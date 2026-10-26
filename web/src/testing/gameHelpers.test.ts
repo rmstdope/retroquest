@@ -13,6 +13,8 @@ import {
   expectQuestCompleted,
   expectQuests,
   expectStoryFlag,
+  pathIndex,
+  playPath,
 } from './gameHelpers'
 
 /** An item whose examine text has an unclosed event tag. */
@@ -151,5 +153,28 @@ describe('markup assertions', () => {
     expect(() =>
       expectNoSpeechOutsideDialogue("She says 'Hello there'."),
     ).toThrow()
+  })
+})
+
+describe('golden path helpers', () => {
+  const path = ['take coin', 'north', 'south', 'north']
+
+  it('finds the nth occurrence of a command', () => {
+    expect(pathIndex(path, 'north')).toBe(1)
+    expect(pathIndex(path, 'north', 2)).toBe(3)
+  })
+
+  it('throws when the command is not on the path', () => {
+    expect(() => pathIndex(path, 'dance')).toThrow(/dance/)
+    expect(() => pathIndex(path, 'north', 3)).toThrow(/north/)
+  })
+
+  it('plays the commands from a marker up to, not including, the next', () => {
+    const g = game()
+    expect(playPath(g, path, 0, 2)).toContain('pick it up')
+    expectItemInInventory(g.state, 'coin', true)
+    expectCurrentRoom(g.state, 'Yard')
+    playPath(g, path, 2, path.length)
+    expectCurrentRoom(g.state, 'Yard')
   })
 })

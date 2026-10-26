@@ -41,10 +41,45 @@ import {
   expectItemInRoom,
   expectQuests,
   expectStoryFlag,
+  pathIndex,
+  playPath,
 } from '@/testing/gameHelpers'
 
 const MAIN = 'The Three Virtues'
 const ECHOES = 'Echoes of the Hidden Bond'
+
+const PATH = ACT3_GOLDEN_PATH
+
+/**
+ * Where each stage of the golden path starts: the index of its first command.
+ * A bead that adds a quest adds a marker and a block below; the path itself
+ * stays the one place that says how the act is played.
+ */
+const AT = {
+  opening: 0,
+  causewayKey: pathIndex(PATH, 'examine mural'),
+  shoreline: pathIndex(PATH, 'n', 1),
+  outerWards: pathIndex(PATH, 'e', 1),
+  collapsedPier: pathIndex(PATH, 'e', 2),
+  antechamber: pathIndex(PATH, 'w', 1),
+  sanctum: pathIndex(PATH, 'e', 3),
+  leaveRuins: pathIndex(PATH, 'w', 2),
+  scholar: pathIndex(PATH, 'talk to ash scholar'),
+  outcrops: pathIndex(PATH, 'n', 2),
+  terraces: pathIndex(PATH, 'e', 7),
+  emberGallery: pathIndex(PATH, 's', 2),
+  fumarole: pathIndex(PATH, 'n', 3),
+  phoenix: pathIndex(PATH, 's', 3),
+  cavernMouth: pathIndex(PATH, 'n', 4),
+  overseer: pathIndex(PATH, 'talk to mine overseer'),
+  toolCache: pathIndex(PATH, 'n', 5),
+  galleries: pathIndex(PATH, 'e', 9),
+  echoChambers: pathIndex(PATH, 'search', 6),
+  vestibule: pathIndex(PATH, 'w', 6),
+  dragon: pathIndex(PATH, 'e', 11),
+  hut: pathIndex(PATH, 'w', 7),
+  fortress: PATH.length - 1,
+}
 
 describe('Act 3 integration', () => {
   it('completes only after the fortress gates are examined', () => {
@@ -92,639 +127,604 @@ describe('Act 3 integration', () => {
 })
 
 describe('Act 3 golden path', () => {
-  it('can be completed from start to finish', () => {
+  /** Plays the path to `index` on a fresh game; the start of a stage. */
+  const gameAt = (index: number): Game => {
     const game = new Game([new Act3()])
-    const state = game.state
-    const room = () => state.currentRoom
-
-    // Start in Mira's Hut with Mira present
-    expectCurrentRoom(state, "Mira's Hut")
-    expectCharacterInRoom(room(), 'mira', true)
-
-    // First talk: start main quest (The Three Virtues)
-    let result = executeCommands(game, ['talk to mira'])
-    expectStoryFlag(state, FLAG_ACT3_MAIN_STARTED, true)
-    expect(result.toLowerCase()).toContain('three relics')
-    // Ensure quest is activated (helpers auto-flush activations)
-    expectQuests(state, [MAIN])
-
-    // Examine note to start another quest
-    executeCommands(game, ['examine keepsake note'])
-    expectQuests(state, [ECHOES, MAIN])
-
-    // Second talk: teleport to Tidal Causeway (Sunken Ruins entry) with companions
-    // Cast light to find key
-    executeCommands(game, ['talk to mira'])
-    expectCurrentRoom(state, 'Tidal Causeway')
-    expectCharacterInRoom(room(), 'mira', true)
-    expectCharacterInRoom(room(), 'sir cedric', true)
-    expectItemInInventory(state, 'Rusted Locker Key', false)
-    result = executeCommands(game, ['cast light'])
-    expect(result.toLowerCase()).toContain('shadow')
-    expect(result.toLowerCase()).toContain('hollow')
-    expect(result.toLowerCase()).toContain('key')
-    // Ensure rusted key present
-    expectItemInRoom(room(), 'Rusted Locker Key', true)
-    executeCommands(game, ['take rusted locker key'])
-    expectItemInInventory(state, 'Rusted Locker Key', true)
-    expectItemInRoom(room(), 'Rusted Locker Key', false)
-
-    // Step 3: move north to Shoreline Markers => should activate Tideward Sigils
-    executeCommands(game, ['north'])
-    expectCurrentRoom(state, 'Shoreline Markers')
-    // Reveal the runes so the Tideward Sigils started flag is set
-    executeCommands(game, ['search'])
-    // Newly activated side quest should now be active alongside the main quest
-    expectQuests(state, [ECHOES, MAIN, 'Tideward Sigils'])
-    // Search/examine/take runes
-    const combined = executeCommands(game, [
-      'search',
-      'examine steles',
-      'take moon rune shards',
-    ])
-    expect(
-      combined.toLowerCase().includes('moon') ||
-        combined.toLowerCase().includes('shard'),
-    ).toBe(true)
-    expectItemInInventory(state, 'Moon Rune Shards', true)
-    const again = executeCommands(game, ['search'])
-    expect(again.toLowerCase()).toContain('already')
-
-    // Step 5: Outer Wards — purify and set sigil; completes Tideward Sigils
-    executeCommands(game, ['east'])
-    expectCurrentRoom(state, 'Outer Wards')
-    const purifyResult = executeCommands(game, ['cast purify on pillars'])
-    expect(
-      ['cleanse', 'rinse', 'cleansed'].some((k) =>
-        purifyResult.toLowerCase().includes(k),
-      ),
-    ).toBe(true)
-    const useResult = executeCommands(game, [
-      'use moon rune shards with pillars',
-    ])
-    expect(useResult.toLowerCase()).toContain('sigil')
-    expectStoryFlag(state, FLAG_ACT3_TIDEWARD_SIGILS_COMPLETED, true)
-    // Quest should be marked completed
-    expectQuests(state, [ECHOES, MAIN])
-
-    // Step 6: Removed
-
-    // Step 7: Collapsed Pier (Vault) — key fails, cast unlock, open locker,
-    // take three prism lanterns
-    // Give the hint by examining the locker
-    executeCommands(game, ['east'])
-    expectCurrentRoom(state, 'Collapsed Pier')
-    const exam = executeCommands(game, ['examine locker'])
-    expect(
-      exam.toLowerCase().includes('fused') ||
-        exam.toLowerCase().includes('lock'),
-    ).toBe(true)
-    // Jam the key in the lock
-    const jammedKey = executeCommands(game, [
-      'use rusted locker key with locker',
-    ])
-    expect(
-      jammedKey.toLowerCase().includes('too corroded') ||
-        jammedKey.toLowerCase().includes('jams in the mechanism'),
-    ).toBe(true)
-    // Cast unlock on locker
-    const unlocked = executeCommands(game, ['cast unlock on locker'])
-    expect(unlocked.toLowerCase()).toContain('locker')
-    expect(
-      unlocked.toLowerCase().includes('click') ||
-        unlocked.toLowerCase().includes('release'),
-    ).toBe(true)
-    // Open locker and take all lanterns
-    const opened = executeCommands(game, ['open locker'])
-    expect(opened.toLowerCase()).toContain('prism lantern')
-    // Collect three lanterns
-    executeCommands(game, [
-      'take prism lantern',
-      'take prism lantern',
-      'take prism lantern',
-    ])
-    expectItemCountInInventory(state, 'Prism Lantern', 3)
-
-    // Step 8: Submerged Antechamber — navigate, mount lanterns and cast light
-    // Move from Collapsed Pier back toward the Outer Wards and the submerged
-    // antechamber where lanterns are mounted.
-    executeCommands(game, ['west'])
-    expectCurrentRoom(state, 'Outer Wards')
-    executeCommands(game, ['south'])
-    expectCurrentRoom(state, 'Submerged Antechamber')
-    // Reveal the lantern brackets in the antechamber, then mount lanterns
-    let searchResult = executeCommands(game, ['search'])
-    expect(
-      searchResult.toLowerCase().includes('bracket') ||
-        searchResult.toLowerCase().includes('brackets'),
-    ).toBe(true)
-    // Mount three lanterns to brackets
-    executeCommands(game, ['use prism lantern with lantern bracket'])
-    executeCommands(game, ['use prism lantern with lantern bracket'])
-    executeCommands(game, ['use prism lantern with lantern bracket'])
-    // After mounts, there should be no more prism lanterns in inventory
-    expectItemCountInInventory(state, 'Prism Lantern', 0)
-    // Cast light to reveal the path
-    const lightResult = executeCommands(game, ['cast light'])
-    expect(
-      lightResult.toLowerCase().includes('path') ||
-        lightResult.toLowerCase().includes('lanterns'),
-    ).toBe(true)
-    // After lighting, head west to the Tidal Causeway
-    executeCommands(game, ['west'])
-    expectCurrentRoom(state, 'Tidal Causeway')
-
-    // Step 9: Tidal Causeway — examine mural, take Sea-Sealed Letter
-    executeCommands(game, ['west'])
-    expectCurrentRoom(state, 'Tidal Causeway')
-    const muralReveal = executeCommands(game, ['examine mural'])
-    expect(
-      muralReveal.toLowerCase().includes('reliquary') ||
-        muralReveal.toLowerCase().includes('sea-sealed letter'),
-    ).toBe(true)
-    executeCommands(game, [
-      'take sea-sealed letter',
-      'examine sea-sealed letter',
-    ])
-    expectItemInInventory(state, 'Sea-Sealed Letter', true)
-
-    // Step 10: Sanctum — walk three steps into the dark water, speak the
-    // vow, then take the crystal
-    executeCommands(game, ['east', 'east'])
-    expectCurrentRoom(state, 'Sanctum of the Tide')
-    executeCommands(game, ['east', 'east'])
-    const parted = executeCommands(game, ['east'])
-    expect(parted).toContain('What did you not abandon?')
-    const midWalk = new Game([new Act3()])
-    midWalk.loadSaveData(game.toSaveData())
-    expect(midWalk.state.currentRoom.descriptionFor(midWalk.state)).toContain(
-      'The water stands parted',
-    )
-    const vow = executeCommands(game, ['say myself to tide-born guardian'])
-    expect(
-      vow.toLowerCase().includes('vow') ||
-        vow.toLowerCase().includes('waters draw back') ||
-        vow.toLowerCase().includes('you may now take'),
-    ).toBe(true)
-    executeCommands(game, ['take crystal of light'])
-    expectItemInInventory(state, 'crystal of light', true)
-
-    // Step 11: Talk to Mira to teleport to Mount Ember
-    executeCommands(game, ['w', 'w', 'talk to mira'])
-    expectCurrentRoom(state, 'Lower Switchbacks')
-
-    // Step 12: Lower Switchbacks — talk to Ash Scholar to receive a brass mirror
-    // Inspect the Emberwater Canteen for lore and a possible mirror hint
-    const examineCanteen = executeCommands(game, ['examine emberwater canteen'])
-    expect(
-      examineCanteen.toLowerCase().includes('expedition') ||
-        examineCanteen.toLowerCase().includes('brass') ||
-        examineCanteen.toLowerCase().includes('canteen'),
-    ).toBe(true)
-    executeCommands(game, ['take brass mirror segment'])
-    expectItemCountInInventory(state, 'Brass Mirror Segment', 1)
-
-    const talkScholar = executeCommands(game, ['talk to ash scholar'])
-    expect(
-      talkScholar.toLowerCase().includes('scholar') ||
-        talkScholar.toLowerCase().includes('brass'),
-    ).toBe(true)
-    expectItemCountInInventory(state, 'Brass Mirror Segment', 2)
-
-    // Step 13: Obsidian Outcrops — search to reveal mirror segments and binding resin
-    executeCommands(game, ['north'])
-    expectCurrentRoom(state, 'Obsidian Outcrops')
-    const searchOut = executeCommands(game, ['search'])
-    expect(
-      searchOut.toLowerCase().includes('brass') ||
-        searchOut.toLowerCase().includes('resin'),
-    ).toBe(true)
-    // Take discovered items
-    executeCommands(game, ['take brass mirror segment', 'take binding resin'])
-    expectItemCountInInventory(state, 'Brass Mirror Segment', 3)
-    expectItemInInventory(state, 'Binding Resin')
-
-    // Step 14: Mirror Terraces — install mirrors to form channel
-    executeCommands(game, ['east'])
-    expectCurrentRoom(state, 'Mirror Terraces')
-    // There should be mounts and at least one brass segment in the room
-    // Examine the inscription to update quest log
-    executeCommands(game, ['examine inscription'])
-    // Take the terrace-provided segment if present
-    executeCommands(game, ['examine mirror mount', 'take brass mirror segment'])
-    expectItemCountInInventory(state, 'Brass Mirror Segment', 4)
-    // Install three segments into mounts (use command format recognized by game)
-    executeCommands(game, ['use brass mirror segment with mirror mount'])
-    executeCommands(game, ['use binding resin with mirror mount'])
-    // Before mending, the mirrors quest should not be completed and the flag not set
-    expectStoryFlag(state, FLAG_ACT3_MIRRORS_OF_EMBER_LIGHT_COMPLETED, false)
-    // After installing, cast the mend spell on a mount to finalize repairs
-    executeCommands(game, ['cast mend on mirror mount'])
-    // The beam waits for the sun: the quest is still open and east is closed
-    expectStoryFlag(state, FLAG_ACT3_MIRRORS_OF_EMBER_LIGHT_COMPLETED, false)
-    expect(state.currentRoom.getExits(state).east).toBeUndefined()
-    // A save made while waiting loads back still waiting; resting fires the beam
-    const reloaded = new Game([new Act3()])
-    reloaded.loadSaveData(game.toSaveData())
-    executeCommands(reloaded, ['rest'])
-    expectStoryFlag(
-      reloaded.state,
-      FLAG_ACT3_MIRRORS_OF_EMBER_LIGHT_COMPLETED,
-      true,
-    )
-    // Resting brings noon; the beam fires and the flag is set
-    executeCommands(game, ['rest'])
-    expectStoryFlag(state, FLAG_ACT3_MIRRORS_OF_EMBER_LIGHT_COMPLETED, true)
-
-    // --- Step 15: Ember Gallery — find ash-fern and cooled slag, craft heat ward
-    // Move back south to the Ember Gallery to gather ward components
-    executeCommands(game, ['south'])
-    expectCurrentRoom(state, 'Ember Gallery')
-    // Search reveals ash-fern and cooled slag
-    searchResult = executeCommands(game, ['search'])
-    expect(
-      searchResult.toLowerCase().includes('ash-fern') ||
-        searchResult.toLowerCase().includes('cooled slag'),
-    ).toBe(true)
-    executeCommands(game, ['take ash-fern', 'take cooled slag'])
-    expectItemInInventory(state, 'ash-fern', true)
-    expectItemInInventory(state, 'cooled slag', true)
-    // Combine to craft the heat-ward mix
-    const craftResult = executeCommands(game, ['use ash-fern with cooled slag'])
-    expect(
-      craftResult.toLowerCase().includes('heat') ||
-        craftResult.toLowerCase().includes('ward'),
-    ).toBe(true)
-    expectItemInInventory(state, 'heat-ward mix', true)
-
-    // --- Step 16: Fumarole Passages — calibrate vents and apply heat ward
-    // Move east to the Fumarole Passages (now open because mirrors completed)
-    executeCommands(game, ['north', 'east'])
-    expectCurrentRoom(state, 'Fumarole Passages')
-    // It should not be possible to move south
-    executeCommands(game, ['south'])
-    expectCurrentRoom(state, 'Fumarole Passages')
-    // Take and use three vent stones to calibrate
-    executeCommands(game, [
-      'take vent stone',
-      'take vent stone',
-      'take vent stone',
-    ])
-    expectItemCountInInventory(state, 'Vent Stone', 3)
-    // Use each vent stone to calibrate the vents
-    executeCommands(game, ['use vent stone', 'use vent stone'])
-    // Before the third calibration, applying the ward should fail
-    const failApply = executeCommands(game, ['use heat-ward mix'])
-    expect(
-      failApply.toLowerCase().includes('not yet synchronized') ||
-        failApply.toLowerCase().includes('unstable'),
-    ).toBe(true)
-    // Final calibration
-    executeCommands(game, ['use vent stone'])
-    // Now apply the heat-ward mix
-    const applyResult = executeCommands(game, ['use heat-ward mix'])
-    expect(
-      applyResult.toLowerCase().includes('ward') ||
-        applyResult.toLowerCase().includes('seals'),
-    ).toBe(true)
-    // The ward does not finish the task: the vents must be crossed in time
-    expectStoryFlag(state, FLAG_ACT3_BREATH_OF_THE_MOUNTAIN_COMPLETED, false)
-    executeCommands(game, ['south'])
-    expectCurrentRoom(state, 'Fumarole Passages')
-    // The failed try moved the breath to the pause; one rest brings the in-breath
-    executeCommands(game, ['rest'])
-    // Save mid-breath: the in-breath comes back as it was
-    const midBreath = new Game([new Act3()])
-    midBreath.loadSaveData(game.toSaveData())
-    executeCommands(midBreath, ['south'])
-    expectCurrentRoom(midBreath.state, 'Phoenix Crater')
-
-    // --- Step 18: Phoenix Crater (Relic Trial) ---
-    // Cross south to Phoenix Crater on the in-breath
-    executeCommands(game, ['south'])
-    expectCurrentRoom(state, 'Phoenix Crater')
-    expectStoryFlag(state, FLAG_ACT3_BREATH_OF_THE_MOUNTAIN_COMPLETED, true)
-    // Reveal the phoenix
-    executeCommands(game, ['rest'])
-    expectCharacterInRoom(room(), 'phoenix', true)
-    // Talk to the phoenix to get the riddle
-    let talkResult = executeCommands(game, ['talk to phoenix'])
-    expect(talkResult.toLowerCase()).toContain('wisdom')
-    expect(talkResult.toLowerCase()).toContain('time is short')
-    // Say the correct answer
-    executeCommands(game, ['say patience to phoenix'])
-    // Take the phoenix feather
-    expectItemInInventory(state, 'phoenix feather', true)
-
-    // --- Step 19: Talk to Mira to teleport to Cavern Mouth (Caverns of Shadow) ---
-    executeCommands(game, ['n', 'w', 'w', 's', 'talk to mira'])
-    expectCurrentRoom(state, 'Cavern Mouth')
-    expectCharacterInRoom(room(), 'mine overseer', true)
-
-    // --- Step 20: Cavern Mouth: search and talk to Mine Overseer ---
-    talkResult = executeCommands(game, ['talk to mine overseer'])
-    expect(talkResult.toLowerCase()).toContain('tool cache')
-    expect(talkResult.toLowerCase()).toContain('key')
-    expectItemInInventory(state, "Miner's Key", true)
-    // Should have started Miners' Rescue quest (side quest activation is implicit)
-    // (If a helper for quest exists, could check for 'Miners' Rescue' in active quests)
-
-    // --- Step 21: Tool Cache: search to find crate, unlock and open crate, take supplies ---
-    executeCommands(game, ['north'])
-    expectCurrentRoom(state, 'Tool Cache')
-
-    // Initially, the supply crate should not be visible in the room
-    expectItemInRoom(room(), 'supply crate', false)
-
-    // Search the room to discover the hidden supply crate
-    searchResult = executeCommands(game, ['search'])
-    expect(searchResult.toLowerCase()).toContain(
-      'discover a heavy supply crate',
-    )
-    expect(searchResult.toLowerCase()).toContain(
-      'hidden behind stacked timbers',
-    )
-    expect(searchResult.toLowerCase()).toContain('rescue supplies')
-
-    // After searching, the supply crate should now be visible in the room
-    expectItemInRoom(room(), 'supply crate', true)
-
-    // Search again should give a different message indicating it's already found
-    const searchAgain = executeCommands(game, ['search'])
-    expect(searchAgain.toLowerCase()).toContain('already found')
-
-    // Use key on crate
-    const unlockResult = executeCommands(game, [
-      "use miner's key with supply crate",
-    ])
-    expect(
-      unlockResult.toLowerCase().includes('unlock') ||
-        unlockResult.toLowerCase().includes('padlock'),
-    ).toBe(true)
-
-    // Open crate
-    const openResult = executeCommands(game, ['open supply crate'])
-    expect(openResult.toLowerCase()).toContain('braces')
-    // Take all three supply items
-    executeCommands(game, ['take reinforced braces'])
-    executeCommands(game, ['take support straps'])
-    executeCommands(game, ['take wedge blocks'])
-    expectItemInInventory(state, 'Reinforced Braces', true)
-    expectItemInInventory(state, 'Support Straps', true)
-    expectItemInInventory(state, 'Wedge Blocks', true)
-
-    // --- Step 22: Collapsed Galleries - Miners' Rescue sequence ---
-    executeCommands(game, ['east'])
-    expectCurrentRoom(state, 'Collapsed Galleries')
-    // Miners should not be present initially - they appear after passage is freed
-    expectCharacterInRoom(room(), 'miners', false)
-    expectItemInRoom(room(), 'fallen rock', true)
-
-    // Initially, east exit should be blocked
-    executeCommands(game, ['east'])
-    expectCurrentRoom(state, 'Collapsed Galleries') // Should still be here
-
-    // Use reinforced braces with fallen rock (stabilizes collapse)
-    const stabilizeResult = executeCommands(game, [
-      'use reinforced braces with fallen rock',
-    ])
-    expect(stabilizeResult.toLowerCase()).toContain('steady the collapse')
-
-    // Use support straps with fallen rock (secures the braces)
-    const secureResult = executeCommands(game, [
-      'use support straps with fallen rock',
-    ])
-    expect(secureResult.toLowerCase()).toContain(
-      'bind the reinforced braces securely',
-    )
-
-    // Use wedge blocks with fallen rock (frees passage and adds miners to room)
-    const freeResult = executeCommands(game, [
-      'use wedge blocks with fallen rock',
-    ])
-    expect(freeResult.toLowerCase()).toContain('free the blocked passage')
-    expect(freeResult.toLowerCase()).toContain('trapped miners emerging')
-
-    // After freeing passage, miners should now be present and fallen rock should be gone
-    expectCharacterInRoom(room(), 'miners', true)
-    expectItemInRoom(room(), 'fallen rock', false)
-
-    // Talk to miners (completes rescue and opens east exit)
-    const rescueResult = executeCommands(game, ['talk to miners'])
-    expect(rescueResult.toLowerCase()).toContain('miner steps forward')
-    expect(rescueResult.toLowerCase()).toContain('thank the gods')
-    expectStoryFlag(state, FLAG_ACT3_MINERS_RESCUE_COMPLETED, true)
-
-    // Now east exit should be available
-    executeCommands(game, ['east'])
-    expectCurrentRoom(state, 'Echo Chambers')
-
-    // --- Step 23: Echo Chambers - Resonant Chant sequence ---
-    expectItemInRoom(room(), 'runic walls', true)
-
-    // Search to discover the Old Oath Scrolls
-    searchResult = executeCommands(game, ['search'])
-    expect(searchResult).toContain('ancient scrolls')
-    expect(searchResult).toContain('stone niche')
-
-    // First examine the Old Oath Scrolls to understand the oath requirements
-    const examineScrolls = executeCommands(game, ['examine old oath scrolls'])
-    expect(examineScrolls).toContain('I take what is given, and I return ___.')
-    expect(examineScrolls.toLowerCase()).not.toContain('disintegrate')
-    expectStoryFlag(state, FLAG_ACT3_OATH_SCROLLS_EXAMINED, true)
-
-    // The scrolls no longer crumble: they stay where they are
-    expectItemInRoom(room(), 'Old Oath Scrolls', true)
-
-    // Examine runic walls (reveals chant instructions and adds rubbings to room)
-    let examineResult = executeCommands(game, ['examine runic walls'])
-    expect(examineResult).toContain('Let stillness echo, let silence bind')
-    expect(examineResult.toLowerCase()).toContain('chant to quiet the phantoms')
-
-    // After examining, rubbings should be available in the room
-    expectItemInRoom(room(), 'Resonant Chant Rubbings', true)
-
-    // Take resonant chant rubbings (adds to inventory)
-    expectItemInInventory(state, 'Resonant Chant Rubbings', false)
-    const takeResult = executeCommands(game, ['take resonant chant rubbings'])
-    expect(takeResult).toBe(
-      'This might come in handy, so you decide to pick it up.',
-    )
-    expectItemInInventory(state, 'Resonant Chant Rubbings', true)
-
-    // --- Step 24: Stillness Vestibule - Oath of Stillness sequence ---
-    executeCommands(game, ['west', 'south'])
-    expectCurrentRoom(state, 'Stillness Vestibule')
-    expectItemInRoom(room(), 'echo stones', true)
-    expectCharacterInRoom(room(), 'silence keeper', true)
-
-    // Cast bless on echo stones (sanctifies them for the rite)
-    const blessResult = executeCommands(game, ['cast bless on echo stones'])
-    expect(blessResult.toLowerCase()).toContain('steady glow')
-    expect(blessResult.toLowerCase()).toContain('ancient chant')
-
-    // Still the pools with the Stillwater Phial (the chant only carries over still water)
-    executeCommands(game, ['take phial'])
-    const stillResult = executeCommands(game, [
-      'use stillwater phial with pool',
-    ])
-    expect(stillResult.toLowerCase()).toContain('the pools are mirror-still')
-    expectItemInInventory(state, 'stillwater phial', true)
-
-    // Use resonant chant rubbings on echo stones (performs the Oath of Stillness)
-    let oathResult = executeCommands(game, [
-      'use resonant chant rubbings with echo stones',
-    ])
-    expect(oathResult.toLowerCase()).toContain('you recite the resonant chant')
-    expect(oathResult.toLowerCase()).toContain('harmonious silence')
-    expect(oathResult.toLowerCase()).toContain("dragon's hall now lies open")
-    expectStoryFlag(state, FLAG_ACT3_OATH_OF_STILLNESS_COMPLETED, true)
-
-    // Resonant chant rubbings should be consumed and removed from inventory
-    expectItemInInventory(state, 'Resonant Chant Rubbings', false)
-
-    // Now east exit to Dragon's Hall should be available
-    executeCommands(game, ['east'])
-    expectCurrentRoom(state, "Dragon's Hall")
-
-    // --- Step 25: Dragon's Hall - Dragon's Memory (Story Clue) ---
-    expectCharacterInRoom(room(), 'ancient dragon', true)
-    // Dragon's scale should NOT be present initially (only after oath in step 26)
-    expectItemInRoom(room(), "dragon's scale", false)
-
-    // Talk to dragon (grants the Dragon's Memory)
-    const memoryResult = executeCommands(game, ['talk to ancient dragon'])
-    expect(memoryResult).toContain('Aren and Lysa')
-    expect(memoryResult.toLowerCase()).toContain('warded away, not dead')
-    expect(memoryResult.toLowerCase()).toContain('anchored in the amulet')
-    expectStoryFlag(state, FLAG_ACT3_DRAGONS_MEMORY_RECEIVED, true)
-
-    // --- Step 26: Dragon's Hall - Relic Trial (Oath and Scale) ---
-    // Finish the old oath for the dragon (adds dragon's scale to room)
-    oathResult = executeCommands(game, ['say everything to ancient dragon'])
-    expect(oathResult).toContain('Your words ring true, young one.')
-    expect(oathResult.toLowerCase()).toContain('scale')
-    expectStoryFlag(state, FLAG_ACT3_DRAGON_OATH_SPOKEN, true)
-
-    // Dragon's scale should now be present in the room
-    expectItemInRoom(room(), "dragon's scale", true)
-
-    // Take dragon's scale
-    executeCommands(game, ["take dragon's scale"])
-    expectItemInInventory(state, "dragon's scale", true)
-    expectItemInRoom(room(), "dragon's scale", false)
-
-    // --- Step 27: Dragon's Hall - Return to Mira's Hut ---
-    // Talk to Mira to teleport back to Mira's Hut
-    talkResult = executeCommands(game, ['w', 'w', 'talk to mira'])
-    expect(talkResult.toLowerCase()).toContain('three relics are yours')
-    expect(talkResult.toLowerCase()).toContain('return to my hut')
-    expectCurrentRoom(state, "Mira's Hut")
-
-    // --- Step 28: Mira's Hut - Warding Rite and Lifelight Elixir ---
-    // The first talk is Mira's confession; the rite is held back
-    expect(executeCommands(game, ['say parents to mira'])).toContain(
-      'Later, Elior. Not here.',
-    )
-    const confession = executeCommands(game, ['talk to mira'])
-    expect(confession.toLowerCase()).toContain('i was their pupil')
-    expect(confession).toContain('say parents, say malakar')
-    expect(executeCommands(game, ['say mother to mira'])).toContain(
-      'They became the ward',
-    )
-    expectStoryFlag(state, FLAG_ACT3_LIFELIGHT_ELIXIR_CREATED, false)
-
-    // Elior may answer the confession; the answer is remembered in the save
-    expect(executeCommands(game, ['say i forgive you to mira'])).toContain(
-      'Thank you. I did not dare ask for that.',
-    )
-    expectStoryFlag(state, FLAG_ACT3_MIRA_FORGIVEN, true)
-
-    // A save made before the rite still has the herbs, and the rite takes them
-    const beforeRite = new Game([new Act3()])
-    expect(beforeRite.loadSaveData(game.toSaveData())).toContain('loaded')
-    expectItemInRoom(beforeRite.state.currentRoom, 'healing herbs', true)
-    expect(executeCommands(beforeRite, ['say amulet to mira'])).toContain(
-      'anchor of their ward',
-    )
-    expectStoryFlag(beforeRite.state, FLAG_ACT3_MIRA_FORGIVEN, true)
-    executeCommands(beforeRite, ['talk to mira'])
-    expectItemInRoom(beforeRite.state.currentRoom, 'healing herbs', false)
-
-    // The next talk performs the Warding Rite
-    const wardingResult = executeCommands(game, ['talk to mira'])
-    expect(wardingResult.toLowerCase()).toContain('three relics resonate')
-    expect(wardingResult.toLowerCase()).toContain('lifelight elixir')
-    expect(wardingResult.toLowerCase()).toContain(
-      'courage, wisdom, and selflessness',
-    )
-    expectStoryFlag(state, FLAG_ACT3_LIFELIGHT_ELIXIR_CREATED, true)
-
-    // After the rite the answer words are no longer recognised
-    expect(
-      executeCommands(game, ['say you should have told me to mira']),
-    ).toContain('shakes her head.')
-    expectStoryFlag(state, FLAG_ACT3_MIRA_REPROACHED, false)
-
-    // The rite used the herbs: gone from the hut, never in the bag.
-    expectItemInRoom(room(), 'healing herbs', false)
-    expectItemInInventory(state, 'healing herbs', false)
-    expect(executeCommands(game, ['take herbs'])).toContain(
-      "There is no 'herbs' here to take.",
-    )
-
-    // Lifelight Elixir should now be available in the room
-    expectItemInRoom(room(), 'lifelight elixir', true)
-
-    // Take Lifelight Elixir
-    executeCommands(game, ['take lifelight elixir'])
-    expectItemInInventory(state, 'lifelight elixir', true)
-    expectItemInRoom(room(), 'lifelight elixir', false)
-
-    // Talk to Mira again to teleport to fortress
-    const fortressResult = executeCommands(game, ['talk to mira'])
-    expect(fortressResult.toLowerCase()).toContain('final journey')
-    expect(fortressResult.toLowerCase()).toContain('fortress')
-    expectCurrentRoom(state, "Entrance to Malakar's Fortress")
-
-    // Mira refuses to stay behind; the scene plays once, then a short line.
-    const gateTalk = executeCommands(game, ['talk to mira'])
-    expect(gateTalk).toContain('I am coming with you.')
-    expect(gateTalk).toContain('You forgave me in the hut')
-    expect(executeCommands(game, ['talk to mira'])).toContain(
-      'I am right behind you, Elior.',
-    )
-
-    // --- Step 29: Entrance to Malakar's Fortress - Examine Gates ---
-    examineResult = executeCommands(game, ['examine gates'])
-    expect(examineResult.toLowerCase()).toContain(
-      'fortress gates tower above you',
-    )
-    expect(examineResult.toLowerCase()).toContain('act iii is complete')
-    expectStoryFlag(state, FLAG_ACT3_FORTRESS_GATES_EXAMINED, true)
-    expect(examineResult).toContain(
-      'The Dragon said they were warded away, not dead. You do not yet know what that means.',
-    )
-    expect(examineResult).toContain('The Lifelight Elixir pulses')
-
-    // The page opens on the hook, also on a game loaded from a save.
-    for (let turn = 0; turn < 3; turn++) game.newTurn()
-    const hook =
-      "Your parents were Malakar's closest friends. The Dragon says they are warded away, not dead."
-    expect(game.getActCompleteText()).toMatch(
-      new RegExp(`^${hook}\\n\\nCongratulations — you have completed`),
-    )
-    const fresh = new Game([new Act3()])
-    expect(fresh.loadSaveData(game.toSaveData())).toContain('loaded')
-    for (let turn = 0; turn < 3; turn++) fresh.newTurn()
-    expect(fresh.getActCompleteText()).toBe(game.getActCompleteText())
-    expectItemInRoom(fresh.state.allRooms.MirasHut, 'healing herbs', false)
-    expect(executeCommands(game, ['look at mira'])).toContain(
-      "the Wardens' pupil",
-    )
-    expectStoryFlag(state, FLAG_ACT3_MAIN_COMPLETED, true)
-    expect(state.isQuestCompleted(MAIN)).toBe(true)
-    expect(new Act3().isCompleted(state)).toBe(true)
+    playPath(game, PATH, 0, index)
+    return game
+  }
+  /** Plays the path from `from` up to `to` and returns what the game said. */
+  const play = (game: Game, from: number, to: number): string =>
+    playPath(game, PATH, from, to).toLowerCase()
+
+  describe('the opening in the hut', () => {
+    it('starts the main quest, then the keepsake note starts a side quest', () => {
+      const game = new Game([new Act3()])
+      const state = game.state
+      expectCurrentRoom(state, "Mira's Hut")
+      expectCharacterInRoom(state.currentRoom, 'mira', true)
+
+      expect(play(game, AT.opening, AT.opening + 1)).toContain('three relics')
+      expectStoryFlag(state, FLAG_ACT3_MAIN_STARTED, true)
+      expectQuests(state, [MAIN])
+
+      play(game, AT.opening + 1, AT.opening + 2)
+      expectQuests(state, [ECHOES, MAIN])
+    })
+
+    it('carries the party to the Tidal Causeway on the second talk', () => {
+      const game = gameAt(AT.opening + 2)
+      play(game, AT.opening + 2, AT.causewayKey)
+      expectCurrentRoom(game.state, 'Tidal Causeway')
+      expectCharacterInRoom(game.state.currentRoom, 'mira', true)
+      expectCharacterInRoom(game.state.currentRoom, 'sir cedric', true)
+    })
+  })
+
+  describe('the Tidal Causeway: the mural, the letter and the key', () => {
+    it('reads the mural, takes the Sea-Sealed Letter and finds the key by light', () => {
+      const game = gameAt(AT.causewayKey)
+      const state = game.state
+      expectItemInInventory(state, 'Rusted Locker Key', false)
+
+      const mural = play(game, AT.causewayKey, AT.causewayKey + 1)
+      expect(
+        mural.includes('reliquary') || mural.includes('sea-sealed letter'),
+      ).toBe(true)
+      play(game, AT.causewayKey + 1, AT.causewayKey + 3)
+      expectItemInInventory(state, 'Sea-Sealed Letter', true)
+
+      const light = play(game, AT.causewayKey + 3, AT.causewayKey + 4)
+      expect(light).toContain('shadow')
+      expect(light).toContain('hollow')
+      expect(light).toContain('key')
+      expectItemInRoom(state.currentRoom, 'Rusted Locker Key', true)
+
+      play(game, AT.causewayKey + 4, AT.shoreline)
+      expectItemInInventory(state, 'Rusted Locker Key', true)
+      expectItemInRoom(state.currentRoom, 'Rusted Locker Key', false)
+    })
+  })
+
+  describe('Shoreline Markers: the moon rune shards', () => {
+    it('starts Tideward Sigils and gives the shards once', () => {
+      const game = gameAt(AT.shoreline)
+      const state = game.state
+      play(game, AT.shoreline, AT.shoreline + 1)
+      expectCurrentRoom(state, 'Shoreline Markers')
+      const reveal = play(game, AT.shoreline + 1, AT.shoreline + 2)
+      expect(reveal.includes('moon') || reveal.includes('shard')).toBe(true)
+      expectQuests(state, [ECHOES, MAIN, 'Tideward Sigils'])
+
+      const found = play(game, AT.shoreline + 2, AT.outerWards)
+      expect(found.includes('moon') || found.includes('shard')).toBe(true)
+      expectItemInInventory(state, 'Moon Rune Shards', true)
+      expect(executeCommands(game, ['search']).toLowerCase()).toContain(
+        'already',
+      )
+    })
+  })
+
+  describe('Outer Wards: Tideward Sigils', () => {
+    it('purifies the pillars and sets the sigil', () => {
+      const game = gameAt(AT.outerWards)
+      const state = game.state
+      play(game, AT.outerWards, AT.outerWards + 1)
+      expectCurrentRoom(state, 'Outer Wards')
+
+      const purify = play(game, AT.outerWards + 1, AT.outerWards + 2)
+      expect(
+        ['cleanse', 'rinse', 'cleansed'].some((k) => purify.includes(k)),
+      ).toBe(true)
+      expect(play(game, AT.outerWards + 2, AT.collapsedPier)).toContain('sigil')
+      expectStoryFlag(state, FLAG_ACT3_TIDEWARD_SIGILS_COMPLETED, true)
+      expectQuests(state, [ECHOES, MAIN])
+    })
+  })
+
+  describe('Collapsed Pier: the locker and the prism lanterns', () => {
+    it('jams the old key, opens the locker by spell and gives three lanterns', () => {
+      const game = gameAt(AT.collapsedPier)
+      const state = game.state
+      play(game, AT.collapsedPier, AT.collapsedPier + 1)
+      expectCurrentRoom(state, 'Collapsed Pier')
+
+      const exam = executeCommands(game, ['examine locker']).toLowerCase()
+      expect(exam.includes('fused') || exam.includes('lock')).toBe(true)
+      const jammed = play(game, AT.collapsedPier + 1, AT.collapsedPier + 2)
+      expect(
+        jammed.includes('too corroded') ||
+          jammed.includes('jams in the mechanism'),
+      ).toBe(true)
+
+      const unlocked = play(game, AT.collapsedPier + 2, AT.collapsedPier + 3)
+      expect(unlocked).toContain('locker')
+      expect(unlocked.includes('click') || unlocked.includes('release')).toBe(
+        true,
+      )
+      expect(play(game, AT.collapsedPier + 3, AT.collapsedPier + 4)).toContain(
+        'prism lantern',
+      )
+      play(game, AT.collapsedPier + 4, AT.antechamber)
+      expectItemCountInInventory(state, 'Prism Lantern', 3)
+    })
+  })
+
+  describe('Submerged Antechamber: the lanterns and the light', () => {
+    it('mounts three lanterns and lights the path west', () => {
+      const game = gameAt(AT.antechamber)
+      const state = game.state
+      expectItemCountInInventory(state, 'Prism Lantern', 3)
+
+      play(game, AT.antechamber, AT.antechamber + 2)
+      expectCurrentRoom(state, 'Submerged Antechamber')
+      expect(play(game, AT.antechamber + 2, AT.antechamber + 3)).toContain(
+        'bracket',
+      )
+      play(game, AT.antechamber + 3, AT.antechamber + 6)
+      expectItemCountInInventory(state, 'Prism Lantern', 0)
+      const light = play(game, AT.antechamber + 6, AT.sanctum)
+      expect(light.includes('path') || light.includes('lanterns')).toBe(true)
+    })
+  })
+
+  describe('Sanctum of the Tide: the vow and the crystal', () => {
+    it('parts the water on the last step and asks what was not abandoned', () => {
+      const game = gameAt(AT.sanctum)
+      const parted = play(game, AT.sanctum, AT.sanctum + 4)
+      expectCurrentRoom(game.state, 'Sanctum of the Tide')
+      expect(parted).toContain('what did you not abandon?')
+
+      const midWalk = new Game([new Act3()])
+      midWalk.loadSaveData(game.toSaveData())
+      expect(midWalk.state.currentRoom.descriptionFor(midWalk.state)).toContain(
+        'The water stands parted',
+      )
+    })
+
+    it('lets the crystal be taken once the vow is spoken', () => {
+      const game = gameAt(AT.sanctum + 4)
+      const vow = play(game, AT.sanctum + 4, AT.sanctum + 5)
+      expect(
+        vow.includes('vow') ||
+          vow.includes('waters draw back') ||
+          vow.includes('you may now take'),
+      ).toBe(true)
+      play(game, AT.sanctum + 5, AT.sanctum + 6)
+      expectItemInInventory(game.state, 'crystal of light', true)
+    })
+  })
+
+  describe('leaving the ruins for Mount Ember', () => {
+    it('talks Mira into carrying the party to the Lower Switchbacks', () => {
+      const game = gameAt(AT.leaveRuins)
+      play(game, AT.leaveRuins, AT.scholar)
+      expectCurrentRoom(game.state, 'Lower Switchbacks')
+    })
+  })
+
+  describe('Lower Switchbacks: the scholar and the canteen', () => {
+    it('gives the first brass mirror segment and a second from the canteen', () => {
+      const game = gameAt(AT.scholar)
+      const state = game.state
+      const talk = play(game, AT.scholar, AT.scholar + 1)
+      expect(talk.includes('scholar') || talk.includes('brass')).toBe(true)
+      expectItemCountInInventory(state, 'Brass Mirror Segment', 1)
+
+      const canteen = play(game, AT.scholar + 1, AT.scholar + 2)
+      expect(
+        ['expedition', 'brass', 'canteen'].some((k) => canteen.includes(k)),
+      ).toBe(true)
+      play(game, AT.scholar + 2, AT.outcrops)
+      expectItemCountInInventory(state, 'Brass Mirror Segment', 2)
+    })
+  })
+
+  describe('Obsidian Outcrops: more segments and binding resin', () => {
+    it('shows brass and resin on a search and lets both be taken', () => {
+      const game = gameAt(AT.outcrops)
+      const state = game.state
+      play(game, AT.outcrops, AT.outcrops + 1)
+      expectCurrentRoom(state, 'Obsidian Outcrops')
+      const search = play(game, AT.outcrops + 1, AT.outcrops + 2)
+      expect(search.includes('brass') || search.includes('resin')).toBe(true)
+      play(game, AT.outcrops + 2, AT.terraces)
+      expectItemCountInInventory(state, 'Brass Mirror Segment', 3)
+      expectItemInInventory(state, 'Binding Resin')
+    })
+  })
+
+  describe('Mirror Terraces: Mirrors of Ember Light', () => {
+    it('installs the segments, mends the mount and waits for the noon beam', () => {
+      const game = gameAt(AT.terraces)
+      const state = game.state
+      play(game, AT.terraces, AT.terraces + 4)
+      expectCurrentRoom(state, 'Mirror Terraces')
+      expectItemCountInInventory(state, 'Brass Mirror Segment', 4)
+      play(game, AT.terraces + 4, AT.terraces + 6)
+      expectStoryFlag(state, FLAG_ACT3_MIRRORS_OF_EMBER_LIGHT_COMPLETED, false)
+
+      play(game, AT.terraces + 6, AT.terraces + 7)
+      expectStoryFlag(state, FLAG_ACT3_MIRRORS_OF_EMBER_LIGHT_COMPLETED, false)
+      expect(state.currentRoom.getExits(state).east).toBeUndefined()
+
+      const reloaded = new Game([new Act3()])
+      reloaded.loadSaveData(game.toSaveData())
+      executeCommands(reloaded, ['rest'])
+      expectStoryFlag(
+        reloaded.state,
+        FLAG_ACT3_MIRRORS_OF_EMBER_LIGHT_COMPLETED,
+        true,
+      )
+
+      play(game, AT.terraces + 7, AT.emberGallery)
+      expectStoryFlag(state, FLAG_ACT3_MIRRORS_OF_EMBER_LIGHT_COMPLETED, true)
+    })
+  })
+
+  describe('Ember Gallery: the heat-ward mix', () => {
+    it('finds ash-fern and cooled slag and combines them', () => {
+      const game = gameAt(AT.emberGallery)
+      const state = game.state
+      play(game, AT.emberGallery, AT.emberGallery + 1)
+      expectCurrentRoom(state, 'Ember Gallery')
+      const search = play(game, AT.emberGallery + 1, AT.emberGallery + 2)
+      expect(
+        search.includes('ash-fern') || search.includes('cooled slag'),
+      ).toBe(true)
+      play(game, AT.emberGallery + 2, AT.emberGallery + 4)
+      expectItemInInventory(state, 'ash-fern', true)
+      expectItemInInventory(state, 'cooled slag', true)
+      const craft = play(game, AT.emberGallery + 4, AT.fumarole)
+      expect(craft.includes('heat') || craft.includes('ward')).toBe(true)
+      expectItemInInventory(state, 'heat-ward mix', true)
+    })
+  })
+
+  describe('Fumarole Passages: Breath of the Mountain', () => {
+    it('refuses the ward until the third vent stone, then seals the vents', () => {
+      const game = gameAt(AT.fumarole)
+      const state = game.state
+      play(game, AT.fumarole, AT.fumarole + 2)
+      expectCurrentRoom(state, 'Fumarole Passages')
+      executeCommands(game, ['south'])
+      expectCurrentRoom(state, 'Fumarole Passages')
+
+      // Off the path: the stones can be picked up, and there are three.
+      executeCommands(game, ['take vent stone', 'take vent stone'])
+      executeCommands(game, ['take vent stone'])
+      expectItemCountInInventory(state, 'Vent Stone', 3)
+      play(game, AT.fumarole + 2, AT.fumarole + 4)
+      const early = executeCommands(game, ['use heat-ward mix']).toLowerCase()
+      expect(
+        early.includes('not yet synchronized') || early.includes('unstable'),
+      ).toBe(true)
+
+      play(game, AT.fumarole + 4, AT.fumarole + 5)
+      const applied = play(game, AT.fumarole + 5, AT.fumarole + 6)
+      expect(applied.includes('ward') || applied.includes('seals')).toBe(true)
+      expectStoryFlag(state, FLAG_ACT3_BREATH_OF_THE_MOUNTAIN_COMPLETED, false)
+    })
+
+    it('keeps the in-breath across a save and crosses on it', () => {
+      const game = gameAt(AT.fumarole + 6)
+      const state = game.state
+      executeCommands(game, ['south'])
+      expectCurrentRoom(state, 'Fumarole Passages')
+      executeCommands(game, ['rest'])
+      const midBreath = new Game([new Act3()])
+      midBreath.loadSaveData(game.toSaveData())
+      executeCommands(midBreath, ['south'])
+      expectCurrentRoom(midBreath.state, 'Phoenix Crater')
+
+      executeCommands(game, ['south'])
+      expectCurrentRoom(state, 'Phoenix Crater')
+      expectStoryFlag(state, FLAG_ACT3_BREATH_OF_THE_MOUNTAIN_COMPLETED, true)
+    })
+
+    it('crosses on the path as it is played', () => {
+      const game = gameAt(AT.phoenix + 1)
+      expectCurrentRoom(game.state, 'Phoenix Crater')
+      expectStoryFlag(
+        game.state,
+        FLAG_ACT3_BREATH_OF_THE_MOUNTAIN_COMPLETED,
+        true,
+      )
+    })
+  })
+
+  describe('Phoenix Crater: the relic trial', () => {
+    it('shows the phoenix, asks its riddle and gives the feather for patience', () => {
+      const game = gameAt(AT.phoenix + 1)
+      const state = game.state
+      play(game, AT.phoenix + 1, AT.phoenix + 2)
+      expectCharacterInRoom(state.currentRoom, 'phoenix', true)
+      const riddle = play(game, AT.phoenix + 2, AT.phoenix + 3)
+      expect(riddle).toContain('wisdom')
+      expect(riddle).toContain('time is short')
+      play(game, AT.phoenix + 3, AT.cavernMouth)
+      expectItemInInventory(state, 'phoenix feather', true)
+    })
+  })
+
+  describe('Cavern Mouth: the Mine Overseer', () => {
+    it('carries the party under the mountain and gives the miner’s key', () => {
+      const game = gameAt(AT.cavernMouth)
+      const state = game.state
+      play(game, AT.cavernMouth, AT.overseer)
+      expectCurrentRoom(state, 'Cavern Mouth')
+      expectCharacterInRoom(state.currentRoom, 'mine overseer', true)
+
+      const talk = play(game, AT.overseer, AT.overseer + 1)
+      expect(talk).toContain('tool cache')
+      expect(talk).toContain('key')
+      expectItemInInventory(state, "Miner's Key", true)
+    })
+  })
+
+  describe("Tool Cache: the supply crate (Miners' Rescue)", () => {
+    it('hides the crate until a search, then yields the three supplies', () => {
+      const game = gameAt(AT.toolCache)
+      const state = game.state
+      play(game, AT.toolCache, AT.toolCache + 1)
+      expectCurrentRoom(state, 'Tool Cache')
+      expectItemInRoom(state.currentRoom, 'supply crate', false)
+
+      const search = play(game, AT.toolCache + 1, AT.toolCache + 2)
+      expect(search).toContain('discover a heavy supply crate')
+      expect(search).toContain('hidden behind stacked timbers')
+      expect(search).toContain('rescue supplies')
+      expectItemInRoom(state.currentRoom, 'supply crate', true)
+      expect(executeCommands(game, ['search']).toLowerCase()).toContain(
+        'already found',
+      )
+
+      const unlock = play(game, AT.toolCache + 2, AT.toolCache + 3)
+      expect(unlock.includes('unlock') || unlock.includes('padlock')).toBe(true)
+      expect(play(game, AT.toolCache + 3, AT.toolCache + 4)).toContain('braces')
+      play(game, AT.toolCache + 4, AT.galleries)
+      expectItemInInventory(state, 'Reinforced Braces', true)
+      expectItemInInventory(state, 'Support Straps', true)
+      expectItemInInventory(state, 'Wedge Blocks', true)
+    })
+  })
+
+  describe('Collapsed Galleries: freeing the miners', () => {
+    it('keeps the east blocked until the rock is braced, strapped and wedged', () => {
+      const game = gameAt(AT.galleries)
+      const state = game.state
+      play(game, AT.galleries, AT.galleries + 2)
+      expectCurrentRoom(state, 'Collapsed Galleries')
+      expectCharacterInRoom(state.currentRoom, 'miners', false)
+      expectItemInRoom(state.currentRoom, 'fallen rock', true)
+      executeCommands(game, ['east'])
+      expectCurrentRoom(state, 'Collapsed Galleries')
+
+      expect(play(game, AT.galleries + 2, AT.galleries + 3)).toContain(
+        'steady the collapse',
+      )
+      expect(play(game, AT.galleries + 3, AT.galleries + 4)).toContain(
+        'bind the reinforced braces securely',
+      )
+      const freed = play(game, AT.galleries + 4, AT.galleries + 5)
+      expect(freed).toContain('free the blocked passage')
+      expect(freed).toContain('trapped miners emerging')
+      expectCharacterInRoom(state.currentRoom, 'miners', true)
+      expectItemInRoom(state.currentRoom, 'fallen rock', false)
+    })
+
+    it('completes the rescue when the miners are spoken to', () => {
+      const game = gameAt(AT.galleries + 5)
+      const rescue = play(game, AT.galleries + 5, AT.galleries + 6)
+      expect(rescue).toContain('miner steps forward')
+      expect(rescue).toContain('thank the gods')
+      expectStoryFlag(game.state, FLAG_ACT3_MINERS_RESCUE_COMPLETED, true)
+      play(game, AT.galleries + 6, AT.echoChambers)
+      expectCurrentRoom(game.state, 'Echo Chambers')
+    })
+  })
+
+  describe('Echo Chambers: the Resonant Chant', () => {
+    it('shows the oath scrolls and the rubbings from the runic walls', () => {
+      const game = gameAt(AT.echoChambers)
+      const state = game.state
+      expectItemInRoom(state.currentRoom, 'runic walls', true)
+
+      const search = executeCommands(game, [PATH[AT.echoChambers]])
+      expect(search).toContain('ancient scrolls')
+      expect(search).toContain('stone niche')
+
+      const scrolls = executeCommands(game, [PATH[AT.echoChambers + 1]])
+      expect(scrolls).toContain('I take what is given, and I return ___.')
+      expect(scrolls.toLowerCase()).not.toContain('disintegrate')
+      expectStoryFlag(state, FLAG_ACT3_OATH_SCROLLS_EXAMINED, true)
+      expectItemInRoom(state.currentRoom, 'Old Oath Scrolls', true)
+
+      const walls = executeCommands(game, [PATH[AT.echoChambers + 2]])
+      expect(walls).toContain('Let stillness echo, let silence bind')
+      expect(walls.toLowerCase()).toContain('chant to quiet the phantoms')
+      expectItemInRoom(state.currentRoom, 'Resonant Chant Rubbings', true)
+
+      expectItemInInventory(state, 'Resonant Chant Rubbings', false)
+      expect(executeCommands(game, [PATH[AT.echoChambers + 3]])).toBe(
+        'This might come in handy, so you decide to pick it up.',
+      )
+      expectItemInInventory(state, 'Resonant Chant Rubbings', true)
+    })
+  })
+
+  describe('Stillness Vestibule: the Oath of Stillness', () => {
+    it('blesses the stones, stills the pools and performs the oath', () => {
+      const game = gameAt(AT.vestibule)
+      const state = game.state
+      play(game, AT.vestibule, AT.vestibule + 2)
+      expectCurrentRoom(state, 'Stillness Vestibule')
+      expectItemInRoom(state.currentRoom, 'echo stones', true)
+      expectCharacterInRoom(state.currentRoom, 'silence keeper', true)
+
+      const bless = play(game, AT.vestibule + 2, AT.vestibule + 3)
+      expect(bless).toContain('steady glow')
+      expect(bless).toContain('ancient chant')
+
+      play(game, AT.vestibule + 3, AT.vestibule + 4)
+      const still = play(game, AT.vestibule + 4, AT.vestibule + 5)
+      expect(still).toContain('the pools are mirror-still')
+      expectItemInInventory(state, 'stillwater phial', true)
+
+      const oath = play(game, AT.vestibule + 5, AT.dragon)
+      expect(oath).toContain('you recite the resonant chant')
+      expect(oath).toContain('harmonious silence')
+      expect(oath).toContain("dragon's hall now lies open")
+      expectStoryFlag(state, FLAG_ACT3_OATH_OF_STILLNESS_COMPLETED, true)
+      expectItemInInventory(state, 'Resonant Chant Rubbings', false)
+    })
+  })
+
+  describe("Dragon's Hall: the memory, the oath and the scale", () => {
+    it('shares its memory on the first talk', () => {
+      const game = gameAt(AT.dragon + 1)
+      const state = game.state
+      expectCharacterInRoom(state.currentRoom, 'ancient dragon', true)
+      expectItemInRoom(state.currentRoom, "dragon's scale", false)
+
+      const memory = play(game, AT.dragon + 1, AT.dragon + 2)
+      expect(memory).toContain('aren and lysa')
+      expect(memory).toContain('warded away, not dead')
+      expect(memory).toContain('anchored in the amulet')
+      expectStoryFlag(state, FLAG_ACT3_DRAGONS_MEMORY_RECEIVED, true)
+    })
+
+    it('gives its scale to the finished oath', () => {
+      const game = gameAt(AT.dragon + 2)
+      const state = game.state
+      const oath = executeCommands(game, [PATH[AT.dragon + 2]])
+      expect(oath).toContain('Your words ring true, young one.')
+      expect(oath.toLowerCase()).toContain('scale')
+      expectStoryFlag(state, FLAG_ACT3_DRAGON_OATH_SPOKEN, true)
+      expectItemInRoom(state.currentRoom, "dragon's scale", true)
+
+      play(game, AT.dragon + 3, AT.hut)
+      expectItemInInventory(state, "dragon's scale", true)
+      expectItemInRoom(state.currentRoom, "dragon's scale", false)
+    })
+  })
+
+  describe("Mira's Hut: the confession, the rite and the elixir", () => {
+    it('brings the party home with the three relics', () => {
+      const game = gameAt(AT.hut)
+      const talk = play(game, AT.hut, AT.hut + 3)
+      expect(talk).toContain('three relics are yours')
+      expect(talk).toContain('return to my hut')
+      expectCurrentRoom(game.state, "Mira's Hut")
+    })
+
+    it('holds the rite back until the confession is heard and answered', () => {
+      const game = gameAt(AT.hut + 3)
+      const state = game.state
+      expectCurrentRoom(state, "Mira's Hut")
+      expect(executeCommands(game, ['say parents to mira'])).toContain(
+        'Later, Elior. Not here.',
+      )
+      const confession = executeCommands(game, [PATH[AT.hut + 3]])
+      expect(confession.toLowerCase()).toContain('i was their pupil')
+      expect(confession).toContain('say parents, say malakar')
+      expect(executeCommands(game, ['say mother to mira'])).toContain(
+        'They became the ward',
+      )
+      expectStoryFlag(state, FLAG_ACT3_LIFELIGHT_ELIXIR_CREATED, false)
+
+      expect(executeCommands(game, ['say i forgive you to mira'])).toContain(
+        'Thank you. I did not dare ask for that.',
+      )
+      expectStoryFlag(state, FLAG_ACT3_MIRA_FORGIVEN, true)
+
+      const beforeRite = new Game([new Act3()])
+      expect(beforeRite.loadSaveData(game.toSaveData())).toContain('loaded')
+      expectItemInRoom(beforeRite.state.currentRoom, 'healing herbs', true)
+      expect(executeCommands(beforeRite, ['say amulet to mira'])).toContain(
+        'anchor of their ward',
+      )
+      expectStoryFlag(beforeRite.state, FLAG_ACT3_MIRA_FORGIVEN, true)
+      executeCommands(beforeRite, ['talk to mira'])
+      expectItemInRoom(beforeRite.state.currentRoom, 'healing herbs', false)
+    })
+
+    it('performs the Warding Rite and gives the Lifelight Elixir', () => {
+      const game = gameAt(AT.hut + 4)
+      const state = game.state
+      const rite = play(game, AT.hut + 4, AT.hut + 5)
+      expect(rite).toContain('three relics resonate')
+      expect(rite).toContain('lifelight elixir')
+      expect(rite).toContain('courage, wisdom, and selflessness')
+      expectStoryFlag(state, FLAG_ACT3_LIFELIGHT_ELIXIR_CREATED, true)
+
+      expect(
+        executeCommands(game, ['say you should have told me to mira']),
+      ).toContain('shakes her head.')
+      expectStoryFlag(state, FLAG_ACT3_MIRA_REPROACHED, false)
+
+      expectItemInRoom(state.currentRoom, 'healing herbs', false)
+      expectItemInInventory(state, 'healing herbs', false)
+      expect(executeCommands(game, ['take herbs'])).toContain(
+        "There is no 'herbs' here to take.",
+      )
+
+      expectItemInRoom(state.currentRoom, 'lifelight elixir', true)
+      play(game, AT.hut + 5, AT.hut + 6)
+      expectItemInInventory(state, 'lifelight elixir', true)
+      expectItemInRoom(state.currentRoom, 'lifelight elixir', false)
+    })
+  })
+
+  describe("Entrance to Malakar's Fortress: the gates", () => {
+    it('carries the party to the fortress, where Mira refuses to stay behind', () => {
+      // Mira's forgiveness is the player's choice, off the path.
+      const game = gameAt(AT.hut + 3)
+      executeCommands(game, [PATH[AT.hut + 3], 'say i forgive you to mira'])
+      play(game, AT.hut + 4, AT.fortress)
+      const fortress = play(game, AT.fortress, PATH.length)
+      expect(fortress).toContain('final journey')
+      expect(fortress).toContain('fortress')
+      expectCurrentRoom(game.state, "Entrance to Malakar's Fortress")
+
+      const gateTalk = executeCommands(game, ['talk to mira'])
+      expect(gateTalk).toContain('I am coming with you.')
+      expect(gateTalk).toContain('You forgave me in the hut')
+      expect(executeCommands(game, ['talk to mira'])).toContain(
+        'I am right behind you, Elior.',
+      )
+    })
+
+    it('completes the act on the gates, with the hook as the closing page', () => {
+      const game = gameAt(PATH.length)
+      const state = game.state
+      const examine = executeCommands(game, ['examine gates'])
+      expect(examine.toLowerCase()).toContain('fortress gates tower above you')
+      expect(examine.toLowerCase()).toContain('act iii is complete')
+      expectStoryFlag(state, FLAG_ACT3_FORTRESS_GATES_EXAMINED, true)
+      expect(examine).toContain(
+        'The Dragon said they were warded away, not dead. You do not yet know what that means.',
+      )
+      expect(examine).toContain('The Lifelight Elixir pulses')
+
+      for (let turn = 0; turn < 3; turn++) game.newTurn()
+      const hook =
+        "Your parents were Malakar's closest friends. The Dragon says they are warded away, not dead."
+      expect(game.getActCompleteText()).toMatch(
+        new RegExp(`^${hook}\\n\\nCongratulations — you have completed`),
+      )
+      const fresh = new Game([new Act3()])
+      expect(fresh.loadSaveData(game.toSaveData())).toContain('loaded')
+      for (let turn = 0; turn < 3; turn++) fresh.newTurn()
+      expect(fresh.getActCompleteText()).toBe(game.getActCompleteText())
+      expectItemInRoom(fresh.state.allRooms.MirasHut, 'healing herbs', false)
+      expect(executeCommands(game, ['look at mira'])).toContain(
+        "the Wardens' pupil",
+      )
+      expectStoryFlag(state, FLAG_ACT3_MAIN_COMPLETED, true)
+      expect(state.isQuestCompleted(MAIN)).toBe(true)
+      expect(new Act3().isCompleted(state)).toBe(true)
+    })
   })
 
   it('survives a save and load round-trip at the end', () => {
