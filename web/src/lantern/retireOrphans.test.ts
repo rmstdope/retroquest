@@ -1,3 +1,4 @@
+import { readFileSync } from 'node:fs'
 import { describe, expect, it } from 'vitest'
 import { retireOrphans } from '../../../tts/retire-orphans'
 
@@ -9,7 +10,32 @@ const MANIFEST =
   '}\n'
 const LOCK = '{\n "aa": {"fp":"1"},\n "bb": {"fp":"2"},\n "cc": {"fp":"3"}\n}\n'
 
+const ACTS = [1, 2, 3, 4]
+
 describe('retireOrphans', () => {
+  it('keeps a lock entry with no clip when another clip is retired', () => {
+    const lock = LOCK.replace('"cc"', '"dd"')
+    const result = retireOrphans(['aa', 'cc'], MANIFEST, lock)
+    expect(Object.keys(JSON.parse(result.lock))).toEqual(['aa', 'dd'])
+  })
+
+  it.each(ACTS)(
+    'finds nothing to retire in the committed files of Act %i',
+    (act) => {
+      const read = (url: string): string =>
+        readFileSync(new URL(url, import.meta.url), 'utf8')
+      const script = JSON.parse(read(`../../../tts/act${act}/script.json`)) as {
+        key: string
+      }[]
+      const result = retireOrphans(
+        script.map((line) => line.key),
+        read(`../../public/audio/narration/act${act}/manifest.json`),
+        read(`../../../tts/act${act}/narration.lock.json`),
+      )
+      expect(result.retired).toEqual([])
+    },
+  )
+
   it('changes nothing when every clip has its line', () => {
     const result = retireOrphans(['aa', 'bb', 'cc'], MANIFEST, LOCK)
     expect(result).toEqual({ manifest: MANIFEST, lock: LOCK, retired: [] })
