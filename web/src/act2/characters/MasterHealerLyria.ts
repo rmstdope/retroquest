@@ -3,6 +3,7 @@ import {
   type GameState,
   type Item,
   characterName,
+  dialogue,
   speech,
 } from '@/engine'
 import { CrystalFocus } from '../items/CrystalFocus'
@@ -67,7 +68,6 @@ export class MasterHealerLyria extends Character {
     ) {
       return usual
     }
-    const name = characterName(this.name)
     if (!gameState.getStoryFlag(FLAG_LYRIA_DIAGNOSED)) {
       gameState.setStoryFlag(FLAG_LYRIA_DIAGNOSED, true)
       return (
@@ -75,9 +75,8 @@ export class MasterHealerLyria extends Character {
         ' looks up from her mortar, and something in your face makes her ' +
         'set the pestle down.' +
         '\n\n' +
-        name +
-        ': ' +
-        speech(
+        dialogue(
+          this.name,
           "You've been to the Silver Stag. Marcus's girl, Elena. I have sat " +
             'by her bed myself, and I could do nothing for her. Listen, then, ' +
             'because this is how a curse like hers is lifted, if it can be ' +
@@ -92,9 +91,8 @@ export class MasterHealerLyria extends Character {
         '\n\n' +
         'She picks the pestle up again and sets it down.' +
         '\n\n' +
-        name +
-        ': ' +
-        speech(
+        dialogue(
+          this.name,
           'I wrote to the healer at Willowbrook about that mark, weeks ago. ' +
             'Mira. The best hand with a curse this side of the hills, they ' +
             'say. She never came, and she never answered.',
@@ -104,9 +102,8 @@ export class MasterHealerLyria extends Character {
       )
     }
     return (
-      name +
-      ': ' +
-      speech(
+      dialogue(
+        this.name,
         'Elena still? Strengthen her, wash her in untouched water, then ' +
           'unbind it. In that order, or not at all.',
       ) +
@@ -122,22 +119,17 @@ export class MasterHealerLyria extends Character {
    * after the apprenticeship.
    */
   private usualReply(gameState: GameState): string {
-    const name = characterName(this.name)
     if (gameState.getStoryFlag(FLAG_HEALERS_APPRENTICE_COMPLETED)) {
-      return (
-        name +
-        ': ' +
-        speech('You have the first of it. Mastery is the next twenty years.')
+      return dialogue(
+        this.name,
+        'You have the first of it. Mastery is the next twenty years.',
       )
     }
     if (gameState.getStoryFlag(FLAG_HEALERS_APPRENTICE_ACCEPTED)) {
-      return (
-        name +
-        ': ' +
-        speech(
-          "He's holding on. The herbs bought him days, not weeks. Find me " +
-            'that focus.',
-        )
+      return dialogue(
+        this.name,
+        "He's holding on. The herbs bought him days, not weeks. Find me " +
+          'that focus.',
       )
     }
     if (gameState.hasItem('healing herbs')) {
@@ -145,25 +137,21 @@ export class MasterHealerLyria extends Character {
         characterName('Lyria') +
         "'s eyes go straight to the bundle in your hands." +
         '\n\n' +
-        name +
-        ': ' +
-        speech(
+        dialogue(
+          this.name,
           'Are those from the old families? Give them here, if you are ' +
             'willing. I have a bed that cannot wait.',
         )
       )
     }
-    return (
-      name +
-      ': ' +
-      speech(
-        'Welcome to my house of healing. I can sense magical potential in ' +
-          'you, and I could use it, but look at my shelves. Bare. I have ' +
-          'patients on the brink of death and nothing left to steep for ' +
-          'them. Bring me [item_name]healing herbs[/item_name], good ones, ' +
-          'and I will let you watch me work. That is how every healer ' +
-          'starts.',
-      )
+    return dialogue(
+      this.name,
+      'Welcome to my house of healing. I can sense magical potential in ' +
+        'you, and I could use it, but look at my shelves. Bare. I have ' +
+        'patients on the brink of death and nothing left to steep for ' +
+        'them. Bring me [item_name]healing herbs[/item_name], good ones, ' +
+        'and I will let you watch me work. That is how every healer ' +
+        'starts.',
     )
   }
 
@@ -174,7 +162,6 @@ export class MasterHealerLyria extends Character {
    * when the herbs have not been given yet.
    */
   override giveItem(gameState: GameState, item: Item): string {
-    const name = characterName(this.name)
     const apprenticed = gameState.getStoryFlag(FLAG_HEALERS_APPRENTICE_ACCEPTED)
     if (item instanceof HealingHerbs && !apprenticed) {
       gameState.removeItemFromInventory(item.name)
@@ -183,9 +170,8 @@ export class MasterHealerLyria extends Character {
         characterName('Lyria') +
         ' unties the bundle and breathes it in.' +
         '\n\n' +
-        name +
-        ': ' +
-        speech(
+        dialogue(
+          this.name,
           "Greendale's old families grow these. They don't part with them " +
             'lightly.',
         ) +
@@ -195,9 +181,8 @@ export class MasterHealerLyria extends Character {
         'her steep the herbs, lay her hands on him and pour her healing in. ' +
         'His breathing eases, but only a little.' +
         '\n\n' +
-        name +
-        ': ' +
-        speech(
+        dialogue(
+          this.name,
           'This is the work. You give what you have, and sometimes it is ' +
             'not enough. He needs more than these hands can give. The old ' +
             'healers gathered their healing into a crystal, a ' +
@@ -231,9 +216,8 @@ export class MasterHealerLyria extends Character {
           characterName('Lyria') +
           ' turns the crystal over in her hands and gives it back.' +
           '\n\n' +
-          name +
-          ': ' +
-          speech(
+          dialogue(
+            this.name,
             'A focus gathers what you pour into it, and I have nothing ' +
               'left to pour. Bring me [item_name]healing herbs[/item_name] ' +
               "first. Then we'll see what this is for.",
@@ -248,9 +232,7 @@ export class MasterHealerLyria extends Character {
         " takes the [item_name]Crystal Focus[/item_name] to the carter's " +
         'bed and sets it on his chest.' +
         '\n\n' +
-        name +
-        ': ' +
-        speech('Watch my hands, not the light.') +
+        dialogue(this.name, 'Watch my hands, not the light.') +
         '\n\n' +
         'She gathers her healing into the crystal, and it comes out the ' +
         'other side bright and narrow, straight into him. The grey goes out ' +
@@ -259,13 +241,12 @@ export class MasterHealerLyria extends Character {
         '\n\n' +
         '[success]You learn [spell_name]greater heal[/spell_name].[/success]' +
         '\n\n' +
-        name +
-        ': ' +
-        speech("He'll live. And you have the first of it now.") +
+        dialogue(this.name, "He'll live. And you have the first of it now.") +
         "\n\n[success]Quest Complete: The Healer's Apprentice[/success]"
       )
     }
     // Default response for other items
+    const name = characterName(this.name)
     return (
       name +
       ' seems to be too busy to receive any gifts from you at the moment.'

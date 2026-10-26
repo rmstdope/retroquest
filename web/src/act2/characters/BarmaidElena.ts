@@ -3,7 +3,6 @@ import {
   type GameState,
   characterName,
   clue,
-  speech,
   dialogue,
 } from '@/engine'
 import {
@@ -127,22 +126,19 @@ export class BarmaidElena extends Character {
         )
       )
     } else if (this.elenaInitialHealing) {
-      const name = characterName(this.name)
       return (
         characterName('Elena') +
         ' turns her hand over and looks at it as if it belonged to someone ' +
         'else.' +
         '\n\n' +
-        name +
-        ': ' +
-        speech(
+        dialogue(
+          this.name,
           "It didn't take. I felt it go in, warm as a hearth, and then the " +
             'cold closed over it again.',
         ) +
         '\n\n' +
-        name +
-        ': ' +
-        speech(
+        dialogue(
+          this.name,
           'Master Lyria sat with me once, when it began. If anyone knows ' +
             'what comes next, she does.',
         )

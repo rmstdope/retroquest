@@ -3,6 +3,7 @@ import {
   type GameState,
   characterName,
   speech,
+  attributeSpeech,
   dialogue,
 } from '@/engine'
 import { AncientAmulet } from '../items/AncientAmulet'
@@ -128,12 +129,14 @@ export class SpectralLibrarian extends Character {
           speech(`${GLANCE_WORDS} ${CONFESSION_WORDS}`)
     }
     return (
-      '[success]' +
-      dialogue(
+      attributeSpeech(
         this.name,
-        `You mended the wards with your [spell_name]${mendName}[/spell_name] ` +
-          'spell. They have been failing longer than I care to count; ' +
-          'thank you. Now, what you came for.',
+        '[success]' +
+          speech(
+            `You mended the wards with your [spell_name]${mendName}[/spell_name] ` +
+              'spell. They have been failing longer than I care to count; ' +
+              'thank you. Now, what you came for.',
+          ),
       ) +
       confession +
       " The spirit's eyes glow brighter as they speak: " +

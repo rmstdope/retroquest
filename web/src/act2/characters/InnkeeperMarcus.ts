@@ -6,7 +6,6 @@ import {
   clue,
   remembered,
   dialogue,
-  speech,
 } from '@/engine'
 import { RoomKey } from '../items/RoomKey'
 import { DruidicCharm } from '../items/DruidicCharm'
@@ -69,7 +68,6 @@ export class InnkeeperMarcus extends Character {
     if (words.trim().toLowerCase() !== 'truth') {
       return super.sayTo(gameState, words)
     }
-    const speaker = characterName(this.name)
     if (!gameState.getStoryFlag(FLAG_INNKEEPERS_DAUGHTER_COMPLETED)) {
       return dialogue(
         this.name,
@@ -91,9 +89,8 @@ export class InnkeeperMarcus extends Character {
       `${characterName('Elena')}'s wrist: the curse was no ill wind. ` +
       'Someone set it on her on purpose.' +
       '\n' +
-      speaker +
-      ': ' +
-      speech(
+      dialogue(
+        this.name,
         'On purpose. … Someone chose my girl. … Then this house sleeps ' +
           'with one eye open from now on. Thank you for telling me. ' +
           "I'd sooner know it than be comforted by a lie.",

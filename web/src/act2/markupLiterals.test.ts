@@ -108,10 +108,21 @@ function operands(node: ts.Node): ts.Node[] {
   return [node]
 }
 
+/** Whether `node` is a call of `speech(...)`. */
+function isSpeechCall(node: ts.Node): boolean {
+  return (
+    ts.isCallExpression(node) &&
+    ts.isIdentifier(node.expression) &&
+    node.expression.text === 'speech'
+  )
+}
+
 /**
- * The `file:line` of every speaker label assembled by hand: a
- * `characterName(...)` directly followed by the bare label separator `': '`,
- * in a `+` chain or a template. `dialogue(speaker, words)` writes the label.
+ * The `file:line` of every speaker label assembled by hand: a text starting
+ * with `: ` directly before a `speech(...)` call in a `+` chain, whoever the
+ * label names (a `characterName(...)` call or a variable holding one), or a
+ * `characterName(...)` directly followed by `: ` in a template.
+ * `dialogue(speaker, words)` writes the label.
  */
 function handAssembledLabels(file: string): string[] {
   const source = ts.createSourceFile(
@@ -137,10 +148,10 @@ function handAssembledLabels(file: string): string[] {
         parts.forEach((part, index) => {
           const next = parts[index + 1]
           if (
-            isCharacterNameCall(part) &&
+            ts.isStringLiteralLike(part) &&
+            part.text.startsWith(': ') &&
             next !== undefined &&
-            ts.isStringLiteralLike(next) &&
-            next.text === ': '
+            isSpeechCall(next)
           )
             report(part)
         })
