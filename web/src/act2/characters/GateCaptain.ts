@@ -121,7 +121,7 @@ export class GateCaptain extends Character {
     return (
       'The ' +
       characterName('Gate Captain') +
-      ` politely declines the ${item.name}. ` +
+      ` politely declines ${item.nameInSentence()}. ` +
       speech('I only need to see proper entry documentation.')
     )
   }

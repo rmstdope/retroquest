@@ -45,9 +45,9 @@ export class OfferingAltar extends Item {
     )
     if (!(hasDruidic && hasProtective && hasNatures)) {
       const missingCharms: string[] = []
-      if (!hasDruidic) missingCharms.push('Druidic Charm')
-      if (!hasProtective) missingCharms.push('Protective Charm')
-      if (!hasNatures) missingCharms.push("Nature's Charm")
+      if (!hasDruidic) missingCharms.push('druidic charm')
+      if (!hasProtective) missingCharms.push('protective charm')
+      if (!hasNatures) missingCharms.push("nature's charm")
       return (
         `The altar's runes flicker weakly as you place ${other.nameInSentence()} upon it. ` +
         'You sense that you need all three sacred charms to activate the full ritual: ' +
