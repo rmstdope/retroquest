@@ -2,6 +2,16 @@ import { describe, it, expect } from 'vitest'
 import { Game } from '@/engine'
 import { Act2 } from '../Act2'
 import {
+  QUEST_ANCIENT_LIBRARY,
+  QUEST_CEDRIKS_LOST_HONOR,
+  QUEST_FOREST_GUARDIANS_RIDDLES,
+  QUEST_GATHERING_STORM,
+  QUEST_HEALERS_APPRENTICE,
+  QUEST_HERMITS_WARNING,
+  QUEST_INNKEEPERS_DAUGHTER,
+  QUEST_LOST_CARAVAN,
+  QUEST_SUPPLIES_FOR_THE_JOURNEY,
+  QUEST_WHISPERS_IN_THE_WIND,
   FLAG_ANCIENT_LIBRARY_COMPLETED,
   FLAG_CEDRIKS_HONOR_COMPLETED,
   FLAG_FOREST_GUARDIANS_RIDDLES_COMPLETED,
@@ -16,16 +26,16 @@ import {
 
 /** Every Act II quest that declares a completed flag, with that flag. */
 const COMPLETED_FLAGS: [string, string][] = [
-  ['Supplies for the Journey', FLAG_SUPPLIES_QUEST_COMPLETED],
-  ["The Healer's Apprentice", FLAG_HEALERS_APPRENTICE_COMPLETED],
-  ['The Ancient Library', FLAG_ANCIENT_LIBRARY_COMPLETED],
-  ["The Innkeeper's Daughter", FLAG_INNKEEPERS_DAUGHTER_COMPLETED],
-  ["Cedric's Lost Honor", FLAG_CEDRIKS_HONOR_COMPLETED],
-  ["The Hermit's Warning", FLAG_HERMITS_WARNING_COMPLETED],
-  ["The Merchant's Lost Caravan", FLAG_LOST_CARAVAN_COMPLETED],
-  ['Whispers in the Wind', FLAG_WHISPERS_IN_WIND_COMPLETED],
-  ["The Forest Guardian's Riddles", FLAG_FOREST_GUARDIANS_RIDDLES_COMPLETED],
-  ['The Gathering Storm', FLAG_GATHERING_STORM_COMPLETED],
+  [QUEST_SUPPLIES_FOR_THE_JOURNEY, FLAG_SUPPLIES_QUEST_COMPLETED],
+  [QUEST_HEALERS_APPRENTICE, FLAG_HEALERS_APPRENTICE_COMPLETED],
+  [QUEST_ANCIENT_LIBRARY, FLAG_ANCIENT_LIBRARY_COMPLETED],
+  [QUEST_INNKEEPERS_DAUGHTER, FLAG_INNKEEPERS_DAUGHTER_COMPLETED],
+  [QUEST_CEDRIKS_LOST_HONOR, FLAG_CEDRIKS_HONOR_COMPLETED],
+  [QUEST_HERMITS_WARNING, FLAG_HERMITS_WARNING_COMPLETED],
+  [QUEST_LOST_CARAVAN, FLAG_LOST_CARAVAN_COMPLETED],
+  [QUEST_WHISPERS_IN_THE_WIND, FLAG_WHISPERS_IN_WIND_COMPLETED],
+  [QUEST_FOREST_GUARDIANS_RIDDLES, FLAG_FOREST_GUARDIANS_RIDDLES_COMPLETED],
+  [QUEST_GATHERING_STORM, FLAG_GATHERING_STORM_COMPLETED],
 ]
 
 describe('Act II quest completion', () => {
@@ -41,15 +51,15 @@ describe('Act II quest completion', () => {
   })
 
   it.each([
-    'Supplies for the Journey',
-    'The Ancient Library',
-    "The Hermit's Warning",
+    QUEST_SUPPLIES_FOR_THE_JOURNEY,
+    QUEST_ANCIENT_LIBRARY,
+    QUEST_HERMITS_WARNING,
   ])(
     'completing %s makes its stage of The Gathering Storm reachable',
     (name) => {
       const game = new Game([new Act2()])
       game.state.settleQuests()
-      const main = game.state.getQuest('The Gathering Storm')
+      const main = game.state.getQuest(QUEST_GATHERING_STORM)
       expect(main?.checkUpdate(game.state)).toBe(false)
 
       game.state.getQuest(name)?.complete(game.state)

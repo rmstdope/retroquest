@@ -26,21 +26,16 @@ export class SuppliesForTheJourneyQuest extends Quest {
     return gameState.getStoryFlag(FLAG_DEMONSTRATED_COMBAT_SKILLS)
   }
 
-  /** Complete once the survival kit, lantern and rope are all carried. */
+  /** Complete once told to, or once the survival kit, lantern and rope are all carried. */
   override checkCompletion(gameState: GameState): boolean {
-    if (!this.completed) {
-      const hasSurvivalKit = gameState.inventory.some(
-        (item) => item instanceof ForestSurvivalKit,
-      )
-      const hasLantern = gameState.inventory.some(
-        (item) => item instanceof EnhancedLantern,
-      )
-      const hasRope = gameState.inventory.some(
-        (item) => item instanceof QualityRope,
-      )
-      if (hasSurvivalKit && hasLantern && hasRope) return true
-    }
-    return false
+    const carries = (kind: new (...args: never[]) => unknown): boolean =>
+      gameState.inventory.some((item) => item instanceof kind)
+    return (
+      this.completed ||
+      (carries(ForestSurvivalKit) &&
+        carries(EnhancedLantern) &&
+        carries(QualityRope))
+    )
   }
 
   /** The story flag completing this quest raises. */

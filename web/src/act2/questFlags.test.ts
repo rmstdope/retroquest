@@ -12,7 +12,7 @@ function sources(dir: string): string[] {
 describe('Act II completed flags', () => {
   it('are raised by the engine, never by hand in characters, items or quests', () => {
     const hand = /setStoryFlag\(\s*FLAG_\w+_COMPLETED\b/
-    const offenders = ['characters', 'items', 'quests', 'rooms', 'spells']
+    const offenders = ['.', 'characters', 'items', 'quests', 'rooms', 'spells']
       .flatMap(sources)
       .filter((text) => hand.test(text))
     expect(offenders).toEqual([])
