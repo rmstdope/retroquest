@@ -1,4 +1,10 @@
-import { Character, type GameState, clue, dialogue } from '@/engine'
+import {
+  Character,
+  type GameState,
+  clue,
+  dialogue,
+  normaliseSpokenWord,
+} from '@/engine'
 import {
   FLAG_ACT4_BANNERS_SEEN,
   FLAG_ACT4_ECHO_STONE_HEARD,
@@ -19,7 +25,6 @@ import {
   HALL_AFTER_REDEMPTION,
   HALL_WARRIORS_SENTENCE,
 } from '../rooms/hallDescriptions'
-import { normaliseSpokenWord } from '../spokenWord'
 
 /** What the knight is called once he is redeemed. */
 const REDEEMED_NAME = 'Redeemed Knight'

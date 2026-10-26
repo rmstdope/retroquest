@@ -18,6 +18,11 @@ describe('miraAnswerIn', () => {
     )
   })
 
+  it('does not hear "forgive" inside another word', () => {
+    expect(miraAnswerIn('forgiveness')).toBeNull()
+    expect(miraAnswerIn('unforgiven')).toBeNull()
+  })
+
   it('returns null for anything else', () => {
     expect(miraAnswerIn('parents')).toBeNull()
     expect(miraAnswerIn('hello')).toBeNull()

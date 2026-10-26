@@ -1,4 +1,10 @@
-import { Character, type GameState, clue, dialogue } from '@/engine'
+import {
+  Character,
+  type GameState,
+  clue,
+  dialogue,
+  normaliseSpokenWord,
+} from '@/engine'
 import {
   FLAG_ACT4_BADGE_SHOWN,
   FLAG_ACT4_HEARTS_TRUTH_CAST,
@@ -10,7 +16,6 @@ import {
 } from '../Act4StoryFlags'
 import { SorceressTruth } from '../items/SorceressTruth'
 import { CHAMBER_AFTER_REDEMPTION } from '../rooms/chamberDescriptions'
-import { normaliseSpokenWord } from '../spokenWord'
 
 /** What the chamber does the moment she is heard. */
 const CRYSTALS_QUIET =

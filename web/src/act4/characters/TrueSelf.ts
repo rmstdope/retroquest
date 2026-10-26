@@ -1,6 +1,11 @@
-import { Character, type GameState, dialogue, remembered } from '@/engine'
+import {
+  Character,
+  type GameState,
+  dialogue,
+  remembered,
+  normaliseSpokenWord,
+} from '@/engine'
 import { FLAG_ACT4_TRUTH_TOLD, VIRTUE_TRUTH } from '../Act4StoryFlags'
-import { normaliseSpokenWord } from '../spokenWord'
 
 /**
  * Elior's reflection in the plain mirror at the maze's heart, present once the

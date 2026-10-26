@@ -1,4 +1,10 @@
-import { Character, type GameState, characterName, speech } from '@/engine'
+import {
+  Character,
+  type GameState,
+  characterName,
+  speech,
+  saysAnyOf,
+} from '@/engine'
 import { CEDRIC_FEATHER_GLANCE, cedricAdds } from '../CedricLines'
 import { PhoenixFeather } from '../items/PhoenixFeather'
 import {
@@ -107,8 +113,7 @@ export class Phoenix extends Character {
         speech('You already hold what you have earned.')
       )
     }
-    const answerWords = words.toLowerCase().split(/[^a-z]+/)
-    if (RIDDLE_ANSWERS.some((key) => answerWords.includes(key))) {
+    if (saysAnyOf(words, RIDDLE_ANSWERS)) {
       gameState.addItemToInventory(new PhoenixFeather())
       gameState.setStoryFlag(FLAG_ACT3_PHOENIX_FEATHER_ACQUIRED, true)
       const link =

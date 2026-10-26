@@ -1,4 +1,9 @@
-import { Character, type GameState, remembered } from '@/engine'
+import {
+  Character,
+  type GameState,
+  remembered,
+  normaliseSpokenWord,
+} from '@/engine'
 import {
   FLAG_ACT3_PHANTOMS_FREED,
   FLAG_ACT3_PHANTOMS_HEARD,
@@ -74,7 +79,7 @@ export class WanderingPhantoms extends Character {
    * line, recorded once; they leave the room. Other words are not answered.
    */
   override sayTo(gameState: GameState, words: string): string {
-    if (words.trim().toLowerCase() !== 'rest') {
+    if (normaliseSpokenWord(words) !== 'rest') {
       return "The phantoms' whispers rise and fall, and do not answer that."
     }
     gameState.setStoryFlag(FLAG_ACT3_PHANTOMS_FREED, true)

@@ -1,4 +1,9 @@
-import { Character, type GameState, characterName } from '@/engine'
+import {
+  Character,
+  type GameState,
+  characterName,
+  normaliseSpokenWord,
+} from '@/engine'
 import {
   CEDRIC_GATE_TALK,
   CEDRIC_NAME,
@@ -188,10 +193,7 @@ export class SirCedric extends Character {
    * "Not now. Not here."; once answered he only says he is ready.
    */
   override sayTo(gameState: GameState, words: string): string {
-    const said = words
-      .trim()
-      .replace(/^['"“]|['"”.!]+$/g, '')
-      .toLowerCase()
+    const said = normaliseSpokenWord(words)
     const isRefrain = said === 'refrain' || said === REFRAIN_LINE
     const atGate = this.roomKey(gameState) === 'FortressEntrance'
     if (atGate && gameState.getStoryFlag(FLAG_ACT3_CEDRIC_GATE_ANSWERED)) {

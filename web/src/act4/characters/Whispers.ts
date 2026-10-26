@@ -1,11 +1,15 @@
-import { Character, type GameState, dialogue } from '@/engine'
+import {
+  Character,
+  type GameState,
+  dialogue,
+  normaliseSpokenWord,
+} from '@/engine'
 import {
   FLAG_ACT4_TOWER_STAIR_OPEN,
   FLAG_ACT4_WHISPERS_CEDRIC_NAMED,
   FLAG_ACT4_WHISPERS_MIRA_NAMED,
   FLAG_ACT4_WHISPERS_NYX_NAMED,
 } from '../Act4StoryFlags'
-import { normaliseSpokenWord } from '../spokenWord'
 
 /** The Loyalty Token's name, which must be in the pack for a name to be heard. */
 const TOKEN_NAME = 'Loyalty Token'
