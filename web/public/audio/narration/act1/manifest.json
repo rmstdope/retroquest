@@ -2239,6 +2239,243 @@
    }
   ]
  },
+ "013b58e4f830be": {
+  "file": "013b58e4f830be.mp3",
+  "speaker": "narrator",
+  "duration": 16.718,
+  "words": [
+   {
+    "word": "When",
+    "start": 0.0,
+    "end": 0.46
+   },
+   {
+    "word": "you",
+    "start": 0.46,
+    "end": 0.56
+   },
+   {
+    "word": "go",
+    "start": 0.56,
+    "end": 0.82
+   },
+   {
+    "word": "to",
+    "start": 0.82,
+    "end": 1.06
+   },
+   {
+    "word": "her,",
+    "start": 1.06,
+    "end": 1.36
+   },
+   {
+    "word": "she",
+    "start": 1.64,
+    "end": 1.94
+   },
+   {
+    "word": "is",
+    "start": 1.94,
+    "end": 2.14
+   },
+   {
+    "word": "humming",
+    "start": 2.14,
+    "end": 2.52
+   },
+   {
+    "word": "at",
+    "start": 2.52,
+    "end": 2.76
+   },
+   {
+    "word": "the",
+    "start": 2.76,
+    "end": 2.88
+   },
+   {
+    "word": "hearth:",
+    "start": 2.88,
+    "end": 3.28
+   },
+   {
+    "word": "a",
+    "start": 3.38,
+    "end": 4.04
+   },
+   {
+    "word": "slow",
+    "start": 4.04,
+    "end": 4.38
+   },
+   {
+    "word": "tune",
+    "start": 4.38,
+    "end": 4.78
+   },
+   {
+    "word": "that",
+    "start": 4.78,
+    "end": 5.1
+   },
+   {
+    "word": "climbs",
+    "start": 5.1,
+    "end": 5.58
+   },
+   {
+    "word": "three",
+    "start": 5.58,
+    "end": 5.9
+   },
+   {
+    "word": "notes",
+    "start": 5.9,
+    "end": 6.32
+   },
+   {
+    "word": "and",
+    "start": 6.32,
+    "end": 6.8
+   },
+   {
+    "word": "settles",
+    "start": 6.8,
+    "end": 7.24
+   },
+   {
+    "word": "home",
+    "start": 7.24,
+    "end": 7.48
+   },
+   {
+    "word": "again.",
+    "start": 7.48,
+    "end": 7.8
+   },
+   {
+    "word": "You",
+    "start": 8.12,
+    "end": 8.58
+   },
+   {
+    "word": "know",
+    "start": 8.58,
+    "end": 8.8
+   },
+   {
+    "word": "it.",
+    "start": 8.8,
+    "end": 9.04
+   },
+   {
+    "word": "You",
+    "start": 9.22,
+    "end": 9.78
+   },
+   {
+    "word": "have",
+    "start": 9.78,
+    "end": 9.98
+   },
+   {
+    "word": "known",
+    "start": 9.98,
+    "end": 10.22
+   },
+   {
+    "word": "it",
+    "start": 10.22,
+    "end": 10.42
+   },
+   {
+    "word": "all",
+    "start": 10.42,
+    "end": 10.74
+   },
+   {
+    "word": "your",
+    "start": 10.74,
+    "end": 10.96
+   },
+   {
+    "word": "life,",
+    "start": 10.96,
+    "end": 11.36
+   },
+   {
+    "word": "and",
+    "start": 11.5,
+    "end": 12.0
+   },
+   {
+    "word": "you",
+    "start": 12.0,
+    "end": 12.14
+   },
+   {
+    "word": "could",
+    "start": 12.14,
+    "end": 12.38
+   },
+   {
+    "word": "not",
+    "start": 12.38,
+    "end": 12.58
+   },
+   {
+    "word": "say",
+    "start": 12.58,
+    "end": 12.94
+   },
+   {
+    "word": "from",
+    "start": 12.94,
+    "end": 13.2
+   },
+   {
+    "word": "where.",
+    "start": 13.2,
+    "end": 13.58
+   },
+   {
+    "word": "She",
+    "start": 14.04,
+    "end": 14.64
+   },
+   {
+    "word": "stops",
+    "start": 14.64,
+    "end": 15.16
+   },
+   {
+    "word": "when",
+    "start": 15.16,
+    "end": 15.42
+   },
+   {
+    "word": "she",
+    "start": 15.42,
+    "end": 15.58
+   },
+   {
+    "word": "sees",
+    "start": 15.58,
+    "end": 15.94
+   },
+   {
+    "word": "your",
+    "start": 15.94,
+    "end": 16.08
+   },
+   {
+    "word": "face.",
+    "start": 16.08,
+    "end": 16.34
+   }
+  ]
+ },
  "014a4d92abe59d": {
   "file": "014a4d92abe59d.mp3",
   "speaker": "narrator",
@@ -17292,6 +17529,38 @@
     "word": "village.",
     "start": 9.38,
     "end": 9.78
+   }
+  ]
+ },
+ "087d0e7421fe92": {
+  "file": "087d0e7421fe92.mp3",
+  "speaker": "narrator",
+  "duration": 2.136,
+  "words": [
+   {
+    "word": "You",
+    "start": 0.0,
+    "end": 0.18
+   },
+   {
+    "word": "are",
+    "start": 0.18,
+    "end": 0.34
+   },
+   {
+    "word": "not",
+    "start": 0.34,
+    "end": 0.68
+   },
+   {
+    "word": "particularly",
+    "start": 0.68,
+    "end": 1.26
+   },
+   {
+    "word": "hungry.",
+    "start": 1.26,
+    "end": 1.82
    }
   ]
  },
@@ -40890,6 +41159,708 @@
    }
   ]
  },
+ "17e675dcabd549": {
+  "file": "17e675dcabd549.mp3",
+  "speaker": "elior",
+  "duration": 46.331,
+  "words": [
+   {
+    "word": "When",
+    "start": 0.0,
+    "end": 0.1
+   },
+   {
+    "word": "I",
+    "start": 0.1,
+    "end": 0.2
+   },
+   {
+    "word": "finally",
+    "start": 0.2,
+    "end": 0.54
+   },
+   {
+    "word": "drifted",
+    "start": 0.54,
+    "end": 1.0
+   },
+   {
+    "word": "off,",
+    "start": 1.0,
+    "end": 1.3
+   },
+   {
+    "word": "the",
+    "start": 1.64,
+    "end": 1.86
+   },
+   {
+    "word": "dreams",
+    "start": 1.86,
+    "end": 2.24
+   },
+   {
+    "word": "came.",
+    "start": 2.24,
+    "end": 2.66
+   },
+   {
+    "word": "Not",
+    "start": 3.06,
+    "end": 3.5
+   },
+   {
+    "word": "the",
+    "start": 3.5,
+    "end": 3.64
+   },
+   {
+    "word": "usual",
+    "start": 3.64,
+    "end": 3.98
+   },
+   {
+    "word": "ones",
+    "start": 3.98,
+    "end": 4.34
+   },
+   {
+    "word": "of",
+    "start": 4.34,
+    "end": 4.52
+   },
+   {
+    "word": "fields",
+    "start": 4.52,
+    "end": 4.9
+   },
+   {
+    "word": "and",
+    "start": 4.9,
+    "end": 5.1
+   },
+   {
+    "word": "harvests.",
+    "start": 5.1,
+    "end": 5.62
+   },
+   {
+    "word": "This",
+    "start": 6.06,
+    "end": 6.48
+   },
+   {
+    "word": "was",
+    "start": 6.48,
+    "end": 6.68
+   },
+   {
+    "word": "dark,",
+    "start": 6.68,
+    "end": 7.18
+   },
+   {
+    "word": "filled",
+    "start": 7.38,
+    "end": 7.86
+   },
+   {
+    "word": "with",
+    "start": 7.86,
+    "end": 8.06
+   },
+   {
+    "word": "swirling",
+    "start": 8.06,
+    "end": 8.54
+   },
+   {
+    "word": "shadows.",
+    "start": 8.54,
+    "end": 8.98
+   },
+   {
+    "word": "And",
+    "start": 9.32,
+    "end": 9.54
+   },
+   {
+    "word": "a",
+    "start": 9.54,
+    "end": 9.66
+   },
+   {
+    "word": "figure,",
+    "start": 9.66,
+    "end": 10.02
+   },
+   {
+    "word": "tall",
+    "start": 10.18,
+    "end": 10.6
+   },
+   {
+    "word": "and",
+    "start": 10.6,
+    "end": 10.94
+   },
+   {
+    "word": "indistinct,",
+    "start": 10.94,
+    "end": 11.54
+   },
+   {
+    "word": "its",
+    "start": 11.9,
+    "end": 12.06
+   },
+   {
+    "word": "voice",
+    "start": 12.06,
+    "end": 12.4
+   },
+   {
+    "word": "a",
+    "start": 12.4,
+    "end": 12.58
+   },
+   {
+    "word": "whisper",
+    "start": 12.58,
+    "end": 12.92
+   },
+   {
+    "word": "on",
+    "start": 12.92,
+    "end": 13.12
+   },
+   {
+    "word": "the",
+    "start": 13.12,
+    "end": 13.22
+   },
+   {
+    "word": "edge",
+    "start": 13.22,
+    "end": 13.4
+   },
+   {
+    "word": "of",
+    "start": 13.4,
+    "end": 13.52
+   },
+   {
+    "word": "hearing,",
+    "start": 13.52,
+    "end": 13.9
+   },
+   {
+    "word": "yet",
+    "start": 14.26,
+    "end": 14.58
+   },
+   {
+    "word": "it",
+    "start": 14.58,
+    "end": 14.7
+   },
+   {
+    "word": "felt",
+    "start": 14.7,
+    "end": 15.0
+   },
+   {
+    "word": "like",
+    "start": 15.0,
+    "end": 15.24
+   },
+   {
+    "word": "it",
+    "start": 15.24,
+    "end": 15.34
+   },
+   {
+    "word": "was",
+    "start": 15.34,
+    "end": 15.46
+   },
+   {
+    "word": "calling",
+    "start": 15.46,
+    "end": 15.76
+   },
+   {
+    "word": "my",
+    "start": 15.76,
+    "end": 15.96
+   },
+   {
+    "word": "name.",
+    "start": 15.96,
+    "end": 16.32
+   },
+   {
+    "word": "Elior...",
+    "start": 16.8,
+    "end": 17.18
+   },
+   {
+    "word": "I",
+    "start": 17.6,
+    "end": 17.76
+   },
+   {
+    "word": "woke",
+    "start": 17.76,
+    "end": 18.04
+   },
+   {
+    "word": "with",
+    "start": 18.04,
+    "end": 18.22
+   },
+   {
+    "word": "a",
+    "start": 18.22,
+    "end": 18.34
+   },
+   {
+    "word": "start,",
+    "start": 18.34,
+    "end": 18.78
+   },
+   {
+    "word": "my",
+    "start": 19.12,
+    "end": 19.26
+   },
+   {
+    "word": "heart",
+    "start": 19.26,
+    "end": 19.52
+   },
+   {
+    "word": "pounding.",
+    "start": 19.52,
+    "end": 19.98
+   },
+   {
+    "word": "And",
+    "start": 20.24,
+    "end": 20.64
+   },
+   {
+    "word": "three",
+    "start": 20.64,
+    "end": 20.88
+   },
+   {
+    "word": "words",
+    "start": 20.88,
+    "end": 21.26
+   },
+   {
+    "word": "at",
+    "start": 21.26,
+    "end": 21.46
+   },
+   {
+    "word": "the",
+    "start": 21.46,
+    "end": 21.56
+   },
+   {
+    "word": "very",
+    "start": 21.56,
+    "end": 21.84
+   },
+   {
+    "word": "end,",
+    "start": 21.84,
+    "end": 22.26
+   },
+   {
+    "word": "which",
+    "start": 22.56,
+    "end": 22.82
+   },
+   {
+    "word": "I",
+    "start": 22.82,
+    "end": 22.94
+   },
+   {
+    "word": "wrote",
+    "start": 22.94,
+    "end": 23.18
+   },
+   {
+    "word": "down",
+    "start": 23.18,
+    "end": 23.48
+   },
+   {
+    "word": "the",
+    "start": 23.48,
+    "end": 23.66
+   },
+   {
+    "word": "moment",
+    "start": 23.66,
+    "end": 23.94
+   },
+   {
+    "word": "I",
+    "start": 23.94,
+    "end": 24.14
+   },
+   {
+    "word": "woke",
+    "start": 24.14,
+    "end": 24.5
+   },
+   {
+    "word": "so",
+    "start": 24.7,
+    "end": 24.98
+   },
+   {
+    "word": "I",
+    "start": 24.98,
+    "end": 25.12
+   },
+   {
+    "word": "would",
+    "start": 25.12,
+    "end": 25.28
+   },
+   {
+    "word": "not",
+    "start": 25.28,
+    "end": 25.44
+   },
+   {
+    "word": "lose",
+    "start": 25.44,
+    "end": 25.72
+   },
+   {
+    "word": "them:",
+    "start": 25.72,
+    "end": 26.0
+   },
+   {
+    "word": "\u2026and",
+    "start": 26.6,
+    "end": 27.1
+   },
+   {
+    "word": "let",
+    "start": 27.1,
+    "end": 27.26
+   },
+   {
+    "word": "them",
+    "start": 27.26,
+    "end": 27.42
+   },
+   {
+    "word": "rest\u2026",
+    "start": 27.42,
+    "end": 27.84
+   },
+   {
+    "word": "Even",
+    "start": 28.04,
+    "end": 28.3
+   },
+   {
+    "word": "now,",
+    "start": 28.3,
+    "end": 28.66
+   },
+   {
+    "word": "the",
+    "start": 28.9,
+    "end": 29.26
+   },
+   {
+    "word": "memory",
+    "start": 29.26,
+    "end": 29.58
+   },
+   {
+    "word": "sends",
+    "start": 29.58,
+    "end": 29.86
+   },
+   {
+    "word": "a",
+    "start": 29.86,
+    "end": 30.08
+   },
+   {
+    "word": "shiver",
+    "start": 30.08,
+    "end": 30.42
+   },
+   {
+    "word": "down",
+    "start": 30.42,
+    "end": 30.62
+   },
+   {
+    "word": "my",
+    "start": 30.62,
+    "end": 30.84
+   },
+   {
+    "word": "spine.",
+    "start": 30.84,
+    "end": 31.28
+   },
+   {
+    "word": "And",
+    "start": 31.8,
+    "end": 32.3
+   },
+   {
+    "word": "the",
+    "start": 32.3,
+    "end": 32.42
+   },
+   {
+    "word": "strangest",
+    "start": 32.42,
+    "end": 32.96
+   },
+   {
+    "word": "thing",
+    "start": 32.96,
+    "end": 33.26
+   },
+   {
+    "word": "\u2014",
+    "start": 33.26,
+    "end": 33.46
+   },
+   {
+    "word": "I",
+    "start": 33.46,
+    "end": 33.82
+   },
+   {
+    "word": "knew",
+    "start": 33.82,
+    "end": 33.96
+   },
+   {
+    "word": "that",
+    "start": 33.96,
+    "end": 34.18
+   },
+   {
+    "word": "voice.",
+    "start": 34.18,
+    "end": 34.6
+   },
+   {
+    "word": "Not",
+    "start": 34.86,
+    "end": 35.22
+   },
+   {
+    "word": "the",
+    "start": 35.22,
+    "end": 35.34
+   },
+   {
+    "word": "way",
+    "start": 35.34,
+    "end": 35.48
+   },
+   {
+    "word": "you",
+    "start": 35.48,
+    "end": 35.64
+   },
+   {
+    "word": "know",
+    "start": 35.64,
+    "end": 35.8
+   },
+   {
+    "word": "a",
+    "start": 35.8,
+    "end": 35.98
+   },
+   {
+    "word": "neighbour's,",
+    "start": 35.98,
+    "end": 36.42
+   },
+   {
+    "word": "but",
+    "start": 36.62,
+    "end": 36.94
+   },
+   {
+    "word": "the",
+    "start": 36.94,
+    "end": 37.06
+   },
+   {
+    "word": "way",
+    "start": 37.06,
+    "end": 37.22
+   },
+   {
+    "word": "you",
+    "start": 37.22,
+    "end": 37.38
+   },
+   {
+    "word": "know",
+    "start": 37.38,
+    "end": 37.54
+   },
+   {
+    "word": "a",
+    "start": 37.54,
+    "end": 37.7
+   },
+   {
+    "word": "song",
+    "start": 37.7,
+    "end": 38.02
+   },
+   {
+    "word": "someone",
+    "start": 38.02,
+    "end": 38.44
+   },
+   {
+    "word": "sang",
+    "start": 38.44,
+    "end": 38.78
+   },
+   {
+    "word": "to",
+    "start": 38.78,
+    "end": 38.94
+   },
+   {
+    "word": "you",
+    "start": 38.94,
+    "end": 39.12
+   },
+   {
+    "word": "before",
+    "start": 39.12,
+    "end": 39.5
+   },
+   {
+    "word": "you",
+    "start": 39.5,
+    "end": 39.72
+   },
+   {
+    "word": "had",
+    "start": 39.72,
+    "end": 39.88
+   },
+   {
+    "word": "words",
+    "start": 39.88,
+    "end": 40.22
+   },
+   {
+    "word": "for",
+    "start": 40.22,
+    "end": 40.44
+   },
+   {
+    "word": "it.",
+    "start": 40.44,
+    "end": 40.68
+   },
+   {
+    "word": "It",
+    "start": 41.36,
+    "end": 41.86
+   },
+   {
+    "word": "made",
+    "start": 41.86,
+    "end": 42.04
+   },
+   {
+    "word": "my",
+    "start": 42.04,
+    "end": 42.24
+   },
+   {
+    "word": "chest",
+    "start": 42.24,
+    "end": 42.58
+   },
+   {
+    "word": "ache.",
+    "start": 42.58,
+    "end": 42.94
+   },
+   {
+    "word": "I",
+    "start": 43.24,
+    "end": 43.58
+   },
+   {
+    "word": "just",
+    "start": 43.58,
+    "end": 43.76
+   },
+   {
+    "word": "can't",
+    "start": 43.76,
+    "end": 44.02
+   },
+   {
+    "word": "remember",
+    "start": 44.02,
+    "end": 44.38
+   },
+   {
+    "word": "from",
+    "start": 44.38,
+    "end": 44.62
+   },
+   {
+    "word": "where.",
+    "start": 44.62,
+    "end": 44.94
+   },
+   {
+    "word": "What",
+    "start": 45.22,
+    "end": 45.5
+   },
+   {
+    "word": "did",
+    "start": 45.5,
+    "end": 45.62
+   },
+   {
+    "word": "it",
+    "start": 45.62,
+    "end": 45.76
+   },
+   {
+    "word": "mean?",
+    "start": 45.76,
+    "end": 45.98
+   }
+  ]
+ },
  "17f052feb8fc87": {
   "file": "17f052feb8fc87.mp3",
   "speaker": "narrator",
@@ -49162,6 +50133,298 @@
     "word": "drawer.",
     "start": 5.16,
     "end": 5.38
+   }
+  ]
+ },
+ "1b62d799d492bb": {
+  "file": "1b62d799d492bb.mp3",
+  "speaker": "elior",
+  "duration": 23.399,
+  "words": [
+   {
+    "word": "What",
+    "start": 0.0,
+    "end": 0.18
+   },
+   {
+    "word": "a",
+    "start": 0.18,
+    "end": 0.34
+   },
+   {
+    "word": "night.",
+    "start": 0.34,
+    "end": 0.68
+   },
+   {
+    "word": "The",
+    "start": 1.16,
+    "end": 1.72
+   },
+   {
+    "word": "wind",
+    "start": 1.72,
+    "end": 2.06
+   },
+   {
+    "word": "howled",
+    "start": 2.06,
+    "end": 2.5
+   },
+   {
+    "word": "like",
+    "start": 2.5,
+    "end": 2.66
+   },
+   {
+    "word": "a",
+    "start": 2.66,
+    "end": 2.78
+   },
+   {
+    "word": "hungry",
+    "start": 2.78,
+    "end": 3.08
+   },
+   {
+    "word": "wolf,",
+    "start": 3.08,
+    "end": 3.52
+   },
+   {
+    "word": "and",
+    "start": 3.74,
+    "end": 4.1
+   },
+   {
+    "word": "rain",
+    "start": 4.1,
+    "end": 4.42
+   },
+   {
+    "word": "lashed",
+    "start": 4.42,
+    "end": 4.8
+   },
+   {
+    "word": "against",
+    "start": 4.8,
+    "end": 5.1
+   },
+   {
+    "word": "the",
+    "start": 5.1,
+    "end": 5.28
+   },
+   {
+    "word": "shutters.",
+    "start": 5.28,
+    "end": 5.7
+   },
+   {
+    "word": "I",
+    "start": 6.18,
+    "end": 6.7
+   },
+   {
+    "word": "swear",
+    "start": 6.7,
+    "end": 6.94
+   },
+   {
+    "word": "the",
+    "start": 6.94,
+    "end": 7.08
+   },
+   {
+    "word": "whole",
+    "start": 7.08,
+    "end": 7.24
+   },
+   {
+    "word": "cottage",
+    "start": 7.24,
+    "end": 7.68
+   },
+   {
+    "word": "shook",
+    "start": 7.68,
+    "end": 8.12
+   },
+   {
+    "word": "with",
+    "start": 8.12,
+    "end": 8.32
+   },
+   {
+    "word": "each",
+    "start": 8.32,
+    "end": 8.52
+   },
+   {
+    "word": "thunderclap.",
+    "start": 8.52,
+    "end": 9.18
+   },
+   {
+    "word": "Sleep",
+    "start": 9.48,
+    "end": 9.98
+   },
+   {
+    "word": "was",
+    "start": 9.98,
+    "end": 10.2
+   },
+   {
+    "word": "impossible",
+    "start": 10.2,
+    "end": 10.7
+   },
+   {
+    "word": "for",
+    "start": 10.7,
+    "end": 10.94
+   },
+   {
+    "word": "hours.",
+    "start": 10.94,
+    "end": 11.38
+   },
+   {
+    "word": "Then,",
+    "start": 12.0,
+    "end": 12.3
+   },
+   {
+    "word": "through",
+    "start": 12.62,
+    "end": 13.06
+   },
+   {
+    "word": "a",
+    "start": 13.06,
+    "end": 13.2
+   },
+   {
+    "word": "gap",
+    "start": 13.2,
+    "end": 13.44
+   },
+   {
+    "word": "in",
+    "start": 13.44,
+    "end": 13.6
+   },
+   {
+    "word": "the",
+    "start": 13.6,
+    "end": 13.68
+   },
+   {
+    "word": "curtains,",
+    "start": 13.68,
+    "end": 14.06
+   },
+   {
+    "word": "I",
+    "start": 14.1,
+    "end": 14.3
+   },
+   {
+    "word": "saw",
+    "start": 14.3,
+    "end": 14.56
+   },
+   {
+    "word": "it",
+    "start": 14.56,
+    "end": 14.78
+   },
+   {
+    "word": "\u2013",
+    "start": 14.78,
+    "end": 15.12
+   },
+   {
+    "word": "a",
+    "start": 15.12,
+    "end": 15.3
+   },
+   {
+    "word": "searing,",
+    "start": 15.3,
+    "end": 15.76
+   },
+   {
+    "word": "unnatural",
+    "start": 15.98,
+    "end": 16.6
+   },
+   {
+    "word": "light",
+    "start": 16.6,
+    "end": 16.96
+   },
+   {
+    "word": "that",
+    "start": 16.96,
+    "end": 17.18
+   },
+   {
+    "word": "split",
+    "start": 17.18,
+    "end": 17.44
+   },
+   {
+    "word": "the",
+    "start": 17.44,
+    "end": 17.6
+   },
+   {
+    "word": "sky.",
+    "start": 17.6,
+    "end": 17.94
+   },
+   {
+    "word": "It",
+    "start": 18.42,
+    "end": 18.8
+   },
+   {
+    "word": "wasn't",
+    "start": 18.8,
+    "end": 19.12
+   },
+   {
+    "word": "lightning;",
+    "start": 19.12,
+    "end": 19.48
+   },
+   {
+    "word": "it",
+    "start": 19.78,
+    "end": 19.98
+   },
+   {
+    "word": "was...",
+    "start": 19.98,
+    "end": 20.4
+   },
+   {
+    "word": "different.",
+    "start": 20.84,
+    "end": 21.3
+   },
+   {
+    "word": "Pulsating,",
+    "start": 21.78,
+    "end": 22.48
+   },
+   {
+    "word": "almost.",
+    "start": 22.66,
+    "end": 23.02
    }
   ]
  },
