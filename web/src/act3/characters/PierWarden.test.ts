@@ -86,7 +86,7 @@ describe('PierWarden dialogue branches', () => {
   })
 })
 
-describe('PierWarden and the Weathered Coin', () => {
+describe('PierWarden and the weathered coin', () => {
   it('keeps the coin, its new description and the follow-up across a save', () => {
     const game = new Game([new Act3()])
     game.state.setStoryFlag(FLAG_ACT3_WARDEN_TRUTH_TOLD, true)

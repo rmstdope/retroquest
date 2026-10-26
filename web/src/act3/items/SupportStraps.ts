@@ -17,6 +17,6 @@ export class SupportStraps extends Item {
     if (other instanceof FallenRock) {
       return other.useWith(gameState, this)
     }
-    return `[failure]You can't use the Support Straps with ${other.name}.[/failure]`
+    return `[failure]You can't use the support straps with ${other.nameInSentence()}.[/failure]`
   }
 }

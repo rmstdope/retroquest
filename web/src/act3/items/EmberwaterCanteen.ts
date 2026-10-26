@@ -36,7 +36,7 @@ export class EmberwaterCanteen extends Item {
       gameState.currentRoom.items.push(segment)
       this.gaveSegment = true
       return (
-        `${lore} You pry free a [item_name]${segment.name}` +
+        `${lore} You pry free a [item_name]${segment.name.toLowerCase()}` +
         '[/item_name] from the lining; it falls to the ground nearby.'
       )
     }

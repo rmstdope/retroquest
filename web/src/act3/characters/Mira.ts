@@ -110,8 +110,8 @@ export class Mira extends Character {
         ) +
         '\n' +
         speech(
-          'Three relics can stand against him: the Crystal of Light, ' +
-            "the Phoenix Feather and the Dragon's Scale. We will fetch " +
+          'Three relics can stand against him: the crystal of light, ' +
+            "the phoenix feather and the dragon's scale. We will fetch " +
             'them one at a time.',
         ) +
         '\n' +
@@ -200,7 +200,7 @@ export class Mira extends Character {
       destinationKey = 'CavernMouth'
       flavor =
         speech(
-          'You have done well, Elior. The Phoenix Feather is a ' +
+          'You have done well, Elior. The phoenix feather is a ' +
             'token of wisdom; it will guide you through darkness and flame. ' +
             'Ahead lies the Cavern Mouth—gaping stone jaws that breathe cold ' +
             'and shadow. Steel your heart and hold your light high.',
@@ -224,7 +224,7 @@ export class Mira extends Character {
           '\n' +
           speech(
             'This place keeps its secrets in salt and song. ' +
-              'Within the Sunken Ruins lies the Crystal of Light—an old ' +
+              'Within the Sunken Ruins lies the crystal of light—an old ' +
               'relic that answers to courage. It parts veils and steadies ' +
               'the spirit. When you stand before the ' +
               'tide-born guardian, speak your vow and let it steady you.',
@@ -326,8 +326,8 @@ export class Mira extends Character {
           '\n' +
           (speech(
             'The three relics resonate with ancient power, ' +
-              'Elior. The Crystal of Light, the Phoenix Feather, and the ' +
-              "Dragon's Scale—courage, wisdom, and selflessness made " +
+              'Elior. The crystal of light, the phoenix feather, and the ' +
+              "dragon's scale—courage, wisdom, and selflessness made " +
               'manifest.',
           ) +
             '\n' +
@@ -348,7 +348,7 @@ export class Mira extends Character {
             '\n' +
             ('The three relics dissolve into streams of pure essence ' +
               'that spiral together into a crystalline vial. The resulting ' +
-              'elixir shimmers with liquid starlight—the Lifelight Elixir, ' +
+              'elixir shimmers with liquid starlight—the lifelight elixir, ' +
               'born from the union of three virtues.') +
             '\n' +
             speech(
@@ -364,7 +364,7 @@ export class Mira extends Character {
             eventMsg +
             '\n' +
             speech(
-              'Elior, you must take the Lifelight Elixir before we ' +
+              'Elior, you must take the lifelight elixir before we ' +
                 'depart for the fortress. We cannot face Malakar without it—the ' +
                 'elixir is our only hope of countering his life-draining ritual ' +
                 'and saving King Alden.',
@@ -375,7 +375,7 @@ export class Mira extends Character {
         destinationKey = 'FortressEntrance'
         flavor =
           speech(
-            'The Lifelight Elixir pulses with the power of three ' +
+            'The lifelight elixir pulses with the power of three ' +
               "virtues. Now we make our final journey—to Malakar's fortress, " +
               "where the kingdom's fate awaits.",
           ) +

@@ -35,7 +35,7 @@ export class LoyaltyToken extends Item {
       if (!gameState.getStoryFlag(FLAG_ACT4_LOYALTY_TOKEN_RAISED_IN_HALL)) {
         gameState.setStoryFlag(FLAG_ACT4_LOYALTY_TOKEN_RAISED_IN_HALL, true)
         return (
-          'You hold the Loyalty Token close to your heart. For a moment you ' +
+          'You hold the loyalty token close to your heart. For a moment you ' +
           'are not alone in the hall: the servants you freed, the friends ' +
           'who brought you to the threshold, everyone who trusted you on ' +
           "the way here. The knight's despair breaks around you and does " +

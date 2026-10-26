@@ -34,8 +34,8 @@ export class AshFern extends Item {
     }
 
     return (
-      `[failure]You can't use the [item_name]${this.name}[/item_name] ` +
-      `with the [item_name]${other.name}[/item_name].[/failure]`
+      `[failure]You can't use ${this.nameInSentence()} ` +
+      `with ${other.nameInSentence()}.[/failure]`
     )
   }
 }

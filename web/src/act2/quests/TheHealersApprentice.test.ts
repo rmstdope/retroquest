@@ -6,7 +6,7 @@ describe("The Healer's Apprentice texts", () => {
     const quest = new TheHealersApprenticeQuest()
 
     expect(quest.description).toContain("dying carter's bed")
-    expect(quest.description).toContain('Crystal Focus')
+    expect(quest.description).toContain('crystal focus')
     expect(quest.completion).toContain('He will live.')
   })
 })

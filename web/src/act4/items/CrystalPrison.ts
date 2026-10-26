@@ -54,7 +54,7 @@ export class CrystalPrison extends Item {
       'You pour the elixir over the crystal. It cracks like ice in ' +
         'spring, and King Alden falls free, gasping, alive. But the wound ' +
         'still stands open, and Malakar still stands beside it.',
-      'The Lifelight Elixir is gone.',
+      'The lifelight elixir is gone.',
     ].join('\n')
   }
 }

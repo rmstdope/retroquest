@@ -8,7 +8,7 @@ import { Mechanism } from './Mechanism'
 import { HiddenGlade } from '../rooms/HiddenGlade'
 import { executeCommands } from '@/testing/gameHelpers'
 
-const AMULET = '[item_name]Ancient Amulet[/item_name]'
+const AMULET = '[item_name]ancient amulet[/item_name]'
 const GLOW_ON_STAND =
   `On its stand, the ${AMULET} glows brighter as you step in, ` +
   'as if something you carry has woken it.'

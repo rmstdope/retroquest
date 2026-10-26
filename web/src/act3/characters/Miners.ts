@@ -46,7 +46,7 @@ export class Miners extends Character {
   override giveItem(gameState: GameState, item: Item): string {
     if (!(item instanceof QuietCharm)) return super.giveItem(gameState, item)
     return (
-      `The ${characterName('lead miner')} turns the [item_name]${item.name}[/item_name] over and hands it back: ` +
+      `The ${characterName('lead miner')} turns ${item.nameInSentence()} over and hands it back: ` +
       speech('Pretty thing. Not much use to an old man with a pick, though.') +
       ' His eyes go to the boy on the bucket. ' +
       speech("If it's quiet you're handing out, I know who needs it.")

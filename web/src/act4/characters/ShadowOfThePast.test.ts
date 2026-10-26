@@ -127,7 +127,7 @@ describe('The Shadow of the Past', () => {
     expect(text).toContain('for the first time it has a face.')
     expectDialogueSpeaker(text, 'Shadow of the Past')
     expect(text).toContain(
-      'You raise the Echo Stone. The voices inside it pour out into the vault, and the orbs drink them in. One by one the cracks close and the scenes grow still and clear. The shadow turns towards you, and for the first time it has a face.',
+      'You raise the echo stone. The voices inside it pour out into the vault, and the orbs drink them in. One by one the cracks close and the scenes grow still and clear. The shadow turns towards you, and for the first time it has a face.',
     )
     expect(text).toContain('Elior. You came.')
     expect(text).toContain(

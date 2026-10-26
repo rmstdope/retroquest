@@ -110,7 +110,7 @@ export class CaptainOfTheGuard extends Character {
     room.characters = room.characters.filter((c) => c !== this)
     room.description = COURTYARD_CAPTAIN_GONE_DESCRIPTION
     return [
-      "You lift the [item_name]Guardian's Chain[/item_name] over the " +
+      "You lift the [item_name]guardian's chain[/item_name] over the " +
         "captain's head. Its crystals flare once and settle against his " +
         'soot-black tabard, and the warmth goes out of your hands.',
       `The ${characterName(this.name)} answers. ` +

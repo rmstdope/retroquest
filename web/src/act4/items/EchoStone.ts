@@ -7,7 +7,7 @@ import { ServantsPendant } from './ServantsPendant'
 
 /** What the stone says anywhere but in the maze. */
 const STONE_OUTSIDE_MAZE =
-  "You hold the Echo Stone to your ear. The hall's voices murmur inside it, " +
+  "You hold the echo stone to your ear. The hall's voices murmur inside it, " +
   'waiting for somewhere that needs them. Under the rest, one voice says a ' +
   'single word over and over, the way a man says a word he has stopped ' +
   'believing in: redemption.'
@@ -19,7 +19,7 @@ const PICKED_UP_AGAIN =
 /** What the stone is called, and how it looks, after the knight is redeemed. */
 const ENHANCED_NAME = 'Enhanced Echo Stone'
 const ENHANCED_DESCRIPTION =
-  "The Echo Stone hums more strongly now. Among the hall's voices one speaks " +
+  "The echo stone hums more strongly now. Among the hall's voices one speaks " +
   "clearly and without fear: the knight's, telling the truth."
 
 /** What the enhanced stone does for now, anywhere. */

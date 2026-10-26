@@ -50,7 +50,7 @@ const REMINDER_LINE =
 const BED_SCENE = 'a carter lies grey under a blanket'
 const BED_ASK = 'wherever the old scholars hid their books'
 const TEACHING_STAGE =
-  "Lyria takes the Crystal Focus to the carter's bed and sets it on his chest."
+  "Lyria takes the crystal focus to the carter's bed and sets it on his chest."
 const HAND_BACK =
   "Bring me healing herbs first. Then we'll see what this is for."
 
@@ -71,7 +71,7 @@ describe('Master Healer Lyria dialogue markup', () => {
     for (let i = 0; i < 2; i++) {
       const answer = lyria.talkTo(game.state)
       expect(plain(answer)).toContain(HERB_ASK)
-      expect(plain(answer)).not.toContain('Crystal Focus')
+      expect(plain(answer)).not.toContain('crystal focus')
       expectLyriaSpeaks(answer)
     }
   })

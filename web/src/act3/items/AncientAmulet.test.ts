@@ -67,7 +67,7 @@ describe('AncientAmulet', () => {
 
     const first = amulet.glow(1)
     expect(first).toContain('grows warm, then glows')
-    expect(first).toContain('[item_name]Ancient Amulet[/item_name]')
+    expect(first).toContain('[item_name]ancient amulet[/item_name]')
     expect(amulet.glow(1)).toBe('')
     expect(amulet.glow(2)).toContain('glows again, brighter than before')
     expect(amulet.glow(3)).toContain('blazes in your hand a third time')

@@ -75,7 +75,7 @@ describe('Shadows Over Willowbrook log', () => {
 
     quest.checkUpdate(game.state)
 
-    expect(quest.latestStage).toContain('[item_name]Ancient Amulet[/item_name]')
+    expect(quest.latestStage).toContain('[item_name]ancient amulet[/item_name]')
     expect(quest.description).not.toContain('druid')
   })
 

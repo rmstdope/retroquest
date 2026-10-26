@@ -25,9 +25,9 @@
     "text": "Your road leads to Greendale, Elior. Once there, show the amulet to no one lightly. Those who know what it is will find you."
   },
   {
-    "key": "047416b6d84e7e",
+    "key": "0cd92e42c1656c",
     "speaker": "narrator",
-    "text": "The Ancient Amulet your parents left you lies hidden under your shirt, warm against your chest. Someone came to Willowbrook looking for it, your grandmother said. Keep it hidden."
+    "text": "The ancient amulet your parents left you lies hidden under your shirt, warm against your chest. Someone came to Willowbrook looking for it, your grandmother said. Keep it hidden."
   },
   {
     "key": "0318fc67052e16",
@@ -455,9 +455,9 @@
     "text": "Greetings, traveler. I am Cedric. Some here still call me Sir; you need not. The Lord Commander's notice asks for able hands; I ask for mine here in the yard, where I can see what they can do. I have been seeking individuals of courage and skill for a matter of great—"
   },
   {
-    "key": "02021b55a207a4",
+    "key": "02304d1cb32a6b",
     "speaker": "narrator",
-    "text": "Sir Cedric stops mid-sentence. His eyes have fallen on the Ancient Amulet at your chest."
+    "text": "Sir Cedric stops mid-sentence. His eyes have fallen on the ancient amulet at your chest."
   },
   {
     "key": "0d09d6449ae10f",
@@ -725,9 +725,9 @@
     "text": "Sir Cedric hesitates, then rests a hand on a small pouch at his belt."
   },
   {
-    "key": "1f80578726e12a",
+    "key": "185c885b46dce1",
     "speaker": "sir cedric",
-    "text": "One more thing, since the forest is where you are bound. My family has kept a charm for generations: Nature's Charm, carved for the knights who first made pacts with the forest spirits. The old texts say it is one of three that can call the sprite Nyx. I will not hand an heirloom of my house to someone I have known for a day. Prove yourself in more than a sparring yard, and we will speak of it again."
+    "text": "One more thing, since the forest is where you are bound. My family has kept a charm for generations: nature's charm, carved for the knights who first made pacts with the forest spirits. The old texts say it is one of three that can call the sprite Nyx. I will not hand an heirloom of my house to someone I have known for a day. Prove yourself in more than a sparring yard, and we will speak of it again."
   },
   {
     "key": "085795faa24bfb",
@@ -1440,9 +1440,9 @@
     "text": "She leads you through to the back room, where a carter lies grey under a blanket, his chest crushed under his own wagon. You watch her steep the herbs, lay her hands on him and pour her healing in. His breathing eases, but only a little."
   },
   {
-    "key": "04aa4e7c504bb6",
+    "key": "0cd24be8e9c7be",
     "speaker": "master healer lyria",
-    "text": "This is the work. You give what you have, and sometimes it is not enough. He needs more than these hands can give. The old healers gathered their healing into a crystal, a Crystal Focus, and it came out the other side like sunlight through a glass. If one survives in Greendale, it is wherever the old scholars hid their books."
+    "text": "This is the work. You give what you have, and sometimes it is not enough. He needs more than these hands can give. The old healers gathered their healing into a crystal, a crystal focus, and it came out the other side like sunlight through a glass. If one survives in Greendale, it is wherever the old scholars hid their books."
   },
   {
     "key": "1532da0c1bc12d",
@@ -1450,9 +1450,9 @@
     "text": "The Healer's Apprentice"
   },
   {
-    "key": "0f82305b6675ab",
+    "key": "1a9e1aee875b74",
     "speaker": "narrator",
-    "text": "Master Healer Lyria let you watch her at a dying carter's bed. Your herbs were not enough. She needs a Crystal Focus, and the old scholars of Greendale may have hidden one with their books."
+    "text": "Master Healer Lyria let you watch her at a dying carter's bed. Your herbs were not enough. She needs a crystal focus, and the old scholars of Greendale may have hidden one with their books."
   },
   {
     "key": "0c1246e24bc0c6",
@@ -1460,9 +1460,9 @@
     "text": "He's holding on. The herbs bought him days, not weeks. Find me that focus."
   },
   {
-    "key": "1d8720b21b77d4",
+    "key": "15c0abf4f9fdf5",
     "speaker": "narrator",
-    "text": "The Healer's Apprentice: Master Healer Lyria let you watch her at a dying carter's bed. Your herbs were not enough. She needs a Crystal Focus, and the old scholars of Greendale may have hidden one with their books."
+    "text": "The Healer's Apprentice: Master Healer Lyria let you watch her at a dying carter's bed. Your herbs were not enough. She needs a crystal focus, and the old scholars of Greendale may have hidden one with their books."
   },
   {
     "key": "0353a5bd1db1d3",
@@ -1500,9 +1500,9 @@
     "text": "The protective enchantments flicker weakly, showing clear signs of damage from the passage of time. These ancient magical barriers need to be repaired with restoration magic before they can properly protect the library's most precious texts."
   },
   {
-    "key": "031bef2db89d43",
+    "key": "0585e5cc66db0a",
     "speaker": "narrator",
-    "text": "The Spectral Librarian turns toward you, and stops. Their eyes have found the Ancient Amulet at your throat."
+    "text": "The Spectral Librarian turns toward you, and stops. Their eyes have found the ancient amulet at your throat."
   },
   {
     "key": "0cf22e3e6e7f31",
@@ -1540,9 +1540,9 @@
     "text": "You mended the wards with your mend spell. They have been failing longer than I care to count; thank you. Now, what you came for."
   },
   {
-    "key": "1eaf719dda018e",
+    "key": "02d3979b2639ab",
     "speaker": "narrator",
-    "text": "Their eyes find the Ancient Amulet at your throat, and stay there."
+    "text": "Their eyes find the ancient amulet at your throat, and stay there."
   },
   {
     "key": "0d04afc31718b4",
@@ -1565,14 +1565,14 @@
     "text": "They gesture to a crystal resting on the shelf:"
   },
   {
-    "key": "1d49b08d8b207b",
+    "key": "12bd8054c10341",
     "speaker": "spectral librarian",
-    "text": "And take this Crystal Focus. What you do with them is yours to choose."
+    "text": "And take this crystal focus. What you do with them is yours to choose."
   },
   {
-    "key": "07b25c7ef67a2b",
+    "key": "152298b21ad8e5",
     "speaker": "narrator",
-    "text": "The Crystal Focus is a masterwork of ancient magical craftsmanship. Its faceted surface catches and amplifies magical energy, and you can feel it resonating with your own magical abilities. This is clearly a tool created by master enchanters to enhance the magical arts."
+    "text": "The crystal focus is a masterwork of ancient magical craftsmanship. Its faceted surface catches and amplifies magical energy, and you can feel it resonating with your own magical abilities. This is clearly a tool created by master enchanters to enhance the magical arts."
   },
   {
     "key": "047c1b1db1baf9",
@@ -1610,9 +1610,9 @@
     "text": "You have read what we left. The rest is not written on any shelf of mine. Use this knowledge wisely."
   },
   {
-    "key": "1bf42e29777bd1",
+    "key": "1ff5f9eb82459a",
     "speaker": "narrator",
-    "text": "You have successfully gained access to the ancient library's knowledge! You've learned the dispel spell, discovered important information about your family heritage, and received a Crystal Focus to enhance your magical abilities. The chronicle you read there was the Wardens' own book, and its last page warns that Malakar seeks the blood of Willowbrook."
+    "text": "You have successfully gained access to the ancient library's knowledge! You've learned the dispel spell, discovered important information about your family heritage, and received a crystal focus to enhance your magical abilities. The chronicle you read there was the Wardens' own book, and its last page warns that Malakar seeks the blood of Willowbrook."
   },
   {
     "key": "1a213fe1ce4efd",
@@ -1625,9 +1625,9 @@
     "text": "Beneath Greendale, the Spectral Librarian taught you the dispel spell. The chronicle there was written by the Wardens of the Dawn, and their magic was the unbinding kind. Its last page warns that Malakar seeks the blood of Willowbrook."
   },
   {
-    "key": "1eb91cf6efd006",
+    "key": "162da4d8f9a893",
     "speaker": "narrator",
-    "text": "Lyria takes the Crystal Focus to the carter's bed and sets it on his chest."
+    "text": "Lyria takes the crystal focus to the carter's bed and sets it on his chest."
   },
   {
     "key": "16dbc33d48d0a6",
@@ -1655,9 +1655,9 @@
     "text": "Quest Complete: The Healer's Apprentice"
   },
   {
-    "key": "1820e64c46030e",
+    "key": "05f1e8b3e6a1fa",
     "speaker": "narrator",
-    "text": "Over the carter's bed, with the Crystal Focus between her hands and then yours, Lyria taught you greater heal. He will live."
+    "text": "Over the carter's bed, with the crystal focus between her hands and then yours, Lyria taught you greater heal. He will live."
   },
   {
     "key": "013ea4d553a98a",
@@ -1830,9 +1830,9 @@
     "text": "A perfectly shaped acorn that glows with soft, natural magic. The shell appears to be made of polished wood with intricate spiral patterns that seem to move when observed closely. It radiates a sense of ancient wisdom and connection to the deepest mysteries of the forest. This is clearly a gift meant for the most sacred forest spirits. When you hold it up to the light, you can see tiny veins of silver running through the shell like tree roots. The acorn seems to whisper in a language older than words, speaking of growth, wisdom, and the eternal cycle of the forest."
   },
   {
-    "key": "0d05fad1e9e554",
+    "key": "09f534eccdd1fc",
     "speaker": "narrator",
-    "text": "The Enhanced Lantern's crystal core pulses with magical energy, casting ethereal blue light that reveals hidden paths through the dense undergrowth. The light seems to resonate with the forest's natural magic, illuminating safe routes and warning you away from dangerous areas. With this enhanced vision, you can navigate the forest with confidence."
+    "text": "The enhanced lantern's crystal core pulses with magical energy, casting ethereal blue light that reveals hidden paths through the dense undergrowth. The light seems to resonate with the forest's natural magic, illuminating safe routes and warning you away from dangerous areas. With this enhanced vision, you can navigate the forest with confidence."
   },
   {
     "key": "1c1cf5f1098482",
@@ -1840,9 +1840,9 @@
     "text": "A narrow path east, toward a tranquil glade, is now open."
   },
   {
-    "key": "156eaab15ab753",
+    "key": "1dc1c9ecd6ff51",
     "speaker": "narrator",
-    "text": "The Protective Charm radiates a warm, golden light as you invoke its power. A shimmering barrier of spiritual energy surrounds you, and you feel the watchful gaze of the forest spirits become less threatening. The ancient magic recognizes your respect and preparation, granting you safe passage through these sacred woods."
+    "text": "The protective charm radiates a warm, golden light as you invoke its power. A shimmering barrier of spiritual energy surrounds you, and you feel the watchful gaze of the forest spirits become less threatening. The ancient magic recognizes your respect and preparation, granting you safe passage through these sacred woods."
   },
   {
     "key": "0e41e234eac7b9",
@@ -2255,9 +2255,9 @@
     "text": "Looking down into the ravine, you can see the remnants of a merchant caravan trapped at the bottom. The wooden wagon wheels are visible among the rocks, and you can hear faint voices calling for help. The walls are steep and dangerous - you'll need rope or other climbing equipment to safely reach the bottom and see what is there."
   },
   {
-    "key": "15636edf478117",
+    "key": "1a8fd791fe80c2",
     "speaker": "narrator",
-    "text": "You secure one end of your Quality Rope to a sturdy tree and lower it into the ravine. Rappelling down carefully, you find the trapped merchant caravan at the bottom. The merchants are injured but alive, and their wagon is damaged but some goods are salvageable. Working together, you create a rope system that allows everyone to climb to safety. The grateful merchants gather their most valuable goods and follow you back to civilization. The caravan has been successfully rescued!"
+    "text": "You secure one end of your quality rope to a sturdy tree and lower it into the ravine. Rappelling down carefully, you find the trapped merchant caravan at the bottom. The merchants are injured but alive, and their wagon is damaged but some goods are salvageable. Working together, you create a rope system that allows everyone to climb to safety. The grateful merchants gather their most valuable goods and follow you back to civilization. The caravan has been successfully rescued!"
   },
   {
     "key": "006919dc30a7cf",
@@ -2710,9 +2710,9 @@
     "text": "Sir Cedric reaches into his pack and withdraws an ancient wooden charm."
   },
   {
-    "key": "174e773a74e4bd",
+    "key": "08a3fb48b7b377",
     "speaker": "sir cedric",
-    "text": "Do you remember what I told you in the yard? That I would not give an heirloom of my house to someone I had known a day. I have known you long enough now. Take Nature's Charm. It was blessed by the ancient knights who first made pacts with the forest spirits, and it is one of the three that call Nyx. You will need it more than I will."
+    "text": "Do you remember what I told you in the yard? That I would not give an heirloom of my house to someone I had known a day. I have known you long enough now. Take nature's charm. It was blessed by the ancient knights who first made pacts with the forest spirits, and it is one of the three that call Nyx. You will need it more than I will."
   },
   {
     "key": "02034bbc8af511",
@@ -2850,9 +2850,9 @@
     "text": "You have received: Nyx's Token"
   },
   {
-    "key": "04c64bdc84b706",
+    "key": "1433d6c06e7e77",
     "speaker": "narrator",
-    "text": "You have received: Forest Heart Crystal"
+    "text": "You have received: forest heart crystal"
   },
   {
     "key": "130aeab0ad3abf",
@@ -2875,9 +2875,9 @@
     "text": "A woman no taller than you, barefoot, with leaves caught in her hair. The moss is greener where she has stood."
   },
   {
-    "key": "1ac366af630fa4",
+    "key": "1917fa8b97aa51",
     "speaker": "narrator",
-    "text": "Nyx judged you worthy and gave you the Prophetic Vision spell, her token and the Forest Heart Crystal. She left you with the words from the glade stone: power follows purpose; purpose follows truth. When every other task in Greendale is done, cast the vision with Sir Cedric beside you, so you can both see what is coming."
+    "text": "Nyx judged you worthy and gave you the Prophetic Vision spell, her token and the forest heart crystal. She left you with the words from the glade stone: power follows purpose; purpose follows truth. When every other task in Greendale is done, cast the vision with Sir Cedric beside you, so you can both see what is coming."
   },
   {
     "key": "13f6b96c8e2ea1",
@@ -2895,9 +2895,9 @@
     "text": "Nyx is already half leaves again. \"Go home the long way, Elior. Look before you step.\""
   },
   {
-    "key": "1716bebf0fed46",
+    "key": "1c35ae46025c4e",
     "speaker": "narrator",
-    "text": "The Gathering Storm: Nyx judged you worthy and gave you the Prophetic Vision spell, her token and the Forest Heart Crystal. She left you with the words from the glade stone: power follows purpose; purpose follows truth. When every other task in Greendale is done, cast the vision with Sir Cedric beside you, so you can both see what is coming."
+    "text": "The Gathering Storm: Nyx judged you worthy and gave you the Prophetic Vision spell, her token and the forest heart crystal. She left you with the words from the glade stone: power follows purpose; purpose follows truth. When every other task in Greendale is done, cast the vision with Sir Cedric beside you, so you can both see what is coming."
   },
   {
     "key": "0ab52ae3a9e273",
@@ -2905,9 +2905,9 @@
     "text": "My friend, I sense something extraordinary has happened. You carry an aura of ancient magic, and your eyes hold depths I had not seen before. Have you succeeded in your quest to find Nyx? The prophetic vision spell you learned is the sort of mystical knowledge we need. With your ability to glimpse possible futures, we can better anticipate threats and develop strategies to counter them. You have become a formidable ally in our fight against the darkness."
   },
   {
-    "key": "029169dc791da7",
+    "key": "0f57f3c56ca890",
     "speaker": "narrator",
-    "text": "You take the Forest Heart Crystal from your pack and hold it out between you and Sir Cedric. The tiny lights inside it gather, brighten, and spill outward, and the vision rises out of the crystal for both of you to see:"
+    "text": "You take the forest heart crystal from your pack and hold it out between you and Sir Cedric. The tiny lights inside it gather, brighten, and spill outward, and the vision rises out of the crystal for both of you to see:"
   },
   {
     "key": "0b994f86809d12",
@@ -2950,9 +2950,9 @@
     "text": "Then it is worse, not better. A thing that wants you to come to it."
   },
   {
-    "key": "146a9c8b2e8203",
+    "key": "0f3208741feda1",
     "speaker": "narrator",
-    "text": "All your life, Malakar has been a name from old books, a story told to frighten children. But the agents asking after the Willowbrook bloodline, the seal on the Secret Documents, the figure reaching for you in the vision: they all point the same way. Malakar is real, and the bloodline he seeks is yours."
+    "text": "All your life, Malakar has been a name from old books, a story told to frighten children. But the agents asking after the Willowbrook bloodline, the seal on the secret documents, the figure reaching for you in the vision: they all point the same way. Malakar is real, and the bloodline he seeks is yours."
   },
   {
     "key": "10dff7ea63f9d7",

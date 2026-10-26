@@ -20,14 +20,14 @@ const PICTURES: string[] = [
 /** The paragraph shown the first time the amulet reaches each stage. */
 const GLOWS: string[] = [
   '',
-  'At your side, the [item_name]Ancient Amulet[/item_name] grows warm, then ' +
+  'At your side, the [item_name]ancient amulet[/item_name] grows warm, then ' +
     'glows. In its light you glimpse two faces, a man and a woman, laughing ' +
     'beside a third figure who has turned away. Then the light fades.',
-  'The [item_name]Ancient Amulet[/item_name] glows again, brighter than ' +
+  'The [item_name]ancient amulet[/item_name] glows again, brighter than ' +
     "before, and the faces sharpen. The woman has Grandmother's eyes. She " +
     'can only be Lysa, your mother. The third figure still has his back ' +
     'turned.',
-  'The [item_name]Ancient Amulet[/item_name] blazes in your hand a third ' +
+  'The [item_name]ancient amulet[/item_name] blazes in your hand a third ' +
     'time. Aren stands beside Lysa now, hand in hand. Behind them, the ' +
     'third figure still has his back turned.',
 ]

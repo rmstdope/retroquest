@@ -3,7 +3,7 @@ import { Game } from '@/engine'
 import { Act3 } from '../Act3'
 
 describe('Lower Switchbacks', () => {
-  it('contains the Emberwater Canteen and the Ash Scholar', () => {
+  it('contains the emberwater canteen and the Ash Scholar', () => {
     const act3 = new Act3()
     new Game([act3])
 

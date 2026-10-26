@@ -93,8 +93,8 @@ describe('Mira', () => {
     expect(speeches).toEqual([
       "[dialogue]Elior. Malakar is draining King Alden's life to break " +
         "Eldoria's wards, and the king grows weaker every day.[/dialogue]",
-      '[dialogue]Three relics can stand against him: the Crystal of Light, ' +
-        "the Phoenix Feather and the Dragon's Scale. We will fetch them one " +
+      '[dialogue]Three relics can stand against him: the crystal of light, ' +
+        "the phoenix feather and the dragon's scale. We will fetch them one " +
         'at a time.[/dialogue]',
       '[dialogue]Before we go, take this, and read it. Then we can leave.' +
         '[/dialogue]',
@@ -126,7 +126,7 @@ describe('Mira', () => {
     // ensure crystal not acquired -> hint
     game.state.setStoryFlag(FLAG_ACT3_CRYSTAL_OF_LIGHT_ACQUIRED, false)
     const hint = m.talkTo(game.state)
-    expect(hint).toContain('Crystal of Light')
+    expect(hint).toContain('crystal of light')
 
     // crystal acquired but letter not read -> should require letter to be read
     game.state.setStoryFlag(FLAG_ACT3_CRYSTAL_OF_LIGHT_ACQUIRED, true)
@@ -225,7 +225,7 @@ describe('Mira', () => {
 
     // without elixir in inventory - should urge to take it
     let out = m.talkTo(game.state)
-    expect(out).toContain('take the Lifelight Elixir')
+    expect(out).toContain('take the lifelight elixir')
     expect(out).toContain('before we depart')
     expect(out).not.toContain('you arrive at your next destination')
 
@@ -332,7 +332,7 @@ describe('Mira', () => {
 
     expect(out).toContain('three relics resonate')
     expect(out.includes('Warding Rite') || out.includes('elixir')).toBe(true)
-    expect(out).toContain('Lifelight Elixir')
+    expect(out).toContain('lifelight elixir')
 
     expect(game.state.hasItem('Crystal of Light')).toBe(false)
     expect(game.state.hasItem('Phoenix Feather')).toBe(false)

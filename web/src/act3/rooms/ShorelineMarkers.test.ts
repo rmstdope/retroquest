@@ -23,7 +23,7 @@ describe('Shoreline Markers', () => {
     game.state.currentRoom = game.state.allRooms.ShorelineMarkers
   })
 
-  it('reveals the Moon Rune Shards on search and lets them be taken', () => {
+  it('reveals the moon rune shards on search and lets them be taken', () => {
     expectItemInRoom(game.state.currentRoom, SHARDS, false)
     expectItemInInventory(game.state, SHARDS, false)
 

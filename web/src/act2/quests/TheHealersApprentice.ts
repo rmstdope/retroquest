@@ -12,10 +12,10 @@ export class TheHealersApprenticeQuest extends Quest {
       name: QUEST_HEALERS_APPRENTICE,
       description:
         "Master Healer Lyria let you watch her at a dying carter's bed. Your " +
-        'herbs were not enough. She needs a Crystal Focus, and the old ' +
+        'herbs were not enough. She needs a crystal focus, and the old ' +
         'scholars of Greendale may have hidden one with their books.',
       completion:
-        "Over the carter's bed, with the Crystal Focus between her hands " +
+        "Over the carter's bed, with the crystal focus between her hands " +
         'and then yours, Lyria taught you greater heal. He will live.',
     })
   }

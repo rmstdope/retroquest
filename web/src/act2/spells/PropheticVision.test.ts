@@ -325,9 +325,9 @@ describe('Prophetic Vision ending', () => {
   })
 })
 
-describe('Prophetic Vision and the Forest Heart Crystal', () => {
+describe('Prophetic Vision and the forest heart crystal', () => {
   const CRYSTAL_OPENING =
-    'You take the [item_name]Forest Heart Crystal[/item_name] from your ' +
+    'You take the [item_name]forest heart crystal[/item_name] from your ' +
     'pack and hold it out between you and ' +
     `${characterName('Sir Cedric')}. The tiny lights inside it gather, ` +
     'brighten, and spill outward, and the vision rises out of the crystal ' +
@@ -354,7 +354,7 @@ describe('Prophetic Vision and the Forest Heart Crystal', () => {
     const first = new PropheticVision().castSpell(game.state)
 
     expect(first).toContain('newly granted sight')
-    expect(first).not.toContain('Forest Heart Crystal')
+    expect(first).not.toContain('forest heart crystal')
   })
 
   it('never mentions the crystal without Cedric, before the quests or later', () => {
@@ -362,13 +362,13 @@ describe('Prophetic Vision and the Forest Heart Crystal', () => {
     const alone = new Game([new Act2()])
     alone.state.addItemToInventory(crystal)
     expect(new PropheticVision().castSpell(alone.state)).not.toContain(
-      'Forest Heart Crystal',
+      'forest heart crystal',
     )
 
     const early = createGameWithCedric()
     early.state.addItemToInventory(new ForestHeartCrystal())
     expect(new PropheticVision().castSpell(early.state)).not.toContain(
-      'Forest Heart Crystal',
+      'forest heart crystal',
     )
 
     const later = createGameWithCedric()
@@ -376,6 +376,6 @@ describe('Prophetic Vision and the Forest Heart Crystal', () => {
     completeAllSideQuests(later.state)
     const spell = new PropheticVision()
     spell.castSpell(later.state)
-    expect(spell.castSpell(later.state)).not.toContain('Forest Heart Crystal')
+    expect(spell.castSpell(later.state)).not.toContain('forest heart crystal')
   })
 })

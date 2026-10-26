@@ -96,7 +96,7 @@ describe('Sir Cedric in the Hall of Echoes', () => {
       'Sir Cedric. I am sorry. I have no right to ask anything of you, so I will not.',
       HOLD_BACK,
       'I heard you. That will have to be enough, for now.',
-      "You received [item_name]Knight's Redemption[/item_name]!",
+      "You received the [item_name]knight's redemption[/item_name]!",
     ].map((part) => out.indexOf(part))
     expect(order.every((i) => i >= 0)).toBe(true)
     expect([...order].sort((a, b) => a - b)).toEqual(order)

@@ -81,7 +81,7 @@ describe('Act II ancient amulet', () => {
       "Mira's parting words go with you: " +
         '[dialogue]Your road leads to Greendale, [character_name]Elior[/character_name]. Once there, show the ' +
         'amulet to no one lightly. Those who know what it is will find you.[/dialogue] ' +
-        'The [item_name]Ancient Amulet[/item_name] your parents left you lies ' +
+        'The [item_name]ancient amulet[/item_name] your parents left you lies ' +
         'hidden under your shirt, warm against your chest. Someone came to ' +
         'Willowbrook looking for it, your grandmother said. Keep it hidden.',
     )

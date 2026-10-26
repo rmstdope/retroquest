@@ -92,7 +92,7 @@ export class SubmergedAntechamber extends Room {
     const lantern = gameState.inventory.find((i) => i instanceof PrismLantern)
     if (!lantern) {
       return clue(
-        'You need a [item_name]Prism Lantern[/item_name] to mount here.',
+        'You need a [item_name]prism lantern[/item_name] to mount here.',
       )
     }
     gameState.inventory.splice(gameState.inventory.indexOf(lantern), 1)

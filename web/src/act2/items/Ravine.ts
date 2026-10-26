@@ -29,6 +29,6 @@ export class Ravine extends Item {
       // Delegate to the Quality Rope's useWith method, passing ravine as the target
       return other.useWith(gameState, this)
     }
-    return `You can't use the ravine with ${other.name}.`
+    return `You can't use the ravine with ${other.nameInSentence()}.`
   }
 }

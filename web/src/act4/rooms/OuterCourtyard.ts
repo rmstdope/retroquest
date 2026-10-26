@@ -82,7 +82,7 @@ export class OuterCourtyard extends Room {
         'away. One by one the servants stand still and look up. ' +
         'By the fountain, the captain blinks, as if waking from a long sleep. ' +
         'One of the servants presses a small blue ' +
-        "[item_name]Servant's Pendant[/item_name] into your hands."
+        "[item_name]servant's pendant[/item_name] into your hands."
       )
     }
     return '[dim]The chains are gone. There is nothing left to bless away.[/dim]'

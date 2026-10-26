@@ -42,9 +42,8 @@ export class MendSpell extends Spell {
           'ancient knowledge.[/success]'
         )
       }
-      const iname = targetItem.name
       return (
-        `[failure]The [item_name]${iname}[/item_name] have already been repaired ` +
+        `[failure]${targetItem.nameInSentence({ atStart: true })} have already been repaired ` +
         'and are functioning properly.[/failure]'
       )
     }
@@ -64,10 +63,9 @@ export class MendSpell extends Spell {
       )
     }
     const name = this.name
-    const iname = targetItem.name
     return (
       `[failure]You cast [spell_name]${name}[/spell_name] on ` +
-      `[item_name]${iname}[/item_name], but it doesn't appear to need any ` +
+      `${targetItem.nameInSentence()}, but it doesn't appear to need any ` +
       'repairs. The spell has no effect.[/failure]'
     )
   }

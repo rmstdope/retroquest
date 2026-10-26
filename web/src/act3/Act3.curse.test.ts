@@ -230,6 +230,6 @@ describe('Act III curse grows worse at each relic site', () => {
     for (const moment of [MOMENT_1, MOMENT_2, MOMENT_3]) {
       expect(again).not.toContain(moment)
     }
-    expect(again).not.toContain('Ancient Amulet[/item_name] glows')
+    expect(again).not.toContain('ancient amulet[/item_name]')
   })
 })

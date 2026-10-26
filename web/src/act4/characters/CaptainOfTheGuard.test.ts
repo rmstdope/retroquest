@@ -156,7 +156,7 @@ describe('CaptainOfTheGuard', () => {
       const game = createCourtyardGame()
       const answer = executeCommands(game, ["give guardian's chain to captain"])
       expect(answer).toContain(
-        "You lift the [item_name]Guardian's Chain[/item_name] over the captain's head. Its crystals flare once and settle against his soot-black tabard, and the warmth goes out of your hands.",
+        "You lift the [item_name]guardian's chain[/item_name] over the captain's head. Its crystals flare once and settle against his soot-black tabard, and the warmth goes out of your hands.",
       )
       expect(answer).toContain("'You will need this more than I will.'")
       expect(answer).toContain(

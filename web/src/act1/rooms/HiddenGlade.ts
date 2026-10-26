@@ -61,7 +61,7 @@ export class HiddenGlade extends Room {
       : HiddenGlade.DIM_DESCRIPTION
     if (gameState.hasItem('Ancient Amulet')) {
       baseDescription +=
-        ' Beside the mossy stone, the [item_name]Ancient Amulet[/item_name] in ' +
+        ' Beside the mossy stone, the [item_name]ancient amulet[/item_name] in ' +
         'your hand begins to glow.'
     }
     if (!this.lightSpellCast) return baseDescription
@@ -75,11 +75,11 @@ export class HiddenGlade extends Room {
       )
       if (this.items.some((item) => item instanceof RareFlower)) {
         dynamicParts.push(
-          'A beautiful [item_name]Rare Flower[/item_name] blooms near the mossy stone.',
+          'A beautiful [item_name]rare flower[/item_name] blooms near the mossy stone.',
         )
       } else {
         dynamicParts.push(
-          'You recall picking a beautiful [item_name]Rare Flower[/item_name] that once ' +
+          'You recall picking a beautiful [item_name]rare flower[/item_name] that once ' +
             'bloomed near the mossy stone.',
         )
       }
@@ -114,7 +114,7 @@ export class HiddenGlade extends Room {
         )
         this.addItem(new RareFlower())
         messages.push(
-          'You notice a rare, beautiful [item_name]Rare Flower[/item_name] blooming ' +
+          'You notice a rare, beautiful [item_name]rare flower[/item_name] blooming ' +
             'near the mossy stone.',
         )
       } else {

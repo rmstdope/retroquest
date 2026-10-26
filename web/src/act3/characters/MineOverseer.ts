@@ -57,7 +57,7 @@ export class MineOverseer extends Character {
             'It opens the supply crate. Get those miners out.',
         ) +
         '\n' +
-        "You receive the [item_name]Miner's Key[/item_name]."
+        "You receive the [item_name]miner's key[/item_name]."
       )
     }
     return (

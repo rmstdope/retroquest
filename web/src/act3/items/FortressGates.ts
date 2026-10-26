@@ -26,14 +26,14 @@ export class FortressGates extends Item {
         "that pulse with malevolent energy. This is the threshold of Malakar's " +
         "domain—where King Alden is held captive and the kingdom's fate will " +
         'be decided.\n\n' +
-        'The [item_name]Ancient Amulet[/item_name] is warm against your palm. ' +
+        'The [item_name]ancient amulet[/item_name] is warm against your palm. ' +
         'You came on this journey believing Malakar took your parents from ' +
         'you. You know better now. ' +
         `${characterName('Aren')} and ${characterName('Lysa')} were his ` +
         'closest friends, and the ward they became is still holding.\n\n' +
         'The Dragon said they were warded away, not dead. You do not yet ' +
         'know what that means.\n\n' +
-        'The Lifelight Elixir pulses with protective power, ready to shield ' +
+        'The lifelight elixir pulses with protective power, ready to shield ' +
         "you from the sorcerer's influence. " +
         '[bold]Act III is complete.[/bold] The final confrontation awaits.'
       )

@@ -59,7 +59,7 @@ describe('Tobin', () => {
     expect(new Tobin().talkTo(game.state)).toContain(FIRST)
   })
 
-  describe('the Quiet Charm', () => {
+  describe('the quiet charm', () => {
     const setup = (): { game: Game; tobin: Tobin } => {
       const game = new Game([new Act3()])
       game.state.addItemToInventory(new QuietCharm())

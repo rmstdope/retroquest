@@ -45,10 +45,9 @@ export class MendSpell extends Spell {
 
     // Fallback behavior: mimic the generic mend response
     const name = this.name
-    const iname = targetItem.name
     return (
       `[dim]You cast [spell_name]${name}[/spell_name] on ` +
-      `[item_name]${iname}[/item_name], but it doesn't appear to need mending.[/dim]`
+      `${targetItem.nameInSentence()}, but it doesn't appear to need mending.[/dim]`
     )
   }
 }

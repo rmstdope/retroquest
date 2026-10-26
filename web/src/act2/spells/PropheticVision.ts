@@ -137,7 +137,7 @@ export class PropheticVision extends Spell {
   private visionOpening(gameState: GameState): string {
     if (gameState.hasItem('forest heart crystal')) {
       return (
-        'You take the [item_name]Forest Heart Crystal[/item_name] from your ' +
+        'You take the [item_name]forest heart crystal[/item_name] from your ' +
         'pack and hold it out between you and ' +
         characterName('Sir Cedric') +
         '. The tiny lights inside it gather, brighten, and spill outward, ' +

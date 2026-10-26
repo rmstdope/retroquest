@@ -27,7 +27,7 @@ export class WardingPillars extends Item {
   /** Prevent pickup of the immovable warding pillars. */
   override preventPickup(): string {
     return clue(
-      `You can't take the [item_name]${this.name}[/item_name]. ` +
+      `You can't take ${this.nameInSentence()}. ` +
         'They are fixed stone, older than the pier.',
     )
   }

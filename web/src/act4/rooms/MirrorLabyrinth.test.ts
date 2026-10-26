@@ -110,7 +110,7 @@ describe('MirrorLabyrinth', () => {
     },
   )
 
-  it('fails every turn without the Echo Stone, even the right one', () => {
+  it('fails every turn without the echo stone, even the right one', () => {
     const { game, room } = inMaze({ stone: false })
     expect(game.move('west')).toContain(NO_STONE)
     expect(seen(game, room)).toContain(ENTRANCE)
@@ -185,7 +185,7 @@ describe('MirrorLabyrinth', () => {
     const { game, room } = inMaze()
     const heard = room.useStone(game.state)
     expect(heard).toContain(
-      'You hold the Echo Stone to your ear. One voice repeats',
+      'You hold the echo stone to your ear. One voice repeats',
     )
     expect(heard).toContain('Left, then left, then the way your shadow')
     game.move('west')

@@ -4,7 +4,7 @@ import { Act2 } from '../Act2'
 import { FLAG_READ_SQUIRES_DIARY } from '../Act2StoryFlags'
 import { SecretDocuments } from './SecretDocuments'
 
-describe('the Secret Documents name where the king was carried', () => {
+describe('the secret documents name where the king was carried', () => {
   it('give the place once the diary has made sense of them', () => {
     const game = new Game([new Act2()])
     game.state.setStoryFlag(FLAG_READ_SQUIRES_DIARY, true)

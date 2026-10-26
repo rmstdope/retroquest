@@ -29,7 +29,7 @@ export class CrystalFocus extends Item {
   /** Describe the masterwork crystal. */
   override examine(_gameState: GameState): string {
     return (
-      'The [item_name]Crystal Focus[/item_name] is a masterwork of ancient magical ' +
+      'The [item_name]crystal focus[/item_name] is a masterwork of ancient magical ' +
       'craftsmanship. Its faceted surface catches and amplifies magical energy, and ' +
       'you can feel it resonating with your own magical abilities. This is clearly ' +
       'a tool created by master enchanters to enhance the magical arts.'

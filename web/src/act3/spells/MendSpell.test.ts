@@ -67,7 +67,7 @@ describe('MendSpell', () => {
     expectMarkupWellFormed(answer)
   })
 
-  it('mends the Charred Inscription through its receiveSpell hook', () => {
+  it('mends the charred inscription through its receiveSpell hook', () => {
     const gs = makeGameState()
     const inscription = new CharredInscription()
     inscription.examine(gs)

@@ -17,7 +17,7 @@ export const THRONE_CHAMBER_FIRST =
 export const THRONE_CHAMBER_AMULET =
   'The light of the ward fills the chamber from the open amulet. King ' +
   'Alden hangs in his crystal prison, the wound bleeds in the air beside ' +
-  'him, and Malakar waits on his knees between them. The Lifelight Elixir ' +
+  'him, and Malakar waits on his knees between them. The lifelight elixir ' +
   'is warm in your hand.'
 
 /** The whole description once Malakar has drunk the elixir. */

@@ -16,7 +16,7 @@ export class TheThreeVirtuesQuest extends Quest {
       name: 'The Three Virtues',
       description:
         'Prove Courage, Wisdom, and Selflessness by recovering the three relics: ' +
-        "the Crystal of Light, the Phoenix Feather, and the Dragon's Scale.",
+        "the crystal of light, the phoenix feather, and the dragon's scale.",
     })
   }
 
@@ -37,7 +37,7 @@ export class TheThreeVirtuesQuest extends Quest {
     const earlier: string[] = []
     let newDesc =
       'Prove Courage, Wisdom, and Selflessness by recovering the three relics: ' +
-      "the Crystal of Light, the Phoenix Feather, and the Dragon's Scale."
+      "the crystal of light, the phoenix feather, and the dragon's scale."
     if (gameState.getStoryFlag(FLAG_ACT3_CRYSTAL_OF_LIGHT_ACQUIRED)) {
       if (!this.flagState[FLAG_ACT3_CRYSTAL_OF_LIGHT_ACQUIRED]) {
         this.flagState[FLAG_ACT3_CRYSTAL_OF_LIGHT_ACQUIRED] = true
@@ -45,7 +45,7 @@ export class TheThreeVirtuesQuest extends Quest {
       }
       earlier.push(newDesc)
       newDesc =
-        '\n\nYou have claimed the Crystal of Light; its steady brilliance answers ' +
+        '\n\nYou have claimed the crystal of light; its steady brilliance answers ' +
         'your courage and steadies what the deep waters once denied. Sir ' +
         'Cedric bids you to press on—dark forces gather, and he needs allies ' +
         'skilled in magic to stand with him when the hour comes. '
@@ -59,7 +59,7 @@ export class TheThreeVirtuesQuest extends Quest {
       }
       earlier.push(newDesc)
       newDesc =
-        '\n\nYou have obtained the Phoenix Feather. Its warmth pulses in your grasp, ' +
+        '\n\nYou have obtained the phoenix feather. Its warmth pulses in your grasp, ' +
         'a living ember that refuses to die. The memory of fire and flight lingers, ' +
         'reminding you that hope can rise from ashes. The path ahead is clearer, ' +
         'but the final virtue remains. '
@@ -73,7 +73,7 @@ export class TheThreeVirtuesQuest extends Quest {
       }
       earlier.push(newDesc)
       newDesc =
-        "\n\nYou have claimed the Dragon's Scale, its obsidian surface gleaming " +
+        "\n\nYou have claimed the dragon's scale, its obsidian surface gleaming " +
         "with ancient power. The dragon's wisdom echoes in your mind, a testament " +
         'to the selflessness you have proven. With all three relics in hand, the ' +
         'final trial awaits—the Warding Rite that will determine the fate of all. '

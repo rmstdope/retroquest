@@ -33,7 +33,7 @@ export class Mural extends Item {
     return (
       "Fine salt lines run along the mural's base. Pressing the stone, " +
       'your hand finds a hollow and a dry scrap falls into your palm. A ' +
-      '[item_name]Sea-Sealed Letter[/item_name] peels free, its ink half-hidden ' +
+      '[item_name]sea-sealed letter[/item_name] peels free, its ink half-hidden ' +
       'by varnish made of salt and tide.'
     )
   }

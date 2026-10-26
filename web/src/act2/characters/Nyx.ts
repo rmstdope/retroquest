@@ -89,7 +89,7 @@ export class Nyx extends Character {
         'hands.\n\n' +
         'You have learned the spell: [spell_name]Prophetic Vision[/spell_name]\n' +
         "You have received: [item_name]Nyx's Token[/item_name]\n" +
-        'You have received: [item_name]Forest Heart Crystal[/item_name]\n\n' +
+        'You have received: [item_name]forest heart crystal[/item_name]\n\n' +
         '"The storm is heading for your village. This lets you see it ' +
         'coming."\n\n' +
         'Then her voice softens, as if she is repeating something she was ' +
