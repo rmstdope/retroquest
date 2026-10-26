@@ -17,6 +17,11 @@ describe('displayName', () => {
     expect(displayName("Dragon's Hall")).toBe("Dragon's Hall")
   })
 
+  it("keeps a capitalised name's own capitalisation", () => {
+    expect(displayName('Captain of the Guard')).toBe('Captain of the Guard')
+    expect(displayName('Crystal of Light')).toBe('Crystal of Light')
+  })
+
   it('collapses extra spaces', () => {
     expect(displayName('  water   nymphs ')).toBe('Water Nymphs')
   })
