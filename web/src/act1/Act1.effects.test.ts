@@ -8,7 +8,7 @@ import { ACT1_GOLDEN_PATH } from './Act1GoldenPath'
 import { executeCommands } from '@/testing/gameHelpers'
 
 /** The grey lines Act I still shows: markers, never a repeat of the command. */
-const ALLOWED_EVENT = /^(You take |You are in |✦ |Game (saved|loaded) )/
+const ALLOWED_EVENT = /^(You are in |✦ |Game (saved|loaded) )/
 
 /** Play the golden path and keep each command with its answer. */
 function playGoldenPath(): { command: string; answer: string }[] {

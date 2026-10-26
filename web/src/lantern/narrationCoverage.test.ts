@@ -228,3 +228,18 @@ describe.each([1, 2, 3, 4])('narration of resting in Act %i', (act) => {
     )
   })
 })
+
+describe.each([1, 2, 3, 4])(
+  'the pickup sentence in the script of Act %i (rq-do7s)',
+  (act) => {
+    it('is voiced by the narrator', () => {
+      const script = readJson<ScriptLine[]>(`tts/act${act}/script.json`)
+      const line = script.find(
+        (entry) =>
+          entry.text ===
+          'This might come in handy, so you decide to pick it up.',
+      )
+      expect(line?.speaker).toBe('narrator')
+    })
+  },
+)

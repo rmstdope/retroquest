@@ -135,7 +135,7 @@ describe('useGameStore over the real engine: game over', () => {
     store.continueChapter()
     expect(store.finishGame(false)).toBe(true)
     expect(store.ending).toEqual({
-      text: expect.stringContaining(CROWN),
+      text: 'This might come in handy, so you decide to pick it up.',
       saved: false,
     })
   })
