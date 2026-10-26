@@ -5,12 +5,25 @@ const read = (path: string): string =>
   readFileSync(new URL(path, import.meta.url), 'utf8')
 
 describe('the speaking rule', () => {
-  it('is drawn once, in lantern.css, for chapter blocks and story blocks', () => {
-    const css = read('./lantern.css')
-    expect(css).toMatch(
-      /\.lq-chapter-block\.lq-speaking[\s\S]*?inset var\(--lq-rule-width/,
+  it.each([
+    '.lq-chapter-block',
+    '.lq-block-text',
+    '.lq-block-dialogue',
+    '.lq-block-failure',
+    '.lq-arrival',
+  ])('is drawn once, in lantern.css, for %s', (selector) => {
+    const rule = read('./lantern.css').match(
+      /([^{}]*)\{\s*box-shadow: inset var\(--lq-rule-width[^}]*\}/,
     )
-    expect(css).toMatch(/\.lq-block-text\.lq-speaking/)
+    expect(rule?.[1]).toContain(`${selector}.lq-speaking`)
+  })
+
+  it('draws a clue failure 3px in the failure colour', () => {
+    const source = read('../components/lantern/StoryTurn.vue')
+    expect(source).toMatch(
+      /\.lq-block-failure\.lq-speaking\s*\{[^}]*--lq-rule-width: 3px/,
+    )
+    expect(source).toMatch(/--lq-rule-colour: var\(--lq-failure\)/)
   })
 
   it.each(['ChapterPage.vue', 'StoryTurn.vue'])(
