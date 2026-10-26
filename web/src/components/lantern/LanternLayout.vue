@@ -742,6 +742,7 @@ watch(
       <TitlePage
         v-if="game.showTitle"
         :text="game.titleText"
+        :music-info="music.musicInfo.value"
         @start="startGame"
       />
 

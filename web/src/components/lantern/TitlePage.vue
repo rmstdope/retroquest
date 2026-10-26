@@ -8,13 +8,28 @@ import { useFocusTrap } from '@/composables/useFocusTrap'
  * (scaled to the screen, hidden from screen readers, who hear the title;
  * a plain wordmark under 400px wide, where the art gets too small), the
  * music credits and Start. Enter on Start or Escape goes on.
+ *
+ * `musicInfo` is the credit of the music actually playing (a take chosen in
+ * Audio Studio has its own), as the layout's music player holds it; until
+ * the player has a track, the credits in the game's own `text` stand.
  */
-const props = defineProps<{ text: string }>()
+const props = withDefaults(
+  defineProps<{ text: string; musicInfo?: string }>(),
+  { musicInfo: '' },
+)
 const emit = defineEmits<{ start: [] }>()
 const titleId = useId()
 const page = ref<HTMLElement | null>(null)
 const trap = useFocusTrap(page)
 const screen = computed(() => parseTitle(props.text))
+const credits = computed(() =>
+  props.musicInfo
+    ? props.musicInfo
+        .split('\n')
+        .map((line) => line.trim())
+        .filter(Boolean)
+    : screen.value.credits,
+)
 
 /** A credit line as text, or as a link when it names a web address. */
 function credit(line: string): { text: string; href: string | null } {
@@ -49,9 +64,9 @@ onMounted(() => nextTick(trap.focusFirst))
       <pre v-if="screen.art" class="lq-art" aria-hidden="true">{{
         screen.art
       }}</pre>
-      <p v-if="screen.credits.length" class="lq-credits">
+      <p v-if="credits.length" class="lq-credits">
         <span class="lq-credits-label">Music</span>
-        <template v-for="(line, index) in screen.credits" :key="index">
+        <template v-for="(line, index) in credits" :key="index">
           <a
             v-if="credit(line).href"
             :href="credit(line).href!"

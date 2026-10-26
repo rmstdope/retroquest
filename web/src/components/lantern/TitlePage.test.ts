@@ -14,9 +14,9 @@ describe('TitlePage', () => {
     wrapper = undefined
   })
 
-  function mountTitle() {
+  function mountTitle(musicInfo?: string): VueWrapper {
     wrapper = mount(TitlePage, {
-      props: { text: LOGO },
+      props: { text: LOGO, musicInfo },
       attachTo: document.body,
     })
     return wrapper
@@ -40,6 +40,18 @@ describe('TitlePage', () => {
     expect(w.get('.lq-credits a').attributes('href')).toBe(
       'https://freetouse.com/music',
     )
+  })
+
+  it('credits the music playing, when the player gives its credit', () => {
+    const w = mountTitle(
+      'Original music for RetroQuest, made with Audio Studio',
+    )
+
+    expect(w.get('.lq-credits').text()).toContain(
+      'Original music for RetroQuest, made with Audio Studio',
+    )
+    expect(w.get('.lq-credits').text()).not.toContain('Conquest')
+    expect(w.find('.lq-credits a').exists()).toBe(false)
   })
 
   it('starts with the Start button, Enter or Escape', async () => {
