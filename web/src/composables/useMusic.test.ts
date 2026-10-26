@@ -85,6 +85,12 @@ describe('useMusic', () => {
       expect(audio.play).toHaveBeenCalled()
     })
 
+    it('keeps the folder of a file in a folder', () => {
+      const { loadTrack } = useMusic(audio)
+      loadTrack('generated/hall one.mp3', 'Made for RetroQuest')
+      expect(audio.src).toBe('/audio/music/generated/hall%20one.mp3')
+    })
+
     it('updates reactive state', () => {
       const { loadTrack, currentMusicFile, musicInfo } = useMusic(audio)
       loadTrack('forest.mp3', 'Forest ambience')

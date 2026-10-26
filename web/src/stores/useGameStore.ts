@@ -255,6 +255,9 @@ export const useGameStore = defineStore('game', () => {
   // --- Music (exposed for useMusic composable) ---
   const musicFile = ref('')
   const musicInfo = ref('')
+  /** The act and room the music plays in (see `getMusicPlace`), '' while nothing plays. */
+  const musicActName = ref('')
+  const musicRoomKey = ref('')
 
   function setBridge(b: GameBridge) {
     bridge = b
@@ -808,6 +811,9 @@ export const useGameStore = defineStore('game', () => {
     const m = b.controller.getCurrentMusic()
     musicFile.value = m.musicFile
     musicInfo.value = m.musicInfo
+    const place = b.controller.getMusicPlace()
+    musicActName.value = place.actName
+    musicRoomKey.value = place.roomKey
   }
 
   /**
@@ -1183,6 +1189,8 @@ export const useGameStore = defineStore('game', () => {
     modalChapter,
     musicFile,
     musicInfo,
+    musicActName,
+    musicRoomKey,
     heldTurn,
     panelsHeld,
     panelFlash,
