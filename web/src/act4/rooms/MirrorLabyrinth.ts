@@ -177,7 +177,7 @@ export class MirrorLabyrinth extends Room {
   /** The Echo Stone used in the maze repeats the route, never solves it. */
   useStone(_gameState: GameState): string {
     return (
-      'You hold the Echo Stone to your ear. One voice repeats, patient as a ' +
+      'You hold the echo stone to your ear. One voice repeats, patient as a ' +
       'heartbeat:\n' +
       dialogue('an echo', `'${MAZE_ROUTE}'`)
     )

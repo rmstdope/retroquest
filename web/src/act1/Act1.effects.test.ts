@@ -49,7 +49,7 @@ describe('Act 1 narrates effects and never echoes the command', () => {
       'The [item_name]stick[/item_name] lashes onto the [item_name]magnetic fishing rod[/item_name]: it is an [item_name]extended magnetic fishing rod[/item_name] now.',
       'The thick [item_name]vines[/item_name] fall away under the [item_name]sharp knife[/item_name], clearing the way to a small alcove.',
       'The murky water shimmers and clears!',
-      'You now carry the [item_name]Ancient Amulet[/item_name].',
+      'You now carry the [item_name]ancient amulet[/item_name].',
     ]) {
       expect(all).toContain(phrase)
     }

@@ -75,7 +75,7 @@ describe('The Gathering Storm log', () => {
       'is waiting.',
     '[character_name]Nyx[/character_name] judged you worthy and gave you the ' +
       '[spell_name]Prophetic Vision[/spell_name] spell, her token and the ' +
-      'Forest Heart Crystal. She left you with the words from the glade ' +
+      'forest heart crystal. She left you with the words from the glade ' +
       'stone: power follows purpose; purpose follows truth. When every other ' +
       'task in Greendale is done, cast the vision with ' +
       '[character_name]Sir Cedric[/character_name] beside you, so you can ' +

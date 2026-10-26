@@ -223,7 +223,7 @@ export class SorceressOfLies extends Character {
       lead,
       ...confession,
       'She lifts the silver mask from her staff and puts it in your hands.',
-      "You received [item_name]Sorceress's Truth[/item_name]!",
+      "You received the [item_name]sorceress's truth[/item_name]!",
     ].join('\n')
   }
 }

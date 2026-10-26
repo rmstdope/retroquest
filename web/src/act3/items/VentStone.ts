@@ -24,7 +24,7 @@ export class VentStone extends Item {
     ).calibrateWithStone
     if (room.name !== 'Fumarole Passages' || typeof hook !== 'function') {
       return (
-        `[failure]You can't use the [item_name]${this.name}[/item_name] ` +
+        `[failure]You can't use ${this.nameInSentence()} ` +
         'usefully here.[/failure]'
       )
     }

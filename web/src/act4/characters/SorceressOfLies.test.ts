@@ -299,7 +299,7 @@ describe('The Sorceress of Lies', () => {
     expect(third).toBeGreaterThan(second)
     expect(gift).toBeGreaterThan(third)
     expect(received).toBeGreaterThan(gift)
-    expect(said).toContain("Sorceress's Truth")
+    expect(said).toContain("sorceress's truth")
     expectMarkupWellFormed(said)
     expectItemInInventory(game.state, "Sorceress's Truth", true)
     expectQuestCompleted(game.state, 'The Sorceress of Lies')

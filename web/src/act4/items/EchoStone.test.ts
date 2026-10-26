@@ -117,7 +117,7 @@ describe('EchoStone enhanced', () => {
     stone.enhance()
     expect(stone.name).toBe('Enhanced Echo Stone')
     expect(stone.examine(game.state)).toContain(
-      'The Echo Stone hums more strongly now.',
+      'The echo stone hums more strongly now.',
     )
     expect(stone.use(game.state)).toContain(
       'waiting for a place where memories sleep.',

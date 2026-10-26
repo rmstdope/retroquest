@@ -91,7 +91,7 @@ export class ShadowsOverWillowbrookQuest extends Quest {
         `${characterName('Elior')} has proven his magical abilities are real. The villagers will look to ` +
           `him with new hope, and ${characterName('Mira')} believes he may be the key to dispelling the ` +
           `darkness. ${characterName('Mira')} has promised ${characterName('Elior')} the ` +
-          '[item_name]Ancient Amulet[/item_name] once he is truly ready for the road ' +
+          '[item_name]ancient amulet[/item_name] once he is truly ready for the road ' +
           'ahead.',
       ],
       [

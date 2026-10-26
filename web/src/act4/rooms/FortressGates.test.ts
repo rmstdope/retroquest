@@ -117,7 +117,7 @@ describe('FortressGates', () => {
       expect(answer).toContain(
         'Your light finds the right stone between its beats.',
       )
-      expect(answer).toContain("Guardian's Essence[/item_name]")
+      expect(answer).toContain("guardian's essence[/item_name]")
       expect(game.state.getStoryFlag(FLAG_ACT4_BARRIERS_DISABLED)).toBe(true)
       expect(
         game.state.getStoryFlag(FLAG_ACT4_SHATTERED_WARD_GUARDIANS_STARTED),

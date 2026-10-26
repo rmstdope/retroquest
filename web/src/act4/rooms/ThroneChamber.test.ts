@@ -21,7 +21,7 @@ import { ThroneChamber } from './ThroneChamber'
 const FIRST_DESCRIPTION =
   'A vast chamber under a broken dome. A throne of black stone, twisted like a root, stands at its head. Above a ritual circle King Alden hangs in a prison of crystal, and from his crown a thin thread of light bleeds into a rift in the air: the wound in time. Malakar stands beside it, grey and failing. The wound is killing him too.'
 const AMULET_DESCRIPTION =
-  'The light of the ward fills the chamber from the open amulet. King Alden hangs in his crystal prison, the wound bleeds in the air beside him, and Malakar waits on his knees between them. The Lifelight Elixir is warm in your hand.'
+  'The light of the ward fills the chamber from the open amulet. King Alden hangs in his crystal prison, the wound bleeds in the air beside him, and Malakar waits on his knees between them. The lifelight elixir is warm in your hand.'
 const HEALED_DESCRIPTION =
   'Malakar sits by the wound, the grey gone from his face, watching it with the eyes of the young man at the workbench. The wound still flickers in the air. King Alden hangs in his prison, waiting.'
 const SHATTERED_DESCRIPTION =
@@ -249,7 +249,7 @@ describe('ThroneChamber', () => {
         'Elior. I tore the world to keep them, and I lost them anyway. I could not wait; you can. Be patient where I was not. Close what I opened, and let them rest.',
       )
       expect(text).toContain(
-        'The Lifelight Elixir is warm in your hand. It can be used only once. It could break the crystal and free the king, or it could be offered to Malakar, to heal the wound that is killing him.',
+        'The lifelight elixir is warm in your hand. It can be used only once. It could break the crystal and free the king, or it could be offered to Malakar, to heal the wound that is killing him.',
       )
       expectStoryFlag(game.state, FLAG_ACT4_THRONE_AMULET_OPENED, true)
       expect(game.state.currentRoom.description).toBe(AMULET_DESCRIPTION)
@@ -288,7 +288,7 @@ describe('ThroneChamber', () => {
       expect(text).toContain(
         `You kneel and hold the elixir to Malakar's lips. He drinks. The grey goes out of his face, and for a moment he is the young man at the workbench again. "Hush, little seed," he sings under his breath, and does not seem to know he does. The wound flickers, and waits.`,
       )
-      expect(text).toContain('The Lifelight Elixir is gone.')
+      expect(text).toContain('The lifelight elixir is gone.')
       expectItemInInventory(game.state, 'Lifelight Elixir', false)
       expectStoryFlag(game.state, FLAG_ACT4_ELIXIR_ON_MALAKAR, true)
       expectStoryFlag(game.state, FLAG_ACT4_LIFELIGHT_ELIXIR_CONSUMED, true)
@@ -316,7 +316,7 @@ describe('ThroneChamber', () => {
     expect(text).toContain(
       'You pour the elixir over the crystal. It cracks like ice in spring, and King Alden falls free, gasping, alive. But the wound still stands open, and Malakar still stands beside it.',
     )
-    expect(text).toContain('The Lifelight Elixir is gone.')
+    expect(text).toContain('The lifelight elixir is gone.')
     expectItemInInventory(game.state, 'Lifelight Elixir', false)
     expectStoryFlag(game.state, FLAG_ACT4_ELIXIR_ON_KING, true)
     expect(game.state.currentRoom.description).toBe(SHATTERED_DESCRIPTION)

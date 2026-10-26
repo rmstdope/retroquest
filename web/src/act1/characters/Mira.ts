@@ -79,9 +79,9 @@ export class Mira extends Character {
               'supplies, honed your magical skills, and prepared your spirit. ' +
               'You are ready.',
           ) +
-          '\nShe presents you with the [item_name]Ancient Amulet[/item_name]. ' +
+          '\nShe presents you with the [item_name]ancient amulet[/item_name]. ' +
           speech('May this guide and protect you.') +
-          '\nYou now carry the [item_name]Ancient Amulet[/item_name].' +
+          '\nYou now carry the [item_name]ancient amulet[/item_name].' +
           '\nThen, more quietly: ' +
           speech(
             'I knew your parents better than I have said. ' +
@@ -209,7 +209,7 @@ export class Mira extends Character {
           'Now prepare for the road. ' +
             "You'll need warmth, protection, food, boots and a [item_name]map[/item_name]. " +
             'And learn all the basic magic the village elders can teach you. ' +
-            'When you are truly ready, the [item_name]Ancient Amulet[/item_name] ' +
+            'When you are truly ready, the [item_name]ancient amulet[/item_name] ' +
             'will be yours.',
         )
       )
@@ -292,7 +292,7 @@ export class Mira extends Character {
           ) +
           '\n' +
           speech(
-            'A [item_name]Rare Flower[/item_name] grows in the ' +
+            'A [item_name]rare flower[/item_name] grows in the ' +
               '[room_name]Hidden Glade[/room_name]. Seek it out, and pay close ' +
               'attention to the well and the glade; they may hold secrets vital to ' +
               'your quest.',

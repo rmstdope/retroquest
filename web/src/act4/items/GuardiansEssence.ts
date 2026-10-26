@@ -30,7 +30,7 @@ export class GuardiansEssence extends Item {
         gameState.setStoryFlag(FLAG_ACT4_SERVANTS_TRUST_EARNED, true)
         return (
           'The servants stop their circling and gather to look at the ' +
-          "[item_name]Guardian's Essence[/item_name]. One reaches " +
+          "[item_name]guardian's essence[/item_name]. One reaches " +
           'out, but does not touch. They know what it is, and what it cost. ' +
           'For the first time, they look at you instead of through you.'
         )

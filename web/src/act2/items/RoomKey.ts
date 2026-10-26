@@ -45,11 +45,9 @@ export class RoomKey extends Item {
         'door here.[/failure]'
       )
     }
-    const otherName = other.name
     return (
-      "[failure]You can't use the [item_name]" +
-      `${this.name}[/item_name] with the [item_name]${otherName}[/item_name].` +
-      '[/failure]'
+      `[failure]You can't use ${this.nameInSentence()} with ` +
+      `${other.nameInSentence()}.[/failure]`
     )
   }
 }

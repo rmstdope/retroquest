@@ -51,8 +51,8 @@ export class AbandonedShed extends Room {
     this.addCharacter(new Patches())
     return (
       'The old wooden door creaks open with a groan, revealing the dusty interior ' +
-      'of the Abandoned Shed. A [item_name]Mysterious Box[/item_name] sits on an old ' +
-      'workbench, and a [item_name]Broken Shovel[/item_name] leans against a ' +
+      'of the Abandoned Shed. A [item_name]mysterious box[/item_name] sits on an old ' +
+      'workbench, and a [item_name]broken shovel[/item_name] leans against a ' +
       'cobweb-covered wall.'
     )
   }
@@ -94,7 +94,7 @@ export class AbandonedShed extends Room {
   private searchClutter(gameState: GameState): string {
     if (this.locked) {
       return (
-        'You take a look around the shed. Nothing! The [item_name]Shed Door[/item_name] ' +
+        'You take a look around the shed. Nothing! The [item_name]shed door[/item_name] ' +
         "is locked so you can't search inside."
       )
     }
@@ -111,9 +111,9 @@ export class AbandonedShed extends Room {
     if (!this.roomSearched) {
       this.addItem(new FishingRod())
       this.roomSearched = true
-      itemsFoundMessages.push('a discarded [item_name]Fishing Rod[/item_name]')
+      itemsFoundMessages.push('a discarded [item_name]fishing rod[/item_name]')
       this.addItem(new Magnet())
-      itemsFoundMessages.push('a small [item_name]Magnet[/item_name]')
+      itemsFoundMessages.push('a small [item_name]magnet[/item_name]')
     }
 
     if (itemsFoundMessages.length > 0) {
@@ -152,7 +152,7 @@ export class AbandonedShed extends Room {
     if (this.locked) {
       return (
         'The glow plays over the weathered boards and the locked ' +
-        '[item_name]Shed Door[/item_name]. Whatever lies inside stays dark.'
+        '[item_name]shed door[/item_name]. Whatever lies inside stays dark.'
       )
     }
     this.lit = true

@@ -186,7 +186,7 @@ export class MasterHealerLyria extends Character {
           'This is the work. You give what you have, and sometimes it is ' +
             'not enough. He needs more than these hands can give. The old ' +
             'healers gathered their healing into a crystal, a ' +
-            '[item_name]Crystal Focus[/item_name], and it came out the ' +
+            '[item_name]crystal focus[/item_name], and it came out the ' +
             'other side like sunlight through a glass. If one survives in ' +
             'Greendale, it is wherever the old scholars hid their books.',
         )
@@ -229,7 +229,7 @@ export class MasterHealerLyria extends Character {
       gameState.learnSpell(new GreaterHealSpell())
       return (
         characterName('Lyria') +
-        " takes the [item_name]Crystal Focus[/item_name] to the carter's " +
+        " takes the [item_name]crystal focus[/item_name] to the carter's " +
         'bed and sets it on his chest.' +
         '\n\n' +
         dialogue(this.name, 'Watch my hands, not the light.') +

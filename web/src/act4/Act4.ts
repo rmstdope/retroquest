@@ -90,7 +90,7 @@ export class Act4 extends Act {
   override getActIntro(): string {
     return (
       '[bold]ACT IV: THE FINAL CONFRONTATION[/bold]\n\n' +
-      "With the Lifelight Elixir in hand, you stand before Malakar's fortress. " +
+      "With the lifelight elixir in hand, you stand before Malakar's fortress. " +
       'The obsidian gates loom ahead, wreathed in shadow and ancient magic. ' +
       'Mira steps through the gates beside you, pale but unbending. She and ' +
       'Sir Cedric take up their places just inside the threshold — someone ' +

@@ -21,8 +21,8 @@ export class TheAncientLibraryQuest extends Quest {
       completion:
         "You have successfully gained access to the ancient library's " +
         "knowledge! You've learned the dispel spell, discovered important " +
-        'information about your family heritage, and received a Crystal ' +
-        'Focus to enhance your magical abilities. The chronicle you read ' +
+        'information about your family heritage, and received a crystal ' +
+        'focus to enhance your magical abilities. The chronicle you read ' +
         "there was the Wardens' own book, and its last page warns that " +
         'Malakar seeks the blood of Willowbrook.',
     })

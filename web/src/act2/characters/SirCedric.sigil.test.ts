@@ -29,7 +29,7 @@ const OLD_GREETING =
   'Before I can trust you with this responsibility, I need proof of your ' +
   'combat skills. Can you demonstrate your martial abilities?'
 const STAGE_LINE =
-  "Sir Cedric's eyes fall on the Ancient Amulet at your chest, and he goes " +
+  "Sir Cedric's eyes fall on the ancient amulet at your chest, and he goes " +
   'very still.'
 const SIGIL_WORDS =
   'That sigil. The sun rising over three linked rings. I have seen it only ' +
@@ -77,8 +77,8 @@ describe('Sir Cedric and the sigil', () => {
         'great—',
     )
     expect(text).toContain(
-      'Sir Cedric stops mid-sentence. His eyes have fallen on the Ancient ' +
-        'Amulet at your chest.',
+      'Sir Cedric stops mid-sentence. His eyes have fallen on the ancient ' +
+        'amulet at your chest.',
     )
     expect(text).toContain(SIGIL_WORDS + '\n\n' + BOUND_WORDS)
     expect(text).toContain(
@@ -106,7 +106,7 @@ describe('Sir Cedric and the sigil', () => {
     expect('markup' in last && last.markup).toContain(
       SIGIL_WORDS + '\n\n' + BOUND_WORDS,
     )
-    expect(out).toContain('[item_name]Ancient Amulet[/item_name]')
+    expect(out).toContain('[item_name]ancient amulet[/item_name]')
     expect(game.state.getStoryFlag(FLAG_SPOKEN_TO_SIR_CEDRIC)).toBe(true)
     expect(game.state.getStoryFlag(FLAG_CEDRIC_RECOGNISED_SIGIL)).toBe(true)
   })

@@ -14,7 +14,7 @@ function makeGameState(): GameState {
 }
 
 describe('AshScholar', () => {
-  it('gives a Brass Mirror Segment exactly once when none is carried', () => {
+  it('gives a brass mirror segment exactly once when none is carried', () => {
     const g = makeGameState()
     const scholar = new AshScholar()
     expect(g.getItemCount('Brass Mirror Segment')).toBe(0)
@@ -79,10 +79,10 @@ describe('AshScholar notebook', () => {
     ]) {
       expect(first).toContain(line)
     }
-    expect(first).toContain('You receive the [item_name]Charred Notebook')
+    expect(first).toContain('You receive the [item_name]charred notebook')
     expect(g.getItemCount('Charred Notebook')).toBe(1)
     expect(first.indexOf('Brass Mirror Segment')).toBeLessThan(
-      first.indexOf('Charred Notebook'),
+      first.indexOf('charred notebook'),
     )
     const later = scholar.talkTo(g)
     expect(later).toContain('Seek the outcrops for what the mountain has shed.')

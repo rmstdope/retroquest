@@ -55,10 +55,9 @@ export class BlessSpell extends Spell {
     if (typeof hook === 'function') {
       return hook.call(targetItem, gameState, this.id, this.name)
     }
-    const name = targetItem.name
     return (
       '[failure]The [spell_name]bless[/spell_name] spell has no effect on ' +
-      `[item_name]${name}[/item_name].[/failure]`
+      `${targetItem.nameInSentence()}.[/failure]`
     )
   }
 }

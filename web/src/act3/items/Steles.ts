@@ -16,7 +16,7 @@ export class Steles extends Item {
   /** Override pickup prevention with context-specific message. */
   override preventPickup(): string {
     return clue(
-      "You can't take the [item_name]Steles[/item_name]. They are part " +
+      "You can't take the [item_name]steles[/item_name]. They are part " +
         'of the shore itself—heavy and set.',
     )
   }

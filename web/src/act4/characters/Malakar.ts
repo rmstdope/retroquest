@@ -412,7 +412,7 @@ export class Malakar extends Character {
           'could not wait; you can. Be patient where I was not. Close what ' +
           'I opened, and let them rest.',
       ),
-      'The Lifelight Elixir is warm in your hand. It can be used only ' +
+      'The lifelight elixir is warm in your hand. It can be used only ' +
         'once. It could break the crystal and free the king, or it could ' +
         'be offered to Malakar, to heal the wound that is killing him.',
     ].join('\n')
@@ -477,7 +477,7 @@ export class Malakar extends Character {
         'at the workbench again. "Hush, little seed," he sings under his ' +
         'breath, and does not seem to know he does. The wound flickers, ' +
         'and waits.',
-      'The Lifelight Elixir is gone.',
+      'The lifelight elixir is gone.',
     ].join('\n')
   }
 }

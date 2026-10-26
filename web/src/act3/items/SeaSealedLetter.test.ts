@@ -93,7 +93,7 @@ describe('SeaSealedLetter', () => {
     const first = letter.examine(game.state)
     const again = letter.examine(game.state)
 
-    expect(first).toContain('At your side, the [item_name]Ancient Amulet')
+    expect(first).toContain('At your side, the [item_name]ancient amulet')
     expect(first.indexOf('and answered')).toBeLessThan(
       first.indexOf('grows warm'),
     )

@@ -123,7 +123,7 @@ export class TideBornGuardian extends Character {
         return 'Black water to your waist. You cannot see your own hands.'
       default:
         return (
-          'The water stands parted around you. The Crystal of Light burns ' +
+          'The water stands parted around you. The crystal of light burns ' +
           'in its basin, the only light in the world.'
         )
     }
@@ -158,7 +158,7 @@ export class TideBornGuardian extends Character {
           'You take the step anyway.' +
           '\n' +
           ('The water parts around you. In the hollow it leaves, the ' +
-            'Crystal of Light burns in its basin, the only light in the ' +
+            'crystal of light burns in its basin, the only light in the ' +
             'world.') +
           '\n' +
           dialogue(this.name, 'You came through. What did you not abandon?')
@@ -220,7 +220,7 @@ export class TideBornGuardian extends Character {
       return (
         '[success]The waters draw back as if breathing in. Your vow anchors ' +
         "the chamber's heart, and the relic heeds your courage. You may now " +
-        'take the [item_name]Crystal of Light[/item_name].[/success]\n' +
+        'take the [item_name]crystal of light[/item_name].[/success]\n' +
         dialogue(
           this.name,
           'Most name a person, and leave themselves behind in the dark. ' +

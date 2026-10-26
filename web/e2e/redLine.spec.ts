@@ -54,7 +54,7 @@ const ACTS: ActPlay[] = [
       },
       {
         name: 'Act I amulet: Mira gives it to him',
-        text: 'She presents you with the Ancient Amulet.',
+        text: 'She presents you with the ancient amulet.',
       },
       {
         name: 'Act I refrain: carved on the moss-covered stone',

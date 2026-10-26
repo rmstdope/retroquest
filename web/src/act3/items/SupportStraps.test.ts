@@ -14,7 +14,7 @@ describe('SupportStraps markup', () => {
       new RustedLockerKey(),
     )
 
-    expect(answer).toContain("You can't use the Support Straps with")
+    expect(answer).toContain("You can't use the support straps with")
     expectMarkupWellFormed(answer)
   })
 })
