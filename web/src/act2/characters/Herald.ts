@@ -4,6 +4,7 @@ import {
   type Item,
   characterName,
   speech,
+  dialogue,
 } from '@/engine'
 import { EntryPass } from '../items/EntryPass'
 import { CastleApproach } from '../rooms/CastleApproach'
@@ -26,26 +27,20 @@ export class Herald extends Character {
   override talkTo(_gameState: GameState): string {
     const name = this.name
     if (this.receivedPass) {
-      return (
-        characterName(name) +
-        ': ' +
-        speech(
-          'Your credentials have been verified and you have been granted ' +
-            'formal audience rights. You may proceed to meet with ' +
-            characterName('Sir Cedric') +
-            ' and other members of the court.',
-        )
+      return dialogue(
+        name,
+        'Your credentials have been verified and you have been granted ' +
+          'formal audience rights. You may proceed to meet with ' +
+          characterName('Sir Cedric') +
+          ' and other members of the court.',
       )
     } else {
-      return (
-        characterName(name) +
-        ': ' +
-        speech(
-          'Greetings, traveler. I must examine your credentials before you ' +
-            'can be granted audience with the nobility. Do you have a formal ' +
-            'pass or letter of recommendation? Forgive the quiet halls. Since King ' +
-            'Alden vanished, half the court has gone home to wait for news.',
-        )
+      return dialogue(
+        name,
+        'Greetings, traveler. I must examine your credentials before you ' +
+          'can be granted audience with the nobility. Do you have a formal ' +
+          'pass or letter of recommendation? Forgive the quiet halls. Since King ' +
+          'Alden vanished, half the court has gone home to wait for news.',
       )
     }
   }

@@ -87,6 +87,73 @@ function wrappedInQuotes(file: string): string[] {
   return found
 }
 
+/** Whether `node` is a call of `characterName(...)`. */
+function isCharacterNameCall(node: ts.Node): boolean {
+  return (
+    ts.isCallExpression(node) &&
+    ts.isIdentifier(node.expression) &&
+    node.expression.text === 'characterName'
+  )
+}
+
+/** The operands of a `+` chain, in order, looking through parentheses. */
+function operands(node: ts.Node): ts.Node[] {
+  if (ts.isParenthesizedExpression(node)) return operands(node.expression)
+  if (
+    ts.isBinaryExpression(node) &&
+    node.operatorToken.kind === ts.SyntaxKind.PlusToken
+  ) {
+    return [...operands(node.left), ...operands(node.right)]
+  }
+  return [node]
+}
+
+/**
+ * The `file:line` of every speaker label assembled by hand: a
+ * `characterName(...)` directly followed by the bare label separator `': '`,
+ * in a `+` chain or a template. `dialogue(speaker, words)` writes the label.
+ */
+function handAssembledLabels(file: string): string[] {
+  const source = ts.createSourceFile(
+    file,
+    readFileSync(file, 'utf8'),
+    ts.ScriptTarget.Latest,
+    true,
+  )
+  const found: string[] = []
+  const report = (node: ts.Node): void => {
+    const line = source.getLineAndCharacterOfPosition(node.getStart()).line
+    found.push(`${file}:${line + 1}`)
+  }
+  const visit = (node: ts.Node): void => {
+    if (ts.isTemplateExpression(node)) {
+      node.templateSpans.forEach((span) => {
+        if (isCharacterNameCall(span.expression) && span.literal.text === ': ')
+          report(span)
+      })
+    } else if (ts.isBinaryExpression(node)) {
+      const parts = operands(node)
+      if (parts.length > 1) {
+        parts.forEach((part, index) => {
+          const next = parts[index + 1]
+          if (
+            isCharacterNameCall(part) &&
+            next !== undefined &&
+            ts.isStringLiteralLike(next) &&
+            next.text === ': '
+          )
+            report(part)
+        })
+        parts.forEach(visit)
+        return
+      }
+    }
+    ts.forEachChild(node, visit)
+  }
+  visit(source)
+  return found
+}
+
 describe('Act II markup', () => {
   it('is written through the engine helpers, never as hand-spelled tags', () => {
     const offenders = contentFiles(__dirname).filter((file) =>
@@ -97,6 +164,11 @@ describe('Act II markup', () => {
 
   it('never wraps a line in quote marks of its own', () => {
     const offenders = contentFiles(__dirname).flatMap(wrappedInQuotes)
+    expect(offenders).toEqual([])
+  })
+
+  it('never assembles a speaker label by hand', () => {
+    const offenders = contentFiles(__dirname).flatMap(handAssembledLabels)
     expect(offenders).toEqual([])
   })
 })

@@ -5,6 +5,7 @@ import {
   characterName,
   clue,
   speech,
+  dialogue,
 } from '@/engine'
 import {
   FLAG_SHOWED_JOURNAL_TO_HISTORIANS,
@@ -30,9 +31,8 @@ export class Historians extends Character {
     const name = this.name
     if (gameState.getStoryFlag(FLAG_RESEARCHED_FAMILY_HERITAGE)) {
       return (
-        characterName(name) +
-        ': ' +
-        speech(
+        dialogue(
+          name,
           'We checked the Willowbrook roll against his notes. One page is ' +
             'gone from it, cut out at the binding, and long ago by the look ' +
             'of it. The year you were born. His notes stop at the same ' +
@@ -47,19 +47,15 @@ export class Historians extends Character {
       )
     }
     if (gameState.getStoryFlag(FLAG_SHOWED_JOURNAL_TO_HISTORIANS)) {
-      return (
-        characterName(name) +
-        ': ' +
-        speech(
-          'Search the archive with us. If a thief has been at our shelves, ' +
-            'we want to know what else he read.',
-        )
+      return dialogue(
+        name,
+        'Search the archive with us. If a thief has been at our shelves, ' +
+          'we want to know what else he read.',
       )
     } else {
       return (
-        characterName(name) +
-        ': ' +
-        speech(
+        dialogue(
+          name,
           'Welcome to the historical archives. We maintain records of ' +
             'regional history, family genealogies, and ancient chronicles. Do ' +
             "you have any historical documents or artifacts you'd like us to " +
@@ -92,19 +88,18 @@ export class Historians extends Character {
         characterName(histName) +
         ' turn the pages slowly at first, then faster. One of them ' +
         'goes pale.[/success]'
-      const speaker = characterName(histName) + ': '
       return (
         successMsg +
         '\n\n' +
-        speaker +
-        speech(
+        dialogue(
+          histName,
           'These are our birth rolls. Copied line for line, and that sketch ' +
             'is drawn from one of our own pages. Nobody has leave to copy ' +
             'the birth rolls. Nobody!',
         ) +
         '\n\n' +
-        speaker +
-        speech(
+        dialogue(
+          histName,
           'Whoever wrote this sat at our shelves. Search the archive with ' +
             'us; we will show you what he read.',
         )

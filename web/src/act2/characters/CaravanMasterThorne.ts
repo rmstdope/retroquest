@@ -4,7 +4,6 @@ import {
   characterName,
   remembered,
   dialogue,
-  speech,
 } from '@/engine'
 import {
   FLAG_SPOKEN_TO_CARAVAN_MASTER,
@@ -49,7 +48,6 @@ export class CaravanMasterThorne extends Character {
     if (words.trim().toLowerCase() !== 'forgive') {
       return super.sayTo(gameState, words)
     }
-    const speaker = characterName(this.name)
     if (!this.hasGivenDocuments) {
       return dialogue(
         this.name,
@@ -69,9 +67,8 @@ export class CaravanMasterThorne extends Character {
       'not the same as cowardice. He came back to tell you, when he ' +
       'could have kept running.' +
       '\n' +
-      speaker +
-      ': ' +
-      speech(
+      dialogue(
+        this.name,
         "… He did come back, didn't he. … All right. One more road. " +
           'If he runs again, he walks home.',
       ) +
@@ -94,9 +91,8 @@ export class CaravanMasterThorne extends Character {
       return (
         reply +
         '\n\n' +
-        characterName(this.name) +
-        ': ' +
-        speech(
+        dialogue(
+          this.name,
           "And my people tell me you didn't just haul them out of that hole " +
             '— you mended them where they sat. One of the spice traders says ' +
             "her hand's never been better. I don't know how a man repays a " +
@@ -125,32 +121,26 @@ export class CaravanMasterThorne extends Character {
           'carry these to Greendale, and begged him to put them in no hands but ' +
           "a knight's. I believe they contain evidence that could clear a good " +
           "man's name. Perhaps you'll know what to do with them.\n\n"
-        return (
-          characterName(this.name) +
-          ': ' +
-          speech(
-            prefix +
-              middle +
-              `Thorne hands you a stack of [item_name]${secretDocs.name}[/item_name].`,
-          )
+        return dialogue(
+          this.name,
+          prefix +
+            middle +
+            `Thorne hands you a stack of [item_name]${secretDocs.name}[/item_name].`,
         )
       } else {
-        const usual =
-          characterName(this.name) +
-          ': ' +
-          speech(
-            "I'm still processing the relief of having my caravan safely " +
-              'returned. Those documents I gave you - I hope they prove useful. ' +
-              'Sometimes the right evidence can restore honor where it was ' +
-              'unjustly lost.',
-          )
+        const usual = dialogue(
+          this.name,
+          "I'm still processing the relief of having my caravan safely " +
+            'returned. Those documents I gave you - I hope they prove useful. ' +
+            'Sometimes the right evidence can restore honor where it was ' +
+            'unjustly lost.',
+        )
         if (gameState.getStoryFlag(FLAG_BRENN_FORGIVEN)) return usual
         return (
           usual +
           '\n\n' +
-          characterName(this.name) +
-          ': ' +
-          speech(
+          dialogue(
+            this.name,
             `Which leaves ${characterName('Brenn')}. A guard who runs is no ` +
               "guard. He's sitting in the warehouse waiting for his " +
               "wages, and wages are all he'll get from me.",
@@ -160,9 +150,8 @@ export class CaravanMasterThorne extends Character {
     } else if (!gameState.getStoryFlag(FLAG_SPOKEN_TO_CARAVAN_MASTER)) {
       gameState.setStoryFlag(FLAG_SPOKEN_TO_CARAVAN_MASTER, true)
       return (
-        characterName(this.name) +
-        ': ' +
-        speech(
+        dialogue(
+          this.name,
           'Thank the gods, someone who looks capable! I desperately need ' +
             'help - one of my most valuable caravans has gone missing in the ' +
             'Enchanted Forest. It was carrying rare goods and several ' +
@@ -171,18 +160,16 @@ export class CaravanMasterThorne extends Character {
             'debt.',
         ) +
         '\n\n' +
-        characterName(this.name) +
-        ': ' +
-        speech(
+        dialogue(
+          this.name,
           "Our road to Heavensforth runs along the forest's edge. It was " +
             "safe enough a month ago, while the king's riders patrolled it. " +
             'Nobody patrols it since the king went; every rider the castle ' +
             'has is out looking for him.',
         ) +
         '\n\n' +
-        characterName(this.name) +
-        ': ' +
-        speech(
+        dialogue(
+          this.name,
           `${characterName('Brenn')}, my guard, came stumbling back alone ` +
             'two nights ago. Says the ravine path gave way and he ran. Ran! ' +
             "He's skulking in the warehouse now. " +
@@ -190,13 +177,10 @@ export class CaravanMasterThorne extends Character {
         )
       )
     } else {
-      return (
-        characterName(this.name) +
-        ': ' +
-        speech(
-          'Any word on my missing caravan? Every day that passes makes me ' +
-            'fear the worst for those poor souls.',
-        )
+      return dialogue(
+        this.name,
+        'Any word on my missing caravan? Every day that passes makes me ' +
+          'fear the worst for those poor souls.',
       )
     }
   }

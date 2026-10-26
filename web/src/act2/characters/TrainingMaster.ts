@@ -1,4 +1,4 @@
-import { Character, type GameState, characterName, speech } from '@/engine'
+import { Character, type GameState, characterName, dialogue } from '@/engine'
 import {
   FLAG_CEDRIKS_HONOR_ACCEPTED,
   FLAG_CEDRIKS_HONOR_COMPLETED,
@@ -25,9 +25,8 @@ export class TrainingMaster extends Character {
       gameState.setStoryFlag(FLAG_CEDRIKS_HONOR_ACCEPTED, true)
 
       return (
-        characterName('Training Master') +
-        ': ' +
-        speech(
+        dialogue(
+          'Training Master',
           "Ah, a visitor to our training grounds. I've been instructing " +
             'knights and squires here for many years.',
         ) +
@@ -36,9 +35,8 @@ export class TrainingMaster extends Character {
         characterName('Sir Cedric') +
         ' with a troubled expression.' +
         '\n\n' +
-        characterName('Training Master') +
-        ': ' +
-        speech(
+        dialogue(
+          'Training Master',
           'It pains me to see a fine knight like Sir Cedric carrying such a ' +
             "heavy burden. He held the watch on the king's wall the night His " +
             'Majesty vanished, and the next morning two men of the night watch ' +
@@ -50,9 +48,8 @@ export class TrainingMaster extends Character {
         '\n\n' +
         'He leans closer, lowering his voice.' +
         '\n\n' +
-        characterName('Training Master') +
-        ': ' +
-        speech(
+        dialogue(
+          'Training Master',
           "I've heard rumors that there are papers somewhere that tell a " +
             'different story. Perhaps someone with your skills could help ' +
             'uncover the truth and restore honor to a good man who has ' +
@@ -67,9 +64,8 @@ export class TrainingMaster extends Character {
         characterName('Training Master') +
         ' nods respectfully.' +
         '\n\n' +
-        characterName('Training Master') +
-        ': ' +
-        speech(
+        dialogue(
+          'Training Master',
           "You've seen it, then? His sword at his hip again. I stood in " +
             'this yard the morning they took it from him, and I held my ' +
             "tongue. I'll not make that mistake twice. Greendale owes you, " +
@@ -82,9 +78,8 @@ export class TrainingMaster extends Character {
       characterName('Training Master') +
       ' nods respectfully.' +
       '\n\n' +
-      characterName('Training Master') +
-      ': ' +
-      speech(
+      dialogue(
+        'Training Master',
         "You're looking into Sir Cedric's " +
           'situation? Good. That man has suffered under false accusations ' +
           'for far too long. The truth needs to come to light. Perhaps the ' +
