@@ -23,6 +23,13 @@ describe('normaliseSpokenWord', () => {
   })
 })
 
+describe('normaliseSpokenWord around punctuation', () => {
+  it('trims space left before the stripped punctuation or inside the quote', () => {
+    expect(normaliseSpokenWord('truth .')).toBe('truth')
+    expect(normaliseSpokenWord('" truth"')).toBe('truth')
+  })
+})
+
 describe('saysAnyOf', () => {
   it('matches a whole word, ignoring case and punctuation', () => {
     expect(saysAnyOf('Patience!', ['patience'])).toBe(true)

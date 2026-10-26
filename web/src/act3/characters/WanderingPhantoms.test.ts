@@ -3,6 +3,7 @@ import { Game } from '@/engine'
 import { Act3 } from '../Act3'
 import { WanderingPhantoms } from './WanderingPhantoms'
 import {
+  FLAG_ACT3_PHANTOMS_FREED,
   FLAG_ACT3_PHANTOMS_HEARD,
   FLAG_ACT3_SHELL_HEARD,
 } from '../Act3StoryFlags'
@@ -86,5 +87,16 @@ describe('Wandering Phantoms humming', () => {
       expect(out.indexOf(HUM)).toBeLessThan(out.indexOf(REST))
       expectMarkupWellFormed(out)
     }
+  })
+})
+
+describe('Wandering Phantoms hear the word as the engine does', () => {
+  it('are freed by a punctuated "Rest."', () => {
+    const game = new Game([new Act3()])
+    const phantoms = new WanderingPhantoms()
+
+    phantoms.sayTo(game.state, '"Rest."')
+
+    expect(game.state.getStoryFlag(FLAG_ACT3_PHANTOMS_FREED)).toBe(true)
   })
 })

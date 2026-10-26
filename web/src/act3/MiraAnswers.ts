@@ -31,7 +31,7 @@ export const MIRA_GATE_LINES: Record<MiraAnswer, string> = {
 }
 
 /** The words that recognise forgiveness. */
-const FORGIVE_WORDS: readonly string[] = ['forgive']
+const FORGIVE_WORDS: readonly string[] = ['forgive', 'forgiven', 'forgave']
 
 /** The phrases that recognise a reproach. */
 const REPROACH_PHRASES: readonly string[] = [

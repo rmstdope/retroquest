@@ -142,6 +142,8 @@ describe('AncientDragon', () => {
     ['myself', 'myself'],
     ['what I take', 'what I take'],
     ['  Everything!  ', 'everything'],
+    ['i return everything .', 'everything'],
+    ['" Everything"', 'everything'],
     ['EVERYTHING.', 'everything'],
     ['i return everything', 'everything'],
     ['I return it.', 'it'],

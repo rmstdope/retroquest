@@ -1,7 +1,7 @@
 /**
  * How the game hears what Elior says to a character: one normaliser for
  * answers that must be the whole utterance, and one whole-word matcher for
- * answers that may sit inside a sentence. Every `sayTo` goes through these, so
+ * answers that may sit inside a sentence. The `sayTo` of Act III and Act IV go through these, so
  * a new riddle cannot reintroduce a substring match ("impatience" is not
  * "patience").
  */
@@ -16,6 +16,7 @@ export function normaliseSpokenWord(words: string): string {
     .trim()
     .replace(/^['"“]|['"”.!]+$/g, '')
     .replace(/\s+/g, ' ')
+    .trim()
     .toLowerCase()
 }
 

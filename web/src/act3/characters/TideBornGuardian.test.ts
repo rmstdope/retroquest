@@ -159,7 +159,7 @@ describe('TideBornGuardian', () => {
     const g = makeGameState()
     const guardian = new TideBornGuardian()
     walkThrough(guardian, g)
-    const res = guardian.sayTo(g, ' Myself ')
+    const res = guardian.sayTo(g, '"Myself!"')
     expect(res).toContain('Most name a person')
     expect(res).toContain('the chamber is lit as you first saw it')
     expectMarkupWellFormed(res)
