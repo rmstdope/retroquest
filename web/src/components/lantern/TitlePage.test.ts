@@ -14,7 +14,7 @@ describe('TitlePage', () => {
     wrapper = undefined
   })
 
-  function mountTitle(musicInfo?: string) {
+  function mountTitle(musicInfo?: string): VueWrapper {
     wrapper = mount(TitlePage, {
       props: { text: LOGO, musicInfo },
       attachTo: document.body,
