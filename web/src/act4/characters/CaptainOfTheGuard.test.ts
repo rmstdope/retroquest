@@ -226,7 +226,7 @@ describe('CaptainOfTheGuard', () => {
       game.state.removeItemFromInventory("Guardian's Chain")
       expect(
         executeCommands(game, ["give guardian's chain to captain"]),
-      ).toContain("You don't have any")
+      ).toContain("You don't have a 'guardian's chain'")
     })
 
     it('keeps him gone, the chain given and the moment counted once on reload', () => {
