@@ -138,6 +138,8 @@ describe('useActMusic', () => {
   })
 
   describe('chosen takes', () => {
+    /** The element the act's music plays on (a crossfade adds short-lived others). */
+    let mainAudio: FakeAudio
     const MARKET = 'Conquest - Market (freetouse.com).mp3'
     const manifest = {
       market: { file: 'market.mp3', duration: 90 },
@@ -161,6 +163,7 @@ describe('useActMusic', () => {
       )
       const scope = effectScope()
       scope.run(() => useActMusic())
+      mainAudio = FakeAudio.last
       const game = useGameStore()
       game.musicFile = MARKET
       game.musicActName = 'Act1'
@@ -171,7 +174,7 @@ describe('useActMusic', () => {
 
     it("plays the room's chosen take in that room", async () => {
       const scope = await start(manifest)
-      expect(FakeAudio.last.src).toBe('/audio/music/generated/square.mp3')
+      expect(mainAudio.src).toBe('/audio/music/generated/square.mp3')
       scope.stop()
     })
 
@@ -196,10 +199,10 @@ describe('useActMusic', () => {
 
     it('does not restart the music between two rooms without takes', async () => {
       const scope = await start({})
-      FakeAudio.last.play.mockClear()
+      mainAudio.play.mockClear()
       useGameStore().musicRoomKey = 'ForestPath'
       await settle()
-      expect(FakeAudio.last.play).not.toHaveBeenCalled()
+      expect(mainAudio.play).not.toHaveBeenCalled()
       scope.stop()
     })
 
@@ -207,23 +210,19 @@ describe('useActMusic', () => {
       const scope = await start(manifest)
       useGameStore().musicRoomKey = 'ForestPath'
       await settle()
-      expect(FakeAudio.last.src).toBe('/audio/music/generated/market.mp3')
+      expect(mainAudio.src).toBe('/audio/music/generated/market.mp3')
       scope.stop()
     })
 
     it("plays the game's own file where no take was chosen", async () => {
       const scope = await start({})
-      expect(FakeAudio.last.src).toBe(
-        `/audio/music/${encodeURIComponent(MARKET)}`,
-      )
+      expect(mainAudio.src).toBe(`/audio/music/${encodeURIComponent(MARKET)}`)
       scope.stop()
     })
 
     it("plays the game's own file when the manifest cannot be read", async () => {
       const scope = await start(null)
-      expect(FakeAudio.last.src).toBe(
-        `/audio/music/${encodeURIComponent(MARKET)}`,
-      )
+      expect(mainAudio.src).toBe(`/audio/music/${encodeURIComponent(MARKET)}`)
       scope.stop()
     })
   })
