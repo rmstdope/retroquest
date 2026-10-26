@@ -761,6 +761,7 @@ watch(
         />
         <SettingsDialog
           v-else-if="gameDialog === 'settings'"
+          :music-info="music.musicInfo.value"
           @close="closeGameDialog"
         />
         <SaveLoadDialog

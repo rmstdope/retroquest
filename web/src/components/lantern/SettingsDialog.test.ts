@@ -4,7 +4,6 @@ import { mount, type VueWrapper } from '@vue/test-utils'
 import { createPinia, setActivePinia } from 'pinia'
 import SettingsDialog from './SettingsDialog.vue'
 import { useSettingsStore } from '@/stores/useSettingsStore'
-import { useGameStore } from '@/stores/useGameStore'
 
 describe('SettingsDialog', () => {
   let wrapper: VueWrapper | undefined
@@ -31,8 +30,11 @@ describe('SettingsDialog', () => {
     vi.unstubAllGlobals()
   })
 
-  function mountSettings() {
-    wrapper = mount(SettingsDialog, { attachTo: document.body })
+  function mountSettings(musicInfo = '') {
+    wrapper = mount(SettingsDialog, {
+      attachTo: document.body,
+      props: { musicInfo },
+    })
     return wrapper
   }
 
@@ -125,10 +127,9 @@ describe('SettingsDialog', () => {
   })
 
   it('names the music that is playing', () => {
-    useGameStore().musicInfo =
-      'Market by Conquest\nSource: https://freetouse.com/music'
+    const credit = 'Market by Conquest\nSource: https://freetouse.com/music'
 
-    expect(mountSettings().get('.lq-now-playing').text()).toContain(
+    expect(mountSettings(credit).get('.lq-now-playing').text()).toContain(
       'Market by Conquest',
     )
   })

@@ -1,12 +1,10 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { storeToRefs } from 'pinia'
 import {
   useSettingsStore,
   type StartMode,
   type ThemeSetting,
 } from '@/stores/useSettingsStore'
-import { useGameStore } from '@/stores/useGameStore'
 import { useMediaQuery } from '@/composables/useMediaQuery'
 import type { LanternTextSize } from '@/lantern/tokens'
 import LanternDialog from './LanternDialog.vue'
@@ -15,10 +13,15 @@ import LanternDialog from './LanternDialog.vue'
  * The player's settings, saved in this browser: theme and text size, music,
  * sound effects and narration (on/off and volume), how the actions start, and reduce
  * motion (which follows the device until it is changed here).
+ *
+ * `musicInfo` is the credit of the music actually playing (a take chosen in
+ * Audio Studio has its own), as the layout's music player holds it.
  */
+const props = withDefaults(defineProps<{ musicInfo?: string }>(), {
+  musicInfo: '',
+})
 const emit = defineEmits<{ close: [] }>()
 const settings = useSettingsStore()
-const { musicInfo } = storeToRefs(useGameStore())
 const deviceReducesMotion = useMediaQuery('(prefers-reduced-motion: reduce)')
 
 const THEMES: Array<{ value: ThemeSetting; label: string }> = [
@@ -46,7 +49,7 @@ function toggleMotion(): void {
 }
 
 /** The first line of the track's credits ("Market by Conquest"). */
-const nowPlaying = computed(() => musicInfo.value.split('\n')[0]?.trim() ?? '')
+const nowPlaying = computed(() => props.musicInfo.split('\n')[0]?.trim() ?? '')
 
 function volume(event: Event): number {
   return Number((event.target as HTMLInputElement).value)

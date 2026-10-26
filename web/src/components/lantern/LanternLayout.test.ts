@@ -1300,6 +1300,61 @@ describe('LanternLayout', () => {
       expect(w.get('[role="dialog"] h2').text()).toBe('Settings')
     })
 
+    describe('Now playing in Settings', () => {
+      const MARKET = 'Conquest - Market (freetouse.com).mp3'
+
+      /** Serves `takes` as the chosen-take list, plays Market in the square and opens Settings. */
+      async function settingsWith(takes: unknown): Promise<string> {
+        phone()
+        vi.stubGlobal(
+          'fetch',
+          vi.fn(() =>
+            Promise.resolve({ ok: true, json: () => Promise.resolve(takes) }),
+          ),
+        )
+        vi.stubGlobal(
+          'Audio',
+          class {
+            paused = true
+            play = (): Promise<void> => Promise.resolve()
+            pause = (): void => undefined
+            load = (): void => undefined
+            removeAttribute = (): void => undefined
+          },
+        )
+        const w = mountLayout()
+        const game = useGameStore()
+        game.musicFile = MARKET
+        game.musicInfo = 'Market by Conquest\nSource: https://freetouse.com'
+        game.musicActName = 'Act1'
+        game.musicRoomKey = 'VillageSquare'
+        await flushPromises()
+        await w.get('button[aria-label="Game menu"]').trigger('click')
+        await w
+          .findAll('[role="dialog"] button')
+          .find((b) => b.text().startsWith('Settings'))!
+          .trigger('click')
+        return w.get('.lq-now-playing').text()
+      }
+
+      afterEach(() => vi.unstubAllGlobals())
+
+      it('credits a studio take to Audio Studio', async () => {
+        const text = await settingsWith({
+          'act1-village-square': { file: 'square.mp3', duration: 60 },
+        })
+        expect(text).toContain(
+          'Original music for RetroQuest, made with Audio Studio',
+        )
+        expect(text).not.toContain('Conquest')
+      })
+
+      it("credits the game's own file when no take is chosen", async () => {
+        const text = await settingsWith({})
+        expect(text).toContain('Market by Conquest')
+      })
+    })
+
     it('closes the menu when a game pop-up opens', async () => {
       phone()
       const w = mountLayout()
