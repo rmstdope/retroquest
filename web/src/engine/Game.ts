@@ -73,11 +73,6 @@ export class Game implements CommandTarget {
   readonly acts: Act[]
   currentAct = 0
   state: GameState
-  /**
-   * The state of the act that just ended, kept until the next act's intro so
-   * UIs can still report the quest completion that ended it.
-   */
-  finishedActState: GameState | null = null
   readonly commandParser: CommandParser
   /** True when the room should be described again after the command. */
   hasChangedRoom = false
@@ -90,7 +85,7 @@ export class Game implements CommandTarget {
 
   constructor(acts: Act[], { saveStorage }: GameOptions = {}) {
     this.acts = acts
-    this.state = this.freshState()
+    this.state = this.freshState(this.currentAct)
     this.commandParser = new CommandParser(this)
     this.saveStorage = saveStorage ?? new MemorySaveStorage()
     this.registry = new ClassRegistry().registerAll(ENGINE_CLASSES)
@@ -102,17 +97,17 @@ export class Game implements CommandTarget {
   }
 
   /**
-   * A new state for the current act, starting in its first room. From the
+   * A new state for act `actIndex`, starting in its first room. From the
    * state of the act before it carries the virtues and every flag an earlier
    * act declared in `carriedFlags`, and nothing else.
    */
-  private freshState(previous?: GameState): GameState {
-    const act = this.acts[this.currentAct]
+  private freshState(actIndex: number, previous?: GameState): GameState {
+    const act = this.acts[actIndex]
     const startingRoom = Object.values(act.rooms)[0]
     const state = new GameState(startingRoom, act.rooms, act.quests)
     if (previous) {
       state.virtues = [...previous.virtues]
-      for (const earlier of this.acts.slice(0, this.currentAct)) {
+      for (const earlier of this.acts.slice(0, actIndex)) {
         for (const flag of earlier.carriedFlags()) {
           if (previous.getStoryFlag(flag)) state.setStoryFlag(flag, true)
         }
@@ -137,12 +132,10 @@ export class Game implements CommandTarget {
       case GameRunState.ActRunning:
         if (this.acts[this.currentAct].isCompleted(this.state)) {
           if (this.currentAct + 1 < this.acts.length) {
-            this.currentAct++
+            // The finished act stays the current one while its closing pages
+            // show; the next act begins when the transition is passed.
             this.runState = GameRunState.ActTransition
             this.acceptInput = false
-            this.finishedActState = this.state
-            this.state = this.freshState(this.state)
-            this.hasChangedRoom = true
           } else {
             this.runState = GameRunState.GameOver
             this.isRunning = false
@@ -153,40 +146,37 @@ export class Game implements CommandTarget {
       case GameRunState.GameOver:
         break
       case GameRunState.ActTransition:
+        this.state = this.freshState(this.currentAct + 1, this.state)
+        this.currentAct++
         this.runState = GameRunState.ActIntro
         this.acceptInput = false
-        this.finishedActState = null
         break
     }
   }
 
   /**
-   * The state of the act the player is being shown: the finished act during
-   * a transition, the current act otherwise (also after game over).
+   * The current act's music once it runs, still under its closing pages (the
+   * transition) and after game over; empty before that so nothing plays early.
    */
-  presentedState(): GameState {
-    return this.finishedActState ?? this.state
-  }
-
-  /** Zero-based index of the act `presentedState` belongs to. */
-  presentedActIndex(): number {
-    return this.finishedActState ? this.currentAct - 1 : this.currentAct
-  }
-
-  /**
-   * The presented act's music once it runs, still under its closing pages
-   * (the transition) and after game over; empty before that so nothing plays
-   * early.
-   */
-  presentedMusic(): MusicInfo {
+  currentMusic(): MusicInfo {
     if (
       !this.isActRunning() &&
       !this.isActTransitioning() &&
       !this.isGameOver()
     )
       return { musicFile: '', musicInfo: '' }
-    const act = this.acts[this.presentedActIndex()]
+    const act = this.acts[this.currentAct]
     return { musicFile: act.musicFile, musicInfo: act.musicInfo }
+  }
+
+  /**
+   * The intro of the act that follows, while a transition shows the finished
+   * act's closing pages; null in every other state.
+   */
+  nextActIntro(): string | null {
+    return this.isActTransitioning()
+      ? this.acts[this.currentAct + 1].getActIntro()
+      : null
   }
 
   /** The text to show for the current run state. */
@@ -209,9 +199,7 @@ export class Game implements CommandTarget {
    * finished act's hook, if it has one, then the words every act shares.
    */
   private actCompleteBody(): string {
-    const hook = this.acts[this.presentedActIndex()].getCompletionHook(
-      this.presentedState(),
-    )
+    const hook = this.acts[this.currentAct].getCompletionHook(this.state)
     return (hook ? `${hook}\n\n` : '') + this.sharedActCompleteWords()
   }
 
@@ -220,9 +208,9 @@ export class Game implements CommandTarget {
     return this.runState === GameRunState.GameOver
       ? `Congratulations — you have completed Act ${this.currentAct + 1}, ` +
           'the final act of RetroQuest!'
-      : `Congratulations — you have completed Act ${this.currentAct}!\n\n` +
+      : `Congratulations — you have completed Act ${this.currentAct + 1}!\n\n` +
           'Take a moment to catch your breath and grab a cup of coffee. ' +
-          `Get ready for Act ${this.currentAct + 1}, where new challenges, ` +
+          `Get ready for Act ${this.currentAct + 2}, where new challenges, ` +
           'characters, and mysteries await.'
   }
 
@@ -823,14 +811,22 @@ Welcome to
   }
 
   /**
-   * The current state and act as save data (JSON). After the last act ends
-   * the act index is capped at the last act to keep the save loadable.
+   * The current state and act as save data (JSON). Between acts it holds the
+   * next act as it will begin. After the last act ends the act index is capped at the last act to keep the save loadable.
    */
   toSaveData(): string {
+    const next = this.isActTransitioning()
+    const actIndex = Math.min(
+      next ? this.currentAct + 1 : this.currentAct,
+      this.acts.length - 1,
+    )
     const payload: SavePayload = {
       version: SAVE_VERSION,
-      actIndex: Math.min(this.currentAct, this.acts.length - 1),
-      state: serialize(this.state, this.registry),
+      actIndex,
+      state: serialize(
+        next ? this.freshState(actIndex, this.state) : this.state,
+        this.registry,
+      ),
     }
     return JSON.stringify(payload)
   }
@@ -858,7 +854,6 @@ Welcome to
       // Play on in the loaded act, even when the load comes between acts or
       // after the last one.
       this.runState = GameRunState.ActRunning
-      this.finishedActState = null
       this.isRunning = true
       this.acceptInput = true
     } catch (error) {

@@ -745,29 +745,24 @@ export const useGameStore = defineStore('game', () => {
     return true
   }
 
+  /**
+   * Queue the finished act's closing page and the next act's intro pop-up.
+   * The engine stays in the finished act, so the controller still answers for
+   * the act on screen; it moves on when the pop-up shows (`showNextModal`).
+   */
   function triggerActTransitionModals(): void {
     const b = requireBridge()
-    // Read the finished act's numbers before the next act starts.
-    const stats = b.controller.getActStats()
-    const finished = currentAct
-    const screens = b.controller
-      .advanceToRunning()
-      .filter((screen) => screen.text.trim() !== '')
-    if (screens.length === 0) return
-    const transitionScreens = screens.slice(0, -1)
-    const actIntroText = screens[screens.length - 1].text
-    const nextAct = parseActIntro(actIntroText).act || undefined
-    for (const { actComplete } of transitionScreens) {
-      modalQueue.value.push({
-        kind: 'complete',
-        act: finished?.act ?? '',
-        title: finished?.title ?? '',
-        body: actComplete ?? '',
-        stats,
-        nextAct,
-      })
-    }
-    queueActIntro(actIntroText)
+    const introText = b.controller.getNextActIntro()
+    if (introText === null) return
+    modalQueue.value.push({
+      kind: 'complete',
+      act: currentAct?.act ?? '',
+      title: currentAct?.title ?? '',
+      body: b.controller.getActCompleteText() ?? '',
+      stats: b.controller.getActStats(),
+      nextAct: parseActIntro(introText).act || undefined,
+    })
+    modalQueue.value.push({ kind: 'intro', ...parseActIntro(introText) })
     pendingLookOnDismiss = true
     if (!showModal.value) {
       showNextModal()
@@ -805,11 +800,9 @@ export const useGameStore = defineStore('game', () => {
   }
 
   /**
-   * Play what the engine says is playing now. The engine is already in the
-   * next act while a finished act's closing page shows
-   * (`triggerActTransitionModals` advances it), so nothing may sync the music
-   * then: the finished act's track plays on under the page, and the next
-   * act's starts with its intro pop-up (`showNextModal`).
+   * Play what the engine says is playing now: under a finished act's closing
+   * page that is still the finished act's track, and the next act's starts
+   * once its intro pop-up has moved the engine on (`showNextModal`).
    */
   function syncMusic(b: GameBridge): void {
     const m = b.controller.getCurrentMusic()
@@ -976,6 +969,18 @@ export const useGameStore = defineStore('game', () => {
     }
   }
 
+  /**
+   * The next act's intro pop-up shows: the engine leaves the finished act's
+   * closing pages for the new act, whose heading and music start with it.
+   */
+  function startQueuedAct(b: GameBridge): void {
+    if (!b.controller.isActRunning()) {
+      b.controller.advanceToRunning()
+      rememberLoadedAct(b)
+    }
+    syncMusic(b)
+  }
+
   function showNextModal(): void {
     if (modalQueue.value.length === 0) {
       showModal.value = false
@@ -984,8 +989,7 @@ export const useGameStore = defineStore('game', () => {
     }
     modalChapter.value = modalQueue.value.shift()!
     showModal.value = true
-    // The engine already runs the act: its music starts with its intro pop-up.
-    if (modalChapter.value.kind === 'intro') syncMusic(requireBridge())
+    if (modalChapter.value.kind === 'intro') startQueuedAct(requireBridge())
   }
 
   function dismissModal(): void {

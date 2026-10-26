@@ -95,6 +95,7 @@ function createMockBridge() {
     isGameOver: vi.fn(() => false),
     getResultText: vi.fn(() => ''),
     getActCompleteText: vi.fn((): string | null => null),
+    getNextActIntro: vi.fn((): string | null => null),
     getCurrentMusic: vi.fn(() => ({
       musicFile: 'track.mp3',
       musicInfo: 'Track info',
@@ -962,9 +963,10 @@ describe('useGameStore', () => {
       bridge.controller.activateQuest.mockReturnValue(null)
       bridge.controller.updateQuest.mockReturnValue(null)
       bridge.controller.completeQuest.mockReturnValue(null)
-      bridge.controller.advanceToRunning.mockReturnValue(
-        screens(['Congratulations Act 1!', 'Act 2 begins.', '']),
+      bridge.controller.getActCompleteText.mockReturnValue(
+        'Congratulations Act 1!',
       )
+      bridge.controller.getNextActIntro.mockReturnValue('Act 2 begins.')
     }
 
     beforeEach(async () => {
@@ -989,10 +991,7 @@ describe('useGameStore', () => {
 
     it('takes the chapter body from the bridge, not from the text', () => {
       setupTransitionMocks()
-      bridge.controller.advanceToRunning.mockReturnValue([
-        { text: 'The map aligns. Done.', actComplete: 'Rest now.' },
-        { text: 'Act 2 begins.', actComplete: null },
-      ])
+      bridge.controller.getActCompleteText.mockReturnValue('Rest now.')
       store.submitCommand('use map')
       expect(store.modalChapter).toMatchObject({
         kind: 'complete',
@@ -1015,6 +1014,61 @@ describe('useGameStore', () => {
       expect(bridge.controller.openRoom).not.toHaveBeenCalled()
       expect(store.musicFile).toBe('act2.mp3')
       expect(store.musicInfo).toBe('Act 2 track')
+    })
+
+    it('leaves the engine in the finished act until the closing page is dismissed', () => {
+      setupTransitionMocks()
+      store.submitCommand('use map')
+      expect(store.modalChapter).toMatchObject({ kind: 'complete' })
+      expect(bridge.controller.advanceToRunning).not.toHaveBeenCalled()
+
+      store.dismissModal()
+      expect(bridge.controller.advanceToRunning).toHaveBeenCalledTimes(1)
+      expect(store.modalChapter).toMatchObject({ kind: 'intro' })
+    })
+
+    it('changes nothing on screen when the panels refresh under the closing page', () => {
+      let advanced = false
+      store.refreshPanels()
+      setupTransitionMocks()
+      bridge.controller.getRoomName.mockImplementation(() =>
+        advanced ? 'Act 2 Start' : 'Village Square',
+      )
+      // Like the engine: the finished act answers until the transition is passed.
+      bridge.controller.advanceToRunning.mockImplementation(() => {
+        advanced = true
+        return screens(['Intro text'])
+      })
+      bridge.controller.getCurrentMusic.mockImplementation(() =>
+        advanced
+          ? { musicFile: 'act2.mp3', musicInfo: 'Act 2 track' }
+          : { musicFile: 'act1.mp3', musicInfo: 'Act 1 track' },
+      )
+      store.submitCommand('use map')
+      const label = store.actLabel
+      const before = {
+        music: store.musicFile,
+        info: store.musicInfo,
+        room: store.roomName,
+        description: store.roomDescription,
+        active: store.activeQuests,
+        completed: store.completedQuests,
+      }
+
+      store.refreshPanels()
+
+      expect(store.musicFile).toBe(before.music)
+      expect(store.musicInfo).toBe(before.info)
+      expect(store.roomName).toBe(before.room)
+      expect(store.roomName).toBe('Village Square')
+      expect(store.roomDescription).toBe(before.description)
+      expect(store.activeQuests).toEqual(before.active)
+      expect(store.completedQuests).toEqual(before.completed)
+      expect(store.actLabel).toBe(label)
+      expect(store.musicFile).toBe('act1.mp3')
+
+      store.dismissModal()
+      expect(store.musicFile).toBe('act2.mp3')
     })
 
     it('fires look after all transition modals are dismissed', () => {
@@ -1212,9 +1266,8 @@ describe('useGameStore', () => {
       bridge.controller.getRoomName.mockReturnValue('Act 2 Start')
       bridge.controller.isActRunning.mockReturnValue(false)
       bridge.controller.isAcceptingInput.mockReturnValue(false)
-      bridge.controller.advanceToRunning.mockReturnValue(
-        screens(['Act 1 done!', 'Act 2 begins.']),
-      )
+      bridge.controller.getActCompleteText.mockReturnValue('Act 1 done!')
+      bridge.controller.getNextActIntro.mockReturnValue('Act 2 begins.')
 
       store.submitCommand('use map')
 
@@ -1931,12 +1984,10 @@ describe('useGameStore', () => {
       bridge.controller.isAcceptingInput.mockReturnValue(false)
       bridge.controller.isActRunning.mockReturnValue(false)
       bridge.controller.getActStats.mockReturnValue(STATS)
-      bridge.controller.advanceToRunning.mockReturnValue(
-        screens([
-          'The map aligns.\n\nCongratulations — you have completed Act 1!',
-          INTRO_2,
-        ]),
+      bridge.controller.getActCompleteText.mockReturnValue(
+        'Congratulations — you have completed Act 1!',
       )
+      bridge.controller.getNextActIntro.mockReturnValue(INTRO_2)
 
       store.submitCommand('use map')
 
@@ -1948,12 +1999,7 @@ describe('useGameStore', () => {
         stats: STATS,
         nextAct: 'Act II',
       })
-      // The finished act's numbers are read before the next act starts.
-      expect(
-        bridge.controller.getActStats.mock.invocationCallOrder[0],
-      ).toBeLessThan(
-        bridge.controller.advanceToRunning.mock.invocationCallOrder[0],
-      )
+      expect(bridge.controller.advanceToRunning).not.toHaveBeenCalled()
       store.dismissModal()
       expect(store.modalChapter).toMatchObject({
         kind: 'intro',
@@ -1973,11 +2019,11 @@ describe('useGameStore', () => {
       load(store)
       bridge.controller.isAcceptingInput.mockReturnValue(false)
       bridge.controller.isActRunning.mockReturnValue(false)
-      bridge.controller.advanceToRunning.mockReturnValue(
-        screens([
-          'Congratulations — you have completed Act 2!',
-          '[bold]ACT III: THE AWAKENING[/bold]\n\nText.',
-        ]),
+      bridge.controller.getActCompleteText.mockReturnValue(
+        'Congratulations — you have completed Act 2!',
+      )
+      bridge.controller.getNextActIntro.mockReturnValue(
+        '[bold]ACT III: THE AWAKENING[/bold]\n\nText.',
       )
 
       store.submitCommand('use orb')
