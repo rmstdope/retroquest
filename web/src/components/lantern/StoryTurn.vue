@@ -351,16 +351,11 @@ function chipLabel(chip: Chip): string {
     opacity: 0;
   }
 }
-/* The block being spoken: an amber rule at its left edge (a quest card has its
-   border lit instead). */
-.lq-block-text.lq-speaking,
-.lq-block-dialogue.lq-speaking,
-.lq-arrival.lq-speaking {
-  box-shadow: inset 2px 0 0 var(--lq-accent);
-}
-/* A clue failure being read: a red rule at the box's left edge. */
+/* A clue failure being read: a red rule at the box's left edge (the shared
+   speaking rule in lantern.css, in the failure colour). */
 .lq-block-failure.lq-speaking {
-  box-shadow: inset 3px 0 0 var(--lq-failure);
+  --lq-rule-width: 3px;
+  --lq-rule-colour: var(--lq-failure);
 }
 /* The rule sits left of the words, which stay where they were. */
 .lq-block-text.lq-speaking {
