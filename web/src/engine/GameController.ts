@@ -269,9 +269,9 @@ export class GameController {
   /**
    * Settle the quest events of the turn and return them for the story: quests
    * that started (only while an act runs), quests whose log changed, and
-   * quests that completed. Between acts and after the last one the
-   * completions are those of the presented state, so the completion that
-   * ended the act is still reported.
+   * quests that completed. Between acts and after the last one only the
+   * completions are reported, so the completion that ended the act is still
+   * reported.
    */
   settleQuests(): QuestPayloads {
     const payloads: QuestPayloads = {
@@ -280,9 +280,8 @@ export class GameController {
       completed: [],
     }
     const game = this.game
-    if (game.finishedActState || game.isGameOver()) {
-      payloads.completed = game
-        .presentedState()
+    if (game.isActTransitioning() || game.isGameOver()) {
+      payloads.completed = game.state
         .settleQuests()
         .completed.map((q) => questReport(q, q.completion))
     } else if (game.isActRunning()) {
@@ -313,8 +312,8 @@ export class GameController {
 
   /** Quest progress of the act; between acts, of the act that just ended. */
   getQuestProgress(): QuestProgress {
-    const state = this.game.presentedState()
-    const actIndex = this.game.presentedActIndex()
+    const state = this.game.state
+    const actIndex = this.game.currentAct
     const all = [
       ...state.nonActivatedQuests,
       ...state.activatedQuests,
@@ -331,7 +330,7 @@ export class GameController {
   /** The act's statistics; between acts, the finished act's. */
   getActStats(): ActStats {
     const progress = this.getQuestProgress()
-    const state = this.game.presentedState()
+    const state = this.game.state
     return {
       questsCompleted: progress.completed,
       questsTotal: progress.total,
@@ -419,6 +418,11 @@ export class GameController {
    * the game is over; empty before that so nothing plays early.
    */
   getCurrentMusic(): MusicInfo {
-    return this.game.presentedMusic()
+    return this.game.currentMusic()
+  }
+
+  /** The intro of the act that follows while a closing page shows; null otherwise. */
+  getNextActIntro(): string | null {
+    return this.game.nextActIntro()
   }
 }

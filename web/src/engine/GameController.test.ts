@@ -525,6 +525,21 @@ describe('GameController', () => {
       })
     })
 
+    it('answers every read for the finished act until the transition is passed', () => {
+      const ctrl = twoActController()
+      const room = ctrl.getRoomName()
+      const music = ctrl.getCurrentMusic()
+      endFirstAct(ctrl)
+      expect(ctrl.getRoomName()).toBe(room)
+      expect(ctrl.getActName()).toBe('Act 1')
+      expect(ctrl.getCurrentMusic()).toEqual(music)
+      expect(ctrl.getNextActIntro()).toBe(ctrl.game.acts[1].getActIntro())
+      expect(ctrl.getActCompleteText()).toContain('Act 1')
+      ctrl.game.newTurn()
+      expect(ctrl.getRoomName()).toBe('Gate')
+      expect(ctrl.getNextActIntro()).toBeNull()
+    })
+
     it('moves on to the next act after the transition', () => {
       const ctrl = twoActController()
       endFirstAct(ctrl)

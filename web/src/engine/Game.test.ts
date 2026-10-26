@@ -294,9 +294,8 @@ describe('Game', () => {
       game.newTurn()
       expect(game.isActTransitioning()).toBe(true)
       expect(game.acceptInput).toBe(false)
-      expect(game.currentAct).toBe(1)
-      expect(game.finishedActState).toBe(firstState)
-      expect(game.state.currentRoom).toBe(secondRooms.Gate)
+      expect(game.currentAct).toBe(0)
+      expect(game.state).toBe(firstState)
       expect(game.getResultText()).toContain(
         'Congratulations — you have completed Act 1!',
       )
@@ -307,7 +306,8 @@ describe('Game', () => {
       game.newTurn()
       expect(game.getActCompleteText()).toBeNull()
       expect(game.isActIntroShowing()).toBe(true)
-      expect(game.finishedActState).toBeNull()
+      expect(game.currentAct).toBe(1)
+      expect(game.state.currentRoom).toBe(secondRooms.Gate)
       expect(game.getActName()).toBe('Act 2')
       game.newTurn()
       secondDone = true
@@ -350,6 +350,7 @@ describe('Game', () => {
       game.state.addVirtue('mercy')
       done = 1
       game.newTurn()
+      game.newTurn()
       expect(game.currentAct).toBe(1)
       expect(game.state.getStoryFlag('field_watered')).toBe(true)
       expect(game.state.getStoryFlag('private_to_first')).toBe(false)
@@ -357,6 +358,7 @@ describe('Game', () => {
       game.newTurn()
       game.newTurn()
       done = 2
+      game.newTurn()
       game.newTurn()
       expect(game.currentAct).toBe(2)
       expect(game.state.getStoryFlag('field_watered')).toBe(true)
@@ -389,7 +391,7 @@ describe('Game', () => {
       )
     })
 
-    it('presents the finished act during a transition and the current act otherwise', () => {
+    it("keeps the finished act, its state and its music until the transition's page is passed", () => {
       const mk = (name: string, file: string): Act =>
         new Act({
           name,
@@ -406,35 +408,39 @@ describe('Game', () => {
       second.isCompleted = () => secondDone
       const game = new Game([first, second])
       const empty = { musicFile: '', musicInfo: '' }
-      expect(game.presentedMusic()).toEqual(empty)
+      expect(game.currentMusic()).toEqual(empty)
       game.newTurn()
       game.newTurn()
-      expect(game.presentedState()).toBe(game.state)
-      expect(game.presentedActIndex()).toBe(0)
-      expect(game.presentedMusic()).toEqual({
+      expect(game.currentMusic()).toEqual({
         musicFile: 'a.mp3',
         musicInfo: 'First',
       })
       firstDone = true
       const firstState = game.state
       game.newTurn()
-      expect(game.presentedState()).toBe(firstState)
-      expect(game.presentedActIndex()).toBe(0)
+      expect(game.isActTransitioning()).toBe(true)
+      expect(game.currentAct).toBe(0)
+      expect(game.state).toBe(firstState)
       // The finished act's music plays on under its closing pages.
-      expect(game.presentedMusic()).toEqual({
+      expect(game.currentMusic()).toEqual({
         musicFile: 'a.mp3',
         musicInfo: 'First',
       })
+      expect(game.nextActIntro()).toBe(second.getActIntro())
       game.newTurn()
-      expect(game.presentedState()).toBe(game.state)
-      expect(game.presentedActIndex()).toBe(1)
+      expect(game.currentAct).toBe(1)
+      expect(game.state).not.toBe(firstState)
+      expect(game.nextActIntro()).toBeNull()
+      expect(game.currentMusic()).toEqual(empty)
       game.newTurn()
+      expect(game.currentMusic()).toEqual({
+        musicFile: 'b.mp3',
+        musicInfo: 'Second',
+      })
       secondDone = true
       game.newTurn()
       expect(game.isGameOver()).toBe(true)
-      expect(game.presentedState()).toBe(game.state)
-      expect(game.presentedActIndex()).toBe(1)
-      expect(game.presentedMusic()).toEqual({
+      expect(game.currentMusic()).toEqual({
         musicFile: 'b.mp3',
         musicInfo: 'Second',
       })
@@ -1289,6 +1295,22 @@ describe('Game', () => {
       expect(fresh.isGameOver()).toBe(true)
     })
 
+    it('saves the next act, as it will begin, when the save comes between acts', () => {
+      const game = twoActGame()
+      game.newTurn()
+      game.newTurn()
+      ;(game.acts[0] as StateAct).done = true
+      game.newTurn()
+      expect(game.isActTransitioning()).toBe(true)
+      const data = game.toSaveData()
+      expect(game.currentAct).toBe(0)
+
+      const fresh = twoActGame()
+      expect(fresh.loadSaveData(data)).toContain('loaded')
+      expect(fresh.currentAct).toBe(1)
+      expect(fresh.state.currentRoom.name).toBe('Second Room')
+    })
+
     it('plays on from a load made between acts or after the last one', () => {
       const game = twoActGame()
       game.newTurn()
@@ -1302,7 +1324,6 @@ describe('Game', () => {
 
       expect(game.isActRunning()).toBe(true)
       expect(game.acceptInput).toBe(true)
-      expect(game.finishedActState).toBeNull()
       expect(game.currentAct).toBe(0)
 
       const last = twoActGame()
