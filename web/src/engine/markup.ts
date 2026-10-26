@@ -37,7 +37,7 @@ export function event(text: string): string {
 /**
  * Mark `text` as the player's gesture: the sentence that only repeats what
  * the typed command already says ("You give her the scroll."). The story view
- * shows no gesture and narration voices none, so content may keep it beside
+ * (answers parsed by `parseTurn`) shows no gesture and narration voices none, so content may keep it beside
  * the effect without the player hearing the command twice.
  */
 export function gesture(text: string): string {

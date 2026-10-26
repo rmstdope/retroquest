@@ -32,7 +32,7 @@ describe('Act III effects', () => {
     // A sentence that opens like the player's gesture but is an effect says so
     // with `effect(...)`; the mark, not a list of exempt sentences, clears it.
     const echo =
-      /(?<!effect\(\s*)['"`]You (speak with|say|cast|examine|give|recite|daub|stand still|arrive at|unfold|offer|study|seat|combine|wedge|bind|hammer)\b/
+      /(?<!(?:effect|gesture)\(\s*)['"`]You (speak with|say|cast|examine|give|recite|daub|stand still|arrive at|unfold|offer|study|seat|combine|wedge|bind|hammer)\b/
     const offenders = contentFiles(__dirname).filter((file) =>
       echo.test(readFileSync(file, 'utf8')),
     )

@@ -27,7 +27,7 @@ describe('Act IV narration', () => {
 
   it('never opens a string by repeating the typed command unless marked as an effect', () => {
     const echo =
-      /(?<!effect\(\s*)['"`]You (speak with|say|cast|examine|give|recite|daub|stand still|arrive at|unfold|offer|study|seat|combine|wedge|bind|hammer)\b/
+      /(?<!(?:effect|gesture)\(\s*)['"`]You (speak with|say|cast|examine|give|recite|daub|stand still|arrive at|unfold|offer|study|seat|combine|wedge|bind|hammer)\b/
     const offenders = contentFiles(__dirname).filter((file) =>
       echo.test(readFileSync(file, 'utf8')),
     )
