@@ -35,6 +35,7 @@ import { FOREST_ENTRANCE_DESCRIPTION } from './rooms/ForestEntrance'
 import { CASTLE_COURTYARD_DESCRIPTION } from './rooms/CastleCourtyard'
 import { GREAT_HALL_DESCRIPTION } from './rooms/GreatHall'
 import { CedricksLostHonorQuest } from './quests/CedricksLostHonorQuest'
+import { Coins, COINS_DESCRIPTION } from './items/Coins'
 import {
   SECRET_DOCUMENTS_DESCRIPTION,
   SecretDocuments,
@@ -157,9 +158,9 @@ export class Act2 extends Act {
   }
 
   /**
-   * Bring older saves up to date: the secret documents, the squire's diary,
-   * the castle rooms, Cedric's quest log and the riddles quest log keep the
-   * text they were saved with, so give them the current wording, and put Brenn
+   * Bring older saves up to date: the coins, the secret documents, the
+   * squire's diary, the castle rooms, Cedric's quest log and the riddles quest
+   * log keep the text they were saved with, so give them the current wording, and put Brenn
    * in the warehouse of saves made before he was met there. Safe to run on
    * every load.
    */
@@ -183,6 +184,7 @@ export class Act2 extends Act {
         item.description = SQUIRES_DIARY_DESCRIPTION
       if (item instanceof CityNoticeBoard)
         item.description = CITY_NOTICE_BOARD_DESCRIPTION
+      if (item instanceof Coins) item.description = COINS_DESCRIPTION
     }
     for (const quest of [
       ...gameState.nonActivatedQuests,

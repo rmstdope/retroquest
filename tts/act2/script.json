@@ -740,14 +740,14 @@
     "text": "Supplies for the Journey: Sir Cedric mentioned the need for proper equipment for forest expeditions. Gather essential supplies from the Market District."
   },
   {
-    "key": "0419603d64a048",
+    "key": "1811267582c948",
     "speaker": "narrator",
-    "text": "A pouch containing 1 gold coins. These will be useful for purchasing supplies and equipment in Greendale."
+    "text": "Gold coins, kept in a pouch at your belt. These will be useful for purchasing supplies and equipment in Greendale."
   },
   {
-    "key": "0200e854cd97d0",
+    "key": "17cdbaef827df3",
     "speaker": "narrator",
-    "text": "You count your coins. You have 1 gold pieces to spend on supplies and equipment."
+    "text": "You count your coins. You have 150 gold pieces to spend on supplies and equipment."
   },
   {
     "key": "093621b48d1f27",
@@ -845,6 +845,11 @@
     "text": "The forest survival kit is yours for 50 gold coins."
   },
   {
+    "key": "07f1babadb4074",
+    "speaker": "narrator",
+    "text": "You count your coins. You have 100 gold pieces to spend on supplies and equipment."
+  },
+  {
     "key": "14b9927e23316d",
     "speaker": "narrator",
     "text": "The forest survival kit contains high-quality gear that would provide essential protection and tools for navigating dangerous forest areas safely. Now is not the time to use it."
@@ -853,6 +858,11 @@
     "key": "11d8ebff9bca59",
     "speaker": "narrator",
     "text": "The enhanced lantern is yours for 40 gold coins."
+  },
+  {
+    "key": "1b547146dd313f",
+    "speaker": "narrator",
+    "text": "You count your coins. You have 60 gold pieces to spend on supplies and equipment."
   },
   {
     "key": "18b115e5a3eaed",
@@ -990,6 +1000,11 @@
     "text": "That room upstairs? Its last lodger was a man in a grey cloak. Never gave a name, wrote half the night by candle, and was gone one morning without paying. It was the week the king went. I've aired it since. You'll find it clean."
   },
   {
+    "key": "1e70c320619c9c",
+    "speaker": "narrator",
+    "text": "You count your coins. You have 50 gold pieces to spend on supplies and equipment."
+  },
+  {
     "key": "11bb96b103c681",
     "speaker": "narrator",
     "text": "The key turns with a soft click, unlocking access to the private inn rooms upstairs. You can now 'go east' to enter them."
@@ -1013,6 +1028,11 @@
     "key": "1dc50b0f1e5394",
     "speaker": "narrator",
     "text": "A plain leather journal, its cover rubbed grey at the corners. There is no name inside. The pages are crowded with notes in a small, careful hand, and many of them look copied from somewhere else."
+  },
+  {
+    "key": "1fd7f1c63b9431",
+    "speaker": "narrator",
+    "text": "You count your coins. You have 70 gold pieces to spend on supplies and equipment."
   },
   {
     "key": "09c68bc860dcd1",
