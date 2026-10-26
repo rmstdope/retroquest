@@ -73,6 +73,14 @@ describe('actLoops', () => {
     }
   })
 
+  it('titles the loop of an act without a number by its name', () => {
+    const [track] = actLoops({
+      name: 'Epilogue',
+      musicFile: 'Conquest - Market (freetouse.com).mp3',
+    })
+    expect(track?.title).toBe('Epilogue')
+  })
+
   it('lists nothing for an act without music', () => {
     expect(actLoops({ name: 'Act5', musicFile: '' })).toEqual([])
   })

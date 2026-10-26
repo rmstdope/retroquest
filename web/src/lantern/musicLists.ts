@@ -18,7 +18,7 @@ const SOUND_EFFECTS_DIR = 'web/public/audio/soundeffects/'
 export interface MusicTrack {
   /** Slug naming the track's file in the studio's clips folder; unique across the game. */
   id: string
-  /** Shown in the studio: "Act 1 Opening" for an act's loop, the room's name for a room's. */
+  /** Shown in the studio: "Act 1 Opening" for an act's loop, the room's name for a room's, the sound file's name for a stinger. */
   title: string
   /** Where the game plays it. */
   plays: string
