@@ -185,14 +185,29 @@ export class Game implements CommandTarget {
    * transition) and after game over; empty before that so nothing plays early.
    */
   currentMusic(): MusicInfo {
-    if (
-      !this.isActRunning() &&
-      !this.isActTransitioning() &&
-      !this.isGameOver()
-    )
-      return { musicFile: '', musicInfo: '' }
+    if (!this.isMusicPlaying()) return { musicFile: '', musicInfo: '' }
     const act = this.acts[this.currentAct]
     return { musicFile: act.musicFile, musicInfo: act.musicInfo }
+  }
+
+  /** Whether the current act's music plays now: see `currentMusic`. */
+  private isMusicPlaying(): boolean {
+    return (
+      this.isActRunning() || this.isActTransitioning() || this.isGameOver()
+    )
+  }
+
+  /**
+   * Where the music plays: the current act's name and the key of the room the
+   * player is in, so a room may have a track of its own. Empty exactly when
+   * `currentMusic` is. The key is found in the state's own rooms, so it is
+   * right after a load too.
+   */
+  currentMusicPlace(): MusicPlace {
+    if (!this.isMusicPlaying()) return { actName: '', roomKey: '' }
+    const rooms = Object.entries(this.state.allRooms)
+    const here = rooms.find(([, room]) => room === this.state.currentRoom)
+    return { actName: this.acts[this.currentAct].name, roomKey: here?.[0] ?? '' }
   }
 
   /**

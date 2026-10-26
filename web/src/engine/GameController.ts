@@ -82,6 +82,12 @@ export interface MusicInfo {
   musicInfo: string
 }
 
+/** Where the music plays: the act's name and the key of the player's room, both '' while nothing plays. */
+export interface MusicPlace {
+  actName: string
+  roomKey: string
+}
+
 /** A character selling wares, like the act shopkeepers. */
 interface Merchant extends Character {
   wares: Record<string, { item: Item; price: number }>
@@ -451,6 +457,11 @@ export class GameController {
    */
   getCurrentMusic(): MusicInfo {
     return this.game.currentMusic()
+  }
+
+  /** The act and room the music plays in, for a track of its own; empty exactly when `getCurrentMusic` is. */
+  getMusicPlace(): MusicPlace {
+    return this.game.currentMusicPlace()
   }
 
   /** The intro of the act that follows while a closing page shows; null otherwise. */
