@@ -43,6 +43,11 @@
         ["deer", "dear"],
         ["guard", "god"]
       ]
+    },
+    "models": {
+      "audition": "s2.1-pro-free",
+      "draft": "s2.1-pro-free",
+      "final": "drama-3"
     }
   }
 }
