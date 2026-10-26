@@ -1,4 +1,4 @@
-import { Item, type GameState, writing } from '@/engine'
+import { type NameOptions, Item, type GameState, writing } from '@/engine'
 import { FLAG_READ_TRAVELERS_JOURNAL } from '../Act2StoryFlags'
 
 /**
@@ -51,5 +51,10 @@ export class TravelersJournal extends Item {
       'them closely. The historians in the Great Hall would know where ' +
       'these notes were copied from.'
     )
+  }
+
+  /** Named after a person, so it takes no "the" and keeps its capitals. */
+  override nameInSentence(options?: NameOptions): string {
+    return super.nameInSentence({ ...options, bare: true })
   }
 }

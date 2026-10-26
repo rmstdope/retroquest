@@ -518,7 +518,7 @@ Welcome to
       return `[failure]You don't have a '${itemName}' to drop.[/failure]`
     this.state.inventory.splice(this.state.inventory.indexOf(item), 1)
     this.state.currentRoom.items.push(item)
-    return `[event]You drop the [item_name]${item.name}[/item_name].[/event]`
+    return `[event]You drop ${item.nameInSentence()}.[/event]`
   }
 
   /**

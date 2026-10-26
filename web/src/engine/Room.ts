@@ -2,6 +2,7 @@ import type { Character } from './Character'
 import type { GameState } from './GameState'
 import type { Item } from './Item'
 import { isNamed } from './itemNames'
+import { nameInSentence, type NameOptions } from './names'
 
 /** Direction → key of the destination room in the act's rooms. */
 export type Exits = Record<string, string>
@@ -168,14 +169,13 @@ export class Room {
   }
 
   /**
-   * The room's name as it reads inside a sentence, article included: "the"
-   * and the marked-up name, with a leading "The" of the name itself dropped so
-   * it is not said twice. Override for a name that takes no article, such as
-   * a person's possessive ("Mira's Hut").
+   * The room's name as it reads inside a sentence, article included (see
+   * `nameInSentence` in `names.ts`): "the [room]" with a leading "The" of the
+   * name dropped. Override and pass `bare: true` for a room named after a
+   * person ("Mira's Hut").
    */
-  protected nameInSentence(): string {
-    const name = this.name.replace(/^The /, '')
-    return `the [room_name]${name}[/room_name]`
+  protected nameInSentence(options?: NameOptions): string {
+    return nameInSentence('room', this.name, options)
   }
 
   search(_gameState: GameState): string {

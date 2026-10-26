@@ -1,4 +1,10 @@
-import { Item, type GameState, characterName, writing } from '@/engine'
+import {
+  type NameOptions,
+  Item,
+  type GameState,
+  characterName,
+  writing,
+} from '@/engine'
 import { FLAG_READ_MOTHERS_LETTER } from '../Act1StoryFlags'
 
 /** The letter as Elior reads it, built on demand so older saves read the current wording. */
@@ -47,5 +53,10 @@ export class MothersLetter extends Item {
   /** Using the letter reads it, the same as examining it. */
   override use(gameState: GameState): string {
     return this.examine(gameState)
+  }
+
+  /** Named after a person, so it takes no "the" and keeps its capitals. */
+  override nameInSentence(options?: NameOptions): string {
+    return super.nameInSentence({ ...options, bare: true })
   }
 }

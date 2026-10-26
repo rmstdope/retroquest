@@ -1,4 +1,4 @@
-import { Item, type GameState, writing } from '@/engine'
+import { type NameOptions, Item, type GameState, writing } from '@/engine'
 import { FLAG_READ_SQUIRES_DIARY } from '../Act2StoryFlags'
 
 /** The diary's description; `Act2.afterLoad` restores it in older saves. */
@@ -75,5 +75,10 @@ export class SquiresDiary extends Item {
       "on Sir Cedric's disgrace and the missing evidence that could " +
       'clear his name.'
     )
+  }
+
+  /** Named after a person, so it takes no "the" and keeps its capitals. */
+  override nameInSentence(options?: NameOptions): string {
+    return super.nameInSentence({ ...options, bare: true })
   }
 }

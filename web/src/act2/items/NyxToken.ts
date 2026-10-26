@@ -1,4 +1,4 @@
-import { Item } from '@/engine'
+import { type NameOptions, Item } from '@/engine'
 
 /** Token of favor awarded by Nyx after ritual or trial completion. */
 export class NyxToken extends Item {
@@ -12,5 +12,10 @@ export class NyxToken extends Item {
         "pulses with gentle magic and seems to contain a fragment of the forest's " +
         'eternal essence.',
     })
+  }
+
+  /** Named after a person, so it takes no "the" and keeps its capitals. */
+  override nameInSentence(options?: NameOptions): string {
+    return super.nameInSentence({ ...options, bare: true })
   }
 }

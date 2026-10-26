@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { Item } from './Item'
+import type { NameOptions } from './names'
 import { Character } from './Character'
 import { GameState } from './GameState'
 import { Room } from './Room'
@@ -116,5 +117,50 @@ describe('Item', () => {
     const snare = new Snarelike({ name: 'snare', description: 'd' })
     expect(snare.answersTo('fox')).toBe(true)
     expect(isNamed(snare, 'fox')).toBe(true)
+  })
+})
+
+describe('Item names in a sentence', () => {
+  const gs = gameState()
+  const rock = new Item({ name: 'rock', description: 'd' })
+  class Token extends Item {
+    /** Test override: named after a person. */
+    override nameInSentence(options?: NameOptions): string {
+      return super.nameInSentence({ ...options, bare: true })
+    }
+  }
+  const token = new Token({ name: "nyx's token", description: 'd' })
+
+  it('opens a sentence with a capital article', () => {
+    expect(rock.listen(gs)).toBe(
+      '[failure]The [item_name]rock[/item_name] is silent.[/failure]',
+    )
+  })
+
+  it('says "the" mid-sentence', () => {
+    expect(rock.eat(gs)).toBe(
+      "[failure]You can't eat the [item_name]rock[/item_name].[/failure]",
+    )
+  })
+
+  it('keeps "the" before a possessive that is no person\'s own', () => {
+    const scale = new Item({ name: "dragon's scale", description: 'd' })
+    expect(scale.eat(gs)).toBe(
+      "[failure]You can't eat the [item_name]dragon's scale[/item_name].[/failure]",
+    )
+  })
+
+  it('takes no article and keeps its capitals when named after a person', () => {
+    expect(token.listen(gs)).toBe(
+      "[failure][item_name]Nyx's Token[/item_name] is silent.[/failure]",
+    )
+    for (const refusal of [
+      token.eat(gs),
+      token.drink(gs),
+      token.equip(gs),
+      token.unequip(gs),
+    ]) {
+      expect(refusal).toContain("[item_name]Nyx's Token[/item_name]")
+    }
   })
 })

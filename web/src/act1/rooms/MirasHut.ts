@@ -1,4 +1,4 @@
-import { characterName, Room, type GameState } from '@/engine'
+import { type NameOptions, characterName, Room, type GameState } from '@/engine'
 import { HealingHerb } from '../items/HealingHerb'
 import { AncientAmulet } from '../items/AncientAmulet'
 import { Mira } from '../characters/Mira'
@@ -42,8 +42,8 @@ export class MirasHut extends Room {
     return base + (onStand ? (keepsake ? GLOW : '') : EMPTY_STAND)
   }
 
-  /** Mira's Hut is named after her, so it takes no "the". */
-  protected override nameInSentence(): string {
-    return `[room_name]${this.name}[/room_name]`
+  /** Named after a person, so it takes no "the" and keeps its capitals. */
+  protected override nameInSentence(options?: NameOptions): string {
+    return super.nameInSentence({ ...options, bare: true })
   }
 }

@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { Room } from './Room'
+import type { NameOptions } from './names'
 import { Item } from './Item'
 import { Character } from './Character'
 import { GameState } from './GameState'
@@ -195,5 +196,34 @@ describe('Room', () => {
           'nothing of interest beyond what you can already see.',
       )
     })
+  })
+})
+
+describe('Room names in a sentence', () => {
+  it('keeps "the" before a possessive name that is no person\'s own', () => {
+    const forge = new Room({ name: "Blacksmith's Forge", description: 'd' })
+    expect(forge.search(gameState())).toContain(
+      "around the [room_name]Blacksmith's Forge[/room_name],",
+    )
+  })
+
+  it('says "the" mid-sentence and drops its own "The"', () => {
+    const mill = new Room({ name: 'The Old Mill', description: 'd' })
+    expect(mill.search(gameState())).toContain(
+      'around the [room_name]Old Mill[/room_name],',
+    )
+  })
+
+  it("takes no article when the subclass says the name is a person's own", () => {
+    class Hut extends Room {
+      /** Test override: named after a person. */
+      protected override nameInSentence(options?: NameOptions): string {
+        return super.nameInSentence({ ...options, bare: true })
+      }
+    }
+    const hut = new Hut({ name: "Mira's Hut", description: 'd' })
+    expect(hut.search(gameState())).toContain(
+      "around [room_name]Mira's Hut[/room_name],",
+    )
   })
 })

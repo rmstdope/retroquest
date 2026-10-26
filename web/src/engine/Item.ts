@@ -1,5 +1,6 @@
 import type { Character } from './Character'
 import type { GameState } from './GameState'
+import { nameInSentence, type NameOptions } from './names'
 
 export interface ItemOptions {
   name: string
@@ -39,12 +40,12 @@ export class Item {
   }
 
   /**
-   * The item's name as it reads inside a sentence, article included: "the"
-   * and the marked-up name. Override for a name that takes no article, such
-   * as a person's possessive ("Elior's Journal").
+   * The item's name as it reads inside a sentence, article included (see
+   * `nameInSentence` in `names.ts`): "the [item]". Override and pass
+   * `bare: true` for an item named after a person ("Elior's Journal").
    */
-  nameInSentence(): string {
-    return `the [item_name]${this.name}[/item_name]`
+  nameInSentence(options?: NameOptions): string {
+    return nameInSentence('item', this.name, options)
   }
 
   /** Why the item cannot be taken, or '' when it can. */
@@ -71,7 +72,7 @@ export class Item {
   useOnCharacter(_gameState: GameState, target: Character): string {
     return (
       `[failure]You can't use ${this.nameInSentence()} on ` +
-      `[character_name]${target.name}[/character_name].[/failure]`
+      `${target.nameInSentence()}.[/failure]`
     )
   }
 
@@ -80,7 +81,7 @@ export class Item {
   }
 
   listen(_gameState: GameState): string {
-    return `[failure]The [item_name]${this.name}[/item_name] is silent.[/failure]`
+    return `[failure]${this.nameInSentence({ atStart: true })} is silent.[/failure]`
   }
 
   /** Called after the player takes the item; the text is shown after the pickup. */
@@ -99,7 +100,7 @@ export class Item {
   /** Called by the grow spell. */
   grow(_gameState: GameState): string {
     return (
-      `[failure]The [item_name]${this.name}[/item_name] does not respond to ` +
+      `[failure]${this.nameInSentence({ atStart: true })} does not respond to ` +
       'the [spell_name]grow[/spell_name] spell.[/failure]'
     )
   }
