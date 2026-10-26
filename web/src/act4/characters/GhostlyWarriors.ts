@@ -1,13 +1,24 @@
-import { Character, type GameState, type NameOptions } from '@/engine'
+import {
+  Character,
+  type GameState,
+  type NameOptions,
+  nameInSentence as nameReading,
+} from '@/engine'
 
 /**
  * Ghostly warriors fighting an old battle among the banners of the Hall of
  * Echoes. Optional: Redemption's Light puts them at peace (see that spell).
  */
 export class GhostlyWarriors extends Character {
-  /** Named by what they are, so it reads "the …" (see `nameInSentence`). */
+  /**
+   * Named by what they are, so it reads "the …" and, a group and not a title,
+   * stays lower case mid-sentence (see `nameInSentence`).
+   */
   override nameInSentence(options?: NameOptions): string {
-    return super.nameInSentence({ ...options, common: true })
+    return nameReading('character', this.name.toLowerCase(), {
+      ...options,
+      common: true,
+    })
   }
 
   /** Several of them, so the default replies take plural verbs. */
