@@ -30,6 +30,11 @@ with Whisper. **Refresh dialog** runs the extractor for an act:
   line has its speaker and a key made from the speaker and the words (`narrationKey` in
   `web/src/lantern/`), so changed wording means a new key and the old clip goes stale. Lines the
   game builds from its state are not in it and play silently.
+- **Retiring clips.** When a wording change leaves a clip whose line left the script,
+  `narrationCasts.test.ts` is red until it is retired. After regenerating the script, run
+  `(cd web && npx -y tsx@4.23.15 --tsconfig tsconfig.json ../tts/retire-orphans.ts)` (or name the
+  acts): it drops those clips from `manifest.json` and `narration.lock.json` and deletes their
+  mp3s. Never edit those generated files by hand. `cues.json` is written by hand: move or drop a key-scene direction whose line changed.
 - **`act<N>/branches.json`** (Acts II to IV) lists optional scenes the golden path skips, each
   `{ after: <index of a path command>, commands: [...] }`, played on a copy so their lines are
   recorded too (Marcus told the truth, Brenn forgiven, Tobin and the Quiet Charm).
