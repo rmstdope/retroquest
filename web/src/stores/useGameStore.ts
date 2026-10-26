@@ -814,11 +814,16 @@ export const useGameStore = defineStore('game', () => {
       stock: { bag, spells: spellList },
     }
     for (const group of PANEL_GROUPS) if (!held.value[group]) applyGroup(group)
+    syncMusic(b)
+    acceptInput.value = b.controller.isAcceptingInput()
+    shortNames.value = b.controller.getShortNames()
+  }
+
+  /** Play what the engine says is playing now. */
+  function syncMusic(b: GameBridge): void {
     const m = b.controller.getCurrentMusic()
     musicFile.value = m.musicFile
     musicInfo.value = m.musicInfo
-    acceptInput.value = b.controller.isAcceptingInput()
-    shortNames.value = b.controller.getShortNames()
   }
 
   /**
@@ -988,6 +993,8 @@ export const useGameStore = defineStore('game', () => {
     }
     modalChapter.value = modalQueue.value.shift()!
     showModal.value = true
+    // The engine already runs the act: its music starts with its intro pop-up.
+    if (modalChapter.value.kind === 'intro') syncMusic(requireBridge())
   }
 
   function dismissModal(): void {
