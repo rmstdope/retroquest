@@ -11,8 +11,9 @@ import { escapeHtml, renderMarkup } from '@/utils/theme'
 /**
  * Quest news inside the story (non-blocking): a new quest is a card with its
  * description; an update is a one-line banner that expands to show the
- * newest part, since updates come often. Opening it scrolls the revealed
- * part into view, as the banner often sits at the bottom of the story.
+ * newest part, since updates come often. The revealed part opens inside
+ * the banner's frame. Opening it scrolls the revealed part into view, as
+ * the banner often sits at the bottom of the story.
  * A card's "Open in journal" button is described by its quest name, so two
  * cards in view are told apart. A completed quest is a record in the story,
  * read aloud like a new quest's card, with the act's quest count (shown, not
@@ -232,6 +233,12 @@ const doneCount = computed(() => {
   line-height: var(--lq-story-line-height);
   color: var(--lq-prose);
 }
+/* The frame is drawn around the banner and the text it opens, so the
+   opened text reads as part of the notice. */
+.lq-update-wrap {
+  border-radius: 10px;
+  border: 1px solid var(--lq-accent-line);
+}
 .lq-update {
   width: 100%;
   min-height: 44px;
@@ -240,7 +247,7 @@ const doneCount = computed(() => {
   gap: 10px;
   padding: 0 14px;
   border-radius: 10px;
-  border: 1px solid var(--lq-accent-line);
+  border: none;
   background: transparent;
   color: var(--lq-accent-text);
   font-family: var(--lq-font-ui);
@@ -257,6 +264,6 @@ const doneCount = computed(() => {
   color: var(--lq-muted);
 }
 .lq-update-body {
-  padding: 4px 14px 0;
+  padding: 4px 14px 12px;
 }
 </style>
