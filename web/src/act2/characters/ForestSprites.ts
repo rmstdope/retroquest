@@ -1,4 +1,10 @@
-import { Character, type GameState, dialogue, speech } from '@/engine'
+import {
+  Character,
+  type GameState,
+  dialogue,
+  speech,
+  type NameOptions,
+} from '@/engine'
 import {
   FLAG_ENHANCED_LANTERN_USED_FOREST_ENTRANCE,
   FLAG_FOREST_GUARDIANS_RIDDLES_OFFERED,
@@ -14,6 +20,16 @@ import {
  */
 export class ForestSprites extends Character {
   riddlesQuestGiven = false
+
+  /** Named by what they are, so it reads "the …" (see `nameInSentence`). */
+  override nameInSentence(options?: NameOptions): string {
+    return super.nameInSentence({ ...options, common: true })
+  }
+
+  /** Several of them, so the default replies take plural verbs. */
+  override isPlural(): boolean {
+    return true
+  }
 
   constructor() {
     super({

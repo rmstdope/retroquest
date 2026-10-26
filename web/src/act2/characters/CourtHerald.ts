@@ -1,9 +1,20 @@
-import { Character, type GameState, type Item, dialogue } from '@/engine'
+import {
+  Character,
+  type GameState,
+  type Item,
+  dialogue,
+  type NameOptions,
+} from '@/engine'
 import { FLAG_COURT_HERALD_FORMAL_PRESENTATION } from '../Act2StoryFlags'
 import { EntryPass } from '../items/EntryPass'
 
 /** Official who manages court presentations and grants archive access. */
 export class CourtHerald extends Character {
+  /** Named by what it is, so it reads "the …" (see `nameInSentence`). */
+  override nameInSentence(options?: NameOptions): string {
+    return super.nameInSentence({ ...options, common: true })
+  }
+
   constructor() {
     super({
       name: 'court herald',

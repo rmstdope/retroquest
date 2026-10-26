@@ -4,6 +4,7 @@ import {
   dialogue,
   remembered,
   normaliseSpokenWord,
+  type NameOptions,
 } from '@/engine'
 import { FLAG_ACT4_TRUTH_TOLD, VIRTUE_TRUTH } from '../Act4StoryFlags'
 
@@ -12,6 +13,11 @@ import { FLAG_ACT4_TRUTH_TOLD, VIRTUE_TRUTH } from '../Act4StoryFlags'
  * maze is solved. Optional: telling it the truth records the virtue "truth".
  */
 export class TrueSelf extends Character {
+  /** Named by what it is, so it reads "the …" (see `nameInSentence`). */
+  override nameInSentence(options?: NameOptions): string {
+    return super.nameInSentence({ ...options, common: true })
+  }
+
   constructor() {
     super({
       name: 'True Self',

@@ -4,6 +4,7 @@ import {
   type Item,
   characterName,
   speech,
+  type NameOptions,
 } from '@/engine'
 import { SirCedric } from './SirCedric'
 import { SecretDocuments } from '../items/SecretDocuments'
@@ -15,6 +16,11 @@ import {
 
 /** The military leader of Greendale who can officially restore Sir Cedric's honor. */
 export class LordCommander extends Character {
+  /** Named by what it is, so it reads "the …" (see `nameInSentence`). */
+  override nameInSentence(options?: NameOptions): string {
+    return super.nameInSentence({ ...options, common: true })
+  }
+
   constructor() {
     super({
       name: 'lord commander',

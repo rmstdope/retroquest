@@ -4,6 +4,7 @@ import {
   clue,
   dialogue,
   normaliseSpokenWord,
+  type NameOptions,
 } from '@/engine'
 import {
   FLAG_ACT4_BANNERS_SEEN,
@@ -52,6 +53,11 @@ const CONFESSION = [
  * Token raised, the word "redemption" redeems him, and he kneels in the hall as the Redeemed Knight.
  */
 export class KnightOfDespair extends Character {
+  /** Named by what it is, so it reads "the …" (see `nameInSentence`). */
+  override nameInSentence(options?: NameOptions): string {
+    return super.nameInSentence({ ...options, common: true })
+  }
+
   constructor() {
     super({
       name: 'Knight of Despair',

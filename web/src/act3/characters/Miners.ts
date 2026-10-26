@@ -4,6 +4,7 @@ import {
   type Item,
   characterName,
   speech,
+  type NameOptions,
 } from '@/engine'
 import { CEDRIC_STAY_BEHIND, cedricAdds } from '../CedricLines'
 import {
@@ -18,6 +19,16 @@ import { Tobin } from './Tobin'
 export class Miners extends Character {
   /** Whether the lead miner has thanked the player for Tobin's voice. */
   thanked = false
+
+  /** Named by what they are, so it reads "the …" (see `nameInSentence`). */
+  override nameInSentence(options?: NameOptions): string {
+    return super.nameInSentence({ ...options, common: true })
+  }
+
+  /** Several of them, so the default replies take plural verbs. */
+  override isPlural(): boolean {
+    return true
+  }
 
   constructor() {
     super({

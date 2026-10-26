@@ -4,6 +4,7 @@ import {
   characterName,
   dialogue,
   speech,
+  type NameOptions,
 } from '@/engine'
 import {
   FLAG_ACT3_ECHO_HEARD,
@@ -36,6 +37,11 @@ export class SilenceKeeper extends Character {
 
   /** Whether the player has talked to the Keeper before; saves from before this field was added read it as false. */
   talkedBefore = false
+
+  /** Named by what it is, so it reads "the …" (see `nameInSentence`). */
+  override nameInSentence(options?: NameOptions): string {
+    return super.nameInSentence({ ...options, common: true })
+  }
 
   constructor() {
     super({

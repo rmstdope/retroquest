@@ -5,6 +5,7 @@ import {
   dialogue,
   speech,
   normaliseSpokenWord,
+  type NameOptions,
 } from '@/engine'
 import { CEDRIC_NAME, cedricAdds, cedricSays } from '../CedricLines'
 import { FLAG_ACT3_VOW_OF_COURAGE_MADE } from '../Act3StoryFlags'
@@ -42,6 +43,11 @@ export class TideBornGuardian extends Character {
   trialStep: number | undefined = 0
   /** True once the lights have gone out for Elior; undefined in old saves. */
   trialBegun: boolean | undefined = false
+
+  /** Named by what it is, so it reads "the …" (see `nameInSentence`). */
+  override nameInSentence(options?: NameOptions): string {
+    return super.nameInSentence({ ...options, common: true })
+  }
 
   constructor() {
     super({

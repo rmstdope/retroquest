@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { Character } from './Character'
+import type { NameOptions } from './names'
 import { Item } from './Item'
 import { GameState } from './GameState'
 import { Room } from './Room'
@@ -100,6 +101,48 @@ describe('Character names in a sentence', () => {
     expect(elena.giveItem(gs, token)).toBe(
       "[character_name]Barmaid Elena[/character_name] doesn't seem interested in " +
         "the [item_name]dragon's scale[/item_name].",
+    )
+  })
+})
+
+/** Characters named by what they are, several of them ("the families"). */
+class Families extends Character {
+  constructor() {
+    super({ name: 'families', description: 'd' })
+  }
+
+  /** Named by what they are, so "the families". */
+  override nameInSentence(options?: NameOptions): string {
+    return super.nameInSentence({ ...options, common: true })
+  }
+
+  /** Several people, so the verbs are plural. */
+  override isPlural(): boolean {
+    return true
+  }
+}
+
+describe('A plural character', () => {
+  const gs = gameState()
+  const families = new Families()
+  const marked = '[character_name]families[/character_name]'
+
+  it('takes plural verbs in the default replies', () => {
+    expect(families.talkTo(gs)).toBe(
+      `The ${marked} have nothing to say right now.`,
+    )
+    expect(families.buyItem(gs, 'rope')).toBe(
+      `The ${marked} have nothing to sell you.`,
+    )
+    const bread = new Item({ name: 'bread', description: 'd' })
+    expect(families.giveItem(gs, bread)).toBe(
+      `The ${marked} don't seem interested in the [item_name]bread[/item_name].`,
+    )
+  })
+
+  it('is singular unless it says otherwise', () => {
+    expect(new Character({ name: 'Mira', description: 'd' }).isPlural()).toBe(
+      false,
     )
   })
 })

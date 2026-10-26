@@ -4,6 +4,7 @@ import {
   dialogue,
   effect,
   normaliseSpokenWord,
+  type NameOptions,
 } from '@/engine'
 import {
   FLAG_ACT4_TOWER_STAIR_OPEN,
@@ -82,6 +83,16 @@ const LEAD_INS = [
  * whispers leave the room.
  */
 export class Whispers extends Character {
+  /** Named by what they are, so it reads "the …" (see `nameInSentence`). */
+  override nameInSentence(options?: NameOptions): string {
+    return super.nameInSentence({ ...options, common: true })
+  }
+
+  /** Several of them, so the default replies take plural verbs. */
+  override isPlural(): boolean {
+    return true
+  }
+
   constructor() {
     super({
       name: 'Whispers',

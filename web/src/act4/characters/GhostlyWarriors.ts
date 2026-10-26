@@ -1,10 +1,20 @@
-import { Character, type GameState } from '@/engine'
+import { Character, type GameState, type NameOptions } from '@/engine'
 
 /**
  * Ghostly warriors fighting an old battle among the banners of the Hall of
  * Echoes. Optional: Redemption's Light puts them at peace (see that spell).
  */
 export class GhostlyWarriors extends Character {
+  /** Named by what they are, so it reads "the …" (see `nameInSentence`). */
+  override nameInSentence(options?: NameOptions): string {
+    return super.nameInSentence({ ...options, common: true })
+  }
+
+  /** Several of them, so the default replies take plural verbs. */
+  override isPlural(): boolean {
+    return true
+  }
+
   constructor() {
     super({
       name: 'Ghostly Warriors',

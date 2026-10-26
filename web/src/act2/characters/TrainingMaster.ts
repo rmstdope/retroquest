@@ -1,4 +1,10 @@
-import { Character, type GameState, characterName, dialogue } from '@/engine'
+import {
+  Character,
+  type GameState,
+  characterName,
+  dialogue,
+  type NameOptions,
+} from '@/engine'
 import {
   FLAG_CEDRIKS_HONOR_ACCEPTED,
   FLAG_CEDRIKS_HONOR_COMPLETED,
@@ -6,6 +12,11 @@ import {
 
 /** Veteran instructor who seeds the Cedric honor investigation. */
 export class TrainingMaster extends Character {
+  /** Named by what it is, so it reads "the …" (see `nameInSentence`). */
+  override nameInSentence(options?: NameOptions): string {
+    return super.nameInSentence({ ...options, common: true })
+  }
+
   constructor() {
     super({
       name: 'training master',

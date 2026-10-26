@@ -3,6 +3,7 @@ import {
   type GameState,
   remembered,
   normaliseSpokenWord,
+  type NameOptions,
 } from '@/engine'
 import {
   FLAG_ACT3_PHANTOMS_FREED,
@@ -29,6 +30,16 @@ const SHELL_SENTENCE = ' It is the tune from the shell.'
  * ends on the clear word "rest"; saying it frees them, an optional mercy.
  */
 export class WanderingPhantoms extends Character {
+  /** Named by what they are, so it reads "the …" (see `nameInSentence`). */
+  override nameInSentence(options?: NameOptions): string {
+    return super.nameInSentence({ ...options, common: true })
+  }
+
+  /** Several of them, so the default replies take plural verbs. */
+  override isPlural(): boolean {
+    return true
+  }
+
   constructor() {
     super({
       name: 'wandering phantoms',

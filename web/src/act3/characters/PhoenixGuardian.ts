@@ -1,4 +1,10 @@
-import { Character, type GameState, characterName, speech } from '@/engine'
+import {
+  Character,
+  type GameState,
+  characterName,
+  speech,
+  type NameOptions,
+} from '@/engine'
 import { CEDRIC_PATIENCE, cedricAdds } from '../CedricLines'
 import {
   FLAG_ACT3_BREATH_OF_THE_MOUNTAIN_COMPLETED,
@@ -7,6 +13,11 @@ import {
 
 /** A silent, vigilant figure who tends the vents and watches the passage to the crater. */
 export class PhoenixGuardian extends Character {
+  /** Named by what it is, so it reads "the …" (see `nameInSentence`). */
+  override nameInSentence(options?: NameOptions): string {
+    return super.nameInSentence({ ...options, common: true })
+  }
+
   constructor() {
     super({
       name: 'phoenix guardian',

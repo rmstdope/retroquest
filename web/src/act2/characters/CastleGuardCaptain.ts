@@ -4,11 +4,17 @@ import {
   characterName,
   speech,
   dialogue,
+  type NameOptions,
 } from '@/engine'
 import { FLAG_CEDRIKS_HONOR_COMPLETED } from '../Act2StoryFlags'
 
 /** Orientation NPC who advises visitors on castle protocol and introductions. */
 export class CastleGuardCaptain extends Character {
+  /** Named by what it is, so it reads "the …" (see `nameInSentence`). */
+  override nameInSentence(options?: NameOptions): string {
+    return super.nameInSentence({ ...options, common: true })
+  }
+
   constructor() {
     super({
       name: 'castle guard captain',

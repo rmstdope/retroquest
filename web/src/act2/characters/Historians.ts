@@ -6,6 +6,7 @@ import {
   clue,
   speech,
   dialogue,
+  type NameOptions,
 } from '@/engine'
 import {
   FLAG_SHOWED_JOURNAL_TO_HISTORIANS,
@@ -16,6 +17,16 @@ import { TravelersJournal } from '../items/TravelersJournal'
 
 /** Group of scholars who validate lore and inspect historical documents. */
 export class Historians extends Character {
+  /** Named by what they are, so it reads "the …" (see `nameInSentence`). */
+  override nameInSentence(options?: NameOptions): string {
+    return super.nameInSentence({ ...options, common: true })
+  }
+
+  /** Several of them, so the default replies take plural verbs. */
+  override isPlural(): boolean {
+    return true
+  }
+
   constructor() {
     super({
       name: 'historians',

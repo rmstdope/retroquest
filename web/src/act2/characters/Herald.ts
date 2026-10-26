@@ -5,6 +5,7 @@ import {
   characterName,
   speech,
   dialogue,
+  type NameOptions,
 } from '@/engine'
 import { EntryPass } from '../items/EntryPass'
 import { CastleApproach } from '../rooms/CastleApproach'
@@ -12,6 +13,11 @@ import { CastleApproach } from '../rooms/CastleApproach'
 /** Court official who verifies credentials and grants audience passes. */
 export class Herald extends Character {
   receivedPass = false
+
+  /** Named by what it is, so it reads "the …" (see `nameInSentence`). */
+  override nameInSentence(options?: NameOptions): string {
+    return super.nameInSentence({ ...options, common: true })
+  }
 
   constructor() {
     super({

@@ -1,9 +1,20 @@
-import { Character, type GameState, characterName, speech } from '@/engine'
+import {
+  Character,
+  type GameState,
+  characterName,
+  speech,
+  type NameOptions,
+} from '@/engine'
 import { MinersKey } from '../items/MinersKey'
 import { FLAG_ACT3_MINERS_RESCUE_STARTED } from '../Act3StoryFlags'
 
 /** Overseer who triggers Miners' Rescue and gives the miner's key. */
 export class MineOverseer extends Character {
+  /** Named by what it is, so it reads "the …" (see `nameInSentence`). */
+  override nameInSentence(options?: NameOptions): string {
+    return super.nameInSentence({ ...options, common: true })
+  }
+
   constructor() {
     super({
       name: 'Mine Overseer',

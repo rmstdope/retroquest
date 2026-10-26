@@ -4,6 +4,7 @@ import {
   characterName,
   clue,
   dialogue,
+  type NameOptions,
 } from '@/engine'
 import { MendSpell } from '../spells/MendSpell'
 import { FLAG_HELPED_ELDERLY_RESIDENTS } from '../Act2StoryFlags'
@@ -15,6 +16,16 @@ import { FLAG_HELPED_ELDERLY_RESIDENTS } from '../Act2StoryFlags'
  * the first interaction after that teaches the mend spell by observation.
  */
 export class LocalCraftsmen extends Character {
+  /** Named by what they are, so it reads "the …" (see `nameInSentence`). */
+  override nameInSentence(options?: NameOptions): string {
+    return super.nameInSentence({ ...options, common: true })
+  }
+
+  /** Several of them, so the default replies take plural verbs. */
+  override isPlural(): boolean {
+    return true
+  }
+
   constructor() {
     super({
       name: 'local craftsmen',

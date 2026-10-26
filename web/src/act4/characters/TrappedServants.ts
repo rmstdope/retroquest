@@ -1,4 +1,10 @@
-import { Character, type GameState, characterName, speech } from '@/engine'
+import {
+  Character,
+  type GameState,
+  characterName,
+  speech,
+  type NameOptions,
+} from '@/engine'
 import {
   FLAG_ACT4_SERVANTS_TRUST_EARNED,
   FLAG_ACT4_SERVANTS_FREED,
@@ -9,6 +15,16 @@ const FREED_SERVANTS_NAME = 'Freed Servants'
 
 /** Fortress servants enslaved by dark magic, seeking freedom. */
 export class TrappedServants extends Character {
+  /** Named by what they are, so it reads "the …" (see `nameInSentence`). */
+  override nameInSentence(options?: NameOptions): string {
+    return super.nameInSentence({ ...options, common: true })
+  }
+
+  /** Several of them, so the default replies take plural verbs. */
+  override isPlural(): boolean {
+    return true
+  }
+
   constructor() {
     super({
       name: 'Trapped Servants',

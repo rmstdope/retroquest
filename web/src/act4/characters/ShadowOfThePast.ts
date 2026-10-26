@@ -4,6 +4,7 @@ import {
   clue,
   dialogue,
   normaliseSpokenWord,
+  type NameOptions,
 } from '@/engine'
 import {
   FLAG_ACT4_MEMORY_ORBS_MENDED,
@@ -29,6 +30,11 @@ const ANSWER_WORD = 'patience'
  * takes the Sorceress's mask, is answered with "patience", and stays.
  */
 export class ShadowOfThePast extends Character {
+  /** Named by what it is, so it reads "the …" (see `nameInSentence`). */
+  override nameInSentence(options?: NameOptions): string {
+    return super.nameInSentence({ ...options, common: true })
+  }
+
   constructor() {
     super({
       name: 'Shadow',

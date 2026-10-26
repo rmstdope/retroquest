@@ -5,6 +5,7 @@ import {
   characterName,
   remembered,
   speech,
+  type NameOptions,
 } from '@/engine'
 import { COURTYARD_CAPTAIN_GONE_DESCRIPTION } from '../rooms/courtyardDescriptions'
 import { GuardiansChain } from '../items/GuardiansChain'
@@ -24,6 +25,11 @@ import {
  * Act IV's selfless moment, and he then walks home and leaves the courtyard.
  */
 export class CaptainOfTheGuard extends Character {
+  /** Named by what it is, so it reads "the …" (see `nameInSentence`). */
+  override nameInSentence(options?: NameOptions): string {
+    return super.nameInSentence({ ...options, common: true })
+  }
+
   constructor() {
     super({
       name: 'Captain of the Guard',
