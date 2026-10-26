@@ -1900,6 +1900,275 @@
    }
   ]
  },
+ "00d1191e27e096": {
+  "file": "00d1191e27e096.mp3",
+  "speaker": "narrator",
+  "duration": 12.121,
+  "words": [
+   {
+    "word": "The",
+    "start": 0.0,
+    "end": 0.18
+   },
+   {
+    "word": "Trapped",
+    "start": 0.18,
+    "end": 0.62
+   },
+   {
+    "word": "Servants:",
+    "start": 0.62,
+    "end": 1.2
+   },
+   {
+    "word": "Malakar's",
+    "start": 1.8,
+    "end": 2.58
+   },
+   {
+    "word": "servants",
+    "start": 2.58,
+    "end": 2.98
+   },
+   {
+    "word": "wander",
+    "start": 2.98,
+    "end": 3.48
+   },
+   {
+    "word": "the",
+    "start": 3.48,
+    "end": 3.68
+   },
+   {
+    "word": "courtyard",
+    "start": 3.68,
+    "end": 4.2
+   },
+   {
+    "word": "in",
+    "start": 4.2,
+    "end": 4.8
+   },
+   {
+    "word": "chains",
+    "start": 4.8,
+    "end": 5.26
+   },
+   {
+    "word": "of",
+    "start": 5.26,
+    "end": 5.48
+   },
+   {
+    "word": "shadow,",
+    "start": 5.48,
+    "end": 5.94
+   },
+   {
+    "word": "bound",
+    "start": 6.22,
+    "end": 6.86
+   },
+   {
+    "word": "to",
+    "start": 6.86,
+    "end": 7.12
+   },
+   {
+    "word": "serve",
+    "start": 7.12,
+    "end": 7.48
+   },
+   {
+    "word": "him",
+    "start": 7.48,
+    "end": 7.64
+   },
+   {
+    "word": "against",
+    "start": 7.64,
+    "end": 7.98
+   },
+   {
+    "word": "their",
+    "start": 7.98,
+    "end": 8.2
+   },
+   {
+    "word": "will.",
+    "start": 8.2,
+    "end": 8.6
+   },
+   {
+    "word": "Win",
+    "start": 9.28,
+    "end": 9.54
+   },
+   {
+    "word": "their",
+    "start": 9.54,
+    "end": 9.8
+   },
+   {
+    "word": "trust,",
+    "start": 9.8,
+    "end": 10.32
+   },
+   {
+    "word": "and",
+    "start": 10.76,
+    "end": 10.82
+   },
+   {
+    "word": "break",
+    "start": 10.82,
+    "end": 11.18
+   },
+   {
+    "word": "the",
+    "start": 11.18,
+    "end": 11.38
+   },
+   {
+    "word": "chains.",
+    "start": 11.38,
+    "end": 11.76
+   }
+  ]
+ },
+ "00ffbef7b6b88f": {
+  "file": "00ffbef7b6b88f.mp3",
+  "speaker": "narrator",
+  "duration": 11.099,
+  "words": [
+   {
+    "word": "The",
+    "start": 0.0,
+    "end": 0.2
+   },
+   {
+    "word": "Parent's",
+    "start": 0.2,
+    "end": 0.66
+   },
+   {
+    "word": "Legacy:",
+    "start": 0.88,
+    "end": 1.3
+   },
+   {
+    "word": "Behind",
+    "start": 1.7,
+    "end": 2.42
+   },
+   {
+    "word": "the",
+    "start": 2.42,
+    "end": 2.66
+   },
+   {
+    "word": "sealed",
+    "start": 2.66,
+    "end": 3.02
+   },
+   {
+    "word": "door,",
+    "start": 3.02,
+    "end": 3.44
+   },
+   {
+    "word": "Aren",
+    "start": 4.04,
+    "end": 4.34
+   },
+   {
+    "word": "and",
+    "start": 4.34,
+    "end": 4.52
+   },
+   {
+    "word": "Lysa's",
+    "start": 4.52,
+    "end": 5.04
+   },
+   {
+    "word": "last",
+    "start": 5.04,
+    "end": 5.48
+   },
+   {
+    "word": "memories",
+    "start": 5.48,
+    "end": 5.98
+   },
+   {
+    "word": "wait.",
+    "start": 5.98,
+    "end": 6.42
+   },
+   {
+    "word": "Look",
+    "start": 6.76,
+    "end": 7.44
+   },
+   {
+    "word": "into",
+    "start": 7.44,
+    "end": 7.7
+   },
+   {
+    "word": "them,",
+    "start": 7.7,
+    "end": 8.0
+   },
+   {
+    "word": "and",
+    "start": 8.0,
+    "end": 8.46
+   },
+   {
+    "word": "learn",
+    "start": 8.46,
+    "end": 8.74
+   },
+   {
+    "word": "the",
+    "start": 8.74,
+    "end": 8.92
+   },
+   {
+    "word": "whole",
+    "start": 8.92,
+    "end": 9.16
+   },
+   {
+    "word": "truth",
+    "start": 9.16,
+    "end": 9.54
+   },
+   {
+    "word": "before",
+    "start": 9.54,
+    "end": 9.98
+   },
+   {
+    "word": "the",
+    "start": 9.98,
+    "end": 10.22
+   },
+   {
+    "word": "throne",
+    "start": 10.22,
+    "end": 10.46
+   },
+   {
+    "word": "room.",
+    "start": 10.46,
+    "end": 10.82
+   }
+  ]
+ },
  "0106774aa37221": {
   "file": "0106774aa37221.mp3",
   "speaker": "malakar",
@@ -2464,6 +2733,53 @@
     "word": "wound.",
     "start": 3.88,
     "end": 4.22
+   }
+  ]
+ },
+ "014e3249e88e12": {
+  "file": "014e3249e88e12.mp3",
+  "speaker": "narrator",
+  "duration": 2.276,
+  "words": [
+   {
+    "word": "You",
+    "start": 0.0,
+    "end": 0.14
+   },
+   {
+    "word": "stop",
+    "start": 0.14,
+    "end": 0.58
+   },
+   {
+    "word": "and",
+    "start": 0.58,
+    "end": 0.76
+   },
+   {
+    "word": "think",
+    "start": 0.76,
+    "end": 1.08
+   },
+   {
+    "word": "over",
+    "start": 1.08,
+    "end": 1.38
+   },
+   {
+    "word": "what",
+    "start": 1.38,
+    "end": 1.64
+   },
+   {
+    "word": "you",
+    "start": 1.64,
+    "end": 1.8
+   },
+   {
+    "word": "know.",
+    "start": 1.8,
+    "end": 2.06
    }
   ]
  },
@@ -9008,6 +9324,213 @@
    }
   ]
  },
+ "05c40f44b6d883": {
+  "file": "05c40f44b6d883.mp3",
+  "speaker": "narrator",
+  "duration": 14.721,
+  "words": [
+   {
+    "word": "The",
+    "start": 0.0,
+    "end": 0.24
+   },
+   {
+    "word": "Sorceress",
+    "start": 0.24,
+    "end": 0.84
+   },
+   {
+    "word": "of",
+    "start": 0.84,
+    "end": 1.0
+   },
+   {
+    "word": "Lies:",
+    "start": 1.0,
+    "end": 1.48
+   },
+   {
+    "word": "At",
+    "start": 1.78,
+    "end": 2.42
+   },
+   {
+    "word": "the",
+    "start": 2.42,
+    "end": 2.56
+   },
+   {
+    "word": "top",
+    "start": 2.56,
+    "end": 2.82
+   },
+   {
+    "word": "of",
+    "start": 2.82,
+    "end": 3.02
+   },
+   {
+    "word": "the",
+    "start": 3.02,
+    "end": 3.14
+   },
+   {
+    "word": "tower",
+    "start": 3.14,
+    "end": 3.48
+   },
+   {
+    "word": "the",
+    "start": 3.52,
+    "end": 3.72
+   },
+   {
+    "word": "Sorceress",
+    "start": 3.72,
+    "end": 4.36
+   },
+   {
+    "word": "of",
+    "start": 4.36,
+    "end": 4.48
+   },
+   {
+    "word": "Lies",
+    "start": 4.48,
+    "end": 4.84
+   },
+   {
+    "word": "holds",
+    "start": 4.84,
+    "end": 5.2
+   },
+   {
+    "word": "court,",
+    "start": 5.2,
+    "end": 5.6
+   },
+   {
+    "word": "and",
+    "start": 5.82,
+    "end": 6.2
+   },
+   {
+    "word": "the",
+    "start": 6.2,
+    "end": 6.32
+   },
+   {
+    "word": "mask",
+    "start": 6.32,
+    "end": 6.7
+   },
+   {
+    "word": "on",
+    "start": 6.7,
+    "end": 6.9
+   },
+   {
+    "word": "her",
+    "start": 6.9,
+    "end": 7.06
+   },
+   {
+    "word": "staff",
+    "start": 7.06,
+    "end": 7.38
+   },
+   {
+    "word": "is",
+    "start": 7.38,
+    "end": 7.9
+   },
+   {
+    "word": "the",
+    "start": 7.9,
+    "end": 8.06
+   },
+   {
+    "word": "mark",
+    "start": 8.06,
+    "end": 8.38
+   },
+   {
+    "word": "that",
+    "start": 8.38,
+    "end": 8.58
+   },
+   {
+    "word": "lay",
+    "start": 8.58,
+    "end": 8.88
+   },
+   {
+    "word": "beneath",
+    "start": 8.88,
+    "end": 9.34
+   },
+   {
+    "word": "Elena's",
+    "start": 9.34,
+    "end": 9.94
+   },
+   {
+    "word": "curse.",
+    "start": 9.94,
+    "end": 10.3
+   },
+   {
+    "word": "See",
+    "start": 10.8,
+    "end": 11.32
+   },
+   {
+    "word": "through",
+    "start": 11.32,
+    "end": 11.58
+   },
+   {
+    "word": "her",
+    "start": 11.58,
+    "end": 11.78
+   },
+   {
+    "word": "lies,",
+    "start": 11.78,
+    "end": 12.28
+   },
+   {
+    "word": "and",
+    "start": 12.28,
+    "end": 12.84
+   },
+   {
+    "word": "find",
+    "start": 12.84,
+    "end": 13.22
+   },
+   {
+    "word": "what",
+    "start": 13.22,
+    "end": 13.46
+   },
+   {
+    "word": "lies",
+    "start": 13.46,
+    "end": 13.84
+   },
+   {
+    "word": "beneath",
+    "start": 13.84,
+    "end": 14.1
+   },
+   {
+    "word": "them.",
+    "start": 14.1,
+    "end": 14.48
+   }
+  ]
+ },
  "05cdd6b4fe4187": {
   "file": "05cdd6b4fe4187.mp3",
   "speaker": "narrator",
@@ -12699,6 +13222,205 @@
    }
   ]
  },
+ "086a5f90189194": {
+  "file": "086a5f90189194.mp3",
+  "speaker": "narrator",
+  "duration": 8.87,
+  "words": [
+   {
+    "word": "The",
+    "start": 0.0,
+    "end": 0.12
+   },
+   {
+    "word": "Maze",
+    "start": 0.12,
+    "end": 0.46
+   },
+   {
+    "word": "of",
+    "start": 0.46,
+    "end": 0.8
+   },
+   {
+    "word": "Mirrors:",
+    "start": 0.8,
+    "end": 1.28
+   },
+   {
+    "word": "Countless",
+    "start": 1.84,
+    "end": 2.52
+   },
+   {
+    "word": "mirrors",
+    "start": 2.52,
+    "end": 2.96
+   },
+   {
+    "word": "show",
+    "start": 2.96,
+    "end": 3.28
+   },
+   {
+    "word": "false",
+    "start": 3.28,
+    "end": 3.76
+   },
+   {
+    "word": "paths",
+    "start": 3.76,
+    "end": 4.2
+   },
+   {
+    "word": "and",
+    "start": 4.2,
+    "end": 4.48
+   },
+   {
+    "word": "twisted",
+    "start": 4.48,
+    "end": 4.96
+   },
+   {
+    "word": "reflections.",
+    "start": 4.96,
+    "end": 5.58
+   },
+   {
+    "word": "Find",
+    "start": 5.96,
+    "end": 6.64
+   },
+   {
+    "word": "the",
+    "start": 6.64,
+    "end": 6.82
+   },
+   {
+    "word": "one",
+    "start": 6.82,
+    "end": 7.1
+   },
+   {
+    "word": "true",
+    "start": 7.1,
+    "end": 7.42
+   },
+   {
+    "word": "way",
+    "start": 7.42,
+    "end": 7.76
+   },
+   {
+    "word": "through",
+    "start": 7.76,
+    "end": 8.04
+   },
+   {
+    "word": "the",
+    "start": 8.04,
+    "end": 8.22
+   },
+   {
+    "word": "labyrinth.",
+    "start": 8.22,
+    "end": 8.78
+   }
+  ]
+ },
+ "086dba44bf6ff0": {
+  "file": "086dba44bf6ff0.mp3",
+  "speaker": "narrator",
+  "duration": 5.991,
+  "words": [
+   {
+    "word": "You",
+    "start": 0.0,
+    "end": 0.14
+   },
+   {
+    "word": "search",
+    "start": 0.14,
+    "end": 0.56
+   },
+   {
+    "word": "around",
+    "start": 0.56,
+    "end": 0.88
+   },
+   {
+    "word": "the",
+    "start": 0.88,
+    "end": 1.06
+   },
+   {
+    "word": "Throne",
+    "start": 1.06,
+    "end": 1.32
+   },
+   {
+    "word": "Chamber,",
+    "start": 1.32,
+    "end": 1.76
+   },
+   {
+    "word": "but",
+    "start": 1.9,
+    "end": 2.46
+   },
+   {
+    "word": "find",
+    "start": 2.46,
+    "end": 2.8
+   },
+   {
+    "word": "nothing",
+    "start": 2.8,
+    "end": 3.16
+   },
+   {
+    "word": "of",
+    "start": 3.16,
+    "end": 3.4
+   },
+   {
+    "word": "interest",
+    "start": 3.4,
+    "end": 3.86
+   },
+   {
+    "word": "beyond",
+    "start": 3.86,
+    "end": 4.22
+   },
+   {
+    "word": "what",
+    "start": 4.22,
+    "end": 4.54
+   },
+   {
+    "word": "you",
+    "start": 4.54,
+    "end": 4.7
+   },
+   {
+    "word": "can",
+    "start": 4.7,
+    "end": 4.86
+   },
+   {
+    "word": "already",
+    "start": 4.86,
+    "end": 5.28
+   },
+   {
+    "word": "see.",
+    "start": 5.28,
+    "end": 5.66
+   }
+  ]
+ },
  "0880679bc553f1": {
   "file": "0880679bc553f1.mp3",
   "speaker": "narrator",
@@ -15133,6 +15855,103 @@
     "word": "shut.",
     "start": 8.36,
     "end": 8.72
+   }
+  ]
+ },
+ "0a5db2df6fbc96": {
+  "file": "0a5db2df6fbc96.mp3",
+  "speaker": "narrator",
+  "duration": 6.316,
+  "words": [
+   {
+    "word": "You",
+    "start": 0.0,
+    "end": 0.24
+   },
+   {
+    "word": "search",
+    "start": 0.24,
+    "end": 0.68
+   },
+   {
+    "word": "around",
+    "start": 0.68,
+    "end": 1.06
+   },
+   {
+    "word": "the",
+    "start": 1.06,
+    "end": 1.22
+   },
+   {
+    "word": "Tower",
+    "start": 1.22,
+    "end": 1.56
+   },
+   {
+    "word": "of",
+    "start": 1.56,
+    "end": 1.78
+   },
+   {
+    "word": "Shadows,",
+    "start": 1.78,
+    "end": 2.3
+   },
+   {
+    "word": "but",
+    "start": 2.48,
+    "end": 2.84
+   },
+   {
+    "word": "find",
+    "start": 2.84,
+    "end": 3.14
+   },
+   {
+    "word": "nothing",
+    "start": 3.14,
+    "end": 3.54
+   },
+   {
+    "word": "of",
+    "start": 3.54,
+    "end": 3.78
+   },
+   {
+    "word": "interest",
+    "start": 3.78,
+    "end": 4.2
+   },
+   {
+    "word": "beyond",
+    "start": 4.2,
+    "end": 4.58
+   },
+   {
+    "word": "what",
+    "start": 4.58,
+    "end": 4.92
+   },
+   {
+    "word": "you",
+    "start": 4.92,
+    "end": 5.08
+   },
+   {
+    "word": "can",
+    "start": 5.08,
+    "end": 5.26
+   },
+   {
+    "word": "already",
+    "start": 5.26,
+    "end": 5.68
+   },
+   {
+    "word": "see.",
+    "start": 5.68,
+    "end": 6.02
    }
   ]
  },
@@ -17879,6 +18698,153 @@
    }
   ]
  },
+ "0ceb5b11d82980": {
+  "file": "0ceb5b11d82980.mp3",
+  "speaker": "narrator",
+  "duration": 11.331,
+  "words": [
+   {
+    "word": "Shattered",
+    "start": 0.0,
+    "end": 0.5
+   },
+   {
+    "word": "Ward",
+    "start": 0.5,
+    "end": 0.86
+   },
+   {
+    "word": "Guardians:",
+    "start": 0.86,
+    "end": 1.4
+   },
+   {
+    "word": "Shadow",
+    "start": 1.76,
+    "end": 2.38
+   },
+   {
+    "word": "guardians",
+    "start": 2.38,
+    "end": 2.88
+   },
+   {
+    "word": "and",
+    "start": 3.12,
+    "end": 3.46
+   },
+   {
+    "word": "a",
+    "start": 3.46,
+    "end": 3.62
+   },
+   {
+    "word": "barrier",
+    "start": 3.62,
+    "end": 4.02
+   },
+   {
+    "word": "of",
+    "start": 4.02,
+    "end": 4.3
+   },
+   {
+    "word": "dark",
+    "start": 4.3,
+    "end": 4.62
+   },
+   {
+    "word": "energy",
+    "start": 4.62,
+    "end": 5.1
+   },
+   {
+    "word": "bar",
+    "start": 5.1,
+    "end": 5.46
+   },
+   {
+    "word": "the",
+    "start": 5.46,
+    "end": 5.68
+   },
+   {
+    "word": "way",
+    "start": 5.68,
+    "end": 5.94
+   },
+   {
+    "word": "into",
+    "start": 5.94,
+    "end": 6.26
+   },
+   {
+    "word": "the",
+    "start": 6.26,
+    "end": 6.42
+   },
+   {
+    "word": "fortress.",
+    "start": 6.42,
+    "end": 6.78
+   },
+   {
+    "word": "Find",
+    "start": 7.3,
+    "end": 7.98
+   },
+   {
+    "word": "what",
+    "start": 7.98,
+    "end": 8.18
+   },
+   {
+    "word": "feeds",
+    "start": 8.18,
+    "end": 8.56
+   },
+   {
+    "word": "them,",
+    "start": 8.56,
+    "end": 8.84
+   },
+   {
+    "word": "and",
+    "start": 8.84,
+    "end": 9.46
+   },
+   {
+    "word": "break",
+    "start": 9.46,
+    "end": 9.8
+   },
+   {
+    "word": "their",
+    "start": 9.8,
+    "end": 10.04
+   },
+   {
+    "word": "hold",
+    "start": 10.04,
+    "end": 10.42
+   },
+   {
+    "word": "on",
+    "start": 10.42,
+    "end": 10.6
+   },
+   {
+    "word": "the",
+    "start": 10.6,
+    "end": 10.7
+   },
+   {
+    "word": "gates.",
+    "start": 10.7,
+    "end": 11.02
+   }
+  ]
+ },
  "0cedbc37093123": {
   "file": "0cedbc37093123.mp3",
   "speaker": "narrator",
@@ -18055,6 +19021,73 @@
     "word": "truth.",
     "start": 8.9,
     "end": 9.1
+   }
+  ]
+ },
+ "0cf8dcdb267d33": {
+  "file": "0cf8dcdb267d33.mp3",
+  "speaker": "narrator",
+  "duration": 3.715,
+  "words": [
+   {
+    "word": "This",
+    "start": 0.0,
+    "end": 0.42
+   },
+   {
+    "word": "might",
+    "start": 0.42,
+    "end": 0.66
+   },
+   {
+    "word": "come",
+    "start": 0.66,
+    "end": 0.96
+   },
+   {
+    "word": "in",
+    "start": 0.96,
+    "end": 1.08
+   },
+   {
+    "word": "handy,",
+    "start": 1.08,
+    "end": 1.5
+   },
+   {
+    "word": "so",
+    "start": 1.5,
+    "end": 1.98
+   },
+   {
+    "word": "you",
+    "start": 1.98,
+    "end": 2.22
+   },
+   {
+    "word": "decide",
+    "start": 2.22,
+    "end": 2.72
+   },
+   {
+    "word": "to",
+    "start": 2.72,
+    "end": 2.96
+   },
+   {
+    "word": "pick",
+    "start": 2.96,
+    "end": 3.2
+   },
+   {
+    "word": "it",
+    "start": 3.2,
+    "end": 3.32
+   },
+   {
+    "word": "up.",
+    "start": 3.32,
+    "end": 3.54
    }
   ]
  },
@@ -22662,6 +23695,103 @@
    }
   ]
  },
+ "103af5e6aa1f09": {
+  "file": "103af5e6aa1f09.mp3",
+  "speaker": "narrator",
+  "duration": 6.594,
+  "words": [
+   {
+    "word": "You",
+    "start": 0.0,
+    "end": 0.4
+   },
+   {
+    "word": "search",
+    "start": 0.4,
+    "end": 0.86
+   },
+   {
+    "word": "around",
+    "start": 0.86,
+    "end": 1.2
+   },
+   {
+    "word": "the",
+    "start": 1.2,
+    "end": 1.4
+   },
+   {
+    "word": "Chamber",
+    "start": 1.4,
+    "end": 1.76
+   },
+   {
+    "word": "of",
+    "start": 1.76,
+    "end": 2.02
+   },
+   {
+    "word": "Whispers,",
+    "start": 2.02,
+    "end": 2.48
+   },
+   {
+    "word": "but",
+    "start": 2.66,
+    "end": 3.1
+   },
+   {
+    "word": "find",
+    "start": 3.1,
+    "end": 3.42
+   },
+   {
+    "word": "nothing",
+    "start": 3.42,
+    "end": 3.8
+   },
+   {
+    "word": "of",
+    "start": 3.8,
+    "end": 4.04
+   },
+   {
+    "word": "interest",
+    "start": 4.04,
+    "end": 4.44
+   },
+   {
+    "word": "beyond",
+    "start": 4.44,
+    "end": 4.78
+   },
+   {
+    "word": "what",
+    "start": 4.78,
+    "end": 5.12
+   },
+   {
+    "word": "you",
+    "start": 5.12,
+    "end": 5.3
+   },
+   {
+    "word": "can",
+    "start": 5.3,
+    "end": 5.48
+   },
+   {
+    "word": "already",
+    "start": 5.48,
+    "end": 5.9
+   },
+   {
+    "word": "see.",
+    "start": 5.9,
+    "end": 6.26
+   }
+  ]
+ },
  "104bbce132243f": {
   "file": "104bbce132243f.mp3",
   "speaker": "narrator",
@@ -23354,6 +24484,133 @@
     "word": "hands.",
     "start": 21.74,
     "end": 22.12
+   }
+  ]
+ },
+ "10a1aa28e66b63": {
+  "file": "10a1aa28e66b63.mp3",
+  "speaker": "narrator",
+  "duration": 11.517,
+  "words": [
+   {
+    "word": "The",
+    "start": 0.0,
+    "end": 0.18
+   },
+   {
+    "word": "Final",
+    "start": 0.18,
+    "end": 0.52
+   },
+   {
+    "word": "Stand:",
+    "start": 0.52,
+    "end": 1.1
+   },
+   {
+    "word": "Malakar's",
+    "start": 1.8,
+    "end": 2.56
+   },
+   {
+    "word": "fortress",
+    "start": 2.56,
+    "end": 2.94
+   },
+   {
+    "word": "stands",
+    "start": 2.94,
+    "end": 3.5
+   },
+   {
+    "word": "before",
+    "start": 3.5,
+    "end": 3.86
+   },
+   {
+    "word": "you,",
+    "start": 3.86,
+    "end": 4.2
+   },
+   {
+    "word": "and",
+    "start": 4.4,
+    "end": 4.92
+   },
+   {
+    "word": "somewhere",
+    "start": 4.92,
+    "end": 5.36
+   },
+   {
+    "word": "inside",
+    "start": 5.36,
+    "end": 5.9
+   },
+   {
+    "word": "King",
+    "start": 5.9,
+    "end": 6.26
+   },
+   {
+    "word": "Alden",
+    "start": 6.26,
+    "end": 6.8
+   },
+   {
+    "word": "is",
+    "start": 6.8,
+    "end": 6.98
+   },
+   {
+    "word": "held",
+    "start": 6.98,
+    "end": 7.26
+   },
+   {
+    "word": "captive.",
+    "start": 7.26,
+    "end": 7.76
+   },
+   {
+    "word": "Break",
+    "start": 8.1,
+    "end": 8.8
+   },
+   {
+    "word": "through",
+    "start": 8.8,
+    "end": 9.02
+   },
+   {
+    "word": "its",
+    "start": 9.02,
+    "end": 9.26
+   },
+   {
+    "word": "defences",
+    "start": 9.26,
+    "end": 9.8
+   },
+   {
+    "word": "and",
+    "start": 9.8,
+    "end": 10.12
+   },
+   {
+    "word": "face",
+    "start": 10.12,
+    "end": 10.52
+   },
+   {
+    "word": "the",
+    "start": 10.52,
+    "end": 10.76
+   },
+   {
+    "word": "sorcerer.",
+    "start": 10.76,
+    "end": 11.38
    }
   ]
  },
@@ -24114,6 +25371,98 @@
    }
   ]
  },
+ "116ad8a51cadc3": {
+  "file": "116ad8a51cadc3.mp3",
+  "speaker": "narrator",
+  "duration": 6.084,
+  "words": [
+   {
+    "word": "You",
+    "start": 0.0,
+    "end": 0.24
+   },
+   {
+    "word": "search",
+    "start": 0.24,
+    "end": 0.62
+   },
+   {
+    "word": "around",
+    "start": 0.62,
+    "end": 1.0
+   },
+   {
+    "word": "the",
+    "start": 1.0,
+    "end": 1.18
+   },
+   {
+    "word": "Mirror",
+    "start": 1.18,
+    "end": 1.5
+   },
+   {
+    "word": "Labyrinth,",
+    "start": 1.5,
+    "end": 2.1
+   },
+   {
+    "word": "but",
+    "start": 2.1,
+    "end": 2.52
+   },
+   {
+    "word": "find",
+    "start": 2.52,
+    "end": 2.86
+   },
+   {
+    "word": "nothing",
+    "start": 2.86,
+    "end": 3.18
+   },
+   {
+    "word": "of",
+    "start": 3.18,
+    "end": 3.44
+   },
+   {
+    "word": "interest",
+    "start": 3.44,
+    "end": 3.82
+   },
+   {
+    "word": "beyond",
+    "start": 3.82,
+    "end": 4.4
+   },
+   {
+    "word": "what",
+    "start": 4.4,
+    "end": 4.66
+   },
+   {
+    "word": "you",
+    "start": 4.66,
+    "end": 4.82
+   },
+   {
+    "word": "can",
+    "start": 4.82,
+    "end": 4.98
+   },
+   {
+    "word": "already",
+    "start": 4.98,
+    "end": 5.38
+   },
+   {
+    "word": "see.",
+    "start": 5.38,
+    "end": 5.76
+   }
+  ]
+ },
  "11907cb28a3e52": {
   "file": "11907cb28a3e52.mp3",
   "speaker": "lysa",
@@ -24822,6 +26171,98 @@
    }
   ]
  },
+ "126162c0ed6194": {
+  "file": "126162c0ed6194.mp3",
+  "speaker": "narrator",
+  "duration": 6.362,
+  "words": [
+   {
+    "word": "You",
+    "start": 0.0,
+    "end": 0.18
+   },
+   {
+    "word": "search",
+    "start": 0.18,
+    "end": 0.58
+   },
+   {
+    "word": "around",
+    "start": 0.58,
+    "end": 1.0
+   },
+   {
+    "word": "the",
+    "start": 1.0,
+    "end": 1.18
+   },
+   {
+    "word": "Willowbrook",
+    "start": 1.18,
+    "end": 1.8
+   },
+   {
+    "word": "Field,",
+    "start": 1.8,
+    "end": 2.2
+   },
+   {
+    "word": "but",
+    "start": 2.4,
+    "end": 2.8
+   },
+   {
+    "word": "find",
+    "start": 2.8,
+    "end": 3.1
+   },
+   {
+    "word": "nothing",
+    "start": 3.1,
+    "end": 3.46
+   },
+   {
+    "word": "of",
+    "start": 3.46,
+    "end": 3.7
+   },
+   {
+    "word": "interest",
+    "start": 3.7,
+    "end": 4.12
+   },
+   {
+    "word": "beyond",
+    "start": 4.12,
+    "end": 4.52
+   },
+   {
+    "word": "what",
+    "start": 4.52,
+    "end": 4.88
+   },
+   {
+    "word": "you",
+    "start": 4.88,
+    "end": 5.04
+   },
+   {
+    "word": "can",
+    "start": 5.04,
+    "end": 5.22
+   },
+   {
+    "word": "already",
+    "start": 5.22,
+    "end": 5.68
+   },
+   {
+    "word": "see.",
+    "start": 5.68,
+    "end": 6.12
+   }
+  ]
+ },
  "126806c1465d47": {
   "file": "126806c1465d47.mp3",
   "speaker": "narrator",
@@ -25331,6 +26772,63 @@
     "word": "them.",
     "start": 12.32,
     "end": 12.74
+   }
+  ]
+ },
+ "12ca45e13de2eb": {
+  "file": "12ca45e13de2eb.mp3",
+  "speaker": "narrator",
+  "duration": 3.622,
+  "words": [
+   {
+    "word": "You",
+    "start": 0.0,
+    "end": 0.16
+   },
+   {
+    "word": "think",
+    "start": 0.16,
+    "end": 0.44
+   },
+   {
+    "word": "it",
+    "start": 0.44,
+    "end": 0.6
+   },
+   {
+    "word": "over.",
+    "start": 0.6,
+    "end": 0.88
+   },
+   {
+    "word": "Nothing",
+    "start": 1.2,
+    "end": 1.76
+   },
+   {
+    "word": "presses",
+    "start": 1.76,
+    "end": 2.26
+   },
+   {
+    "word": "on",
+    "start": 2.26,
+    "end": 2.58
+   },
+   {
+    "word": "you",
+    "start": 2.58,
+    "end": 2.76
+   },
+   {
+    "word": "just",
+    "start": 2.76,
+    "end": 3.04
+   },
+   {
+    "word": "now.",
+    "start": 3.04,
+    "end": 3.4
    }
   ]
  },
@@ -25876,6 +27374,193 @@
     "word": "stopping:",
     "start": 6.48,
     "end": 7.1
+   }
+  ]
+ },
+ "131ecfa1101b89": {
+  "file": "131ecfa1101b89.mp3",
+  "speaker": "narrator",
+  "duration": 13.282,
+  "words": [
+   {
+    "word": "The",
+    "start": 0.0,
+    "end": 0.16
+   },
+   {
+    "word": "Knight",
+    "start": 0.16,
+    "end": 0.42
+   },
+   {
+    "word": "of",
+    "start": 0.42,
+    "end": 0.62
+   },
+   {
+    "word": "Despair:",
+    "start": 0.62,
+    "end": 1.26
+   },
+   {
+    "word": "A",
+    "start": 1.54,
+    "end": 2.1
+   },
+   {
+    "word": "knight",
+    "start": 2.1,
+    "end": 2.38
+   },
+   {
+    "word": "in",
+    "start": 2.38,
+    "end": 2.58
+   },
+   {
+    "word": "a",
+    "start": 2.58,
+    "end": 2.68
+   },
+   {
+    "word": "grey",
+    "start": 2.68,
+    "end": 2.9
+   },
+   {
+    "word": "cloak",
+    "start": 2.9,
+    "end": 3.38
+   },
+   {
+    "word": "bars",
+    "start": 3.38,
+    "end": 4.18
+   },
+   {
+    "word": "the",
+    "start": 4.18,
+    "end": 4.44
+   },
+   {
+    "word": "stair",
+    "start": 4.44,
+    "end": 4.8
+   },
+   {
+    "word": "to",
+    "start": 4.8,
+    "end": 5.0
+   },
+   {
+    "word": "the",
+    "start": 5.0,
+    "end": 5.14
+   },
+   {
+    "word": "Tower",
+    "start": 5.14,
+    "end": 5.48
+   },
+   {
+    "word": "of",
+    "start": 5.48,
+    "end": 5.7
+   },
+   {
+    "word": "Shadows,",
+    "start": 5.7,
+    "end": 6.22
+   },
+   {
+    "word": "lost",
+    "start": 6.6,
+    "end": 7.28
+   },
+   {
+    "word": "in",
+    "start": 7.28,
+    "end": 7.46
+   },
+   {
+    "word": "a",
+    "start": 7.46,
+    "end": 7.56
+   },
+   {
+    "word": "despair",
+    "start": 7.56,
+    "end": 8.06
+   },
+   {
+    "word": "no",
+    "start": 8.06,
+    "end": 8.36
+   },
+   {
+    "word": "blade",
+    "start": 8.36,
+    "end": 8.74
+   },
+   {
+    "word": "can",
+    "start": 8.74,
+    "end": 8.98
+   },
+   {
+    "word": "reach.",
+    "start": 8.98,
+    "end": 9.4
+   },
+   {
+    "word": "Learn",
+    "start": 9.88,
+    "end": 10.44
+   },
+   {
+    "word": "the",
+    "start": 10.44,
+    "end": 10.62
+   },
+   {
+    "word": "truth",
+    "start": 10.62,
+    "end": 10.9
+   },
+   {
+    "word": "of",
+    "start": 10.9,
+    "end": 11.12
+   },
+   {
+    "word": "him,",
+    "start": 11.12,
+    "end": 11.32
+   },
+   {
+    "word": "and",
+    "start": 11.32,
+    "end": 11.82
+   },
+   {
+    "word": "find",
+    "start": 11.82,
+    "end": 12.2
+   },
+   {
+    "word": "a",
+    "start": 12.2,
+    "end": 12.38
+   },
+   {
+    "word": "way",
+    "start": 12.38,
+    "end": 12.56
+   },
+   {
+    "word": "past.",
+    "start": 12.56,
+    "end": 12.84
    }
   ]
  },
@@ -27168,6 +28853,98 @@
     "word": "waiting.",
     "start": 17.9,
     "end": 18.2
+   }
+  ]
+ },
+ "14243d0dad2726": {
+  "file": "14243d0dad2726.mp3",
+  "speaker": "narrator",
+  "duration": 6.084,
+  "words": [
+   {
+    "word": "You",
+    "start": 0.0,
+    "end": 0.16
+   },
+   {
+    "word": "search",
+    "start": 0.16,
+    "end": 0.58
+   },
+   {
+    "word": "around",
+    "start": 0.58,
+    "end": 0.98
+   },
+   {
+    "word": "the",
+    "start": 0.98,
+    "end": 1.14
+   },
+   {
+    "word": "Parents'",
+    "start": 1.14,
+    "end": 1.52
+   },
+   {
+    "word": "Vault,",
+    "start": 1.68,
+    "end": 1.9
+   },
+   {
+    "word": "but",
+    "start": 2.02,
+    "end": 2.46
+   },
+   {
+    "word": "find",
+    "start": 2.46,
+    "end": 2.8
+   },
+   {
+    "word": "nothing",
+    "start": 2.8,
+    "end": 3.16
+   },
+   {
+    "word": "of",
+    "start": 3.16,
+    "end": 3.38
+   },
+   {
+    "word": "interest",
+    "start": 3.38,
+    "end": 3.84
+   },
+   {
+    "word": "beyond",
+    "start": 3.84,
+    "end": 4.24
+   },
+   {
+    "word": "what",
+    "start": 4.24,
+    "end": 4.56
+   },
+   {
+    "word": "you",
+    "start": 4.56,
+    "end": 4.76
+   },
+   {
+    "word": "can",
+    "start": 4.76,
+    "end": 4.92
+   },
+   {
+    "word": "already",
+    "start": 4.92,
+    "end": 5.36
+   },
+   {
+    "word": "see.",
+    "start": 5.36,
+    "end": 5.76
    }
   ]
  },
@@ -28573,6 +30350,153 @@
     "word": "away.",
     "start": 9.68,
     "end": 10.1
+   }
+  ]
+ },
+ "15f030a4caa5de": {
+  "file": "15f030a4caa5de.mp3",
+  "speaker": "narrator",
+  "duration": 10.82,
+  "words": [
+   {
+    "word": "The",
+    "start": 0.0,
+    "end": 0.16
+   },
+   {
+    "word": "Shadow",
+    "start": 0.16,
+    "end": 0.62
+   },
+   {
+    "word": "of",
+    "start": 0.62,
+    "end": 0.9
+   },
+   {
+    "word": "the",
+    "start": 0.9,
+    "end": 1.04
+   },
+   {
+    "word": "Past:",
+    "start": 1.04,
+    "end": 1.5
+   },
+   {
+    "word": "Among",
+    "start": 1.72,
+    "end": 2.36
+   },
+   {
+    "word": "the",
+    "start": 2.36,
+    "end": 2.62
+   },
+   {
+    "word": "broken",
+    "start": 2.62,
+    "end": 3.02
+   },
+   {
+    "word": "memories",
+    "start": 3.02,
+    "end": 3.52
+   },
+   {
+    "word": "a",
+    "start": 3.52,
+    "end": 3.84
+   },
+   {
+    "word": "shadow",
+    "start": 3.84,
+    "end": 4.26
+   },
+   {
+    "word": "reaches",
+    "start": 4.26,
+    "end": 4.66
+   },
+   {
+    "word": "for",
+    "start": 4.66,
+    "end": 4.94
+   },
+   {
+    "word": "scenes",
+    "start": 4.94,
+    "end": 5.34
+   },
+   {
+    "word": "it",
+    "start": 5.34,
+    "end": 5.56
+   },
+   {
+    "word": "cannot",
+    "start": 5.56,
+    "end": 5.92
+   },
+   {
+    "word": "hold.",
+    "start": 5.92,
+    "end": 6.4
+   },
+   {
+    "word": "Mend",
+    "start": 6.76,
+    "end": 7.44
+   },
+   {
+    "word": "what",
+    "start": 7.44,
+    "end": 7.7
+   },
+   {
+    "word": "it",
+    "start": 7.7,
+    "end": 7.84
+   },
+   {
+    "word": "has",
+    "start": 7.84,
+    "end": 8.0
+   },
+   {
+    "word": "lost,",
+    "start": 8.0,
+    "end": 8.44
+   },
+   {
+    "word": "and",
+    "start": 8.44,
+    "end": 8.98
+   },
+   {
+    "word": "learn",
+    "start": 8.98,
+    "end": 9.32
+   },
+   {
+    "word": "whose",
+    "start": 9.32,
+    "end": 9.66
+   },
+   {
+    "word": "voice",
+    "start": 9.66,
+    "end": 10.1
+   },
+   {
+    "word": "it",
+    "start": 10.1,
+    "end": 10.3
+   },
+   {
+    "word": "is.",
+    "start": 10.3,
+    "end": 10.66
    }
   ]
  },
@@ -32445,6 +34369,98 @@
    }
   ]
  },
+ "17fb8edd4f94f2": {
+  "file": "17fb8edd4f94f2.mp3",
+  "speaker": "narrator",
+  "duration": 6.316,
+  "words": [
+   {
+    "word": "You",
+    "start": 0.0,
+    "end": 0.34
+   },
+   {
+    "word": "search",
+    "start": 0.34,
+    "end": 0.78
+   },
+   {
+    "word": "around",
+    "start": 0.78,
+    "end": 1.12
+   },
+   {
+    "word": "the",
+    "start": 1.12,
+    "end": 1.3
+   },
+   {
+    "word": "Outer",
+    "start": 1.3,
+    "end": 1.54
+   },
+   {
+    "word": "Courtyard,",
+    "start": 1.54,
+    "end": 2.1
+   },
+   {
+    "word": "but",
+    "start": 2.46,
+    "end": 2.72
+   },
+   {
+    "word": "find",
+    "start": 2.72,
+    "end": 3.04
+   },
+   {
+    "word": "nothing",
+    "start": 3.04,
+    "end": 3.4
+   },
+   {
+    "word": "of",
+    "start": 3.4,
+    "end": 3.64
+   },
+   {
+    "word": "interest",
+    "start": 3.64,
+    "end": 4.06
+   },
+   {
+    "word": "beyond",
+    "start": 4.06,
+    "end": 4.64
+   },
+   {
+    "word": "what",
+    "start": 4.64,
+    "end": 4.96
+   },
+   {
+    "word": "you",
+    "start": 4.96,
+    "end": 5.12
+   },
+   {
+    "word": "can",
+    "start": 5.12,
+    "end": 5.26
+   },
+   {
+    "word": "already",
+    "start": 5.26,
+    "end": 5.68
+   },
+   {
+    "word": "see.",
+    "start": 5.68,
+    "end": 6.04
+   }
+  ]
+ },
  "180b8d1195fdde": {
   "file": "180b8d1195fdde.mp3",
   "speaker": "narrator",
@@ -32794,6 +34810,103 @@
     "word": "theirs.",
     "start": 23.46,
     "end": 23.76
+   }
+  ]
+ },
+ "182260c50b5057": {
+  "file": "182260c50b5057.mp3",
+  "speaker": "narrator",
+  "duration": 6.316,
+  "words": [
+   {
+    "word": "You",
+    "start": 0.0,
+    "end": 0.16
+   },
+   {
+    "word": "search",
+    "start": 0.16,
+    "end": 0.58
+   },
+   {
+    "word": "around",
+    "start": 0.58,
+    "end": 0.98
+   },
+   {
+    "word": "the",
+    "start": 0.98,
+    "end": 1.14
+   },
+   {
+    "word": "Hall",
+    "start": 1.14,
+    "end": 1.38
+   },
+   {
+    "word": "of",
+    "start": 1.38,
+    "end": 1.6
+   },
+   {
+    "word": "Echoes,",
+    "start": 1.6,
+    "end": 2.18
+   },
+   {
+    "word": "but",
+    "start": 2.24,
+    "end": 2.76
+   },
+   {
+    "word": "find",
+    "start": 2.76,
+    "end": 3.06
+   },
+   {
+    "word": "nothing",
+    "start": 3.06,
+    "end": 3.46
+   },
+   {
+    "word": "of",
+    "start": 3.46,
+    "end": 3.72
+   },
+   {
+    "word": "interest",
+    "start": 3.72,
+    "end": 4.08
+   },
+   {
+    "word": "beyond",
+    "start": 4.08,
+    "end": 4.48
+   },
+   {
+    "word": "what",
+    "start": 4.48,
+    "end": 4.86
+   },
+   {
+    "word": "you",
+    "start": 4.86,
+    "end": 5.04
+   },
+   {
+    "word": "can",
+    "start": 5.04,
+    "end": 5.24
+   },
+   {
+    "word": "already",
+    "start": 5.24,
+    "end": 5.66
+   },
+   {
+    "word": "see.",
+    "start": 5.66,
+    "end": 6.06
    }
   ]
  },
@@ -42511,6 +44624,190 @@
     "word": "empty.",
     "start": 9.4,
     "end": 9.76
+   }
+  ]
+ },
+ "1ecd1a8a61edf8": {
+  "file": "1ecd1a8a61edf8.mp3",
+  "speaker": "narrator",
+  "duration": 6.594,
+  "words": [
+   {
+    "word": "You",
+    "start": 0.0,
+    "end": 0.4
+   },
+   {
+    "word": "search",
+    "start": 0.4,
+    "end": 0.8
+   },
+   {
+    "word": "around",
+    "start": 0.8,
+    "end": 1.12
+   },
+   {
+    "word": "the",
+    "start": 1.12,
+    "end": 1.3
+   },
+   {
+    "word": "Fortress",
+    "start": 1.3,
+    "end": 1.72
+   },
+   {
+    "word": "Gates,",
+    "start": 1.72,
+    "end": 2.2
+   },
+   {
+    "word": "but",
+    "start": 2.44,
+    "end": 2.76
+   },
+   {
+    "word": "find",
+    "start": 2.76,
+    "end": 3.1
+   },
+   {
+    "word": "nothing",
+    "start": 3.1,
+    "end": 3.48
+   },
+   {
+    "word": "of",
+    "start": 3.48,
+    "end": 3.74
+   },
+   {
+    "word": "interest",
+    "start": 3.74,
+    "end": 4.22
+   },
+   {
+    "word": "beyond",
+    "start": 4.22,
+    "end": 4.8
+   },
+   {
+    "word": "what",
+    "start": 4.8,
+    "end": 5.14
+   },
+   {
+    "word": "you",
+    "start": 5.14,
+    "end": 5.3
+   },
+   {
+    "word": "can",
+    "start": 5.3,
+    "end": 5.48
+   },
+   {
+    "word": "already",
+    "start": 5.48,
+    "end": 5.9
+   },
+   {
+    "word": "see.",
+    "start": 5.9,
+    "end": 6.28
+   }
+  ]
+ },
+ "1eee10cb1b0cc0": {
+  "file": "1eee10cb1b0cc0.mp3",
+  "speaker": "narrator",
+  "duration": 5.991,
+  "words": [
+   {
+    "word": "You",
+    "start": 0.0,
+    "end": 0.14
+   },
+   {
+    "word": "search",
+    "start": 0.14,
+    "end": 0.54
+   },
+   {
+    "word": "around",
+    "start": 0.54,
+    "end": 0.88
+   },
+   {
+    "word": "the",
+    "start": 0.88,
+    "end": 1.04
+   },
+   {
+    "word": "Memory",
+    "start": 1.04,
+    "end": 1.36
+   },
+   {
+    "word": "Vault,",
+    "start": 1.36,
+    "end": 1.74
+   },
+   {
+    "word": "but",
+    "start": 1.96,
+    "end": 2.36
+   },
+   {
+    "word": "find",
+    "start": 2.36,
+    "end": 2.64
+   },
+   {
+    "word": "nothing",
+    "start": 2.64,
+    "end": 3.04
+   },
+   {
+    "word": "of",
+    "start": 3.04,
+    "end": 3.28
+   },
+   {
+    "word": "interest",
+    "start": 3.28,
+    "end": 3.76
+   },
+   {
+    "word": "beyond",
+    "start": 3.76,
+    "end": 4.16
+   },
+   {
+    "word": "what",
+    "start": 4.16,
+    "end": 4.5
+   },
+   {
+    "word": "you",
+    "start": 4.5,
+    "end": 4.64
+   },
+   {
+    "word": "can",
+    "start": 4.64,
+    "end": 4.84
+   },
+   {
+    "word": "already",
+    "start": 4.84,
+    "end": 5.3
+   },
+   {
+    "word": "see.",
+    "start": 5.3,
+    "end": 5.68
    }
   ]
  },
