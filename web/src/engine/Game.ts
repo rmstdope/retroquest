@@ -174,11 +174,16 @@ export class Game implements CommandTarget {
   }
 
   /**
-   * The presented act's music once it runs, and still after game over; empty
-   * before that so nothing plays early.
+   * The presented act's music once it runs, still under its closing pages
+   * (the transition) and after game over; empty before that so nothing plays
+   * early.
    */
   presentedMusic(): MusicInfo {
-    if (!this.isActRunning() && !this.isGameOver())
+    if (
+      !this.isActRunning() &&
+      !this.isActTransitioning() &&
+      !this.isGameOver()
+    )
       return { musicFile: '', musicInfo: '' }
     const act = this.acts[this.presentedActIndex()]
     return { musicFile: act.musicFile, musicInfo: act.musicInfo }

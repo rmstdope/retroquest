@@ -420,7 +420,11 @@ describe('Game', () => {
       game.newTurn()
       expect(game.presentedState()).toBe(firstState)
       expect(game.presentedActIndex()).toBe(0)
-      expect(game.presentedMusic()).toEqual(empty)
+      // The finished act's music plays on under its closing pages.
+      expect(game.presentedMusic()).toEqual({
+        musicFile: 'a.mp3',
+        musicInfo: 'First',
+      })
       game.newTurn()
       expect(game.presentedState()).toBe(game.state)
       expect(game.presentedActIndex()).toBe(1)
