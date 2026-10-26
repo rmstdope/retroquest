@@ -9,6 +9,8 @@ const URL_PATTERN = /(https?:\/\/[^\s]+)/g
 export const MUSIC_DUCK = 0.35
 /** How long the music takes to dip under a voice, or to come back up, in ms. */
 export const MUSIC_DUCK_FADE_MS = 400
+/** How long one loop takes to fade out while the next fades in, in ms. */
+export const MUSIC_CROSSFADE_MS = 1500
 /** Steps per fade. */
 const FADE_STEPS = 10
 
@@ -17,6 +19,9 @@ const FADE_STEPS = 10
  * player's settings, so changes made anywhere (top bar, Settings dialog)
  * apply immediately. While `narrating` is true the music fades down to
  * `MUSIC_DUCK` of its volume, so voices stand out, and fades back up after.
+ * When a different track replaces one that is playing, the old one fades out
+ * on a throwaway element while the new one fades in (`MUSIC_CROSSFADE_MS`);
+ * the same track again changes nothing.
  */
 export function useMusic(
   audio: HTMLAudioElement,
@@ -39,14 +44,45 @@ export function useMusic(
 
     if (file === currentMusicFile.value) return
 
+    const crossfade =
+      currentMusicFile.value !== '' &&
+      !audio.paused &&
+      !musicMuted.value &&
+      typeof Audio !== 'undefined'
+    if (crossfade) fadeOutCopy()
+
     currentMusicFile.value = file
     musicInfo.value = info
     audio.src =
       MUSIC_BASE_PATH + file.split('/').map(encodeURIComponent).join('/')
 
+    if (crossfade) {
+      audio.volume = 0
+      fadeTo(targetVolume.value, MUSIC_CROSSFADE_MS)
+    }
     if (!musicMuted.value) {
       audio.play().catch(() => {})
     }
+  }
+
+  /** Plays what `audio` plays on a second element and fades that out. */
+  function fadeOutCopy(): void {
+    const old = new Audio()
+    old.loop = true
+    old.src = audio.src
+    old.currentTime = audio.currentTime
+    old.volume = audio.volume
+    old.play().catch(() => {})
+    const start = old.volume
+    let step = 0
+    const timer = setInterval(() => {
+      step++
+      old.volume = Math.max(0, start * (1 - step / FADE_STEPS))
+      if (step >= FADE_STEPS) {
+        clearInterval(timer)
+        old.pause()
+      }
+    }, MUSIC_CROSSFADE_MS / FADE_STEPS)
   }
 
   // Sync flush so muting takes effect immediately, wherever it was changed.
@@ -68,7 +104,7 @@ export function useMusic(
   )
   let fade: ReturnType<typeof setInterval> | null = null
 
-  function fadeTo(volume: number): void {
+  function fadeTo(volume: number, ms: number = MUSIC_DUCK_FADE_MS): void {
     if (fade) clearInterval(fade)
     const start = audio.volume
     let step = 0
@@ -79,7 +115,7 @@ export function useMusic(
         clearInterval(fade)
         fade = null
       }
-    }, MUSIC_DUCK_FADE_MS / FADE_STEPS)
+    }, ms / FADE_STEPS)
   }
 
   audio.volume = targetVolume.value
