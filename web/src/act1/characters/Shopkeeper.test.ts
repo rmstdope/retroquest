@@ -3,6 +3,7 @@ import { Game, GameController } from '@/engine'
 import { Act1 } from '../Act1'
 import {
   FLAG_CONNECT_WITH_NATURE,
+  FLAG_MET_HEMLOCK,
   FLAG_HEMLOCK_HEARD_PATCHES_STAYED,
   FLAG_PATCHES_FOUND,
   FLAG_PATCHES_RETURNED,
@@ -405,5 +406,15 @@ describe('Shopkeeper named as a common noun', () => {
     expect(answer.startsWith(`The ${SHOPKEEPER} hurries over`), answer).toBe(
       true,
     )
+  })
+
+  it('shakes his head as "The shopkeeper" once Elior has met him', () => {
+    const game = gameInStore({ shopOpen: false })
+    game.state.setStoryFlag(FLAG_MET_HEMLOCK, true)
+    const answer = game.commandParser.parse('talk to shopkeeper')
+    expect(
+      answer.startsWith(`The ${SHOPKEEPER} shakes his head.`),
+      answer,
+    ).toBe(true)
   })
 })
