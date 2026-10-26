@@ -233,19 +233,22 @@ describe('Grandmother and the dream', () => {
     )
   })
 
-  it('still hums when Elior has already talked to her about the photograph', () => {
+  it('still hums when Elior has already talked to her and about the photograph', () => {
     const game = cottageGame()
+    executeCommands(game, ['talk to grandmother'])
     executeCommands(game, READ)
     game.state.addItemToInventory(new FadedPhotograph())
-    executeCommands(game, [
+    const gave = executeCommands(game, [
       'examine faded photograph',
       'give faded photograph to grandmother',
     ])
+    expect(gave).toContain('Your mother loved the river.')
 
     const response = executeCommands(game, ['talk to grandmother'])
 
-    expect(response).toContain('When you go to her, she is humming')
-    expect(response).not.toContain('when you come in')
+    const humming = response.indexOf('When you go to her, she is humming')
+    expect(humming).toBeGreaterThan(-1)
+    expect(humming).toBeLessThan(response.indexOf(REACTION))
   })
 
   it('goes quiet over the three words Elior caught from the voice', () => {
