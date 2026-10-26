@@ -24355,6 +24355,73 @@
    }
   ]
  },
+ "0cf8dcdb267d33": {
+  "file": "0cf8dcdb267d33.mp3",
+  "speaker": "narrator",
+  "duration": 3.622,
+  "words": [
+   {
+    "word": "This",
+    "start": 0.0,
+    "end": 0.46
+   },
+   {
+    "word": "might",
+    "start": 0.46,
+    "end": 0.7
+   },
+   {
+    "word": "come",
+    "start": 0.7,
+    "end": 0.98
+   },
+   {
+    "word": "in",
+    "start": 0.98,
+    "end": 1.12
+   },
+   {
+    "word": "handy,",
+    "start": 1.12,
+    "end": 1.5
+   },
+   {
+    "word": "so",
+    "start": 1.64,
+    "end": 2.04
+   },
+   {
+    "word": "you",
+    "start": 2.04,
+    "end": 2.22
+   },
+   {
+    "word": "decide",
+    "start": 2.22,
+    "end": 2.66
+   },
+   {
+    "word": "to",
+    "start": 2.66,
+    "end": 2.86
+   },
+   {
+    "word": "pick",
+    "start": 2.86,
+    "end": 3.1
+   },
+   {
+    "word": "it",
+    "start": 3.1,
+    "end": 3.22
+   },
+   {
+    "word": "up.",
+    "start": 3.22,
+    "end": 3.42
+   }
+  ]
+ },
  "0d05aeb47bf59b": {
   "file": "0d05aeb47bf59b.mp3",
   "speaker": "narrator",
