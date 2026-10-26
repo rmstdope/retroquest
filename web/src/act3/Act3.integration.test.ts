@@ -998,7 +998,7 @@ describe('Giving the quiet charm to Tobin', () => {
     expect(game.state.virtueCount('selfless')).toBe(1)
     expect(game.state.hasItem('quiet charm')).toBe(false)
     expect(executeCommands(game, ['give charm to boy'])).toContain(
-      "You don't have any 'charm' to give.",
+      "You don't have a 'charm' to give.",
     )
     expect(game.state.virtueCount('selfless')).toBe(1)
   })

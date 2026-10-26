@@ -11,6 +11,7 @@ import { GameState } from './GameState'
 import { Item } from './Item'
 import { Quest } from './Quest'
 import { Room } from './Room'
+import { indefiniteArticle } from './names'
 import { deserialize, serialize, type SerializedGraph } from './Serializer'
 import { Spell } from './Spell'
 
@@ -565,7 +566,7 @@ Welcome to
   drop(itemName: string): string {
     const item = this.findItem(itemName, { room: false })
     if (!item)
-      return `[failure]You don't have a '${itemName}' to drop.[/failure]`
+      return `[failure]You don't have ${indefiniteArticle(itemName)} '${itemName}' to drop.[/failure]`
     this.state.inventory.splice(this.state.inventory.indexOf(item), 1)
     this.state.currentRoom.items.push(item)
     return `[event]You drop ${item.nameInSentence()}.[/event]`
@@ -665,7 +666,7 @@ Welcome to
     const [itemName, characterName] = split
     const item = this.findItem(itemName, { room: false })
     if (!item)
-      return `[failure]You don't have any '${itemName}' to give.[/failure]`
+      return `[failure]You don't have ${indefiniteArticle(itemName)} '${itemName}' to give.[/failure]`
     const character = this.findCharacter(characterName)
     if (!character) {
       return `[failure]There is no character named '${capitalize(characterName)}' here.[/failure]`
@@ -688,7 +689,10 @@ Welcome to
   use(itemName: string, targetName?: string): string {
     const item = this.findItem(itemName)
     if (!item) {
-      return `[failure]You don't have a '${itemName}' to use, and there isn't one here.[/failure]`
+      return (
+        `[failure]You don't have ${indefiniteArticle(itemName)} '${itemName}' ` +
+        `to use, and there isn't one here.[/failure]`
+      )
     }
     if (!targetName) return item.use(this.state)
     const other = this.findItem(targetName)

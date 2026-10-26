@@ -13,7 +13,10 @@ import {
   type NarrationUnit,
 } from '@/lantern/narrationUnits'
 import { parseTurn } from '@/lantern/parseTurn'
+import { blockVoice } from '@/lantern/narrationScript'
 import { GEM, startedHoldStore } from '@/testing/holdGame'
+import { useBridge, type ActClass } from '@/composables/useBridge'
+import { Act1 } from '@/act1/Act1'
 
 /** A fake recording that never ends by itself. */
 class FakeAudio implements NarrationAudio {
@@ -135,5 +138,85 @@ describe('usePanelHold', () => {
     hold.settle(game.turns.at(-1)!)
     expect(game.roomName).toBe('Garden')
     expect(game.panelsHeld).toBe(false)
+  })
+})
+
+describe('usePanelHold: the music of a narrated move', () => {
+  let game: ReturnType<typeof useGameStore>
+  let narration: ReturnType<typeof useNarrationStore>
+  let hold: ReturnType<typeof usePanelHold>
+
+  beforeEach(async () => {
+    vi.useFakeTimers()
+    FakeAudio.all = []
+    setActivePinia(createPinia())
+    vi.stubGlobal('localStorage', {
+      getItem: (): null => null,
+      setItem: (): void => {},
+      removeItem: (): void => {},
+    })
+    game = useGameStore()
+    game.setBridge(useBridge(async (): Promise<ActClass[]> => [Act1]))
+    await game.initGame()
+    game.dismissModal()
+    game.setPanelHold(true)
+    narration = useNarrationStore()
+    narration.setAudioFactory((src) => new FakeAudio(src))
+    hold = effectScope().run(() => usePanelHold())!
+  })
+  afterEach(() => {
+    vi.useRealTimers()
+    vi.unstubAllGlobals()
+  })
+
+  /** Every spoken block, the arrival and each quest card voiced. */
+  function voicedUnitsOf(turn: Turn): NarrationUnit[] {
+    return [
+      ...parseTurn(turn.text).map(
+        (block): NarrationUnit =>
+          blockVoice(block) ? voiced('block') : { kind: 'block', parts: [] },
+      ),
+      ...(turn.arrival
+        ? [{ ...voiced('arrival'), pauseBefore: SCENE_PAUSE_MS }]
+        : []),
+      ...(turn.quests ?? []).map(() => voiced('quest')),
+    ]
+  }
+
+  /** End the voice being spoken and wait out the pause after it. */
+  async function endVoice(): Promise<void> {
+    FakeAudio.all.at(-1)!.onended?.()
+    await vi.advanceTimersByTimeAsync(400)
+  }
+
+  it('keeps The Dream’s music until the wake-up text begins', async () => {
+    expect(game.musicRoomKey).toBe('TheDream')
+    game.submitCommand('talk to voice')
+    const turn = game.turns.at(-1)!
+    narration.begin(turn.id, voicedUnitsOf(turn), 'act1')
+    hold.track(turn)
+    await vi.advanceTimersByTimeAsync(0)
+
+    // "You answer it…"
+    expect(game.musicRoomKey).toBe('TheDream')
+    await endVoice()
+    // "…and let them rest…"
+    expect(game.musicRoomKey).toBe('TheDream')
+    await endVoice()
+    // "You wake in your own bed…"
+    expect(game.musicRoomKey).toBe('EliorsCottage')
+  })
+
+  it('moves the music to the cottage at once when the answer is skipped', async () => {
+    game.submitCommand('talk to voice')
+    const turn = game.turns.at(-1)!
+    narration.begin(turn.id, voicedUnitsOf(turn), 'act1')
+    hold.track(turn)
+    await vi.advanceTimersByTimeAsync(0)
+    expect(game.musicRoomKey).toBe('TheDream')
+
+    narration.skipAll()
+
+    expect(game.musicRoomKey).toBe('EliorsCottage')
   })
 })
