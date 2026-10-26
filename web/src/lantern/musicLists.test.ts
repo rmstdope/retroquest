@@ -61,6 +61,14 @@ describe('actLoops', () => {
   })
 })
 
+describe('actLoops without a brief', () => {
+  it('refuses a music file it has no brief for', () => {
+    expect(() => actLoops({ musicFile: 'Someone - New Song.mp3' })).toThrow(
+      'No loop brief',
+    )
+  })
+})
+
 describe('questStingers', () => {
   it('lists the new-quest and quest-complete sounds, at most 10 seconds each', () => {
     const stingers = questStingers()

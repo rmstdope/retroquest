@@ -11,6 +11,7 @@ import { NEW_QUEST_FILE, QUEST_COMPLETE_FILE } from '@/composables/questSounds'
 export interface MusicTrack {
   /** Slug naming the track's file in the studio's clips folder; unique across the game. */
   id: string
+  /** Shown in the studio: the track's name in the file name. */
   title: string
   /** Where the game plays it. */
   plays: string
@@ -18,7 +19,9 @@ export interface MusicTrack {
   brief: string
   /** Length in seconds (a stinger is at most 10). */
   seconds: number
+  /** Tempo, where known; omitted when not measured. */
   bpm?: number
+  /** Musical key such as "D major", where known; omitted when not measured. */
   key?: string
 }
 
@@ -68,11 +71,17 @@ function slug(title: string): string {
     .replace(/^-+|-+$/g, '')
 }
 
-/** The loop an act plays today (none for an act without music), named after its file. */
+/**
+ * The loop an act plays today, named after its file: none for an act without
+ * music (`''`), and an error for a music file that has no title or brief here,
+ * so a refresh never says "no loops" about an act that has music.
+ */
 export function actLoops(act: { musicFile: string }): MusicTrack[] {
+  if (act.musicFile === '') return []
   const title = FILE_TITLE.exec(act.musicFile)?.[1]
   const brief = LOOP_BRIEFS[act.musicFile]
-  if (!title || !brief) return []
+  if (!title || !brief)
+    throw new Error(`No loop brief for music file "${act.musicFile}"`)
   return [{ id: slug(title), title, ...brief }]
 }
 
