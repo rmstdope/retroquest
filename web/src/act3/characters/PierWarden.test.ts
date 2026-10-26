@@ -169,3 +169,14 @@ describe('PierWarden and the Weathered Coin', () => {
     expect(out).toContain("doesn't seem interested")
   })
 })
+
+describe('PierWarden hears the word as the engine does', () => {
+  it('accepts a quoted, punctuated "Truth." as the word', () => {
+    const game = new Game([new Act3()])
+    game.state.setStoryFlag(FLAG_ACT3_WARDEN_ASKED, true)
+
+    new PierWarden().sayTo(game.state, '"Truth."')
+
+    expect(game.state.getStoryFlag(FLAG_ACT3_WARDEN_TRUTH_TOLD)).toBe(true)
+  })
+})

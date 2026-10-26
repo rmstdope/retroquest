@@ -1,4 +1,10 @@
-import { Character, type GameState, characterName, speech } from '@/engine'
+import {
+  Character,
+  type GameState,
+  characterName,
+  speech,
+  normaliseSpokenWord,
+} from '@/engine'
 import { AncientAmulet } from '../items/AncientAmulet'
 import { DragonsScale } from '../items/DragonsScale'
 import {
@@ -259,17 +265,10 @@ const TAKING_ANSWERS: readonly string[] = [
 ]
 
 /**
- * Lower-case an answer, drop commas, collapse spaces and strip one final
- * "." or "!".
+ * Hear an answer as the engine does, after dropping its commas.
  */
 function normaliseAnswer(words: string): string {
-  return words
-    .toLowerCase()
-    .replace(/,/g, '')
-    .replace(/\s+/g, ' ')
-    .trim()
-    .replace(/[.!]$/, '')
-    .trim()
+  return normaliseSpokenWord(words.replace(/,/g, ''))
 }
 
 /**

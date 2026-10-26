@@ -1,4 +1,10 @@
-import { Character, type GameState, clue, dialogue } from '@/engine'
+import {
+  Character,
+  type GameState,
+  clue,
+  dialogue,
+  normaliseSpokenWord,
+} from '@/engine'
 import {
   FLAG_ACT4_ELIXIR_ON_KING,
   FLAG_ACT4_ELIXIR_ON_MALAKAR,
@@ -22,7 +28,6 @@ import {
   THRONE_CHAMBER_AMULET,
   THRONE_CHAMBER_HEALED,
 } from '../rooms/throneDescriptions'
-import { normaliseSpokenWord } from '../spokenWord'
 
 /** The speaker label of the dream voice, as in the Memory Vault. */
 const SHADOW_LABEL = 'Shadow of the Past'

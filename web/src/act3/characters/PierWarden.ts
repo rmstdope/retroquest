@@ -6,6 +6,7 @@ import {
   characterName,
   remembered,
   speech,
+  normaliseSpokenWord,
 } from '@/engine'
 import {
   FLAG_ACT3_TIDEWARD_SIGILS_COMPLETED,
@@ -87,7 +88,7 @@ export class PierWarden extends Character {
    */
   override sayTo(gameState: GameState, words: string): string {
     if (
-      words.trim().toLowerCase() !== 'truth' ||
+      normaliseSpokenWord(words) !== 'truth' ||
       gameState.getStoryFlag(FLAG_ACT3_RUINS_LEFT)
     ) {
       return super.sayTo(gameState, words)

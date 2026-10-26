@@ -4,6 +4,7 @@ import {
   characterName,
   dialogue,
   speech,
+  normaliseSpokenWord,
 } from '@/engine'
 import { CEDRIC_NAME, cedricAdds, cedricSays } from '../CedricLines'
 import { FLAG_ACT3_VOW_OF_COURAGE_MADE } from '../Act3StoryFlags'
@@ -207,7 +208,7 @@ export class TideBornGuardian extends Character {
     if (this.step() < TRIAL_STEPS) {
       return dialogue(this.name, 'Words are easy on the shore. Walk first.')
     }
-    const w = words.trim().toLowerCase()
+    const w = normaliseSpokenWord(words)
     if (w === 'myself') {
       gameState.setStoryFlag(FLAG_ACT3_VOW_OF_COURAGE_MADE, true)
       return (

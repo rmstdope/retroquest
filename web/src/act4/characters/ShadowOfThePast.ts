@@ -1,11 +1,16 @@
-import { Character, type GameState, clue, dialogue } from '@/engine'
+import {
+  Character,
+  type GameState,
+  clue,
+  dialogue,
+  normaliseSpokenWord,
+} from '@/engine'
 import {
   FLAG_ACT4_MEMORY_ORBS_MENDED,
   FLAG_ACT4_SHADOW_MASK_SHOWN,
   FLAG_ACT4_SHADOW_OF_THE_PAST_COMPLETED,
   FLAG_ACT4_SHADOW_OF_THE_PAST_STARTED,
 } from '../Act4StoryFlags'
-import { normaliseSpokenWord } from '../spokenWord'
 
 /** What it is called once the orbs are mended and it has a face. */
 const FULL_NAME = 'Shadow of the Past'

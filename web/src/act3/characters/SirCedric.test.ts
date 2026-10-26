@@ -117,6 +117,7 @@ describe('SirCedric', () => {
     it.each([
       'refrain',
       REFRAIN,
+      '"Refrain."',
       'Power follows purpose; purpose follows truth',
     ])('is answered by the refrain as %s', (words) => {
       const game = startedAt('FortressEntrance')

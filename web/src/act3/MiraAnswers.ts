@@ -3,7 +3,7 @@
  * the two answers, her replies, and the gate line each answer leaves behind.
  * The answer itself is remembered in two story flags, so nothing here is saved.
  */
-import { characterName, speech } from '@/engine'
+import { characterName, saysAnyOf, speech } from '@/engine'
 
 /** How Elior answers the confession. */
 export type MiraAnswer = 'forgive' | 'reproach'
@@ -30,15 +30,22 @@ export const MIRA_GATE_LINES: Record<MiraAnswer, string> = {
     'you this plainly. I am coming with you.',
 }
 
+/** The words that recognise forgiveness. */
+const FORGIVE_WORDS: readonly string[] = ['forgive', 'forgiven', 'forgave']
+
+/** The phrases that recognise a reproach. */
+const REPROACH_PHRASES: readonly string[] = [
+  'should have told',
+  'should have said',
+]
+
 /**
- * The answer in the words Elior says (case-insensitive). "forgive" wins over
+ * The answer in the words Elior says (whole words, case-insensitive). "forgive" wins over
  * "should have told" / "should have said"; anything else is null.
  */
 export function miraAnswerIn(words: string): MiraAnswer | null {
-  const lower = words.toLowerCase()
-  if (lower.includes('forgive')) return 'forgive'
-  if (lower.includes('should have told') || lower.includes('should have said'))
-    return 'reproach'
+  if (saysAnyOf(words, FORGIVE_WORDS)) return 'forgive'
+  if (saysAnyOf(words, REPROACH_PHRASES)) return 'reproach'
   return null
 }
 
