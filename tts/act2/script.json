@@ -120,11 +120,6 @@
     "text": "You search around the Mountain Path, but find nothing of interest beyond what you can already see."
   },
   {
-    "key": "12ca45e13de2eb",
-    "speaker": "narrator",
-    "text": "You think it over. Nothing presses on you just now."
-  },
-  {
     "key": "09097b529ab3e9",
     "speaker": "narrator",
     "text": "You rest for a moment, gathering your strength."
@@ -153,16 +148,6 @@
     "key": "10689e94667003",
     "speaker": "narrator",
     "text": "The mountain flower is quite pretty, but seems to be just an ordinary wildflower that's adapted to the harsh mountain climate."
-  },
-  {
-    "key": "014e3249e88e12",
-    "speaker": "narrator",
-    "text": "You stop and think over what you know."
-  },
-  {
-    "key": "1391311e5349da",
-    "speaker": "narrator",
-    "text": "The Gathering Storm: Greendale is bigger than any place you have seen, but the talk in its streets is low and uneasy. People speak of a darkness gathering beyond the walls, and say that if anyone at the castle understands it, it is Sir Cedric."
   },
   {
     "key": "085a594c82fac7",
@@ -550,16 +535,6 @@
     "text": "I await your demonstration of combat skills before we can proceed with more serious matters."
   },
   {
-    "key": "198bae0555d9fb",
-    "speaker": "narrator",
-    "text": "The Gathering Storm: Sir Cedric calls it the Gathering Storm. He needs allies who know magic, but he will not trust you on your word alone. He wants to see you fight first, with the training sword."
-  },
-  {
-    "key": "0f9e1052a3914d",
-    "speaker": "narrator",
-    "text": "The Knight's Test: Sir Cedric wants to see proof of your combat abilities before trusting you with important responsibilities. Demonstrate your martial skills with a training sword."
-  },
-  {
     "key": "065f627240f71f",
     "speaker": "narrator",
     "text": "He raises his blade high over his left shoulder."
@@ -730,16 +705,6 @@
     "text": "One more thing, since the forest is where you are bound. My family has kept a charm for generations: Nature's Charm, carved for the knights who first made pacts with the forest spirits. The old texts say it is one of three that can call the sprite Nyx. I will not hand an heirloom of my house to someone I have known for a day. Prove yourself in more than a sparring yard, and we will speak of it again."
   },
   {
-    "key": "085795faa24bfb",
-    "speaker": "narrator",
-    "text": "The Gathering Storm: Sir Cedric watched you with the training sword and now trusts you. He wants you to find Nyx, deep in the Enchanted Forest, because her old wisdom may show what you are truly facing. He gave you a hundred and fifty coins for a survival kit, an enhanced lantern and rope from the Market District."
-  },
-  {
-    "key": "1c514da91e3567",
-    "speaker": "narrator",
-    "text": "Supplies for the Journey: Sir Cedric mentioned the need for proper equipment for forest expeditions. Gather essential supplies from the Market District."
-  },
-  {
     "key": "0419603d64a048",
     "speaker": "narrator",
     "text": "A pouch containing 1 gold coins. These will be useful for purchasing supplies and equipment in Greendale."
@@ -880,11 +845,6 @@
     "text": "Any word on my missing caravan? Every day that passes makes me fear the worst for those poor souls."
   },
   {
-    "key": "0cb4d7c9de4646",
-    "speaker": "narrator",
-    "text": "The Merchant's Lost Caravan: Caravan Master Thorne's valuable caravan has gone missing in the Enchanted Forest. Find out what happened to the merchants and their goods."
-  },
-  {
     "key": "0424cccc5622d7",
     "speaker": "narrator",
     "text": "The Silver Stag Inn"
@@ -975,11 +935,6 @@
     "text": "Have you found a way to break the curse? I can feel my strength fading more each day..."
   },
   {
-    "key": "0208de1e07f7f8",
-    "speaker": "narrator",
-    "text": "The Innkeeper's Daughter: Elena, the barmaid at The Silver Stag Inn, has been cursed by a dark wizard. Use your magical abilities to break the curse and save her life."
-  },
-  {
     "key": "09c701da74c625",
     "speaker": "narrator",
     "text": "The room key is yours for 10 gold coins. Marcus hands you a brass key and explains how to access the private rooms upstairs."
@@ -1060,11 +1015,6 @@
     "text": "Investigate your family heritage and Willowbrook's significance by researching historical records and genealogical information in the Great Hall."
   },
   {
-    "key": "03141429a4d83f",
-    "speaker": "narrator",
-    "text": "Echoes of the Past: Investigate your family heritage and Willowbrook's significance by researching historical records and genealogical information in the Great Hall."
-  },
-  {
     "key": "1493661065f084",
     "speaker": "narrator",
     "text": "The quality rope is yours for 20 gold coins."
@@ -1078,11 +1028,6 @@
     "key": "01589e9ff408a6",
     "speaker": "narrator",
     "text": "You coil the quality rope over your arm: fifty feet of it, tight-laid, without a frayed strand. It wants an edge to be dropped over."
-  },
-  {
-    "key": "1d0ab320bc37ea",
-    "speaker": "narrator",
-    "text": "The Gathering Storm: The survival kit, the lantern and the rope are packed. The merchants of Greendale have done what they can for you. The rest of the road leads to the edge of the Enchanted Forest."
   },
   {
     "key": "1ff363f3565b90",
@@ -1440,11 +1385,6 @@
     "text": "He's holding on. The herbs bought him days, not weeks. Find me that focus."
   },
   {
-    "key": "1d8720b21b77d4",
-    "speaker": "narrator",
-    "text": "The Healer's Apprentice: Master Healer Lyria let you watch her at a dying carter's bed. Your herbs were not enough. She needs a Crystal Focus, and the old scholars of Greendale may have hidden one with their books."
-  },
-  {
     "key": "0353a5bd1db1d3",
     "speaker": "narrator",
     "text": "The Ancient Library"
@@ -1453,11 +1393,6 @@
     "key": "0bc87ff36ed028",
     "speaker": "narrator",
     "text": "You've discovered a hidden passage beneath Greendale containing an ancient library of magical texts and lore. You should explore its depths and uncover the secrets within."
-  },
-  {
-    "key": "14c019c5fd1a15",
-    "speaker": "narrator",
-    "text": "The Ancient Library: You've discovered a hidden passage beneath Greendale containing an ancient library of magical texts and lore. You should explore its depths and uncover the secrets within."
   },
   {
     "key": "1b370ac31db011",
@@ -1598,11 +1533,6 @@
     "key": "1bf42e29777bd1",
     "speaker": "narrator",
     "text": "You have successfully gained access to the ancient library's knowledge! You've learned the dispel spell, discovered important information about your family heritage, and received a Crystal Focus to enhance your magical abilities. The chronicle you read there was the Wardens' own book, and its last page warns that Malakar seeks the blood of Willowbrook."
-  },
-  {
-    "key": "1a213fe1ce4efd",
-    "speaker": "narrator",
-    "text": "The Gathering Storm: Beneath Greendale, the Spectral Librarian taught you the dispel spell. The chronicle there was written by the Wardens of the Dawn, and their magic was the unbinding kind. Its last page warns that Malakar seeks the blood of Willowbrook."
   },
   {
     "key": "076cf2dae596cc",
@@ -1780,11 +1710,6 @@
     "text": "She knows you're coming now. Go on, before she changes her mind."
   },
   {
-    "key": "0aa739d4267e5a",
-    "speaker": "narrator",
-    "text": "The Hermit's Warning: A forest hermit at the edge of the Enchanted Forest has warned you that the forest moves its paths and keeps old things that don't care for strangers. The hermit has given you a protective charm to help safeguard your journey through the magical wilderness, but you need to prepare yourself before venturing further into the Enchanted Forest."
-  },
-  {
     "key": "020a55ee49c366",
     "speaker": "narrator",
     "text": "At the standing stones you opened the survival kit and studied its map, as the hermit urged. You know now which paths to take and which to avoid. Somewhere inside the forest, Nyx is waiting."
@@ -1793,11 +1718,6 @@
     "key": "0c1bfb7c630ecd",
     "speaker": "narrator",
     "text": "You spent a night on the forest's doorstep, and she let you. The way east is open."
-  },
-  {
-    "key": "0f72842bd00949",
-    "speaker": "narrator",
-    "text": "The Gathering Storm: At the standing stones you opened the survival kit and studied its map, as the hermit urged. You know now which paths to take and which to avoid. Somewhere inside the forest, Nyx is waiting."
   },
   {
     "key": "0b2fbba095ac22",
@@ -1945,11 +1865,6 @@
     "text": "—with their riddles."
   },
   {
-    "key": "0e1e9b3c5ccc8b",
-    "speaker": "narrator",
-    "text": "The Forest Guardian's Riddles: The forest sprites have challenged you to prove your wisdom by solving the riddles of the forest guardians. You must journey east from the Forest Entrance to the Whispering Glade, where ancient spirits will test your understanding of forest ways and natural wisdom."
-  },
-  {
     "key": "1e1822cb358981",
     "speaker": "narrator",
     "text": "Ancient Grove"
@@ -2048,11 +1963,6 @@
     "key": "050b08d0d20290",
     "speaker": "ancient tree spirit",
     "text": "The nymphs in the glade east of the entrance have something for these roots. Answer them, and bring back what they give you."
-  },
-  {
-    "key": "077f818a305439",
-    "speaker": "narrator",
-    "text": "Whispers in the Wind: The Ancient Tree Spirit has sensed mystical beings hidden within the forest's depths. Gentle whispers carry on the wind, speaking of ancient wisdom and forgotten lore. To prove yourself worthy of the forest's trust, you must seek out these hidden spirits in the Whispering Glade and demonstrate your understanding of nature's mysteries."
   },
   {
     "key": "07665b9f3abb03",
@@ -2525,11 +2435,6 @@
     "text": "We found a diary under the stone benches that tells a different story. Maybe you should take a look at it."
   },
   {
-    "key": "16f1140fc65e20",
-    "speaker": "narrator",
-    "text": "Cedric's Lost Honor: Sir Cedric was stripped of his knighthood after the night King Alden vanished: two men of the night watch swore he had left his post. Investigate what happened that night and find evidence to clear his name."
-  },
-  {
     "key": "012bba0d4cefd0",
     "speaker": "narrator",
     "text": "Remembering what the squires told you, you look more carefully under one of the ancient stone benches and discover a worn leather diary that appears to have been left by a former squire."
@@ -2600,11 +2505,6 @@
     "text": "A confession from a man of the night watch, written in Heavensforth where he fled. He swears that he and another were paid to leave the king's postern gate unguarded on the night King Alden vanished, and to say afterwards that Sir Cedric had left his post. Pinned to it is the letter that paid them, closed with black wax pressed with a twisted rune, the same kind of rune as the token you fished out of Willowbrook's well. It names where the king was to be carried: the bastion on the shattered ridge, north of the hills. It ends with a name in an old script you cannot read."
   },
   {
-    "key": "1728aafb4b5253",
-    "speaker": "narrator",
-    "text": "Cedric's Lost Honor: According to the squires and their diary, one of the watchmen who accused Cedric fled to Heavensforth and sent papers back with a merchant caravan that never arrived. Find these papers to restore his honor."
-  },
-  {
     "key": "09828de945c134",
     "speaker": "narrator",
     "text": "You have found the papers: a watchman's confession that he and another were paid to leave the king's postern unguarded and to blame Sir Cedric, with the letter that paid them, sealed with a twisted rune. Present them to the Lord Commander in the Great Hall to restore his honor."
@@ -2618,11 +2518,6 @@
     "key": "01d30a7f02531f",
     "speaker": "lord commander",
     "text": "I am told you carry papers touching on Sir Cedric's case, and on the night His Majesty vanished. If they bear on either, give them to me."
-  },
-  {
-    "key": "1add23e98fab0c",
-    "speaker": "narrator",
-    "text": "Cedric's Lost Honor: You have found the papers: a watchman's confession that he and another were paid to leave the king's postern unguarded and to blame Sir Cedric, with the letter that paid them, sealed with a twisted rune. Present them to the Lord Commander in the Great Hall to restore his honor."
   },
   {
     "key": "193a25dc1a98a7",
@@ -2878,11 +2773,6 @@
     "key": "0298e64d51825f",
     "speaker": "narrator",
     "text": "Nyx is already half leaves again. \"Go home the long way, Elior. Look before you step.\""
-  },
-  {
-    "key": "1716bebf0fed46",
-    "speaker": "narrator",
-    "text": "The Gathering Storm: Nyx judged you worthy and gave you the Prophetic Vision spell, her token and the Forest Heart Crystal. She left you with the words from the glade stone: power follows purpose; purpose follows truth. When every other task in Greendale is done, cast the vision with Sir Cedric beside you, so you can both see what is coming."
   },
   {
     "key": "0ab52ae3a9e273",
