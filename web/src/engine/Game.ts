@@ -136,7 +136,6 @@ export class Game implements CommandTarget {
             // show; the next act begins when the transition is passed.
             this.runState = GameRunState.ActTransition
             this.acceptInput = false
-            this.hasChangedRoom = true
           } else {
             this.runState = GameRunState.GameOver
             this.isRunning = false
@@ -812,11 +811,10 @@ Welcome to
   }
 
   /**
-   * The current state and act as save data (JSON); between acts the next
-   * act as it will begin. After the last act ends the act index is capped at the last act to keep the save loadable.
+   * The current state and act as save data (JSON). Between acts it holds the
+   * next act as it will begin. After the last act ends the act index is capped at the last act to keep the save loadable.
    */
   toSaveData(): string {
-    // Between acts the save holds the next act as it will begin.
     const next = this.isActTransitioning()
     const actIndex = Math.min(
       next ? this.currentAct + 1 : this.currentAct,

@@ -269,9 +269,9 @@ export class GameController {
   /**
    * Settle the quest events of the turn and return them for the story: quests
    * that started (only while an act runs), quests whose log changed, and
-   * quests that completed. Between acts and after the last one only the
-   * completions are reported, so the completion that ended the act is still
-   * reported.
+   * quests that completed. Between acts and after the last one only
+   * completions are settled, so the completion that ended the act reaches the
+   * story (the engine still holds the finished act).
    */
   settleQuests(): QuestPayloads {
     const payloads: QuestPayloads = {

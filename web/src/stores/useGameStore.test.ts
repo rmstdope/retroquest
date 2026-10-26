@@ -1020,10 +1020,13 @@ describe('useGameStore', () => {
     })
 
     it('changes nothing on screen when the panels refresh under the closing page', () => {
+      let advanced = false
       store.refreshPanels()
       setupTransitionMocks()
+      bridge.controller.getRoomName.mockImplementation(() =>
+        advanced ? 'Act 2 Start' : 'Village Square',
+      )
       // Like the engine: the finished act answers until the transition is passed.
-      let advanced = false
       bridge.controller.advanceToRunning.mockImplementation(() => {
         advanced = true
         return screens(['Intro text'])
@@ -1049,6 +1052,7 @@ describe('useGameStore', () => {
       expect(store.musicFile).toBe(before.music)
       expect(store.musicInfo).toBe(before.info)
       expect(store.roomName).toBe(before.room)
+      expect(store.roomName).toBe('Village Square')
       expect(store.roomDescription).toBe(before.description)
       expect(store.activeQuests).toEqual(before.active)
       expect(store.completedQuests).toEqual(before.completed)
