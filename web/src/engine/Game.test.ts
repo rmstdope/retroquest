@@ -937,6 +937,49 @@ describe('Game', () => {
     })
   })
 
+  describe('a leading "the" in a character target', () => {
+    it('reaches the character through talk, say, give and buy', () => {
+      const families = new Talker('Families')
+      families.giveItem = (_state, given) => `Given: ${given.name}`
+      families.buyItem = (_state, name) => `Sold: ${name}`
+      rooms.EliorsCottage.addCharacter(families)
+      game.state.inventory.push(item('apple'))
+      expect(game.talk('the families')).toContain('has nothing to say')
+      expect(game.say('hello', 'the families')).toContain(
+        "responds: 'Hello there!'",
+      )
+      expect(game.give('apple to the families')).toBe('Given: apple')
+      expect(game.buy('rope from the families')).toBe('Sold: rope')
+    })
+
+    it('reaches the character through examine, use and cast', () => {
+      const families = character('Families')
+      families.examine = () => 'Examined'
+      rooms.EliorsCottage.addCharacter(families)
+      const apple = item('apple')
+      apple.useOnCharacter = (_state, target) => `Used on ${target.name}`
+      game.state.inventory.push(apple)
+      game.state.knownSpells.push(new EchoSpell('light'))
+      expect(game.examine('the families')).toBe('Examined')
+      expect(game.use('apple', 'the families')).toBe('Used on Families')
+      expect(game.cast('light on the families')).toContain(
+        '[character_name]Families[/character_name]',
+      )
+    })
+
+    it('still finds a character whose own name begins with "the"', () => {
+      rooms.EliorsCottage.addCharacter(new Talker('The Hermit'))
+      expect(game.say('hello', 'the hermit')).toContain(
+        "responds: 'Hello there!'",
+      )
+    })
+
+    it('does not treat "the" alone as a name', () => {
+      rooms.EliorsCottage.addCharacter(new Talker('Families'))
+      expect(game.say('hello', 'the')).toContain('There is no character')
+    })
+  })
+
   describe('give', () => {
     it('hands an inventory item to a character in the room', () => {
       const apple = item('apple')
