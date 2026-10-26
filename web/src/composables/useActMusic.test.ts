@@ -111,6 +111,48 @@ describe('useActMusic', () => {
     scope.stop()
   })
 
+  it('comes back on the next input after a pause from outside the game', async () => {
+    const scope = effectScope()
+    scope.run(() => useActMusic())
+    useGameStore().musicFile = 'willowbrook.mp3'
+    await settle()
+    window.dispatchEvent(new Event('click'))
+    // A headset taken out: the browser pauses the playing element.
+    FakeAudio.last.pause()
+    FakeAudio.last.play.mockClear()
+
+    window.dispatchEvent(new Event('keydown'))
+
+    expect(FakeAudio.last.play).toHaveBeenCalledOnce()
+    expect(FakeAudio.last.paused).toBe(false)
+    scope.stop()
+  })
+
+  it('ignores a headset or media-key pause and play', async () => {
+    const handlers: Record<string, (() => void) | null> = {}
+    vi.stubGlobal('navigator', {
+      ...navigator,
+      mediaSession: {
+        setActionHandler: (action: string, handler: (() => void) | null) => {
+          handlers[action] = handler
+        },
+      },
+    })
+    const scope = effectScope()
+    scope.run(() => useActMusic())
+    useGameStore().musicFile = 'willowbrook.mp3'
+    await settle()
+
+    expect(handlers.pause).toBeTypeOf('function')
+    expect(handlers.play).toBeTypeOf('function')
+    handlers.pause?.()
+    expect(FakeAudio.last.paused).toBe(false)
+
+    scope.stop()
+    expect(handlers.pause).toBeNull()
+    expect(handlers.play).toBeNull()
+  })
+
   it('stops listening for gestures when its scope ends', async () => {
     const scope = effectScope()
     scope.run(() => useActMusic())
