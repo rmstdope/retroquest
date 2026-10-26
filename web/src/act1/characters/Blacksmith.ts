@@ -2,6 +2,7 @@ import {
   Character,
   type GameState,
   type Item,
+  type NameOptions,
   characterName,
   speech,
   attributeSpeech,
@@ -39,6 +40,11 @@ export class Blacksmith extends Character {
         'A burly, skilled craftsman who forges tools and weapons for the ' +
         'village. He is always ready to offer advice or sharpen a blade.',
     })
+  }
+
+  /** Named by what it is, so it reads "the blacksmith" (see `nameInSentence`). */
+  override nameInSentence(options?: NameOptions): string {
+    return super.nameInSentence({ ...options, common: true })
   }
 
   /** Dialogue when the player talks to the blacksmith; varies by story flags. */

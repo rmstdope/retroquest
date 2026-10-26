@@ -2,6 +2,7 @@ import {
   Character,
   type GameState,
   type Item,
+  type NameOptions,
   characterName,
   remembered,
   speech,
@@ -71,6 +72,11 @@ export class Merchant extends Character {
         'and stories from ' +
         'distant lands. Always ready to trade or offer travel advice.',
     })
+  }
+
+  /** Named by what it is, so it reads "the merchant" (see `nameInSentence`). */
+  override nameInSentence(options?: NameOptions): string {
+    return super.nameInSentence({ ...options, common: true })
   }
 
   /**

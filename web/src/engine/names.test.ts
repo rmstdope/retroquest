@@ -17,6 +17,15 @@ describe('nameInSentence', () => {
     )
   })
 
+  it('gives a common-noun character "the" and keeps it lower case', () => {
+    expect(nameInSentence('character', 'merchant', { common: true })).toBe(
+      'the [character_name]merchant[/character_name]',
+    )
+    expect(
+      nameInSentence('character', 'merchant', { common: true, atStart: true }),
+    ).toBe('The [character_name]merchant[/character_name]')
+  })
+
   it('gives an item "the" mid-sentence and "The" at the start', () => {
     expect(nameInSentence('item', 'rock')).toBe(
       'the [item_name]rock[/item_name]',

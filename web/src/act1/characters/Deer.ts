@@ -1,4 +1,10 @@
-import { Character, type GameState, type Item, characterName } from '@/engine'
+import {
+  Character,
+  type GameState,
+  type Item,
+  type NameOptions,
+  characterName,
+} from '@/engine'
 import { HiddenGlade } from '../rooms/HiddenGlade'
 
 /**
@@ -15,6 +21,11 @@ export class Deer extends Character {
         'It seems to sense the ' +
         'magic of the glade and watches you with curiosity.',
     })
+  }
+
+  /** Named by what it is, so it reads "the deer" (see `nameInSentence`). */
+  override nameInSentence(options?: NameOptions): string {
+    return super.nameInSentence({ ...options, common: true })
   }
 
   /** The deer does not answer in words; it shares a wordless moment. */
