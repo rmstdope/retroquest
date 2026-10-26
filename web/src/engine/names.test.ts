@@ -1,0 +1,52 @@
+import { describe, expect, it } from 'vitest'
+import { nameInSentence } from './names'
+
+describe('nameInSentence', () => {
+  it('title-cases a character name wherever it stands', () => {
+    expect(nameInSentence('character', 'barmaid elena')).toBe(
+      '[character_name]Barmaid Elena[/character_name]',
+    )
+    expect(
+      nameInSentence('character', 'barmaid elena', { atStart: true }),
+    ).toBe('[character_name]Barmaid Elena[/character_name]')
+  })
+
+  it('keeps the minor words of a title lower case', () => {
+    expect(nameInSentence('character', 'captain of the guard')).toBe(
+      '[character_name]Captain of the Guard[/character_name]',
+    )
+  })
+
+  it('gives an item "the" mid-sentence and "The" at the start', () => {
+    expect(nameInSentence('item', 'rock')).toBe(
+      'the [item_name]rock[/item_name]',
+    )
+    expect(nameInSentence('item', 'rock', { atStart: true })).toBe(
+      'The [item_name]rock[/item_name]',
+    )
+  })
+
+  it('gives a possessive item name no article and its capitals', () => {
+    expect(nameInSentence('item', "nyx's token")).toBe(
+      "[item_name]Nyx's Token[/item_name]",
+    )
+    expect(nameInSentence('item', "nyx's token", { atStart: true })).toBe(
+      "[item_name]Nyx's Token[/item_name]",
+    )
+  })
+
+  it('drops the "The" of a room name it puts "the" before', () => {
+    expect(nameInSentence('room', 'The Old Mill')).toBe(
+      'the [room_name]Old Mill[/room_name]',
+    )
+    expect(nameInSentence('room', 'The Old Mill', { atStart: true })).toBe(
+      'The [room_name]Old Mill[/room_name]',
+    )
+  })
+
+  it('gives a possessive room name no article', () => {
+    expect(nameInSentence('room', "Mira's Hut")).toBe(
+      "[room_name]Mira's Hut[/room_name]",
+    )
+  })
+})

@@ -680,8 +680,13 @@ describe('Game', () => {
       expect(game.drop('lantern')).toBe(
         '[event]You drop the [item_name]lantern[/item_name].[/event]',
       )
+      const token = item("nyx's token")
+      game.state.inventory.push(token)
+      expect(game.drop("nyx's token")).toBe(
+        "[event]You drop [item_name]Nyx's Token[/item_name].[/event]",
+      )
       expect(game.state.inventory).toEqual([])
-      expect(rooms.EliorsCottage.items).toEqual([lantern])
+      expect(rooms.EliorsCottage.items).toEqual([lantern, token])
       expect(game.drop('nonexistent')).toBe(
         "[failure]You don't have a 'nonexistent' to drop.[/failure]",
       )
@@ -1011,7 +1016,7 @@ describe('Game', () => {
       game.state.addItemToInventory(item('apple'))
       rooms.EliorsCottage.addCharacter(character('hungry person'))
       expect(game.use('apple', 'hungry person')).toBe(
-        "[failure]You can't use the [item_name]apple[/item_name] on [character_name]hungry person[/character_name].[/failure]",
+        "[failure]You can't use the [item_name]apple[/item_name] on [character_name]Hungry Person[/character_name].[/failure]",
       )
       expect(game.use('apple', 'unicorn')).toBe(
         "[failure]You don't see a 'unicorn' to use with the [item_name]apple[/item_name].[/failure]",

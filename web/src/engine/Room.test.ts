@@ -197,3 +197,19 @@ describe('Room', () => {
     })
   })
 })
+
+describe('Room names in a sentence', () => {
+  it('says "the" mid-sentence and drops its own "The"', () => {
+    const mill = new Room({ name: 'The Old Mill', description: 'd' })
+    expect(mill.search(gameState())).toContain(
+      'around the [room_name]Old Mill[/room_name],',
+    )
+  })
+
+  it('takes no article when possessive, with no override needed', () => {
+    const hut = new Room({ name: "Mira's Hut", description: 'd' })
+    expect(hut.search(gameState())).toContain(
+      "around [room_name]Mira's Hut[/room_name],",
+    )
+  })
+})

@@ -118,3 +118,35 @@ describe('Item', () => {
     expect(isNamed(snare, 'fox')).toBe(true)
   })
 })
+
+describe('Item names in a sentence', () => {
+  const gs = gameState()
+  const rock = new Item({ name: 'rock', description: 'd' })
+  const token = new Item({ name: "nyx's token", description: 'd' })
+
+  it('opens a sentence with a capital article', () => {
+    expect(rock.listen(gs)).toBe(
+      '[failure]The [item_name]rock[/item_name] is silent.[/failure]',
+    )
+  })
+
+  it('says "the" mid-sentence', () => {
+    expect(rock.eat(gs)).toBe(
+      "[failure]You can't eat the [item_name]rock[/item_name].[/failure]",
+    )
+  })
+
+  it('takes no article and keeps its capitals when possessive', () => {
+    expect(token.listen(gs)).toBe(
+      "[failure][item_name]Nyx's Token[/item_name] is silent.[/failure]",
+    )
+    for (const refusal of [
+      token.eat(gs),
+      token.drink(gs),
+      token.equip(gs),
+      token.unequip(gs),
+    ]) {
+      expect(refusal).toContain("[item_name]Nyx's Token[/item_name]")
+    }
+  })
+})

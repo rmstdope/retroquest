@@ -38,8 +38,8 @@ export class Spell {
 
   castOnItem(_gameState: GameState, target: Item): string {
     return (
-      `[failure]You cast [spell_name]${this.name}[/spell_name] on the ` +
-      `[item_name]${target.name}[/item_name]. Nothing in it answers the ` +
+      `[failure]You cast [spell_name]${this.name}[/spell_name] on ` +
+      `${target.nameInSentence()}. Nothing in it answers the ` +
       'spell.[/failure]'
     )
   }
@@ -56,7 +56,7 @@ export class Spell {
   castOnCharacter(_gameState: GameState, target: Character): string {
     return (
       `[failure]You cast [spell_name]${this.name}[/spell_name] on ` +
-      `[character_name]${target.name}[/character_name]. Nothing in them ` +
+      `${target.nameInSentence()}. Nothing in them ` +
       'answers the spell.[/failure]'
     )
   }

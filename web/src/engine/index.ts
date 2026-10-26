@@ -50,3 +50,4 @@ export {
   speech,
   writing,
 } from './markup'
+export { nameInSentence, type NameKind, type NameOptions } from './names'

@@ -81,3 +81,25 @@ describe('Character', () => {
     )
   })
 })
+
+describe('Character names in a sentence', () => {
+  const gs = gameState()
+  const elena = new Character({ name: 'barmaid elena', description: 'd' })
+
+  it('names itself title-cased, at the start and mid-sentence', () => {
+    expect(elena.nameInSentence()).toBe(
+      '[character_name]Barmaid Elena[/character_name]',
+    )
+    expect(elena.sayTo(gs, 'hi')).toContain(
+      'to [character_name]Barmaid Elena[/character_name], but',
+    )
+  })
+
+  it('names a possessive item without an article when refusing a gift', () => {
+    const token = new Item({ name: "nyx's token", description: 'd' })
+    expect(elena.giveItem(gs, token)).toBe(
+      "[character_name]Barmaid Elena[/character_name] doesn't seem interested in " +
+        "[item_name]Nyx's Token[/item_name].",
+    )
+  })
+})

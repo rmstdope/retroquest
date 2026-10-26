@@ -13,11 +13,6 @@ export class EliorsJournal extends Item {
     })
   }
 
-  /** Elior's Journal is named after him, so it takes no "the" and keeps his capital. */
-  override nameInSentence(): string {
-    return "[item_name]Elior's Journal[/item_name]"
-  }
-
   /**
    * Read the latest journal entry, in two paragraphs so the player can skip
    * the first and hear the second, and set a story flag.
