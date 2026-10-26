@@ -54,10 +54,10 @@ after the elixir ("It does not hurt. For the first time in years, it does not hu
     is a `[failure]` and stays silent only when it is a bare no (already lit, already full).
     A failure that tells the player something about the world or carries a clue goes through
     `clue()`: it keeps the red box and is read aloud, in one fixed sentence that names no changing
-    target, price or item. The only grey `event()` lines left are markers, not repeats: a plain
-    pick-up ("You take the coin.") and its twin "You drop the coin.", waking in the cottage, saving and loading, and the
-    `remembered()` line. A pick-up with its own line has no marker: that line, read, is the whole
-    answer ("take echo stone" answers "You lift a smooth grey stone…" alone). Dialogue that opens
+    target, price or item. The only grey `event()` lines left are markers, not repeats: a drop
+    ("You drop the coin."), waking in the cottage, saving and loading, and the
+    `remembered()` line. A pick-up is narrated, not a marker: "This might come in handy, so you decide to pick it up."
+    (several at once say it once), and a pick-up with its own line answers that line alone ("take echo stone" answers "You lift a smooth grey stone…" alone). Dialogue that opens
     an answer is labelled with `attributeSpeech()`.
 
 ## Before and after

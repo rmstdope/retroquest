@@ -547,7 +547,9 @@ describe('Act 3 golden path', () => {
     // Take resonant chant rubbings (adds to inventory)
     expectItemInInventory(state, 'Resonant Chant Rubbings', false)
     const takeResult = executeCommands(game, ['take resonant chant rubbings'])
-    expect(takeResult.toLowerCase()).toContain('resonant chant rubbings')
+    expect(takeResult).toBe(
+      'This might come in handy, so you decide to pick it up.',
+    )
     expectItemInInventory(state, 'Resonant Chant Rubbings', true)
 
     // --- Step 24: Stillness Vestibule - Oath of Stillness sequence ---

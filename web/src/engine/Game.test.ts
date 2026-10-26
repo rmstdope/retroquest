@@ -607,7 +607,7 @@ describe('Game', () => {
       const egg = item('egg')
       rooms.EliorsCottage.items.push(egg)
       expect(game.take('egg')).toBe(
-        '[event]You take the [item_name]egg[/item_name].[/event]',
+        'This might come in handy, so you decide to pick it up.',
       )
       expect(game.state.inventory).toEqual([egg])
       expect(rooms.EliorsCottage.items).toEqual([])
@@ -624,7 +624,7 @@ describe('Game', () => {
         rooms.EliorsCottage.items.push(new TakeItem('coins'))
       const result = game.commandParser.parse('take coins')
       expect(result).toBe(
-        '[event]You take 5 [item_name]coins[/item_name].[/event]',
+        'This might come in handy, so you decide to pick it up.',
       )
       expect(rooms.EliorsCottage.items).toEqual([])
       expect(game.state.getItemCount('coins')).toBe(5)
@@ -638,7 +638,7 @@ describe('Game', () => {
       )
       const result = game.take('book')
       expect(result).toBe(
-        '[event]You take 2 [item_name]book[/item_name].[/event]\n' +
+        'This might come in handy, so you decide to pick it up.\n' +
           'This book is heavy!\n' +
           '[failure]The book is too heavy to lift.[/failure]',
       )

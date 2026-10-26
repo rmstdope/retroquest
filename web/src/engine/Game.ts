@@ -56,6 +56,9 @@ interface SavePayload {
   state: SerializedGraph
 }
 
+/** What taking an item with no pickup line of its own answers: plain narration, read aloud. */
+const PICKUP_LINE = 'This might come in handy, so you decide to pick it up.'
+
 const SAVE_VERSION = 4
 const DEFAULT_SAVE_NAME = 'retroquest'
 const SAVE_NAME = /^[a-z0-9_-]+$/
@@ -528,7 +531,7 @@ Welcome to
   /**
    * Take every item with the name from the room; some may refuse. A single
    * item with its own pickup line is taken in that line alone, which already
-   * says what happens; the plain "You take the X." is for items without one.
+   * says what happens; items without one answer `PICKUP_LINE`, once, narrated.
    */
   take(itemName: string): string {
     const candidates = this.findAllItems(itemName, { inventory: false })
@@ -550,16 +553,9 @@ Welcome to
     }
     const responses: string[] = []
     if (taken.length === 1) {
-      const [item, message] = taken[0]
-      responses.push(
-        message ||
-          `[event]You take the [item_name]${item.name}[/item_name].[/event]`,
-      )
+      responses.push(taken[0][1] || PICKUP_LINE)
     } else if (taken.length > 1) {
-      const name = taken[0][0].name
-      responses.push(
-        `[event]You take ${taken.length} [item_name]${name}[/item_name].[/event]`,
-      )
+      responses.push(PICKUP_LINE)
       responses.push(...taken.map(([, message]) => message).filter(Boolean))
     }
     responses.push(...prevented)

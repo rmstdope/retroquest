@@ -110,6 +110,11 @@
     "text": "You search around the Fortress Gates, but find nothing of interest beyond what you can already see."
   },
   {
+    "key": "12ca45e13de2eb",
+    "speaker": "narrator",
+    "text": "You think it over. Nothing presses on you just now."
+  },
+  {
     "key": "09097b529ab3e9",
     "speaker": "narrator",
     "text": "You rest for a moment, gathering your strength."
@@ -168,6 +173,21 @@
     "key": "1dece0402c3030",
     "speaker": "narrator",
     "text": "You channel divine energy, filling the area with warm, golden light, but there is nothing here that responds to the blessing."
+  },
+  {
+    "key": "014e3249e88e12",
+    "speaker": "narrator",
+    "text": "You stop and think over what you know."
+  },
+  {
+    "key": "10a1aa28e66b63",
+    "speaker": "narrator",
+    "text": "The Final Stand: Malakar's fortress stands before you, and somewhere inside King Alden is held captive. Break through its defences and face the sorcerer."
+  },
+  {
+    "key": "0ceb5b11d82980",
+    "speaker": "narrator",
+    "text": "Shattered Ward Guardians: Shadow guardians and a barrier of dark energy bar the way into the fortress. Find what feeds them, and break their hold on the gates."
   },
   {
     "key": "1fc9d5de8cb36a",
@@ -260,6 +280,11 @@
     "text": "The crystals stay quiet. Whatever the chain was made to stand against, it is not here."
   },
   {
+    "key": "0cf8dcdb267d33",
+    "speaker": "narrator",
+    "text": "This might come in handy, so you decide to pick it up."
+  },
+  {
     "key": "1a5590b6b094a7",
     "speaker": "narrator",
     "text": "The light sits warm in your hand, waiting for someone to show it to."
@@ -348,6 +373,11 @@
     "key": "17fb8edd4f94f2",
     "speaker": "narrator",
     "text": "You search around the Outer Courtyard, but find nothing of interest beyond what you can already see."
+  },
+  {
+    "key": "00d1191e27e096",
+    "speaker": "narrator",
+    "text": "The Trapped Servants: Malakar's servants wander the courtyard in chains of shadow, bound to serve him against their will. Win their trust, and break the chains."
   },
   {
     "key": "0f4e62a865c9d3",
@@ -555,6 +585,11 @@
     "text": "You search around the Mirror Labyrinth, but find nothing of interest beyond what you can already see."
   },
   {
+    "key": "086a5f90189194",
+    "speaker": "narrator",
+    "text": "The Maze of Mirrors: Countless mirrors show false paths and twisted reflections. Find the one true way through the labyrinth."
+  },
+  {
     "key": "07429567d9aa12",
     "speaker": "narrator",
     "text": "Hall of Echoes"
@@ -613,6 +648,11 @@
     "key": "182260c50b5057",
     "speaker": "narrator",
     "text": "You search around the Hall of Echoes, but find nothing of interest beyond what you can already see."
+  },
+  {
+    "key": "131ecfa1101b89",
+    "speaker": "narrator",
+    "text": "The Knight of Despair: A knight in a grey cloak bars the stair to the Tower of Shadows, lost in a despair no blade can reach. Learn the truth of him, and find a way past."
   },
   {
     "key": "0348b7226196e6",
@@ -985,6 +1025,11 @@
     "text": "You search around the Chamber of Whispers, but find nothing of interest beyond what you can already see."
   },
   {
+    "key": "05c40f44b6d883",
+    "speaker": "narrator",
+    "text": "The Sorceress of Lies: At the top of the tower the Sorceress of Lies holds court, and the mask on her staff is the mark that lay beneath Elena's curse. See through her lies, and find what lies beneath them."
+  },
+  {
     "key": "10c09aa84a67a4",
     "speaker": "narrator",
     "text": "You cannot answer a pain you cannot hear. Beneath the whispers her heart is saying something, too quietly for ears alone."
@@ -1175,6 +1220,11 @@
     "text": "You search around the Memory Vault, but find nothing of interest beyond what you can already see."
   },
   {
+    "key": "15f030a4caa5de",
+    "speaker": "narrator",
+    "text": "The Shadow of the Past: Among the broken memories a shadow reaches for scenes it cannot hold. Mend what it has lost, and learn whose voice it is."
+  },
+  {
     "key": "13c6516fd74782",
     "speaker": "narrator",
     "text": "The Shadow shakes its head. “Patience is for those who still have hope. I have none left.”"
@@ -1353,6 +1403,11 @@
     "key": "14243d0dad2726",
     "speaker": "narrator",
     "text": "You search around the Parents' Vault, but find nothing of interest beyond what you can already see."
+  },
+  {
+    "key": "00ffbef7b6b88f",
+    "speaker": "narrator",
+    "text": "The Parent's Legacy: Behind the sealed door, Aren and Lysa's last memories wait. Look into them, and learn the whole truth before the throne room."
   },
   {
     "key": "0ee22d340e3f95",

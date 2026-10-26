@@ -100,6 +100,11 @@
     "text": "You search around Mira's Hut, but find nothing of interest beyond what you can already see."
   },
   {
+    "key": "12ca45e13de2eb",
+    "speaker": "narrator",
+    "text": "You think it over. Nothing presses on you just now."
+  },
+  {
     "key": "09097b529ab3e9",
     "speaker": "narrator",
     "text": "You rest for a moment, gathering your strength."
@@ -138,6 +143,16 @@
     "key": "09940a4ad697b2",
     "speaker": "sir cedric",
     "text": "Mira knows the way. I know how to stand in front of you. Between us, that will have to do."
+  },
+  {
+    "key": "014e3249e88e12",
+    "speaker": "narrator",
+    "text": "You stop and think over what you know."
+  },
+  {
+    "key": "00c7d547ab2c2b",
+    "speaker": "narrator",
+    "text": "The Three Virtues: Prove Courage, Wisdom, and Selflessness by recovering the three relics: the Crystal of Light, the Phoenix Feather, and the Dragon's Scale."
   },
   {
     "key": "0678b14852e2e7",
@@ -183,6 +198,11 @@
     "key": "06c0baf03f6bf7",
     "speaker": "narrator",
     "text": "Mira traces a prism with her finger; the air folds and the world blurs. When it clears, you arrive at your next destination."
+  },
+  {
+    "key": "052f7109d107ee",
+    "speaker": "narrator",
+    "text": "Echoes of the Hidden Bond: Your parents once walked these same paths in their own desperate search for the three relics. As you face the trials they faced, you may discover traces of their passage. In the depths where courage is tested, echoes of the past linger."
   },
   {
     "key": "1766a66115e457",
@@ -300,6 +320,11 @@
     "text": "A family heirloom whose runes glint like dew at dawn. In its depths two faces linger: a man and a woman, laughing beside a third figure who has turned away."
   },
   {
+    "key": "13d00d451bdf62",
+    "speaker": "narrator",
+    "text": "Echoes of the Hidden Bond: Your parents once walked these same paths in their own desperate search for the three relics. As you face the trials they faced, you may discover traces of their passage. On the heights where wisdom burns, their words may still echo."
+  },
+  {
     "key": "05d73e62e50b54",
     "speaker": "narrator",
     "text": "Your light catches a patch of pigment and a small hollow. In the shadowed cranny, something metallic flakes free — a corroded key rests in the rock."
@@ -353,6 +378,11 @@
     "key": "0aca31f1240070",
     "speaker": "narrator",
     "text": "Thin, chalky shards veined with pale luster. Each shard holds a faint lunar marking, as if carved in moonlight and salt."
+  },
+  {
+    "key": "0c69701223d83a",
+    "speaker": "narrator",
+    "text": "Tideward Sigils: Ancient warding pillars stand along the drowned causeway — relics of coastal rites that once bent the tides to human will. You must cleanse and activate them by engraving a full Moon Sigil to steady the flood wards and gain safe passage to the sanctum."
   },
   {
     "key": "0f3116cf0cbafa",
@@ -433,6 +463,11 @@
     "key": "13cb2515f1f7c2",
     "speaker": "pier warden",
     "text": "… Aye. I think I knew it, and only wanted someone to say otherwise. Better a hard truth than a soft lie. I'll send word up the coast to keep the boats in."
+  },
+  {
+    "key": "0cf8dcdb267d33",
+    "speaker": "narrator",
+    "text": "This might come in handy, so you decide to pick it up."
   },
   {
     "key": "0120693bbc6ced",
@@ -548,6 +583,11 @@
     "key": "0847beb458dafc",
     "speaker": "narrator",
     "text": "You wade through chilled water. Three empty brackets line the approach; their carved grooves catch the faint tide-light."
+  },
+  {
+    "key": "156d590c1635e9",
+    "speaker": "narrator",
+    "text": "Lanterns of the Deeps: Find something that will fit the carved brackets and will bear or produce light when placed there. Once the mounts hold a living glow, the hall may answer — the stones could yield secrets folded into their seams."
   },
   {
     "key": "10004d2376cf45",
@@ -718,6 +758,11 @@
     "key": "042b3296e168ac",
     "speaker": "narrator",
     "text": "You have claimed the Crystal of Light; its steady brilliance answers your courage and steadies what the deep waters once denied. Sir Cedric bids you to press on—dark forces gather, and he needs allies skilled in magic to stand with him when the hour comes."
+  },
+  {
+    "key": "1e7feb02d08043",
+    "speaker": "narrator",
+    "text": "The Three Virtues: You have claimed the Crystal of Light; its steady brilliance answers your courage and steadies what the deep waters once denied. Sir Cedric bids you to press on—dark forces gather, and he needs allies skilled in magic to stand with him when the hour comes."
   },
   {
     "key": "1067b9454380eb",
@@ -940,6 +985,11 @@
     "text": "You search around the Mirror Terraces, but find nothing of interest beyond what you can already see."
   },
   {
+    "key": "0dd1f82c77ed77",
+    "speaker": "narrator",
+    "text": "Mirrors of Emberlight: The terraces are lined with ancient, cracked mirrors. Find a way to repair the mirrors and restore the channel of light to the high altar."
+  },
+  {
     "key": "1c8dd246483304",
     "speaker": "narrator",
     "text": "✓ Heights of Mount Ember: You discovered your parents' words burned into stone, describing the protective ward they forged through fire and sacrifice."
@@ -948,6 +998,11 @@
     "key": "0c97c09fb88acc",
     "speaker": "narrator",
     "text": "A family heirloom whose runes glint like dew at dawn. In its depths the woman's face is clear: Lysa, with Grandmother's eyes. The man laughs beside her, and the third figure keeps his back turned."
+  },
+  {
+    "key": "09b2417a0ceeb5",
+    "speaker": "narrator",
+    "text": "Echoes of the Hidden Bond: Your parents once walked these same paths in their own desperate search for the three relics. As you face the trials they faced, you may discover traces of their passage. In the shadows where sacrifice dwells, ancient memories await."
   },
   {
     "key": "196f377213fdd4",
@@ -1215,6 +1270,11 @@
     "text": "You search around the Fumarole Passages, but find nothing of interest beyond what you can already see."
   },
   {
+    "key": "1b044113b59491",
+    "speaker": "narrator",
+    "text": "Breath of the Mountain: The Fumarole Passages exhale waves of heat and steam, blocking the way forward. Find a way to cross the shifting vents and reach the heights to the south."
+  },
+  {
     "key": "05c2021fb1b284",
     "speaker": "narrator",
     "text": "The Phoenix Guardian watches the vents."
@@ -1268,6 +1328,11 @@
     "key": "1556a622af4d06",
     "speaker": "sir cedric",
     "text": "A bird told us to wait, and we waited. I hope it was worth what it cost him."
+  },
+  {
+    "key": "103aece9ca0bd6",
+    "speaker": "narrator",
+    "text": "The Three Virtues: You have obtained the Phoenix Feather. Its warmth pulses in your grasp, a living ember that refuses to die. The memory of fire and flight lingers, reminding you that hope can rise from ashes. The path ahead is clearer, but the final virtue remains."
   },
   {
     "key": "0eacd243ef2027",
@@ -1413,6 +1478,11 @@
     "key": "01a04919222037",
     "speaker": "mine overseer",
     "text": "The miners are still waiting. The Tool Cache is north."
+  },
+  {
+    "key": "05ef3432624e57",
+    "speaker": "narrator",
+    "text": "Miners' Rescue: Collapsed Galleries have trapped people behind tons of stone. You must find a way to free them."
   },
   {
     "key": "00f0ddcb46a680",
@@ -1855,6 +1925,11 @@
     "text": "The Echo Chambers whisper with restless phantoms that block the path to the dragon's hall. Ancient voices drift through the darkness, their words lost to time but their purpose clear—they seek the sacred ritual that will grant them peace. The runic walls hold secrets of old ceremonies, and somewhere within these carved passages lies the key to silencing their eternal unrest. The echo stones await a blessed chant, one that must be spoken with reverence and precision to quiet the wandering spirits."
   },
   {
+    "key": "0957cd5d9d4493",
+    "speaker": "narrator",
+    "text": "Oath of Stillness: The Echo Chambers whisper with restless phantoms that block the path to the dragon's hall. Ancient voices drift through the darkness, their words lost to time but their purpose clear—they seek the sacred ritual that will grant them peace. The runic walls hold secrets of old ceremonies, and somewhere within these carved passages lies the key to silencing their eternal unrest. The echo stones await a blessed chant, one that must be spoken with reverence and precision to quiet the wandering spirits."
+  },
+  {
     "key": "171403adb2ff8a",
     "speaker": "narrator",
     "text": "You unstopper the phial and let a single drop fall into the nearest pool. The ripple does not spread; it sinks, and the stillness goes down after it until the black water lies flat as glass, holding the stones and the dark above in perfect reflection."
@@ -2083,6 +2158,11 @@
     "key": "0ea6d71e45791d",
     "speaker": "ancient dragon",
     "text": "Go with my blessing. The prison I hold is weaker for the scale's going. That is the price, and it is mine to pay, not yours."
+  },
+  {
+    "key": "1f16b2eea5d37d",
+    "speaker": "narrator",
+    "text": "The Three Virtues: You have claimed the Dragon's Scale, its obsidian surface gleaming with ancient power. The dragon's wisdom echoes in your mind, a testament to the selflessness you have proven. With all three relics in hand, the final trial awaits—the Warding Rite that will determine the fate of all."
   },
   {
     "key": "0860c1b3d9579b",

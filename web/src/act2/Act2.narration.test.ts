@@ -11,7 +11,7 @@ import { Coins } from './items/Coins'
 import { GreendaleGates } from './rooms/GreendaleGates'
 
 /** Grey event lines that may stay: markers, never the echo of a command. */
-const MARKER = /^(✦ |You take |You move |.*this will be remembered)/
+const MARKER = /^(✦ |You move |.*this will be remembered)/
 
 /** Event lines of the answers to the Act II golden path that are not markers. */
 function echoes(): string[] {
