@@ -145,12 +145,14 @@ describe('useActMusic', () => {
 
     expect(handlers.pause).toBeTypeOf('function')
     expect(handlers.play).toBeTypeOf('function')
+    expect(handlers.stop).toBeTypeOf('function')
     handlers.pause?.()
     expect(FakeAudio.last.paused).toBe(false)
 
     scope.stop()
     expect(handlers.pause).toBeNull()
     expect(handlers.play).toBeNull()
+    expect(handlers.stop).toBeNull()
   })
 
   it('stops listening for gestures when its scope ends', async () => {
