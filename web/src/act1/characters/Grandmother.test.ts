@@ -214,14 +214,14 @@ describe('Grandmother and the dream', () => {
     expect(findMarkupProblems(response)).toEqual([])
   })
 
-  it('is humming the cradle tune when Elior comes in with the dream, and stops', () => {
+  it('is humming the cradle tune when Elior goes to her with the dream, and stops', () => {
     const game = cottageGame()
     executeCommands(game, READ)
 
     const response = executeCommands(game, ['talk to grandmother'])
 
     const humming = response.indexOf(
-      'She is humming at the hearth when you come in: a slow tune that ' +
+      'When you go to her, she is humming at the hearth: a slow tune that ' +
         'climbs three notes and settles home again. You know it. You have ' +
         'known it all your life, and you could not say from where. She ' +
         'stops when she sees your face.',
@@ -231,6 +231,21 @@ describe('Grandmother and the dream', () => {
     expect(humming).toBeLessThan(
       response.indexOf('Willowbrook has always been'),
     )
+  })
+
+  it('still hums when Elior has already talked to her about the photograph', () => {
+    const game = cottageGame()
+    executeCommands(game, READ)
+    game.state.addItemToInventory(new FadedPhotograph())
+    executeCommands(game, [
+      'examine faded photograph',
+      'give faded photograph to grandmother',
+    ])
+
+    const response = executeCommands(game, ['talk to grandmother'])
+
+    expect(response).toContain('When you go to her, she is humming')
+    expect(response).not.toContain('when you come in')
   })
 
   it('goes quiet over the three words Elior caught from the voice', () => {
