@@ -31,6 +31,7 @@ export {
   type RoomDescription,
   type ActStats,
   type MusicInfo,
+  type MusicPlace,
   type NamedItem,
   type QuestPayloads,
   type QuestProgress,

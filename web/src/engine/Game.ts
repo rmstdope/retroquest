@@ -2,7 +2,7 @@
  * The game: its acts, the run-state machine (logo, act intro, act running,
  * act transition, game over), every player command, command completion and save/load.
  */
-import type { MusicInfo } from './GameController'
+import type { MusicInfo, MusicPlace } from './GameController'
 import type { Act } from './Act'
 import { Character } from './Character'
 import { ClassRegistry } from './ClassRegistry'
@@ -192,9 +192,7 @@ export class Game implements CommandTarget {
 
   /** Whether the current act's music plays now: see `currentMusic`. */
   private isMusicPlaying(): boolean {
-    return (
-      this.isActRunning() || this.isActTransitioning() || this.isGameOver()
-    )
+    return this.isActRunning() || this.isActTransitioning() || this.isGameOver()
   }
 
   /**
@@ -207,7 +205,10 @@ export class Game implements CommandTarget {
     if (!this.isMusicPlaying()) return { actName: '', roomKey: '' }
     const rooms = Object.entries(this.state.allRooms)
     const here = rooms.find(([, room]) => room === this.state.currentRoom)
-    return { actName: this.acts[this.currentAct].name, roomKey: here?.[0] ?? '' }
+    return {
+      actName: this.acts[this.currentAct].name,
+      roomKey: here?.[0] ?? '',
+    }
   }
 
   /**
