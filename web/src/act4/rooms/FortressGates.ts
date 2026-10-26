@@ -138,7 +138,7 @@ export class FortressGates extends Room {
       'Without the barrier the guardians have nothing to stand on. They ' +
       'thin to smoke and are gone, and where they drifted lies the chain ' +
       'that bound them, and a small orb of golden light: the ' +
-      "[item_name]Guardian's Essence[/item_name]."
+      "[item_name]guardian's essence[/item_name]."
     )
   }
 }

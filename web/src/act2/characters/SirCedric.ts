@@ -41,7 +41,7 @@ export const CEDRIC_DESCRIPTION_AFTER =
 export const VISION_CLOSING =
   'All your life, Malakar has been a name from old books, a story told ' +
   'to frighten children. But the agents asking after the Willowbrook ' +
-  'bloodline, the seal on the [item_name]Secret Documents[/item_name], ' +
+  'bloodline, the seal on the [item_name]secret documents[/item_name], ' +
   'the figure reaching for you in the vision: they all point the same ' +
   'way. Malakar is real, and the bloodline he seeks is yours.\n\n' +
   `${characterName('Sir Cedric')} rests a hand on his sword. ` +
@@ -449,7 +449,7 @@ export class SirCedric extends Character {
       return (
         characterName('Sir Cedric') +
         "'s eyes fall on the " +
-        '[item_name]Ancient Amulet[/item_name]' +
+        '[item_name]ancient amulet[/item_name]' +
         ' at your chest, and he goes very still.' +
         '\n\n' +
         dialogue('Sir Cedric', this.recognitionWords()) +
@@ -488,7 +488,7 @@ export class SirCedric extends Character {
       '\n\n' +
       characterName('Sir Cedric') +
       ' stops mid-sentence. His eyes have fallen on the ' +
-      '[item_name]Ancient Amulet[/item_name] at your chest.' +
+      '[item_name]ancient amulet[/item_name] at your chest.' +
       '\n\n' +
       dialogue(
         'Sir Cedric',
@@ -511,14 +511,14 @@ export class SirCedric extends Character {
       return (
         'Do you remember what I told you in the yard? That I would not give ' +
         'an heirloom of my house to someone I had known a day. I have known ' +
-        "you long enough now. Take Nature's Charm. It was blessed by the " +
+        "you long enough now. Take nature's charm. It was blessed by the " +
         'ancient knights who first made pacts with the forest spirits, and ' +
         'it is one of the three that call Nyx. You will need it more than I ' +
         'will.'
       )
     }
     return (
-      "Please accept this Nature's Charm. It has been in my family for " +
+      "Please accept this nature's charm. It has been in my family for " +
       'generations, blessed by the ancient knights who first made pacts with ' +
       'the forest spirits. A day ago I would not have given it to someone I ' +
       'had only just met. But you have done more for me than men I have ' +
@@ -633,7 +633,7 @@ export class SirCedric extends Character {
         dialogue(
           'Sir Cedric',
           'One more thing, since the forest is where you are bound. My ' +
-            "family has kept a charm for generations: Nature's Charm, " +
+            "family has kept a charm for generations: nature's charm, " +
             'carved for the knights who first made pacts with the forest ' +
             'spirits. The old texts say it is one of three that can call the ' +
             'sprite Nyx. I will not hand an heirloom of my house to someone ' +

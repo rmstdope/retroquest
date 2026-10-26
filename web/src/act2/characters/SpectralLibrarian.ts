@@ -20,7 +20,7 @@ import {
 } from '../Act2StoryFlags'
 
 /** The Ancient Amulet's name as the librarian's lines mark it. */
-const AMULET_NAME = 'Ancient Amulet'
+const AMULET_NAME = 'ancient amulet'
 
 /** What the librarian says on first seeing the amulet. */
 const GLANCE_WORDS =
@@ -154,7 +154,7 @@ export class SpectralLibrarian extends Character {
       ) +
       ' They gesture to a crystal resting on the shelf: ' +
       speech(
-        `And take this [item_name]${crystalFocus.name}[/item_name]. What you ` +
+        `And take this [item_name]${crystalFocus.name.toLowerCase()}[/item_name]. What you ` +
           'do with them is yours to choose.',
       ) +
       '[/success]'

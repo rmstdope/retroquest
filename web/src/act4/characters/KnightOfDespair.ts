@@ -99,7 +99,7 @@ export class KnightOfDespair extends Character {
       'Your sight sharpens, and the gloom peels away from the knight. His ' +
       "grey cloak is a traveller's, hooded and road-worn, and its clasp " +
       'bears a twisted rune you know: the rune on the token that fouled ' +
-      "Willowbrook's well, and the seal on the Secret Documents that " +
+      "Willowbrook's well, and the seal on the secret documents that " +
       "cleared Sir Cedric's name. This is the cloaked stranger the " +
       'villagers whispered about. Behind the visor, the knight is weeping.'
     )
@@ -256,14 +256,14 @@ export class KnightOfDespair extends Character {
         'Slowly, he lifts his visor. ' +
         'The face beneath is grey and tired, and very human.',
       ...confession,
-      "You received [item_name]Knight's Redemption[/item_name]!",
+      "You received the [item_name]knight's redemption[/item_name]!",
     ]
     const stone = this.findEchoStone(gameState)
     if (stone) {
       stone.enhance()
       gameState.setStoryFlag(FLAG_ACT4_ENHANCED_ECHO_STONE_ACQUIRED, true)
       lines.push(
-        'The Echo Stone grows warm in your pack. A new voice has joined ' +
+        'The echo stone grows warm in your pack. A new voice has joined ' +
           "the echoes inside it: the knight's own, speaking the truth at last.",
       )
     }

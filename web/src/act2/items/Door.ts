@@ -44,6 +44,6 @@ export class Door extends Item {
       // Delegate to the Room Key's useWith method, passing door as the target
       return other.useWith(gameState, this)
     }
-    return `You can't use the door with ${other.name}.`
+    return `You can't use the door with ${other.nameInSentence()}.`
   }
 }

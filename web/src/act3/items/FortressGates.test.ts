@@ -4,7 +4,7 @@ import { Act3 } from '../Act3'
 import { FortressGates } from './FortressGates'
 
 const AMULET_MOMENT =
-  'The [item_name]Ancient Amulet[/item_name] is warm against your palm. ' +
+  'The [item_name]ancient amulet[/item_name] is warm against your palm. ' +
   'You came on this journey believing Malakar took your parents from you. ' +
   'You know better now. [character_name]Aren[/character_name] and ' +
   '[character_name]Lysa[/character_name] were his closest friends, and the ' +
@@ -18,7 +18,7 @@ describe('FortressGates', () => {
     expect(text).toContain("the kingdom's fate will be decided.\n\n")
     expect(text).toContain(AMULET_MOMENT)
     expect(text).toContain(
-      "\n\nThe Lifelight Elixir pulses with protective power, ready to shield you from the sorcerer's influence. " +
+      "\n\nThe lifelight elixir pulses with protective power, ready to shield you from the sorcerer's influence. " +
         '[bold]Act III is complete.[/bold] The final confrontation awaits.',
     )
     expect(text).not.toContain('three relics')

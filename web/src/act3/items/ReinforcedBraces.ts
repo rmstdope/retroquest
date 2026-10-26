@@ -19,8 +19,8 @@ export class ReinforcedBraces extends Item {
       return other.useWith(gameState, this)
     }
     return (
-      "[failure]You can't use the reinforced braces with the " +
-      `${other.name}.[/failure]`
+      "[failure]You can't use the reinforced braces with " +
+      `${other.nameInSentence()}.[/failure]`
     )
   }
 }

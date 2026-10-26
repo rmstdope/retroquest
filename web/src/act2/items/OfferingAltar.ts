@@ -28,9 +28,9 @@ export class OfferingAltar extends Item {
     // Check if the other item is one of the three sacred charms
     if (!isCharm(other)) {
       return (
-        `The altar's runes remain dim. The ${other.name} does not seem to be one of ` +
+        `The altar's runes remain dim. ${other.nameInSentence({ atStart: true })} does not seem to be one of ` +
         'the sacred charms needed for this ancient ritual. You need the three blessed ' +
-        "charms: Druidic Charm, Protective Charm, and Nature's Charm."
+        "charms: druidic charm, protective charm, and nature's charm."
       )
     }
     // Check if player has all three sacred charms
@@ -45,11 +45,11 @@ export class OfferingAltar extends Item {
     )
     if (!(hasDruidic && hasProtective && hasNatures)) {
       const missingCharms: string[] = []
-      if (!hasDruidic) missingCharms.push('Druidic Charm')
-      if (!hasProtective) missingCharms.push('Protective Charm')
-      if (!hasNatures) missingCharms.push("Nature's Charm")
+      if (!hasDruidic) missingCharms.push('druidic charm')
+      if (!hasProtective) missingCharms.push('protective charm')
+      if (!hasNatures) missingCharms.push("nature's charm")
       return (
-        `The altar's runes flicker weakly as you place the ${other.name} upon it. ` +
+        `The altar's runes flicker weakly as you place ${other.nameInSentence()} upon it. ` +
         'You sense that you need all three sacred charms to activate the full ritual: ' +
         `${missingCharms.join(', ')}. The ancient magic requires all three offerings to ` +
         'complete the summoning.'

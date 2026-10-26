@@ -124,7 +124,7 @@ describe('Act IV items narrate their effect', () => {
     )
     expect(essence).toContain(
       'The servants stop their circling and gather to look at the [item_name]' +
-        "Guardian's Essence[/item_name]. One reaches out, but does not touch.",
+        "guardian's essence[/item_name]. One reaches out, but does not touch.",
     )
     expect(essence).not.toContain('You hold out')
     expect(nonText(essence)).toEqual([])
@@ -139,7 +139,7 @@ describe('Act IV items narrate their effect', () => {
 
     const outside = EchoStone.useInRoom(inRoom('FortressGates'))
     expect(outside).toMatch(
-      /^You hold the Echo Stone to your ear\. The hall's voices murmur inside it, waiting for somewhere that needs them\./,
+      /^You hold the echo stone to your ear\. The hall's voices murmur inside it, waiting for somewhere that needs them\./,
     )
     expect(nonText(outside)).toEqual([])
     const enhanced = new EchoStone()
@@ -176,7 +176,7 @@ describe('Act IV items narrate their effect', () => {
       /^You pour the elixir over the crystal\. It cracks like ice in spring/,
     )
     expect(nonText(freed)).toEqual([])
-    expect(freed).toContain('The Lifelight Elixir is gone.')
+    expect(freed).toContain('The lifelight elixir is gone.')
 
     const forgiving = inRoom('ThroneChamber')
     forgiving.setStoryFlag(FLAG_ACT4_FORGIVENESS_SAID, true)

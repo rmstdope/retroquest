@@ -29,8 +29,8 @@ export class HeatWardMix extends Item {
     if (typeof hook === 'function') return hook.call(other, gameState, this)
 
     return (
-      `[failure]You can't use the [item_name]${this.name}[/item_name] ` +
-      `with the [item_name]${other.name}[/item_name].[/failure]`
+      `[failure]You can't use ${this.nameInSentence()} ` +
+      `with ${other.nameInSentence()}.[/failure]`
     )
   }
 
@@ -39,7 +39,7 @@ export class HeatWardMix extends Item {
     const room = gameState.currentRoom
     if (room.name !== 'Fumarole Passages') {
       return (
-        `[failure]You can't use the [item_name]${this.name}[/item_name] ` +
+        `[failure]You can't use ${this.nameInSentence()} ` +
         'usefully here.[/failure]'
       )
     }
@@ -48,7 +48,7 @@ export class HeatWardMix extends Item {
     if (typeof hook === 'function') return hook.call(room, gameState, this)
 
     return (
-      `[failure]The [item_name]${this.name}[/item_name] has no obvious ` +
+      `[failure]${this.nameInSentence({ atStart: true })} has no obvious ` +
       'place to use here.[/failure]'
     )
   }

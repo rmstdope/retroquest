@@ -71,6 +71,6 @@ export class ResonantChantRubbings extends Item {
           'sanctified before the chant can take hold.',
       )
     }
-    return `[failure]The ${other.name} has no effect on the rubbings.[/failure]`
+    return `[failure]${other.nameInSentence({ atStart: true })} has no effect on the rubbings.[/failure]`
   }
 }

@@ -4,7 +4,7 @@ import { AncientAmulet } from '../items/AncientAmulet'
 import { Mira } from '../characters/Mira'
 
 const GLOW =
-  ' On its stand, the [item_name]Ancient Amulet[/item_name] glows brighter as you ' +
+  ' On its stand, the [item_name]ancient amulet[/item_name] glows brighter as you ' +
   'step in, as if something you carry has woken it.'
 const EMPTY_STAND = ' The stand where the amulet rested stands empty.'
 

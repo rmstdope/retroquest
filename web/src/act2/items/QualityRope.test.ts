@@ -3,7 +3,7 @@ import { Game } from '@/engine'
 import { Act2 } from '../Act2'
 import { QualityRope } from './QualityRope'
 
-describe('the Quality Rope used alone', () => {
+describe('the quality rope used alone', () => {
   it('says what it is and what it wants, not what the player must do', () => {
     const game = new Game([new Act2()])
 

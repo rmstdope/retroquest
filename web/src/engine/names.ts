@@ -84,3 +84,11 @@ export function nameInSentence(
   if (bare) return marked
   return `${options.atStart ? 'The' : 'the'} ${marked}`
 }
+
+/**
+ * The indefinite article a name takes, by its first sound as its spelling
+ * shows it: "an" before a vowel ("an enhanced echo stone"), "a" otherwise.
+ */
+export function indefiniteArticle(name: string): 'a' | 'an' {
+  return /^[aeiou]/i.test(name.trim()) ? 'an' : 'a'
+}

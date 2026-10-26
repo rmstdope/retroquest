@@ -57,8 +57,8 @@ export class MirrorMount extends Item {
 
     if (!(other instanceof BrassMirrorSegment)) {
       return (
-        `[failure]You can't use the [item_name]${this.name}[/item_name] with ` +
-        `the [item_name]${other.name}[/item_name].[/failure]`
+        `[failure]You can't use ${this.nameInSentence()} with ` +
+        `${other.nameInSentence()}.[/failure]`
       )
     }
 
@@ -135,7 +135,7 @@ export class MirrorMount extends Item {
     this.segmentRevealed = true
     return (
       'You sift the ash and grit beneath the mount and find a ' +
-      `[item_name]${segment.name}[/item_name]. It lies half-buried ` +
+      `[item_name]${segment.name.toLowerCase()}[/item_name]. It lies half-buried ` +
       'in the sand and has been added to the terrace.'
     )
   }

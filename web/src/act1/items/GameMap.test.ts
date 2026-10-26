@@ -47,7 +47,7 @@ function completeSideQuestsExcept(
 }
 
 describe('GameMap act completion', () => {
-  it('does not complete the act without the Ancient Amulet', () => {
+  it('does not complete the act without the ancient amulet', () => {
     const { act, game, map } = setupGameAtRoad()
     completeSideQuestsExcept(game)
 

@@ -86,7 +86,7 @@ describe('Echo Chambers', () => {
     expect(rubbings.canBeCarried).toBe(true)
   })
 
-  it('reveals the Old Oath Scrolls when searched', () => {
+  it('reveals the old oath scrolls when searched', () => {
     const room = new EchoChambers()
     const gs = dummyState()
     gs.currentRoom = room

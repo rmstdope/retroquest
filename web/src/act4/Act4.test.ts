@@ -57,7 +57,7 @@ describe('Act4', () => {
     const act4 = new Act4()
     const intro = act4.getActIntro()
     expect(intro).toContain('ACT IV: THE FINAL CONFRONTATION')
-    expect(intro).toContain('Lifelight Elixir')
+    expect(intro).toContain('lifelight elixir')
   })
 
   it('opens with the companions’ goodbye and the token, without the old cliché', () => {

@@ -5,6 +5,8 @@ import { GateCaptain } from './GateCaptain'
 import type { GreendaleGates } from '../rooms/GreendaleGates'
 import { EntryPass } from '../items/EntryPass'
 import { WalkingStick } from '../items/WalkingStick'
+import { CrystalFocus } from '../items/CrystalFocus'
+import { NyxToken } from '../items/NyxToken'
 import {
   expectDialogueSpeaker,
   expectMarkupWellFormed,
@@ -142,5 +144,18 @@ describe('Gate Captain welcome', () => {
     )
     expect(answer).not.toContain('Feel free to look around')
     expectCaptainSpeaks(answer)
+  })
+})
+
+describe('Gate Captain declining an item', () => {
+  it('names it in lower case, and a person-named item without "the"', () => {
+    const game = createGameAtGates()
+    const captain = new GateCaptain()
+    expect(captain.giveItem(game.state, new CrystalFocus())).toContain(
+      'politely declines the [item_name]crystal focus[/item_name].',
+    )
+    expect(captain.giveItem(game.state, new NyxToken())).toContain(
+      "politely declines [item_name]Nyx's Token[/item_name].",
+    )
   })
 })

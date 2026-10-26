@@ -55,7 +55,7 @@ describe('TideBornGuardian', () => {
 
     const res = guardian.sayTo(g, 'myself')
 
-    expect(res).toContain('Crystal of Light')
+    expect(res).toContain('crystal of light')
     expect(g.getStoryFlag(FLAG_ACT3_VOW_OF_COURAGE_MADE)).toBe(true)
   })
 

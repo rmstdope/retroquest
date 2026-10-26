@@ -111,7 +111,7 @@ describe('Spectral Librarian dialogue markup', () => {
       " The spirit's eyes glow brighter as they speak: ",
       'I am a keeper, not a teller. The answer you came for is in that chronicle. We wrote it, and our mark is on its cover. Read it, and you will learn the [spell_name]dispel[/spell_name] spell.',
       ' They gesture to a crystal resting on the shelf: ',
-      'And take this [item_name]Crystal Focus[/item_name]. What you do with them is yours to choose.',
+      'And take this [item_name]crystal focus[/item_name]. What you do with them is yours to choose.',
     ]
     let from = 0
     for (const line of lines) {
@@ -135,7 +135,7 @@ describe('Spectral Librarian dialogue markup', () => {
 })
 
 const GLANCE_NARRATION =
-  'The [character_name]Spectral Librarian[/character_name] turns toward you, and stops. Their eyes have found the [item_name]Ancient Amulet[/item_name] at your throat.'
+  'The [character_name]Spectral Librarian[/character_name] turns toward you, and stops. Their eyes have found the [item_name]ancient amulet[/item_name] at your throat.'
 const GLANCE_LINE =
   'I have not seen that worn since the last hand wrote in that chronicle.'
 const CONFESSION =
@@ -201,7 +201,7 @@ describe('Spectral Librarian notices the amulet', () => {
 
     expectInOrder(answer, [
       THANKS,
-      ' Their eyes go back to the [item_name]Ancient Amulet[/item_name]. ',
+      ' Their eyes go back to the [item_name]ancient amulet[/item_name]. ',
       `${CONFESSION}`,
       " The spirit's eyes glow brighter as they speak: ",
       'I am a keeper, not a teller.',
@@ -223,7 +223,7 @@ describe('Spectral Librarian notices the amulet', () => {
 
     expectInOrder(answer, [
       THANKS,
-      ' Their eyes find the [item_name]Ancient Amulet[/item_name] at your throat, and stay there. ',
+      ' Their eyes find the [item_name]ancient amulet[/item_name] at your throat, and stay there. ',
       `${GLANCE_LINE} ${CONFESSION}`,
       " The spirit's eyes glow brighter as they speak: ",
     ])
@@ -256,7 +256,7 @@ describe('Spectral Librarian notices the amulet', () => {
     const again = librarian.talkTo(game.state)
 
     expectInOrder(delayed, [
-      "The [character_name]Spectral Librarian[/character_name]'s eyes go to the [item_name]Ancient Amulet[/item_name].",
+      "The [character_name]Spectral Librarian[/character_name]'s eyes go to the [item_name]ancient amulet[/item_name].",
       `${GLANCE_LINE} ${CONFESSION}`,
       'The chronicle is waiting on its shelf. We wrote it for whoever would read it; I cannot read it for you.',
     ])

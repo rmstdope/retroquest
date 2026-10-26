@@ -85,7 +85,7 @@ describe('Act III rooms narrate the effect, never the echo', () => {
     expect(room.search(state)).not.toContain('[event]')
 
     expect(room.mountLantern(state)).toBe(
-      '[failure][clue]You need a [item_name]Prism Lantern[/item_name] to ' +
+      '[failure][clue]You need a [item_name]prism lantern[/item_name] to ' +
         'mount here.[/clue][/failure]',
     )
     state.inventory.push(

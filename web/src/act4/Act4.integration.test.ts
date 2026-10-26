@@ -321,7 +321,7 @@ describe('Act 4 integration', () => {
       const bless = executeCommands(game, ['cast bless on servants'])
       expect(bless).toContain(
         'By the fountain, the captain blinks, as if waking from a long ' +
-          "sleep. One of the servants presses a small blue [item_name]Servant's Pendant[/item_name] into your hands.",
+          "sleep. One of the servants presses a small blue [item_name]servant's pendant[/item_name] into your hands.",
       )
       expectQuestCompleted(game.state, 'The Trapped Servants')
       const done = game.state.completedQuests.find(
@@ -331,7 +331,7 @@ describe('Act 4 integration', () => {
         "Elior's courage earns the servants' trust, and a blessing breaks " +
           'their chains. Freed, they offer what help they can for the trials ahead.',
       )
-      expect(bless).not.toContain('Loyalty Token')
+      expect(bless).not.toContain('loyalty token')
       expectItemInInventory(game.state, "Servant's Pendant", false)
       const room = game.state.currentRoom.describe(game.state)
       expect(room).toContain(
@@ -514,7 +514,7 @@ describe('Act 4 integration', () => {
       'only with your own voice. You lose the way, and find yourself back at ' +
       'the entrance.'
     const STONE_OUTSIDE =
-      "You hold the Echo Stone to your ear. The hall's voices murmur inside " +
+      "You hold the echo stone to your ear. The hall's voices murmur inside " +
       'it, waiting for somewhere that needs them.'
     const SOLVED =
       'You step into the empty corridor. Behind you the false mirrors go ' +
@@ -703,7 +703,7 @@ describe('Act 4 integration', () => {
       ]) {
         const heard = executeCommands(game, [command])
         expect(heard).toContain(
-          'You hold the Echo Stone to your ear. One voice repeats, patient as a heartbeat:',
+          'You hold the echo stone to your ear. One voice repeats, patient as a heartbeat:',
         )
         expect(heard).toContain(
           "'Left, then left, then the way your shadow does not go.'",
@@ -713,7 +713,7 @@ describe('Act 4 integration', () => {
       expectStoryFlag(game.state, FLAG_ACT4_MAZE_OF_MIRRORS_COMPLETED, false)
     })
 
-    it('fails every turn without the Echo Stone', () => {
+    it('fails every turn without the echo stone', () => {
       toFreedServants()
       executeCommands(game, ['north'])
       expect(executeCommands(game, ['go west'])).toContain(NO_STONE)
@@ -965,7 +965,7 @@ describe('Act 4 integration', () => {
     it('gives the stone lines and the badge once redeemed', () => {
       toRedeemed()
       expect(executeCommands(game, ['examine enhanced echo stone'])).toContain(
-        'The Echo Stone hums more strongly now.',
+        'The echo stone hums more strongly now.',
       )
       expect(executeCommands(game, ["examine knight's redemption"])).toContain(
         "A tarnished knight's badge, warm to the touch.",

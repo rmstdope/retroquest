@@ -78,16 +78,16 @@ describe('Act IV reads how Elior does it again (rq-s5a)', () => {
     )
   })
 
-  it('holding the Echo Stone to your ear, in the maze and elsewhere', () => {
+  it('holding the echo stone to your ear, in the maze and elsewhere', () => {
     const { game, room } = inMaze()
     expect(firstRead(room.useStone(game.state))).toBe(
-      'You hold the Echo Stone to your ear. One voice repeats, patient as a ' +
+      'You hold the echo stone to your ear. One voice repeats, patient as a ' +
         'heartbeat:',
     )
     expect(
       firstRead(EchoStone.useInRoom(inRoom('FortressGates').state)),
     ).toMatch(
-      /^You hold the Echo Stone to your ear\. The hall's voices murmur inside it, waiting/,
+      /^You hold the echo stone to your ear\. The hall's voices murmur inside it, waiting/,
     )
     const enhanced = new EchoStone()
     enhanced.enhance()
@@ -97,11 +97,11 @@ describe('Act IV reads how Elior does it again (rq-s5a)', () => {
     )
   })
 
-  it('raising the Echo Stone to mend the orbs', () => {
+  it('raising the echo stone to mend the orbs', () => {
     const { game } = inRoom('MemoryVault')
     const vault = game.state.currentRoom as MemoryVault
     expect(firstRead(vault.mendOrbs(game.state))).toMatch(
-      /^You raise the Echo Stone\. The voices inside it pour out into the vault/,
+      /^You raise the echo stone\. The voices inside it pour out into the vault/,
     )
   })
 

@@ -9,7 +9,7 @@ import { DispelSpell } from '../spells/DispelSpell'
 import { TheAncientLibraryQuest } from './TheAncientLibrary'
 
 describe('The Ancient Library completion', () => {
-  it('counts the Crystal Focus after it has been given to Lyria', () => {
+  it('counts the crystal focus after it has been given to Lyria', () => {
     const game = new Game([new Act2()])
     const quest = new TheAncientLibraryQuest()
     game.state.learnSpell(new DispelSpell())

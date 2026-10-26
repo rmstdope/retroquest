@@ -134,7 +134,7 @@ export class TheGatheringStormQuest extends Quest {
         'you the ' +
         PROPHETIC_VISION +
         ' spell, her token ' +
-        'and the Forest Heart Crystal. She left you with the words from the ' +
+        'and the forest heart crystal. She left you with the words from the ' +
         'glade stone: power follows purpose; purpose follows truth. When ' +
         'every other task in Greendale is done, cast the vision with ' +
         SIR_CEDRIC +

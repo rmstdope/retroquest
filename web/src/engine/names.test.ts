@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { nameInSentence } from './names'
+import { indefiniteArticle, nameInSentence } from './names'
 
 describe('nameInSentence', () => {
   it('title-cases a character name wherever it stands', () => {
@@ -78,5 +78,13 @@ describe('nameInSentence', () => {
     expect(nameInSentence('room', "Mira's Hut", { bare: true })).toBe(
       "[room_name]Mira's Hut[/room_name]",
     )
+  })
+})
+
+describe('indefiniteArticle', () => {
+  it('picks "an" before a vowel and "a" before a consonant', () => {
+    expect(indefiniteArticle('enhanced echo stone')).toBe('an')
+    expect(indefiniteArticle('Iron key')).toBe('an')
+    expect(indefiniteArticle('lantern')).toBe('a')
   })
 })

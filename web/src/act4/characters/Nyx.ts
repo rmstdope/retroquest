@@ -51,7 +51,7 @@ export class Nyx extends Character {
       )
     }
     return (
-      `The light brushes the [item_name]${item.name}[/item_name] once and ` +
+      `The light brushes ${item.nameInSentence()} once and ` +
       'leaves it in your hand. It is yours.'
     )
   }

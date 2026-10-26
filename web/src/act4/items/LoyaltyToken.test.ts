@@ -67,7 +67,7 @@ describe('LoyaltyToken', () => {
       const item = new LoyaltyToken()
       const first = item.use(game.state)
       expect(first).toContain(
-        'You hold the Loyalty Token close to your heart. For a moment you are not alone in the hall: the servants you freed, the friends who brought you to the threshold, everyone who trusted you on the way here. The knight’s despair breaks around you and does not reach you.'.replace(
+        'You hold the loyalty token close to your heart. For a moment you are not alone in the hall: the servants you freed, the friends who brought you to the threshold, everyone who trusted you on the way here. The knight’s despair breaks around you and does not reach you.'.replace(
           '’',
           "'",
         ),

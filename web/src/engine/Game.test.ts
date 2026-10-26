@@ -728,6 +728,9 @@ describe('Game', () => {
       expect(game.drop('nonexistent')).toBe(
         "[failure]You don't have a 'nonexistent' to drop.[/failure]",
       )
+      expect(game.drop('enhanced echo stone')).toBe(
+        "[failure]You don't have an 'enhanced echo stone' to drop.[/failure]",
+      )
     })
   })
 
@@ -993,7 +996,10 @@ describe('Game', () => {
     it('reports missing items, missing characters and bad formats', () => {
       rooms.EliorsCottage.addCharacter(character('Villager'))
       expect(game.give('nonexistent_item to villager')).toBe(
-        "[failure]You don't have any 'nonexistent_item' to give.[/failure]",
+        "[failure]You don't have a 'nonexistent_item' to give.[/failure]",
+      )
+      expect(game.give('enhanced echo stone to villager')).toBe(
+        "[failure]You don't have an 'enhanced echo stone' to give.[/failure]",
       )
       game.state.inventory.push(item('apple'))
       expect(game.give('apple to Ghost')).toBe(
@@ -1065,6 +1071,9 @@ describe('Game', () => {
       expect(game.use('lever')).toBe('You used the [item]lever[/item].')
       expect(game.use('nonexistent_item')).toBe(
         "[failure]You don't have a 'nonexistent_item' to use, and there isn't one here.[/failure]",
+      )
+      expect(game.use('enhanced echo stone', 'banners')).toBe(
+        "[failure]You don't have an 'enhanced echo stone' to use, and there isn't one here.[/failure]",
       )
     })
 

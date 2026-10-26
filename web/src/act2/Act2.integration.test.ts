@@ -76,7 +76,7 @@ describe('Act 2 golden path', () => {
     exits = room().getExits(state)
     expect(
       exits,
-      "North exit shouldn't be available before giving Entry Pass",
+      "North exit shouldn't be available before giving entry pass",
     ).not.toHaveProperty('north')
     expect(
       exits,
@@ -90,7 +90,7 @@ describe('Act 2 golden path', () => {
     exits = room().getExits(state)
     expect(
       exits,
-      'North exit should be available after giving Entry Pass',
+      'North exit should be available after giving entry pass',
     ).toHaveProperty('north')
     expect(exits.north, 'North exit should lead to Main Square').toBe(
       'MainSquare',
@@ -1164,7 +1164,7 @@ describe('Step 24: Lord Commander interaction', () => {
         (item) => item.name.toLowerCase() === "nature's charm",
       ),
     ).toBe(true)
-    expect(result).toContain("Nature's Charm")
+    expect(result).toContain("nature's charm")
     expect(result).toContain('blessed by the ancient knights')
   })
 })
@@ -1410,7 +1410,7 @@ describe("The sergeant's sword", () => {
   })
 })
 
-describe('Act 2 silver leaves and the Forest Heart Crystal', () => {
+describe('Act 2 silver leaves and the forest heart crystal', () => {
   const GIVE = 'give silver leaves to master healer lyria'
   const WINDOWSILL = 'The dish of silver leaves sits on the windowsill'
 
@@ -1434,7 +1434,7 @@ describe('Act 2 silver leaves and the Forest Heart Crystal', () => {
     expect(game.state.hasItem('silver leaves')).toBe(false)
     expectItemInInventory(game.state, 'forest heart crystal')
     const vision = executeCommands(game, ['cast prophetic vision'])
-    expect(vision).toContain('Forest Heart Crystal')
+    expect(vision).toContain('forest heart crystal')
     expect(vision).toContain('something to say.')
   })
 

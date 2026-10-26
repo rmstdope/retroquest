@@ -37,7 +37,7 @@ function completeJourneyPreparations(state: GameState): void {
 }
 
 describe('Mira’s early guidance', () => {
-  it('points Elior toward the Rare Flower, the well and the Hidden Glade', () => {
+  it('points Elior toward the rare flower, the well and the Hidden Glade', () => {
     const game = gameInMirasHut()
     game.state.setStoryFlag(FLAG_INVESTIGATED_WITHERED_CROPS, true)
     game.state.setStoryFlag(FLAG_VILLAGER_TALKED_TO, true)
@@ -45,14 +45,14 @@ describe('Mira’s early guidance', () => {
 
     const response = game.commandParser.parse('talk to mira')
 
-    expect(response).toContain('Rare Flower')
+    expect(response).toContain('rare flower')
     expect(response).toContain('Hidden Glade')
     expect(response).toContain('well')
     expect(game.state.getStoryFlag(FLAG_CONNECT_WITH_NATURE)).toBe(true)
   })
 })
 
-describe('Mira accepting the Rare Flower', () => {
+describe('Mira accepting the rare flower', () => {
   it('teaches the spells in short beats and names the preparations in one line', () => {
     const game = gameInMirasHut()
     game.state.addItemToInventory(new RareFlower())
@@ -83,7 +83,7 @@ describe('Mira accepting the Rare Flower', () => {
   })
 })
 
-describe('Mira handing over the Ancient Amulet', () => {
+describe('Mira handing over the ancient amulet', () => {
   it('sends Elior toward Greendale and warns him to guard the amulet', () => {
     const game = gameInMirasHut()
     game.state.addItemToInventory(new RareFlower())

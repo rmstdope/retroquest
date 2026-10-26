@@ -115,7 +115,8 @@ export class LordCommander extends Character {
       )
     }
 
-    const itemName = `[item_name]${item.name}[/item_name]`
-    return `The ${name} has no need for your ${itemName}.`
+    // "your crystal focus", but "Nyx's Token" alone: a person's own name takes no article.
+    const yours = item.nameInSentence().replace(/^the /, 'your ')
+    return `The ${name} has no need for ${yours}.`
   }
 }

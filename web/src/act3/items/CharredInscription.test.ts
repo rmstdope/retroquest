@@ -42,12 +42,12 @@ describe('CharredInscription', () => {
       true,
     )
     expect(result).toContain('We are three, and we are one promise.')
-    expect(result).toContain('I, Aren, pour courage into the Crystal of Light.')
+    expect(result).toContain('I, Aren, pour courage into the crystal of light.')
     expect(result).toContain(
-      "I, Lysa, pour selflessness into the Dragon's Scale.",
+      "I, Lysa, pour selflessness into the dragon's scale.",
     )
     expect(result).toContain(
-      'I, Malakar, pour wisdom into the Phoenix Feather.',
+      'I, Malakar, pour wisdom into the phoenix feather.',
     )
     expect(result).toContain('What we pour into the ward, the ward will keep.')
     expect(result).toContain('the wisdom was his')
@@ -87,9 +87,9 @@ describe('CharredInscription', () => {
       blocks.flatMap((b) => (b.kind === 'dialogue' ? [b.markup] : [])),
     ).toEqual([
       'We are three, and we are one promise.',
-      'I, Aren, pour courage into the Crystal of Light.',
-      "I, Lysa, pour selflessness into the Dragon's Scale.",
-      'I, Malakar, pour wisdom into the Phoenix Feather.',
+      'I, Aren, pour courage into the crystal of light.',
+      "I, Lysa, pour selflessness into the dragon's scale.",
+      'I, Malakar, pour wisdom into the phoenix feather.',
       'What we pour into the ward, the ward will keep.',
     ])
   })

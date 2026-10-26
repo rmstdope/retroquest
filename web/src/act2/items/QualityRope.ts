@@ -50,7 +50,7 @@ export class QualityRope extends Item {
       if (index >= 0) gameState.inventory.splice(index, 1)
 
       return (
-        '[success]You secure one end of your [item_name]Quality Rope[/item_name] to a ' +
+        '[success]You secure one end of your [item_name]quality rope[/item_name] to a ' +
         'sturdy tree and lower it into the ravine. Rappelling down carefully, you find ' +
         'the trapped merchant caravan at the bottom. The merchants are injured but ' +
         'alive, and their wagon is damaged but some goods are salvageable. Working ' +
@@ -60,7 +60,6 @@ export class QualityRope extends Item {
       )
     }
     // Fallback message when rope can't be used with the provided item
-    const name = other.name
-    return `You can't use the rope with ${name}.`
+    return `You can't use the rope with ${other.nameInSentence()}.`
   }
 }

@@ -25,7 +25,7 @@ import {
 } from '@/testing/gameHelpers'
 
 const SEEN =
-  "Your sight sharpens, and the gloom peels away from the knight. His grey cloak is a traveller's, hooded and road-worn, and its clasp bears a twisted rune you know: the rune on the token that fouled Willowbrook's well, and the seal on the Secret Documents that cleared Sir Cedric's name. This is the cloaked stranger the villagers whispered about. Behind the visor, the knight is weeping."
+  "Your sight sharpens, and the gloom peels away from the knight. His grey cloak is a traveller's, hooded and road-worn, and its clasp bears a twisted rune you know: the rune on the token that fouled Willowbrook's well, and the seal on the secret documents that cleared Sir Cedric's name. This is the cloaked stranger the villagers whispered about. Behind the visor, the knight is weeping."
 const NOT_SEEN =
   'The word means nothing to a man you cannot truly see. He does not even turn his head.'
 const NO_CHAIN =
@@ -114,7 +114,7 @@ describe('KnightOfDespair', () => {
     expect(executeCommands(game, ['go east'])).toContain(BLOCK)
   })
 
-  it('shows the banners and the Echo Stone in any order, once each', () => {
+  it('shows the banners and the echo stone in any order, once each', () => {
     const game = createGameInHall()
     expect(executeCommands(game, ['examine banners'])).toContain(
       'Something is stitched beneath the dirt.',
@@ -134,7 +134,7 @@ describe('KnightOfDespair', () => {
     expect(executeCommands(game, ['talk to knight'])).toContain(SOMETHING_OF_ME)
   })
 
-  it('answers the Echo Stone in its niche as well as in the pack', () => {
+  it('answers the echo stone in its niche as well as in the pack', () => {
     const game = createGameInHall()
     const stone = game.state.inventory.pop()
     if (stone) game.state.currentRoom.addItem(stone)
@@ -202,8 +202,8 @@ describe('KnightOfDespair', () => {
         'Sir Cedric. I am sorry. I have no right to ask anything of you, so I will not.',
         'Sir Cedric does not move from the door.',
         'I heard you. That will have to be enough, for now.',
-        "You received [item_name]Knight's Redemption[/item_name]!",
-        "The Echo Stone grows warm in your pack. A new voice has joined the echoes inside it: the knight's own, speaking the truth at last.",
+        "You received the [item_name]knight's redemption[/item_name]!",
+        "The echo stone grows warm in your pack. A new voice has joined the echoes inside it: the knight's own, speaking the truth at last.",
         "Redemption's Light",
         'Light that reminds a fallen soul of who it was.',
       ]
@@ -256,7 +256,7 @@ describe('KnightOfDespair', () => {
     expect(game.state.currentRoom.name).toBe('Tower of Shadows')
   })
 
-  describe('with the Loyalty Token instead of the chain', () => {
+  describe('with the loyalty token instead of the chain', () => {
     const GONE =
       "You open your mouth, and the knight's despair rolls over you like cold water. The word dies in your throat. Nothing stands between you and his sorrow, and the chain is gone with the captain. But you are not as alone as the knight would have you believe."
     const TOKEN_OPENING =
@@ -289,7 +289,7 @@ describe('KnightOfDespair', () => {
       const answer = executeCommands(game, ['say redemption to knight'])
       expect(answer).toContain(TOKEN_OPENING)
       expect(answer).not.toContain("chain's light")
-      expect(answer).toContain('Knight’s Redemption'.replace('’', "'"))
+      expect(answer).toContain("knight's redemption")
       expectStoryFlag(game.state, FLAG_ACT4_KNIGHT_OF_DESPAIR_COMPLETED)
       expectMarkupWellFormed(answer)
     })

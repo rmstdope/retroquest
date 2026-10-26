@@ -162,7 +162,7 @@ describe('Act 3 golden path', () => {
   })
 
   describe('the Tidal Causeway: the mural, the letter and the key', () => {
-    it('reads the mural, takes the Sea-Sealed Letter and finds the key by light', () => {
+    it('reads the mural, takes the sea-sealed letter and finds the key by light', () => {
       const game = gameAt(AT.causewayKey)
       const state = game.state
       expectItemInInventory(state, 'Rusted Locker Key', false)
@@ -334,7 +334,7 @@ describe('Act 3 golden path', () => {
     })
   })
 
-  describe('Mirror Terraces: Mirrors of Ember Light', () => {
+  describe('Mirror Terraces: mirrors of Ember Light', () => {
     it('installs the segments, mends the mount and waits for the noon beam', () => {
       const game = gameAt(AT.terraces)
       const state = game.state
@@ -649,7 +649,7 @@ describe('Act 3 golden path', () => {
       expectItemInRoom(beforeRite.state.currentRoom, 'healing herbs', false)
     })
 
-    it('performs the Warding Rite and gives the Lifelight Elixir', () => {
+    it('performs the Warding Rite and gives the lifelight elixir', () => {
       const game = gameAt(AT.hut + 4)
       const state = game.state
       const rite = play(game, AT.hut + 4, AT.hut + 5)
@@ -705,7 +705,7 @@ describe('Act 3 golden path', () => {
       expect(examine).toContain(
         'The Dragon said they were warded away, not dead. You do not yet know what that means.',
       )
-      expect(examine).toContain('The Lifelight Elixir pulses')
+      expect(examine).toContain('The lifelight elixir pulses')
 
       for (let turn = 0; turn < 3; turn++) game.newTurn()
       const hook =
@@ -891,7 +891,7 @@ describe('Act 3 golden path as declared by the act', () => {
     const out = executeCommands(game, ACT3_GOLDEN_PATH)
     expect(
       out.match(
-        /Ancient Amulet\[\/item_name\] (grows warm|glows again|blazes)/g,
+        /ancient amulet\[\/item_name\] (grows warm|glows again|blazes)/g,
       ),
     ).toHaveLength(3)
     expect(executeCommands(game, ['examine amulet'])).toContain(
@@ -980,7 +980,7 @@ describe('Tobin and the saves', () => {
   })
 })
 
-describe('Giving the Quiet Charm to Tobin', () => {
+describe('Giving the quiet charm to Tobin', () => {
   const rescued = (): Game => {
     const game = new Game([new Act3()])
     game.state.currentRoom = game.state.allRooms.CollapsedGalleries
@@ -998,7 +998,7 @@ describe('Giving the Quiet Charm to Tobin', () => {
     expect(game.state.virtueCount('selfless')).toBe(1)
     expect(game.state.hasItem('quiet charm')).toBe(false)
     expect(executeCommands(game, ['give charm to boy'])).toContain(
-      "You don't have any 'charm' to give.",
+      "You don't have a 'charm' to give.",
     )
     expect(game.state.virtueCount('selfless')).toBe(1)
   })
@@ -1024,7 +1024,7 @@ describe('Giving the Quiet Charm to Tobin', () => {
   })
 })
 
-describe('Act 3 saves from before the Stillwater Phial stilled the pools', () => {
+describe('Act 3 saves from before the stillwater phial stilled the pools', () => {
   it('gives the old phial its reflection, adds the pool and counts a finished oath as stilled', () => {
     const game = new Game([new Act3()])
     game.state.currentRoom = game.state.allRooms.StillnessVestibule

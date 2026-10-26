@@ -27,7 +27,7 @@ const STRANGER_SIGHTING =
   'door the path is empty.'
 
 const AMULET_HUM =
-  ' At your side, the [item_name]Ancient Amulet[/item_name] hums softly, as if ' +
+  ' At your side, the [item_name]ancient amulet[/item_name] hums softly, as if ' +
   'answering something stirring beneath the floor.'
 
 /**

@@ -181,7 +181,7 @@ describe('Act IV rooms narrate their effect', () => {
     it('the stone and the pendant are read', () => {
       const { game, room } = inMaze()
       expect(room.useStone(game.state)).toContain(
-        'You hold the Echo Stone to your ear. One voice repeats, patient as a heartbeat:',
+        'You hold the echo stone to your ear. One voice repeats, patient as a heartbeat:',
       )
       expect(shape(room.useStone(game.state))).not.toContain('event')
       expect(shape(room.usePendant(game.state))).toEqual(['text'])
@@ -208,7 +208,7 @@ describe('Act IV rooms narrate their effect', () => {
       const vault = act.rooms.MemoryVault as MemoryVault
       const out = vault.mendOrbs(game.state)
       expect(out).toMatch(
-        /^You raise the Echo Stone\. The voices inside it pour out/,
+        /^You raise the echo stone\. The voices inside it pour out/,
       )
       expect(shape(out)).not.toContain('event')
     })
