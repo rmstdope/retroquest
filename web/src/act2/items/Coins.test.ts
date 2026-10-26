@@ -9,24 +9,18 @@ function numbersIn(text: string): number[] {
 }
 
 describe('Coins (rq-pw5d)', () => {
-  it.each([
-    ['one coin each, as Sir Cedric pays them', () => new Coins()],
-    ['a coin from the inn rooms', () => new Coins()],
-  ])(
-    'never states a count other than the one in the bag: %s',
-    (_source, coin) => {
-      const game = new Game([new Act2()])
-      game.state.addItemToInventory(coin(), 50)
+  it('never states a count other than the one in the bag', () => {
+    const game = new Game([new Act2()])
+    game.state.addItemToInventory(new Coins(), 50)
 
-      const entry = new GameController(game)
-        .getInventory()
-        .find((item) => item.name.includes('coins'))
+    const entry = new GameController(game)
+      .getInventory()
+      .find((item) => item.name.includes('coins'))
 
-      expect(entry?.name).toContain('50 coins')
-      for (const stated of numbersIn(entry?.description ?? ''))
-        expect(stated).toBe(50)
-    },
-  )
+    expect(entry?.name).toContain('50 coins')
+    for (const stated of numbersIn(entry?.description ?? ''))
+      expect(stated).toBe(50)
+  })
 
   it('counts the coins actually carried when used', () => {
     const game = new Game([new Act2()])
