@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs'
 import { describe, expect, it } from 'vitest'
-import { retireOrphans } from '../../../tts/retire-orphans'
+import { retireOrphans } from './retireOrphans'
 
 const MANIFEST =
   '{\n' +
