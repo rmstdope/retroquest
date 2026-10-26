@@ -1,7 +1,7 @@
 import { Item, type GameState, characterName, clue, speech } from '@/engine'
 import {
   FLAG_HERMITS_WARNING_ACCEPTED,
-  FLAG_HERMITS_WARNING_COMPLETED,
+  QUEST_HERMITS_WARNING,
 } from '../Act2StoryFlags'
 import { ForestTransition } from '../rooms/ForestTransition'
 
@@ -30,7 +30,7 @@ export class ForestSurvivalKit extends Item {
             "Making camp on someone's doorstep without a word seems rude.",
         )
       }
-      gameState.setStoryFlag(FLAG_HERMITS_WARNING_COMPLETED, true)
+      gameState.getQuest(QUEST_HERMITS_WARNING)?.complete(gameState)
       gameState.removeItemFromInventory('forest survival kit')
 
       return (

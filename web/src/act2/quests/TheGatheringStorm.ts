@@ -1,12 +1,13 @@
 import { Quest, characterName, type GameState } from '@/engine'
 import {
+  QUEST_GATHERING_STORM,
   FLAG_GATHERING_STORM_COMPLETED,
   FLAG_SPOKEN_TO_SIR_CEDRIC,
   FLAG_DEMONSTRATED_COMBAT_SKILLS,
   FLAG_SUPPLIES_QUEST_COMPLETED,
   FLAG_ANCIENT_LIBRARY_COMPLETED,
   FLAG_HERMITS_WARNING_COMPLETED,
-  FLAG_NYX_TRIALS_COMPLETED,
+  FLAG_NYX_TRIALS_PASSED,
 } from '../Act2StoryFlags'
 
 const SIR_CEDRIC = characterName('Sir Cedric')
@@ -31,7 +32,7 @@ export class TheGatheringStormQuest extends Quest {
 
   constructor() {
     super({
-      name: 'The Gathering Storm',
+      name: QUEST_GATHERING_STORM,
       description: OPENING_ENTRY,
     })
   }
@@ -120,9 +121,9 @@ export class TheGatheringStormQuest extends Quest {
         ' is waiting.'
     }
 
-    if (gameState.getStoryFlag(FLAG_NYX_TRIALS_COMPLETED)) {
-      if (!this.flagState[FLAG_NYX_TRIALS_COMPLETED]) {
-        this.flagState[FLAG_NYX_TRIALS_COMPLETED] = true
+    if (gameState.getStoryFlag(FLAG_NYX_TRIALS_PASSED)) {
+      if (!this.flagState[FLAG_NYX_TRIALS_PASSED]) {
+        this.flagState[FLAG_NYX_TRIALS_PASSED] = true
         updated = true
       }
       earlier.push(newDesc)
@@ -145,7 +146,8 @@ export class TheGatheringStormQuest extends Quest {
     return updated
   }
 
-  override checkCompletion(gameState: GameState): boolean {
-    return gameState.getStoryFlag(FLAG_GATHERING_STORM_COMPLETED)
+  /** The story flag completing this quest raises. */
+  override completedFlag(): string {
+    return FLAG_GATHERING_STORM_COMPLETED
   }
 }

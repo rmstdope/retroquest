@@ -1,5 +1,6 @@
 import { Quest, type GameState } from '@/engine'
 import {
+  QUEST_HEALERS_APPRENTICE,
   FLAG_HEALERS_APPRENTICE_ACCEPTED,
   FLAG_HEALERS_APPRENTICE_COMPLETED,
 } from '../Act2StoryFlags'
@@ -8,7 +9,7 @@ import {
 export class TheHealersApprenticeQuest extends Quest {
   constructor() {
     super({
-      name: "The Healer's Apprentice",
+      name: QUEST_HEALERS_APPRENTICE,
       description:
         "Master Healer Lyria let you watch her at a dying carter's bed. Your " +
         'herbs were not enough. She needs a Crystal Focus, and the old ' +
@@ -25,9 +26,8 @@ export class TheHealersApprenticeQuest extends Quest {
     return gameState.getStoryFlag(FLAG_HEALERS_APPRENTICE_ACCEPTED)
   }
 
-  /** Completes once Lyria has been given the Crystal Focus and taught greater heal. */
-  override checkCompletion(gameState: GameState): boolean {
-    // Quest completes when player has been taught greater heal over the carter's bed (focus given)
-    return gameState.getStoryFlag(FLAG_HEALERS_APPRENTICE_COMPLETED)
+  /** The story flag completing this quest raises. */
+  override completedFlag(): string {
+    return FLAG_HEALERS_APPRENTICE_COMPLETED
   }
 }

@@ -7,7 +7,7 @@ import {
   FLAG_ANCIENT_LIBRARY_COMPLETED,
   FLAG_DEMONSTRATED_COMBAT_SKILLS,
   FLAG_HERMITS_WARNING_COMPLETED,
-  FLAG_NYX_TRIALS_COMPLETED,
+  FLAG_NYX_TRIALS_PASSED,
   FLAG_SPOKEN_TO_SIR_CEDRIC,
   FLAG_SUPPLIES_QUEST_COMPLETED,
 } from '../Act2StoryFlags'
@@ -87,7 +87,7 @@ describe('The Gathering Storm log', () => {
     FLAG_SUPPLIES_QUEST_COMPLETED,
     FLAG_ANCIENT_LIBRARY_COMPLETED,
     FLAG_HERMITS_WARNING_COMPLETED,
-    FLAG_NYX_TRIALS_COMPLETED,
+    FLAG_NYX_TRIALS_PASSED,
   ]
 
   it('opens with the agreed entry, which is also the description', () => {
@@ -119,7 +119,7 @@ describe('The Gathering Storm log', () => {
   it('keeps the entries in order even when done out of order', () => {
     const game = new Game([new Act2()])
     const quest = new TheGatheringStormQuest()
-    game.state.setStoryFlag(FLAG_NYX_TRIALS_COMPLETED, true)
+    game.state.setStoryFlag(FLAG_NYX_TRIALS_PASSED, true)
     game.state.setStoryFlag(FLAG_SPOKEN_TO_SIR_CEDRIC, true)
     quest.checkUpdate(game.state)
     const details = quest.details()

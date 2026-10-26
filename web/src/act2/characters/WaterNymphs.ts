@@ -8,7 +8,7 @@ import {
 } from '@/engine'
 import { CrystalClearWater } from '../items/CrystalClearWater'
 import { Moonflowers } from '../items/Moonflowers'
-import { FLAG_FOREST_GUARDIANS_RIDDLES_COMPLETED } from '../Act2StoryFlags'
+import { QUEST_FOREST_GUARDIANS_RIDDLES } from '../Act2StoryFlags'
 
 /** The grey help line shown under every riddle. */
 const RIDDLE_HELP =
@@ -174,7 +174,7 @@ export class WaterNymphs extends Character {
 
       if (this.currentRiddle >= RIDDLES.length) {
         this.riddlesCompleted = true
-        gameState.setStoryFlag(FLAG_FOREST_GUARDIANS_RIDDLES_COMPLETED, true)
+        gameState.getQuest(QUEST_FOREST_GUARDIANS_RIDDLES)?.complete(gameState)
 
         gameState.currentRoom.items.push(new CrystalClearWater())
         gameState.currentRoom.items.push(new Moonflowers())

@@ -1,5 +1,6 @@
 import { Quest, type GameState } from '@/engine'
 import {
+  QUEST_ANCIENT_LIBRARY,
   FLAG_ANCIENT_LIBRARY_ACCEPTED,
   FLAG_ANCIENT_LIBRARY_COMPLETED,
   FLAG_HEALERS_APPRENTICE_COMPLETED,
@@ -12,7 +13,7 @@ import {
 export class TheAncientLibraryQuest extends Quest {
   constructor() {
     super({
-      name: 'The Ancient Library',
+      name: QUEST_ANCIENT_LIBRARY,
       description:
         "You've discovered a hidden passage beneath Greendale containing an " +
         'ancient library of magical texts and lore. You should explore its ' +
@@ -44,8 +45,11 @@ export class TheAncientLibraryQuest extends Quest {
     const crystalFocusAcquired =
       gameState.hasItem('Crystal Focus') ||
       gameState.getStoryFlag(FLAG_HEALERS_APPRENTICE_COMPLETED)
-    const completed = gameState.hasSpell('dispel') && crystalFocusAcquired
-    if (completed) gameState.setStoryFlag(FLAG_ANCIENT_LIBRARY_COMPLETED, true)
-    return completed
+    return gameState.hasSpell('dispel') && crystalFocusAcquired
+  }
+
+  /** The story flag completing this quest raises. */
+  override completedFlag(): string {
+    return FLAG_ANCIENT_LIBRARY_COMPLETED
   }
 }

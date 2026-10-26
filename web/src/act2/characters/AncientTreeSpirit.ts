@@ -14,6 +14,7 @@ import { ForestSpeechSpell } from '../spells/ForestSpeechSpell'
 import {
   FLAG_WHISPERS_IN_WIND_COMPLETED,
   FLAG_WHISPERS_IN_WIND_OFFERED,
+  QUEST_WHISPERS_IN_THE_WIND,
 } from '../Act2StoryFlags'
 
 /** Where the nymphs are, said after the acorn without naming what to bring. */
@@ -121,7 +122,7 @@ export class AncientTreeSpirit extends Character {
       const hasMoonflowers = gameState.hasItem('moonflowers')
 
       if (hasWater && hasMoonflowers) {
-        gameState.setStoryFlag(FLAG_WHISPERS_IN_WIND_COMPLETED, true)
+        gameState.getQuest(QUEST_WHISPERS_IN_THE_WIND)?.complete(gameState)
         this.whispersQuestCompleted = true
         gameState.removeItemFromInventory('moonflowers')
 

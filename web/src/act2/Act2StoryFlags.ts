@@ -26,7 +26,8 @@ export const FLAG_WHISPERS_IN_WIND_COMPLETED = 'whispers_in_wind_completed'
 export const FLAG_LOST_CARAVAN_COMPLETED = 'lost_caravan_completed'
 
 // Character Relationship Flags
-export const FLAG_NYX_TRIALS_COMPLETED = 'nyx_trials_completed'
+/** Set when Nyx has judged Elior; no quest owns it, and the stored name predates the constant's. */
+export const FLAG_NYX_TRIALS_PASSED = 'nyx_trials_completed'
 export const FLAG_KNOWS_ELENA_CURSE = 'knows_elena_curse'
 export const FLAG_SPECTRAL_LIBRARIAN_FRIENDLY = 'spectral_librarian_friendly'
 /** Set once the Spectral Librarian has spoken the glance line about the amulet. */
@@ -81,3 +82,15 @@ export const FLAG_THORNE_HEALING_TOLD = 'thorne_healing_told'
 export const FLAG_LYRIA_DIAGNOSED = 'lyria_diagnosed'
 /** Set once Elior has given the silver leaves to Master Healer Lyria. */
 export const FLAG_LYRIA_SILVER_LEAVES_GIVEN = 'lyria_silver_leaves_given'
+
+/** Names of the quests that raise a completed flag (see `Quest.completedFlag`). */
+export const QUEST_CEDRIKS_LOST_HONOR = "Cedric's Lost Honor"
+export const QUEST_SUPPLIES_FOR_THE_JOURNEY = 'Supplies for the Journey'
+export const QUEST_FOREST_GUARDIANS_RIDDLES = "The Forest Guardian's Riddles"
+export const QUEST_HEALERS_APPRENTICE = "The Healer's Apprentice"
+export const QUEST_ANCIENT_LIBRARY = 'The Ancient Library'
+export const QUEST_GATHERING_STORM = 'The Gathering Storm'
+export const QUEST_HERMITS_WARNING = "The Hermit's Warning"
+export const QUEST_INNKEEPERS_DAUGHTER = "The Innkeeper's Daughter"
+export const QUEST_LOST_CARAVAN = "The Merchant's Lost Caravan"
+export const QUEST_WHISPERS_IN_THE_WIND = 'Whispers in the Wind'

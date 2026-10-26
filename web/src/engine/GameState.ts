@@ -263,13 +263,17 @@ export class GameState {
     for (const quest of this.activatedQuests) quest.checkUpdate(this)
   }
 
-  /** Complete the first active quest whose completion is met and return it, or null. */
+  /**
+   * Complete the first active quest whose completion is met and return it, or
+   * null. Completing raises the quest's completed flag.
+   */
   nextCompletedQuest(): Quest | null {
     const index = this.activatedQuests.findIndex((quest) =>
       quest.checkCompletion(this),
     )
     if (index < 0) return null
     const [quest] = this.activatedQuests.splice(index, 1)
+    quest.complete(this)
     this.completedQuests.push(quest)
     return quest
   }

@@ -1,5 +1,6 @@
 import { Quest, type GameState } from '@/engine'
 import {
+  QUEST_FOREST_GUARDIANS_RIDDLES,
   FLAG_FOREST_GUARDIANS_RIDDLES_OFFERED,
   FLAG_FOREST_GUARDIANS_RIDDLES_COMPLETED,
 } from '../Act2StoryFlags'
@@ -21,7 +22,7 @@ export class TheForestGuardiansRiddles extends Quest {
 
   constructor() {
     super({
-      name: "The Forest Guardian's Riddles",
+      name: QUEST_FOREST_GUARDIANS_RIDDLES,
       description: DESCRIPTION,
       completion:
         'You have successfully solved the riddles of the forest guardians, ' +
@@ -40,20 +41,8 @@ export class TheForestGuardiansRiddles extends Quest {
     return gameState.getStoryFlag(FLAG_FOREST_GUARDIANS_RIDDLES_OFFERED)
   }
 
-  /** Check if the quest can be completed based on story flags. */
-  override checkCompletion(gameState: GameState): boolean {
-    return (
-      gameState.getStoryFlag(FLAG_FOREST_GUARDIANS_RIDDLES_COMPLETED) &&
-      !this.completed
-    )
-  }
-
-  /** Complete the quest and give rewards. */
-  override complete(_gameState: GameState): string {
-    if (!this.completed) {
-      this.completed = true
-      return `[success]Quest Complete: ${this.name}[/success]`
-    }
-    return this.completion
+  /** The story flag completing this quest raises. */
+  override completedFlag(): string {
+    return FLAG_FOREST_GUARDIANS_RIDDLES_COMPLETED
   }
 }
