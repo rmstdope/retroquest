@@ -38,30 +38,39 @@ export class Item {
     )
   }
 
+  /**
+   * The item's name as it reads inside a sentence, article included: "the"
+   * and the marked-up name. Override for a name that takes no article, such
+   * as a person's possessive ("Elior's Journal").
+   */
+  nameInSentence(): string {
+    return `the [item_name]${this.name}[/item_name]`
+  }
+
   /** Why the item cannot be taken, or '' when it can. */
   preventPickup(): string {
     return this.canBeCarried
       ? ''
-      : `[failure]You can't take the [item_name]${this.name}[/item_name].[/failure]`
+      : `[failure]You can't take ${this.nameInSentence()}.[/failure]`
   }
 
   use(_gameState: GameState): string {
     return (
-      `[failure]You can't use the [item_name]${this.name}[/item_name] in any ` +
+      `[failure]You can't use ${this.nameInSentence()} in any ` +
       'special way.[/failure]'
     )
   }
 
   useWith(_gameState: GameState, other: Item): string {
     return (
-      `[failure]You can't use the [item_name]${this.name}[/item_name] with ` +
-      `the [item_name]${other.name}[/item_name].[/failure]`
+      `[failure]You can't use ${this.nameInSentence()} with ` +
+      `${other.nameInSentence()}.[/failure]`
     )
   }
 
   useOnCharacter(_gameState: GameState, target: Character): string {
     return (
-      `[failure]You can't use the [item_name]${this.name}[/item_name] on ` +
+      `[failure]You can't use ${this.nameInSentence()} on ` +
       `[character_name]${target.name}[/character_name].[/failure]`
     )
   }
@@ -80,11 +89,11 @@ export class Item {
   }
 
   open(_gameState: GameState): string {
-    return `[failure]You can't open the [item_name]${this.name}[/item_name].[/failure]`
+    return `[failure]You can't open ${this.nameInSentence()}.[/failure]`
   }
 
   close(_gameState: GameState): string {
-    return `[failure]You can't close the [item_name]${this.name}[/item_name].[/failure]`
+    return `[failure]You can't close ${this.nameInSentence()}.[/failure]`
   }
 
   /** Called by the grow spell. */

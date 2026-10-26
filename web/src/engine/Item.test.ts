@@ -38,6 +38,26 @@ describe('Item', () => {
     ).toBe('')
   })
 
+  it('names itself in refusals through nameInSentence, which a subclass can override', () => {
+    class Diary extends Item {
+      override nameInSentence(): string {
+        return "[item_name]Ann's Diary[/item_name]"
+      }
+    }
+    const gs = gameState()
+    const diary = new Diary({ name: "ann's diary", description: 'd' })
+    const rock = new Item({ name: 'rock', description: 'd' })
+    expect(rock.nameInSentence()).toBe('the [item_name]rock[/item_name]')
+    expect(diary.preventPickup()).toBe(
+      "[failure]You can't take [item_name]Ann's Diary[/item_name].[/failure]",
+    )
+    expect(diary.use(gs)).toContain("can't use [item_name]Ann's Diary")
+    expect(rock.useWith(gs, diary)).toContain(
+      "with [item_name]Ann's Diary[/item_name].",
+    )
+    expect(diary.open(gs)).toContain("can't open [item_name]Ann's Diary")
+  })
+
   it('answers every action with a failure or nothing by default', () => {
     const gs = gameState()
     const rock = new Item({ name: 'rock', description: 'A grey rock.' })

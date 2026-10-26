@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import { Game, findMarkupProblems } from '@/engine'
 import { parseTurn } from '@/lantern/parseTurn'
+import { executeCommands } from '@/testing/gameHelpers'
 import { Act1 } from '../Act1'
 import { EliorsJournal } from './EliorsJournal'
 
@@ -43,6 +44,16 @@ describe('EliorsJournal', () => {
         "I just can't remember from where. What did it mean?",
     )
     expect(text).not.toMatch(/mother|father/i)
+  })
+
+  it('is refused by name, as Elior\'s Journal and without a "the"', () => {
+    const game = new Game([new Act1()])
+    game.state.currentRoom = game.state.allRooms.EliorsCottage
+    const answer = executeCommands(game, ['use lantern', 'take journal'])
+
+    expect(answer).toContain(
+      "[failure]You can't take [item_name]Elior's Journal[/item_name].[/failure]",
+    )
   })
 
   it('shows the same page every time', () => {
