@@ -1,5 +1,6 @@
 import { Quest, type GameState } from '@/engine'
 import {
+  QUEST_LOST_CARAVAN,
   FLAG_SPOKEN_TO_CARAVAN_MASTER,
   FLAG_FOUND_LOST_CARAVAN,
   FLAG_LOST_CARAVAN_COMPLETED,
@@ -9,7 +10,7 @@ import {
 export class TheMerchantsLostCaravanQuest extends Quest {
   constructor() {
     super({
-      name: "The Merchant's Lost Caravan",
+      name: QUEST_LOST_CARAVAN,
       description:
         "Caravan Master Thorne's valuable caravan has gone missing in the Enchanted " +
         'Forest. Find out what happened to the merchants and their goods.',
@@ -28,8 +29,9 @@ export class TheMerchantsLostCaravanQuest extends Quest {
     return gameState.getStoryFlag(FLAG_SPOKEN_TO_CARAVAN_MASTER)
   }
 
-  override checkCompletion(gameState: GameState): boolean {
-    return gameState.getStoryFlag(FLAG_LOST_CARAVAN_COMPLETED)
+  /** The story flag completing this quest raises. */
+  override completedFlag(): string {
+    return FLAG_LOST_CARAVAN_COMPLETED
   }
 
   /** Provide dynamic quest hints based on current progress. */

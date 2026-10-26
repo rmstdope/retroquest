@@ -9,7 +9,7 @@ import {
   FLAG_COURT_HERALD_FORMAL_PRESENTATION,
   FLAG_EXAMINED_SECRET_DOCUMENTS,
   FLAG_FOUND_LOST_CARAVAN,
-  FLAG_NYX_TRIALS_COMPLETED,
+  FLAG_NYX_TRIALS_PASSED,
   FLAG_READ_SQUIRES_DIARY,
   FLAG_SHOWED_JOURNAL_TO_HISTORIANS,
   FLAG_SPOKEN_TO_SIR_CEDRIC,
@@ -275,7 +275,7 @@ describe('Sir Cedric', () => {
     const game = gameIn('CastleCourtyard')
     game.state.setStoryFlag(FLAG_CEDRIKS_HONOR_ACCEPTED, true)
     game.state.setStoryFlag(FLAG_CEDRIC_RECOGNISED_SIGIL, true)
-    game.state.setStoryFlag(FLAG_NYX_TRIALS_COMPLETED, true)
+    game.state.setStoryFlag(FLAG_NYX_TRIALS_PASSED, true)
     expect(talk(game, 'sir cedric')).toContain(
       'I sense something extraordinary',
     )

@@ -3,7 +3,7 @@ import { Game } from '@/engine'
 import { Act2 } from '../Act2'
 import { Nyx } from './Nyx'
 import {
-  FLAG_NYX_TRIALS_COMPLETED,
+  FLAG_NYX_TRIALS_PASSED,
   FLAG_WREN_FLOWER_GIVEN,
   FLAG_MARCUS_TOLD_TRUTH,
   FLAG_BRENN_FORGIVEN,
@@ -92,7 +92,7 @@ describe('Nyx', () => {
 
   it('gives a save that already met Nyx only the farewell', () => {
     const game = new Game([new Act2()])
-    game.state.setStoryFlag(FLAG_NYX_TRIALS_COMPLETED, true)
+    game.state.setStoryFlag(FLAG_NYX_TRIALS_PASSED, true)
 
     const answer = new Nyx().talkTo(game.state)
 
@@ -194,7 +194,7 @@ describe('Nyx', () => {
       game.state.setStoryFlag(FLAG_WREN_FLOWER_GIVEN, true)
       const before = game.state.inventory.length
       new Nyx().talkTo(game.state)
-      expect(game.state.getStoryFlag(FLAG_NYX_TRIALS_COMPLETED)).toBe(true)
+      expect(game.state.getStoryFlag(FLAG_NYX_TRIALS_PASSED)).toBe(true)
       expect(game.state.inventory).toHaveLength(before + 2)
     })
   })

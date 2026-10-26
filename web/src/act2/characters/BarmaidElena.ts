@@ -10,6 +10,7 @@ import {
   FLAG_ELENA_HEALED,
   FLAG_INNKEEPERS_DAUGHTER_COMPLETED,
   FLAG_MARCUS_TOLD_TRUTH,
+  QUEST_INNKEEPERS_DAUGHTER,
 } from '../Act2StoryFlags'
 
 /**
@@ -284,7 +285,7 @@ export class BarmaidElena extends Character {
     this.markShown = false
 
     // Complete the cure and set the quest completion flag
-    gameState.setStoryFlag(FLAG_INNKEEPERS_DAUGHTER_COMPLETED, true)
+    gameState.getQuest(QUEST_INNKEEPERS_DAUGHTER)?.complete(gameState)
 
     // Update Elena's description to show complete healing
     this.description =

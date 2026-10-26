@@ -55,13 +55,32 @@ export class Quest {
     return false
   }
 
-  checkCompletion(_gameState: GameState): boolean {
-    return this.completed
+  /**
+   * The story flag raised when this quest completes, or null for none. A
+   * method, not a field, so saves made before a quest declared it still work.
+   */
+  completedFlag(): string | null {
+    return null
   }
 
-  /** Mark the quest completed and return its completion text. */
-  complete(_gameState: GameState): string {
+  /**
+   * True once the quest has been completed, or its declared completed flag is
+   * already raised (a save from before the engine raised it). A quest with its
+   * own condition overrides this; the engine then completes it.
+   */
+  checkCompletion(gameState: GameState): boolean {
+    const flag = this.completedFlag()
+    return this.completed || (flag !== null && gameState.getStoryFlag(flag))
+  }
+
+  /**
+   * Mark the quest completed, raise its completed flag and return its
+   * completion text. The one place a quest's completed flag is raised.
+   */
+  complete(gameState: GameState): string {
     this.completed = true
+    const flag = this.completedFlag()
+    if (flag !== null) gameState.setStoryFlag(flag, true)
     return this.completion
   }
 

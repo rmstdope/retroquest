@@ -1,5 +1,6 @@
 import { Quest, type GameState } from '@/engine'
 import {
+  QUEST_HERMITS_WARNING,
   FLAG_HERMITS_WARNING_COMPLETED,
   FLAG_HERMITS_WARNING_ACCEPTED,
 } from '../Act2StoryFlags'
@@ -8,7 +9,7 @@ import {
 export class TheHermitsWarningQuest extends Quest {
   constructor() {
     super({
-      name: "The Hermit's Warning",
+      name: QUEST_HERMITS_WARNING,
       description:
         'A forest hermit at the edge of the Enchanted Forest has warned you ' +
         "that the forest moves its paths and keeps old things that don't " +
@@ -27,8 +28,8 @@ export class TheHermitsWarningQuest extends Quest {
     return gameState.getStoryFlag(FLAG_HERMITS_WARNING_ACCEPTED)
   }
 
-  /** Check if the quest should be completed when the survival kit is used. */
-  override checkCompletion(gameState: GameState): boolean {
-    return gameState.getStoryFlag(FLAG_HERMITS_WARNING_COMPLETED)
+  /** The story flag completing this quest raises. */
+  override completedFlag(): string {
+    return FLAG_HERMITS_WARNING_COMPLETED
   }
 }

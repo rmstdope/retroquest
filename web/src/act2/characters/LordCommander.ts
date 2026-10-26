@@ -10,6 +10,7 @@ import { SecretDocuments } from '../items/SecretDocuments'
 import {
   FLAG_CEDRIKS_HONOR_COMPLETED,
   FLAG_EXAMINED_SECRET_DOCUMENTS,
+  QUEST_CEDRIKS_LOST_HONOR,
 } from '../Act2StoryFlags'
 
 /** The military leader of Greendale who can officially restore Sir Cedric's honor. */
@@ -76,7 +77,7 @@ export class LordCommander extends Character {
       }
 
       // The player has examined the papers and understands them
-      gameState.setStoryFlag(FLAG_CEDRIKS_HONOR_COMPLETED, true)
+      gameState.getQuest(QUEST_CEDRIKS_LOST_HONOR)?.complete(gameState)
       SirCedric.refreshAll(gameState)
 
       // Remove the documents from inventory

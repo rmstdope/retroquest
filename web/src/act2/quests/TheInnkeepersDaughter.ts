@@ -1,5 +1,6 @@
 import { Quest, type GameState } from '@/engine'
 import {
+  QUEST_INNKEEPERS_DAUGHTER,
   FLAG_KNOWS_ELENA_CURSE,
   FLAG_INNKEEPERS_DAUGHTER_COMPLETED,
 } from '../Act2StoryFlags'
@@ -8,7 +9,7 @@ import {
 export class TheInnkeepersDaughterQuest extends Quest {
   constructor() {
     super({
-      name: "The Innkeeper's Daughter",
+      name: QUEST_INNKEEPERS_DAUGHTER,
       description:
         'Elena, the barmaid at The Silver Stag Inn, has been cursed by a ' +
         'dark wizard. Use your magical abilities to break the curse and save ' +
@@ -26,7 +27,8 @@ export class TheInnkeepersDaughterQuest extends Quest {
     return gameState.getStoryFlag(FLAG_KNOWS_ELENA_CURSE)
   }
 
-  override checkCompletion(gameState: GameState): boolean {
-    return gameState.getStoryFlag(FLAG_INNKEEPERS_DAUGHTER_COMPLETED)
+  /** The story flag completing this quest raises. */
+  override completedFlag(): string {
+    return FLAG_INNKEEPERS_DAUGHTER_COMPLETED
   }
 }

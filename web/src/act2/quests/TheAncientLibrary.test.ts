@@ -27,13 +27,15 @@ describe('The Ancient Library completion', () => {
     expect(quest.checkCompletion(game.state)).toBe(false)
   })
 
-  it('raises the completed flag when it completes', () => {
+  it('raises the completed flag when the engine settles it', () => {
     const game = new Game([new Act2()])
     const quest = new TheAncientLibraryQuest()
+    game.state.activatedQuests = [quest]
     game.state.learnSpell(new DispelSpell())
     game.state.setStoryFlag(FLAG_HEALERS_APPRENTICE_COMPLETED, true)
 
     expect(quest.checkCompletion(game.state)).toBe(true)
+    expect(game.state.settleQuests().completed).toEqual([quest])
     expect(game.state.getStoryFlag(FLAG_ANCIENT_LIBRARY_COMPLETED)).toBe(true)
   })
 

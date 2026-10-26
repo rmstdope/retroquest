@@ -1,5 +1,6 @@
 import { Quest, type GameState } from '@/engine'
 import {
+  QUEST_WHISPERS_IN_THE_WIND,
   FLAG_WHISPERS_IN_WIND_OFFERED,
   FLAG_WHISPERS_IN_WIND_COMPLETED,
 } from '../Act2StoryFlags'
@@ -12,7 +13,7 @@ import {
 export class WhispersInTheWind extends Quest {
   constructor() {
     super({
-      name: 'Whispers in the Wind',
+      name: QUEST_WHISPERS_IN_THE_WIND,
       description:
         'The Ancient Tree Spirit has sensed mystical beings hidden within the ' +
         "forest's depths. Gentle whispers carry on the wind, speaking of " +
@@ -34,19 +35,8 @@ export class WhispersInTheWind extends Quest {
     return gameState.getStoryFlag(FLAG_WHISPERS_IN_WIND_OFFERED)
   }
 
-  /** Check if the quest can be completed based on story flags. */
-  override checkCompletion(gameState: GameState): boolean {
-    return (
-      gameState.getStoryFlag(FLAG_WHISPERS_IN_WIND_COMPLETED) && !this.completed
-    )
-  }
-
-  /** Complete the quest and give rewards. */
-  override complete(_gameState: GameState): string {
-    if (!this.completed) {
-      this.completed = true
-      return `[success]Quest Complete: ${this.name}[/success]`
-    }
-    return this.completion
+  /** The story flag completing this quest raises. */
+  override completedFlag(): string {
+    return FLAG_WHISPERS_IN_WIND_COMPLETED
   }
 }

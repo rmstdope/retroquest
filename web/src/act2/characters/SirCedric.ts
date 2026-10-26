@@ -18,9 +18,10 @@ import {
   FLAG_SPOKEN_TO_SIR_CEDRIC,
   FLAG_CEDRIKS_HONOR_ACCEPTED,
   FLAG_CEDRIKS_HONOR_COMPLETED,
-  FLAG_NYX_TRIALS_COMPLETED,
+  FLAG_NYX_TRIALS_PASSED,
   FLAG_GATHERING_STORM_COMPLETED,
   FLAG_VISION_SHARED,
+  QUEST_GATHERING_STORM,
 } from '../Act2StoryFlags'
 
 /** Cedric's description while his name is not yet cleared: old mail, no device, an empty scabbard. */
@@ -204,7 +205,7 @@ export class SirCedric extends Character {
 
   /** Complete The Gathering Storm, which ends Act II; returns the closing lines after `opening`. */
   private endAct(gameState: GameState, opening = ''): string {
-    gameState.setStoryFlag(FLAG_GATHERING_STORM_COMPLETED, true)
+    gameState.getQuest(QUEST_GATHERING_STORM)?.complete(gameState)
     return opening + VISION_CLOSING
   }
 
@@ -534,7 +535,7 @@ export class SirCedric extends Character {
   /** Cedric's reply to a talk, by the stage of the act; the recognition never changes it. */
   private normalReply(gameState: GameState): string {
     // Check if Nyx trials are completed - highest priority response
-    if (gameState.getStoryFlag(FLAG_NYX_TRIALS_COMPLETED)) {
+    if (gameState.getStoryFlag(FLAG_NYX_TRIALS_PASSED)) {
       return (
         characterName('Sir Cedric') +
         ': ' +

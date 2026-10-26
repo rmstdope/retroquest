@@ -17,6 +17,7 @@ import {
   FLAG_INNKEEPERS_DAUGHTER_COMPLETED,
   FLAG_LYRIA_DIAGNOSED,
   FLAG_LYRIA_SILVER_LEAVES_GIVEN,
+  QUEST_HEALERS_APPRENTICE,
 } from '../Act2StoryFlags'
 
 /** NPC mentor who teaches advanced healing and handles the apprenticeship quest. */
@@ -240,7 +241,7 @@ export class MasterHealerLyria extends Character {
         )
       }
       gameState.removeItemFromInventory('Crystal Focus')
-      gameState.setStoryFlag(FLAG_HEALERS_APPRENTICE_COMPLETED, true)
+      gameState.getQuest(QUEST_HEALERS_APPRENTICE)?.complete(gameState)
       gameState.learnSpell(new GreaterHealSpell())
       return (
         characterName('Lyria') +

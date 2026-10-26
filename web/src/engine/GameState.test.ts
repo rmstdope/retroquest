@@ -95,6 +95,19 @@ describe('GameState', () => {
       expect(gs.nextCompletedQuest()).toBeNull()
     })
 
+    it("raises a settled quest's declared flag, whatever completed it", () => {
+      class Flagged extends DummyQuest {
+        override completedFlag(): string {
+          return 'ends_completed'
+        }
+      }
+      const ends = new Flagged('Ends', false, true)
+      gs.activatedQuests = [ends]
+      gs.settleQuests()
+      expect(ends.completed).toBe(true)
+      expect(gs.getStoryFlag('ends_completed')).toBe(true)
+    })
+
     it('settles every pending quest event in one call, then reports nothing', () => {
       const starts = new DummyQuest('Starts', true, false)
       const changes = new DummyQuest('Changes')

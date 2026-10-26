@@ -9,11 +9,11 @@ import {
 import {
   FLAG_SPOKEN_TO_CARAVAN_MASTER,
   FLAG_FOUND_LOST_CARAVAN,
-  FLAG_LOST_CARAVAN_COMPLETED,
   FLAG_BRENN_FORGIVEN,
   FLAG_MERCHANTS_HEALED,
   FLAG_THORNE_HEALING_TOLD,
   VIRTUE_MERCY,
+  QUEST_LOST_CARAVAN,
 } from '../Act2StoryFlags'
 import { SecretDocuments } from '../items/SecretDocuments'
 
@@ -116,7 +116,7 @@ export class CaravanMasterThorne extends Character {
         gameState.inventory.push(secretDocs)
         this.hasGivenDocuments = true
         // Set the flag indicating the lost caravan quest is completed
-        gameState.setStoryFlag(FLAG_LOST_CARAVAN_COMPLETED, true)
+        gameState.getQuest(QUEST_LOST_CARAVAN)?.complete(gameState)
         const prefix = "You've found them! "
         const middle =
           'I cannot express my gratitude enough for bringing my people back safely. ' +

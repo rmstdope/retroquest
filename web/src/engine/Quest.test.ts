@@ -37,6 +37,38 @@ describe('Quest', () => {
     expect(q.checkCompletion(gs)).toBe(true)
   })
 
+  describe('completed flag', () => {
+    /** A quest that declares the story flag its completion raises. */
+    class Flagged extends Quest {
+      override completedFlag(): string {
+        return 'flagged_completed'
+      }
+    }
+
+    it('declares no flag by default and raises none', () => {
+      const gs = gameState()
+      const q = new Quest({ name: 'Q', description: 'd' })
+      expect(q.completedFlag()).toBeNull()
+      q.complete(gs)
+      expect(gs.storyFlags).toEqual({})
+    })
+
+    it('raises its declared flag when completed', () => {
+      const gs = gameState()
+      const q = new Flagged({ name: 'Q', description: 'd' })
+      q.complete(gs)
+      expect(gs.getStoryFlag('flagged_completed')).toBe(true)
+    })
+
+    it('counts as completed once its flag is raised elsewhere (older saves)', () => {
+      const gs = gameState()
+      const q = new Flagged({ name: 'Q', description: 'd' })
+      expect(q.checkCompletion(gs)).toBe(false)
+      gs.setStoryFlag('flagged_completed', true)
+      expect(q.checkCompletion(gs)).toBe(true)
+    })
+  })
+
   describe('details', () => {
     /** A quest exposing the protected helpers. */
     class Logged extends Quest {

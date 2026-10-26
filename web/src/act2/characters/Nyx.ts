@@ -5,7 +5,7 @@ import { PropheticVision } from '../spells/PropheticVision'
 import {
   FLAG_BRENN_FORGIVEN,
   FLAG_MARCUS_TOLD_TRUTH,
-  FLAG_NYX_TRIALS_COMPLETED,
+  FLAG_NYX_TRIALS_PASSED,
   FLAG_WREN_FLOWER_GIVEN,
 } from '../Act2StoryFlags'
 
@@ -61,11 +61,11 @@ export class Nyx extends Character {
    */
   override talkTo(gameState: GameState): string {
     // Check if this is the first time talking to Nyx
-    if (!gameState.getStoryFlag(FLAG_NYX_TRIALS_COMPLETED)) {
+    if (!gameState.getStoryFlag(FLAG_NYX_TRIALS_PASSED)) {
       // The kindnesses are read now, before anything changes, and only once
       const kindnesses = this.kindnessesSpoken(gameState)
       // First meeting - grant all rewards immediately
-      gameState.setStoryFlag(FLAG_NYX_TRIALS_COMPLETED, true)
+      gameState.setStoryFlag(FLAG_NYX_TRIALS_PASSED, true)
       // Add Prophetic Vision spell
       const propheticVision = new PropheticVision()
       gameState.knownSpells.push(propheticVision)

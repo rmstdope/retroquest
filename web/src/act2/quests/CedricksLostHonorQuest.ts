@@ -1,5 +1,6 @@
 import { Quest, type GameState } from '@/engine'
 import {
+  QUEST_CEDRIKS_LOST_HONOR,
   FLAG_CEDRIKS_HONOR_ACCEPTED,
   FLAG_CEDRIKS_HONOR_COMPLETED,
   FLAG_READ_SQUIRES_DIARY,
@@ -38,7 +39,7 @@ export class CedricksLostHonorQuest extends Quest {
 
   constructor() {
     super({
-      name: "Cedric's Lost Honor",
+      name: QUEST_CEDRIKS_LOST_HONOR,
       description: START_TEXT,
       completion: COMPLETION_TEXT,
     })
@@ -61,9 +62,9 @@ export class CedricksLostHonorQuest extends Quest {
     )
   }
 
-  /** Quest is completed when the secret documents have been used to clear Cedric's name. */
-  override checkCompletion(gameState: GameState): boolean {
-    return gameState.getStoryFlag(FLAG_CEDRIKS_HONOR_COMPLETED)
+  /** The story flag completing this quest raises. */
+  override completedFlag(): string {
+    return FLAG_CEDRIKS_HONOR_COMPLETED
   }
 
   /** Refresh the quest description when new squire or document information exists. */

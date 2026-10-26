@@ -1,5 +1,6 @@
 import { Quest, type GameState } from '@/engine'
 import {
+  QUEST_SUPPLIES_FOR_THE_JOURNEY,
   FLAG_DEMONSTRATED_COMBAT_SKILLS,
   FLAG_SUPPLIES_QUEST_COMPLETED,
 } from '../Act2StoryFlags'
@@ -11,7 +12,7 @@ import { QualityRope } from '../items/QualityRope'
 export class SuppliesForTheJourneyQuest extends Quest {
   constructor() {
     super({
-      name: 'Supplies for the Journey',
+      name: QUEST_SUPPLIES_FOR_THE_JOURNEY,
       description:
         'Sir Cedric mentioned the need for proper equipment for forest ' +
         'expeditions. Gather essential supplies from the Market District.',
@@ -25,6 +26,7 @@ export class SuppliesForTheJourneyQuest extends Quest {
     return gameState.getStoryFlag(FLAG_DEMONSTRATED_COMBAT_SKILLS)
   }
 
+  /** Complete once the survival kit, lantern and rope are all carried. */
   override checkCompletion(gameState: GameState): boolean {
     if (!this.completed) {
       const hasSurvivalKit = gameState.inventory.some(
@@ -36,12 +38,13 @@ export class SuppliesForTheJourneyQuest extends Quest {
       const hasRope = gameState.inventory.some(
         (item) => item instanceof QualityRope,
       )
-      if (hasSurvivalKit && hasLantern && hasRope) {
-        this.completed = true
-        gameState.setStoryFlag(FLAG_SUPPLIES_QUEST_COMPLETED, true)
-        return true
-      }
+      if (hasSurvivalKit && hasLantern && hasRope) return true
     }
     return false
+  }
+
+  /** The story flag completing this quest raises. */
+  override completedFlag(): string {
+    return FLAG_SUPPLIES_QUEST_COMPLETED
   }
 }
