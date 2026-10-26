@@ -5,6 +5,7 @@ import {
   effect,
   normaliseSpokenWord,
   type NameOptions,
+  nameInSentence as nameReading,
 } from '@/engine'
 import {
   FLAG_ACT4_TOWER_STAIR_OPEN,
@@ -83,9 +84,15 @@ const LEAD_INS = [
  * whispers leave the room.
  */
 export class Whispers extends Character {
-  /** Named by what they are, so it reads "the …" (see `nameInSentence`). */
+  /**
+   * Named by what they are, so it reads "the …" and, a group and not a title,
+   * stays lower case mid-sentence (see `nameInSentence`).
+   */
   override nameInSentence(options?: NameOptions): string {
-    return super.nameInSentence({ ...options, common: true })
+    return nameReading('character', this.name.toLowerCase(), {
+      ...options,
+      common: true,
+    })
   }
 
   /** Several of them, so the default replies take plural verbs. */

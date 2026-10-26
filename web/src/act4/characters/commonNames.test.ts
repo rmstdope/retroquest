@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest'
-import type { Character } from '@/engine'
+import { Game, type Character } from '@/engine'
+import { Act4 } from '../Act4'
 import { CaptainOfTheGuard } from './CaptainOfTheGuard'
 import { GhostlyWarriors } from './GhostlyWarriors'
 import { Grandmother } from './Grandmother'
@@ -24,13 +25,13 @@ import { Whispers } from './Whispers'
  */
 describe.each([
   ['Captain of the Guard', false, (): Character => new CaptainOfTheGuard()],
-  ['Ghostly Warriors', true, (): Character => new GhostlyWarriors()],
+  ['ghostly warriors', true, (): Character => new GhostlyWarriors()],
   ['Knight of Despair', false, (): Character => new KnightOfDespair()],
   ['Shadow', false, (): Character => new ShadowOfThePast()],
   ['Sorceress of Lies', false, (): Character => new SorceressOfLies()],
-  ['Trapped Servants', true, (): Character => new TrappedServants()],
+  ['trapped servants', true, (): Character => new TrappedServants()],
   ['True Self', false, (): Character => new TrueSelf()],
-  ['Whispers', true, (): Character => new Whispers()],
+  ['whispers', true, (): Character => new Whispers()],
 ] as const)('the %s, a common-noun character', (name, plural, make) => {
   const marked = `[character_name]${name}[/character_name]`
 
@@ -57,6 +58,33 @@ describe.each([
   it('reads without an article', () => {
     expect(make().nameInSentence()).toBe(
       `[character_name]${name}[/character_name]`,
+    )
+  })
+})
+
+/**
+ * A group keeps the lower case of a common noun wherever it stands, so the
+ * engine's own replies never write it like a proper name.
+ */
+describe('a group character in a default reply', () => {
+  it('reads "The trapped servants have nothing to sell you."', () => {
+    const act = new Act4()
+    act.musicFile = ''
+    const game = new Game([act])
+    game.state.currentRoom = game.state.allRooms.OuterCourtyard
+
+    expect(game.commandParser.parse('buy bread from servants')).toContain(
+      'The [character_name]trapped servants[/character_name] have nothing ' +
+        'to sell you.',
+    )
+  })
+
+  it('reads "the freed servants" once they are freed', () => {
+    const servants = new TrappedServants()
+    servants.free()
+
+    expect(servants.nameInSentence()).toBe(
+      'the [character_name]freed servants[/character_name]',
     )
   })
 })
