@@ -408,9 +408,17 @@ Welcome to
     return splitMultiwordKeys(completions)
   }
 
-  /** The character with the name in the current room, or null. */
+  /**
+   * The character with the name in the current room, or null. A leading
+   * "the" is dropped when the name as typed answers to nobody, so
+   * "the families" reaches the families.
+   */
   findCharacter(target: string): Character | null {
-    return this.state.currentRoom.getCharacterByName(target)
+    const room = this.state.currentRoom
+    const found = room.getCharacterByName(target)
+    if (found) return found
+    const article = /^the\s+(\S.*)$/i.exec(target.trim())
+    return article ? room.getCharacterByName(article[1]) : null
   }
 
   /**
