@@ -1,8 +1,9 @@
 /**
  * How a character's, item's or room's name reads inside a sentence.
  *
- * Content objects have one `name`, the lowercase key the parser matches
- * ("barmaid elena", "elior's journal"). Whatever the engine prints about an
+ * Content objects have one `name`, the key the parser matches ("barmaid
+ * elena", "elior's journal"). Content may case it as it likes ("Echo Stone");
+ * this module decides the case it reads in. Whatever the engine prints about an
  * object goes through `nameInSentence`, the single place that knows the rules:
  * the markup tag of the kind, capitals, and the article a name does or does
  * not take.

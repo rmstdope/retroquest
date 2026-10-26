@@ -1,4 +1,4 @@
-import { Item } from '@/engine'
+import { Item, type NameOptions } from '@/engine'
 
 /**
  * Nyx's Token, the crystalline pendant she gave Elior in the Heart of the
@@ -16,5 +16,10 @@ export class NyxToken extends Item {
         'warm, the way a held hand is warm.',
       canBeCarried: true,
     })
+  }
+
+  /** Named after a person, so it takes no "the" and keeps its capitals. */
+  override nameInSentence(options?: NameOptions): string {
+    return super.nameInSentence({ ...options, bare: true })
   }
 }
