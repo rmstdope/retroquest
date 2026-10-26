@@ -1919,6 +1919,26 @@ describe('LanternLayout', () => {
         expect(w.find('button.lq-more-below').exists()).toBe(true)
       })
 
+      it('shows "More below" when a skip draws the rest of the turn below the edge', async () => {
+        const w = await ready()
+        const el = story(w)
+        Object.defineProperty(el, 'clientHeight', {
+          configurable: true,
+          value: 300,
+        })
+        // Everything fits until the skip draws the second line, far below.
+        Object.defineProperty(el, 'scrollHeight', {
+          configurable: true,
+          get: () => (texts(w).includes(SECOND) ? 2000 : 300),
+        })
+        await say(narratedTurn(1))
+        expect(texts(w)).toEqual([FIRST])
+        useNarrationStore().skipAll()
+        await vi.advanceTimersByTimeAsync(0)
+        expect(texts(w)).toEqual([FIRST, SECOND])
+        expect(w.find('button.lq-more-below').exists()).toBe(true)
+      })
+
       it('shows the end of the story when a reading ending on a quest update has been read', async () => {
         const w = await ready()
         const el = story(w)

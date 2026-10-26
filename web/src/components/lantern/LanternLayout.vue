@@ -252,6 +252,14 @@ onUnmounted(() => {
 // Larger or smaller text changes how much of the turn is still below.
 watch(() => settings.textSize, updateMoreBelow, { flush: 'post' })
 
+// A reading that ends (above all a skip) draws the rest of the turn at once,
+// which grows the story without scrolling it or changing its size.
+watch(storyHeld, async (held) => {
+  if (held) return
+  await nextTick()
+  updateMoreBelow()
+})
+
 // The running act's recordings load in good time for its first answer.
 watch(
   () => game.narrationFolder,
