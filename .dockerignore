@@ -3,6 +3,8 @@
 !web/**
 !deploy/
 !deploy/Caddyfile
+!tts/
+!tts/*.ts
 web/node_modules
 web/dist
 web/test-results

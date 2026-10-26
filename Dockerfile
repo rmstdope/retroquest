@@ -3,6 +3,8 @@ WORKDIR /app/web
 COPY web/package.json web/package-lock.json ./
 RUN npm ci
 COPY web/ ./
+# vue-tsc type-checks the tests that import the narration extractor in tts/.
+COPY tts/*.ts /app/tts/
 ARG VCS_REF
 RUN printf '%s' "$VCS_REF" | grep -Eq '^[0-9a-f]{40}$' \
     && npm run build \
