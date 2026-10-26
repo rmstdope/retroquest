@@ -29,6 +29,39 @@ export function executeCommands(game: Game, commands: string[]): string {
   return results.join('')
 }
 
+/**
+ * The index in a golden path of the `occurrence`th (1-based) time `command`
+ * appears; the marker a stage of an act's integration test starts or ends at.
+ * Throws when the path does not have that many.
+ */
+export function pathIndex(
+  path: string[],
+  command: string,
+  occurrence = 1,
+): number {
+  let seen = 0
+  for (let index = 0; index < path.length; index++) {
+    if (path[index] === command && ++seen === occurrence) return index
+  }
+  throw new Error(
+    `"${command}" does not occur ${occurrence} time(s) on the path`,
+  )
+}
+
+/**
+ * Play the commands of `path` from index `from` up to, not including, index
+ * `to`, as {@link executeCommands} does, and return all answers. A stage's
+ * test plays the path to its start, then its own slice, and asserts on it.
+ */
+export function playPath(
+  game: Game,
+  path: string[],
+  from: number,
+  to: number,
+): string {
+  return executeCommands(game, path.slice(from, to))
+}
+
 function lowerNames(named: { name: string }[]): string[] {
   return named.map((entry) => entry.name.toLowerCase())
 }
