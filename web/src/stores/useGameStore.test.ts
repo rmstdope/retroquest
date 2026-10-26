@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 import { setActivePinia, createPinia } from 'pinia'
 import { useGameStore, MAX_TURNS } from './useGameStore'
+import type { RoomDescription } from '@/engine'
 import type {
   CompletionTree,
   QuestReport,
@@ -39,7 +40,7 @@ function createMockBridge() {
   const controller = {
     advanceToRunning: vi.fn(() => screens(['Intro text'])),
     takeTurn: vi.fn(() => 'command result'),
-    lastTurnRedescribesRoom: vi.fn(() => false),
+    lastTurnRoomDescription: vi.fn((): RoomDescription | null => null),
     getRoomName: vi.fn(() => 'Village Square'),
     getVisitedRooms: vi.fn(() => ['Village Square']),
     getRoomDescription: vi.fn(() => 'A quiet village.'),
@@ -63,7 +64,14 @@ function createMockBridge() {
     activateQuest: vi.fn((): QuestReport | null => null),
     updateQuest: vi.fn((): QuestReport | null => null),
     completeQuest: vi.fn((): QuestReport | null => null),
-    look: vi.fn(() => 'You look around'),
+    openRoom: vi.fn(() => {
+      // The act's opening look describes its room as a first arrival.
+      controller.lastTurnRoomDescription.mockReturnValueOnce({
+        moved: true,
+        firstVisit: true,
+      })
+      return 'You look around'
+    }),
     getActIntro: vi.fn(() => 'Act intro'),
     getActName: vi.fn(() => 'Act 1'),
     getQuestProgress: vi.fn(() => ({
@@ -233,11 +241,11 @@ describe('useGameStore', () => {
       expect(store.acceptInput).toBe(true)
     })
 
-    it('calls look() when intro modal is dismissed', async () => {
+    it('calls openRoom() when intro modal is dismissed', async () => {
       bridge.controller.isAcceptingInput.mockReturnValue(true)
       await store.initGame()
       store.dismissModal()
-      expect(bridge.controller.look).toHaveBeenCalledTimes(1)
+      expect(bridge.controller.openRoom).toHaveBeenCalledTimes(1)
     })
 
     it('puts quests started by the first look in its turn', async () => {
@@ -1000,11 +1008,11 @@ describe('useGameStore', () => {
           ? { musicFile: 'act2.mp3', musicInfo: 'Act 2 track' }
           : { musicFile: '', musicInfo: '' },
       )
-      bridge.controller.look.mockClear()
+      bridge.controller.openRoom.mockClear()
       store.submitCommand('use map')
       store.dismissModal() // dismiss the act-complete page
       expect(store.modalChapter).toMatchObject({ kind: 'intro' })
-      expect(bridge.controller.look).not.toHaveBeenCalled()
+      expect(bridge.controller.openRoom).not.toHaveBeenCalled()
       expect(store.musicFile).toBe('act2.mp3')
       expect(store.musicInfo).toBe('Act 2 track')
     })
@@ -1013,9 +1021,13 @@ describe('useGameStore', () => {
       setupTransitionMocks()
       store.submitCommand('use map')
       store.dismissModal() // dismiss transition modal
-      bridge.controller.look.mockReturnValue('You are in Act 2.')
+      bridge.controller.openRoom.mockReturnValue('You are in Act 2.')
+      bridge.controller.lastTurnRoomDescription.mockReturnValueOnce({
+        moved: true,
+        firstVisit: true,
+      })
       store.dismissModal() // dismiss intro modal
-      expect(bridge.controller.look).toHaveBeenCalled()
+      expect(bridge.controller.openRoom).toHaveBeenCalled()
     })
 
     it('holds the act-complete page while the last turn is being read, then shows it', () => {
@@ -1119,11 +1131,10 @@ describe('useGameStore', () => {
           command: null,
           text: 'You look around',
           room: 'Village Square',
-          roomChanged: true,
+          description: { moved: true, firstVisit: true },
           gained: [],
           lost: [],
           narrate: true,
-          firstVisit: true,
           arrival: {
             room: 'Village Square',
             description: 'A quiet village.',
@@ -1148,7 +1159,7 @@ describe('useGameStore', () => {
         command: 'take bucket',
         text: '[item_name]Bucket[/item_name] taken.',
         room: 'Village Square',
-        roomChanged: false,
+        description: null,
         gained: [],
         lost: [],
         arrival: null,
@@ -1159,13 +1170,17 @@ describe('useGameStore', () => {
     it('marks a turn whose command moved the player to another room', async () => {
       await startPlaying()
       bridge.controller.getRoomName.mockReturnValue('Forest Path')
+      bridge.controller.lastTurnRoomDescription.mockReturnValueOnce({
+        moved: true,
+        firstVisit: false,
+      })
 
       store.submitCommand('go north')
 
       expect(store.turns.at(-1)).toMatchObject({
         command: 'go north',
         room: 'Forest Path',
-        roomChanged: true,
+        description: { moved: true, firstVisit: false },
       })
     })
 
@@ -1187,7 +1202,7 @@ describe('useGameStore', () => {
         command: null,
         text: '',
         room: 'Ancient Grove',
-        roomChanged: true,
+        description: { moved: true, firstVisit: false },
       })
     })
 
@@ -1206,11 +1221,15 @@ describe('useGameStore', () => {
       expect(store.turns.at(-1)).toMatchObject({
         command: 'use map',
         room: 'Village Square',
-        roomChanged: false,
+        description: null,
       })
 
       bridge.controller.isActRunning.mockReturnValue(true)
-      bridge.controller.look.mockReturnValue('You are in Act 2.')
+      bridge.controller.openRoom.mockReturnValue('You are in Act 2.')
+      bridge.controller.lastTurnRoomDescription.mockReturnValueOnce({
+        moved: true,
+        firstVisit: true,
+      })
       bridge.controller.getVisitedRooms.mockReturnValue(['Act 2 Start'])
       store.dismissModal() // act complete
       store.dismissModal() // act intro -> arrival look
@@ -1219,14 +1238,17 @@ describe('useGameStore', () => {
         command: null,
         text: 'You are in Act 2.',
         room: 'Act 2 Start',
-        roomChanged: true,
+        description: { moved: true, firstVisit: true },
         narrate: true,
       })
     })
 
     it('marks the opening arrival and a typed command for narration, never a load', async () => {
       await startPlaying()
-      expect(store.turns[0]).toMatchObject({ narrate: true, firstVisit: true })
+      expect(store.turns[0]).toMatchObject({
+        narrate: true,
+        description: { moved: true, firstVisit: true },
+      })
 
       store.submitCommand('look')
       expect(store.turns.at(-1)?.narrate).toBe(true)
@@ -1239,24 +1261,37 @@ describe('useGameStore', () => {
       await startPlaying()
       bridge.controller.getRoomName.mockReturnValue("Elior's Cottage")
       bridge.controller.getVisitedRooms.mockReturnValue(["Elior's Cottage"])
+      bridge.controller.lastTurnRoomDescription.mockReturnValueOnce({
+        moved: true,
+        firstVisit: true,
+      })
       store.submitCommand('talk to voice')
-      expect(store.turns.at(-1)?.firstVisit).toBe(true)
+      expect(store.turns.at(-1)?.description?.firstVisit).toBe(true)
     })
 
-    it('flags a first visit once, and not a return', async () => {
+    it("forwards the engine's word on a first visit and on a return", async () => {
       await startPlaying()
       bridge.controller.getRoomName.mockReturnValue('Forest')
-      bridge.controller.getVisitedRooms.mockReturnValue([
-        'Village Square',
-        'Forest',
-      ])
+      bridge.controller.lastTurnRoomDescription.mockReturnValueOnce({
+        moved: true,
+        firstVisit: true,
+      })
       store.submitCommand('go north')
-      expect(store.turns.at(-1)?.firstVisit).toBe(true)
+      expect(store.turns.at(-1)?.description).toEqual({
+        moved: true,
+        firstVisit: true,
+      })
 
       bridge.controller.getRoomName.mockReturnValue('Village Square')
+      bridge.controller.lastTurnRoomDescription.mockReturnValueOnce({
+        moved: true,
+        firstVisit: false,
+      })
       store.submitCommand('go south')
-      expect(store.turns.at(-1)?.firstVisit).toBeUndefined()
-      expect(store.turns.at(-1)?.roomChanged).toBe(true)
+      expect(store.turns.at(-1)?.description).toEqual({
+        moved: true,
+        firstVisit: false,
+      })
     })
 
     it("names the folder of the running act's recordings", async () => {
@@ -1543,6 +1578,10 @@ describe('useGameStore', () => {
 
     it('captures the new room when a command moves the player', () => {
       bridge.controller.getRoomName.mockReturnValue('Vegetable Field')
+      bridge.controller.lastTurnRoomDescription.mockReturnValueOnce({
+        moved: true,
+        firstVisit: false,
+      })
       bridge.controller.getRoomDescription.mockReturnValue(
         'Rows of withered crops.',
       )
@@ -1572,10 +1611,18 @@ describe('useGameStore', () => {
       bridge.controller.getRoomDescription.mockReturnValue(
         'Rows of withered crops.',
       )
+      bridge.controller.lastTurnRoomDescription.mockReturnValueOnce({
+        moved: true,
+        firstVisit: false,
+      })
       store.submitCommand('go south')
       const field = store.turns.length - 1
 
       bridge.controller.getRoomName.mockReturnValue('Chicken Coop')
+      bridge.controller.lastTurnRoomDescription.mockReturnValueOnce({
+        moved: true,
+        firstVisit: false,
+      })
       bridge.controller.getRoomDescription.mockReturnValue('A noisy coop.')
       store.submitCommand('go south')
 
@@ -1951,7 +1998,7 @@ describe('useGameStore', () => {
 
       expect(store.finishAsked).toBe(false)
       expect(store.modalChapter).toBe(null)
-      expect(bridge.controller.look).toHaveBeenCalled()
+      expect(bridge.controller.openRoom).toHaveBeenCalled()
     })
   })
 

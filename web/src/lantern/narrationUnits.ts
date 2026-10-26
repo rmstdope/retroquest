@@ -12,6 +12,7 @@
  * record are read.
  */
 
+import type { RoomDescription } from '@/engine'
 import type { QuestNews } from './questNews'
 import {
   findClip,
@@ -70,13 +71,14 @@ export function firstQuestUnit(turn: NarratedTurnInput): number {
 
 /**
  * Whether a turn's arrival is read: on a first visit, or when the player
- * looked around; a revisited room appears at once.
+ * looked around (stayed); a revisited room appears at once. Callers ask only
+ * for a narrated turn (`turn.narrate`).
  */
 export function readsArrival(turn: {
-  firstVisit?: true
-  lookedAround?: true
+  description: RoomDescription | null
 }): boolean {
-  return Boolean(turn.firstVisit || turn.lookedAround)
+  const description = turn.description
+  return description !== null && (description.firstVisit || !description.moved)
 }
 
 /**

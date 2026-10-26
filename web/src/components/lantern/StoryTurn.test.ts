@@ -22,7 +22,7 @@ function turn(partial: Partial<Turn>): Turn {
     command: null,
     text: '',
     room: 'Village Square',
-    roomChanged: false,
+    description: null,
     gained: [],
     lost: [],
     arrival: null,
@@ -182,7 +182,7 @@ describe('StoryTurn', () => {
     const w = mountTurn({
       command: 'go south',
       text: '[event]You move south to [room_name]Vegetable Field[/room_name].[/event]',
-      roomChanged: true,
+      description: { moved: true, firstVisit: false },
       arrival: {
         room: 'Vegetable Field',
         description: 'Rows of withered crops.',

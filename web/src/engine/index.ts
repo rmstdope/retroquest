@@ -26,6 +26,8 @@ export {
 } from './Game'
 export {
   GameController,
+  LOADED_ROOM,
+  type RoomDescription,
   type ActStats,
   type MusicInfo,
   type NamedItem,

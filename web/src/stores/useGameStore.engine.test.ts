@@ -232,10 +232,10 @@ describe('useGameStore over the real engine: look', () => {
 
     const turn = store.turns.at(-1)
     expect(turn?.command).toBe('look')
-    expect(turn?.roomChanged).toBe(false)
+    // The engine's fact: the room is shown again without a move.
+    expect(turn?.description).toEqual({ moved: false, firstVisit: false })
     // Marked so the narration reads the room again.
     expect(turn?.narrate).toBe(true)
-    expect(turn?.lookedAround).toBe(true)
     expect(turn?.arrival).toEqual({
       room: 'Hall',
       description: 'A quiet hall.',
@@ -250,6 +250,6 @@ describe('useGameStore over the real engine: look', () => {
     store.submitCommand('inventory')
 
     expect(store.turns.at(-1)?.arrival).toBeNull()
-    expect(store.turns.at(-1)?.lookedAround).toBeUndefined()
+    expect(store.turns.at(-1)?.description).toBeNull()
   })
 })
