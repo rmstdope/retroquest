@@ -1300,12 +1300,11 @@ describe('LanternLayout', () => {
       expect(w.get('[role="dialog"] h2').text()).toBe('Settings')
     })
 
-    describe('Now playing in Settings', () => {
+    describe('Music credits for the track playing', () => {
       const MARKET = 'Conquest - Market (freetouse.com).mp3'
 
-      /** Serves `takes` as the chosen-take list, plays Market in the square and opens Settings. */
-      async function settingsWith(takes: unknown): Promise<string> {
-        phone()
+      /** Serves `takes` as the chosen-take list, with a silent stand-in for Audio. */
+      function stubMusic(takes: unknown): void {
         vi.stubGlobal(
           'fetch',
           vi.fn(() =>
@@ -1322,6 +1321,12 @@ describe('LanternLayout', () => {
             removeAttribute = (): void => undefined
           },
         )
+      }
+
+      /** Serves `takes` as the chosen-take list, plays Market in the square and opens Settings. */
+      async function settingsWith(takes: unknown): Promise<string> {
+        phone()
+        stubMusic(takes)
         const w = mountLayout()
         const game = useGameStore()
         game.musicFile = MARKET
@@ -1351,6 +1356,39 @@ describe('LanternLayout', () => {
 
       it("credits the game's own file when no take is chosen", async () => {
         const text = await settingsWith({})
+        expect(text).toContain('Market by Conquest')
+      })
+
+      /** Serves `takes`, plays Market across Act I and shows the title page. */
+      async function titleCreditsWith(takes: unknown): Promise<string> {
+        stubMusic(takes)
+        const w = mountLayout()
+        const game = useGameStore()
+        game.musicFile = MARKET
+        game.musicInfo = 'Market by Conquest\nSource: https://freetouse.com'
+        game.musicActName = 'Act1'
+        game.musicRoomKey = 'VillageSquare'
+        game.titleText =
+          'Welcome\n[bold yellow]\n###\n[/bold yellow]\n' +
+          '[bold]Music track:[/bold] Market by Conquest\n' +
+          'Source: https://freetouse.com'
+        game.showTitle = true
+        await flushPromises()
+        return w.get('.lq-credits').text()
+      }
+
+      it('credits a take chosen for the act loop on the title page', async () => {
+        const text = await titleCreditsWith({
+          market: { file: 'market.mp3', duration: 60 },
+        })
+        expect(text).toContain(
+          'Original music for RetroQuest, made with Audio Studio',
+        )
+        expect(text).not.toContain('Conquest')
+      })
+
+      it("names the act's file on the title page when no take is chosen", async () => {
+        const text = await titleCreditsWith({})
         expect(text).toContain('Market by Conquest')
       })
     })
