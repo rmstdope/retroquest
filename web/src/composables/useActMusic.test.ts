@@ -138,7 +138,7 @@ describe('useActMusic', () => {
   })
 
   describe('chosen takes', () => {
-    /** The element the act's music plays on (a crossfade adds short-lived others). */
+    /** The element the act's music plays on (a crossfade plays the next loop on a second one). */
     let mainAudio: FakeAudio
     const MARKET = 'Conquest - Market (freetouse.com).mp3'
     const manifest = {
@@ -210,8 +210,21 @@ describe('useActMusic', () => {
       const scope = await start(manifest)
       useGameStore().musicRoomKey = 'ForestPath'
       await settle()
-      expect(mainAudio.src).toBe('/audio/music/generated/market.mp3')
+      // The new loop plays on the element that was not playing before.
+      expect(FakeAudio.last).not.toBe(mainAudio)
+      expect(FakeAudio.last.src).toBe('/audio/music/generated/market.mp3')
+      expect(mainAudio.src).toBe('/audio/music/generated/square.mp3')
+      expect(mainAudio.paused).toBe(false)
       scope.stop()
+    })
+
+    it('silences every loop when the scope ends mid-crossfade', async () => {
+      const scope = await start(manifest)
+      useGameStore().musicRoomKey = 'ForestPath'
+      await settle()
+      scope.stop()
+      expect(mainAudio.paused).toBe(true)
+      expect(FakeAudio.last.paused).toBe(true)
     })
 
     it("plays the game's own file where no take was chosen", async () => {
