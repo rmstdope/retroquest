@@ -992,6 +992,23 @@ describe('useGameStore', () => {
       })
     })
 
+    it("plays the next act's music as soon as its intro pop-up shows", () => {
+      setupTransitionMocks()
+      // Like the engine: no music during the transition, the next act's once it runs.
+      bridge.controller.getCurrentMusic.mockImplementation(() =>
+        bridge.controller.advanceToRunning.mock.calls.length > 0
+          ? { musicFile: 'act2.mp3', musicInfo: 'Act 2 track' }
+          : { musicFile: '', musicInfo: '' },
+      )
+      bridge.controller.look.mockClear()
+      store.submitCommand('use map')
+      store.dismissModal() // dismiss the act-complete page
+      expect(store.modalChapter).toMatchObject({ kind: 'intro' })
+      expect(bridge.controller.look).not.toHaveBeenCalled()
+      expect(store.musicFile).toBe('act2.mp3')
+      expect(store.musicInfo).toBe('Act 2 track')
+    })
+
     it('fires look after all transition modals are dismissed', () => {
       setupTransitionMocks()
       store.submitCommand('use map')
