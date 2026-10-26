@@ -69,11 +69,15 @@ export class Shopkeeper extends Character {
   }
 
   /**
-   * Also answers to his name, Hemlock, which his description, the notice and
-   * his own introduction all give.
+   * Also answers to his name as the game gives it, "Hemlock", "Old Hemlock"
+   * or "Old Man Hemlock": his description, the notice and his own
+   * introduction all name him.
    */
   override answersTo(name: string): boolean {
-    return super.answersTo(name) || name.toLowerCase() === 'hemlock'
+    return (
+      super.answersTo(name) ||
+      ['hemlock', 'old hemlock', 'old man hemlock'].includes(name.toLowerCase())
+    )
   }
 
   /** Named by what it is, so it reads "the shopkeeper" (see `nameInSentence`). */

@@ -421,6 +421,25 @@ describe('Shopkeeper named as a common noun', () => {
 })
 
 describe('the shopkeeper answers to his name', () => {
+  it('answers to Hemlock before he has introduced himself', () => {
+    const game = gameInStore({ shopOpen: false })
+
+    const talk = game.commandParser.parse('talk to hemlock')
+
+    expect(talk).not.toContain('There is no character')
+    expectDialogueSpeaker(talk, 'shopkeeper')
+  })
+
+  it.each(['old hemlock', 'old man hemlock'])(
+    'answers to "%s", as the game names him',
+    (name) => {
+      const game = gameInStore()
+      expect(game.commandParser.parse(`talk to ${name}`)).not.toContain(
+        'There is no character',
+      )
+    },
+  )
+
   it('reaches Hemlock by name once he has introduced himself', () => {
     const game = gameInStore({ shopOpen: false })
     game.commandParser.parse('talk to shopkeeper')
