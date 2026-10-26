@@ -190,8 +190,10 @@ describe('Act 3 golden path', () => {
     it('starts Tideward Sigils and gives the shards once', () => {
       const game = gameAt(AT.shoreline)
       const state = game.state
-      play(game, AT.shoreline, AT.shoreline + 2)
+      play(game, AT.shoreline, AT.shoreline + 1)
       expectCurrentRoom(state, 'Shoreline Markers')
+      const reveal = play(game, AT.shoreline + 1, AT.shoreline + 2)
+      expect(reveal.includes('moon') || reveal.includes('shard')).toBe(true)
       expectQuests(state, [ECHOES, MAIN, 'Tideward Sigils'])
 
       const found = play(game, AT.shoreline + 2, AT.outerWards)
@@ -388,6 +390,10 @@ describe('Act 3 golden path', () => {
       executeCommands(game, ['south'])
       expectCurrentRoom(state, 'Fumarole Passages')
 
+      // Off the path: the stones can be picked up, and there are three.
+      executeCommands(game, ['take vent stone', 'take vent stone'])
+      executeCommands(game, ['take vent stone'])
+      expectItemCountInInventory(state, 'Vent Stone', 3)
       play(game, AT.fumarole + 2, AT.fumarole + 4)
       const early = executeCommands(game, ['use heat-ward mix']).toLowerCase()
       expect(
