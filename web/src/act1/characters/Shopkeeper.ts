@@ -94,7 +94,7 @@ export class Shopkeeper extends Character {
     if (!gameState.getStoryFlag(FLAG_MET_HEMLOCK)) {
       gameState.setStoryFlag(FLAG_MET_HEMLOCK, true)
       return (
-        `The ${characterName('Shopkeeper')} looks up from the window, ` +
+        `${this.nameInSentence({ atStart: true })} looks up from the window, ` +
         'his face creased with worry. ' +
         speech(
           `Oh! Forgive me, lad. ${characterName('Hemlock')}'s the name, ` +
@@ -117,7 +117,7 @@ export class Shopkeeper extends Character {
       )
     }
     return (
-      `The ${characterName('Shopkeeper')} shakes his head. ` +
+      `${this.nameInSentence({ atStart: true })} shakes his head. ` +
       speech(
         `No sign of ${characterName('Patches')} yet? ` +
           "The store stays shut until she's home, lad. " +
@@ -141,8 +141,8 @@ export class Shopkeeper extends Character {
       ? "Here, the reward I promised. It isn't much, but it's honestly given."
       : "You'll always be welcome in this store, lad."
     return (
-      `${characterName('Patches')} butts her head against the ` +
-      `${characterName('Shopkeeper')}'s hand, and his face lights up. ` +
+      `${characterName('Patches')} butts her head against ` +
+      `${this.nameInSentence()}'s hand, and his face lights up. ` +
       speech(
         `${characterName('Patches')}! You found her! ` +
           `Old ${characterName('Hemlock')} won't forget this. ` +
@@ -170,7 +170,7 @@ export class Shopkeeper extends Character {
       gameState.addItemToInventory(apple)
     }
     return (
-      `The ${characterName('Shopkeeper')} hurries over the moment you come in. ` +
+      `${this.nameInSentence({ atStart: true })} hurries over the moment you come in. ` +
       speech(
         `Your ${characterName('grandmother')} sent word, lad. ` +
           `${characterName('Patches')} is safe and warm by her hearth. ` +
@@ -243,7 +243,7 @@ export class Shopkeeper extends Character {
       this.priestMatchesGiven = true
 
       return (
-        `The ${characterName('Shopkeeper')} leans in. ` +
+        `${this.nameInSentence({ atStart: true })} leans in. ` +
         speech(
           `Ah, you spoke to the ${characterName('priest')}? ` +
             'He does get through his [item_name]matches[/item_name]. ' +
@@ -275,7 +275,7 @@ export class Shopkeeper extends Character {
     this.dialogueIndex = (this.dialogueIndex + 1) % this.dialogueOptions.length
 
     return (
-      `The ${characterName('Shopkeeper')} says: ` +
+      `${this.nameInSentence({ atStart: true })} says: ` +
       speech(`${dialogue} ${waresInfo.trim()}`)
     )
   }
@@ -294,7 +294,7 @@ export class Shopkeeper extends Character {
   /** The shopkeeper does not accept gifts. */
   override giveItem(_gameState: GameState, _item: Item): string {
     return (
-      `The ${characterName('Shopkeeper')} chuckles. ` +
+      `${this.nameInSentence({ atStart: true })} chuckles. ` +
       speech(
         'Not looking for donations, friend, but I appreciate the ' + 'thought!',
       )

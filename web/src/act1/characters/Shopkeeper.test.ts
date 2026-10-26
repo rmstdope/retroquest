@@ -3,6 +3,7 @@ import { Game, GameController } from '@/engine'
 import { Act1 } from '../Act1'
 import {
   FLAG_CONNECT_WITH_NATURE,
+  FLAG_MET_HEMLOCK,
   FLAG_HEMLOCK_HEARD_PATCHES_STAYED,
   FLAG_PATCHES_FOUND,
   FLAG_PATCHES_RETURNED,
@@ -359,5 +360,61 @@ describe('Shopkeeper when Patches stays with grandmother', () => {
     expect(game.state.inventory.filter((i) => i.name === 'rope')).toHaveLength(
       1,
     )
+  })
+})
+
+describe('Shopkeeper named as a common noun', () => {
+  const SHOPKEEPER = '[character_name]shopkeeper[/character_name]'
+
+  it('refuses a gift as "The shopkeeper"', () => {
+    const game = gameInStore()
+    game.state.addItemToInventory(new Coin())
+    const answer = game.commandParser.parse('give coin to shopkeeper')
+    expect(answer.startsWith(`The ${SHOPKEEPER} chuckles.`), answer).toBe(true)
+  })
+
+  it.each(['rope', 'apple', 'matches', 'sword', 'armor'])(
+    'stops an unpaid %s as "The shopkeeper"',
+    (ware) => {
+      const answer = gameInStore().commandParser.parse(`take ${ware}`)
+      expect(answer).toContain(`The ${SHOPKEEPER} quickly steps over.`)
+    },
+  )
+
+  it.each([
+    ['talks while the store is shut', { shopOpen: false }],
+    ['lists the wares', {}],
+    ['hands over the priest matches', { priestTalkedTo: true }],
+  ])('never reads "Shopkeeper" when he %s', (_case, options) => {
+    const answer =
+      gameInStore(options).commandParser.parse('talk to shopkeeper')
+    expect(answer).toContain(`The ${SHOPKEEPER}`)
+    expect(answer).not.toContain('[character_name]Shopkeeper')
+  })
+
+  it('reads "the shopkeeper\'s hand" when Patches comes home', () => {
+    const game = gameInStore({ shopOpen: false })
+    game.state.setStoryFlag(FLAG_PATCHES_FOUND, true)
+    const answer = game.commandParser.parse('talk to shopkeeper')
+    expect(answer).toContain(`butts her head against the ${SHOPKEEPER}'s hand`)
+  })
+
+  it('opens with "The shopkeeper" when grandmother has kept Patches', () => {
+    const game = gameInStore({ shopOpen: false })
+    game.state.setStoryFlag(FLAG_PATCHES_STAYED_WITH_GRANDMOTHER, true)
+    const answer = game.commandParser.parse('talk to shopkeeper')
+    expect(answer.startsWith(`The ${SHOPKEEPER} hurries over`), answer).toBe(
+      true,
+    )
+  })
+
+  it('shakes his head as "The shopkeeper" once Elior has met him', () => {
+    const game = gameInStore({ shopOpen: false })
+    game.state.setStoryFlag(FLAG_MET_HEMLOCK, true)
+    const answer = game.commandParser.parse('talk to shopkeeper')
+    expect(
+      answer.startsWith(`The ${SHOPKEEPER} shakes his head.`),
+      answer,
+    ).toBe(true)
   })
 })

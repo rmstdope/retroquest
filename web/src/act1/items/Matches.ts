@@ -1,4 +1,10 @@
-import { Item, type GameState, characterName, speech } from '@/engine'
+import {
+  Item,
+  type GameState,
+  characterName,
+  nameInSentence,
+  speech,
+} from '@/engine'
 import { Candle } from './Candle'
 
 /** Basic ignition source enabling illumination and ritual flavor actions. */
@@ -15,7 +21,10 @@ export class Matches extends Item {
   override preventPickup(): string {
     if (!this.canBeCarried) {
       return (
-        characterName('Shopkeeper') +
+        nameInSentence('character', 'shopkeeper', {
+          common: true,
+          atStart: true,
+        }) +
         ' quickly steps over. ' +
         speech(
           'Hold on there, friend! Those ' +
