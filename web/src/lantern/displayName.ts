@@ -2,12 +2,13 @@
  * Display form of an engine name: the engine tags many names in lowercase
  * ("innkeeper marcus") and spells by id ("greater_heal"). Shown as
  * "Innkeeper Marcus" / "Greater Heal" (user decision, step 8–9 reviews).
+ * A name that already carries a capital ("Captain of the Guard") is the
+ * content's own spelling and keeps its capitalisation.
  */
 export function displayName(name: string): string {
-  return name
-    .replace(/_/g, ' ')
-    .trim()
-    .split(/\s+/)
+  const words = name.replace(/_/g, ' ').trim().split(/\s+/)
+  if (/[A-Z]/.test(name)) return words.join(' ')
+  return words
     .map((word) =>
       word
         .split('-')
