@@ -7,7 +7,7 @@ import { Miners } from './characters/Miners'
 import { WanderingPhantoms } from './characters/WanderingPhantoms'
 import { PolishedShell } from './items/PolishedShell'
 import { QuietCharm } from './items/QuietCharm'
-import { ACT3_GOLDEN_PATH } from './Act3GoldenPath'
+import { ACT3_COMPLETING_COMMANDS, ACT3_GOLDEN_PATH } from './Act3GoldenPath'
 import { playDebugScript } from '@/utils/debugScript'
 import {
   FLAG_ACT3_MAIN_STARTED,
@@ -698,7 +698,7 @@ describe('Act 3 golden path', () => {
     it('completes the act on the gates, with the hook as the closing page', () => {
       const game = gameAt(PATH.length)
       const state = game.state
-      const examine = executeCommands(game, ['examine gates'])
+      const examine = executeCommands(game, ACT3_COMPLETING_COMMANDS)
       expect(examine.toLowerCase()).toContain('fortress gates tower above you')
       expect(examine.toLowerCase()).toContain('act iii is complete')
       expectStoryFlag(state, FLAG_ACT3_FORTRESS_GATES_EXAMINED, true)
@@ -784,7 +784,7 @@ describe('Act 3 optional mercy: mending the inscription', () => {
     expect(fresh.state.virtueCount(VIRTUE_MERCY)).toBe(1)
 
     executeCommands(fresh, ACT3_GOLDEN_PATH.slice(upToInscription.length))
-    executeCommands(fresh, ['examine fortress gates'])
+    executeCommands(fresh, ACT3_COMPLETING_COMMANDS)
     expect(new Act3().isCompleted(fresh.state)).toBe(true)
   })
 })
@@ -937,7 +937,7 @@ describe('debug act3', () => {
     expect(shown.join('\n')).not.toContain('[failure]')
     expectStoryFlag(game.state, FLAG_ACT3_FORTRESS_GATES_EXAMINED, false)
 
-    executeCommands(game, ['examine gates'])
+    executeCommands(game, ACT3_COMPLETING_COMMANDS)
     expectStoryFlag(game.state, FLAG_ACT3_FORTRESS_GATES_EXAMINED, true)
   })
 })

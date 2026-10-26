@@ -7,6 +7,9 @@
  * (the act's golden path), then finished with the act's completing commands.
  */
 import { test, expect, type Page } from '@playwright/test'
+import { ACT1_COMPLETING_COMMANDS } from '../src/act1/Act1GoldenPath'
+import { ACT2_COMPLETING_COMMANDS } from '../src/act2/Act2GoldenPath'
+import { ACT3_COMPLETING_COMMANDS } from '../src/act3/Act3GoldenPath'
 
 /** One beat of the red line: what a player reads, and a phrase that proves it. */
 interface Beat {
@@ -43,7 +46,7 @@ const ACTS: ActPlay[] = [
   {
     header: 'Act I',
     played: /Debug script 'act1' played \d+ commands/,
-    completing: ['use map'],
+    completing: ACT1_COMPLETING_COMMANDS,
     beats: [
       {
         name: 'Act I dream voice: the three words in the opening dream',
@@ -66,7 +69,7 @@ const ACTS: ActPlay[] = [
   {
     header: 'Act II',
     played: /Debug script 'act2' played \d+ commands/,
-    completing: ['cast prophetic vision', 'talk to sir cedric'],
+    completing: ACT2_COMPLETING_COMMANDS,
     beats: [
       {
         name: 'Act II amulet: Cedric recognises it',
@@ -85,7 +88,7 @@ const ACTS: ActPlay[] = [
   {
     header: 'Act III',
     played: /Debug script 'act3' played \d+ commands/,
-    completing: ['examine fortress gates'],
+    completing: ACT3_COMPLETING_COMMANDS,
     beats: [
       {
         name: 'Act III amulet: an anchor of the ward',

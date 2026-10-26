@@ -1,4 +1,7 @@
-/** The commands that play Act 3's golden path from a new game to its end. */
+/** The command that completes Act 3 at the Fortress Gates, once the golden path has been played; it reads the closing page. */
+export const ACT3_COMPLETING_COMMANDS: string[] = ['examine gates']
+
+/** The commands that play Act 3's golden path from a new game to the Fortress Gates; `ACT3_COMPLETING_COMMANDS` there complete the act. */
 export const ACT3_GOLDEN_PATH: string[] = [
   'talk to mira',
   'examine note',

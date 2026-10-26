@@ -13,13 +13,19 @@ import { Game } from '../web/src/engine'
 import type { Act } from '../web/src/engine'
 import { Act1 } from '../web/src/act1/Act1'
 import {
-  ACT1_COMPLETING_COMMAND,
+  ACT1_COMPLETING_COMMANDS,
   ACT1_GOLDEN_PATH,
 } from '../web/src/act1/Act1GoldenPath'
 import { Act2 } from '../web/src/act2/Act2'
-import { ACT2_GOLDEN_PATH } from '../web/src/act2/Act2GoldenPath'
+import {
+  ACT2_COMPLETING_COMMANDS,
+  ACT2_GOLDEN_PATH,
+} from '../web/src/act2/Act2GoldenPath'
 import { Act3 } from '../web/src/act3/Act3'
-import { ACT3_GOLDEN_PATH } from '../web/src/act3/Act3GoldenPath'
+import {
+  ACT3_COMPLETING_COMMANDS,
+  ACT3_GOLDEN_PATH,
+} from '../web/src/act3/Act3GoldenPath'
 import { Act4 } from '../web/src/act4/Act4'
 import { ACT4_GOLDEN_PATH } from '../web/src/act4/Act4GoldenPath'
 import {
@@ -40,22 +46,18 @@ export interface ActSource {
 export const ACT_SOURCES: Record<string, ActSource> = {
   '1': {
     make: () => new Act1(),
-    commands: [...ACT1_GOLDEN_PATH, ACT1_COMPLETING_COMMAND],
+    commands: [...ACT1_GOLDEN_PATH, ...ACT1_COMPLETING_COMMANDS],
   },
   '2': {
     make: () => new Act2(),
     // The golden path stops with Cedric waiting; the vision and his answer
     // end the act (branches.json plays the other answer, "say truth").
-    commands: [
-      ...ACT2_GOLDEN_PATH,
-      'cast prophetic vision',
-      'talk to sir cedric',
-    ],
+    commands: [...ACT2_GOLDEN_PATH, ...ACT2_COMPLETING_COMMANDS],
   },
   '3': {
     make: () => new Act3(),
-    // 'examine gates' plays the closing page into the script.
-    commands: [...ACT3_GOLDEN_PATH, 'examine gates'],
+    // The completing command plays the closing page into the script.
+    commands: [...ACT3_GOLDEN_PATH, ...ACT3_COMPLETING_COMMANDS],
   },
   '4': { make: () => new Act4(), commands: ACT4_GOLDEN_PATH },
 }
