@@ -2,6 +2,7 @@
   {
     "id": "new-quest",
     "title": "New Quest",
+    "file": "web/public/audio/soundeffects/Voicy_New Quest.mp3",
     "plays": "When a new quest begins",
     "brief": "short bright fanfare announcing a new quest, instrumental, no vocals",
     "seconds": 5
@@ -9,6 +10,7 @@
   {
     "id": "quest-complete",
     "title": "Quest Completed",
+    "file": "web/public/audio/soundeffects/Voicy_Quest Completed.mp3",
     "plays": "When a quest is completed",
     "brief": "short triumphant fanfare for a quest completed, instrumental, no vocals",
     "seconds": 5
