@@ -1071,4 +1071,64 @@ test.describe('Lantern UI (the default)', () => {
     expect(Math.abs(text.left - box.x - 10)).toBeLessThan(2)
     expect(Math.abs(box.x + box.width - text.right - 10)).toBeLessThan(2)
   })
+
+  for (const [width, height] of [
+    [1280, 800],
+    [375, 667],
+  ]) {
+    test(`shows an opened quest update inside its frame at ${width}×${height}`, async ({
+      page,
+    }) => {
+      await page.setViewportSize({ width, height })
+      await page.goto('/')
+      await injectMockState(page)
+      await page.evaluate(() => {
+        /* eslint-disable @typescript-eslint/no-explicit-any */
+        const app = (document.querySelector('#app') as any).__vue_app__
+        const store = app.config.globalProperties.$pinia.state.value.game
+        store.turns.push({
+          id: 998,
+          command: 'talk to elder',
+          text: 'The elder nods slowly.',
+          room: store.roomName,
+          roomChanged: false,
+          gained: [],
+          lost: [],
+          arrival: null,
+          quests: [
+            {
+              kind: 'updated',
+              name: 'Shadows Over Willowbrook',
+              main: true,
+              text: 'The villagers whisper of shadows beyond the mill.',
+            },
+          ],
+        })
+        /* eslint-enable @typescript-eslint/no-explicit-any */
+      })
+
+      const banner = page.getByRole('button', { name: /Quest updated/ })
+      await banner.click()
+      const body = page.getByText(
+        'The villagers whisper of shadows beyond the mill.',
+      )
+      await expect(body).toBeVisible()
+      // The frame is the bordered box of the notice itself: the button or
+      // the notice that holds it, never a box further out.
+      const frame = await banner.evaluate((button) => {
+        const framed = [button, button.parentElement].find(
+          (el) => el && parseFloat(getComputedStyle(el).borderTopWidth) > 0,
+        )
+        if (!framed) return null
+        const r = framed.getBoundingClientRect()
+        return { top: r.top, bottom: r.bottom, left: r.left, right: r.right }
+      })
+      expect(frame).not.toBeNull()
+      const text = (await body.boundingBox())!
+      expect(text.y).toBeGreaterThanOrEqual(frame!.top)
+      expect(text.y + text.height).toBeLessThanOrEqual(frame!.bottom)
+      expect(text.x).toBeGreaterThanOrEqual(frame!.left)
+      expect(text.x + text.width).toBeLessThanOrEqual(frame!.right)
+    })
+  }
 })
