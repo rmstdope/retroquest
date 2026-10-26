@@ -206,6 +206,11 @@ export const useNarrationStore = defineStore('narration', () => {
     return lastEnd.value?.turnId === turnId && lastEnd.value.skipped
   }
 
+  /** Whether the latest narrated turn was read to its end (not skipped or cut in on). */
+  const readToEnd = computed(
+    () => lastEnd.value !== null && !lastEnd.value.skipped,
+  )
+
   /** Whether turn `turnId` is the one being narrated (its units appear as they are spoken). */
   function narrates(turnId: number): boolean {
     return active.value?.turnId === turnId
@@ -429,6 +434,7 @@ export const useNarrationStore = defineStore('narration', () => {
     revealed,
     narrates,
     endedBySkip,
+    readToEnd,
     speaking,
     manifestFor,
     preload,

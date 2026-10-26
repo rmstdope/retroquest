@@ -1,5 +1,6 @@
 import {
   computed,
+  nextTick,
   onScopeDispose,
   watch,
   type ComputedRef,
@@ -15,7 +16,11 @@ import { useNarrationStore } from '@/stores/useNarrationStore'
  * scrollbar), every attempt shows the narration hint, and the pane follows the
  * lit word, gliding up a line at a time to keep it two lines above the bottom
  * edge (the line just inside the bottom edge in a pane too short for that).
- * When the reading ends the pane is free where it is.
+ * When the reading ends the pane is free: where it is if the reading was
+ * skipped or cut in on, and at the end of the story if it was read to its end
+ * (whatever showed last without a voice, such as a quest update, is then in
+ * view and nothing is left below), though never so far that the last word
+ * read leaves the top: unvoiced text taller than the pane stays below it.
  *
  * All programmatic scrolling of the pane goes through `moveTo`, which keeps
  * track of where the pane is meant to be, so any other change while held is
@@ -87,6 +92,8 @@ export function useStoryFollow(story: Ref<HTMLElement | null>): StoryFollow {
   /** Where the running glide ends, if one is running. */
   let goal: number | null = null
   let frame: number | undefined
+  /** Where the top of the last word (or unit) followed in this reading is, in the pane's content. */
+  let lastFollowedTop: number | null = null
 
   /** The most the pane can scroll. */
   function maxTop(pane: HTMLElement): number {
@@ -148,6 +155,7 @@ export function useStoryFollow(story: Ref<HTMLElement | null>): StoryFollow {
     const bottom = unit
       ? Math.min(rect.bottom, rect.top + line) - paneRect.top + pane.scrollTop
       : rect.bottom - paneRect.top + pane.scrollTop
+    lastFollowedTop = top
     const view = pane.clientHeight
     const room = view < SHORT_PANE_LINES * line ? 0 : ROOM_LINES * line
     const from = goal ?? pane.scrollTop
@@ -239,12 +247,27 @@ export function useStoryFollow(story: Ref<HTMLElement | null>): StoryFollow {
   )
   document.addEventListener('keydown', onKey)
 
-  // A reading starts from where the pane is; its end leaves the pane free.
+  /** Show the end of the story once what the reading ended with is drawn, keeping the last word read in view. */
+  async function showEnd(): Promise<void> {
+    const lastRead = lastFollowedTop
+    await nextTick()
+    const pane = story.value
+    if (!pane || held.value) return
+    moveTo(Math.min(maxTop(pane), lastRead ?? Infinity), false)
+  }
+
+  // A reading starts from where the pane is; its end leaves the pane free,
+  // at the end of the story when it was read to its end.
   watch(
     held,
     (now) => {
-      if (now) expectedTop = story.value?.scrollTop ?? 0
-      else stopGlide()
+      if (now) {
+        expectedTop = story.value?.scrollTop ?? 0
+        lastFollowedTop = null
+      } else {
+        stopGlide()
+        if (narration.readToEnd) void showEnd()
+      }
     },
     { flush: 'sync' },
   )
