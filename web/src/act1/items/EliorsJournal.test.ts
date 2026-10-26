@@ -56,6 +56,24 @@ describe('EliorsJournal', () => {
     )
   })
 
+  it('is named the same way when used with itself or with nothing here', () => {
+    const game = new Game([new Act1()])
+    game.state.currentRoom = game.state.allRooms.EliorsCottage
+    const answer = executeCommands(game, [
+      'use lantern',
+      'use journal with journal',
+      'use journal with xyz',
+    ])
+
+    expect(answer).toContain(
+      "You can't use [item_name]Elior's Journal[/item_name] with itself.",
+    )
+    expect(answer).toContain(
+      "to use with [item_name]Elior's Journal[/item_name].",
+    )
+    expect(answer).not.toContain("elior's journal")
+  })
+
   it('shows the same page every time', () => {
     const game = new Game([new Act1()])
     const journal = new EliorsJournal()

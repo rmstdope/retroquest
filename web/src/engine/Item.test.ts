@@ -55,7 +55,21 @@ describe('Item', () => {
     expect(rock.useWith(gs, diary)).toContain(
       "with [item_name]Ann's Diary[/item_name].",
     )
-    expect(diary.open(gs)).toContain("can't open [item_name]Ann's Diary")
+    for (const refusal of [
+      diary.open(gs),
+      diary.close(gs),
+      diary.useOnCharacter(
+        gs,
+        new Character({ name: 'Mira', description: 'd' }),
+      ),
+      diary.eat(gs),
+      diary.drink(gs),
+      diary.equip(gs),
+      diary.unequip(gs),
+    ]) {
+      expect(refusal).toContain("[item_name]Ann's Diary[/item_name]")
+      expect(refusal).not.toContain('the [item_name]')
+    }
   })
 
   it('answers every action with a failure or nothing by default', () => {

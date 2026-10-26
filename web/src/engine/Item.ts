@@ -105,18 +105,18 @@ export class Item {
   }
 
   eat(_gameState: GameState): string {
-    return `[failure]You can't eat the [item_name]${this.name}[/item_name].[/failure]`
+    return `[failure]You can't eat ${this.nameInSentence()}.[/failure]`
   }
 
   drink(_gameState: GameState): string {
-    return `[failure]You can't drink the [item_name]${this.name}[/item_name].[/failure]`
+    return `[failure]You can't drink ${this.nameInSentence()}.[/failure]`
   }
 
   equip(_gameState: GameState): string {
-    return `[failure]You can't equip the [item_name]${this.name}[/item_name].[/failure]`
+    return `[failure]You can't equip ${this.nameInSentence()}.[/failure]`
   }
 
   unequip(_gameState: GameState): string {
-    return `[failure]You can't unequip the [item_name]${this.name}[/item_name].[/failure]`
+    return `[failure]You can't unequip ${this.nameInSentence()}.[/failure]`
   }
 }

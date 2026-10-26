@@ -657,12 +657,12 @@ Welcome to
       const character = this.findCharacter(targetName)
       if (character) return item.useOnCharacter(this.state, character)
       return (
-        `[failure]You don't see a '${targetName}' to use with the ` +
-        `[item_name]${item.name}[/item_name].[/failure]`
+        `[failure]You don't see a '${targetName}' to use with ` +
+        `${item.nameInSentence()}.[/failure]`
       )
     }
     if (item === other) {
-      return `[failure]You can't use the [item_name]${item.name}[/item_name] with itself.[/failure]`
+      return `[failure]You can't use ${item.nameInSentence()} with itself.[/failure]`
     }
     return item.useWith(this.state, other)
   }
