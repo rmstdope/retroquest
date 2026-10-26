@@ -16,12 +16,16 @@ const CHOSEN_TAKE_CREDIT =
   'Original music for RetroQuest, made with Audio Studio'
 
 const GESTURES = ['keydown', 'click', 'touchstart'] as const
+/** The media keys the game takes from the browser, and ignores. */
+const MEDIA_KEYS: readonly MediaSessionAction[] = ['play', 'pause', 'stop']
 
 /**
  * The current act's background music, looping. Browsers block autoplay until
- * the player interacts, so it also starts on the first key press, click or
- * touch. It dips while a turn, chapter page or pop-up is narrated, so the
- * voices stand out.
+ * the player interacts, so it also starts on a key press, click or touch; and
+ * since a headset taken out can still pause it, every later input brings it
+ * back. A headset's or media key's pause and play are taken from the browser
+ * and ignored, so neither the music nor the narration reacts to them. It dips
+ * while a turn, chapter page or pop-up is narrated, so the voices stand out.
  *
  * A take chosen in Audio Studio plays in place of the act's file: the room's
  * own take in that room, else the act loop's take across the act (see
@@ -61,20 +65,34 @@ export function useActMusic(): ReturnType<typeof useMusic> {
     { immediate: true },
   )
 
-  function unlock(): void {
+  function resume(): void {
     music.ensureMusicStarted()
-    removeListeners()
-  }
-  function removeListeners(): void {
-    for (const gesture of GESTURES) window.removeEventListener(gesture, unlock)
   }
   for (const gesture of GESTURES) {
-    window.addEventListener(gesture, unlock, { passive: true })
+    window.addEventListener(gesture, resume, { passive: true })
   }
+  setMediaKeyHandlers(() => {})
   onScopeDispose(() => {
-    removeListeners()
+    for (const gesture of GESTURES) window.removeEventListener(gesture, resume)
+    setMediaKeyHandlers(null)
     music.loadTrack('', '')
   })
 
   return music
+}
+
+/**
+ * Sets the page's handler for a headset's or media key's pause and play; a
+ * page with its own handler gets those keys instead of the browser pausing
+ * its audio. `null` gives them back to the browser.
+ */
+function setMediaKeyHandlers(handler: (() => void) | null): void {
+  if (typeof navigator === 'undefined' || !navigator.mediaSession) return
+  for (const action of MEDIA_KEYS) {
+    try {
+      navigator.mediaSession.setActionHandler(action, handler)
+    } catch {
+      // A browser that does not support this action keeps its own.
+    }
+  }
 }
