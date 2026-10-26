@@ -126,12 +126,12 @@ export class Grandmother extends Character {
   }
 
   /**
-   * What she is doing when Elior comes in with the dream to tell: humming
+   * What she is doing when Elior goes to her with the dream to tell: humming
    * the cradle tune, which she stops. Shown first in that one talk, before
    * any greeting.
    */
   private static readonly HUMMING_AT_THE_HEARTH =
-    'She is humming at the hearth when you come in: a slow tune that ' +
+    'When you go to her, she is humming at the hearth: a slow tune that ' +
     'climbs three notes and settles home again. You know it. You have ' +
     'known it all your life, and you could not say from where. She ' +
     'stops when she sees your face.'
