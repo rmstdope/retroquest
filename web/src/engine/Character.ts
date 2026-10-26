@@ -1,6 +1,6 @@
 import type { GameState } from './GameState'
 import type { Item } from './Item'
-import { nameInSentence } from './names'
+import { nameInSentence, type NameOptions } from './names'
 import type { Spell } from './Spell'
 
 export interface CharacterOptions {
@@ -28,10 +28,11 @@ export class Character {
 
   /**
    * The character's name as it reads inside a sentence: title-cased and
-   * marked up (see `nameInSentence` in `names.ts`).
+   * marked up (see `nameInSentence` in `names.ts`). Override and pass
+   * `common: true` for a character named by what it is ("the merchant").
    */
-  nameInSentence(): string {
-    return nameInSentence('character', this.name)
+  nameInSentence(options?: NameOptions): string {
+    return nameInSentence('character', this.name, options)
   }
 
   examine(_gameState: GameState): string {
@@ -40,10 +41,10 @@ export class Character {
 
   /**
    * The player talks to the character. By default it has nothing to say, the
-   * sentence opening with the name in title case (see `nameInSentence`).
+   * sentence opening with the name (see `nameInSentence`).
    */
   talkTo(_gameState: GameState): string {
-    return `${this.nameInSentence()} has nothing to say right now.`
+    return `${this.nameInSentence({ atStart: true })} has nothing to say right now.`
   }
 
   /** The player says specific words to the character. */
@@ -66,11 +67,11 @@ export class Character {
 
   /**
    * The player offers an item. By default the character refuses it, the
-   * sentence opening with the name in title case (see `nameInSentence`).
+   * sentence opening with the name (see `nameInSentence`).
    */
   giveItem(_gameState: GameState, item: Item): string {
     return (
-      `${this.nameInSentence()} doesn't seem interested in ` +
+      `${this.nameInSentence({ atStart: true })} doesn't seem interested in ` +
       `${item.nameInSentence()}.`
     )
   }
@@ -78,9 +79,9 @@ export class Character {
   /**
    * The player asks to buy an item. By default the character sells nothing;
    * the reply names who answered, never the item, so one line serves every
-   * item, and opens with the name in title case (see `nameInSentence`).
+   * item, and opens with the name (see `nameInSentence`).
    */
   buyItem(_gameState: GameState, _itemName: string): string {
-    return `${this.nameInSentence()} has nothing to sell you.`
+    return `${this.nameInSentence({ atStart: true })} has nothing to sell you.`
   }
 }

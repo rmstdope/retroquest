@@ -21,6 +21,12 @@ export interface NameOptions {
    * does not ("the Blacksmith's Forge" still takes "the").
    */
   bare?: boolean
+  /**
+   * The character is named by what it is, not who ("merchant", "deer"), so
+   * the name takes "the" and stays lower case like an item's. Content says
+   * so explicitly; without it a character's name is a proper name.
+   */
+  common?: boolean
 }
 
 /** Words a title keeps lower case ("Captain of the Guard"). */
@@ -41,7 +47,9 @@ function titleCase(name: string): string {
 /**
  * The marked-up name as it reads in a sentence.
  *
- * - A character is a proper name: title-cased, no article, wherever it stands.
+ * - A character is a proper name: title-cased, no article, wherever it stands;
+ *   unless `common` says it is named by what it is, when it reads like an
+ *   item ("the merchant", "The merchant" with `atStart`).
  * - An item or room takes "the" ("The" with `atStart`), unless `bare` says its
  *   name is a person's own. A bare item is title-cased ("Elior's Journal"); a
  *   room's name is already cased, and a leading "The " of it is dropped so the
@@ -52,10 +60,15 @@ export function nameInSentence(
   name: string,
   options: NameOptions = {},
 ): string {
-  if (kind === 'character') {
+  if (kind === 'character' && options.common !== true) {
     return `[character_name]${titleCase(name)}[/character_name]`
   }
-  const tag = kind === 'item' ? 'item_name' : 'room_name'
+  const tag =
+    kind === 'character'
+      ? 'character_name'
+      : kind === 'item'
+        ? 'item_name'
+        : 'room_name'
   const bare = options.bare === true
   const shown =
     kind === 'item' && bare

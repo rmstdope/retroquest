@@ -387,43 +387,6 @@
    }
   ]
  },
- "006733f09712cb": {
-  "file": "006733f09712cb.mp3",
-  "speaker": "narrator",
-  "duration": 1.997,
-  "words": [
-   {
-    "word": "Deer",
-    "start": 0.0,
-    "end": 0.4
-   },
-   {
-    "word": "has",
-    "start": 0.4,
-    "end": 0.68
-   },
-   {
-    "word": "nothing",
-    "start": 0.68,
-    "end": 1.04
-   },
-   {
-    "word": "to",
-    "start": 1.04,
-    "end": 1.3
-   },
-   {
-    "word": "sell",
-    "start": 1.3,
-    "end": 1.58
-   },
-   {
-    "word": "you.",
-    "start": 1.58,
-    "end": 1.78
-   }
-  ]
- },
  "0079706338d1c0": {
   "file": "0079706338d1c0.mp3",
   "speaker": "narrator",
@@ -34959,43 +34922,6 @@
    }
   ]
  },
- "13c2202788220e": {
-  "file": "13c2202788220e.mp3",
-  "speaker": "narrator",
-  "duration": 2.461,
-  "words": [
-   {
-    "word": "Fisherman",
-    "start": 0.58,
-    "end": 0.58
-   },
-   {
-    "word": "has",
-    "start": 0.58,
-    "end": 1.12
-   },
-   {
-    "word": "nothing",
-    "start": 1.12,
-    "end": 1.5
-   },
-   {
-    "word": "to",
-    "start": 1.5,
-    "end": 1.78
-   },
-   {
-    "word": "sell",
-    "start": 1.78,
-    "end": 2.06
-   },
-   {
-    "word": "you.",
-    "start": 2.06,
-    "end": 2.24
-   }
-  ]
- },
  "13c26768bcc0c8": {
   "file": "13c26768bcc0c8.mp3",
   "speaker": "narrator",
@@ -44089,43 +44015,6 @@
     "word": "road",
     "start": 0.92,
     "end": 1.2
-   }
-  ]
- },
- "194bb4c5ea311f": {
-  "file": "194bb4c5ea311f.mp3",
-  "speaker": "narrator",
-  "duration": 2.183,
-  "words": [
-   {
-    "word": "Merchant",
-    "start": 0.0,
-    "end": 0.54
-   },
-   {
-    "word": "has",
-    "start": 0.54,
-    "end": 0.84
-   },
-   {
-    "word": "nothing",
-    "start": 0.84,
-    "end": 1.2
-   },
-   {
-    "word": "to",
-    "start": 1.2,
-    "end": 1.44
-   },
-   {
-    "word": "sell",
-    "start": 1.44,
-    "end": 1.74
-   },
-   {
-    "word": "you.",
-    "start": 1.74,
-    "end": 1.94
    }
   ]
  },

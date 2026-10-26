@@ -2,6 +2,7 @@ import {
   Character,
   type GameState,
   type Item,
+  type NameOptions,
   characterName,
   speech,
   attributeSpeech,
@@ -59,6 +60,11 @@ export class Fisherman extends Character {
         'fishing and humming quiet tunes. He knows much about the river ' +
         'and its secrets.',
     })
+  }
+
+  /** Named by what it is, so it reads "the fisherman" (see `nameInSentence`). */
+  override nameInSentence(options?: NameOptions): string {
+    return super.nameInSentence({ ...options, common: true })
   }
 
   /** Handle talking to the fisherman and teach fishing basics if eligible. */
