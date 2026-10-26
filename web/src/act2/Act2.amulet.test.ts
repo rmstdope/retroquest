@@ -46,7 +46,7 @@ describe('Act II ancient amulet', () => {
       game.state.currentRoom.items.some((i) => i instanceof AncientAmulet),
     ).toBe(true)
     expect(executeCommands(game, ['take amulet'])).toContain(
-      'You take the [item_name]ancient amulet[/item_name].',
+      'This might come in handy, so you decide to pick it up.',
     )
     expect(carries(game)).toBe(true)
   })
