@@ -58,18 +58,24 @@ export function useMusic(
     // The element already playing is left alone, so it never reloads and
     // the old loop never drops out; the new loop goes on the other element.
     let next = active
+    let comingBack = false
     if (crossfade) {
-      next = takeSpare()
+      // Going back to the loop that is still fading out: fade it up again.
+      const returning = takeFadingOut(file)
+      comingBack = returning !== null
+      next = returning ?? takeSpare()
       fadeOutActive()
       next.loop = true
-      next.volume = 0
+      if (!comingBack) next.volume = 0
       active = next
     }
 
     currentMusicFile.value = file
     musicInfo.value = info
-    next.src =
-      MUSIC_BASE_PATH + file.split('/').map(encodeURIComponent).join('/')
+    if (!comingBack) {
+      next.src =
+        MUSIC_BASE_PATH + file.split('/').map(encodeURIComponent).join('/')
+    }
 
     if (crossfade) fadeTo(targetVolume.value, MUSIC_CROSSFADE_MS)
     if (!musicMuted.value) {
@@ -80,8 +86,18 @@ export function useMusic(
   /** The loops still fading out, each with the timer that fades it. */
   const outgoing: {
     old: HTMLAudioElement
+    file: string
     timer: ReturnType<typeof setInterval>
   }[] = []
+
+  /** Takes back the element still fading out `file`, or null if none is. */
+  function takeFadingOut(file: string): HTMLAudioElement | null {
+    const index = outgoing.findIndex((entry) => entry.file === file)
+    if (index < 0) return null
+    const [entry] = outgoing.splice(index, 1)
+    clearInterval(entry.timer)
+    return entry.old
+  }
 
   /**
    * The element for the next loop: the spare, else the loop that has been
@@ -123,6 +139,7 @@ export function useMusic(
     let step = 0
     const entry = {
       old,
+      file: currentMusicFile.value,
       timer: setInterval(() => {
         step++
         const duck = narrating.value ? MUSIC_DUCK : 1

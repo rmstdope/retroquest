@@ -434,7 +434,7 @@ describe('useMusic', () => {
       expect(FadeAudio.made[0].paused).toBe(true)
     })
 
-    it('silences both loops when stopped', () => {
+    it('silences the fading loop when stopped', () => {
       const el = playing()
       const music = useMusic(el as unknown as HTMLAudioElement)
       music.loadTrack('a.mp3', '')
@@ -459,6 +459,48 @@ describe('useMusic', () => {
       await nextTick()
       vi.advanceTimersByTime(MUSIC_CROSSFADE_MS / 10)
       expect(el.volume).toBeLessThanOrEqual(0.5 * 0.8 * MUSIC_DUCK + 1e-9)
+    })
+
+    it('fades the loop back up, without reloading it, when the player walks back', () => {
+      const el = playing()
+      const { loadTrack } = useMusic(el as unknown as HTMLAudioElement)
+      loadTrack('a.mp3', '')
+      el.paused = false
+      el.volume = 0.5
+      loadTrack('b.mp3', '')
+      vi.advanceTimersByTime(MUSIC_CROSSFADE_MS / 2)
+      const heard = el.volume
+      loadTrack('a.mp3', '')
+      expect(el.srcSets).toHaveLength(1)
+      expect(el.paused).toBe(false)
+      expect(el.volume).toBe(heard)
+      vi.advanceTimersByTime(MUSIC_CROSSFADE_MS * 2)
+      expect(el.volume).toBeCloseTo(0.5)
+      expect(FadeAudio.made[0].paused).toBe(true)
+    })
+
+    it('keeps the volume, duck and mute controls on the new element after a crossfade', async () => {
+      const el = playing()
+      const narrating = ref(false)
+      const music = useMusic(el as unknown as HTMLAudioElement, narrating)
+      music.loadTrack('a.mp3', '')
+      el.paused = false
+      music.loadTrack('b.mp3', '')
+      vi.advanceTimersByTime(MUSIC_CROSSFADE_MS * 2)
+      const next = FadeAudio.made[0]
+
+      useSettingsStore().musicVolume = 40
+      await nextTick()
+      expect(next.volume).toBeCloseTo(0.4)
+      narrating.value = true
+      await nextTick()
+      vi.advanceTimersByTime(MUSIC_DUCK_FADE_MS * 2)
+      expect(next.volume).toBeCloseTo(0.4 * MUSIC_DUCK)
+
+      useSettingsStore().musicOn = false
+      expect(next.paused).toBe(true)
+      useSettingsStore().musicOn = true
+      expect(next.paused).toBe(false)
     })
 
     it('ends with the newest loop alone when the room changes twice quickly', () => {
