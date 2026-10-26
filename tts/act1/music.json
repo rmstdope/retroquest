@@ -6,5 +6,117 @@
     "plays": "Act I, throughout",
     "brief": "lively medieval market, plucked strings and light percussion, bustling and cheerful, instrumental, no vocals",
     "seconds": 126
+  },
+  {
+    "id": "act1-the-dream",
+    "title": "The Dream",
+    "plays": "Act I, The Dream",
+    "brief": "instrumental background loop for The Dream: Dark, and a storm in it. Rain drives against shutters you cannot see, and the thunder comes so close that the dark itself shakes. Shadows move through it the way smoke moves, no vocals",
+    "seconds": 60
+  },
+  {
+    "id": "act1-eliors-cottage",
+    "title": "Elior's Cottage",
+    "plays": "Act I, Elior's Cottage",
+    "brief": "instrumental background loop for Elior's Cottage: A modest cottage with a straw roof and a cozy hearth. The scent of fresh bread and old books fills the air, no vocals",
+    "seconds": 60
+  },
+  {
+    "id": "act1-vegetable-field",
+    "title": "Vegetable Field",
+    "plays": "Act I, Vegetable Field",
+    "brief": "instrumental background loop for Vegetable Field: Rows of withered crops stretch beneath a brooding gray sky. The earth is cracked and dry, with only a few stubborn carrots and a rusty hoe hinting at better days, no vocals",
+    "seconds": 60
+  },
+  {
+    "id": "act1-chicken-coop",
+    "title": "Chicken Coop",
+    "plays": "Act I, Chicken Coop",
+    "brief": "instrumental background loop for Chicken Coop: A small wooden coop stands here, its planks patched and weathered. Nervous chickens cluck and flutter, their feathers ruffled as they dart between straw nests, no vocals",
+    "seconds": 60
+  },
+  {
+    "id": "act1-village-square",
+    "title": "Village Square",
+    "plays": "Act I, Village Square",
+    "brief": "instrumental background loop for Village Square: The heart of Willowbrook bustles with life. Cobblestone paths radiate from an old stone fountain, and a weathered notice board stands nearby, covered in faded announcements, no vocals",
+    "seconds": 60
+  },
+  {
+    "id": "act1-miras-hut",
+    "title": "Mira's Hut",
+    "plays": "Act I, Mira's Hut",
+    "brief": "instrumental background loop for Mira's Hut: A fragrant hut filled with drying herbs and mysterious potions. Shelves overflow with bottles, roots, and colorful flowers. The air is thick with the scent of lavender and sage, no vocals",
+    "seconds": 60
+  },
+  {
+    "id": "act1-blacksmiths-forge",
+    "title": "Blacksmith's Forge",
+    "plays": "Act I, Blacksmith's Forge",
+    "brief": "instrumental background loop for Blacksmith's Forge: A hot, smoky forge glows with the light of burning coals. The clang of hammer on anvil echoes through the air, mingling with the scent of molten metal and sweat, no vocals",
+    "seconds": 60
+  },
+  {
+    "id": "act1-general-store",
+    "title": "General Store",
+    "plays": "Act I, General Store",
+    "brief": "instrumental background loop for General Store: A cluttered shop overflowing with goods of every kind. Shelves groan under the weight of rope, apples, matches, and trinkets. The shopkeeper bustles about, dusting jars and chatting with customers, no vocals",
+    "seconds": 60
+  },
+  {
+    "id": "act1-village-well",
+    "title": "Village Well",
+    "plays": "Act I, Village Well",
+    "brief": "instrumental background loop for Village Well: An old stone well stands at the village's center, its stones worn smooth by countless hands. The water below lies dark and still, and a faint sour smell hangs in the cool, damp air, no vocals",
+    "seconds": 60
+  },
+  {
+    "id": "act1-abandoned-shed",
+    "title": "Abandoned Shed",
+    "plays": "Act I, Abandoned Shed",
+    "brief": "instrumental background loop for Abandoned Shed: A rickety shed leans precariously at the edge of Willowbrook, its weathered boards creaking in the wind, no vocals",
+    "seconds": 60
+  },
+  {
+    "id": "act1-old-mill",
+    "title": "Old Mill",
+    "plays": "Act I, Old Mill",
+    "brief": "instrumental background loop for Old Mill: A creaky windmill towers above, its sails turning slowly in the breeze. Dusty gears and cobwebs fill the interior, and the scent of flour hangs in the air, no vocals",
+    "seconds": 60
+  },
+  {
+    "id": "act1-riverbank",
+    "title": "Riverbank",
+    "plays": "Act I, Riverbank",
+    "brief": "instrumental background loop for Riverbank: A gentle river flows past the village. Reeds sway along the banks, and the air is alive with the hum of insects. A weathered fisherman sits nearby, humming a quiet tune, no vocals",
+    "seconds": 60
+  },
+  {
+    "id": "act1-forest-path",
+    "title": "Forest Path",
+    "plays": "Act I, Forest Path",
+    "brief": "instrumental background loop for Forest Path: A winding path snakes into the heart of the woods, dappled sunlight flickering through the canopy above. A section of the path is blocked by thick, thorny vines, no vocals",
+    "seconds": 60
+  },
+  {
+    "id": "act1-hidden-glade",
+    "title": "Hidden Glade",
+    "plays": "Act I, Hidden Glade",
+    "brief": "instrumental background loop for Hidden Glade: A hushed clearing hidden deep within the forest, dim and overgrown. Brambles crowd its edges, and the tall grass stands grey and still beneath branches that shut out the sun, no vocals",
+    "seconds": 60
+  },
+  {
+    "id": "act1-village-chapel",
+    "title": "Village Chapel",
+    "plays": "Act I, Village Chapel",
+    "brief": "instrumental background loop for Village Chapel: A small stone chapel stands in quiet dignity, its stained glass windows casting rainbows across the worn pews. The air is cool and still, filled with the faint scent of candle wax and old parchment, no vocals",
+    "seconds": 60
+  },
+  {
+    "id": "act1-road-to-greendale",
+    "title": "Road to Greendale",
+    "plays": "Act I, Road to Greendale",
+    "brief": "instrumental background loop for Road to Greendale: The main road leaving Willowbrook stretches beneath ancient oaks, their branches arching overhead like a living tunnel. The path is well-trodden, lined with wildflowers and scattered leaves, no vocals",
+    "seconds": 60
   }
 ]

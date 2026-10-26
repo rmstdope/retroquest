@@ -11,7 +11,14 @@ import { Act3 } from '@/act3/Act3'
 import { Act4 } from '@/act4/Act4'
 import type { Act } from '@/engine'
 import { NEW_QUEST_FILE, QUEST_COMPLETE_FILE } from '@/composables/questSounds'
-import { actLoops, questStingers, type MusicTrack } from './musicLists'
+import {
+  actLoopId,
+  actLoops,
+  questStingers,
+  roomLoops,
+  roomTrackId,
+  type MusicTrack,
+} from './musicLists'
 
 const SLUG = /^[a-z0-9]+(-[a-z0-9]+)*$/
 const ACTS: Act[] = [new Act1(), new Act2(), new Act3(), new Act4()]
@@ -69,6 +76,47 @@ describe('actLoops without a brief', () => {
   })
 })
 
+describe('roomLoops', () => {
+  it('lists every room of every act once, under a slug id', () => {
+    for (const act of ACTS) {
+      const tracks = roomLoops(act)
+      expect(tracks.map((t) => t.id)).toEqual(
+        Object.keys(act.rooms).map((key) => roomTrackId(act.name, key)),
+      )
+      for (const track of tracks) expect(track.id).toMatch(SLUG)
+    }
+  })
+
+  it('names a room track after its act and room key', () => {
+    expect(roomTrackId('Act1', 'VillageSquare')).toBe('act1-village-square')
+  })
+
+  it("briefs a room from its name and description, and plays no file of the game's", () => {
+    const act = new Act1()
+    const square = roomLoops(act).find((t) => t.id === 'act1-village-square')
+    const room = act.rooms.VillageSquare
+    expect(square?.title).toBe(room.name)
+    expect(square?.plays).toBe(`Act I, ${room.name}`)
+    expect(square?.brief).toContain(room.name)
+    expect(square?.brief).toContain('instrumental')
+    expect(square?.brief).not.toMatch(/\[\/?[a-z_]+\]/)
+    expect(square?.file).toBeUndefined()
+  })
+
+  it('keeps every brief short enough to read in the studio', () => {
+    for (const act of ACTS)
+      for (const track of roomLoops(act))
+        expect(track.brief.length).toBeLessThan(400)
+  })
+})
+
+describe('actLoopId', () => {
+  it('is the id of the act loop', () => {
+    for (const act of ACTS)
+      expect(actLoopId(act.musicFile)).toBe(actLoops(act)[0]?.id)
+  })
+})
+
 describe('questStingers', () => {
   it('lists the new-quest and quest-complete sounds, at most 10 seconds each', () => {
     const stingers = questStingers()
@@ -101,16 +149,21 @@ describe('questStingers', () => {
   })
 
   it('has ids unique across the whole game', () => {
-    const ids = [...ACTS.flatMap(actLoops), ...questStingers()].map((t) => t.id)
+    const ids = [
+      ...ACTS.flatMap(actLoops),
+      ...ACTS.flatMap(roomLoops),
+      ...questStingers(),
+    ].map((t) => t.id)
     expect(new Set(ids).size).toBe(ids.length)
   })
 })
 
 describe('the committed lists', () => {
   it.each([1, 2, 3, 4])('tts/act%i/music.json is what the game lists', (n) => {
-    expect(readJson<MusicTrack[]>(`tts/act${n}/music.json`)).toEqual(
-      actLoops(ACTS[n - 1] as Act),
-    )
+    expect(readJson<MusicTrack[]>(`tts/act${n}/music.json`)).toEqual([
+      ...actLoops(ACTS[n - 1] as Act),
+      ...roomLoops(ACTS[n - 1] as Act),
+    ])
   })
 
   it('tts/stingers.json is what the game lists', () => {

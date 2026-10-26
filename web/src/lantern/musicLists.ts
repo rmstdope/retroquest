@@ -6,6 +6,8 @@
  * The tts scripts `extract-act.ts` and `extract-shared.ts` write them.
  */
 import { NEW_QUEST_FILE, QUEST_COMPLETE_FILE } from '@/composables/questSounds'
+import type { Act } from '@/engine'
+import { narrationText } from './narrationKey'
 
 /** Where the game's music files live (`/audio/music/` in `useMusic`), as paths inside the project root. */
 const MUSIC_DIR = 'web/public/audio/music/'
@@ -67,6 +69,11 @@ const LOOP_BRIEFS: Record<string, LoopBrief> = {
   },
 }
 
+/** Length of a room's loop in seconds, a starting point for the studio. */
+const ROOM_LOOP_SECONDS = 60
+/** How much of a room's description goes into its brief, cut at a sentence end. */
+const BRIEF_DESCRIPTION_CHARS = 200
+
 /** The title in a freetouse.com file name: "Conquest - Market (freetouse.com).mp3" is "Market". */
 const FILE_TITLE = /^.+? - (.+) \(freetouse\.com\)\.mp3$/
 
@@ -92,6 +99,53 @@ export function actLoops(act: { musicFile: string }): MusicTrack[] {
   return [
     { id: slug(title), title, file: `${MUSIC_DIR}${act.musicFile}`, ...brief },
   ]
+}
+
+/** The id of an act's loop from the music file it plays: "Market" is "market". */
+export function actLoopId(musicFile: string): string {
+  const title = FILE_TITLE.exec(musicFile)?.[1]
+  return title ? slug(title) : ''
+}
+
+/** The id of a room's track: act `Act1` and room key `VillageSquare` give `act1-village-square`. */
+export function roomTrackId(actName: string, roomKey: string): string {
+  return `${slug(actName)}-${slug(roomKey.replace(/([a-z0-9])([A-Z])/g, '$1 $2'))}`
+}
+
+/** "Act1" as "Act I" (the act's heading label), or the name itself when it has no number. */
+function actLabel(actName: string): string {
+  const number = Number(/\d+$/.exec(actName)?.[0])
+  const numerals = ['I', 'II', 'III', 'IV']
+  return numerals[number - 1] ? `Act ${numerals[number - 1]}` : actName
+}
+
+/** The opening sentences of a description that fit the brief, markup stripped. */
+function descriptionOpening(description: string): string {
+  const sentences = narrationText(description).match(/[^.!?]+[.!?]*/g) ?? []
+  let opening = ''
+  for (const sentence of sentences) {
+    const next = `${opening} ${sentence.trim()}`.trim()
+    if (opening && next.length > BRIEF_DESCRIPTION_CHARS) break
+    opening = next
+  }
+  return opening.replace(/[.!?]+$/, '')
+}
+
+/**
+ * One loop slot for each room of the act, briefed from the room's own name and
+ * description. A room plays no file of its own: until the navigator chooses a
+ * take, the game plays the act's loop there.
+ */
+export function roomLoops(act: Act): MusicTrack[] {
+  return Object.entries(act.rooms).map(([key, room]) => ({
+    id: roomTrackId(act.name, key),
+    title: room.name,
+    plays: `${actLabel(act.name)}, ${room.name}`,
+    brief:
+      `instrumental background loop for ${room.name}: ` +
+      `${descriptionOpening(room.description)}, no vocals`,
+    seconds: ROOM_LOOP_SECONDS,
+  }))
 }
 
 /** The stingers: the sounds for a new quest and a completed quest, by the files the game plays. */
