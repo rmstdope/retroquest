@@ -943,6 +943,11 @@ watch(
   display: flex;
   flex-direction: column;
   gap: calc(18px * var(--lq-density));
+  /* Room left of the words for the rule of a paragraph being read, which sits
+     12px out (StoryTurn): a scrolling story clips whatever sticks out of it.
+     The words stay where they were. */
+  margin-left: -12px;
+  padding-left: 12px;
 }
 .lq-send {
   width: 100%;

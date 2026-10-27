@@ -54,6 +54,33 @@ test('tells an answer block by block, and a double tap shows the rest', async ({
   expect(await lastTurnBlocks(page).count()).toBeGreaterThan(early)
 })
 
+for (const { name, width, height } of [
+  { name: 'desktop', width: 1280, height: 800 },
+  { name: 'phone', width: 390, height: 720 },
+]) {
+  test(`marks a narrated paragraph with a rule inside the story on ${name}`, async ({
+    page,
+  }): Promise<void> => {
+    await page.setViewportSize({ width, height })
+    await slowNarrationClips(page)
+    await startAct1(page)
+
+    const input = page.getByLabel('Command')
+    await input.fill('talk to voice')
+    await input.press('Enter')
+
+    // The rule is drawn at the paragraph's left edge, so that edge has to lie
+    // inside the story, which clips whatever sticks out of it.
+    const speaking = page.locator('.lq-block-text.lq-speaking')
+    await expect(speaking).toHaveCount(1)
+    const block = await speaking.boundingBox()
+    const story = await page
+      .getByRole('region', { name: 'Story' })
+      .boundingBox()
+    expect(block?.x).toBeGreaterThanOrEqual(story?.x ?? Infinity)
+  })
+}
+
 test('keeps the room card until the voice reaches them, and a press in the journal catches up', async ({
   page,
 }): Promise<void> => {
