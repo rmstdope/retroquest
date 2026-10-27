@@ -625,6 +625,26 @@
     "text": "I don't have a use for this, lad."
   },
   {
+    "key": "1829dbae932fd2",
+    "speaker": "narrator",
+    "text": "The blacksmith eyes the dull knife."
+  },
+  {
+    "key": "08748f6fd3d3b3",
+    "speaker": "blacksmith",
+    "text": "That edge has seen better days. I'll put it right for ye, but it'll cost you a coin."
+  },
+  {
+    "key": "10ff3024e15d07",
+    "speaker": "narrator",
+    "text": "The blacksmith eyes the coin."
+  },
+  {
+    "key": "0f2e7ad5bfcd13",
+    "speaker": "blacksmith",
+    "text": "Thanks for the offer, but I can only sharpen a dull knife for ye if you have one—and you'll need to pay me a coin for the service."
+  },
+  {
     "key": "0c64c7e367b44a",
     "speaker": "narrator",
     "text": "Blacksmith's Forge"

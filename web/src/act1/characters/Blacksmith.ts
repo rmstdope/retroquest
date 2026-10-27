@@ -128,27 +128,43 @@ export class Blacksmith extends Character {
     )
   }
 
-  /** Handle items offered to the blacksmith and perform exchanges. */
+  /**
+   * Handle items offered to the blacksmith and perform exchanges. The knife
+   * trade needs the coin and the dull knife both carried and reads the same
+   * whichever one is handed over; a knife without a coin gets its own refusal.
+   */
   override giveItem(gameState: GameState, item: Item): string {
     if (item instanceof Coin || item instanceof DullKnife) {
-      // Check for "knife (dull)" in inventory
-      const dullKnifeInstance = gameState.getItem('dull knife')
-      const coinInstance = gameState.getItem('coin')
+      // The trade needs both items in hand, whichever one was offered.
+      const coinInstance = gameState.inventory.find(
+        (carried) => carried instanceof Coin,
+      )
+      const dullKnifeInstance = gameState.inventory.find(
+        (carried) => carried instanceof DullKnife,
+      )
       if (dullKnifeInstance && coinInstance) {
-        // Remove coin from inventory
-        gameState.removeItemFromInventory(item.name)
-        // Remove the dull knife from inventory
+        gameState.removeItemFromInventory(coinInstance.name)
         gameState.removeItemFromInventory(dullKnifeInstance.name)
-        // Add a new sharp knife to inventory
         gameState.addItemToInventory(new SharpKnife())
         gameState.setStoryFlag(FLAG_BLACKSMITH_SHARPENED_KNIFE, true)
 
         return (
           `The ${characterName(this.name)} takes your ` +
-          `[item_name]${item.name}[/item_name] and your ` +
+          `[item_name]${coinInstance.name}[/item_name] and your ` +
           `[item_name]${dullKnifeInstance.name}[/item_name]. He ` +
           'expertly sharpens it on his whetstone and hands you back a ' +
           'gleaming [item_name]sharp knife[/item_name]!'
+        )
+      }
+      if (item instanceof DullKnife) {
+        return (
+          `The ${characterName(this.name)} eyes the ` +
+          `[item_name]${item.name}[/item_name]. ` +
+          speech(
+            'That edge has seen better days. ' +
+              "I'll put it right for ye, but it'll cost you a " +
+              '[item_name]coin[/item_name].',
+          )
         )
       }
       return (

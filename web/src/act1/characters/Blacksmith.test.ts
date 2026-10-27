@@ -27,6 +27,73 @@ function seeTheDeer(game: Game): void {
   game.state.currentRoom = game.state.allRooms.BlacksmithsForge
 }
 
+describe('Borin sharpening the knife', () => {
+  const TRADE =
+    'The blacksmith takes your coin and your dull knife. He expertly ' +
+    'sharpens it on his whetstone and hands you back a gleaming sharp knife!'
+
+  /** The response with markup tags removed, so wording can be compared. */
+  function plain(response: string): string {
+    return response.replace(/\[\/?[a-z_]+\]/g, '')
+  }
+
+  it.each(['coin', 'dull knife'])(
+    'names the coin then the knife when %s is handed over',
+    (given) => {
+      const game = gameAtForge()
+      game.state.addItemToInventory(new Coin())
+      game.state.addItemToInventory(new DullKnife())
+
+      const response = executeCommands(game, [`give ${given} to blacksmith`])
+
+      expect(plain(response)).toContain(TRADE)
+      expect(game.state.hasItem('coin')).toBe(false)
+      expect(game.state.hasItem('dull knife')).toBe(false)
+      expect(game.state.hasItem('sharp knife')).toBe(true)
+      expect(findMarkupProblems(response)).toEqual([])
+    },
+  )
+
+  it('asks for a coin when given the knife without one', () => {
+    const game = gameAtForge()
+    game.state.addItemToInventory(new DullKnife())
+
+    const response = executeCommands(game, ['give dull knife to blacksmith'])
+
+    expect(plain(response)).toContain(
+      'The blacksmith eyes the dull knife. That edge has seen better days. ' +
+        "I'll put it right for ye, but it'll cost you a coin.",
+    )
+    expect(game.state.hasItem('dull knife')).toBe(true)
+    expect(findMarkupProblems(response)).toEqual([])
+  })
+
+  it('refuses the coin when no dull knife is carried', () => {
+    // The starting dull knife lies in another room: only a carried knife
+    // counts, so this must not be "simplified" back to a world-wide lookup.
+    const game = gameAtForge()
+    game.state.addItemToInventory(new Coin())
+
+    const response = executeCommands(game, ['give coin to blacksmith'])
+
+    expect(response).toContain('if you have one')
+    expect(game.state.hasItem('coin')).toBe(true)
+  })
+
+  it('does not trade a coin lying on the floor', () => {
+    const game = gameAtForge()
+    game.state.addItemToInventory(new Coin())
+    game.state.addItemToInventory(new DullKnife())
+    executeCommands(game, ['drop coin'])
+
+    const response = executeCommands(game, ['give dull knife to blacksmith'])
+
+    expect(response).toContain('cost you a')
+    expect(game.state.hasItem('dull knife')).toBe(true)
+    expect(game.state.hasItem('sharp knife')).toBe(false)
+  })
+})
+
 describe('Borin as the act goes on', () => {
   it('just welcomes Elior back when nothing has happened yet', () => {
     const game = gameAtForge()
