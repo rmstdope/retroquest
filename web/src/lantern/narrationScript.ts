@@ -194,7 +194,8 @@ export function linesOfTurn(
 
 /**
  * An optional scene the golden path does not take: once the command at index
- * `after` of the path has been played, `commands` are played on a copy of the
+ * `after` of the path has been played (`-1`: before the first, for a scene of
+ * the opening dream), `commands` are played on a copy of the
  * game and everything they say is read too. `virtues` are recorded on the copy
  * first, for scenes that colour their lines by the virtues the player earned;
  * `unset` story flags are cleared on the copy, for a scene the path only
@@ -262,6 +263,18 @@ export function actScript(
     add(arrivalBlocks(room, play.getRoomDescription()))
   }
   arrive()
+  const playBranches = (after: number): void => {
+    for (const branch of branches.filter((b) => b.after === after)) {
+      probe.loadSaveData(game.toSaveData())
+      for (const virtue of branch.virtues ?? []) probe.state.addVirtue(virtue)
+      for (const flag of branch.unset ?? [])
+        probe.state.setStoryFlag(flag, false)
+      for (const step of branch.commands) {
+        add(turnBlocks(tryOut.takeTurn(step)))
+        settle(tryOut)
+      }
+    }
+  }
   const tryProbes = (): void => {
     const save = game.toSaveData()
     for (const command of probes(game)) {
@@ -276,19 +289,11 @@ export function actScript(
     for (const report of quests.completed) add(questCompleteBlocks(report))
   }
   tryProbes()
+  playBranches(-1)
   for (const [index, command] of commands.entries()) {
     add(turnBlocks(play.takeTurn(command)))
     settle(play)
-    for (const branch of branches.filter((b) => b.after === index)) {
-      probe.loadSaveData(game.toSaveData())
-      for (const virtue of branch.virtues ?? []) probe.state.addVirtue(virtue)
-      for (const flag of branch.unset ?? [])
-        probe.state.setStoryFlag(flag, false)
-      for (const step of branch.commands) {
-        add(turnBlocks(tryOut.takeTurn(step)))
-        settle(tryOut)
-      }
-    }
+    playBranches(index)
     if (!game.isActRunning()) {
       const { act, title } = parseActIntro(game.getActIntro())
       const heading = chapterHeading('complete', act, title)
