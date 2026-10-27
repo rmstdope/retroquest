@@ -40,3 +40,19 @@ describe('committed narration files are current', () => {
     })
   }
 })
+
+/** Lines a player reaches only off the golden path must be in the script, so they can be recorded. */
+describe('Act I off-path lines are in the narration script', () => {
+  const texts = (committed('1', 'script.json') as { text: string }[]).map(
+    (line) => line.text,
+  )
+  it.each([
+    "I'm not sure what you mean, dear, but I do like to hear you talk.",
+    'Nothing here answers to that. The voice says your name.',
+    'It looks like you need to use something with the strange mechanism.',
+    "You can't unlock a person!",
+    "The truth about what, love? You've lost me.",
+  ])('has "%s"', (text) => {
+    expect(texts).toContain(text)
+  })
+})

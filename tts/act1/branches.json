@@ -69,5 +69,53 @@
     {"after": 132, "commands": ["give lantern to fisherman", "buy rope from fisherman", "cast bless on fisherman", "cast heal on fisherman", "cast purify on fisherman"]},
     {"after": 134, "commands": ["give lantern to deer", "buy rope from deer", "cast bless on deer", "cast heal on deer", "cast purify on deer"]},
     {"after": 153, "commands": ["give lantern to priest", "buy rope from priest", "cast bless on priest", "cast heal on priest", "cast purify on priest"]},
-    {"after": 155, "commands": ["give lantern to merchant", "buy rope from merchant", "cast bless on merchant", "cast heal on merchant", "cast purify on merchant"]}
+    {"after": 155, "commands": ["give lantern to merchant", "buy rope from merchant", "cast bless on merchant", "cast heal on merchant", "cast purify on merchant"]},
+    {
+        "after": -1,
+        "commands": ["go north", "listen", "talk to xyz"]
+    },
+    {
+        "after": 0,
+        "commands": ["listen", "say hello to grandmother"]
+    },
+    {
+        "after": 36,
+        "commands": ["say hello to patches"]
+    },
+    {
+        "after": 43,
+        "commands": ["say yes to grandmother", "talk to grandmother", "examine patches", "talk to patches", "go east", "go east", "talk to shopkeeper", "search", "look"]
+    },
+    {
+        "after": 48,
+        "commands": ["use sword", "use armor"]
+    },
+    {
+        "after": 57,
+        "commands": ["use strange mechanism", "listen to strange mechanism"]
+    },
+    {
+        "after": 58,
+        "commands": ["listen to strange mechanism"]
+    },
+    {
+        "after": 70,
+        "commands": ["cast purify"]
+    },
+    {
+        "after": 72,
+        "commands": ["give faded photograph to fisherman"]
+    },
+    {
+        "after": 112,
+        "commands": ["cast purify", "cast purify on healing herb", "cast revive on mira", "cast unlock on mira", "cast unlock on healing herb", "cast light", "cast heal"]
+    },
+    {
+        "after": 22,
+        "commands": ["say truth to tilda"]
+    },
+    {
+        "after": 166,
+        "commands": ["talk to villager", "say truth to tilda", "say truth to tilda"]
+    }
 ]

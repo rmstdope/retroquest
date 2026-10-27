@@ -60,6 +60,21 @@
     "text": "You are asleep already. The voice says your name again, nearer."
   },
   {
+    "key": "0b0388eba615e9",
+    "speaker": "narrator",
+    "text": "You go that way, and it is the same dark, the same rain, the same tune. There is no door in this. There is only the voice, and it says your name."
+  },
+  {
+    "key": "11c74bf14404bc",
+    "speaker": "narrator",
+    "text": "The rain, and the thunder under it. Under the thunder, the tune: three notes climbing, and settling home. You know it, and could not say from where. Under the tune, a whisper, and the whisper is your name."
+  },
+  {
+    "key": "1b4ebbdd79fc8d",
+    "speaker": "narrator",
+    "text": "Nothing here answers to that. The voice says your name."
+  },
+  {
     "key": "1f7d39c44976a9",
     "speaker": "narrator",
     "text": "New main quest"
@@ -98,6 +113,21 @@
     "key": "151113c15ddf05",
     "speaker": "narrator",
     "text": "You don't see that here."
+  },
+  {
+    "key": "041e30b4ecb790",
+    "speaker": "narrator",
+    "text": "It is quiet here."
+  },
+  {
+    "key": "1a4b47847265b2",
+    "speaker": "narrator",
+    "text": "Your grandmother tilts her head."
+  },
+  {
+    "key": "126089c08d01aa",
+    "speaker": "grandmother",
+    "text": "I'm not sure what you mean, dear, but I do like to hear you talk."
   },
   {
     "key": "1ce01e698ceb2f",
@@ -480,6 +510,11 @@
     "text": "Tilda has nothing to sell you."
   },
   {
+    "key": "1cafb496c9a807",
+    "speaker": "tilda",
+    "text": "The truth about what, love? You've lost me."
+  },
+  {
     "key": "0d49024e6a4c8b",
     "speaker": "narrator",
     "text": "Village Square"
@@ -715,6 +750,11 @@
     "text": "Patches sniffs at your offering from the shadows and stays put. Perhaps she would rather hear her name."
   },
   {
+    "key": "0350b91735f95b",
+    "speaker": "narrator",
+    "text": "Patches flicks an ear at you, but the words mean nothing to her."
+  },
+  {
     "key": "1d1933af2244eb",
     "speaker": "narrator",
     "text": "The shed door is unlocked and slightly ajar."
@@ -778,6 +818,61 @@
     "key": "182833db6adeb7",
     "speaker": "narrator",
     "text": "You lift the bucket, then think better of it. The sour water from the well would only sicken the soil further."
+  },
+  {
+    "key": "00a4d1d822a2a8",
+    "speaker": "narrator",
+    "text": "Patches sniffs the rug, circles twice and curls up at your grandmother's feet. She laughs softly."
+  },
+  {
+    "key": "046c8379d4b6f9",
+    "speaker": "grandmother",
+    "text": "Well, that's settled, then. I'll send word to Hemlock this very afternoon. He's a kind old soul; he'll be glad she's safe, and his store will be open again by the time you get there."
+  },
+  {
+    "key": "09352ca76d96c1",
+    "speaker": "narrator",
+    "text": "You let Patches stay by your grandmother's hearth, and she sent word to Old Man Hemlock. The General Store is open again. Curiosity did not kill this cat after all."
+  },
+  {
+    "key": "1a498b8e00d04e",
+    "speaker": "narrator",
+    "text": "Patches is asleep in the warm spot by the hearth. Your grandmother follows your gaze and smiles."
+  },
+  {
+    "key": "0111d9e5831ab6",
+    "speaker": "grandmother",
+    "text": "She has the run of the cottage already. I'll not be lonely with that one about."
+  },
+  {
+    "key": "0ea1159058b214",
+    "speaker": "narrator",
+    "text": "Patches blinks at you slowly from beside the hearth and begins to purr."
+  },
+  {
+    "key": "1e75064e03807c",
+    "speaker": "narrator",
+    "text": "The shopkeeper hurries over the moment you come in."
+  },
+  {
+    "key": "0af5bbf0fb8712",
+    "speaker": "shopkeeper",
+    "text": "Your grandmother sent word, lad. Patches is safe and warm by her hearth. I'll not drag her back; she always did like a fire better than a draughty old store, and I can call in and see her."
+  },
+  {
+    "key": "0e9e175535a167",
+    "speaker": "shopkeeper",
+    "text": "The reward was for bringing her home, and she found a new one. But you'll not leave empty-handed: take this rope, on the house, and there's always an apple to go with it. And the store's open again, so have a look around."
+  },
+  {
+    "key": "0d3a3a5f0dab52",
+    "speaker": "narrator",
+    "text": "You receive a rope and an apple."
+  },
+  {
+    "key": "083f9e2e23d369",
+    "speaker": "narrator",
+    "text": "You search around the General Store, but find nothing of interest beyond what you can already see."
   },
   {
     "key": "08d707c65b4699",
@@ -920,6 +1015,16 @@
     "text": "Not looking for donations, friend, but I appreciate the thought!"
   },
   {
+    "key": "18a36fc3df947f",
+    "speaker": "narrator",
+    "text": "It feels perfectly balanced and ready for combat."
+  },
+  {
+    "key": "00a4c4d212e8de",
+    "speaker": "narrator",
+    "text": "It looks like it would provide good protection if worn."
+  },
+  {
     "key": "124d5c3ce7ffcb",
     "speaker": "narrator",
     "text": "General Store"
@@ -980,11 +1085,6 @@
     "text": "Old Man Hemlock, the owner of the General Store, always bustling about and eager to strike a bargain or share a rumor."
   },
   {
-    "key": "083f9e2e23d369",
-    "speaker": "narrator",
-    "text": "You search around the General Store, but find nothing of interest beyond what you can already see."
-  },
-  {
     "key": "024e14903a4d2a",
     "speaker": "shopkeeper",
     "text": "Hold on there, friend! That apple is merchandise, not a free sample. If you want it, you'll need to buy it proper-like."
@@ -1025,6 +1125,16 @@
     "text": "The rope is yours for 1 coin(s), with an extra apple as a bonus!"
   },
   {
+    "key": "0707d5535402bf",
+    "speaker": "narrator",
+    "text": "It looks like you need to use something with the strange mechanism."
+  },
+  {
+    "key": "0debb7a078ccd8",
+    "speaker": "narrator",
+    "text": "You hear a faint whirring and clicking from within the strange mechanism, and beneath it a low hum, as if something were being drawn up from far below."
+  },
+  {
     "key": "129314440d0b65",
     "speaker": "narrator",
     "text": "Old Mill"
@@ -1058,6 +1168,11 @@
     "key": "0694a27d2ff576",
     "speaker": "narrator",
     "text": "With a clunk, a hidden compartment slides open, revealing a fragment of the old millstone!"
+  },
+  {
+    "key": "0b7095bd4f6ce5",
+    "speaker": "narrator",
+    "text": "The strange mechanism is silent now, its gears jammed fast."
   },
   {
     "key": "0bcb5f657bc789",
@@ -1220,6 +1335,11 @@
     "text": "You have helped the fisherman and learned something new about the world around you. Your kindness is rewarded."
   },
   {
+    "key": "03407d37d2246d",
+    "speaker": "narrator",
+    "text": "The magic fizzles out, achieving nothing. It feels like the magic is just out of reach."
+  },
+  {
     "key": "1718cd046076cf",
     "speaker": "narrator",
     "text": "The fisherman looks out over the water."
@@ -1263,6 +1383,16 @@
     "key": "0de6915aebf8ee",
     "speaker": "narrator",
     "text": "You tip the smooth stone aside and dig into the cold mud beneath it. Your fingers close on a small tin, sealed with wax. Inside, wrapped in oilcloth, lies a mother's letter."
+  },
+  {
+    "key": "1503b6977bed26",
+    "speaker": "narrator",
+    "text": "The fisherman nods slowly."
+  },
+  {
+    "key": "0e22641f0b1fbe",
+    "speaker": "fisherman",
+    "text": "She'd be proud of you, lad. Keep her words close."
   },
   {
     "key": "1d6486a738f75d",
@@ -1733,6 +1863,41 @@
     "key": "1fb5426e0eadff",
     "speaker": "narrator",
     "text": "A cleansing energy flows around Mira, purifying their spirit and lifting any negative influences."
+  },
+  {
+    "key": "0a2d6cb7f168a2",
+    "speaker": "narrator",
+    "text": "A cleansing energy flows from your hands."
+  },
+  {
+    "key": "0c826cf36691ef",
+    "speaker": "narrator",
+    "text": "A cleansing energy flows from your hands, but nothing else seems to happen."
+  },
+  {
+    "key": "0dd5c21afbf51c",
+    "speaker": "narrator",
+    "text": "You can't revive someone who is very much alive!"
+  },
+  {
+    "key": "1a21472deec87b",
+    "speaker": "narrator",
+    "text": "You can't unlock a person!"
+  },
+  {
+    "key": "0e9aeb149250ab",
+    "speaker": "narrator",
+    "text": "That has no lock or magical seal to open."
+  },
+  {
+    "key": "05ec706f6c0dc0",
+    "speaker": "narrator",
+    "text": "The room is already well lit."
+  },
+  {
+    "key": "16327c5981dd9b",
+    "speaker": "narrator",
+    "text": "A warm light envelops you, and you feel your wounds mending."
   },
   {
     "key": "1cacf7b290b7d8",
@@ -2403,6 +2568,21 @@
     "key": "13aa84f923d1fd",
     "speaker": "tilda",
     "text": "The water's clean! Was that you, Elior? No — don't tell me, you've that look about you. I've not had dough rise so light in a year."
+  },
+  {
+    "key": "16b565f80843a4",
+    "speaker": "narrator",
+    "text": "You tell Tilda it was you: a spell, and a little help from the healer."
+  },
+  {
+    "key": "02d25d2e523f27",
+    "speaker": "tilda",
+    "text": "Magic? In Willowbrook? ... Well. I'll not tell a soul if you'd rather I didn't. But I'll know, and I'll be saving you the first loaf every morning."
+  },
+  {
+    "key": "056aeef4c3c4ca",
+    "speaker": "tilda",
+    "text": "I know, love. Your secret's safe with me, and so's your loaf."
   },
   {
     "key": "1f9e60b785fb3f",

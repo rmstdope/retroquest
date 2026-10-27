@@ -361,6 +361,22 @@ describe('actScript branches', () => {
   })
 })
 
+describe('actScript branches before the first command', () => {
+  it('reads a scene of the opening dream, which the first command ends', () => {
+    const dream: ScriptBranch = { after: -1, commands: ['go north'] }
+    const lines = actScript(
+      () => new Game([new Act1()]),
+      ACT1_GOLDEN_PATH.slice(0, 1),
+      [],
+      [],
+      [dream],
+    )
+    expect(lines.some((line) => line.text.includes('There is no door'))).toBe(
+      true,
+    )
+  })
+})
+
 describe('actScript branches with story flags cleared', () => {
   const QUIET =
     'You rest for a while, but the glade remains quiet. Perhaps something more needs to happen for its magic to awaken.'
