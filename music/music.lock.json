@@ -1,3 +1,4 @@
 {
+ "act1-eliors-cottage": {"fp":"5db025a3e2b1781a","model":"acestep-v15-xl-turbo+lm-4B","seed":546989290,"list":"act1","take":4,"inputs":{"brief":"instrumental background loop for Elior's Cottage: lute and drums, humming voices, cozy and ambient.","kind":"loop","seconds":60,"bpm":80,"key":"A minor"},"at":"2026-10-27T01:20:51.496Z"},
  "act1-the-dream": {"fp":"35f65a0cc5ca5d4a","model":"acestep-v15-xl-turbo+lm-4B","seed":1362786485,"list":"act1","take":8,"inputs":{"brief":"Piano, violin and boy choir. Background loop for a dream scene.","kind":"loop","seconds":60,"bpm":50,"key":"D minor"},"at":"2026-10-26T15:45:25.437Z"}
 }
