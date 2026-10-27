@@ -60,5 +60,6 @@
       "clips": "web/public/audio/music/generated",
       "manifest": "web/public/audio/music/generated/manifest.json"
     }
-  }
+  },
+  "takeFade": 0.5
 }
