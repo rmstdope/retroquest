@@ -136,17 +136,23 @@ const END_SLACK = 8
 const PILL_ROOM = 96
 
 /**
- * Show the pill while story text continues below the visible part. When it
- * goes while focused (pressed to the end), focus moves on to the actions.
+ * Show the pill while story text continues below the visible part (the blank
+ * room the story keeps at its end for the narration hint does not count).
+ * When it goes while focused (pressed to the end), focus moves on to the
+ * actions.
  */
 function updateMoreBelow(): void {
   const story = storyEl.value
   const hadFocus =
     !!moreBelowButton.value && document.activeElement === moreBelowButton.value
+  const trailing = story
+    ? parseFloat(getComputedStyle(story).paddingBottom) || 0
+    : 0
   moreBelow.value =
     !!story &&
     story.clientHeight >= PILL_ROOM &&
-    story.scrollTop + story.clientHeight < story.scrollHeight - END_SLACK
+    story.scrollTop + story.clientHeight <
+      story.scrollHeight - trailing - END_SLACK
   if (hadFocus && !moreBelow.value) focusActions()
 }
 
@@ -253,7 +259,8 @@ onUnmounted(() => {
 watch(() => settings.textSize, updateMoreBelow, { flush: 'post' })
 
 // A reading that ends (above all a skip) draws the rest of the turn at once,
-// which grows the story without scrolling it or changing its size.
+// which grows the story without scrolling it (the room kept for the hint
+// moves from below the story into its end, so nothing moves).
 watch(storyHeld, async (held) => {
   if (held) return
   await nextTick()
@@ -654,7 +661,11 @@ watch(
         @click.capture="onPanelPress"
       >
         <RoomCard v-if="wide" class="lq-card" data-panel @click="onNameClick" />
-        <div v-show="wide || section === 'story'" class="lq-story-wrap">
+        <div
+          v-show="wide || section === 'story'"
+          class="lq-story-wrap"
+          :class="{ 'lq-hint-room': storyHeld }"
+        >
           <section
             ref="storyEl"
             class="lq-story"
@@ -884,6 +895,24 @@ watch(
   position: relative;
   display: flex;
   flex-direction: column;
+}
+/* Room for the narration hint: its 12px from the bottom, its ~30px pill
+   (12px text, 5px padding, 1px border) and a 6px gap above it.
+   While a story turn is read, the story ends above that room, so no word
+   being read (above all the last one in view) sits under the hint. Kept for
+   the whole reading, hint or not, so a scroll attempt that brings the hint up
+   never resizes the held story; the raised hint (More below) never shows
+   while held. Otherwise the same room is blank space at the end of the
+   story, so the furthest the story scrolls is the same in both cases and the
+   words never move when a reading starts or lets go. */
+.lq-story-wrap {
+  --lq-hint-room: 48px;
+}
+.lq-story-wrap.lq-hint-room {
+  padding-bottom: var(--lq-hint-room);
+}
+.lq-story-wrap:not(.lq-hint-room) .lq-story {
+  padding-bottom: var(--lq-hint-room);
 }
 .lq-narration-hint {
   position: absolute;
