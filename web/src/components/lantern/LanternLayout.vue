@@ -654,7 +654,11 @@ watch(
         @click.capture="onPanelPress"
       >
         <RoomCard v-if="wide" class="lq-card" data-panel @click="onNameClick" />
-        <div v-show="wide || section === 'story'" class="lq-story-wrap">
+        <div
+          v-show="wide || section === 'story'"
+          class="lq-story-wrap"
+          :class="{ 'lq-hint-room': storyHeld }"
+        >
           <section
             ref="storyEl"
             class="lq-story"
@@ -884,6 +888,14 @@ watch(
   position: relative;
   display: flex;
   flex-direction: column;
+}
+/* While a story turn is read, the story ends above where the hint shows, so
+   no word being read (above all the last one in view) sits under it. Kept for
+   the whole reading, hint or not, so a scroll attempt that brings the hint up
+   never resizes the held story; and the raised hint (More below) never shows
+   while held. */
+.lq-story-wrap.lq-hint-room {
+  padding-bottom: 48px;
 }
 .lq-narration-hint {
   position: absolute;
