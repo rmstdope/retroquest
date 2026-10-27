@@ -68,7 +68,9 @@ describe('Borin sharpening the knife', () => {
     expect(findMarkupProblems(response)).toEqual([])
   })
 
-  it("keeps today's refusal when given the coin without a knife", () => {
+  it('refuses the coin when no dull knife is carried', () => {
+    // The starting dull knife lies in another room: only a carried knife
+    // counts, so this must not be "simplified" back to a world-wide lookup.
     const game = gameAtForge()
     game.state.addItemToInventory(new Coin())
 
@@ -76,6 +78,19 @@ describe('Borin sharpening the knife', () => {
 
     expect(response).toContain('if you have one')
     expect(game.state.hasItem('coin')).toBe(true)
+  })
+
+  it('does not trade a coin lying on the floor', () => {
+    const game = gameAtForge()
+    game.state.addItemToInventory(new Coin())
+    game.state.addItemToInventory(new DullKnife())
+    executeCommands(game, ['drop coin'])
+
+    const response = executeCommands(game, ['give dull knife to blacksmith'])
+
+    expect(response).toContain('cost you a')
+    expect(game.state.hasItem('dull knife')).toBe(true)
+    expect(game.state.hasItem('sharp knife')).toBe(false)
   })
 })
 

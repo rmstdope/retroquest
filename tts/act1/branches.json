@@ -16,6 +16,10 @@
         "after": 30,
         "commands": ["drop coin", "give dull knife to blacksmith"]
     },
+    {
+        "after": 30,
+        "commands": ["drop dull knife", "give coin to blacksmith"]
+    },
     { "after": 36, "commands": ["open mysterious box", "give egg to patches"] },
     { "after": 39, "commands": ["use fishing rod on magnet"] },
     { "after": 41, "commands": ["use fishing rod on well"] },
