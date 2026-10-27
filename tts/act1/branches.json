@@ -4,38 +4,17 @@
         "commands": ["rest"],
         "unset": ["deer_can_be_observed"]
     },
-    {
-        "after": 0,
-        "commands": ["take lantern"]
-    },
-    {
-        "after": 2,
-        "commands": ["give bread to grandmother"]
-    },
-    {
-        "after": 8,
-        "commands": ["give faded photograph to grandmother"]
-    },
-    {
-        "after": 23,
-        "commands": ["use bucket on old notice"]
-    },
+    { "after": 0, "commands": ["take lantern"] },
+    { "after": 2, "commands": ["give bread to grandmother"] },
+    { "after": 8, "commands": ["give faded photograph to grandmother"] },
+    { "after": 23, "commands": ["use bucket on old notice"] },
     {
         "after": 30,
         "commands": ["give faded photograph to blacksmith"]
     },
-    {
-        "after": 36,
-        "commands": ["open mysterious box", "give egg to patches"]
-    },
-    {
-        "after": 39,
-        "commands": ["use fishing rod on magnet"]
-    },
-    {
-        "after": 41,
-        "commands": ["use fishing rod on well"]
-    },
+    { "after": 36, "commands": ["open mysterious box", "give egg to patches"] },
+    { "after": 39, "commands": ["use fishing rod on magnet"] },
+    { "after": 41, "commands": ["use fishing rod on well"] },
     {
         "after": 45,
         "commands": ["take healing herb", "take ancient amulet", "give rusty hoe to mira"]
@@ -48,10 +27,7 @@
         "after": 67,
         "commands": ["take smooth stone", "use fishing rod on river"]
     },
-    {
-        "after": 71,
-        "commands": ["give faded photograph to fisherman"]
-    },
+    { "after": 71, "commands": ["give faded photograph to fisherman"] },
     {
         "after": 76,
         "commands": ["take snare", "use sharp knife on snare"]
@@ -60,22 +36,10 @@
         "after": 111,
         "commands": ["take healing herb", "take ancient amulet"]
     },
-    {
-        "after": 117,
-        "commands": ["cast light"]
-    },
-    {
-        "after": 119,
-        "commands": ["open mysterious box"]
-    },
-    {
-        "after": 128,
-        "commands": ["use bucket on well"]
-    },
-    {
-        "after": 131,
-        "commands": ["cast unlock on strange mechanism"]
-    },
+    { "after": 117, "commands": ["cast light"] },
+    { "after": 119, "commands": ["open mysterious box"] },
+    { "after": 128, "commands": ["use bucket on well"] },
+    { "after": 131, "commands": ["cast unlock on strange mechanism"] },
     {
         "after": 132,
         "commands": ["cast heal on fisherman", "cast purify on river"]
@@ -84,125 +48,28 @@
         "after": 133,
         "commands": ["cast heal on snare", "cast revive on bush"]
     },
-    {
-        "after": 135,
-        "commands": ["cast grow"]
-    },
-    {
-        "after": 144,
-        "commands": ["give wild berries to grandmother"]
-    },
+    { "after": 135, "commands": ["cast grow"] },
+    { "after": 144, "commands": ["give wild berries to grandmother"] },
     {
         "after": 155,
         "commands": ["give rusty hoe to merchant", "give egg to merchant"]
     },
-    {
-        "after": 167,
-        "commands": ["cast grow on healing herb"]
-    },
-    {
-        "after": 168,
-        "commands": ["give rune token to mira"]
-    },
-    {
-        "after": 0,
-        "commands": ["examine dragon"]
-    },
-    {
-        "after": 4,
-        "commands": ["give lantern to grandmother", "buy rope from grandmother"]
-    },
-    {
-        "after": 22,
-        "commands": ["give lantern to tilda", "buy rope from tilda"]
-    },
-    {
-        "after": 36,
-        "commands": ["give lantern to patches"]
-    },
-    {
-        "after": 108,
-        "commands": ["give lantern to blacksmith", "buy rope from blacksmith"]
-    },
-    {
-        "after": 109,
-        "commands": ["buy rope from patches", "buy dragon from shopkeeper"]
-    },
-    {
-        "after": 111,
-        "commands": ["buy rope from mira", "give lantern to mira"]
-    },
-    {
-        "after": 112,
-        "commands": ["cast bless on mira", "cast heal on mira", "cast purify on mira"]
-    },
-    {
-        "after": 113,
-        "commands": [
-            "cast bless on tilda",
-            "cast heal on tilda",
-            "cast purify on tilda",
-            "go east",
-            "cast bless on patches",
-            "cast heal on patches",
-            "cast purify on patches",
-            "cast bless on shopkeeper",
-            "cast heal on shopkeeper",
-            "cast purify on shopkeeper",
-            "go south",
-            "cast bless on blacksmith",
-            "cast heal on blacksmith",
-            "cast purify on blacksmith"
-        ]
-    },
-    {
-        "after": 114,
-        "commands": [
-            "cast bless on grandmother",
-            "cast heal on grandmother",
-            "cast purify on grandmother"
-        ]
-    },
-    {
-        "after": 132,
-        "commands": [
-            "give lantern to fisherman",
-            "buy rope from fisherman",
-            "cast bless on fisherman",
-            "cast heal on fisherman",
-            "cast purify on fisherman"
-        ]
-    },
-    {
-        "after": 134,
-        "commands": [
-            "give lantern to deer",
-            "buy rope from deer",
-            "cast bless on deer",
-            "cast heal on deer",
-            "cast purify on deer"
-        ]
-    },
-    {
-        "after": 153,
-        "commands": [
-            "give lantern to priest",
-            "buy rope from priest",
-            "cast bless on priest",
-            "cast heal on priest",
-            "cast purify on priest"
-        ]
-    },
-    {
-        "after": 155,
-        "commands": [
-            "give lantern to merchant",
-            "buy rope from merchant",
-            "cast bless on merchant",
-            "cast heal on merchant",
-            "cast purify on merchant"
-        ]
-    },
+    { "after": 167, "commands": ["cast grow on healing herb"] },
+    { "after": 168, "commands": ["give rune token to mira"] },
+    {"after": 0, "commands": ["examine dragon"]},
+    {"after": 4, "commands": ["give lantern to grandmother", "buy rope from grandmother"]},
+    {"after": 22, "commands": ["give lantern to tilda", "buy rope from tilda"]},
+    {"after": 36, "commands": ["give lantern to patches"]},
+    {"after": 108, "commands": ["give lantern to blacksmith", "buy rope from blacksmith"]},
+    {"after": 109, "commands": ["buy rope from patches", "buy dragon from shopkeeper"]},
+    {"after": 111, "commands": ["buy rope from mira", "give lantern to mira"]},
+    {"after": 112, "commands": ["cast bless on mira", "cast heal on mira", "cast purify on mira"]},
+    {"after": 113, "commands": ["cast bless on tilda", "cast heal on tilda", "cast purify on tilda", "go east", "cast bless on patches", "cast heal on patches", "cast purify on patches", "cast bless on shopkeeper", "cast heal on shopkeeper", "cast purify on shopkeeper", "go south", "cast bless on blacksmith", "cast heal on blacksmith", "cast purify on blacksmith"]},
+    {"after": 114, "commands": ["cast bless on grandmother", "cast heal on grandmother", "cast purify on grandmother"]},
+    {"after": 132, "commands": ["give lantern to fisherman", "buy rope from fisherman", "cast bless on fisherman", "cast heal on fisherman", "cast purify on fisherman"]},
+    {"after": 134, "commands": ["give lantern to deer", "buy rope from deer", "cast bless on deer", "cast heal on deer", "cast purify on deer"]},
+    {"after": 153, "commands": ["give lantern to priest", "buy rope from priest", "cast bless on priest", "cast heal on priest", "cast purify on priest"]},
+    {"after": 155, "commands": ["give lantern to merchant", "buy rope from merchant", "cast bless on merchant", "cast heal on merchant", "cast purify on merchant"]},
     {
         "after": -1,
         "commands": ["go north", "listen", "talk to xyz"]
@@ -217,17 +84,7 @@
     },
     {
         "after": 43,
-        "commands": [
-            "say yes to grandmother",
-            "talk to grandmother",
-            "examine patches",
-            "talk to patches",
-            "go east",
-            "go east",
-            "talk to shopkeeper",
-            "search",
-            "look"
-        ]
+        "commands": ["say yes to grandmother", "talk to grandmother", "examine patches", "talk to patches", "go east", "go east", "talk to shopkeeper", "search", "look"]
     },
     {
         "after": 48,
@@ -251,14 +108,14 @@
     },
     {
         "after": 112,
-        "commands": [
-            "cast purify",
-            "cast purify on healing herb",
-            "cast revive on mira",
-            "cast unlock on mira",
-            "cast unlock on healing herb",
-            "cast light",
-            "cast heal"
-        ]
+        "commands": ["cast purify", "cast purify on healing herb", "cast revive on mira", "cast unlock on mira", "cast unlock on healing herb", "cast light", "cast heal"]
+    },
+    {
+        "after": 22,
+        "commands": ["say truth to tilda"]
+    },
+    {
+        "after": 166,
+        "commands": ["talk to villager", "say truth to tilda", "say truth to tilda"]
     }
 ]

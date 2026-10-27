@@ -510,6 +510,11 @@
     "text": "Tilda has nothing to sell you."
   },
   {
+    "key": "1cafb496c9a807",
+    "speaker": "tilda",
+    "text": "The truth about what, love? You've lost me."
+  },
+  {
     "key": "0d49024e6a4c8b",
     "speaker": "narrator",
     "text": "Village Square"
@@ -2563,6 +2568,21 @@
     "key": "13aa84f923d1fd",
     "speaker": "tilda",
     "text": "The water's clean! Was that you, Elior? No — don't tell me, you've that look about you. I've not had dough rise so light in a year."
+  },
+  {
+    "key": "16b565f80843a4",
+    "speaker": "narrator",
+    "text": "You tell Tilda it was you: a spell, and a little help from the healer."
+  },
+  {
+    "key": "02d25d2e523f27",
+    "speaker": "tilda",
+    "text": "Magic? In Willowbrook? ... Well. I'll not tell a soul if you'd rather I didn't. But I'll know, and I'll be saving you the first loaf every morning."
+  },
+  {
+    "key": "056aeef4c3c4ca",
+    "speaker": "tilda",
+    "text": "I know, love. Your secret's safe with me, and so's your loaf."
   },
   {
     "key": "1f9e60b785fb3f",

@@ -51,6 +51,7 @@ describe('Act I off-path lines are in the narration script', () => {
     'Nothing here answers to that. The voice says your name.',
     'It looks like you need to use something with the strange mechanism.',
     "You can't unlock a person!",
+    "The truth about what, love? You've lost me.",
   ])('has "%s"', (text) => {
     expect(texts).toContain(text)
   })
