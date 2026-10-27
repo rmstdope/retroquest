@@ -334,3 +334,12 @@ body {
   box-shadow: inset var(--lq-rule-width, 2px) 0 0
     var(--lq-rule-colour, var(--lq-accent));
 }
+/* A block whose words start at its left edge moves its edge, and the rule
+   with it, out into the margin while it is read, so the rule sits beside the
+   words and the words stay where they were. (A centred closing line keeps
+   its own side padding; story text sets its own offset in StoryTurn.vue.) */
+.lq-chapter-body:not(.lq-chapter-closing) > .lq-chapter-block.lq-speaking,
+.lq-arrival.lq-speaking {
+  padding-left: 12px;
+  margin-left: -12px;
+}
