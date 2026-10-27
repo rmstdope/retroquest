@@ -94,6 +94,30 @@ describe('Borin sharpening the knife', () => {
   })
 })
 
+describe('Borin by his own name', () => {
+  it.each(['borin', 'Borin'])(
+    'sharpens the knife when it is given to %s',
+    (name) => {
+      const game = gameAtForge()
+      game.state.addItemToInventory(new Coin())
+      game.state.addItemToInventory(new DullKnife())
+
+      executeCommands(game, [`give knife to ${name}`])
+
+      expect(game.state.hasItem('sharp knife')).toBe(true)
+    },
+  )
+
+  it('answers to talk to borin as he does to the blacksmith', () => {
+    const byName = gameAtForge()
+    const byTrade = gameAtForge()
+
+    expect(executeCommands(byName, ['talk to borin'])).toBe(
+      executeCommands(byTrade, ['talk to blacksmith']),
+    )
+  })
+})
+
 describe('Borin as the act goes on', () => {
   it('just welcomes Elior back when nothing has happened yet', () => {
     const game = gameAtForge()

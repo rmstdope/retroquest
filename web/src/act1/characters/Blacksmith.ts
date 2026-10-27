@@ -42,6 +42,11 @@ export class Blacksmith extends Character {
     })
   }
 
+  /** Also answers to Borin, the name he introduces himself by. */
+  override answersTo(name: string): boolean {
+    return super.answersTo(name) || name.toLowerCase() === 'borin'
+  }
+
   /** Named by what it is, so it reads "the blacksmith" (see `nameInSentence`). */
   override nameInSentence(options?: NameOptions): string {
     return super.nameInSentence({ ...options, common: true })
