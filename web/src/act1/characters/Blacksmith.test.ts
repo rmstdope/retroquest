@@ -27,6 +27,58 @@ function seeTheDeer(game: Game): void {
   game.state.currentRoom = game.state.allRooms.BlacksmithsForge
 }
 
+describe('Borin sharpening the knife', () => {
+  const TRADE =
+    'The blacksmith takes your coin and your dull knife. He expertly ' +
+    'sharpens it on his whetstone and hands you back a gleaming sharp knife!'
+
+  /** The response with markup tags removed, so wording can be compared. */
+  function plain(response: string): string {
+    return response.replace(/\[\/?[a-z_]+\]/g, '')
+  }
+
+  it.each(['coin', 'dull knife'])(
+    'names the coin then the knife when %s is handed over',
+    (given) => {
+      const game = gameAtForge()
+      game.state.addItemToInventory(new Coin())
+      game.state.addItemToInventory(new DullKnife())
+
+      const response = executeCommands(game, [`give ${given} to blacksmith`])
+
+      expect(plain(response)).toContain(TRADE)
+      expect(game.state.hasItem('coin')).toBe(false)
+      expect(game.state.hasItem('dull knife')).toBe(false)
+      expect(game.state.hasItem('sharp knife')).toBe(true)
+      expect(findMarkupProblems(response)).toEqual([])
+    },
+  )
+
+  it('asks for a coin when given the knife without one', () => {
+    const game = gameAtForge()
+    game.state.addItemToInventory(new DullKnife())
+
+    const response = executeCommands(game, ['give dull knife to blacksmith'])
+
+    expect(plain(response)).toContain(
+      'The blacksmith eyes the dull knife. That edge has seen better days. ' +
+        "I'll put it right for ye, but it'll cost you a coin.",
+    )
+    expect(game.state.hasItem('dull knife')).toBe(true)
+    expect(findMarkupProblems(response)).toEqual([])
+  })
+
+  it("keeps today's refusal when given the coin without a knife", () => {
+    const game = gameAtForge()
+    game.state.addItemToInventory(new Coin())
+
+    const response = executeCommands(game, ['give coin to blacksmith'])
+
+    expect(response).toContain('if you have one')
+    expect(game.state.hasItem('coin')).toBe(true)
+  })
+})
+
 describe('Borin as the act goes on', () => {
   it('just welcomes Elior back when nothing has happened yet', () => {
     const game = gameAtForge()
