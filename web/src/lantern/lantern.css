@@ -336,8 +336,10 @@ body {
 }
 /* A block whose words start at its left edge moves its edge, and the rule
    with it, out into the margin while it is read, so the rule sits beside the
-   words and the words stay where they were. (A centred closing line keeps
-   its own side padding; story text sets its own offset in StoryTurn.vue.) */
+   words and the words stay where they were. The 12px must fit inside the
+   scrolling pane: the chapter page pads 24px, the story pane 12px
+   (LanternLayout.vue). A centred closing line keeps its own side padding;
+   story text sets the same offset in StoryTurn.vue. */
 .lq-chapter-body:not(.lq-chapter-closing) > .lq-chapter-block.lq-speaking,
 .lq-arrival.lq-speaking {
   padding-left: 12px;

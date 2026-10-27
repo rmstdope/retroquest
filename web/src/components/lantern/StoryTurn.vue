@@ -359,7 +359,7 @@ function chipLabel(chip: Chip): string {
 }
 /* The rule sits left of the words, which stay where they were. */
 .lq-block-text.lq-speaking {
-  padding-left: 10px;
+  padding-left: 12px;
   margin-left: -12px;
 }
 .lq-turn :deep(.lq-block-failure .lq-w-now) {
