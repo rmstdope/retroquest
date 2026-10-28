@@ -168,7 +168,6 @@ const exits = computed(() => Object.entries(props.arrival.exits))
   font-size: var(--lq-story-size);
   line-height: var(--lq-story-line-height);
   color: var(--lq-prose);
-  max-width: 72ch;
 }
 .lq-here-box {
   display: flex;
