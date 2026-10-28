@@ -32,24 +32,81 @@ describe('Hidden Glade', () => {
     expect(after).not.toContain('darkness')
   })
 
-  it('reads only as dark and waiting before light is cast', () => {
+  it('ends the dim glade on its darkness, not on a pun', () => {
     const game = gameInGlade()
     const before = game.state.currentRoom.describe(game.state)
     expect(before).toContain(
-      'as if the glade itself is waiting to be enlightened.',
+      'An unnatural darkness lingers here, though the sky above the branches is clear.',
     )
-    expect(before).not.toContain('The glade feels enchanted')
-    expect(before).not.toMatch(/The glade feels[^.]*\. The glade feels/)
+    expect(before).not.toContain('enlightened')
   })
 
-  it('still ends enchanted once light is cast', () => {
+  it('carries no mood lines once lit', () => {
     const game = gameInGlade()
     game.commandParser.parse('cast light')
     const after = game.state.currentRoom.describe(game.state)
-    expect(after).toContain(
-      ' The glade feels quiet and expectant, as if waiting for something.' +
-        ' The glade feels enchanted, a place where the world holds its breath.',
-    )
+    expect(after).not.toContain('expectant')
+    expect(after).not.toContain('holds its breath')
+    expect(after).not.toContain('enchanted')
+    expect(after).toContain(SENTENCE)
+  })
+
+  it('keeps the lit glade free of mood lines with the Deer present', () => {
+    const game = gameInGlade()
+    game.commandParser.parse('cast light')
+    game.state.setStoryFlag('deer_can_be_observed', true)
+    game.commandParser.parse('rest')
+    const after = game.state.currentRoom.describe(game.state)
+    expect(after).toContain('grazes quietly')
+    expect(after).not.toContain('holds its breath')
+  })
+
+  describe('resting', () => {
+    it('refuses too early without telling the player to do more', () => {
+      const game = gameInGlade()
+      const text = game.commandParser.parse('rest')
+      expect(text).toContain(
+        'You rest a while. Birds, the grey grass, a stone you cannot read. ' +
+          'Nothing comes. You catch yourself watching the brambles for it, ' +
+          'whatever it is.',
+      )
+      expect(text).not.toContain('Perhaps something more needs')
+    })
+
+    it('brings the Deer and opens the flower', () => {
+      const game = gameInGlade()
+      game.state.setStoryFlag('deer_can_be_observed', true)
+      const text = game.commandParser.parse('rest')
+      expect(text).toContain(
+        'After a while you stop listening for anything, and a ',
+      )
+      expect(text).toContain(
+        ' steps out of the brambles. It stands and looks at you, quite still. ' +
+          'Near the mossy stone, where there was only moss, a [item_name]rare flower[/item_name] has opened.',
+      )
+      expect(text).not.toContain('ancient eyes')
+      expect(text).not.toContain('surge of gentle magical energy')
+      expect(game.state.currentRoom.getItemByName('Rare Flower')).toBeDefined()
+    })
+  })
+
+  describe('lighting the stone', () => {
+    it('reads the runes plainly and teaches grow as a reading', () => {
+      const game = gameInGlade()
+      const text = game.commandParser.parse('cast light')
+      expect(text).toContain(
+        'The darkness lifts, and sunlight comes down through the branches. ' +
+          'The runes on the mossy stone stand out clear at last. ' +
+          'They speak of a seed, a song, and the sun.',
+      )
+      expect(text).toContain(
+        'You read them slowly, and the spell comes with the reading. ' +
+          'It does not wake in you the way the others did; this one you read, ' +
+          'word by word, off the stone, and it feels like your own. ',
+      )
+      expect(text).not.toContain('ancient')
+      expect(text).not.toContain('golden sunlight spills')
+    })
   })
 
   describe('the carved refrain', () => {
