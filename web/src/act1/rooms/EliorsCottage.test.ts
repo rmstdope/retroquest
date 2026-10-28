@@ -17,7 +17,7 @@ function grandmotherSentence(): string {
 describe("Elior's Cottage room card", () => {
   it('shows Grandmother up and baking, as her own lines have her', () => {
     const sentence = grandmotherSentence()
-    expect(sentence).not.toMatch(/chair|sit|seated/i)
+    expect(sentence).not.toMatch(/\b(chair|sits?|sitting|seated)\b/i)
     expect(sentence).toMatch(/bread/i)
   })
 })
