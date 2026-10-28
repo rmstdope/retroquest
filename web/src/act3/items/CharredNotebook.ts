@@ -10,7 +10,8 @@ export class CharredNotebook extends Item {
       name: 'Charred Notebook',
       shortName: 'notebook',
       description:
-        'A notebook burned nearly through, two pages still legible in a neat and patient hand.',
+        'A notebook burned nearly through. The cover is gone; the spine ' +
+        'still holds.',
       canBeCarried: true,
     })
   }

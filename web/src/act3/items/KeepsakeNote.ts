@@ -1,15 +1,14 @@
-import { Item, type GameState } from '@/engine'
+import { Item, type GameState, characterName, writing } from '@/engine'
 import { FLAG_ACT3_ECHOES_QUEST_STARTED } from '../Act3StoryFlags'
 
-/** A note from Mira referencing Elior's parents and hinting at hidden truths. */
+/** A note from Mira telling Elior to read what the relics' makers left behind. */
 export class KeepsakeNote extends Item {
   constructor() {
     super({
       name: 'Keepsake Note',
       description:
-        "A small, worn piece of parchment in Mira's careful handwriting. " +
-        'The note seems to carry the weight of long-held secrets, and ' +
-        'mentions fragments of truth scattered across the relic sites.',
+        'A small, worn piece of parchment, folded twice, in ' +
+        `${characterName('Mira')}'s careful hand.`,
       canBeCarried: true,
       shortName: 'note',
     })
@@ -22,16 +21,14 @@ export class KeepsakeNote extends Item {
     }
 
     return (
-      '[dim]Elior, as you journey to the relic sites, keep your eyes ' +
-      'open for traces of the past. Your parents left marks upon this ' +
-      'world—fragments of their story that Malakar could not erase. In ' +
-      'the depths where courage is tested, on the heights where wisdom ' +
-      'burns, and in the shadows where sacrifice echoes, you may find ' +
-      'the truth of how they hid you from his sight. The three testimonies ' +
-      'will reveal what love can accomplish against the darkest power.[/dim]\n\n' +
-      'The note fills you with a sense of purpose beyond the road ' +
-      'ahead. Somewhere in each relic site, pieces of your heritage ' +
-      'await discovery.'
+      writing(
+        'Elior. The people who made the relics left words behind them: by ' +
+          'the sea, on the mountain and under the hills. Keep your eyes open ' +
+          'for traces of the past. Read what they left, all of it, before ' +
+          'you judge anyone.',
+      ) +
+      '\n\n' +
+      'She has underlined the last line twice.'
     )
   }
 }

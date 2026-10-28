@@ -8,6 +8,13 @@ function dummyState(): GameState {
   return new GameState(new Room({ name: 'Nowhere', description: '' }), {}, [])
 }
 
+/** The sentences the crater adds once the Phoenix is there. */
+const PHOENIX_LINES =
+  "At the crater's heart the phoenix lies on a bed of cooled slag, its " +
+  'feathers red-gold and steaming. Each breath it lets out sends sparks up ' +
+  'out of the bowl. Now and then a feather comes loose and cools on the rim ' +
+  'to a shard that still hums.'
+
 function phoenixCount(room: Room): number {
   return room.characters.filter((c) => c.name.toLowerCase() === 'phoenix')
     .length
@@ -32,14 +39,12 @@ describe('Phoenix Crater', () => {
     // First rest: should add Phoenix and update description
     const result = room.rest(gs)
     expect(phoenixCount(room)).toBeGreaterThan(0)
-    expect(
-      result.includes('phoenix of living ember') ||
-        result.includes('ancient, knowing patience'),
-    ).toBe(true)
-    expect(
-      room.description.includes('molten fan') ||
-        room.description.includes('plumage'),
-    ).toBe(true)
+    expect(result).toBe(
+      'As your eyes close, the air grows warmer. When you open them, a ' +
+        'phoenix is lying in the crater with you, watching you as if it has ' +
+        'been there all along.',
+    )
+    expect(room.descriptionFor(gs)).toContain(PHOENIX_LINES)
     // Second rest: should not add another Phoenix
     const prevCount = phoenixCount(room)
     const result2 = room.rest(gs)
@@ -74,15 +79,28 @@ describe('Phoenix Crater', () => {
       game.rest()
       const text = game.state.currentRoom.descriptionFor(game.state)
       expect(text).not.toContain(DROWSY)
-      expect(text).toContain('molten fan')
+      expect(text).toContain(PHOENIX_LINES)
       expect(game.talk('phoenix')).not.toContain('crater is silent')
 
       const fresh = new Game([new Act3()])
       fresh.loadSaveData(game.toSaveData())
       const loaded = fresh.state.currentRoom.descriptionFor(fresh.state)
       expect(loaded).not.toContain(DROWSY)
-      expect(loaded).toContain('molten fan')
+      expect(loaded).toContain(PHOENIX_LINES)
       expect(fresh.talk('phoenix')).not.toContain('crater is silent')
+    })
+
+    it('shows the current text to a save made before the rewrite', () => {
+      const game = new Game([new Act3()])
+      game.state.currentRoom = new PhoenixCrater()
+      game.rest()
+      game.state.currentRoom.description =
+        'A luminous bowl. At the crater an enormous phoenix reclines on a throne.'
+      const fresh = new Game([new Act3()])
+      fresh.loadSaveData(game.toSaveData())
+      const loaded = fresh.state.currentRoom.descriptionFor(fresh.state)
+      expect(loaded).toContain(PHOENIX_LINES)
+      expect(loaded).not.toContain('throne')
     })
   })
 })

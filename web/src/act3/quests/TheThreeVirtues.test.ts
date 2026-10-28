@@ -99,8 +99,8 @@ describe('The Three Virtues quest', () => {
     expect(updated).toBe(true)
     // Description should mention that the Dragon's Scale was claimed
     expect(quest.description).toContain("dragon's scale")
-    expect(quest.description).toContain('obsidian surface')
-    expect(quest.description).toContain('ancient power')
+    expect(quest.description).toContain('heavy in your pack')
+    expect(quest.description).toContain('all three relics')
 
     // Subsequent calls should not report another update
     expect(quest.checkUpdate(game.state)).toBe(false)
@@ -125,7 +125,9 @@ describe('The Three Virtues quest', () => {
 
     // Final message should indicate all relics are obtained
     expect(quest.description).toContain('all three relics')
-    expect(quest.description).toContain('final trial awaits')
+    expect(quest.description).toContain(
+      "Mira's Warding Rite is all that is left",
+    )
   })
 
   it('updates correctly when the relics are acquired sequentially', () => {
@@ -137,12 +139,17 @@ describe('The Three Virtues quest', () => {
     expect(quest.checkUpdate(game.state)).toBe(true)
     expect(quest.description).toContain('crystal of light')
     expect(quest.description).toContain('steady brilliance')
+    expect(quest.description).toContain(
+      'Sir Cedric has said little since the guardian asked him what he would ' +
+        'not abandon.',
+    )
+    expect(quest.description).not.toContain('allies skilled in magic')
     // Should not have specific messages for other relics yet
     expect(quest.description).not.toContain(
       'phoenix feather. Its warmth pulses',
     )
     expect(quest.description).not.toContain(
-      "dragon's scale, its obsidian surface",
+      "dragon's scale, heavy in your pack",
     )
 
     // Then acquire Phoenix Feather
@@ -152,7 +159,7 @@ describe('The Three Virtues quest', () => {
     expect(quest.description).toContain('phoenix feather. Its warmth pulses')
     // Should not have Dragon's Scale specific message yet
     expect(quest.description).not.toContain(
-      "dragon's scale, its obsidian surface",
+      "dragon's scale, heavy in your pack",
     )
 
     // Finally acquire Dragon's Scale
@@ -160,7 +167,7 @@ describe('The Three Virtues quest', () => {
     expect(quest.checkUpdate(game.state)).toBe(true)
     expect(quest.description).toContain('steady brilliance')
     expect(quest.description).toContain('phoenix feather. Its warmth pulses')
-    expect(quest.description).toContain("dragon's scale, its obsidian surface")
+    expect(quest.description).toContain("dragon's scale, heavy in your pack")
     expect(quest.description).toContain('all three relics')
   })
 

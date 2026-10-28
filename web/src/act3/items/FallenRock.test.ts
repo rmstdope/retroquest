@@ -61,3 +61,29 @@ describe('FallenRock markup', () => {
     }
   })
 })
+
+describe('FallenRock and the men behind it', () => {
+  it('lets the player hear tapping, never voices, since the men are silent', () => {
+    const { game, rock } = createGameWithRock()
+
+    const examined = rock.examine(game.state)
+
+    expect(rock.description).toContain('someone tapping')
+    expect(rock.description).toContain('the way east is gone under it')
+    expect(rock.description).not.toContain('calls for help')
+    expect(examined).toContain('it needs holding up first')
+    expect(examined).not.toContain('voices')
+  })
+
+  it('lets the miners out with no exclamation', () => {
+    const { game, rock } = createGameWithRock()
+    rock.examine(game.state)
+    rock.useWith(game.state, new ReinforcedBraces())
+    rock.useWith(game.state, new SupportStraps())
+
+    const freed = rock.useWith(game.state, new WedgeBlocks())
+
+    expect(freed).toContain('blinking at your light')
+    expect(freed).not.toContain('!')
+  })
+})

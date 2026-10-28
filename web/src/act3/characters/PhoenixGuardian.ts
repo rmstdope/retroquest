@@ -11,7 +11,20 @@ import {
   FLAG_ACT3_FUMAROLE_WARD_APPLIED,
 } from '../Act3StoryFlags'
 
-/** A silent, vigilant figure who tends the vents and watches the passage to the crater. */
+/** The vent stones that bring the vents into harmony. */
+const VENT_STONES_NEEDED = 3
+
+/** How many vent stones are set in the room, read structurally (0 elsewhere). */
+function ventCalibrations(gameState: GameState): number {
+  const room = gameState.allRooms.FumarolePassages
+  return room &&
+    'ventCalibrations' in room &&
+    typeof room.ventCalibrations === 'number'
+    ? room.ventCalibrations
+    : 0
+}
+
+/** A masked figure who counts the vents' breath and watches the passage to the crater. */
 export class PhoenixGuardian extends Character {
   /** Named by what it is, so it reads "the …" (see `nameInSentence`). */
   override nameInSentence(options?: NameOptions): string {
@@ -23,11 +36,14 @@ export class PhoenixGuardian extends Character {
       name: 'phoenix guardian',
       description:
         'A tall, masked figure in fire-etched robes stands by the vents, staff in hand. ' +
-        "His eyes glint with emberlight, and he seems to listen to the mountain's breath.",
+        'His head is turned to the vents, and his lips move as if he is counting.',
     })
   }
 
-  /** Give hints before the ward, while the breath must be counted, and after the first crossing. */
+  /**
+   * Give hints before the vents are in harmony, once they are but the ward is
+   * not set, while the breath must be counted, and after the first crossing.
+   */
   override talkTo(gameState: GameState): string {
     const crossed = gameState.getStoryFlag(
       FLAG_ACT3_BREATH_OF_THE_MOUNTAIN_COMPLETED,
@@ -43,6 +59,17 @@ export class PhoenixGuardian extends Character {
         )
       )
     }
+    if (!crossed && ventCalibrations(gameState) >= VENT_STONES_NEEDED) {
+      return (
+        'The ' +
+        characterName('Phoenix Guardian') +
+        ' listens to the vents. ' +
+        speech(
+          'They breathe as one now. Bind the heat with a ward, and they ' +
+            'will hold.',
+        )
+      )
+    }
     if (!crossed) {
       return (
         'The ' +
@@ -50,11 +77,12 @@ export class PhoenixGuardian extends Character {
         ' studies you for a ' +
         'moment. ' +
         speech(
-          'So, you seek the mighty one? To stand before the Phoenix, you must be ' +
-            'both patient and watchful. The mountain tests those who would pass: its breath is ' +
-            'wild, its heat unforgiving. First, bring the vents into harmony—let them ' +
-            'breathe as one. Only then can you bind the heat with a ward. When the rhythm ' +
-            'is steady and the ward is set, the way to the crater will open.',
+          'You have come for the Phoenix. Then you must be both patient and ' +
+            'watchful. The vents breathe wild here, and the heat will turn ' +
+            'you back. First bring the vents into harmony, so they breathe ' +
+            'as one. Then bind the heat with a ward; the gallery below the ' +
+            'terraces has what a ward is made of. When the rhythm is steady ' +
+            'and the ward is set, the way to the crater opens.',
         )
       )
     }
@@ -64,8 +92,8 @@ export class PhoenixGuardian extends Character {
       ' nods: ' +
       speech(
         'The way is open, but patience is your ally. The Phoenix will not ' +
-          'appear for those who rush. Be patient, and the mighty one will reveal ' +
-          'itself.',
+          'appear for those who rush. Sit in the crater a while, and let it ' +
+          'come to you.',
       ) +
       cedricAdds(gameState, CEDRIC_PATIENCE)
     )

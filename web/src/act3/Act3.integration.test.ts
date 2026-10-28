@@ -285,11 +285,7 @@ describe('Act 3 golden path', () => {
     it('lets the crystal be taken once the vow is spoken', () => {
       const game = gameAt(AT.sanctum + 4)
       const vow = play(game, AT.sanctum + 4, AT.sanctum + 5)
-      expect(
-        vow.includes('vow') ||
-          vow.includes('waters draw back') ||
-          vow.includes('you may now take'),
-      ).toBe(true)
+      expect(vow).toContain('sits loose in its basin')
       play(game, AT.sanctum + 5, AT.sanctum + 6)
       expectItemInInventory(game.state, 'crystal of light', true)
     })
@@ -507,8 +503,8 @@ describe('Act 3 golden path', () => {
         'bind the reinforced braces securely',
       )
       const freed = play(game, AT.galleries + 4, AT.galleries + 5)
-      expect(freed).toContain('free the blocked passage')
-      expect(freed).toContain('trapped miners emerging')
+      expect(freed).toContain('the pile gives way')
+      expect(freed).toContain('the miners come out one at a time')
       expectCharacterInRoom(state.currentRoom, 'miners', true)
       expectItemInRoom(state.currentRoom, 'fallen rock', false)
     })
@@ -613,8 +609,8 @@ describe('Act 3 golden path', () => {
     it('brings the party home with the three relics', () => {
       const game = gameAt(AT.hut)
       const talk = play(game, AT.hut, AT.hut + 3)
-      expect(talk).toContain('three relics are yours')
-      expect(talk).toContain('return to my hut')
+      expect(talk).toContain('that is all three')
+      expect(talk).toContain('to my hut')
       expectCurrentRoom(game.state, "Mira's Hut")
     })
 
@@ -655,7 +651,7 @@ describe('Act 3 golden path', () => {
       const rite = play(game, AT.hut + 4, AT.hut + 5)
       expect(rite).toContain('three relics resonate')
       expect(rite).toContain('lifelight elixir')
-      expect(rite).toContain('courage, wisdom, and selflessness')
+      expect(rite).toContain('they were made together, and they know it.')
       expectStoryFlag(state, FLAG_ACT3_LIFELIGHT_ELIXIR_CREATED, true)
 
       expect(

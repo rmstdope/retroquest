@@ -1,6 +1,7 @@
 import {
   Character,
   type GameState,
+  characterName,
   remembered,
   normaliseSpokenWord,
   type NameOptions,
@@ -44,10 +45,9 @@ export class WanderingPhantoms extends Character {
     super({
       name: 'wandering phantoms',
       description:
-        'Translucent figures drift through the chamber like wisps of mist, their ' +
-        'forms barely visible in the dim light. They move with purpose yet seem ' +
-        'trapped in an endless cycle, their ethereal voices creating a constant ' +
-        'murmur of unintelligible whispers that echo off the ancient stones.',
+        'Grey figures, thin as breath on glass, move among the pools. Each ' +
+        'does one thing over and over: lifts a hand, turns, reaches for a ' +
+        'door that is not there. They whisper all the time.',
     })
   }
 
@@ -56,22 +56,20 @@ export class WanderingPhantoms extends Character {
    * was heard) and then say the clear word "rest". Hearing them is recorded.
    */
   override talkTo(gameState: GameState): string {
+    const phantoms = characterName('phantoms')
     const whispers = [
-      'The phantoms turn toward you, their voices rising in a chorus of whispered ' +
-        'syllables that seem to flow like water over stone. The words are just beyond ' +
-        'comprehension, as if spoken in a language forgotten by time.',
+      `The ${phantoms} turn toward you all at once. Their whispers run ` +
+        'together, too many voices to pick one out.',
 
-      'A low murmur ripples through the ghostly figures as they notice your presence. ' +
-        'Their whispers grow more urgent, overlapping in harmonies that speak of longing ' +
-        'and unfinished purpose, but no clear meaning emerges.',
+      `One of the ${phantoms} stops in front of you and says something ` +
+        'very fast, the same few words three times over. You do not catch ' +
+        'them. It moves on and starts again.',
 
-      'The phantoms drift closer, their ethereal forms shimmering as they attempt to ' +
-        'communicate. Their voices blend into a haunting melody of sibilant sounds and ' +
-        'half-formed words that dance at the edge of understanding.',
+      `The ${phantoms} drift closer. Their mouths move a moment behind ` +
+        'their whispers, like an echo running the wrong way.',
 
-      'Spectral lips move in silent prayer, then burst into urgent whispers that ' +
-        'cascade around you like falling leaves. Each voice carries a different tone ' +
-        'of desperation, yet none speak words you can fully grasp.',
+      `One of the ${phantoms} reaches for a door that is not there, opens ` +
+        'it, and reaches for it again. The others whisper on around it.',
     ]
 
     gameState.setStoryFlag(FLAG_ACT3_PHANTOMS_HEARD, true)
@@ -91,7 +89,10 @@ export class WanderingPhantoms extends Character {
    */
   override sayTo(gameState: GameState, words: string): string {
     if (normaliseSpokenWord(words) !== 'rest') {
-      return "The phantoms' whispers rise and fall, and do not answer that."
+      return (
+        `The whispers of the ${characterName('phantoms')} rise and fall, ` +
+        'and do not answer that.'
+      )
     }
     gameState.setStoryFlag(FLAG_ACT3_PHANTOMS_FREED, true)
     gameState.addVirtue(VIRTUE_MERCY)
@@ -99,9 +100,9 @@ export class WanderingPhantoms extends Character {
     room.characters = room.characters.filter((c) => c !== this)
     return (
       'The whispering falters. One by one the figures turn toward you, and ' +
-      'the urgency drains out of them. They thin like mist in morning sun, ' +
-      'and then they are gone. The chamber is quieter for it, but not yet ' +
-      'still.\n' +
+      'the hurry goes out of them. They thin until you can see the far wall ' +
+      'through them, and then they are gone. The chamber is quieter for it, ' +
+      'but not yet still.\n' +
       remembered('Mercy')
     )
   }

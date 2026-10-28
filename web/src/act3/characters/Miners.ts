@@ -34,8 +34,8 @@ export class Miners extends Character {
     super({
       name: 'miners',
       description:
-        'A group of miners trapped behind the fallen rock, their voices ' +
-        'echoing faintly through the debris.',
+        'Half a dozen miners, grey with rock dust, passing timbers hand to ' +
+        'hand. The oldest of them gives the orders, and nobody argues.',
     })
   }
 
@@ -66,17 +66,15 @@ export class Miners extends Character {
         ' gather around as ' +
         'the lead miner steps forward, dust-covered but relieved: ' +
         speech(
-          'Thank the gods you found us. When that section collapsed this ' +
-            'morning, we thought we were done for. The whole ceiling came down like ' +
-            'thunder—trapped us behind tons of rock with barely any air.',
+          'Thank the gods you found us. Roof came down this morning and ' +
+            'kept coming. We sat in the dark and listened to each other ' +
+            'breathe.',
         ) +
         '\n\n' +
         'Another miner adds, voice shaking: ' +
         speech(
-          'We could hear you working ' +
-            "on the other side, but we didn't dare hope. Those braces you placed " +
-            "saved our lives—without them, the whole tunnel would've come down on " +
-            'our heads.',
+          'We heard you setting the braces. Every knock, we waited for the ' +
+            'roof. It held.',
         ) +
         '\n\n' +
         'The lead miner lowers his voice and nods toward a boy sitting apart ' +
@@ -86,17 +84,14 @@ export class Miners extends Character {
             "till his voice went. Hasn't said a word since. Not one.",
         ) +
         '\n\n' +
-        'The lead miner nods gratefully: ' +
+        'The lead miner wipes his hands on his shirt: ' +
         speech(
-          "We can't thank you enough, " +
-            "Elior. Now that the immediate danger's passed, we'll get to work " +
-            'reinforcing this whole section. These old caverns need proper support ' +
-            'beams before anyone else ventures through. The route to the Echo ' +
-            "Chambers is open, but we'll make sure it stays that way.",
+          "We owe you, Elior. We'll stay and beam this section properly " +
+            'before anyone else comes through. The way east to the Echo ' +
+            "Chambers is open, and we'll keep it open.",
         ) +
         '\n\n' +
-        'The miners begin setting up additional supports as you prepare ' +
-        'to continue your journey.' +
+        'The miners are already reaching for the spare timbers.' +
         cedricAdds(gameState, CEDRIC_STAY_BEHIND)
       )
     }
@@ -132,11 +127,8 @@ export class Miners extends Character {
       ' look up from their ' +
       'work, tools in hand: ' +
       speech(
-        'Still ' +
-          "here, Elior? We're making good progress on these support beams. " +
-          'The passage to the Echo Chambers is secure now—you can head east ' +
-          "whenever you're ready. We'll keep working to make sure these old " +
-          'caverns are safe for future travelers.',
+        'Still here, Elior? Beams are going in. The way east to the Echo ' +
+          "Chambers is sound. Go when you're ready.",
       )
     )
   }

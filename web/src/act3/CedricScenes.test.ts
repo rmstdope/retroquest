@@ -80,8 +80,11 @@ describe('Sir Cedric reacts to the story', () => {
     const second = guardian.sayTo(game.state, 'myself')
 
     expectMarkupWellFormed(first)
-    expect(inOrder(first, 'You may now', 'turns its rippling face to')).toBe(
-      true,
+    expect(
+      inOrder(first, 'sits loose in its basin', 'turns its rippling face to'),
+    ).toBe(true)
+    expect(first).toContain(
+      'turns its rippling face to [character_name]Sir Cedric[/character_name].',
     )
     expect(first).toContain('Name what you will not abandon.')
     expect(first).toContain('My king.')
@@ -125,7 +128,13 @@ describe('Sir Cedric reacts to the story', () => {
     (key, flags, miraLine, cedricLine) => {
       const out = circleTalk(key, flags)
       expect(inOrder(out, miraLine, cedricLine)).toBe(true)
-      expect(inOrder(out, cedricLine, 'Mira traces a prism')).toBe(true)
+      expect(
+        inOrder(
+          out,
+          cedricLine,
+          '[character_name]Mira[/character_name] traces a prism',
+        ),
+      ).toBe(true)
     },
   )
 
@@ -148,7 +157,9 @@ describe('Sir Cedric reacts to the story', () => {
     expectMarkupWellFormed(out)
     expect(game.state.currentRoom.name).toBe("Entrance to Malakar's Fortress")
     expect(out).not.toContain('You arrive at')
-    expect(inOrder(out, 'Steel yourself', 'looking up at the gates')).toBe(true)
+    expect(
+      inOrder(out, 'Stay close when we land.', 'looking up at the gates'),
+    ).toBe(true)
     expect(inOrder(out, 'looking up at the gates', 'sunlit glade')).toBe(true)
     expectCharacterInRoom(game.state.currentRoom, 'Sir Cedric')
   })
@@ -222,10 +233,10 @@ describe('Sir Cedric in the story view', () => {
     expect(quotes).toContain('Sir Cedric: I did once.')
   })
 
-  it('gives the oldest miner his own words', () => {
+  it('gives the lead miner his own words', () => {
     const game = partyAt('CollapsedGalleries')
     const quotes = speakers(new Miners().talkTo(game.state))
-    expect(quotes.some((q) => q.startsWith('oldest miner: '))).toBe(true)
+    expect(quotes.some((q) => q.startsWith('lead miner: '))).toBe(true)
     expect(quotes).toContain(
       'Sir Cedric: Someone should stay until the braces settle. I will.',
     )
@@ -234,10 +245,9 @@ describe('Sir Cedric in the story view', () => {
   it('narrates the refrain Elior speaks before Sir Cedric answers', () => {
     const game = partyAt('FortressEntrance')
     const out = new SirCedric().sayTo(game.state, 'refrain')
-    expect(out).toContain(
-      'You: “Power follows purpose; purpose follows truth.”\n',
-    )
+    expect(out).not.toContain('You:')
     expect(speakers(out)).toEqual([
+      'Elior: Power follows purpose; purpose follows truth.',
       'Sir Cedric: Truth, then. The truth is I was on the wall. The truth is he is still alive. Let us go and get him.',
     ])
   })
@@ -264,5 +274,41 @@ describe('Sir Cedric and the save', () => {
     expect(
       fresh.state.allRooms.MirasHut.getCharacterByName('cedric')?.name,
     ).toBe('Sir Cedric')
+  })
+})
+
+describe('Sir Cedric keeps his own gestures', () => {
+  it('looks at his hands when the king fades, leaving the caverns', () => {
+    const out = circleTalk('CavernMouth', [FLAG_ACT3_DRAGONS_SCALE_ACQUIRED])
+    expect(out).toContain(
+      '[character_name]Sir Cedric[/character_name] looks at his hands.',
+    )
+    expect(out).not.toContain('a long moment')
+  })
+
+  it("looks at the miner's hand before he nods", () => {
+    const game = partyAt('CollapsedGalleries')
+    const out = new Miners().talkTo(game.state)
+    expect(out).toContain(
+      '[character_name]Sir Cedric[/character_name] looks down at the hand ' +
+        'on his arm, then nods.',
+    )
+    expect(out).not.toContain('a long moment')
+  })
+})
+
+describe('Sir Cedric restored from a save made before the rewrite', () => {
+  it('is described with the current words, not the ones held in the save', () => {
+    const game = partyAt('TidalCauseway')
+    const cedric = game.state.currentRoom.getCharacterByName('cedric')
+    if (!cedric) throw new Error('no cedric')
+    cedric.description =
+      'Armor tempered, eyes steady—Cedric stands ready for the trials. ' +
+      'His presence is a quiet promise.'
+    const fresh = new Game([new Act3()])
+    expect(fresh.loadSaveData(game.toSaveData())).toContain('loaded')
+
+    const restored = fresh.state.currentRoom.getCharacterByName('cedric')
+    expect(restored?.description).toBe(new SirCedric().description)
   })
 })

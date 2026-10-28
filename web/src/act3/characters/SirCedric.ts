@@ -2,9 +2,11 @@ import {
   Character,
   type GameState,
   characterName,
+  dialogue,
   normaliseSpokenWord,
 } from '@/engine'
 import {
+  CEDRIC_DESCRIPTION,
   CEDRIC_GATE_TALK,
   CEDRIC_NAME,
   CEDRIC_NOT_NOW,
@@ -62,9 +64,7 @@ export class SirCedric extends Character {
   constructor() {
     super({
       name: CEDRIC_NAME,
-      description:
-        'Armor tempered, eyes steady—Cedric stands ready for the trials. ' +
-        'His presence is a quiet promise.',
+      description: CEDRIC_DESCRIPTION,
     })
   }
 
@@ -88,9 +88,8 @@ export class SirCedric extends Character {
   private line(gameState: GameState): string {
     if (!gameState.getStoryFlag(FLAG_ACT3_MAIN_STARTED)) {
       return cedricSays(
-        "If we're to take the fight to Malakar, speak with " +
-          characterName('Mira') +
-          '. She understands the rites and the way to begin.',
+        `Go and speak with ${characterName('Mira')}. She knows where we go ` +
+          'from here. I will be beside you when we get there.',
       )
     }
     const key = this.roomKey(gameState)
@@ -98,8 +97,7 @@ export class SirCedric extends Character {
     if (key === 'FortressEntrance') {
       return gameState.getStoryFlag(FLAG_ACT3_CEDRIC_GATE_ANSWERED)
         ? cedricSays(
-            'Ready when you are. The gates will not open by looking at them, ' +
-              'but look anyway.',
+            'Ready when you are. I have looked at this door long enough.',
           )
         : CEDRIC_GATE_TALK
     }
@@ -118,7 +116,7 @@ export class SirCedric extends Character {
       return gameState.getStoryFlag(FLAG_ACT3_PHOENIX_FEATHER_ACQUIRED)
         ? cedricSays(
             'A bird told us to wait, and we waited. I hope it was worth ' +
-              'what it cost him.',
+              'what it cost the king.',
           )
         : cedricSays(
             'We stand about reading vents while he fades. Let me go through ' +
@@ -190,7 +188,8 @@ export class SirCedric extends Character {
   /**
    * At the fortress gates Elior may answer him with the refrain, by its name
    * or in full. Any other words, or the refrain anywhere else, get a gentle
-   * "Not now. Not here."; once answered he only says he is ready.
+   * "Later, when there is time for it."; once answered he only says he is
+   * ready.
    */
   override sayTo(gameState: GameState, words: string): string {
     const said = normaliseSpokenWord(words)
@@ -202,11 +201,10 @@ export class SirCedric extends Character {
     if (!isRefrain || !atGate) return CEDRIC_NOT_NOW
     gameState.setStoryFlag(FLAG_ACT3_CEDRIC_GATE_ANSWERED, true)
     return (
-      `You: “${REFRAIN}”` +
+      dialogue('Elior', REFRAIN) +
       '\n' +
       cedricDoes(
-        'is quiet a long moment. Then he nods, once, and loosens his sword ' +
-          'in its sheath.',
+        'is quiet. Then he nods, once, and loosens his sword in its sheath.',
       ) +
       '\n' +
       cedricSays(

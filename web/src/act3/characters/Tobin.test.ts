@@ -73,8 +73,13 @@ describe('Tobin', () => {
 
       expect(answer).not.toContain('You give the')
       expect(answer).toContain(
-        'As his hand closes around it, the endless dripping of the gallery seems to step back a pace',
+        'As his hand closes around it, the creak of the new braces seems to step back a pace',
       )
+      expect(
+        answer.startsWith(
+          '[character_name]Tobin[/character_name] turns the pale stone',
+        ),
+      ).toBe(true)
       expect(answer).toContain("It's quiet.")
       expect(answer).toContain(
         'Across the gallery, the lead miner sets down his pick and does not pick it up again.',

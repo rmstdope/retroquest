@@ -107,7 +107,9 @@ describe('Mira Ember slip', () => {
       out.indexOf(EMBER_NARRATION),
     )
     expect(out).toContain('…even when the world burns.')
-    expect(out).toContain('finishing a sentence someone else began.')
+    expect(out).toContain(
+      'She says it softly, before you have told her what the phoenix said.',
+    )
     expect(out).toContain('discover the words your parents left')
     expect(game.state.getStoryFlag(FLAG_ACT3_MIRA_EMBER_SLIP_PLAYED)).toBe(true)
     expect(mira.talkTo(game.state)).not.toContain(EMBER_NARRATION)
@@ -142,7 +144,7 @@ describe('Mira relay of the dragon message', () => {
       out.indexOf(RELAY_NARRATION),
     )
     expect(out.indexOf(RELAY_NARRATION)).toBeLessThan(
-      out.indexOf('The shadows here run deep'),
+      out.indexOf('There are miners trapped somewhere'),
     )
     expect(game.state.getStoryFlag(FLAG_ACT3_DRAGON_MESSAGE_RELAYED)).toBe(true)
     expect(mira.talkTo(game.state)).not.toContain(RELAY_NARRATION)

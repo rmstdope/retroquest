@@ -12,6 +12,12 @@ describe('CharredNotebook', () => {
     expect(notebook.canBeCarried).toBe(true)
   })
 
+  it('leaves the patient hand to the reading, not the description', () => {
+    expect(new CharredNotebook().description).toBe(
+      'A notebook burned nearly through. The cover is gone; the spine still holds.',
+    )
+  })
+
   it('shows the opening line, both entries and the closing line', () => {
     const game = new Game([new Act3()])
     const text = new CharredNotebook().examine(game.state)

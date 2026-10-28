@@ -7,6 +7,7 @@ import {
   remembered,
   speech,
   normaliseSpokenWord,
+  saysAnyOf,
   type NameOptions,
 } from '@/engine'
 import {
@@ -27,6 +28,12 @@ const QUESTION =
   "You'll have seen the causeway. Birds by the hundred, and the surf gone " +
   "grey. I've known bad seasons on this coast, forty years of them. It's " +
   "only a bad season, isn't it? Tell me the sea will mend on its own."
+
+/** Words that answer his question with the truth: the sea will not mend. */
+const TRUTH_WORDS = ['truth', 'no', 'not', "won't"]
+
+/** Words that give him the comforting lie he asked for. */
+const LIE_WORDS = ['yes', 'it will mend', 'it will pass', 'a bad season']
 
 /** What he says, once, when Elior talks to him again without the truth. */
 const BAD_SEASON =
@@ -51,8 +58,8 @@ export class PierWarden extends Character {
     super({
       name: 'Pier Warden',
       description:
-        'A salt-crusted figure who tends the ruined jetty and watches ' +
-        'for those who come and go.',
+        'An old man in a salt-stiff coat, sitting on the last sound plank ' +
+        'of the jetty with his eyes on the water.',
     })
   }
 
@@ -87,20 +94,33 @@ export class PierWarden extends Character {
   }
 
   /**
-   * Take the truth. Saying "truth" after he has asked tells him the curse is
-   * no season: his reply and the remembered line, recorded once. Before he
-   * has asked he is lost; afterwards he keeps it. Other words, and anything
-   * once the ruins are left, get the usual reply.
+   * Answer his question. After he has asked, the truth ("truth", or a plain
+   * "no", "it won't") tells him the curse is no season: his reply and the
+   * remembered line, recorded once; afterwards he keeps it. The comforting lie
+   * ("yes", "it will mend") gets a quiet reply and records nothing, so the
+   * truth can still be told. Before he has asked, "truth" leaves him lost.
+   * Other words, and anything once the ruins are left, get the usual reply.
    */
   override sayTo(gameState: GameState, words: string): string {
-    if (
-      normaliseSpokenWord(words) !== 'truth' ||
-      gameState.getStoryFlag(FLAG_ACT3_RUINS_LEFT)
-    ) {
+    if (gameState.getStoryFlag(FLAG_ACT3_RUINS_LEFT)) {
       return super.sayTo(gameState, words)
     }
     if (!gameState.getStoryFlag(FLAG_ACT3_WARDEN_ASKED)) {
-      return dialogue(this.name, 'The truth about what, lad? Speak plain.')
+      return normaliseSpokenWord(words) === 'truth'
+        ? dialogue(this.name, 'The truth about what, lad? Speak plain.')
+        : super.sayTo(gameState, words)
+    }
+    if (!saysAnyOf(words, TRUTH_WORDS)) {
+      if (
+        saysAnyOf(words, LIE_WORDS) &&
+        !gameState.getStoryFlag(FLAG_ACT3_WARDEN_TRUTH_TOLD)
+      ) {
+        return (
+          dialogue(this.name, "Aye. That's what I'll tell the boats, then.") +
+          ' He goes back to watching the water.'
+        )
+      }
+      return super.sayTo(gameState, words)
     }
     if (gameState.getStoryFlag(FLAG_ACT3_WARDEN_TRUTH_TOLD)) {
       return dialogue(
@@ -117,9 +137,8 @@ export class PierWarden extends Character {
       'and it is getting worse.' +
       '\n' +
       speech(
-        '… Aye. I think I knew it, and only wanted someone to say ' +
-          "otherwise. Better a hard truth than a soft lie. I'll send word up " +
-          'the coast to keep the boats in.',
+        '… Aye. I think I knew it. I only wanted someone to tell me ' +
+          "otherwise. I'll send word up the coast to keep the boats in.",
       ) +
       '\n' +
       remembered('Truth')
@@ -168,9 +187,8 @@ export class PierWarden extends Character {
         characterName(name) +
         ' squints toward the shore. ' +
         speech(
-          "I'd mind the high stones if I were you. The markers " +
-            'along the shore keep strange fragments—take heed and look for ' +
-            'moon-signs before the tide turns.',
+          "The markers along the shore, lad. There's bits of moon-sign " +
+            'broken off in among them, if you look close.',
         )
       )
     }
@@ -183,7 +201,9 @@ export class PierWarden extends Character {
         speech(
           "You've done right by the pillars. There's a fused locker " +
             "down in the vaults; I tried a key once but it stuck. Key's no " +
-            "good alone, and magic's no good alone. It wants both.",
+            "good alone, and magic's no good alone. It wants both. Lost " +
+            'that key after, in some dark hole by the mural on the ' +
+            "causeway. You'd want a light to find it.",
         )
       )
     }
@@ -192,11 +212,7 @@ export class PierWarden extends Character {
       'The ' +
       characterName(name) +
       ' looks out over the calmer water. ' +
-      speech(
-        'With the sigils attuned and the lanterns lit, the way grows ' +
-          'steadier. Those who brave the sanctum find the tide less quick to ' +
-          'swallow their steps.',
-      ) +
+      speech("Pillars set and lanterns lit. That's the sanctum open, then.") +
       '\n' +
       speech(
         'My da walked that water once, when the old wardens still asked it ' +

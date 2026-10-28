@@ -91,21 +91,29 @@ describe('Mira', () => {
     const out = new Mira().talkTo(game.state)
     const speeches = out.match(/\[dialogue\].*?\[\/dialogue\]/g) ?? []
     expect(speeches).toEqual([
-      "[dialogue]Elior. Malakar is draining King Alden's life to break " +
-        "Eldoria's wards, and the king grows weaker every day.[/dialogue]",
+      '[dialogue]Elior. Malakar is draining the life out of King Alden, and ' +
+        'the king grows weaker every day.[/dialogue]',
       '[dialogue]Three relics can stand against him: the crystal of light, ' +
         "the phoenix feather and the dragon's scale. We will fetch them one " +
         'at a time.[/dialogue]',
-      '[dialogue]Before we go, take this, and read it. Then we can leave.' +
-        '[/dialogue]',
-      '[dialogue]Say the word, and I will draw the first circle.[/dialogue]',
+      '[dialogue]Before we go, take this, and read it.[/dialogue]',
+      '[dialogue]Tell me when you are ready, and I will draw the first ' +
+        'circle.[/dialogue]',
       '[dialogue]On the road, ask me what you need to. I may not be able to ' +
         'answer all of it yet.[/dialogue]',
     ])
     expect(out.endsWith(MIRA_TOPICS_REMINDER)).toBe(true)
-    const handOver = out.indexOf('Mira hands you a small, worn piece')
+    const handOver = out.indexOf(
+      'She puts a small, worn piece of parchment in your hand.',
+    )
+    const gift = out.indexOf(
+      'You receive a [item_name]keepsake note[/item_name].',
+    )
     expect(handOver).toBeGreaterThan(out.indexOf('take this, and read it'))
-    expect(handOver).toBeLessThan(out.indexOf('Say the word'))
+    expect(gift).toBeGreaterThan(handOver)
+    expect(gift).toBeLessThan(out.indexOf('Tell me when you are ready'))
+    expect(out).not.toContain('Say the word')
+    expect(out).not.toContain("Eldoria's wards")
   })
 
   it('tells the Crystal purpose at the Tidal Causeway', () => {
@@ -175,7 +183,9 @@ describe('Mira', () => {
 
     const out = m.talkTo(game.state)
 
-    expect(out).toContain('Here, Wisdom is taught in embers.')
+    expect(out).toContain('The scholar camped on this path')
+    expect(out).toContain('this mountain will not be hurried')
+    expect(out).not.toContain('songs on the wind')
     expect(out).not.toContain('second virtue')
     expect(out.toLowerCase()).toContain('wisdom')
     expect(out.toLowerCase()).toContain('phoenix')
@@ -259,9 +269,10 @@ describe('Mira', () => {
 
       expect(out).not.toContain('[event]')
       expect(out).toContain(
-        'Mira leans on the cold stone of the gate. Her hands are still ' +
-          'shaking from the last circle.',
+        '[character_name]Mira[/character_name] leans on the cold stone of ' +
+          'the gate. Her hands are still shaking from the last circle.',
       )
+      expect(out).not.toContain('courage, wisdom, and selflessness')
       expect(out).toContain('I know how I look, Elior.')
       expect(out).toContain('I am coming with you.')
       expect(out).not.toContain('I will await your return')
@@ -281,7 +292,7 @@ describe('Mira', () => {
         'I am right behind you, Elior. The gates will not open themselves.',
       )
       expect(out).not.toContain('I know how I look')
-      expect(out).not.toContain('Mira leans on the cold stone')
+      expect(out).not.toContain('leans on the cold stone')
     })
 
     it('remembers the first talk across a save and load', () => {
@@ -408,20 +419,23 @@ describe('Mira', () => {
     const out = m.talkTo(game.state)
 
     const herbsLine =
-      'Mira takes the healing herbs from the shelf and presses the sachets ' +
-      'into your hands. Their resin-sweet scent steadies your breath as ' +
-      'the starlight tightens around the relics.'
-    const arranging = out.indexOf('Mira carefully arranges')
+      'She takes the [item_name]healing herbs[/item_name] from the shelf and ' +
+      'presses the sachets into your hands. They smell of resin, and your ' +
+      'breath slows while the circle tightens.'
+    const arranging = out.indexOf(
+      '[character_name]Mira[/character_name] sets the three relics',
+    )
     const herbs = out.indexOf(herbsLine)
-    const incantation = out.indexOf('By light and flame')
+    const words = out.indexOf('She says three words under her breath')
+    const elixir = out.indexOf('the [item_name]lifelight elixir[/item_name].')
+    expect(arranging).toBeGreaterThan(-1)
     expect(herbs).toBeGreaterThan(arranging)
-    expect(incantation).toBeGreaterThan(herbs)
-    expect(out.indexOf('The three relics dissolve')).toBeGreaterThan(
-      incantation,
-    )
-    expect(out.indexOf('It is done.')).toBeGreaterThan(
-      out.indexOf('The three relics dissolve'),
-    )
+    expect(words).toBeGreaterThan(herbs)
+    expect(elixir).toBeGreaterThan(words)
+    expect(out.indexOf('It is done.')).toBeGreaterThan(elixir)
+    expect(out).not.toContain('!')
+    expectDialogueSpeaker(out, 'Mira')
+    expectMarkupWellFormed(out)
     expect(hasItemNamed(game.state.currentRoom, 'healing herbs')).toBe(false)
     expect(game.state.hasItem('healing herbs')).toBe(false)
   })
@@ -434,7 +448,8 @@ describe('Mira', () => {
     const out = new Mira().talkTo(game.state)
 
     expect(out).toContain('read the note')
-    expect(out).toContain('important guidance')
+    expect(out).toContain('I wrote it for the road')
+    expect(out).not.toContain('important guidance')
     expect(out).not.toContain('three relics')
     expect(
       !out.includes('teleport') ||
@@ -493,7 +508,9 @@ describe('Mira', () => {
 
     const out = new Mira().talkTo(game.state)
 
-    expect(out).toContain("The miners' plight is a test of selflessness")
+    expect(out).toContain('There are miners trapped somewhere under this hill')
+    expect(out).toContain('Help them first.')
+    expect(out).not.toContain('test of selflessness')
     expect(out).not.toContain('circle')
     expect(out).not.toContain('you arrive at your next destination')
   })
@@ -513,7 +530,9 @@ describe('Mira confesses before the Warding Rite', () => {
     return game
   }
 
-  const OLD_DESCRIPTION = 'The village healer returns with renewed purpose.'
+  const OLD_DESCRIPTION =
+    'The village healer, with chalk dust still on her sleeves from the ' +
+    'circle in the castle yard.'
   const NEW_DESCRIPTION =
     "The village healer — and, you know now, the Wardens' pupil, who " +
     'stayed in Willowbrook for your sake. She meets your eyes more easily ' +
@@ -525,8 +544,7 @@ describe('Mira confesses before the Warding Rite', () => {
     const out = executeCommands(game, ['talk to mira'])
 
     const expected = [
-      "Mira's hands stop above the three relics. She does not begin the rite.",
-      '[character_name]Mira[/character_name]',
+      "[character_name]Mira[/character_name]'s hands stop above the three relics. She does not begin the rite.",
       speech(
         'Before I join them, Elior, there is something you must hear from me, and not from a stone or a dragon.',
       ),
@@ -668,7 +686,7 @@ describe('Mira topics', () => {
   it('ends the confession with the invitation and the grey reminder', () => {
     const game = new Game([new Act3()])
     const out = new Mira().talkTo(game.state)
-    expect(out).toContain('Say the word')
+    expect(out).toContain('Tell me when you are ready')
     completeNonMainQuests(game)
     game.state.setStoryFlag(FLAG_ACT3_ECHOES_QUEST_STARTED, true)
     game.state.setStoryFlag(FLAG_ACT3_CRYSTAL_OF_LIGHT_ACQUIRED, true)
@@ -772,7 +790,7 @@ describe('Elior answers the confession', () => {
       return new Mira().talkTo(game.state)
     }
     const ORIGINAL = speech(
-      'Your parents walked into the dark without me once. I will not let you do the same. Go with courage, wisdom, and selflessness—I am coming with you.',
+      'Your parents walked into the dark without me once. I will not let you do the same. I am coming with you.',
     )
 
     it('keeps the original second line with no answer', () => {
@@ -801,5 +819,146 @@ describe('Elior answers the confession', () => {
       mira.talkTo(game.state)
       expect(mira.talkTo(game.state)).toContain('I am right behind you')
     })
+  })
+})
+
+describe('Mira counts the relics as she draws each circle', () => {
+  /** Talk to Mira in a room with the given flags set, Cedric along. */
+  function circleTalk(key: string, flags: string[]): string {
+    const game = new Game([new Act3()])
+    game.state.setStoryFlag(FLAG_ACT3_MAIN_STARTED, true)
+    game.state.setStoryFlag(FLAG_ACT3_ECHOES_QUEST_STARTED, true)
+    for (const flag of flags) game.state.setStoryFlag(flag, true)
+    game.state.currentRoom = game.state.allRooms[key]
+    const mira = new Mira()
+    game.state.currentRoom.characters.push(mira)
+    return mira.talkTo(game.state)
+  }
+
+  it.each([
+    [
+      'TidalCauseway',
+      [FLAG_ACT3_CRYSTAL_OF_LIGHT_ACQUIRED, FLAG_ACT3_SEA_SEALED_LETTER_READ],
+      'That is one. Next is the mountain.',
+      'fever dream',
+    ],
+    [
+      'LowerSwitchbacks',
+      [FLAG_ACT3_PHOENIX_FEATHER_ACQUIRED, FLAG_ACT3_CHARRED_INSCRIPTION_READ],
+      'That is two. The last is under the hills.',
+      'Steel your heart',
+    ],
+    [
+      'CavernMouth',
+      [FLAG_ACT3_DRAGONS_SCALE_ACQUIRED],
+      'That is all three. Now we go home, to my hut',
+      "dragon's wisdom",
+    ],
+  ])('says where the circle goes from %s', (key, flags, line, gone) => {
+    const out = circleTalk(key, flags)
+    expect(out).toContain(line)
+    expect(out).not.toContain(gone)
+    expect(out).toContain(
+      '[character_name]Mira[/character_name] traces a prism in the air with ' +
+        'one finger.',
+    )
+    expect(out).toContain('you arrive at your next destination')
+  })
+
+  it('feels the king through the circle, not the focus left in the hut', () => {
+    const out = circleTalk('TidalCauseway', [
+      FLAG_ACT3_CRYSTAL_OF_LIGHT_ACQUIRED,
+      FLAG_ACT3_SEA_SEALED_LETTER_READ,
+    ])
+    expect(out).toContain('I can feel the king through the circle.')
+    expect(out).not.toContain('through the focus')
+  })
+
+  it('names the causeway and the ruins for the first circle', () => {
+    const out = circleTalk('MirasHut', [])
+    expect(out).toContain(
+      'The first circle sets us down on the Tidal Causeway, by the Sunken Ruins.',
+    )
+    expect(out).not.toContain('moonlight marries the sea')
+  })
+
+  it('keeps the fortress circle plain', () => {
+    const game = new Game([new Act3()])
+    game.state.setStoryFlag(FLAG_ACT3_MAIN_STARTED, true)
+    game.state.setStoryFlag(FLAG_ACT3_ECHOES_QUEST_STARTED, true)
+    game.state.setStoryFlag(FLAG_ACT3_LIFELIGHT_ELIXIR_CREATED, true)
+    game.state.currentRoom = game.state.allRooms.MirasHut
+    game.state.inventory.push(new LifelightElixir())
+    const out = new Mira().talkTo(game.state)
+    expect(out).toContain("Then this is the final journey. Malakar's fortress.")
+    expect(out).toContain('Stay close when we land.')
+    expect(out).not.toContain("kingdom's fate")
+    expect(out).not.toContain('heart of shadow')
+  })
+
+  it('tells the crystal without salt and song at the causeway', () => {
+    const out = circleTalk('TidalCauseway', [])
+    expect(out).toContain(
+      'The crystal of light is somewhere in these ruins. It answers to courage.',
+    )
+    expect(out).toContain('speak your vow, and mean it.')
+    expect(out).not.toContain('salt and song')
+  })
+
+  it('waits for the rest of the work without the weave', () => {
+    const game = new Game([new Act3()])
+    game.state.setStoryFlag(FLAG_ACT3_MAIN_STARTED, true)
+    game.state.setStoryFlag(FLAG_ACT3_ECHOES_QUEST_STARTED, true)
+    game.state.setStoryFlag(FLAG_ACT3_CRYSTAL_OF_LIGHT_ACQUIRED, true)
+    game.state.setStoryFlag(FLAG_ACT3_PHOENIX_FEATHER_ACQUIRED, true)
+    game.state.setStoryFlag(FLAG_ACT3_DRAGONS_SCALE_ACQUIRED, true)
+    game.state.currentRoom = game.state.allRooms.MirasHut
+    const out = new Mira().talkTo(game.state)
+    expect(out).toContain(
+      'Not yet. Something is still left undone out there, Elior. Until it is ' +
+        'set right, I will not join them.',
+    )
+    expect(out).not.toContain('weave')
+  })
+
+  it('asks for the elixir to be taken without calling it our only hope', () => {
+    const game = new Game([new Act3()])
+    game.state.setStoryFlag(FLAG_ACT3_MAIN_STARTED, true)
+    game.state.setStoryFlag(FLAG_ACT3_ECHOES_QUEST_STARTED, true)
+    game.state.setStoryFlag(FLAG_ACT3_LIFELIGHT_ELIXIR_CREATED, true)
+    game.state.currentRoom = game.state.allRooms.MirasHut
+    const out = new Mira().talkTo(game.state)
+    expect(out).toContain('I did not make it to leave it on my table.')
+    expect(out).not.toContain('only hope')
+  })
+})
+
+describe('Mira restored from a save made before the rewrite', () => {
+  it('is described with the current words until she confesses', () => {
+    const game = new Game([new Act3()])
+    const mira = game.state.allRooms.MirasHut.getCharacterByName('mira')
+    if (!mira) throw new Error('no mira')
+    mira.description = 'The village healer returns with renewed purpose.'
+    const fresh = new Game([new Act3()])
+    expect(fresh.loadSaveData(game.toSaveData())).toContain('loaded')
+
+    const restored = fresh.state.allRooms.MirasHut.getCharacterByName('mira')
+    expect(restored?.description).toBe(new Mira().description)
+  })
+
+  it('keeps the description she has after the confession', () => {
+    const game = new Game([new Act3()])
+    game.state.setStoryFlag(FLAG_ACT3_MIRA_CONFESSED, true)
+    const mira = game.state.allRooms.MirasHut.getCharacterByName('mira')
+    if (!mira) throw new Error('no mira')
+    mira.description =
+      "The village healer — and, you know now, the Wardens' pupil."
+    const fresh = new Game([new Act3()])
+    expect(fresh.loadSaveData(game.toSaveData())).toContain('loaded')
+
+    const restored = fresh.state.allRooms.MirasHut.getCharacterByName('mira')
+    expect(restored?.description).toBe(
+      "The village healer — and, you know now, the Wardens' pupil.",
+    )
   })
 })

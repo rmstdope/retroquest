@@ -6,9 +6,8 @@ export class PhoenixFeather extends Item {
     super({
       name: 'Phoenix Feather',
       description:
-        'A single feather shed by the Phoenix, warm as a heartbeat and shimmering with ' +
-        'crimson and gold. It hums faintly in your hand, as if containing a spark of ' +
-        'ancient wisdom.',
+        'A single feather shed by the Phoenix, warm as a heartbeat, red at ' +
+        'the quill and gold at the tip. It hums faintly in your hand.',
     })
   }
 }

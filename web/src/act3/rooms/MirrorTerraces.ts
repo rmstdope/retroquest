@@ -9,6 +9,17 @@ import {
   FLAG_ACT3_CHARRED_INSCRIPTION_READ,
 } from '../Act3StoryFlags'
 
+/** The room as it always looks; the state lines are added after it. */
+const DESCRIPTION =
+  'Stepped platforms rise in concentric benches, each ring studded with ' +
+  'sockets for polished mirrors and brass mounts. Channels are neatly ' +
+  'etched into the stone to carry and focus light up the slope; stray ' +
+  'rays catch on alignment wedges and glint like cold flame. The air ' +
+  'hums faintly with residual heat, and dusted ash settles on ' +
+  'worktables where scholars and attendants file, polish, and fit ' +
+  'mirror segments. The place smells of warm metal, singed cloth, and ' +
+  'the mineral tang of cooling slag.'
+
 /** The sentence the room gains once the curse has shown itself here. */
 const CURSE_LINE =
   'Ash falls over the terraces like slow grey rain, and down the slope the ' +
@@ -32,16 +43,7 @@ export class MirrorTerraces extends Room {
   constructor() {
     super({
       name: 'Mirror Terraces',
-      description:
-        'Stepped platforms rise in concentric benches, each ring studded with ' +
-        'sockets for polished mirrors and brass mounts. Channels are neatly ' +
-        'etched into the stone to carry and focus light up the slope; stray ' +
-        'rays catch on alignment wedges and glint like cold flame. The air ' +
-        'humms faintly with residual heat, and dusted ash settles on ' +
-        'worktables where scholars and attendants file, polish, and fit ' +
-        'mirror segments. A Terrace Warden watches the assembly points, ' +
-        'checking the angles and murmuring measurements — the place smells ' +
-        'of warm metal, singed cloth, and the mineral tang of cooling slag.',
+      description: DESCRIPTION,
       // A prepared mount is present at the terraces for the player to use
       items: [new MirrorMount(), new CharredInscription()],
       characters: [],
@@ -77,10 +79,11 @@ export class MirrorTerraces extends Room {
 
   /**
    * The description: a waiting line while the mended mirrors wait on the sun,
-   * then the curse's mark once the clue is found (always last).
+   * then the curse's mark once the clue is found (always last). Built from
+   * the constant, so a save made before the text changed shows the current one.
    */
   override descriptionFor(gameState: GameState): string {
-    let description = this.description
+    let description = DESCRIPTION
     if (this.isWaitingForSun(gameState)) {
       description = `${description} ${WAITING_LINE}`
     }

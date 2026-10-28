@@ -29,7 +29,35 @@ const RIDDLE_ANSWERS = [
   'ease',
 ]
 
-/** A majestic, telepathic phoenix who poses a riddle to the worthy. */
+/**
+ * The Phoenix's replies to answers close to the riddle's, each with the words
+ * that earn it (whole words, checked after the right answers). Each says
+ * something true about the Warden of Wisdom, who is never named.
+ */
+const NEAR_MISSES: readonly { words: readonly string[]; reply: string }[] = [
+  {
+    words: ['wait', 'waiting'],
+    reply:
+      'Anyone can wait while time is long. What is it called when time is ' +
+      'short, and you wait anyway?',
+  },
+  {
+    words: ['haste', 'speed', 'hurry'],
+    reply: 'That was his answer, in the end. It was not wisdom.',
+  },
+  {
+    words: ['knowledge', 'learning'],
+    reply: 'He had knowledge enough. It did not stop him.',
+  },
+  {
+    words: ['courage'],
+    reply:
+      "Courage was his friend's to carry. This feather was made for " +
+      'something else.',
+  },
+]
+
+/** A telepathic phoenix who poses a riddle about patience. */
 export class Phoenix extends Character {
   private riddlePosed = false
 
@@ -42,10 +70,9 @@ export class Phoenix extends Character {
     super({
       name: 'Phoenix',
       description:
-        "A vast, ember-wrought phoenix reclines amid the crater's molten glass. Its " +
-        'feathers glow with shifting gold and crimson, and its eyes burn with patient, ' +
-        'ancient wisdom. It radiates a presence that is both fierce and serene, as if it ' +
-        'has seen the rise and fall of ages.',
+        "A phoenix the size of a cottage roof lies in the crater's glass. " +
+        'Its feathers go from gold to red as it breathes, and it watches you ' +
+        'without any hurry.',
     })
   }
 
@@ -88,12 +115,10 @@ export class Phoenix extends Character {
     return (
       'The ' +
       characterName('phoenix') +
-      "'s voice does not come from its " +
-      'beak, but resounds within your mind: ' +
+      ' does not open its beak, but its voice is in your head all the ' +
+      'same: ' +
       speech('What is wisdom when time is short?') +
-      ' The question lingers, ' +
-      'bright and weightless, as if the answer might shape the very air around you.' +
-      ' ' +
+      ' It lets the question stand. ' +
       speech(
         'I asked this once of the Warden of Wisdom, when he came to me with ' +
           'his two friends. He knew the answer, and did not keep it.',
@@ -103,7 +128,8 @@ export class Phoenix extends Character {
 
   /**
    * Accepts a correct answer, matched as a whole word, and gives the Phoenix
-   * Feather if appropriate.
+   * Feather if appropriate. A near miss gets its own nudge, anything else the
+   * riddle again.
    */
   override sayTo(gameState: GameState, words: string): string {
     // Only accept answer if riddle was posed and feather not yet given
@@ -114,8 +140,7 @@ export class Phoenix extends Character {
       return (
         'The ' +
         characterName('phoenix') +
-        ' inclines its head, a knowing ' +
-        'warmth in its eyes. ' +
+        ' looks at the feather you carry. ' +
         speech('You already hold what you have earned.')
       )
     }
@@ -137,21 +162,28 @@ export class Phoenix extends Character {
       return (
         'The ' +
         characterName('phoenix') +
-        "'s eyes flare with approval. It " +
-        'plucks a single glowing feather and offers it to you. ' +
+        ' bends its neck, draws a single feather from its breast and lays ' +
+        'it in your hands. ' +
         speech(
           'Wisdom is ' +
             'patience, even when the world burns. Take this, and remember.',
         ) +
         link +
         terraces +
+        '\nYou receive a [item_name]phoenix feather[/item_name].' +
         cedricAdds(gameState, CEDRIC_FEATHER_GLANCE)
+      )
+    }
+    const nearMiss = NEAR_MISSES.find((miss) => saysAnyOf(words, miss.words))
+    if (nearMiss) {
+      return (
+        'The ' + characterName('phoenix') + ' waits. ' + speech(nearMiss.reply)
       )
     }
     return (
       'The ' +
       characterName('phoenix') +
-      ' studies you in silence. ' +
+      ' waits. ' +
       speech('Is that truly wisdom, when time is short?')
     )
   }
