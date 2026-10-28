@@ -25,10 +25,14 @@ const FIELD_WATERED_ONCE =
 /** What the field has been since Act I, if he never did. */
 const FIELD_UNTOUCHED = 'Nobody has touched it since you left.'
 
-/** Grandmother's singing at the gate, shown in every ending. */
+/**
+ * Grandmother's humming at the gate, shown in every ending: the cradle tune in
+ * Act I's own words, so Elior knows it before she names it.
+ */
 const GATE_SONG =
-  'At the gate Grandmother is singing to herself: "Hush, little seed, the ' +
-  'frost is going—" She sees you, and stops.'
+  'At the gate Grandmother is humming to herself: a slow tune that climbs ' +
+  'three notes and settles home again. You are humming it with her before ' +
+  'you know it. She stops.'
 
 /** The kneel after Redemption or Justice, when grow comes back. */
 const KNEEL_REMEMBER =
@@ -38,7 +42,7 @@ const KNEEL_REMEMBER =
 /** The kneel after Sacrifice, when grow was kept. */
 const KNEEL_KEPT =
   'You kneel at the edge of the field. The one spell you kept stirs in ' +
-  'your hands, the one that was never theirs, small and certain.'
+  'your hands, small and certain.'
 
 /**
  * The end of the story: the withered field behind Elior's home, where the
@@ -67,7 +71,7 @@ export class WillowbrookField extends Room {
   }
 
   /**
-   * The walk home, what the field has been since Act I, Grandmother's singing
+   * The walk home, what the field has been since Act I, Grandmother's humming
    * and the kneel; the remembering is an event, once.
    */
   override enterText(gameState: GameState): string {
@@ -79,7 +83,7 @@ export class WillowbrookField extends Room {
     }
     return (
       `${WALK_HOME}\n${since}\n${GATE_SONG}\n${KNEEL_REMEMBER}\n` +
-      'You remember the grow spell!'
+      'You have learned [spell_name]grow[/spell_name].'
     )
   }
 

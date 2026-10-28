@@ -13,19 +13,17 @@ import {
 } from '@/testing/gameHelpers'
 
 const BY_DOOR = 'Sir Cedric, by the south door, his eyes on the knight.'
-const ON_STAIR =
-  'Sir Cedric sits on the stair beside the knight. Neither of them is saying much.'
-const DESC_DOOR =
-  'Sir Cedric has followed you in; he stands by the south door, his eyes on the knight.'
+const CEDRIC = '[character_name]Sir Cedric[/character_name]'
+const ON_STAIR = `${CEDRIC} sits on the stair beside the knight. Neither of them is saying much.`
+const DESC_DOOR = `${CEDRIC} stands by the south door, the way out at his back, his eyes on the knight.`
 const HALF =
-  'That voice. I have heard it before, Elior, I would swear to it. I cannot see the face that goes with it.'
+  "That voice. I have heard it before, Elior, on the king's walls. I would swear to it. I cannot see the face that goes with it."
 const KNOWS =
   'Grey cloak, twisted rune. I know him now. Do what you came to do. I will hear what he has to say.'
 const KEEP_EYE = 'Go on up. I will keep an eye on him.'
 const WAIT_HERE = 'Go on up. I will wait here with him. Someone should.'
-const HOLD_BACK = 'Sir Cedric does not move from the door.'
-const FORGIVE_EVENT =
-  'Sir Cedric watches the last of them go. Then he crosses the hall and offers the knight his hand.'
+const HOLD_BACK = `${CEDRIC} does not move from the door.`
+const FORGIVE_EVENT = `${CEDRIC} watches the last of them go. Then he crosses the hall and offers the knight his hand.`
 const FORGIVE_LINE =
   'If they can be let go, so can this. I forgive you. Get up.'
 
@@ -96,7 +94,7 @@ describe('Sir Cedric in the Hall of Echoes', () => {
       'Sir Cedric. I am sorry. I have no right to ask anything of you, so I will not.',
       HOLD_BACK,
       'I heard you. That will have to be enough, for now.',
-      "You received the [item_name]knight's redemption[/item_name]!",
+      "You receive the [item_name]knight's redemption[/item_name].",
     ].map((part) => out.indexOf(part))
     expect(order.every((i) => i >= 0)).toBe(true)
     expect([...order].sort((a, b) => a - b)).toEqual(order)

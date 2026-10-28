@@ -1,9 +1,11 @@
 import {
   Character,
   type GameState,
+  affirms,
+  characterName,
   clue,
   dialogue,
-  normaliseSpokenWord,
+  speech,
 } from '@/engine'
 import {
   FLAG_ACT4_ELIXIR_ON_KING,
@@ -11,6 +13,7 @@ import {
   FLAG_ACT4_FORGIVENESS_SAID,
   FLAG_ACT4_JUSTICE_SAID,
   FLAG_ACT4_LIFELIGHT_ELIXIR_CONSUMED,
+  FLAG_ACT4_MALAKAR_MESSAGE_HEARD,
   FLAG_ACT4_SACRIFICE_SAID,
   FLAG_ACT4_THRONE_AMULET_OPENED,
   FLAG_ACT4_THRONE_BARGAIN_SEEN,
@@ -37,8 +40,11 @@ function wrapBreath(text: string): string {
   return `[breath]${text}[/breath]`
 }
 
-/** The words that are the refrain, when said in full. */
-const REFRAIN_LINE = 'power follows purpose; purpose follows truth'
+/**
+ * The words that are the refrain: its name, or its opening said in any
+ * punctuation ("power follows purpose, purpose follows truth").
+ */
+const REFRAIN_WORDS = ['refrain', 'power follows purpose']
 
 /** What he says to anything once the wound is closed, and he is still there. */
 const NOTHING_LEFT = '[dim]There is nothing left to say. It is over.[/dim]'
@@ -61,8 +67,32 @@ const SAID_AMULET = '[dim]You have said it. The amulet is waiting.[/dim]'
 /** The other word said after one was chosen. */
 const CHOSEN = '[dim]You have chosen. The amulet is waiting.[/dim]'
 
-/** The words that choose an ending. */
-const ENDING_WORDS = ['forgiveness', 'justice', 'sacrifice']
+/** The ending each word chooses, heard in a sentence that does not deny it. */
+const ENDING_WORDS: readonly {
+  ending: EndingWord
+  words: readonly string[]
+}[] = [
+  { ending: 'forgiveness', words: ['forgiveness', 'forgive'] },
+  { ending: 'justice', words: ['justice'] },
+  { ending: 'sacrifice', words: ['sacrifice'] },
+]
+
+/** The word that chooses an ending. */
+type EndingWord = 'forgiveness' | 'justice' | 'sacrifice'
+
+/** The ending word the words say, or null. */
+function endingWordIn(words: string): EndingWord | null {
+  return ENDING_WORDS.find((e) => affirms(words, e.words))?.ending ?? null
+}
+
+/**
+ * What he does when spoken to after the elixir healed him: the look that
+ * points at forgiveness, through what Sir Cedric did for the knight.
+ */
+const WAITING_FOR_FORGIVENESS =
+  `${characterName('Malakar')} looks at you the way the knight looked at ` +
+  `${characterName('Sir Cedric')} in the hall, before ` +
+  `${characterName('Sir Cedric')} gave him his hand.`
 
 /**
  * Malakar in the Throne Chamber: tired and pleading, a grieving friend. He
@@ -109,6 +139,7 @@ export class Malakar extends Character {
     const ending = endingPlayed(gameState)
     if (ending === 'justice') return GONE_INTO_SEAL
     if (ending === 'redemption') {
+      gameState.setStoryFlag(FLAG_ACT4_MALAKAR_MESSAGE_HEARD, true)
       return dialogue(
         this.name,
         'Go home, Elior. Tell Mira I am sorry, and that I remember her.',
@@ -138,8 +169,7 @@ export class Malakar extends Character {
     if (gameState.getStoryFlag(FLAG_ACT4_THRONE_BARGAIN_SEEN)) {
       return dialogue(
         this.name,
-        'You saw them. Then you know I was not lying. It would not break ' +
-          'for me. Perhaps it would for you.',
+        'It would not break for me. Perhaps it would for you.',
       )
     }
     if (gameState.getStoryFlag(FLAG_ACT4_THRONE_OFFER_HEARD)) {
@@ -172,8 +202,9 @@ export class Malakar extends Character {
       dialogue(
         this.name,
         'Only the ward holds it shut: half in your amulet, half in ' +
-          "Alden's crown. I have been bleeding the king for years to loosen " +
-          'his half. Give me yours and he can stop dying today.',
+          "Alden's crown. Since my man brought him here I have been " +
+          'bleeding the king to loosen his half. Give me yours and the ' +
+          'bleeding stops today.',
       ),
       dialogue(
         this.name,
@@ -187,20 +218,19 @@ export class Malakar extends Character {
 
   /**
    * The refrain is the refusal; the words of the endings are heard once the
-   * elixir is used; any other word only gets a dim answer.
+   * elixir is used; any other word only gets a dim answer. Each is heard in
+   * a sentence too, unless the sentence denies it ("I will never forgive
+   * you").
    */
   override sayTo(gameState: GameState, words: string): string {
-    const word = normaliseSpokenWord(words)
     const ending = endingPlayed(gameState)
     if (ending === 'justice') return GONE_INTO_SEAL
     if (ending) return NOTHING_LEFT
-    if (
-      ENDING_WORDS.includes(word) &&
-      gameState.getStoryFlag(FLAG_ACT4_THRONE_AMULET_OPENED)
-    ) {
+    const word = endingWordIn(words)
+    if (word && gameState.getStoryFlag(FLAG_ACT4_THRONE_AMULET_OPENED)) {
       return this.endingWord(gameState, word)
     }
-    if (word !== 'refrain' && word !== REFRAIN_LINE) {
+    if (!affirms(words, REFRAIN_WORDS)) {
       return this.otherWords(gameState)
     }
     if (gameState.getStoryFlag(FLAG_ACT4_THRONE_REFRAIN_SAID)) {
@@ -239,7 +269,7 @@ export class Malakar extends Character {
   }
 
   /** Hears "forgiveness", "justice" or "sacrifice" with the amulet open. */
-  private endingWord(gameState: GameState, word: string): string {
+  private endingWord(gameState: GameState, word: EndingWord): string {
     const onMalakar = gameState.getStoryFlag(FLAG_ACT4_ELIXIR_ON_MALAKAR)
     if (!onMalakar && !gameState.getStoryFlag(FLAG_ACT4_ELIXIR_ON_KING)) {
       return clue('Not yet. The elixir is still in your hand.')
@@ -264,10 +294,8 @@ export class Malakar extends Character {
     gameState.learnSpell(new Forgiveness())
     const lines = [
       dialogue('Elior', 'I forgive you.'),
-      'The words are harder than any spell, and then they are easy. ' +
-        'Something warm settles in your chest, like a lesson you always ' +
-        'knew.',
-      'You have learned the Forgiveness spell!',
+      'The words are harder than any spell, and then they are easy.',
+      'You have learned [spell_name]forgiveness[/spell_name].',
       dialogue(this.name, 'You would forgive me. They would have too.'),
     ]
     if (gameState.hasVirtue(VIRTUE_MERCY)) {
@@ -291,8 +319,8 @@ export class Malakar extends Character {
       dialogue(
         'Elior',
         'You tore the world, Malakar. You drained the king. You sent a man ' +
-          'to hunt a child in Willowbrook, and you let Sir Cedric take the ' +
-          "blame. I will not pretend you didn't.",
+          'to hunt a child in Willowbrook, and you had Sir Cedric framed ' +
+          "for it. I will not pretend you didn't.",
       ),
       dialogue(this.name, "No. You won't. Your mother never could either."),
       AMULET_READY,
@@ -308,8 +336,8 @@ export class Malakar extends Character {
       dialogue('Elior', 'Take my magic. All of it. Close the wound with that.'),
       dialogue(
         this.name,
-        'No. Your parents poured themselves into that wound once already. ' +
-          'It does not get to have you too.',
+        'No. Your parents gave themselves to hold that wound shut. It does ' +
+          'not get to have you too.',
       ),
       AMULET_READY,
     ].join('\n')
@@ -318,7 +346,7 @@ export class Malakar extends Character {
   /** What he answers to words that are not the refrain. */
   private otherWords(gameState: GameState): string {
     if (gameState.getStoryFlag(FLAG_ACT4_ELIXIR_ON_MALAKAR)) {
-      return '[dim]Malakar only waits.[/dim]'
+      return WAITING_FOR_FORGIVENESS
     }
     if (this.choiceMade(gameState)) {
       return '[dim]Malakar listens, but words are not what he needs now.[/dim]'
@@ -326,7 +354,10 @@ export class Malakar extends Character {
     if (gameState.getStoryFlag(FLAG_ACT4_THRONE_AMULET_OPENED)) {
       return '[dim]Malakar does not answer. He is staring at the open amulet.[/dim]'
     }
-    return '[dim]Malakar only waits for your answer.[/dim]'
+    return (
+      `${characterName(this.name)} waits. Your mother and father told him ` +
+      'no once, in a letter. It did not stop him.'
+    )
   }
 
   /** Whether the elixir has been used, on anyone. */
@@ -392,7 +423,7 @@ export class Malakar extends Character {
    */
   openAmulet(gameState: GameState): string {
     if (endingPlayed(gameState)) {
-      return '[dim]The amulet is only a locket now, warm and quiet.[/dim]'
+      return '[dim]The amulet is dark now, and still warm.[/dim]'
     }
     if (gameState.getStoryFlag(FLAG_ACT4_THRONE_AMULET_OPENED)) {
       return '[dim]The amulet is already open, its light filling the chamber.[/dim]'
@@ -408,11 +439,11 @@ export class Malakar extends Character {
         'staggers. When he speaks again, it is not his voice.',
       dialogue(
         SHADOW_LABEL,
-        'Elior. I tore the world to keep them, and I lost them anyway. I ' +
-          'could not wait; you can. Be patient where I was not. Close what ' +
-          'I opened, and let them rest.',
+        'Elior. I tore the world to keep them, and I lost them anyway. Be ' +
+          'patient where I was not. Close what I opened, and let them rest.',
       ),
-      'The lifelight elixir is warm in your hand. It can be used only ' +
+      'The [item_name]lifelight elixir[/item_name] is warm in your hand. It ' +
+        'can be used only ' +
         'once. It could break the crystal and free the king, or it could ' +
         'be offered to Malakar, to heal the wound that is killing him.',
     ].join('\n')
@@ -472,11 +503,12 @@ export class Malakar extends Character {
     gameState.removeItemFromInventoryOrRoom('Lifelight Elixir', 1)
     gameState.currentRoom.description = THRONE_CHAMBER_HEALED
     return [
-      "You kneel and hold the elixir to Malakar's lips. He drinks. The " +
-        'grey goes out of his face, and for a moment he is the young man ' +
-        'at the workbench again. "Hush, little seed," he sings under his ' +
-        'breath, and does not seem to know he does. The wound flickers, ' +
-        'and waits.',
+      `You kneel and hold the elixir to ${characterName(this.name)}'s lips. ` +
+        'He drinks. The grey goes out of his face, and for a moment he is ' +
+        'the young man at the workbench again. ' +
+        speech('Hush, little seed,') +
+        ' he sings under his breath, and does not seem to know he does. ' +
+        'The wound flickers, and waits.',
       'The lifelight elixir is gone.',
     ].join('\n')
   }

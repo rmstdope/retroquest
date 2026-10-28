@@ -1,10 +1,11 @@
 import {
+  affirms,
   Character,
   type GameState,
   clue,
   dialogue,
   effect,
-  normaliseSpokenWord,
+  saysAnyOf,
   type NameOptions,
 } from '@/engine'
 import {
@@ -12,6 +13,7 @@ import {
   FLAG_ACT4_HEARTS_TRUTH_CAST,
   FLAG_ACT4_STAFF_HEARD,
   FLAG_ACT4_WHISPERS_HEARD,
+  FLAG_ACT4_ELENA_MESSAGE_HEARD,
   FLAG_ACT4_SORCERESS_OF_LIES_COMPLETED,
   FLAG_ACT4_SORCERESS_OF_LIES_STARTED,
   FLAG_ACT4_SORCERESS_TRUTH_ACQUIRED,
@@ -38,16 +40,28 @@ const CONFESSION = [
     'And I watched the inn door, to see who would come for a mark like ' +
     'that. The healer from Willowbrook never did. I should have known ' +
     'then what that meant.',
-  "I told the king's physicians he was only tired. I told the court he " +
-    'had gone hunting. I have told so many lies that I forgot what my own ' +
-    'voice sounds like. And I told you your parents sold you. Mine did. I ' +
-    'wanted it to be true of everyone, so that it would not only be true of ' +
-    'me.',
+  "I told the king's physicians he was only tired. I have told so many " +
+    'lies that I forgot what my own voice sounds like. And I told you your ' +
+    'parents sold you. Mine did. I wanted it to be true of everyone, so that ' +
+    'it would not only be true of me.',
   'No one has ever spoken to me without a lie. Not Malakar, not his ' +
     'servants, not the ones I cursed. You are the first. I did not know it ' +
     'would hurt.',
 ]
 
+/** The likeliest wrong words, each with a refusal of her own. */
+const NEAR_MISSES: readonly { words: readonly string[]; reply: string }[] = [
+  {
+    words: ['redemption'],
+    reply:
+      'That was his word, little Elior. I have not asked to be forgiven. I ' +
+      'have not asked you for anything.',
+  },
+  {
+    words: ['truth'],
+    reply: 'Truth? I have hundreds. Which one would you like?',
+  },
+]
 /**
  * The Sorceress of Lies, who holds the Chamber of Whispers. The knight's badge
  * and Heart's Truth let Elior hear her loneliness; the word "understanding"
@@ -99,9 +113,8 @@ export class SorceressOfLies extends Character {
         'has always been: no one has ever spoken to her without a lie, and ' +
         'she has never answered with anything else.',
       'And under the loneliness, older and smaller: a girl in a hungry ' +
-        'winter, and the parents who sold her for a sack of grain. She ' +
-        'tells you the lie because she believes it. It is the only story ' +
-        'about parents she has ever known.',
+        'winter, and the parents who sold her for a sack of grain. It is ' +
+        'the only story about parents she has ever known.',
     ].join('\n')
   }
 
@@ -121,6 +134,7 @@ export class SorceressOfLies extends Character {
   override talkTo(gameState: GameState): string {
     gameState.setStoryFlag(FLAG_ACT4_SORCERESS_OF_LIES_STARTED, true)
     if (gameState.getStoryFlag(FLAG_ACT4_SORCERESS_OF_LIES_COMPLETED)) {
+      gameState.setStoryFlag(FLAG_ACT4_ELENA_MESSAGE_HEARD, true)
       return dialogue(
         this.name,
         'Go on, through the arch. What waits there has been waiting for you ' +
@@ -138,18 +152,29 @@ export class SorceressOfLies extends Character {
     return dialogue(
       this.name,
       'Little Elior. Your parents sold you to save themselves, did you know? ' +
-        'Malakar told me so himself. Turn back.',
+        'For a sack of grain, in a hungry winter. Turn back.',
     )
   }
 
-  /** Only "understanding" works, and only once the badge is shown and all three hearts are heard. */
+  /**
+   * Only understanding works, said as the word or in a sentence that does
+   * not deny it ("I understand"), and only once the badge is shown and all
+   * three hearts are heard. "Redemption" and "truth" get refusals of their own.
+   */
   override sayTo(gameState: GameState, words: string): string {
     gameState.setStoryFlag(FLAG_ACT4_SORCERESS_OF_LIES_STARTED, true)
     if (gameState.getStoryFlag(FLAG_ACT4_SORCERESS_OF_LIES_COMPLETED)) {
       return '[dim]She has already been heard. She nods to you, once.[/dim]'
     }
-    const word = normaliseSpokenWord(words)
-    if (word !== 'understanding') return '[dim]The Sorceress only smiles.[/dim]'
+    if (!affirms(words, ['understanding', 'understand'])) {
+      const nearMiss = NEAR_MISSES.find((miss) => saysAnyOf(words, miss.words))
+      return nearMiss
+        ? dialogue(this.name, nearMiss.reply)
+        : clue(
+            'She smiles, and the crystals hum your word back to you, ' +
+              'sweeter, and wrong.',
+          )
+    }
     return this.understandBy(
       gameState,
       [
@@ -165,12 +190,20 @@ export class SorceressOfLies extends Character {
   /**
    * Listening in the chamber is understanding too: with the badge shown and
    * all three hearts heard, standing still and listening to her redeems her
-   * as the word does. Before that, the same refusals as the word.
+   * as the word does. Before the badge only her laughing is heard; after it,
+   * the same refusals as the word.
    */
   listenedTo(gameState: GameState): string {
     gameState.setStoryFlag(FLAG_ACT4_SORCERESS_OF_LIES_STARTED, true)
     if (gameState.getStoryFlag(FLAG_ACT4_SORCERESS_OF_LIES_COMPLETED)) {
       return '[dim]She has already been heard. The chamber is quiet.[/dim]'
+    }
+    if (!gameState.getStoryFlag(FLAG_ACT4_BADGE_SHOWN)) {
+      return clue(
+        'The crystals hum kind, untrue things, and under them she is ' +
+          'laughing at you. If there is anything beneath the laughing, it ' +
+          'does not let you near.',
+      )
     }
     return this.understandBy(
       gameState,
@@ -223,7 +256,7 @@ export class SorceressOfLies extends Character {
       lead,
       ...confession,
       'She lifts the silver mask from her staff and puts it in your hands.',
-      "You received the [item_name]sorceress's truth[/item_name]!",
+      "You receive the [item_name]sorceress's truth[/item_name].",
     ].join('\n')
   }
 }

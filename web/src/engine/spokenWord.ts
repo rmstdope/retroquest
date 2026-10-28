@@ -44,3 +44,18 @@ export function saysAnyOf(words: string, answers: readonly string[]): boolean {
     return false
   })
 }
+
+/** Words that turn a sentence against what it names; "n't" splits off as "t". */
+const NEGATIONS = ['not', 'never', 'no', 'cannot', 'nor', 't']
+
+/**
+ * Whether the words say one of the answers and do not deny it: "I forgive
+ * you" affirms "forgive", "I will never forgive you" does not. Use it where a
+ * sentence may carry the answer and a stray negation must not count.
+ */
+export function affirms(words: string, answers: readonly string[]): boolean {
+  return (
+    saysAnyOf(words, answers) &&
+    !wordsOf(words).some((word) => NEGATIONS.includes(word))
+  )
+}

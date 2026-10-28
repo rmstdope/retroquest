@@ -14,11 +14,12 @@ export class Nyx extends Character {
   /** Whether the Forest Heart Crystal has been set in the hedge. */
   crystalReturned = false
 
+  /** How she looks; a constant, so old saves get the current words. */
+  private static readonly DESCRIPTION =
+    'A small light in the hedge. The leaves are greener where it has settled.'
+
   constructor() {
-    super({
-      name: 'Nyx',
-      description: 'A small light that flickers in the hedge, keeping close.',
-    })
+    super({ name: 'Nyx', description: Nyx.DESCRIPTION })
   }
 
   /** Nyx cannot speak; the light answers with a touch. */
@@ -57,15 +58,15 @@ export class Nyx extends Character {
   }
 
   /** The light, and what has been given back to it. */
-  override examine(gameState: GameState): string {
+  override examine(_gameState: GameState): string {
     const back: string[] = []
     if (this.tokenReturned) back.push('her pendant')
     if (this.crystalReturned) back.push('the crystal with the forest in it')
-    if (back.length === 0) return super.examine(gameState)
+    if (back.length === 0) return Nyx.DESCRIPTION
     const where =
       back.length > 1 ? 'are where they belong' : 'is where it belongs'
     return (
-      super.examine(gameState) +
+      Nyx.DESCRIPTION +
       `\nSomewhere in the hedge, ${back.join(' and ')} ${where} now.`
     )
   }

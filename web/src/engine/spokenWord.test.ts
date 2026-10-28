@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { normaliseSpokenWord, saysAnyOf } from './spokenWord'
+import { affirms, normaliseSpokenWord, saysAnyOf } from './spokenWord'
 
 describe('normaliseSpokenWord', () => {
   it('trims and lower-cases', () => {
@@ -52,5 +52,29 @@ describe('saysAnyOf', () => {
     expect(saysAnyOf('you should have not told me', ['should have told'])).toBe(
       false,
     )
+  })
+})
+
+describe('affirms', () => {
+  it('hears an answer inside a sentence', () => {
+    expect(affirms('I forgive you', ['forgive', 'forgiveness'])).toBe(true)
+    expect(affirms('be patient', ['patience', 'patient'])).toBe(true)
+  })
+
+  it('does not hear it when the sentence denies it', () => {
+    for (const words of [
+      'I will never forgive you',
+      'I do not forgive you',
+      "I won't forgive you",
+      "I can't forgive you",
+      'I cannot forgive you',
+      'no forgiveness',
+    ]) {
+      expect(affirms(words, ['forgive', 'forgiveness']), words).toBe(false)
+    }
+  })
+
+  it('does not hear an answer that is not there', () => {
+    expect(affirms('I understand', ['forgive'])).toBe(false)
   })
 })

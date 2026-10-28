@@ -112,7 +112,7 @@ describe('Act IV rooms narrate their effect', () => {
     const out = (act.rooms.WillowbrookField as WillowbrookField).enterText(
       game.state,
     )
-    expect(out).toContain('You remember the grow spell!')
+    expect(out).toContain('You have learned [spell_name]grow[/spell_name].')
     expect(shape(out)).not.toContain('event')
   })
 

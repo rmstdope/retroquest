@@ -1,10 +1,13 @@
 import {
+  affirms,
   Character,
   type GameState,
+  characterName,
   clue,
   dialogue,
-  normaliseSpokenWord,
   type NameOptions,
+  saysAnyOf,
+  speech,
 } from '@/engine'
 import {
   FLAG_ACT4_BANNERS_SEEN,
@@ -36,15 +39,45 @@ const SIGHTS_NEEDED = 3
 /** The four speeches of the confession, in order. */
 const CONFESSION = [
   'I was the stranger in Willowbrook. Malakar sent me for an amulet, and for ' +
-    'the child it hid. It was my token that fouled your well.',
-  'The night King Alden was taken, I paid the watch to look away. The ' +
-    'captain of the watch was a good man. I made sure he was asleep. And I ' +
-    'put my seal to the lie that shamed Sir Cedric.',
+    'the child of the house that kept it. It was my token that fouled your ' +
+    'well.',
+  "I stood on that gate once, in the king's colours. The night King Alden " +
+    'was taken, I paid the watch to look away. The captain of the watch was ' +
+    'a good man. I made sure he was asleep. And I put my seal to the lie ' +
+    'that shamed Sir Cedric.',
   'And when I saw what my master was doing to the king, I stopped believing ' +
-    'he could be saved. That is all despair is. You have given me something ' +
-    'to believe in again.',
+    'he could be saved. That is all despair is. Then you walked in and said ' +
+    'the word I had stopped saying.',
   'Sir Cedric. I am sorry. I have no right to ask anything of you, so I ' +
     'will not.',
+]
+
+/** How he looks and sounds before Truth Sight; a constant, so old saves get it too. */
+const KNIGHT_DESCRIPTION =
+  'A knight in tarnished armour, a shredded grey cloak hanging from his ' +
+  'shoulders. He stands with his back to the door you came in by. His ' +
+  'visor is down, and he does not move. When he speaks, his voice is ' +
+  'hollow.\n' +
+  dialogue('Knight of Despair', 'Return when you have the truth.')
+
+/** The likeliest wrong words, each with a refusal of its own. */
+const NEAR_MISSES: readonly { words: readonly string[]; reply: string }[] = [
+  {
+    words: ['sorry'],
+    reply:
+      'The visor turns a little toward you.\n' +
+      dialogue(
+        'Knight of Despair',
+        'That is my word. You have nothing to be sorry for.',
+      ),
+  },
+  {
+    words: ['forgive', 'forgiveness'],
+    reply: dialogue(
+      'Knight of Despair',
+      'Forgiveness is not yours to give. Ask the man by the door.',
+    ),
+  },
 ]
 
 /**
@@ -61,11 +94,7 @@ export class KnightOfDespair extends Character {
   constructor() {
     super({
       name: 'Knight of Despair',
-      description:
-        'A knight in tarnished armour, a shredded grey cloak hanging from his ' +
-        'shoulders. He stands with his back to the door you came in by. His ' +
-        'visor is down, and he does not move. When he speaks, ' +
-        "his voice is hollow: 'Return when you have the truth.'",
+      description: KNIGHT_DESCRIPTION,
     })
   }
 
@@ -121,7 +150,7 @@ export class KnightOfDespair extends Character {
         'and he knows you have seen him.'
       )
     }
-    return this.description
+    return KNIGHT_DESCRIPTION
   }
 
   /** What he says changes as he is seen through and redeemed. */
@@ -157,20 +186,24 @@ export class KnightOfDespair extends Character {
   }
 
   /**
-   * Only the word "redemption" works, and only once all three sights are seen and
-   * Elior is shielded: the chain raised and not given away, or the Loyalty
-   * Token raised in the hall.
+   * Only the word "redemption" works, alone or in a sentence that does not
+   * deny it, and only once all three sights are seen and Elior is shielded:
+   * the chain raised and not given away, or the Loyalty Token raised in the
+   * hall. "Sorry" and "forgiveness" get refusals of their own.
    */
   override sayTo(gameState: GameState, words: string): string {
     gameState.setStoryFlag(FLAG_ACT4_KNIGHT_OF_DESPAIR_STARTED, true)
     if (gameState.getStoryFlag(FLAG_ACT4_KNIGHT_OF_DESPAIR_COMPLETED)) {
       return '[dim]He has already found his way back. He bows his head to you.[/dim]'
     }
-    const word = normaliseSpokenWord(words)
-    if (word !== 'redemption') {
+    if (!affirms(words, ['redemption'])) {
+      const nearMiss = NEAR_MISSES.find((miss) => saysAnyOf(words, miss.words))
       return (
-        '[dim]The visor does not move. Whatever that word was, it is not the ' +
-        'one he is waiting for.[/dim]'
+        nearMiss?.reply ??
+        clue(
+          'The visor does not move. Whatever that word was, it is not the ' +
+            'one he is waiting for.',
+        )
       )
     }
     const seen = this.sightsSeen(gameState)
@@ -226,17 +259,14 @@ export class KnightOfDespair extends Character {
   private redeem(gameState: GameState, byChain: boolean): string {
     gameState.setStoryFlag(FLAG_ACT4_KNIGHT_OF_DESPAIR_COMPLETED, true)
     gameState.setStoryFlag(FLAG_ACT4_KNIGHTS_REDEMPTION_ACQUIRED, true)
-    const confession = CONFESSION.map((speech) => dialogue(this.name, speech))
+    const confession = CONFESSION.map((words) => dialogue(this.name, words))
     confession.unshift(
       dialogue('Sir Cedric', 'You.'),
       dialogue(this.name, 'Me.'),
     )
     confession.push(
-      'Sir Cedric does not move from the door.',
-      dialogue(
-        'Sir Cedric',
-        'I heard you. That will have to be enough, for now.',
-      ),
+      `${characterName('Sir Cedric')} does not move from the door.\n` +
+        speech('I heard you. That will have to be enough, for now.'),
     )
     this.name = REDEEMED_NAME
 
@@ -253,22 +283,27 @@ export class KnightOfDespair extends Character {
         (byChain
           ? "chain's light like a wave on stone. "
           : 'warmth at your heart like a wave on stone. ') +
-        'Slowly, he lifts his visor. ' +
+        'Slowly he turns round to face you, and lifts his visor. ' +
         'The face beneath is grey and tired, and very human.',
       ...confession,
-      "You received the [item_name]knight's redemption[/item_name]!",
+      'With his despair gone from the hall, you see what it was hiding: ' +
+        'pale soldiers among the banners, still fighting.',
+      'He unpins a tarnished badge from his breast and presses it into your ' +
+        'hand.',
+      "You receive the [item_name]knight's redemption[/item_name].",
     ]
     const stone = this.findEchoStone(gameState)
     if (stone) {
       stone.enhance()
       gameState.setStoryFlag(FLAG_ACT4_ENHANCED_ECHO_STONE_ACQUIRED, true)
       lines.push(
-        'The echo stone grows warm in your pack. A new voice has joined ' +
-          "the echoes inside it: the knight's own, speaking the truth at last.",
+        "The echo stone grows warm. Inside it the knight's voice has stopped " +
+          'repeating its one word; it speaks plainly now, and what it says ' +
+          'is true.',
       )
     }
     lines.push(
-      `You have learned the [spell_name]${spell.name}[/spell_name] spell! ` +
+      `You have learned [spell_name]${spell.name}[/spell_name]. ` +
         spell.description,
     )
     return lines.join('\n')

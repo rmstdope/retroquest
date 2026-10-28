@@ -163,8 +163,8 @@ describe('Act 4 integration', () => {
 
   describe('the gates and the courtyard', () => {
     const BARRIER_THROWS_BACK =
-      'A shimmering barrier of dark energy throws you back. It pulses in ' +
-      'rhythm with the ward stones.'
+      'The violet wall throws you back. It swells and fades in time with ' +
+      'the ward stones.'
     const SERVANTS_BLOCK =
       'The servants drift across the archway, their chains trailing. ' +
       'They do not stop for you, and you cannot get past them.'
@@ -188,10 +188,9 @@ describe('Act 4 integration', () => {
     it('tells that Mira steps through the gates and holds the way out inside', () => {
       const intro = act4.getActIntro()
       expect(intro).toContain(
-        'The obsidian gates loom ahead, wreathed in shadow and ancient magic. ' +
-          'Mira steps through the gates beside you, pale but unbending. She ' +
-          'and Sir Cedric take up their places just inside the threshold — ' +
-          'someone must hold the way out. ',
+        'Mira steps through the gates beside you, her hands still unsteady ' +
+          'from the circle. She and Sir Cedric stop just inside the ' +
+          'threshold. ',
       )
     })
 
@@ -229,7 +228,7 @@ describe('Act 4 integration', () => {
         (quest) => quest.name === 'Shattered Ward Guardians',
       )
       expect(card?.description).toBe(
-        'Shadow guardians and a barrier of dark energy bar the way into the ' +
+        'Shadow guardians and a wall of violet light bar the way into the ' +
           'fortress. Find what feeds them, and break their hold on the gates.',
       )
     })
@@ -266,7 +265,7 @@ describe('Act 4 integration', () => {
       )
       const room = game.state.currentRoom.describe(game.state)
       expect(room).toContain(
-        'The ward stones stand dark and silent now, and the barrier is gone.',
+        'The ward stones are dark, and the violet wall is gone; the ways north and east lie open.',
       )
       expect(room).not.toContain('guardians drift')
       executeCommands(game, ['go north'])
@@ -306,7 +305,7 @@ describe('Act 4 integration', () => {
           'forgotten how to draw.',
       )
       const talk = executeCommands(game, ['talk to captain'])
-      expect(talk).toContain('I held the gate for King Alden once.')
+      expect(talk).toContain("I kept King Alden's gate once.")
       expectDialogueSpeaker(talk, 'Captain of the Guard')
     })
 
@@ -321,7 +320,7 @@ describe('Act 4 integration', () => {
       const bless = executeCommands(game, ['cast bless on servants'])
       expect(bless).toContain(
         'By the fountain, the captain blinks, as if waking from a long ' +
-          "sleep. One of the servants presses a small blue [item_name]servant's pendant[/item_name] into your hands.",
+          "sleep. One of the servants lays a small blue [item_name]servant's pendant[/item_name] on the fountain's rim for you.",
       )
       expectQuestCompleted(game.state, 'The Trapped Servants')
       const done = game.state.completedQuests.find(
@@ -329,14 +328,14 @@ describe('Act 4 integration', () => {
       )
       expect(done?.completion).toBe(
         "Elior's courage earns the servants' trust, and a blessing breaks " +
-          'their chains. Freed, they offer what help they can for the trials ahead.',
+          'their chains. Freed, they leave him a pendant to light the way.',
       )
       expect(bless).not.toContain('loyalty token')
       expectItemInInventory(game.state, "Servant's Pendant", false)
       const room = game.state.currentRoom.describe(game.state)
       expect(room).toContain(
         'The fountains have stopped running black, and the sky has thinned to ' +
-          'grey. The Freed Servants rest by the fountains, their chains gone, ' +
+          'grey. The freed servants rest by the fountains, their chains gone, ' +
           'and the captain of the guard sits among them with his head in his ' +
           'hands.',
       )
@@ -358,13 +357,13 @@ describe('Act 4 integration', () => {
     it('shows the gates description that matches, also after a reload', () => {
       const look = (): string => game.state.currentRoom.describe(game.state)
       expect(look()).toContain(
-        'Three ancient ward stones, left, middle and right',
+        'three ward stones, left, middle and right, swell and fade with it',
       )
       executeCommands(game, ['cast light on right stone'])
-      expect(look()).toContain('the barrier is gone')
+      expect(look()).toContain('the violet wall is gone')
       const loaded = game.loadSaveData(game.toSaveData())
       expect(loaded).toContain('Game loaded successfully.')
-      expect(look()).toContain('the barrier is gone')
+      expect(look()).toContain('the violet wall is gone')
     })
 
     it('never tells the player what to type in the first half of the act', () => {
@@ -402,7 +401,7 @@ describe('Act 4 integration', () => {
       reload()
       expectQuestCompleted(game.state, 'Shattered Ward Guardians')
       expect(game.state.currentRoom.describe(game.state)).toContain(
-        'The ward stones stand dark and silent now',
+        'The ward stones are dark, and the violet wall is gone',
       )
       executeCommands(game, ['go north'])
       executeCommands(game, ['go south', "take guardian's essence", 'east'])
@@ -510,16 +509,16 @@ describe('Act 4 integration', () => {
       'The Knight of Despair stands before the stair to the tower. He does ' +
       'not lift his sword. He simply does not move, and there is no way past him.'
     const NO_STONE =
-      "You try to recall the echoes' words, but in here the glass answers " +
-      'only with your own voice. You lose the way, and find yourself back at ' +
-      'the entrance.'
+      'You listen for a voice to follow, but in here the glass answers only ' +
+      'with your own. You lose the way, and find yourself back at the ' +
+      'entrance.'
     const STONE_OUTSIDE =
       "You hold the echo stone to your ear. The hall's voices murmur inside " +
       'it, waiting for somewhere that needs them.'
     const SOLVED =
       'You step into the empty corridor. Behind you the false mirrors go ' +
-      'dark, one by one, until a single corridor remains — and at its end, a ' +
-      'plain mirror that shows you exactly as you are.'
+      'dark, one by one, until a single corridor remains. At its end stands ' +
+      'a plain mirror that shows you exactly as you are.'
     const ALREADY_CLEAR =
       'The true path is already clear. The false mirrors stay dark.'
     const NOTHING_YET =
@@ -676,7 +675,9 @@ describe('Act 4 integration', () => {
       expect(executeCommands(game, ['examine knight of despair'])).toContain(
         'A knight in tarnished armour, a shredded grey cloak hanging from his ' +
           'shoulders. He stands with his back to the door you came in by. His visor is down, and he does not move. ' +
-          "When he speaks, his voice is hollow: 'Return when you have the truth.'",
+          'When he speaks, his voice is hollow.\n' +
+          '[character_name]Knight of Despair[/character_name]\n' +
+          '[dialogue]Return when you have the truth.[/dialogue]',
       )
       const talk = executeCommands(game, ['talk to knight of despair'])
       expect(talk).toContain(
@@ -706,7 +707,7 @@ describe('Act 4 integration', () => {
           'You hold the echo stone to your ear. One voice repeats, patient as a heartbeat:',
         )
         expect(heard).toContain(
-          "'Left, then left, then the way your shadow does not go.'",
+          '[dialogue]Left, then left, then the way your shadow does not go.[/dialogue]',
         )
       }
       expectSpellKnown(game.state, 'truth_sight', false)
@@ -779,11 +780,11 @@ describe('Act 4 integration', () => {
       )
       const before = executeCommands(game, ['talk to true self'])
       expect(before).toContain(
-        'You told Mira you came for the king. Tell me why you really came.',
+        'You tell everyone you came for the king. Tell me the truth: why did you really come?',
       )
       expectDialogueSpeaker(before, 'True Self')
       expect(executeCommands(game, ['say anything to true self'])).toContain(
-        'The reflection only shakes its head.',
+        'The reflection waits. It has heard you say easier things than that.',
       )
       expect(game.state.hasVirtue('truth')).toBe(false)
       const told = executeCommands(game, ['say truth to true self'])

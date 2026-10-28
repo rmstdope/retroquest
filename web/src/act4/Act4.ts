@@ -90,16 +90,15 @@ export class Act4 extends Act {
   override getActIntro(): string {
     return (
       '[bold]ACT IV: THE FINAL CONFRONTATION[/bold]\n\n' +
-      "With the lifelight elixir in hand, you stand before Malakar's fortress. " +
-      'The obsidian gates loom ahead, wreathed in shadow and ancient magic. ' +
-      'Mira steps through the gates beside you, pale but unbending. She and ' +
-      'Sir Cedric take up their places just inside the threshold — someone ' +
-      'must hold the way out. A small light settles on the gatepost: Nyx, ' +
-      'keeping close.\n\n' +
+      "With the lifelight elixir in your pack, you stand before Malakar's " +
+      'fortress. Mira steps through the gates beside you, her hands still ' +
+      'unsteady from the circle. She and Sir Cedric stop just inside the ' +
+      'threshold. A small light settles on the gatepost: Nyx, keeping ' +
+      'close.\n\n' +
       dialogue(
         'Mira',
-        "Someone has to keep the way out open, and that's me. So come back " +
-          'through it.',
+        'I said I would come with you, and I have. Someone has to keep the ' +
+          "way out open, and that's me. So come back through it.",
       ) +
       '\n' +
       dialogue(
@@ -116,14 +115,14 @@ export class Act4 extends Act {
       '\n\n' +
       'Mira presses something into your hand: a small silver medallion, two ' +
       'hands clasped on its face. Sir Cedric lays his hand over hers; the ' +
-      'light on the gatepost leans in.\n\n' +
+      'light on the gatepost leans in.\n' +
+      'You receive a [item_name]loyalty token[/item_name].\n\n' +
       dialogue(
         'Mira',
         "If it goes quiet in there, say our names. We'll hear.",
       ) +
       '\n\n' +
-      'The halls beyond are yours to walk, but you will not be far from ' +
-      'them.\n\n' +
+      'The rest of the way is yours to walk, but they will not be far.\n\n' +
       "Let's begin. (Type 'help' for a list of commands.)\n"
     )
   }

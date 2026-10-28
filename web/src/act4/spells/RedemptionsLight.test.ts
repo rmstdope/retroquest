@@ -67,7 +67,7 @@ describe('RedemptionsLight', () => {
       "cast redemption's light on ghostly warriors",
     ])
     expect(cast).toContain(
-      'Soft light spills from your hands across the hall. One by one the ghostly warriors lower their blades and look at one another as if for the first time. Then they fade, at peace.',
+      "Soft light spills from your hands across the hall. One by one the ghostly warriors lower their blades. One puts a hand on another's shoulder. Then they fade, at peace.",
     )
     expect(cast).toContain('[event]✦ Mercy — this will be remembered[/event]')
     expect(cast).not.toContain('Elior will remember this.')
@@ -98,7 +98,12 @@ describe('RedemptionsLight', () => {
     const shadow = new ShadowOfThePast()
     const sorceress = new SorceressOfLies()
     const line = spell.castOnCharacter(game.state, shadow)
-    expect(line).toContain('It is already remembering. It needs no light.')
+    expect(line).toContain(
+      'Light gathers in your hand, and the Shadow turns from it, gently.\n' +
+        '[character_name]Shadow of the Past[/character_name]\n' +
+        '[dialogue]I have done nothing but remember. Keep it for him.[/dialogue]',
+    )
+    expect(line).not.toContain('"')
     expectMarkupWellFormed(line)
     expect(spell.castOnCharacter(game.state, shadow)).toBe(line)
     expect(spell.castOnCharacter(game.state, sorceress)).toContain(
@@ -106,7 +111,13 @@ describe('RedemptionsLight', () => {
     )
     game.state.setStoryFlag(FLAG_ACT4_SORCERESS_OF_LIES_COMPLETED, true)
     const redeemed = spell.castOnCharacter(game.state, sorceress)
-    expect(redeemed).toContain('to be looked at without a lie')
+    expect(redeemed).toContain(
+      'Soft light touches the [character_name]Unmasked Sorceress[/character_name]. ' +
+        'She does not flinch.\n' +
+        '[character_name]Unmasked Sorceress[/character_name]\n' +
+        '[dialogue]So this is what it is, to be looked at without a lie.[/dialogue]',
+    )
+    expect(redeemed).not.toContain('"')
     expectMarkupWellFormed(redeemed)
     expect(spell.castOnCharacter(game.state, sorceress)).toBe(redeemed)
     expect(game.state.hasVirtue('mercy')).toBe(false)

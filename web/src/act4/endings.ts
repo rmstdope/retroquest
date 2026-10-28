@@ -27,8 +27,8 @@ export function truthLine(gameState: GameState): string | null {
   if (gameState.virtueCount(VIRTUE_TRUTH) < MOMENTS_FOR_EXTRA_LINE) return null
   return dialogue(
     'King Alden',
-    'You named every crime and did not add one. Only someone who has paid ' +
-      'for the truth before speaks it like that. I will remember it.',
+    'You named every crime and did not add one. Few men in my court could ' +
+      'do that.',
   )
 }
 
@@ -69,7 +69,7 @@ const ENDING_LINES: Record<Ending, string> = {
   sacrifice: dialogue(
     'Lysa',
     'You gave our gift back to close what he opened, and kept the one ' +
-      'thing that was yours. That was always the best of you.',
+      'thing that was yours.',
   ),
 }
 
@@ -81,7 +81,7 @@ const ENDING_LINES: Record<Ending, string> = {
 export function farewell(ending: Ending, gameState: GameState): string {
   return [
     'Where the wound was, the light of the amulet gathers into two shapes ' +
-      "you have only ever seen in the vault's memories: a man with your " +
+      'you have only ever seen in pictures and memories: a man with your ' +
       "eyes, and a woman with Grandmother's smile. Your parents.",
     dialogue('Aren', 'Elior. Look at you. Taller than me, I think.'),
     dialogue(
@@ -105,7 +105,7 @@ export function farewell(ending: Ending, gameState: GameState): string {
     ),
     dialogue('Lysa', 'Go home, love. The field is waiting.'),
     'The light thins. They smile, and they are gone. The amulet in your ' +
-      'hand is only a locket now, warm and quiet. Your parents are at rest.',
+      'hand is dark now, and still warm. Your parents are at rest.',
   ]
     .filter((line) => line !== null)
     .join('\n')

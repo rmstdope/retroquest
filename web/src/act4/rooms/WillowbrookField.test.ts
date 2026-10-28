@@ -4,8 +4,11 @@ import { Act4 } from '../Act4'
 import { Grow } from '../spells/Grow'
 import { ACT4_GOLDEN_PATH } from '../Act4GoldenPath'
 import {
+  FLAG_ACT4_CAPTAIN_APOLOGY_HEARD,
   FLAG_ACT4_CEDRIC_FORGAVE,
+  FLAG_ACT4_ELENA_MESSAGE_HEARD,
   FLAG_ACT4_FIELD_GREEN,
+  FLAG_ACT4_MALAKAR_MESSAGE_HEARD,
   VIRTUE_SELFLESS,
   VIRTUE_TRUTH,
 } from '../Act4StoryFlags'
@@ -20,24 +23,27 @@ const ARCH_LINE =
 const KNEEL_REMEMBER =
   'You kneel at the edge of the field. Your hands remember the spell you read from a stone in the glade, the one that was always yours.'
 const KNEEL_KEPT =
-  'You kneel at the edge of the field. The one spell you kept stirs in your hands, the one that was never theirs, small and certain.'
+  'You kneel at the edge of the field. The one spell you kept stirs in your hands, small and certain.'
 const ARCH_SENTENCE = 'Behind the throne an arch stands open on the road home.'
 const AMULET_STEP = ACT4_GOLDEN_PATH.indexOf('use ancient amulet') + 1
 
 const MIRA_ELENA_TOLD =
   'You tell her, too, what the Sorceress asked you to carry: that she is sorry, and that Elena should hear it.'
 const MIRA_ELENA_ANSWER =
-  'Elena. I am going back through Greendale. I will tell her.'
+  'Elena. I am going back through Greendale; I owe Lyria an answer to a letter. I will tell her.'
 const CEDRIC_OLD =
   'I have walked a long way beside you. This is a good place to stop.'
 const CEDRIC_FORGAVE =
-  'And the knight in grey said his piece to my face. I forgave him. I find I meant it.'
+  'The knight in grey said his piece to my face. I forgave him. I find I meant it.'
+const CAPTAIN_TOLD =
+  "You give him the captain of the guard's apology, for ever doubting him."
+const CAPTAIN_ANSWER =
+  'He had the gate that night, and I had the wall. I never blamed him. I am glad he remembers.'
+/** Sir Cedric's first talk at home when Elior never heard the captain. */
 const CEDRIC_FIRST = [
-  'You tell him what the captain of the guard said: that he is sorry he ever doubted him.',
-  'He was the youngest on the walls that night. I never blamed him. I am glad he remembers.',
-  'And the knight in grey said his piece to my face. I have not forgiven him. Not yet.',
+  'The knight in grey said his piece to my face. I have not forgiven him. Not yet.',
   'He looks out over the field for a while.',
-  `Later. ${CEDRIC_OLD}`,
+  CEDRIC_OLD,
 ]
 
 type Ending = 'redemption' | 'justice' | 'sacrifice'
@@ -133,7 +139,8 @@ describe('Willowbrook Field', () => {
         'You walk out of the fortress and do not look back.',
       )
       expect(text).toContain(KNEEL_REMEMBER)
-      expect(text).toContain('You remember the grow spell!')
+      expect(text).toContain('You have learned [spell_name]grow[/spell_name].')
+      expect(text).not.toContain('grow spell!')
       expect(text).not.toContain('[event]You remember')
       expectCurrentRoom(game.state, 'Willowbrook Field')
       expect(game.state.knownSpells.map((s) => s.id)).toContain('grow')
@@ -153,7 +160,7 @@ describe('Willowbrook Field', () => {
     const since = text.indexOf(
       'The field you watered once went grey again after you left. Grandmother tried.',
     )
-    const song = text.indexOf('At the gate Grandmother is singing')
+    const song = text.indexOf('At the gate Grandmother is humming')
     expect(since).toBeGreaterThan(walk)
     expect(song).toBeGreaterThan(since)
     expect(text).not.toContain('Nobody has touched it')
@@ -163,7 +170,9 @@ describe('Willowbrook Field', () => {
     const { game } = ended('sacrifice')
     const text = executeCommands(game, ['north'])
     expect(text).toContain(KNEEL_KEPT)
-    expect(text).not.toContain('You remember the grow spell!')
+    expect(text).not.toContain(
+      'You have learned [spell_name]grow[/spell_name].',
+    )
     expect(game.state.knownSpells.map((s) => s.id)).toEqual(['grow'])
   })
 
@@ -202,7 +211,7 @@ describe('Willowbrook Field', () => {
 
 describe('the cradle song at the gate', () => {
   const GATE =
-    'At the gate Grandmother is singing to herself: "Hush, little seed, the frost is going—" She sees you, and stops.'
+    'At the gate Grandmother is humming to herself: a slow tune that climbs three notes and settles home again. You are humming it with her before you know it. She stops.'
 
   for (const ending of ['redemption', 'justice', 'sacrifice'] as const) {
     it(`is sung on arrival after the ${ending} ending, between the walk and the kneel`, () => {
@@ -257,24 +266,49 @@ describe('the companions', () => {
       'You tell her what they said: that they are proud of her, that they are resting.',
     )
     expect(first).toContain(
-      'Resting. Good. Then so can we. Go on, love. The field has waited long enough.',
+      'Resting. Good. Then so can we. Go on, dear. The field first. The bread will keep.',
     )
     reload(game)
     const later = executeCommands(game, ['talk to grandmother'])
-    expect(later).toContain('Go on, love. The field has waited long enough.')
+    expect(later).toContain(
+      'Go on, dear. The field first. The bread will keep.',
+    )
     expect(later).not.toContain('You saw them')
   })
 
-  it("Mira follows the ending, then delivers Elena's message once", () => {
+  it('Mira follows the ending and passes on no message Elior never heard', () => {
     const endingLines = {
-      redemption: 'He remembers. Then I will go and see him, one day. Not yet.',
+      redemption: 'Himself. Then I will go and see him, one day. Not yet.',
       justice:
-        'Good. And I am sorry, both at once. He taught me my first spell, too.',
+        'Good. And I am sorry, both at once. He taught me my first spell.',
       sacrifice:
-        'All of it? Oh, Elior. Then I will teach you again, slowly, if you want to learn.',
+        'All of it? Oh, Elior. Then I will teach you herbs, the slow way, if you want to learn.',
     }
     for (const ending of Object.keys(endingLines) as Ending[]) {
       const game = home(ending)
+      const first = executeCommands(game, ['talk to mira'])
+      expect(first).toContain(endingLines[ending])
+      expect(first).not.toContain(MIRA_ELENA_TOLD)
+      expect(first).not.toContain('teach you again')
+      expect(first).not.toContain('what Malakar said')
+    }
+    expect(executeCommands(home('redemption'), ['talk to mira'])).toContain(
+      'You tell her Malakar is himself again, and alive.',
+    )
+  })
+
+  it("Mira hears Malakar's and Elena's messages once Elior heard them", () => {
+    const endingLines = {
+      redemption: 'He remembers. Then I will go and see him, one day. Not yet.',
+      justice:
+        'Good. And I am sorry, both at once. He taught me my first spell.',
+      sacrifice:
+        'All of it? Oh, Elior. Then I will teach you herbs, the slow way, if you want to learn.',
+    }
+    for (const ending of Object.keys(endingLines) as Ending[]) {
+      const game = home(ending)
+      game.state.setStoryFlag(FLAG_ACT4_MALAKAR_MESSAGE_HEARD, true)
+      game.state.setStoryFlag(FLAG_ACT4_ELENA_MESSAGE_HEARD, true)
       const first = executeCommands(game, ['talk to mira'])
       expect(first).toContain(endingLines[ending])
       expect(first.indexOf(endingLines[ending])).toBeLessThan(
@@ -290,7 +324,23 @@ describe('the companions', () => {
     }
   })
 
-  it('Sir Cedric delivers both apologies once, then keeps his old line', () => {
+  it("Sir Cedric gets the captain's apology only if Elior heard it", () => {
+    const game = home('justice')
+    game.state.setStoryFlag(FLAG_ACT4_CAPTAIN_APOLOGY_HEARD, true)
+    const first = executeCommands(game, ['talk to sir cedric'])
+    const order = [
+      CAPTAIN_TOLD,
+      CAPTAIN_ANSWER,
+      'And the knight in grey said his piece to my face. I have not forgiven him. Not yet.',
+      CEDRIC_OLD,
+    ].map((line) => first.indexOf(line))
+    expect(order.every((i) => i >= 0)).toBe(true)
+    expect([...order].sort((a, b) => a - b)).toEqual(order)
+    expect(first).not.toContain('Later.')
+    expect(first).not.toContain('youngest on the walls')
+  })
+
+  it('Sir Cedric says his piece once, then keeps his old line', () => {
     for (const ending of ['redemption', 'justice', 'sacrifice'] as const) {
       const game = home(ending)
       const first = executeCommands(game, ['talk to sir cedric'])
@@ -300,6 +350,8 @@ describe('the companions', () => {
         expect(next).toBeGreaterThan(at)
         at = next
       }
+      expect(first).not.toContain(CAPTAIN_TOLD)
+      expect(first).not.toContain('And the knight')
       expect(first).not.toContain('Tell me where he is')
       expect(first).not.toContain('what the knight in grey said')
       reload(game)
@@ -328,7 +380,7 @@ describe('the companions', () => {
     expect(first).not.toContain('Not yet')
     expect(first).not.toContain('what the knight in grey said')
     expect(first.indexOf(CEDRIC_FORGAVE)).toBeLessThan(
-      first.indexOf(`Later. ${CEDRIC_OLD}`),
+      first.indexOf(CEDRIC_OLD),
     )
   })
 
@@ -447,7 +499,7 @@ describe('more of the field', () => {
       expectCurrentRoom(game.state, 'Willowbrook Field')
       expect(game.state.knownSpells.map((s) => s.id)).toContain('grow')
       expect(executeCommands(game, ['talk to mira'])).toContain(
-        ending === 'redemption' ? 'He remembers.' : 'teach you again',
+        ending === 'redemption' ? 'see him, one day' : 'teach you herbs',
       )
       executeCommands(game, ['cast grow'])
       reload(game)

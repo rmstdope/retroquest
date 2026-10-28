@@ -14,7 +14,7 @@ import {
 /** What the servants are called once their chains are broken. */
 const FREED_SERVANTS_NAME = 'Freed Servants'
 
-/** Fortress servants enslaved by dark magic, seeking freedom. */
+/** The king's servants, chained in the Outer Courtyard until a blessing frees them. */
 export class TrappedServants extends Character {
   /**
    * Named by what they are, so it reads "the …" and, a group and not a title,
@@ -57,6 +57,17 @@ export class TrappedServants extends Character {
     this.name = FREED_SERVANTS_NAME
   }
 
+  /** In chains while trapped; once freed, at rest by the fountains. */
+  override examine(gameState: GameState): string {
+    if (!gameState.getStoryFlag(FLAG_ACT4_SERVANTS_FREED)) {
+      return this.description
+    }
+    return (
+      'The freed servants sit by the fountains in their kitchen aprons and ' +
+      'stable coats, rubbing their ankles where the chains were.'
+    )
+  }
+
   /** Return the servants' plea, which changes as their trust and freedom are won. */
   override talkTo(gameState: GameState): string {
     const name = characterName(this.name)
@@ -65,9 +76,9 @@ export class TrappedServants extends Character {
         `The ${name} watch you from the corners of their eyes and keep ` +
         'walking. One whispers, without stopping: ' +
         speech(
-          "'Others came through that gate. They were all brave, until the " +
+          'Others came through that gate. They were all brave, until the ' +
             'guardians. If you were braver than the guardians, you would ' +
-            "carry something of theirs.'",
+            'carry something of theirs.',
         )
       )
     }
@@ -75,13 +86,16 @@ export class TrappedServants extends Character {
       return (
         `The ${name} have stopped walking. They stand close together, ` +
         'watching you. ' +
-        speech("'We are so tired. Whatever you can do for us, do it gently.'")
+        speech(
+          'We are so tired. No one has said a kind word over us in years. ' +
+            'Whatever you can do for us, do it gently.',
+        )
       )
     }
     return (
       `The ${name} bow. One of them, an old woman with flour still in the ` +
       'creases of her hands, looks up. ' +
-      speech("'I was the king's cook. I do not know how long ago.'")
+      speech("I was the king's cook. I do not know how long ago.")
     )
   }
 }

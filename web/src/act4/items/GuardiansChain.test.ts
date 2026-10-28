@@ -24,4 +24,15 @@ describe('GuardiansChain', () => {
       expectMarkupWellFormed(answer)
     }
   })
+
+  it('has the crystals the hall and the captain see, also in an old save', () => {
+    const act = new Act4()
+    act.musicFile = ''
+    const game = new Game([act])
+    const chain = new GuardiansChain()
+    chain.description = 'A silver chain, each link inscribed with runes.'
+    expect(chain.examine(game.state)).toBe(
+      'A silver chain set with small crystals, each link inscribed with runes. It bound the guardians to the stones; now it binds nothing.',
+    )
+  })
 })

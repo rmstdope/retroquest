@@ -89,15 +89,14 @@ describe('Act IV items narrate their effect', () => {
     expect(parseTurn(new WardStoneFragment().pickedUp(state))).toEqual([
       {
         kind: 'text',
-        markup: 'The fragment is cold, and it no longer keeps any time at all.',
+        markup: 'The fragment is lighter than it looks, and cold.',
       },
     ])
     expect(parseTurn(new GuardiansChain().pickedUp(state))).toEqual([
       {
         kind: 'text',
         markup:
-          'A surge of protective energy courses through your body. The ' +
-          "chain's light grows brighter, recognizing you as its new bearer.",
+          'The chain is warm, and its crystals brighten a little in your hands.',
       },
     ])
   })
@@ -214,8 +213,8 @@ describe('Act IV items narrate their effect', () => {
         kind: 'failure',
         narrated: true,
         markup:
-          "The door's runes stay dark under the amulet. Something in this " +
-          'vault is not ready to let you in.',
+          "The door's runes stay dark under the amulet. The Shadow is still " +
+          'watching you.',
       },
     ])
 

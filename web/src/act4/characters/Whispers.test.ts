@@ -18,23 +18,26 @@ const TO_KNIGHT = ACT4_GOLDEN_PATH.slice(
 
 const STUMBLE = 'You stumble back down.'
 const HINT =
-  'They do not answer you. They only say it again, closer: your friends have left you. No one is coming. Name one who stayed, if you can.'
+  'They do not answer you. They only say it again, closer: your friends have left you. No one is coming. Name one who stayed. You cannot.'
 const FIRST = 'The token warms against your palm, and the whispers falter.'
 const SECOND = 'The token warms again. The whispers draw back from the stair.'
 const NYX_LEAD =
-  'A small light flickers at the edge of your eye, and in your pack the ' +
-  "crystalline pendant she gave you, Nyx's Token, is warm."
+  'The token warms against your palm. A small light flickers at the edge of ' +
+  "your eye, and in your pack the crystalline pendant she gave you, Nyx's " +
+  'Token, is warm too.'
 const OPEN =
   'The whispers have nothing left to say. They thin like smoke, and the stair above lies open.'
 const MIRA_LINE =
   "I'm at the gate, Elior. I said I'd hold it, and I'm holding it."
 const CEDRIC_LINE =
-  'A knight does not leave his post. Mine is the threshold. Go on, lad.'
+  'I am in the hall below you, Elior. I have not left. Go on up.'
 const NYX_LINE = "Left? I'm right here. I never was anywhere else."
 const GRANDMOTHER =
-  '[effect]You say it into the dark, and something in you steadies — but she is far from here, and the whispers know it.[/effect] Name one who came with you to the gate.'
+  '[effect]You say it into the dark, and something in you steadies — but she is far from here, and the whispers know it.[/effect] She did not come to the gate, they say. Who did? No one.'
 const SWALLOWED =
-  'The whispers swallow the word. Name one who stayed, if you can.'
+  'The whispers swallow the word and go on: no one stayed. Name one, if you can.'
+const MYSELF =
+  'The whispers like that answer. Yes, they say: you, and only you, alone on a stair.'
 const AFTER =
   'The whispers are gone. The stair winds up into the dark, and it is only a stair.'
 
@@ -113,7 +116,7 @@ describe('The whispers in the Tower of Shadows', () => {
     )
     expect(executeCommands(game, ['say cedric to whispers'])).toContain(SECOND)
     expect(executeCommands(game, ['say cedric to whispers'])).toContain(
-      'The token is still warm from him. Sir Cedric is holding the gate; you know that now.',
+      'The token is still warm from him. Sir Cedric is in the hall below; you know that now.',
     )
     expect(executeCommands(game, ['go up'])).toContain(STUMBLE)
   })
@@ -174,6 +177,41 @@ describe('The whispers in the Tower of Shadows', () => {
     executeCommands(game, ['say mira to whispers', 'drop loyalty token'])
     expect(game.loadSaveData(game.toSaveData())).toContain('loaded')
     expect(game.state.hasItem('Loyalty Token')).toBe(false)
+  })
+
+  it.each(['myself', 'me', 'Elior'])(
+    'turn %s, the vow of the sea, into a taunt and count nothing',
+    (words) => {
+      const game = inTower()
+      expect(executeCommands(game, [`say ${words} to whispers`])).toContain(
+        MYSELF,
+      )
+      expect(executeCommands(game, ['go up'])).toContain(STUMBLE)
+    },
+  )
+
+  it('hear a name said inside a sentence', () => {
+    const game = inTower()
+    const mira = executeCommands(game, ['say Mira stayed to whispers'])
+    expect(mira).toContain(FIRST)
+    expect(mira).toContain(MIRA_LINE)
+  })
+
+  it('answer the first friend not yet named when a sentence holds two', () => {
+    const game = inTower()
+    executeCommands(game, ['say mira to whispers'])
+    const both = executeCommands(game, ['say mira and cedric to whispers'])
+    expect(both).toContain(SECOND)
+    expect(both).toContain(CEDRIC_LINE)
+  })
+
+  it('give the plain lead-in for Nyx when her token is not carried', () => {
+    const game = inTower()
+    game.state.removeItemFromInventory("Nyx's Token")
+    const nyx = executeCommands(game, ['say nyx to whispers'])
+    expect(nyx).toContain(FIRST)
+    expect(nyx).not.toContain("Nyx's Token")
+    expect(nyx).toContain(NYX_LINE)
   })
 
   it('writes well-formed markup in every state', () => {

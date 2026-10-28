@@ -3,9 +3,12 @@ import { Game } from '@/engine'
 import { MemoryOrbs } from './MemoryOrbs'
 import { FLAG_ACT4_MEMORY_ORBS_MENDED } from '../Act4StoryFlags'
 import { Act4 } from '../Act4'
+import { expectMarkupWellFormed } from '@/testing/gameHelpers'
 
 const VERSE =
-  'From the cracked one by the cradle a voice sings, low, "Hush, little seed—" and breaks off.'
+  'From the cracked one by the cradle a voice sings, low:\n' +
+  '[character_name][/character_name]\n[dialogue]Hush, little seed—[/dialogue]\n' +
+  'It breaks off.'
 
 describe('MemoryOrbs', () => {
   it('sings a broken-off verse before mending, and not after', () => {
@@ -13,6 +16,8 @@ describe('MemoryOrbs', () => {
     const orbs = new MemoryOrbs()
     const before = orbs.examine(game.state)
     expect(before).toContain('before you can hold it. ' + VERSE)
+    expect(before).not.toContain('"')
+    expectMarkupWellFormed(before)
     game.state.setStoryFlag(FLAG_ACT4_MEMORY_ORBS_MENDED, true)
     const after = orbs.examine(game.state)
     expect(after).not.toContain('Hush')

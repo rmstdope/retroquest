@@ -1,7 +1,9 @@
 import {
   Spell,
+  characterName,
   dialogue,
   remembered,
+  speech,
   type Character,
   type GameState,
 } from '@/engine'
@@ -24,13 +26,20 @@ const NOTHING_TO_REDEEM =
 
 /** What the light does to the Shadow of the Past: it needs none. */
 const SHADOW_LINE =
-  'Light gathers in your hand, and the Shadow turns from it, gently. ' +
-  '"It is already remembering. It needs no light."'
+  'Light gathers in your hand, and the Shadow turns from it, gently.\n' +
+  dialogue(
+    'Shadow of the Past',
+    'I have done nothing but remember. Keep it for him.',
+  )
 
 /** What the light does to the redeemed Sorceress. */
 const SORCERESS_LINE =
-  'Soft light touches the Unmasked Sorceress. She does not flinch. "So this ' +
-  'is what it is," she says, "to be looked at without a lie."'
+  `Soft light touches the ${characterName('Unmasked Sorceress')}. She does ` +
+  'not flinch.\n' +
+  dialogue(
+    'Unmasked Sorceress',
+    'So this is what it is, to be looked at without a lie.',
+  )
 
 /**
  * Learned from the Knight of Despair: reminds a fallen soul of who it was.
@@ -75,14 +84,11 @@ export class RedemptionsLight extends Spell {
     gameState.addVirtue(VIRTUE_MERCY)
     return (
       'Soft light spills from your hands across the hall. One by one the ' +
-      'ghostly warriors lower their blades and look at one another as if ' +
-      'for the first time. Then they fade, at peace.\n' +
-      'Sir Cedric watches the last of them go. Then he crosses the hall ' +
-      'and offers the knight his hand.\n' +
-      dialogue(
-        'Sir Cedric',
-        'If they can be let go, so can this. I forgive you. Get up.',
-      ) +
+      "ghostly warriors lower their blades. One puts a hand on another's " +
+      'shoulder. Then they fade, at peace.\n' +
+      `${characterName('Sir Cedric')} watches the last of them go. Then he ` +
+      'crosses the hall and offers the knight his hand.\n' +
+      speech('If they can be let go, so can this. I forgive you. Get up.') +
       '\n' +
       remembered('Mercy')
     )

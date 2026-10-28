@@ -3,7 +3,7 @@ import {
   type GameState,
   dialogue,
   effect,
-  normaliseSpokenWord,
+  saysAnyOf,
   type NameOptions,
   nameInSentence as nameReading,
 } from '@/engine'
@@ -35,6 +35,8 @@ interface Friend {
   line: string
   /** The narrated lead-in that always goes with this friend, if any. */
   ownLeadIn?: string
+  /** The item that must be carried for the friend's own lead-in to be true. */
+  ownLeadInNeeds?: string
 }
 
 const FRIENDS: Friend[] = [
@@ -53,8 +55,8 @@ const FRIENDS: Friend[] = [
     flag: FLAG_ACT4_WHISPERS_CEDRIC_NAMED,
     pronoun: 'his',
     object: 'him',
-    doing: 'is holding the gate',
-    line: 'A knight does not leave his post. Mine is the threshold. Go on, lad.',
+    doing: 'is in the hall below',
+    line: 'I am in the hall below you, Elior. I have not left. Go on up.',
   },
   {
     name: 'Nyx',
@@ -65,10 +67,15 @@ const FRIENDS: Friend[] = [
     doing: 'is keeping close',
     line: "Left? I'm right here. I never was anywhere else.",
     ownLeadIn:
-      'A small light flickers at the edge of your eye, and in your pack the ' +
-      "crystalline pendant she gave you, Nyx's Token, is warm.",
+      'The token warms against your palm. A small light flickers at the edge ' +
+      'of your eye, and in your pack the crystalline pendant she gave you, ' +
+      "Nyx's Token, is warm too.",
+    ownLeadInNeeds: "Nyx's Token",
   },
 ]
+
+/** What the whispers make of Elior naming himself, the answer of the sea. */
+const MYSELF_WORDS = ['myself', 'me', 'elior']
 
 /** The lead-ins for the first and second name said, whoever it is. */
 const LEAD_INS = [
@@ -109,29 +116,43 @@ export class Whispers extends Character {
     })
   }
 
-  /** They point at the way out: name one who stayed. */
+  /** They dare Elior to do the one thing that answers them: name one who stayed. */
   override talkTo(_gameState: GameState): string {
     return (
       'They do not answer you. They only say it again, closer: your ' +
-      'friends have left you. No one is coming. Name one who stayed, if ' +
-      'you can.'
+      'friends have left you. No one is coming. Name one who stayed. You ' +
+      'cannot.'
     )
   }
 
-  /** A friend's name is answered through the token; other words are swallowed. */
+  /**
+   * A friend's name, alone or in a sentence, is answered through the token;
+   * a sentence naming several answers the first not yet named. Grandmother
+   * and Elior himself get taunts of their own; other words are swallowed.
+   */
   override sayTo(gameState: GameState, words: string): string {
-    const word = normaliseSpokenWord(words)
-    const friend = FRIENDS.find((f) => f.words.includes(word))
+    const mentioned = FRIENDS.filter((f) => saysAnyOf(words, f.words))
+    const friend =
+      mentioned.find((f) => !gameState.getStoryFlag(f.flag)) ?? mentioned[0]
     if (!friend) {
-      if (word === 'grandmother') {
+      if (saysAnyOf(words, ['grandmother'])) {
         return (
           effect(
             'You say it into the dark, and something in you steadies — but ' +
               'she is far from here, and the whispers know it.',
-          ) + ' Name one who came with you to the gate.'
+          ) + ' She did not come to the gate, they say. Who did? No one.'
         )
       }
-      return 'The whispers swallow the word. Name one who stayed, if you can.'
+      if (saysAnyOf(words, MYSELF_WORDS)) {
+        return (
+          'The whispers like that answer. Yes, they say: you, and only you, ' +
+          'alone on a stair.'
+        )
+      }
+      return (
+        'The whispers swallow the word and go on: no one stayed. Name one, ' +
+        'if you can.'
+      )
     }
     if (!gameState.hasItem(TOKEN_NAME)) {
       return (
@@ -150,7 +171,11 @@ export class Whispers extends Character {
     }
     const named = FRIENDS.filter((f) => gameState.getStoryFlag(f.flag)).length
     gameState.setStoryFlag(friend.flag, true)
-    const leadIn = friend.ownLeadIn ?? LEAD_INS[named]
+    const ownLeadIn =
+      friend.ownLeadInNeeds && !gameState.hasItem(friend.ownLeadInNeeds)
+        ? undefined
+        : friend.ownLeadIn
+    const leadIn = ownLeadIn ?? LEAD_INS[named]
     const parts = [
       ...(leadIn ? [leadIn] : []),
       dialogue(friend.name, friend.line),

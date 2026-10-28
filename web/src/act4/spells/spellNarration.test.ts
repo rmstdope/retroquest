@@ -142,10 +142,10 @@ describe('Act IV spells narrate their effect', () => {
     const spell = new RedemptionsLight()
     expect(
       shape(spell.castOnCharacter(game.state, new ShadowOfThePast())),
-    ).toEqual(['text'])
+    ).toEqual(['text', 'dialogue'])
     game.state.setStoryFlag(FLAG_ACT4_SORCERESS_OF_LIES_COMPLETED, true)
     const out = spell.castOnCharacter(game.state, new SorceressOfLies())
-    expect(shape(out)).toEqual(['text'])
+    expect(shape(out)).toEqual(['text', 'dialogue'])
   })
 
   it("redemption's light on the warriors is read, and the silent marker closes it", () => {

@@ -1,4 +1,4 @@
-import { Room, type Exits, type GameState, clue } from '@/engine'
+import { Room, type Exits, type GameState, characterName, clue } from '@/engine'
 import { WardStoneFragment } from '../items/WardStoneFragment'
 import { GuardiansChain } from '../items/GuardiansChain'
 import { GuardiansEssence } from '../items/GuardiansEssence'
@@ -11,22 +11,31 @@ import {
   FLAG_ACT4_SHATTERED_WARD_GUARDIANS_STARTED,
 } from '../Act4StoryFlags'
 
+/** The Warden sigil on the gate arch, in Act III's words. */
+const SIGIL_SENTENCE =
+  ' On the arch behind you, under the black, an older carving shows ' +
+  'through: a sun rising over three linked rings.'
+
+/** Mira, holding the way out, in both states of the gates. */
+const MIRA_SENTENCE =
+  ` Just inside the threshold ${characterName('Mira')} keeps the way out, ` +
+  'her back to the gatepost.'
+
 /** The gates while the barrier stands and the guardians drift between the stones. */
 const GATES_BEFORE_DESCRIPTION =
-  'Towering obsidian gates loom before you, carved with writhing shadows ' +
-  'that seem to move in the corners of your vision. Three ancient ward ' +
-  'stones, left, middle and right, pulse with malevolent energy, casting ' +
-  'eerie purple light across the threshold. The air crackles with dark ' +
-  'magic, and whispers of forgotten souls echo from beyond the barrier. ' +
-  'Spectral guardians drift between the stones, their hollow eyes fixed ' +
-  'upon any who dare approach this cursed entrance.'
+  'You stand just inside the fortress gates. The ways on, north and east, ' +
+  'are barred by a thin wall of violet light, and three ward stones, left, ' +
+  'middle and right, swell and fade with it. Guardians made of shadow ' +
+  'drift between the stones, watching you.' +
+  SIGIL_SENTENCE +
+  MIRA_SENTENCE
 
 /** The gates once the stones are dark and the guardians gone. */
 const GATES_AFTER_DESCRIPTION =
-  'Towering obsidian gates loom before you, carved with writhing shadows ' +
-  'that seem to move in the corners of your vision. The ward stones stand ' +
-  'dark and silent now, and the barrier is gone. Whispers of forgotten ' +
-  'souls still echo from deep within the fortress.'
+  'You stand just inside the fortress gates. The ward stones are dark, and ' +
+  'the violet wall is gone; the ways north and east lie open.' +
+  SIGIL_SENTENCE +
+  MIRA_SENTENCE
 
 /**
  * The dark entrance to Malakar's fortress, protected by shadow guardians.
@@ -79,8 +88,8 @@ export class FortressGates extends Room {
     if (gameState.getStoryFlag(FLAG_ACT4_BARRIERS_DISABLED)) return null
     gameState.setStoryFlag(FLAG_ACT4_SHATTERED_WARD_GUARDIANS_STARTED, true)
     return clue(
-      'A shimmering barrier of dark energy throws you back. It ' +
-        'pulses in rhythm with the ward stones.',
+      'The violet wall throws you back. It swells and fades in time with ' +
+        'the ward stones.',
     )
   }
 
@@ -136,9 +145,9 @@ export class FortressGates extends Room {
       'to the flagstones. The other two stones falter, lose the count, ' +
       'and go dark with it; the barrier flickers out of time and is gone.\n\n' +
       'Without the barrier the guardians have nothing to stand on. They ' +
-      'thin to smoke and are gone, and where they drifted lies the chain ' +
-      'that bound them, and a small orb of golden light: the ' +
-      "[item_name]guardian's essence[/item_name]."
+      'thin to smoke, and where they drifted lie the ' +
+      "[item_name]guardian's chain[/item_name] that bound them and a small, " +
+      "steady light: the [item_name]guardian's essence[/item_name]."
     )
   }
 }

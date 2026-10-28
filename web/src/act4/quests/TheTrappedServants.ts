@@ -10,11 +10,11 @@ export class TheTrappedServants extends Quest {
     super({
       name: 'The Trapped Servants',
       description:
-        "Malakar's servants wander the courtyard in chains of shadow, bound to " +
-        'serve him against their will. Win their trust, and break the chains.',
+        "The king's servants walk the courtyard in chains of shadow. Win " +
+        'their trust, and break the chains.',
       completion:
         "Elior's courage earns the servants' trust, and a blessing breaks " +
-        'their chains. Freed, they offer what help they can for the trials ahead.',
+        'their chains. Freed, they leave him a pendant to light the way.',
     })
   }
 

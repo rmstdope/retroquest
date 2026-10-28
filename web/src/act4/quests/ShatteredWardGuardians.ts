@@ -10,7 +10,7 @@ export class ShatteredWardGuardians extends Quest {
     super({
       name: 'Shattered Ward Guardians',
       description:
-        'Shadow guardians and a barrier of dark energy bar the way into the ' +
+        'Shadow guardians and a wall of violet light bar the way into the ' +
         'fortress. Find what feeds them, and break their hold on the gates.',
       completion:
         "Elior's light breaks the guardians' hold on the gates. The ward " +

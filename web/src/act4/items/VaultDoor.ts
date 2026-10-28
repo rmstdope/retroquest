@@ -61,8 +61,8 @@ export class VaultDoor extends Item {
     }
     if (!gameState.getStoryFlag(FLAG_ACT4_SHADOW_OF_THE_PAST_COMPLETED)) {
       return clue(
-        "The door's runes stay dark under the amulet. " +
-          'Something in this vault is not ready to let you in.',
+        "The door's runes stay dark under the amulet. The Shadow is still " +
+          'watching you.',
       )
     }
     gameState.setStoryFlag(FLAG_ACT4_VAULT_DOOR_OPENED, true)

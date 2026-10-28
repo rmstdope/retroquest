@@ -42,7 +42,7 @@ export class KnightsRedemption extends Item {
       "The Sorceress stares at the knight's badge, and " +
         'for the first time her smile slips. Beneath the whispers you ' +
         'hear something else: a voice, very small, that is not lying.',
-      `You have learned the [spell_name]${spell.name}[/spell_name] spell! ` +
+      `You have learned [spell_name]${spell.name}[/spell_name]. ` +
         spell.description,
     ].join('\n')
   }

@@ -39,7 +39,9 @@ describe('HeartsTruth optional targets', () => {
     const malakar = new Malakar()
     const before = JSON.stringify(game.toSaveData())
     const line = spell.castOnCharacter(game.state, malakar)
-    expect(line).toContain('The Shadow is here, in the room')
+    expect(line).toContain(
+      'low and tired: the voice from your dreams. The Shadow is in him still.',
+    )
     expectMarkupWellFormed(line)
     expect(spell.castOnCharacter(game.state, malakar)).toBe(line)
     expect(JSON.stringify(game.toSaveData())).toBe(before)

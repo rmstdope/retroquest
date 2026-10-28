@@ -7,6 +7,7 @@ import { ACT4_GOLDEN_PATH } from '../Act4GoldenPath'
 import {
   FLAG_ACT4_FINAL_STAND_COMPLETED,
   FLAG_ACT4_JUSTICE_ENDING,
+  FLAG_ACT4_MALAKAR_MESSAGE_HEARD,
   FLAG_ACT4_REDEMPTION_ENDING,
   FLAG_ACT4_SACRIFICE_ENDING,
   VIRTUE_MERCY,
@@ -46,7 +47,7 @@ function spellNames(game: Game): string[] {
 
 const JUSTICE_LINE = dialogue(
   'Elior',
-  "You tore the world, Malakar. You drained the king. You sent a man to hunt a child in Willowbrook, and you let Sir Cedric take the blame. I will not pretend you didn't.",
+  "You tore the world, Malakar. You drained the king. You sent a man to hunt a child in Willowbrook, and you had Sir Cedric framed for it. I will not pretend you didn't.",
 )
 
 describe('the endings are always open', () => {
@@ -79,7 +80,7 @@ describe('Redemption', () => {
   it('hints at something gentler, and closes the other roads', () => {
     const game = healed(TWO_TRUTHS)
     expect(executeCommands(game, ['use ancient amulet on wound'])).toContain(
-      'The wound waits for something gentler than the amulet. Malakar looks up at you, as if he is waiting to hear something.',
+      'The wound waits for something gentler than the amulet. Malakar looks up at you like a man waiting to be forgiven.',
     )
     expect(executeCommands(game, ['say justice to malakar'])).toContain(
       'Malakar has drunk the elixir. That road is closed now.',
@@ -88,7 +89,7 @@ describe('Redemption', () => {
       'Malakar has drunk the elixir. That road is closed now.',
     )
     expect(executeCommands(game, ['say hello to malakar'])).toContain(
-      'Malakar only waits.',
+      '[character_name]Malakar[/character_name] looks at you the way the knight looked at [character_name]Sir Cedric[/character_name] in the hall, before [character_name]Sir Cedric[/character_name] gave him his hand.',
     )
   })
 
@@ -96,13 +97,15 @@ describe('Redemption', () => {
     const plain = healed()
     const text = executeCommands(plain, ['say forgiveness to malakar'])
     expect(text).toContain(dialogue('Elior', 'I forgive you.'))
-    expect(text).toContain('You have learned the Forgiveness spell!')
+    expect(text).toContain(
+      'You have learned [spell_name]forgiveness[/spell_name].',
+    )
     expect(text.startsWith(dialogue('Elior', 'I forgive you.'))).toBe(true)
     expect(text.indexOf('The words are harder')).toBeLessThan(
-      text.indexOf('You have learned the Forgiveness spell!'),
+      text.indexOf('You have learned [spell_name]forgiveness[/spell_name].'),
     )
     expect(
-      text.indexOf('You have learned the Forgiveness spell!'),
+      text.indexOf('You have learned [spell_name]forgiveness[/spell_name].'),
     ).toBeLessThan(text.indexOf('You would forgive me.'))
     expectMarkupWellFormed(text)
     expectDialogueSpeaker(text, 'Malakar')
@@ -156,8 +159,9 @@ describe('Redemption', () => {
       expect(executeCommands(g, ['talk to malakar'])).toContain(
         'Go home, Elior. Tell Mira I am sorry, and that I remember her.',
       )
+      expect(g.state.getStoryFlag(FLAG_ACT4_MALAKAR_MESSAGE_HEARD)).toBe(true)
       expect(executeCommands(g, ['talk to king alden'])).toContain(
-        'You saved my kingdom, and somehow him as well. Go home.',
+        'You saved my kingdom, and somehow him as well. I would not have known how.',
       )
       expect(executeCommands(g, ['cast forgiveness on wound'])).toContain(
         'There is no wound left to forgive.',
@@ -166,7 +170,7 @@ describe('Redemption', () => {
         'There is nothing left to say. It is over.',
       )
       expect(executeCommands(g, ['use ancient amulet'])).toContain(
-        'The amulet is only a locket now, warm and quiet.',
+        'The amulet is dark now, and still warm.',
       )
       expect(executeCommands(g, ['use ancient amulet on wound'])).toContain(
         'The wound is gone.',
@@ -251,7 +255,7 @@ describe('Justice', () => {
     expect(text).not.toContain('Then keep something.')
     expect(text).toContain('I am sorry. Tell them— no. They know.')
     const song =
-      'The last of him to go is his voice, low: "…the field will wake." Then the seal is shut.'
+      'The last of him to go is his voice, low: [dialogue]…the field will wake.[/dialogue] Then the seal is shut.'
     expect(text.indexOf(song)).toBeGreaterThan(text.indexOf('They know.'))
     expect(text.indexOf(song)).toBeLessThan(text.indexOf('Then it falls to me'))
     expect(text).toContain('Then it falls to me to set right what he broke.')
@@ -263,7 +267,7 @@ describe('Justice', () => {
       'Malakar is gone into the seal.',
     )
     expect(executeCommands(game, ['talk to king alden'])).toContain(
-      'Go home, Elior. The kingdom will remember what you did here.',
+      'The kingdom will remember what you did here, farmer. I will see that it does.',
     )
     expect(spellNames(game)).not.toContain('Forgiveness')
     expect(spellNames(game)).toContain('bless')
@@ -288,11 +292,11 @@ describe('Sacrifice', () => {
     )
     expect(said).not.toContain('Everything you have learned')
     expect(said).toContain(
-      'No. Your parents poured themselves into that wound once already. It does not get to have you too.',
+      'No. Your parents gave themselves to hold that wound shut. It does not get to have you too.',
     )
     expect(said).toContain('The open amulet grows heavy in your hand, ready.')
     expect(executeCommands(game, ['say sacrifice to malakar'])).not.toContain(
-      'Your parents poured themselves',
+      'Your parents gave themselves',
     )
     expect(spellNames(game)).toContain('bless')
     const text = executeCommands(game, ['use ancient amulet on wound'])
@@ -305,13 +309,13 @@ describe('Sacrifice', () => {
     expect(text.indexOf(keep)).toBeGreaterThan(text.indexOf(rise))
     expect(text.indexOf(press)).toBeGreaterThan(text.indexOf(keep))
     expect(text).toContain(
-      'When it is done, one small spell is still in you: grow, the one you did not inherit. You read it from a stone in a glade, and it was never theirs.',
+      'When it is done, one small spell is still in you: [spell_name]grow[/spell_name], the one you read from a stone in a glade.',
     )
     expect(text).not.toContain('the smallest')
     expect(text).toContain('Your magic is gone. Only grow remains.')
     expect(text).toContain('He will answer to me, and he will live to do it.')
     expect(text).toContain(
-      'You gave our gift back to close what he opened, and kept the one thing that was yours. That was always the best of you.',
+      'You gave our gift back to close what he opened, and kept the one thing that was yours.',
     )
     expectStoryFlag(game.state, FLAG_ACT4_SACRIFICE_ENDING, true)
     expectQuestCompleted(game.state, 'The Final Stand')
@@ -323,7 +327,7 @@ describe('Sacrifice', () => {
       'You gave it all away. For them. For me.',
     )
     expect(executeCommands(game, ['talk to king alden'])).toContain(
-      'Go home, farmer. You have earned your field.',
+      'You have earned your field, farmer. No one will take it from you.',
     )
     expect(game.state.currentRoom.description).toContain(
       'Malakar kneels before him, grey and powerless',
@@ -338,7 +342,7 @@ describe('Sacrifice colouring', () => {
   it('adds Aren’s line only after two selfless moments', () => {
     const line = 'We watched you give, again and again'
     const lysa =
-      'You gave our gift back to close what he opened, and kept the one thing that was yours. That was always the best of you.'
+      'You gave our gift back to close what he opened, and kept the one thing that was yours.'
     const play = (virtues: string[]): string => {
       const game = opened(virtues)
       executeCommands(game, ['use lifelight elixir on prison'])
@@ -438,5 +442,84 @@ describe('after the endings and around them', () => {
     const grow = new Grow()
     expect(grow.castSpell(game.state)).toContain('nothing else happens')
     expect(grow.castOnItem(game.state, new Wound())).toBeTypeOf('string')
+  })
+})
+
+describe('the ending words, heard in a sentence', () => {
+  function healed(): Game {
+    const game = opened()
+    executeCommands(game, ['use lifelight elixir on malakar'])
+    return game
+  }
+
+  it.each(['I forgive you', 'forgive', 'I forgive you, Malakar'])(
+    'takes %s as forgiveness',
+    (words) => {
+      const game = healed()
+      expect(executeCommands(game, [`say ${words} to malakar`])).toContain(
+        'You would forgive me. They would have too.',
+      )
+      expect(spellNames(game)).toContain('Forgiveness')
+    },
+  )
+
+  it.each([
+    'I will never forgive you',
+    'I do not forgive you',
+    "I can't forgive you",
+  ])('does not take %s as forgiveness', (words) => {
+    const game = healed()
+    expect(executeCommands(game, [`say ${words} to malakar`])).not.toContain(
+      'You would forgive me.',
+    )
+    expect(spellNames(game)).not.toContain('Forgiveness')
+  })
+
+  it('points at forgiveness, first of the three roads, before the elixir', () => {
+    const text = executeCommands(opened(), ['use ancient amulet on wound'])
+    expect(text).toContain(
+      'you could forgive him, as [character_name]Sir Cedric[/character_name] forgave the knight',
+    )
+    expect(text.indexOf('forgive him')).toBeLessThan(text.indexOf('justice'))
+  })
+})
+
+describe('the farewell', () => {
+  function redeemed(): string {
+    const game = opened()
+    executeCommands(game, [
+      'use lifelight elixir on malakar',
+      'say forgiveness to malakar',
+    ])
+    return executeCommands(game, ['cast forgiveness on wound'])
+  }
+
+  it('knows Elior has seen his parents in pictures too', () => {
+    expect(redeemed()).toContain(
+      'two shapes you have only ever seen in pictures and memories',
+    )
+  })
+
+  it('leaves the amulet dark and warm, never a locket', () => {
+    const text = redeemed()
+    expect(text).toContain(
+      'The amulet in your hand is dark now, and still warm.',
+    )
+    expect(text).not.toContain('locket')
+  })
+
+  it('gives Alden a shorter truth line after two truth moments', () => {
+    const game = opened(TWO_TRUTHS)
+    executeCommands(game, [
+      'use lifelight elixir on prison',
+      'say justice to malakar',
+    ])
+    const text = executeCommands(game, ['use ancient amulet on wound'])
+    expect(text).toContain(
+      dialogue(
+        'King Alden',
+        'You named every crime and did not add one. Few men in my court could do that.',
+      ),
+    )
   })
 })
