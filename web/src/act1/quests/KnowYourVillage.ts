@@ -7,9 +7,11 @@ export class KnowYourVillageQuest extends Quest {
     super({
       name: 'Know your village',
       description:
-        'You are encouraged to explore and get to know every corner of Willowbrook. The village holds many secrets for you to discover.',
+        'Something pulls at you to walk every lane of Willowbrook, ' +
+        'and to look properly at the places you have passed a thousand times.',
       completion:
-        'You have explored every corner of Willowbrook. The village feels more like home, and you are ready for what lies ahead.',
+        'You have walked every corner of Willowbrook. ' +
+        'The pull has gone quiet, and the village feels like home.',
     })
   }
 
