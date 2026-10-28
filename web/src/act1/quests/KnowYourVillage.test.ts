@@ -3,6 +3,7 @@ import { Game } from '@/engine'
 import { Act1 } from '../Act1'
 import { TheDream } from '../rooms/TheDream'
 import { executeCommands } from '@/testing/gameHelpers'
+import { KnowYourVillageQuest } from './KnowYourVillage'
 
 const QUEST = 'Know your village'
 
@@ -26,5 +27,13 @@ describe('Know your village', () => {
     game.state.settleQuests()
     expect(game.state.visitedRooms).not.toContain('The Dream')
     expect(game.state.completedQuests.map((q) => q.name)).toContain(QUEST)
+  })
+
+  it("reads as Elior's own urge to explore, never an instruction to the player", () => {
+    const quest = new KnowYourVillageQuest()
+    for (const text of [quest.description, quest.completion]) {
+      expect(text).toContain('Willowbrook')
+      expect(text).not.toMatch(/encouraged|you should|you need to/i)
+    }
   })
 })
