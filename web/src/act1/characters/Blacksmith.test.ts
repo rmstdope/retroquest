@@ -77,7 +77,9 @@ describe('Borin sharpening the knife', () => {
 
     const response = executeCommands(game, ['give coin to blacksmith'])
 
-    expect(response).toContain('Bring the blade as well.')
+    expect(response).toContain(
+      'Bring the [item_name]dull knife[/item_name] as well.',
+    )
     expect(game.state.hasItem('coin')).toBe(true)
   })
 

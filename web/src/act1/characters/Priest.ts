@@ -115,8 +115,8 @@ export class Priest extends Character {
     }
     if (gameState.inventory.some((item) => item instanceof Locket)) {
       return (
-        `The ${priest} looks at the locket in your hand, at the tree and ` +
-        'the two moons on it, and then up at the door. ' +
+        `The ${priest} looks at the locket in your hand, at the tree under ` +
+        'two moons on it, and then up at the door. ' +
         speech(
           'Thank you for the light, child. Show that to your ' +
             `${characterName('grandmother')}. ` +

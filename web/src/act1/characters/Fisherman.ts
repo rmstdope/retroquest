@@ -101,7 +101,7 @@ export class Fisherman extends Character {
           `The ${characterName('fisherman')} notices ` +
           'your [item_name]fishing rod[/item_name]. ' +
           speech(this.fishingLesson(gameState)) +
-          '\nHe shows you how to hold it, and where. ' +
+          ' ' +
           speech(
             "By the reeds. That's where they hide. Then you wait, lad. " +
               "Fish don't come to them as hurry.",

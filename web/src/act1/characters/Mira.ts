@@ -67,8 +67,8 @@ export class Mira extends Character {
           `${characterName(this.name)} looks you over, from your boots up. ` +
           speech(
             "Not yet. I'll not send you out half-dressed and half-taught. " +
-              "Come back when you're ready for the road, and when the " +
-              `${characterName('priest')} has said his blessing over you.`,
+              "Come back when you're ready for the road, with a blessing " +
+              'on you for it.',
           )
         )
       case 'quest_complete_amulet_given':
@@ -198,9 +198,9 @@ export class Mira extends Character {
         speech(
           'Now, the road. ' +
             "You'll need warmth, protection, food, boots and a [item_name]map[/item_name]. " +
-            'And learn what else this village can teach you; the ' +
-            `${characterName('priest')} will want to bless you before you ` +
-            "go. When you're ready, the [item_name]ancient amulet[/item_name] " +
+            'And learn what else this village can teach you, and go with ' +
+            "a blessing on you. When you're ready, the " +
+            '[item_name]ancient amulet[/item_name] ' +
             'is yours.',
         )
       )
@@ -239,7 +239,7 @@ export class Mira extends Character {
     gameState.setStoryFlag(FLAG_MIRA_FOREST_REMARK_SAID, true)
     return (
       speech(
-        'A fox kit came past my door this morning with a bit of snare cord ' +
+        'A fox kit came past my door this morning with a bit of snare wire ' +
           'still round its leg. I took it off.',
       ) +
       ' She glances at you. ' +

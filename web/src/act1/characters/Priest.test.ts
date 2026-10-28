@@ -59,7 +59,7 @@ describe('Priest dialogue', () => {
 
     const response = executeCommands(game, ['talk to priest'])
 
-    expect(response).toContain('the tree and the two moons on it')
+    expect(response).toContain('the tree under two moons on it')
     expect(response).toContain('[character_name]grandmother[/character_name]')
   })
 

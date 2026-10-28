@@ -288,3 +288,18 @@ describe('Mira and the cloaked stranger', () => {
     expect(response).toContain('in a grey cloak, asking after this')
   })
 })
+
+describe('Mira and the blessing for the road', () => {
+  it('asks for a blessing on Elior without sending him to the priest for it', () => {
+    const game = gameInMirasHut()
+    game.state.addItemToInventory(new RareFlower())
+
+    const taught = executeCommands(game, ['give rare flower to mira'])
+    const notYet = executeCommands(game, ['talk to mira'])
+
+    for (const answer of [taught, notYet]) {
+      expect(answer).toContain('a blessing on you')
+      expect(answer).not.toContain('[character_name]priest[/character_name]')
+    }
+  })
+})

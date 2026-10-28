@@ -180,7 +180,7 @@ export class Blacksmith extends Character {
         `[item_name]${item.name}[/item_name]. ` +
         speech(
           "A coin's no use to me without something to put an edge on, " +
-            'lad. Bring the blade as well.',
+            'lad. Bring the [item_name]dull knife[/item_name] as well.',
         )
       )
     } else if (item instanceof RuneToken) {
