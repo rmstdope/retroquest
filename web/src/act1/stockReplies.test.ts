@@ -28,12 +28,14 @@ const REFUSALS: [string, () => Character, string][] = [
   [
     'Tilda',
     () => new Villager(),
-    `${characterName('Tilda')} shakes her head politely. It isn't something she needs.`,
+    `${characterName('Tilda')} looks it over with interest and gives it back. ` +
+      speech("Don't go giving your things away, love. People will talk."),
   ],
   [
     'the priest',
     () => new Priest(),
-    `The ${characterName('priest')} shakes his head politely. It isn't something he needs.`,
+    `The ${characterName('priest')} shakes his head and folds your fingers back over it. ` +
+      speech('Keep it, child. The road will want it more than I do.'),
   ],
   [
     'the deer',
@@ -43,8 +45,8 @@ const REFUSALS: [string, () => Character, string][] = [
   [
     'Grandmother',
     () => new Grandmother(),
-    `${characterName('Grandmother')} turns it over in her hands. ` +
-      speech("I'm not sure what to do with this, dear."),
+    `${characterName('Grandmother')} turns it over in her hands and gives it back. ` +
+      speech('Keep it, love. My shelves are full enough.'),
   ],
   [
     'Mira',
@@ -56,24 +58,26 @@ const REFUSALS: [string, () => Character, string][] = [
     'the blacksmith',
     () => new Blacksmith(),
     `The ${characterName('blacksmith')} gives it a glance and hands it back. ` +
-      speech("I don't have a use for this, lad."),
+      speech("Can't melt it, can't mend it. No use to me, lad."),
   ],
   [
     'the fisherman',
     () => new Fisherman(),
-    `The ${characterName('fisherman')} eyes it with mild curiosity, then shrugs.`,
+    `The ${characterName('fisherman')} eyes it, then shrugs. ` +
+      speech("Won't catch anything with that, lad."),
   ],
   [
     'the merchant',
     () => new Merchant(),
     `The ${characterName('merchant')} weighs it in his palm and hands it back. ` +
-      speech('Not interested in that, friend.'),
+      speech("I'd not get a copper for that in Greendale, friend."),
   ],
   [
     'Patches',
     () => new Patches(),
     `${characterName('Patches')} sniffs at your offering from the shadows and stays put. ` +
-      'Perhaps she would rather hear her name.',
+      "Whatever it is, it isn't worth leaving the crates for. " +
+      "Her ears turn toward you, though, as if she's waiting to be called.",
   ],
 ]
 
@@ -106,7 +110,11 @@ describe('Act I stock replies', () => {
     game.state.setStoryFlag(FLAG_PATCHES_RETURNED, true)
     const shopkeeper = new Shopkeeper()
     const reply = withoutLabel(shopkeeper.buyItem(game.state, 'dragon'))
-    expect(reply).toBe(speech("Sorry, friend, that's not something I carry."))
+    expect(reply).toBe(
+      speech(
+        'Not something I carry, lad. Not since the caravans stopped, anyway.',
+      ),
+    )
     expect(withoutLabel(shopkeeper.buyItem(game.state, 'unicorn'))).toBe(reply)
   })
 

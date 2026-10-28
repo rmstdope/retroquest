@@ -37,10 +37,10 @@ export class Grandmother extends Character {
     super({
       name: 'grandmother',
       description:
-        `${characterName('Elior')}'s wise and loving ` +
-        `${characterName('grandmother')}, always ready with advice and a ` +
-        `gentle smile. She has raised ${characterName('Elior')} since his ` +
-        'parents vanished.',
+        `Your ${characterName('grandmother')}, flour on her apron and her ` +
+        'sleeves pushed up. She has raised you since your parents went ' +
+        'away, and she keeps her hands busy when she would rather not ' +
+        'answer.',
     })
   }
 
@@ -63,25 +63,20 @@ export class Grandmother extends Character {
     if (dreamToTell) dialogue = Grandmother.HUMMING_AT_THE_HEARTH
     if (this.dialogueState.initial_talk) {
       dialogue += dialogue ? '\n' : ''
-      dialogue += speech(
-        `Oh, ${characterName('Elior')}, my dear. The village... ` +
-          "it feels a bit on edge lately, doesn't it? \n" +
-          'Willowbrook has always been a peaceful place. The [room_name]Village ' +
-          'Square[/room_name] is usually bustling, though folks seem more hushed ' +
-          'these days. \n' +
-          "If you're needing anything, the [room_name]General Store[/room_name] " +
-          `usually has a bit of everything. Old Man ${characterName('Hemlock')}, the ` +
-          `${characterName('shopkeeper')}, sees and hears a lot, too.\n` +
-          `And if it's wisdom or a remedy you seek, ${characterName('Mira')} ` +
-          'in her hut to the north of the square is the one to talk to. She has a ' +
-          'way with herbs and... other things.\n' +
-          `The ${characterName('Blacksmith')} down by the south end, ` +
-          "he's a sturdy fellow, always hammering away. Keeps the tools sharp, " +
-          'and his spirits, mostly.\n' +
-          "Just... be observant, child. There's more to this world than meets the " +
-          `eye. And you, ${characterName('Elior')}, you have a good heart. ` +
-          'Remember that.',
-      )
+      dialogue +=
+        speech("There you are. Sit down a minute, the bread's nearly done.") +
+        '\nShe does not sit down herself.\n' +
+        speech(
+          "The village is on edge, you'll have noticed. Folk keep their " +
+            'voices down in the square these days, and nobody will say why.\n' +
+            `If you're going out, call on ${characterName('Mira')}, north of ` +
+            'the square. She has a way with herbs, and with... other things. ' +
+            `Old Man ${characterName('Hemlock')} at the ` +
+            '[room_name]General Store[/room_name] hears everything, and ' +
+            `${characterName('Borin')} at the forge keeps the tools sharp.\n` +
+            `You've a good heart, ${characterName('Elior')}. ` +
+            "Don't let anyone talk you out of it.",
+        )
       this.dialogueState.initial_talk = false // Change state after initial talk
     }
 
@@ -110,15 +105,13 @@ export class Grandmother extends Character {
       dialogue =
         this.journalTale() +
         '\n\n' +
-        ("You recall your father's writings on the " +
-          '[spell_name]Revive[/spell_name] spell. The knowledge feels familiar.')
+        'You already have it by heart: his words, and the way she told them.'
     }
 
     if (!dialogue) {
       // If no other dialogue was triggered
       dialogue = speech(
-        `It's good to see you, ${characterName('Elior')}. ` +
-          'Is there something you need?',
+        "Back again? There's bread on the board, if you're hungry.",
       )
     }
 
@@ -155,21 +148,19 @@ export class Grandmother extends Character {
 
   /** What she tells of Elior's father's journal and the revive spell. */
   private journalTale(): string {
-    return speech(
-      'That [item_name]journal[/item_name] of yours... your father was ' +
-        'a great writer, you know. He wrote of many things, some of which I am ' +
-        'only now beginning to understand.\n' +
-        'He sensed a darkness, a shadow stretching over Eldoria, long before ' +
-        'others did. He believed it was tied to the old tales, to the whispers of ' +
-        'forgotten magic.\n' +
-        'He even researched a peculiar enchantment, one that could supposedly ' +
-        'breathe life back into things on the very brink... a ' +
-        "'[spell_name]revive[/spell_name]' " +
-        'spell, he called it.\n' +
-        'He thought it might be a key, a way to mend what the encroaching ' +
-        'darkness sought to break. Keep your eyes open, ' +
-        `${characterName('Elior')}. What you've read might be more than ` +
-        'just stories.',
+    return (
+      'She wipes her hands and looks at the [item_name]journal[/item_name] ' +
+      'under your arm. ' +
+      speech(
+        'Your father wrote in one like that every night, at this table. ' +
+          'Half of it I never understood.\n' +
+          'He thought the land was getting sick long before anyone else did. ' +
+          'And there was one thing he kept coming back to: a way to call a ' +
+          "thing back when it's nearly gone. [spell_name]Revive[/spell_name], " +
+          "he called it. He'd try it on my herbs when they wilted.",
+      ) +
+      '\nShe almost smiles. ' +
+      speech('Sometimes I think it worked.')
     )
   }
 
@@ -177,9 +168,9 @@ export class Grandmother extends Character {
   private teachRevive(gameState: GameState): string {
     gameState.knownSpells.push(new ReviveSpell())
     return (
-      'As she speaks of it, the words your father wrote seem to ' +
-      'settle in your mind. \nYou feel a new understanding... You have ' +
-      'learned the [spell_name]Revive[/spell_name] spell!'
+      'As she speaks, the words your father wrote come back to you, and ' +
+      'this time they stay.\n' +
+      'You have learned [spell_name]revive[/spell_name].'
     )
   }
 
@@ -204,8 +195,8 @@ export class Grandmother extends Character {
     if (!gameState.getStoryFlag(FLAG_MAGIC_FULLY_UNLOCKED)) return null
     if (gameState.getStoryFlag(FLAG_GRANDMOTHER_BAKED_BREAD)) {
       return speech(
-        'How are your preparations coming along, dear? Mind you take ' +
-          'everything you need. The road is long, and I want you warm and fed.',
+        "Packed yet? Don't tell me you'll manage. You'll manage cold and " +
+          'hungry. I want you warm and fed, do you hear?',
       )
     }
     gameState.setStoryFlag(FLAG_GRANDMOTHER_BAKED_BREAD, true)
@@ -225,7 +216,7 @@ export class Grandmother extends Character {
           'I baked this morning; take this for the way.',
       ) +
       '\n' +
-      `You received a [item_name]${bread.name}[/item_name]!`
+      `You receive a [item_name]${bread.name}[/item_name].`
     )
   }
 
@@ -258,12 +249,15 @@ export class Grandmother extends Character {
       `${characterName('Patches')} peers out of your arms, and your ` +
       `${characterName('grandmother')} reaches out to scratch her ears. ` +
       speech(
-        `${characterName('Hemlock')}'s ${characterName('Patches')}! The poor wee thing, ` +
-          "she's all dust and bones. She's taken to you, hasn't she?\n" +
-          'With you off on the road soon, this cottage will be terribly ' +
-          "quiet. If you'd have her stay with me, you need only say so, and " +
-          `I'll square it with ${characterName('Hemlock')} myself. ` +
-          "Or carry her home to him; he'll be worried sick.",
+        `${characterName('Hemlock')}'s ${characterName('Patches')}! ` +
+          "Poor thing, she's all dust and bones.",
+      ) +
+      '\nShe keeps scratching a while longer than she needs to.\n' +
+      speech(
+        'With you off on the road soon, this cottage will be very quiet. ' +
+          "If you'd have her stay with me, say so, and I'll square it with " +
+          `${characterName('Hemlock')} myself. Or carry her home to him. ` +
+          "He'll be worried sick.",
       )
     )
   }
@@ -329,20 +323,17 @@ export class Grandmother extends Character {
             'me from my mother, all the way back to the founders, so the old ' +
             'ones said. I thought she took it with her when she left.',
         ) +
-        '\nShe closes her hand around it for a moment. ' +
+        '\nShe closes her hand around it for a moment. Then she goes to the ' +
+        'chest at the foot of her bed and takes out something folded in ' +
+        'paper. ' +
         speech(
-          'She said it would keep you safe. And this... she wanted you to ' +
-            'have this when you were old enough to understand its importance.',
+          "She left this with me the week before she went. 'When he's " +
+            "grown,' she said. I've never known when that was.",
         ) +
+        '\nShe looks at you. ' +
+        speech("I suppose it's now.") +
         '\n' +
-        (`${characterName('Grandmother')} hands you a finely made [item_name]` +
-          travelCloak.name +
-          '[/item_name].\n' +
-          speech(
-            `May it protect you on your journeys, ${characterName('Elior')}.`,
-          )) +
-        '\n' +
-        `You received a [item_name]${travelCloak.name}[/item_name]!`
+        `You receive a [item_name]${travelCloak.name}[/item_name].`
       )
     } else if (
       item instanceof WildBerries &&
@@ -353,11 +344,11 @@ export class Grandmother extends Character {
       gameState.removeItemFromInventory(item.name)
       return (
         speech(
-          `Oh, [item_name]${item.name}[/item_name]! ` +
-            "Thank you, dear. These look lovely. I'll make a pie later.",
+          `Look at you: [item_name]${item.name}[/item_name], and your ` +
+            'fingers purple to the knuckle, same as when you were six.',
         ) +
-        ` ${characterName('Grandmother')} smiles warmly. ` +
-        speech("It's the little things that brighten the day, isn't it?")
+        ' She tips them into a bowl. ' +
+        speech("I'll make a pie. You'll be here to eat it, I hope.")
       )
     } else if (
       item instanceof WildBerries &&
@@ -365,46 +356,44 @@ export class Grandmother extends Character {
     ) {
       // Remove WildBerries from inventory
       gameState.removeItemFromInventory(item.name)
-      return speech(
-        `More [item_name]${item.name}[/item_name]? ` +
-          'You are too ' +
-          `kind, ${characterName('Elior')}. Thank you.`,
-      )
+      return speech("More? That's two pies, then. Or one very large one.")
     } else if (item instanceof FadedPhotograph) {
       if (!gameState.getStoryFlag(FLAG_READ_PHOTO_MESSAGE)) {
         return (
-          `Your ${characterName('grandmother')} takes the photograph, her eyes misty with memory. ` +
+          `Your ${characterName('grandmother')} takes the photograph and ` +
+          'holds it close to the window. ' +
           speech(
-            'This was taken long ago, before the troubles began. Your parents were so ' +
-              `full of hope... They loved you dearly, ${characterName('Elior')}. ` +
-              'I miss them every day.',
+            "The three of you. You'd not have been two. Your mother wouldn't " +
+              "stand still for it; that's why she's half a blur.",
           ) +
-          ' She gently returns the photo to you, lost in thought.'
+          '\nShe hands it back, and turns to the bread.'
         )
       }
       gameState.setStoryFlag(FLAG_TALKED_TO_GRANDMOTHER_ABOUT_PHOTO, true)
       return (
-        `Your ${characterName('grandmother')} studies the back of the photograph, her expression growing ` +
-        'serious. ' +
+        `Your ${characterName('grandmother')} turns the photograph over, ` +
+        'and her thumb rests on the writing. ' +
         speech(
-          'You found the message, then? Your parents... ' +
-            'they were involved in something much bigger than any of us realized. ' +
-            'There is a darkness in Eldoria, and your family is tied to it. There ' +
-            `is a secret, ${characterName('Elior')} — a truth you must uncover. ` +
-            "Promise me you'll be careful.",
+          "That's her hand. She always wrote as if the ink were running out.",
+        ) +
+        '\nFor a while she says nothing. ' +
+        speech(
+          `Your parents didn't just leave, ${characterName('Elior')}. ` +
+            'They went toward something. I begged them not to.',
         ) +
         '\nShe hands the photograph back. ' +
         speech(
           'Your mother loved the river. If anyone remembers what she did ' +
             `there, it's the old ${characterName('fisherman')} down at the ` +
-            '[room_name]Riverbank[/room_name].',
+            "[room_name]Riverbank[/room_name]. Promise me you'll be careful.",
         )
       )
     }
 
     return (
-      `${characterName('Grandmother')} turns it over in her hands. ` +
-      speech("I'm not sure what to do with this, dear.")
+      `${characterName('Grandmother')} turns it over in her hands and gives ` +
+      'it back. ' +
+      speech('Keep it, love. My shelves are full enough.')
     )
   }
 }

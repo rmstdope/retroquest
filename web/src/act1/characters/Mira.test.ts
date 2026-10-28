@@ -221,8 +221,7 @@ describe('Mira and the rune token from the well', () => {
 
 describe('Mira and the fox kit', () => {
   const REMARK =
-    'The forest has been whispering about you. A small red thing, running ' +
-    'free that ought not to be. That was kindly done, ' +
+    "It didn't get out of that snare on its own. That was kindly done, " +
     '[character_name]Elior[/character_name].'
 
   it('says nothing about the forest until the kit has been freed', () => {
@@ -242,11 +241,11 @@ describe('Mira and the fox kit', () => {
     expect(first.indexOf('You speak with')).toBeLessThan(first.indexOf(REMARK))
     expect(first).not.toContain('tilts her head')
     expect(first.indexOf(REMARK)).toBeLessThan(
-      first.indexOf('Welcome, [character_name]Elior'),
+      first.indexOf('Come in, mind the sage.'),
     )
     expectDialogueSpeaker(first, 'Mira')
-    expect(second).not.toContain('whispering')
-    expect(second).toContain('Welcome, [character_name]Elior')
+    expect(second).not.toContain('snare')
+    expect(second).toContain('Come in, mind the sage.')
   })
 
   it('also precedes the post-amulet line, whenever in the act the kit was freed', () => {
@@ -257,6 +256,35 @@ describe('Mira and the fox kit', () => {
     const answer = executeCommands(game, ['talk to mira'])
 
     expect(answer).toContain(REMARK)
-    expect(answer).toContain('The journey of a thousand miles')
+    expect(answer).toContain('Still here?')
+  })
+})
+
+describe('Mira on the land and the king', () => {
+  it('calls the sick fields and the sick king one wound when Elior brings the three signs', () => {
+    const game = gameInMirasHut()
+    game.state.setStoryFlag(FLAG_INVESTIGATED_WITHERED_CROPS, true)
+    game.state.setStoryFlag(FLAG_VILLAGER_TALKED_TO, true)
+    game.state.setStoryFlag(FLAG_WELL_EXAMINED, true)
+
+    const response = executeCommands(game, ['talk to mira'])
+
+    expect(response).toContain('They say the king is ill')
+    expect(response).toContain("I think it's one wound")
+    expectDialogueSpeaker(response, 'Mira')
+  })
+})
+
+describe('Mira and the cloaked stranger', () => {
+  it('says, as she hands over the amulet, that a man in a grey cloak came asking after it', () => {
+    const game = gameInMirasHut()
+    game.state.addItemToInventory(new RareFlower())
+    executeCommands(game, ['give rare flower to mira'])
+    completeJourneyPreparations(game.state)
+
+    const response = executeCommands(game, ['talk to mira'])
+
+    expect(response).toContain('A man came to my door')
+    expect(response).toContain('in a grey cloak, asking after this')
   })
 })

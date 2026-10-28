@@ -20,9 +20,9 @@
     "text": "The Dream"
   },
   {
-    "key": "04f582d34caddd",
+    "key": "0fdd7fd9e8f8ed",
     "speaker": "narrator",
-    "text": "Dark, and a storm in it. Rain drives against shutters you cannot see, and the thunder comes so close that the dark itself shakes. Shadows move through it the way smoke moves. A hand, a man’s hand, lifts a child out of the dark and holds it against a shoulder, and then the dark has them both. Somewhere a slow tune climbs three notes and settles home again. Among the shadows a figure stands, tall and without a face, too far to reach and too near to be anything but real. Its whisper is at the edge of hearing, and it is your name."
+    "text": "It is dark, and it is raining hard. You hear it beating on shutters, though you cannot see any. Thunder breaks so close that the dark shakes with it. Shadows drift past like smoke. A man’s hand reaches out of the dark, lifts a child and holds it against his shoulder, and then both of them are gone. Somewhere a slow tune climbs three notes and settles home again. A tall figure stands among the shadows. It has no face you can find. It is too far away to reach, and too close to be only a dream. It is whispering, at the very edge of hearing, and what it whispers is your name."
   },
   {
     "key": "136e4c997d932c",
@@ -30,14 +30,19 @@
     "text": "You answer it. You do not know with what: your own name back, or the question under it."
   },
   {
-    "key": "125684d214ec05",
+    "key": "13ab0a58c93685",
     "speaker": "narrator",
-    "text": "The whisper comes once more, closer than the thunder, and this time there are words in it: …and let them rest… Then your name, and the dark lets go of you."
+    "text": "The whisper comes once more, closer than the thunder, and this time there are words in it."
   },
   {
-    "key": "15665cf0c1ce46",
+    "key": "16b4d172a726df",
+    "speaker": "voice",
+    "text": "…and let them rest… Elior."
+  },
+  {
+    "key": "068dd35b0f517b",
     "speaker": "narrator",
-    "text": "You wake in your own bed. The storm is gone and there is grey morning in the curtains. Your heart is going hard. The tune is still going too, thin and near: someone is humming it, out by the hearth. Three words are already slipping, and you write them down before they can go."
+    "text": "The dark lets go of you, and you wake in your own bed. The storm is gone and there is grey morning in the curtains. Your heart is going hard. The tune is still going too, thin and near: someone is humming it, out by the hearth. Three words are already slipping, and you write them down before they can go."
   },
   {
     "key": "0c2b48f3e89ded",
@@ -145,14 +150,24 @@
     "text": "A well-used brass lantern. Its glass is clean and the wick is fresh, ready to light up the darkest corners."
   },
   {
-    "key": "0666f53f8ad71a",
+    "key": "1638fe58e0bba6",
     "speaker": "grandmother",
-    "text": "Oh, Elior, my dear. The village... it feels a bit on edge lately, doesn't it? Willowbrook has always been a peaceful place. The Village Square is usually bustling, though folks seem more hushed these days. If you're needing anything, the General Store usually has a bit of everything. Old Man Hemlock, the shopkeeper, sees and hears a lot, too. And if it's wisdom or a remedy you seek, Mira in her hut to the north of the square is the one to talk to. She has a way with herbs and... other things. The Blacksmith down by the south end, he's a sturdy fellow, always hammering away. Keeps the tools sharp, and his spirits, mostly. Just... be observant, child. There's more to this world than meets the eye. And you, Elior, you have a good heart. Remember that."
+    "text": "There you are. Sit down a minute, the bread's nearly done."
   },
   {
-    "key": "06a824d7accd07",
+    "key": "16573e0a17e838",
     "speaker": "narrator",
-    "text": "Elior's wise and loving grandmother, always ready with advice and a gentle smile. She has raised Elior since his parents vanished."
+    "text": "She does not sit down herself."
+  },
+  {
+    "key": "0362fb29e2eec2",
+    "speaker": "grandmother",
+    "text": "The village is on edge, you'll have noticed. Folk keep their voices down in the square these days, and nobody will say why. If you're going out, call on Mira, north of the square. She has a way with herbs, and with... other things. Old Man Hemlock at the General Store hears everything, and Borin at the forge keeps the tools sharp. You've a good heart, Elior. Don't let anyone talk you out of it."
+  },
+  {
+    "key": "177a6e95fe57b9",
+    "speaker": "narrator",
+    "text": "Your grandmother, flour on her apron and her sleeves pushed up. She has raised you since your parents went away, and she keeps her hands busy when she would rather not answer."
   },
   {
     "key": "1b614fc868a707",
@@ -200,14 +215,14 @@
     "text": "This might come in handy, so you decide to pick it up."
   },
   {
-    "key": "0f903b003c9861",
+    "key": "1c66ff8c216536",
     "speaker": "narrator",
-    "text": "Grandmother turns it over in her hands."
+    "text": "Grandmother turns it over in her hands and gives it back."
   },
   {
-    "key": "1921d4472cd88d",
+    "key": "0ea33d509e41cf",
     "speaker": "grandmother",
-    "text": "I'm not sure what to do with this, dear."
+    "text": "Keep it, love. My shelves are full enough."
   },
   {
     "key": "087d0e7421fe92",
@@ -220,9 +235,9 @@
     "text": "Grandmother has nothing to sell you."
   },
   {
-    "key": "0b928263f68e32",
+    "key": "134db2673b0e04",
     "speaker": "grandmother",
-    "text": "It's good to see you, Elior. Is there something you need?"
+    "text": "Back again? There's bread on the board, if you're hungry."
   },
   {
     "key": "1ce3d721f05512",
@@ -265,19 +280,34 @@
     "text": "Some voices are older than memory."
   },
   {
-    "key": "0428e09bf61aa5",
+    "key": "033d5ccbf999ee",
+    "speaker": "narrator",
+    "text": "She wipes her hands and looks at the journal under your arm."
+  },
+  {
+    "key": "1a35a4f872fc47",
     "speaker": "grandmother",
-    "text": "That journal of yours... your father was a great writer, you know. He wrote of many things, some of which I am only now beginning to understand. He sensed a darkness, a shadow stretching over Eldoria, long before others did. He believed it was tied to the old tales, to the whispers of forgotten magic. He even researched a peculiar enchantment, one that could supposedly breathe life back into things on the very brink... a 'revive' spell, he called it. He thought it might be a key, a way to mend what the encroaching darkness sought to break. Keep your eyes open, Elior. What you've read might be more than just stories."
+    "text": "Your father wrote in one like that every night, at this table. Half of it I never understood. He thought the land was getting sick long before anyone else did. And there was one thing he kept coming back to: a way to call a thing back when it's nearly gone. Revive, he called it. He'd try it on my herbs when they wilted."
   },
   {
-    "key": "0750f26c9e7fef",
+    "key": "19b17797f667bd",
     "speaker": "narrator",
-    "text": "As she speaks of it, the words your father wrote seem to settle in your mind."
+    "text": "She almost smiles."
   },
   {
-    "key": "189da21d440891",
+    "key": "0de80450abdebb",
+    "speaker": "grandmother",
+    "text": "Sometimes I think it worked."
+  },
+  {
+    "key": "136d7882b7f2e3",
     "speaker": "narrator",
-    "text": "You feel a new understanding... You have learned the Revive spell!"
+    "text": "As she speaks, the words your father wrote come back to you, and this time they stay."
+  },
+  {
+    "key": "18964e39051980",
+    "speaker": "narrator",
+    "text": "You have learned revive."
   },
   {
     "key": "09acfbb0c60912",
@@ -300,9 +330,9 @@
     "text": "You have discovered that the strange feeling within you is the first sign of something magical. Your journey into the unknown has truly begun."
   },
   {
-    "key": "0f38727bd4dfb0",
+    "key": "057092a4b7c2fb",
     "speaker": "narrator",
-    "text": "You recall your father's writings on the Revive spell. The knowledge feels familiar."
+    "text": "You already have it by heart: his words, and the way she told them."
   },
   {
     "key": "194f1d8f95c7fd",
@@ -340,29 +370,39 @@
     "text": "The Faded Photograph: An old photograph of your parents, hidden away in a drawer. On the back is a line in your mother's hand."
   },
   {
-    "key": "0ffd22ca95680e",
+    "key": "1f0a016b014864",
     "speaker": "narrator",
-    "text": "Your grandmother takes the photograph, her eyes misty with memory."
+    "text": "Your grandmother takes the photograph and holds it close to the window."
   },
   {
-    "key": "1a98b71a7e3a4c",
+    "key": "1c06819587e463",
     "speaker": "grandmother",
-    "text": "This was taken long ago, before the troubles began. Your parents were so full of hope... They loved you dearly, Elior. I miss them every day."
+    "text": "The three of you. You'd not have been two. Your mother wouldn't stand still for it; that's why she's half a blur."
   },
   {
-    "key": "0f510099463830",
+    "key": "14b2e251d75238",
     "speaker": "narrator",
-    "text": "She gently returns the photo to you, lost in thought."
+    "text": "She hands it back, and turns to the bread."
   },
   {
-    "key": "1ba5f1fad1d316",
+    "key": "00372589396b2b",
     "speaker": "narrator",
-    "text": "Your grandmother studies the back of the photograph, her expression growing serious."
+    "text": "Your grandmother turns the photograph over, and her thumb rests on the writing."
   },
   {
-    "key": "0543d099851491",
+    "key": "13e55a61b29678",
     "speaker": "grandmother",
-    "text": "You found the message, then? Your parents... they were involved in something much bigger than any of us realized. There is a darkness in Eldoria, and your family is tied to it. There is a secret, Elior — a truth you must uncover. Promise me you'll be careful."
+    "text": "That's her hand. She always wrote as if the ink were running out."
+  },
+  {
+    "key": "0b05507e4bad39",
+    "speaker": "narrator",
+    "text": "For a while she says nothing."
+  },
+  {
+    "key": "0d9d5363ea4b1c",
+    "speaker": "grandmother",
+    "text": "Your parents didn't just leave, Elior. They went toward something. I begged them not to."
   },
   {
     "key": "09245420c652a2",
@@ -370,9 +410,9 @@
     "text": "She hands the photograph back."
   },
   {
-    "key": "02b215191fce4e",
+    "key": "134864ed490a75",
     "speaker": "grandmother",
-    "text": "Your mother loved the river. If anyone remembers what she did there, it's the old fisherman down at the Riverbank."
+    "text": "Your mother loved the river. If anyone remembers what she did there, it's the old fisherman down at the Riverbank. Promise me you'll be careful."
   },
   {
     "key": "19ad071adb2439",
@@ -500,9 +540,14 @@
     "text": "So the chickens gave up my little secret. I tucked that key up in the coop rafters years ago. It opens the old shed by the mill. It was a workshop once... your father's. I never could bring myself to go in. It's dark as a cellar in there, dear; take the lantern with you."
   },
   {
-    "key": "1b926a29754ffb",
+    "key": "09ac02c544b3da",
     "speaker": "narrator",
-    "text": "Tilda shakes her head politely. It isn't something she needs."
+    "text": "Tilda looks it over with interest and gives it back."
+  },
+  {
+    "key": "1a417e323b4711",
+    "speaker": "tilda",
+    "text": "Don't go giving your things away, love. People will talk."
   },
   {
     "key": "06c9636081f1d2",
@@ -535,14 +580,14 @@
     "text": "A faded piece of parchment pinned to the notice board. The writing is barely legible, but it might contain a clue or warning."
   },
   {
-    "key": "0d58b899d845ab",
+    "key": "06e536f7a07539",
     "speaker": "tilda",
-    "text": "Have you seen the fields lately? The crops are withering overnight, and no one knows why. It's like the land itself is sick..."
+    "text": "Have you seen the fields? Green on market day, grey by the next morning. My husband says it's the soil. He also said it would rain last Tuesday."
   },
   {
-    "key": "08da6252927c8a",
+    "key": "19244f5c6fea49",
     "speaker": "narrator",
-    "text": "Tilda, the baker's wife: a friendly Willowbrook local, always eager to share the latest gossip or rumors about the village."
+    "text": "Tilda, the baker's wife, flour to the elbows. She knows what everyone in Willowbrook had for breakfast, and who they ate it with."
   },
   {
     "key": "145b9dc5201213",
@@ -620,9 +665,9 @@
     "text": "The blacksmith gives it a glance and hands it back."
   },
   {
-    "key": "1d8fbebac5aa39",
+    "key": "1cedf8cdf63e07",
     "speaker": "blacksmith",
-    "text": "I don't have a use for this, lad."
+    "text": "Can't melt it, can't mend it. No use to me, lad."
   },
   {
     "key": "1829dbae932fd2",
@@ -630,9 +675,9 @@
     "text": "The blacksmith eyes the dull knife."
   },
   {
-    "key": "08748f6fd3d3b3",
+    "key": "0212eb8dabfa49",
     "speaker": "blacksmith",
-    "text": "That edge has seen better days. I'll put it right for ye, but it'll cost you a coin."
+    "text": "That edge has seen better days. I'll put it right for you, lad, but it'll cost a coin. Whetstones don't grow on trees."
   },
   {
     "key": "10ff3024e15d07",
@@ -640,9 +685,9 @@
     "text": "The blacksmith eyes the coin."
   },
   {
-    "key": "0f2e7ad5bfcd13",
+    "key": "105fe431cb3e96",
     "speaker": "blacksmith",
-    "text": "Thanks for the offer, but I can only sharpen a dull knife for ye if you have one—and you'll need to pay me a coin for the service."
+    "text": "A coin's no use to me without something to put an edge on, lad. Bring the blade as well."
   },
   {
     "key": "0c64c7e367b44a",
@@ -660,14 +705,24 @@
     "text": "A heavy iron horseshoe, slightly bent. It might bring luck or be useful for repairs."
   },
   {
-    "key": "098d337e8c685a",
+    "key": "0b0c487c57980a",
     "speaker": "blacksmith",
-    "text": "Well met, young one. I am Borin, the village blacksmith. If you need tools made or mended, I'm your man. A sharp blade can be a good friend."
+    "text": "Mind the sparks, lad."
   },
   {
-    "key": "11549ac18aaa32",
+    "key": "0573050eb19dc8",
     "speaker": "narrator",
-    "text": "A burly, skilled craftsman who forges tools and weapons for the village. He is always ready to offer advice or sharpen a blade."
+    "text": "He doesn't stop hammering."
+  },
+  {
+    "key": "0f9c839fddfaaf",
+    "speaker": "blacksmith",
+    "text": "Borin. I make what this village breaks, and I mend what it won't throw away. Got anything with an edge gone soft? Bring it here."
+  },
+  {
+    "key": "1ae731a85479cc",
+    "speaker": "narrator",
+    "text": "Borin, the village smith: forearms like fence posts and an old burn on every knuckle. He talks while he works, and he doesn't stop working."
   },
   {
     "key": "14b2c088262b5a",
@@ -675,14 +730,19 @@
     "text": "You search around the Blacksmith's Forge, but find nothing of interest beyond what you can already see."
   },
   {
-    "key": "1b1b078b4d2f85",
+    "key": "0be2c322a1f36a",
     "speaker": "blacksmith",
-    "text": "Welcome back, young Elior. Need something else?"
+    "text": "Back again, lad? Forge is hot. What've you got for me?"
   },
   {
-    "key": "16163f78470851",
+    "key": "0d222db6e06369",
     "speaker": "narrator",
-    "text": "The blacksmith takes your coin and your dull knife. He expertly sharpens it on his whetstone and hands you back a gleaming sharp knife!"
+    "text": "The blacksmith pockets the coin and puts the dull knife to the whetstone. It sings for a minute. He tests the edge on his thumbnail before he hands it back."
+  },
+  {
+    "key": "111eb026e4b756",
+    "speaker": "narrator",
+    "text": "You receive a sharp knife."
   },
   {
     "key": "16dbffbea6a688",
@@ -765,9 +825,9 @@
     "text": "Patches was hiding in the Abandoned Shed. Carry her home to Old Man Hemlock at the General Store."
   },
   {
-    "key": "088baadadf2ee4",
+    "key": "0074c947a2229e",
     "speaker": "narrator",
-    "text": "Patches sniffs at your offering from the shadows and stays put. Perhaps she would rather hear her name."
+    "text": "Patches sniffs at your offering from the shadows and stays put. Whatever it is, it isn't worth leaving the crates for. Her ears turn toward you, though, as if she's waiting to be called."
   },
   {
     "key": "0350b91735f95b",
@@ -900,9 +960,19 @@
     "text": "Patches peers out of your arms, and your grandmother reaches out to scratch her ears."
   },
   {
-    "key": "1fa3f4e8f62e30",
+    "key": "1d4b72cf59ca24",
     "speaker": "grandmother",
-    "text": "Hemlock's Patches! The poor wee thing, she's all dust and bones. She's taken to you, hasn't she? With you off on the road soon, this cottage will be terribly quiet. If you'd have her stay with me, you need only say so, and I'll square it with Hemlock myself. Or carry her home to him; he'll be worried sick."
+    "text": "Hemlock's Patches! Poor thing, she's all dust and bones."
+  },
+  {
+    "key": "0053a76fb79c76",
+    "speaker": "narrator",
+    "text": "She keeps scratching a while longer than she needs to."
+  },
+  {
+    "key": "07b880fa9b7e61",
+    "speaker": "grandmother",
+    "text": "With you off on the road soon, this cottage will be very quiet. If you'd have her stay with me, say so, and I'll square it with Hemlock myself. Or carry her home to him. He'll be worried sick."
   },
   {
     "key": "11a62c8885cd34",
@@ -955,44 +1025,59 @@
     "text": "A mysterious amulet inscribed with runes. It is faintly warm, as if someone had only just set it down."
   },
   {
-    "key": "1741790e443df3",
+    "key": "0f969b061b4c06",
     "speaker": "narrator",
-    "text": "Mira smiles warmly as you enter her fragrant hut."
+    "text": "Mira looks up from the herbs she is tying."
   },
   {
-    "key": "11b828c755a4e3",
+    "key": "0586f7fe81dd2b",
     "speaker": "mira",
-    "text": "Welcome, Elior. I sense a stirring of the old powers within you. What brings you to my door?"
+    "text": "Elior. Come in, mind the sage."
   },
   {
-    "key": "0a4c186aa7cf5d",
+    "key": "0b536e37b7bbab",
     "speaker": "narrator",
-    "text": "You describe to Mira the withered crops, the villagers' fears, and the foul stench from the well. Her expression grows troubled as she listens."
+    "text": "She studies your face."
   },
   {
-    "key": "1bed1de6885e66",
+    "key": "036f6c36044cda",
     "speaker": "mira",
-    "text": "These are signs of a darkness that has long slumbered beneath Willowbrook,"
+    "text": "You've been dreaming. It's written all over you. What brings you?"
   },
   {
-    "key": "0d9f45ac7426fb",
+    "key": "11540ba3f2512e",
     "speaker": "narrator",
-    "text": "she says sadly."
+    "text": "You tell Mira about the grey crops, the hushed square and the sour smell of the well. She stops tying herbs."
   },
   {
-    "key": "19fba7cbc32ab7",
+    "key": "0edc28d97c6726",
     "speaker": "mira",
-    "text": "The land is suffering, and so are its people. But there is hope, Elior. You must connect with the living world—listen to the wind, the water, the roots beneath your feet. Only by understanding the magic of nature can you hope to confront what is coming."
+    "text": "None of that is weather."
   },
   {
-    "key": "1634907d6bbde6",
-    "speaker": "mira",
-    "text": "A rare flower grows in the Hidden Glade. Seek it out, and pay close attention to the well and the glade; they may hold secrets vital to your quest."
-  },
-  {
-    "key": "010ce445c93c9b",
+    "key": "08466bf39067a5",
     "speaker": "narrator",
-    "text": "The village healer and wise woman, Mira is known for her knowledge of herbs and magic. She guides Elior on his journey."
+    "text": "She sets the bundle down."
+  },
+  {
+    "key": "16d9f85af99e9b",
+    "speaker": "mira",
+    "text": "They say the king is ill, and no one can name it. The fields are ill, and no one can name that either. I think it's one wound, Elior, and we're feeling it in two places."
+  },
+  {
+    "key": "1866f0a0f33405",
+    "speaker": "mira",
+    "text": "There is a rare flower in the Hidden Glade. It only opens for someone the land trusts. Bring me one. If it opens for you, I'll know what I need to know."
+  },
+  {
+    "key": "170dffc3a2d0ec",
+    "speaker": "mira",
+    "text": "And look at that well again on your way. Water doesn't sour without a reason."
+  },
+  {
+    "key": "13c55aa000bd16",
+    "speaker": "narrator",
+    "text": "Mira, the village healer. Her hut smells of drying sage, and she looks at you a moment longer than people usually do."
   },
   {
     "key": "0a2f78f83100c4",
@@ -1025,14 +1110,14 @@
     "text": "Hold on there, friend! That armor is merchandise, not a free sample. If you want it, you'll need to buy it proper-like."
   },
   {
-    "key": "0d81dfc2b0f3db",
+    "key": "1b2055f0fdd403",
     "speaker": "narrator",
-    "text": "The shopkeeper chuckles."
+    "text": "The shopkeeper chuckles and pushes it back across the counter."
   },
   {
-    "key": "03f08d0124cf70",
+    "key": "0dd0b50f7da05b",
     "speaker": "shopkeeper",
-    "text": "Not looking for donations, friend, but I appreciate the thought!"
+    "text": "I sell things, lad. I don't take them in."
   },
   {
     "key": "18a36fc3df947f",
@@ -1100,9 +1185,9 @@
     "text": "Patches curls up beside the till and begins to purr."
   },
   {
-    "key": "002ad4d6510582",
+    "key": "0314de4a5463db",
     "speaker": "narrator",
-    "text": "Old Man Hemlock, the owner of the General Store, always bustling about and eager to strike a bargain or share a rumor."
+    "text": "Old Man Hemlock, who keeps the General Store. He glances at the door every time it creaks."
   },
   {
     "key": "024e14903a4d2a",
@@ -1130,9 +1215,9 @@
     "text": "The shopkeeper says:"
   },
   {
-    "key": "1bff5f5f401a90",
+    "key": "1fd0d12d436dec",
     "speaker": "shopkeeper",
-    "text": "Welcome to my humble store! Finest goods in Willowbrook, I assure you. I have a few things for sale: - Rope: 1 coin(s) - Sword: 5 coin(s) - Armor: 10 coin(s) And remember, you always get an extra apple with every purchase!"
+    "text": "Only store in Willowbrook, so I suppose that makes it the finest. Here's what I've got for sale: - Rope: 1 coin - Sword: 5 coins - Armor: 10 coins And there's an apple with everything. My mother's rule."
   },
   {
     "key": "0aa00c23e6adc8",
@@ -1140,9 +1225,9 @@
     "text": "Patches blinks at you slowly from the counter and begins to purr."
   },
   {
-    "key": "095429b4d19389",
+    "key": "05feedc880605f",
     "speaker": "narrator",
-    "text": "The rope is yours for 1 coin(s), with an extra apple as a bonus!"
+    "text": "He counts the coin twice and hands over the rope, and an apple with it."
   },
   {
     "key": "0707d5535402bf",
@@ -1205,14 +1290,24 @@
     "text": "A chunk of stone broken from the old mill's grinding wheel. It's heavy and rough, but could be useful for repairs or as a tool."
   },
   {
-    "key": "099dc6df8bbf4a",
+    "key": "10e066e55f37c2",
     "speaker": "narrator",
-    "text": "The blacksmith takes the millstone fragment, turning it over in his calloused hands."
+    "text": "The blacksmith takes the millstone fragment and turns it over in his calloused hands."
   },
   {
-    "key": "172e331b7dcc06",
+    "key": "016504f33352a0",
     "speaker": "blacksmith",
-    "text": "Aye, this is from the old mill, alright. Sturdy stone. You know, old tales say the mill was built on a place of ancient power. Some say a magical deer sometimes appears in the Hidden Glade, but only when all is calm and restful—no voices, no footsteps, just the hush of the wind and the song of the stream. If you seek the deer, go there and sit quiet a while; have a rest, and let it come to you. It will not show itself to those who rush or bring trouble."
+    "text": "From the old mill, that. Good stone. My grandfather said they built the mill where they did for a reason. The ground there's older than the village."
+  },
+  {
+    "key": "18712058389118",
+    "speaker": "narrator",
+    "text": "He sets it on the bench."
+  },
+  {
+    "key": "1d048e0cbc8c8b",
+    "speaker": "blacksmith",
+    "text": "He told me something else, too. There's a deer in the Hidden Glade that comes to folk who keep still. Not to hunters. Not to talkers. You go there, sit down, rest a while, and stop looking for it. That's when it comes."
   },
   {
     "key": "096a69c7bd0f90",
@@ -1265,9 +1360,19 @@
     "text": "The fisherman notices your fishing rod."
   },
   {
-    "key": "03647e7a632a42",
+    "key": "008acc1ef42825",
     "speaker": "fisherman",
-    "text": "Ah, a fellow angler! My arm's busted, can't fish myself. But I can tell you a thing or two. Cast your line near the reeds, that's where they like to hide. Patience is key, my friend, patience."
+    "text": "That was your father's rod, or I'm a trout. I can't cast with this arm, but I can show you. Here."
+  },
+  {
+    "key": "060c1f70aa7c00",
+    "speaker": "narrator",
+    "text": "He shows you how to hold it, and where."
+  },
+  {
+    "key": "0c6892b6deee83",
+    "speaker": "fisherman",
+    "text": "By the reeds. That's where they hide. Then you wait, lad. Fish don't come to them as hurry."
   },
   {
     "key": "0d53995cd0ee6f",
@@ -1275,9 +1380,9 @@
     "text": "He teaches you the basics of fishing."
   },
   {
-    "key": "0ed6cc055fb83e",
+    "key": "1f0760918561c3",
     "speaker": "narrator",
-    "text": "A weathered old man who spends his days by the riverbank, fishing and humming quiet tunes. He knows much about the river and its secrets."
+    "text": "An old man on an upturned crate at the bend, his line in the water, humming something under his breath."
   },
   {
     "key": "165757030a4e44",
@@ -1300,9 +1405,9 @@
     "text": "The fisherman smiles."
   },
   {
-    "key": "017a30e8992a54",
+    "key": "121938ab3d1673",
     "speaker": "fisherman",
-    "text": "Good to see you trying your luck with the rod. Any luck yet?"
+    "text": "Anything biting? Reeds, lad. Always the reeds."
   },
   {
     "key": "152c191d292b34",
@@ -1335,19 +1440,29 @@
     "text": "The fisherman's eyes light up."
   },
   {
-    "key": "1fd17a1a8504ae",
+    "key": "1195fd2a9ed323",
     "speaker": "fisherman",
-    "text": "Ah, a fine catch! Thank you kindly. It's been a while since I've had a fresh river fish."
+    "text": "Now that's a fish. Haven't tasted fresh since the arm went."
   },
   {
-    "key": "1aad6db6706e5d",
-    "speaker": "fisherman",
-    "text": "The river's water... it's not been right. Murky. Your mother taught me this, by the bend. I reckon it's yours more than mine. With this, you can cleanse water,"
-  },
-  {
-    "key": "08ddbf528829c8",
+    "key": "149887ce101956",
     "speaker": "narrator",
-    "text": "You have learned purify!"
+    "text": "He wraps it in a dock leaf and sets it by his crate. Then he is quiet a while."
+  },
+  {
+    "key": "0a70b37d05b452",
+    "speaker": "fisherman",
+    "text": "Water's not been right. You'll have smelled the well. Your mother taught me a thing for that, here at the bend, years back. I reckon it was always more hers than mine."
+  },
+  {
+    "key": "0d5555a8eba12e",
+    "speaker": "narrator",
+    "text": "He shows you, slowly."
+  },
+  {
+    "key": "0087c0e709d3b2",
+    "speaker": "narrator",
+    "text": "You have learned purify."
   },
   {
     "key": "1c76b767ac8cbe",
@@ -1365,9 +1480,9 @@
     "text": "The fisherman looks out over the water."
   },
   {
-    "key": "1618156184f966",
+    "key": "14fc80c2fd796e",
     "speaker": "fisherman",
-    "text": "The river has many moods. Treat it with respect, and it might share its secrets with you."
+    "text": "She used to sit right where you're standing, your mother. Feet in the water, even in spring. Said it helped her think."
   },
   {
     "key": "1ad83930790920",
@@ -1395,9 +1510,9 @@
     "text": "The fisherman points to the water's edge."
   },
   {
-    "key": "0cd39a3304f65a",
+    "key": "0d642db602dcc0",
     "speaker": "fisherman",
-    "text": "Under the smooth stone, lad, where the water turns. Go on, search there."
+    "text": "Under the smooth stone, lad, where the water turns. I've not touched it. I promised."
   },
   {
     "key": "0de6915aebf8ee",
@@ -1410,9 +1525,19 @@
     "text": "The fisherman nods slowly."
   },
   {
-    "key": "0e22641f0b1fbe",
+    "key": "1c98421835996c",
     "speaker": "fisherman",
-    "text": "She'd be proud of you, lad. Keep her words close."
+    "text": "You found it, then."
+  },
+  {
+    "key": "121e59f501c6ed",
+    "speaker": "narrator",
+    "text": "He looks at the stone a while."
+  },
+  {
+    "key": "1560af900c476f",
+    "speaker": "fisherman",
+    "text": "I've watched that stone a long time, lad. I reckon I can stop now."
   },
   {
     "key": "1d6486a738f75d",
@@ -1535,9 +1660,9 @@
     "text": "The deer does not answer, not in words. Its dark eyes hold yours for a long moment. Then its gaze drifts to the mossy stone and the shadowed runes upon it... then to you, patient, as if waiting for you to bring something to light."
   },
   {
-    "key": "038b5b2ff3cb23",
+    "key": "0a7a0a22b255d1",
     "speaker": "narrator",
-    "text": "A graceful deer with wise, gentle eyes. It seems to sense the magic of the glade and watches you with curiosity."
+    "text": "A deer, red-brown and very still, standing where the moss is thickest. It does not startle when you move."
   },
   {
     "key": "1caf3b96fb4df1",
@@ -1570,14 +1695,24 @@
     "text": "A small, leather-bound book filled with prayers and hymns. The pages are worn from years of use."
   },
   {
-    "key": "129f67ae097d0e",
+    "key": "1d786e925274de",
     "speaker": "narrator",
-    "text": "The priest offers a serene smile."
+    "text": "The priest looks up from the altar."
   },
   {
-    "key": "07c3d85ca704d8",
+    "key": "0572210789703d",
     "speaker": "priest",
-    "text": "Welcome, child. The chapel is a sanctuary for all who seek peace. The shadows in our land grow long, but faith can be a guiding light."
+    "text": "Come in, child, and shut the door behind you. The draught gets at the candles."
+  },
+  {
+    "key": "1eb8c44c08810d",
+    "speaker": "narrator",
+    "text": "He looks at the cold wick."
+  },
+  {
+    "key": "0b5159cbb3d3e3",
+    "speaker": "priest",
+    "text": "It would, if I had one lit."
   },
   {
     "key": "1a0ad5da98efd1",
@@ -1595,14 +1730,14 @@
     "text": "He sighs."
   },
   {
-    "key": "198b48cd69992c",
+    "key": "09a00198cd57cb",
     "speaker": "priest",
-    "text": "And now I cannot even light a candle against the dark. I am out of matches, and I usually get them for free from the General Store. Could you bring me some?"
+    "text": "And now I can't even light a candle in their chapel. I'm out of matches. Hemlock at the General Store keeps a box for me; he has never once let me pay. If you're passing that way..."
   },
   {
-    "key": "1b280033ab58da",
+    "key": "15767444734418",
     "speaker": "narrator",
-    "text": "A kindly priest who tends the chapel, offering blessings and sharing the lore of Eldoria."
+    "text": "The chapel's priest, thin and a little stooped, with old candle wax on both sleeves."
   },
   {
     "key": "0f87d1fedfdc4a",
@@ -1645,9 +1780,19 @@
     "text": "The shopkeeper leans in."
   },
   {
-    "key": "12966b96a7a430",
+    "key": "1cb7ce56d7eb58",
     "speaker": "shopkeeper",
-    "text": "Ah, you spoke to the priest? He does get through his matches. Here, take these for him, on the house. Tell him I said hello!"
+    "text": "Been to see the priest, have you? He does get through his matches."
+  },
+  {
+    "key": "0315fc6362b3bd",
+    "speaker": "narrator",
+    "text": "He takes a box from under the counter."
+  },
+  {
+    "key": "13c153a34c68e2",
+    "speaker": "shopkeeper",
+    "text": "They're on the house. Always have been; my father said a chapel without a light is bad luck, and I've never been brave enough to find out."
   },
   {
     "key": "0817c990ec4cac",
@@ -1735,14 +1880,14 @@
     "text": "The silver warms in your palm for a moment, then cools again."
   },
   {
-    "key": "1e90f314ab230b",
+    "key": "1ebad825592ef5",
     "speaker": "narrator",
-    "text": "The priest nods at the locket in your hand."
+    "text": "The priest looks at the locket in your hand, at the tree and the two moons on it, and then up at the door."
   },
   {
-    "key": "0087af48dc9bdd",
+    "key": "07876550bd9ae0",
     "speaker": "priest",
-    "text": "Thank you for the light, child. Keep that locket close, and show it to your grandmother. She will know it better than I."
+    "text": "Thank you for the light, child. Show that to your grandmother. She will know it better than I."
   },
   {
     "key": "02d80d342013aa",
@@ -1755,9 +1900,9 @@
     "text": "Patches has nothing to sell you."
   },
   {
-    "key": "16195c2ec1a1a6",
+    "key": "0bef1fc0430199",
     "speaker": "shopkeeper",
-    "text": "Sorry, friend, that's not something I carry."
+    "text": "Not something I carry, lad. Not since the caravans stopped, anyway."
   },
   {
     "key": "06e59d8bf016e5",
@@ -1770,44 +1915,29 @@
     "text": "A mysterious amulet inscribed with runes. Its glow quickens as you lean closer, steady as a heartbeat."
   },
   {
-    "key": "18df9e2a6489d4",
+    "key": "11b854417ed0e2",
     "speaker": "narrator",
-    "text": "Mira smiles, accepting the flower."
+    "text": "The flower is open in your hand. Mira looks at it for a long moment before she takes it."
   },
   {
-    "key": "0acdf870df6d00",
+    "key": "13e9a8e7e8eb36",
     "speaker": "mira",
-    "text": "This bloom,"
+    "text": "Well. There it is."
   },
   {
-    "key": "14a40e4b476f55",
+    "key": "1cc9581c4c8f88",
     "speaker": "narrator",
-    "text": "she says, her voice soft,"
+    "text": "She sits you down, puts her hands over yours, and shows you three things, slowly: how to mend, how to open, how to make a light. None of it feels new. It feels like remembering."
   },
   {
-    "key": "10252aeeff21ff",
-    "speaker": "mira",
-    "text": "is a testament to your growing bond with the living world, Elior. It shows you are ready to truly channel the energies around us."
-  },
-  {
-    "key": "0745d0bcb749ce",
+    "key": "070a648732a4bd",
     "speaker": "narrator",
-    "text": "She then guides you through ancient words and gestures, awakening your innate abilities. You feel a new understanding dawn as she imparts the knowledge of heal to mend, unlock to reveal, and light to illuminate the path."
+    "text": "You have learned heal, unlock and light."
   },
   {
-    "key": "1ef7a629a3c658",
+    "key": "1c9e4bccf0071f",
     "speaker": "mira",
-    "text": "The spark was always within you,"
-  },
-  {
-    "key": "0b6a4bedb49148",
-    "speaker": "narrator",
-    "text": "Mira explains,"
-  },
-  {
-    "key": "1addf9b9fbfa4f",
-    "speaker": "mira",
-    "text": "but now, you can truly command these magics."
+    "text": "It was always in you. I've only shown you where the door is."
   },
   {
     "key": "0638932533305a",
@@ -1815,9 +1945,9 @@
     "text": "Her tone turns practical."
   },
   {
-    "key": "030bed3196de37",
+    "key": "19e2c1dc43ba8c",
     "speaker": "mira",
-    "text": "Now prepare for the road. You'll need warmth, protection, food, boots and a map. And learn all the basic magic the village elders can teach you. When you are truly ready, the ancient amulet will be yours."
+    "text": "Now, the road. You'll need warmth, protection, food, boots and a map. And learn what else this village can teach you; the priest will want to bless you before you go. When you're ready, the ancient amulet is yours."
   },
   {
     "key": "193be0a872654f",
@@ -1920,14 +2050,14 @@
     "text": "A warm light envelops you, and you feel your wounds mending."
   },
   {
-    "key": "1cacf7b290b7d8",
+    "key": "0d72fc56c5715a",
     "speaker": "narrator",
-    "text": "Mira looks at you thoughtfully."
+    "text": "Mira looks you over, from your boots up."
   },
   {
-    "key": "16ebfefeafeb0d",
+    "key": "08d93718051318",
     "speaker": "mira",
-    "text": "You have made progress, Elior, but you are not yet fully prepared for what lies ahead. Ensure you have all necessary items, learned the essential spells, and received a blessing for your journey."
+    "text": "Not yet. I'll not send you out half-dressed and half-taught. Come back when you're ready for the road, and when the priest has said his blessing over you."
   },
   {
     "key": "1cad04572ca53c",
@@ -2035,9 +2165,9 @@
     "text": "So you're to go on the road. Then you'll not go hungry on it. I baked this morning; take this for the way."
   },
   {
-    "key": "164acd6bab9c62",
+    "key": "15deece007a2f7",
     "speaker": "narrator",
-    "text": "You received a fresh bread!"
+    "text": "You receive a fresh bread."
   },
   {
     "key": "0d1d08d0535a2c",
@@ -2240,9 +2370,14 @@
     "text": "The light runs out over the water and finds nothing to do. The river was never the trouble. Your mother stood at this bend and taught this spell to the fisherman; the water remembers her better than it needs you."
   },
   {
-    "key": "1715821c603f25",
+    "key": "05a685197c61ff",
     "speaker": "narrator",
-    "text": "The fisherman eyes it with mild curiosity, then shrugs."
+    "text": "The fisherman eyes it, then shrugs."
+  },
+  {
+    "key": "19c841724855d6",
+    "speaker": "fisherman",
+    "text": "Won't catch anything with that, lad."
   },
   {
     "key": "1ad32ed66e7629",
@@ -2330,14 +2465,14 @@
     "text": "The nearby plants seem to respond with vibrant energy, but nothing else happens."
   },
   {
-    "key": "0d22a28439914e",
+    "key": "0245e6ba2c8489",
     "speaker": "narrator",
-    "text": "The deer does not answer, not in words. It lifts its head toward the glowing stone, then dips it to you, slow and deliberate, as if in thanks. For a heartbeat the whole glade seems to breathe with it."
+    "text": "The deer does not answer, not in words. It lifts its head toward the glowing stone, then dips it to you, slow and deliberate, as if in thanks."
   },
   {
-    "key": "06eae3201e33bb",
+    "key": "1d4db1040d0138",
     "speaker": "narrator",
-    "text": "It lifts its head toward the glowing stone, then dips it to you, slow and deliberate, as if in thanks. For a heartbeat the whole glade seems to breathe with it."
+    "text": "It lifts its head toward the glowing stone, then dips it to you, slow and deliberate, as if in thanks."
   },
   {
     "key": "03fc34fcfaf0cd",
@@ -2350,19 +2485,19 @@
     "text": "A handful of small, juicy berries. They look edible, but you can't be sure they're safe."
   },
   {
-    "key": "06d4f72606d312",
+    "key": "0fef245d4b77eb",
     "speaker": "grandmother",
-    "text": "Oh, wild berries! Thank you, dear. These look lovely. I'll make a pie later."
+    "text": "Look at you: wild berries, and your fingers purple to the knuckle, same as when you were six."
   },
   {
-    "key": "1a0fc3df24fb74",
+    "key": "17b8b9671f29c5",
     "speaker": "narrator",
-    "text": "Grandmother smiles warmly."
+    "text": "She tips them into a bowl."
   },
   {
-    "key": "106baca24308cd",
+    "key": "19f9285c006f4d",
     "speaker": "grandmother",
-    "text": "It's the little things that brighten the day, isn't it?"
+    "text": "I'll make a pie. You'll be here to eat it, I hope."
   },
   {
     "key": "06da398409b0c9",
@@ -2375,29 +2510,29 @@
     "text": "This... this was your mother's. It came to her from me, and to me from my mother, all the way back to the founders, so the old ones said. I thought she took it with her when she left."
   },
   {
-    "key": "0dcda258ee0f05",
+    "key": "155deb9c061467",
     "speaker": "narrator",
-    "text": "She closes her hand around it for a moment."
+    "text": "She closes her hand around it for a moment. Then she goes to the chest at the foot of her bed and takes out something folded in paper."
   },
   {
-    "key": "1025be2ed1e76c",
+    "key": "09f4ddd73f46c9",
     "speaker": "grandmother",
-    "text": "She said it would keep you safe. And this... she wanted you to have this when you were old enough to understand its importance."
+    "text": "She left this with me the week before she went. 'When he's grown,' she said. I've never known when that was."
   },
   {
-    "key": "15e75debaba42c",
+    "key": "0c24e966302117",
     "speaker": "narrator",
-    "text": "Grandmother hands you a finely made travel cloak."
+    "text": "She looks at you."
   },
   {
-    "key": "026e61af208f13",
+    "key": "1f16a53a23889d",
     "speaker": "grandmother",
-    "text": "May it protect you on your journeys, Elior."
+    "text": "I suppose it's now."
   },
   {
-    "key": "0ba97c7753d265",
+    "key": "1df4f139719b03",
     "speaker": "narrator",
-    "text": "You received a travel cloak!"
+    "text": "You receive a travel cloak."
   },
   {
     "key": "0c5f5b929a897d",
@@ -2410,9 +2545,14 @@
     "text": "Preparing for the road: Mira has tasked you with preparing for your journey. She says you will need: Magical protection"
   },
   {
-    "key": "04184304f9b693",
+    "key": "04202bf0542090",
     "speaker": "narrator",
-    "text": "The priest shakes his head politely. It isn't something he needs."
+    "text": "The priest shakes his head and folds your fingers back over it."
+  },
+  {
+    "key": "049a36655cbc50",
+    "speaker": "priest",
+    "text": "Keep it, child. The road will want it more than I do."
   },
   {
     "key": "04bbd118254301",
@@ -2475,9 +2615,9 @@
     "text": "The merchant weighs it in his palm and hands it back."
   },
   {
-    "key": "17d317ea4fc5f2",
+    "key": "08e05dac14195d",
     "speaker": "merchant",
-    "text": "Not interested in that, friend."
+    "text": "I'd not get a copper for that in Greendale, friend."
   },
   {
     "key": "06c49bbc27a458",
@@ -2530,14 +2670,14 @@
     "text": "The merchant offers a friendly nod."
   },
   {
-    "key": "05029327b21462",
+    "key": "1a66312f1c7b95",
     "speaker": "merchant",
-    "text": "You'll want news, if you're bound for Greendale. It's a sombre city this season: they say King Alden has fallen ill, and no physician can name the sickness. And the roads have gone bad besides. I passed a cart on its side by the hill road, and nobody with it. And it's not only your fields that are failing. I've seen crops gone grey in every valley from here to the capital, ever since the king took to his bed. Keep to the daylight, friend. Looking for something specific, or just browsing? If you have any fine jewelry, especially a shiny ring, I'm ready to exchange it for a pair of sturdy wandering boots. Failing that, my old mare threw a shoe on the hill road; a good iron horseshoe would do me nearly as well. Forgive me if I'm short, friend. I've not eaten since the hill road, and there's no inn this side of Greendale."
+    "text": "You'll want news, if you're bound for Greendale. It's a sombre city this season: they say King Alden has fallen ill, and no physician can name the sickness. And the roads have gone bad besides. I passed a cart on its side by the hill road, and nobody with it. And it's not only your fields that are failing. I've seen crops gone grey in every valley from here to the capital, ever since the king took to his bed. Keep to the daylight, friend. Boots, friend? I've one good pair of wandering boots left, walked in and soft, and the soles will outlast you. I'll not take coin for them; coin's thin where I'm going. Something small and fine would buy them. A ring, say. Failing that, my old mare threw a shoe on the hill road; a good iron horseshoe would do me nearly as well. Forgive me if I'm short, friend. I've not eaten since the hill road, and there's no inn this side of Greendale."
   },
   {
-    "key": "02ecbdc146e5fc",
+    "key": "1fb285babc0d61",
     "speaker": "narrator",
-    "text": "A traveling merchant with a cart full of wares and stories from distant lands. Always ready to trade or offer travel advice."
+    "text": "A travelling merchant with a loaded cart and a thin grey mare who stands on three good shoes. He has the look of a man two days from his last meal."
   },
   {
     "key": "17ca10006970d9",
@@ -2545,19 +2685,29 @@
     "text": "You search around the Road to Greendale, but find nothing of interest beyond what you can already see."
   },
   {
-    "key": "02169305687430",
+    "key": "0660ceb90bfd31",
     "speaker": "narrator",
-    "text": "The merchant's eyes widen as you hand over the shiny ring."
+    "text": "The merchant holds the shiny ring up to the light, and his eyebrows go up."
   },
   {
-    "key": "1293279fb3b049",
+    "key": "005e5aad004cd1",
     "speaker": "merchant",
-    "text": "A fine piece! As promised, here are the wandering boots. They'll serve you well on the road to Greendale."
+    "text": "Now this is fine work. Older than it looks, too."
   },
   {
-    "key": "057e5dec740f04",
+    "key": "127b025c535116",
     "speaker": "narrator",
-    "text": "You receive a pair of wandering boots!"
+    "text": "He looks at you, then away."
+  },
+  {
+    "key": "0fbd499a2909a1",
+    "speaker": "merchant",
+    "text": "Well. A bargain's a bargain. The wandering boots are yours."
+  },
+  {
+    "key": "1daa8adca28df7",
+    "speaker": "narrator",
+    "text": "You receive a pair of wandering boots."
   },
   {
     "key": "1d32015bd63445",
@@ -2580,9 +2730,9 @@
     "text": "The merchant grins."
   },
   {
-    "key": "052df3c85f4832",
+    "key": "0365b2c22b2690",
     "speaker": "merchant",
-    "text": "You'll want news, if you're bound for Greendale. It's a sombre city this season: they say King Alden has fallen ill, and no physician can name the sickness. And the roads have gone bad besides. I passed a cart on its side by the hill road, and nobody with it. And it's not only your fields that are failing. I've seen crops gone grey in every valley from here to the capital, ever since the king took to his bed. Keep to the daylight, friend. Those boots should serve you well on the road ahead! Let me know if you find anything else of value. Forgive me if I'm short, friend. I've not eaten since the hill road, and there's no inn this side of Greendale."
+    "text": "You'll want news, if you're bound for Greendale. It's a sombre city this season: they say King Alden has fallen ill, and no physician can name the sickness. And the roads have gone bad besides. I passed a cart on its side by the hill road, and nobody with it. And it's not only your fields that are failing. I've seen crops gone grey in every valley from here to the capital, ever since the king took to his bed. Keep to the daylight, friend. How are the boots? Give them a week and they'll know your feet better than you do. Forgive me if I'm short, friend. I've not eaten since the hill road, and there's no inn this side of Greendale."
   },
   {
     "key": "13aa84f923d1fd",
@@ -2620,24 +2770,19 @@
     "text": "That was dear, that herb. Now there is more of it. I will not complain."
   },
   {
-    "key": "081f99ee117abb",
+    "key": "016fdb7c212efd",
     "speaker": "narrator",
-    "text": "Mira smiles, a deep wisdom in her eyes."
+    "text": "Mira looks you over: cloak, boots, pack. She nods once."
   },
   {
-    "key": "1ba829e163bb49",
+    "key": "0d43a8ba42be2d",
     "speaker": "mira",
-    "text": "You have done well, Elior. You have gathered your supplies, honed your magical skills, and prepared your spirit. You are ready."
+    "text": "You're ready. Or as ready as anyone gets."
   },
   {
-    "key": "0ff09d3b553fa3",
+    "key": "11463ed2796d7b",
     "speaker": "narrator",
-    "text": "She presents you with the ancient amulet."
-  },
-  {
-    "key": "0bd69e6bdb62a0",
-    "speaker": "mira",
-    "text": "May this guide and protect you."
+    "text": "She lifts the ancient amulet from its stand, puts it in your hand and closes your fingers over it. It is warm."
   },
   {
     "key": "1f6662a6f4c08b",
@@ -2655,19 +2800,19 @@
     "text": "I knew your parents better than I have said. Once you are truly ready, I will tell you."
   },
   {
-    "key": "1574e0ceaaed26",
+    "key": "1ff6109e8ebf51",
     "speaker": "narrator",
-    "text": "She holds your hand a moment longer, her tone serious."
+    "text": "She holds your hand a moment longer."
+  },
+  {
+    "key": "0440e505a57b14",
+    "speaker": "mira",
+    "text": "A man came to my door at the turn of the month, in a grey cloak, asking after this. I told him I grow herbs."
   },
   {
     "key": "04b6e65057b84f",
     "speaker": "mira",
     "text": "Your road leads to Greendale, Elior. Once there, show the amulet to no one lightly. Those who know what it is will find you."
-  },
-  {
-    "key": "19379ad88adc35",
-    "speaker": "mira",
-    "text": "Trust in yourself, and remember: the fate of our village, or even more, may rest in your hands."
   },
   {
     "key": "0e4e8bf1670acc",
@@ -2745,14 +2890,14 @@
     "text": "A mysterious amulet inscribed with runes. It is faintly warm in your hand."
   },
   {
-    "key": "111039c35b0765",
+    "key": "18708bfe81a990",
     "speaker": "narrator",
-    "text": "Mira looks at you kindly."
+    "text": "Mira doesn't look up from her herbs."
   },
   {
-    "key": "06957d5b8781bb",
+    "key": "1bcce557e73274",
     "speaker": "mira",
-    "text": "The journey of a thousand miles begins with a single step. You have taken many already. Go now, and may your path be clear."
+    "text": "Still here? Go and say a proper goodbye to your grandmother. Then go."
   },
   {
     "key": "05633832d62aae",

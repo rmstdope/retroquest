@@ -26,18 +26,24 @@ import { Well } from '../items/Well'
 export class Villager extends Character {
   /** Her rumours, in the order she tells them. */
   private static readonly RUMOURS: readonly string[] = [
-    'Have you seen the fields lately? The crops are withering overnight, and no one ' +
-      "knows why. It's like the land itself is sick...",
+    'Have you seen the fields? Green on market day, grey by the next ' +
+      "morning. My husband says it's the soil. He also said it would rain " +
+      'last Tuesday.',
     'Last night, someone spotted a cloaked stranger near the old well, asking after ' +
       'an old amulet, from a family that left. Nobody would tell him a thing, ' +
       'and he took the road to the mill.',
     "The animals are restless. My neighbor's dog howled at nothing for hours, and the " +
       'chickens refuse to leave their coop after dusk. ' +
       "Malakar's weather, my mother would have called it, and knocked on wood.",
-    'Strange footprints appeared by the riverbank this morning—too large for any ' +
-      'villager, and they led straight into the woods.',
-    `${characterName('Mira')} says the air feels heavy with magic, and the chapel bell rang by itself at ` +
-      "midnight. Something's not right in Willowbrook.",
+    "Somebody's been down at the river bend. Good boots, not from round " +
+      "here. The prints go right to the water's edge and just stand there, " +
+      'my cousin says, like he waited a long while.',
+    'Did you know the chapel bell rang once by itself? Years back, at ' +
+      'midnight, with no hand on the rope. My mother knocked on wood for ' +
+      'a week.',
+    "They say the king's taken to his bed in Greendale, and not one " +
+      "physician can name what ails him. And the flour cart didn't come " +
+      "Thursday. Eleven years, and it's never once missed a Thursday.",
   ]
 
   dialogueOptions: string[] = [...Villager.RUMOURS]
@@ -52,9 +58,9 @@ export class Villager extends Character {
 
   private static readonly NAME = 'Tilda'
   private static readonly DESCRIPTION =
-    `${characterName(Villager.NAME)}, the baker's wife: a friendly ` +
-    'Willowbrook local, always eager to share the latest gossip or rumors ' +
-    'about the village.'
+    `${characterName(Villager.NAME)}, the baker's wife, flour to the ` +
+    'elbows. She knows what everyone in Willowbrook had for breakfast, and ' +
+    'who they ate it with.'
 
   /**
    * Bring a villager from a save made before she was named up to date: she
@@ -66,11 +72,13 @@ export class Villager extends Character {
     this.dialogueOptions = [...Villager.RUMOURS]
   }
 
-  /** She politely declines any gift; the reply never names the item. */
+  /** She hands any gift back with a warning; the reply never names the item. */
   override giveItem(_gameState: GameState, _item: Item): string {
-    return (
-      `${characterName(this.name)} shakes her head politely. ` +
-      "It isn't something she needs."
+    return attributeSpeech(
+      this.name,
+      `${characterName(this.name)} looks it over with interest and gives it ` +
+        'back. ' +
+        speech("Don't go giving your things away, love. People will talk."),
     )
   }
 

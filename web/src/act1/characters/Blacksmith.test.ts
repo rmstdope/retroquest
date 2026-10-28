@@ -29,8 +29,9 @@ function seeTheDeer(game: Game): void {
 
 describe('Borin sharpening the knife', () => {
   const TRADE =
-    'The blacksmith takes your coin and your dull knife. He expertly ' +
-    'sharpens it on his whetstone and hands you back a gleaming sharp knife!'
+    'The blacksmith pockets the coin and puts the dull knife to the ' +
+    'whetstone. It sings for a minute. He tests the edge on his thumbnail ' +
+    'before he hands it back.\nYou receive a sharp knife.'
 
   /** The response with markup tags removed, so wording can be compared. */
   function plain(response: string): string {
@@ -62,7 +63,7 @@ describe('Borin sharpening the knife', () => {
 
     expect(plain(response)).toContain(
       'The blacksmith eyes the dull knife. That edge has seen better days. ' +
-        "I'll put it right for ye, but it'll cost you a coin.",
+        "I'll put it right for you, lad, but it'll cost a coin.",
     )
     expect(game.state.hasItem('dull knife')).toBe(true)
     expect(findMarkupProblems(response)).toEqual([])
@@ -76,7 +77,7 @@ describe('Borin sharpening the knife', () => {
 
     const response = executeCommands(game, ['give coin to blacksmith'])
 
-    expect(response).toContain('if you have one')
+    expect(response).toContain('Bring the blade as well.')
     expect(game.state.hasItem('coin')).toBe(true)
   })
 
@@ -88,7 +89,7 @@ describe('Borin sharpening the knife', () => {
 
     const response = executeCommands(game, ['give dull knife to blacksmith'])
 
-    expect(response).toContain('cost you a')
+    expect(response).toContain("it'll cost a")
     expect(game.state.hasItem('dull knife')).toBe(true)
     expect(game.state.hasItem('sharp knife')).toBe(false)
   })
@@ -124,7 +125,7 @@ describe('Borin as the act goes on', () => {
 
     const response = executeCommands(game, ['talk to blacksmith'])
 
-    expect(response).toContain('Need something else?')
+    expect(response).toContain("What've you got for me?")
     expectDialogueSpeaker(response, 'blacksmith')
   })
 
@@ -198,7 +199,7 @@ describe('Borin as the act goes on', () => {
     expect(findMarkupProblems(response)).toEqual([])
   })
 
-  it('tells Elior plainly to sit quiet a while in the glade', () => {
+  it('tells Elior plainly to sit and rest a while in the glade', () => {
     const game = gameAtForge()
     game.state.addItemToInventory(new MillstoneFragment())
 
@@ -206,7 +207,8 @@ describe('Borin as the act goes on', () => {
       'give millstone fragment to blacksmith',
     ])
 
-    expect(response).toContain('sit quiet a while')
+    expect(response).toContain('sit down, rest a while')
+    expect(response).toContain('[room_name]Hidden Glade[/room_name]')
     expectDialogueSpeaker(response, 'blacksmith')
   })
 })

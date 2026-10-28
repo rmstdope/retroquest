@@ -68,9 +68,9 @@ export class Merchant extends Character {
     super({
       name: 'merchant',
       description:
-        `A traveling ${characterName('merchant')} with a cart full of wares ` +
-        'and stories from ' +
-        'distant lands. Always ready to trade or offer travel advice.',
+        `A travelling ${characterName('merchant')} with a loaded cart and a ` +
+        'thin grey mare who stands on three good shoes. He has the look of a ' +
+        'man two days from his last meal.',
     })
   }
 
@@ -95,10 +95,11 @@ export class Merchant extends Character {
         `The ${characterName(this.name)} offers a friendly nod. ` +
         speech(
           news +
-            'Looking for something ' +
-            'specific, or just browsing? If you have any fine jewelry, especially ' +
-            "a [item_name]shiny ring[/item_name], I'm ready to exchange it for a " +
-            'pair of sturdy [item_name]wandering boots[/item_name].\n' +
+            "Boots, friend? I've one good pair of " +
+            '[item_name]wandering boots[/item_name] left, walked in and ' +
+            "soft, and the soles will outlast you. I'll not take coin for " +
+            "them; coin's thin where I'm going. Something small and fine " +
+            'would buy them. A ring, say.\n' +
             'Failing that, my old mare threw a shoe on the hill road; ' +
             'a good iron [item_name]horseshoe[/item_name] would do me nearly as well.' +
             this.hunger(),
@@ -109,9 +110,8 @@ export class Merchant extends Character {
       `The ${characterName(this.name)} grins. ` +
       speech(
         news +
-          'Those [item_name]boots[/item_name] should ' +
-          'serve you well on the road ahead! Let me know if you find anything ' +
-          'else of value.' +
+          'How are the [item_name]boots[/item_name]? Give them a week and ' +
+          "they'll know your feet better than you do." +
           this.hunger(),
       )
     )
@@ -174,21 +174,22 @@ export class Merchant extends Character {
       gameState.addItemToInventory(boots)
       this.bootsGiven = true // Set flag when boots are given
       return (
-        `The ${characterName(this.name)}'s eyes widen as you hand over the [item_name]` +
-        item.name +
-        '[/item_name]. ' +
+        `The ${characterName(this.name)} holds the ` +
+        `[item_name]${item.name}[/item_name] up to the light, and his ` +
+        'eyebrows go up. ' +
+        speech('Now this is fine work. Older than it looks, too.') +
+        ' He looks at you, then away. ' +
         speech(
-          'A fine piece! As promised, here are the [item_name]' +
-            boots.name +
-            "[/item_name]. They'll serve you well on the road to Greendale.",
+          "Well. A bargain's a bargain. The " +
+            `[item_name]${boots.name}[/item_name] are yours.`,
         ) +
         '\n\n' +
-        `You receive a pair of [item_name]${boots.name}[/item_name]!`
+        `You receive a pair of [item_name]${boots.name}[/item_name].`
       )
     }
     return (
       `The ${characterName(this.name)} weighs it in his palm and hands it back. ` +
-      speech('Not interested in that, friend.')
+      speech("I'd not get a copper for that in Greendale, friend.")
     )
   }
 
@@ -216,7 +217,7 @@ export class Merchant extends Character {
           `Here, the [item_name]${boots.name}[/item_name] are yours.`,
       ) +
       '\n\n' +
-      `You receive a pair of [item_name]${boots.name}[/item_name]!`
+      `You receive a pair of [item_name]${boots.name}[/item_name].`
     )
   }
 }

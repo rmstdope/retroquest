@@ -26,40 +26,53 @@ import {
 export class Fisherman extends Character {
   knowsFishingBasics = false
   receivedFish = false
-  dialogueStates: Record<string, string> = {
-    initial:
-      `The ${characterName('fisherman')} nods at you. ` +
-      speech(
-        "The river's been a bit strange lately. Not many fish biting, and " +
-          "my arm... well, it's seen better days. Oh, I wish I could pull up " +
-          'a pike or two!',
-      ),
-    taught_fishing:
-      `The ${characterName('fisherman')} smiles. ` +
-      speech('Good to see you trying your luck with the rod. Any luck yet?'),
-    received_fish_thanks:
-      `The ${characterName('fisherman')}'s eyes light up. ` +
-      speech(
-        "Ah, a fine catch! Thank you kindly. It's been a while since " +
-          "I've had a fresh river fish.",
-      ),
-    taught_spells:
-      `The ${characterName('fisherman')} looks out over the water. ` +
-      speech(
-        'The river has many moods. Treat it with respect, ' +
-          'and it might share its secrets with you.',
-      ),
-  }
   currentDialogueKey = 'initial'
 
   constructor() {
     super({
       name: 'fisherman',
       description:
-        'A weathered old man who spends his days by the riverbank, ' +
-        'fishing and humming quiet tunes. He knows much about the river ' +
-        'and its secrets.',
+        'An old man on an upturned crate at the bend, his line in the ' +
+        'water, humming something under his breath.',
     })
+  }
+
+  /**
+   * His line for each stage (`currentDialogueKey`). Built on demand rather
+   * than kept in a field, so a save always hears the current wording.
+   */
+  private dialogue(key: string): string {
+    const fisherman = characterName('fisherman')
+    switch (key) {
+      case 'taught_fishing':
+        return (
+          `The ${fisherman} smiles. ` +
+          speech('Anything biting? Reeds, lad. Always the reeds.')
+        )
+      case 'received_fish_thanks':
+        return (
+          `The ${fisherman}'s eyes light up. ` +
+          speech("Now that's a fish. Haven't tasted fresh since the arm went.")
+        )
+      case 'taught_spells':
+        return (
+          `The ${fisherman} looks out over the water. ` +
+          speech(
+            "She used to sit right where you're standing, your mother. " +
+              'Feet in the water, even in spring. Said it helped her think.',
+          )
+        )
+      default:
+        return (
+          `The ${fisherman} nods at you. ` +
+          speech(
+            "River's off this season. Fish are sulking, and this arm's " +
+              "gone stiff on me, so I couldn't land one if they weren't.",
+          ) +
+          ' He looks at the water. ' +
+          speech("I'd give a good deal for a fresh fish.")
+        )
+    }
   }
 
   /** Named by what it is, so it reads "the fisherman" (see `nameInSentence`). */
@@ -88,6 +101,11 @@ export class Fisherman extends Character {
           `The ${characterName('fisherman')} notices ` +
           'your [item_name]fishing rod[/item_name]. ' +
           speech(this.fishingLesson(gameState)) +
+          '\nHe shows you how to hold it, and where. ' +
+          speech(
+            "By the reeds. That's where they hide. Then you wait, lad. " +
+              "Fish don't come to them as hurry.",
+          ) +
           '\n' +
           'He teaches you the basics of fishing.'
         )
@@ -98,49 +116,34 @@ export class Fisherman extends Character {
       } else if (gameState.getStoryFlag(FLAG_HEALED_FISHERMAN_ARM)) {
         return this.healedGreeting()
       } else {
-        return this.dialogueStates.initial
+        return this.dialogue('initial')
       }
     }
 
-    return this.dialogueStates[this.currentDialogueKey]
+    return this.dialogue(this.currentDialogueKey)
   }
 
-  /**
-   * His greeting once heal has mended his arm. Kept out of `dialogueStates`
-   * so saves made before this line existed still greet correctly.
-   */
+  /** His greeting once heal has mended his arm. */
   private healedGreeting(): string {
     return (
-      `The ${characterName('fisherman')} nods at you and rolls his mended ` +
-      'shoulder. ' +
+      `The ${characterName('fisherman')} rolls his mended shoulder at you. ` +
       speech(
-        "The river's been a bit strange lately. Not many fish biting, but " +
-          "thanks to you this arm's mended, and I'll have a pike or two out " +
-          'of her yet!',
+        "River's still sulking. But this arm's good as new, and I'll have " +
+          'a pike out of her yet.',
       )
     )
   }
 
   /**
-   * The words he teaches fishing with: before heal he cannot fish with his
-   * busted arm, after it he shares his know-how out of gratitude.
+   * What he says on seeing the rod, which was Elior's father's: before heal
+   * he cannot fish with his stiff arm, after it he teaches out of gratitude.
    */
   private fishingLesson(gameState: GameState): string {
-    const tips =
-      "Cast your line near the reeds, that's where they like to hide. " +
-      'Patience is key, my friend, patience.'
+    const rod = "That was your father's rod, or I'm a trout."
     if (gameState.getStoryFlag(FLAG_HEALED_FISHERMAN_ARM)) {
-      return (
-        'Ah, a fellow angler! ' +
-        'You mended this old arm, so the least I can do is share what I ' +
-        `know. ${tips}`
-      )
+      return `${rod} You mended this old arm; the least I can do is show you.`
     }
-    return (
-      'Ah, a fellow angler! ' +
-      "My arm's busted, can't fish myself. But I can tell you a thing " +
-      `or two. ${tips}`
-    )
+    return `${rod} I can't cast with this arm, but I can show you. Here.`
   }
 
   /** Handle items offered to the fisherman and teach spells if appropriate. */
@@ -152,22 +155,21 @@ export class Fisherman extends Character {
       gameState.learnSpell(new PurifySpell())
       this.currentDialogueKey = 'taught_spells'
       return (
-        this.dialogueStates.received_fish_thanks +
-        ' ' +
+        this.dialogue('received_fish_thanks') +
+        '\nHe wraps it in a dock leaf and sets it by his crate. Then he is ' +
+        'quiet a while. ' +
         speech(
-          "The river's water... it's not been right. Murky. " +
-            'Your mother taught me this, by the bend. ' +
-            "I reckon it's yours more than mine. With this, you can cleanse " +
-            'water,',
+          "Water's not been right. You'll have smelled the well. Your " +
+            'mother taught me a thing for that, here at the bend, years ' +
+            'back. I reckon it was always more hers than mine.',
         ) +
-        ' ' +
-        '\n' +
-        'You have learned [spell_name]purify[/spell_name]!'
+        '\nHe shows you, slowly.\n' +
+        'You have learned [spell_name]purify[/spell_name].'
       )
     } else if (item instanceof Fish && this.receivedFish) {
       return (
-        `The ${characterName('fisherman')} smiles. ` +
-        speech("Thank you, but I've already eaten. Save it for yourself!")
+        `The ${characterName('fisherman')} pats his belly. ` +
+        speech("One's a feast, lad. Two's showing off. Keep it for the road.")
       )
     }
 
@@ -175,9 +177,10 @@ export class Fisherman extends Character {
       return this.showPhotograph(gameState)
     }
 
-    return (
-      `The ${characterName('fisherman')} eyes it with mild curiosity, ` +
-      'then shrugs.'
+    return attributeSpeech(
+      this.name,
+      `The ${characterName('fisherman')} eyes it, then shrugs. ` +
+        speech("Won't catch anything with that, lad."),
     )
   }
 
@@ -202,7 +205,11 @@ export class Fisherman extends Character {
     if (gameState.getStoryFlag(FLAG_FOUND_MOTHERS_LETTER)) {
       return (
         `The ${characterName('fisherman')} nods slowly. ` +
-        speech("She'd be proud of you, lad. Keep her words close.")
+        speech('You found it, then.') +
+        ' He looks at the stone a while. ' +
+        speech(
+          "I've watched that stone a long time, lad. I reckon I can stop now.",
+        )
       )
     }
     if (gameState.getStoryFlag(FLAG_FISHERMAN_TOLD_OF_TIN)) {
@@ -210,7 +217,7 @@ export class Fisherman extends Character {
         `The ${characterName('fisherman')} points to the water's edge. ` +
         speech(
           'Under the [item_name]smooth stone[/item_name], lad, ' +
-            'where the water turns. Go on, search there.',
+            "where the water turns. I've not touched it. I promised.",
         )
       )
     }

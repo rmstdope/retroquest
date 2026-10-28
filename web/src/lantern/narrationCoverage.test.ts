@@ -52,12 +52,12 @@ const OPTIONAL_LINES: Record<number, { speaker: string; opening: string }[]> = {
     { speaker: 'narrator', opening: 'The bush greens under your hand' },
     { speaker: 'narrator', opening: 'The herb crowds its pot' },
     { speaker: 'mira', opening: 'That was dear, that herb.' },
-    { speaker: 'grandmother', opening: 'Oh, wild berries! Thank you, dear.' },
+    { speaker: 'grandmother', opening: 'Look at you: wild berries' },
     { speaker: 'fisherman', opening: 'Under the smooth stone, lad' },
-    { speaker: 'grandmother', opening: 'This was taken long ago' },
-    { speaker: 'grandmother', opening: "It's the little things" },
+    { speaker: 'grandmother', opening: 'The three of you.' },
+    { speaker: 'grandmother', opening: "I'll make a pie." },
     { speaker: 'shopkeeper', opening: 'Hold on there, friend! That armor' },
-    { speaker: 'shopkeeper', opening: 'Not looking for donations' },
+    { speaker: 'shopkeeper', opening: 'I sell things, lad.' },
     { speaker: 'merchant', opening: "That's kind, friend" },
     { speaker: 'mira', opening: 'I have told you what I know of it' },
     { speaker: 'narrator', opening: 'The old water splashes out' },
@@ -66,13 +66,25 @@ const OPTIONAL_LINES: Record<number, { speaker: string; opening: string }[]> = {
     { speaker: 'narrator', opening: "You have a rod, but you're not quite" },
     { speaker: 'narrator', opening: 'The nearby plants seem to respond' },
     /** Act I's stock replies (rq-bio): one fixed line per person, never naming the item. */
-    { speaker: 'narrator', opening: 'Tilda shakes her head politely.' },
-    { speaker: 'narrator', opening: 'The priest shakes his head politely.' },
+    {
+      speaker: 'narrator',
+      opening: 'Tilda looks it over with interest and gives it back.',
+    },
+    { speaker: 'tilda', opening: "Don't go giving your things away" },
+    {
+      speaker: 'narrator',
+      opening: 'The priest shakes his head and folds your fingers',
+    },
+    { speaker: 'priest', opening: 'Keep it, child. The road will want it' },
     {
       speaker: 'narrator',
       opening: 'The deer sniffs at it and turns its head away.',
     },
-    { speaker: 'narrator', opening: 'Grandmother turns it over in her hands.' },
+    {
+      speaker: 'narrator',
+      opening: 'Grandmother turns it over in her hands and gives it back.',
+    },
+    { speaker: 'grandmother', opening: 'Keep it, love. My shelves' },
     {
       speaker: 'narrator',
       opening: 'Mira regards it, then shakes her head gently.',
@@ -83,8 +95,9 @@ const OPTIONAL_LINES: Record<number, { speaker: string; opening: string }[]> = {
     },
     {
       speaker: 'narrator',
-      opening: 'The fisherman eyes it with mild curiosity, then shrugs.',
+      opening: 'The fisherman eyes it, then shrugs.',
     },
+    { speaker: 'fisherman', opening: "Won't catch anything with that, lad." },
     {
       speaker: 'narrator',
       opening: 'The merchant weighs it in his palm and hands it back.',
@@ -97,7 +110,7 @@ const OPTIONAL_LINES: Record<number, { speaker: string; opening: string }[]> = {
     { speaker: 'narrator', opening: 'Patches has nothing to sell you.' },
     {
       speaker: 'shopkeeper',
-      opening: "Sorry, friend, that's not something I carry.",
+      opening: 'Not something I carry, lad.',
     },
     { speaker: 'narrator', opening: "You don't see that here." },
     { speaker: 'narrator', opening: 'A divine light surrounds Tilda' },
@@ -170,8 +183,8 @@ describe('Act I stock replies in the script (rq-bio)', () => {
 
   it('holds each give refusal once, whatever item was offered', () => {
     for (const opening of [
-      'Tilda shakes her head politely.',
-      'The priest shakes his head politely.',
+      'Tilda looks it over',
+      'The priest shakes his head and',
       'The deer sniffs at it',
       'Grandmother turns it over',
       'Mira regards it',

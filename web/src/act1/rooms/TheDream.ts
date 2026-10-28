@@ -14,15 +14,16 @@ export class TheDream extends Room {
     super({
       name: 'The Dream',
       description:
-        'Dark, and a storm in it. Rain drives against shutters you cannot ' +
-        'see, and the thunder comes so close that the dark itself shakes. ' +
-        'Shadows move through it the way smoke moves. A hand, a man’s ' +
-        'hand, lifts a child out of the dark and holds it against a ' +
-        'shoulder, and then the dark has them both. Somewhere a slow tune ' +
-        'climbs three notes and settles home again. Among the shadows a ' +
-        'figure stands, tall and without a face, too far to reach and too ' +
-        'near to be anything but real. Its whisper is at the edge of ' +
-        'hearing, and it is your name.',
+        'It is dark, and it is raining hard. You hear it beating on ' +
+        'shutters, though you cannot see any. Thunder breaks so close ' +
+        'that the dark shakes with it. Shadows drift past like smoke. ' +
+        'A man’s hand reaches out of the dark, lifts a child and holds ' +
+        'it against his shoulder, and then both of them are gone. ' +
+        'Somewhere a slow tune climbs three notes and settles home again. ' +
+        'A tall figure stands among the shadows. It has no face you can ' +
+        'find. It is too far away to reach, and too close to be only a dream. ' +
+        'It is whispering, at the very edge of hearing, and what it ' +
+        'whispers is your name.',
       items: [],
       characters: [new DreamVoice()],
       exits: {},

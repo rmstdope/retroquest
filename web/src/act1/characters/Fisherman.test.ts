@@ -74,8 +74,10 @@ describe('Fisherman', () => {
 
     const response = executeCommands(game, ['give fish to fisherman'])
 
-    expect(response).toContain('Your mother taught me this, by the bend.')
-    expect(response).toContain("I reckon it's yours more than mine.")
+    expect(response).toContain(
+      'mother taught me a thing for that, here at the bend',
+    )
+    expect(response).toContain('I reckon it was always more hers than mine.')
     expect(game.state.hasSpell('purify')).toBe(true)
   })
 
@@ -124,5 +126,41 @@ describe('Fisherman', () => {
       expect(game.state.getStoryFlag('learned_fishing_basics')).toBe(true)
       expectDialogueSpeaker(response, 'fisherman')
     })
+  })
+})
+
+describe('Fisherman teaching purify', () => {
+  it('ends his speech on a full sentence, not a comma', () => {
+    const game = new Game([new Act1()])
+    game.state.currentRoom = game.state.allRooms.Riverbank
+    game.state.addItemToInventory(new Fish())
+
+    const response = executeCommands(game, ['give fish to fisherman'])
+
+    expect(response).not.toContain(',[/dialogue]')
+    expect(response).toContain(
+      'You have learned [spell_name]purify[/spell_name].',
+    )
+  })
+
+  it('speaks his current idle line after loading a save that holds the old one', () => {
+    const game = new Game([new Act1()])
+    game.state.currentRoom = game.state.allRooms.Riverbank
+    game.state.addItemToInventory(new Fish())
+    executeCommands(game, ['give fish to fisherman'])
+    const fisherman = game.state.currentRoom.getCharacterByName('fisherman')
+    Object.defineProperty(fisherman, 'dialogueStates', {
+      value: { taught_spells: 'The river has many moods.' },
+      enumerable: true,
+      writable: true,
+      configurable: true,
+    })
+    const loaded = new Game([new Act1()])
+    expect(loaded.loadSaveData(game.toSaveData())).toContain('loaded')
+
+    const answer = loaded.commandParser.parse('talk to fisherman')
+
+    expect(answer).toContain('She used to sit right where you')
+    expect(answer).not.toContain('many moods')
   })
 })

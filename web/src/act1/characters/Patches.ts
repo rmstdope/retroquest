@@ -60,8 +60,9 @@ export class Patches extends Character {
     }
     return (
       `${characterName(this.name)} sniffs at your offering ` +
-      'from the shadows and stays put. ' +
-      'Perhaps she would rather hear her name.'
+      "from the shadows and stays put. Whatever it is, it isn't worth " +
+      'leaving the crates for. Her ears turn toward you, though, as if ' +
+      "she's waiting to be called."
     )
   }
 

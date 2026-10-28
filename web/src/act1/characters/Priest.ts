@@ -26,9 +26,8 @@ export class Priest extends Character {
     super({
       name: 'priest',
       description:
-        `A kindly ${characterName('priest')} who tends the chapel, ` +
-        'offering blessings ' +
-        'and sharing the lore of Eldoria.',
+        `The chapel's ${characterName('priest')}, thin and a little ` +
+        'stooped, with old candle wax on both sleeves.',
     })
   }
 
@@ -37,11 +36,13 @@ export class Priest extends Character {
     return super.nameInSentence({ ...options, common: true })
   }
 
-  /** He politely declines any gift; the reply never names the item. */
+  /** He gently gives any gift back; the reply never names the item. */
   override giveItem(_gameState: GameState, _item: Item): string {
-    return (
-      `The ${characterName(this.name)} shakes his head politely. ` +
-      "It isn't something he needs."
+    return attributeSpeech(
+      this.name,
+      `The ${characterName(this.name)} shakes his head and folds your ` +
+        'fingers back over it. ' +
+        speech('Keep it, child. The road will want it more than I do.'),
     )
   }
 
@@ -62,11 +63,13 @@ export class Priest extends Character {
   /** The greeting, the story of the founders, the relic and the bell, and the matches. */
   private firstTalk(): string {
     return (
-      `The ${characterName(this.name)} offers a serene smile. ` +
+      `The ${characterName(this.name)} looks up from the altar. ` +
       speech(
-        'Welcome, child. The chapel is a sanctuary for all who seek peace. ' +
-          'The shadows in our land grow long, but faith can be a guiding light.',
+        'Come in, child, and shut the door behind you. The draught gets at ' +
+          'the candles.',
       ) +
+      ' He looks at the cold wick. ' +
+      speech('It would, if I had one lit.') +
       '\nHe glances up at the bell rope. ' +
       speech(
         'When the founders came to this valley, they brought a relic with ' +
@@ -79,9 +82,11 @@ export class Priest extends Character {
       ) +
       '\nHe sighs. ' +
       speech(
-        'And now I cannot even light a candle against the dark. ' +
-          'I am out of matches, and I usually get them for free from the ' +
-          'General Store. Could you bring me some?',
+        "And now I can't even light a candle in their chapel. I'm out of " +
+          `matches. ${characterName('Hemlock')} at the ` +
+          '[room_name]General Store[/room_name] keeps a box ' +
+          'for me; he has never once let me pay. ' +
+          "If you're passing that way...",
       )
     )
   }
@@ -110,10 +115,11 @@ export class Priest extends Character {
     }
     if (gameState.inventory.some((item) => item instanceof Locket)) {
       return (
-        `The ${priest} nods at the locket in your hand. ` +
+        `The ${priest} looks at the locket in your hand, at the tree and ` +
+        'the two moons on it, and then up at the door. ' +
         speech(
-          'Thank you for the light, child. Keep that locket close, and show ' +
-            `it to your ${characterName('grandmother')}. ` +
+          'Thank you for the light, child. Show that to your ' +
+            `${characterName('grandmother')}. ` +
             'She will know it better than I.',
         )
       )

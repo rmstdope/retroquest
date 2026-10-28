@@ -44,22 +44,19 @@ describe('Grandmother and the locket', () => {
     expect(response).toContain(
       "[character_name]Grandmother[/character_name]'s eyes widen",
     )
-    expect(response).toContain(
-      '[character_name]Grandmother[/character_name] hands you',
-    )
+    expect(response).toContain("I suppose it's now.")
   })
 })
 
 describe('Grandmother and other gifts', () => {
-  it('smiles warmly over the berries, her name capitalised', () => {
+  it('remembers him as a boy over the berries and promises a pie', () => {
     const game = cottageGame()
     game.state.addItemToInventory(new WildBerries())
 
     const response = executeCommands(game, ['give berries to grandmother'])
 
-    expect(response).toContain(
-      '[character_name]Grandmother[/character_name] smiles warmly',
-    )
+    expect(response).toContain('same as when you were six')
+    expect(response).toContain("I'll make a pie.")
   })
 
   it('turns over a gift she has no use for, her name capitalised', () => {
@@ -69,7 +66,7 @@ describe('Grandmother and other gifts', () => {
     const response = executeCommands(game, ['give key to grandmother'])
 
     expect(response).toContain(
-      '[character_name]Grandmother[/character_name] turns it over in her hands.',
+      '[character_name]Grandmother[/character_name] turns it over in her hands and gives it back.',
     )
   })
 })
@@ -154,7 +151,7 @@ describe('Grandmother and the journey', () => {
     const response = executeCommands(game, ['talk to grandmother'])
 
     expect(response).not.toContain("your mother's gift")
-    expect(response).toContain('preparations')
+    expect(response).toContain('warm and fed')
     expect(
       game.state.inventory.filter((item) => item instanceof FreshBread),
     ).toHaveLength(1)
@@ -170,7 +167,7 @@ describe('Grandmother and the journey', () => {
 
     expect(response).toContain("So it's true, then.")
     expect(response).toContain('Come back to me, child.')
-    expect(response).not.toContain('preparations')
+    expect(response).not.toContain('warm and fed')
     expectDialogueSpeaker(response, 'grandmother')
     expect(findMarkupProblems(response)).toEqual([])
   })
@@ -188,7 +185,7 @@ describe('Grandmother and the journey', () => {
     const response = executeCommands(game, ['talk to grandmother'])
 
     expect(response).toContain("your mother's gift")
-    expect(response).not.toContain('your father was a great writer')
+    expect(response).not.toContain('Your father wrote in one like that')
   })
 })
 
@@ -202,10 +199,10 @@ describe('Grandmother and the dream', () => {
 
     const response = executeCommands(game, ['talk to grandmother'])
 
-    const greeting = response.indexOf('Oh, ')
+    const greeting = response.indexOf('There you are.')
     const reaction = response.indexOf(REACTION)
-    const tale = response.indexOf('your father was')
-    const lesson = response.indexOf('learned the')
+    const tale = response.indexOf('Your father wrote')
+    const lesson = response.indexOf('You have learned')
     expect(greeting).toBeGreaterThan(-1)
     expect(reaction).toBeGreaterThan(greeting)
     expect(tale).toBeGreaterThan(reaction)
@@ -228,9 +225,7 @@ describe('Grandmother and the dream', () => {
     )
     expect(humming).toBeGreaterThan(-1)
     expect(humming).toBeLessThan(response.indexOf(REACTION))
-    expect(humming).toBeLessThan(
-      response.indexOf('Willowbrook has always been'),
-    )
+    expect(humming).toBeLessThan(response.indexOf('The village is on edge'))
   })
 
   it('still hums when Elior has already talked to her and about the photograph', () => {
@@ -273,9 +268,9 @@ describe('Grandmother and the dream', () => {
 
     const response = executeCommands(game, ['talk to grandmother'])
 
-    expect(response).not.toContain('Oh, ')
+    expect(response).not.toContain('There you are.')
     expect(response.indexOf(REACTION)).toBeLessThan(
-      response.indexOf('your father was'),
+      response.indexOf('Your father wrote'),
     )
   })
 
@@ -294,7 +289,7 @@ describe('Grandmother and the dream', () => {
     const response = executeCommands(game, ['talk to grandmother'])
 
     expect(response).not.toContain(REACTION)
-    expect(response).toContain('You recall your father')
+    expect(response).toContain('You already have it by heart')
   })
 
   it('does not react for a player who already learned revive', () => {
