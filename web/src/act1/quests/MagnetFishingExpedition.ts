@@ -6,9 +6,9 @@ export class MagnetFishingExpeditionQuest extends Quest {
     super({
       name: 'Magnet fishing expedition',
       description:
-        'You have assembled a strange fishing rod with a magnet. Time to go on another fishing expedition!',
-      completion:
-        'You have retrieved the shiny ring from the well, proving your ingenuity and determination.',
+        'Something shiny lies at the bottom of the well, too deep for hands. ' +
+        'The magnet might reach it, on a long enough rod.',
+      completion: 'The well gave up a silver ring, and something else besides.',
     })
   }
 

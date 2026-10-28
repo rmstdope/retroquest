@@ -1,4 +1,4 @@
-import { Quest, type GameState } from '@/engine'
+import { characterName, Quest, type GameState } from '@/engine'
 import { FLAG_WOKE_FROM_DREAM } from '../Act1StoryFlags'
 
 /** Quest that unlocks the cottage exits after the player learns the revive spell. */
@@ -7,12 +7,13 @@ export class HintOfMagicQuest extends Quest {
     super({
       name: 'Hint of Magic',
       description:
-        'After a strange, vivid dream, you awaken with the sense that something beyond ' +
-        'the ordinary is calling to you. A mysterious force stirs within, urging you to ' +
-        'pay attention to the signs around you and discover what this new feeling means.',
+        'You woke with three words written down and a tune still going in the house. ' +
+        `${characterName('Grandmother')} is at the hearth, ` +
+        'and she will want to hear about the dream.',
       completion:
-        'You have discovered that the strange feeling within you is the first sign of ' +
-        'something magical. Your journey into the unknown has truly begun.',
+        `${characterName('Grandmother')} told you of your father's journal, ` +
+        'and his word for calling a thing back. ' +
+        'It came to you as she spoke, and it stayed.',
     })
   }
 

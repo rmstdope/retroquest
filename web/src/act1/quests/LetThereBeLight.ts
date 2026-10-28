@@ -7,8 +7,11 @@ export class LetThereBeLightQuest extends Quest {
   constructor() {
     super({
       name: 'Let there be light',
-      description: `The ${characterName('priest')} has asked you to help bring light to the chapel. Perhaps this small act will illuminate more than just the room for you.`,
-      completion: `You have brought light to the chapel, earning the gratitude of the ${characterName('priest')} and the respect of the villagers.`,
+      description:
+        `The ${characterName('priest')} is out of matches and his candle is cold. ` +
+        `${characterName('Hemlock')} at the General Store keeps a box for him.`,
+      completion:
+        'The candle is lit, and in the dark corner by the altar its light found a locket.',
     })
   }
 

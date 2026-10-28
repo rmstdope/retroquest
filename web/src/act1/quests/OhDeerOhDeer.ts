@@ -6,8 +6,12 @@ export class OhDeerOhDeerQuest extends Quest {
   constructor() {
     super({
       name: 'Oh deer, oh deer',
-      description: `You have heard tales of a magical ${characterName('deer')} from the ${characterName('Blacksmith')}. Perhaps you will witness something extraordinary yourself!`,
-      completion: `You have observed the magical ${characterName('deer')}, gaining a deeper understanding of the wonders and mysteries of Eldoria.`,
+      description:
+        `${characterName('Borin')}'s grandfather swore by a ${characterName('deer')} in the Hidden Glade ` +
+        'that comes to folk who keep still. Not to hunters. Not to talkers.',
+      completion:
+        `The ${characterName('deer')} came to you in the glade, ` +
+        'and where it stood a rare flower opened.',
     })
   }
 
