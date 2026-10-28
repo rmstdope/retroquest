@@ -78,8 +78,13 @@ describe('affirms', () => {
     expect(affirms('I understand', ['forgive'])).toBe(false)
   })
 
-  it('ignores a negation after the answer or in another clause', () => {
-    expect(affirms('be patient where I was not', ['patient'])).toBe(true)
+  it('ignores a negation in another clause, or inside the answer itself', () => {
+    expect(
+      affirms('be patient where I was not', [
+        'patient',
+        'be patient where I was not',
+      ]),
+    ).toBe(true)
     expect(affirms('I forgive you, no matter what', ['forgive'])).toBe(true)
     expect(affirms("Don't worry, I forgive you", ['forgive'])).toBe(true)
     expect(
@@ -95,5 +100,26 @@ describe('affirms', () => {
     expect(affirms('I do not really understand you', ['understand'])).toBe(
       false,
     )
+  })
+
+  it('hears a denial later in the same clause', () => {
+    expect(affirms('Justice is not what I want', ['justice'])).toBe(false)
+    expect(
+      affirms('forgiveness is not something you deserve', ['forgiveness']),
+    ).toBe(false)
+    expect(affirms('patient? not me', ['patient'])).toBe(false)
+  })
+
+  it('hears a question answered with a denial', () => {
+    expect(affirms('Justice? No. Sacrifice.', ['justice'])).toBe(false)
+    expect(affirms('Justice? No. Sacrifice.', ['sacrifice'])).toBe(true)
+    expect(affirms('Forgive you? Never.', ['forgive'])).toBe(false)
+    expect(affirms('Redemption? Never.', ['redemption'])).toBe(false)
+  })
+
+  it('reads a multi-word answer across an ellipsis', () => {
+    expect(
+      affirms('Power... follows… purpose', ['power follows purpose']),
+    ).toBe(true)
   })
 })

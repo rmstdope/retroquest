@@ -50,6 +50,7 @@ describe('TrueSelf', () => {
     'for the king',
     'alden',
     'the truth is I came for the king',
+    'not for revenge, for the king',
   ])('answers %s with the part of the truth it is', (words) => {
     const game = new Game([new Act4()])
     const answer = new TrueSelf().sayTo(game.state, words)

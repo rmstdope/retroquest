@@ -66,7 +66,7 @@ export class TrueSelf extends Character {
 
   /**
    * Saying the truth confesses (once): "truth", "revenge" or "vengeance" as a
-   * whole word, alone or in a sentence, unless the sentence denies it. The
+   * whole word, alone or in a sentence, unless it is denied. The
    * king, named without the motive, is the likeliest wrong answer and gets
    * its own reply, even inside "the truth is…"; anything else
    * is waited out.

@@ -52,21 +52,36 @@ function startsOf(spoken: readonly string[], answer: string): number[] {
 /** Words that turn a sentence against what it names; "n't" splits off as "t". */
 const NEGATIONS = ['not', 'never', 'no', 'cannot', 'nor', 't']
 
+/** Whether any of the words is a negation. */
+function negates(words: readonly string[]): boolean {
+  return words.some((word) => NEGATIONS.includes(word))
+}
+
 /**
  * Whether the words say one of the answers and do not deny it: "I forgive
- * you" affirms "forgive", "I will never forgive you" does not. Only a
- * negation earlier in the same clause denies the answer, so "be patient where
- * I was not" and "I forgive you, no matter what" still count. Use it where a
- * sentence may carry the answer and a stray negation must not count.
+ * you" affirms "forgive", "I will never forgive you" does not. A negation
+ * denies the answer when it is in the same clause ("justice is not what I
+ * want") or opens the reply to it asked as a question ("Justice? No."); a
+ * negation in another clause does not ("I forgive you, no matter what"), nor
+ * one inside a listed answer ("be patient where I was not"). An ellipsis does
+ * not end a clause. Use it where a sentence may carry the answer and a stray
+ * negation must not count.
  */
 export function affirms(words: string, answers: readonly string[]): boolean {
-  return words.split(/[,.;:!?]/).some((clause) => {
+  const clauses = words.replace(/\.{2,}|…/g, ' ').split(/(?<=[,.;:!?])/)
+  return clauses.some((clause, index) => {
+    const answeredNo =
+      clause.trimEnd().endsWith('?') &&
+      negates(wordsOf(clauses[index + 1] ?? '').slice(0, 1))
+    if (answeredNo) return false
     const spoken = wordsOf(clause)
-    return answers.some((answer) =>
-      startsOf(spoken, answer).some(
+    return answers.some((answer) => {
+      const length = wordsOf(answer).length
+      return startsOf(spoken, answer).some(
         (start) =>
-          !spoken.slice(0, start).some((word) => NEGATIONS.includes(word)),
-      ),
-    )
+          !negates(spoken.slice(0, start)) &&
+          !negates(spoken.slice(start + length)),
+      )
+    })
   })
 }

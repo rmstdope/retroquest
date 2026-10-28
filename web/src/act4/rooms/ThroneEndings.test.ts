@@ -103,6 +103,19 @@ describe('Redemption', () => {
     expect(text).not.toContain('Sir Cedric')
   })
 
+  it('stops waiting to be forgiven once Elior has forgiven him', () => {
+    const game = healed()
+    executeCommands(game, ['say forgiveness to malakar'])
+    const talk = executeCommands(game, ['talk to malakar'])
+    expect(talk).toContain(
+      'It does not hurt. For the first time in years, it does not hurt.',
+    )
+    expect(talk).not.toContain('waiting to be forgiven')
+    const other = executeCommands(game, ['say hello to malakar'])
+    expect(other).toContain('You have forgiven him. It is the wound that')
+    expect(other).not.toContain('waiting to be forgiven')
+  })
+
   it('calls back to Sir Cedric only once he has forgiven the knight', () => {
     const game = healed()
     game.state.setStoryFlag(FLAG_ACT4_CEDRIC_FORGAVE, true)

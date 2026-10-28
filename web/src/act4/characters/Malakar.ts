@@ -42,8 +42,9 @@ function wrapBreath(text: string): string {
 }
 
 /**
- * The words that are the refrain: its name, or its opening said in any
- * punctuation ("power follows purpose, purpose follows truth").
+ * The words that are the refrain: its name, or its opening, whatever ends it
+ * ("power follows purpose, purpose follows truth"), or with an ellipsis
+ * between its words.
  */
 const REFRAIN_WORDS = ['refrain', 'power follows purpose']
 
@@ -86,10 +87,15 @@ function endingWordIn(words: string): EndingWord | null {
   return ENDING_WORDS.find((e) => affirms(words, e.words))?.ending ?? null
 }
 
+/** What he answers once Elior has forgiven him and the wound is left. */
+const FORGIVEN = clue(
+  'You have forgiven him. It is the wound that is waiting now.',
+)
+
 /**
- * His look once the elixir has healed him, which points at forgiveness:
- * through what Sir Cedric did for the knight, if Elior saw him do it, and
- * plainly otherwise.
+ * His look once the elixir has healed him and before Elior has forgiven
+ * him, which points at forgiveness: through what Sir Cedric did for the
+ * knight, if Elior saw him do it, and plainly otherwise.
  */
 function waitingForForgiveness(gameState: GameState): string {
   return gameState.getStoryFlag(FLAG_ACT4_CEDRIC_FORGAVE)
@@ -160,8 +166,9 @@ export class Malakar extends Character {
           this.name,
           'It does not hurt. For the first time in years, it does not hurt.',
         ) +
-        '\n' +
-        waitingForForgiveness(gameState)
+        (gameState.getStoryFlag(FLAG_ACT4_FORGIVENESS_SAID)
+          ? ''
+          : '\n' + waitingForForgiveness(gameState))
       )
     }
     if (gameState.getStoryFlag(FLAG_ACT4_ELIXIR_ON_KING)) {
@@ -229,8 +236,8 @@ export class Malakar extends Character {
   /**
    * The refrain is the refusal; the words of the endings are heard once the
    * elixir is used; any other word only gets a dim answer. Each is heard in
-   * a sentence too, unless the sentence denies it ("I will never forgive
-   * you").
+   * a sentence too, unless it is denied ("I will never forgive you",
+   * "Justice? No.").
    */
   override sayTo(gameState: GameState, words: string): string {
     const ending = endingPlayed(gameState)
@@ -356,7 +363,9 @@ export class Malakar extends Character {
   /** What he answers to words that are not the refrain. */
   private otherWords(gameState: GameState): string {
     if (gameState.getStoryFlag(FLAG_ACT4_ELIXIR_ON_MALAKAR)) {
-      return waitingForForgiveness(gameState)
+      return gameState.getStoryFlag(FLAG_ACT4_FORGIVENESS_SAID)
+        ? FORGIVEN
+        : waitingForForgiveness(gameState)
     }
     if (this.choiceMade(gameState)) {
       return '[dim]Malakar listens, but words are not what he needs now.[/dim]'

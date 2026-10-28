@@ -342,14 +342,16 @@ describe("The Parent's Legacy", () => {
 })
 
 describe('The Shadow of the Past hears the answer and the near misses', () => {
-  it.each(['be patient', 'I will be patient', 'patience, then'])(
-    'takes %s as patience',
-    (words) => {
-      const game = masked()
-      executeCommands(game, [`say ${words} to shadow`])
-      expectStoryFlag(game.state, FLAG_ACT4_SHADOW_OF_THE_PAST_COMPLETED, true)
-    },
-  )
+  it.each([
+    'be patient',
+    'I will be patient',
+    'patience, then',
+    'be patient where I was not',
+  ])('takes %s as patience', (words) => {
+    const game = masked()
+    executeCommands(game, [`say ${words} to shadow`])
+    expectStoryFlag(game.state, FLAG_ACT4_SHADOW_OF_THE_PAST_COMPLETED, true)
+  })
 
   it.each(['I have no patience', 'I will not be patient', 'impatience'])(
     'does not take %s as patience',

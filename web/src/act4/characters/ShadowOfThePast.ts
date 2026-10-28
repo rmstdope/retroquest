@@ -25,8 +25,8 @@ const ANSWERED =
   '[dim]The Shadow has its answer. It nods towards the door to the ' +
   'east.[/dim]'
 
-/** The words that answer the Shadow, after the Phoenix's riddle. */
-const ANSWER_WORDS = ['patience', 'patient']
+/** The words that answer the Shadow, after the Phoenix's riddle, including his own plea. */
+const ANSWER_WORDS = ['patience', 'patient', 'be patient where I was not']
 
 /**
  * Near misses, each with its own answer: the virtue he had, the two that were
