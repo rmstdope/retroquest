@@ -6,8 +6,13 @@ export class FishingExpeditionQuest extends Quest {
   constructor() {
     super({
       name: 'Fishing expedition',
-      description: `You can't help but feel sorry for the ${characterName('fisherman')}—he seems troubled and in need of help. Perhaps if you assist him, you'll uncover something important.`,
-      completion: `You have helped the ${characterName('fisherman')} and learned something new about the world around you. Your kindness is rewarded.`,
+      description:
+        `The ${characterName('fisherman')} at the bend can't fish with his stiff arm, ` +
+        'and he would give a good deal for a fresh fish.',
+      completion:
+        `You brought the ${characterName('fisherman')} a fish, ` +
+        "and he gave you back something of your mother's: " +
+        'the spell she taught him at the bend.',
     })
   }
 
