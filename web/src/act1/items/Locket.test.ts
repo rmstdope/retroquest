@@ -19,6 +19,10 @@ describe('Locket', () => {
 
     expect(response).toContain("only the founders' line wore it")
     expect(response).toContain("Your mother's line")
+    expect(response).toContain('says the old blessing slowly')
+    expect(response).not.toContain('He teaches you')
+    expect(response).not.toContain('May this blessing')
+    expect(response).not.toContain('As you do this')
     expect(game.state.hasSpell('bless')).toBe(true)
   })
 

@@ -114,7 +114,7 @@ describe('Tilda, the baker’s wife', () => {
     const first = game.commandParser.parse('talk to villager')
     const second = game.commandParser.parse('talk to villager')
 
-    expect(first).toContain("The water's clean! Was that you, ")
+    expect(first).toContain("The water's clean! ")
     expectDialogueSpeaker(first, 'Tilda')
     expect(findMarkupProblems(first)).toEqual([])
     expect(second).not.toContain("The water's clean!")
@@ -156,10 +156,11 @@ describe('Tilda and the truth about the well', () => {
     const answer = game.commandParser.parse('talk to tilda')
 
     expect(answer).toContain(
-      "The water's clean! Was that you, [character_name]Elior[/character_name]? " +
-        "No — don't tell me, you've that look about you. " +
-        "I've not had dough rise so light in a year.",
+      "The water's clean! I've not had dough rise so light in a year. " +
+        'Was that you, [character_name]Elior[/character_name]?',
     )
+    expect(answer).toContain('She looks at you, and waits.')
+    expect(answer).not.toContain('that look about you')
     expect(answer).not.toContain("word's all round the square")
   })
 

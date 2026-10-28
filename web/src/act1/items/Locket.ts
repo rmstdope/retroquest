@@ -25,18 +25,17 @@ export class Locket extends Item {
       const blessSpell = new BlessSpell()
       gameState.learnSpell(blessSpell)
       return (
-        'As you do this, the ' +
+        'The ' +
         characterName('priest') +
-        ' gasps and looks closely at its crest. ' +
+        ' sees it in your hand and catches his breath. ' +
         speech(
           "The founders' relic... That crest, child, only the founders' line " +
             "wore it. Your mother's line. " +
             'She prayed here alone the night she left. ' +
             'She must have hidden it then, for you.',
         ) +
-        '\nHe nods gravely. ' +
-        speech('May this blessing protect you on your path.') +
-        '\nHe teaches you the [spell_name]bless[/spell_name] spell!\n' +
+        '\nHe lays his hand over yours and says the old blessing slowly, ' +
+        'so you can follow it.\n' +
         'You have learned [spell_name]bless[/spell_name].'
       )
     }

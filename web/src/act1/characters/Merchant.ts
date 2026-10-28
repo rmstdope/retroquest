@@ -98,7 +98,7 @@ export class Merchant extends Character {
             "Boots, friend? I've one good pair of " +
             '[item_name]wandering boots[/item_name] left, walked in and ' +
             "soft, and the soles will outlast you. I'll not take coin for " +
-            "them; coin's no good where I'm going. Something small and fine " +
+            'them; coin I can earn anywhere. Something small and fine ' +
             'would buy them. A ring, say.\n' +
             'Failing that, my old mare threw a shoe on the hill road; ' +
             'a good iron [item_name]horseshoe[/item_name] would do me nearly as well.' +

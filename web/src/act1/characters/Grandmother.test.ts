@@ -166,6 +166,8 @@ describe('Grandmother and the journey', () => {
     const response = executeCommands(game, ['talk to grandmother'])
 
     expect(response).toContain("So it's true, then.")
+    expect(response).toContain('She turns the loaf on the board')
+    expect(response).not.toContain('I knew this day would come')
     expect(response).toContain('Come back to me, child.')
     expect(response).not.toContain('warm and fed')
     expectDialogueSpeaker(response, 'grandmother')
@@ -329,6 +331,8 @@ describe('Grandmother and Patches', () => {
 
     expect(response).toContain('[character_name]Patches[/character_name]')
     expect(response).toContain('say so')
+    expect(response).toContain("It's very quiet here, with you out all day.")
+    expect(response).not.toContain('off on the road')
     expectDialogueSpeaker(response, 'grandmother')
   })
 

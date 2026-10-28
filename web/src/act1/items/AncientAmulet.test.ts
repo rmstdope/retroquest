@@ -188,3 +188,16 @@ describe('Ancient Amulet and the hut across a save', () => {
     expect(hut).not.toContain('glows brighter')
   })
 })
+
+describe('Ancient Amulet pickup refusal', () => {
+  it('has Mira keep it back in her own voice, with no talk of preparations', () => {
+    const game = gameIn('MirasHut')
+
+    const response = executeCommands(game, ['take amulet'])
+
+    expect(response).toContain(' puts her hand over the ')
+    expect(response).toContain('Not that one, ')
+    expect(response).toContain('It has waited a long while for you')
+    expect(response).not.toContain('preparations')
+  })
+})

@@ -185,11 +185,9 @@ export class Grandmother extends Character {
       return (
         'Her eyes fall on the [item_name]amulet[/item_name] you carry, and ' +
         'she goes very still. ' +
-        speech(
-          "So it's true, then. I knew this day would come; I only hoped it " +
-            'would come later.\n' +
-            'Come back to me, child.',
-        )
+        speech("So it's true, then.") +
+        ' She turns the loaf on the board, though it does not need turning. ' +
+        speech('Come back to me, child.')
       )
     }
     if (!gameState.getStoryFlag(FLAG_MAGIC_FULLY_UNLOCKED)) return null
@@ -254,7 +252,7 @@ export class Grandmother extends Character {
       ) +
       '\nShe keeps scratching a while longer than she needs to.\n' +
       speech(
-        'With you off on the road soon, this cottage will be very quiet. ' +
+        "It's very quiet here, with you out all day. " +
           "If you'd have her stay with me, say so, and I'll square it with " +
           `${characterName('Hemlock')} myself. Or carry her home to him. ` +
           "He'll be worried sick.",

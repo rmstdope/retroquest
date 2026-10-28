@@ -43,6 +43,10 @@ describe('Merchant', () => {
   it('trades the boots for the ring, the golden path', () => {
     const game = gameAtMerchant()
 
+    const offer = executeCommands(game, ['talk to merchant'])
+    expect(offer).toContain('coin I can earn anywhere')
+    expect(offer).not.toContain("coin's no good")
+
     executeCommands(game, ['give shiny ring to merchant'])
 
     expect(game.state.hasItem('wandering boots')).toBe(true)
