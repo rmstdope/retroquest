@@ -47,9 +47,9 @@ describe('Collapsed Galleries', () => {
 
     // Step 0: Examine the fallen rock first (required before stabilization)
     const examineResult = fallenRock.examine(gs)
-    expect(examineResult).toContain('unstable')
-    expect(examineResult).toContain('trapped')
-    expect(examineResult).toContain('reinforcement')
+    expect(examineResult).toContain('Loose stones hang over the pile')
+    expect(examineResult).toContain('the tapping goes on')
+    expect(examineResult).toContain('it needs holding up first')
 
     // Step 1: Use reinforced braces with fallen rock
     const result1 = fallenRock.useWith(gs, braces)
@@ -63,8 +63,8 @@ describe('Collapsed Galleries', () => {
 
     // Step 3: Use wedge blocks with fallen rock (this should add miners to room)
     const result3 = fallenRock.useWith(gs, blocks)
-    expect(result3).toContain('free the blocked passage')
-    expect(result3).toContain('trapped miners emerging')
+    expect(result3).toContain('the pile gives way')
+    expect(result3).toContain('the miners come out one at a time')
     expect(gs.inventory).not.toContain(blocks) // Blocks should be consumed
 
     // After freeing passage, miners should now be present in the room

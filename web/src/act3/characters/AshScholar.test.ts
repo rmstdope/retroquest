@@ -14,6 +14,13 @@ function makeGameState(): GameState {
 }
 
 describe('AshScholar', () => {
+  it('is described by what he carries, not as thoughtful', () => {
+    expect(new AshScholar().description).toBe(
+      'A scholar in soot-streaked robes, with a sheaf of notes on mirror ' +
+        'angles tied to one wrist so the wind cannot take it.',
+    )
+  })
+
   it('gives a brass mirror segment exactly once when none is carried', () => {
     const g = makeGameState()
     const scholar = new AshScholar()
@@ -79,12 +86,26 @@ describe('AshScholar notebook', () => {
     ]) {
       expect(first).toContain(line)
     }
-    expect(first).toContain('You receive the [item_name]charred notebook')
-    expect(g.getItemCount('Charred Notebook')).toBe(1)
-    expect(first.indexOf('Brass Mirror Segment')).toBeLessThan(
-      first.indexOf('charred notebook'),
+    expect(first).toContain(
+      'You receive a [item_name]brass mirror segment[/item_name].',
     )
+    expect(first).toContain(
+      'You receive a [item_name]charred notebook[/item_name].',
+    )
+    expect(first).toContain(
+      'looks up from a tray of brass fittings and wipes the soot from both ' +
+        'hands before speaking.',
+    )
+    expect(first).not.toContain('studies you')
+    expect(g.getItemCount('Charred Notebook')).toBe(1)
+    expect(
+      first.indexOf('[item_name]brass mirror segment[/item_name].'),
+    ).toBeLessThan(first.indexOf('[item_name]charred notebook[/item_name].'))
     const later = scholar.talkTo(g)
+    expect(later).toContain(
+      'taps a page of notes. [dialogue]The mount on the terraces takes four ' +
+        'segments, by my notes.',
+    )
     expect(later).toContain('Seek the outcrops for what the mountain has shed.')
     expect(later).not.toContain('alignment')
     expect(later).not.toContain('Notebook')

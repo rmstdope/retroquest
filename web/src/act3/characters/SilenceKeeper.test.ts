@@ -2,7 +2,9 @@ import { describe, it, expect } from 'vitest'
 import { Game } from '@/engine'
 import { Act3 } from '../Act3'
 import { SilenceKeeper } from './SilenceKeeper'
+import { EchoStones } from '../items/EchoStones'
 import {
+  FLAG_ACT3_DRAGONS_MEMORY_RECEIVED,
   FLAG_ACT3_ECHO_HEARD,
   FLAG_ACT3_KEEPER_PHANTOM_LINE_TOLD,
   FLAG_ACT3_OATH_OF_STILLNESS_COMPLETED,
@@ -42,21 +44,36 @@ describe('Silence Keeper over time', () => {
     expect(later).not.toContain('singer')
 
     game.state.setStoryFlag(FLAG_ACT3_OATH_OF_STILLNESS_COMPLETED, true)
+    const opened = keeper.talkTo(game.state)
+    expect(opened).toContain(
+      'The stones held. The way is open, and the sleeper knows you are ' +
+        'coming. Go quietly.',
+    )
+    expect(opened).not.toContain('The sleeper spoke with you')
+
+    game.state.setStoryFlag(FLAG_ACT3_DRAGONS_MEMORY_RECEIVED, true)
     const closing = keeper.talkTo(game.state)
     expect(closing).toContain('The sleeper spoke with you, and the stone held.')
     expect(keeper.talkTo(game.state)).toBe(closing)
-    for (const text of [first, later, closing]) {
+    for (const text of [first, later, opened, closing]) {
       expectMarkupWellFormed(text)
       expectDialogueSpeaker(text, keeper.name)
     }
   })
 
-  it('gives the closing line on a first talk after completion', () => {
+  it('gives the closing line on a first talk after the Dragon\u2019s Memory', () => {
     const game = new Game([new Act3()])
     game.state.setStoryFlag(FLAG_ACT3_OATH_OF_STILLNESS_COMPLETED, true)
-    expect(new SilenceKeeper().talkTo(game.state)).toContain(
-      'never been so glad to have kept a quiet',
-    )
+    game.state.setStoryFlag(FLAG_ACT3_DRAGONS_MEMORY_RECEIVED, true)
+    const closing = new SilenceKeeper().talkTo(game.state)
+    expect(closing).toContain('never been so glad to have kept a quiet')
+    expect(closing).not.toContain('The water lies true')
+  })
+
+  it('sends Elior on quietly between the chant and the Dragon\u2019s Memory', () => {
+    const game = new Game([new Act3()])
+    game.state.setStoryFlag(FLAG_ACT3_OATH_OF_STILLNESS_COMPLETED, true)
+    expect(new SilenceKeeper().talkTo(game.state)).toContain('Go quietly.')
   })
 })
 
@@ -81,7 +98,60 @@ describe('Silence Keeper and the pools', () => {
     expect(first).not.toContain('troubled water')
     expect(keeper.talkTo(game.state)).toContain(trueWater)
     game.state.setStoryFlag(FLAG_ACT3_OATH_OF_STILLNESS_COMPLETED, true)
-    expect(keeper.talkTo(game.state)).toContain(trueWater)
+    expect(keeper.talkTo(game.state)).not.toContain(trueWater)
+  })
+})
+
+describe('Silence Keeper and the echo stones', () => {
+  /** The echo stones of the Stillness Vestibule in this game. */
+  function stonesOf(game: Game): EchoStones {
+    const stones = game.state.allRooms.StillnessVestibule.items.find(
+      (item) => item instanceof EchoStones,
+    )
+    if (!(stones instanceof EchoStones)) throw new Error('no echo stones')
+    return stones
+  }
+
+  it('asks to bless the stones before the warning about the pools, and says where the chant is', () => {
+    const game = new Game([new Act3()])
+    const keeper = new SilenceKeeper()
+
+    const first = keeper.talkTo(game.state)
+    const later = keeper.talkTo(game.state)
+
+    expect(first).toContain(
+      'Bless them, and give them the old chant from the walls of the Echo ' +
+        'Chambers, and the way will open.',
+    )
+    expect(first.indexOf('Bless them')).toBeLessThan(
+      first.indexOf('troubled water'),
+    )
+    expect(later).toContain(
+      'They are cold. Bless the stones; give them the chant.',
+    )
+    expect(later.indexOf('Bless the stones')).toBeLessThan(
+      later.indexOf('troubled water'),
+    )
+  })
+
+  it('says the stones are warm again once they are blessed', () => {
+    const game = new Game([new Act3()])
+    const keeper = new SilenceKeeper()
+    keeper.talkTo(game.state)
+    stonesOf(game).receiveSpell(game.state, 'bless')
+
+    const later = keeper.talkTo(game.state)
+
+    expect(later).toContain('They are warm again. Give them the chant.')
+    expect(later).not.toContain('cold')
+    expect(later).not.toContain('Bless')
+    expectMarkupWellFormed(later)
+  })
+
+  it('is described by the hush they keep', () => {
+    const keeper = new SilenceKeeper()
+    expect(keeper.description).toContain('you have lowered your voice')
+    expect(keeper.description).not.toContain('absorb')
   })
 })
 
@@ -148,6 +218,7 @@ describe('Silence Keeper on the phantoms', () => {
     const { game, keeper } = setup()
     game.state.setStoryFlag(FLAG_ACT3_ECHO_HEARD, true)
     game.state.setStoryFlag(FLAG_ACT3_OATH_OF_STILLNESS_COMPLETED, true)
+    game.state.setStoryFlag(FLAG_ACT3_DRAGONS_MEMORY_RECEIVED, true)
     const unchanged = keeper.talkTo(game.state)
     expect(unchanged).not.toContain('moments')
     const answer = keeper.talkTo(game.state)

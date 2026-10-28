@@ -14,6 +14,10 @@ describe('DragonsScale', () => {
 
     expect(scale.name).toBe("Dragon's Scale")
     expect(scale.description).toContain('dark as midnight')
+    expect(scale.description).toContain(
+      'It is cold, and heavier than it looks.',
+    )
+    expect(scale.description).not.toContain('warmth')
     expect(scale.description).toContain('deep gold')
     expect(scale.canBeCarried).toBe(true)
   })

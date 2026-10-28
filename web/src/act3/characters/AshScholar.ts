@@ -22,8 +22,8 @@ export class AshScholar extends Character {
     super({
       name: 'Ash Scholar',
       description:
-        'A thoughtful figure with soot-streaked robes, carrying notes on ' +
-        'reflective geometry and the craft of mirrors.',
+        'A scholar in soot-streaked robes, with a sheaf of notes on mirror ' +
+        'angles tied to one wrist so the wind cannot take it.',
     })
   }
 
@@ -41,7 +41,8 @@ export class AshScholar extends Character {
       return (
         'The ' +
         characterName(this.name) +
-        ' straightens and studies you for a long moment before speaking.\n' +
+        ' looks up from a tray of brass fittings and wipes the soot from ' +
+        'both hands before speaking.\n' +
         speech(
           'We are on an expedition: a small band of scholars and tinkerers, ' +
             'tracing the terraces and cataloguing anything that glints.',
@@ -53,7 +54,7 @@ export class AshScholar extends Character {
             'among the outcrops, if you search carefully.',
         ) +
         '\n' +
-        `You receive ${segment.nameInSentence()}.` +
+        `You receive a [item_name]${segment.name.toLowerCase()}[/item_name].` +
         '\n' +
         speech(
           'This was in the same ledge. A notebook, burned nearly through. ' +
@@ -61,16 +62,16 @@ export class AshScholar extends Character {
             'and I cannot make out who that was. Perhaps you can.',
         ) +
         '\n' +
-        `You receive ${notebook.nameInSentence()}.`
+        `You receive a [item_name]${notebook.name.toLowerCase()}[/item_name].`
       )
     }
     return (
       'The ' +
       characterName(this.name) +
-      ' offers a small nod. ' +
+      ' taps a page of notes. ' +
       speech(
-        'The terraces favour steady hands. Seek the outcrops for what the ' +
-          'mountain has shed.',
+        'The mount on the terraces takes four segments, by my notes. Seek ' +
+          'the outcrops for what the mountain has shed.',
       )
     )
   }

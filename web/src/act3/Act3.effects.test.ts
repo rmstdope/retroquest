@@ -39,15 +39,19 @@ describe('Act III effects', () => {
     expect(offenders).toEqual([])
   })
 
-  it('narrates the oath Elior speaks, then labels the dragon’s answer from it', () => {
+  it('gives the oath to Elior as speech, then the dragon’s answer', () => {
     const game = new Game([new Act3()])
     game.state.setStoryFlag(FLAG_ACT3_DRAGONS_MEMORY_RECEIVED, true)
     game.state.setStoryFlag(FLAG_ACT3_OATH_SCROLLS_EXAMINED, true)
     const blocks = parseTurn(new AncientDragon().sayTo(game.state, 'it'))
-    expect(blocks.map((block) => block.kind)).toEqual(['text', 'dialogue'])
-    expect(JSON.stringify(blocks[0])).toContain(
-      '“I take what is given, and I return it.”',
-    )
-    expect(blocks[1]).toMatchObject({ speaker: 'ancient dragon' })
+    expect(blocks[0]).toMatchObject({
+      kind: 'dialogue',
+      speaker: 'Elior',
+      markup: 'I take what is given, and I return it.',
+    })
+    expect(blocks.at(-1)).toMatchObject({
+      kind: 'dialogue',
+      speaker: 'ancient dragon',
+    })
   })
 })

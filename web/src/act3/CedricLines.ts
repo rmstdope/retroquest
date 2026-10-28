@@ -8,6 +8,11 @@ import { type GameState, characterName, dialogue, speech } from '@/engine'
 /** The name he is shown under, in room listings and in every line. */
 export const CEDRIC_NAME = 'Sir Cedric'
 
+/** How he looks in Act III, also given back to saves made before it changed. */
+export const CEDRIC_DESCRIPTION =
+  'A tall knight in old, dented mail, his sword at his hip again. He keeps ' +
+  'half a step behind you and to one side, where a guard walks.'
+
 /** One spoken line of Sir Cedric, as attributed speech. */
 export function cedricSays(words: string): string {
   return dialogue(CEDRIC_NAME, words)
@@ -48,7 +53,7 @@ export const CEDRIC_KING_WEAKER_2 =
 
 /** His reaction to the third "the king is weaker" beat (leaving the caverns). */
 export const CEDRIC_KING_WEAKER_3 =
-  cedricDoes('says nothing for a long moment.') +
+  cedricDoes('looks at his hands.') +
   '\n' +
   cedricSays('He was taken on my watch. He will not die on it.')
 
@@ -82,14 +87,14 @@ export const CEDRIC_STAY_BEHIND =
   '\n' +
   cedricSays('Someone should stay until the braces settle. I will.') +
   '\n' +
-  `The ${characterName('oldest miner')} puts a grey hand on his arm.` +
+  `The ${characterName('lead miner')} puts a grey hand on his arm.` +
   ' ' +
   speech(
     'You have a king to fetch, ser. We have stood in worse holes than ' +
       'this one.',
   ) +
   '\n' +
-  cedricDoes('looks at him for a long moment, then nods.')
+  cedricDoes('looks down at the hand on his arm, then nods.')
 
 /** What he does and says as the circle sets them down at the fortress. */
 export const CEDRIC_GATE_ARRIVAL =
@@ -111,4 +116,6 @@ export const CEDRIC_GATE_TALK =
 
 /** What he says to words that are not the refrain. */
 export const CEDRIC_NOT_NOW =
-  cedricDoes('shakes his head.') + ' ' + speech('Not now. Not here.')
+  cedricDoes('keeps his eyes on the way ahead.') +
+  ' ' +
+  speech('Later, when there is time for it.')

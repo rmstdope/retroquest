@@ -6,7 +6,9 @@ import {
   speech,
   type NameOptions,
 } from '@/engine'
+import { EchoStones } from '../items/EchoStones'
 import {
+  FLAG_ACT3_DRAGONS_MEMORY_RECEIVED,
   FLAG_ACT3_ECHO_HEARD,
   FLAG_ACT3_KEEPER_PHANTOM_LINE_TOLD,
   FLAG_ACT3_OATH_OF_STILLNESS_COMPLETED,
@@ -16,8 +18,8 @@ import {
 
 const TROUBLED_WATER =
   'But a chant will not carry over troubled water, and these pools are not ' +
-  'as still as they seem. '
-const TRUE_WATER = 'The water lies true now; it will hold your words. '
+  'as still as they seem.'
+const TRUE_WATER = 'The water lies true now; it will hold your words.'
 
 const PHANTOMS_PRESENT =
   'The figures by the pools? They are not ghosts, not as the villages ' +
@@ -47,9 +49,9 @@ export class SilenceKeeper extends Character {
     super({
       name: 'silence keeper',
       description:
-        'A tall figure robed in shadow-dark fabric that seems to absorb ' +
-        'sound itself. Their face is hidden beneath a deep hood, and they ' +
-        'move without disturbing the stillness around them.',
+        "A tall figure in a deep hood stands at the water's edge. Their " +
+        'feet make no sound on the stone, and you find you have lowered ' +
+        'your voice.',
     })
   }
 
@@ -58,6 +60,15 @@ export class SilenceKeeper extends Character {
     return gameState.getStoryFlag(FLAG_ACT3_POOLS_STILLED)
       ? TRUE_WATER
       : TROUBLED_WATER
+  }
+
+  /** Whether the echo stones in the Stillness Vestibule have been blessed. */
+  private stonesBlessed(gameState: GameState): boolean {
+    return (
+      gameState.allRooms.StillnessVestibule?.items.some(
+        (item) => item instanceof EchoStones && item.areBlessed(),
+      ) ?? false
+    )
   }
 
   /**
@@ -85,33 +96,45 @@ export class SilenceKeeper extends Character {
 
   /**
    * The whole story and the hint on the first talk, a short reminder on later
-   * talks, and a closing line once the Oath of Stillness has opened the way
-   * (also on a first talk after that).
+   * talks (warm stones once blessed), a send-off once the Oath of Stillness has
+   * opened the way, and a closing line once the sleeper has spoken (also on a
+   * first talk after either).
    */
   private usualReply(gameState: GameState): string {
     const keeper = characterName('Silence Keeper')
-    if (gameState.getStoryFlag(FLAG_ACT3_OATH_OF_STILLNESS_COMPLETED)) {
+    if (gameState.getStoryFlag(FLAG_ACT3_DRAGONS_MEMORY_RECEIVED)) {
       return (
         `The ${keeper} bows their hooded head: ` +
         speech(
           'The sleeper spoke with you, and the stone held. Forty years, ' +
-            'and I have never been so glad to have kept a quiet. ' +
-            `${TRUE_WATER.trim()}`,
+            'and I have never been so glad to have kept a quiet.',
+        )
+      )
+    }
+    if (gameState.getStoryFlag(FLAG_ACT3_OATH_OF_STILLNESS_COMPLETED)) {
+      return (
+        `The ${keeper} bows their hooded head: ` +
+        speech(
+          'The stones held. The way is open, and the sleeper knows you are ' +
+            'coming. Go quietly.',
         )
       )
     }
     if (this.introduced) {
+      const stones = this.stonesBlessed(gameState)
+        ? 'They are warm again. Give them the chant.'
+        : 'They are cold. Bless the stones; give them the chant.'
       return (
         `The ${keeper} does not turn: ` +
         speech(
-          'Forty years I have listened to those stones. They are cold. ' +
-            `${this.waterLine(gameState)}Bless them; give them the chant.`,
+          `Forty years I have listened to those stones. ${stones} ` +
+            this.waterLine(gameState),
         )
       )
     }
     this.introduced = true
     return (
-      `The ${keeper} whispers, their voice barely disturbing the air: ` +
+      `The ${keeper} whispers: ` +
       speech(
         'I have kept this hush for forty years, so the sleeper below can ' +
           'rest. I was a singer once, in the villages above. I sang one ' +
@@ -122,9 +145,9 @@ export class SilenceKeeper extends Character {
       '\n\n' +
       speech(
         'The stones in this room were cut to carry a whisper to the ' +
-          'sleeper without waking it. They have gone cold. ' +
-          `${this.waterLine(gameState)}Bless them, and ` +
-          'give them the old chant, and the way will open.',
+          'sleeper without waking it. They have gone cold. Bless them, and ' +
+          'give them the old chant from the walls of the Echo Chambers, and ' +
+          `the way will open. ${this.waterLine(gameState)}`,
       )
     )
   }

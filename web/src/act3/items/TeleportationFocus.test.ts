@@ -48,9 +48,11 @@ describe('TeleportationFocus', () => {
     const result = focus.preventPickup()
 
     expect(result).toContain('Mira')
-    expect(
-      result.includes('circle anchors') || result.includes('must bear it'),
-    ).toBe(true)
+    expect(result).toContain(
+      'Careful. Every circle I draw is tied to this. If it moves, I cannot ' +
+        'find my way back.',
+    )
+    expect(result).not.toContain('weave')
     expect(result).toContain('dialogue')
   })
 

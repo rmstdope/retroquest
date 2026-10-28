@@ -181,8 +181,24 @@ describe('CharredInscription mending', () => {
 
     const answer = inscription.receiveSpell(game.state, 'bless', 'bless')
 
-    expect(answer).toContain('no effect')
+    expect(answer).toBe(
+      '[failure][clue]The letters stay as the fire left them.[/clue][/failure]',
+    )
+    expect(inscription.receiveSpell(game.state, 'light', 'light')).toBe(answer)
     expect(game.state.getStoryFlag(FLAG_ACT3_INSCRIPTION_MENDED)).toBe(false)
+  })
+
+  it('opens the reading with the letters and the motifs, without felt heat', () => {
+    const { game, inscription } = setup()
+
+    const answer = inscription.examine(game.state)
+
+    expect(answer).toContain(
+      'You trace the charred letters with your finger. Above the words, cut ' +
+        'shallow, is the sun over three rings; beneath it, older and nearly ' +
+        'gone, a tree under two moons. The inscription reads:',
+    )
+    expect(answer).not.toContain('heat that once shaped them')
   })
 
   it('ends the reading on the level-names line once mended, without a new glow', () => {

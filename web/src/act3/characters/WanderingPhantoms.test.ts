@@ -100,3 +100,39 @@ describe('Wandering Phantoms hear the word as the engine does', () => {
     expect(game.state.getStoryFlag(FLAG_ACT3_PHANTOMS_FREED)).toBe(true)
   })
 })
+
+describe('Wandering Phantoms in plain words', () => {
+  afterEach(() => {
+    vi.restoreAllMocks()
+  })
+
+  it('show one repeated action instead of paperback words, and mark their name', () => {
+    const game = new Game([new Act3()])
+    const phantoms = new WanderingPhantoms()
+    const answers = new Set<string>()
+    for (let seed = 0; seed < SEEDS; seed++) {
+      vi.spyOn(Math, 'random').mockReturnValue(seed / SEEDS)
+      answers.add(phantoms.talkTo(game.state))
+    }
+
+    for (const answer of answers) {
+      expect(answer).toContain('[character_name]phantoms[/character_name]')
+      expect(answer).not.toMatch(/ethereal|spectral|forgotten by time|cascade/)
+    }
+    expect(phantoms.description).toContain(
+      'reaches for a door that is not there',
+    )
+    expect(phantoms.description).not.toMatch(/ethereal|ancient/)
+  })
+
+  it('leave with the far wall showing through them', () => {
+    const game = new Game([new Act3()])
+    const phantoms = new WanderingPhantoms()
+
+    const freed = phantoms.sayTo(game.state, 'rest')
+
+    expect(freed).toContain('you can see the far wall through them')
+    expect(freed).toContain('The chamber is quieter for it, but not yet still.')
+    expect(freed).not.toContain('morning sun')
+  })
+})

@@ -7,10 +7,8 @@ export class DragonsScale extends Item {
     super({
       name: "Dragon's Scale",
       description:
-        'A scale from the ancient dragon, dark as midnight yet shot ' +
-        'through with veins of deep gold. It pulses with a slow, steady ' +
-        'warmth and weighs heavy with the promise of protection and ' +
-        'sacrifice.',
+        'A scale from the dragon, dark as midnight and shot through with ' +
+        'veins of deep gold. It is cold, and heavier than it looks.',
       canBeCarried: true,
       shortName: 'scale',
     })

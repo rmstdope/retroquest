@@ -16,12 +16,9 @@ export class FallenRock extends Item {
     super({
       name: 'fallen rock',
       description:
-        'A massive pile of stone and debris blocks the passage, sealing off ' +
-        'any further venturing to the east. Muffled voices echo from beyond ' +
-        'the collapse—panicked calls for help and the desperate scraping of ' +
-        'hands against stone. The sounds confirm your worst fears: people are ' +
-        'trapped behind this barrier, their fate hanging in the balance of ' +
-        'whether you can find a way to safely clear the obstruction.',
+        'Broken stone fills the gallery to the roof, and the way east is ' +
+        'gone under it. Put your ear to it and you hear, faintly, someone ' +
+        'tapping: three knocks, a wait, three knocks.',
       shortName: 'rock',
       canBeCarried: false,
     })
@@ -31,12 +28,9 @@ export class FallenRock extends Item {
   override examine(gameState: GameState): string {
     gameState.setStoryFlag(FLAG_ACT3_MINERS_RESCUE_STARTED, true)
     return (
-      'The collapse ' +
-      'appears unstable, with loose stones precariously balanced above. You can ' +
-      'hear desperate voices calling from beyond the barrier—miners are definitely ' +
-      'trapped on the other side. The ceiling sags dangerously, but with the right ' +
-      'reinforcement, you might be able to stabilize the collapse and then clear ' +
-      'a safe passage through.'
+      'Loose stones hang over the pile, and the ceiling sags above them. ' +
+      'Behind it the tapping goes on. Pull one stone now and the roof comes ' +
+      'with it: it needs holding up first.'
     )
   }
 
@@ -102,10 +96,9 @@ export class FallenRock extends Item {
         const miners = new Miners()
         gameState.currentRoom.addCharacter(miners)
         return (
-          'The wedge blocks bite into the cracks and free the blocked ' +
-          'passage. The fallen rock crumbles away, clearing ' +
-          'the path forward. Through the newly opened gap, you see the ' +
-          'trapped miners emerging from the depths!' +
+          'The wedge blocks bite into the cracks, and the pile gives way. ' +
+          'Through the gap, grey with dust, the miners come out one at a ' +
+          'time, blinking at your light.' +
           cedricAdds(gameState, CEDRIC_WEDGE)
         )
       }

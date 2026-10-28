@@ -69,8 +69,8 @@ describe('Act III items narrate effects and keep no echo of the command', () => 
         'can withstand the pressure when the debris is cleared.',
     )
     expect(wedges).toContain(
-      'The wedge blocks bite into the cracks and free the blocked ' +
-        'passage. The fallen rock crumbles away',
+      'The wedge blocks bite into the cracks, and the pile gives way. ' +
+        'Through the gap, grey with dust, the miners come out one at a time',
     )
     for (const answer of [braces, straps, wedges]) {
       expect(eventLines(answer)).toEqual([])
@@ -89,7 +89,9 @@ describe('Act III items narrate effects and keep no echo of the command', () => 
     const unhelpful = rock.useWith(game.state, new CooledSlag())
 
     expect(examined).not.toContain('You examine')
-    expect(examined.startsWith('The collapse appears unstable')).toBe(true)
+    expect(examined.startsWith('Loose stones hang over the pile')).toBe(true)
+    expect(examined).toContain('Behind it the tapping goes on.')
+    expect(examined).not.toContain('voices')
     expect(isClue(early)).toBe(true)
     expect(isClue(strapsEarly)).toBe(true)
     expect(isClue(wedgesEarly)).toBe(true)

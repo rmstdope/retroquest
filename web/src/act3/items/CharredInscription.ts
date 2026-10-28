@@ -1,4 +1,4 @@
-import { Item, remembered, writing, type GameState } from '@/engine'
+import { Item, clue, remembered, writing, type GameState } from '@/engine'
 import { AncientAmulet } from './AncientAmulet'
 import {
   FLAG_ACT3_CHARRED_INSCRIPTION_READ,
@@ -33,8 +33,8 @@ export class CharredInscription extends Item {
     gameState.setStoryFlag(FLAG_ACT3_CHARRED_INSCRIPTION_READ, true)
 
     return (
-      'You trace the charred letters with your finger, feeling the ' +
-      'heat that once shaped them. Above the words, cut shallow, is the ' +
+      'You trace the charred letters with your finger. Above the words, ' +
+      'cut shallow, is the ' +
       'sun over three rings; beneath it, older and nearly gone, a tree ' +
       'under two moons. The inscription reads:' +
       '\n\n' +
@@ -68,10 +68,10 @@ export class CharredInscription extends Item {
   receiveSpell(
     gameState: GameState,
     spellId: string,
-    spellName: string = spellId,
+    _spellName: string = spellId,
   ): string {
     if (spellId !== 'mend') {
-      return `[failure]The ${spellName} spell has no effect on the inscription.[/failure]`
+      return clue('The letters stay as the fire left them.')
     }
     if (!gameState.getStoryFlag(FLAG_ACT3_CHARRED_INSCRIPTION_READ)) {
       return (

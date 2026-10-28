@@ -40,11 +40,13 @@ import { ACT3_GOLDEN_PATH } from './Act3GoldenPath'
 import {
   FLAG_ACT3_FORTRESS_GATES_EXAMINED,
   FLAG_ACT3_MINERS_RESCUE_COMPLETED,
+  FLAG_ACT3_MIRA_CONFESSED,
   FLAG_ACT3_OATH_OF_STILLNESS_COMPLETED,
   FLAG_ACT3_POOLS_STILLED,
 } from './Act3StoryFlags'
+import { Mira } from './characters/Mira'
 import { Tobin } from './characters/Tobin'
-import { CEDRIC_NAME } from './CedricLines'
+import { CEDRIC_DESCRIPTION, CEDRIC_NAME } from './CedricLines'
 
 /** Act 3 of RetroQuest: The Awakening. */
 export class Act3 extends Act {
@@ -163,7 +165,9 @@ export class Act3 extends Act {
 
   /**
    * Saves from before Sir Cedric was shown in title case still name him in
-   * lower case, and saves already past the miners' rescue lack Tobin.
+   * lower case, saves from before the Act III rewrite keep his and Mira's
+   * old descriptions (hers until she confesses), and saves already past the
+   * miners' rescue lack Tobin.
    */
   override afterLoad(gameState: GameState): void {
     const galleries = gameState.allRooms.CollapsedGalleries
@@ -176,7 +180,15 @@ export class Act3 extends Act {
     }
     for (const room of Object.values(gameState.allRooms)) {
       const cedric = room.getCharacterByName(CEDRIC_NAME)
-      if (cedric) cedric.name = CEDRIC_NAME
+      if (!cedric) continue
+      cedric.name = CEDRIC_NAME
+      cedric.description = CEDRIC_DESCRIPTION
+    }
+    if (!gameState.getStoryFlag(FLAG_ACT3_MIRA_CONFESSED)) {
+      for (const room of Object.values(gameState.allRooms))
+        for (const character of room.characters)
+          if (character instanceof Mira)
+            character.description = Mira.DESCRIPTION
     }
     this.patchStillnessVestibule(gameState)
   }
