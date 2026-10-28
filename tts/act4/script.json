@@ -395,9 +395,9 @@
     "text": "The Trapped Servants have stopped walking. They stand close together, watching you."
   },
   {
-    "key": "1b3f27566ebe24",
+    "key": "114500d423d31d",
     "speaker": "trapped servants",
-    "text": "We are so tired. No one has said a kind word over us in years. Whatever you can do for us, do it gently."
+    "text": "We are so tired. No one has said a kind word over us since we came here. Whatever you can do for us, do it gently."
   },
   {
     "key": "14233eb14960d4",
@@ -975,9 +975,9 @@
     "text": "The token warms again. The whispers draw back from the stair."
   },
   {
-    "key": "0abd1868f266c0",
+    "key": "1f6d4ed81f1703",
     "speaker": "sir cedric",
-    "text": "I am in the hall below you, Elior. I have not left. Go on up."
+    "text": "I am in the hall behind you, Elior. I have not left. Go on up."
   },
   {
     "key": "14407e80704d0b",
@@ -1815,9 +1815,9 @@
     "text": "You pour the elixir over the crystal. It cracks like ice in spring, and King Alden falls free, gasping, alive. But the wound still stands open, and Malakar still stands beside it."
   },
   {
-    "key": "1103067ed862c7",
+    "key": "0915045d3002e9",
     "speaker": "elior",
-    "text": "You tore the world, Malakar. You drained the king. You sent a man to hunt a child in Willowbrook, and you had Sir Cedric framed for it. I will not pretend you didn't."
+    "text": "You tore the world, Malakar. You drained the king. You sent a man to hunt a child in Willowbrook, and you had Sir Cedric framed for taking the king. I will not pretend you didn't."
   },
   {
     "key": "0cc8fde0d59fa4",
@@ -1970,9 +1970,9 @@
     "text": "Not yet. The elixir is still in your hand."
   },
   {
-    "key": "1926277821587b",
+    "key": "1119d01b3ced45",
     "speaker": "narrator",
-    "text": "Not yet. The elixir is still in your hand. After that, you could forgive him, as Sir Cedric forgave the knight. You could name his crimes and seal him away, in justice. Or you could give up your magic to close the wound, in sacrifice."
+    "text": "Not yet. The elixir is still in your hand. After that, you could forgive him. You could name his crimes and seal him away, in justice. Or you could give up your magic to close the wound, in sacrifice."
   },
   {
     "key": "1b2d7d45383642",
@@ -2003,6 +2003,11 @@
     "key": "1931fac992f597",
     "speaker": "malakar",
     "text": "It does not hurt. For the first time in years, it does not hurt."
+  },
+  {
+    "key": "1c5cce29587eef",
+    "speaker": "narrator",
+    "text": "Malakar looks up at you like a man waiting to be forgiven."
   },
   {
     "key": "0cedbc37093123",

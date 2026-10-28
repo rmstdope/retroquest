@@ -77,4 +77,23 @@ describe('affirms', () => {
   it('does not hear an answer that is not there', () => {
     expect(affirms('I understand', ['forgive'])).toBe(false)
   })
+
+  it('ignores a negation after the answer or in another clause', () => {
+    expect(affirms('be patient where I was not', ['patient'])).toBe(true)
+    expect(affirms('I forgive you, no matter what', ['forgive'])).toBe(true)
+    expect(affirms("Don't worry, I forgive you", ['forgive'])).toBe(true)
+    expect(
+      affirms('No, power follows purpose; purpose follows truth', [
+        'power follows purpose',
+      ]),
+    ).toBe(true)
+  })
+
+  it('still hears a denial earlier in the same clause', () => {
+    expect(affirms('there is no redemption', ['redemption'])).toBe(false)
+    expect(affirms("I don't understand", ['understand'])).toBe(false)
+    expect(affirms('I do not really understand you', ['understand'])).toBe(
+      false,
+    )
+  })
 })

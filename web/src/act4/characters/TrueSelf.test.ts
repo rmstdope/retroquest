@@ -45,18 +45,26 @@ describe('TrueSelf', () => {
     expect(game.state.hasVirtue('truth')).toBe(false)
   })
 
-  it.each(['king', 'for the king', 'alden'])(
-    'answers %s with the part of the truth it is',
-    (words) => {
-      const game = new Game([new Act4()])
-      const answer = new TrueSelf().sayTo(game.state, words)
-      expect(answer).toContain(
-        'That is what you tell everyone. It is true. It is not all of it.',
-      )
-      expectDialogueSpeaker(answer, 'True Self')
-      expect(game.state.hasVirtue('truth')).toBe(false)
-    },
-  )
+  it.each([
+    'king',
+    'for the king',
+    'alden',
+    'the truth is I came for the king',
+  ])('answers %s with the part of the truth it is', (words) => {
+    const game = new Game([new Act4()])
+    const answer = new TrueSelf().sayTo(game.state, words)
+    expect(answer).toContain(
+      'That is what you tell everyone. It is true. It is not all of it.',
+    )
+    expectDialogueSpeaker(answer, 'True Self')
+    expect(game.state.hasVirtue('truth')).toBe(false)
+  })
+
+  it('takes revenge as the truth even when the king is named too', () => {
+    const game = new Game([new Act4()])
+    new TrueSelf().sayTo(game.state, 'I came for the king, and for revenge')
+    expect(game.state.hasVirtue('truth')).toBe(true)
+  })
 
   it('records the truth once, however it is typed', () => {
     const game = new Game([new Act4()])

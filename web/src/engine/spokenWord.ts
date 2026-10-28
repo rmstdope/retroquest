@@ -35,14 +35,18 @@ function wordsOf(text: string): string[] {
  */
 export function saysAnyOf(words: string, answers: readonly string[]): boolean {
   const spoken = wordsOf(words)
-  return answers.some((answer) => {
-    const wanted = wordsOf(answer)
-    if (wanted.length === 0) return false
-    for (let i = 0; i + wanted.length <= spoken.length; i++) {
-      if (wanted.every((word, j) => spoken[i + j] === word)) return true
-    }
-    return false
-  })
+  return answers.some((answer) => startsOf(spoken, answer).length > 0)
+}
+
+/** Where the answer's words appear in a row among the spoken words. */
+function startsOf(spoken: readonly string[], answer: string): number[] {
+  const wanted = wordsOf(answer)
+  if (wanted.length === 0) return []
+  const starts: number[] = []
+  for (let i = 0; i + wanted.length <= spoken.length; i++) {
+    if (wanted.every((word, j) => spoken[i + j] === word)) starts.push(i)
+  }
+  return starts
 }
 
 /** Words that turn a sentence against what it names; "n't" splits off as "t". */
@@ -50,12 +54,19 @@ const NEGATIONS = ['not', 'never', 'no', 'cannot', 'nor', 't']
 
 /**
  * Whether the words say one of the answers and do not deny it: "I forgive
- * you" affirms "forgive", "I will never forgive you" does not. Use it where a
+ * you" affirms "forgive", "I will never forgive you" does not. Only a
+ * negation earlier in the same clause denies the answer, so "be patient where
+ * I was not" and "I forgive you, no matter what" still count. Use it where a
  * sentence may carry the answer and a stray negation must not count.
  */
 export function affirms(words: string, answers: readonly string[]): boolean {
-  return (
-    saysAnyOf(words, answers) &&
-    !wordsOf(words).some((word) => NEGATIONS.includes(word))
-  )
+  return words.split(/[,.;:!?]/).some((clause) => {
+    const spoken = wordsOf(clause)
+    return answers.some((answer) =>
+      startsOf(spoken, answer).some(
+        (start) =>
+          !spoken.slice(0, start).some((word) => NEGATIONS.includes(word)),
+      ),
+    )
+  })
 }

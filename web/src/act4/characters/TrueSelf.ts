@@ -10,8 +10,11 @@ import {
 } from '@/engine'
 import { FLAG_ACT4_TRUTH_TOLD, VIRTUE_TRUTH } from '../Act4StoryFlags'
 
+/** The motive the reflection waits for; the king without it is only part of the truth. */
+const MOTIVE_WORDS = ['revenge', 'vengeance']
+
 /** Words that tell the reflection the truth: the confession names revenge. */
-const TRUTH_WORDS = ['truth', 'revenge', 'vengeance']
+const TRUTH_WORDS = ['truth', ...MOTIVE_WORDS]
 
 /** The likeliest wrong answer: the king, true but not all of it. */
 const KING_WORDS = ['king', 'alden']
@@ -64,11 +67,14 @@ export class TrueSelf extends Character {
   /**
    * Saying the truth confesses (once): "truth", "revenge" or "vengeance" as a
    * whole word, alone or in a sentence, unless the sentence denies it. The
-   * king is the likeliest wrong answer and gets its own reply; anything else
+   * king, named without the motive, is the likeliest wrong answer and gets
+   * its own reply, even inside "the truth is…"; anything else
    * is waited out.
    */
   override sayTo(gameState: GameState, words: string): string {
-    if (!affirms(words, TRUTH_WORDS)) {
+    const namesTheKingOnly =
+      saysAnyOf(words, KING_WORDS) && !affirms(words, MOTIVE_WORDS)
+    if (namesTheKingOnly || !affirms(words, TRUTH_WORDS)) {
       if (saysAnyOf(words, KING_WORDS)) {
         return dialogue(
           this.name,

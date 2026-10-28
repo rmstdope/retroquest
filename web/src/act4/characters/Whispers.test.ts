@@ -30,7 +30,7 @@ const OPEN =
 const MIRA_LINE =
   "I'm at the gate, Elior. I said I'd hold it, and I'm holding it."
 const CEDRIC_LINE =
-  'I am in the hall below you, Elior. I have not left. Go on up.'
+  'I am in the hall behind you, Elior. I have not left. Go on up.'
 const NYX_LINE = "Left? I'm right here. I never was anywhere else."
 const GRANDMOTHER =
   '[effect]You say it into the dark, and something in you steadies — but she is far from here, and the whispers know it.[/effect] She did not come to the gate, they say. Who did? No one.'
@@ -116,7 +116,7 @@ describe('The whispers in the Tower of Shadows', () => {
     )
     expect(executeCommands(game, ['say cedric to whispers'])).toContain(SECOND)
     expect(executeCommands(game, ['say cedric to whispers'])).toContain(
-      'The token is still warm from him. Sir Cedric is in the hall below; you know that now.',
+      'The token is still warm from him. Sir Cedric is in the hall behind you; you know that now.',
     )
     expect(executeCommands(game, ['go up'])).toContain(STUMBLE)
   })

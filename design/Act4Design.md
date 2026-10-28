@@ -138,7 +138,7 @@ rule that all side quests must be completed before the main quest can be finishe
         seal on the cloak's clasp is the seal on the Secret Documents that cleared Sir Cedric.
         The knight searched Willowbrook for the amulet, framed Sir Cedric, and has been in despair
         since because he no longer believes the king can be saved. In his redemption he confesses all
-        three to Sir Cedric, who has followed Elior into the hall and stands by the south door; Cedric forgives him and gives him his hand.
+        three to Sir Cedric, who has followed Elior into the hall and stands by the south door. Cedric forgives him and gives him his hand only in the optional mercy moment (Redemption's Light on the ghostly warriors); otherwise he answers "I heard you. That will have to be enough, for now."
     -   **Story Impact:** Mercy triumphs over corruption; closes the loop on Acts I and II
 
 -   **Name:** The Sorceress of Lies
@@ -213,7 +213,7 @@ Elior grows from a simple farmer to a hero who chooses mercy or justice knowing 
 -   **Mira:** Confesses the last of what she knew in Act III; she goes through the gate with Elior and holds the way out just inside it while he goes deeper alone.
     She was the Wardens' pupil.
 -   **Sir Cedric:** Follows Elior into the Hall of Echoes and waits by the south door. The Knight of Despair
-    confesses the framing to his face; Cedric forgives him, and his honour is restored.
+    confesses the framing to his face, and his honour is restored; Cedric forgives him only if Elior also frees the ghostly warriors.
 -   **Nyx:** Her refrain is the one Elior says to Malakar, and her light in the hedge says it once more, as the last spoken line before Grandmother's "Welcome home".
 
 ### Malakar's Complexity
@@ -812,9 +812,9 @@ where they would occur. The `examine` and `talk to` steps below that `ACT4_GOLDE
       through it and Malakar: "Close what I opened, and let them rest."
     - (optional: the Bargain, see Optional choices)
     - `use lifelight elixir on malakar`, then `say forgiveness to malakar` → Spell learned: `forgiveness`
-      (the pointer: before the elixir is used, the wound names the three roads, forgiveness first, "as Sir Cedric
-      forgave the knight"; after it, Malakar looks at Elior the way the knight looked at Sir Cedric in the hall.
-      "I forgive you" counts; a denial does not)
+      (the pointer: before the elixir is used, the wound names the three roads, forgiveness first; after it,
+      Malakar looks up "like a man waiting to be forgiven". If Sir Cedric forgave the knight, both compare it
+      with that. "I forgive you" counts; a denial earlier in the same clause does not)
     - `cast forgiveness on wound` → the elixir is consumed
         - Quest completed: "The Final Stand"
         - Ending: Redemption

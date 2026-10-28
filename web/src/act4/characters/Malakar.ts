@@ -9,6 +9,7 @@ import {
 } from '@/engine'
 import {
   FLAG_ACT4_ELIXIR_ON_KING,
+  FLAG_ACT4_CEDRIC_FORGAVE,
   FLAG_ACT4_ELIXIR_ON_MALAKAR,
   FLAG_ACT4_FORGIVENESS_SAID,
   FLAG_ACT4_JUSTICE_SAID,
@@ -86,13 +87,18 @@ function endingWordIn(words: string): EndingWord | null {
 }
 
 /**
- * What he does when spoken to after the elixir healed him: the look that
- * points at forgiveness, through what Sir Cedric did for the knight.
+ * His look once the elixir has healed him, which points at forgiveness:
+ * through what Sir Cedric did for the knight, if Elior saw him do it, and
+ * plainly otherwise.
  */
-const WAITING_FOR_FORGIVENESS =
-  `${characterName('Malakar')} looks at you the way the knight looked at ` +
-  `${characterName('Sir Cedric')} in the hall, before ` +
-  `${characterName('Sir Cedric')} gave him his hand.`
+function waitingForForgiveness(gameState: GameState): string {
+  return gameState.getStoryFlag(FLAG_ACT4_CEDRIC_FORGAVE)
+    ? `${characterName('Malakar')} looks at you the way the knight looked ` +
+        `at ${characterName('Sir Cedric')} in the hall, before ` +
+        `${characterName('Sir Cedric')} gave him his hand.`
+    : `${characterName('Malakar')} looks up at you like a man waiting to ` +
+        'be forgiven.'
+}
 
 /**
  * Malakar in the Throne Chamber: tired and pleading, a grieving friend. He
@@ -149,9 +155,13 @@ export class Malakar extends Character {
       return dialogue(this.name, 'You gave it all away. For them. For me.')
     }
     if (gameState.getStoryFlag(FLAG_ACT4_ELIXIR_ON_MALAKAR)) {
-      return dialogue(
-        this.name,
-        'It does not hurt. For the first time in years, it does not hurt.',
+      return (
+        dialogue(
+          this.name,
+          'It does not hurt. For the first time in years, it does not hurt.',
+        ) +
+        '\n' +
+        waitingForForgiveness(gameState)
       )
     }
     if (gameState.getStoryFlag(FLAG_ACT4_ELIXIR_ON_KING)) {
@@ -320,7 +330,7 @@ export class Malakar extends Character {
         'Elior',
         'You tore the world, Malakar. You drained the king. You sent a man ' +
           'to hunt a child in Willowbrook, and you had Sir Cedric framed ' +
-          "for it. I will not pretend you didn't.",
+          "for taking the king. I will not pretend you didn't.",
       ),
       dialogue(this.name, "No. You won't. Your mother never could either."),
       AMULET_READY,
@@ -346,7 +356,7 @@ export class Malakar extends Character {
   /** What he answers to words that are not the refrain. */
   private otherWords(gameState: GameState): string {
     if (gameState.getStoryFlag(FLAG_ACT4_ELIXIR_ON_MALAKAR)) {
-      return WAITING_FOR_FORGIVENESS
+      return waitingForForgiveness(gameState)
     }
     if (this.choiceMade(gameState)) {
       return '[dim]Malakar listens, but words are not what he needs now.[/dim]'

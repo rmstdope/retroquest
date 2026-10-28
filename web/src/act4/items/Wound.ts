@@ -7,6 +7,7 @@ import {
   speech,
 } from '@/engine'
 import {
+  FLAG_ACT4_CEDRIC_FORGAVE,
   FLAG_ACT4_ELIXIR_ON_KING,
   FLAG_ACT4_ELIXIR_ON_MALAKAR,
   FLAG_ACT4_FINAL_STAND_COMPLETED,
@@ -40,15 +41,20 @@ const NOT_YET = clue(
 
 /**
  * What the amulet says once it is open and the elixir is still in hand: the
- * three roads, forgiveness first, pointed at through what Sir Cedric did for
- * the knight in the hall.
+ * three roads, forgiveness first, compared with what Sir Cedric did for the
+ * knight in the hall only if Elior saw him do it.
  */
-const THREE_ROADS = clue(
-  'Not yet. The elixir is still in your hand. After that, you could ' +
-    `forgive him, as ${characterName('Sir Cedric')} forgave the knight. ` +
-    'You could name his crimes and seal him away, in justice. Or you could ' +
-    'give up your magic to close the wound, in sacrifice.',
-)
+function threeRoads(gameState: GameState): string {
+  const asCedricDid = gameState.getStoryFlag(FLAG_ACT4_CEDRIC_FORGAVE)
+    ? `, as ${characterName('Sir Cedric')} forgave the knight`
+    : ''
+  return clue(
+    'Not yet. The elixir is still in your hand. After that, you could ' +
+      `forgive him${asCedricDid}. You could name his crimes and seal him ` +
+      'away, in justice. Or you could give up your magic to close the ' +
+      'wound, in sacrifice.',
+  )
+}
 
 /** What the amulet says once the elixir has healed Malakar. */
 const GENTLER =
@@ -102,7 +108,7 @@ export class Wound extends Item {
     if (gameState.getStoryFlag(FLAG_ACT4_ELIXIR_ON_MALAKAR)) return GENTLER
     if (!gameState.getStoryFlag(FLAG_ACT4_ELIXIR_ON_KING)) {
       return gameState.getStoryFlag(FLAG_ACT4_THRONE_AMULET_OPENED)
-        ? THREE_ROADS
+        ? threeRoads(gameState)
         : NOT_YET
     }
     if (gameState.getStoryFlag(FLAG_ACT4_JUSTICE_SAID)) {

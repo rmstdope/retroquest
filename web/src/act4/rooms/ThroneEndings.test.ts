@@ -5,6 +5,7 @@ import { Wound } from '../items/Wound'
 import { Grow } from '../spells/Grow'
 import { ACT4_GOLDEN_PATH } from '../Act4GoldenPath'
 import {
+  FLAG_ACT4_CEDRIC_FORGAVE,
   FLAG_ACT4_FINAL_STAND_COMPLETED,
   FLAG_ACT4_JUSTICE_ENDING,
   FLAG_ACT4_MALAKAR_MESSAGE_HEARD,
@@ -47,7 +48,7 @@ function spellNames(game: Game): string[] {
 
 const JUSTICE_LINE = dialogue(
   'Elior',
-  "You tore the world, Malakar. You drained the king. You sent a man to hunt a child in Willowbrook, and you had Sir Cedric framed for it. I will not pretend you didn't.",
+  "You tore the world, Malakar. You drained the king. You sent a man to hunt a child in Willowbrook, and you had Sir Cedric framed for taking the king. I will not pretend you didn't.",
 )
 
 describe('the endings are always open', () => {
@@ -89,7 +90,27 @@ describe('Redemption', () => {
       'Malakar has drunk the elixir. That road is closed now.',
     )
     expect(executeCommands(game, ['say hello to malakar'])).toContain(
+      '[character_name]Malakar[/character_name] looks up at you like a man waiting to be forgiven.',
+    )
+  })
+
+  it('points at forgiveness when Elior talks to him after the elixir', () => {
+    const text = executeCommands(healed(), ['talk to malakar'])
+    expect(text).toContain(
+      'It does not hurt. For the first time in years, it does not hurt.',
+    )
+    expect(text).toContain('like a man waiting to be forgiven')
+    expect(text).not.toContain('Sir Cedric')
+  })
+
+  it('calls back to Sir Cedric only once he has forgiven the knight', () => {
+    const game = healed()
+    game.state.setStoryFlag(FLAG_ACT4_CEDRIC_FORGAVE, true)
+    expect(executeCommands(game, ['say hello to malakar'])).toContain(
       '[character_name]Malakar[/character_name] looks at you the way the knight looked at [character_name]Sir Cedric[/character_name] in the hall, before [character_name]Sir Cedric[/character_name] gave him his hand.',
+    )
+    expect(executeCommands(game, ['talk to malakar'])).toContain(
+      'before [character_name]Sir Cedric[/character_name] gave him his hand',
     )
   })
 
@@ -477,10 +498,17 @@ describe('the ending words, heard in a sentence', () => {
 
   it('points at forgiveness, first of the three roads, before the elixir', () => {
     const text = executeCommands(opened(), ['use ancient amulet on wound'])
-    expect(text).toContain(
-      'you could forgive him, as [character_name]Sir Cedric[/character_name] forgave the knight',
-    )
+    expect(text).toContain('After that, you could forgive him.')
+    expect(text).not.toContain('Sir Cedric')
     expect(text.indexOf('forgive him')).toBeLessThan(text.indexOf('justice'))
+  })
+
+  it('names Sir Cedric among the three roads only once he forgave the knight', () => {
+    const game = opened()
+    game.state.setStoryFlag(FLAG_ACT4_CEDRIC_FORGAVE, true)
+    expect(executeCommands(game, ['use ancient amulet on wound'])).toContain(
+      'you could forgive him, as [character_name]Sir Cedric[/character_name] forgave the knight.',
+    )
   })
 })
 

@@ -87,7 +87,7 @@ export class TrappedServants extends Character {
         `The ${name} have stopped walking. They stand close together, ` +
         'watching you. ' +
         speech(
-          'We are so tired. No one has said a kind word over us in years. ' +
+          'We are so tired. No one has said a kind word over us since we came here. ' +
             'Whatever you can do for us, do it gently.',
         )
       )

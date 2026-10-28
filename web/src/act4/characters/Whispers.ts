@@ -55,8 +55,8 @@ const FRIENDS: Friend[] = [
     flag: FLAG_ACT4_WHISPERS_CEDRIC_NAMED,
     pronoun: 'his',
     object: 'him',
-    doing: 'is in the hall below',
-    line: 'I am in the hall below you, Elior. I have not left. Go on up.',
+    doing: 'is in the hall behind you',
+    line: 'I am in the hall behind you, Elior. I have not left. Go on up.',
   },
   {
     name: 'Nyx',

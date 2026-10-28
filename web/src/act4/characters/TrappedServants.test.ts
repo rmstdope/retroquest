@@ -51,7 +51,7 @@ describe('TrappedServants', () => {
     const answer = game.commandParser.parse('talk to trapped servants')
 
     expect(answer).toContain(
-      '[dialogue]We are so tired. No one has said a kind word over us in years. Whatever you can do for us, do it gently.[/dialogue]',
+      '[dialogue]We are so tired. No one has said a kind word over us since we came here. Whatever you can do for us, do it gently.[/dialogue]',
     )
     expectDialogueSpeaker(answer, SPEAKER)
     expectMarkupWellFormed(answer)
