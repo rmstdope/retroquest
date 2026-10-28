@@ -14,8 +14,7 @@ export class HealSpell extends Spell {
     super({
       id: 'heal',
       name: 'heal',
-      description:
-        'A restorative spell that mends wounds and alleviates ailments.',
+      description: 'The first thing Mira showed you: how to mend.',
     })
   }
 
@@ -47,8 +46,8 @@ export class HealSpell extends Spell {
       return character.healArm(gameState)
     }
     return (
-      'A warm light envelops ' +
-      `${characterName(name)} and the character seems a bit healthier.`
+      `A warm light settles over ${characterName(name)}. ` +
+      'There was nothing in them that needed mending.'
     )
   }
 }

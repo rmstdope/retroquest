@@ -14,8 +14,7 @@ export class UnlockSpell extends Spell {
     super({
       id: 'unlock',
       name: 'unlock',
-      description:
-        'A spell that can open magically sealed or complex mundane locks.',
+      description: 'The second thing Mira showed you: how to open.',
     })
   }
 

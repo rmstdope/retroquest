@@ -16,8 +16,8 @@ export class PurifySpell extends Spell {
       id: 'purify',
       name: 'purify',
       description:
-        'A cleansing spell that removes impurities from water or other ' +
-        'substances.',
+        'Your mother taught it to the fisherman at the bend, and he gave ' +
+        'it back to you. It makes foul water clean.',
     })
   }
 
@@ -62,8 +62,8 @@ export class PurifySpell extends Spell {
     }
     const name = character.name
     return (
-      'A cleansing energy flows around ' +
-      `${characterName(name)}, purifying their spirit and lifting any negative influences.`
+      `The cleansing runs over ${characterName(name)} ` +
+      'and finds nothing to wash away.'
     )
   }
 }

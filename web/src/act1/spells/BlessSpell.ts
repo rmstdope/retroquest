@@ -5,14 +5,15 @@ import {
   FLAG_PRIEST_BLESSED,
 } from '../Act1StoryFlags'
 
-/** Divine incantation granting temporary protection and strength to a target. */
+/** The priest's blessing, remembered: gives strength to Elior or another character. */
 export class BlessSpell extends Spell {
   constructor() {
     super({
       id: 'bless',
       name: 'bless',
       description:
-        'A divine incantation that offers protection and strength to the caster.',
+        'The blessing the priest said over you when you found the ' +
+        "founders' locket.",
     })
   }
 
@@ -20,8 +21,8 @@ export class BlessSpell extends Spell {
   override castSpell(gameState: GameState): string {
     gameState.setStoryFlag(FLAG_JOURNEY_BLESS_COMPLETED, true)
     return (
-      'Your resolve is strengthened, and you feel more prepared for the ' +
-      'challenges that lie ahead on your journey.'
+      'A quiet warmth settles on your shoulders and stays, the way the ' +
+      `${characterName('priest')}'s hand did.`
     )
   }
 

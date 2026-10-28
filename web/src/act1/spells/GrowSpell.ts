@@ -1,19 +1,21 @@
 import { Spell, type GameState, type Item } from '@/engine'
 
-/** Spell that encourages plants to flourish; delegates growth to items. */
+/** Spell read off the glade stone; delegates growth to items. */
 export class GrowSpell extends Spell {
   constructor() {
     super({
       id: 'grow',
       name: 'grow',
-      description: 'A nature spell that encourages plants to flourish.',
+      description:
+        'Read word by word off the mossy stone in the glade. It feels like ' +
+        'your own.',
     })
   }
 
   override castSpell(_gameState: GameState): string {
     return (
-      'The nearby plants seem to respond with vibrant energy, ' +
-      'but nothing else happens.'
+      'The grass at your feet stands a little taller. ' +
+      'Nothing here was waiting for it.'
     )
   }
 
