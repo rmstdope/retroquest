@@ -32,7 +32,7 @@ export class HiddenGlade extends Room {
     'Brambles crowd its edges, and the tall grass stands grey and still beneath ' +
     'branches that shut out the sun. In the center, a mossy stone bears a faint ' +
     'inscription, too deep in shadow to read. An unnatural darkness lingers here, ' +
-    'as if the glade itself is waiting to be enlightened.'
+    'though the sky above the branches is clear.'
 
   /** The glade once `light` has lifted the darkness. */
   private static readonly SUNLIT_DESCRIPTION =
@@ -52,8 +52,8 @@ export class HiddenGlade extends Room {
   /**
    * The glade's text, built from its dynamic segments: dim or sunlit, the
    * glowing amulet, and the Deer and Rare Flower once they have appeared.
-   * The dim glade ends on its darkness; only the sunlit glade goes on to
-   * feel expectant and enchanted.
+   * The dim glade ends on its darkness; the sunlit glade ends on the carving,
+   * or on the Deer and flower once they have appeared.
    */
   override descriptionFor(gameState: GameState): string {
     let baseDescription = this.lightSpellCast
@@ -84,17 +84,8 @@ export class HiddenGlade extends Room {
         )
       }
     }
-    if (dynamicParts.length === 0 && !this.getCharacterByName('Deer')) {
-      baseDescription +=
-        ' The glade feels quiet and expectant, as if waiting for something.'
-    }
-    let description = baseDescription
-    if (dynamicParts.length > 0) {
-      description += ' ' + dynamicParts.join(' ')
-    }
-    description +=
-      ' The glade feels enchanted, a place where the world holds its breath.'
-    return description
+    if (dynamicParts.length === 0) return baseDescription
+    return baseDescription + ' ' + dynamicParts.join(' ')
   }
 
   /** Resting spawns the Deer and RareFlower once the deer can be observed. */
@@ -105,17 +96,14 @@ export class HiddenGlade extends Room {
         const deer = new Deer()
         this.addCharacter(deer)
         messages.push(
-          'As you relax, a graceful ' +
+          'After a while you stop listening for anything, and a ' +
             characterName('Deer') +
-            ' emerges into ' +
-            'the glade. It gazes at you with deep, ancient eyes, and for a moment, ' +
-            'you feel a surge of gentle magical energy flow through your body, as if ' +
-            'the glade itself is welcoming you.',
+            ' steps out of the brambles. It stands and looks at you, quite still.',
         )
         this.addItem(new RareFlower())
         messages.push(
-          'You notice a rare, beautiful [item_name]rare flower[/item_name] blooming ' +
-            'near the mossy stone.',
+          'Near the mossy stone, where there was only moss, a ' +
+            '[item_name]rare flower[/item_name] has opened.',
         )
       } else {
         messages.push(
@@ -128,8 +116,9 @@ export class HiddenGlade extends Room {
       return messages.join(' ')
     }
     return (
-      'You rest for a while, but the glade remains quiet. Perhaps something more needs ' +
-      'to happen for its magic to awaken.'
+      'You rest a while. Birds, the grey grass, a stone you cannot read. ' +
+      'Nothing comes. You catch yourself watching the brambles for it, ' +
+      'whatever it is.'
     )
   }
 
@@ -138,15 +127,14 @@ export class HiddenGlade extends Room {
     this.lightSpellCast = true
     let message =
       'Light fills the glade.\n' +
-      'The unnatural darkness lifts, and golden sunlight spills through the ' +
-      'branches. The inscription on the mossy stone glows faintly, revealing ' +
-      'ancient runes. ' +
-      "They speak of a seed, a song, and the sun's embrace to awaken life."
+      'The darkness lifts, and sunlight comes down through the branches. ' +
+      'The runes on the mossy stone stand out clear at last. ' +
+      'They speak of a seed, a song, and the sun.'
     if (!gameState.hasSpell('Grow')) {
       const growSpell = new GrowSpell()
       gameState.learnSpell(growSpell)
       message +=
-        '\nAs you read the runes, you feel a connection to the ancient magic of nature. ' +
+        '\nYou read them slowly, and the spell comes with the reading. ' +
         'It does not wake in you the way the others did; this one you read, ' +
         'word by word, off the stone, and it feels like your own. ' +
         'You have learned the [spell_name]grow[/spell_name] spell!'

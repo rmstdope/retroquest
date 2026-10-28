@@ -379,7 +379,7 @@ describe('actScript branches before the first command', () => {
 
 describe('actScript branches with story flags cleared', () => {
   const QUIET =
-    'You rest for a while, but the glade remains quiet. Perhaps something more needs to happen for its magic to awaken.'
+    'You rest a while. Birds, the grey grass, a stone you cannot read. Nothing comes. You catch yourself watching the brambles for it, whatever it is.'
   const glade = ACT1_GOLDEN_PATH.indexOf('rest')
   const branch: ScriptBranch = {
     after: glade,

@@ -1615,9 +1615,9 @@
     "text": "Hidden Glade"
   },
   {
-    "key": "075f1ce44dc6ba",
+    "key": "108b4faf369d64",
     "speaker": "narrator",
-    "text": "A hushed clearing hidden deep within the forest, dim and overgrown. Brambles crowd its edges, and the tall grass stands grey and still beneath branches that shut out the sun. In the center, a mossy stone bears a faint inscription, too deep in shadow to read. An unnatural darkness lingers here, as if the glade itself is waiting to be enlightened."
+    "text": "A hushed clearing hidden deep within the forest, dim and overgrown. Brambles crowd its edges, and the tall grass stands grey and still beneath branches that shut out the sun. In the center, a mossy stone bears a faint inscription, too deep in shadow to read. An unnatural darkness lingers here, though the sky above the branches is clear."
   },
   {
     "key": "1a40afb1558cf8",
@@ -1630,9 +1630,9 @@
     "text": "You search around the Hidden Glade, but find nothing of interest beyond what you can already see."
   },
   {
-    "key": "0f80760894c8ce",
+    "key": "0b9a210212362a",
     "speaker": "narrator",
-    "text": "You take a moment to rest in the tranquil glade. As you relax, a graceful Deer emerges into the glade. It gazes at you with deep, ancient eyes, and for a moment, you feel a surge of gentle magical energy flow through your body, as if the glade itself is welcoming you. You notice a rare, beautiful rare flower blooming near the mossy stone."
+    "text": "You take a moment to rest in the tranquil glade. After a while you stop listening for anything, and a Deer steps out of the brambles. It stands and looks at you, quite still. Near the mossy stone, where there was only moss, a rare flower has opened."
   },
   {
     "key": "09ae2f5c6f96f4",
@@ -1640,9 +1640,9 @@
     "text": "You have observed the magical deer, gaining a deeper understanding of the wonders and mysteries of Eldoria."
   },
   {
-    "key": "13b9b8255c378a",
+    "key": "151fa6d37c2090",
     "speaker": "narrator",
-    "text": "You rest for a while, but the glade remains quiet. Perhaps something more needs to happen for its magic to awaken."
+    "text": "You rest a while. Birds, the grey grass, a stone you cannot read. Nothing comes. You catch yourself watching the brambles for it, whatever it is."
   },
   {
     "key": "173eaeef97cb8d",
@@ -2430,14 +2430,14 @@
     "text": "Light fills the glade."
   },
   {
-    "key": "0d2c5de2512e86",
+    "key": "08d7eef1035f6f",
     "speaker": "narrator",
-    "text": "The unnatural darkness lifts, and golden sunlight spills through the branches. The inscription on the mossy stone glows faintly, revealing ancient runes. They speak of a seed, a song, and the sun's embrace to awaken life."
+    "text": "The darkness lifts, and sunlight comes down through the branches. The runes on the mossy stone stand out clear at last. They speak of a seed, a song, and the sun."
   },
   {
-    "key": "1d9765c8a2a1dd",
+    "key": "05817e605a230d",
     "speaker": "narrator",
-    "text": "As you read the runes, you feel a connection to the ancient magic of nature. It does not wake in you the way the others did; this one you read, word by word, off the stone, and it feels like your own. You have learned the grow spell!"
+    "text": "You read them slowly, and the spell comes with the reading. It does not wake in you the way the others did; this one you read, word by word, off the stone, and it feels like your own. You have learned the grow spell!"
   },
   {
     "key": "0b8a43fec851bd",
