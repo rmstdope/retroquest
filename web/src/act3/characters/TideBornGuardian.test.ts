@@ -59,6 +59,19 @@ describe('TideBornGuardian', () => {
     expect(g.getStoryFlag(FLAG_ACT3_VOW_OF_COURAGE_MADE)).toBe(true)
   })
 
+  it.each(['I will not abandon myself', 'I swear by myself'])(
+    'takes the vow sworn as a sentence: %s',
+    (words) => {
+      const g = makeGameState()
+      const guardian = new TideBornGuardian()
+      walkThrough(guardian, g)
+
+      guardian.sayTo(g, words)
+
+      expect(g.getStoryFlag(FLAG_ACT3_VOW_OF_COURAGE_MADE)).toBe(true)
+    },
+  )
+
   it('rejects other words without setting the flag', () => {
     const g = makeGameState()
     const guardian = new TideBornGuardian()

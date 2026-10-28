@@ -10,6 +10,7 @@ import {
   FLAG_ACT3_CHARRED_INSCRIPTION_READ,
   FLAG_ACT3_CRYSTAL_OF_LIGHT_ACQUIRED,
   FLAG_ACT3_DRAGONS_SCALE_ACQUIRED,
+  FLAG_ACT3_MINERS_RESCUE_COMPLETED,
   FLAG_ACT3_ECHOES_QUEST_STARTED,
   FLAG_ACT3_LIFELIGHT_ELIXIR_CREATED,
   FLAG_ACT3_MAIN_COMPLETED,
@@ -513,6 +514,20 @@ describe('Mira', () => {
     expect(out).not.toContain('test of selflessness')
     expect(out).not.toContain('circle')
     expect(out).not.toContain('you arrive at your next destination')
+  })
+
+  it('points past the galleries once the miners are out', () => {
+    const game = new Game([new Act3()])
+    game.state.setStoryFlag(FLAG_ACT3_MAIN_STARTED, true)
+    game.state.setStoryFlag(FLAG_ACT3_MINERS_RESCUE_COMPLETED, true)
+    game.state.currentRoom = game.state.allRooms.CavernMouth
+
+    const out = new Mira().talkTo(game.state)
+
+    expect(out).toContain('The miners are out, all of them.')
+    expect(out).toContain('past the galleries, where the caves go quiet')
+    expect(out).not.toContain('trapped')
+    expect(out).not.toContain('circle')
   })
 })
 

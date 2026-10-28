@@ -4,7 +4,6 @@ import {
   characterName,
   dialogue,
   speech,
-  normaliseSpokenWord,
   saysAnyOf,
   type NameOptions,
 } from '@/engine'
@@ -230,7 +229,8 @@ export class TideBornGuardian extends Character {
 
   /**
    * Answer what Elior says: before the third step it asks him to walk first;
-   * at the third step "myself" is the vow, a near miss gets its own gentle
+   * at the third step "myself", alone or in a sworn sentence, is the vow,
+   * a near miss gets its own gentle
    * refusal and anything else the generic one.
    */
   override sayTo(gameState: GameState, words: string): string {
@@ -240,8 +240,7 @@ export class TideBornGuardian extends Character {
     if (this.step() < TRIAL_STEPS) {
       return dialogue(this.name, 'Words are easy on the shore. Walk first.')
     }
-    const w = normaliseSpokenWord(words)
-    if (w === 'myself') {
+    if (saysAnyOf(words, ['myself'])) {
       gameState.setStoryFlag(FLAG_ACT3_VOW_OF_COURAGE_MADE, true)
       return (
         '[success]The water draws back from you, all the way to the walls. ' +

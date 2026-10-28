@@ -226,6 +226,31 @@ describe('PierWarden hears the word as the engine does', () => {
     expect(out).not.toContain('Better a hard truth')
   })
 
+  it.each(["I'm not sure", 'I do not know', 'no idea'])(
+    'does not take the unsure answer %s as the truth',
+    (words) => {
+      const game = new Game([new Act3()])
+      game.state.setStoryFlag(FLAG_ACT3_WARDEN_ASKED, true)
+
+      new PierWarden().sayTo(game.state, words)
+
+      expect(game.state.getStoryFlag(FLAG_ACT3_WARDEN_TRUTH_TOLD)).toBe(false)
+    },
+  )
+
+  it.each(['yes, no doubt it will mend', 'it will mend, not to worry'])(
+    'takes %s as the comforting lie, not the truth',
+    (words) => {
+      const game = new Game([new Act3()])
+      game.state.setStoryFlag(FLAG_ACT3_WARDEN_ASKED, true)
+
+      const out = new PierWarden().sayTo(game.state, words)
+
+      expect(out).toContain("That's what I'll tell the boats, then.")
+      expect(game.state.getStoryFlag(FLAG_ACT3_WARDEN_TRUTH_TOLD)).toBe(false)
+    },
+  )
+
   it.each(['yes', 'it will mend', 'It will pass', 'only a bad season'])(
     'takes the comforting lie %s and records nothing',
     (words) => {

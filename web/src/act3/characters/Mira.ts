@@ -21,6 +21,7 @@ import {
   FLAG_ACT3_CRYSTAL_OF_LIGHT_ACQUIRED,
   FLAG_ACT3_PHOENIX_FEATHER_ACQUIRED,
   FLAG_ACT3_DRAGONS_SCALE_ACQUIRED,
+  FLAG_ACT3_MINERS_RESCUE_COMPLETED,
   FLAG_ACT3_LIFELIGHT_ELIXIR_CREATED,
   FLAG_ACT3_MAIN_COMPLETED,
   FLAG_ACT3_SEA_SEALED_LETTER_READ,
@@ -146,6 +147,19 @@ export class Mira extends Character {
       return this.talkAtGate(gameState, eventMsg)
     } else if (gameState.currentRoom.name === 'Cavern Mouth') {
       // Check if dragon's scale has been acquired
+      if (
+        !gameState.getStoryFlag(FLAG_ACT3_DRAGONS_SCALE_ACQUIRED) &&
+        gameState.getStoryFlag(FLAG_ACT3_MINERS_RESCUE_COMPLETED)
+      ) {
+        return (
+          eventMsg +
+          '\n' +
+          speech(
+            'The miners are out, all of them. The dragon is further in, ' +
+              'past the galleries, where the caves go quiet.',
+          )
+        )
+      }
       if (!gameState.getStoryFlag(FLAG_ACT3_DRAGONS_SCALE_ACQUIRED)) {
         return (
           eventMsg +

@@ -29,8 +29,20 @@ const QUESTION =
   "grey. I've known bad seasons on this coast, forty years of them. It's " +
   "only a bad season, isn't it? Tell me the sea will mend on its own."
 
-/** Words that answer his question with the truth: the sea will not mend. */
-const TRUTH_WORDS = ['truth', 'no', 'not', "won't"]
+/** Phrases that answer his question with the truth: the sea will not mend. */
+const TRUTH_WORDS = ['truth', "won't", 'will not', 'not a season', 'not mend']
+
+/**
+ * Whether Elior tells him the truth: a truth phrase, or a plain "no" given
+ * as the whole answer or to open it ("no, it is not a season"), so that
+ * "no idea" or "I'm not sure" do not count.
+ */
+function tellsTruth(words: string): boolean {
+  const spoken = normaliseSpokenWord(words)
+  return (
+    spoken === 'no' || spoken.startsWith('no,') || saysAnyOf(words, TRUTH_WORDS)
+  )
+}
 
 /** Words that give him the comforting lie he asked for. */
 const LIE_WORDS = ['yes', 'it will mend', 'it will pass', 'a bad season']
@@ -110,7 +122,7 @@ export class PierWarden extends Character {
         ? dialogue(this.name, 'The truth about what, lad? Speak plain.')
         : super.sayTo(gameState, words)
     }
-    if (!saysAnyOf(words, TRUTH_WORDS)) {
+    if (!tellsTruth(words)) {
       if (
         saysAnyOf(words, LIE_WORDS) &&
         !gameState.getStoryFlag(FLAG_ACT3_WARDEN_TRUTH_TOLD)
