@@ -52,8 +52,8 @@ export class HiddenGlade extends Room {
   /**
    * The glade's text, built from its dynamic segments: dim or sunlit, the
    * glowing amulet, and the Deer and Rare Flower once they have appeared.
-   * The dim glade ends on its darkness; the sunlit glade ends on the carving,
-   * or on the Deer and flower once they have appeared.
+   * The dim glade ends on its darkness; the sunlit glade ends on the carving
+   * (or the amulet's glow), then the Deer and flower once they have appeared.
    */
   override descriptionFor(gameState: GameState): string {
     let baseDescription = this.lightSpellCast
