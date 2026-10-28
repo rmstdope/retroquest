@@ -31,9 +31,9 @@ const OPTIONAL_LINES: Record<number, { speaker: string; opening: string }[]> = {
     { speaker: 'mira', opening: 'Those herbs are part of my stores' },
     {
       speaker: 'narrator',
-      opening: 'Mira places a protective hand over the amulet',
+      opening: 'Mira puts her hand over the amulet',
     },
-    { speaker: 'mira', opening: 'This is not yet yours to claim' },
+    { speaker: 'mira', opening: 'Not that one, Elior. Not yet.' },
     {
       speaker: 'shopkeeper',
       opening: 'Hold on there, friend! That sword is merchandise',

@@ -149,9 +149,10 @@ export class Mira extends Character {
       speech('The well did not sicken. Someone poisoned it on purpose.') +
       mill +
       '\n' +
+      speech('The cloaked stranger the villagers whisper about.') +
+      ' She stops, as if she has said more than she meant to. ' +
       speech(
-        'The cloaked stranger the villagers whisper about, perhaps. ' +
-          'Whoever carried this was not here to spoil a well and leave. ' +
+        'Whoever carried this was not here to spoil a well and leave. ' +
           'They were searching Willowbrook for something.',
       ) +
       ' She is quiet a moment. ' +

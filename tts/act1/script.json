@@ -970,9 +970,9 @@
     "text": "She keeps scratching a while longer than she needs to."
   },
   {
-    "key": "07b880fa9b7e61",
+    "key": "0d05eeae9275b9",
     "speaker": "grandmother",
-    "text": "With you off on the road soon, this cottage will be very quiet. If you'd have her stay with me, say so, and I'll square it with Hemlock myself. Or carry her home to him. He'll be worried sick."
+    "text": "It's very quiet here, with you out all day. If you'd have her stay with me, say so, and I'll square it with Hemlock myself. Or carry her home to him. He'll be worried sick."
   },
   {
     "key": "11a62c8885cd34",
@@ -985,14 +985,14 @@
     "text": "Those herbs are part of my stores, Elior. They are not for taking, but for healing those who truly need them."
   },
   {
-    "key": "03ba7c4764d78e",
+    "key": "00382f3f08c6be",
     "speaker": "narrator",
-    "text": "Mira places a protective hand over the amulet."
+    "text": "Mira puts her hand over the amulet before yours gets there."
   },
   {
-    "key": "00a2055aac5d2c",
+    "key": "0159e611b6acf9",
     "speaker": "mira",
-    "text": "This is not yet yours to claim, Elior. The ancient amulet is a powerful artifact that must be earned through preparation and wisdom. Complete your journey preparations first, and it shall be yours."
+    "text": "Not that one, Elior. Not yet. It has waited a long while for you; it can wait until you're ready."
   },
   {
     "key": "117cc66e56de2a",
@@ -1825,9 +1825,9 @@
     "text": "Look there, child. The light has found something."
   },
   {
-    "key": "13404625e6187f",
+    "key": "1ac4291eb09877",
     "speaker": "narrator",
-    "text": "As you do this, the priest gasps and looks closely at its crest."
+    "text": "The priest sees it in your hand and catches his breath."
   },
   {
     "key": "1186a7a6adc382",
@@ -1835,19 +1835,9 @@
     "text": "The founders' relic... That crest, child, only the founders' line wore it. Your mother's line. She prayed here alone the night she left. She must have hidden it then, for you."
   },
   {
-    "key": "1b64be0bbfade6",
+    "key": "0688e86dc5e621",
     "speaker": "narrator",
-    "text": "He nods gravely."
-  },
-  {
-    "key": "147a69a189a4b4",
-    "speaker": "priest",
-    "text": "May this blessing protect you on your path."
-  },
-  {
-    "key": "01d14b196cce2a",
-    "speaker": "narrator",
-    "text": "He teaches you the bless spell!"
+    "text": "He lays his hand over yours and says the old blessing slowly, so you can follow it."
   },
   {
     "key": "1dfd52df92eea4",
@@ -2665,9 +2655,9 @@
     "text": "The merchant offers a friendly nod."
   },
   {
-    "key": "04532abd69b091",
+    "key": "19f9bc427a7b3c",
     "speaker": "merchant",
-    "text": "You'll want news, if you're bound for Greendale. It's a sombre city this season: they say King Alden has fallen ill, and no physician can name the sickness. And the roads have gone bad besides. I passed a cart on its side by the hill road, and nobody with it. And it's not only your fields that are failing. I've seen crops gone grey in every valley from here to the capital, ever since the king took to his bed. Keep to the daylight, friend. Boots, friend? I've one good pair of wandering boots left, walked in and soft, and the soles will outlast you. I'll not take coin for them; coin's no good where I'm going. Something small and fine would buy them. A ring, say. Failing that, my old mare threw a shoe on the hill road; a good iron horseshoe would do me nearly as well. Forgive me if I'm short, friend. I've not eaten since the hill road, and there's no inn this side of Greendale."
+    "text": "You'll want news, if you're bound for Greendale. It's a sombre city this season: they say King Alden has fallen ill, and no physician can name the sickness. And the roads have gone bad besides. I passed a cart on its side by the hill road, and nobody with it. And it's not only your fields that are failing. I've seen crops gone grey in every valley from here to the capital, ever since the king took to his bed. Keep to the daylight, friend. Boots, friend? I've one good pair of wandering boots left, walked in and soft, and the soles will outlast you. I'll not take coin for them; coin I can earn anywhere. Something small and fine would buy them. A ring, say. Failing that, my old mare threw a shoe on the hill road; a good iron horseshoe would do me nearly as well. Forgive me if I'm short, friend. I've not eaten since the hill road, and there's no inn this side of Greendale."
   },
   {
     "key": "1fb285babc0d61",
@@ -2730,9 +2720,14 @@
     "text": "You'll want news, if you're bound for Greendale. It's a sombre city this season: they say King Alden has fallen ill, and no physician can name the sickness. And the roads have gone bad besides. I passed a cart on its side by the hill road, and nobody with it. And it's not only your fields that are failing. I've seen crops gone grey in every valley from here to the capital, ever since the king took to his bed. Keep to the daylight, friend. How are the boots? Give them a week and they'll know your feet better than you do. Forgive me if I'm short, friend. I've not eaten since the hill road, and there's no inn this side of Greendale."
   },
   {
-    "key": "13aa84f923d1fd",
+    "key": "088262cbf14bd0",
     "speaker": "tilda",
-    "text": "The water's clean! Was that you, Elior? No — don't tell me, you've that look about you. I've not had dough rise so light in a year."
+    "text": "The water's clean! I've not had dough rise so light in a year. Was that you, Elior?"
+  },
+  {
+    "key": "143b15276ea453",
+    "speaker": "narrator",
+    "text": "She looks at you, and waits."
   },
   {
     "key": "16b565f80843a4",
@@ -2835,9 +2830,19 @@
     "text": "The same hand, then. The mill stands on old power, and that thing was drinking it. You did well to stop it."
   },
   {
-    "key": "0344cc4f732b78",
+    "key": "192b401a127985",
     "speaker": "mira",
-    "text": "The cloaked stranger the villagers whisper about, perhaps. Whoever carried this was not here to spoil a well and leave. They were searching Willowbrook for something."
+    "text": "The cloaked stranger the villagers whisper about."
+  },
+  {
+    "key": "0c41816e3b06a8",
+    "speaker": "narrator",
+    "text": "She stops, as if she has said more than she meant to."
+  },
+  {
+    "key": "10d7275daeafff",
+    "speaker": "mira",
+    "text": "Whoever carried this was not here to spoil a well and leave. They were searching Willowbrook for something."
   },
   {
     "key": "0aac26d492ee4d",
@@ -2905,9 +2910,19 @@
     "text": "Her eyes fall on the amulet you carry, and she goes very still."
   },
   {
-    "key": "027a4ba401dc98",
+    "key": "1e847e99475365",
     "speaker": "grandmother",
-    "text": "So it's true, then. I knew this day would come; I only hoped it would come later. Come back to me, child."
+    "text": "So it's true, then."
+  },
+  {
+    "key": "0cc465aa785fcf",
+    "speaker": "narrator",
+    "text": "She turns the loaf on the board, though it does not need turning."
+  },
+  {
+    "key": "19b2e4198a16d3",
+    "speaker": "grandmother",
+    "text": "Come back to me, child."
   },
   {
     "key": "152d2eed998f12",

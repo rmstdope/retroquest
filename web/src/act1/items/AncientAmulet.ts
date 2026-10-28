@@ -61,13 +61,13 @@ export class AncientAmulet extends Item {
   override preventPickup(): string {
     return (
       characterName('Mira') +
-      ' places a protective hand over the [item_name]amulet[/item_name]. ' +
+      ' puts her hand over the [item_name]amulet[/item_name] before yours ' +
+      'gets there. ' +
       speech(
-        'This is not yet yours to claim, ' +
+        'Not that one, ' +
           characterName('Elior') +
-          '. The [item_name]ancient amulet[/item_name] ' +
-          'is a powerful artifact that must be earned through preparation and wisdom. ' +
-          'Complete your journey preparations first, and it shall be yours.',
+          '. Not yet. It has waited a long while for you; ' +
+          "it can wait until you're ready.",
       )
     )
   }

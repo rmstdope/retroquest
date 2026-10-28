@@ -179,6 +179,10 @@ describe('Mira and the rune token from the well', () => {
     const response = executeCommands(game, ['give rune token to mira'])
 
     expect(response).toContain('fouling sigil')
+    expect(response).toContain(
+      'She stops, as if she has said more than she meant to.',
+    )
+    expect(response).not.toContain('whisper about, perhaps')
     expect(response).toContain('on purpose')
     expect(response).toContain('searching')
     expect(response).not.toContain('Malakar')

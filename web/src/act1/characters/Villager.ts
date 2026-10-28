@@ -112,10 +112,11 @@ export class Villager extends Character {
       !gameState.getStoryFlag(FLAG_TILDA_ASKED_ABOUT_WELL)
     ) {
       gameState.setStoryFlag(FLAG_TILDA_ASKED_ABOUT_WELL, true)
-      return speech(
-        `The water's clean! Was that you, ${characterName('Elior')}? ` +
-          "No — don't tell me, you've that look about you. " +
-          "I've not had dough rise so light in a year.",
+      return (
+        speech(
+          "The water's clean! I've not had dough rise so light in a year. " +
+            `Was that you, ${characterName('Elior')}?`,
+        ) + ' She looks at you, and waits.'
       )
     }
     if (
