@@ -379,7 +379,7 @@ Optional virtue moments; none blocks the golden path, none adds a puzzle or comb
 
 11. **Return to Blacksmith's Forge:**
 
-    - Give millstone fragment to Blacksmith. _He examines it and nods. 'A fine piece from the Old Mill. They say the mill has secrets older than the village itself. Some folks with a touch of the arcane about them have even whispered tales of a magical deer seen in the Hidden Glade, a place the mill's old energies might be connected to. Be wary if you venture too deep into its workings.' He says plainly how to meet the deer: go to the glade and sit quiet a while; have a rest, and let it come._
+    - Give millstone fragment to Blacksmith. _He examines it and nods. 'A fine piece from the Old Mill. They say the mill has secrets older than the village itself. Some folks with a touch of the arcane about them have even whispered tales of a magical deer seen in the Hidden Glade, a place the mill's old energies might be connected to. Be wary if you venture too deep into its workings.' He says plainly how to meet the deer, in his grandfather's words: go to the glade, sit down, rest a while, and stop looking for it._
       - Item used: `millstone fragment`
       - Item obtained: Information (about magical deer in Hidden Glade)
 
@@ -503,7 +503,7 @@ Optional virtue moments; none blocks the golden path, none adds a puzzle or comb
 27. **Return to Mira's Hut (Final Visit):**
 
     - Give rune token to Mira. _Mira turns it over and the color drains from her face: it is a fouling sigil, and the well was poisoned on purpose. If the mill mechanism is jammed she recognises the same hand there, drinking the old power. Whoever carried it, perhaps the cloaked stranger, was searching Willowbrook "for something. Or for someone." She hands the token back: keep it close, and keep it hidden._
-    - Speak to Mira. _Seeing Elior has fulfilled all the tasks and is fully prepared, Mira smiles and presents him with the `ancient amulet`. "You are ready, Elior. May this guide and protect you." Then, more quietly: "I knew your parents better than I have said. Once you are truly ready, I will tell you." She sends him toward Greendale: "Once there, show the amulet to no one lightly. Those who know what it is will find you." This sets up Sir Cedric recognising the amulet in Act II._
+    - Speak to Mira. _Seeing Elior has fulfilled all the tasks and is fully prepared, Mira looks him over and puts the `ancient amulet` in his hand. "You're ready. Or as ready as anyone gets." Then, more quietly: "I knew your parents better than I have said. Once you are truly ready, I will tell you." She sends him toward Greendale: "Once there, show the amulet to no one lightly. Those who know what it is will find you." This sets up Sir Cedric recognising the amulet in Act II._
       - Item obtained: `ancient amulet` (ESSENTIAL)
       - (Implicitly, all spells learned completes: Learn basic magic; `map` obtained completes: Map; `wild berries` obtained from Forest Path, `apple` from General Store, `egg` from Chicken Coop, and `carrot` from Vegetable Field are four of the six kinds and complete: Food)
 

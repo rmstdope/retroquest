@@ -37,8 +37,9 @@ export class Blacksmith extends Character {
     super({
       name: 'blacksmith',
       description:
-        'A burly, skilled craftsman who forges tools and weapons for the ' +
-        'village. He is always ready to offer advice or sharpen a blade.',
+        `${characterName('Borin')}, the village smith: forearms like fence ` +
+        'posts and an old burn on every knuckle. He talks while he works, ' +
+        "and he doesn't stop working.",
     })
   }
 
@@ -62,10 +63,7 @@ export class Blacksmith extends Character {
     if (gameState.getStoryFlag(FLAG_BLACKSMITH_MET)) {
       const lines = this.contextLines(gameState)
       if (lines.length === 0) {
-        return speech(
-          `Welcome back, young ${characterName('Elior')}. ` +
-            'Need something else?',
-        )
+        return speech("Back again, lad? Forge is hot. What've you got for me?")
       }
       const spoken =
         lines.length > (this.contextLinesKnown ?? 0)
@@ -77,10 +75,14 @@ export class Blacksmith extends Character {
     }
 
     gameState.setStoryFlag(FLAG_BLACKSMITH_MET, true)
-    return speech(
-      `Well met, young one. I am ${characterName('Borin')}, the village ` +
-        `${characterName(this.name)}. If you need tools ` +
-        "made or mended, I'm your man. A sharp blade can be a good friend.",
+    return (
+      speech('Mind the sparks, lad.') +
+      " He doesn't stop hammering. " +
+      speech(
+        `${characterName('Borin')}. I make what this village breaks, and I ` +
+          "mend what it won't throw away. Got anything with an edge gone " +
+          'soft? Bring it here.',
+      )
     )
   }
 
@@ -154,11 +156,12 @@ export class Blacksmith extends Character {
         gameState.setStoryFlag(FLAG_BLACKSMITH_SHARPENED_KNIFE, true)
 
         return (
-          `The ${characterName(this.name)} takes your ` +
-          `[item_name]${coinInstance.name}[/item_name] and your ` +
-          `[item_name]${dullKnifeInstance.name}[/item_name]. He ` +
-          'expertly sharpens it on his whetstone and hands you back a ' +
-          'gleaming [item_name]sharp knife[/item_name]!'
+          `The ${characterName(this.name)} pockets the ` +
+          `[item_name]${coinInstance.name}[/item_name] and puts the ` +
+          `[item_name]${dullKnifeInstance.name}[/item_name] to the ` +
+          'whetstone. It sings for a minute. He tests the edge on his ' +
+          'thumbnail before he hands it back.\n' +
+          'You receive a [item_name]sharp knife[/item_name].'
         )
       }
       if (item instanceof DullKnife) {
@@ -167,8 +170,8 @@ export class Blacksmith extends Character {
           `[item_name]${item.name}[/item_name]. ` +
           speech(
             'That edge has seen better days. ' +
-              "I'll put it right for ye, but it'll cost you a " +
-              '[item_name]coin[/item_name].',
+              "I'll put it right for you, lad, but it'll cost a " +
+              "[item_name]coin[/item_name]. Whetstones don't grow on trees.",
           )
         )
       }
@@ -176,9 +179,8 @@ export class Blacksmith extends Character {
         `The ${characterName(this.name)} eyes the ` +
         `[item_name]${item.name}[/item_name]. ` +
         speech(
-          'Thanks for the offer, but I can only sharpen a ' +
-            "[item_name]dull knife[/item_name] for ye if you have one—and you'll " +
-            'need to pay me a coin for the service.',
+          "A coin's no use to me without something to put an edge on, " +
+            'lad. Bring the [item_name]dull knife[/item_name] as well.',
         )
       )
     } else if (item instanceof RuneToken) {
@@ -190,25 +192,27 @@ export class Blacksmith extends Character {
 
       return (
         `The ${characterName(this.name)} takes the ` +
-        `[item_name]${item.name}[/item_name], turning it over in ` +
+        `[item_name]${item.name}[/item_name] and turns it over in ` +
         'his calloused hands. ' +
         speech(
-          'Aye, this is from the old mill, alright. Sturdy stone. ' +
-            'You know, old tales say the mill was built on a place of ancient ' +
-            `power. Some say a magical ${characterName('deer')} sometimes ` +
-            'appears in the Hidden ' +
-            'Glade, but only when all is calm and restful—no voices, no ' +
-            'footsteps, just the hush of the wind and the song of the stream. ' +
-            `If you seek the ${characterName('deer')}, go there and sit ` +
-            'quiet a while; have a rest, and let it come to you. It will not ' +
-            'show itself to those who rush or bring trouble.',
+          'From the old mill, that. Good stone. My grandfather said they ' +
+            "built the mill where they did for a reason. The ground there's " +
+            'older than the village.',
+        ) +
+        '\nHe sets it on the bench. ' +
+        speech(
+          `He told me something else, too. There's a ${characterName('deer')} ` +
+            'in the [room_name]Hidden Glade[/room_name] that comes to folk ' +
+            'who keep still. Not to hunters. Not to talkers. You go there, ' +
+            "sit down, rest a while, and stop looking for it. That's when it " +
+            'comes.',
         )
       )
     }
 
     return (
       `The ${characterName(this.name)} gives it a glance and hands it back. ` +
-      speech("I don't have a use for this, lad.")
+      speech("Can't melt it, can't mend it. No use to me, lad.")
     )
   }
 }

@@ -94,7 +94,7 @@ describe('Shopkeeper dialogue markup', () => {
     const answer = gameInStore().commandParser.parse(
       'buy lantern from shopkeeper',
     )
-    expect(answer).toContain("that's not something I carry")
+    expect(answer).toContain('Not something I carry, lad.')
     expectQuotesInsideDialogue(answer)
     expectDialogueSpeaker(answer, 'shopkeeper')
   })
@@ -103,7 +103,7 @@ describe('Shopkeeper dialogue markup', () => {
     const game = gameInStore()
     game.state.addItemToInventory(new Coin())
     const answer = game.commandParser.parse('buy rope from shopkeeper')
-    expect(answer).toContain('is yours for')
+    expect(answer).toContain('You receive a [item_name]rope[/item_name]')
     expectQuotesInsideDialogue(answer)
   })
 
@@ -111,7 +111,7 @@ describe('Shopkeeper dialogue markup', () => {
     const game = gameInStore()
     game.state.addItemToInventory(new Coin())
     const answer = game.commandParser.parse('give coin to shopkeeper')
-    expect(answer).toContain('donations')
+    expect(answer).toContain("I don't take them in")
     expectQuotesInsideDialogue(answer)
     expectDialogueSpeaker(answer, 'shopkeeper')
   })
@@ -212,7 +212,7 @@ describe('Hemlock and his missing cat', () => {
     game.state.setStoryFlag(FLAG_CONNECT_WITH_NATURE, true)
     game.state.addItemToInventory(new Coin())
     expect(game.commandParser.parse('buy rope from shopkeeper')).not.toContain(
-      'is yours for',
+      'You receive a [item_name]rope[/item_name]',
     )
     expect(coins(game)).toBe(1)
   })
@@ -237,7 +237,7 @@ describe('Hemlock and his missing cat', () => {
     )
     expect(coins(game)).toBe(1)
     expect(game.commandParser.parse('buy rope from shopkeeper')).toContain(
-      'is yours for',
+      'You receive a [item_name]rope[/item_name]',
     )
   })
 
@@ -306,7 +306,7 @@ describe('Shopkeeper restored from a save made before Patches', () => {
       'You found her',
     )
     expect(loaded.commandParser.parse('buy rope from shopkeeper')).toContain(
-      'is yours for',
+      'You receive a [item_name]rope[/item_name]',
     )
   })
 })
@@ -371,7 +371,10 @@ describe('Shopkeeper named as a common noun', () => {
     const game = gameInStore()
     game.state.addItemToInventory(new Coin())
     const answer = game.commandParser.parse('give coin to shopkeeper')
-    expect(answer.startsWith(`The ${SHOPKEEPER} chuckles.`), answer).toBe(true)
+    expect(
+      answer.startsWith(`The ${SHOPKEEPER} chuckles and pushes it back`),
+      answer,
+    ).toBe(true)
   })
 
   it.each(['rope', 'apple', 'matches', 'sword', 'armor'])(
@@ -414,7 +417,7 @@ describe('Shopkeeper named as a common noun', () => {
     game.state.setStoryFlag(FLAG_MET_HEMLOCK, true)
     const answer = game.commandParser.parse('talk to shopkeeper')
     expect(
-      answer.startsWith(`The ${SHOPKEEPER} shakes his head.`),
+      answer.startsWith(`The ${SHOPKEEPER} shakes his head before`),
       answer,
     ).toBe(true)
   })
@@ -451,6 +454,39 @@ describe('the shopkeeper answers to his name', () => {
     expect(talk).not.toContain('There is no character')
     expectDialogueSpeaker(talk, 'shopkeeper')
     expect(give).not.toContain('There is no character')
-    expect(give).toContain('Not looking for donations')
+    expect(give).toContain("I don't take them in")
+  })
+})
+
+describe('Hemlock and the byword', () => {
+  it('knocks on the counter after naming Malakar', () => {
+    const game = gameInStore({ shopOpen: false })
+
+    const answer = game.commandParser.parse('talk to shopkeeper')
+
+    expect(answer).toContain(
+      "Malakar's luck, my father would have called it.[/dialogue] " +
+        'He raps the counter twice with his knuckles.',
+    )
+  })
+})
+
+describe('Hemlock idle lines', () => {
+  it('speaks his current lines after loading a save that holds the old ones', () => {
+    const game = gameInStore()
+    const shopkeeper = game.state.currentRoom.getCharacterByName('shopkeeper')
+    Object.defineProperty(shopkeeper, 'dialogueOptions', {
+      value: ['Welcome to my humble store!'],
+      enumerable: true,
+      writable: true,
+      configurable: true,
+    })
+    const loaded = new Game([new Act1()])
+    expect(loaded.loadSaveData(game.toSaveData())).toContain('loaded')
+
+    const answer = loaded.commandParser.parse('talk to shopkeeper')
+
+    expect(answer).toContain('Only store in Willowbrook')
+    expect(answer).not.toContain('humble store')
   })
 })

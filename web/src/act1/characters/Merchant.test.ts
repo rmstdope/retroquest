@@ -33,7 +33,9 @@ describe('Merchant', () => {
   it('asks for the ring, or failing that a horseshoe', () => {
     const answer = executeCommands(gameAtMerchant(), ['talk to merchant'])
 
-    expect(answer).toContain('[item_name]shiny ring[/item_name]')
+    expect(answer).toContain(
+      'Something small and fine would buy them. A ring, say.',
+    )
     expect(answer).toContain('[item_name]horseshoe[/item_name]')
     expectDialogueSpeaker(answer, 'merchant')
   })
@@ -89,13 +91,13 @@ describe('Merchant', () => {
         'took to his bed. Keep to the daylight, friend.',
     )
     expect(first.indexOf('Keep to the daylight, friend.')).toBeLessThan(
-      first.indexOf('[item_name]shiny ring[/item_name]'),
+      first.indexOf('A ring, say.'),
     )
     expectDialogueSpeaker(first, 'merchant')
     expect(first.match(/\[dialogue\]/g)).toHaveLength(1)
     expect(game.state.getStoryFlag(FLAG_MERCHANT_NEWS_HEARD)).toBe(true)
     expect(second).not.toContain('King Alden')
-    expect(second).toContain('[item_name]shiny ring[/item_name]')
+    expect(second).toContain('A ring, say.')
   })
 
   it('tells the news before the boots line when the boots were traded first', () => {
@@ -106,7 +108,7 @@ describe('Merchant', () => {
 
     expect(first).toContain('King Alden has fallen ill')
     expect(first.indexOf('Keep to the daylight, friend.')).toBeLessThan(
-      first.indexOf('should serve you well'),
+      first.indexOf('know your feet'),
     )
     expectDialogueSpeaker(first, 'merchant')
     expect(first.match(/\[dialogue\]/g)).toHaveLength(1)
@@ -176,9 +178,9 @@ describe('Merchant and the fresh bread', () => {
 
     const answer = executeCommands(game, ['talk to merchant'])
 
-    expect(answer).toContain('should serve you well')
+    expect(answer).toContain('know your feet')
     expect(answer.indexOf(HUNGER)).toBeGreaterThan(
-      answer.indexOf('should serve you well'),
+      answer.indexOf('know your feet'),
     )
   })
 
@@ -214,7 +216,7 @@ describe('Merchant and the fresh bread', () => {
 
     expect(answer).not.toContain('Forgive me')
     expect(answer).not.toContain('remembered')
-    expect(answer).toContain('[item_name]shiny ring[/item_name]')
+    expect(answer).toContain('A ring, say.')
   })
 
   it.each([

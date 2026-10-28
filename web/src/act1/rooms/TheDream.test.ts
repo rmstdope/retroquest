@@ -28,8 +28,9 @@ describe('The Dream, where Act I opens', () => {
     expect(look).not.toContain('Exits:')
     const description = game.state.currentRoom.descriptionFor(game.state)
     expect(description).toContain('three notes')
-    expect(description).toContain('a man’s hand, lifts a child')
-    expect(description).toContain('it is your name')
+    expect(description).toContain('A man’s hand reaches out of the dark')
+    expect(description).toContain('what it whispers is your name')
+    expect(description).not.toContain('Dark, and a storm in it.')
   })
 
   it('keeps Elior in the dream when he walks, rests, searches or calls another name', () => {
@@ -65,6 +66,16 @@ describe('The Dream, where Act I opens', () => {
       expect(findMarkupProblems(answer)).toEqual([])
     },
   )
+
+  it('lets the voice say the three words and his name in its own voice', () => {
+    const answer = executeCommands(newGame(), ['talk to voice'])
+    expect(answer).toContain(
+      '[character_name]voice[/character_name]\n' +
+        '[dialogue]…and let them rest… ' +
+        '[character_name]Elior[/character_name].[/dialogue]',
+    )
+    expect(answer).not.toContain('Then your name')
+  })
 
   it('wakes him when he says anything to the voice, and the voice stays behind', () => {
     const game = newGame()

@@ -1,4 +1,10 @@
-import { Character, event, type GameState } from '@/engine'
+import {
+  Character,
+  characterName,
+  dialogue,
+  event,
+  type GameState,
+} from '@/engine'
 import { FLAG_WOKE_FROM_DREAM } from '../Act1StoryFlags'
 
 /**
@@ -39,7 +45,8 @@ export class DreamVoice extends Character {
   }
 
   /**
-   * The whisper says the three words and his name, and Elior wakes in
+   * The whisper says the three words and his name, spoken as the voice's
+   * own line so the narration reads it in that voice, and Elior wakes in
    * Elior's Cottage. The cottage is entered as a move enters it, the dream
    * is taken off the map, and FLAG_WOKE_FROM_DREAM is set.
    */
@@ -55,9 +62,11 @@ export class DreamVoice extends Character {
     gameState.setStoryFlag(FLAG_WOKE_FROM_DREAM, true)
     return (
       'The whisper comes once more, closer than the thunder, and this time ' +
-      'there are words in it: …and let them rest… Then your name, ' +
-      'and the dark lets go of you.\n\n' +
-      'You wake in your own bed. The storm is gone and there is grey ' +
+      'there are words in it.\n' +
+      dialogue(this.name, `…and let them rest… ${characterName('Elior')}.`) +
+      '\n\n' +
+      'The dark lets go of you, and you wake in your own bed. ' +
+      'The storm is gone and there is grey ' +
       'morning in the curtains. Your heart is going hard. The tune is ' +
       'still going too, thin and near: someone is humming it, out by the ' +
       'hearth. Three words are already slipping, and you write them down ' +

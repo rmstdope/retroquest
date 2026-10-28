@@ -66,6 +66,7 @@
     "lysa": { "voice": "f7fe817b4b634c2cb763d240d95b1c2c", "style": "[tender, firm, a mother's voice]" },
     "redeemed knight": { "voice": "0adf497c253f403c99227d8197094644", "style": "[hollow, heavy, worn out]" },
     "shadow of the past": { "voice": "85ff97bc3f424b789d09dc6e2b57252a", "style": "[gentle, hollow, very tired]" },
+    "voice": { "voice": "85ff97bc3f424b789d09dc6e2b57252a", "style": "[whispering, gentle, hollow]" },
     "sorceress of lies": { "voice": "7b305f7f7d584a18b76649ddb8535ba6", "style": "[cool, silken, cracking at the end]" },
     "trapped servants": { "voice": "1f168740f0034cf0a94590e22282ddf2", "style": "[tired, gentle, far away]" },
     "true self": { "voice": "ad1e8d0c166e464789c6c9d1c003bedd", "style": "[quiet, unblinking]" },

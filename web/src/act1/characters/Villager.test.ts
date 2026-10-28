@@ -29,12 +29,12 @@ describe('Villager dialogue markup', () => {
     }
   })
 
-  it('carries the amulet and the mill in her cloaked-stranger rumour, second in her cycle of five', () => {
+  it('carries the amulet and the mill in her cloaked-stranger rumour, second in her cycle of six', () => {
     const villager = gameInSquare().state.currentRoom.characters.find(
       (c) => c instanceof Villager,
     ) as Villager
 
-    expect(villager.dialogueOptions).toHaveLength(5)
+    expect(villager.dialogueOptions).toHaveLength(6)
     expect(villager.dialogueOptions[1]).toBe(
       'Last night, someone spotted a cloaked stranger near the old well, asking after ' +
         'an old amulet, from a family that left. Nobody would tell him a thing, ' +
@@ -227,7 +227,7 @@ describe('Tilda and the truth about the well', () => {
         'like my gran always said it would. Funny old world.',
     )
     expect(next).not.toContain('old spring clearing itself')
-    expect(next).toContain('Have you seen the fields lately?')
+    expect(next).toContain('Have you seen the fields?')
   })
 
   it('still takes the truth after her spring line', () => {
@@ -247,7 +247,7 @@ describe('Tilda and the truth about the well', () => {
     const answer = game.commandParser.parse('talk to tilda')
 
     expect(answer).not.toContain('spring clearing itself')
-    expect(answer).toContain('Have you seen the fields lately?')
+    expect(answer).toContain('Have you seen the fields?')
   })
 
   it('answers other words as before', () => {
@@ -265,5 +265,33 @@ describe('Tilda and the truth about the well', () => {
     expect(game.commandParser.parse('talk to tilda')).toContain(
       "you're leaving, aren't you?",
     )
+  })
+})
+
+describe('Tilda and the king', () => {
+  it('tells, last in her cycle of six, that the king is ill and the flour cart has stopped', () => {
+    const villager = gameInSquare().state.currentRoom.characters.find(
+      (c) => c instanceof Villager,
+    ) as Villager
+
+    expect(villager.dialogueOptions).toHaveLength(6)
+    expect(villager.dialogueOptions[5]).toContain(
+      "the king's taken to his bed in Greendale",
+    )
+    expect(villager.dialogueOptions[5]).toContain('the flour cart')
+  })
+})
+
+describe('Tilda and the chapel bell', () => {
+  it('remembers the bell ringing years back, with no hand on the rope, not lately', () => {
+    const villager = gameInSquare().state.currentRoom.characters.find(
+      (c) => c instanceof Villager,
+    ) as Villager
+    const bell = villager.dialogueOptions.find((rumour) =>
+      rumour.includes('chapel bell'),
+    )
+
+    expect(bell).toContain('Years back, at midnight, with no hand on the rope.')
+    expect(bell).not.toContain('rang by itself at midnight.')
   })
 })

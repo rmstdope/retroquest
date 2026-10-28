@@ -17,9 +17,8 @@ export class Deer extends Character {
     super({
       name: 'deer',
       description:
-        `A graceful ${characterName('deer')} with wise, gentle eyes. ` +
-        'It seems to sense the ' +
-        'magic of the glade and watches you with curiosity.',
+        `A ${characterName('deer')}, red-brown and very still, standing ` +
+        'where the moss is thickest. It does not startle when you move.',
     })
   }
 
@@ -55,8 +54,7 @@ export class Deer extends Character {
     if (room instanceof HiddenGlade && room.lightSpellCast) {
       return (
         'It lifts its head toward the glowing stone, then dips it to you, ' +
-        'slow and deliberate, as if in thanks. For a heartbeat the whole ' +
-        'glade seems to breathe with it.'
+        'slow and deliberate, as if in thanks.'
       )
     }
     return (

@@ -29,6 +29,11 @@ function capitalize(text: string): string {
   return text.charAt(0).toUpperCase() + text.slice(1).toLowerCase()
 }
 
+/** "coin" or "coins", to go with a price. */
+function coins(price: number): string {
+  return price === 1 ? 'coin' : 'coins'
+}
+
 /**
  * Old Man Hemlock, the shopkeeper of Willowbrook's General Store.
  *
@@ -50,12 +55,16 @@ export class Shopkeeper extends Character {
     armor: { item: new Armor(), price: 10 },
   }
   priestMatchesGiven = false
-  dialogueOptions: string[] = [
-    'Welcome to my humble store! Finest goods in Willowbrook, ' +
-      'I assure you.',
-    'Looking for something specific, or just browsing?',
-    'Heard some strange tales from travelers lately. This village ' +
-      "isn't as sleepy as it seems.",
+  /**
+   * The lines he opens with once the store is open, in turn. Kept out of the
+   * saved fields so a save always hears the current wording.
+   */
+  private static readonly IDLE_LINES: readonly string[] = [
+    'Only store in Willowbrook, so I suppose that makes it the finest.',
+    "That rope's good hemp, from before the caravans stopped. There'll be " +
+      'no more till spring, so mind what you tie with it.',
+    "That sword's hung on that wall since my father's day. Nobody in " +
+      "Willowbrook has ever needed one. I'd like it to stay that way.",
   ]
   dialogueIndex = 0
 
@@ -63,8 +72,8 @@ export class Shopkeeper extends Character {
     super({
       name: 'shopkeeper',
       description:
-        `Old Man ${characterName('Hemlock')}, the owner of the General Store, ` +
-        'always bustling about and eager to strike a bargain or share a rumor.',
+        `Old Man ${characterName('Hemlock')}, who keeps the General Store. ` +
+        'He glances at the door every time it creaks.',
     })
   }
 
@@ -125,15 +134,19 @@ export class Shopkeeper extends Character {
           'And the caravans have stopped coming, now the king is ill and the ' +
             "roads are what they are. Malakar's luck, my father would have " +
             'called it.',
-        )
+        ) +
+        ' He raps the counter twice with his knuckles.'
       )
     }
     return (
-      `${this.nameInSentence({ atStart: true })} shakes his head. ` +
+      `${this.nameInSentence({ atStart: true })} shakes his head before ` +
+      'you can say anything. ' +
       speech(
-        `No sign of ${characterName('Patches')} yet? ` +
-          "The store stays shut until she's home, lad. " +
-          'She was last seen near the old well.',
+        `No sign of ${characterName('Patches')}, then. I put a saucer ` +
+          'out every night, near the ' +
+          'old well where she was last seen. ' +
+          "It's always still full in the morning. The store stays shut " +
+          "till she's home, lad.",
       )
     )
   }
@@ -257,9 +270,14 @@ export class Shopkeeper extends Character {
       return (
         `${this.nameInSentence({ atStart: true })} leans in. ` +
         speech(
-          `Ah, you spoke to the ${characterName('priest')}? ` +
-            'He does get through his [item_name]matches[/item_name]. ' +
-            'Here, take these for him, on the house. Tell him I said hello!',
+          `Been to see the ${characterName('priest')}, have you? ` +
+            'He does get through his [item_name]matches[/item_name].',
+        ) +
+        ' He takes a box from under the counter. ' +
+        speech(
+          "They're on the house. Always have been; my father said a chapel without " +
+            "a light is bad luck, and I've never been brave enough to find " +
+            'out.',
         ) +
         '\n\n' +
         'You receive a box of [item_name]matches[/item_name].'
@@ -267,24 +285,25 @@ export class Shopkeeper extends Character {
     }
 
     // Standard dialogue if matches aren't being given for the priest
-    let waresInfo = 'I have a few things for sale:\n'
+    let waresInfo = "Here's what I've got for sale:\n"
     const entries = Object.entries(this.wares)
     if (entries.length > 0) {
       for (const [name, details] of entries) {
         waresInfo +=
           `- [item_name]${capitalize(name)}[/item_name]: ${details.price} ` +
-          '[item_name]coin(s)[/item_name]\n'
+          `[item_name]${coins(details.price)}[/item_name]\n`
       }
     } else {
-      waresInfo = "I'm currently out of stock of items for sale.\n"
+      waresInfo = "I've nothing left on the shelves.\n"
     }
 
     waresInfo +=
-      'And remember, you always get an extra [item_name]apple[/item_name] ' +
-      'with every purchase!\n'
+      "And there's an [item_name]apple[/item_name] with everything. " +
+      "My mother's rule.\n"
 
-    const dialogue = this.dialogueOptions[this.dialogueIndex]
-    this.dialogueIndex = (this.dialogueIndex + 1) % this.dialogueOptions.length
+    const lines = Shopkeeper.IDLE_LINES
+    const dialogue = lines[this.dialogueIndex % lines.length]
+    this.dialogueIndex = (this.dialogueIndex + 1) % lines.length
 
     return (
       `${this.nameInSentence({ atStart: true })} says: ` +
@@ -306,10 +325,9 @@ export class Shopkeeper extends Character {
   /** The shopkeeper does not accept gifts. */
   override giveItem(_gameState: GameState, _item: Item): string {
     return (
-      `${this.nameInSentence({ atStart: true })} chuckles. ` +
-      speech(
-        'Not looking for donations, friend, but I appreciate the ' + 'thought!',
-      )
+      `${this.nameInSentence({ atStart: true })} chuckles and pushes it ` +
+      'back across the counter. ' +
+      speech("I sell things, lad. I don't take them in.")
     )
   }
 
@@ -335,7 +353,9 @@ export class Shopkeeper extends Character {
       )
     }
     if (!(itemNameToBuy in this.wares)) {
-      return speech("Sorry, friend, that's not something I carry.")
+      return speech(
+        'Not something I carry, lad. Not since the caravans stopped, anyway.',
+      )
     }
 
     const wareDetails = this.wares[itemNameToBuy]
@@ -385,9 +405,11 @@ export class Shopkeeper extends Character {
     // The store has infinite stock; the player buys one instance.
 
     return (
-      `The [item_name]${newItem.name}[/item_name] is yours for ${price} ` +
-      '[item_name]coin(s)[/item_name], with an extra ' +
-      '[item_name]apple[/item_name] as a bonus!'
+      `He counts the ${coins(price)} twice and hands over the ` +
+      `[item_name]${newItem.name}[/item_name], and an ` +
+      '[item_name]apple[/item_name] with it.\n' +
+      `You receive a [item_name]${newItem.name}[/item_name] and an ` +
+      '[item_name]apple[/item_name].'
     )
   }
 }

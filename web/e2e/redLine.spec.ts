@@ -50,11 +50,11 @@ const ACTS: ActPlay[] = [
     beats: [
       {
         name: 'Act I dream voice: the three words in the opening dream',
-        text: '…and let them rest… Then your name, and the dark lets go of you.',
+        text: '…and let them rest… Elior.',
       },
       {
         name: 'Act I amulet: Mira gives it to him',
-        text: 'She presents you with the ancient amulet.',
+        text: 'She lifts the ancient amulet from its stand, puts it in your hand',
       },
       {
         name: 'Act I refrain: carved on the moss-covered stone',
