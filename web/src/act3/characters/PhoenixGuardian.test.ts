@@ -6,6 +6,7 @@ import {
   FLAG_ACT3_FUMAROLE_WARD_APPLIED,
 } from '../Act3StoryFlags'
 import { PhoenixGuardian } from './PhoenixGuardian'
+import { FumarolePassages } from '../rooms/FumarolePassages'
 import { SirCedric } from './SirCedric'
 import {
   expectDialogueSpeaker,
@@ -34,6 +35,46 @@ describe('PhoenixGuardian', () => {
     expect(response).toContain('ward')
     expect(response).toContain('crater')
     expect(response).toContain('Phoenix Guardian[/character_name] studies you')
+  })
+
+  it('says plainly what to do, and where a ward comes from', () => {
+    const response = new PhoenixGuardian().talkTo(makeGameState(false))
+    expect(response).toContain(
+      'You have come for the Phoenix. Then you must be both patient and ' +
+        'watchful.',
+    )
+    expect(response).toContain(
+      'the gallery below the terraces has what a ward is made of.',
+    )
+    expect(response).toContain('the way to the crater opens.')
+    expect(response).not.toContain('mighty one')
+  })
+
+  it('stops asking for harmony once the third vent stone is set', () => {
+    const state = makeGameState(false)
+    const room = state.allRooms.FumarolePassages
+    if (!(room instanceof FumarolePassages)) throw new Error('no passages')
+    room.ventCalibrations = 3
+    const answer = new PhoenixGuardian().talkTo(state)
+    expect(answer).toContain(
+      'listens to the vents. [dialogue]They breathe as one now. Bind the ' +
+        'heat with a ward, and they will hold.[/dialogue]',
+    )
+    expect(answer).not.toContain('bring the vents into harmony')
+    expectMarkupWellFormed(answer)
+    expectDialogueSpeaker(answer, 'phoenix guardian')
+    room.ventCalibrations = 2
+    expect(new PhoenixGuardian().talkTo(state)).toContain(
+      'bring the vents into harmony',
+    )
+  })
+
+  it('is described counting the vents', () => {
+    expect(new PhoenixGuardian().description).toBe(
+      'A tall, masked figure in fire-etched robes stands by the vents, ' +
+        'staff in hand. His head is turned to the vents, and his lips move ' +
+        'as if he is counting.',
+    )
   })
 
   it('asks for the patience of the site of Wisdom, not bravery, before the quest', () => {
@@ -70,6 +111,10 @@ describe('PhoenixGuardian', () => {
     expect(response).toContain('The way is open')
     expect(response).toContain('patience is your ally')
     expect(response).toContain('Phoenix will not appear')
+    expect(response).toContain(
+      'Sit in the crater a while, and let it come to you.',
+    )
+    expect(response).not.toContain('mighty one')
   })
 
   it.each([false, true])(

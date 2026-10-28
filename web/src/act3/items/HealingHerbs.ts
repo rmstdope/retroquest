@@ -20,10 +20,10 @@ export class HealingHerbs extends Item {
   override preventPickup(): string {
     return (
       characterName('Mira') +
-      ' lifts a sachet, then shakes her head. ' +
+      ' takes the sachet back out of your hand. ' +
       speech(
-        'Leave these for the circles and crossings. When the ' +
-          'rite calls for them, I will place them in your hands.',
+        'Leave those. The rite will need them, and when it does I will put ' +
+          'them in your hands myself.',
       )
     )
   }

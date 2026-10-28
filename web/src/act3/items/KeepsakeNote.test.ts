@@ -24,15 +24,23 @@ describe('KeepsakeNote', () => {
 
     expect(game.state.getStoryFlag(FLAG_ACT3_ECHOES_QUEST_STARTED)).toBe(true)
     expect(result).not.toContain('You unfold')
-    expect(result).toContain('fragments of their story')
-    expect(result).toContain('three testimonies will reveal')
-    expect(result).toContain('depths where courage is tested')
-    expect(result).toContain('heights where wisdom burns')
-    expect(result).toContain('shadows where sacrifice echoes')
-    expect(result).toContain('[dim]Elior, as you journey')
-    expect(result).toContain('darkest power.[/dim]')
-    expect(result).toContain('purpose beyond the road ahead')
+    expect(result).toContain(
+      '[dialogue]Elior. The people who made the relics left words behind them',
+    )
+    expect(result).toContain('before you judge anyone.[/dialogue]')
+    expect(result).toContain('She has underlined the last line twice.')
+    expect(result).not.toContain('[dim]')
     expect(result).not.toContain('immediate quest')
+  })
+
+  it('does not give away how the parents hid Elior (Red Line)', () => {
+    const game = new Game([new Act3()])
+
+    const result = new KeepsakeNote().examine(game.state)
+
+    expect(result).not.toContain('hid you')
+    expect(result).not.toContain('his sight')
+    expect(result).not.toContain('— M.')
   })
 
   it('reading uses only known, balanced tags', () => {
@@ -40,7 +48,7 @@ describe('KeepsakeNote', () => {
 
     const answer = new KeepsakeNote().examine(game.state)
 
-    expect(answer).toContain('keep your eyes open for traces of the past')
+    expect(answer).toContain('Keep your eyes open for traces of the past')
     expectMarkupWellFormed(answer)
   })
 })

@@ -47,8 +47,8 @@ export class TheThreeVirtuesQuest extends Quest {
       newDesc =
         '\n\nYou have claimed the crystal of light; its steady brilliance answers ' +
         'your courage and steadies what the deep waters once denied. Sir ' +
-        'Cedric bids you to press on—dark forces gather, and he needs allies ' +
-        'skilled in magic to stand with him when the hour comes. '
+        'Cedric has said little since the guardian asked him what he would ' +
+        'not abandon. '
     }
 
     // Add block for Phoenix Feather acquisition
@@ -73,10 +73,8 @@ export class TheThreeVirtuesQuest extends Quest {
       }
       earlier.push(newDesc)
       newDesc =
-        "\n\nYou have claimed the dragon's scale, its obsidian surface gleaming " +
-        "with ancient power. The dragon's wisdom echoes in your mind, a testament " +
-        'to the selflessness you have proven. With all three relics in hand, the ' +
-        'final trial awaits—the Warding Rite that will determine the fate of all. '
+        "\n\nYou have the dragon's scale, heavy in your pack. With all three " +
+        "relics in hand, Mira's Warding Rite is all that is left. "
     }
     this.setJournal(earlier, newDesc)
     return updated

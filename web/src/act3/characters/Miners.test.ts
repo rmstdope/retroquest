@@ -40,7 +40,7 @@ describe('Miners dialogue markup', () => {
 
     expect(first).toContain('Someone should stay until the braces settle')
     expect(first).toContain(
-      'oldest miner[/character_name] puts a grey hand on his arm',
+      'lead miner[/character_name] puts a grey hand on his arm',
     )
     expect(first).toMatch(/then nods\.(\[\/event\])?$/)
     expectMarkupWellFormed(first)
@@ -61,9 +61,11 @@ describe('Miners and Tobin', () => {
 
     const first = miners.talkTo(game.state)
 
-    const second = first.indexOf('come down on our heads')
+    const second = first.indexOf(
+      'Every knock, we waited for the roof. It held.',
+    )
     const tobin = first.indexOf("That's Tobin. Youngest of us.")
-    const thanks = first.indexOf('The lead miner nods gratefully')
+    const thanks = first.indexOf('The lead miner wipes his hands on his shirt')
     expect(second).toBeGreaterThan(-1)
     expect(tobin).toBeGreaterThan(second)
     expect(thanks).toBeGreaterThan(tobin)
@@ -106,6 +108,33 @@ describe('Miners and Tobin', () => {
     const { game, miners } = setup()
     game.state.setStoryFlag(FLAG_ACT3_DRAGONS_MEMORY_RECEIVED, true)
     expect(miners.talkTo(game.state)).toContain('Thank the gods you found us')
+  })
+
+  it('tells the rescue in their own words and points east', () => {
+    const { game, miners } = setup()
+
+    const first = miners.talkTo(game.state)
+    const later = miners.talkTo(game.state)
+
+    expect(first).toContain(
+      'We sat in the dark and listened to each other breathe.',
+    )
+    expect(first).toContain(
+      "The way east to the Echo Chambers is open, and we'll keep it open.",
+    )
+    expect(first).toContain(
+      'The miners are already reaching for the spare timbers.',
+    )
+    expect(first).not.toContain('tons of')
+    expect(first).not.toContain('continue your journey')
+    expect(later).toContain('The way east to the Echo Chambers is sound.')
+    expect(later).not.toContain('future travelers')
+  })
+
+  it('are described as they are once freed, not as trapped', () => {
+    const { miners } = setup()
+    expect(miners.description).toContain('passing timbers hand to hand')
+    expect(miners.description).not.toContain('trapped')
   })
 
   it('hands the charm back and nods toward the boy, every time', () => {

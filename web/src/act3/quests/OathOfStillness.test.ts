@@ -24,8 +24,12 @@ describe('Oath of Stillness quest', () => {
 
   it('is properly initialized', () => {
     expect(quest.name).toBe('Oath of Stillness')
-    expect(quest.description).toContain('Echo Chambers whisper')
-    expect(quest.completion).toContain('illusions have fallen silent')
+    expect(quest.description).toContain('Stillness Vestibule')
+    expect(quest.description).toContain('as they have for years')
+    expect(quest.description).toContain('walls of the Echo Chambers')
+    expect(quest.description).not.toContain('centuries')
+    expect(quest.completion).toContain("the way to the dragon's hall lies open")
+    expect(quest.completion).not.toMatch(/centuries|ethereal|motes/)
     expect(quest.isMain()).toBe(false)
   })
 

@@ -2,6 +2,7 @@ import {
   Character,
   type GameState,
   characterName,
+  dialogue,
   speech,
   normaliseSpokenWord,
   type NameOptions,
@@ -31,10 +32,9 @@ export class AncientDragon extends Character {
     super({
       name: 'ancient dragon',
       description:
-        'A magnificent dragon of immense age, scales gleaming like polished ' +
-        'obsidian in the ember-light. Ancient wisdom burns in golden eyes ' +
-        'that have witnessed countless ages. Slow breaths stir the air like ' +
-        'distant thunder.',
+        "A dragon lies coiled around the hall's centre. The scales along " +
+        'its flank are worn dull where they have pressed the floor for a very ' +
+        'long time. Its golden eyes open slowly, and close slower.',
     })
   }
 
@@ -109,18 +109,18 @@ export class AncientDragon extends Character {
   override talkTo(gameState: GameState): string {
     const name = this.name
     // Check if this is the first conversation
-    let dialogue = ''
+    let text = ''
     if (!gameState.getStoryFlag(FLAG_ACT3_DRAGONS_MEMORY_RECEIVED)) {
       gameState.setStoryFlag(FLAG_ACT3_DRAGONS_MEMORY_RECEIVED, true)
-      dialogue =
+      text =
         'The ' +
         characterName(name) +
-        "'s voice resonates through " +
-        'your mind like distant thunder:\n\n' +
+        ' opens one golden eye. Its voice is slow, and very low:\n\n' +
         speech(
-          'Young one, I remember your parents well. Aren and Lysa, ' +
-            'Wardens of the Dawn. They came to me with their friend ' +
-            'Malakar, the three of them laughing, and made the relics as equals.',
+          'Young one, I remember your parents. Aren and Lysa, Wardens of ' +
+            'the Dawn. They came down here with their friend Malakar for a ' +
+            'scale, the three of them laughing. They were making the relics ' +
+            'together, as equals.',
         ) +
         '\n\n' +
         speech(
@@ -132,10 +132,8 @@ export class AncientDragon extends Character {
             'is why Malakar drains him.',
         ) +
         '\n\n' +
-        speech(
-          'They are not gone as the dead are gone, child. They are ' +
-            'warded away, not dead.',
-        ) +
+        `The ${characterName(name)} is quiet for a long breath.\n\n` +
+        speech('They are warded away, not dead, child.') +
         '\n\n' +
         speech(
           'They had a saying, the three of them, carved wherever they ' +
@@ -148,14 +146,14 @@ export class AncientDragon extends Character {
     }
     if (!gameState.getStoryFlag(FLAG_ACT3_DRAGON_VOICE_HEARD)) {
       gameState.setStoryFlag(FLAG_ACT3_DRAGON_VOICE_HEARD, true)
-      dialogue = dialogue + this.voiceMoment(gameState)
+      text = text + this.voiceMoment(gameState)
     }
     if (!gameState.getStoryFlag(FLAG_ACT3_DRAGON_MESSAGE_GIVEN)) {
       gameState.setStoryFlag(FLAG_ACT3_DRAGON_MESSAGE_GIVEN, true)
-      dialogue = dialogue + this.messageForMira()
+      text = text + this.messageForMira()
     }
     return (
-      dialogue +
+      text +
       'The ' +
       characterName(name) +
       ' rumbles softly: ' +
@@ -186,9 +184,9 @@ export class AncientDragon extends Character {
       return 'You have read the old words. Then tell me: ' + OATH_QUESTION
     }
     return (
-      'The memory has been shared. Your path leads forward now, not ' +
-      'back. The scale awaits when you are ready to prove your ' +
-      'selflessness.'
+      'The memory has been shared. The scale awaits, but it is not given ' +
+      'for the asking. There is an old oath for it. The words are kept in ' +
+      'the Echo Chambers.'
     )
   }
 
@@ -223,14 +221,11 @@ export class AncientDragon extends Character {
       gameState.setStoryFlag(FLAG_ACT3_DRAGON_OATH_SPOKEN, true)
       gameState.currentRoom.addItem(new DragonsScale())
       return (
-        `You speak the old words to the ${name}: ` +
-        `“I take what is given, and I return ${word}.”` +
-        '\n[success]' +
-        speech(
-          'Your words ring true, young one. The scale is yours to bear. ' +
-            'May you carry its burden with honor.',
-        ) +
-        '[/success]'
+        dialogue('Elior', `I take what is given, and I return ${word}.`) +
+        '\n' +
+        `The ${name} shifts one coil, and a single scale lies loose on the ` +
+        'tiles. ' +
+        speech('Your words ring true, young one. It is heavier than it looks.')
       )
     }
     if (TAKING_ANSWERS.includes(answer)) {
@@ -248,7 +243,7 @@ const OATH_QUESTION = 'what will you give back, for what you take?'
 
 /** The line for the gap between the accepted oath and taking the scale. */
 const OATH_ACCEPTED_LINE =
-  'The oath has been given and accepted. The scale is yours to claim.'
+  'You have said it. The scale is there, young one. Take it.'
 
 /** The words that fill the blank, normalised, with how the echo spells them. */
 const GIVING_WORDS: ReadonlyMap<string, string> = new Map([

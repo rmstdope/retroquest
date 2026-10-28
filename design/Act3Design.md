@@ -220,7 +220,7 @@ Connectivity note: All cardinal exits connect only within their location. Travel
 
 #### Mira's Hut (Act III Start)
 
--   Description: A fragrant hut filled with drying herbs and mysterious potions. Shelves overflow with bottles, roots, and colorful flowers. The air is thick with the scent of lavender and sage. Sunlight streams through stained glass, painting the walls in shifting hues. Mira herself moves gracefully among her concoctions, her eyes bright with knowledge and kindness.
+-   Description: A fragrant hut filled with drying herbs and mysterious potions. Shelves overflow with bottles, roots, and colorful flowers. The air is thick with the scent of lavender and sage. Sunlight streams through stained glass, painting the walls in shifting hues. Mira moves between her shelves without looking, the way you cross your own kitchen in the dark.
 -   Items:
     -   Healing Herbs (basic curatives and components; not carriable — Mira uses them in the Warding Rite and they leave the hut)
     -   Teleportation Focus (crystal prism used by Mira to anchor travel between relic sites)
@@ -390,7 +390,7 @@ Connectivity note: All cardinal exits connect only within their location. Travel
 
 -   Description: Passages pinched by fallen rock; dust motes hang in still air.
 -   Items: Fallen Rock.
--   Characters: Miners appear after the collapse is cleared.
+-   Characters: Miners appear after the collapse is cleared, and with them Tobin, the young miner who shouted his voice away; the Quiet Charm eases him (an optional selfless moment).
 -   Quest Relevance: Clear debris and reach the miners (talking to them completes “Miners’ Rescue”).
 -   Exits:
     -   South to Stillness Vestibule
@@ -447,6 +447,7 @@ Optional virtue moments; none blocks the golden path, none adds a puzzle. Each r
 | ----------------------------- | ------------------------------------------------------------------------------------ | ------------ |
 | Collapsed Pier, Pier Warden   | Tell the Pier Warden the true state of the ruins instead of the comforting lie       | **truth**    |
 | Stillness Vestibule, Phantoms | Free the wandering phantoms without banishing them (`say rest to wandering phantoms`) before the chant; the chant then still completes the quest | **mercy**    |
+| Collapsed Galleries, Tobin    | After the rescue, give the young miner Tobin the Quiet Charm from the Stillness Vestibule (`give quiet charm to tobin`); it quiets the shouting he still hears | **selfless** |
 | Dragon’s Hall, the Dragon     | After taking the scale, mend the prison it weakened (`cast bless on sigils`), gaining nothing | **selfless** |
 | Mirror Terraces, Charred Inscription | After reading it, restore Malakar’s deeper-struck name (`cast mend on inscription`). The inscription’s closing line, the Phoenix’s farewell and the feather reply change once it is done | **mercy**    |
 

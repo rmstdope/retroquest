@@ -59,9 +59,81 @@ describe('Phoenix links patience to the Warden of Wisdom', () => {
     const game = new Game([new Act3()])
     const phoenix = new Phoenix()
     phoenix.talkTo(game.state)
-    const reply = phoenix.sayTo(game.state, 'haste')
-    expect(reply).toContain('Is that truly wisdom, when time is short?')
+    const reply = phoenix.sayTo(game.state, 'gold')
+    expect(reply).toContain(
+      'The [character_name]phoenix[/character_name] waits. ' +
+        '[dialogue]Is that truly wisdom, when time is short?[/dialogue]',
+    )
+    expect(reply).not.toContain('studies you')
     expect(reply).not.toContain(LINK)
+  })
+
+  it.each([
+    [
+      'wait',
+      'Anyone can wait while time is long. What is it called when time is ' +
+        'short, and you wait anyway?',
+    ],
+    ['waiting', 'Anyone can wait while time is long.'],
+    ['haste', 'That was his answer, in the end. It was not wisdom.'],
+    ['hurry', 'That was his answer, in the end. It was not wisdom.'],
+    ['knowledge', 'He had knowledge enough. It did not stop him.'],
+    [
+      'courage',
+      "Courage was his friend's to carry. This feather was made for " +
+        'something else.',
+    ],
+  ])('nudges the near miss "%s" with its own reply', (words, line) => {
+    const game = new Game([new Act3()])
+    const phoenix = new Phoenix()
+    phoenix.talkTo(game.state)
+    const reply = phoenix.sayTo(game.state, words)
+    expect(reply).toContain(`[dialogue]${line}`)
+    expect(reply).not.toContain('Is that truly wisdom')
+    expect(game.state.hasItem('Phoenix Feather')).toBe(false)
+    expectMarkupWellFormed(reply)
+    expectDialogueSpeaker(reply, phoenix.name)
+  })
+
+  it('still gives the feather for "wait patiently"', () => {
+    const game = new Game([new Act3()])
+    const phoenix = new Phoenix()
+    phoenix.talkTo(game.state)
+    phoenix.sayTo(game.state, 'wait patiently')
+    expect(game.state.hasItem('Phoenix Feather')).toBe(true)
+  })
+
+  it('asks the riddle plainly, and lays the feather in his hands', () => {
+    const game = new Game([new Act3()])
+    const phoenix = new Phoenix()
+    const riddle = phoenix.talkTo(game.state)
+    expect(riddle).toContain(
+      'The [character_name]phoenix[/character_name] does not open its beak, ' +
+        'but its voice is in your head all the same: [dialogue]What is ' +
+        'wisdom when time is short?[/dialogue] It lets the question stand.',
+    )
+    const reply = phoenix.sayTo(game.state, 'patience')
+    expect(reply).toContain(
+      'The [character_name]phoenix[/character_name] bends its neck, draws a ' +
+        'single feather from its breast and lays it in your hands.',
+    )
+    expect(reply).toContain(
+      '\nYou receive a [item_name]phoenix feather[/item_name].',
+    )
+    expect(reply.indexOf('You receive a')).toBeGreaterThan(reply.indexOf(LINK))
+    expect(phoenix.sayTo(game.state, 'patience')).toContain(
+      'The [character_name]phoenix[/character_name] looks at the feather ' +
+        'you carry. [dialogue]You already hold what you have earned.',
+    )
+  })
+
+  it('is described without being called wise or ancient', () => {
+    const description = new Phoenix().description
+    expect(description).toBe(
+      "A phoenix the size of a cottage roof lies in the crater's glass. Its " +
+        'feathers go from gold to red as it breathes, and it watches you ' +
+        'without any hurry.',
+    )
   })
 
   it('adds the link and the terraces line when the inscription was read', () => {

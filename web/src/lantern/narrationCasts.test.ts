@@ -121,9 +121,9 @@ describe('lines the engine picks at random', () => {
   it('has every one of the four phantom whispers in the Act III script', () => {
     const openings = [
       'The phantoms turn toward you',
-      'A low murmur ripples through the ghostly figures',
+      'One of the phantoms stops in front of you',
       'The phantoms drift closer',
-      'Spectral lips move in silent prayer',
+      'One of the phantoms reaches for a door',
     ]
     const script = read<Line[]>(3, 'script.json')
     for (const opening of openings)

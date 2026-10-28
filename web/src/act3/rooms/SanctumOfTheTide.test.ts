@@ -37,10 +37,7 @@ describe('Sanctum of the Tide', () => {
       'east',
       'say myself to tide-born guardian',
     ])
-    expect(
-      vow.toLowerCase().includes('you may now take') ||
-        vow.toLowerCase().includes('waters draw back'),
-    ).toBe(true)
+    expect(vow).toContain('sits loose in its basin')
     expectStoryFlag(game.state, FLAG_ACT3_VOW_OF_COURAGE_MADE, true)
 
     executeCommands(game, ['take crystal of light'])

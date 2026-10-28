@@ -72,9 +72,9 @@ describe('Pier Warden: truth', () => {
     run(game, 'talk to pier warden')
     const told = run(game, 'say truth to pier warden')
     expect(told).toContain('You tell')
-    expect(told).toContain('Better a hard truth than a soft lie.')
+    expect(told).toContain('I only wanted someone to tell me otherwise.')
     expect(told).toContain(REMEMBERED_TRUTH)
-    expect(told.indexOf('Better a hard truth')).toBeLessThan(
+    expect(told.indexOf('I only wanted someone')).toBeLessThan(
       told.indexOf(REMEMBERED_TRUTH),
     )
     expect(game.state.hasVirtue(VIRTUE_TRUTH)).toBe(true)
@@ -176,7 +176,7 @@ describe('Wandering phantoms: mercy', () => {
     const game = gameIn('StillnessVestibule')
     const answer = game.commandParser.parse('say hello to wandering phantoms')
     expect(answer).toContain(
-      "The phantoms' whispers rise and fall, and do not answer that.",
+      'The whispers of the [character_name]phantoms[/character_name] rise and fall, and do not answer that.',
     )
     expect(game.state.hasVirtue(VIRTUE_MERCY)).toBe(false)
   })
@@ -250,8 +250,8 @@ describe("Dragon's prison: selflessness", () => {
     expect(answer).not.toContain('You cast')
     expect(answer).toContain('brighten, steady, and hold.')
     expect(answer).toContain(
-      'You said you would return what you took. Most forget by the time ' +
-        'they reach the door. Your parents would have done the same.',
+      'You said you would give back. Most forget by the time ' +
+        'they reach the door. Your parents would not have forgotten.',
     )
     expect(answer).not.toContain('You owed me nothing')
     expect(answer).toContain(REMEMBERED_SELFLESS)

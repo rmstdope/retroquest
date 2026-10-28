@@ -18,9 +18,32 @@ describe('PierWarden dialogue branches', () => {
   it('hints at shore markers before the sigils are completed', () => {
     const game = new Game([new Act3()])
 
-    const out = new PierWarden().talkTo(game.state).toLowerCase()
+    const out = new PierWarden().talkTo(game.state)
 
-    expect(out.includes('high stones') || out.includes('moon')).toBe(true)
+    expect(out).toContain(
+      "The markers along the shore, lad. There's bits of moon-sign broken " +
+        'off in among them, if you look close.',
+    )
+    expect(out).not.toContain('before the tide turns')
+  })
+
+  it('points at a light by the causeway mural for the lost key', () => {
+    const game = new Game([new Act3()])
+    game.state.setStoryFlag(FLAG_ACT3_TIDEWARD_SIGILS_COMPLETED, true)
+
+    const out = new PierWarden().talkTo(game.state)
+
+    expect(out).toContain(
+      'It wants both. Lost that key after, in some dark hole by the mural ' +
+        "on the causeway. You'd want a light to find it.",
+    )
+  })
+
+  it('describes an old man watching the water', () => {
+    expect(new PierWarden().description).toBe(
+      'An old man in a salt-stiff coat, sitting on the last sound plank of ' +
+        'the jetty with his eyes on the water.',
+    )
   })
 
   it('mentions the fused locker after the sigils but before the lanterns', () => {
@@ -51,9 +74,12 @@ describe('PierWarden dialogue branches', () => {
     game.state.setStoryFlag(FLAG_ACT3_TIDEWARD_SIGILS_COMPLETED, true)
     game.state.setStoryFlag(FLAG_ACT3_LANTERNS_OF_THE_DEEPS_LIT, true)
 
-    const out = new PierWarden().talkTo(game.state).toLowerCase()
+    const out = new PierWarden().talkTo(game.state)
 
-    expect(out.includes('steadier') || out.includes('lanterns')).toBe(true)
+    expect(out).toContain(
+      "Pillars set and lanterns lit. That's the sanctum open, then.",
+    )
+    expect(out).not.toContain('swallow their steps')
   })
 
   it("passes on his father's word about the sanctum water once the way is lit", () => {
@@ -178,5 +204,79 @@ describe('PierWarden hears the word as the engine does', () => {
     new PierWarden().sayTo(game.state, '"Truth."')
 
     expect(game.state.getStoryFlag(FLAG_ACT3_WARDEN_TRUTH_TOLD)).toBe(true)
+  })
+
+  it.each([
+    'the truth',
+    'no',
+    "it won't mend",
+    'it will not',
+    'No, it is not a season',
+  ])('takes the natural answer %s as the truth', (words) => {
+    const game = new Game([new Act3()])
+    game.state.setStoryFlag(FLAG_ACT3_WARDEN_ASKED, true)
+
+    const out = new PierWarden().sayTo(game.state, words)
+
+    expect(game.state.getStoryFlag(FLAG_ACT3_WARDEN_TRUTH_TOLD)).toBe(true)
+    expect(out).toContain(
+      "… Aye. I think I knew it. I only wanted someone to tell me otherwise. I'll " +
+        'send word up the coast to keep the boats in.',
+    )
+    expect(out).not.toContain('Better a hard truth')
+  })
+
+  it.each(["I'm not sure", 'I do not know', 'no idea'])(
+    'does not take the unsure answer %s as the truth',
+    (words) => {
+      const game = new Game([new Act3()])
+      game.state.setStoryFlag(FLAG_ACT3_WARDEN_ASKED, true)
+
+      new PierWarden().sayTo(game.state, words)
+
+      expect(game.state.getStoryFlag(FLAG_ACT3_WARDEN_TRUTH_TOLD)).toBe(false)
+    },
+  )
+
+  it.each(['yes, no doubt it will mend', 'it will mend, not to worry'])(
+    'takes %s as the comforting lie, not the truth',
+    (words) => {
+      const game = new Game([new Act3()])
+      game.state.setStoryFlag(FLAG_ACT3_WARDEN_ASKED, true)
+
+      const out = new PierWarden().sayTo(game.state, words)
+
+      expect(out).toContain("That's what I'll tell the boats, then.")
+      expect(game.state.getStoryFlag(FLAG_ACT3_WARDEN_TRUTH_TOLD)).toBe(false)
+    },
+  )
+
+  it.each(['yes', 'it will mend', 'It will pass', 'only a bad season'])(
+    'takes the comforting lie %s and records nothing',
+    (words) => {
+      const game = new Game([new Act3()])
+      game.state.setStoryFlag(FLAG_ACT3_WARDEN_ASKED, true)
+      const warden = new PierWarden()
+
+      const out = warden.sayTo(game.state, words)
+
+      expect(out).toContain(
+        "Aye. That's what I'll tell the boats, then.[/dialogue] He goes back " +
+          'to watching the water.',
+      )
+      expect(game.state.getStoryFlag(FLAG_ACT3_WARDEN_TRUTH_TOLD)).toBe(false)
+      expectMarkupWellFormed(out)
+      expectDialogueSpeaker(out, warden.name)
+      warden.sayTo(game.state, 'truth')
+      expect(game.state.getStoryFlag(FLAG_ACT3_WARDEN_TRUTH_TOLD)).toBe(true)
+    },
+  )
+
+  it('does not hear the lie before he has asked', () => {
+    const game = new Game([new Act3()])
+
+    expect(new PierWarden().sayTo(game.state, 'yes')).not.toContain(
+      "That's what I'll tell the boats",
+    )
   })
 })

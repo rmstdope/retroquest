@@ -7,6 +7,18 @@ import { RustedLockerKey } from './RustedLockerKey'
 import { expectMarkupWellFormed } from '@/testing/gameHelpers'
 
 describe('RustedLockerKey', () => {
+  it('says it came from the causeway, where it is found', () => {
+    const game = new Game([new Act3()])
+    const key = new RustedLockerKey()
+    const text = key.examine(game.state)
+    expect(text).toBe(
+      'A corroded iron key from a hollow in the causeway rock, beside the ' +
+        'mural. Its teeth are pitted with salt and age.',
+    )
+    key.description = 'A corroded iron key recovered from the pier vaults.'
+    expect(key.examine(game.state)).toBe(text)
+  })
+
   it('provides a plausible name', () => {
     new Game([new Act3()])
 

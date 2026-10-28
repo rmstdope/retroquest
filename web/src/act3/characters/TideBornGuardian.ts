@@ -4,7 +4,7 @@ import {
   characterName,
   dialogue,
   speech,
-  normaliseSpokenWord,
+  saysAnyOf,
   type NameOptions,
 } from '@/engine'
 import { CEDRIC_NAME, cedricAdds, cedricSays } from '../CedricLines'
@@ -13,22 +13,47 @@ import { FLAG_ACT3_VOW_OF_COURAGE_MADE } from '../Act3StoryFlags'
 /** How many steps into the black water the trial takes. */
 export const TRIAL_STEPS = 3
 
-/** The Guardian's refusals of the near-miss answers, by the word spoken. */
-const NEAR_MISSES: Record<string, string> = {
-  mira: 'Mira was not in the water with you. Her voice was. Who walked?',
-  cedric:
-    'The knight stayed at the door. You could not see him. ' +
-    'Who did you still have?',
-  'my friends':
-    'Your friends were behind you, in the light. ' +
-    'Who was with you in the dark?',
-  'the king': 'The king is the reason you came. He is not who came through.',
-  'my parents':
-    'They are with you always, and still they did not walk. Who did?',
-}
+/**
+ * The Guardian's refusals of the near-miss answers, each with the words that
+ * earn it (matched as whole words, first match wins). The last is the answer
+ * in the wrong form, so it gets a nudge towards the vow.
+ */
+const NEAR_MISSES: readonly { words: readonly string[]; reply: string }[] = [
+  {
+    words: ['mira'],
+    reply: 'Mira was not in the water with you. Her voice was. Who walked?',
+  },
+  {
+    words: ['cedric', 'knight'],
+    reply:
+      'The knight stayed at the door. You could not see him. ' +
+      'Who did you still have?',
+  },
+  {
+    words: ['friends', 'friend'],
+    reply:
+      'Your friends were behind you, in the light. ' +
+      'Who was with you in the dark?',
+  },
+  {
+    words: ['king'],
+    reply: 'The king is the reason you came. He is not who came through.',
+  },
+  {
+    words: ['parents', 'mother', 'father'],
+    reply: 'They did not walk this water with you. Who did?',
+  },
+  {
+    words: ['me', 'elior', 'i did'],
+    reply: 'Nearly. Say it the way you would swear it.',
+  },
+]
+
+/** The crystal as the player sees it named: an item in the room. */
+const CRYSTAL = '[item_name]crystal of light[/item_name]'
 
 /**
- * The Tide-Born Guardian: a figure of gathered waters and ward-sigils.
+ * The Tide-Born Guardian: a shape of standing water with ward-sigils in it.
  *
  * It keeps the trial of courage: where Elior stands in the dark water
  * (`trialStep`, 0 at the edge up to the third step) and whether the darkness
@@ -53,8 +78,8 @@ export class TideBornGuardian extends Character {
     super({
       name: 'Tide-Born Guardian',
       description:
-        'A figure of gathered waters and ward-sigils, its form rippling ' +
-        "with the tide's breath.",
+        'A shape of standing water the height of a man. Ward-sigils drift ' +
+        'in it like weed in a current.',
     })
   }
 
@@ -95,9 +120,9 @@ export class TideBornGuardian extends Character {
   private turnsToCedric(): string {
     return (
       `The ${characterName(this.name)} turns its rippling face to ` +
-      `${CEDRIC_NAME}.` +
-      ' ' +
-      speech('Name what you will not abandon.') +
+      `${characterName(CEDRIC_NAME)}.` +
+      '\n' +
+      dialogue(this.name, 'Name what you will not abandon.') +
       '\n' +
       cedricSays('My king.') +
       ' ' +
@@ -115,7 +140,7 @@ export class TideBornGuardian extends Character {
       case 0:
         return (
           'You stand at the edge of the black water. Somewhere ahead, the ' +
-          'Guardian waits.'
+          `${characterName(this.name)} waits.`
         )
       case 1:
         return 'Black water to your knees. You cannot see your own hands.'
@@ -123,7 +148,7 @@ export class TideBornGuardian extends Character {
         return 'Black water to your waist. You cannot see your own hands.'
       default:
         return (
-          'The water stands parted around you. The crystal of light burns ' +
+          `The water stands parted around you. The ${CRYSTAL} burns ` +
           'in its basin, the only light in the world.'
         )
     }
@@ -146,19 +171,19 @@ export class TideBornGuardian extends Character {
         )
       case 2:
         return (
-          'A voice like ' +
+          'The water climbs to your waist. Then a voice like ' +
           characterName('Mira') +
-          ', close behind you: ' +
+          "'s, close behind you: " +
           speech('Turn back, Elior. There is nothing out there.')
         )
       default:
         return (
           'The water is at your chest. You call for ' +
-          'Sir Cedric and hear nothing — the door is too far behind. ' +
+          `${characterName(CEDRIC_NAME)}. Nothing comes back. ` +
           'You take the step anyway.' +
           '\n' +
           ('The water parts around you. In the hollow it leaves, the ' +
-            'crystal of light burns in its basin, the only light in the ' +
+            `${CRYSTAL} burns in its basin, the only light in the ` +
             'world.') +
           '\n' +
           dialogue(this.name, 'You came through. What did you not abandon?')
@@ -204,7 +229,8 @@ export class TideBornGuardian extends Character {
 
   /**
    * Answer what Elior says: before the third step it asks him to walk first;
-   * at the third step "myself" is the vow, a near miss gets its own gentle
+   * at the third step "myself", alone or in a sworn sentence, is the vow,
+   * a near miss gets its own gentle
    * refusal and anything else the generic one.
    */
   override sayTo(gameState: GameState, words: string): string {
@@ -214,18 +240,16 @@ export class TideBornGuardian extends Character {
     if (this.step() < TRIAL_STEPS) {
       return dialogue(this.name, 'Words are easy on the shore. Walk first.')
     }
-    const w = normaliseSpokenWord(words)
-    if (w === 'myself') {
+    if (saysAnyOf(words, ['myself'])) {
       gameState.setStoryFlag(FLAG_ACT3_VOW_OF_COURAGE_MADE, true)
       return (
-        '[success]The waters draw back as if breathing in. Your vow anchors ' +
-        "the chamber's heart, and the relic heeds your courage. You may now " +
-        'take the [item_name]crystal of light[/item_name].[/success]\n' +
+        '[success]The water draws back from you, all the way to the walls. ' +
+        'The [item_name]crystal of light[/item_name] sits loose in its ' +
+        'basin.[/success]\n' +
         dialogue(
           this.name,
           'Most name a person, and leave themselves behind in the dark. ' +
-            'You walked in whole, and you walked out whole. That is the ' +
-            'courage the crystal asks for.',
+            'You walked in whole, and you walked out whole.',
         ) +
         '\n' +
         ('One by one the sigils kindle again across the water, and the ' +
@@ -233,10 +257,10 @@ export class TideBornGuardian extends Character {
         cedricAdds(gameState, this.turnsToCedric())
       )
     }
-    const nearMiss = NEAR_MISSES[w]
+    const nearMiss = NEAR_MISSES.find((miss) => saysAnyOf(words, miss.words))
     return dialogue(
       this.name,
-      nearMiss ??
+      nearMiss?.reply ??
         'The tide listens, then falls quiet. That is not what you carried ' +
           'through the water.',
     )

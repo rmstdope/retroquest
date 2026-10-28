@@ -8,14 +8,10 @@ const BASE_DESCRIPTION =
   'a giant hearth that remembers how to forge stars.'
 
 const PHOENIX_DESCRIPTION =
-  " At the crater's heart an enormous phoenix reclines on a throne of cooled slag and " +
-  'ember—its plumage a molten fan of red-gold feathers that shimmer and steam. Each ' +
-  'breath it gives sends a shower of glowing ash that drifts like sparks, and its ' +
-  'coal-bright eyes watch with a patient, ancient intelligence. Its talons curl around ' +
-  'glassed stones, and every movement rings with a metal-on-metal chime, as if the bird ' +
-  'were at once creature and relic. Now and then a single feather arcs away in a slow, ' +
-  'burning arc, embedding itself in the rim where it cools to a shard that still hums ' +
-  'faintly.'
+  " At the crater's heart the phoenix lies on a bed of cooled slag, its " +
+  'feathers red-gold and steaming. Each breath it lets out sends sparks up ' +
+  'out of the bowl. Now and then a feather comes loose and cools on the rim ' +
+  'to a shard that still hums.'
 
 const DROWSY_DESCRIPTION =
   ' The warmth is drowsy here, as if the bowl would rather you sat and rested a ' +
@@ -40,10 +36,16 @@ export class PhoenixCrater extends Room {
     return this.characters.some((c) => c.name.toLowerCase() === 'phoenix')
   }
 
-  /** Until the Phoenix appears, the description ends with an invitation to rest. */
-  override descriptionFor(gameState: GameState): string {
-    const base = super.descriptionFor(gameState)
-    return this.phoenixPresent() ? base : base + DROWSY_DESCRIPTION
+  /**
+   * Until the Phoenix appears, the description ends with an invitation to
+   * rest; afterwards it shows the Phoenix. Built from the constants, so a save
+   * made before the text changed shows the current text.
+   */
+  override descriptionFor(_gameState: GameState): string {
+    return (
+      BASE_DESCRIPTION +
+      (this.phoenixPresent() ? PHOENIX_DESCRIPTION : DROWSY_DESCRIPTION)
+    )
   }
 
   /** Until the Phoenix appears, calling out gets a quiet in-world answer. */
@@ -57,9 +59,9 @@ export class PhoenixCrater extends Room {
       this.addCharacter(new Phoenix())
       this.description = BASE_DESCRIPTION + PHOENIX_DESCRIPTION
       return (
-        'As your eyes close, the air grows warmer. When you ' +
-        'open them, a vast phoenix of living ember stands before you, its gaze meeting ' +
-        'yours with ancient, knowing patience.'
+        'As your eyes close, the air grows warmer. When you open them, a ' +
+        'phoenix is lying in the crater with you, watching you as if it has ' +
+        'been there all along.'
       )
     }
     return 'The heat of the crater soaks into you, and the ache goes out of your legs.'

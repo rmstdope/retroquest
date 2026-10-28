@@ -52,10 +52,10 @@ export class Tobin extends Character {
       'his lap. The pale charm hangs at his throat on a bootlace, over the ' +
       'strip of torn shirt. He watches you now, not the ceiling.'
     return (
-      `Tobin turns the pale stone over in his fingers. As his hand ` +
-      'closes around it, the endless dripping of the gallery seems to step ' +
-      'back a pace, and his shoulders come down for the first time since ' +
-      'you met him.' +
+      `${characterName(this.name)} turns the pale stone over in his ` +
+      'fingers. As his hand closes around it, the creak of the new braces ' +
+      'seems to step back a pace, and his shoulders come down for the first ' +
+      'time since you met him.' +
       '\n' +
       `${characterName(this.name)}: ` +
       speech("It's quiet.") +

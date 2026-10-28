@@ -59,6 +59,19 @@ describe('TideBornGuardian', () => {
     expect(g.getStoryFlag(FLAG_ACT3_VOW_OF_COURAGE_MADE)).toBe(true)
   })
 
+  it.each(['I will not abandon myself', 'I swear by myself'])(
+    'takes the vow sworn as a sentence: %s',
+    (words) => {
+      const g = makeGameState()
+      const guardian = new TideBornGuardian()
+      walkThrough(guardian, g)
+
+      guardian.sayTo(g, words)
+
+      expect(g.getStoryFlag(FLAG_ACT3_VOW_OF_COURAGE_MADE)).toBe(true)
+    },
+  )
+
   it('rejects other words without setting the flag', () => {
     const g = makeGameState()
     const guardian = new TideBornGuardian()
@@ -142,9 +155,17 @@ describe('TideBornGuardian', () => {
   it.each([
     ['mira', 'Mira was not in the water with you'],
     ['Cedric', 'The knight stayed at the door'],
+    ['sir cedric', 'The knight stayed at the door'],
     ['my friends', 'Your friends were behind you'],
+    ['friends', 'Your friends were behind you'],
     ['the king', 'The king is the reason you came'],
-    ['my parents', 'They are with you always'],
+    ['my king', 'The king is the reason you came'],
+    ['king', 'The king is the reason you came'],
+    ['my parents', 'They did not walk this water with you. Who did?'],
+    ['parents', 'They did not walk this water with you. Who did?'],
+    ['me', 'Nearly. Say it the way you would swear it.'],
+    ['Elior', 'Nearly. Say it the way you would swear it.'],
+    ['i did', 'Nearly. Say it the way you would swear it.'],
   ])('answers the near miss %s specifically', (words, line) => {
     const g = makeGameState()
     const guardian = new TideBornGuardian()
@@ -153,6 +174,63 @@ describe('TideBornGuardian', () => {
     expect(res).toContain(line)
     expect(g.getStoryFlag(FLAG_ACT3_VOW_OF_COURAGE_MADE)).toBe(false)
     expectMarkupWellFormed(res)
+  })
+
+  it('no longer says the parents are always with him (the Red Line)', () => {
+    const g = makeGameState()
+    const guardian = new TideBornGuardian()
+    walkThrough(guardian, g)
+    expect(guardian.sayTo(g, 'my parents')).not.toContain('with you always')
+  })
+
+  it('shows the crystal loose after the vow, without telling Elior to take it', () => {
+    const g = makeGameState()
+    const guardian = new TideBornGuardian()
+    walkThrough(guardian, g)
+    const res = guardian.sayTo(g, 'myself')
+    expect(res).toContain(
+      '[success]The water draws back from you, all the way to the walls. ' +
+        'The [item_name]crystal of light[/item_name] sits loose in its ' +
+        'basin.[/success]',
+    )
+    expect(res).toContain(
+      'You walked in whole, and you walked out whole.[/dialogue]',
+    )
+    expect(res).not.toContain('You may now')
+    expect(res).not.toContain('courage the crystal asks for')
+  })
+
+  it('marks names and the crystal in the walk', () => {
+    const g = makeGameState()
+    const guardian = new TideBornGuardian()
+    expect(guardian.lookLine(g)).toContain(
+      'Somewhere ahead, the [character_name]Tide-Born ' +
+        'Guardian[/character_name] waits.',
+    )
+    guardian.walkEast(g)
+    const second = guardian.walkEast(g)
+    expect(second).toContain(
+      'The water climbs to your waist. Then a voice like ' +
+        "[character_name]Mira[/character_name]'s, close behind you:",
+    )
+    const third = guardian.walkEast(g)
+    expect(third).toContain(
+      'You call for [character_name]Sir Cedric[/character_name]. Nothing ' +
+        'comes back. You take the step anyway.',
+    )
+    expect(third).toContain(
+      'the [item_name]crystal of light[/item_name] burns in its basin',
+    )
+    expect(guardian.lookLine(g)).toContain(
+      'The [item_name]crystal of light[/item_name] burns in its basin',
+    )
+  })
+
+  it('describes a shape of standing water', () => {
+    expect(new TideBornGuardian().description).toBe(
+      'A shape of standing water the height of a man. Ward-sigils drift in ' +
+        'it like weed in a current.',
+    )
   })
 
   it('explains itself after the vow and then tells of Aren', () => {

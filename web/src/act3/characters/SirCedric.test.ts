@@ -49,7 +49,18 @@ describe('SirCedric', () => {
 
   it('directs the player to Mira before the main quest', () => {
     const game = new Game([new Act3()])
-    expect(talk(game)).toContain('speak with')
+    const out = talk(game)
+    expect(out).toContain('speak with')
+    expect(out).toContain('I will be beside you when we get there.')
+    expect(out).not.toContain('take the fight')
+  })
+
+  it('is described as a guard in old mail', () => {
+    const cedric = new SirCedric()
+    expect(cedric.description).toBe(
+      'A tall knight in old, dented mail, his sword at his hip again. He ' +
+        'keeps half a step behind you and to one side, where a guard walks.',
+    )
   })
 
   it.each([
@@ -77,7 +88,10 @@ describe('SirCedric', () => {
   it('speaks of the bird on Mount Ember once the feather is won', () => {
     const game = startedAt('PhoenixCrater')
     game.state.setStoryFlag(FLAG_ACT3_PHOENIX_FEATHER_ACQUIRED, true)
-    expect(talk(game)).toContain('A bird told us to wait')
+    expect(talk(game)).toContain(
+      'A bird told us to wait, and we waited. I hope it was worth what it ' +
+        'cost the king.',
+    )
   })
 
   it('speaks of the old man in the caverns once the miners are freed', () => {
@@ -123,19 +137,32 @@ describe('SirCedric', () => {
       const game = startedAt('FortressEntrance')
       const out = new SirCedric().sayTo(game.state, words)
       expectMarkupWellFormed(out)
-      expect(out.startsWith(`You: ${REFRAIN}\n`)).toBe(true)
+      expect(
+        out.startsWith(
+          '[character_name]Elior[/character_name]\n' +
+            '[dialogue]Power follows purpose; purpose follows truth.' +
+            '[/dialogue]\n',
+        ),
+      ).toBe(true)
+      expect(out).not.toContain('You:')
+      expect(out).not.toContain('a long moment')
       expect(out).toContain('loosens his sword in its sheath')
       expect(out).toContain('Truth, then. The truth is I was on the wall.')
       expect(game.state.getStoryFlag(FLAG_ACT3_CEDRIC_GATE_ANSWERED)).toBe(true)
-      expect(talk(game)).toContain('Ready when you are.')
+      expect(talk(game)).toContain(
+        'Ready when you are. I have looked at this door long enough.',
+      )
     })
 
-    it('answers anything else with "Not now. Not here." and can still be answered', () => {
+    it('answers anything else with "Later, when there is time for it." and can still be answered', () => {
       const game = startedAt('FortressEntrance')
       const cedric = new SirCedric()
       const out = cedric.sayTo(game.state, 'hello')
       expectMarkupWellFormed(out)
-      expect(out).toContain('Not now. Not here.')
+      expect(out).toBe(
+        '[character_name]Sir Cedric[/character_name] keeps his eyes on the ' +
+          'way ahead. [dialogue]Later, when there is time for it.[/dialogue]',
+      )
       expect(game.state.getStoryFlag(FLAG_ACT3_CEDRIC_GATE_ANSWERED)).toBe(
         false,
       )
@@ -145,7 +172,7 @@ describe('SirCedric', () => {
     it('does not take the refrain away from the gate', () => {
       const game = startedAt('TidalCauseway')
       expect(new SirCedric().sayTo(game.state, 'refrain')).toContain(
-        'Not now. Not here.',
+        'Later, when there is time for it.',
       )
       expect(game.state.getStoryFlag(FLAG_ACT3_CEDRIC_GATE_ANSWERED)).toBe(
         false,

@@ -51,8 +51,9 @@ describe('AncientDragon', () => {
   it('initializes with name and description', () => {
     const dragon = new AncientDragon()
     expect(dragon.name).toBe('ancient dragon')
-    expect(dragon.description.toLowerCase()).toContain('magnificent dragon')
+    expect(dragon.description).toContain('worn dull')
     expect(dragon.description.toLowerCase()).toContain('golden eyes')
+    expect(dragon.description).not.toMatch(/wisdom|ancient|countless/i)
   })
 
   it('gives the memory when talked to the first time', () => {
@@ -157,13 +158,17 @@ describe('AncientDragon', () => {
     const result = new AncientDragon().sayTo(gameState, words)
 
     expect(result).toContain(
-      'You speak the old words to the ' +
-        '[character_name]ancient dragon[/character_name]: ' +
-        `“I take what is given, and I return ${word}.”`,
+      '[character_name]Elior[/character_name]\n' +
+        `[dialogue]I take what is given, and I return ${word}.[/dialogue]`,
     )
+    expect(result).not.toContain('“')
     expect(result).not.toContain('[event]')
-    expect(result).toContain('Your words ring true, young one.')
-    expect(result).toContain('[success]')
+    expect(result).toContain(
+      'shifts one coil, and a single scale lies loose on the tiles.',
+    )
+    expect(result).toContain(
+      'Your words ring true, young one. It is heavier than it looks.',
+    )
     expect(gameState.getStoryFlag(FLAG_ACT3_DRAGON_OATH_SPOKEN)).toBe(true)
     expect(hasScale(room)).toBe(true)
     expectMarkupWellFormed(result)
@@ -214,7 +219,7 @@ describe('AncientDragon', () => {
     for (const words of ['everything', 'hello']) {
       const result = new AncientDragon().sayTo(gameState, words)
       expect(result).toContain(
-        'The oath has been given and accepted. The scale is yours to claim.',
+        'You have said it. The scale is there, young one. Take it.',
       )
     }
   })
@@ -247,7 +252,12 @@ describe('AncientDragon', () => {
 
     const result = new AncientDragon().talkTo(gameState)
 
-    expect(result).toContain('The scale awaits when you are ready')
+    expect(result).toContain(
+      'The memory has been shared. The scale awaits, but it is not given ' +
+        'for the asking. There is an old oath for it. The words are kept in ' +
+        'the Echo Chambers.',
+    )
+    expect(result).not.toContain('prove your selflessness')
     expect(result).not.toContain(QUESTION)
   })
 
@@ -258,7 +268,7 @@ describe('AncientDragon', () => {
     const result = new AncientDragon().talkTo(gameState)
 
     expect(result).toContain(
-      'The oath has been given and accepted. The scale is yours to claim.',
+      'You have said it. The scale is there, young one. Take it.',
     )
     expect(result).not.toContain(QUESTION)
   })
@@ -304,13 +314,13 @@ describe('AncientDragon', () => {
       ),
     ).toBe(true)
     expect(speeches[0].kind === 'dialogue' && speeches[0].markup).toBe(
-      'Young one, I remember your parents well. Aren and Lysa, Wardens of ' +
-        'the Dawn. They came to me with their friend Malakar, the three of ' +
-        'them laughing, and made the relics as equals.',
+      'Young one, I remember your parents. Aren and Lysa, Wardens of the ' +
+        'Dawn. They came down here with their friend Malakar for a scale, ' +
+        'the three of them laughing. They were making the relics together, ' +
+        'as equals.',
     )
     expect(speeches[2].kind === 'dialogue' && speeches[2].markup).toBe(
-      'They are not gone as the dead are gone, child. They are warded ' +
-        'away, not dead.',
+      'They are warded away, not dead, child.',
     )
     expect(speeches[3].kind === 'dialogue' && speeches[3].markup).toBe(
       'They had a saying, the three of them, carved wherever they worked: ' +

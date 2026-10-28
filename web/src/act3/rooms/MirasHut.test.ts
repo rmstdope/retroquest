@@ -11,4 +11,14 @@ describe("Mira's Hut (Act III)", () => {
         'of interest beyond what you can already see.',
     )
   })
+
+  it('shows Mira at home without calling her wise', () => {
+    const game = new Game([new Act3()])
+    const hut = game.state.allRooms.MirasHut
+    expect(hut.description).toContain(
+      '[character_name]Mira[/character_name] moves between her shelves ' +
+        'without looking, the way you cross your own kitchen in the dark.',
+    )
+    expect(hut.description).not.toContain('knowledge')
+  })
 })

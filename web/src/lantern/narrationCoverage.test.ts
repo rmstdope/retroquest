@@ -137,7 +137,7 @@ const OPTIONAL_LINES: Record<number, { speaker: string; opening: string }[]> = {
     { speaker: 'pier warden', opening: '… Aye. I think I knew it' },
     {
       speaker: 'ancient dragon',
-      opening: 'You said you would return what you took',
+      opening: 'You said you would give back',
     },
     { speaker: 'ancient dragon', opening: 'Go with my blessing, young one' },
   ],

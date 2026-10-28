@@ -1,4 +1,4 @@
-import { type NameOptions, Room } from '@/engine'
+import { type NameOptions, Room, characterName } from '@/engine'
 import { Mira } from '../characters/Mira'
 import { SirCedric } from '../characters/SirCedric'
 import { HealingHerbs } from '../items/HealingHerbs'
@@ -13,8 +13,9 @@ export class MirasHut extends Room {
         'A fragrant hut filled with drying herbs and mysterious potions. Shelves ' +
         'overflow with bottles, roots, and colorful flowers. The air is thick with ' +
         'the scent of lavender and sage. Sunlight streams through stained glass, ' +
-        'painting the walls in shifting hues. Mira herself moves gracefully among ' +
-        'her concoctions, her eyes bright with knowledge and kindness.',
+        'painting the walls in shifting hues. ' +
+        `${characterName('Mira')} moves between her shelves without looking, ` +
+        'the way you cross your own kitchen in the dark.',
       items: [new HealingHerbs(), new TeleportationFocus()],
       characters: [new Mira(), new SirCedric()],
       exits: {},
