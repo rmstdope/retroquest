@@ -21,8 +21,8 @@ export class EliorsCottage extends Room {
         'Sunlight filters through lace curtains, illuminating ' +
         'shelves lined with trinkets and memories. A sturdy wooden ' +
         'table sits in the center, and a gentle fire crackles in the ' +
-        `hearth. ${characterName('Grandmother')} hums softly in her rocking chair, her ` +
-        'eyes twinkling with wisdom and warmth.',
+        `hearth. ${characterName('Grandmother')} stands by it, humming, ` +
+        'and keeps an eye on the bread.',
       items: [new Lantern()],
       characters: [new Grandmother()],
       exits: {},
