@@ -39,11 +39,13 @@ describe('AncientAmulet', () => {
       return executeCommands(game, ['examine amulet'])
     }
 
-    it('turns the third figure once the orbs are mended', () => {
-      expect(examineWith(FLAG_ACT4_MEMORY_ORBS_MENDED)).toContain(
+    it('keeps the third figure turned away once the orbs are mended', () => {
+      const text = examineWith(FLAG_ACT4_MEMORY_ORBS_MENDED)
+      expect(text).toContain(
         HEAD +
-          'The third figure has turned around. He is young, and he is smiling at them.',
+          'The third figure keeps his back turned. He is young; you can see it in the set of his shoulders.',
       )
+      expect(text).not.toContain('turned around')
     })
 
     it('shows Malakar as he is now after the refrain', () => {
@@ -54,7 +56,7 @@ describe('AncientAmulet', () => {
         ),
       ).toContain(
         HEAD +
-          'The third figure is Malakar as he is now: white-haired, grey-robed, a step behind them.',
+          'The third figure keeps his back turned, but his head is up, as if someone has said his name.',
       )
     })
 
@@ -65,7 +67,7 @@ describe('AncientAmulet', () => {
           FLAG_ACT4_THRONE_REFRAIN_SAID,
           FLAG_ACT4_JUSTICE_ENDING,
         ),
-      ).toContain('The third figure is Malakar as he is now')
+      ).toContain('his head is up, as if someone has said his name')
     })
 
     it('shows the three at the workbench after Redemption', () => {
@@ -77,7 +79,7 @@ describe('AncientAmulet', () => {
         ),
       ).toContain(
         HEAD +
-          'The three of them stand together at a workbench, heads bent over something you cannot quite see.',
+          'The third figure has turned around. The three of them stand together at a workbench, heads bent over something you cannot quite see.',
       )
     })
   })

@@ -62,17 +62,22 @@ describe('Act4', () => {
 
   it('opens with the companions’ goodbye and the token, without the old cliché', () => {
     const intro = new Act4().getActIntro()
-    expect(intro).toContain('someone must hold the way out. ')
+    expect(intro).toContain(
+      "With the lifelight elixir in your pack, you stand before Malakar's fortress. Mira steps through the gates beside you, her hands still unsteady from the circle. She and Sir Cedric stop just inside the threshold.",
+    )
+    expect(intro).not.toContain('someone must hold the way out')
+    expect(intro).not.toContain('wreathed')
     expect(intro).toContain(
       'A small light settles on the gatepost: Nyx, keeping close.',
     )
     const order = [
-      "Someone has to keep the way out open, and that's me. So come back through it.",
+      "I said I would come with you, and I have. Someone has to keep the way out open, and that's me. So come back through it.",
       'I held a gate once and lost a king behind it. I will not lose this one, or you.',
       "I'll be the light at the edge of your eye. Don't look for me. Just know.",
       'Mira presses something into your hand: a small silver medallion, two hands clasped on its face. Sir Cedric lays his hand over hers; the light on the gatepost leans in.',
+      'You receive a [item_name]loyalty token[/item_name].',
       "If it goes quiet in there, say our names. We'll hear.",
-      'The halls beyond are yours to walk, but you will not be far from them.',
+      'The rest of the way is yours to walk, but they will not be far.',
       "Let's begin. (Type 'help' for a list of commands.)",
     ].map((line) => intro.indexOf(line))
     expect(order.every((i) => i >= 0)).toBe(true)

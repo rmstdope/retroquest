@@ -3,6 +3,7 @@ import { Game, dialogue } from '@/engine'
 import { Act4 } from '../Act4'
 import { ACT4_GOLDEN_PATH } from '../Act4GoldenPath'
 import {
+  FLAG_ACT4_ELENA_MESSAGE_HEARD,
   FLAG_ACT4_SORCERESS_OF_LIES_COMPLETED,
   FLAG_ACT4_SORCERESS_OF_LIES_STARTED,
   FLAG_ACT4_SORCERESS_TRUTH_ACQUIRED,
@@ -44,7 +45,10 @@ const THREE_HEARTS = [
   "cast heart's truth on staff",
   "cast heart's truth on whispers",
 ]
-const SMILES = 'The Sorceress only smiles.'
+const SMILES =
+  'She smiles, and the crystals hum your word back to you, sweeter, and wrong.'
+const LISTEN_EARLY =
+  'The crystals hum kind, untrue things, and under them she is laughing at you. If there is anything beneath the laughing, it does not let you near.'
 const NORTH_WALL =
   'The north arch is a wall of whispering crystal. It will not open while the Sorceress holds the chamber.'
 
@@ -75,7 +79,7 @@ describe('The Sorceress of Lies', () => {
     expect(executeCommands(game, ['go up'])).toContain(STUMBLE)
     expect(game.state.currentRoom.name).toBe('Tower of Shadows')
     expect(executeCommands(game, ['use loyalty token'])).toContain(
-      'Say their names.',
+      'what she said at the gate: say our names.',
     )
     expect(executeCommands(game, ['go up'])).toContain(STUMBLE)
     executeCommands(game, NAME_FRIENDS)
@@ -120,7 +124,7 @@ describe('The Sorceress of Lies', () => {
   it('looks and talks before the badge', () => {
     const game = inChamber()
     expect(executeCommands(game, ['examine staff'])).toContain(
-      "The mask is smooth and smiling, with no eyes behind it. It is the very mark that sat beneath Elena's curse in Greendale. This is the hand that cursed her.",
+      "The mask is smooth and smiling, with no eyes behind it. It is the very mark that sat on Elena's wrist in Greendale. The woman who carries this staff cursed her.",
     )
     expect(executeCommands(game, ['examine sorceress of lies'])).toContain(
       'She is beautiful in the way the chamber is beautiful: a little too perfect, a little wrong. Her smile never reaches her eyes.',
@@ -128,8 +132,9 @@ describe('The Sorceress of Lies', () => {
     const talk = executeCommands(game, ['talk to sorceress'])
     expectDialogueSpeaker(talk, 'Sorceress of Lies')
     expect(talk).toContain(
-      'Little Elior. Your parents sold you to save themselves, did you know? Malakar told me so himself. Turn back.',
+      'Little Elior. Your parents sold you to save themselves, did you know? For a sack of grain, in a hungry winter. Turn back.',
     )
+    expect(talk).not.toContain('Malakar told me')
     expect(executeCommands(game, ['say understanding to sorceress'])).toContain(
       LAUGHS,
     )
@@ -143,8 +148,10 @@ describe('The Sorceress of Lies', () => {
     expect(shown).toContain(
       "The Sorceress stares at the knight's badge, and for the first time her smile slips. Beneath the whispers you hear something else: a voice, very small, that is not lying.",
     )
-    expect(shown).toContain("Heart's Truth")
-    expect(shown).toContain('Hear the true heart beneath a lie.')
+    expect(shown).toContain(
+      "You have learned [spell_name]Heart's Truth[/spell_name]. Hear the true heart beneath a lie.",
+    )
+    expect(shown).not.toContain('!')
     expectSpellKnown(game.state, 'hearts_truth')
     expectMarkupWellFormed(shown)
     expect(executeCommands(game, ["use knight's redemption"])).toContain(
@@ -185,8 +192,9 @@ describe('The Sorceress of Lies', () => {
       'The whispers fall away. Beneath them the Sorceress is alone, as she has always been: no one has ever spoken to her without a lie, and she has never answered with anything else.',
     )
     expect(cast).toContain(
-      'And under the loneliness, older and smaller: a girl in a hungry winter, and the parents who sold her for a sack of grain. She tells you the lie because she believes it. It is the only story about parents she has ever known.',
+      'And under the loneliness, older and smaller: a girl in a hungry winter, and the parents who sold her for a sack of grain. It is the only story about parents she has ever known.',
     )
+    expect(cast).not.toContain('because she believes it')
     expectMarkupWellFormed(cast)
     const again = executeCommands(game, ["cast heart's truth on sorceress"])
     expect(again).toContain('You already hear her heart beneath the lies.')
@@ -223,9 +231,9 @@ describe('The Sorceress of Lies', () => {
 
   it('is redeemed by listening too, with the same gates as the word', () => {
     const early = inChamber()
-    expect(executeCommands(early, ['listen'])).toContain(
-      'Whatever you came to give her is lost among the whispers.',
-    )
+    const listenEarly = executeCommands(early, ['listen'])
+    expect(listenEarly).toContain(LISTEN_EARLY)
+    expect(listenEarly).not.toContain('Whatever you came to give her')
     executeCommands(early, ["use knight's redemption"])
     expect(executeCommands(early, ['listen'])).toContain(
       'You cannot answer a pain you cannot hear.',
@@ -284,7 +292,11 @@ describe('The Sorceress of Lies', () => {
     const second = said.indexOf('I told the king')
     const third = said.indexOf('No one has ever spoken to me without a lie.')
     const gift = said.indexOf('She lifts the silver mask from her staff')
-    const received = said.indexOf('You received')
+    const received = said.indexOf(
+      "You receive the [item_name]sorceress's truth[/item_name].",
+    )
+    expect(said).not.toContain('gone hunting')
+    expect(said).not.toContain('!')
     expect(said).toContain(
       'And I watched the inn door, to see who would come for a mark like that. The healer from Willowbrook never did. I should have known then what that meant.',
     )
@@ -333,6 +345,7 @@ describe('The Sorceress of Lies', () => {
     const talk = executeCommands(game, ['talk to sorceress'])
     expectDialogueSpeaker(talk, 'Unmasked Sorceress')
     expect(talk).toContain('tell Elena I am sorry.')
+    expect(game.state.getStoryFlag(FLAG_ACT4_ELENA_MESSAGE_HEARD)).toBe(true)
     expect(executeCommands(game, ['say understanding to sorceress'])).toContain(
       'She has already been heard. She nods to you, once.',
     )
@@ -391,5 +404,61 @@ describe('The Sorceress of Lies', () => {
     )
     executeCommands(game, ['go north'])
     expect(game.state.currentRoom.name).toBe('Memory Vault')
+  })
+
+  describe('the spoken word', () => {
+    /** A game in the chamber, badge shown and all three hearts heard. */
+    function readyToUnderstand(): Game {
+      const game = inChamber()
+      executeCommands(game, ["use knight's redemption", ...THREE_HEARTS])
+      return game
+    }
+
+    it.each(['I understand', 'I understand you'])(
+      'takes the word inside a sentence: %s',
+      (words) => {
+        const game = readyToUnderstand()
+
+        executeCommands(game, [`say ${words} to sorceress`])
+
+        expectStoryFlag(game.state, FLAG_ACT4_SORCERESS_OF_LIES_COMPLETED, true)
+      },
+    )
+
+    it.each(["I don't understand", 'I do not understand you'])(
+      'does not take the word denied: %s',
+      (words) => {
+        const game = readyToUnderstand()
+
+        executeCommands(game, [`say ${words} to sorceress`])
+
+        expectStoryFlag(
+          game.state,
+          FLAG_ACT4_SORCERESS_OF_LIES_COMPLETED,
+          false,
+        )
+      },
+    )
+
+    it('answers redemption, the knight’s word, with its own refusal', () => {
+      const game = readyToUnderstand()
+
+      const out = executeCommands(game, ['say redemption to sorceress'])
+
+      expect(out).toContain(
+        'That was his word, little Elior. I have not asked to be forgiven. I have not asked you for anything.',
+      )
+      expectDialogueSpeaker(out, 'Sorceress of Lies')
+      expectStoryFlag(game.state, FLAG_ACT4_SORCERESS_OF_LIES_COMPLETED, false)
+    })
+
+    it('answers truth with its own refusal', () => {
+      const game = readyToUnderstand()
+
+      const out = executeCommands(game, ['say truth to sorceress'])
+
+      expect(out).toContain('Truth? I have hundreds. Which one would you like?')
+      expectDialogueSpeaker(out, 'Sorceress of Lies')
+    })
   })
 })

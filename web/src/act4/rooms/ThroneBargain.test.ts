@@ -39,7 +39,7 @@ const AGAIN =
 
 const AFTER_TALK = dialogue(
   'Malakar',
-  'You saw them. Then you know I was not lying. It would not break for me. Perhaps it would for you.',
+  'It would not break for me. Perhaps it would for you.',
 )
 
 const LYSA_LINE = dialogue(
@@ -51,7 +51,7 @@ describe('the Bargain', () => {
   it('is not offered before Malakar has been talked to', () => {
     const game = inThrone()
     expect(executeCommands(game, ['give amulet to malakar'])).toContain(
-      'Malakar only waits for your answer.',
+      'Your mother and father told him no once, in a letter. It did not stop him.',
     )
     expect(game.state.getStoryFlag(FLAG_ACT4_THRONE_BARGAIN_SEEN)).toBe(false)
   })

@@ -44,10 +44,31 @@ describe('FortressGates', () => {
 
   it('names the three stones in the arrival description', () => {
     const game = createGame()
-    expect(game.state.currentRoom.descriptionFor(game.state)).toContain(
-      'Three ancient ward stones, left, middle and right, pulse with ' +
-        'malevolent energy',
+    const text = game.state.currentRoom.descriptionFor(game.state)
+    expect(text).toContain(
+      'three ward stones, left, middle and right, swell and fade with it.',
     )
+    expect(text).toContain('You stand just inside the fortress gates.')
+    expect(text).not.toContain('malevolent')
+  })
+
+  it('shows the Warden sigil and Mira keeping the way out, before and after', () => {
+    const game = createGame()
+    const sigil =
+      'On the arch behind you, under the black, an older carving shows through: a sun rising over three linked rings.'
+    const mira =
+      'Just inside the threshold [character_name]Mira[/character_name] keeps the way out, her back to the gatepost.'
+    const before = game.state.currentRoom.descriptionFor(game.state)
+    expect(before).toContain(sigil)
+    expect(before).toContain(mira)
+    executeCommands(game, ['cast light on right ward stone'])
+    const after = game.state.currentRoom.descriptionFor(game.state)
+    expect(after).toContain(
+      'The ward stones are dark, and the violet wall is gone; the ways north and east lie open.',
+    )
+    expect(after).toContain(sigil)
+    expect(after).toContain(mira)
+    expect(after).not.toContain('Whispers of')
   })
 
   describe('before the gates fall', () => {
@@ -104,8 +125,8 @@ describe('FortressGates', () => {
     it('throws the player back at the barrier', () => {
       const game = createGame()
       expect(executeCommands(game, ['go north'])).toContain(
-        'A shimmering barrier of dark energy throws you back. It pulses in ' +
-          'rhythm with the ward stones.',
+        'The violet wall throws you back. It swells and fades in time with ' +
+          'the ward stones.',
       )
     })
   })
@@ -118,6 +139,10 @@ describe('FortressGates', () => {
         'Your light finds the right stone between its beats.',
       )
       expect(answer).toContain("guardian's essence[/item_name]")
+      expect(answer).toContain(
+        "They thin to smoke, and where they drifted lie the [item_name]guardian's chain[/item_name] that bound them and a small, steady light: the [item_name]guardian's essence[/item_name].",
+      )
+      expect(answer).not.toContain('are gone, and')
       expect(game.state.getStoryFlag(FLAG_ACT4_BARRIERS_DISABLED)).toBe(true)
       expect(
         game.state.getStoryFlag(FLAG_ACT4_SHATTERED_WARD_GUARDIANS_STARTED),
@@ -136,7 +161,7 @@ describe('FortressGates', () => {
         east: 'OuterCourtyard',
       })
       expect(room.descriptionFor(game.state)).toContain(
-        'The ward stones stand dark and silent now, and the barrier is gone.',
+        'The ward stones are dark, and the violet wall is gone',
       )
     })
 
@@ -151,7 +176,7 @@ describe('FortressGates', () => {
       expectItemInInventory(game.state, "Guardian's Essence", true)
       expectItemInInventory(game.state, 'Ward Stone Fragment', false)
       expect(executeCommands(game, ['take ward stone fragment'])).toContain(
-        'The fragment is cold',
+        'The fragment is lighter than it looks, and cold.',
       )
     })
 

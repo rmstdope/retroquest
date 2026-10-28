@@ -14,6 +14,6 @@ export class WardStoneFragment extends Item {
 
   /** The fragment's welcome when it is picked up. */
   override pickedUp(_gameState: GameState): string {
-    return 'The fragment is cold, and it no longer keeps any time at all.'
+    return 'The fragment is lighter than it looks, and cold.'
   }
 }

@@ -150,3 +150,11 @@ export const VIRTUE_MERCY = 'mercy'
 
 /** The virtue moment recorded for help that gains nothing. */
 export const VIRTUE_SELFLESS = 'selfless'
+
+// Messages for the epilogue: each is passed on only if Elior heard it.
+/** The freed captain asked Elior to tell Sir Cedric he is sorry. */
+export const FLAG_ACT4_CAPTAIN_APOLOGY_HEARD = 'act4_captain_apology_heard'
+/** Malakar, after the Redemption ending, asked Elior to tell Mira he is sorry. */
+export const FLAG_ACT4_MALAKAR_MESSAGE_HEARD = 'act4_malakar_message_heard'
+/** The redeemed Sorceress asked Elior to tell Elena she is sorry. */
+export const FLAG_ACT4_ELENA_MESSAGE_HEARD = 'act4_elena_message_heard'

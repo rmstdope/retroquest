@@ -18,9 +18,9 @@ export const MAZE_ROUTE =
 /** What each stretch of the maze looks like. */
 const STRETCH_DESCRIPTIONS: Record<MazeStretch, string> = {
   entrance:
-    'Corridors of mirror run away from you in impossible directions, and in ' +
-    'every one of them a different Elior looks back. You stand at the mouth ' +
-    'of the maze, facing north.',
+    'Corridors of mirror run away from you in every direction, and in each ' +
+    'of them a different Elior looks back. You stand at the mouth of the ' +
+    'maze, facing north.',
   stretch:
     'The corridor narrows and bends, and you face north again. Fewer ' +
     'reflections follow you here, and they walk a little behind.',
@@ -44,9 +44,9 @@ const WRONG_TURN = clue(
 
 /** A turn taken without the Echo Stone: back to the entrance. */
 const NO_STONE_TURN = clue(
-  "You try to recall the echoes' words, but in here the glass " +
-    'answers only with your own voice. You lose the way, and find yourself ' +
-    'back at the entrance.',
+  'You listen for a voice to follow, but in here the glass answers only ' +
+    'with your own. You lose the way, and find yourself back at the ' +
+    'entrance.',
 )
 
 /**
@@ -168,9 +168,9 @@ export class MirrorLabyrinth extends Room {
     this.addCharacter(new TrueSelf())
     return (
       'You step into the empty corridor. Behind you the false mirrors go ' +
-      'dark, one by one, until a single corridor remains — and at its ' +
-      'end, a plain mirror that shows you exactly as you are.\n' +
-      'You learn [spell_name]Truth Sight[/spell_name].'
+      'dark, one by one, until a single corridor remains. At its end stands ' +
+      'a plain mirror that shows you exactly as you are.\n' +
+      'You have learned [spell_name]Truth Sight[/spell_name].'
     )
   }
 
@@ -179,7 +179,7 @@ export class MirrorLabyrinth extends Room {
     return (
       'You hold the echo stone to your ear. One voice repeats, patient as a ' +
       'heartbeat:\n' +
-      dialogue('an echo', `'${MAZE_ROUTE}'`)
+      dialogue('an echo', MAZE_ROUTE)
     )
   }
 

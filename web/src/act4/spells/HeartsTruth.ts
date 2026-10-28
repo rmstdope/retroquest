@@ -30,8 +30,8 @@ const WHISPERS_HEARD =
 
 /** The voice beneath Malakar's, until the refrain is said. */
 const MALAKAR_HEARD =
-  "Beneath Malakar's voice runs another, low and cold: the voice from your " +
-  'dreams. The Shadow is here, in the room, speaking through him.'
+  "Beneath Malakar's voice runs another, low and tired: the voice from your " +
+  'dreams. The Shadow is in him still.'
 
 /** What the freed servants will not say. */
 const SERVANTS_HEARD =

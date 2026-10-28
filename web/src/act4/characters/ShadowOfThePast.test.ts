@@ -31,27 +31,27 @@ const SCENE = [
   'Three young Wardens bent over one workbench: your father, your mother, and a dark-haired man laughing at something Lysa said. Between them lie a crystal, a feather and a scale.',
   'The year before you were born. The Wasting: a fever sweeps the land, and Aren and Lysa fall ill with it. Nothing the Wardens know can heal them. Malakar sits by their beds, reading, searching, unable to wait.',
   'Malakar alone in a room full of clocks, tearing the air open to pull back the days before the fever. Aren and Lysa wake, well again. But the wound he opened does not close, and it begins to feed.',
-  'It is still pulling. Every hand in the room turns backwards, wanting more of the days back, and the wound would take all of them if nothing held it shut.',
-  'Your parents before the wound, hands joined, pouring themselves into it until they are only light, bound to the amulet and to the crown of King Alden, so that you would be hidden and the wound held shut.',
+  'It is still pulling. Every clock in the room runs backwards, wanting more of the days back, and the wound would take all of them if nothing held it shut.',
+  'Your parents before the wound, hands joined, pouring themselves into a seal across it until they are only light, bound to the amulet and to the crown of King Alden, so that you would be hidden and the wound held shut.',
   'Hold it shut, Aren. Hide him. That is enough.',
-  'The ward is Aren and Lysa, and their gift is the magic you have: every spell that ever answered your hands came through them, all but one, which you read from a stone in a glade.',
-  'Last, and smallest: Malakar by a cottage fire in Willowbrook, rocking a baby in his arms and singing, low: "Hush, little seed, the frost is going. Hush, the field will wake." The baby is you.',
+  'The ward is Aren and Lysa, and it lives in you. Their gift is the magic you have: every spell that ever answered your hands came through them, all but one, which you read from a stone in a glade.',
+  'Last, and smallest: [character_name]Malakar[/character_name] by a cottage fire in Willowbrook, rocking a baby in his arms and singing, low: [dialogue]Hush, little seed, the frost is going. Hush, the field will wake.[/dialogue] The baby is you.',
   'The lanterns dim, one by one, until only the amulet glows in your hand.',
-  'It was the opposite. They gave themselves away to save you. Of all the lies in the fortress, hers was the one that hurt most, because for a day you could not be sure. You are sure now.',
+  'It was the opposite. They gave themselves away to save you. You are sure now.',
 ]
 
 const MUTE = "The shadow's lips move, but the vault swallows the sound."
 const WAITS = 'The Shadow waits, as it has waited for years.'
 const NOT_MENDED_PATIENCE =
-  'The Shadow cannot hear you. The memories around it are too broken.'
+  'The Shadow does not see you. The memories around it are too broken.'
 const NO_HOPE =
-  'The Shadow shakes its head. “Patience is for those who still have hope. I have none left.”'
+  'shakes its head. [dialogue]Patience is for those who still have hope. I have none left.[/dialogue]'
 const NO_SEE = 'The Shadow cannot see the mask through the broken memories.'
 const DARK_DOOR = 'The sealed door will not move. Its runes are dark.'
 const WAITING_DOOR =
   'The door is sealed. Its runes glow faintly, waiting for the amulet.'
 const DARK_AMULET =
-  "The door's runes stay dark under the amulet. Something in this vault is not ready to let you in."
+  "The door's runes stay dark under the amulet. The Shadow is still watching you."
 const NORTH_SHUT =
   'The door to the north is shut. The lanterns are still waiting for you.'
 
@@ -94,7 +94,7 @@ describe('The Shadow of the Past', () => {
       'The Shadow of the Past',
     )
     expect(game.state.currentRoom.description).toContain(
-      'a shadowy figure wavers between existence and void',
+      'Among them stands a shadow in the shape of a man.',
     )
     expect(executeCommands(game, ['talk to shadow'])).toContain(MUTE)
     expect(executeCommands(game, ['examine shadow'])).toContain(
@@ -146,10 +146,10 @@ describe('The Shadow of the Past', () => {
       'The orbs are whole. The stone lies quiet in your hand.',
     )
     expect(executeCommands(game, ['talk to shadow of the past'])).toContain(
-      'I was Malakar, once. Not the one who waits in the throne room: the part of him that remembered why he began. When he tore the wound, he tore himself in two, and I am the half he left behind. I held you once, when you were small enough to fit in my two hands. I have called to you ever since.',
+      'I was Malakar, once. Not the one in the throne room. The part of him that remembered why he began. When he tore the wound, he left me behind. I have called to you since you were small.',
     )
     expect(executeCommands(game, ['talk to shadow of the past'])).toContain(
-      'Every time, with the same words, and you caught only pieces of them. Hear them whole: be patient where I was not. Close what I opened, and let them rest.',
+      'The same words, every time. You caught pieces. Hear them whole. Be patient where I was not. Close what I opened, and let them rest.',
     )
     expect(executeCommands(game, ['examine shadow'])).toContain(
       'His face is kind and very tired.',
@@ -177,7 +177,7 @@ describe('The Shadow of the Past', () => {
       'The Shadow has seen the mask. It is enough.',
     )
     expect(executeCommands(game, ['talk to shadow'])).toContain(
-      'The Phoenix asked us once what wisdom is when time is short. Aren and Lysa knew. I did not.',
+      'The Phoenix asked me once what wisdom is when time is short. I gave it the right answer. Then the fever came, and I did not keep it.',
     )
   })
 
@@ -222,7 +222,7 @@ describe('The Shadow of the Past', () => {
 
   it('is answered by waiting too, with the same gates as the word', () => {
     expect(executeCommands(inVault(), ['rest'])).toContain(
-      'The Shadow cannot hear you.',
+      'The Shadow does not see you.',
     )
     const early = mended()
     expect(executeCommands(early, ['rest'])).toContain(
@@ -313,7 +313,10 @@ describe("The Parent's Legacy", () => {
     const game = inParentsVault()
     const text = executeCommands(game, ['examine memories'])
     expectMarkupWellFormed(text)
-    expectDialogueSpeaker(text, 'Lysa')
+    expect(text).toContain(
+      dialogue('Lysa', 'Hold it shut, Aren. Hide him. That is enough.'),
+    )
+    expect(text).not.toContain('"')
     let at = -1
     for (const line of SCENE) {
       const next = text.indexOf(line)
@@ -335,5 +338,74 @@ describe("The Parent's Legacy", () => {
     expect(game.state.currentRoom.description).toContain('hang dim and still')
     executeCommands(game, ['go north'])
     expect(game.state.currentRoom.name).toBe('Throne Chamber')
+  })
+})
+
+describe('The Shadow of the Past hears the answer and the near misses', () => {
+  it.each([
+    'be patient',
+    'I will be patient',
+    'patience, then',
+    'be patient where I was not',
+  ])('takes %s as patience', (words) => {
+    const game = masked()
+    executeCommands(game, [`say ${words} to shadow`])
+    expectStoryFlag(game.state, FLAG_ACT4_SHADOW_OF_THE_PAST_COMPLETED, true)
+  })
+
+  it.each(['I have no patience', 'I will not be patient', 'impatience'])(
+    'does not take %s as patience',
+    (words) => {
+      const game = masked()
+      executeCommands(game, [`say ${words} to shadow`])
+      expectStoryFlag(game.state, FLAG_ACT4_SHADOW_OF_THE_PAST_COMPLETED, false)
+    },
+  )
+
+  it.each([
+    ['wisdom', 'I was the Warden of Wisdom, Elior. It was not enough.'],
+    ['courage', 'That was theirs. The one I failed was mine.'],
+    ['selflessness', 'That was theirs. The one I failed was mine.'],
+    [
+      'time',
+      'Time is what I tore. Say the other thing. The thing I never had.',
+    ],
+    [
+      'wait',
+      'Time is what I tore. Say the other thing. The thing I never had.',
+    ],
+  ])('answers the near miss %s with its own line', (word, line) => {
+    const game = masked()
+    const text = executeCommands(game, [`say ${word} to shadow`])
+    expect(text).toContain(dialogue('Shadow of the Past', line))
+    expectStoryFlag(game.state, FLAG_ACT4_SHADOW_OF_THE_PAST_COMPLETED, false)
+  })
+
+  it('does not give away the cradle memory before the vault', () => {
+    const text = executeCommands(mended(), ['talk to shadow of the past'])
+    expect(text).not.toContain('I held you once')
+  })
+
+  it('sends Elior on once the Parents’ Vault is seen', () => {
+    const game = answered()
+    expect(executeCommands(game, ['talk to shadow'])).toContain(
+      'You never have.',
+    )
+    game.state.setStoryFlag(FLAG_ACT4_PARENTS_LEGACY_COMPLETED, true)
+    const text = executeCommands(game, ['talk to shadow'])
+    expect(text).toContain(
+      dialogue(
+        'Shadow of the Past',
+        'Now you have seen them too. He is past the north door of their ' +
+          'vault. Go to him.',
+      ),
+    )
+    expect(text).not.toContain('You never have.')
+  })
+
+  it('shakes its head in speech markup, not raw quote marks', () => {
+    const text = executeCommands(mended(), ['say patience to shadow'])
+    expectMarkupWellFormed(text)
+    expect(text).not.toContain('“')
   })
 })

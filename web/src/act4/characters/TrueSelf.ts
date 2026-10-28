@@ -1,12 +1,23 @@
 import {
+  affirms,
   Character,
   type GameState,
+  clue,
   dialogue,
   remembered,
-  normaliseSpokenWord,
+  saysAnyOf,
   type NameOptions,
 } from '@/engine'
 import { FLAG_ACT4_TRUTH_TOLD, VIRTUE_TRUTH } from '../Act4StoryFlags'
+
+/** The motive the reflection waits for; the king without it is only part of the truth. */
+const MOTIVE_WORDS = ['revenge', 'vengeance']
+
+/** Words that tell the reflection the truth: the confession names revenge. */
+const TRUTH_WORDS = ['truth', ...MOTIVE_WORDS]
+
+/** The likeliest wrong answer: the king, true but not all of it. */
+const KING_WORDS = ['king', 'alden']
 
 /**
  * Elior's reflection in the plain mirror at the maze's heart, present once the
@@ -48,14 +59,31 @@ export class TrueSelf extends Character {
     }
     return dialogue(
       this.name,
-      'You told Mira you came for the king. Tell me why you really came.',
+      'You tell everyone you came for the king. Tell me the truth: why did ' +
+        'you really come?',
     )
   }
 
-  /** Saying "truth" confesses (once); anything else is shaken off. */
+  /**
+   * Saying the truth confesses (once): "truth", "revenge" or "vengeance" as a
+   * whole word, alone or in a sentence, unless it is denied. The
+   * king, named without the motive, is the likeliest wrong answer and gets
+   * its own reply, even inside "the truth is…"; anything else
+   * is waited out.
+   */
   override sayTo(gameState: GameState, words: string): string {
-    if (normaliseSpokenWord(words) !== 'truth') {
-      return '[dim]The reflection only shakes its head.[/dim]'
+    const namesTheKingOnly =
+      saysAnyOf(words, KING_WORDS) && !affirms(words, MOTIVE_WORDS)
+    if (namesTheKingOnly || !affirms(words, TRUTH_WORDS)) {
+      if (saysAnyOf(words, KING_WORDS)) {
+        return dialogue(
+          this.name,
+          'That is what you tell everyone. It is true. It is not all of it.',
+        )
+      }
+      return clue(
+        'The reflection waits. It has heard you say easier things than that.',
+      )
     }
     if (gameState.getStoryFlag(FLAG_ACT4_TRUTH_TOLD)) {
       return '[dim]The reflection has heard your truth. It keeps still.[/dim]'

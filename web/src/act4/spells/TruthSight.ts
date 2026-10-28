@@ -1,4 +1,10 @@
-import { Spell, type Character, type GameState, type Item } from '@/engine'
+import {
+  Spell,
+  type Character,
+  type GameState,
+  type Item,
+  dialogue,
+} from '@/engine'
 import {
   FLAG_ACT4_BANNERS_SEEN,
   FLAG_ACT4_ECHO_STONE_HEARD,
@@ -18,14 +24,17 @@ const NOTHING_HIDDEN =
 /** What the banners show, once. */
 const BANNERS_SEEN =
   'Your sight sharpens, and the grime slides from the banners. Beneath it is ' +
-  "a sigil you have seen on the captain's tabard: the gate company of King " +
-  "Alden's guard. The knight served the king before he ever served Malakar."
+  "the sigil of the gate company of King Alden's guard, and the same sigil " +
+  "shows through the tarnish on the knight's breastplate. He served the king " +
+  'before he ever served Malakar.'
 
 /** What the Echo Stone reveals, once. */
 const STONE_HEARD =
   "Your sight sharpens, and the stone's murmur parts. Under the hall's " +
-  'voices one is already there, very quiet: a man weeping, saying one word ' +
-  'over and over as if he knows no other. "Sorry." It is the knight\'s voice.'
+  'voices, the one that keeps saying redemption is weeping, and between the ' +
+  'words it says one more, very quietly.\n' +
+  dialogue('Knight of Despair', 'Sorry.') +
+  "\nIt is the knight's voice."
 
 /** What the clouded orbs show before they are mended. */
 const ORBS_SEEN =

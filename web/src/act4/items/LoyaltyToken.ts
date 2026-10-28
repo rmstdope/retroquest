@@ -1,5 +1,6 @@
-import { Item, type GameState } from '@/engine'
+import { Item, type GameState, characterName } from '@/engine'
 import {
+  FLAG_ACT4_CHAIN_GIVEN,
   FLAG_ACT4_KNIGHT_OF_DESPAIR_COMPLETED,
   FLAG_ACT4_LOYALTY_TOKEN_RAISED_IN_HALL,
   FLAG_ACT4_TOWER_STAIR_OPEN,
@@ -34,12 +35,14 @@ export class LoyaltyToken extends Item {
     ) {
       if (!gameState.getStoryFlag(FLAG_ACT4_LOYALTY_TOKEN_RAISED_IN_HALL)) {
         gameState.setStoryFlag(FLAG_ACT4_LOYALTY_TOKEN_RAISED_IN_HALL, true)
+        const third = gameState.getStoryFlag(FLAG_ACT4_CHAIN_GIVEN)
+          ? 'the captain walking home in your chain'
+          : 'the servants you freed'
         return (
           'You hold the loyalty token close to your heart. For a moment you ' +
-          'are not alone in the hall: the servants you freed, the friends ' +
-          'who brought you to the threshold, everyone who trusted you on ' +
-          "the way here. The knight's despair breaks around you and does " +
-          'not reach you.'
+          'are not alone in the hall: Mira at the gate, the light on the ' +
+          `gatepost, ${third}. The knight's despair breaks around you and ` +
+          'does not reach you.'
         )
       }
       return (
@@ -53,8 +56,8 @@ export class LoyaltyToken extends Item {
       }
       return (
         'You hold the token up, and it grows warm. Under the whispers, very ' +
-        "faint, you think you hear your name, in Mira's voice. They are " +
-        'not gone. Say their names.'
+        `faint, you think you hear your name, in ${characterName('Mira')}'s ` +
+        'voice, and what she said at the gate: say our names.'
       )
     }
     if (gameState.currentRoom instanceof ChamberOfWhispers) {

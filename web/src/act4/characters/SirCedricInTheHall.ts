@@ -4,6 +4,7 @@ import {
   FLAG_ACT4_KNIGHT_OF_DESPAIR_COMPLETED,
   FLAG_ACT4_KNIGHT_SEEN_THROUGH,
 } from '../Act4StoryFlags'
+import { CEDRIC_ON_STAIR } from '../rooms/hallDescriptions'
 
 /**
  * Sir Cedric in the Hall of Echoes, by the south door. He has followed Elior
@@ -26,12 +27,7 @@ export class SirCedricInTheHall extends Character {
 
   /** By the south door, or sitting on the stair once he has forgiven. */
   override examine(gameState: GameState): string {
-    if (gameState.getStoryFlag(FLAG_ACT4_CEDRIC_FORGAVE)) {
-      return (
-        'Sir Cedric sits on the stair beside the knight. Neither of them is ' +
-        'saying much.'
-      )
-    }
+    if (gameState.getStoryFlag(FLAG_ACT4_CEDRIC_FORGAVE)) return CEDRIC_ON_STAIR
     return this.description
   }
 
@@ -55,8 +51,8 @@ export class SirCedricInTheHall extends Character {
     }
     return dialogue(
       this.name,
-      'That voice. I have heard it before, Elior, I would swear to it. I ' +
-        'cannot see the face that goes with it.',
+      "That voice. I have heard it before, Elior, on the king's walls. I " +
+        'would swear to it. I cannot see the face that goes with it.',
     )
   }
 }

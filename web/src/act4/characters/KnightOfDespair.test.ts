@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { Game } from '@/engine'
+import { Game, clue, dialogue } from '@/engine'
 import { Act4 } from '../Act4'
 import { TruthSight } from '../spells/TruthSight'
 import { GuardiansChain } from '../items/GuardiansChain'
@@ -169,8 +169,10 @@ describe('KnightOfDespair', () => {
       NO_CHAIN,
     )
     expect(executeCommands(game, ['say hello to knight'])).toBe(
-      '[dim]The visor does not move. Whatever that word was, it is not the ' +
-        'one he is waiting for.[/dim]',
+      clue(
+        'The visor does not move. Whatever that word was, it is not the ' +
+          'one he is waiting for.',
+      ),
     )
     expectStoryFlag(game.state, FLAG_ACT4_KNIGHT_OF_DESPAIR_COMPLETED, false)
     expectItemInInventory(game.state, 'Echo Stone', true)
@@ -193,19 +195,20 @@ describe('KnightOfDespair', () => {
       executeCommands(game, order)
       const out = executeCommands(game, ['say redemption to knight'])
       const parts = [
-        "The knight's despair breaks against the chain's light like a wave on stone. Slowly, he lifts his visor. The face beneath is grey and tired, and very human.",
+        "The knight's despair breaks against the chain's light like a wave on stone. Slowly he turns round to face you, and lifts his visor. The face beneath is grey and tired, and very human.",
         'You.',
         'Me.',
-        'I was the stranger in Willowbrook. Malakar sent me for an amulet, and for the child it hid. It was my token that fouled your well.',
-        'The night King Alden was taken, I paid the watch to look away. The captain of the watch was a good man. I made sure he was asleep. And I put my seal to the lie that shamed Sir Cedric.',
-        'And when I saw what my master was doing to the king, I stopped believing he could be saved. That is all despair is. You have given me something to believe in again.',
+        'I was the stranger in Willowbrook. Malakar sent me for an amulet, and for the child of the house that kept it. It was my token that fouled your well.',
+        "I stood on that gate once, in the king's colours. The night King Alden was taken, I paid the watch to look away. The captain of the watch was a good man. I made sure he was asleep. And I put my seal to the lie that shamed Sir Cedric.",
+        'And when I saw what my master was doing to the king, I stopped believing he could be saved. That is all despair is. Then you walked in and said the word I had stopped saying.',
         'Sir Cedric. I am sorry. I have no right to ask anything of you, so I will not.',
-        'Sir Cedric does not move from the door.',
+        '[character_name]Sir Cedric[/character_name] does not move from the door.',
         'I heard you. That will have to be enough, for now.',
-        "You received the [item_name]knight's redemption[/item_name]!",
-        "The echo stone grows warm in your pack. A new voice has joined the echoes inside it: the knight's own, speaking the truth at last.",
-        "Redemption's Light",
-        'Light that reminds a fallen soul of who it was.',
+        'With his despair gone from the hall, you see what it was hiding: pale soldiers among the banners, still fighting.',
+        'He unpins a tarnished badge from his breast and presses it into your hand.',
+        "You receive the [item_name]knight's redemption[/item_name].",
+        "The echo stone grows warm. Inside it the knight's voice has stopped repeating its one word; it speaks plainly now, and what it says is true.",
+        "You have learned [spell_name]Redemption's Light[/spell_name]. Light that reminds a fallen soul of who it was.",
       ]
       let at = 0
       for (const part of parts) {
@@ -214,6 +217,8 @@ describe('KnightOfDespair', () => {
         at = found
       }
       expect(out.match(/\[character_name\]Knight of Despair/g)).toHaveLength(5)
+      expect(out).not.toContain('the child it hid')
+      expect(out).not.toContain('!')
       expectMarkupWellFormed(out)
       expectStoryFlag(game.state, FLAG_ACT4_KNIGHT_OF_DESPAIR_COMPLETED)
       expectItemInInventory(game.state, "Knight's Redemption", true)
@@ -260,7 +265,7 @@ describe('KnightOfDespair', () => {
     const GONE =
       "You open your mouth, and the knight's despair rolls over you like cold water. The word dies in your throat. Nothing stands between you and his sorrow, and the chain is gone with the captain. But you are not as alone as the knight would have you believe."
     const TOKEN_OPENING =
-      "The knight's despair breaks against the warmth at your heart like a wave on stone. Slowly, he lifts his visor. The face beneath is grey and tired, and very human."
+      "The knight's despair breaks against the warmth at your heart like a wave on stone. Slowly he turns round to face you, and lifts his visor. The face beneath is grey and tired, and very human."
 
     function gameWithoutChain(): Game {
       const game = createGameInHall()
@@ -326,5 +331,111 @@ describe('KnightOfDespair', () => {
       expect(answer).toContain(NO_CHAIN)
       expect(answer).not.toContain('The chain is gone')
     })
+  })
+})
+
+describe('KnightOfDespair after the dialogue review', () => {
+  /** A game in the hall, all three sights seen and the chain raised. */
+  function readyToRedeem(): Game {
+    const game = createGameInHall()
+    executeCommands(game, ["use guardian's chain", ...THREE_SIGHTS])
+    return game
+  }
+
+  it('speaks his line in the description through the markup', () => {
+    const knight = new KnightOfDespair()
+
+    expect(knight.description).toContain(
+      'When he speaks, his voice is hollow.\n' +
+        dialogue('Knight of Despair', 'Return when you have the truth.'),
+    )
+    expect(knight.description).not.toContain("'")
+    expectMarkupWellFormed(knight.description)
+  })
+
+  it.each(['I offer you redemption', 'redemption, if you want it'])(
+    'takes the word inside a sentence: %s',
+    (words) => {
+      const game = readyToRedeem()
+
+      executeCommands(game, [`say ${words} to knight`])
+
+      expectStoryFlag(game.state, FLAG_ACT4_KNIGHT_OF_DESPAIR_COMPLETED)
+    },
+  )
+
+  it.each(['there is no redemption', 'not redemption'])(
+    'does not take the word denied: %s',
+    (words) => {
+      const game = readyToRedeem()
+
+      executeCommands(game, [`say ${words} to knight`])
+
+      expectStoryFlag(game.state, FLAG_ACT4_KNIGHT_OF_DESPAIR_COMPLETED, false)
+    },
+  )
+
+  it('answers sorry with its own refusal', () => {
+    const game = readyToRedeem()
+
+    const out = executeCommands(game, ['say sorry to knight'])
+
+    expect(out).toContain('The visor turns a little toward you.')
+    expect(out).toContain('That is my word. You have nothing to be sorry for.')
+    expectMarkupWellFormed(out)
+    expectStoryFlag(game.state, FLAG_ACT4_KNIGHT_OF_DESPAIR_COMPLETED, false)
+  })
+
+  it.each(['forgiveness', 'I forgive you'])(
+    'answers %s with its own refusal',
+    (words) => {
+      const game = readyToRedeem()
+
+      const out = executeCommands(game, [`say ${words} to knight`])
+
+      expect(out).toContain(
+        'Forgiveness is not yours to give. Ask the man by the door.',
+      )
+      expectDialogueSpeaker(out, 'Knight of Despair')
+      expectStoryFlag(game.state, FLAG_ACT4_KNIGHT_OF_DESPAIR_COMPLETED, false)
+    },
+  )
+
+  it('finds the gate sigil on the knight, not on a tabard never shown', () => {
+    const game = createGameInHall()
+
+    const banners = executeCommands(game, ['cast truth sight on banners'])
+
+    expect(banners).toContain(
+      "the same sigil shows through the tarnish on the knight's breastplate",
+    )
+    expect(banners).not.toContain('tabard')
+  })
+
+  it('hears the one word of the stone, and the one more under it', () => {
+    const game = createGameInHall()
+
+    const stone = executeCommands(game, ['cast truth sight on echo stone'])
+
+    expect(stone).toContain(
+      'the one that keeps saying redemption is weeping, and between the ' +
+        'words it says one more, very quietly',
+    )
+    expect(stone).not.toContain('as if he knows no other')
+    expectMarkupWellFormed(stone)
+  })
+
+  it('shows the current look to a save made before the rewrite', () => {
+    const game = createGameInHall()
+    const knight = game.state.currentRoom.getCharacterByName('knight')
+    if (!knight) throw new Error('no knight')
+    knight.description = "When he speaks, his voice is hollow: 'Return.'"
+    const fresh = new Game([new Act4()])
+    expect(fresh.loadSaveData(game.toSaveData())).toContain('loaded')
+
+    const look = executeCommands(fresh, ['examine knight of despair'])
+
+    expect(look).toContain('When he speaks, his voice is hollow.')
+    expect(look).not.toContain("'Return.'")
   })
 })

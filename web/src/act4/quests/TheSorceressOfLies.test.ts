@@ -12,10 +12,10 @@ describe('TheSorceressOfLies', () => {
     const quest = new TheSorceressOfLies()
     expect(quest.name).toBe('The Sorceress of Lies')
     expect(quest.description).toBe(
-      "At the top of the tower the Sorceress of Lies holds court, and the mask on her staff is the mark that lay beneath Elena's curse. See through her lies, and find what lies beneath them.",
+      "At the top of the tower the Sorceress of Lies holds court, and the mask on her staff is the mark from Elena's wrist. Listen past her lies, to what is under them.",
     )
     expect(quest.completion).toBe(
-      "Elior sees through the Sorceress's lies and answers the loneliness beneath them. She confesses the curse on Elena, and the arch to the north opens.",
+      "Elior listens past the Sorceress's lies and answers the loneliness beneath them. She confesses the curse on Elena, and the arch to the north opens.",
     )
   })
 

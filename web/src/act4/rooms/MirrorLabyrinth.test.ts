@@ -16,7 +16,8 @@ const STRETCH = 'The corridor narrows and bends, and you face north again.'
 const FORK = 'The corridor ends in a last fork, facing north.'
 const AFTER = 'The false mirrors stand dark and silent now.'
 const WRONG = 'walk straight into cold glass'
-const NO_STONE = "You try to recall the echoes' words"
+const NO_STONE =
+  'You listen for a voice to follow, but in here the glass answers only with your own.'
 
 /** A game with Elior standing at the entrance of the maze. */
 function inMaze(carry: { stone?: boolean; pendant?: boolean } = {}): {
@@ -57,6 +58,9 @@ describe('MirrorLabyrinth', () => {
   it('starts at the entrance with four exits', () => {
     const { game, room } = inMaze()
     expect(seen(game, room)).toContain(ENTRANCE)
+    expect(seen(game, room)).toContain(
+      'Corridors of mirror run away from you in every direction, and in each of them a different Elior looks back.',
+    )
     expect(exitsOf(game, room)).toEqual(['north', 'east', 'west', 'south'])
   })
 
@@ -171,7 +175,13 @@ describe('MirrorLabyrinth', () => {
     room.usePendant(game.state)
     const result = game.move('east')
     expect(result).toContain('Behind you the false mirrors go dark')
-    expect(result).toContain('Truth Sight')
+    expect(result).toContain(
+      'until a single corridor remains. At its end stands a plain mirror that shows you exactly as you are.',
+    )
+    expect(result).toContain(
+      'You have learned [spell_name]Truth Sight[/spell_name].',
+    )
+    expect(result).not.toContain('You learn ')
     expect(game.state.hasSpell('truth_sight')).toBe(true)
     expect(game.state.getStoryFlag(FLAG_ACT4_MAZE_OF_MIRRORS_COMPLETED)).toBe(
       true,
@@ -187,7 +197,10 @@ describe('MirrorLabyrinth', () => {
     expect(heard).toContain(
       'You hold the echo stone to your ear. One voice repeats',
     )
-    expect(heard).toContain('Left, then left, then the way your shadow')
+    expect(heard).toContain(
+      '[dialogue]Left, then left, then the way your shadow does not go.[/dialogue]',
+    )
+    expect(heard).not.toContain("'Left")
     game.move('west')
     game.move('west')
     room.usePendant(game.state)

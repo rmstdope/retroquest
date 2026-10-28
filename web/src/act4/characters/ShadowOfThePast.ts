@@ -1,13 +1,17 @@
 import {
   Character,
   type GameState,
+  affirms,
+  characterName,
   clue,
   dialogue,
-  normaliseSpokenWord,
+  saysAnyOf,
+  speech,
   type NameOptions,
 } from '@/engine'
 import {
   FLAG_ACT4_MEMORY_ORBS_MENDED,
+  FLAG_ACT4_PARENTS_LEGACY_COMPLETED,
   FLAG_ACT4_SHADOW_MASK_SHOWN,
   FLAG_ACT4_SHADOW_OF_THE_PAST_COMPLETED,
   FLAG_ACT4_SHADOW_OF_THE_PAST_STARTED,
@@ -21,8 +25,28 @@ const ANSWERED =
   '[dim]The Shadow has its answer. It nods towards the door to the ' +
   'east.[/dim]'
 
-/** The word that answers the Shadow, after the Phoenix's riddle. */
-const ANSWER_WORD = 'patience'
+/** The words that answer the Shadow, after the Phoenix's riddle, including his own plea. */
+const ANSWER_WORDS = ['patience', 'patient', 'be patient where I was not']
+
+/**
+ * Near misses, each with its own answer: the virtue he had, the two that were
+ * not his, and the time he tore. "wait" is a near miss, never the answer, so
+ * that "I can't wait" cannot count.
+ */
+const NEAR_MISSES: readonly { words: readonly string[]; reply: string }[] = [
+  {
+    words: ['wisdom', 'wise'],
+    reply: 'I was the Warden of Wisdom, Elior. It was not enough.',
+  },
+  {
+    words: ['courage', 'brave', 'selflessness', 'selfless'],
+    reply: 'That was theirs. The one I failed was mine.',
+  },
+  {
+    words: ['time', 'wait', 'waiting'],
+    reply: 'Time is what I tore. Say the other thing. The thing I never had.',
+  },
+]
 
 /**
  * The Shadow of the Past in the Memory Vault: the voice from Elior's dreams,
@@ -72,6 +96,13 @@ export class ShadowOfThePast extends Character {
   /** What it says follows the orbs, the mask and the answer. */
   override talkTo(gameState: GameState): string {
     gameState.setStoryFlag(FLAG_ACT4_SHADOW_OF_THE_PAST_STARTED, true)
+    if (gameState.getStoryFlag(FLAG_ACT4_PARENTS_LEGACY_COMPLETED)) {
+      return dialogue(
+        FULL_NAME,
+        'Now you have seen them too. He is past the north door of their ' +
+          'vault. Go to him.',
+      )
+    }
     if (gameState.getStoryFlag(FLAG_ACT4_SHADOW_OF_THE_PAST_COMPLETED)) {
       return dialogue(
         FULL_NAME,
@@ -82,41 +113,48 @@ export class ShadowOfThePast extends Character {
     if (gameState.getStoryFlag(FLAG_ACT4_SHADOW_MASK_SHOWN)) {
       return dialogue(
         FULL_NAME,
-        'The Phoenix asked us once what wisdom is when time is short. Aren ' +
-          'and Lysa knew. I did not.',
+        'The Phoenix asked me once what wisdom is when time is short. I ' +
+          'gave it the right answer. Then the fever came, and I did not ' +
+          'keep it.',
       )
     }
     if (gameState.getStoryFlag(FLAG_ACT4_MEMORY_ORBS_MENDED)) {
       return (
         dialogue(
           FULL_NAME,
-          'I was Malakar, once. Not the one who waits in the throne room: the ' +
-            'part of him that remembered why he began. When he tore the wound, ' +
-            'he tore himself in two, and I am the half he left behind. I held ' +
-            'you once, when you were small enough to fit in my two hands. I ' +
-            'have called to you ever since.',
+          'I was Malakar, once. Not the one in the throne room. The part of ' +
+            'him that remembered why he began. When he tore the wound, he left ' +
+            'me behind. I have called to you since you were small.',
         ) +
         '\n' +
         dialogue(
           FULL_NAME,
-          'Every time, with the same words, and you caught only pieces of ' +
-            'them. Hear them whole: be patient where I was not. Close what I ' +
-            'opened, and let them rest.',
+          'The same words, every time. You caught pieces. Hear them whole. ' +
+            'Be patient where I was not. Close what I opened, and let them ' +
+            'rest.',
         )
       )
     }
     return "[dim]The shadow's lips move, but the vault swallows the sound.[/dim]"
   }
 
-  /** Only "patience" answers it, and only after the orbs are mended and the mask shown. */
+  /**
+   * Only patience answers it ("patience", or "be patient" in a sentence that
+   * does not deny it), and only after the orbs are mended and the mask shown.
+   * Once the orbs are mended a near miss gets its own answer.
+   */
   override sayTo(gameState: GameState, words: string): string {
     gameState.setStoryFlag(FLAG_ACT4_SHADOW_OF_THE_PAST_STARTED, true)
     if (gameState.getStoryFlag(FLAG_ACT4_SHADOW_OF_THE_PAST_COMPLETED)) {
       return ANSWERED
     }
-    const word = normaliseSpokenWord(words)
-    if (word !== ANSWER_WORD) {
-      return '[dim]The Shadow waits, as it has waited for years.[/dim]'
+    if (!affirms(words, ANSWER_WORDS)) {
+      const nearMiss = gameState.getStoryFlag(FLAG_ACT4_MEMORY_ORBS_MENDED)
+        ? NEAR_MISSES.find((miss) => saysAnyOf(words, miss.words))
+        : undefined
+      return nearMiss
+        ? dialogue(FULL_NAME, nearMiss.reply)
+        : '[dim]The Shadow waits, as it has waited for years.[/dim]'
     }
     return this.answerWithPatience(
       gameState,
@@ -149,14 +187,16 @@ export class ShadowOfThePast extends Character {
   private answerWithPatience(gameState: GameState, lead: string): string {
     if (!gameState.getStoryFlag(FLAG_ACT4_MEMORY_ORBS_MENDED)) {
       return clue(
-        'The Shadow cannot hear you. The memories around it are ' +
+        'The Shadow does not see you. The memories around it are ' +
           'too broken.',
       )
     }
     if (!gameState.getStoryFlag(FLAG_ACT4_SHADOW_MASK_SHOWN)) {
       return clue(
-        'The Shadow shakes its head. “Patience is for those who ' +
-          'still have hope. I have none left.”',
+        `The ${characterName(FULL_NAME)} shakes its head. ` +
+          speech(
+            'Patience is for those who still have hope. I have none left.',
+          ),
       )
     }
     gameState.setStoryFlag(FLAG_ACT4_SHADOW_OF_THE_PAST_COMPLETED, true)

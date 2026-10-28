@@ -13,14 +13,18 @@ const PICTURE_HEAD =
   'A family heirloom whose runes glint like dew at dawn. In its depths ' +
   'Aren and Lysa stand hand in hand. '
 
-/** The last sentence of the look, in the order of the stages the story reaches. */
+/**
+ * The last sentence of the look, in the order of the stages the story
+ * reaches. Canon: he keeps his back turned until the Redemption ending.
+ */
 const THIRD_FIGURE_STAGES = [
   'The third figure keeps his back turned.',
-  'The third figure has turned around. He is young, and he is smiling at them.',
-  'The third figure is Malakar as he is now: white-haired, grey-robed, a ' +
-    'step behind them.',
-  'The three of them stand together at a workbench, heads bent over ' +
-    'something you cannot quite see.',
+  'The third figure keeps his back turned. He is young; you can see it in ' +
+    'the set of his shoulders.',
+  'The third figure keeps his back turned, but his head is up, as if ' +
+    'someone has said his name.',
+  'The third figure has turned around. The three of them stand together at ' +
+    'a workbench, heads bent over something you cannot quite see.',
 ]
 
 /**

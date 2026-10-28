@@ -6,12 +6,10 @@
 
 /** The Memory Vault until the orbs are mended. */
 export const MEMORY_VAULT_BEFORE =
-  'This mystical chamber exists partially outside of time itself, its walls ' +
-  'covered in floating orbs of crystallized memory that flicker with scenes ' +
-  'from long ago. The air ripples with temporal distortions, and fragments of ' +
-  "the past drift like spectral snow through the space. At the room's center, " +
-  'a shadowy figure wavers between existence and void, reaching out with ' +
-  'desperate longing toward memories that seem to slip away like morning mist.'
+  'Glass orbs hang in the air at every height, each one cracked, each one ' +
+  'holding a scene that breaks apart before it settles. Among them stands a ' +
+  'shadow in the shape of a man. In the east wall is a round door of pale ' +
+  'stone.'
 
 /** The whole Memory Vault description once the orbs are mended. */
 export const MEMORY_VAULT_AFTER =

@@ -1,5 +1,13 @@
-import { Item, type GameState, clue, dialogue } from '@/engine'
 import {
+  Item,
+  type GameState,
+  characterName,
+  clue,
+  dialogue,
+  speech,
+} from '@/engine'
+import {
+  FLAG_ACT4_CEDRIC_FORGAVE,
   FLAG_ACT4_ELIXIR_ON_KING,
   FLAG_ACT4_ELIXIR_ON_MALAKAR,
   FLAG_ACT4_FINAL_STAND_COMPLETED,
@@ -9,6 +17,7 @@ import {
   FLAG_ACT4_REDEMPTION_ENDING,
   FLAG_ACT4_SACRIFICE_ENDING,
   FLAG_ACT4_SACRIFICE_SAID,
+  FLAG_ACT4_THRONE_AMULET_OPENED,
 } from '../Act4StoryFlags'
 import {
   ARCH_LINE,
@@ -30,10 +39,27 @@ const NOT_YET = clue(
     'waits for you.',
 )
 
+/**
+ * What the amulet says once it is open and the elixir is still in hand: the
+ * three roads, forgiveness first, compared with what Sir Cedric did for the
+ * knight in the hall only if Elior saw him do it.
+ */
+function threeRoads(gameState: GameState): string {
+  const asCedricDid = gameState.getStoryFlag(FLAG_ACT4_CEDRIC_FORGAVE)
+    ? `, as ${characterName('Sir Cedric')} forgave the knight`
+    : ''
+  return clue(
+    'Not yet. The elixir is still in your hand. After that, you could ' +
+      `forgive him${asCedricDid}. You could name his crimes and seal him ` +
+      'away, in justice. Or you could give up your magic to close the ' +
+      'wound, in sacrifice.',
+  )
+}
+
 /** What the amulet says once the elixir has healed Malakar. */
 const GENTLER =
   'The wound waits for something gentler than the amulet. Malakar looks up ' +
-  'at you, as if he is waiting to hear something.'
+  'at you like a man waiting to be forgiven.'
 
 /** The hint: both roads are always open. */
 const HINT =
@@ -73,13 +99,18 @@ export class Wound extends Item {
 
   /**
    * The ancient amulet used on the wound: the second step of Justice and
-   * Sacrifice once the word is said, a hint before that, and a dim line
-   * once the wound is closed.
+   * Sacrifice once the word is said, a hint before that (the three roads
+   * while the elixir is still in hand), and a dim line once the wound is
+   * closed.
    */
   closeWithAmulet(gameState: GameState): string {
     if (endingPlayed(gameState)) return '[dim]The wound is gone.[/dim]'
     if (gameState.getStoryFlag(FLAG_ACT4_ELIXIR_ON_MALAKAR)) return GENTLER
-    if (!gameState.getStoryFlag(FLAG_ACT4_ELIXIR_ON_KING)) return NOT_YET
+    if (!gameState.getStoryFlag(FLAG_ACT4_ELIXIR_ON_KING)) {
+      return gameState.getStoryFlag(FLAG_ACT4_THRONE_AMULET_OPENED)
+        ? threeRoads(gameState)
+        : NOT_YET
+    }
     if (gameState.getStoryFlag(FLAG_ACT4_JUSTICE_SAID)) {
       return this.justiceEnding(gameState)
     }
@@ -125,8 +156,9 @@ export class Wound extends Item {
         'closes, and Malakar goes with it, drawn into the seal. He does not ' +
         'fight.',
       dialogue('Malakar', 'I am sorry. Tell them— no. They know.'),
-      'The last of him to go is his voice, low: "…the field will wake." ' +
-        'Then the seal is shut.',
+      'The last of him to go is his voice, low: ' +
+        speech('…the field will wake.') +
+        ' Then the seal is shut.',
       dialogue(
         'King Alden',
         'Then it falls to me to set right what he broke. Rest now. You ' +
@@ -157,9 +189,9 @@ export class Wound extends Item {
       'You press the open amulet to the wound and let go. The light, the ' +
         'blessing, the truth sight, every spell you carried runs out of ' +
         'your hands into the tear, and the tear drinks it and closes. When ' +
-        'it is done, one small spell is still in you: grow, the one you did ' +
-        'not inherit. You read it from a stone in a glade, and it was never ' +
-        'theirs.',
+        'it is done, one small spell is still in you: ' +
+        '[spell_name]grow[/spell_name], the one you read from a stone in a ' +
+        'glade.',
       'Your magic is gone. Only grow remains.',
       dialogue(
         'King Alden',

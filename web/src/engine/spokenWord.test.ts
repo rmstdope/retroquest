@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { normaliseSpokenWord, saysAnyOf } from './spokenWord'
+import { affirms, normaliseSpokenWord, saysAnyOf } from './spokenWord'
 
 describe('normaliseSpokenWord', () => {
   it('trims and lower-cases', () => {
@@ -52,5 +52,74 @@ describe('saysAnyOf', () => {
     expect(saysAnyOf('you should have not told me', ['should have told'])).toBe(
       false,
     )
+  })
+})
+
+describe('affirms', () => {
+  it('hears an answer inside a sentence', () => {
+    expect(affirms('I forgive you', ['forgive', 'forgiveness'])).toBe(true)
+    expect(affirms('be patient', ['patience', 'patient'])).toBe(true)
+  })
+
+  it('does not hear it when the sentence denies it', () => {
+    for (const words of [
+      'I will never forgive you',
+      'I do not forgive you',
+      "I won't forgive you",
+      "I can't forgive you",
+      'I cannot forgive you',
+      'no forgiveness',
+    ]) {
+      expect(affirms(words, ['forgive', 'forgiveness']), words).toBe(false)
+    }
+  })
+
+  it('does not hear an answer that is not there', () => {
+    expect(affirms('I understand', ['forgive'])).toBe(false)
+  })
+
+  it('ignores a negation in another clause, or inside the answer itself', () => {
+    expect(
+      affirms('be patient where I was not', [
+        'patient',
+        'be patient where I was not',
+      ]),
+    ).toBe(true)
+    expect(affirms('I forgive you, no matter what', ['forgive'])).toBe(true)
+    expect(affirms("Don't worry, I forgive you", ['forgive'])).toBe(true)
+    expect(
+      affirms('No, power follows purpose; purpose follows truth', [
+        'power follows purpose',
+      ]),
+    ).toBe(true)
+  })
+
+  it('still hears a denial earlier in the same clause', () => {
+    expect(affirms('there is no redemption', ['redemption'])).toBe(false)
+    expect(affirms("I don't understand", ['understand'])).toBe(false)
+    expect(affirms('I do not really understand you', ['understand'])).toBe(
+      false,
+    )
+  })
+
+  it('hears a denial later in the same clause', () => {
+    expect(affirms('Justice is not what I want', ['justice'])).toBe(false)
+    expect(
+      affirms('forgiveness is not something you deserve', ['forgiveness']),
+    ).toBe(false)
+    expect(affirms('patient? not me', ['patient'])).toBe(false)
+  })
+
+  it('hears a question answered with a denial', () => {
+    expect(affirms('Justice? No. Sacrifice.', ['justice'])).toBe(false)
+    expect(affirms('Justice? No. Sacrifice.', ['sacrifice'])).toBe(true)
+    expect(affirms('Forgive you? Never.', ['forgive'])).toBe(false)
+    expect(affirms('Redemption? Never.', ['redemption'])).toBe(false)
+  })
+
+  it('reads a multi-word answer across an ellipsis', () => {
+    expect(
+      affirms('Power... follows… purpose', ['power follows purpose']),
+    ).toBe(true)
   })
 })

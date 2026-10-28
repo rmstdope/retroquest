@@ -76,7 +76,7 @@ function shattered(): Game {
 const OFFER_BLOCKS = [
   "Aren's son. You have their eyes, both of them. You have seen the vault, so you know what I did, and you know it worked. They woke, Elior. For a little while, they woke.",
   'The wound runs backwards. Open it all the way and it pulls the days back to before the fever, and they wake at the workbench as they were. I am not lying to you. I have done the sums.',
-  "Only the ward holds it shut: half in your amulet, half in Alden's crown. I have been bleeding the king for years to loosen his half. Give me yours and he can stop dying today.",
+  "Only the ward holds it shut: half in your amulet, half in Alden's crown. Since my man brought him here I have been bleeding the king to loosen his half. Give me yours and the bleeding stops today.",
   'And the price is the rest of it. The king. Every year the kingdom has had since. And you. You were born after the tear, Elior. When the days go back, you go with them. I am sorry. The sums are still right.',
 ]
 
@@ -124,13 +124,31 @@ describe('ThroneChamber', () => {
   it('accepts the full refrain and answers the amulet given to Malakar', () => {
     const game = inThrone()
     expect(executeCommands(game, ['give ancient amulet to malakar'])).toContain(
-      'Malakar only waits for your answer.',
+      'Your mother and father told him no once, in a letter. It did not stop him.',
     )
     executeCommands(game, ['talk to malakar'])
     const text = executeCommands(game, [
       'say "Power follows purpose; purpose follows truth." to malakar',
     ])
     expect(text).toContain('We carved those words together')
+  })
+
+  it.each([
+    'power follows purpose, purpose follows truth',
+    'Power follows purpose purpose follows truth',
+    'the refrain',
+  ])('hears the refrain said as %s', (words) => {
+    const game = inThrone()
+    executeCommands(game, ['talk to malakar'])
+    executeCommands(game, [`say ${words} to malakar`])
+    expectStoryFlag(game.state, FLAG_ACT4_THRONE_REFRAIN_SAID, true)
+  })
+
+  it('does not hear the refrain when Elior refuses to say it', () => {
+    const game = inThrone()
+    executeCommands(game, ['talk to malakar'])
+    executeCommands(game, ['say I will not say the refrain to malakar'])
+    expectStoryFlag(game.state, FLAG_ACT4_THRONE_REFRAIN_SAID, false)
   })
 
   it('shows the freed king when examined', () => {
@@ -196,7 +214,7 @@ describe('ThroneChamber', () => {
       expect(executeCommands(game, ['talk to malakar'])).toContain(PLEA)
     }
     expect(executeCommands(game, ['say hello to malakar'])).toContain(
-      'Malakar only waits for your answer.',
+      'Your mother and father told him no once, in a letter. It did not stop him.',
     )
     expect(executeCommands(game, ['use ancient amulet'])).toContain(
       'it burns white',
@@ -246,10 +264,10 @@ describe('ThroneChamber', () => {
       )
       expectDialogueSpeaker(text, 'Shadow of the Past')
       expect(text).toContain(
-        'Elior. I tore the world to keep them, and I lost them anyway. I could not wait; you can. Be patient where I was not. Close what I opened, and let them rest.',
+        'Elior. I tore the world to keep them, and I lost them anyway. Be patient where I was not. Close what I opened, and let them rest.',
       )
       expect(text).toContain(
-        'The lifelight elixir is warm in your hand. It can be used only once. It could break the crystal and free the king, or it could be offered to Malakar, to heal the wound that is killing him.',
+        'The [item_name]lifelight elixir[/item_name] is warm in your hand. It can be used only once. It could break the crystal and free the king, or it could be offered to Malakar, to heal the wound that is killing him.',
       )
       expectStoryFlag(game.state, FLAG_ACT4_THRONE_AMULET_OPENED, true)
       expect(game.state.currentRoom.description).toBe(AMULET_DESCRIPTION)
@@ -270,11 +288,14 @@ describe('ThroneChamber', () => {
   it('refuses the amulet on the wound in every state', () => {
     const NOT_YET =
       'Not yet. The wound is not yours to close while Malakar still waits for you.'
-    for (const make of [inThrone, refrained, opened]) {
+    for (const make of [inThrone, refrained]) {
       expect(
         executeCommands(make(), ['use ancient amulet on wound']),
       ).toContain(NOT_YET)
     }
+    expect(
+      executeCommands(opened(), ['use ancient amulet on wound']),
+    ).toContain('Not yet. The elixir is still in your hand.')
   })
 
   for (const command of [
@@ -286,7 +307,7 @@ describe('ThroneChamber', () => {
       const game = opened()
       const text = executeCommands(game, [command])
       expect(text).toContain(
-        `You kneel and hold the elixir to Malakar's lips. He drinks. The grey goes out of his face, and for a moment he is the young man at the workbench again. "Hush, little seed," he sings under his breath, and does not seem to know he does. The wound flickers, and waits.`,
+        `You kneel and hold the elixir to [character_name]Malakar[/character_name]'s lips. He drinks. The grey goes out of his face, and for a moment he is the young man at the workbench again. [dialogue]Hush, little seed,[/dialogue] he sings under his breath, and does not seem to know he does. The wound flickers, and waits.`,
       )
       expect(text).toContain('The lifelight elixir is gone.')
       expectItemInInventory(game.state, 'Lifelight Elixir', false)
@@ -437,7 +458,7 @@ describe('Throne Chamber, commands out of order', () => {
     executeCommands(game, ['say refrain to malakar'])
     reload(game)
     expect(executeCommands(game, ['examine amulet'])).toContain(
-      'Malakar as he is now',
+      'his head is up, as if someone has said his name',
     )
   })
 })

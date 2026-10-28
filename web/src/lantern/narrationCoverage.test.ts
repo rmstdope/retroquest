@@ -148,7 +148,7 @@ const OPTIONAL_LINES: Record<number, { speaker: string; opening: string }[]> = {
     { speaker: 'sir cedric', opening: 'If they can be let go, so can this' },
     {
       speaker: 'captain of the guard',
-      opening: "'Then I will tell them at home",
+      opening: 'Then I will tell them at home',
     },
     { speaker: 'true self', opening: 'Remember what you told me' },
     {

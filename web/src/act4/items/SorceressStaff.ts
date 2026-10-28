@@ -4,15 +4,18 @@ import {
   FLAG_ACT4_SORCERESS_OF_LIES_STARTED,
 } from '../Act4StoryFlags'
 
+/** How the masked staff looks; a constant, so old saves get it too. */
+const STAFF_DESCRIPTION =
+  'The mask is smooth and smiling, with no eyes behind it. It is the very ' +
+  "mark that sat on Elena's wrist in Greendale. The woman who carries this " +
+  'staff cursed her.'
+
 /** The Sorceress's staff: crowned with the silver mask until she is redeemed. */
 export class SorceressStaff extends Item {
   constructor() {
     super({
       name: 'Staff',
-      description:
-        'The mask is smooth and smiling, with no eyes behind it. It is the ' +
-        "very mark that sat beneath Elena's curse in Greendale. This is the " +
-        'hand that cursed her.',
+      description: STAFF_DESCRIPTION,
     })
   }
 
@@ -38,6 +41,6 @@ export class SorceressStaff extends Item {
     if (gameState.getStoryFlag(FLAG_ACT4_SORCERESS_OF_LIES_COMPLETED)) {
       return 'Her staff lies across her knees, bare where the mask once sat.'
     }
-    return this.description
+    return STAFF_DESCRIPTION
   }
 }

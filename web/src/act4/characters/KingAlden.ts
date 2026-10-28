@@ -4,10 +4,23 @@ import { endingPlayed, type Ending } from '../endings'
 
 /** What he says once the wound is closed, by ending. */
 const ENDING_LINES: Record<Ending, string> = {
-  redemption: 'You saved my kingdom, and somehow him as well. Go home.',
-  justice: 'Go home, Elior. The kingdom will remember what you did here.',
-  sacrifice: 'Go home, farmer. You have earned your field.',
+  redemption:
+    'You saved my kingdom, and somehow him as well. I would not have known ' +
+    'how.',
+  justice:
+    'The kingdom will remember what you did here, farmer. I will see that ' +
+    'it does.',
+  sacrifice:
+    'You have earned your field, farmer. No one will take it from you.',
 }
+
+/**
+ * How he looks in the crystal. Taken three weeks before Act II, he has been
+ * held for weeks, not years. A constant, so old saves get the current words.
+ */
+const IN_THE_CRYSTAL =
+  'The king of Eldoria, grey and thin, as if each week in here had been a ' +
+  'year. His crown is dark.'
 
 /**
  * King Alden in the Throne Chamber: asleep in his crystal prison until the
@@ -17,9 +30,7 @@ export class KingAlden extends Character {
   constructor() {
     super({
       name: 'King Alden',
-      description:
-        'The king of Eldoria, grey with the long years of the wound. His ' +
-        'crown is dark.',
+      description: IN_THE_CRYSTAL,
     })
   }
 
@@ -41,7 +52,7 @@ export class KingAlden extends Character {
         'dark still.'
       )
     }
-    return this.description
+    return IN_THE_CRYSTAL
   }
 
   /** Asleep in the crystal until it is broken; then his line, by ending. */

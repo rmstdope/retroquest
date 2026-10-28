@@ -6,20 +6,26 @@ import { Character, type GameState, dialogue } from '@/engine'
  * parents' message; later talks only send Elior on to the field.
  */
 export class Grandmother extends Character {
+  /** How she looks; a constant, so old saves get the current words. */
+  private static readonly DESCRIPTION =
+    'Your grandmother at the gate, flour still on her apron. For once her ' +
+    'hands are still.'
+
   /** Whether Elior has already told her what his parents said. */
   talked = false
 
   constructor() {
-    super({
-      name: 'Grandmother',
-      description:
-        'Your grandmother, waiting at the gate with her hands folded.',
-    })
+    super({ name: 'Grandmother', description: Grandmother.DESCRIPTION })
+  }
+
+  /** Her look, always in the current words. */
+  override examine(_gameState: GameState): string {
+    return Grandmother.DESCRIPTION
   }
 
   /** The message the first time, her short line after. */
   override talkTo(_gameState: GameState): string {
-    const send = 'Go on, love. The field has waited long enough.'
+    const send = 'Go on, dear. The field first. The bread will keep.'
     if (this.talked) return dialogue('Grandmother', send)
     this.talked = true
     return [
