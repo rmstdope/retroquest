@@ -34,24 +34,23 @@ export class MasterMerchantAldric extends Character {
     'quality rope': { item: new QualityRope(), price: 20 },
   }
   dialogueOptions: string[] = [
-    "Welcome to Aldric's Premium Adventure Gear! Only the finest equipment for " +
-      'discerning adventurers.',
-    "Planning an expedition? You've come to the right place for quality supplies.",
-    "I've heard tales of strange happenings in the forest. Good thing I stock the " +
-      'best protective gear!',
+    "Welcome to Aldric's. Rope that holds, lanterns that stay lit, and " +
+      'nothing that comes apart on the road.',
+    "Planning an expedition? Tell me where, and I'll tell you what you'll " +
+      "wish you'd brought.",
+    "I've heard tales of strange happenings in the forest. The carters who " +
+      'still go in buy two things from me: a lantern and a good rope.',
     'Bread costs near twice what it did in spring. The farms west of the city ' +
       'send half the grain they used to, and what does come is grey at the ' +
       'husk. Not my trade, mind, but my suppliers talk of little else.',
   ]
   dialogueIndex = 0
   closedDialogue =
-    'The ' +
     characterName('Master Merchant Aldric') +
-    ' looks at you appraisingly. ' +
+    ' looks at your boots, then at your face. ' +
     speech(
-      'I deal only with established customers and those with proper ' +
-        'credentials. Do you have any introduction or referral that would ' +
-        'qualify you for my premium services?',
+      'I deal only with established customers. A new face brings me an ' +
+        'introduction. Even one of my own handbills will do.',
     )
   gaveFlyer = false
 
@@ -59,8 +58,8 @@ export class MasterMerchantAldric extends Character {
     super({
       name: 'master merchant aldric',
       description:
-        'A prosperous merchant with keen eyes for quality goods. He specializes in ' +
-        'premium adventure gear and has connections throughout the trading networks.',
+        'A broad man in a good coat, standing among coils of rope and racks ' +
+        'of lanterns. He looks at your boots before he looks at your face.',
     })
   }
 
@@ -107,25 +106,21 @@ export class MasterMerchantAldric extends Character {
       return (
         '[success]' +
         characterName('Master Merchant Aldric') +
-        "'s eyes light up as he examines the flyer. " +
+        ' turns the flyer over and finds his own name on it. ' +
         speech(
-          'Ah, excellent! This flyer grants you access to our premium ' +
-            'selection and preferred customer pricing. What quality goods can ' +
-            'I help you acquire today?',
+          'One of mine. Then someone thought you worth sending. This flyer ' +
+            'grants you access to our premium selection. Have a look.',
         ) +
         '[/success]'
       )
     }
 
     // Non-flyer items are politely declined
-    const itemName = item.name
     return (
-      'The ' +
       characterName('Master Merchant Aldric') +
-      ` examines the ${itemName}. ` +
+      ` turns the [item_name]${item.name}[/item_name] over and hands it back. ` +
       speech(
-        'I appreciate the offer, but I deal in adventure gear, not ' +
-          'donations. Perhaps you could purchase something instead?',
+        "I deal in adventure gear, not donations. Bring coin, and we'll talk.",
       )
     )
   }
@@ -143,9 +138,8 @@ export class MasterMerchantAldric extends Character {
     if (!(itemNameToBuy in this.wares)) {
       return dialogue(
         this.name,
-        `Sorry, I don't have any ' [item_name]${itemNameToBuy}` +
-          "[/item_name]' for sale. Check my current inventory for available " +
-          'items.',
+        `I don't stock any [item_name]${itemNameToBuy}[/item_name]. ` +
+          'What I sell is laid out here.',
       )
     }
 
@@ -169,8 +163,8 @@ export class MasterMerchantAldric extends Character {
     ) {
       return dialogue(
         this.name,
-        `You already have a [item_name]${itemNameToBuy}[/item_name]. One ` +
-          'should be sufficient for your needs.',
+        `You've a [item_name]${itemNameToBuy}[/item_name] already. ` +
+          "I'd sooner sell you something you'll use.",
       )
     }
 

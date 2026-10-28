@@ -1,8 +1,13 @@
-import { Item, type GameState } from '@/engine'
+import { Item, characterName, type GameState } from '@/engine'
 import { AncientTreeSpirit } from '../characters/AncientTreeSpirit'
 import { AncientGrove } from '../rooms/AncientGrove'
 
-/** Ancient silver-barked tree that anchors the Ancient Grove and related encounters. */
+/** What a first look at the tree shows, wherever it stands. */
+const TREE_FIRST_LOOK =
+  'The tree stands taller than anything around it. Its bark is silver, ' +
+  'smooth as metal and warm under your hand.'
+
+/** Silver-barked tree that anchors the Ancient Grove and related encounters. */
 export class SilverTree extends Item {
   examined = false
 
@@ -11,16 +16,14 @@ export class SilverTree extends Item {
       name: 'silver-barked tree',
       shortName: 'tree',
       description:
-        'A magnificent ancient tree that towers above all others, its silver bark ' +
-        'shimmering with an inner light that seems to pulse in rhythm with your ' +
-        'heartbeat. The bark is smooth as polished metal yet warm to the touch, ' +
-        'and intricate spiraling patterns flow across its surface like living ' +
-        'veins of starlight. This is the dwelling place of the Ancient Tree Spirit.',
+        'A tree taller than any around it, with bark the colour of ' +
+        'tarnished silver, warm to the touch. Something lives in it; you ' +
+        'can feel it the way you feel someone in a dark room.',
       canBeCarried: false,
     })
   }
 
-  /** Examine the magnificent silver-barked tree. */
+  /** Examine the tree: the first look in the grove wakes the spirit. */
   override examine(gameState: GameState): string {
     if (!this.examined) {
       this.examined = true
@@ -29,37 +32,19 @@ export class SilverTree extends Item {
         const ancientSpirit = new AncientTreeSpirit()
         gameState.currentRoom.characters.push(ancientSpirit)
         return (
-          'The ancient tree towers above you, its silver bark shimmering ' +
-          'with an inner light that seems to pulse in rhythm with your ' +
-          'heartbeat. The bark is smooth as polished metal yet warm to the ' +
-          'touch, and intricate spiraling patterns flow across its surface ' +
-          'like living veins of starlight. Its massive canopy spreads wide, ' +
-          'with leaves that catch and reflect light in impossible ways. You ' +
-          'sense an ancient presence within - older than memory, wise beyond ' +
-          'measure, and deeply connected to the very essence of the forest. ' +
-          'As you study the tree more closely, the silver bark begins to ' +
-          'glow more brightly, and suddenly you feel a powerful presence ' +
-          'emerge from within. The Ancient Tree Spirit has awakened to your ' +
-          'reverent attention.'
+          `${TREE_FIRST_LOOK} You stand there long enough, and something ` +
+          'in the wood turns over, like a sleeper waking. The ' +
+          `${characterName('ancient tree spirit')} is awake.`
         )
       }
       return (
-        'The ancient tree towers above you, its silver bark shimmering ' +
-        'with an inner light that seems to pulse in rhythm with your ' +
-        'heartbeat. The bark is smooth as polished metal yet warm to the ' +
-        'touch, and intricate spiraling patterns flow across its surface ' +
-        'like living veins of starlight. Its massive canopy spreads wide, ' +
-        'with leaves that catch and reflect light in impossible ways. You ' +
-        'sense an ancient presence within - older than memory, wise beyond ' +
-        'measure, and deeply connected to the very essence of the forest. ' +
-        'This is no mere tree, but the dwelling place of the Ancient Tree ' +
-        'Spirit.'
+        `${TREE_FIRST_LOOK} Something lives in it; you can feel it the ` +
+        'way you feel someone in a dark room.'
       )
     }
     return (
-      'The magnificent silver-barked tree continues to radiate ancient ' +
-      'power and wisdom. Its presence fills you with a sense of ' +
-      'reverence and connection to the natural world.'
+      'The silver bark is warm under your hand. Somewhere in it, the ' +
+      'spirit is listening.'
     )
   }
 }

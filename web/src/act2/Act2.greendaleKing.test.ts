@@ -126,7 +126,7 @@ describe('Lord Commander', () => {
   it('greets with the vanished king', () => {
     const a = talk(gameIn('GreatHall'), 'lord commander')
     expect(a).toContain(
-      'since King Alden vanished, I hold his court in his name.',
+      'Since King Alden vanished I hold his court in his name, and no more than that.',
     )
     expect(a).toContain('you bring it to me first.')
   })
@@ -172,7 +172,7 @@ describe('Lord Commander', () => {
     expect(game.state.inventory).not.toContain(docs)
     expect(game.state.getStoryFlag(FLAG_CEDRIKS_HONOR_COMPLETED)).toBe(true)
     expect(talk(game, 'lord commander')).toContain(
-      'I have sent riders to Heavensforth for the watchman who wrote it.',
+      'I have sent riders to Heavensforth for the watchman who confessed.',
     )
   })
 })
@@ -192,7 +192,7 @@ describe('Sir Cedric', () => {
     game.state.setStoryFlag(FLAG_SPOKEN_TO_SIR_CEDRIC, true)
     game.state.setStoryFlag(FLAG_CEDRIKS_HONOR_ACCEPTED, true)
     const a = talk(game, 'sir cedric')
-    expect(a).toContain('I await your demonstration')
+    expect(a).toContain('Not yet. Show me what you can do with a blade first')
     expect(a).not.toContain('I will not make excuses.')
   })
 
@@ -204,8 +204,13 @@ describe('Sir Cedric', () => {
     for (let i = 0; i < 2; i++) {
       const a = talk(game, 'sir cedric')
       expect(a).toContain(PREPARATION)
-      expect(a).toContain("Sir Cedric's jaw tightens.")
+      expect(a).toContain(
+        "[character_name]Sir Cedric[/character_name]'s jaw tightens.",
+      )
       expect(a).toContain("I held the king's wall the night he vanished")
+      expect(a).toContain('and he was lost on my watch.')
+      expect(a).not.toContain('taken on my watch')
+      expect(a).not.toContain('gathering storm grows')
       expect(a).not.toMatch(/framed/)
     }
   })
@@ -218,6 +223,10 @@ describe('Sir Cedric', () => {
     const first = talk(game, 'sir cedric')
     expect(first).toContain('the king was not lost on my watch. He was taken')
     expect(first).toContain('My grandmother frightened me with that name')
+    expect(first).toContain(
+      'the papers say where: the bastion on the shattered ridge. I mean to find him.',
+    )
+    expect(first).not.toContain('My friend')
     expect(first).toContain('Do you remember what I told you in the yard?')
     expect(first).not.toContain('Please accept this Nature')
     const later = talk(game, 'sir cedric')
@@ -231,7 +240,14 @@ describe('Sir Cedric', () => {
       new Quest({ name: "The Knight's Test", description: '', completion: '' }),
     )
     const first = talk(game, 'sir cedric')
-    expect(first).toContain('we must be prepared.')
+    expect(first).toContain(
+      'it will cover all three, if you do not let the merchants see how ' +
+        'badly you want them.',
+    )
+    expect(first).toContain('You receive 150 gold coins.')
+    expect(first).toContain(
+      'You held your own in the yard. Few do, against me.',
+    )
     expect(first).toContain(
       '[character_name]Sir Cedric[/character_name] hesitates, then rests a ' +
         'hand on a small pouch at his belt.',
@@ -253,9 +269,16 @@ describe('Sir Cedric', () => {
     game.state.setStoryFlag(FLAG_SPOKEN_TO_SIR_CEDRIC, true)
     game.state.setStoryFlag(FLAG_CEDRIKS_HONOR_COMPLETED, true)
     const a = talk(game, 'sir cedric')
-    expect(a).toContain('withdraws an ancient wooden charm')
-    expect(a).toContain('I have known you long enough now. Take nature')
+    expect(a).toContain('takes out a small wooden charm, dark with handling.')
+    expect(a).toContain(
+      'I have known you long enough now. Take [item_name]nature',
+    )
+    expect(a).toContain(
+      'It was carved for the knights who first made pacts with the forest spirits',
+    )
     expect(a).toContain('it is one of the three that call Nyx.')
+    expect(a).toContain("You receive [item_name]nature's charm[/item_name].")
+    expect(a).not.toContain('blessed by the ancient knights')
     expect(a).toContain('I mean to find him.')
   })
 
@@ -264,9 +287,12 @@ describe('Sir Cedric', () => {
     game.state.setStoryFlag(FLAG_SPOKEN_TO_SIR_CEDRIC, true)
     game.state.setStoryFlag(FLAG_CEDRIKS_HONOR_COMPLETED, true)
     const a = talk(game, 'sir cedric')
-    expect(a).toContain('withdraws an ancient wooden charm')
+    expect(a).toContain('takes out a small wooden charm, dark with handling.')
     expect(a).toContain("Please accept this nature's charm.")
-    expect(a).toContain('A day ago I would not have given it')
+    expect(a).toContain('A month ago I would not have given it')
+    expect(a).toContain('The old texts say it is one of three that call Nyx.')
+    expect(a).toContain("You receive [item_name]nature's charm[/item_name].")
+    expect(a).not.toMatch(/sacred|blessed by the ancient/)
     expect(a).not.toContain('in the yard')
     expect(a).not.toContain('Do you remember')
   })
@@ -276,9 +302,10 @@ describe('Sir Cedric', () => {
     game.state.setStoryFlag(FLAG_CEDRIKS_HONOR_ACCEPTED, true)
     game.state.setStoryFlag(FLAG_CEDRIC_RECOGNISED_SIGIL, true)
     game.state.setStoryFlag(FLAG_NYX_TRIALS_PASSED, true)
-    expect(talk(game, 'sir cedric')).toContain(
-      'I sense something extraordinary',
-    )
+    const a = talk(game, 'sir cedric')
+    expect(a).toContain('You found her. It is in your face')
+    expect(a).toContain('Show me here, and I will stand beside you')
+    expect(a).not.toMatch(/aura|mystical|formidable|darkness|My friend/)
   })
 })
 
@@ -287,16 +314,13 @@ describe('the trail to the papers', () => {
     const game = gameIn('CastleCourtyard')
     const first = talk(game, 'training master')
     expect(first).toContain('the night His Majesty vanished')
-    expect(first).toContain("The watch's story was… too neat.")
+    expect(first).toContain("The watch's story was too neat.")
     expect(first).toContain(
-      'there are papers somewhere'.replace(
-        'there are',
-        "I've heard rumors that there are",
-      ),
+      "There's talk of papers somewhere that tell a different story.",
     )
     expect(first).not.toContain('Thornfield')
     expect(talk(game, 'training master')).toContain(
-      "You're looking into Sir Cedric's",
+      'Still at it? Good. Ask the squires.',
     )
   })
 
@@ -305,7 +329,10 @@ describe('the trail to the papers', () => {
     game.state.setStoryFlag(FLAG_CEDRIKS_HONOR_ACCEPTED, true)
     const a = talk(game, 'squires')
     expect(a).toContain('whoever took the king walked in through the gap.')
-    expect(a).toContain('We found a diary under the stone benches')
+    expect(a).toContain(
+      "One of us kept a diary that week. It's under the stone benches.",
+    )
+    expect(a).not.toContain('We found a diary')
   })
 
   it('the diary reads the new entries', () => {
@@ -330,7 +357,7 @@ describe('the trail to the papers', () => {
     game.state.setStoryFlag(FLAG_FOUND_LOST_CARAVAN, true)
     const a = new CaravanMasterThorne().talkTo(game.state)
     expect(a).toContain(
-      'a frightened man in Heavensforth paid him to carry these',
+      'a frightened man in Heavensforth paid him to carry them',
     )
     expect(a).toContain('Thorne hands you a stack of')
     expect(a).not.toContain('years ago')

@@ -41,7 +41,7 @@ export class Brenn extends Character {
     }
     return dialogue(
       this.name,
-      "You've seen Thorne, then. You'll have heard. The path just went, " +
+      "If you've come from Thorne, you'll have heard. The path just went, " +
         'out from under the wagons. I was hanging over the ravine by one ' +
         'hand. When I got up I ran for help, I swear I did. But the forest ' +
         "turned me round, and I couldn't find the road again for two days. " +

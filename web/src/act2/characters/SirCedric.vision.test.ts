@@ -133,7 +133,13 @@ describe('Elior answers Cedric', () => {
         '[bold]Act II is complete.[/bold] The storm has a name now.',
       ),
     ).toBe(true)
-    expect(VISION_CLOSING).toContain('"Wherever this road leads')
+    expect(VISION_CLOSING).toContain(
+      '"I said I would listen to you. Wherever this goes, I will be beside you."',
+    )
+    expect(VISION_CLOSING).toContain(
+      'Now he has agents asking after the Willowbrook bloodline',
+    )
+    expect(VISION_CLOSING).not.toContain('they all point the same way')
   })
 
   it('gives the usual reply to say truth before the vision', () => {

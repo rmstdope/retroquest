@@ -33,10 +33,8 @@ export class Squires extends Character {
     super({
       name: 'squires',
       description:
-        'Young men and women training to become knights under the guidance of the ' +
-        'Training Master and Sir Cedric. They practice sword work and horsemanship with ' +
-        'determination, though they occasionally pause to whisper among themselves about ' +
-        "castle affairs and their mentors' reputations.",
+        'A dozen squires at drill in the yard, wooden swords knocking. ' +
+        'Between passes they glance at Sir Cedric and whisper.',
     })
   }
 
@@ -49,14 +47,11 @@ export class Squires extends Character {
     if (!gameState.getStoryFlag(FLAG_CEDRIKS_HONOR_ACCEPTED)) {
       // Squires are too busy to talk if quest hasn't been accepted
       return (
-        'The squires are deeply focused on their training exercises, ' +
-        'practicing sword forms and footwork with intense concentration. ' +
-        'They seem too busy and focused to engage in conversation right ' +
-        'now.\n\n' +
+        'The squires keep their eyes on their drill. One of them answers ' +
+        'without turning.\n\n' +
         dialogue(
           'Squires',
-          "Sorry, we can't talk - the Training Master expects us to " +
-            'perfect these techniques before the day is over.',
+          "Can't stop. The Training Master's watching, and he counts.",
         )
       )
     }
@@ -88,13 +83,13 @@ export class Squires extends Character {
       ) +
       '\n\nOne squire looks particularly troubled.\n\n' +
       speech(
-        "But it doesn't make sense — Sir Cedric has always taught us about " +
-          'honor and duty. He would never leave his post.',
+        "But it doesn't make sense. Sir Cedric made us stand a post in the " +
+          'rain till our boots filled. He would never leave one.',
       ) +
       '\n\nAnother squire nods.\n\n' +
       speech(
-        'We found a diary under the stone benches that tells a different ' +
-          'story. Maybe you should take a look at it.',
+        "One of us kept a diary that week. It's under the stone benches. " +
+          "Read it; it says what we can't.",
       )
     )
   }

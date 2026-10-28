@@ -6,13 +6,17 @@ import {
   type NameOptions,
 } from '@/engine'
 import { ProtectiveCharm } from '../items/ProtectiveCharm'
-import { FLAG_HERMITS_WARNING_ACCEPTED } from '../Act2StoryFlags'
+import {
+  FLAG_HERMITS_WARNING_ACCEPTED,
+  FLAG_HERMITS_WARNING_COMPLETED,
+} from '../Act2StoryFlags'
 
 /**
  * Wilderness mentor who grants a protective charm and warns of deeper trials.
  *
  * The first interaction grants a ProtectiveCharm and sets the acceptance flag;
- * later talks only tell the player the forest is ready for them.
+ * later talks repeat the camp clue until the player has camped here, then
+ * tell the player the forest is ready for them.
  */
 export class ForestHermit extends Character {
   hasWarned = false
@@ -34,7 +38,7 @@ export class ForestHermit extends Character {
     })
   }
 
-  /** Warn the player and give the charm once, then send the player on. */
+  /** Warn the player and give the charm once, then send the player to camp, then on. */
   override talkTo(gameState: GameState): string {
     if (!this.hasWarned) {
       this.hasWarned = true
@@ -49,8 +53,7 @@ export class ForestHermit extends Character {
       return (
         'The ' +
         characterName(this.name) +
-        ' glances at the treeline before looking at you, as if checking ' +
-        'who might be listening. ' +
+        ' looks at the treeline first, and only then at you. ' +
         speech(
           "You're going in. She's in a sour mood this season, so mind yourself.",
         ) +
@@ -64,12 +67,19 @@ export class ForestHermit extends Character {
         '\n\n' +
         speech(
           'But you... there is old magic on you, and not of your own making. ' +
-            "She'll notice it. Take this charm—it tells her you're under my " +
-            "protection. And don't go to her unready; sort out your pack " +
-            'before you cross.',
+            "She'll notice it. Take this charm—it's my mark; it tells her " +
+            "you're under my protection. And don't walk in tonight. Make " +
+            'camp out here first, where she can get a look at you.',
         ) +
         '\n\n' +
-        'You receive a [item_name]protective charm[/item_name]!'
+        'You receive a [item_name]protective charm[/item_name].'
+      )
+    } else if (!gameState.getStoryFlag(FLAG_HERMITS_WARNING_COMPLETED)) {
+      return (
+        'The ' +
+        characterName(this.name) +
+        ' looks at the treeline, then at your pack. ' +
+        speech('Not tonight. Make camp first; let her get a look at you.')
       )
     } else {
       return (

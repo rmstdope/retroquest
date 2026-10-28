@@ -44,8 +44,9 @@ export class Families extends Character {
     super({
       name: 'families',
       description:
-        'Friendly local families who have lived in Greendale for generations. They know ' +
-        "the city's history and are happy to share stories with helpful visitors.",
+        "Neighbours on their doorsteps, shelling beans and minding each other's " +
+        'children. Most of them were born on this lane, and so were their ' +
+        'grandparents.',
     })
   }
 
@@ -55,20 +56,16 @@ export class Families extends Character {
       return clue(
         'The ' +
           characterName(this.name) +
-          ' seem busy with their own affairs and no one seems to want to ' +
-          'talk to you. They give you polite but distant nods, clearly not ' +
-          'interested in conversation with a stranger.',
+          ' give you polite but distant nods and go on with their work. ' +
+          'Behind them an old man inches along the cobbles, one hand flat ' +
+          'against the wall.',
       )
     }
 
     let response = dialogue(
       this.name,
-      "Welcome to our neighborhood! It's lovely to meet someone who " +
-        'takes time to help others. Greendale has a rich history - our ' +
-        'families have been here for generations. The city has always been ' +
-        'a place where those with good hearts and magical talents find a ' +
-        "home. We're grateful for folks like you who lend a hand to those " +
-        'in need.',
+      "You're the one who helped the old folk over the cobbles. Sit a " +
+        'moment, if you like. Nobody on this lane forgets a kindness.',
     )
 
     // Give healing herbs on first conversation after helping elderly residents
@@ -80,14 +77,14 @@ export class Families extends Character {
         '\n\n' +
         'An elderly woman from one of the ' +
         characterName(this.name) +
-        ' approaches you with a warm smile. ' +
+        ' comes over, wiping her hands. ' +
         speech('Here, dear,') +
         ' she says, pressing a bundle into your hands. ' +
         speech(
-          'These are rare healing herbs that have been in our family for ' +
-            'generations. Someone who helps others as you do should have them.',
+          "From my mother's garden, and hers before that. The grey hasn't " +
+            'reached that bed yet.',
         ) +
-        ` You receive [item_name]${herbs.name}[/item_name]!` +
+        ` You receive [item_name]${herbs.name}[/item_name].` +
         '\n\n' +
         dialogue(
           this.name,
@@ -133,11 +130,9 @@ export class Families extends Character {
       gameState.removeItemFromInventory(item.name)
       gameState.setStoryFlag(FLAG_HELPED_ELDERLY_RESIDENTS, true)
       return (
-        '[success]You use your walking stick to help several elderly residents ' +
-        'navigate the uneven cobblestones and carry their heavy loads. Your ' +
-        'assistance is greatly appreciated, and the community takes note of your ' +
-        'kind and helpful nature. Word spreads that you are someone who cares ' +
-        'about others.[/success]'
+        '[success]An old man takes the stick, tries it on the cobbles, and ' +
+        'walks the length of the lane without touching the wall. By the time ' +
+        'he is back, half the doors on the street are open.[/success]'
       )
     } else {
       // For all other items, use the default behavior

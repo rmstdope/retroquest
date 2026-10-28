@@ -31,6 +31,10 @@ describe('Herald dialogue markup', () => {
     const answer = game.commandParser.parse('talk to herald')
 
     expect(answer).toContain('I must examine your credentials')
+    expect(answer).toContain('before you pass into the courtyard')
+    expect(answer).toContain(
+      'Since King Alden vanished, half the court has gone home',
+    )
     expectHeraldSpeaks(answer)
   })
 
@@ -40,13 +44,12 @@ describe('Herald dialogue markup', () => {
 
     const answer = game.commandParser.parse('give entry pass to herald')
 
+    expect(answer).toContain('A sound seal. You may pass into the courtyard.')
     expect(answer).toContain(
-      'This is a formal recommendation of excellent standing',
+      'He does not look at the line above the seal, where the name has ' +
+        'been scraped away. He writes something in his ledger.',
     )
-    expect(answer).toContain(
-      'He does not seem to notice that the name above the seal has been ' +
-        'scraped away. The pass has been officially registered',
-    )
+    expect(answer).not.toContain('officially registered')
     expectHeraldSpeaks(answer)
   })
 
@@ -58,6 +61,7 @@ describe('Herald dialogue markup', () => {
     const answer = game.commandParser.parse('talk to herald')
 
     expect(answer).toContain('Your credentials have been verified')
+    expect(answer).toContain('The courtyard is through the west arch')
     expectHeraldSpeaks(answer)
   })
 })

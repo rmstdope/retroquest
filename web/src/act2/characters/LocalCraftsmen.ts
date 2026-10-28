@@ -30,9 +30,9 @@ export class LocalCraftsmen extends Character {
     super({
       name: 'local craftsmen',
       description:
-        'Skilled artisans working at various crafts - blacksmithing, carpentry, ' +
-        'tailoring, and magical repair work. They demonstrate traditional ' +
-        'techniques passed down through generations.',
+        'Artisans at their benches: a smith, a carpenter, a tailor with a ' +
+        'lapful of torn sailcloth, and an old woman who mends with her hands ' +
+        'and a murmur instead of a needle.',
     })
   }
 
@@ -40,33 +40,31 @@ export class LocalCraftsmen extends Character {
   override talkTo(gameState: GameState): string {
     if (!gameState.getStoryFlag(FLAG_HELPED_ELDERLY_RESIDENTS)) {
       const name = this.name
-      return clue(
-        'The ' +
-          characterName(name) +
-          " eye you with suspicion and refuse to talk to you. They don't " +
-          'seem to trust you yet. Perhaps you need to prove yourself to the ' +
-          'community first.',
+      return (
+        clue(`The ${characterName(name)} keep their eyes on their work.`) +
+        '\n\n' +
+        dialogue(
+          name,
+          "We don't know you. Old Hettie can barely get down this lane on " +
+            "her own; help our own first, and we'll talk.",
+        )
       )
     }
     if (!gameState.hasSpell(new MendSpell().id)) {
       gameState.learnSpell(new MendSpell())
-      const name = this.name
       return (
-        '[success]You watch the ' +
-        characterName(name) +
-        ' work, observing their techniques for repairing ' +
-        'items. As you study their methods, you begin to understand the ' +
-        'magical principles behind restoration and repair. Through careful ' +
-        'study, you learn the [spell_name]mend[/spell_name] ' +
-        'spell![/success]'
+        '[success]The old woman at the end bench ' +
+        'runs her thumb along a split bowl, murmuring, and the crack closes ' +
+        'behind her thumb. She hands you a second bowl and has you do it, ' +
+        'again and again, until the wood answers you too. You have learned ' +
+        '[spell_name]mend[/spell_name].[/success]'
       )
     }
     const name = this.name
     return dialogue(
       name,
-      'Good to see you again! How has your repair magic been working? ' +
-        'The mend spell is one of the most useful pieces of magic a person ' +
-        'can learn.',
+      'Back again. Whatever you mend, mend it slowly; a rushed join is the ' +
+        'first to split.',
     )
   }
 }

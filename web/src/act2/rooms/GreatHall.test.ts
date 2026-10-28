@@ -22,7 +22,7 @@ describe('Great Hall archive search', () => {
   it('keeps both failure texts unchanged', () => {
     const game = new Game([new Act2()])
     expect(new GreatHall().search(game.state)).toContain(
-      'You need formal approval from him first.',
+      'The Court Herald steps between you and the shelves and holds out his hand for your pass.',
     )
     game.state.setStoryFlag(FLAG_COURT_HERALD_FORMAL_PRESENTATION, true)
     expect(new GreatHall().search(game.state)).toContain(

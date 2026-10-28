@@ -3,6 +3,8 @@ import { Game } from '@/engine'
 import { Act2 } from '../Act2'
 import { MerchantsFlyer } from '../items/MerchantsFlyer'
 import { WalkingStick } from '../items/WalkingStick'
+import { QualityRope } from '../items/QualityRope'
+import { Coins } from '../items/Coins'
 import {
   expectDialogueSpeaker,
   expectMarkupWellFormed,
@@ -32,6 +34,7 @@ describe('Master Merchant Aldric dialogue markup', () => {
     const answer = game.commandParser.parse('talk to master merchant aldric')
 
     expect(answer).toContain('I deal only with established customers')
+    expect(answer).toContain('Even one of my own handbills will do.')
     expectAldricSpeaks(answer)
   })
 
@@ -46,6 +49,8 @@ describe('Master Merchant Aldric dialogue markup', () => {
     expect(answer).toContain(
       'This flyer grants you access to our premium selection',
     )
+    expect(answer).toContain('finds his own name on it')
+    expect(answer).not.toContain('preferred customer pricing')
     expectAldricSpeaks(answer)
   })
 
@@ -69,6 +74,40 @@ describe('Master Merchant Aldric dialogue markup', () => {
     )
 
     expect(answer).toContain('I deal in adventure gear, not donations')
+    expect(answer).toContain(
+      'turns the [item_name]walking stick[/item_name] over and hands it back',
+    )
+    expectAldricSpeaks(answer)
+  })
+})
+
+describe('Master Merchant Aldric at the stall', () => {
+  it('names a ware he does not stock without stray quote marks', () => {
+    const game = createGameWithOpenShop()
+
+    const answer = game.commandParser.parse(
+      'buy forest axe from master merchant aldric',
+    )
+
+    expect(answer).toContain(
+      "I don't stock any [item_name]forest axe[/item_name]. What I sell is laid out here.",
+    )
+    expect(answer).not.toContain("' [item_name]")
+    expectAldricSpeaks(answer)
+  })
+
+  it('will not sell a second rope', () => {
+    const game = createGameWithOpenShop()
+    game.state.addItemToInventory(new QualityRope())
+    for (let i = 0; i < 20; i++) game.state.addItemToInventory(new Coins())
+
+    const answer = game.commandParser.parse(
+      'buy quality rope from master merchant aldric',
+    )
+
+    expect(answer).toContain(
+      "You've a [item_name]quality rope[/item_name] already. I'd sooner sell you something you'll use.",
+    )
     expectAldricSpeaks(answer)
   })
 })
@@ -95,6 +134,8 @@ describe('Master Merchant Aldric and the blight', () => {
     )
 
     expect(talks[0]).toContain('Welcome to Aldric')
+    expect(talks[0]).toContain('Rope that holds, lanterns that stay lit')
+    expect(talks[2]).toContain('a lantern and a good rope')
     expect(talks[1]).toContain('Planning an expedition?')
     expect(talks[2]).toContain('strange happenings')
     expect(talks[3]).toContain(ALDRIC_BLIGHT)

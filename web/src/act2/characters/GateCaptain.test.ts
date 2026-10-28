@@ -47,6 +47,7 @@ describe('Gate Captain dialogue markup', () => {
     const answer = game.commandParser.parse('talk to gate captain')
 
     expect(answer).toContain('State your business in Greendale')
+    expect(answer).toContain('Nobody goes through this gate without a pass.')
     expectCaptainSpeaks(answer)
   })
 
@@ -62,8 +63,7 @@ describe('Gate Captain dialogue markup', () => {
     )
     expect(answer).toContain(
       "Somebody's scraped the name off this. The seal's good, though, and the " +
-        "seal's what I answer for. You are welcome in Greendale. Please, " +
-        'proceed.',
+        "seal's what I answer for. Welcome to Greendale.",
     )
     expect(answer).not.toContain('honored visitor')
     expectCaptainSpeaks(answer)
@@ -77,8 +77,9 @@ describe('Gate Captain dialogue markup', () => {
 
     expect(answer).toContain('A map would help you find your way')
     expect(answer).not.toContain("You'll need a map")
-    expect(answer).toContain('information post')
+    expect(answer).toContain('information post by the arch')
     expect(answer).toContain('salutes smartly')
+    expect(answer).not.toContain('leaving you free')
     expect(answer).not.toContain('He steps aside')
     expect(game.state.currentRoom.characters).toHaveLength(0)
     expectCaptainSpeaks(answer)
@@ -107,7 +108,8 @@ describe('Gate Captain dialogue markup', () => {
 
     const answer = game.commandParser.parse('talk to gate captain')
 
-    expect(answer).toContain('Welcome to Greendale, honored visitor')
+    expect(answer).toContain('Welcome to Greendale.')
+    expect(answer).not.toContain('honored visitor')
     expect(answer).toContain('A map would help you find your way')
     expect(answer).not.toContain("You'll need a map")
     expect(answer).toContain('salutes smartly')
@@ -123,7 +125,9 @@ describe('Gate Captain dialogue markup', () => {
       'give walking stick to gate captain',
     )
 
-    expect(answer).toContain('I only need to see proper entry documentation')
+    expect(answer).toContain(
+      'Papers, traveler. A pass, with a seal I can answer for.',
+    )
     expectCaptainSpeaks(answer)
   })
 })
@@ -139,8 +143,8 @@ describe('Gate Captain welcome', () => {
     const answer = captain.talkTo(game.state)
 
     expect(answer).toContain(
-      'Travelers leave all sorts at the information post by the arch; have a ' +
-        'look there before you go in.',
+      'Travelers leave all sorts at the information post by the arch. Have a ' +
+        'look before you go in.',
     )
     expect(answer).not.toContain('Feel free to look around')
     expectCaptainSpeaks(answer)

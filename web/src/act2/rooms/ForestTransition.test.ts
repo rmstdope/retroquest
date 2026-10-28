@@ -39,14 +39,16 @@ describe('Forest Transition description', () => {
 
     const before = room.descriptionFor(game.state)
     expect(
-      before.endsWith('A robed figure sits peacefully among the stones.'),
+      before.endsWith(
+        'A robed figure sits among the stones, watching the trees.',
+      ),
     ).toBe(true)
 
     game.state.setStoryFlag(FLAG_HERMITS_WARNING_COMPLETED, true)
     const after = room.descriptionFor(game.state)
     expect(after).toBe(
       before.replace(
-        'A robed figure sits peacefully among the stones.',
+        'A robed figure sits among the stones, watching the trees.',
         'The [character_name]forest hermit[/character_name] sits by the cold ashes of your camp in the lee of the oldest stone.',
       ),
     )

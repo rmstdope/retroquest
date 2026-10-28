@@ -67,8 +67,8 @@ describe("The Knight's Test bout", () => {
   })
 
   it.each([
-    ['strike', 'You step aside too late', HIGH_CUT],
-    ['turn', 'You step aside too late', HIGH_CUT],
+    ['strike', 'You are too slow to bring your blade up', HIGH_CUT],
+    ['turn', 'You are too slow to bring your blade up', HIGH_CUT],
   ])('repeats call 1 on a wrong %s', (word, narration, repeat) => {
     const game = courtyardGame()
     begin(game)
@@ -91,10 +91,19 @@ describe("The Knight's Test bout", () => {
     expect(two).toContain('Well?')
     const three = run(game, ['say strike to sir cedric'])
     expect(three).toContain('You tap his chest with the flat of the blade.')
-    expect(three).toContain('lowers his blade and nods approvingly.')
-    expect(three).toContain('Excellent! Your martial training is evident.')
-    expect(three).toContain('He pauses, his expression growing more serious.')
-    expect(three).toContain('forest survival kit')
+    expect(three).toContain('lowers his blade and nods.')
+    expect(three).toContain(
+      'Three for three. I can trust a hand like that at my back.',
+    )
+    expect(three).toContain('He pauses, and his voice drops.')
+    expect(three).toContain(
+      'The old tales speak of a sprite called Nyx, deep in the Enchanted Forest.',
+    )
+    expect(three).toContain(
+      'a forest survival kit, an enhanced lantern and quality rope',
+    )
+    expect(three).toContain('see me before you go to the market, Elior')
+    expect(three).not.toMatch(/ancient|mystical|darkness/i)
     expect(game.state.getStoryFlag(FLAG_DEMONSTRATED_COMBAT_SKILLS)).toBe(true)
     expectItemInInventory(game.state, 'training sword', false)
     expect(game.state.isQuestCompleted("The Knight's Test")).toBe(true)
@@ -106,16 +115,22 @@ describe("The Knight's Test bout", () => {
     run(game, ['say guard to sir cedric'])
     for (const word of ['strike', 'guard']) {
       const out = run(game, [`say ${word} to sir cedric`])
-      expect(out).toContain('his point slides under it')
-      expect(out).toContain("You can't block a lunge with hope. Again.")
+      expect(out).toContain(
+        'You stand and meet it, and his point slides past your blade',
+      )
+      expect(out).toContain("You can't stop a lunge with hope. Again.")
       expect(out).toContain(LUNGE)
       expect(out.trimEnd().endsWith(REMINDER)).toBe(true)
     }
     run(game, ['say turn to sir cedric'])
     for (const word of ['guard', 'turn']) {
       const out = run(game, [`say ${word} to sir cedric`])
-      expect(out).toContain('the opening closes before you move.')
-      expect(out).toContain('I gave you a door and you stood in it. Again.')
+      expect(out).toContain(
+        'You wait a heartbeat too long, and the opening closes.',
+      )
+      expect(out).toContain(
+        'I gave you a door and you did not go through it. Again.',
+      )
       expect(out).toContain(WELL)
       expect(out.trimEnd().endsWith(REMINDER)).toBe(true)
     }
@@ -153,7 +168,7 @@ describe("The Knight's Test bout", () => {
     expect(out).toContain('answer with mend instead.')
     expect(out).toContain('A mage.')
     expect(out).not.toContain(".' ")
-    expect(out).toContain('He pauses, his expression growing more serious.')
+    expect(out).toContain('He pauses, and his voice drops.')
     expect(game.state.getStoryFlag(FLAG_DEMONSTRATED_COMBAT_SKILLS)).toBe(true)
     expectItemInInventory(game.state, 'training sword', false)
     expect(game.state.isQuestCompleted("The Knight's Test")).toBe(true)

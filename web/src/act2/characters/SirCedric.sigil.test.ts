@@ -23,11 +23,9 @@ const OLD_GREETING =
   'Greetings, traveler. I am [character_name]Cedric[/character_name]. Some ' +
   "here still call me Sir; you need not. The Lord Commander's notice asks " +
   'for able hands; I ask for mine here in the yard, where I can see what ' +
-  'they can do. I have been seeking individuals of courage and skill for a matter of ' +
-  "great importance. Dark forces are gathering; I call it the 'Gathering " +
-  "Storm', and I need allies with magical knowledge and proven abilities. " +
-  'Before I can trust you with this responsibility, I need proof of your ' +
-  'combat skills. Can you demonstrate your martial abilities?'
+  'they can do. There is a storm gathering over this kingdom, and I do not ' +
+  'yet know its name. I need people at my back I can trust, and trust ' +
+  'starts here. Show me what you can do with a blade.'
 const STAGE_LINE =
   "Sir Cedric's eyes fall on the ancient amulet at your chest, and he goes " +
   'very still.'
@@ -72,28 +70,24 @@ describe('Sir Cedric and the sigil', () => {
     const game = newGame()
     const out = executeCommands(game, ['talk to sir cedric'])
     const text = plain(out)
-    expect(text).toContain(
-      'I have been seeking individuals of courage and skill for a matter of ' +
-        'great—',
-    )
+    expect(text).toContain('There is a storm gathering over this—')
     expect(text).toContain(
       'Sir Cedric stops mid-sentence. His eyes have fallen on the ancient ' +
         'amulet at your chest.',
     )
     expect(text).toContain(SIGIL_WORDS + '\n\n' + BOUND_WORDS)
     expect(text).toContain(
-      "Dark forces are gathering; I call it the 'Gathering Storm', and I " +
-        'need allies with magical knowledge and proven abilities. The sigil ' +
-        'tells me where you come from; it does not tell me what you can do. ' +
-        'Can you demonstrate your martial abilities?',
+      'There is a storm gathering over this kingdom, and I do not yet know ' +
+        'its name. The sigil tells me where you come from; it does not tell ' +
+        'me what you can do. Show me, with a blade, here in the yard.',
     )
-    expect(text).not.toContain('proof of your combat skills')
+    expect(text).not.toContain('Gathering Storm')
     const order = [
-      'matter of great—',
+      'gathering over this—',
       'stops mid-sentence',
       SIGIL_WORDS,
       BOUND_WORDS,
-      'Gathering Storm',
+      'I do not yet know its name',
     ].map((piece) => text.indexOf(piece))
     expect(order).toEqual([...order].sort((a, b) => a - b))
     expect(order.every((i) => i >= 0)).toBe(true)
@@ -140,11 +134,11 @@ describe('Sir Cedric and the sigil', () => {
     expect(text).toContain(STAGE_LINE)
     expect(text).toContain(SIGIL_WORDS + '\n\n' + BOUND_WORDS)
     expect(text.indexOf(BOUND_WORDS)).toBeLessThan(
-      text.indexOf('I await your demonstration of combat skills'),
+      text.indexOf('Not yet. Show me what you can do with a blade first'),
     )
     expect(text).toContain(
-      'I await your demonstration of combat skills before we can proceed ' +
-        'with more serious matters.',
+      'Not yet. Show me what you can do with a blade first; then we will ' +
+        'talk of the rest.',
     )
     expect(parseTurn(out).map((b) => b.kind)).toEqual([
       'text',
@@ -154,7 +148,7 @@ describe('Sir Cedric and the sigil', () => {
     const again = executeCommands(game, ['talk to sir cedric'])
     expect(again).not.toContain('Wardens')
     expect(again).not.toContain('goes very still')
-    expect(again).toContain('I await your demonstration')
+    expect(again).toContain('Not yet. Show me what you can do with a blade')
   })
 
   it('keeps the coins handover after the recognition', () => {
@@ -167,7 +161,8 @@ describe('Sir Cedric and the sigil', () => {
     executeCommands(game, ['take amulet'])
     const out = executeCommands(game, ['talk to sir cedric'])
     expect(out).toContain('goes very still')
-    expect(out).toContain('Please accept these 150 gold coins.')
+    expect(out).toContain('For the market. The kit, the lantern and the rope')
+    expect(out).toContain('You receive 150 gold coins.')
     expect(game.state.getItemCount('coins')).toBe(150)
   })
 
@@ -179,7 +174,7 @@ describe('Sir Cedric and the sigil', () => {
     executeCommands(game, ['take amulet'])
     const out = executeCommands(game, ['talk to sir cedric'])
     expect(plain(out)).toContain(STAGE_LINE)
-    expect(out).toContain('withdraws an ancient wooden charm')
+    expect(out).toContain('takes out a small wooden charm, dark with handling')
     expect(game.state.inventory.some((i) => i instanceof NaturesCharm)).toBe(
       true,
     )

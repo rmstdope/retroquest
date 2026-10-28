@@ -11,7 +11,7 @@ const EXAMINE =
   'A young caravan guard sits on a crate by the door, one hand wrapped in a dirty bandage. ' +
   'He jumps whenever someone comes in, as if he expects to be thrown out.'
 const STEP_1 =
-  "You've seen Thorne, then. You'll have heard. The path just went, out from under the wagons. " +
+  "If you've come from Thorne, you'll have heard. The path just went, out from under the wagons. " +
   'I was hanging over the ravine by one hand. When I got up I ran for help, I swear I did. ' +
   "But the forest turned me round, and I couldn't find the road again for two days. " +
   'So I came back. Somebody had to tell him.'

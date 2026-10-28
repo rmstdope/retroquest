@@ -9,8 +9,6 @@ import {
 } from '@/engine'
 import { AncientAmulet } from '../items/AncientAmulet'
 import { CrystalFocus } from '../items/CrystalFocus'
-import { MendSpell } from '../spells/MendSpell'
-import { DispelSpell } from '../spells/DispelSpell'
 import {
   FLAG_LIBRARIAN_CONFESSED,
   FLAG_LIBRARIAN_NOTICED_AMULET,
@@ -29,7 +27,7 @@ const GLANCE_WORDS =
 /** What the librarian confesses once the wards are mended. */
 const CONFESSION_WORDS =
   'I wore that mark once, when I had a body to wear it in. Whose yours ' +
-  'was, I cannot tell you; only that the Wardens did not give them away. ' +
+  'was, I cannot tell you; only that we did not give them away. ' +
   'We taught the unbinding to those we trusted, and wrote it down for the rest.'
 
 /** Marks an item name in narration. */
@@ -43,7 +41,7 @@ function itemName(name: string): string {
  * A Warden of the Dawn in life: glances at the Ancient Amulet on the first
  * greeting while Elior carries it, and confesses after the wards are mended
  * (once, the first time he carries the amulet), saying "we" about the Wardens
- * from then on. Never names the Wardens of Act III.
+ * from then on and never before. Never names the Wardens of Act III.
  *
  * Becomes friendly once FLAG_MENDED_LIBRARY_ENCHANTMENTS is set: points the
  * player to the Wardens' chronicle, places the Crystal Focus in the room, and
@@ -92,8 +90,8 @@ export class SpectralLibrarian extends Character {
       this.name,
       'Mind the shelves. Everything here has been kept a long time, ' +
         'and the wards on the oldest texts are failing. I can keep a book; ' +
-        'I cannot mend one. Mend the wards, and I will show you where to ' +
-        'look for the mark you carry.',
+        'I cannot mend one. Mend the wards, and I will show you what is ' +
+        'kept here.',
     )
     if (!carrying || gameState.getStoryFlag(FLAG_LIBRARIAN_NOTICED_AMULET)) {
       return greeting
@@ -117,8 +115,6 @@ export class SpectralLibrarian extends Character {
     // Add Crystal Focus to the room for player to take
     const crystalFocus = new CrystalFocus()
     gameState.currentRoom.addItem(crystalFocus)
-    const mendName = new MendSpell().name
-    const dispelName = new DispelSpell().name
     const heardGlance = gameState.getStoryFlag(FLAG_LIBRARIAN_NOTICED_AMULET)
     let confession = ''
     if (carrying) {
@@ -139,23 +135,20 @@ export class SpectralLibrarian extends Character {
         this.name,
         '[success]' +
           speech(
-            `You mended the wards with your [spell_name]${mendName}[/spell_name] ` +
-              'spell. They have been failing longer than I care to count; ' +
-              'thank you. Now, what you came for.',
+            'The wards hold again. They had been failing longer than I care ' +
+              'to count. Thank you. Now, what you came for.',
           ),
       ) +
       confession +
-      " The spirit's eyes glow brighter as they speak: " +
+      ' They look past you, to the chronicle on its stand. ' +
       speech(
-        'I am a keeper, not a teller. The answer you came for is in that ' +
-          'chronicle. We wrote it, and our mark is on its cover. Read it, ' +
-          `and you will learn the [spell_name]${dispelName}[/spell_name] ` +
-          'spell.',
+        'I am a keeper, not a teller. What you came for is in that ' +
+          'chronicle, under the mark on its cover. Read it.',
       ) +
       ' They gesture to a crystal resting on the shelf: ' +
       speech(
-        `And take this [item_name]${crystalFocus.name.toLowerCase()}[/item_name]. What you ` +
-          'do with them is yours to choose.',
+        `And take this [item_name]${crystalFocus.name.toLowerCase()}[/item_name]. ` +
+          "It was made for a healer's hands, and it has waited long enough.",
       ) +
       '[/success]'
     )
@@ -166,9 +159,9 @@ export class SpectralLibrarian extends Character {
     const line = dialogue(
       this.name,
       gameState.getStoryFlag(FLAG_READ_ANCIENT_CHRONICLE)
-        ? 'You have read what we left. The rest is not written on ' +
-            'any shelf of mine. Use this knowledge wisely.'
-        : 'The chronicle is waiting on its shelf. We wrote it for ' +
+        ? 'You have read what was left. The rest is not written on ' +
+            'any shelf of mine.'
+        : 'The chronicle is waiting on its shelf. It was written for ' +
             'whoever would read it; I cannot read it for you.',
     )
     if (!carrying || gameState.getStoryFlag(FLAG_LIBRARIAN_CONFESSED)) {

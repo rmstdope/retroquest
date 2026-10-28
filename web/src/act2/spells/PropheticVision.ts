@@ -15,7 +15,7 @@ const ERRAND_SENTENCES: Record<string, string> = {
   "The Healer's Apprentice":
     'Master Healer Lyria is still waiting to finish your training.',
   'The Ancient Library':
-    'The library beneath Greendale still keeps its secrets from you.',
+    'The library beneath Greendale has not finished with you.',
   "The Innkeeper's Daughter":
     'Elena at the Silver Stag still carries her curse.',
   "Cedric's Lost Honor": 'My own name is not yet cleared.',
@@ -24,7 +24,7 @@ const ERRAND_SENTENCES: Record<string, string> = {
   "The Hermit's Warning":
     "The hermit at the forest's edge asked you to make ready, and you have not.",
   'Whispers in the Wind':
-    'The spirits of the Whispering Glade have not yet been found.',
+    'The Whispering Glade and the old grove are still waiting on you.',
   "The Forest Guardian's Riddles":
     "The guardians' riddles are still unanswered.",
 }
@@ -102,7 +102,9 @@ export class PropheticVision extends Spell {
         'closer than it was. You do ' +
         'not know whose it is, only that you have heard it before, long ' +
         'before the dream.\n\n' +
-        "The vision fades. Sir Cedric's expression has grown grave." +
+        'The vision fades. ' +
+        characterName('Sir Cedric') +
+        ' has not moved.' +
         '\n\n' +
         dialogue(
           'Sir Cedric',
@@ -145,10 +147,9 @@ export class PropheticVision extends Spell {
       )
     }
     return (
-      'You close your eyes and reach out with your newly granted sight ' +
-      'beyond sight. With ' +
+      'You close your eyes and let the vision come. ' +
       characterName('Sir Cedric') +
-      ' standing beside you, you share the vision as it rises before you:'
+      ' stands beside you, and it rises for both of you to see:'
     )
   }
 

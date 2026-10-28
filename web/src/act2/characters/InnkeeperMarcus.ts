@@ -34,11 +34,9 @@ export class InnkeeperMarcus extends Character {
     'room key': { item: new RoomKey(), price: 10 },
   }
   dialogueOptions: string[] = [
-    'Welcome to The Silver Stag Inn! We offer comfortable rooms and warm meals ' +
-      'for weary travelers.',
-    'These have been difficult times, but we still maintain the finest ' +
-      'accommodations in Greendale.',
-    "A good night's rest in a private room can work wonders for mind and body.",
+    'Welcome to The Silver Stag. Hot stew, clean sheets, and a door that locks.',
+    'Hard times or not, this house changes its sheets every week.',
+    'A night in a room of your own does more for a body than any healer.',
   ]
   dialogueIndex = 0
   hasGivenCharm = false
@@ -47,9 +45,8 @@ export class InnkeeperMarcus extends Character {
     super({
       name: 'innkeeper marcus',
       description:
-        'A kind-hearted man who runs The Silver Stag Inn. He has worry lines on ' +
-        'his face and glances frequently toward his daughter with obvious ' +
-        'concern.',
+        'A big man in a stained apron who runs The Silver Stag Inn. He talks ' +
+        'to every guest and watches only one: his daughter, across the room.',
     })
   }
 
@@ -61,7 +58,7 @@ export class InnkeeperMarcus extends Character {
   /**
    * Take the truth about the curse. After the cure, saying "truth" tells him
    * the silver mask was set on Elena on purpose: his reply and the remembered
-   * line, recorded once. Before the cure he points upstairs; afterwards he
+   * line, recorded once. Before the cure he points at her; afterwards he
    * has heard it. Any other words get the usual reply.
    */
   override sayTo(gameState: GameState, words: string): string {
@@ -71,7 +68,7 @@ export class InnkeeperMarcus extends Character {
     if (!gameState.getStoryFlag(FLAG_INNKEEPERS_DAUGHTER_COMPLETED)) {
       return dialogue(
         this.name,
-        'The truth? The only truth I care about is upstairs, and ' +
+        'The truth? The only truth I care about is over there, and ' +
           "she's getting worse.",
       )
     }
@@ -113,28 +110,23 @@ export class InnkeeperMarcus extends Character {
         const druidicCharm = new DruidicCharm()
         gameState.addItemToInventory(druidicCharm)
 
-        const charmName = druidicCharm.name
-        const name = this.name
+        const charm = `[item_name]${druidicCharm.name}[/item_name]`
         const direction =
-          characterName('Marcus') + ' has tears of joy in his eyes.'
-        const head =
-          'You have given me back my daughter! There are no words to express my ' +
-          'gratitude. '
-        const body =
-          `This [item_name]${charmName}[/item_name] has been in my family for ` +
-          'generations - it was blessed by the ancient druids who first settled ' +
-          'in these lands. Please, take it as a token of our eternal gratitude. ' +
-          'May it bring you protection and guidance on your heroic journey!'
+          characterName('Marcus') + ' has to wipe his eyes before he can speak.'
+        const words =
+          `You gave me back my girl. … This ${charm} has hung over our ` +
+          "door longer than there's been a Silver Stag. My grandmother said " +
+          'it came out of the forest, and the forest would know it again. ' +
+          'Take it. It kept this house. Let it keep you.'
         const tail =
-          '[success]Marcus places the sacred charm in your hands with reverence. ' +
-          'You can feel the ancient magic thrumming within the carved wood.[/success]'
-        return direction + '\n\n' + dialogue(name, head + body) + '\n\n' + tail
+          '[success]He presses the carved wood into your hands. ' +
+          `You receive a ${charm}.[/success]`
+        return direction + '\n\n' + dialogue(this.name, words) + '\n\n' + tail
       } else {
         const usual = dialogue(
           this.name,
-          'My daughter is healthy and happy again, all thanks to you! The ' +
-            'Silver Stag Inn will always be your home. Whatever you need - ' +
-            "rooms, meals, information - it's yours freely.",
+          'My daughter is healthy and happy again. Hear her? Singing over ' +
+            "the trays. Your room's free here as long as this house stands.",
         )
         if (gameState.getStoryFlag(FLAG_MARCUS_TOLD_TRUTH)) return usual
         return (
@@ -142,7 +134,7 @@ export class InnkeeperMarcus extends Character {
           '\n\n' +
           dialogue(
             this.name,
-            'An ill wind, the healer called it. Bad luck, blown in off the ' +
+            "An ill wind, that's all it was. Bad luck, blown in off the " +
               'road, settling on the one soul in this house who never harmed ' +
               'anyone.',
           )
@@ -175,10 +167,8 @@ export class InnkeeperMarcus extends Character {
         name,
         "You've spoken with " +
           characterName('Elena') +
-          '? Then you understand my desperation. The curse grows stronger ' +
-          "each day, and I fear we don't have much time left. If you truly " +
-          "can help her, I'll give you anything - rooms, information, " +
-          'whatever you need.',
+          ". Then you've seen. She says she's only tired. … If you can " +
+          'help her, name it, and this house will find it.',
       )
       const weekTheKingWent =
         '\n\n' +
@@ -193,9 +183,8 @@ export class InnkeeperMarcus extends Character {
         dialogue(name, `${option} ${waresInfo.trim()}`) + '\n\n'
       const closing = dialogue(
         name,
-        'Though I must say, these have been dark times for my family. My daughter... ' +
-          "well, perhaps you should speak with her yourself if you're looking to help " +
-          'those in need.',
+        "My girl, Elena. She's been poorly three weeks. … Talk to her, if " +
+          "you've a kind word to spare. She'll tell it better than I can.",
       )
       return dialogueBlock + closing
     }
@@ -208,11 +197,9 @@ export class InnkeeperMarcus extends Character {
 
     // Check if item is available
     if (!(itemNameToBuy in this.wares)) {
-      const itemDisp = `[item_name]${itemNameToBuy}[/item_name]`
       return dialogue(
         this.name,
-        `Sorry, I don't have any '${itemDisp}' for sale. Check what I can ` +
-          'offer you.',
+        "I've rooms to let, and nothing else for sale.",
       )
     }
 
@@ -237,8 +224,8 @@ export class InnkeeperMarcus extends Character {
     ) {
       return dialogue(
         this.name,
-        `You already have a [item_name]${itemNameToBuy}[/item_name]. One ` +
-          'room should be sufficient for your stay.',
+        `You've a [item_name]${itemNameToBuy}[/item_name] already. ` +
+          "One room's plenty for one guest.",
       )
     }
 
@@ -270,8 +257,8 @@ export class InnkeeperMarcus extends Character {
         `[success]The [item_name]${itemNameToBuy}[/item_name] is yours for ` +
         `${price} [item_name]gold coins[/item_name]. ` +
         characterName('Marcus') +
-        ' hands you a brass key and explains how to access the private ' +
-        'rooms upstairs.[/success]'
+        ' hands you a brass key and nods at the [item_name]door[/item_name] ' +
+        'behind the bar.[/success]'
       const lodger = dialogue(
         seller,
         'That room upstairs? Its last lodger was a man in a grey cloak. ' +

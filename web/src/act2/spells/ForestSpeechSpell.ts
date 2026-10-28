@@ -112,9 +112,8 @@ export class ForestSpeechSpell extends Spell {
       targetCharacter instanceof WaterNymphs
     ) {
       return (
-        '[success]A channel of deep, mystical communication opens between ' +
-        "you. Through the spell's magic, you can understand their ancient " +
-        'wisdom and forest secrets.[/success]'
+        '[success]The sounds they make sort themselves into words. They ' +
+        'were talking about you before you cast it, and they go on.[/success]'
       )
     }
     return clue(

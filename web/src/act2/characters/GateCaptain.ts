@@ -21,9 +21,9 @@ export class GateCaptain extends Character {
     super({
       name: 'gate captain',
       description:
-        "A seasoned officer of Greendale's guard, wearing polished mail and " +
-        'bearing the insignia of the city watch. His weathered face shows years ' +
-        'of experience maintaining order at the gates.',
+        "An officer of the city watch in polished mail, the watch's badge on " +
+        'his shoulder. He looks at every face that comes up the road, and ' +
+        'then at its papers.',
     })
   }
 
@@ -36,10 +36,10 @@ export class GateCaptain extends Character {
       return (
         'The ' +
         characterName('Gate Captain') +
-        ' looks at you with a professional but guarded expression. ' +
+        ' looks at your boots, then at your face. ' +
         speech(
-          'State your business in Greendale, traveler. Do you have proper ' +
-            'documentation for entry?',
+          'State your business in Greendale, traveler. Nobody goes through ' +
+            'this gate without a pass.',
         )
       )
     } else {
@@ -47,15 +47,14 @@ export class GateCaptain extends Character {
         return (
           'The ' +
           characterName('Gate Captain') +
-          ' nods respectfully. ' +
+          ' nods. ' +
           speech(
-            'Welcome to Greendale, honored visitor. A map would help you ' +
-              'find your way - the streets can be quite maze-like for ' +
-              'newcomers. Travelers leave all sorts at the information post by ' +
-              'the arch; have a look there before you go in.',
+            'Welcome to Greendale. A map would help you find your way; the ' +
+              'streets in there turn back on themselves. Travelers leave all ' +
+              'sorts at the information post by the arch. Have a look before ' +
+              'you go in.',
           ) +
-          ' With that, he salutes smartly and walks back to his patrol ' +
-          'duties, leaving you free to explore the gate area.'
+          ' With that, he salutes smartly and walks off along the wall.'
         )
       } else {
         return (
@@ -103,18 +102,15 @@ export class GateCaptain extends Character {
         'he looks at the seal, and grunts. ' +
         speech(
           "Somebody's scraped the name off this. The seal's good, though, " +
-            "and the seal's what I answer for. You are welcome in Greendale. " +
-            'Please, proceed.',
+            "and the seal's what I answer for. Welcome to Greendale.",
         ) +
         ' ' +
         speech(
-          'A map would help you find your way - the streets can be ' +
-            'quite maze-like for newcomers. Travelers leave things at the ' +
-            'information post there; look around and you may find what you ' +
-            'need.',
+          'A map would help you find your way; the streets in there turn ' +
+            'back on themselves. Travelers leave things at the information ' +
+            'post by the arch. Have a look before you go in.',
         ) +
-        ' With that, he salutes smartly and walks back to his patrol ' +
-        'duties, leaving you free to explore the gate area.'
+        ' With that, he salutes smartly and walks off along the wall.'
       )
     }
 
@@ -122,7 +118,7 @@ export class GateCaptain extends Character {
       'The ' +
       characterName('Gate Captain') +
       ` politely declines ${item.nameInSentence()}. ` +
-      speech('I only need to see proper entry documentation.')
+      speech('Papers, traveler. A pass, with a seal I can answer for.')
     )
   }
 }

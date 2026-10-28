@@ -23,14 +23,12 @@ export class ProtectiveCharm extends Item {
       if (!gameState.getStoryFlag(FLAG_PROTECTIVE_CHARM_USED_FOREST_ENTRANCE)) {
         gameState.setStoryFlag(FLAG_PROTECTIVE_CHARM_USED_FOREST_ENTRANCE, true)
         const result =
-          'The protective charm radiates a warm, golden light as you invoke ' +
-          'its power. A shimmering barrier of spiritual energy surrounds ' +
-          'you, and you feel the watchful gaze of the forest spirits become ' +
-          'less threatening. The ancient magic recognizes your respect and ' +
-          'preparation, granting you safe passage through these sacred woods.'
+          'You hold up the charm. The sprites crowd round it, chiming, and ' +
+          'settle on your sleeve one by one, then lift off again.'
         return (
           result +
-          '\n\n[success]The sprites draw aside. The path south, to the ancient grove, is now open.[/success]'
+          '\n\n[success]The sprites draw aside. The path south, to the ' +
+          '[room_name]Ancient Grove[/room_name], is now open.[/success]'
         )
       }
       return (

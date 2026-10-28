@@ -11,6 +11,7 @@ import {
 } from '@/testing/gameHelpers'
 
 const SPEAKER = 'families'
+const WELCOME = "You're the one who helped the old folk over the cobbles."
 
 /** An Act II game where the player has helped the elderly residents. */
 function createGameAfterHelpingElders(): Game {
@@ -35,8 +36,11 @@ describe('Families dialogue markup', () => {
     const answer = game.commandParser.parse('talk to families')
 
     expect(answer).toContain('Here, dear,')
-    expect(answer).toContain('rare healing herbs')
-    expect(answer).toContain('You receive')
+    expect(answer).toContain("From my mother's garden")
+    expect(answer).toContain(
+      'You receive [item_name]healing herbs[/item_name].',
+    )
+    expect(answer).not.toContain('!')
     expect(game.state.hasItem('healing herbs')).toBe(true)
     expectFamiliesSpeak(answer)
   })
@@ -47,7 +51,7 @@ describe('Families dialogue markup', () => {
 
     const answer = game.commandParser.parse('talk to families')
 
-    expect(answer).toContain('Welcome to our neighborhood!')
+    expect(answer).toContain(WELCOME)
     expect(answer).not.toContain('Here, dear,')
     expectFamiliesSpeak(answer)
   })
@@ -90,7 +94,7 @@ describe('Families and the mountain flower (selfless moment)', () => {
       expect(answer).toContain(WREN_LINE)
       expectFamiliesSpeak(answer)
     }
-    expect(first.indexOf('rare healing herbs')).toBeLessThan(
+    expect(first.indexOf("From my mother's garden")).toBeLessThan(
       first.indexOf(WREN_LINE),
     )
     expect(
@@ -107,6 +111,32 @@ describe('Families and the mountain flower (selfless moment)', () => {
     game.state.currentRoom = game.state.allRooms.ResidentialQuarter
 
     expect(game.commandParser.parse('talk to families')).not.toContain('Wren')
+  })
+
+  it('shows a stranger an old man on the cobbles, the need the stick answers', () => {
+    const game = new Game([new Act2()])
+    game.state.currentRoom = game.state.allRooms.ResidentialQuarter
+
+    const answer = game.commandParser.parse('talk to families')
+
+    expect(answer).toContain(
+      'Behind them an old man inches along the cobbles, one hand flat ' +
+        'against the wall.',
+    )
+    expect(answer).toContain('[clue]')
+  })
+
+  it('shows the old man walking with the stick when it is given', () => {
+    const game = new Game([new Act2()])
+    game.state.currentRoom = game.state.allRooms.ResidentialQuarter
+    game.state.addItemToInventory(new WalkingStick())
+
+    const answer = game.commandParser.parse('give walking stick to families')
+
+    expect(answer).toContain(
+      'walks the length of the lane without touching the wall.',
+    )
+    expect(answer).not.toContain('You use your walking stick')
   })
 
   it('takes the flower, thanks Elior and records selflessness once', () => {
@@ -188,8 +218,8 @@ describe('Families and the blight', () => {
     const answer = game.commandParser.parse('talk to families')
 
     const order = [
-      'Welcome to our neighborhood!',
-      'rare healing herbs',
+      WELCOME,
+      "From my mother's garden",
       BLIGHT_LINE,
       WREN_LINE,
     ].map((part) => answer.indexOf(part))
@@ -204,8 +234,8 @@ describe('Families and the blight', () => {
 
     const answer = game.commandParser.parse('talk to families')
 
-    const order = ['Welcome to our neighborhood!', BLIGHT_LINE, WREN_LINE].map(
-      (part) => answer.indexOf(part),
+    const order = [WELCOME, BLIGHT_LINE, WREN_LINE].map((part) =>
+      answer.indexOf(part),
     )
     expect(order.every((i) => i >= 0)).toBe(true)
     expect(order).toEqual([...order].sort((a, b) => a - b))

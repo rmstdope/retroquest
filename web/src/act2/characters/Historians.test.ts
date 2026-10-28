@@ -31,7 +31,7 @@ describe('Historians dialogue markup', () => {
 
     const answer = new Historians().talkTo(game.state)
 
-    expect(answer).toContain('Welcome to the historical archives')
+    expect(answer).toContain("These are the court's archives")
     expectMarkupWellFormed(answer)
     expectDialogueSpeaker(answer, 'historians')
   })
@@ -55,16 +55,26 @@ describe('Historians dialogue markup', () => {
 })
 
 describe('The Historians recognise their own shelves', () => {
-  it('keeps the refusal for an unread journal and the welcome', () => {
+  it('pushes an unread journal back, in their own words', () => {
     const game = newGame()
     const historians = new Historians()
 
     const refusal = historians.giveItem(game.state, new TravelersJournal())
-    expect(refusal).toContain('You should not give things away')
+    expect(refusal).toContain('push the journal back across the table.')
+    expect(refusal).toContain(
+      'We do not take papers from someone who cannot say what they are. ' +
+        'Read it first.',
+    )
+    expect(refusal).not.toContain('You should')
+    expectMarkupWellFormed(refusal)
+    expectDialogueSpeaker(refusal, 'historians')
+    expectNoSpeechOutsideDialogue(refusal)
     expect(game.state.getStoryFlag(FLAG_SHOWED_JOURNAL_TO_HISTORIANS)).toBe(
       false,
     )
-    expect(historians.talkTo(game.state)).toContain('Welcome to the historical')
+    expect(historians.talkTo(game.state)).toContain(
+      'If you have brought something written, show us.',
+    )
   })
 
   it('shows the birth rolls on giving the journal', () => {
@@ -116,7 +126,7 @@ describe('The Historians recognise their own shelves', () => {
       expect(findMarkupProblems(text)).toEqual([])
       expect(text).toContain(
         'We checked the Willowbrook roll against his notes. One page is gone ' +
-          'from it, cut out at the binding, and long ago by the look of it. ' +
+          'from it, cut out at the binding, years ago by the look of the cut. ' +
           'The year you were born. His notes stop at the same place. Whatever ' +
           'he came for, someone hid it from him before he ever sat down.',
       )
@@ -127,7 +137,7 @@ describe('The Historians recognise their own shelves', () => {
 
 describe('The Historians and the week the king went', () => {
   const WEEK_LINE =
-    'You saw the last name in our register, then. The same week. We have ' +
+    'You saw the last entry in our register, then. The week the king went. We have ' +
     'told ourselves it means nothing, and none of us believes it.'
   const LEAD_IN = 'One of them adds, more quietly:'
 

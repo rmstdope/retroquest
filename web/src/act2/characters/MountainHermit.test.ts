@@ -32,7 +32,11 @@ describe('MountainHermit, the retired sergeant', () => {
     expect(first).toContain(
       'Tell him the sergeant never believed a word of it.',
     )
-    expect(first).toContain('You receive a [item_name]training sword')
+    expect(first).toContain('They say he left his post the night the king went')
+    expect(first).not.toContain('slept on watch')
+    expect(first).toContain(
+      'You receive a [item_name]training sword[/item_name].',
+    )
     expect(first).not.toMatch(PROPHETIC)
     expect(game.state.inventory.map((i) => i.name)).toContain('training sword')
     expectMarkupWellFormed(first)
@@ -77,7 +81,7 @@ describe('MountainHermit, the retired sergeant', () => {
     expect(given).not.toContain('would-be heroes')
     expectMarkupWellFormed(given)
     expect(hermit.giveTrainingSword(game.state)).toContain(
-      'I already gave you the sword, young one. Use it wisely.',
+      "You've got it already. Don't lose it before he sees it.",
     )
   })
 })

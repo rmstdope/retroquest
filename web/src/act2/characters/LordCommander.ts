@@ -25,9 +25,8 @@ export class LordCommander extends Character {
     super({
       name: 'lord commander',
       description:
-        'A distinguished military officer wearing elaborate ceremonial armor adorned ' +
-        "with Greendale's coat of arms. His bearing speaks of years of command and " +
-        "the authority to make important decisions affecting the realm's knights.",
+        "A broad, grey-bearded officer in ceremonial armour, Greendale's arms " +
+        'on the breastplate. He sits below the empty throne, not on it.',
     })
   }
 
@@ -40,7 +39,7 @@ export class LordCommander extends Character {
         speech(
           "Sir Cedric's knighthood is restored and the charge struck from the " +
             'record. As for the name in that letter, I have sent riders to ' +
-            'Heavensforth for the watchman who wrote it. Whoever paid in that ' +
+            'Heavensforth for the watchman who confessed. Whoever paid in that ' +
             'name will be found.',
         )
       )
@@ -59,10 +58,9 @@ export class LordCommander extends Character {
     return (
       `The ${name} greets you formally. ` +
       speech(
-        "Welcome to Greendale's Great Hall. I oversee the military affairs of " +
-          'our realm and, since King Alden vanished, I hold his court in his ' +
-          'name. If you hear any word of His Majesty, you bring it to me ' +
-          'first.',
+        "This is the king's hall. Since King Alden vanished I hold his court " +
+          'in his name, and no more than that. If you hear any word of His ' +
+          'Majesty, you bring it to me first.',
       )
     )
   }

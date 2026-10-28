@@ -46,8 +46,8 @@ export class GreatHall extends Room {
   override search(gameState: GameState): string {
     if (!gameState.getStoryFlag(FLAG_COURT_HERALD_FORMAL_PRESENTATION)) {
       return clue(
-        'The Court Herald stops you from accessing the archives. You need formal ' +
-          'approval from him first.',
+        'The Court Herald steps between you and the shelves and holds out his ' +
+          'hand for your pass.',
       )
     }
     if (!gameState.getStoryFlag(FLAG_SHOWED_JOURNAL_TO_HISTORIANS)) {

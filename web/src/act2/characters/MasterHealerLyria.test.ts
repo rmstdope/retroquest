@@ -154,7 +154,9 @@ describe('Master Healer Lyria dialogue markup', () => {
 
     expect(plain(answer)).toContain(TEACHING_STAGE)
     expect(plain(answer)).toContain('Watch my hands, not the light.')
-    expect(answer).toContain('You learn [spell_name]greater heal[/spell_name].')
+    expect(answer).toContain(
+      'You have learned [spell_name]greater heal[/spell_name].',
+    )
     expect(plain(answer)).toContain('Quest Complete: The Healer')
     expect(plain(answer)).not.toContain('truly earned the title')
     expect(game.state.hasItem('Crystal Focus')).toBe(false)
@@ -188,7 +190,12 @@ describe('Master Healer Lyria dialogue markup', () => {
 
     const answer = new MasterHealerLyria().giveItem(game.state, stick)
 
-    expect(plain(answer)).toContain('too busy to receive any gifts')
+    expect(plain(answer)).toContain(
+      'glances at it and goes back to her mortar.',
+    )
+    expect(plain(answer)).toContain('Not that. I need my hands for the sick.')
+    expect(plain(answer)).not.toContain('too busy')
+    expectLyriaSpeaks(answer)
   })
 
   it('starts the quest at the bed and completes it over the focus', () => {
@@ -288,8 +295,9 @@ const DIAGNOSIS_START = "You've been to the Silver Stag. Marcus's girl, Elena."
 const DIAGNOSIS_MIDDLE =
   'First she must be made strong, or what comes after will kill her; that ' +
   'wants a deeper healing than I can give alone. Then the mark must be ' +
-  'washed in water no shadow has ever touched. You will find none in this ' +
-  'city; every well here has seen the dark. And last, the thing must be ' +
+  'washed in untouched water, from a spring no bucket has ever gone down. ' +
+  'You will find none in this city; every well here has the grey in it. ' +
+  'And last, the thing must be ' +
   'unbound. Not broken: unbound, with the old kind of unbinding,'
 const DIAGNOSIS_END =
   'the kind the scholars wrote down before any of us were born.'
@@ -302,7 +310,7 @@ const REMINDER =
   'it. In that order, or not at all.'
 const MENTOR_LINE =
   'You have the first of it. Mastery is the next twenty years.'
-const USUAL = 'Welcome to my house of healing'
+const USUAL = "You have a healer's hands, or you could have."
 
 describe("Lyria explains how Elena's curse is lifted (rq-nun)", () => {
   it('knows nothing of the curse until it is known: usual reply only', () => {

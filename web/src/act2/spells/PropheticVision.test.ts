@@ -101,6 +101,25 @@ describe('Sir Cedric turns away an early vision', () => {
     )
   })
 
+  it('names the library and the glade errands in plain words', () => {
+    const game = createGameWithCedric()
+    leaveIncomplete(
+      game.state,
+      ['The Ancient Library', 'Whispers in the Wind'],
+      [],
+    )
+
+    const answer = refusal(game.state)
+
+    expect(answer).toContain(
+      'The library beneath Greendale has not finished with you.',
+    )
+    expect(answer).toContain(
+      'The Whispering Glade and the old grove are still waiting on you.',
+    )
+    expect(answer).not.toContain('keeps its secrets')
+  })
+
   it('uses the one-left opener and closer for a single started errand (state 2)', () => {
     const game = createGameWithCedric()
     leaveIncomplete(game.state, ["Cedric's Lost Honor"], [])
@@ -243,9 +262,9 @@ describe('Prophetic Vision first cast', () => {
 
     expect(
       first.startsWith(
-        'You close your eyes and reach out with your newly granted sight ' +
-          'beyond sight. With [character_name]Sir Cedric[/character_name] ' +
-          'standing beside you, you share the vision as it rises before you:' +
+        'You close your eyes and let the vision come. ' +
+          '[character_name]Sir Cedric[/character_name] stands beside you, ' +
+          'and it rises for both of you to see:' +
           '\n\n' +
           'A village at dusk, its roofs low and familiar. Beyond it, a field ' +
           'withered to grey stalks, the way yours was the morning all this ' +
@@ -261,7 +280,8 @@ describe('Prophetic Vision first cast', () => {
           'closer than it was. You do ' +
           'not know whose it is, only that you have heard it before, long ' +
           'before the dream.\n\n' +
-          "The vision fades. Sir Cedric's expression has grown grave." +
+          'The vision fades. [character_name]Sir Cedric[/character_name] has ' +
+          'not moved.' +
           '\n\n',
       ),
     ).toBe(true)
@@ -305,7 +325,7 @@ describe('Prophetic Vision ending', () => {
     const answer = new PropheticVision().castSpell(game.state)
 
     expect(answer).toContain(
-      'has grown grave.\n\n' +
+      'has not moved.\n\n' +
         '[character_name]Sir Cedric[/character_name]\n[dialogue]' +
         'The man in the crystal. That was the king. That was Alden. Then ' +
         'Malakar is no tale, and it is you he is hunting.[/dialogue]\n\n',
@@ -341,7 +361,7 @@ describe('Prophetic Vision and the forest heart crystal', () => {
     const first = new PropheticVision().castSpell(game.state)
 
     expect(first.startsWith(CRYSTAL_OPENING)).toBe(true)
-    expect(first).not.toContain('newly granted sight')
+    expect(first).not.toContain('let the vision come')
     expect(first).toContain('something to say.')
     expect(game.state.hasItem('forest heart crystal')).toBe(true)
     expectMarkupWellFormed(first)
@@ -353,7 +373,8 @@ describe('Prophetic Vision and the forest heart crystal', () => {
 
     const first = new PropheticVision().castSpell(game.state)
 
-    expect(first).toContain('newly granted sight')
+    expect(first).toContain('let the vision come')
+    expect(first).not.toContain('sight beyond sight')
     expect(first).not.toContain('forest heart crystal')
   })
 

@@ -13,17 +13,42 @@ import { QUEST_FOREST_GUARDIANS_RIDDLES } from '../Act2StoryFlags'
 
 /** The grey help line shown under every riddle. */
 const RIDDLE_HELP =
-  '[dim]Think carefully and speak your answer when you believe you know ' +
-  "it. Use the command 'say <your_answer> to water nymphs' to give your " +
-  'solution.[/dim]'
+  '[dim](Answer them with: say <your answer> to water nymphs.)[/dim]'
 
-/** One of the nymphs' riddles: the question, accepted answers, explanation and hint. */
+/**
+ * One of the nymphs' riddles: the question, the accepted answers, what the
+ * nymphs do when it is answered (given their marked name), the hint, and the
+ * near misses that get a question of their own instead of the plain refusal.
+ */
 interface Riddle {
   question: string
   answers: string[]
-  explanation: string
+  reaction: (nymphs: string) => string
   hint: string
+  nearMisses: Record<string, string>
 }
+
+/** The near-miss reply for 'liar', and for 'lie' on the mask riddle. */
+const LIAR_MISS =
+  "A liar has eyes, hasn't he? And what does he hold up in front of them?"
+
+/** The near-miss reply for 'lie' on the truth riddle. */
+const LIE_MISS =
+  "Does a lie grow heavier for being hidden? Isn't it glad of the dark?"
+
+/** The near-miss reply for 'ice' and 'snow' on the water riddle. */
+const SNOW_MISS =
+  'Can snow carve stone in summer? And what is it, once it melts?'
+
+/** The near-miss reply for 'secret' on the truth riddle. */
+const SECRET_MISS =
+  "A secret is only how a thing is kept, isn't it? What is the thing?"
+
+/** The near-miss reply for 'face' on the mask riddle. */
+const FACE_MISS = 'A face? Whose, then? Is it its own?'
+
+/** The near-miss reply for 'mirror' on the mask riddle. */
+const MIRROR_MISS = 'Can you put a mirror on? Would it hide you, or show you?'
 
 /**
  * The nymphs' three riddles in the order they are asked: water, mask, truth.
@@ -38,12 +63,16 @@ export const RIDDLES: Riddle[] = [
       'that falls without being thrown. I give life yet can take it, ' +
       'am soft yet can carve stone. What am I?',
     answers: ['water', 'the water', 'rain', 'stream', 'river'],
-    explanation:
-      'Water is the lifeblood of the forest, falls as rain, nurtures life ' +
-      'but can flood, and over time carves through stone.',
+    reaction: (nymphs) =>
+      `The stream runs a little faster round your boots. The ${nymphs} nod.`,
     hint:
       "What runs through us while we sit here? Haven't your boots been " +
       'wet since you came in?',
+    nearMisses: {
+      blood: 'Blood? Does the sky bleed, then, every time it rains?',
+      ice: SNOW_MISS,
+      snow: SNOW_MISS,
+    },
   },
   {
     question:
@@ -51,13 +80,20 @@ export const RIDDLES: Riddle[] = [
       'Put me on and I hide you; leave me behind and I tell whose work it ' +
       'was. What am I?',
     answers: ['mask', 'masks', 'a mask', 'the mask', 'false face', 'disguise'],
-    explanation:
-      'A mask smiles without eyes and wears a face that is not its own. ' +
-      'It hides whoever wears it, and whoever leaves one behind has signed ' +
-      'their work.',
+    reaction: (nymphs) =>
+      `For a moment every one of the ${nymphs} wears your face. Then they nod.`,
     hint:
       'What do the players at a fair hold up to their faces? Who smiles on ' +
       'the outside and weeps behind it?',
+    nearMisses: {
+      face: FACE_MISS,
+      'a face': FACE_MISS,
+      mirror: MIRROR_MISS,
+      'a mirror': MIRROR_MISS,
+      liar: LIAR_MISS,
+      'a liar': LIAR_MISS,
+      lie: LIAR_MISS,
+    },
   },
   {
     question:
@@ -65,13 +101,23 @@ export const RIDDLES: Riddle[] = [
       'coat, but it cannot keep it on. I am hard to say and harder to ' +
       'hear, and I grow no lighter for being hidden. What am I?',
     answers: ['truth', 'the truth', 'a truth', 'honesty', 'true'],
-    explanation:
-      'Purpose follows truth, and power follows purpose. A lie can pass ' +
-      'for the truth only for a while, and a hidden truth only grows ' +
-      'heavier.',
+    reaction: (nymphs) =>
+      `The ${nymphs} laugh, a sound like water over a weir.`,
     hint:
       'What did the old stone in your own woods say comes first, before ' +
       'purpose and before power?',
+    nearMisses: {
+      purpose: 'Purpose? But what does purpose follow?',
+      power:
+        "Power? Isn't power at the end of the line? What stands at the " +
+        'start of it?',
+      lie: LIE_MISS,
+      lies: LIE_MISS,
+      'a lie': LIE_MISS,
+      secret: SECRET_MISS,
+      'a secret': SECRET_MISS,
+      secrets: SECRET_MISS,
+    },
   },
 ]
 
@@ -125,9 +171,9 @@ export class WaterNymphs extends Character {
         '\n\n' +
         dialogue(
           this.name,
-          'Yet the streams come down thinner from the hills this season, ' +
-            'seeker. Something up there drinks before we do, and the fields ' +
-            'below the city taste it first.',
+          'Have you seen the streams come down thinner from the hills this ' +
+            'season? What drinks up there before we do, that the fields ' +
+            'below the city taste it first?',
         )
       )
     } else if (this.currentRiddle < RIDDLES.length) {
@@ -139,7 +185,7 @@ export class WaterNymphs extends Character {
             dialogue(
               this.name,
               'Came all this way to stand in our water? Will you answer ' +
-                'three questions, then? Here is the first.',
+                'three questions, then? Shall we start?',
             )
           : dialogue(
               this.name,
@@ -190,25 +236,23 @@ export class WaterNymphs extends Character {
         gameState.currentRoom.items.push(new Moonflowers())
 
         return (
-          `[success]Correct! That is indeed the answer. ${riddle.explanation}` +
-          '[/success]\n\nThe ' +
-          characterName(this.name) +
-          ' laugh, a sound like water over a weir. ' +
+          riddle.reaction(characterName(this.name)) +
+          ' ' +
           speech(
             'Three for three — who taught you to listen like that? Will you ' +
               'take what grows here? Who else would we give it to?',
           ) +
           '\n\n' +
-          'The water nymphs draw back from the bank. The clear pool and ' +
-          'the pale flowers at its edge are there for the taking.'
+          'They draw back from the bank. The ' +
+          '[item_name]crystal-clear water[/item_name] and the ' +
+          '[item_name]moonflowers[/item_name] at its edge are there for ' +
+          'the taking.'
         )
       }
       const nextRiddle = RIDDLES[this.currentRiddle]
       return (
-        `[success]Correct! That is the right answer. ${riddle.explanation}` +
-        '[/success]\n\nThe ' +
-        characterName(this.name) +
-        ' nod. ' +
+        riddle.reaction(characterName(this.name)) +
+        ' ' +
         speech(
           'Did you know it, or guess it? Does it matter? What about this ' +
             'one?',
@@ -222,7 +266,11 @@ export class WaterNymphs extends Character {
     return (
       clue('The ' + characterName(this.name) + ' shake their heads gently.') +
       ' ' +
-      speech('Is that really what you think? Will you hear it again?') +
+      speech(
+        Object.hasOwn(riddle.nearMisses, wordLower)
+          ? riddle.nearMisses[wordLower]
+          : 'Is that really what you think? Will you hear it again?',
+      ) +
       '\n\n' +
       speech(riddle.question) +
       hint

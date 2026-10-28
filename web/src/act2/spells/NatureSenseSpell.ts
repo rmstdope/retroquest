@@ -1,4 +1,4 @@
-import { Spell, type GameState, clue } from '@/engine'
+import { Spell, type GameState, characterName, clue } from '@/engine'
 import { FLAG_FOUND_RAVINE, FLAG_RAVINE_STORY_PENDING } from '../Act2StoryFlags'
 import { Ravine } from '../items/Ravine'
 import { ForestEntrance } from '../rooms/ForestEntrance'
@@ -40,18 +40,15 @@ export class NatureSenseSpell extends Spell {
         // Add the Water Nymphs to the room when first cast
         gameState.currentRoom.characters.push(new WaterNymphs())
         return (
-          'Your awareness extends throughout the glade. Immediately, you ' +
-          'sense magical presences by the stream - graceful forms of living ' +
-          'water and moonlight. The water nymphs reveal themselves, ' +
-          'shimmering into visibility as they recognize your magical ' +
-          'sensitivity and respect for the natural world.'
+          'You hold still and let the glade come to you. The stream is not ' +
+          'only water: there are shapes sitting in it, and they have been ' +
+          `watching you all along. The ${characterName('water nymphs')} ` +
+          'let you see them.'
         )
       }
-      const name = this.name
       return clue(
-        `Your [spell_name]${name}[/spell_name] reveals the familiar ` +
-          'presence of the water nymphs by the sacred stream, their forms ' +
-          'visible and welcoming.',
+        `The ${characterName('water nymphs')} are where they were, ` +
+          'sitting in the stream.',
       )
     }
     if (gameState.currentRoom instanceof ForestEntrance) {

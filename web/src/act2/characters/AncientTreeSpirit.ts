@@ -24,8 +24,7 @@ const NYMPHS_POINTER_TEXT =
   'roots. Answer them, and bring back what they give you.'
 /** The pointer as spoken straight after the spell is learned. */
 const NYMPHS_POINTER_AFTER_SPELL =
-  "Now you can hear them, you'll hear the grove is uneasy. " +
-  NYMPHS_POINTER_TEXT
+  'You can hear them now. The grove is uneasy. ' + NYMPHS_POINTER_TEXT
 
 /** Ancient Tree Spirit NPC for quest progression and spell teaching. */
 export class AncientTreeSpirit extends Character {
@@ -107,8 +106,8 @@ export class AncientTreeSpirit extends Character {
         ) +
         '\n\n[success]The voices of the grove settle into you: the creak of ' +
         'branches, the talk of roots, the small sounds in the undergrowth. ' +
-        'You can understand them now.\n\nYou have learned the ' +
-        '[spell_name]Forest Speech[/spell_name] spell![/success]\n\n' +
+        'You can understand them now.\n\nYou have learned ' +
+        '[spell_name]Forest Speech[/spell_name].[/success]\n\n' +
         dialogue(this.name, NYMPHS_POINTER_AFTER_SPELL)
       )
     }
@@ -144,8 +143,8 @@ export class AncientTreeSpirit extends Character {
           '\n\nSouth of the grove, branches pull apart with a long creak.\n\n' +
           dialogue(
             this.name,
-            "The way south is open. Nyx lives at the end of it. She doesn't " +
-              'come for asking — read her altar before you call her.',
+            "Nyx lives at the end of that path. She doesn't come for " +
+              'asking — read her altar before you call her.',
           )
         )
       }

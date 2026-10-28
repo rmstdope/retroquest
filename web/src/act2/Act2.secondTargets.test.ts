@@ -110,7 +110,9 @@ describe('Thorne after the merchants are healed', () => {
     const game = atThorne()
     game.commandParser.parse('cast greater_heal on merchants')
     const first = game.commandParser.parse('talk to caravan master thorne')
-    expect(first).toContain('As promised, here is your reward')
+    expect(first).toContain(
+      'I owe you more than I can pay, so take these instead.',
+    )
     expect(first.endsWith(`[dialogue]${THORNE_LINE}[/dialogue]`)).toBe(true)
     expect(game.state.getStoryFlag(FLAG_THORNE_HEALING_TOLD)).toBe(true)
     const later = game.commandParser.parse('talk to caravan master thorne')
@@ -188,7 +190,7 @@ describe('dispel on Elena too early', () => {
     game.state.inventory.push(new CrystalClearWater())
     game.commandParser.parse('use crystal-clear water on barmaid elena')
     const cure = game.commandParser.parse('cast dispel on barmaid elena')
-    expect(cure).toContain('shattering the evil enchantment completely')
+    expect(cure).toContain('The unbinding takes hold')
     expect(game.state.getStoryFlag(FLAG_INNKEEPERS_DAUGHTER_COMPLETED)).toBe(
       true,
     )

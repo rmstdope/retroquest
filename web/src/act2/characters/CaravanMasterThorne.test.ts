@@ -57,15 +57,41 @@ describe('Caravan Master Thorne and Brenn (mercy moment)', () => {
     expect(answer).not.toContain(BRENN_AFTER)
   })
 
+  it('hands the documents over in narration, after his words', () => {
+    const game = gameAtThorne()
+    game.state.setStoryFlag(FLAG_FOUND_LOST_CARAVAN, true)
+
+    const answer = game.commandParser.parse('talk to caravan master thorne')
+
+    expect(answer).toContain(
+      "I believe they could clear a good man's name.[/dialogue]\n" +
+        'Thorne hands you a stack of [item_name]secret documents[/item_name].',
+    )
+    expect(answer).not.toContain('As promised')
+    expectMarkupWellFormed(answer)
+  })
+
+  it('counts the days while the caravan is lost', () => {
+    const game = gameAtThorne()
+    game.commandParser.parse('talk to caravan master thorne')
+
+    const answer = game.commandParser.parse('talk to caravan master thorne')
+
+    expect(answer).toContain(
+      "Any word? … No. I've stopped counting the goods. I count the days.",
+    )
+    expectDialogueSpeaker(answer, 'caravan master thorne')
+  })
+
   it('ends every later talk with the Brenn line until Elior speaks', () => {
     const game = gameAfterRescue()
 
     for (let i = 0; i < 2; i++) {
       const answer = game.commandParser.parse('talk to caravan master thorne')
-      expect(answer).toContain('still processing the relief')
+      expect(answer).toContain('I still wake up counting them')
       expect(answer).toContain(BRENN_AFTER)
       expect(answer.indexOf(BRENN_AFTER)).toBeGreaterThan(
-        answer.indexOf('still processing'),
+        answer.indexOf('I still wake up counting them'),
       )
       expectMarkupWellFormed(answer)
       expectDialogueSpeaker(answer, 'caravan master thorne')
@@ -104,7 +130,7 @@ describe('Caravan Master Thorne and Brenn (mercy moment)', () => {
 
     const answer = game.commandParser.parse('talk to caravan master thorne')
 
-    expect(answer).toContain('still processing the relief')
+    expect(answer).toContain('I still wake up counting them')
     expect(answer).not.toContain(BRENN_AFTER)
     expect(answer).not.toContain('remembered')
   })
