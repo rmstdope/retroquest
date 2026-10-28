@@ -40,11 +40,11 @@ function newGame(): Game {
 
 describe('Barmaid Elena stage directions', () => {
   const cases: [string, (e: BarmaidElena, g: Game) => void, string][] = [
-    ['cursed', () => {}, 'Elena coughs weakly.'],
+    ['cursed', () => {}, 'Elena coughs, and turns it into a smile.'],
     [
       'asked again',
       (_e, g) => g.state.setStoryFlag(FLAG_KNOWS_ELENA_CURSE, true),
-      'Elena speaks weakly.',
+      'Elena pulls her shawl tighter.',
     ],
     [
       'partly healed',
@@ -63,7 +63,7 @@ describe('Barmaid Elena stage directions', () => {
     [
       'cured',
       (_e, g) => g.state.setStoryFlag(FLAG_INNKEEPERS_DAUGHTER_COMPLETED, true),
-      'Elena beams with health and vitality.',
+      'Elena sets her tray down and takes both your hands.',
     ],
   ]
   it.each(cases)(
@@ -85,14 +85,18 @@ describe('Barmaid Elena stage directions', () => {
 })
 
 describe('Innkeeper Marcus stage direction', () => {
-  it('lifts the tears of joy out of the quote', () => {
+  it('lifts the wiped eyes out of the quote', () => {
     const game = newGame()
     game.state.setStoryFlag(FLAG_INNKEEPERS_DAUGHTER_COMPLETED, true)
     const out = new InnkeeperMarcus().talkTo(game.state)
     expect(out).not.toContain('*')
-    expect(narration(out)[0]).toBe('Marcus has tears of joy in his eyes.')
+    expect(narration(out)[0]).toBe(
+      'Marcus has to wipe his eyes before he can speak.',
+    )
     expect(parseTurn(out)[0].kind).toBe('text')
-    expect(quotes(out)[0].words.startsWith('You have given me back')).toBe(true)
+    expect(quotes(out)[0].words.startsWith('You gave me back my girl.')).toBe(
+      true,
+    )
   })
 })
 
@@ -102,7 +106,7 @@ describe('Training Master stage directions', () => {
     const out = new TrainingMaster().talkTo(game.state)
     expect(out).not.toContain('*')
     expect(narration(out)).toEqual([
-      'He glances toward Sir Cedric with a troubled expression.',
+      'He glances toward Sir Cedric and away again.',
       'He leans closer, lowering his voice.',
     ])
     const kinds = parseTurn(out).map((b) => b.kind)
@@ -117,9 +121,9 @@ describe('Training Master stage directions', () => {
     game.state.setStoryFlag(FLAG_CEDRIKS_HONOR_ACCEPTED, true)
     const out = new TrainingMaster().talkTo(game.state)
     expect(out).not.toContain('*')
-    expect(narration(out)).toEqual(['The Training Master nods respectfully.'])
+    expect(narration(out)).toEqual(['The Training Master nods.'])
     expect(parseTurn(out)[0].kind).toBe('text')
-    expect(quotes(out)[0].words.startsWith("You're looking into")).toBe(true)
+    expect(quotes(out)[0].words.startsWith('Still at it?')).toBe(true)
   })
 })
 
@@ -129,16 +133,13 @@ describe('Squires stage directions', () => {
     const out = new Squires().talkTo(game.state)
     expect(out).not.toContain('*')
     expect(narration(out)).toEqual([
-      'The squires are deeply focused on their training exercises, ' +
-        'practicing sword forms and footwork with intense concentration. ' +
-        'They seem too busy and focused to engage in conversation right now.',
+      'The squires keep their eyes on their drill. One of them answers ' +
+        'without turning.',
     ])
     expect(quotes(out)).toEqual([
       {
         speaker: 'Squires',
-        words:
-          "Sorry, we can't talk - the Training Master expects us to perfect " +
-          'these techniques before the day is over.',
+        words: "Can't stop. The Training Master's watching, and he counts.",
       },
     ])
   })
@@ -175,8 +176,9 @@ describe('Sir Cedric narration between quotes', () => {
     const out = new SirCedric().talkTo(game.state)
     expect(out).not.toContain('*')
     expect(narration(out).filter((l) => l.startsWith('Sir Cedric '))).toEqual([
-      'Sir Cedric reaches into his pack and withdraws an ancient wooden charm.',
+      'Sir Cedric reaches into his pack and takes out a small wooden charm, dark with handling.',
     ])
+    expect(narration(out)).toContain("You receive nature's charm.")
     expect(quotes(out).map((q) => q.speaker)).toEqual([
       'Sir Cedric',
       'Sir Cedric',
@@ -197,6 +199,7 @@ describe('Sir Cedric narration between quotes', () => {
       'Sir Cedric reaches into his pouch and hands you a bag of coins.',
       'Sir Cedric hesitates, then rests a hand on a small pouch at his belt.',
     ])
+    expect(narration(out)).toContain('You receive 150 gold coins.')
     expect(quotes(out).map((q) => q.speaker)).toEqual([
       'Sir Cedric',
       'Sir Cedric',

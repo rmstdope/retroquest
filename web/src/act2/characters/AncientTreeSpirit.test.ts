@@ -13,7 +13,7 @@ import {
 } from '@/testing/gameHelpers'
 
 const POINTER =
-  "Now you can hear them, you'll hear the grove is uneasy. The nymphs in " +
+  'You can hear them now. The grove is uneasy. The nymphs in ' +
   'the glade east of the entrance have something for these roots. Answer ' +
   'them, and bring back what they give you.'
 const HALF_HARVEST =
@@ -71,7 +71,7 @@ describe('Ancient Tree Spirit voice', () => {
     )
     const flavour = answer.indexOf('The voices of the grove settle into you')
     const learned = answer.indexOf(
-      'You have learned the [spell_name]Forest Speech[/spell_name] spell!',
+      'You have learned [spell_name]Forest Speech[/spell_name].',
     )
     expect(flavour).toBeGreaterThan(-1)
     expect(learned).toBeGreaterThan(flavour)
@@ -136,9 +136,10 @@ describe('Ancient Tree Spirit voice', () => {
       'South of the grove, branches pull apart with a long creak.',
     )
     expect(answer).toContain(
-      "The way south is open. Nyx lives at the end of it. She doesn't come " +
-        'for asking — read her altar before you call her.',
+      "Nyx lives at the end of that path. She doesn't come for asking — " +
+        'read her altar before you call her.',
     )
+    expect(answer).not.toContain('The way south is open')
     expect(answer).not.toContain('Heart of the Forest')
     expect(game.state.getStoryFlag(FLAG_WHISPERS_IN_WIND_COMPLETED)).toBe(true)
     expectMarkupWellFormed(answer)

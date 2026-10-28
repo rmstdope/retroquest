@@ -74,7 +74,7 @@ describe('Elena and the silver mask', () => {
     const { game, elena } = setup()
     elena.receiveGreaterHeal(game.state)
     expect(elena.receiveGreaterHeal(game.state)).toBe(
-      '[failure]Elena is already strengthened by your healing magic.[/failure]',
+      '[failure]Elena is as strong as healing will make her.[/failure]',
     )
   })
 
@@ -215,11 +215,72 @@ describe('Elena names no next step (rq-nun)', () => {
   it('out-of-order refusals stay word for word', () => {
     const { game, elena } = setup()
     expect(elena.receiveCrystalWaterPurification(game.state)).toBe(
-      'Elena is too weak from the curse; the water would run off her like rain off stone. She wants mending first.',
+      'Elena is too weak from the curse; the water would run off her like rain off stone. She must be made strong first.',
     )
     expect(elena.receiveDispelFinalCure(game.state)).toContain(
       'The counter-magic finds nothing to take hold of',
     )
+  })
+})
+
+describe('Elena in her own words', () => {
+  it('first talk: names the curse but no culprit', () => {
+    const { game, elena } = setup()
+    const first = elena.talkTo(game.state)
+    expect(first).toContain("It's a curse, the healers say.")
+    expect(first).toContain('every morning I wake a little colder')
+    expect(first).not.toMatch(/wizard|life force/i)
+  })
+
+  it('the water a second time: a true refusal that names no step', () => {
+    const { game, elena } = setup()
+    elena.receiveGreaterHeal(game.state)
+    purify(game, elena)
+    const again = elena.receiveCrystalWaterPurification(game.state)
+    expect(again).toBe(
+      '[failure]The water has done what water can. Whatever is left in her, ' +
+        'it will not wash out.[/failure]',
+    )
+    expect(again).not.toMatch(/purif|dispel/i)
+  })
+
+  it('the water without water in hand: no "You need"', () => {
+    const { game, elena } = setup()
+    elena.receiveGreaterHeal(game.state)
+    expect(elena.receiveCrystalWaterPurification(game.state)).toBe(
+      'There is no water in your hands to wash her with.',
+    )
+  })
+
+  it('the water leaves the water in hand and says nothing of its last drop', () => {
+    const { game, elena } = setup()
+    elena.receiveGreaterHeal(game.state)
+    game.state.inventory.push(new CrystalClearWater())
+    const out = elena.receiveCrystalWaterPurification(game.state)
+    expect(out).toContain('where it runs the grey goes out of her skin')
+    expect(out).not.toContain('last of the water')
+  })
+
+  it('the dispel: no exclamation and no recap of the steps', () => {
+    const { game, elena } = setup()
+    elena.receiveGreaterHeal(game.state)
+    purify(game, elena)
+    const out = elena.receiveDispelFinalCure(game.state)
+    expect(out).toContain(
+      'The unbinding takes hold, and Elena cries out, once.',
+    )
+    expect(out).not.toContain('!')
+    expect(out).not.toContain('three-step')
+    expect(elena.description).toContain('with a tray on each arm')
+  })
+
+  it('after the cure: thanks, and points at the charm over the door', () => {
+    const { game, elena } = setup()
+    game.state.setStoryFlag(FLAG_INNKEEPERS_DAUGHTER_COMPLETED, true)
+    const talk = elena.talkTo(game.state)
+    expect(talk).toContain('Father says the charm over our door is yours now')
+    expect(talk).not.toContain('truly a hero')
+    expectDialogueSpeaker(talk, 'barmaid elena')
   })
 })
 

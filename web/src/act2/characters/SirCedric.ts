@@ -26,26 +26,25 @@ import {
 
 /** Cedric's description while his name is not yet cleared: old mail, no device, an empty scabbard. */
 export const CEDRIC_DESCRIPTION_BEFORE =
-  'A tall knight in old, dented mail, bearing the scars of many battles. ' +
-  'A pale patch on his surcoat shows where his device has been unpicked, and ' +
-  'the scabbard at his hip hangs empty. His eyes hold wisdom and ' +
-  'determination all the same.'
+  'A tall knight in old, dented mail. A pale patch on his surcoat shows ' +
+  'where his device has been unpicked, and the scabbard at his hip hangs ' +
+  'empty. He stands as if he were still on watch.'
 
 /** Cedric's description once the Lord Commander has cleared his name and returned his sword. */
 export const CEDRIC_DESCRIPTION_AFTER =
-  'A tall knight in old, dented mail, bearing the scars of many battles. His ' +
-  'sword hangs at his hip once more, and he carries himself like a man who ' +
-  'has been given back his name.'
+  'A tall knight in old, dented mail. His sword hangs at his hip once more, ' +
+  'and he carries himself like a man who has been given back his name.'
 
 /** What Cedric and the narration say once the act ends, after the vision has been answered. */
 export const VISION_CLOSING =
   'All your life, Malakar has been a name from old books, a story told ' +
-  'to frighten children. But the agents asking after the Willowbrook ' +
-  'bloodline, the seal on the [item_name]secret documents[/item_name], ' +
-  'the figure reaching for you in the vision: they all point the same ' +
-  'way. Malakar is real, and the bloodline he seeks is yours.\n\n' +
+  'to frighten children. Now he has agents asking after the Willowbrook ' +
+  'bloodline, a seal on the [item_name]secret documents[/item_name], and ' +
+  'a hand reaching for you out of a vision. The bloodline he seeks is ' +
+  'yours.\n\n' +
   `${characterName('Sir Cedric')} rests a hand on his sword. ` +
-  '"Wherever this road leads, you will not walk it alone." ' +
+  '"I said I would listen to you. Wherever this goes, I will be beside ' +
+  'you." ' +
   '[bold]Act II is complete.[/bold] The storm has a name now.'
 
 /** Elior's telling, when he says the voice did not sound like a hunter. */
@@ -86,7 +85,8 @@ const BOUT_CALLS: BoutCall[] = [
   {
     answer: 'guard',
     failure:
-      'You step aside too late, and his blade stops a finger from your neck.',
+      'You are too slow to bring your blade up, and his stops a finger from ' +
+      'your neck.',
     correction: 'Dead, if this were steel. Again.',
     attackAction: 'He raises his blade high over his left shoulder.',
     cry: 'High cut!',
@@ -95,17 +95,17 @@ const BOUT_CALLS: BoutCall[] = [
   {
     answer: 'turn',
     failure:
-      'You bring the sword down to block, and his point slides under it ' +
-      'and stops against your ribs.',
-    correction: "You can't block a lunge with hope. Again.",
+      'You stand and meet it, and his point slides past your blade and ' +
+      'stops against your ribs.',
+    correction: "You can't stop a lunge with hope. Again.",
     attackAction: 'He drives straight at your middle.',
     cry: 'Lunge!',
     success: 'You step aside and his point slides past your ribs.',
   },
   {
     answer: 'strike',
-    failure: 'You hold your ground, and the opening closes before you move.',
-    correction: 'I gave you a door and you stood in it. Again.',
+    failure: 'You wait a heartbeat too long, and the opening closes.',
+    correction: 'I gave you a door and you did not go through it. Again.',
     attackAction: 'He swings wide and leaves his chest open.',
     cry: 'Well?',
     success: 'You tap his chest with the flat of the blade.',
@@ -187,7 +187,8 @@ export class SirCedric extends Character {
     if (charmDue && this.receivedNaturesCharm) {
       // The talk that opens the charm scene after the ruling starts with the sword at his hip
       return (
-        "Sir Cedric's sword hangs at his hip again. He rests a hand on its " +
+        characterName('Sir Cedric') +
+        "'s sword hangs at his hip again. He rests a hand on its " +
         'hilt as you approach, as if to be sure it is real.\n\n' +
         reply
       )
@@ -350,11 +351,8 @@ export class SirCedric extends Character {
       call.success +
         '\n' +
         characterName('Sir Cedric') +
-        ' lowers his blade and nods approvingly.\n' +
-        speech(
-          'Excellent! Your martial training is evident. I can trust ' +
-            'someone with such disciplined combat skills.',
-        ),
+        ' lowers his blade and nods.\n' +
+        speech('Three for three. I can trust a hand like that at my back.'),
     )
   }
 
@@ -395,43 +393,36 @@ export class SirCedric extends Character {
     )
   }
 
-  /** Cedric's warning about the dark forces, Nyx and the supplies from the Market District. */
+  /**
+   * Cedric's briefing after the bout: a sword will not find what is wrong,
+   * Nyx might; the three supplies from the Market District; and a word to see
+   * him first, for the coins.
+   */
   private missionBriefing(): string {
     return (
-      'He pauses, his expression growing more serious. ' +
+      'He pauses, and his voice drops. ' +
       speech(
-        "Since you've proven your combat prowess, I can share more about " +
-          "what lies ahead. The dark forces gathering aren't ordinary " +
-          "threats - they're connected to ancient magical energies that have " +
-          'been dormant for centuries.',
+        'Now I can tell you the rest. Whatever is wrong in this kingdom, a ' +
+          'sword will not find it.',
       ) +
       '\n\n' +
-      characterName('Sir Cedric') +
-      ' leans closer, lowering his voice. ' +
       speech(
-        'There are legends of a being known as ' +
+        'The old tales speak of a sprite called ' +
           characterName('Nyx') +
-          ' - a mystical entity who dwells deep within the enchanted forest ' +
-          'beyond our borders. Nyx is said to possess knowledge of the ' +
-          'oldest magics, including secrets that could help us understand ' +
-          'and combat these gathering shadows.',
+          ', deep in the Enchanted Forest. She knows things no archive does. ' +
+          'If anyone can tell us what we are facing, it is her.',
       ) +
       '\n\n' +
-      speech('But the enchanted forest is treacherous,') +
-      ' he continues. ' +
       speech(
-        "You'll need proper supplies before attempting such a journey. " +
-          'Visit the Market District and gather essential equipment: a ' +
-          'forest survival kit, an enhanced lantern for the dark woods, and ' +
-          "quality rope for navigating difficult terrain. Only when you're " +
-          'properly equipped should you venture into those mystical lands to ' +
-          'seek out Nyx.',
+        'The forest does not forgive the unprepared. The Market District ' +
+          'sells what you will want: a [item_name]forest survival ' +
+          'kit[/item_name], an [item_name]enhanced lantern[/item_name] and ' +
+          '[item_name]quality rope[/item_name]. Get all three before you go.',
       ) +
-      '\n\nHe straightens up, his voice returning to its commanding tone. ' +
+      '\n\nHe straightens. ' +
       speech(
-        'Time is of the essence, Elior. The darkness grows stronger each ' +
-          "day, and we need Nyx's ancient wisdom to understand what we're " +
-          'truly facing.',
+        'And see me before you go to the market, Elior. I will not send ' +
+          'you there with empty pockets.',
       )
     )
   }
@@ -481,9 +472,7 @@ export class SirCedric extends Character {
     return (
       dialogue(
         'Sir Cedric',
-        this.greetingWords() +
-          'I have been seeking individuals of courage and skill for a ' +
-          'matter of great—',
+        this.greetingWords() + 'There is a storm gathering over this—',
       ) +
       '\n\n' +
       characterName('Sir Cedric') +
@@ -494,10 +483,10 @@ export class SirCedric extends Character {
         'Sir Cedric',
         this.recognitionWords() +
           '\n\n' +
-          "Dark forces are gathering; I call it the 'Gathering Storm', and " +
-          'I need allies with magical knowledge and proven abilities. The ' +
-          'sigil tells me where you come from; it does not tell me what you ' +
-          'can do. Can you demonstrate your martial abilities?',
+          'There is a storm gathering over this kingdom, and I do not yet ' +
+          'know its name. The sigil tells me where you come from; it does ' +
+          'not tell me what you can do. Show me, with a blade, here in the ' +
+          'yard.',
       )
     )
   }
@@ -511,20 +500,19 @@ export class SirCedric extends Character {
       return (
         'Do you remember what I told you in the yard? That I would not give ' +
         'an heirloom of my house to someone I had known a day. I have known ' +
-        "you long enough now. Take nature's charm. It was blessed by the " +
-        'ancient knights who first made pacts with the forest spirits, and ' +
-        'it is one of the three that call Nyx. You will need it more than I ' +
-        'will.'
+        "you long enough now. Take [item_name]nature's charm[/item_name]. " +
+        'It was carved for the knights who first made pacts with the forest ' +
+        'spirits, and it is one of the three that call Nyx. You will need it ' +
+        'more than I will.'
       )
     }
     return (
       "Please accept this nature's charm. It has been in my family for " +
-      'generations, blessed by the ancient knights who first made pacts with ' +
-      'the forest spirits. A day ago I would not have given it to someone I ' +
+      'generations, carved for the knights who first made pacts with the ' +
+      'forest spirits. A month ago I would not have given it to someone I ' +
       'had only just met. But you have done more for me than men I have ' +
-      'known for years. The old texts say this is one of three sacred ' +
-      'charms needed to summon Nyx. I believe you will need it for the ' +
-      'greater challenges ahead.'
+      'known for years. The old texts say it is one of three that call ' +
+      'Nyx. You will need it more than I will.'
     )
   }
 
@@ -534,14 +522,10 @@ export class SirCedric extends Character {
     if (gameState.getStoryFlag(FLAG_NYX_TRIALS_PASSED)) {
       return dialogue(
         'Sir Cedric',
-        'My friend, I sense something extraordinary has happened. You ' +
-          'carry an aura of ancient magic, and your eyes hold depths I had ' +
-          'not seen before. Have you succeeded in your quest to find Nyx? ' +
-          'The prophetic vision spell you learned is the sort of mystical ' +
-          'knowledge we need. With your ability to glimpse possible futures, ' +
-          'we can better anticipate threats and develop strategies to ' +
-          'counter them. You have become a formidable ally in our fight ' +
-          'against the darkness.',
+        'You found her. It is in your face; you look like a man who has ' +
+          'been shown something. Whatever she gave you to see, I would see ' +
+          'it too. Show me here, and I will stand beside you for whatever ' +
+          'comes of it.',
       )
     }
 
@@ -557,21 +541,23 @@ export class SirCedric extends Character {
       return (
         dialogue(
           'Sir Cedric',
-          'My friend, I cannot express how grateful I am. You have restored ' +
-            'my honor and cleared my name. And more: the king was not lost on ' +
-            'my watch. He was taken, by men who were paid to let it happen.',
+          'Elior. You have cleared my name. And more than that: the king ' +
+            'was not lost on my watch. He was taken, by men who were paid ' +
+            'to let it happen.',
         ) +
         '\n\nHe is quiet for a moment.\n\n' +
         speech(
           'Malakar. My grandmother frightened me with that name when I was ' +
-            'small. Whoever hides behind it took my king, and I mean to find ' +
-            'him.',
+            'small. Whoever hides behind it took my king, and the papers say ' +
+            'where: the bastion on the shattered ridge. I mean to find him.',
         ) +
         '\n\n' +
         characterName('Sir Cedric') +
-        ' reaches into his pack and withdraws an ancient wooden charm.' +
+        ' reaches into his pack and takes out a small wooden charm, dark ' +
+        'with handling.' +
         '\n\n' +
-        dialogue('Sir Cedric', this.charmHandOverWords())
+        dialogue('Sir Cedric', this.charmHandOverWords()) +
+        `\n\nYou receive [item_name]${charm.name}[/item_name].`
       )
     }
 
@@ -590,12 +576,9 @@ export class SirCedric extends Character {
       return dialogue(
         'Sir Cedric',
         this.greetingWords() +
-          'I have been seeking individuals of courage and skill for a ' +
-          'matter of great importance. Dark forces are gathering; I call it ' +
-          "the 'Gathering Storm', and I need allies with magical knowledge " +
-          'and proven abilities. Before I can trust you with this ' +
-          'responsibility, I need proof of your combat skills. Can you ' +
-          'demonstrate your martial abilities?',
+          'There is a storm gathering over this kingdom, and I do not yet ' +
+          'know its name. I need people at my back I can trust, and trust ' +
+          'starts here. Show me what you can do with a blade.',
       )
     } else if (
       gameState.isQuestCompleted("The Knight's Test") &&
@@ -610,9 +593,7 @@ export class SirCedric extends Character {
       return (
         dialogue(
           'Sir Cedric',
-          'Excellent demonstration! Your combat skills are impressive. I can ' +
-            'see you have the training and discipline needed for the ' +
-            'challenges ahead.',
+          'You held your own in the yard. Few do, against me.',
         ) +
         '\n\n' +
         characterName('Sir Cedric') +
@@ -620,20 +601,19 @@ export class SirCedric extends Character {
         '\n\n' +
         dialogue(
           'Sir Cedric',
-          'Please accept these 150 gold coins. I should have provided them ' +
-            "earlier for your supply purchasing. You'll need proper equipment " +
-            'for the forest expedition: a survival kit, an enhanced lantern, ' +
-            'and quality rope from the Market District. The realm faces a ' +
-            'great threat, and we must be prepared.',
+          'For the market. The kit, the lantern and the rope; it will cover ' +
+            'all three, if you do not let the merchants see how badly you ' +
+            'want them.',
         ) +
-        '\n\n' +
+        '\n\nYou receive 150 gold coins.\n\n' +
         characterName('Sir Cedric') +
         ' hesitates, then rests a hand on a small pouch at his belt.' +
         '\n\n' +
         dialogue(
           'Sir Cedric',
           'One more thing, since the forest is where you are bound. My ' +
-            "family has kept a charm for generations: nature's charm, " +
+            "family has kept a charm for generations: [item_name]nature's " +
+            'charm[/item_name], ' +
             'carved for the knights who first made pacts with the forest ' +
             'spirits. The old texts say it is one of three that can call the ' +
             'sprite Nyx. I will not hand an heirloom of my house to someone ' +
@@ -644,27 +624,28 @@ export class SirCedric extends Character {
     } else if (this.cedricTrustsElior) {
       const preparation = dialogue(
         'Sir Cedric',
-        'How goes your preparation? The gathering storm grows stronger ' +
-          'each day. I trust you are making good progress in gathering ' +
-          'allies and supplies.',
+        'How goes your preparation? Whatever is coming does not wait on ' +
+          'us. Neither should you.',
       )
       if (!gameState.getStoryFlag(FLAG_CEDRIKS_HONOR_ACCEPTED))
         return preparation
       // He has heard of his own disgrace: he owns it without defending himself
       return (
         preparation +
-        "\n\nSir Cedric's jaw tightens.\n\n" +
+        '\n\n' +
+        characterName('Sir Cedric') +
+        "'s jaw tightens.\n\n" +
         speech(
           "You will have heard what they say of me. I held the king's wall " +
-            'the night he vanished, and he was taken on my watch. Whatever ' +
+            'the night he vanished, and he was lost on my watch. Whatever ' +
             'else is true, that is. I will not make excuses.',
         )
       )
     }
     return dialogue(
       'Sir Cedric',
-      'I await your demonstration of combat skills before we can proceed ' +
-        'with more serious matters.',
+      'Not yet. Show me what you can do with a blade first; then we will ' +
+        'talk of the rest.',
     )
   }
 }

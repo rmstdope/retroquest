@@ -1,4 +1,7 @@
 import { describe, it, expect } from 'vitest'
+import { Game } from '@/engine'
+import { Act2 } from '../Act2'
+import { NatureSenseSpell } from './NatureSenseSpell'
 import { FLAG_FOUND_LOST_CARAVAN, FLAG_FOUND_RAVINE } from '../Act2StoryFlags'
 import { FLAG_SPOKEN_TO_CARAVAN_MASTER } from '../Act2StoryFlags'
 import { ravineHere, reload, setupForestEntrance } from '../ravineTestSupport'
@@ -72,5 +75,29 @@ describe('NatureSenseSpell at the Forest Entrance', () => {
     expect(afterRescue.commandParser.parse('cast nature_sense')).toBe(
       NOTHING_CHANGED,
     )
+  })
+})
+
+describe('NatureSenseSpell in the Whispering Glade', () => {
+  it('lets the nymphs be seen by name, then finds them where they were', () => {
+    const game = new Game([new Act2()])
+    const state = game.state
+    state.learnSpell(new NatureSenseSpell())
+    state.currentRoom = state.allRooms.WhisperingGlade
+
+    const first = game.commandParser.parse('cast nature_sense')
+    const again = game.commandParser.parse('cast nature_sense')
+
+    expect(first).toBe(
+      'You hold still and let the glade come to you. The stream is not ' +
+        'only water: there are shapes sitting in it, and they have been ' +
+        'watching you all along. The [character_name]water ' +
+        'nymphs[/character_name] let you see them.',
+    )
+    expect(again).toContain(
+      'The [character_name]water nymphs[/character_name] are where they ' +
+        'were, sitting in the stream.',
+    )
+    expect(again).not.toMatch(/sacred|presence/)
   })
 })

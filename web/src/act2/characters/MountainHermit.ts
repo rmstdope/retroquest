@@ -116,8 +116,8 @@ export class MountainHermit extends Character {
     return (
       'The ' +
       characterName(this.name) +
-      ' smiles. ' +
-      speech('I already gave you the sword, young one. Use it wisely.')
+      ' snorts. ' +
+      speech("You've got it already. Don't lose it before he sees it.")
     )
   }
 
@@ -137,13 +137,13 @@ export class MountainHermit extends Character {
       speech(
         'This was ' +
           characterName('Cedric') +
-          "'s. I put it in his hands when he was a squire no taller than " +
-          'you. They say he slept on watch the night the king went, and ' +
+          "'s. I put it in his hands when he was a boy, a squire in that " +
+          'yard. They say he left his post the night the king went, and ' +
           'lost his spurs for it. Take it to him in the castle yard. Tell ' +
           'him the sergeant never believed a word of it.',
       ) +
       '\n\n' +
-      `You receive a [item_name]${swordName}[/item_name]!`
+      `You receive a [item_name]${swordName}[/item_name].`
     )
   }
 }

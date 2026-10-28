@@ -17,7 +17,9 @@ describe('Training Master dialogue markup', () => {
     const second = master.talkTo(game.state)
 
     expect(first).toContain('papers somewhere that tell a different story')
-    expect(second).toContain('Perhaps the squires might know more')
+    expect(first).toContain('I have known Cedric twenty years.')
+    expect(first).not.toMatch(/It pains me|never sat right/)
+    expect(second).toContain('Ask the squires.')
     for (const answer of [first, second]) {
       expectMarkupWellFormed(answer)
       expectDialogueSpeaker(answer, 'Training Master')

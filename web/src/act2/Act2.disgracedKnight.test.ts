@@ -9,6 +9,7 @@ import {
   FLAG_CEDRIKS_HONOR_ACCEPTED,
   FLAG_CEDRIKS_HONOR_COMPLETED,
   FLAG_EXAMINED_SECRET_DOCUMENTS,
+  FLAG_DEMONSTRATED_COMBAT_SKILLS,
 } from './Act2StoryFlags'
 import { SecretDocuments } from './items/SecretDocuments'
 import { CityNoticeBoard } from './items/CityNoticeBoard'
@@ -24,13 +25,13 @@ const BOARD_EXAMINE =
 const BOARD_DESCRIPTION =
   "A large wooden board posted with official notices, job postings, and announcements. The most prominent posting, under the Lord Commander's seal, calls for able hands to serve the castle."
 const CEDRIC_BEFORE =
-  'A tall knight in old, dented mail, bearing the scars of many battles. A pale patch on his surcoat shows where his device has been unpicked, and the scabbard at his hip hangs empty. His eyes hold wisdom and determination all the same.'
+  'A tall knight in old, dented mail. A pale patch on his surcoat shows where his device has been unpicked, and the scabbard at his hip hangs empty. He stands as if he were still on watch.'
 const CEDRIC_AFTER =
-  'A tall knight in old, dented mail, bearing the scars of many battles. His sword hangs at his hip once more, and he carries himself like a man who has been given back his name.'
+  'A tall knight in old, dented mail. His sword hangs at his hip once more, and he carries himself like a man who has been given back his name.'
 const GREETING =
   "Greetings, traveler. I am [character_name]Cedric[/character_name]. Some here still call me Sir; you need not. The Lord Commander's notice asks for able hands; I ask for mine here in the yard, where I can see what they can do."
 const HILT =
-  "Sir Cedric's sword hangs at his hip again. He rests a hand on its hilt as you approach, as if to be sure it is real."
+  "[character_name]Sir Cedric[/character_name]'s sword hangs at his hip again. He rests a hand on its hilt as you approach, as if to be sure it is real."
 
 /** A new Act II game. */
 function newGame(): Game {
@@ -78,7 +79,19 @@ describe('before the ruling', () => {
     const text = new CastleGuardCaptain().talkTo(newGame().state)
     expect(text).toContain('He holds no rank now, but we still call him Sir')
     expect(text).toContain('ask no questions about the king')
+    expect(text).toContain("he'll want to see you with a blade")
+    expect(text).not.toContain('capable individuals')
     expect(text).not.toContain('address him')
+  })
+
+  it('the Captain stops asking for a blade once Elior has held his own', () => {
+    const game = newGame()
+    game.state.setStoryFlag(FLAG_DEMONSTRATED_COMBAT_SKILLS, true)
+    const text = new CastleGuardCaptain().talkTo(game.state)
+    expect(text).toContain('He holds no rank now, but we still call him Sir')
+    expect(text).toContain('I hear you held your own against him. Not many do.')
+    expect(text).not.toContain('with a blade')
+    expect(text).toContain('ask no questions about the king')
   })
 
   it('Cedric greets as plain Cedric and wears the disgrace', () => {
@@ -89,8 +102,10 @@ describe('before the ruling', () => {
     const text = cedric.talkTo(game.state)
     expect(text).toContain(GREETING)
     expect(text).toContain(
-      'I have been seeking individuals of courage and skill',
+      'There is a storm gathering over this kingdom, and I do not yet know its name.',
     )
+    expect(text).toContain('Show me what you can do with a blade.')
+    expect(text).not.toContain('Gathering Storm')
     expect(text).not.toContain('I am [character_name]Sir')
   })
 })
@@ -100,7 +115,7 @@ describe('the first meeting while carrying the amulet', () => {
     const game = newGame()
     const text = find(game, SirCedric).talkTo(game.state)
     expect(text).toContain(GREETING)
-    expect(text).toContain('a matter of great—')
+    expect(text).toContain('There is a storm gathering over this—')
     expect(text).not.toContain('I am [character_name]Sir')
   })
 })

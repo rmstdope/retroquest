@@ -4,7 +4,8 @@ import { FLAG_HERMITS_WARNING_COMPLETED } from '../Act2StoryFlags'
 import { ForestHermit } from '../characters/ForestHermit'
 import { StandingStones } from '../items/StandingStones'
 
-const HERMIT_BEFORE_CAMP = 'A robed figure sits peacefully among the stones.'
+const HERMIT_BEFORE_CAMP =
+  'A robed figure sits among the stones, watching the trees.'
 const HERMIT_AFTER_CAMP =
   `The ${characterName('forest hermit')} sits by the cold ashes of your camp ` +
   'in the lee of the oldest stone.'

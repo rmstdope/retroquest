@@ -31,9 +31,8 @@ export class Historians extends Character {
     super({
       name: 'historians',
       description:
-        "A group of learned scholars who maintain the court's historical records and " +
-        'genealogical archives. They are eager to examine any historical documents or ' +
-        'artifacts.',
+        "Three scholars in ink-stained sleeves, bent over the court's birth rolls " +
+        'and family registers. They look up at anything with writing on it.',
     })
   }
 
@@ -45,14 +44,15 @@ export class Historians extends Character {
         dialogue(
           name,
           'We checked the Willowbrook roll against his notes. One page is ' +
-            'gone from it, cut out at the binding, and long ago by the look ' +
-            'of it. The year you were born. His notes stop at the same ' +
+            'gone from it, cut out at the binding, years ago by the look ' +
+            'of the cut. The year you were born. His notes stop at the same ' +
             'place. Whatever he came for, someone hid it from him before he ' +
             'ever sat down.',
         ) +
         '\n\nOne of them adds, more quietly:\n\n' +
         speech(
-          'You saw the last name in our register, then. The same week. We ' +
+          'You saw the last entry in our register, then. The week the king ' +
+            'went. We ' +
             'have told ourselves it means nothing, and none of us believes it.',
         )
       )
@@ -67,10 +67,9 @@ export class Historians extends Character {
       return (
         dialogue(
           name,
-          'Welcome to the historical archives. We maintain records of ' +
-            'regional history, family genealogies, and ancient chronicles. Do ' +
-            "you have any historical documents or artifacts you'd like us to " +
-            'examine?',
+          "These are the court's archives: birth rolls, land grants, family " +
+            'registers, three hundred years of them. If you have brought ' +
+            'something written, show us. We read everything.',
         ) +
         '\n\nOne of them adds, more quietly:\n\n' +
         speech(
@@ -85,10 +84,17 @@ export class Historians extends Character {
   override giveItem(gameState: GameState, item: Item): string {
     if (item instanceof TravelersJournal) {
       if (!gameState.getStoryFlag(FLAG_READ_TRAVELERS_JOURNAL)) {
-        return clue(
-          'You should not give things away that you know nothing about. ' +
-            'Perhaps you should ensure that you understand its contents before ' +
-            'sharing it with others.',
+        return (
+          clue(
+            `The ${characterName(this.name)} push the journal back across ` +
+              'the table.',
+          ) +
+          '\n\n' +
+          dialogue(
+            this.name,
+            'Whose is it? What is in it? We do not take papers from someone ' +
+              'who cannot say what they are. Read it first.',
+          )
         )
       }
 

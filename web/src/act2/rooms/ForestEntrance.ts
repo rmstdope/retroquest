@@ -54,7 +54,8 @@ export class ForestEntrance extends Room {
       ? 'A path leads south toward an ancient grove; the forest sprites ' +
         'have drawn aside from it and dance among the trees.'
       : 'A path leads south toward an ancient grove, but small motes of ' +
-        `light dance thick across it: ${sprites}, watching your every move.`
+        `light dance thick across it: ${sprites}, and every one of them is ` +
+        'looking at you.'
     const east = this.lanternUsed(gameState)
       ? "To the east, your lantern's blue light picks out a narrow path " +
         'through the undergrowth, toward a tranquil glade.'

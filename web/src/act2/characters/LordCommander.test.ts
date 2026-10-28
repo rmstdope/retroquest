@@ -36,7 +36,10 @@ describe('Lord Commander', () => {
 
     const answer = game.commandParser.parse('talk to lord commander')
 
-    expect(answer).toContain("Welcome to Greendale's Great Hall")
+    expect(answer).toContain(
+      "This is the king's hall. Since King Alden vanished I hold his court " +
+        'in his name, and no more than that.',
+    )
     expect(answer).toContain(`The ${TITLE} greets you formally.`)
     expectAttributedDialogue(answer)
   })

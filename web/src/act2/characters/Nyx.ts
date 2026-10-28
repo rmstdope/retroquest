@@ -1,4 +1,10 @@
-import { Character, characterName, type GameState } from '@/engine'
+import {
+  Character,
+  characterName,
+  dialogue,
+  speech,
+  type GameState,
+} from '@/engine'
 import { NyxToken } from '../items/NyxToken'
 import { ForestHeartCrystal } from '../items/ForestHeartCrystal'
 import { PropheticVision } from '../spells/PropheticVision'
@@ -73,36 +79,51 @@ export class Nyx extends Character {
       const nyxToken = new NyxToken()
       const forestCrystal = new ForestHeartCrystal()
       gameState.inventory.push(nyxToken, forestCrystal)
-      const msg =
-        '[success]The light over the altar folds into a woman no taller than ' +
-        'you, barefoot, leaves caught in her hair. She looks at you the way ' +
-        'you look at a road you have walked before.\n\n' +
-        '"Elior. My deer sat with you in the glade at Willowbrook, before ' +
-        'any of this. It said you were still. Few are. ' +
-        'You gave the tree your acorn instead of keeping it. You ' +
-        'answered the nymphs without bargaining. You brought me the three ' +
-        'charms. ' +
-        kindnesses +
-        'That is enough."\n\n' +
+      const elior = characterName('Elior')
+      return (
+        'The light over the altar folds into a woman no taller than you, ' +
+        'barefoot, leaves caught in her hair. She looks at you the way you ' +
+        'look at a road you have walked before.\n' +
+        dialogue(
+          this.name,
+          `${elior}. My deer sat with you in the glade at Willowbrook, ` +
+            'before any of this. It said you were still. Few are. ' +
+            'You gave the tree your acorn instead of keeping it. You ' +
+            'answered the nymphs without bargaining. You brought me the ' +
+            'three charms. ' +
+            kindnesses +
+            'That is enough.',
+        ) +
+        '\n\n' +
         'She touches your forehead. Something settles behind your eyes, like ' +
         'a word you had forgotten coming back. She puts two things in your ' +
         'hands.\n\n' +
-        'You have learned the spell: [spell_name]Prophetic Vision[/spell_name]\n' +
-        "You have received: [item_name]Nyx's Token[/item_name]\n" +
-        'You have received: [item_name]forest heart crystal[/item_name]\n\n' +
-        '"The storm is heading for your village. This lets you see it ' +
-        'coming."\n\n' +
+        '[success]You have learned [spell_name]Prophetic Vision[/spell_name].\n' +
+        "You receive [item_name]Nyx's Token[/item_name] and a " +
+        '[item_name]forest heart crystal[/item_name].[/success]\n\n' +
+        speech(
+          'This lets you see what is coming. Do not look at it alone; take ' +
+            'it to your knight.',
+        ) +
+        '\n\n' +
         'Then her voice softens, as if she is repeating something she was ' +
-        'told long ago. "Remember the old words, Elior: Power follows ' +
-        'purpose; purpose follows truth."\n\n' +
+        'told long ago. ' +
+        speech(
+          `Remember the old words, ${elior}: Power follows purpose; ` +
+            'purpose follows truth.',
+        ) +
+        '\n\n' +
         'The words from the stone in the glade. You read them aloud there ' +
         'and did not know what they meant. You still do not, quite.'
-      return msg + '[/success]'
+      )
     }
     // Subsequent meetings - one plain line
     return (
-      'Nyx is already half leaves again. "Go home the long way, Elior. Look ' +
-      'before you step."'
+      `${characterName('Nyx')} is already half leaves again. ` +
+      speech(
+        `Go home the long way, ${characterName('Elior')}. Look before you ` +
+          'step.',
+      )
     )
   }
 }

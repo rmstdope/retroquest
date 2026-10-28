@@ -23,9 +23,8 @@ export class Herald extends Character {
     super({
       name: 'herald',
       description:
-        'An official court herald wearing ornate robes bearing the royal arms. ' +
-        'He examines documents and credentials for those seeking audience ' +
-        'with nobility.',
+        'A thin man in a tabard of the royal arms, a ledger open on a stand ' +
+        'beside him. He looks hard at every seal and not at much else.',
     })
   }
 
@@ -35,18 +34,18 @@ export class Herald extends Character {
     if (this.receivedPass) {
       return dialogue(
         name,
-        'Your credentials have been verified and you have been granted ' +
-          'formal audience rights. You may proceed to meet with ' +
+        'Your credentials have been verified. The courtyard is through the ' +
+          'west arch; you will find ' +
           characterName('Sir Cedric') +
-          ' and other members of the court.',
+          ' there.',
       )
     } else {
       return dialogue(
         name,
         'Greetings, traveler. I must examine your credentials before you ' +
-          'can be granted audience with the nobility. Do you have a formal ' +
-          'pass or letter of recommendation? Forgive the quiet halls. Since King ' +
-          'Alden vanished, half the court has gone home to wait for news.',
+          'pass into the courtyard. A sealed pass will do, or a letter. ' +
+          'Forgive the quiet halls. Since King Alden vanished, half the ' +
+          'court has gone home to wait for news.',
       )
     }
   }
@@ -54,8 +53,7 @@ export class Herald extends Character {
   /** Handle giving items to the Herald. */
   override giveItem(gameState: GameState, item: Item): string {
     if (item instanceof EntryPass) {
-      // Python calls current_room.enable_castle_courtyard() unconditionally;
-      // only the Castle Approach room defines it.
+      // Only the Castle Approach has a courtyard exit to open.
       const room = gameState.currentRoom
       if (room instanceof CastleApproach) {
         room.enableCastleCourtyard()
@@ -66,12 +64,9 @@ export class Herald extends Character {
         '[success]The ' +
         characterName(name) +
         ' examines the seal carefully and nods with approval. ' +
-        speech(
-          'This is a formal recommendation of excellent standing. You are ' +
-            'granted formal audience rights with the nobility.',
-        ) +
-        ' He does not seem to notice that the name above the seal has been ' +
-        'scraped away. The pass has been officially registered.[/success]'
+        speech('A sound seal. You may pass into the courtyard.') +
+        ' He does not look at the line above the seal, where the name has ' +
+        'been scraped away. He writes something in his ledger.[/success]'
       )
     } else {
       return super.giveItem(gameState, item)

@@ -2,6 +2,7 @@ import {
   Character,
   type GameState,
   type Item,
+  characterName,
   dialogue,
   type NameOptions,
 } from '@/engine'
@@ -19,9 +20,8 @@ export class CourtHerald extends Character {
     super({
       name: 'court herald',
       description:
-        'An elaborately dressed official who manages formal presentations and ' +
-        'ceremonies at court. He scrutinizes documents and credentials with ' +
-        'practiced expertise.',
+        'An official in a tabard stiff with gold thread, standing at a ' +
+        'lectern with the court ledger open on it. He reads every seal twice.',
     })
   }
 
@@ -31,15 +31,17 @@ export class CourtHerald extends Character {
       // Set the formal presentation flag
       gameState.setStoryFlag(FLAG_COURT_HERALD_FORMAL_PRESENTATION, true)
 
-      const heraldName = this.name
-      const announcement =
-        'Excellent! This is a ' +
-        'properly certified entry pass. I hereby formally present you to the ' +
-        'court and grant you access to our historical archives.'
-      const announcementTail =
-        'Your credentials are now on record, and you may research freely in ' +
-        'our collections.'
-      return dialogue(heraldName, announcement + ' ' + announcementTail)
+      return (
+        `The ${characterName('Court Herald')} reads the seal twice and never looks at the line ` +
+        'above it.' +
+        '\n' +
+        dialogue(
+          this.name,
+          'The seal of Greendale, in good order. I hereby present you to the ' +
+            'court, and enter you in the ledger. The archives are open to ' +
+            'you; the historians keep them.',
+        )
+      )
     } else {
       // Default behavior for other items
       return super.giveItem(gameState, item)
@@ -52,19 +54,17 @@ export class CourtHerald extends Character {
     if (gameState.getStoryFlag(FLAG_COURT_HERALD_FORMAL_PRESENTATION)) {
       return dialogue(
         name,
-        'You have been formally presented to the court and your ' +
-          'credentials are on record. You may access the historical archives ' +
-          'and speak with court historians about your research. Petitions that ' +
+        'You are entered in the ledger, and the archives are open to you. ' +
+          'The historians know the shelves; ask them where to look. Petitions that ' +
           "were the king's go to the Lord Commander now, by his order, until His " +
           'Majesty is found.',
       )
     } else {
       return dialogue(
         name,
-        'I handle formal presentations and credentials for court access. ' +
-          'If you wish to research in the historical archives or speak with ' +
-          "court officials, you'll need proper documentation of your " +
-          "standing. Petitions that were the king's go to the Lord Commander " +
+        'Presentations to the court come through me, and nobody reads in ' +
+          'the archives unpresented. If you carry a pass, hand it to me and I ' +
+          "will enter you. Petitions that were the king's go to the Lord Commander " +
           'now, by his order, until His Majesty is found.',
       )
     }

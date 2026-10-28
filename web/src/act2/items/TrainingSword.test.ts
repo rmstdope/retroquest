@@ -21,8 +21,12 @@ describe('Training Sword markup', () => {
     const second = sword.use(game.state)
 
     expect(first).toContain('High cut!')
-    expect(pass).toContain('Excellent! Your martial training is evident')
+    expect(pass).toContain('Three for three.')
     expect(second).toContain('Your skills remain sharp')
+    expect(second).toContain(
+      'Keep them that way in the forest. The market first, then',
+    )
+    expect(second).not.toMatch(/mystical|ancient|darkness|wisdom/i)
     for (const answer of [first, pass, second]) {
       expectMarkupWellFormed(answer)
       expectDialogueSpeaker(answer, 'Sir Cedric')
@@ -52,7 +56,7 @@ describe("Training Sword as Cedric's old blade", () => {
     expect(first).toContain('Show me what he taught you, then.')
     expect(recognition).toBeGreaterThan(-1)
     expect(bout).toBeGreaterThan(recognition)
-    expect(first).not.toContain('Excellent! Your martial training is evident')
+    expect(first).not.toContain('Three for three.')
     expectMarkupWellFormed(first)
     expectNoSpeechOutsideDialogue(first)
   })

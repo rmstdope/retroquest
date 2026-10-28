@@ -11,18 +11,25 @@ import {
 import { characterName } from '@/engine'
 import { expectMarkupWellFormed } from '@/testing/gameHelpers'
 
+const ELIOR = characterName('Elior')
 const REFRAIN =
   'Then her voice softens, as if she is repeating something she was told ' +
-  'long ago. "Remember the old words, Elior: Power follows purpose; purpose ' +
-  'follows truth."'
-const STORM =
-  '"The storm is heading for your village. This lets you see it coming."'
+  `long ago. [dialogue]Remember the old words, ${ELIOR}: Power follows ` +
+  'purpose; purpose follows truth.[/dialogue]'
+const KNIGHT =
+  '[dialogue]This lets you see what is coming. Do not look at it alone; ' +
+  'take it to your knight.[/dialogue]'
+const GIFTS =
+  '[success]You have learned [spell_name]Prophetic Vision[/spell_name].\n' +
+  "You receive [item_name]Nyx's Token[/item_name] and a " +
+  '[item_name]forest heart crystal[/item_name].[/success]'
 const RECOGNITION =
   'The words from the stone in the glade. You read them aloud there and ' +
   'did not know what they meant. You still do not, quite.'
 
 const LATER =
-  'Nyx is already half leaves again. "Go home the long way, Elior. Look before you step."'
+  `${characterName('Nyx')} is already half leaves again. ` +
+  `[dialogue]Go home the long way, ${ELIOR}. Look before you step.[/dialogue]`
 
 describe('Nyx', () => {
   it('is a plain witness on the first meeting', () => {
@@ -36,21 +43,23 @@ describe('Nyx', () => {
         'look at a road you have walked before.',
     )
     expect(answer).toContain(
-      '"Elior. My deer sat with you in the glade at Willowbrook, before any ' +
+      '[character_name]nyx[/character_name]\n' +
+        `[dialogue]${ELIOR}. My deer sat with you in the glade at Willowbrook, before any ` +
         'of this. It said you were still. Few are. ' +
         'You gave the tree your acorn instead of keeping it. You ' +
         'answered the nymphs without bargaining. You brought me the three ' +
         'charms. The forest saw the road you took. It will keep watching. ' +
-        'That is enough."',
+        'That is enough.[/dialogue]',
     )
     expect(answer).toContain(
       'She touches your forehead. Something settles behind your eyes, like ' +
         'a word you had forgotten coming back. She puts two things in your ' +
         'hands.',
     )
-    expect(answer.indexOf('You have learned the spell')).toBeGreaterThan(
+    expect(answer.indexOf(GIFTS)).toBeGreaterThan(
       answer.indexOf('She puts two things in your hands.'),
     )
+    expect(answer).not.toMatch(/storm|village|You have received/)
     expect(answer).not.toMatch(/ancient|wisdom|millennia|ethereal/i)
   })
 
@@ -61,19 +70,15 @@ describe('Nyx', () => {
     )
   })
 
-  it('ends the first talk with the refrain and the recognition line, inside the success reply', () => {
+  it('ends the first talk with the knight, the refrain and the recognition line', () => {
     const game = new Game([new Act2()])
 
     const answer = new Nyx().talkTo(game.state)
 
-    const storm = answer.indexOf(STORM)
-    expect(storm).toBeGreaterThan(-1)
-    expect(answer.indexOf(REFRAIN)).toBeGreaterThan(storm)
-    expect(answer.indexOf(RECOGNITION)).toBeGreaterThan(answer.indexOf(REFRAIN))
-    expect(answer.startsWith('[success]')).toBe(true)
+    expect(answer.startsWith('[success]')).toBe(false)
     expect(
       answer.endsWith(
-        STORM + '\n\n' + REFRAIN + '\n\n' + RECOGNITION + '[/success]',
+        GIFTS + '\n\n' + KNIGHT + '\n\n' + REFRAIN + '\n\n' + RECOGNITION,
       ),
     ).toBe(true)
     expectMarkupWellFormed(answer)

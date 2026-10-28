@@ -4,6 +4,8 @@ import {
   FLAG_SPOKEN_TO_CARAVAN_MASTER,
 } from '../Act2StoryFlags'
 import { ravineHere, reload, setupForestEntrance } from '../ravineTestSupport'
+import { ForestSprites } from '../characters/ForestSprites'
+import { ForestSpeechSpell } from './ForestSpeechSpell'
 
 const FIRST =
   '[success]The woodland creatures gather around you excitedly. A family of ' +
@@ -57,5 +59,18 @@ describe('ForestSpeechSpell at the Forest Entrance', () => {
     expect(beforeStory.commandParser.parse('cast forest_speech')).toBe(STORY)
     const afterStory = reload(beforeStory)
     expect(afterStory.commandParser.parse('cast forest_speech')).toBe(NO_NEWS)
+  })
+})
+
+describe('ForestSpeechSpell cast on a forest being', () => {
+  it('lets their sounds sort themselves into words', () => {
+    const answer = new ForestSpeechSpell().castOnCharacter(
+      setupForestEntrance().state,
+      new ForestSprites(),
+    )
+    expect(answer).toBe(
+      '[success]The sounds they make sort themselves into words. They were ' +
+        'talking about you before you cast it, and they go on.[/success]',
+    )
   })
 })

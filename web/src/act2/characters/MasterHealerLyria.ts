@@ -27,11 +27,8 @@ export class MasterHealerLyria extends Character {
     super({
       name: 'Master Healer Lyria',
       description:
-        'A wise and nurturing healer with graying hair and gentle eyes that seem to ' +
-        'see right through to your magical potential. She wears simple robes adorned ' +
-        'with healing herbs, and her hands are steady from years of tending to the ' +
-        "sick and wounded. There's an aura of calm competence about her that inspires " +
-        'confidence in her abilities.',
+        'A grey-haired healer in a stained apron, sleeves pushed to the ' +
+        'elbow. Her hands smell of crushed herbs, and they are very steady.',
     })
   }
 
@@ -82,9 +79,10 @@ export class MasterHealerLyria extends Character {
             'because this is how a curse like hers is lifted, if it can be ' +
             'lifted at all. First she must be made strong, or what comes ' +
             'after will kill her; that wants a deeper healing than I can ' +
-            'give alone. Then the mark must be washed in water no shadow has ' +
-            'ever touched. You will find none in this city; every well here ' +
-            'has seen the dark. And last, the thing must be unbound. Not ' +
+            'give alone. Then the mark must be washed in untouched water, ' +
+            'from a spring no bucket has ever gone down. You will find none ' +
+            'in this city; every well here has the grey in it. And last, the ' +
+            'thing must be unbound. Not ' +
             'broken: unbound, with the old kind of unbinding, the kind the ' +
             'scholars wrote down before any of us were born.',
         ) +
@@ -146,8 +144,8 @@ export class MasterHealerLyria extends Character {
     }
     return dialogue(
       this.name,
-      'Welcome to my house of healing. I can sense magical potential in ' +
-        'you, and I could use it, but look at my shelves. Bare. I have ' +
+      "You have a healer's hands, or you could have. But look at my " +
+        'shelves. Bare. I have ' +
         'patients on the brink of death and nothing left to steep for ' +
         'them. Bring me [item_name]healing herbs[/item_name], good ones, ' +
         'and I will let you watch me work. That is how every healer ' +
@@ -239,17 +237,18 @@ export class MasterHealerLyria extends Character {
         'of his face. Then she takes your hands, puts them where hers were, ' +
         'and has you do it again, slower, until you feel the shape of it.' +
         '\n\n' +
-        '[success]You learn [spell_name]greater heal[/spell_name].[/success]' +
+        '[success]You have learned [spell_name]greater heal[/spell_name].' +
+        '[/success]' +
         '\n\n' +
         dialogue(this.name, "He'll live. And you have the first of it now.") +
         "\n\n[success]Quest Complete: The Healer's Apprentice[/success]"
       )
     }
     // Default response for other items
-    const name = characterName(this.name)
     return (
-      name +
-      ' seems to be too busy to receive any gifts from you at the moment.'
+      characterName(this.name) +
+      ' glances at it and goes back to her mortar. ' +
+      speech('Not that. I need my hands for the sick.')
     )
   }
 }

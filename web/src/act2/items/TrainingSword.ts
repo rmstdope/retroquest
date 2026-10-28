@@ -42,20 +42,9 @@ export class TrainingSword extends Item {
           speech('Your skills remain sharp,') +
           ' he observes. ' +
           speech(
-            'Remember what I told you about the enchanted forest and seeking ' +
-              'out ' +
+            'Keep them that way in the forest. The market first, then ' +
               characterName('Nyx') +
-              '. Gather those supplies from the Market District first - a forest ' +
-              'survival kit, enhanced lantern, and quality rope. The mystical ' +
-              'being Nyx holds ancient knowledge that could be crucial in our ' +
-              'fight against the gathering darkness.',
-          ) +
-          '\n\nHe looks toward the forest beyond the city walls. ' +
-          speech(
-            'The enchanted forest is dangerous, but with proper preparation ' +
-              'and your proven combat skills, you may succeed where others have ' +
-              "failed. Nyx's wisdom could be the key to saving both Greendale " +
-              'and the surrounding lands.',
+              '.',
           ) +
           '[/success]'
         )

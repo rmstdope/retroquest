@@ -29,8 +29,8 @@ export class CaravanMasterThorne extends Character {
     super({
       name: 'caravan master thorne',
       description:
-        'A weather-beaten man with worried eyes who oversees merchant caravans. ' +
-        'He paces anxiously, clearly distressed about some urgent matter.',
+        'A weather-beaten caravan master with a ledger under his arm and ' +
+        'road dust in the creases of his coat.',
     })
   }
 
@@ -113,27 +113,24 @@ export class CaravanMasterThorne extends Character {
         this.hasGivenDocuments = true
         // Set the flag indicating the lost caravan quest is completed
         gameState.getQuest(QUEST_LOST_CARAVAN)?.complete(gameState)
-        const prefix = "You've found them! "
-        const middle =
-          'I cannot express my gratitude enough for bringing my people back safely. ' +
-          'As promised, here is your reward, but this is more than just payment. ' +
-          'My wagon-master says a frightened man in Heavensforth paid him to ' +
-          'carry these to Greendale, and begged him to put them in no hands but ' +
-          "a knight's. I believe they contain evidence that could clear a good " +
-          "man's name. Perhaps you'll know what to do with them.\n\n"
-        return dialogue(
-          this.name,
-          prefix +
-            middle +
-            `Thorne hands you a stack of [item_name]${secretDocs.name}[/item_name].`,
+        return (
+          dialogue(
+            this.name,
+            'You found them. All of them. … I owe you more than I can pay, ' +
+              'so take these instead. My wagon-master says a frightened man ' +
+              'in Heavensforth paid him to carry them to Greendale, and begged ' +
+              "him to put them in no hands but a knight's. I believe they " +
+              "could clear a good man's name.",
+          ) +
+          '\n' +
+          `Thorne hands you a stack of [item_name]${secretDocs.name}[/item_name].`
         )
       } else {
         const usual = dialogue(
           this.name,
-          "I'm still processing the relief of having my caravan safely " +
-            'returned. Those documents I gave you - I hope they prove useful. ' +
-            'Sometimes the right evidence can restore honor where it was ' +
-            'unjustly lost.',
+          'My people are home, and I still wake up counting them. Those ' +
+            'papers I gave you: I hope they find the knight they were meant ' +
+            'for.',
         )
         if (gameState.getStoryFlag(FLAG_BRENN_FORGIVEN)) return usual
         return (
@@ -152,12 +149,11 @@ export class CaravanMasterThorne extends Character {
       return (
         dialogue(
           this.name,
-          'Thank the gods, someone who looks capable! I desperately need ' +
-            'help - one of my most valuable caravans has gone missing in the ' +
-            'Enchanted Forest. It was carrying rare goods and several ' +
-            'merchants. I fear the worst, but I must know their fate. Would ' +
-            'you be willing to search for them? I would be forever in your ' +
-            'debt.',
+          "You've the look of someone who isn't afraid of trees. My caravan " +
+            'to Heavensforth never came through: spice, cloth, and my people ' +
+            'with it, lost somewhere in the Enchanted Forest. Goods I can ' +
+            "write off. People I can't. Would you be willing to search for " +
+            "them? I'd be forever in your debt.",
         ) +
         '\n\n' +
         dialogue(
@@ -179,8 +175,7 @@ export class CaravanMasterThorne extends Character {
     } else {
       return dialogue(
         this.name,
-        'Any word on my missing caravan? Every day that passes makes me ' +
-          'fear the worst for those poor souls.',
+        "Any word? … No. I've stopped counting the goods. I count the days.",
       )
     }
   }

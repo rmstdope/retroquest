@@ -19,9 +19,9 @@ export class TownCrier extends Character {
     super({
       name: 'town crier',
       description:
-        'A loud, enthusiastic man dressed in official Greendale colors who ' +
-        'announces news and events throughout the city. He carries a brass ' +
-        'bell and scroll with current announcements.',
+        "A red-faced man in Greendale's colors, a brass bell in one hand and " +
+        'a scroll of notices in the other. You hear him across the square ' +
+        'before you see him.',
     })
   }
 

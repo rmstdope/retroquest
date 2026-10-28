@@ -81,7 +81,7 @@ const ACTS: ActPlay[] = [
       },
       {
         name: 'Act II refrain: spoken by Nyx',
-        text: `"Remember the old words, Elior: ${REFRAIN}"`,
+        text: `Remember the old words, Elior: ${REFRAIN}`,
       },
     ],
   },

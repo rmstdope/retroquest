@@ -813,7 +813,7 @@ describe('Whispering Glade riddle system', () => {
 
     // Start riddle sequence
     let result = executeCommands(game, ['talk to water nymphs'])
-    expect(result).toContain('Here is the first.')
+    expect(result).toContain('Shall we start?')
 
     // Test wrong answer first
     result = executeCommands(game, ['say wrong to water nymphs'])
@@ -823,10 +823,12 @@ describe('Whispering Glade riddle system', () => {
     // Test correct answers in sequence
     const riddleAnswers = ['water', 'mask', 'truth']
 
-    for (const answer of riddleAnswers) {
-      result = executeCommands(game, [`say ${answer} to water nymphs`])
-      expect(result.toLowerCase()).toContain('correct')
-    }
+    riddleAnswers.forEach((answer, index) => {
+      executeCommands(game, [`say ${answer} to water nymphs`])
+      expect(
+        state.getStoryFlag(`water_nymph_riddle_${index + 1}_completed`),
+      ).toBe(true)
+    })
 
     // Verify all riddles completed
     // Note: Quest completion is handled internally by the riddle completion logic
@@ -851,8 +853,8 @@ describe("Squire's diary quest dependency", () => {
 
     // Try to talk to squires before quest is accepted - should be too busy
     let result = executeCommands(game, ['talk to squires'])
-    expect(result).toContain('too busy and focused to engage')
-    expect(result).toContain("can't talk")
+    expect(result).toContain("Can't stop. The Training Master's watching")
+    expect(result).toContain('One of them answers without turning.')
 
     // Try to search without talking to squires first - should not find diary
     result = executeCommands(game, ['search'])
@@ -866,7 +868,7 @@ describe("Squire's diary quest dependency", () => {
     // Now talk to squires - should provide information about diary
     result = executeCommands(game, ['talk to squires'])
     expect(result).toContain("Sir Cedric's disgrace")
-    expect(result).toContain('diary under the stone benches')
+    expect(result).toContain("It's under the stone benches.")
 
     // Now search should find the diary
     result = executeCommands(game, ['search'])
@@ -904,15 +906,15 @@ describe('Castle Courtyard search dependency', () => {
 
     // Try to talk to squires before quest accepted - should be too busy
     result = executeCommands(game, ['talk to squires'])
-    expect(result).toContain('too busy and focused')
-    expect(result).toContain("can't talk")
+    expect(result).toContain("Can't stop. The Training Master's watching")
+    expect(result).toContain('One of them answers without turning.')
 
     // Accept quest by talking to Training Master
     executeCommands(game, ['talk to training master'])
 
     // Now talk to squires - should work
     result = executeCommands(game, ['talk to squires'])
-    expect(result).toContain('diary under the stone benches')
+    expect(result).toContain("It's under the stone benches.")
 
     // Now search should succeed
     result = executeCommands(game, ['search'])
@@ -939,9 +941,9 @@ describe('Squires before quest acceptance', () => {
 
     // Try to talk to squires before quest is accepted
     let result = executeCommands(game, ['talk to squires'])
-    expect(result).toContain('too busy and focused to engage')
-    expect(result).toContain("can't talk")
-    expect(result).toContain('Training Master expects us to perfect')
+    expect(result).toContain("Can't stop. The Training Master's watching")
+    expect(result).toContain('One of them answers without turning.')
+    expect(result).toContain('and he counts.')
 
     // Verify squires talked flag is NOT set
     expect(state.getStoryFlag(FLAG_SQUIRES_TALKED_TO)).toBe(false)
@@ -952,7 +954,7 @@ describe('Squires before quest acceptance', () => {
     // Now squires should be willing to talk
     result = executeCommands(game, ['talk to squires'])
     expect(result).toContain("Sir Cedric's disgrace")
-    expect(result).toContain('diary under the stone benches')
+    expect(result).toContain("It's under the stone benches.")
 
     // Verify squires talked flag IS now set
     expect(state.getStoryFlag(FLAG_SQUIRES_TALKED_TO)).toBe(true)
@@ -1165,7 +1167,7 @@ describe('Step 24: Lord Commander interaction', () => {
       ),
     ).toBe(true)
     expect(result).toContain("nature's charm")
-    expect(result).toContain('blessed by the ancient knights')
+    expect(result).toContain('carved for the knights')
   })
 })
 

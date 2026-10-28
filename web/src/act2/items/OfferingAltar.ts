@@ -1,4 +1,4 @@
-import { Item, type GameState } from '@/engine'
+import { Item, characterName, type GameState } from '@/engine'
 import { Nyx } from '../characters/Nyx'
 import { DruidicCharm } from './DruidicCharm'
 import { NaturesCharm } from './NaturesCharm'
@@ -62,10 +62,9 @@ export class OfferingAltar extends Item {
     const nyx = new Nyx()
     gameState.currentRoom.characters.push(nyx)
     const summonMessage =
-      'As the three sacred charms are placed upon the altar, the starstone erupts in ' +
-      'brilliant light! The mystical runes blaze with ancient power, and the very air ' +
-      'shimmers with magic. From the swirling energies, a figure of ethereal beauty ' +
-      "materializes - Nyx, the ancient forest sprite, has answered the ritual's call!"
+      'The three charms sink into the starstone, and the runes light one ' +
+      'after another. Above the altar the light gathers and stays, the ' +
+      `height of a woman. ${characterName('Nyx')} has come.`
     return `[success]${summonMessage}[/success]`
   }
 }

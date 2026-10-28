@@ -16,7 +16,7 @@ import {
 } from '@/testing/gameHelpers'
 
 const LODGER_LINE = 'Its last lodger was a man in a grey cloak.'
-const ILL_WIND = 'An ill wind, the healer called it.'
+const ILL_WIND = "An ill wind, that's all it was."
 const REMEMBERED = '✦ Truth — this will be remembered'
 
 /** An Act II game at the Silver Stag Inn, Elena cured; the charm not yet given. */
@@ -35,6 +35,20 @@ describe('Innkeeper Marcus and the truth (truth moment)', () => {
 
     expect(answer).toContain('druidic charm')
     expect(answer).not.toContain(ILL_WIND)
+  })
+
+  it('gives the charm with a plain gift line', () => {
+    const game = gameAfterCure()
+
+    const answer = game.commandParser.parse('talk to innkeeper marcus')
+
+    expect(answer).toContain(
+      'He presses the carved wood into your hands. ' +
+        'You receive a [item_name]druidic charm[/item_name].',
+    )
+    expect(answer).toContain('the forest would know it again')
+    expect(answer).not.toContain('!')
+    expectMarkupWellFormed(answer)
   })
 
   it('ends every later talk with the ill wind line until told', () => {
@@ -113,13 +127,13 @@ describe('Innkeeper Marcus and the truth (truth moment)', () => {
     expectDialogueSpeaker(answer, 'innkeeper marcus')
   })
 
-  it('says the truth is upstairs before the cure and records nothing', () => {
+  it('says the truth is across the room before the cure and records nothing', () => {
     const game = new Game([new Act2()])
     game.state.currentRoom = game.state.allRooms.SilverStagInn
 
     const answer = game.commandParser.parse('say truth to marcus')
 
-    expect(answer).toContain('The only truth I care about is upstairs')
+    expect(answer).toContain('The only truth I care about is over there')
     expect(answer).not.toContain('remembered')
     expect(game.state.hasVirtue(VIRTUE_TRUTH)).toBe(false)
     expectDialogueSpeaker(answer, 'innkeeper marcus')
@@ -157,6 +171,27 @@ describe('Innkeeper Marcus and the last lodger', () => {
       text.indexOf('remaining.'),
     )
     expect(text.split(LODGER_LINE)).toHaveLength(2)
+  })
+
+  it('nods at the door the key opens', () => {
+    const text = new InnkeeperMarcus().buyItem(richGame(20).state, 'room key')
+
+    expect(text).toContain(
+      'hands you a brass key and nods at the [item_name]door[/item_name] behind the bar.',
+    )
+  })
+
+  it('refuses a second key and wares he does not sell', () => {
+    const game = richGame(30)
+    const marcus = new InnkeeperMarcus()
+    marcus.buyItem(game.state, 'room key')
+
+    expect(marcus.buyItem(game.state, 'room key')).toContain(
+      "You've a [item_name]room key[/item_name] already. One room's plenty for one guest.",
+    )
+    const ale = marcus.buyItem(game.state, 'ale')
+    expect(ale).toContain("I've rooms to let, and nothing else for sale.")
+    expectDialogueSpeaker(ale, 'innkeeper marcus')
   })
 
   it('stays silent when the purchase is refused', () => {
@@ -290,8 +325,8 @@ describe('Innkeeper Marcus speaks every line in his quote (rq-31u)', () => {
     game.state.currentRoom = game.state.allRooms.SilverStagInn
 
     expectQuoted(game.commandParser.parse('talk to innkeeper marcus'), [
-      'Welcome to The Silver Stag Inn!',
-      'Though I must say, these have been dark times for my family.',
+      'Welcome to The Silver Stag.',
+      "Talk to her, if you've a kind word to spare.",
     ])
   })
 
@@ -301,8 +336,8 @@ describe('Innkeeper Marcus speaks every line in his quote (rq-31u)', () => {
     game.state.setStoryFlag(FLAG_KNOWS_ELENA_CURSE, true)
 
     expectQuoted(game.commandParser.parse('talk to innkeeper marcus'), [
-      'Welcome to The Silver Stag Inn!',
-      'Then you understand my desperation.',
+      'Welcome to The Silver Stag.',
+      "Then you've seen. She says she's only tired.",
       'It came on her the week the king went.',
     ])
   })
@@ -311,11 +346,32 @@ describe('Innkeeper Marcus speaks every line in his quote (rq-31u)', () => {
     const game = gameAfterCure()
 
     expectQuoted(game.commandParser.parse('talk to innkeeper marcus'), [
-      'You have given me back my daughter!',
+      'You gave me back my girl.',
     ])
     expectQuoted(game.commandParser.parse('talk to innkeeper marcus'), [
       'My daughter is healthy and happy again',
       ILL_WIND,
     ])
+  })
+})
+
+describe('Innkeeper Marcus restored from a save made before the rewrite', () => {
+  it('speaks the current idle lines, not the wording held in the save', () => {
+    const game = new Game([new Act2()])
+    game.state.currentRoom = game.state.allRooms.SilverStagInn
+    const marcus = game.state.currentRoom.getCharacterByName('innkeeper marcus')
+    if (!(marcus instanceof InnkeeperMarcus)) throw new Error('no marcus')
+    Object.defineProperty(marcus, 'dialogueOptions', {
+      value: ['An old idle line.'],
+      enumerable: true,
+      writable: true,
+      configurable: true,
+    })
+    const loaded = new Game([new Act2()])
+    expect(loaded.loadSaveData(game.toSaveData())).toContain('loaded')
+
+    const answer = loaded.commandParser.parse('talk to innkeeper marcus')
+    expect(answer).toContain('Welcome to The Silver Stag.')
+    expect(answer).not.toContain('An old idle line.')
   })
 })

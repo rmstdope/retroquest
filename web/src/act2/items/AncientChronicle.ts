@@ -67,15 +67,8 @@ export class AncientChronicle extends Item {
     return (
       'The ' +
       characterName('Spectral Librarian') +
-      ' materializes before you, blocking your access to the ancient ' +
-      'texts.' +
-      '\n' +
-      speech('These sacred chronicles are not for the unworthy,') +
-      ' the spirit intones. ' +
-      speech(
-        'Prove yourself first, then perhaps I will permit you to study ' +
-          'these treasures.',
-      )
+      ' is between you and the chronicle before you see them move. ' +
+      speech('Not yet. Ask me first; I am the one who keeps it.')
     )
   }
 }

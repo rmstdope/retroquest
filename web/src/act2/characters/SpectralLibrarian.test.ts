@@ -20,6 +20,10 @@ function createGame(): Game {
   return new Game([new Act2()])
 }
 
+const KEEPER_STAGE = ' They look past you, to the chronicle on its stand. '
+const KEEPER =
+  'I am a keeper, not a teller. What you came for is in that chronicle, under the mark on its cover. Read it.'
+
 describe('Spectral Librarian dialogue markup', () => {
   it('tags the greeting before mending as dialogue', () => {
     const game = createGame()
@@ -28,7 +32,7 @@ describe('Spectral Librarian dialogue markup', () => {
     const answer = librarian.talkTo(game.state)
 
     expect(answer).toContain(
-      'Mind the shelves. Everything here has been kept a long time, and the wards on the oldest texts are failing. I can keep a book; I cannot mend one. Mend the wards, and I will show you where to look for the mark you carry.',
+      'Mind the shelves. Everything here has been kept a long time, and the wards on the oldest texts are failing. I can keep a book; I cannot mend one. Mend the wards, and I will show you what is kept here.',
     )
     expect(answer).not.toMatch(/eternal|worthiness/i)
     expectMarkupWellFormed(answer)
@@ -42,7 +46,7 @@ describe('Spectral Librarian dialogue markup', () => {
 
     const answer = librarian.talkTo(game.state)
 
-    expect(answer).toContain('We wrote it, and our mark is on its cover.')
+    expect(answer).toContain(KEEPER)
     expectMarkupWellFormed(answer)
     expectDialogueSpeaker(answer, librarian.name)
   })
@@ -55,7 +59,7 @@ describe('Spectral Librarian dialogue markup', () => {
 
     const answer = librarian.talkTo(game.state)
 
-    expect(answer).toContain('The chronicle is waiting on its shelf')
+    expect(answer).toContain('The chronicle is waiting on its stand')
     expectMarkupWellFormed(answer)
     expectDialogueSpeaker(answer, librarian.name)
   })
@@ -69,7 +73,7 @@ describe('Spectral Librarian dialogue markup', () => {
 
     const answer = librarian.talkTo(game.state)
 
-    expect(answer).toContain('You have read what we left.')
+    expect(answer).toContain('You have read what was left.')
     expectMarkupWellFormed(answer)
     expectDialogueSpeaker(answer, librarian.name)
   })
@@ -96,7 +100,7 @@ describe('Spectral Librarian dialogue markup', () => {
     const answer = librarian.talkTo(game.state)
 
     expect(answer).toMatch(
-      /^\[success\]\n\[character_name\]Spectral Librarian\[\/character_name\]\n\[dialogue\]You mended/,
+      /^\[success\]\n\[character_name\]Spectral Librarian\[\/character_name\]\n\[dialogue\]The wards hold again/,
     )
   })
 
@@ -107,11 +111,11 @@ describe('Spectral Librarian dialogue markup', () => {
     const answer = new SpectralLibrarian().talkTo(game.state)
 
     const lines = [
-      'You mended the wards with your [spell_name]mend[/spell_name] spell. They have been failing longer than I care to count; thank you. Now, what you came for.',
-      " The spirit's eyes glow brighter as they speak: ",
-      'I am a keeper, not a teller. The answer you came for is in that chronicle. We wrote it, and our mark is on its cover. Read it, and you will learn the [spell_name]dispel[/spell_name] spell.',
+      THANKS,
+      KEEPER_STAGE,
+      KEEPER,
       ' They gesture to a crystal resting on the shelf: ',
-      'And take this [item_name]crystal focus[/item_name]. What you do with them is yours to choose.',
+      "And take this [item_name]crystal focus[/item_name]. It was made for a healer's hands, and it has waited long enough.",
     ]
     let from = 0
     for (const line of lines) {
@@ -139,10 +143,10 @@ const GLANCE_NARRATION =
 const GLANCE_LINE =
   'I have not seen that worn since the last hand wrote in that chronicle.'
 const CONFESSION =
-  'I wore that mark once, when I had a body to wear it in. Whose yours was, I cannot tell you; only that the Wardens did not give them away. We taught the unbinding to those we trusted, and wrote it down for the rest.'
+  'I wore that mark once, when I had a body to wear it in. Whose yours was, I cannot tell you; only that we did not give them away. We taught the unbinding to those we trusted, and wrote it down for the rest.'
 const GREETING_START = 'Mind the shelves.'
 const THANKS =
-  'You mended the wards with your [spell_name]mend[/spell_name] spell. They have been failing longer than I care to count; thank you. Now, what you came for.'
+  'The wards hold again. They had been failing longer than I care to count. Thank you. Now, what you came for.'
 
 /** A game with the librarian, optionally with the wards mended and the amulet carried. */
 function setup(options: { amulet: boolean; mended?: boolean }): {
@@ -203,7 +207,7 @@ describe('Spectral Librarian notices the amulet', () => {
       THANKS,
       ' Their eyes go back to the [item_name]ancient amulet[/item_name]. ',
       `${CONFESSION}`,
-      " The spirit's eyes glow brighter as they speak: ",
+      KEEPER_STAGE,
       'I am a keeper, not a teller.',
       ' They gesture to a crystal resting on the shelf: ',
     ])
@@ -225,7 +229,7 @@ describe('Spectral Librarian notices the amulet', () => {
       THANKS,
       ' Their eyes find the [item_name]ancient amulet[/item_name] at your throat, and stay there. ',
       `${GLANCE_LINE} ${CONFESSION}`,
-      " The spirit's eyes glow brighter as they speak: ",
+      KEEPER_STAGE,
     ])
     expect(answer.startsWith('[success]')).toBe(true)
     expect(game.state.currentRoom.items.map((i) => i.name)).toContain(
@@ -243,8 +247,22 @@ describe('Spectral Librarian notices the amulet', () => {
     expect(answer).toContain(THANKS)
     expect(answer).not.toContain('I wore that mark')
     expect(answer).not.toContain('Their eyes')
-    expect(answer).toContain('We wrote it, and our mark is on its cover.')
+    expect(answer).toContain(KEEPER)
     expect(game.state.getStoryFlag(FLAG_LIBRARIAN_CONFESSED)).toBe(false)
+  })
+
+  it('says no "we" of the Wardens before the confession', () => {
+    const { game, librarian } = setup({ amulet: false })
+    const lines = [librarian.talkTo(game.state)]
+    game.state.setStoryFlag(FLAG_MENDED_LIBRARY_ENCHANTMENTS, true)
+    lines.push(librarian.talkTo(game.state), librarian.talkTo(game.state))
+    game.state.setStoryFlag(FLAG_READ_ANCIENT_CHRONICLE, true)
+    lines.push(librarian.talkTo(game.state))
+
+    expect(game.state.getStoryFlag(FLAG_LIBRARIAN_CONFESSED)).toBe(false)
+    for (const line of lines) {
+      expect(line).not.toMatch(/\bwe\b|\bour\b/i)
+    }
   })
 
   it('plays the confession once on the first later talk with the amulet', () => {
@@ -258,7 +276,7 @@ describe('Spectral Librarian notices the amulet', () => {
     expectInOrder(delayed, [
       "The [character_name]Spectral Librarian[/character_name]'s eyes go to the [item_name]ancient amulet[/item_name].",
       `${GLANCE_LINE} ${CONFESSION}`,
-      'The chronicle is waiting on its shelf. We wrote it for whoever would read it; I cannot read it for you.',
+      'The chronicle is waiting on its stand. It was written for whoever would read it; I cannot read it for you.',
     ])
     expect(again).not.toContain('I wore that mark')
     expectMarkupWellFormed(delayed)
@@ -274,7 +292,7 @@ describe('Spectral Librarian notices the amulet', () => {
 
     expectInOrder(delayed, [
       CONFESSION,
-      'You have read what we left. The rest is not written on any shelf of mine. Use this knowledge wisely.',
+      'You have read what was left. The rest is not written on any shelf of mine.',
     ])
   })
 

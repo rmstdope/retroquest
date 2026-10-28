@@ -21,10 +21,9 @@ export class TrainingMaster extends Character {
     super({
       name: 'training master',
       description:
-        "A grizzled veteran knight responsible for training the castle's squires " +
-        'and maintaining combat readiness. His weathered face and battle-scarred ' +
-        'armor speak of many years of military service. He observes the training ' +
-        'grounds with a critical eye, ensuring every move is precise and disciplined.',
+        'A grey-haired knight with a voice worn rough from shouting across ' +
+        'the yard. His armour is old and dented and polished anyway. He ' +
+        "watches the squires' feet, not their swords.",
     })
   }
 
@@ -38,33 +37,28 @@ export class TrainingMaster extends Character {
       return (
         dialogue(
           'Training Master',
-          "Ah, a visitor to our training grounds. I've been instructing " +
-            'knights and squires here for many years.',
+          "A visitor. Keep off the sand while they're drilling.",
         ) +
         '\n\n' +
         'He glances toward ' +
         characterName('Sir Cedric') +
-        ' with a troubled expression.' +
+        ' and away again.' +
         '\n\n' +
         dialogue(
           'Training Master',
-          'It pains me to see a fine knight like Sir Cedric carrying such a ' +
-            "heavy burden. He held the watch on the king's wall the night His " +
+          "Sir Cedric held the watch on the king's wall the night His " +
             'Majesty vanished, and the next morning two men of the night watch ' +
-            'swore he had left his post. They took his knighthood for it. But ' +
-            "I've known Cedric for years, and he has never left a post in his " +
-            'life. Something about that whole affair never sat right with me. ' +
-            "The watch's story was… too neat.",
+            'swore he had left his post. They took his knighthood for it. I ' +
+            'have known Cedric twenty years. He has never left a post in his ' +
+            "life. The watch's story was too neat.",
         ) +
         '\n\n' +
         'He leans closer, lowering his voice.' +
         '\n\n' +
         dialogue(
           'Training Master',
-          "I've heard rumors that there are papers somewhere that tell a " +
-            'different story. Perhaps someone with your skills could help ' +
-            'uncover the truth and restore honor to a good man who has ' +
-            'suffered long enough.',
+          "There's talk of papers somewhere that tell a different story. " +
+            "I'm too old and too watched to go looking. You're neither.",
         )
       )
     }
@@ -87,15 +81,12 @@ export class TrainingMaster extends Character {
     return (
       'The ' +
       characterName('Training Master') +
-      ' nods respectfully.' +
+      ' nods.' +
       '\n\n' +
       dialogue(
         'Training Master',
-        "You're looking into Sir Cedric's " +
-          'situation? Good. That man has suffered under false accusations ' +
-          'for far too long. The truth needs to come to light. Perhaps the ' +
-          'squires might know more about what happened - they sometimes hear ' +
-          'things that we older knights miss.',
+        'Still at it? Good. Ask the squires. Boys and girls in a barracks ' +
+          'hear things an old knight never does.',
       )
     )
   }

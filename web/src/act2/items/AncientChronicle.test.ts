@@ -15,7 +15,13 @@ describe('Ancient Chronicle markup', () => {
 
     const answer = new AncientChronicle().use(game.state)
 
-    expect(answer).toContain('not for the unworthy')
+    expect(answer).toContain(
+      'is between you and the chronicle before you see them move.',
+    )
+    expect(answer).toContain(
+      'Not yet. Ask me first; I am the one who keeps it.',
+    )
+    expect(answer).not.toMatch(/unworthy|sacred|intones/)
     expectMarkupWellFormed(answer)
     expectDialogueSpeaker(answer, 'Spectral Librarian')
     expect(game.state.hasSpell('dispel')).toBe(false)

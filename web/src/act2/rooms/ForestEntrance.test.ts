@@ -15,7 +15,10 @@ const LED_ASTRAY = 'exactly where you started'
 const LANTERN_GREEN =
   '[success]A narrow path east, toward a tranquil glade, is now open.[/success]'
 const CHARM_GREEN =
-  '[success]The sprites draw aside. The path south, to the ancient grove, is now open.[/success]'
+  '[success]The sprites draw aside. The path south, to the [room_name]Ancient Grove[/room_name], is now open.[/success]'
+const CHARM_USE =
+  'You hold up the charm. The sprites crowd round it, chiming, and settle ' +
+  'on your sleeve one by one, then lift off again.'
 const OLD_COMBINED = 'With both the protective charm'
 const TEASE = 'The grove path? Walk it, walk it'
 const NOTICE = 'Pretty light! Pretty light'
@@ -124,6 +127,8 @@ describe('Forest Entrance paths', () => {
       '[success]',
     )
     const second = executeCommands(game, ['use protective charm'])
+    expect(second).toContain(CHARM_USE)
+    expect(second).not.toMatch(/spiritual energy|ancient magic|invoke/i)
     expect(second).toContain(CHARM_GREEN)
     expect(second).not.toContain(OLD_COMBINED)
     expect(second).not.toContain(LANTERN_GREEN)
@@ -144,7 +149,7 @@ describe('Forest Entrance paths', () => {
     expect(describeRoom(atEntrance())).toContain(
       'A path leads south toward an ancient grove, but small motes of light ' +
         'dance thick across it: [character_name]forest sprites[/character_name], ' +
-        'watching your every move.',
+        'and every one of them is looking at you.',
     )
   })
 
