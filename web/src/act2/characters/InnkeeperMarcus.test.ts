@@ -354,3 +354,24 @@ describe('Innkeeper Marcus speaks every line in his quote (rq-31u)', () => {
     ])
   })
 })
+
+describe('Innkeeper Marcus restored from a save made before the rewrite', () => {
+  it('speaks the current idle lines, not the wording held in the save', () => {
+    const game = new Game([new Act2()])
+    game.state.currentRoom = game.state.allRooms.SilverStagInn
+    const marcus = game.state.currentRoom.getCharacterByName('innkeeper marcus')
+    if (!(marcus instanceof InnkeeperMarcus)) throw new Error('no marcus')
+    Object.defineProperty(marcus, 'dialogueOptions', {
+      value: ['An old idle line.'],
+      enumerable: true,
+      writable: true,
+      configurable: true,
+    })
+    const loaded = new Game([new Act2()])
+    expect(loaded.loadSaveData(game.toSaveData())).toContain('loaded')
+
+    const answer = loaded.commandParser.parse('talk to innkeeper marcus')
+    expect(answer).toContain('Welcome to The Silver Stag.')
+    expect(answer).not.toContain('An old idle line.')
+  })
+})

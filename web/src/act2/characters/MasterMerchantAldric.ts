@@ -33,7 +33,8 @@ export class MasterMerchantAldric extends Character {
     'enhanced lantern': { item: new EnhancedLantern(), price: 40 },
     'quality rope': { item: new QualityRope(), price: 20 },
   }
-  dialogueOptions: string[] = [
+  /** The talk lines he cycles through; static, so old saves get the current wording. */
+  private static readonly IDLE_LINES: readonly string[] = [
     "Welcome to Aldric's. Rope that holds, lanterns that stay lit, and " +
       'nothing that comes apart on the road.',
     "Planning an expedition? Tell me where, and I'll tell you what you'll " +
@@ -45,7 +46,8 @@ export class MasterMerchantAldric extends Character {
       'husk. Not my trade, mind, but my suppliers talk of little else.',
   ]
   dialogueIndex = 0
-  closedDialogue =
+  /** His answer before the flyer; static, so old saves get the current wording. */
+  private static readonly CLOSED_DIALOGUE: string =
     characterName('Master Merchant Aldric') +
     ' looks at your boots, then at your face. ' +
     speech(
@@ -67,7 +69,7 @@ export class MasterMerchantAldric extends Character {
   override talkTo(_gameState: GameState): string {
     // If merchant hasn't been given the flyer, shop is not fully open yet
     if (!this.gaveFlyer) {
-      return this.closedDialogue
+      return MasterMerchantAldric.CLOSED_DIALOGUE
     }
 
     // Build wares information similar to Act 1 Shopkeeper
@@ -84,8 +86,9 @@ export class MasterMerchantAldric extends Character {
     }
 
     // Cycle through dialogue options like Act 1 Shopkeeper
-    const dialogue = this.dialogueOptions[this.dialogueIndex]
-    this.dialogueIndex = (this.dialogueIndex + 1) % this.dialogueOptions.length
+    const dialogue = MasterMerchantAldric.IDLE_LINES[this.dialogueIndex]
+    this.dialogueIndex =
+      (this.dialogueIndex + 1) % MasterMerchantAldric.IDLE_LINES.length
 
     return (
       'The ' +
@@ -129,7 +132,7 @@ export class MasterMerchantAldric extends Character {
   override buyItem(gameState: GameState, itemName: string): string {
     // Check if shop is accessible
     if (!this.gaveFlyer) {
-      return this.closedDialogue
+      return MasterMerchantAldric.CLOSED_DIALOGUE
     }
 
     const itemNameToBuy = itemName.toLowerCase()

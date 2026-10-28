@@ -45,8 +45,8 @@ export class LocalCraftsmen extends Character {
         '\n\n' +
         dialogue(
           name,
-          "We don't know you. Old Hettie can barely get down this lane on " +
-            "her own; help our own first, and we'll talk.",
+          "We don't know you. Old Tomas can barely get down this lane on " +
+            "his own; help our own first, and we'll talk.",
         )
       )
     }

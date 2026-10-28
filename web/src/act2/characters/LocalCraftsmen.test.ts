@@ -34,7 +34,7 @@ describe('Local Craftsmen and the elders', () => {
     const answer = new LocalCraftsmen().talkTo(game.state)
 
     expect(answer).toContain(
-      'Old Hettie can barely get down this lane on her own; help our own ' +
+      'Old Tomas can barely get down this lane on his own; help our own ' +
         "first, and we'll talk.",
     )
     expect(answer).not.toContain('Perhaps you need')

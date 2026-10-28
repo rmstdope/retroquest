@@ -1,4 +1,4 @@
-import { Room, clue, writing } from '@/engine'
+import { Room, characterName, clue, writing } from '@/engine'
 import type { GameState } from '@/engine'
 import { CourtHerald } from '../characters/CourtHerald'
 import { Historians } from '../characters/Historians'
@@ -46,8 +46,8 @@ export class GreatHall extends Room {
   override search(gameState: GameState): string {
     if (!gameState.getStoryFlag(FLAG_COURT_HERALD_FORMAL_PRESENTATION)) {
       return clue(
-        'The Court Herald steps between you and the shelves and holds out his ' +
-          'hand for your pass.',
+        `The ${characterName('Court Herald')} steps between you and the ` +
+          'shelves and holds out his hand for your pass.',
       )
     }
     if (!gameState.getStoryFlag(FLAG_SHOWED_JOURNAL_TO_HISTORIANS)) {

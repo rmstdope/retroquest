@@ -161,7 +161,7 @@ export class SpectralLibrarian extends Character {
       gameState.getStoryFlag(FLAG_READ_ANCIENT_CHRONICLE)
         ? 'You have read what was left. The rest is not written on ' +
             'any shelf of mine.'
-        : 'The chronicle is waiting on its shelf. It was written for ' +
+        : 'The chronicle is waiting on its stand. It was written for ' +
             'whoever would read it; I cannot read it for you.',
     )
     if (!carrying || gameState.getStoryFlag(FLAG_LIBRARIAN_CONFESSED)) {

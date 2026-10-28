@@ -59,7 +59,7 @@ describe('Spectral Librarian dialogue markup', () => {
 
     const answer = librarian.talkTo(game.state)
 
-    expect(answer).toContain('The chronicle is waiting on its shelf')
+    expect(answer).toContain('The chronicle is waiting on its stand')
     expectMarkupWellFormed(answer)
     expectDialogueSpeaker(answer, librarian.name)
   })
@@ -276,7 +276,7 @@ describe('Spectral Librarian notices the amulet', () => {
     expectInOrder(delayed, [
       "The [character_name]Spectral Librarian[/character_name]'s eyes go to the [item_name]ancient amulet[/item_name].",
       `${GLANCE_LINE} ${CONFESSION}`,
-      'The chronicle is waiting on its shelf. It was written for whoever would read it; I cannot read it for you.',
+      'The chronicle is waiting on its stand. It was written for whoever would read it; I cannot read it for you.',
     ])
     expect(again).not.toContain('I wore that mark')
     expectMarkupWellFormed(delayed)

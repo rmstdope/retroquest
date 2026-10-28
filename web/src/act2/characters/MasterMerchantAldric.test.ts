@@ -170,3 +170,38 @@ describe('Master Merchant Aldric and the blight', () => {
     expect(answer).toContain(ALDRIC_BLIGHT)
   })
 })
+
+describe('Master Merchant Aldric restored from a save made before the rewrite', () => {
+  it('speaks the current lines, not the wording held in the save', () => {
+    const game = createGameAtMarket()
+    const aldric = game.state.currentRoom.getCharacterByName(
+      'master merchant aldric',
+    )
+    if (!aldric) throw new Error('no aldric')
+    const legacy: [string, unknown][] = [
+      ['closedDialogue', 'I need an introduction or referral.'],
+      ['dialogueOptions', ['An old idle line.']],
+    ]
+    for (const [field, value] of legacy) {
+      Object.defineProperty(aldric, field, {
+        value,
+        enumerable: true,
+        writable: true,
+        configurable: true,
+      })
+    }
+    game.state.addItemToInventory(new MerchantsFlyer())
+    const loaded = new Game([new Act2()])
+    expect(loaded.loadSaveData(game.toSaveData())).toContain('loaded')
+
+    const closed = loaded.commandParser.parse('talk to master merchant aldric')
+    expect(closed).toContain('Even one of my own handbills will do.')
+    expect(closed).not.toContain('referral')
+
+    loaded.commandParser.parse(
+      "give merchant's flyer to master merchant aldric",
+    )
+    const open = loaded.commandParser.parse('talk to master merchant aldric')
+    expect(open).not.toContain('An old idle line.')
+  })
+})

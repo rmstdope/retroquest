@@ -41,7 +41,7 @@ describe('Court Herald', () => {
 
     expect(
       answer.startsWith(
-        'The Court Herald reads the seal twice and never looks at the line above it.\n',
+        'The [character_name]Court Herald[/character_name] reads the seal twice and never looks at the line above it.\n',
       ),
     ).toBe(true)
     expect(answer).toContain(

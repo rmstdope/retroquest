@@ -2,6 +2,7 @@ import {
   Character,
   type GameState,
   type Item,
+  characterName,
   dialogue,
   type NameOptions,
 } from '@/engine'
@@ -31,7 +32,7 @@ export class CourtHerald extends Character {
       gameState.setStoryFlag(FLAG_COURT_HERALD_FORMAL_PRESENTATION, true)
 
       return (
-        'The Court Herald reads the seal twice and never looks at the line ' +
+        `The ${characterName('Court Herald')} reads the seal twice and never looks at the line ` +
         'above it.' +
         '\n' +
         dialogue(

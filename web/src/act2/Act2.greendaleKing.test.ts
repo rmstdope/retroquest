@@ -330,7 +330,7 @@ describe('the trail to the papers', () => {
     const a = talk(game, 'squires')
     expect(a).toContain('whoever took the king walked in through the gap.')
     expect(a).toContain(
-      "One of us kept a diary that week. It's under the stone benches.",
+      "A squire before us kept a diary that week. It's under the stone benches.",
     )
     expect(a).not.toContain('We found a diary')
   })

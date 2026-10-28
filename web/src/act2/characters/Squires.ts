@@ -88,7 +88,7 @@ export class Squires extends Character {
       ) +
       '\n\nAnother squire nods.\n\n' +
       speech(
-        "One of us kept a diary that week. It's under the stone benches. " +
+        "A squire before us kept a diary that week. It's under the stone benches. " +
           "Read it; it says what we can't.",
       )
     )

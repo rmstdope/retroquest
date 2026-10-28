@@ -33,7 +33,8 @@ export class InnkeeperMarcus extends Character {
   wares: Record<string, { item: Item; price: number }> = {
     'room key': { item: new RoomKey(), price: 10 },
   }
-  dialogueOptions: string[] = [
+  /** The talk lines he cycles through; static, so old saves get the current wording. */
+  private static readonly IDLE_LINES: readonly string[] = [
     'Welcome to The Silver Stag. Hot stew, clean sheets, and a door that locks.',
     'Hard times or not, this house changes its sheets every week.',
     'A night in a room of your own does more for a body than any healer.',
@@ -156,8 +157,9 @@ export class InnkeeperMarcus extends Character {
     }
 
     // Cycle through dialogue options
-    const option = this.dialogueOptions[this.dialogueIndex]
-    this.dialogueIndex = (this.dialogueIndex + 1) % this.dialogueOptions.length
+    const option = InnkeeperMarcus.IDLE_LINES[this.dialogueIndex]
+    this.dialogueIndex =
+      (this.dialogueIndex + 1) % InnkeeperMarcus.IDLE_LINES.length
     const name = this.name
 
     if (gameState.getStoryFlag(FLAG_KNOWS_ELENA_CURSE)) {
