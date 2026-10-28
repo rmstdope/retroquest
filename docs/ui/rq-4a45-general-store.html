@@ -1,0 +1,18 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>General Store, shut and open</title><style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Fraunces:opsz,wght@9..144,600&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=swap');
+:root{--bg:#10151a;--surface:#161d24;--line:#26313b;--fg:#ece6d6;--prose:#d9d3c3;--muted:#a39d8e;--accent-text:#ffb836;--accent-line:#a8740f;--character:#7fb0e6;--page:#0b0f13;--new:#9fd38a}
+*{box-sizing:border-box}body{margin:0;background:var(--page);color:var(--fg);font:15px/1.5 'DM Sans',system-ui,sans-serif;padding:24px 16px}
+.wrap{max-width:900px;margin:0 auto}.kicker{color:var(--accent-text);font-size:12px;letter-spacing:.12em;text-transform:uppercase}
+h1{font:600 26px/1.15 Fraunces,serif;margin:4px 0 8px}.intro{color:var(--prose)}.cost{color:var(--muted);font-size:13px;border-left:2px solid var(--accent-line);padding-left:10px}
+.state{margin:22px 0}.state h2{font:600 14px 'DM Sans';color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin:0 0 6px}
+.game{border:1px solid var(--line);border-radius:14px;background:var(--bg);padding:16px 22px;font:15px/1.6 'Source Serif 4',Georgia,serif;color:var(--prose)}
+.echo{font:500 13px 'DM Sans';color:var(--accent-text);margin-bottom:8px}.room{font:600 17px Fraunces,serif;color:var(--fg);margin-bottom:4px}
+.ch{color:var(--character)}.hl{background:#17261a;outline:1px dashed #3c6236;border-radius:3px;padding:0 2px}
+.note{color:var(--muted);font:13px 'DM Sans';margin-top:6px}</style></head><body><div class="wrap"><div class="kicker">Option A · The cat line simply drops</div><h1>The General Store, shut and open</h1>
+<p class="intro">What the player reads on entering the store or typing <i>look</i>, in each state. States 1 and 2 are the wording already agreed. State 3 is the open question: Patches stayed with Grandmother (the usual path), so there is no cat on the counter.</p>
+<p class="cost">Shortest and plainest; the store reads as back to normal, and the cat is only felt in Hemlock's own talk.</p><div class="state"><h2>1 · Before Patches is found — the store is shut</h2><div class="game"><div class="echo">&gt; go east</div><div class="room">General Store</div>
+A cluttered shop with the shutters half down. Rope, apples, matches and trinkets crowd the shelves in the gloom. The <span class="ch">shopkeeper</span> stands at the window, watching the lane.</div></div>
+<div class="state"><h2>2 · Patches carried home — she sleeps on the counter</h2><div class="game"><div class="echo">&gt; look</div><div class="room">General Store</div>
+A cluttered shop. Rope, apples, matches and trinkets crowd the shelves, and the air smells of fruit, wax and old wood. The <span class="ch">shopkeeper</span> dusts jars between customers, and every so often looks at the counter, where his cat sleeps.</div></div><div class="state"><h2>3 · Patches stayed with Grandmother — no cat on the counter</h2><div class="game"><div class="echo">&gt; look</div><div class="room">General Store</div>
+A cluttered shop. Rope, apples, matches and trinkets crowd the shelves, and the air smells of fruit, wax and old wood. The <span class="ch">shopkeeper</span> <span class="hl">dusts jars between customers.</span></div><div class="note">Highlighted: the only words that differ from state 2.</div></div></div></body></html>
