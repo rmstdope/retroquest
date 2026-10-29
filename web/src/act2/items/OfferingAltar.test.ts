@@ -6,7 +6,9 @@ import { DruidicCharm } from './DruidicCharm'
 import { EnchantedAcorn } from './EnchantedAcorn'
 import { NaturesCharm } from './NaturesCharm'
 import { ProtectiveCharm } from './ProtectiveCharm'
-import { expectMarkupWellFormed } from '@/testing/gameHelpers'
+import { QualityRope } from './QualityRope'
+import { TravelersJournal } from './TravelersJournal'
+import { executeCommands, expectMarkupWellFormed } from '@/testing/gameHelpers'
 
 describe('OfferingAltar', () => {
   it('shows a sign beside each hollow, one for each charm', () => {
@@ -24,6 +26,40 @@ describe('OfferingAltar', () => {
       `${acorn.nameInSentence({ atStart: true })} fits none of the hollows. ` +
         'The runes stay dark.',
     )
+  })
+
+  it('says a wrong item fits no hollow whichever way round it is used', () => {
+    const game = new Game([new Act2()])
+    game.state.currentRoom = game.state.allRooms.HeartOfTheForest
+    const journal = new TravelersJournal()
+    game.state.inventory.push(journal)
+    const answer =
+      `${journal.nameInSentence({ atStart: true })} fits none of the ` +
+      'hollows. The runes stay dark.'
+
+    expect(
+      executeCommands(game, ["use traveler's journal with offering altar"]),
+    ).toBe(answer)
+    expect(
+      executeCommands(game, ["use offering altar with traveler's journal"]),
+    ).toBe(answer)
+  })
+
+  it('tells the rope it fits no hollow, though the rope has uses of its own', () => {
+    const game = new Game([new Act2()])
+    game.state.currentRoom = game.state.allRooms.HeartOfTheForest
+    const rope = new QualityRope()
+    game.state.inventory.push(rope)
+    const answer =
+      `${rope.nameInSentence({ atStart: true })} fits none of the ` +
+      'hollows. The runes stay dark.'
+
+    expect(
+      executeCommands(game, ['use quality rope with offering altar']),
+    ).toBe(answer)
+    expect(
+      executeCommands(game, ['use offering altar with quality rope']),
+    ).toBe(answer)
   })
 
   it('wakes the runes beside the charm placed, without listing the rest', () => {

@@ -19,6 +19,14 @@ export class OfferingAltar extends Item {
     })
   }
 
+  /**
+   * Any item used with the altar gets the altar's answer, so a wrong item
+   * fits none of the hollows whichever way round the player says it.
+   */
+  override answerUseFrom(gameState: GameState, item: Item): string {
+    return this.useWith(gameState, item)
+  }
+
   /** Use the offering altar with one of the three sacred charms to summon Nyx. */
   override useWith(gameState: GameState, other: Item): string {
     const isCharm = (item: Item): boolean =>

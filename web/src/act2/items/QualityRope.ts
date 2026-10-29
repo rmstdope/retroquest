@@ -25,7 +25,11 @@ export class QualityRope extends Item {
     )
   }
 
-  /** Special method for using rope with other items like the ravine. */
+  /**
+   * Lowers the rope into the ravine to rescue the caravan. With any other
+   * item, that item answers if it can; otherwise the rope says it has no use
+   * there.
+   */
   override useWith(gameState: GameState, other: Item): string {
     if (other instanceof Ravine) {
       // Check if caravan has already been secured
@@ -57,7 +61,9 @@ export class QualityRope extends Item {
         'goods they can carry.[/success]'
       )
     }
-    // Fallback message when rope can't be used with the provided item
+    // Let the other item answer first (the offering altar does), then refuse
+    const answer = other.answerUseFrom(gameState, this)
+    if (answer) return answer
     return `You can't use the rope with ${other.nameInSentence()}.`
   }
 }
