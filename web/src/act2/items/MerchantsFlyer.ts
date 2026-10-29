@@ -1,15 +1,18 @@
 import { Item, type GameState } from '@/engine'
 
-/** Promotional flyer advertising Market District merchants and coupons. */
+/** What the flyer reads as when examined, also restored on load. */
+export const FLYER_DESCRIPTION =
+  "A handbill for Master Merchant Aldric's in the Market District: rope, " +
+  'lanterns and gear for the road. At the bottom, in smaller print: ' +
+  'Bring this, and be welcome.'
+
+/** Handbill for Master Merchant Aldric's shop; handing it over opens the shop. */
 export class MerchantsFlyer extends Item {
   constructor() {
     super({
       name: "merchant's flyer",
       shortName: 'flyer',
-      description:
-        "A colorful handbill advertising the Market District's finest merchants " +
-        'and their premium goods. It features a special introduction coupon ' +
-        'for new customers seeking quality adventure gear.',
+      description: FLYER_DESCRIPTION,
       canBeCarried: true,
     })
   }

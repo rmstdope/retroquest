@@ -143,7 +143,7 @@ const GLANCE_NARRATION =
 const GLANCE_LINE =
   'I have not seen that worn since the last hand wrote in that chronicle.'
 const CONFESSION =
-  'I wore that mark once, when I had a body to wear it in. Whose yours was, I cannot tell you; only that we did not give them away. We taught the unbinding to those we trusted, and wrote it down for the rest.'
+  'I wore that mark once, when I had a body to wear it in. Whose it was before it was yours, I cannot tell you; only that we did not give them away. We taught the unbinding to those we trusted, and wrote it down for the rest.'
 const GREETING_START = 'Mind the shelves.'
 const THANKS =
   'The wards hold again. They had been failing longer than I care to count. Thank you. Now, what you came for.'

@@ -105,8 +105,8 @@ export class BarmaidElena extends Character {
         '\n\n' +
         dialogue(
           this.name,
-          "Oh, thank you so much! I'm warm. I'd forgotten what that was " +
-            'like. Father says the charm over our door is yours now, and he ' +
+          "I'm warm. I'd forgotten what that was like. " +
+            'Father says the charm over our door is yours now, and he ' +
             "won't hear a word against it.",
         )
       )

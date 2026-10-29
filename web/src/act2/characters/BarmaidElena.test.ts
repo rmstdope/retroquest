@@ -291,7 +291,7 @@ describe('Elena remarks on her father after the truth (rq-coj)', () => {
     'Father has bolted every shutter in the house, and he sleeps down in the ' +
     "taproom now with the poker across his knees. I'm glad you told him. " +
     "He'd have gone on blaming the wind."
-  const USUAL = 'Oh, thank you so much!'
+  const USUAL = "I'm warm. I'd forgotten what that was like."
 
   function cured(): { game: Game; elena: BarmaidElena } {
     const { game, elena } = setup()

@@ -26,8 +26,8 @@ const GLANCE_WORDS =
 
 /** What the librarian confesses once the wards are mended. */
 const CONFESSION_WORDS =
-  'I wore that mark once, when I had a body to wear it in. Whose yours ' +
-  'was, I cannot tell you; only that we did not give them away. ' +
+  'I wore that mark once, when I had a body to wear it in. Whose it ' +
+  'was before it was yours, I cannot tell you; only that we did not give them away. ' +
   'We taught the unbinding to those we trusted, and wrote it down for the rest.'
 
 /** Marks an item name in narration. */

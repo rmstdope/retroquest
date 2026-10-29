@@ -1336,7 +1336,8 @@ describe('Act 2 optional virtue moments', () => {
 
     const first = game.commandParser.parse('talk to barmaid elena')
     expect(first).toContain('glances toward the taproom')
-    expect(first).toContain('Oh, thank you so much!')
+    expect(first).toContain("I'm warm. I'd forgotten what that was like.")
+    expect(first).not.toContain('Oh, thank you so much!')
     expect(game.commandParser.parse('talk to barmaid elena')).not.toContain(
       'glances toward the taproom',
     )

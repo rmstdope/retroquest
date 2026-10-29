@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import { Game } from '@/engine'
 import { Act2 } from '../Act2'
+import { MasterMerchantAldric } from './MasterMerchantAldric'
 import { MerchantsFlyer } from '../items/MerchantsFlyer'
 import { WalkingStick } from '../items/WalkingStick'
 import { QualityRope } from '../items/QualityRope'
@@ -47,8 +48,9 @@ describe('Master Merchant Aldric dialogue markup', () => {
     )
 
     expect(answer).toContain(
-      'This flyer grants you access to our premium selection',
+      'Then someone thought you worth sending. Have a look.',
     )
+    expect(answer).not.toContain('premium')
     expect(answer).toContain('finds his own name on it')
     expect(answer).not.toContain('preferred customer pricing')
     expectAldricSpeaks(answer)
@@ -61,8 +63,25 @@ describe('Master Merchant Aldric dialogue markup', () => {
 
     const answer = game.commandParser.parse('talk to master merchant aldric')
 
-    expect(answer).toContain('My premium selection includes')
+    expect(answer).toContain("Here's what I have:")
     expectAldricSpeaks(answer)
+  })
+
+  it('says his racks are bare when he has no wares', () => {
+    const game = createGameAtMarket()
+    game.state.addItemToInventory(new MerchantsFlyer())
+    game.commandParser.parse("give merchant's flyer to master merchant aldric")
+    const aldric = game.state.currentRoom.characters.find(
+      (c) => c instanceof MasterMerchantAldric,
+    )
+    expect(aldric).toBeInstanceOf(MasterMerchantAldric)
+    if (!(aldric instanceof MasterMerchantAldric)) return
+    aldric.wares = {}
+
+    const answer = game.commandParser.parse('talk to master merchant aldric')
+
+    expect(answer).toContain('My racks are bare till the next cart comes in.')
+    expect(answer).not.toContain('premium')
   })
 
   it('attributes declining other items to Aldric', () => {
@@ -73,7 +92,7 @@ describe('Master Merchant Aldric dialogue markup', () => {
       'give walking stick to master merchant aldric',
     )
 
-    expect(answer).toContain('I deal in adventure gear, not donations')
+    expect(answer).toContain("I sell gear, friend; I don't take it in.")
     expect(answer).toContain(
       'turns the [item_name]walking stick[/item_name] over and hands it back',
     )
@@ -141,9 +160,9 @@ describe('Master Merchant Aldric and the blight', () => {
     expect(talks[3]).toContain(ALDRIC_BLIGHT)
     expect(talks[4]).toContain('Welcome to Aldric')
     for (const talk of talks.slice(0, 3)) expect(talk).not.toContain('Bread')
-    expect(talks[3]).toContain('My premium selection includes')
+    expect(talks[3]).toContain("Here's what I have:")
     expect(talks[3].indexOf(ALDRIC_BLIGHT)).toBeLessThan(
-      talks[3].indexOf('My premium selection includes'),
+      talks[3].indexOf("Here's what I have:"),
     )
     expectAldricSpeaks(talks[3])
   })
