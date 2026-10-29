@@ -8,7 +8,6 @@ import { Bread } from './items/Bread'
 import { BrokenShovel } from './items/BrokenShovel'
 import { Bucket } from './items/Bucket'
 import { Bush } from './items/Bush'
-import { Hearth } from './items/Hearth'
 import { Candle } from './items/Candle'
 import { Chicken } from './items/Chicken'
 import { Coin } from './items/Coin'
@@ -22,6 +21,7 @@ import { Fish } from './items/Fish'
 import { FishingRod } from './items/FishingRod'
 import { FreshBread } from './items/FreshBread'
 import { HealingHerb } from './items/HealingHerb'
+import { Hearth } from './items/Hearth'
 import { Horseshoe } from './items/Horseshoe'
 import { Key } from './items/Key'
 import { Lantern } from './items/Lantern'
@@ -112,7 +112,6 @@ export const ACT1_CLASSES = {
   BrokenShovel,
   Bucket,
   Bush,
-  Hearth,
   Candle,
   Chicken,
   Coin,
@@ -126,6 +125,7 @@ export const ACT1_CLASSES = {
   FishingRod,
   FreshBread,
   HealingHerb,
+  Hearth,
   Horseshoe,
   Key,
   Lantern,

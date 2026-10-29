@@ -104,8 +104,9 @@ export class Act1 extends Act {
 
   /**
    * Bring older saves up to date: drop the matches the store's wares still
-   * sell, give the villager her name, Tilda, and give the rooms and the locket
-   * whose description a save stores the wording they have now.
+   * sell, give the villager her name, Tilda, give the cottage the hearth it
+   * lacked, and give the rooms and the locket whose description a save stores
+   * the wording they have now.
    */
   override afterLoad(gameState: GameState): void {
     const rooms = gameState.allRooms
