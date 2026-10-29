@@ -163,7 +163,7 @@ describe('useBridge', () => {
       expect(bridge.controller.getRoomName()).toBe("Elior's Cottage")
       expect(bridge.controller.getRoomDescription()).toContain('cottage')
       expect(bridge.controller.getRoomCharacters()).toEqual(['grandmother'])
-      expect(bridge.controller.getRoomItems()).toEqual(['lantern'])
+      expect(bridge.controller.getRoomItems()).toEqual(['hearth', 'lantern'])
       expect(bridge.controller.getRoomExits()).toEqual({})
       expect(bridge.controller.getRoomWares()).toEqual([])
       expect(bridge.controller.look()).toBe('')

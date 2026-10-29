@@ -1,5 +1,6 @@
 import { characterName, Room } from '@/engine'
 import type { Exits, GameState } from '@/engine'
+import { Hearth } from '../items/Hearth'
 import { Lantern } from '../items/Lantern'
 import { Grandmother } from '../characters/Grandmother'
 import { FadedPhotograph } from '../items/FadedPhotograph'
@@ -23,7 +24,7 @@ export class EliorsCottage extends Room {
         'table sits in the center, and a gentle fire crackles in the ' +
         `hearth. ${characterName('Grandmother')} stands by it, humming, ` +
         'and keeps an eye on the bread.',
-      items: [new Lantern()],
+      items: [new Hearth(), new Lantern()],
       characters: [new Grandmother()],
       exits: {},
     })
