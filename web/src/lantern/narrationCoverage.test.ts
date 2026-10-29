@@ -121,7 +121,7 @@ const OPTIONAL_LINES: Record<number, { speaker: string; opening: string }[]> = {
     { speaker: 'narrator', opening: 'You think it over. Nothing presses' },
     {
       speaker: 'narrator',
-      opening: 'Shadows Over Willowbrook: Villagers speak',
+      opening: 'Shadows Over Willowbrook: In the square, Tilda has more',
     },
     { speaker: 'narrator', opening: 'Curiosity killed the cat: Patches was' },
     { speaker: 'narrator', opening: 'Preparing for the road: Mira has tasked' },
