@@ -7,8 +7,8 @@ const HINT =
   'At the end of one lane an old cellar door has been bricked up, and a ' +
   'cold draught breathes through the gaps.'
 const AFTER =
-  'At the end of one lane, behind the old storage crates, the way down to ' +
-  'the hidden library stands open.'
+  'At the end of one lane, where the cellar door was bricked up, the way ' +
+  'down to the hidden library stands open.'
 
 describe('ResidentialQuarter search hint', () => {
   it('hints at the draught until the passage is found, then says it stands open', () => {
