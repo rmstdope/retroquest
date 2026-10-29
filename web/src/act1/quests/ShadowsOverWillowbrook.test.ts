@@ -100,6 +100,7 @@ describe('Shadows Over Willowbrook log', () => {
         'at the far door with his back to ' +
         `${characterName('Elior')}. He left toward the river without turning.`,
     )
+    expect(quest.earlierStages?.join('')).toContain('rune token')
     expect(quest.checkUpdate(game.state)).toBe(false)
   })
 
