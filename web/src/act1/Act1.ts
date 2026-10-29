@@ -15,6 +15,7 @@ import { ForestPath } from './rooms/ForestPath'
 import { HiddenGlade } from './rooms/HiddenGlade'
 import { VillageChapel } from './rooms/VillageChapel'
 import { RoadToGreendale } from './rooms/RoadToGreendale'
+import { Locket } from './items/Locket'
 import { HintOfMagicQuest } from './quests/HintOfMagic'
 import { CuriosityKilledTheCatQuest } from './quests/CuriosityKilledTheCat'
 import { FishingExpeditionQuest } from './quests/FishingExpedition'
@@ -102,9 +103,23 @@ export class Act1 extends Act {
 
   /**
    * Bring older saves up to date: drop the matches the store's wares still
-   * sell, and give the villager her name, Tilda.
+   * sell, give the villager her name, Tilda, and give the rooms and the locket
+   * whose description a save stores the wording they have now.
    */
   override afterLoad(gameState: GameState): void {
+    const rooms = gameState.allRooms
+    rooms.VillageSquare.description = new VillageSquare().description
+    rooms.BlacksmithsForge.description = new BlacksmithsForge().description
+    rooms.RoadToGreendale.description = new RoadToGreendale().description
+    rooms.AbandonedShed.description = new AbandonedShed().description
+    rooms.MirasHut.description = new MirasHut().description
+    const carriers = [
+      ...gameState.inventory,
+      ...Object.values(rooms).flatMap((room) => room.items),
+    ]
+    for (const item of carriers) {
+      if (item instanceof Locket) item.description = new Locket().description
+    }
     for (const room of Object.values(gameState.allRooms)) {
       for (const character of room.characters) {
         if (character instanceof Shopkeeper) character.migrateLegacyWares()

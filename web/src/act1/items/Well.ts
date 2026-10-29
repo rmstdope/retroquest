@@ -44,12 +44,12 @@ export class Well extends Item {
     } else {
       let desc =
         baseDesc +
-        (' The water below is dark and still. A foul stench rises from the ' +
-          'depths, making your stomach churn. Something is very wrong here.')
+        (' The water below is dark and still, and it smells sour, the way ' +
+          'milk does when it has turned.')
       if (this.containsRing) {
         desc +=
-          ' You think you see something shiny deep within the murky water, but ' +
-          "it's impossible to tell for sure or reach."
+          ' Far down, something glints, or you think it does. It is much too ' +
+          'deep to reach.'
       }
       this.description = desc
     }

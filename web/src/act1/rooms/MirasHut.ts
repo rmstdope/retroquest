@@ -18,11 +18,10 @@ export class MirasHut extends Room {
     super({
       name: "Mira's Hut",
       description:
-        'A fragrant hut filled with drying herbs and mysterious potions. Shelves ' +
-        'overflow with bottles, roots, and colorful flowers. The air is thick with ' +
-        'the scent of lavender and sage. Sunlight streams through stained glass, ' +
-        `painting the walls in shifting hues. ${characterName('Mira')} herself moves gracefully among ` +
-        'her concoctions, her eyes bright with knowledge and kindness.',
+        'A small hut hung with drying herbs: lavender, sage, and roots in ' +
+        'bundles from the rafters. Shelves of bottles line the walls, every ' +
+        `one labelled. ${characterName('Mira')} moves among them without looking, ` +
+        'the way you move through your own kitchen.',
       items: [new HealingHerb(), new AncientAmulet()],
       characters: [new Mira()],
       exits: { south: 'VillageSquare' },

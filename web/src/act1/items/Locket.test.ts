@@ -26,14 +26,14 @@ describe('Locket', () => {
     expect(game.state.hasSpell('bless')).toBe(true)
   })
 
-  it('shows the founders’ crest and hints at family when examined', () => {
+  it('shows the founders’ crest and does not steer the player when examined', () => {
     game.state.addItemToInventory(new Locket())
 
     const response = executeCommands(game, ['examine locket'])
 
     expect(response).toContain('a silver tree beneath twin moons')
     expect(response).not.toContain('Ravencrest')
-    expect(response).toContain('family')
+    expect(response).not.toContain('family')
   })
 
   it('opens to an engraving for the next of the founders’ line when used', () => {

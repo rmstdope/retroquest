@@ -31,9 +31,8 @@ export class AbandonedShed extends Room {
         'A rickety shed leans precariously at the edge of Willowbrook, its weathered ' +
         'boards creaking in the wind. Rusty tools and broken crates are scattered ' +
         'about a long workbench, and a thick layer of dust covers everything. ' +
-        'Little light gets past the grimy boards; shadows gather in the corners, ' +
-        'and the air smells of old earth and forgotten secrets. Something ' +
-        'about the place feels both forlorn and mysteriously inviting.',
+        'Little light gets past the grimy boards, and the air smells of old ' +
+        'earth and lamp oil.',
       items: [new ShedDoor()],
       characters: [],
       exits: { north: 'VillageWell', south: 'OldMill' },
@@ -94,8 +93,8 @@ export class AbandonedShed extends Room {
   private searchClutter(gameState: GameState): string {
     if (this.locked) {
       return (
-        'You take a look around the shed. Nothing! The [item_name]shed door[/item_name] ' +
-        "is locked so you can't search inside."
+        'The door is locked. Through a gap in the ' +
+        'boards there is only dark, and a smell of dust.'
       )
     }
 

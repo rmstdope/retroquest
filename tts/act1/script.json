@@ -435,9 +435,9 @@
     "text": "Vegetable Field"
   },
   {
-    "key": "1a6b7090032ec2",
+    "key": "02618682c4c622",
     "speaker": "narrator",
-    "text": "Rows of withered crops stretch beneath a brooding gray sky. The earth is cracked and dry, with only a few stubborn carrots and a rusty hoe hinting at better days. A faint breeze rustles the brittle leaves, carrying the scent of soil and distant rain. The field feels quiet, as if holding its breath, waiting for a touch of magic to bring it back to life."
+    "text": "Rows of withered crops stretch beneath a brooding gray sky. The earth is cracked and dry, with only a few stubborn carrots and a rusty hoe hinting at better days. A faint breeze rustles the brittle leaves, carrying the scent of soil and distant rain. These rows were green a month ago."
   },
   {
     "key": "162d8e104e5376",
@@ -565,9 +565,9 @@
     "text": "Village Square"
   },
   {
-    "key": "03ee6611d39356",
+    "key": "087a91050d11c4",
     "speaker": "narrator",
-    "text": "The heart of Willowbrook bustles with life. Cobblestone paths radiate from an old stone fountain, and a weathered notice board stands nearby, covered in faded announcements. Children chase each other around market stalls, and the air is filled with laughter, gossip, and the scent of fresh bread. The square is a crossroads for villagers, travelers, and secrets alike."
+    "text": "The heart of Willowbrook: cobblestones around an old stone fountain, and a weathered notice board covered in faded announcements. Half the market stalls stand empty. The people at the others keep their voices down, and stop talking when you pass."
   },
   {
     "key": "0c2f77642b7cb8",
@@ -625,14 +625,14 @@
     "text": "Village Well"
   },
   {
-    "key": "0b460da0b2e890",
+    "key": "01da3eb13f1793",
     "speaker": "narrator",
-    "text": "An old stone well stands at the village's center, its stones worn smooth by countless hands. The water below lies dark and still, and a faint sour smell hangs in the cool, damp air. Moss creeps up the sides. The well seems to whisper secrets to those who listen closely."
+    "text": "An old stone well stands between the field and the forge, its stones worn smooth by countless hands. The water below lies dark and still, and a faint sour smell hangs in the cool, damp air. Moss creeps up the sides."
   },
   {
-    "key": "0cfbaf6919199b",
+    "key": "0af2ce6a3c8b10",
     "speaker": "narrator",
-    "text": "An old stone well, its surface worn smooth, its shaft disappearing into the depths. The water below is dark and still. A foul stench rises from the depths, making your stomach churn. Something is very wrong here. You think you see something shiny deep within the murky water, but it's impossible to tell for sure or reach."
+    "text": "An old stone well, its surface worn smooth, its shaft disappearing into the depths. The water below is dark and still, and it smells sour, the way milk does when it has turned. Far down, something glints, or you think it does. It is much too deep to reach."
   },
   {
     "key": "056fa02e7b1c06",
@@ -695,9 +695,9 @@
     "text": "Blacksmith's Forge"
   },
   {
-    "key": "0ed78cb365d15e",
+    "key": "1007997f192420",
     "speaker": "narrator",
-    "text": "A hot, smoky forge glows with the light of burning coals. The clang of hammer on anvil echoes through the air, mingling with the scent of molten metal and sweat. Tools and half-finished weapons hang from the walls, and the blacksmith wipes his brow, his arms corded with muscle. Sparks dance in the gloom, and the heat is almost overwhelming."
+    "text": "A hot, smoky forge. Coals glow in the hearth and the anvil rings. Hinges, ploughshares and horseshoes hang from the walls, waiting to be mended or fetched, and the blacksmith wipes his brow without putting down the hammer."
   },
   {
     "key": "160b587b246d02",
@@ -770,9 +770,9 @@
     "text": "Abandoned Shed"
   },
   {
-    "key": "157c9006e63850",
+    "key": "171f9e8202e847",
     "speaker": "narrator",
-    "text": "A rickety shed leans precariously at the edge of Willowbrook, its weathered boards creaking in the wind. Rusty tools and broken crates are scattered about a long workbench, and a thick layer of dust covers everything. Little light gets past the grimy boards; shadows gather in the corners, and the air smells of old earth and forgotten secrets. Something about the place feels both forlorn and mysteriously inviting."
+    "text": "A rickety shed leans precariously at the edge of Willowbrook, its weathered boards creaking in the wind. Rusty tools and broken crates are scattered about a long workbench, and a thick layer of dust covers everything. Little light gets past the grimy boards, and the air smells of old earth and lamp oil."
   },
   {
     "key": "17ced776faa8d7",
@@ -780,9 +780,9 @@
     "text": "It's a sturdy wooden door, locked tight. There's a keyhole visible."
   },
   {
-    "key": "18a91b009370ba",
+    "key": "049507346fab7e",
     "speaker": "narrator",
-    "text": "You take a look around the shed. Nothing! The shed door is locked so you can't search inside."
+    "text": "The door is locked. Through a gap in the boards there is only dark, and a smell of dust."
   },
   {
     "key": "17236651ac23a8",
@@ -1010,9 +1010,9 @@
     "text": "Mira's Hut"
   },
   {
-    "key": "1ad9768b1fa166",
+    "key": "16e6a86be68933",
     "speaker": "narrator",
-    "text": "A fragrant hut filled with drying herbs and mysterious potions. Shelves overflow with bottles, roots, and colorful flowers. The air is thick with the scent of lavender and sage. Sunlight streams through stained glass, painting the walls in shifting hues. Mira herself moves gracefully among her concoctions, her eyes bright with knowledge and kindness."
+    "text": "A small hut hung with drying herbs: lavender, sage, and roots in bundles from the rafters. Shelves of bottles line the walls, every one labelled. Mira moves among them without looking, the way you move through your own kitchen."
   },
   {
     "key": "0e4bf89a769eb9",
@@ -1230,9 +1230,9 @@
     "text": "He counts the coin twice and hands over the rope, and an apple with it."
   },
   {
-    "key": "0707d5535402bf",
+    "key": "0c5e064199040e",
     "speaker": "narrator",
-    "text": "It looks like you need to use something with the strange mechanism."
+    "text": "You put a hand to the gears. They turn under it and keep turning; fingers will not stop them."
   },
   {
     "key": "0debb7a078ccd8",
@@ -1560,9 +1560,9 @@
     "text": "Forest Path"
   },
   {
-    "key": "1b1a839fb28b10",
+    "key": "07243a51a2f3b4",
     "speaker": "narrator",
-    "text": "A winding path snakes into the heart of the woods, dappled sunlight flickering through the canopy above. A section of the path is blocked by thick, thorny vines. The air is alive with the scent of pine and wildflowers, and the ground is soft with moss and fallen leaves. Birds flit between branches, and the occasional snap of a twig hints at unseen creatures nearby. The path feels ancient, as if it remembers every footstep that has ever passed this way."
+    "text": "A winding path snakes into the heart of the woods, dappled sunlight flickering through the canopy above. A section of the path is blocked by thick, thorny vines. The air is alive with the scent of pine and wildflowers, and the ground is soft with moss and fallen leaves. Birds flit between branches, and the occasional snap of a twig hints at unseen creatures nearby."
   },
   {
     "key": "07603951eb8444",
@@ -1810,9 +1810,9 @@
     "text": "The candle is lit, casting a warm, steady light."
   },
   {
-    "key": "00dd07a1c44c47",
+    "key": "13cb658e77a0ac",
     "speaker": "narrator",
-    "text": "A small, intricately carved silver locket, clearly very old. A tiny crest, a silver tree beneath twin moons, is worked into its lid. It feels cool to the touch. Perhaps someone in your family might know more about it."
+    "text": "A small, intricately carved silver locket, clearly very old. A tiny crest, a silver tree beneath twin moons, is worked into its lid. It feels cool to the touch."
   },
   {
     "key": "1e34cf6e8dea85",
@@ -2635,9 +2635,9 @@
     "text": "Road to Greendale"
   },
   {
-    "key": "02d2b5030244c3",
+    "key": "0a06acda3b39a7",
     "speaker": "narrator",
-    "text": "The main road leaving Willowbrook stretches beneath ancient oaks, their branches arching overhead like a living tunnel. The path is well-trodden, lined with wildflowers and scattered leaves. A merchant's cart creaks nearby, and the air is filled with the promise of adventure and the unknown. The road beckons, leading onward to new lands and new stories."
+    "text": "The main road out of Willowbrook runs east under old oaks, their branches meeting overhead. The way is well trodden, lined with wildflowers and fallen leaves. A merchant's cart stands at the roadside, and his thin grey mare grazes beside it on three good shoes."
   },
   {
     "key": "04e3c6b9a3c930",

@@ -8,11 +8,10 @@ export class BlacksmithsForge extends Room {
     super({
       name: "Blacksmith's Forge",
       description:
-        'A hot, smoky forge glows with the light of burning coals. The clang of ' +
-        'hammer on anvil echoes through the air, mingling with the scent of molten ' +
-        'metal and sweat. Tools and half-finished weapons hang from the walls, and ' +
-        `the ${characterName('blacksmith')} wipes his brow, his arms corded with muscle. Sparks dance ` +
-        'in the gloom, and the heat is almost overwhelming.',
+        'A hot, smoky forge. Coals glow in the hearth and the anvil rings. ' +
+        'Hinges, ploughshares and horseshoes hang from the walls, waiting to ' +
+        'be mended or fetched, and ' +
+        `the ${characterName('blacksmith')} wipes his brow without putting down the hammer.`,
       items: [new Horseshoe()],
       characters: [new Blacksmith()],
       exits: { west: 'VillageWell', north: 'GeneralStore' },

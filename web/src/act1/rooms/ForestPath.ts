@@ -10,16 +10,14 @@ const BLOCKED_DESCRIPTION =
   'thick, thorny vines. The air is alive with the scent of pine and wildflowers, ' +
   'and the ground is soft with moss and fallen leaves. Birds flit between ' +
   'branches, and the occasional snap of a twig hints at unseen creatures ' +
-  'nearby. The path feels ancient, as if it remembers every footstep that has ' +
-  'ever passed this way.'
+  'nearby.'
 const CLEARED_DESCRIPTION =
   'A winding path snakes into the heart of the woods, dappled sunlight ' +
   'flickering through the canopy above. Where thick vines once blocked a ' +
   'small alcove, they now lie cut, revealing the opening. The air is alive ' +
   'with the scent of pine and wildflowers, and the ground is soft with ' +
   'moss and fallen leaves. Birds flit between branches, and the occasional ' +
-  'snap of a twig hints at unseen creatures nearby. The path feels ancient, ' +
-  'as if it remembers every footstep that has ever passed this way.'
+  'snap of a twig hints at unseen creatures nearby.'
 const KIT_CAUGHT_SENTENCE =
   " In the alcove a fox kit is caught in a poacher's " +
   '[item_name]snare[/item_name], ' +
