@@ -200,8 +200,9 @@ describe('Act 4 integration', () => {
       const quest = game.state.activatedQuests[0]
       expect(quest.isMain()).toBe(true)
       expect(quest.description).toBe(
-        "Malakar's fortress stands before you, and somewhere inside King " +
-          'Alden is held captive. Break through its defences and face the sorcerer.',
+        "Malakar's fortress. Somewhere inside it King Alden is held, and " +
+          'Malakar waits for you. You came to free the king, and to make ' +
+          'Malakar pay for what he took.',
       )
     })
 
