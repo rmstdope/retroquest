@@ -85,8 +85,8 @@ describe('Act II ancient amulet', () => {
         'hidden under your shirt, warm against your chest. Someone came to ' +
         'Willowbrook looking for it, your grandmother said. Keep it hidden.',
     )
-    expect(intro).toContain('As you crest the final ridge')
-    expect(intro).toContain('Beyond Greendale, you glimpse')
+    expect(intro).toContain('from the last ridge you see Greendale')
+    expect(intro).toContain('East of the city the Enchanted Forest begins')
     expect(intro).not.toContain('Seek out Sir Cedric')
     expect(intro).not.toContain('Cedric')
     expect(intro).not.toContain('feels warm')

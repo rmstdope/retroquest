@@ -113,19 +113,12 @@ export class Act2 extends Act {
   /** The Act II opening page: arrival at Greendale, quoting only Mira's and Grandmother's Act I words. */
   override getActIntro(): string {
     return (
-      '[bold]ACT 2: THE GATHERING STORM[/bold]\n\nAfter the mysterious ' +
-      'events in Willowbrook and the revelation of your growing magical ' +
-      'abilities, you have left your quiet village behind. The mountain ' +
-      'path stretches before you, winding through rocky terrain toward ' +
-      'your destination: Greendale, a bustling city that serves as the ' +
-      'gateway between civilization and the mystical Enchanted ' +
-      'Forest.\n\nAs you crest the final ridge, the sight takes your ' +
-      'breath away. Below lies Greendale—larger than any settlement ' +
-      "you've ever seen, with stone buildings, busy market squares, and " +
-      'an impressive castle rising majestically above the city walls. ' +
-      'Smoke rises from countless chimneys, and you can hear the distant ' +
-      'sounds of commerce and conversation carried on the mountain ' +
-      "breeze.\n\nMira's parting words go with you: " +
+      '[bold]ACT 2: THE GATHERING STORM[/bold]\n\nYou left Willowbrook to ' +
+      'the sound of the chapel bell, ringing once with no hand on the rope. ' +
+      'The mountain path took you up through rock and pine, and from the ' +
+      'last ridge you see Greendale: stone houses, more chimneys than you ' +
+      'can count, and a white castle above the walls. No banner flies from ' +
+      "its highest spire.\n\nMira's parting words go with you: " +
       speech(
         'Your road leads to Greendale, ' +
           characterName('Elior') +
@@ -139,15 +132,8 @@ export class Act2 extends Act {
       'say over bad weather and bad luck, and knock on wood after. A tale ' +
       "to frighten children, and one line in your mother's hand that called " +
       'him a friend once.' +
-      '\n\nBeyond Greendale, ' +
-      'you glimpse the edge of the Enchanted Forest—an ancient woodland ' +
-      'where magic flows like water and spirits older than memory dwell ' +
-      'among the trees. The very air seems to shimmer with possibility ' +
-      'and danger.\n\nThis is where your true journey begins. In ' +
-      'Greendale, you must prove yourself worthy, forge alliances with ' +
-      'powerful allies, and master the magical arts. Only then will you ' +
-      "be ready to face the forest's deepest secrets and the growing " +
-      'storm that threatens all you hold dear.\n\nTake a deep breath, and ' +
+      '\n\nEast of the city the Enchanted Forest begins, a dark line of trees ' +
+      'as far as you can see.\n\nTake a deep breath, and ' +
       'start down the road into Greendale.\n'
     )
   }

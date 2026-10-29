@@ -8,6 +8,9 @@ import {
   FLAG_ANCIENT_LIBRARY_COMPLETED,
   FLAG_HERMITS_WARNING_COMPLETED,
   FLAG_NYX_TRIALS_PASSED,
+  FLAG_CEDRIC_RECOGNISED_SIGIL,
+  FLAG_RESEARCHED_FAMILY_HERITAGE,
+  FLAG_CEDRIKS_HONOR_COMPLETED,
 } from '../Act2StoryFlags'
 
 const SIR_CEDRIC = characterName('Sir Cedric')
@@ -46,103 +49,103 @@ export class TheGatheringStormQuest extends Quest {
     return true // This quest is always active once Act II begins
   }
 
+  /** Record a flag the first time it is seen; true when it was new. */
+  private noteFlag(flag: string): boolean {
+    if (this.flagState[flag]) return false
+    this.flagState[flag] = true
+    return true
+  }
+
+  /**
+   * Rebuild the journal: the opening entry first, then every beat whose flag
+   * is set, in the order the flags were first noticed (`flagState` keeps its
+   * insertion order, in saves too), so the newest beat is always the latest.
+   */
   override checkUpdate(gameState: GameState): boolean {
+    const beats: [string, string][] = [
+      [
+        FLAG_SPOKEN_TO_SIR_CEDRIC,
+        SIR_CEDRIC +
+          ', a knight without his sword, says a storm is gathering over the ' +
+          'kingdom and he does not yet know its name. He will not trust you ' +
+          'on your word; he wants to see you with a blade.',
+      ],
+      [
+        FLAG_CEDRIC_RECOGNISED_SIGIL,
+        SIR_CEDRIC +
+          ' knew the sigil on your amulet: the sun rising over three linked ' +
+          'rings, the mark of the Wardens of the Dawn. Whoever wore it before ' +
+          'you was a Warden, he says, and your family is bound to them.',
+      ],
+      [
+        FLAG_DEMONSTRATED_COMBAT_SKILLS,
+        SIR_CEDRIC +
+          ' watched you with the training sword and now trusts you. He wants ' +
+          'you to find ' +
+          NYX +
+          ', deep in the Enchanted Forest, because her old wisdom may show ' +
+          'what you are truly facing. He gave you a hundred and fifty coins ' +
+          'for a survival kit, an enhanced lantern and rope from the Market ' +
+          'District.',
+      ],
+      [
+        FLAG_SUPPLIES_QUEST_COMPLETED,
+        'The survival kit, the lantern and the rope are packed. The merchants of ' +
+          'Greendale have done what they can for you. The rest of the road ' +
+          'leads to the edge of the Enchanted Forest.',
+      ],
+      [
+        FLAG_ANCIENT_LIBRARY_COMPLETED,
+        'Beneath Greendale, the ' +
+          SPECTRAL_LIBRARIAN +
+          ' taught you the dispel spell. The chronicle there was written by ' +
+          'the Wardens of the Dawn, and their magic was the unbinding kind. ' +
+          'Its last page warns that Malakar seeks the blood of Willowbrook.',
+      ],
+      [
+        FLAG_RESEARCHED_FAMILY_HERITAGE,
+        "The castle archive's register names a man in a grey cloak who asked " +
+          'after the families of Willowbrook, on the business of Malakar. You ' +
+          'had always thought Malakar a tale. His last visit was the week ' +
+          'King Alden vanished.',
+      ],
+      [
+        FLAG_CEDRIKS_HONOR_COMPLETED,
+        "The papers from Thorne's caravan cleared " +
+          SIR_CEDRIC +
+          "'s name. The watch was paid to let the king be taken, by the will " +
+          'of Malakar, and he was carried to the bastion on the shattered ' +
+          'ridge.',
+      ],
+      [
+        FLAG_HERMITS_WARNING_COMPLETED,
+        "At the standing stones you slept on the forest's doorstep, as the " +
+          'hermit asked, and dreamed of a grey field with someone at its far ' +
+          'edge. In the morning the hermit said she had let you. Somewhere ' +
+          'inside the forest, ' +
+          NYX +
+          ' is waiting.',
+      ],
+      [
+        FLAG_NYX_TRIALS_PASSED,
+        NYX +
+          ' judged you worthy and gave you the ' +
+          PROPHETIC_VISION +
+          ' spell, her token and the forest heart crystal. She left you with ' +
+          'the words from the glade stone: power follows purpose; purpose ' +
+          'follows truth. When every other task in Greendale is done, cast ' +
+          'the vision with ' +
+          SIR_CEDRIC +
+          ' beside you, so you can both see what is coming.',
+      ],
+    ]
     let updated = false
-    const earlier: string[] = []
-    let newDesc = OPENING_ENTRY
-    if (gameState.getStoryFlag(FLAG_SPOKEN_TO_SIR_CEDRIC)) {
-      if (!this.flagState[FLAG_SPOKEN_TO_SIR_CEDRIC]) {
-        this.flagState[FLAG_SPOKEN_TO_SIR_CEDRIC] = true
-        updated = true
-      }
-      earlier.push(newDesc)
-      newDesc =
-        '\n\n' +
-        SIR_CEDRIC +
-        ' calls it the Gathering ' +
-        'Storm. He needs allies who know magic, but he will not trust you on ' +
-        'your word alone. He wants to see you fight first, with the training ' +
-        'sword.'
-    }
-    if (gameState.getStoryFlag(FLAG_DEMONSTRATED_COMBAT_SKILLS)) {
-      if (!this.flagState[FLAG_DEMONSTRATED_COMBAT_SKILLS]) {
-        this.flagState[FLAG_DEMONSTRATED_COMBAT_SKILLS] = true
-        updated = true
-      }
-      earlier.push(newDesc)
-      newDesc =
-        '\n\n' +
-        SIR_CEDRIC +
-        ' watched you with the ' +
-        'training sword and now trusts you. He wants you to find ' +
-        NYX +
-        ', deep in the Enchanted Forest, ' +
-        'because her old wisdom may show what you are truly facing. He gave ' +
-        'you a hundred and fifty coins for a survival kit, an enhanced ' +
-        'lantern and rope from the Market District.'
-    }
-    if (gameState.getStoryFlag(FLAG_SUPPLIES_QUEST_COMPLETED)) {
-      if (!this.flagState[FLAG_SUPPLIES_QUEST_COMPLETED]) {
-        this.flagState[FLAG_SUPPLIES_QUEST_COMPLETED] = true
-        updated = true
-      }
-      earlier.push(newDesc)
-      newDesc =
-        '\n\nThe survival kit, the lantern and the rope are packed. The ' +
-        'merchants of Greendale have done what they can for you. The rest of ' +
-        'the road leads to the edge of the Enchanted Forest.'
-    }
-    if (gameState.getStoryFlag(FLAG_ANCIENT_LIBRARY_COMPLETED)) {
-      if (!this.flagState[FLAG_ANCIENT_LIBRARY_COMPLETED]) {
-        this.flagState[FLAG_ANCIENT_LIBRARY_COMPLETED] = true
-        updated = true
-      }
-      earlier.push(newDesc)
-      newDesc =
-        '\n\nBeneath Greendale, the ' +
-        SPECTRAL_LIBRARIAN +
-        ' taught you the dispel spell. The chronicle ' +
-        'there was written by the Wardens of the Dawn, and their magic was ' +
-        'the unbinding kind. Its last page warns that Malakar seeks the blood ' +
-        'of Willowbrook.'
-    }
-
-    if (gameState.getStoryFlag(FLAG_HERMITS_WARNING_COMPLETED)) {
-      if (!this.flagState[FLAG_HERMITS_WARNING_COMPLETED]) {
-        this.flagState[FLAG_HERMITS_WARNING_COMPLETED] = true
-        updated = true
-      }
-      earlier.push(newDesc)
-      newDesc =
-        '\n\nAt the standing stones you opened the survival kit and studied ' +
-        'its map, as the hermit urged. You know now which paths to take and ' +
-        'which to avoid. Somewhere inside the forest, ' +
-        NYX +
-        ' is waiting.'
-    }
-
-    if (gameState.getStoryFlag(FLAG_NYX_TRIALS_PASSED)) {
-      if (!this.flagState[FLAG_NYX_TRIALS_PASSED]) {
-        this.flagState[FLAG_NYX_TRIALS_PASSED] = true
-        updated = true
-      }
-      earlier.push(newDesc)
-      newDesc =
-        '\n\n' +
-        NYX +
-        ' judged you worthy and gave ' +
-        'you the ' +
-        PROPHETIC_VISION +
-        ' spell, her token ' +
-        'and the forest heart crystal. She left you with the words from the ' +
-        'glade stone: power follows purpose; purpose follows truth. When ' +
-        'every other task in Greendale is done, cast the vision with ' +
-        SIR_CEDRIC +
-        ' beside you, so you can ' +
-        'both see what is coming.'
-    }
-
-    this.setJournal(earlier, newDesc)
+    const shown = beats.filter(([flag]) => gameState.getStoryFlag(flag))
+    for (const [flag] of shown) if (this.noteFlag(flag)) updated = true
+    const noticed = Object.keys(this.flagState)
+    shown.sort(([a], [b]) => noticed.indexOf(a) - noticed.indexOf(b))
+    const stages = [OPENING_ENTRY, ...shown.map(([, text]) => `\n\n${text}`)]
+    this.setJournal(stages.slice(0, -1), stages[stages.length - 1])
     return updated
   }
 
