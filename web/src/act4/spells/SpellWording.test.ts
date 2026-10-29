@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import { Game } from '@/engine'
 import { Act4 } from '../Act4'
+import { AncientAmulet } from '../items/AncientAmulet'
 import { LifelightElixir } from '../items/LifelightElixir'
 import { Light } from './Light'
 import { Bless } from './Bless'
@@ -35,23 +36,43 @@ describe('Act IV elixir', () => {
 })
 
 describe('older saves show the new wording', () => {
-  it('re-applies the spell and elixir descriptions on load', () => {
+  it('re-applies the descriptions when a save is loaded', () => {
     const game = new Game([new Act4()])
     game.state.learnSpell(new Light())
     game.state.learnSpell(new Bless())
     game.state.learnSpell(new Grow())
     for (const spell of game.state.knownSpells) spell.description = 'old'
-    game.state.addItemToInventory(new LifelightElixir())
-    const elixir = game.state.inventory.find(
-      (item) => item instanceof LifelightElixir,
+    const carried = new LifelightElixir()
+    carried.description = OLD_ELIXIR
+    game.state.addItemToInventory(carried)
+    const dropped = new LifelightElixir()
+    dropped.description = OLD_ELIXIR
+    game.state.allRooms.MemoryVault.addItem(dropped)
+    const amulet = game.state.inventory.find(
+      (item) => item instanceof AncientAmulet,
     )
-    if (elixir) elixir.description = OLD_ELIXIR
-    new Act4().afterLoad(game.state)
+    if (amulet) amulet.description = 'A family heirloom.'
+
+    game.loadSaveData(game.toSaveData())
+
     const known = (id: string): string | undefined =>
       game.state.knownSpells.find((s) => s.id === id)?.description
     expect(known('light')).toBe(new Light().description)
     expect(known('bless')).toBe(new Bless().description)
     expect(known('grow')).toBe(new Grow().description)
-    expect(elixir?.description).toBe(new LifelightElixir().description)
+    const wording = new LifelightElixir().description
+    const carriedNow = game.state.inventory.find(
+      (item) => item instanceof LifelightElixir,
+    )
+    expect(carriedNow?.description).toBe(wording)
+    expect(
+      game.state.allRooms.MemoryVault.items.find(
+        (item) => item instanceof LifelightElixir,
+      )?.description,
+    ).toBe(wording)
+    expect(
+      game.state.inventory.find((item) => item instanceof AncientAmulet)
+        ?.description,
+    ).toBe(new AncientAmulet().description)
   })
 })

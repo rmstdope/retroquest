@@ -181,7 +181,9 @@ export class Act4 extends Act {
    * Saves from before Nyx's gifts were carried get the token and the
    * crystal, unless the hedge already has them back. The main quest's log and
    * closing words are rebuilt, a finished one included, so saves made before
-   * the log followed the revelations read the current wording.
+   * the log followed the revelations read the current wording. Every save
+   * gets the reviewed wording of the amulet, the elixir and the spells light,
+   * bless and grow.
    */
   override afterLoad(gameState: GameState): void {
     for (const quest of gameState.completedQuests)
