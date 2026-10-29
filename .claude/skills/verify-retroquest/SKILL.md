@@ -7,10 +7,11 @@ description: RetroQuest's verification skill, named by `verification_skill` in .
 
 This skill **extends `verify-bead`; it does not replace it.** Load `verify-bead` first and follow it,
 together with `agents/verifier.md`. That covers the candidates, the fresh `origin/main` worktree, the
-commit check, `verification=pending`, the port refusal, the sha in every verdict, the report written
+commit check, `verification=pending`, the sha in every verdict, the report written
 onto the bead before asking, the recipes in *Taking the verdict*, and the end of a pass. Where this
-file is more specific, this file wins. It adds five things: batching, reaching a game state,
-protecting the navigator's saves, human checks, and exploratory testing.
+file is more specific, this file wins. It adds six things: batching, reaching a game state,
+protecting the navigator's saves, human checks, exploratory testing, and two environmental
+workarounds (a file Chrome cannot open, a taken port) that replace verify-bead's port refusal.
 
 Every question below is the verifier's three-action sandwich: `asking --bead <id> --phase verify`,
 the question, then `working --bead <id> --phase verify` before anything else. In a batch, `--bead`
@@ -44,7 +45,8 @@ Say each batch and its reason in one line before launching, for example "batch A
 rq-mh4.4, all narration UI, one run at `<short sha>`". Then, per batch:
 
 1. Prepare every bead (verify-bead's *Prepare*): one checklist per bead, criterion by criterion.
-2. Launch once (verify-bead's *Launch*), on the declared port.
+2. Launch once (verify-bead's *Launch*), on the declared port, or on the fallback port from
+   *Two environmental snags* when 5173 is taken.
 3. Walk the beads in the order that reaches the game states most cheaply, keeping a separate
    evidence log per bead. A screenshot can serve two beads, but name it in both logs.
 4. Collect every human check in the batch into **one** hand-off (below).
@@ -87,21 +89,22 @@ Neither is a question for the navigator. Work round both, and say so in the repo
   `python3 -m http.server <free port> --bind 127.0.0.1 --directory <dir>`, on a port from the
   range below, then `http://127.0.0.1:<port>/<file>`. Stop only the server you started.
 - **5173 occupied** (`lsof -nP -iTCP:5173 -sTCP:LISTEN` prints a listener). This overrides
-  verify-bead's rule that an occupied port is a question: do not ask. Never stop, signal or reuse
+  the occupied-port refusal in both verify-bead and
+  `agents/verifier.md`: do not ask. Never stop, signal or reuse
   whatever holds 5173. Pick the first free port from 5174 to 5199 (below the producers' 5200+
   blocks), checking each with the same `lsof`, and start the declared launch command on it with
   Vite's port flags: `npm run dev --prefix web -- --port <port> --strictPort`. Name the port in
   the report, as "verified on http://localhost:<port> because 5173 was taken". If none of
   5174-5199 is free, that is a blocker to report.
 - **Origins differ by port.** `localStorage` belongs to the origin, so the navigator's saves on
-  `localhost:5173` are not visible on another port. The game starts empty there; that is expected.
+  `localhost:5173` are not visible on another port. The game may start empty there; that is expected.
   Snapshot and restore on the origin you actually use (next section), and where a bead needs an
   existing save, build the state with `debug act<N>` instead.
 
 ## Protect the navigator's saves
 
 The browser is the navigator's own Chrome, and `localhost:5173` shares its `localStorage` with
-every game they have played there. On a fallback port (see above) the origin is new and holds none
+every game they have played there. On a fallback port (see above) the origin is new and may hold none
 of their saves, but snapshot and restore anyway, on that origin. Before the first save, load or settings change in a batch,
 snapshot RetroQuest's keys through the Chrome integration's JavaScript tool:
 
@@ -226,5 +229,5 @@ where they do not. Record only what they answered, by the recipes in `agents/ver
 
 ## When the look is over
 
-Restore the storage snapshot, delete any scratch debug script, close the tabs you opened, and stop the
-server you started, and only that one.
+Restore the storage snapshot, delete any scratch debug script, close the tabs you opened, and stop every
+server you started (the dev server, and any `http.server` for local files), and only those.
