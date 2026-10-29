@@ -24,7 +24,7 @@ describe('MendSpell', () => {
   it('initializes with name and description', () => {
     const spell = new MendSpell()
     expect(spell.name).toBe('mend')
-    expect(spell.description).toContain('repair charm')
+    expect(spell.description).toContain('close what is cracked')
   })
 
   it('finds nothing to mend without a target', () => {

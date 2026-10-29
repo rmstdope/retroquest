@@ -6,15 +6,15 @@ import {
   type Item,
 } from '@/engine'
 
-/** Divine incantation granting protection and sanctifying power. */
+/** The priest's blessing: warms Elior, and sanctifies sacred items for ritual. */
 export class BlessSpell extends Spell {
   constructor() {
     super({
       id: 'bless',
       name: 'bless',
       description:
-        'A divine incantation that offers protection and strength, and can ' +
-        'sanctify sacred items for ritual purposes.',
+        'The blessing the priest said over you when you found the ' +
+        "founders' locket.",
     })
   }
 
@@ -22,8 +22,8 @@ export class BlessSpell extends Spell {
   override castSpell(gameState: GameState): string {
     gameState.setStoryFlag('journey_bless_completed', true)
     return (
-      'Your resolve is strengthened, and you feel more prepared for the ' +
-      'challenges that lie ahead on your journey.'
+      'A quiet warmth settles on your shoulders and stays, the way the ' +
+      "priest's hand did."
     )
   }
 

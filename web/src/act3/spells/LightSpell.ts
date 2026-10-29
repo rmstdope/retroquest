@@ -1,13 +1,13 @@
 import { Spell, type GameState, type Item } from '@/engine'
 import { LanternBracket } from '../items/LanternBracket'
 
-/** A steady kindling that coaxes prisms to life. */
+/** Mira's third lesson: a light that also coaxes prisms to life. */
 export class LightSpell extends Spell {
   constructor() {
     super({
       id: 'light',
       name: 'light',
-      description: 'A steady kindling that coaxes prisms to life.',
+      description: 'The third thing Mira showed you: how to make a light.',
     })
   }
 

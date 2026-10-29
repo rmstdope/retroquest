@@ -15,8 +15,8 @@ export class MendSpell extends Spell {
       id: 'mend',
       name: 'mend',
       description:
-        'A focused repair charm used to bind and finish delicate work; in ' +
-        'Mount Ember it is used to set the final mirrors into resonance.',
+        'The old woman at the end bench in Greendale taught you over a ' +
+        'split bowl: close what is cracked, slowly.',
     })
   }
 
