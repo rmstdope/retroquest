@@ -7,6 +7,7 @@ import {
   FLAG_MAGIC_FULLY_UNLOCKED,
   FLAG_MERCHANT_NEWS_HEARD,
   FLAG_MIRA_NAMED_FOULING_SIGIL,
+  FLAG_STRANGER_SEEN_AT_MILL,
   FLAG_VEGETABLE_FIELD_WATERED,
   FLAG_VILLAGER_TALKED_TO,
 } from '../Act1StoryFlags'
@@ -37,14 +38,16 @@ describe('Shadows Over Willowbrook log', () => {
     const details = quest.details()
     if (details.kind !== 'journal') throw new Error('expected a journal')
     expect(details.earlier).toHaveLength(2)
-    expect(details.latest).toContain('Villagers speak in hushed tones')
+    expect(details.latest).toContain(
+      `${characterName('Tilda')} has more rumours than bread`,
+    )
     expect(quest.description).toBe(
       (quest.earlierStages ?? [])
         .map((stage) => `[dim]${stage}[/dim]`)
         .join('') + quest.latestStage,
     )
     expect(
-      quest.description.startsWith(`[dim]${characterName('Elior')} dreams`),
+      quest.description.startsWith(`[dim]${characterName('Elior')} dreamed`),
     ).toBe(true)
   })
 
@@ -64,8 +67,40 @@ describe('Shadows Over Willowbrook log', () => {
     const details = loaded.details()
     if (details.kind !== 'journal') throw new Error('expected a journal')
     expect(details.earlier).toHaveLength(2)
-    expect(details.latest).toContain('Villagers speak in hushed tones')
+    expect(details.latest).toContain(
+      `${characterName('Tilda')} has more rumours than bread`,
+    )
     expect(fresh.state.nextUpdatedQuest()).toBeNull()
+  })
+
+  it('tells the dream the player played, and ends on the amulet on the road', () => {
+    const quest = new ShadowsOverWillowbrookQuest()
+    quest.checkUpdate(new Game([new Act1()]).state)
+
+    expect(quest.description).toContain(
+      `${characterName('Elior')} dreamed of a storm, a tune, and a figure in the dark that ` +
+        'whispered his name. He woke with three words written down: ' +
+        '…and let them rest…',
+    )
+    expect(quest.completion).toContain('The well was poisoned on purpose')
+    expect(quest.completion).toContain('on the road to Greendale')
+    expect(quest.completion).not.toContain('key to protecting')
+  })
+
+  it('logs the stranger at the mill after the rune token', () => {
+    const game = new Game([new Act1()])
+    const quest = new ShadowsOverWillowbrookQuest()
+    game.state.setStoryFlag(FLAG_FOUND_RUNE_TOKEN, true)
+    quest.checkUpdate(game.state)
+    game.state.setStoryFlag(FLAG_STRANGER_SEEN_AT_MILL, true)
+
+    expect(quest.checkUpdate(game.state)).toBe(true)
+    expect(quest.latestStage).toBe(
+      '\nAt the [room_name]Old Mill[/room_name] a man in a grey cloak stood ' +
+        'at the far door with his back to ' +
+        `${characterName('Elior')}. He left toward the river without turning.`,
+    )
+    expect(quest.checkUpdate(game.state)).toBe(false)
   })
 
   it('records the amulet promise rather than a druid once magic is unlocked', () => {
@@ -147,7 +182,9 @@ describe('Shadows Over Willowbrook log', () => {
     game.state.setStoryFlag(FLAG_VILLAGER_TALKED_TO, true)
     quest.checkUpdate(game.state)
 
-    expect(quest.latestStage).toContain('Villagers speak in hushed tones')
+    expect(quest.latestStage).toContain(
+      `${characterName('Tilda')} has more rumours than bread`,
+    )
     expect(quest.earlierStages?.join('')).toContain('King Alden lies ill')
   })
 })

@@ -426,7 +426,9 @@ describe('actScript hints', () => {
 
   it('reads a quest line whole, with the quest name in front', () => {
     const line = script.find((l) =>
-      l.text.startsWith('Shadows Over Willowbrook: Villagers speak'),
+      l.text.startsWith(
+        'Shadows Over Willowbrook: In the square, Tilda has more',
+      ),
     )
     expect(line?.speaker).toBe('narrator')
   })
