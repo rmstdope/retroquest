@@ -170,10 +170,21 @@ export class Act3 extends Act {
    * lower case, saves from before the Act III rewrite keep his and Mira's
    * old descriptions (hers until she confesses), saves from before the hut was
    * reworded keep its old description, and saves already past the
-   * miners' rescue lack Tobin.
+   * miners' rescue lack Tobin. Every spell the player knows takes the
+   * description of Act III's own copy, so older saves show who taught it.
    */
   override afterLoad(gameState: GameState): void {
     gameState.allRooms.MirasHut.description = new MirasHut().description
+    for (const spell of [
+      new PurifySpell(),
+      new UnlockSpell(),
+      new LightSpell(),
+      new MendSpell(),
+      new BlessSpell(),
+    ]) {
+      const known = gameState.knownSpells.find((s) => s.id === spell.id)
+      if (known) known.description = spell.description
+    }
     const galleries = gameState.allRooms.CollapsedGalleries
     if (
       galleries &&

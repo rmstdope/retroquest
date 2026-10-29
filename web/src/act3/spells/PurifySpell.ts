@@ -9,8 +9,8 @@ export class PurifySpell extends Spell {
       id: 'purify',
       name: 'purify',
       description:
-        'A cleansing rite tuned to salt and stone; it scours sea-grit and ' +
-        'wakes dormant ward-glyphs.',
+        'Your mother taught it to the fisherman at the bend, and he gave it ' +
+        'back to you. It makes foul water clean.',
     })
   }
 

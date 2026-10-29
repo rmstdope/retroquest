@@ -8,7 +8,7 @@ export class UnlockSpell extends Spell {
     super({
       id: 'unlock',
       name: 'unlock',
-      description: 'A deft sigil that loosens fused pins and grudging clasps.',
+      description: 'The second thing Mira showed you: how to open.',
     })
   }
 
