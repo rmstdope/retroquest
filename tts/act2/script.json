@@ -5,14 +5,9 @@
     "text": "Act II: The Gathering Storm"
   },
   {
-    "key": "18fb515d54c5bd",
+    "key": "1627267a3cb7cd",
     "speaker": "narrator",
-    "text": "After the mysterious events in Willowbrook and the revelation of your growing magical abilities, you have left your quiet village behind. The mountain path stretches before you, winding through rocky terrain toward your destination: Greendale, a bustling city that serves as the gateway between civilization and the mystical Enchanted Forest."
-  },
-  {
-    "key": "004dd1039fbe71",
-    "speaker": "narrator",
-    "text": "As you crest the final ridge, the sight takes your breath away. Below lies Greendale—larger than any settlement you've ever seen, with stone buildings, busy market squares, and an impressive castle rising majestically above the city walls. Smoke rises from countless chimneys, and you can hear the distant sounds of commerce and conversation carried on the mountain breeze."
+    "text": "You left Willowbrook to the sound of the chapel bell, ringing once with no hand on the rope. The mountain path took you up through rock and pine, and from the last ridge you see Greendale: stone houses, more chimneys than you can count, and a white castle above the walls. No banner flies from its highest spire."
   },
   {
     "key": "11e7538286f2d5",
@@ -35,14 +30,9 @@
     "text": "Malakar, to you, is a word from Willowbrook: a name your neighbours say over bad weather and bad luck, and knock on wood after. A tale to frighten children, and one line in your mother's hand that called him a friend once."
   },
   {
-    "key": "1eb8a1263fb75e",
+    "key": "03b74e6caf7c84",
     "speaker": "narrator",
-    "text": "Beyond Greendale, you glimpse the edge of the Enchanted Forest—an ancient woodland where magic flows like water and spirits older than memory dwell among the trees. The very air seems to shimmer with possibility and danger."
-  },
-  {
-    "key": "0ff50575625578",
-    "speaker": "narrator",
-    "text": "This is where your true journey begins. In Greendale, you must prove yourself worthy, forge alliances with powerful allies, and master the magical arts. Only then will you be ready to face the forest's deepest secrets and the growing storm that threatens all you hold dear."
+    "text": "East of the city the Enchanted Forest begins, a dark line of trees as far as you can see."
   },
   {
     "key": "0bc301d9db0039",
@@ -535,9 +525,9 @@
     "text": "Sir Cedric wants to see proof of your combat abilities before trusting you with important responsibilities. Demonstrate your martial skills with a training sword."
   },
   {
-    "key": "1a142f80d97d18",
+    "key": "18ab0afc1c9c4b",
     "speaker": "narrator",
-    "text": "Sir Cedric calls it the Gathering Storm. He needs allies who know magic, but he will not trust you on your word alone. He wants to see you fight first, with the training sword."
+    "text": "Sir Cedric knew the sigil on your amulet: the sun rising over three linked rings, the mark of the Wardens of the Dawn. Whoever wore it before you was a Warden, he says, and your family is bound to them."
   },
   {
     "key": "14ef884f0c5716",
@@ -550,9 +540,9 @@
     "text": "Not yet. Show me what you can do with a blade first; then we will talk of the rest."
   },
   {
-    "key": "198bae0555d9fb",
+    "key": "15b889fd26aeab",
     "speaker": "narrator",
-    "text": "The Gathering Storm: Sir Cedric calls it the Gathering Storm. He needs allies who know magic, but he will not trust you on your word alone. He wants to see you fight first, with the training sword."
+    "text": "The Gathering Storm: Sir Cedric knew the sigil on your amulet: the sun rising over three linked rings, the mark of the Wardens of the Dawn. Whoever wore it before you was a Warden, he says, and your family is bound to them."
   },
   {
     "key": "0f9e1052a3914d",
@@ -1235,6 +1225,11 @@
     "text": "Malakar. You had always thought him a name from old books, a tale to frighten children. Yet someone walks into this archive in his name, asking after the families of Willowbrook. The last entry is dated the week King Alden vanished."
   },
   {
+    "key": "1bd5a129407b64",
+    "speaker": "narrator",
+    "text": "The castle archive's register names a man in a grey cloak who asked after the families of Willowbrook, on the business of Malakar. You had always thought Malakar a tale. His last visit was the week King Alden vanished."
+  },
+  {
     "key": "0b1e0c219b018b",
     "speaker": "narrator",
     "text": "The archive names the Wardens of the Dawn, and a stranger asking after the Willowbrook bloodline on Malakar's business."
@@ -1253,6 +1248,11 @@
     "key": "1d13a90e3bff8d",
     "speaker": "narrator",
     "text": "You have already been through the archive. One entry in the visitors' register stays with you:"
+  },
+  {
+    "key": "04227febcf96e4",
+    "speaker": "narrator",
+    "text": "The Gathering Storm: The castle archive's register names a man in a grey cloak who asked after the families of Willowbrook, on the business of Malakar. You had always thought Malakar a tale. His last visit was the week King Alden vanished."
   },
   {
     "key": "0536a89fc3609b",
@@ -1620,14 +1620,14 @@
     "text": "You have successfully gained access to the ancient library's knowledge! You've learned the dispel spell, discovered important information about your family heritage, and received a crystal focus to enhance your magical abilities. The chronicle you read there was the Wardens' own book, and its last page warns that Malakar seeks the blood of Willowbrook."
   },
   {
-    "key": "1a213fe1ce4efd",
-    "speaker": "narrator",
-    "text": "The Gathering Storm: Beneath Greendale, the Spectral Librarian taught you the dispel spell. The chronicle there was written by the Wardens of the Dawn, and their magic was the unbinding kind. Its last page warns that Malakar seeks the blood of Willowbrook."
-  },
-  {
     "key": "076cf2dae596cc",
     "speaker": "narrator",
     "text": "Beneath Greendale, the Spectral Librarian taught you the dispel spell. The chronicle there was written by the Wardens of the Dawn, and their magic was the unbinding kind. Its last page warns that Malakar seeks the blood of Willowbrook."
+  },
+  {
+    "key": "1a213fe1ce4efd",
+    "speaker": "narrator",
+    "text": "The Gathering Storm: Beneath Greendale, the Spectral Librarian taught you the dispel spell. The chronicle there was written by the Wardens of the Dawn, and their magic was the unbinding kind. Its last page warns that Malakar seeks the blood of Willowbrook."
   },
   {
     "key": "162da4d8f9a893",
@@ -1805,9 +1805,9 @@
     "text": "The Hermit's Warning: A forest hermit at the edge of the Enchanted Forest has warned you that the forest moves its paths and keeps old things that don't care for strangers. The hermit has given you a protective charm to help safeguard your journey through the magical wilderness, but you need to prepare yourself before venturing further into the Enchanted Forest."
   },
   {
-    "key": "020a55ee49c366",
+    "key": "1eccf1a1549b19",
     "speaker": "narrator",
-    "text": "At the standing stones you opened the survival kit and studied its map, as the hermit urged. You know now which paths to take and which to avoid. Somewhere inside the forest, Nyx is waiting."
+    "text": "At the standing stones you slept on the forest's doorstep, as the hermit asked, and dreamed of a grey field with someone at its far edge. In the morning the hermit said she had let you. Somewhere inside the forest, Nyx is waiting."
   },
   {
     "key": "0c1bfb7c630ecd",
@@ -1825,9 +1825,9 @@
     "text": "She knows you're coming now. Go on, before she changes her mind."
   },
   {
-    "key": "0f72842bd00949",
+    "key": "106ff4b9d73f49",
     "speaker": "narrator",
-    "text": "The Gathering Storm: At the standing stones you opened the survival kit and studied its map, as the hermit urged. You know now which paths to take and which to avoid. Somewhere inside the forest, Nyx is waiting."
+    "text": "The Gathering Storm: At the standing stones you slept on the forest's doorstep, as the hermit asked, and dreamed of a grey field with someone at its far edge. In the morning the hermit said she had let you. Somewhere inside the forest, Nyx is waiting."
   },
   {
     "key": "0b2fbba095ac22",
@@ -2675,6 +2675,11 @@
     "text": "Take this to the training yard. A knight should not stand among his squires with an empty scabbard."
   },
   {
+    "key": "02ca6cbf9f4935",
+    "speaker": "narrator",
+    "text": "The papers from Thorne's caravan cleared Sir Cedric's name. The watch was paid to let the king be taken, by the will of Malakar, and he was carried to the bastion on the shattered ridge."
+  },
+  {
     "key": "1a5d3e721ebfec",
     "speaker": "narrator",
     "text": "You have cleared Sir Cedric's name. The night watch was paid to leave the king's postern open and to blame him, and the letter that paid them was written in Malakar's name."
@@ -2688,6 +2693,11 @@
     "key": "1f4c170ce3b222",
     "speaker": "lord commander",
     "text": "Sir Cedric's knighthood is restored and the charge struck from the record. As for the name in that letter, I have sent riders to Heavensforth for the watchman who confessed. Whoever paid in that name will be found."
+  },
+  {
+    "key": "1c2358958c403b",
+    "speaker": "narrator",
+    "text": "The Gathering Storm: The papers from Thorne's caravan cleared Sir Cedric's name. The watch was paid to let the king be taken, by the will of Malakar, and he was carried to the bastion on the shattered ridge."
   },
   {
     "key": "02b3f6c320c800",

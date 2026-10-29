@@ -5,9 +5,12 @@ import { Act2 } from '../Act2'
 import { TrainingSword } from '../items/TrainingSword'
 import {
   FLAG_ANCIENT_LIBRARY_COMPLETED,
+  FLAG_CEDRIC_RECOGNISED_SIGIL,
+  FLAG_CEDRIKS_HONOR_COMPLETED,
   FLAG_DEMONSTRATED_COMBAT_SKILLS,
   FLAG_HERMITS_WARNING_COMPLETED,
   FLAG_NYX_TRIALS_PASSED,
+  FLAG_RESEARCHED_FAMILY_HERITAGE,
   FLAG_SPOKEN_TO_SIR_CEDRIC,
   FLAG_SUPPLIES_QUEST_COMPLETED,
 } from '../Act2StoryFlags'
@@ -42,7 +45,7 @@ describe('The Gathering Storm log', () => {
     expect(details.earlier).toHaveLength(2)
     expect(details.latest).toContain('watched you with the training sword')
     expect(quest.description).toContain('[dim]Greendale is bigger')
-    expect(quest.description).toContain('with the training sword.[/dim]')
+    expect(quest.description).toContain('you with a blade.[/dim]')
     expect(quest.description.endsWith(quest.latestStage ?? '')).toBe(true)
   })
 
@@ -51,10 +54,14 @@ describe('The Gathering Storm log', () => {
       'streets is low and uneasy. People speak of a darkness gathering beyond ' +
       'the walls, and say that if anyone at the castle understands it, it is ' +
       '[character_name]Sir Cedric[/character_name].',
-    '[character_name]Sir Cedric[/character_name] calls it the Gathering ' +
-      'Storm. He needs allies who know magic, but he will not trust you on ' +
-      'your word alone. He wants to see you fight first, with the training ' +
-      'sword.',
+    '[character_name]Sir Cedric[/character_name], a knight without his ' +
+      'sword, says a storm is gathering over the kingdom and he does not yet ' +
+      'know its name. He will not trust you on your word; he wants to see ' +
+      'you with a blade.',
+    '[character_name]Sir Cedric[/character_name] knew the sigil on your ' +
+      'amulet: the sun rising over three linked rings, the mark of the ' +
+      'Wardens of the Dawn. Whoever wore it before you was a Warden, he ' +
+      'says, and your family is bound to them.',
     '[character_name]Sir Cedric[/character_name] watched you with the ' +
       'training sword and now trusts you. He wants you to find ' +
       '[character_name]Nyx[/character_name], deep in the Enchanted Forest, ' +
@@ -69,10 +76,15 @@ describe('The Gathering Storm log', () => {
       'there was written by the Wardens of the Dawn, and their magic was the ' +
       'unbinding kind. Its last page warns that Malakar seeks the blood of ' +
       'Willowbrook.',
-    'At the standing stones you opened the survival kit and studied its map, ' +
-      'as the hermit urged. You know now which paths to take and which to ' +
-      'avoid. Somewhere inside the forest, [character_name]Nyx[/character_name] ' +
-      'is waiting.',
+    "The castle archive's register names a man in a grey cloak who asked " +
+      'after the families of Willowbrook, on the business of Malakar. You ' +
+      'had always thought Malakar a tale. His last visit was the week King ' +
+      'Alden vanished.',
+    "The papers from Thorne's caravan cleared " +
+      '[character_name]Sir Cedric[/character_name]' +
+      "'s name. The watch was paid to let the king be taken, by the will of " +
+      'Malakar, and he was carried to the bastion on the shattered ridge.',
+    "At the standing stones you slept on the forest's doorstep, as the hermit asked, and dreamed of a grey field with someone at its far edge. In the morning the hermit said she had let you. Somewhere inside the forest, [character_name]Nyx[/character_name] is waiting.",
     '[character_name]Nyx[/character_name] judged you worthy and gave you the ' +
       '[spell_name]Prophetic Vision[/spell_name] spell, her token and the ' +
       'forest heart crystal. She left you with the words from the glade ' +
@@ -83,9 +95,12 @@ describe('The Gathering Storm log', () => {
   ]
   const FLAGS = [
     FLAG_SPOKEN_TO_SIR_CEDRIC,
+    FLAG_CEDRIC_RECOGNISED_SIGIL,
     FLAG_DEMONSTRATED_COMBAT_SKILLS,
     FLAG_SUPPLIES_QUEST_COMPLETED,
     FLAG_ANCIENT_LIBRARY_COMPLETED,
+    FLAG_RESEARCHED_FAMILY_HERITAGE,
+    FLAG_CEDRIKS_HONOR_COMPLETED,
     FLAG_HERMITS_WARNING_COMPLETED,
     FLAG_NYX_TRIALS_PASSED,
   ]
@@ -124,7 +139,45 @@ describe('The Gathering Storm log', () => {
     quest.checkUpdate(game.state)
     const details = quest.details()
     if (details.kind !== 'journal') throw new Error('expected a journal')
-    expect(details.latest).toBe(ENTRIES[6])
+    expect(details.latest).toBe(ENTRIES[ENTRIES.length - 1])
+  })
+
+  it('shows a beat noticed later as the latest, whatever its place in the story', () => {
+    const game = new Game([new Act2()])
+    const quest = new TheGatheringStormQuest()
+    game.state.setStoryFlag(FLAG_CEDRIKS_HONOR_COMPLETED, true)
+    quest.checkUpdate(game.state)
+    game.state.setStoryFlag(FLAG_SPOKEN_TO_SIR_CEDRIC, true)
+    quest.checkUpdate(game.state)
+    const details = quest.details()
+    if (details.kind !== 'journal') throw new Error('expected a journal')
+    expect(details.latest).toBe(ENTRIES[1])
+    expect(details.earlier).toEqual([ENTRIES[0], ENTRIES[7]])
+  })
+
+  it('slots the new beats in story order, so the newest is still the last one reached', () => {
+    const game = new Game([new Act2()])
+    const quest = new TheGatheringStormQuest()
+    // The save knew only the old beats...
+    game.state.setStoryFlag(FLAG_SPOKEN_TO_SIR_CEDRIC, true)
+    game.state.setStoryFlag(FLAG_NYX_TRIALS_PASSED, true)
+    quest.checkUpdate(game.state)
+    // ...while the flags of the new beats were already set.
+    game.state.setStoryFlag(FLAG_CEDRIC_RECOGNISED_SIGIL, true)
+    game.state.setStoryFlag(FLAG_CEDRIKS_HONOR_COMPLETED, true)
+
+    quest.migrateOlderSave(game.state)
+    quest.checkUpdate(game.state)
+
+    const details = quest.details()
+    if (details.kind !== 'journal') throw new Error('expected a journal')
+    expect(details.latest).toBe(ENTRIES[ENTRIES.length - 1])
+    expect(details.earlier).toEqual([
+      ENTRIES[0],
+      ENTRIES[1],
+      ENTRIES[2],
+      ENTRIES[7],
+    ])
   })
 
   it('is plain: at most three sentences, no generic phrases', () => {

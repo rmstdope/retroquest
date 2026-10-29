@@ -26,6 +26,23 @@ describe('Act II tells the heritage through the Wardens, never a Chosen One', ()
     expect(intro).not.toMatch(CHOSEN_TALK)
   })
 
+  it('opens on the chapel bell of Act I and the castle with no banner', () => {
+    const intro = new Act2().getActIntro()
+
+    expect(intro).toContain(
+      'You left Willowbrook to the sound of the chapel bell, ringing once ' +
+        'with no hand on the rope. The mountain path took you up through rock ' +
+        'and pine, and from the last ridge you see Greendale: stone houses, ' +
+        'more chimneys than you can count, and a white castle above the ' +
+        'walls. No banner flies from its highest spire.',
+    )
+    expect(intro).toContain(
+      'East of the city the Enchanted Forest begins, a dark line of trees ' +
+        'as far as you can see.',
+    )
+    expect(intro).not.toMatch(/breath away|majestically|prove yourself/)
+  })
+
   it('tells on the opening page that Malakar is only a Willowbrook byword to Elior', () => {
     const intro = new Act2().getActIntro()
 
