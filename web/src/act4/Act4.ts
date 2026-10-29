@@ -157,9 +157,13 @@ export class Act4 extends Act {
    * gets its banners and the chamber its whispering crystals when an older
    * save lacks them.
    * Saves from before Nyx's gifts were carried get the token and the
-   * crystal, unless the hedge already has them back.
+   * crystal, unless the hedge already has them back. The main quest's log and
+   * closing words are rebuilt, a finished one included, so saves made before
+   * the log followed the revelations read the current wording.
    */
   override afterLoad(gameState: GameState): void {
+    for (const quest of gameState.completedQuests)
+      if (quest instanceof TheFinalStand) quest.checkUpdate(gameState)
     const gates = gameState.allRooms.FortressGates
     if (gates && !gates.getItemByName('Right Stone')) {
       for (const side of ['left', 'middle', 'right'] as const) {
