@@ -142,7 +142,7 @@ describe('Mira', () => {
     game.state.setStoryFlag(FLAG_ACT3_SEA_SEALED_LETTER_READ, false)
     const out = m.talkTo(game.state)
     expect(out).toContain('something in these ruins that was left for you')
-    expect(out).not.toContain('you arrive at your next destination')
+    expect(out).not.toContain('the air smells different')
 
     // letter read -> should teleport to Lower Switchbacks
     game.state.setStoryFlag(FLAG_ACT3_SEA_SEALED_LETTER_READ, true)
@@ -153,7 +153,7 @@ describe('Mira', () => {
 
     const res = m.talkTo(game.state)
 
-    expect(res).toContain('you arrive at your next destination')
+    expect(res).toContain('the air smells different')
     expect(game.state.currentRoom.characters).toContain(m)
     expect(hasCharacterNamed(game.state.currentRoom, 'sir cedric')).toBe(true)
   })
@@ -190,7 +190,7 @@ describe('Mira', () => {
     expect(out).not.toContain('second virtue')
     expect(out.toLowerCase()).toContain('wisdom')
     expect(out.toLowerCase()).toContain('phoenix')
-    expect(out).not.toContain('you arrive at your next destination')
+    expect(out).not.toContain('the air smells different')
     expect(game.state.currentRoom.characters).toContain(m)
   })
 
@@ -207,7 +207,7 @@ describe('Mira', () => {
     expect(out).toContain(
       'words burned into the stone up on the terraces, and they were left for you',
     )
-    expect(out).not.toContain('you arrive at your next destination')
+    expect(out).not.toContain('the air smells different')
 
     // inscription read - should allow teleport
     game.state.setStoryFlag(FLAG_ACT3_CHARRED_INSCRIPTION_READ, true)
@@ -217,7 +217,7 @@ describe('Mira', () => {
 
     out = m.talkTo(game.state)
 
-    expect(out).toContain('you arrive at your next destination')
+    expect(out).toContain('the air smells different')
     expect(
       out.includes('Cavern Mouth') ||
         game.state.currentRoom.name.includes('CavernMouth'),
@@ -238,7 +238,7 @@ describe('Mira', () => {
     let out = m.talkTo(game.state)
     expect(out).toContain('take the lifelight elixir')
     expect(out).toContain('before we depart')
-    expect(out).not.toContain('you arrive at your next destination')
+    expect(out).not.toContain('the air smells different')
 
     // with elixir in inventory - should allow teleport
     game.state.inventory.push(new LifelightElixir())
@@ -252,7 +252,7 @@ describe('Mira', () => {
     expect(out).toContain(
       "I know the road. I walked it as a girl, when it was the Wardens' hall and not his fortress. Your parents made the relics there, at a workbench under the dome.",
     )
-    expect(out).toContain('you arrive at your next destination')
+    expect(out).toContain('the air smells different')
   })
 
   describe('at the Fortress Entrance', () => {
@@ -278,7 +278,7 @@ describe('Mira', () => {
       expect(out).toContain('I am coming with you.')
       expect(out).not.toContain('I will await your return')
       expect(out).not.toContain('must rest and recover')
-      expect(out).not.toContain('you arrive at your next destination')
+      expect(out).not.toContain('the air smells different')
       expect(game.state.getStoryFlag(FLAG_ACT3_MIRA_GATE_TALKED)).toBe(true)
     })
 
@@ -453,8 +453,7 @@ describe('Mira', () => {
     expect(out).not.toContain('important guidance')
     expect(out).not.toContain('three relics')
     expect(
-      !out.includes('teleport') ||
-        !out.includes('you arrive at your next destination'),
+      !out.includes('teleport') || !out.includes('the air smells different'),
     ).toBe(true)
   })
 
@@ -471,7 +470,7 @@ describe('Mira', () => {
       'words burned into the stone up on the terraces, and they were left for you',
     )
     expect(out).toContain('into the dark without them')
-    expect(out).not.toContain('you arrive at your next destination')
+    expect(out).not.toContain('the air smells different')
   })
 
   it('requires the sea-sealed letter read at the Tidal Causeway', () => {
@@ -485,7 +484,7 @@ describe('Mira', () => {
 
     expect(out).toContain('something in these ruins that was left for you')
     expect(out).toContain('up the mountain without it')
-    expect(out).not.toContain('you arrive at your next destination')
+    expect(out).not.toContain('the air smells different')
   })
 
   it('points to the ember heights, not the caverns, before the sea-sealed letter is read', () => {
@@ -514,7 +513,7 @@ describe('Mira', () => {
     expect(out).toContain('Help them first.')
     expect(out).not.toContain('test of selflessness')
     expect(out).not.toContain('circle')
-    expect(out).not.toContain('you arrive at your next destination')
+    expect(out).not.toContain('the air smells different')
   })
 
   it('points past the galleries once the miners are out', () => {
@@ -878,7 +877,7 @@ describe('Mira counts the relics as she draws each circle', () => {
       '[character_name]Mira[/character_name] traces a prism in the air with ' +
         'one finger.',
     )
-    expect(out).toContain('you arrive at your next destination')
+    expect(out).toContain('the air smells different')
   })
 
   it('feels the king through the circle, not the focus left in the hut', () => {

@@ -183,7 +183,7 @@ describe('Sir Cedric reacts to the story', () => {
       const out = room.applyHeatWard(game.state, mix)
       expectMarkupWellFormed(out)
       expect(
-        inOrder(out, 'not yet synchronized', 'steps toward the vents'),
+        inOrder(out, 'still gust out of time', 'steps toward the vents'),
       ).toBe(true)
       expect(out).toContain('Between breaths, then.')
     }

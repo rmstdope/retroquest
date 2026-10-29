@@ -70,7 +70,7 @@ describe('Mira ruins slip', () => {
     expect(talk.indexOf('You speak with')).toBeLessThan(
       talk.indexOf(RUINS_NARRATION),
     )
-    expect(talk).toContain('you arrive at your next destination')
+    expect(talk).toContain('the air smells different')
     expect(talk).toContain(RUINS_SPEECH)
     expect(talk.indexOf(RUINS_SPEECH)).toBeLessThan(
       talk.indexOf(RUINS_NARRATION),
@@ -121,7 +121,7 @@ describe('Mira Ember slip', () => {
     game.state.setStoryFlag(FLAG_ACT3_CHARRED_INSCRIPTION_READ, true)
     const out = mira.talkTo(game.state)
     expect(out).toContain(EMBER_NARRATION)
-    expect(out).toContain('you arrive at your next destination')
+    expect(out).toContain('the air smells different')
   })
 
   it('does not play before the feather', () => {
@@ -156,6 +156,6 @@ describe('Mira relay of the dragon message', () => {
     game.state.setStoryFlag(FLAG_ACT3_DRAGONS_SCALE_ACQUIRED, true)
     const out = mira.talkTo(game.state)
     expect(out).toContain(RELAY_NARRATION)
-    expect(out).toContain('you arrive at your next destination')
+    expect(out).toContain('the air smells different')
   })
 })

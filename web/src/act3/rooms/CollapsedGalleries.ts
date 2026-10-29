@@ -9,13 +9,9 @@ export class CollapsedGalleries extends Room {
     super({
       name: 'Collapsed Galleries',
       description:
-        'Ancient passages lie strangled by fallen stone, their throats choked with ' +
-        'the weight of ages. Dust motes drift like restless spirits in the stagnant ' +
-        'air, and shadows pool in the broken archways where starlight once danced. ' +
-        'The walls bear scars of some long-forgotten catastrophe, and you sense the ' +
-        'presence of those who await deliverance from this tomb of earth and shadow. ' +
-        'A palpable tension hangs in the darkness, as if the very stones remember ' +
-        'their violent collapse.',
+        'A gallery choked with fallen stone, floor to roof. ' +
+        'The timbers that held it lie snapped under the pile, ' +
+        'and dust hangs in the still air.',
       items: [new FallenRock()],
       characters: [],
       exits: {

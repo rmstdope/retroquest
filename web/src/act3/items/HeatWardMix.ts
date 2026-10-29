@@ -12,8 +12,7 @@ export class HeatWardMix extends Item {
       name: 'heat-ward mix',
       description:
         'A coarse paste of ash-fern and cooled slag prepared to seal and ' +
-        "stabilize vent stones against the mountain's heat. Use it at the " +
-        'fumaroles after calibration.',
+        "stabilize vent stones against the mountain's heat.",
       shortName: 'heat-ward mix',
       canBeCarried: true,
     })

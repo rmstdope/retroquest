@@ -66,8 +66,8 @@ export class MirrorMount extends Item {
     const segName = new BrassMirrorSegment().name
     if (gameState.getItemCount(segName) < 4) {
       return clue(
-        'You need more brass mirror segments in your pack before ' +
-          'you can install them into the terrace mounts.',
+        'The mount has four sockets, and you have not enough segments to ' +
+          'fill them.',
       )
     }
 
@@ -135,8 +135,8 @@ export class MirrorMount extends Item {
     this.segmentRevealed = true
     return (
       'You sift the ash and grit beneath the mount and find a ' +
-      `[item_name]${segment.name.toLowerCase()}[/item_name]. It lies half-buried ` +
-      'in the sand and has been added to the terrace.'
+      `[item_name]${segment.name.toLowerCase()}[/item_name], half-buried in ` +
+      'the sand.'
     )
   }
 }

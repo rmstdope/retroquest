@@ -24,6 +24,8 @@ import { EchoChambers } from './rooms/EchoChambers'
 import { StillnessVestibule } from './rooms/StillnessVestibule'
 import { DragonsHall } from './rooms/DragonsHall'
 import { FortressEntrance } from './rooms/FortressEntrance'
+import { CrystalOfLight } from './items/CrystalOfLight'
+import { HeatWardMix } from './items/HeatWardMix'
 import { TheThreeVirtuesQuest } from './quests/TheThreeVirtues'
 import { EchoesOfTheHiddenBondQuest } from './quests/EchoesOfTheHiddenBond'
 import { TidewardSigilsQuest } from './quests/TidewardSigils'
@@ -211,6 +213,7 @@ export class Act3 extends Act {
     this.patchFortressThreshold(gameState)
     this.patchQuestLogs(gameState)
     this.patchParentsStory(gameState)
+    this.patchPlainDescriptions(gameState)
   }
 
   /**
@@ -229,6 +232,35 @@ export class Act3 extends Act {
         quest.description = new TidewardSigilsQuest().description
       if (quest instanceof LanternsOfTheDeepsQuest)
         quest.completion = new LanternsOfTheDeepsQuest().completion
+    }
+  }
+
+  /**
+   * Saves from before the cavern, echo and coast rooms, the crystal and the
+   * heat-ward mix were reworded keep the old descriptions.
+   */
+  private patchPlainDescriptions(gameState: GameState): void {
+    const rooms: Record<string, string> = {
+      CavernMouth: new CavernMouth().description,
+      CollapsedGalleries: new CollapsedGalleries().description,
+      ToolCache: new ToolCache().description,
+      EchoChambers: new EchoChambers().description,
+      OuterWards: new OuterWards().description,
+      SubmergedAntechamber: new SubmergedAntechamber().description,
+    }
+    for (const [name, description] of Object.entries(rooms)) {
+      const room = gameState.allRooms[name]
+      if (room) room.description = description
+    }
+    const items = [
+      ...gameState.inventory,
+      ...Object.values(gameState.allRooms).flatMap((room) => room.items),
+    ]
+    for (const item of items) {
+      if (item instanceof CrystalOfLight)
+        item.description = new CrystalOfLight().description
+      if (item instanceof HeatWardMix)
+        item.description = new HeatWardMix().description
     }
   }
 

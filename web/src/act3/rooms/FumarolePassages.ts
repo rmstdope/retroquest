@@ -118,8 +118,8 @@ export class FumarolePassages extends Room {
     if (this.ventCalibrations < 3) {
       return (
         clue(
-          'The vents are not yet synchronized; the ward would be unstable. ' +
-            'Calibrate more vent stones first.',
+          'The vents still gust out of time with each other. ' +
+            'A ward laid on them now would crack at the first wrong breath.',
         ) + cedricAdds(gameState, CEDRIC_HEAT_WARD)
       )
     }

@@ -428,8 +428,8 @@ export class Mira extends Character {
       gameState.markVisited(gameState.currentRoom)
       const arrivalFx =
         `${characterName(this.name)} traces a prism in the air with one ` +
-        'finger. The air folds and the world blurs, and when it clears you ' +
-        'arrive at your next destination.' +
+        'finger. The air folds and the world blurs, and when it clears, the ' +
+        'air smells different.' +
         '\n'
       return eventMsg + '\n' + flavor + '\n' + arrivalFx + atGate
     }

@@ -85,8 +85,8 @@ describe('Act III rooms narrate the effect, never the echo', () => {
     expect(room.search(state)).not.toContain('[event]')
 
     expect(room.mountLantern(state)).toBe(
-      '[failure][clue]You need a [item_name]prism lantern[/item_name] to ' +
-        'mount here.[/clue][/failure]',
+      '[failure][clue]The bracket is empty, and you have nothing to set in ' +
+        'it.[/clue][/failure]',
     )
     state.inventory.push(
       new PrismLantern(),
@@ -123,7 +123,7 @@ describe('Act III rooms narrate the effect, never the echo', () => {
     state.inventory = [...stones]
 
     expect(room.applyHeatWard(state, new HeatWardMix())).toMatch(
-      /^\[failure\]\[clue\]The vents are not yet synchronized/,
+      /^\[failure\]\[clue\]The vents still gust out of time/,
     )
     const first = room.calibrateWithStone(state, stones[0])
     expect(first).toMatch(/^The vents click and a rhythmic hiss/)

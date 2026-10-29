@@ -12,14 +12,10 @@ export class EchoChambers extends Room {
     super({
       name: 'Echo Chambers',
       description:
-        'Smooth caverns carved from living stone stretch into shadow, where ' +
-        'every footfall reverberates through the darkness like whispered ' +
-        'incantations. Faint, otherworldly voices seem to mimic your speech, ' +
-        'echoing from unseen alcoves as if ancient spirits dwell within the ' +
-        'walls themselves. Mysterious runic walls line the chamber, their ' +
-        'symbols glowing with a dim, ethereal light that pulses in rhythm ' +
-        'with your heartbeat. The air thrums with an almost palpable energy, ' +
-        'and you sense that this place has witnessed rituals of great power.',
+        'Smooth caverns of bare stone. ' +
+        'Every step comes back to you from the alcoves, ' +
+        'and so does every word, a breath late, as if someone were copying you. ' +
+        'Runes cover the walls, cut by three hands, the same words over and over.',
       items: [new RunicWalls()],
       exits: { west: 'CollapsedGalleries' },
     })
@@ -48,11 +44,8 @@ export class EchoChambers extends Room {
       this.scrollsDiscovered = true
       this.addItem(new OldOathScrolls())
       return (
-        'Your careful search of the shadowed alcoves reveals a bundle of ' +
-        'ancient scrolls tucked away in a stone niche, their parchment ' +
-        'yellowed with age and covered in faded script. These appear to be ' +
-        'old oath scrolls, containing wisdom about sacred promises and ' +
-        'the true nature of selfless vows.'
+        'In a stone niche at the back of an alcove lies a bundle of old scrolls, ' +
+        'tied with faded golden thread.'
       )
     }
     return (

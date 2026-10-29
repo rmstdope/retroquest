@@ -96,9 +96,9 @@ describe('Echo Chambers', () => {
 
     // Search the room
     const searchResult = room.search(gs)
-    expect(searchResult).toContain('ancient scrolls')
+    expect(searchResult).toContain('old scrolls')
     expect(searchResult).toContain('stone niche')
-    expect(searchResult).toContain('sacred promises')
+    expect(searchResult).toContain('faded golden thread')
 
     // After searching, Old Oath Scrolls should be present
     expect(itemNames(room)).toContain(SCROLLS)

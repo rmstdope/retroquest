@@ -31,8 +31,8 @@ export class ShorelineMarkers extends Room {
     // Idempotent message once revealed, even if the shards are gone.
     if (this.runesRevealed) {
       return (
-        '[failure]You comb the surf-slick stones again. pale shards gleam in ' +
-        "the cracks, but you've already gathered what you need.[/failure]"
+        '[failure]You comb the surf-slick stones again. Pale shards gleam in ' +
+        'the cracks, but you have gathered all you can use.[/failure]'
       )
     }
     this.items.push(new MoonRuneShards())
