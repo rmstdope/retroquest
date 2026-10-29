@@ -135,9 +135,9 @@
     "text": "The Final Stand"
   },
   {
-    "key": "019f9bf4961047",
+    "key": "15967ec690f918",
     "speaker": "narrator",
-    "text": "Malakar's fortress stands before you, and somewhere inside King Alden is held captive. Break through its defences and face the sorcerer."
+    "text": "Malakar's fortress. Somewhere inside it King Alden is held, and Malakar waits for you. You came to free the king, and to make Malakar pay for what he took."
   },
   {
     "key": "0678b14852e2e7",
@@ -185,9 +185,9 @@
     "text": "You stop and think over what you know."
   },
   {
-    "key": "10a1aa28e66b63",
+    "key": "04582a17532674",
     "speaker": "narrator",
-    "text": "The Final Stand: Malakar's fortress stands before you, and somewhere inside King Alden is held captive. Break through its defences and face the sorcerer."
+    "text": "The Final Stand: Malakar's fortress. Somewhere inside it King Alden is held, and Malakar waits for you. You came to free the king, and to make Malakar pay for what he took."
   },
   {
     "key": "12d8559d0a196a",
@@ -860,6 +860,11 @@
     "text": "You have learned Redemption's Light. Light that reminds a fallen soul of who it was."
   },
   {
+    "key": "1f6342040d8adc",
+    "speaker": "narrator",
+    "text": "The Knight of Despair was the stranger from Willowbrook. He fouled the well, framed Sir Cedric and let the king be taken, and he confessed it to Sir Cedric's face."
+  },
+  {
     "key": "18af870c7d2dc1",
     "speaker": "narrator",
     "text": "Elior sees the knight as he truly is and offers him redemption instead of a blade. The man who framed Sir Cedric confesses, and the stair to the Tower of Shadows lies open."
@@ -923,6 +928,11 @@
     "key": "1f499148b7ff88",
     "speaker": "narrator",
     "text": "Pale shapes of soldiers drift among the banners, fighting a battle that ended long ago. Their blades pass through one another without a sound."
+  },
+  {
+    "key": "1212238ccabfa3",
+    "speaker": "narrator",
+    "text": "The Final Stand: The Knight of Despair was the stranger from Willowbrook. He fouled the well, framed Sir Cedric and let the king be taken, and he confessed it to Sir Cedric's face."
   },
   {
     "key": "1fede627b89ee9",
@@ -1355,6 +1365,11 @@
     "text": "Patience. You could not wait for them. You can wait a little longer, for me."
   },
   {
+    "key": "1b5bcb84a2ce2f",
+    "speaker": "narrator",
+    "text": "The voice from your dreams is what is left of Malakar's better self. It said its words whole at last: Be patient where I was not. Close what I opened, and let them rest."
+  },
+  {
     "key": "052d070f56e7f4",
     "speaker": "narrator",
     "text": "Elior learns that the voice from his dreams is what remains of Malakar's better self. The sealed door to the east now answers to the amulet."
@@ -1378,6 +1393,11 @@
     "key": "191b0cb0759820",
     "speaker": "shadow of the past",
     "text": "Go east, Elior. I have seen those memories every day for years. You never have."
+  },
+  {
+    "key": "1968e8b086e57c",
+    "speaker": "narrator",
+    "text": "The Final Stand: The voice from your dreams is what is left of Malakar's better self. It said its words whole at last: Be patient where I was not. Close what I opened, and let them rest."
   },
   {
     "key": "14bc73b445f17d",
@@ -1480,6 +1500,11 @@
     "text": "The Parent's Legacy: Behind the sealed door, Aren and Lysa's last memories wait. Look into them, and learn the whole truth before the throne room."
   },
   {
+    "key": "0676cf0d9beac4",
+    "speaker": "narrator",
+    "text": "In the vault you saw it all. Malakar tore at time to save your parents from the Wasting. They poured themselves into the ward that holds his wound shut, and the ward lives in you. Malakar waits past the north door."
+  },
+  {
     "key": "0ee22d340e3f95",
     "speaker": "narrator",
     "text": "Elior sees the whole truth: his parents' friendship with Malakar, the wound, and the ward they became. The way north to the Throne Chamber opens."
@@ -1488,6 +1513,11 @@
     "key": "091491218bb345",
     "speaker": "narrator",
     "text": "The lanterns are dim now. You do not need to look again; you will not forget."
+  },
+  {
+    "key": "09c23857c0b12d",
+    "speaker": "narrator",
+    "text": "The Final Stand: In the vault you saw it all. Malakar tore at time to save your parents from the Wasting. They poured themselves into the ward that holds his wound shut, and the ward lives in you. Malakar waits past the north door."
   },
   {
     "key": "16aed33be01696",
@@ -1740,9 +1770,9 @@
     "text": "Main quest complete"
   },
   {
-    "key": "0905f831b145e3",
+    "key": "1e5193e60f034a",
     "speaker": "narrator",
-    "text": "You have completed the quest 'The Final Stand'."
+    "text": "The wound is closed and the king is free. Your parents are at rest."
   },
   {
     "key": "065ebf6dd8a2e0",

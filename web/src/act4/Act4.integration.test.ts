@@ -6,6 +6,8 @@ import { selflessLine } from './endings'
 import { playDebugScript } from '@/utils/debugScript'
 import {
   FLAG_ACT4_FIELD_GREEN,
+  FLAG_ACT4_FINAL_STAND_COMPLETED,
+  FLAG_ACT4_KNIGHT_OF_DESPAIR_COMPLETED,
   FLAG_ACT4_SHATTERED_WARD_GUARDIANS_COMPLETED,
   FLAG_ACT4_TRAPPED_SERVANTS_COMPLETED,
   FLAG_ACT4_MAZE_OF_MIRRORS_COMPLETED,
@@ -200,8 +202,38 @@ describe('Act 4 integration', () => {
       const quest = game.state.activatedQuests[0]
       expect(quest.isMain()).toBe(true)
       expect(quest.description).toBe(
-        "Malakar's fortress stands before you, and somewhere inside King " +
-          'Alden is held captive. Break through its defences and face the sorcerer.',
+        "Malakar's fortress. Somewhere inside it King Alden is held, and " +
+          'Malakar waits for you. You came to free the king, and to make ' +
+          'Malakar pay for what he took.',
+      )
+    })
+
+    it('rebuilds the main quest log of older saves on load, news-free', () => {
+      executeCommands(game, ['look'])
+      game.state.setStoryFlag(FLAG_ACT4_KNIGHT_OF_DESPAIR_COMPLETED, true)
+      game.state.settleQuests()
+      const quest = game.state.activatedQuests[0]
+      quest.description = 'Break through its defences and face the sorcerer.'
+      quest.earlierStages = undefined
+      quest.latestStage = undefined
+      const loaded = game.loadSaveData(game.toSaveData())
+      expect(loaded).toContain('Game loaded successfully.')
+      const restored = game.state.activatedQuests[0]
+      expect(restored.description).toContain('Malakar waits for you.')
+      expect(restored.description).toContain('The Knight of Despair was')
+      expect(game.state.settleQuests().updated).toEqual([])
+    })
+
+    it('gives a finished main quest the current closing words on load', () => {
+      executeCommands(game, ['look'])
+      const quest = game.state.activatedQuests[0]
+      game.state.setStoryFlag(FLAG_ACT4_FINAL_STAND_COMPLETED, true)
+      game.state.settleQuests()
+      expect(game.state.completedQuests).toContain(quest)
+      quest.completion = "You have completed the quest 'The Final Stand'."
+      game.loadSaveData(game.toSaveData())
+      expect(game.state.completedQuests[0].completion).toBe(
+        'The wound is closed and the king is free. Your parents are at rest.',
       )
     })
 
