@@ -247,7 +247,7 @@ describe('Prophetic Vision markup', () => {
 
     const answer = spell.castSpell(game.state)
 
-    expect(answer).toContain('Brief glimpses of possible futures')
+    expect(answer).toContain('Shapes stir at the edge of sight')
     expectMarkupWellFormed(answer)
   })
 })

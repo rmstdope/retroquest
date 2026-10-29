@@ -52,11 +52,11 @@ describe('NatureSenseSpell at the Forest Entrance', () => {
     expect(game.commandParser.parse('cast nature_sense')).toBe(NOTHING_CHANGED)
   })
 
-  it('is unchanged elsewhere', () => {
+  it('gives the stones line at the Forest Transition', () => {
     const game = setupForestEntrance()
     game.state.currentRoom = game.state.allRooms.ForestTransition
     expect(game.commandParser.parse('cast nature_sense')).toContain(
-      'safe passages',
+      'At the stones the living things around you thin to a line.',
     )
     expect(game.state.getStoryFlag(FLAG_FOUND_RAVINE)).toBe(false)
   })

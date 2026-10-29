@@ -12,9 +12,8 @@ export class GreaterHealSpell extends Spell {
       id: 'greater_heal',
       name: 'greater heal',
       description:
-        'An advanced healing spell that can cure serious ailments, break ' +
-        'curses, and restore significant health. This powerful magic ' +
-        'requires deep understanding of healing arts and compassion.',
+        "Lyria taught you over the carter's bed: gather your healing into a " +
+        'narrow light. It makes the weak strong. It does not lift a curse.',
     })
   }
 
@@ -44,8 +43,8 @@ export class GreaterHealSpell extends Spell {
       return targetCharacter.receiveGreaterHeal(gameState)
     }
     return (
-      '[success]Golden healing energy flows from your hands, restoring ' +
-      'vitality and curing any minor ailments.[/success]'
+      '[success]Golden light settles over them. There was nothing in them ' +
+      'that needed it.[/success]'
     )
   }
 }

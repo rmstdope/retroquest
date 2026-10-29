@@ -1,5 +1,11 @@
 import { Act, characterName, type GameState, type Item, speech } from '@/engine'
 import { Brenn } from './characters/Brenn'
+import { DispelSpell } from './spells/DispelSpell'
+import { ForestSpeechSpell } from './spells/ForestSpeechSpell'
+import { GreaterHealSpell } from './spells/GreaterHealSpell'
+import { MendSpell } from './spells/MendSpell'
+import { NatureSenseSpell } from './spells/NatureSenseSpell'
+import { PropheticVision } from './spells/PropheticVision'
 import { AncientAmulet } from './items/AncientAmulet'
 import { MountainPath } from './rooms/MountainPath'
 import { GreendaleGates } from './rooms/GreendaleGates'
@@ -173,7 +179,8 @@ export class Act2 extends Act {
   /**
    * Bring older saves up to date: the coins, the merchant's flyer, the secret
    * documents, the squire's diary, the altar, the charms, the acorn, Nyx's
-   * gifts, the castle rooms, the Main Square, the Healer's House, the
+   * gifts, the spells' descriptions, the castle rooms, the Main Square, the
+   * Healer's House, the
    * Residential Quarter, Cedric's quest log and the riddles quest log keep the
    * text they were saved with, so give them the current wording, and put Brenn
    * in the warehouse of saves made before he was met there. Safe to run on
@@ -190,6 +197,17 @@ export class Act2 extends Act {
     gameState.allRooms.GreatHall.description = GREAT_HALL_DESCRIPTION
     gameState.allRooms.ForestEntrance.description = FOREST_ENTRANCE_DESCRIPTION
     SirCedric.refreshAll(gameState)
+    for (const spell of [
+      new MendSpell(),
+      new GreaterHealSpell(),
+      new DispelSpell(),
+      new NatureSenseSpell(),
+      new ForestSpeechSpell(),
+      new PropheticVision(),
+    ]) {
+      const known = gameState.knownSpells.find((s) => s.id === spell.id)
+      if (known) known.description = spell.description
+    }
     for (const room of Object.values(gameState.allRooms))
       for (const character of room.characters)
         if (character instanceof MountainHermit)

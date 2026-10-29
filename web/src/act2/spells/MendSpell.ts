@@ -14,9 +14,8 @@ export class MendSpell extends Spell {
       id: 'mend',
       name: 'mend',
       description:
-        'A basic repair spell that can fix broken objects, torn clothing, and ' +
-        'minor damage to items. This fundamental magic is essential for any ' +
-        'aspiring mage.',
+        'The old woman at the end bench taught you over a split bowl: close ' +
+        'what is cracked, slowly.',
     })
   }
 
