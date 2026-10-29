@@ -40,9 +40,9 @@
     "text": "Reflections in the prism hover a breath out of sync—each a doorway waiting for Mira's word."
   },
   {
-    "key": "11cd35b0d31514",
+    "key": "14ef884f0c5716",
     "speaker": "narrator",
-    "text": "A family heirloom whose runes glint like dew at dawn. It is faintly warm in your hand."
+    "text": "A mysterious amulet inscribed with runes. At its centre is the sigil of the Wardens of the Dawn: the sun rising over three linked rings. It is faintly warm in your hand."
   },
   {
     "key": "0330ea89c2350f",
@@ -170,24 +170,24 @@
     "text": "Echoes of the Hidden Bond"
   },
   {
-    "key": "01f58c59d96269",
+    "key": "04101098a58db9",
     "speaker": "narrator",
-    "text": "Your parents once walked these same paths in their own desperate search for the three relics. As you face the trials they faced, you may discover traces of their passage."
+    "text": "Your parents made the three relics, long before you were born. Mira says they left words behind them: by the sea, on the mountain and under the hills."
   },
   {
-    "key": "101a823f69f603",
+    "key": "1c66f2d11b1ce0",
     "speaker": "narrator",
-    "text": "○ In the depths where courage is tested, echoes of the past linger."
+    "text": "○ By the sea: something they left in the Sunken Ruins."
   },
   {
-    "key": "029dcff84a8fd9",
+    "key": "0436e715812a98",
     "speaker": "narrator",
-    "text": "○ On the heights where wisdom burns, their words may still echo."
+    "text": "○ On the mountain: something they left on Mount Ember."
   },
   {
-    "key": "1d502c104ead63",
+    "key": "12feaaf1bf66d1",
     "speaker": "narrator",
-    "text": "○ In the shadows where sacrifice dwells, ancient memories await."
+    "text": "○ Under the hills: something they left in the Caverns of Shadow."
   },
   {
     "key": "1f04c193733cfe",
@@ -205,9 +205,9 @@
     "text": "Mira traces a prism in the air with one finger. The air folds and the world blurs, and when it clears you arrive at your next destination."
   },
   {
-    "key": "052f7109d107ee",
+    "key": "161eae6b04a1cd",
     "speaker": "narrator",
-    "text": "Echoes of the Hidden Bond: Your parents once walked these same paths in their own desperate search for the three relics. As you face the trials they faced, you may discover traces of their passage. In the depths where courage is tested, echoes of the past linger."
+    "text": "Echoes of the Hidden Bond: Your parents made the three relics, long before you were born. Mira says they left words behind them: by the sea, on the mountain and under the hills. By the sea: something they left in the Sunken Ruins."
   },
   {
     "key": "1766a66115e457",
@@ -315,19 +315,19 @@
     "text": "You carefully fold the letter — a plea to a friend, kept by the sea."
   },
   {
-    "key": "00e1eb4dc146be",
+    "key": "0a5458dd21a823",
     "speaker": "narrator",
-    "text": "✓ Depths of the Sunken Ruins: You found traces of your parents' first passage, revealing their past as Malakar's apprentices and the moment they chose to defy him."
+    "text": "✓ In the Sunken Ruins: a letter from Aren and Lysa to their friend Malakar, begging him not to reach for time. He wrote back: You would have me wait while you die."
   },
   {
-    "key": "171ce9371b86d6",
+    "key": "18f9ba6292bf12",
     "speaker": "narrator",
-    "text": "A family heirloom whose runes glint like dew at dawn. In its depths two faces linger: a man and a woman, laughing beside a third figure who has turned away."
+    "text": "A mysterious amulet inscribed with runes. At its centre is the sigil of the Wardens of the Dawn: the sun rising over three linked rings. In its depths two faces linger: a man and a woman, laughing beside a third figure who has turned away."
   },
   {
-    "key": "13d00d451bdf62",
+    "key": "045479dc985349",
     "speaker": "narrator",
-    "text": "Echoes of the Hidden Bond: Your parents once walked these same paths in their own desperate search for the three relics. As you face the trials they faced, you may discover traces of their passage. On the heights where wisdom burns, their words may still echo."
+    "text": "Echoes of the Hidden Bond: Your parents made the three relics, long before you were born. Mira says they left words behind them: by the sea, on the mountain and under the hills. On the mountain: something they left on Mount Ember."
   },
   {
     "key": "05d73e62e50b54",
@@ -995,19 +995,19 @@
     "text": "Mirrors of Emberlight: The terraces are lined with ancient, cracked mirrors. Find a way to repair the mirrors and restore the channel of light to the high altar."
   },
   {
-    "key": "1c8dd246483304",
+    "key": "0e472f873a6621",
     "speaker": "narrator",
-    "text": "✓ Heights of Mount Ember: You discovered your parents' words burned into stone, describing the protective ward they forged through fire and sacrifice."
+    "text": "✓ On Mount Ember: the promise the three of them burned into stone, one virtue each, and Malakar's name struck deeper than the others."
   },
   {
-    "key": "0c97c09fb88acc",
+    "key": "11f0ce82c22d53",
     "speaker": "narrator",
-    "text": "A family heirloom whose runes glint like dew at dawn. In its depths the woman's face is clear: Lysa, with Grandmother's eyes. The man laughs beside her, and the third figure keeps his back turned."
+    "text": "A mysterious amulet inscribed with runes. At its centre is the sigil of the Wardens of the Dawn: the sun rising over three linked rings. In its depths the woman's face is clear: Lysa, with Grandmother's eyes. The man laughs beside her, and the third figure keeps his back turned."
   },
   {
-    "key": "09b2417a0ceeb5",
+    "key": "1b6bec4b10e426",
     "speaker": "narrator",
-    "text": "Echoes of the Hidden Bond: Your parents once walked these same paths in their own desperate search for the three relics. As you face the trials they faced, you may discover traces of their passage. In the shadows where sacrifice dwells, ancient memories await."
+    "text": "Echoes of the Hidden Bond: Your parents made the three relics, long before you were born. Mira says they left words behind them: by the sea, on the mountain and under the hills. Under the hills: something they left in the Caverns of Shadow."
   },
   {
     "key": "196f377213fdd4",
@@ -2050,9 +2050,29 @@
     "text": "Far off in the mines the ring of picks stops, and does not start again. Then the cavern's old dripping stops too, and the silence is complete. The curse has reached even here, beneath the oldest hills."
   },
   {
-    "key": "16fd6d51650e10",
+    "key": "0ea3a0d7bb5dbb",
     "speaker": "narrator",
-    "text": "Then, beneath the dragon's breathing, another voice: the whisper from your dream, at the very edge of hearing. “Elior… little one. Help me. I cannot hold it shut alone.” And after it, almost lost in the dragon's breathing: “…be patient where I was not…” You know it the way you know a song someone sang to you before you had words for it. Then it is gone."
+    "text": "Then, beneath the dragon's breathing, another voice: the whisper from your dream, at the very edge of hearing."
+  },
+  {
+    "key": "104969dc642e29",
+    "speaker": "voice",
+    "text": "Elior… little one. Help me. I cannot hold it shut alone."
+  },
+  {
+    "key": "1e818c65e8eeee",
+    "speaker": "narrator",
+    "text": "And after it, almost lost in the dragon's breathing:"
+  },
+  {
+    "key": "1c3e9a41502fcd",
+    "speaker": "voice",
+    "text": "…be patient where I was not…"
+  },
+  {
+    "key": "00105eaa4a101d",
+    "speaker": "narrator",
+    "text": "You know it the way you know a song someone sang to you before you had words for it. Then it is gone."
   },
   {
     "key": "091f1b893a7c2d",
@@ -2100,14 +2120,14 @@
     "text": "You search around the Dragon's Hall, but find nothing of interest beyond what you can already see."
   },
   {
-    "key": "0c1b860093a52d",
+    "key": "19264ee82e4e82",
     "speaker": "narrator",
-    "text": "✓ Shadows of the Caverns: The ancient dragon shared memories of your parents' final act, naming them and the completion of their ward."
+    "text": "✓ In the Caverns of Shadow: the dragon remembered them. They poured themselves into a ward that hides you and holds Malakar's wound shut. They are warded away, not dead."
   },
   {
-    "key": "12d347b27f5084",
+    "key": "1604c5ca1d08e9",
     "speaker": "narrator",
-    "text": "The three testimonies have revealed the truth: Elior's parents, once apprentices to Malakar, defied their master to protect their son. Through sacrifice and ancient wards, they hid Elior from Malakar's sight, ensuring he would grow strong enough to face the darkness when the time came."
+    "text": "Your parents were not Malakar's victims. They were his closest friends, Wardens of the Dawn like him, and when he tore at time they became the ward that hides you. The dragon says they are warded away, not dead."
   },
   {
     "key": "067c3e83a7ff7f",
@@ -2135,9 +2155,9 @@
     "text": "I take what is given, and I return what I take."
   },
   {
-    "key": "19a152339c309e",
+    "key": "05a3ca979b02f0",
     "speaker": "narrator",
-    "text": "A family heirloom whose runes glint like dew at dawn. In its depths Aren and Lysa stand hand in hand. The third figure keeps his back turned."
+    "text": "A mysterious amulet inscribed with runes. At its centre is the sigil of the Wardens of the Dawn: the sun rising over three linked rings. In its depths Aren and Lysa stand hand in hand. The third figure keeps his back turned."
   },
   {
     "key": "10600cc922a965",
@@ -2245,9 +2265,9 @@
     "text": "Mira's hands stop above the three relics. She does not begin the rite."
   },
   {
-    "key": "1b2f0cdbf1bc6a",
+    "key": "1a19e967a403d7",
     "speaker": "mira",
-    "text": "Before I join them, Elior, there is something you must hear from me, and not from a stone or a dragon."
+    "text": "Before I bind them, Elior, there is something you must hear from me, and not from a stone or a dragon."
   },
   {
     "key": "18fc7bd3855ab2",

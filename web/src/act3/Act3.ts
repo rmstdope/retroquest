@@ -208,6 +208,7 @@ export class Act3 extends Act {
     this.patchStillnessVestibule(gameState)
     this.patchFortressThreshold(gameState)
     this.patchQuestLogs(gameState)
+    this.patchParentsStory(gameState)
   }
 
   /**
@@ -245,6 +246,27 @@ export class Act3 extends Act {
         item.description = new FortressGates().description
       if (item instanceof LifelightElixir)
         item.description = new LifelightElixir().description
+    }
+  }
+
+  /**
+   * Saves from before the parents' story was reworded keep the old
+   * completion text of the Echoes quest and the old description of the amulet.
+   */
+  private patchParentsStory(gameState: GameState): void {
+    for (const quest of [
+      ...gameState.nonActivatedQuests,
+      ...gameState.activatedQuests,
+      ...gameState.completedQuests,
+    ]) {
+      if (quest instanceof EchoesOfTheHiddenBondQuest) quest.refreshText()
+    }
+    const carried = [
+      ...gameState.inventory,
+      ...Object.values(gameState.allRooms).flatMap((room) => room.items),
+    ]
+    for (const item of carried) {
+      if (item instanceof AncientAmulet) item.refreshDescription()
     }
   }
 

@@ -23,7 +23,7 @@ describe('Echoes of the Hidden Bond quest', () => {
   it('initializes correctly', () => {
     expect(quest.name).toBe('Echoes of the Hidden Bond')
     expect(quest.isMain()).toBe(false)
-    expect(quest.description).toContain('Your parents once walked')
+    expect(quest.description).toContain('Your parents made the three relics')
   })
 
   it('triggers when the Act III main quest starts', () => {
@@ -43,22 +43,23 @@ describe('Echoes of the Hidden Bond quest', () => {
     game.state.setStoryFlag(FLAG_ACT3_SEA_SEALED_LETTER_READ, true)
     let updated = quest.checkUpdate(game.state)
     expect(updated).toBe(true)
-    expect(quest.description).toContain('✓ Depths of the Sunken Ruins')
-    expect(quest.description).toContain("Malakar's apprentices")
+    expect(quest.description).toContain('✓ In the Sunken Ruins')
+    expect(quest.description).toContain('a letter from Aren and Lysa')
+    expect(quest.description).not.toContain('apprentices')
 
     // Read Charred Inscription
     game.state.setStoryFlag(FLAG_ACT3_CHARRED_INSCRIPTION_READ, true)
     updated = quest.checkUpdate(game.state)
     expect(updated).toBe(true)
-    expect(quest.description).toContain('✓ Heights of Mount Ember')
-    expect(quest.description).toContain('protective ward they forged')
+    expect(quest.description).toContain('✓ On Mount Ember')
+    expect(quest.description).toContain('one virtue each')
 
     // Hear Dragon's Memory
     game.state.setStoryFlag(FLAG_ACT3_DRAGONS_MEMORY_RECEIVED, true)
     updated = quest.checkUpdate(game.state)
     expect(updated).toBe(true)
-    expect(quest.description).toContain('✓ Shadows of the Caverns')
-    expect(quest.description).toContain('ancient dragon shared memories')
+    expect(quest.description).toContain('✓ In the Caverns of Shadow')
+    expect(quest.description).toContain('They are warded away, not dead')
   })
 
   it('completes when all testimonies are found', () => {
@@ -83,11 +84,12 @@ describe('Echoes of the Hidden Bond quest', () => {
 
   it('has appropriate completion text', () => {
     const completionText = quest.completion
-    expect(completionText).toContain(
-      'three testimonies have revealed the truth',
+    expect(completionText).toBe(
+      "Your parents were not Malakar's victims. They were his closest " +
+        'friends, Wardens of the Dawn like him, and when he tore at time ' +
+        'they became the ward that hides you. The dragon says they are ' +
+        'warded away, not dead.',
     )
-    expect(completionText).toContain('once apprentices to Malakar')
-    expect(completionText).toContain("hid Elior from Malakar's sight")
   })
 
   it('reports its clues as checklist data', () => {
@@ -100,10 +102,26 @@ describe('Echoes of the Hidden Bond quest', () => {
     const details = quest.details()
     if (details.kind !== 'checklist') throw new Error('expected a checklist')
     expect(details.items.map((item) => item.done)).toEqual([false, true, false])
-    expect(details.items[1].text).toContain('Heights of Mount Ember')
+    expect(details.items[1].text).toContain('On Mount Ember')
     expect(details.items[0].text).toBe(
-      'In the depths where courage is tested, echoes of the past linger.',
+      'By the sea: something they left in the Sunken Ruins.',
     )
-    expect(details.intro).toMatch(/^Your parents once walked/)
+    expect(details.items[2].text).toBe(
+      'Under the hills: something they left in the Caverns of Shadow.',
+    )
+    expect(details.intro).toMatch(/^Your parents made the three relics/)
+  })
+
+  it('words the third open clue the same in the opening log and the checklist', () => {
+    const opening = quest.description
+    quest.checkUpdate(game.state)
+    expect(opening).toContain('○ Under the hills: something they left')
+    expect(quest.description).toContain('Under the hills: something they left')
+  })
+
+  it('refreshes the completion text of an older save', () => {
+    quest.completion = 'once apprentices to Malakar'
+    quest.refreshText()
+    expect(quest.completion).toBe(new EchoesOfTheHiddenBondQuest().completion)
   })
 })

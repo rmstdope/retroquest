@@ -4,7 +4,9 @@ import { Act3 } from '../Act3'
 import { AncientAmulet } from './AncientAmulet'
 import { executeCommands, expectMarkupWellFormed } from '@/testing/gameHelpers'
 
-const BASE = 'A family heirloom whose runes glint like dew at dawn. '
+const BASE =
+  'A mysterious amulet inscribed with runes. At its centre is the sigil of ' +
+  'the Wardens of the Dawn: the sun rising over three linked rings. '
 const BEFORE = BASE + 'It is faintly warm in your hand.'
 const AFTER_LETTER =
   BASE +
@@ -88,6 +90,17 @@ describe('AncientAmulet', () => {
     game.state.inventory = []
 
     expect(AncientAmulet.glowInBag(game.state, 1)).toBe('')
+  })
+
+  it('shows the new opening to a save made with the old description', () => {
+    const game = new Game([new Act3()])
+    const amulet = bagAmulet(game)
+    amulet.glow(2)
+    amulet.description = 'A family heirloom whose runes glint like dew at dawn.'
+
+    new Act3().afterLoad(game.state)
+
+    expect(amulet.description).toBe(AFTER_INSCRIPTION)
   })
 
   it('keeps its picture through a save and load', () => {
