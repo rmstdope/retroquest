@@ -152,8 +152,9 @@ export class Act2 extends Act {
 
   /**
    * Bring older saves up to date: the coins, the secret documents, the
-   * squire's diary, the castle rooms, the Main Square, the Healer's House, the Residential Quarter, Cedric's quest log and the riddles quest
-   * log keep the text they were saved with, so give them the current wording, and put Brenn
+   * squire's diary, the castle rooms, the Main Square, the Healer's House, the
+   * Residential Quarter, Cedric's quest log and the riddles quest log keep the
+   * text they were saved with, so give them the current wording, and put Brenn
    * in the warehouse of saves made before he was met there. Safe to run on
    * every load.
    */
