@@ -134,7 +134,7 @@ describe('Elior answers Cedric', () => {
       ),
     ).toBe(true)
     expect(VISION_CLOSING).toContain(
-      '"I said I would listen to you. Wherever this goes, I will be beside you."',
+      '[dialogue]I said I would listen to you. Wherever this goes, I will be beside you.[/dialogue]',
     )
     expect(VISION_CLOSING).toContain(
       'Now he has agents asking after the Willowbrook bloodline',

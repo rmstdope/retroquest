@@ -23,6 +23,10 @@ import { TheGatheringStormQuest } from './quests/TheGatheringStorm'
 import { TheKnightsTestQuest } from './quests/TheKnightsTest'
 import { SuppliesForTheJourneyQuest } from './quests/SuppliesForTheJourney'
 import { EchoesOfThePastQuest } from './quests/EchoesOfThePast'
+import {
+  MountainHermit,
+  MOUNTAIN_HERMIT_DESCRIPTION,
+} from './characters/MountainHermit'
 import { TheInnkeepersDaughterQuest } from './quests/TheInnkeepersDaughter'
 import { TheMerchantsLostCaravanQuest } from './quests/TheMerchantsLostCaravan'
 import { TheHealersApprenticeQuest } from './quests/TheHealersApprentice'
@@ -157,6 +161,10 @@ export class Act2 extends Act {
     gameState.allRooms.GreatHall.description = GREAT_HALL_DESCRIPTION
     gameState.allRooms.ForestEntrance.description = FOREST_ENTRANCE_DESCRIPTION
     SirCedric.refreshAll(gameState)
+    for (const room of Object.values(gameState.allRooms))
+      for (const character of room.characters)
+        if (character instanceof MountainHermit)
+          character.description = MOUNTAIN_HERMIT_DESCRIPTION
     const warehouse = gameState.allRooms.MerchantsWarehouse
     if (!warehouse.characters.some((c) => c instanceof Brenn))
       warehouse.characters.push(new Brenn())
@@ -179,6 +187,7 @@ export class Act2 extends Act {
     ]) {
       if (quest instanceof CedricksLostHonorQuest) quest.refreshText(gameState)
       if (quest instanceof TheForestGuardiansRiddles) quest.refreshText()
+      if (quest instanceof TheInnkeepersDaughterQuest) quest.refreshText()
       if (quest instanceof TheGatheringStormQuest)
         quest.migrateOlderSave(gameState)
     }

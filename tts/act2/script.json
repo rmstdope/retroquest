@@ -100,9 +100,9 @@
     "text": "You receive a training sword."
   },
   {
-    "key": "0aaaf02226f11a",
+    "key": "0640cf5d5b9732",
     "speaker": "narrator",
-    "text": "A broad old man in a patched grey castle cloak, sitting straight-backed by a small fire. His hands are scarred across the knuckles, and he watches the path between Willowbrook and Greendale the way a sentry watches a gate."
+    "text": "A broad old man in a patched castle cloak, its royal blue faded almost to nothing, sitting straight-backed by a small fire. His hands are scarred across the knuckles, and he watches the path between Willowbrook and Greendale the way a sentry watches a gate."
   },
   {
     "key": "002a9415ed66ac",
@@ -945,9 +945,9 @@
     "text": "The Innkeeper's Daughter"
   },
   {
-    "key": "0b5b1bf27a6e0e",
+    "key": "15cdca09b6e33c",
     "speaker": "narrator",
-    "text": "Elena, the barmaid at The Silver Stag Inn, has been cursed by a dark wizard. Use your magical abilities to break the curse and save her life."
+    "text": "Elena, the barmaid at the Silver Stag, wakes a little colder every morning. The healers call it a curse; nobody can say who laid it."
   },
   {
     "key": "108d3861af9e5f",
@@ -970,9 +970,9 @@
     "text": "Still here. Still cold. … Don't look like that. You're the first in weeks who came back to ask."
   },
   {
-    "key": "0208de1e07f7f8",
+    "key": "0275b3e6aedafb",
     "speaker": "narrator",
-    "text": "The Innkeeper's Daughter: Elena, the barmaid at The Silver Stag Inn, has been cursed by a dark wizard. Use your magical abilities to break the curse and save her life."
+    "text": "The Innkeeper's Daughter: Elena, the barmaid at the Silver Stag, wakes a little colder every morning. The healers call it a curse; nobody can say who laid it."
   },
   {
     "key": "164644067b52aa",
@@ -1005,9 +1005,9 @@
     "text": "Comfortable guest rooms on the upper floor of The Silver Stag Inn. Each room has a cozy bed, a writing desk, and a window overlooking the Market District. The rooms are clean and well-maintained, offering a peaceful retreat for travelers. Faint conversation drifts up from the common room below. One floorboard beside the bed sits a little proud of the rest."
   },
   {
-    "key": "02e47f6d2bff2a",
+    "key": "036af1968a0e00",
     "speaker": "narrator",
-    "text": "As you examine the room carefully, you notice a wooden floorboard near the bed is slightly raised. Pressing it shifts the board with a soft creak. Lifting it reveals a hidden space containing a leather-bound journal deliberately concealed by a previous guest. The pages hold detailed notes and observations that may aid your journey."
+    "text": "The proud board beside the bed lifts with a creak. In the dust beneath it lies a plain leather journal, pushed far back, where a guest who left without paying would not have wanted it found."
   },
   {
     "key": "1dc50b0f1e5394",
@@ -2420,9 +2420,9 @@
     "text": "On her wrist the silver mask goes on smiling a moment longer, then fades like breath on a cold window, and is gone."
   },
   {
-    "key": "0c60098b0aecfe",
+    "key": "082a1defa8d323",
     "speaker": "narrator",
-    "text": "Through careful magical healing, you successfully broke Elena's curse. You first strengthened her with a greater heal spell, then purified her spirit with crystal-clear water, and finally used a dispel spell to shatter the dark magic completely. Elena is now free from the wizard's curse!"
+    "text": "You made Elena strong with greater heal, washed the mark in water from the nymphs' spring, and unbound the curse with the Wardens' dispel. The silver mask on her wrist faded, and she is warm again."
   },
   {
     "key": "0771845e9ccac6",
@@ -2945,9 +2945,29 @@
     "text": "A village at dusk, its roofs low and familiar. Beyond it, a field withered to grey stalks, the way yours was the morning all this began. And at the field's edge, a robed figure, its face lost in shadow, reaching one hand toward you as if across a great distance. Above it all, small and far, a crowned man hangs in a prison of crystal, and grey light runs out of him like water."
   },
   {
-    "key": "0e7dd5c7b2a74f",
+    "key": "0780d6d0ed85a2",
     "speaker": "narrator",
-    "text": "Then the voice from your dream, the one that called your name on the night of the storm: “Elior… how you have grown. Do not be afraid of me.” And then, fainter, as if carried off by the wind: “…close what I opened…” It is closer than it was. You do not know whose it is, only that you have heard it before, long before the dream."
+    "text": "Then the voice from your dream, the one that called your name on the night of the storm:"
+  },
+  {
+    "key": "17c5a1b2cc6575",
+    "speaker": "voice",
+    "text": "Elior… how you have grown. Do not be afraid of me."
+  },
+  {
+    "key": "192a0873206d1f",
+    "speaker": "narrator",
+    "text": "And then, fainter, as if carried off by the wind:"
+  },
+  {
+    "key": "1ea6dbab7a5473",
+    "speaker": "voice",
+    "text": "…close what I opened…"
+  },
+  {
+    "key": "1dda46e5617ee4",
+    "speaker": "narrator",
+    "text": "It is closer than it was. You do not know whose it is, only that you have heard it before, long before the dream."
   },
   {
     "key": "09ab45aceac064",
@@ -2985,9 +3005,19 @@
     "text": "All your life, Malakar has been a name from old books, a story told to frighten children. Now he has agents asking after the Willowbrook bloodline, a seal on the secret documents, and a hand reaching for you out of a vision. The bloodline he seeks is yours."
   },
   {
-    "key": "1e6b9ba17ff409",
+    "key": "17bb74f0484bf6",
     "speaker": "narrator",
-    "text": "Sir Cedric rests a hand on his sword. \"I said I would listen to you. Wherever this goes, I will be beside you.\" Act II is complete. The storm has a name now."
+    "text": "Sir Cedric rests a hand on his sword."
+  },
+  {
+    "key": "11bc99c895e632",
+    "speaker": "sir cedric",
+    "text": "I said I would listen to you. Wherever this goes, I will be beside you."
+  },
+  {
+    "key": "010ea7dce94818",
+    "speaker": "narrator",
+    "text": "Act II is complete. The storm has a name now."
   },
   {
     "key": "091ab964b0dd1c",

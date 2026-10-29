@@ -47,12 +47,9 @@ export class InnRooms extends Room {
       this.addItem(journal)
       this.journalFound = true
       return (
-        'As you examine the room carefully, you notice a wooden ' +
-        'floorboard near the bed is slightly raised. Pressing it shifts ' +
-        'the board with a soft creak. Lifting it reveals a hidden space ' +
-        'containing a leather-bound journal deliberately concealed by a ' +
-        'previous guest. The pages hold detailed notes and observations ' +
-        'that may aid your journey.'
+        'The proud board beside the bed lifts with a creak. In the dust ' +
+        'beneath it lies a plain leather journal, pushed far back, where a ' +
+        'guest who left without paying would not have wanted it found.'
       )
     }
     return (

@@ -8,6 +8,19 @@ const AFTER =
   'The loose floorboard beside the bed sits back in its place, the hiding ' +
   'place beneath it empty.'
 
+describe('InnRooms search', () => {
+  it("finds the journal as a stranger's hiding place, naming no one", () => {
+    const game = new Game([new Act2()])
+    const room = new InnRooms()
+
+    expect(room.search(game.state)).toBe(
+      'The proud board beside the bed lifts with a creak. In the dust ' +
+        'beneath it lies a plain leather journal, pushed far back, where a ' +
+        'guest who left without paying would not have wanted it found.',
+    )
+  })
+})
+
 describe('InnRooms search hint', () => {
   it('hints at the floorboard until the journal is found', () => {
     const game = new Game([new Act2()])

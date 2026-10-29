@@ -14,8 +14,11 @@ describe('MountainHermit, the retired sergeant', () => {
   it('is described as a castle sergeant', () => {
     const hermit = new MountainHermit()
 
-    expect(hermit.description).toContain('patched grey castle cloak')
+    expect(hermit.description).toContain(
+      'patched castle cloak, its royal blue faded almost to nothing',
+    )
     expect(hermit.description).toContain('the way a sentry watches a gate')
+    expect(hermit.description).not.toContain('grey')
     expect(hermit.description).not.toMatch(PROPHETIC)
   })
 
