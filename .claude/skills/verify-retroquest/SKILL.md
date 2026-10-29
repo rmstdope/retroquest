@@ -78,10 +78,31 @@ Type them into the game's command input:
 To close the title page and the act intro, click through them as a player would. Getting past them
 is part of the journey a bead may have changed.
 
+## Two environmental snags: file:// and a taken port
+
+Neither is a question for the navigator. Work round both, and say so in the report.
+
+- **A local file Chrome cannot open as `file://`** (a mockup, review page, evidence, anything
+  else on disk): serve its directory over http and open that URL instead. From a scratch shell:
+  `python3 -m http.server <free port> --bind 127.0.0.1 --directory <dir>`, on a port from the
+  range below, then `http://127.0.0.1:<port>/<file>`. Stop only the server you started.
+- **5173 occupied** (`lsof -nP -iTCP:5173 -sTCP:LISTEN` prints a listener). This overrides
+  verify-bead's rule that an occupied port is a question: do not ask. Never stop, signal or reuse
+  whatever holds 5173. Pick the first free port from 5174 to 5199 (below the producers' 5200+
+  blocks), checking each with the same `lsof`, and start the declared launch command on it with
+  Vite's port flags: `npm run dev --prefix web -- --port <port> --strictPort`. Name the port in
+  the report, as "verified on http://localhost:<port> because 5173 was taken". If none of
+  5174-5199 is free, that is a blocker to report.
+- **Origins differ by port.** `localStorage` belongs to the origin, so the navigator's saves on
+  `localhost:5173` are not visible on another port. The game starts empty there; that is expected.
+  Snapshot and restore on the origin you actually use (next section), and where a bead needs an
+  existing save, build the state with `debug act<N>` instead.
+
 ## Protect the navigator's saves
 
 The browser is the navigator's own Chrome, and `localhost:5173` shares its `localStorage` with
-every game they have played there. Before the first save, load or settings change in a batch,
+every game they have played there. On a fallback port (see above) the origin is new and holds none
+of their saves, but snapshot and restore anyway, on that origin. Before the first save, load or settings change in a batch,
 snapshot RetroQuest's keys through the Chrome integration's JavaScript tool:
 
 ```js
@@ -106,7 +127,8 @@ Say in the report that storage was snapshotted and restored.
 On top of verify-bead's *Look*, check what the acceptance touches:
 
 - **The mockup.** A bead agreed with a mockup names it in its acceptance. It is committed under
-  `web/public/` and served by the dev server at `http://localhost:5173/<file>.html`. Open it in a
+  `web/public/` and served by the dev server at `http://localhost:<port>/<file>.html`, `<port>` being the one you
+  launched on (5173 unless it was taken). Open it in a
   second tab and compare it with the game side by side, and screenshot both.
 - **Desktop and phone.** "Working" includes reading well on a phone. Look at desktop width, then
   resize the window to phone width (about 390×844) and look again. A bead that changes layout,
