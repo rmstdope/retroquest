@@ -73,7 +73,11 @@ export class NatureSenseSpell extends Spell {
         'line. On the far side of it the forest begins, thick and ' +
         'watchful.[/success]'
       )
-    } else if (roomName.includes('forest') || roomName.includes('enchanted')) {
+    } else if (
+      ['forest', 'enchanted', 'grove', 'glade'].some((word) =>
+        roomName.includes(word),
+      )
+    ) {
       return (
         '[success]You let your awareness spread through the roots and the ' +
         'undergrowth. Everything here is alive and busy, and none of it is ' +

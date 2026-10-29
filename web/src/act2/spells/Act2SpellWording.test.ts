@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { Game } from '@/engine'
+import { Character, Game, Item, Spell } from '@/engine'
 import { expectMarkupWellFormed } from '@/testing/gameHelpers'
 import { Act2 } from '../Act2'
 import { DispelSpell } from './DispelSpell'
@@ -10,9 +10,8 @@ import { NatureSenseSpell } from './NatureSenseSpell'
 import { PropheticVision } from './PropheticVision'
 import { FLAG_GATHERING_STORM_COMPLETED } from '../Act2StoryFlags'
 import { SirCedric } from '../characters/SirCedric'
-import { Item } from '@/engine'
 
-const DESCRIPTIONS: [string, () => { description: string }, string][] = [
+const DESCRIPTIONS: [string, () => Spell, string][] = [
   [
     'mend',
     () => new MendSpell(),
@@ -60,7 +59,7 @@ describe('Act II spell descriptions', () => {
     const game = new Game([new Act2()])
     for (const [, make] of DESCRIPTIONS) {
       const spell = make()
-      game.state.learnSpell(spell as never)
+      game.state.learnSpell(spell)
     }
     for (const spell of game.state.knownSpells) spell.description = 'old'
     new Act2().afterLoad(game.state)
@@ -91,6 +90,13 @@ describe('Act II spell fallback lines', () => {
     )
   })
 
+  it('nature sense in the grove and the glade is the forest line', () => {
+    const spell = new NatureSenseSpell()
+    expect(spell.castSpell(gameIn('AncientGrove').state)).toContain(
+      'Everything here is alive and busy',
+    )
+  })
+
   it('prophetic vision once the act is over', () => {
     const game = gameIn('GreatHall')
     game.state.currentRoom.characters.push(new SirCedric())
@@ -108,7 +114,7 @@ describe('Act II spell fallback lines', () => {
     expect(new DispelSpell().castOnItem(game.state, item)).toBe(
       '[success]The unbinding finds nothing bound in it.[/success]',
     )
-    const other = game.state.currentRoom.characters[0]
+    const other = new Character({ name: 'Bystander', description: 'Someone.' })
     expect(new GreaterHealSpell().castOnCharacter(game.state, other)).toBe(
       '[success]Golden light settles over them. There was nothing in them that needed it.[/success]',
     )

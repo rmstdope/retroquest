@@ -197,19 +197,16 @@ export class Act2 extends Act {
     gameState.allRooms.GreatHall.description = GREAT_HALL_DESCRIPTION
     gameState.allRooms.ForestEntrance.description = FOREST_ENTRANCE_DESCRIPTION
     SirCedric.refreshAll(gameState)
-    for (const spell of gameState.knownSpells) {
-      if (spell instanceof MendSpell)
-        spell.description = new MendSpell().description
-      if (spell instanceof GreaterHealSpell)
-        spell.description = new GreaterHealSpell().description
-      if (spell instanceof DispelSpell)
-        spell.description = new DispelSpell().description
-      if (spell instanceof NatureSenseSpell)
-        spell.description = new NatureSenseSpell().description
-      if (spell instanceof ForestSpeechSpell)
-        spell.description = new ForestSpeechSpell().description
-      if (spell instanceof PropheticVision)
-        spell.description = new PropheticVision().description
+    for (const spell of [
+      new MendSpell(),
+      new GreaterHealSpell(),
+      new DispelSpell(),
+      new NatureSenseSpell(),
+      new ForestSpeechSpell(),
+      new PropheticVision(),
+    ]) {
+      const known = gameState.knownSpells.find((s) => s.id === spell.id)
+      if (known) known.description = spell.description
     }
     for (const room of Object.values(gameState.allRooms))
       for (const character of room.characters)
