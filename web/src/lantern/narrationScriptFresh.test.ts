@@ -49,7 +49,7 @@ describe('Act I off-path lines are in the narration script', () => {
   it.each([
     "I'm not sure what you mean, dear, but I do like to hear you talk.",
     'Nothing here answers to that. The voice says your name.',
-    'It looks like you need to use something with the strange mechanism.',
+    'You put a hand to the gears. They turn under it and keep turning; fingers will not stop them.',
     "You can't unlock a person!",
     "The truth about what, love? You've lost me.",
   ])('has "%s"', (text) => {

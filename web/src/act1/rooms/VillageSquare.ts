@@ -9,11 +9,10 @@ export class VillageSquare extends Room {
     super({
       name: 'Village Square',
       description:
-        'The heart of Willowbrook bustles with life. Cobblestone paths radiate from an ' +
-        'old stone fountain, and a weathered notice board stands nearby, covered in faded ' +
-        'announcements. Children chase each other around market stalls, and the air is ' +
-        'filled with laughter, gossip, and the scent of fresh bread. The square is a ' +
-        'crossroads for villagers, travelers, and secrets alike.',
+        'The heart of Willowbrook: cobblestones around an old stone fountain, ' +
+        'and a weathered notice board covered in faded announcements. ' +
+        'Half the market stalls stand empty. The people at the others keep ' +
+        'their voices down, and stop talking when you pass.',
       items: [new Bucket(), new OldNotice()],
       characters: [new Villager()],
       exits: { west: 'EliorsCottage', north: 'MirasHut', east: 'GeneralStore' },

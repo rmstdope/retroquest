@@ -208,7 +208,7 @@ describe('actScript for Act I', () => {
       script.some(
         (line) =>
           line.speaker === 'narrator' &&
-          line.text.startsWith('The heart of Willowbrook bustles with life.'),
+          line.text.startsWith('The heart of Willowbrook: cobblestones'),
       ),
     ).toBe(true)
   })

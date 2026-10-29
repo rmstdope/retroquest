@@ -1,4 +1,4 @@
-import { Item, type GameState, clue } from '@/engine'
+import { Item, type GameState } from '@/engine'
 import { MillstoneFragment } from './MillstoneFragment'
 import { Rope } from './Rope'
 
@@ -46,8 +46,9 @@ export class Mechanism extends Item {
     if (this.repaired) {
       return '[failure]The ' + nameHtml + ' is jammed fast.[/failure]'
     }
-    return clue(
-      'It looks like you need to use something with the ' + nameHtml + '.',
+    return (
+      'You put a hand to the gears. They turn under it and keep turning; ' +
+      'fingers will not stop them.'
     )
   }
 

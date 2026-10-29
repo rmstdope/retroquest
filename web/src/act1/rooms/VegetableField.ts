@@ -12,8 +12,7 @@ const WITHERED_DESCRIPTION =
   'Rows of withered crops stretch beneath a brooding gray sky. The earth is ' +
   'cracked and dry, with only a few stubborn carrots and a rusty hoe hinting at ' +
   'better days. A faint breeze rustles the brittle leaves, carrying the scent ' +
-  'of soil and distant rain. The field feels quiet, as if holding its breath, ' +
-  'waiting for a touch of magic to bring it back to life.'
+  'of soil and distant rain. These rows were green a month ago.'
 const WATERED_DESCRIPTION =
   'Rows of green crops stretch beneath an open sky. The earth is dark and soft ' +
   'where the clean well water soaked in, and young leaves stand tall where ' +

@@ -2,11 +2,9 @@ import { Room, type GameState } from '@/engine'
 import { Well } from '../items/Well'
 
 const DESCRIPTION_START =
-  "An old stone well stands at the village's center, its stones worn smooth " +
-  'by countless hands.'
-const DESCRIPTION_END =
-  ' Moss creeps up the sides. The well seems to whisper secrets to those who ' +
-  'listen closely.'
+  'An old stone well stands between the field and the forge, its stones ' +
+  'worn smooth by countless hands.'
+const DESCRIPTION_END = ' Moss creeps up the sides.'
 const MURKY_WATER =
   ' The water below lies dark and still, and a faint sour smell hangs in the ' +
   'cool, damp air.'

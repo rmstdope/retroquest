@@ -8,11 +8,10 @@ export class RoadToGreendale extends Room {
     super({
       name: 'Road to Greendale',
       description:
-        'The main road leaving Willowbrook stretches beneath ancient oaks, their ' +
-        'branches arching overhead like a living tunnel. The path is well-trodden, ' +
-        `lined with wildflowers and scattered leaves. A ${characterName('merchant')}'s cart creaks nearby, ` +
-        'and the air is filled with the promise of adventure and the unknown. The road ' +
-        'beckons, leading onward to new lands and new stories.',
+        'The main road out of Willowbrook runs east under old oaks, their ' +
+        'branches meeting overhead. The way is well trodden, lined with ' +
+        `wildflowers and fallen leaves. A ${characterName('merchant')}'s cart stands at the roadside, ` +
+        'and his thin grey mare grazes beside it on three good shoes.',
       items: [new RustySaw()],
       characters: [new Merchant()],
       exits: { west: 'VillageChapel' },

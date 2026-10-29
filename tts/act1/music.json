@@ -39,21 +39,21 @@
     "id": "act1-village-square",
     "title": "Village Square",
     "plays": "Act I, Village Square",
-    "brief": "instrumental background loop for Village Square: The heart of Willowbrook bustles with life. Cobblestone paths radiate from an old stone fountain, and a weathered notice board stands nearby, covered in faded announcements, no vocals",
+    "brief": "instrumental background loop for Village Square: The heart of Willowbrook: cobblestones around an old stone fountain, and a weathered notice board covered in faded announcements. Half the market stalls stand empty, no vocals",
     "seconds": 60
   },
   {
     "id": "act1-miras-hut",
     "title": "Mira's Hut",
     "plays": "Act I, Mira's Hut",
-    "brief": "instrumental background loop for Mira's Hut: A fragrant hut filled with drying herbs and mysterious potions. Shelves overflow with bottles, roots, and colorful flowers. The air is thick with the scent of lavender and sage, no vocals",
+    "brief": "instrumental background loop for Mira's Hut: A small hut hung with drying herbs: lavender, sage, and roots in bundles from the rafters. Shelves of bottles line the walls, every one labelled, no vocals",
     "seconds": 60
   },
   {
     "id": "act1-blacksmiths-forge",
     "title": "Blacksmith's Forge",
     "plays": "Act I, Blacksmith's Forge",
-    "brief": "instrumental background loop for Blacksmith's Forge: A hot, smoky forge glows with the light of burning coals. The clang of hammer on anvil echoes through the air, mingling with the scent of molten metal and sweat, no vocals",
+    "brief": "instrumental background loop for Blacksmith's Forge: A hot, smoky forge. Coals glow in the hearth and the anvil rings, no vocals",
     "seconds": 60
   },
   {
@@ -67,7 +67,7 @@
     "id": "act1-village-well",
     "title": "Village Well",
     "plays": "Act I, Village Well",
-    "brief": "instrumental background loop for Village Well: An old stone well stands at the village's center, its stones worn smooth by countless hands. The water below lies dark and still, and a faint sour smell hangs in the cool, damp air, no vocals",
+    "brief": "instrumental background loop for Village Well: An old stone well stands between the field and the forge, its stones worn smooth by countless hands. The water below lies dark and still, and a faint sour smell hangs in the cool, damp air, no vocals",
     "seconds": 60
   },
   {
@@ -116,7 +116,7 @@
     "id": "act1-road-to-greendale",
     "title": "Road to Greendale",
     "plays": "Act I, Road to Greendale",
-    "brief": "instrumental background loop for Road to Greendale: The main road leaving Willowbrook stretches beneath ancient oaks, their branches arching overhead like a living tunnel. The path is well-trodden, lined with wildflowers and scattered leaves, no vocals",
+    "brief": "instrumental background loop for Road to Greendale: The main road out of Willowbrook runs east under old oaks, their branches meeting overhead. The way is well trodden, lined with wildflowers and fallen leaves, no vocals",
     "seconds": 60
   }
 ]
