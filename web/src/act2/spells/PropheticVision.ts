@@ -96,10 +96,14 @@ export class PropheticVision extends Spell {
         'prison of crystal, and grey light runs out of him like water.' +
         '\n\n' +
         'Then the voice from your dream, the one that called your name on ' +
-        'the night of the storm: [italic]“Elior… how you have grown. Do ' +
-        'not be afraid of me.”[/italic] And then, fainter, as if carried ' +
-        'off by the wind: [italic]“…close what I opened…”[/italic] It is ' +
-        'closer than it was. You do ' +
+        'the night of the storm:\n\n' +
+        dialogue(
+          'voice',
+          'Elior… how you have grown. Do not be afraid of me.',
+        ) +
+        '\n\nAnd then, fainter, as if carried off by the wind:\n\n' +
+        dialogue('voice', '…close what I opened…') +
+        '\n\nIt is closer than it was. You do ' +
         'not know whose it is, only that you have heard it before, long ' +
         'before the dream.\n\n' +
         'The vision fades. ' +

@@ -5,22 +5,31 @@ import {
   FLAG_INNKEEPERS_DAUGHTER_COMPLETED,
 } from '../Act2StoryFlags'
 
-/** Quest to save Elena, the innkeeper's daughter, from a dark curse. */
+/** What the log says while Elena is cursed: nobody can say who laid it. */
+export const INNKEEPERS_DAUGHTER_DESCRIPTION =
+  'Elena, the barmaid at the Silver Stag, wakes a little colder every ' +
+  'morning. The healers call it a curse; nobody can say who laid it.'
+
+/** What the log says once the curse is unbound. */
+export const INNKEEPERS_DAUGHTER_COMPLETION =
+  'You made Elena strong with greater heal, washed the mark in water from ' +
+  "the nymphs' spring, and unbound the curse with the Wardens' dispel. The " +
+  'silver mask on her wrist faded, and she is warm again.'
+
+/** Quest to save Elena, the innkeeper's daughter, from a curse nobody can trace. */
 export class TheInnkeepersDaughterQuest extends Quest {
   constructor() {
     super({
       name: QUEST_INNKEEPERS_DAUGHTER,
-      description:
-        'Elena, the barmaid at The Silver Stag Inn, has been cursed by a ' +
-        'dark wizard. Use your magical abilities to break the curse and save ' +
-        'her life.',
-      completion:
-        "Through careful magical healing, you successfully broke Elena's " +
-        'curse. You first strengthened her with a greater heal spell, then ' +
-        'purified her spirit with crystal-clear water, and finally used a ' +
-        'dispel spell to shatter the dark magic completely. Elena is now ' +
-        "free from the wizard's curse!",
+      description: INNKEEPERS_DAUGHTER_DESCRIPTION,
+      completion: INNKEEPERS_DAUGHTER_COMPLETION,
     })
+  }
+
+  /** Bring the log up to date in a save made with the older wording. */
+  refreshText(): void {
+    this.description = INNKEEPERS_DAUGHTER_DESCRIPTION
+    this.completion = INNKEEPERS_DAUGHTER_COMPLETION
   }
 
   override checkTrigger(gameState: GameState): boolean {

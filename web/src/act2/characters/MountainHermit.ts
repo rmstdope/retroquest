@@ -8,6 +8,13 @@ import {
 import { FLAG_DEMONSTRATED_COMBAT_SKILLS } from '../Act2StoryFlags'
 import { TrainingSword } from '../items/TrainingSword'
 
+/** The hermit's description: a retired sergeant in a faded blue castle cloak, never the stranger's grey one. */
+export const MOUNTAIN_HERMIT_DESCRIPTION =
+  'A broad old man in a patched castle cloak, its royal blue faded ' +
+  'almost to nothing, sitting straight-backed by a small fire. His ' +
+  'hands are scarred across the knuckles, and he watches the path ' +
+  'between Willowbrook and Greendale the way a sentry watches a gate.'
+
 /**
  * The Mountain Hermit: a retired castle sergeant who drilled Sir Cedric as a
  * squire.
@@ -28,11 +35,7 @@ export class MountainHermit extends Character {
   constructor() {
     super({
       name: 'mountain hermit',
-      description:
-        'A broad old man in a patched grey castle cloak, sitting ' +
-        'straight-backed by a small fire. His hands are scarred across the ' +
-        'knuckles, and he watches the path between Willowbrook and Greendale ' +
-        'the way a sentry watches a gate.',
+      description: MOUNTAIN_HERMIT_DESCRIPTION,
     })
   }
 

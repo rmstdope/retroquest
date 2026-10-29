@@ -43,8 +43,11 @@ export const VISION_CLOSING =
   'a hand reaching for you out of a vision. The bloodline he seeks is ' +
   'yours.\n\n' +
   `${characterName('Sir Cedric')} rests a hand on his sword. ` +
-  '"I said I would listen to you. Wherever this goes, I will be beside ' +
-  'you." ' +
+  speech(
+    'I said I would listen to you. Wherever this goes, I will be beside ' +
+      'you.',
+  ) +
+  ' ' +
   '[bold]Act II is complete.[/bold] The storm has a name now.'
 
 /** Elior's telling, when he says the voice did not sound like a hunter. */
