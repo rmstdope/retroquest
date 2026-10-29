@@ -201,9 +201,9 @@ export class Mira extends Character {
           eventMsg +
           '\n' +
           speech(
-            'Not yet, Elior. First discover the words your parents left ' +
-              'burned into stone on these ember heights, up on the terraces. ' +
-              'I will not take you into the dark without them.',
+            'Not yet. There are words burned into the stone up on the ' +
+              'terraces, and they were left for you. I will not take you ' +
+              'into the dark without them.',
           )
         )
       }
@@ -247,9 +247,8 @@ export class Mira extends Character {
           eventMsg +
           '\n' +
           speech(
-            'Not yet, Elior. First seek the traces your parents left behind ' +
-              'in the sunken ruins. I will not take you up to the ember ' +
-              'heights without them.',
+            'Not yet, Elior. There is something in these ruins that was ' +
+              'left for you. I will not take you up the mountain without it.',
           )
         )
       }
@@ -301,7 +300,7 @@ export class Mira extends Character {
             '\n' +
             speech(
               'Not yet. Something is still left undone out there, Elior. ' +
-                'Until it is set right, I will not join them.',
+                'Until it is set right, I will not bind them.',
             )
           )
         }
@@ -588,7 +587,7 @@ export class Mira extends Character {
       `${characterName(this.name)}'s hands stop above the three relics. ` +
         'She does not begin the rite.',
       speech(
-        'Before I join them, Elior, there is something you must hear from ' +
+        'Before I bind them, Elior, there is something you must hear from ' +
           'me, and not from a stone or a dragon.',
       ),
       speech('You noticed. I saw you notice.'),

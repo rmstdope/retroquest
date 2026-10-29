@@ -172,6 +172,8 @@ export class Act3 extends Act {
    * reworded keep its old description, and saves already past the
    * miners' rescue lack Tobin. Every spell the player knows takes the
    * description of Act III's own copy, so older saves show who taught it.
+   * The Echoes completion text and the amulet's description are set again
+   * to the current wording.
    */
   override afterLoad(gameState: GameState): void {
     gameState.allRooms.MirasHut.description = new MirasHut().description
@@ -208,6 +210,7 @@ export class Act3 extends Act {
     this.patchStillnessVestibule(gameState)
     this.patchFortressThreshold(gameState)
     this.patchQuestLogs(gameState)
+    this.patchParentsStory(gameState)
   }
 
   /**
@@ -245,6 +248,27 @@ export class Act3 extends Act {
         item.description = new FortressGates().description
       if (item instanceof LifelightElixir)
         item.description = new LifelightElixir().description
+    }
+  }
+
+  /**
+   * Saves from before the parents' story was reworded keep the old
+   * completion text of the Echoes quest and the old description of the amulet.
+   */
+  private patchParentsStory(gameState: GameState): void {
+    for (const quest of [
+      ...gameState.nonActivatedQuests,
+      ...gameState.activatedQuests,
+      ...gameState.completedQuests,
+    ]) {
+      if (quest instanceof EchoesOfTheHiddenBondQuest) quest.refreshText()
+    }
+    const carried = [
+      ...gameState.inventory,
+      ...Object.values(gameState.allRooms).flatMap((room) => room.items),
+    ]
+    for (const item of carried) {
+      if (item instanceof AncientAmulet) item.refreshDescription()
     }
   }
 

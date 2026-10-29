@@ -141,7 +141,7 @@ describe('Mira', () => {
     game.state.setStoryFlag(FLAG_ACT3_CRYSTAL_OF_LIGHT_ACQUIRED, true)
     game.state.setStoryFlag(FLAG_ACT3_SEA_SEALED_LETTER_READ, false)
     const out = m.talkTo(game.state)
-    expect(out).toContain('seek the traces your parents left behind')
+    expect(out).toContain('something in these ruins that was left for you')
     expect(out).not.toContain('you arrive at your next destination')
 
     // letter read -> should teleport to Lower Switchbacks
@@ -205,7 +205,7 @@ describe('Mira', () => {
     // without inscription read - should require reading it first
     let out = m.talkTo(game.state)
     expect(out).toContain(
-      'discover the words your parents left burned into stone',
+      'words burned into the stone up on the terraces, and they were left for you',
     )
     expect(out).not.toContain('you arrive at your next destination')
 
@@ -468,9 +468,9 @@ describe('Mira', () => {
     const out = new Mira().talkTo(game.state)
 
     expect(out).toContain(
-      'discover the words your parents left burned into stone',
+      'words burned into the stone up on the terraces, and they were left for you',
     )
-    expect(out).toContain('ember heights')
+    expect(out).toContain('into the dark without them')
     expect(out).not.toContain('you arrive at your next destination')
   })
 
@@ -483,8 +483,8 @@ describe('Mira', () => {
 
     const out = new Mira().talkTo(game.state)
 
-    expect(out).toContain('seek the traces your parents left behind')
-    expect(out).toContain('sunken ruins')
+    expect(out).toContain('something in these ruins that was left for you')
+    expect(out).toContain('up the mountain without it')
     expect(out).not.toContain('you arrive at your next destination')
   })
 
@@ -498,7 +498,8 @@ describe('Mira', () => {
     const out = new Mira().talkTo(game.state)
 
     expect(out).not.toContain('caverns')
-    expect(out).toContain('ember heights')
+    expect(out).not.toContain('your parents')
+    expect(out).toContain('up the mountain without it')
   })
 
   it('offers no next circle at the Cavern Mouth before the scale is won', () => {
@@ -561,7 +562,7 @@ describe('Mira confesses before the Warding Rite', () => {
     const expected = [
       "[character_name]Mira[/character_name]'s hands stop above the three relics. She does not begin the rite.",
       speech(
-        'Before I join them, Elior, there is something you must hear from me, and not from a stone or a dragon.',
+        'Before I bind them, Elior, there is something you must hear from me, and not from a stone or a dragon.',
       ),
       speech('You noticed. I saw you notice.'),
       speech(
@@ -931,7 +932,7 @@ describe('Mira counts the relics as she draws each circle', () => {
     const out = new Mira().talkTo(game.state)
     expect(out).toContain(
       'Not yet. Something is still left undone out there, Elior. Until it is ' +
-        'set right, I will not join them.',
+        'set right, I will not bind them.',
     )
     expect(out).not.toContain('weave')
   })

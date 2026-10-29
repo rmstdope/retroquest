@@ -1,6 +1,8 @@
 import { Item, type GameState } from '@/engine'
 
-const HEIRLOOM = 'A family heirloom whose runes glint like dew at dawn. '
+const HEIRLOOM =
+  'A mysterious amulet inscribed with runes. At its centre is the sigil of ' +
+  'the Wardens of the Dawn: the sun rising over three linked rings. '
 
 /** What the amulet shows when examined, by how many clues it has glowed at. */
 const PICTURES: string[] = [
@@ -67,6 +69,11 @@ export class AncientAmulet extends Item {
       description: PICTURES[0],
       canBeCarried: true,
     })
+  }
+
+  /** Put the picture for the current stage back, so an older save shows the current wording. */
+  refreshDescription(): void {
+    this.description = PICTURES[this.stage]
   }
 
   /**

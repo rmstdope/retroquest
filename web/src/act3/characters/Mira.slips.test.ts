@@ -110,7 +110,7 @@ describe('Mira Ember slip', () => {
     expect(out).toContain(
       'She says it softly, before you have told her what the phoenix said.',
     )
-    expect(out).toContain('discover the words your parents left')
+    expect(out).toContain('words burned into the stone up on the terraces')
     expect(game.state.getStoryFlag(FLAG_ACT3_MIRA_EMBER_SLIP_PLAYED)).toBe(true)
     expect(mira.talkTo(game.state)).not.toContain(EMBER_NARRATION)
   })

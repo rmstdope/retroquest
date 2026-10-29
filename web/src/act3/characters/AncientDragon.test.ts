@@ -306,7 +306,9 @@ describe('AncientDragon', () => {
 
     const blocks = parseTurn(dragon.talkTo(gameState))
 
-    const speeches = blocks.filter((b) => b.kind === 'dialogue')
+    const speeches = blocks.filter(
+      (b) => b.kind === 'dialogue' && b.speaker !== 'voice',
+    )
     expect(speeches).toHaveLength(7)
     expect(
       speeches.every(
@@ -374,23 +376,19 @@ describe('AncientDragon', () => {
     expectMarkupWellFormed(first)
   })
 
-  it('writes the voice as unlabelled narration with italic words', () => {
+  it('speaks the dream voice through dialogue, as in Act I', () => {
     const gameState = makeGameState()
 
     const blocks = parseTurn(new AncientDragon().talkTo(gameState))
 
-    const voice = blocks.find(
-      (b) => b.kind === 'text' && b.markup.includes('another voice'),
+    const quotes = blocks.flatMap((b) =>
+      b.kind === 'dialogue' && b.speaker === 'voice' ? [b.markup] : [],
     )
-    expect(voice?.kind === 'text' && voice.markup).toBe(
-      "Then, beneath the dragon's breathing, another voice: the whisper " +
-        'from your dream, at the very edge of hearing. [italic]“Elior… ' +
-        'little one. Help me. I cannot hold it shut alone.”[/italic] And ' +
-        "after it, almost lost in the dragon's breathing: [italic]“…be " +
-        'patient where I was not…”[/italic] You ' +
-        'know it the way you know a song someone sang to you before you ' +
-        'had words for it. Then it is gone.',
-    )
+    expect(quotes).toEqual([
+      'Elior… little one. Help me. I cannot hold it shut alone.',
+      '…be patient where I was not…',
+    ])
+    expect(JSON.stringify(blocks)).not.toContain('[italic]')
     expect(
       blocks.some((b) => b.kind === 'text' && b.markup === 'It says no more.'),
     ).toBe(true)
