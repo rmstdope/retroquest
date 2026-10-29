@@ -20,34 +20,37 @@ export class EliorsJournal extends Item {
   }
 
   /**
-   * Read the latest journal entry, in two paragraphs so the player can skip
-   * the first and hear the second, and set a story flag.
+   * Read the latest journal entry, in four paragraphs, and set a story flag.
    */
   override use(gameState: GameState): string {
     const entry =
       'The ink is slightly smudged on this page, as if written in haste or with a ' +
       'trembling hand...\n\n' +
       writing(
-        'What a night. The wind howled like a hungry wolf, and rain lashed ' +
-          'against the shutters. I swear the whole cottage shook with each thunderclap. ' +
-          'Sleep was impossible for hours. Then, through a gap in the curtains, I saw it ' +
-          "– a searing, unnatural light that split the sky. It wasn't lightning; it was... " +
-          'different. Pulsating, almost.',
+        'The storm kept me up half the night. Then a light split the sky ' +
+          'over the fields, and it was not lightning.',
       ) +
       '\n\n' +
       writing(
-        'When I finally drifted off, the dreams came. ' +
-          'Not the usual ones of fields and harvests. This was dark, filled with swirling ' +
-          'shadows. And a figure, tall and indistinct, its voice a whisper on the edge of ' +
-          'hearing, yet it felt like it was calling my name. ' +
-          `${characterName('Elior')}... I woke with a start, ` +
-          'my heart pounding. And three words at the very end, which I wrote ' +
-          'down the moment I woke so I would not lose them: …and let them rest… ' +
-          'Even now, the memory sends a shiver down my spine. ' +
-          'And the strangest thing — I knew that voice. Not the way you know a ' +
-          "neighbour's, but the way you know a song someone sang to you before " +
-          'you had words for it. It made my chest ache. ' +
-          "I just can't remember from where. What did it mean?",
+        'When I slept, I dreamed. Dark, and rain on shutters I could not see. ' +
+          "A man's hand lifted a child out of the dark. " +
+          'There was a tune, three notes up and home again, ' +
+          'and a tall figure that whispered my name. ' +
+          'When I answered it, it said three words more, ' +
+          'and I wrote them down the moment I woke so I would not lose them: ' +
+          '…and let them rest…',
+      ) +
+      '\n\n' +
+      writing(
+        "I knew that voice. Not the way you know a neighbour's, " +
+          'but the way you know a song someone sang to you before you had ' +
+          'words for it. It made my chest ache. ' +
+          "I can't think from where.",
+      ) +
+      '\n\n' +
+      writing(
+        'When I woke, the tune was still going. ' +
+          'Someone out by the hearth was humming it.',
       ) +
       '\n'
     gameState.setStoryFlag('journal_read_prologue_entry', true)

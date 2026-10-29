@@ -1,6 +1,8 @@
 [
   { "opening": "My dearest Elior", "speaker": "mother" },
   { "opening": "For when the light comes back to you", "speaker": "father" },
-  { "opening": "What a night.", "speaker": "elior" },
-  { "opening": "When I finally drifted off", "speaker": "elior" }
+  { "opening": "The storm kept me up half the night.", "speaker": "elior" },
+  { "opening": "When I slept, I dreamed.", "speaker": "elior" },
+  { "opening": "I knew that voice.", "speaker": "elior" },
+  { "opening": "When I woke, the tune was still going.", "speaker": "elior" }
 ]

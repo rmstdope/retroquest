@@ -3,7 +3,9 @@ import { HiddenGlade } from '../rooms/HiddenGlade'
 import { OldMill } from '../rooms/OldMill'
 import { Mechanism } from './Mechanism'
 
-const RUNES = 'A mysterious amulet inscribed with runes. '
+const RUNES =
+  'A mysterious amulet inscribed with runes. ' +
+  'At its centre, a sun rises over three linked rings. '
 const NO_KEEPSAKE =
   RUNES + 'It is faintly warm, as if someone had only just set it down.'
 const KEEPSAKE =

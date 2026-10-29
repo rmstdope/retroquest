@@ -17,7 +17,9 @@ const MILL_HUM =
   `At your side, the ${AMULET} hums softly, as if answering something ` +
   'stirring beneath the floor.'
 const GLADE_GLOW = `Beside the mossy stone, the ${AMULET} in your hand begins to glow.`
-const RUNES = 'A mysterious amulet inscribed with runes.'
+const RUNES =
+  'A mysterious amulet inscribed with runes. ' +
+  'At its centre, a sun rises over three linked rings.'
 
 /** An Act I game standing in the named room. */
 function gameIn(room: string): Game {

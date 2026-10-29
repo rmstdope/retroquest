@@ -33,7 +33,7 @@ export class Fisherman extends Character {
       name: 'fisherman',
       description:
         'An old man on an upturned crate at the bend, his line in the ' +
-        'water, humming something under his breath.',
+        'water and his bad arm held close to his side.',
     })
   }
 

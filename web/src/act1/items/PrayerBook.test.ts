@@ -11,12 +11,14 @@ describe('PrayerBook', () => {
     expect(text).not.toContain('[event]You read the [item_name]')
   })
 
-  it('shows the passage as unquoted writing', () => {
+  it('opens with narration, then sets the hymn apart as unquoted writing', () => {
     const game = new Game([new Act1()])
     const text = new PrayerBook().read(game.state)
-    expect(text).toContain(
-      "[character_name][/character_name]\n[dialogue]By the moon's forgotten echo, " +
-        'let the silent bells resound...[/dialogue]',
+    expect(text).toBe(
+      'The book falls open by itself at a page worn soft with reading: ' +
+        'the hymn for the bell.\n' +
+        '[character_name][/character_name]\n[dialogue]Ring for the ones who go, ' +
+        'and ring them home.[/dialogue]',
     )
   })
 })

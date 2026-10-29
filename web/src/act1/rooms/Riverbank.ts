@@ -20,10 +20,11 @@ export class Riverbank extends Room {
     super({
       name: 'Riverbank',
       description:
-        'A gentle river flows past the village. Reeds sway along the banks, and ' +
-        `the air is alive with the hum of insects. A weathered ${characterName('fisherman')} sits ` +
-        'nearby, humming a quiet tune. The riverbank is peaceful, a place where ' +
-        'time seems to slow and worries drift away.',
+        'A gentle river flows past the village and makes a slow bend here, ' +
+        "past the reeds and a broad, flat stone at the water's edge. " +
+        'Insects hum over the water. ' +
+        `A weathered ${characterName('fisherman')} sits on an upturned crate ` +
+        'at the bend, his line in.',
       items: [new SmoothStone(), new River()],
       characters: [new Fisherman()],
       exits: { west: 'OldMill', south: 'ForestPath' },
