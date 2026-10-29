@@ -20,4 +20,9 @@ export class PrayerBook extends Item {
       writing('Ring for the ones who go, and ring them home.')
     )
   }
+
+  /** Using the book reads it, as using Elior's journal does: the game has no read verb. */
+  override use(gameState: GameState): string {
+    return this.read(gameState)
+  }
 }

@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { Game, findMarkupProblems } from '@/engine'
+import { executeCommands } from '@/testing/gameHelpers'
 import { Act1 } from '../Act1'
 import { PrayerBook } from './PrayerBook'
 
@@ -20,5 +21,14 @@ describe('PrayerBook', () => {
         '[character_name][/character_name]\n[dialogue]Ring for the ones who go, ' +
         'and ring them home.[/dialogue]',
     )
+  })
+
+  it('is read in the chapel with use, the way the journal is', () => {
+    const game = new Game([new Act1()])
+    game.state.currentRoom = game.state.allRooms.VillageChapel
+    const text = executeCommands(game, ['use prayer book'])
+    expect(text).toContain('the hymn for the bell.')
+    expect(text).toContain('Ring for the ones who go, and ring them home.')
+    expect(text).not.toContain("can't use")
   })
 })
