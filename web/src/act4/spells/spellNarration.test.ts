@@ -42,8 +42,8 @@ describe('Act IV spells narrate their effect', () => {
     const game = newGame()
     const out = new Grow().castSpell(game.state)
     expect(out).toBe(
-      'The nearby plants seem to respond with vibrant energy, ' +
-        'but nothing else happens.',
+      'The grass at your feet stands a little taller. ' +
+        'Nothing here was waiting for it.',
     )
     expect(shape(out)).toEqual(['text'])
   })

@@ -42,6 +42,13 @@ describe('endings', () => {
     expect(endingPlayed(state)).toBe('redemption')
   })
 
+  it('describes the parents the way Act III pictured them', () => {
+    const text = farewell('justice', freshState())
+    expect(text).toContain('a man with your face, and a woman with Grandmother')
+    expect(text).toContain("Grandmother's eyes. Your parents.")
+    expect(text).not.toContain("Grandmother's smile")
+  })
+
   it('shares the farewell and varies one line by ending', () => {
     const lines = {
       redemption: 'You gave him back to us, our friend.',

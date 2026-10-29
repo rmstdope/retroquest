@@ -18,9 +18,9 @@ export class LifelightElixir extends Item {
     super({
       name: 'Lifelight Elixir',
       description:
-        'A shimmering elixir that seems to contain liquid starlight. ' +
-        'Threads of crystal clarity, phoenix flame, and draconic essence ' +
-        'swirl within the glass vial.',
+        'A small glass vial the colour of first light. Something moves in ' +
+        'it: a white glint, a thread of flame, a dark shimmer like a scale ' +
+        'turning. Mira made it from the three relics.',
       canBeCarried: true,
       shortName: 'elixir',
     })

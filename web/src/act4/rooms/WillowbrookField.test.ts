@@ -465,7 +465,7 @@ describe('casting grow at home', () => {
   it('does not change grow elsewhere in the fortress', () => {
     const { game } = ended('sacrifice')
     expect(executeCommands(game, ['cast grow'])).toContain(
-      'nothing else happens',
+      'Nothing here was waiting for it.',
     )
   })
 })

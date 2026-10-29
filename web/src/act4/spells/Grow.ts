@@ -23,7 +23,9 @@ export class Grow extends Spell {
     super({
       id: 'grow',
       name: 'grow',
-      description: 'A nature spell that encourages plants to flourish.',
+      description:
+        'Read word by word off the mossy stone in the glade. ' +
+        'It feels like your own.',
     })
   }
 
@@ -33,8 +35,8 @@ export class Grow extends Spell {
       return this.greenTheField(gameState)
     }
     return (
-      'The nearby plants seem to respond with vibrant energy, ' +
-      'but nothing else happens.'
+      'The grass at your feet stands a little taller. ' +
+      'Nothing here was waiting for it.'
     )
   }
 

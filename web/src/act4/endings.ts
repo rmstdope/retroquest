@@ -82,7 +82,7 @@ export function farewell(ending: Ending, gameState: GameState): string {
   return [
     'Where the wound was, the light of the amulet gathers into two shapes ' +
       'you have only ever seen in pictures and memories: a man with your ' +
-      "eyes, and a woman with Grandmother's smile. Your parents.",
+      "face, and a woman with Grandmother's eyes. Your parents.",
     dialogue('Aren', 'Elior. Look at you. Taller than me, I think.'),
     dialogue(
       'Lysa',
