@@ -1,10 +1,4 @@
-import {
-  Spell,
-  type Character,
-  type GameState,
-  type Item,
-  characterName,
-} from '@/engine'
+import { Spell, type Character, type GameState, type Item } from '@/engine'
 import { Well } from '../items/Well'
 import { River } from '../items/River'
 import { FLAG_MAGIC_FULLY_UNLOCKED } from '../Act1StoryFlags'
@@ -60,9 +54,8 @@ export class PurifySpell extends Spell {
     if (!gameState.getStoryFlag(FLAG_MAGIC_FULLY_UNLOCKED)) {
       return this.fizzle()
     }
-    const name = character.name
     return (
-      `The cleansing runs over ${characterName(name)} ` +
+      `The cleansing runs over ${character.nameInSentence()} ` +
       'and finds nothing to wash away.'
     )
   }

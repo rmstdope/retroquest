@@ -92,4 +92,16 @@ describe('Act I fallback cast lines speak in the world', () => {
         `${characterName('priest')}'s hand did.`,
     )
   })
+
+  it('heal and purify name a character known by what it is with its article', () => {
+    const game = awake()
+    game.state.currentRoom = game.state.allRooms.VillageChapel
+    const priest = `the ${characterName('priest')}`
+    expect(executeCommands(game, ['cast heal on priest'])).toContain(
+      `A warm light settles over ${priest}.`,
+    )
+    expect(executeCommands(game, ['cast purify on priest'])).toContain(
+      `The cleansing runs over ${priest} `,
+    )
+  })
 })
