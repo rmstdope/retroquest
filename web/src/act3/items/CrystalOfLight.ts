@@ -14,18 +14,10 @@ export class CrystalOfLight extends Item {
       name: 'Crystal of Light',
       shortName: 'Crystal',
       description:
-        'A palm-sized prism humming with soft radiance. Within it swirl echoes ' +
-        'of moonlit tides and layered ward patterns waiting to converge.',
+        'A prism the size of your palm, cold and clear. ' +
+        'Light moves in it like water under a moon.',
       canBeCarried: true,
     })
-  }
-
-  /** Return descriptive examination text referencing ambient progress cues. */
-  override examine(_gameState: GameState): string {
-    return (
-      "The crystal's facets amplify the faintest glow, casting sigil-like " +
-      'refractions. It seems to breathe with the tide.'
-    )
   }
 
   /** No direct blocking; gating enforced during `pickedUp()`. */
@@ -42,9 +34,6 @@ export class CrystalOfLight extends Item {
       return clue('Wards flare as you touch the crystal, locking it in place.')
     }
     gameState.setStoryFlag(FLAG_ACT3_CRYSTAL_OF_LIGHT_ACQUIRED, true)
-    return (
-      'The crystal steadies in your grasp, radiance aligning with your ' +
-      'resolve.'
-    )
+    return 'The crystal is cold, and steady in your hand.'
   }
 }

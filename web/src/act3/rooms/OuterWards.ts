@@ -17,7 +17,7 @@ export class OuterWards extends Room {
         'The courtyard lies half-swallowed by the sea. Three ancient pillars ' +
         'rise from the black water, their faces scored with shallow marks. ' +
         'Brine beads along the carved lines and they catch the moon in small ' +
-        'rings of light. The air here tastes of old promises and slow tides.',
+        'rings of light.',
       items: [new WardingPillars(), new SeaweedTangle()],
       characters: [],
       exits: {

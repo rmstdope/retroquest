@@ -203,7 +203,7 @@ describe('Act 3 golden path', () => {
       expect(found.includes('moon') || found.includes('shard')).toBe(true)
       expectItemInInventory(state, 'Moon Rune Shards', true)
       expect(executeCommands(game, ['search']).toLowerCase()).toContain(
-        'already',
+        'gathered all you can use',
       )
     })
   })
@@ -395,9 +395,7 @@ describe('Act 3 golden path', () => {
       expectItemCountInInventory(state, 'Vent Stone', 3)
       play(game, AT.fumarole + 2, AT.fumarole + 4)
       const early = executeCommands(game, ['use heat-ward mix']).toLowerCase()
-      expect(
-        early.includes('not yet synchronized') || early.includes('unstable'),
-      ).toBe(true)
+      expect(early.includes('still gust out of time')).toBe(true)
 
       play(game, AT.fumarole + 4, AT.fumarole + 5)
       const applied = play(game, AT.fumarole + 5, AT.fumarole + 6)
@@ -530,7 +528,7 @@ describe('Act 3 golden path', () => {
       expectItemInRoom(state.currentRoom, 'runic walls', true)
 
       const search = executeCommands(game, [PATH[AT.echoChambers]])
-      expect(search).toContain('ancient scrolls')
+      expect(search).toContain('old scrolls')
       expect(search).toContain('stone niche')
 
       const scrolls = executeCommands(game, [PATH[AT.echoChambers + 1]])

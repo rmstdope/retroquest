@@ -66,7 +66,7 @@ describe('Fumarole Passages', () => {
     // Not calibrated yet
     const result = room.applyHeatWard(gs, mix)
     expect(
-      result.includes('not yet synchronized') ||
+      result.includes('still gust out of time') ||
         result.includes('calibrate more'),
     ).toBe(true)
     // Calibrate three times

@@ -55,8 +55,8 @@ export class SupplyCrate extends Item {
     }
     this.opened = true
     return (
-      'Inside the crate are heavy iron braces, strong hemp straps, and ' +
-      'tapered wooden wedge blocks—just what you need to rescue the trapped miners!'
+      'Inside the crate are heavy iron braces, strong hemp straps and ' +
+      'tapered wooden wedge blocks.'
     )
   }
 

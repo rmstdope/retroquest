@@ -188,7 +188,7 @@ describe('Act III curse grows worse at each relic site', () => {
 
       expect(out).toContain(`[dialogue]${sentence}[/dialogue]`)
       expect(out).not.toContain('You arrive at')
-      expect(out).toContain('you arrive at your next destination')
+      expect(out).toContain('the air smells different')
       if (key === 'LowerSwitchbacks') {
         expect(out).toContain(`[dialogue]${MIRA_WASTING}[/dialogue]`)
         expect(out.indexOf(MIRA_WASTING)).toBeLessThan(out.indexOf(sentence))

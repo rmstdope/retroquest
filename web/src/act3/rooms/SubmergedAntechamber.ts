@@ -18,8 +18,7 @@ export class SubmergedAntechamber extends Room {
         'arches bear weathered carvings that pulse with a cold, inner glow. ' +
         'A hush hangs in the air as if the sea itself listens; faint, ' +
         'distant echoes suggest something patient and watchful beyond the ' +
-        'veil of gloom. The place tastes of old prayers and the memory of ' +
-        'rituals long since folded into the stones.',
+        'veil of gloom. Somewhere further in, water drips, slow and patient.',
       items: [],
       characters: [],
       exits: {
@@ -91,9 +90,7 @@ export class SubmergedAntechamber extends Room {
     }
     const lantern = gameState.inventory.find((i) => i instanceof PrismLantern)
     if (!lantern) {
-      return clue(
-        'You need a [item_name]prism lantern[/item_name] to mount here.',
-      )
+      return clue('The bracket is empty, and you have nothing to set in it.')
     }
     gameState.inventory.splice(gameState.inventory.indexOf(lantern), 1)
     empty.putLantern()

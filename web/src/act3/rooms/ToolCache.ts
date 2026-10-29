@@ -10,12 +10,10 @@ export class ToolCache extends Room {
     super({
       name: 'Tool Cache',
       description:
-        'A reinforced alcove carved from living stone, where shadows pool between ' +
-        'weathered crates of timbers, iron braces, and coils of hemp rope. The air ' +
-        'tastes of old metal and earth, heavy with the weight of countless mining ' +
-        'expeditions. Ancient tool marks score the walls, and you sense the ' +
-        'presence of those who labored here in ages past. The flickering torchlight ' +
-        'reveals corners shrouded in darkness.',
+        'A side chamber shored with old timbers and stacked with crates of ' +
+        'braces, iron fittings and coils of hemp rope. ' +
+        'The walls are scored with tool marks, ' +
+        'and the air smells of iron and wet earth.',
       items: [],
       characters: [],
       exits: { south: 'CavernMouth', east: 'CollapsedGalleries' },

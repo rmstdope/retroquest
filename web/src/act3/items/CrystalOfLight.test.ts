@@ -27,7 +27,7 @@ describe('CrystalOfLight', () => {
     game.state.setStoryFlag(FLAG_ACT3_VOW_OF_COURAGE_MADE, true)
     const resultOk = crystal.pickedUp(game.state).toLowerCase()
     expect(
-      ['take', 'picked', 'steadies', 'radiance', 'grasp'].some((k) =>
+      ['take', 'picked', 'steady', 'cold', 'hand'].some((k) =>
         resultOk.includes(k),
       ),
     ).toBe(true)
@@ -39,7 +39,7 @@ describe('CrystalOfLight', () => {
 
     const answer = new CrystalOfLight().pickedUp(game.state)
 
-    expect(answer).toContain('crystal steadies in your grasp')
+    expect(answer).toContain('crystal is cold, and steady in your hand')
     expectMarkupWellFormed(answer)
   })
 })

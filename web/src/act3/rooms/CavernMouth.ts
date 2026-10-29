@@ -7,12 +7,9 @@ export class CavernMouth extends Room {
     super({
       name: 'Cavern Mouth',
       description:
-        'A broad entry arch yawns before you, curtained by tendrils of cold mist ' +
-        'that coil and writhe like spectral fingers. Lantern light wavers and dims ' +
-        'at the threshold, as if the darkness within hungers to devour illumination. ' +
-        'Ancient symbols are carved into the weathered stone archway, their meanings ' +
-        'lost to time but somehow still resonating with a faint, otherworldly power. ' +
-        'The air carries whispers of forgotten secrets and the weight of ages past.',
+        'A broad arch opens into the hill, hung with cold mist. ' +
+        'Lantern light dims a step inside it. ' +
+        'Old signs are cut into the arch stone, worn too smooth to read.',
       items: [],
       characters: [new MineOverseer()],
       exits: { north: 'ToolCache', east: 'StillnessVestibule' },
