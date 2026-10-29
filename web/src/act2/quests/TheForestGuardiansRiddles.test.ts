@@ -5,15 +5,12 @@ import { FLAG_FOREST_GUARDIANS_RIDDLES_COMPLETED } from '../Act2StoryFlags'
 import { TheForestGuardiansRiddles } from './TheForestGuardiansRiddles'
 
 const NEW_DESCRIPTION =
-  'The forest sprites have challenged you to prove your wisdom by solving ' +
-  'the riddles of the forest guardians. You must journey east from the ' +
-  'Forest Entrance to the Whispering Glade, where ancient spirits will test ' +
-  'your understanding of forest ways and natural wisdom.'
+  'The forest sprites say the water nymphs, east of the Forest Entrance, ' +
+  'have riddles for travellers who want the deep paths.'
 
 const COMPLETION =
-  'You have successfully solved the riddles of the forest guardians, ' +
-  'proving your wisdom and respect for the natural world. The forest ' +
-  'spirits acknowledge your understanding.'
+  "You answered the nymphs' three riddles: water, mask and truth. " +
+  'They gave you water from their stream and moonflowers from its bank.'
 
 const OLD_DESCRIPTION =
   'The forest sprites have challenged you to prove your wisdom by solving ' +

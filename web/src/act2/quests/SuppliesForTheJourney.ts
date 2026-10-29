@@ -8,18 +8,28 @@ import { ForestSurvivalKit } from '../items/ForestSurvivalKit'
 import { EnhancedLantern } from '../items/EnhancedLantern'
 import { QualityRope } from '../items/QualityRope'
 
+/** The journal entry, which is also the quest description. */
+const DESCRIPTION =
+  'Sir Cedric gave you coin for the forest: a survival kit, an ' +
+  'enhanced lantern and rope, from the Market District.'
+
+/** The line shown when the quest is done. */
+const COMPLETION = 'The kit, the lantern and the rope are in your pack.'
+
 /** Quest to gather essential gear for the forest expedition. */
 export class SuppliesForTheJourneyQuest extends Quest {
   constructor() {
     super({
       name: QUEST_SUPPLIES_FOR_THE_JOURNEY,
-      description:
-        'Sir Cedric mentioned the need for proper equipment for forest ' +
-        'expeditions. Gather essential supplies from the Market District.',
-      completion:
-        'You have gathered all the essential supplies for forest exploration. ' +
-        'The journey supplies quest is complete!',
+      description: DESCRIPTION,
+      completion: COMPLETION,
     })
+  }
+
+  /** Bring the log up to date in a save made with the older wording. */
+  refreshText(): void {
+    this.description = DESCRIPTION
+    this.completion = COMPLETION
   }
 
   override checkTrigger(gameState: GameState): boolean {

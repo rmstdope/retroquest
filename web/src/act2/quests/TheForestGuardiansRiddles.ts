@@ -7,10 +7,13 @@ import {
 
 /** The journal entry, which is also the quest description. */
 const DESCRIPTION =
-  'The forest sprites have challenged you to prove your wisdom by solving the ' +
-  'riddles of the forest guardians. You must journey east from the Forest ' +
-  'Entrance to the Whispering Glade, where ancient spirits will test ' +
-  'your understanding of forest ways and natural wisdom.'
+  'The forest sprites say the water nymphs, east of the Forest Entrance, ' +
+  'have riddles for travellers who want the deep paths.'
+
+/** The line shown when the quest is done. */
+const COMPLETION =
+  "You answered the nymphs' three riddles: water, mask and truth. " +
+  'They gave you water from their stream and moonflowers from its bank.'
 
 /**
  * Quest to solve the riddles posed by the forest guardians. Riddle interactions
@@ -24,16 +27,14 @@ export class TheForestGuardiansRiddles extends Quest {
     super({
       name: QUEST_FOREST_GUARDIANS_RIDDLES,
       description: DESCRIPTION,
-      completion:
-        'You have successfully solved the riddles of the forest guardians, ' +
-        'proving your wisdom and respect for the natural world. The ' +
-        'forest spirits acknowledge your understanding.',
+      completion: COMPLETION,
     })
   }
 
-  /** Bring the description up to date in a save made with the older directions. */
+  /** Bring the log up to date in a save made with the older wording. */
   refreshText(): void {
     this.description = DESCRIPTION
+    this.completion = COMPLETION
   }
 
   /** Check if this quest should be activated. */

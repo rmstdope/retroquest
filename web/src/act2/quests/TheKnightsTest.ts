@@ -4,19 +4,30 @@ import {
   FLAG_SPOKEN_TO_SIR_CEDRIC,
 } from '../Act2StoryFlags'
 
+/** The journal entry, which is also the quest description. */
+const DESCRIPTION =
+  'Sir Cedric will not trust you on your word. He wants to see ' +
+  'you with a blade, in the courtyard.'
+
+/** The line shown when the quest is done. */
+const COMPLETION =
+  'You held your own against Sir Cedric in the yard, and he ' +
+  'trusts you now.'
+
 /** Quest to prove combat skills to Sir Cedric. */
 export class TheKnightsTestQuest extends Quest {
   constructor() {
     super({
       name: "The Knight's Test",
-      description:
-        'Sir Cedric wants to see proof of your combat abilities before ' +
-        'trusting you with important responsibilities. Demonstrate your ' +
-        'martial skills with a training sword.',
-      completion:
-        'You have successfully demonstrated your combat skills to Sir ' +
-        'Cedric. He now trusts your abilities!',
+      description: DESCRIPTION,
+      completion: COMPLETION,
     })
+  }
+
+  /** Bring the log up to date in a save made with the older wording. */
+  refreshText(): void {
+    this.description = DESCRIPTION
+    this.completion = COMPLETION
   }
 
   override checkTrigger(gameState: GameState): boolean {

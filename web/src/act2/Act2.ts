@@ -83,6 +83,18 @@ import { FLAG_GATHERING_STORM_COMPLETED } from './Act2StoryFlags'
 import { ACT2_CLASSES } from './classes'
 import { ACT2_GOLDEN_PATH } from './Act2GoldenPath'
 
+/** The quests whose log text is set again on every load, so older saves read the current wording. */
+const REFRESHED_QUESTS = [
+  TheHermitsWarningQuest,
+  TheForestGuardiansRiddles,
+  WhispersInTheWind,
+  TheKnightsTestQuest,
+  SuppliesForTheJourneyQuest,
+  TheAncientLibraryQuest,
+  EchoesOfThePastQuest,
+  TheMerchantsLostCaravanQuest,
+]
+
 /** Act 2: Greendale & The Forest Edge. */
 export class Act2 extends Act {
   constructor() {
@@ -247,7 +259,8 @@ export class Act2 extends Act {
       ...gameState.completedQuests,
     ]) {
       if (quest instanceof CedricksLostHonorQuest) quest.refreshText(gameState)
-      if (quest instanceof TheForestGuardiansRiddles) quest.refreshText()
+      for (const kind of REFRESHED_QUESTS)
+        if (quest instanceof kind) quest.refreshText()
       if (quest instanceof TheInnkeepersDaughterQuest) quest.refreshText()
       if (quest instanceof TheGatheringStormQuest)
         quest.migrateOlderSave(gameState)

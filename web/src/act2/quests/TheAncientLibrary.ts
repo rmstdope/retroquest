@@ -6,6 +6,17 @@ import {
   FLAG_HEALERS_APPRENTICE_COMPLETED,
 } from '../Act2StoryFlags'
 
+/** The journal entry, which is also the quest description. */
+const DESCRIPTION =
+  'Behind a bricked-up cellar door in the Residential Quarter, ' +
+  'steps lead down to a library nobody in Greendale talks about.'
+
+/** The line shown when the quest is done. */
+const COMPLETION =
+  "The library's keeper was a Warden once. Its chronicle taught " +
+  'you dispel, and its last page warns that Malakar seeks the ' +
+  'blood of Willowbrook.'
+
 /**
  * Quest to discover and explore the hidden ancient library beneath Greendale.
  * Completes when Dispel is known and the Crystal Focus is carried or given to Lyria.
@@ -14,18 +25,15 @@ export class TheAncientLibraryQuest extends Quest {
   constructor() {
     super({
       name: QUEST_ANCIENT_LIBRARY,
-      description:
-        "You've discovered a hidden passage beneath Greendale containing an " +
-        'ancient library of magical texts and lore. You should explore its ' +
-        'depths and uncover the secrets within.',
-      completion:
-        "You have successfully gained access to the ancient library's " +
-        "knowledge! You've learned the dispel spell, discovered important " +
-        'information about your family heritage, and received a crystal ' +
-        'focus to enhance your magical abilities. The chronicle you read ' +
-        "there was the Wardens' own book, and its last page warns that " +
-        'Malakar seeks the blood of Willowbrook.',
+      description: DESCRIPTION,
+      completion: COMPLETION,
     })
+  }
+
+  /** Bring the log up to date in a save made with the older wording. */
+  refreshText(): void {
+    this.description = DESCRIPTION
+    this.completion = COMPLETION
   }
 
   override checkTrigger(gameState: GameState): boolean {

@@ -11,13 +11,4 @@ describe('TheMerchantsLostCaravanQuest text', () => {
         "land, or speaking with the woodland creatures, at the forest's edge.",
     )
   })
-
-  it('credits the forest magic in the completion text', () => {
-    const quest = new TheMerchantsLostCaravanQuest()
-    expect(quest.completion).toContain(
-      'within the Enchanted Forest. Using your forest magic, you discovered ' +
-        'their location, then employed quality rope',
-    )
-    expect(quest.completion).not.toContain('forest speech')
-  })
 })

@@ -80,12 +80,10 @@ describe('Act II tells the heritage through the Wardens, never a Chosen One', ()
   it('completes The Ancient Library with the Wardens', () => {
     const completion = new TheAncientLibraryQuest().completion
 
-    expect(completion).toContain(
-      'You have successfully gained access to the ancient library',
-    )
+    expect(completion).toContain("The library's keeper was a Warden once.")
     expect(
       completion.endsWith(
-        "The chronicle you read there was the Wardens' own book, and its last page warns that Malakar seeks the blood of Willowbrook.",
+        'its last page warns that Malakar seeks the blood of Willowbrook.',
       ),
     ).toBe(true)
     expect(completion).not.toMatch(CHOSEN_TALK)
