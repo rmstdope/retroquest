@@ -651,7 +651,8 @@ describe('Act 4 integration', () => {
       )
       const clue =
         '[effect]You stand still and listen.[/effect] Beneath the battle cries and laments, one voice repeats the same words over and over, patient as a heartbeat:'
-      const route = "'Left, then left, then the way your shadow does not go.'"
+      const route =
+        "'Left, then left, then the way your reflection does not go.'"
       for (let i = 0; i < 2; i++) {
         const heard = executeCommands(game, ['examine echoes'])
         expect(heard).toContain(clue)
@@ -707,7 +708,7 @@ describe('Act 4 integration', () => {
           'You hold the echo stone to your ear. One voice repeats, patient as a heartbeat:',
         )
         expect(heard).toContain(
-          '[dialogue]Left, then left, then the way your shadow does not go.[/dialogue]',
+          '[dialogue]Left, then left, then the way your reflection does not go.[/dialogue]',
         )
       }
       expectSpellKnown(game.state, 'truth_sight', false)

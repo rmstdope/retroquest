@@ -9,7 +9,14 @@ import { SirCedricInTheHall } from '../characters/SirCedricInTheHall'
 import { Banners } from '../items/Banners'
 import { Echoes } from '../items/Echoes'
 import { EchoStone } from '../items/EchoStone'
-import { HALL_CEDRIC_AT_DOOR, HALL_CEDRIC_ON_STAIR } from './hallDescriptions'
+import { GhostlyWarriors } from '../characters/GhostlyWarriors'
+import {
+  HALL_AFTER_REDEMPTION,
+  HALL_BEFORE_REDEMPTION,
+  HALL_CEDRIC_AT_DOOR,
+  HALL_CEDRIC_ON_STAIR,
+  HALL_WARRIORS_SENTENCE,
+} from './hallDescriptions'
 
 /**
  * A mystical hall where the voices of the past linger in eternal resonance.
@@ -21,24 +28,29 @@ export class HallOfEchoes extends Room {
   constructor() {
     super({
       name: 'Hall of Echoes',
-      description:
-        'A long hall of old banners, so high the ceiling is lost. Everything ' +
-        'that was ever said here is still being said, very quietly: orders, ' +
-        'jokes, names, someone counting. Tattered banners hang high along the ' +
-        'walls, grimed past reading. At the far end, before the stair, a ' +
-        'knight in tarnished armour stands without moving, the way a man ' +
-        'stands at a grave.',
+      description: HALL_BEFORE_REDEMPTION,
       items: [new Echoes(), new EchoStone(), new Banners()],
       characters: [new KnightOfDespair(), new SirCedricInTheHall()],
       exits: { south: 'FortressGates', east: 'TowerOfShadows' },
     })
   }
 
-  /** The description, with Sir Cedric by the door or, once he forgives, on the stair. */
+  /**
+   * The description, derived from the story rather than read from the stored
+   * text so older saves show the current wording: the knight at the stair or
+   * kneeling (with the warriors while they remain), and Sir Cedric by the door
+   * or, once he forgives, on the stair.
+   */
   override descriptionFor(gameState: GameState): string {
+    const redeemed = gameState.getStoryFlag(
+      FLAG_ACT4_KNIGHT_OF_DESPAIR_COMPLETED,
+    )
+    const warriors = this.characters.some((c) => c instanceof GhostlyWarriors)
     const forgave = gameState.getStoryFlag(FLAG_ACT4_CEDRIC_FORGAVE)
     return (
-      this.description + (forgave ? HALL_CEDRIC_ON_STAIR : HALL_CEDRIC_AT_DOOR)
+      (redeemed ? HALL_AFTER_REDEMPTION : HALL_BEFORE_REDEMPTION) +
+      (redeemed && warriors ? HALL_WARRIORS_SENTENCE : '') +
+      (forgave ? HALL_CEDRIC_ON_STAIR : HALL_CEDRIC_AT_DOOR)
     )
   }
 

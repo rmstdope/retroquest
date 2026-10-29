@@ -77,8 +77,8 @@ describe('RedemptionsLight', () => {
     expect(hall.characters.some((c) => c instanceof GhostlyWarriors)).toBe(
       false,
     )
-    expect(hall.description).not.toContain('ghostly warriors')
-    expect(hall.description).toContain('the knight kneels')
+    expect(hall.descriptionFor(game.state)).not.toContain('ghostly warriors')
+    expect(hall.descriptionFor(game.state)).toContain('the knight kneels')
     expect(
       executeCommands(game, ["cast redemption's light on ghostly warriors"]),
     ).toContain("You don't see a 'ghostly warriors'")

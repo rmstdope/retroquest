@@ -5,6 +5,7 @@ import {
   FLAG_ACT4_KNIGHT_OF_DESPAIR_COMPLETED,
   FLAG_ACT4_KNIGHT_OF_DESPAIR_STARTED,
 } from '../Act4StoryFlags'
+import { GhostlyWarriors } from '../characters/GhostlyWarriors'
 import { HallOfEchoes } from './HallOfEchoes'
 
 describe('HallOfEchoes', () => {
@@ -54,5 +55,40 @@ describe('HallOfEchoes', () => {
     game.state.setStoryFlag(FLAG_ACT4_KNIGHT_OF_DESPAIR_COMPLETED, true)
     expect(Object.keys(room.getExits(game.state))).toContain('east')
     expect(room.blockedExit(game.state, 'east')).toBeNull()
+  })
+
+  const BEFORE =
+    'A long hall, so high the ceiling is lost. Everything that was ever said here is still being said, very quietly: orders, jokes, names, someone counting. Tattered banners hang high along the walls, grimed past reading. At the far end, before the stair, a knight in tarnished armour stands without moving, the way a man stands at a grave.'
+  const AFTER =
+    'A long hall, so high the ceiling is lost. The echoes have softened to a murmur. By the stair to the east the knight kneels with his helm beside him, his grey cloak folded on the stone.'
+
+  it('reads as one room that has changed once the knight is redeemed', () => {
+    const game = new Game([new Act4()])
+    const room = new HallOfEchoes()
+    expect(room.descriptionFor(game.state)).toContain(BEFORE)
+    game.state.setStoryFlag(FLAG_ACT4_KNIGHT_OF_DESPAIR_COMPLETED, true)
+    room.characters = room.characters.filter(
+      (c) => !(c instanceof GhostlyWarriors),
+    )
+    expect(room.descriptionFor(game.state)).toContain(AFTER)
+  })
+
+  it('shows the new wording even when the saved room holds an older description', () => {
+    const game = new Game([new Act4()])
+    const room = new HallOfEchoes()
+    room.description = 'This vast hall stretches into shadow.'
+    game.state.setStoryFlag(FLAG_ACT4_KNIGHT_OF_DESPAIR_COMPLETED, true)
+    expect(room.descriptionFor(game.state)).toContain(AFTER)
+    expect(room.descriptionFor(game.state)).not.toContain('stretches')
+  })
+
+  it('keeps the warriors in the hall until they are put to rest', () => {
+    const game = new Game([new Act4()])
+    const room = new HallOfEchoes()
+    game.state.setStoryFlag(FLAG_ACT4_KNIGHT_OF_DESPAIR_COMPLETED, true)
+    room.addCharacter(new GhostlyWarriors())
+    expect(room.descriptionFor(game.state)).toContain(
+      AFTER + ' Among the tattered banners, ghostly warriors still fight',
+    )
   })
 })

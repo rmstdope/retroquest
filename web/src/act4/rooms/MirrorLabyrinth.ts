@@ -13,7 +13,7 @@ type MazeStretch = 'entrance' | 'stretch' | 'fork'
 
 /** The words of the echoes, which the Echo Stone repeats inside the maze. */
 export const MAZE_ROUTE =
-  'Left, then left, then the way your shadow does not go.'
+  'Left, then left, then the way your reflection does not go.'
 
 /** What each stretch of the maze looks like. */
 const STRETCH_DESCRIPTIONS: Record<MazeStretch, string> = {
