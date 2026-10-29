@@ -10,10 +10,9 @@ export class TidewardSigilsQuest extends Quest {
     super({
       name: 'Tideward Sigils',
       description:
-        'Ancient warding pillars stand along the drowned causeway — relics of ' +
-        'coastal rites that once bent the tides to human will. You must cleanse ' +
-        'and activate them by engraving a full Moon Sigil to steady the flood ' +
-        'wards and gain safe passage to the sanctum.',
+        'Three warding pillars stand in the drowned courtyard of the Outer ' +
+        'Wards. Cleaned and set with moon sigils, they could draw the sea ' +
+        'back from the hall beyond.',
       completion:
         'You cleansed the pillars and set the Moon Rune shards—the Moon ' +
         'Sigil resonates and the flood wards steady, granting safe passage ' +

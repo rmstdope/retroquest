@@ -1,4 +1,4 @@
-import { Act, type GameState, type Room } from '@/engine'
+import { Act, type GameState, type Quest, type Room } from '@/engine'
 import { AncientAmulet } from './items/AncientAmulet'
 import { DarkPool } from './items/DarkPool'
 import { StillwaterPhial } from './items/StillwaterPhial'
@@ -196,6 +196,26 @@ export class Act3 extends Act {
     }
     this.patchStillnessVestibule(gameState)
     this.patchFortressThreshold(gameState)
+    this.patchQuestLogs(gameState)
+  }
+
+  /**
+   * Saves from before the side quest logs told what happened keep the old
+   * wording; the main quest rebuilds its own log from the story flags.
+   */
+  private patchQuestLogs(gameState: GameState): void {
+    const quests: Quest[] = [
+      ...gameState.activatedQuests,
+      ...gameState.completedQuests,
+    ]
+    for (const quest of quests) {
+      if (quest instanceof BreathOfTheMountain)
+        quest.completion = new BreathOfTheMountain().completion
+      if (quest instanceof TidewardSigilsQuest)
+        quest.description = new TidewardSigilsQuest().description
+      if (quest instanceof LanternsOfTheDeepsQuest)
+        quest.completion = new LanternsOfTheDeepsQuest().completion
+    }
   }
 
   /**

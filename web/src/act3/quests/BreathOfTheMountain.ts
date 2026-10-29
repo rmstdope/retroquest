@@ -13,11 +13,9 @@ export class BreathOfTheMountain extends Quest {
         'The Fumarole Passages exhale waves of heat and steam, blocking the way forward. ' +
         'Find a way to cross the shifting vents and reach the heights to the south.',
       completion:
-        'With patience and ingenuity, Elior crafts a heat ward from ash-fern and cooled ' +
-        "slag, then calibrates the mountain's ancient vents to breathe in a steady, safe " +
-        'rhythm. ' +
-        "The searing passages yield, opening the way to the Phoenix's crater and the next " +
-        'trial of wisdom.',
+        'You set the vent stones, sealed the vents with ash-fern and slag, ' +
+        "counted the mountain's breath, and crossed to the crater on the " +
+        'in-breath.',
     })
   }
 
