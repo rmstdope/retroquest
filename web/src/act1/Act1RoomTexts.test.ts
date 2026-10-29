@@ -87,6 +87,9 @@ describe('Act I room and item texts say one true thing', () => {
     )
     room.items = room.items.filter((i) => !(i instanceof Vines))
     expect(room.descriptionFor(game.state)).not.toContain('remembers')
+    expect(room.descriptionFor(game.state)).toMatch(
+      /unseen creatures nearby\.( In the alcove.*)?$/,
+    )
   })
 
   it('shows the merchant mare on three good shoes on the road', () => {
@@ -134,3 +137,45 @@ describe('Act I room and item texts say one true thing', () => {
     expect(new Locket().examine(game.state)).not.toContain('family')
   })
 })
+
+describe('A save made before the rewrite shows the new wording', () => {
+  it('rewords the rooms and the carried locket on load', () => {
+    const old = new Game([new Act1()])
+    const rooms = old.state.allRooms
+    for (const name of [
+      'VillageSquare',
+      'BlacksmithsForge',
+      'RoadToGreendale',
+      'AbandonedShed',
+      'MirasHut',
+    ]) {
+      rooms[name].description = 'The old wording.'
+    }
+    const locket = new Locket()
+    locket.description += ' Perhaps someone in your family might know more.'
+    old.state.addItemToInventory(locket)
+
+    const loaded = new Game([new Act1()])
+    loaded.loadSaveData(old.toSaveData())
+
+    for (const name of [
+      'VillageSquare',
+      'BlacksmithsForge',
+      'RoadToGreendale',
+      'AbandonedShed',
+      'MirasHut',
+    ]) {
+      const room = loaded.state.allRooms[name]
+      expect(room.descriptionFor(loaded.state)).not.toContain('old wording')
+    }
+    expect(describeIn(loaded, 'VillageSquare')).toContain('keep their voices')
+    expect(
+      loaded.state.inventory.find((i) => i instanceof Locket)?.description,
+    ).not.toContain('family')
+  })
+})
+
+/** The description of a room in a loaded game. */
+function describeIn(game: Game, room: string): string {
+  return game.state.allRooms[room].descriptionFor(game.state)
+}
