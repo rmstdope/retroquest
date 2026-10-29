@@ -118,7 +118,7 @@ rule that all side quests must be completed before the main quest can be finishe
     -   **Type:** Side Quest (Required)
     -   **Trigger:** Enter the mirror labyrinth
     -   **Prerequisites:** Servant's Pendant and the Echo Stone from the Hall of Echoes
-    -   **Completion:** Walk the maze inside the one room: the Echoes give the route ("Left, then left, then the way your shadow does not go"), which the Echo Stone repeats inside the maze; `west`, `west`, then at the last fork the Servant's Pendant shows which corridor the reflection does not follow (east). A wrong turn, or a turn without the stone, returns Elior to the entrance with the reflections' laugh. Reaching the heart teaches `truth_sight`
+    -   **Completion:** Walk the maze inside the one room: the Echoes give the route ("Left, then left, then the way your reflection does not go"), which the Echo Stone repeats inside the maze; `west`, `west`, then at the last fork the Servant's Pendant shows which corridor the reflection does not follow (east). A wrong turn, or a turn without the stone, returns Elior to the entrance with the reflections' laugh. Reaching the heart teaches `truth_sight`
     -   **Rewards:** The spell `truth_sight`
     -   **Story Impact:** Wisdom combines several sources of knowledge. `truth_sight` lets Elior
         see the Knight of Despair as he really is.

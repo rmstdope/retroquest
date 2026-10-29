@@ -198,7 +198,7 @@ describe('MirrorLabyrinth', () => {
       'You hold the echo stone to your ear. One voice repeats',
     )
     expect(heard).toContain(
-      '[dialogue]Left, then left, then the way your shadow does not go.[/dialogue]',
+      '[dialogue]Left, then left, then the way your reflection does not go.[/dialogue]',
     )
     expect(heard).not.toContain("'Left")
     game.move('west')

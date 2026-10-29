@@ -11,7 +11,6 @@ import { GhostlyWarriors } from '../characters/GhostlyWarriors'
 import { KnightOfDespair } from '../characters/KnightOfDespair'
 import { ShadowOfThePast } from '../characters/ShadowOfThePast'
 import { SorceressOfLies } from '../characters/SorceressOfLies'
-import { HALL_AFTER_REDEMPTION } from '../rooms/hallDescriptions'
 import {
   FLAG_ACT4_CEDRIC_FORGAVE,
   FLAG_ACT4_SORCERESS_OF_LIES_COMPLETED,
@@ -78,7 +77,6 @@ export class RedemptionsLight extends Spell {
     }
     const room = gameState.currentRoom
     room.characters = room.characters.filter((c) => c !== target)
-    room.description = HALL_AFTER_REDEMPTION
     gameState.setStoryFlag(FLAG_ACT4_WARRIORS_AT_PEACE, true)
     gameState.setStoryFlag(FLAG_ACT4_CEDRIC_FORGAVE, true)
     gameState.addVirtue(VIRTUE_MERCY)

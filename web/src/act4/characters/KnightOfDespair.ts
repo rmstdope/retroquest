@@ -25,10 +25,6 @@ import { EchoStone } from '../items/EchoStone'
 import { KnightsRedemption } from '../items/KnightsRedemption'
 import { RedemptionsLight } from '../spells/RedemptionsLight'
 import { GhostlyWarriors } from './GhostlyWarriors'
-import {
-  HALL_AFTER_REDEMPTION,
-  HALL_WARRIORS_SENTENCE,
-} from '../rooms/hallDescriptions'
 
 /** What the knight is called once he is redeemed. */
 const REDEEMED_NAME = 'Redeemed Knight'
@@ -275,7 +271,6 @@ export class KnightOfDespair extends Character {
     gameState.learnSpell(spell)
 
     const room = gameState.currentRoom
-    room.description = HALL_AFTER_REDEMPTION + HALL_WARRIORS_SENTENCE
     room.addCharacter(new GhostlyWarriors())
 
     const lines = [

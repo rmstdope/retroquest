@@ -86,7 +86,7 @@ describe('EchoStone', () => {
     const pendant = new ServantsPendant()
     game.state.inventory.push(pendant)
     const alone = stone.use(game.state)
-    expect(alone).toContain('Left, then left, then the way your shadow')
+    expect(alone).toContain('Left, then left, then the way your reflection')
     expect(stone.useWith(game.state, pendant)).toBe(alone)
     expect(pendant.useWith(game.state, stone)).toBe(alone)
     expect(game.state.getStoryFlag(FLAG_ACT4_MAZE_OF_MIRRORS_COMPLETED)).toBe(

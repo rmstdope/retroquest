@@ -12,7 +12,7 @@ describe('Echoes', () => {
     const first = echoes.examine(game.state)
     expect(first).toContain('one voice repeats the same words')
     expect(first).toContain(
-      "'Left, then left, then the way your shadow does not go.'",
+      "'Left, then left, then the way your reflection does not go.'",
     )
     expect(echoes.examine(game.state)).toBe(first)
     expectMarkupWellFormed(first)
