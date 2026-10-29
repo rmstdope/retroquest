@@ -201,7 +201,7 @@ describe('Wandering phantoms: mercy', () => {
     expect(game.state.hasVirtue(VIRTUE_MERCY)).toBe(true)
   })
 
-  it('the chant without the mercy banishes them and records nothing', () => {
+  it('the chant without the mercy lets them fade and records nothing', () => {
     const game = gameIn('StillnessVestibule')
     const answer = chant(game)
     expect(answer).toContain(

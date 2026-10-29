@@ -166,7 +166,8 @@ export class Act3 extends Act {
   /**
    * Saves from before Sir Cedric was shown in title case still name him in
    * lower case, saves from before the Act III rewrite keep his and Mira's
-   * old descriptions (hers until she confesses), and saves already past the
+   * old descriptions (hers until she confesses), saves from before the hut was
+   * reworded keep its old description, and saves already past the
    * miners' rescue lack Tobin.
    */
   override afterLoad(gameState: GameState): void {
