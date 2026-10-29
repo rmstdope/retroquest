@@ -197,14 +197,18 @@ describe('Wandering phantoms: mercy', () => {
     expect(answer).toContain(
       'a harmonious silence that settles over the empty chamber.',
     )
-    expect(answer).not.toContain('banishes the wandering phantoms')
+    expect(answer).not.toContain('banish')
     expect(game.state.hasVirtue(VIRTUE_MERCY)).toBe(true)
   })
 
   it('the chant without the mercy banishes them and records nothing', () => {
     const game = gameIn('StillnessVestibule')
     const answer = chant(game)
-    expect(answer).toContain('banishes the wandering phantoms')
+    expect(answer).toContain(
+      'a silence that settles over the chamber. The phantoms stop where ' +
+        'they stand, and fade into it.',
+    )
+    expect(answer).not.toContain('banish')
     expect(game.state.hasVirtue(VIRTUE_MERCY)).toBe(false)
   })
 })

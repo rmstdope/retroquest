@@ -56,14 +56,14 @@ export class ResonantChantRubbings extends Item {
         }
         // Freed first (the optional mercy): the silence settles on an empty room.
         const silence = gameState.getStoryFlag(FLAG_ACT3_PHANTOMS_FREED)
-          ? 'settles over the empty chamber.'
-          : 'banishes the wandering phantoms.'
+          ? 'a harmonious silence that settles over the empty chamber.'
+          : 'a silence that settles over the chamber. The phantoms stop ' +
+            'where they stand, and fade into it.'
         return (
           `${RECITED}\n` +
           '[success]The words ' +
-          'echo and re-echo, building into a harmonious silence that ' +
-          `${silence} The path to the dragon's hall ` +
-          'now lies open.[/success]'
+          `echo and re-echo, building into ${silence} ` +
+          "The path to the dragon's hall now lies open.[/success]"
         )
       }
       return clue(

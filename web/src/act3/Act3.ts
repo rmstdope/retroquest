@@ -170,6 +170,7 @@ export class Act3 extends Act {
    * miners' rescue lack Tobin.
    */
   override afterLoad(gameState: GameState): void {
+    gameState.allRooms.MirasHut.description = new MirasHut().description
     const galleries = gameState.allRooms.CollapsedGalleries
     if (
       galleries &&

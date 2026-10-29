@@ -33,7 +33,7 @@ describe('EchoStones', () => {
 
     let result = stones.receiveSpell(gs, 'bless')
     expect(result.toLowerCase()).toContain('steady glow')
-    expect(result.toLowerCase()).toContain('ancient chant')
+    expect(result.toLowerCase()).toContain('waiting for words')
     expect(stones.areBlessed()).toBe(true)
     expect(gs.getStoryFlag(FLAG_ACT3_OATH_OF_STILLNESS_STARTED)).toBe(true)
 
@@ -50,11 +50,7 @@ describe('EchoStones', () => {
         'water finding its course. Then the light settles into a slow, steady ' +
         'glow.',
     )
-    expect(hint).toBe(
-      '[success]You sense that these hallowed stones now await ' +
-        'the ancient chant that will complete the ritual and banish the ' +
-        'restless spirits from this sacred place.[/success]',
-    )
+    expect(hint).toBe('The stones are warm now, and waiting for words.')
   })
 
   it('starts the quest when examined', () => {
@@ -100,7 +96,7 @@ describe('EchoStones', () => {
     const result = rubbings.useWith(gs, stones).toLowerCase()
 
     expect(result).toContain('you recite the resonant chant at each stone.')
-    expect(result).toContain('harmonious silence')
+    expect(result).toContain('building into a silence that settles')
     expect(result).toContain("dragon's hall now lies open")
     expect(gs.getStoryFlag(FLAG_ACT3_OATH_OF_STILLNESS_COMPLETED)).toBe(true)
   })
@@ -126,7 +122,9 @@ describe('EchoStones', () => {
     const result = stones.useWith(gs, rubbings)
 
     expect(gs.getStoryFlag(FLAG_ACT3_OATH_OF_STILLNESS_COMPLETED)).toBe(true)
-    expect(result).toContain('banishes the wandering phantoms')
+    expect(result).toContain(
+      'The phantoms stop where they stand, and fade into it.',
+    )
   })
 
   it('fails gracefully with other items', () => {

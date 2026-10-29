@@ -106,7 +106,7 @@ describe('StillwaterPhial', () => {
     const done = executeCommands(game, [
       'use resonant chant rubbings with echo stones',
     ])
-    expect(done).toContain('harmonious silence')
+    expect(done).toContain('a silence that settles over the chamber')
     expectItemInInventory(game.state, 'Resonant Chant Rubbings', false)
   })
 

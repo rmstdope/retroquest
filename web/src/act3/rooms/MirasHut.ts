@@ -4,17 +4,16 @@ import { SirCedric } from '../characters/SirCedric'
 import { HealingHerbs } from '../items/HealingHerbs'
 import { TeleportationFocus } from '../items/TeleportationFocus'
 
-/** A fragrant hut filled with drying herbs and mysterious potions. */
+/** A small hut hung with drying herbs, where Mira works among her bottles. */
 export class MirasHut extends Room {
   constructor() {
     super({
       name: "Mira's Hut",
       description:
-        'A fragrant hut filled with drying herbs and mysterious potions. Shelves ' +
-        'overflow with bottles, roots, and colorful flowers. The air is thick with ' +
-        'the scent of lavender and sage. Sunlight streams through stained glass, ' +
-        'painting the walls in shifting hues. ' +
-        `${characterName('Mira')} moves between her shelves without looking, ` +
+        'A small hut hung with drying herbs: lavender, sage, and roots in ' +
+        'bundles from the rafters. Shelves of bottles line the walls, every ' +
+        'one labelled. ' +
+        `${characterName('Mira')} moves among them without looking, ` +
         'the way you cross your own kitchen in the dark.',
       items: [new HealingHerbs(), new TeleportationFocus()],
       characters: [new Mira(), new SirCedric()],

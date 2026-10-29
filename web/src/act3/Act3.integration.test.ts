@@ -560,7 +560,7 @@ describe('Act 3 golden path', () => {
 
       const bless = play(game, AT.vestibule + 2, AT.vestibule + 3)
       expect(bless).toContain('steady glow')
-      expect(bless).toContain('ancient chant')
+      expect(bless).toContain('waiting for words')
 
       play(game, AT.vestibule + 3, AT.vestibule + 4)
       const still = play(game, AT.vestibule + 4, AT.vestibule + 5)
@@ -569,7 +569,7 @@ describe('Act 3 golden path', () => {
 
       const oath = play(game, AT.vestibule + 5, AT.dragon)
       expect(oath).toContain('you recite the resonant chant')
-      expect(oath).toContain('harmonious silence')
+      expect(oath).toContain('a silence that settles over the chamber')
       expect(oath).toContain("dragon's hall now lies open")
       expectStoryFlag(state, FLAG_ACT3_OATH_OF_STILLNESS_COMPLETED, true)
       expectItemInInventory(state, 'Resonant Chant Rubbings', false)

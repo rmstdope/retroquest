@@ -76,6 +76,11 @@ describe('WardingPillars', () => {
     const successOut = shards.useWith(game.state, pillars)
     expect(successOut).not.toContain('[event]')
     expect(successOut).toContain('You press the pale shards')
+    expect(successOut).toContain(
+      'a pull runs through the courtyard as the tide answers the sigils, ' +
+        'and the sea draws back from the drowned hall to the south.',
+    )
+    expect(successOut).not.toContain('closer')
     expect(game.state.getItemCount('Moon Rune Shards')).toBe(0)
     expectStoryFlag(game.state, FLAG_ACT3_TIDEWARD_SIGILS_COMPLETED, true)
   })

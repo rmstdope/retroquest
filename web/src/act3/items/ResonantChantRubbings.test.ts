@@ -45,7 +45,9 @@ describe('ResonantChantRubbings', () => {
     expect(room.characters.some((c) => c instanceof WanderingPhantoms)).toBe(
       false,
     )
-    expect(result).toContain('banishes the wandering phantoms')
+    expect(result).toContain(
+      'The phantoms stop where they stand, and fade into it.',
+    )
   })
 
   it('fails with unblessed stones', () => {
