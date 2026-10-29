@@ -15,6 +15,10 @@ export class RoomKey extends Item {
     })
   }
 
+  /**
+   * Unlocks the door of the private room at the Silver Stag Inn; with any
+   * other item it falls back to the engine's answer.
+   */
   override useWith(gameState: GameState, other: Item): string {
     // Check if other is a Door
     if (other instanceof Door) {
@@ -45,9 +49,6 @@ export class RoomKey extends Item {
         'door here.[/failure]'
       )
     }
-    return (
-      `[failure]You can't use ${this.nameInSentence()} with ` +
-      `${other.nameInSentence()}.[/failure]`
-    )
+    return super.useWith(gameState, other)
   }
 }

@@ -62,11 +62,26 @@ export class Item {
     )
   }
 
-  useWith(_gameState: GameState, other: Item): string {
+  /**
+   * Use this item with `other`. By default `other` gets to answer through
+   * `answerUseFrom` (an altar that takes offerings, say), and only when it
+   * has nothing to say does the use fail.
+   */
+  useWith(gameState: GameState, other: Item): string {
+    const answer = other.answerUseFrom(gameState, this)
+    if (answer) return answer
     return (
       `[failure]You can't use ${this.nameInSentence()} with ` +
       `${other.nameInSentence()}.[/failure]`
     )
+  }
+
+  /**
+   * What this item says when `item` is used with it and `item` has no use of
+   * its own for it; '' (the default) leaves the generic refusal.
+   */
+  answerUseFrom(_gameState: GameState, _item: Item): string {
+    return ''
   }
 
   useOnCharacter(_gameState: GameState, target: Character): string {

@@ -73,6 +73,22 @@ describe('Item', () => {
     }
   })
 
+  it('lets the other item answer a use it has nothing to say about', () => {
+    class Hollow extends Item {
+      /** Answers any item put to it. */
+      override answerUseFrom(_gameState: GameState, item: Item): string {
+        return `${item.name} does not fit.`
+      }
+    }
+    const gs = gameState()
+    const rock = new Item({ name: 'rock', description: 'd' })
+    const hollow = new Hollow({ name: 'hollow', description: 'd' })
+    expect(rock.useWith(gs, hollow)).toBe('rock does not fit.')
+    expect(
+      new Item({ name: 'stick', description: 'd' }).answerUseFrom(gs, rock),
+    ).toBe('')
+  })
+
   it('answers every action with a failure or nothing by default', () => {
     const gs = gameState()
     const rock = new Item({ name: 'rock', description: 'A grey rock.' })
