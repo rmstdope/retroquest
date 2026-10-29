@@ -235,8 +235,8 @@ describe('Act III items narrate effects and keep no echo of the command', () => 
     )
     expect(
       gatesText.startsWith(
-        'The fortress gates tower above you. Their blackened iron is carved ' +
-          'with sigils',
+        'The gates are taller than a house, and the sigils on them seem to ' +
+          'move',
       ),
     ).toBe(true)
     for (const text of [letterText, notebookText, focusText, gatesText]) {

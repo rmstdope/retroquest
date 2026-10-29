@@ -2395,9 +2395,9 @@
     "text": "You have completed the quest 'The Three Virtues'."
   },
   {
-    "key": "0281235e06da3d",
+    "key": "005878fc7621a2",
     "speaker": "narrator",
-    "text": "A shimmering elixir that seems to contain liquid starlight. Threads of crystal clarity, phoenix flame, and draconic essence swirl within the glass vial. This potion pulses with the combined power of courage, wisdom, and selflessness—the three virtues needed to counter Malakar's dark ritual and save King Alden's life."
+    "text": "A small glass vial the colour of first light. Something moves in it: a white glint, a thread of flame, a dark shimmer like a scale turning. Mira made it from the three relics, to stop what Malakar is doing to the king."
   },
   {
     "key": "07b3a59eb29c51",
@@ -2460,14 +2460,14 @@
     "text": "Entrance to Malakar's Fortress"
   },
   {
-    "key": "03e279bed7d92b",
+    "key": "148a5014ef64fd",
     "speaker": "narrator",
-    "text": "A blackstone bastion rises from a shattered ridge; gate sigils pulse like a heartbeat behind iron lattices. The air tastes of cold metal and distant thunder. The massive gates loom ahead, wreathed in shadow and bound with eldritch wards. Where the gate arch meets the wall an older carving shows through the black: a sun rising over three linked rings."
+    "text": "A bastion of black stone rises from a shattered ridge. Iron lattices close its gates, and sigils glow behind them, slow as breathing. The wind up here is cold and smells of metal. Where the gate arch meets the wall an older carving shows through the black: a sun rising over three linked rings."
   },
   {
-    "key": "09964a955bad87",
+    "key": "1a90a0cdb2e72a",
     "speaker": "narrator",
-    "text": "The fortress gates tower above you. Their blackened iron is carved with sigils that seem to writhe in the corner of your vision. Beyond the lattice, you glimpse corridors that pulse with malevolent energy. This is the threshold of Malakar's domain—where King Alden is held captive and the kingdom's fate will be decided."
+    "text": "The gates are taller than a house, and the sigils on them seem to move at the edge of sight. Beyond the lattice, corridors run into the dark. Somewhere in there is King Alden."
   },
   {
     "key": "06b60bf016a001",
@@ -2480,9 +2480,9 @@
     "text": "The Dragon said they were warded away, not dead. You do not yet know what that means."
   },
   {
-    "key": "03f189448ed8a8",
+    "key": "1642d24dabb87b",
     "speaker": "narrator",
-    "text": "The lifelight elixir pulses with protective power, ready to shield you from the sorcerer's influence. Act III is complete. The final confrontation awaits."
+    "text": "In your pack, the lifelight elixir is warm. Act III is complete. The final confrontation awaits."
   },
   {
     "key": "14154d166b42fd",

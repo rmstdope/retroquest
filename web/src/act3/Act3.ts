@@ -2,6 +2,8 @@ import { Act, type GameState, type Room } from '@/engine'
 import { AncientAmulet } from './items/AncientAmulet'
 import { DarkPool } from './items/DarkPool'
 import { StillwaterPhial } from './items/StillwaterPhial'
+import { FortressGates } from './items/FortressGates'
+import { LifelightElixir } from './items/LifelightElixir'
 import { MirasHut } from './rooms/MirasHut'
 import { TidalCauseway } from './rooms/TidalCauseway'
 import { ShorelineMarkers } from './rooms/ShorelineMarkers'
@@ -191,6 +193,26 @@ export class Act3 extends Act {
             character.description = Mira.DESCRIPTION
     }
     this.patchStillnessVestibule(gameState)
+    this.patchFortressThreshold(gameState)
+  }
+
+  /**
+   * Saves from before the fortress threshold was reworded keep the old
+   * descriptions of the entrance, its gates and the lifelight elixir.
+   */
+  private patchFortressThreshold(gameState: GameState): void {
+    const entrance = gameState.allRooms.FortressEntrance
+    if (entrance) entrance.description = new FortressEntrance().description
+    const items = [
+      ...gameState.inventory,
+      ...Object.values(gameState.allRooms).flatMap((room) => room.items),
+    ]
+    for (const item of items) {
+      if (item instanceof FortressGates)
+        item.description = new FortressGates().description
+      if (item instanceof LifelightElixir)
+        item.description = new LifelightElixir().description
+    }
   }
 
   /**

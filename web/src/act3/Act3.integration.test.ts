@@ -3,6 +3,9 @@ import { Game } from '@/engine'
 import { Act3 } from './Act3'
 import { DarkPool } from './items/DarkPool'
 import { StillwaterPhial } from './items/StillwaterPhial'
+import { FortressGates } from './items/FortressGates'
+import { LifelightElixir } from './items/LifelightElixir'
+import { FortressEntrance } from './rooms/FortressEntrance'
 import { Miners } from './characters/Miners'
 import { WanderingPhantoms } from './characters/WanderingPhantoms'
 import { PolishedShell } from './items/PolishedShell'
@@ -695,13 +698,15 @@ describe('Act 3 golden path', () => {
       const game = gameAt(PATH.length)
       const state = game.state
       const examine = executeCommands(game, ACT3_COMPLETING_COMMANDS)
-      expect(examine.toLowerCase()).toContain('fortress gates tower above you')
+      expect(examine.toLowerCase()).toContain(
+        'the gates are taller than a house',
+      )
       expect(examine.toLowerCase()).toContain('act iii is complete')
       expectStoryFlag(state, FLAG_ACT3_FORTRESS_GATES_EXAMINED, true)
       expect(examine).toContain(
         'The Dragon said they were warded away, not dead. You do not yet know what that means.',
       )
-      expect(examine).toContain('The lifelight elixir pulses')
+      expect(examine).toContain('In your pack, the lifelight elixir is warm.')
 
       for (let turn = 0; turn < 3; turn++) game.newTurn()
       const hook =
@@ -1057,5 +1062,25 @@ describe('Act 3 lullaby', () => {
     expectStoryFlag(fresh.state, FLAG_ACT3_SHELL_HEARD, true)
     expectStoryFlag(fresh.state, FLAG_ACT3_PHANTOMS_HEARD, true)
     expect(fresh.listen('shell')).toContain('still humming')
+  })
+})
+
+describe('Act 3 saves from before the fortress threshold was reworded', () => {
+  it('gives the entrance, the gates and the elixir their new descriptions', () => {
+    const game = new Game([new Act3()])
+    const entrance = game.state.allRooms.FortressEntrance
+    const gates = entrance.items.find((i) => i instanceof FortressGates)
+    if (!gates) throw new Error('no gates')
+    const elixir = new LifelightElixir()
+    game.state.addItemToInventory(elixir)
+    entrance.description = 'Old room text.'
+    gates.description = 'Old gates text.'
+    elixir.description = 'Old elixir text.'
+
+    new Act3().afterLoad(game.state)
+
+    expect(entrance.description).toBe(new FortressEntrance().description)
+    expect(gates.description).toBe(new FortressGates().description)
+    expect(elixir.description).toBe(new LifelightElixir().description)
   })
 })
