@@ -172,6 +172,8 @@ export class Act3 extends Act {
    * reworded keep its old description, and saves already past the
    * miners' rescue lack Tobin. Every spell the player knows takes the
    * description of Act III's own copy, so older saves show who taught it.
+   * The Echoes completion text and the amulet's description are set again
+   * to the current wording.
    */
   override afterLoad(gameState: GameState): void {
     gameState.allRooms.MirasHut.description = new MirasHut().description

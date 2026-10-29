@@ -40,8 +40,8 @@ export class AncientDragon extends Character {
 
   /**
    * The dream voice and the Dragon naming it: narration with the whispered
-   * words in italics (no speaker label), the Dragon's one line and the
-   * closing event. Heard once; the caller guards it with the voice flag.
+   * words spoken by 'voice' through `dialogue()`, as in Act I, the Dragon's
+   * one line and the closing event. Heard once; the caller guards it with the voice flag.
    * Elior recognises the tune from the shell, or else from the phantoms,
    * only if he heard it.
    */

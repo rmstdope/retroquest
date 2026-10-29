@@ -124,4 +124,40 @@ describe('Echoes of the Hidden Bond quest', () => {
     quest.refreshText()
     expect(quest.completion).toBe(new EchoesOfTheHiddenBondQuest().completion)
   })
+
+  it('refreshes the completion text when a save is loaded', () => {
+    const saved = game.state.nonActivatedQuests.find(
+      (q) => q instanceof EchoesOfTheHiddenBondQuest,
+    )
+    if (!saved) throw new Error('no Echoes quest')
+    saved.completion = 'once apprentices to Malakar'
+
+    new Act3().afterLoad(game.state)
+
+    expect(saved.completion).toBe(new EchoesOfTheHiddenBondQuest().completion)
+  })
+
+  it('words the intro and the three found texts exactly', () => {
+    game.state.setStoryFlag(FLAG_ACT3_SEA_SEALED_LETTER_READ, true)
+    game.state.setStoryFlag(FLAG_ACT3_CHARRED_INSCRIPTION_READ, true)
+    game.state.setStoryFlag(FLAG_ACT3_DRAGONS_MEMORY_RECEIVED, true)
+    quest.checkUpdate(game.state)
+    const details = quest.details()
+    if (details.kind !== 'checklist') throw new Error('expected a checklist')
+    expect(details.intro).toBe(
+      'Your parents made the three relics, long before you were born. Mira ' +
+        'says they left words behind them: by the sea, on the mountain and ' +
+        'under the hills.',
+    )
+    expect(details.items.map((item) => item.text)).toEqual([
+      'In the Sunken Ruins: a letter from Aren and Lysa to their friend ' +
+        'Malakar, begging him not to reach for time. He wrote back: You would ' +
+        'have me wait while you die.',
+      'On Mount Ember: the promise the three of them burned into stone, one ' +
+        "virtue each, and Malakar's name struck deeper than the others.",
+      'In the Caverns of Shadow: the dragon remembered them. They poured ' +
+        "themselves into a ward that hides you and holds Malakar's wound " +
+        'shut. They are warded away, not dead.',
+    ])
+  })
 })
