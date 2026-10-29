@@ -1,7 +1,10 @@
 import { describe, it, expect } from 'vitest'
 import { Game } from '@/engine'
 import { Act2 } from './Act2'
-import { MountainHermit } from './characters/MountainHermit'
+import {
+  MountainHermit,
+  MOUNTAIN_HERMIT_DESCRIPTION,
+} from './characters/MountainHermit'
 import {
   INNKEEPERS_DAUGHTER_COMPLETION,
   INNKEEPERS_DAUGHTER_DESCRIPTION,
@@ -28,7 +31,7 @@ describe('Act2.afterLoad clue wording', () => {
 
     new Act2().afterLoad(game.state)
 
-    expect(hermit.description).not.toContain('grey')
+    expect(hermit.description).toBe(MOUNTAIN_HERMIT_DESCRIPTION)
     expect(quest.description).toBe(INNKEEPERS_DAUGHTER_DESCRIPTION)
     expect(quest.completion).toBe(INNKEEPERS_DAUGHTER_COMPLETION)
     expect(quest.completion).toContain('unbound the curse')
