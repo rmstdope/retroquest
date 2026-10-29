@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import { Game } from '@/engine'
 import { Act2 } from './Act2'
+import { FLYER_DESCRIPTION, MerchantsFlyer } from './items/MerchantsFlyer'
 import {
   MountainHermit,
   MOUNTAIN_HERMIT_DESCRIPTION,
@@ -36,5 +37,20 @@ describe('Act2.afterLoad clue wording', () => {
     expect(quest.completion).toBe(INNKEEPERS_DAUGHTER_COMPLETION)
     expect(quest.completion).toContain('unbound the curse')
     expect(quest.completion).not.toMatch(/wizard|shatter/)
+  })
+})
+
+describe('Act2.afterLoad flyer wording', () => {
+  it('gives the merchant flyer its current description in older saves', () => {
+    const game = new Game([new Act2()])
+    const flyer = new MerchantsFlyer()
+    flyer.description = 'A colorful handbill with premium goods.'
+    game.state.inventory.push(flyer)
+
+    new Act2().afterLoad(game.state)
+
+    expect(flyer.description).toBe(FLYER_DESCRIPTION)
+    expect(flyer.description).toContain('Bring this, and be welcome.')
+    expect(flyer.description).not.toContain('premium')
   })
 })

@@ -42,6 +42,7 @@ import { FOREST_ENTRANCE_DESCRIPTION } from './rooms/ForestEntrance'
 import { CASTLE_COURTYARD_DESCRIPTION } from './rooms/CastleCourtyard'
 import { GREAT_HALL_DESCRIPTION } from './rooms/GreatHall'
 import { CedricksLostHonorQuest } from './quests/CedricksLostHonorQuest'
+import { FLYER_DESCRIPTION, MerchantsFlyer } from './items/MerchantsFlyer'
 import { Coins, COINS_DESCRIPTION } from './items/Coins'
 import {
   SECRET_DOCUMENTS_DESCRIPTION,
@@ -151,7 +152,7 @@ export class Act2 extends Act {
   }
 
   /**
-   * Bring older saves up to date: the coins, the secret documents, the
+   * Bring older saves up to date: the coins, the merchant's flyer, the secret documents, the
    * squire's diary, the castle rooms, the Main Square, the Healer's House, the
    * Residential Quarter, Cedric's quest log and the riddles quest log keep the
    * text they were saved with, so give them the current wording, and put Brenn
@@ -187,6 +188,7 @@ export class Act2 extends Act {
       if (item instanceof CityNoticeBoard)
         item.description = CITY_NOTICE_BOARD_DESCRIPTION
       if (item instanceof Coins) item.description = COINS_DESCRIPTION
+      if (item instanceof MerchantsFlyer) item.description = FLYER_DESCRIPTION
     }
     for (const quest of [
       ...gameState.nonActivatedQuests,

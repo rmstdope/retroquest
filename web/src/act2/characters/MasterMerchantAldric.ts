@@ -73,7 +73,7 @@ export class MasterMerchantAldric extends Character {
     }
 
     // Build wares information similar to Act 1 Shopkeeper
-    let waresInfo = 'My premium selection includes:\n'
+    let waresInfo = "Here's what I have:\n"
     const entries = Object.entries(this.wares)
     if (entries.length > 0) {
       for (const [name, details] of entries) {
@@ -82,7 +82,7 @@ export class MasterMerchantAldric extends Character {
           '[item_name]gold coins[/item_name]\n'
       }
     } else {
-      waresInfo = "I'm currently restocking my premium inventory.\n"
+      waresInfo = 'My racks are bare till the next cart comes in.\n'
     }
 
     // Cycle through dialogue options like Act 1 Shopkeeper
@@ -111,8 +111,8 @@ export class MasterMerchantAldric extends Character {
         characterName('Master Merchant Aldric') +
         ' turns the flyer over and finds his own name on it. ' +
         speech(
-          'One of mine. Then someone thought you worth sending. This flyer ' +
-            'grants you access to our premium selection. Have a look.',
+          'One of mine. Then someone thought you worth sending. ' +
+            'Have a look.',
         ) +
         '[/success]'
       )
@@ -123,7 +123,8 @@ export class MasterMerchantAldric extends Character {
       characterName('Master Merchant Aldric') +
       ` turns the [item_name]${item.name}[/item_name] over and hands it back. ` +
       speech(
-        "I deal in adventure gear, not donations. Bring coin, and we'll talk.",
+        "I sell gear, friend; I don't take it in. " +
+          "Bring coin, and we'll talk.",
       )
     )
   }
