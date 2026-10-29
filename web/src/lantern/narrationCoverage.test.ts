@@ -64,7 +64,7 @@ const OPTIONAL_LINES: Record<number, { speaker: string; opening: string }[]> = {
     { speaker: 'narrator', opening: 'The mysterious box is locked' },
     { speaker: 'narrator', opening: 'A small nose twitches' },
     { speaker: 'narrator', opening: "You have a rod, but you're not quite" },
-    { speaker: 'narrator', opening: 'The nearby plants seem to respond' },
+    { speaker: 'narrator', opening: 'The grass at your feet stands' },
     /** Act I's stock replies (rq-bio): one fixed line per person, never naming the item. */
     {
       speaker: 'narrator',
@@ -114,8 +114,8 @@ const OPTIONAL_LINES: Record<number, { speaker: string; opening: string }[]> = {
     },
     { speaker: 'narrator', opening: "You don't see that here." },
     { speaker: 'narrator', opening: 'A divine light surrounds Tilda' },
-    { speaker: 'narrator', opening: 'A warm light envelops Tilda' },
-    { speaker: 'narrator', opening: 'A cleansing energy flows around Tilda' },
+    { speaker: 'narrator', opening: 'A warm light settles over Tilda' },
+    { speaker: 'narrator', opening: 'The cleansing runs over Tilda' },
     /** The `hint` answer: its opening line, the quiet line and each quest's line under its name. */
     { speaker: 'narrator', opening: 'You stop and think over what you know.' },
     { speaker: 'narrator', opening: 'You think it over. Nothing presses' },

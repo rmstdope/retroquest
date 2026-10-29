@@ -1,10 +1,4 @@
-import {
-  Spell,
-  type Character,
-  type GameState,
-  type Item,
-  characterName,
-} from '@/engine'
+import { Spell, type Character, type GameState, type Item } from '@/engine'
 import { Fisherman } from '../characters/Fisherman'
 import { Snare } from '../items/Snare'
 
@@ -14,8 +8,7 @@ export class HealSpell extends Spell {
     super({
       id: 'heal',
       name: 'heal',
-      description:
-        'A restorative spell that mends wounds and alleviates ailments.',
+      description: 'The first thing Mira showed you: how to mend.',
     })
   }
 
@@ -42,13 +35,12 @@ export class HealSpell extends Spell {
 
   /** Heal a target character; the fisherman's busted arm mends for real. */
   override castOnCharacter(gameState: GameState, character: Character): string {
-    const name = character.name
     if (character instanceof Fisherman) {
       return character.healArm(gameState)
     }
     return (
-      'A warm light envelops ' +
-      `${characterName(name)} and the character seems a bit healthier.`
+      `A warm light settles over ${character.nameInSentence()}. ` +
+      'There was nothing in them that needed mending.'
     )
   }
 }

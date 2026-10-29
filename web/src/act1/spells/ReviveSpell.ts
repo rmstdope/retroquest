@@ -9,15 +9,15 @@ import { WitheredCarrot } from '../items/WitheredCarrot'
 import { Bush } from '../items/Bush'
 import { FLAG_MAGIC_FULLY_UNLOCKED } from '../Act1StoryFlags'
 
-/** Restore life to withered plants or recently deceased small creatures. */
+/** Restore life to withered plants; the carrot and the bush answer, living people do not. */
 export class ReviveSpell extends Spell {
   constructor() {
     super({
       id: 'revive',
       name: 'revive',
       description:
-        'A potent spell that can restore life to withered plants or even recently ' +
-        'deceased small creatures.',
+        "Your father's word for calling a thing back when it is nearly " +
+        'gone. Grandmother remembered it for you.',
     })
   }
 

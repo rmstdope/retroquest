@@ -6,8 +6,7 @@ export class LightSpell extends Spell {
     super({
       id: 'light',
       name: 'light',
-      description:
-        'A simple spell that conjures a sphere of light to illuminate dark areas.',
+      description: 'The third thing Mira showed you: how to make a light.',
     })
   }
 

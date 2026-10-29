@@ -1,10 +1,4 @@
-import {
-  Spell,
-  type Character,
-  type GameState,
-  type Item,
-  characterName,
-} from '@/engine'
+import { Spell, type Character, type GameState, type Item } from '@/engine'
 import { Well } from '../items/Well'
 import { River } from '../items/River'
 import { FLAG_MAGIC_FULLY_UNLOCKED } from '../Act1StoryFlags'
@@ -16,8 +10,8 @@ export class PurifySpell extends Spell {
       id: 'purify',
       name: 'purify',
       description:
-        'A cleansing spell that removes impurities from water or other ' +
-        'substances.',
+        'Your mother taught it to the fisherman at the bend, and he gave ' +
+        'it back to you. It makes foul water clean.',
     })
   }
 
@@ -60,10 +54,9 @@ export class PurifySpell extends Spell {
     if (!gameState.getStoryFlag(FLAG_MAGIC_FULLY_UNLOCKED)) {
       return this.fizzle()
     }
-    const name = character.name
     return (
-      'A cleansing energy flows around ' +
-      `${characterName(name)}, purifying their spirit and lifting any negative influences.`
+      `The cleansing runs over ${character.nameInSentence()} ` +
+      'and finds nothing to wash away.'
     )
   }
 }
