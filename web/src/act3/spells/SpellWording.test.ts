@@ -53,8 +53,8 @@ describe('Act III spell descriptions remember who taught the spell', () => {
         expect(spell.description).toBe(EXPECTED[spell.id])
       }
     }
-    expect(
-      fresh.state.knownSpells.filter((s) => s.id in EXPECTED).length,
-    ).toBeGreaterThanOrEqual(3)
+    expect(fresh.state.knownSpells.filter((s) => s.id in EXPECTED).length).toBe(
+      5,
+    )
   })
 })

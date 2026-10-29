@@ -2,7 +2,7 @@ import { Spell, clue, type GameState, type Item } from '@/engine'
 import { Locker } from '../items/Locker'
 import { SupplyCrate } from '../items/SupplyCrate'
 
-/** A deft sigil that loosens fused pins and grudging clasps. */
+/** Mira's second lesson: opens the fused locker and the miners' supply crate. */
 export class UnlockSpell extends Spell {
   constructor() {
     super({
