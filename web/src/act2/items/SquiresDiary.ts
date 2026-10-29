@@ -58,12 +58,9 @@ export class SquiresDiary extends Item {
           'never came; they say it was lost on the forest road. If those ' +
           "papers are still out there, they could clear Sir Cedric's name.'",
       ) +
-      '\n\n[success]The diary points to papers sent from Heavensforth by a ' +
-      "watchman who fled, on a caravan that never arrived. The lost caravan's " +
-      'papers might still be out there…[/success]\n\n' +
-      'After reading the diary, you place it back where you found it. ' +
-      'This keeps the information safe while you no longer carry the ' +
-      'diary.'
+      '\n\n' +
+      'You put the diary back under the bench, where the next squire will ' +
+      'find it.'
     )
   }
 

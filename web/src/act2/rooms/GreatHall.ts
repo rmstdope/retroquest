@@ -52,9 +52,8 @@ export class GreatHall extends Room {
     }
     if (!gameState.getStoryFlag(FLAG_SHOWED_JOURNAL_TO_HISTORIANS)) {
       return clue(
-        'The archives are vast, filled with countless books and scrolls. ' +
-          "You don't know where to start. You need guidance from someone familiar " +
-          'with these records.',
+        'The archive runs to three hundred years of shelves. Without someone ' +
+          'who knows them, you could read for a month and find nothing.',
       )
     }
     if (gameState.getStoryFlag(FLAG_RESEARCHED_FAMILY_HERITAGE)) {

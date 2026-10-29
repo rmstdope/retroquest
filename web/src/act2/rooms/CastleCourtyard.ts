@@ -69,9 +69,8 @@ export class CastleCourtyard extends Room {
       // Check if squires have been talked to first
       if (!gameState.getStoryFlag(FLAG_SQUIRES_TALKED_TO)) {
         return clue(
-          "You don't find anything of particular interest around the " +
-            'benches. The squires are watching you curiously — perhaps you ' +
-            'should talk to them first to learn more about this place.',
+          'You find nothing under the benches but old leaves. A few of the ' +
+            'squires watch you look, and whisper.',
         )
       }
 

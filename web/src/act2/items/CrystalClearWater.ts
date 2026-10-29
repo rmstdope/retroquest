@@ -1,18 +1,18 @@
 import { Item, type Character, type GameState, characterName } from '@/engine'
 import { BarmaidElena } from '../characters/BarmaidElena'
 
-/** Purifying water item that can cleanse curses and dark enchantments. */
+/** The item's description; `Act2.afterLoad` restores it in older saves. */
+export const CRYSTAL_CLEAR_WATER_DESCRIPTION =
+  "Water from the nymphs' stream, so clear the flask looks empty until " +
+  'you tip it. No bucket has ever gone down that spring.'
+
+/** Water from the nymphs' stream, which Elena's cure needs. */
 export class CrystalClearWater extends Item {
   constructor() {
     super({
       name: 'crystal-clear water',
       shortName: 'water',
-      description:
-        'Water from the sacred spring in the Whispering Glade, this liquid is so ' +
-        'pure it seems to glow with its own inner light. The water has been ' +
-        'blessed by the water nymphs and carries powerful purification magic ' +
-        'that can break curses and cleanse dark enchantments. Each drop sparkles ' +
-        'like liquid starlight, and the container feels cool to the touch.',
+      description: CRYSTAL_CLEAR_WATER_DESCRIPTION,
       canBeCarried: true,
     })
   }
@@ -30,17 +30,6 @@ export class CrystalClearWater extends Item {
       characterName(name) +
       ', but it seems this blessed water is meant for someone ' +
       'specifically afflicted by dark magic.'
-    )
-  }
-
-  /** Examine the water and sense the purification magic within. */
-  override examine(_gameState: GameState): string {
-    const description = this.description
-    return (
-      `${description}` +
-      ' The liquid moves with an otherworldly fluidity, and you can ' +
-      'sense the powerful purification magic contained within. This ' +
-      'water could break even the strongest curses.'
     )
   }
 }

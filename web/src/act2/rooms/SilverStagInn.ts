@@ -29,8 +29,8 @@ export class SilverStagInn extends Room {
     if (!('east' in this.exits)) {
       this.exits.east = 'InnRooms'
       return (
-        '[success]The key turns with a soft click, unlocking access to the private ' +
-        "inn rooms upstairs. You can now 'go east' to enter them.[/success]"
+        '[success]The key turns with a soft click, and the door to the stairs ' +
+        'swings open.[/success]'
       )
     }
     return '[failure]The inn rooms are already unlocked.[/failure]'

@@ -6,6 +6,13 @@ import { CampSite } from '../items/CampSite'
 import { MountainHermit } from '../characters/MountainHermit'
 import { FLAG_SUPPLIES_QUEST_COMPLETED } from '../Act2StoryFlags'
 
+/** The room's description; `Act2.afterLoad` restores it in older saves. */
+export const MOUNTAIN_PATH_DESCRIPTION =
+  'A trail climbs through rock and pine between Willowbrook and ' +
+  'Greendale. From the overlooks you can see both: Greendale ahead, and ' +
+  'Willowbrook small and far behind you. Just off the trail is a camp ' +
+  'site where travellers stop for the night.'
+
 /**
  * Mountain Path room: preparation corridor linking settlements (Act II).
  *
@@ -16,12 +23,7 @@ export class MountainPath extends Room {
   constructor() {
     super({
       name: 'Mountain Path',
-      description:
-        'A winding trail climbs through rocky terrain between Willowbrook and Greendale. ' +
-        'Sturdy trees cast intermittent shade and the path remains well tended despite ' +
-        'its remoteness. Glimpses of both settlements appear at overlooks, offering ' +
-        'reflective pauses. A small ' +
-        'camp site used by travelers rests just off the main trail.',
+      description: MOUNTAIN_PATH_DESCRIPTION,
       items: [new MountainFlower(), new WalkingStick(), new CampSite()],
       characters: [new MountainHermit()],
       exits: { north: 'GreendaleGates', east: 'ForestTransition' },

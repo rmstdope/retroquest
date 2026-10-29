@@ -50,13 +50,11 @@ export class QualityRope extends Item {
       if (index >= 0) gameState.inventory.splice(index, 1)
 
       return (
-        '[success]You secure one end of your [item_name]quality rope[/item_name] to a ' +
-        'sturdy tree and lower it into the ravine. Rappelling down carefully, you find ' +
-        'the trapped merchant caravan at the bottom. The merchants are injured but ' +
-        'alive, and their wagon is damaged but some goods are salvageable. Working ' +
-        'together, you create a rope system that allows everyone to climb to safety. ' +
-        'The grateful merchants gather their most valuable goods and follow you back ' +
-        'to civilization. The caravan has been successfully rescued![/success]'
+        '[success]You tie the [item_name]rope[/item_name] to a sturdy ' +
+        'tree and climb down into the ravine. The wagon lies on its side at ' +
+        "the bottom, and round it are Thorne's people: hurt, hungry, and " +
+        'alive. One by one you get them up the rope, and they bring what ' +
+        'goods they can carry.[/success]'
       )
     }
     // Fallback message when rope can't be used with the provided item

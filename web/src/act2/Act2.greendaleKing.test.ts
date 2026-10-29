@@ -346,10 +346,11 @@ describe('the trail to the papers', () => {
     expect(a).toContain('Some days later:')
     expect(a).toContain('Last entry:')
     expect(a).toContain('took the road to Heavensforth')
-    expect(a).toContain('The diary points to papers sent from Heavensforth')
+    expect(a).toContain('the road to Heavensforth')
+    expect(a).not.toContain('The diary points to papers')
     expect(a).not.toContain('Thornfield')
     expect(a).not.toContain('*')
-    expect(a).toContain('you place it back')
+    expect(a).toContain('You put the diary back under the bench')
   })
 
   it('Thorne explains how the papers came to be on the caravan', () => {

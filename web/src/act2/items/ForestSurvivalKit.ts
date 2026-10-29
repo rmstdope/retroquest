@@ -5,16 +5,19 @@ import {
 } from '../Act2StoryFlags'
 import { ForestTransition } from '../rooms/ForestTransition'
 
-/** Comprehensive kit providing supplies and guidance for safe forest travel. */
+/** The item's description; `Act2.afterLoad` restores it in older saves. */
+export const FOREST_SURVIVAL_KIT_DESCRIPTION =
+  'A canvas roll with everything for a night in the open: dried food, ' +
+  'flint and steel, a water skin, a blanket, and a ring of small warding ' +
+  'stones to set round where you sleep.'
+
+/** Canvas roll of camp supplies and warding stones for a night at the standing stones. */
 export class ForestSurvivalKit extends Item {
   constructor() {
     super({
       name: 'forest survival kit',
       shortName: 'kit',
-      description:
-        'A comprehensive kit containing everything needed for safe forest exploration: ' +
-        'dried food, water purification tablets, protective gear, a compass, and magical ' +
-        'wards against forest spirits.',
+      description: FOREST_SURVIVAL_KIT_DESCRIPTION,
       canBeCarried: true,
     })
   }

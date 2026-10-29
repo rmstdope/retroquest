@@ -11,7 +11,7 @@
     "id": "act2-mountain-path",
     "title": "Mountain Path",
     "plays": "Act II, Mountain Path",
-    "brief": "instrumental background loop for Mountain Path: A winding trail climbs through rocky terrain between Willowbrook and Greendale. Sturdy trees cast intermittent shade and the path remains well tended despite its remoteness, no vocals",
+    "brief": "instrumental background loop for Mountain Path: A trail climbs through rock and pine between Willowbrook and Greendale. From the overlooks you can see both: Greendale ahead, and Willowbrook small and far behind you, no vocals",
     "seconds": 60
   },
   {
@@ -102,7 +102,7 @@
     "id": "act2-forest-transition",
     "title": "Forest Transition",
     "plays": "Act II, Forest Transition",
-    "brief": "instrumental background loop for Forest Transition: The boundary between the civilized mountain paths and the wild Enchanted Forest. Ancient standing stones mark the threshold, carved with protective runes that pulse with faint magic, no vocals",
+    "brief": "instrumental background loop for Forest Transition: The mountain path ends at a ring of standing stones, grey and mossed, with runes cut deep in them. Past the stones the trees begin all at once, close and dark, no vocals",
     "seconds": 60
   },
   {
@@ -116,21 +116,21 @@
     "id": "act2-ancient-grove",
     "title": "Ancient Grove",
     "plays": "Act II, Ancient Grove",
-    "brief": "instrumental background loop for Ancient Grove: A circular clearing dominated by trees so old and massive they seem to touch the sky. Their bark bears carved symbols that predate human memory, and the air shimmers with concentrated magic, no vocals",
+    "brief": "instrumental background loop for Ancient Grove: A ring of trees so old their trunks are wider than a cottage. Signs are carved in their bark, older than any letters you know, no vocals",
     "seconds": 60
   },
   {
     "id": "act2-whispering-glade",
     "title": "Whispering Glade",
     "plays": "Act II, Whispering Glade",
-    "brief": "instrumental background loop for Whispering Glade: A peaceful meadow opens around a small stream that babbles over smooth stones. Wildflowers blanket the ground and butterflies drift through warm sunlight, no vocals",
+    "brief": "instrumental background loop for Whispering Glade: A meadow opens round a small stream that runs over smooth stones. Wildflowers grow thick to the water's edge, no vocals",
     "seconds": 60
   },
   {
     "id": "act2-heart-of-the-forest",
     "title": "Heart of the Forest",
     "plays": "Act II, Heart of the Forest",
-    "brief": "instrumental background loop for Heart of the Forest: The deepest part of the Enchanted Forest, where reality feels fluid and magic flows like water. Impossible colors paint the landscape and the air sparkles with latent energy, no vocals",
+    "brief": "instrumental background loop for Heart of the Forest: The deepest part of the forest. The light here is green and gold and does not seem to come from the sky, no vocals",
     "seconds": 60
   }
 ]
