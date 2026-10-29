@@ -6,6 +6,12 @@ import {
   FLAG_LOST_CARAVAN_COMPLETED,
 } from '../Act2StoryFlags'
 
+/** The line shown when the quest is done. */
+const COMPLETION =
+  "You found Thorne's caravan at the bottom of a ravine and " +
+  'brought his people out on a rope. In thanks he gave you papers ' +
+  "sent from Heavensforth, meant for a knight's hands."
+
 /** Quest to find and rescue the lost caravan in the Enchanted Forest. */
 export class TheMerchantsLostCaravanQuest extends Quest {
   constructor() {
@@ -14,15 +20,13 @@ export class TheMerchantsLostCaravanQuest extends Quest {
       description:
         "Caravan Master Thorne's valuable caravan has gone missing in the Enchanted " +
         'Forest. Find out what happened to the merchants and their goods.',
-      completion:
-        'You successfully located the missing caravan trapped in a deep ravine ' +
-        'within the Enchanted Forest. Using your forest magic, you discovered ' +
-        'their location, then employed ' +
-        'quality rope to rappel down and rescue the trapped merchants. All ' +
-        'merchants survived the ordeal, and Caravan Master Thorne rewarded you ' +
-        "with secret documents containing evidence that can clear Sir Cedric's " +
-        'name of false accusations from a past court case.',
+      completion: COMPLETION,
     })
+  }
+
+  /** Bring the log up to date in a save made with the older wording. */
+  refreshText(): void {
+    this.completion = COMPLETION
   }
 
   override checkTrigger(gameState: GameState): boolean {

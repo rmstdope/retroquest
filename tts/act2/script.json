@@ -520,9 +520,9 @@
     "text": "The Knight's Test"
   },
   {
-    "key": "01419347fea0db",
+    "key": "14af8155e9300c",
     "speaker": "narrator",
-    "text": "Sir Cedric wants to see proof of your combat abilities before trusting you with important responsibilities. Demonstrate your martial skills with a training sword."
+    "text": "Sir Cedric will not trust you on your word. He wants to see you with a blade, in the courtyard."
   },
   {
     "key": "18ab0afc1c9c4b",
@@ -545,9 +545,9 @@
     "text": "The Gathering Storm: Sir Cedric knew the sigil on your amulet: the sun rising over three linked rings, the mark of the Wardens of the Dawn. Whoever wore it before you was a Warden, he says, and your family is bound to them."
   },
   {
-    "key": "0f9e1052a3914d",
+    "key": "0492a337975b77",
     "speaker": "narrator",
-    "text": "The Knight's Test: Sir Cedric wants to see proof of your combat abilities before trusting you with important responsibilities. Demonstrate your martial skills with a training sword."
+    "text": "The Knight's Test: Sir Cedric will not trust you on your word. He wants to see you with a blade, in the courtyard."
   },
   {
     "key": "065f627240f71f",
@@ -660,9 +660,9 @@
     "text": "Supplies for the Journey"
   },
   {
-    "key": "0cbada91f9d6bd",
+    "key": "1ac5e85f3d7f11",
     "speaker": "narrator",
-    "text": "Sir Cedric mentioned the need for proper equipment for forest expeditions. Gather essential supplies from the Market District."
+    "text": "Sir Cedric gave you coin for the forest: a survival kit, an enhanced lantern and rope, from the Market District."
   },
   {
     "key": "0d866def961bcf",
@@ -675,9 +675,9 @@
     "text": "Side quest complete"
   },
   {
-    "key": "166d0e5a67c879",
+    "key": "15ac60d0a67fe8",
     "speaker": "narrator",
-    "text": "You have successfully demonstrated your combat skills to Sir Cedric. He now trusts your abilities!"
+    "text": "You held your own against Sir Cedric in the yard, and he trusts you now."
   },
   {
     "key": "096a6fb841d7dd",
@@ -715,9 +715,9 @@
     "text": "The Gathering Storm: Sir Cedric watched you with the training sword and now trusts you. He wants you to find Nyx, deep in the Enchanted Forest, because her old wisdom may show what you are truly facing. He gave you a hundred and fifty coins for a survival kit, an enhanced lantern and rope from the Market District."
   },
   {
-    "key": "1c514da91e3567",
+    "key": "1ad0a53027e906",
     "speaker": "narrator",
-    "text": "Supplies for the Journey: Sir Cedric mentioned the need for proper equipment for forest expeditions. Gather essential supplies from the Market District."
+    "text": "Supplies for the Journey: Sir Cedric gave you coin for the forest: a survival kit, an enhanced lantern and rope, from the Market District."
   },
   {
     "key": "1811267582c948",
@@ -1060,14 +1060,14 @@
     "text": "Echoes of the Past"
   },
   {
-    "key": "1b4d78679b77ab",
+    "key": "1491e4f7e5835e",
     "speaker": "narrator",
-    "text": "Investigate your family heritage and Willowbrook's significance by researching historical records and genealogical information in the Great Hall."
+    "text": "Someone copied Willowbrook's birth rolls into a notebook and hid it under the floor of the Silver Stag. The historians in the Great Hall keep those rolls."
   },
   {
-    "key": "03141429a4d83f",
+    "key": "0faa093f446c9c",
     "speaker": "narrator",
-    "text": "Echoes of the Past: Investigate your family heritage and Willowbrook's significance by researching historical records and genealogical information in the Great Hall."
+    "text": "Echoes of the Past: Someone copied Willowbrook's birth rolls into a notebook and hid it under the floor of the Silver Stag. The historians in the Great Hall keep those rolls."
   },
   {
     "key": "1493661065f084",
@@ -1075,9 +1075,9 @@
     "text": "The quality rope is yours for 20 gold coins."
   },
   {
-    "key": "12545708345f81",
+    "key": "0dd27ddd160f86",
     "speaker": "narrator",
-    "text": "You have gathered all the essential supplies for forest exploration. The journey supplies quest is complete!"
+    "text": "The kit, the lantern and the rope are in your pack."
   },
   {
     "key": "01589e9ff408a6",
@@ -1475,14 +1475,14 @@
     "text": "The Ancient Library"
   },
   {
-    "key": "0bc87ff36ed028",
+    "key": "0ebb122c3e36bc",
     "speaker": "narrator",
-    "text": "You've discovered a hidden passage beneath Greendale containing an ancient library of magical texts and lore. You should explore its depths and uncover the secrets within."
+    "text": "Behind a bricked-up cellar door in the Residential Quarter, steps lead down to a library nobody in Greendale talks about."
   },
   {
-    "key": "14c019c5fd1a15",
+    "key": "0fee906584f42c",
     "speaker": "narrator",
-    "text": "The Ancient Library: You've discovered a hidden passage beneath Greendale containing an ancient library of magical texts and lore. You should explore its depths and uncover the secrets within."
+    "text": "The Ancient Library: Behind a bricked-up cellar door in the Residential Quarter, steps lead down to a library nobody in Greendale talks about."
   },
   {
     "key": "1b370ac31db011",
@@ -1615,9 +1615,9 @@
     "text": "You have read what was left. The rest is not written on any shelf of mine."
   },
   {
-    "key": "1ff5f9eb82459a",
+    "key": "127be352f125bb",
     "speaker": "narrator",
-    "text": "You have successfully gained access to the ancient library's knowledge! You've learned the dispel spell, discovered important information about your family heritage, and received a crystal focus to enhance your magical abilities. The chronicle you read there was the Wardens' own book, and its last page warns that Malakar seeks the blood of Willowbrook."
+    "text": "The library's keeper was a Warden once. Its chronicle taught you dispel, and its last page warns that Malakar seeks the blood of Willowbrook."
   },
   {
     "key": "076cf2dae596cc",
@@ -1755,9 +1755,9 @@
     "text": "The Hermit's Warning"
   },
   {
-    "key": "086a00b42a568d",
+    "key": "044172b041bf81",
     "speaker": "narrator",
-    "text": "A forest hermit at the edge of the Enchanted Forest has warned you that the forest moves its paths and keeps old things that don't care for strangers. The hermit has given you a protective charm to help safeguard your journey through the magical wilderness, but you need to prepare yourself before venturing further into the Enchanted Forest."
+    "text": "A hermit at the forest's edge says the forest moves its paths and keeps old things that don't care for strangers. The hermit gave you a charm with their mark on it, and told you not to walk in tonight: make camp by the stones first, so the forest can get a look at you."
   },
   {
     "key": "0c6650dff2cb72",
@@ -1800,9 +1800,9 @@
     "text": "Not tonight. Make camp first; let her get a look at you."
   },
   {
-    "key": "0aa739d4267e5a",
+    "key": "05289d1d3ea818",
     "speaker": "narrator",
-    "text": "The Hermit's Warning: A forest hermit at the edge of the Enchanted Forest has warned you that the forest moves its paths and keeps old things that don't care for strangers. The hermit has given you a protective charm to help safeguard your journey through the magical wilderness, but you need to prepare yourself before venturing further into the Enchanted Forest."
+    "text": "The Hermit's Warning: A hermit at the forest's edge says the forest moves its paths and keeps old things that don't care for strangers. The hermit gave you a charm with their mark on it, and told you not to walk in tonight: make camp by the stones first, so the forest can get a look at you."
   },
   {
     "key": "1eccf1a1549b19",
@@ -1950,9 +1950,9 @@
     "text": "The Forest Guardian's Riddles"
   },
   {
-    "key": "008bde1796d285",
+    "key": "0d6ddebd421ac4",
     "speaker": "narrator",
-    "text": "The forest sprites have challenged you to prove your wisdom by solving the riddles of the forest guardians. You must journey east from the Forest Entrance to the Whispering Glade, where ancient spirits will test your understanding of forest ways and natural wisdom."
+    "text": "The forest sprites say the water nymphs, east of the Forest Entrance, have riddles for travellers who want the deep paths."
   },
   {
     "key": "0e52d6fd25ae05",
@@ -1975,9 +1975,9 @@
     "text": "—with their riddles."
   },
   {
-    "key": "0e1e9b3c5ccc8b",
+    "key": "07e612c6222ed2",
     "speaker": "narrator",
-    "text": "The Forest Guardian's Riddles: The forest sprites have challenged you to prove your wisdom by solving the riddles of the forest guardians. You must journey east from the Forest Entrance to the Whispering Glade, where ancient spirits will test your understanding of forest ways and natural wisdom."
+    "text": "The Forest Guardian's Riddles: The forest sprites say the water nymphs, east of the Forest Entrance, have riddles for travellers who want the deep paths."
   },
   {
     "key": "1e1822cb358981",
@@ -2060,9 +2060,9 @@
     "text": "Whispers in the Wind"
   },
   {
-    "key": "043f120f335a0e",
+    "key": "0d91103ae02708",
     "speaker": "narrator",
-    "text": "The Ancient Tree Spirit has sensed mystical beings hidden within the forest's depths. Gentle whispers carry on the wind, speaking of ancient wisdom and forgotten lore. To prove yourself worthy of the forest's trust, you must seek out these hidden spirits in the Whispering Glade and demonstrate your understanding of nature's mysteries."
+    "text": "The spirit in the silver-barked tree taught you forest speech for an acorn. Now its roots want what the nymphs in the Whispering Glade can give."
   },
   {
     "key": "0c2bc4a73d3ba8",
@@ -2080,9 +2080,9 @@
     "text": "The nymphs in the glade east of the entrance have something for these roots. Answer them, and bring back what they give you."
   },
   {
-    "key": "077f818a305439",
+    "key": "16ae72bfd3b3b2",
     "speaker": "narrator",
-    "text": "Whispers in the Wind: The Ancient Tree Spirit has sensed mystical beings hidden within the forest's depths. Gentle whispers carry on the wind, speaking of ancient wisdom and forgotten lore. To prove yourself worthy of the forest's trust, you must seek out these hidden spirits in the Whispering Glade and demonstrate your understanding of nature's mysteries."
+    "text": "Whispers in the Wind: The spirit in the silver-barked tree taught you forest speech for an acorn. Now its roots want what the nymphs in the Whispering Glade can give."
   },
   {
     "key": "07665b9f3abb03",
@@ -2180,9 +2180,9 @@
     "text": "They draw back from the bank. The crystal-clear water and the moonflowers at its edge are there for the taking."
   },
   {
-    "key": "1a023e0c2d25d1",
+    "key": "099f47af9cb2bf",
     "speaker": "narrator",
-    "text": "You have successfully solved the riddles of the forest guardians, proving your wisdom and respect for the natural world. The forest spirits acknowledge your understanding."
+    "text": "You answered the nymphs' three riddles: water, mask and truth. They gave you water from their stream and moonflowers from its bank."
   },
   {
     "key": "1d60e1773ed000",
@@ -2240,9 +2240,9 @@
     "text": "Nyx lives at the end of that path. She doesn't come for asking — read her altar before you call her."
   },
   {
-    "key": "136993e2bbf768",
+    "key": "1083ab2d8253f3",
     "speaker": "narrator",
-    "text": "You have communed with the Water Nymphs in the Whispering Glade, solved their ancient riddles, and earned their sacred gifts. By returning these blessed items to the Ancient Tree Spirit, you have proven yourself a true friend to the woodland spirits and earned the forest's trust."
+    "text": "You brought the tree spirit the nymphs' water and moonflowers, and the way south opened toward Nyx."
   },
   {
     "key": "0369cf7e1b0d2b",
@@ -2295,9 +2295,9 @@
     "text": "And my people tell me you didn't just haul them out of that hole — you mended them where they sat. One of the spice traders says her hand's never been better. I don't know how a man repays a debt twice over."
   },
   {
-    "key": "02af69e62d34d5",
+    "key": "03d224243dc483",
     "speaker": "narrator",
-    "text": "You successfully located the missing caravan trapped in a deep ravine within the Enchanted Forest. Using your forest magic, you discovered their location, then employed quality rope to rappel down and rescue the trapped merchants. All merchants survived the ordeal, and Caravan Master Thorne rewarded you with secret documents containing evidence that can clear Sir Cedric's name of false accusations from a past court case."
+    "text": "You found Thorne's caravan at the bottom of a ravine and brought his people out on a rope. In thanks he gave you papers sent from Heavensforth, meant for a knight's hands."
   },
   {
     "key": "08308c03d5c9ae",
