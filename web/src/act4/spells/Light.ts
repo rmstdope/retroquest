@@ -9,9 +9,7 @@ export class Light extends Spell {
     super({
       id: 'light',
       name: 'light',
-      description:
-        'Creates a brilliant burst of pure light that illuminates dark areas ' +
-        'and can dispel shadow magic or reveal hidden objects.',
+      description: 'The third thing Mira showed you: how to make a light.',
     })
   }
 

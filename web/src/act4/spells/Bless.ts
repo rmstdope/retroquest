@@ -17,8 +17,8 @@ export class Bless extends Spell {
       id: 'bless',
       name: 'bless',
       description:
-        'Channels divine energy to purify corruption, break dark enchantments, ' +
-        'and free those bound by shadow magic.',
+        "The blessing the priest said over you when you found the founders' " +
+        'locket.',
     })
   }
 

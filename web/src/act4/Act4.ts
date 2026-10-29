@@ -21,6 +21,7 @@ import { ThroneChamber } from './rooms/ThroneChamber'
 import { WillowbrookField } from './rooms/WillowbrookField'
 import { Light } from './spells/Light'
 import { Bless } from './spells/Bless'
+import { Grow } from './spells/Grow'
 import { TheFinalStand } from './quests/TheFinalStand'
 import { ShatteredWardGuardians } from './quests/ShatteredWardGuardians'
 import { TheTrappedServants } from './quests/TheTrappedServants'
@@ -149,6 +150,27 @@ export class Act4 extends Act {
   }
 
   /**
+   * Saves made before the Act IV wording review keep the old descriptions of
+   * the amulet, the elixir and the spells light, bless and grow.
+   */
+  private patchWording(gameState: GameState): void {
+    for (const spell of [new Light(), new Bless(), new Grow()]) {
+      const known = gameState.knownSpells.find((s) => s.id === spell.id)
+      if (known) known.description = spell.description
+    }
+    const items = [
+      ...gameState.inventory,
+      ...Object.values(gameState.allRooms).flatMap((room) => room.items),
+    ]
+    for (const item of items) {
+      if (item instanceof LifelightElixir)
+        item.description = new LifelightElixir().description
+      if (item instanceof AncientAmulet)
+        item.description = new AncientAmulet().description
+    }
+  }
+
+  /**
    * Saves from before the friends were named to the whispers: the old flag
    * for the raised token now means the stair is open, a tower still barred
    * gets its whispers, and the Loyalty Token (once found in the courtyard) is
@@ -159,11 +181,14 @@ export class Act4 extends Act {
    * Saves from before Nyx's gifts were carried get the token and the
    * crystal, unless the hedge already has them back. The main quest's log and
    * closing words are rebuilt, a finished one included, so saves made before
-   * the log followed the revelations read the current wording.
+   * the log followed the revelations read the current wording. Every save
+   * gets the reviewed wording of the amulet, the elixir and the spells light,
+   * bless and grow.
    */
   override afterLoad(gameState: GameState): void {
     for (const quest of gameState.completedQuests)
       if (quest instanceof TheFinalStand) quest.checkUpdate(gameState)
+    this.patchWording(gameState)
     const gates = gameState.allRooms.FortressGates
     if (gates && !gates.getItemByName('Right Stone')) {
       for (const side of ['left', 'middle', 'right'] as const) {

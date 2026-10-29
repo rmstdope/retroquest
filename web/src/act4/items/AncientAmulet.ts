@@ -10,8 +10,9 @@ import { Wound } from './Wound'
 
 /** The first two sentences of the amulet's look, which never change. */
 const PICTURE_HEAD =
-  'A family heirloom whose runes glint like dew at dawn. In its depths ' +
-  'Aren and Lysa stand hand in hand. '
+  'A mysterious amulet inscribed with runes. At its centre is the sigil of ' +
+  'the Wardens of the Dawn: the sun rising over three linked rings. In its ' +
+  'depths Aren and Lysa stand hand in hand. '
 
 /**
  * The last sentence of the look, in the order of the stages the story

@@ -474,7 +474,9 @@ describe('after the endings and around them', () => {
   it('casts grow alone and on an item', () => {
     const game = opened()
     const grow = new Grow()
-    expect(grow.castSpell(game.state)).toContain('nothing else happens')
+    expect(grow.castSpell(game.state)).toContain(
+      'Nothing here was waiting for it.',
+    )
     expect(grow.castOnItem(game.state, new Wound())).toBeTypeOf('string')
   })
 })

@@ -10,7 +10,7 @@ import {
 } from '../Act4StoryFlags'
 
 const HEAD =
-  'A family heirloom whose runes glint like dew at dawn. In its depths Aren and Lysa stand hand in hand. '
+  'A mysterious amulet inscribed with runes. At its centre is the sigil of the Wardens of the Dawn: the sun rising over three linked rings. In its depths Aren and Lysa stand hand in hand. '
 
 describe('AncientAmulet', () => {
   it('is carried from the first turn and shows the picture Act III left', () => {
