@@ -67,10 +67,11 @@ describe('HallOfEchoes', () => {
     const room = new HallOfEchoes()
     expect(room.descriptionFor(game.state)).toContain(BEFORE)
     game.state.setStoryFlag(FLAG_ACT4_KNIGHT_OF_DESPAIR_COMPLETED, true)
-    room.characters = room.characters.filter(
-      (c) => !(c instanceof GhostlyWarriors),
-    )
+    const warriors = new GhostlyWarriors()
+    room.addCharacter(warriors)
+    room.characters = room.characters.filter((c) => c !== warriors)
     expect(room.descriptionFor(game.state)).toContain(AFTER)
+    expect(room.descriptionFor(game.state)).not.toContain('ghostly warriors')
   })
 
   it('shows the new wording even when the saved room holds an older description', () => {
