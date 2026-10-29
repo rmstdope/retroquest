@@ -44,6 +44,25 @@ import { GREAT_HALL_DESCRIPTION } from './rooms/GreatHall'
 import { CedricksLostHonorQuest } from './quests/CedricksLostHonorQuest'
 import { FLYER_DESCRIPTION, MerchantsFlyer } from './items/MerchantsFlyer'
 import { Coins, COINS_DESCRIPTION } from './items/Coins'
+import { DruidicCharm, DRUIDIC_CHARM_DESCRIPTION } from './items/DruidicCharm'
+import {
+  EnchantedAcorn,
+  ENCHANTED_ACORN_DESCRIPTION,
+} from './items/EnchantedAcorn'
+import {
+  ForestHeartCrystal,
+  FOREST_HEART_CRYSTAL_DESCRIPTION,
+} from './items/ForestHeartCrystal'
+import { NaturesCharm, NATURES_CHARM_DESCRIPTION } from './items/NaturesCharm'
+import { NyxToken, NYX_TOKEN_DESCRIPTION } from './items/NyxToken'
+import {
+  OfferingAltar,
+  OFFERING_ALTAR_DESCRIPTION,
+} from './items/OfferingAltar'
+import {
+  ProtectiveCharm,
+  PROTECTIVE_CHARM_DESCRIPTION,
+} from './items/ProtectiveCharm'
 import {
   SECRET_DOCUMENTS_DESCRIPTION,
   SecretDocuments,
@@ -152,8 +171,9 @@ export class Act2 extends Act {
   }
 
   /**
-   * Bring older saves up to date: the coins, the merchant's flyer, the secret documents, the
-   * squire's diary, the castle rooms, the Main Square, the Healer's House, the
+   * Bring older saves up to date: the coins, the merchant's flyer, the secret
+   * documents, the squire's diary, the altar, the charms, the acorn, Nyx's
+   * gifts, the castle rooms, the Main Square, the Healer's House, the
    * Residential Quarter, Cedric's quest log and the riddles quest log keep the
    * text they were saved with, so give them the current wording, and put Brenn
    * in the warehouse of saves made before he was met there. Safe to run on
@@ -189,6 +209,19 @@ export class Act2 extends Act {
         item.description = CITY_NOTICE_BOARD_DESCRIPTION
       if (item instanceof Coins) item.description = COINS_DESCRIPTION
       if (item instanceof MerchantsFlyer) item.description = FLYER_DESCRIPTION
+      if (item instanceof OfferingAltar)
+        item.description = OFFERING_ALTAR_DESCRIPTION
+      if (item instanceof DruidicCharm)
+        item.description = DRUIDIC_CHARM_DESCRIPTION
+      if (item instanceof ProtectiveCharm)
+        item.description = PROTECTIVE_CHARM_DESCRIPTION
+      if (item instanceof NaturesCharm)
+        item.description = NATURES_CHARM_DESCRIPTION
+      if (item instanceof EnchantedAcorn)
+        item.description = ENCHANTED_ACORN_DESCRIPTION
+      if (item instanceof NyxToken) item.description = NYX_TOKEN_DESCRIPTION
+      if (item instanceof ForestHeartCrystal)
+        item.description = FOREST_HEART_CRYSTAL_DESCRIPTION
     }
     for (const quest of [
       ...gameState.nonActivatedQuests,

@@ -1,16 +1,17 @@
 import { Item } from '@/engine'
 
-/** A powerful crystal embodying the living essence of the enchanted forest. */
+/** The crystal's description; `Act2.afterLoad` restores it in older saves. */
+export const FOREST_HEART_CRYSTAL_DESCRIPTION =
+  'A crystal the size of a plum. Inside it, tiny lights drift like ' +
+  'fireflies over a forest you could almost walk into. Held close, it ' +
+  'sounds like wind in leaves.'
+
+/** A crystal holding the living forest, Nyx's gift for the heart of the forest. */
 export class ForestHeartCrystal extends Item {
   constructor() {
     super({
       name: 'forest heart crystal',
-      description:
-        'A magnificent crystal that seems to contain an entire living forest within its ' +
-        'translucent depths. Tiny lights dance inside like fireflies, and you can almost ' +
-        'hear the whisper of wind through leaves when you hold it close. This crystal ' +
-        'radiates immense magical power and represents the concentrated essence of all ' +
-        'natural magic.',
+      description: FOREST_HEART_CRYSTAL_DESCRIPTION,
     })
   }
 }

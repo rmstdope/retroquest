@@ -1760,9 +1760,9 @@
     "text": "A forest hermit at the edge of the Enchanted Forest has warned you that the forest moves its paths and keeps old things that don't care for strangers. The hermit has given you a protective charm to help safeguard your journey through the magical wilderness, but you need to prepare yourself before venturing further into the Enchanted Forest."
   },
   {
-    "key": "1e2bbe4d2450e2",
+    "key": "0c6650dff2cb72",
     "speaker": "narrator",
-    "text": "A small talisman woven from forest vines and blessed by ancient magic. It pulses with a gentle green light and carries the protective power of the deep woods. This charm will ward off hostile forest spirits and mark the bearer as one under the hermit's protection."
+    "text": "A twist of braided grass, bark and a bird's bone: the hermit's mark. It tells the forest you are under the hermit's protection."
   },
   {
     "key": "1351f3f158c695",
@@ -1785,9 +1785,9 @@
     "text": "You slept on her doorstep and she let you. That's a start. Go on, then."
   },
   {
-    "key": "0bd63537a3bc35",
+    "key": "085143070b290a",
     "speaker": "narrator",
-    "text": "The protective charm glows softly, providing a sense of comfort and protection. It seems most powerful near places of natural magic."
+    "text": "The braided grass is dry and light in your hand."
   },
   {
     "key": "1a6e9032a80821",
@@ -1840,9 +1840,9 @@
     "text": "Massive trees create a natural cathedral as you enter the Enchanted Forest. Dappled sunlight filters through the dense canopy, and the path ahead disappears into green shadows. The air is alive with birds and rustling leaves, but beneath it lies an expectant silence, as if the forest itself is watching. A path leads south toward an ancient grove, but small motes of light dance thick across it: forest sprites, and every one of them is looking at you. To the east the undergrowth grows thick and dark."
   },
   {
-    "key": "085e5d62049f73",
+    "key": "02a71f321f2b2d",
     "speaker": "narrator",
-    "text": "A perfectly shaped acorn that glows with soft, natural magic. The shell appears to be made of polished wood with intricate spiral patterns that seem to move when observed closely. It radiates a sense of ancient wisdom and connection to the deepest mysteries of the forest. This is clearly a gift meant for the most sacred forest spirits. When you hold it up to the light, you can see tiny veins of silver running through the shell like tree roots. The acorn seems to whisper in a language older than words, speaking of growth, wisdom, and the eternal cycle of the forest."
+    "text": "An acorn, perfectly shaped, with fine veins of silver running through the shell like roots. It is warm, as if someone had just been holding it."
   },
   {
     "key": "09f534eccdd1fc",
@@ -1920,14 +1920,14 @@
     "text": "You search around the Forest Entrance, but find nothing of interest beyond what you can already see."
   },
   {
-    "key": "01991ff198ef2e",
+    "key": "0694c5307e130e",
     "speaker": "narrator",
-    "text": "The moment you touch it, you feel a surge of natural magic - this is no ordinary acorn, but a sacred offering imbued with the forest's blessing. The forest sprites whisper approvingly as you claim this gift."
+    "text": "It is warm in your palm. The forest sprites go quiet, all at once, and watch you put it away."
   },
   {
-    "key": "0c0e28f4bff5eb",
+    "key": "179865944396f5",
     "speaker": "narrator",
-    "text": "The enchanted acorn glows softly in the forest, but it seems to be calling you toward something more ancient and sacred."
+    "text": "The acorn lies warm and still in your hand."
   },
   {
     "key": "186d0e2f86830e",
@@ -2465,14 +2465,14 @@
     "text": "On purpose. … Someone chose my girl. … Then this house sleeps with one eye open from now on. Thank you for telling me. I'd sooner know it than be comforted by a lie."
   },
   {
-    "key": "06f31dd80f194d",
+    "key": "100293e92ad458",
     "speaker": "narrator",
-    "text": "An ancient charm carved from sacred oak and blessed by generations of druids. The wooden pendant is etched with mystical symbols that seem to pulse with natural magic. Wrapped in silver wire and suspended from a leather cord, it emanates a warm, protective energy. This sacred charm represents the bond between nature and civilization. The intricate carvings depict intertwined branches and leaves, symbols of the eternal cycle of growth and renewal. You can feel the gratitude and love that Marcus poured into this gift when he gave it to you for saving his daughter Elena from the dark curse."
+    "text": "A pendant of dark oak on a leather cord, bound with silver wire, with an oak leaf carved on its face. It hung over the door of the Silver Stag for longer than there has been a Silver Stag."
   },
   {
-    "key": "0a7406cedd0e04",
+    "key": "0687f6b74357c9",
     "speaker": "narrator",
-    "text": "The druidic charm glows faintly with natural magic. It feels especially potent here, but you sense it has a greater purpose that requires the right location and companions."
+    "text": "The charm is warm from your hand."
   },
   {
     "key": "14210ae72a55d1",
@@ -2770,9 +2770,9 @@
     "text": "A tall knight in old, dented mail. His sword hangs at his hip once more, and he carries himself like a man who has been given back his name."
   },
   {
-    "key": "02eaca6b4dd2e2",
+    "key": "09bf74e18e6320",
     "speaker": "narrator",
-    "text": "An ancient charm blessed by the knights of old, carved from living wood and inlaid with silver runes. It pulses with a gentle green light and seems to resonate with the natural world. This is clearly one of the sacred charms mentioned in the old texts - those needed to summon the forest sprite Nyx."
+    "text": "A small wooden charm, dark with handling, carved with a sword laid across a branch. Sir Cedric's family has kept it since the knights first made pacts with the forest spirits."
   },
   {
     "key": "081c50e0919d17",
@@ -2830,14 +2830,9 @@
     "text": "The deepest part of the Enchanted Forest, where reality feels fluid and magic flows like water. Impossible colors paint the landscape and the air sparkles with latent energy. A colossal tree dominates the center, its branches seeming to uphold the sky. Before it rests an ancient altar carved from starstone, runes pulsing with otherworldly light. This is Nyx's domain where profound secrets surface. The sacred grove path is the only passage into this mystical heart."
   },
   {
-    "key": "0413ccf77df0b5",
+    "key": "1ee6e541ff6664",
     "speaker": "narrator",
-    "text": "An ancient altar carved from a single piece of starstone, its surface adorned with mystical runes that pulse with otherworldly light. Three circular indentations suggest that specific items are meant to be placed here in a sacred ritual. The altar radiates powerful magic and seems to be waiting for the proper offerings to activate its full potential."
-  },
-  {
-    "key": "03da8a4c79eb03",
-    "speaker": "narrator",
-    "text": "The druidic charm resonates with the mystical energy of this sacred place. It should be placed on the offering altar along with other sacred items to perform powerful rituals."
+    "text": "An altar cut from one block of starstone, pale and speckled. Three hollows are carved in its top, and beside each a sign is cut: an oak leaf, a braid of grass, and a sword laid across a branch."
   },
   {
     "key": "0c49d7e58ae9bf",
@@ -2905,14 +2900,14 @@
     "text": "Nyx judged you worthy and gave you the Prophetic Vision spell, her token and the forest heart crystal. She left you with the words from the glade stone: power follows purpose; purpose follows truth. When every other task in Greendale is done, cast the vision with Sir Cedric beside you, so you can both see what is coming."
   },
   {
-    "key": "13f6b96c8e2ea1",
+    "key": "1e01c742580318",
     "speaker": "narrator",
-    "text": "A small, crystalline pendant that shifts through all the colors of nature — from the deep green of summer leaves to the golden brown of autumn, the pure white of winter snow, and the vibrant colors of spring flowers. It pulses with gentle magic and seems to contain a fragment of the forest's eternal essence."
+    "text": "A small crystal on a cord of plaited grass. Turn it in the light and it is green as summer leaves, then brown as autumn, then white as snow."
   },
   {
-    "key": "0ba9adb82f02b5",
+    "key": "06e7c0278ab680",
     "speaker": "narrator",
-    "text": "A magnificent crystal that seems to contain an entire living forest within its translucent depths. Tiny lights dance inside like fireflies, and you can almost hear the whisper of wind through leaves when you hold it close. This crystal radiates immense magical power and represents the concentrated essence of all natural magic."
+    "text": "A crystal the size of a plum. Inside it, tiny lights drift like fireflies over a forest you could almost walk into. Held close, it sounds like wind in leaves."
   },
   {
     "key": "0444e0f9f83e4f",

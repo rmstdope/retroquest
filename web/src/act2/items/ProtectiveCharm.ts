@@ -3,21 +3,23 @@ import { FLAG_PROTECTIVE_CHARM_USED_FOREST_ENTRANCE } from '../Act2StoryFlags'
 import { ForestEntrance } from '../rooms/ForestEntrance'
 import { OfferingAltar } from './OfferingAltar'
 
-/** Talisman granting spiritual protection in the enchanted forest when used. */
+/** The charm's description; `Act2.afterLoad` restores it in older saves. */
+export const PROTECTIVE_CHARM_DESCRIPTION =
+  "A twist of braided grass, bark and a bird's bone: the hermit's mark. It " +
+  "tells the forest you are under the hermit's protection."
+
+/** The hermit's mark: it opens the sprites' path at the forest entrance. */
 export class ProtectiveCharm extends Item {
   constructor() {
     super({
       name: 'protective charm',
       shortName: 'charm',
-      description:
-        'A small talisman woven from forest vines and blessed by ancient magic.' +
-        ' It pulses with a gentle green light and carries the protective power ' +
-        'of the deep woods. This charm will ward off hostile forest spirits ' +
-        "and mark the bearer as one under the hermit's protection.",
+      description: PROTECTIVE_CHARM_DESCRIPTION,
       canBeCarried: true,
     })
   }
 
+  /** Opens the sprites' path at the forest entrance; elsewhere it is only braided grass. */
   override use(gameState: GameState): string {
     if (gameState.currentRoom instanceof ForestEntrance) {
       if (!gameState.getStoryFlag(FLAG_PROTECTIVE_CHARM_USED_FOREST_ENTRANCE)) {
@@ -36,10 +38,7 @@ export class ProtectiveCharm extends Item {
         'spiritual protection in this mystical place.[/failure]'
       )
     }
-    return (
-      'The [item_name]protective charm[/item_name] glows softly, providing a sense of ' +
-      'comfort and protection. It seems most powerful near places of natural magic.'
-    )
+    return 'The braided grass is dry and light in your hand.'
   }
 
   /** Use the protective charm with another item. */

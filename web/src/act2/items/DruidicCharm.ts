@@ -1,36 +1,25 @@
 import { Item, type GameState } from '@/engine'
 import { OfferingAltar } from './OfferingAltar'
 
-/** Sacred charm used in rituals and offerings at the forest altar. */
+/** The charm's description; `Act2.afterLoad` restores it in older saves. */
+export const DRUIDIC_CHARM_DESCRIPTION =
+  'A pendant of dark oak on a leather cord, bound with silver wire, with an ' +
+  'oak leaf carved on its face. It hung over the door of the Silver Stag for ' +
+  'longer than there has been a Silver Stag.'
+
+/** Marcus's gift: the oak-leaf charm for the offering altar. */
 export class DruidicCharm extends Item {
   constructor() {
     super({
       name: 'druidic charm',
-      description:
-        'An ancient charm carved from sacred oak and blessed by generations ' +
-        'of druids. The wooden pendant is etched with mystical symbols that ' +
-        'seem to pulse with natural magic. Wrapped in silver wire and suspended ' +
-        'from a leather cord, it emanates a warm, protective energy. This sacred ' +
-        'charm represents the bond between nature and civilization.',
+      description: DRUIDIC_CHARM_DESCRIPTION,
       canBeCarried: true,
     })
   }
 
-  /** The charm resonates in the Heart of the Forest, glows faintly elsewhere. */
-  override use(gameState: GameState): string {
-    const currentRoom = gameState.currentRoom.name
-    if (currentRoom.toLowerCase().includes('heart of the forest')) {
-      return (
-        'The [item_name]druidic charm[/item_name] resonates with the mystical ' +
-        'energy of this sacred place. It should be placed on the offering altar ' +
-        'along with other sacred items to perform powerful rituals.'
-      )
-    }
-    return (
-      'The [item_name]druidic charm[/item_name] glows faintly with natural magic. ' +
-      'It feels especially potent here, but you sense it has a greater purpose ' +
-      'that requires the right location and companions.'
-    )
+  /** The charm is only warm from the hand, in every room. */
+  override use(_gameState: GameState): string {
+    return 'The charm is warm from your hand.'
   }
 
   /** Use the druidic charm with another item. */
@@ -40,17 +29,5 @@ export class DruidicCharm extends Item {
       return other.useWith(gameState, this)
     }
     return super.useWith(gameState, other)
-  }
-
-  /** Examine the charm and recall Marcus's gratitude. */
-  override examine(_gameState: GameState): string {
-    const desc = this.description
-    return (
-      `${desc} The ` +
-      'intricate carvings depict intertwined branches and leaves, ' +
-      'symbols of the eternal cycle of growth and renewal. You can feel ' +
-      'the gratitude and love that Marcus poured into this gift when he ' +
-      'gave it to you for saving his daughter Elena from the dark curse.'
-    )
   }
 }
