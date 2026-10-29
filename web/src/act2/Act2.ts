@@ -1,5 +1,11 @@
 import { Act, characterName, type GameState, type Item, speech } from '@/engine'
 import { Brenn } from './characters/Brenn'
+import { DispelSpell } from './spells/DispelSpell'
+import { ForestSpeechSpell } from './spells/ForestSpeechSpell'
+import { GreaterHealSpell } from './spells/GreaterHealSpell'
+import { MendSpell } from './spells/MendSpell'
+import { NatureSenseSpell } from './spells/NatureSenseSpell'
+import { PropheticVision } from './spells/PropheticVision'
 import { AncientAmulet } from './items/AncientAmulet'
 import { MountainPath } from './rooms/MountainPath'
 import { GreendaleGates } from './rooms/GreendaleGates'
@@ -173,7 +179,8 @@ export class Act2 extends Act {
   /**
    * Bring older saves up to date: the coins, the merchant's flyer, the secret
    * documents, the squire's diary, the altar, the charms, the acorn, Nyx's
-   * gifts, the castle rooms, the Main Square, the Healer's House, the
+   * gifts, the spells' descriptions, the castle rooms, the Main Square, the
+   * Healer's House, the
    * Residential Quarter, Cedric's quest log and the riddles quest log keep the
    * text they were saved with, so give them the current wording, and put Brenn
    * in the warehouse of saves made before he was met there. Safe to run on
@@ -190,6 +197,20 @@ export class Act2 extends Act {
     gameState.allRooms.GreatHall.description = GREAT_HALL_DESCRIPTION
     gameState.allRooms.ForestEntrance.description = FOREST_ENTRANCE_DESCRIPTION
     SirCedric.refreshAll(gameState)
+    for (const spell of gameState.knownSpells) {
+      if (spell instanceof MendSpell)
+        spell.description = new MendSpell().description
+      if (spell instanceof GreaterHealSpell)
+        spell.description = new GreaterHealSpell().description
+      if (spell instanceof DispelSpell)
+        spell.description = new DispelSpell().description
+      if (spell instanceof NatureSenseSpell)
+        spell.description = new NatureSenseSpell().description
+      if (spell instanceof ForestSpeechSpell)
+        spell.description = new ForestSpeechSpell().description
+      if (spell instanceof PropheticVision)
+        spell.description = new PropheticVision().description
+    }
     for (const room of Object.values(gameState.allRooms))
       for (const character of room.characters)
         if (character instanceof MountainHermit)

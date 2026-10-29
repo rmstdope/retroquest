@@ -42,8 +42,8 @@ export class PropheticVision extends Spell {
       id: 'prophetic_vision',
       name: 'prophetic vision',
       description:
-        'A powerful divination spell that allows the caster to glimpse possible futures ' +
-        'and see the threads of fate.',
+        "Nyx's gift: a look at what is coming. She told you not to look at " +
+        'it alone.',
     })
   }
 
@@ -129,10 +129,8 @@ export class PropheticVision extends Spell {
     }
 
     return (
-      'Brief glimpses of possible futures dance before your eyes. The gift ' +
-      'of foresight reminds you that every choice creates ripples through ' +
-      'the tapestry of time, and wisdom lies in understanding the ' +
-      'consequences of your actions.'
+      'Shapes stir at the edge of sight and will not settle. Whatever is ' +
+      'coming, it is not ready to be seen.'
     )
   }
 

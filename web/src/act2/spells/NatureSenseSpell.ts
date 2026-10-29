@@ -19,12 +19,8 @@ export class NatureSenseSpell extends Spell {
       id: 'nature_sense',
       name: 'nature sense',
       description:
-        'A druidic spell that enhances your connection to the natural world. ' +
-        'When cast, it allows you to sense the life force of plants and ' +
-        'animals around you, detect hidden paths through forests, and ' +
-        'understand the subtle warnings that nature provides about dangers ' +
-        'ahead. This ancient magic was once commonly known among those who ' +
-        'lived in harmony with the wilderness.',
+        'Read from the runes on the standing stones: a way of listening to ' +
+        'everything that grows.',
     })
   }
 
@@ -70,31 +66,24 @@ export class NatureSenseSpell extends Spell {
       )
     }
     const roomName = gameState.currentRoom.name.toLowerCase()
-    if (roomName.includes('forest') || roomName.includes('enchanted')) {
-      // In forest areas, provide enhanced sensory information
+    if (roomName.includes('transition')) {
+      // The standing stones: the edge of the forest
       return (
-        '[success]Your awareness expands throughout the surrounding forest. The whisper of leaves ' +
-        'speaks of safe passages, the rustle of small creatures warns of ' +
-        'predators, and the very air reveals the health of the woodland. ' +
-        'You sense several hidden paths that wind through the trees, offering ' +
-        'safer routes through the wilderness.[/success]'
+        '[success]At the stones the living things around you thin to a ' +
+        'line. On the far side of it the forest begins, thick and ' +
+        'watchful.[/success]'
       )
-    } else if (roomName.includes('transition')) {
-      // In transition areas, help detect magical boundaries
+    } else if (roomName.includes('forest') || roomName.includes('enchanted')) {
       return (
-        '[success]You feel the magical ' +
-        'boundaries that separate different realms. The spell reveals the ebb ' +
-        'and flow of natural energy, showing you where the civilized world ' +
-        'ends and wilder magics begin. You can sense the ancient protections ' +
-        'woven into the very landscape.[/success]'
+        '[success]You let your awareness spread through the roots and the ' +
+        'undergrowth. Everything here is alive and busy, and none of it is ' +
+        'hiding from you.[/success]'
       )
     }
-    // In other areas, provide general nature awareness
+    // Elsewhere there is hardly anything growing
     return (
-      '[dim]You feel a subtle ' +
-      "connection to the natural world around you. While there isn't much " +
-      'wilderness here, you gain a better understanding of the living ' +
-      'things in this area and their relationship to the environment.[/dim]'
+      '[dim]There is little growing here: weeds between the cobbles, a ' +
+      'sparrow, moss on a wall.[/dim]'
     )
   }
 }

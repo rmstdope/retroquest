@@ -18,11 +18,8 @@ export class ForestSpeechSpell extends Spell {
       id: 'forest_speech',
       name: 'forest speech',
       description:
-        'An ancient druidic spell that grants the ability to communicate with ' +
-        'trees, plants, and forest creatures. This magic opens your mind to the ' +
-        'slow, deep thoughts of ancient trees and the quick, bright chatter of ' +
-        'woodland animals. Through this spell, you can seek guidance, learn ' +
-        'forest secrets, and understand the hidden wisdom of the natural world.',
+        "The tree spirit's gift for your acorn: the talk of roots, branches " +
+        'and small creatures, in words.',
     })
   }
 
@@ -78,10 +75,8 @@ export class ForestSpeechSpell extends Spell {
     const roomName = currentRoom.name.toLowerCase()
     if (roomName.includes('forest') || roomName.includes('grove')) {
       return (
-        '[success]The forest comes alive with conversation. The trees whisper their ancient ' +
-        'wisdom, sharing memories of seasons past and warnings of dangers ahead. ' +
-        'Small woodland creatures emerge to share news of hidden paths and secret ' +
-        'places. You feel deeply connected to the living tapestry of the forest.' +
+        "[success]The forest's talk sorts itself into words: roots " +
+        'complaining of dry ground, a jay telling everyone you are here.' +
         '[/success]'
       )
     } else if (roomName.includes('enchanted')) {

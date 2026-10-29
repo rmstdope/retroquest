@@ -21,10 +21,8 @@ export class DispelSpell extends Spell {
       id: 'dispel',
       name: 'dispel',
       description:
-        'A powerful counter-magic spell that can break magical barriers, ' +
-        'dispel illusions, and counter enemy enchantments. This advanced ' +
-        'magic requires deep understanding of magical theory and precise ' +
-        'control.',
+        "The Wardens' unbinding, from their chronicle: loosen what another " +
+        'hand has bound.',
     })
   }
 
@@ -65,10 +63,6 @@ export class DispelSpell extends Spell {
 
   /** Dispel on an item: one fixed sentence whatever the item is. */
   override castOnItem(_gameState: GameState, _targetItem: Item): string {
-    return (
-      '[success]Counter-magic flows through the item, neutralizing any ' +
-      'magical enchantments or curses that may have been affecting ' +
-      'it.[/success]'
-    )
+    return '[success]The unbinding finds nothing bound in it.[/success]'
   }
 }
