@@ -30,14 +30,13 @@ export class WhispersInTheWind extends Quest {
     })
   }
 
-  /** Check if this quest should be activated. */
-
   /** Bring the log up to date in a save made with the older wording. */
   refreshText(): void {
     this.description = DESCRIPTION
     this.completion = COMPLETION
   }
 
+  /** Check if this quest should be activated. */
   override checkTrigger(gameState: GameState): boolean {
     return gameState.getStoryFlag(FLAG_WHISPERS_IN_WIND_OFFERED)
   }

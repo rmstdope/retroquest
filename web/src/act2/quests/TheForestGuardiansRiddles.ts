@@ -31,7 +31,7 @@ export class TheForestGuardiansRiddles extends Quest {
     })
   }
 
-  /** Bring the description up to date in a save made with the older directions. */
+  /** Bring the log up to date in a save made with the older wording. */
   refreshText(): void {
     this.description = DESCRIPTION
     this.completion = COMPLETION
