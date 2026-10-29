@@ -104,16 +104,18 @@ describe('the closing line of Act III', () => {
 })
 
 describe("Elior's journal in the Act I script", () => {
-  it('is two lines, both in Elior’s voice', () => {
+  it('is four lines, all in Elior’s voice', () => {
     const script = read<Line[]>(1, 'script.json')
-    const first = script.find((line) => line.text.startsWith('What a night.'))
-    const second = script.find((line) =>
-      line.text.startsWith('When I finally drifted off, the dreams came.'),
-    )
-    expect(first?.text).toMatch(/Pulsating, almost\.$/)
-    expect(first?.speaker).toBe('elior')
-    expect(second?.text).toMatch(/What did it mean\?$/)
-    expect(second?.speaker).toBe('elior')
+    const openings = [
+      'The storm kept me up half the night.',
+      'When I slept, I dreamed.',
+      'I knew that voice.',
+      'When I woke, the tune was still going.',
+    ]
+    for (const opening of openings) {
+      const line = script.find((entry) => entry.text.startsWith(opening))
+      expect(line?.speaker).toBe('elior')
+    }
   })
 })
 

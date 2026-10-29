@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { Game, findMarkupProblems } from '@/engine'
+import { executeCommands } from '@/testing/gameHelpers'
 import { Act1 } from '../Act1'
 import { PrayerBook } from './PrayerBook'
 
@@ -11,12 +12,23 @@ describe('PrayerBook', () => {
     expect(text).not.toContain('[event]You read the [item_name]')
   })
 
-  it('shows the passage as unquoted writing', () => {
+  it('opens with narration, then sets the hymn apart as unquoted writing', () => {
     const game = new Game([new Act1()])
     const text = new PrayerBook().read(game.state)
-    expect(text).toContain(
-      "[character_name][/character_name]\n[dialogue]By the moon's forgotten echo, " +
-        'let the silent bells resound...[/dialogue]',
+    expect(text).toBe(
+      'The book falls open by itself at a page worn soft with reading: ' +
+        'the hymn for the bell.\n' +
+        '[character_name][/character_name]\n[dialogue]Ring for the ones who go, ' +
+        'and ring them home.[/dialogue]',
     )
+  })
+
+  it('is read in the chapel with use, the way the journal is', () => {
+    const game = new Game([new Act1()])
+    game.state.currentRoom = game.state.allRooms.VillageChapel
+    const text = executeCommands(game, ['use prayer book'])
+    expect(text).toContain('the hymn for the bell.')
+    expect(text).toContain('Ring for the ones who go, and ring them home.')
+    expect(text).not.toContain("can't use")
   })
 })

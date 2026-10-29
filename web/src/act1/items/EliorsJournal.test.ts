@@ -11,26 +11,29 @@ describe('EliorsJournal', () => {
     const entry = journal.use(new Game([new Act1()]).state)
 
     expect(entry).toContain(
-      'And three words at the very end, which I wrote down the moment I ' +
-        'woke so I would not lose them: …and let them rest…',
+      'it said three words more, and I wrote them down the moment I woke so ' +
+        'I would not lose them: …and let them rest…',
     )
   })
 
-  it('shows the journal entry as two unlabelled paragraphs, so each can be skipped', () => {
+  it('shows the entry as four unlabelled paragraphs, so each can be skipped', () => {
     const game = new Game([new Act1()])
     const text = new EliorsJournal().use(game.state)
 
     expect(findMarkupProblems(text)).toEqual([])
     const quotes = parseTurn(text).filter((b) => b.kind === 'dialogue')
-    expect(quotes).toHaveLength(2)
-    expect(quotes[0]).toMatchObject({ speaker: null })
-    expect(quotes[1]).toMatchObject({ speaker: null })
-    expect(text).toContain('[dialogue]What a night.')
-    expect(text).toContain('Pulsating, almost.[/dialogue]')
+    expect(quotes).toHaveLength(4)
+    for (const quote of quotes) expect(quote).toMatchObject({ speaker: null })
+    expect(text).toContain('[dialogue]The storm kept me up half the night.')
+    expect(text).toContain('and it was not lightning.[/dialogue]')
+    expect(text).toContain('[dialogue]When I slept, I dreamed.')
+    expect(text).toContain("A man's hand lifted a child out of the dark.")
+    expect(text).toContain('three notes up and home again')
+    expect(text).toContain('[dialogue]I knew that voice.')
+    expect(text).toContain('[dialogue]When I woke, the tune was still going.')
     expect(text).toContain(
-      '[dialogue]When I finally drifted off, the dreams came.',
+      'Someone out by the hearth was humming it.[/dialogue]',
     )
-    expect(text).toContain('What did it mean?[/dialogue]')
   })
 
   it('remembers the dream voice as achingly familiar but never places it', () => {
@@ -38,10 +41,10 @@ describe('EliorsJournal', () => {
     const text = new EliorsJournal().use(game.state)
 
     expect(text).toContain(
-      'And the strangest thing — I knew that voice. Not the way you know a ' +
+      'I knew that voice. Not the way you know a ' +
         "neighbour's, but the way you know a song someone sang to you before " +
         'you had words for it. It made my chest ache. ' +
-        "I just can't remember from where. What did it mean?",
+        "I can't think from where.",
     )
     expect(text).not.toMatch(/mother|father/i)
   })

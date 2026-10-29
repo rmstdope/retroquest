@@ -12,14 +12,17 @@ export class PrayerBook extends Item {
     })
   }
 
-  /** Read the prayer book and return its mystical message. */
+  /** Read the prayer book: the hymn for the bell, set apart as the book's own words. */
   read(_gameState: GameState): string {
     return (
-      'The pages shimmer with shifting runes and cryptic sigils. As you try to focus, ' +
-      'the words seem to rearrange themselves:\n' +
-      writing("By the moon's forgotten echo, let the silent bells resound...") +
-      '\nBut the rest dissolves into a swirl of arcane nonsense. ' +
-      'You feel a faint tingle in your fingertips.'
+      'The book falls open by itself at a page worn soft with reading: ' +
+      'the hymn for the bell.\n' +
+      writing('Ring for the ones who go, and ring them home.')
     )
+  }
+
+  /** Using the book reads it, as using Elior's journal does: the game has no read verb. */
+  override use(gameState: GameState): string {
+    return this.read(gameState)
   }
 }

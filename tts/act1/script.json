@@ -245,14 +245,24 @@
     "text": "The ink is slightly smudged on this page, as if written in haste or with a trembling hand..."
   },
   {
-    "key": "1b62d799d492bb",
+    "key": "015e34273fc648",
     "speaker": "elior",
-    "text": "What a night. The wind howled like a hungry wolf, and rain lashed against the shutters. I swear the whole cottage shook with each thunderclap. Sleep was impossible for hours. Then, through a gap in the curtains, I saw it – a searing, unnatural light that split the sky. It wasn't lightning; it was... different. Pulsating, almost."
+    "text": "The storm kept me up half the night. Then a light split the sky over the fields, and it was not lightning."
   },
   {
-    "key": "17e675dcabd549",
+    "key": "0be28f802c06d6",
     "speaker": "elior",
-    "text": "When I finally drifted off, the dreams came. Not the usual ones of fields and harvests. This was dark, filled with swirling shadows. And a figure, tall and indistinct, its voice a whisper on the edge of hearing, yet it felt like it was calling my name. Elior... I woke with a start, my heart pounding. And three words at the very end, which I wrote down the moment I woke so I would not lose them: …and let them rest… Even now, the memory sends a shiver down my spine. And the strangest thing — I knew that voice. Not the way you know a neighbour's, but the way you know a song someone sang to you before you had words for it. It made my chest ache. I just can't remember from where. What did it mean?"
+    "text": "When I slept, I dreamed. Dark, and rain on shutters I could not see. A man's hand lifted a child out of the dark. There was a tune, three notes up and home again, and a tall figure that whispered my name. When I answered it, it said three words more, and I wrote them down the moment I woke so I would not lose them: …and let them rest…"
+  },
+  {
+    "key": "1d40b2e31eff55",
+    "speaker": "elior",
+    "text": "I knew that voice. Not the way you know a neighbour's, but the way you know a song someone sang to you before you had words for it. It made my chest ache. I can't think from where."
+  },
+  {
+    "key": "0956c166f444c8",
+    "speaker": "elior",
+    "text": "When I woke, the tune was still going. Someone out by the hearth was humming it."
   },
   {
     "key": "013b58e4f830be",
@@ -1020,9 +1030,9 @@
     "text": "A bundle of fragrant green herbs, known for their restorative properties. Useful for healing wounds or brewing potions."
   },
   {
-    "key": "04700c60c4991c",
+    "key": "14da17371d9c97",
     "speaker": "narrator",
-    "text": "A mysterious amulet inscribed with runes. It is faintly warm, as if someone had only just set it down."
+    "text": "A mysterious amulet inscribed with runes. At its centre, a sun rises over three linked rings. It is faintly warm, as if someone had only just set it down."
   },
   {
     "key": "0f969b061b4c06",
@@ -1340,9 +1350,9 @@
     "text": "Riverbank"
   },
   {
-    "key": "0950d6e42d4663",
+    "key": "139edb34a8e6fc",
     "speaker": "narrator",
-    "text": "A gentle river flows past the village. Reeds sway along the banks, and the air is alive with the hum of insects. A weathered fisherman sits nearby, humming a quiet tune. The riverbank is peaceful, a place where time seems to slow and worries drift away."
+    "text": "A gentle river flows past the village and makes a slow bend here, past the reeds and a broad, flat stone at the water's edge. Insects hum over the water. A weathered fisherman sits on an upturned crate at the bend, his line in."
   },
   {
     "key": "1fbe63de89a20b",
@@ -1375,9 +1385,9 @@
     "text": "He teaches you the basics of fishing."
   },
   {
-    "key": "1f0760918561c3",
+    "key": "1767fee1b8c64a",
     "speaker": "narrator",
-    "text": "An old man on an upturned crate at the bend, his line in the water, humming something under his breath."
+    "text": "An old man on an upturned crate at the bend, his line in the water and his bad arm held close to his side."
   },
   {
     "key": "165757030a4e44",
@@ -1675,9 +1685,9 @@
     "text": "Village Chapel"
   },
   {
-    "key": "0cc25b5c5a869a",
+    "key": "120f846e60a8f4",
     "speaker": "narrator",
-    "text": "A small stone chapel stands in quiet dignity, its stained glass windows casting rainbows across the worn pews. The air is cool and still, filled with the faint scent of candle wax and old parchment. A kindly priest tends to the altar, offering blessings and words of comfort. Over the door a shape is cut into the stone, worn almost smooth. A dark corner by the altar swallows the light."
+    "text": "A small stone chapel. Its stained glass windows cast colours across the worn pews, and the air is cool and smells of candle wax. A kindly priest tends the altar. By the door the bell rope hangs straight and still. Over the door a shape is cut into the stone, worn almost smooth. A dark corner by the altar swallows the light."
   },
   {
     "key": "1018f12794002f",
@@ -1895,9 +1905,9 @@
     "text": "Mira has nothing to sell you."
   },
   {
-    "key": "0eb3653554f52f",
+    "key": "02ff119b0dff79",
     "speaker": "narrator",
-    "text": "A mysterious amulet inscribed with runes. Its glow quickens as you lean closer, steady as a heartbeat."
+    "text": "A mysterious amulet inscribed with runes. At its centre, a sun rises over three linked rings. Its glow quickens as you lean closer, steady as a heartbeat."
   },
   {
     "key": "11b854417ed0e2",
@@ -2885,9 +2895,9 @@
     "text": "Shadows Over Willowbrook: Mira named the token a fouling sigil: someone poisoned the well on purpose. Whoever carried it, perhaps the cloaked stranger the villagers whisper about, was searching Willowbrook for something, or for someone."
   },
   {
-    "key": "102c991f73cdd6",
+    "key": "11a0ba67289d79",
     "speaker": "narrator",
-    "text": "A mysterious amulet inscribed with runes. It is faintly warm in your hand."
+    "text": "A mysterious amulet inscribed with runes. At its centre, a sun rises over three linked rings. It is faintly warm in your hand."
   },
   {
     "key": "18708bfe81a990",
@@ -2925,14 +2935,14 @@
     "text": "Come back to me, child."
   },
   {
-    "key": "152d2eed998f12",
+    "key": "1617d901ed64b1",
     "speaker": "narrator",
-    "text": "A mysterious amulet inscribed with runes. It hums softly in your hand, as if answering something stirring beneath the floor."
+    "text": "A mysterious amulet inscribed with runes. At its centre, a sun rises over three linked rings. It hums softly in your hand, as if answering something stirring beneath the floor."
   },
   {
-    "key": "048345f2e4ba4f",
+    "key": "01ec643e83edc4",
     "speaker": "narrator",
-    "text": "A mysterious amulet inscribed with runes. It glows in your hand, brightest when you hold it near the mossy stone."
+    "text": "A mysterious amulet inscribed with runes. At its centre, a sun rises over three linked rings. It glows in your hand, brightest when you hold it near the mossy stone."
   },
   {
     "key": "14cc1c80d9153b",
