@@ -1,16 +1,15 @@
 import { Item } from '@/engine'
 
-/** A powerful elixir created from the three virtues that can save King Alden. */
+/** The elixir Mira made from the three relics, to stop what Malakar is doing to the king. */
 export class LifelightElixir extends Item {
   constructor() {
     super({
       name: 'Lifelight Elixir',
       description:
-        'A shimmering elixir that seems to contain liquid starlight. ' +
-        'Threads of crystal clarity, phoenix flame, and draconic essence ' +
-        'swirl within the glass vial. This potion pulses with the combined ' +
-        'power of courage, wisdom, and selflessness—the three virtues ' +
-        "needed to counter Malakar's dark ritual and save King Alden's life.",
+        'A small glass vial the colour of first light. Something moves in ' +
+        'it: a white glint, a thread of flame, a dark shimmer like a scale ' +
+        'turning. Mira made it from the three relics, to stop what Malakar ' +
+        'is doing to the king.',
       canBeCarried: true,
       shortName: 'elixir',
     })
