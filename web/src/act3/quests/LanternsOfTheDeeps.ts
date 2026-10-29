@@ -20,12 +20,8 @@ export class LanternsOfTheDeepsQuest extends Quest {
         'glow, the hall may answer — the stones could yield secrets folded ' +
         'into their seams.',
       completion:
-        'Light fills the mounts and the chamber sighs. Threads of pearly ' +
-        'flame trace the carvings and the stone seems to part its lips. ' +
-        'A pale corridor unfurls where shadow once lay; it feels older ' +
-        'than living memory and leads toward what might be the sanctum, ' +
-        'veiled in salt and promise. The room has answered — more of its ' +
-        'secrets lie open now.',
+        'The prism lanterns burn in their brackets, and their light lays a ' +
+        'clear path through the flooded hall to the sanctum.',
     })
   }
 

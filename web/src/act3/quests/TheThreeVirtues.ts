@@ -7,6 +7,12 @@ import {
   FLAG_ACT3_PHOENIX_FEATHER_ACQUIRED,
 } from '../Act3StoryFlags'
 
+/** What Mira told Elior about Malakar and the three relics that can stand against him. */
+const OPENING_ENTRY =
+  'Mira says Malakar is draining the life out of King Alden. ' +
+  'Three relics can stand against him: the crystal of light, ' +
+  "the phoenix feather and the dragon's scale."
+
 /** Quest to prove Courage, Wisdom, and Selflessness to unlock the final ritual. */
 export class TheThreeVirtuesQuest extends Quest {
   private flagState: Record<string, boolean> = {}
@@ -14,9 +20,7 @@ export class TheThreeVirtuesQuest extends Quest {
   constructor() {
     super({
       name: 'The Three Virtues',
-      description:
-        'Prove Courage, Wisdom, and Selflessness by recovering the three relics: ' +
-        "the crystal of light, the phoenix feather, and the dragon's scale.",
+      description: OPENING_ENTRY,
     })
   }
 
@@ -35,9 +39,7 @@ export class TheThreeVirtuesQuest extends Quest {
   override checkUpdate(gameState: GameState): boolean {
     let updated = false
     const earlier: string[] = []
-    let newDesc =
-      'Prove Courage, Wisdom, and Selflessness by recovering the three relics: ' +
-      "the crystal of light, the phoenix feather, and the dragon's scale."
+    let newDesc = OPENING_ENTRY
     if (gameState.getStoryFlag(FLAG_ACT3_CRYSTAL_OF_LIGHT_ACQUIRED)) {
       if (!this.flagState[FLAG_ACT3_CRYSTAL_OF_LIGHT_ACQUIRED]) {
         this.flagState[FLAG_ACT3_CRYSTAL_OF_LIGHT_ACQUIRED] = true
@@ -45,10 +47,9 @@ export class TheThreeVirtuesQuest extends Quest {
       }
       earlier.push(newDesc)
       newDesc =
-        '\n\nYou have claimed the crystal of light; its steady brilliance answers ' +
-        'your courage and steadies what the deep waters once denied. Sir ' +
-        'Cedric has said little since the guardian asked him what he would ' +
-        'not abandon. '
+        '\n\nYou walked into the black water and named what you did not ' +
+        'abandon: yourself. The guardian gave you the crystal of light. ' +
+        'Sir Cedric has said little since it asked him the same question. '
     }
 
     // Add block for Phoenix Feather acquisition
@@ -59,10 +60,9 @@ export class TheThreeVirtuesQuest extends Quest {
       }
       earlier.push(newDesc)
       newDesc =
-        '\n\nYou have obtained the phoenix feather. Its warmth pulses in your grasp, ' +
-        'a living ember that refuses to die. The memory of fire and flight lingers, ' +
-        'reminding you that hope can rise from ashes. The path ahead is clearer, ' +
-        'but the final virtue remains. '
+        '\n\nYou answered the phoenix: wisdom is patience, even when the ' +
+        'world burns. It gave you a feather, and told you of a Warden who ' +
+        'had none. '
     }
 
     // Add block for Dragon's Scale acquisition

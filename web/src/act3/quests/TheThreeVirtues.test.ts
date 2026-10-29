@@ -68,7 +68,7 @@ describe('The Three Virtues quest', () => {
     expect(updated).toBe(true)
     // Description should mention that the Phoenix Feather was obtained
     expect(quest.description).toContain('phoenix feather')
-    expect(quest.description).toContain('hope can rise')
+    expect(quest.description).toContain('wisdom is patience')
 
     // Subsequent calls should not report another update
     expect(quest.checkUpdate(game.state)).toBe(false)
@@ -83,7 +83,7 @@ describe('The Three Virtues quest', () => {
     expect(updated).toBe(true)
     expect(quest.description).toContain('crystal of light')
     expect(quest.description).toContain('phoenix feather')
-    expect(quest.description).toContain('hope can rise')
+    expect(quest.description).toContain('wisdom is patience')
   })
 
   it("updates once when the dragon's scale is acquired", () => {
@@ -138,16 +138,13 @@ describe('The Three Virtues quest', () => {
     game.state.setStoryFlag(FLAG_ACT3_CRYSTAL_OF_LIGHT_ACQUIRED, true)
     expect(quest.checkUpdate(game.state)).toBe(true)
     expect(quest.description).toContain('crystal of light')
-    expect(quest.description).toContain('steady brilliance')
+    expect(quest.description).toContain('the black water')
     expect(quest.description).toContain(
-      'Sir Cedric has said little since the guardian asked him what he would ' +
-        'not abandon.',
+      'Sir Cedric has said little since it asked him the same question.',
     )
     expect(quest.description).not.toContain('allies skilled in magic')
     // Should not have specific messages for other relics yet
-    expect(quest.description).not.toContain(
-      'phoenix feather. Its warmth pulses',
-    )
+    expect(quest.description).not.toContain('You answered the phoenix')
     expect(quest.description).not.toContain(
       "dragon's scale, heavy in your pack",
     )
@@ -155,8 +152,8 @@ describe('The Three Virtues quest', () => {
     // Then acquire Phoenix Feather
     game.state.setStoryFlag(FLAG_ACT3_PHOENIX_FEATHER_ACQUIRED, true)
     expect(quest.checkUpdate(game.state)).toBe(true)
-    expect(quest.description).toContain('steady brilliance')
-    expect(quest.description).toContain('phoenix feather. Its warmth pulses')
+    expect(quest.description).toContain('the black water')
+    expect(quest.description).toContain('You answered the phoenix')
     // Should not have Dragon's Scale specific message yet
     expect(quest.description).not.toContain(
       "dragon's scale, heavy in your pack",
@@ -165,8 +162,8 @@ describe('The Three Virtues quest', () => {
     // Finally acquire Dragon's Scale
     game.state.setStoryFlag(FLAG_ACT3_DRAGONS_SCALE_ACQUIRED, true)
     expect(quest.checkUpdate(game.state)).toBe(true)
-    expect(quest.description).toContain('steady brilliance')
-    expect(quest.description).toContain('phoenix feather. Its warmth pulses')
+    expect(quest.description).toContain('the black water')
+    expect(quest.description).toContain('You answered the phoenix')
     expect(quest.description).toContain("dragon's scale, heavy in your pack")
     expect(quest.description).toContain('all three relics')
   })
@@ -180,7 +177,31 @@ describe('The Three Virtues quest', () => {
     const details = quest.details()
     if (details.kind !== 'journal') throw new Error('expected a journal')
     expect(details.earlier).toHaveLength(1)
-    expect(details.earlier[0]).toMatch(/^Prove Courage/)
-    expect(details.latest).toMatch(/^You have claimed the crystal of light/)
+    expect(details.earlier[0]).toMatch(/^Mira says Malakar is draining/)
+    expect(details.latest).toMatch(/^You walked into the black water/)
+  })
+
+  it('tells the crystal and the feather as what happened at each trial', () => {
+    const quest = new TheThreeVirtuesQuest()
+    const game = new Game([new Act3()])
+    expect(quest.description).toBe(
+      'Mira says Malakar is draining the life out of King Alden. Three relics ' +
+        'can stand against him: the crystal of light, the phoenix feather and ' +
+        "the dragon's scale.",
+    )
+    game.state.setStoryFlag(FLAG_ACT3_CRYSTAL_OF_LIGHT_ACQUIRED, true)
+    game.state.setStoryFlag(FLAG_ACT3_PHOENIX_FEATHER_ACQUIRED, true)
+    quest.checkUpdate(game.state)
+    const details = quest.details()
+    if (details.kind !== 'journal') throw new Error('expected a journal')
+    expect(details.earlier[1].trim()).toBe(
+      'You walked into the black water and named what you did not abandon: ' +
+        'yourself. The guardian gave you the crystal of light. Sir Cedric has ' +
+        'said little since it asked him the same question.',
+    )
+    expect(details.latest.trim()).toBe(
+      'You answered the phoenix: wisdom is patience, even when the world ' +
+        'burns. It gave you a feather, and told you of a Warden who had none.',
+    )
   })
 })
