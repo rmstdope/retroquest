@@ -6,6 +6,7 @@ import { DruidicCharm } from './DruidicCharm'
 import { EnchantedAcorn } from './EnchantedAcorn'
 import { NaturesCharm } from './NaturesCharm'
 import { ProtectiveCharm } from './ProtectiveCharm'
+import { QualityRope } from './QualityRope'
 import { TravelersJournal } from './TravelersJournal'
 import { executeCommands, expectMarkupWellFormed } from '@/testing/gameHelpers'
 
@@ -41,6 +42,23 @@ describe('OfferingAltar', () => {
     ).toBe(answer)
     expect(
       executeCommands(game, ["use offering altar with traveler's journal"]),
+    ).toBe(answer)
+  })
+
+  it('tells the rope it fits no hollow, though the rope has uses of its own', () => {
+    const game = new Game([new Act2()])
+    game.state.currentRoom = game.state.allRooms.HeartOfTheForest
+    const rope = new QualityRope()
+    game.state.inventory.push(rope)
+    const answer =
+      `${rope.nameInSentence({ atStart: true })} fits none of the ` +
+      'hollows. The runes stay dark.'
+
+    expect(
+      executeCommands(game, ['use quality rope with offering altar']),
+    ).toBe(answer)
+    expect(
+      executeCommands(game, ['use offering altar with quality rope']),
     ).toBe(answer)
   })
 
