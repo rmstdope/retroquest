@@ -15,6 +15,7 @@ import { ForestPath } from './rooms/ForestPath'
 import { HiddenGlade } from './rooms/HiddenGlade'
 import { VillageChapel } from './rooms/VillageChapel'
 import { RoadToGreendale } from './rooms/RoadToGreendale'
+import { Hearth } from './items/Hearth'
 import { Locket } from './items/Locket'
 import { HintOfMagicQuest } from './quests/HintOfMagic'
 import { CuriosityKilledTheCatQuest } from './quests/CuriosityKilledTheCat'
@@ -113,6 +114,9 @@ export class Act1 extends Act {
     rooms.RoadToGreendale.description = new RoadToGreendale().description
     rooms.AbandonedShed.description = new AbandonedShed().description
     rooms.MirasHut.description = new MirasHut().description
+    if (!rooms.EliorsCottage.getItemByName('hearth')) {
+      rooms.EliorsCottage.addItem(new Hearth())
+    }
     const carriers = [
       ...gameState.inventory,
       ...Object.values(rooms).flatMap((room) => room.items),

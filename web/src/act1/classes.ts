@@ -8,6 +8,7 @@ import { Bread } from './items/Bread'
 import { BrokenShovel } from './items/BrokenShovel'
 import { Bucket } from './items/Bucket'
 import { Bush } from './items/Bush'
+import { Hearth } from './items/Hearth'
 import { Candle } from './items/Candle'
 import { Chicken } from './items/Chicken'
 import { Coin } from './items/Coin'
@@ -111,6 +112,7 @@ export const ACT1_CLASSES = {
   BrokenShovel,
   Bucket,
   Bush,
+  Hearth,
   Candle,
   Chicken,
   Coin,
