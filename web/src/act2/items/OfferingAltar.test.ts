@@ -3,17 +3,36 @@ import { Game } from '@/engine'
 import { Act2 } from '../Act2'
 import { OfferingAltar } from './OfferingAltar'
 import { DruidicCharm } from './DruidicCharm'
+import { EnchantedAcorn } from './EnchantedAcorn'
 import { NaturesCharm } from './NaturesCharm'
 import { ProtectiveCharm } from './ProtectiveCharm'
 import { expectMarkupWellFormed } from '@/testing/gameHelpers'
 
 describe('OfferingAltar', () => {
-  it('lists the missing charms in lower case', () => {
+  it('shows a sign beside each hollow, one for each charm', () => {
+    expect(new OfferingAltar().description).toBe(
+      'An altar cut from one block of starstone, pale and speckled. Three ' +
+        'hollows are carved in its top, and beside each a sign is cut: an oak ' +
+        'leaf, a braid of grass, and a sword laid across a branch.',
+    )
+  })
+
+  it('says only that a wrong item fits no hollow', () => {
+    const game = new Game([new Act2()])
+    const acorn = new EnchantedAcorn()
+    expect(new OfferingAltar().useWith(game.state, acorn)).toBe(
+      `${acorn.nameInSentence({ atStart: true })} fits none of the hollows. ` +
+        'The runes stay dark.',
+    )
+  })
+
+  it('wakes the runes beside the charm placed, without listing the rest', () => {
     const game = new Game([new Act2()])
     const charm = new DruidicCharm()
     game.state.inventory.push(charm)
-    expect(new OfferingAltar().useWith(game.state, charm)).toContain(
-      "to activate the full ritual: protective charm, nature's charm.",
+    expect(new OfferingAltar().useWith(game.state, charm)).toBe(
+      `You set ${charm.nameInSentence()} in its hollow, and the runes beside ` +
+        'it wake. The others stay dark, and so do their hollows.',
     )
   })
 })

@@ -4,18 +4,18 @@ import { DruidicCharm } from './DruidicCharm'
 import { NaturesCharm } from './NaturesCharm'
 import { ProtectiveCharm } from './ProtectiveCharm'
 
-/** An ancient starstone altar where the three sacred charms can be placed to summon Nyx. */
+/** The altar's description; `Act2.afterLoad` restores it in older saves. */
+export const OFFERING_ALTAR_DESCRIPTION =
+  'An altar cut from one block of starstone, pale and speckled. Three ' +
+  'hollows are carved in its top, and beside each a sign is cut: an oak ' +
+  'leaf, a braid of grass, and a sword laid across a branch.'
+
+/** A starstone altar where the three sacred charms can be placed to summon Nyx. */
 export class OfferingAltar extends Item {
   constructor() {
     super({
       name: 'offering altar',
-      description:
-        'An ancient altar carved from a single piece of starstone, its surface ' +
-        'adorned with mystical runes that pulse with otherworldly light. Three ' +
-        'circular indentations suggest that specific items are meant to be ' +
-        'placed here in a sacred ritual. The altar radiates ' +
-        'powerful magic and seems to be waiting for the proper offerings to activate its ' +
-        'full potential.',
+      description: OFFERING_ALTAR_DESCRIPTION,
     })
   }
 
@@ -28,9 +28,8 @@ export class OfferingAltar extends Item {
     // Check if the other item is one of the three sacred charms
     if (!isCharm(other)) {
       return (
-        `The altar's runes remain dim. ${other.nameInSentence({ atStart: true })} does not seem to be one of ` +
-        'the sacred charms needed for this ancient ritual. You need the three blessed ' +
-        "charms: druidic charm, protective charm, and nature's charm."
+        `${other.nameInSentence({ atStart: true })} fits none of the hollows. ` +
+        'The runes stay dark.'
       )
     }
     // Check if player has all three sacred charms
@@ -44,15 +43,9 @@ export class OfferingAltar extends Item {
       (item) => item instanceof NaturesCharm,
     )
     if (!(hasDruidic && hasProtective && hasNatures)) {
-      const missingCharms: string[] = []
-      if (!hasDruidic) missingCharms.push('druidic charm')
-      if (!hasProtective) missingCharms.push('protective charm')
-      if (!hasNatures) missingCharms.push("nature's charm")
       return (
-        `The altar's runes flicker weakly as you place ${other.nameInSentence()} upon it. ` +
-        'You sense that you need all three sacred charms to activate the full ritual: ' +
-        `${missingCharms.join(', ')}. The ancient magic requires all three offerings to ` +
-        'complete the summoning.'
+        `You set ${other.nameInSentence()} in its hollow, and the runes ` +
+        'beside it wake. The others stay dark, and so do their hollows.'
       )
     }
     // Player has all three charms - complete the ritual!

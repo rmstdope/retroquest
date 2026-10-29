@@ -1,16 +1,18 @@
 import { Item, type GameState } from '@/engine'
 import { OfferingAltar } from './OfferingAltar'
 
+/** The charm's description; `Act2.afterLoad` restores it in older saves. */
+export const NATURES_CHARM_DESCRIPTION =
+  'A small wooden charm, dark with handling, carved with a sword laid ' +
+  "across a branch. Sir Cedric's family has kept it since the knights first " +
+  'made pacts with the forest spirits.'
+
 /** One of the sacred charms required for the Offering Altar ritual. */
 export class NaturesCharm extends Item {
   constructor() {
     super({
       name: "nature's charm",
-      description:
-        'An ancient charm blessed by the knights of old, carved from living wood and ' +
-        'inlaid with silver runes. It pulses with a gentle green light and seems to ' +
-        'resonate with the natural world. This is clearly one of the sacred charms ' +
-        'mentioned in the old texts - those needed to summon the forest sprite Nyx.',
+      description: NATURES_CHARM_DESCRIPTION,
     })
   }
 

@@ -1,16 +1,16 @@
 import { type NameOptions, Item } from '@/engine'
 
+/** The token's description; `Act2.afterLoad` restores it in older saves. */
+export const NYX_TOKEN_DESCRIPTION =
+  'A small crystal on a cord of plaited grass. Turn it in the light and it ' +
+  'is green as summer leaves, then brown as autumn, then white as snow.'
+
 /** Token of favor awarded by Nyx after ritual or trial completion. */
 export class NyxToken extends Item {
   constructor() {
     super({
       name: "nyx's token",
-      description:
-        'A small, crystalline pendant that shifts through all the colors of nature — ' +
-        'from the deep green of summer leaves to the golden brown of autumn, the ' +
-        'pure white of winter snow, and the vibrant colors of spring flowers. It ' +
-        "pulses with gentle magic and seems to contain a fragment of the forest's " +
-        'eternal essence.',
+      description: NYX_TOKEN_DESCRIPTION,
     })
   }
 
