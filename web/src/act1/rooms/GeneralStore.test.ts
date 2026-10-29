@@ -41,4 +41,13 @@ describe('General Store room text', () => {
   it('drops the cat when the hoe second coin opened the store', () => {
     expect(storeText(FLAG_RUSTY_HOE_SECOND_COIN_FOUND)).toBe(OPEN + '.')
   })
+
+  it('switches in the same game the moment the store opens', () => {
+    const game = new Game([new Act1()])
+    game.state.currentRoom = game.state.allRooms.GeneralStore
+    const controller = new GameController(game)
+    expect(controller.getRoomDescription()).toBe(SHUT)
+    game.state.setStoryFlag(FLAG_PATCHES_RETURNED, true)
+    expect(controller.getRoomDescription()).toBe(OPEN + CAT)
+  })
 })
