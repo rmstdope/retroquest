@@ -179,6 +179,8 @@ export class Act2 extends Act {
     ]) {
       if (quest instanceof CedricksLostHonorQuest) quest.refreshText(gameState)
       if (quest instanceof TheForestGuardiansRiddles) quest.refreshText()
+      if (quest instanceof TheGatheringStormQuest)
+        quest.migrateOlderSave(gameState)
     }
   }
 

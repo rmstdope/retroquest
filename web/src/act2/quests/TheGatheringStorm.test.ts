@@ -155,6 +155,31 @@ describe('The Gathering Storm log', () => {
     expect(details.earlier).toEqual([ENTRIES[0], ENTRIES[7]])
   })
 
+  it('slots the new beats in story order, so the newest is still the last one reached', () => {
+    const game = new Game([new Act2()])
+    const quest = new TheGatheringStormQuest()
+    // The save knew only the old beats...
+    game.state.setStoryFlag(FLAG_SPOKEN_TO_SIR_CEDRIC, true)
+    game.state.setStoryFlag(FLAG_NYX_TRIALS_PASSED, true)
+    quest.checkUpdate(game.state)
+    // ...while the flags of the new beats were already set.
+    game.state.setStoryFlag(FLAG_CEDRIC_RECOGNISED_SIGIL, true)
+    game.state.setStoryFlag(FLAG_CEDRIKS_HONOR_COMPLETED, true)
+
+    quest.migrateOlderSave(game.state)
+    quest.checkUpdate(game.state)
+
+    const details = quest.details()
+    if (details.kind !== 'journal') throw new Error('expected a journal')
+    expect(details.latest).toBe(ENTRIES[ENTRIES.length - 1])
+    expect(details.earlier).toEqual([
+      ENTRIES[0],
+      ENTRIES[1],
+      ENTRIES[2],
+      ENTRIES[7],
+    ])
+  })
+
   it('is plain: at most three sentences, no generic phrases', () => {
     for (const entry of ENTRIES) {
       expect(entry.split(/(?<=[.!?])\s+/).length).toBeLessThanOrEqual(3)

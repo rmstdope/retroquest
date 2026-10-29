@@ -3,20 +3,33 @@ import {
   QUEST_GATHERING_STORM,
   FLAG_GATHERING_STORM_COMPLETED,
   FLAG_SPOKEN_TO_SIR_CEDRIC,
+  FLAG_CEDRIC_RECOGNISED_SIGIL,
+  FLAG_RESEARCHED_FAMILY_HERITAGE,
+  FLAG_CEDRIKS_HONOR_COMPLETED,
   FLAG_DEMONSTRATED_COMBAT_SKILLS,
   FLAG_SUPPLIES_QUEST_COMPLETED,
   FLAG_ANCIENT_LIBRARY_COMPLETED,
   FLAG_HERMITS_WARNING_COMPLETED,
   FLAG_NYX_TRIALS_PASSED,
-  FLAG_CEDRIC_RECOGNISED_SIGIL,
-  FLAG_RESEARCHED_FAMILY_HERITAGE,
-  FLAG_CEDRIKS_HONOR_COMPLETED,
 } from '../Act2StoryFlags'
 
 const SIR_CEDRIC = characterName('Sir Cedric')
 const NYX = characterName('Nyx')
 const SPECTRAL_LIBRARIAN = characterName('Spectral Librarian')
 const PROPHETIC_VISION = '[spell_name]Prophetic Vision[/spell_name]'
+
+/** The flags behind the log's beats, in story order. */
+const STORY_ORDER = [
+  FLAG_SPOKEN_TO_SIR_CEDRIC,
+  FLAG_CEDRIC_RECOGNISED_SIGIL,
+  FLAG_DEMONSTRATED_COMBAT_SKILLS,
+  FLAG_SUPPLIES_QUEST_COMPLETED,
+  FLAG_ANCIENT_LIBRARY_COMPLETED,
+  FLAG_RESEARCHED_FAMILY_HERITAGE,
+  FLAG_CEDRIKS_HONOR_COMPLETED,
+  FLAG_HERMITS_WARNING_COMPLETED,
+  FLAG_NYX_TRIALS_PASSED,
+]
 
 /** The opening journal entry, which is also the quest description. */
 const OPENING_ENTRY =
@@ -47,6 +60,23 @@ export class TheGatheringStormQuest extends Quest {
 
   override checkTrigger(_gameState: GameState): boolean {
     return true // This quest is always active once Act II begins
+  }
+
+  /**
+   * Bring an older save's log in order: a flag that is already set but was
+   * never noted (a beat added after the save was made) is slotted in at its
+   * place in the story, before the first later beat already noted, so the
+   * newest beat stays the one the player reached last.
+   */
+  migrateOlderSave(gameState: GameState): void {
+    const noted = Object.keys(this.flagState)
+    for (const flag of STORY_ORDER) {
+      if (noted.includes(flag) || !gameState.getStoryFlag(flag)) continue
+      const later = STORY_ORDER.slice(STORY_ORDER.indexOf(flag) + 1)
+      const at = noted.findIndex((n) => later.includes(n))
+      noted.splice(at < 0 ? noted.length : at, 0, flag)
+    }
+    this.flagState = Object.fromEntries(noted.map((f) => [f, true]))
   }
 
   /** Record a flag the first time it is seen; true when it was new. */

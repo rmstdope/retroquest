@@ -1620,14 +1620,14 @@
     "text": "You have successfully gained access to the ancient library's knowledge! You've learned the dispel spell, discovered important information about your family heritage, and received a crystal focus to enhance your magical abilities. The chronicle you read there was the Wardens' own book, and its last page warns that Malakar seeks the blood of Willowbrook."
   },
   {
-    "key": "1a213fe1ce4efd",
-    "speaker": "narrator",
-    "text": "The Gathering Storm: Beneath Greendale, the Spectral Librarian taught you the dispel spell. The chronicle there was written by the Wardens of the Dawn, and their magic was the unbinding kind. Its last page warns that Malakar seeks the blood of Willowbrook."
-  },
-  {
     "key": "076cf2dae596cc",
     "speaker": "narrator",
     "text": "Beneath Greendale, the Spectral Librarian taught you the dispel spell. The chronicle there was written by the Wardens of the Dawn, and their magic was the unbinding kind. Its last page warns that Malakar seeks the blood of Willowbrook."
+  },
+  {
+    "key": "1a213fe1ce4efd",
+    "speaker": "narrator",
+    "text": "The Gathering Storm: Beneath Greendale, the Spectral Librarian taught you the dispel spell. The chronicle there was written by the Wardens of the Dawn, and their magic was the unbinding kind. Its last page warns that Malakar seeks the blood of Willowbrook."
   },
   {
     "key": "162da4d8f9a893",
