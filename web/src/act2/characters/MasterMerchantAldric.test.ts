@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import { Game } from '@/engine'
 import { Act2 } from '../Act2'
+import { MasterMerchantAldric } from './MasterMerchantAldric'
 import { MerchantsFlyer } from '../items/MerchantsFlyer'
 import { WalkingStick } from '../items/WalkingStick'
 import { QualityRope } from '../items/QualityRope'
@@ -64,6 +65,23 @@ describe('Master Merchant Aldric dialogue markup', () => {
 
     expect(answer).toContain("Here's what I have:")
     expectAldricSpeaks(answer)
+  })
+
+  it('says his racks are bare when he has no wares', () => {
+    const game = createGameAtMarket()
+    game.state.addItemToInventory(new MerchantsFlyer())
+    game.commandParser.parse("give merchant's flyer to master merchant aldric")
+    const aldric = game.state.currentRoom.characters.find(
+      (c) => c instanceof MasterMerchantAldric,
+    )
+    expect(aldric).toBeInstanceOf(MasterMerchantAldric)
+    if (!(aldric instanceof MasterMerchantAldric)) return
+    aldric.wares = {}
+
+    const answer = game.commandParser.parse('talk to master merchant aldric')
+
+    expect(answer).toContain('My racks are bare till the next cart comes in.')
+    expect(answer).not.toContain('premium')
   })
 
   it('attributes declining other items to Aldric', () => {

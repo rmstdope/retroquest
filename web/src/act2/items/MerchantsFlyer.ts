@@ -6,7 +6,7 @@ export const FLYER_DESCRIPTION =
   'lanterns and gear for the road. At the bottom, in smaller print: ' +
   'Bring this, and be welcome.'
 
-/** Promotional flyer advertising Market District merchants and coupons. */
+/** Handbill for Master Merchant Aldric's shop; handing it over opens the shop. */
 export class MerchantsFlyer extends Item {
   constructor() {
     super({

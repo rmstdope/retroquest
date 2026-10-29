@@ -26,7 +26,7 @@ function hasAddWares(room: Room): room is Room & { addWares: () => void } {
   return 'addWares' in room && typeof room.addWares === 'function'
 }
 
-/** Merchant dealing premium adventure gear and expedition supplies. */
+/** Merchant selling adventure gear and expedition supplies. */
 export class MasterMerchantAldric extends Character {
   wares: Record<string, { item: Item; price: number }> = {
     'forest survival kit': { item: new ForestSurvivalKit(), price: 50 },
