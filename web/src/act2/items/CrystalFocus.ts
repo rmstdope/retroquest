@@ -1,17 +1,18 @@
 import { Item, type GameState } from '@/engine'
 
-/** Faceted magical crystal that amplifies spellcasting and arcane study. */
+/** The item's description; `Act2.afterLoad` restores it in older saves. */
+export const CRYSTAL_FOCUS_DESCRIPTION =
+  'A clear crystal the length of your finger, cut with many faces. Hold ' +
+  'it to the light and the light comes out the other side narrower and ' +
+  'brighter.'
+
+/** A faceted crystal that narrows and brightens the light through it. */
 export class CrystalFocus extends Item {
   constructor() {
     super({
       name: 'Crystal Focus',
       shortName: 'crystal',
-      description:
-        'A perfectly cut crystal that resonates with magical energy, crafted by ancient ' +
-        'practitioners to amplify and focus spellcasting abilities. The crystal glows ' +
-        'with inner light and feels warm to the touch, enhancing your connection to ' +
-        'magical forces. This artifact represents the pinnacle of magical craftsmanship ' +
-        'from ages past.',
+      description: CRYSTAL_FOCUS_DESCRIPTION,
       canBeCarried: true,
     })
   }
@@ -23,16 +24,6 @@ export class CrystalFocus extends Item {
       'understand arcane principles and enhancing your ability to comprehend ' +
       'ancient magical texts. Your connection to magical forces feels stronger ' +
       'and more refined.[/success]'
-    )
-  }
-
-  /** Describe the masterwork crystal. */
-  override examine(_gameState: GameState): string {
-    return (
-      'The [item_name]crystal focus[/item_name] is a masterwork of ancient magical ' +
-      'craftsmanship. Its faceted surface catches and amplifies magical energy, and ' +
-      'you can feel it resonating with your own magical abilities. This is clearly ' +
-      'a tool created by master enchanters to enhance the magical arts.'
     )
   }
 }

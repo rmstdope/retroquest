@@ -45,9 +45,9 @@
     "text": "Mountain Path"
   },
   {
-    "key": "1e92f307d3b358",
+    "key": "01ef99acf430e3",
     "speaker": "narrator",
-    "text": "A winding trail climbs through rocky terrain between Willowbrook and Greendale. Sturdy trees cast intermittent shade and the path remains well tended despite its remoteness. Glimpses of both settlements appear at overlooks, offering reflective pauses. A small camp site used by travelers rests just off the main trail."
+    "text": "A trail climbs through rock and pine between Willowbrook and Greendale. From the overlooks you can see both: Greendale ahead, and Willowbrook small and far behind you. Just off the trail is a camp site where travellers stop for the night."
   },
   {
     "key": "06c894f080ba49",
@@ -165,9 +165,9 @@
     "text": "A well-balanced practice sword with a dulled blade. The grip is worn smooth by years of a young hand, and there is a small notch near the guard. Though not sharp enough for real combat, it's perfect for demonstrating martial skills and training exercises."
   },
   {
-    "key": "083338bae2861e",
+    "key": "1f8ad93750fa8c",
     "speaker": "narrator",
-    "text": "You practice a few sword forms with the training sword. The balance feels good in your hands, and it would be perfect for demonstrating combat skills to someone who needs proof of your abilities."
+    "text": "You practice a few sword forms with the training sword. The balance is good. Somebody swung this a great deal, a long time ago."
   },
   {
     "key": "075915c3158718",
@@ -505,9 +505,9 @@
     "text": "A dozen squires at drill in the yard, wooden swords knocking. Between passes they glance at Sir Cedric and whisper."
   },
   {
-    "key": "1a7e45491cfe0d",
+    "key": "17d56bfa9fcdf9",
     "speaker": "narrator",
-    "text": "You don't find anything of particular interest around the benches. The squires are watching you curiously — perhaps you should talk to them first to learn more about this place."
+    "text": "You find nothing under the benches but old leaves. A few of the squires watch you look, and whisper."
   },
   {
     "key": "0678b14852e2e7",
@@ -800,9 +800,9 @@
     "text": "One of mine. Then someone thought you worth sending. Have a look."
   },
   {
-    "key": "050eb759fdf2a4",
+    "key": "14a790913db746",
     "speaker": "narrator",
-    "text": "A comprehensive kit containing everything needed for safe forest exploration: dried food, water purification tablets, protective gear, a compass, and magical wards against forest spirits."
+    "text": "A canvas roll with everything for a night in the open: dried food, flint and steel, a water skin, a blanket, and a ring of small warding stones to set round where you sleep."
   },
   {
     "key": "104c2e459ac6bc",
@@ -990,9 +990,9 @@
     "text": "You count your coins. You have 50 gold pieces to spend on supplies and equipment."
   },
   {
-    "key": "11bb96b103c681",
+    "key": "07aeaf8c4ae99b",
     "speaker": "narrator",
-    "text": "The key turns with a soft click, unlocking access to the private inn rooms upstairs. You can now 'go east' to enter them."
+    "text": "The key turns with a soft click, and the door to the stairs swings open."
   },
   {
     "key": "08ce2c9f0c5eb1",
@@ -1170,9 +1170,9 @@
     "text": "You are entered in the ledger, and the archives are open to you. The historians know the shelves; ask them where to look. Petitions that were the king's go to the Lord Commander now, by his order, until His Majesty is found."
   },
   {
-    "key": "123d77411ba690",
+    "key": "099fe9ad59b5eb",
     "speaker": "narrator",
-    "text": "The archives are vast, filled with countless books and scrolls. You don't know where to start. You need guidance from someone familiar with these records."
+    "text": "The archive runs to three hundred years of shelves. Without someone who knows them, you could read for a month and find nothing."
   },
   {
     "key": "1835225011c0c1",
@@ -1530,9 +1530,9 @@
     "text": "You search around the Hidden Library, but find nothing of interest beyond what you can already see."
   },
   {
-    "key": "04eb476d577a65",
+    "key": "0f679cc0b6ee6f",
     "speaker": "narrator",
-    "text": "The magical barriers flicker and stabilize as your repair magic restores their integrity. The shimmering barriers around the most valuable texts now glow steadily. You have proven your worthiness and respect for ancient knowledge."
+    "text": "The magical barriers flicker and stabilize as your repair magic restores their integrity. The shimmering barriers around the most valuable texts now glow steadily."
   },
   {
     "key": "1015ea2c8a6dbc",
@@ -1575,9 +1575,9 @@
     "text": "And take this crystal focus. It was made for a healer's hands, and it has waited long enough."
   },
   {
-    "key": "152298b21ad8e5",
+    "key": "086fc9002eefa3",
     "speaker": "narrator",
-    "text": "The crystal focus is a masterwork of ancient magical craftsmanship. Its faceted surface catches and amplifies magical energy, and you can feel it resonating with your own magical abilities. This is clearly a tool created by master enchanters to enhance the magical arts."
+    "text": "A clear crystal the length of your finger, cut with many faces. Hold it to the light and the light comes out the other side narrower and brighter."
   },
   {
     "key": "05c0ee76410738",
@@ -1685,24 +1685,19 @@
     "text": "Forest Transition"
   },
   {
-    "key": "1a9a4aa83b2647",
+    "key": "16beadecebc9c5",
     "speaker": "narrator",
-    "text": "The boundary between the civilized mountain paths and the wild Enchanted Forest. Ancient standing stones mark the threshold, carved with protective runes that pulse with faint magic. The air grows thicker and you sense ancient power awakening. Beyond lies a realm where normal rules may not apply. A robed figure sits among the stones, watching the trees."
+    "text": "The mountain path ends at a ring of standing stones, grey and mossed, with runes cut deep in them. Past the stones the trees begin all at once, close and dark. A robed figure sits among the stones, watching the trees."
   },
   {
-    "key": "0b2faf6e29079d",
+    "key": "04b64a85c11e1d",
     "speaker": "narrator",
-    "text": "You approach the ancient standing stones and run your hands over their weathered surfaces. The runes carved into the stone are clearly druidic—symbols representing protection, passage, and the balance between civilization and wilderness. These stones have stood here for centuries, marking the boundary between worlds. You can feel the old magic thrumming within them, a gentle but powerful force that has protected travelers for generations."
+    "text": "You run your hands over the stones. The runes are worn but deep, cut by people who meant them to last. As you trace them, the shapes start to mean something: not words, but a way of listening to everything that grows."
   },
   {
-    "key": "187c4ced4e274f",
+    "key": "142b943ec09b8c",
     "speaker": "narrator",
-    "text": "As you trace the druidic runes with your finger, ancient knowledge flows into your mind. The symbols begin to make sense—they're not just markers, but a teaching tool! You feel a connection forming with the natural world around you, and suddenly you understand how to cast the nature sense spell!"
-  },
-  {
-    "key": "04a8b03179cf4a",
-    "speaker": "narrator",
-    "text": "You have learned the spell: nature sense!"
+    "text": "You have learned nature sense."
   },
   {
     "key": "16873065a868b9",
@@ -1845,9 +1840,9 @@
     "text": "An acorn, perfectly shaped, with fine veins of silver running through the shell like roots. It is warm, as if someone had just been holding it."
   },
   {
-    "key": "09f534eccdd1fc",
+    "key": "1fbe8d15cbc76b",
     "speaker": "narrator",
-    "text": "The enhanced lantern's crystal core pulses with magical energy, casting ethereal blue light that reveals hidden paths through the dense undergrowth. The light seems to resonate with the forest's natural magic, illuminating safe routes and warning you away from dangerous areas. With this enhanced vision, you can navigate the forest with confidence."
+    "text": "The lantern's crystal catches, and its light comes out blue and steady. Where it falls on the undergrowth to the east, the tangle thins, and a narrow path shows through it."
   },
   {
     "key": "1c1cf5f1098482",
@@ -1985,9 +1980,9 @@
     "text": "Ancient Grove"
   },
   {
-    "key": "1bef95ee5c6ac9",
+    "key": "1f12cb7954bf9e",
     "speaker": "narrator",
-    "text": "A circular clearing dominated by trees so old and massive they seem to touch the sky. Their bark bears carved symbols that predate human memory, and the air shimmers with concentrated magic. At the center grows a tree unlike any other - its silver bark gleams and its leaves whisper secrets in an ancient tongue. This is clearly a place of power and the sacred gateway to the forest's deepest mysteries."
+    "text": "A ring of trees so old their trunks are wider than a cottage. Signs are carved in their bark, older than any letters you know. In the middle stands one tree taller than the rest, with bark the colour of tarnished silver."
   },
   {
     "key": "10baf1883a3cee",
@@ -2065,9 +2060,9 @@
     "text": "The spirit in the silver-barked tree taught you forest speech for an acorn. Now its roots want what the nymphs in the Whispering Glade can give."
   },
   {
-    "key": "0c2bc4a73d3ba8",
+    "key": "14ad4bd6f89e32",
     "speaker": "narrator",
-    "text": "Delicate leaves that shimmer with a soft argent sheen even in shadow. Their surfaces refract light into faint auroral threads, and a cool, clean scent clings to them. Holding them you sense tranquil, ancient vitality. A healer would know what to do with these."
+    "text": "Leaves from the silver-barked tree, cool and stiff, with a silver sheen even in shadow. A healer would know what to do with these."
   },
   {
     "key": "153a5597d93914",
@@ -2090,9 +2085,9 @@
     "text": "Whispering Glade"
   },
   {
-    "key": "0d40d575112956",
+    "key": "08e8e5c298773e",
     "speaker": "narrator",
-    "text": "A peaceful meadow opens around a small stream that babbles over smooth stones. Wildflowers blanket the ground and butterflies drift through warm sunlight. The water's murmur soothes, yet faint voices ride the breeze — whispers hinting at ancient secrets. Near the crystal stream you sense watchful, unseen guardians."
+    "text": "A meadow opens round a small stream that runs over smooth stones. Wildflowers grow thick to the water's edge. Under the sound of the water there are other sounds, almost voices, and they stop when you listen for them."
   },
   {
     "key": "02c1300b04283d",
@@ -2185,14 +2180,14 @@
     "text": "You answered the nymphs' three riddles: water, mask and truth. They gave you water from their stream and moonflowers from its bank."
   },
   {
-    "key": "1d60e1773ed000",
+    "key": "0f490c5db846ba",
     "speaker": "narrator",
-    "text": "Water from the sacred spring in the Whispering Glade, this liquid is so pure it seems to glow with its own inner light. The water has been blessed by the water nymphs and carries powerful purification magic that can break curses and cleanse dark enchantments. Each drop sparkles like liquid starlight, and the container feels cool to the touch. The liquid moves with an otherworldly fluidity, and you can sense the powerful purification magic contained within. This water could break even the strongest curses."
+    "text": "Water from the nymphs' stream, so clear the flask looks empty until you tip it. No bucket has ever gone down that spring."
   },
   {
-    "key": "1bda0787d0a576",
+    "key": "05f55acc7dfacc",
     "speaker": "narrator",
-    "text": "Ethereal white flowers that bloom only in places where moonlight and magic converge. Their petals shimmer with a silvery luminescence and give off a faint, sweet fragrance that seems to calm the mind and spirit. These rare blossoms are prized by herbalists and magical practitioners for their ability to enhance divination and provide protection against nightmares and dark visions. As you watch, the petals seem to move gently even though there's no breeze, and you notice tiny motes of silvery light drifting from the blooms like magical pollen."
+    "text": "White flowers that open only at night, and these are open still. They smell faintly sweet, and their petals give off a little light of their own."
   },
   {
     "key": "027d2bd6cbb945",
@@ -2205,9 +2200,9 @@
     "text": "Have you seen the streams come down thinner from the hills this season? What drinks up there before we do, that the fields below the city taste it first?"
   },
   {
-    "key": "17a2d38bf48bf5",
+    "key": "082f8aeec95573",
     "speaker": "narrator",
-    "text": "The moonflowers seem to approve of your gentle touch, their silvery glow pulsing warmly as you gather them. These blessed blooms will aid in healing and protection magic."
+    "text": "They come up easily, roots and all, as if they had been waiting to be carried."
   },
   {
     "key": "08f571f5fa7676",
@@ -2255,14 +2250,14 @@
     "text": "The woodland creatures gather around you excitedly. A family of squirrels chatters frantically about strange noises from the deep ravine to the northeast. An old owl hoots solemnly about 'metal beasts trapped in the earth-scar where the stone walls weep.' The animals describe a steep ravine hidden beyond the thickest part of the forest, where something seems to be moving. The owl looks at you, and then at the ravine."
   },
   {
-    "key": "103a48b8f0ff41",
+    "key": "11468a1af456c1",
     "speaker": "narrator",
-    "text": "Looking down into the ravine, you can see the remnants of a merchant caravan trapped at the bottom. The wooden wagon wheels are visible among the rocks, and you can hear faint voices calling for help. The walls are steep and dangerous - you'll need rope or other climbing equipment to safely reach the bottom and see what is there."
+    "text": "Looking down into the ravine, you can see the remnants of a merchant caravan trapped at the bottom. The wooden wagon wheels are visible among the rocks, and you can hear faint voices calling for help. The walls are sheer and loose; nobody climbs down those by hand."
   },
   {
-    "key": "1a8fd791fe80c2",
+    "key": "0d6a3732b85292",
     "speaker": "narrator",
-    "text": "You secure one end of your quality rope to a sturdy tree and lower it into the ravine. Rappelling down carefully, you find the trapped merchant caravan at the bottom. The merchants are injured but alive, and their wagon is damaged but some goods are salvageable. Working together, you create a rope system that allows everyone to climb to safety. The grateful merchants gather their most valuable goods and follow you back to civilization. The caravan has been successfully rescued!"
+    "text": "You tie the rope to a sturdy tree and climb down into the ravine. The wagon lies on its side at the bottom, and round it are Thorne's people: hurt, hungry, and alive. One by one you get them up the rope, and they bring what goods they can carry."
   },
   {
     "key": "006919dc30a7cf",
@@ -2600,14 +2595,9 @@
     "text": "'A carter swears the watchman sent something back from Heavensforth, papers, with a merchant caravan bound for Greendale. The caravan never came; they say it was lost on the forest road. If those papers are still out there, they could clear Sir Cedric's name.'"
   },
   {
-    "key": "06fb045e148347",
+    "key": "1409c2f75694af",
     "speaker": "narrator",
-    "text": "The diary points to papers sent from Heavensforth by a watchman who fled, on a caravan that never arrived. The lost caravan's papers might still be out there…"
-  },
-  {
-    "key": "06dd5ef0cb7e2e",
-    "speaker": "narrator",
-    "text": "After reading the diary, you place it back where you found it. This keeps the information safe while you no longer carry the diary."
+    "text": "You put the diary back under the bench, where the next squire will find it."
   },
   {
     "key": "01d1c8f196a856",
@@ -2825,9 +2815,9 @@
     "text": "Heart of the Forest"
   },
   {
-    "key": "0c916f76329b7e",
+    "key": "00b029762d3a17",
     "speaker": "narrator",
-    "text": "The deepest part of the Enchanted Forest, where reality feels fluid and magic flows like water. Impossible colors paint the landscape and the air sparkles with latent energy. A colossal tree dominates the center, its branches seeming to uphold the sky. Before it rests an ancient altar carved from starstone, runes pulsing with otherworldly light. This is Nyx's domain where profound secrets surface. The sacred grove path is the only passage into this mystical heart."
+    "text": "The deepest part of the forest. The light here is green and gold and does not seem to come from the sky. A tree vaster than any other holds up the branches overhead, and before it stands an altar of starstone. The only way out is back north, to the grove."
   },
   {
     "key": "1ee6e541ff6664",

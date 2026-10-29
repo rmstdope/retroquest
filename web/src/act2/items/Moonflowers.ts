@@ -1,18 +1,18 @@
 import { Item, type GameState, characterName, dialogue } from '@/engine'
 import { WhisperingGlade } from '../rooms/WhisperingGlade'
 
-/** Rare bioluminescent blossoms used in healing and divinatory practices. */
+/** The item's description; `Act2.afterLoad` restores it in older saves. */
+export const MOONFLOWERS_DESCRIPTION =
+  'White flowers that open only at night, and these are open still. ' +
+  'They smell faintly sweet, and their petals give off a little light of ' +
+  'their own.'
+
+/** White flowers that open at night and give off a little light of their own. */
 export class Moonflowers extends Item {
   constructor() {
     super({
       name: 'moonflowers',
-      description:
-        'Ethereal white flowers that bloom only in places where moonlight and ' +
-        'magic converge. Their petals shimmer with a silvery luminescence and ' +
-        'give off a faint, sweet fragrance that seems to calm the mind and spirit. ' +
-        'These rare blossoms are prized by herbalists and magical practitioners ' +
-        'for their ability to enhance divination and provide protection against ' +
-        'nightmares and dark visions.',
+      description: MOONFLOWERS_DESCRIPTION,
       canBeCarried: true,
     })
   }
@@ -47,21 +47,10 @@ export class Moonflowers extends Item {
   override pickedUp(gameState: GameState): string {
     if (gameState.currentRoom instanceof WhisperingGlade) {
       return (
-        'The moonflowers seem to approve of your gentle touch, their ' +
-        'silvery glow pulsing warmly as you gather them. These blessed ' +
-        'blooms will aid in healing and protection magic.'
+        'They come up easily, roots and all, as if they had been waiting to ' +
+        'be carried.'
       )
     }
     return ''
-  }
-
-  override examine(_gameState: GameState): string {
-    const desc = this.description
-    return (
-      `${desc} As ` +
-      "you watch, the petals seem to move gently even though there's no " +
-      'breeze, and you notice tiny motes of silvery light drifting from ' +
-      'the blooms like magical pollen.'
-    )
   }
 }

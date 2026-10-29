@@ -23,12 +23,9 @@ export class EnhancedLantern extends Item {
         gameState.setStoryFlag(FLAG_ENHANCED_LANTERN_USED_FOREST_ENTRANCE, true)
         this.name = 'enhanced lantern (lit)'
         const result =
-          "The enhanced lantern's crystal core pulses with magical energy, " +
-          'casting ethereal blue light that reveals hidden paths through the ' +
-          "dense undergrowth. The light seems to resonate with the forest's " +
-          'natural magic, illuminating safe routes and warning you away from ' +
-          'dangerous areas. With this enhanced vision, you can navigate the ' +
-          'forest with confidence.'
+          "The lantern's crystal catches, and its light comes out blue and " +
+          'steady. Where it falls on the undergrowth to the east, the ' +
+          'tangle thins, and a narrow path shows through it.'
 
         return (
           result +

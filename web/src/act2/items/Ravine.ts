@@ -17,9 +17,8 @@ export class Ravine extends Item {
     return (
       'Looking down into the ravine, you can see the remnants of a merchant caravan ' +
       'trapped at the bottom. The wooden wagon wheels are visible among the rocks, ' +
-      'and you can hear faint voices calling for help. The walls are steep and ' +
-      "dangerous - you'll need rope or other climbing equipment to safely reach the " +
-      'bottom and see what is there.'
+      'and you can hear faint voices calling for help. The walls are ' +
+      'sheer and loose; nobody climbs down those by hand.'
     )
   }
 

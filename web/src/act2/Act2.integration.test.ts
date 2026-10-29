@@ -763,11 +763,8 @@ describe('Golden path step 15: Forest Transition', () => {
 
     // Step 15b: Examine standing stones
     result = executeCommands(game, ['examine stones'])
-    expect(result.toLowerCase(), 'Should mention druidic runes').toContain(
-      'druidic',
-    )
-    expect(result.toLowerCase(), 'Should describe the boundary').toContain(
-      'boundary between worlds',
+    expect(result.toLowerCase(), 'Should mention the runes').toContain(
+      'the runes are worn but deep',
     )
 
     // Step 15c: Learn nature_sense spell from the stones
@@ -777,8 +774,8 @@ describe('Golden path step 15: Forest Transition', () => {
     )
     expect(
       result.toLowerCase(),
-      'Should describe magical connection',
-    ).toContain('connection forming with the natural world')
+      'Should describe what the runes teach',
+    ).toContain('a way of listening to everything that grows')
 
     // Step 15d: The first talk gave the charm; later talks send the player on
     const hermit = state.currentRoom.characters[0]
@@ -858,8 +855,8 @@ describe("Squire's diary quest dependency", () => {
 
     // Try to search without talking to squires first - should not find diary
     result = executeCommands(game, ['search'])
-    expect(result).toContain("don't find anything of particular interest")
-    expect(result).toContain('talk to them first')
+    expect(result).toContain('You find nothing under the benches')
+    expect(result).toContain('A few of the squires watch you look')
     expectItemInRoom(state.currentRoom, "squire's diary", false)
 
     // Accept quest by talking to Training Master first
@@ -900,8 +897,8 @@ describe('Castle Courtyard search dependency', () => {
 
     // Search without talking to squires should fail to find diary
     let result = executeCommands(game, ['search'])
-    expect(result).toContain("don't find anything of particular interest")
-    expect(result).toContain('talk to them first')
+    expect(result).toContain('You find nothing under the benches')
+    expect(result).toContain('A few of the squires watch you look')
     expectItemInRoom(state.currentRoom, "squire's diary", false)
 
     // Try to talk to squires before quest accepted - should be too busy
@@ -1053,7 +1050,7 @@ describe("Squire's diary flag", () => {
     // Verify the diary content is returned
     expect(result).toContain('troubling story')
     expect(result).toContain('the king vanished')
-    expect(result).toContain('papers sent from Heavensforth')
+    expect(result).toContain('took the road to Heavensforth')
   })
 })
 

@@ -26,7 +26,7 @@ describe('Great Hall archive search', () => {
     )
     game.state.setStoryFlag(FLAG_COURT_HERALD_FORMAL_PRESENTATION, true)
     expect(new GreatHall().search(game.state)).toContain(
-      'You need guidance from someone familiar with these records.',
+      'Without someone who knows them, you could read for a month and find nothing.',
     )
     expect(game.state.getStoryFlag(FLAG_RESEARCHED_FAMILY_HERITAGE)).toBe(false)
   })

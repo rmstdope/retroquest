@@ -67,8 +67,7 @@ describe("Training Sword as Cedric's old blade", () => {
 
     expect(game.commandParser.parse('use training sword')).toContain(
       'You practice a few sword forms with the training sword. The balance ' +
-        'feels good in your hands, and it would be perfect for demonstrating ' +
-        'combat skills to someone who needs proof of your abilities.',
+        'is good. Somebody swung this a great deal, a long time ago.',
     )
   })
 

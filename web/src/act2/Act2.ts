@@ -78,6 +78,21 @@ import {
   CITY_NOTICE_BOARD_DESCRIPTION,
   CityNoticeBoard,
 } from './items/CityNoticeBoard'
+import { WHISPERING_GLADE_DESCRIPTION } from './rooms/WhisperingGlade'
+import { HEART_OF_THE_FOREST_DESCRIPTION } from './rooms/HeartOfTheForest'
+import { ANCIENT_GROVE_DESCRIPTION } from './rooms/AncientGrove'
+import { MOUNTAIN_PATH_DESCRIPTION } from './rooms/MountainPath'
+import {
+  CRYSTAL_CLEAR_WATER_DESCRIPTION,
+  CrystalClearWater,
+} from './items/CrystalClearWater'
+import { MOONFLOWERS_DESCRIPTION, Moonflowers } from './items/Moonflowers'
+import { SILVER_LEAVES_DESCRIPTION, SilverLeaves } from './items/SilverLeaves'
+import { CRYSTAL_FOCUS_DESCRIPTION, CrystalFocus } from './items/CrystalFocus'
+import {
+  FOREST_SURVIVAL_KIT_DESCRIPTION,
+  ForestSurvivalKit,
+} from './items/ForestSurvivalKit'
 import { SQUIRES_DIARY_DESCRIPTION, SquiresDiary } from './items/SquiresDiary'
 import { FLAG_GATHERING_STORM_COMPLETED } from './Act2StoryFlags'
 import { ACT2_CLASSES } from './classes'
@@ -191,7 +206,7 @@ export class Act2 extends Act {
   /**
    * Bring older saves up to date: the coins, the merchant's flyer, the secret
    * documents, the squire's diary, the altar, the charms, the acorn, Nyx's
-   * gifts, the spells' descriptions, the castle rooms, the Main Square, the
+   * gifts, the spells' descriptions, the castle rooms, the forest rooms, the nymphs' gifts, the focus and the kit, the Main Square, the
    * Healer's House, the
    * Residential Quarter, Cedric's quest log and the riddles quest log keep the
    * text they were saved with, so give them the current wording, and put Brenn
@@ -208,6 +223,12 @@ export class Act2 extends Act {
       CASTLE_COURTYARD_DESCRIPTION
     gameState.allRooms.GreatHall.description = GREAT_HALL_DESCRIPTION
     gameState.allRooms.ForestEntrance.description = FOREST_ENTRANCE_DESCRIPTION
+    gameState.allRooms.WhisperingGlade.description =
+      WHISPERING_GLADE_DESCRIPTION
+    gameState.allRooms.HeartOfTheForest.description =
+      HEART_OF_THE_FOREST_DESCRIPTION
+    gameState.allRooms.AncientGrove.description = ANCIENT_GROVE_DESCRIPTION
+    gameState.allRooms.MountainPath.description = MOUNTAIN_PATH_DESCRIPTION
     SirCedric.refreshAll(gameState)
     for (const spell of [
       new MendSpell(),
@@ -252,6 +273,16 @@ export class Act2 extends Act {
       if (item instanceof NyxToken) item.description = NYX_TOKEN_DESCRIPTION
       if (item instanceof ForestHeartCrystal)
         item.description = FOREST_HEART_CRYSTAL_DESCRIPTION
+      if (item instanceof CrystalClearWater)
+        item.description = CRYSTAL_CLEAR_WATER_DESCRIPTION
+      if (item instanceof Moonflowers)
+        item.description = MOONFLOWERS_DESCRIPTION
+      if (item instanceof SilverLeaves)
+        item.description = SILVER_LEAVES_DESCRIPTION
+      if (item instanceof CrystalFocus)
+        item.description = CRYSTAL_FOCUS_DESCRIPTION
+      if (item instanceof ForestSurvivalKit)
+        item.description = FOREST_SURVIVAL_KIT_DESCRIPTION
     }
     for (const quest of [
       ...gameState.nonActivatedQuests,

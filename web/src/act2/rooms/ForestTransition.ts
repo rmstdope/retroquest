@@ -16,10 +16,9 @@ const HERMIT_AFTER_CAMP =
  * already ends with the hermit sentence) never shows two of them.
  */
 const BASE_DESCRIPTION =
-  'The boundary between the civilized mountain paths and the wild Enchanted Forest. ' +
-  'Ancient standing stones mark the threshold, carved with protective runes that ' +
-  'pulse with faint magic. The air grows thicker and you sense ancient power ' +
-  'awakening. Beyond lies a realm where normal rules may not apply.'
+  'The mountain path ends at a ring of standing stones, grey and mossed, ' +
+  'with runes cut deep in them. Past the stones the trees begin all at ' +
+  'once, close and dark.'
 
 const PRE_FOREST_QUESTS = [
   "The Knight's Test",

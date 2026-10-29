@@ -72,7 +72,6 @@ describe("Squire's diary", () => {
       'text',
       'dialogue:null',
       'text',
-      'text',
     ])
   })
 
@@ -105,7 +104,8 @@ describe("Squire's diary", () => {
     expect(game.state.currentRoom.items).not.toContain(diary)
   })
 
-  it('keeps the success line before the closing event', () => {
-    expect(raw).toContain('[success]The diary points to papers')
+  it('ends on the diary going back under the bench, without a summary', () => {
+    expect(raw).not.toContain('[success]')
+    expect(raw).toContain('You put the diary back under the bench')
   })
 })

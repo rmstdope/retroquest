@@ -28,23 +28,13 @@ export class StandingStones extends Item {
       if (!gameState.hasSpell(new NatureSenseSpell().id)) {
         const natureSense = new NatureSenseSpell()
         gameState.learnSpell(natureSense)
-        spellMsg =
-          '\n\n[success]As you trace the druidic runes with your finger, ' +
-          'ancient knowledge flows into your mind. The symbols begin to make ' +
-          "sense—they're not just markers, but a teaching tool! You feel a " +
-          'connection forming with the natural world around you, and ' +
-          'suddenly you understand how to cast the ' +
-          '[spell_name]nature sense[/spell_name] spell![/success]\n\n' +
-          'You have learned the spell: [spell_name]nature sense[/spell_name]!'
+        spellMsg = '\n\nYou have learned [spell_name]nature sense[/spell_name].'
       }
       return (
-        'You approach the ancient standing stones and run your hands over ' +
-        'their weathered surfaces. The runes carved into the stone are ' +
-        'clearly druidic—symbols representing protection, passage, and the ' +
-        'balance between civilization and wilderness. These stones have ' +
-        'stood here for centuries, marking the boundary between worlds. ' +
-        'You can feel the old magic thrumming within them, a gentle but ' +
-        'powerful force that has protected travelers for generations.' +
+        'You run your hands over the stones. The runes are worn but deep, ' +
+        'cut by people who meant them to last. As you trace them, the ' +
+        'shapes start to mean something: not words, but a way of listening ' +
+        'to everything that grows.' +
         spellMsg
       )
     }

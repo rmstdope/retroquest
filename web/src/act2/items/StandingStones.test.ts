@@ -10,7 +10,7 @@ describe('StandingStones', () => {
 
     const answer = new StandingStones().examine(game.state)
 
-    expect(answer).toContain('You have learned the spell')
+    expect(answer).toContain('You have learned')
     expect(game.state.hasSpell('nature_sense')).toBe(true)
   })
 
@@ -20,14 +20,11 @@ describe('StandingStones', () => {
     const answer = new StandingStones().examine(game.state)
 
     expect(answer).toContain(
-      'suddenly you understand how to cast the [spell_name]nature sense[/spell_name] spell![/success]',
-    )
-    expect(answer).toContain(
-      'You have learned the spell: [spell_name]nature sense[/spell_name]!',
+      'You have learned [spell_name]nature sense[/spell_name].',
     )
     expect(
       answer.match(/\[spell_name\]nature sense\[\/spell_name\]/g),
-    ).toHaveLength(2)
+    ).toHaveLength(1)
     expect(answer.toLowerCase()).not.toContain("nature's sense")
     expect(answer.toLowerCase()).not.toContain('nature sense spell')
   })
@@ -49,7 +46,7 @@ describe('StandingStones', () => {
 
     const answer = new StandingStones().examine(game.state)
 
-    expect(answer).not.toContain('You have learned the spell')
+    expect(answer).not.toContain('You have learned')
     expect(game.state.knownSpells).toHaveLength(1)
   })
 })

@@ -37,8 +37,7 @@ export class MendSpell extends Spell {
           '[success]The magical barriers flicker and ' +
           'stabilize as your repair magic restores their integrity. The ' +
           'shimmering barriers around the most valuable texts now glow ' +
-          'steadily. You have proven your worthiness and respect for ' +
-          'ancient knowledge.[/success]'
+          'steadily.[/success]'
         )
       }
       return (

@@ -1,18 +1,19 @@
 import { Item } from '@/engine'
 
+/** The item's description; `Act2.afterLoad` restores it in older saves. */
+export const SILVER_LEAVES_DESCRIPTION =
+  'Leaves from the silver-barked tree, cool and stiff, with a silver ' +
+  'sheen even in shadow. A healer would know what to do with these.'
+
 /**
- * Photic foliage fragment underscoring ancient forest luminosity themes.
+ * Leaves from the silver-barked tree in the Ancient Grove.
  * Purely descriptive; inherits the base `examine`.
  */
 export class SilverLeaves extends Item {
   constructor() {
     super({
       name: 'silver leaves',
-      description:
-        'Delicate leaves that shimmer with a soft argent sheen even in shadow. ' +
-        'Their surfaces refract light into faint auroral threads, and a cool, ' +
-        'clean scent clings to them. Holding them you sense tranquil, ancient ' +
-        'vitality. A healer would know what to do with these.',
+      description: SILVER_LEAVES_DESCRIPTION,
       canBeCarried: true,
     })
   }
