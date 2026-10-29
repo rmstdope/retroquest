@@ -35,6 +35,9 @@ import { TheForestGuardiansRiddles } from './quests/TheForestGuardiansRiddles'
 import { TheHermitsWarningQuest } from './quests/TheHermitsWarning'
 import { WhispersInTheWind } from './quests/WhispersInTheWind'
 import { CASTLE_APPROACH_DESCRIPTION } from './rooms/CastleApproach'
+import { MAIN_SQUARE_DESCRIPTION } from './rooms/MainSquare'
+import { HEALERS_HOUSE_DESCRIPTION } from './rooms/HealersHouse'
+import { RESIDENTIAL_QUARTER_DESCRIPTION } from './rooms/ResidentialQuarter'
 import { FOREST_ENTRANCE_DESCRIPTION } from './rooms/ForestEntrance'
 import { CASTLE_COURTYARD_DESCRIPTION } from './rooms/CastleCourtyard'
 import { GREAT_HALL_DESCRIPTION } from './rooms/GreatHall'
@@ -149,13 +152,18 @@ export class Act2 extends Act {
 
   /**
    * Bring older saves up to date: the coins, the secret documents, the
-   * squire's diary, the castle rooms, Cedric's quest log and the riddles quest
-   * log keep the text they were saved with, so give them the current wording, and put Brenn
+   * squire's diary, the castle rooms, the Main Square, the Healer's House, the
+   * Residential Quarter, Cedric's quest log and the riddles quest log keep the
+   * text they were saved with, so give them the current wording, and put Brenn
    * in the warehouse of saves made before he was met there. Safe to run on
    * every load.
    */
   override afterLoad(gameState: GameState): void {
     gameState.allRooms.CastleApproach.description = CASTLE_APPROACH_DESCRIPTION
+    gameState.allRooms.MainSquare.description = MAIN_SQUARE_DESCRIPTION
+    gameState.allRooms.HealersHouse.description = HEALERS_HOUSE_DESCRIPTION
+    gameState.allRooms.ResidentialQuarter.description =
+      RESIDENTIAL_QUARTER_DESCRIPTION
     gameState.allRooms.CastleCourtyard.description =
       CASTLE_COURTYARD_DESCRIPTION
     gameState.allRooms.GreatHall.description = GREAT_HALL_DESCRIPTION

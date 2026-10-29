@@ -260,9 +260,9 @@
     "text": "Main Square"
   },
   {
-    "key": "084f6122e0b420",
+    "key": "15418f8c351d0a",
     "speaker": "narrator",
-    "text": "The heart of Greendale pulses with activity. A grand fountain shows ancient heroes locked in battle with mythical beasts. Merchants hawk wares from bright stalls while townsfolk bustle about, exchanging news and gossip. Stone buildings with red roofs frame the space. Castle towers rise to the north, and the energetic flow of people makes it clear important things happen here."
+    "text": "The heart of Greendale: a great fountain of old heroes fighting beasts, stalls under bright awnings, red roofs all round. The square is crowded, but the talk is low, and it stops when a guard walks past. Castle towers rise to the north."
   },
   {
     "key": "18ab127c0ba2e8",
@@ -1260,9 +1260,9 @@
     "text": "Residential Quarter"
   },
   {
-    "key": "1322f0aed9b36f",
+    "key": "0c219dbb7dbbb8",
     "speaker": "narrator",
-    "text": "Quiet streets lined with comfortable two-story homes, each with small gardens and neat workshops. Smoke rises from chimneys, and the sound of craftsmen at work echoes from nearby buildings. This is where Greendale's skilled artisans and middle-class citizens live and work. The atmosphere is peaceful and industrious. At the end of one lane an old cellar door has been bricked up, and a cold draught breathes through the gaps."
+    "text": "Quiet lanes of two-storey houses, each with a small garden and a workshop. Craftsmen work at benches in the open doorways, and neighbours sit on their steps. Half the garden plots have gone grey. At the end of one lane an old cellar door has been bricked up, and a cold draught breathes through the gaps."
   },
   {
     "key": "0b47d0b63287ae",
@@ -1290,9 +1290,9 @@
     "text": "Neighbours on their doorsteps, shelling beans and minding each other's children. Most of them were born on this lane, and so were their grandparents."
   },
   {
-    "key": "0e7f5d33d1d195",
+    "key": "0cac8ad4437bf3",
     "speaker": "narrator",
-    "text": "Behind some old storage crates and forgotten furniture in the basements, you discover a concealed entrance in the stone wall. A narrow tunnel leads underground to what appears to be an ancient chamber. You've found a secret passage to a Hidden Library! Use 'go secret_passage' to enter this mysterious repository."
+    "text": "You work at the bricks of the old cellar door. The mortar is soft, and they come away in your hands. Behind them, steps lead down into the cold, to a passage under the city and a room full of books."
   },
   {
     "key": "11a71c75b44c6c",
@@ -1380,9 +1380,9 @@
     "text": "Healer's House"
   },
   {
-    "key": "193fe31842f982",
+    "key": "0c33ace71d8af7",
     "speaker": "narrator",
-    "text": "A cozy cottage filled with the scents of medicinal herbs and healing potions. Dried plants hang from the rafters and shelves are packed with bottles of many shapes and colors. A warm fire crackles in the hearth while comfortable chairs invite recovery. This is clearly a place of healing and learning."
+    "text": "A small stone house that smells of crushed herbs. A few bundles of dried plants still hang from the rafters, but the shelves below them are nearly bare: rows of empty bottles, rinsed and waiting. A fire burns in the hearth, and a door at the back stands half shut."
   },
   {
     "key": "1b94efc414d794",
