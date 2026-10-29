@@ -39,9 +39,7 @@ export class EchoStones extends Item {
         'channels like water finding its course. Then the light settles ' +
         'into a slow, steady glow.' +
         '\n' +
-        '[success]You sense that these hallowed stones now await ' +
-        'the ancient chant that will complete the ritual and banish the ' +
-        'restless spirits from this sacred place.[/success]'
+        'The stones are warm now, and waiting for words.'
       )
     } else if (spellId === 'bless' && this.blessed) {
       return '[dim]The echo stones are already blessed.[/dim]'

@@ -89,8 +89,8 @@ export class WardingPillars extends Item {
     return (
       'You press the pale shards into the cleansed grooves. Pale runes ' +
       'flare and sink into the stone like stored moonlight. The air leans in; ' +
-      'a subtle pull runs through the courtyard as the tide answers the sigils, ' +
-      'drawing the sea closer to the pillars.'
+      'a pull runs through the courtyard as the tide answers the sigils, ' +
+      'and the sea draws back from the drowned hall to the south.'
     )
   }
 }

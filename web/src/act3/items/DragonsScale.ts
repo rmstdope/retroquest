@@ -19,10 +19,8 @@ export class DragonsScale extends Item {
     // Requirements met, allow pickup
     gameState.setStoryFlag(FLAG_ACT3_DRAGONS_SCALE_ACQUIRED, true)
     return (
-      "The dragon's scale settles into your hands with surprising " +
-      'weight. You feel the burden of responsibility and the strength that ' +
-      'comes from selfless action. The relic pulses warmly against your ' +
-      'palm.'
+      'The scale is cold, and heavier than it looks. ' +
+      'You take its weight in both hands.'
     )
   }
 }

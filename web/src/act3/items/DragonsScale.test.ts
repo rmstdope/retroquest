@@ -27,11 +27,12 @@ describe('DragonsScale', () => {
     const gs = createState()
     gs.inventory.push(scale)
 
-    const result = scale.pickedUp(gs).toLowerCase()
+    const result = scale.pickedUp(gs)
 
-    expect(result).toContain('settles into your hands')
-    expect(result).toContain('burden of responsibility')
-    expect(result).toContain('pulses warmly')
+    expect(result).toBe(
+      'The scale is cold, and heavier than it looks. ' +
+        'You take its weight in both hands.',
+    )
     expect(gs.inventory).toContain(scale)
     expect(gs.getStoryFlag(FLAG_ACT3_DRAGONS_SCALE_ACQUIRED)).toBe(true)
   })

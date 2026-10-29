@@ -12,13 +12,26 @@ describe("Mira's Hut (Act III)", () => {
     )
   })
 
-  it('shows Mira at home without calling her wise', () => {
+  it('reads as it did in Act I, with the dark kitchen kept', () => {
     const game = new Game([new Act3()])
-    const hut = game.state.allRooms.MirasHut
-    expect(hut.description).toContain(
-      '[character_name]Mira[/character_name] moves between her shelves ' +
-        'without looking, the way you cross your own kitchen in the dark.',
+    expect(game.state.allRooms.MirasHut.description).toBe(
+      'A small hut hung with drying herbs: lavender, sage, and roots in ' +
+        'bundles from the rafters. Shelves of bottles line the walls, every ' +
+        'one labelled. ' +
+        '[character_name]Mira[/character_name] moves among them without ' +
+        'looking, the way you cross your own kitchen in the dark.',
     )
-    expect(hut.description).not.toContain('knowledge')
+  })
+
+  it('shows the new wording to a save that stored the old one', () => {
+    const game = new Game([new Act3()])
+    game.state.allRooms.MirasHut.description =
+      'A fragrant hut. Sunlight streams.'
+    const fresh = new Game([new Act3()])
+    fresh.loadSaveData(game.toSaveData())
+    expect(fresh.state.allRooms.MirasHut.description).not.toContain('Sunlight')
+    expect(fresh.state.allRooms.MirasHut.description).toContain(
+      'every one labelled',
+    )
   })
 })
