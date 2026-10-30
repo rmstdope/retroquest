@@ -73,6 +73,30 @@ describe('OfferingAltar', () => {
   })
 })
 
+describe('OfferingAltar names', () => {
+  it('answers to plain "altar" when examined', () => {
+    const game = new Game([new Act2()])
+    game.state.currentRoom = game.state.allRooms.HeartOfTheForest
+
+    expect(executeCommands(game, ['examine altar'])).toBe(
+      executeCommands(game, ['examine offering altar']),
+    )
+  })
+
+  it('answers to plain "altar" when an item is used with it', () => {
+    const game = new Game([new Act2()])
+    game.state.currentRoom = game.state.allRooms.HeartOfTheForest
+    game.state.inventory.push(new TravelersJournal())
+    const answer =
+      `${new TravelersJournal().nameInSentence({ atStart: true })} fits ` +
+      'none of the hollows. The runes stay dark.'
+
+    expect(executeCommands(game, ["use traveler's journal with altar"])).toBe(
+      answer,
+    )
+  })
+})
+
 describe('OfferingAltar summoning', () => {
   it('gathers the light and names Nyx once, leaving her arrival to her talk', () => {
     const game = new Game([new Act2()])
