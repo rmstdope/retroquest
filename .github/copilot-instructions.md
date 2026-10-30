@@ -167,6 +167,12 @@ Run each check as its own command and read its exit status; never chain them wit
 - A change that adds or changes a spoken line puts the line in its act's script (`tts/act<N>/script.json`, written by `tts/extract-act.ts`) and ships without a recording. The navigator records new lines after the merge.
 - A line with no recording yet is not a defect. A test may require that every recording belongs to a line of the script, never that every line of the script has a recording.
 
+### Images
+
+- The images on the game's image list are made and chosen by the navigator, by hand, in the studio. No agent generates, draws or picks such an image, and no bead is filed to make one.
+- A change may add or change the game's image descriptions and its image list (and the shared style file the studio reads), and ships without a new image. The navigator makes the images after the merge.
+- An image that has not been made yet is not a defect. A test may require that every image belongs to an entry of the list, never that every entry of the list has an image.
+
 ### Save/Load Compatibility
 
 Saves are JSON produced by the engine's generic serializer and kept in the browser's storage. Every content class must stay serializable:
