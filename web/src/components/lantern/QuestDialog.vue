@@ -100,6 +100,16 @@ const checks = computed(() => {
     </template>
 
     <template v-else>
+      <!-- A finished checklist quest leads with how it ended, then keeps its list. -->
+      <template v-if="details.outcome">
+        <span class="lq-label">Outcome</span>
+        <!-- eslint-disable vue/no-v-html -->
+        <p
+          class="lq-latest lq-prose"
+          v-html="renderMarkup(details.outcome)"
+        ></p>
+        <!-- eslint-enable vue/no-v-html -->
+      </template>
       <!-- eslint-disable vue/no-v-html -->
       <p class="lq-intro lq-prose" v-html="renderMarkup(details.intro)"></p>
       <!-- eslint-enable vue/no-v-html -->
@@ -165,6 +175,9 @@ const checks = computed(() => {
   font-size: var(--lq-story-size);
   line-height: var(--lq-story-line-height);
   color: var(--lq-prose);
+}
+.lq-latest + .lq-intro {
+  margin-top: 14px;
 }
 .lq-earlier-toggle {
   margin-top: 14px;

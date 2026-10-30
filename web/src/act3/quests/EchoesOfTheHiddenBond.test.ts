@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest'
-import { Game } from '@/engine'
+import { Game, GameController } from '@/engine'
 import { Act3 } from '../Act3'
 import { EchoesOfTheHiddenBondQuest } from './EchoesOfTheHiddenBond'
 import {
@@ -121,8 +121,29 @@ describe('Echoes of the Hidden Bond quest', () => {
 
   it('refreshes the completion text of an older save', () => {
     quest.completion = 'once apprentices to Malakar'
-    quest.refreshText()
+    quest.refreshText(game.state)
     expect(quest.completion).toBe(new EchoesOfTheHiddenBondQuest().completion)
+  })
+
+  it('rebuilds the clue list of a finished quest saved with the old wording', () => {
+    game.state.setStoryFlag(FLAG_ACT3_SEA_SEALED_LETTER_READ, true)
+    game.state.setStoryFlag(FLAG_ACT3_CHARRED_INSCRIPTION_READ, true)
+    game.state.setStoryFlag(FLAG_ACT3_DRAGONS_MEMORY_RECEIVED, true)
+    quest.checklist = {
+      intro: 'Your parents once walked these same paths.',
+      items: [{ done: true, text: 'An old line' }],
+    }
+
+    quest.refreshText(game.state)
+
+    const details = quest.details()
+    if (details.kind !== 'checklist') throw new Error('expected a checklist')
+    expect(details.intro).toContain('Your parents made the three relics')
+    expect(details.items).toHaveLength(3)
+    expect(details.items[2]).toEqual({
+      done: true,
+      text: expect.stringContaining('In the Caverns of Shadow: the dragon'),
+    })
   })
 
   it('refreshes the completion text when a save is loaded', () => {
@@ -159,5 +180,31 @@ describe('Echoes of the Hidden Bond quest', () => {
         "themselves into a ward that hides you and holds Malakar's wound " +
         'shut. They are warded away, not dead.',
     ])
+  })
+
+  it('keeps the Caverns clue readable in the finished quest, through a save', () => {
+    game.state.nonActivatedQuests = [quest]
+    game.state.setStoryFlag(FLAG_ACT3_ECHOES_QUEST_STARTED, true)
+    game.state.setStoryFlag(FLAG_ACT3_SEA_SEALED_LETTER_READ, true)
+    game.state.setStoryFlag(FLAG_ACT3_CHARRED_INSCRIPTION_READ, true)
+    game.state.setStoryFlag(FLAG_ACT3_DRAGONS_MEMORY_RECEIVED, true)
+    game.state.settleQuests()
+
+    const caverns =
+      'In the Caverns of Shadow: the dragon remembered them. They poured ' +
+      "themselves into a ward that hides you and holds Malakar's wound " +
+      'shut. They are warded away, not dead.'
+    const reloaded = new Game([new Act3()])
+    reloaded.loadSaveData(game.toSaveData())
+    for (const g of [game, reloaded]) {
+      const done = new GameController(g)
+        .getCompletedQuests()
+        .find((q) => q.name === quest.name)
+      expect(done?.details).toMatchObject({ kind: 'checklist' })
+      const items = done?.details.kind === 'checklist' ? done.details.items : []
+      expect(items).toHaveLength(3)
+      expect(items.every((item) => item.done)).toBe(true)
+      expect(items[2].text).toBe(caverns)
+    }
   })
 })

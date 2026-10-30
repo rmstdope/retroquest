@@ -285,6 +285,47 @@ describe('GameController', () => {
     })
   })
 
+  describe('a finished checklist quest', () => {
+    class ListQuest extends SimpleQuest {
+      constructor() {
+        super('Packing')
+        this.setChecklist(
+          {
+            intro: 'You need:',
+            items: [
+              { done: true, text: 'A cloak' },
+              { done: true, text: 'A map' },
+            ],
+          },
+          'prose',
+        )
+        this.completion = 'You are packed.'
+      }
+    }
+
+    it('keeps its list beside the outcome', () => {
+      const ctrl = makeController()
+      ctrl.game.state.completedQuests = [new ListQuest()]
+      const [summary] = ctrl.getCompletedQuests()
+      expect(summary.details).toEqual({
+        kind: 'checklist',
+        intro: 'You need:',
+        items: [
+          { done: true, text: 'A cloak' },
+          { done: true, text: 'A map' },
+        ],
+        outcome: 'You are packed.',
+      })
+    })
+
+    it('does not give an open checklist an outcome', () => {
+      const ctrl = makeController()
+      ctrl.game.state.activatedQuests = [new ListQuest()]
+      const [summary] = ctrl.getActiveQuests()
+      expect(summary.details).not.toHaveProperty('outcome')
+    })
+  })
+
   describe('quest events', () => {
     it('reports activation, update and completion once each as pop-up text', () => {
       const quest = new FlagQuest('Main Arc', true)

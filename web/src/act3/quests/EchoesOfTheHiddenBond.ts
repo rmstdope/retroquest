@@ -54,9 +54,14 @@ export class EchoesOfTheHiddenBondQuest extends Quest {
     )
   }
 
-  /** Re-set the saved completion text, so an older save shows the current wording. */
-  refreshText(): void {
+  /**
+   * Re-set the saved completion text and rebuild the clue list from the story
+   * flags, so an older save shows the current wording, a finished quest's
+   * list included.
+   */
+  refreshText(gameState: GameState): void {
     this.completion = COMPLETION
+    this.rebuildLog(gameState)
   }
 
   /** Return false as this is a storytelling side quest. */
@@ -73,6 +78,11 @@ export class EchoesOfTheHiddenBondQuest extends Quest {
 
   /** Check if quest description should update based on discoveries. */
   override checkUpdate(gameState: GameState): boolean {
+    return this.rebuildLog(gameState)
+  }
+
+  /** Set the checklist from the story flags; true when a new clue was found. */
+  private rebuildLog(gameState: GameState): boolean {
     let updated = false
 
     // The prose form of each clue, for readers of the description.
