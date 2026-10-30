@@ -1,0 +1,128 @@
+[
+  {
+    "id": "act2-mountain-path",
+    "title": "Mountain Path",
+    "width": 640,
+    "height": 360,
+    "description": "A trail climbs through rock and pine between Willowbrook and Greendale. From the overlooks you can see both: Greendale ahead, and Willowbrook small and far behind you. Just off the trail is a camp site where travellers stop for the night."
+  },
+  {
+    "id": "act2-greendale-gates",
+    "title": "Greendale Gates",
+    "width": 640,
+    "height": 360,
+    "description": "A magnificent stone archway marks the entrance to Greendale, the largest settlement you have encountered. Guards in polished mail stand watch, banners fluttering in the mountain breeze. Beyond, cobblestone streets wind between stone houses and bustling shops. The air carries the sounds of commerce—a stark contrast to Willowbrook's quiet charm."
+  },
+  {
+    "id": "act2-main-square",
+    "title": "Main Square",
+    "width": 640,
+    "height": 360,
+    "description": "The heart of Greendale: a great fountain of old heroes fighting beasts, stalls under bright awnings, red roofs all round. The square is crowded, but the talk is low, and it stops when a guard walks past. Castle towers rise to the north."
+  },
+  {
+    "id": "act2-market-district",
+    "title": "Market District",
+    "width": 640,
+    "height": 360,
+    "description": "Narrow streets crammed with shops and trading posts weave a maze of commerce. Spices, leather, and fresh bread scent the air. Merchant wagons clog passageways while deals are argued in several languages. Serious business gets done here."
+  },
+  {
+    "id": "act2-silver-stag-inn",
+    "title": "The Silver Stag Inn",
+    "width": 640,
+    "height": 360,
+    "description": "A three-story inn glows with warm yellow light. Conversations from travelers and locals merge into a comforting din while tales are traded over bread and ale. Stag mounts and adventuring trophies line the walls. The place feels welcoming; information flows here as freely as the drink."
+  },
+  {
+    "id": "act2-inn-rooms",
+    "title": "Inn Rooms",
+    "width": 640,
+    "height": 360,
+    "description": "Comfortable guest rooms on the upper floor of The Silver Stag Inn. Each room has a cozy bed, a writing desk, and a window overlooking the Market District. The rooms are clean and well-maintained, offering a peaceful retreat for travelers. Faint conversation drifts up from the common room below."
+  },
+  {
+    "id": "act2-merchants-warehouse",
+    "title": "Merchant's Warehouse",
+    "width": 640,
+    "height": 360,
+    "description": "A large stone building packed with goods from distant lands. Crates and barrels form narrow corridors between tall shelving. Exotic spice and lacquer aromas mingle in the cool still air. This is where the most valuable inventory rests under quiet watch."
+  },
+  {
+    "id": "act2-castle-approach",
+    "title": "Castle Approach",
+    "width": 640,
+    "height": 360,
+    "description": "A wide avenue lined with statues of Greendale's heroes leads to an impressive castle of white stone. Tall spires reach toward the sky, and colorful banners snap in the wind. Fewer guards than the posts were built for patrol the approach, and those who remain keep their voices low. The royal standard is gone from the highest spire."
+  },
+  {
+    "id": "act2-castle-courtyard",
+    "title": "Castle Courtyard",
+    "width": 640,
+    "height": 360,
+    "description": "An expansive courtyard within the castle walls, featuring training grounds where knights practice their swordwork. Ancient oak trees provide shade for stone benches, and a stable houses magnificent warhorses, though half its stalls stand empty since the king's own guard rode out to search for him. The castle's main hall rises before you, its great doors carved with the symbols of Greendale's noble houses."
+  },
+  {
+    "id": "act2-great-hall",
+    "title": "Great Hall",
+    "width": 640,
+    "height": 360,
+    "description": "A magnificent hall with soaring ceilings supported by massive stone columns. Tapestries depicting legendary battles cover the walls, and the king's throne stands empty on a raised dais at the far end, a dark cloth laid across its arms. Behind it, the doors to the throne room are barred. Sunlight streams through tall stained-glass windows, casting colorful patterns on the stone floor. This is where the lords of Greendale hold court; for now, the Lord Commander holds it alone."
+  },
+  {
+    "id": "act2-residential-quarter",
+    "title": "Residential Quarter",
+    "width": 640,
+    "height": 360,
+    "description": "Quiet lanes of two-storey houses, each with a small garden and a workshop. Craftsmen work at benches in the open doorways, and neighbours sit on their steps. Half the garden plots have gone grey."
+  },
+  {
+    "id": "act2-healers-house",
+    "title": "Healer's House",
+    "width": 640,
+    "height": 360,
+    "description": "A small stone house that smells of crushed herbs. A few bundles of dried plants still hang from the rafters, but the shelves below them are nearly bare: rows of empty bottles, rinsed and waiting. A fire burns in the hearth, and a door at the back stands half shut."
+  },
+  {
+    "id": "act2-hidden-library",
+    "title": "Hidden Library",
+    "width": 640,
+    "height": 360,
+    "description": "Discovered beneath Greendale through a secret passage, this ancient library holds countless volumes of magical lore. Glowing crystals provide soft illumination and the air hums with residual energy. Protective enchantments shimmer around the most valuable texts. Somewhere on these shelves may be an answer about the mark you carry."
+  },
+  {
+    "id": "act2-forest-transition",
+    "title": "Forest Transition",
+    "width": 640,
+    "height": 360,
+    "description": "The mountain path ends at a ring of standing stones, grey and mossed, with runes cut deep in them. Past the stones the trees begin all at once, close and dark."
+  },
+  {
+    "id": "act2-forest-entrance",
+    "title": "Forest Entrance",
+    "width": 640,
+    "height": 360,
+    "description": "Massive trees create a natural cathedral as you enter the Enchanted Forest. Dappled sunlight filters through the dense canopy, and the path ahead disappears into green shadows. The air is alive with birds and rustling leaves, but beneath it lies an expectant silence, as if the forest itself is watching."
+  },
+  {
+    "id": "act2-ancient-grove",
+    "title": "Ancient Grove",
+    "width": 640,
+    "height": 360,
+    "description": "A ring of trees so old their trunks are wider than a cottage. Signs are carved in their bark, older than any letters you know. In the middle stands one tree taller than the rest, with bark the colour of tarnished silver."
+  },
+  {
+    "id": "act2-whispering-glade",
+    "title": "Whispering Glade",
+    "width": 640,
+    "height": 360,
+    "description": "A meadow opens round a small stream that runs over smooth stones. Wildflowers grow thick to the water's edge. Under the sound of the water there are other sounds, almost voices, and they stop when you listen for them."
+  },
+  {
+    "id": "act2-heart-of-the-forest",
+    "title": "Heart of the Forest",
+    "width": 640,
+    "height": 360,
+    "description": "The deepest part of the forest. The light here is green and gold and does not seem to come from the sky. A tree vaster than any other holds up the branches overhead, and before it stands an altar of starstone. The only way out is back north, to the grove."
+  }
+]

@@ -119,3 +119,14 @@ M5 Pro at about 7x slower than real time. It took voice and emotion from a refer
 drifted past ~20 s per generation (repeating, skipping and garbling words) and often babbled
 after the text ended. Fish's free model was faster, word-accurate and directable with cues, so
 the MisoTTS scripts were removed; they are in this branch's history.
+
+## Images
+
+Audio Studio's images workspace lists the pictures the game needs. **Refresh dialog** on an act
+also writes `act<N>/images.json`: one image per room, each `{ id, title, width, height,
+description }`, where the description is the room's base description with the markup removed (the
+studio's starting prompt) and the id is the room's music track id. The look all images share is
+`images/style.json`, written by hand: the style text, things to keep out (`avoid`), the `palette`
+and an optional addition per act (`acts`). The `images` section of `audio-studio.json` points at
+both. Prompt overrides live in the studio, never in the game; the lists come from
+`web/src/lantern/imageLists.ts` and a vitest test fails when a committed list is stale.

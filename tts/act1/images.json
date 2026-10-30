@@ -1,0 +1,114 @@
+[
+  {
+    "id": "act1-the-dream",
+    "title": "The Dream",
+    "width": 640,
+    "height": 360,
+    "description": "It is dark, and it is raining hard. You hear it beating on shutters, though you cannot see any. Thunder breaks so close that the dark shakes with it. Shadows drift past like smoke. A man’s hand reaches out of the dark, lifts a child and holds it against his shoulder, and then both of them are gone. Somewhere a slow tune climbs three notes and settles home again. A tall figure stands among the shadows. It has no face you can find. It is too far away to reach, and too close to be only a dream. It is whispering, at the very edge of hearing, and what it whispers is your name."
+  },
+  {
+    "id": "act1-eliors-cottage",
+    "title": "Elior's Cottage",
+    "width": 640,
+    "height": 360,
+    "description": "A modest cottage with a straw roof and a cozy hearth. The scent of fresh bread and old books fills the air. Sunlight filters through lace curtains, illuminating shelves lined with trinkets and memories. A sturdy wooden table sits in the center, and a gentle fire crackles in the hearth. Grandmother stands by it, humming, and keeps an eye on the bread."
+  },
+  {
+    "id": "act1-vegetable-field",
+    "title": "Vegetable Field",
+    "width": 640,
+    "height": 360,
+    "description": "Rows of withered crops stretch beneath a brooding gray sky. The earth is cracked and dry, with only a few stubborn carrots and a rusty hoe hinting at better days. A faint breeze rustles the brittle leaves, carrying the scent of soil and distant rain. These rows were green a month ago."
+  },
+  {
+    "id": "act1-chicken-coop",
+    "title": "Chicken Coop",
+    "width": 640,
+    "height": 360,
+    "description": "A small wooden coop stands here, its planks patched and weathered. Nervous chickens cluck and flutter, their feathers ruffled as they dart between straw nests. The air is thick with the scent of hay and the occasional squawk. Sunbeams slip through the slats, casting striped shadows on the dirt floor. High on a rafter, out of reach, something glints where no hen could have put it."
+  },
+  {
+    "id": "act1-village-square",
+    "title": "Village Square",
+    "width": 640,
+    "height": 360,
+    "description": "The heart of Willowbrook: cobblestones around an old stone fountain, and a weathered notice board covered in faded announcements. Half the market stalls stand empty. The people at the others keep their voices down, and stop talking when you pass."
+  },
+  {
+    "id": "act1-miras-hut",
+    "title": "Mira's Hut",
+    "width": 640,
+    "height": 360,
+    "description": "A small hut hung with drying herbs: lavender, sage, and roots in bundles from the rafters. Shelves of bottles line the walls, every one labelled. Mira moves among them without looking, the way you move through your own kitchen."
+  },
+  {
+    "id": "act1-blacksmiths-forge",
+    "title": "Blacksmith's Forge",
+    "width": 640,
+    "height": 360,
+    "description": "A hot, smoky forge. Coals glow in the hearth and the anvil rings. Hinges, ploughshares and horseshoes hang from the walls, waiting to be mended or fetched, and the blacksmith wipes his brow without putting down the hammer."
+  },
+  {
+    "id": "act1-general-store",
+    "title": "General Store",
+    "width": 640,
+    "height": 360,
+    "description": "A cluttered shop with the shutters half down. Rope, apples, matches and trinkets crowd the shelves in the gloom. The shopkeeper stands at the window, watching the lane."
+  },
+  {
+    "id": "act1-village-well",
+    "title": "Village Well",
+    "width": 640,
+    "height": 360,
+    "description": "An old stone well stands between the field and the forge, its stones worn smooth by countless hands. The water below lies dark and still, and a faint sour smell hangs in the cool, damp air. Moss creeps up the sides."
+  },
+  {
+    "id": "act1-abandoned-shed",
+    "title": "Abandoned Shed",
+    "width": 640,
+    "height": 360,
+    "description": "A rickety shed leans precariously at the edge of Willowbrook, its weathered boards creaking in the wind. Rusty tools and broken crates are scattered about a long workbench, and a thick layer of dust covers everything. Little light gets past the grimy boards, and the air smells of old earth and lamp oil."
+  },
+  {
+    "id": "act1-old-mill",
+    "title": "Old Mill",
+    "width": 640,
+    "height": 360,
+    "description": "A creaky windmill towers above, its sails turning slowly in the breeze. Dusty gears and cobwebs fill the interior, and the scent of flour hangs in the air. Sunlight streams through broken windows, illuminating sacks of grain and a heavy millstone. Amidst the old workings, you notice a strange mechanism of black iron, whirring to itself, that doesn't belong to the mill's original design."
+  },
+  {
+    "id": "act1-riverbank",
+    "title": "Riverbank",
+    "width": 640,
+    "height": 360,
+    "description": "A gentle river flows past the village and makes a slow bend here, past the reeds and a broad, flat stone at the water's edge. Insects hum over the water. A weathered fisherman sits on an upturned crate at the bend, his line in."
+  },
+  {
+    "id": "act1-forest-path",
+    "title": "Forest Path",
+    "width": 640,
+    "height": 360,
+    "description": "A winding path snakes into the heart of the woods, dappled sunlight flickering through the canopy above. A section of the path is blocked by thick, thorny vines. The air is alive with the scent of pine and wildflowers, and the ground is soft with moss and fallen leaves. Birds flit between branches, and the occasional snap of a twig hints at unseen creatures nearby."
+  },
+  {
+    "id": "act1-hidden-glade",
+    "title": "Hidden Glade",
+    "width": 640,
+    "height": 360,
+    "description": "A hushed clearing hidden deep within the forest, dim and overgrown. Brambles crowd its edges, and the tall grass stands grey and still beneath branches that shut out the sun. In the center, a mossy stone bears a faint inscription, too deep in shadow to read. An unnatural darkness lingers here, though the sky above the branches is clear."
+  },
+  {
+    "id": "act1-village-chapel",
+    "title": "Village Chapel",
+    "width": 640,
+    "height": 360,
+    "description": "A small stone chapel. Its stained glass windows cast colours across the worn pews, and the air is cool and smells of candle wax. A kindly priest tends the altar. By the door the bell rope hangs straight and still. Over the door a shape is cut into the stone, worn almost smooth. A dark corner by the altar swallows the light."
+  },
+  {
+    "id": "act1-road-to-greendale",
+    "title": "Road to Greendale",
+    "width": 640,
+    "height": 360,
+    "description": "The main road out of Willowbrook runs east under old oaks, their branches meeting overhead. The way is well trodden, lined with wildflowers and fallen leaves. A merchant's cart stands at the roadside, and his thin grey mare grazes beside it on three good shoes."
+  }
+]

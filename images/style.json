@@ -1,0 +1,25 @@
+{
+    "style": "Painted storybook illustration of a place in a small medieval fantasy world, soft gouache with visible brush texture, muted warm tones, gentle lantern light and long soft shadows, hand-painted and slightly worn like an old picture book, wide landscape composition, no people in the foreground",
+    "avoid": [
+        "text",
+        "lettering",
+        "watermark",
+        "signature",
+        "photorealism",
+        "3d render",
+        "anime",
+        "neon colours",
+        "modern objects",
+        "crowds of people",
+        "frame or border"
+    ],
+    "palette": [
+        { "name": "night", "hex": "#10151a" },
+        { "name": "parchment", "hex": "#f5f0e6" },
+        { "name": "lantern amber", "hex": "#ffa914" },
+        { "name": "dusk blue", "hex": "#7fb0e6" },
+        { "name": "leaf green", "hex": "#8fcf7a" },
+        { "name": "ember red", "hex": "#e8896b" }
+    ],
+    "acts": {}
+}
