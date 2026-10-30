@@ -1,6 +1,8 @@
-import { describe, it, expect } from 'vitest'
-import { characterName, Game } from '@/engine'
+import { describe, it, expect, vi } from 'vitest'
+import { characterName, Game, GameController } from '@/engine'
 import { Act1 } from '../Act1'
+import { WanderingBoots } from '../items/WanderingBoots'
+import { FLAG_JOURNEY_BLESS_COMPLETED } from '../Act1StoryFlags'
 import { GameMap } from '../items/GameMap'
 import { TravelCloak } from '../items/TravelCloak'
 import { Apple } from '../items/Apple'
@@ -87,6 +89,51 @@ describe('Preparing for the road checklist', () => {
     if (details.kind !== 'checklist') throw new Error('expected a checklist')
     expect(details.items[0]).toEqual({ done: true, text: 'Warm clothing' })
     expect(details.items[4].done).toBe(false)
+  })
+})
+
+describe('A finished Preparing for the road', () => {
+  it('keeps the list it had at completion, food count included', () => {
+    const game = new Game([new Act1()])
+    vi.spyOn(game.state, 'hasSpell').mockReturnValue(true)
+    game.state.setStoryFlag(FLAG_JOURNEY_BLESS_COMPLETED, true)
+    for (const item of [
+      new TravelCloak(),
+      new GameMap(),
+      new WanderingBoots(),
+      new Apple(),
+      new Egg(),
+      new Fish(),
+      new WildBerries(),
+    ])
+      game.state.addItemToInventory(item)
+    game.state.nonActivatedQuests = []
+    game.state.activatedQuests = [new PreparingForTheRoadQuest()]
+
+    game.state.settleQuests()
+    expect(game.state.completedQuests).toHaveLength(1)
+
+    const summarise = (g: Game) => {
+      const [done] = new GameController(g).getCompletedQuests()
+      return done.details
+    }
+    const frozen = summarise(game)
+    expect(frozen).toMatchObject({ kind: 'checklist' })
+    const food =
+      frozen.kind === 'checklist' ? frozen.items[2].text : 'not a checklist'
+    expect(food).toBe(
+      'Food for the road (4 of 6 kinds gathered, any 4 will do)',
+    )
+
+    // Eating something afterwards changes nothing.
+    game.state.removeItemFromInventory('apple')
+    game.state.settleQuests()
+    game.state.refreshQuestLogs()
+    expect(summarise(game)).toEqual(frozen)
+
+    const reloaded = new Game([new Act1()])
+    reloaded.loadSaveData(game.toSaveData())
+    expect(summarise(reloaded)).toEqual(frozen)
   })
 })
 

@@ -293,7 +293,8 @@ export class Act3 extends Act {
       ...gameState.activatedQuests,
       ...gameState.completedQuests,
     ]) {
-      if (quest instanceof EchoesOfTheHiddenBondQuest) quest.refreshText()
+      if (quest instanceof EchoesOfTheHiddenBondQuest)
+        quest.refreshText(gameState)
     }
     const carried = [
       ...gameState.inventory,

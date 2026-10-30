@@ -121,8 +121,29 @@ describe('Echoes of the Hidden Bond quest', () => {
 
   it('refreshes the completion text of an older save', () => {
     quest.completion = 'once apprentices to Malakar'
-    quest.refreshText()
+    quest.refreshText(game.state)
     expect(quest.completion).toBe(new EchoesOfTheHiddenBondQuest().completion)
+  })
+
+  it('rebuilds the clue list of a finished quest saved with the old wording', () => {
+    game.state.setStoryFlag(FLAG_ACT3_SEA_SEALED_LETTER_READ, true)
+    game.state.setStoryFlag(FLAG_ACT3_CHARRED_INSCRIPTION_READ, true)
+    game.state.setStoryFlag(FLAG_ACT3_DRAGONS_MEMORY_RECEIVED, true)
+    quest.checklist = {
+      intro: 'Your parents once walked these same paths.',
+      items: [{ done: true, text: 'An old line' }],
+    }
+
+    quest.refreshText(game.state)
+
+    const details = quest.details()
+    if (details.kind !== 'checklist') throw new Error('expected a checklist')
+    expect(details.intro).toContain('Your parents made the three relics')
+    expect(details.items).toHaveLength(3)
+    expect(details.items[2]).toEqual({
+      done: true,
+      text: expect.stringContaining('In the Caverns of Shadow: the dragon'),
+    })
   })
 
   it('refreshes the completion text when a save is loaded', () => {
