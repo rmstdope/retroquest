@@ -4,7 +4,7 @@
     "grandmother": { "voice": "47e0fe010fc1468fa2b389a3dc1db037", "voiceName": "Warm Grandmother", "style": "[warm, gentle, a little worried]", "audition": { "keywords": ["grandmother", "old", "mother", "warm"], "phrase": "Oh, Elior, my dear. The village... it feels a bit on edge lately, doesn't it?\nWillowbrook has always been a peaceful place. The Village Square is usually bustling, though folks seem more hushed these days." } },
     "mira": { "voice": "52b38f57477c4a3dbaf9136e739d9799", "style": "[low, calm, knowing]" },
     "priest": { "voice": "d5b3a0954fba413b924daa64cf19fcf4", "style": "[kind, hushed, reverent]" },
-    "fisherman": { "voice": "66fd169d1eca43298b3e977878f14e20", "style": "[weathered, friendly, unhurried]" },
+    "fisherman": { "voice": "65aa3aa0a3f94c10b7da7f1665e2fa4f", "voiceName": "ELDERLY", "style": "[weathered, friendly, unhurried]", "audition": { "keywords": ["elderly man"] } },
     "shopkeeper": { "voice": "592b2d14a67540dfa8ca486caa45b699", "style": "[bustling, cheerful]" },
     "blacksmith": { "voice": "d3b518ad71b64fa2a3197779f217a5f1", "style": "[gruff, hearty]" },
     "tilda": { "voice": "1c93f26e9a6e411ba05c263432e5d3ce", "style": "[chatty, lowering her voice]" },

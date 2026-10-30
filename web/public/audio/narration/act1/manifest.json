@@ -737,112 +737,112 @@
  "008acc1ef42825": {
   "file": "008acc1ef42825.mp3",
   "speaker": "fisherman",
-  "duration": 7.338,
+  "duration": 6.502,
   "words": [
    {
     "word": "That",
     "start": 0.0,
-    "end": 0.2
+    "end": 0.16
    },
    {
     "word": "was",
-    "start": 0.2,
-    "end": 0.4
+    "start": 0.16,
+    "end": 0.34
    },
    {
     "word": "your",
-    "start": 0.4,
-    "end": 0.58
+    "start": 0.34,
+    "end": 0.5
    },
    {
     "word": "father's",
-    "start": 0.58,
-    "end": 1.14
+    "start": 0.5,
+    "end": 0.98
    },
    {
     "word": "rod,",
-    "start": 1.14,
-    "end": 1.56
+    "start": 0.98,
+    "end": 1.34
    },
    {
     "word": "or",
-    "start": 1.82,
-    "end": 2.14
+    "start": 1.48,
+    "end": 1.76
    },
    {
     "word": "I'm",
-    "start": 2.14,
-    "end": 2.34
+    "start": 1.76,
+    "end": 1.96
    },
    {
     "word": "a",
-    "start": 2.34,
-    "end": 2.48
+    "start": 1.96,
+    "end": 2.1
    },
    {
     "word": "trout.",
-    "start": 2.48,
-    "end": 2.72
+    "start": 2.1,
+    "end": 2.32
    },
    {
     "word": "I",
-    "start": 3.16,
-    "end": 3.62
+    "start": 2.62,
+    "end": 3.0
    },
    {
     "word": "can't",
-    "start": 3.62,
-    "end": 3.98
+    "start": 3.0,
+    "end": 3.28
    },
    {
     "word": "cast",
-    "start": 3.98,
-    "end": 4.38
+    "start": 3.28,
+    "end": 3.6
    },
    {
     "word": "with",
-    "start": 4.38,
-    "end": 4.54
+    "start": 3.6,
+    "end": 3.76
    },
    {
     "word": "this",
-    "start": 4.54,
-    "end": 4.74
+    "start": 3.76,
+    "end": 3.96
    },
    {
     "word": "arm,",
-    "start": 4.74,
-    "end": 5.08
+    "start": 3.96,
+    "end": 4.26
    },
    {
     "word": "but",
-    "start": 5.24,
-    "end": 5.52
+    "start": 4.46,
+    "end": 4.7
    },
    {
     "word": "I",
-    "start": 5.52,
-    "end": 5.64
+    "start": 4.7,
+    "end": 4.8
    },
    {
     "word": "can",
-    "start": 5.64,
-    "end": 5.8
+    "start": 4.8,
+    "end": 4.96
    },
    {
     "word": "show",
-    "start": 5.8,
-    "end": 6.1
+    "start": 4.96,
+    "end": 5.2
    },
    {
     "word": "you.",
-    "start": 6.1,
-    "end": 6.38
+    "start": 5.2,
+    "end": 5.44
    },
    {
     "word": "Here.",
-    "start": 6.64,
-    "end": 7.04
+    "start": 5.82,
+    "end": 6.28
    }
   ]
  },
@@ -3130,162 +3130,162 @@
  "019c14b217e7b0": {
   "file": "019c14b217e7b0.mp3",
   "speaker": "fisherman",
-  "duration": 12.167,
+  "duration": 9.613,
   "words": [
    {
     "word": "Well,",
     "start": 0.0,
-    "end": 0.32
+    "end": 0.22
    },
    {
     "word": "would",
-    "start": 0.72,
-    "end": 0.92
+    "start": 0.38,
+    "end": 0.52
    },
    {
     "word": "you",
-    "start": 0.92,
-    "end": 1.02
+    "start": 0.52,
+    "end": 0.64
    },
    {
     "word": "look",
-    "start": 1.02,
-    "end": 1.2
+    "start": 0.64,
+    "end": 0.84
    },
    {
     "word": "at",
-    "start": 1.2,
-    "end": 1.34
+    "start": 0.84,
+    "end": 0.94
    },
    {
     "word": "that!",
-    "start": 1.34,
-    "end": 1.66
+    "start": 0.94,
+    "end": 1.24
    },
    {
     "word": "Not",
-    "start": 1.98,
-    "end": 2.54
+    "start": 1.42,
+    "end": 1.72
    },
    {
     "word": "a",
-    "start": 2.54,
-    "end": 2.68
+    "start": 1.72,
+    "end": 1.84
    },
    {
     "word": "twinge.",
-    "start": 2.68,
-    "end": 3.22
+    "start": 1.84,
+    "end": 2.26
    },
    {
     "word": "Your",
-    "start": 3.56,
-    "end": 4.08
+    "start": 2.5,
+    "end": 2.86
    },
    {
     "word": "mother",
-    "start": 4.08,
-    "end": 4.38
+    "start": 2.86,
+    "end": 3.14
    },
    {
     "word": "mended",
-    "start": 4.38,
-    "end": 4.78
+    "start": 3.14,
+    "end": 3.52
    },
    {
     "word": "my",
-    "start": 4.78,
-    "end": 4.96
+    "start": 3.52,
+    "end": 3.72
    },
    {
     "word": "scrapes",
-    "start": 4.96,
-    "end": 5.42
+    "start": 3.72,
+    "end": 4.16
    },
    {
     "word": "the",
-    "start": 5.42,
-    "end": 5.54
+    "start": 4.16,
+    "end": 4.3
    },
    {
     "word": "same",
-    "start": 5.54,
-    "end": 5.82
+    "start": 4.3,
+    "end": 4.58
    },
    {
     "word": "way,",
-    "start": 5.82,
-    "end": 6.16
+    "start": 4.58,
+    "end": 4.88
    },
    {
     "word": "down",
-    "start": 6.42,
-    "end": 6.74
+    "start": 5.08,
+    "end": 5.38
    },
    {
     "word": "by",
-    "start": 6.74,
-    "end": 6.9
+    "start": 5.38,
+    "end": 5.58
    },
    {
     "word": "the",
-    "start": 6.9,
-    "end": 7.06
+    "start": 5.58,
+    "end": 5.72
    },
    {
     "word": "bend.",
-    "start": 7.06,
-    "end": 7.44
+    "start": 5.72,
+    "end": 6.0
    },
    {
     "word": "Thank",
-    "start": 7.9,
-    "end": 8.52
+    "start": 6.38,
+    "end": 6.68
    },
    {
     "word": "you,",
-    "start": 8.52,
-    "end": 8.72
+    "start": 6.68,
+    "end": 6.84
    },
    {
     "word": "lad.",
-    "start": 8.8,
-    "end": 9.0
+    "start": 6.92,
+    "end": 7.12
    },
    {
     "word": "Tomorrow",
-    "start": 9.68,
-    "end": 10.08
+    "start": 7.44,
+    "end": 7.72
    },
    {
     "word": "I'll",
-    "start": 10.08,
-    "end": 10.54
+    "start": 7.72,
+    "end": 8.12
    },
    {
     "word": "cast",
-    "start": 10.54,
-    "end": 10.9
+    "start": 8.12,
+    "end": 8.44
    },
    {
     "word": "my",
-    "start": 10.9,
-    "end": 11.12
+    "start": 8.44,
+    "end": 8.66
    },
    {
     "word": "own",
-    "start": 11.12,
-    "end": 11.3
+    "start": 8.66,
+    "end": 8.9
    },
    {
     "word": "line",
-    "start": 11.3,
-    "end": 11.54
+    "start": 8.9,
+    "end": 9.16
    },
    {
     "word": "again.",
-    "start": 11.54,
-    "end": 11.78
+    "start": 9.16,
+    "end": 9.4
    }
   ]
  },
@@ -20887,167 +20887,167 @@
  "0a70b37d05b452": {
   "file": "0a70b37d05b452.mp3",
   "speaker": "fisherman",
-  "duration": 10.774,
+  "duration": 9.52,
   "words": [
    {
     "word": "Water's",
     "start": 0.0,
-    "end": 0.44
+    "end": 0.4
    },
    {
     "word": "not",
-    "start": 0.44,
-    "end": 0.6
+    "start": 0.4,
+    "end": 0.58
    },
    {
     "word": "been",
-    "start": 0.6,
+    "start": 0.58,
     "end": 0.78
    },
    {
     "word": "right.",
     "start": 0.78,
-    "end": 1.08
+    "end": 1.06
    },
    {
     "word": "You'll",
-    "start": 1.34,
-    "end": 1.8
+    "start": 1.32,
+    "end": 1.68
    },
    {
     "word": "have",
-    "start": 1.8,
-    "end": 1.92
+    "start": 1.68,
+    "end": 1.82
    },
    {
     "word": "smelled",
-    "start": 1.92,
-    "end": 2.22
+    "start": 1.82,
+    "end": 2.18
    },
    {
     "word": "the",
-    "start": 2.22,
-    "end": 2.38
+    "start": 2.18,
+    "end": 2.4
    },
    {
     "word": "well.",
-    "start": 2.38,
-    "end": 2.68
+    "start": 2.4,
+    "end": 2.7
    },
    {
     "word": "Your",
-    "start": 3.08,
-    "end": 3.64
+    "start": 2.96,
+    "end": 3.34
    },
    {
     "word": "mother",
-    "start": 3.64,
-    "end": 3.9
+    "start": 3.34,
+    "end": 3.6
    },
    {
     "word": "taught",
-    "start": 3.9,
-    "end": 4.16
+    "start": 3.6,
+    "end": 3.86
    },
    {
     "word": "me",
-    "start": 4.16,
-    "end": 4.34
+    "start": 3.86,
+    "end": 4.02
    },
    {
     "word": "a",
-    "start": 4.34,
-    "end": 4.5
+    "start": 4.02,
+    "end": 4.22
    },
    {
     "word": "thing",
-    "start": 4.5,
-    "end": 4.76
+    "start": 4.22,
+    "end": 4.4
    },
    {
     "word": "for",
-    "start": 4.76,
-    "end": 4.96
+    "start": 4.4,
+    "end": 4.6
    },
    {
     "word": "that,",
-    "start": 4.96,
-    "end": 5.28
+    "start": 4.6,
+    "end": 4.86
    },
    {
     "word": "here",
-    "start": 5.44,
-    "end": 5.76
+    "start": 5.02,
+    "end": 5.3
    },
    {
     "word": "at",
-    "start": 5.76,
-    "end": 5.88
+    "start": 5.3,
+    "end": 5.42
    },
    {
     "word": "the",
-    "start": 5.88,
-    "end": 6.0
+    "start": 5.42,
+    "end": 5.52
    },
    {
     "word": "bend,",
-    "start": 6.0,
-    "end": 6.34
+    "start": 5.52,
+    "end": 5.84
    },
    {
     "word": "years",
-    "start": 6.62,
-    "end": 6.96
+    "start": 6.02,
+    "end": 6.34
    },
    {
     "word": "back.",
-    "start": 6.96,
-    "end": 7.36
+    "start": 6.34,
+    "end": 6.68
    },
    {
     "word": "I",
-    "start": 7.68,
-    "end": 8.14
+    "start": 6.88,
+    "end": 7.18
    },
    {
     "word": "reckon",
-    "start": 8.14,
-    "end": 8.4
+    "start": 7.18,
+    "end": 7.44
    },
    {
     "word": "it",
-    "start": 8.4,
-    "end": 8.56
+    "start": 7.44,
+    "end": 7.58
    },
    {
     "word": "was",
-    "start": 8.56,
-    "end": 8.74
+    "start": 7.58,
+    "end": 7.74
    },
    {
     "word": "always",
-    "start": 8.74,
-    "end": 9.14
+    "start": 7.74,
+    "end": 8.16
    },
    {
     "word": "more",
-    "start": 9.14,
-    "end": 9.54
+    "start": 8.16,
+    "end": 8.5
    },
    {
     "word": "hers",
-    "start": 9.54,
-    "end": 9.9
+    "start": 8.5,
+    "end": 8.84
    },
    {
     "word": "than",
-    "start": 9.9,
-    "end": 10.1
+    "start": 8.84,
+    "end": 9.0
    },
    {
     "word": "mine.",
-    "start": 10.1,
-    "end": 10.44
+    "start": 9.0,
+    "end": 9.3
    }
   ]
  },
@@ -21377,182 +21377,182 @@
  "0acca903cca760": {
   "file": "0acca903cca760.mp3",
   "speaker": "fisherman",
-  "duration": 12.167,
+  "duration": 11.285,
   "words": [
    {
     "word": "Where",
     "start": 0.0,
-    "end": 0.24
+    "end": 0.12
    },
    {
     "word": "the",
-    "start": 0.24,
-    "end": 0.42
+    "start": 0.12,
+    "end": 0.26
    },
    {
     "word": "river",
-    "start": 0.42,
-    "end": 0.68
+    "start": 0.26,
+    "end": 0.5
    },
    {
     "word": "bends...",
-    "start": 0.68,
-    "end": 1.22
+    "start": 0.5,
+    "end": 0.88
    },
    {
     "word": "that's",
-    "start": 1.5,
-    "end": 2.08
+    "start": 1.28,
+    "end": 1.76
    },
    {
     "word": "here,",
-    "start": 2.08,
-    "end": 2.34
+    "start": 1.76,
+    "end": 1.94
    },
    {
     "word": "lad.",
-    "start": 2.42,
-    "end": 2.64
+    "start": 2.04,
+    "end": 2.22
    },
    {
     "word": "This",
-    "start": 2.9,
-    "end": 3.28
+    "start": 2.52,
+    "end": 2.86
    },
    {
     "word": "very",
-    "start": 3.28,
-    "end": 3.56
+    "start": 2.86,
+    "end": 3.16
    },
    {
     "word": "spot.",
-    "start": 3.56,
-    "end": 4.06
+    "start": 3.16,
+    "end": 3.54
    },
    {
     "word": "Your",
-    "start": 4.22,
-    "end": 4.54
+    "start": 3.9,
+    "end": 4.38
    },
    {
     "word": "mother",
-    "start": 4.54,
-    "end": 4.84
+    "start": 4.38,
+    "end": 4.62
    },
    {
     "word": "came",
-    "start": 4.84,
-    "end": 5.14
+    "start": 4.62,
+    "end": 4.98
    },
    {
     "word": "to",
-    "start": 5.14,
-    "end": 5.28
+    "start": 4.98,
+    "end": 5.12
    },
    {
     "word": "the",
-    "start": 5.28,
-    "end": 5.4
+    "start": 5.12,
+    "end": 5.26
    },
    {
     "word": "bend",
-    "start": 5.4,
-    "end": 5.72
+    "start": 5.26,
+    "end": 5.5
    },
    {
     "word": "near",
-    "start": 5.72,
-    "end": 6.18
+    "start": 5.5,
+    "end": 5.76
    },
    {
     "word": "every",
-    "start": 6.18,
-    "end": 6.5
+    "start": 5.76,
+    "end": 6.18
    },
    {
     "word": "evening.",
-    "start": 6.5,
-    "end": 6.92
+    "start": 6.18,
+    "end": 6.6
    },
    {
     "word": "Said",
-    "start": 7.18,
-    "end": 7.58
+    "start": 6.9,
+    "end": 7.24
    },
    {
     "word": "the",
-    "start": 7.58,
-    "end": 7.74
+    "start": 7.24,
+    "end": 7.36
    },
    {
     "word": "water",
-    "start": 7.74,
-    "end": 8.04
+    "start": 7.36,
+    "end": 7.66
    },
    {
     "word": "here",
-    "start": 8.04,
-    "end": 8.3
+    "start": 7.66,
+    "end": 7.88
    },
    {
     "word": "was",
-    "start": 8.3,
-    "end": 8.56
+    "start": 7.88,
+    "end": 8.08
    },
    {
     "word": "old,",
-    "start": 8.56,
-    "end": 9.0
+    "start": 8.08,
+    "end": 8.48
    },
    {
     "word": "older",
-    "start": 9.28,
-    "end": 9.58
+    "start": 8.72,
+    "end": 9.02
    },
    {
     "word": "than",
-    "start": 9.58,
-    "end": 9.78
+    "start": 9.02,
+    "end": 9.2
    },
    {
     "word": "the",
-    "start": 9.78,
-    "end": 9.92
+    "start": 9.2,
+    "end": 9.32
    },
    {
     "word": "village,",
-    "start": 9.92,
-    "end": 10.36
+    "start": 9.32,
+    "end": 9.7
    },
    {
     "word": "and",
-    "start": 10.54,
-    "end": 10.76
+    "start": 9.84,
+    "end": 10.16
    },
    {
     "word": "it",
-    "start": 10.76,
-    "end": 10.88
+    "start": 10.16,
+    "end": 10.26
    },
    {
     "word": "had",
-    "start": 10.88,
-    "end": 11.04
+    "start": 10.26,
+    "end": 10.46
    },
    {
     "word": "things",
-    "start": 11.04,
-    "end": 11.38
+    "start": 10.46,
+    "end": 10.74
    },
    {
     "word": "to",
-    "start": 11.38,
-    "end": 11.58
+    "start": 10.74,
+    "end": 10.92
    },
    {
     "word": "teach.",
-    "start": 11.58,
-    "end": 11.92
+    "start": 10.92,
+    "end": 11.14
    }
   ]
  },
@@ -22075,227 +22075,227 @@
  "0b01a79754dcc0": {
   "file": "0b01a79754dcc0.mp3",
   "speaker": "fisherman",
-  "duration": 13.607,
+  "duration": 11.146,
   "words": [
    {
     "word": "The",
     "start": 0.0,
-    "end": 0.1
+    "end": 0.12
    },
    {
     "word": "night",
-    "start": 0.1,
-    "end": 0.24
+    "start": 0.12,
+    "end": 0.28
    },
    {
     "word": "before",
-    "start": 0.24,
-    "end": 0.54
+    "start": 0.28,
+    "end": 0.56
    },
    {
     "word": "she",
-    "start": 0.54,
-    "end": 0.78
+    "start": 0.56,
+    "end": 0.76
    },
    {
     "word": "went",
-    "start": 0.78,
-    "end": 0.98
+    "start": 0.76,
+    "end": 0.94
    },
    {
     "word": "away,",
-    "start": 0.98,
-    "end": 1.34
+    "start": 0.94,
+    "end": 1.26
    },
    {
     "word": "she",
-    "start": 1.52,
-    "end": 1.9
+    "start": 1.48,
+    "end": 1.76
    },
    {
     "word": "pressed",
-    "start": 1.9,
-    "end": 2.24
+    "start": 1.76,
+    "end": 2.06
    },
    {
     "word": "a",
-    "start": 2.24,
-    "end": 2.42
+    "start": 2.06,
+    "end": 2.2
    },
    {
     "word": "little",
-    "start": 2.42,
-    "end": 2.56
+    "start": 2.2,
+    "end": 2.34
    },
    {
     "word": "tin",
-    "start": 2.56,
-    "end": 2.9
+    "start": 2.34,
+    "end": 2.62
    },
    {
     "word": "into",
-    "start": 2.9,
-    "end": 3.12
+    "start": 2.62,
+    "end": 2.82
    },
    {
     "word": "the",
-    "start": 3.12,
-    "end": 3.28
+    "start": 2.82,
+    "end": 2.96
    },
    {
     "word": "mud",
-    "start": 3.28,
-    "end": 3.58
+    "start": 2.96,
+    "end": 3.24
    },
    {
     "word": "under",
-    "start": 3.58,
-    "end": 3.82
+    "start": 3.24,
+    "end": 3.5
    },
    {
     "word": "that",
-    "start": 3.82,
-    "end": 4.06
+    "start": 3.5,
+    "end": 3.7
    },
    {
     "word": "smooth",
-    "start": 4.06,
-    "end": 4.46
+    "start": 3.7,
+    "end": 4.02
    },
    {
     "word": "stone",
-    "start": 4.46,
-    "end": 4.94
+    "start": 4.02,
+    "end": 4.44
    },
    {
     "word": "yonder,",
-    "start": 4.94,
-    "end": 5.42
+    "start": 4.44,
+    "end": 4.86
    },
    {
     "word": "and",
+    "start": 5.06,
+    "end": 5.3
+   },
+   {
+    "word": "made",
+    "start": 5.3,
+    "end": 5.48
+   },
+   {
+    "word": "me",
+    "start": 5.48,
+    "end": 5.62
+   },
+   {
+    "word": "promise",
     "start": 5.62,
     "end": 6.02
    },
    {
-    "word": "made",
+    "word": "to",
     "start": 6.02,
     "end": 6.2
    },
    {
-    "word": "me",
-    "start": 6.2,
-    "end": 6.32
-   },
-   {
-    "word": "promise",
-    "start": 6.32,
-    "end": 6.7
-   },
-   {
-    "word": "to",
-    "start": 6.7,
-    "end": 6.92
-   },
-   {
     "word": "watch",
-    "start": 6.92,
-    "end": 7.22
+    "start": 6.2,
+    "end": 6.46
    },
    {
     "word": "over",
-    "start": 7.22,
-    "end": 7.5
+    "start": 6.46,
+    "end": 6.7
    },
    {
     "word": "it.",
-    "start": 7.5,
-    "end": 7.74
+    "start": 6.7,
+    "end": 6.88
    },
    {
     "word": "Said",
-    "start": 8.12,
-    "end": 8.64
+    "start": 7.08,
+    "end": 7.3
    },
    {
     "word": "if",
-    "start": 8.64,
-    "end": 8.8
+    "start": 7.3,
+    "end": 7.42
    },
    {
     "word": "her",
-    "start": 8.8,
-    "end": 8.92
+    "start": 7.42,
+    "end": 7.52
    },
    {
     "word": "boy",
-    "start": 8.92,
-    "end": 9.16
+    "start": 7.52,
+    "end": 7.74
    },
    {
     "word": "ever",
-    "start": 9.16,
-    "end": 9.4
+    "start": 7.74,
+    "end": 7.96
    },
    {
     "word": "came",
-    "start": 9.4,
-    "end": 9.66
+    "start": 7.96,
+    "end": 8.2
    },
    {
     "word": "asking,",
-    "start": 9.66,
-    "end": 10.08
+    "start": 8.2,
+    "end": 8.56
    },
    {
     "word": "he'd",
-    "start": 10.34,
-    "end": 10.64
+    "start": 8.56,
+    "end": 8.86
    },
    {
     "word": "know",
-    "start": 10.64,
-    "end": 10.78
+    "start": 8.86,
+    "end": 9.0
    },
    {
     "word": "where",
-    "start": 10.78,
-    "end": 10.94
+    "start": 9.0,
+    "end": 9.16
    },
    {
     "word": "to",
-    "start": 10.94,
-    "end": 11.08
+    "start": 9.16,
+    "end": 9.28
    },
    {
     "word": "look.",
-    "start": 11.08,
-    "end": 11.38
+    "start": 9.28,
+    "end": 9.52
    },
    {
     "word": "I",
-    "start": 11.66,
-    "end": 12.18
+    "start": 9.7,
+    "end": 10.02
    },
    {
     "word": "reckon",
-    "start": 12.18,
-    "end": 12.46
+    "start": 10.02,
+    "end": 10.28
    },
    {
     "word": "you've",
-    "start": 12.46,
-    "end": 12.72
+    "start": 10.28,
+    "end": 10.52
    },
    {
     "word": "come",
-    "start": 12.72,
-    "end": 12.9
+    "start": 10.52,
+    "end": 10.66
    },
    {
     "word": "asking.",
-    "start": 12.9,
-    "end": 13.2
+    "start": 10.66,
+    "end": 10.96
    }
   ]
  },
@@ -25598,97 +25598,97 @@
  "0c6892b6deee83": {
   "file": "0c6892b6deee83.mp3",
   "speaker": "fisherman",
-  "duration": 5.991,
+  "duration": 5.201,
   "words": [
    {
     "word": "By",
     "start": 0.0,
-    "end": 0.22
+    "end": 0.14
    },
    {
     "word": "the",
-    "start": 0.22,
-    "end": 0.4
+    "start": 0.14,
+    "end": 0.26
    },
    {
     "word": "reeds.",
-    "start": 0.4,
-    "end": 0.86
+    "start": 0.26,
+    "end": 0.62
    },
    {
     "word": "That's",
-    "start": 1.12,
-    "end": 1.56
+    "start": 0.92,
+    "end": 1.28
    },
    {
     "word": "where",
-    "start": 1.56,
-    "end": 1.68
+    "start": 1.28,
+    "end": 1.4
    },
    {
     "word": "they",
-    "start": 1.68,
-    "end": 1.82
+    "start": 1.4,
+    "end": 1.54
    },
    {
     "word": "hide.",
-    "start": 1.82,
-    "end": 2.18
+    "start": 1.54,
+    "end": 1.9
    },
    {
     "word": "Then",
-    "start": 2.54,
-    "end": 2.9
+    "start": 2.18,
+    "end": 2.54
    },
    {
     "word": "you",
-    "start": 2.9,
-    "end": 3.1
+    "start": 2.54,
+    "end": 2.7
    },
    {
     "word": "wait,",
-    "start": 3.1,
-    "end": 3.38
+    "start": 2.7,
+    "end": 2.98
    },
    {
     "word": "lad.",
-    "start": 3.46,
-    "end": 3.66
+    "start": 3.08,
+    "end": 3.28
    },
    {
     "word": "Fish",
-    "start": 4.12,
-    "end": 4.52
+    "start": 3.6,
+    "end": 3.96
    },
    {
     "word": "don't",
-    "start": 4.52,
-    "end": 4.78
+    "start": 3.96,
+    "end": 4.22
    },
    {
     "word": "come",
-    "start": 4.78,
-    "end": 4.96
+    "start": 4.22,
+    "end": 4.4
    },
    {
     "word": "to",
-    "start": 4.96,
-    "end": 5.1
+    "start": 4.4,
+    "end": 4.54
    },
    {
     "word": "them",
-    "start": 5.1,
-    "end": 5.28
+    "start": 4.54,
+    "end": 4.7
    },
    {
     "word": "as",
-    "start": 5.28,
-    "end": 5.44
+    "start": 4.7,
+    "end": 4.84
    },
    {
     "word": "hurry.",
-    "start": 5.44,
-    "end": 5.7
+    "start": 4.84,
+    "end": 5.201
    }
   ]
  },
@@ -27123,82 +27123,82 @@
  "0d642db602dcc0": {
   "file": "0d642db602dcc0.mp3",
   "speaker": "fisherman",
-  "duration": 6.966,
+  "duration": 4.737,
   "words": [
    {
     "word": "Under",
     "start": 0.0,
-    "end": 0.32
+    "end": 0.2
    },
    {
     "word": "the",
-    "start": 0.32,
-    "end": 0.52
+    "start": 0.2,
+    "end": 0.36
    },
    {
     "word": "smooth",
-    "start": 0.52,
-    "end": 0.94
+    "start": 0.36,
+    "end": 0.64
    },
    {
     "word": "stone,",
-    "start": 0.94,
-    "end": 1.52
+    "start": 0.64,
+    "end": 1.04
    },
    {
     "word": "lad,",
-    "start": 1.72,
-    "end": 1.96
+    "start": 1.04,
+    "end": 1.36
    },
    {
     "word": "where",
-    "start": 2.34,
-    "end": 2.7
+    "start": 1.54,
+    "end": 1.78
    },
    {
     "word": "the",
-    "start": 2.7,
-    "end": 2.86
+    "start": 1.78,
+    "end": 1.9
    },
    {
     "word": "water",
-    "start": 2.86,
-    "end": 3.2
+    "start": 1.9,
+    "end": 2.16
    },
    {
     "word": "turns.",
-    "start": 3.2,
-    "end": 3.66
+    "start": 2.16,
+    "end": 2.54
    },
    {
     "word": "I've",
-    "start": 4.08,
-    "end": 4.68
+    "start": 2.78,
+    "end": 3.14
    },
    {
     "word": "not",
-    "start": 4.68,
-    "end": 4.88
+    "start": 3.14,
+    "end": 3.3
    },
    {
     "word": "touched",
-    "start": 4.88,
-    "end": 5.2
+    "start": 3.3,
+    "end": 3.56
    },
    {
     "word": "it.",
-    "start": 5.2,
-    "end": 5.42
+    "start": 3.56,
+    "end": 3.76
    },
    {
     "word": "I",
-    "start": 5.78,
-    "end": 6.18
+    "start": 3.9,
+    "end": 4.12
    },
    {
     "word": "promised.",
-    "start": 6.18,
-    "end": 6.6
+    "start": 4.12,
+    "end": 4.48
    }
   ]
  },
@@ -33489,62 +33489,62 @@
  "1195fd2a9ed323": {
   "file": "1195fd2a9ed323.mp3",
   "speaker": "fisherman",
-  "duration": 3.622,
+  "duration": 3.39,
   "words": [
    {
     "word": "Now",
     "start": 0.0,
-    "end": 0.22
+    "end": 0.16
    },
    {
     "word": "that's",
-    "start": 0.22,
-    "end": 0.56
+    "start": 0.16,
+    "end": 0.44
    },
    {
     "word": "a",
-    "start": 0.56,
-    "end": 0.7
+    "start": 0.44,
+    "end": 0.56
    },
    {
     "word": "fish.",
-    "start": 0.7,
-    "end": 1.06
+    "start": 0.56,
+    "end": 0.88
    },
    {
     "word": "Haven't",
-    "start": 1.28,
-    "end": 1.78
+    "start": 1.22,
+    "end": 1.7
    },
    {
     "word": "tasted",
-    "start": 1.78,
-    "end": 2.06
+    "start": 1.7,
+    "end": 2.0
    },
    {
     "word": "fresh",
-    "start": 2.06,
-    "end": 2.42
+    "start": 2.0,
+    "end": 2.34
    },
    {
     "word": "since",
-    "start": 2.42,
-    "end": 2.72
+    "start": 2.34,
+    "end": 2.6
    },
    {
     "word": "the",
-    "start": 2.72,
-    "end": 2.88
+    "start": 2.6,
+    "end": 2.74
    },
    {
     "word": "arm",
-    "start": 2.88,
-    "end": 3.14
+    "start": 2.74,
+    "end": 2.98
    },
    {
     "word": "went.",
-    "start": 3.14,
-    "end": 3.38
+    "start": 2.98,
+    "end": 3.22
    }
   ]
  },
@@ -34629,42 +34629,42 @@
  "121938ab3d1673": {
   "file": "121938ab3d1673.mp3",
   "speaker": "fisherman",
-  "duration": 4.598,
+  "duration": 3.437,
   "words": [
    {
     "word": "Anything",
     "start": 0.0,
-    "end": 0.38
+    "end": 0.36
    },
    {
     "word": "biting?",
-    "start": 0.38,
-    "end": 0.7
+    "start": 0.36,
+    "end": 0.64
    },
    {
     "word": "Reeds,",
-    "start": 1.4,
-    "end": 2.08
+    "start": 0.96,
+    "end": 1.56
    },
    {
     "word": "lad.",
-    "start": 2.24,
-    "end": 2.5
+    "start": 1.72,
+    "end": 1.92
    },
    {
     "word": "Always",
-    "start": 2.92,
-    "end": 3.6
+    "start": 2.22,
+    "end": 2.72
    },
    {
     "word": "the",
-    "start": 3.6,
-    "end": 3.82
+    "start": 2.72,
+    "end": 2.88
    },
    {
     "word": "reeds.",
-    "start": 3.82,
-    "end": 4.32
+    "start": 2.88,
+    "end": 3.22
    }
   ]
  },
@@ -39074,7 +39074,7 @@
  "14fc80c2fd796e": {
   "file": "14fc80c2fd796e.mp3",
   "speaker": "fisherman",
-  "duration": 6.502,
+  "duration": 6.78,
   "words": [
    {
     "word": "She",
@@ -39084,107 +39084,107 @@
    {
     "word": "used",
     "start": 0.2,
-    "end": 0.38
+    "end": 0.42
    },
    {
     "word": "to",
-    "start": 0.38,
-    "end": 0.52
+    "start": 0.42,
+    "end": 0.58
    },
    {
     "word": "sit",
-    "start": 0.52,
-    "end": 0.74
+    "start": 0.58,
+    "end": 0.8
    },
    {
     "word": "right",
-    "start": 0.74,
-    "end": 0.96
+    "start": 0.8,
+    "end": 1.04
    },
    {
     "word": "where",
-    "start": 0.96,
-    "end": 1.12
+    "start": 1.04,
+    "end": 1.22
    },
    {
     "word": "you're",
-    "start": 1.12,
-    "end": 1.32
+    "start": 1.22,
+    "end": 1.46
    },
    {
     "word": "standing,",
-    "start": 1.32,
-    "end": 1.78
+    "start": 1.46,
+    "end": 1.9
    },
    {
     "word": "your",
-    "start": 2.0,
-    "end": 2.18
+    "start": 2.16,
+    "end": 2.42
    },
    {
     "word": "mother.",
-    "start": 2.18,
-    "end": 2.46
+    "start": 2.42,
+    "end": 2.7
    },
    {
     "word": "Feet",
-    "start": 2.78,
-    "end": 3.1
+    "start": 3.12,
+    "end": 3.56
    },
    {
     "word": "in",
-    "start": 3.1,
-    "end": 3.2
+    "start": 3.56,
+    "end": 3.66
    },
    {
     "word": "the",
-    "start": 3.2,
-    "end": 3.28
+    "start": 3.66,
+    "end": 3.74
    },
    {
     "word": "water,",
-    "start": 3.28,
-    "end": 3.62
+    "start": 3.74,
+    "end": 4.08
    },
    {
     "word": "even",
-    "start": 3.8,
-    "end": 4.1
+    "start": 4.3,
+    "end": 4.58
    },
    {
     "word": "in",
-    "start": 4.1,
-    "end": 4.26
+    "start": 4.58,
+    "end": 4.78
    },
    {
     "word": "spring.",
-    "start": 4.26,
-    "end": 4.64
+    "start": 4.78,
+    "end": 5.1
    },
    {
     "word": "Said",
-    "start": 5.04,
-    "end": 5.38
+    "start": 5.62,
+    "end": 5.8
    },
    {
     "word": "it",
-    "start": 5.38,
-    "end": 5.5
-   },
-   {
-    "word": "helped",
-    "start": 5.5,
-    "end": 5.74
-   },
-   {
-    "word": "her",
-    "start": 5.74,
+    "start": 5.8,
     "end": 5.9
    },
    {
-    "word": "think.",
+    "word": "helped",
     "start": 5.9,
-    "end": 6.14
+    "end": 6.12
+   },
+   {
+    "word": "her",
+    "start": 6.12,
+    "end": 6.26
+   },
+   {
+    "word": "think.",
+    "start": 6.26,
+    "end": 6.54
    }
   ]
  },
@@ -39640,77 +39640,77 @@
  "1560af900c476f": {
   "file": "1560af900c476f.mp3",
   "speaker": "fisherman",
-  "duration": 5.108,
+  "duration": 3.762,
   "words": [
    {
     "word": "I've",
     "start": 0.0,
-    "end": 0.32
+    "end": 0.18
    },
    {
     "word": "watched",
-    "start": 0.32,
-    "end": 0.58
+    "start": 0.18,
+    "end": 0.42
    },
    {
     "word": "that",
-    "start": 0.58,
-    "end": 0.8
+    "start": 0.42,
+    "end": 0.6
    },
    {
     "word": "stone",
-    "start": 0.8,
-    "end": 1.2
+    "start": 0.6,
+    "end": 0.88
    },
    {
     "word": "a",
-    "start": 1.2,
-    "end": 1.44
+    "start": 0.88,
+    "end": 1.06
    },
    {
     "word": "long",
-    "start": 1.44,
-    "end": 1.64
+    "start": 1.06,
+    "end": 1.26
    },
    {
     "word": "time,",
-    "start": 1.64,
-    "end": 1.98
+    "start": 1.26,
+    "end": 1.54
    },
    {
     "word": "lad.",
-    "start": 2.14,
-    "end": 2.36
+    "start": 1.54,
+    "end": 1.82
    },
    {
     "word": "I",
-    "start": 2.98,
-    "end": 3.48
+    "start": 2.12,
+    "end": 2.42
    },
    {
     "word": "reckon",
-    "start": 3.48,
-    "end": 3.76
+    "start": 2.42,
+    "end": 2.66
    },
    {
     "word": "I",
-    "start": 3.76,
-    "end": 3.92
+    "start": 2.66,
+    "end": 2.8
    },
    {
     "word": "can",
-    "start": 3.92,
-    "end": 4.06
+    "start": 2.8,
+    "end": 2.94
    },
    {
     "word": "stop",
-    "start": 4.06,
-    "end": 4.42
+    "start": 2.94,
+    "end": 3.24
    },
    {
     "word": "now.",
-    "start": 4.42,
-    "end": 4.66
+    "start": 3.24,
+    "end": 3.48
    }
   ]
  },
@@ -47018,37 +47018,37 @@
  "19c841724855d6": {
   "file": "19c841724855d6.mp3",
   "speaker": "fisherman",
-  "duration": 2.136,
+  "duration": 1.765,
   "words": [
    {
     "word": "Won't",
     "start": 0.0,
-    "end": 0.36
+    "end": 0.26
    },
    {
     "word": "catch",
-    "start": 0.36,
-    "end": 0.68
+    "start": 0.26,
+    "end": 0.52
    },
    {
     "word": "anything",
-    "start": 0.68,
-    "end": 1.0
+    "start": 0.52,
+    "end": 0.82
    },
    {
     "word": "with",
-    "start": 1.0,
-    "end": 1.24
+    "start": 0.82,
+    "end": 1.04
    },
    {
     "word": "that,",
-    "start": 1.24,
-    "end": 1.5
+    "start": 1.04,
+    "end": 1.26
    },
    {
     "word": "lad.",
-    "start": 1.62,
-    "end": 1.8
+    "start": 1.36,
+    "end": 1.52
    }
   ]
  },
@@ -54044,27 +54044,27 @@
  "1c98421835996c": {
   "file": "1c98421835996c.mp3",
   "speaker": "fisherman",
-  "duration": 1.486,
+  "duration": 1.068,
   "words": [
    {
     "word": "You",
     "start": 0.0,
-    "end": 0.24
+    "end": 0.16
    },
    {
     "word": "found",
-    "start": 0.24,
-    "end": 0.68
+    "start": 0.16,
+    "end": 0.48
    },
    {
     "word": "it,",
-    "start": 0.68,
-    "end": 0.86
+    "start": 0.48,
+    "end": 0.62
    },
    {
     "word": "then.",
-    "start": 0.86,
-    "end": 1.08
+    "start": 0.62,
+    "end": 0.82
    }
   ]
  },
