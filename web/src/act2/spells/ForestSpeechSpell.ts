@@ -73,7 +73,7 @@ export class ForestSpeechSpell extends Spell {
     }
     // Normal forest speech behavior for other locations
     const roomName = currentRoom.name.toLowerCase()
-    if (roomName.includes('forest') || roomName.includes('grove')) {
+    if (['forest', 'grove', 'glade'].some((word) => roomName.includes(word))) {
       return (
         "[success]The forest's talk sorts itself into words: roots " +
         'complaining of dry ground, a jay telling everyone you are here.' +

@@ -74,3 +74,15 @@ describe('ForestSpeechSpell cast on a forest being', () => {
     )
   })
 })
+
+describe('ForestSpeechSpell in the Whispering Glade', () => {
+  it('hears the forest talk, since the glade is forest', () => {
+    const game = setupForestEntrance()
+    game.state.currentRoom = game.state.allRooms.WhisperingGlade
+    expect(game.commandParser.parse('cast forest_speech')).toBe(
+      "[success]The forest's talk sorts itself into words: roots " +
+        'complaining of dry ground, a jay telling everyone you are here.' +
+        '[/success]',
+    )
+  })
+})
