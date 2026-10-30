@@ -12,13 +12,5 @@
         "modern objects",
             "frame or border"
     ],
-    "palette": [
-        { "name": "night", "hex": "#10151a" },
-        { "name": "parchment", "hex": "#f5f0e6" },
-        { "name": "lantern amber", "hex": "#ffa914" },
-        { "name": "dusk blue", "hex": "#7fb0e6" },
-        { "name": "leaf green", "hex": "#8fcf7a" },
-        { "name": "ember red", "hex": "#e8896b" }
-    ],
     "acts": {}
 }

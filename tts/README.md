@@ -126,7 +126,8 @@ Audio Studio's images workspace lists the pictures the game needs. **Refresh dia
 also writes `act<N>/images.json`: one image per room, each `{ id, title, width, height,
 description }`, where the description is the room's base description with the markup removed (the
 studio's starting prompt) and the id is the room's music track id. The look all images share is
-`images/style.json`, written by hand: the style text, things to keep out (`avoid`), the `palette`
-and an optional addition per act (`acts`). The `images` section of `audio-studio.json` points at
+`images/style.json`, written by hand: the style text, things to keep out (`avoid`)
+and an optional addition per act (`acts`). It lists no `palette`: the images keep full colour and
+the studio only brings each take to size. The `images` section of `audio-studio.json` points at
 both. Prompt overrides live in the studio, never in the game; the lists come from
 `web/src/lantern/imageLists.ts` and a vitest test fails when a committed list is stale.

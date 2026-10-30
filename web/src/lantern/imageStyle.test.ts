@@ -17,7 +17,6 @@ function readJson<T>(path: string): T {
 interface Style {
   style: string
   avoid: string[]
-  palette: { name: string; hex: string }[]
   acts: Record<string, string>
 }
 interface Studio {
@@ -30,14 +29,11 @@ interface Studio {
 describe('images/style.json', () => {
   const style = readJson<Style>('images/style.json')
 
-  it('holds the style text, things to keep out and a palette', () => {
+  it('holds the style text and things to keep out, and lists no palette', () => {
     expect(style.style.length).toBeGreaterThan(0)
     expect(style.avoid.length).toBeGreaterThan(0)
-    expect(style.palette.length).toBeGreaterThan(0)
-    for (const colour of style.palette) {
-      expect(colour.name).not.toBe('')
-      expect(colour.hex).toMatch(/^#[0-9a-f]{6}$/)
-    }
+    // No palette means full colour: Audio Studio only resizes each take.
+    expect(style).not.toHaveProperty('palette')
   })
 
   it('adds to the style only for acts of the game', () => {
