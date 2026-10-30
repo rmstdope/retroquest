@@ -1,0 +1,72 @@
+[
+  {
+    "id": "act4-fortress-gates",
+    "title": "Fortress Gates",
+    "width": 640,
+    "height": 360,
+    "description": "You stand just inside the fortress gates. The ways on, north and east, are barred by a thin wall of violet light, and three ward stones, left, middle and right, swell and fade with it. Guardians made of shadow drift between the stones, watching you. On the arch behind you, under the black, an older carving shows through: a sun rising over three linked rings. Just inside the threshold Mira keeps the way out, her back to the gatepost."
+  },
+  {
+    "id": "act4-outer-courtyard",
+    "title": "Outer Courtyard",
+    "width": 640,
+    "height": 360,
+    "description": "This was a garden once. The fountains still stand under a sky that never quite rains, but what runs down them is black and slow, and the statues have all turned their faces away. Grey figures walk the paths in circles, chains of shadow at their ankles, never looking up. By the dry fountain a soldier in a soot-black royal tabard stands rigid, staring at nothing."
+  },
+  {
+    "id": "act4-mirror-labyrinth",
+    "title": "Mirror Labyrinth",
+    "width": 640,
+    "height": 360,
+    "description": "Corridors of mirror run away from you in every direction, and in each of them a different Elior looks back. You stand at the mouth of the maze, facing north."
+  },
+  {
+    "id": "act4-hall-of-echoes",
+    "title": "Hall of Echoes",
+    "width": 640,
+    "height": 360,
+    "description": "A long hall, so high the ceiling is lost. Everything that was ever said here is still being said, very quietly: orders, jokes, names, someone counting. Tattered banners hang high along the walls, grimed past reading. At the far end, before the stair, a knight in tarnished armour stands without moving, the way a man stands at a grave."
+  },
+  {
+    "id": "act4-tower-of-shadows",
+    "title": "Tower of Shadows",
+    "width": 640,
+    "height": 360,
+    "description": "A stair winds up inside the black stone, narrow and dark. The walls are cold, and there are no windows. The shadows on the stair move a moment after you do. With every step, something quiet at your ear tells you why you should not have come."
+  },
+  {
+    "id": "act4-chamber-of-whispers",
+    "title": "Chamber of Whispers",
+    "width": 640,
+    "height": 360,
+    "description": "A round room at the top of the tower, and the only beautiful room in the fortress. That is what is wrong with it. Crystals grow from the walls, each humming something kind and untrue, and the floor gives a little under your feet, like ice that might hold. At the chamber's heart the Sorceress of Lies waits, her staff crowned with a small silver mask. Your breath catches: it is the mask from Elena's wrist."
+  },
+  {
+    "id": "act4-memory-vault",
+    "title": "Memory Vault",
+    "width": 640,
+    "height": 360,
+    "description": "Glass orbs hang in the air at every height, each one cracked, each one holding a scene that breaks apart before it settles. Among them stands a shadow in the shape of a man. In the east wall is a round door of pale stone."
+  },
+  {
+    "id": "act4-parents-vault",
+    "title": "Parents' Vault",
+    "width": 640,
+    "height": 360,
+    "description": "A small, quiet room. Nothing here is threatening. Memories hang in the air like lanterns, warm and still, and every one of them has your parents in it. It is the saddest and warmest room in the fortress."
+  },
+  {
+    "id": "act4-throne-chamber",
+    "title": "Throne Chamber",
+    "width": 640,
+    "height": 360,
+    "description": "A vast chamber under a broken dome. A throne of black stone, twisted like a root, stands at its head. Above a ritual circle King Alden hangs in a prison of crystal, and from his crown a thin thread of light bleeds into a rift in the air: the wound in time. Malakar stands beside it, grey and failing. The wound is killing him too."
+  },
+  {
+    "id": "act4-willowbrook-field",
+    "title": "Willowbrook Field",
+    "width": 640,
+    "height": 360,
+    "description": "The field behind your home: rows of withered crops under a pale sky, the earth cracked and grey. Grandmother waits at the gate. Mira stands beside her, and Sir Cedric leans on the fence. In the hedge a small light flickers: Nyx, keeping close. The air is quiet."
+  }
+]

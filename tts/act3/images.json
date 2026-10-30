@@ -1,0 +1,142 @@
+[
+  {
+    "id": "act3-miras-hut",
+    "title": "Mira's Hut",
+    "width": 640,
+    "height": 360,
+    "description": "A small hut hung with drying herbs: lavender, sage, and roots in bundles from the rafters. Shelves of bottles line the walls, every one labelled. Mira moves among them without looking, the way you cross your own kitchen in the dark."
+  },
+  {
+    "id": "act3-tidal-causeway",
+    "title": "Tidal Causeway",
+    "width": 640,
+    "height": 360,
+    "description": "Thin causeways of old stone lift from the black water like ribs. Moonlight skims the wet stones; salt and wind carry half‑heard songs. Broken arches stand like quiet mouths, guarding what the sea keeps."
+  },
+  {
+    "id": "act3-shoreline-markers",
+    "title": "Shoreline Markers",
+    "width": 640,
+    "height": 360,
+    "description": "The shore here is quiet and cold. Weathered steles rise from the sand, their worn faces full of shallow marks. Salt and time have smudged many lines, but faint moon sigils still show when the tide drops. Loose pale flakes sit in the grooves; they shimmer like old stars. When the moon is high, the stones seem to hum with a slow, patient voice—an old magic tied to the sea."
+  },
+  {
+    "id": "act3-outer-wards",
+    "title": "Outer Wards",
+    "width": 640,
+    "height": 360,
+    "description": "The courtyard lies half-swallowed by the sea. Three ancient pillars rise from the black water, their faces scored with shallow marks. Brine beads along the carved lines and they catch the moon in small rings of light."
+  },
+  {
+    "id": "act3-collapsed-pier",
+    "title": "Collapsed Pier",
+    "width": 640,
+    "height": 360,
+    "description": "The pier surrenders to the tide. Warped planks gape and blackened vaults yawn where light forgets to go. Barnacled timbers rise like buried ribs, and the water sings a low, patient counting of losses."
+  },
+  {
+    "id": "act3-submerged-antechamber",
+    "title": "Submerged Antechamber",
+    "width": 640,
+    "height": 360,
+    "description": "The hall lies half-swallowed by tide and time. Salt-smoothed stone arches bear weathered carvings that pulse with a cold, inner glow. A hush hangs in the air as if the sea itself listens; faint, distant echoes suggest something patient and watchful beyond the veil of gloom. Somewhere further in, water drips, slow and patient."
+  },
+  {
+    "id": "act3-sanctum-of-the-tide",
+    "title": "Sanctum of the Tide",
+    "width": 640,
+    "height": 360,
+    "description": "A vaulted chamber where water hangs like a dark mirror, its surface etched with sigils that breathe and shift. Pale motes of light drift along the ripples, arranging themselves into slow, impatient runes. At the room's heart a shallow basin holds a cold, humming brightness; the air tastes of brine and vows left unsaid."
+  },
+  {
+    "id": "act3-lower-switchbacks",
+    "title": "Lower Switchbacks",
+    "width": 640,
+    "height": 360,
+    "description": "Wind‑carved paths snake across black, glassy rock; ash skims the air and the scent of iron hangs on the wind. A small scholars' camp clings to a lee: canvas shelters patched with soot, low braziers for warmth, and drying racks where scorched notes and map fragments flutter. Workbenches hold polishing stones and brass fittings—evidence of a diligent, makeshift atelier repairing mirror segments found among the outcrops. Beyond the camp, the slope falls into jagged obsidian ribs and steaming vents where fumaroles hiss; sparks drift like trapped fireflies when the wind turns."
+  },
+  {
+    "id": "act3-obsidian-outcrops",
+    "title": "Obsidian Outcrops",
+    "width": 640,
+    "height": 360,
+    "description": "Needle-sharp obsidian towers rise like black teeth from the ash, their surfaces catching and fracturing the light into jagged, glassy facets. Between the towers, thin seams and crevices hide weathered mirror fragments and the faint scars of old mounts—brass filings, dull polish, and tiny holes that speak of a long-vanished craft. A dry, metallic tang rides the hot wind, and every step sets off a tiny cascade of glass flakes into echoing gullies below."
+  },
+  {
+    "id": "act3-mirror-terraces",
+    "title": "Mirror Terraces",
+    "width": 640,
+    "height": 360,
+    "description": "Stepped platforms rise in concentric benches, each ring studded with sockets for polished mirrors and brass mounts. Channels are neatly etched into the stone to carry and focus light up the slope; stray rays catch on alignment wedges and glint like cold flame. The air hums faintly with residual heat, and dusted ash settles on worktables where scholars and attendants file, polish, and fit mirror segments. The place smells of warm metal, singed cloth, and the mineral tang of cooling slag."
+  },
+  {
+    "id": "act3-fumarole-passages",
+    "title": "Fumarole Passages",
+    "width": 640,
+    "height": 360,
+    "description": "Narrow tunnels exhale a rhythmic, breath-like heat; stone vents chuff and sigh as if the mountain itself sleeps and dreams. Curtains of steam veil the low passages, and the air tastes faintly of sulfur and warm metal. Here and there a vent hisses sparks that glass the rock into smoky, translucent streaks, while the floor bears the pale scars of old fittings—tiny holes and rubbed brass where mounts were once bolted. Each step sends a warm gust that carries a distant clink of metal and the steady, low sigh of fumaroles farther below."
+  },
+  {
+    "id": "act3-ember-gallery",
+    "title": "Ember Gallery",
+    "width": 640,
+    "height": 360,
+    "description": "A vaulted cavern veined with cooling flows; the air smells of charcoal and iron. Streaks of glassed lava lace the walls, catching stray cinders that glow like embers in the gloom. Steam sighs from fissures and pools of blackened water mirror faint, dancing light. Worktables gather scattered fragments of fireglass and ash‑tumbled tools where attendants hammer and sort cooled slag for wards. The heat here is a steady, low thrum — a reminder that the mountain breathes beneath your feet."
+  },
+  {
+    "id": "act3-phoenix-crater",
+    "title": "Phoenix Crater",
+    "width": 640,
+    "height": 360,
+    "description": "A luminous bowl of vitrified rock where warm drafts swirl and cinders dance in spirals. The air smells of ozone, resin, and warm iron; the whole bowl feels like a giant hearth that remembers how to forge stars."
+  },
+  {
+    "id": "act3-cavern-mouth",
+    "title": "Cavern Mouth",
+    "width": 640,
+    "height": 360,
+    "description": "A broad arch opens into the hill, hung with cold mist. Lantern light dims a step inside it. Old signs are cut into the arch stone, worn too smooth to read."
+  },
+  {
+    "id": "act3-tool-cache",
+    "title": "Tool Cache",
+    "width": 640,
+    "height": 360,
+    "description": "A side chamber shored with old timbers and stacked with crates of braces, iron fittings and coils of hemp rope. The walls are scored with tool marks, and the air smells of iron and wet earth."
+  },
+  {
+    "id": "act3-collapsed-galleries",
+    "title": "Collapsed Galleries",
+    "width": 640,
+    "height": 360,
+    "description": "A gallery choked with fallen stone, floor to roof. The timbers that held it lie snapped under the pile, and dust hangs in the still air."
+  },
+  {
+    "id": "act3-echo-chambers",
+    "title": "Echo Chambers",
+    "width": 640,
+    "height": 360,
+    "description": "Smooth caverns of bare stone. Every step comes back to you from the alcoves, and so does every word, a breath late, as if someone were copying you. Runes cover the walls, cut by three hands, the same words over and over."
+  },
+  {
+    "id": "act3-stillness-vestibule",
+    "title": "Stillness Vestibule",
+    "width": 640,
+    "height": 360,
+    "description": "A hush falls over this chamber like a shroud. Dark pools mirror the ceiling, so still they look frozen in time, and the stone seems to swallow every sound. At the centre, three weathered echo stones stand in a triangle. Their carved channels look made to catch whispered words and hold them."
+  },
+  {
+    "id": "act3-dragons-hall",
+    "title": "Dragon's Hall",
+    "width": 640,
+    "height": 360,
+    "description": "A hall of living stone opens beyond sight, its ceiling lost in shadow. Embers burn slowly along the floor, pulsing like a heartbeat, and somewhere in the dark, water drips. Rings of old sigils spiral across the black tiles around the Ancient Dragon. It lies coiled at the centre, scales like polished obsidian, and each slow breath hums in your bones."
+  },
+  {
+    "id": "act3-fortress-entrance",
+    "title": "Entrance to Malakar's Fortress",
+    "width": 640,
+    "height": 360,
+    "description": "A bastion of black stone rises from a shattered ridge. Iron lattices close its gates, and sigils glow behind them, slow as breathing. The wind up here is cold and smells of metal. Where the gate arch meets the wall an older carving shows through the black: a sun rising over three linked rings."
+  }
+]

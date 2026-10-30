@@ -1,11 +1,16 @@
 /**
- * Writes `tts/act<N>/script.json` and `music.json` from `extractActScript` and
- * `extractActMusic` (see `actScripts.ts`, where the work is and which a vitest
+ * Writes `tts/act<N>/script.json`, `music.json` and `images.json` from
+ * `extractActScript`, `extractActMusic` and `extractActImages` (see `actScripts.ts`, where the work is and which a vitest
  * test checks against the committed files).
  * Run from `web/`: `npx -y tsx@4.23.15 --tsconfig tsconfig.json ../tts/extract-act.ts 2`.
  */
 import { writeFileSync } from 'node:fs'
-import { ACT_NUMBERS, extractActMusic, extractActScript } from './actScripts'
+import {
+  ACT_NUMBERS,
+  extractActImages,
+  extractActMusic,
+  extractActScript,
+} from './actScripts'
 
 const number = process.argv[2] ?? ''
 if (!ACT_NUMBERS.includes(number))
@@ -24,3 +29,9 @@ writeFileSync(
   JSON.stringify(loops, null, 2) + '\n',
 )
 console.log(`${loops.length} loops written to tts/act${number}/music.json`)
+const images = extractActImages(number)
+writeFileSync(
+  new URL('images.json', here),
+  JSON.stringify(images, null, 2) + '\n',
+)
+console.log(`${images.length} images written to tts/act${number}/images.json`)

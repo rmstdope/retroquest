@@ -2,6 +2,7 @@ import { readFileSync } from 'node:fs'
 import { describe, expect, it } from 'vitest'
 import {
   ACT_NUMBERS,
+  extractActImages,
   extractActMusic,
   extractActScript,
 } from '../../../tts/actScripts'
@@ -37,6 +38,9 @@ describe('committed narration files are current', () => {
     )
     it(`tts/act${number}/music.json is what extract-act.ts writes`, () => {
       expect(extractActMusic(number)).toEqual(committed(number, 'music.json'))
+    })
+    it(`tts/act${number}/images.json is what extract-act.ts writes`, () => {
+      expect(extractActImages(number)).toEqual(committed(number, 'images.json'))
     })
   }
 })

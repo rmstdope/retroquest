@@ -35,6 +35,7 @@ import {
   type WriterRule,
 } from '../web/src/lantern/narrationScript'
 import { actLoops, roomLoops, type MusicTrack } from '../web/src/lantern/musicLists'
+import { roomImages, type GameImage } from '../web/src/lantern/imageLists'
 
 /** What the extractor needs of an act: a fresh act and the commands that play it to its end. */
 export interface ActSource {
@@ -116,4 +117,9 @@ export function extractActScript(number: string): ScriptLine[] {
 export function extractActMusic(number: string): MusicTrack[] {
   const act = sourceOf(number).make()
   return [...actLoops(act), ...roomLoops(act)]
+}
+
+/** Returns one image for each room of the act, as `images.json` holds them. */
+export function extractActImages(number: string): GameImage[] {
+  return roomImages(sourceOf(number).make())
 }
