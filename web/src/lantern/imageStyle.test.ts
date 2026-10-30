@@ -40,6 +40,29 @@ describe('images/style.json', () => {
     }
   })
 
+  it('says in its own words what the picture must not hold', () => {
+    expect(style.style).toContain('no fold, frame or border')
+    expect(style.style).toContain(
+      'no text, lettering, signature or watermark anywhere',
+    )
+    expect(style.style).not.toMatch(/lantern|picture book|worn/i)
+  })
+
+  it('keeps the full list of things to keep out', () => {
+    expect(style.avoid).toEqual([
+      'text',
+      'lettering',
+      'watermark',
+      'signature',
+      'photorealism',
+      '3d render',
+      'anime',
+      'neon colours',
+      'modern objects',
+      'frame or border',
+    ])
+  })
+
   it('adds to the style only for acts of the game', () => {
     const ids = readJson<Studio>('audio-studio.json').images.parts.map(
       (p) => p.id,
