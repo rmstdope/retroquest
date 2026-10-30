@@ -5,6 +5,7 @@
  */
 import { existsSync, readFileSync } from 'node:fs'
 import { describe, expect, it } from 'vitest'
+import { ACT_NUMBERS } from '../../../tts/actScripts'
 
 /** Reads a JSON file of the repository (relative to its root). */
 function readJson<T>(path: string): T {
@@ -53,7 +54,9 @@ describe('audio-studio.json images section', () => {
   it('finds the style file and every act image list', () => {
     const root = new URL('../../../', import.meta.url)
     expect(existsSync(new URL(images.paths.style, root))).toBe(true)
-    expect(images.parts).toHaveLength(4)
+    expect(images.parts.map((p) => p.id)).toEqual(
+      ACT_NUMBERS.map((n) => `act${n}`),
+    )
     for (const part of images.parts)
       expect(
         existsSync(new URL(images.paths.list.replace('{part}', part.id), root)),

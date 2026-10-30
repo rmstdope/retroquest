@@ -1,5 +1,5 @@
 {
-    "style": "Painted storybook illustration of a place in a small medieval fantasy world, soft gouache with visible brush texture, muted warm tones, gentle lantern light and long soft shadows, hand-painted and slightly worn like an old picture book, wide landscape composition, no people in the foreground",
+    "style": "Painted storybook illustration of a place in a small medieval fantasy world, soft gouache with visible brush texture, muted warm tones, gentle lantern light and long soft shadows, hand-painted and slightly worn like an old picture book, wide landscape composition",
     "avoid": [
         "text",
         "lettering",
@@ -10,8 +10,7 @@
         "anime",
         "neon colours",
         "modern objects",
-        "crowds of people",
-        "frame or border"
+            "frame or border"
     ],
     "palette": [
         { "name": "night", "hex": "#10151a" },

@@ -25,12 +25,14 @@ describe('roomImages', () => {
   )
 
   it('gives each image the shared dimensions and the room name as title', () => {
-    const act = new Act1()
-    const [first] = roomImages(act)
-    const room = Object.values(act.rooms)[0]
-    expect(first.width).toBe(IMAGE_WIDTH)
-    expect(first.height).toBe(IMAGE_HEIGHT)
-    expect(first.title).toBe(room.name)
+    for (const act of ACTS) {
+      const rooms = Object.values(act.rooms)
+      roomImages(act).forEach((image, i) => {
+        expect(image.width).toBe(IMAGE_WIDTH)
+        expect(image.height).toBe(IMAGE_HEIGHT)
+        expect(image.title).toBe(rooms[i].name)
+      })
+    }
   })
 
   it('describes each room without markup', () => {
