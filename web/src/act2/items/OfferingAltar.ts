@@ -20,6 +20,14 @@ export class OfferingAltar extends Item {
   }
 
   /**
+   * Also answers to plain "altar", in code rather than a short name so that
+   * saves made before this change reach it too.
+   */
+  override answersTo(name: string): boolean {
+    return super.answersTo(name) || name.toLowerCase() === 'altar'
+  }
+
+  /**
    * Any item used with the altar gets the altar's answer, so a wrong item
    * fits none of the hollows whichever way round the player says it.
    */
