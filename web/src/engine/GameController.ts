@@ -122,16 +122,26 @@ function newsText(quest: Quest): string {
   return quest.description
 }
 
-/** A quest for the journal list. */
+/**
+ * A quest for the journal list. A finished journal quest shows how it ended;
+ * a finished checklist quest keeps its whole list and adds the outcome.
+ */
 function questSummary(quest: Quest, done: boolean): QuestSummary {
   return {
     name: quest.name,
     main: quest.isMain(),
     done,
-    details: done
-      ? { kind: 'journal', latest: quest.completion, earlier: [] }
-      : quest.details(),
+    details: logOf(quest, done),
   }
+}
+
+/** The log a quest shows, finished or not. */
+function logOf(quest: Quest, done: boolean): QuestDetails {
+  const details = quest.details()
+  if (!done) return details
+  if (details.kind === 'checklist')
+    return { ...details, outcome: quest.completion }
+  return { kind: 'journal', latest: quest.completion, earlier: [] }
 }
 
 /**

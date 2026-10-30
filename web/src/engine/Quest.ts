@@ -22,11 +22,12 @@ export interface QuestChecklist {
 
 /**
  * What a quest's log holds, as data: a journal (the newest entry, earlier
- * entries kept apart) or a checklist.
+ * entries kept apart) or a checklist. A finished checklist quest also carries
+ * its `outcome`, the completion text, beside the list it kept.
  */
 export type QuestDetails =
   | { kind: 'journal'; latest: string; earlier: string[] }
-  | ({ kind: 'checklist' } & QuestChecklist)
+  | ({ kind: 'checklist'; outcome?: string } & QuestChecklist)
 
 /**
  * Base class for all quests. A quest activates when `checkTrigger` becomes

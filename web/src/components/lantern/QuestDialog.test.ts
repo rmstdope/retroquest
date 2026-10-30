@@ -88,6 +88,52 @@ describe('QuestDialog', () => {
     expect(rows[0].get('.lq-check-mark').attributes('aria-hidden')).toBe('true')
   })
 
+  it('shows a finished checklist: outcome first, then lead-in, full bar and ticked items', () => {
+    const w = mountQuest({
+      name: 'Echoes',
+      main: false,
+      done: true,
+      details: {
+        kind: 'checklist',
+        intro: 'Words left behind.',
+        items: [
+          { done: true, text: 'By the sea' },
+          { done: true, text: 'Under the hills' },
+        ],
+        outcome: 'They are warded away.',
+      },
+    })
+
+    expect(w.findAll('.lq-tag').map((t) => t.text())).toEqual([
+      'Side quest',
+      'Done',
+    ])
+    expect(w.get('.lq-label').text()).toBe('Outcome')
+    expect(w.get('.lq-latest').text()).toBe('They are warded away.')
+    expect(w.get('.lq-intro').text()).toBe('Words left behind.')
+    expect(w.get('.lq-check-count').text()).toBe('2 of 2 done')
+    expect(w.findAll('.lq-check').map((r) => r.text())).toEqual([
+      '✓By the sea (done)',
+      '✓Under the hills (done)',
+    ])
+    const order = w.html()
+    expect(order.indexOf('lq-latest')).toBeLessThan(order.indexOf('lq-intro'))
+  })
+
+  it('gives an open checklist no outcome', () => {
+    const w = mountQuest({
+      name: 'Echoes',
+      main: false,
+      done: false,
+      details: {
+        kind: 'checklist',
+        intro: 'Words.',
+        items: [{ done: false, text: 'By the sea' }],
+      },
+    })
+    expect(w.find('.lq-label').exists()).toBe(false)
+  })
+
   it('marks a completed quest', () => {
     const w = mountQuest({
       ...JOURNAL,
