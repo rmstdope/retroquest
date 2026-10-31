@@ -57,6 +57,11 @@ describe('images/style.json', () => {
     expect(style.look).not.toMatch(/lantern|picture book|worn/i)
   })
 
+  it('leaves the light to each room and act, not always warm', () => {
+    expect(style.look).toContain('muted natural colours, soft light')
+    expect(style.look).not.toMatch(/warm/i)
+  })
+
   it('keeps out only what does no harm when named in the prompt', () => {
     // The studio's models read no negative prompt: keepOut is added to the
     // prompt as words, so what would be drawn by naming it stays in the look.
@@ -70,6 +75,22 @@ describe('images/style.json', () => {
       (p) => p.id,
     )
     for (const act of Object.keys(style.acts)) expect(ids).toContain(act)
+  })
+
+  it('gives every act a mood of light and colour, naming no thing to draw', () => {
+    // Whatever an act's addition names is drawn in every room of the act.
+    expect(style.acts).toEqual({
+      act1: 'Warm late-day light, earthy greens and straw golds, homely and lived-in',
+      act2:
+        'Clear daylight and richer colour, deep greens, warm reds and creams, ' +
+        'a faint grey haze at the edges',
+      act3:
+        'Cooler, wilder light, colours a little drained, ' +
+        'as if a sickness were creeping into the land',
+      act4:
+        'Cold, dim light, violet and grey shadows, ' +
+        'colours drained almost to stone, a hush of dread',
+    })
   })
 })
 

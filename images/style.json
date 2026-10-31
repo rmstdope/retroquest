@@ -1,5 +1,10 @@
 {
-  "look": "Painted storybook illustration of a place in a small medieval fantasy world, soft gouache with visible brush texture, muted warm tones, soft warm light and long soft shadows, hand-painted, one single full-bleed image with no fold, frame or border, no text, lettering, signature or watermark anywhere, wide landscape composition",
+  "look": "Painted storybook illustration of a place in a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft light and long soft shadows, hand-painted, one single full-bleed image with no fold, frame or border, no text, lettering, signature or watermark anywhere, wide landscape composition",
   "keepOut": "photorealism, 3d render, anime, neon colours, modern objects",
-  "acts": {}
+  "acts": {
+    "act1": "Warm late-day light, earthy greens and straw golds, homely and lived-in",
+    "act2": "Clear daylight and richer colour, deep greens, warm reds and creams, a faint grey haze at the edges",
+    "act3": "Cooler, wilder light, colours a little drained, as if a sickness were creeping into the land",
+    "act4": "Cold, dim light, violet and grey shadows, colours drained almost to stone, a hush of dread"
+  }
 }
