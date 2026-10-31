@@ -1,0 +1,82 @@
+{
+  "act1-abandoned-shed": {
+    "file": "act1-abandoned-shed.png",
+    "width": 640,
+    "height": 360
+  },
+  "act1-blacksmiths-forge": {
+    "file": "act1-blacksmiths-forge.png",
+    "width": 640,
+    "height": 360
+  },
+  "act1-chicken-coop": {
+    "file": "act1-chicken-coop.png",
+    "width": 640,
+    "height": 360
+  },
+  "act1-eliors-cottage": {
+    "file": "act1-eliors-cottage.png",
+    "width": 640,
+    "height": 360
+  },
+  "act1-forest-path": {
+    "file": "act1-forest-path.png",
+    "width": 640,
+    "height": 360
+  },
+  "act1-general-store": {
+    "file": "act1-general-store.png",
+    "width": 640,
+    "height": 360
+  },
+  "act1-hidden-glade": {
+    "file": "act1-hidden-glade.png",
+    "width": 640,
+    "height": 360
+  },
+  "act1-miras-hut": {
+    "file": "act1-miras-hut.png",
+    "width": 640,
+    "height": 360
+  },
+  "act1-old-mill": {
+    "file": "act1-old-mill.png",
+    "width": 640,
+    "height": 360
+  },
+  "act1-riverbank": {
+    "file": "act1-riverbank.png",
+    "width": 640,
+    "height": 360
+  },
+  "act1-road-to-greendale": {
+    "file": "act1-road-to-greendale.png",
+    "width": 640,
+    "height": 360
+  },
+  "act1-the-dream": {
+    "file": "act1-the-dream.png",
+    "width": 640,
+    "height": 360
+  },
+  "act1-vegetable-field": {
+    "file": "act1-vegetable-field.png",
+    "width": 640,
+    "height": 360
+  },
+  "act1-village-chapel": {
+    "file": "act1-village-chapel.png",
+    "width": 640,
+    "height": 360
+  },
+  "act1-village-square": {
+    "file": "act1-village-square.png",
+    "width": 640,
+    "height": 360
+  },
+  "act1-village-well": {
+    "file": "act1-village-well.png",
+    "width": 640,
+    "height": 360
+  }
+}
