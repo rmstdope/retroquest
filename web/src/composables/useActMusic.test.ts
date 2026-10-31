@@ -222,7 +222,7 @@ describe('useActMusic', () => {
       scope.stop()
     })
 
-    it('credits a chosen take to Audio Studio', async () => {
+    it('credits a chosen take to Content Studio', async () => {
       vi.stubGlobal(
         'fetch',
         vi.fn(() =>
@@ -237,7 +237,10 @@ describe('useActMusic', () => {
       game.musicActName = 'Act1'
       game.musicRoomKey = 'VillageSquare'
       await settle()
-      expect(music?.musicInfo.value).toContain('Audio Studio')
+      expect(music?.musicInfo.value).toBe(
+        'Original music for RetroQuest\n' +
+          'Images, narration and music made with Content Studio',
+      )
       scope.stop()
     })
 

@@ -11,9 +11,14 @@ import {
   type ChosenManifest,
 } from './chosenMusic'
 
-/** The credit shown for a take made in Content Studio. */
+/**
+ * The credit shown for a take made in Content Studio: what the music is, then
+ * what the studio made. The title page and Help show both lines; Settings
+ * shows the first.
+ */
 const CHOSEN_TAKE_CREDIT =
-  'Original music for RetroQuest, made with Audio Studio'
+  'Original music for RetroQuest\n' +
+  'Images, narration and music made with Content Studio'
 
 const GESTURES = ['keydown', 'click', 'touchstart'] as const
 /** The media keys the game takes from the browser, and ignores. */
