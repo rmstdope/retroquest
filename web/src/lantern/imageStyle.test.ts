@@ -77,7 +77,7 @@ describe('images/style.json', () => {
     for (const act of Object.keys(style.acts)) expect(ids).toContain(act)
   })
 
-  it('gives every act a mood of light and colour, naming no thing to draw', () => {
+  it('gives every act its agreed mood of light and colour', () => {
     // Whatever an act's addition names is drawn in every room of the act.
     expect(style.acts).toEqual({
       act1: 'Warm late-day light, earthy greens and straw golds, homely and lived-in',
