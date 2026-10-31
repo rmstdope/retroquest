@@ -1350,6 +1350,7 @@ describe('LanternLayout', () => {
         })
         expect(text).toContain('Original music for RetroQuest')
         expect(text).not.toContain('Content Studio')
+        expect(text).not.toContain('Audio Studio')
         expect(text).not.toContain('Conquest')
       })
 
@@ -1380,6 +1381,7 @@ describe('LanternLayout', () => {
         const text = await titleCreditsWith({
           market: { file: 'market.mp3', duration: 60 },
         })
+        expect(text).toContain('Original music for RetroQuest')
         expect(text).toContain(
           'Images, narration and music made with Content Studio',
         )
