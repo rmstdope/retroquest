@@ -1,5 +1,5 @@
 /**
- * The game's image lists for Audio Studio: one image per room of an act, with
+ * The game's image lists for Content Studio: one image per room of an act, with
  * its dimensions and its description free of markup.
  */
 import { describe, expect, it } from 'vitest'

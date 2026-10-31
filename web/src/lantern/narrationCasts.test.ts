@@ -4,7 +4,7 @@ import type { NarrationManifest } from './narrationManifest'
 
 /**
  * The recording tools' files, read from the repository: one cast for the whole game
- * (`tts/cast.json`, Audio Studio's), and each act's script and key-scene directions
+ * (`tts/cast.json`, Content Studio's), and each act's script and key-scene directions
  * (`tts/act<N>/`).
  */
 const TTS = new URL('../../../tts/', import.meta.url)

@@ -1,5 +1,5 @@
 /**
- * The music the navigator chose in Audio Studio. The studio writes each chosen
+ * The music the navigator chose in Content Studio. The studio writes each chosen
  * take to `public/audio/music/generated/` with a `manifest.json` of
  * `{ trackId: { file, duration } }`; the game plays a room's take in that room,
  * the act loop's take across the act, and its own file where no take was made.

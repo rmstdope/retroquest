@@ -11,7 +11,7 @@ import {
   type ChosenManifest,
 } from './chosenMusic'
 
-/** The credit shown for a take made in Audio Studio. */
+/** The credit shown for a take made in Content Studio. */
 const CHOSEN_TAKE_CREDIT =
   'Original music for RetroQuest, made with Audio Studio'
 
@@ -27,7 +27,7 @@ const MEDIA_KEYS: readonly MediaSessionAction[] = ['play', 'pause', 'stop']
  * and ignored, so neither the music nor the narration reacts to them. It dips
  * while a turn, chapter page or pop-up is narrated, so the voices stand out.
  *
- * A take chosen in Audio Studio plays in place of the act's file: the room's
+ * A take chosen in Content Studio plays in place of the act's file: the room's
  * own take in that room, else the act loop's take across the act (see
  * `chosenMusic.ts`). The track waits for the list of takes to load, so it never
  * starts on the file and then swaps.

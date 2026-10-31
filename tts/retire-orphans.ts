@@ -4,7 +4,7 @@
  * whose key is not in `tts/act<N>/script.json`, and deletes their mp3 files. Run it after
  * `extract-act.ts` when a wording change has left a clip behind (the "has no clip for a
  * line that left the script" test in `narrationCasts.test.ts` is red until then).
- * The files are edited as text, entry by entry, so what Audio Studio wrote is kept byte
+ * The files are edited as text, entry by entry, so what Content Studio wrote is kept byte
  * for byte. Run from `web/`:
  * `npx -y tsx@4.23.15 --tsconfig tsconfig.json ../tts/retire-orphans.ts [act...]`
  * (no act: all four).
