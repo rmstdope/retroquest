@@ -7,8 +7,8 @@ ENV/
 env.bak/
 venv.bak/
 
-# Audio Studio's own state: audition sessions and cached takes
-.audio-studio/
+# Content Studio's own state: audition sessions and cached takes
+.content-studio/
 
 # Mac OS
 .DS_Store
