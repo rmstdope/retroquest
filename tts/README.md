@@ -128,7 +128,10 @@ description }`, where the description is the room's base description with the ma
 studio's starting prompt) and the id is the room's music track id. The look all images share is
 `images/style.json`, written by hand: the look (`look`), things to keep out (`keepOut`, added to
 the prompt as words, since the image models read no negative prompt, so anything drawn by naming
-it is said as "no …" in the look instead) and an optional addition per act (`acts`). It lists no
-`palette`: the images keep full colour and the studio only brings each take to size. The `images` section of `content-studio.json` points at
+it is said as "no …" in the look instead) and an optional addition per act (`acts`). The look and
+the act additions say only light, colour and mood, never a thing: whatever they name is drawn in
+every room (an early "lantern light" put a lantern in each one), and each room's own description
+sets its light. It lists no `palette`: the images keep full colour and the studio only brings each
+take to size. The `images` section of `content-studio.json` points at
 both. Prompt overrides live in the studio, never in the game; the lists come from
 `web/src/lantern/imageLists.ts` and a vitest test fails when a committed list is stale.
