@@ -10,7 +10,7 @@ import { useFocusTrap } from '@/composables/useFocusTrap'
  * music credits and Start. Enter on Start or Escape goes on.
  *
  * `musicInfo` is the credit of the music actually playing (a take chosen in
- * Audio Studio has its own), as the layout's music player holds it; until
+ * Content Studio has its own), as the layout's music player holds it; until
  * the player has a track, the credits in the game's own `text` stand.
  */
 const props = withDefaults(

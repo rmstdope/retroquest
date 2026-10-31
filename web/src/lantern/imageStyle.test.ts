@@ -1,6 +1,6 @@
 /**
  * The game's shared image style (`images/style.json`) and the `images` section
- * of `audio-studio.json`, which points Audio Studio at it and at each act's
+ * of `content-studio.json`, which points Content Studio at it and at each act's
  * image list.
  */
 import { existsSync, readFileSync } from 'node:fs'
@@ -15,68 +15,74 @@ function readJson<T>(path: string): T {
 }
 
 interface Style {
-  style: string
-  avoid: string[]
+  look: string
+  keepOut: string
   acts: Record<string, string>
 }
 interface Studio {
-  images: {
-    parts: { id: string }[]
-    paths: { list: string; style: string }
-  }
+  narration: { parts: { id: string }[] }
+  images: { paths: { list: string; style: string } }
 }
+
+/** The fields Content Studio reads from a style file; any other is ignored, so a renamed field is lost. */
+const STYLE_FIELDS = [
+  'look',
+  'keepOut',
+  'palette',
+  'colourDepth',
+  'dithering',
+  'acts',
+]
 
 describe('images/style.json', () => {
   const style = readJson<Style>('images/style.json')
 
-  it('holds the style text and things to keep out, and lists no palette', () => {
-    expect(style.style.length).toBeGreaterThan(0)
-    expect(style.avoid.length).toBeGreaterThan(0)
-    // No palette means full colour: Audio Studio only resizes each take.
+  it('uses only the fields Content Studio reads', () => {
+    for (const field of Object.keys(style))
+      expect(STYLE_FIELDS).toContain(field)
+  })
+
+  it('holds the look and things to keep out, and lists no palette', () => {
+    expect(style.look.length).toBeGreaterThan(0)
+    expect(style.keepOut.length).toBeGreaterThan(0)
+    // No palette means full colour: Content Studio only resizes each take.
     expect(style).not.toHaveProperty('palette')
   })
 
   it('says in its own words what the picture must not hold', () => {
-    expect(style.style).toContain('no fold, frame or border')
-    expect(style.style).toContain(
+    expect(style.look).toContain('no fold, frame or border')
+    expect(style.look).toContain(
       'no text, lettering, signature or watermark anywhere',
     )
-    expect(style.style).not.toMatch(/lantern|picture book|worn/i)
+    expect(style.look).not.toMatch(/lantern|picture book|worn/i)
   })
 
-  it('keeps the full list of things to keep out', () => {
-    expect(style.avoid).toEqual([
-      'text',
-      'lettering',
-      'watermark',
-      'signature',
-      'photorealism',
-      '3d render',
-      'anime',
-      'neon colours',
-      'modern objects',
-      'frame or border',
-    ])
+  it('keeps out only what does no harm when named in the prompt', () => {
+    // The studio's models read no negative prompt: keepOut is added to the
+    // prompt as words, so what would be drawn by naming it stays in the look.
+    expect(style.keepOut).toBe(
+      'photorealism, 3d render, anime, neon colours, modern objects',
+    )
   })
 
   it('adds to the style only for acts of the game', () => {
-    const ids = readJson<Studio>('audio-studio.json').images.parts.map(
+    const ids = readJson<Studio>('content-studio.json').narration.parts.map(
       (p) => p.id,
     )
     for (const act of Object.keys(style.acts)) expect(ids).toContain(act)
   })
 })
 
-describe('audio-studio.json images section', () => {
-  const { images } = readJson<Studio>('audio-studio.json')
+describe('content-studio.json images section', () => {
+  const { narration, images } = readJson<Studio>('content-studio.json')
 
   it('finds the style file and every act image list', () => {
     const root = new URL('../../../', import.meta.url)
     expect(existsSync(new URL(images.paths.style, root))).toBe(true)
-    expect(images.parts.map((p) => p.id)).toEqual(
+    expect(narration.parts.map((p) => p.id)).toEqual(
       ACT_NUMBERS.map((n) => `act${n}`),
     )
-    for (const part of images.parts)
+    for (const part of narration.parts)
       expect(
         existsSync(new URL(images.paths.list.replace('{part}', part.id), root)),
       ).toBe(true)

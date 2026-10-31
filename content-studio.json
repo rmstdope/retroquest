@@ -62,21 +62,14 @@
     }
   },
   "images": {
-    "partLabel": "Act",
-    "parts": [
-      { "id": "act1", "title": "Act I: The Call to Adventure" },
-      { "id": "act2", "title": "Act II: The Gathering Storm" },
-      { "id": "act3", "title": "Act III: Trials and Revelations" },
-      { "id": "act4", "title": "Act IV: The Final Confrontation" }
-    ],
     "paths": {
       "list": "tts/{part}/images.json",
       "style": "images/style.json",
-      "lock": "tts/{part}/images.lock.json",
-      "clips": "web/public/images/{part}",
-      "manifest": "web/public/images/{part}/manifest.json"
-    },
-    "refreshList": "p={part}; cd web && npx -y tsx@4.23.15 --tsconfig tsconfig.json ../tts/extract-act.ts ${p#act}"
+      "prompts": "images/prompts.json",
+      "lock": "images/images.lock.json",
+      "clips": "web/public/images/generated",
+      "manifest": "web/public/images/generated/manifest.json"
+    }
   },
   "takeFade": 0.5
 }

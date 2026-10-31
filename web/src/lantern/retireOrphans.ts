@@ -1,7 +1,7 @@
 /**
  * Retiring orphaned narration clips: the pure text edit behind `tts/retire-orphans.ts`.
  * The manifest and the lock are generated files, so they are edited entry by entry as text,
- * which keeps what Audio Studio wrote byte for byte.
+ * which keeps what Content Studio wrote byte for byte.
  */
 
 /** A clip that was retired: its key and its mp3 file. */

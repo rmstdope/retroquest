@@ -1,7 +1,7 @@
 /**
- * Writes `tts/stingers.json`: the game's stingers, the quest sounds, in Audio
+ * Writes `tts/stingers.json`: the game's stingers, the quest sounds, in Content
  * Studio's track format (see `questStingers`). It is the `music.refreshShared`
- * command of `audio-studio.json`; each act's loop is written by `extract-act.ts`.
+ * command of `content-studio.json`; each act's loop is written by `extract-act.ts`.
  * Run from `web/`: `npx -y tsx@4.23.15 --tsconfig tsconfig.json ../tts/extract-shared.ts`.
  */
 import { writeFileSync } from 'node:fs'

@@ -1,5 +1,5 @@
 /**
- * The lists of music Audio Studio's Music workspace reads from the game: each
+ * The lists of music Content Studio's Music workspace reads from the game: each
  * act's loop (`tts/act<N>/music.json`) and the quest stingers
  * (`tts/stingers.json`). They describe the tracks the game plays today, so new
  * music can be made for them; the game keeps playing its own files.
@@ -14,7 +14,7 @@ const MUSIC_DIR = 'web/public/audio/music/'
 /** Where the game's sound effects live (`/audio/soundeffects/` in `useAudio`), as paths inside the project root. */
 const SOUND_EFFECTS_DIR = 'web/public/audio/soundeffects/'
 
-/** One track in Audio Studio's format: a loop of an act, or a stinger. */
+/** One track in Content Studio's format: a loop of an act, or a stinger. */
 export interface MusicTrack {
   /** Slug naming the track's file in the studio's clips folder; unique across the game. */
   id: string

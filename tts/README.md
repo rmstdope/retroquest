@@ -6,17 +6,17 @@ everything else here is tooling and stays outside the build.
 
 ## Setup
 
-- [Audio Studio](https://github.com/rmstdope/audio-studio), installed once with `bun link`, records
+- [Content Studio](https://github.com/rmstdope/audio-studio), installed once with `bun link`, records
   the narration (see *Recording an act*).
 - `FISH_AUDIO_API_KEY=…` in the repository's `.env` (gitignored), or in the environment.
-- `ffmpeg` (for Audio Studio, `level.py` and `check.py`), [uv](https://docs.astral.sh/uv/) (Audio
+- `ffmpeg` (for Content Studio, `level.py` and `check.py`), [uv](https://docs.astral.sh/uv/) (Content
   Studio's Whisper check, `check.py`) and `npm ci` in `web/`.
 
 ## Recording an act
 
-An act's narration is recorded with [Audio Studio](https://github.com/rmstdope/audio-studio),
-from a script of every line the story reads aloud. Run `audio-studio` in the repository root: it
-reads `audio-studio.json` and opens in the browser. There a character is cast by audition (Fish's
+An act's narration is recorded with [Content Studio](https://github.com/rmstdope/audio-studio),
+from a script of every line the story reads aloud. Run `content-studio` in the repository root: it
+reads `content-studio.json` and opens in the browser. There a character is cast by audition (Fish's
 library searched by keywords, rounds of takes of a phrase), and an act is generated: missing lines
 recorded, lines whose voice, cue, words or pronunciation changed recorded again, each take checked
 with Whisper. **Refresh dialog** runs the extractor for an act:
@@ -52,20 +52,20 @@ A script.json or music.json that differs from what the extractor writes now fail
   library voice is only a clone of its uploader's clips, and its title and tags are often wrong,
   so it is judged by its takes in the audition. Names need help: "Elior" came out as "Elia" or
   "Hylia" until `pronounce` spelled it out.
-- **`act<N>/narration.lock.json`** is Audio Studio's record of what each clip was made from, so it
-  knows which lines are up to date. Its own state (auditions, cached takes) is in `.audio-studio/`,
+- **`act<N>/narration.lock.json`** is Content Studio's record of what each clip was made from, so it
+  knows which lines are up to date. Its own state (auditions, cached takes) is in `.content-studio/`,
   which is not committed.
 - Clips are 64 kbps mono MP3, levelled to −16 LUFS as `level.py` levels them, in
   `web/public/audio/narration/act<N>/` with `manifest.json` (key -> file, speaker, duration, word
   timings), which the story view reads. Each line is sent to Fish's free model (long ones in
   sentence-sized pieces) and the best of up to three takes is kept, aiming for 90% of the words
-  heard. Until October 2026 this was `narrate.py`; Audio Studio writes the same manifest (checked
+  heard. Until October 2026 this was `narrate.py`; Content Studio writes the same manifest (checked
   clip for clip on Act I), and `fish_tts.py`'s voice search is its audition. Both scripts are in
   this repository's history.
 
 ## Music
 
-Audio Studio's Music workspace lists the tracks the game plays today, so new music can be made for
+Content Studio's Music workspace lists the tracks the game plays today, so new music can be made for
 them. **Refresh dialog** on an act also writes `act<N>/music.json`, the act's loop, and **Refresh
 from the game** on the Stingers page runs `extract-shared.ts`, which writes `stingers.json`
 (the new-quest and quest-complete sounds):
@@ -95,7 +95,7 @@ demand.
 `check.py` transcribes a clip with Whisper (`uvx mlx-whisper`, Apple Silicon) and diffs it
 against its text (bracketed cues are ignored), listing dropped, added and changed words. Whisper
 invents text over trailing silence; segments that are near-empty or reach past the end of the
-clip are ignored. Audio Studio checks every take this way as it records; `check.py` is for a
+clip are ignored. Content Studio checks every take this way as it records; `check.py` is for a
 closer look at one clip, with its line's words in a text file:
 
 ```sh
@@ -105,7 +105,7 @@ python3 tts/check.py line.txt web/public/audio/narration/act1/0016e4860763bd.mp3
 ## Voice prompts
 
 `prompts/` holds two 30-36 s clips of LibriVox narrators, for cloning a voice (`fish_tts.py
---prompt` did it; Audio Studio uses library voices only, so cloning is back in the history):
+--prompt` did it; Content Studio uses library voices only, so cloning is back in the history):
 `praetzellis` (*Treasure Island*) and `driver` (*The Princess and the Goblin*). LibriVox
 recordings are public domain, and both texts are public domain worldwide (Stevenson d. 1894,
 MacDonald d. 1905); `prompts.json` has the exact transcripts, sources and cut times. Clips of
@@ -122,12 +122,13 @@ the MisoTTS scripts were removed; they are in this branch's history.
 
 ## Images
 
-Audio Studio's images workspace lists the pictures the game needs. **Refresh dialog** on an act
+Content Studio's images workspace lists the pictures the game needs. **Refresh dialog** on an act
 also writes `act<N>/images.json`: one image per room, each `{ id, title, width, height,
 description }`, where the description is the room's base description with the markup removed (the
 studio's starting prompt) and the id is the room's music track id. The look all images share is
-`images/style.json`, written by hand: the style text, things to keep out (`avoid`)
-and an optional addition per act (`acts`). It lists no `palette`: the images keep full colour and
-the studio only brings each take to size. The `images` section of `audio-studio.json` points at
+`images/style.json`, written by hand: the look (`look`), things to keep out (`keepOut`, added to
+the prompt as words, since the image models read no negative prompt, so anything drawn by naming
+it is said as "no …" in the look instead) and an optional addition per act (`acts`). It lists no
+`palette`: the images keep full colour and the studio only brings each take to size. The `images` section of `content-studio.json` points at
 both. Prompt overrides live in the studio, never in the game; the lists come from
 `web/src/lantern/imageLists.ts` and a vitest test fails when a committed list is stale.

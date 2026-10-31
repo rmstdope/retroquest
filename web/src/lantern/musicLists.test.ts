@@ -1,5 +1,5 @@
 /**
- * The game's track lists for Audio Studio: one loop per act, briefed after the
+ * The game's track lists for Content Studio: one loop per act, briefed after the
  * track the act plays today, and the two quest stingers. The committed lists in
  * `tts/` are what a refresh from the game writes, so they must equal these.
  */
@@ -188,10 +188,10 @@ describe('the committed lists', () => {
     expect(readJson<MusicTrack[]>('tts/stingers.json')).toEqual(questStingers())
   })
 
-  it('audio-studio.json declares the music paths and the shared refresh', () => {
+  it('content-studio.json declares the music paths and the shared refresh', () => {
     const project = readJson<{
       music: { refreshShared: string; paths: Record<string, string> }
-    }>('audio-studio.json')
+    }>('content-studio.json')
     expect(project.music.refreshShared).toContain('tts/extract-shared.ts')
     expect(project.music.paths).toEqual({
       loops: 'tts/{part}/music.json',

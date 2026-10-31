@@ -15,7 +15,7 @@ import LanternDialog from './LanternDialog.vue'
  * motion (which follows the device until it is changed here).
  *
  * `musicInfo` is the credit of the music actually playing (a take chosen in
- * Audio Studio has its own), as the layout's music player holds it.
+ * Content Studio has its own), as the layout's music player holds it.
  */
 const props = withDefaults(defineProps<{ musicInfo?: string }>(), {
   musicInfo: '',
