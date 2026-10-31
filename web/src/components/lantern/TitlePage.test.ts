@@ -44,12 +44,15 @@ describe('TitlePage', () => {
 
   it('credits the music playing, when the player gives its credit', () => {
     const w = mountTitle(
-      'Original music for RetroQuest, made with Audio Studio',
+      'Original music for RetroQuest\n' +
+        'Images, narration and music made with Content Studio',
     )
 
-    expect(w.get('.lq-credits').text()).toContain(
-      'Original music for RetroQuest, made with Audio Studio',
-    )
+    const lines = w.findAll('.lq-credits span:not(.lq-credits-label)')
+    expect(lines.map((l) => l.text())).toEqual([
+      'Original music for RetroQuest',
+      'Images, narration and music made with Content Studio',
+    ])
     expect(w.get('.lq-credits').text()).not.toContain('Conquest')
     expect(w.find('.lq-credits a').exists()).toBe(false)
   })

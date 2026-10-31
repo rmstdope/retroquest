@@ -1344,13 +1344,13 @@ describe('LanternLayout', () => {
 
       afterEach(() => vi.unstubAllGlobals())
 
-      it('credits a studio take to Audio Studio', async () => {
+      it('credits a studio take to Content Studio', async () => {
         const text = await settingsWith({
           'act1-village-square': { file: 'square.mp3', duration: 60 },
         })
-        expect(text).toContain(
-          'Original music for RetroQuest, made with Audio Studio',
-        )
+        expect(text).toContain('Original music for RetroQuest')
+        expect(text).not.toContain('Content Studio')
+        expect(text).not.toContain('Audio Studio')
         expect(text).not.toContain('Conquest')
       })
 
@@ -1381,8 +1381,9 @@ describe('LanternLayout', () => {
         const text = await titleCreditsWith({
           market: { file: 'market.mp3', duration: 60 },
         })
+        expect(text).toContain('Original music for RetroQuest')
         expect(text).toContain(
-          'Original music for RetroQuest, made with Audio Studio',
+          'Images, narration and music made with Content Studio',
         )
         expect(text).not.toContain('Conquest')
       })
