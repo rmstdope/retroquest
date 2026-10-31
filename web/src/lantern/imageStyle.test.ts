@@ -24,7 +24,7 @@ interface Studio {
   images: { paths: { list: string; style: string } }
 }
 
-/** The fields Content Studio reads from a style file; any other is refused. */
+/** The fields Content Studio reads from a style file; any other is ignored, so a renamed field is lost. */
 const STYLE_FIELDS = [
   'look',
   'keepOut',

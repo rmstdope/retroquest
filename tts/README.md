@@ -9,7 +9,7 @@ everything else here is tooling and stays outside the build.
 - [Content Studio](https://github.com/rmstdope/audio-studio), installed once with `bun link`, records
   the narration (see *Recording an act*).
 - `FISH_AUDIO_API_KEY=…` in the repository's `.env` (gitignored), or in the environment.
-- `ffmpeg` (for Content Studio, `level.py` and `check.py`), [uv](https://docs.astral.sh/uv/) (Audio
+- `ffmpeg` (for Content Studio, `level.py` and `check.py`), [uv](https://docs.astral.sh/uv/) (Content
   Studio's Whisper check, `check.py`) and `npm ci` in `web/`.
 
 ## Recording an act
@@ -128,7 +128,7 @@ description }`, where the description is the room's base description with the ma
 studio's starting prompt) and the id is the room's music track id. The look all images share is
 `images/style.json`, written by hand: the look (`look`), things to keep out (`keepOut`, added to
 the prompt as words, since the image models read no negative prompt, so anything drawn by naming
-it is said as "no …" in the look instead) and an optional addition per act (`acts`). It lists no `palette`: the images keep full colour and
-the studio only brings each take to size. The `images` section of `content-studio.json` points at
+it is said as "no …" in the look instead) and an optional addition per act (`acts`). It lists no
+`palette`: the images keep full colour and the studio only brings each take to size. The `images` section of `content-studio.json` points at
 both. Prompt overrides live in the studio, never in the game; the lists come from
 `web/src/lantern/imageLists.ts` and a vitest test fails when a committed list is stale.
