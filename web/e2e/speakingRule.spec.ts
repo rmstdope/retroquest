@@ -95,7 +95,14 @@ for (const width of [1280, 360]) {
     test('the rule sits beside the room description', async ({ page }) => {
       await openChapter(page)
       await page.locator('.lq-chapter-button').click()
-      // The opening turn arrives in the first room, description and all.
+      // The opening turn arrives in the first room, description and all. On
+      // the laptop it is told on the picture first: Escape sends it away.
+      if (width === 1280) {
+        const told = page.locator('.lq-arrival-card')
+        await expect(told.last()).toBeVisible()
+        await page.keyboard.press('Escape')
+        await expect(told).toHaveCount(0)
+      }
       const arrival = page.getByTestId('turn').first().locator('.lq-arrival')
       await expectRuleBesideText(arrival)
     })

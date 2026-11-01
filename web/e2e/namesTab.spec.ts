@@ -15,6 +15,14 @@ async function settle(page: Page): Promise<void> {
   )
 }
 
+/** The arrival is told on the picture first (laptop): Escape sends it away so the story is read. */
+async function clearArrival(page: Page): Promise<void> {
+  const told = page.locator('.lq-arrival-card')
+  await expect(told.last()).toBeVisible()
+  await page.keyboard.press('Escape')
+  await expect(told).toHaveCount(0)
+}
+
 /**
  * Start a new game (narration off: the voice scrolling the story would close
  * an open menu) and close the opening chapter page.
@@ -41,6 +49,7 @@ test('a name in the newest turn opens its menu from the keyboard', async ({
   const input = page.getByLabel('Command')
   await input.fill('talk to voice')
   await input.press('Enter')
+  await clearArrival(page)
   const stop = page
     .locator('.lq-story .lq-turn')
     .last()
@@ -69,6 +78,7 @@ test("Tab reaches the newest turn's names between the stage buttons and the acti
   const input = page.getByLabel('Command')
   await input.fill('talk to voice')
   await input.press('Enter')
+  await clearArrival(page)
   const stop = page
     .locator('.lq-story .lq-turn')
     .last()

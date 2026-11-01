@@ -94,7 +94,7 @@ describe('LanternLayout: the arrival on the picture', () => {
   const card = (w: VueWrapper): string =>
     w.find('.lq-arrival-card').exists() ? w.get('.lq-arrival-card').text() : ''
   const storyAside = (w: VueWrapper): boolean =>
-    w.get('.lq-story-wrap').classes().includes('lq-aside')
+    w.get('.lq-story-wrap').classes().includes('lq-paper-away')
   const key = async (name: string): Promise<void> => {
     document.dispatchEvent(
       new KeyboardEvent('keydown', { key: name, bubbles: true }),
@@ -126,7 +126,7 @@ describe('LanternLayout: the arrival on the picture', () => {
     expect(card(w)).toContain('Click or press Enter to continue')
     expect(w.find('[data-testid="arrival-bar"]').exists()).toBe(false)
     expect(storyAside(w)).toBe(true)
-    expect(w.get('.lq-narration-tab').text()).toBe('▴ Narration')
+    expect(w.get('.lq-paper-tab').text()).toBe('▴ Narration')
   })
 
   it('clears 1½ s after the narrator finishes, and the story comes back with the arrival in it', async () => {
@@ -141,7 +141,7 @@ describe('LanternLayout: the arrival on the picture', () => {
     await vi.advanceTimersByTimeAsync(1)
     expect(card(w)).toBe('')
     expect(storyAside(w)).toBe(false)
-    expect(w.find('.lq-narration-tab').exists()).toBe(false)
+    expect(w.find('.lq-paper-tab').exists()).toBe(false)
     expect(w.get('.lq-story').text()).toContain('A green garden.')
   })
 
@@ -235,7 +235,7 @@ describe('LanternLayout: the arrival on the picture', () => {
   it('clears with the Narration tab', async () => {
     const w = await ready()
     await run('go north')
-    await w.get('.lq-narration-tab').trigger('click')
+    await w.get('.lq-paper-tab').trigger('click')
     expect(card(w)).toBe('')
     expect(useNarrationStore().isNarrating).toBe(false)
     expect(storyAside(w)).toBe(false)
@@ -278,7 +278,7 @@ describe('LanternLayout: the arrival on the picture', () => {
     expect(card(w)).toBe('')
     expect(storyAside(w)).toBe(false)
     await run('go north')
-    await w.get('.lq-narration-tab').trigger('click')
+    await w.get('.lq-paper-tab').trigger('click')
     await run('go south')
     expect(card(w)).toBe('')
     expect(storyAside(w)).toBe(false)
@@ -288,7 +288,7 @@ describe('LanternLayout: the arrival on the picture', () => {
     const w = await ready(false)
     await run('go north')
     expect(card(w)).toBe('')
-    expect(w.find('.lq-narration-tab').exists()).toBe(false)
+    expect(w.find('.lq-paper-tab').exists()).toBe(false)
     expect(w.find('[data-testid="arrival-on-picture"]').exists()).toBe(false)
   })
 

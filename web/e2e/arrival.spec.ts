@@ -26,7 +26,7 @@ test.describe('the arrival told on the picture', () => {
     // Narration is off here: the reading-time bar shows.
     await expect(page.getByTestId('arrival-bar')).toBeVisible()
     await expect(story(page)).toBeHidden()
-    const tab = page.getByRole('button', { name: /Narration/ })
+    const tab = page.getByRole('button', { name: /Narration/ }).first()
     await expect(tab).toBeVisible()
 
     await arrival(page).click({ position: { x: 600, y: 300 } })
