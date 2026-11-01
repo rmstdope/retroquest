@@ -121,6 +121,49 @@ describe('ArrivalOnPicture', () => {
     expect(w.get('.lq-arrival-hint').text()).toBe('Tap to continue')
   })
 
+  describe('the hint pill', () => {
+    it('holds the hint and, while nobody speaks, the reading bar', async () => {
+      const w = mount(ArrivalOnPicture, { props: { pictured: true } })
+      useArrivalStore().show(1, [description], false)
+      await w.vm.$nextTick()
+      const pill = w.get('.lq-arrival-pill')
+      expect(pill.find('.lq-arrival-hint').exists()).toBe(true)
+      expect(pill.find('[data-testid="arrival-bar"]').exists()).toBe(true)
+    })
+
+    it('holds only the hint when the narrator speaks the part', async () => {
+      const w = mount(ArrivalOnPicture, { props: { pictured: false } })
+      useArrivalStore().show(1, [{ ...description, voiced: true }], true)
+      await w.vm.$nextTick()
+      const pill = w.get('.lq-arrival-pill')
+      expect(pill.get('.lq-arrival-hint').text()).toBe(
+        'Click or press Enter to continue',
+      )
+      expect(pill.find('[data-testid="arrival-bar"]').exists()).toBe(false)
+    })
+
+    it('is a dark see-through pill whose words meet 4.5:1 even over white', () => {
+      const source = read('./ArrivalOnPicture.vue')
+      const pill = source.match(/\.lq-arrival-pill \{([^}]*)\}/)?.[1] ?? ''
+      const bg = pill.match(
+        /background:\s*rgb\((\d+) (\d+) (\d+) \/ ([\d.]+)\)/,
+      )
+      expect(bg).not.toBeNull()
+      const alpha = Number(bg?.[4])
+      expect(alpha).toBeGreaterThan(0)
+      expect(alpha).toBeLessThan(1)
+      const over = [1, 2, 3]
+        .map((i) => Math.round(Number(bg?.[i]) * alpha + 255 * (1 - alpha)))
+        .map((c) => c.toString(16).padStart(2, '0'))
+        .join('')
+      const ink = pill.match(/color:\s*(#[0-9a-f]{6})/i)?.[1] ?? ''
+      expect(contrastRatio(ink, `#${over}`)).toBeGreaterThanOrEqual(4.5)
+      expect(pill).not.toContain('text-shadow: var')
+      const hint = source.match(/\.lq-arrival-hint \{([^}]*)\}/)?.[1] ?? ''
+      expect(hint).not.toContain('opacity')
+    })
+  })
+
   describe('on a picture, in either theme', () => {
     const dark = Object.fromEntries(
       Object.entries(LANTERN_PALETTES.dark).map(([k, v]) => [
