@@ -28,6 +28,12 @@ describe('JournalDrawer', () => {
     )
   })
 
+  it('passes on a tab chosen inside it', async () => {
+    const w = mount(JournalDrawer, { props: { tab: 'bag' } })
+    await w.get('#lq-tab-quests').trigger('click')
+    expect(w.emitted('select')).toEqual([['quests']])
+  })
+
   it('moves focus into itself when it opens', async () => {
     const w = mount(JournalDrawer, {
       props: { tab: 'bag' },

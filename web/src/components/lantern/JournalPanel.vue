@@ -16,11 +16,13 @@ import { renderMarkup } from '@/utils/theme'
  * pattern: one tab stop, Left/Right (wrapping), Home and End select a tab.
  * Phones show one tab at a time from their section tabs (the `tab` prop):
  * then there is no tab row, just a heading. The stage's drawer instead gives
- * the tab to open on (`start`) and keeps the tab row.
+ * the tab to open on (`start`) and keeps the tab row, and hears of every tab
+ * the player turns to (`select`), so its lit button follows.
  */
 type Tab = 'bag' | 'spells' | 'quests'
 
 const props = defineProps<{ tab?: Tab; start?: Tab }>()
+const emit = defineEmits<{ select: [tab: Tab] }>()
 const TITLES: Record<Tab, string> = {
   bag: 'Bag',
   spells: 'Spells',
@@ -70,6 +72,9 @@ watch(
     if (tab) active.value = tab
   },
 )
+
+// Tell whoever opened the journal which tab the player turned to.
+watch(active, (tab) => emit('select', tab))
 
 // Seeing a tab clears its "new" dot, including news that arrives while open.
 watch(

@@ -190,6 +190,7 @@ describe('JournalPanel', () => {
 
     await tab(w, /Bag/).trigger('keydown', { key: 'ArrowRight' })
     expect(selected()?.text()).toMatch(/^Spells/)
+    expect(w.emitted('select')?.[0]).toEqual(['spells'])
     expect(document.activeElement).toBe(selected()?.element)
 
     await tab(w, /Spells/).trigger('keydown', { key: 'ArrowLeft' })
