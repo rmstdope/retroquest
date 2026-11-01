@@ -52,4 +52,15 @@ describe('RoomPlate', () => {
     expect(w.find('.lq-here').exists()).toBe(false)
     expect(w.get('h2').text()).toBe('Village Square')
   })
+
+  it('has no Story so far button unless the phone stage asks for it', () => {
+    expect(mount(RoomPlate).find('.lq-story-so-far').exists()).toBe(false)
+  })
+
+  it('shows "⟲ Story so far" in the corner on the phone stage, and says when it is pressed', async () => {
+    const w = mount(RoomPlate, { props: { storyButton: true } })
+    expect(w.get('.lq-story-so-far').text()).toBe('⟲ Story so far')
+    await w.get('.lq-story-so-far').trigger('click')
+    expect(w.emitted('story')).toHaveLength(1)
+  })
 })

@@ -122,4 +122,10 @@ describe('StoryDrawer', () => {
       drawer.get('.lq-story-drawer-body').element,
     )
   })
+
+  it('covers the whole stage on a phone', () => {
+    w = mount(StoryDrawer, { props: { phone: true } })
+    expect(w.get('.lq-story-drawer').classes()).toContain('lq-phone-drawer')
+    expect(w.get('h2').text()).toBe('Story so far')
+  })
 })

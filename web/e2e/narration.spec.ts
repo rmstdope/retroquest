@@ -22,10 +22,34 @@ async function startAct1(page: Page): Promise<void> {
   await page.goto('/')
   await page.getByRole('button', { name: 'Start', exact: true }).click()
   await page.locator('.lq-chapter-button').click()
-  await page
+  await openTyping(page)
+}
+
+/**
+ * Switch the actions to typing: the stage's row has a Type button; on a phone
+ * the folded bar's keyboard button opens the sheet straight into typing.
+ */
+async function openTyping(page: Page): Promise<void> {
+  const type = page
     .getByRole('region', { name: 'Actions' })
     .getByRole('button', { name: 'Type', exact: true })
-    .click()
+  if (await type.isVisible()) await type.click()
+  else await page.getByRole('button', { name: 'Type a command' }).click()
+}
+
+/** Open the sheet into typing again after an answer folded it (the bar's keyboard button). */
+async function reopenTyping(page: Page): Promise<void> {
+  const input = page.getByLabel('Command', { exact: true })
+  if (!(await input.isVisible()))
+    await page.getByRole('button', { name: 'Type a command' }).click()
+}
+
+/** Type a command and press Enter, opening the sheet again if the last answer folded it. */
+async function enter(page: Page, command: string): Promise<void> {
+  const input = page.getByLabel('Command', { exact: true })
+  await reopenTyping(page)
+  await input.fill(command)
+  await input.press('Enter')
 }
 
 /** The narration paragraphs of the newest turn. */
@@ -38,7 +62,7 @@ test('tells an answer block by block, and a double tap shows the rest', async ({
   await slowNarrationClips(page)
   await startAct1(page)
 
-  const input = page.getByLabel('Command')
+  const input = page.getByLabel('Command', { exact: true })
   await input.fill('talk to voice')
   await input.press('Enter')
 
@@ -65,9 +89,7 @@ for (const { name, width, height } of [
     await slowNarrationClips(page)
     await startAct1(page)
 
-    const input = page.getByLabel('Command')
-    await input.fill('talk to voice')
-    await input.press('Enter')
+    await enter(page, 'talk to voice')
 
     // The rule is drawn at the paragraph's left edge, so that edge has to lie
     // inside the story, which clips whatever sticks out of it.
@@ -89,7 +111,7 @@ test('opens a journal drawer at once while the voice reads, and a press inside i
   const roomName = page.locator('.lq-room-name')
   const before = await roomName.textContent()
 
-  const input = page.getByLabel('Command')
+  const input = page.getByLabel('Command', { exact: true })
   await input.fill('talk to voice')
   await input.press('Enter')
   await expect(lastTurnBlocks(page).first()).toBeVisible()
@@ -119,17 +141,16 @@ test('opens a journal drawer at once while the voice reads, and a press inside i
 test('Space and Enter press a focused verb and the voice keeps reading', async ({
   page,
 }): Promise<void> => {
-  // On a phone: on the laptop stage this first arrival is told on the picture,
-  // where choosing an action or typing clears it (arrival.spec.ts).
-  await page.setViewportSize({ width: 390, height: 844 })
+  // A short screen: the text page, where the sheet is the composer (a taller
+  // screen tells this first arrival on the picture, arrival.spec.ts).
+  await page.setViewportSize({ width: 390, height: 500 })
   await slowNarrationClips(page)
   await startAct1(page)
-  const input = page.getByLabel('Command')
-  await input.fill('talk to voice')
-  await input.press('Enter')
-  await expect(lastTurnBlocks(page).first()).toBeVisible()
+  await enter(page, 'talk to voice')
+  await expect(page.locator('.lq-speaking')).not.toHaveCount(0)
 
   // Back to the verbs, as the default mode has it, with one of them focused.
+  await page.getByRole('button', { name: 'Actions ▴' }).click()
   await page
     .getByRole('region', { name: 'Actions' })
     .getByRole('button', { name: 'Actions', exact: true })
@@ -164,17 +185,17 @@ test('Space and Enter press a focused verb and the voice keeps reading', async (
 test('typing keeps the voice reading, and Esc in the command box skips it', async ({
   page,
 }): Promise<void> => {
-  // On a phone: on the laptop stage this first arrival is told on the picture,
-  // where choosing an action or typing clears it (arrival.spec.ts).
-  await page.setViewportSize({ width: 390, height: 844 })
+  // A short screen: the text page, where the sheet is the composer (a taller
+  // screen tells this first arrival on the picture, arrival.spec.ts).
+  await page.setViewportSize({ width: 390, height: 500 })
   await slowNarrationClips(page)
   await startAct1(page)
-  const input = page.getByLabel('Command')
-  await input.fill('talk to voice')
-  await input.press('Enter')
-  await expect(lastTurnBlocks(page).first()).toBeVisible()
+  await enter(page, 'talk to voice')
+  await expect(page.locator('.lq-speaking')).not.toHaveCount(0)
   const shown = await lastTurnBlocks(page).count()
 
+  await reopenTyping(page)
+  const input = page.getByLabel('Command', { exact: true })
   await input.pressSequentially('look')
   expect(await lastTurnBlocks(page).count()).toBeLessThanOrEqual(shown + 1)
   await expect(page.locator('.lq-speaking')).not.toHaveCount(0)
@@ -191,17 +212,16 @@ test('typing keeps the voice reading, and Esc in the command box skips it', asyn
 test('holds the story still while it reads, and frees it when the reading ends', async ({
   page,
 }): Promise<void> => {
-  await page.setViewportSize({ width: 390, height: 520 })
+  // A short screen: the text page, whose story is held still while it reads.
+  await page.setViewportSize({ width: 390, height: 500 })
   await slowNarrationClips(page)
   await startAct1(page)
-  const input = page.getByLabel('Command')
   const story = page.getByRole('region', { name: 'Story' })
   const top = (): Promise<number> => story.evaluate((el) => el.scrollTop)
 
   // Past the first three narrated turns the hint is gone until a scroll attempt.
   for (let i = 0; i < 4; i++) {
-    await input.fill(i === 0 ? 'talk to voice' : 'look')
-    await input.press('Enter')
+    await enter(page, i === 0 ? 'talk to voice' : 'look')
     await expect(page.locator('.lq-speaking')).toHaveCount(1)
     if (i < 3) await story.dblclick({ position: { x: 5, y: 5 } })
   }
@@ -228,7 +248,7 @@ test('shows an answer at once with narration off', async ({
     localStorage.setItem('retroquest_settings', '{"narrationOn":false}'),
   )
   await startAct1(page)
-  const input = page.getByLabel('Command')
+  const input = page.getByLabel('Command', { exact: true })
   await input.fill('talk to voice')
   await input.press('Enter')
 
@@ -243,7 +263,7 @@ test('hints at hurrying on the first narrated turn, and Settings can switch narr
   await slowNarrationClips(page)
   await startAct1(page)
 
-  const input = page.getByLabel('Command')
+  const input = page.getByLabel('Command', { exact: true })
   await input.fill('talk to voice')
   await input.press('Enter')
   await expect(page.locator('.lq-narration-hint')).toBeVisible()

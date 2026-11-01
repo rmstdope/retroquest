@@ -31,13 +31,19 @@ describe('LanternLayout: the arrival on the picture', () => {
   let wideChanges: ((event: { matches: boolean }) => void)[] = []
 
   /** Mount the layout on a wide screen (or a phone); `recorded` gives the garden's lines a voice. */
-  async function ready(wide = true, recorded = true): Promise<VueWrapper> {
+  async function ready(
+    wide: boolean | 'short' = true,
+    recorded = true,
+  ): Promise<VueWrapper> {
     vi.useFakeTimers()
     wideChanges = []
     vi.stubGlobal(
       'matchMedia',
       vi.fn((query: string) => ({
-        matches: wide && query.includes('min-width'),
+        matches:
+          wide === 'short'
+            ? query.includes('max-height')
+            : wide && query.includes('min-width'),
         addEventListener: vi.fn((_type: string, listener: never) => {
           if (query.includes('min-width')) wideChanges.push(listener)
         }),
@@ -284,8 +290,18 @@ describe('LanternLayout: the arrival on the picture', () => {
     expect(storyAside(w)).toBe(false)
   })
 
-  it('leaves a phone as it was', async () => {
+  it('tells the arrival on a phone too, with its own hint', async () => {
     const w = await ready(false)
+    useSettingsStore().narrationOn = false
+    await run('go north')
+    expect(card(w)).toContain('Tap to continue')
+    expect(w.get('[data-testid="arrival-on-picture"]').classes()).toContain(
+      'lq-phone-arrival',
+    )
+  })
+
+  it('leaves a short screen as it was', async () => {
+    const w = await ready('short')
     await run('go north')
     expect(card(w)).toBe('')
     expect(w.find('.lq-paper-tab').exists()).toBe(false)

@@ -40,7 +40,8 @@ describe('LanternLayout: names reached with Tab', () => {
     vi.stubGlobal(
       'matchMedia',
       vi.fn((query: string) => ({
-        matches: wide && query.includes('min-width'),
+        // Narrow here is the text page (a short screen), where every turn has stops.
+        matches: query.includes(wide ? 'min-width' : 'max-height'),
         addEventListener: vi.fn(),
         removeEventListener: vi.fn(),
       })),

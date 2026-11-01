@@ -14,7 +14,7 @@ import { useReadAlong } from '@/composables/useReadAlong'
  * light theme. The text is also in the story, which waits aside: the layer is
  * a polite live region for screen readers.
  */
-defineProps<{ pictured: boolean }>()
+defineProps<{ pictured: boolean; phone?: boolean }>()
 const arrival = useArrivalStore()
 const root = ref<HTMLElement | null>(null)
 const { html } = useReadAlong(() => arrival.turnId ?? 0, root)
@@ -24,7 +24,11 @@ const { html } = useReadAlong(() => arrival.turnId ?? 0, root)
   <div
     ref="root"
     class="lq-arrival-stage"
-    :class="{ 'lq-bare': !pictured, 'lq-on': arrival.active }"
+    :class="{
+      'lq-bare': !pictured,
+      'lq-on': arrival.active,
+      'lq-phone-arrival': phone,
+    }"
     aria-live="polite"
     data-testid="arrival-on-picture"
     @click="arrival.next()"
@@ -51,7 +55,9 @@ const { html } = useReadAlong(() => arrival.turnId ?? 0, root)
           ></p>
         </template>
         <!-- eslint-enable vue/no-v-html -->
-        <p class="lq-arrival-hint">Click or press Enter to continue</p>
+        <p class="lq-arrival-hint">
+          {{ phone ? 'Tap to continue' : 'Click or press Enter to continue' }}
+        </p>
         <div
           v-if="arrival.barMs"
           :key="arrival.barKey"
@@ -80,6 +86,20 @@ const { html } = useReadAlong(() => arrival.turnId ?? 0, root)
     0 0 18px rgb(0 0 0 / 0.85), 0 0 6px rgb(0 0 0 / 0.9), 0 1px 2px #000;
   --lq-arrival-track: rgb(255 255 255 / 0.25);
   --lq-arrival-fill: rgb(255 255 255 / 0.85);
+}
+/* The phone: a narrower block of smaller type, above the paper's tab and the bar. */
+.lq-phone-arrival {
+  /* Clear of the plate across the top, and of the bar and the paper's tab. */
+  padding: calc(var(--lq-plate-h, 108px) + 24px) 20px 110px;
+  /* A long description scrolls inside the stage instead of past its edges. */
+  overflow-y: auto;
+  align-items: safe center;
+}
+.lq-phone-arrival .lq-arrival-card {
+  width: min(320px, 100%);
+}
+.lq-phone-arrival .lq-arrival-line {
+  font-size: calc(17px * var(--lq-text-scale, 1));
 }
 .lq-arrival-stage.lq-on {
   pointer-events: auto;

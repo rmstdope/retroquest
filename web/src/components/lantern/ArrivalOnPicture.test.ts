@@ -73,4 +73,13 @@ describe('ArrivalOnPicture', () => {
     const w = mount(ArrivalOnPicture, { props: { pictured: true } })
     expect(w.attributes('aria-live')).toBe('polite')
   })
+
+  it('says "Tap to continue" on a phone', async () => {
+    const w = mount(ArrivalOnPicture, {
+      props: { pictured: true, phone: true },
+    })
+    useArrivalStore().show(1, [description], false)
+    await w.vm.$nextTick()
+    expect(w.get('.lq-arrival-hint').text()).toBe('Tap to continue')
+  })
 })

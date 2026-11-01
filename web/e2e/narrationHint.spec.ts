@@ -127,10 +127,10 @@ function expectClear(reading: Reading, what: string): void {
 }
 
 for (const { name, width, height } of [
-  // Under 1024 px wide: the stage (1024 and up) tells an arrival on the
-  // picture, where the story and its hint wait aside (arrival.spec.ts).
-  { name: 'desktop', width: 1000, height: 862 },
-  { name: 'phone', width: 390, height: 720 },
+  // Short screens keep the text page: any other screen tells an arrival on
+  // the picture, where the story and its hint wait aside (arrival.spec.ts).
+  { name: 'desktop', width: 1000, height: 500 },
+  { name: 'phone', width: 844, height: 390 },
 ]) {
   test(`no word being read sits under the narration hint, and the story stays put after, on ${name}`, async ({
     page,
@@ -147,8 +147,10 @@ for (const { name, width, height } of [
       .getByRole('button', { name: /^Type( a command)?$/ })
       .first()
       .click()
-    const input = page.getByLabel('Command')
+    const input = page.getByLabel('Command', { exact: true })
     for (const command of ['talk to voice', 'examine lantern']) {
+      if (!(await input.isVisible()))
+        await page.getByRole('button', { name: 'Type a command' }).click()
       await input.fill(command)
       await input.press('Enter')
       await expect(page.locator('.lq-narration-hint')).toBeVisible()
