@@ -2,7 +2,7 @@
  * The read model a UI uses on top of Game: journal lists, room data, quest
  * pop-ups, progress and stats as plain data (names still carry engine markup).
  */
-import type { Character } from './Character'
+import { Character } from './Character'
 import type { CompletionTree, Game } from './Game'
 import type { Item } from './Item'
 import type { Quest, QuestDetails } from './Quest'
@@ -161,6 +161,9 @@ export const LOADED_ROOM: RoomDescription = { moved: true, firstVisit: false }
 export class GameController {
   /** How the last turn described the room, or null when it did not. */
   private roomDescription: RoomDescription | null = null
+  private addressee: string | null = null
+  /** The cast of each act by its name, worked out once (see `getActCharacters`). */
+  private readonly casts = new Map<string, { key: string; name: string }[]>()
 
   constructor(readonly game: Game) {}
 
@@ -182,6 +185,7 @@ export class GameController {
    */
   takeTurn(command: string): string {
     const roomBefore = this.game.state.currentRoom.name
+    this.addressee = this.game.addresseeOf(command)
     const visitedBefore = this.getVisitedRooms()
     this.game.hasChangedRoom = false
     const result = this.handleCommand(command)
@@ -202,6 +206,37 @@ export class GameController {
    */
   lastTurnRoomDescription(): RoomDescription | null {
     return this.roomDescription
+  }
+
+  /**
+   * The character of the room the last `takeTurn` command was for (talk to,
+   * say … to, give … to), or null. Found before the command ran.
+   */
+  lastTurnAddressee(): string | null {
+    return this.addressee
+  }
+
+  /**
+   * The characters the running act registers, as class key and name, a name
+   * listed once by the first class that has it (the same cast as the act's
+   * portrait list). The key names the character's portrait file.
+   */
+  getActCharacters(): { key: string; name: string }[] {
+    const act = this.game.acts[this.game.currentAct]
+    if (!act) return []
+    const known = this.casts.get(act.name)
+    if (known) return known
+    const seen = new Set<string>()
+    const cast: { key: string; name: string }[] = []
+    for (const [key, C] of Object.entries(act.classes)) {
+      if (!(C.prototype instanceof Character)) continue
+      const name = new (C as unknown as new () => Character)().name
+      if (seen.has(name.toLowerCase())) continue
+      seen.add(name.toLowerCase())
+      cast.push({ key, name })
+    }
+    this.casts.set(act.name, cast)
+    return cast
   }
 
   /** The current result text, then a new turn (the logo and intro screens). */

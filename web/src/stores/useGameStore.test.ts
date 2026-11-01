@@ -101,6 +101,8 @@ function createMockBridge() {
       musicInfo: 'Track info',
     })),
     getMusicPlace: vi.fn(() => ({ actName: '', roomKey: '' })),
+    getActCharacters: vi.fn((): { key: string; name: string }[] => []),
+    lastTurnAddressee: vi.fn((): string | null => null),
     getCommandCompletions: vi.fn((): CompletionTree => ({})),
   }
   // The tests script each kind of quest event with the three mocks above, one
@@ -1187,6 +1189,32 @@ describe('useGameStore', () => {
 
     it('starts empty', () => {
       expect(store.turns).toEqual([])
+    })
+
+    it('records who a command was for, and nothing for other turns', async () => {
+      await startPlaying()
+      bridge.controller.lastTurnAddressee.mockReturnValueOnce('Mira')
+      store.submitCommand('talk to mira')
+      store.submitCommand('look')
+      const [, talk, look] = store.turns
+      expect(talk.addressed).toBe('Mira')
+      expect(look).not.toHaveProperty('addressed')
+      expect(store.turns[0]).not.toHaveProperty('addressed')
+    })
+
+    it('gives a character of the act a portrait file and Elior none', async () => {
+      bridge.controller.getMusicPlace.mockReturnValue({
+        actName: 'Act1',
+        roomKey: 'ElioCottage',
+      })
+      bridge.controller.getActCharacters.mockReturnValue([
+        { key: 'Mira', name: 'Mira' },
+      ])
+      await startPlaying()
+      expect(store.portraitFor('mira')).toMatch(
+        /images\/generated\/act1-portrait-mira\.png$/,
+      )
+      expect(store.portraitFor('Elior')).toBe('')
     })
 
     it('records the arrival look after the act intro as the first turn', async () => {

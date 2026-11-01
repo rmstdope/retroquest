@@ -458,11 +458,16 @@ test.describe('Lantern UI (the default)', () => {
     await expect(plate).toBeHidden()
   })
 
+<<<<<<< HEAD
   test('opens the story so far as a drawer beside the stage on a laptop', async ({
+=======
+  test('puts speech on the picture on a laptop: the Voice on the right, Elior on the left, cleared by ✕, Escape and walking', async ({
+>>>>>>> 969bd7df (feat(rq-tffa.4): characters speak from the sides of the stage, with portraits)
     page,
   }) => {
     await page.setViewportSize({ width: 1280, height: 800 })
     await page.goto('/')
+<<<<<<< HEAD
     await injectMockState(page)
 
     const button = page.getByRole('button', { name: /Story so far/ })
@@ -494,6 +499,66 @@ test.describe('Lantern UI (the default)', () => {
       .locator('.lq-stage-picture')
       .click({ position: { x: 20, y: 300 } })
     await expect(drawer).toHaveCount(0)
+=======
+    await page.getByRole('button', { name: 'Start', exact: true }).click()
+    await page.locator('.lq-chapter-button').click()
+    await page
+      .getByRole('region', { name: 'Actions' })
+      .getByRole('button', { name: 'Type', exact: true })
+      .click()
+    const input = page.getByLabel('Command')
+    const lines = page.getByTestId('speech-line')
+
+    await input.fill('talk to voice')
+    await input.press('Enter')
+    await expect(lines.first()).toBeVisible()
+    // No portrait is made yet: the initial card stands in, on the right.
+    const right = page.locator('.lq-sp-right')
+    await expect(right).toContainText('Voice')
+    await expect(right.locator('.lq-initial')).toHaveText('V')
+    await expect(page.locator('.lq-sp-left')).toHaveCount(0)
+    // The story band prints it too.
+    await expect(page.getByRole('region', { name: 'Story' })).toContainText(
+      'Voice',
+    )
+
+    // Elior wakes in his cottage and talks to his grandmother: a fresh
+    // conversation, and his own words bring him in on the left.
+    await input.fill('say hello to voice')
+    await input.press('Enter')
+    await input.fill('talk to grandmother')
+    await input.press('Enter')
+    await expect(page.locator('.lq-sp-right .lq-initial')).toHaveText('G')
+    await expect(page.locator('.lq-sp-left')).toHaveCount(0)
+    await input.fill('say hello to grandmother')
+    await input.press('Enter')
+    await expect(page.locator('.lq-sp-left .lq-initial')).toHaveText('E')
+
+    // ✕ clears the picture and focus goes to the story band.
+    await page.getByRole('button', { name: 'Clear the conversation' }).click()
+    await expect(lines).toHaveCount(0)
+    await expect(page.getByRole('region', { name: 'Story' })).toBeFocused()
+
+    // Escape clears too, and walking away does.
+    await input.fill('talk to grandmother')
+    await input.press('Enter')
+    await expect(lines.first()).toBeVisible()
+    await page.keyboard.press('Escape')
+    await expect(lines).toHaveCount(0)
+    await input.fill('talk to grandmother')
+    await input.press('Enter')
+    await expect(lines.first()).toBeVisible()
+    await input.fill('look')
+    await input.press('Enter')
+    await expect(lines).toHaveCount(0)
+
+    // A phone keeps today's story layout: no speech on a picture.
+    await input.fill('talk to grandmother')
+    await input.press('Enter')
+    await expect(lines.first()).toBeVisible()
+    await page.setViewportSize({ width: 390, height: 844 })
+    await expect(lines).toHaveCount(0)
+>>>>>>> 969bd7df (feat(rq-tffa.4): characters speak from the sides of the stage, with portraits)
   })
 
   test('keeps the story and actions in view in a busy room on a laptop', async ({

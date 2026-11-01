@@ -62,6 +62,33 @@ function afterPrefix(command: string, prefixes: string[]): string | null {
   return prefix === undefined ? null : command.slice(prefix.length)
 }
 
+/**
+ * The name the player's command addresses, as typed: the target of `talk to`,
+ * `say … to` and `give … to`, or null for any other command. The same prefixes
+ * and splitting as `parse`, so the story knows who a command is for.
+ */
+export function addresseeTarget(command: string): string | null {
+  const cmd = command.trim().toLowerCase()
+  const talk = afterPrefix(cmd, TALK_PREFIXES)
+  if (talk !== null) return talk.trim() || null
+  if (cmd.startsWith('say ')) {
+    const args = cmd.slice('say '.length)
+    const separator = args.indexOf(' to ')
+    return separator < 0
+      ? null
+      : args.slice(separator + ' to '.length).trim() || null
+  }
+  const give = afterPrefix(cmd, GIVE_PREFIXES)
+  if (give !== null) {
+    const parts = give.split(/\s+/).filter(Boolean)
+    const index = parts.indexOf('to')
+    return index > 0 && index < parts.length - 1
+      ? parts.slice(index + 1).join(' ')
+      : null
+  }
+  return null
+}
+
 export class CommandParser {
   /** The last command as typed, before normalization. */
   lastRaw: string | null = null

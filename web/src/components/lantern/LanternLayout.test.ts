@@ -933,6 +933,131 @@ describe('LanternLayout', () => {
     })
   })
 
+  describe('speech on the picture, on a laptop', () => {
+    const WORDS =
+      '[character_name]Grandmother[/character_name]\n[dialogue]There you are.[/dialogue]'
+
+    beforeEach(() => {
+      vi.stubGlobal(
+        'matchMedia',
+        vi.fn(() => ({
+          matches: true,
+          addEventListener: vi.fn(),
+          removeEventListener: vi.fn(),
+        })),
+      )
+    })
+
+    afterEach(() => vi.unstubAllGlobals())
+
+    /** A player's command answered with `text`, addressed to `addressed`. */
+    async function say(
+      w: VueWrapper,
+      text: string,
+      addressed?: string,
+      command = 'talk to grandmother',
+    ): Promise<void> {
+      const game = useGameStore()
+      game.turns.push({
+        ...TURN,
+        id: (game.turns.at(-1)?.id ?? 0) + 1,
+        command,
+        text,
+        ...(addressed ? { addressed } : {}),
+      })
+      await w.vm.$nextTick()
+      await w.vm.$nextTick()
+    }
+
+    it('shows what the one spoken to says on the picture, and still in the story', async () => {
+      const w = mountLayout()
+      await say(w, WORDS, 'Grandmother')
+
+      expect(w.get('.lq-sp-right .lq-foot').text()).toBe('Grandmother')
+      expect(w.get('[data-testid="speech-line"]').text()).toContain(
+        'There you are.',
+      )
+      expect(w.get('section[aria-label="Story"]').text()).toContain(
+        'There you are.',
+      )
+    })
+
+    it('clears the picture on another action, but not the story', async () => {
+      const w = mountLayout()
+      await say(w, WORDS, 'Grandmother')
+      await say(w, 'You walk north.', undefined, 'go north')
+
+      expect(w.find('[data-testid="speech-line"]').exists()).toBe(false)
+      expect(w.get('section[aria-label="Story"]').text()).toContain(
+        'There you are.',
+      )
+    })
+
+    it('clears the picture after a load and in a new act', async () => {
+      const w = mountLayout()
+      const game = useGameStore()
+      await say(w, WORDS, 'Grandmother')
+      game.loadNumber++
+      await w.vm.$nextTick()
+      expect(w.find('[data-testid="speech-line"]').exists()).toBe(false)
+
+      await say(w, WORDS, 'Grandmother')
+      game.musicActName = 'Act2'
+      await w.vm.$nextTick()
+      expect(w.find('[data-testid="speech-line"]').exists()).toBe(false)
+    })
+
+    it('puts the ✕ after the five buttons and before the story band, and focuses the band when pressed', async () => {
+      const w = mount(LanternLayout, { attachTo: document.body })
+      wrapper = w
+      await say(w, WORDS, 'Grandmother')
+      const order = Array.from(
+        document.querySelectorAll<HTMLElement>(
+          '.lq-stage-btn, .lq-clear, section[aria-label="Story"]',
+        ),
+      ).map((el) => el.className.split(' ')[0])
+      expect(order.slice(-2)).toEqual(['lq-clear', 'lq-story'])
+      expect(order.slice(0, 5).every((name) => name === 'lq-stage-btn')).toBe(
+        true,
+      )
+
+      const story = w.get('section[aria-label="Story"]').element
+      await w.get('.lq-clear').trigger('click')
+      expect(w.find('[data-testid="speech-line"]').exists()).toBe(false)
+      expect(document.activeElement).toBe(story)
+    })
+
+    it('lets Escape close an open drawer first and clear the picture next', async () => {
+      const w = mountLayout()
+      await say(w, WORDS, 'Grandmother')
+      await w.get('[data-button="bag"]').trigger('click')
+      await w
+        .get('[aria-label="Journal drawer"]')
+        .trigger('keydown', { key: 'Escape' })
+      expect(w.find('[aria-label="Journal drawer"]').exists()).toBe(false)
+      expect(w.find('[data-testid="speech-line"]').exists()).toBe(true)
+
+      document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }))
+      await w.vm.$nextTick()
+      expect(w.find('[data-testid="speech-line"]').exists()).toBe(false)
+    })
+  })
+
+  it('shows no speech on the picture on a phone', async () => {
+    const w = mountLayout()
+    const game = useGameStore()
+    game.turns.push({
+      ...TURN,
+      id: 1,
+      command: 'talk to grandmother',
+      text: '[character_name]Grandmother[/character_name]\n[dialogue]Hello.[/dialogue]',
+      addressed: 'Grandmother',
+    })
+    await w.vm.$nextTick()
+    expect(w.find('.lq-speech-zone').exists()).toBe(false)
+    expect(w.get('section[aria-label="Story"]').text()).toContain('Hello.')
+  })
+
   it('keeps the single column on smaller screens', () => {
     const w = mountLayout()
 

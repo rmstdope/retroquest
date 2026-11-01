@@ -13,3 +13,13 @@ export function roomPictureUrl(actName: string, roomKey: string): string {
   if (!actName || !roomKey) return ''
   return `${import.meta.env.BASE_URL}images/generated/${roomTrackId(actName, roomKey)}.png`
 }
+
+/**
+ * The URL of a character's portrait: the image Content Studio made for the
+ * character class `classKey` of the act, named as the act's image list names
+ * it. The file may not exist yet; the speech then shows an initial card.
+ */
+export function portraitUrl(actName: string, classKey: string): string {
+  if (!actName || !classKey) return ''
+  return `${import.meta.env.BASE_URL}images/generated/${roomTrackId(actName, `Portrait ${classKey}`)}.png`
+}
