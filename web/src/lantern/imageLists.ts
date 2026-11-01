@@ -47,10 +47,23 @@ export function roomImages(act: Act): GameImage[] {
 }
 
 /**
+ * The markup with every spoken line removed: a `[dialogue]` block and the
+ * `[character_name]` label directly before it. A portrait describes how a
+ * character looks, and a line of speech in the studio's prompt reads as part
+ * of the picture.
+ */
+export function withoutSpeech(markup: string): string {
+  return markup.replace(
+    /(\[character_name\][^[]*\[\/character_name\]\s*)?\[dialogue\][\s\S]*?\[\/dialogue\]/g,
+    '',
+  )
+}
+
+/**
  * One portrait for each character the act registers (`act.classes`, so those
  * who arrive mid-story are found too), described by the character's own
- * description. A name two classes share is listed once, the first class
- * winning. Ids are `act<N>-portrait-<class key>`, apart from every room id.
+ * description without any line of speech. A name two classes share is listed
+ * once, the first class winning. Ids are `act<N>-portrait-<class key>`, apart from every room id.
  */
 export function characterImages(act: Act): GameImage[] {
   const seen = new Set<string>()
@@ -66,7 +79,7 @@ export function characterImages(act: Act): GameImage[] {
       title: displayName(character.name),
       width: PORTRAIT_WIDTH,
       height: PORTRAIT_HEIGHT,
-      description: narrationText(character.description),
+      description: narrationText(withoutSpeech(character.description)),
     })
   }
   return images

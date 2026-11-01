@@ -126,7 +126,8 @@ Content Studio's images workspace lists the pictures the game needs. **Refresh d
 also writes `act<N>/images.json`: one image per room, then one portrait per character the act
 registers (480x640, upright; a name two classes share is listed once; ids `act<N>-portrait-<class>`),
 each `{ id, title, width, height, description }`, where the description is the room's base
-description, or the character's own, with the markup removed (the studio's starting prompt) and the
+description, or the character's own, with the markup and any line of speech removed (the
+studio's starting prompt) and the
 room's id is its music track id. The look all images share is
 `images/style.json`, written by hand: the look (`look`), things to keep out (`keepOut`, added to
 the prompt as words, since the image models read no negative prompt, so anything drawn by naming

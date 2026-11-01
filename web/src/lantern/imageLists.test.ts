@@ -10,6 +10,7 @@ import { Act4 } from '@/act4/Act4'
 import type { Act } from '@/engine'
 import { Character } from '@/engine'
 import { displayName } from './displayName'
+import { narrationText } from './narrationKey'
 import {
   IMAGE_HEIGHT,
   IMAGE_WIDTH,
@@ -18,6 +19,7 @@ import {
   allImages,
   characterImages,
   roomImages,
+  withoutSpeech,
 } from './imageLists'
 
 const SLUG = /^[a-z0-9]+(-[a-z0-9]+)*$/
@@ -111,5 +113,39 @@ describe('characterImages', () => {
     const rooms = roomImages(act).length
     expect(allImages(act).slice(0, rooms)).toEqual(roomImages(act))
     expect(allImages(act).slice(rooms)).toEqual(characterImages(act))
+  })
+
+  it('describes how a character looks, with no line of speech in it', () => {
+    const knight = characterImages(new Act4()).find(
+      (i) => i.id === 'act4-portrait-knight-of-despair',
+    )
+    expect(knight?.description.endsWith('his voice is hollow.')).toBe(true)
+    for (const act of ACTS) {
+      for (const [key, C] of Object.entries(act.classes)) {
+        if (!(C.prototype instanceof Character)) continue
+        const character = new (C as unknown as new () => Character)()
+        const spoken = [
+          ...character.description.matchAll(
+            /\[dialogue\]([\s\S]*?)\[\/dialogue\]/g,
+          ),
+        ].map((m) => m[1] ?? '')
+        const image = characterImages(act).find(
+          (i) =>
+            i.title.toLowerCase() === displayName(character.name).toLowerCase(),
+        )
+        for (const words of spoken) {
+          expect(image?.description, key).not.toContain(narrationText(words))
+        }
+      }
+    }
+  })
+
+  it('keeps a character named in the prose when removing a line of speech', () => {
+    const markup =
+      'A [character_name]Mira[/character_name] waves. ' +
+      '[character_name]Bob[/character_name]\n[dialogue]Hi[/dialogue] End.'
+    expect(withoutSpeech(markup)).toBe(
+      'A [character_name]Mira[/character_name] waves.  End.',
+    )
   })
 })
