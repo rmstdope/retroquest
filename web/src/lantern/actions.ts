@@ -25,7 +25,6 @@ export interface Slot {
   sources: TargetSource[]
   /** Word placed before this slot's value, e.g. "with". */
   joiner?: string
-  optional?: boolean
 }
 
 export interface Verb {
@@ -93,10 +92,14 @@ export const VERBS: readonly Verb[] = [
     id: 'use',
     label: 'Use',
     words: 'use',
-    slots: [
-      { sources: THINGS },
-      { sources: ANYTHING, joiner: 'with', optional: true },
-    ],
+    slots: [{ sources: THINGS }],
+    group: 'main',
+  },
+  {
+    id: 'usewith',
+    label: 'Use with',
+    words: 'use',
+    slots: [{ sources: THINGS }, { sources: ANYTHING, joiner: 'with' }],
     group: 'main',
   },
   {
@@ -129,7 +132,7 @@ export const VERBS: readonly Verb[] = [
     words: 'buy',
     slots: [
       { sources: ['wares'] },
-      // Required: the engine rejects "buy <item>" without "from <seller>".
+      // The engine rejects "buy <item>" without "from <seller>".
       { sources: ['sellers'], joiner: 'from' },
     ],
     group: 'main',
@@ -152,13 +155,16 @@ export const VERBS: readonly Verb[] = [
     id: 'cast',
     label: 'Cast',
     words: 'cast',
+    slots: [{ sources: ['spells'] }],
+    group: 'main',
+  },
+  {
+    id: 'caston',
+    label: 'Cast on',
+    words: 'cast',
     slots: [
       { sources: ['spells'] },
-      {
-        sources: ['characters', 'roomItems', 'inventory'],
-        joiner: 'on',
-        optional: true,
-      },
+      { sources: ['characters', 'roomItems', 'inventory'], joiner: 'on' },
     ],
     group: 'main',
   },
@@ -191,7 +197,8 @@ export function verbById(id: string): Verb {
 
 /**
  * The command for `verb` with one value per slot (null/empty = not chosen),
- * or null while a required slot is still empty.
+ * or null while a slot is still empty. A command is performed as soon as it
+ * is complete.
  */
 export function buildCommand(
   verb: Verb,
@@ -200,41 +207,11 @@ export function buildCommand(
   const parts = [verb.words]
   for (const [index, slot] of verb.slots.entries()) {
     const value = args[index]?.trim()
-    if (!value) {
-      if (slot.optional) continue
-      return null
-    }
+    if (!value) return null
     if (slot.joiner) parts.push(slot.joiner)
     parts.push(value)
   }
   return parts.join(' ')
-}
-
-/**
- * Whether the composer keeps a "Do it" button for `verb`: only where the
- * command can still take more after it is complete (an optional last part) or
- * where free text may be the last thing filled. Every other verb is performed
- * as soon as its last choice is picked.
- */
-export function keepsDoIt(verb: Verb): boolean {
-  return verb.slots.some(
-    (slot) => slot.optional || slot.sources.includes('text'),
-  )
-}
-
-/**
- * Whether the command for `verb` is complete with nothing left to add: every
- * slot, optional ones included, has a value. Such a command is performed
- * straight away when a choice completes it.
- */
-export function isFinished(
-  verb: Verb,
-  args: Array<string | null | undefined>,
-): boolean {
-  return (
-    buildCommand(verb, args) !== null &&
-    verb.slots.every((_, index) => !!args[index]?.trim())
-  )
 }
 
 /** The choices for one slot in the current situation (no duplicates). */
