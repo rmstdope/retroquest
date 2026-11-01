@@ -7,7 +7,7 @@ import type { NameAction } from '@/lantern/nameActions'
  * it. Picking one runs it; an action with choices (Give…, Cast…) shows
  * them in its place, named after it (Escape there goes back to the
  * actions); Escape, a click elsewhere, Tab or scrolling (the name would
- * move away from it) closes it.
+ * move away from it) closes it; a scroll from before it opened does not.
  * Arrow keys move between the actions.
  */
 /** `x`, `top` and `bottom` are where the clicked name is in the window. */
@@ -99,12 +99,22 @@ function onScroll(event: Event): void {
   if (!menu.value?.contains(event.target as Node)) emit('close', false)
 }
 
+/** The frame that starts listening for scrolls, until it has run. */
+let listenFrame = 0
+
 onMounted(() => {
   void nextTick(() => items()[0]?.focus())
   document.addEventListener('pointerdown', onPointerDown, true)
-  document.addEventListener('scroll', onScroll, true)
+  // A scroll from before it opened (focus scrolling the name into view just
+  // before Enter) is reported at the next frame, ahead of its callbacks:
+  // listen from that frame on, so only a later scroll closes it.
+  listenFrame = requestAnimationFrame(() => {
+    listenFrame = 0
+    document.addEventListener('scroll', onScroll, true)
+  })
 })
 onBeforeUnmount(() => {
+  cancelAnimationFrame(listenFrame)
   document.removeEventListener('pointerdown', onPointerDown, true)
   document.removeEventListener('scroll', onScroll, true)
 })

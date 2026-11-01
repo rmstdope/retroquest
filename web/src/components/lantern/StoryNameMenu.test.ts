@@ -4,6 +4,11 @@ import { nextTick } from 'vue'
 import { mount, type VueWrapper } from '@vue/test-utils'
 import StoryNameMenu from './StoryNameMenu.vue'
 
+/** Wait for the next animation frame. */
+function nextFrame(): Promise<void> {
+  return new Promise((done) => requestAnimationFrame(() => done()))
+}
+
 const ACTIONS = [
   { label: 'Take', command: 'take bread' },
   { label: 'Examine', command: 'examine bread' },
@@ -36,10 +41,21 @@ describe('StoryNameMenu', () => {
 
   it('closes when the story scrolls under it', async () => {
     menuAt({ x: 100, top: 200, bottom: 218 })
+    await nextFrame()
 
     document.body.dispatchEvent(new Event('scroll'))
 
     expect(wrapper!.emitted('close')).toEqual([[false]])
+  })
+
+  it('stays open for a scroll reported only after it opened (focus scrolling the name into view)', async () => {
+    menuAt({ x: 100, top: 200, bottom: 218 })
+
+    // The browser reports a scroll at the next frame, before its callbacks.
+    document.body.dispatchEvent(new Event('scroll'))
+    await nextFrame()
+
+    expect(wrapper!.emitted('close')).toBeUndefined()
   })
 
   it('stays inside a short window when the choices are many, and scrolls', async () => {

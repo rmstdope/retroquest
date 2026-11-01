@@ -5,7 +5,7 @@
  */
 import { test, expect, type Page } from '@playwright/test'
 
-/** Let the scroll that focusing a name causes finish (it closes an open menu). */
+/** Let the browser report the scroll that focusing a name causes. */
 async function settle(page: Page): Promise<void> {
   await page.evaluate(
     () =>
@@ -48,7 +48,6 @@ test('a name in the newest turn opens its menu from the keyboard', async ({
     .first()
   await expect(stop).toHaveText('Grandmother')
   await stop.focus()
-  await settle(page)
   await page.keyboard.press('Enter')
   const menu = page.locator('.lq-name-menu')
   await expect(menu).toBeVisible()
@@ -83,7 +82,6 @@ test("Tab reaches the newest turn's names between the stage buttons and the acti
     reached = await stop.evaluate((el) => el === document.activeElement)
   }
   expect(reached).toBe(true)
-  await settle(page)
   await page.keyboard.press('Space')
   const menu = page.locator('.lq-name-menu')
   await expect(menu).toBeVisible()
@@ -92,4 +90,40 @@ test("Tab reaches the newest turn's names between the stage buttons and the acti
   await expect(stop).toBeFocused()
   await page.keyboard.press('Tab')
   await expect(stop).not.toBeFocused()
+})
+
+test('in the Story so far drawer, Enter at once on a name just scrolled into view opens its menu', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1280, height: 800 })
+  await start(page)
+  await page
+    .getByRole('button', { name: /^Type( a command)?$/ })
+    .first()
+    .click()
+  const input = page.getByLabel('Command')
+  // Wake in Elior's Cottage, then look about until the story is long enough
+  // that its first names are out of the drawer's sight.
+  for (const command of ['talk to voice', 'look', 'look', 'look', 'look']) {
+    await input.fill(command)
+    await input.press('Enter')
+  }
+  await page.getByRole('button', { name: /Story so far/ }).click()
+  const drawer = page.locator('.lq-story-drawer')
+  const body = drawer.locator('.lq-story-drawer-body')
+  await expect(body).toBeFocused()
+  const first = drawer.locator('[role="button"][tabindex="0"]').first()
+  await expect(first).not.toBeInViewport()
+  // No pause: the name takes focus (the drawer scrolls it into view) and Enter
+  // comes in the same frame, before that scroll's event is delivered.
+  await first.evaluate((name) => {
+    name.focus()
+    name.dispatchEvent(
+      new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }),
+    )
+  })
+  await settle(page)
+  const menu = page.locator('.lq-name-menu')
+  await expect(menu).toBeVisible()
+  await expect(menu.getByRole('menuitem').first()).toBeFocused()
 })
