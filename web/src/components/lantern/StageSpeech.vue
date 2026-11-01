@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted } from 'vue'
+import { computed } from 'vue'
 import { useGameStore } from '@/stores/useGameStore'
 import { useStageSpeechStore } from '@/stores/useStageSpeechStore'
 import { useNarrationStore } from '@/stores/useNarrationStore'
@@ -14,8 +14,9 @@ import SpeechPortrait from './SpeechPortrait.vue'
  * thread of lines between them in the order things were said. The newest line
  * is full strength, the one before it about 55% and the rest about 30%; when
  * the room is full the oldest leaves at the top. The conversation is kept by
- * `useStageSpeechStore`. A round ✕ and Escape clear it (the story band keeps
- * every line), and ✕ hands focus to the story band (`focus-story`). The zone
+ * `useStageSpeechStore`. A round ✕ clears it (the story band keeps every
+ * line) and hands focus to the story band (`focus-story`); Escape clears it
+ * too, which the layout handles with the other keys. The zone
  * fills the space between the stage's top and the story band; a press on it
  * shows the rest of the turn's lines at once. Not shown while there is no
  * conversation.
@@ -45,21 +46,11 @@ function clearAndFocus(): void {
   speech.clear()
   emit('focus-story')
 }
-
-/** Escape clears the picture, unless something else (a drawer, the map) closed first. */
-function onKeydown(event: KeyboardEvent): void {
-  if (event.key !== 'Escape' || event.defaultPrevented) return
-  if (!speech.conversation) return
-  speech.clear()
-}
-
-onMounted(() => document.addEventListener('keydown', onKeydown))
-onUnmounted(() => document.removeEventListener('keydown', onKeydown))
 </script>
 
 <template>
   <div class="lq-speech-zone" data-testid="speech-zone" @click="hurry">
-    <div v-if="speech.conversation" class="lq-speech">
+    <div v-if="speech.visible.length" class="lq-speech">
       <SpeechPortrait
         v-if="speech.leftSpeaking"
         class="lq-sp-left"
@@ -113,7 +104,8 @@ onUnmounted(() => document.removeEventListener('keydown', onKeydown))
   position: relative;
   flex: 1 1 auto;
   min-height: 0;
-  z-index: 1;
+  /* Under the plate, so a faded line never covers a chip. */
+  z-index: 0;
   container-type: inline-size;
   --lq-portrait-w: 9.84cqw;
   /* The picture and the plate under it stay pressable; only what is drawn here takes presses. */
@@ -187,6 +179,12 @@ onUnmounted(() => document.removeEventListener('keydown', onKeydown))
 }
 .lq-age-old {
   opacity: 0.3;
+}
+/* The line being read: the read-along ring. */
+.lq-line.lq-speaking {
+  box-shadow:
+    0 0 0 2px var(--lq-accent),
+    0 6px 20px rgba(0, 0, 0, 0.25);
 }
 @keyframes lq-line-in {
   from {

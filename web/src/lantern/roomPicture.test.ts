@@ -32,3 +32,17 @@ describe('portraitUrl', () => {
     expect(portraitUrl('Act1', '')).toBe('')
   })
 })
+
+describe('the characters of each act and their portraits', () => {
+  it('lists the same portraits as the act image list', async () => {
+    const { Game } = await import('@/engine')
+    const { GameController } = await import('@/engine/GameController')
+    const act = new Act1()
+    const cast = new GameController(new Game([act])).getActCharacters()
+    const ids = characterImages(act).map((image) => image.id)
+    expect(cast.length).toBe(ids.length)
+    expect(
+      cast.map((entry) => roomTrackId(act.name, `Portrait ${entry.key}`)),
+    ).toEqual(ids)
+  })
+})

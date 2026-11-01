@@ -289,6 +289,10 @@ let storyResize: ResizeObserver | undefined
 
 /** Keys that steer the narration; see `onNarrationKey`. */
 function onNarrationKey(event: KeyboardEvent): void {
+  // Escape also clears the speech on the picture (unless a drawer, the map or
+  // a menu took it first); the narration below still hears it.
+  if (event.key === 'Escape' && !event.defaultPrevented && wide.value)
+    speech.clear()
   if (!narration.isNarrating || event.defaultPrevented) return
   if (event.ctrlKey || event.metaKey || event.altKey) return
   const hurries = event.key === ' ' || event.key === 'Enter'

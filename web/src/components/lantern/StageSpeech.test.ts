@@ -136,19 +136,12 @@ describe('StageSpeech', () => {
     expect(w.find('[data-testid="portrait"]').exists()).toBe(false)
   })
 
-  it('clears with Escape unless something else took it', async () => {
+  it('shows no button until a line is shown', async () => {
     const { speech, w } = mounted()
-    speech.observe(turn(say('Mira', 'Hello.'), 'Mira'))
-    const handled = new KeyboardEvent('keydown', {
-      key: 'Escape',
-      cancelable: true,
-    })
-    handled.preventDefault()
-    document.dispatchEvent(handled)
-    expect(speech.conversation).not.toBeNull()
-    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }))
+    speech.observe(turn('Nothing to say.', 'Mira', 'give bread to mira'))
     await w.vm.$nextTick()
-    expect(speech.conversation).toBeNull()
+    expect(speech.conversation).not.toBeNull()
+    expect(w.find('button').exists()).toBe(false)
   })
 
   it('shows the rest of the turn at once when the picture is pressed', async () => {
