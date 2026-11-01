@@ -634,6 +634,8 @@ export const useGameStore = defineStore('game', () => {
   const quitAsked = ref(false)
   /** Counts restarts, so views can start afresh with a new game. */
   const gameNumber = ref(0)
+  /** Counts loads, so views that hold open panels (the stage's drawer and map) close them. */
+  const loadNumber = ref(0)
 
   /** Start a new game from Act I: the story, dots and pop-ups start empty. */
   function restartGame(): void {
@@ -896,6 +898,7 @@ export const useGameStore = defineStore('game', () => {
     const result = b.quickLoadGame()
     dropHold()
     rememberLoadedAct(b)
+    loadNumber.value++
     clearNewDots()
     showLoaded(command, result, 'Game loaded')
     refreshPanels()
@@ -915,6 +918,7 @@ export const useGameStore = defineStore('game', () => {
     const result = b.loadNamedGame(name)
     dropHold()
     rememberLoadedAct(b)
+    loadNumber.value++
     clearNewDots()
     showLoaded(command, result, `Game loaded · ${name}`)
     refreshPanels()
@@ -964,6 +968,7 @@ export const useGameStore = defineStore('game', () => {
     const result = b.loadFromSlot(slot)
     dropHold()
     rememberLoadedAct(b)
+    loadNumber.value++
     clearNewDots()
     showLoaded(null, result, `Game loaded · Slot ${slot}`)
     refreshPanels()
@@ -1198,6 +1203,7 @@ export const useGameStore = defineStore('game', () => {
     showTitle,
     dismissTitle,
     gameNumber,
+    loadNumber,
     restartGame,
     ringQuestSounds,
     setActEndGate,

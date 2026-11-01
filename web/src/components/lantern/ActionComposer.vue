@@ -837,9 +837,8 @@ function onTypedEnter(): void {
   cursor: pointer;
 }
 /* On the stage the verbs are one row over the picture, and the sentence being
-   built sits in a row just above it. */
+   built sits in a row just above it (the builder comes first in the markup). */
 .lq-on-stage {
-  flex-direction: column-reverse;
   background: color-mix(in srgb, var(--lq-surface) 93%, transparent);
 }
 .lq-on-stage .lq-verbs {

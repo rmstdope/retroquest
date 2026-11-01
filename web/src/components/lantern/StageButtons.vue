@@ -47,11 +47,13 @@ const journalButtons = computed(() => [
   },
 ])
 
+/** Show the map and cancel any pending close. */
 function openMap(): void {
   clearTimeout(closeTimer)
   mapOpen.value = true
 }
 
+/** Hide the map now. */
 function closeMap(): void {
   clearTimeout(closeTimer)
   mapOpen.value = false
@@ -87,6 +89,7 @@ function onDocumentKey(event: KeyboardEvent): void {
   focusButton('map')
 }
 
+/** A press outside the buttons and the map closes the map. */
 function onDocumentPress(event: Event): void {
   if (root.value && event.target instanceof Node)
     if (!root.value.contains(event.target)) closeMap()

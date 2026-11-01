@@ -761,6 +761,23 @@ describe('LanternLayout', () => {
       expect(w.find('[aria-label="Journal drawer"]').exists()).toBe(false)
     })
 
+    it('closes the drawer and the map after a load and in a new act', async () => {
+      const w = mountLayout()
+      const game = useGameStore()
+
+      await w.get('[data-button="bag"]').trigger('click')
+      await w.get('[data-button="map"]').trigger('click')
+      game.loadNumber++
+      await w.vm.$nextTick()
+      expect(w.find('[aria-label="Journal drawer"]').exists()).toBe(false)
+      expect(w.find('.lq-compass').exists()).toBe(false)
+
+      await w.get('[data-button="spells"]').trigger('click')
+      game.musicActName = 'Act2'
+      await w.vm.$nextTick()
+      expect(w.find('[aria-label="Journal drawer"]').exists()).toBe(false)
+    })
+
     it('scrolls the story back to its start with Story so far', async () => {
       const w = mountLayout()
       const story = w.get('section[aria-label="Story"]').element

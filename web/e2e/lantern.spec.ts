@@ -435,10 +435,24 @@ test.describe('Lantern UI (the default)', () => {
     await page.getByRole('button', { name: /Bag · 1/ }).click()
     const drawer = page.getByRole('complementary', { name: 'Journal drawer' })
     await expect(drawer.getByRole('tab', { name: /Bag · 1/ })).toBeVisible()
+    // The lit button stays in sight, and pressing it again closes the drawer.
+    await page.getByRole('button', { name: /Quests · 0/ }).click()
+    await expect(page.getByRole('button', { name: /Quests · 0/ })).toBeVisible()
+    await page.getByRole('button', { name: /Quests · 0/ }).click()
+    await expect(drawer).toHaveCount(0)
+    await expect(page.getByRole('button', { name: /Quests · 0/ })).toBeFocused()
+    await page.getByRole('button', { name: /Bag · 1/ }).click()
+    await expect(drawer).toBeVisible()
     // The map closes a moment after the pointer left it.
     await expect(exit).toHaveCount(0)
     await page.keyboard.press('Escape')
     await expect(drawer).toHaveCount(0)
+
+    // The row to choose who or what opens just above the verbs.
+    await page.getByRole('button', { name: 'Use', exact: true }).click()
+    const builder = await page.locator('.lq-builder').boundingBox()
+    const verbs = await page.locator('.lq-verbs').boundingBox()
+    expect(builder!.y + builder!.height).toBeLessThanOrEqual(verbs!.y + 1)
 
     await page.setViewportSize({ width: 390, height: 844 })
     await expect(plate).toBeHidden()

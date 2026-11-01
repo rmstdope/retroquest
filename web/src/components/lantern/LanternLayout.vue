@@ -130,9 +130,16 @@ watch(
   () => game.gameNumber,
   () => {
     section.value = 'story'
-    drawerTab.value = null
   },
 )
+
+/** What starts the stage afresh: a new game, a load, or a new act. */
+const stageKey = computed(
+  () => `${game.gameNumber}-${game.loadNumber}-${game.musicActName}`,
+)
+watch(stageKey, () => {
+  drawerTab.value = null
+})
 
 /** A journal button: opens the drawer on its tab, or closes it if it is lit. */
 function toggleDrawer(tab: 'bag' | 'spells' | 'quests'): void {
@@ -705,7 +712,7 @@ watch(
           <StagePicture :src="game.roomPicture" />
           <RoomPlate class="lq-stage-plate" data-panel @click="onNameClick" />
           <StageButtons
-            :key="`buttons-${game.gameNumber}`"
+            :key="`buttons-${stageKey}`"
             ref="stageButtons"
             class="lq-stage-buttons"
             :drawer="drawerTab"
@@ -714,7 +721,7 @@ watch(
           />
           <JournalDrawer
             v-if="drawerTab"
-            :key="`drawer-${game.gameNumber}`"
+            :key="`drawer-${stageKey}`"
             :tab="drawerTab"
             @close="closeDrawer"
           />

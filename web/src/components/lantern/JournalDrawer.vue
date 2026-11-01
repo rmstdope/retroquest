@@ -50,7 +50,8 @@ function onKeydown(event: KeyboardEvent): void {
 <style scoped>
 .lq-drawer {
   position: absolute;
-  top: 0;
+  /* Under the buttons, so the lit one stays in sight and can be pressed again. */
+  top: 76px;
   right: 0;
   bottom: 0;
   z-index: 6;
