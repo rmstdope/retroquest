@@ -1588,12 +1588,18 @@ describe('useGameStore', () => {
       expect(bridge.quickLoadGame).toHaveBeenCalledTimes(1)
       expect(bridge.controller.takeTurn).not.toHaveBeenCalled()
       expect(store.notice?.text).toBe('Game loaded')
+      // The typed word stays on the turn, for the narration card's command line.
       expect(store.turns.at(-1)).toMatchObject({
-        command: null,
+        command: 'load',
         text: '',
         gained: [],
         lost: [],
       })
+    })
+
+    it('leaves the command off a load made from the Load window', () => {
+      store.loadFromSlot(2)
+      expect(store.turns.at(-1)).toMatchObject({ command: null, text: '' })
     })
 
     it('routes "save <name>" and "load <name>" to the named saves', () => {

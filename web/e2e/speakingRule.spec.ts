@@ -102,7 +102,15 @@ for (const width of [1280, 360]) {
       await expect(told.last()).toBeVisible()
       await page.keyboard.press('Escape')
       await expect(told).toHaveCount(0)
-      const arrival = page.getByTestId('turn').first().locator('.lq-arrival')
+      // A first visit is told in the middle, not on the card: look tells it there.
+      const input = page.getByLabel('Command', { exact: true })
+      await page
+        .getByRole('button', { name: /^Type( a command)?$/ })
+        .first()
+        .click()
+      await input.fill('look')
+      await input.press('Enter')
+      const arrival = page.getByTestId('turn').last().locator('.lq-arrival')
       await expectRuleBesideText(arrival)
     })
 
@@ -111,6 +119,8 @@ for (const width of [1280, 360]) {
       await page.setViewportSize({ width, height: width === 360 ? 500 : 800 })
       await openChapter(page)
       await type(page, 'talk to voice')
+      // The walk into the first room is told in the middle first; Escape sends it away.
+      await page.keyboard.press('Escape')
       const paragraph = page
         .getByTestId('turn')
         .last()

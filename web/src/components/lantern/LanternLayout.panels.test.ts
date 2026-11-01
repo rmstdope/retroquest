@@ -172,10 +172,10 @@ describe('LanternLayout: panels wait for the narration', () => {
     const w = await ready()
     await goNorth()
     await w.get('[data-verb="look"]').trigger('click')
-    // The paper holds the new turn alone.
+    // The walk's card stays above the new one.
     const turns = w.findAll('[data-testid="turn"]')
-    expect(turns).toHaveLength(1)
-    expect(turns[0]?.text()).toContain('› look')
+    expect(turns).toHaveLength(2)
+    expect(turns[1]?.text()).toContain('› look')
     expect(cardName(w)).toBe('Garden')
   })
 

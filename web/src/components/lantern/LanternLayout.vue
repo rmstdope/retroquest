@@ -68,13 +68,15 @@ import TitlePage from './TitlePage.vue'
  * room is played on its picture, which fills the play area: a plate (room
  * and who and what is here) top-left, the buttons Bag, Spells, Quests, Story
  * so far and Map top-right (the journal and the story open as a drawer from
- * the right, the map beneath its button), the story in a paper band along the bottom and the
- * actions as one row under it.
- * The story there is the narration paper: it holds the current turn and grows
- * as the narrator reaches each part (up to half the play area, then it
- * scrolls); "▾ Hide" (or N) slides it down to a "▴ Narration" tab, a new turn
- * with something to tell opens it again; earlier turns are read in the story
- * drawer.
+ * the right, the map beneath its button), the narrator's words as paper cards
+ * up the left side and the actions as one row along the bottom.
+ * The cards are the narration paper: one per turn since the last room change
+ * (`useNarrationPaper`), the newest lit and older ones dimmed, each starting
+ * with the command; the newest grows as the narrator reaches each part and,
+ * when it is taller than the room under the plate, scrolls with a "More below"
+ * pill. "▾ Hide" (or N) folds them to a "▴ Narration" tab at the bottom left,
+ * a new turn with a card opens them again; every turn is read in the story
+ * drawer. A phone keeps the paper as a band under the picture.
  * The first time the player walks into a room its arrival is told on the
  * middle of the picture instead (`ArrivalOnPicture`, `useArrivalStore`): the
  * paper slides down to its "▴ Narration" tab and comes back, with everything
@@ -289,8 +291,9 @@ const tabEl = ref<HTMLButtonElement | null>(null)
 const paper = useNarrationPaper(
   () => game.turns,
   () => stageKey.value,
+  () => wide.value,
 )
-/** What the story pane holds: the paper's turns on the laptop, every turn elsewhere. */
+/** What the story pane holds: the narration cards on the laptop, the paper's turn on a phone, every turn elsewhere. */
 const storyTurns = computed(() =>
   staged.value ? paper.shownTurns.value : game.turns,
 )
@@ -313,7 +316,8 @@ function measurePaper(): void {
   const story = storyEl.value
   const content = contentEl.value
   const area = mainEl.value
-  if (!staged.value || !wrap || !story || !content || !area) {
+  // The laptop's cards are a column: they grow up the side, not a band.
+  if (!staged.value || wide.value || !wrap || !story || !content || !area) {
     paperPx.value = null
     return
   }
@@ -612,6 +616,36 @@ watch(
   },
   { flush: 'post' },
 )
+
+/** The laptop's room plate, under which the narration cards stop. */
+const widePlate = ref<InstanceType<typeof RoomPlate> | null>(null)
+/** Where the cards' column ends at the top: the plate's foot and a gap (px from the stage's top). */
+const cardsTop = ref(140)
+/** The stage's top margin the plate stands at, and the gap kept under it (px). */
+const PLATE_TOP = 16
+const PLATE_GAP = 12
+let widePlateResize: ResizeObserver | undefined
+watch(
+  widePlate,
+  (current) => {
+    widePlateResize?.disconnect()
+    const el = current?.$el
+    if (typeof ResizeObserver === 'undefined' || !(el instanceof HTMLElement))
+      return
+    widePlateResize = new ResizeObserver(() => {
+      cardsTop.value = PLATE_TOP + el.offsetHeight + PLATE_GAP
+    })
+    widePlateResize.observe(el)
+  },
+  { flush: 'post' },
+)
+onUnmounted(() => widePlateResize?.disconnect())
+
+/** Faded by how far back the card is: 0 newest, 1 the one before, 2 older (as speech lines). */
+function cardAge(index: number, count: number): string {
+  const back = count - 1 - index
+  return back === 0 ? 'lq-age-new' : back === 1 ? 'lq-age-prev' : 'lq-age-old'
+}
 
 /** The phone's plate height, which the arrival on the picture stays clear of. */
 const plateHeight = ref(108)
@@ -1182,6 +1216,7 @@ watch(
           <ArrivalOnPicture :pictured="pictured" :phone="phoneStage" />
           <RoomPlate
             v-if="wide"
+            ref="widePlate"
             class="lq-stage-plate"
             data-panel
             @click="onNameClick"
@@ -1242,13 +1277,33 @@ watch(
           ref="paperEl"
           class="lq-story-wrap"
           :class="{
+            'lq-cards': wide,
             'lq-hint-room': storyHeld,
             'lq-paper-away': paperAway,
             'lq-covered': sheetOpen,
           }"
-          :style="staged && paperPx !== null ? { height: `${paperPx}px` } : {}"
+          :style="
+            wide
+              ? {
+                  top: `${cardsTop}px`,
+                  bottom: `calc(${actionsHeight}px + 6px)`,
+                }
+              : staged && paperPx !== null
+                ? { height: `${paperPx}px` }
+                : {}
+          "
           :inert="paperAway || undefined"
         >
+          <button
+            v-if="staged"
+            type="button"
+            class="lq-paper-corner lq-paper-hide"
+            :title="wide ? 'Hide the narration (N)' : undefined"
+            :aria-keyshortcuts="wide ? 'N' : undefined"
+            @click="hidePaper"
+          >
+            ▾ Hide
+          </button>
           <section
             ref="storyEl"
             class="lq-story"
@@ -1261,22 +1316,14 @@ watch(
             <h2 class="lq-sr-only">Story</h2>
             <div ref="contentEl" class="lq-paper-content">
               <StoryTurn
-                v-for="turn in storyTurns"
+                v-for="(turn, index) in storyTurns"
                 :key="turn.id"
                 :turn="turn"
+                :card="wide"
+                :class="wide ? cardAge(index, storyTurns.length) : undefined"
               />
             </div>
           </section>
-          <button
-            v-if="staged"
-            type="button"
-            class="lq-paper-corner lq-paper-hide"
-            :title="wide ? 'Hide the narration (N)' : undefined"
-            :aria-keyshortcuts="wide ? 'N' : undefined"
-            @click="hidePaper"
-          >
-            ▾ Hide
-          </button>
           <p
             v-if="narration.hintVisible"
             class="lq-narration-hint"
@@ -1527,6 +1574,69 @@ watch(
 .lq-staged .lq-story {
   padding-top: 14px;
 }
+/* The laptop: the narrator's cards up the left side of the picture, from just
+   under the plate down to the actions, as wide as the drawing (520px) but never
+   more than 40% of the stage, so a narrow window shares its width with the
+   speech. Only the cards take presses; the picture stays pressable around them. */
+.lq-staged .lq-story-wrap.lq-cards {
+  position: absolute;
+  left: 16px;
+  width: min(520px, 40%);
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  justify-content: flex-end;
+  background: none;
+  border-top: none;
+  pointer-events: none;
+  transition: opacity calc(0.2s * var(--lq-motion)) ease;
+}
+.lq-cards .lq-story {
+  flex: 0 1 auto;
+  gap: 8px;
+  padding: 0 12px 6px 12px;
+  /* The oldest card leaves at the top under a soft fade. */
+  mask-image: linear-gradient(to bottom, transparent, #000 16px);
+  scrollbar-width: none;
+}
+.lq-cards .lq-story::-webkit-scrollbar {
+  display: none;
+}
+.lq-cards .lq-paper-content {
+  gap: 8px;
+}
+.lq-staged .lq-story-wrap.lq-cards.lq-paper-away {
+  transform: none;
+  opacity: 0;
+  /* Fades out, then leaves reach (as the paper did when it slid down). */
+  transition:
+    opacity calc(0.2s * var(--lq-motion)) ease,
+    visibility 0s linear calc(0.2s * var(--lq-motion));
+}
+.lq-cards.lq-hint-room {
+  padding-bottom: 40px;
+}
+.lq-cards .lq-paper-corner {
+  position: static;
+  align-self: flex-start;
+  flex: 0 0 auto;
+  margin: 0 0 6px 12px;
+  pointer-events: auto;
+}
+.lq-cards .lq-narration-hint {
+  left: 12px;
+  bottom: 8px;
+  transform: none;
+}
+.lq-cards .lq-more-below {
+  left: 12px;
+  transform: none;
+  bottom: 8px;
+  pointer-events: auto;
+}
+.lq-cards .lq-narration-hint.lq-hint-raised {
+  bottom: 56px;
+}
 /* The phone: the plate across the top, the paper across the width, the sheet over the picture. */
 .lq-phone-plate {
   position: relative;
@@ -1543,6 +1653,11 @@ watch(
 }
 .lq-phone .lq-paper-tab {
   right: 12px;
+}
+/* The laptop's tab rests at the bottom left of the picture, under the cards. */
+.lq-wide .lq-paper-tab {
+  right: auto;
+  left: 16px;
 }
 .lq-phone :deep(.lq-dock) {
   position: relative;

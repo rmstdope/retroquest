@@ -505,3 +505,141 @@ describe('StoryTurn while it is narrated', () => {
     expect(w.findAll('.lq-w-now').map((e) => e.text())).toEqual(['the'])
   })
 })
+
+describe('StoryTurn as a narration card', () => {
+  beforeEach(() => {
+    setActivePinia(createPinia())
+  })
+
+  const ROOM = {
+    room: 'Square',
+    description: 'A busy square.',
+    characters: [],
+    items: [],
+    exits: {},
+  }
+
+  function mountCard(partial: Partial<Turn>) {
+    return mount(StoryTurn, { props: { turn: turn(partial), card: true } })
+  }
+
+  const TALK =
+    '[event]You speak with [character_name]grandmother[/character_name].[/event]\n' +
+    "[dialogue]'Sit down.'[/dialogue]\n" +
+    'She does not sit down herself.'
+
+  it('leaves the quotes of a conversation to the speech and keeps the narrator', () => {
+    const w = mountCard({
+      command: 'talk to grandmother',
+      addressed: 'grandmother',
+      text: TALK,
+    })
+
+    expect(w.find('.lq-block-dialogue').exists()).toBe(false)
+    expect(w.text()).toContain('She does not sit down herself.')
+  })
+
+  it('keeps a quote when the turn is not a conversation', () => {
+    const w = mountCard({ command: 'read letter', text: TALK })
+
+    expect(w.find('.lq-block-dialogue').exists()).toBe(true)
+  })
+
+  it('keeps a quote nobody speaks (writing) even in a conversation', () => {
+    const w = mountCard({
+      command: 'talk to grandmother',
+      addressed: 'grandmother',
+      text: '[dialogue]The ink is smudged.[/dialogue]',
+    })
+
+    expect(w.get('.lq-block-dialogue').text()).toContain('The ink is smudged.')
+  })
+
+  it('is a slim card with only the command when nobody but a speaker talks', () => {
+    const w = mountCard({
+      command: 'talk to grandmother',
+      addressed: 'grandmother',
+      text: "[character_name]Grandmother[/character_name]\n[dialogue]'Sit down.'[/dialogue]",
+    })
+
+    expect(w.get('[data-testid="command"]').text()).toBe(
+      '› talk to grandmother',
+    )
+    expect(w.classes()).toContain('lq-slim')
+  })
+
+  it('is not slim when it has words', () => {
+    const w = mountCard({ command: 'look', text: 'It is quiet.' })
+
+    expect(w.classes()).not.toContain('lq-slim')
+  })
+
+  it('has no command line when none was typed', () => {
+    const w = mountCard({
+      arrival: ROOM,
+      description: { moved: true, firstVisit: false },
+    })
+
+    expect(w.find('[data-testid="command"]').exists()).toBe(false)
+    expect(w.text()).toContain('A busy square.')
+  })
+
+  it('tells the room as a bare description on a look or a revisit, with no divider', () => {
+    const w = mountCard({
+      command: 'look',
+      arrival: ROOM,
+      description: { moved: false, firstVisit: false },
+    })
+
+    expect(w.text()).toContain('A busy square.')
+    expect(w.find('[data-testid="divider"]').exists()).toBe(false)
+  })
+
+  it('leaves the description of a first visit to the middle of the picture', () => {
+    const w = mountCard({
+      command: 'go north',
+      narrate: true,
+      arrival: ROOM,
+      description: { moved: true, firstVisit: true },
+    })
+
+    expect(w.text()).not.toContain('A busy square.')
+    expect(w.classes()).toContain('lq-slim')
+  })
+
+  it('marks silent information with ⊝ and a red-edged card', () => {
+    const w = mountCard({
+      command: 'talk to mira',
+      text: "[failure]There is no character named 'mira' here to speak to.[/failure]",
+    })
+
+    expect(w.get('.lq-failure-mark').text()).toBe('⊝')
+    expect(w.classes()).toContain('lq-card-error')
+  })
+
+  it('is not a red card when the failure comes with other words', () => {
+    const w = mountCard({
+      command: 'use key',
+      text: 'You try.\n[failure]It will not turn.[/failure]',
+    })
+
+    expect(w.classes()).not.toContain('lq-card-error')
+  })
+
+  it('keeps the item chips on the card', () => {
+    const w = mountCard({
+      command: 'take bread',
+      text: 'Taken.',
+      gained: [{ name: 'Bread', count: 1, kind: 'item' }],
+    })
+
+    expect(w.find('[data-testid="chip"]').exists()).toBe(true)
+  })
+
+  it('does not have the card look in the story drawer', () => {
+    const w = mountTurn({ command: 'look', text: 'It is quiet.' })
+
+    expect(w.classes()).not.toContain('lq-card')
+    expect(w.find('.lq-failure-mark').exists()).toBe(false)
+  })
+})

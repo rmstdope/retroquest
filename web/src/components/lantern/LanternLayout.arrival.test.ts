@@ -141,7 +141,7 @@ describe('LanternLayout: the arrival on the picture', () => {
     expect(w.get('.lq-paper-tab').text()).toBe('▴ Narration')
   })
 
-  it('clears 1½ s after the narrator finishes, and the story comes back with the arrival in it', async () => {
+  it('clears 1½ s after the narrator finishes, and the cards come back with a slim card for the walk', async () => {
     const w = await ready()
     await run('go north')
     await vi.advanceTimersByTimeAsync(SCENE_PAUSE_MS)
@@ -154,7 +154,9 @@ describe('LanternLayout: the arrival on the picture', () => {
     expect(card(w)).toBe('')
     expect(storyAside(w)).toBe(false)
     expect(w.find('.lq-paper-tab').exists()).toBe(false)
-    expect(w.get('.lq-story').text()).toContain('A green garden.')
+    // The room was told in the middle: the card keeps only the command.
+    expect(w.get('.lq-story').text()).toContain('› go north')
+    expect(w.get('.lq-story').text()).not.toContain('A green garden.')
   })
 
   it('reads it for its reading time with a bar when narration is off', async () => {
