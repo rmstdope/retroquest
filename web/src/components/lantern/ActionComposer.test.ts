@@ -50,7 +50,9 @@ describe('ActionComposer', () => {
     const found = w
       .findAll('button')
       .find(
-        (b) => b.attributes('aria-label') === name || b.text().trim() === name,
+        (b) =>
+          b.attributes('aria-label') === name ||
+          b.text().trim().replace(/Esc$/, '') === name,
       )
     if (!found) throw new Error(`No button "${name}"`)
     return found
@@ -713,6 +715,57 @@ describe('ActionComposer', () => {
       useGameStore().acceptInput = false
       await w.vm.$nextTick()
       expect(w.find('[role="listbox"]').exists()).toBe(false)
+    })
+  })
+
+  describe('the panel switch takes the keyboard with it', () => {
+    const commandBox = (w: VueWrapper): Element =>
+      w.get('input[aria-label="Command"]').element
+
+    it('puts the cursor in the command box when Type is chosen', async () => {
+      const w = mountComposer()
+      await button(w, 'Type').trigger('click')
+      await w.vm.$nextTick()
+      expect(document.activeElement).toBe(commandBox(w))
+    })
+
+    it('puts the cursor in the box again when Type is already selected, keeping the text', async () => {
+      const w = mountComposer()
+      await button(w, 'Type').trigger('click')
+      await w.get('input[aria-label="Command"]').setValue('look')
+      ;(document.activeElement as HTMLElement).blur()
+      await button(w, 'Type').trigger('click')
+      await w.vm.$nextTick()
+      expect(document.activeElement).toBe(commandBox(w))
+      expect((commandBox(w) as HTMLInputElement).value).toBe('look')
+    })
+
+    it('puts focus on Look when Actions is chosen and no verb was used', async () => {
+      const w = mountComposer()
+      await button(w, 'Type').trigger('click')
+      await button(w, 'Actions').trigger('click')
+      await w.vm.$nextTick()
+      expect(document.activeElement).toBe(w.get('.lq-verbs .lq-verb').element)
+    })
+
+    it('puts focus on the verb used last when Actions is chosen', async () => {
+      const w = mountComposer()
+      await w.get('[data-verb="search"]').trigger('click')
+      await button(w, 'Type').trigger('click')
+      await button(w, 'Actions').trigger('click')
+      await w.vm.$nextTick()
+      expect(document.activeElement).toBe(w.get('[data-verb="search"]').element)
+    })
+
+    it('keeps focus on the Type half when the box is disabled', async () => {
+      const w = mountComposer()
+      useGameStore().acceptInput = false
+      const type = button(w, 'Type')
+      ;(type.element as HTMLElement).focus()
+      await type.trigger('click')
+      await w.vm.$nextTick()
+      expect(button(w, 'Type').attributes('aria-pressed')).toBe('true')
+      expect(document.activeElement).toBe(type.element)
     })
   })
 
