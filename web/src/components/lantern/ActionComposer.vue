@@ -209,6 +209,16 @@ function chooseType(): void {
   focusFirst('input[aria-label="Command"]')
 }
 
+/**
+ * The stage's Actions: switch back to the verbs and put focus on the verb used
+ * last (or the first verb), so the keyboard carries on (the button itself is
+ * gone once the verbs show, which would otherwise leave focus on the page).
+ */
+function chooseActions(): void {
+  mode.value = 'actions'
+  focusFirst(`[data-verb="${lastVerbId.value}"]`, '.lq-verbs .lq-verb')
+}
+
 defineExpose({ focus, setMode })
 
 // "Not like that": the verb used last (in Actions mode the sentence is cleared
@@ -612,7 +622,7 @@ function onTypedEnter(): void {
         type="button"
         class="lq-verb"
         data-actions
-        @click="mode = 'actions'"
+        @click="chooseActions"
       >
         Actions
       </button>

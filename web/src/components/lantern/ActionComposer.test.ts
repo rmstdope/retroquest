@@ -1207,6 +1207,16 @@ describe('ActionComposer on the stage', () => {
     w.unmount()
   })
 
+  it('puts focus on a verb when Actions is chosen from the command box', async () => {
+    const w = stage()
+    await click(w, '[data-type]')
+    await w.vm.$nextTick()
+    await click(w, '[data-actions]')
+    await w.vm.$nextTick()
+    expect(document.activeElement).toBe(w.get('.lq-verbs .lq-verb').element)
+    w.unmount()
+  })
+
   it('is unchanged without the stage', () => {
     const w = mount(ActionComposer)
     expect(w.find('.lq-seg').exists()).toBe(true)
