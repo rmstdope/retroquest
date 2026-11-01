@@ -7,9 +7,10 @@ import { useReadAlong } from '@/composables/useReadAlong'
  * The arrival told on the middle of the room's picture, like a film title:
  * light serif text with a soft dark glow, no paper, at most 760 px wide. First
  * what happens as the player arrives (in italics), then the room's
- * description, the spoken word lit while the narrator tells it. Under it the
- * hint, and, while nobody speaks the part, a thin bar that empties over its
- * reading time. A click anywhere on the picture goes on (`useArrivalStore`).
+ * description, the spoken word lit while the narrator tells it. Under it a
+ * small dark pill holds the hint and, while nobody speaks the part, a thin bar
+ * that empties over its reading time. A click anywhere on the picture goes on
+ * (`useArrivalStore`).
  * Names and other inline tags keep the dark theme's light colours on the
  * picture. With no picture (`pictured` false) the text is dark ink on the
  * paper in the light theme. The text is also in the story, which waits aside:
@@ -56,16 +57,18 @@ const { html } = useReadAlong(() => arrival.turnId ?? 0, root)
           ></p>
         </template>
         <!-- eslint-enable vue/no-v-html -->
-        <p class="lq-arrival-hint">
-          {{ phone ? 'Tap to continue' : 'Click or press Enter to continue' }}
-        </p>
-        <div
-          v-if="arrival.barMs"
-          :key="arrival.barKey"
-          class="lq-arrival-bar"
-          data-testid="arrival-bar"
-        >
-          <i :style="{ animationDuration: `${arrival.barMs}ms` }"></i>
+        <div class="lq-arrival-pill">
+          <p class="lq-arrival-hint">
+            {{ phone ? 'Tap to continue' : 'Click or press Enter to continue' }}
+          </p>
+          <div
+            v-if="arrival.barMs"
+            :key="arrival.barKey"
+            class="lq-arrival-bar"
+            data-testid="arrival-bar"
+          >
+            <i :style="{ animationDuration: `${arrival.barMs}ms` }"></i>
+          </div>
         </div>
       </div>
     </Transition>
@@ -85,8 +88,6 @@ const { html } = useReadAlong(() => arrival.turnId ?? 0, root)
   --lq-arrival-ink: #fbf6ea;
   --lq-arrival-glow:
     0 0 18px rgb(0 0 0 / 0.85), 0 0 6px rgb(0 0 0 / 0.9), 0 1px 2px #000;
-  --lq-arrival-track: rgb(255 255 255 / 0.25);
-  --lq-arrival-fill: rgb(255 255 255 / 0.85);
 }
 /*
  * On a picture the glow is dark in both themes, so the inline tags (names,
@@ -124,8 +125,6 @@ const { html } = useReadAlong(() => arrival.turnId ?? 0, root)
 .lq-arrival-stage.lq-bare {
   --lq-arrival-ink: var(--lq-arrival-bare-ink);
   --lq-arrival-glow: var(--lq-arrival-bare-glow);
-  --lq-arrival-track: var(--lq-arrival-bare-track);
-  --lq-arrival-fill: var(--lq-arrival-bare-fill);
 }
 .lq-arrival-card {
   width: min(760px, 100%);
@@ -151,18 +150,33 @@ const { html } = useReadAlong(() => arrival.turnId ?? 0, root)
   border-radius: 3px;
   box-shadow: 0 0 0 2px rgb(242 158 0 / 0.45);
 }
+/*
+ * The hint and the bar sit on their own dark, see-through pill, so they read
+ * over any picture and on the paper alike, in both themes.
+ */
+.lq-arrival-pill {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: rgb(20 17 12 / 0.72);
+  color: #fbf6ea;
+  text-shadow: none;
+}
 .lq-arrival-hint {
   margin: 0;
   font-family: var(--lq-font-ui);
   font-size: 13px;
   letter-spacing: 0.02em;
-  opacity: 0.8;
 }
 .lq-arrival-bar {
-  width: 160px;
-  height: 3px;
+  width: 100%;
+  min-width: 140px;
+  height: 2px;
   border-radius: 2px;
-  background: var(--lq-arrival-track);
+  background: rgb(255 255 255 / 0.25);
   overflow: hidden;
   box-shadow: none;
 }
@@ -170,7 +184,7 @@ const { html } = useReadAlong(() => arrival.turnId ?? 0, root)
 .lq-arrival-bar i {
   display: block;
   height: 100%;
-  background: var(--lq-arrival-fill);
+  background: rgb(255 255 255 / 0.85);
   transform-origin: left;
   animation-name: lq-arrival-empty;
   animation-timing-function: linear;
