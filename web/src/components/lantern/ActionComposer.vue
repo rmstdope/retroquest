@@ -922,7 +922,7 @@ function onTypedEnter(): void {
 }
 .lq-verbs {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(88px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(62px, 1fr));
   gap: 6px;
 }
 .lq-verb {
