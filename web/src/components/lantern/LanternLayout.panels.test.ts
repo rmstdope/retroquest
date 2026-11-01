@@ -159,12 +159,13 @@ describe('LanternLayout: panels wait for the narration', () => {
     expect(useNarrationStore().isNarrating).toBe(true)
   })
 
-  it('keeps the voice reading while a verb is pressed, and offers the old place', async () => {
+  it('clears the arrival on the picture, and the voice, when a verb is pressed', async () => {
     const w = await ready()
     await goNorth()
-    await w.get('[data-verb="take"]').trigger('click')
     expect(useNarrationStore().isNarrating).toBe(true)
-    expect(cardName(w)).toBe('Hall')
+    await w.get('[data-verb="take"]').trigger('click')
+    expect(useNarrationStore().isNarrating).toBe(false)
+    expect(cardName(w)).toBe('Garden')
   })
 
   it('cuts in when a verb that needs nothing more is pressed', async () => {

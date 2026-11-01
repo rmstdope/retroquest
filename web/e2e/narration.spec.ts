@@ -119,6 +119,9 @@ test('opens a journal drawer at once while the voice reads, and a press inside i
 test('Space and Enter press a focused verb and the voice keeps reading', async ({
   page,
 }): Promise<void> => {
+  // On a phone: on the laptop stage this first arrival is told on the picture,
+  // where choosing an action or typing clears it (arrival.spec.ts).
+  await page.setViewportSize({ width: 390, height: 844 })
   await slowNarrationClips(page)
   await startAct1(page)
   const input = page.getByLabel('Command')
@@ -158,6 +161,9 @@ test('Space and Enter press a focused verb and the voice keeps reading', async (
 test('typing keeps the voice reading, and Esc in the command box skips it', async ({
   page,
 }): Promise<void> => {
+  // On a phone: on the laptop stage this first arrival is told on the picture,
+  // where choosing an action or typing clears it (arrival.spec.ts).
+  await page.setViewportSize({ width: 390, height: 844 })
   await slowNarrationClips(page)
   await startAct1(page)
   const input = page.getByLabel('Command')

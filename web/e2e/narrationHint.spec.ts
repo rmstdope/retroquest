@@ -127,7 +127,9 @@ function expectClear(reading: Reading, what: string): void {
 }
 
 for (const { name, width, height } of [
-  { name: 'desktop', width: 1512, height: 862 },
+  // Under 1024 px wide: the stage (1024 and up) tells an arrival on the
+  // picture, where the story and its hint wait aside (arrival.spec.ts).
+  { name: 'desktop', width: 1000, height: 862 },
   { name: 'phone', width: 390, height: 720 },
 ]) {
   test(`no word being read sits under the narration hint, and the story stays put after, on ${name}`, async ({

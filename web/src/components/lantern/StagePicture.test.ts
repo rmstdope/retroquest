@@ -52,6 +52,19 @@ describe('StagePicture', () => {
     expect(w.find('img.lq-pic').exists()).toBe(false)
   })
 
+  it('says whether a picture is shown, or only the backdrop', async () => {
+    const w = mount(StagePicture, { props: { src: '/a.png' } })
+    await w.get('img.lq-loading').trigger('load')
+    expect(w.emitted('pictured')?.at(-1)).toEqual([true])
+    await w.setProps({ src: '' })
+    expect(w.emitted('pictured')?.at(-1)).toEqual([false])
+  })
+
+  it('says at once that there is only the backdrop', () => {
+    const w = mount(StagePicture, { props: { src: '' } })
+    expect(w.emitted('pictured')?.at(-1)).toEqual([false])
+  })
+
   it('is decorative', () => {
     const w = mount(StagePicture, { props: { src: '' } })
     expect(w.attributes('aria-hidden')).toBe('true')

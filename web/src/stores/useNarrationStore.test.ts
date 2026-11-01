@@ -263,6 +263,21 @@ describe('useNarrationStore', () => {
     expect(last()).not.toBe(first)
   })
 
+  it('skipTo cuts the voice and plays from the given unit, skipping the ones between', () => {
+    narration.begin(7, [voiced(), voiced(), voiced()], 'act1')
+    const first = last()
+    narration.skipTo(2)
+    expect(first.paused).toBe(true)
+    expect(narration.revealed(7, 2)).toBe(true)
+    expect(narration.speaking(7)?.unit).toBe(2)
+  })
+
+  it('skipTo past the last voice ends the turn', () => {
+    narration.begin(7, [voiced(), silent], 'act1')
+    narration.skipTo(1)
+    expect(narration.isNarrating).toBe(false)
+  })
+
   it('hurry during the pause brings the next block now', () => {
     narration.begin(1, [voiced(), voiced()], 'act1')
     last().onended?.()
