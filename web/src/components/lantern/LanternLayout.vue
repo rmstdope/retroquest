@@ -47,6 +47,7 @@ import StageButtons from './StageButtons.vue'
 import StagePicture from './StagePicture.vue'
 import StoryDrawer from './StoryDrawer.vue'
 import StoryNameMenu from './StoryNameMenu.vue'
+import { NAME_SELECTOR, useNameStops } from '@/composables/useNameStops'
 import StoryTurn from './StoryTurn.vue'
 import TitlePage from './TitlePage.vue'
 
@@ -610,6 +611,46 @@ const nameMenu = ref<{
 /** Where focus goes when the menu closes: the chip, or what had focus. */
 let focusBeforeMenu: HTMLElement | null = null
 
+/** The menu actions of a name in the story or a Here chip: none when it is not here. */
+function actionsOf(name: HTMLElement): NameAction[] {
+  const kind =
+    name.dataset.nameKind === 'character' ||
+    name.classList.contains('theme-character_name')
+      ? 'character'
+      : 'item'
+  return nameActions(kind, name.dataset.name ?? name.textContent ?? '', {
+    characters: game.characters,
+    items: game.items,
+    bag: game.rawInventory.map((entry) => parseCountedName(entry.name).name),
+    spells: game.spellEntries.map((entry) => parseCountedName(entry).name),
+    shortNames: game.shortNames,
+  })
+}
+
+/**
+ * Open the menu of `name`, if the game takes input and the name has one.
+ * A pointer open leaves no focus on the name (a Tab stop takes focus on a
+ * click): as before, closing by key then goes to the actions.
+ */
+function openNameMenu(name: HTMLElement, pointer = false): void {
+  if (!game.acceptInput) return
+  const actions = actionsOf(name)
+  if (!actions.length) return
+  const box = name.getBoundingClientRect()
+  // A chip takes focus back (Safari does not focus a clicked button).
+  if (
+    pointer &&
+    name === document.activeElement &&
+    !(name instanceof HTMLButtonElement)
+  )
+    name.blur()
+  focusBeforeMenu =
+    name instanceof HTMLButtonElement
+      ? name
+      : (document.activeElement as HTMLElement | null)
+  nameMenu.value = { actions, x: box.left, top: box.top, bottom: box.bottom }
+}
+
 /**
  * A click on an item or character name in the story, or on a Here chip
  * (which carries the engine's name), opens its menu.
@@ -618,32 +659,42 @@ function onNameClick(event: MouseEvent): void {
   const name = (event.target as HTMLElement).closest<HTMLElement>(
     '.theme-item_name, .theme-character_name, [data-name-kind]',
   )
-  if (!name || !game.acceptInput) return
-  const kind =
-    name.dataset.nameKind === 'character' ||
-    name.classList.contains('theme-character_name')
-      ? 'character'
-      : 'item'
-  const actions = nameActions(
-    kind,
-    name.dataset.name ?? name.textContent ?? '',
-    {
-      characters: game.characters,
-      items: game.items,
-      bag: game.rawInventory.map((entry) => parseCountedName(entry.name).name),
-      spells: game.spellEntries.map((entry) => parseCountedName(entry).name),
-      shortNames: game.shortNames,
-    },
-  )
-  if (!actions.length) return
-  const box = name.getBoundingClientRect()
-  // A chip takes focus back (Safari does not focus a clicked button).
-  focusBeforeMenu =
-    name instanceof HTMLButtonElement
-      ? name
-      : (document.activeElement as HTMLElement | null)
-  nameMenu.value = { actions, x: box.left, top: box.top, bottom: box.bottom }
+  if (name) openNameMenu(name, event.detail > 0)
 }
+
+/** Enter or Space on a name that is a Tab stop opens its menu, as a click does. */
+function onNameKeydown(event: KeyboardEvent): void {
+  if (event.key !== 'Enter' && event.key !== ' ') return
+  if (event.ctrlKey || event.metaKey || event.altKey) return
+  const name = (event.target as HTMLElement).closest<HTMLElement>(
+    '[role="button"][tabindex]',
+  )
+  if (!name?.matches(NAME_SELECTOR)) return
+  event.preventDefault()
+  openNameMenu(name)
+}
+
+// Names in the story are Tab stops (see useNameStops) while they have a menu.
+const mainEl = ref<HTMLElement | null>(null)
+const { sync: syncNameStops } = useNameStops(mainEl, {
+  wide: () => wide.value,
+  reachable: (name) => actionsOf(name).length > 0,
+})
+watch(
+  () => [
+    game.turns.length,
+    game.turns.at(-1)?.id,
+    game.characters,
+    game.items,
+    game.rawInventory,
+    game.spellEntries,
+    wide.value,
+    section.value,
+    drawerTab.value,
+  ],
+  () => void nextTick(syncNameStops),
+  { deep: true },
+)
 
 /**
  * Focus goes back without scrolling (a scroll away also closes the menu).
@@ -748,6 +799,7 @@ watch(
       </LanternHeader>
 
       <main
+        ref="mainEl"
         class="lq-main"
         :class="{ 'lq-wide': wide }"
         @click.capture="onPanelPress"
@@ -780,6 +832,7 @@ watch(
             v-else-if="drawerTab === 'story'"
             :key="`story-${stageKey}`"
             @click="onNameClick"
+            @keydown="onNameKeydown"
             @close="closeDrawer"
           />
         </div>
@@ -793,6 +846,7 @@ watch(
             class="lq-story"
             aria-label="Story"
             @click="onStoryClick"
+            @keydown="onNameKeydown"
             @scroll.passive="updateMoreBelow"
           >
             <h2 class="lq-sr-only">Story</h2>
