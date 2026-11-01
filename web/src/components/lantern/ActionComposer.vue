@@ -199,6 +199,16 @@ function setMode(next: 'actions' | 'type'): void {
   mode.value = next
 }
 
+/**
+ * The stage's ⌨ Type: switch to the command box and put the cursor in it, so
+ * the first letters typed land there (the button itself is gone once the box
+ * shows, which would otherwise leave focus on the page).
+ */
+function chooseType(): void {
+  mode.value = 'type'
+  focusFirst('input[aria-label="Command"]')
+}
+
 defineExpose({ focus, setMode })
 
 // "Not like that": the verb used last (in Actions mode the sentence is cleared
@@ -589,7 +599,7 @@ function onTypedEnter(): void {
           class="lq-verb"
           data-type
           aria-label="Type"
-          @click="mode = 'type'"
+          @click="chooseType"
         >
           ⌨ Type
         </button>

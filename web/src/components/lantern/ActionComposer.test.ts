@@ -1197,6 +1197,16 @@ describe('ActionComposer on the stage', () => {
     w.unmount()
   })
 
+  it('puts the cursor in the command box when ⌨ Type is chosen', async () => {
+    const w = stage()
+    await click(w, '[data-type]')
+    await w.vm.$nextTick()
+    expect(document.activeElement).toBe(
+      w.get('input[aria-label="Command"]').element,
+    )
+    w.unmount()
+  })
+
   it('is unchanged without the stage', () => {
     const w = mount(ActionComposer)
     expect(w.find('.lq-seg').exists()).toBe(true)
