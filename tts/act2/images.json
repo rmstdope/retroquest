@@ -124,5 +124,180 @@
     "width": 640,
     "height": 360,
     "description": "The deepest part of the forest. The light here is green and gold and does not seem to come from the sky. A tree vaster than any other holds up the branches overhead, and before it stands an altar of starstone. The only way out is back north, to the grove."
+  },
+  {
+    "id": "act2-portrait-ancient-tree-spirit",
+    "title": "Ancient Tree Spirit",
+    "width": 480,
+    "height": 640,
+    "description": "The spirit lives in the silver-barked tree. Its face is only there when you stop looking for it: two knots for eyes, a split in the bark for a mouth. Moss grows on it in rings, one for every winter."
+  },
+  {
+    "id": "act2-portrait-barmaid-elena",
+    "title": "Barmaid Elena",
+    "width": 480,
+    "height": 640,
+    "description": "A young woman who moves slowly, as if every tray weighs twice what it should. Her lips are grey, and the cup she sets down rattles."
+  },
+  {
+    "id": "act2-portrait-brenn",
+    "title": "Brenn",
+    "width": 480,
+    "height": 640,
+    "description": "A young caravan guard sits on a crate by the door, one hand wrapped in a dirty bandage. He jumps whenever someone comes in, as if he expects to be thrown out."
+  },
+  {
+    "id": "act2-portrait-caravan-master-thorne",
+    "title": "Caravan Master Thorne",
+    "width": 480,
+    "height": 640,
+    "description": "A weather-beaten caravan master with a ledger under his arm and road dust in the creases of his coat."
+  },
+  {
+    "id": "act2-portrait-castle-guard-captain",
+    "title": "Castle Guard Captain",
+    "width": 480,
+    "height": 640,
+    "description": "A grey-moustached officer in polished armor, standing where he can see both the gate and the courtyard arch. He keeps his voice low out of habit."
+  },
+  {
+    "id": "act2-portrait-court-herald",
+    "title": "Court Herald",
+    "width": 480,
+    "height": 640,
+    "description": "An official in a tabard stiff with gold thread, standing at a lectern with the court ledger open on it. He reads every seal twice."
+  },
+  {
+    "id": "act2-portrait-families",
+    "title": "Families",
+    "width": 480,
+    "height": 640,
+    "description": "Neighbours on their doorsteps, shelling beans and minding each other's children. Most of them were born on this lane, and so were their grandparents."
+  },
+  {
+    "id": "act2-portrait-forest-hermit",
+    "title": "Forest Hermit",
+    "width": 480,
+    "height": 640,
+    "description": "A thin figure in moss-green robes, weathered by years outdoors. Charms of bark, bone and braided grass hang from their belt. Every so often they glance at the treeline, the way you would at someone who might be listening."
+  },
+  {
+    "id": "act2-portrait-forest-sprites",
+    "title": "Forest Sprites",
+    "width": 480,
+    "height": 640,
+    "description": "Motes of light no bigger than a thumbnail, each with wings like a split beech-nut husk. They never all hold still at once."
+  },
+  {
+    "id": "act2-portrait-gate-captain",
+    "title": "Gate Captain",
+    "width": 480,
+    "height": 640,
+    "description": "An officer of the city watch in polished mail, the watch's badge on his shoulder. He looks at every face that comes up the road, and then at its papers."
+  },
+  {
+    "id": "act2-portrait-herald",
+    "title": "Herald",
+    "width": 480,
+    "height": 640,
+    "description": "A thin man in a tabard of the royal arms, a ledger open on a stand beside him. He looks hard at every seal and not at much else."
+  },
+  {
+    "id": "act2-portrait-historians",
+    "title": "Historians",
+    "width": 480,
+    "height": 640,
+    "description": "Three scholars in ink-stained sleeves, bent over the court's birth rolls and family registers. They look up at anything with writing on it."
+  },
+  {
+    "id": "act2-portrait-innkeeper-marcus",
+    "title": "Innkeeper Marcus",
+    "width": 480,
+    "height": 640,
+    "description": "A big man in a stained apron who runs The Silver Stag Inn. He talks to every guest and watches only one: his daughter, across the room."
+  },
+  {
+    "id": "act2-portrait-local-craftsmen",
+    "title": "Local Craftsmen",
+    "width": 480,
+    "height": 640,
+    "description": "Artisans at their benches: a smith, a carpenter, a tailor with a lapful of torn sailcloth, and an old woman who mends with her hands and a murmur instead of a needle."
+  },
+  {
+    "id": "act2-portrait-lord-commander",
+    "title": "Lord Commander",
+    "width": 480,
+    "height": 640,
+    "description": "A broad, grey-bearded officer in ceremonial armour, Greendale's arms on the breastplate. He sits below the empty throne, not on it."
+  },
+  {
+    "id": "act2-portrait-master-healer-lyria",
+    "title": "Master Healer Lyria",
+    "width": 480,
+    "height": 640,
+    "description": "A grey-haired healer in a stained apron, sleeves pushed to the elbow. Her hands smell of crushed herbs, and they are very steady."
+  },
+  {
+    "id": "act2-portrait-master-merchant-aldric",
+    "title": "Master Merchant Aldric",
+    "width": 480,
+    "height": 640,
+    "description": "A broad man in a good coat, standing among coils of rope and racks of lanterns. He looks at your boots before he looks at your face."
+  },
+  {
+    "id": "act2-portrait-mountain-hermit",
+    "title": "Mountain Hermit",
+    "width": 480,
+    "height": 640,
+    "description": "A broad old man in a patched castle cloak, its royal blue faded almost to nothing, sitting straight-backed by a small fire. His hands are scarred across the knuckles, and he watches the path between Willowbrook and Greendale the way a sentry watches a gate."
+  },
+  {
+    "id": "act2-portrait-nyx",
+    "title": "Nyx",
+    "width": 480,
+    "height": 640,
+    "description": "A woman no taller than you, barefoot, with leaves caught in her hair. The moss is greener where she has stood."
+  },
+  {
+    "id": "act2-portrait-sir-cedric",
+    "title": "Sir Cedric",
+    "width": 480,
+    "height": 640,
+    "description": "A tall knight in old, dented mail. A pale patch on his surcoat shows where his device has been unpicked, and the scabbard at his hip hangs empty. He stands as if he were still on watch."
+  },
+  {
+    "id": "act2-portrait-spectral-librarian",
+    "title": "Spectral Librarian",
+    "width": 480,
+    "height": 640,
+    "description": "A ghostly figure in the worn robes of a working scholar, shimmering with a soft blue light. They watch your hands more than your face, the way a librarian watches anyone standing near the books."
+  },
+  {
+    "id": "act2-portrait-squires",
+    "title": "Squires",
+    "width": 480,
+    "height": 640,
+    "description": "A dozen squires at drill in the yard, wooden swords knocking. Between passes they glance at Sir Cedric and whisper."
+  },
+  {
+    "id": "act2-portrait-town-crier",
+    "title": "Town Crier",
+    "width": 480,
+    "height": 640,
+    "description": "A red-faced man in Greendale's colors, a brass bell in one hand and a scroll of notices in the other. You hear him across the square before you see him."
+  },
+  {
+    "id": "act2-portrait-training-master",
+    "title": "Training Master",
+    "width": 480,
+    "height": 640,
+    "description": "A grey-haired knight with a voice worn rough from shouting across the yard. His armour is old and dented and polished anyway. He watches the squires' feet, not their swords."
+  },
+  {
+    "id": "act2-portrait-water-nymphs",
+    "title": "Water Nymphs",
+    "width": 480,
+    "height": 640,
+    "description": "Three of them, or four; it is hard to count water. They sit waist-deep in the stream, and the stream runs through them."
   }
 ]

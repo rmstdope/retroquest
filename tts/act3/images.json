@@ -138,5 +138,96 @@
     "width": 640,
     "height": 360,
     "description": "A bastion of black stone rises from a shattered ridge. Iron lattices close its gates, and sigils glow behind them, slow as breathing. The wind up here is cold and smells of metal. Where the gate arch meets the wall an older carving shows through the black: a sun rising over three linked rings."
+  },
+  {
+    "id": "act3-portrait-ancient-dragon",
+    "title": "Ancient Dragon",
+    "width": 480,
+    "height": 640,
+    "description": "A dragon lies coiled around the hall's centre. The scales along its flank are worn dull where they have pressed the floor for a very long time. Its golden eyes open slowly, and close slower."
+  },
+  {
+    "id": "act3-portrait-ash-scholar",
+    "title": "Ash Scholar",
+    "width": 480,
+    "height": 640,
+    "description": "A scholar in soot-streaked robes, with a sheaf of notes on mirror angles tied to one wrist so the wind cannot take it."
+  },
+  {
+    "id": "act3-portrait-mine-overseer",
+    "title": "Mine Overseer",
+    "width": 480,
+    "height": 640,
+    "description": "A foreman in a coat grey with rock dust, a ring of keys at his belt. He keeps looking past you, into the dark."
+  },
+  {
+    "id": "act3-portrait-miners",
+    "title": "Miners",
+    "width": 480,
+    "height": 640,
+    "description": "Half a dozen miners, grey with rock dust, passing timbers hand to hand. The oldest of them gives the orders, and nobody argues."
+  },
+  {
+    "id": "act3-portrait-mira",
+    "title": "Mira",
+    "width": 480,
+    "height": 640,
+    "description": "The village healer, with chalk dust still on her sleeves from the circle in the castle yard. She watches you the way she watches a fever."
+  },
+  {
+    "id": "act3-portrait-phoenix",
+    "title": "Phoenix",
+    "width": 480,
+    "height": 640,
+    "description": "A phoenix the size of a cottage roof lies in the crater's glass. Its feathers go from gold to red as it breathes, and it watches you without any hurry."
+  },
+  {
+    "id": "act3-portrait-phoenix-guardian",
+    "title": "Phoenix Guardian",
+    "width": 480,
+    "height": 640,
+    "description": "A tall, masked figure in fire-etched robes stands by the vents, staff in hand. His head is turned to the vents, and his lips move as if he is counting."
+  },
+  {
+    "id": "act3-portrait-pier-warden",
+    "title": "Pier Warden",
+    "width": 480,
+    "height": 640,
+    "description": "An old man in a salt-stiff coat, sitting on the last sound plank of the jetty with his eyes on the water."
+  },
+  {
+    "id": "act3-portrait-silence-keeper",
+    "title": "Silence Keeper",
+    "width": 480,
+    "height": 640,
+    "description": "A tall figure in a deep hood stands at the water's edge. Their feet make no sound on the stone, and you find you have lowered your voice."
+  },
+  {
+    "id": "act3-portrait-sir-cedric",
+    "title": "Sir Cedric",
+    "width": 480,
+    "height": 640,
+    "description": "A tall knight in old, dented mail, his sword at his hip again. He keeps half a step behind you and to one side, where a guard walks."
+  },
+  {
+    "id": "act3-portrait-tide-born-guardian",
+    "title": "Tide-Born Guardian",
+    "width": 480,
+    "height": 640,
+    "description": "A shape of standing water the height of a man. Ward-sigils drift in it like weed in a current."
+  },
+  {
+    "id": "act3-portrait-tobin",
+    "title": "Tobin",
+    "width": 480,
+    "height": 640,
+    "description": "A boy of perhaps fifteen sits apart from the others on an upturned bucket, knees drawn up, a cracked lamp in his lap. His throat is wrapped in a strip of torn shirt. He watches the ceiling, not you."
+  },
+  {
+    "id": "act3-portrait-wandering-phantoms",
+    "title": "Wandering Phantoms",
+    "width": 480,
+    "height": 640,
+    "description": "Grey figures, thin as breath on glass, move among the pools. Each does one thing over and over: lifts a hand, turns, reaches for a door that is not there. They whisper all the time."
   }
 ]
