@@ -159,4 +159,35 @@ describe('StageSpeech', () => {
       'lq-phone-speech',
     )
   })
+
+  it('says how tall its room is, and again when the room changes', async () => {
+    const callbacks: Array<() => void> = []
+    vi.stubGlobal(
+      'ResizeObserver',
+      class {
+        constructor(callback: () => void) {
+          callbacks.push(callback)
+        }
+        observe(): void {}
+        disconnect(): void {}
+      },
+    )
+    const { w } = mounted()
+    await w.vm.$nextTick()
+    const zone = w.get('.lq-speech-zone').element
+    let height = 58
+    Object.defineProperty(zone, 'clientHeight', { get: () => height })
+    callbacks.forEach((callback) => callback())
+    height = 140
+    callbacks.forEach((callback) => callback())
+    expect(w.emitted('room')).toEqual([[58], [140]])
+    vi.unstubAllGlobals()
+  })
+
+  it('marks its zone when the plate above it is folded', async () => {
+    const { w } = mounted()
+    expect(w.get('.lq-speech-zone').classes()).not.toContain('lq-speech-folded')
+    await w.setProps({ folded: true })
+    expect(w.get('.lq-speech-zone').classes()).toContain('lq-speech-folded')
+  })
 })

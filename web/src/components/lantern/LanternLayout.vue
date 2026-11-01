@@ -579,6 +579,40 @@ onMounted(() => {
   measurePaper()
 })
 
+/** The least height (px) the conversation needs to show the newest line's speaker and first line whole. */
+const MIN_SPEECH_ROOM = 120
+/**
+ * The phone's room plate is folded to one row. It folds when a conversation is
+ * on the picture under an open narration paper and the conversation's room
+ * (reported by the speech zone) is under `MIN_SPEECH_ROOM`; then it stays
+ * folded, so it does not fold and open line by line, until the conversation
+ * is cleared or the narration is hidden. Nothing is saved.
+ */
+const plateFolded = ref(false)
+
+/** The conversation's room as the speech zone last reported it (px). */
+const speechRoom = ref(Number.POSITIVE_INFINITY)
+
+/** The speech zone's height changed. */
+function onSpeechRoom(height: number): void {
+  speechRoom.value = height
+}
+
+watch(
+  () =>
+    [
+      speech.visible.length > 0,
+      paper.visible.value && !paperAway.value,
+      phoneStage.value && section.value === 'story',
+      speechRoom.value < MIN_SPEECH_ROOM,
+    ] as const,
+  ([talking, paperOpen, onPicture, cramped]) => {
+    if (!talking || !paperOpen || !onPicture) plateFolded.value = false
+    else if (cramped) plateFolded.value = true
+  },
+  { flush: 'post' },
+)
+
 /** The phone's plate height, which the arrival on the picture stays clear of. */
 const plateHeight = ref(108)
 let plateResize: ResizeObserver | undefined
@@ -1186,6 +1220,7 @@ watch(
           class="lq-phone-plate"
           data-panel
           story-button
+          :folded="plateFolded"
           @click="onNameClick"
           @story="drawerTab = 'story'"
         />
@@ -1194,7 +1229,9 @@ watch(
           v-show="section === 'story'"
           :class="{ 'lq-covered': sheetOpen }"
           :phone="phoneStage"
+          :folded="plateFolded"
           @focus-story="focusStory"
+          @room="onSpeechRoom"
         />
         <div
           v-show="

@@ -100,3 +100,67 @@ test('on a laptop the newest line stays at the foot when more lines are said tha
     await seenAtCentre(page, '[data-testid="speech-line"]:nth-child(1)'),
   ).toBe(false)
 })
+
+test('on a short laptop window the plate folds so the newest line and the ✕ have room (rq-7cv0)', async ({
+  page,
+}): Promise<void> => {
+  await page.setViewportSize({ width: 1000, height: 613 })
+  await page.goto('/')
+  await page.getByRole('button', { name: 'Start', exact: true }).click()
+  await page.locator('.lq-chapter-button').click()
+
+  await enter(page, 'talk to voice')
+  await enter(page, 'talk to grandmother')
+  const plate = page.locator('.lq-phone-plate')
+  await expect(plate).toHaveClass(/lq-plate-folded/)
+  await expect(plate.locator('.lq-label')).toBeHidden()
+  const rows = await plate.evaluate((el) => el.getBoundingClientRect().height)
+  expect(rows).toBeLessThan(60)
+
+  // The ✕ is clear of the right portrait, and the portrait is not under the plate.
+  const boxes = await page.evaluate(() => {
+    const rect = (sel: string): DOMRect | undefined =>
+      document.querySelector(sel)?.getBoundingClientRect()
+    return {
+      clear: rect('.lq-clear'),
+      portrait: rect('.lq-sp-right'),
+      plate: rect('.lq-phone-plate'),
+    }
+  })
+  expect(boxes.clear!.bottom).toBeLessThanOrEqual(boxes.portrait!.top)
+  expect(boxes.portrait!.top).toBeGreaterThanOrEqual(boxes.plate!.bottom)
+
+  // The newest line shows its speaker and first line whole.
+  const newest = page.locator('[data-testid="speech-line"]').last()
+  await expect
+    .poll(
+      () =>
+        seenAtCentre(
+          page,
+          '[data-testid="speech-line"]:last-child .lq-line-name',
+        ),
+      {
+        timeout: 2_000,
+      },
+    )
+    .toBe(true)
+  await expect(newest).toBeVisible()
+
+  await page.getByRole('button', { name: 'Clear the conversation' }).click()
+  await expect(plate).not.toHaveClass(/lq-plate-folded/)
+})
+
+test('on an upright phone the plate does not fold (rq-7cv0)', async ({
+  page,
+}): Promise<void> => {
+  await page.setViewportSize({ width: 390, height: 844 })
+  await page.goto('/')
+  await page.getByRole('button', { name: 'Start', exact: true }).click()
+  await page.locator('.lq-chapter-button').click()
+  await enter(page, 'talk to voice')
+  await enter(page, 'talk to grandmother')
+  await expect(page.getByTestId('speech-line').first()).toBeVisible()
+  await expect(page.locator('.lq-phone-plate')).not.toHaveClass(
+    /lq-plate-folded/,
+  )
+})

@@ -63,4 +63,23 @@ describe('RoomPlate', () => {
     await w.get('.lq-story-so-far').trigger('click')
     expect(w.emitted('story')).toHaveLength(1)
   })
+
+  describe('folded', () => {
+    it('is open (with its label) unless folded', () => {
+      const w = mount(RoomPlate, { props: { storyButton: true } })
+      expect(w.classes()).not.toContain('lq-plate-folded')
+    })
+
+    it('folds to one row, keeping every name and the button in the open order', () => {
+      const open = mount(RoomPlate, { props: { storyButton: true } })
+      const folded = mount(RoomPlate, {
+        props: { storyButton: true, folded: true },
+      })
+      expect(folded.classes()).toContain('lq-plate-folded')
+      const order = (w: typeof open): string[] =>
+        w.findAll('h2, .lq-here-chip, .lq-story-so-far').map((e) => e.text())
+      expect(order(folded)).toEqual(order(open))
+      expect(folded.get('.lq-label').attributes('aria-hidden')).toBe('true')
+    })
+  })
 })
