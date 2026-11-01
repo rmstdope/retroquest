@@ -5,6 +5,8 @@ import { nextTick } from 'vue'
 import { createPinia, setActivePinia } from 'pinia'
 import LanternLayout from './LanternLayout.vue'
 import { useGameStore, type Turn } from '@/stores/useGameStore'
+import { useNarrationStore } from '@/stores/useNarrationStore'
+import { useSettingsStore } from '@/stores/useSettingsStore'
 
 /** A turn that tells `text` (nothing when empty). */
 function turn(id: number, text: string, command: string | null = 'look'): Turn {
@@ -60,7 +62,11 @@ describe('the narration paper', () => {
   const paper = (): HTMLElement =>
     document.querySelector('.lq-story-wrap') as HTMLElement
   const hideButton = (): HTMLElement | null =>
+    document.querySelector('.lq-words-hide')
+  const phoneHide = (): HTMLElement | null =>
     document.querySelector('.lq-paper-hide')
+  const speechZone = (): HTMLElement =>
+    document.querySelector('[data-testid="speech-zone"]') as HTMLElement
   const tab = (): HTMLElement | null => document.querySelector('.lq-paper-tab')
   const press = (key: string, target: EventTarget = document.body): void => {
     target.dispatchEvent(
@@ -154,15 +160,19 @@ describe('the narration paper', () => {
   it('hides to a tab with Hide and brings the paper back with the tab, moving focus between them', async () => {
     await mountWith([turn(1, 'First.')])
     expect(hideButton()?.textContent?.trim()).toBe('▾ Hide')
-    expect(hideButton()?.getAttribute('title')).toBe('Hide the narration (N)')
+    expect(hideButton()?.getAttribute('title')).toBe('Hide the words (N)')
+    // One Hide, outside the cards and not above them.
+    expect(paper().contains(hideButton())).toBe(false)
+    expect(phoneHide()).toBeNull()
     expect(tab()).toBeNull()
 
     await settle()
     hideButton()?.click()
     await nextTick()
     await nextTick()
-    expect(tab()?.textContent?.trim()).toBe('▴ Narration')
-    expect(tab()?.getAttribute('title')).toBe('Show the narration (N)')
+    expect(tab()?.textContent?.trim()).toBe('▴ Show')
+    expect(tab()?.getAttribute('title')).toBe('Show the words (N)')
+    expect(hideButton()).toBeNull()
     expect(paper().hasAttribute('inert')).toBe(true)
     expect(document.activeElement).toBe(tab())
 
@@ -219,6 +229,159 @@ describe('the narration paper', () => {
     await nextTick()
     await nextTick()
     expect(document.activeElement).toBe(tab())
+  })
+
+  const say = (name: string, words: string): string =>
+    `[character_name]${name}[/character_name]\n[dialogue]${words}[/dialogue]`
+  const talk = (id: number, words: string): Turn => ({
+    ...turn(id, say('Mira', words), 'talk to mira'),
+    addressed: 'Mira',
+  })
+
+  /** Mount with a conversation shown on the right and a card on the left. */
+  async function mountTalking(): Promise<void> {
+    await mountWith([])
+    game.turns.push(talk(1, 'Hello.'))
+    await nextTick()
+    await settle()
+  }
+
+  it('has one Hide whenever either side has something, and none when neither has', async () => {
+    await mountWith([turn(1, '', null)])
+    expect(hideButton()).toBeNull()
+    expect(tab()).toBeNull()
+    w?.unmount()
+    document.body.innerHTML = ''
+    await mountWith([turn(1, 'Only the narrator.')])
+    expect(hideButton()).not.toBeNull()
+    w?.unmount()
+    document.body.innerHTML = ''
+    await mountTalking()
+    expect(hideButton()).not.toBeNull()
+    expect(document.querySelectorAll('.lq-words-hide')).toHaveLength(1)
+    expect(document.querySelector('.lq-clear')).toBeNull()
+  })
+
+  it('clears the cards and the speech together and brings both back as they were', async () => {
+    await mountTalking()
+    expect(speechZone().hasAttribute('inert')).toBe(false)
+    hideButton()?.click()
+    await nextTick()
+    await nextTick()
+    expect(speechZone().hasAttribute('inert')).toBe(true)
+    expect(paper().hasAttribute('inert')).toBe(true)
+    expect(tab()?.textContent?.trim()).toBe('▴ Show')
+    expect(document.activeElement).toBe(tab())
+    // Hiding loses nothing.
+    expect(
+      speechZone().querySelectorAll('[data-testid="speech-line"]'),
+    ).toHaveLength(1)
+    await settle()
+    tab()?.click()
+    await nextTick()
+    await nextTick()
+    expect(speechZone().hasAttribute('inert')).toBe(false)
+    expect(paper().hasAttribute('inert')).toBe(false)
+    expect(document.activeElement).toBe(hideButton())
+    expect(
+      speechZone().querySelectorAll('[data-testid="speech-line"]'),
+    ).toHaveLength(1)
+  })
+
+  it('brings both sides back with the next answer, new turn added', async () => {
+    await mountTalking()
+    hideButton()?.click()
+    await nextTick()
+    game.turns.push(talk(2, 'Again.'))
+    await nextTick()
+    expect(tab()).toBeNull()
+    expect(hideButton()).not.toBeNull()
+    expect(speechZone().hasAttribute('inert')).toBe(false)
+    expect(paper().querySelectorAll('[data-testid="turn"]')).toHaveLength(2)
+  })
+
+  it('loses the tab when the player walks into another room', async () => {
+    await mountTalking()
+    hideButton()?.click()
+    await nextTick()
+    game.turns.push({
+      ...turn(2, '', 'go north'),
+      description: { moved: true, firstVisit: false },
+    })
+    await nextTick()
+    expect(tab()).toBeNull()
+    expect(paper().hasAttribute('inert')).toBe(false)
+  })
+
+  it('hides both sides with Escape when nothing is narrated, and leaves focus alone', async () => {
+    await mountTalking()
+    const box = document.createElement('input')
+    document.body.appendChild(box)
+    box.focus()
+    press('Escape', box)
+    await nextTick()
+    expect(tab()).not.toBeNull()
+    expect(speechZone().hasAttribute('inert')).toBe(true)
+    expect(document.activeElement).toBe(box)
+    // Already hidden: nothing more happens.
+    press('Escape', box)
+    await nextTick()
+    expect(tab()).not.toBeNull()
+    box.remove()
+  })
+
+  it('only skips on Escape while the narrator speaks, hiding nothing', async () => {
+    await mountTalking()
+    useSettingsStore().narrationOn = true
+    const narration = useNarrationStore()
+    narration.setAudioFactory(() => ({
+      volume: 1,
+      currentTime: 0,
+      onended: null,
+      onerror: null,
+      play: () => Promise.resolve(),
+      pause: () => {},
+    }))
+    narration.begin(
+      99,
+      [
+        {
+          kind: 'block',
+          parts: [
+            {
+              markup: 'a b',
+              clip: {
+                file: 'x.mp3',
+                speaker: 'narrator',
+                duration: 2,
+                words: [],
+              },
+            },
+          ],
+        },
+      ],
+      'act1',
+    )
+    expect(narration.isNarrating).toBe(true)
+    press('Escape')
+    await nextTick()
+    expect(narration.isNarrating).toBe(false)
+    expect(tab()).toBeNull()
+    expect(speechZone().hasAttribute('inert')).toBe(false)
+    // With nothing narrated, the next Escape hides.
+    press('Escape')
+    await nextTick()
+    expect(tab()).not.toBeNull()
+  })
+
+  it('hides both sides with N too', async () => {
+    await mountTalking()
+    press('n')
+    await nextTick()
+    expect(speechZone().hasAttribute('inert')).toBe(true)
+    press('n')
+    await nextTick()
+    expect(speechZone().hasAttribute('inert')).toBe(false)
   })
 
   it('sizes the phone paper to its content, up to half the play area', async () => {
@@ -305,11 +468,11 @@ describe('the narration paper', () => {
   }
 
   it('has the Help line for N on a laptop, and not on a phone', async () => {
-    expect(await helpText()).toContain('N — hide or show the narration')
+    expect(await helpText()).toContain('N — hide or show the words')
     w?.unmount()
     document.body.innerHTML = ''
     stubScreen(false)
-    expect(await helpText()).not.toContain('hide or show the narration')
+    expect(await helpText()).not.toContain('hide or show the')
   })
 
   it('has the paper with Hide on a phone, and no N key', async () => {
@@ -318,7 +481,8 @@ describe('the narration paper', () => {
     expect(
       document.querySelectorAll('.lq-story [data-testid="turn"]'),
     ).toHaveLength(1)
-    expect(hideButton()).not.toBeNull()
+    expect(phoneHide()).not.toBeNull()
+    expect(hideButton()).toBeNull()
     press('n')
     await nextTick()
     expect(tab()).toBeNull()

@@ -635,20 +635,24 @@ test.describe('Lantern UI (the default)', () => {
     await input.press('Enter')
     await expect(page.locator('.lq-sp-left .lq-initial')).toHaveText('E')
 
-    // ✕ clears the picture and focus goes to the story band.
-    await page.getByRole('button', { name: 'Clear the conversation' }).click()
-    await expect(lines).toHaveCount(0)
-    await expect(page.getByRole('region', { name: 'Story' })).toBeFocused()
+    // The one Hide clears both sides and leaves the Show tab, with focus on it.
+    await page.getByRole('button', { name: '▾ Hide' }).click()
+    await expect(lines.first()).toBeHidden()
+    await expect(page.getByRole('button', { name: '▴ Show' })).toBeFocused()
+    await page.getByRole('button', { name: '▴ Show' }).click()
+    await expect(lines.first()).toBeVisible()
+    await expect(page.getByRole('button', { name: '▾ Hide' })).toBeFocused()
 
-    // Escape clears too, and walking away does.
-    await input.fill('talk to grandmother')
-    await input.press('Enter')
-    await expect(lines.first()).toBeVisible()
+    // Escape hides too (focus stays in the command box), and so does N.
+    await input.focus()
     await page.keyboard.press('Escape')
-    await expect(lines).toHaveCount(0)
-    await input.fill('talk to grandmother')
-    await input.press('Enter')
+    await expect(lines.first()).toBeHidden()
+    await expect(input).toBeFocused()
+    await input.blur()
+    await page.keyboard.press('n')
     await expect(lines.first()).toBeVisible()
+
+    // Walking away clears the speech.
     await input.fill('look')
     await input.press('Enter')
     await expect(lines).toHaveCount(0)
@@ -720,7 +724,7 @@ test.describe('Lantern UI (the default)', () => {
       )
     const paper = page.locator('.lq-story-wrap')
     const hide = page.getByRole('button', { name: '▾ Hide' })
-    const tab = page.getByRole('button', { name: '▴ Narration' })
+    const tab = page.getByRole('button', { name: '▴ Show' })
     const cards = paper.locator('.lq-story')
     const height = async () => (await cards.boundingBox())!.height
 

@@ -213,14 +213,14 @@ test.describe('the arrival told on the picture', () => {
       await expect(arrival(page).locator('.lq-arrival-card')).toHaveCount(1)
     }
 
-    /** Whether every shown line sits between the top buttons and the story tab. */
+    /** Whether every shown line sits between the top buttons and the actions. */
     async function clearOfTheChrome(page: Page): Promise<void> {
       const buttons = await page
         .getByRole('button', { name: /^Bag/ })
         .boundingBox()
+      // No tab is left on the laptop during an arrival: the actions are the floor.
       const tab = await page
-        .getByRole('button', { name: /Narration/ })
-        .first()
+        .getByRole('region', { name: 'Actions' })
         .boundingBox()
       const pill = await arrival(page).locator('.lq-arrival-pill').boundingBox()
       for (const line of await arrival(page)
@@ -230,7 +230,7 @@ test.describe('the arrival told on the picture', () => {
         expect(box!.y).toBeGreaterThanOrEqual(buttons!.y + buttons!.height)
         expect(box!.y + box!.height).toBeLessThanOrEqual(tab!.y)
       }
-      expect(pill!.y + pill!.height).toBeLessThanOrEqual(tab!.y + tab!.height)
+      expect(pill!.y + pill!.height).toBeLessThanOrEqual(tab!.y)
     }
 
     test('turns into pages that start below the buttons, in the same type', async ({
