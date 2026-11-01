@@ -788,6 +788,29 @@ describe('ActionComposer', () => {
       expect(button(w, 'Type').attributes('aria-pressed')).toBe('true')
       expect(document.activeElement).toBe(type.element)
     })
+
+    // A blur would take the Esc mark away and narrow the switch under the
+    // pointer, so the click would miss (rq-nq8t).
+    it('keeps the cursor in the box when the switch is pressed while typing', async () => {
+      const w = mountComposer()
+      await button(w, 'Type').trigger('click')
+      await w.vm.$nextTick()
+      await w.get('input[aria-label="Command"]').trigger('focus')
+      for (const name of ['Type', 'Actions']) {
+        const press = new MouseEvent('mousedown', { cancelable: true })
+        button(w, name).element.dispatchEvent(press)
+        expect(press.defaultPrevented, name).toBe(true)
+      }
+    })
+
+    it('lets a press on the switch take focus when the box has none', () => {
+      const w = mountComposer()
+      for (const name of ['Type', 'Actions']) {
+        const press = new MouseEvent('mousedown', { cancelable: true })
+        button(w, name).element.dispatchEvent(press)
+        expect(press.defaultPrevented, name).toBe(false)
+      }
+    })
   })
 
   describe('as a foldable sheet (phones)', () => {
