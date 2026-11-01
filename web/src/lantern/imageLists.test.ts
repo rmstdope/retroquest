@@ -91,6 +91,10 @@ describe('characterImages', () => {
   it('lists a name shared by two classes once', () => {
     const titles = characterImages(new Act4()).map((i) => i.title)
     expect(titles.filter((t) => t === 'Sir Cedric')).toHaveLength(1)
+    // The first class registered wins.
+    expect(characterImages(new Act4()).map((i) => i.id)).toContain(
+      'act4-portrait-sir-cedric',
+    )
   })
 
   it('gives ids that are slugs, unique among rooms and portraits of the game', () => {

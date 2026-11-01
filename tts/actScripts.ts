@@ -119,7 +119,10 @@ export function extractActMusic(number: string): MusicTrack[] {
   return [...actLoops(act), ...roomLoops(act)]
 }
 
-/** Returns an image for each room and a portrait for each character of the act, as `images.json` holds them. */
+/**
+ * Returns an image for each room and a portrait for each character of the act,
+ * as `images.json` holds them.
+ */
 export function extractActImages(number: string): GameImage[] {
   return allImages(sourceOf(number).make())
 }

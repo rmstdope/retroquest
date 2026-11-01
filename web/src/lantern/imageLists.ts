@@ -23,7 +23,7 @@ export const PORTRAIT_HEIGHT = 640
 
 /** One image in Content Studio's format. */
 export interface GameImage {
-  /** Slug naming the image's files in the studio; unique across the game, same as the room's music track. */
+  /** Slug naming the image's files in the studio; unique across the game; a room's is its music track id, a portrait's `act<N>-portrait-<class>`. */
   id: string
   /** Shown in the studio: the room's or the character's name. */
   title: string
