@@ -68,8 +68,10 @@ export const useStageSpeechStore = defineStore('stageSpeech', () => {
 
   /** Whether a line is the one being read aloud now. */
   function isSpeaking(line: StageLine): boolean {
-    if (!line.narrated || narration.speaking(line.turnId)?.unit !== line.unit)
-      return false
+    const now = narration.speaking(line.turnId)
+    if (!line.narrated || now?.unit !== line.unit) return false
+    // Without matching word timings the paragraph read is unknown: ring the quote.
+    if (!now.aligned) return true
     // The newest paragraph shown of the quote being read is the one being read.
     const later = conversation.value?.lines.some(
       (other) =>

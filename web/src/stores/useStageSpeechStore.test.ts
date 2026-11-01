@@ -314,4 +314,36 @@ describe('useStageSpeechStore while the turn is narrated', () => {
     useNarrationStore().skipAll()
     expect(speech.visible).toHaveLength(2)
   })
+
+  it('shows and rings every paragraph of a quote whose recording does not match its words', () => {
+    const speech = useStageSpeechStore()
+    const words = 'One two.\nThree four.'
+    const t = turn(say('Mira', words), 'Mira')
+    const stale = recorded(words, 'mira')
+    const clip = Object.values(stale)[0]
+    clip.words = clip.words.slice(0, 2)
+    useNarrationStore().begin(t.id, turnUnits(t, true, stale), 'act1')
+    speech.observe(t)
+    expect(speech.visible).toHaveLength(2)
+    expect(speech.visible.map((l) => speech.isSpeaking(l))).toEqual([
+      true,
+      true,
+    ])
+  })
+
+  it('counts words the same way when tags run across paragraphs', () => {
+    const speech = useStageSpeechStore()
+    const words = '[i]One two.\n[/i]\nThree [b]four[/b].'
+    const t = turn(say('Mira', words), 'Mira')
+    useNarrationStore().begin(
+      t.id,
+      turnUnits(t, true, recorded(words, 'mira')),
+      'act1',
+    )
+    speech.observe(t)
+    expect(speech.visible).toHaveLength(1)
+    audios[0].currentTime = 2.5
+    vi.advanceTimersByTime(100)
+    expect(speech.visible).toHaveLength(2)
+  })
 })
