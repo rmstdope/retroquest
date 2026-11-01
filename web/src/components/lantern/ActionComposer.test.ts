@@ -757,6 +757,27 @@ describe('ActionComposer', () => {
       expect(document.activeElement).toBe(w.get('[data-verb="search"]').element)
     })
 
+    it('puts focus on the verb used last when Actions is already selected', async () => {
+      const w = mountComposer()
+      await w.get('[data-verb="search"]').trigger('click')
+      await button(w, 'Actions').trigger('click')
+      await w.vm.$nextTick()
+      expect(document.activeElement).toBe(w.get('[data-verb="search"]').element)
+    })
+
+    it('falls back to Look when the verb used last is behind a folded More…', async () => {
+      const w = mountComposer()
+      await w.get('[data-more]').trigger('click')
+      const behind = w.findAll('.lq-verb').at(-1)
+      const id = behind?.attributes('data-verb')
+      await behind?.trigger('click')
+      await button(w, 'Type').trigger('click')
+      await button(w, 'Actions').trigger('click')
+      await w.vm.$nextTick()
+      expect(w.find(`[data-verb="${id}"]`).exists()).toBe(false)
+      expect(document.activeElement).toBe(w.get('.lq-verbs .lq-verb').element)
+    })
+
     it('keeps focus on the Type half when the box is disabled', async () => {
       const w = mountComposer()
       useGameStore().acceptInput = false
