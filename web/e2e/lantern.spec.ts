@@ -618,9 +618,7 @@ test.describe('Lantern UI (the default)', () => {
     // leaves the picture empty, while the story band prints the Voice.
     await input.fill('talk to voice')
     await input.press('Enter')
-    await expect(page.getByRole('region', { name: 'Story' })).toContainText(
-      'Voice',
-    )
+    await expect(page.locator('.lq-story')).toContainText('Voice')
     await expect(
       page.getByRole('region', { name: 'Current location' }),
     ).toContainText("Elior's Cottage")
@@ -696,7 +694,7 @@ test.describe('Lantern UI (the default)', () => {
     expect(fit).toEqual({ lines: 1, clipped: false })
   })
 
-  test('tells each turn on a paper that grows to half the screen, hides to a tab', async ({
+  test('tells each turn on a card that grows up to the room plate, hides to a tab', async ({
     page,
   }) => {
     await page.setViewportSize({ width: 1280, height: 800 })
@@ -723,22 +721,27 @@ test.describe('Lantern UI (the default)', () => {
     const paper = page.locator('.lq-story-wrap')
     const hide = page.getByRole('button', { name: '▾ Hide' })
     const tab = page.getByRole('button', { name: '▴ Narration' })
-    const height = async () => (await paper.boundingBox())!.height
+    const cards = paper.locator('.lq-story')
+    const height = async () => (await cards.boundingBox())!.height
 
     await tell(2, 'You take the bread.', 'take bread')
     await expect(paper.getByText('› take bread')).toBeVisible()
-    await expect(paper.getByText('The heart of')).toHaveCount(0)
+    // The cards before it stay above, dimmed.
+    await expect(paper.getByText('The heart of')).toBeVisible()
     const small = await height()
-    expect(small).toBeLessThan(200)
+    expect(small).toBeLessThan(400)
 
     const long = Array.from(
       { length: 30 },
       (_, i) => `Line ${i} of a very long answer that goes on and on.`,
     ).join('\n')
     await tell(3, long, 'look')
-    const area = (await page.locator('.lq-main').boundingBox())!.height
+    const plate = (await page.locator('.lq-stage-plate').boundingBox())!
     await expect.poll(height).toBeGreaterThan(small)
-    await expect.poll(height).toBeLessThanOrEqual(area / 2 + 1)
+    // The column stops below the room plate and scrolls inside.
+    await expect
+      .poll(async () => (await cards.boundingBox())!.y)
+      .toBeGreaterThanOrEqual(plate.y + plate.height)
     await expect(page.getByRole('button', { name: /More below/ })).toBeVisible()
 
     await hide.click()
@@ -754,8 +757,9 @@ test.describe('Lantern UI (the default)', () => {
     await expect(tab).toHaveCount(0)
     await expect(paper.getByText('› wait')).toBeVisible()
 
+    // A turn with nothing to tell still leaves a slim card with its command.
     await tell(5, '', 'wait')
-    await expect(paper).toBeHidden()
+    await expect(paper.getByText('› wait').last()).toBeVisible()
     await expect(tab).toHaveCount(0)
   })
 

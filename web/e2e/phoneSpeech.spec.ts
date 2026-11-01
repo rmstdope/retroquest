@@ -76,7 +76,8 @@ test('on a phone the newest speech line is never cut through its speaker and fir
 test('on a laptop the newest line stays at the foot when more lines are said than fit', async ({
   page,
 }): Promise<void> => {
-  await page.setViewportSize({ width: 1280, height: 720 })
+  // The thread reaches down to the actions (no story band under it), so a lower window is needed to overflow it.
+  await page.setViewportSize({ width: 1280, height: 580 })
   await page.goto('/')
   await page.getByRole('button', { name: 'Start', exact: true }).click()
   await page.locator('.lq-chapter-button').click()

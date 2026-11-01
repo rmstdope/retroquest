@@ -60,6 +60,9 @@ test('tells an answer block by block, and a double tap shows the rest', async ({
   page,
 }): Promise<void> => {
   await slowNarrationClips(page)
+  // The story page of a short window reads the answer as it is told (a laptop
+  // tells the walk into the first room in the middle of the picture).
+  await page.setViewportSize({ width: 1280, height: 500 })
   await startAct1(page)
 
   const input = page.getByLabel('Command', { exact: true })
@@ -114,7 +117,8 @@ test('opens a journal drawer at once while the voice reads, and a press inside i
   const input = page.getByLabel('Command', { exact: true })
   await input.fill('talk to voice')
   await input.press('Enter')
-  await expect(lastTurnBlocks(page).first()).toBeVisible()
+  // The card is away while the walk is told in the middle: it is there, not in view.
+  await expect(lastTurnBlocks(page).first()).toBeAttached()
   await expect(page.locator('.lq-speaking')).toHaveCount(1)
   // Block 1 is being read: the panels are still the ones from before the turn.
   await expect(roomName).toHaveText(before ?? '')
@@ -247,6 +251,10 @@ test('shows an answer at once with narration off', async ({
   await page.addInitScript(() =>
     localStorage.setItem('retroquest_settings', '{"narrationOn":false}'),
   )
+
+  // The story page of a short window reads the answer as it is told (a laptop
+  // tells the walk into the first room in the middle of the picture).
+  await page.setViewportSize({ width: 1280, height: 500 })
   await startAct1(page)
   const input = page.getByLabel('Command', { exact: true })
   await input.fill('talk to voice')
@@ -261,6 +269,9 @@ test('hints at hurrying on the first narrated turn, and Settings can switch narr
   page,
 }): Promise<void> => {
   await slowNarrationClips(page)
+  // The story page of a short window reads the answer as it is told (a laptop
+  // tells the walk into the first room in the middle of the picture).
+  await page.setViewportSize({ width: 1280, height: 500 })
   await startAct1(page)
 
   const input = page.getByLabel('Command', { exact: true })
@@ -273,6 +284,7 @@ test('hints at hurrying on the first narrated turn, and Settings can switch narr
   })
   await expect(page.locator('.lq-narration-hint')).toHaveCount(0)
 
+  await page.setViewportSize({ width: 1280, height: 720 })
   await page.getByRole('button', { name: 'Settings', exact: true }).click()
   const narration = page.getByRole('switch', { name: 'Narration' })
   await expect(narration).toHaveAttribute('aria-checked', 'true')

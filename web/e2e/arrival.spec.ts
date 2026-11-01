@@ -66,15 +66,15 @@ test.describe('the arrival told on the picture', () => {
     ).toBeVisible()
     // Narration is off here: the reading-time bar shows.
     await expect(page.getByTestId('arrival-bar')).toBeVisible()
+    // The act's opening leaves no card yet, so there is no tab either.
     await expect(story(page)).toBeHidden()
-    const tab = page.getByRole('button', { name: /Narration/ }).first()
-    await expect(tab).toBeVisible()
+    const tab = page.getByRole('button', { name: /Narration/ })
+    await expect(tab).toHaveCount(0)
 
     await arrival(page).click({ position: { x: 600, y: 300 } })
     await expect(line).toHaveCount(0)
     await expect(tab).toHaveCount(0)
-    await expect(story(page)).toBeVisible()
-    await expect(story(page).locator('.lq-arrival-text')).not.toHaveText('')
+    await expect(story(page)).toBeHidden()
   })
 
   test('goes on with Enter', async ({ page }) => {
@@ -84,7 +84,6 @@ test.describe('the arrival told on the picture', () => {
     const before = await commands.count()
     await page.keyboard.press('Enter')
     await expect(arrival(page).locator('.lq-arrival-line')).toHaveCount(0)
-    await expect(story(page)).toBeVisible()
     // Enter went on; it did not press the focused verb.
     await expect(commands).toHaveCount(before)
   })
@@ -103,7 +102,6 @@ test.describe('the arrival told on the picture', () => {
     await page.getByLabel('Command').focus()
     await page.keyboard.press('Enter')
     await expect(line).toHaveCount(0)
-    await expect(story(page)).toBeVisible()
     await expect(commands).toHaveCount(before)
   })
 

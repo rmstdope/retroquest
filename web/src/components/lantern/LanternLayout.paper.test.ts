@@ -68,16 +68,85 @@ describe('the narration paper', () => {
     )
   }
 
-  it('holds only the current turn', async () => {
-    await mountWith([turn(1, 'First.', 'look'), turn(2, 'Second.', 'wait')])
-    const turns = [...paper().querySelectorAll('[data-testid="turn"]')]
-    expect(turns).toHaveLength(1)
-    expect(turns[0]?.textContent).toContain('Second.')
-    expect(turns[0]?.textContent).toContain('› wait')
+  it('holds a card for each turn since the last room change, the newest lit and older ones dimmed', async () => {
+    await mountWith([
+      turn(1, 'First.', 'look'),
+      turn(2, 'Second.', 'wait'),
+      turn(3, 'Third.', 'listen'),
+      turn(4, 'Fourth.', 'sit'),
+    ])
+    const cards = [...paper().querySelectorAll('[data-testid="turn"]')]
+    expect(cards.map((c) => c.textContent)).toEqual([
+      expect.stringContaining('› look'),
+      expect.stringContaining('› wait'),
+      expect.stringContaining('› listen'),
+      expect.stringContaining('› sit'),
+    ])
+    expect(cards.map((c) => c.className)).toEqual([
+      expect.stringContaining('lq-age-old'),
+      expect.stringContaining('lq-age-old'),
+      expect.stringContaining('lq-age-prev'),
+      expect.stringContaining('lq-age-new'),
+    ])
   })
 
-  it('shows no paper and no tab for a turn with nothing to tell', async () => {
-    await mountWith([turn(1, 'First.'), turn(2, '')])
+  it('clears the cards when the player walks into another room', async () => {
+    await mountWith([turn(1, 'First.', 'look'), turn(2, 'Second.', 'wait')])
+    game.turns.push({
+      ...turn(3, '', 'go north'),
+      description: { moved: true, firstVisit: false },
+    })
+    await nextTick()
+    const cards = [...paper().querySelectorAll('[data-testid="turn"]')]
+    expect(cards).toHaveLength(1)
+    expect(cards[0]?.textContent).toContain('› go north')
+    expect(cards[0]?.classList.contains('lq-slim')).toBe(true)
+  })
+
+  it('tells the room on one card after a load, with no command line', async () => {
+    await mountWith([
+      {
+        ...turn(1, '', null),
+        arrival: {
+          room: 'Square',
+          description: 'A busy square.',
+          characters: [],
+          items: [],
+          exits: {},
+        },
+        description: { moved: true, firstVisit: false },
+      },
+    ])
+    const cards = [...paper().querySelectorAll('[data-testid="turn"]')]
+    expect(cards).toHaveLength(1)
+    expect(cards[0]?.textContent).toContain('A busy square.')
+    expect(paper().querySelector('[data-testid="command"]')).toBeNull()
+  })
+
+  it('shows silent information as a red-edged card above which the earlier card stays', async () => {
+    await mountWith([
+      turn(1, 'She does not sit down.', 'talk to grandmother'),
+      turn(
+        2,
+        "[failure]There is no character named 'mira'.[/failure]",
+        'talk to mira',
+      ),
+    ])
+    const cards = [...paper().querySelectorAll('[data-testid="turn"]')]
+    expect(cards[1]?.classList.contains('lq-card-error')).toBe(true)
+    expect(cards[1]?.textContent).toContain('⊝')
+    expect(cards[0]?.classList.contains('lq-age-prev')).toBe(true)
+  })
+
+  it('is a column up the left, with no inline band height', async () => {
+    await mountWith([turn(1, 'First.')])
+    expect(paper().classList.contains('lq-cards')).toBe(true)
+    expect(paper().style.height).toBe('')
+    expect(paper().style.top).not.toBe('')
+  })
+
+  it('shows no paper and no tab when there is no card', async () => {
+    await mountWith([turn(1, '', null)])
     expect(paper().style.display).toBe('none')
     expect(tab()).toBeNull()
   })
@@ -125,7 +194,7 @@ describe('the narration paper', () => {
     box.remove()
   })
 
-  it('opens again on a new turn with something to tell, and stays clear for one without', async () => {
+  it('opens again on a new turn with a card, and stays as it is for one without', async () => {
     await mountWith([turn(1, 'First.')])
     await settle()
     hideButton()?.click()
@@ -138,10 +207,9 @@ describe('the narration paper', () => {
     await settle()
     hideButton()?.click()
     await nextTick()
-    game.turns.push(turn(3, ''))
+    game.turns.push(turn(3, '', null))
     await nextTick()
-    expect(tab()).toBeNull()
-    expect(paper().style.display).toBe('none')
+    expect(tab()).not.toBeNull()
   })
 
   it('moves focus to the tab when N hides the paper while focus is inside it', async () => {
@@ -153,7 +221,8 @@ describe('the narration paper', () => {
     expect(document.activeElement).toBe(tab())
   })
 
-  it('sizes the paper to its content, up to half the play area', async () => {
+  it('sizes the phone paper to its content, up to half the play area', async () => {
+    stubScreen(false)
     const heights: Record<string, number> = {
       'lq-paper-content': 200,
       'lq-story-wrap': 260,
@@ -188,7 +257,7 @@ describe('the narration paper', () => {
   })
 
   it('lets the tab row push the actions down when there is no paper', async () => {
-    await mountWith([turn(1, '')])
+    await mountWith([turn(1, '', null)])
     expect(
       document
         .querySelector('.lq-paper-tabrow')

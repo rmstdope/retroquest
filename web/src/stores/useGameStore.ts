@@ -943,7 +943,8 @@ export const useGameStore = defineStore('game', () => {
   }
 
   /**
-   * A load: a notice and the room in the story, or the engine's failure. A
+   * A load: a notice and the room in the story (under the command, when one
+   * was typed), or the engine's failure. A
    * load plays on in the loaded act, so an act-complete page still held for
    * narration is dropped.
    */
@@ -954,7 +955,8 @@ export const useGameStore = defineStore('game', () => {
   ): void {
     if (showNotice(result, text)) {
       actEndPending.value = false
-      showOutput(null, '', { chips: false, description: LOADED_ROOM })
+      // The typed word stays on the turn (the narration card's command line).
+      showOutput(command, '', { chips: false, description: LOADED_ROOM })
     } else showOutput(command, result, { chips: false })
   }
 

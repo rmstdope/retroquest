@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import type { Turn } from '@/stores/useGameStore'
-import { turnTells } from './turnTells'
+import { startsFresh, turnHasCard, turnTells } from './turnTells'
 
 /** A turn with nothing in it; each test adds the one thing it checks. */
 function turn(extra: Partial<Turn> = {}): Turn {
@@ -52,5 +52,76 @@ describe('turnTells', () => {
         }),
       ),
     ).toBe(true)
+  })
+})
+
+describe('turnHasCard', () => {
+  it('is true for a typed command even when nothing is told (a slim card)', () => {
+    expect(turnHasCard(turn({ command: 'talk to grandmother' }))).toBe(true)
+  })
+
+  it('is true for a turn with no command that tells something, false for an empty system turn', () => {
+    expect(turnHasCard(turn({ command: null, text: 'Saved.' }))).toBe(true)
+    expect(turnHasCard(turn({ command: null }))).toBe(false)
+  })
+})
+
+describe('turnHasCard for a room told in the middle', () => {
+  const arrival = {
+    room: 'Square',
+    description: 'A square.',
+    characters: [],
+    items: [],
+    exits: {},
+  }
+  const opening = turn({
+    command: null,
+    narrate: true,
+    arrival,
+    description: { moved: true, firstVisit: true },
+  })
+
+  it('leaves no card for the arrival that opens an act', () => {
+    expect(turnHasCard(opening)).toBe(false)
+  })
+
+  it('still leaves one when that turn also says something', () => {
+    expect(turnHasCard({ ...opening, text: 'A bell tolls.' })).toBe(true)
+  })
+})
+
+describe('startsFresh', () => {
+  const arrival = {
+    room: 'Square',
+    description: 'A square.',
+    characters: [],
+    items: [],
+    exits: {},
+  }
+
+  it('is true for a turn that moves to another room, a load among them', () => {
+    expect(
+      startsFresh(turn({ description: { moved: true, firstVisit: true } })),
+    ).toBe(true)
+    expect(
+      startsFresh(turn({ description: { moved: true, firstVisit: false } })),
+    ).toBe(true)
+  })
+
+  it('is true for a system arrival (an act opening)', () => {
+    expect(startsFresh(turn({ command: null, arrival }))).toBe(true)
+  })
+
+  it('is false for a look and for an ordinary command', () => {
+    expect(
+      startsFresh(
+        turn({
+          command: 'look',
+          arrival,
+          description: { moved: false, firstVisit: false },
+        }),
+      ),
+    ).toBe(false)
+    expect(startsFresh(turn())).toBe(false)
   })
 })

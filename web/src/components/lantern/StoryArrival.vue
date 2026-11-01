@@ -23,6 +23,8 @@ const props = defineProps<{
   descriptionHtml?: string
   /** True when the player stayed and looked around: the region is not an arrival. */
   stayed?: boolean
+  /** Only the description: a narration card tells the room without the divider. */
+  bare?: boolean
 }>()
 const wide = useMediaQuery(WIDE_QUERY)
 const game = useGameStore()
@@ -67,7 +69,7 @@ const exits = computed(() => Object.entries(props.arrival.exits))
     class="lq-arrival"
     :aria-label="stayed ? arrival.room : `Arrived at ${arrival.room}`"
   >
-    <div class="lq-divider" data-testid="divider">
+    <div v-if="!bare" class="lq-divider" data-testid="divider">
       <span class="lq-rule" aria-hidden="true"></span>
       <span v-if="direction" class="lq-direction"
         ><span class="lq-arrow" aria-hidden="true">{{
@@ -87,7 +89,7 @@ const exits = computed(() => Object.entries(props.arrival.exits))
       v-html="descriptionHtml ?? renderMarkup(arrival.description)"
     ></p>
     <!-- eslint-enable vue/no-v-html -->
-    <template v-if="!wide">
+    <template v-if="!wide && !bare">
       <div v-if="here.length || exits.length" class="lq-here-box">
         <div v-if="here.length" class="lq-here" data-testid="here">
           <span class="lq-here-label">Here</span>
