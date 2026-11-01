@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { nextTick, onBeforeUnmount, ref, watch } from 'vue'
 import { useArrivalStore } from '@/stores/useArrivalStore'
 import { useReadAlong } from '@/composables/useReadAlong'
+import { FOLLOW_EVENT } from '@/composables/useStoryFollow'
 
 /**
  * The arrival told on the middle of the room's picture, like a film title:
@@ -15,11 +16,85 @@ import { useReadAlong } from '@/composables/useReadAlong'
  * picture. With no picture (`pictured` false) the text is dark ink on the
  * paper in the light theme. The text is also in the story, which waits aside:
  * the layer is a polite live region for screen readers.
+ *
+ * A description too tall for the clear space scrolls inside its own box
+ * (`.lq-arrival-text`) above the pill, which never leaves the bottom of the
+ * space. The box fades out at an edge where the text continues, and, while the
+ * narrator speaks, glides to keep the lit word in view (the `lq-follow` event
+ * of the read-along); with reduced motion it jumps.
  */
 defineProps<{ pictured: boolean; phone?: boolean }>()
 const arrival = useArrivalStore()
 const root = ref<HTMLElement | null>(null)
 const { html } = useReadAlong(() => arrival.turnId ?? 0, root)
+
+/** The text box of the part up; it is a new element for every part. */
+const text = ref<HTMLElement | null>(null)
+const fadeTop = ref(false)
+const fadeBottom = ref(false)
+/** The lit word is kept in the top two thirds of the box, and put a third down when it leaves. */
+const BAND_END = 2 / 3
+const PLACE_AT = 1 / 3
+let observer: ResizeObserver | undefined
+
+/** Whether the text continues above and below what shows. */
+function measure(): void {
+  const el = text.value
+  fadeTop.value = !!el && el.scrollTop > 1
+  fadeBottom.value =
+    !!el && el.scrollTop + el.clientHeight < el.scrollHeight - 1
+}
+
+/** Whether the game's "less motion" setting (or the system's) is on. */
+function motionReduced(): boolean {
+  return (
+    getComputedStyle(document.documentElement)
+      .getPropertyValue('--lq-motion')
+      .trim() === '0'
+  )
+}
+
+/** Keep the lit word in view; the event is taken so nothing else scrolls for it. */
+function follow(event: Event): void {
+  const el = text.value
+  const word = event.target
+  if (!el || !(word instanceof Element)) return
+  event.preventDefault()
+  const box = el.getBoundingClientRect()
+  const at = word.getBoundingClientRect()
+  const top = at.top - box.top
+  if (top >= 0 && at.bottom - box.top <= box.height * BAND_END) return
+  el.scrollTo({
+    top: el.scrollTop + top - el.clientHeight * PLACE_AT,
+    behavior: motionReduced() ? 'auto' : 'smooth',
+  })
+}
+
+/** Measure the box afresh, and watch it and its lines for a change of size. */
+async function watchBox(el: HTMLElement | null): Promise<void> {
+  observer?.disconnect()
+  await nextTick()
+  measure()
+  if (el && typeof ResizeObserver !== 'undefined') {
+    observer ??= new ResizeObserver(() => requestAnimationFrame(measure))
+    observer.observe(el)
+    el.querySelectorAll('.lq-arrival-line').forEach((line) =>
+      observer?.observe(line),
+    )
+  }
+}
+
+watch(text, watchBox)
+// A new arrival whose first part is of the same kind reuses the box: start it
+// at its first line.
+watch(
+  () => [arrival.turnId, arrival.part?.kind, arrival.part?.lines[0]?.unit],
+  () => {
+    if (text.value) text.value.scrollTop = 0
+    void watchBox(text.value)
+  },
+)
+onBeforeUnmount(() => observer?.disconnect())
 </script>
 
 <template>
@@ -38,24 +113,32 @@ const { html } = useReadAlong(() => arrival.turnId ?? 0, root)
     <Transition name="lq-arrival-fade">
       <div v-if="arrival.part" :key="arrival.part.kind" class="lq-arrival-card">
         <!-- eslint-disable vue/no-v-html -->
-        <template v-if="arrival.part.kind === 'events'">
-          <p
-            v-for="line in arrival.part.lines"
-            :key="line.unit"
-            class="lq-arrival-line lq-arrival-event"
-            :data-unit="line.unit"
-            v-html="html(line.markup, line.unit)"
-          ></p>
-        </template>
-        <template v-else>
-          <p
-            v-for="line in arrival.part.lines"
-            :key="line.unit"
-            class="lq-arrival-line"
-            :data-unit="line.unit"
-            v-html="html(line.markup, line.unit, 1)"
-          ></p>
-        </template>
+        <div
+          ref="text"
+          class="lq-arrival-text"
+          :class="{ 'lq-fade-t': fadeTop, 'lq-fade-b': fadeBottom }"
+          @scroll="measure"
+          v-on="{ [FOLLOW_EVENT]: follow }"
+        >
+          <template v-if="arrival.part.kind === 'events'">
+            <p
+              v-for="line in arrival.part.lines"
+              :key="line.unit"
+              class="lq-arrival-line lq-arrival-event"
+              :data-unit="line.unit"
+              v-html="html(line.markup, line.unit)"
+            ></p>
+          </template>
+          <template v-else>
+            <p
+              v-for="line in arrival.part.lines"
+              :key="line.unit"
+              class="lq-arrival-line"
+              :data-unit="line.unit"
+              v-html="html(line.markup, line.unit, 1)"
+            ></p>
+          </template>
+        </div>
         <!-- eslint-enable vue/no-v-html -->
         <div class="lq-arrival-pill">
           <p class="lq-arrival-hint">
@@ -107,9 +190,6 @@ const { html } = useReadAlong(() => arrival.turnId ?? 0, root)
 .lq-phone-arrival {
   /* Clear of the plate across the top, and of the bar and the paper's tab. */
   padding: calc(var(--lq-plate-h, 108px) + 24px) 20px 110px;
-  /* A long description scrolls inside the stage instead of past its edges. */
-  overflow-y: auto;
-  align-items: safe center;
 }
 .lq-phone-arrival .lq-arrival-card {
   width: min(320px, 100%);
@@ -128,6 +208,9 @@ const { html } = useReadAlong(() => arrival.turnId ?? 0, root)
 }
 .lq-arrival-card {
   width: min(760px, 100%);
+  /* No taller than the clear space; the text scrolls and the pill stays. */
+  max-height: 100%;
+  min-height: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -135,6 +218,42 @@ const { html } = useReadAlong(() => arrival.turnId ?? 0, root)
   text-align: center;
   color: var(--lq-arrival-ink);
   text-shadow: var(--lq-arrival-glow);
+}
+/*
+ * The text scrolls here when it is too tall. The padding and the opposite
+ * margin keep the glow from being clipped without moving the text; the mask
+ * fades an edge where the text continues.
+ */
+.lq-arrival-text {
+  flex: 0 1 auto;
+  min-height: 0;
+  align-self: stretch;
+  margin: -20px -24px;
+  padding: 20px 24px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+.lq-arrival-text::-webkit-scrollbar {
+  display: none;
+}
+.lq-arrival-text.lq-fade-b {
+  mask-image: linear-gradient(#000 calc(100% - 44px), transparent);
+}
+.lq-arrival-text.lq-fade-t {
+  mask-image: linear-gradient(transparent, #000 44px);
+}
+.lq-arrival-text.lq-fade-t.lq-fade-b {
+  mask-image: linear-gradient(
+    transparent,
+    #000 44px,
+    #000 calc(100% - 44px),
+    transparent
+  );
 }
 .lq-arrival-line {
   margin: 0;
@@ -155,6 +274,7 @@ const { html } = useReadAlong(() => arrival.turnId ?? 0, root)
  * over any picture and on the paper alike, in both themes.
  */
 .lq-arrival-pill {
+  flex-shrink: 0;
   display: flex;
   flex-direction: column;
   align-items: center;

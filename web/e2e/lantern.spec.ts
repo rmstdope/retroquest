@@ -598,6 +598,39 @@ test.describe('Lantern UI (the default)', () => {
     await expect(lines).toHaveCount(0)
   })
 
+  test("fits a speaker's whole name on one line of the small card on a phone", async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 390, height: 844 })
+    await page.goto('/')
+    await page.getByRole('button', { name: 'Start', exact: true }).click()
+    await page.locator('.lq-chapter-button').click()
+    const say = async (command: string): Promise<void> => {
+      const input = page.getByLabel('Command', { exact: true })
+      if (!(await input.isVisible()))
+        await page.getByRole('button', { name: 'Type a command' }).click()
+      await input.fill(command)
+      await input.press('Enter')
+    }
+    await say('talk to voice')
+    await say('talk to grandmother')
+
+    const foot = page.locator('.lq-phone-speech .lq-sp-right .lq-foot')
+    await expect(foot).toHaveText('Grandmother')
+    // One line box for the text, and none of it cut off.
+    const fit = await foot.evaluate((el) => {
+      const range = document.createRange()
+      range.selectNodeContents(el)
+      return {
+        lines: new Set(
+          Array.from(range.getClientRects(), (rect) => Math.round(rect.top)),
+        ).size,
+        clipped: el.scrollWidth > el.clientWidth,
+      }
+    })
+    expect(fit).toEqual({ lines: 1, clipped: false })
+  })
+
   test('tells each turn on a paper that grows to half the screen, hides to a tab', async ({
     page,
   }) => {
