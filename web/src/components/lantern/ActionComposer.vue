@@ -208,9 +208,10 @@ function setMode(next: 'actions' | 'type'): void {
 }
 
 /**
- * The stage's ⌨ Type: switch to the command box and put the cursor in it, so
- * the first letters typed land there (the button itself is gone once the box
- * shows, which would otherwise leave focus on the page).
+ * Type (the stage's ⌨ Type, the panel's switch): switch to the command box
+ * and put the cursor in it, so the first letters typed land there (the stage's
+ * button is gone once the box shows, which would otherwise leave focus on the
+ * page).
  */
 function chooseType(): void {
   mode.value = 'type'
@@ -218,9 +219,10 @@ function chooseType(): void {
 }
 
 /**
- * The stage's Actions: switch back to the verbs and put focus on the verb used
- * last (or the first verb), so the keyboard carries on (the button itself is
- * gone once the verbs show, which would otherwise leave focus on the page).
+ * Actions (the stage's button, the panel's switch): switch back to the verbs
+ * and put focus on the verb used last (or the first verb), so the keyboard
+ * carries on (the stage's button is gone once the verbs show, which would
+ * otherwise leave focus on the page).
  */
 function chooseActions(): void {
   mode.value = 'actions'
@@ -443,7 +445,7 @@ function onTypedEnter(): void {
           :aria-pressed="mode === 'actions' ? 'true' : 'false'"
           class="lq-seg-btn"
           :aria-keyshortcuts="inBox ? 'Escape' : undefined"
-          @click="mode = 'actions'"
+          @click="chooseActions"
         >
           Actions<kbd v-if="inBox" class="lq-esc" aria-hidden="true">Esc</kbd>
         </button>
@@ -451,7 +453,7 @@ function onTypedEnter(): void {
           type="button"
           :aria-pressed="mode === 'type' ? 'true' : 'false'"
           class="lq-seg-btn"
-          @click="mode = 'type'"
+          @click="chooseType"
         >
           Type
         </button>
