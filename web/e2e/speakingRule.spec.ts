@@ -74,7 +74,7 @@ async function type(page: Page, command: string): Promise<void> {
     .getByRole('button', { name: /^Type( a command)?$/ })
     .first()
     .click()
-  const input = page.getByLabel('Command')
+  const input = page.getByLabel('Command', { exact: true })
   await input.fill(command)
   await input.press('Enter')
 }
@@ -96,18 +96,19 @@ for (const width of [1280, 360]) {
       await openChapter(page)
       await page.locator('.lq-chapter-button').click()
       // The opening turn arrives in the first room, description and all. On
-      // the laptop it is told on the picture first: Escape sends it away.
-      if (width === 1280) {
-        const told = page.locator('.lq-arrival-card')
-        await expect(told.last()).toBeVisible()
-        await page.keyboard.press('Escape')
-        await expect(told).toHaveCount(0)
-      }
+      // the stage (laptop and phone) it is told on the picture first: Escape
+      // sends it away.
+      const told = page.locator('.lq-arrival-card')
+      await expect(told.last()).toBeVisible()
+      await page.keyboard.press('Escape')
+      await expect(told).toHaveCount(0)
       const arrival = page.getByTestId('turn').first().locator('.lq-arrival')
       await expectRuleBesideText(arrival)
     })
 
     test('the rule sits beside a narrated paragraph', async ({ page }) => {
+      // The stage tells it on the picture; a short screen keeps the story page.
+      await page.setViewportSize({ width, height: width === 360 ? 500 : 800 })
       await openChapter(page)
       await type(page, 'talk to voice')
       const paragraph = page

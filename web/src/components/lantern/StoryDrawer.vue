@@ -17,6 +17,7 @@ import StoryTurn from './StoryTurn.vue'
  * from the drawer lands on the newest turn's first name (or, when that turn has none,
  * the last name before it).
  */
+defineProps<{ phone?: boolean }>()
 const emit = defineEmits<{ close: [] }>()
 const game = useGameStore()
 const body = ref<HTMLElement | null>(null)
@@ -92,6 +93,7 @@ function onKeydown(event: KeyboardEvent): void {
 <template>
   <aside
     class="lq-story-drawer"
+    :class="{ 'lq-phone-drawer': phone }"
     aria-label="Story so far drawer"
     @keydown="onKeydown"
   >
@@ -202,6 +204,18 @@ function onKeydown(event: KeyboardEvent): void {
   content: '';
   position: absolute;
   inset: -4px 0;
+}
+/* On a phone it covers the whole stage, edge to edge, bar included. */
+.lq-phone-drawer {
+  top: 0;
+  bottom: 0;
+  width: 100%;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+}
+.lq-phone-drawer .lq-story-drawer-body {
+  padding: 16px;
 }
 @keyframes lq-story-drawer-in {
   from {

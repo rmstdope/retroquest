@@ -53,4 +53,12 @@ describe('SectionNav', () => {
 
     expect(mountNav().findAll('button')[3].text()).toBe('Quests (new)')
   })
+
+  it('tells the layout of every tap, also on the section already shown', async () => {
+    const w = mountNav('story')
+
+    await w.findAll('button')[0].trigger('click')
+
+    expect(w.emitted('press')).toEqual([['story']])
+  })
 })

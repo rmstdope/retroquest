@@ -9,7 +9,15 @@ import { useGameStore } from '@/stores/useGameStore'
 export type Section = 'story' | 'bag' | 'spells' | 'quests' | 'map'
 
 const current = defineModel<Section>({ required: true })
+/** Every tap on a tab, also on the one already shown (the phone stage closes the story so far on it). */
+const emit = defineEmits<{ press: [section: Section] }>()
 const game = useGameStore()
+
+/** Show the section and tell the layout it was tapped. */
+function choose(id: Section): void {
+  current.value = id
+  emit('press', id)
+}
 
 const sections = computed(() => [
   { id: 'story' as const, label: 'Story', dot: false },
@@ -28,7 +36,7 @@ const sections = computed(() => [
       type="button"
       class="lq-nav-btn"
       :aria-current="current === s.id ? 'page' : undefined"
-      @click="current = s.id"
+      @click="choose(s.id)"
     >
       {{ s.label
       }}<span v-if="s.dot" class="lq-dot"

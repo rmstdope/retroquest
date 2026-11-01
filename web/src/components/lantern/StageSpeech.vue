@@ -21,6 +21,7 @@ import SpeechPortrait from './SpeechPortrait.vue'
  * shows the rest of the turn's lines at once. Not shown while there is no
  * conversation.
  */
+defineProps<{ phone?: boolean }>()
 const emit = defineEmits<{ 'focus-story': [] }>()
 const game = useGameStore()
 const speech = useStageSpeechStore()
@@ -49,7 +50,12 @@ function clearAndFocus(): void {
 </script>
 
 <template>
-  <div class="lq-speech-zone" data-testid="speech-zone" @click="hurry">
+  <div
+    class="lq-speech-zone"
+    :class="{ 'lq-phone-speech': phone }"
+    data-testid="speech-zone"
+    @click="hurry"
+  >
     <div v-if="speech.visible.length" class="lq-speech">
       <SpeechPortrait
         v-if="speech.leftSpeaking"
@@ -190,6 +196,29 @@ function clearAndFocus(): void {
   from {
     opacity: 0;
   }
+}
+/* The phone: small portraits at the edges, a thread about 190 wide between them. */
+.lq-phone-speech {
+  --lq-portrait-w: 72px;
+}
+.lq-phone-speech .lq-sp-left {
+  left: 8px;
+}
+.lq-phone-speech .lq-sp-right {
+  right: 8px;
+}
+.lq-phone-speech .lq-thread {
+  top: 40px;
+  left: 88px;
+  right: 88px;
+}
+.lq-phone-speech .lq-line {
+  max-width: 92%;
+  padding: 7px 10px;
+}
+.lq-phone-speech .lq-clear {
+  top: 6px;
+  right: 88px;
 }
 .lq-clear {
   position: absolute;

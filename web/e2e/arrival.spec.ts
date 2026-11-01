@@ -116,8 +116,16 @@ test.describe('the arrival told on the picture', () => {
     await expect(arrival(page).locator('.lq-arrival-line')).toHaveCount(0)
   })
 
-  test('leaves a phone as it was', async ({ page }) => {
+  test('tells the arrival on a phone, with its own hint', async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 })
+    await page.goto('/')
+    await page.getByRole('button', { name: 'Start', exact: true }).click()
+    await page.locator('.lq-chapter-button').click()
+    await expect(arrival(page)).toContainText('Tap to continue')
+  })
+
+  test('leaves a short screen as it was', async ({ page }) => {
+    await page.setViewportSize({ width: 844, height: 390 })
     await page.goto('/')
     await page.getByRole('button', { name: 'Start', exact: true }).click()
     await page.locator('.lq-chapter-button').click()

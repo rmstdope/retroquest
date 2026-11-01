@@ -80,11 +80,14 @@ import TitlePage from './TitlePage.vue'
  * paper slides down to its "▴ Narration" tab and comes back, with everything
  * told in it, when the arrival clears. Enter or Space goes on, a click on the
  * picture too; Escape, the tab, an action or typing clear it at once.
- * Smaller screens show one section at a time (Story, Bag, Spells, Quests,
- * Map) with section tabs at the bottom, or in the header when short.
- * There the actions are a sheet (at most 62% of the height) that folds into
- * a one-row bar: by hand, or by itself only when an answer does not fit
- * beside it (always on short screens, where it also starts folded).
+ * Smaller screens that are not short (a phone upright) play the same stage
+ * arranged for a tall screen: the plate across the top with "⟲ Story so far"
+ * (the whole story over the stage), speech and the paper over the lower half
+ * and the folded bar above the section tabs (Story, Bag, Spells, Quests, Map);
+ * the actions are a sheet (at most 62% of the height) over the picture that
+ * folds after every turn. A short screen (a phone on its side) keeps the text
+ * page, with the tabs in the header and the same sheet folded into the bar,
+ * which also folds when an answer does not fit beside it.
  * A new turn opens at its start, with a "More below" pill while the story
  * goes on below the visible part.
  * After the last act, Finish the game asks to save (FinishDialog), then
@@ -110,6 +113,10 @@ const arrival = useArrivalStore()
 const panelHold = usePanelHold()
 const wide = useMediaQuery(WIDE_QUERY)
 const short = useMediaQuery(SHORT_QUERY)
+/** A phone (or any screen under the laptop stage) that is not short: the picture stage, arranged for a tall screen. */
+const phoneStage = computed(() => !wide.value && !short.value)
+/** The room is played on its picture: the laptop stage or the phone's. */
+const staged = computed(() => wide.value || phoneStage.value)
 /** A mouse and keyboard: the narration hint names keys instead of taps. */
 const keyboardPlayer = useMediaQuery(KEYBOARD_QUERY)
 /** The cursor is in a text field (the command box): only Esc steers the voice there. */
@@ -135,12 +142,15 @@ const drawerTab = ref<'bag' | 'spells' | 'quests' | 'story' | 'map' | null>(
   null,
 )
 const stageButtons = ref<InstanceType<typeof StageButtons> | null>(null)
+const plate = ref<InstanceType<typeof RoomPlate> | null>(null)
 /** Whether the room's picture is up (otherwise the paper backdrop), for the arrival's ink. */
 const pictured = ref(false)
-const dockOpen = ref(!short.value)
-watch(short, (isShort) => {
-  if (isShort) dockOpen.value = false
-})
+/** The actions sheet: every screen starts with it folded into the bar. */
+const dockOpen = ref(false)
+/** The phone's sheet is up over the picture. */
+const sheetOpen = computed(
+  () => phoneStage.value && section.value === 'story' && dockOpen.value,
+)
 
 // "Open in journal": the Quests drawer on the stage, the Quests section on a phone.
 watch(
@@ -148,7 +158,10 @@ watch(
   (name) => {
     if (!name) return
     if (wide.value) drawerTab.value = 'quests'
-    else section.value = 'quests'
+    else {
+      drawerTab.value = null
+      section.value = 'quests'
+    }
   },
 )
 
@@ -189,7 +202,10 @@ function toggleDrawer(
 function closeDrawer(): void {
   const tab = drawerTab.value
   drawerTab.value = null
-  if (tab) void stageButtons.value?.focusButton(tab)
+  if (!tab) return
+  // On a phone the story so far was opened from the plate.
+  if (phoneStage.value) void nextTick(() => plate.value?.focusStoryButton())
+  else void stageButtons.value?.focusButton(tab)
 }
 
 // A turn played closes the story drawer; the turn then plays on the stage.
@@ -205,7 +221,9 @@ function onOutsidePress(event: Event): void {
   if (!drawerTab.value) return
   const target = event.target instanceof Element ? event.target : null
   if (
-    target?.closest('.lq-drawer, .lq-story-drawer, .lq-buttons, .lq-name-menu')
+    target?.closest(
+      '.lq-drawer, .lq-story-drawer, .lq-buttons, .lq-name-menu, .lq-story-so-far, .lq-nav-bottom',
+    )
   )
     return
   drawerTab.value = null
@@ -237,13 +255,25 @@ const actionsHeight = ref(0)
 let actionsResize: ResizeObserver | undefined
 
 // The laptop shows everything at once; coming back from it starts on the story.
+// Turning the phone, or changing the stage, starts the stage afresh.
 watch(wide, (isWide) => {
   if (isWide) section.value = 'story'
-  else {
-    drawerTab.value = null
-    speech.clear()
-    clearArrival()
-  }
+  drawerTab.value = null
+  speech.clear()
+  clearArrival()
+})
+watch(staged, () => {
+  drawerTab.value = null
+  speech.clear()
+  clearArrival()
+})
+
+/** A tap on a section tab: the Story tab shown already puts the story so far away; leaving the Story tab does too. */
+function onSectionPress(pressed: Section): void {
+  if (pressed === 'story' && drawerTab.value === 'story') drawerTab.value = null
+}
+watch(section, (now) => {
+  if (now !== 'story' && drawerTab.value === 'story') drawerTab.value = null
 })
 const storyEl = ref<HTMLElement | null>(null)
 const mainEl = ref<HTMLElement | null>(null)
@@ -258,12 +288,14 @@ const paper = useNarrationPaper(
 )
 /** What the story pane holds: the paper's turns on the laptop, every turn elsewhere. */
 const storyTurns = computed(() =>
-  wide.value ? paper.shownTurns.value : game.turns,
+  staged.value ? paper.shownTurns.value : game.turns,
 )
 /** The paper is slid down, leaving its tab. */
 const paperAway = computed(
   () =>
-    wide.value && paper.visible.value && (paper.hidden.value || arrival.active),
+    staged.value &&
+    paper.visible.value &&
+    (paper.hidden.value || arrival.active),
 )
 /** The paper's height in px, or null before it was measured (and off the laptop). */
 const paperPx = ref<number | null>(null)
@@ -277,7 +309,7 @@ function measurePaper(): void {
   const story = storyEl.value
   const content = contentEl.value
   const area = mainEl.value
-  if (!wide.value || !wrap || !story || !content || !area) {
+  if (!staged.value || !wrap || !story || !content || !area) {
     paperPx.value = null
     return
   }
@@ -302,7 +334,7 @@ watch(
   () => arrival.active,
   (active) => {
     const focus = document.activeElement
-    if (active && wide.value && paperEl.value?.contains(focus))
+    if (active && staged.value && paperEl.value?.contains(focus))
       void nextTick(() => tabEl.value?.focus())
     else if (!active && focus && focus === tabEl.value)
       void nextTick(() =>
@@ -440,7 +472,7 @@ function dialogOpen(): boolean {
 function onNarrationKey(event: KeyboardEvent): void {
   // Escape also clears the speech on the picture (unless a drawer, the map or
   // a menu took it first); the narration below still hears it.
-  if (event.key === 'Escape' && !event.defaultPrevented && wide.value)
+  if (event.key === 'Escape' && !event.defaultPrevented && staged.value)
     speech.clear()
   if (!(narration.isNarrating || arrival.active) || event.defaultPrevented)
     return
@@ -560,7 +592,7 @@ watch(
   },
   { flush: 'post' },
 )
-watch(wide, measurePaper, { flush: 'post' })
+watch(staged, measurePaper, { flush: 'post' })
 
 // A reading that ends (above all a skip) draws the rest of the turn at once,
 // which grows the story without scrolling it (the room kept for the hint
@@ -592,7 +624,7 @@ watch(
     const folder = game.narrationFolder
     const manifest = folder ? narration.manifestFor(folder) : null
     const onPicture =
-      !!turn && wide.value && !game.showModal && arrivesOnPicture(turn)
+      !!turn && staged.value && !game.showModal && arrivesOnPicture(turn)
     // The units the narration plays; the arrival on the picture keeps quest
     // news for the story and waits to read its description while events that
     // nobody speaks are read.
@@ -617,7 +649,7 @@ watch(
       arrival.show(turn.id, parts, narration.narrates(turn.id))
     // The conversation on the picture (laptop only) follows the turn; it reads
     // the narration just begun, so it comes after it.
-    if (turn && wide.value) speech.observe(turn)
+    if (turn && staged.value) speech.observe(turn)
     // Its panels wait for the voice, or, with none to wait for, change now.
     if (!turn) return
     if (narration.narrates(turn.id)) panelHold.track(turn)
@@ -764,8 +796,11 @@ watch(
         false,
       )
     else latest?.scrollIntoView?.({ block: 'start' })
+    // Every answer is read on the picture: the phone's sheet folds after each turn.
     const folds =
-      !wide.value && dockOpen.value && (short.value || answerTooLong())
+      !wide.value &&
+      dockOpen.value &&
+      (phoneStage.value || short.value || answerTooLong())
     if (folds) {
       dockOpen.value = false
       await nextTick()
@@ -931,6 +966,7 @@ watch(
     game.rawInventory,
     game.spellEntries,
     wide.value,
+    staged.value,
     section.value,
     drawerTab.value,
   ],
@@ -1032,6 +1068,7 @@ watch(
     <template v-else>
       <LanternHeader
         :compact="!wide"
+        :hide-room="phoneStage"
         @menu="openGameDialog('menu')"
         @open="openGameDialog"
       >
@@ -1043,19 +1080,30 @@ watch(
       <main
         ref="mainEl"
         class="lq-main"
-        :class="{ 'lq-wide': wide }"
+        :class="{
+          'lq-wide': wide,
+          'lq-staged': staged,
+          'lq-phone': phoneStage,
+        }"
         @click.capture="onPanelPress"
       >
         <div
-          v-if="wide"
+          v-if="staged"
+          v-show="section === 'story'"
           class="lq-stage"
           :style="{ '--lq-actions-h': `${actionsHeight}px` }"
           @click="onPicturePress"
         >
           <StagePicture :src="game.roomPicture" @pictured="pictured = $event" />
-          <ArrivalOnPicture :pictured="pictured" />
-          <RoomPlate class="lq-stage-plate" data-panel @click="onNameClick" />
+          <ArrivalOnPicture :pictured="pictured" :phone="phoneStage" />
+          <RoomPlate
+            v-if="wide"
+            class="lq-stage-plate"
+            data-panel
+            @click="onNameClick"
+          />
           <StageButtons
+            v-if="wide"
             :key="`buttons-${stageKey}`"
             ref="stageButtons"
             class="lq-stage-buttons"
@@ -1075,19 +1123,41 @@ watch(
           <StoryDrawer
             v-else-if="drawerTab === 'story'"
             :key="`story-${stageKey}`"
+            :phone="phoneStage"
             @click="onNameClick"
             @keydown="onNameKeydown"
             @close="closeDrawer"
           />
         </div>
-        <StageSpeech v-if="wide" @focus-story="focusStory" />
+        <RoomPlate
+          v-if="phoneStage"
+          v-show="section === 'story'"
+          ref="plate"
+          class="lq-phone-plate"
+          data-panel
+          story-button
+          @click="onNameClick"
+          @story="drawerTab = 'story'"
+        />
+        <StageSpeech
+          v-if="staged"
+          v-show="section === 'story'"
+          :class="{ 'lq-covered': sheetOpen }"
+          :phone="phoneStage"
+          @focus-story="focusStory"
+        />
         <div
-          v-show="wide ? paper.visible.value : section === 'story'"
+          v-show="
+            staged
+              ? paper.visible.value && section === 'story'
+              : section === 'story'
+          "
           ref="paperEl"
           class="lq-story-wrap"
           :class="{
             'lq-hint-room': storyHeld,
             'lq-paper-away': paperAway,
+            'lq-covered': sheetOpen,
           }"
           :style="wide && paperPx !== null ? { height: `${paperPx}px` } : {}"
           :inert="paperAway || undefined"
@@ -1111,11 +1181,11 @@ watch(
             </div>
           </section>
           <button
-            v-if="wide"
+            v-if="staged"
             type="button"
             class="lq-paper-corner lq-paper-hide"
-            title="Hide the narration (N)"
-            aria-keyshortcuts="N"
+            :title="wide ? 'Hide the narration (N)' : undefined"
+            :aria-keyshortcuts="wide ? 'N' : undefined"
             @click="hidePaper"
           >
             ▾ Hide
@@ -1138,17 +1208,23 @@ watch(
           </button>
         </div>
         <div
-          v-if="wide"
+          v-if="staged"
+          v-show="section === 'story'"
           class="lq-paper-tabrow"
-          :class="{ 'lq-paper-none': !paper.visible.value }"
+          :class="{
+            'lq-paper-none': !paper.visible.value,
+            'lq-covered': sheetOpen,
+          }"
         >
           <button
             v-if="paperAway"
             ref="tabEl"
             type="button"
             class="lq-paper-tab"
-            :title="arrival.active ? undefined : 'Show the narration (N)'"
-            :aria-keyshortcuts="arrival.active ? undefined : 'N'"
+            :title="
+              arrival.active || !wide ? undefined : 'Show the narration (N)'
+            "
+            :aria-keyshortcuts="arrival.active || !wide ? undefined : 'N'"
             @click="showPaper"
           >
             ▴ Narration
@@ -1158,12 +1234,13 @@ watch(
         <!-- Choosing an action or typing clears an arrival on the picture. Bubbling
              listeners, not capture: a render before the command box's own v-model
              has read the text would give the first typed character back. -->
+        <div v-if="sheetOpen" class="lq-scrim" aria-hidden="true"></div>
         <ActionComposer
           v-show="wide || (section === 'story' && dockOpen)"
           :key="`composer-${game.gameNumber}`"
           ref="composer"
           class="lq-composer"
-          :class="{ 'lq-sheet': !wide }"
+          :class="{ 'lq-sheet': !wide, 'lq-sheet-over': phoneStage }"
           :foldable="!wide"
           :stage="wide"
           @click="clearArrival"
@@ -1178,21 +1255,37 @@ watch(
         />
 
         <template v-if="!wide">
-          <CompassPanel v-if="section === 'map'" heading data-panel />
-          <JournalPanel
-            v-else-if="section !== 'story'"
-            :key="`journal-${game.gameNumber}`"
-            :tab="section"
-            class="lq-section-view"
-            data-panel
-          />
+          <div
+            v-if="phoneStage && section !== 'story'"
+            class="lq-phone-section"
+          >
+            <CompassPanel v-if="section === 'map'" heading data-panel />
+            <JournalPanel
+              v-else
+              :key="`journal-${game.gameNumber}`"
+              :tab="section"
+              class="lq-section-view"
+              data-panel
+            />
+          </div>
+          <template v-else>
+            <CompassPanel v-if="section === 'map'" heading data-panel />
+            <JournalPanel
+              v-else-if="section !== 'story'"
+              :key="`journal-${game.gameNumber}`"
+              :tab="section"
+              class="lq-section-view"
+              data-panel
+            />
+          </template>
         </template>
       </main>
 
       <SectionNav
-        v-if="!wide && !short"
+        v-if="phoneStage"
         v-model="section"
         class="lq-nav-bottom"
+        @press="onSectionPress"
       />
 
       <SaveToast />
@@ -1284,6 +1377,9 @@ watch(
   height: 100vh;
   height: 100dvh;
   overflow: hidden;
+  /* Clipped, not just hidden: a hidden paper slid below the stage (or a
+     scrollIntoView inside it) must never scroll the whole page up. */
+  overflow: clip;
   display: flex;
   flex-direction: column;
   background: var(--lq-bg);
@@ -1304,7 +1400,7 @@ watch(
 /* The stage: the room's picture fills the play area, the story band and the
    actions sit along its bottom. The stage itself is behind them (it makes no
    stacking context of its own, so the drawer in it rises above them). */
-.lq-wide {
+.lq-staged {
   position: relative;
   max-width: none;
   padding: 0;
@@ -1328,7 +1424,7 @@ watch(
   z-index: 4;
   max-width: 55%;
 }
-.lq-wide .lq-story-wrap {
+.lq-staged .lq-story-wrap {
   flex: 0 0 auto;
   max-height: 50%;
   margin-top: auto;
@@ -1341,11 +1437,59 @@ watch(
   background: color-mix(in srgb, var(--lq-surface) 96%, transparent);
   border-top: 1px solid var(--lq-line);
 }
-.lq-wide .lq-story {
+.lq-staged .lq-story {
   padding-top: 14px;
 }
+/* The phone: the plate across the top, the paper across the width, the sheet over the picture. */
+.lq-phone-plate {
+  position: relative;
+  z-index: 1;
+  flex: 0 0 auto;
+  margin: 8px 8px 0;
+}
+.lq-phone .lq-story-wrap {
+  padding: 0 16px;
+  margin-bottom: 0;
+}
+.lq-phone .lq-paper-corner {
+  right: 16px;
+}
+.lq-phone .lq-paper-tab {
+  right: 12px;
+}
+.lq-phone :deep(.lq-dock) {
+  position: relative;
+  z-index: 3;
+  margin: 8px;
+}
+.lq-phone .lq-sheet-over {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 5;
+  border-radius: 14px 14px 0 0;
+}
+.lq-scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  background: rgb(0 0 0 / 0.45);
+}
+/* Under the open sheet the paper and the speech are covered. */
+.lq-covered {
+  visibility: hidden;
+}
+.lq-phone-section {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  padding: 16px;
+}
 /* Hidden: slid down behind the actions, and out of reach until the tab brings it back. */
-.lq-wide .lq-story-wrap.lq-paper-away {
+.lq-staged .lq-story-wrap.lq-paper-away {
   transform: translateY(100%);
   visibility: hidden;
   transition:

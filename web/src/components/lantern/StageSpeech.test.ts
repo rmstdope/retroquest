@@ -152,4 +152,11 @@ describe('StageSpeech', () => {
     await w.get('[data-testid="speech-zone"]').trigger('click')
     expect(w.findAll('[data-testid="speech-line"]')).toHaveLength(3)
   })
+
+  it('takes the phone arrangement when asked', () => {
+    const w = mount(StageSpeech, { props: { phone: true } })
+    expect(w.get('[data-testid="speech-zone"]').classes()).toContain(
+      'lq-phone-speech',
+    )
+  })
 })

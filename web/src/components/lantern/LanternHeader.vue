@@ -11,7 +11,7 @@ import type { LanternTextSize } from '@/lantern/tokens'
  * progress bar; the title stays as a hidden top-level heading. The
  * full-screen button (where supported) is left out under 360px wide.
  */
-defineProps<{ compact?: boolean }>()
+defineProps<{ compact?: boolean; hideRoom?: boolean }>()
 const emit = defineEmits<{
   menu: []
   open: [kind: 'save' | 'load' | 'stats' | 'settings' | 'help']
@@ -115,7 +115,7 @@ function toggleTheme(): void {
     </button>
     <div v-if="compact" class="lq-compact">
       <h1 class="lq-sr-only">RetroQuest</h1>
-      <span class="lq-compact-room">{{ game.roomName }}</span>
+      <span v-if="!hideRoom" class="lq-compact-room">{{ game.roomName }}</span>
       <span v-if="progress" class="lq-compact-sub"
         >{{ actLabel }} · Quests {{ progress.completed }}/{{
           progress.total

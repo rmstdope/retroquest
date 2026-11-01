@@ -93,6 +93,7 @@ test.describe('Lantern UI (the default)', () => {
     await page.setViewportSize({ width: 390, height: 844 })
     await page.goto('/')
     await injectMockState(page)
+    await page.getByRole('button', { name: 'Actions ▴' }).click()
     await page.evaluate(() => {
       /* eslint-disable @typescript-eslint/no-explicit-any */
       const app = (document.querySelector('#app') as any).__vue_app__
@@ -109,7 +110,10 @@ test.describe('Lantern UI (the default)', () => {
       /* eslint-enable @typescript-eslint/no-explicit-any */
     })
 
-    await expect(page.getByRole('region', { name: 'Actions' })).toBeInViewport()
+    // The answer folded the sheet into the bar, which stays in reach.
+    await expect(
+      page.getByRole('region', { name: 'Action bar' }),
+    ).toBeInViewport()
   })
 
   test('is the only UI, also for old ?ui= links', async ({ page }) => {
@@ -252,6 +256,7 @@ test.describe('Lantern UI (the default)', () => {
       store.exits = { north: "Mira's Hut" }
       /* eslint-enable @typescript-eslint/no-explicit-any */
     })
+    await page.getByRole('button', { name: 'Actions ▴' }).click()
 
     const actions = page.getByRole('region', { name: 'Actions' })
     await expect(
@@ -294,6 +299,7 @@ test.describe('Lantern UI (the default)', () => {
     await page.setViewportSize({ width: 900, height: 800 })
     await page.goto('/')
     await injectMockState(page)
+    await page.getByRole('button', { name: 'Actions ▴' }).click()
     const actions = page.getByRole('region', { name: 'Actions' })
     const background = (name: string) =>
       actions
@@ -369,6 +375,7 @@ test.describe('Lantern UI (the default)', () => {
       }
       /* eslint-enable @typescript-eslint/no-explicit-any */
     })
+    await page.getByRole('button', { name: 'Actions ▴' }).click()
     await page
       .getByRole('region', { name: 'Actions' })
       .getByRole('button', { name: 'Type', exact: true })
@@ -486,7 +493,8 @@ test.describe('Lantern UI (the default)', () => {
     expect(row!.height).toBeLessThan(100)
 
     await page.setViewportSize({ width: 390, height: 844 })
-    await expect(plate).toBeHidden()
+    await expect(page.locator('.lq-stage-plate')).toHaveCount(0)
+    await expect(page.locator('.lq-phone-plate')).toBeVisible()
   })
 
   test('opens the story so far as a drawer beside the stage on a laptop', async ({
@@ -699,7 +707,7 @@ test.describe('Lantern UI (the default)', () => {
     expect(navBox!.y + navBox!.height).toBeCloseTo(844, 0)
 
     await sections.getByRole('button', { name: 'Story' }).click()
-    await expect(page.getByRole('region', { name: 'Actions' })).toBeVisible()
+    await expect(page.getByRole('region', { name: 'Action bar' })).toBeVisible()
   })
 
   test('puts the section tabs in the header in phone landscape', async ({
@@ -746,6 +754,7 @@ test.describe('Lantern UI (the default)', () => {
     await page.setViewportSize({ width: 320, height: 568 })
     await page.goto('/')
     await injectMockState(page)
+    await page.getByRole('button', { name: 'Actions ▴' }).click()
 
     const sheet = page.getByRole('region', { name: 'Actions' })
     await expect(sheet).toBeVisible()
@@ -794,7 +803,6 @@ test.describe('Lantern UI (the default)', () => {
       }
       /* eslint-enable @typescript-eslint/no-explicit-any */
     })
-    await page.getByRole('button', { name: 'Hide actions' }).click()
 
     const open = page.getByRole('button', { name: 'Actions ▴' })
     const lines = await open.evaluate((el) => {

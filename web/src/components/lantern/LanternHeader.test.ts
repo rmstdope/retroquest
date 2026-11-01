@@ -207,4 +207,15 @@ describe('LanternHeader', () => {
       ).toBe(false)
     })
   })
+
+  it('leaves the room name out of the compact row when the plate names it', () => {
+    useGameStore().roomName = 'Garden'
+    wrapper = mount(LanternHeader, { props: { compact: true } })
+    expect(wrapper.find('.lq-compact-room').exists()).toBe(true)
+    wrapper.unmount()
+    wrapper = mount(LanternHeader, {
+      props: { compact: true, hideRoom: true },
+    })
+    expect(wrapper.find('.lq-compact-room').exists()).toBe(false)
+  })
 })

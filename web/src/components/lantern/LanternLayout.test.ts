@@ -32,13 +32,24 @@ const TURN = {
 describe('LanternLayout', () => {
   let wrapper: VueWrapper | undefined
 
+  // These tests read the text page, which a short screen (a phone on its side) keeps;
+  // the picture stage on a phone has its own tests (LanternLayout.phone.test.ts).
   beforeEach(() => {
     setActivePinia(createPinia())
+    vi.stubGlobal(
+      'matchMedia',
+      vi.fn((query: string) => ({
+        matches: query.includes('max-height'),
+        addEventListener: vi.fn(),
+        removeEventListener: vi.fn(),
+      })),
+    )
   })
 
   afterEach(() => {
     wrapper?.unmount()
     wrapper = undefined
+    vi.unstubAllGlobals()
   })
 
   function mountLayout() {
@@ -663,7 +674,7 @@ describe('LanternLayout', () => {
     game.acceptInput = true
     await wrapper.vm.$nextTick()
 
-    expect(document.activeElement?.textContent?.trim()).toBe('Look')
+    expect(document.activeElement?.textContent?.trim()).toBe('Actions ▴')
   })
 
   it('brings the start of the newest turn into view', async () => {
@@ -1054,7 +1065,7 @@ describe('LanternLayout', () => {
     })
   })
 
-  it('shows no speech on the picture on a phone', async () => {
+  it('shows no speech on the picture on a short screen', async () => {
     const w = mountLayout()
     const game = useGameStore()
     game.turns.push({
@@ -1069,7 +1080,7 @@ describe('LanternLayout', () => {
     expect(w.get('section[aria-label="Story"]').text()).toContain('Hello.')
   })
 
-  it('keeps the single column on smaller screens', () => {
+  it('keeps the single column on a short screen', () => {
     const w = mountLayout()
 
     expect(w.find('aside').exists()).toBe(false)
@@ -1106,10 +1117,11 @@ describe('LanternLayout', () => {
     it('starts on the story with the section tabs at the bottom', () => {
       const w = mountLayout()
 
-      expect(w.find('header .lq-compact-room').exists()).toBe(true)
+      // The plate on the picture names the room, so the header does not.
+      expect(w.find('header .lq-compact-room').exists()).toBe(false)
       expect(sections(w).classes()).toContain('lq-nav-bottom')
       expect(sections(w).get('[aria-current="page"]').text()).toBe('Story')
-      expect(w.get('[aria-label="Story"]').isVisible()).toBe(true)
+      expect(w.get('.lq-stage').isVisible()).toBe(true)
     })
 
     it('shows the bag in place of the story and keeps the story', async () => {
@@ -1198,7 +1210,7 @@ describe('LanternLayout', () => {
       await use.trigger('click')
       await flushPromises()
 
-      expect(document.activeElement?.textContent?.trim()).toBe('Look')
+      expect(document.activeElement?.textContent?.trim()).toBe('Actions ▴')
     })
 
     it('returns to the story after the window was laptop-wide', async () => {
@@ -1305,12 +1317,12 @@ describe('LanternLayout', () => {
       vi.restoreAllMocks()
     })
 
-    it('starts with the actions open as a sheet', () => {
+    it('starts folded into the bar, so the picture is clear', () => {
       const w = mountLayout()
 
-      expect(actions(w).isVisible()).toBe(true)
+      expect(actions(w).isVisible()).toBe(false)
       expect(actions(w).classes()).toContain('lq-sheet')
-      expect(w.find('[aria-label="Action bar"]').exists()).toBe(false)
+      expect(w.find('[aria-label="Action bar"]').exists()).toBe(true)
     })
 
     it('starts folded on a short screen', () => {
@@ -1355,13 +1367,16 @@ describe('LanternLayout', () => {
       expect(document.activeElement).toBe(w.get('button.lq-dock-open').element)
     })
 
-    it('stays open when the answer fits', async () => {
+    it('folds after every answer, however short, so it is read on the picture', async () => {
       stubHeights(100, 300)
       const w = mountLayout()
+      await w.get('button.lq-dock-open').trigger('click')
+      expect(actions(w).isVisible()).toBe(true)
 
       await addTurn(w, 7)
+      await flushPromises()
 
-      expect(actions(w).isVisible()).toBe(true)
+      expect(w.find('[aria-label="Action bar"]').exists()).toBe(true)
     })
 
     it('puts the focus back on the bar when its exit button has gone', async () => {
@@ -1561,7 +1576,7 @@ describe('LanternLayout', () => {
       await w.get('section[aria-label="Story"]').trigger('scroll')
 
       expect(w.find('button.lq-more-below').exists()).toBe(false)
-      expect(document.activeElement?.textContent?.trim()).toBe('Look')
+      expect(document.activeElement?.textContent?.trim()).toBe('Actions ▴')
     })
   })
 

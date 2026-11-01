@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { useGameStore } from '@/stores/useGameStore'
 import { usePanelFlash } from '@/composables/usePanelFlash'
 import { displayName } from '@/lantern/displayName'
@@ -12,7 +12,10 @@ import { displayName } from '@/lantern/displayName'
  * name wraps; with nothing here the plate shows only the name. The plate is
  * never read aloud: the room's name and description are read in the story.
  */
+const props = defineProps<{ storyButton?: boolean }>()
+const emit = defineEmits<{ story: [] }>()
 const game = useGameStore()
+const storyEl = ref<HTMLButtonElement | null>(null)
 const { flashing, endFlash } = usePanelFlash(['place'])
 
 /**
@@ -32,6 +35,13 @@ const here = computed(() => {
     return { ...entry, key: `${base}:${count}` }
   })
 })
+
+/** Put focus on "⟲ Story so far" (the story so far has just been closed). */
+function focusStoryButton(): void {
+  storyEl.value?.focus()
+}
+
+defineExpose({ focusStoryButton })
 </script>
 
 <template>
@@ -41,7 +51,18 @@ const here = computed(() => {
     aria-label="Current location"
     @animationend.self="endFlash"
   >
-    <span class="lq-label">You are in</span>
+    <div class="lq-plate-top">
+      <span class="lq-label">You are in</span>
+      <button
+        v-if="props.storyButton"
+        ref="storyEl"
+        type="button"
+        class="lq-story-so-far"
+        @click="emit('story')"
+      >
+        ⟲ Story so far
+      </button>
+    </div>
     <h2 class="lq-room-name">{{ game.roomName }}</h2>
     <div v-if="here.length" class="lq-here">
       <button
@@ -85,6 +106,26 @@ const here = computed(() => {
   font-size: calc(24px * var(--lq-display-scale));
   font-weight: 500;
   color: var(--lq-fg);
+}
+/* The label, and on the phone stage "⟲ Story so far" in the top-right corner. */
+.lq-plate-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.lq-story-so-far {
+  height: 32px;
+  margin: -6px -6px -6px 0;
+  padding: 0 12px;
+  border: 1px solid var(--lq-line);
+  border-radius: 16px;
+  background: var(--lq-raised);
+  color: var(--lq-accent-text);
+  font: inherit;
+  font-family: var(--lq-font-ui);
+  font-size: 13px;
+  cursor: pointer;
 }
 .lq-here {
   display: flex;

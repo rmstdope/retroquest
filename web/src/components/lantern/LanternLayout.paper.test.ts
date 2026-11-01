@@ -20,11 +20,11 @@ function turn(id: number, text: string, command: string | null = 'look'): Turn {
   }
 }
 
-function stubScreen(wide: boolean): void {
+function stubScreen(wide: boolean | 'short'): void {
   vi.stubGlobal(
     'matchMedia',
-    vi.fn(() => ({
-      matches: wide,
+    vi.fn((query: string) => ({
+      matches: wide === 'short' ? query.includes('max-height') : wide,
       addEventListener: vi.fn(),
       removeEventListener: vi.fn(),
     })),
@@ -243,8 +243,20 @@ describe('the narration paper', () => {
     expect(await helpText()).not.toContain('hide or show the narration')
   })
 
-  it('keeps every turn in the story, with no Hide, on a phone', async () => {
+  it('has the paper with Hide on a phone, and no N key', async () => {
     stubScreen(false)
+    await mountWith([turn(1, 'First.'), turn(2, 'Second.')])
+    expect(
+      document.querySelectorAll('.lq-story [data-testid="turn"]'),
+    ).toHaveLength(1)
+    expect(hideButton()).not.toBeNull()
+    press('n')
+    await nextTick()
+    expect(tab()).toBeNull()
+  })
+
+  it('keeps every turn in the story, with no Hide, on a short screen', async () => {
+    stubScreen('short')
     await mountWith([turn(1, 'First.'), turn(2, 'Second.')])
     expect(
       document.querySelectorAll('.lq-story [data-testid="turn"]'),
