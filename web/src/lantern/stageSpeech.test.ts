@@ -73,6 +73,18 @@ describe('speechLines', () => {
   })
 })
 
+describe('speechLines with single line breaks', () => {
+  it('makes each line-broken paragraph of a speech its own line', () => {
+    const lines = speechLines(
+      parseTurn(
+        '[character_name]Mira[/character_name]\n' +
+          '[dialogue]One.\nTwo.\nThree.[/dialogue]',
+      ),
+    )
+    expect(lines.map((l) => l.markup)).toEqual(['One.', 'Two.', 'Three.'])
+  })
+})
+
 describe('eliorLine', () => {
   it('is the words of a say command, as typed, on the left before any block', () => {
     expect(eliorLine('say Hello there to grandmother')).toEqual({

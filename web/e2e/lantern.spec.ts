@@ -527,7 +527,7 @@ test.describe('Lantern UI (the default)', () => {
     await expect(drawer).toHaveCount(0)
   })
 
-  test('puts speech on the picture on a laptop: the Voice on the right, Elior on the left, cleared by ✕, Escape and walking', async ({
+  test('puts speech on the picture on a laptop: the grandmother on the right, Elior on the left, cleared by ✕, Escape and walking', async ({
     page,
   }) => {
     await page.setViewportSize({ width: 1280, height: 800 })
@@ -541,25 +541,23 @@ test.describe('Lantern UI (the default)', () => {
     const input = page.getByLabel('Command')
     const lines = page.getByTestId('speech-line')
 
+    // Talking to the Voice wakes Elior in his cottage: leaving the room
+    // leaves the picture empty, while the story band prints the Voice.
     await input.fill('talk to voice')
     await input.press('Enter')
-    await expect(lines.first()).toBeVisible()
-    // No portrait is made yet: the initial card stands in, on the right.
-    const right = page.locator('.lq-sp-right')
-    await expect(right).toContainText('Voice')
-    await expect(right.locator('.lq-initial')).toHaveText('V')
-    await expect(page.locator('.lq-sp-left')).toHaveCount(0)
-    // The story band prints it too.
     await expect(page.getByRole('region', { name: 'Story' })).toContainText(
       'Voice',
     )
+    await expect(
+      page.getByRole('region', { name: 'Current location' }),
+    ).toContainText("Elior's Cottage")
+    await expect(lines).toHaveCount(0)
 
-    // Elior wakes in his cottage and talks to his grandmother: a fresh
-    // conversation, and his own words bring him in on the left.
-    await input.fill('say hello to voice')
-    await input.press('Enter')
+    // Talking to his grandmother: no portrait is made yet, so the initial
+    // card stands in, on the right.
     await input.fill('talk to grandmother')
     await input.press('Enter')
+    await expect(page.locator('.lq-sp-right')).toContainText('Grandmother')
     await expect(page.locator('.lq-sp-right .lq-initial')).toHaveText('G')
     await expect(page.locator('.lq-sp-left')).toHaveCount(0)
     await input.fill('say hello to grandmother')

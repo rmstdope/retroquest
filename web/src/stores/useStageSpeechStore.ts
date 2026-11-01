@@ -13,7 +13,7 @@ import {
 /**
  * The conversation shown on the room's picture (never saved). A command that
  * addresses a character starts or continues a conversation with them; any
- * other turn clears it, and so does addressing someone else (which starts a
+ * other turn clears it, and so does a turn that moves Elior to another room, and so does addressing someone else (which starts a
  * fresh one). The lines of each turn are the quotes of its answer
  * (`speechLines`), shown as the narrator reaches them when the turn is
  * narrated, and otherwise one at a time by a reading pause (`readingPauseMs`);
@@ -98,13 +98,15 @@ export const useStageSpeechStore = defineStore('stageSpeech', () => {
 
   /**
    * Take a new turn in: the previous turn's lines show in full first. A turn
-   * that addresses no one clears the conversation; one that addresses someone
+   * that addresses no one, or ends in another room, clears the conversation; one that addresses someone
    * else starts a new one; one that addresses the same character adds to it.
    */
   function observe(turn: Turn): void {
     revealAll()
+    const moved = turn.description?.moved === true
     const addressed = turn.addressed ?? null
-    if (!addressed) return clear()
+    // Leaving the room ends the conversation, even when the talk itself moved Elior.
+    if (!addressed || moved) return clear()
     if (conversation.value?.with.toLowerCase() !== addressed.toLowerCase()) {
       clear()
       conversation.value = { with: addressed, lines: [] }
