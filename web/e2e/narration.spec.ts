@@ -105,8 +105,14 @@ test('opens a journal drawer at once while the voice reads, and a press inside i
   await expect(page.locator('.lq-speaking')).toHaveCount(1)
 
   // The drawer is a held panel: a press in it only brings everything up to date.
+  // Within one clip, so the voice ending by itself cannot pass it.
   await drawer.getByRole('tab', { name: /^Bag/ }).click()
-  await expect(page.locator('.lq-speaking')).toHaveCount(0)
+  await expect(page.locator('.lq-speaking')).toHaveCount(0, { timeout: 1_000 })
+  // That press did nothing but catch up: the Quests tab is still the open one.
+  await expect(drawer.getByRole('tab', { name: /^Quests/ })).toHaveAttribute(
+    'aria-selected',
+    'true',
+  )
   await expect(page.getByTestId('turn')).toHaveCount(turns)
 })
 
