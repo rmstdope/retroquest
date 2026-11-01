@@ -1,8 +1,17 @@
 <script setup lang="ts">
-import { nextTick, onBeforeUnmount, ref, watch } from 'vue'
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { useArrivalStore } from '@/stores/useArrivalStore'
 import { useReadAlong } from '@/composables/useReadAlong'
 import { FOLLOW_EVENT } from '@/composables/useStoryFollow'
+import {
+  pageLines,
+  paginate,
+  type ArrivalPage,
+  type ArrivalPiece,
+  type PageLine,
+} from '@/lantern/arrivalPages'
+import { renderMarkup } from '@/utils/theme'
+import { useSettingsStore } from '@/stores/useSettingsStore'
 
 /**
  * The arrival told on the middle of the room's picture, like a film title:
@@ -17,16 +26,118 @@ import { FOLLOW_EVENT } from '@/composables/useStoryFollow'
  * paper in the light theme. The text is also in the story, which waits aside:
  * the layer is a polite live region for screen readers.
  *
- * A description too tall for the clear space scrolls inside its own box
+ * On the laptop stage a part taller than the clear space (below the top
+ * buttons, above the story tab and the actions) is cut into pages that each
+ * fit, in the same full-size type (`arrivalPages`): the view measures the
+ * pieces in a hidden twin of the text box, shows the page up
+ * (`useArrivalStore.page`) and reports where each page starts to the store,
+ * which turns them. The cut is made afresh when the part or the stage's size
+ * changes. Only a single sentence too tall for any page scrolls inside its
+ * own box, as the phone's arrival does: on a phone (`phone`) the text is not
+ * paged and a description too tall scrolls inside its box
  * (`.lq-arrival-text`) above the pill, which never leaves the bottom of the
- * space. The box fades out at an edge where the text continues, and, while the
- * narrator speaks, glides to keep the lit word in view (the `lq-follow` event
- * of the read-along); with reduced motion it jumps.
+ * space. A scrolling box fades out at an edge where the text continues, and,
+ * while the narrator speaks, glides to keep the lit word in view (the
+ * `lq-follow` event of the read-along); with reduced motion it jumps.
  */
-defineProps<{ pictured: boolean; phone?: boolean }>()
+const props = defineProps<{ pictured: boolean; phone?: boolean }>()
 const arrival = useArrivalStore()
 const root = ref<HTMLElement | null>(null)
 const { html } = useReadAlong(() => arrival.turnId ?? 0, root)
+
+/** The twin of the text box the pieces are measured in. */
+const twin = ref<HTMLElement | null>(null)
+/** The pill under the text. */
+const pill = ref<HTMLElement | null>(null)
+/** The pages of the part up (laptop only); empty until it is cut. */
+const pages = ref<ArrivalPage[]>([])
+/** The gap between the text and the pill (px), as in the card's rule. */
+const CARD_GAP = 14
+
+/** What the page up shows: its lines, or all of the part's before it is cut. */
+const shown = computed((): PageLine[] => {
+  const page = pages.value[arrival.page]
+  if (page) return pageLines(page)
+  return (arrival.part?.lines ?? []).map((line) => ({
+    unit: line.unit,
+    markup: line.markup,
+    wordStart: 0,
+  }))
+})
+/** The height the text may have: the stage inside its padding, less the pill and the gap. */
+function room(): number {
+  const stage = root.value
+  if (!stage) return 0
+  const style = getComputedStyle(stage)
+  const padding =
+    (parseFloat(style.paddingTop) || 0) + (parseFloat(style.paddingBottom) || 0)
+  return (
+    stage.clientHeight - padding - (pill.value?.offsetHeight ?? 0) - CARD_GAP
+  )
+}
+
+/** Cut the part up into pages that fit (not on a phone, which scrolls). */
+function recut(): void {
+  const part = arrival.part
+  const measure = twin.value
+  if (props.phone || !part || !measure) {
+    pages.value = []
+    return
+  }
+  const available = room()
+  const fits = (pieces: ArrivalPiece[]): boolean => {
+    measure.innerHTML = pageLines({
+      pieces,
+      firstUnit: 0,
+      firstWord: 0,
+      scrolls: false,
+    })
+      .map(
+        (line) =>
+          `<p class="lq-arrival-line${part.kind === 'events' ? ' lq-arrival-event' : ''}">` +
+          `${renderMarkup(line.markup)}</p>`,
+      )
+      .join('')
+    return measure.offsetHeight <= available
+  }
+  const cut = paginate(part.lines, fits)
+  measure.innerHTML = ''
+  pages.value = cut
+  const base = (unit: number): number =>
+    part.lines.find((line) => line.unit === unit)?.wordBase ?? 0
+  arrival.setPages(
+    cut.map((page) => ({
+      unit: page.firstUnit,
+      word: base(page.firstUnit) + page.firstWord,
+      text: pageLines(page)
+        .map((line) => line.markup)
+        .join(' '),
+    })),
+  )
+}
+// Larger or smaller type changes the lines, not the stage: cut afresh.
+watch(
+  () => useSettingsStore().textSize,
+  async () => {
+    await nextTick()
+    recut()
+  },
+)
+let stageObserver: ResizeObserver | undefined
+onMounted(() => {
+  if (typeof ResizeObserver === 'undefined' || !root.value) return
+  stageObserver = new ResizeObserver(() => requestAnimationFrame(recut))
+  stageObserver.observe(root.value)
+})
+// Cut each part afresh, once its card is drawn.
+watch(
+  () => [arrival.turnId, arrival.part?.kind, props.phone],
+  async () => {
+    pages.value = []
+    await nextTick()
+    recut()
+  },
+)
 
 /** The text box of the part up; it is a new element for every part. */
 const text = ref<HTMLElement | null>(null)
@@ -94,7 +205,10 @@ watch(
     void watchBox(text.value)
   },
 )
-onBeforeUnmount(() => observer?.disconnect())
+onBeforeUnmount(() => {
+  observer?.disconnect()
+  stageObserver?.disconnect()
+})
 </script>
 
 <template>
@@ -110,6 +224,9 @@ onBeforeUnmount(() => observer?.disconnect())
     data-testid="arrival-on-picture"
     @click="arrival.next()"
   >
+    <div class="lq-arrival-measure" aria-hidden="true">
+      <div ref="twin" class="lq-arrival-twin"></div>
+    </div>
     <Transition name="lq-arrival-fade">
       <div v-if="arrival.part" :key="arrival.part.kind" class="lq-arrival-card">
         <!-- eslint-disable vue/no-v-html -->
@@ -122,25 +239,29 @@ onBeforeUnmount(() => observer?.disconnect())
         >
           <template v-if="arrival.part.kind === 'events'">
             <p
-              v-for="line in arrival.part.lines"
-              :key="line.unit"
+              v-for="line in shown"
+              :key="`${line.unit}-${line.wordStart}`"
               class="lq-arrival-line lq-arrival-event"
               :data-unit="line.unit"
-              v-html="html(line.markup, line.unit)"
+              v-html="
+                html(line.markup, line.unit, 0, undefined, line.wordStart)
+              "
             ></p>
           </template>
           <template v-else>
             <p
-              v-for="line in arrival.part.lines"
-              :key="line.unit"
+              v-for="line in shown"
+              :key="`${line.unit}-${line.wordStart}`"
               class="lq-arrival-line"
               :data-unit="line.unit"
-              v-html="html(line.markup, line.unit, 1)"
+              v-html="
+                html(line.markup, line.unit, 1, undefined, line.wordStart)
+              "
             ></p>
           </template>
         </div>
         <!-- eslint-enable vue/no-v-html -->
-        <div class="lq-arrival-pill">
+        <div ref="pill" class="lq-arrival-pill">
           <p class="lq-arrival-hint">
             {{ phone ? 'Tap to continue' : 'Click or press Enter to continue' }}
           </p>
@@ -238,6 +359,29 @@ onBeforeUnmount(() => observer?.disconnect())
   align-items: center;
   gap: 14px;
 }
+/*
+ * Measures the pieces of a page at the card's width; never seen or heard. It
+ * lives on the stage, outside the card, which is replaced as the parts change.
+ */
+.lq-arrival-measure {
+  position: absolute;
+  inset: 0;
+  padding: 0 24px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  visibility: hidden;
+  pointer-events: none;
+}
+.lq-arrival-twin {
+  width: min(760px, 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  text-align: center;
+  font-size: inherit;
+}
 .lq-arrival-text::-webkit-scrollbar {
   display: none;
 }
@@ -255,13 +399,15 @@ onBeforeUnmount(() => observer?.disconnect())
     transparent
   );
 }
-.lq-arrival-line {
+.lq-arrival-line,
+.lq-arrival-twin :deep(.lq-arrival-line) {
   margin: 0;
   font-family: var(--lq-font-prose);
   font-size: calc(24px * var(--lq-text-scale, 1));
   line-height: 1.5;
 }
-.lq-arrival-event {
+.lq-arrival-event,
+.lq-arrival-twin :deep(.lq-arrival-event) {
   font-style: italic;
 }
 .lq-arrival-card :deep(.lq-w-now) {

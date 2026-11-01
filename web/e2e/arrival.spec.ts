@@ -12,37 +12,41 @@ async function startAct1(page: Page): Promise<void> {
 async function pushArrival(
   page: Page,
   description = 'Some place.',
+  text = '',
 ): Promise<void> {
-  await page.evaluate((description) => {
-    const app = (
-      document.querySelector('#app') as unknown as {
-        __vue_app__: {
-          config: {
-            globalProperties: {
-              $pinia: { state: { value: { game: { turns: unknown[] } } } }
+  await page.evaluate(
+    ({ description, text }) => {
+      const app = (
+        document.querySelector('#app') as unknown as {
+          __vue_app__: {
+            config: {
+              globalProperties: {
+                $pinia: { state: { value: { game: { turns: unknown[] } } } }
+              }
             }
           }
         }
-      }
-    ).__vue_app__
-    app.config.globalProperties.$pinia.state.value.game.turns.push({
-      id: 999,
-      command: null,
-      text: '',
-      room: 'Nowhere',
-      description: { moved: true, firstVisit: true },
-      gained: [],
-      lost: [],
-      narrate: true,
-      arrival: {
+      ).__vue_app__
+      app.config.globalProperties.$pinia.state.value.game.turns.push({
+        id: 999,
+        command: null,
+        text,
         room: 'Nowhere',
-        description,
-        characters: [],
-        items: [],
-        exits: {},
-      },
-    })
-  }, description)
+        description: { moved: true, firstVisit: true },
+        gained: [],
+        lost: [],
+        narrate: true,
+        arrival: {
+          room: 'Nowhere',
+          description,
+          characters: [],
+          items: [],
+          exits: {},
+        },
+      })
+    },
+    { description, text },
+  )
 }
 
 const arrival = (page: Page) => page.getByTestId('arrival-on-picture')
@@ -186,5 +190,132 @@ test.describe('the arrival told on the picture', () => {
     await page.locator('.lq-chapter-button').click()
     await expect(arrival(page)).toHaveCount(0)
     await expect(story(page)).toBeVisible()
+  })
+
+  test.describe('a long arrival on a short laptop window', () => {
+    const EVENTS =
+      '[event]You answer it, and the room holds its breath while the old rafters creak above you.[/event]\n' +
+      '[event]The whisper comes once more, closer than before, and it seems to know your name.[/event]\n' +
+      '[event]The dark lets go of you, one thread at a time, as a hand lets go of a sleeper’s sleeve.[/event]\n' +
+      '[event]A grey light finds the edges of the shutters and lays itself along the floor.[/event]\n' +
+      '[event]Somewhere below, a kettle begins to tick against the iron of the hob.[/event]'
+    const PLACE =
+      'A low room of dark beams and old rugs, warm with the last of the fire. ' +
+      'The shutters are closed against the morning. A kettle ticks on the hob.'
+
+    /** Open a laptop window of the given height with a long arrival told. */
+    async function longArrival(page: Page, height: number): Promise<void> {
+      await page.setViewportSize({ width: 1280, height })
+      await page.goto('/')
+      await page.getByRole('button', { name: 'Start', exact: true }).click()
+      await page.locator('.lq-chapter-button').click()
+      await arrival(page).click()
+      await pushArrival(page, PLACE, EVENTS)
+      // The cleared arrival has faded away.
+      await expect(arrival(page).locator('.lq-arrival-card')).toHaveCount(1)
+    }
+
+    /** Whether every shown line sits between the top buttons and the story tab. */
+    async function clearOfTheChrome(page: Page): Promise<void> {
+      const buttons = await page
+        .getByRole('button', { name: /^Bag/ })
+        .boundingBox()
+      const tab = await page
+        .getByRole('button', { name: /Narration/ })
+        .first()
+        .boundingBox()
+      const pill = await arrival(page).locator('.lq-arrival-pill').boundingBox()
+      for (const line of await arrival(page)
+        .locator('.lq-arrival-line')
+        .all()) {
+        const box = await line.boundingBox()
+        expect(box!.y).toBeGreaterThanOrEqual(buttons!.y + buttons!.height)
+        expect(box!.y + box!.height).toBeLessThanOrEqual(tab!.y)
+      }
+      expect(pill!.y + pill!.height).toBeLessThanOrEqual(tab!.y + tab!.height)
+    }
+
+    test('turns into pages that start below the buttons, in the same type', async ({
+      page,
+    }) => {
+      await longArrival(page, 560)
+      const lines = arrival(page).locator('.lq-arrival-line')
+      await expect(lines.first()).toBeVisible()
+      const size = await lines
+        .first()
+        .evaluate((el) => getComputedStyle(el).fontSize)
+      expect(size).toBe('24px')
+      await clearOfTheChrome(page)
+      const first = await lines.allTextContents()
+      expect(first.join(' ')).toContain('You answer it')
+      expect(first.join(' ')).not.toContain('The dark lets go')
+      // A click turns the page, the hint stays, and nothing is added.
+      await arrival(page).click({ position: { x: 600, y: 300 } })
+      await expect(lines.first()).not.toHaveText(first[0])
+      await clearOfTheChrome(page)
+      await expect(arrival(page).locator('.lq-arrival-hint')).toHaveText(
+        'Click or press Enter to continue',
+      )
+      // Pages and parts go on with Enter until the arrival clears.
+      for (let i = 0; i < 12 && (await lines.count()); i++)
+        await page.keyboard.press('Enter')
+      await expect(lines).toHaveCount(0)
+      await expect(story(page)).toBeVisible()
+    })
+
+    test('keeps a speaker’s quote on the page of the line that introduces it, and Space and Escape work', async ({
+      page,
+    }) => {
+      await page.setViewportSize({ width: 1280, height: 713 })
+      await page.goto('/')
+      await page.getByRole('button', { name: 'Start', exact: true }).click()
+      await page.locator('.lq-chapter-button').click()
+      await arrival(page).click()
+      await pushArrival(
+        page,
+        'You are in Elior’s Cottage.',
+        '[event]You answer it, and the room holds its breath while the old rafters creak above you.[/event]\n' +
+          '[event]A grey light finds the edges of the shutters and lays itself along the floor.[/event]\n' +
+          '[event]Somewhere below, a kettle begins to tick against the iron of the hob and wakes it.[/event]\n' +
+          'The whisper comes once more, closer than the thunder, and this time there are words in it.\n' +
+          '[dialogue]…and let them rest…[/dialogue]\n' +
+          '[event]The dark lets go of you.[/event]',
+      )
+      await expect(arrival(page).locator('.lq-arrival-card')).toHaveCount(1)
+      const lines = arrival(page).locator('.lq-arrival-line')
+      const seen: string[] = []
+      for (let i = 0; i < 6; i++) {
+        const text = (await lines.allTextContents()).join(' | ')
+        seen.push(text)
+        if (text.includes('let them rest')) expect(text).toContain('whisper')
+        await page.keyboard.press('Space')
+        await expect(arrival(page).locator('.lq-arrival-card')).toHaveCount(1)
+        if (text.includes('Elior')) break
+      }
+      expect(seen.some((text) => text.includes('let them rest'))).toBe(true)
+      await page.keyboard.press('Escape')
+      await expect(lines).toHaveCount(0)
+    })
+
+    test('is one page per part in a window tall enough', async ({ page }) => {
+      await longArrival(page, 1000)
+      const lines = arrival(page).locator('.lq-arrival-line')
+      await expect(lines).toHaveCount(5)
+      await page.keyboard.press('Enter')
+      await expect(lines).toHaveCount(1)
+      await page.keyboard.press('Enter')
+      await expect(lines).toHaveCount(0)
+    })
+
+    test('is cut again when the window is resized', async ({ page }) => {
+      await longArrival(page, 560)
+      const lines = arrival(page).locator('.lq-arrival-line')
+      await expect(lines.first()).toBeVisible()
+      const before = await lines.count()
+      await page.setViewportSize({ width: 1280, height: 1000 })
+      await expect(lines).toHaveCount(5)
+      expect(before).toBeLessThan(5)
+      await clearOfTheChrome(page)
+    })
   })
 })

@@ -79,9 +79,25 @@ describe('arrivalParts', () => {
     expect(parts).toEqual([
       {
         kind: 'description',
-        lines: [{ unit: 0, markup: room.description }],
+        lines: [{ unit: 0, markup: room.description, wordBase: 1 }],
         voiced: true,
       },
+    ])
+  })
+
+  it('marks a speaker’s quote as joining the line before it', () => {
+    const parts = arrivalParts(
+      {
+        text:
+          '[character_name]Mira[/character_name] speaks.\n' +
+          '[dialogue]Hello.[/dialogue]',
+        arrival: null,
+      },
+      [],
+    )
+    expect(parts[0].lines.map((l) => l.joinsPrevious)).toEqual([
+      undefined,
+      true,
     ])
   })
 
