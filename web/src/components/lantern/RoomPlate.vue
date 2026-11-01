@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useGameStore } from '@/stores/useGameStore'
 import { usePanelFlash } from '@/composables/usePanelFlash'
 import { displayName } from '@/lantern/displayName'
@@ -11,8 +11,12 @@ import { displayName } from '@/lantern/displayName'
  * name). Many chips wrap onto more lines and the plate grows downward; a long
  * name wraps; with nothing here the plate shows only the name. The plate is
  * never read aloud: the room's name and description are read in the story.
+ * Folded (a short screen with a conversation on the picture), the plate is one
+ * row: the name, the chips in a single row that fades at its right edge and
+ * slides sideways, then "⟲ Story so far"; "You are in" is hidden. The same
+ * elements stay in the same order, so folding never moves focus.
  */
-const props = defineProps<{ storyButton?: boolean }>()
+const props = defineProps<{ storyButton?: boolean; folded?: boolean }>()
 const emit = defineEmits<{ story: [] }>()
 const game = useGameStore()
 const storyEl = ref<HTMLButtonElement | null>(null)
@@ -36,6 +40,21 @@ const here = computed(() => {
   })
 })
 
+/** The plate has just opened again from folded: it eases in once. */
+const opening = ref(false)
+watch(
+  () => props.folded,
+  (folded, wasFolded) => {
+    if (wasFolded && !folded) opening.value = true
+  },
+)
+
+/** An animation ended: the flash, or the ease of opening. */
+function onAnimationEnd(event: AnimationEvent): void {
+  if (event.animationName === 'lq-plate-fold') opening.value = false
+  else endFlash()
+}
+
 /** Put focus on "⟲ Story so far" (the story so far has just been closed). */
 function focusStoryButton(): void {
   storyEl.value?.focus()
@@ -47,11 +66,17 @@ defineExpose({ focusStoryButton })
 <template>
   <section
     class="lq-plate"
-    :class="{ 'lq-flash': flashing }"
+    :class="{
+      'lq-flash': flashing,
+      'lq-plate-folded': props.folded,
+      'lq-plate-opening': opening,
+    }"
     aria-label="Current location"
-    @animationend.self="endFlash"
+    @animationend.self="onAnimationEnd"
   >
-    <span class="lq-label">You are in</span>
+    <span class="lq-label" :aria-hidden="props.folded ? true : undefined">
+      You are in
+    </span>
     <h2 class="lq-room-name" :class="{ 'lq-room-name-pad': props.storyButton }">
       {{ game.roomName }}
     </h2>
@@ -147,6 +172,51 @@ defineExpose({ focusStoryButton })
   font-family: var(--lq-font-ui);
   font-size: 13px;
   cursor: pointer;
+}
+/* Folded: one row; the names slide sideways under a fade at the right edge. */
+.lq-plate-folded {
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 8px 6px 16px;
+}
+.lq-plate-folded,
+.lq-plate-opening {
+  animation: lq-plate-fold calc(0.2s * var(--lq-motion)) ease-out;
+}
+.lq-plate-folded .lq-label {
+  display: none;
+}
+.lq-plate-folded .lq-room-name {
+  flex: 0 0 auto;
+  padding-top: 0;
+  font-size: calc(20px * var(--lq-display-scale));
+  white-space: nowrap;
+}
+.lq-plate-folded .lq-here {
+  flex: 1 1 0;
+  min-width: 0;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  scrollbar-width: none;
+  /* Room after the last name, so scrolled to the end it is clear of the fade. */
+  padding-inline-end: 28px;
+  mask-image: linear-gradient(to right, #000 calc(100% - 28px), transparent);
+}
+.lq-plate-folded .lq-here::-webkit-scrollbar {
+  display: none;
+}
+.lq-plate-folded .lq-here-chip {
+  flex: 0 0 auto;
+}
+.lq-plate-folded .lq-story-so-far {
+  position: static;
+  flex: 0 0 auto;
+}
+@keyframes lq-plate-fold {
+  from {
+    opacity: 0.4;
+  }
 }
 .lq-here-character {
   border: 1px solid var(--lq-character-line);

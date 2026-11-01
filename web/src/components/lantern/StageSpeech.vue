@@ -23,10 +23,13 @@ import SpeechPortrait from './SpeechPortrait.vue'
  * fills the space between the stage's top and the story band (on a phone,
  * between the plate and the paper, the thread rising to the plate); a press
  * on it shows the rest of the turn's lines at once. Not shown while there is
- * no conversation.
+ * no conversation. The zone reports its height (`room`) whenever it changes,
+ * so the layout can fold the plate when the room is too small; `folded` says
+ * the plate is folded, and the portraits are then smaller and rest 4px from
+ * the foot so the ✕ above the right one stays clear of it.
  */
-defineProps<{ phone?: boolean }>()
-const emit = defineEmits<{ 'focus-story': [] }>()
+defineProps<{ phone?: boolean; folded?: boolean }>()
+const emit = defineEmits<{ 'focus-story': []; room: [height: number] }>()
 const game = useGameStore()
 const speech = useStageSpeechStore()
 const narration = useNarrationStore()
@@ -71,6 +74,17 @@ watch(thread, (el) => {
 })
 onBeforeUnmount(() => threadResize?.disconnect())
 
+/** The room's element, whose height is reported to the layout. */
+const zone = ref<HTMLElement | null>(null)
+let zoneResize: ResizeObserver | undefined
+watch(zone, (el) => {
+  zoneResize?.disconnect()
+  if (!el || typeof ResizeObserver === 'undefined') return
+  zoneResize = new ResizeObserver(() => emit('room', el.clientHeight))
+  zoneResize.observe(el)
+})
+onBeforeUnmount(() => zoneResize?.disconnect())
+
 /** Show the rest of the turn at once (the narrator, if reading, stops too). */
 function hurry(): void {
   speech.revealAll()
@@ -86,8 +100,9 @@ function clearAndFocus(): void {
 
 <template>
   <div
+    ref="zone"
     class="lq-speech-zone"
-    :class="{ 'lq-phone-speech': phone }"
+    :class="{ 'lq-phone-speech': phone, 'lq-speech-folded': folded }"
     data-testid="speech-zone"
     @click="hurry"
   >
@@ -285,6 +300,18 @@ function clearAndFocus(): void {
 .lq-phone-speech .lq-clear {
   top: 6px;
   right: 29px;
+}
+/* Folded plate: smaller portraits rest 4px from the foot and the ✕ sits at the very top, centred over the right one, clear of it. */
+.lq-phone-speech.lq-speech-folded {
+  --lq-portrait-w: 62px;
+}
+.lq-speech-folded .lq-sp-left,
+.lq-speech-folded .lq-sp-right {
+  bottom: 4px;
+}
+.lq-phone-speech.lq-speech-folded .lq-clear {
+  top: 2px;
+  right: 24px;
 }
 .lq-clear {
   position: absolute;

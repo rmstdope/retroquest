@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { mount } from '@vue/test-utils'
 import { createPinia, setActivePinia } from 'pinia'
 import StageSpeech from './StageSpeech.vue'
@@ -36,6 +36,8 @@ function mounted() {
 }
 
 describe('StageSpeech', () => {
+  afterEach(() => vi.unstubAllGlobals())
+
   beforeEach(() => {
     vi.useFakeTimers()
     setActivePinia(createPinia())
@@ -158,5 +160,35 @@ describe('StageSpeech', () => {
     expect(w.get('[data-testid="speech-zone"]').classes()).toContain(
       'lq-phone-speech',
     )
+  })
+
+  it('says how tall its room is, and again when the room changes', async () => {
+    const callbacks: Array<() => void> = []
+    vi.stubGlobal(
+      'ResizeObserver',
+      class {
+        constructor(callback: () => void) {
+          callbacks.push(callback)
+        }
+        observe(): void {}
+        disconnect(): void {}
+      },
+    )
+    const { w } = mounted()
+    await w.vm.$nextTick()
+    const zone = w.get('.lq-speech-zone').element
+    let height = 58
+    Object.defineProperty(zone, 'clientHeight', { get: () => height })
+    callbacks.forEach((callback) => callback())
+    height = 140
+    callbacks.forEach((callback) => callback())
+    expect(w.emitted('room')).toEqual([[58], [140]])
+  })
+
+  it('marks its zone when the plate above it is folded', async () => {
+    const { w } = mounted()
+    expect(w.get('.lq-speech-zone').classes()).not.toContain('lq-speech-folded')
+    await w.setProps({ folded: true })
+    expect(w.get('.lq-speech-zone').classes()).toContain('lq-speech-folded')
   })
 })
