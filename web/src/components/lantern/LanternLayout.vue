@@ -713,9 +713,20 @@ watch(staged, measurePaper, { flush: 'post' })
 // A reading that ends (above all a skip) draws the rest of the turn at once,
 // which grows the story without scrolling it (the room kept for the hint
 // moves from below the story into its end, so nothing moves).
+// On the laptop's cards a reading cut short leaves the newest card at its
+// start in view: the turn grew after the pane was last moved, and the older
+// cards must not keep the column.
 watch(storyHeld, async (held) => {
   if (held) return
   await nextTick()
+  const latest = contentEl.value?.lastElementChild
+  if (wide.value && !narration.readToEnd && latest && storyEl.value)
+    moveStory(
+      latest.getBoundingClientRect().top -
+        storyEl.value.getBoundingClientRect().top +
+        storyEl.value.scrollTop,
+      false,
+    )
   updateMoreBelow()
 })
 
