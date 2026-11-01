@@ -431,7 +431,18 @@ test.describe('Lantern UI (the default)', () => {
     const exit = page.getByRole('button', { name: "Go north to Mira's Hut" })
     await expect(exit).toHaveCount(0)
     await page.getByRole('button', { name: /Map/ }).hover()
+    await expect(exit).toHaveCount(0)
+    await page.getByRole('button', { name: /Map/ }).click()
     await expect(exit).toBeVisible()
+
+    // The bug's own direction: with Bag open, Map replaces it and is pressable.
+    await page.getByRole('button', { name: /Bag · 1/ }).click()
+    await page.getByRole('button', { name: /Map/ }).click()
+    await expect(
+      page.getByRole('complementary', { name: 'Journal drawer' }),
+    ).toHaveCount(0)
+    await expect(exit).toBeVisible()
+    await expect(exit).toBeEnabled()
 
     await page.getByRole('button', { name: /Bag · 1/ }).click()
     const drawer = page.getByRole('complementary', { name: 'Journal drawer' })
@@ -442,8 +453,11 @@ test.describe('Lantern UI (the default)', () => {
     expect(drawerBox!.y + drawerBox!.height).toBeLessThanOrEqual(
       actionVerbs!.y + 1,
     )
-    // Its foot follows the action row: More… open makes the row taller.
+    // Its foot follows the action row: More… open makes the row taller. A
+    // press on More… is outside the drawer, so it closes it; open it again.
     await page.getByRole('button', { name: 'More…' }).click()
+    await expect(drawer).toHaveCount(0)
+    await page.getByRole('button', { name: /Bag · 1/ }).click()
     await expect
       .poll(async () => {
         const composer = await page.locator('.lq-composer').boundingBox()
@@ -452,6 +466,7 @@ test.describe('Lantern UI (the default)', () => {
       })
       .toBeGreaterThanOrEqual(0)
     await page.getByRole('button', { name: 'More…' }).click()
+    await expect(drawer).toHaveCount(0)
     // The lit button stays in sight, and pressing it again closes the drawer.
     await page.getByRole('button', { name: /Quests · 0/ }).click()
     await expect(page.getByRole('button', { name: /Quests · 0/ })).toBeVisible()
@@ -460,8 +475,6 @@ test.describe('Lantern UI (the default)', () => {
     await expect(page.getByRole('button', { name: /Quests · 0/ })).toBeFocused()
     await page.getByRole('button', { name: /Bag · 1/ }).click()
     await expect(drawer).toBeVisible()
-    // The map closes a moment after the pointer left it.
-    await expect(exit).toHaveCount(0)
     await page.keyboard.press('Escape')
     await expect(drawer).toHaveCount(0)
 

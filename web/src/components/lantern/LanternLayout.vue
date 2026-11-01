@@ -106,8 +106,10 @@ function onFocusChange(event: FocusEvent): void {
     next instanceof Element && next.matches('input, textarea')
 }
 const section = ref<Section>('story')
-/** The drawer open on the stage (a journal tab or the story), or null. */
-const drawerTab = ref<'bag' | 'spells' | 'quests' | 'story' | null>(null)
+/** What is open on the stage (a journal tab, the story or the map), or null. */
+const drawerTab = ref<'bag' | 'spells' | 'quests' | 'story' | 'map' | null>(
+  null,
+)
 const stageButtons = ref<InstanceType<typeof StageButtons> | null>(null)
 const dockOpen = ref(!short.value)
 watch(short, (isShort) => {
@@ -142,8 +144,10 @@ watch(stageKey, () => {
   drawerTab.value = null
 })
 
-/** A drawer button: opens its drawer, or closes it if it is lit. */
-function toggleDrawer(tab: 'bag' | 'spells' | 'quests' | 'story'): void {
+/** A stage button: opens its drawer or the map (closing what was open), or closes it if lit. */
+function toggleDrawer(
+  tab: 'bag' | 'spells' | 'quests' | 'story' | 'map',
+): void {
   if (drawerTab.value === tab) closeDrawer()
   else drawerTab.value = tab
 }
@@ -163,16 +167,18 @@ watch(
   },
 )
 
-/** A press outside the story drawer closes it and goes on doing what it does. */
+/** A press outside what is open closes it and goes on doing what it does. */
 function onOutsidePress(event: Event): void {
-  if (drawerTab.value !== 'story') return
+  if (!drawerTab.value) return
   const target = event.target instanceof Element ? event.target : null
-  if (target?.closest('.lq-story-drawer, [data-button="story"], .lq-name-menu'))
+  if (
+    target?.closest('.lq-drawer, .lq-story-drawer, .lq-buttons, .lq-name-menu')
+  )
     return
   drawerTab.value = null
 }
 watch(
-  () => drawerTab.value === 'story',
+  () => drawerTab.value !== null,
   (open) => {
     if (open) document.addEventListener('pointerdown', onOutsidePress)
     else document.removeEventListener('pointerdown', onOutsidePress)
@@ -759,9 +765,11 @@ watch(
             :drawer="drawerTab"
             @journal="toggleDrawer"
             @story="toggleDrawer('story')"
+            @map="toggleDrawer('map')"
+            @close="closeDrawer"
           />
           <JournalDrawer
-            v-if="drawerTab && drawerTab !== 'story'"
+            v-if="drawerTab && drawerTab !== 'story' && drawerTab !== 'map'"
             :key="`drawer-${stageKey}`"
             :tab="drawerTab"
             @close="closeDrawer"
