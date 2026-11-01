@@ -152,9 +152,72 @@ describe('the narration paper', () => {
     expect(document.activeElement).toBe(tab())
   })
 
+  it('sizes the paper to its content, up to half the play area', async () => {
+    const heights: Record<string, number> = {
+      'lq-paper-content': 200,
+      'lq-story-wrap': 260,
+    }
+    vi.spyOn(HTMLElement.prototype, 'offsetHeight', 'get').mockImplementation(
+      function (this: HTMLElement) {
+        const name = Object.keys(heights).find((c) =>
+          this.classList.contains(c),
+        )
+        return name ? (heights[name] ?? 0) : 0
+      },
+    )
+    vi.spyOn(HTMLElement.prototype, 'clientHeight', 'get').mockImplementation(
+      function (this: HTMLElement) {
+        if (this.classList.contains('lq-main')) return 1000
+        if (this.classList.contains('lq-story')) return 240
+        return 0
+      },
+    )
+    await mountWith([turn(1, 'First.')])
+    // chrome = wrap 260 - story 240 (+ no padding in jsdom) = 20
+    expect(paper().style.height).toBe('220px')
+
+    heights['lq-paper-content'] = 900
+    game.turns.push(turn(2, 'Long.'))
+    await nextTick()
+    const { useSettingsStore } = await import('@/stores/useSettingsStore')
+    useSettingsStore().textSize = 'large'
+    await nextTick()
+    await nextTick()
+    expect(paper().style.height).toBe('500px')
+    vi.restoreAllMocks()
+  })
+
+  it('lets the tab row push the actions down when there is no paper', async () => {
+    await mountWith([turn(1, '')])
+    expect(
+      document
+        .querySelector('.lq-paper-tabrow')
+        ?.classList.contains('lq-paper-none'),
+    ).toBe(true)
+    game.turns.push(turn(2, 'Something.'))
+    await nextTick()
+    expect(
+      document
+        .querySelector('.lq-paper-tabrow')
+        ?.classList.contains('lq-paper-none'),
+    ).toBe(false)
+  })
+
+  it('moves focus to Hide when N shows the paper while the tab has focus', async () => {
+    await mountWith([turn(1, 'First.')])
+    press('n')
+    await nextTick()
+    tab()?.focus()
+    press('n', tab() as HTMLElement)
+    await nextTick()
+    await nextTick()
+    expect(document.activeElement).toBe(hideButton())
+  })
+
   async function helpText(): Promise<string> {
     vi.spyOn(game, 'readInfo').mockReturnValue('[bold]Commands[/bold]')
     await mountWith([turn(1, 'First.')])
+    await settle()
     // The laptop header has Help in its row; the phone's is behind the menu.
     const menu = document.querySelector<HTMLElement>(
       'button[aria-label="Game menu"]',
@@ -166,7 +229,10 @@ describe('the narration paper', () => {
     )
     help?.click()
     await nextTick()
-    return document.querySelector('[role="dialog"]')?.textContent ?? ''
+    await settle()
+    const text = document.querySelector('[role="dialog"]')?.textContent ?? ''
+    expect(text).toContain('Commands')
+    return text
   }
 
   it('has the Help line for N on a laptop, and not on a phone', async () => {

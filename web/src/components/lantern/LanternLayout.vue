@@ -288,11 +288,16 @@ function onPaperKey(event: KeyboardEvent): void {
   const target = event.target instanceof Element ? event.target : null
   if (target?.closest('input, textarea, select, [contenteditable]')) return
   event.preventDefault()
-  // Focus inside the paper would be lost as it slides away: it goes to the tab.
-  const focusWasInside = !!paperEl.value?.contains(document.activeElement)
+  // Focus on the paper or on its tab would be lost as one slides away and the
+  // other goes: it follows to the other one.
+  const active = document.activeElement
+  const focusWasInside = !!paperEl.value?.contains(active)
+  const focusWasOnTab = !!active && active === tabEl.value
   paper.toggle()
   if (focusWasInside && paper.hidden.value) {
     void nextTick(() => tabEl.value?.focus())
+  } else if (focusWasOnTab && !paper.hidden.value) {
+    void showPaper()
   }
 }
 /** The story is held still and follows the word while an answer is read. */
@@ -813,7 +818,6 @@ function onNameKeydown(event: KeyboardEvent): void {
 }
 
 // Names in the story are Tab stops (see useNameStops) while they have a menu.
-const mainEl = ref<HTMLElement | null>(null)
 const { sync: syncNameStops } = useNameStops(mainEl, {
   wide: () => wide.value,
   reachable: (name) => actionsOf(name).length > 0,
@@ -1032,7 +1036,11 @@ watch(
             More below <span aria-hidden="true">↓</span>
           </button>
         </div>
-        <div v-if="wide" class="lq-paper-tabrow">
+        <div
+          v-if="wide"
+          class="lq-paper-tabrow"
+          :class="{ 'lq-paper-none': !paper.visible.value }"
+        >
           <button
             v-if="paperAway"
             ref="tabEl"
@@ -1266,6 +1274,11 @@ watch(
   position: relative;
   z-index: 3;
   flex: 0 0 0;
+}
+/* With no paper (an empty turn) the row takes over pushing the
+   actions to the foot of the stage. */
+.lq-paper-tabrow.lq-paper-none {
+  margin-top: auto;
 }
 .lq-paper-tab {
   position: absolute;

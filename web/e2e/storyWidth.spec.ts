@@ -43,10 +43,10 @@ async function expectAsWideAsStory(
 }
 
 /** Where the whole story is read: the drawer on a laptop, the story itself on a phone. */
-function storyOf(page: Page): Locator {
-  return page
-    .getByRole('complementary', { name: 'Story so far drawer' })
-    .or(page.getByRole('region', { name: 'Story' }))
+function storyOf(page: Page, width: number): Locator {
+  return width > 600
+    ? page.getByRole('complementary', { name: 'Story so far drawer' })
+    : page.getByRole('region', { name: 'Story' })
 }
 
 for (const width of [1280, 360]) {
@@ -58,12 +58,12 @@ for (const width of [1280, 360]) {
       // Elior's Cottage, whose description follows it.
       await type(page, 'talk to voice')
       // On the laptop the paper holds the last turn only: open the whole story.
-      const recap = page.getByRole('button', { name: /Story so far/ })
-      if (await recap.isVisible()) await recap.click()
+      const storyButton = page.getByRole('button', { name: /Story so far/ })
+      if (await storyButton.isVisible()) await storyButton.click()
     })
 
     test('the Dream description is as wide as the story', async ({ page }) => {
-      const story = storyOf(page)
+      const story = storyOf(page, width)
       const turn = story.getByTestId('turn').first()
       await expect(turn.locator('.lq-room')).toHaveText('The Dream')
       await expectAsWideAsStory(turn.locator('.lq-arrival-text'), story)
@@ -72,7 +72,7 @@ for (const width of [1280, 360]) {
     test("Elior's Cottage description is as wide as the story", async ({
       page,
     }) => {
-      const story = storyOf(page)
+      const story = storyOf(page, width)
       const turn = story.getByTestId('turn').last()
       await expect(turn.locator('.lq-room')).toHaveText("Elior's Cottage")
       await expectAsWideAsStory(turn.locator('.lq-arrival-text'), turn)
