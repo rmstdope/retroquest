@@ -277,6 +277,23 @@ function reset(): void {
   if (id) focusFirst(`[data-verb="${id}"]`, '[data-more]')
 }
 
+/**
+ * Tap on More…: opens or folds the list. Folding while the sentence began with
+ * a verb from behind More… puts that sentence away (as Cancel would), so a
+ * lit verb is never hidden; a main-row verb's sentence is left alone.
+ */
+function toggleMore(): void {
+  if (
+    showMore.value &&
+    verb.value &&
+    moreVerbs.value.some((v) => v.id === verb.value?.id)
+  ) {
+    reset()
+    return
+  }
+  showMore.value = !showMore.value
+}
+
 /** Close the builder without moving focus. */
 function clear(): void {
   verb.value = null
@@ -547,7 +564,7 @@ function onTypedEnter(): void {
           :class="{ 'lq-shake': shaking && !verb && lastIsMore }"
           data-more
           :aria-expanded="showMore ? 'true' : 'false'"
-          @click="showMore = !showMore"
+          @click="toggleMore"
         >
           More…
         </button>

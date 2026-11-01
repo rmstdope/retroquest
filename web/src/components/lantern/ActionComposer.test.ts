@@ -1141,6 +1141,43 @@ describe('ActionComposer on the stage', () => {
     w.unmount()
   })
 
+  it('puts a half-built More… verb away when More… is folded', async () => {
+    const w = stage()
+    await click(w, '[data-more]')
+    await w.get('[data-verb="caston"]').trigger('click')
+    expect(w.find('.lq-row').exists()).toBe(true)
+
+    await click(w, '[data-more]')
+    await flushPromises()
+    expect(w.find('.lq-row').exists()).toBe(false)
+    expect(w.find('[data-verb="caston"]').exists()).toBe(false)
+    expect(w.get('[data-more]').attributes('aria-expanded')).toBe('false')
+    expect(w.find('.lq-verb-on').exists()).toBe(false)
+    expect(submit).not.toHaveBeenCalled()
+    expect(document.activeElement?.hasAttribute('data-more')).toBe(true)
+    w.unmount()
+  })
+
+  it('keeps a main-row verb lit and its row open when More… is folded', async () => {
+    const w = stage()
+    await click(w, '[data-verb="talk"]')
+    await click(w, '[data-more]')
+    await click(w, '[data-more]')
+    expect(w.find('[data-verb="drop"]').exists()).toBe(false)
+    expect(w.get('[data-verb="talk"]').attributes('aria-pressed')).toBe('true')
+    expect(w.find('.lq-row').exists()).toBe(true)
+    w.unmount()
+  })
+
+  it('does not change the sentence when More… is opened', async () => {
+    const w = stage()
+    await click(w, '[data-verb="talk"]')
+    await click(w, '[data-more]')
+    expect(w.get('[data-verb="talk"]').attributes('aria-pressed')).toBe('true')
+    expect(w.find('.lq-row').exists()).toBe(true)
+    w.unmount()
+  })
+
   it('names the choices as a group', async () => {
     const w = stage()
     await click(w, '[data-verb="talk"]')
