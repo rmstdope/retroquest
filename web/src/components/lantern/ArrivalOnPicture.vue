@@ -9,7 +9,8 @@ import { useReadAlong } from '@/composables/useReadAlong'
  * what happens as the player arrives (in italics), then the room's
  * description, the spoken word lit while the narrator tells it. Under it a
  * small dark pill holds the hint and, while nobody speaks the part, a thin bar
- * that empties over its reading time. A click anywhere on the picture goes on (`useArrivalStore`).
+ * that empties over its reading time. A click anywhere on the picture goes on
+ * (`useArrivalStore`).
  * Names and other inline tags keep the dark theme's light colours on the
  * picture. With no picture (`pictured` false) the text is dark ink on the
  * paper in the light theme. The text is also in the story, which waits aside:

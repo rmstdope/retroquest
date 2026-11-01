@@ -158,7 +158,7 @@ describe('ArrivalOnPicture', () => {
         .join('')
       const ink = pill.match(/color:\s*(#[0-9a-f]{6})/i)?.[1] ?? ''
       expect(contrastRatio(ink, `#${over}`)).toBeGreaterThanOrEqual(4.5)
-      expect(pill).not.toContain('text-shadow: var')
+      expect(pill).toContain('text-shadow: none')
       const hint = source.match(/\.lq-arrival-hint \{([^}]*)\}/)?.[1] ?? ''
       expect(hint).not.toContain('opacity')
     })
