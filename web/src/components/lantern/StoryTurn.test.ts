@@ -15,6 +15,9 @@ import {
   type NarrationManifest,
 } from '@/lantern/narrationManifest'
 import { turnUnits } from '@/lantern/narrationUnits'
+import { useArrivalStore } from '@/stores/useArrivalStore'
+import type { ArrivalPart } from '@/lantern/stageArrival'
+import type { QuestNews } from '@/lantern/questNews'
 
 function turn(partial: Partial<Turn>): Turn {
   return {
@@ -641,5 +644,70 @@ describe('StoryTurn as a narration card', () => {
 
     expect(w.classes()).not.toContain('lq-card')
     expect(w.find('.lq-failure-mark').exists()).toBe(false)
+  })
+})
+
+describe('StoryTurn quest news told in the middle', () => {
+  const done: QuestNews = {
+    kind: 'completed',
+    name: 'Hint of Magic',
+    main: false,
+    text: 'You did it.',
+    progress: { completed: 1, total: 11 },
+  }
+  const fresh: QuestNews = {
+    kind: 'new',
+    name: 'Magic for real',
+    main: false,
+    text: 'Go on.',
+  }
+  const piece = (news: QuestNews, unit: number): ArrivalPart => ({
+    kind: 'news',
+    news,
+    lines: [{ unit, markup: news.text }],
+    voiced: false,
+  })
+
+  beforeEach(() => {
+    setActivePinia(createPinia())
+  })
+
+  it('keeps the cards in the story when the news was not told in the middle', () => {
+    const w = mountTurn({ command: 'x', text: 'Done.', quests: [done] })
+    expect(w.find('[data-testid="news-line"]').exists()).toBe(false)
+    expect(w.text()).toContain('You did it.')
+  })
+
+  it('shows neither card nor line while the news is still to be told', () => {
+    useArrivalStore().show(1, [piece(done, 1), piece(fresh, 2)], false)
+    const w = mountTurn({
+      command: 'x',
+      text: 'Done.',
+      quests: [done, fresh],
+    })
+    expect(w.find('[data-testid="news-line"]').exists()).toBe(false)
+    expect(w.text()).not.toContain('You did it.')
+  })
+
+  it('ends with one slim line per piece, in order, once the news has cleared', () => {
+    const arrival = useArrivalStore()
+    arrival.show(1, [piece(done, 1), piece(fresh, 2)], false)
+    arrival.clear()
+    const w = mountTurn({
+      command: 'x',
+      text: 'Done.',
+      quests: [done, fresh],
+    })
+    const lines = w.findAll('[data-testid="news-line"]')
+    expect(lines.map((line) => line.text().replace(/\s+/g, ' '))).toEqual([
+      '✓ Side quest complete · Hint of Magic Open in journal',
+      'New side quest · Magic for real Open in journal',
+    ])
+    expect(w.text()).not.toContain('You did it.')
+  })
+
+  it('has no line for a turn without news', () => {
+    const w = mountTurn({ command: 'x', text: 'Done.' })
+    expect(w.find('[data-testid="news-line"]').exists()).toBe(false)
   })
 })

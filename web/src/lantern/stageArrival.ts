@@ -2,6 +2,11 @@ import type { RoomDescription } from '@/engine'
 import { narrationWords } from './narrationManifest'
 import type { NarrationUnit } from './narrationUnits'
 import { parseTurn } from './parseTurn'
+import {
+  newQuestKicker,
+  questCompleteKicker,
+  type QuestNews,
+} from './questNews'
 
 /**
  * Telling a room's arrival on the picture (the laptop stage): which turns do
@@ -27,7 +32,9 @@ export interface ArrivalLine {
 
 /** One thing shown at a time on the picture: what happens on arrival, then the description. */
 export interface ArrivalPart {
-  kind: 'events' | 'description'
+  kind: 'events' | 'description' | 'news'
+  /** For `news`: the quest news this part tells. */
+  news?: QuestNews
   lines: ArrivalLine[]
   /** Whether the narrator speaks any of it (it has a recording). */
   voiced: boolean
@@ -100,4 +107,61 @@ export function arrivalParts(
     parts.push({ kind: 'description', lines, voiced: spoken(lines, 1) })
   }
   return parts
+}
+
+/** Whether a turn has quest news to tell in the middle of the picture (on the stage, once its words are told). */
+export function newsOnPicture(turn: { quests?: QuestNews[] }): boolean {
+  return (turn.quests?.length ?? 0) > 0
+}
+
+/** The heading of a piece of news in the middle: a completion carries the act's count (shown, not read). */
+export function newsHeading(news: QuestNews): string {
+  if (news.kind === 'updated') return 'Quest updated'
+  if (news.kind === 'new') return newQuestKicker(news.main)
+  const heading = questCompleteKicker(news.main)
+  const progress = news.progress
+  return progress
+    ? `${heading} · ${progress.completed} of ${progress.total}`
+    : heading
+}
+
+/** The heading of a piece of news on the card's slim line: no count. */
+export function newsSlimHeading(news: QuestNews): string {
+  if (news.kind === 'updated') return 'Quest updated'
+  return news.kind === 'new'
+    ? newQuestKicker(news.main)
+    : questCompleteKicker(news.main)
+}
+
+/**
+ * The parts for a turn's quest news, one for each piece, after the answer's
+ * blocks and the arrival. `units` are the turn's narration units, to say
+ * which piece has a voice; a piece's unit is its heading, its name, then its
+ * text, so the text's words start after the first two.
+ */
+export function newsParts(
+  turn: { text: string; arrival: unknown; quests?: QuestNews[] },
+  units: NarrationUnit[],
+): ArrivalPart[] {
+  const first = parseTurn(turn.text).length + (turn.arrival ? 1 : 0)
+  return (turn.quests ?? []).map((news, index) => {
+    const unit = first + index
+    const heading =
+      news.kind === 'completed'
+        ? questCompleteKicker(news.main)
+        : newQuestKicker(news.main)
+    return {
+      kind: 'news',
+      news,
+      lines: [
+        {
+          unit,
+          markup: news.text,
+          wordBase:
+            narrationWords(heading).length + narrationWords(news.name).length,
+        },
+      ],
+      voiced: !!units[unit]?.parts.some((part) => part.clip !== null),
+    }
+  })
 }

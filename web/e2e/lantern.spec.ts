@@ -1052,10 +1052,16 @@ test.describe('Lantern UI (the default)', () => {
       /* eslint-enable @typescript-eslint/no-explicit-any */
     })
 
-    const story = page.getByRole('region', { name: 'Story' })
-    await expect(story.getByText('Oath of Stillness')).toBeVisible()
-    await expect(story.getByText('Side quest complete · 5 of 8')).toBeAttached()
+    // Told in the middle of the picture, never as a pop-up; the story keeps a slim line.
+    const middle = page.getByTestId('arrival-on-picture')
+    await expect(middle.getByText('Oath of Stillness')).toBeVisible()
+    await expect(middle.getByText('Side quest complete · 5 of 8')).toBeVisible()
     await expect(page.getByRole('dialog')).toHaveCount(0)
+    await page.keyboard.press('Escape')
+    const story = page.getByRole('region', { name: 'Story' })
+    await expect(
+      story.getByText('Side quest complete · Oath of Stillness'),
+    ).toBeVisible()
   })
 
   test('keeps the failed-load screen reachable with a long error on a short screen', async ({
@@ -1404,9 +1410,10 @@ test.describe('Lantern UI (the default)', () => {
     expect(Math.abs(box.x + box.width - text.right - 10)).toBeLessThan(2)
   })
 
+  // Where the news is not told in the middle (a short screen), the story keeps its cards.
   for (const [width, height] of [
-    [1280, 800],
-    [375, 667],
+    [900, 500],
+    [667, 375],
   ]) {
     test(`shows an opened quest update inside its frame at ${width}×${height}`, async ({
       page,

@@ -27,6 +27,7 @@ import {
   questCompleteBlocks,
 } from './narrationScript'
 import { parseTurn } from './parseTurn'
+import { readingTimeMs } from './stageArrival'
 
 /** One voiced line of a unit: its markup, and the recording if the manifest has one. */
 export interface NarrationPart {
@@ -83,10 +84,16 @@ export function readsArrival(turn: {
 
 /** How the stage tells an arrival on the picture (see `turnUnits`). */
 export interface StageUnitOptions {
-  /** Quest news is not read: it waits in the story. */
+  /** Quest news is not read aloud. */
   silentQuests?: boolean
   /** The least pause before the room's description (ms), for events that are not spoken. */
   arrivalPauseMs?: number
+  /**
+   * Quest news is told one piece at a time in the middle of the picture: a
+   * piece nobody speaks is read for its reading time, so the piece after it
+   * waits that long (counted from the last voice).
+   */
+  readSilentNews?: boolean
 }
 
 /**
@@ -117,17 +124,24 @@ export function turnUnits(
           )
         : [],
     })
-  for (const news of turn.quests ?? [])
+  let unread = 0
+  for (const news of turn.quests ?? []) {
+    const parts = options.silentQuests
+      ? []
+      : news.kind === 'new'
+        ? partsOf(newQuestBlocks(news), manifest)
+        : news.kind === 'completed'
+          ? partsOf(questCompleteBlocks(news), manifest)
+          : []
     units.push({
       kind: 'quest',
-      parts: options.silentQuests
-        ? []
-        : news.kind === 'new'
-          ? partsOf(newQuestBlocks(news), manifest)
-          : news.kind === 'completed'
-            ? partsOf(questCompleteBlocks(news), manifest)
-            : [],
+      parts,
+      ...(options.readSilentNews && unread ? { pauseBefore: unread } : {}),
     })
+    unread = parts.some((part) => part.clip)
+      ? 0
+      : unread + readingTimeMs(news.text)
+  }
   return units
 }
 

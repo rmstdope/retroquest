@@ -340,4 +340,97 @@ describe('useArrivalStore', () => {
       })
     })
   })
+
+  describe('quest news', () => {
+    const quest = (unit: number, voiced: boolean): ArrivalPart => ({
+      kind: 'news',
+      news: { kind: 'new', name: 'Q', main: false, text: 'Go.' },
+      lines: [{ unit, markup: 'Go.' }],
+      voiced,
+    })
+
+    it('is told at once when nobody narrates and nothing is being said, read for its reading time', () => {
+      arrival.show(1, [quest(0, false)], false)
+      expect(arrival.active).toBe(true)
+      expect(arrival.part?.kind).toBe('news')
+      expect(arrival.barMs).toBe(6000)
+      expect(arrival.newsUp).toEqual({ turnId: 1, index: 0 })
+      vi.advanceTimersByTime(6000)
+      expect(arrival.active).toBe(false)
+      expect(arrival.newsUp).toBeNull()
+    })
+
+    it('tells several pieces one after the other, a click clearing the one up', () => {
+      arrival.show(1, [quest(0, false), quest(1, false)], false)
+      expect(arrival.newsUp?.index).toBe(0)
+      arrival.next()
+      expect(arrival.newsUp?.index).toBe(1)
+      expect(arrival.barMs).toBe(6000)
+      vi.advanceTimersByTime(6000)
+      expect(arrival.active).toBe(false)
+    })
+
+    it('ends all the news at once with clear', () => {
+      arrival.show(1, [quest(0, false), quest(1, false)], false)
+      arrival.clear()
+      expect(arrival.active).toBe(false)
+    })
+
+    it('waits for the narrator to reach it, with nothing in the middle yet', async () => {
+      narration.begin(1, [voiced, voiced], 'act1')
+      arrival.show(1, [quest(1, true)], narration.narrates(1))
+      expect(arrival.active).toBe(false)
+      expect(arrival.part).toBeNull()
+      FakeAudio.all[0].onended?.()
+      await nextTick()
+      vi.advanceTimersByTime(1000)
+      await nextTick()
+      expect(arrival.active).toBe(true)
+      expect(arrival.part?.kind).toBe('news')
+    })
+
+    it('goes from one narrated piece to the next as the narrator does, and clears after the last', async () => {
+      narration.begin(1, [voiced, voiced], 'act1')
+      arrival.show(1, [quest(0, true), quest(1, true)], true)
+      expect(arrival.newsUp?.index).toBe(0)
+      FakeAudio.all[0].onended?.()
+      await nextTick()
+      vi.advanceTimersByTime(1000)
+      await nextTick()
+      expect(arrival.newsUp?.index).toBe(1)
+      FakeAudio.all.at(-1)?.onended?.()
+      await nextTick()
+      vi.advanceTimersByTime(ARRIVAL_CLEAR_AFTER_MS)
+      expect(arrival.active).toBe(false)
+    })
+
+    it('a next on a narrated piece jumps the narrator to the following one', async () => {
+      narration.begin(1, [voiced, voiced], 'act1')
+      arrival.show(1, [quest(0, true), quest(1, true)], true)
+      arrival.next()
+      await nextTick()
+      expect(arrival.newsUp?.index).toBe(1)
+      expect(narration.speaking(1)?.unit).toBe(1)
+    })
+
+    it('comes after the arrival when the turn also walked into a room', () => {
+      arrival.show(1, [...parts(false, false), quest(1, false)], false)
+      expect(arrival.part?.kind).toBe('description')
+      arrival.next()
+      expect(arrival.part?.kind).toBe('news')
+    })
+
+    it('remembers which turns told news, and which is still pending, until reset', () => {
+      arrival.show(4, [quest(0, false), quest(1, false)], false)
+      expect(arrival.newsPending(4)).toBe(true)
+      expect(arrival.told).toContain(4)
+      arrival.clear()
+      expect(arrival.newsPending(4)).toBe(false)
+      expect(arrival.told).toContain(4)
+      arrival.show(5, parts(false, false), false)
+      expect(arrival.told).not.toContain(5)
+      arrival.reset()
+      expect(arrival.told).toEqual([])
+    })
+  })
 })

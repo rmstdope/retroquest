@@ -50,6 +50,10 @@ test('a name in the newest turn opens its menu from the keyboard', async ({
   await input.fill('talk to voice')
   await input.press('Enter')
   await clearArrival(page)
+  // The quest news is told in the middle and leaves only slim lines: look
+  // around for a turn that names who is here.
+  await input.fill('look')
+  await input.press('Enter')
   const stop = page
     .locator('.lq-story .lq-turn')
     .last()
@@ -79,6 +83,10 @@ test("Tab reaches the newest turn's names between the stage buttons and the acti
   await input.fill('talk to voice')
   await input.press('Enter')
   await clearArrival(page)
+  // The quest news is told in the middle and leaves only slim lines: look
+  // around for a turn that names who is here.
+  await input.fill('look')
+  await input.press('Enter')
   const stop = page
     .locator('.lq-story .lq-turn')
     .last()

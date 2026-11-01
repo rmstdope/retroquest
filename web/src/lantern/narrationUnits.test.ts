@@ -283,4 +283,19 @@ describe('turnUnits on the stage', () => {
       turnUnits(turn, true, manifest, { arrivalPauseMs: 10 })[0].pauseBefore,
     ).toBe(SCENE_PAUSE_MS)
   })
+
+  it('pauses before a piece of news for the silent ones read before it', () => {
+    const update = {
+      kind: 'updated' as const,
+      name: 'U',
+      main: false,
+      text: 'One two three.',
+    }
+    const two = { ...turn, quests: [update, update, quest] }
+    const units = turnUnits(two, true, manifest, { readSilentNews: true })
+    expect(units[1].pauseBefore).toBeUndefined()
+    expect(units[2].pauseBefore).toBe(6000)
+    expect(units[3].pauseBefore).toBe(12000)
+    expect(turnUnits(two, true, manifest)[2].pauseBefore).toBeUndefined()
+  })
 })

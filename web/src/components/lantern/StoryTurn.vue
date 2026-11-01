@@ -6,6 +6,8 @@ import { parseTurn, type TurnBlock } from '@/lantern/parseTurn'
 import { newQuestKicker, questCompleteKicker } from '@/lantern/questNews'
 import { firstQuestUnit as firstQuestOf } from '@/lantern/narrationUnits'
 import QuestNewsCard from './QuestNewsCard.vue'
+import QuestSlimLine from './QuestSlimLine.vue'
+import { useArrivalStore } from '@/stores/useArrivalStore'
 import { displayName } from '@/lantern/displayName'
 import { renderMarkup } from '@/utils/theme'
 import StoryArrival from './StoryArrival.vue'
@@ -27,7 +29,10 @@ import { arrivesOnPicture } from '@/lantern/stageArrival'
  * room told in the middle of the picture on a first visit; a look, a revisit
  * and a load tell the room here, as a bare description. A card with nothing
  * but the command is slim, and one that only holds silent information has a
- * red edge. The quest cards stay on it for now.
+ * red edge. Quest news told in the middle of the picture (`useArrivalStore`)
+ * is not on the card while it waits or is told, and leaves one slim line for
+ * each piece (`QuestSlimLine`) once it has cleared; where it is not told in
+ * the middle, the quest cards stay in the story.
  */
 const props = defineProps<{ turn: Turn; card?: boolean }>()
 const narration = useNarrationStore()
@@ -47,6 +52,11 @@ const arrivalUnit = computed(() =>
   props.turn.arrival ? blocks.value.length : -1,
 )
 const firstQuestUnit = computed(() => firstQuestOf(props.turn))
+const arrivalStore = useArrivalStore()
+/** The turn's quest news was told in the middle of the picture: the card keeps slim lines instead of cards. */
+const newsInMiddle = computed(() => arrivalStore.told.includes(props.turn.id))
+/** Its news is still to be told: nothing of it shows on the card yet. */
+const newsPending = computed(() => arrivalStore.newsPending(props.turn.id))
 
 const blocks = computed(() => parseTurn(props.turn.text))
 
@@ -238,8 +248,17 @@ function chipLabel(chip: Chip): string {
       >
     </div>
 
+    <template v-if="newsInMiddle">
+      <template v-if="!newsPending">
+        <QuestSlimLine
+          v-for="(news, index) in turn.quests ?? []"
+          :key="`news-${index}`"
+          :news="news"
+        />
+      </template>
+    </template>
     <template
-      v-for="(news, index) in turn.quests ?? []"
+      v-for="(news, index) in newsInMiddle ? [] : (turn.quests ?? [])"
       :key="`quest-${index}`"
     >
       <QuestNewsCard

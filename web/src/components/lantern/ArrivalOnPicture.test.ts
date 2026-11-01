@@ -7,6 +7,7 @@ import ArrivalOnPicture from './ArrivalOnPicture.vue'
 import { useArrivalStore } from '@/stores/useArrivalStore'
 import { FOLLOW_EVENT } from '@/composables/useStoryFollow'
 import type { ArrivalPart } from '@/lantern/stageArrival'
+import type { QuestNews } from '@/lantern/questNews'
 import {
   LANTERN_PALETTES,
   contrastRatio,
@@ -477,5 +478,70 @@ describe('ArrivalOnPicture', () => {
         expect(contrastRatio(colour, '#000000')).toBeGreaterThanOrEqual(4.5)
       },
     )
+  })
+
+  describe('quest news', () => {
+    const piece = (news: QuestNews, unit = 0, voiced = false): ArrivalPart => ({
+      kind: 'news',
+      news,
+      lines: [{ unit, markup: news.text, wordBase: 5 }],
+      voiced,
+    })
+    const done: QuestNews = {
+      kind: 'completed',
+      name: 'Hint of Magic',
+      main: false,
+      text: 'It [bold]stayed[/bold].',
+      progress: { completed: 1, total: 11 },
+    }
+    const fresh: QuestNews = {
+      kind: 'new',
+      name: 'Magic for real',
+      main: false,
+      text: 'Find something.',
+    }
+    const update: QuestNews = {
+      kind: 'updated',
+      name: 'Curiosity killed the cat',
+      main: false,
+      text: 'The cat.',
+    }
+
+    it('tells a completion with the seal, the heading and count, the name, the text and the pill', async () => {
+      const w = mount(ArrivalOnPicture, { props: { pictured: true } })
+      useArrivalStore().show(1, [piece(done)], false)
+      await w.vm.$nextTick()
+      expect(w.find('.lq-news-seal').exists()).toBe(true)
+      expect(w.get('.lq-news-kicker').text()).toBe(
+        'Side quest complete · 1 of 11',
+      )
+      expect(w.get('.lq-news-name').text()).toBe('Hint of Magic')
+      expect(w.get('.lq-arrival-line').text()).toBe('It stayed.')
+      expect(w.get('.lq-arrival-hint').text()).toBe(
+        'Click or press Enter to continue',
+      )
+      expect(w.find('button').exists()).toBe(false)
+    })
+
+    it('tells a new quest and an update without a seal', async () => {
+      const w = mount(ArrivalOnPicture, { props: { pictured: true } })
+      const arrival = useArrivalStore()
+      arrival.show(1, [piece(fresh), piece(update, 1)], false)
+      await w.vm.$nextTick()
+      expect(w.find('.lq-news-seal').exists()).toBe(false)
+      expect(w.get('.lq-news-kicker').text()).toBe('New side quest')
+      await w.trigger('click')
+      expect(w.get('.lq-news-kicker').text()).toBe('Quest updated')
+      expect(w.get('.lq-news-name').text()).toBe('Curiosity killed the cat')
+    })
+
+    it('says "Tap to continue" on a phone', async () => {
+      const w = mount(ArrivalOnPicture, {
+        props: { pictured: true, phone: true },
+      })
+      useArrivalStore().show(1, [piece(fresh)], false)
+      await w.vm.$nextTick()
+      expect(w.get('.lq-arrival-hint').text()).toBe('Tap to continue')
+    })
   })
 })

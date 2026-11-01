@@ -10,6 +10,7 @@ import {
   type ArrivalPiece,
   type PageLine,
 } from '@/lantern/arrivalPages'
+import { newsSlimHeading } from '@/lantern/stageArrival'
 import { renderMarkup } from '@/utils/theme'
 import { useSettingsStore } from '@/stores/useSettingsStore'
 
@@ -39,6 +40,10 @@ import { useSettingsStore } from '@/stores/useSettingsStore'
  * space. A scrolling box fades out at an edge where the text continues, and,
  * while the narrator speaks, glides to keep the lit word in view (the
  * `lq-follow` event of the read-along); with reduced motion it jumps.
+ *
+ * Quest news (`news` parts) is told the same way: a round seal (completions),
+ * the heading, the quest's name in large type and then its text, which is the
+ * part that is paged or scrolls; the head above it stays on every page.
  */
 const props = defineProps<{ pictured: boolean; phone?: boolean }>()
 const arrival = useArrivalStore()
@@ -49,6 +54,15 @@ const { html } = useReadAlong(() => arrival.turnId ?? 0, root)
 const twin = ref<HTMLElement | null>(null)
 /** The pill under the text. */
 const pill = ref<HTMLElement | null>(null)
+/** The head of a piece of quest news (seal, heading, name), above the text. */
+const head = ref<HTMLElement | null>(null)
+/** The quest news of the part up, or null. */
+const news = computed(() => arrival.part?.news ?? null)
+/** The count after a completion's heading: shown, not read aloud. */
+const newsCount = computed(() => {
+  const progress = news.value?.progress
+  return progress ? ` · ${progress.completed} of ${progress.total}` : ''
+})
 /** The pages of the part up (laptop only); empty until it is cut. */
 const pages = ref<ArrivalPage[]>([])
 /** The gap between the text and the pill (px), as in the card's rule. */
@@ -71,8 +85,13 @@ function room(): number {
   const style = getComputedStyle(stage)
   const padding =
     (parseFloat(style.paddingTop) || 0) + (parseFloat(style.paddingBottom) || 0)
+  const gaps = head.value ? 2 * CARD_GAP : CARD_GAP
   return (
-    stage.clientHeight - padding - (pill.value?.offsetHeight ?? 0) - CARD_GAP
+    stage.clientHeight -
+    padding -
+    (pill.value?.offsetHeight ?? 0) -
+    (head.value?.offsetHeight ?? 0) -
+    gaps
   )
 }
 
@@ -131,7 +150,12 @@ onMounted(() => {
 })
 // Cut each part afresh, once its card is drawn.
 watch(
-  () => [arrival.turnId, arrival.part?.kind, props.phone],
+  () => [
+    arrival.turnId,
+    arrival.part?.kind,
+    arrival.part?.lines[0]?.unit,
+    props.phone,
+  ],
   async () => {
     pages.value = []
     await nextTick()
@@ -228,7 +252,46 @@ onBeforeUnmount(() => {
       <div ref="twin" class="lq-arrival-twin"></div>
     </div>
     <Transition name="lq-arrival-fade">
-      <div v-if="arrival.part" :key="arrival.part.kind" class="lq-arrival-card">
+      <div
+        v-if="arrival.part"
+        :key="`${arrival.part.kind}-${arrival.part.lines[0]?.unit}`"
+        class="lq-arrival-card"
+      >
+        <div v-if="news" ref="head" class="lq-news-head">
+          <span
+            v-if="news.kind === 'completed'"
+            class="lq-news-seal"
+            aria-hidden="true"
+            data-testid="news-seal"
+          >
+            <svg
+              width="26"
+              height="26"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.6"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M5 12.5l4.5 4.5L19 7.5" />
+            </svg>
+          </span>
+          <!-- eslint-disable vue/no-v-html -->
+          <p class="lq-news-kicker">
+            <span
+              v-html="
+                html(newsSlimHeading(news), arrival.part.lines[0].unit, 0, 1)
+              "
+            ></span
+            >{{ newsCount }}
+          </p>
+          <p
+            class="lq-news-name"
+            v-html="html(news.name, arrival.part.lines[0].unit, 1, 2)"
+          ></p>
+          <!-- eslint-enable vue/no-v-html -->
+        </div>
         <!-- eslint-disable vue/no-v-html -->
         <div
           ref="text"
@@ -245,6 +308,17 @@ onBeforeUnmount(() => {
               :data-unit="line.unit"
               v-html="
                 html(line.markup, line.unit, 0, undefined, line.wordStart)
+              "
+            ></p>
+          </template>
+          <template v-else-if="news">
+            <p
+              v-for="line in shown"
+              :key="`${line.unit}-${line.wordStart}`"
+              class="lq-arrival-line"
+              :data-unit="line.unit"
+              v-html="
+                html(line.markup, line.unit, 2, undefined, line.wordStart)
               "
             ></p>
           </template>
@@ -414,6 +488,51 @@ onBeforeUnmount(() => {
   background: rgb(242 158 0 / 0.45);
   border-radius: 3px;
   box-shadow: 0 0 0 2px rgb(242 158 0 / 0.45);
+}
+/* The head of a piece of quest news: the seal, the heading and the quest's name. */
+.lq-news-head {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+.lq-news-seal {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: var(--lq-accent);
+  color: #fff;
+  text-shadow: none;
+}
+.lq-news-kicker {
+  margin: 0;
+  font-family: var(--lq-font-ui);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #ffd27a;
+}
+.lq-arrival-stage.lq-bare .lq-news-kicker {
+  color: var(--lq-accent-text);
+}
+.lq-news-name {
+  margin: 0;
+  font-family: var(--lq-font-display);
+  font-size: calc(44px * var(--lq-display-scale, 1));
+  font-weight: 500;
+  line-height: 1.1;
+}
+.lq-phone-arrival .lq-news-name {
+  font-size: calc(30px * var(--lq-display-scale, 1));
+}
+.lq-phone-arrival .lq-news-seal {
+  width: 38px;
+  height: 38px;
 }
 /*
  * The hint and the bar sit on their own dark, see-through pill, so they read

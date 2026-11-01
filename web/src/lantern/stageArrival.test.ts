@@ -3,6 +3,10 @@ import {
   ARRIVAL_MIN_SECONDS,
   arrivalParts,
   arrivesOnPicture,
+  newsHeading,
+  newsOnPicture,
+  newsParts,
+  newsSlimHeading,
   readingTimeMs,
 } from './stageArrival'
 import type { NarrationUnit } from './narrationUnits'
@@ -124,5 +128,71 @@ describe('arrivalParts', () => {
     expect(parts[0].voiced).toBe(false)
     expect(parts[1].lines[0].unit).toBe(2)
     expect(parts[1].voiced).toBe(true)
+  })
+})
+
+describe('quest news on the picture', () => {
+  const done = {
+    kind: 'completed' as const,
+    name: 'Hint of Magic',
+    main: false,
+    text: 'You did it.',
+    progress: { completed: 1, total: 11 },
+  }
+  const fresh = { kind: 'new' as const, name: 'Magic', main: true, text: 'Go.' }
+  const update = {
+    kind: 'updated' as const,
+    name: 'Cat',
+    main: false,
+    text: 'More.',
+  }
+  const unit = (clip: boolean): NarrationUnit => ({
+    kind: 'quest',
+    parts: [{ markup: 'x', clip: clip ? ({} as never) : null }],
+  })
+
+  it('applies to any turn with quest news', () => {
+    expect(newsOnPicture({ quests: [done] })).toBe(true)
+    expect(newsOnPicture({ quests: [] })).toBe(false)
+    expect(newsOnPicture({})).toBe(false)
+  })
+
+  it('has one part per piece, after the answer and the arrival, voiced by its clips', () => {
+    const turn = { text: 'Hi.', arrival: null, quests: [done, update] }
+    const parts = newsParts(turn, [unit(false), unit(true), unit(false)])
+    expect(parts.map((p) => p.kind)).toEqual(['news', 'news'])
+    expect(parts.map((p) => p.lines[0].unit)).toEqual([1, 2])
+    expect(parts.map((p) => p.voiced)).toEqual([true, false])
+    expect(parts[0].news).toBe(done)
+    expect(parts[0].lines[0].markup).toBe('You did it.')
+    // "Side quest complete" + "Hint of Magic" come before the text.
+    expect(parts[0].lines[0].wordBase).toBe(6)
+  })
+
+  it('counts the arrival unit when the turn has one', () => {
+    const turn = {
+      text: '',
+      arrival: { description: 'Cobbles.' },
+      quests: [fresh],
+    }
+    expect(newsParts(turn, [unit(false), unit(false)])[0].lines[0].unit).toBe(
+      0 + 1,
+    )
+  })
+
+  it('heads the middle with the count for a completion, and the slim line without', () => {
+    expect(newsHeading(done)).toBe('Side quest complete · 1 of 11')
+    expect(
+      newsHeading({
+        ...done,
+        main: true,
+        progress: { completed: 3, total: 11 },
+      }),
+    ).toBe('Main quest complete · 3 of 11')
+    expect(newsHeading(fresh)).toBe('New main quest')
+    expect(newsHeading(update)).toBe('Quest updated')
+    expect(newsSlimHeading(done)).toBe('Side quest complete')
+    expect(newsSlimHeading(fresh)).toBe('New main quest')
+    expect(newsSlimHeading(update)).toBe('Quest updated')
   })
 })

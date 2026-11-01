@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { computed, ref, watch } from 'vue'
 import { useNarrationStore } from './useNarrationStore'
+import { useStageSpeechStore } from './useStageSpeechStore'
 import {
   ARRIVAL_CLEAR_AFTER_MS,
   readingTimeMs,
@@ -33,6 +34,14 @@ export interface PageStart {
  * keeps which page is up. Pages go forward only: a narrator reaching the first
  * word of the next page turns it, `next` turns it (the narrator jumping to
  * it), and a part nobody speaks reads each page for its own reading time.
+ *
+ * Quest news follows the arrival's parts as `news` parts, one for each piece.
+ * A turn that has only news waits (`active` false, nothing in the middle)
+ * until the turn's words are told: the narrator reaching the first piece, or,
+ * when nobody narrates, the conversation on the picture having shown every
+ * line. `told` remembers the turns whose news went through the middle (the
+ * story shows their slim lines once `newsPending` is false) and `newsUp`
+ * says which piece is on screen, for its sound.
  */
 export const useArrivalStore = defineStore('arrival', () => {
   const narration = useNarrationStore()
@@ -48,17 +57,28 @@ export const useArrivalStore = defineStore('arrival', () => {
     pages: PageStart[]
     /** The page up. */
     page: number
+    /** Whether the middle is up: false while a turn of news alone waits for the turn's words. */
+    shown: boolean
   } | null>(null)
+  /** Turns whose quest news was told in the middle, for the story's slim lines. */
+  const newsTurns = ref<number[]>([])
   let timer: ReturnType<typeof setTimeout> | undefined
 
   /** Whether an arrival is on the picture. */
-  const active = computed(() => current.value !== null)
+  const active = computed(() => !!current.value?.shown)
   /** The turn whose arrival is up, or null. */
   const turnId = computed(() => current.value?.turnId ?? null)
   /** The part up now. */
   const part = computed(() =>
-    current.value ? current.value.parts[current.value.index] : null,
+    current.value?.shown ? current.value.parts[current.value.index] : null,
   )
+  /** The piece of quest news on screen: its turn and its number among the turn's news. */
+  const newsUp = computed(() => {
+    const now = current.value
+    if (!now?.shown || part.value?.kind !== 'news') return null
+    const first = now.parts.findIndex((each) => each.kind === 'news')
+    return { turnId: now.turnId, index: now.index - first }
+  })
   /** The page of the part up (0 for the first). */
   const page = computed(() => current.value?.page ?? 0)
   /** How many pages the part up has. */
@@ -80,6 +100,20 @@ export const useArrivalStore = defineStore('arrival', () => {
       ? `${current.value.turnId}-${current.value.index}-${current.value.page}`
       : '',
   )
+
+  /** Whether turn `turnId` still has quest news to tell (waiting or up). */
+  function newsPending(turnId: number): boolean {
+    const now = current.value
+    return (
+      now?.turnId === turnId && now.parts.some((each) => each.kind === 'news')
+    )
+  }
+
+  /** Forget everything told (a new game, a load). */
+  function reset(): void {
+    clear()
+    newsTurns.value = []
+  }
 
   /** Forget the pending move on. */
   function stopTimer(): void {
@@ -173,8 +207,25 @@ export const useArrivalStore = defineStore('arrival', () => {
       ended: false,
       pages: [],
       page: 0,
+      shown: true,
+    }
+    if (newsTurns.value.length > 50) newsTurns.value.shift()
+    if (newsTurns.value.includes(id))
+      newsTurns.value.splice(newsTurns.value.indexOf(id), 1)
+    if (parts.some((each) => each.kind === 'news')) newsTurns.value.push(id)
+    // News alone waits until the turn's words are told.
+    if (parts[0].kind === 'news' && !wordsTold(current.value)) {
+      current.value.shown = false
+      return
     }
     if (!narrated) readPart()
+  }
+
+  /** Whether the words of the turn before its news are told: the narrator is at the news, or the conversation is out. */
+  function wordsTold(now: NonNullable<typeof current.value>): boolean {
+    return now.narrated
+      ? narration.revealed(now.turnId, now.parts[0].lines[0].unit)
+      : useStageSpeechStore().told(now.turnId)
   }
 
   /** Go on to the next page, or part (the narrator jumps with it); on the last one, clear. */
@@ -182,11 +233,12 @@ export const useArrivalStore = defineStore('arrival', () => {
     const now = current.value
     if (!now) return
     if (turnPage()) return
-    const last = now.parts.length - 1
-    if (now.index >= last) return clear()
+    if (now.index >= now.parts.length - 1) return clear()
     if (now.narrated && !now.ended) {
-      now.index = last
-      narration.skipTo(now.parts[last].lines[0].unit)
+      now.index++
+      now.page = 0
+      now.pages = []
+      narration.skipTo(now.parts[now.index].lines[0].unit)
     } else advance()
   }
 
@@ -198,22 +250,38 @@ export const useArrivalStore = defineStore('arrival', () => {
     if (now?.narrated && narration.narrates(now.turnId)) narration.skipAll()
   }
 
-  // The narrated description comes up when the narrator reaches it.
+  // News alone comes up when the turn's words are told.
   watch(
     () => {
       const now = current.value
-      if (!now?.narrated || now.index >= now.parts.length - 1) return false
-      return narration.revealed(
-        now.turnId,
-        now.parts[now.parts.length - 1].lines[0].unit,
-      )
+      return !!now && !now.shown && wordsTold(now)
+    },
+    (ready) => {
+      const now = current.value
+      if (!ready || !now) return
+      now.shown = true
+      if (!now.narrated) readPart()
+    },
+  )
+
+  // Each narrated part comes up when the narrator reaches it.
+  watch(
+    () => {
+      const now = current.value
+      if (!now?.narrated || !now.shown) return -1
+      let reached = now.index
+      now.parts.forEach((each, i) => {
+        if (i > reached && narration.revealed(now.turnId, each.lines[0].unit))
+          reached = i
+      })
+      return reached
     },
     (reached) => {
-      if (reached && current.value) {
-        current.value.index = current.value.parts.length - 1
-        current.value.page = 0
-        current.value.pages = []
-      }
+      const now = current.value
+      if (!now || reached <= now.index) return
+      now.index = reached
+      now.page = 0
+      now.pages = []
     },
   )
 
@@ -241,7 +309,10 @@ export const useArrivalStore = defineStore('arrival', () => {
   // The narrator has finished: the last part goes 1½ s later, or, with no
   // voice of its own, is read for its reading time.
   watch(
-    () => current.value?.narrated && !narration.narrates(current.value.turnId),
+    () =>
+      current.value?.shown &&
+      current.value.narrated &&
+      !narration.narrates(current.value.turnId),
     (over) => {
       const now = current.value
       if (!over || !now || now.ended) return
@@ -265,6 +336,10 @@ export const useArrivalStore = defineStore('arrival', () => {
     pageCount,
     barMs,
     barKey,
+    newsUp,
+    told: newsTurns,
+    newsPending,
+    reset,
     show,
     next,
     setPages,
