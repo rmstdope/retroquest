@@ -15,7 +15,7 @@ import { inventoryChanges, type Chip } from '@/lantern/inventoryChanges'
 import { toQuestNews, type QuestNews } from '@/lantern/questNews'
 import { parseActIntro, type ActIntro } from '@/lantern/parseActIntro'
 import { actFolder } from '@/lantern/narrationManifest'
-import { roomPictureUrl } from '@/lantern/roomPicture'
+import { portraitUrl, roomPictureUrl } from '@/lantern/roomPicture'
 import type { Chapter } from '@/lantern/chapter'
 
 /**
@@ -71,6 +71,8 @@ export interface Turn {
   quests?: QuestNews[]
   /** Set on a player's command and on the arrival that opens an act: its answer is narrated (never on a load). */
   narrate?: true
+  /** The room character a player's command was for (talk to, say … to, give … to), when it was for one. */
+  addressed?: string
 }
 
 /** What the player found on entering a room (engine markup / names). */
@@ -272,6 +274,17 @@ export const useGameStore = defineStore('game', () => {
     roomPictureUrl(musicActName.value, musicRoomKey.value),
   )
 
+  /** The running act's characters by class key and name, for their portraits. */
+  const actCast = ref<{ key: string; name: string }[]>([])
+
+  /** The portrait of a character of the running act, '' when the name is not on its list (Elior, or a name the act does not register). */
+  function portraitFor(name: string): string {
+    const entry = actCast.value.find(
+      (cast) => cast.name.toLowerCase() === name.toLowerCase(),
+    )
+    return entry ? portraitUrl(musicActName.value, entry.key) : ''
+  }
+
   function setBridge(b: GameBridge) {
     bridge = b
   }
@@ -296,11 +309,13 @@ export const useGameStore = defineStore('game', () => {
       description = null,
       narrate = false,
       hold = false,
+      addressed = null,
     }: {
       chips?: boolean
       description?: RoomDescription | null
       narrate?: boolean
       hold?: boolean
+      addressed?: string | null
     } = {},
   ): void {
     const b = requireBridge()
@@ -341,6 +356,7 @@ export const useGameStore = defineStore('game', () => {
       // The engine only says "You move north to …"; keep what the room looked
       // like now so the story can show it later.
       ...(narrate ? { narrate: true as const } : {}),
+      ...(addressed ? { addressed } : {}),
       // A look shows the room again without having moved.
       arrival: shown
         ? {
@@ -693,6 +709,7 @@ export const useGameStore = defineStore('game', () => {
       description: b.controller.lastTurnRoomDescription(),
       narrate: true,
       hold: true,
+      addressed: b.controller.lastTurnAddressee(),
     })
     refreshPanels()
     pollQuestEvents()
@@ -848,6 +865,7 @@ export const useGameStore = defineStore('game', () => {
     musicInfo.value = m.musicInfo
     const place = b.controller.getMusicPlace()
     musicActName.value = place.actName
+    actCast.value = b.controller.getActCharacters()
     latestRoomKey = isIntroShowing() ? '' : place.roomKey
     if (!musicHeld) musicRoomKey.value = latestRoomKey
   }
@@ -1237,6 +1255,7 @@ export const useGameStore = defineStore('game', () => {
     musicActName,
     musicRoomKey,
     roomPicture,
+    portraitFor,
     heldTurn,
     panelsHeld,
     panelFlash,

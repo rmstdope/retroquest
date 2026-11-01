@@ -4,6 +4,7 @@ import { useGameStore } from '@/stores/useGameStore'
 import { renderMarkup } from '@/utils/theme'
 import { useSettingsStore } from '@/stores/useSettingsStore'
 import { useNarrationStore } from '@/stores/useNarrationStore'
+import { useStageSpeechStore } from '@/stores/useStageSpeechStore'
 import {
   POPUP_NARRATION_ID,
   chapterUnits,
@@ -45,6 +46,7 @@ import SaveToast from './SaveToast.vue'
 import SectionNav, { type Section } from './SectionNav.vue'
 import StageButtons from './StageButtons.vue'
 import StagePicture from './StagePicture.vue'
+import StageSpeech from './StageSpeech.vue'
 import StoryDrawer from './StoryDrawer.vue'
 import StoryNameMenu from './StoryNameMenu.vue'
 import { NAME_SELECTOR, useNameStops } from '@/composables/useNameStops'
@@ -84,6 +86,7 @@ import TitlePage from './TitlePage.vue'
 const game = useGameStore()
 const settings = useSettingsStore()
 const narration = useNarrationStore()
+const speech = useStageSpeechStore()
 const panelHold = usePanelHold()
 const wide = useMediaQuery(WIDE_QUERY)
 const short = useMediaQuery(SHORT_QUERY)
@@ -143,6 +146,7 @@ const stageKey = computed(
 )
 watch(stageKey, () => {
   drawerTab.value = null
+  speech.clear()
 })
 
 /** A stage button: opens its drawer or the map (closing what was open), or closes it if lit. */
@@ -178,6 +182,19 @@ function onOutsidePress(event: Event): void {
     return
   drawerTab.value = null
 }
+
+/** A press on the picture itself shows the rest of the turn's speech at once (and the narrator skips ahead). */
+function onPicturePress(event: MouseEvent): void {
+  if (!(event.target instanceof Element)) return
+  if (!event.target.closest('.lq-stage-picture')) return
+  speech.revealAll()
+  if (speech.conversation) narration.skipAll()
+}
+
+/** The ✕ on the picture cleared it: focus goes to the story band. */
+function focusStory(): void {
+  storyEl.value?.focus({ preventScroll: true })
+}
 watch(
   () => drawerTab.value !== null,
   (open) => {
@@ -194,7 +211,10 @@ let actionsResize: ResizeObserver | undefined
 // The laptop shows everything at once; coming back from it starts on the story.
 watch(wide, (isWide) => {
   if (isWide) section.value = 'story'
-  else drawerTab.value = null
+  else {
+    drawerTab.value = null
+    speech.clear()
+  }
 })
 const storyEl = ref<HTMLElement | null>(null)
 /** The story is held still and follows the word while an answer is read. */
@@ -276,6 +296,10 @@ let storyResize: ResizeObserver | undefined
 
 /** Keys that steer the narration; see `onNarrationKey`. */
 function onNarrationKey(event: KeyboardEvent): void {
+  // Escape also clears the speech on the picture (unless a drawer, the map or
+  // a menu took it first); the narration below still hears it.
+  if (event.key === 'Escape' && !event.defaultPrevented && wide.value)
+    speech.clear()
   if (!narration.isNarrating || event.defaultPrevented) return
   if (event.ctrlKey || event.metaKey || event.altKey) return
   const hurries = event.key === ' ' || event.key === 'Enter'
@@ -384,6 +408,9 @@ watch(
         turnUnits(turn, readsArrival(turn), manifest),
         folder,
       )
+    // The conversation on the picture (laptop only) follows the turn; it reads
+    // the narration just begun, so it comes after it.
+    if (turn && wide.value) speech.observe(turn)
     // Its panels wait for the voice, or, with none to wait for, change now.
     if (!turn) return
     if (narration.narrates(turn.id)) panelHold.track(turn)
@@ -808,6 +835,7 @@ watch(
           v-if="wide"
           class="lq-stage"
           :style="{ '--lq-actions-h': `${actionsHeight}px` }"
+          @click="onPicturePress"
         >
           <StagePicture :src="game.roomPicture" />
           <RoomPlate class="lq-stage-plate" data-panel @click="onNameClick" />
@@ -836,6 +864,7 @@ watch(
             @close="closeDrawer"
           />
         </div>
+        <StageSpeech v-if="wide" @focus-story="focusStory" />
         <div
           v-show="wide || section === 'story'"
           class="lq-story-wrap"
@@ -844,6 +873,7 @@ watch(
           <section
             ref="storyEl"
             class="lq-story"
+            tabindex="-1"
             aria-label="Story"
             @click="onStoryClick"
             @keydown="onNameKeydown"

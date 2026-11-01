@@ -6,7 +6,11 @@ import type { MusicInfo, MusicPlace } from './GameController'
 import type { Act } from './Act'
 import { Character } from './Character'
 import { ClassRegistry } from './ClassRegistry'
-import { CommandParser, type CommandTarget } from './CommandParser'
+import {
+  CommandParser,
+  addresseeTarget,
+  type CommandTarget,
+} from './CommandParser'
 import { GameState } from './GameState'
 import { Item } from './Item'
 import { Quest } from './Quest'
@@ -420,6 +424,16 @@ Welcome to
     if (found) return found
     const article = /^the\s+(\S.*)$/i.exec(target.trim())
     return article ? room.getCharacterByName(article[1]) : null
+  }
+
+  /**
+   * The name of the character in the room a command is for (`talk to`,
+   * `say … to`, `give … to`), or null when it is for no one here. Asked before
+   * the command runs, as the command can change the room.
+   */
+  addresseeOf(command: string): string | null {
+    const target = addresseeTarget(command)
+    return target === null ? null : (this.findCharacter(target)?.name ?? null)
   }
 
   /**

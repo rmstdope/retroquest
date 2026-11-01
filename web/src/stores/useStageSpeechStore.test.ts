@@ -1,0 +1,252 @@
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { createPinia, setActivePinia } from 'pinia'
+import type { Turn } from './useGameStore'
+import { useNarrationStore, type NarrationAudio } from './useNarrationStore'
+import { useStageSpeechStore } from './useStageSpeechStore'
+import { narrationKey } from '@/lantern/narrationKey'
+import {
+  narrationWords,
+  type NarrationManifest,
+} from '@/lantern/narrationManifest'
+import { turnUnits } from '@/lantern/narrationUnits'
+import { readingPauseMs } from '@/lantern/stageSpeech'
+
+let nextId = 1
+
+/** A player's command that addressed `addressed` (or nobody), answered with `text`. */
+function turn(
+  text: string,
+  addressed: string | null,
+  command = 'talk to someone',
+): Turn {
+  return {
+    id: nextId++,
+    command,
+    text,
+    room: 'Cottage',
+    description: null,
+    gained: [],
+    lost: [],
+    arrival: null,
+    ...(addressed ? { addressed } : {}),
+  }
+}
+
+const say = (name: string, words: string): string =>
+  `[character_name]${name}[/character_name]\n[dialogue]${words}[/dialogue]`
+
+describe('useStageSpeechStore', () => {
+  beforeEach(() => {
+    vi.useFakeTimers()
+    setActivePinia(createPinia())
+  })
+  afterEach(() => vi.useRealTimers())
+
+  it('starts with no conversation', () => {
+    const speech = useStageSpeechStore()
+    expect(speech.conversation).toBeNull()
+    expect(speech.visible).toEqual([])
+    expect(speech.rightSpeaker).toBeNull()
+    expect(speech.leftSpeaking).toBe(false)
+  })
+
+  it('starts a conversation with the one addressed and shows what they say', () => {
+    const speech = useStageSpeechStore()
+    speech.observe(turn(say('Grandmother', 'There you are.'), 'Grandmother'))
+    expect(speech.visible.map((l) => [l.speaker, l.markup])).toEqual([
+      ['Grandmother', 'There you are.'],
+    ])
+    expect(speech.rightSpeaker).toBe('Grandmother')
+    expect(speech.leftSpeaking).toBe(false)
+  })
+
+  it('stacks while the same character is addressed, whatever the case', () => {
+    const speech = useStageSpeechStore()
+    speech.observe(turn(say('Grandmother', 'One.'), 'Grandmother'))
+    speech.observe(
+      turn(say('Grandmother', 'Two.'), 'grandmother', 'say why to grandmother'),
+    )
+    expect(speech.visible.map((l) => l.speaker)).toEqual([
+      'Grandmother',
+      'Elior',
+    ])
+    vi.runAllTimers()
+    expect(speech.visible.map((l) => [l.speaker, l.side])).toEqual([
+      ['Grandmother', 'right'],
+      ['Elior', 'left'],
+      ['Grandmother', 'right'],
+    ])
+    expect(speech.leftSpeaking).toBe(true)
+  })
+
+  it('shows a second speaker on the right and keeps the earlier names', () => {
+    const speech = useStageSpeechStore()
+    speech.observe(
+      turn(
+        say('Grandmother', 'One.') + '\n' + say('Villager', 'Two.'),
+        'Grandmother',
+      ),
+    )
+    vi.runAllTimers()
+    expect(speech.rightSpeaker).toBe('Villager')
+    expect(speech.visible.map((l) => l.speaker)).toEqual([
+      'Grandmother',
+      'Villager',
+    ])
+  })
+
+  it('starts afresh when someone else is addressed', () => {
+    const speech = useStageSpeechStore()
+    speech.observe(turn(say('Grandmother', 'One.'), 'Grandmother'))
+    speech.observe(turn(say('Mira', 'Hello.'), 'Mira'))
+    expect(speech.visible.map((l) => l.speaker)).toEqual(['Mira'])
+    expect(speech.conversation?.with).toBe('Mira')
+  })
+
+  it.each(['look', 'take bread', 'go north'])(
+    'is cleared by a turn that addresses no one (%s)',
+    (command) => {
+      const speech = useStageSpeechStore()
+      speech.observe(turn(say('Grandmother', 'One.'), 'Grandmother'))
+      speech.observe(turn('Nothing happens.', null, command))
+      expect(speech.conversation).toBeNull()
+      expect(speech.visible).toEqual([])
+    },
+  )
+
+  it('shows nothing of unsigned writing or narration', () => {
+    const speech = useStageSpeechStore()
+    speech.observe(
+      turn(
+        'She nods.\n[character_name][/character_name]\n[dialogue]Dear.[/dialogue]',
+        'Grandmother',
+      ),
+    )
+    expect(speech.visible).toEqual([])
+  })
+
+  it('releases the lines of an unnarrated turn one at a time by their length', () => {
+    const speech = useStageSpeechStore()
+    const first = 'First line.'
+    const second = 'Second line.'
+    speech.observe(turn(say('Mira', `${first}\n\n${second}\n\nThird.`), 'Mira'))
+    expect(speech.visible.map((l) => l.markup)).toEqual([first])
+    vi.advanceTimersByTime(readingPauseMs(first) - 1)
+    expect(speech.visible).toHaveLength(1)
+    vi.advanceTimersByTime(1)
+    expect(speech.visible.map((l) => l.markup)).toEqual([first, second])
+    vi.advanceTimersByTime(readingPauseMs(second))
+    expect(speech.visible).toHaveLength(3)
+  })
+
+  it('shows the rest of the turn at once on revealAll, and when the next turn comes', () => {
+    const speech = useStageSpeechStore()
+    speech.observe(turn(say('Mira', 'A.\n\nB.\n\nC.'), 'Mira'))
+    speech.revealAll()
+    expect(speech.visible).toHaveLength(3)
+    vi.runAllTimers()
+    expect(speech.visible).toHaveLength(3)
+
+    speech.observe(turn(say('Mira', 'D.\n\nE.'), 'Mira'))
+    expect(speech.visible.map((l) => l.markup)).toEqual([
+      'A.',
+      'B.',
+      'C.',
+      'D.',
+    ])
+    speech.observe(turn(say('Mira', 'F.'), 'Mira'))
+    expect(speech.visible.map((l) => l.markup)).toEqual([
+      'A.',
+      'B.',
+      'C.',
+      'D.',
+      'E.',
+      'F.',
+    ])
+  })
+
+  it('stops releasing lines once cleared', () => {
+    const speech = useStageSpeechStore()
+    speech.observe(turn(say('Mira', 'A.\n\nB.'), 'Mira'))
+    speech.clear()
+    vi.runAllTimers()
+    expect(speech.visible).toEqual([])
+    expect(speech.conversation).toBeNull()
+  })
+})
+
+/** A recording for `markup` spoken by `speaker`, one second a word. */
+function recorded(markup: string, speaker: string): NarrationManifest {
+  return {
+    [narrationKey(speaker, markup)]: {
+      file: 'x.mp3',
+      speaker,
+      duration: 9,
+      words: narrationWords(markup).map((word, i) => ({
+        word,
+        start: i,
+        end: i + 1,
+      })),
+    },
+  }
+}
+
+describe('useStageSpeechStore while the turn is narrated', () => {
+  const audios: NarrationAudio[] = []
+
+  beforeEach(() => {
+    vi.useFakeTimers()
+    setActivePinia(createPinia())
+    audios.length = 0
+    useNarrationStore().setAudioFactory(() => {
+      const audio: NarrationAudio = {
+        volume: 1,
+        currentTime: 0,
+        onended: null,
+        onerror: null,
+        play: () => Promise.resolve(),
+        pause: () => undefined,
+      }
+      audios.push(audio)
+      return audio
+    })
+  })
+  afterEach(() => vi.useRealTimers())
+
+  const TEXT = `${say('Mira', 'Hello there.')}\nShe smiles.\n${say('Mira', 'Come in.')}`
+  const manifest = {
+    ...recorded('Hello there.', 'mira'),
+    ...recorded('She smiles.', 'narrator'),
+    ...recorded('Come in.', 'mira'),
+  }
+
+  it('shows each line as the narrator reaches it, and rings the one being read', async () => {
+    const speech = useStageSpeechStore()
+    const t = turn(TEXT, 'Mira')
+    useNarrationStore().begin(t.id, turnUnits(t, true, manifest), 'act1')
+    speech.observe(t)
+
+    expect(speech.visible.map((l) => l.markup)).toEqual(['Hello there.'])
+    expect(speech.isSpeaking(speech.visible[0])).toBe(true)
+
+    audios[0].onended?.()
+    await vi.advanceTimersByTimeAsync(350)
+    audios[1].onended?.()
+    await vi.advanceTimersByTimeAsync(350)
+    expect(speech.visible.map((l) => l.markup)).toEqual([
+      'Hello there.',
+      'Come in.',
+    ])
+    expect(speech.isSpeaking(speech.visible[0])).toBe(false)
+    expect(speech.isSpeaking(speech.visible[1])).toBe(true)
+  })
+
+  it('shows every line once the narration is skipped', () => {
+    const speech = useStageSpeechStore()
+    const t = turn(TEXT, 'Mira')
+    useNarrationStore().begin(t.id, turnUnits(t, true, manifest), 'act1')
+    speech.observe(t)
+    useNarrationStore().skipAll()
+    expect(speech.visible).toHaveLength(2)
+  })
+})

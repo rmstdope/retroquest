@@ -58,7 +58,7 @@ const SPAN_TAG = new RegExp(
  * lines), drop closing tags with no opener and close what is still open. `open`
  * is updated to the tags left open at the end of `markup`.
  */
-function balance(markup: string, open: string[]): string {
+export function balance(markup: string, open: string[]): string {
   const reopen = open.map((tag) => `[${tag}]`).join('')
   const body = markup.replace(SPAN_TAG, (match, slash: string, tag: string) => {
     if (!slash) {

@@ -756,4 +756,66 @@ describe('GameController', () => {
       expect(ctrl.loadGame('slot2')).toContain('loaded')
     })
   })
+
+  describe('who a turn addresses', () => {
+    function talkers(): GameController {
+      const ctrl = makeController({
+        characters: [
+          new Character({ name: 'Old Mira', description: 'Herbs.' }),
+          character('Borin'),
+        ],
+        items: [item('bread')],
+      })
+      startAct(ctrl)
+      return ctrl
+    }
+
+    it.each([
+      ['talk to old mira', 'Old Mira'],
+      ['speak to borin', 'Borin'],
+      ['say hello to borin', 'Borin'],
+      ['give bread to borin', 'Borin'],
+      ['  Talk To The Borin ', 'Borin'],
+    ])('reads %s as addressing %s', (command, who) => {
+      const ctrl = talkers()
+      ctrl.takeTurn(command)
+      expect(ctrl.lastTurnAddressee()).toBe(who)
+    })
+
+    it.each(['look', 'take bread', 'go north', 'talk to nobody', 'say hi'])(
+      'reads %s as addressing no one',
+      (command) => {
+        const ctrl = talkers()
+        ctrl.takeTurn('talk to borin')
+        ctrl.takeTurn(command)
+        expect(ctrl.lastTurnAddressee()).toBeNull()
+      },
+    )
+  })
+
+  describe('the characters of the running act', () => {
+    it('lists a name once, by the first class that has it, with its class key', () => {
+      class Borin extends Character {
+        constructor() {
+          super({ name: 'Borin', description: 'Smith.' })
+        }
+      }
+      class Twin extends Character {
+        constructor() {
+          super({ name: 'Borin', description: 'Smith again.' })
+        }
+      }
+      const act = new Act({
+        name: 'Test Act',
+        rooms: { TestRoom: new Room({ name: 'R', description: 'D' }) },
+        quests: [],
+        musicFile: '',
+        musicInfo: '',
+        classes: { Borin, Twin },
+      })
+      const ctrl = new GameController(new Game([act]))
+      const cast = ctrl.getActCharacters()
+      expect(cast).toEqual([{ key: 'Borin', name: 'Borin' }])
+    })
+  })
 })
