@@ -425,9 +425,10 @@ function onBoxBlur(): void {
 }
 
 /**
- * A press on the panel's switch while typing keeps the cursor in the box: a
- * blur would take the Escape mark away and narrow the switch under the
- * pointer, so the click would miss. Its click moves focus where it belongs.
+ * A press on the panel's switch, or on the stage's Actions, while typing
+ * keeps the cursor in the box: a blur would take the Escape mark away and
+ * narrow the button under the pointer, so the click would miss. Its click
+ * moves focus where it belongs.
  */
 function keepBoxFocus(event: MouseEvent): void {
   if (inBox.value) event.preventDefault()
@@ -676,6 +677,7 @@ function onTypedEnter(): void {
         class="lq-verb"
         data-actions
         :aria-keyshortcuts="inBox ? 'Escape' : undefined"
+        @mousedown="keepBoxFocus"
         @click="chooseActions"
       >
         Actions<kbd v-if="inBox" class="lq-esc" aria-hidden="true">Esc</kbd>

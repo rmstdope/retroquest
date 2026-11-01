@@ -1487,6 +1487,16 @@ describe('ActionComposer on the stage', () => {
       w.unmount()
     })
 
+    // A blur would take the Esc mark away and narrow Actions under the
+    // pointer, so the click would miss (rq-u8b2).
+    it('keeps the cursor in the box when Actions is pressed while typing', async () => {
+      const { w } = await typing('lo')
+      const press = new MouseEvent('mousedown', { cancelable: true })
+      w.get('[data-actions]').element.dispatchEvent(press)
+      expect(press.defaultPrevented).toBe(true)
+      w.unmount()
+    })
+
     it('does the same in the narrow panel, ending on Actions', async () => {
       const w = mount(ActionComposer, { attachTo: document.body })
       await w.findAll('.lq-seg-btn')[1].trigger('click')
