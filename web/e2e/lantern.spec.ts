@@ -458,16 +458,11 @@ test.describe('Lantern UI (the default)', () => {
     await expect(plate).toBeHidden()
   })
 
-<<<<<<< HEAD
   test('opens the story so far as a drawer beside the stage on a laptop', async ({
-=======
-  test('puts speech on the picture on a laptop: the Voice on the right, Elior on the left, cleared by ✕, Escape and walking', async ({
->>>>>>> 969bd7df (feat(rq-tffa.4): characters speak from the sides of the stage, with portraits)
     page,
   }) => {
     await page.setViewportSize({ width: 1280, height: 800 })
     await page.goto('/')
-<<<<<<< HEAD
     await injectMockState(page)
 
     const button = page.getByRole('button', { name: /Story so far/ })
@@ -499,7 +494,13 @@ test.describe('Lantern UI (the default)', () => {
       .locator('.lq-stage-picture')
       .click({ position: { x: 20, y: 300 } })
     await expect(drawer).toHaveCount(0)
-=======
+  })
+
+  test('puts speech on the picture on a laptop: the Voice on the right, Elior on the left, cleared by ✕, Escape and walking', async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 1280, height: 800 })
+    await page.goto('/')
     await page.getByRole('button', { name: 'Start', exact: true }).click()
     await page.locator('.lq-chapter-button').click()
     await page
@@ -558,7 +559,6 @@ test.describe('Lantern UI (the default)', () => {
     await expect(lines.first()).toBeVisible()
     await page.setViewportSize({ width: 390, height: 844 })
     await expect(lines).toHaveCount(0)
->>>>>>> 969bd7df (feat(rq-tffa.4): characters speak from the sides of the stage, with portraits)
   })
 
   test('keeps the story and actions in view in a busy room on a laptop', async ({
