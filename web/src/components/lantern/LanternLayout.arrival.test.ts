@@ -1,9 +1,11 @@
 // @vitest-environment jsdom
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { nextTick } from 'vue'
 import { mount, type VueWrapper } from '@vue/test-utils'
 import { createPinia, setActivePinia } from 'pinia'
 import LanternLayout from './LanternLayout.vue'
 import { useGameStore } from '@/stores/useGameStore'
+import { useArrivalStore } from '@/stores/useArrivalStore'
 import { useSettingsStore } from '@/stores/useSettingsStore'
 import {
   useNarrationStore,
@@ -391,7 +393,9 @@ describe('LanternLayout: the arrival on the picture', () => {
     useSettingsStore().narrationOn = false
     await run('go north')
     useGameStore().loadNumber++
+    await nextTick()
     await vi.advanceTimersByTimeAsync(0)
-    expect(card(w)).toBe('')
+    await vi.waitFor(() => expect(card(w)).toBe(''))
+    expect(useArrivalStore().active).toBe(false)
   })
 })
