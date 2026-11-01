@@ -927,11 +927,19 @@ test.describe('Lantern UI (the default)', () => {
       const story = page.getByRole('region', { name: 'Story' })
       const newest = story.locator('[data-testid="turn"]').last()
       await expect(newest).toContainText('The spirit speaks.')
-      const [storyBox, turnBox] = [
-        await story.boundingBox(),
-        await newest.boundingBox(),
-      ]
-      expect(Math.abs(turnBox!.y - storyBox!.y)).toBeLessThan(24)
+      // Both tops in one frame: the paper glides as it grows (0.2 s), so two
+      // separate reads can straddle the glide and see the story move between them.
+      const offset = await page.evaluate(() => {
+        const box = (selector: string): DOMRect => {
+          const all = document.querySelectorAll(selector)
+          return all[all.length - 1].getBoundingClientRect()
+        }
+        return (
+          box('section[aria-label="Story"] [data-testid="turn"]').top -
+          box('section[aria-label="Story"]').top
+        )
+      })
+      expect(Math.abs(offset)).toBeLessThan(24)
 
       const pill = page.getByRole('button', { name: 'More below', exact: true })
       await expect(pill).toBeVisible()
