@@ -68,5 +68,103 @@
     "width": 640,
     "height": 360,
     "description": "The field behind your home: rows of withered crops under a pale sky, the earth cracked and grey. Grandmother waits at the gate. Mira stands beside her, and Sir Cedric leans on the fence. In the hedge a small light flickers: Nyx, keeping close. The air is quiet."
+  },
+  {
+    "id": "act4-portrait-malakar",
+    "title": "Malakar",
+    "width": 480,
+    "height": 640,
+    "description": "A tall man in a grey robe that was once a Warden's blue. His hair is white, though he cannot be much older than your father would have been. He leans on the throne as if it is the only thing holding him up. He is looking at the wound, not at you."
+  },
+  {
+    "id": "act4-portrait-king-alden",
+    "title": "King Alden",
+    "width": 480,
+    "height": 640,
+    "description": "The king of Eldoria, grey and thin, as if each week in here had been a year. His crown is dark."
+  },
+  {
+    "id": "act4-portrait-grandmother",
+    "title": "Grandmother",
+    "width": 480,
+    "height": 640,
+    "description": "Your grandmother at the gate, flour still on her apron. For once her hands are still."
+  },
+  {
+    "id": "act4-portrait-mira",
+    "title": "Mira",
+    "width": 480,
+    "height": 640,
+    "description": "Mira, standing beside Grandmother at the gate."
+  },
+  {
+    "id": "act4-portrait-sir-cedric",
+    "title": "Sir Cedric",
+    "width": 480,
+    "height": 640,
+    "description": "Sir Cedric, leaning on the fence as if it were a wall."
+  },
+  {
+    "id": "act4-portrait-nyx",
+    "title": "Nyx",
+    "width": 480,
+    "height": 640,
+    "description": "A small light in the hedge. The leaves are greener where it has settled."
+  },
+  {
+    "id": "act4-portrait-whispers",
+    "title": "Whispers",
+    "width": 480,
+    "height": 640,
+    "description": "Voices without mouths, thick on the stair, saying the same thing again and again."
+  },
+  {
+    "id": "act4-portrait-shadow-of-the-past",
+    "title": "Shadow",
+    "width": 480,
+    "height": 640,
+    "description": "It is the shape of a man, thin as smoke. It reaches for the orbs, and they slip through its fingers."
+  },
+  {
+    "id": "act4-portrait-sorceress-of-lies",
+    "title": "Sorceress of Lies",
+    "width": 480,
+    "height": 640,
+    "description": "She is beautiful in the way the chamber is beautiful: a little too perfect, a little wrong. Her smile never reaches her eyes."
+  },
+  {
+    "id": "act4-portrait-captain-of-the-guard",
+    "title": "Captain of the Guard",
+    "width": 480,
+    "height": 640,
+    "description": "A captain of the royal guard, his tabard black with soot. His eyes are open but see nothing, and his hand rests on a sword he has forgotten how to draw."
+  },
+  {
+    "id": "act4-portrait-knight-of-despair",
+    "title": "Knight of Despair",
+    "width": 480,
+    "height": 640,
+    "description": "A knight in tarnished armour, a shredded grey cloak hanging from his shoulders. He stands with his back to the door you came in by. His visor is down, and he does not move. When he speaks, his voice is hollow. Knight of Despair Return when you have the truth."
+  },
+  {
+    "id": "act4-portrait-ghostly-warriors",
+    "title": "Ghostly Warriors",
+    "width": 480,
+    "height": 640,
+    "description": "Pale shapes of soldiers drift among the banners, fighting a battle that ended long ago. Their blades pass through one another without a sound."
+  },
+  {
+    "id": "act4-portrait-true-self",
+    "title": "True Self",
+    "width": 480,
+    "height": 640,
+    "description": "Your own reflection, in the plain mirror at the labyrinth's heart. It does not copy you. It waits, watching, as if it already knows what you will say."
+  },
+  {
+    "id": "act4-portrait-trapped-servants",
+    "title": "Trapped Servants",
+    "width": 480,
+    "height": 640,
+    "description": "Grey figures walk the courtyard paths in circles, chains of shadow at their ankles. They wear what is left of kitchen aprons and stable coats. None of them looks up."
   }
 ]

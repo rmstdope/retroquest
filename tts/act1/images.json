@@ -110,5 +110,82 @@
     "width": 640,
     "height": 360,
     "description": "The main road out of Willowbrook runs east under old oaks, their branches meeting overhead. The way is well trodden, lined with wildflowers and fallen leaves. A merchant's cart stands at the roadside, and his thin grey mare grazes beside it on three good shoes."
+  },
+  {
+    "id": "act1-portrait-blacksmith",
+    "title": "Blacksmith",
+    "width": 480,
+    "height": 640,
+    "description": "Borin, the village smith: forearms like fence posts and an old burn on every knuckle. He talks while he works, and he doesn't stop working."
+  },
+  {
+    "id": "act1-portrait-deer",
+    "title": "Deer",
+    "width": 480,
+    "height": 640,
+    "description": "A deer, red-brown and very still, standing where the moss is thickest. It does not startle when you move."
+  },
+  {
+    "id": "act1-portrait-dream-voice",
+    "title": "Voice",
+    "width": 480,
+    "height": 640,
+    "description": "It has no face you can find, only a height and a nearness. When it speaks, it speaks your name."
+  },
+  {
+    "id": "act1-portrait-fisherman",
+    "title": "Fisherman",
+    "width": 480,
+    "height": 640,
+    "description": "An old man on an upturned crate at the bend, his line in the water and his bad arm held close to his side."
+  },
+  {
+    "id": "act1-portrait-grandmother",
+    "title": "Grandmother",
+    "width": 480,
+    "height": 640,
+    "description": "Your grandmother, flour on her apron and her sleeves pushed up. She has raised you since your parents went away, and she keeps her hands busy when she would rather not answer."
+  },
+  {
+    "id": "act1-portrait-merchant",
+    "title": "Merchant",
+    "width": 480,
+    "height": 640,
+    "description": "A travelling merchant with a loaded cart and a thin grey mare who stands on three good shoes. He has the look of a man two days from his last meal."
+  },
+  {
+    "id": "act1-portrait-mira",
+    "title": "Mira",
+    "width": 480,
+    "height": 640,
+    "description": "Mira, the village healer. Her hut smells of drying sage, and she looks at you a moment longer than people usually do."
+  },
+  {
+    "id": "act1-portrait-priest",
+    "title": "Priest",
+    "width": 480,
+    "height": 640,
+    "description": "The chapel's priest, thin and a little stooped, with old candle wax on both sleeves."
+  },
+  {
+    "id": "act1-portrait-patches",
+    "title": "Patches",
+    "width": 480,
+    "height": 640,
+    "description": "A small cat with a patchwork coat of ginger, black and white, and wide green eyes."
+  },
+  {
+    "id": "act1-portrait-shopkeeper",
+    "title": "Shopkeeper",
+    "width": 480,
+    "height": 640,
+    "description": "Old Man Hemlock, who keeps the General Store. He glances at the door every time it creaks."
+  },
+  {
+    "id": "act1-portrait-villager",
+    "title": "Tilda",
+    "width": 480,
+    "height": 640,
+    "description": "Tilda, the baker's wife, flour to the elbows. She knows what everyone in Willowbrook had for breakfast, and who they ate it with."
   }
 ]
