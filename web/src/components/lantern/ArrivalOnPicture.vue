@@ -10,9 +10,10 @@ import { useReadAlong } from '@/composables/useReadAlong'
  * description, the spoken word lit while the narrator tells it. Under it the
  * hint, and, while nobody speaks the part, a thin bar that empties over its
  * reading time. A click anywhere on the picture goes on (`useArrivalStore`).
- * With no picture (`pictured` false) the text is dark ink on the paper in the
- * light theme. The text is also in the story, which waits aside: the layer is
- * a polite live region for screen readers.
+ * Names and other inline tags keep the dark theme's light colours on the
+ * picture. With no picture (`pictured` false) the text is dark ink on the
+ * paper in the light theme. The text is also in the story, which waits aside:
+ * the layer is a polite live region for screen readers.
  */
 defineProps<{ pictured: boolean; phone?: boolean }>()
 const arrival = useArrivalStore()
@@ -86,6 +87,20 @@ const { html } = useReadAlong(() => arrival.turnId ?? 0, root)
     0 0 18px rgb(0 0 0 / 0.85), 0 0 6px rgb(0 0 0 / 0.9), 0 1px 2px #000;
   --lq-arrival-track: rgb(255 255 255 / 0.25);
   --lq-arrival-fill: rgb(255 255 255 / 0.85);
+}
+/*
+ * On a picture the glow is dark in both themes, so the inline tags (names,
+ * exits, quests) keep the dark theme's light colours, as tokens.ts sets them.
+ */
+.lq-arrival-stage:not(.lq-bare) {
+  --lq-fg: #ece6d6;
+  --lq-muted: #a39d8e;
+  --lq-accent-text: #ffb836;
+  --lq-failure: #e8896b;
+  --lq-success: #8fcf7a;
+  --lq-character: #7fb0e6;
+  --lq-item: #8fcf7a;
+  --lq-spell: #c79bf0;
 }
 /* The phone: a narrower block of smaller type, above the paper's tab and the bar. */
 .lq-phone-arrival {
