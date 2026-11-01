@@ -7,9 +7,8 @@ import JournalPanel from './JournalPanel.vue'
  * Quests tabs) opened on the tab of the button pressed. On opening, focus
  * moves into it (the open tab). A tab chosen inside it is passed on
  * (`select`), so the layout lights that tab's button. ✕ and Escape ask the
- * layout to close it (which
- * also hands focus back to the button that opened it). Escape closes only the
- * drawer, so it does not also skip the narration.
+ * layout to close it (which also hands focus back to the lit button). Escape
+ * closes only the drawer, so it does not also skip the narration.
  */
 defineProps<{ tab: 'bag' | 'spells' | 'quests' }>()
 const emit = defineEmits<{

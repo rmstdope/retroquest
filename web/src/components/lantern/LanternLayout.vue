@@ -152,7 +152,7 @@ function toggleDrawer(
   else drawerTab.value = tab
 }
 
-/** Close the drawer; focus goes back to the button that opened it. */
+/** Close the drawer; focus goes back to its lit button (the tab it was on). */
 function closeDrawer(): void {
   const tab = drawerTab.value
   drawerTab.value = null

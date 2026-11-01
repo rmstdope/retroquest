@@ -85,6 +85,15 @@ describe('LanternLayout: one thing open on the stage', () => {
     expect(lit()).toEqual([])
   })
 
+  it('hands focus to the lit button when the drawer closes after a tab change', async () => {
+    await press('bag')
+    await w.get('.lq-drawer #lq-tab-quests').trigger('click')
+    await w.get('.lq-drawer-close').trigger('click')
+    await w.vm.$nextTick()
+    expect(w.find('.lq-drawer').exists()).toBe(false)
+    expect(document.activeElement).toBe(w.get('[data-button="quests"]').element)
+  })
+
   it('closes what is open on a press outside, but not on a press inside', async () => {
     await press('bag')
     w.get('.lq-drawer').element.dispatchEvent(
