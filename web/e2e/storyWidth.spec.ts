@@ -30,16 +30,21 @@ async function type(page: Page, command: string): Promise<void> {
   await input.press('Enter')
 }
 
-/** A room's description reaches the same right edge as a story paragraph. */
+/**
+ * A room's description reaches the same right edge as a story paragraph. The
+ * drawer slides in, so the two edges are read again until the slide is over.
+ */
 async function expectAsWideAsStory(
   description: Locator,
   story: Locator,
 ): Promise<void> {
   const paragraph = story.locator('.lq-block-text').first()
-  expect(await rightEdge(description)).toBeCloseTo(
-    await rightEdge(paragraph),
-    0,
-  )
+  await expect(paragraph).toBeVisible()
+  await expect
+    .poll(async () =>
+      Math.abs((await rightEdge(description)) - (await rightEdge(paragraph))),
+    )
+    .toBeLessThan(0.5)
 }
 
 /** Where the whole story is read: the drawer on a laptop, the story itself on a phone. */
