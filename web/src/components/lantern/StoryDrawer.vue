@@ -13,6 +13,8 @@ import StoryTurn from './StoryTurn.vue'
  * only the drawer, so it does not also skip the narration. Opening or closing
  * it never touches the narration, and the narration's follow-the-word scroll
  * (which belongs to the story band) does not pull this reader off an older turn.
+ * Every name with a menu is a Tab stop (the layout marks them); the first Tab
+ * from the drawer lands on the newest turn's first name.
  */
 const emit = defineEmits<{ close: [] }>()
 const game = useGameStore()
@@ -59,6 +61,22 @@ onMounted(async () => {
 })
 onUnmounted(() => resize?.disconnect())
 
+/**
+ * Tab from the drawer's own body (where it opens) lands on the first name of
+ * the newest turn, not the oldest at the top, so the reader keeps their place.
+ */
+function onBodyKeydown(event: KeyboardEvent): void {
+  if (event.key !== 'Tab' || event.shiftKey || event.target !== body.value)
+    return
+  const turns = body.value?.querySelectorAll('.lq-turn')
+  const first = turns?.[turns.length - 1]?.querySelector<HTMLElement>(
+    '[role="button"][tabindex]',
+  )
+  if (!first) return
+  event.preventDefault()
+  first.focus()
+}
+
 /** Escape closes the drawer and goes no further. */
 function onKeydown(event: KeyboardEvent): void {
   if (event.key !== 'Escape') return
@@ -92,6 +110,7 @@ function onKeydown(event: KeyboardEvent): void {
       aria-label="Story so far"
       tabindex="-1"
       @lq-follow.prevent
+      @keydown="onBodyKeydown"
       @scroll.passive="updatePill"
     >
       <StoryTurn v-for="turn in game.turns" :key="turn.id" :turn="turn" />
