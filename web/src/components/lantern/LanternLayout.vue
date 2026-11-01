@@ -472,13 +472,39 @@ function dialogOpen(): boolean {
   )
 }
 
+/** Enter presses that found a command box with nothing typed in it. */
+const emptyBoxEnters = new WeakSet<Event>()
+
+/**
+ * Note, before the command box handles it, an Enter pressed in an empty
+ * command box: the box sends and clears itself first, so by the time
+ * `onNarrationKey` hears the key the box is empty either way.
+ */
+function noteEmptyBoxEnter(event: KeyboardEvent): void {
+  if (
+    event.key === 'Enter' &&
+    event.target instanceof HTMLInputElement &&
+    event.target.matches(COMMAND_BOX) &&
+    event.target.value === ''
+  )
+    emptyBoxEnters.add(event)
+}
+
+/** Whether this is Enter pressed in a command box with nothing typed. */
+function isEmptyBoxEnter(event: KeyboardEvent): boolean {
+  return emptyBoxEnters.has(event)
+}
+
 /** Keys that steer the narration; see `onNarrationKey`. */
 function onNarrationKey(event: KeyboardEvent): void {
   // Escape also clears the speech on the picture (unless a drawer, the map or
   // a menu took it first); the narration below still hears it.
   if (event.key === 'Escape' && !event.defaultPrevented && staged.value)
     speech.clear()
-  if (!(narration.isNarrating || arrival.active) || event.defaultPrevented)
+  if (!(narration.isNarrating || arrival.active)) return
+  // The command box handles its own Enter (and marks it handled); on an
+  // arrival an empty box still lets that Enter go on.
+  if (event.defaultPrevented && !(arrival.active && isEmptyBoxEnter(event)))
     return
   if (event.ctrlKey || event.metaKey || event.altKey) return
   const hurries = event.key === ' ' || event.key === 'Enter'
@@ -494,11 +520,7 @@ function onNarrationKey(event: KeyboardEvent): void {
     // An arrival on the picture takes Enter and Space even from a focused
     // button (focus stays where it was, the button is not pressed); a field
     // keeps them (a space, the command), but an empty command box goes on.
-    const emptyBox =
-      event.key === 'Enter' &&
-      field instanceof HTMLInputElement &&
-      field.value === ''
-    if (field && !emptyBox) return
+    if (field && !isEmptyBoxEnter(event)) return
     spaceTaken = event.key === ' '
   } else {
     // A field keeps Space and Enter (a space, the command), and an open word
@@ -533,6 +555,7 @@ function onSpaceUp(event: KeyboardEvent): void {
 
 onMounted(() => {
   fieldFocused.value = !!document.activeElement?.matches(COMMAND_BOX)
+  document.addEventListener('keydown', noteEmptyBoxEnter, true)
   document.addEventListener('keydown', onNarrationKey)
   document.addEventListener('keydown', onPaperKey)
   document.addEventListener('keyup', onSpaceUp)
@@ -594,6 +617,7 @@ watch(
   { flush: 'post' },
 )
 onUnmounted(() => {
+  document.removeEventListener('keydown', noteEmptyBoxEnter, true)
   document.removeEventListener('keydown', onNarrationKey)
   document.removeEventListener('keydown', onPaperKey)
   document.removeEventListener('keyup', onSpaceUp)
