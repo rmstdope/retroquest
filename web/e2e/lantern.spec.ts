@@ -894,7 +894,7 @@ test.describe('Lantern UI (the default)', () => {
           return all[all.length - 1].getBoundingClientRect()
         }
         return (
-          box('[data-testid="turn"]').top -
+          box('section[aria-label="Story"] [data-testid="turn"]').top -
           box('section[aria-label="Story"]').top
         )
       })
