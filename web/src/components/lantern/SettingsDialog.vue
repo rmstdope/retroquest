@@ -30,6 +30,8 @@ const THEMES: Array<{ value: ThemeSetting; label: string }> = [
   { value: 'dark', label: 'Dark' },
 ]
 const SIZES: Array<{ value: LanternTextSize; label: string; px: number }> = [
+  { value: 'smallest', label: 'Smallest text', px: 9 },
+  { value: 'extraSmall', label: 'Extra small text', px: 11 },
   { value: 'small', label: 'Small text', px: 13 },
   { value: 'medium', label: 'Medium text', px: 17 },
   { value: 'large', label: 'Large text', px: 21 },
@@ -78,7 +80,7 @@ function volume(event: Event): number {
           </button>
         </div>
       </div>
-      <div class="lq-row">
+      <div class="lq-row lq-row-wrap">
         <span class="lq-row-text"
           ><span class="lq-row-label">Text size</span
           ><span class="lq-note">Story text only</span></span
@@ -261,6 +263,13 @@ function volume(event: Event): number {
   display: flex;
   align-items: center;
   gap: 12px;
+}
+.lq-row-wrap {
+  flex-wrap: wrap;
+  padding: 8px 0;
+}
+.lq-row-wrap .lq-row-text {
+  flex: 1 1 8rem;
 }
 .lq-row-text {
   flex: 1;

@@ -111,8 +111,10 @@ export const LANTERN_PALETTES: Readonly<Record<LanternTheme, LanternPalette>> =
     },
   }
 
-/** Story-text multipliers for the player's Small / Medium / Large setting. */
+/** Story-text multipliers for the player's five text sizes, smallest first. */
 export const LANTERN_TEXT_SCALE = {
+  smallest: 0.64,
+  extraSmall: 0.76,
   small: 0.88,
   medium: 1,
   large: 1.18,

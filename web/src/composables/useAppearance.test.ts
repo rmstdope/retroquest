@@ -54,6 +54,10 @@ describe('useAppearance', () => {
     useSettingsStore().textSize = 'large'
     await nextTick()
     expect(root.style.getPropertyValue('--lq-text-scale')).toBe('1.18')
+
+    useSettingsStore().textSize = 'smallest'
+    await nextTick()
+    expect(root.style.getPropertyValue('--lq-text-scale')).toBe('0.64')
   })
 
   it('marks reduce motion only when chosen explicitly', async () => {

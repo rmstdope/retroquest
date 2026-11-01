@@ -51,6 +51,8 @@ function onDocumentClick(e: MouseEvent): void {
   }
 }
 const SIZES: Array<{ value: LanternTextSize; label: string; px: number }> = [
+  { value: 'smallest', label: 'Smallest text', px: 9 },
+  { value: 'extraSmall', label: 'Extra small text', px: 11 },
   { value: 'small', label: 'Small text', px: 13 },
   { value: 'medium', label: 'Medium text', px: 17 },
   { value: 'large', label: 'Large text', px: 21 },
@@ -416,14 +418,24 @@ function toggleTheme(): void {
   right: 0;
   z-index: 5;
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 4px;
-  width: 200px;
+  width: 292px;
   padding: 8px;
   border-radius: var(--lq-radius);
   border: 1px solid var(--lq-line2);
   background: var(--lq-surface);
   box-shadow: 0 12px 30px rgb(0 0 0 / 0.3);
+}
+/* Too narrow to hang from the Aa button: span the screen with an 8px margin. */
+@media (max-width: 479px) {
+  .lq-popover {
+    position: fixed;
+    top: 60px;
+    left: 8px;
+    right: 8px;
+    width: auto;
+  }
 }
 .lq-size {
   height: 44px;
