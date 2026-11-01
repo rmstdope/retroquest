@@ -9,9 +9,10 @@ import { usePanelFlash } from '@/composables/usePanelFlash'
  * The map compass beside the story on laptops: the exits laid out around the
  * current room in a 3 × 3 grid (up/down in the top/bottom-right corners),
  * other named exits listed below. Each exit is a button that moves there.
- * As a phone section it gets a "Map" heading (`heading`).
+ * As a phone section it gets a "Map" heading (`heading`). On the stage
+ * (`stage`) the middle cell says only "Here": the plate names the room.
  */
-defineProps<{ heading?: boolean }>()
+defineProps<{ heading?: boolean; stage?: boolean }>()
 const game = useGameStore()
 const { flashing, endFlash } = usePanelFlash(['place'])
 
@@ -56,8 +57,10 @@ function go(direction: string): void {
     <div class="lq-grid">
       <template v-for="(exit, cell) in grid" :key="cell">
         <div v-if="cell === 4" class="lq-here">
-          <span class="lq-here-label">You are here</span>
-          <span class="lq-here-room">{{ game.roomName }}</span>
+          <span class="lq-here-label">{{
+            stage ? 'Here' : 'You are here'
+          }}</span>
+          <span v-if="!stage" class="lq-here-room">{{ game.roomName }}</span>
         </div>
         <button
           v-else-if="exit"

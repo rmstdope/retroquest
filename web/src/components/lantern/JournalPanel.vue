@@ -15,11 +15,12 @@ import { renderMarkup } from '@/utils/theme'
  * something new until it is opened. The tabs follow the WAI-ARIA tabs
  * pattern: one tab stop, Left/Right (wrapping), Home and End select a tab.
  * Phones show one tab at a time from their section tabs (the `tab` prop):
- * then there is no tab row, just a heading.
+ * then there is no tab row, just a heading. The stage's drawer instead gives
+ * the tab to open on (`start`) and keeps the tab row.
  */
 type Tab = 'bag' | 'spells' | 'quests'
 
-const props = defineProps<{ tab?: Tab }>()
+const props = defineProps<{ tab?: Tab; start?: Tab }>()
 const TITLES: Record<Tab, string> = {
   bag: 'Bag',
   spells: 'Spells',
@@ -27,7 +28,7 @@ const TITLES: Record<Tab, string> = {
 }
 const game = useGameStore()
 const { flashing, endFlash } = usePanelFlash(['quests', 'stock'])
-const active = ref<Tab>(props.tab ?? 'bag')
+const active = ref<Tab>(props.tab ?? props.start ?? 'bag')
 const expanded = ref<Set<string>>(new Set())
 const tabButtons = ref<HTMLButtonElement[]>([])
 
@@ -64,7 +65,7 @@ const tabs = computed(() => [
 ])
 
 watch(
-  () => props.tab,
+  () => props.tab ?? props.start,
   (tab) => {
     if (tab) active.value = tab
   },

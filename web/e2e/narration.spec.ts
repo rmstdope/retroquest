@@ -81,7 +81,7 @@ for (const { name, width, height } of [
   })
 }
 
-test('keeps the room card until the voice reaches them, and a press in the journal catches up', async ({
+test('keeps the plate until the voice reaches them, and a press on a journal button catches up', async ({
   page,
 }): Promise<void> => {
   await slowNarrationClips(page)
@@ -99,12 +99,11 @@ test('keeps the room card until the voice reaches them, and a press in the journ
 
   // A press in a held panel only brings everything up to date.
   const turns = await page.getByTestId('turn').count()
-  await page.getByRole('tab', { name: /^Quests/ }).click()
-  // That press did nothing but catch up: the tab did not open.
-  await expect(page.getByRole('tab', { name: /^Quests/ })).toHaveAttribute(
-    'aria-selected',
-    'false',
-  )
+  await page.getByRole('button', { name: /^Quests/ }).click()
+  // That press did nothing but catch up: the drawer did not open.
+  await expect(
+    page.getByRole('complementary', { name: 'Journal drawer' }),
+  ).toHaveCount(0)
   await expect(page.locator('.lq-speaking')).toHaveCount(0)
   await expect(page.getByTestId('turn')).toHaveCount(turns)
 })

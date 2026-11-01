@@ -902,3 +902,66 @@ describe('ActionComposer', () => {
     })
   })
 })
+
+describe('ActionComposer on the stage', () => {
+  beforeEach(() => {
+    setActivePinia(createPinia())
+    const game = useGameStore()
+    game.acceptInput = true
+    game.items = ['bucket']
+    game.characters = ['mira']
+    game.exits = { north: "Mira's Hut" }
+    game.roomWares = []
+  })
+
+  const labels = (w: VueWrapper): string[] =>
+    w.findAll('.lq-verb').map((b) => b.text())
+
+  it('is one row of verbs ending in More… and ⌨ Type, without the mode switch or exits', () => {
+    const w = mount(ActionComposer, { props: { stage: true } })
+    expect(labels(w)).toEqual([
+      'Look',
+      'Examine',
+      'Search',
+      'Take',
+      'Use',
+      'Talk',
+      'Say',
+      'Give',
+      'More…',
+      '⌨ Type',
+    ])
+    expect(w.find('.lq-seg').exists()).toBe(false)
+    expect(w.find('.lq-go-row').exists()).toBe(false)
+  })
+
+  it('keeps Drop, Buy, Open, Close, Cast and Rest behind More…', async () => {
+    const w = mount(ActionComposer, { props: { stage: true } })
+    await w.get('[data-more]').trigger('click')
+    expect(labels(w)).toEqual(
+      expect.arrayContaining(['Drop', 'Buy', 'Open', 'Close', 'Cast', 'Rest']),
+    )
+  })
+
+  it('opens the builder with "Do it ▸" for the verb picked', async () => {
+    const w = mount(ActionComposer, { props: { stage: true } })
+    await w.get('[data-verb="use"]').trigger('click')
+    expect(w.get('.lq-builder').text()).toContain('Use')
+    expect(w.get('.lq-do').text()).toBe('Do it ▸')
+  })
+
+  it('switches to the command box with ⌨ Type and back with Actions', async () => {
+    const w = mount(ActionComposer, { props: { stage: true } })
+    await w.get('[data-type]').trigger('click')
+    expect(w.find('input[aria-label="Command"]').exists()).toBe(true)
+    expect(w.get('.lq-type-row .lq-do').text()).toBe('Do it ▸')
+    await w.get('[data-actions]').trigger('click')
+    expect(w.find('.lq-verbs').exists()).toBe(true)
+  })
+
+  it('is unchanged without the stage', () => {
+    const w = mount(ActionComposer)
+    expect(w.find('.lq-seg').exists()).toBe(true)
+    expect(w.find('[data-type]').exists()).toBe(false)
+  })
+})

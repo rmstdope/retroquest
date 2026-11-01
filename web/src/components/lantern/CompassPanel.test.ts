@@ -99,3 +99,12 @@ describe('CompassPanel', () => {
     expect(wrapper.get('h2').text()).toBe('Map')
   })
 })
+
+describe('CompassPanel on the stage', () => {
+  it('names the middle cell "Here" only', () => {
+    setActivePinia(createPinia())
+    useGameStore().roomName = 'Village Square'
+    const wrapper = mount(CompassPanel, { props: { stage: true } })
+    expect(wrapper.get('.lq-grid .lq-here').text()).toBe('Here')
+  })
+})
