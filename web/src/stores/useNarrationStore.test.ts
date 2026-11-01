@@ -290,6 +290,15 @@ describe('useNarrationStore', () => {
     expect(narration.speaking(7)).toMatchObject({ unit: 1 })
   })
 
+  it('seekToWord never takes the narrator back to a unit he has passed', () => {
+    narration.begin(7, [voiced(2), voiced(6)], 'act1')
+    narration.skipTo(1)
+    const playing = last()
+    narration.seekToWord(0, 1)
+    expect(last()).toBe(playing)
+    expect(narration.speaking(7)).toMatchObject({ unit: 1 })
+  })
+
   it('seekToWord does nothing when no voice is in the turn', () => {
     narration.seekToWord(0, 1)
     expect(narration.isNarrating).toBe(false)

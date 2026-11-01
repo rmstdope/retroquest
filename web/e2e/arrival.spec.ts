@@ -263,6 +263,40 @@ test.describe('the arrival told on the picture', () => {
       await expect(story(page)).toBeVisible()
     })
 
+    test('keeps a speaker’s quote on the page of the line that introduces it, and Space and Escape work', async ({
+      page,
+    }) => {
+      await page.setViewportSize({ width: 1280, height: 713 })
+      await page.goto('/')
+      await page.getByRole('button', { name: 'Start', exact: true }).click()
+      await page.locator('.lq-chapter-button').click()
+      await arrival(page).click()
+      await pushArrival(
+        page,
+        'You are in Elior’s Cottage.',
+        '[event]You answer it, and the room holds its breath while the old rafters creak above you.[/event]\n' +
+          '[event]A grey light finds the edges of the shutters and lays itself along the floor.[/event]\n' +
+          '[event]Somewhere below, a kettle begins to tick against the iron of the hob and wakes it.[/event]\n' +
+          'The whisper comes once more, closer than the thunder, and this time there are words in it.\n' +
+          '[dialogue]…and let them rest…[/dialogue]\n' +
+          '[event]The dark lets go of you.[/event]',
+      )
+      await expect(arrival(page).locator('.lq-arrival-card')).toHaveCount(1)
+      const lines = arrival(page).locator('.lq-arrival-line')
+      const seen: string[] = []
+      for (let i = 0; i < 6; i++) {
+        const text = (await lines.allTextContents()).join(' | ')
+        seen.push(text)
+        if (text.includes('let them rest')) expect(text).toContain('whisper')
+        await page.keyboard.press('Space')
+        await expect(arrival(page).locator('.lq-arrival-card')).toHaveCount(1)
+        if (text.includes('Elior')) break
+      }
+      expect(seen.some((text) => text.includes('let them rest'))).toBe(true)
+      await page.keyboard.press('Escape')
+      await expect(lines).toHaveCount(0)
+    })
+
     test('is one page per part in a window tall enough', async ({ page }) => {
       await longArrival(page, 1000)
       const lines = arrival(page).locator('.lq-arrival-line')

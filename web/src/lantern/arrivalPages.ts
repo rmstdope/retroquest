@@ -15,6 +15,8 @@ import { narrationWords } from './narrationManifest'
 export interface PageSource {
   unit: number
   markup: string
+  /** Stays on the page of the line before it (a speaker's quote). */
+  joinsPrevious?: boolean
 }
 
 /** A slice of a line: a paragraph or a sentence, balanced on its own. */
@@ -144,8 +146,29 @@ export function paginate(lines: PageSource[], fits: Fits): ArrivalPage[] {
     close()
   }
 
-  for (const line of lines)
-    place(whole(line), [splitParagraphs, splitSentences])
+  // A quote travels with the line that introduces its speaker, while both fit a page.
+  const groups: PageSource[][] = []
+  for (const line of lines) {
+    if (line.joinsPrevious && groups.length)
+      groups[groups.length - 1].push(line)
+    else groups.push([line])
+  }
+  const cuts = [splitParagraphs, splitSentences]
+  for (const group of groups) {
+    const pieces = group.map(whole)
+    if (pieces.length > 1) {
+      if (fits([...current, ...pieces])) {
+        current.push(...pieces)
+        continue
+      }
+      close()
+      if (fits(pieces)) {
+        current.push(...pieces)
+        continue
+      }
+    }
+    for (const piece of pieces) place(piece, cuts)
+  }
   close()
   return pages
 }

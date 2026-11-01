@@ -151,3 +151,37 @@ describe('a single-paragraph line', () => {
     expect(pages).toHaveLength(2)
   })
 })
+
+describe('a speaker’s quote', () => {
+  const lines = [
+    { unit: 0, markup: 'aaaa' },
+    { unit: 1, markup: 'bbbb' },
+    { unit: 2, markup: 'qqqq', joinsPrevious: true },
+    { unit: 3, markup: 'cccc' },
+  ]
+
+  it('stays on the page of the line before it', () => {
+    const pages = paginate(lines, fitsChars(9))
+    expect(pages.map((p) => p.pieces.map((x) => x.markup))).toEqual([
+      ['aaaa'],
+      ['bbbb', 'qqqq'],
+      ['cccc'],
+    ])
+  })
+
+  it('does not hold the line back when both fit with the page before', () => {
+    const pages = paginate(lines, fitsChars(14))
+    expect(pages.map((p) => p.pieces.map((x) => x.markup))).toEqual([
+      ['aaaa', 'bbbb', 'qqqq'],
+      ['cccc'],
+    ])
+  })
+
+  it('parts from the line before it only when both together are too tall for a page', () => {
+    const pages = paginate(lines.slice(1, 3), fitsChars(5))
+    expect(pages.map((p) => p.pieces.map((x) => x.markup))).toEqual([
+      ['bbbb'],
+      ['qqqq'],
+    ])
+  })
+})

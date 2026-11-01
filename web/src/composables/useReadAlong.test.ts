@@ -234,4 +234,34 @@ describe('useReadAlong', () => {
       '4',
     ])
   })
+
+  it('numbers the first piece of a part cut into pieces, though it holds fewer words', async () => {
+    const narration = useNarrationStore()
+    const text = 'One two. Three four five.'
+    const manifest = {
+      [narrationKey('narrator', text)]: {
+        file: 'a.mp3',
+        speaker: 'narrator',
+        duration: 5,
+        words: narrationWords(text).map((word, i) => ({
+          word,
+          start: i,
+          end: i + 1,
+        })),
+      },
+    }
+    const w = mountReader(10, (along) => [
+      h('p', { innerHTML: along.html('One two.', 0, 0, undefined, 0) }),
+    ])
+    narration.begin(
+      10,
+      turnUnits({ text, arrival: null }, false, manifest),
+      'act1',
+    )
+    await nextTick()
+    expect(w.findAll('.lq-w').map((s) => s.attributes('data-w'))).toEqual([
+      '0',
+      '1',
+    ])
+  })
 })

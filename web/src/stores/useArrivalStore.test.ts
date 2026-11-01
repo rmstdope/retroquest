@@ -319,6 +319,18 @@ describe('useArrivalStore', () => {
         expect(arrival.active).toBe(true)
       })
 
+      it('keeps the page of a description nobody speaks when the narrator ends', async () => {
+        narration.begin(1, [unit], 'act1')
+        arrival.show(1, parts(false, false), true)
+        arrival.setPages([start(0), start(5), start(9)])
+        FakeAudio.all[0].onended?.()
+        await nextTick()
+        expect(arrival.page).toBe(0)
+        expect(arrival.barMs).toBe(6000)
+        vi.advanceTimersByTime(6000)
+        expect(arrival.page).toBe(1)
+      })
+
       it('a next on the last page clears and stops the narrator', () => {
         narrate()
         arrival.next()

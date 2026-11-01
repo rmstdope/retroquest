@@ -11,6 +11,7 @@ import {
   type PageLine,
 } from '@/lantern/arrivalPages'
 import { renderMarkup } from '@/utils/theme'
+import { useSettingsStore } from '@/stores/useSettingsStore'
 
 /**
  * The arrival told on the middle of the room's picture, like a film title:
@@ -114,6 +115,14 @@ function recut(): void {
     })),
   )
 }
+// Larger or smaller type changes the lines, not the stage: cut afresh.
+watch(
+  () => useSettingsStore().textSize,
+  async () => {
+    await nextTick()
+    recut()
+  },
+)
 let stageObserver: ResizeObserver | undefined
 onMounted(() => {
   if (typeof ResizeObserver === 'undefined' || !root.value) return

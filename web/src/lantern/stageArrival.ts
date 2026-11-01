@@ -21,6 +21,8 @@ export interface ArrivalLine {
   markup: string
   /** The narration words that come before the markup in its unit (the room's name before the description); 0 when absent. */
   wordBase?: number
+  /** A speaker's quote: it stays on the page of the line before it, which introduces the speaker. */
+  joinsPrevious?: true
 }
 
 /** One thing shown at a time on the picture: what happens on arrival, then the description. */
@@ -76,7 +78,11 @@ export function arrivalParts(
   const events: ArrivalLine[] = []
   blocks.forEach((block, unit) => {
     if (block.kind !== 'checklist' && block.markup.trim())
-      events.push({ unit, markup: block.markup })
+      events.push(
+        block.kind === 'dialogue'
+          ? { unit, markup: block.markup, joinsPrevious: true }
+          : { unit, markup: block.markup },
+      )
   })
   const parts: ArrivalPart[] = []
   if (events.length)

@@ -85,6 +85,22 @@ describe('arrivalParts', () => {
     ])
   })
 
+  it('marks a speaker’s quote as joining the line before it', () => {
+    const parts = arrivalParts(
+      {
+        text:
+          '[character_name]Mira[/character_name] speaks.\n' +
+          '[dialogue]Hello.[/dialogue]',
+        arrival: null,
+      },
+      [],
+    )
+    expect(parts[0].lines.map((l) => l.joinsPrevious)).toEqual([
+      undefined,
+      true,
+    ])
+  })
+
   it('does not count the room name as the voice of the description', () => {
     const nameOnly: NarrationUnit = {
       kind: 'arrival',

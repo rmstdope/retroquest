@@ -67,16 +67,21 @@ export function useReadAlong(
     unit: number,
     from = 0,
     to = Number.POSITIVE_INFINITY,
-    wordStart = 0,
+    wordStart?: number,
   ): string {
     const plain = renderMarkup(markup)
     const [markedUnit, counts] = wordMarking.value.split(':')
     if (!counts || Number(markedUnit) !== unit) return plain
     const lengths = counts.split(',').map(Number)
     const sum = (list: number[]): number => list.reduce((a, n) => a + n, 0)
-    const wrapped = wrapWords(plain, sum(lengths.slice(0, from)) + wordStart)
-    const room = sum(lengths.slice(from, to)) - wordStart
-    const fits = wordStart ? wrapped.count <= room : wrapped.count === room
+    const wrapped = wrapWords(
+      plain,
+      sum(lengths.slice(0, from)) + (wordStart ?? 0),
+    )
+    const room = sum(lengths.slice(from, to)) - (wordStart ?? 0)
+    // A slice of the parts (a page's piece) may hold fewer words than they do.
+    const fits =
+      wordStart === undefined ? wrapped.count === room : wrapped.count <= room
     return fits ? wrapped.html : plain
   }
 

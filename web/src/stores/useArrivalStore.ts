@@ -250,7 +250,8 @@ export const useArrivalStore = defineStore('arrival', () => {
         now.index = now.parts.length - 1
         now.page = 0
         now.pages = []
-      } else now.page = Math.max(0, now.pages.length - 1)
+      } else if (part.value?.voiced)
+        now.page = Math.max(0, now.pages.length - 1)
       if (part.value?.voiced) later(ARRIVAL_CLEAR_AFTER_MS, clear)
       else readPart()
     },

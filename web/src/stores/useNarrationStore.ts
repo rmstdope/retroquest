@@ -431,7 +431,8 @@ export const useNarrationStore = defineStore('narration', () => {
    */
   function seekToWord(unit: number, word: number): void {
     const now = active.value
-    if (!now || unit >= now.units.length) return
+    // The narrator is never taken back to a unit he has passed.
+    if (!now || unit >= now.units.length || unit < now.unit) return
     const parts = now.units[unit].parts
     let part = 0
     let offset = 0
