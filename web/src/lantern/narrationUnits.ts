@@ -81,6 +81,14 @@ export function readsArrival(turn: {
   return description !== null && (description.firstVisit || !description.moved)
 }
 
+/** How the stage tells an arrival on the picture (see `turnUnits`). */
+export interface StageUnitOptions {
+  /** Quest news is not read: it waits in the story. */
+  silentQuests?: boolean
+  /** The least pause before the room's description (ms), for events that are not spoken. */
+  arrivalPauseMs?: number
+}
+
 /**
  * The units of a turn. `firstVisit` says whether its arrival is read (see
  * `readsArrival`; only then are the room's name and description voiced).
@@ -89,6 +97,7 @@ export function turnUnits(
   turn: NarratedTurnInput,
   firstVisit: boolean,
   manifest: NarrationManifest,
+  options: StageUnitOptions = {},
 ): NarrationUnit[] {
   const units: NarrationUnit[] = parseTurn(turn.text).map((block) => {
     const voice = blockVoice(block)
@@ -100,7 +109,7 @@ export function turnUnits(
   if (turn.arrival)
     units.push({
       kind: 'arrival',
-      pauseBefore: SCENE_PAUSE_MS,
+      pauseBefore: Math.max(SCENE_PAUSE_MS, options.arrivalPauseMs ?? 0),
       parts: firstVisit
         ? partsOf(
             arrivalBlocks(turn.arrival.room, turn.arrival.description),
@@ -111,8 +120,9 @@ export function turnUnits(
   for (const news of turn.quests ?? [])
     units.push({
       kind: 'quest',
-      parts:
-        news.kind === 'new'
+      parts: options.silentQuests
+        ? []
+        : news.kind === 'new'
           ? partsOf(newQuestBlocks(news), manifest)
           : news.kind === 'completed'
             ? partsOf(questCompleteBlocks(news), manifest)

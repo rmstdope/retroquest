@@ -8,9 +8,11 @@ import { onUnmounted, ref, watch } from 'vue'
  * player walks, the next picture is loaded out of sight and then fades in over
  * the old one (about a third of a second, at once under Reduce motion); the
  * old picture goes once the fade is over. In dark mode the picture is dimmed.
- * Purely decorative: hidden from assistive technology.
+ * It says (`pictured`) whether a picture is up or only the backdrop, for the
+ * text told over it. Purely decorative: hidden from assistive technology.
  */
 const props = defineProps<{ src: string }>()
+const emit = defineEmits<{ pictured: [shown: boolean] }>()
 
 /** How long the old picture stays under the fading new one. */
 const FADE_MS = 350
@@ -19,6 +21,12 @@ const shown = ref('')
 const leaving = ref('')
 const loading = ref(props.src)
 let leaveTimer: ReturnType<typeof setTimeout> | undefined
+
+watch(
+  () => !!shown.value,
+  (up) => emit('pictured', up),
+  { immediate: true },
+)
 
 watch(
   () => props.src,

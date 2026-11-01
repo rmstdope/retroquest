@@ -5,6 +5,7 @@ import { renderMarkup } from '@/utils/theme'
 import { useSettingsStore } from '@/stores/useSettingsStore'
 import { useNarrationStore } from '@/stores/useNarrationStore'
 import { useStageSpeechStore } from '@/stores/useStageSpeechStore'
+import { useArrivalStore } from '@/stores/useArrivalStore'
 import {
   POPUP_NARRATION_ID,
   chapterUnits,
@@ -13,6 +14,11 @@ import {
   turnUnits,
 } from '@/lantern/narrationUnits'
 import { actFolder } from '@/lantern/narrationManifest'
+import {
+  arrivalParts,
+  arrivesOnPicture,
+  readingTimeMs,
+} from '@/lantern/stageArrival'
 import { usePanelHold } from '@/composables/usePanelHold'
 import { useAudio } from '@/composables/useAudio'
 import { useActMusic } from '@/composables/useActMusic'
@@ -29,6 +35,7 @@ import {
   WIDE_QUERY,
 } from '@/composables/useMediaQuery'
 import ActionComposer from './ActionComposer.vue'
+import ArrivalOnPicture from './ArrivalOnPicture.vue'
 import ChapterPage from './ChapterPage.vue'
 import CompassPanel from './CompassPanel.vue'
 import DockBar from './DockBar.vue'
@@ -68,6 +75,11 @@ import TitlePage from './TitlePage.vue'
  * scrolls); "▾ Hide" (or N) slides it down to a "▴ Narration" tab, a new turn
  * with something to tell opens it again; earlier turns are read in the story
  * drawer.
+ * The first time the player walks into a room its arrival is told on the
+ * middle of the picture instead (`ArrivalOnPicture`, `useArrivalStore`): the
+ * paper slides down to its "▴ Narration" tab and comes back, with everything
+ * told in it, when the arrival clears. Enter or Space goes on, a click on the
+ * picture too; Escape, the tab, an action or typing clear it at once.
  * Smaller screens show one section at a time (Story, Bag, Spells, Quests,
  * Map) with section tabs at the bottom, or in the header when short.
  * There the actions are a sheet (at most 62% of the height) that folds into
@@ -81,7 +93,7 @@ import TitlePage from './TitlePage.vue'
  * act has recordings and narration is on (`useNarrationStore`): the layout
  * starts it with the new turn, a click on
  * the story hurries it (two skip), Space/Enter hurry while focus is not on a
- * field or a control, Escape skips (also in the command box, unless its word
+ * field or a control (an arrival on the picture goes on a part instead), Escape skips (also in the command box, unless its word
  * list is open), and a pop-up stops it. Building a command (typing, verbs,
  * targets) never stops it: only the complete command cuts in.
  * While a command is narrated the panels (plate, buttons, map, drawer, the
@@ -94,6 +106,7 @@ const game = useGameStore()
 const settings = useSettingsStore()
 const narration = useNarrationStore()
 const speech = useStageSpeechStore()
+const arrival = useArrivalStore()
 const panelHold = usePanelHold()
 const wide = useMediaQuery(WIDE_QUERY)
 const short = useMediaQuery(SHORT_QUERY)
@@ -122,6 +135,8 @@ const drawerTab = ref<'bag' | 'spells' | 'quests' | 'story' | 'map' | null>(
   null,
 )
 const stageButtons = ref<InstanceType<typeof StageButtons> | null>(null)
+/** Whether the room's picture is up (otherwise the paper backdrop), for the arrival's ink. */
+const pictured = ref(false)
 const dockOpen = ref(!short.value)
 watch(short, (isShort) => {
   if (isShort) dockOpen.value = false
@@ -154,7 +169,13 @@ const stageKey = computed(
 watch(stageKey, () => {
   drawerTab.value = null
   speech.clear()
+  clearArrival()
 })
+
+/** End the arrival on the picture at once (a narrator still telling it stops, see `useArrivalStore.clear`). */
+function clearArrival(): void {
+  arrival.clear()
+}
 
 /** A stage button: opens its drawer or the map (closing what was open), or closes it if lit. */
 function toggleDrawer(
@@ -221,6 +242,7 @@ watch(wide, (isWide) => {
   else {
     drawerTab.value = null
     speech.clear()
+    clearArrival()
   }
 })
 const storyEl = ref<HTMLElement | null>(null)
@@ -240,7 +262,8 @@ const storyTurns = computed(() =>
 )
 /** The paper is slid down, leaving its tab. */
 const paperAway = computed(
-  () => wide.value && paper.visible.value && paper.hidden.value,
+  () =>
+    wide.value && paper.visible.value && (paper.hidden.value || arrival.active),
 )
 /** The paper's height in px, or null before it was measured (and off the laptop). */
 const paperPx = ref<number | null>(null)
@@ -272,8 +295,26 @@ async function hidePaper(): Promise<void> {
   tabEl.value?.focus()
 }
 
+// An arrival holds the paper away (inert) and ends by giving it back: focus
+// in the paper when it goes moves to the tab, and focus on the tab when it
+// goes (the tab leaves with it) moves on to the paper's Hide button.
+watch(
+  () => arrival.active,
+  (active) => {
+    const focus = document.activeElement
+    if (active && wide.value && paperEl.value?.contains(focus))
+      void nextTick(() => tabEl.value?.focus())
+    else if (!active && focus && focus === tabEl.value)
+      void nextTick(() =>
+        paperEl.value?.querySelector<HTMLElement>('.lq-paper-corner')?.focus(),
+      )
+  },
+)
+
 /** Bring the paper back; focus goes to its Hide button. */
 async function showPaper(): Promise<void> {
+  // The tab also ends an arrival told on the picture, which holds the paper away.
+  clearArrival()
   paper.show()
   await nextTick()
   paperEl.value?.querySelector<HTMLElement>('.lq-paper-corner')?.focus()
@@ -285,6 +326,8 @@ function onPaperKey(event: KeyboardEvent): void {
   if (event.defaultPrevented || event.repeat) return
   if (event.ctrlKey || event.metaKey || event.altKey) return
   if (!wide.value || !paper.visible.value || dialogOpen()) return
+  // An arrival on the picture holds the paper away; Escape, Enter or the tab end it.
+  if (arrival.active) return
   const target = event.target instanceof Element ? event.target : null
   if (target?.closest('input, textarea, select, [contenteditable]')) return
   event.preventDefault()
@@ -399,30 +442,64 @@ function onNarrationKey(event: KeyboardEvent): void {
   // a menu took it first); the narration below still hears it.
   if (event.key === 'Escape' && !event.defaultPrevented && wide.value)
     speech.clear()
-  if (!narration.isNarrating || event.defaultPrevented) return
+  if (!(narration.isNarrating || arrival.active) || event.defaultPrevented)
+    return
   if (event.ctrlKey || event.metaKey || event.altKey) return
   const hurries = event.key === ' ' || event.key === 'Enter'
   if (!hurries && event.key !== 'Escape') return
   // A menu or dialog has its own keys (Escape closes it first).
   if (dialogOpen()) return
   const target = event.target instanceof Element ? event.target : null
-  // A field keeps Space and Enter (a space, the command), and an open word
-  // list takes Escape to close itself; any other Escape skips, text kept.
-  if (target?.closest('input, textarea, select, [contenteditable]')) {
-    if (hurries || target.closest('[aria-expanded="true"]')) return
+  const field = target?.closest('input, textarea, select, [contenteditable]')
+  if (arrival.active && hurries) {
+    // The paper's tab is pressed as a button (it ends the arrival and takes
+    // focus on); holding a key down goes on once, not through the parts.
+    if (target?.closest('.lq-paper-tab') || event.repeat) return
+    // An arrival on the picture takes Enter and Space even from a focused
+    // button (focus stays where it was, the button is not pressed); a field
+    // keeps them (a space, the command), but an empty command box goes on.
+    const emptyBox =
+      event.key === 'Enter' &&
+      field instanceof HTMLInputElement &&
+      field.value === ''
+    if (field && !emptyBox) return
+    spaceTaken = event.key === ' '
+  } else {
+    // A field keeps Space and Enter (a space, the command), and an open word
+    // list takes Escape to close itself; any other Escape skips, text kept.
+    if (field && (hurries || target?.closest('[aria-expanded="true"]'))) return
+    // A button, link or summary presses on Space or Enter: building a command
+    // goes on while the voice reads (the press that completes it cuts in).
+    if (hurries && target?.closest('button, a, [role="button"], summary'))
+      return
   }
-  // A button, link or summary presses on Space or Enter: building a command
-  // goes on while the voice reads (the press that completes it cuts in).
-  if (hurries && target?.closest('button, a, [role="button"], summary')) return
   event.preventDefault()
-  if (hurries) narration.hurry()
+  // An arrival on the picture goes on a part, or clears (the narrator with it).
+  if (arrival.active) {
+    if (hurries) arrival.next()
+    else {
+      arrival.clear()
+      narration.skipAll()
+    }
+  } else if (hurries) narration.hurry()
   else narration.skipAll()
+}
+
+/** A Space went on an arrival: its key-up must not press the focused button. */
+let spaceTaken = false
+
+/** Swallow the key-up of a Space that `onNarrationKey` used to go on. */
+function onSpaceUp(event: KeyboardEvent): void {
+  if (!spaceTaken || event.key !== ' ') return
+  spaceTaken = false
+  event.preventDefault()
 }
 
 onMounted(() => {
   fieldFocused.value = !!document.activeElement?.matches(COMMAND_BOX)
   document.addEventListener('keydown', onNarrationKey)
   document.addEventListener('keydown', onPaperKey)
+  document.addEventListener('keyup', onSpaceUp)
   document.addEventListener('focusin', onFocusChange)
   document.addEventListener('focusout', onFocusChange)
   // The game opens with its first act intro already showing.
@@ -464,6 +541,7 @@ watch(
 onUnmounted(() => {
   document.removeEventListener('keydown', onNarrationKey)
   document.removeEventListener('keydown', onPaperKey)
+  document.removeEventListener('keyup', onSpaceUp)
   document.removeEventListener('focusin', onFocusChange)
   document.removeEventListener('focusout', onFocusChange)
   narration.skipAll()
@@ -508,16 +586,35 @@ watch(
 watch(
   () => game.turns.at(-1)?.id,
   () => {
+    arrival.clear()
     narration.skipAll()
     const turn = game.turns.at(-1)
     const folder = game.narrationFolder
     const manifest = folder ? narration.manifestFor(folder) : null
+    const onPicture =
+      !!turn && wide.value && !game.showModal && arrivesOnPicture(turn)
+    // The units the narration plays; the arrival on the picture keeps quest
+    // news for the story and waits to read its description while events that
+    // nobody speaks are read.
+    let units =
+      turn?.narrate && (manifest || onPicture)
+        ? turnUnits(turn, readsArrival(turn), manifest ?? {}, {
+            silentQuests: onPicture,
+          })
+        : []
+    const parts = turn && onPicture ? arrivalParts(turn, units) : []
+    const events = parts[0]?.kind === 'events' && !parts[0].voiced
+    if (turn?.narrate && events)
+      units = turnUnits(turn, readsArrival(turn), manifest ?? {}, {
+        silentQuests: true,
+        arrivalPauseMs: readingTimeMs(
+          parts[0].lines.map((line) => line.markup).join(' '),
+        ),
+      })
     if (turn?.narrate && folder && manifest && !game.showModal)
-      narration.begin(
-        turn.id,
-        turnUnits(turn, readsArrival(turn), manifest),
-        folder,
-      )
+      narration.begin(turn.id, units, folder)
+    if (turn && parts.length)
+      arrival.show(turn.id, parts, narration.narrates(turn.id))
     // The conversation on the picture (laptop only) follows the turn; it reads
     // the narration just begun, so it comes after it.
     if (turn && wide.value) speech.observe(turn)
@@ -612,7 +709,10 @@ watch(() => game.gameNumber, narration.resetGame)
 watch(
   () => settings.narrationOn,
   (on) => {
-    if (!on) narration.skipAll()
+    if (!on) {
+      narration.skipAll()
+      clearArrival()
+    }
   },
 )
 
@@ -952,7 +1052,8 @@ watch(
           :style="{ '--lq-actions-h': `${actionsHeight}px` }"
           @click="onPicturePress"
         >
-          <StagePicture :src="game.roomPicture" />
+          <StagePicture :src="game.roomPicture" @pictured="pictured = $event" />
+          <ArrivalOnPicture :pictured="pictured" />
           <RoomPlate class="lq-stage-plate" data-panel @click="onNameClick" />
           <StageButtons
             :key="`buttons-${stageKey}`"
@@ -1046,14 +1147,17 @@ watch(
             ref="tabEl"
             type="button"
             class="lq-paper-tab"
-            title="Show the narration (N)"
-            aria-keyshortcuts="N"
+            :title="arrival.active ? undefined : 'Show the narration (N)'"
+            :aria-keyshortcuts="arrival.active ? undefined : 'N'"
             @click="showPaper"
           >
             ▴ Narration
           </button>
         </div>
 
+        <!-- Choosing an action or typing clears an arrival on the picture. Bubbling
+             listeners, not capture: a render before the command box's own v-model
+             has read the text would give the first typed character back. -->
         <ActionComposer
           v-show="wide || (section === 'story' && dockOpen)"
           :key="`composer-${game.gameNumber}`"
@@ -1062,6 +1166,8 @@ watch(
           :class="{ 'lq-sheet': !wide }"
           :foldable="!wide"
           :stage="wide"
+          @click="clearArrival"
+          @input="clearArrival"
           @fold="fold"
         />
         <DockBar

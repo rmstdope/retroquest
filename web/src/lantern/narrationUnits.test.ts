@@ -256,3 +256,31 @@ describe('POPUP_NARRATION_ID', () => {
     expect(POPUP_NARRATION_ID).toBeLessThan(1)
   })
 })
+
+describe('turnUnits on the stage', () => {
+  const quest = { kind: 'new' as const, name: 'Q', main: false, text: 'T.' }
+  const turn = {
+    text: '',
+    arrival: { room: 'Square', description: 'Cobbles.' },
+    quests: [quest],
+  }
+  const manifest = manifestOf(
+    [NARRATOR, 'Square'],
+    [NARRATOR, 'Cobbles.'],
+    [NARRATOR, 'New side quest'],
+  )
+
+  it('reads quest news unless it is kept silent for the story', () => {
+    expect(turnUnits(turn, true, manifest)[1].parts.length).toBeGreaterThan(0)
+    const silent = turnUnits(turn, true, manifest, { silentQuests: true })
+    expect(silent[1].parts).toEqual([])
+  })
+
+  it('waits longer before the description when asked to', () => {
+    const units = turnUnits(turn, true, manifest, { arrivalPauseMs: 6000 })
+    expect(units[0].pauseBefore).toBe(6000)
+    expect(
+      turnUnits(turn, true, manifest, { arrivalPauseMs: 10 })[0].pauseBefore,
+    ).toBe(SCENE_PAUSE_MS)
+  })
+})

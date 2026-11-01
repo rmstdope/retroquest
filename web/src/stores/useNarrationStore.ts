@@ -18,8 +18,8 @@ import type { NarrationUnit } from '@/lantern/narrationUnits'
  * short pause follows each spoken part (a shorter one after a hurry).
  *
  * - `hurry` completes the block being spoken and cuts its voice; the next one
- *   plays. `skipAll` shows the rest of the turn at once, silently. `tap` is
- *   both: a second tap within 300 ms skips. A new turn (`begin`) cuts in on
+ *   plays. `skipTo` does so up to a given unit. `skipAll` shows the rest of
+ *   the turn at once, silently. `tap` is both: a second tap within 300 ms skips. A new turn (`begin`) cuts in on
  *   the one being narrated.
  * - A voice that fails, is blocked, or has not ended `duration + 3 s` after it
  *   started completes its block, so a turn never stalls.
@@ -408,6 +408,21 @@ export const useNarrationStore = defineStore('narration', () => {
     }
   }
 
+  /**
+   * Go on at unit `unit` now: the voice in hand is cut, the units between are
+   * passed over and the unit is read without its pause. Nothing voiced from
+   * there on ends the turn.
+   */
+  function skipTo(unit: number): void {
+    const now = active.value
+    if (!now) return
+    stopVoice()
+    now.unit = Math.max(now.unit, unit)
+    now.part = 0
+    now.waited = Infinity
+    step()
+  }
+
   /** Show the rest of the turn at once, silently. */
   function skipAll(): void {
     finish(true)
@@ -440,6 +455,7 @@ export const useNarrationStore = defineStore('narration', () => {
     preload,
     begin,
     hurry,
+    skipTo,
     skipAll,
     tap,
   }

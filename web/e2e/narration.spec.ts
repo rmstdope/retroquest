@@ -119,6 +119,9 @@ test('opens a journal drawer at once while the voice reads, and a press inside i
 test('Space and Enter press a focused verb and the voice keeps reading', async ({
   page,
 }): Promise<void> => {
+  // On a phone: on the laptop stage this first arrival is told on the picture,
+  // where choosing an action or typing clears it (arrival.spec.ts).
+  await page.setViewportSize({ width: 390, height: 844 })
   await slowNarrationClips(page)
   await startAct1(page)
   const input = page.getByLabel('Command')
@@ -149,15 +152,21 @@ test('Space and Enter press a focused verb and the voice keeps reading', async (
   await expect(page.locator('.lq-speaking')).not.toHaveCount(0)
 
   // Enter on the focused Cancel presses it too, and the voice still reads.
-  await page.locator('.lq-close').focus()
+  const cancel = page
+    .getByRole('region', { name: 'Actions' })
+    .getByRole('button', { name: 'Cancel' })
+  await cancel.focus()
   await page.keyboard.press('Enter')
-  await expect(page.locator('.lq-close')).toHaveCount(0)
+  await expect(cancel).toHaveCount(0)
   await expect(page.locator('.lq-speaking')).not.toHaveCount(0)
 })
 
 test('typing keeps the voice reading, and Esc in the command box skips it', async ({
   page,
 }): Promise<void> => {
+  // On a phone: on the laptop stage this first arrival is told on the picture,
+  // where choosing an action or typing clears it (arrival.spec.ts).
+  await page.setViewportSize({ width: 390, height: 844 })
   await slowNarrationClips(page)
   await startAct1(page)
   const input = page.getByLabel('Command')
