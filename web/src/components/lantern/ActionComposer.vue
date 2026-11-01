@@ -73,6 +73,10 @@ const moreVerbs = computed(() =>
     ? actionVerbs.filter((v) => !STAGE_ROW.includes(v.id))
     : VERBS.filter((v) => v.group === 'more'),
 )
+/** Whether the verb used last waits behind More… (so More… is what shakes). */
+const lastIsMore = computed(() =>
+  moreVerbs.value.some((v) => v.id === lastVerbId.value),
+)
 const exits = computed(() => Object.entries(game.exits))
 
 /** Drop chosen targets that are no longer available (e.g. after another command). */
@@ -267,8 +271,10 @@ function pickTarget(value: string): void {
 
 /** Close the builder and give focus back to the verb that opened it. */
 function reset(): void {
-  if (verb.value) focusFirst(`[data-verb="${verb.value.id}"]`)
+  // A More… verb is gone once the list folds; focus its toggle instead.
+  const id = verb.value?.id
   clear()
+  if (id) focusFirst(`[data-verb="${id}"]`, '[data-more]')
 }
 
 /** Close the builder without moving focus. */
@@ -413,7 +419,7 @@ function onTypedEnter(): void {
 
       <div v-if="verb && !stage" class="lq-builder">
         <div class="lq-sentence">
-          <span class="lq-word">{{ verb.label }}</span>
+          <span class="lq-word">{{ leadWords }}</span>
           <template v-for="(slot, index) in verb.slots" :key="index">
             <span v-if="slot.joiner" class="lq-joiner">{{ slot.joiner }}</span>
             <input
@@ -476,7 +482,12 @@ function onTypedEnter(): void {
             placeholder="words…"
             @keydown.enter.prevent="textEntered"
           />
-          <template v-else-if="activeSlot === index">
+          <span
+            v-else-if="activeSlot === index"
+            class="lq-row-choices"
+            role="group"
+            :aria-label="`Choices for ${slotName(index)}`"
+          >
             <button
               v-for="target in targets"
               :key="target.value"
@@ -491,7 +502,7 @@ function onTypedEnter(): void {
             <span v-if="!targets.length" class="lq-empty"
               >Nothing to {{ verb.label.toLowerCase() }} here</span
             >
-          </template>
+          </span>
           <button
             v-else-if="args[index]"
             type="button"
@@ -533,6 +544,7 @@ function onTypedEnter(): void {
         <button
           type="button"
           class="lq-verb"
+          :class="{ 'lq-shake': shaking && !verb && lastIsMore }"
           data-more
           :aria-expanded="showMore ? 'true' : 'false'"
           @click="showMore = !showMore"
@@ -545,6 +557,7 @@ function onTypedEnter(): void {
             :key="v.id"
             type="button"
             class="lq-verb"
+            :data-verb="v.id"
             :disabled="!game.acceptInput"
             @click="pickVerb(v)"
           >
@@ -877,6 +890,9 @@ function onTypedEnter(): void {
 .lq-row .lq-slot {
   border-style: solid;
   border-color: var(--lq-accent);
+}
+.lq-row-choices {
+  display: contents;
 }
 .lq-blank {
   color: var(--lq-muted);

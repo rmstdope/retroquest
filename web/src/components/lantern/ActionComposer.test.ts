@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
-import { mount, type VueWrapper } from '@vue/test-utils'
+import { flushPromises, mount, type VueWrapper } from '@vue/test-utils'
 import { createPinia, setActivePinia } from 'pinia'
 import ActionComposer from './ActionComposer.vue'
 import { useGameStore } from '@/stores/useGameStore'
@@ -332,6 +332,7 @@ describe('ActionComposer', () => {
 
     expect(button(w, 'Use with: choose…').exists()).toBe(true)
     expect(button(w, 'with: choose…').exists()).toBe(true)
+    expect(w.get('.lq-sentence').text()).toBe('Usechoose…withchoose…')
 
     await button(w, 'Lantern').trigger('click')
     expect(button(w, 'Use with: Lantern').exists()).toBe(true)
@@ -1082,6 +1083,56 @@ describe('ActionComposer on the stage', () => {
     await choice(w, 'Mira').trigger('click')
     await w.vm.$nextTick()
     expect(document.activeElement?.getAttribute('data-verb')).toBe('talk')
+    w.unmount()
+  })
+
+  it('returns focus to More… after Cast completes or is put away', async () => {
+    const w = stage()
+    await click(w, '[data-more]')
+    await w.get('[data-verb="cast"]').trigger('click')
+    await choice(w, 'Light').trigger('click')
+    await flushPromises()
+    expect(document.activeElement?.hasAttribute('data-more')).toBe(true)
+
+    await click(w, '[data-more]')
+    await w.get('[data-verb="caston"]').trigger('click')
+    await w.get('.lq-row .lq-close').trigger('click')
+    await flushPromises()
+    expect(document.activeElement?.hasAttribute('data-more')).toBe(true)
+    w.unmount()
+  })
+
+  it('shakes More… when a verb from behind it fails', async () => {
+    const game = useGameStore()
+    submit.mockImplementationOnce(() => {
+      game.turns = [
+        {
+          id: 1,
+          command: 'cast light',
+          text: '[failure]Nothing happens.[/failure]',
+          room: 'Hall',
+          description: null,
+          gained: [],
+          lost: [],
+          arrival: null,
+        },
+      ]
+    })
+    const w = stage()
+    await click(w, '[data-more]')
+    await w.get('[data-verb="cast"]').trigger('click')
+    await choice(w, 'Light').trigger('click')
+    await w.vm.$nextTick()
+    expect(w.get('[data-more]').classes()).toContain('lq-shake')
+    w.unmount()
+  })
+
+  it('names the choices as a group', async () => {
+    const w = stage()
+    await click(w, '[data-verb="talk"]')
+    expect(w.get('.lq-row [role="group"]').attributes('aria-label')).toBe(
+      'Choices for Talk: choose…',
+    )
     w.unmount()
   })
 
