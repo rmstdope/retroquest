@@ -22,6 +22,7 @@ describe('speechLines', () => {
         speaker: 'Grandmother',
         side: 'right',
         markup: 'There you are.',
+        firstWord: 0,
       },
     ])
   })
@@ -42,6 +43,13 @@ describe('speechLines', () => {
     expect(speechLines(writing)).toEqual([])
     const nameless = parseTurn("[dialogue]You say 'hi' to Mira.[/dialogue]")
     expect(speechLines(nameless)).toEqual([])
+  })
+
+  it('counts the narrated words before each paragraph of a quote', () => {
+    const blocks = parseTurn(
+      '[character_name]Mira[/character_name]\n[dialogue]One two.\nThree four five.\nSix.[/dialogue]',
+    )
+    expect(speechLines(blocks).map((l) => l.firstWord)).toEqual([0, 2, 5])
   })
 
   it('numbers the unit of each quote as the narration does', () => {
@@ -92,6 +100,7 @@ describe('eliorLine', () => {
       speaker: ELIOR,
       side: 'left',
       markup: 'Hello there',
+      firstWord: 0,
     })
     expect(eliorLine('  SAY why to the families ')?.markup).toBe('why')
   })

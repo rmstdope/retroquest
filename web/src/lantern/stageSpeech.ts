@@ -8,6 +8,7 @@
  */
 import { balance, type TurnBlock } from './parseTurn'
 import { displayName } from './displayName'
+import { narrationWords } from './narrationManifest'
 
 /** The name Elior's own words are shown under. */
 export const ELIOR = 'Elior'
@@ -22,6 +23,8 @@ export interface SpeechLine {
   side: 'left' | 'right'
   /** The words, as engine markup, balanced on their own. */
   markup: string
+  /** How many narrated words of the quote come before this paragraph (0 for the first). */
+  firstWord: number
 }
 
 /** A line break between paragraphs (the game writes them with one or with a blank line). */
@@ -40,6 +43,7 @@ export function speechLines(blocks: TurnBlock[]): SpeechLine[] {
     const speaker = displayName(block.speaker)
     const side = speaker === ELIOR ? 'left' : 'right'
     const open: string[] = []
+    let firstWord = 0
     for (const paragraph of block.markup.split(PARAGRAPH_BREAK)) {
       if (!paragraph.trim()) continue
       lines.push({
@@ -47,7 +51,9 @@ export function speechLines(blocks: TurnBlock[]): SpeechLine[] {
         speaker,
         side,
         markup: balance(paragraph.trim(), open),
+        firstWord,
       })
+      firstWord += narrationWords(paragraph).length
     }
   })
   return lines
@@ -64,7 +70,7 @@ const SAY_COMMAND = /^\s*say\s+(.+?)\s+to\s+\S/i
 export function eliorLine(command: string | null): SpeechLine | null {
   const words = command ? SAY_COMMAND.exec(command)?.[1]?.trim() : undefined
   return words
-    ? { unit: -1, speaker: ELIOR, side: 'left', markup: words }
+    ? { unit: -1, speaker: ELIOR, side: 'left', markup: words, firstWord: 0 }
     : null
 }
 

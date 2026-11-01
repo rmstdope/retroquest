@@ -41,9 +41,12 @@ export const useStageSpeechStore = defineStore('stageSpeech', () => {
 
   /** Whether a line is on the picture now. */
   function isShown(line: StageLine): boolean {
-    return line.narrated
-      ? narration.revealed(line.turnId, line.unit)
-      : line.shown
+    if (!line.narrated) return line.shown
+    if (!narration.revealed(line.turnId, line.unit)) return false
+    // A quote is one recording: its later paragraphs wait for the narrator's word.
+    const now = narration.speaking(line.turnId)
+    if (!now || now.unit !== line.unit || !now.aligned) return true
+    return line.firstWord === 0 || now.offset + now.word >= line.firstWord
   }
 
   /** The lines on the picture now, in the order they were said. */
@@ -65,7 +68,19 @@ export const useStageSpeechStore = defineStore('stageSpeech', () => {
 
   /** Whether a line is the one being read aloud now. */
   function isSpeaking(line: StageLine): boolean {
-    return line.narrated && narration.speaking(line.turnId)?.unit === line.unit
+    const now = narration.speaking(line.turnId)
+    if (!line.narrated || now?.unit !== line.unit) return false
+    // Without matching word timings the paragraph read is unknown: ring the quote.
+    if (!now.aligned) return true
+    // The newest paragraph shown of the quote being read is the one being read.
+    const later = conversation.value?.lines.some(
+      (other) =>
+        other.turnId === line.turnId &&
+        other.unit === line.unit &&
+        other.firstWord > line.firstWord &&
+        isShown(other),
+    )
+    return !later
   }
 
   /** Release the next line of an unnarrated turn after the reading pause of the one before it. */

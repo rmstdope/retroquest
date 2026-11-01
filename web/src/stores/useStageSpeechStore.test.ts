@@ -265,4 +265,85 @@ describe('useStageSpeechStore while the turn is narrated', () => {
     useNarrationStore().skipAll()
     expect(speech.visible).toHaveLength(2)
   })
+
+  it('shows the paragraphs of one narrated quote as the narrator reaches each, ringing the newest', async () => {
+    const speech = useStageSpeechStore()
+    const words = 'One two.\nThree four five.\nSix seven.'
+    const t = turn(say('Mira', words), 'Mira')
+    useNarrationStore().begin(
+      t.id,
+      turnUnits(t, true, recorded(words, 'mira')),
+      'act1',
+    )
+    speech.observe(t)
+    const shown = (): string[] => speech.visible.map((l) => l.markup)
+
+    expect(shown()).toEqual(['One two.'])
+    expect(speech.isSpeaking(speech.visible[0])).toBe(true)
+
+    audios[0].currentTime = 2.5
+    await vi.advanceTimersByTimeAsync(100)
+    expect(shown()).toEqual(['One two.', 'Three four five.'])
+    expect(speech.isSpeaking(speech.visible[0])).toBe(false)
+    expect(speech.isSpeaking(speech.visible[1])).toBe(true)
+
+    audios[0].currentTime = 5.5
+    await vi.advanceTimersByTimeAsync(100)
+    expect(shown()).toHaveLength(3)
+    expect(speech.visible.map((l) => speech.isSpeaking(l))).toEqual([
+      false,
+      false,
+      true,
+    ])
+
+    audios[0].onended?.()
+    await vi.advanceTimersByTimeAsync(350)
+    expect(shown()).toHaveLength(3)
+  })
+
+  it('shows every paragraph of a quote at once when the narration is skipped', () => {
+    const speech = useStageSpeechStore()
+    const words = 'One two.\nThree four.'
+    const t = turn(say('Mira', words), 'Mira')
+    useNarrationStore().begin(
+      t.id,
+      turnUnits(t, true, recorded(words, 'mira')),
+      'act1',
+    )
+    speech.observe(t)
+    useNarrationStore().skipAll()
+    expect(speech.visible).toHaveLength(2)
+  })
+
+  it('shows and rings every paragraph of a quote whose recording does not match its words', () => {
+    const speech = useStageSpeechStore()
+    const words = 'One two.\nThree four.'
+    const t = turn(say('Mira', words), 'Mira')
+    const stale = recorded(words, 'mira')
+    const clip = Object.values(stale)[0]
+    clip.words = clip.words.slice(0, 2)
+    useNarrationStore().begin(t.id, turnUnits(t, true, stale), 'act1')
+    speech.observe(t)
+    expect(speech.visible).toHaveLength(2)
+    expect(speech.visible.map((l) => speech.isSpeaking(l))).toEqual([
+      true,
+      true,
+    ])
+  })
+
+  it('counts words the same way when tags run across paragraphs', () => {
+    const speech = useStageSpeechStore()
+    const words = '[i]One two.\n[/i]\nThree [b]four[/b].'
+    const t = turn(say('Mira', words), 'Mira')
+    useNarrationStore().begin(
+      t.id,
+      turnUnits(t, true, recorded(words, 'mira')),
+      'act1',
+    )
+    speech.observe(t)
+    expect(speech.visible).toHaveLength(1)
+    audios[0].currentTime = 2.5
+    vi.advanceTimersByTime(100)
+    expect(speech.visible).toHaveLength(2)
+  })
 })
