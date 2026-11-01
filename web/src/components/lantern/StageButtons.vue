@@ -11,7 +11,9 @@ import CompassPanel from './CompassPanel.vue'
  * only one of the five be open (`drawer`), and press-only: nothing opens on
  * hover. The button of the open one stays lit. Walking from the map keeps it
  * open. Escape closes the map (asking the layout to, which returns focus to
- * the button) and nothing else hears it.
+ * the button) and nothing else hears it. The buttons open their drawers at
+ * once, even while a turn is read aloud; only the map's ways out are a held
+ * panel (`data-panel`), where a first press catches up.
  */
 type Tab = 'bag' | 'spells' | 'quests'
 
@@ -73,7 +75,7 @@ defineExpose({ focusButton })
 </script>
 
 <template>
-  <div ref="root" class="lq-buttons" data-panel>
+  <div ref="root" class="lq-buttons">
     <div class="lq-button-row">
       <button
         v-for="button in journalButtons"
@@ -110,7 +112,7 @@ defineExpose({ focusButton })
         >
           🧭 Map
         </button>
-        <div v-if="mapOpen" class="lq-map-pop">
+        <div v-if="mapOpen" class="lq-map-pop" data-panel>
           <CompassPanel stage />
         </div>
       </div>

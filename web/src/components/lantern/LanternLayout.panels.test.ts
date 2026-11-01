@@ -131,6 +131,34 @@ describe('LanternLayout: panels wait for the narration', () => {
     expect(w.get('.lq-plate').classes()).not.toContain('lq-flash')
   })
 
+  it('opens Story so far on the first press while the voice reads on', async () => {
+    const w = await ready()
+    await goNorth()
+    await w.get('[data-button="story"]').trigger('click')
+    expect(w.find('.lq-story-drawer').exists()).toBe(true)
+    expect(useNarrationStore().isNarrating).toBe(true)
+    expect(cardName(w)).toBe('Hall')
+  })
+
+  it.each(['bag', 'spells', 'quests'])(
+    'opens the %s drawer on the first press while the voice reads on',
+    async (tab) => {
+      const w = await ready()
+      await goNorth()
+      await w.get(`[data-button="${tab}"]`).trigger('click')
+      expect(w.find('.lq-drawer').exists()).toBe(true)
+      expect(useNarrationStore().isNarrating).toBe(true)
+    },
+  )
+
+  it('opens the map on the first press while the voice reads on', async () => {
+    const w = await ready()
+    await goNorth()
+    await w.get('[data-button="map"]').trigger('click')
+    expect(w.find('.lq-map-pop').exists()).toBe(true)
+    expect(useNarrationStore().isNarrating).toBe(true)
+  })
+
   it('keeps the voice reading while a verb is pressed, and offers the old place', async () => {
     const w = await ready()
     await goNorth()
