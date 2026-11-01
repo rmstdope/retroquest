@@ -458,6 +458,44 @@ test.describe('Lantern UI (the default)', () => {
     await expect(plate).toBeHidden()
   })
 
+  test('opens the story so far as a drawer beside the stage on a laptop', async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 1280, height: 800 })
+    await page.goto('/')
+    await injectMockState(page)
+
+    const button = page.getByRole('button', { name: /Story so far/ })
+    await button.click()
+    const drawer = page.getByRole('complementary', {
+      name: 'Story so far drawer',
+    })
+    await expect(drawer).toBeVisible()
+    await expect(button).toHaveAttribute('aria-pressed', 'true')
+    const box = await drawer.boundingBox()
+    expect(Math.abs(box!.width - 640)).toBeLessThanOrEqual(2)
+    // It stops above the actions, which stay in reach.
+    const verbs = await page.locator('.lq-verbs').boundingBox()
+    expect(box!.y + box!.height).toBeLessThanOrEqual(verbs!.y + 1)
+
+    await page.keyboard.press('Escape')
+    await expect(drawer).toHaveCount(0)
+    await expect(button).toBeFocused()
+
+    // Bag swaps it, and pressing the picture closes it.
+    await button.click()
+    await page.getByRole('button', { name: /Bag · / }).click()
+    await expect(drawer).toHaveCount(0)
+    await expect(
+      page.getByRole('complementary', { name: 'Journal drawer' }),
+    ).toBeVisible()
+    await button.click()
+    await page
+      .locator('.lq-stage-picture')
+      .click({ position: { x: 20, y: 300 } })
+    await expect(drawer).toHaveCount(0)
+  })
+
   test('keeps the story and actions in view in a busy room on a laptop', async ({
     page,
   }) => {

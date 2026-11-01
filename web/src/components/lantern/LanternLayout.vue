@@ -45,6 +45,7 @@ import SaveToast from './SaveToast.vue'
 import SectionNav, { type Section } from './SectionNav.vue'
 import StageButtons from './StageButtons.vue'
 import StagePicture from './StagePicture.vue'
+import StoryDrawer from './StoryDrawer.vue'
 import StoryNameMenu from './StoryNameMenu.vue'
 import StoryTurn from './StoryTurn.vue'
 import TitlePage from './TitlePage.vue'
@@ -54,8 +55,8 @@ import TitlePage from './TitlePage.vue'
  * StoryTurn per turn) and the action composer. On laptops (≥1024 × 560) the
  * room is played on its picture, which fills the play area: a plate (room
  * and who and what is here) top-left, the buttons Bag, Spells, Quests, Story
- * so far and Map top-right (the journal opens as a drawer from the right, the
- * map beneath its button), the story in a paper band along the bottom and the
+ * so far and Map top-right (the journal and the story open as a drawer from
+ * the right, the map beneath its button), the story in a paper band along the bottom and the
  * actions as one row under it.
  * Smaller screens show one section at a time (Story, Bag, Spells, Quests,
  * Map) with section tabs at the bottom, or in the header when short.
@@ -105,8 +106,8 @@ function onFocusChange(event: FocusEvent): void {
     next instanceof Element && next.matches('input, textarea')
 }
 const section = ref<Section>('story')
-/** The tab of the journal drawer on the stage, or null while it is closed. */
-const drawerTab = ref<'bag' | 'spells' | 'quests' | null>(null)
+/** The drawer open on the stage (a journal tab or the story), or null. */
+const drawerTab = ref<'bag' | 'spells' | 'quests' | 'story' | null>(null)
 const stageButtons = ref<InstanceType<typeof StageButtons> | null>(null)
 const dockOpen = ref(!short.value)
 watch(short, (isShort) => {
@@ -141,8 +142,8 @@ watch(stageKey, () => {
   drawerTab.value = null
 })
 
-/** A journal button: opens the drawer on its tab, or closes it if it is lit. */
-function toggleDrawer(tab: 'bag' | 'spells' | 'quests'): void {
+/** A drawer button: opens its drawer, or closes it if it is lit. */
+function toggleDrawer(tab: 'bag' | 'spells' | 'quests' | 'story'): void {
   if (drawerTab.value === tab) closeDrawer()
   else drawerTab.value = tab
 }
@@ -154,18 +155,34 @@ function closeDrawer(): void {
   if (tab) void stageButtons.value?.focusButton(tab)
 }
 
-/** "Story so far" (until its drawer arrives): the story band back to its start. */
-function storyToStart(): void {
-  const story = storyEl.value
-  if (!story) return
-  const still =
-    getComputedStyle(document.documentElement)
-      .getPropertyValue('--lq-motion')
-      .trim() === '0'
-  if (typeof story.scrollTo === 'function')
-    story.scrollTo({ top: 0, behavior: still ? 'auto' : 'smooth' })
-  else story.scrollTop = 0
+// A turn played closes the story drawer; the turn then plays on the stage.
+watch(
+  () => game.turns.at(-1)?.id,
+  () => {
+    if (drawerTab.value === 'story') drawerTab.value = null
+  },
+)
+
+/** A press outside the story drawer closes it and goes on doing what it does. */
+function onOutsidePress(event: Event): void {
+  if (drawerTab.value !== 'story') return
+  const target = event.target instanceof Element ? event.target : null
+  if (target?.closest('.lq-story-drawer, [data-button="story"], .lq-name-menu'))
+    return
+  drawerTab.value = null
 }
+watch(
+  () => drawerTab.value === 'story',
+  (open) => {
+    if (open) document.addEventListener('pointerdown', onOutsidePress)
+    else document.removeEventListener('pointerdown', onOutsidePress)
+  },
+)
+onUnmounted(() => document.removeEventListener('pointerdown', onOutsidePress))
+
+/** The height of the action row, which the story drawer stops above. */
+const actionsHeight = ref(0)
+let actionsResize: ResizeObserver | undefined
 
 // The laptop shows everything at once; coming back from it starts on the story.
 watch(wide, (isWide) => {
@@ -295,12 +312,32 @@ onMounted(() => {
     storyResize.observe(storyEl.value)
   }
 })
+
+// The action row is a new element after a new game: follow the current one.
+watch(
+  composer,
+  (current) => {
+    actionsResize?.disconnect()
+    const actions = current?.$el
+    if (
+      typeof ResizeObserver === 'undefined' ||
+      !(actions instanceof HTMLElement)
+    )
+      return
+    actionsResize = new ResizeObserver(() => {
+      actionsHeight.value = actions.offsetHeight
+    })
+    actionsResize.observe(actions)
+  },
+  { flush: 'post' },
+)
 onUnmounted(() => {
   document.removeEventListener('keydown', onNarrationKey)
   document.removeEventListener('focusin', onFocusChange)
   document.removeEventListener('focusout', onFocusChange)
   narration.skipAll()
   storyResize?.disconnect()
+  actionsResize?.disconnect()
 })
 
 // Larger or smaller text changes how much of the turn is still below.
@@ -708,7 +745,11 @@ watch(
         :class="{ 'lq-wide': wide }"
         @click.capture="onPanelPress"
       >
-        <div v-if="wide" class="lq-stage">
+        <div
+          v-if="wide"
+          class="lq-stage"
+          :style="{ '--lq-actions-h': `${actionsHeight}px` }"
+        >
           <StagePicture :src="game.roomPicture" />
           <RoomPlate class="lq-stage-plate" data-panel @click="onNameClick" />
           <StageButtons
@@ -717,12 +758,18 @@ watch(
             class="lq-stage-buttons"
             :drawer="drawerTab"
             @journal="toggleDrawer"
-            @story="storyToStart"
+            @story="toggleDrawer('story')"
           />
           <JournalDrawer
-            v-if="drawerTab"
+            v-if="drawerTab && drawerTab !== 'story'"
             :key="`drawer-${stageKey}`"
             :tab="drawerTab"
+            @close="closeDrawer"
+          />
+          <StoryDrawer
+            v-else-if="drawerTab === 'story'"
+            :key="`story-${stageKey}`"
+            @click="onNameClick"
             @close="closeDrawer"
           />
         </div>

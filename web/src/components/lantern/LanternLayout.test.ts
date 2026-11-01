@@ -778,12 +778,158 @@ describe('LanternLayout', () => {
       expect(w.find('[aria-label="Journal drawer"]').exists()).toBe(false)
     })
 
-    it('scrolls the story back to its start with Story so far', async () => {
-      const w = mountLayout()
-      const story = w.get('section[aria-label="Story"]').element
-      story.scrollTop = 300
-      await w.get('[data-button="story"]').trigger('click')
-      expect(story.scrollTop).toBe(0)
+    describe('the story drawer', () => {
+      const STORY = '[aria-label="Story so far drawer"]'
+      const stageTurns = () => {
+        useGameStore().turns = [
+          { ...TURN, id: 1, command: 'look' },
+          { ...TURN, id: 2, command: 'take bread' },
+        ]
+      }
+
+      it('opens from Story so far with every turn, lights the button, and closes on a second press', async () => {
+        stageTurns()
+        const w = mountLayout()
+        await w.get('[data-button="story"]').trigger('click')
+
+        const drawer = w.get(STORY)
+        expect(drawer.findAll('[data-testid="command"]')).toHaveLength(2)
+        expect(w.get('[data-button="story"]').attributes('aria-pressed')).toBe(
+          'true',
+        )
+
+        await w.get('[data-button="story"]').trigger('click')
+        expect(w.find(STORY).exists()).toBe(false)
+      })
+
+      it('closes with ✕ and Escape', async () => {
+        const w = mountLayout()
+        await w.get('[data-button="story"]').trigger('click')
+        await w.get(`${STORY} .lq-drawer-close`).trigger('click')
+        expect(w.find(STORY).exists()).toBe(false)
+
+        await w.get('[data-button="story"]').trigger('click')
+        await w.get(STORY).trigger('keydown', { key: 'Escape' })
+        expect(w.find(STORY).exists()).toBe(false)
+      })
+
+      it('swaps with the Bag, Spells and Quests drawer, both ways', async () => {
+        const w = mountLayout()
+        await w.get('[data-button="story"]').trigger('click')
+        await w.get('[data-button="bag"]').trigger('click')
+        expect(w.find(STORY).exists()).toBe(false)
+        expect(w.find('[aria-label="Journal drawer"]').exists()).toBe(true)
+
+        await w.get('[data-button="story"]').trigger('click')
+        expect(w.find('[aria-label="Journal drawer"]').exists()).toBe(false)
+        expect(w.find(STORY).exists()).toBe(true)
+      })
+
+      it('closes when a turn is played, and when the game is loaded', async () => {
+        stageTurns()
+        const w = mountLayout()
+        const game = useGameStore()
+        await w.get('[data-button="story"]').trigger('click')
+        game.turns = [...game.turns, { ...TURN, id: 3 }]
+        await w.vm.$nextTick()
+        expect(w.find(STORY).exists()).toBe(false)
+
+        await w.get('[data-button="story"]').trigger('click')
+        game.loadNumber++
+        await w.vm.$nextTick()
+        expect(w.find(STORY).exists()).toBe(false)
+      })
+
+      it('closes on a press outside it, but not on a press inside it', async () => {
+        stageTurns()
+        wrapper = mount(LanternLayout, { attachTo: document.body })
+        const w = wrapper
+        await w.get('[data-button="story"]').trigger('click')
+
+        await w.get(`${STORY} h2`).trigger('pointerdown')
+        expect(w.find(STORY).exists()).toBe(true)
+
+        await w.get('.lq-stage-picture').trigger('pointerdown')
+        expect(w.find(STORY).exists()).toBe(false)
+      })
+
+      it('gives focus back to Story so far on ✕ and on a second press', async () => {
+        wrapper = mount(LanternLayout, { attachTo: document.body })
+        const w = wrapper
+        const button = w.get('[data-button="story"]').element
+        await w.get('[data-button="story"]').trigger('click')
+        await w.get(`${STORY} .lq-drawer-close`).trigger('click')
+        await flushPromises()
+        expect(document.activeElement).toBe(button)
+
+        await w.get('[data-button="story"]').trigger('click')
+        await w.get('[data-button="story"]').trigger('click')
+        await flushPromises()
+        expect(document.activeElement).toBe(button)
+      })
+
+      it('is swapped for the Quests drawer by Open in journal', async () => {
+        const w = mountLayout()
+        await w.get('[data-button="story"]').trigger('click')
+        useGameStore().questToOpen = 'Whispers'
+        await w.vm.$nextTick()
+        expect(w.find(STORY).exists()).toBe(false)
+        expect(w.get('[role="tab"][aria-selected="true"]').text()).toMatch(
+          /^Quests/,
+        )
+      })
+
+      it('stays open for a press in the name menu', async () => {
+        wrapper = mount(LanternLayout, { attachTo: document.body })
+        const w = wrapper
+        await w.get('[data-button="story"]').trigger('click')
+        const menu = document.createElement('div')
+        menu.className = 'lq-name-menu'
+        document.body.appendChild(menu)
+        menu.dispatchEvent(new Event('pointerdown', { bubbles: true }))
+        await w.vm.$nextTick()
+        expect(w.find(STORY).exists()).toBe(true)
+        menu.remove()
+      })
+
+      it('closes in a new game', async () => {
+        const w = mountLayout()
+        await w.get('[data-button="story"]').trigger('click')
+        useGameStore().gameNumber++
+        await w.vm.$nextTick()
+        expect(w.find(STORY).exists()).toBe(false)
+      })
+
+      it('follows the action row of a new game for its bottom edge', async () => {
+        const observed: Element[] = []
+        vi.stubGlobal(
+          'ResizeObserver',
+          class {
+            observe(el: Element): void {
+              observed.push(el)
+            }
+            disconnect(): void {}
+          },
+        )
+        const w = mountLayout()
+        await flushPromises()
+        const first = observed.at(-1)
+        useGameStore().gameNumber++
+        await flushPromises()
+        const last = observed.at(-1)
+        expect(last).toBeDefined()
+        expect(last).not.toBe(first)
+        w.unmount()
+        wrapper = undefined
+      })
+
+      it('leaves the story band where it was', async () => {
+        const w = mountLayout()
+        const story = w.get('section[aria-label="Story"]').element
+        story.scrollTop = 300
+        await w.get('[data-button="story"]').trigger('click')
+        expect(story.scrollTop).toBe(300)
+      })
     })
   })
 
