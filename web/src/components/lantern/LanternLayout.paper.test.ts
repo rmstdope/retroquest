@@ -43,6 +43,7 @@ describe('the narration paper', () => {
   afterEach(() => {
     w?.unmount()
     vi.unstubAllGlobals()
+    vi.restoreAllMocks()
   })
 
   async function mountWith(turns: Turn[]): Promise<VueWrapper> {
@@ -184,7 +185,6 @@ describe('the narration paper', () => {
     await nextTick()
     await nextTick()
     expect(paper().style.height).toBe('500px')
-    vi.restoreAllMocks()
   })
 
   it('lets the tab row push the actions down when there is no paper', async () => {
