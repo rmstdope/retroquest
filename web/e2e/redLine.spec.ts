@@ -190,7 +190,16 @@ test('plays the red line from Act I to the Willowbrook epilogue', async ({
     await expect(page.getByText(act.played)).toBeVisible({ timeout: 60_000 })
     for (const command of act.completing) await type(page, command)
 
-    const text = await story.innerText()
+    // On the laptop the story drawer holds all the turns (the paper only the
+    // last); the act-complete page covers its button, so press it from the page.
+    const recap = page.getByRole('button', { name: /Story so far/ })
+    let text: string
+    if (await recap.isVisible()) {
+      await recap.evaluate((button) => (button as HTMLElement).click())
+      text = await page
+        .getByRole('complementary', { name: 'Story so far drawer' })
+        .innerText()
+    } else text = await story.innerText()
     for (const beat of act.beats) {
       expect(text, beat.name).toContain(beat.text)
     }

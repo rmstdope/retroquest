@@ -592,6 +592,69 @@ test.describe('Lantern UI (the default)', () => {
     await expect(lines).toHaveCount(0)
   })
 
+  test('tells each turn on a paper that grows to half the screen, hides to a tab', async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 1280, height: 800 })
+    await page.goto('/')
+    await injectMockState(page)
+    const tell = (id: number, text: string, command: string | null) =>
+      page.evaluate(
+        ([turnId, turnText, turnCommand]) => {
+          /* eslint-disable @typescript-eslint/no-explicit-any */
+          const app = (document.querySelector('#app') as any).__vue_app__
+          const store = app.config.globalProperties.$pinia.state.value.game
+          /* eslint-enable @typescript-eslint/no-explicit-any */
+          store.turns.push({
+            id: turnId,
+            command: turnCommand,
+            text: turnText,
+            room: 'Village Square',
+            gained: [],
+            lost: [],
+          })
+        },
+        [id, text, command] as const,
+      )
+    const paper = page.locator('.lq-story-wrap')
+    const hide = page.getByRole('button', { name: '▾ Hide' })
+    const tab = page.getByRole('button', { name: '▴ Narration' })
+    const height = async () => (await paper.boundingBox())!.height
+
+    await tell(2, 'You take the bread.', 'take bread')
+    await expect(paper.getByText('› take bread')).toBeVisible()
+    await expect(paper.getByText('The heart of')).toHaveCount(0)
+    const small = await height()
+    expect(small).toBeLessThan(200)
+
+    const long = Array.from(
+      { length: 30 },
+      (_, i) => `Line ${i} of a very long answer that goes on and on.`,
+    ).join('\n')
+    await tell(3, long, 'look')
+    const area = (await page.locator('.lq-main').boundingBox())!.height
+    await expect.poll(height).toBeGreaterThan(small)
+    await expect.poll(height).toBeLessThanOrEqual(area / 2 + 1)
+    await expect(page.getByRole('button', { name: /More below/ })).toBeVisible()
+
+    await hide.click()
+    await expect(tab).toBeFocused()
+    await expect(paper).toBeHidden()
+    await page.keyboard.press('n')
+    await expect(paper).toBeVisible()
+    await expect(hide).toBeVisible()
+    await page.keyboard.press('n')
+    await expect(tab).toBeVisible()
+
+    await tell(4, 'The wind turns.', 'wait')
+    await expect(tab).toHaveCount(0)
+    await expect(paper.getByText('› wait')).toBeVisible()
+
+    await tell(5, '', 'wait')
+    await expect(paper).toBeHidden()
+    await expect(tab).toHaveCount(0)
+  })
+
   test('keeps the story and actions in view in a busy room on a laptop', async ({
     page,
   }) => {
@@ -782,7 +845,7 @@ test.describe('Lantern UI (the default)', () => {
       })
 
       const story = page.getByRole('region', { name: 'Story' })
-      const newest = story.locator('> *').last()
+      const newest = story.locator('[data-testid="turn"]').last()
       await expect(newest).toContainText('The spirit speaks.')
       const [storyBox, turnBox] = [
         await story.boundingBox(),
