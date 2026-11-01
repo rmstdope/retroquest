@@ -6,7 +6,7 @@ import CompassPanel from './CompassPanel.vue'
 /**
  * The buttons in the stage's top-right corner: Bag, Spells and Quests (with
  * their counts and today's amber dot while something is new) open the journal
- * drawer, "⟲ Story so far" goes back to the start of the story, and "🧭 Map"
+ * drawer, "⟲ Story so far" opens the story drawer, and "🧭 Map"
  * opens the map of the ways out beneath it. The map opens when the pointer is
  * on the button, stays while the pointer is on the button or the map, and
  * closes a moment after it leaves; pressing the button (or Enter or Space on
@@ -16,7 +16,7 @@ import CompassPanel from './CompassPanel.vue'
  */
 type Tab = 'bag' | 'spells' | 'quests'
 
-const props = defineProps<{ drawer: Tab | null }>()
+const props = defineProps<{ drawer: Tab | 'story' | null }>()
 const emit = defineEmits<{ journal: [tab: Tab]; story: [] }>()
 const game = useGameStore()
 
@@ -111,8 +111,8 @@ onUnmounted(() => {
   document.removeEventListener('pointerdown', onDocumentPress)
 })
 
-/** Focus a button: a journal button, or the Map button. */
-async function focusButton(which: Tab | 'map'): Promise<void> {
+/** Focus a button: a journal button, Story so far, or the Map button. */
+async function focusButton(which: Tab | 'story' | 'map'): Promise<void> {
   await nextTick()
   root.value?.querySelector<HTMLElement>(`[data-button="${which}"]`)?.focus()
 }
@@ -138,7 +138,9 @@ defineExpose({ focusButton })
       <button
         type="button"
         class="lq-stage-btn"
+        :class="{ 'lq-lit': props.drawer === 'story' }"
         data-button="story"
+        :aria-pressed="props.drawer === 'story' ? 'true' : 'false'"
         @click="emit('story')"
       >
         ⟲ Story so far

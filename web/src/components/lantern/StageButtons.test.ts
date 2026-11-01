@@ -14,7 +14,9 @@ function pointer(type: string, pointerType = 'mouse'): Event {
 
 describe('StageButtons', () => {
   let w: VueWrapper | undefined
-  const mountButtons = (drawer: 'bag' | 'spells' | 'quests' | null = null) =>
+  const mountButtons = (
+    drawer: 'bag' | 'spells' | 'quests' | 'story' | null = null,
+  ) =>
     (w = mount(StageButtons, {
       props: { drawer },
       attachTo: document.body,
@@ -163,5 +165,19 @@ describe('StageButtons', () => {
     await nextTick()
     await nextTick()
     expect(document.activeElement).toBe(w.get('[data-button="quests"]').element)
+  })
+
+  it('lights Story so far while its drawer is open', () => {
+    const buttons = mountButtons('story')
+    const story = buttons.get('[data-button="story"]')
+    expect(story.classes()).toContain('lq-lit')
+    expect(story.attributes('aria-pressed')).toBe('true')
+    expect(buttons.get('[data-button="bag"]').classes()).not.toContain('lq-lit')
+  })
+
+  it('asks for the story drawer when Story so far is pressed', async () => {
+    const buttons = mountButtons()
+    await buttons.get('[data-button="story"]').trigger('click')
+    expect(buttons.emitted('story')).toHaveLength(1)
   })
 })
