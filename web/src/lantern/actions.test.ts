@@ -3,8 +3,6 @@ import {
   VERBS,
   verbById,
   buildCommand,
-  keepsDoIt,
-  isFinished,
   targetsFor,
   type ActionContext,
 } from './actions'
@@ -42,7 +40,7 @@ describe('buildCommand', () => {
     ['take', ['bucket'], 'take bucket'],
     ['drop', ['lantern'], 'drop lantern'],
     ['use', ['lantern'], 'use lantern'],
-    ['use', ['bucket', 'well'], 'use bucket with well'],
+    ['usewith', ['bucket', 'well'], 'use bucket with well'],
     ['talk', ['mira'], 'talk to mira'],
     ['say', ['hello there', 'mira'], 'say hello there to mira'],
     ['give', ['apple', 'mira'], 'give apple to mira'],
@@ -50,7 +48,7 @@ describe('buildCommand', () => {
     ['open', ['chest'], 'open chest'],
     ['close', ['chest'], 'close chest'],
     ['cast', ['revive'], 'cast revive'],
-    ['cast', ['revive', 'withered carrot'], 'cast revive on withered carrot'],
+    ['caston', ['revive', 'withered carrot'], 'cast revive on withered carrot'],
   ] as const)('%s %j → "%s"', (id, args, expected) => {
     expect(buildCommand(verbById(id), [...args])).toBe(expected)
   })
@@ -166,27 +164,19 @@ describe('opening and closing', () => {
   })
 })
 
-describe('keepsDoIt', () => {
-  it('is true only for verbs that can take more after a complete command', () => {
-    const keeping = VERBS.filter((v) => keepsDoIt(v)).map((v) => v.id)
-    expect([...keeping].sort()).toEqual(['cast', 'say', 'use'])
-  })
-})
-
-describe('isFinished', () => {
-  it('is false while a required choice is missing', () => {
-    expect(isFinished(verbById('take'), [null])).toBe(false)
-    expect(isFinished(verbById('give'), ['lantern', null])).toBe(false)
+describe('Use, Use with, Cast and Cast on', () => {
+  it('splits one-thing and two-thing verbs, each complete on its last slot', () => {
+    expect(verbById('use').slots).toHaveLength(1)
+    expect(verbById('cast').slots).toHaveLength(1)
+    expect(buildCommand(verbById('usewith'), ['rope', null])).toBeNull()
+    expect(buildCommand(verbById('caston'), ['revive', null])).toBeNull()
   })
 
-  it('is true when every choice is made', () => {
-    expect(isFinished(verbById('take'), ['bucket'])).toBe(true)
-    expect(isFinished(verbById('give'), ['lantern', 'mira'])).toBe(true)
-    expect(isFinished(verbById('say'), ['hi', 'mira'])).toBe(true)
-  })
-
-  it('waits while an optional choice is still empty', () => {
-    expect(isFinished(verbById('use'), ['lantern', null])).toBe(false)
-    expect(isFinished(verbById('use'), ['lantern', 'bucket'])).toBe(true)
+  it('labels the new verbs and sits them beside Use and Cast', () => {
+    const ids = VERBS.map((v) => v.id)
+    expect(verbById('usewith').label).toBe('Use with')
+    expect(verbById('caston').label).toBe('Cast on')
+    expect(ids.indexOf('usewith')).toBe(ids.indexOf('use') + 1)
+    expect(ids.indexOf('caston')).toBe(ids.indexOf('cast') + 1)
   })
 })

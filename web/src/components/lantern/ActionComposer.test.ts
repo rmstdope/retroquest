@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
-import { mount, type VueWrapper } from '@vue/test-utils'
+import { flushPromises, mount, type VueWrapper } from '@vue/test-utils'
 import { createPinia, setActivePinia } from 'pinia'
 import ActionComposer from './ActionComposer.vue'
 import { useGameStore } from '@/stores/useGameStore'
@@ -109,16 +109,22 @@ describe('ActionComposer', () => {
   })
 
   describe('instant actions', () => {
-    it.each(['Examine', 'Take', 'Drop', 'Talk', 'Open', 'Close'])(
-      'has only Cancel, no Do it, for %s',
-      async (verb) => {
-        const w = mountComposer()
-        await button(w, verb).trigger('click')
+    it.each([
+      'Examine',
+      'Take',
+      'Drop',
+      'Talk',
+      'Open',
+      'Close',
+      'Use',
+      'Cast',
+    ])('has only Cancel, no Do it, for %s', async (verb) => {
+      const w = mountComposer()
+      await button(w, verb).trigger('click')
 
-        expect(w.findAll('.lq-do')).toHaveLength(0)
-        expect(button(w, 'Cancel').exists()).toBe(true)
-      },
-    )
+      expect(w.findAll('.lq-do')).toHaveLength(0)
+      expect(button(w, 'Cancel').exists()).toBe(true)
+    })
 
     it('performs Talk and Examine at once on the last choice', async () => {
       const w = mountComposer()
@@ -160,37 +166,46 @@ describe('ActionComposer', () => {
     })
 
     it.each([
-      ['Use', 'Lantern', 'use lantern', 'Bucket', 'use lantern with bucket'],
-      ['Cast', 'Revive', 'cast revive', 'Mira', 'cast revive on mira'],
+      ['Use', 'Lantern', 'use lantern'],
+      ['Cast', 'Revive', 'cast revive'],
+    ])('performs %s on its one choice', async (verb, choice, full) => {
+      const w = mountComposer()
+      await button(w, verb).trigger('click')
+      await button(w, choice).trigger('click')
+
+      expect(submit).toHaveBeenCalledTimes(1)
+      expect(submit).toHaveBeenLastCalledWith(full)
+      expect(w.find('.lq-builder').exists()).toBe(false)
+    })
+
+    it.each([
+      ['Use with', 'Lantern', 'Bucket', 'use lantern with bucket'],
+      ['Cast on', 'Revive', 'Mira', 'cast revive on mira'],
     ])(
-      'waits for Do it after the first choice of %s',
-      async (verb, first, partial, second, full) => {
+      'performs %s on the second choice',
+      async (verb, first, second, full) => {
         const w = mountComposer()
         await button(w, verb).trigger('click')
         await button(w, first).trigger('click')
-
         expect(submit).not.toHaveBeenCalled()
-        expect(w.get('[data-testid="preview"]').text()).toBe(partial)
-        await button(w, 'Do it').trigger('click')
-        expect(submit).toHaveBeenLastCalledWith(partial)
 
-        await button(w, verb).trigger('click')
-        await button(w, first).trigger('click')
         await button(w, second).trigger('click')
+        expect(submit).toHaveBeenCalledTimes(1)
         expect(submit).toHaveBeenLastCalledWith(full)
         expect(w.find('.lq-builder').exists()).toBe(false)
       },
     )
 
-    it('keeps Do it for Say; the to-choice sends once words are typed', async () => {
+    it('sends Say on Enter in the words box when the person was tapped first', async () => {
       const w = mountComposer()
       await button(w, 'Say').trigger('click')
-      expect(button(w, 'Do it').attributes()).toHaveProperty('disabled')
       await button(w, 'Mira').trigger('click')
+      expect(w.findAll('.lq-do')).toHaveLength(0)
       expect(submit).not.toHaveBeenCalled()
-      await w.get('input[aria-label="Words to say"]').setValue('hi')
-      expect(button(w, 'Do it').attributes()).not.toHaveProperty('disabled')
-      await button(w, 'Do it').trigger('click')
+      const words = w.get('input[aria-label="Words to say"]')
+      await words.setValue('hi')
+      await words.trigger('keydown', { key: 'Enter' })
+
       expect(submit).toHaveBeenCalledWith('say hi to mira')
     })
 
@@ -201,25 +216,6 @@ describe('ActionComposer', () => {
       await button(w, 'Mira').trigger('click')
 
       expect(submit).toHaveBeenCalledWith('say hi to mira')
-    })
-
-    it('does not send when the optional choice is cleared again', async () => {
-      const w = mountComposer()
-      await button(w, 'Use').trigger('click')
-      await button(w, 'with: optional').trigger('click')
-      await button(w, 'Bucket').trigger('click')
-      await button(w, 'Use: choose…').trigger('click')
-      await button(w, 'Lantern').trigger('click')
-      expect(submit).toHaveBeenLastCalledWith('use lantern with bucket')
-
-      await button(w, 'Use').trigger('click')
-      await button(w, 'with: optional').trigger('click')
-      await button(w, 'Bucket').trigger('click')
-      await button(w, 'with: Bucket').trigger('click')
-      await button(w, 'None').trigger('click')
-
-      expect(submit).toHaveBeenCalledTimes(1)
-      expect(w.get('[data-testid="preview"]').text()).toBe('use …')
     })
 
     it('keeps the builder and sends nothing on Enter when input is closed', async () => {
@@ -249,18 +245,6 @@ describe('ActionComposer', () => {
     })
   })
 
-  it('allows an optional second target', async () => {
-    const w = mountComposer()
-    await button(w, 'Use').trigger('click')
-    await button(w, 'Lantern').trigger('click')
-
-    expect(w.get('[data-testid="preview"]').text()).toBe('use lantern')
-    expect(button(w, 'Do it').attributes()).not.toHaveProperty('disabled')
-
-    await button(w, 'Bucket').trigger('click')
-    expect(submit).toHaveBeenCalledWith('use lantern with bucket')
-  })
-
   it('takes free text for what to say', async () => {
     const w = mountComposer()
     await button(w, 'Say').trigger('click')
@@ -283,10 +267,10 @@ describe('ActionComposer', () => {
 
   it('puts the builder away when the selected verb is tapped again', async () => {
     const w = mountComposer()
-    await button(w, 'Use').trigger('click')
+    await button(w, 'Use with').trigger('click')
     await button(w, 'Lantern').trigger('click')
 
-    await button(w, 'Use').trigger('click')
+    await button(w, 'Use with').trigger('click')
 
     expect(w.find('[data-testid="preview"]').exists()).toBe(false)
     expect(submit).not.toHaveBeenCalled()
@@ -344,27 +328,27 @@ describe('ActionComposer', () => {
 
   it('names the part of the sentence each slot pill fills', async () => {
     const w = mountComposer()
-    await button(w, 'Use').trigger('click')
+    await button(w, 'Use with').trigger('click')
 
-    expect(button(w, 'Use: choose…').exists()).toBe(true)
-    expect(button(w, 'with: optional').exists()).toBe(true)
+    expect(button(w, 'Use with: choose…').exists()).toBe(true)
+    expect(button(w, 'with: choose…').exists()).toBe(true)
+    expect(w.get('.lq-sentence').text()).toBe('Usechoose…withchoose…')
 
     await button(w, 'Lantern').trigger('click')
-    expect(button(w, 'Use: Lantern').exists()).toBe(true)
+    expect(button(w, 'Use with: Lantern').exists()).toBe(true)
   })
 
   it('drops a chosen target that is no longer here', async () => {
     const game = useGameStore()
     const w = mountComposer()
-    await button(w, 'Use').trigger('click')
+    await button(w, 'Use with').trigger('click')
     await button(w, 'Bucket').trigger('click')
-    expect(w.get('[data-testid="preview"]').text()).toBe('use bucket')
+    expect(w.get('[data-testid="preview"]').text()).toBe('use bucket …')
 
     game.items = ['old notice']
     await w.vm.$nextTick()
 
     expect(w.get('[data-testid="preview"]').text()).toBe('use …')
-    expect(button(w, 'Do it').attributes()).toHaveProperty('disabled')
   })
 
   it('moves focus to the choices, then back to the verb when performed', async () => {
@@ -819,7 +803,7 @@ describe('ActionComposer', () => {
 
     it('does not shake later when nothing showed the failure', async () => {
       // A failed move from the compass before any verb was used: no verb
-      // shakes, and opening a verb afterwards must not shake its Do it.
+      // shakes, and opening a verb afterwards must not shake anything.
       vi.useFakeTimers()
       useSettingsStore().startMode = 'actions'
       const w = mountComposer()
@@ -829,7 +813,7 @@ describe('ActionComposer', () => {
       vi.advanceTimersByTime(320)
       await button(w, 'Use').trigger('click')
 
-      expect(w.get('.lq-do').classes()).not.toContain('lq-shake')
+      expect(w.find('.lq-shake').exists()).toBe(false)
     })
 
     it('shakes the verb used last in Actions mode', async () => {
@@ -904,27 +888,50 @@ describe('ActionComposer', () => {
 })
 
 describe('ActionComposer on the stage', () => {
+  let submit: ReturnType<typeof vi.fn<(command: string) => void>>
+
   beforeEach(() => {
     setActivePinia(createPinia())
     const game = useGameStore()
     game.acceptInput = true
     game.items = ['bucket']
-    game.characters = ['mira']
+    game.characters = ['mira', 'old woman']
+    game.bagEntries = ['[item_name]bread[/item_name]']
+    game.spellEntries = ['[spell_name]light[/spell_name]']
     game.exits = { north: "Mira's Hut" }
     game.roomWares = []
+    submit = vi.fn<(command: string) => void>()
+    vi.spyOn(game, 'submitCommand').mockImplementation(submit)
   })
 
   const labels = (w: VueWrapper): string[] =>
     w.findAll('.lq-verb').map((b) => b.text())
 
+  function stage(): VueWrapper {
+    return mount(ActionComposer, {
+      props: { stage: true },
+      attachTo: document.body,
+    })
+  }
+
+  const click = (w: VueWrapper, selector: string) =>
+    w.get(selector).trigger('click')
+
+  function choice(w: VueWrapper, name: string) {
+    const found = w.findAll('.lq-row .lq-target').find((b) => b.text() === name)
+    if (!found) throw new Error(`No choice "${name}"`)
+    return found
+  }
+
   it('is one row of verbs ending in More… and ⌨ Type, without the mode switch or exits', () => {
-    const w = mount(ActionComposer, { props: { stage: true } })
+    const w = stage()
     expect(labels(w)).toEqual([
       'Look',
       'Examine',
       'Search',
       'Take',
       'Use',
+      'Use with',
       'Talk',
       'Say',
       'Give',
@@ -933,30 +940,210 @@ describe('ActionComposer on the stage', () => {
     ])
     expect(w.find('.lq-seg').exists()).toBe(false)
     expect(w.find('.lq-go-row').exists()).toBe(false)
+    w.unmount()
   })
 
-  it('keeps Drop, Buy, Open, Close, Cast and Rest behind More…', async () => {
-    const w = mount(ActionComposer, { props: { stage: true } })
-    await w.get('[data-more]').trigger('click')
-    expect(labels(w)).toEqual(
-      expect.arrayContaining(['Drop', 'Buy', 'Open', 'Close', 'Cast', 'Rest']),
+  it('keeps Drop, Buy, Open, Close, Cast, Cast on and Rest behind More…', async () => {
+    const w = stage()
+    await click(w, '[data-more]')
+    expect(labels(w).slice(labels(w).indexOf('More…') + 1, -1)).toEqual([
+      'Drop',
+      'Buy',
+      'Open',
+      'Close',
+      'Cast',
+      'Cast on',
+      'Rest',
+    ])
+    w.unmount()
+  })
+
+  it('shows no row at rest', () => {
+    const w = stage()
+    expect(w.find('.lq-row').exists()).toBe(false)
+    expect(w.find('.lq-builder').exists()).toBe(false)
+    w.unmount()
+  })
+
+  it('opens one slim row with the choices standing where the blank is', async () => {
+    const w = stage()
+    await click(w, '[data-verb="talk"]')
+    const row = w.get('.lq-row')
+    expect(w.find('.lq-builder').exists()).toBe(false)
+    expect(row.text()).toContain('Talk to')
+    expect(w.findAll('.lq-row .lq-target').map((b) => b.text())).toEqual([
+      'Mira',
+      'Old Woman',
+    ])
+    expect(w.find('.lq-do').exists()).toBe(false)
+    await choice(w, 'Old Woman').trigger('click')
+    expect(submit).toHaveBeenCalledWith('talk to old woman')
+    expect(w.find('.lq-row').exists()).toBe(false)
+    w.unmount()
+  })
+
+  it('shows a later blank as … and a chosen thing as a pill', async () => {
+    const w = stage()
+    await click(w, '[data-verb="give"]')
+    expect(w.get('.lq-row').text()).toContain('…')
+    await choice(w, 'Bread').trigger('click')
+    const row = w.get('.lq-row')
+    expect(row.find('.lq-slot').text()).toBe('Bread')
+    expect(row.text()).toContain('to')
+    expect(w.findAll('.lq-row .lq-target').map((b) => b.text())).toEqual([
+      'Mira',
+      'Old Woman',
+    ])
+    // Tapping the pill chooses again.
+    await row.get('.lq-slot').trigger('click')
+    expect(w.findAll('.lq-row .lq-target').map((b) => b.text())).toEqual([
+      'Bread',
+    ])
+    w.unmount()
+  })
+
+  it('sends Use with on the second tap', async () => {
+    const w = stage()
+    await click(w, '[data-verb="usewith"]')
+    await choice(w, 'Bread').trigger('click')
+    expect(submit).not.toHaveBeenCalled()
+    await choice(w, 'Bucket').trigger('click')
+    expect(submit).toHaveBeenCalledWith('use bread with bucket')
+    w.unmount()
+  })
+
+  it('closes with ✕, Escape and the lit verb, and sends nothing', async () => {
+    const w = stage()
+    await click(w, '[data-verb="talk"]')
+    await w.get('.lq-row .lq-close').trigger('click')
+    expect(w.find('.lq-row').exists()).toBe(false)
+
+    await click(w, '[data-verb="talk"]')
+    await w.get('section').trigger('keydown', { key: 'Escape' })
+    expect(w.find('.lq-row').exists()).toBe(false)
+
+    await click(w, '[data-verb="talk"]')
+    await click(w, '[data-verb="talk"]')
+    expect(w.find('.lq-row').exists()).toBe(false)
+    expect(submit).not.toHaveBeenCalled()
+    w.unmount()
+  })
+
+  it('reads the close mark as Cancel and puts it after the choices', async () => {
+    const w = stage()
+    await click(w, '[data-verb="talk"]')
+    const close = w.get('.lq-row .lq-close')
+    expect(close.text()).toBe('✕')
+    expect(close.attributes('aria-label')).toBe('Cancel')
+    const all = w.get('.lq-row').findAll('button')
+    expect(all[all.length - 1].element).toBe(close.element)
+    w.unmount()
+  })
+
+  it('says so on the line when there is nothing to choose', async () => {
+    useGameStore().items = []
+    const w = stage()
+    await click(w, '[data-verb="take"]')
+    expect(w.get('.lq-row').text()).toContain('Nothing to take here')
+    expect(w.find('.lq-row .lq-close').exists()).toBe(true)
+    w.unmount()
+  })
+
+  it('greys the choices while the game is not taking commands', async () => {
+    const game = useGameStore()
+    const w = stage()
+    await click(w, '[data-verb="talk"]')
+    game.acceptInput = false
+    await w.vm.$nextTick()
+    expect(choice(w, 'Mira').attributes()).toHaveProperty('disabled')
+    expect(w.get('.lq-row .lq-close').attributes()).not.toHaveProperty(
+      'disabled',
     )
+    w.unmount()
   })
 
-  it('opens the builder with "Do it ▸" for the verb picked', async () => {
-    const w = mount(ActionComposer, { props: { stage: true } })
-    await w.get('[data-verb="use"]').trigger('click')
-    expect(w.get('.lq-builder').text()).toContain('Use')
-    expect(w.get('.lq-do').text()).toBe('Do it ▸')
+  it('takes Say as words, then the person, with no button', async () => {
+    const w = stage()
+    await click(w, '[data-verb="say"]')
+    expect(w.find('.lq-row input[aria-label="Words to say"]').exists()).toBe(
+      true,
+    )
+    await w.get('.lq-row input').setValue('hello')
+    await choice(w, 'Mira').trigger('click')
+    expect(submit).toHaveBeenCalledWith('say hello to mira')
+    expect(w.find('.lq-do').exists()).toBe(false)
+    w.unmount()
+  })
+
+  it('moves focus to the first choice, then back to the verb', async () => {
+    const w = stage()
+    await click(w, '[data-verb="talk"]')
+    await w.vm.$nextTick()
+    expect(document.activeElement?.textContent?.trim()).toBe('Mira')
+    await choice(w, 'Mira').trigger('click')
+    await w.vm.$nextTick()
+    expect(document.activeElement?.getAttribute('data-verb')).toBe('talk')
+    w.unmount()
+  })
+
+  it('returns focus to More… after Cast completes or is put away', async () => {
+    const w = stage()
+    await click(w, '[data-more]')
+    await w.get('[data-verb="cast"]').trigger('click')
+    await choice(w, 'Light').trigger('click')
+    await flushPromises()
+    expect(document.activeElement?.hasAttribute('data-more')).toBe(true)
+
+    await click(w, '[data-more]')
+    await w.get('[data-verb="caston"]').trigger('click')
+    await w.get('.lq-row .lq-close').trigger('click')
+    await flushPromises()
+    expect(document.activeElement?.hasAttribute('data-more')).toBe(true)
+    w.unmount()
+  })
+
+  it('shakes More… when a verb from behind it fails', async () => {
+    const game = useGameStore()
+    submit.mockImplementationOnce(() => {
+      game.turns = [
+        {
+          id: 1,
+          command: 'cast light',
+          text: '[failure]Nothing happens.[/failure]',
+          room: 'Hall',
+          description: null,
+          gained: [],
+          lost: [],
+          arrival: null,
+        },
+      ]
+    })
+    const w = stage()
+    await click(w, '[data-more]')
+    await w.get('[data-verb="cast"]').trigger('click')
+    await choice(w, 'Light').trigger('click')
+    await w.vm.$nextTick()
+    expect(w.get('[data-more]').classes()).toContain('lq-shake')
+    w.unmount()
+  })
+
+  it('names the choices as a group', async () => {
+    const w = stage()
+    await click(w, '[data-verb="talk"]')
+    expect(w.get('.lq-row [role="group"]').attributes('aria-label')).toBe(
+      'Choices for Talk: choose…',
+    )
+    w.unmount()
   })
 
   it('switches to the command box with ⌨ Type and back with Actions', async () => {
-    const w = mount(ActionComposer, { props: { stage: true } })
-    await w.get('[data-type]').trigger('click')
+    const w = stage()
+    await click(w, '[data-type]')
     expect(w.find('input[aria-label="Command"]').exists()).toBe(true)
     expect(w.get('.lq-type-row .lq-do').text()).toBe('Do it ▸')
-    await w.get('[data-actions]').trigger('click')
+    await click(w, '[data-actions]')
     expect(w.find('.lq-verbs').exists()).toBe(true)
+    w.unmount()
   })
 
   it('is unchanged without the stage', () => {

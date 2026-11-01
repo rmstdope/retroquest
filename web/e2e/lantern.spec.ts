@@ -276,13 +276,14 @@ test.describe('Lantern UI (the default)', () => {
       /* eslint-enable @typescript-eslint/no-explicit-any */
     })
 
-    // Use may still take "with …", so it waits for Do it.
-    await actions.getByRole('button', { name: 'Use', exact: true }).click()
+    // Use with takes two things and is performed on the second tap (no Do it).
+    await actions.getByRole('button', { name: 'Use with', exact: true }).click()
     await actions.getByRole('button', { name: 'Lantern', exact: true }).click()
-    await expect(page.getByTestId('preview')).toHaveText('use lantern')
+    await expect(page.getByTestId('preview')).toHaveText('use lantern …')
     await expect(
       actions.getByRole('button', { name: 'Do it', exact: true }),
-    ).toBeEnabled()
+    ).toHaveCount(0)
+    await actions.getByRole('button', { name: 'Cancel', exact: true }).click()
 
     await actions.getByRole('button', { name: 'Type', exact: true }).click()
     await expect(page.getByLabel('Command')).toBeVisible()
@@ -448,11 +449,12 @@ test.describe('Lantern UI (the default)', () => {
     await page.keyboard.press('Escape')
     await expect(drawer).toHaveCount(0)
 
-    // The row to choose who or what opens just above the verbs.
+    // One slim row to choose who or what opens just above the verbs.
     await page.getByRole('button', { name: 'Use', exact: true }).click()
-    const builder = await page.locator('.lq-builder').boundingBox()
+    const row = await page.locator('.lq-row').boundingBox()
     const verbs = await page.locator('.lq-verbs').boundingBox()
-    expect(builder!.y + builder!.height).toBeLessThanOrEqual(verbs!.y + 1)
+    expect(row!.y + row!.height).toBeLessThanOrEqual(verbs!.y + 1)
+    expect(row!.height).toBeLessThan(100)
 
     await page.setViewportSize({ width: 390, height: 844 })
     await expect(plate).toBeHidden()

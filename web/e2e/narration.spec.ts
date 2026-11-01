@@ -130,17 +130,20 @@ test('Space and Enter press a focused verb and the voice keeps reading', async (
   const shown = await lastTurnBlocks(page).count()
 
   await page.keyboard.press(' ')
-  // The press opened the builder (its Cancel shows); nothing was hurried.
+  // The press opened the builder (its ✕, read as Cancel, shows); nothing was
+  // hurried.
   await expect(
-    page.getByRole('region', { name: 'Actions' }).getByText('Cancel'),
+    page.getByRole('region', { name: 'Actions' }).getByRole('button', {
+      name: 'Cancel',
+    }),
   ).toBeVisible()
   expect(await lastTurnBlocks(page).count()).toBeLessThanOrEqual(shown + 1)
   await expect(page.locator('.lq-speaking')).not.toHaveCount(0)
 
   // Enter on the focused Cancel presses it too, and the voice still reads.
-  await page.locator('.lq-cancel').focus()
+  await page.locator('.lq-close').focus()
   await page.keyboard.press('Enter')
-  await expect(page.locator('.lq-cancel')).toHaveCount(0)
+  await expect(page.locator('.lq-close')).toHaveCount(0)
   await expect(page.locator('.lq-speaking')).not.toHaveCount(0)
 })
 

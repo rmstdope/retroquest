@@ -8,8 +8,6 @@ import { exitArrow } from '@/lantern/exitArrow'
 import {
   VERBS,
   buildCommand,
-  isFinished,
-  keepsDoIt,
   targetsFor,
   type ActionContext,
   type Verb,
@@ -17,13 +15,15 @@ import {
 
 /**
  * The Lantern action composer: tap a verb and pick its targets as chips — the
- * command is performed as soon as the last choice is made. Only Use, Cast and
- * Say (whose last part may still be added) keep a "Do it" button. Or switch
- * to Type and write the command. On the stage (`stage`) the verbs are one
- * row (Look to Give, More… and ⌨ Type, Drop, Buy, Open, Close, Cast and Rest
- * behind More…) with the sentence being built in a row above it. A live preview shows the command the game
- * will receive. Focus follows the sentence: verb → choices → (Do it →) back
- * to the verb. On phones it is a sheet that can fold away
+ * command is performed as soon as the last choice is made, so there is no
+ * "Do it" in Actions mode (Say sends on Enter in its words box when the person
+ * was tapped first). Or switch to Type and write the command. On the stage
+ * (`stage`) the verbs are one row (Look to Give, More… and ⌨ Type; Drop, Buy,
+ * Open, Close, Cast, Cast on and Rest behind More…) with the sentence being
+ * built as one slim row above it, the choices standing where the blank is and
+ * a ✕ at the end. Elsewhere the sentence is a box with its choices below and
+ * a Cancel button, and a live preview shows the command the game will
+ * receive. Focus follows the sentence: verb → choices → back to the verb. On phones it is a sheet that can fold away
  * (`foldable` shows a hide button that emits `fold`). In Type mode its root
  * carries `lq-typing`, so the sheet can let the completion list (which opens
  * above the command box) show outside it.
@@ -57,6 +57,7 @@ const STAGE_ROW = [
   'search',
   'take',
   'use',
+  'usewith',
   'talk',
   'say',
   'give',
@@ -71,6 +72,10 @@ const moreVerbs = computed(() =>
   props.stage
     ? actionVerbs.filter((v) => !STAGE_ROW.includes(v.id))
     : VERBS.filter((v) => v.group === 'more'),
+)
+/** Whether the verb used last waits behind More… (so More… is what shakes). */
+const lastIsMore = computed(() =>
+  moreVerbs.value.some((v) => v.id === lastVerbId.value),
 )
 const exits = computed(() => Object.entries(game.exits))
 
@@ -135,7 +140,7 @@ const preview = computed(() => {
 
 function labelFor(index: number): string {
   const value = args.value[index]
-  if (!value) return verb.value?.slots[index].optional ? 'optional' : 'choose…'
+  if (!value) return 'choose…'
   const match = targetsFor(verb.value!.slots[index], context.value).find(
     (target) => target.value === value,
   )
@@ -148,13 +153,11 @@ function slotName(index: number): string {
   return `${word}: ${labelFor(index)}`
 }
 
-/** Whether the active slot is optional and filled, so "None" can clear it. */
-const canClear = computed(
-  () =>
-    activeSlot.value !== null &&
-    !!verb.value?.slots[activeSlot.value].optional &&
-    !!args.value[activeSlot.value],
-)
+/** The sentence's first words on the stage's row: "Talk to", "Use", "Cast". */
+const leadWords = computed(() => {
+  const words = verb.value?.words ?? ''
+  return words.charAt(0).toUpperCase() + words.slice(1)
+})
 
 /**
  * After the DOM updates, focus the first element matching one of `selectors`
@@ -198,11 +201,11 @@ function setMode(next: 'actions' | 'type'): void {
 
 defineExpose({ focus, setMode })
 
-// "Not like that": Do it — or in Actions mode, which clears the sentence,
-// the verb used last — gives a short shake when a command fails (it does
-// not move when motion is reduced, see .lq-shake). The shake ends after its
-// length even when nothing showed it (no verb used yet, the sheet folded),
-// so a later Do it does not shake for an old failure. Only commands sent
+// "Not like that": the verb used last (in Actions mode the sentence is cleared
+// on sending) or Type's Do it gives a short shake when a command fails (it
+// does not move when motion is reduced, see .lq-shake). The shake ends after
+// its length even when nothing showed it (no verb used yet, the sheet folded),
+// so a later verb does not shake for an old failure. Only commands sent
 // from here shake: a failed move from the compass or a journal Use does not.
 const SHAKE_MS = 320 // the length of the lq-shake animation
 const shaking = ref(false)
@@ -252,24 +255,26 @@ function pickVerb(next: Verb): void {
   verb.value = next
   args.value = next.slots.map(() => null)
   chosenSlot.value = null
-  focusFirst('.lq-text-slot', '.lq-target', '.lq-do')
+  focusFirst('.lq-text-slot', '.lq-target')
 }
 
-function pickTarget(value: string | null): void {
+function pickTarget(value: string): void {
   if (activeSlot.value === null) return
   args.value[activeSlot.value] = value
   chosenSlot.value = null
-  if (verb.value && isFinished(verb.value, args.value)) {
+  if (command.value) {
     doIt()
     return
   }
-  focusFirst('.lq-target', '.lq-do')
+  focusFirst('.lq-target', '.lq-text-slot')
 }
 
 /** Close the builder and give focus back to the verb that opened it. */
 function reset(): void {
-  if (verb.value) focusFirst(`[data-verb="${verb.value.id}"]`)
+  // A More… verb is gone once the list folds; focus its toggle instead.
+  const id = verb.value?.id
   clear()
+  if (id) focusFirst(`[data-verb="${id}"]`, '[data-more]')
 }
 
 /** Close the builder without moving focus. */
@@ -300,7 +305,7 @@ function onTypedEscape(event: KeyboardEvent): void {
 /** Enter in a text slot: run the command if complete, else go on to the choices. */
 function textEntered(): void {
   if (command.value) doIt()
-  else focusFirst('.lq-target', '.lq-do')
+  else focusFirst('.lq-target')
 }
 
 function doIt(): void {
@@ -412,9 +417,9 @@ function onTypedEnter(): void {
         </button>
       </div>
 
-      <div v-if="verb" class="lq-builder">
+      <div v-if="verb && !stage" class="lq-builder">
         <div class="lq-sentence">
-          <span class="lq-word">{{ verb.label }}</span>
+          <span class="lq-word">{{ leadWords }}</span>
           <template v-for="(slot, index) in verb.slots" :key="index">
             <span v-if="slot.joiner" class="lq-joiner">{{ slot.joiner }}</span>
             <input
@@ -455,33 +460,68 @@ function onTypedEnter(): void {
           >
             {{ target.label }}
           </button>
-          <button
-            v-if="canClear"
-            type="button"
-            class="lq-target lq-target-none"
-            :disabled="!game.acceptInput"
-            @click="pickTarget(null)"
-          >
-            None
-          </button>
-          <span v-if="!targets.length && !canClear" class="lq-empty"
+          <span v-if="!targets.length" class="lq-empty"
             >Nothing to {{ verb.label.toLowerCase() }} here</span
           >
         </div>
 
         <div class="lq-builder-actions">
           <button type="button" class="lq-cancel" @click="reset">Cancel</button>
-          <button
-            v-if="keepsDoIt(verb)"
-            type="button"
-            class="lq-do"
-            :class="{ 'lq-shake': shaking }"
-            :disabled="!command || !game.acceptInput"
-            @click="doIt"
-          >
-            {{ stage ? 'Do it ▸' : 'Do it' }}
-          </button>
         </div>
+      </div>
+
+      <div v-if="verb && stage" class="lq-row">
+        <span class="lq-word">{{ leadWords }}</span>
+        <template v-for="(slot, index) in verb.slots" :key="index">
+          <span v-if="slot.joiner" class="lq-joiner">{{ slot.joiner }}</span>
+          <input
+            v-if="isText(index)"
+            v-model="args[index]"
+            class="lq-text-slot"
+            aria-label="Words to say"
+            placeholder="words…"
+            @keydown.enter.prevent="textEntered"
+          />
+          <span
+            v-else-if="activeSlot === index"
+            class="lq-row-choices"
+            role="group"
+            :aria-label="`Choices for ${slotName(index)}`"
+          >
+            <button
+              v-for="target in targets"
+              :key="target.value"
+              type="button"
+              class="lq-target"
+              :class="`lq-target-${target.kind}`"
+              :disabled="!game.acceptInput"
+              @click="pickTarget(target.value)"
+            >
+              {{ target.label }}
+            </button>
+            <span v-if="!targets.length" class="lq-empty"
+              >Nothing to {{ verb.label.toLowerCase() }} here</span
+            >
+          </span>
+          <button
+            v-else-if="args[index]"
+            type="button"
+            class="lq-slot"
+            :aria-label="slotName(index)"
+            @click="chosenSlot = index"
+          >
+            {{ labelFor(index) }}
+          </button>
+          <span v-else class="lq-blank">…</span>
+        </template>
+        <button
+          type="button"
+          class="lq-close"
+          aria-label="Cancel"
+          @click="reset"
+        >
+          ✕
+        </button>
       </div>
 
       <div class="lq-verbs">
@@ -504,6 +544,7 @@ function onTypedEnter(): void {
         <button
           type="button"
           class="lq-verb"
+          :class="{ 'lq-shake': shaking && !verb && lastIsMore }"
           data-more
           :aria-expanded="showMore ? 'true' : 'false'"
           @click="showMore = !showMore"
@@ -516,6 +557,7 @@ function onTypedEnter(): void {
             :key="v.id"
             type="button"
             class="lq-verb"
+            :data-verb="v.id"
             :disabled="!game.acceptInput"
             @click="pickVerb(v)"
           >
@@ -837,7 +879,36 @@ function onTypedEnter(): void {
   cursor: pointer;
 }
 /* On the stage the verbs are one row over the picture, and the sentence being
-   built sits in a row just above it (the builder comes first in the markup). */
+   built is one slim row just above it (it comes first in the markup). It wraps
+   only when the choices need a second line, whole choices at a time. */
+.lq-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 8px;
+}
+.lq-row .lq-slot {
+  border-style: solid;
+  border-color: var(--lq-accent);
+}
+.lq-row-choices {
+  display: contents;
+}
+.lq-blank {
+  color: var(--lq-muted);
+}
+.lq-close {
+  margin-left: auto;
+  min-width: 44px;
+  min-height: 44px;
+  border-radius: 10px;
+  border: 1px solid var(--lq-line2);
+  background: transparent;
+  color: var(--lq-fg);
+  font: inherit;
+  font-size: 14px;
+  cursor: pointer;
+}
 .lq-on-stage {
   background: color-mix(in srgb, var(--lq-surface) 93%, transparent);
 }
@@ -851,7 +922,7 @@ function onTypedEnter(): void {
 }
 .lq-verbs {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(88px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(62px, 1fr));
   gap: 6px;
 }
 .lq-verb {
