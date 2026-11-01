@@ -87,8 +87,14 @@ describe('Lantern palettes', () => {
 })
 
 describe('Lantern text scale', () => {
-  it('maps Small/Medium/Large to the chosen multipliers', () => {
-    expect(LANTERN_TEXT_SCALE).toEqual({ small: 0.88, medium: 1, large: 1.18 })
+  it('maps the five sizes, smallest first, to the chosen multipliers', () => {
+    expect(LANTERN_TEXT_SCALE).toEqual({
+      smallest: 0.64,
+      extraSmall: 0.76,
+      small: 0.88,
+      medium: 1,
+      large: 1.18,
+    })
   })
 })
 

@@ -70,6 +70,29 @@ describe('LanternHeader', () => {
     ).toBe('true')
   })
 
+  it('offers five text sizes, smallest first, and picks the smallest', async () => {
+    const w = mountHeader()
+    await w.get('button[aria-label="Text size"]').trigger('click')
+
+    const names = w
+      .get('[role="group"][aria-label="Text size"]')
+      .findAll('button')
+      .map((b) => b.attributes('aria-label'))
+    expect(names).toEqual([
+      'Smallest text',
+      'Extra small text',
+      'Small text',
+      'Medium text',
+      'Large text',
+    ])
+
+    await w.get('button[aria-label="Smallest text"]').trigger('click')
+    expect(useSettingsStore().textSize).toBe('smallest')
+    expect(
+      w.get('button[aria-label="Smallest text"]').attributes('aria-pressed'),
+    ).toBe('true')
+  })
+
   it('closes the text size popover with Escape and refocuses Aa', async () => {
     wrapper = mount(LanternHeader, { attachTo: document.body })
     const aa = wrapper.get('button[aria-label="Text size"]')
