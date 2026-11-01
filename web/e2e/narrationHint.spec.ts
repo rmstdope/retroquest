@@ -91,6 +91,9 @@ async function watchReading(page: Page): Promise<Reading> {
               top: Math.max(pane.top, pill.top),
               bottom: Math.min(pane.bottom, pill.bottom),
             }
+            // The pane ends above the hint (the paper glides taller while a
+            // part appears): nothing can sit under it then.
+            const shared = area.right > area.left && area.bottom > area.top
             const walker = document.createTreeWalker(
               speaking,
               NodeFilter.SHOW_TEXT,
@@ -102,7 +105,7 @@ async function watchReading(page: Page): Promise<Reading> {
                 range.setStart(n, match.index)
                 range.setEnd(n, match.index + match[0].length)
                 for (const r of Array.from(range.getClientRects()))
-                  if (overlaps(r, area)) covered.add(match[0])
+                  if (shared && overlaps(r, area)) covered.add(match[0])
               }
             }
           }

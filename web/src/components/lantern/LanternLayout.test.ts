@@ -988,9 +988,13 @@ describe('LanternLayout', () => {
       await say(w, 'You walk north.', undefined, 'go north')
 
       expect(w.find('[data-testid="speech-line"]').exists()).toBe(false)
+      // The paper tells the current turn only; the earlier one stays in the story.
       expect(w.get('section[aria-label="Story"]').text()).toContain(
-        'There you are.',
+        'You walk north.',
       )
+      expect(
+        useGameStore().turns.some((t) => t.text.includes('There you are.')),
+      ).toBe(true)
     })
 
     it('clears the picture after a load and in a new act', async () => {

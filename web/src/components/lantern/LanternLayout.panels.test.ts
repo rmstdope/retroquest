@@ -171,7 +171,10 @@ describe('LanternLayout: panels wait for the narration', () => {
     const w = await ready()
     await goNorth()
     await w.get('[data-verb="look"]').trigger('click')
-    expect(w.findAll('[data-testid="turn"]').length).toBeGreaterThan(1)
+    // The paper holds the new turn alone.
+    const turns = w.findAll('[data-testid="turn"]')
+    expect(turns).toHaveLength(1)
+    expect(turns[0]?.text()).toContain('› look')
     expect(cardName(w)).toBe('Garden')
   })
 

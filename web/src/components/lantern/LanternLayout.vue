@@ -20,6 +20,8 @@ import { useFocusTrap } from '@/composables/useFocusTrap'
 import { nameActions, type NameAction } from '@/lantern/nameActions'
 import { parseCountedName } from '@/lantern/inventoryChanges'
 import { useStoryFollow } from '@/composables/useStoryFollow'
+import { useNarrationPaper } from '@/composables/useNarrationPaper'
+import { paperHeight } from '@/lantern/paperHeight'
 import {
   SHORT_QUERY,
   useMediaQuery,
@@ -61,6 +63,11 @@ import TitlePage from './TitlePage.vue'
  * so far and Map top-right (the journal and the story open as a drawer from
  * the right, the map beneath its button), the story in a paper band along the bottom and the
  * actions as one row under it.
+ * The story there is the narration paper: it holds the current turn and grows
+ * as the narrator reaches each part (up to half the play area, then it
+ * scrolls); "▾ Hide" (or N) slides it down to a "▴ Narration" tab, a new turn
+ * with something to tell opens it again; earlier turns are read in the story
+ * drawer.
  * Smaller screens show one section at a time (Story, Bag, Spells, Quests,
  * Map) with section tabs at the bottom, or in the header when short.
  * There the actions are a sheet (at most 62% of the height) that folds into
@@ -217,6 +224,82 @@ watch(wide, (isWide) => {
   }
 })
 const storyEl = ref<HTMLElement | null>(null)
+const mainEl = ref<HTMLElement | null>(null)
+const paperEl = ref<HTMLElement | null>(null)
+const contentEl = ref<HTMLElement | null>(null)
+const tabEl = ref<HTMLButtonElement | null>(null)
+
+/** The narration paper of the laptop stage (see `useNarrationPaper`). */
+const paper = useNarrationPaper(
+  () => game.turns,
+  () => stageKey.value,
+)
+/** What the story pane holds: the paper's turns on the laptop, every turn elsewhere. */
+const storyTurns = computed(() =>
+  wide.value ? paper.shownTurns.value : game.turns,
+)
+/** The paper is slid down, leaving its tab. */
+const paperAway = computed(
+  () => wide.value && paper.visible.value && paper.hidden.value,
+)
+/** The paper's height in px, or null before it was measured (and off the laptop). */
+const paperPx = ref<number | null>(null)
+
+/**
+ * Set the paper's height from its content: grown to fit up to half the play
+ * area. Its CSS glides the change.
+ */
+function measurePaper(): void {
+  const wrap = paperEl.value
+  const story = storyEl.value
+  const content = contentEl.value
+  const area = mainEl.value
+  if (!wide.value || !wrap || !story || !content || !area) {
+    paperPx.value = null
+    return
+  }
+  const style = getComputedStyle(story)
+  const padding =
+    (parseFloat(style.paddingTop) || 0) + (parseFloat(style.paddingBottom) || 0)
+  const chrome = wrap.offsetHeight - story.clientHeight + padding
+  paperPx.value = paperHeight(content.offsetHeight, chrome, area.clientHeight)
+}
+
+/** Hide the paper; focus goes to the tab it leaves. */
+async function hidePaper(): Promise<void> {
+  paper.hide()
+  await nextTick()
+  tabEl.value?.focus()
+}
+
+/** Bring the paper back; focus goes to its Hide button. */
+async function showPaper(): Promise<void> {
+  paper.show()
+  await nextTick()
+  paperEl.value?.querySelector<HTMLElement>('.lq-paper-corner')?.focus()
+}
+
+/** The keys N steers: only on the laptop, only with a paper (or its tab) to steer. */
+function onPaperKey(event: KeyboardEvent): void {
+  if (event.key !== 'n' && event.key !== 'N') return
+  if (event.defaultPrevented || event.repeat) return
+  if (event.ctrlKey || event.metaKey || event.altKey) return
+  if (!wide.value || !paper.visible.value || dialogOpen()) return
+  const target = event.target instanceof Element ? event.target : null
+  if (target?.closest('input, textarea, select, [contenteditable]')) return
+  event.preventDefault()
+  // Focus on the paper or on its tab would be lost as one slides away and the
+  // other goes: it follows to the other one.
+  const active = document.activeElement
+  const focusWasInside = !!paperEl.value?.contains(active)
+  const focusWasOnTab = !!active && active === tabEl.value
+  paper.toggle()
+  if (focusWasInside && paper.hidden.value) {
+    void nextTick(() => tabEl.value?.focus())
+  } else if (focusWasOnTab && !paper.hidden.value) {
+    void showPaper()
+  }
+}
 /** The story is held still and follows the word while an answer is read. */
 const { held: storyHeld, moveTo: moveStory, refollow } = useStoryFollow(storyEl)
 /** Unread story below the visible part (a long turn opens at its start). */
@@ -286,13 +369,29 @@ async function openDock(mode: 'actions' | 'type'): Promise<void> {
 /** Whether the newest turn is taller than the story area beside the actions. */
 function answerTooLong(): boolean {
   const story = storyEl.value
-  const last = story?.lastElementChild as HTMLElement | null | undefined
+  const last = contentEl.value?.lastElementChild as
+    | HTMLElement
+    | null
+    | undefined
   return !!story && !!last && last.offsetHeight > story.clientHeight
 }
 
 // The story also changes size without scrolling: the sheet opens or folds,
 // the window turns, a section is shown again, the room card grows.
 let storyResize: ResizeObserver | undefined
+let paperResize: ResizeObserver | undefined
+
+/** Whether a pop-up, menu or dialog is open (it has its own keys). */
+function dialogOpen(): boolean {
+  return !!(
+    game.showModal ||
+    game.showTitle ||
+    game.quitAsked ||
+    game.shownQuest ||
+    gameDialog.value ||
+    nameMenu.value
+  )
+}
 
 /** Keys that steer the narration; see `onNarrationKey`. */
 function onNarrationKey(event: KeyboardEvent): void {
@@ -305,15 +404,7 @@ function onNarrationKey(event: KeyboardEvent): void {
   const hurries = event.key === ' ' || event.key === 'Enter'
   if (!hurries && event.key !== 'Escape') return
   // A menu or dialog has its own keys (Escape closes it first).
-  if (
-    game.showModal ||
-    game.showTitle ||
-    game.quitAsked ||
-    game.shownQuest ||
-    gameDialog.value ||
-    nameMenu.value
-  )
-    return
+  if (dialogOpen()) return
   const target = event.target instanceof Element ? event.target : null
   // A field keeps Space and Enter (a space, the command), and an open word
   // list takes Escape to close itself; any other Escape skips, text kept.
@@ -331,6 +422,7 @@ function onNarrationKey(event: KeyboardEvent): void {
 onMounted(() => {
   fieldFocused.value = !!document.activeElement?.matches(COMMAND_BOX)
   document.addEventListener('keydown', onNarrationKey)
+  document.addEventListener('keydown', onPaperKey)
   document.addEventListener('focusin', onFocusChange)
   document.addEventListener('focusout', onFocusChange)
   // The game opens with its first act intro already showing.
@@ -342,6 +434,13 @@ onMounted(() => {
     })
     storyResize.observe(storyEl.value)
   }
+  if (typeof ResizeObserver !== 'undefined') {
+    // The paper grows with its content, and with the play area it may fill half of.
+    paperResize = new ResizeObserver(measurePaper)
+    if (contentEl.value) paperResize.observe(contentEl.value)
+    if (mainEl.value) paperResize.observe(mainEl.value)
+  }
+  measurePaper()
 })
 
 // The action row is a new element after a new game: follow the current one.
@@ -364,15 +463,26 @@ watch(
 )
 onUnmounted(() => {
   document.removeEventListener('keydown', onNarrationKey)
+  document.removeEventListener('keydown', onPaperKey)
   document.removeEventListener('focusin', onFocusChange)
   document.removeEventListener('focusout', onFocusChange)
   narration.skipAll()
   storyResize?.disconnect()
   actionsResize?.disconnect()
+  paperResize?.disconnect()
 })
 
-// Larger or smaller text changes how much of the turn is still below.
-watch(() => settings.textSize, updateMoreBelow, { flush: 'post' })
+// Larger or smaller text changes how much of the turn is still below, and how
+// tall the paper grows.
+watch(
+  () => settings.textSize,
+  () => {
+    measurePaper()
+    updateMoreBelow()
+  },
+  { flush: 'post' },
+)
+watch(wide, measurePaper, { flush: 'post' })
 
 // A reading that ends (above all a skip) draws the rest of the turn at once,
 // which grows the story without scrolling it (the room kept for the hint
@@ -544,7 +654,7 @@ watch(
     const away = !wide.value && section.value !== 'story'
     section.value = 'story'
     await nextTick()
-    const latest = storyEl.value?.lastElementChild
+    const latest = contentEl.value?.lastElementChild
     // A held story is moved only through `moveStory`, which knows where it belongs.
     if (storyHeld.value && latest && storyEl.value)
       moveStory(
@@ -618,13 +728,19 @@ const NARRATION_HELP =
   'double-tap or press Esc to show the rest at once. Any action cuts in. ' +
   'Turn narration off in Settings.\n'
 
+/** Help's line for the key that hides the narration paper (laptop only). */
+const NARRATION_KEY_HELP = '\nN — hide or show the narration\n'
+
 /** Stats or Help as HTML (Help ends with the music credits). */
 const infoHtml = computed(() => {
   const kind = gameDialog.value
   if (kind !== 'stats' && kind !== 'help') return ''
   const html = renderMarkup(game.readInfo(kind))
   return kind === 'help'
-    ? html + renderMarkup(NARRATION_HELP) + music.buildAttributionHtml()
+    ? html +
+        renderMarkup(NARRATION_HELP) +
+        (wide.value ? renderMarkup(NARRATION_KEY_HELP) : '') +
+        music.buildAttributionHtml()
     : html
 })
 
@@ -702,7 +818,6 @@ function onNameKeydown(event: KeyboardEvent): void {
 }
 
 // Names in the story are Tab stops (see useNameStops) while they have a menu.
-const mainEl = ref<HTMLElement | null>(null)
 const { sync: syncNameStops } = useNameStops(mainEl, {
   wide: () => wide.value,
   reachable: (name) => actionsOf(name).length > 0,
@@ -866,9 +981,15 @@ watch(
         </div>
         <StageSpeech v-if="wide" @focus-story="focusStory" />
         <div
-          v-show="wide || section === 'story'"
+          v-show="wide ? paper.visible.value : section === 'story'"
+          ref="paperEl"
           class="lq-story-wrap"
-          :class="{ 'lq-hint-room': storyHeld }"
+          :class="{
+            'lq-hint-room': storyHeld,
+            'lq-paper-away': paperAway,
+          }"
+          :style="wide && paperPx !== null ? { height: `${paperPx}px` } : {}"
+          :inert="paperAway || undefined"
         >
           <section
             ref="storyEl"
@@ -880,8 +1001,24 @@ watch(
             @scroll.passive="updateMoreBelow"
           >
             <h2 class="lq-sr-only">Story</h2>
-            <StoryTurn v-for="turn in game.turns" :key="turn.id" :turn="turn" />
+            <div ref="contentEl" class="lq-paper-content">
+              <StoryTurn
+                v-for="turn in storyTurns"
+                :key="turn.id"
+                :turn="turn"
+              />
+            </div>
           </section>
+          <button
+            v-if="wide"
+            type="button"
+            class="lq-paper-corner lq-paper-hide"
+            title="Hide the narration (N)"
+            aria-keyshortcuts="N"
+            @click="hidePaper"
+          >
+            ▾ Hide
+          </button>
           <p
             v-if="narration.hintVisible"
             class="lq-narration-hint"
@@ -897,6 +1034,23 @@ watch(
             @click="readOn"
           >
             More below <span aria-hidden="true">↓</span>
+          </button>
+        </div>
+        <div
+          v-if="wide"
+          class="lq-paper-tabrow"
+          :class="{ 'lq-paper-none': !paper.visible.value }"
+        >
+          <button
+            v-if="paperAway"
+            ref="tabEl"
+            type="button"
+            class="lq-paper-tab"
+            title="Show the narration (N)"
+            aria-keyshortcuts="N"
+            @click="showPaper"
+          >
+            ▴ Narration
           </button>
         </div>
 
@@ -1069,8 +1223,13 @@ watch(
   max-width: 55%;
 }
 .lq-wide .lq-story-wrap {
-  flex: 0 0 33%;
+  flex: 0 0 auto;
+  max-height: 50%;
   margin-top: auto;
+  /* The paper glides as it grows (its height is set from its content). */
+  transition:
+    height calc(0.2s * var(--lq-motion)) ease,
+    transform calc(0.2s * var(--lq-motion)) ease;
   z-index: 2;
   padding: 0 24px;
   background: color-mix(in srgb, var(--lq-surface) 96%, transparent);
@@ -1078,6 +1237,63 @@ watch(
 }
 .lq-wide .lq-story {
   padding-top: 14px;
+}
+/* Hidden: slid down behind the actions, and out of reach until the tab brings it back. */
+.lq-wide .lq-story-wrap.lq-paper-away {
+  transform: translateY(100%);
+  visibility: hidden;
+  transition:
+    transform calc(0.2s * var(--lq-motion)) ease,
+    visibility 0s linear calc(0.2s * var(--lq-motion));
+}
+.lq-paper-content {
+  display: flex;
+  flex-direction: column;
+  gap: calc(18px * var(--lq-density));
+}
+.lq-paper-corner {
+  position: absolute;
+  top: 8px;
+  right: 24px;
+  z-index: 1;
+  height: 32px;
+  padding: 0 12px;
+  border: 1px solid var(--lq-line);
+  border-radius: 16px;
+  background: var(--lq-raised);
+  color: var(--lq-muted);
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+}
+.lq-paper-corner:hover {
+  color: var(--lq-fg);
+}
+/* A zero-height row on the edge of the actions, so the tab rests on them. */
+.lq-paper-tabrow {
+  position: relative;
+  z-index: 3;
+  flex: 0 0 0;
+}
+/* With no paper (an empty turn) the row takes over pushing the
+   actions to the foot of the stage. */
+.lq-paper-tabrow.lq-paper-none {
+  margin-top: auto;
+}
+.lq-paper-tab {
+  position: absolute;
+  right: 16px;
+  bottom: 0;
+  height: 32px;
+  padding: 0 14px;
+  border: 1px solid var(--lq-line);
+  border-bottom: none;
+  border-radius: 10px 10px 0 0;
+  background: color-mix(in srgb, var(--lq-surface) 96%, transparent);
+  color: var(--lq-accent-text);
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
 }
 .lq-wide .lq-composer {
   position: relative;
@@ -1187,7 +1403,6 @@ watch(
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: calc(18px * var(--lq-density));
   /* Room left of the words for the rule of a paragraph being read, which sits
      12px out (StoryTurn): a scrolling story clips whatever sticks out of it.
      The words stay where they were. */
