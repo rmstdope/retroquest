@@ -66,19 +66,34 @@ function follow(event: Event): void {
   if (top >= 0 && at.bottom - box.top <= box.height * BAND_END) return
   el.scrollTo({
     top: el.scrollTop + top - el.clientHeight * PLACE_AT,
-    behavior: motionReduced() ? 'instant' : 'smooth',
+    behavior: motionReduced() ? 'auto' : 'smooth',
   })
 }
 
-watch(text, async (el) => {
+/** Measure the box afresh, and watch it and its lines for a change of size. */
+async function watchBox(el: HTMLElement | null): Promise<void> {
   observer?.disconnect()
   await nextTick()
   measure()
   if (el && typeof ResizeObserver !== 'undefined') {
     observer ??= new ResizeObserver(() => requestAnimationFrame(measure))
     observer.observe(el)
+    el.querySelectorAll('.lq-arrival-line').forEach((line) =>
+      observer?.observe(line),
+    )
   }
-})
+}
+
+watch(text, watchBox)
+// A new arrival whose first part is of the same kind reuses the box: start it
+// at its first line.
+watch(
+  () => [arrival.turnId, arrival.part?.kind, arrival.part?.lines[0]?.unit],
+  () => {
+    if (text.value) text.value.scrollTop = 0
+    void watchBox(text.value)
+  },
+)
 onBeforeUnmount(() => observer?.disconnect())
 </script>
 
@@ -213,8 +228,8 @@ onBeforeUnmount(() => observer?.disconnect())
   flex: 0 1 auto;
   min-height: 0;
   align-self: stretch;
-  margin: -6px -12px;
-  padding: 6px 12px;
+  margin: -20px -24px;
+  padding: 20px 24px;
   overflow-y: auto;
   overscroll-behavior: contain;
   scrollbar-width: none;

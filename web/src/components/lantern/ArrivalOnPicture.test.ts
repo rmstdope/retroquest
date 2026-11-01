@@ -261,6 +261,20 @@ describe('ArrivalOnPicture', () => {
       expect(el.classes()).not.toContain('lq-fade-t')
     })
 
+    it('starts a second arrival of the same kind at its first line', async () => {
+      const w = await told(900, 300)
+      await scrollTo(w, 400)
+      expect(w.get('.lq-arrival-text').classes()).toContain('lq-fade-t')
+      const store = useArrivalStore()
+      store.clear()
+      store.show(2, [description], false)
+      for (let i = 0; i < 4; i++) await w.vm.$nextTick()
+      const el = w.get('.lq-arrival-text')
+      expect(el.element.scrollTop).toBe(0)
+      expect(el.classes()).not.toContain('lq-fade-t')
+      expect(el.classes()).toContain('lq-fade-b')
+    })
+
     it('follows the lit word that leaves the visible text, and takes the event', async () => {
       const w = await told(900, 300, true)
       const text = w.get('.lq-arrival-text').element
@@ -314,7 +328,7 @@ describe('ArrivalOnPicture', () => {
       word.dispatchEvent(
         new CustomEvent(FOLLOW_EVENT, { bubbles: true, cancelable: true }),
       )
-      expect(scrollTo.mock.calls[0][0].behavior).toBe('instant')
+      expect(scrollTo.mock.calls[0][0].behavior).toBe('auto')
       document.documentElement.style.removeProperty('--lq-motion')
     })
 

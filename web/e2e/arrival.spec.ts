@@ -167,11 +167,13 @@ test.describe('the arrival told on the picture', () => {
       (el) => el.scrollHeight > el.clientHeight,
     )
     expect(scrolls).toBe(true)
+    const box = await text.boundingBox()
     const pill = await arrival(page).locator('.lq-arrival-pill').boundingBox()
     const stage = await arrival(page).boundingBox()
     expect(pill).not.toBeNull()
     expect(stage).not.toBeNull()
     expect(pill!.y).toBeGreaterThan(0)
+    expect(box!.y).toBeGreaterThanOrEqual(stage!.y + 100)
     expect(pill!.y + pill!.height).toBeLessThanOrEqual(
       stage!.y + stage!.height - 100,
     )
