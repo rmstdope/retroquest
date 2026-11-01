@@ -1127,6 +1127,20 @@ describe('ActionComposer on the stage', () => {
     w.unmount()
   })
 
+  it('lights a verb from behind More… while its row is open, and puts the row away on a second tap', async () => {
+    const w = stage()
+    await click(w, '[data-more]')
+    await w.get('[data-verb="caston"]').trigger('click')
+    const castOn = w.get('[data-verb="caston"]')
+    expect(castOn.classes()).toContain('lq-verb-on')
+    expect(castOn.attributes('aria-pressed')).toBe('true')
+    expect(w.get('[data-verb="drop"]').attributes('aria-pressed')).toBe('false')
+
+    await castOn.trigger('click')
+    expect(w.find('.lq-row').exists()).toBe(false)
+    w.unmount()
+  })
+
   it('names the choices as a group', async () => {
     const w = stage()
     await click(w, '[data-verb="talk"]')

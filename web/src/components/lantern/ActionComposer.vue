@@ -557,6 +557,8 @@ function onTypedEnter(): void {
             :key="v.id"
             type="button"
             class="lq-verb"
+            :class="{ 'lq-verb-on': verb?.id === v.id }"
+            :aria-pressed="verb?.id === v.id ? 'true' : 'false'"
             :data-verb="v.id"
             :disabled="!game.acceptInput"
             @click="pickVerb(v)"
