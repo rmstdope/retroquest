@@ -16,13 +16,20 @@ import {
 const read = (path: string): string =>
   readFileSync(new URL(path, import.meta.url), 'utf8')
 
-/** The colour tokens the inline tags (`.theme-*` in lantern.css) are drawn in. */
+/**
+ * The colour tokens the inline tags are drawn in: every rule of lantern.css
+ * whose selector list names a `.theme-*` class, grouped or not.
+ */
 function inlineTagColourTokens(): string[] {
   const css = read('../../lantern/lantern.css')
-  const tokens = [
-    ...css.matchAll(/\n\.theme-\w+ \{[^}]*\bcolor: var\((--lq-[\w-]+)\)/g),
-  ].map((m) => m[1])
-  return [...new Set(tokens)]
+  const tokens = [...css.matchAll(/([^{}]*)\{([^}]*)\}/g)]
+    .filter((m) => m[1].includes('.theme-'))
+    .flatMap((m) =>
+      [...m[2].matchAll(/(?:^|[;\s])color: var\((--lq-[\w-]+)\)/g)].map(
+        (c) => c[1],
+      ),
+    )
+  return [...new Set(tokens)].sort()
 }
 
 /** The `--name: value` declarations of the arrival's rule on a picture. */
@@ -123,7 +130,16 @@ describe('ArrivalOnPicture', () => {
     )
 
     it('finds the colours the inline tags use', () => {
-      expect(inlineTagColourTokens()).toContain('--lq-character')
+      expect(inlineTagColourTokens()).toEqual([
+        '--lq-accent-text',
+        '--lq-character',
+        '--lq-failure',
+        '--lq-fg',
+        '--lq-item',
+        '--lq-muted',
+        '--lq-spell',
+        '--lq-success',
+      ])
     })
 
     it.each(inlineTagColourTokens())(
