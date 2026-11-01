@@ -79,8 +79,9 @@ import TitlePage from './TitlePage.vue'
  * drawer. A phone keeps the paper as a band under the picture.
  * The first time the player walks into a room its arrival is told on the
  * middle of the picture instead (`ArrivalOnPicture`, `useArrivalStore`): the
- * paper slides down to its "▴ Narration" tab and comes back, with everything
- * told in it, when the arrival clears. Enter or Space goes on, a click on the
+ * paper slides down to its "▴ Narration" tab and comes back when the arrival
+ * clears (on the laptop as a slim card with the command, the room itself having
+ * been told in the middle). Enter or Space goes on, a click on the
  * picture too; Escape, the tab, an action or typing clear it at once.
  * Smaller screens that are not short (a phone upright) play the same stage
  * arranged for a tall screen: the plate across the top with "⟲ Story so far"
@@ -1286,7 +1287,7 @@ watch(
             wide
               ? {
                   top: `${cardsTop}px`,
-                  bottom: `calc(${actionsHeight}px + 6px)`,
+                  bottom: `calc(${actionsHeight}px + 12px)`,
                 }
               : staged && paperPx !== null
                 ? { height: `${paperPx}px` }
@@ -1294,16 +1295,6 @@ watch(
           "
           :inert="paperAway || undefined"
         >
-          <button
-            v-if="staged"
-            type="button"
-            class="lq-paper-corner lq-paper-hide"
-            :title="wide ? 'Hide the narration (N)' : undefined"
-            :aria-keyshortcuts="wide ? 'N' : undefined"
-            @click="hidePaper"
-          >
-            ▾ Hide
-          </button>
           <section
             ref="storyEl"
             class="lq-story"
@@ -1324,6 +1315,16 @@ watch(
               />
             </div>
           </section>
+          <button
+            v-if="staged"
+            type="button"
+            class="lq-paper-corner lq-paper-hide"
+            :title="wide ? 'Hide the narration (N)' : undefined"
+            :aria-keyshortcuts="wide ? 'N' : undefined"
+            @click="hidePaper"
+          >
+            ▾ Hide
+          </button>
           <p
             v-if="narration.hintVisible"
             class="lq-narration-hint"
@@ -1594,7 +1595,8 @@ watch(
 .lq-cards .lq-story {
   flex: 0 1 auto;
   gap: 8px;
-  padding: 0 12px 6px 12px;
+  /* The top padding keeps the fade on empty space, so a lone card is fully lit. */
+  padding: 16px 12px 6px 12px;
   /* The oldest card leaves at the top under a soft fade. */
   mask-image: linear-gradient(to bottom, transparent, #000 16px);
   scrollbar-width: none;
@@ -1617,6 +1619,7 @@ watch(
   padding-bottom: 40px;
 }
 .lq-cards .lq-paper-corner {
+  order: -1;
   position: static;
   align-self: flex-start;
   flex: 0 0 auto;

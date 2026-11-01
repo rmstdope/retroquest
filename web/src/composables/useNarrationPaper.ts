@@ -11,7 +11,7 @@ export interface NarrationPaper {
   hidden: Ref<boolean>
   /** The turns the paper holds: the current one only, or on the laptop the cards since the last room change. */
   shownTurns: ComputedRef<Turn[]>
-  /** There is a paper (or its tab): the current turn has something to tell. */
+  /** There is a paper (or its tab): the current turn has something to tell, or on the laptop a card exists. */
   visible: ComputedRef<boolean>
   hide(): void
   show(): void

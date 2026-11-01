@@ -4,8 +4,8 @@ import { arrivesOnPicture } from './stageArrival'
 /**
  * Whether a turn has anything for the narration paper to tell: an answer (an
  * error reply too), an item or spell chip, a quest card or a room arrival.
- * This is the one place that decides it; a turn that tells nothing shows no
- * paper and no tab.
+ * This decides it for the phone's paper (`turnHasCard` does for the laptop's
+ * cards); a turn that tells nothing shows no paper and no tab.
  */
 export function turnTells(turn: Turn): boolean {
   return (

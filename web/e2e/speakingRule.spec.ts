@@ -102,6 +102,11 @@ for (const width of [1280, 360]) {
       await expect(told.last()).toBeVisible()
       await page.keyboard.press('Escape')
       await expect(told).toHaveCount(0)
+      if (width === 360) {
+        const arrival = page.getByTestId('turn').first().locator('.lq-arrival')
+        await expectRuleBesideText(arrival)
+        return
+      }
       // A first visit is told in the middle, not on the card: look tells it there.
       const input = page.getByLabel('Command', { exact: true })
       await page
