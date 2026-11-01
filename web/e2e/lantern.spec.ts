@@ -436,6 +436,12 @@ test.describe('Lantern UI (the default)', () => {
     await page.getByRole('button', { name: /Bag · 1/ }).click()
     const drawer = page.getByRole('complementary', { name: 'Journal drawer' })
     await expect(drawer.getByRole('tab', { name: /Bag · 1/ })).toBeVisible()
+    // It stops above the actions, so every action stays in reach.
+    const drawerBox = await drawer.boundingBox()
+    const actionVerbs = await page.locator('.lq-verbs').boundingBox()
+    expect(drawerBox!.y + drawerBox!.height).toBeLessThanOrEqual(
+      actionVerbs!.y + 1,
+    )
     // The lit button stays in sight, and pressing it again closes the drawer.
     await page.getByRole('button', { name: /Quests · 0/ }).click()
     await expect(page.getByRole('button', { name: /Quests · 0/ })).toBeVisible()
