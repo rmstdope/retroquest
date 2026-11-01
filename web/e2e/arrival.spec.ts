@@ -8,6 +8,40 @@ async function startAct1(page: Page): Promise<void> {
   await page.locator('.lq-chapter-button').click()
 }
 
+/** Push a further first-visit arrival into the turns, as a new room would. */
+async function pushArrival(page: Page): Promise<void> {
+  await page.evaluate(() => {
+    const app = (
+      document.querySelector('#app') as unknown as {
+        __vue_app__: {
+          config: {
+            globalProperties: {
+              $pinia: { state: { value: { game: { turns: unknown[] } } } }
+            }
+          }
+        }
+      }
+    ).__vue_app__
+    app.config.globalProperties.$pinia.state.value.game.turns.push({
+      id: 999,
+      command: null,
+      text: '',
+      room: 'Nowhere',
+      description: { moved: true, firstVisit: true },
+      gained: [],
+      lost: [],
+      narrate: true,
+      arrival: {
+        room: 'Nowhere',
+        description: 'Some place.',
+        characters: [],
+        items: [],
+        exits: {},
+      },
+    })
+  })
+}
+
 const arrival = (page: Page) => page.getByTestId('arrival-on-picture')
 const story = (page: Page) => page.getByRole('region', { name: 'Story' })
 
@@ -48,6 +82,24 @@ test.describe('the arrival told on the picture', () => {
     await expect(commands).toHaveCount(before)
   })
 
+  test('goes on with Enter in the empty command box', async ({ page }) => {
+    await startAct1(page)
+    await page
+      .getByRole('region', { name: 'Actions' })
+      .getByRole('button', { name: 'Type', exact: true })
+      .click()
+    await pushArrival(page)
+    const line = arrival(page).locator('.lq-arrival-line')
+    await expect(line).toHaveText('Some place.')
+    const commands = page.getByTestId('command')
+    const before = await commands.count()
+    await page.getByLabel('Command').focus()
+    await page.keyboard.press('Enter')
+    await expect(line).toHaveCount(0)
+    await expect(story(page)).toBeVisible()
+    await expect(commands).toHaveCount(before)
+  })
+
   test('clears when an action is chosen', async ({ page }) => {
     await startAct1(page)
     await expect(arrival(page).locator('.lq-arrival-line')).toBeVisible()
@@ -64,37 +116,7 @@ test.describe('the arrival told on the picture', () => {
       .getByRole('region', { name: 'Actions' })
       .getByRole('button', { name: 'Type', exact: true })
       .click()
-    // Another arrival, with the command box already open.
-    await page.evaluate(() => {
-      const app = (
-        document.querySelector('#app') as unknown as {
-          __vue_app__: {
-            config: {
-              globalProperties: {
-                $pinia: { state: { value: { game: { turns: unknown[] } } } }
-              }
-            }
-          }
-        }
-      ).__vue_app__
-      app.config.globalProperties.$pinia.state.value.game.turns.push({
-        id: 999,
-        command: null,
-        text: '',
-        room: 'Nowhere',
-        description: { moved: true, firstVisit: true },
-        gained: [],
-        lost: [],
-        narrate: true,
-        arrival: {
-          room: 'Nowhere',
-          description: 'Some place.',
-          characters: [],
-          items: [],
-          exits: {},
-        },
-      })
-    })
+    await pushArrival(page)
     await expect(arrival(page).locator('.lq-arrival-line')).toHaveText(
       'Some place.',
     )

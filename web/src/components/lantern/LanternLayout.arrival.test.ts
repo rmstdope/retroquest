@@ -207,6 +207,25 @@ describe('LanternLayout: the arrival on the picture', () => {
     expect(useGameStore().turns).toHaveLength(turns)
   })
 
+  it('goes on with Enter in the empty command box, whose own handler has already taken the key', async () => {
+    useSettingsStore().startMode = 'type'
+    const w = await ready()
+    await run('go north')
+    const turns = useGameStore().turns.length
+    const input = w.get('.lq-type-input').element as HTMLInputElement
+    input.focus()
+    const down = new KeyboardEvent('keydown', {
+      key: 'Enter',
+      bubbles: true,
+      cancelable: true,
+    })
+    input.dispatchEvent(down)
+    await vi.advanceTimersByTimeAsync(0)
+    expect(card(w)).toBe('')
+    expect(storyAside(w)).toBe(false)
+    expect(useGameStore().turns).toHaveLength(turns)
+  })
+
   it('goes on with Space from a focused verb, and swallows its key-up', async () => {
     const w = await ready()
     await run('go north')
