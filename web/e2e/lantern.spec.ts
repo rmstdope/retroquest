@@ -453,6 +453,30 @@ test.describe('Lantern UI (the default)', () => {
     await expect(actions.locator('.lq-verbs .lq-verb').first()).toBeFocused()
   })
 
+  // The stage's Actions button carries the same Esc mark while the command
+  // box has focus; a press on it once blurred the box, the mark went, Actions
+  // narrowed and the field grew under the pointer, so the click missed
+  // (rq-u8b2).
+  test('acts on the first click on the Esc mark of the stage Actions while typing', async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 1280, height: 800 })
+    await page.goto('/')
+    await injectMockState(page)
+    await page.getByRole('button', { name: 'Type', exact: true }).click()
+    const input = page.getByLabel('Command')
+    await expect(input).toBeFocused()
+    await input.pressSequentially('lo')
+    // Escape puts the word list away first.
+    await input.press('Escape')
+    await expect(page.getByRole('listbox')).toHaveCount(0)
+    await expect(input).toBeFocused()
+
+    await page.locator('[data-actions] .lq-esc').click()
+    await expect(input).toHaveCount(0)
+    await expect(page.locator('.lq-verbs .lq-verb').first()).toBeFocused()
+  })
+
   test('plays the room on its picture on a laptop: plate, buttons, map on pointing, drawer', async ({
     page,
   }) => {
