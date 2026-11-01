@@ -9,8 +9,11 @@ async function startAct1(page: Page): Promise<void> {
 }
 
 /** Push a further first-visit arrival into the turns, as a new room would. */
-async function pushArrival(page: Page): Promise<void> {
-  await page.evaluate(() => {
+async function pushArrival(
+  page: Page,
+  description = 'Some place.',
+): Promise<void> {
+  await page.evaluate((description) => {
     const app = (
       document.querySelector('#app') as unknown as {
         __vue_app__: {
@@ -33,13 +36,13 @@ async function pushArrival(page: Page): Promise<void> {
       narrate: true,
       arrival: {
         room: 'Nowhere',
-        description: 'Some place.',
+        description,
         characters: [],
         items: [],
         exits: {},
       },
     })
-  })
+  }, description)
 }
 
 const arrival = (page: Page) => page.getByTestId('arrival-on-picture')
@@ -144,6 +147,36 @@ test.describe('the arrival told on the picture', () => {
     await page.getByRole('button', { name: 'Start', exact: true }).click()
     await page.locator('.lq-chapter-button').click()
     await expect(arrival(page)).toContainText('Tap to continue')
+  })
+
+  test('keeps the continue pill in view under a long arrival on a phone', async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 390, height: 700 })
+    await page.goto('/')
+    await page.getByRole('button', { name: 'Start', exact: true }).click()
+    await page.locator('.lq-chapter-button').click()
+    await arrival(page).click()
+    await pushArrival(
+      page,
+      'A long, slow dream of fields and rivers. '.repeat(30),
+    )
+    const text = arrival(page).locator('.lq-arrival-text')
+    await expect(text).toBeVisible()
+    const scrolls = await text.evaluate(
+      (el) => el.scrollHeight > el.clientHeight,
+    )
+    expect(scrolls).toBe(true)
+    const box = await text.boundingBox()
+    const pill = await arrival(page).locator('.lq-arrival-pill').boundingBox()
+    const stage = await arrival(page).boundingBox()
+    expect(pill).not.toBeNull()
+    expect(stage).not.toBeNull()
+    expect(pill!.y).toBeGreaterThan(0)
+    expect(box!.y).toBeGreaterThanOrEqual(stage!.y + 100)
+    expect(pill!.y + pill!.height).toBeLessThanOrEqual(
+      stage!.y + stage!.height - 100,
+    )
   })
 
   test('leaves a short screen as it was', async ({ page }) => {
