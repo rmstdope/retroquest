@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { describe, it, expect, beforeEach, afterEach } from 'vitest'
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 import { mount, type VueWrapper } from '@vue/test-utils'
 import { nextTick } from 'vue'
 import { createPinia, setActivePinia } from 'pinia'
@@ -92,5 +92,34 @@ describe('StoryDrawer', () => {
     size(drawer, 700)
     await drawer.get('.lq-story-drawer-body').trigger('scroll')
     expect(drawer.find('.lq-newest').exists()).toBe(false)
+  })
+
+  it('opens scrolled to the end of the story', () => {
+    const proto = HTMLElement.prototype
+    const spy = vi.spyOn(proto, 'scrollHeight', 'get').mockReturnValue(1000)
+    const drawer = open()
+    expect(drawer.get('.lq-story-drawer-body').element.scrollTop).toBe(1000)
+    spy.mockRestore()
+  })
+
+  it('cancels the narration follow, so an older turn can be reread', () => {
+    const drawer = open()
+    const follow = new CustomEvent('lq-follow', {
+      bubbles: true,
+      cancelable: true,
+    })
+    drawer.get('[data-testid="turn"]').element.dispatchEvent(follow)
+    expect(follow.defaultPrevented).toBe(true)
+  })
+
+  it('keeps focus in the drawer when the pill it was pressed on goes', async () => {
+    const drawer = open()
+    size(drawer, 0)
+    await drawer.get('.lq-story-drawer-body').trigger('scroll')
+    ;(drawer.get('.lq-newest').element as HTMLElement).focus()
+    await drawer.get('.lq-newest').trigger('click')
+    expect(document.activeElement).toBe(
+      drawer.get('.lq-story-drawer-body').element,
+    )
   })
 })

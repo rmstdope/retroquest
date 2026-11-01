@@ -853,6 +853,76 @@ describe('LanternLayout', () => {
         expect(w.find(STORY).exists()).toBe(false)
       })
 
+      it('gives focus back to Story so far on ✕ and on a second press', async () => {
+        wrapper = mount(LanternLayout, { attachTo: document.body })
+        const w = wrapper
+        const button = w.get('[data-button="story"]').element
+        await w.get('[data-button="story"]').trigger('click')
+        await w.get(`${STORY} .lq-drawer-close`).trigger('click')
+        await flushPromises()
+        expect(document.activeElement).toBe(button)
+
+        await w.get('[data-button="story"]').trigger('click')
+        await w.get('[data-button="story"]').trigger('click')
+        await flushPromises()
+        expect(document.activeElement).toBe(button)
+      })
+
+      it('is swapped for the Quests drawer by Open in journal', async () => {
+        const w = mountLayout()
+        await w.get('[data-button="story"]').trigger('click')
+        useGameStore().questToOpen = 'Whispers'
+        await w.vm.$nextTick()
+        expect(w.find(STORY).exists()).toBe(false)
+        expect(w.get('[role="tab"][aria-selected="true"]').text()).toMatch(
+          /^Quests/,
+        )
+      })
+
+      it('stays open for a press in the name menu', async () => {
+        wrapper = mount(LanternLayout, { attachTo: document.body })
+        const w = wrapper
+        await w.get('[data-button="story"]').trigger('click')
+        const menu = document.createElement('div')
+        menu.className = 'lq-name-menu'
+        document.body.appendChild(menu)
+        menu.dispatchEvent(new Event('pointerdown', { bubbles: true }))
+        await w.vm.$nextTick()
+        expect(w.find(STORY).exists()).toBe(true)
+        menu.remove()
+      })
+
+      it('closes in a new game', async () => {
+        const w = mountLayout()
+        await w.get('[data-button="story"]').trigger('click')
+        useGameStore().gameNumber++
+        await w.vm.$nextTick()
+        expect(w.find(STORY).exists()).toBe(false)
+      })
+
+      it('follows the action row of a new game for its bottom edge', async () => {
+        const observed: Element[] = []
+        vi.stubGlobal(
+          'ResizeObserver',
+          class {
+            observe(el: Element): void {
+              observed.push(el)
+            }
+            disconnect(): void {}
+          },
+        )
+        const w = mountLayout()
+        await flushPromises()
+        const first = observed.at(-1)
+        useGameStore().gameNumber++
+        await flushPromises()
+        const last = observed.at(-1)
+        expect(last).toBeDefined()
+        expect(last).not.toBe(first)
+        w.unmount()
+        wrapper = undefined
+      })
+
       it('leaves the story band where it was', async () => {
         const w = mountLayout()
         const story = w.get('section[aria-label="Story"]').element

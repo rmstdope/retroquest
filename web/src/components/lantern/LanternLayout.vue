@@ -311,14 +311,26 @@ onMounted(() => {
     })
     storyResize.observe(storyEl.value)
   }
-  const actions = composer.value?.$el
-  if (typeof ResizeObserver !== 'undefined' && actions instanceof HTMLElement) {
+})
+
+// The action row is a new element after a new game: follow the current one.
+watch(
+  composer,
+  (current) => {
+    actionsResize?.disconnect()
+    const actions = current?.$el
+    if (
+      typeof ResizeObserver === 'undefined' ||
+      !(actions instanceof HTMLElement)
+    )
+      return
     actionsResize = new ResizeObserver(() => {
       actionsHeight.value = actions.offsetHeight
     })
     actionsResize.observe(actions)
-  }
-})
+  },
+  { flush: 'post' },
+)
 onUnmounted(() => {
   document.removeEventListener('keydown', onNarrationKey)
   document.removeEventListener('focusin', onFocusChange)

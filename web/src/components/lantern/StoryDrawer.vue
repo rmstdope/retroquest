@@ -11,7 +11,8 @@ import StoryTurn from './StoryTurn.vue'
  * pill at the foot scrolls back to it. ✕ and Escape ask the layout to close
  * it (which hands focus back to the button that opened it); Escape closes
  * only the drawer, so it does not also skip the narration. Opening or closing
- * it never touches the narration.
+ * it never touches the narration, and the narration's follow-the-word scroll
+ * (which belongs to the story band) does not pull this reader off an older turn.
  */
 const emit = defineEmits<{ close: [] }>()
 const game = useGameStore()
@@ -33,6 +34,9 @@ function updatePill(): void {
 function toNewest(smooth: boolean): void {
   const el = body.value
   if (!el) return
+  // The pill goes once the end is reached: keep focus (and Escape) in the drawer.
+  if (document.activeElement?.closest('.lq-newest'))
+    el.focus({ preventScroll: true })
   const still =
     getComputedStyle(document.documentElement)
       .getPropertyValue('--lq-motion')
@@ -87,6 +91,7 @@ function onKeydown(event: KeyboardEvent): void {
       role="region"
       aria-label="Story so far"
       tabindex="-1"
+      @lq-follow.prevent
       @scroll.passive="updatePill"
     >
       <StoryTurn v-for="turn in game.turns" :key="turn.id" :turn="turn" />
