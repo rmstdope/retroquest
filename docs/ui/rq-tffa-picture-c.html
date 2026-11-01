@@ -1,0 +1,100 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Option C</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700&family=Fraunces:wght@600&family=Source+Serif+4:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f5f0e6;--surface:#fffcf5;--raised:#efe8da;--line:#e2d9c6;--line2:#cfc4ad;--fg:#22201b;--prose:#36322a;--muted:#6b6455;--accent:#f29e00;--accentText:#7a4300;--accentSoft:#ffe0a0;--char:#2a5d9f;--charSoft:#e3edf9;--charLine:#a9c3e6;--item:#2e6e27;--itemSoft:#e4f2df;--itemLine:#a9d29e}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#d9d2c3;font-family:'DM Sans',system-ui,sans-serif;color:var(--fg);padding:28px 24px 60px}
+h1.page{font-family:Fraunces,serif;font-size:28px;margin-bottom:4px}
+p.lede{max-width:900px;color:#3d382f;margin-bottom:6px;line-height:1.45;font-size:15px}
+.cost{max-width:900px;color:#5a4a2a;background:#fff3d6;border-left:3px solid var(--accent);padding:8px 12px;margin:10px 0 22px;font-size:14px}
+.row{display:flex;gap:28px;flex-wrap:wrap;align-items:flex-start}
+.cap{font-size:13px;color:#4a443a;margin:0 0 6px;font-weight:600;letter-spacing:.02em}
+.cap span{font-weight:400;color:#6b6455}
+.frame{background:var(--bg);border:1px solid #b9ae98;border-radius:10px;overflow:hidden;position:relative;box-shadow:0 6px 24px rgba(0,0,0,.12)}
+.laptop{width:1280px;height:800px;transform:scale(.72);transform-origin:top left;margin-bottom:-224px;margin-right:-358px}
+.phone{width:390px;height:844px;border-radius:28px}
+.hdr{height:60px;border-bottom:1px solid var(--line);display:flex;align-items:center;padding:0 16px;gap:18px;background:var(--bg)}
+.brand{font-family:Fraunces,serif;font-weight:600;font-size:20px}
+.act{font-size:13px;color:var(--muted)}
+.sp{flex:1}
+.qbar{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted)}
+.qbar i{display:block;width:96px;height:6px;border-radius:3px;background:var(--raised);position:relative;overflow:hidden}
+.qbar i:after{content:'';position:absolute;inset:0;width:36%;background:var(--accent)}
+.nav{display:flex;gap:22px;font-size:14px}
+.ibtn{width:42px;height:42px;border:1px solid var(--line);border-radius:10px;background:var(--surface);display:grid;place-items:center;font-size:15px;font-weight:600}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px}
+.eyebrow{font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
+.rname{font-family:Fraunces,serif;font-weight:600;font-size:22px}
+.prose{font-family:'Source Serif 4',Georgia,serif;font-size:16px;line-height:1.5;color:var(--prose)}
+.chip{display:inline-block;font-size:13px;padding:4px 11px;border-radius:999px;border:1px solid var(--charLine);background:var(--charSoft);color:var(--char);margin:0 6px 6px 0}
+.chip.item{border-color:var(--itemLine);background:var(--itemSoft);color:var(--item)}
+.chip.exit{border-color:var(--line2);background:var(--raised);color:var(--fg)}
+.cmd{font-size:13px;color:var(--accentText);font-weight:600;margin:14px 0 4px}
+.cmd:before{content:'› '}
+.say{border-left:3px solid var(--charLine);padding-left:10px;margin-top:6px}
+.say b{display:block;font-family:'DM Sans';font-size:12px;color:var(--char);font-weight:600;margin-bottom:2px}
+.ev{font-size:13px;color:var(--muted);margin-top:8px}
+.ev:before{content:'◆ ';color:var(--accent)}
+.comp{padding:12px}
+.tabs2{display:inline-flex;background:var(--raised);border:1px solid var(--line);border-radius:10px;padding:3px;font-size:13px;margin-bottom:10px}
+.tabs2 span{padding:7px 14px;border-radius:8px;color:var(--muted)}
+.tabs2 span.on{background:var(--surface);color:var(--fg);font-weight:600}
+.verbs{display:grid;grid-template-columns:repeat(8,1fr);gap:8px}
+.verbs span{background:var(--raised);border:1px solid var(--line);border-radius:9px;text-align:center;padding:11px 0;font-size:14px}
+.aside{display:flex;flex-direction:column;gap:12px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;padding:12px}
+.grid3 span{height:52px;border:1px dashed var(--line2);border-radius:8px;font-size:12px;display:grid;place-items:center;text-align:center;color:var(--muted)}
+.grid3 span.ex{border:1px solid var(--line2);background:var(--raised);color:var(--fg)}
+.grid3 span.me{border:1px solid var(--accent);background:var(--accentSoft);color:var(--fg);font-weight:600}
+.jt{display:flex;gap:18px;padding:12px 16px 0;font-size:14px;border-bottom:1px solid var(--line)}
+.jt span{padding-bottom:10px}.jt span.on{border-bottom:2px solid var(--accent);font-weight:600}
+.jb{padding:12px 16px;font-size:14px;color:var(--muted)}
+.tabbar{position:absolute;left:0;right:0;bottom:0;height:46px;border-top:1px solid var(--line);display:flex;background:var(--bg);font-size:13px}
+.tabbar span{flex:1;text-align:center;padding-top:14px;color:var(--muted)}
+.tabbar span.on{color:var(--accentText);font-weight:700;border-top:2px solid var(--accent);margin-top:-1px}
+.dock{position:absolute;left:12px;right:12px;bottom:58px;height:50px;display:flex;align-items:center;gap:8px;padding:0 10px;font-size:13px}
+.dock .ex{flex:1;white-space:nowrap;overflow:hidden}
+.dock b{background:var(--raised);border:1px solid var(--line);border-radius:8px;padding:7px 10px;font-weight:600}
+.phdr{height:60px;border-bottom:1px solid var(--line);display:flex;align-items:center;padding:0 10px;gap:10px}
+.phdr .t{font-family:Fraunces,serif;font-weight:600;font-size:18px;line-height:1.1}
+.phdr .s{font-size:12px;color:var(--muted)}
+.ph{background:repeating-linear-gradient(135deg,#ece4d3 0 10px,#e6dcc8 10px 20px);display:grid;place-items:center;color:var(--muted);font-size:13px}
+.note{font-size:12px;color:#6b4e12;background:#fff3d6;border:1px dashed var(--accent);border-radius:8px;padding:6px 9px;position:absolute;z-index:5;max-width:230px;line-height:1.35}
+.more{position:absolute;left:50%;transform:translateX(-50%);background:var(--fg);color:var(--bg);font-size:12px;padding:6px 12px;border-radius:999px}
+
+.arr{margin:6px 0 14px}
+.arr img{width:100%;border-radius:10px;display:block;aspect-ratio:16/9;object-fit:cover}
+.arr .rname{margin:10px 0 4px}
+.old img{filter:saturate(.6);opacity:.85}
+</style></head><body><h1 class="page">Option C · Pictures in the story</h1><p class="lede">The picture belongs to the arrival: every time you enter a room, the story opens that part with its picture, full width. Earlier rooms keep their (smaller, faded) pictures further up, so the story reads like an illustrated book of your journey.</p><div class="cost">Cost: closest to a picture book and simple on a phone, but the picture scrolls away as you play, so it heads the room only until you start doing things there.</div><p class="cap">Laptop <span>1280×800, shown at 72%</span></p><div class="frame laptop"><div class="hdr"><span class="brand">RetroQuest</span><span class="act">Act I</span><span class="sp"></span>
+<span class="qbar">Quests <i></i> 4/11</span><span class="nav"><span>Save</span><span>Load</span><span>Stats</span><span>Settings</span><span>Help</span></span>
+<span class="ibtn">⛶</span><span class="ibtn">Aa</span><span class="ibtn">☾</span></div>
+<div style="display:flex;gap:20px;padding:16px 36px;height:740px">
+ <div style="flex:1;display:flex;flex-direction:column;gap:12px;min-width:0">
+  <div style="flex:1;overflow:hidden;padding:0 120px;position:relative"><div style="position:absolute;left:120px;right:120px;bottom:0"><div class="arr old"><img src="../../web/public/images/generated/act1-eliors-cottage.png" style="max-height:150px"><div class="rname" style="font-size:18px">Elior's Cottage</div></div>
+<div class="cmd">go east</div>
+<div class="arr"><img src="../../web/public/images/generated/act1-village-square.png"><div class="rname">Village Square</div><div class="prose">The heart of Willowbrook: cobblestones around an old stone fountain, and a weathered notice board covered in faded announcements. Half the market stalls stand empty. The people at the others keep their voices down, and stop talking when you pass.</div><div style="margin-top:8px"><span class="chip">Villager</span><span class="chip item">Notice Board</span></div></div><div class="cmd">examine notice board</div>
+<div class="prose">Most of the notices are faded past reading. One is newer: a drawing of a calico cat, and under it, <i>Lost: Patches. Reward of one coin. Ask at the store.</i></div>
+<div class="cmd">talk to villager</div>
+<div class="prose say"><b>Villager</b>“The crops won't take this year. Not on any farm. My grandmother says she's never seen the like.”</div></div></div>
+  <div class="card comp"><div class="tabs2"><span class="on">Actions</span><span>Type</span></div>
+<div class="verbs"><span>Look</span><span>Examine</span><span>Search</span><span>Take</span><span>Drop</span><span>Use</span><span>Talk</span><span>Say</span><span>Give</span><span>Buy</span><span>Open</span><span>Close</span><span>Cast</span><span>Rest</span><span>More…</span></div></div>
+ </div><div class="aside" style="width:340px"><div class="card"><div class="grid3"><span></span><span class="ex">General Store</span><span></span>
+<span class="ex">Elior's Cottage</span><span class="me">Village Square</span><span class="ex">Village Well</span><span></span><span class="ex">Blacksmith's Forge</span><span></span></div></div>
+<div class="card" style="flex:1"><div class="jt"><span class="on">Bag · 2</span><span>Spells · 1</span><span>Quests · 3 active</span></div><div class="jb">Bread · Lantern</div></div></div></div>
+<div class="note" style="left:40px;top:120px">No room card: each arrival in the story opens with the room's picture, like a chapter in an illustrated book. Scroll back and you see the way you came.</div></div>
+<div class="row" style="margin-top:28px"><div><p class="cap">Phone · arriving</p><div class="frame phone"><div class="phdr"><span class="ibtn">☰</span><div style="flex:1;min-width:0"><div class="t">Village Square</div><div class="s">Act I · Quests 4/11</div></div><span class="ibtn">Aa</span></div>
+<div style="position:absolute;left:16px;right:16px;bottom:116px"><div class="arr old"><img src="../../web/public/images/generated/act1-eliors-cottage.png" style="max-height:150px"><div class="rname" style="font-size:18px">Elior's Cottage</div></div>
+<div class="cmd">go east</div>
+<div class="arr"><img src="../../web/public/images/generated/act1-village-square.png"><div class="rname">Village Square</div><div class="prose">The heart of Willowbrook: cobblestones around an old stone fountain, and a weathered notice board covered in faded announcements. Half the market stalls stand empty. The people at the others keep their voices down, and stop talking when you pass.</div><div style="margin-top:8px"><span class="chip">Villager</span><span class="chip item">Notice Board</span></div></div></div>
+<div class="dock card"><span class="ex">Exits: north · east · south · west</span><b>Actions ▴</b><b>⌨</b></div><div class="tabbar"><span class="on">Story</span><span>Bag</span><span>Spells</span><span>Quests</span><span>Map</span></div></div></div><div><p class="cap">Phone · playing on in the room</p><div class="frame phone"><div class="phdr"><span class="ibtn">☰</span><div style="flex:1;min-width:0"><div class="t">Village Square</div><div class="s">Act I · Quests 4/11</div></div><img src="../../web/public/images/generated/act1-village-square.png" style="width:54px;height:30px;object-fit:cover;border-radius:5px"><span class="ibtn">Aa</span></div>
+<div style="position:absolute;left:16px;right:16px;bottom:116px"><div class="cmd">examine notice board</div>
+<div class="prose">Most of the notices are faded past reading. One is newer: a drawing of a calico cat, and under it, <i>Lost: Patches. Reward of one coin. Ask at the store.</i></div>
+<div class="cmd">talk to villager</div>
+<div class="prose say"><b>Villager</b>“The crops won't take this year. Not on any farm. My grandmother says she's never seen the like.”</div><div class="cmd">examine notice board</div>
+<div class="prose">Most of the notices are faded past reading. One is newer: a drawing of a calico cat, and under it, <i>Lost: Patches. Reward of one coin. Ask at the store.</i></div>
+<div class="cmd">talk to villager</div>
+<div class="prose say"><b>Villager</b>“The crops won't take this year. Not on any farm. My grandmother says she's never seen the like.”</div></div>
+<div class="dock card"><span class="ex">Exits: north · east · south · west</span><b>Actions ▴</b><b>⌨</b></div><div class="tabbar"><span class="on">Story</span><span>Bag</span><span>Spells</span><span>Quests</span><span>Map</span></div><div class="note" style="right:12px;top:72px">When the picture has scrolled away, a small copy sits in the header; tap it to see it again.</div></div></div><div><p class="cap">Phone · a room with no picture yet</p><div class="frame phone"><div class="phdr"><span class="ibtn">☰</span><div style="flex:1;min-width:0"><div class="t">Main Square</div><div class="s">Act I · Quests 4/11</div></div><span class="ibtn">Aa</span></div>
+<div style="position:absolute;left:16px;right:16px;bottom:116px"><div style="border-top:1px solid var(--line2);margin:10px 0"></div><div class="rname">Main Square</div><div class="prose" style="font-size:15px;margin-top:4px">The heart of Greendale: a great fountain of old heroes fighting beasts, stalls under bright awnings, red roofs all round.</div></div>
+<div class="dock card"><span class="ex">Exits: north · east · south · west</span><b>Actions ▴</b><b>⌨</b></div><div class="tabbar"><span class="on">Story</span><span>Bag</span><span>Spells</span><span>Quests</span><span>Map</span></div><div class="note" style="left:16px;top:300px">No picture yet: the arrival is today's divider and name.</div></div></div></div></body></html>
