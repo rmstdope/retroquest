@@ -19,6 +19,8 @@ export const ARRIVAL_CLEAR_AFTER_MS = 1500
 export interface ArrivalLine {
   unit: number
   markup: string
+  /** The narration words that come before the markup in its unit (the room's name before the description); 0 when absent. */
+  wordBase?: number
 }
 
 /** One thing shown at a time on the picture: what happens on arrival, then the description. */
@@ -80,7 +82,14 @@ export function arrivalParts(
   if (events.length)
     parts.push({ kind: 'events', lines: events, voiced: spoken(events) })
   if (turn.arrival) {
-    const lines = [{ unit: blocks.length, markup: turn.arrival.description }]
+    const name = units[blocks.length]?.parts[0]?.markup ?? ''
+    const lines = [
+      {
+        unit: blocks.length,
+        markup: turn.arrival.description,
+        wordBase: narrationWords(name).length,
+      },
+    ]
     // The unit's first part is the room's name, which the plate shows.
     parts.push({ kind: 'description', lines, voiced: spoken(lines, 1) })
   }

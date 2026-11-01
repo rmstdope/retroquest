@@ -194,4 +194,138 @@ describe('useArrivalStore', () => {
       expect(arrival.barMs).toBe(6000)
     })
   })
+
+  describe('pages', () => {
+    const start = (word: number, text = 'a b c') => ({ unit: 0, word, text })
+
+    it('reads each page for its own reading time, with its own bar, then goes on', () => {
+      arrival.show(1, parts(false, false), false)
+      arrival.setPages([start(0), start(20, WORDS_48)])
+      expect(arrival.pageCount).toBe(2)
+      expect(arrival.page).toBe(0)
+      expect(arrival.barMs).toBe(6000)
+      const key = arrival.barKey
+      vi.advanceTimersByTime(6000)
+      expect(arrival.page).toBe(1)
+      expect(arrival.active).toBe(true)
+      expect(arrival.barMs).toBe(12000)
+      expect(arrival.barKey).not.toBe(key)
+      vi.advanceTimersByTime(12000)
+      expect(arrival.active).toBe(false)
+    })
+
+    it('a next turns the pages, then the part, then clears', () => {
+      arrival.show(1, parts(true, false), false)
+      arrival.setPages([start(0), start(3)])
+      arrival.next()
+      expect(arrival.part?.kind).toBe('events')
+      expect(arrival.page).toBe(1)
+      arrival.next()
+      expect(arrival.part?.kind).toBe('description')
+      expect(arrival.page).toBe(0)
+      expect(arrival.pageCount).toBe(1)
+      arrival.setPages([start(0), start(5), start(9)])
+      arrival.next()
+      arrival.next()
+      expect(arrival.active).toBe(true)
+      arrival.next()
+      expect(arrival.active).toBe(false)
+    })
+
+    it('a part reported as one page is one page', () => {
+      arrival.show(1, parts(false, false), false)
+      arrival.setPages([start(0)])
+      expect(arrival.barMs).toBe(6000)
+      arrival.next()
+      expect(arrival.active).toBe(false)
+    })
+
+    it('a new cut keeps the paragraph the player was reading', () => {
+      arrival.show(1, parts(false, false), false)
+      arrival.setPages([start(0), start(10), start(20)])
+      arrival.next()
+      arrival.next()
+      expect(arrival.page).toBe(2)
+      arrival.setPages([start(0), start(15)])
+      expect(arrival.page).toBe(1)
+      arrival.setPages([start(0)])
+      expect(arrival.page).toBe(0)
+    })
+
+    it('a new cut with the same pages does not restart the reading time', () => {
+      arrival.show(1, parts(false, false), false)
+      arrival.setPages([start(0), start(10)])
+      vi.advanceTimersByTime(5000)
+      arrival.setPages([start(0), start(10)])
+      vi.advanceTimersByTime(1000)
+      expect(arrival.page).toBe(1)
+    })
+
+    describe('with the narrator', () => {
+      const unit: NarrationUnit = {
+        kind: 'block',
+        parts: [
+          {
+            markup: 'a b c d e f',
+            clip: {
+              file: 'x.mp3',
+              speaker: 'narrator',
+              duration: 6,
+              words: Array.from({ length: 6 }, (_, k) => ({
+                word: 'w',
+                start: k,
+                end: k + 1,
+              })),
+            },
+          },
+        ],
+      }
+      function narrate(): void {
+        narration.begin(1, [unit], 'act1')
+        arrival.show(1, parts(false, true), true)
+        arrival.setPages([start(0), start(4)])
+      }
+
+      it('turns the page when the narrator reaches its first word', async () => {
+        narrate()
+        expect(arrival.page).toBe(0)
+        FakeAudio.all[0].currentTime = 3
+        vi.advanceTimersByTime(100)
+        await nextTick()
+        expect(arrival.page).toBe(0)
+        FakeAudio.all[0].currentTime = 4
+        vi.advanceTimersByTime(100)
+        await nextTick()
+        expect(arrival.page).toBe(1)
+        expect(arrival.barMs).toBe(0)
+      })
+
+      it('never goes back when the narrator is moved back', async () => {
+        narrate()
+        FakeAudio.all[0].currentTime = 5
+        vi.advanceTimersByTime(100)
+        await nextTick()
+        FakeAudio.all[0].currentTime = 1
+        vi.advanceTimersByTime(100)
+        await nextTick()
+        expect(arrival.page).toBe(1)
+      })
+
+      it('a next jumps the narrator to the start of the next page', () => {
+        narrate()
+        arrival.next()
+        expect(arrival.page).toBe(1)
+        expect(FakeAudio.all[0].currentTime).toBe(4)
+        expect(arrival.active).toBe(true)
+      })
+
+      it('a next on the last page clears and stops the narrator', () => {
+        narrate()
+        arrival.next()
+        arrival.next()
+        expect(arrival.active).toBe(false)
+        expect(narration.isNarrating).toBe(false)
+      })
+    })
+  })
 })

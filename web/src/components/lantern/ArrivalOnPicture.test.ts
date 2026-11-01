@@ -344,6 +344,110 @@ describe('ArrivalOnPicture', () => {
     })
   })
 
+  describe('a part too tall for the clear space', () => {
+    /** The layout jsdom does not have: the twin is as tall as its text is long, the stage 34 tall. */
+    const proto = HTMLElement.prototype
+    beforeEach(() => {
+      Object.defineProperty(proto, 'offsetHeight', {
+        configurable: true,
+        get(this: HTMLElement): number {
+          return this.classList.contains('lq-arrival-twin')
+            ? (this.textContent ?? '').length
+            : 0
+        },
+      })
+      Object.defineProperty(proto, 'clientHeight', {
+        configurable: true,
+        get(this: HTMLElement): number {
+          return this.dataset.testid === 'arrival-on-picture' ? 34 + 14 : 0
+        },
+      })
+    })
+    afterEach(() => {
+      Reflect.deleteProperty(proto, 'offsetHeight')
+      Reflect.deleteProperty(proto, 'clientHeight')
+    })
+
+    const long: ArrivalPart = {
+      kind: 'description',
+      lines: [
+        { unit: 0, markup: 'Aaaaaaaaaa bbbb.' },
+        { unit: 1, markup: 'Cccccccccc dddd.' },
+        { unit: 2, markup: 'Eeee.' },
+      ],
+      voiced: false,
+    }
+
+    /** Mount with the part up and let the cut be made. */
+    async function told(part: ArrivalPart, phone = false): Promise<VueWrapper> {
+      const w = mount(ArrivalOnPicture, { props: { pictured: true, phone } })
+      useArrivalStore().show(1, [part], false)
+      for (let i = 0; i < 4; i++) await w.vm.$nextTick()
+      return w
+    }
+    const lines = (w: VueWrapper): string[] =>
+      w.findAll('.lq-arrival-text .lq-arrival-line').map((l) => l.text())
+
+    it('shows the first page only, then the next on a click, with the same hint', async () => {
+      const w = await told(long)
+      expect(lines(w)).toEqual(['Aaaaaaaaaa bbbb.', 'Cccccccccc dddd.'])
+      expect(w.get('.lq-arrival-hint').text()).toBe(
+        'Click or press Enter to continue',
+      )
+      expect(w.find('.lq-arrival-bar').exists()).toBe(true)
+      await w.trigger('click')
+      await w.vm.$nextTick()
+      expect(lines(w)).toEqual(['Eeee.'])
+      expect(w.get('.lq-arrival-hint').text()).toBe(
+        'Click or press Enter to continue',
+      )
+      await w.trigger('click')
+      expect(w.find('.lq-arrival-card').exists()).toBe(false)
+    })
+
+    it('shows a part that fits as one page', async () => {
+      const w = await told({ ...long, lines: [long.lines[2]] })
+      expect(lines(w)).toEqual(['Eeee.'])
+      await w.trigger('click')
+      expect(w.find('.lq-arrival-card').exists()).toBe(false)
+    })
+
+    it('splits a paragraph too tall for a page between its sentences', async () => {
+      const w = await told({
+        ...long,
+        lines: [{ unit: 0, markup: 'Aaaaaaaaaa bbbb. Cccccccccc dddd. Eeee.' }],
+      })
+      expect(lines(w)).toEqual(['Aaaaaaaaaa bbbb. Cccccccccc dddd.'])
+      await w.trigger('click')
+      await w.vm.$nextTick()
+      expect(lines(w)).toEqual(['Eeee.'])
+    })
+
+    it('cuts a later arrival to the stage as it is then', async () => {
+      const w = await told(long)
+      await w.trigger('click')
+      await w.vm.$nextTick()
+      expect(lines(w)).toEqual(['Eeee.'])
+      Object.defineProperty(proto, 'clientHeight', {
+        configurable: true,
+        get(this: HTMLElement): number {
+          return this.dataset.testid === 'arrival-on-picture' ? 200 : 0
+        },
+      })
+      // The observer is not in jsdom: the cut is made afresh with the part.
+      const store = useArrivalStore()
+      store.clear()
+      store.show(2, [long], false)
+      for (let i = 0; i < 4; i++) await w.vm.$nextTick()
+      expect(lines(w)).toHaveLength(3)
+    })
+
+    it('does not page a phone, which scrolls', async () => {
+      const w = await told(long, true)
+      expect(lines(w)).toHaveLength(3)
+    })
+  })
+
   describe('on a picture, in either theme', () => {
     const dark = Object.fromEntries(
       Object.entries(LANTERN_PALETTES.dark).map(([k, v]) => [

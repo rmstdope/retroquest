@@ -12,10 +12,12 @@ import { FOLLOW_EVENT } from '@/composables/useStoryFollow'
  *
  * - `shown(unit)`: whether the unit has been revealed yet.
  * - `isSpeaking(unit)`: whether its voice is playing now.
- * - `html(markup, unit, from, to)`: the rendered markup of the unit's parts
- *   `from` up to `to` (all of them by default); while the unit is spoken each
- *   word is wrapped and numbered from the start of part `from` (only when the
- *   words match those parts' recordings). A unit shown in several places, such
+ * - `html(markup, unit, from, to, wordStart)`: the rendered markup of the
+ *   unit's parts `from` up to `to` (all of them by default); while the unit is
+ *   spoken each word is wrapped and numbered from the start of part `from`
+ *   (only when the words match those parts' recordings). With `wordStart` the
+ *   markup is only a piece of those parts, starting that many words into them
+ *   (a page of an arrival), and its words are numbered from there. A unit shown in several places, such
  *   as a room's name and its description, marks each place with its parts.
  *
  * The composable also lights the spoken word (`.lq-w-now`, found by
@@ -32,7 +34,13 @@ export function useReadAlong(
 ): {
   shown: (unit: number) => boolean
   isSpeaking: (unit: number) => boolean
-  html: (markup: string, unit: number, from?: number, to?: number) => string
+  html: (
+    markup: string,
+    unit: number,
+    from?: number,
+    to?: number,
+    wordStart?: number,
+  ) => string
 } {
   const narration = useNarrationStore()
   const speaking = computed(() => narration.speaking(id()))
@@ -59,14 +67,17 @@ export function useReadAlong(
     unit: number,
     from = 0,
     to = Number.POSITIVE_INFINITY,
+    wordStart = 0,
   ): string {
     const plain = renderMarkup(markup)
     const [markedUnit, counts] = wordMarking.value.split(':')
     if (!counts || Number(markedUnit) !== unit) return plain
     const lengths = counts.split(',').map(Number)
     const sum = (list: number[]): number => list.reduce((a, n) => a + n, 0)
-    const wrapped = wrapWords(plain, sum(lengths.slice(0, from)))
-    return wrapped.count === sum(lengths.slice(from, to)) ? wrapped.html : plain
+    const wrapped = wrapWords(plain, sum(lengths.slice(0, from)) + wordStart)
+    const room = sum(lengths.slice(from, to)) - wordStart
+    const fits = wordStart ? wrapped.count <= room : wrapped.count === room
+    return fits ? wrapped.html : plain
   }
 
   // Light the spoken word, and keep the unit being spoken in view.

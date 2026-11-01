@@ -272,6 +272,29 @@ describe('useNarrationStore', () => {
     expect(narration.speaking(7)?.unit).toBe(2)
   })
 
+  it('seekToWord moves the voice of the unit to that word', () => {
+    narration.begin(7, [voiced(6), voiced(2)], 'act1')
+    const playing = last()
+    narration.seekToWord(0, 3)
+    expect(last()).toBe(playing)
+    expect(playing.currentTime).toBe(3)
+    expect(narration.speaking(7)).toMatchObject({ unit: 0, word: 3 })
+  })
+
+  it('seekToWord into a later unit cuts the voice and starts that unit at the word', () => {
+    narration.begin(7, [voiced(2), voiced(6)], 'act1')
+    const first = last()
+    narration.seekToWord(1, 4)
+    expect(first.paused).toBe(true)
+    expect(last().currentTime).toBe(4)
+    expect(narration.speaking(7)).toMatchObject({ unit: 1 })
+  })
+
+  it('seekToWord does nothing when no voice is in the turn', () => {
+    narration.seekToWord(0, 1)
+    expect(narration.isNarrating).toBe(false)
+  })
+
   it('skipTo past the last voice ends the turn', () => {
     narration.begin(7, [voiced(), silent], 'act1')
     narration.skipTo(1)
