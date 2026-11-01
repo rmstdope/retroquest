@@ -39,6 +39,35 @@ export function useNameStops(
 ): { sync: () => void } {
   let observer: MutationObserver | undefined
   let pending = false
+  /** The stop that has focus: where it is among its scope's stops, to find it again after a re-render. */
+  let focused: { scope: string; index: number } | null = null
+
+  /** The stops of a scope ("drawer" or "band"), in order. */
+  function stopsOf(scope: string): HTMLElement[] {
+    const area = scope === 'drawer' ? '.lq-story-drawer' : '.lq-story'
+    return [
+      ...(root.value?.querySelectorAll<HTMLElement>(
+        `${area} ${NAME_SELECTOR}`,
+      ) ?? []),
+    ].filter((name) => name.hasAttribute('tabindex'))
+  }
+
+  /** Remember which stop takes focus. */
+  function onFocusIn(event: FocusEvent): void {
+    const name = event.target instanceof HTMLElement ? event.target : null
+    if (!name?.matches(NAME_SELECTOR)) {
+      focused = null
+      return
+    }
+    const scope = name.closest('.lq-story-drawer') ? 'drawer' : 'band'
+    focused = { scope, index: stopsOf(scope).indexOf(name) }
+  }
+
+  /** Forget the stop when focus moves on by itself (a re-render removing it is not that). */
+  function onFocusOut(event: FocusEvent): void {
+    const name = event.target instanceof HTMLElement ? event.target : null
+    if (name?.isConnected) focused = null
+  }
 
   /** Mark the reachable names in scope and clear every other name. */
   function sync(): void {
@@ -62,6 +91,15 @@ export function useNameStops(
       if (inScope.has(name)) mark(name)
       else unmark(name)
     })
+    // Narration re-renders a turn's text and the focused name with it:
+    // focus goes back to the same stop.
+    if (
+      focused &&
+      document.activeElement === document.body &&
+      !document.querySelector('.lq-name-menu')
+    ) {
+      stopsOf(focused.scope)[focused.index]?.focus({ preventScroll: true })
+    }
   }
 
   /** Re-sync once after a burst of re-renders. */
@@ -75,9 +113,15 @@ export function useNameStops(
     if (!root.value || typeof MutationObserver === 'undefined') return
     observer = new MutationObserver(schedule)
     observer.observe(root.value, { childList: true, subtree: true })
+    root.value.addEventListener('focusin', onFocusIn)
+    root.value.addEventListener('focusout', onFocusOut)
     sync()
   })
-  onBeforeUnmount(() => observer?.disconnect())
+  onBeforeUnmount(() => {
+    observer?.disconnect()
+    root.value?.removeEventListener('focusin', onFocusIn)
+    root.value?.removeEventListener('focusout', onFocusOut)
+  })
 
   return { sync }
 }

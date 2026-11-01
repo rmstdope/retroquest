@@ -627,13 +627,23 @@ function actionsOf(name: HTMLElement): NameAction[] {
   })
 }
 
-/** Open the menu of `name`, if the game takes input and the name has one. */
-function openNameMenu(name: HTMLElement): void {
+/**
+ * Open the menu of `name`, if the game takes input and the name has one.
+ * A pointer open leaves no focus on the name (a Tab stop takes focus on a
+ * click): as before, closing by key then goes to the actions.
+ */
+function openNameMenu(name: HTMLElement, pointer = false): void {
   if (!game.acceptInput) return
   const actions = actionsOf(name)
   if (!actions.length) return
   const box = name.getBoundingClientRect()
   // A chip takes focus back (Safari does not focus a clicked button).
+  if (
+    pointer &&
+    name === document.activeElement &&
+    !(name instanceof HTMLButtonElement)
+  )
+    name.blur()
   focusBeforeMenu =
     name instanceof HTMLButtonElement
       ? name
@@ -649,7 +659,7 @@ function onNameClick(event: MouseEvent): void {
   const name = (event.target as HTMLElement).closest<HTMLElement>(
     '.theme-item_name, .theme-character_name, [data-name-kind]',
   )
-  if (name) openNameMenu(name)
+  if (name) openNameMenu(name, event.detail > 0)
 }
 
 /** Enter or Space on a name that is a Tab stop opens its menu, as a click does. */

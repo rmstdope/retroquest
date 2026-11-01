@@ -35,6 +35,7 @@ describe('LanternLayout: names reached with Tab', () => {
 
   /** Mount the layout in a wide or a narrow window. */
   async function start(wide: boolean): Promise<void> {
+    vi.spyOn(HTMLMediaElement.prototype, 'play').mockResolvedValue()
     setActivePinia(createPinia())
     vi.stubGlobal(
       'matchMedia',
@@ -60,6 +61,7 @@ describe('LanternLayout: names reached with Tab', () => {
   afterEach(() => {
     w.unmount()
     vi.unstubAllGlobals()
+    vi.restoreAllMocks()
   })
 
   const stops = (root: string): HTMLElement[] =>
@@ -151,6 +153,76 @@ describe('LanternLayout: names reached with Tab', () => {
         }),
       )
       expect(document.activeElement).toBe(found[1])
+    })
+  })
+
+  describe('wide, edge cases', () => {
+    beforeEach(() => start(true))
+
+    const tab = (el: Element): void => {
+      el.dispatchEvent(
+        new KeyboardEvent('keydown', {
+          key: 'Tab',
+          bubbles: true,
+          cancelable: true,
+        }),
+      )
+    }
+
+    it('keeps the reader near the newest turn when it has no stops', async () => {
+      game.turns.push(turn(903, 'Nothing to name here.'))
+      await w.vm.$nextTick()
+      await w.get('[data-button="story"]').trigger('click')
+      await w.vm.$nextTick()
+      await w.vm.$nextTick()
+      const found = stops('.lq-story-drawer')
+      const body = w.get('.lq-story-drawer-body').element as HTMLElement
+      body.focus()
+      tab(body)
+      expect(document.activeElement).toBe(found[found.length - 1])
+    })
+
+    it('does not keep focus on a name opened with the mouse', async () => {
+      const name = stops('.lq-story')[0]!
+      name.focus()
+      name.dispatchEvent(new MouseEvent('click', { bubbles: true, detail: 1 }))
+      await w.vm.$nextTick()
+      expect(document.querySelector('.lq-name-menu')).not.toBeNull()
+      await w.vm.$nextTick()
+      document.querySelector('.lq-name-menu button')!.dispatchEvent(
+        new KeyboardEvent('keydown', {
+          key: 'Escape',
+          bubbles: true,
+          cancelable: true,
+        }),
+      )
+      await w.vm.$nextTick()
+      expect(document.querySelector('.lq-name-menu')).toBeNull()
+      expect(document.activeElement).not.toBe(name)
+    })
+
+    it('puts focus back on the same stop when a re-render replaces it', async () => {
+      const name = stops('.lq-story')[1]!
+      name.focus()
+      const html = name.parentElement!.innerHTML
+      name.parentElement!.innerHTML = html
+      await Promise.resolve()
+      await w.vm.$nextTick()
+      const now = stops('.lq-story')
+      expect(now).toHaveLength(2)
+      expect(document.activeElement).toBe(now[1])
+    })
+  })
+
+  describe('narrow, following what is here', () => {
+    beforeEach(() => start(false))
+
+    it('drops the stops of a thing left behind', async () => {
+      expect(stops('.lq-story')).toHaveLength(3)
+      game.submitCommand('north')
+      await w.vm.$nextTick()
+      await w.vm.$nextTick()
+      expect(stops('.lq-story')).toHaveLength(0)
     })
   })
 

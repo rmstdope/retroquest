@@ -14,7 +14,8 @@ import StoryTurn from './StoryTurn.vue'
  * it never touches the narration, and the narration's follow-the-word scroll
  * (which belongs to the story band) does not pull this reader off an older turn.
  * Every name with a menu is a Tab stop (the layout marks them); the first Tab
- * from the drawer lands on the newest turn's first name.
+ * from the drawer lands on the newest turn's first name (or, when that turn has none,
+ * the last name before it).
  */
 const emit = defineEmits<{ close: [] }>()
 const game = useGameStore()
@@ -69,12 +70,14 @@ function onBodyKeydown(event: KeyboardEvent): void {
   if (event.key !== 'Tab' || event.shiftKey || event.target !== body.value)
     return
   const turns = body.value?.querySelectorAll('.lq-turn')
-  const first = turns?.[turns.length - 1]?.querySelector<HTMLElement>(
-    '[role="button"][tabindex]',
-  )
-  if (!first) return
+  const stop = '[role="button"][tabindex]'
+  const first = turns?.[turns.length - 1]?.querySelector<HTMLElement>(stop)
+  // The newest turn names nobody reachable: the nearest stop before it.
+  const nearest = [...(body.value?.querySelectorAll<HTMLElement>(stop) ?? [])]
+  const target = first ?? nearest[nearest.length - 1]
+  if (!target) return
   event.preventDefault()
-  first.focus()
+  target.focus()
 }
 
 /** Escape closes the drawer and goes no further. */
