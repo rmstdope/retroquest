@@ -2,6 +2,9 @@
 import { computed, nextTick, ref, watch } from 'vue'
 import { useGameStore } from '@/stores/useGameStore'
 import { useSettingsStore } from '@/stores/useSettingsStore'
+import { useNarrationStore } from '@/stores/useNarrationStore'
+import { useArrivalStore } from '@/stores/useArrivalStore'
+import { useStageSpeechStore } from '@/stores/useStageSpeechStore'
 import { useCommandCompletion } from '@/composables/useCommandCompletion'
 import { displayName } from '@/lantern/displayName'
 import { exitArrow } from '@/lantern/exitArrow'
@@ -32,6 +35,9 @@ const props = defineProps<{ foldable?: boolean; stage?: boolean }>()
 const emit = defineEmits<{ fold: [] }>()
 const game = useGameStore()
 const settings = useSettingsStore()
+const narration = useNarrationStore()
+const arrival = useArrivalStore()
+const speech = useStageSpeechStore()
 
 const mode = ref(settings.startMode)
 const verb = ref<Verb | null>(null)
@@ -40,6 +46,8 @@ const chosenSlot = ref<number | null>(null)
 const showMore = ref(false)
 const typed = ref('')
 const root = ref<HTMLElement | null>(null)
+/** Whether the cursor is in the command box (then Escape is shown on Actions). */
+const inBox = ref(false)
 
 const context = computed<ActionContext>(() => ({
   roomItems: game.items,
@@ -331,12 +339,33 @@ function putAway(event: KeyboardEvent): void {
 }
 
 /**
- * Escape in the command box: with the word list open it only closes the list
- * (consumed, so the layout's narration skip does not also take it).
+ * Escape in the command box takes one step back per press: close the word list
+ * (the text stays), then clear the text, then leave the box for the verbs. An
+ * Escape that already has a job (the narrator, an arrival or a speech on the
+ * picture, see the layout) or a box that takes no input is left alone. Every
+ * step but the list's own is consumed here so the layout does not also act.
  */
 function onTypedEscape(event: KeyboardEvent): void {
-  if (completion.open.value) event.preventDefault()
-  completion.close()
+  if (completion.open.value) {
+    event.preventDefault()
+    completion.close()
+    return
+  }
+  if (
+    !game.acceptInput ||
+    narration.isNarrating ||
+    arrival.active ||
+    speech.visible.length
+  )
+    return
+  event.preventDefault()
+  // A held key takes one step only, not all of them.
+  if (event.repeat) return
+  if (typed.value) {
+    typed.value = ''
+    return
+  }
+  chooseActions()
 }
 
 /** Enter in a text slot: run the command if complete, else go on to the choices. */
@@ -367,8 +396,12 @@ const completion = useCommandCompletion(
   () => game.acceptInput,
 )
 
-/** Switching away from Type puts the word list away. */
-watch(mode, () => completion.close())
+/** Switching away from Type puts the word list and the Escape mark away. */
+watch(mode, () => {
+  completion.close()
+  // A box that is removed fires no blur.
+  inBox.value = false
+})
 const completionListId = 'lq-completions'
 
 /** Keep the highlighted match visible when the list scrolls. */
@@ -382,6 +415,12 @@ watch(
   },
   { flush: 'post' },
 )
+
+/** The cursor left the command box: the list and the Escape mark go. */
+function onBoxBlur(): void {
+  inBox.value = false
+  completion.close()
+}
 
 /** Enter in the command box: apply a highlighted match, else send. */
 function onTypedEnter(): void {
@@ -403,9 +442,10 @@ function onTypedEnter(): void {
           type="button"
           :aria-pressed="mode === 'actions' ? 'true' : 'false'"
           class="lq-seg-btn"
+          :aria-keyshortcuts="inBox ? 'Escape' : undefined"
           @click="mode = 'actions'"
         >
-          Actions
+          Actions<kbd v-if="inBox" class="lq-esc" aria-hidden="true">Esc</kbd>
         </button>
         <button
           type="button"
@@ -622,9 +662,10 @@ function onTypedEnter(): void {
         type="button"
         class="lq-verb"
         data-actions
+        :aria-keyshortcuts="inBox ? 'Escape' : undefined"
         @click="chooseActions"
       >
-        Actions
+        Actions<kbd v-if="inBox" class="lq-esc" aria-hidden="true">Esc</kbd>
       </button>
       <div class="lq-type-field">
         <input
@@ -648,7 +689,8 @@ function onTypedEnter(): void {
           @keydown.up.prevent="completion.onArrowUp"
           @keydown.escape="onTypedEscape"
           @keydown.enter.prevent="onTypedEnter"
-          @blur="completion.close"
+          @focus="inBox = true"
+          @blur="onBoxBlur"
         />
         <ul
           v-if="completion.open.value"
@@ -1051,6 +1093,24 @@ function onTypedEnter(): void {
   color: var(--lq-fg);
   font-family: var(--lq-font-mono);
   font-size: 16px;
+}
+/* The Escape key-cap on Actions; touch screens have no Esc key. */
+.lq-esc {
+  margin-left: 6px;
+  padding: 1px 6px;
+  border: 1px solid var(--lq-line2);
+  border-bottom-width: 2px;
+  border-radius: 5px;
+  background: var(--lq-bg);
+  color: var(--lq-muted);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 700;
+}
+@media (hover: none) {
+  .lq-esc {
+    display: none;
+  }
 }
 button:disabled,
 input:disabled {

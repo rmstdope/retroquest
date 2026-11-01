@@ -5,6 +5,9 @@ import { createPinia, setActivePinia } from 'pinia'
 import ActionComposer from './ActionComposer.vue'
 import { useGameStore } from '@/stores/useGameStore'
 import { useSettingsStore } from '@/stores/useSettingsStore'
+import { useArrivalStore } from '@/stores/useArrivalStore'
+import { useNarrationStore } from '@/stores/useNarrationStore'
+import { useStageSpeechStore } from '@/stores/useStageSpeechStore'
 
 describe('ActionComposer', () => {
   let wrapper: VueWrapper | undefined
@@ -1226,6 +1229,179 @@ describe('ActionComposer on the stage', () => {
     await w.vm.$nextTick()
     expect(document.activeElement).toBe(w.get('[data-verb="search"]').element)
     w.unmount()
+  })
+
+  describe('Escape steps back from the command box', () => {
+    async function typing(text = '') {
+      const w = stage()
+      await click(w, '[data-type]')
+      await w.vm.$nextTick()
+      const input = w.get('input[aria-label="Command"]')
+      if (text) await input.setValue(text)
+      return { w, input }
+    }
+    const esc = (input: { trigger: (e: string, o: object) => Promise<void> }) =>
+      input.trigger('keydown', { key: 'Escape' })
+
+    it('clears the text and keeps focus in the box', async () => {
+      const { w, input } = await typing('xyz')
+      await esc(input)
+      expect((input.element as HTMLInputElement).value).toBe('xyz')
+      await esc(input)
+      expect((input.element as HTMLInputElement).value).toBe('')
+      expect(w.find('input[aria-label="Command"]').exists()).toBe(true)
+      expect(document.activeElement).toBe(input.element)
+      w.unmount()
+    })
+
+    it('leaves an empty box for the verb used last', async () => {
+      const w = stage()
+      await click(w, '[data-verb="search"]')
+      await click(w, '[data-type]')
+      await w.vm.$nextTick()
+      await esc(w.get('input[aria-label="Command"]'))
+      await w.vm.$nextTick()
+      expect(w.find('input[aria-label="Command"]').exists()).toBe(false)
+      expect(document.activeElement).toBe(w.get('[data-verb="search"]').element)
+      w.unmount()
+    })
+
+    it('falls back to Look when no verb was used', async () => {
+      const { w, input } = await typing()
+      await esc(input)
+      await w.vm.$nextTick()
+      expect(document.activeElement).toBe(w.get('[data-verb="look"]').element)
+      w.unmount()
+    })
+
+    it('opens an empty box on the next Type', async () => {
+      const { w, input } = await typing('abc')
+      await esc(input)
+      await esc(input)
+      await esc(input)
+      await click(w, '[data-type]')
+      expect(
+        (w.get('input[aria-label="Command"]').element as HTMLInputElement)
+          .value,
+      ).toBe('')
+      w.unmount()
+    })
+
+    it('does not step back while the input is disabled', async () => {
+      const { w, input } = await typing()
+      useGameStore().acceptInput = false
+      await w.vm.$nextTick()
+      await esc(input)
+      expect(w.find('input[aria-label="Command"]').exists()).toBe(true)
+      w.unmount()
+    })
+
+    it('leaves the Escape to an arrival on the picture', async () => {
+      const { w, input } = await typing('abc')
+      useArrivalStore().show(
+        1,
+        [
+          {
+            kind: 'description',
+            lines: [{ unit: 0, markup: 'Cobbles.' }],
+            voiced: false,
+          },
+        ],
+        false,
+      )
+      await esc(input)
+      expect((input.element as HTMLInputElement).value).toBe('abc')
+      w.unmount()
+    })
+
+    it('leaves the Escape to the narrator while it reads', async () => {
+      useSettingsStore().narrationOn = true
+      const narration = useNarrationStore()
+      narration.setAudioFactory(() => ({
+        volume: 1,
+        currentTime: 0,
+        onended: null,
+        onerror: null,
+        play: () => Promise.resolve(),
+        pause: () => {},
+      }))
+      const { w, input } = await typing()
+      narration.begin(
+        1,
+        [
+          {
+            kind: 'block',
+            parts: [
+              {
+                markup: 'a b',
+                clip: {
+                  file: 'x.mp3',
+                  speaker: 'narrator',
+                  duration: 2,
+                  words: [],
+                },
+              },
+            ],
+          },
+        ],
+        'act1',
+      )
+      expect(narration.isNarrating).toBe(true)
+      await esc(input)
+      expect(w.find('input[aria-label="Command"]').exists()).toBe(true)
+      w.unmount()
+    })
+
+    it('leaves the Escape to a speech on the picture', async () => {
+      const { w, input } = await typing()
+      useStageSpeechStore().observe({
+        id: 1,
+        command: 'talk to mira',
+        text:
+          '[character_name]Mira[/character_name]\n' +
+          '[dialogue]Hello.[/dialogue]',
+        room: 'Hut',
+        description: null,
+        gained: [],
+        lost: [],
+        arrival: null,
+        addressed: 'Mira',
+      })
+      expect(useStageSpeechStore().visible.length).toBeGreaterThan(0)
+      await esc(input)
+      expect(w.find('input[aria-label="Command"]').exists()).toBe(true)
+      w.unmount()
+    })
+
+    it('does not run through the steps on a held key', async () => {
+      const { w, input } = await typing('abc')
+      await input.trigger('keydown', { key: 'Escape', repeat: true })
+      expect((input.element as HTMLInputElement).value).toBe('abc')
+      w.unmount()
+    })
+
+    it('shows the Esc mark on Actions only while the cursor is in the box', async () => {
+      const { w, input } = await typing()
+      const actions = w.get('[data-actions]')
+      expect(actions.find('kbd').text()).toBe('Esc')
+      expect(actions.attributes('aria-keyshortcuts')).toBe('Escape')
+      await input.trigger('blur')
+      expect(w.get('[data-actions]').find('kbd').exists()).toBe(false)
+      w.unmount()
+    })
+
+    it('does the same in the narrow panel, ending on Actions', async () => {
+      const w = mount(ActionComposer, { attachTo: document.body })
+      await w.findAll('.lq-seg-btn')[1].trigger('click')
+      const input = w.get('input[aria-label="Command"]')
+      await input.trigger('focus')
+      expect(w.get('.lq-seg-btn').find('kbd').text()).toBe('Esc')
+      await esc(input)
+      await w.vm.$nextTick()
+      expect(w.get('.lq-seg-btn').attributes('aria-pressed')).toBe('true')
+      expect(document.activeElement).toBe(w.get('.lq-verb').element)
+      w.unmount()
+    })
   })
 
   it('is unchanged without the stage', () => {
