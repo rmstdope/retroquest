@@ -37,6 +37,8 @@ export const useStageSpeechStore = defineStore('stageSpeech', () => {
   const narration = useNarrationStore()
   const conversation = ref<{ with: string; lines: StageLine[] } | null>(null)
   let nextKey = 1
+  /** The room the last observed turn ended in. */
+  let lastRoom: string | null = null
   let timer: ReturnType<typeof setTimeout> | undefined
 
   /** Whether a line is on the picture now. */
@@ -98,13 +100,16 @@ export const useStageSpeechStore = defineStore('stageSpeech', () => {
 
   /**
    * Take a new turn in: the previous turn's lines show in full first. A turn
-   * that addresses no one clears the conversation; one that addresses someone
+   * that addresses no one, or ends in another room, clears the conversation; one that addresses someone
    * else starts a new one; one that addresses the same character adds to it.
    */
   function observe(turn: Turn): void {
     revealAll()
+    const moved = lastRoom !== null && lastRoom !== turn.room
+    lastRoom = turn.room
     const addressed = turn.addressed ?? null
-    if (!addressed) return clear()
+    // Leaving the room ends the conversation, even when the talk itself moved Elior.
+    if (!addressed || moved) return clear()
     if (conversation.value?.with.toLowerCase() !== addressed.toLowerCase()) {
       clear()
       conversation.value = { with: addressed, lines: [] }

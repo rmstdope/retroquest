@@ -18,12 +18,13 @@ function turn(
   text: string,
   addressed: string | null,
   command = 'talk to someone',
+  room = 'Cottage',
 ): Turn {
   return {
     id: nextId++,
     command,
     text,
-    room: 'Cottage',
+    room,
     description: null,
     gained: [],
     lost: [],
@@ -48,6 +49,16 @@ describe('useStageSpeechStore', () => {
     expect(speech.visible).toEqual([])
     expect(speech.rightSpeaker).toBeNull()
     expect(speech.leftSpeaking).toBe(false)
+  })
+
+  it('shows nothing when a talk moves Elior to another room', () => {
+    const speech = useStageSpeechStore()
+    speech.observe(turn('Dark.', null, 'look', 'Dream'))
+    speech.observe(
+      turn(say('Voice', 'Wake.'), 'Voice', 'talk to voice', 'Cottage'),
+    )
+    expect(speech.conversation).toBeNull()
+    expect(speech.visible).toEqual([])
   })
 
   it('starts a conversation with the one addressed and shows what they say', () => {

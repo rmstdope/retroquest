@@ -24,8 +24,8 @@ export interface SpeechLine {
   markup: string
 }
 
-/** A blank line between paragraphs. */
-const PARAGRAPH_BREAK = /\n\s*\n/
+/** A line break between paragraphs (the game writes them with one or with a blank line). */
+const PARAGRAPH_BREAK = /\n+/
 
 /**
  * The lines of a turn's picture, in the order they were said: one for each
