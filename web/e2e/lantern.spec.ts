@@ -449,6 +449,8 @@ test.describe('Lantern UI (the default)', () => {
     await actions.locator('.lq-esc').click()
     await expect(actionsButton).toHaveAttribute('aria-pressed', 'true')
     await expect(input).toHaveCount(0)
+    // Focus goes on to the verbs, not left on the switch.
+    await expect(actions.locator('.lq-verbs .lq-verb').first()).toBeFocused()
   })
 
   test('plays the room on its picture on a laptop: plate, buttons, map on pointing, drawer', async ({
