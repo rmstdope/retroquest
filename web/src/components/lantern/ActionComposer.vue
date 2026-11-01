@@ -19,14 +19,16 @@ import {
  * The Lantern action composer: tap a verb and pick its targets as chips — the
  * command is performed as soon as the last choice is made. Only Use, Cast and
  * Say (whose last part may still be added) keep a "Do it" button. Or switch
- * to Type and write the command. A live preview shows the command the game
+ * to Type and write the command. On the stage (`stage`) the verbs are one
+ * row (Look to Give, More… and ⌨ Type, Drop, Buy, Open, Close, Cast and Rest
+ * behind More…) with the sentence being built in a row above it. A live preview shows the command the game
  * will receive. Focus follows the sentence: verb → choices → (Do it →) back
  * to the verb. On phones it is a sheet that can fold away
  * (`foldable` shows a hide button that emits `fold`). In Type mode its root
  * carries `lq-typing`, so the sheet can let the completion list (which opens
  * above the command box) show outside it.
  */
-defineProps<{ foldable?: boolean }>()
+const props = defineProps<{ foldable?: boolean; stage?: boolean }>()
 const emit = defineEmits<{ fold: [] }>()
 const game = useGameStore()
 const settings = useSettingsStore()
@@ -48,8 +50,28 @@ const context = computed<ActionContext>(() => ({
   wares: game.roomWares,
 }))
 
-const mainVerbs = VERBS.filter((v) => v.group === 'main' && v.id !== 'go')
-const moreVerbs = VERBS.filter((v) => v.group === 'more')
+/** The verbs on the stage's one row; the other action verbs wait behind More…. */
+const STAGE_ROW = [
+  'look',
+  'examine',
+  'search',
+  'take',
+  'use',
+  'talk',
+  'say',
+  'give',
+]
+const actionVerbs = VERBS.filter((v) => v.group === 'main' && v.id !== 'go')
+const mainVerbs = computed(() =>
+  props.stage
+    ? actionVerbs.filter((v) => STAGE_ROW.includes(v.id))
+    : actionVerbs,
+)
+const moreVerbs = computed(() =>
+  props.stage
+    ? actionVerbs.filter((v) => !STAGE_ROW.includes(v.id))
+    : VERBS.filter((v) => v.group === 'more'),
+)
 const exits = computed(() => Object.entries(game.exits))
 
 /** Drop chosen targets that are no longer available (e.g. after another command). */
@@ -329,11 +351,11 @@ function onTypedEnter(): void {
   <section
     ref="root"
     class="lq-composer"
-    :class="{ 'lq-typing': mode === 'type' }"
+    :class="{ 'lq-typing': mode === 'type', 'lq-on-stage': stage }"
     aria-label="Actions"
     @keydown.escape="putAway"
   >
-    <div class="lq-composer-top">
+    <div v-if="!stage" class="lq-composer-top">
       <div role="group" aria-label="Input mode" class="lq-seg">
         <button
           type="button"
@@ -371,7 +393,7 @@ function onTypedEnter(): void {
     </div>
 
     <template v-if="mode === 'actions'">
-      <div v-if="exits.length" class="lq-go-row">
+      <div v-if="exits.length && !stage" class="lq-go-row">
         <span class="lq-row-label">Go</span>
         <button
           v-for="[dir, room] in exits"
@@ -457,7 +479,7 @@ function onTypedEnter(): void {
             :disabled="!command || !game.acceptInput"
             @click="doIt"
           >
-            Do it
+            {{ stage ? 'Do it ▸' : 'Do it' }}
           </button>
         </div>
       </div>
@@ -500,10 +522,29 @@ function onTypedEnter(): void {
             {{ v.label }}
           </button>
         </template>
+        <button
+          v-if="stage"
+          type="button"
+          class="lq-verb"
+          data-type
+          aria-label="Type"
+          @click="mode = 'type'"
+        >
+          ⌨ Type
+        </button>
       </div>
     </template>
 
     <form v-else class="lq-type-row" @submit.prevent="submitTyped">
+      <button
+        v-if="stage"
+        type="button"
+        class="lq-verb"
+        data-actions
+        @click="mode = 'actions'"
+      >
+        Actions
+      </button>
       <div class="lq-type-field">
         <input
           v-model="typed"
@@ -564,7 +605,7 @@ function onTypedEnter(): void {
         :class="{ 'lq-shake': shaking }"
         :disabled="!game.acceptInput"
       >
-        Do it
+        {{ stage ? 'Do it ▸' : 'Do it' }}
       </button>
     </form>
   </section>
@@ -794,6 +835,19 @@ function onTypedEnter(): void {
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
+}
+/* On the stage the verbs are one row over the picture, and the sentence being
+   built sits in a row just above it (the builder comes first in the markup). */
+.lq-on-stage {
+  background: color-mix(in srgb, var(--lq-surface) 93%, transparent);
+}
+.lq-on-stage .lq-verbs {
+  display: flex;
+  flex-wrap: wrap;
+}
+.lq-on-stage .lq-verb {
+  flex: 0 1 auto;
+  padding: 0 16px;
 }
 .lq-verbs {
   display: grid;

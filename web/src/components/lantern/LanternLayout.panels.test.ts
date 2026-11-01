@@ -97,8 +97,9 @@ describe('LanternLayout: panels wait for the narration', () => {
     vi.unstubAllGlobals()
   })
 
-  it('keeps the old room card and map until the arrival is read, then lights them', async () => {
+  it('keeps the old plate and map until the arrival is read, then lights them', async () => {
     const w = await ready()
+    await w.get('[data-button="map"]').trigger('click')
     await goNorth()
     expect(useNarrationStore().isNarrating).toBe(true)
     expect(cardName(w)).toBe('Hall')
@@ -106,7 +107,7 @@ describe('LanternLayout: panels wait for the narration', () => {
 
     await vi.advanceTimersByTimeAsync(SCENE_PAUSE_MS)
     expect(cardName(w)).toBe('Garden')
-    expect(w.get('.lq-room-card').classes()).toContain('lq-flash')
+    expect(w.get('.lq-plate').classes()).toContain('lq-flash')
     expect(w.get('.lq-compass').classes()).toContain('lq-flash')
   })
 
@@ -120,13 +121,14 @@ describe('LanternLayout: panels wait for the narration', () => {
 
   it('catches up, and does nothing else, when a held map exit is pressed', async () => {
     const w = await ready()
+    await w.get('[data-button="map"]').trigger('click')
     await goNorth()
     const turns = useGameStore().turns.length
     await w.get('.lq-compass .lq-exit').trigger('click')
     expect(useNarrationStore().isNarrating).toBe(false)
     expect(cardName(w)).toBe('Garden')
     expect(useGameStore().turns).toHaveLength(turns)
-    expect(w.get('.lq-room-card').classes()).not.toContain('lq-flash')
+    expect(w.get('.lq-plate').classes()).not.toContain('lq-flash')
   })
 
   it('keeps the voice reading while a verb is pressed, and offers the old place', async () => {

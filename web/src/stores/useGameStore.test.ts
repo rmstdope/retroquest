@@ -2376,3 +2376,14 @@ describe('useGameStore', () => {
     expect(store.shortNames).toEqual({ journal: "Elior's Journal" })
   })
 })
+
+describe('roomPicture', () => {
+  it('is the picture of the music room, empty before there is one', () => {
+    setActivePinia(createPinia())
+    const game = useGameStore()
+    expect(game.roomPicture).toBe('')
+    game.musicActName = 'Act1'
+    game.musicRoomKey = 'ElioCottage'
+    expect(game.roomPicture).toMatch(/images\/generated\/act1-.*\.png$/)
+  })
+})

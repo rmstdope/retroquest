@@ -31,6 +31,7 @@ import CompassPanel from './CompassPanel.vue'
 import DockBar from './DockBar.vue'
 import EndScreen from './EndScreen.vue'
 import FinishDialog from './FinishDialog.vue'
+import JournalDrawer from './JournalDrawer.vue'
 import JournalPanel from './JournalPanel.vue'
 import LanternDialog from './LanternDialog.vue'
 import GameMenu, { type InfoKind, type MenuKind } from './GameMenu.vue'
@@ -39,17 +40,23 @@ import QuitDialog from './QuitDialog.vue'
 import SaveLoadDialog from './SaveLoadDialog.vue'
 import SettingsDialog from './SettingsDialog.vue'
 import LanternHeader from './LanternHeader.vue'
-import RoomCard from './RoomCard.vue'
+import RoomPlate from './RoomPlate.vue'
 import SaveToast from './SaveToast.vue'
 import SectionNav, { type Section } from './SectionNav.vue'
+import StageButtons from './StageButtons.vue'
+import StagePicture from './StagePicture.vue'
 import StoryNameMenu from './StoryNameMenu.vue'
 import StoryTurn from './StoryTurn.vue'
 import TitlePage from './TitlePage.vue'
 
 /**
  * Shell of the Lantern UI (the only UI; old `?ui=` links open it too): header, story (one
- * StoryTurn per turn) and the action composer. On laptops (≥1024 × 560) a
- * room card sits above the story and the map and journal in a side column.
+ * StoryTurn per turn) and the action composer. On laptops (≥1024 × 560) the
+ * room is played on its picture, which fills the play area: a plate (room
+ * and who and what is here) top-left, the buttons Bag, Spells, Quests, Story
+ * so far and Map top-right (the journal opens as a drawer from the right, the
+ * map beneath its button), the story in a paper band along the bottom and the
+ * actions as one row under it.
  * Smaller screens show one section at a time (Story, Bag, Spells, Quests,
  * Map) with section tabs at the bottom, or in the header when short.
  * There the actions are a sheet (at most 62% of the height) that folds into
@@ -66,7 +73,7 @@ import TitlePage from './TitlePage.vue'
  * field or a control, Escape skips (also in the command box, unless its word
  * list is open), and a pop-up stops it. Building a command (typing, verbs,
  * targets) never stops it: only the complete command cuts in.
- * While a command is narrated the side panels (room card, map, journal, the
+ * While a command is narrated the panels (plate, buttons, map, drawer, the
  * header's room and counts) keep the state from before it and switch as the
  * voice reaches them (`usePanelHold`), and so do the command box's word list
  * and the target chips; only pressing in one of those panels first shows the
@@ -98,21 +105,27 @@ function onFocusChange(event: FocusEvent): void {
     next instanceof Element && next.matches('input, textarea')
 }
 const section = ref<Section>('story')
+/** The tab of the journal drawer on the stage, or null while it is closed. */
+const drawerTab = ref<'bag' | 'spells' | 'quests' | null>(null)
+const stageButtons = ref<InstanceType<typeof StageButtons> | null>(null)
 const dockOpen = ref(!short.value)
 watch(short, (isShort) => {
   if (isShort) dockOpen.value = false
 })
 
-// "Open in journal" on a phone: show the Quests section (it opens the quest).
+// "Open in journal": the Quests drawer on the stage, the Quests section on a phone.
 watch(
   () => game.questToOpen,
   (name) => {
-    if (name && !wide.value) section.value = 'quests'
+    if (!name) return
+    if (wide.value) drawerTab.value = 'quests'
+    else section.value = 'quests'
   },
 )
 
 // A new game (after quit) starts on the story, with the journal and the
-// actions afresh (they are keyed by the game number).
+// actions afresh (they are keyed by the game number), the drawer closed (and
+// the map, which the buttons are keyed by).
 watch(
   () => game.gameNumber,
   () => {
@@ -120,9 +133,44 @@ watch(
   },
 )
 
+/** What starts the stage afresh: a new game, a load, or a new act. */
+const stageKey = computed(
+  () => `${game.gameNumber}-${game.loadNumber}-${game.musicActName}`,
+)
+watch(stageKey, () => {
+  drawerTab.value = null
+})
+
+/** A journal button: opens the drawer on its tab, or closes it if it is lit. */
+function toggleDrawer(tab: 'bag' | 'spells' | 'quests'): void {
+  if (drawerTab.value === tab) closeDrawer()
+  else drawerTab.value = tab
+}
+
+/** Close the drawer; focus goes back to the button that opened it. */
+function closeDrawer(): void {
+  const tab = drawerTab.value
+  drawerTab.value = null
+  if (tab) void stageButtons.value?.focusButton(tab)
+}
+
+/** "Story so far" (until its drawer arrives): the story band back to its start. */
+function storyToStart(): void {
+  const story = storyEl.value
+  if (!story) return
+  const still =
+    getComputedStyle(document.documentElement)
+      .getPropertyValue('--lq-motion')
+      .trim() === '0'
+  if (typeof story.scrollTo === 'function')
+    story.scrollTo({ top: 0, behavior: still ? 'auto' : 'smooth' })
+  else story.scrollTop = 0
+}
+
 // The laptop shows everything at once; coming back from it starts on the story.
 watch(wide, (isWide) => {
   if (isWide) section.value = 'story'
+  else drawerTab.value = null
 })
 const storyEl = ref<HTMLElement | null>(null)
 /** The story is held still and follows the word while an answer is read. */
@@ -660,7 +708,24 @@ watch(
         :class="{ 'lq-wide': wide }"
         @click.capture="onPanelPress"
       >
-        <RoomCard v-if="wide" class="lq-card" data-panel @click="onNameClick" />
+        <div v-if="wide" class="lq-stage">
+          <StagePicture :src="game.roomPicture" />
+          <RoomPlate class="lq-stage-plate" data-panel @click="onNameClick" />
+          <StageButtons
+            :key="`buttons-${stageKey}`"
+            ref="stageButtons"
+            class="lq-stage-buttons"
+            :drawer="drawerTab"
+            @journal="toggleDrawer"
+            @story="storyToStart"
+          />
+          <JournalDrawer
+            v-if="drawerTab"
+            :key="`drawer-${stageKey}`"
+            :tab="drawerTab"
+            @close="closeDrawer"
+          />
+        </div>
         <div
           v-show="wide || section === 'story'"
           class="lq-story-wrap"
@@ -701,6 +766,7 @@ watch(
           class="lq-composer"
           :class="{ 'lq-sheet': !wide }"
           :foldable="!wide"
+          :stage="wide"
           @fold="fold"
         />
         <DockBar
@@ -720,15 +786,6 @@ watch(
             data-panel
           />
         </template>
-
-        <aside v-if="wide" class="lq-aside" aria-label="Map and journal">
-          <CompassPanel data-panel />
-          <JournalPanel
-            :key="`journal-${game.gameNumber}`"
-            class="lq-journal-panel"
-            data-panel
-          />
-        </aside>
       </main>
 
       <SectionNav
@@ -843,31 +900,50 @@ watch(
   gap: 12px;
   padding: 16px;
 }
+/* The stage: the room's picture fills the play area, the story band and the
+   actions sit along its bottom. The stage itself is behind them (it makes no
+   stacking context of its own, so the drawer in it rises above them). */
 .lq-wide {
-  max-width: 1240px;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 340px;
-  grid-template-rows: auto minmax(0, 1fr) auto;
-  column-gap: 20px;
+  position: relative;
+  max-width: none;
+  padding: 0;
+  gap: 0;
 }
-.lq-wide .lq-card,
-.lq-wide .lq-story-wrap,
+.lq-stage {
+  position: absolute;
+  inset: 0;
+}
+.lq-stage-plate {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  z-index: 1;
+  max-width: min(360px, 40%);
+}
+.lq-stage-buttons {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 4;
+  max-width: 55%;
+}
+.lq-wide .lq-story-wrap {
+  flex: 0 0 33%;
+  margin-top: auto;
+  z-index: 2;
+  padding: 0 24px;
+  background: color-mix(in srgb, var(--lq-surface) 96%, transparent);
+  border-top: 1px solid var(--lq-line);
+}
+.lq-wide .lq-story {
+  padding-top: 14px;
+}
 .lq-wide .lq-composer {
-  grid-column: 1;
-}
-/* An expanded long room scrolls inside the card instead of pushing the story
-   and the actions out of the window. */
-.lq-wide .lq-card {
-  max-height: 40vh;
-  overflow-y: auto;
-}
-.lq-aside {
-  grid-column: 2;
-  grid-row: 1 / -1;
-  min-height: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+  position: relative;
+  z-index: 3;
+  flex: 0 0 auto;
+  border-radius: 0;
+  border-width: 1px 0 0;
 }
 .lq-sheet {
   flex: 0 0 auto;
@@ -879,7 +955,6 @@ watch(
 .lq-sheet.lq-typing {
   overflow-y: visible;
 }
-.lq-journal-panel,
 .lq-section-view {
   flex: 1;
 }

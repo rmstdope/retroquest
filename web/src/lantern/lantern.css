@@ -95,6 +95,8 @@
 }
 
 :root {
+  /* How much the room's picture is dimmed (dark theme only). */
+  --lq-picture-dim: 0.2;
   --lq-bg: #10151a;
   --lq-surface: #161d24;
   --lq-raised: #1c242c;
@@ -146,6 +148,7 @@
 
 @media (prefers-color-scheme: light) {
   :root:not([data-theme='dark']) {
+    --lq-picture-dim: 0;
     --lq-bg: #f5f0e6;
     --lq-surface: #fffcf5;
     --lq-raised: #efe8da;
@@ -177,6 +180,7 @@
 }
 
 :root[data-theme='light'] {
+  --lq-picture-dim: 0;
   --lq-bg: #f5f0e6;
   --lq-surface: #fffcf5;
   --lq-raised: #efe8da;

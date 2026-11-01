@@ -311,17 +311,18 @@ describe('LanternLayout', () => {
       })),
     )
     const w = mountLayout()
-    const quests = w
-      .findAll('[role="tab"]')
-      .find((t) => t.text().startsWith('Quests'))!
-    await quests.trigger('click')
-    expect(quests.attributes('aria-selected')).toBe('true')
+    await w.get('[data-button="quests"]').trigger('click')
+    expect(w.get('[role="tab"][aria-selected="true"]').text()).toMatch(
+      /^Quests/,
+    )
+    await w.get('[data-button="map"]').trigger('click')
+    expect(w.find('.lq-compass').exists()).toBe(true)
 
     useGameStore().gameNumber++
     await w.vm.$nextTick()
 
-    const selected = w.get('[role="tab"][aria-selected="true"]')
-    expect(selected.text()).toMatch(/^Bag/)
+    expect(w.find('[aria-label="Journal drawer"]').exists()).toBe(false)
+    expect(w.find('.lq-compass').exists()).toBe(false)
     vi.unstubAllGlobals()
   })
 
@@ -708,19 +709,81 @@ describe('LanternLayout', () => {
 
     afterEach(() => vi.unstubAllGlobals())
 
-    it('shows the room card above the story', () => {
+    it('plays the room on its picture: plate, buttons, story band and actions', () => {
       useGameStore().roomName = 'Village Square'
       const w = mountLayout()
 
-      expect(w.find('[aria-label="Current location"]').exists()).toBe(true)
+      expect(w.find('.lq-stage-picture').exists()).toBe(true)
+      expect(w.get('[aria-label="Current location"]').text()).toContain(
+        'Village Square',
+      )
+      expect(w.findAll('.lq-stage-btn').map((b) => b.text())).toEqual([
+        'Bag · 0',
+        'Spells · 0',
+        'Quests · 0',
+        '⟲ Story so far',
+        '🧭 Map',
+      ])
+      expect(w.find('section[aria-label="Story"]').exists()).toBe(true)
+      expect(w.find('section[aria-label="Actions"]').exists()).toBe(true)
     })
 
-    it('shows the map and journal beside the story', () => {
+    it('has no side column, and the map and the drawer start closed', () => {
       const w = mountLayout()
 
-      const aside = w.get('aside')
-      expect(aside.find('[aria-label="Map"]').exists()).toBe(true)
-      expect(aside.find('[aria-label="Journal"]').exists()).toBe(true)
+      expect(w.find('aside').exists()).toBe(false)
+      expect(w.find('.lq-compass').exists()).toBe(false)
+    })
+
+    it('opens the journal as a drawer on the pressed tab and closes it with ✕, a second press and Escape', async () => {
+      const w = mountLayout()
+
+      await w.get('[data-button="spells"]').trigger('click')
+      expect(w.find('[aria-label="Journal drawer"]').exists()).toBe(true)
+      expect(w.get('[role="tab"][aria-selected="true"]').text()).toMatch(
+        /^Spells/,
+      )
+      expect(w.get('[data-button="spells"]').attributes('aria-pressed')).toBe(
+        'true',
+      )
+
+      await w.get('.lq-drawer-close').trigger('click')
+      expect(w.find('[aria-label="Journal drawer"]').exists()).toBe(false)
+
+      await w.get('[data-button="bag"]').trigger('click')
+      await w.get('[data-button="bag"]').trigger('click')
+      expect(w.find('[aria-label="Journal drawer"]').exists()).toBe(false)
+
+      await w.get('[data-button="quests"]').trigger('click')
+      await w
+        .get('[aria-label="Journal drawer"]')
+        .trigger('keydown', { key: 'Escape' })
+      expect(w.find('[aria-label="Journal drawer"]').exists()).toBe(false)
+    })
+
+    it('closes the drawer and the map after a load and in a new act', async () => {
+      const w = mountLayout()
+      const game = useGameStore()
+
+      await w.get('[data-button="bag"]').trigger('click')
+      await w.get('[data-button="map"]').trigger('click')
+      game.loadNumber++
+      await w.vm.$nextTick()
+      expect(w.find('[aria-label="Journal drawer"]').exists()).toBe(false)
+      expect(w.find('.lq-compass').exists()).toBe(false)
+
+      await w.get('[data-button="spells"]').trigger('click')
+      game.musicActName = 'Act2'
+      await w.vm.$nextTick()
+      expect(w.find('[aria-label="Journal drawer"]').exists()).toBe(false)
+    })
+
+    it('scrolls the story back to its start with Story so far', async () => {
+      const w = mountLayout()
+      const story = w.get('section[aria-label="Story"]').element
+      story.scrollTop = 300
+      await w.get('[data-button="story"]').trigger('click')
+      expect(story.scrollTop).toBe(0)
     })
   })
 
@@ -729,6 +792,7 @@ describe('LanternLayout', () => {
 
     expect(w.find('aside').exists()).toBe(false)
     expect(w.find('[aria-label="Current location"]').exists()).toBe(false)
+    expect(w.find('.lq-stage').exists()).toBe(false)
   })
 
   describe('on a phone', () => {

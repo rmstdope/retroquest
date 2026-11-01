@@ -1,26 +1,19 @@
 <script setup lang="ts">
-import { computed, ref, useId, watch } from 'vue'
+import { computed } from 'vue'
 import { useGameStore } from '@/stores/useGameStore'
 import { usePanelFlash } from '@/composables/usePanelFlash'
 import { displayName } from '@/lantern/displayName'
-import { renderMarkup } from '@/utils/theme'
 
 /**
- * The room card above the story on laptops: where the player is, the room
- * description (long ones clamped to three lines with Read more) and who and
- * what is here (the Here chips are buttons: the layout opens their
- * actions menu). The card is never read aloud or marked as speaking: the
- * room's name and description are read in the story's arrival.
+ * The plate in the stage's top-left corner: "You are in", the room's name and
+ * under it who and what is here as chips (characters blue, items green). A
+ * chip is a button the layout opens the name menu for (it carries the engine's
+ * name). Many chips wrap onto more lines and the plate grows downward; a long
+ * name wraps; with nothing here the plate shows only the name. The plate is
+ * never read aloud: the room's name and description are read in the story.
  */
 const game = useGameStore()
 const { flashing, endFlash } = usePanelFlash(['place'])
-
-/** Descriptions longer than this get the clamp and a Read more toggle. */
-const CLAMP_CHARS = 280
-
-const expanded = ref(false)
-const descriptionId = useId()
-const clampable = computed(() => game.roomDescription.length > CLAMP_CHARS)
 
 /**
  * Who and what is here, each with a key unique within the list: a room can
@@ -39,45 +32,18 @@ const here = computed(() => {
     return { ...entry, key: `${base}:${count}` }
   })
 })
-
-// A new room starts collapsed again.
-watch(
-  () => game.roomName,
-  () => {
-    expanded.value = false
-  },
-)
 </script>
 
 <template>
   <section
-    class="lq-room-card"
+    class="lq-plate"
     :class="{ 'lq-flash': flashing }"
     aria-label="Current location"
     @animationend.self="endFlash"
   >
     <span class="lq-label">You are in</span>
     <h2 class="lq-room-name">{{ game.roomName }}</h2>
-    <!-- eslint-disable vue/no-v-html -->
-    <p
-      :id="descriptionId"
-      class="lq-room-text"
-      :class="{ 'lq-clamp': clampable && !expanded }"
-      v-html="renderMarkup(game.roomDescription)"
-    ></p>
-    <!-- eslint-enable vue/no-v-html -->
-    <button
-      v-if="clampable"
-      type="button"
-      class="lq-read-more"
-      :aria-controls="descriptionId"
-      :aria-expanded="expanded ? 'true' : 'false'"
-      @click="expanded = !expanded"
-    >
-      {{ expanded ? 'Show less' : 'Read more' }}
-    </button>
     <div v-if="here.length" class="lq-here">
-      <span class="lq-label">Here</span>
       <button
         v-for="entry in here"
         :key="entry.key"
@@ -95,14 +61,15 @@ watch(
 </template>
 
 <style scoped>
-.lq-room-card {
+.lq-plate {
   display: flex;
   flex-direction: column;
   gap: 6px;
-  padding: 14px 16px;
+  padding: 12px 16px;
   border-radius: var(--lq-radius);
   border: 1px solid var(--lq-line);
-  background: var(--lq-surface);
+  background: color-mix(in srgb, var(--lq-surface) 93%, transparent);
+  box-shadow: 0 6px 24px rgb(0 0 0 / 0.25);
 }
 .lq-label {
   font-family: var(--lq-font-ui);
@@ -113,40 +80,17 @@ watch(
 }
 .lq-room-name {
   margin: 0;
+  overflow-wrap: anywhere;
   font-family: var(--lq-font-display);
   font-size: calc(24px * var(--lq-display-scale));
   font-weight: 500;
   color: var(--lq-fg);
 }
-.lq-room-text {
-  margin: 0;
-  font-family: var(--lq-font-prose);
-  font-size: var(--lq-story-size);
-  line-height: var(--lq-story-line-height);
-  color: var(--lq-prose);
-}
-.lq-clamp {
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-.lq-read-more {
-  align-self: flex-start;
-  min-height: 32px;
-  padding: 0;
-  border: none;
-  background: none;
-  color: var(--lq-accent-text);
-  font-family: var(--lq-font-ui);
-  font-size: 13px;
-  cursor: pointer;
-}
 .lq-here {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 6px 10px;
+  gap: 6px;
 }
 .lq-here-chip {
   height: 30px;

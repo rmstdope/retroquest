@@ -239,6 +239,8 @@ test.describe('Lantern UI (the default)', () => {
   })
 
   test('builds a command with the action composer', async ({ page }) => {
+    // The classic composer is the phone's (the laptop's is the stage's row).
+    await page.setViewportSize({ width: 900, height: 800 })
     await page.goto('/')
     await injectMockState(page)
     await page.evaluate(() => {
@@ -287,6 +289,8 @@ test.describe('Lantern UI (the default)', () => {
   })
 
   test('highlights the selected input mode', async ({ page }) => {
+    // The classic composer is the phone's (the laptop's is the stage's row).
+    await page.setViewportSize({ width: 900, height: 800 })
     await page.goto('/')
     await injectMockState(page)
     const actions = page.getByRole('region', { name: 'Actions' })
@@ -400,7 +404,7 @@ test.describe('Lantern UI (the default)', () => {
     await expect(list).toHaveCount(0)
   })
 
-  test('puts the room card, map and journal around the story on a laptop', async ({
+  test('plays the room on its picture on a laptop: plate, buttons, map on pointing, drawer', async ({
     page,
   }) => {
     await page.setViewportSize({ width: 1280, height: 800 })
@@ -411,34 +415,50 @@ test.describe('Lantern UI (the default)', () => {
       const app = (document.querySelector('#app') as any).__vue_app__
       const store = app.config.globalProperties.$pinia.state.value.game
       store.roomName = 'Village Square'
-      store.roomDescription = 'The heart of Willowbrook.'
       store.exits = { north: "Mira's Hut" }
       store.rawInventory = [{ name: 'bread', description: 'A small loaf.' }]
       /* eslint-enable @typescript-eslint/no-explicit-any */
     })
 
-    await expect(
-      page.getByRole('region', { name: 'Current location' }),
-    ).toBeVisible()
-    const aside = page.getByRole('complementary', { name: 'Map and journal' })
-    await expect(
-      aside.getByRole('button', { name: "Go north to Mira's Hut" }),
-    ).toBeVisible()
-    await expect(aside.getByRole('tab', { name: /Bag · 1/ })).toBeVisible()
-    // The tab labels fit the side column on one line each.
-    const tabHeights = await aside
-      .getByRole('tab')
-      .evaluateAll((tabs) => tabs.map((t) => t.getBoundingClientRect().height))
-    expect(Math.max(...tabHeights)).toBeLessThan(50)
+    const plate = page.getByRole('region', { name: 'Current location' })
+    await expect(plate).toContainText('You are in')
+    await expect(plate).toContainText('Village Square')
+    for (const name of [/Bag · 1/, /Spells · 0/, /Quests · 0/, /Story so far/])
+      await expect(page.getByRole('button', { name })).toBeVisible()
+    await expect(page.getByRole('complementary')).toHaveCount(0)
+
+    const exit = page.getByRole('button', { name: "Go north to Mira's Hut" })
+    await expect(exit).toHaveCount(0)
+    await page.getByRole('button', { name: /Map/ }).hover()
+    await expect(exit).toBeVisible()
+
+    await page.getByRole('button', { name: /Bag · 1/ }).click()
+    const drawer = page.getByRole('complementary', { name: 'Journal drawer' })
+    await expect(drawer.getByRole('tab', { name: /Bag · 1/ })).toBeVisible()
+    // The lit button stays in sight, and pressing it again closes the drawer.
+    await page.getByRole('button', { name: /Quests · 0/ }).click()
+    await expect(page.getByRole('button', { name: /Quests · 0/ })).toBeVisible()
+    await page.getByRole('button', { name: /Quests · 0/ }).click()
+    await expect(drawer).toHaveCount(0)
+    await expect(page.getByRole('button', { name: /Quests · 0/ })).toBeFocused()
+    await page.getByRole('button', { name: /Bag · 1/ }).click()
+    await expect(drawer).toBeVisible()
+    // The map closes a moment after the pointer left it.
+    await expect(exit).toHaveCount(0)
+    await page.keyboard.press('Escape')
+    await expect(drawer).toHaveCount(0)
+
+    // The row to choose who or what opens just above the verbs.
+    await page.getByRole('button', { name: 'Use', exact: true }).click()
+    const builder = await page.locator('.lq-builder').boundingBox()
+    const verbs = await page.locator('.lq-verbs').boundingBox()
+    expect(builder!.y + builder!.height).toBeLessThanOrEqual(verbs!.y + 1)
 
     await page.setViewportSize({ width: 390, height: 844 })
-    await expect(aside).toBeHidden()
-    await expect(
-      page.getByRole('region', { name: 'Current location' }),
-    ).toBeHidden()
+    await expect(plate).toBeHidden()
   })
 
-  test('keeps the story and actions in view when a long room is expanded', async ({
+  test('keeps the story and actions in view in a busy room on a laptop', async ({
     page,
   }) => {
     await page.setViewportSize({ width: 1024, height: 700 })
@@ -448,14 +468,10 @@ test.describe('Lantern UI (the default)', () => {
       /* eslint-disable @typescript-eslint/no-explicit-any */
       const app = (document.querySelector('#app') as any).__vue_app__
       const store = app.config.globalProperties.$pinia.state.value.game
-      store.roomName = "Dragon's Hall"
-      store.roomDescription =
-        'The hall stretches on, banners stirring. '.repeat(60)
+      store.roomName = "Dragon's Hall of the Long Banners and Many Torches"
       store.items = Array.from({ length: 12 }, (_, i) => `trinket ${i}`)
       /* eslint-enable @typescript-eslint/no-explicit-any */
     })
-
-    await page.getByRole('button', { name: 'Read more' }).click()
 
     await expect(page.getByRole('region', { name: 'Actions' })).toBeInViewport({
       ratio: 1,
