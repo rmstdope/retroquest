@@ -5,6 +5,8 @@ import { nextTick } from 'vue'
 import { createPinia, setActivePinia } from 'pinia'
 import LanternLayout from './LanternLayout.vue'
 import { useGameStore, type Turn } from '@/stores/useGameStore'
+import { useNarrationStore } from '@/stores/useNarrationStore'
+import { useSettingsStore } from '@/stores/useSettingsStore'
 
 /** A turn that tells `text` (nothing when empty). */
 function turn(id: number, text: string, command: string | null = 'look'): Turn {
@@ -326,6 +328,50 @@ describe('the narration paper', () => {
     await nextTick()
     expect(tab()).not.toBeNull()
     box.remove()
+  })
+
+  it('only skips on Escape while the narrator speaks, hiding nothing', async () => {
+    await mountTalking()
+    useSettingsStore().narrationOn = true
+    const narration = useNarrationStore()
+    narration.setAudioFactory(() => ({
+      volume: 1,
+      currentTime: 0,
+      onended: null,
+      onerror: null,
+      play: () => Promise.resolve(),
+      pause: () => {},
+    }))
+    narration.begin(
+      99,
+      [
+        {
+          kind: 'block',
+          parts: [
+            {
+              markup: 'a b',
+              clip: {
+                file: 'x.mp3',
+                speaker: 'narrator',
+                duration: 2,
+                words: [],
+              },
+            },
+          ],
+        },
+      ],
+      'act1',
+    )
+    expect(narration.isNarrating).toBe(true)
+    press('Escape')
+    await nextTick()
+    expect(narration.isNarrating).toBe(false)
+    expect(tab()).toBeNull()
+    expect(speechZone().hasAttribute('inert')).toBe(false)
+    // With nothing narrated, the next Escape hides.
+    press('Escape')
+    await nextTick()
+    expect(tab()).not.toBeNull()
   })
 
   it('hides both sides with N too', async () => {
