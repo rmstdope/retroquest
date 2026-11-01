@@ -112,4 +112,29 @@ describe('characterImages', () => {
     expect(allImages(act).slice(0, rooms)).toEqual(roomImages(act))
     expect(allImages(act).slice(rooms)).toEqual(characterImages(act))
   })
+
+  it('describes how a character looks, with no line of speech in it', () => {
+    const knight = characterImages(new Act4()).find(
+      (i) => i.id === 'act4-portrait-knight-of-despair',
+    )
+    expect(knight?.description.endsWith('his voice is hollow.')).toBe(true)
+    for (const act of ACTS) {
+      for (const [key, C] of Object.entries(act.classes)) {
+        if (!(C.prototype instanceof Character)) continue
+        const character = new (C as unknown as new () => Character)()
+        const spoken = [
+          ...character.description.matchAll(
+            /\[dialogue\]([\s\S]*?)\[\/dialogue\]/g,
+          ),
+        ].map((m) => m[1] ?? '')
+        const image = characterImages(act).find(
+          (i) =>
+            i.title.toLowerCase() === displayName(character.name).toLowerCase(),
+        )
+        for (const words of spoken) {
+          expect(image?.description, key).not.toContain(words)
+        }
+      }
+    }
+  })
 })
