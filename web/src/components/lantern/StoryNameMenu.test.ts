@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { describe, it, expect, afterEach } from 'vitest'
+import { describe, it, expect, afterEach, vi } from 'vitest'
 import { nextTick } from 'vue'
 import { mount, type VueWrapper } from '@vue/test-utils'
 import StoryNameMenu from './StoryNameMenu.vue'
@@ -56,6 +56,17 @@ describe('StoryNameMenu', () => {
     await nextFrame()
 
     expect(wrapper!.emitted('close')).toBeUndefined()
+  })
+
+  it('listens for no scroll when it is gone before its first frame', async () => {
+    const listen = vi.spyOn(document, 'addEventListener')
+    menuAt({ x: 100, top: 200, bottom: 218 })
+    wrapper!.unmount()
+    wrapper = undefined
+    await nextFrame()
+
+    expect(listen.mock.calls.map(([type]) => type)).not.toContain('scroll')
+    listen.mockRestore()
   })
 
   it('stays inside a short window when the choices are many, and scrolls', async () => {
