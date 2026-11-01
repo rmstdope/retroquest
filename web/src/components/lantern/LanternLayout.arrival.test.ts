@@ -349,6 +349,107 @@ describe('LanternLayout: the arrival on the picture', () => {
     expect(w.get('.lq-story').text()).toContain('The heart of Willowbrook.')
   })
 
+  it('keeps the paper away and inert only while the arrival is told', async () => {
+    const w = await ready()
+    useSettingsStore().narrationOn = false
+    await run('go north')
+    expect(w.get('.lq-story-wrap').attributes('inert')).toBeDefined()
+    await key('Escape')
+    expect(w.get('.lq-story-wrap').attributes('inert')).toBeUndefined()
+  })
+
+  it('ignores N during an arrival, and the tab does not offer it', async () => {
+    const w = await ready()
+    await run('go north')
+    expect(w.get('.lq-paper-tab').attributes('aria-keyshortcuts')).toBe(
+      undefined,
+    )
+    await key('n')
+    expect(card(w)).not.toBe('')
+    expect(storyAside(w)).toBe(true)
+  })
+
+  it('clears when narration is switched off while it is told', async () => {
+    const w = await ready()
+    await run('go north')
+    expect(card(w)).not.toBe('')
+    useSettingsStore().narrationOn = false
+    await vi.advanceTimersByTimeAsync(0)
+    expect(card(w)).toBe('')
+    expect(storyAside(w)).toBe(false)
+  })
+
+  it('lets Enter press the Narration tab, which clears the arrival and takes focus to Hide', async () => {
+    const w = await ready()
+    useSettingsStore().narrationOn = false
+    useGameStore().turns.push({
+      id: 96,
+      command: 'south',
+      text: 'A man leaves.',
+      room: 'Garden',
+      description: { moved: true, firstVisit: true },
+      gained: [],
+      lost: [],
+      arrival: {
+        room: 'Garden',
+        description: 'A green garden.',
+        characters: [],
+        items: [],
+        exits: {},
+      },
+      narrate: true,
+    })
+    await vi.advanceTimersByTimeAsync(0)
+    const tab = w.get('.lq-paper-tab').element as HTMLElement
+    tab.focus()
+    const down = new KeyboardEvent('keydown', {
+      key: 'Enter',
+      bubbles: true,
+      cancelable: true,
+    })
+    tab.dispatchEvent(down)
+    // Not taken as "go on": the button itself is pressed (a click follows).
+    expect(down.defaultPrevented).toBe(false)
+    expect(card(w)).toContain('A man leaves.')
+    await w.get('.lq-paper-tab').trigger('click')
+    await vi.advanceTimersByTimeAsync(0)
+    expect(card(w)).toBe('')
+    expect(document.activeElement).toBe(w.get('.lq-paper-corner').element)
+  })
+
+  it('moves focus from the tab to Hide when the arrival ends by itself', async () => {
+    const w = await ready()
+    useSettingsStore().narrationOn = false
+    await run('go north')
+    ;(w.get('.lq-paper-tab').element as HTMLElement).focus()
+    await vi.advanceTimersByTimeAsync(6000)
+    expect(card(w)).toBe('')
+    expect(document.activeElement).toBe(w.get('.lq-paper-corner').element)
+  })
+
+  it('moves focus from the paper to the tab when an arrival starts', async () => {
+    const w = await ready()
+    useSettingsStore().narrationOn = false
+    ;(w.get('.lq-paper-corner').element as HTMLElement).focus()
+    await run('go north')
+    expect(document.activeElement).toBe(w.get('.lq-paper-tab').element)
+  })
+
+  it('does not let a held key run through the parts', async () => {
+    const w = await ready()
+    useSettingsStore().narrationOn = false
+    await run('go north')
+    document.body.dispatchEvent(
+      new KeyboardEvent('keydown', {
+        key: 'Enter',
+        repeat: true,
+        bubbles: true,
+      }),
+    )
+    await vi.advanceTimersByTimeAsync(0)
+    expect(card(w)).not.toBe('')
+  })
+
   it('clears for a new game and a new act', async () => {
     const w = await ready()
     useSettingsStore().narrationOn = false

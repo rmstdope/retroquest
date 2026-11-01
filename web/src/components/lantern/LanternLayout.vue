@@ -295,6 +295,22 @@ async function hidePaper(): Promise<void> {
   tabEl.value?.focus()
 }
 
+// An arrival holds the paper away (inert) and ends by giving it back: focus
+// in the paper when it goes moves to the tab, and focus on the tab when it
+// goes (the tab leaves with it) moves on to the paper's Hide button.
+watch(
+  () => arrival.active,
+  (active) => {
+    const focus = document.activeElement
+    if (active && wide.value && paperEl.value?.contains(focus))
+      void nextTick(() => tabEl.value?.focus())
+    else if (!active && focus && focus === tabEl.value)
+      void nextTick(() =>
+        paperEl.value?.querySelector<HTMLElement>('.lq-paper-corner')?.focus(),
+      )
+  },
+)
+
 /** Bring the paper back; focus goes to its Hide button. */
 async function showPaper(): Promise<void> {
   // The tab also ends an arrival told on the picture, which holds the paper away.
@@ -436,6 +452,9 @@ function onNarrationKey(event: KeyboardEvent): void {
   const target = event.target instanceof Element ? event.target : null
   const field = target?.closest('input, textarea, select, [contenteditable]')
   if (arrival.active && hurries) {
+    // The paper's tab is pressed as a button (it ends the arrival and takes
+    // focus on); holding a key down goes on once, not through the parts.
+    if (target?.closest('.lq-paper-tab') || event.repeat) return
     // An arrival on the picture takes Enter and Space even from a focused
     // button (focus stays where it was, the button is not pressed); a field
     // keeps them (a space, the command), but an empty command box goes on.
@@ -1128,8 +1147,8 @@ watch(
             ref="tabEl"
             type="button"
             class="lq-paper-tab"
-            title="Show the narration (N)"
-            aria-keyshortcuts="N"
+            :title="arrival.active ? undefined : 'Show the narration (N)'"
+            :aria-keyshortcuts="arrival.active ? undefined : 'N'"
             @click="showPaper"
           >
             ▴ Narration
