@@ -116,8 +116,20 @@ describe('StageSpeech', () => {
     expect(w.findAll('[data-testid="speech-line"]')).toHaveLength(2)
   })
 
-  it('has one control, named for what it does, and nothing else to focus', async () => {
+  it('has no control of its own on the laptop: the one Hide clears both sides', async () => {
     const { speech, w } = mounted()
+    speech.observe(turn(say('Mira', 'Hello.'), 'Mira'))
+    await w.vm.$nextTick()
+    expect(w.findAll('button, a, input, [tabindex]')).toHaveLength(0)
+    expect(w.get('.lq-thread').attributes('aria-hidden')).toBe('true')
+  })
+
+  it('has one control on the phone, named for what it does, and nothing else to focus', async () => {
+    const speech = useStageSpeechStore()
+    const w = mount(StageSpeech, {
+      props: { phone: true },
+      attachTo: document.body,
+    })
     speech.observe(turn(say('Mira', 'Hello.'), 'Mira'))
     await w.vm.$nextTick()
     const buttons = w.findAll('button, a, input, [tabindex]')
@@ -125,11 +137,26 @@ describe('StageSpeech', () => {
     expect(buttons[0].text()).toBe('✕')
     expect(buttons[0].attributes('aria-label')).toBe('Clear the conversation')
     expect(buttons[0].attributes('title')).toBe('Clear the conversation')
-    expect(w.get('.lq-thread').attributes('aria-hidden')).toBe('true')
   })
 
-  it('clears with the button, which hands focus to the story band', async () => {
+  it('is cleared away, and unreachable, while the words are hidden', async () => {
     const { speech, w } = mounted()
+    speech.observe(turn(say('Mira', 'Hello.'), 'Mira'))
+    await w.vm.$nextTick()
+    expect(w.classes()).not.toContain('lq-speech-away')
+    await w.setProps({ away: true })
+    expect(w.classes()).toContain('lq-speech-away')
+    expect(w.attributes('inert')).toBeDefined()
+    // The lines are kept: hiding loses nothing.
+    expect(w.findAll('[data-testid="speech-line"]')).toHaveLength(1)
+  })
+
+  it('clears with the phone button, which hands focus to the story band', async () => {
+    const speech = useStageSpeechStore()
+    const w = mount(StageSpeech, {
+      props: { phone: true },
+      attachTo: document.body,
+    })
     speech.observe(turn(say('Mira', 'Hello.'), 'Mira'))
     await w.vm.$nextTick()
     await w.get('button').trigger('click')

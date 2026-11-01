@@ -17,9 +17,12 @@ import SpeechPortrait from './SpeechPortrait.vue'
  * taller than the room never loses its top: the thread scrolls so the newest
  * line shows from its speaker down, its end faded at the bottom (the paper
  * below has every word). The conversation is kept by
- * `useStageSpeechStore`. A round ✕ clears it (the story band keeps every
- * line) and hands focus to the story band (`focus-story`); Escape clears it
- * too, which the layout handles with the other keys. The zone
+ * `useStageSpeechStore`. On a phone a round ✕ clears it (the story band keeps
+ * every line) and hands focus to the story band (`focus-story`), and Escape
+ * clears it too, which the layout handles with the other keys. On the laptop
+ * there is no control here: the one Hide of the layout clears both sides, and
+ * `away` says the words are hidden, so the zone fades out and is unreachable
+ * while the lines are kept. The zone
  * fills the space between the stage's top and the story band (on a phone,
  * between the plate and the paper, the thread rising to the plate); a press
  * on it shows the rest of the turn's lines at once. Not shown while there is
@@ -28,7 +31,7 @@ import SpeechPortrait from './SpeechPortrait.vue'
  * the plate is folded, and the portraits are then smaller and rest 4px from
  * the foot so the ✕ above the right one stays clear of it.
  */
-defineProps<{ phone?: boolean; folded?: boolean }>()
+defineProps<{ phone?: boolean; folded?: boolean; away?: boolean }>()
 const emit = defineEmits<{ 'focus-story': []; room: [height: number] }>()
 const game = useGameStore()
 const speech = useStageSpeechStore()
@@ -102,7 +105,12 @@ function clearAndFocus(): void {
   <div
     ref="zone"
     class="lq-speech-zone"
-    :class="{ 'lq-phone-speech': phone, 'lq-speech-folded': folded }"
+    :class="{
+      'lq-phone-speech': phone,
+      'lq-speech-folded': folded,
+      'lq-speech-away': away,
+    }"
+    :inert="away || undefined"
     data-testid="speech-zone"
     @click="hurry"
   >
@@ -142,6 +150,7 @@ function clearAndFocus(): void {
         <!-- eslint-enable vue/no-v-html -->
       </div>
       <button
+        v-if="phone"
         type="button"
         class="lq-clear"
         aria-label="Clear the conversation"
@@ -170,6 +179,14 @@ function clearAndFocus(): void {
 .lq-speech {
   position: absolute;
   inset: 0;
+}
+/* Hidden with the narrator's cards by the one Hide: faded out, then out of reach. */
+.lq-speech-away {
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity calc(0.2s * var(--lq-motion)) ease,
+    visibility 0s linear calc(0.2s * var(--lq-motion));
 }
 .lq-sp-left,
 .lq-sp-right {

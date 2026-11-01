@@ -1029,27 +1029,15 @@ describe('LanternLayout', () => {
       expect(w.find('[data-testid="speech-line"]').exists()).toBe(false)
     })
 
-    it('puts the ✕ after the five buttons and before the story band, and focuses the band when pressed', async () => {
+    it('has no ✕ on the laptop: the one Hide is the control', async () => {
       const w = mount(LanternLayout, { attachTo: document.body })
       wrapper = w
       await say(w, WORDS, 'Grandmother')
-      const order = Array.from(
-        document.querySelectorAll<HTMLElement>(
-          '.lq-stage-btn, .lq-clear, section[aria-label="Story"]',
-        ),
-      ).map((el) => el.className.split(' ')[0])
-      expect(order.slice(-2)).toEqual(['lq-clear', 'lq-story'])
-      expect(order.slice(0, 5).every((name) => name === 'lq-stage-btn')).toBe(
-        true,
-      )
-
-      const story = w.get('section[aria-label="Story"]').element
-      await w.get('.lq-clear').trigger('click')
-      expect(w.find('[data-testid="speech-line"]').exists()).toBe(false)
-      expect(document.activeElement).toBe(story)
+      expect(w.find('.lq-clear').exists()).toBe(false)
+      expect(w.findAll('.lq-words-hide')).toHaveLength(1)
     })
 
-    it('lets Escape close an open drawer first and clear the picture next', async () => {
+    it('lets Escape close an open drawer first and hide the words next', async () => {
       const w = mountLayout()
       await say(w, WORDS, 'Grandmother')
       await w.get('[data-button="bag"]').trigger('click')
@@ -1061,7 +1049,10 @@ describe('LanternLayout', () => {
 
       document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }))
       await w.vm.$nextTick()
-      expect(w.find('[data-testid="speech-line"]').exists()).toBe(false)
+      expect(
+        w.get('[data-testid="speech-zone"]').attributes('inert'),
+      ).toBeDefined()
+      expect(w.find('.lq-paper-tab').exists()).toBe(true)
     })
   })
 

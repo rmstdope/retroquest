@@ -74,12 +74,16 @@ import TitlePage from './TitlePage.vue'
  * (`useNarrationPaper`), the newest lit and older ones dimmed, each starting
  * with the command; the newest grows as the narrator reaches each part and,
  * when it is taller than the room under the plate, scrolls with a "More below"
- * pill. "▾ Hide" (or N) folds them to a "▴ Narration" tab at the bottom left,
- * a new turn with a card opens them again; every turn is read in the story
- * drawer. A phone keeps the paper as a band under the picture.
+ * pill. One "▾ Hide" on its own line at the bottom centre of the picture (or N,
+ * or Escape when nothing is narrated) clears both the cards and the speech,
+ * leaving a "▴ Show" tab in its place; the tab, N or the next turn with a card
+ * brings both back as they were, and every turn is read in the story drawer. A
+ * phone keeps the paper as a band under the picture, with its own Hide and
+ * "▴ Narration" tab.
  * The first time the player walks into a room its arrival is told on the
  * middle of the picture instead (`ArrivalOnPicture`, `useArrivalStore`): the
- * paper slides down to its "▴ Narration" tab and comes back when the arrival
+ * cards and the speech are clear (no Hide or tab on the laptop; a phone's paper
+ * slides down to its "▴ Narration" tab) and the cards come back when the arrival
  * clears (on the laptop as a slim card with the command, the room itself having
  * been told in the middle). Enter or Space goes on, a click on the
  * picture too; Escape, the tab, an action or typing clear it at once.
@@ -305,6 +309,26 @@ const paperAway = computed(
     paper.visible.value &&
     (paper.hidden.value || arrival.active),
 )
+/**
+ * Something is on the picture for the one Hide to clear: on the laptop either
+ * side (the narrator's cards or the speech), elsewhere the paper.
+ */
+const wordsVisible = computed(
+  () => paper.visible.value || (wide.value && speech.visible.length > 0),
+)
+/** The laptop's "▾ Hide": the words are showing and no arrival holds them away. */
+const showHide = computed(
+  () =>
+    wide.value && wordsVisible.value && !paper.hidden.value && !arrival.active,
+)
+/** The tab that brings the words back: on the laptop "▴ Show" (not during an arrival), elsewhere the paper's own tab. */
+const showTab = computed(() =>
+  wide.value
+    ? wordsVisible.value && paper.hidden.value && !arrival.active
+    : paperAway.value,
+)
+/** The laptop's Hide button, which hands focus to the tab. */
+const hideEl = ref<HTMLButtonElement | null>(null)
 /** The paper's height in px, or null before it was measured (and off the stage). */
 const paperPx = ref<number | null>(null)
 
@@ -329,11 +353,27 @@ function measurePaper(): void {
   paperPx.value = paperHeight(content.offsetHeight, chrome, area.clientHeight)
 }
 
-/** Hide the paper; focus goes to the tab it leaves. */
+/** Hide the words (on the laptop both sides); focus goes to the tab they leave. */
 async function hidePaper(): Promise<void> {
   paper.hide()
   await nextTick()
   tabEl.value?.focus()
+}
+
+/**
+ * Hide or show the words from a key (N, Escape). Focus on the Hide or inside
+ * the cards follows to the tab when they go, and focus on the tab follows to
+ * Hide when they come back; focus anywhere else (the command box) stays.
+ */
+function setWordsHidden(hide: boolean): void {
+  const active = document.activeElement
+  const focusWasInside =
+    !!active && (active === hideEl.value || !!paperEl.value?.contains(active))
+  const focusWasOnTab = !!active && active === tabEl.value
+  if (hide) paper.hide()
+  else paper.show()
+  if (focusWasInside && hide) void nextTick(() => tabEl.value?.focus())
+  else if (focusWasOnTab && !hide) void showPaper()
 }
 
 // An arrival holds the paper away (inert) and ends by giving it back: focus
@@ -343,6 +383,8 @@ watch(
   () => arrival.active,
   (active) => {
     const focus = document.activeElement
+    // The laptop shows neither Hide nor tab during an arrival.
+    if (wide.value) return
     if (active && staged.value && paperEl.value?.contains(focus))
       void nextTick(() => tabEl.value?.focus())
     else if (!active && focus && focus === tabEl.value)
@@ -358,7 +400,8 @@ async function showPaper(): Promise<void> {
   clearArrival()
   paper.show()
   await nextTick()
-  paperEl.value?.querySelector<HTMLElement>('.lq-paper-corner')?.focus()
+  if (wide.value) hideEl.value?.focus()
+  else paperEl.value?.querySelector<HTMLElement>('.lq-paper-corner')?.focus()
 }
 
 /** The keys N steers: only on the laptop, only with a paper (or its tab) to steer. */
@@ -366,23 +409,13 @@ function onPaperKey(event: KeyboardEvent): void {
   if (event.key !== 'n' && event.key !== 'N') return
   if (event.defaultPrevented || event.repeat) return
   if (event.ctrlKey || event.metaKey || event.altKey) return
-  if (!wide.value || !paper.visible.value || dialogOpen()) return
+  if (!wide.value || !wordsVisible.value || dialogOpen()) return
   // An arrival on the picture holds the paper away; Escape, Enter or the tab end it.
   if (arrival.active) return
   const target = event.target instanceof Element ? event.target : null
   if (target?.closest('input, textarea, select, [contenteditable]')) return
   event.preventDefault()
-  // Focus on the paper or on its tab would be lost as one slides away and the
-  // other goes: it follows to the other one.
-  const active = document.activeElement
-  const focusWasInside = !!paperEl.value?.contains(active)
-  const focusWasOnTab = !!active && active === tabEl.value
-  paper.toggle()
-  if (focusWasInside && paper.hidden.value) {
-    void nextTick(() => tabEl.value?.focus())
-  } else if (focusWasOnTab && !paper.hidden.value) {
-    void showPaper()
-  }
+  setWordsHidden(!paper.hidden.value)
 }
 /** The story is held still and follows the word while an answer is read. */
 const { held: storyHeld, moveTo: moveStory, refollow } = useStoryFollow(storyEl)
@@ -502,10 +535,20 @@ function isEmptyBoxEnter(event: KeyboardEvent): boolean {
 
 /** Keys that steer the narration; see `onNarrationKey`. */
 function onNarrationKey(event: KeyboardEvent): void {
-  // Escape also clears the speech on the picture (unless a drawer, the map or
-  // a menu took it first); the narration below still hears it.
-  if (event.key === 'Escape' && !event.defaultPrevented && staged.value)
-    speech.clear()
+  // Escape (unless a drawer, the map or a menu took it first) clears the
+  // speech on a phone; on the laptop it does what Hide does, when nothing is
+  // being narrated (while it is, Escape only skips, below).
+  if (event.key === 'Escape' && !event.defaultPrevented && staged.value) {
+    if (!wide.value) speech.clear()
+    else if (
+      wordsVisible.value &&
+      !paper.hidden.value &&
+      !narration.isNarrating &&
+      !arrival.active &&
+      !dialogOpen()
+    )
+      setWordsHidden(true)
+  }
   if (!(narration.isNarrating || arrival.active)) return
   // The command box handles its own Enter (and marks it handled); on an
   // arrival an empty box still lets that Enter go on.
@@ -982,7 +1025,7 @@ const NARRATION_HELP =
   'Turn narration off in Settings.\n'
 
 /** Help's line for the key that hides the narration paper (laptop only). */
-const NARRATION_KEY_HELP = '\nN — hide or show the narration\n'
+const NARRATION_KEY_HELP = '\nN — hide or show the words\n'
 
 /** Stats or Help as HTML (Help ends with the music credits). */
 const infoHtml = computed(() => {
@@ -1263,9 +1306,10 @@ watch(
         <StageSpeech
           v-if="staged"
           v-show="section === 'story'"
-          :class="{ 'lq-covered': sheetOpen }"
+          :class="{ 'lq-covered': sheetOpen, 'lq-above-hide': wide }"
           :phone="phoneStage"
           :folded="plateFolded"
+          :away="wide && (paper.hidden.value || arrival.active)"
           @focus-story="focusStory"
           @room="onSpeechRoom"
         />
@@ -1287,7 +1331,7 @@ watch(
             wide
               ? {
                   top: `${cardsTop}px`,
-                  bottom: `calc(${actionsHeight}px + 12px)`,
+                  bottom: `calc(${actionsHeight}px + var(--lq-hide-line) + 12px)`,
                 }
               : staged && paperPx !== null
                 ? { height: `${paperPx}px` }
@@ -1316,11 +1360,9 @@ watch(
             </div>
           </section>
           <button
-            v-if="staged"
+            v-if="phoneStage"
             type="button"
             class="lq-paper-corner lq-paper-hide"
-            :title="wide ? 'Hide the narration (N)' : undefined"
-            :aria-keyshortcuts="wide ? 'N' : undefined"
             @click="hidePaper"
           >
             ▾ Hide
@@ -1347,22 +1389,31 @@ watch(
           v-show="section === 'story'"
           class="lq-paper-tabrow"
           :class="{
-            'lq-paper-none': !paper.visible.value,
+            'lq-paper-none': !wordsVisible,
             'lq-covered': sheetOpen,
           }"
         >
           <button
-            v-if="paperAway"
+            v-if="showHide"
+            ref="hideEl"
+            type="button"
+            class="lq-words-hide"
+            title="Hide the words (N)"
+            aria-keyshortcuts="N"
+            @click="hidePaper"
+          >
+            ▾ Hide
+          </button>
+          <button
+            v-if="showTab"
             ref="tabEl"
             type="button"
             class="lq-paper-tab"
-            :title="
-              arrival.active || !wide ? undefined : 'Show the narration (N)'
-            "
-            :aria-keyshortcuts="arrival.active || !wide ? undefined : 'N'"
+            :title="wide ? 'Show the words (N)' : undefined"
+            :aria-keyshortcuts="wide ? 'N' : undefined"
             @click="showPaper"
           >
-            ▴ Narration
+            {{ wide ? '▴ Show' : '▴ Narration' }}
           </button>
         </div>
 
@@ -1657,10 +1708,43 @@ watch(
 .lq-phone .lq-paper-tab {
   right: 12px;
 }
-/* The laptop's tab rests at the bottom left of the picture, under the cards. */
+/* The laptop: one Hide on its own slim line at the foot of the picture, the
+   cards and the speech ending above it; hidden, the "▴ Show" tab rests in
+   its place. Both sit at the bottom centre. */
+.lq-wide {
+  --lq-hide-line: 40px;
+}
 .lq-wide .lq-paper-tab {
   right: auto;
-  left: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.lq-above-hide {
+  margin-bottom: var(--lq-hide-line);
+}
+.lq-words-hide {
+  position: absolute;
+  left: 50%;
+  bottom: 6px;
+  transform: translateX(-50%);
+  height: 28px;
+  padding: 0 14px;
+  border: 1px solid var(--lq-line);
+  border-radius: 14px;
+  background: var(--lq-raised);
+  color: var(--lq-muted);
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.2);
+}
+.lq-words-hide:hover {
+  color: var(--lq-fg);
+}
+.lq-words-hide:focus-visible,
+.lq-paper-tab:focus-visible {
+  outline: 2px solid var(--lq-accent);
+  outline-offset: 2px;
 }
 .lq-phone :deep(.lq-dock) {
   position: relative;

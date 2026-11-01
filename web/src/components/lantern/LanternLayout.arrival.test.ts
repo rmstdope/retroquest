@@ -131,14 +131,16 @@ describe('LanternLayout: the arrival on the picture', () => {
     vi.unstubAllGlobals()
   })
 
-  it('tells a first visit on the picture, with the story aside and a Narration tab', async () => {
+  it('tells a first visit on the picture, with the story aside and neither Hide nor tab', async () => {
     const w = await ready()
     await run('go north')
     expect(card(w)).toContain('A green garden.')
     expect(card(w)).toContain('Click or press Enter to continue')
     expect(w.find('[data-testid="arrival-bar"]').exists()).toBe(false)
     expect(storyAside(w)).toBe(true)
-    expect(w.get('.lq-paper-tab').text()).toBe('▴ Narration')
+    // Both sides are clear, so there is nothing to hide or show.
+    expect(w.find('.lq-paper-tab').exists()).toBe(false)
+    expect(w.find('.lq-words-hide').exists()).toBe(false)
   })
 
   it('clears 1½ s after the narrator finishes, and the cards come back with a slim card for the walk', async () => {
@@ -265,13 +267,12 @@ describe('LanternLayout: the arrival on the picture', () => {
     expect(storyAside(w)).toBe(false)
   })
 
-  it('clears with the Narration tab', async () => {
-    const w = await ready()
+  it('clears with the Narration tab on a phone', async () => {
+    const w = await ready(false)
     await run('go north')
     await w.get('.lq-paper-tab').trigger('click')
     expect(card(w)).toBe('')
     expect(useNarrationStore(pinia).isNarrating).toBe(false)
-    expect(storyAside(w)).toBe(false)
   })
 
   it('clears when an action is chosen', async () => {
@@ -320,7 +321,7 @@ describe('LanternLayout: the arrival on the picture', () => {
     expect(card(w)).toBe('')
     expect(storyAside(w)).toBe(false)
     await run('go north')
-    await w.get('.lq-paper-tab').trigger('click')
+    await key('Escape')
     await run('go south')
     expect(card(w)).toBe('')
     expect(storyAside(w)).toBe(false)
@@ -410,12 +411,10 @@ describe('LanternLayout: the arrival on the picture', () => {
     expect(w.get('.lq-story-wrap').attributes('inert')).toBeUndefined()
   })
 
-  it('ignores N during an arrival, and the tab does not offer it', async () => {
+  it('ignores N during an arrival, which has neither Hide nor tab to offer it', async () => {
     const w = await ready()
     await run('go north')
-    expect(w.get('.lq-paper-tab').attributes('aria-keyshortcuts')).toBe(
-      undefined,
-    )
+    expect(w.find('.lq-paper-tab').exists()).toBe(false)
     await key('n')
     expect(card(w)).not.toBe('')
     expect(storyAside(w)).toBe(true)
@@ -431,8 +430,8 @@ describe('LanternLayout: the arrival on the picture', () => {
     expect(storyAside(w)).toBe(false)
   })
 
-  it('lets Enter press the Narration tab, which clears the arrival and takes focus to Hide', async () => {
-    const w = await ready()
+  it('lets Enter press the Narration tab on a phone, which clears the arrival and takes focus to Hide', async () => {
+    const w = await ready(false)
     useSettingsStore(pinia).narrationOn = false
     useGameStore(pinia).turns.push({
       id: 96,
@@ -469,8 +468,8 @@ describe('LanternLayout: the arrival on the picture', () => {
     expect(document.activeElement).toBe(w.get('.lq-paper-corner').element)
   })
 
-  it('moves focus from the tab to Hide when the arrival ends by itself', async () => {
-    const w = await ready()
+  it('moves focus from the tab to Hide when the arrival ends by itself, on a phone', async () => {
+    const w = await ready(false)
     useSettingsStore(pinia).narrationOn = false
     await run('go north')
     ;(w.get('.lq-paper-tab').element as HTMLElement).focus()
@@ -479,8 +478,8 @@ describe('LanternLayout: the arrival on the picture', () => {
     expect(document.activeElement).toBe(w.get('.lq-paper-corner').element)
   })
 
-  it('moves focus from the paper to the tab when an arrival starts', async () => {
-    const w = await ready()
+  it('moves focus from the paper to the tab when an arrival starts, on a phone', async () => {
+    const w = await ready(false)
     useSettingsStore(pinia).narrationOn = false
     ;(w.get('.lq-paper-corner').element as HTMLElement).focus()
     await run('go north')
