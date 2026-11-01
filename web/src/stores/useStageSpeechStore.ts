@@ -13,7 +13,7 @@ import {
 /**
  * The conversation shown on the room's picture (never saved). A command that
  * addresses a character starts or continues a conversation with them; any
- * other turn clears it, and so does addressing someone else (which starts a
+ * other turn clears it, and so does a turn that moves Elior to another room, and so does addressing someone else (which starts a
  * fresh one). The lines of each turn are the quotes of its answer
  * (`speechLines`), shown as the narrator reaches them when the turn is
  * narrated, and otherwise one at a time by a reading pause (`readingPauseMs`);
@@ -37,8 +37,6 @@ export const useStageSpeechStore = defineStore('stageSpeech', () => {
   const narration = useNarrationStore()
   const conversation = ref<{ with: string; lines: StageLine[] } | null>(null)
   let nextKey = 1
-  /** The room the last observed turn ended in. */
-  let lastRoom: string | null = null
   let timer: ReturnType<typeof setTimeout> | undefined
 
   /** Whether a line is on the picture now. */
@@ -105,8 +103,7 @@ export const useStageSpeechStore = defineStore('stageSpeech', () => {
    */
   function observe(turn: Turn): void {
     revealAll()
-    const moved = lastRoom !== null && lastRoom !== turn.room
-    lastRoom = turn.room
+    const moved = turn.description?.moved === true
     const addressed = turn.addressed ?? null
     // Leaving the room ends the conversation, even when the talk itself moved Elior.
     if (!addressed || moved) return clear()

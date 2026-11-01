@@ -527,7 +527,7 @@ test.describe('Lantern UI (the default)', () => {
     await expect(drawer).toHaveCount(0)
   })
 
-  test('puts speech on the picture on a laptop: the Voice on the right, Elior on the left, cleared by ✕, Escape and walking', async ({
+  test('puts speech on the picture on a laptop: the grandmother on the right, Elior on the left, cleared by ✕, Escape and walking', async ({
     page,
   }) => {
     await page.setViewportSize({ width: 1280, height: 800 })
@@ -548,6 +548,9 @@ test.describe('Lantern UI (the default)', () => {
     await expect(page.getByRole('region', { name: 'Story' })).toContainText(
       'Voice',
     )
+    await expect(
+      page.getByRole('region', { name: 'Current location' }),
+    ).toContainText("Elior's Cottage")
     await expect(lines).toHaveCount(0)
 
     // Talking to his grandmother: no portrait is made yet, so the initial
