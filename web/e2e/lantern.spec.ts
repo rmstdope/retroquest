@@ -412,6 +412,45 @@ test.describe('Lantern UI (the default)', () => {
     await expect(list).toHaveCount(0)
   })
 
+  // The Esc mark on Actions shows only while the command box has focus; a
+  // press on the switch once blurred the box, the mark went and the switch
+  // narrowed under the pointer, so the click missed (rq-nq8t).
+  test('acts on the first click on the narrow switch while typing', async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 900, height: 800 })
+    await page.goto('/')
+    await injectMockState(page)
+    await page.getByRole('button', { name: 'Actions ▴' }).click()
+    const actions = page.getByRole('region', { name: 'Actions' })
+    const actionsButton = actions.getByRole('button', {
+      name: 'Actions',
+      exact: true,
+    })
+    const typeButton = actions.getByRole('button', {
+      name: 'Type',
+      exact: true,
+    })
+    const input = page.getByLabel('Command')
+
+    await typeButton.click()
+    await input.pressSequentially('lo')
+    // Escape puts the word list (which covers the switch) away first.
+    await input.press('Escape')
+    await expect(page.getByRole('listbox')).toHaveCount(0)
+    // Type again: the box keeps the cursor, and typing goes on in it.
+    await typeButton.click()
+    await expect(input).toBeFocused()
+    await page.keyboard.type('ok')
+    await expect(input).toHaveValue('look')
+    await input.press('Escape')
+
+    // The Esc mark is part of Actions: a click on it switches to Actions.
+    await actions.locator('.lq-esc').click()
+    await expect(actionsButton).toHaveAttribute('aria-pressed', 'true')
+    await expect(input).toHaveCount(0)
+  })
+
   test('plays the room on its picture on a laptop: plate, buttons, map on pointing, drawer', async ({
     page,
   }) => {

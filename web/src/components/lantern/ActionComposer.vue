@@ -424,6 +424,15 @@ function onBoxBlur(): void {
   completion.close()
 }
 
+/**
+ * A press on the panel's switch while typing keeps the cursor in the box: a
+ * blur would take the Escape mark away and narrow the switch under the
+ * pointer, so the click would miss. Its click moves focus where it belongs.
+ */
+function keepBoxFocus(event: MouseEvent): void {
+  if (inBox.value) event.preventDefault()
+}
+
 /** Enter in the command box: apply a highlighted match, else send. */
 function onTypedEnter(): void {
   if (!completion.applyActive()) submitTyped()
@@ -445,6 +454,7 @@ function onTypedEnter(): void {
           :aria-pressed="mode === 'actions' ? 'true' : 'false'"
           class="lq-seg-btn"
           :aria-keyshortcuts="inBox ? 'Escape' : undefined"
+          @mousedown="keepBoxFocus"
           @click="chooseActions"
         >
           Actions<kbd v-if="inBox" class="lq-esc" aria-hidden="true">Esc</kbd>
@@ -453,6 +463,7 @@ function onTypedEnter(): void {
           type="button"
           :aria-pressed="mode === 'type' ? 'true' : 'false'"
           class="lq-seg-btn"
+          @mousedown="keepBoxFocus"
           @click="chooseType"
         >
           Type
