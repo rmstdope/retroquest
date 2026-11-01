@@ -14,6 +14,11 @@ import { narrationKey } from '@/lantern/narrationKey'
 import { narrationWords } from '@/lantern/narrationManifest'
 import type { Turn } from '@/stores/useGameStore'
 
+/** Wait for the next animation frame (an open name menu listens for scrolls from then on). */
+function nextFrame(): Promise<void> {
+  return new Promise((done) => requestAnimationFrame(() => done()))
+}
+
 const TURN = {
   command: 'look',
   text: 'Hi',
@@ -457,6 +462,7 @@ describe('LanternLayout', () => {
       ;(document.activeElement as HTMLElement | null)?.blur()
       await w.get('.lq-story .theme-item_name').trigger('click')
       await flushPromises()
+      await nextFrame()
 
       document.body.dispatchEvent(new Event('scroll'))
       await flushPromises()
@@ -524,6 +530,7 @@ describe('LanternLayout', () => {
       await chip.trigger('click')
       await flushPromises()
       const focus = vi.spyOn(chip.element as HTMLElement, 'focus')
+      await nextFrame()
 
       await w.get('.lq-story').trigger('scroll')
 
