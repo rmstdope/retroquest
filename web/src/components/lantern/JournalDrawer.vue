@@ -50,16 +50,19 @@ function onKeydown(event: KeyboardEvent): void {
 <style scoped>
 .lq-drawer {
   position: absolute;
-  /* Under the buttons, so the lit one stays in sight and can be pressed again. */
+  /* Under the buttons, so the lit one stays in sight and can be pressed again;
+     above the action row, so every action stays in reach. */
   top: 76px;
   right: 0;
-  bottom: 0;
+  bottom: var(--lq-actions-h, 0px);
   z-index: 6;
   width: min(380px, 92%);
   display: flex;
   flex-direction: column;
   background: var(--lq-surface);
-  border-left: 1px solid var(--lq-line);
+  border: 1px solid var(--lq-line);
+  border-right: none;
+  border-radius: 10px 0 0 10px;
   box-shadow: -8px 0 28px rgb(0 0 0 / 0.3);
   animation: lq-drawer-in calc(0.2s * var(--lq-motion)) ease;
 }
