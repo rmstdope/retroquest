@@ -10,6 +10,7 @@ import { Act4 } from '@/act4/Act4'
 import type { Act } from '@/engine'
 import { Character } from '@/engine'
 import { displayName } from './displayName'
+import { narrationText } from './narrationKey'
 import {
   IMAGE_HEIGHT,
   IMAGE_WIDTH,
@@ -18,6 +19,7 @@ import {
   allImages,
   characterImages,
   roomImages,
+  withoutSpeech,
 } from './imageLists'
 
 const SLUG = /^[a-z0-9]+(-[a-z0-9]+)*$/
@@ -132,9 +134,18 @@ describe('characterImages', () => {
             i.title.toLowerCase() === displayName(character.name).toLowerCase(),
         )
         for (const words of spoken) {
-          expect(image?.description, key).not.toContain(words)
+          expect(image?.description, key).not.toContain(narrationText(words))
         }
       }
     }
+  })
+
+  it('keeps a character named in the prose when removing a line of speech', () => {
+    const markup =
+      'A [character_name]Mira[/character_name] waves. ' +
+      '[character_name]Bob[/character_name]\n[dialogue]Hi[/dialogue] End.'
+    expect(withoutSpeech(markup)).toBe(
+      'A [character_name]Mira[/character_name] waves.  End.',
+    )
   })
 })
