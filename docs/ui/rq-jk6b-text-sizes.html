@@ -1,0 +1,44 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Text size – five sizes (agreed)</title><link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700&family=Fraunces:wght@600&family=Source+Serif+4:wght@400&display=swap" rel="stylesheet"><style>:root{--bg:#1d1a15;--surface:#29251e;--raised:#3a342a;--line:#3f382d;--line2:#544a3a;--fg:#f1eadb;--muted:#a99f8b;--accent:#f29e00;--onaccent:#1d1a15;--prose:#e6dcc6}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#d9d2c3;font-family:'DM Sans',system-ui,sans-serif;color:#22201b;padding:28px 24px 60px}
+h1{font-family:Fraunces,serif;font-size:26px;margin-bottom:6px}
+h2{font-family:Fraunces,serif;font-size:19px;margin:26px 0 8px}
+p.lede{max-width:900px;color:#3d382f;line-height:1.45;font-size:15px;margin-bottom:6px}
+.cost{max-width:900px;color:#5a4a2a;background:#fff3d6;border-left:3px solid #f29e00;padding:8px 12px;margin:10px 0 22px;font-size:14px}
+.row{display:flex;gap:28px;flex-wrap:wrap;align-items:flex-start}
+.cap{font-size:13px;color:#3d382f;margin-top:8px;max-width:380px;line-height:1.4}
+.desk{width:560px;max-width:100%;height:260px;position:relative;border-radius:10px;overflow:hidden;border:1px solid #b9ae98;background:linear-gradient(180deg,#7d8a6a,#4f5a3f 60%,#39402d)}
+.hdr{position:absolute;left:0;right:0;top:0;height:56px;background:rgba(29,26,21,.92);display:flex;align-items:center;justify-content:flex-end;gap:6px;padding:0 10px;color:var(--fg)}
+.hdr .room{margin-right:auto;font-family:Fraunces,serif;font-size:17px}
+.ib{width:44px;height:44px;border-radius:10px;display:grid;place-items:center;color:var(--fg);font-family:Fraunces,serif}
+.ib.open{background:var(--raised)}
+.pop{position:absolute;top:52px;right:58px;display:grid;gap:4px;padding:8px;border-radius:14px;border:1px solid var(--line2);background:var(--surface);box-shadow:0 12px 30px rgba(0,0,0,.3)}
+.sz{height:44px;border-radius:10px;display:grid;place-items:center;color:var(--fg);font-family:Fraunces,serif}
+.sz.on{background:var(--accent);color:var(--onaccent)}
+.phone{width:360px;border-radius:22px;border:8px solid #2a2620;background:var(--bg);color:var(--fg);overflow:hidden}
+.dlg{padding:16px}
+.dlg .eb{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.dlg h3{font-family:Fraunces,serif;font-size:22px;margin:2px 0 14px}
+.grp{font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin:4px 0 4px}
+.lrow{min-height:52px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--line)}
+.lt{flex:1;min-width:0;display:flex;flex-direction:column}
+.lt b{font-weight:600;font-size:15px}.lt span{font-size:12px;color:var(--muted)}
+.seg{display:flex;gap:2px;padding:3px;border-radius:12px;border:1px solid var(--line);background:var(--bg)}
+.sb{min-width:44px;min-height:44px;padding:0 10px;border-radius:9px;display:grid;place-items:center;color:var(--fg);font-size:14px}
+.sb.on{background:var(--raised);font-weight:600}
+.sample{margin:10px 0 6px;font-family:'Source Serif 4',Georgia,serif;line-height:1.5;color:var(--prose)}
+.new{outline:2px dashed #f29e00;outline-offset:1px}
+.tag{display:inline-block;font-size:11px;background:#f29e00;color:#1d1a15;border-radius:4px;padding:0 5px;margin-left:4px;font-weight:700}</style></head><body>
+<h1>Text size — five sizes (agreed: Option A)</h1>
+<p class="lede">The same row of A's you have today, with two smaller A's added on the left. One tap picks any size; the picked one is highlighted. New sizes are outlined in dashed orange here only to point them out.</p>
+<div class="cost">Cost: the quick menu in the top bar gets wider (about 290px instead of 200px), and on a phone the Settings row gets tight, so there the A's move to their own line under "Text size".</div>
+<h2>Top bar, the Aa menu open (desktop and tablet)</h2>
+<div class="row"><div><div class="desk"><div class="hdr"><span class="room">Willowbrook Square</span><span class="ib">⛶</span><span class="ib open">Aa</span><span class="ib">☾</span><span class="ib">☰</span></div>
+<div class="pop" style="grid-template-columns:repeat(5,52px)"><span class="sz new" style="font-size:9px">A</span><span class="sz new on" style="font-size:11px">A</span><span class="sz" style="font-size:13px">A</span><span class="sz" style="font-size:17px">A</span><span class="sz" style="font-size:21px">A</span></div></div>
+<p class="cap">Second-smallest picked. Smallest to largest, left to right. Escape or a tap outside still closes it. Names, smallest first: "Smallest text" (64%), "Extra small text" (76%), "Small text", "Medium text", "Large text".</p></div><div><div class="desk" style="width:360px"><div class="hdr"><span class="room">Square</span><span class="ib">⛶</span><span class="ib open">Aa</span><span class="ib">☾</span><span class="ib">☰</span></div><div class="pop" style="grid-template-columns:repeat(5,1fr);left:8px;right:8px"><span class="sz new on" style="font-size:9px">A</span><span class="sz new" style="font-size:11px">A</span><span class="sz" style="font-size:13px">A</span><span class="sz" style="font-size:17px">A</span><span class="sz" style="font-size:21px">A</span></div></div><p class="cap">Phone (360px): the menu stays fully on screen, 8px from each edge. Smallest picked.</p></div></div>
+<h2>Settings on a phone (360px)</h2>
+<div class="row"><div><div class="phone"><div class="dlg"><div class="eb">Game</div><h3>Settings</h3><div class="grp">Look</div>
+<div class="lrow"><div class="lt"><b>Theme</b></div><div class="seg"><span class="sb on">Device</span><span class="sb">Light</span><span class="sb">Dark</span></div></div>
+<div class="lrow" style="flex-wrap:wrap;padding:8px 0"><div class="lt" style="flex-basis:100%"><b>Text size</b><span>Story text only</span></div><div class="seg" style="margin-top:6px"><span class="sb new" style="font-size:9px">A</span><span class="sb new on" style="font-size:11px">A</span><span class="sb" style="font-size:13px">A</span><span class="sb" style="font-size:17px">A</span><span class="sb" style="font-size:21px">A</span></div></div>
+<p class="sample" style="font-size:11.4px">The great boughs creak overhead as silver leaves drift down around you.</p></div></div><p class="cap">On a phone the A's sit under the label. On a wider screen they stay beside it, as today. The sample line shows the picked size.</p></div></div>
+</body></html>
