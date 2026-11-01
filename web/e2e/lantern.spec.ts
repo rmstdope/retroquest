@@ -435,6 +435,15 @@ test.describe('Lantern UI (the default)', () => {
     await page.getByRole('button', { name: /Map/ }).click()
     await expect(exit).toBeVisible()
 
+    // The bug's own direction: with Bag open, Map replaces it and is pressable.
+    await page.getByRole('button', { name: /Bag · 1/ }).click()
+    await page.getByRole('button', { name: /Map/ }).click()
+    await expect(
+      page.getByRole('complementary', { name: 'Journal drawer' }),
+    ).toHaveCount(0)
+    await expect(exit).toBeVisible()
+    await expect(exit).toBeEnabled()
+
     await page.getByRole('button', { name: /Bag · 1/ }).click()
     const drawer = page.getByRole('complementary', { name: 'Journal drawer' })
     await expect(drawer.getByRole('tab', { name: /Bag · 1/ })).toBeVisible()

@@ -39,7 +39,9 @@ describe('LanternLayout: one thing open on the stage', () => {
     w.findAll('.lq-stage-btn.lq-lit').map((b) => b.attributes('data-button')!)
 
   it('opens nothing on pointing at the map', async () => {
-    w.get('.lq-map-wrap').element.dispatchEvent(new Event('pointerenter'))
+    const enter = new Event('pointerenter', { bubbles: true })
+    Object.defineProperty(enter, 'pointerType', { value: 'mouse' })
+    w.get('.lq-map-wrap').element.dispatchEvent(enter)
     await w.vm.$nextTick()
     expect(w.find('.lq-compass').exists()).toBe(false)
     expect(lit()).toEqual([])
