@@ -55,3 +55,43 @@ for (const width of [1440, 1060]) {
     }
   })
 }
+
+test.describe('with the narrator reading', () => {
+  // Narration on, as for a new player (the config turns it off for the other specs).
+  test.use({ storageState: { cookies: [], origins: [] } })
+
+  test('after Escape skips an answer the newest card is in view at its start', async ({
+    page,
+  }): Promise<void> => {
+    // Narrated clips end three seconds after they start (no audio device in CI).
+    await page.addInitScript(() => {
+      HTMLMediaElement.prototype.play = function (this: HTMLMediaElement) {
+        if (this.src.includes('/audio/narration/'))
+          setTimeout(() => this.dispatchEvent(new Event('ended')), 3000)
+        return Promise.resolve()
+      }
+    })
+    await page.setViewportSize({ width: 1440, height: 800 })
+    await start(page)
+    await enter(page, 'talk to voice')
+    await page.keyboard.press('Escape')
+    await enter(page, 'look')
+    await page.keyboard.press('Escape')
+    await enter(page, 'talk to grandmother')
+    await page.keyboard.press('Escape')
+    await enter(page, 'xyzzy')
+    await enter(page, 'look')
+    await page.keyboard.press('Escape')
+
+    const wrap = page.locator('.lq-story-wrap.lq-cards')
+    const newestCommand = wrap.getByTestId('command').last()
+    await expect(newestCommand).toHaveText('› look')
+    const view = (await wrap.locator('.lq-story').boundingBox())!
+    const command = (await newestCommand.boundingBox())!
+    expect(command.y).toBeGreaterThanOrEqual(view.y)
+    // Clear of the "More below" pill at the foot.
+    expect(command.y + command.height).toBeLessThanOrEqual(
+      view.y + view.height - 48,
+    )
+  })
+})
