@@ -720,13 +720,14 @@ watch(storyHeld, async (held) => {
   if (held) return
   await nextTick()
   const latest = contentEl.value?.lastElementChild
-  if (wide.value && !narration.readToEnd && latest && storyEl.value)
-    moveStory(
+  if (wide.value && !narration.readToEnd && latest && storyEl.value) {
+    const top =
       latest.getBoundingClientRect().top -
-        storyEl.value.getBoundingClientRect().top +
-        storyEl.value.scrollTop,
-      false,
-    )
+      storyEl.value.getBoundingClientRect().top +
+      storyEl.value.scrollTop
+    // Only forward: a long card already read past its start stays where it is.
+    if (top > storyEl.value.scrollTop) moveStory(top, false)
+  }
   updateMoreBelow()
 })
 
