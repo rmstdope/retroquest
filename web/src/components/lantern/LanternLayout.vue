@@ -772,6 +772,7 @@ watch(
             v-if="drawerTab && drawerTab !== 'story' && drawerTab !== 'map'"
             :key="`drawer-${stageKey}`"
             :tab="drawerTab"
+            @select="drawerTab = $event"
             @close="closeDrawer"
           />
           <StoryDrawer
