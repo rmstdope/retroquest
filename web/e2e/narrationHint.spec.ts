@@ -149,8 +149,7 @@ for (const { name, width, height } of [
       .click()
     const input = page.getByLabel('Command', { exact: true })
     for (const command of ['talk to voice', 'examine lantern']) {
-      // A press on the bar may first only bring the panels up to date.
-      for (let tries = 0; tries < 3 && !(await input.isVisible()); tries++)
+      if (!(await input.isVisible()))
         await page.getByRole('button', { name: 'Type a command' }).click()
       await input.fill(command)
       await input.press('Enter')

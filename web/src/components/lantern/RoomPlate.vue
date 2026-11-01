@@ -51,19 +51,10 @@ defineExpose({ focusStoryButton })
     aria-label="Current location"
     @animationend.self="endFlash"
   >
-    <div class="lq-plate-top">
-      <span class="lq-label">You are in</span>
-      <button
-        v-if="props.storyButton"
-        ref="storyEl"
-        type="button"
-        class="lq-story-so-far"
-        @click="emit('story')"
-      >
-        ⟲ Story so far
-      </button>
-    </div>
-    <h2 class="lq-room-name">{{ game.roomName }}</h2>
+    <span class="lq-label">You are in</span>
+    <h2 class="lq-room-name" :class="{ 'lq-room-name-pad': props.storyButton }">
+      {{ game.roomName }}
+    </h2>
     <div v-if="here.length" class="lq-here">
       <button
         v-for="entry in here"
@@ -78,6 +69,16 @@ defineExpose({ focusStoryButton })
         {{ displayName(entry.name) }}
       </button>
     </div>
+    <!-- After the chips in the Tab order; drawn in the plate's top-right corner. -->
+    <button
+      v-if="props.storyButton"
+      ref="storyEl"
+      type="button"
+      class="lq-story-so-far"
+      @click="emit('story')"
+    >
+      ⟲ Story so far
+    </button>
   </section>
 </template>
 
@@ -107,16 +108,15 @@ defineExpose({ focusStoryButton })
   font-weight: 500;
   color: var(--lq-fg);
 }
-/* The label, and on the phone stage "⟲ Story so far" in the top-right corner. */
-.lq-plate-top {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
+/* On the phone stage "⟲ Story so far" sits in the plate's top-right corner. */
+.lq-plate {
+  position: relative;
 }
 .lq-story-so-far {
+  position: absolute;
+  top: 8px;
+  right: 8px;
   height: 32px;
-  margin: -6px -6px -6px 0;
   padding: 0 12px;
   border: 1px solid var(--lq-line);
   border-radius: 16px;
@@ -126,6 +126,10 @@ defineExpose({ focusStoryButton })
   font-family: var(--lq-font-ui);
   font-size: 13px;
   cursor: pointer;
+}
+/* A long name wraps before the button, not under it. */
+.lq-room-name-pad {
+  padding-top: 8px;
 }
 .lq-here {
   display: flex;

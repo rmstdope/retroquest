@@ -37,16 +37,11 @@ async function openTyping(page: Page): Promise<void> {
   else await page.getByRole('button', { name: 'Type a command' }).click()
 }
 
-/**
- * Open the sheet into typing again after an answer folded it. A press on the
- * bar while the panels still wait for the voice only brings them up to date,
- * so it may take a second press.
- */
+/** Open the sheet into typing again after an answer folded it (the bar's keyboard button). */
 async function reopenTyping(page: Page): Promise<void> {
   const input = page.getByLabel('Command', { exact: true })
-  const bar = page.getByRole('button', { name: 'Type a command' })
-  for (let tries = 0; tries < 3 && !(await input.isVisible()); tries++)
-    await bar.click()
+  if (!(await input.isVisible()))
+    await page.getByRole('button', { name: 'Type a command' }).click()
 }
 
 /** Type a command and press Enter, opening the sheet again if the last answer folded it. */
@@ -141,6 +136,77 @@ test('opens a journal drawer at once while the voice reads, and a press inside i
     'true',
   )
   await expect(page.getByTestId('turn')).toHaveCount(turns)
+})
+
+test('Space and Enter press a focused verb and the voice keeps reading', async ({
+  page,
+}): Promise<void> => {
+  // A short screen: the text page, where the sheet is the composer (a taller
+  // screen tells this first arrival on the picture, arrival.spec.ts).
+  await page.setViewportSize({ width: 390, height: 500 })
+  await slowNarrationClips(page)
+  await startAct1(page)
+  await enter(page, 'talk to voice')
+  await expect(page.locator('.lq-speaking')).not.toHaveCount(0)
+
+  // Back to the verbs, as the default mode has it, with one of them focused.
+  await page.getByRole('button', { name: 'Actions ▴' }).click()
+  await page
+    .getByRole('region', { name: 'Actions' })
+    .getByRole('button', { name: 'Actions', exact: true })
+    .click()
+  const verb = page
+    .getByRole('region', { name: 'Actions' })
+    .getByRole('button', { name: 'Talk', exact: true })
+  await verb.focus()
+  const shown = await lastTurnBlocks(page).count()
+
+  await page.keyboard.press(' ')
+  // The press opened the builder (its ✕, read as Cancel, shows); nothing was
+  // hurried.
+  await expect(
+    page.getByRole('region', { name: 'Actions' }).getByRole('button', {
+      name: 'Cancel',
+    }),
+  ).toBeVisible()
+  expect(await lastTurnBlocks(page).count()).toBeLessThanOrEqual(shown + 1)
+  await expect(page.locator('.lq-speaking')).not.toHaveCount(0)
+
+  // Enter on the focused Cancel presses it too, and the voice still reads.
+  const cancel = page
+    .getByRole('region', { name: 'Actions' })
+    .getByRole('button', { name: 'Cancel' })
+  await cancel.focus()
+  await page.keyboard.press('Enter')
+  await expect(cancel).toHaveCount(0)
+  await expect(page.locator('.lq-speaking')).not.toHaveCount(0)
+})
+
+test('typing keeps the voice reading, and Esc in the command box skips it', async ({
+  page,
+}): Promise<void> => {
+  // A short screen: the text page, where the sheet is the composer (a taller
+  // screen tells this first arrival on the picture, arrival.spec.ts).
+  await page.setViewportSize({ width: 390, height: 500 })
+  await slowNarrationClips(page)
+  await startAct1(page)
+  await enter(page, 'talk to voice')
+  await expect(page.locator('.lq-speaking')).not.toHaveCount(0)
+  const shown = await lastTurnBlocks(page).count()
+
+  await reopenTyping(page)
+  const input = page.getByLabel('Command', { exact: true })
+  await input.pressSequentially('look')
+  expect(await lastTurnBlocks(page).count()).toBeLessThanOrEqual(shown + 1)
+  await expect(page.locator('.lq-speaking')).not.toHaveCount(0)
+  await expect(page.locator('.lq-narration-hint')).toHaveText('Esc to skip')
+
+  // The word list is open for "look"; the first Esc closes it, the next skips.
+  await input.press('Escape')
+  await input.press('Escape')
+  await expect(page.locator('.lq-speaking')).toHaveCount(0)
+  await expect(input).toHaveValue('look')
+  await expect(input).toBeFocused()
 })
 
 test('holds the story still while it reads, and frees it when the reading ends', async ({

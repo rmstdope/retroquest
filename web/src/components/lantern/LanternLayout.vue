@@ -147,6 +147,10 @@ const plate = ref<InstanceType<typeof RoomPlate> | null>(null)
 const pictured = ref(false)
 /** The actions sheet: every screen starts with it folded into the bar. */
 const dockOpen = ref(false)
+// A phone turned on its side shows the text page with the sheet folded.
+watch(short, (isShort) => {
+  if (isShort) dockOpen.value = false
+})
 /** The phone's sheet is up over the picture. */
 const sheetOpen = computed(
   () => phoneStage.value && section.value === 'story' && dockOpen.value,
@@ -297,7 +301,7 @@ const paperAway = computed(
     paper.visible.value &&
     (paper.hidden.value || arrival.active),
 )
-/** The paper's height in px, or null before it was measured (and off the laptop). */
+/** The paper's height in px, or null before it was measured (and off the stage). */
 const paperPx = ref<number | null>(null)
 
 /**
@@ -552,6 +556,25 @@ onMounted(() => {
   measurePaper()
 })
 
+/** The phone's plate height, which the arrival on the picture stays clear of. */
+const plateHeight = ref(108)
+let plateResize: ResizeObserver | undefined
+watch(
+  plate,
+  (current) => {
+    plateResize?.disconnect()
+    const el = current?.$el
+    if (typeof ResizeObserver === 'undefined' || !(el instanceof HTMLElement))
+      return
+    plateResize = new ResizeObserver(() => {
+      plateHeight.value = el.offsetHeight
+    })
+    plateResize.observe(el)
+  },
+  { flush: 'post' },
+)
+onUnmounted(() => plateResize?.disconnect())
+
 // The action row is a new element after a new game: follow the current one.
 watch(
   composer,
@@ -669,6 +692,8 @@ onUnmounted(() => game.setPanelHold(false))
 function onPanelPress(event: MouseEvent): void {
   const target = event.target instanceof Element ? event.target : null
   if (!target?.closest('[data-panel] :is(button, a, [role="button"])')) return
+  // Opening the sheet changes nothing the voice holds: it never waits for it.
+  if (target.closest('.lq-dock-open, .lq-dock-icon')) return
   if (!panelHold.catchUp()) return
   event.stopPropagation()
   event.preventDefault()
@@ -954,7 +979,7 @@ function onNameKeydown(event: KeyboardEvent): void {
 
 // Names in the story are Tab stops (see useNameStops) while they have a menu.
 const { sync: syncNameStops } = useNameStops(mainEl, {
-  wide: () => wide.value,
+  wide: () => staged.value,
   reachable: (name) => actionsOf(name).length > 0,
 })
 watch(
@@ -1085,6 +1110,7 @@ watch(
           'lq-staged': staged,
           'lq-phone': phoneStage,
         }"
+        :style="phoneStage ? { '--lq-plate-h': `${plateHeight}px` } : {}"
         @click.capture="onPanelPress"
       >
         <div
@@ -1159,7 +1185,7 @@ watch(
             'lq-paper-away': paperAway,
             'lq-covered': sheetOpen,
           }"
-          :style="wide && paperPx !== null ? { height: `${paperPx}px` } : {}"
+          :style="staged && paperPx !== null ? { height: `${paperPx}px` } : {}"
           :inert="paperAway || undefined"
         >
           <section

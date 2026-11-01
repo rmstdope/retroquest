@@ -90,7 +90,7 @@ const { html } = useReadAlong(() => arrival.turnId ?? 0, root)
 /* The phone: a narrower block of smaller type, above the paper's tab and the bar. */
 .lq-phone-arrival {
   /* Clear of the plate across the top, and of the bar and the paper's tab. */
-  padding: 124px 20px 110px;
+  padding: calc(var(--lq-plate-h, 108px) + 24px) 20px 110px;
   /* A long description scrolls inside the stage instead of past its edges. */
   overflow-y: auto;
   align-items: safe center;
