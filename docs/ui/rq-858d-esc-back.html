@@ -1,0 +1,42 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700&family=Fraunces:wght@600&display=swap" rel="stylesheet"><style>
+:root{--bg:#f5f0e6;--surface:#fffcf5;--raised:#efe8da;--line:#e2d9c6;--line2:#cfc4ad;--fg:#22201b;--muted:#6b6455;--accent:#f29e00;--accentText:#7a4300;--glass:rgba(255,252,245,.93)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#d9d2c3;font-family:'DM Sans',system-ui,sans-serif;color:#22201b;padding:28px 24px 60px}
+h1{font-family:Fraunces,serif;font-size:26px;margin-bottom:6px}
+p.lede{max-width:900px;color:#3d382f;line-height:1.45;font-size:15px;margin-bottom:6px}
+.cost{max-width:900px;color:#5a4a2a;background:#fff3d6;border-left:3px solid #f29e00;padding:8px 12px;margin:10px 0 22px;font-size:14px}
+.step{display:flex;gap:18px;align-items:flex-start;margin-bottom:20px;flex-wrap:wrap}
+.n{flex:0 0 220px;font-size:14px;line-height:1.4;color:#3d382f}
+.n b{display:block;font-size:15px;color:#22201b;margin-bottom:2px}
+kbd{font-family:inherit;font-size:12px;font-weight:700;border:1px solid #b9ae98;border-bottom-width:2px;border-radius:5px;padding:1px 6px;background:#fffcf5}
+.frame{flex:1;min-width:300px;max-width:860px;height:170px;border-radius:10px;overflow:hidden;position:relative;border:1px solid #b9ae98;background:linear-gradient(180deg,#7d8a6a,#4f5a3f 60%,#39402d)}
+.frame .room{position:absolute;left:16px;top:12px;color:#fff;font-family:Fraunces,serif;font-size:18px;text-shadow:0 1px 3px #000}
+.bar{position:absolute;left:12px;right:12px;bottom:12px;background:var(--glass);border-radius:12px;padding:10px;display:flex;gap:6px;flex-wrap:wrap;align-items:center;box-shadow:0 6px 18px rgba(0,0,0,.25)}
+.v{border:1px solid var(--line2);background:var(--surface);border-radius:9px;padding:7px 11px;font-size:14px;font-weight:600;color:var(--fg)}
+.v.f{outline:3px solid #2a5d9f;outline-offset:2px}
+.in{flex:1;min-width:140px;border:1px solid var(--line2);background:#fff;border-radius:9px;padding:7px 11px;font-size:14px;color:var(--fg)}
+.in.f{outline:3px solid #2a5d9f;outline-offset:1px}
+.in .ph{color:var(--muted)}
+.in .car{display:inline-block;width:1px;height:15px;background:#22201b;vertical-align:-2px;margin-left:1px}
+.do{border:0;background:var(--accent);color:#3a2000;border-radius:9px;padding:8px 12px;font-size:14px;font-weight:700}
+.list{position:absolute;left:96px;bottom:62px;width:220px;background:var(--surface);border:1px solid var(--line2);border-radius:10px;padding:4px;box-shadow:0 10px 24px rgba(0,0,0,.3);font-size:14px}
+.list div{padding:6px 10px;border-radius:6px}.list .on{background:#ffe0a0}
+.paper{position:absolute;right:14px;top:12px;width:300px;background:#fffcf5;border-radius:8px;padding:8px 10px;font-size:13px;color:#36322a;box-shadow:0 4px 12px rgba(0,0,0,.3)}
+.paper i{color:#7a4300;font-style:normal;font-weight:700}
+.hint{font-size:12px;color:var(--muted);font-weight:600}
+.cap{font-size:11px;color:var(--muted);margin-left:4px;font-weight:700;border:1px solid var(--line2);border-radius:4px;padding:0 4px}
+.rec{display:inline-block;background:#2e6e27;color:#fff;font-size:12px;font-weight:700;border-radius:20px;padding:2px 10px;margin-left:8px;vertical-align:4px;font-family:'DM Sans'}
+</style></head><body>
+<title>Esc back to verbs</title><h1>Esc steps back from the command box to the verbs <span class="rec">Agreed</span></h1>
+<p class="lede">Each Esc takes one step back: close the word list, then clear the typed text, then leave the box for the verbs with focus on the verb used last. Tab keeps doing word completion only. While the cursor is in the command box, the Actions button carries a small <b>Esc</b> mark (not on touch screens). The same rule holds in the narrow window&apos;s pull-up panel.</p>
+<h2 style="font-family:Fraunces,serif;margin:18px 0 10px">Wide stage</h2>
+<div class="step"><div class="n"><b>1 · Word list open</b>Esc closes the list. Text stays.</div><div class="frame"><div class="room">The Village Square</div><div class="list"><div class="on">rope</div><div>rock</div></div><div class="bar"><span class="v">Actions<span class="cap">Esc</span></span><span class="in f">take ro<span class="car"></span></span><span class="do">Do it ▸</span></div></div></div>
+<div class="step"><div class="n"><b>2 · Text in the box</b>Esc clears the text. Focus stays in the box.</div><div class="frame"><div class="room">The Village Square</div><div class="bar"><span class="v">Actions<span class="cap">Esc</span></span><span class="in f">take ro<span class="car"></span></span><span class="do">Do it ▸</span></div></div></div>
+<div class="step"><div class="n"><b>3 · Empty box</b>Esc leaves for the verbs.</div><div class="frame"><div class="room">The Village Square</div><div class="bar"><span class="v">Actions<span class="cap">Esc</span></span><span class="in f"><span class="ph">What do you do?</span><span class="car"></span></span><span class="do">Do it ▸</span></div></div></div>
+<div class="step"><div class="n"><b>4 · Back on the verbs</b>Focus on the verb used last (Look if none), as clicking Actions does. The Esc mark is gone with the box.</div><div class="frame"><div class="room">The Village Square</div><div class="bar"><span class="v">Look</span><span class="v f">Take</span><span class="v">Talk to</span><span class="v">Use</span><span class="v">Open</span><span class="v">Give</span><span class="v">More…</span><span class="v">⌨ Type</span></div></div></div>
+<div class="step"><div class="n"><b>Escape already taken</b>While the narrator reads, or a speech shows on the picture, the first Esc does what it does today (skip / clear); the next Esc steps back.</div><div class="frame"><div class="room">The Village Square</div><div class="paper"><i>Narrator:</i> The square is quiet this morning; a rope lies coiled by the well…</div><div class="bar"><span class="v">Actions<span class="cap">Esc</span></span><span class="in f"><span class="ph">What do you do?</span><span class="car"></span></span><span class="do">Do it ▸</span></div></div></div>
+<h2 style="font-family:Fraunces,serif;margin:18px 0 10px">Narrow window — pull-up panel</h2>
+<div class="step"><div class="n"><b>Empty box</b>Esc switches to Actions. The Esc mark sits on the Actions half of the switch while typing.</div><div style="flex:0 0 340px;height:300px;border:1px solid #b9ae98;border-radius:14px;overflow:hidden;position:relative;background:#4f5a3f"><div style="position:absolute;left:0;right:0;bottom:0;background:var(--surface);border-radius:14px 14px 0 0;padding:12px;display:flex;flex-direction:column;gap:10px"><div style="display:flex;gap:4px;background:var(--raised);border-radius:9px;padding:3px;font-size:13px;font-weight:700"><span style="flex:1;text-align:center;padding:5px">Actions<span class="cap">Esc</span></span><span style="flex:1;text-align:center;padding:5px;background:#fff;border-radius:7px">Type</span></div><div style="display:flex;gap:6px"><span class="in f"><span class="ph">What do you do?</span><span class="car"></span></span><span class="do">Do it</span></div></div></div></div>
+<div class="step"><div class="n"><b>Actions, focus on a verb</b>Verb used last (Look if none).</div><div style="flex:0 0 340px;height:300px;border:1px solid #b9ae98;border-radius:14px;overflow:hidden;position:relative;background:#4f5a3f"><div style="position:absolute;left:0;right:0;bottom:0;background:var(--surface);border-radius:14px 14px 0 0;padding:12px;display:flex;flex-direction:column;gap:10px"><div style="display:flex;gap:4px;background:var(--raised);border-radius:9px;padding:3px;font-size:13px;font-weight:700"><span style="flex:1;text-align:center;padding:5px;background:#fff;border-radius:7px">Actions</span><span style="flex:1;text-align:center;padding:5px">Type</span></div><div style="display:flex;gap:6px;flex-wrap:wrap"><span class="v">Look</span><span class="v f">Take</span><span class="v">Talk to</span><span class="v">Use</span><span class="v">Open</span><span class="v">Give</span><span class="v">More…</span></div></div></div></div>
+</body></html>
