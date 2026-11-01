@@ -397,6 +397,7 @@ onUnmounted(() => game.setPanelHold(false))
 /**
  * A press on something in a held panel (room card, map, journal, the exits
  * bar) only brings the panels up to date; the player presses again to act.
+ * The stage buttons are not a held panel: they open their drawers at once.
  */
 function onPanelPress(event: MouseEvent): void {
   const target = event.target instanceof Element ? event.target : null
