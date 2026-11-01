@@ -6,28 +6,26 @@ import CompassPanel from './CompassPanel.vue'
 /**
  * The buttons in the stage's top-right corner: Bag, Spells and Quests (with
  * their counts and today's amber dot while something is new) open the journal
- * drawer, "⟲ Story so far" opens the story drawer, and "🧭 Map"
- * opens the map of the ways out beneath it. The map opens when the pointer is
- * on the button, stays while the pointer is on the button or the map, and
- * closes a moment after it leaves; pressing the button (or Enter or Space on
- * it) also opens it, for keyboards and touch screens. Walking from the map
- * keeps it open. Escape closes it and returns focus to the button; a press
- * outside closes it too. The button of the open drawer stays lit.
+ * drawer, "⟲ Story so far" opens the story drawer, and "🧭 Map" opens the map
+ * of the ways out beneath it. They are controlled by the layout, which lets
+ * only one of the five be open (`drawer`), and press-only: nothing opens on
+ * hover. The button of the open one stays lit. Walking from the map keeps it
+ * open. Escape closes the map (asking the layout to, which returns focus to
+ * the button) and nothing else hears it.
  */
 type Tab = 'bag' | 'spells' | 'quests'
 
-const props = defineProps<{ drawer: Tab | 'story' | null }>()
-const emit = defineEmits<{ journal: [tab: Tab]; story: [] }>()
+const props = defineProps<{ drawer: Tab | 'story' | 'map' | null }>()
+const emit = defineEmits<{
+  journal: [tab: Tab]
+  story: []
+  map: []
+  close: []
+}>()
 const game = useGameStore()
 
-/** How long the map waits after the pointer leaves before it closes. */
-const MAP_CLOSE_MS = 250
-
 const root = ref<HTMLElement | null>(null)
-const mapOpen = ref(false)
-/** The map was opened by a press, so another press closes it. */
-const pressed = ref(false)
-let closeTimer: ReturnType<typeof setTimeout> | undefined
+const mapOpen = computed(() => props.drawer === 'map')
 
 const journalButtons = computed(() => [
   {
@@ -47,69 +45,24 @@ const journalButtons = computed(() => [
   },
 ])
 
-/** Show the map and cancel any pending close. */
-function openMap(): void {
-  clearTimeout(closeTimer)
-  mapOpen.value = true
-}
-
-/** Hide the map now. */
-function closeMap(): void {
-  clearTimeout(closeTimer)
-  mapOpen.value = false
-  pressed.value = false
-}
-
-/** Only a mouse hovers; on a touch screen the press does it. */
-function onEnter(event: PointerEvent): void {
-  if (event.pointerType === 'mouse') openMap()
-}
-
-function onLeave(event: PointerEvent): void {
-  if (event.pointerType !== 'mouse' || !mapOpen.value) return
-  clearTimeout(closeTimer)
-  closeTimer = setTimeout(closeMap, MAP_CLOSE_MS)
-}
-
-/** A press opens the map (or, if it was opened by a press, closes it). */
-function pressMap(): void {
-  if (mapOpen.value && pressed.value) closeMap()
-  else {
-    openMap()
-    pressed.value = true
-  }
-}
-
 /** Escape closes the map, if it is open, and nothing else hears it. */
 function onDocumentKey(event: KeyboardEvent): void {
   if (event.key !== 'Escape' || !mapOpen.value) return
   event.stopPropagation()
   event.preventDefault()
-  closeMap()
-  focusButton('map')
+  emit('close')
 }
 
-/** A press outside the buttons and the map closes the map. */
-function onDocumentPress(event: Event): void {
-  if (root.value && event.target instanceof Node)
-    if (!root.value.contains(event.target)) closeMap()
-}
-
-watch(mapOpen, (open) => {
-  if (open) {
+watch(
+  mapOpen,
+  (open) => {
     // Capture, so the layout's narration keys do not also hear this Escape.
-    document.addEventListener('keydown', onDocumentKey, true)
-    document.addEventListener('pointerdown', onDocumentPress)
-  } else {
-    document.removeEventListener('keydown', onDocumentKey, true)
-    document.removeEventListener('pointerdown', onDocumentPress)
-  }
-})
-onUnmounted(() => {
-  clearTimeout(closeTimer)
-  document.removeEventListener('keydown', onDocumentKey, true)
-  document.removeEventListener('pointerdown', onDocumentPress)
-})
+    if (open) document.addEventListener('keydown', onDocumentKey, true)
+    else document.removeEventListener('keydown', onDocumentKey, true)
+  },
+  { immediate: true },
+)
+onUnmounted(() => document.removeEventListener('keydown', onDocumentKey, true))
 
 /** Focus a button: a journal button, Story so far, or the Map button. */
 async function focusButton(which: Tab | 'story' | 'map'): Promise<void> {
@@ -145,7 +98,7 @@ defineExpose({ focusButton })
       >
         ⟲ Story so far
       </button>
-      <div class="lq-map-wrap" @pointerenter="onEnter" @pointerleave="onLeave">
+      <div class="lq-map-wrap">
         <button
           type="button"
           class="lq-stage-btn"
@@ -153,7 +106,7 @@ defineExpose({ focusButton })
           data-button="map"
           aria-haspopup="true"
           :aria-expanded="mapOpen ? 'true' : 'false'"
-          @click="pressMap"
+          @click="emit('map')"
         >
           🧭 Map
         </button>
@@ -206,7 +159,7 @@ defineExpose({ focusButton })
 .lq-map-wrap {
   position: relative;
 }
-/* Starts at the button's edge, so the pointer never crosses a gap. */
+/* Starts at the button's edge. */
 .lq-map-pop {
   position: absolute;
   top: 100%;
