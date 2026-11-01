@@ -197,9 +197,22 @@ function clearAndFocus(): void {
     opacity: 0;
   }
 }
-/* The phone: small portraits at the edges, a thread about 190 wide between them. */
+/*
+ * The phone: small portraits at the edges, a thread about 190 wide between them.
+ * The name on the small card is in smaller type on one line, as in the mockup.
+ */
 .lq-phone-speech {
   --lq-portrait-w: 72px;
+}
+.lq-phone-speech :deep(.lq-foot) {
+  padding: 2px 0;
+  font-size: calc(10px * var(--lq-text-scale));
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .lq-phone-speech .lq-sp-left {
   left: 8px;
