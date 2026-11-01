@@ -65,6 +65,15 @@ describe('RoomPlate', () => {
   })
 
   describe('folded', () => {
+    it('eases in once when it opens again from folded', async () => {
+      const w = mount(RoomPlate, { props: { folded: true } })
+      expect(w.classes()).not.toContain('lq-plate-opening')
+      await w.setProps({ folded: false })
+      expect(w.classes()).toContain('lq-plate-opening')
+      await w.trigger('animationend', { animationName: 'lq-plate-fold' })
+      expect(w.classes()).not.toContain('lq-plate-opening')
+    })
+
     it('is open (with its label) unless folded', () => {
       const w = mount(RoomPlate, { props: { storyButton: true } })
       expect(w.classes()).not.toContain('lq-plate-folded')

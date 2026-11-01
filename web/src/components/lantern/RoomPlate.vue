@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useGameStore } from '@/stores/useGameStore'
 import { usePanelFlash } from '@/composables/usePanelFlash'
 import { displayName } from '@/lantern/displayName'
@@ -40,6 +40,21 @@ const here = computed(() => {
   })
 })
 
+/** The plate has just opened again from folded: it eases in once. */
+const opening = ref(false)
+watch(
+  () => props.folded,
+  (folded, wasFolded) => {
+    if (wasFolded && !folded) opening.value = true
+  },
+)
+
+/** An animation ended: the flash, or the ease of opening. */
+function onAnimationEnd(event: AnimationEvent): void {
+  if (event.animationName === 'lq-plate-fold') opening.value = false
+  else endFlash()
+}
+
 /** Put focus on "⟲ Story so far" (the story so far has just been closed). */
 function focusStoryButton(): void {
   storyEl.value?.focus()
@@ -51,9 +66,13 @@ defineExpose({ focusStoryButton })
 <template>
   <section
     class="lq-plate"
-    :class="{ 'lq-flash': flashing, 'lq-plate-folded': props.folded }"
+    :class="{
+      'lq-flash': flashing,
+      'lq-plate-folded': props.folded,
+      'lq-plate-opening': opening,
+    }"
     aria-label="Current location"
-    @animationend.self="endFlash"
+    @animationend.self="onAnimationEnd"
   >
     <span class="lq-label" :aria-hidden="props.folded ? true : undefined">
       You are in
@@ -160,6 +179,9 @@ defineExpose({ focusStoryButton })
   align-items: center;
   gap: 10px;
   padding: 6px 8px 6px 16px;
+}
+.lq-plate-folded,
+.lq-plate-opening {
   animation: lq-plate-fold calc(0.2s * var(--lq-motion)) ease-out;
 }
 .lq-plate-folded .lq-label {
@@ -177,6 +199,8 @@ defineExpose({ focusStoryButton })
   flex-wrap: nowrap;
   overflow-x: auto;
   scrollbar-width: none;
+  /* Room after the last name, so scrolled to the end it is clear of the fade. */
+  padding-inline-end: 28px;
   mask-image: linear-gradient(to right, #000 calc(100% - 28px), transparent);
 }
 .lq-plate-folded .lq-here::-webkit-scrollbar {

@@ -145,6 +145,19 @@ test('on a short laptop window the plate folds so the newest line and the ✕ ha
     )
     .toBe(true)
   await expect(newest).toBeVisible()
+  // Its first line of words is whole too: inside the thread, clear of both fades (12px).
+  const whole = await page.evaluate(() => {
+    const thread = document.querySelector('.lq-thread')!.getBoundingClientRect()
+    const words = document.querySelector(
+      '[data-testid="speech-line"]:last-child span',
+    )!
+    const first = words.getClientRects()[0]!
+    const name = document
+      .querySelector('[data-testid="speech-line"]:last-child .lq-line-name')!
+      .getBoundingClientRect()
+    return name.top >= thread.top + 12 && first.bottom <= thread.bottom - 12
+  })
+  expect(whole).toBe(true)
 
   await page.getByRole('button', { name: 'Clear the conversation' }).click()
   await expect(plate).not.toHaveClass(/lq-plate-folded/)

@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { mount } from '@vue/test-utils'
 import { createPinia, setActivePinia } from 'pinia'
 import StageSpeech from './StageSpeech.vue'
@@ -36,6 +36,8 @@ function mounted() {
 }
 
 describe('StageSpeech', () => {
+  afterEach(() => vi.unstubAllGlobals())
+
   beforeEach(() => {
     vi.useFakeTimers()
     setActivePinia(createPinia())
@@ -181,7 +183,6 @@ describe('StageSpeech', () => {
     height = 140
     callbacks.forEach((callback) => callback())
     expect(w.emitted('room')).toEqual([[58], [140]])
-    vi.unstubAllGlobals()
   })
 
   it('marks its zone when the plate above it is folded', async () => {
