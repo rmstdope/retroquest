@@ -3,6 +3,7 @@
  * whose pick-up changes the bag and starts a second quest.
  */
 import { Act, Item, Quest, Room, type GameState } from '@/engine'
+import type { Pinia } from 'pinia'
 import { useBridge, type ActClass } from '@/composables/useBridge'
 import { useGameStore } from '@/stores/useGameStore'
 
@@ -72,12 +73,16 @@ class HoldAct extends Act {
   }
 }
 
-/** A started store over the real engine, with holding on as the layout turns it. */
-export async function startedHoldStore(): Promise<
-  ReturnType<typeof useGameStore>
-> {
+/**
+ * A started store over the real engine, with holding on as the layout turns
+ * it. A test that must not lose its stores to a late callback of an earlier
+ * test passes its own `pinia`.
+ */
+export async function startedHoldStore(
+  pinia?: Pinia,
+): Promise<ReturnType<typeof useGameStore>> {
   const bridge = useBridge(async (): Promise<ActClass[]> => [HoldAct])
-  const store = useGameStore()
+  const store = useGameStore(pinia)
   store.setBridge(bridge)
   await store.initGame()
   store.dismissModal()
