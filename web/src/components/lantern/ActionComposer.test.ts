@@ -6,6 +6,8 @@ import ActionComposer from './ActionComposer.vue'
 import { useGameStore } from '@/stores/useGameStore'
 import { useSettingsStore } from '@/stores/useSettingsStore'
 import { useArrivalStore } from '@/stores/useArrivalStore'
+import { useNarrationStore } from '@/stores/useNarrationStore'
+import { useStageSpeechStore } from '@/stores/useStageSpeechStore'
 
 describe('ActionComposer', () => {
   let wrapper: VueWrapper | undefined
@@ -57,7 +59,7 @@ describe('ActionComposer', () => {
   it('starts in actions mode by default', () => {
     const w = mountComposer()
 
-    expect(w.get('.lq-seg-btn').attributes('aria-pressed')).toBe('true')
+    expect(button(w, 'Actions').attributes('aria-pressed')).toBe('true')
     expect(button(w, 'Type').attributes('aria-pressed')).toBe('false')
     expect(w.find('input[aria-label="Command"]').exists()).toBe(false)
   })
@@ -1244,6 +1246,7 @@ describe('ActionComposer on the stage', () => {
     it('clears the text and keeps focus in the box', async () => {
       const { w, input } = await typing('xyz')
       await esc(input)
+      expect((input.element as HTMLInputElement).value).toBe('xyz')
       await esc(input)
       expect((input.element as HTMLInputElement).value).toBe('')
       expect(w.find('input[aria-label="Command"]').exists()).toBe(true)
@@ -1307,6 +1310,72 @@ describe('ActionComposer on the stage', () => {
         false,
       )
       await esc(input)
+      expect((input.element as HTMLInputElement).value).toBe('abc')
+      w.unmount()
+    })
+
+    it('leaves the Escape to the narrator while it reads', async () => {
+      useSettingsStore().narrationOn = true
+      const narration = useNarrationStore()
+      narration.setAudioFactory(() => ({
+        volume: 1,
+        currentTime: 0,
+        onended: null,
+        onerror: null,
+        play: () => Promise.resolve(),
+        pause: () => {},
+      }))
+      const { w, input } = await typing()
+      narration.begin(
+        1,
+        [
+          {
+            kind: 'block',
+            parts: [
+              {
+                markup: 'a b',
+                clip: {
+                  file: 'x.mp3',
+                  speaker: 'narrator',
+                  duration: 2,
+                  words: [],
+                },
+              },
+            ],
+          },
+        ],
+        'act1',
+      )
+      expect(narration.isNarrating).toBe(true)
+      await esc(input)
+      expect(w.find('input[aria-label="Command"]').exists()).toBe(true)
+      w.unmount()
+    })
+
+    it('leaves the Escape to a speech on the picture', async () => {
+      const { w, input } = await typing()
+      useStageSpeechStore().observe({
+        id: 1,
+        command: 'talk to mira',
+        text:
+          '[character_name]Mira[/character_name]\n' +
+          '[dialogue]Hello.[/dialogue]',
+        room: 'Hut',
+        description: null,
+        gained: [],
+        lost: [],
+        arrival: null,
+        addressed: 'Mira',
+      })
+      expect(useStageSpeechStore().visible.length).toBeGreaterThan(0)
+      await esc(input)
+      expect(w.find('input[aria-label="Command"]').exists()).toBe(true)
+      w.unmount()
+    })
+
+    it('does not run through the steps on a held key', async () => {
+      const { w, input } = await typing('abc')
+      await input.trigger('keydown', { key: 'Escape', repeat: true })
       expect((input.element as HTMLInputElement).value).toBe('abc')
       w.unmount()
     })

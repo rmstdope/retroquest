@@ -359,6 +359,8 @@ function onTypedEscape(event: KeyboardEvent): void {
   )
     return
   event.preventDefault()
+  // A held key takes one step only, not all of them.
+  if (event.repeat) return
   if (typed.value) {
     typed.value = ''
     return
