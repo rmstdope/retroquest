@@ -484,6 +484,7 @@ function noteEmptyBoxEnter(event: KeyboardEvent): void {
   if (
     event.key === 'Enter' &&
     event.target instanceof HTMLInputElement &&
+    event.target.matches(COMMAND_BOX) &&
     event.target.value === ''
   )
     emptyBoxEnters.add(event)
