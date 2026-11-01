@@ -154,6 +154,21 @@ describe('useSettingsStore', () => {
     expect(settings.theme).toBe('light')
   })
 
+  it('keeps every text size, the two smallest included, and falls back on an unknown one', () => {
+    for (const size of ['smallest', 'extraSmall', 'small', 'medium', 'large']) {
+      installLocalStorage({
+        [SETTINGS_STORAGE_KEY]: JSON.stringify({ textSize: size }),
+      })
+      setActivePinia(createPinia())
+      expect(useSettingsStore().textSize).toBe(size)
+    }
+    installLocalStorage({
+      [SETTINGS_STORAGE_KEY]: JSON.stringify({ textSize: 'tiny' }),
+    })
+    setActivePinia(createPinia())
+    expect(useSettingsStore().textSize).toBe('medium')
+  })
+
   it('resets to the defaults', async () => {
     const { store } = installLocalStorage()
     const settings = useSettingsStore()

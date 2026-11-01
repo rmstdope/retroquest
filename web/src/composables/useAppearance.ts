@@ -6,7 +6,7 @@ import { LANTERN_PALETTES, LANTERN_TEXT_SCALE } from '@/lantern/tokens'
  * Mirror the player's appearance settings onto the document root, where
  * lantern.css reads them:
  * - `data-theme` = light | dark (absent = follow the device)
- * - `--lq-text-scale` = story text multiplier for Small / Medium / Large
+ * - `--lq-text-scale` = story text multiplier for the five text sizes
  * - `data-reduce-motion` = on | off (absent = follow the device)
  *
  * The page's `theme-color` tags (browser and phone chrome; one per device

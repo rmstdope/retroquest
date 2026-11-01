@@ -80,6 +80,25 @@ describe('SettingsDialog', () => {
     ).toBe('true')
   })
 
+  it('offers five text sizes, smallest first, and picks the extra small one', async () => {
+    const w = mountSettings()
+    const names = w
+      .get('[role="group"][aria-label="Text size"]')
+      .findAll('button')
+      .map((b) => b.attributes('aria-label'))
+    expect(names).toEqual([
+      'Smallest text',
+      'Extra small text',
+      'Small text',
+      'Medium text',
+      'Large text',
+    ])
+
+    await choice(w, 'Text size', 'Extra small text').trigger('click')
+
+    expect(useSettingsStore().textSize).toBe('extraSmall')
+  })
+
   it('turns music off and on and sets its volume', async () => {
     const w = mountSettings()
     const settings = useSettingsStore()
