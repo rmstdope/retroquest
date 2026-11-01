@@ -53,7 +53,10 @@ test('the Settings text size row wraps its A buttons under the label on a phone'
   await page.getByRole('button', { name: 'Game menu' }).click()
   await page.getByRole('button', { name: /^Settings/ }).click()
 
-  const label = page.getByText('Text size', { exact: true }).first()
+  const label = page
+    .getByRole('dialog')
+    .getByText('Text size', { exact: true })
+    .first()
   const sizes = page
     .getByRole('dialog')
     .getByRole('group', { name: 'Text size' })

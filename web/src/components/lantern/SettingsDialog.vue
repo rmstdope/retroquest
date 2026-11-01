@@ -266,7 +266,7 @@ function volume(event: Event): number {
 }
 .lq-row-wrap {
   flex-wrap: wrap;
-  padding: 8px 0;
+  row-gap: 8px;
 }
 .lq-row-wrap .lq-row-text {
   flex: 1 1 8rem;

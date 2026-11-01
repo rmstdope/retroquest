@@ -431,6 +431,7 @@ function toggleTheme(): void {
 @media (max-width: 479px) {
   .lq-popover {
     position: fixed;
+    /* Just under the compact header: 8 + 44 + 8 padding. */
     top: 60px;
     left: 8px;
     right: 8px;
