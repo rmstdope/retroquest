@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest'
 import { setActivePinia, createPinia } from 'pinia'
 import { useAudio } from './useAudio'
+import { NEW_SPELL_FILE } from './questSounds'
 import { useSettingsStore } from '@/stores/useSettingsStore'
 import type { AudioFactory } from './useAudio'
 
@@ -209,12 +210,14 @@ describe('useAudio', () => {
     })
   })
 
-  it('plays nothing for a learned spell until its sound is supplied', () => {
+  it('plays its own sound for a learned spell', () => {
     const { factory, playFn } = createMockFactory()
 
     useAudio(factory).playNewSpell()
 
-    expect(factory).not.toHaveBeenCalled()
-    expect(playFn).not.toHaveBeenCalled()
+    expect(factory).toHaveBeenCalledWith(
+      `/audio/soundeffects/${encodeURIComponent(NEW_SPELL_FILE)}`,
+    )
+    expect(playFn).toHaveBeenCalledOnce()
   })
 })

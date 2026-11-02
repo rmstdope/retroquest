@@ -14,5 +14,13 @@
     "plays": "When a quest is completed",
     "brief": "short triumphant fanfare for a quest completed, instrumental, no vocals",
     "seconds": 5
+  },
+  {
+    "id": "spell-learned",
+    "title": "Spell Learned",
+    "file": "web/public/audio/soundeffects/Voicy_Spell Learned.mp3",
+    "plays": "When a spell is learned",
+    "brief": "short magical chime for a spell learned, instrumental, no vocals",
+    "seconds": 5
   }
 ]

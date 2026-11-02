@@ -45,9 +45,9 @@ export function useAudio(audioFactory: AudioFactory = defaultAudioFactory) {
     playSound(QUEST_COMPLETE_FILE)
   }
 
-  /** Play the learned-spell sound effect (nothing until its file is supplied). */
+  /** Play the learned-spell sound effect (silent until its file is made). */
   function playNewSpell(): void {
-    if (NEW_SPELL_FILE) playSound(NEW_SPELL_FILE)
+    playSound(NEW_SPELL_FILE)
   }
 
   /** Toggle sound effects on or off (saved with the player's settings). */
