@@ -140,8 +140,9 @@ describe('ColumnTurn', () => {
     })
     const followed: string[] = []
     w.element.addEventListener(FOLLOW_EVENT, (event: Event) => {
+      // Announced whole, not by its first line as a unit.
       const unit = event instanceof CustomEvent && event.detail?.unit === true
-      if (unit && event.target instanceof Element)
+      if (!unit && event.target instanceof Element)
         followed.push(
           event.target.querySelector('.lq-line')?.textContent?.trim() ?? '',
         )

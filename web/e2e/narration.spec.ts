@@ -338,22 +338,25 @@ test('in the one column the held story follows Elior’s journal lines as they a
   }
 
   await enter(page, 'use journal')
-  // Elior's line being read is ringed, and the held story has brought it into view.
+  // Elior's line being read is ringed, and the held story has brought all of
+  // it into view (from its top, when it is taller than the story).
   const line = page
     .getByTestId('column-turn')
     .last()
     .getByTestId('speech-line')
     .filter({ has: page.locator('.lq-speaking') })
-    .last()
+    .first()
   await expect(line).toHaveCount(1)
   await expect
     .poll(async () => {
       const lineBox = await line.boundingBox()
       const storyBox = await story.boundingBox()
       if (!lineBox || !storyBox) return false
+      const storyBottom = storyBox.y + storyBox.height
+      const tall = lineBox.height > storyBox.height
       return (
-        lineBox.y >= storyBox.y &&
-        lineBox.y + Math.min(lineBox.height, 40) <= storyBox.y + storyBox.height
+        lineBox.y >= storyBox.y - 1 &&
+        (tall || lineBox.y + lineBox.height <= storyBottom + 1)
       )
     })
     .toBe(true)

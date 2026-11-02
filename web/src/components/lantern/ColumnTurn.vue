@@ -22,8 +22,9 @@ import StoryTurn from './StoryTurn.vue'
  * never come before the line they follow. The lines are the conversation's
  * (`useStageSpeechStore`) while it holds them, and shown once it lets go.
  * The line being read is announced to the held story with the read-along's
- * `lq-follow` event (as a unit), so the story brings it into view as it is
- * spoken, whether or not the turn is a conversation.
+ * `lq-follow` event, whole (it has no lit words to follow), so the story
+ * brings all of it into view as it is spoken (its top first when it is
+ * taller than the pane), whether or not the turn is a conversation.
  */
 const props = defineProps<{
   turn: Turn
@@ -51,18 +52,18 @@ const told = computed(() => {
 
 const root = ref<HTMLElement | null>(null)
 
-/** The newest told line being read aloud now, as its piece index (-1 for none). */
-const speakingIndex = computed(() => {
-  for (let index = told.value.length - 1; index >= 0; index--) {
-    const piece = told.value[index]
-    if (
+/**
+ * The told line being read aloud now, as its piece index (-1 for none): the
+ * first one ringed, since a quote without word timings rings all its
+ * paragraphs and is read from its first.
+ */
+const speakingIndex = computed(() =>
+  told.value.findIndex(
+    (piece) =>
       piece.kind === 'line' &&
-      speech.lineSpeaking(props.turn.id, piece.line.unit, piece.line.firstWord)
-    )
-      return index
-  }
-  return -1
-})
+      speech.lineSpeaking(props.turn.id, piece.line.unit, piece.line.firstWord),
+  ),
+)
 
 // A line that starts being read asks the held story to keep it in view.
 watch(
@@ -70,13 +71,11 @@ watch(
   async (index) => {
     if (index < 0) return
     await nextTick()
-    root.value?.querySelector(`[data-piece="${index}"]`)?.dispatchEvent(
-      new CustomEvent(FOLLOW_EVENT, {
-        bubbles: true,
-        cancelable: true,
-        detail: { unit: true },
-      }),
-    )
+    root.value
+      ?.querySelector(`[data-piece="${index}"]`)
+      ?.dispatchEvent(
+        new CustomEvent(FOLLOW_EVENT, { bubbles: true, cancelable: true }),
+      )
   },
   { flush: 'post' },
 )

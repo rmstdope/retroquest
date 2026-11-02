@@ -221,6 +221,26 @@ describe('useStoryFollow', () => {
       expect(fake.story.scrollTop).toBe(620 - VIEW + 2 * LINE)
     })
 
+    it('brings a whole element (a spoken line) into view, but never its top above the pane', async () => {
+      fake = await mountStory()
+      read()
+      const element = (top: number, bottom: number): HTMLElement => {
+        const el = fake.word(bottom)
+        el.getBoundingClientRect = () =>
+          ({
+            top: 100 + top - fake.story.scrollTop,
+            bottom: 100 + bottom - fake.story.scrollTop,
+          }) as DOMRect
+        return el
+      }
+      // A short line: all of it, two lines above the bottom.
+      fake.api.follow(element(500, 600))
+      expect(fake.story.scrollTop).toBe(600 - VIEW + 2 * LINE)
+      // One taller than the pane: its top at the pane's top.
+      fake.api.follow(element(700, 1500))
+      expect(fake.story.scrollTop).toBe(700)
+    })
+
     it('refollows the lit word at once when the pane changes size', async () => {
       fake = await mountStory()
       document.documentElement.style.setProperty('--lq-motion', '1')

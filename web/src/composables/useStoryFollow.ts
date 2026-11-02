@@ -60,7 +60,7 @@ export interface StoryFollow {
   held: ComputedRef<boolean>
   /** Scroll the pane to `top` (clamped), gliding unless `animate` is false or motion is reduced. */
   moveTo(top: number, animate?: boolean): void
-  /** Scroll just enough to keep `el` in view as the rule says; a `unit` counts by its first line. */
+  /** Scroll just enough to keep `el` in view as the rule says, never past its top; a `unit` counts by its first line. */
   follow(el: Element, unit?: boolean): void
   /** Bring the lit word (or the unit being spoken) back into view at once, after the pane changed size. */
   refollow(): void
@@ -159,7 +159,8 @@ export function useStoryFollow(story: Ref<HTMLElement | null>): StoryFollow {
     const view = pane.clientHeight
     const room = view < SHORT_PANE_LINES * line ? 0 : ROOM_LINES * line
     const from = goal ?? pane.scrollTop
-    if (bottom > from + view - room) moveTo(bottom - view + room)
+    // Never so far that the element's top leaves the pane (a tall spoken line).
+    if (bottom > from + view - room) moveTo(Math.min(bottom - view + room, top))
     else if (top < from) moveTo(top)
   }
 
