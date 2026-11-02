@@ -15,6 +15,7 @@ import { useNarrationStore } from '@/stores/useNarrationStore'
 import { useReadAlong } from '@/composables/useReadAlong'
 import { arrivesOnPicture } from '@/lantern/stageArrival'
 import type { CardPiece } from '@/lantern/columnPieces'
+import { toldAsSpeech } from '@/lantern/stageSpeech'
 
 /**
  * One turn in the Lantern story: the command echo, the answer's blocks and
@@ -90,18 +91,18 @@ const blocks = computed(() =>
   ),
 )
 
-/** The quotes of a conversation turn go to the speech on the right (the store's own rule). */
-const speechTurn = computed(
-  () => !!props.turn.addressed && props.turn.description?.moved !== true,
-)
-/** Whether a block is left to the speech on the right: only on a card, only a named speaker's quote. */
+/**
+ * Whether a block is left to the speech on the right: only on a card, only a
+ * named speaker's quote that the turn tells as speech (the store's own rule,
+ * `toldAsSpeech`).
+ */
 function onSpeech(block: TurnBlock): boolean {
   return (
     !!props.card &&
     !props.piece &&
-    speechTurn.value &&
     block.kind === 'dialogue' &&
-    !!block.speaker
+    !!block.speaker &&
+    toldAsSpeech(props.turn, block.speaker)
   )
 }
 /** Whether the piece (if any) tells block `index`. */

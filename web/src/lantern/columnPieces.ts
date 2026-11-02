@@ -11,7 +11,12 @@
 import type { Turn } from '@/stores/useGameStore'
 import { arrivesOnPicture } from './stageArrival'
 import { displayName } from './displayName'
-import { eliorLine, speechLines, type SpeechLine } from './stageSpeech'
+import {
+  eliorLine,
+  speechLines,
+  toldAsSpeech,
+  type SpeechLine,
+} from './stageSpeech'
 import type { TurnBlock } from './parseTurn'
 
 /** A narrator card and what of the turn it carries. */
@@ -66,15 +71,18 @@ function plain(block: TurnBlock | undefined): string {
 /**
  * The pieces of `turn` (whose answer is `blocks`) in the order they happened.
  * The quotes of a conversation turn (one that addresses someone and stays in
- * the room) are lines, Elior's own words first; in any other turn they stay on
- * the narrator's cards.
+ * the room) are lines, Elior's own words first; in any other turn that stays
+ * in the room only Elior's own quotes are lines, and the rest stay on the
+ * narrator's cards (`toldAsSpeech`).
  */
 export function columnPieces(turn: Turn, blocks: TurnBlock[]): ColumnPiece[] {
   const talking = !!turn.addressed && turn.description?.moved !== true
   const pieces: ColumnPiece[] = []
   const own = talking ? eliorLine(turn.command) : null
   if (own) pieces.push({ kind: 'line', line: own })
-  const lines = talking ? speechLines(blocks) : []
+  const lines = speechLines(blocks).filter((line) =>
+    toldAsSpeech(turn, line.speaker),
+  )
   const lastCard = (): CardPiece | undefined => {
     const last = pieces.at(-1)
     return last?.kind === 'card' ? last : undefined

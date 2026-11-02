@@ -63,6 +63,23 @@ describe('columnPieces', () => {
     expect(kinds(t)).toEqual(['card'])
   })
 
+  it("puts Elior's own lines on the speech side even when nobody is addressed", () => {
+    const t = turn(
+      `The ink is smudged.\n${say('Elior', 'The storm.')}\n${say('Mira', 'Hello.')}`,
+      { command: 'use journal', addressed: undefined },
+    )
+    expect(kinds(t)).toEqual(['card', 'line:Elior', 'card'])
+  })
+
+  it("leaves Elior's lines with the narrator when the turn leaves the room", () => {
+    const t = turn(say('Elior', 'Onwards.'), {
+      command: 'go north',
+      addressed: undefined,
+      description: { moved: true, firstVisit: false },
+    })
+    expect(kinds(t)).toEqual(['card'])
+  })
+
   it('has no command card for a turn without a command', () => {
     const t = turn('The room.', { command: null, addressed: undefined })
     const pieces = columnPieces(t, parseTurn(t.text))

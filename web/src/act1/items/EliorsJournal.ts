@@ -3,7 +3,7 @@ import {
   Item,
   type GameState,
   characterName,
-  writing,
+  dialogue,
 } from '@/engine'
 
 /** Elior's personal journal containing lore and story hints. */
@@ -20,18 +20,21 @@ export class EliorsJournal extends Item {
   }
 
   /**
-   * Read the latest journal entry, in four paragraphs, and set a story flag.
+   * Read the latest journal entry, four paragraphs in Elior's own voice (his
+   * speech, told on the right), and set a story flag.
    */
   override use(gameState: GameState): string {
     const entry =
       'The ink is slightly smudged on this page, as if written in haste or with a ' +
       'trembling hand...\n\n' +
-      writing(
+      dialogue(
+        'Elior',
         'The storm kept me up half the night. Then a light split the sky ' +
           'over the fields, and it was not lightning.',
       ) +
       '\n\n' +
-      writing(
+      dialogue(
+        'Elior',
         'When I slept, I dreamed. Dark, and rain on shutters I could not see. ' +
           "A man's hand lifted a child out of the dark. " +
           'There was a tune, three notes up and home again, ' +
@@ -41,14 +44,16 @@ export class EliorsJournal extends Item {
           '…and let them rest…',
       ) +
       '\n\n' +
-      writing(
+      dialogue(
+        'Elior',
         "I knew that voice. Not the way you know a neighbour's, " +
           'but the way you know a song someone sang to you before you had ' +
           'words for it. It made my chest ache. ' +
           "I can't think from where.",
       ) +
       '\n\n' +
-      writing(
+      dialogue(
+        'Elior',
         'When I woke, the tune was still going. ' +
           'Someone out by the hearth was humming it.',
       ) +

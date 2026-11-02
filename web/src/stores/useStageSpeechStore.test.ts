@@ -134,6 +134,29 @@ describe('useStageSpeechStore', () => {
     expect(speech.visible).toEqual([])
   })
 
+  it("shows Elior's own lines from a turn that addresses no one, and only his", () => {
+    const speech = useStageSpeechStore()
+    speech.observe(turn(say('Mira', 'Hello.'), 'Mira'))
+    speech.observe(
+      turn(
+        `The ink is smudged.\n${say('Elior', 'The storm.')}\n${say('Mira', 'Hm.')}`,
+        null,
+        'use journal',
+      ),
+    )
+    speech.revealAll()
+    expect(speech.visible.map((l) => [l.speaker, l.side, l.markup])).toEqual([
+      ['Elior', 'left', 'The storm.'],
+    ])
+  })
+
+  it("does not show Elior's lines from a turn that leaves the room", () => {
+    const speech = useStageSpeechStore()
+    speech.observe(turn(say('Elior', 'Onwards.'), null, 'go north', true))
+    speech.revealAll()
+    expect(speech.visible).toEqual([])
+  })
+
   it('releases the lines of an unnarrated turn one at a time by their length', () => {
     const speech = useStageSpeechStore()
     const first = 'First line.'

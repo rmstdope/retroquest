@@ -4,16 +4,19 @@ import type { Turn } from './useGameStore'
 import { useNarrationStore } from './useNarrationStore'
 import { parseTurn } from '@/lantern/parseTurn'
 import {
+  ELIOR,
   eliorLine,
   readingPauseMs,
   speechLines,
+  toldAsSpeech,
   type SpeechLine,
 } from '@/lantern/stageSpeech'
 
 /**
  * The conversation shown on the room's picture (never saved). A command that
  * addresses a character starts or continues a conversation with them; any
- * other turn clears it, and so does a turn that moves Elior to another room, and so does addressing someone else (which starts a
+ * other turn clears it (showing only Elior's own words, such as his journal,
+ * when it has any), and so does a turn that moves Elior to another room, and so does addressing someone else (which starts a
  * fresh one). The lines of each turn are the quotes of its answer
  * (`speechLines`), shown as the narrator reaches them when the turn is
  * narrated, and otherwise one at a time by a reading pause (`readingPauseMs`);
@@ -147,25 +150,35 @@ export const useStageSpeechStore = defineStore('stageSpeech', () => {
 
   /**
    * Take a new turn in: the previous turn's lines show in full first. A turn
-   * that addresses no one, or ends in another room, clears the conversation; one that addresses someone
-   * else starts a new one; one that addresses the same character adds to it.
+   * that ends in another room clears the conversation; one that addresses no
+   * one clears it too and shows only Elior's own quotes (`toldAsSpeech`); one
+   * that addresses someone else starts a new one; one that addresses the same
+   * character adds to it.
    */
   function observe(turn: Turn): void {
     revealAll()
     const moved = turn.description?.moved === true
     const addressed = turn.addressed ?? null
+    const said = speechLines(parseTurn(turn.text)).filter((line) =>
+      toldAsSpeech(turn, line.speaker),
+    )
     // Leaving the room ends the conversation, even when the talk itself moved Elior.
-    if (!addressed || moved) return clear()
-    if (conversation.value?.with.toLowerCase() !== addressed.toLowerCase()) {
+    if (moved || (!addressed && !said.length)) return clear()
+    // A turn that addresses no one shows only Elior's own words, on their own.
+    const partner = addressed ?? ELIOR
+    if (
+      !addressed ||
+      conversation.value?.with.toLowerCase() !== partner.toLowerCase()
+    ) {
       clear()
-      conversation.value = { with: addressed, lines: [] }
+      conversation.value = { with: partner, lines: [] }
     }
     const narrated = narration.narrates(turn.id)
     // Elior's own words come first and need no narrator or pause.
-    const own = eliorLine(turn.command)
+    const own = addressed ? eliorLine(turn.command) : null
     const lines = [
       ...(own ? [{ ...own, narrated: false, shown: true }] : []),
-      ...speechLines(parseTurn(turn.text)).map((line) => ({
+      ...said.map((line) => ({
         ...line,
         narrated,
         shown: false,

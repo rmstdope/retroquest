@@ -549,6 +549,18 @@ describe('StoryTurn as a narration card', () => {
     expect(w.find('.lq-block-dialogue').exists()).toBe(true)
   })
 
+  it("leaves Elior's own quote to the speech when the turn is not a conversation", () => {
+    const w = mountCard({
+      command: 'use journal',
+      text:
+        'The ink is smudged.\n' +
+        '[character_name]Elior[/character_name]\n[dialogue]The storm.[/dialogue]',
+    })
+
+    expect(w.find('.lq-block-dialogue').exists()).toBe(false)
+    expect(w.text()).toContain('The ink is smudged.')
+  })
+
   it('keeps a quote nobody speaks (writing) even in a conversation', () => {
     const w = mountCard({
       command: 'talk to grandmother',

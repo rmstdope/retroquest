@@ -16,14 +16,15 @@ describe('EliorsJournal', () => {
     )
   })
 
-  it('shows the entry as four unlabelled paragraphs, so each can be skipped', () => {
+  it("shows the entry as four paragraphs in Elior's own voice, so each is his speech", () => {
     const game = new Game([new Act1()])
     const text = new EliorsJournal().use(game.state)
 
     expect(findMarkupProblems(text)).toEqual([])
     const quotes = parseTurn(text).filter((b) => b.kind === 'dialogue')
     expect(quotes).toHaveLength(4)
-    for (const quote of quotes) expect(quote).toMatchObject({ speaker: null })
+    for (const quote of quotes)
+      expect(quote).toMatchObject({ speaker: 'Elior' })
     expect(text).toContain('[dialogue]The storm kept me up half the night.')
     expect(text).toContain('and it was not lightning.[/dialogue]')
     expect(text).toContain('[dialogue]When I slept, I dreamed.')
