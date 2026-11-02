@@ -64,7 +64,7 @@ export function useMusic(
       stopCrossfade()
       currentMusicFile.value = ''
       musicInfo.value = ''
-      retire(active)
+      if (active !== base) retire(active)
       active = base
       audio.pause()
       audio.removeAttribute('src')
@@ -74,6 +74,11 @@ export function useMusic(
 
     if (file === requestedFile) return
     requestedFile = file
+    if (file === currentMusicFile.value) {
+      // Back to the music that is playing: drop the load under way.
+      request++
+      return
+    }
     const id = ++request
 
     const returning = takeFadingOut(file)
@@ -271,9 +276,11 @@ export function useMusic(
   }
 
   function ensureMusicStarted(): void {
-    if (!currentMusicFile.value || musicMuted.value) return
+    // Also while the first music is still decoding: this input is the
+    // gesture that lets the context run.
     const context = sharedAudioContext()
     if (context && context.state !== 'running') void context.resume()
+    if (!currentMusicFile.value || musicMuted.value) return
     if (active.paused) {
       active.play().catch(() => {})
     }
