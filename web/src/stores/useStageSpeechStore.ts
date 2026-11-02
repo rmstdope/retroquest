@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
 import type { Turn } from './useGameStore'
 import { useNarrationStore } from './useNarrationStore'
+import { useSceneStore } from './useSceneStore'
 import { parseTurn } from '@/lantern/parseTurn'
 import {
   ELIOR,
@@ -39,6 +40,7 @@ export interface StageLine extends SpeechLine {
 /** The conversation on the picture. */
 export const useStageSpeechStore = defineStore('stageSpeech', () => {
   const narration = useNarrationStore()
+  const scene = useSceneStore()
   const conversation = ref<{ with: string; lines: StageLine[] } | null>(null)
   let nextKey = 1
   let timer: ReturnType<typeof setTimeout> | undefined
@@ -104,9 +106,12 @@ export const useStageSpeechStore = defineStore('stageSpeech', () => {
   /**
    * Whether the line a turn made (by unit and first word) is on the page now.
    * A line the conversation no longer holds (an older turn, or one it was
-   * cleared of) was shown long ago.
+   * cleared of) was shown long ago. Nothing of a turn that moves Elior shows
+   * while the picture of its move is still changing (`useSceneStore`), also
+   * before the conversation has taken the turn in.
    */
   function lineShown(turnId: number, unit: number, firstWord: number): boolean {
+    if (scene.holds(turnId)) return false
     const line = lineAt(turnId, unit, firstWord)
     return !line || isShown(line)
   }

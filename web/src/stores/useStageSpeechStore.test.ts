@@ -3,6 +3,7 @@ import { createPinia, setActivePinia } from 'pinia'
 import type { Turn } from './useGameStore'
 import { useNarrationStore, type NarrationAudio } from './useNarrationStore'
 import { useStageSpeechStore } from './useStageSpeechStore'
+import { useSceneStore } from './useSceneStore'
 import { narrationKey } from '@/lantern/narrationKey'
 import {
   narrationWords,
@@ -398,5 +399,25 @@ describe('useStageSpeechStore.told', () => {
     expect(speech.told(said.id)).toBe(false)
     vi.advanceTimersByTime(60000)
     expect(speech.told(said.id)).toBe(true)
+  })
+})
+
+describe('useStageSpeechStore during a change of scene', () => {
+  beforeEach(() => {
+    vi.useFakeTimers()
+    setActivePinia(createPinia())
+  })
+  afterEach(() => vi.useRealTimers())
+
+  it('holds back a line of the moving turn, also before the conversation has taken it in, until the picture is up', () => {
+    const speech = useStageSpeechStore()
+    const scene = useSceneStore()
+    const moving = turn(say('Voice', 'Wake.'), 'Voice', 'talk to voice', true)
+    scene.begin(moving.id, '/new.png', () => speech.observe(moving))
+    // The column asks while the scene changes and the turn is not yet observed.
+    expect(speech.lineShown(moving.id, 0, 0)).toBe(false)
+    expect(speech.lineShown(moving.id, -1, 0)).toBe(false)
+    scene.skip()
+    expect(speech.lineShown(moving.id, 0, 0)).toBe(true)
   })
 })
