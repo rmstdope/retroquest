@@ -105,4 +105,35 @@ describe('ColumnTurn', () => {
     const w = mount(ColumnTurn, { props: { turn: t, age: 'old' } })
     expect(w.text()).toContain('Hello.')
   })
+
+  it('rings the line being read, and no line of an older turn', async () => {
+    const speech = useStageSpeechStore()
+    const t = turn(say('Mira', 'Hello.'))
+    speech.observe(t)
+    speech.revealAll()
+    vi.spyOn(speech, 'lineSpeaking').mockReturnValue(true)
+    const reading = mount(ColumnTurn, { props: { turn: t, age: 'new' } })
+    expect(reading.find('.lq-line').classes()).toContain('lq-speaking')
+    vi.mocked(speech.lineSpeaking).mockReturnValue(false)
+    const older = mount(ColumnTurn, { props: { turn: t, age: 'old' } })
+    expect(older.find('.lq-line').classes()).not.toContain('lq-speaking')
+  })
+
+  it('tells the room after a load on one card with no command', () => {
+    const t = turn('', {
+      command: null,
+      addressed: undefined,
+      arrival: {
+        room: 'Cottage',
+        description: 'Cosy.',
+        characters: [],
+        items: [],
+        exits: {},
+      },
+    })
+    const w = mount(ColumnTurn, { props: { turn: t, age: 'new' } })
+    expect(w.findAll('[data-testid="turn"]')).toHaveLength(1)
+    expect(w.find('[data-testid="command"]').exists()).toBe(false)
+    expect(w.text()).toContain('Cosy.')
+  })
 })

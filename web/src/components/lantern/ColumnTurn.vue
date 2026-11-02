@@ -131,7 +131,8 @@ function heads(index: number): boolean {
   display: flex;
   align-items: flex-start;
   gap: 8px;
-  max-width: 100%;
+  /* Up to about three quarters of the column, whatever the line's own width. */
+  max-width: 75%;
   pointer-events: auto;
 }
 .lq-cl-right {
@@ -151,7 +152,6 @@ function heads(index: number): boolean {
 }
 .lq-col {
   min-width: 0;
-  max-width: 75%;
   display: flex;
   flex-direction: column;
 }

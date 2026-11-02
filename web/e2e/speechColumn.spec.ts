@@ -163,6 +163,14 @@ test('at 1060px the lines are in the one column, in the middle, with 46px portra
   expect(box.width).toBeLessThanOrEqual(620)
   expect(Math.abs(box.x + box.width / 2 - 530)).toBeLessThan(2)
   await expect(column.locator('.lq-cl-left .lq-line-name')).toHaveText('Elior')
+  // A line takes up to three quarters of the column, not of its own width.
+  const widest = await column
+    .locator('[data-testid="speech-line"]')
+    .evaluateAll((rows) =>
+      Math.max(...rows.map((row) => row.getBoundingClientRect().width)),
+    )
+  expect(widest).toBeGreaterThan(box.width * 0.5)
+  expect(widest).toBeLessThanOrEqual(box.width * 0.75 + 1)
 })
 
 test('on a phone the lines rest at the foot of the column and a two-line name clears the row above', async ({

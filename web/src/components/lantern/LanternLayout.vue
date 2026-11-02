@@ -1388,18 +1388,15 @@ watch(
           v-if="staged"
           v-show="section === 'story'"
           class="lq-paper-tabrow"
-          :class="{
-            'lq-paper-none': !wordsVisible,
-            'lq-covered': sheetOpen,
-          }"
+          :class="{ 'lq-covered': sheetOpen }"
         >
           <button
             v-if="showHide"
             ref="hideEl"
             type="button"
             class="lq-words-hide"
-            title="Hide the words (N)"
-            aria-keyshortcuts="N"
+            :title="wide ? 'Hide the words (N)' : undefined"
+            :aria-keyshortcuts="wide ? 'N' : undefined"
             @click="hidePaper"
           >
             ▾ Hide
@@ -1410,7 +1407,7 @@ watch(
             type="button"
             class="lq-paper-tab"
             :title="wide ? 'Show the words (N)' : undefined"
-            aria-keyshortcuts="N"
+            :aria-keyshortcuts="wide ? 'N' : undefined"
             @click="showPaper"
           >
             ▴ Show

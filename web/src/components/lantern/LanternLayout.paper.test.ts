@@ -382,22 +382,6 @@ describe('the narration paper', () => {
     expect(speechZone().hasAttribute('inert')).toBe(false)
   })
 
-  it('lets the tab row push the actions down when there is no paper', async () => {
-    await mountWith([turn(1, '', null)])
-    expect(
-      document
-        .querySelector('.lq-paper-tabrow')
-        ?.classList.contains('lq-paper-none'),
-    ).toBe(true)
-    game.turns.push(turn(2, 'Something.'))
-    await nextTick()
-    expect(
-      document
-        .querySelector('.lq-paper-tabrow')
-        ?.classList.contains('lq-paper-none'),
-    ).toBe(false)
-  })
-
   it('moves focus to Hide when N shows the paper while the tab has focus', async () => {
     await mountWith([turn(1, 'First.')])
     press('n')
@@ -458,7 +442,8 @@ describe('the narration paper', () => {
     vi.stubGlobal(
       'matchMedia',
       vi.fn((query: string) => ({
-        matches: !query.includes('1100px'),
+        // A 1060 x 800 laptop with a mouse: wide and keyboard, not short, not 1100 wide.
+        matches: !query.includes('1100px') && !query.includes('max-height'),
         addEventListener: vi.fn(),
         removeEventListener: vi.fn(),
       })),
