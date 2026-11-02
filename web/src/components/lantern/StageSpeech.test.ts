@@ -210,4 +210,53 @@ describe('StageSpeech', () => {
     // The next block is read, not the rest of the turn passed over.
     expect(narration.speaking(journal.id)?.unit).toBe(1)
   })
+
+  it('lights the word being read in a narrated line, counted across its paragraphs (rq-v66a)', async () => {
+    const { speech, w } = mounted()
+    const narration = useNarrationStore()
+    const audio = {
+      play: () => Promise.resolve(),
+      pause: () => undefined,
+      volume: 1,
+      currentTime: 0,
+      onended: null,
+      onerror: null,
+    }
+    narration.setAudioFactory(() => audio)
+    const quote = 'The storm came.\nI dreamed of fire.'
+    const words = quote.split(/\s+/)
+    const said = turn(say('Mira', quote), 'Mira')
+    narration.begin(
+      said.id,
+      [
+        {
+          kind: 'block',
+          parts: [
+            {
+              markup: quote,
+              clip: {
+                file: 'x.mp3',
+                speaker: 'mira',
+                duration: 9,
+                words: words.map((word, i) => ({ word, start: i, end: i + 1 })),
+              },
+            },
+          ],
+        },
+      ],
+      'act1',
+    )
+    speech.observe(said)
+    audio.currentTime = 1.5
+    await vi.advanceTimersByTimeAsync(60)
+    expect(w.findAll('.lq-w-now').map((el) => el.text())).toEqual(['storm'])
+    // The fifth word of the quote is the second word of its second paragraph.
+    audio.currentTime = 4.5
+    await vi.advanceTimersByTimeAsync(60)
+    const lines = w.findAll('[data-testid="speech-line"]')
+    expect(lines[1].findAll('.lq-w-now').map((el) => el.text())).toEqual([
+      'dreamed',
+    ])
+    expect(lines[0].findAll('.lq-w-now')).toHaveLength(0)
+  })
 })

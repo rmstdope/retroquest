@@ -4,6 +4,12 @@ import { wrapWords } from '@/lantern/wrapWords'
 import { renderMarkup } from '@/utils/theme'
 import { FOLLOW_EVENT } from '@/composables/useStoryFollow'
 
+/** How a surface's read-along is limited (see `useReadAlong`). */
+export interface ReadAlongOptions {
+  /** A selector: only words inside elements matching it are lit, and no unit is announced. */
+  within?: string
+}
+
 /**
  * The read-along of one narrated surface (a story turn, a chapter page or a
  * quest-complete pop-up), shared so they cannot drift apart. The surface is
@@ -27,10 +33,16 @@ import { FOLLOW_EVENT } from '@/composables/useStoryFollow'
  * and follows the word (`useStoryFollow`), can scroll itself; a surface where
  * nobody handles it (the chapter page, a pop-up) has the unit scrolled into
  * view as before, and the word is not followed.
+ *
+ * A surface that holds another surface's words (the phone column, whose cards
+ * are story turns with a read-along of their own) passes `options.within`: it
+ * then lights only the words inside elements matching that selector, and
+ * announces no unit (the spoken lines' surfaces follow their lines whole).
  */
 export function useReadAlong(
   id: () => number,
   root: Ref<HTMLElement | null>,
+  options: ReadAlongOptions = {},
 ): {
   shown: (unit: number) => boolean
   isSpeaking: (unit: number) => boolean
@@ -85,6 +97,8 @@ export function useReadAlong(
     return fits ? wrapped.html : plain
   }
 
+  const scope = options.within ? `${options.within} ` : ''
+
   // Light the spoken word, and keep the unit being spoken in view.
   watch(
     () => {
@@ -95,21 +109,21 @@ export function useReadAlong(
     },
     async (key) => {
       await nextTick()
-      root.value?.querySelectorAll('.lq-w-now').forEach((el) => {
+      root.value?.querySelectorAll(`${scope}.lq-w-now`).forEach((el) => {
         el.classList.remove('lq-w-now')
       })
       const now = speaking.value
       if (!now) return
       if (now.word >= 0) {
         const lit = root.value?.querySelectorAll(
-          `[data-w="${now.offset + now.word}"]`,
+          `${scope}[data-w="${now.offset + now.word}"]`,
         )
         lit?.forEach((el) => el.classList.add('lq-w-now'))
         lit?.[0]?.dispatchEvent(
           new CustomEvent(FOLLOW_EVENT, { bubbles: true, cancelable: true }),
         )
       }
-      if (key.endsWith(':-1')) {
+      if (key.endsWith(':-1') && !options.within) {
         const unit = root.value?.querySelector(`[data-unit="${now.unit}"]`)
         const unhandled = unit?.dispatchEvent(
           new CustomEvent(FOLLOW_EVENT, {
