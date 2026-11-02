@@ -143,6 +143,10 @@ Run each check as its own command and read its exit status; never chain them wit
 - Each act is a directory `web/src/act<N>/` with `Act<N>.ts`, `Act<N>StoryFlags.ts`, `classes.ts` and the sub-directories `rooms/`, `items/`, `characters/`, `spells/` and (where the act has quests) `quests/`. See `docs/typescript-porting-guide.md` for the conventions in detail.
 - The UI talks to the engine only through `GameController` and the `useBridge` composable; Vue components never import act classes (only `useBridge` loads the acts, as separate chunks).
 
+### Game Commands
+
+- New game commands (verbs, or synonyms such as `read journal` beside `use journal`) are never added to the game, and never proposed as follow-ups, features or beads, unless the navigator explicitly asks for one. The navigator has declined such proposals many times.
+
 ### Quest Management
 
 - Quests should be structured in a way that allows for branching paths and dependencies.
