@@ -9,6 +9,8 @@ import {
   readingTimeMs,
 } from './stageArrival'
 import type { NarrationUnit } from './narrationUnits'
+import { parseTurn } from './parseTurn'
+import { dialogue, event } from '@/engine'
 
 const room = { room: 'Square', description: 'Cobbles and a fountain.' }
 
@@ -127,6 +129,42 @@ describe('arrivalParts', () => {
     expect(parts[0].voiced).toBe(false)
     expect(parts[1].lines[0].unit).toBe(2)
     expect(parts[1].voiced).toBe(true)
+  })
+
+  it('leaves a talk that moves Elior to the sides, and tells only its closing arrival line', () => {
+    const text =
+      'You answer it.\n\n' +
+      'The whisper comes once more.\n' +
+      dialogue('voice', '…let them rest…') +
+      '\n\n' +
+      'You wake in your own bed.\n\n' +
+      event('You are in [room_name]Cottage[/room_name].')
+    const blocks = parseTurn(text)
+    const parts = arrivalParts({ text, arrival: room, addressed: 'voice' }, [])
+    expect(parts.map((part) => part.kind)).toEqual(['events', 'description'])
+    expect(parts[0].lines).toEqual([
+      {
+        unit: blocks.length - 1,
+        markup: 'You are in [room_name]Cottage[/room_name].',
+      },
+    ])
+    expect(parts[0].afterWords).toBe(true)
+    expect(parts[1].afterWords).toBeUndefined()
+  })
+
+  it('waits for the talk with the description alone when a moving talk ends on no arrival line', () => {
+    const text = 'She traces a prism.\n' + dialogue('Mira', 'Breathe.')
+    const parts = arrivalParts({ text, arrival: room, addressed: 'Mira' }, [])
+    expect(parts.map((part) => part.kind)).toEqual(['description'])
+    expect(parts[0].afterWords).toBe(true)
+  })
+
+  it('tells the whole answer in the middle when the move addressed nobody', () => {
+    const text =
+      'You climb.\n\n' + event('You are in [room_name]Loft[/room_name].')
+    const parts = arrivalParts({ text, arrival: room }, [])
+    expect(parts[0].lines.map((line) => line.unit)).toEqual([0, 1])
+    expect(parts[0].afterWords).toBeUndefined()
   })
 })
 

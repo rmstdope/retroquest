@@ -72,10 +72,11 @@ test('on a phone a long answer opens at its start, with the command and the firs
   ).toContainText("Elior's Cottage")
   // Her greeting comes a paragraph at a time, in the column after the command
   // that asked for it; the turn opens at its start, with its first line in view.
+  // The Voice's line from the dream is the column's first line (rq-uqp8).
   await enter(page, 'talk to grandmother')
   const lines = page.getByTestId('speech-line')
-  await expect(lines).toHaveCount(3)
-  await expect(lines.nth(2)).toContainText("If you're going out")
+  await expect(lines).toHaveCount(4)
+  await expect(lines.nth(3)).toContainText("If you're going out")
   await expect
     .poll(() => seenAtTop(page, '.lq-one-column [data-testid="command"]'), {
       timeout: 2_000,
@@ -87,7 +88,7 @@ test('on a phone a long answer opens at its start, with the command and the firs
         seenAtTop(
           page,
           '.lq-one-column [data-testid="speech-line"] .lq-line',
-          0,
+          1,
         ),
       { timeout: 2_000 },
     )

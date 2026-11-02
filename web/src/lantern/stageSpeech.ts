@@ -69,13 +69,16 @@ export interface SpeechTurn {
 
 /**
  * Whether `speaker`'s quotes in `turn` are told as speech on the right rather
- * than on the narrator's card. A turn that leaves the room tells none; a
- * conversation (a turn that addresses someone) tells every speaker's; any
- * other turn tells only Elior's own words, such as his journal.
+ * than on the narrator's card. A conversation (a turn that addresses someone)
+ * tells every speaker's, also when the talk itself takes Elior to another
+ * room (answering the dream's voice); any other turn that leaves the room
+ * tells none; any other turn tells only Elior's own words, such as his
+ * journal.
  */
 export function toldAsSpeech(turn: SpeechTurn, speaker: string): boolean {
+  if (turn.addressed) return true
   if (turn.description?.moved === true) return false
-  return !!turn.addressed || displayName(speaker) === ELIOR
+  return displayName(speaker) === ELIOR
 }
 
 /** The "say <words> to <character>" command: what Elior says, and to whom. */

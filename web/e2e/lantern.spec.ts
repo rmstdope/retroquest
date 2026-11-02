@@ -614,15 +614,15 @@ test.describe('Lantern UI (the default)', () => {
     const input = page.getByLabel('Command')
     const lines = page.getByTestId('speech-line')
 
-    // Talking to the Voice wakes Elior in his cottage: leaving the room
-    // leaves the picture empty, while the story band prints the Voice.
+    // Talking to the Voice wakes Elior in his cottage: the talk is told as
+    // any conversation is (rq-uqp8), the Voice's line on the right.
     await input.fill('talk to voice')
     await input.press('Enter')
-    await expect(page.locator('.lq-story')).toContainText('Voice')
     await expect(
       page.getByRole('region', { name: 'Current location' }),
     ).toContainText("Elior's Cottage")
-    await expect(lines).toHaveCount(0)
+    await expect(lines).toHaveCount(1)
+    await expect(page.locator('.lq-line-right')).toContainText('let them rest')
 
     // Talking to his grandmother: no portrait is made yet, so the initial
     // card stands in, on the right.
@@ -699,9 +699,11 @@ test.describe('Lantern UI (the default)', () => {
     const size = await portrait.first().boundingBox()
     expect(Math.round(size!.width)).toBe(32)
     expect(Math.round(size!.height)).toBe(32)
-    await expect(
-      page.locator('.lq-one-column .lq-line-name').first(),
-    ).toHaveText('Grandmother')
+    // The Voice's line from the dream comes first in the column (rq-uqp8).
+    await expect(page.locator('.lq-one-column .lq-line-name')).toHaveText([
+      'Voice',
+      'Grandmother',
+    ])
   })
 
   test('tells each turn on a card that grows up to the room plate, hides to a tab', async ({

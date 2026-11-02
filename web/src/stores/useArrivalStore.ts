@@ -37,8 +37,9 @@ export interface PageStart {
  *
  * News follows the arrival's parts as `news` parts, one for each piece: the
  * turn's learned spells first, then its quest news.
- * A turn that has only news waits (`active` false, nothing in the middle)
- * until the turn's words are told: the narrator reaching the first piece, or,
+ * A turn that has only news, and an arrival after a talk told on the sides
+ * (`afterWords`), waits (`active` false, nothing in the middle) until the
+ * turn's words are told: the narrator reaching the first piece, or,
  * when nobody narrates, the conversation on the picture having shown every
  * line. `told` remembers the turns whose news went through the middle, or was cut short by a clear (the
  * story shows their slim lines once `newsPending` is false) and `newsUp`
@@ -224,8 +225,11 @@ export const useArrivalStore = defineStore('arrival', () => {
       page: 0,
       shown: true,
     }
-    // News alone waits until the turn's words are told.
-    if (parts[0].kind === 'news' && !wordsTold(current.value)) {
+    // News alone, and an arrival after a talk told on the sides, wait until the turn's words are told.
+    if (
+      (parts[0].kind === 'news' || parts[0].afterWords) &&
+      !wordsTold(current.value)
+    ) {
       current.value.shown = false
       return
     }
@@ -276,7 +280,7 @@ export const useArrivalStore = defineStore('arrival', () => {
     if (now?.narrated && narration.narrates(now.turnId)) narration.skipAll()
   }
 
-  // News alone comes up when the turn's words are told.
+  // News alone, or an arrival after a talk, comes up when the turn's words are told.
   watch(
     () => {
       const now = current.value

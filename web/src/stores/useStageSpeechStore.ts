@@ -16,7 +16,8 @@ import {
  * The conversation shown on the room's picture (never saved). A command that
  * addresses a character starts or continues a conversation with them, and
  * addressing someone else starts a fresh one. A turn that moves Elior to
- * another room clears it. Any other turn clears it too, and shows only Elior's
+ * another room clears it; when the talk itself moved him, its lines start a
+ * fresh conversation. Any other turn clears it too, and shows only Elior's
  * own words (such as his journal) when it has any. The lines of each turn are the quotes of its answer
  * (`speechLines`), shown as the narrator reaches them when the turn is
  * narrated, and otherwise one at a time by a reading pause (`readingPauseMs`);
@@ -150,10 +151,11 @@ export const useStageSpeechStore = defineStore('stageSpeech', () => {
 
   /**
    * Take a new turn in: the previous turn's lines show in full first. A turn
-   * that ends in another room clears the conversation; one that addresses no
-   * one clears it too and shows only Elior's own quotes (`toldAsSpeech`); one
-   * that addresses someone else starts a new one; one that addresses the same
-   * character adds to it.
+   * that ends in another room clears the conversation, and starts a new one
+   * when it addressed someone (the talk itself moved Elior); one that
+   * addresses no one clears it too and shows only Elior's own quotes
+   * (`toldAsSpeech`); one that addresses someone else starts a new one; one
+   * that addresses the same character adds to it.
    */
   function observe(turn: Turn): void {
     revealAll()
@@ -162,11 +164,12 @@ export const useStageSpeechStore = defineStore('stageSpeech', () => {
     const said = speechLines(parseTurn(turn.text)).filter((line) =>
       toldAsSpeech(turn, line.speaker),
     )
-    // Leaving the room ends the conversation, even when the talk itself moved Elior.
-    if (moved || (!addressed && !said.length)) return clear()
+    // Leaving the room ends the conversation; a talk that moved Elior starts a new one.
+    if (!addressed && (moved || !said.length)) return clear()
     // A turn that addresses no one shows only Elior's own words, on their own.
     const partner = addressed ?? ELIOR
     if (
+      moved ||
       !addressed ||
       conversation.value?.with.toLowerCase() !== partner.toLowerCase()
     ) {

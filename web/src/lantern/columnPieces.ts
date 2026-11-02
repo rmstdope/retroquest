@@ -70,15 +70,14 @@ function plain(block: TurnBlock | undefined): string {
 
 /**
  * The pieces of `turn` (whose answer is `blocks`) in the order they happened.
- * The quotes of a conversation turn (one that addresses someone and stays in
- * the room) are lines, Elior's own words first; in any other turn that stays
- * in the room only Elior's own quotes are lines, and the rest stay on the
- * narrator's cards (`toldAsSpeech`).
+ * The quotes of a conversation turn (one that addresses someone, also when
+ * the talk takes Elior to another room) are lines, Elior's own words first; in
+ * any other turn that stays in the room only Elior's own quotes are lines, and
+ * the rest stay on the narrator's cards (`toldAsSpeech`).
  */
 export function columnPieces(turn: Turn, blocks: TurnBlock[]): ColumnPiece[] {
-  const talking = !!turn.addressed && turn.description?.moved !== true
   const pieces: ColumnPiece[] = []
-  const own = talking ? eliorLine(turn.command) : null
+  const own = turn.addressed ? eliorLine(turn.command) : null
   if (own) pieces.push({ kind: 'line', line: own })
   const lines = speechLines(blocks).filter((line) =>
     toldAsSpeech(turn, line.speaker),
