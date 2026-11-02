@@ -234,7 +234,7 @@ export const useArrivalStore = defineStore('arrival', () => {
     if (!narrated || (up.kind === 'news' && !up.voiced)) readPart()
   }
 
-  /** Remember that the turn's quest news went through the middle (once it is up). */
+  /** Remember that the turn's news is told: it came up, or it was cut short (see `clear`). Its card then keeps slim lines. */
   function markTold(now: NonNullable<typeof current.value>): void {
     if (
       now.parts.some((each) => each.kind === 'news') &&
@@ -271,6 +271,8 @@ export const useArrivalStore = defineStore('arrival', () => {
     stopTimer()
     const now = current.value
     current.value = null
+    // News cut short before it came up (a new command) still leaves its slim lines.
+    if (now) markTold(now)
     if (now?.narrated && narration.narrates(now.turnId)) narration.skipAll()
   }
 
