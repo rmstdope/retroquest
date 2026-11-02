@@ -31,7 +31,12 @@ import {
  * carries `lq-typing`, so the sheet can let the completion list (which opens
  * above the command box) show outside it.
  */
-const props = defineProps<{ foldable?: boolean; stage?: boolean }>()
+const props = defineProps<{
+  foldable?: boolean
+  stage?: boolean
+  /** The laptop's Hide is on the picture: words showing, not hidden, no arrival. */
+  wordsShowing?: boolean
+}>()
 const emit = defineEmits<{ fold: [] }>()
 const game = useGameStore()
 const settings = useSettingsStore()
@@ -343,9 +348,10 @@ function putAway(event: KeyboardEvent): void {
 /**
  * Escape in the command box takes one step back per press: close the word list
  * (the text stays), then clear the text, then leave the box for the verbs. An
- * Escape that already has a job (the narrator, an arrival or a speech on the
- * picture, see the layout) or a box that takes no input is left alone. Every
- * step but the list's own is consumed here so the layout does not also act.
+ * Escape that already has a job (the narrator, an arrival, or words on the
+ * laptop's picture for the layout to hide; on a phone a speech) or a box that
+ * takes no input is left alone. Every step but the list's own is consumed here
+ * so the layout does not also act.
  */
 function onTypedEscape(event: KeyboardEvent): void {
   if (completion.open.value) {
@@ -357,7 +363,7 @@ function onTypedEscape(event: KeyboardEvent): void {
     !game.acceptInput ||
     narration.isNarrating ||
     arrival.active ||
-    speech.visible.length
+    (props.stage ? props.wordsShowing : speech.visible.length)
   )
     return
   event.preventDefault()
