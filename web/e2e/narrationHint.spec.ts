@@ -31,6 +31,11 @@ interface Reading {
   hintSeen: boolean
   /** How far the last paragraph read moved down once the reading let go, in px. */
   drop: number
+  /**
+   * The largest gap seen between the middle of the hint and the middle of the
+   * "▾ Hide" button while both showed, in px (null when they never showed together).
+   */
+  offHide: number | null
 }
 
 /**
@@ -49,6 +54,7 @@ async function watchReading(page: Page): Promise<Reading> {
         let hintSeen = false
         let last: Element | null = null
         let lastTop = 0
+        let offHide: number | null = null
         const overlaps = (
           a: DOMRect,
           b: { left: number; right: number; top: number; bottom: number },
@@ -68,6 +74,7 @@ async function watchReading(page: Page): Promise<Reading> {
             seen,
             hintSeen,
             drop: Math.max(0, top - lastTop),
+            offHide,
           })
         }
         const check = (): void => {
@@ -82,6 +89,13 @@ async function watchReading(page: Page): Promise<Reading> {
             lastTop = speaking.getBoundingClientRect().top
           }
           if (hint) hintSeen = true
+          const hide = document.querySelector('.lq-words-hide')
+          if (hint && hide) {
+            const a = hint.getBoundingClientRect()
+            const b = hide.getBoundingClientRect()
+            const gap = Math.abs(a.top + a.height / 2 - (b.top + b.height / 2))
+            offHide = Math.max(offHide ?? 0, gap)
+          }
           if (story && hint && speaking) {
             const pane = story.getBoundingClientRect()
             const pill = hint.getBoundingClientRect()
@@ -158,3 +172,40 @@ for (const { name, width, height } of [
     }
   })
 }
+
+/**
+ * On a laptop wide enough for two sides the narrator's cards end above the
+ * "▾ Hide" line: the hint sits on that line, beside the Hide, and so never
+ * over the newest card (rq-7tei).
+ */
+test('on a wide desktop the hint sits at the height of the Hide button and covers no word being read', async ({
+  page,
+}): Promise<void> => {
+  await page.setViewportSize({ width: 1280, height: 800 })
+  await quickNarrationClips(page)
+  await page.goto('/')
+  await page.getByRole('button', { name: 'Start', exact: true }).click()
+  await page.locator('.lq-chapter-button').click()
+  const input = page.getByLabel('Command', { exact: true })
+  const type = page
+    .getByRole('region', { name: 'Actions' })
+    .getByRole('button', { name: 'Type', exact: true })
+  const enter = async (command: string): Promise<void> => {
+    if (await type.isVisible()) await type.click()
+    await input.fill(command)
+    await input.press('Enter')
+  }
+  // The voice wakes the hero, whose arrival in the cottage is told on the
+  // picture; the next command clears it and is read on the cards.
+  await enter('talk to voice')
+  await expect(page.getByTestId('arrival-on-picture')).toBeVisible()
+  await enter('look')
+  await expect(page.locator('.lq-narration-hint')).toBeVisible()
+  const reading = await watchReading(page)
+  expectClear(reading, 'look')
+  expect(reading.offHide, 'the hint beside the Hide').not.toBeNull()
+  expect(
+    reading.offHide ?? 0,
+    "the hint off the Hide's height, in px",
+  ).toBeLessThan(2)
+})
