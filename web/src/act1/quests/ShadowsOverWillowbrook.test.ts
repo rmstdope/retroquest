@@ -80,7 +80,7 @@ describe('Shadows Over Willowbrook log', () => {
     expect(quest.description).toContain(
       `${characterName('Elior')} dreamed of a storm, a tune, and a figure in the dark that ` +
         'whispered his name. He woke with three words written down: ' +
-        '…and let them rest…',
+        '…let them rest…',
     )
     expect(quest.completion).toContain('The well was poisoned on purpose')
     expect(quest.completion).toContain('on the road to Greendale')

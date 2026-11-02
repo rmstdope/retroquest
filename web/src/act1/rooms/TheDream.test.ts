@@ -57,7 +57,8 @@ describe('The Dream, where Act I opens', () => {
     (command) => {
       const game = newGame()
       const answer = executeCommands(game, [command])
-      expect(answer).toContain('…and let them rest…')
+      expect(answer).toContain('…let them rest…')
+      expect(answer).not.toContain('and let them rest')
       expect(answer).toContain('someone is humming it, out by the hearth')
       expect(answer).toContain("[room_name]Elior's Cottage[/room_name]")
       expectCurrentRoom(game.state, "Elior's Cottage")
@@ -71,7 +72,7 @@ describe('The Dream, where Act I opens', () => {
     const answer = executeCommands(newGame(), ['talk to voice'])
     expect(answer).toContain(
       '[character_name]voice[/character_name]\n' +
-        '[dialogue]…and let them rest… ' +
+        '[dialogue]…let them rest… ' +
         '[character_name]Elior[/character_name].[/dialogue]',
     )
     expect(answer).not.toContain('Then your name')
