@@ -397,12 +397,18 @@ function clearAndFocus(): void {
   left: 8px;
   right: 8px;
   width: auto;
+  padding-top: calc(36px * var(--lq-text-scale));
+  /* The soft fade ends above a two-line name. */
+  mask-image: linear-gradient(
+    to bottom,
+    transparent,
+    #000 calc(36px * var(--lq-text-scale) + 4px),
+    #000 calc(100% - 12px),
+    transparent
+  );
 }
 /* On the narrow phone a name may take two lines, so a run has room for both above its first line. */
-.lq-phone-speech .lq-thread {
-  padding-top: calc(36px * var(--lq-text-scale));
-}
-.lq-phone-speech .lq-run-first {
+.lq-phone-speech .lq-run-first:not(:first-child) {
   margin-top: calc(36px * var(--lq-text-scale));
 }
 .lq-phone-speech .lq-line {
