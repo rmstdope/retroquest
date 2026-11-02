@@ -129,6 +129,11 @@
     "width": 640,
     "height": 360
   },
+  "portrait-elior": {
+    "file": "portrait-elior.png",
+    "width": 480,
+    "height": 640
+  },
   "portrait-grandmother": {
     "file": "portrait-grandmother.png",
     "width": 480,
