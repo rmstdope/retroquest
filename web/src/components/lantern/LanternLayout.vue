@@ -6,6 +6,7 @@ import { useSettingsStore } from '@/stores/useSettingsStore'
 import { useNarrationStore } from '@/stores/useNarrationStore'
 import { useStageSpeechStore } from '@/stores/useStageSpeechStore'
 import { useArrivalStore } from '@/stores/useArrivalStore'
+import { useSceneStore } from '@/stores/useSceneStore'
 import {
   POPUP_NARRATION_ID,
   chapterUnits,
@@ -122,6 +123,7 @@ const settings = useSettingsStore()
 const narration = useNarrationStore()
 const speech = useStageSpeechStore()
 const arrival = useArrivalStore()
+const scene = useSceneStore()
 const panelHold = usePanelHold()
 const wide = useMediaQuery(WIDE_QUERY)
 const short = useMediaQuery(SHORT_QUERY)
@@ -204,6 +206,7 @@ const stageKey = computed(
 watch(stageKey, () => {
   drawerTab.value = null
   speech.clear()
+  scene.reset()
   clearArrival()
 })
 
@@ -267,6 +270,8 @@ function onOutsidePress(event: Event): void {
 function onPicturePress(event: MouseEvent): void {
   if (!(event.target instanceof Element)) return
   if (!event.target.closest('.lq-stage-picture')) return
+  // During a change of scene a click brings the new room up at once.
+  if (scene.turn !== null) return scene.skip()
   speech.revealAll()
   if (speech.conversation) narration.tap()
 }
@@ -669,6 +674,24 @@ function isEmptyBoxEnter(event: KeyboardEvent): boolean {
 
 /** Keys that steer the narration; see `onNarrationKey`. */
 function onNarrationKey(event: KeyboardEvent): void {
+  // Enter (or Space, or Escape) during a change of scene brings the new room
+  // up at once; the command box and buttons keep their own Enter and Space.
+  if (
+    scene.turn !== null &&
+    !event.defaultPrevented &&
+    !(event.ctrlKey || event.metaKey || event.altKey) &&
+    (event.key === 'Enter' || event.key === ' ' || event.key === 'Escape') &&
+    !dialogOpen()
+  ) {
+    const target = event.target instanceof Element ? event.target : null
+    const field = target?.closest('input, textarea, select, [contenteditable]')
+    const control = target?.closest('button, a, [role="button"], summary')
+    if (event.key === 'Escape' || !(field || control)) {
+      event.preventDefault()
+      scene.skip()
+      return
+    }
+  }
   // Escape (unless a drawer, the map or a menu took it first) does what Hide
   // does on the stage, when nothing is being narrated (while it is, Escape
   // only skips, below).
@@ -929,6 +952,8 @@ watch(
 watch(
   () => game.turns.at(-1)?.id,
   () => {
+    // The change of scene of the move before is brought up first (its words are told, then cut in on below).
+    scene.skip()
     arrival.clear()
     narration.skipAll()
     const turn = game.turns.at(-1)
@@ -961,20 +986,56 @@ watch(
         ),
       })
     if (turn && news) parts.push(...newsParts(turn, units))
+    // A move to a room with another picture is a change of scene: the words
+    // and the narrator wait until the new picture is fully up.
+    const changing =
+      !!turn &&
+      staged.value &&
+      !game.showModal &&
+      !motionReduced() &&
+      scene.shown !== null &&
+      game.roomPicture !== scene.shown
     if (turn?.narrate && folder && manifest && !game.showModal)
-      narration.begin(turn.id, units, folder)
-    // The conversation on the picture (laptop only) follows the turn; it reads
-    // the narration just begun, so it comes after it and before the news
-    // that waits for it.
-    if (turn && staged.value) speech.observe(turn)
-    if (turn && parts.length)
-      arrival.show(turn.id, parts, narration.narrates(turn.id))
-    // Its panels wait for the voice, or, with none to wait for, change now.
-    if (!turn) return
-    if (narration.narrates(turn.id)) panelHold.track(turn)
-    else panelHold.settle(turn)
+      narration.begin(turn.id, units, folder, changing)
+    if (turn && changing) scene.begin(turn.id, game.roomPicture, tellTurn)
+    else tellTurn()
+    /** The conversation, the arrival and the narrator of the turn: now, or once its picture is up. */
+    function tellTurn(): void {
+      if (!turn) return
+      if (changing) narration.start(turn.id)
+      // The conversation on the picture (laptop only) follows the turn; it reads
+      // the narration just begun, so it comes after it and before the news
+      // that waits for it.
+      if (staged.value) speech.observe(turn)
+      if (parts.length)
+        arrival.show(turn.id, parts, narration.narrates(turn.id))
+      // Its panels wait for the voice, or, with none to wait for, change now.
+      if (narration.narrates(turn.id)) panelHold.track(turn)
+      else panelHold.settle(turn)
+    }
   },
 )
+
+// The room's name (the place panels) changes at the darkest moment of a change of scene.
+watch(
+  () => scene.darkTurn,
+  (id) => {
+    if (id !== null) game.releasePanels(id, ['place'], true)
+  },
+)
+
+// The picture and music follow the room at once on the picture stage.
+watch(staged, (on) => game.setScenePicture(on), { immediate: true })
+onUnmounted(() => game.setScenePicture(false))
+
+/** Whether the game's "less motion" setting (or the system's) is on: no change of scene. */
+function motionReduced(): boolean {
+  return (
+    getComputedStyle(document.documentElement)
+      .getPropertyValue('--lq-motion')
+      .trim() === '0'
+  )
+}
 
 // The panels of a narrated command are held for this layout; leaving lets go.
 game.setPanelHold(true)
@@ -988,6 +1049,8 @@ onUnmounted(() => game.setPanelHold(false))
 function onPanelPress(event: MouseEvent): void {
   const target = event.target instanceof Element ? event.target : null
   if (!target?.closest('[data-panel] :is(button, a, [role="button"])')) return
+  // A press during a change of scene brings the new room up first.
+  scene.skip()
   // Opening the sheet changes nothing the voice holds: it never waits for it.
   if (target.closest('.lq-dock-open, .lq-dock-icon')) return
   if (!panelHold.catchUp()) return

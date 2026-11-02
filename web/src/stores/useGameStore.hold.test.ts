@@ -32,6 +32,19 @@ describe('useGameStore: panels held while a turn is narrated', () => {
     expect(store.panelFlash.place).toBe(1)
   })
 
+  it('holds the music room for the narrator, but not on a picture stage', async () => {
+    const held = await startedStore()
+    held.submitCommand('go north')
+    expect(held.musicRoomKey).not.toBe('Garden')
+
+    setActivePinia(createPinia())
+    const staged = await startedStore()
+    staged.setScenePicture(true)
+    staged.submitCommand('go north')
+    expect(staged.heldTurn).not.toBeNull()
+    expect(staged.musicRoomKey).toBe('Garden')
+  })
+
   it('shows the room a debug script ends in as soon as it ends', async () => {
     vi.stubGlobal(
       'fetch',
