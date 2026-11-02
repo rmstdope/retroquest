@@ -1868,6 +1868,15 @@ watch(
 .lq-cards .lq-narration-hint.lq-hint-raised {
   bottom: 56px;
 }
+/* A laptop with two sides: the hint leaves the cards for the Hide's own line
+   below them, at the Hide's height (28px tall, 6px above the actions; the
+   cards end the Hide line and 12px above the actions), so it never lies over
+   the newest card. More below stays in the cards, so the hint never rises. */
+.lq-wide .lq-cards:not(.lq-one-column) .lq-narration-hint,
+.lq-wide .lq-cards:not(.lq-one-column) .lq-narration-hint.lq-hint-raised {
+  bottom: calc(6px - var(--lq-hide-line) - 12px);
+  line-height: 16px;
+}
 /* One column over the picture, on a laptop window too narrow for two sides:
    in the middle, about 620px wide, so lines stay a comfortable length and the
    picture shows at both sides. */
