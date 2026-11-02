@@ -115,6 +115,11 @@ export const useArrivalStore = defineStore('arrival', () => {
     newsTurns.value = []
   }
 
+  /** Whether the part up is quest news nobody speaks: it is read for its time even while the narrator goes on. */
+  function silentNews(): boolean {
+    return part.value?.kind === 'news' && !part.value.voiced
+  }
+
   /** Forget the pending move on. */
   function stopTimer(): void {
     clearTimeout(timer)
@@ -150,7 +155,7 @@ export const useArrivalStore = defineStore('arrival', () => {
       now.index++
       now.page = 0
       now.pages = []
-      if (!now.narrated || now.ended || !part.value?.voiced) readPart()
+      if (!now.narrated || now.ended || silentNews()) readPart()
     } else clear()
   }
 
@@ -176,7 +181,7 @@ export const useArrivalStore = defineStore('arrival', () => {
     const changed = fresh || page !== now.page
     now.pages = starts
     now.page = page
-    if (changed && (!now.narrated || now.ended)) readPart()
+    if (changed && (!now.narrated || now.ended || silentNews())) readPart()
   }
 
   /** Turn to the next page of the part up; the narrator jumps to it. False when there is none. */
@@ -245,7 +250,9 @@ export const useArrivalStore = defineStore('arrival', () => {
       now.index++
       now.page = 0
       now.pages = []
+      stopTimer()
       narration.skipTo(now.parts[now.index].lines[0].unit)
+      if (silentNews()) readPart()
     } else advance()
   }
 
@@ -267,8 +274,11 @@ export const useArrivalStore = defineStore('arrival', () => {
       const now = current.value
       if (!ready || !now) return
       now.shown = true
+      // The narrator was skipped before it got to the news: all of it is read for its time.
+      if (now.narrated && !narration.narrates(now.turnId))
+        now.parts = now.parts.map((each) => ({ ...each, voiced: false }))
       markTold(now)
-      if (!now.narrated || !part.value?.voiced) readPart()
+      if (!now.narrated || silentNews()) readPart()
     },
   )
 
@@ -295,7 +305,7 @@ export const useArrivalStore = defineStore('arrival', () => {
       now.index = reached
       now.page = 0
       now.pages = []
-      if (!part.value?.voiced) readPart()
+      if (silentNews()) readPart()
     },
   )
 

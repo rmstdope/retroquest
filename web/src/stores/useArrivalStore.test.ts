@@ -453,10 +453,39 @@ describe('useArrivalStore', () => {
       narration.skipAll()
       await vi.advanceTimersByTimeAsync(0)
       expect(arrival.newsUp?.index).toBe(0)
-      await vi.advanceTimersByTimeAsync(ARRIVAL_CLEAR_AFTER_MS)
+      expect(arrival.barMs).toBe(6000)
+      await vi.advanceTimersByTimeAsync(6000)
       expect(arrival.newsUp?.index).toBe(1)
       await vi.advanceTimersByTimeAsync(6000)
       expect(arrival.active).toBe(false)
+    })
+
+    it('a next on a silent piece of a narrated turn goes to the voiced one without the old timer cutting it off', async () => {
+      const long: NarrationUnit = {
+        kind: 'quest',
+        parts: [
+          {
+            markup: 'a b',
+            clip: {
+              file: 'y.mp3',
+              speaker: 'narrator',
+              duration: 60,
+              words: [],
+            },
+          },
+        ],
+      }
+      narration.begin(1, [voiced, silent, long], 'act1')
+      arrival.show(1, [quest(1, false), quest(2, true)], true)
+      FakeAudio.all[0].onended?.()
+      await vi.advanceTimersByTimeAsync(400)
+      expect(arrival.newsUp?.index).toBe(0)
+      arrival.next()
+      await vi.advanceTimersByTimeAsync(0)
+      expect(arrival.newsUp?.index).toBe(1)
+      await vi.advanceTimersByTimeAsync(7000)
+      expect(arrival.newsUp?.index).toBe(1)
+      expect(narration.isNarrating).toBe(true)
     })
 
     it('does not count news as told while it still waits, nor when it was cleared before it came up', async () => {

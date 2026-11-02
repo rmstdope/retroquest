@@ -926,7 +926,7 @@ watch(
 
 // A new game counts its narrated turns (for the hint) from the start.
 watch(() => game.gameNumber, narration.resetGame)
-// A new game forgets which turns told their news in the middle (turn numbers start over).
+// A new game forgets which turns told their news in the middle.
 watch(() => game.gameNumber, arrival.reset)
 
 // Switching narration off in Settings ends the turn being spoken.
