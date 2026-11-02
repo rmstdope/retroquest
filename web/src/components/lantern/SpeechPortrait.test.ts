@@ -4,17 +4,17 @@ import { mount } from '@vue/test-utils'
 import SpeechPortrait from './SpeechPortrait.vue'
 import { speakerColor } from '@/lantern/stageSpeech'
 
-function portrait(props: { name: string; src?: string; dim?: boolean }) {
+function portrait(props: { name: string; src?: string }) {
   return mount(SpeechPortrait, {
-    props: { name: props.name, src: props.src ?? '', dim: props.dim ?? false },
+    props: { name: props.name, src: props.src ?? '' },
   })
 }
 
 describe('SpeechPortrait', () => {
-  it("shows the character's initial on a card in their own colour when there is no portrait", () => {
+  it("shows the character's initial on a circle in their own colour when there is no portrait", () => {
     const w = portrait({ name: 'Grandmother' })
     expect(w.get('.lq-initial').text()).toBe('G')
-    expect(w.get('.lq-foot').text()).toBe('Grandmother')
+    expect(w.find('.lq-foot').exists()).toBe(false)
     const hex = speakerColor('Grandmother')
     const [r, g, b] = [1, 3, 5].map((at) => parseInt(hex.slice(at, at + 2), 16))
     expect(
@@ -46,8 +46,8 @@ describe('SpeechPortrait', () => {
     expect(w.get('img').attributes('src')).toBe('/other.png')
   })
 
-  it('dims the side that is not speaking', () => {
-    expect(portrait({ name: 'Elior', dim: true }).classes()).toContain('lq-dim')
-    expect(portrait({ name: 'Elior' }).classes()).not.toContain('lq-dim')
+  it('cuts the face from the top of the portrait', () => {
+    const w = portrait({ name: 'Mira', src: '/mira.png' })
+    expect(w.get('img').classes()).toContain('lq-face')
   })
 })

@@ -38,6 +38,17 @@ async function seenAtCentre(page: Page, selector: string): Promise<boolean> {
   }, selector)
 }
 
+/** Whether the top-left corner of the element (its first words) is what the player sees there. */
+async function seenAtTop(page: Page, selector: string): Promise<boolean> {
+  return page.evaluate((sel) => {
+    const element = document.querySelector(sel)
+    if (!element) return false
+    const box = element.getBoundingClientRect()
+    const hit = document.elementFromPoint(box.left + 12, box.top + 12)
+    return hit !== null && element.contains(hit)
+  }, selector)
+}
+
 test('on a phone the newest speech line is never cut through its speaker and first words', async ({
   page,
 }): Promise<void> => {
@@ -62,10 +73,7 @@ test('on a phone the newest speech line is never cut through its speaker and fir
   await expect
     .poll(
       () =>
-        seenAtCentre(
-          page,
-          '[data-testid="speech-line"]:nth-child(3) .lq-line-name',
-        ),
+        seenAtTop(page, '[data-testid="speech-line"]:nth-child(3) .lq-line'),
       {
         timeout: 2_000,
       },
@@ -91,14 +99,17 @@ test('on a laptop the newest line stays at the foot when more lines are said tha
   const lines = page.getByTestId('speech-line')
   await expect(lines).toHaveCount(4, { timeout: 30_000 })
 
-  const newest = '[data-testid="speech-line"]:nth-child(4)'
-  await expect
-    .poll(() => seenAtCentre(page, `${newest} .lq-line-name`))
-    .toBe(true)
+  // Elior answers her, which adds more lines than the thread can hold.
+  await enter(page, 'say hello to grandmother')
+  await expect(lines.last()).toContainText('hello', { timeout: 30_000 })
+  const newest = '[data-testid="speech-line"]:last-child .lq-line'
   await expect.poll(() => seenAtCentre(page, newest)).toBe(true)
   // The oldest has left at the top.
   expect(
-    await seenAtCentre(page, '[data-testid="speech-line"]:nth-child(1)'),
+    await seenAtCentre(
+      page,
+      '[data-testid="speech-line"]:nth-child(1) .lq-line',
+    ),
   ).toBe(false)
 })
 
@@ -124,7 +135,9 @@ test('on a short laptop window the plate folds so the newest line and the ✕ ha
       document.querySelector(sel)?.getBoundingClientRect()
     return {
       clear: rect('.lq-clear'),
-      portrait: rect('.lq-sp-right'),
+      portrait: rect(
+        '.lq-phone-speech .lq-ln:last-child [data-testid="portrait"]',
+      ),
       plate: rect('.lq-phone-plate'),
     }
   })
@@ -136,10 +149,7 @@ test('on a short laptop window the plate folds so the newest line and the ✕ ha
   await expect
     .poll(
       () =>
-        seenAtCentre(
-          page,
-          '[data-testid="speech-line"]:last-child .lq-line-name',
-        ),
+        seenAtCentre(page, '[data-testid="speech-line"]:last-child .lq-line'),
       {
         timeout: 2_000,
       },
@@ -154,7 +164,7 @@ test('on a short laptop window the plate folds so the newest line and the ✕ ha
     )!
     const first = words.getClientRects()[0]!
     const name = document
-      .querySelector('[data-testid="speech-line"]:last-child .lq-line-name')!
+      .querySelector('[data-testid="speech-line"]:last-child .lq-line')!
       .getBoundingClientRect()
     return name.top >= thread.top + 12 && first.bottom <= thread.bottom - 12
   })

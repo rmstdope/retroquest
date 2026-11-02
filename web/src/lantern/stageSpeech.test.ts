@@ -4,6 +4,7 @@ import {
   ELIOR,
   eliorLine,
   readingPauseMs,
+  runHeads,
   speakerColor,
   speechLines,
 } from './stageSpeech'
@@ -144,5 +145,34 @@ describe('readingPauseMs', () => {
     expect(readingPauseMs('[bold]' + 'x'.repeat(100) + '[/bold]')).toBe(
       readingPauseMs('x'.repeat(100)),
     )
+  })
+})
+
+describe('runHeads', () => {
+  it('marks the first line of each run of one speaker', () => {
+    expect(runHeads(['G', 'G', 'G', 'Elior', 'G'], 0)).toEqual([
+      true,
+      false,
+      false,
+      true,
+      true,
+    ])
+  })
+
+  it('steps a run down to its first line still showing', () => {
+    expect(runHeads(['G', 'G', 'G', 'Elior'], 1)).toEqual([
+      false,
+      true,
+      false,
+      true,
+    ])
+  })
+
+  it('gives a run that has left altogether no head', () => {
+    expect(runHeads(['G', 'G', 'Elior'], 2)).toEqual([false, false, true])
+  })
+
+  it('has nothing to mark without lines', () => {
+    expect(runHeads([], 0)).toEqual([])
   })
 })

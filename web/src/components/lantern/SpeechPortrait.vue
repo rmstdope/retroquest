@@ -3,24 +3,22 @@ import { computed, ref, watch } from 'vue'
 import { speakerColor } from '@/lantern/stageSpeech'
 
 /**
- * A speaker's portrait at the edge of the picture: upright (3:4), with the
- * name across its foot. Until the portrait file is there (none are made yet,
- * Elior has none, or it fails to load) a card of the same size in the
- * character's own steady colour shows their initial instead. The side that is
- * not speaking is dimmed. Decorative: the words are in the story band.
+ * A speaker's small round portrait beside their first line: the face cut from
+ * the top of the upright portrait file. Until the file is there (none are
+ * made yet, Elior has none, or it fails to load) a circle in the character's
+ * own steady colour shows their initial in white instead. Decorative: the
+ * words are in the story band.
  */
 const props = defineProps<{
   /** The name the game shows for the speaker. */
   name: string
   /** The portrait's URL, or '' when the character has none. */
   src: string
-  /** Whether this side is not the one speaking. */
-  dim: boolean
 }>()
 
 /** The file is missing or broken. */
 const failed = ref(false)
-/** The file has loaded, so it can cover the card. */
+/** The file has loaded, so it can cover the circle. */
 const loaded = ref(false)
 watch(
   () => props.src,
@@ -34,7 +32,7 @@ const initial = computed(() => props.name.trim().charAt(0).toUpperCase())
 </script>
 
 <template>
-  <div class="lq-portrait" :class="{ 'lq-dim': dim }" data-testid="portrait">
+  <div class="lq-portrait" data-testid="portrait">
     <div
       class="lq-card"
       :style="{ background: speakerColor(name) }"
@@ -52,24 +50,21 @@ const initial = computed(() => props.name.trim().charAt(0).toUpperCase())
       @load="loaded = true"
       @error="failed = true"
     />
-    <div class="lq-foot">{{ name }}</div>
   </div>
 </template>
 
 <style scoped>
+/* A fixed size: the portrait does not scale with the window. */
 .lq-portrait {
   position: relative;
-  width: var(--lq-portrait-w);
-  height: calc(var(--lq-portrait-w) * 4 / 3);
-  border-radius: 12px;
-  border: 3px solid var(--lq-surface);
-  box-shadow: 0 8px 26px rgba(0, 0, 0, 0.4);
+  flex: none;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
   overflow: hidden;
-  transition: opacity calc(0.25s * var(--lq-motion)) ease-out;
-}
-.lq-dim {
-  opacity: 0.55;
-  filter: saturate(0.6);
+  box-sizing: border-box;
 }
 .lq-card {
   width: 100%;
@@ -80,7 +75,7 @@ const initial = computed(() => props.name.trim().charAt(0).toUpperCase())
 .lq-initial {
   font-family: var(--lq-font-display);
   font-weight: 600;
-  font-size: calc(var(--lq-portrait-w) * 0.42);
+  font-size: 20px;
   color: #fff;
 }
 .lq-face {
@@ -89,23 +84,11 @@ const initial = computed(() => props.name.trim().charAt(0).toUpperCase())
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: top;
   opacity: 0;
   transition: opacity calc(0.25s * var(--lq-motion)) ease-out;
 }
 .lq-face-loaded {
   opacity: 1;
-}
-.lq-foot {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  padding: 5px 8px;
-  background: rgba(20, 16, 10, 0.6);
-  color: #fff8e8;
-  font-family: var(--lq-font-ui);
-  font-size: calc(13px * var(--lq-text-scale));
-  font-weight: 700;
-  overflow-wrap: anywhere;
 }
 </style>

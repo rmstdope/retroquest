@@ -106,3 +106,17 @@ export function readingPauseMs(markup: string): number {
   const length = markup.replace(TAGS, '').length
   return Math.min(6000, Math.max(900, 600 + 35 * length))
 }
+
+/**
+ * Which lines head a run of one speaker (the ones that carry the name and the
+ * portrait), given each line's speaker and the index of the first line still
+ * showing at the top of the picture. Lines before it have left; a run whose
+ * first line has left is headed by its first line still showing.
+ */
+export function runHeads(speakers: string[], firstShowing: number): boolean[] {
+  return speakers.map(
+    (speaker, index) =>
+      index >= firstShowing &&
+      (index === firstShowing || speakers[index - 1] !== speaker),
+  )
+}

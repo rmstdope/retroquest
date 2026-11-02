@@ -628,12 +628,17 @@ test.describe('Lantern UI (the default)', () => {
     // card stands in, on the right.
     await input.fill('talk to grandmother')
     await input.press('Enter')
-    await expect(page.locator('.lq-sp-right')).toContainText('Grandmother')
-    await expect(page.locator('.lq-sp-right .lq-initial')).toHaveText('G')
-    await expect(page.locator('.lq-sp-left')).toHaveCount(0)
+    await expect(page.locator('.lq-line-right .lq-line-name')).toContainText(
+      'Grandmother',
+    )
+    await expect(page.locator('.lq-line-right .lq-initial')).toHaveText('G')
+    await expect(page.locator('.lq-line-left')).toHaveCount(0)
     await input.fill('say hello to grandmother')
     await input.press('Enter')
-    await expect(page.locator('.lq-sp-left .lq-initial')).toHaveText('E')
+    await expect(page.locator('.lq-line-left .lq-initial')).toHaveText('E')
+    await expect(page.locator('.lq-line-left .lq-line-name')).toHaveText(
+      'Elior',
+    )
 
     // The one Hide clears both sides and leaves the Show tab, with focus on it.
     await page.getByRole('button', { name: '▾ Hide' }).click()
@@ -665,7 +670,7 @@ test.describe('Lantern UI (the default)', () => {
     await expect(lines).toHaveCount(0)
   })
 
-  test("fits a speaker's whole name on one line of the small card on a phone", async ({
+  test('a phone shows chat-style lines with a small round portrait, named once (rq-c15r.2)', async ({
     page,
   }) => {
     await page.setViewportSize({ width: 390, height: 844 })
@@ -682,20 +687,14 @@ test.describe('Lantern UI (the default)', () => {
     await say('talk to voice')
     await say('talk to grandmother')
 
-    const foot = page.locator('.lq-phone-speech .lq-sp-right .lq-foot')
-    await expect(foot).toHaveText('Grandmother')
-    // One line box for the text, and none of it cut off.
-    const fit = await foot.evaluate((el) => {
-      const range = document.createRange()
-      range.selectNodeContents(el)
-      return {
-        lines: new Set(
-          Array.from(range.getClientRects(), (rect) => Math.round(rect.top)),
-        ).size,
-        clipped: el.scrollWidth > el.clientWidth,
-      }
-    })
-    expect(fit).toEqual({ lines: 1, clipped: false })
+    const portrait = page.locator('.lq-phone-speech [data-testid="portrait"]')
+    await expect(portrait.first()).toBeVisible()
+    const size = await portrait.first().boundingBox()
+    expect(Math.round(size!.width)).toBe(46)
+    expect(Math.round(size!.height)).toBe(46)
+    await expect(
+      page.locator('.lq-phone-speech .lq-line-name').first(),
+    ).toHaveText('Grandmother')
   })
 
   test('tells each turn on a card that grows up to the room plate, hides to a tab', async ({
