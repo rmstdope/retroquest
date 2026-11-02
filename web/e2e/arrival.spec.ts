@@ -311,7 +311,7 @@ test.describe('the arrival told on the picture', () => {
           '[event]A grey light finds the edges of the shutters and lays itself along the floor.[/event]\n' +
           '[event]Somewhere below, a kettle begins to tick against the iron of the hob and wakes it.[/event]\n' +
           'The whisper comes once more, closer than the thunder, and this time there are words in it.\n' +
-          '[dialogue]…and let them rest…[/dialogue]\n' +
+          '[dialogue]…let them rest…[/dialogue]\n' +
           '[event]The dark lets go of you.[/event]',
       )
       await expect(arrival(page).locator('.lq-arrival-card')).toHaveCount(1)

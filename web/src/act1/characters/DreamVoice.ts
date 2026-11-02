@@ -10,7 +10,7 @@ import { FLAG_WOKE_FROM_DREAM } from '../Act1StoryFlags'
 /**
  * The voice in the dream the game opens with: the tall figure whispering
  * Elior's name. Answering it, by talking to it or saying anything to it,
- * makes it say the three words ("…and let them rest…") and his
+ * makes it say the three words ("…let them rest…") and his
  * name once more, and Elior wakes in his cottage with the tune still going
  * out by the hearth. It never speaks again; it stays in the dream.
  */
@@ -63,7 +63,7 @@ export class DreamVoice extends Character {
     return (
       'The whisper comes once more, closer than the thunder, and this time ' +
       'there are words in it.\n' +
-      dialogue(this.name, `…and let them rest… ${characterName('Elior')}.`) +
+      dialogue(this.name, `…let them rest… ${characterName('Elior')}.`) +
       '\n\n' +
       'The dark lets go of you, and you wake in your own bed. ' +
       'The storm is gone and there is grey ' +

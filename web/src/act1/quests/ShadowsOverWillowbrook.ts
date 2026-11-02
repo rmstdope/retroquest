@@ -58,7 +58,7 @@ export class ShadowsOverWillowbrookQuest extends Quest {
     const dream =
       `${characterName('Elior')} dreamed of a storm, a tune, and a figure in ` +
       'the dark that whispered his name. He woke with three words written ' +
-      'down: …and let them rest…'
+      'down: …let them rest…'
     const beats: [string, string][] = [
       [
         FLAG_INVESTIGATED_WITHERED_CROPS,

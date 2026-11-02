@@ -47,7 +47,8 @@ describe('Act 1 golden path', () => {
     // The act's quests are given in the cottage, not in the dream.
     expectQuests(state, [])
     const woke = executeCommands(game, ['talk to voice'])
-    expect(woke).toContain('\u2026and let them rest\u2026')
+    expect(woke).toContain('\u2026let them rest\u2026')
+    expect(woke).not.toContain('and let them rest')
     expectCurrentRoom(state, "Elior's Cottage")
     expectStoryFlag(state, FLAG_WOKE_FROM_DREAM, true)
 
