@@ -479,6 +479,25 @@ describe('LanternLayout: the arrival on the picture', () => {
       expect(audio.playQuestComplete).toHaveBeenCalledOnce()
     })
 
+    it('keeps the narrator and the waiting news while the player types ahead in the command box', async () => {
+      const w = await ready(true, true)
+      useGameStore(pinia).setAudioPlayer({
+        playNewQuest: vi.fn(),
+        playQuestComplete: vi.fn(),
+        playNewSpell: vi.fn(),
+      })
+      pushTurn({ ...news(), text: 'A green garden.', narrate: true })
+      await vi.advanceTimersByTimeAsync(0)
+      const narration = useNarrationStore(pinia)
+      expect(narration.narrates(90)).toBe(true)
+      expect(useArrivalStore(pinia).newsPending(90)).toBe(true)
+      await w.get('.lq-composer').trigger('input')
+      await w.get('.lq-composer').trigger('click')
+      expect(narration.narrates(90)).toBe(true)
+      expect(useArrivalStore(pinia).newsPending(90)).toBe(true)
+      expect(w.findAll('[data-testid="news-line"]')).toHaveLength(0)
+    })
+
     it('goes on with Space, and Enter after the last piece clears it', async () => {
       const w = await ready(true, false)
       useSettingsStore(pinia).narrationOn = false
