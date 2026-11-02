@@ -113,6 +113,41 @@ test.describe('the arrival told on the picture', () => {
     await expect(story(page)).toBeVisible()
   })
 
+  test.describe('with the narrator on', () => {
+    // Narration on, as for a new player (the config turns it off elsewhere).
+    test.use({ storageState: { cookies: [], origins: [] } })
+
+    test('tells the arrival of a turn played with the action buttons (rq-mfb1)', async ({
+      page,
+    }) => {
+      // Narrated clips end a second after they start (no audio device in CI).
+      await page.addInitScript(() => {
+        HTMLMediaElement.prototype.play = function (this: HTMLMediaElement) {
+          if (this.src.includes('/audio/narration/'))
+            setTimeout(() => this.dispatchEvent(new Event('ended')), 1000)
+          return Promise.resolve()
+        }
+      })
+      await startAct1(page)
+      await arrival(page).click({ position: { x: 600, y: 300 } })
+      await expect(arrival(page).locator('.lq-arrival-line')).toHaveCount(0)
+      const actions = page.getByRole('region', { name: 'Actions' })
+      await actions.getByRole('button', { name: 'Talk', exact: true }).click()
+      // The click that plays the turn must not also clear the arrival it starts.
+      await actions.getByRole('button', { name: 'Voice', exact: true }).click()
+      const lines = arrival(page).locator('.lq-arrival-line')
+      await expect(lines.first()).toContainText('You answer it')
+      // The narrator goes on into Elior's Cottage, described as any arrival is.
+      await expect(lines.first()).toContainText('A modest cottage', {
+        timeout: 20_000,
+      })
+      // And then the quests the waking starts.
+      await expect(arrival(page)).toContainText('Shadows Over Willowbrook', {
+        timeout: 20_000,
+      })
+    })
+  })
+
   test('clears when the player types, and keeps what was typed', async ({
     page,
   }) => {
