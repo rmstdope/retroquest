@@ -22,5 +22,9 @@
  "act1-village-square": {
   "file": "act1-village-square.mp3",
   "duration": 60.0
+ },
+ "market": {
+  "file": "market.mp3",
+  "duration": 60.0
  }
 }
