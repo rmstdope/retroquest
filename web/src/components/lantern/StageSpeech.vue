@@ -5,6 +5,8 @@ import { useStageSpeechStore } from '@/stores/useStageSpeechStore'
 import { useNarrationStore } from '@/stores/useNarrationStore'
 import { runHeads } from '@/lantern/stageSpeech'
 import { renderMarkup } from '@/utils/theme'
+import { useReadAlong } from '@/composables/useReadAlong'
+import type { StageLine } from '@/stores/useStageSpeechStore'
 import SpeechPortrait from './SpeechPortrait.vue'
 
 /**
@@ -40,6 +42,25 @@ const narration = useNarrationStore()
 function age(index: number): 'new' | 'prev' | 'old' {
   const back = speech.visible.length - 1 - index
   return back === 0 ? 'new' : back === 1 ? 'prev' : 'old'
+}
+
+/** The turn being narrated among the conversation's lines (0 for none). */
+const readTurn = computed(
+  () =>
+    speech.visible.find(
+      (line) => line.narrated && narration.narrates(line.turnId),
+    )?.turnId ?? 0,
+)
+const zone = ref<HTMLElement | null>(null)
+const { html } = useReadAlong(() => readTurn.value, zone, {
+  within: '.lq-line',
+})
+
+/** A line's HTML, its words marked while its quote is read. */
+function lineHtml(line: StageLine): string {
+  return line.turnId === readTurn.value && line.unit >= 0
+    ? html(line.markup, line.unit, 0, Number.POSITIVE_INFINITY, line.firstWord)
+    : renderMarkup(line.markup)
 }
 
 /** Index of the first line still showing at the top of the thread (0 when nothing is laid out). */
@@ -130,6 +151,7 @@ function hurry(): void {
 
 <template>
   <div
+    ref="zone"
     class="lq-speech-zone"
     :class="{ 'lq-speech-away': away }"
     :inert="away || undefined"
@@ -180,7 +202,7 @@ function hurry(): void {
                 { 'lq-speaking': speech.isSpeaking(line) },
               ]"
             >
-              <span v-html="renderMarkup(line.markup)"></span>
+              <span v-html="lineHtml(line)"></span>
             </div>
           </div>
           <SpeechPortrait
@@ -349,6 +371,13 @@ function hurry(): void {
   box-shadow:
     0 0 0 2px var(--lq-accent),
     0 2px 10px rgba(0, 0, 0, 0.18);
+}
+/* The spoken word, lit as in the narrator's cards. */
+.lq-line :deep(.lq-w-now) {
+  background: var(--lq-accent-soft);
+  color: var(--lq-accent-text);
+  border-radius: 3px;
+  box-shadow: 0 0 0 2px var(--lq-accent-soft);
 }
 @keyframes lq-line-in {
   from {

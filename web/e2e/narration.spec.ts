@@ -419,3 +419,55 @@ for (const { name, width, height } of [
     })
   }
 }
+
+for (const { name, width, height } of [
+  { name: 'desktop', width: 1280, height: 800 },
+  { name: 'phone', width: 390, height: 720 },
+]) {
+  test(`on ${name} Elior's journal lines light the word being read (rq-v66a)`, async ({
+    page,
+  }): Promise<void> => {
+    await page.setViewportSize({ width, height })
+    await slowNarrationClips(page)
+    // A narrated clip's time runs from when it is played, as a real one would.
+    await page.addInitScript(() => {
+      const started = new WeakMap<HTMLMediaElement, number>()
+      const play = HTMLMediaElement.prototype.play
+      HTMLMediaElement.prototype.play = function (this: HTMLMediaElement) {
+        started.set(this, performance.now())
+        return play.call(this)
+      }
+      Object.defineProperty(HTMLMediaElement.prototype, 'currentTime', {
+        get(this: HTMLMediaElement): number {
+          const from = started.get(this)
+          return from === undefined ? 0 : (performance.now() - from) / 1000
+        },
+        set(): void {},
+      })
+    })
+    await startAct1(page)
+
+    // Into the cottage with the lantern lit; each reading skipped.
+    for (const command of ['talk to voice', 'use lantern']) {
+      await enter(page, command)
+      await expect(page.locator('.lq-speaking')).not.toHaveCount(0)
+      await expect
+        .poll(async () => {
+          await page.keyboard.press('Escape')
+          return page.locator('.lq-speaking').count()
+        })
+        .toBe(0)
+    }
+
+    await enter(page, 'use journal')
+    const lit = page
+      .getByTestId('speech-line')
+      .filter({ hasText: 'The storm kept me up' })
+      .locator('.lq-w-now')
+    await expect(lit).not.toHaveCount(0)
+    await expect(lit.first()).not.toHaveCSS(
+      'background-color',
+      'rgba(0, 0, 0, 0)',
+    )
+  })
+}
