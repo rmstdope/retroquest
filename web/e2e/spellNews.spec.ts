@@ -80,6 +80,12 @@ test.describe('a learned spell told in the middle of the picture', () => {
     await expect(page.locator('.lq-story')).not.toContainText(
       'You have learned',
     )
+
+    // Story so far keeps the full record, learned line included.
+    await page.getByRole('button', { name: /Story so far/ }).click()
+    await expect(
+      page.getByRole('complementary', { name: 'Story so far drawer' }),
+    ).toContainText('You have learned revive.')
   })
 
   test('is told on a phone too, with "Tap to continue"', async ({ page }) => {

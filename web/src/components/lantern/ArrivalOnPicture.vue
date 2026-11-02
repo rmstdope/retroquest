@@ -43,7 +43,7 @@ import { useSettingsStore } from '@/stores/useSettingsStore'
  * `lq-follow` event of the read-along); with reduced motion it jumps.
  *
  * News (`news` parts: a learned spell, quest news) is told the same way: a round seal (a violet ✦ for a spell, a tick for a completion),
- * the heading, the quest's name in large type and then its text, which is the
+ * the heading, the quest's or spell's name in large type and then its text, which is the
  * part that is paged or scrolls; the head above it stays on every page.
  */
 const props = defineProps<{ pictured: boolean; phone?: boolean }>()
@@ -532,13 +532,6 @@ onBeforeUnmount(() => {
   background: #6b3fa0;
   font-size: 24px;
 }
-.lq-news-kicker-spell,
-.lq-arrival-stage.lq-bare .lq-news-kicker-spell {
-  color: #d9c2ff;
-}
-.lq-arrival-stage.lq-bare .lq-news-kicker-spell {
-  color: #6b3fa0;
-}
 .lq-news-kicker {
   margin: 0;
   font-family: var(--lq-font-ui);
@@ -550,6 +543,10 @@ onBeforeUnmount(() => {
 }
 .lq-arrival-stage.lq-bare .lq-news-kicker {
   color: var(--lq-accent-text);
+}
+/* A spell's heading is violet, on the picture and on the paper (after the quest rules, which it outweighs). */
+.lq-arrival-stage .lq-news-kicker.lq-news-kicker-spell {
+  color: var(--lq-spell);
 }
 .lq-news-name {
   margin: 0;

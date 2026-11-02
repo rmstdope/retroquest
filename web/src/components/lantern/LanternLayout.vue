@@ -913,11 +913,19 @@ watch(
 )
 
 // A piece of news told in the middle rings as it comes up: a spell's own
-// sound, or a quest's chime or fanfare.
+// sound, or a quest's chime or fanfare. The same piece up again (its part is
+// rebuilt when the narrator ends) rings nothing.
+let ringedNews = ''
 watch(
   () => arrival.newsUp,
   (up) => {
-    if (!up) return
+    if (!up) {
+      ringedNews = ''
+      return
+    }
+    const key = `${up.turnId}-${up.spell ? 'spell' : 'quest'}-${up.index}`
+    if (key === ringedNews) return
+    ringedNews = key
     if (up.spell) game.ringSpellSound()
     else game.ringQuestSounds(up.turnId, [up.index])
   },

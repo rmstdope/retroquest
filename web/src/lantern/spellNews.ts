@@ -50,20 +50,33 @@ const EMPTY_TAGS = /\[([a-z_]+)\]\s*\[\/\1\]/g
  */
 export function withoutLearnedLines(text: string, spells: SpellNews[]): string {
   if (!spells.length) return text
-  const learned = new Set(spells.map((spell) => spell.name.toLowerCase()))
-  const names = (sentence: string): string[] =>
-    [...sentence.matchAll(NAMED_SPELL)].map((match) =>
-      spellTitle(match[1]).toLowerCase(),
+  const byName = new Map(
+    spells.map((spell) => [spell.name.toLowerCase(), spell]),
+  )
+  let stripped = ''
+  let from = 0
+  for (const match of text.matchAll(LEARNED_SENTENCE)) {
+    const named = [...match[0].matchAll(NAMED_SPELL)].map((each) =>
+      byName.get(spellTitle(each[1]).toLowerCase()),
     )
-  const stripped = text.replace(LEARNED_SENTENCE, (sentence) => {
-    const named = names(sentence)
-    return named.length && named.every((name) => learned.has(name))
-      ? ''
-      : sentence
-  })
-  if (stripped === text) return text
+    if (!named.length || named.some((spell) => !spell)) continue
+    let end = match.index + match[0].length
+    // The spell's own description right after the sentence is told in the middle too.
+    for (const spell of named) {
+      const rest = text.slice(end)
+      const gap = rest.length - rest.trimStart().length
+      if (spell && rest.slice(gap).startsWith(spell.text))
+        end += gap + spell.text.length
+    }
+    stripped += text.slice(from, match.index)
+    from = end
+  }
+  if (from === 0 && stripped === '') return text
+  stripped += text.slice(from)
   return stripped
     .replace(EMPTY_TAGS, '')
+    .replace(/\[([a-z_]+)\] +/g, '[$1]')
+    .replace(/ +\[\/([a-z_]+)\]/g, '[/$1]')
     .split('\n')
     .map((line) => line.replace(/ {2,}/g, ' ').replace(/^ +| +$/g, ''))
     .filter((line, index, lines) => line !== '' || lines[index - 1] !== '')

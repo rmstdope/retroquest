@@ -99,4 +99,22 @@ describe('withoutLearnedLines', () => {
       ]),
     ).toBe('')
   })
+
+  it('drops the description that follows the sentence, since the middle tells it', () => {
+    expect(
+      withoutLearnedLines(
+        'She nods.\nYou have learned [spell_name]revive[/spell_name]. Calls a thing back.',
+        [revive],
+      ),
+    ).toBe('She nods.')
+  })
+
+  it('keeps other words after the sentence and trims the spaces a removal leaves in tags', () => {
+    expect(
+      withoutLearnedLines(
+        '[success]Done. You have learned [spell_name]revive[/spell_name]. More words.[/success]',
+        [revive],
+      ),
+    ).toBe('[success]Done. More words.[/success]')
+  })
 })
