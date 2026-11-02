@@ -212,7 +212,10 @@ function clearArrival(): void {
   arrival.clear()
 }
 
-/** The command box: ends an arrival that is up, but leaves news still waiting for the turn's words alone (typing ahead must not cut the narrator off). */
+/**
+ * The command box: ends an arrival that is up, but leaves news still waiting for the turn's words alone (typing ahead must not cut the narrator off).
+ * A click takes it on the way down, before the button plays its turn: on the way up it would end the arrival that turn just began.
+ */
 function clearShownArrival(): void {
   if (arrival.active) arrival.clear()
 }
@@ -1419,9 +1422,10 @@ watch(
           </button>
         </div>
 
-        <!-- Choosing an action or typing clears an arrival on the picture. Bubbling
-             listeners, not capture: a render before the command box's own v-model
-             has read the text would give the first typed character back. -->
+        <!-- Choosing an action or typing clears an arrival on the picture. Typing
+             listens bubbling, not capture: a render before the command box's own
+             v-model has read the text would give the first typed character back.
+             A click is captured, so a turn the click plays keeps the arrival it starts. -->
         <div v-if="sheetOpen" class="lq-scrim" aria-hidden="true"></div>
         <ActionComposer
           v-show="wide || (section === 'story' && dockOpen)"
@@ -1432,7 +1436,7 @@ watch(
           :foldable="!wide"
           :stage="wide"
           :words-showing="showHide"
-          @click="clearShownArrival"
+          @click.capture="clearShownArrival"
           @input="clearShownArrival"
           @fold="fold"
         />
