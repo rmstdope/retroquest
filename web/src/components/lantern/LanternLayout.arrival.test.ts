@@ -419,6 +419,7 @@ describe('LanternLayout: the arrival on the picture', () => {
       command: string
       text: string
       quests: NonNullable<Turn['quests']>
+      narrate?: true
     }): void {
       useGameStore(pinia).turns.push({
         room: 'Square',
@@ -456,6 +457,45 @@ describe('LanternLayout: the arrival on the picture', () => {
       expect(lines).toHaveLength(2)
       expect(lines[0].text()).toContain('Side quest complete · Hint of Magic')
       expect(lines[1].text()).toContain('Quest updated · The cat')
+    })
+
+    it('tells a turn whose news still waits for the narrator as slim lines, and rings its sounds, when the player moves on', async () => {
+      const w = await ready(true, true)
+      const audio = {
+        playNewQuest: vi.fn(),
+        playQuestComplete: vi.fn(),
+        playNewSpell: vi.fn(),
+      }
+      useGameStore(pinia).setAudioPlayer(audio)
+      pushTurn({ ...news(), text: 'A green garden.', narrate: true })
+      await vi.advanceTimersByTimeAsync(0)
+      // The narrator is still on the words: nothing of the news is up.
+      expect(card(w)).toBe('')
+      expect(w.findAll('[data-testid="news-line"]')).toHaveLength(0)
+      await run('look')
+      const lines = w.findAll('[data-testid="news-line"]')
+      expect(lines).toHaveLength(2)
+      expect(lines[0].text()).toContain('Side quest complete · Hint of Magic')
+      expect(audio.playQuestComplete).toHaveBeenCalledOnce()
+    })
+
+    it('keeps the narrator and the waiting news while the player types ahead in the command box', async () => {
+      const w = await ready(true, true)
+      useGameStore(pinia).setAudioPlayer({
+        playNewQuest: vi.fn(),
+        playQuestComplete: vi.fn(),
+        playNewSpell: vi.fn(),
+      })
+      pushTurn({ ...news(), text: 'A green garden.', narrate: true })
+      await vi.advanceTimersByTimeAsync(0)
+      const narration = useNarrationStore(pinia)
+      expect(narration.narrates(90)).toBe(true)
+      expect(useArrivalStore(pinia).newsPending(90)).toBe(true)
+      await w.get('.lq-composer').trigger('input')
+      await w.get('.lq-composer').trigger('click')
+      expect(narration.narrates(90)).toBe(true)
+      expect(useArrivalStore(pinia).newsPending(90)).toBe(true)
+      expect(w.findAll('[data-testid="news-line"]')).toHaveLength(0)
     })
 
     it('goes on with Space, and Enter after the last piece clears it', async () => {

@@ -212,6 +212,11 @@ function clearArrival(): void {
   arrival.clear()
 }
 
+/** The command box: ends an arrival that is up, but leaves news still waiting for the turn's words alone (typing ahead must not cut the narrator off). */
+function clearShownArrival(): void {
+  if (arrival.active) arrival.clear()
+}
+
 /** A stage button: opens its drawer or the map (closing what was open), or closes it if lit. */
 function toggleDrawer(
   tab: 'bag' | 'spells' | 'quests' | 'story' | 'map',
@@ -1427,8 +1432,8 @@ watch(
           :foldable="!wide"
           :stage="wide"
           :words-showing="showHide"
-          @click="clearArrival"
-          @input="clearArrival"
+          @click="clearShownArrival"
+          @input="clearShownArrival"
           @fold="fold"
         />
         <DockBar

@@ -413,6 +413,16 @@ describe('useArrivalStore', () => {
       expect(arrival.active).toBe(false)
     })
 
+    it('keeps news cut short while it waits as told, so the card gets its slim lines', () => {
+      narration.begin(1, [voiced, voiced], 'act1')
+      arrival.show(1, [quest(1, true)], narration.narrates(1))
+      expect(arrival.active).toBe(false)
+      expect(arrival.told).not.toContain(1)
+      arrival.clear()
+      expect(arrival.told).toContain(1)
+      expect(arrival.newsPending(1)).toBe(false)
+    })
+
     it('waits for the narrator to reach it, with nothing in the middle yet', async () => {
       narration.begin(1, [voiced, voiced], 'act1')
       arrival.show(1, [quest(1, true)], narration.narrates(1))
@@ -524,14 +534,11 @@ describe('useArrivalStore', () => {
       expect(narration.isNarrating).toBe(true)
     })
 
-    it('does not count news as told while it still waits, nor when it was cleared before it came up', async () => {
+    it('does not count news as told while it still waits', async () => {
       narration.begin(1, [voiced, voiced], 'act1')
       arrival.show(1, [quest(1, true)], true)
       expect(arrival.told).not.toContain(1)
       expect(arrival.newsPending(1)).toBe(true)
-      arrival.clear()
-      expect(arrival.told).not.toContain(1)
-      expect(arrival.newsPending(1)).toBe(false)
     })
 
     it('waits, when nobody narrates, for the conversation on the picture to be told', async () => {

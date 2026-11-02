@@ -40,7 +40,7 @@ export interface PageStart {
  * A turn that has only news waits (`active` false, nothing in the middle)
  * until the turn's words are told: the narrator reaching the first piece, or,
  * when nobody narrates, the conversation on the picture having shown every
- * line. `told` remembers the turns whose news went through the middle (the
+ * line. `told` remembers the turns whose news went through the middle, or was cut short by a clear (the
  * story shows their slim lines once `newsPending` is false) and `newsUp`
  * says which piece is on screen, for its sound.
  */
@@ -61,7 +61,7 @@ export const useArrivalStore = defineStore('arrival', () => {
     /** Whether the middle is up: false while a turn of news alone waits for the turn's words. */
     shown: boolean
   } | null>(null)
-  /** Turns whose quest news was told in the middle, for the story's slim lines. */
+  /** Turns whose quest news was told in the middle or cut short (any clear), for the story's slim lines. */
   const newsTurns = ref<number[]>([])
   let timer: ReturnType<typeof setTimeout> | undefined
 
@@ -234,7 +234,7 @@ export const useArrivalStore = defineStore('arrival', () => {
     if (!narrated || (up.kind === 'news' && !up.voiced)) readPart()
   }
 
-  /** Remember that the turn's quest news went through the middle (once it is up). */
+  /** Remember that the turn's news is told: it came up, or it was cut short (see `clear`). Its card then keeps slim lines. */
   function markTold(now: NonNullable<typeof current.value>): void {
     if (
       now.parts.some((each) => each.kind === 'news') &&
@@ -271,6 +271,8 @@ export const useArrivalStore = defineStore('arrival', () => {
     stopTimer()
     const now = current.value
     current.value = null
+    // News cut short before it came up (a new command, Escape, a tab) still leaves its slim lines.
+    if (now) markTold(now)
     if (now?.narrated && narration.narrates(now.turnId)) narration.skipAll()
   }
 
