@@ -59,6 +59,25 @@ export function speechLines(blocks: TurnBlock[]): SpeechLine[] {
   return lines
 }
 
+/** What of a turn decides where its quotes are told. */
+export interface SpeechTurn {
+  /** The character the command addressed, if any. */
+  addressed?: string
+  /** How the turn described the room; `moved` when it took Elior elsewhere. */
+  description?: { moved: boolean } | null
+}
+
+/**
+ * Whether `speaker`'s quotes in `turn` are told as speech on the right rather
+ * than on the narrator's card. A turn that leaves the room tells none; a
+ * conversation (a turn that addresses someone) tells every speaker's; any
+ * other turn tells only Elior's own words, such as his journal.
+ */
+export function toldAsSpeech(turn: SpeechTurn, speaker: string): boolean {
+  if (turn.description?.moved === true) return false
+  return !!turn.addressed || displayName(speaker) === ELIOR
+}
+
 /** The "say <words> to <character>" command: what Elior says, and to whom. */
 const SAY_COMMAND = /^\s*say\s+(.+?)\s+to\s+\S/i
 
