@@ -316,3 +316,45 @@ test('reads the opening chapter page, and Continue mid-sentence moves on', async
   await expect(page.locator('.lq-speaking')).toHaveCount(0)
   await expect(page.getByRole('region', { name: 'Actions' })).toBeVisible()
 })
+
+test('in the one column the held story follows Elior’s journal lines as they are read (rq-s738)', async ({
+  page,
+}): Promise<void> => {
+  await page.setViewportSize({ width: 390, height: 720 })
+  await slowNarrationClips(page)
+  await startAct1(page)
+  const story = page.getByRole('region', { name: 'Story' })
+
+  // Into the cottage with the lantern lit; each reading skipped.
+  for (const command of ['talk to voice', 'use lantern']) {
+    await enter(page, command)
+    await expect(page.locator('.lq-speaking')).not.toHaveCount(0)
+    await expect
+      .poll(async () => {
+        await page.keyboard.press('Escape')
+        return page.locator('.lq-speaking').count()
+      })
+      .toBe(0)
+  }
+
+  await enter(page, 'use journal')
+  // Elior's line being read is ringed, and the held story has brought it into view.
+  const line = page
+    .getByTestId('column-turn')
+    .last()
+    .getByTestId('speech-line')
+    .filter({ has: page.locator('.lq-speaking') })
+    .last()
+  await expect(line).toHaveCount(1)
+  await expect
+    .poll(async () => {
+      const lineBox = await line.boundingBox()
+      const storyBox = await story.boundingBox()
+      if (!lineBox || !storyBox) return false
+      return (
+        lineBox.y >= storyBox.y &&
+        lineBox.y + Math.min(lineBox.height, 40) <= storyBox.y + storyBox.height
+      )
+    })
+    .toBe(true)
+})

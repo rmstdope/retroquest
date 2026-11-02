@@ -1,8 +1,10 @@
 // @vitest-environment jsdom
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { mount } from '@vue/test-utils'
+import { flushPromises, mount } from '@vue/test-utils'
 import { createPinia, setActivePinia } from 'pinia'
+import { ref } from 'vue'
 import ColumnTurn from './ColumnTurn.vue'
+import { FOLLOW_EVENT } from '@/composables/useStoryFollow'
 import type { Turn } from '@/stores/useGameStore'
 import { useStageSpeechStore } from '@/stores/useStageSpeechStore'
 
@@ -117,6 +119,39 @@ describe('ColumnTurn', () => {
     vi.mocked(speech.lineSpeaking).mockReturnValue(false)
     const older = mount(ColumnTurn, { props: { turn: t, age: 'old' } })
     expect(older.find('.lq-line').classes()).not.toContain('lq-speaking')
+  })
+
+  it('asks the story to follow each of Elior’s lines as it is read, outside a conversation too', async () => {
+    const speech = useStageSpeechStore()
+    const t = turn(
+      `The ink is smudged.\n${say('Elior', 'First page.\nSecond page.')}`,
+      { command: 'use journal', addressed: undefined },
+    )
+    speech.observe(t)
+    speech.revealAll()
+    // Which paragraph (by its first word) the narrator reads; none at first.
+    const reading = ref(-1)
+    vi.spyOn(speech, 'lineSpeaking').mockImplementation(
+      (_turnId, _unit, firstWord) => firstWord === reading.value,
+    )
+    const w = mount(ColumnTurn, {
+      props: { turn: t, age: 'new' },
+      attachTo: document.body,
+    })
+    const followed: string[] = []
+    w.element.addEventListener(FOLLOW_EVENT, (event: Event) => {
+      const unit = event instanceof CustomEvent && event.detail?.unit === true
+      if (unit && event.target instanceof Element)
+        followed.push(
+          event.target.querySelector('.lq-line')?.textContent?.trim() ?? '',
+        )
+    })
+    reading.value = 0
+    await flushPromises()
+    reading.value = 2
+    await flushPromises()
+    expect(followed).toEqual(['First page.', 'Second page.'])
+    w.unmount()
   })
 
   it('tells the room after a load on one card with no command', () => {

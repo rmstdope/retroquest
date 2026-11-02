@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, nextTick, ref, watch } from 'vue'
 import type { Turn } from '@/stores/useGameStore'
 import { useGameStore } from '@/stores/useGameStore'
 import { useStageSpeechStore } from '@/stores/useStageSpeechStore'
+import { FOLLOW_EVENT } from '@/composables/useStoryFollow'
 import { columnPieces } from '@/lantern/columnPieces'
 import { parseTurn } from '@/lantern/parseTurn'
 import { renderMarkup } from '@/utils/theme'
@@ -20,6 +21,9 @@ import StoryTurn from './StoryTurn.vue'
  * told stops at the first line that has not appeared yet, so later cards
  * never come before the line they follow. The lines are the conversation's
  * (`useStageSpeechStore`) while it holds them, and shown once it lets go.
+ * The line being read is announced to the held story with the read-along's
+ * `lq-follow` event (as a unit), so the story brings it into view as it is
+ * spoken, whether or not the turn is a conversation.
  */
 const props = defineProps<{
   turn: Turn
@@ -45,6 +49,38 @@ const told = computed(() => {
   return stop === -1 ? all : all.slice(0, stop)
 })
 
+const root = ref<HTMLElement | null>(null)
+
+/** The newest told line being read aloud now, as its piece index (-1 for none). */
+const speakingIndex = computed(() => {
+  for (let index = told.value.length - 1; index >= 0; index--) {
+    const piece = told.value[index]
+    if (
+      piece.kind === 'line' &&
+      speech.lineSpeaking(props.turn.id, piece.line.unit, piece.line.firstWord)
+    )
+      return index
+  }
+  return -1
+})
+
+// A line that starts being read asks the held story to keep it in view.
+watch(
+  speakingIndex,
+  async (index) => {
+    if (index < 0) return
+    await nextTick()
+    root.value?.querySelector(`[data-piece="${index}"]`)?.dispatchEvent(
+      new CustomEvent(FOLLOW_EVENT, {
+        bubbles: true,
+        cancelable: true,
+        detail: { unit: true },
+      }),
+    )
+  },
+  { flush: 'post' },
+)
+
 /** Whether piece `index` starts a run, so carries the speaker's name and portrait. */
 function heads(index: number): boolean {
   const piece = told.value[index]
@@ -58,6 +94,7 @@ function heads(index: number): boolean {
 
 <template>
   <div
+    ref="root"
     class="lq-column-turn"
     :class="`lq-age-${age}`"
     data-testid="column-turn"
@@ -75,6 +112,7 @@ function heads(index: number): boolean {
         class="lq-cl"
         :class="[`lq-cl-${piece.line.side}`, { 'lq-cl-head': heads(index) }]"
         :data-unit="piece.line.unit >= 0 ? piece.line.unit : undefined"
+        :data-piece="index"
         data-testid="speech-line"
       >
         <SpeechPortrait
