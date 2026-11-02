@@ -522,7 +522,8 @@ function endLanding(): void {
  * The window crossing about 1100 px redraws the story's turns (the column or
  * the cards) in the same pane. The story re-forms where a fresh answer would
  * have put it: the newest turn from its start (a short one whole at the
- * bottom), unless the player had scrolled back, whose turn then stays in view
+ * bottom; a player resting at the bottom, the newest whole in view, is at the
+ * newest), unless the player had scrolled back, whose turn then stays in view
  * (the same share of it above the view, as its height changes). Taken before
  * the redraw, finished after it, and finished again each time the pane or its
  * turns change size, and on every frame, while the browser settles the new layout.
@@ -545,7 +546,14 @@ watch(
     const anchorRect = turns[anchor].getBoundingClientRect()
     const offset = anchorRect.top - storyTop
     const oldHeight = anchorRect.height
-    const atNewest = anchor === turns.length - 1 || !moreBelow.value
+    // At the newest: it is at the top edge or holds it, or it is whole in view
+    // (resting at the bottom, an older turn at the top edge, room after it).
+    const storyBottom = story.getBoundingClientRect().bottom
+    const atNewest =
+      anchor === turns.length - 1 ||
+      !moreBelow.value ||
+      turns[turns.length - 1].getBoundingClientRect().bottom <=
+        storyBottom + END_SLACK
     endLanding()
     await nextTick()
     landing = (): void => {

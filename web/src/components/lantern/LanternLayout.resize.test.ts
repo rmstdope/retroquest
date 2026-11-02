@@ -35,6 +35,8 @@ describe('where the story lands after the window crosses 1100 px', () => {
   let extra: number
   /** Room the pane gains at its end (padding) without any element changing size. */
   let trailing: number
+  /** How tall the two sides' cards are, against the column's lines. */
+  let sidesScale: number
   /** The callbacks of the ResizeObservers the layout made. */
   let observers: Array<() => void>
 
@@ -56,6 +58,7 @@ describe('where the story lands after the window crosses 1100 px', () => {
     newestHeight = TURN_HEIGHT
     extra = 0
     trailing = 0
+    sidesScale = 2
     vi.stubGlobal(
       'matchMedia',
       vi.fn((query: string) => ({
@@ -83,7 +86,8 @@ describe('where the story lands after the window crosses 1100 px', () => {
   const content = (): HTMLElement =>
     document.querySelector('.lq-paper-content') as HTMLElement
   /** The cards of the two sides, as drawn now, are twice as tall as the column's lines. */
-  const scale = (): number => (document.querySelector('.lq-one-column') ? 1 : 2)
+  const scale = (): number =>
+    document.querySelector('.lq-one-column') ? 1 : sidesScale
   const heightOf = (index: number, count: number): number =>
     (index === count - 1 ? newestHeight : TURN_HEIGHT) * scale()
   const totalHeight = (count: number): number =>
@@ -107,7 +111,7 @@ describe('where the story lands after the window crosses 1100 px', () => {
     })
     vi.spyOn(Element.prototype, 'getBoundingClientRect').mockImplementation(
       function (this: Element): DOMRect {
-        if (this === el) return { top: 0 } as DOMRect
+        if (this === el) return { top: 0, bottom: PANE } as DOMRect
         if (this.classList.contains('lq-w-now'))
           return {
             top: 4 * TURN_HEIGHT * scale() + 700 - el.scrollTop,
@@ -119,6 +123,7 @@ describe('where the story lands after the window crosses 1100 px', () => {
         if (index < 0) return { top: 0, height: 0 } as DOMRect
         return {
           top: topOf(index) - el.scrollTop,
+          bottom: topOf(index) - el.scrollTop + heightOf(index, kids.length),
           height: heightOf(index, kids.length),
         } as DOMRect
       },
@@ -155,6 +160,19 @@ describe('where the story lands after the window crosses 1100 px', () => {
     await readNewest()
     await cross(false)
     expect(pane().scrollTop).toBe(totalHeight(5) - PANE)
+    expect(document.querySelector('.lq-more-below')).toBeNull()
+  })
+
+  it('opens the column on the newest for a player resting at the bottom of the sides', async () => {
+    // Short cards on the sides: the view's top edge is in an older card, the newest whole below it.
+    sidesScale = 0.5
+    sides = true
+    await mountWith(8)
+    // The pill was up at the top; the player is now at the bottom (the pill not yet updated).
+    observers.forEach((notify) => notify())
+    pane().scrollTop = totalHeight(8) - PANE
+    await cross(false)
+    expect(pane().scrollTop).toBe(totalHeight(8) - PANE)
     expect(document.querySelector('.lq-more-below')).toBeNull()
   })
 
