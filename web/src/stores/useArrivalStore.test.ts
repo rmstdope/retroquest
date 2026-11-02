@@ -4,6 +4,7 @@ import { createPinia, setActivePinia } from 'pinia'
 import { useArrivalStore } from './useArrivalStore'
 import { useNarrationStore, type NarrationAudio } from './useNarrationStore'
 import { useSettingsStore } from './useSettingsStore'
+import { useStageSpeechStore } from './useStageSpeechStore'
 import type { NarrationUnit } from '@/lantern/narrationUnits'
 import {
   ARRIVAL_CLEAR_AFTER_MS,
@@ -411,6 +412,87 @@ describe('useArrivalStore', () => {
       await nextTick()
       expect(arrival.newsUp?.index).toBe(1)
       expect(narration.speaking(1)?.unit).toBe(1)
+    })
+
+    it('reads each silent piece of a narrated turn for its time before the next one is up', async () => {
+      const quiet = (unit: number): ArrivalPart => quest(unit, false)
+      narration.begin(
+        1,
+        [voiced, silent, silent, { ...voiced, pauseBefore: 12000 }],
+        'act1',
+      )
+      arrival.show(1, [quiet(1), quiet(2), quest(3, true)], true)
+      expect(arrival.active).toBe(false)
+      FakeAudio.all[0].onended?.()
+      await vi.advanceTimersByTimeAsync(400)
+      expect(arrival.newsUp?.index).toBe(0)
+      expect(arrival.barMs).toBe(6000)
+      await vi.advanceTimersByTimeAsync(6000)
+      expect(arrival.newsUp?.index).toBe(1)
+      await vi.advanceTimersByTimeAsync(6000)
+      expect(arrival.newsUp?.index).toBe(2)
+      expect(arrival.barMs).toBe(0)
+    })
+
+    it('reads every silent piece, in order, when the narrator has nothing to say about any', async () => {
+      narration.begin(1, [voiced, silent, silent], 'act1')
+      arrival.show(1, [quest(1, false), quest(2, false)], true)
+      FakeAudio.all[0].onended?.()
+      await vi.advanceTimersByTimeAsync(400)
+      expect(arrival.newsUp?.index).toBe(0)
+      await vi.advanceTimersByTimeAsync(6000)
+      expect(arrival.newsUp?.index).toBe(1)
+      await vi.advanceTimersByTimeAsync(6000)
+      expect(arrival.active).toBe(false)
+    })
+
+    it('tells every piece, one after the other, when the narrator is skipped while the news waits', async () => {
+      narration.begin(1, [voiced, voiced, voiced], 'act1')
+      arrival.show(1, [quest(1, true), quest(2, true)], true)
+      expect(arrival.active).toBe(false)
+      narration.skipAll()
+      await vi.advanceTimersByTimeAsync(0)
+      expect(arrival.newsUp?.index).toBe(0)
+      await vi.advanceTimersByTimeAsync(ARRIVAL_CLEAR_AFTER_MS)
+      expect(arrival.newsUp?.index).toBe(1)
+      await vi.advanceTimersByTimeAsync(6000)
+      expect(arrival.active).toBe(false)
+    })
+
+    it('does not count news as told while it still waits, nor when it was cleared before it came up', async () => {
+      narration.begin(1, [voiced, voiced], 'act1')
+      arrival.show(1, [quest(1, true)], true)
+      expect(arrival.told).not.toContain(1)
+      expect(arrival.newsPending(1)).toBe(true)
+      arrival.clear()
+      expect(arrival.told).not.toContain(1)
+      expect(arrival.newsPending(1)).toBe(false)
+    })
+
+    it('waits, when nobody narrates, for the conversation on the picture to be told', async () => {
+      const speech = useStageSpeechStore()
+      const said =
+        `[character_name]Mira[/character_name]\n[dialogue]Hello there.[/dialogue]\n` +
+        `[character_name]Mira[/character_name]\n[dialogue]And welcome.[/dialogue]`
+      speech.observe({
+        id: 1,
+        command: 'talk to mira',
+        text: said,
+        room: 'Cottage',
+        description: null,
+        gained: [],
+        lost: [],
+        arrival: null,
+        addressed: 'Mira',
+      })
+      arrival.show(1, [quest(0, false)], false)
+      expect(arrival.active).toBe(false)
+      // The second line is shown after the first one's reading pause: then the news comes up.
+      for (let i = 0; i < 120 && !arrival.active; i++)
+        await vi.advanceTimersByTimeAsync(250)
+      expect(arrival.active).toBe(true)
+      expect(speech.told(1)).toBe(true)
+      expect(arrival.told).toContain(1)
     })
 
     it('comes after the arrival when the turn also walked into a room', () => {

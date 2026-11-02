@@ -114,18 +114,7 @@ export function newsOnPicture(turn: { quests?: QuestNews[] }): boolean {
   return (turn.quests?.length ?? 0) > 0
 }
 
-/** The heading of a piece of news in the middle: a completion carries the act's count (shown, not read). */
-export function newsHeading(news: QuestNews): string {
-  if (news.kind === 'updated') return 'Quest updated'
-  if (news.kind === 'new') return newQuestKicker(news.main)
-  const heading = questCompleteKicker(news.main)
-  const progress = news.progress
-  return progress
-    ? `${heading} · ${progress.completed} of ${progress.total}`
-    : heading
-}
-
-/** The heading of a piece of news on the card's slim line: no count. */
+/** The heading of a piece of quest news (the slim line has no count; the middle adds the act's count to a completion). */
 export function newsSlimHeading(news: QuestNews): string {
   if (news.kind === 'updated') return 'Quest updated'
   return news.kind === 'new'
@@ -146,10 +135,7 @@ export function newsParts(
   const first = parseTurn(turn.text).length + (turn.arrival ? 1 : 0)
   return (turn.quests ?? []).map((news, index) => {
     const unit = first + index
-    const heading =
-      news.kind === 'completed'
-        ? questCompleteKicker(news.main)
-        : newQuestKicker(news.main)
+    const heading = newsSlimHeading(news)
     return {
       kind: 'news',
       news,

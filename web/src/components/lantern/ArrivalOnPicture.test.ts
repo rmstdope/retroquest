@@ -406,6 +406,36 @@ describe('ArrivalOnPicture', () => {
       expect(w.find('.lq-arrival-card').exists()).toBe(false)
     })
 
+    it('pages the text of quest news, the seal, heading and name staying on every page', async () => {
+      const w = await told({
+        kind: 'news',
+        news: {
+          kind: 'completed',
+          name: 'Hint of Magic',
+          main: false,
+          text: 'x',
+          progress: { completed: 1, total: 11 },
+        },
+        lines: [{ unit: 0, markup: 'Aaaaaaaaaa bbbb. Cccccccccc dddd. Eeee.' }],
+        voiced: false,
+      })
+      const firstPage = lines(w)
+      expect(firstPage.length).toBe(1)
+      expect(firstPage[0]).not.toContain('Eeee.')
+      await w.trigger('click')
+      await w.vm.$nextTick()
+      expect(lines(w)).toEqual(['Cccccccccc dddd.'])
+      expect(w.get('.lq-news-name').text()).toBe('Hint of Magic')
+      await w.trigger('click')
+      await w.vm.$nextTick()
+      expect(lines(w)).toEqual(['Eeee.'])
+      expect(w.get('.lq-news-name').text()).toBe('Hint of Magic')
+      expect(w.find('.lq-news-seal').exists()).toBe(true)
+      expect(w.get('.lq-news-kicker').text()).toBe(
+        'Side quest complete · 1 of 11',
+      )
+    })
+
     it('shows a part that fits as one page', async () => {
       const w = await told({ ...long, lines: [long.lines[2]] })
       expect(lines(w)).toEqual(['Eeee.'])

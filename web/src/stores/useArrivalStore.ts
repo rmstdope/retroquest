@@ -150,7 +150,7 @@ export const useArrivalStore = defineStore('arrival', () => {
       now.index++
       now.page = 0
       now.pages = []
-      if (!now.narrated || now.ended) readPart()
+      if (!now.narrated || now.ended || !part.value?.voiced) readPart()
     } else clear()
   }
 
@@ -209,16 +209,23 @@ export const useArrivalStore = defineStore('arrival', () => {
       page: 0,
       shown: true,
     }
-    if (newsTurns.value.length > 50) newsTurns.value.shift()
-    if (newsTurns.value.includes(id))
-      newsTurns.value.splice(newsTurns.value.indexOf(id), 1)
-    if (parts.some((each) => each.kind === 'news')) newsTurns.value.push(id)
     // News alone waits until the turn's words are told.
     if (parts[0].kind === 'news' && !wordsTold(current.value)) {
       current.value.shown = false
       return
     }
-    if (!narrated) readPart()
+    markTold(current.value)
+    const up = current.value.parts[0]
+    if (!narrated || (up.kind === 'news' && !up.voiced)) readPart()
+  }
+
+  /** Remember that the turn's quest news went through the middle (once it is up). */
+  function markTold(now: NonNullable<typeof current.value>): void {
+    if (
+      now.parts.some((each) => each.kind === 'news') &&
+      !newsTurns.value.includes(now.turnId)
+    )
+      newsTurns.value.push(now.turnId)
   }
 
   /** Whether the words of the turn before its news are told: the narrator is at the news, or the conversation is out. */
@@ -260,21 +267,27 @@ export const useArrivalStore = defineStore('arrival', () => {
       const now = current.value
       if (!ready || !now) return
       now.shown = true
-      if (!now.narrated) readPart()
+      markTold(now)
+      if (!now.narrated || !part.value?.voiced) readPart()
     },
   )
 
-  // Each narrated part comes up when the narrator reaches it.
+  // Each narrated part comes up when the narrator reaches it: the first one
+  // it has revealed beyond the part up, so a piece nobody speaks (which it
+  // reveals at once) is still read before the next.
   watch(
     () => {
       const now = current.value
-      if (!now?.narrated || !now.shown) return -1
-      let reached = now.index
-      now.parts.forEach((each, i) => {
-        if (i > reached && narration.revealed(now.turnId, each.lines[0].unit))
-          reached = i
-      })
-      return reached
+      if (!now?.narrated || !now.shown || !narration.narrates(now.turnId))
+        return -1
+      // A piece of news nobody speaks is read for its time, then the timer moves on.
+      const up = now.parts[now.index]
+      if (up.kind === 'news' && !up.voiced) return now.index
+      const next = now.parts.findIndex(
+        (each, i) =>
+          i > now.index && narration.revealed(now.turnId, each.lines[0].unit),
+      )
+      return next < 0 ? now.index : next
     },
     (reached) => {
       const now = current.value
@@ -282,6 +295,7 @@ export const useArrivalStore = defineStore('arrival', () => {
       now.index = reached
       now.page = 0
       now.pages = []
+      if (!part.value?.voiced) readPart()
     },
   )
 
@@ -317,14 +331,27 @@ export const useArrivalStore = defineStore('arrival', () => {
       const now = current.value
       if (!over || !now || now.ended) return
       now.ended = true
-      if (now.index !== now.parts.length - 1) {
-        now.index = now.parts.length - 1
+      // The room's parts the narrator did not reach are skipped to the last.
+      const told = now.parts.map((each) => each.kind !== 'news')
+      const lastTold = told.lastIndexOf(true)
+      if (now.index < lastTold) {
+        now.index = lastTold
         now.page = 0
         now.pages = []
-      } else if (part.value?.voiced)
+      }
+      // News it did not reach (it was skipped) is read for its time instead.
+      now.parts = now.parts.map((each, i) =>
+        each.kind === 'news' && i > now.index
+          ? { ...each, voiced: false }
+          : each,
+      )
+      if (part.value?.voiced) {
         now.page = Math.max(0, now.pages.length - 1)
-      if (part.value?.voiced) later(ARRIVAL_CLEAR_AFTER_MS, clear)
-      else readPart()
+        later(
+          ARRIVAL_CLEAR_AFTER_MS,
+          now.index < now.parts.length - 1 ? advance : clear,
+        )
+      } else readPart()
     },
   )
 

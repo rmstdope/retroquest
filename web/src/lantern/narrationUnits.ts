@@ -84,8 +84,6 @@ export function readsArrival(turn: {
 
 /** How the stage tells an arrival on the picture (see `turnUnits`). */
 export interface StageUnitOptions {
-  /** Quest news is not read aloud. */
-  silentQuests?: boolean
   /** The least pause before the room's description (ms), for events that are not spoken. */
   arrivalPauseMs?: number
   /**
@@ -126,9 +124,8 @@ export function turnUnits(
     })
   let unread = 0
   for (const news of turn.quests ?? []) {
-    const parts = options.silentQuests
-      ? []
-      : news.kind === 'new'
+    const parts =
+      news.kind === 'new'
         ? partsOf(newQuestBlocks(news), manifest)
         : news.kind === 'completed'
           ? partsOf(questCompleteBlocks(news), manifest)

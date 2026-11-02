@@ -34,7 +34,12 @@ import { arrivesOnPicture } from '@/lantern/stageArrival'
  * each piece (`QuestSlimLine`) once it has cleared; where it is not told in
  * the middle, the quest cards stay in the story.
  */
-const props = defineProps<{ turn: Turn; card?: boolean }>()
+const props = defineProps<{
+  turn: Turn
+  card?: boolean
+  /** The full record (Story so far): quest news is always shown as its cards. */
+  record?: boolean
+}>()
 const narration = useNarrationStore()
 const root = ref<HTMLElement | null>(null)
 /** Whether this turn is narrated, kept once it has been so the fade only plays for the first showing. */
@@ -54,9 +59,19 @@ const arrivalUnit = computed(() =>
 const firstQuestUnit = computed(() => firstQuestOf(props.turn))
 const arrivalStore = useArrivalStore()
 /** The turn's quest news was told in the middle of the picture: the card keeps slim lines instead of cards. */
-const newsInMiddle = computed(() => arrivalStore.told.includes(props.turn.id))
-/** Its news is still to be told: nothing of it shows on the card yet. */
-const newsPending = computed(() => arrivalStore.newsPending(props.turn.id))
+const newsInMiddle = computed(
+  () => !props.record && arrivalStore.told.includes(props.turn.id),
+)
+/** Its news is still to be told (waiting or up): nothing of it shows on the card yet. */
+const newsPending = computed(
+  () => !props.record && arrivalStore.newsPending(props.turn.id),
+)
+/** How many quest cards the story shows for the turn (none while the news is told in the middle). */
+const questCards = computed(() =>
+  newsInMiddle.value || newsPending.value
+    ? 0
+    : (props.turn.quests?.length ?? 0),
+)
 
 const blocks = computed(() => parseTurn(props.turn.text))
 
@@ -86,7 +101,7 @@ const slim = computed(
     !blocks.value.some((block) => !onSpeech(block)) &&
     !roomOnCard.value &&
     !chips.value.length &&
-    !props.turn.quests?.length,
+    !questCards.value,
 )
 /** Only silent information: a red-edged card. */
 const errorCard = computed(() => {
@@ -96,7 +111,7 @@ const errorCard = computed(() => {
     told.length > 0 &&
     told.every((block) => block.kind === 'failure') &&
     !chips.value.length &&
-    !props.turn.quests?.length
+    !questCards.value
   )
 })
 
@@ -248,8 +263,8 @@ function chipLabel(chip: Chip): string {
       >
     </div>
 
-    <template v-if="newsInMiddle">
-      <template v-if="!newsPending">
+    <template v-if="newsInMiddle || newsPending">
+      <template v-if="newsInMiddle && !newsPending">
         <QuestSlimLine
           v-for="(news, index) in turn.quests ?? []"
           :key="`news-${index}`"
@@ -258,7 +273,7 @@ function chipLabel(chip: Chip): string {
       </template>
     </template>
     <template
-      v-for="(news, index) in newsInMiddle ? [] : (turn.quests ?? [])"
+      v-for="(news, index) in questCards ? (turn.quests ?? []) : []"
       :key="`quest-${index}`"
     >
       <QuestNewsCard

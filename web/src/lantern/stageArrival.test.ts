@@ -3,7 +3,6 @@ import {
   ARRIVAL_MIN_SECONDS,
   arrivalParts,
   arrivesOnPicture,
-  newsHeading,
   newsOnPicture,
   newsParts,
   newsSlimHeading,
@@ -180,17 +179,7 @@ describe('quest news on the picture', () => {
     )
   })
 
-  it('heads the middle with the count for a completion, and the slim line without', () => {
-    expect(newsHeading(done)).toBe('Side quest complete · 1 of 11')
-    expect(
-      newsHeading({
-        ...done,
-        main: true,
-        progress: { completed: 3, total: 11 },
-      }),
-    ).toBe('Main quest complete · 3 of 11')
-    expect(newsHeading(fresh)).toBe('New main quest')
-    expect(newsHeading(update)).toBe('Quest updated')
+  it('heads a piece of news without the count', () => {
     expect(newsSlimHeading(done)).toBe('Side quest complete')
     expect(newsSlimHeading(fresh)).toBe('New main quest')
     expect(newsSlimHeading(update)).toBe('Quest updated')

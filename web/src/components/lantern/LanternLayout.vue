@@ -195,7 +195,7 @@ const stageKey = computed(
 watch(stageKey, () => {
   drawerTab.value = null
   speech.clear()
-  arrival.reset()
+  clearArrival()
 })
 
 /** End the arrival on the picture at once (a narrator still telling it stops, see `useArrivalStore.clear`). */
@@ -804,7 +804,7 @@ watch(
     // The units the narration plays; the arrival on the picture waits to read
     // its description while events that nobody speaks are read, and a quest
     // piece nobody speaks is read before the next one.
-    const unitOptions = { silentQuests: false, readSilentNews: news }
+    const unitOptions = { readSilentNews: news }
     let units =
       turn?.narrate && (manifest || onPicture)
         ? turnUnits(turn, readsArrival(turn), manifest ?? {}, unitOptions)
@@ -926,6 +926,8 @@ watch(
 
 // A new game counts its narrated turns (for the hint) from the start.
 watch(() => game.gameNumber, narration.resetGame)
+// A new game forgets which turns told their news in the middle (turn numbers start over).
+watch(() => game.gameNumber, arrival.reset)
 
 // Switching narration off in Settings ends the turn being spoken.
 watch(

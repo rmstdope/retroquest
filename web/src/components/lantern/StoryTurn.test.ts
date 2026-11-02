@@ -710,4 +710,44 @@ describe('StoryTurn quest news told in the middle', () => {
     const w = mountTurn({ command: 'x', text: 'Done.' })
     expect(w.find('[data-testid="news-line"]').exists()).toBe(false)
   })
+
+  it('keeps the full cards in the record (Story so far), told in the middle or not', () => {
+    const arrival = useArrivalStore()
+    arrival.show(1, [piece(done, 1)], false)
+    const waiting = mount(StoryTurn, {
+      props: {
+        turn: turn({ command: 'x', text: 'Done.', quests: [done] }),
+        record: true,
+      },
+    })
+    expect(waiting.text()).toContain('You did it.')
+    arrival.clear()
+    const cleared = mount(StoryTurn, {
+      props: {
+        turn: turn({ command: 'x', text: 'Done.', quests: [done] }),
+        record: true,
+      },
+    })
+    expect(cleared.text()).toContain('You did it.')
+    expect(cleared.find('[data-testid="news-line"]').exists()).toBe(false)
+  })
+
+  it('is a slim card when the turn only had speech and its news was told in the middle', () => {
+    const arrival = useArrivalStore()
+    arrival.show(1, [piece(done, 1)], false)
+    arrival.clear()
+    const w = mount(StoryTurn, {
+      props: {
+        card: true,
+        turn: turn({
+          command: 'talk to mira',
+          addressed: 'Mira',
+          text: '[character_name]Mira[/character_name]\n[dialogue]Hello.[/dialogue]',
+          quests: [done],
+        }),
+      },
+    })
+    expect(w.classes()).toContain('lq-slim')
+    expect(w.find('[data-testid="news-line"]').exists()).toBe(true)
+  })
 })

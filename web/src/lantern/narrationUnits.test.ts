@@ -270,10 +270,8 @@ describe('turnUnits on the stage', () => {
     [NARRATOR, 'New side quest'],
   )
 
-  it('reads quest news unless it is kept silent for the story', () => {
+  it('reads quest news that has a recording', () => {
     expect(turnUnits(turn, true, manifest)[1].parts.length).toBeGreaterThan(0)
-    const silent = turnUnits(turn, true, manifest, { silentQuests: true })
-    expect(silent[1].parts).toEqual([])
   })
 
   it('waits longer before the description when asked to', () => {

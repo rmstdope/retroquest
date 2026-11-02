@@ -454,6 +454,22 @@ describe('LanternLayout: the arrival on the picture', () => {
       expect(lines[1].text()).toContain('Quest updated · The cat')
     })
 
+    it('goes on with Space, and Enter after the last piece clears it', async () => {
+      const w = await ready(true, false)
+      useSettingsStore(pinia).narrationOn = false
+      useGameStore(pinia).setAudioPlayer({
+        playNewQuest: vi.fn(),
+        playQuestComplete: vi.fn(),
+      })
+      pushTurn(news())
+      await vi.advanceTimersByTimeAsync(0)
+      expect(card(w)).toContain('Hint of Magic')
+      await key(' ')
+      expect(card(w)).toContain('Quest updated')
+      await key('Enter')
+      expect(card(w)).toBe('')
+    })
+
     it('ends all the news of the turn with Escape', async () => {
       const w = await ready(true, false)
       useSettingsStore(pinia).narrationOn = false
