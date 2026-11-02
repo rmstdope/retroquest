@@ -479,6 +479,18 @@ const LANDING_SETTLE_MS = 600
 /** Puts the story where the last crossing of 1100 px meant it to be, until the layout has settled or the player moves it. */
 let landing: (() => void) | null = null
 let landingTimer: ReturnType<typeof setTimeout> | undefined
+/** The frame that lands the story again, while the layout settles: room at the story's end can grow with no element changing size. */
+let landingFrame: number | undefined
+
+/** Land again on every frame until the landing ends. */
+function landOnFrames(): void {
+  if (typeof requestAnimationFrame !== 'function') return
+  landingFrame = requestAnimationFrame(() => {
+    if (!landing) return
+    landing()
+    landOnFrames()
+  })
+}
 
 /** Keys that scroll the story, and so take it over from the landing. */
 const SCROLL_KEYS = new Set([
@@ -501,6 +513,9 @@ function onStoryKeydown(event: KeyboardEvent): void {
 function endLanding(): void {
   landing = null
   clearTimeout(landingTimer)
+  if (landingFrame !== undefined && typeof cancelAnimationFrame === 'function')
+    cancelAnimationFrame(landingFrame)
+  landingFrame = undefined
 }
 
 /**
@@ -510,7 +525,7 @@ function endLanding(): void {
  * bottom), unless the player had scrolled back, whose turn then stays in view
  * (the same share of it above the view, as its height changes). Taken before
  * the redraw, finished after it, and finished again each time the pane or its
- * turns change size while the browser settles the new layout.
+ * turns change size, and on every frame, while the browser settles the new layout.
  */
 watch(
   [column, staged],
@@ -550,6 +565,7 @@ watch(
       updateMoreBelow()
     }
     landing()
+    landOnFrames()
     landingTimer = setTimeout(endLanding, LANDING_SETTLE_MS)
   },
   { flush: 'pre' },
