@@ -17,6 +17,8 @@ export const MUSIC_DUCK = 0.35
 export const MUSIC_DUCK_FADE_MS = 400
 /** How long one loop takes to fade out while the next fades in, in ms. */
 export const MUSIC_CROSSFADE_MS = 1500
+/** How long the title page's music takes to rise from silence, in ms. */
+export const MUSIC_FADE_IN_MS = 2000
 /** Steps per fade. */
 const FADE_STEPS = 10
 
@@ -28,7 +30,8 @@ const FADE_STEPS = 10
  * When a different track replaces one that is playing, the old one keeps
  * playing on its own element and fades out while the new one fades in on a
  * second element (`MUSIC_CROSSFADE_MS`), so the old loop never reloads and
- * never drops out; the same track again changes nothing.
+ * never drops out; the same track again changes nothing. A track loaded with
+ * a fade-in time, with nothing playing, rises from silence once it sounds.
  *
  * Loops play on Web Audio (see `musicVoice.ts`): a track is decoded first, the
  * music already playing goes on until it is ready, and the loop then comes
@@ -57,7 +60,7 @@ export function useMusic(
     return MUSIC_BASE_PATH + file.split('/').map(encodeURIComponent).join('/')
   }
 
-  function loadTrack(file: string, info: string): void {
+  function loadTrack(file: string, info: string, fadeInMs: number = 0): void {
     if (!file) {
       request++
       requestedFile = ''
@@ -90,6 +93,7 @@ export function useMusic(
         info,
         returning ?? htmlVoiceFor(file),
         returning !== null,
+        fadeInMs,
       )
       return
     }
@@ -99,7 +103,7 @@ export function useMusic(
         voice?.dispose()
         return
       }
-      startVoice(file, info, voice ?? htmlVoiceFor(file), false)
+      startVoice(file, info, voice ?? htmlVoiceFor(file), false, fadeInMs)
     })
   }
 
@@ -121,9 +125,12 @@ export function useMusic(
     info: string,
     next: MusicVoice,
     comingBack: boolean,
+    fadeInMs: number = 0,
   ): void {
     const crossfade =
       currentMusicFile.value !== '' && !active.paused && !musicMuted.value
+    const fadeIn =
+      fadeInMs > 0 && !crossfade && !comingBack && !musicMuted.value
     if (crossfade) {
       fadeOutActive()
       if (!comingBack) next.volume = 0
@@ -135,13 +142,23 @@ export function useMusic(
       // Straight in at the set volume, ducked under a voice; no fade-in.
       if (!comingBack) next.volume = targetVolume.value
     }
+    // The element in hand may be the one that plays on: silence it first.
+    if (fadeIn) next.volume = 0
     active = next
     currentMusicFile.value = file
     musicInfo.value = info
 
     if (crossfade) fadeTo(targetVolume.value, MUSIC_CROSSFADE_MS)
     if (!musicMuted.value) {
-      next.play().catch(() => {})
+      const started = next.play()
+      // The ramp starts when the sound does, after any wait for a key press.
+      if (fadeIn)
+        void started
+          .then(() => {
+            if (active === next) fadeTo(targetVolume.value, fadeInMs)
+          })
+          .catch(() => {})
+      else started.catch(() => {})
     }
   }
 

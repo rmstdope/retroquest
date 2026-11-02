@@ -2,7 +2,7 @@ import { onScopeDispose, ref, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useGameStore } from '@/stores/useGameStore'
 import { useNarrationStore } from '@/stores/useNarrationStore'
-import { useMusic } from './useMusic'
+import { MUSIC_FADE_IN_MS, useMusic } from './useMusic'
 import {
   chooseTrack,
   GENERATED_MUSIC_DIR,
@@ -38,11 +38,14 @@ const MEDIA_KEYS: readonly MediaSessionAction[] = ['play', 'pause', 'stop']
  * `chosenMusic.ts`). The track waits for the list of takes to load, so it never
  * starts on the file and then swaps.
  *
+ * The first track, when it loads under the game's title page, fades in over
+ * `MUSIC_FADE_IN_MS`.
+ *
  * When the calling component's scope ends, the music stops and the
  * listeners are removed.
  */
 export function useActMusic(): ReturnType<typeof useMusic> {
-  const { musicFile, musicInfo, musicActName, musicRoomKey } =
+  const { musicFile, musicInfo, musicActName, musicRoomKey, showTitle } =
     storeToRefs(useGameStore())
   const chosen = ref<ChosenManifest | null>(null)
   void loadChosenManifest().then((manifest) => {
@@ -52,6 +55,8 @@ export function useActMusic(): ReturnType<typeof useMusic> {
   audio.loop = true
   const { isNarrating } = storeToRefs(useNarrationStore())
   const music = useMusic(audio, isNarrating)
+  /** Whether a track has been asked for yet; only the first can be the title page's. */
+  let started = false
 
   watch(
     [musicFile, musicInfo, musicActName, musicRoomKey, chosen],
@@ -64,9 +69,16 @@ export function useActMusic(): ReturnType<typeof useMusic> {
           musicFile.value,
         ),
       )
+      // The title page's music rises over two seconds; no other starts so.
+      const fadeInMs = !started && showTitle.value ? MUSIC_FADE_IN_MS : 0
+      started = true
       if (take)
-        music.loadTrack(GENERATED_MUSIC_DIR + take.file, CHOSEN_TAKE_CREDIT)
-      else music.loadTrack(musicFile.value, musicInfo.value)
+        music.loadTrack(
+          GENERATED_MUSIC_DIR + take.file,
+          CHOSEN_TAKE_CREDIT,
+          fadeInMs,
+        )
+      else music.loadTrack(musicFile.value, musicInfo.value, fadeInMs)
     },
     { immediate: true },
   )
