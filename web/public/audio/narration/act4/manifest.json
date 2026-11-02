@@ -3160,6 +3160,23 @@
    }
   ]
  },
+ "018e1045e3ea62": {
+  "file": "018e1045e3ea62.mp3",
+  "speaker": "narrator",
+  "duration": 1.3,
+  "words": [
+   {
+    "word": "Heart's",
+    "start": 0.0,
+    "end": 0.58
+   },
+   {
+    "word": "Truth",
+    "start": 0.58,
+    "end": 0.86
+   }
+  ]
+ },
  "01b23ae64b344d": {
   "file": "01b23ae64b344d.mp3",
   "speaker": "king alden",
@@ -4684,6 +4701,93 @@
     "word": "fingers.",
     "start": 6.66,
     "end": 7.04
+   }
+  ]
+ },
+ "03008de9d04e24": {
+  "file": "03008de9d04e24.mp3",
+  "speaker": "narrator",
+  "duration": 5.991,
+  "words": [
+   {
+    "word": "Read",
+    "start": 0.0,
+    "end": 0.56
+   },
+   {
+    "word": "word",
+    "start": 0.56,
+    "end": 0.88
+   },
+   {
+    "word": "by",
+    "start": 0.88,
+    "end": 1.14
+   },
+   {
+    "word": "word",
+    "start": 1.14,
+    "end": 1.56
+   },
+   {
+    "word": "off",
+    "start": 1.56,
+    "end": 1.8
+   },
+   {
+    "word": "the",
+    "start": 1.8,
+    "end": 2.0
+   },
+   {
+    "word": "mossy",
+    "start": 2.0,
+    "end": 2.54
+   },
+   {
+    "word": "stone",
+    "start": 2.54,
+    "end": 2.84
+   },
+   {
+    "word": "in",
+    "start": 2.84,
+    "end": 3.08
+   },
+   {
+    "word": "the",
+    "start": 3.08,
+    "end": 3.22
+   },
+   {
+    "word": "glade.",
+    "start": 3.22,
+    "end": 3.66
+   },
+   {
+    "word": "It",
+    "start": 3.88,
+    "end": 4.44
+   },
+   {
+    "word": "feels",
+    "start": 4.44,
+    "end": 4.86
+   },
+   {
+    "word": "like",
+    "start": 4.86,
+    "end": 5.12
+   },
+   {
+    "word": "your",
+    "start": 5.12,
+    "end": 5.32
+   },
+   {
+    "word": "own.",
+    "start": 5.32,
+    "end": 5.68
    }
   ]
  },
@@ -12729,6 +12833,18 @@
    }
   ]
  },
+ "0768b2642cf4ed": {
+  "file": "0768b2642cf4ed.mp3",
+  "speaker": "narrator",
+  "duration": 0.604,
+  "words": [
+   {
+    "word": "Grow",
+    "start": 0.0,
+    "end": 0.38
+   }
+  ]
+ },
  "076927fab37a7c": {
   "file": "076927fab37a7c.mp3",
   "speaker": "grandmother",
@@ -13206,6 +13322,18 @@
     "word": "human.",
     "start": 13.12,
     "end": 13.48
+   }
+  ]
+ },
+ "07cf025862d72c": {
+  "file": "07cf025862d72c.mp3",
+  "speaker": "narrator",
+  "duration": 0.975,
+  "words": [
+   {
+    "word": "Forgiveness",
+    "start": 0.0,
+    "end": 0.52
    }
   ]
  },
@@ -16637,6 +16765,53 @@
    }
   ]
  },
+ "0aa84d0502975b": {
+  "file": "0aa84d0502975b.mp3",
+  "speaker": "narrator",
+  "duration": 2.879,
+  "words": [
+   {
+    "word": "See",
+    "start": 0.0,
+    "end": 0.22
+   },
+   {
+    "word": "through",
+    "start": 0.22,
+    "end": 0.46
+   },
+   {
+    "word": "illusion",
+    "start": 0.46,
+    "end": 1.0
+   },
+   {
+    "word": "to",
+    "start": 1.0,
+    "end": 1.52
+   },
+   {
+    "word": "what",
+    "start": 1.52,
+    "end": 1.7
+   },
+   {
+    "word": "is",
+    "start": 1.7,
+    "end": 1.9
+   },
+   {
+    "word": "really",
+    "start": 1.9,
+    "end": 2.26
+   },
+   {
+    "word": "there.",
+    "start": 2.26,
+    "end": 2.56
+   }
+  ]
+ },
  "0ab495f06ea828": {
   "file": "0ab495f06ea828.mp3",
   "speaker": "narrator",
@@ -18224,6 +18399,23 @@
     "word": "lying.",
     "start": 11.66,
     "end": 12.04
+   }
+  ]
+ },
+ "0bd271af4cffea": {
+  "file": "0bd271af4cffea.mp3",
+  "speaker": "narrator",
+  "duration": 1.44,
+  "words": [
+   {
+    "word": "Redemption's",
+    "start": 0.52,
+    "end": 1.0
+   },
+   {
+    "word": "Light",
+    "start": 1.0,
+    "end": 1.24
    }
   ]
  },
@@ -27488,6 +27680,63 @@
    }
   ]
  },
+ "12b0f145f26d34": {
+  "file": "12b0f145f26d34.mp3",
+  "speaker": "narrator",
+  "duration": 3.901,
+  "words": [
+   {
+    "word": "Magic",
+    "start": 0.0,
+    "end": 0.44
+   },
+   {
+    "word": "that",
+    "start": 0.44,
+    "end": 0.72
+   },
+   {
+    "word": "lets",
+    "start": 0.72,
+    "end": 0.98
+   },
+   {
+    "word": "a",
+    "start": 0.98,
+    "end": 1.14
+   },
+   {
+    "word": "wound",
+    "start": 1.14,
+    "end": 1.46
+   },
+   {
+    "word": "close",
+    "start": 1.46,
+    "end": 1.96
+   },
+   {
+    "word": "because",
+    "start": 1.96,
+    "end": 2.54
+   },
+   {
+    "word": "it",
+    "start": 2.54,
+    "end": 2.94
+   },
+   {
+    "word": "is",
+    "start": 2.94,
+    "end": 3.16
+   },
+   {
+    "word": "forgiven.",
+    "start": 3.16,
+    "end": 3.58
+   }
+  ]
+ },
  "12ca45e13de2eb": {
   "file": "12ca45e13de2eb.mp3",
   "speaker": "narrator",
@@ -28912,6 +29161,63 @@
     "word": "you.",
     "start": 10.96,
     "end": 11.26
+   }
+  ]
+ },
+ "13f8af4a65ac54": {
+  "file": "13f8af4a65ac54.mp3",
+  "speaker": "narrator",
+  "duration": 3.344,
+  "words": [
+   {
+    "word": "Light",
+    "start": 0.0,
+    "end": 0.34
+   },
+   {
+    "word": "that",
+    "start": 0.34,
+    "end": 0.54
+   },
+   {
+    "word": "reminds",
+    "start": 0.54,
+    "end": 1.0
+   },
+   {
+    "word": "a",
+    "start": 1.0,
+    "end": 1.24
+   },
+   {
+    "word": "fallen",
+    "start": 1.24,
+    "end": 1.64
+   },
+   {
+    "word": "soul",
+    "start": 1.64,
+    "end": 2.06
+   },
+   {
+    "word": "of",
+    "start": 2.06,
+    "end": 2.34
+   },
+   {
+    "word": "who",
+    "start": 2.34,
+    "end": 2.54
+   },
+   {
+    "word": "it",
+    "start": 2.54,
+    "end": 2.72
+   },
+   {
+    "word": "was.",
+    "start": 2.72,
+    "end": 2.96
    }
   ]
  },
@@ -30441,6 +30747,23 @@
     "word": "it.",
     "start": 8.62,
     "end": 8.86
+   }
+  ]
+ },
+ "14a3ebc1840f01": {
+  "file": "14a3ebc1840f01.mp3",
+  "speaker": "narrator",
+  "duration": 1.254,
+  "words": [
+   {
+    "word": "Truth",
+    "start": 0.0,
+    "end": 0.38
+   },
+   {
+    "word": "Sight",
+    "start": 0.38,
+    "end": 1.06
    }
   ]
  },
@@ -38725,6 +39048,48 @@
    }
   ]
  },
+ "19adae93489484": {
+  "file": "19adae93489484.mp3",
+  "speaker": "narrator",
+  "duration": 2.601,
+  "words": [
+   {
+    "word": "Hear",
+    "start": 0.0,
+    "end": 0.28
+   },
+   {
+    "word": "the",
+    "start": 0.28,
+    "end": 0.46
+   },
+   {
+    "word": "true",
+    "start": 0.46,
+    "end": 0.76
+   },
+   {
+    "word": "heart",
+    "start": 0.76,
+    "end": 1.22
+   },
+   {
+    "word": "beneath",
+    "start": 1.22,
+    "end": 1.84
+   },
+   {
+    "word": "a",
+    "start": 1.84,
+    "end": 2.12
+   },
+   {
+    "word": "lie.",
+    "start": 2.12,
+    "end": 2.38
+   }
+  ]
+ },
  "19ae551fa5f73e": {
   "file": "19ae551fa5f73e.mp3",
   "speaker": "narrator",
@@ -43504,6 +43869,23 @@
     "word": "dark.",
     "start": 1.34,
     "end": 1.74
+   }
+  ]
+ },
+ "1d8373b816e792": {
+  "file": "1d8373b816e792.mp3",
+  "speaker": "narrator",
+  "duration": 1.161,
+  "words": [
+   {
+    "word": "New",
+    "start": 0.0,
+    "end": 0.3
+   },
+   {
+    "word": "spell",
+    "start": 0.3,
+    "end": 0.76
    }
   ]
  },
