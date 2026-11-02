@@ -27,7 +27,8 @@ import SpeechPortrait from './SpeechPortrait.vue'
  * no control here: the one Hide of the layout clears both sides, and `away`
  * says the words are hidden, so the zone fades out and is unreachable while
  * the lines are kept. The zone fills the space under the stage's top; a press
- * on it shows the rest of the turn's lines at once. Not shown while there is no
+ * on it shows the rest of an unnarrated turn's lines at once, and taps on a
+ * narrated one like the story (one block). Not shown while there is no
  * conversation.
  */
 defineProps<{ away?: boolean }>()
@@ -117,10 +118,13 @@ watch(thread, (el) => {
 })
 onBeforeUnmount(() => threadResize?.disconnect())
 
-/** Show the rest of the turn at once (the narrator, if reading, stops too). */
+/**
+ * Show the rest of an unnarrated turn's lines at once; a narrated turn is
+ * tapped on like the story (one block hurried, a double tap skips the turn).
+ */
 function hurry(): void {
   speech.revealAll()
-  narration.skipAll()
+  narration.tap()
 }
 </script>
 

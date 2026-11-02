@@ -361,3 +361,61 @@ test('in the one column the held story follows Elior’s journal lines as they a
     })
     .toBe(true)
 })
+
+/** The ways a skip reaches the narration in rq-cynd's test, and what each presses. */
+const SKIPS = {
+  Space: null,
+  'tap on the story': '.lq-story [data-testid="turn"]:last-child',
+  'tap on the picture': '.lq-stage-picture',
+  'tap on the speech': '[data-testid="speech-zone"]',
+} as const
+
+for (const { name, width, height } of [
+  { name: 'desktop', width: 1280, height: 800 },
+  { name: 'phone', width: 390, height: 720 },
+]) {
+  for (const [how, target] of Object.entries(SKIPS)) {
+    // The phone tells speech in the one column: it has no speech zone.
+    if (name === 'phone' && how === 'tap on the speech') continue
+    test(`on ${name} a ${how} during Elior's journal skips one block at a time (rq-cynd)`, async ({
+      page,
+    }): Promise<void> => {
+      await page.setViewportSize({ width, height })
+      await slowNarrationClips(page)
+      await startAct1(page)
+
+      // Into the cottage with the lantern lit; each reading skipped.
+      for (const command of ['talk to voice', 'use lantern']) {
+        await enter(page, command)
+        await expect(page.locator('.lq-speaking')).not.toHaveCount(0)
+        await expect
+          .poll(async () => {
+            await page.keyboard.press('Escape')
+            return page.locator('.lq-speaking').count()
+          })
+          .toBe(0)
+      }
+
+      await enter(page, 'use journal')
+      const speaking = page.locator('.lq-speaking').first()
+      const skip = async (): Promise<void> => {
+        if (target === null) {
+          // Space hurries while focus is not in the command box.
+          await page.evaluate(() =>
+            (document.activeElement as HTMLElement | null)?.blur(),
+          )
+          await page.keyboard.press(' ')
+          return
+        }
+        // Never so soon after the last tap that the two make a double tap.
+        await page.waitForTimeout(400)
+        await page.locator(target).first().dispatchEvent('click')
+      }
+      await expect(speaking).toContainText('The ink is slightly')
+      await skip()
+      await expect(speaking).toContainText('The storm kept me up')
+      await skip()
+      await expect(speaking).toContainText('When I slept, I dreamed')
+    })
+  }
+}

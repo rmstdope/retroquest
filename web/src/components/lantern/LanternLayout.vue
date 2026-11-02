@@ -259,12 +259,16 @@ function onOutsidePress(event: Event): void {
   drawerTab.value = null
 }
 
-/** A press on the picture itself shows the rest of the turn's speech at once (and the narrator skips ahead). */
+/**
+ * A press on the picture itself shows the rest of an unnarrated turn's speech
+ * at once; while there is speech, a narrated turn is tapped on like the story
+ * (one block hurried, a double tap skips the turn).
+ */
 function onPicturePress(event: MouseEvent): void {
   if (!(event.target instanceof Element)) return
   if (!event.target.closest('.lq-stage-picture')) return
   speech.revealAll()
-  if (speech.conversation) narration.skipAll()
+  if (speech.conversation) narration.tap()
 }
 
 watch(
