@@ -1450,9 +1450,11 @@ describe('ActionComposer on the stage', () => {
     })
 
     it('leaves the Escape to a speech on a phone (no stage)', async () => {
-      useSettingsStore().startMode = 'type'
       const w = mount(ActionComposer, { attachTo: document.body })
-      await w.vm.$nextTick()
+      await w
+        .findAll('button')
+        .find((b) => b.text().startsWith('Type'))
+        ?.trigger('click')
       const input = w.get('input[aria-label="Command"]')
       useStageSpeechStore().observe({
         id: 1,
