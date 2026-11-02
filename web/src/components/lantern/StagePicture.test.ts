@@ -128,4 +128,18 @@ describe('StagePicture during a change of scene', () => {
     await nextTick()
     expect(w.find('img.lq-pic').exists()).toBe(false)
   })
+
+  it('shows the backdrop, never the old room, when skipped before the picture has loaded', async () => {
+    const scene = useSceneStore()
+    const w = mount(StagePicture, { props: { src: '/a.png' } })
+    await w.get('img.lq-loading').trigger('load')
+    scene.begin(1, '/b.png', () => {})
+    await w.setProps({ src: '/b.png' })
+    scene.skip()
+    await nextTick()
+    expect(w.find('img.lq-pic').exists()).toBe(false)
+    expect(w.classes()).toContain('lq-scene-idle')
+    await w.get('img.lq-loading').trigger('load')
+    expect(w.get('img.lq-pic').attributes('src')).toBe('/b.png')
+  })
 })

@@ -45,8 +45,14 @@ const MEDIA_KEYS: readonly MediaSessionAction[] = ['play', 'pause', 'stop']
  * listeners are removed.
  */
 export function useActMusic(): ReturnType<typeof useMusic> {
-  const { musicFile, musicInfo, musicActName, musicRoomKey, showTitle } =
-    storeToRefs(useGameStore())
+  const {
+    musicFile,
+    musicInfo,
+    musicActName,
+    musicRoomKey,
+    showTitle,
+    scenePicture,
+  } = storeToRefs(useGameStore())
   const chosen = ref<ChosenManifest | null>(null)
   void loadChosenManifest().then((manifest) => {
     chosen.value = manifest
@@ -57,6 +63,9 @@ export function useActMusic(): ReturnType<typeof useMusic> {
   const music = useMusic(audio, isNarrating)
   /** Whether a track has been asked for yet; only the first can be the title page's. */
   let started = false
+
+  /** The act and room last played, to tell a walk within the act from anything else. */
+  let played = { act: '', room: '' }
 
   watch(
     [musicFile, musicInfo, musicActName, musicRoomKey, chosen],
@@ -72,13 +81,23 @@ export function useActMusic(): ReturnType<typeof useMusic> {
       // The title page's music rises over two seconds; no other starts so.
       const fadeInMs = !started && showTitle.value ? MUSIC_FADE_IN_MS : 0
       started = true
+      // A walk to another room of the act on the picture stage goes through the dark.
+      const through =
+        scenePicture.value &&
+        !motionReduced() &&
+        played.act === musicActName.value &&
+        played.room !== '' &&
+        musicRoomKey.value !== '' &&
+        played.room !== musicRoomKey.value
+      played = { act: musicActName.value, room: musicRoomKey.value }
       if (take)
         music.loadTrack(
           GENERATED_MUSIC_DIR + take.file,
           CHOSEN_TAKE_CREDIT,
           fadeInMs,
+          through,
         )
-      else music.loadTrack(musicFile.value, musicInfo.value, fadeInMs)
+      else music.loadTrack(musicFile.value, musicInfo.value, fadeInMs, through)
     },
     { immediate: true },
   )
@@ -97,6 +116,15 @@ export function useActMusic(): ReturnType<typeof useMusic> {
   })
 
   return music
+}
+
+/** Whether the game's "less motion" setting (or the system's) is on. */
+function motionReduced(): boolean {
+  return (
+    getComputedStyle(document.documentElement)
+      .getPropertyValue('--lq-motion')
+      .trim() === '0'
+  )
 }
 
 /**

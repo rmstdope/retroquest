@@ -117,6 +117,11 @@ import TitlePage from './TitlePage.vue'
  * voice reaches them (`usePanelHold`), and so do the command box's word list
  * and the target chips; only pressing in one of those panels first shows the
  * rest of the turn at once. Opening another section or a name's menu does not.
+ * On the picture stage a move to a room with another picture is a change of
+ * scene (`useSceneStore`, `StagePicture`): the old picture goes dark, the new
+ * one rises, the room's name changes in the dark, and the move's words and
+ * narrator wait until the picture is up; Enter, a click on the picture, a
+ * press in a panel or a new command bring the new room up at once.
  */
 const game = useGameStore()
 const settings = useSettingsStore()
@@ -678,7 +683,7 @@ function onNarrationKey(event: KeyboardEvent): void {
   // up at once; the command box and buttons keep their own Enter and Space.
   if (
     scene.turn !== null &&
-    !event.defaultPrevented &&
+    (!event.defaultPrevented || isEmptyBoxEnter(event)) &&
     !(event.ctrlKey || event.metaKey || event.altKey) &&
     (event.key === 'Enter' || event.key === ' ' || event.key === 'Escape') &&
     !dialogOpen()
@@ -686,7 +691,11 @@ function onNarrationKey(event: KeyboardEvent): void {
     const target = event.target instanceof Element ? event.target : null
     const field = target?.closest('input, textarea, select, [contenteditable]')
     const control = target?.closest('button, a, [role="button"], summary')
-    if (event.key === 'Escape' || !(field || control)) {
+    if (
+      event.key === 'Escape' ||
+      isEmptyBoxEnter(event) ||
+      !(field || control)
+    ) {
       event.preventDefault()
       scene.skip()
       return
@@ -1002,6 +1011,9 @@ watch(
     /** The conversation, the arrival and the narrator of the turn: now, or once its picture is up. */
     function tellTurn(): void {
       if (!turn) return
+      // The room's name goes with the picture (at the dark, or here when skipped or with no fade).
+      if (changing || (staged.value && !game.showModal && motionReduced()))
+        game.releasePanels(turn.id, ['place'], true)
       if (changing) narration.start(turn.id)
       // The conversation on the picture (laptop only) follows the turn; it reads
       // the narration just begun, so it comes after it and before the news

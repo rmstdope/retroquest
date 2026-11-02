@@ -98,7 +98,29 @@ describe('LanternLayout: change of scene', () => {
     expect(scene.turn).toBeNull()
   })
 
-  it('a command during the change skips it, and the next move starts its own', async () => {
+  it('changes the room name when the change is skipped before the dark', async () => {
+    const game = await stage()
+    game.submitCommand('go north')
+    await w.vm.$nextTick()
+    await w.vm.$nextTick()
+    expect(game.roomName).toBe('Hall')
+    await w.get('.lq-stage-picture').trigger('click')
+    expect(game.roomName).toBe('Garden')
+  })
+
+  it('skips on an Enter pressed in an empty command box', async () => {
+    const game = await stage()
+    const scene = useSceneStore()
+    game.submitCommand('go north')
+    await w.vm.$nextTick()
+    await w.vm.$nextTick()
+    const input = w.find('input')
+    if (input.exists()) await input.trigger('keydown', { key: 'Enter' })
+    else document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }))
+    expect(scene.turn).toBeNull()
+  })
+
+  it('a command during the change skips it and leaves the new room up', async () => {
     const game = await stage()
     const scene = useSceneStore()
     game.submitCommand('go north')
@@ -110,6 +132,9 @@ describe('LanternLayout: change of scene', () => {
     await w.vm.$nextTick()
     expect(first).not.toBeNull()
     expect(scene.holds(first!)).toBe(false)
+    // The room now up is the Garden's: looking again changes nothing.
+    expect(scene.shown).toContain('garden')
+    expect(scene.turn).toBeNull()
   })
 
   it('does not change scene under Reduce motion', async () => {
@@ -120,6 +145,7 @@ describe('LanternLayout: change of scene', () => {
     await w.vm.$nextTick()
     await w.vm.$nextTick()
     expect(scene.turn).toBeNull()
+    expect(game.roomName).toBe('Garden')
     document.documentElement.style.removeProperty('--lq-motion')
   })
 

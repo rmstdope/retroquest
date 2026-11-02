@@ -71,7 +71,8 @@ watch(
 
 /** Put the picture the change of scene brought (or the backdrop) in place, without a dissolve. */
 function putInPlace(target: string): void {
-  if (waiting.value === null && target !== '') return
+  if (waiting.value === null && shown.value === target) return
+  // A picture not loaded yet (a skip) leaves the backdrop until it is, never the old room.
   clearTimeout(leaveTimer)
   leaving.value = ''
   shown.value = waiting.value ?? ''
