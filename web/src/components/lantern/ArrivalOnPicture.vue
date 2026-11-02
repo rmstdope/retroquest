@@ -266,7 +266,7 @@ onBeforeUnmount(() => {
     <div class="lq-arrival-measure" aria-hidden="true">
       <div ref="twin" class="lq-arrival-twin"></div>
     </div>
-    <Transition name="lq-arrival-fade">
+    <Transition name="lq-arrival-fade" mode="out-in">
       <div
         v-if="arrival.part"
         :key="`${arrival.part.kind}-${arrival.part.lines[0]?.unit}`"
@@ -608,9 +608,11 @@ onBeforeUnmount(() => {
     transform: scaleX(0);
   }
 }
+/* A quick fade, one message out before the next in (`out-in`), so the stage's
+   row never holds two cards that push each other sideways. */
 .lq-arrival-fade-enter-active,
 .lq-arrival-fade-leave-active {
-  transition: opacity calc(0.4s * var(--lq-motion));
+  transition: opacity calc(0.15s * var(--lq-motion));
 }
 .lq-arrival-fade-enter-from,
 .lq-arrival-fade-leave-to {
