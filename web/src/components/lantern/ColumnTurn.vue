@@ -21,7 +21,8 @@ import StoryTurn from './StoryTurn.vue'
  * speaker, and a narrator card in between ends the run. The whole turn wears
  * the dimming for how many turns ago it was (`age`). A turn that is still being
  * told stops at the first line that has not appeared yet, so later cards
- * never come before the line they follow. The lines are the conversation's
+ * never come before the line they follow, and a turn whose move is still
+ * changing the picture shows no line at all. The lines are the conversation's
  * (`useStageSpeechStore`) while it holds them, and shown once it lets go.
  * The line being read is announced to the held story with the read-along's
  * `lq-follow` event, whole, so the story brings all of it into view as it
