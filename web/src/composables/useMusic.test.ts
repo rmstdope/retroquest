@@ -471,14 +471,9 @@ describe('useMusic', () => {
       expect(next.paused).toBe(false)
       expect(next.volume).toBe(0)
 
-      // The old loop fades out first (the picture's first second) ...
-      vi.advanceTimersByTime(MUSIC_CROSSFADE_MS / 4)
+      vi.advanceTimersByTime(MUSIC_CROSSFADE_MS / 2)
       expect(el.volume).toBeGreaterThan(0)
       expect(el.volume).toBeLessThan(0.5)
-      expect(next.volume).toBe(0)
-      // ... and the new one rises in the second.
-      vi.advanceTimersByTime(MUSIC_CROSSFADE_MS / 2)
-      expect(el.volume).toBe(0)
       expect(next.volume).toBeGreaterThan(0)
       expect(next.volume).toBeLessThan(0.5)
 
@@ -561,7 +556,7 @@ describe('useMusic', () => {
       el.paused = false
       el.volume = 0.5
       loadTrack('b.mp3', '')
-      vi.advanceTimersByTime(MUSIC_CROSSFADE_MS / 4)
+      vi.advanceTimersByTime(MUSIC_CROSSFADE_MS / 2)
       const heard = el.volume
       loadTrack('a.mp3', '')
       expect(el.srcSets).toHaveLength(1)
@@ -892,7 +887,7 @@ describe('useMusic on Web Audio', () => {
     await vi.advanceTimersByTimeAsync(0)
     music.loadTrack('b.mp3', 'B')
     await vi.advanceTimersByTimeAsync(0)
-    await vi.advanceTimersByTimeAsync(MUSIC_CROSSFADE_MS / 4)
+    await vi.advanceTimersByTimeAsync(MUSIC_CROSSFADE_MS / 2)
     const fetches = vi.mocked(fetch).mock.calls.length
     music.loadTrack('a.mp3', 'A')
     await vi.advanceTimersByTimeAsync(MUSIC_CROSSFADE_MS + 100)
