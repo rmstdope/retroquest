@@ -677,10 +677,24 @@ function isEmptyBoxEnter(event: KeyboardEvent): boolean {
   return emptyBoxEnters.has(event)
 }
 
+/**
+ * Whether this is Enter on the folded bar's Actions: on a phone the sheet
+ * folds as a command is sent and focus lands there, so the Enter a player
+ * presses next to hurry the change of scene finds that button, not the box.
+ */
+function isFoldedActionsEnter(event: KeyboardEvent): boolean {
+  return (
+    event.key === 'Enter' &&
+    event.target instanceof Element &&
+    !!event.target.closest('.lq-dock-open')
+  )
+}
+
 /** Keys that steer the narration; see `onNarrationKey`. */
 function onNarrationKey(event: KeyboardEvent): void {
   // Enter (or Space, or Escape) during a change of scene brings the new room
-  // up at once; the command box and buttons keep their own Enter and Space.
+  // up at once; the command box and buttons keep their own Enter and Space,
+  // except an empty box and the folded bar's Actions (which stays folded).
   if (
     scene.turn !== null &&
     (!event.defaultPrevented || isEmptyBoxEnter(event)) &&
@@ -694,6 +708,7 @@ function onNarrationKey(event: KeyboardEvent): void {
     if (
       event.key === 'Escape' ||
       isEmptyBoxEnter(event) ||
+      isFoldedActionsEnter(event) ||
       !(field || control)
     ) {
       event.preventDefault()
