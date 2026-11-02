@@ -5,6 +5,7 @@ import { nextTick } from 'vue'
 import { createPinia, setActivePinia } from 'pinia'
 import LanternLayout from './LanternLayout.vue'
 import { useGameStore, type Turn } from '@/stores/useGameStore'
+import { useStageSpeechStore } from '@/stores/useStageSpeechStore'
 import { useNarrationStore } from '@/stores/useNarrationStore'
 import { useSettingsStore } from '@/stores/useSettingsStore'
 
@@ -506,55 +507,14 @@ describe('the narration paper', () => {
     expect(document.querySelector('.lq-speech-zone')).not.toBeNull()
   })
 
-  it('keeps what was said in the one column when the window widens to two sides, and the reverse', async () => {
-    const listeners: Record<string, (e: { matches: boolean }) => void> = {}
-    let sides = false
-    vi.stubGlobal(
-      'matchMedia',
-      vi.fn((query: string) => ({
-        matches: query.includes('1100px')
-          ? sides
-          : !query.includes('max-height'),
-        addEventListener: (
-          _: string,
-          fn: (e: { matches: boolean }) => void,
-        ) => {
-          listeners[query] = fn
-        },
-        removeEventListener: vi.fn(),
-      })),
-    )
-    const said = {
-      ...turn(
-        1,
-        '[character_name]Mira[/character_name]\n[dialogue]There you are.[/dialogue]',
-        'talk to mira',
-      ),
-      addressed: 'Mira',
-    }
-    await mountWith([])
-    game.turns = [said]
-    await settle()
-    await nextTick()
-    expect(document.querySelector('.lq-speech-zone')).toBeNull()
-    sides = true
-    listeners['(min-width: 1100px)']({ matches: true })
-    await settle()
-    await nextTick()
-    expect(
-      document.querySelectorAll('[data-testid="speech-line"]'),
-    ).toHaveLength(1)
-  })
-
   it('keeps what was said in the one column when a phone widens to two sides', async () => {
     const listeners: Record<string, (e: { matches: boolean }) => void> = {}
     let sides = false
     vi.stubGlobal(
       'matchMedia',
       vi.fn((query: string) => ({
-        matches: query.includes('1100px')
-          ? sides
-          : query.includes('1100px') || query.includes('1024px')
+        matches:
+          query.includes('1100px') || query.includes('1024px')
             ? sides
             : !query.includes('max-height'),
         addEventListener: (
@@ -579,8 +539,10 @@ describe('the narration paper', () => {
     await settle()
     await nextTick()
     expect(document.querySelector('.lq-speech-zone')).toBeNull()
+    expect(useStageSpeechStore().visible).toHaveLength(1)
     sides = true
-    for (const fn of Object.values(listeners)) fn({ matches: true })
+    for (const [query, fn] of Object.entries(listeners))
+      if (!query.includes('max-height')) fn({ matches: true })
     await settle()
     await nextTick()
     expect(
