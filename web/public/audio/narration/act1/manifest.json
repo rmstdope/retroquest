@@ -6172,6 +6172,148 @@
    }
   ]
  },
+ "02ead14d12fc21": {
+  "file": "02ead14d12fc21.mp3",
+  "speaker": "narrator",
+  "duration": 10.635,
+  "words": [
+   {
+    "word": "Elior",
+    "start": 0.0,
+    "end": 0.62
+   },
+   {
+    "word": "dreamed",
+    "start": 0.62,
+    "end": 1.02
+   },
+   {
+    "word": "of",
+    "start": 1.02,
+    "end": 1.2
+   },
+   {
+    "word": "a",
+    "start": 1.2,
+    "end": 1.32
+   },
+   {
+    "word": "storm,",
+    "start": 1.32,
+    "end": 1.78
+   },
+   {
+    "word": "a",
+    "start": 2.28,
+    "end": 2.5
+   },
+   {
+    "word": "tune,",
+    "start": 2.5,
+    "end": 2.72
+   },
+   {
+    "word": "and",
+    "start": 3.1,
+    "end": 3.44
+   },
+   {
+    "word": "a",
+    "start": 3.44,
+    "end": 3.56
+   },
+   {
+    "word": "figure",
+    "start": 3.56,
+    "end": 3.98
+   },
+   {
+    "word": "in",
+    "start": 3.98,
+    "end": 4.16
+   },
+   {
+    "word": "the",
+    "start": 4.16,
+    "end": 4.26
+   },
+   {
+    "word": "dark",
+    "start": 4.26,
+    "end": 4.58
+   },
+   {
+    "word": "that",
+    "start": 4.58,
+    "end": 4.78
+   },
+   {
+    "word": "whispered",
+    "start": 4.78,
+    "end": 5.3
+   },
+   {
+    "word": "his",
+    "start": 5.3,
+    "end": 5.42
+   },
+   {
+    "word": "name.",
+    "start": 5.42,
+    "end": 5.76
+   },
+   {
+    "word": "He",
+    "start": 6.08,
+    "end": 6.66
+   },
+   {
+    "word": "woke",
+    "start": 6.66,
+    "end": 6.94
+   },
+   {
+    "word": "with",
+    "start": 6.94,
+    "end": 7.18
+   },
+   {
+    "word": "three",
+    "start": 7.18,
+    "end": 7.48
+   },
+   {
+    "word": "words",
+    "start": 7.48,
+    "end": 7.94
+   },
+   {
+    "word": "written",
+    "start": 7.94,
+    "end": 8.2
+   },
+   {
+    "word": "down:",
+    "start": 8.2,
+    "end": 8.66
+   },
+   {
+    "word": "\u2026let",
+    "start": 9.08,
+    "end": 9.74
+   },
+   {
+    "word": "them",
+    "start": 9.74,
+    "end": 9.98
+   },
+   {
+    "word": "rest\u2026",
+    "start": 9.98,
+    "end": 10.42
+   }
+  ]
+ },
  "02f19afee901ad": {
   "file": "02f19afee901ad.mp3",
   "speaker": "narrator",
@@ -36786,6 +36928,163 @@
    }
   ]
  },
+ "13c7352845b63e": {
+  "file": "13c7352845b63e.mp3",
+  "speaker": "narrator",
+  "duration": 12.91,
+  "words": [
+   {
+    "word": "Shadows",
+    "start": 0.0,
+    "end": 0.54
+   },
+   {
+    "word": "Over",
+    "start": 0.54,
+    "end": 0.92
+   },
+   {
+    "word": "Willowbrook:",
+    "start": 0.92,
+    "end": 1.64
+   },
+   {
+    "word": "Elior",
+    "start": 1.64,
+    "end": 2.9
+   },
+   {
+    "word": "dreamed",
+    "start": 2.9,
+    "end": 3.26
+   },
+   {
+    "word": "of",
+    "start": 3.26,
+    "end": 3.46
+   },
+   {
+    "word": "a",
+    "start": 3.46,
+    "end": 3.58
+   },
+   {
+    "word": "storm,",
+    "start": 3.58,
+    "end": 4.1
+   },
+   {
+    "word": "a",
+    "start": 4.6,
+    "end": 4.78
+   },
+   {
+    "word": "tune,",
+    "start": 4.78,
+    "end": 5.0
+   },
+   {
+    "word": "and",
+    "start": 5.36,
+    "end": 5.6
+   },
+   {
+    "word": "a",
+    "start": 5.6,
+    "end": 5.74
+   },
+   {
+    "word": "figure",
+    "start": 5.74,
+    "end": 6.14
+   },
+   {
+    "word": "in",
+    "start": 6.14,
+    "end": 6.3
+   },
+   {
+    "word": "the",
+    "start": 6.3,
+    "end": 6.4
+   },
+   {
+    "word": "dark",
+    "start": 6.4,
+    "end": 6.76
+   },
+   {
+    "word": "that",
+    "start": 6.76,
+    "end": 7.2
+   },
+   {
+    "word": "whispered",
+    "start": 7.2,
+    "end": 7.76
+   },
+   {
+    "word": "his",
+    "start": 7.76,
+    "end": 7.9
+   },
+   {
+    "word": "name.",
+    "start": 7.9,
+    "end": 8.24
+   },
+   {
+    "word": "He",
+    "start": 8.58,
+    "end": 9.28
+   },
+   {
+    "word": "woke",
+    "start": 9.28,
+    "end": 9.56
+   },
+   {
+    "word": "with",
+    "start": 9.56,
+    "end": 9.82
+   },
+   {
+    "word": "three",
+    "start": 9.82,
+    "end": 10.1
+   },
+   {
+    "word": "words",
+    "start": 10.1,
+    "end": 10.54
+   },
+   {
+    "word": "written",
+    "start": 10.54,
+    "end": 10.78
+   },
+   {
+    "word": "down:",
+    "start": 10.78,
+    "end": 11.18
+   },
+   {
+    "word": "\u2026let",
+    "start": 11.56,
+    "end": 12.04
+   },
+   {
+    "word": "them",
+    "start": 12.04,
+    "end": 12.24
+   },
+   {
+    "word": "rest\u2026",
+    "start": 12.24,
+    "end": 12.64
+   }
+  ]
+ },
  "13cb658e77a0ac": {
   "file": "13cb658e77a0ac.mp3",
   "speaker": "narrator",
@@ -37912,6 +38211,358 @@
     "word": "see.",
     "start": 5.36,
     "end": 5.72
+   }
+  ]
+ },
+ "1487064d1dc916": {
+  "file": "1487064d1dc916.mp3",
+  "speaker": "elior",
+  "duration": 22.236,
+  "words": [
+   {
+    "word": "When",
+    "start": 0.0,
+    "end": 0.12
+   },
+   {
+    "word": "I",
+    "start": 0.12,
+    "end": 0.22
+   },
+   {
+    "word": "slept,",
+    "start": 0.22,
+    "end": 0.62
+   },
+   {
+    "word": "I",
+    "start": 0.82,
+    "end": 1.02
+   },
+   {
+    "word": "dreamed.",
+    "start": 1.02,
+    "end": 1.44
+   },
+   {
+    "word": "Dark,",
+    "start": 2.44,
+    "end": 2.92
+   },
+   {
+    "word": "and",
+    "start": 3.12,
+    "end": 3.38
+   },
+   {
+    "word": "rain",
+    "start": 3.38,
+    "end": 3.62
+   },
+   {
+    "word": "on",
+    "start": 3.62,
+    "end": 3.82
+   },
+   {
+    "word": "shutters",
+    "start": 3.82,
+    "end": 4.26
+   },
+   {
+    "word": "I",
+    "start": 4.26,
+    "end": 4.44
+   },
+   {
+    "word": "could",
+    "start": 4.44,
+    "end": 4.6
+   },
+   {
+    "word": "not",
+    "start": 4.6,
+    "end": 4.78
+   },
+   {
+    "word": "see.",
+    "start": 4.78,
+    "end": 5.12
+   },
+   {
+    "word": "A",
+    "start": 5.58,
+    "end": 6.04
+   },
+   {
+    "word": "man's",
+    "start": 6.04,
+    "end": 6.4
+   },
+   {
+    "word": "hand",
+    "start": 6.4,
+    "end": 6.72
+   },
+   {
+    "word": "lifted",
+    "start": 6.72,
+    "end": 7.06
+   },
+   {
+    "word": "a",
+    "start": 7.06,
+    "end": 7.24
+   },
+   {
+    "word": "child",
+    "start": 7.24,
+    "end": 7.6
+   },
+   {
+    "word": "out",
+    "start": 7.6,
+    "end": 7.82
+   },
+   {
+    "word": "of",
+    "start": 7.82,
+    "end": 7.92
+   },
+   {
+    "word": "the",
+    "start": 7.92,
+    "end": 8.04
+   },
+   {
+    "word": "dark.",
+    "start": 8.04,
+    "end": 8.38
+   },
+   {
+    "word": "There",
+    "start": 8.9,
+    "end": 9.36
+   },
+   {
+    "word": "was",
+    "start": 9.36,
+    "end": 9.48
+   },
+   {
+    "word": "a",
+    "start": 9.48,
+    "end": 9.64
+   },
+   {
+    "word": "tune,",
+    "start": 9.64,
+    "end": 9.92
+   },
+   {
+    "word": "three",
+    "start": 10.34,
+    "end": 10.7
+   },
+   {
+    "word": "notes",
+    "start": 10.7,
+    "end": 11.04
+   },
+   {
+    "word": "up",
+    "start": 11.04,
+    "end": 11.32
+   },
+   {
+    "word": "and",
+    "start": 11.32,
+    "end": 11.46
+   },
+   {
+    "word": "home",
+    "start": 11.46,
+    "end": 11.7
+   },
+   {
+    "word": "again,",
+    "start": 11.7,
+    "end": 12.0
+   },
+   {
+    "word": "and",
+    "start": 12.24,
+    "end": 12.52
+   },
+   {
+    "word": "a",
+    "start": 12.52,
+    "end": 12.6
+   },
+   {
+    "word": "tall",
+    "start": 12.6,
+    "end": 12.82
+   },
+   {
+    "word": "figure",
+    "start": 12.82,
+    "end": 13.22
+   },
+   {
+    "word": "that",
+    "start": 13.22,
+    "end": 13.4
+   },
+   {
+    "word": "whispered",
+    "start": 13.4,
+    "end": 13.82
+   },
+   {
+    "word": "my",
+    "start": 13.82,
+    "end": 13.96
+   },
+   {
+    "word": "name.",
+    "start": 13.96,
+    "end": 14.34
+   },
+   {
+    "word": "When",
+    "start": 14.66,
+    "end": 14.96
+   },
+   {
+    "word": "I",
+    "start": 14.96,
+    "end": 15.06
+   },
+   {
+    "word": "answered",
+    "start": 15.06,
+    "end": 15.4
+   },
+   {
+    "word": "it,",
+    "start": 15.4,
+    "end": 15.56
+   },
+   {
+    "word": "it",
+    "start": 15.72,
+    "end": 15.96
+   },
+   {
+    "word": "said",
+    "start": 15.96,
+    "end": 16.14
+   },
+   {
+    "word": "three",
+    "start": 16.14,
+    "end": 16.38
+   },
+   {
+    "word": "words",
+    "start": 16.38,
+    "end": 16.74
+   },
+   {
+    "word": "more,",
+    "start": 16.74,
+    "end": 17.1
+   },
+   {
+    "word": "and",
+    "start": 17.14,
+    "end": 17.54
+   },
+   {
+    "word": "I",
+    "start": 17.54,
+    "end": 17.66
+   },
+   {
+    "word": "wrote",
+    "start": 17.66,
+    "end": 17.86
+   },
+   {
+    "word": "them",
+    "start": 17.86,
+    "end": 18.04
+   },
+   {
+    "word": "down",
+    "start": 18.04,
+    "end": 18.3
+   },
+   {
+    "word": "the",
+    "start": 18.3,
+    "end": 18.48
+   },
+   {
+    "word": "moment",
+    "start": 18.48,
+    "end": 18.7
+   },
+   {
+    "word": "I",
+    "start": 18.7,
+    "end": 18.9
+   },
+   {
+    "word": "woke",
+    "start": 18.9,
+    "end": 19.22
+   },
+   {
+    "word": "so",
+    "start": 19.22,
+    "end": 19.44
+   },
+   {
+    "word": "I",
+    "start": 19.44,
+    "end": 19.56
+   },
+   {
+    "word": "would",
+    "start": 19.56,
+    "end": 19.72
+   },
+   {
+    "word": "not",
+    "start": 19.72,
+    "end": 19.88
+   },
+   {
+    "word": "lose",
+    "start": 19.88,
+    "end": 20.16
+   },
+   {
+    "word": "them:",
+    "start": 20.16,
+    "end": 20.44
+   },
+   {
+    "word": "\u2026let",
+    "start": 20.9,
+    "end": 21.38
+   },
+   {
+    "word": "them",
+    "start": 21.38,
+    "end": 21.56
+   },
+   {
+    "word": "rest\u2026",
+    "start": 21.56,
+    "end": 21.96
    }
   ]
  },
@@ -56221,6 +56872,33 @@
     "word": "up.",
     "start": 1.6,
     "end": 1.84
+   }
+  ]
+ },
+ "1de6e31a0ecf29": {
+  "file": "1de6e31a0ecf29.mp3",
+  "speaker": "voice",
+  "duration": 2.601,
+  "words": [
+   {
+    "word": "\u2026let",
+    "start": 0.0,
+    "end": 0.3
+   },
+   {
+    "word": "them",
+    "start": 0.3,
+    "end": 0.62
+   },
+   {
+    "word": "rest\u2026",
+    "start": 0.62,
+    "end": 1.24
+   },
+   {
+    "word": "Elior.",
+    "start": 1.72,
+    "end": 2.28
    }
   ]
  },
