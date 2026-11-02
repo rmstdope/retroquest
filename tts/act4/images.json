@@ -84,32 +84,32 @@
     "description": "The king of Eldoria, grey and thin, as if each week in here had been a year. His crown is dark."
   },
   {
-    "id": "act4-portrait-grandmother",
+    "id": "portrait-grandmother",
     "title": "Grandmother",
     "width": 480,
     "height": 640,
-    "description": "Your grandmother at the gate, flour still on her apron. For once her hands are still."
+    "description": "Your grandmother, flour on her apron and her sleeves pushed up. She has raised you since your parents went away, and she keeps her hands busy when she would rather not answer."
   },
   {
-    "id": "act4-portrait-mira",
+    "id": "portrait-mira",
     "title": "Mira",
     "width": 480,
     "height": 640,
-    "description": "Mira, standing beside Grandmother at the gate."
+    "description": "Mira, the village healer. Her hut smells of drying sage, and she looks at you a moment longer than people usually do."
   },
   {
-    "id": "act4-portrait-sir-cedric",
+    "id": "portrait-sir-cedric",
     "title": "Sir Cedric",
     "width": 480,
     "height": 640,
-    "description": "Sir Cedric, leaning on the fence as if it were a wall."
+    "description": "A tall knight in old, dented mail. A pale patch on his surcoat shows where his device has been unpicked, and the scabbard at his hip hangs empty. He stands as if he were still on watch."
   },
   {
-    "id": "act4-portrait-nyx",
+    "id": "portrait-nyx",
     "title": "Nyx",
     "width": 480,
     "height": 640,
-    "description": "A small light in the hedge. The leaves are greener where it has settled."
+    "description": "A woman no taller than you, barefoot, with leaves caught in her hair. The moss is greener where she has stood."
   },
   {
     "id": "act4-portrait-whispers",

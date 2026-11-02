@@ -16,8 +16,10 @@ import {
   IMAGE_WIDTH,
   PORTRAIT_HEIGHT,
   PORTRAIT_WIDTH,
+  SHARED_PORTRAITS,
   allImages,
   characterImages,
+  portraitId,
   roomImages,
   withoutSpeech,
 } from './imageLists'
@@ -95,17 +97,53 @@ describe('characterImages', () => {
     expect(titles.filter((t) => t === 'Sir Cedric')).toHaveLength(1)
     // The first class registered wins.
     expect(characterImages(new Act4()).map((i) => i.id)).toContain(
-      'act4-portrait-sir-cedric',
+      'portrait-sir-cedric',
     )
   })
 
-  it('gives ids that are slugs, unique among rooms and portraits of the game', () => {
-    const ids = ACTS.flatMap((act) => allImages(act).map((i) => i.id))
-    expect(new Set(ids).size).toBe(ids.length)
-    for (const id of ids) expect(id).toMatch(SLUG)
+  it('gives ids that are slugs, unique among rooms and portraits of an act', () => {
+    for (const act of ACTS) {
+      const ids = allImages(act, ACTS).map((i) => i.id)
+      expect(new Set(ids).size).toBe(ids.length)
+      for (const id of ids) expect(id).toMatch(SLUG)
+    }
     expect(characterImages(new Act1()).map((i) => i.id)).toContain(
-      'act1-portrait-mira',
+      'portrait-mira',
     )
+  })
+
+  it('gives a character in several acts one portrait id and one entry in every act', () => {
+    const lists = ACTS.map((act) => characterImages(act, ACTS))
+    const mira = lists.flatMap((list) =>
+      list.filter((i) => i.id === 'portrait-mira'),
+    )
+    expect(mira).toHaveLength(3)
+    expect(mira[1]).toEqual(mira[0])
+    expect(mira[2]).toEqual(mira[0])
+    expect(lists[1].map((i) => i.id)).toContain('portrait-sir-cedric')
+    expect(lists[3].map((i) => i.id)).toContain('portrait-grandmother')
+  })
+
+  it('repeats an id across the acts only for a shared portrait, and lists SHARED_PORTRAITS as exactly the characters of several acts', () => {
+    const acts = new Map<string, Set<string>>()
+    for (const act of ACTS)
+      for (const [key, C] of Object.entries(act.classes))
+        if (C.prototype instanceof Character)
+          acts.set(key, (acts.get(key) ?? new Set()).add(act.name))
+    const recurring = [...acts].filter(([, a]) => a.size > 1).map(([k]) => k)
+    expect([...SHARED_PORTRAITS].sort()).toEqual(recurring.sort())
+    const ids = ACTS.flatMap((act) =>
+      characterImages(act, ACTS).map((i) => i.id),
+    )
+    const repeated = ids.filter((id, i) => ids.indexOf(id) !== i)
+    expect(new Set(repeated)).toEqual(
+      new Set(SHARED_PORTRAITS.map((key) => portraitId('Act1', key))),
+    )
+  })
+
+  it('keeps a character of one act under that act', () => {
+    expect(portraitId('Act1', 'Deer')).toBe('act1-portrait-deer')
+    expect(portraitId('Act4', 'Mira')).toBe('portrait-mira')
   })
 
   it('lists the rooms first and the portraits after them', () => {
