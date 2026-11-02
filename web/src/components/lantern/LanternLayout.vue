@@ -521,16 +521,6 @@ function endLanding(): void {
   landingFrame = undefined
 }
 
-/**
- * The window crossing about 1100 px redraws the story's turns (the column or
- * the cards) in the same pane. The story re-forms where a fresh answer would
- * have put it: the newest turn from its start (a short one whole at the
- * bottom; a player resting at the bottom, the newest whole in view, is at the
- * newest), unless the player had scrolled back, whose turn then stays in view
- * (the same share of it above the view, as its height changes). Taken before
- * the redraw, finished after it, and finished again each time the pane or its
- * turns change size, and on every frame, while the browser settles the new layout.
- */
 /** Where the player was reading: the turn at the pane's top edge, how far it starts above it, how tall it was, and whether that is the newest. */
 interface StoryView {
   anchor: number
@@ -543,7 +533,9 @@ let view: StoryView = { anchor: 0, offset: 0, height: 0, atNewest: true }
 
 /** The window size the view was taken at; the old turns are laid out afresh at a new size before the crossing is noticed, so a view is not taken until the layout has settled there. */
 let viewSize = ''
+/** Whether the view is being kept as it was, while the window changes size. */
 let viewFrozen = false
+/** Ends the freeze once no view has been asked for during `VIEW_FREEZE_MS`. */
 let viewFreezeTimer: ReturnType<typeof setTimeout> | undefined
 
 /** The window's size now. */
@@ -588,6 +580,16 @@ function noteView(): void {
   }
 }
 
+/**
+ * The window crossing about 1100 px redraws the story's turns (the column or
+ * the cards) in the same pane. The story re-forms where a fresh answer would
+ * have put it: the newest turn from its start (a short one whole at the
+ * bottom; a player resting at the bottom, the newest whole in view, is at the
+ * newest), unless the player had scrolled back, whose turn then stays in view
+ * (the same share of it above the view, as its height changes). Taken before
+ * the redraw, finished after it, and finished again each time the pane or its
+ * turns change size, and on every frame, while the browser settles the new layout.
+ */
 watch(
   [column, staged],
   async ([_column, nowStaged], [_wasColumn, wasStaged]) => {

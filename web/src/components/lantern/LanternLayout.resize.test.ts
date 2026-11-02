@@ -35,8 +35,6 @@ describe('where the story lands after the window crosses 1100 px', () => {
   let extra: number
   /** Room the pane gains at its end (padding) without any element changing size. */
   let trailing: number
-  /** How tall the two sides' cards are, against the column's lines. */
-  let sidesScale: number
   /** The callbacks of the ResizeObservers the layout made. */
   let observers: Array<() => void>
 
@@ -58,7 +56,6 @@ describe('where the story lands after the window crosses 1100 px', () => {
     newestHeight = TURN_HEIGHT
     extra = 0
     trailing = 0
-    sidesScale = 2
     vi.stubGlobal(
       'matchMedia',
       vi.fn((query: string) => ({
@@ -77,6 +74,7 @@ describe('where the story lands after the window crosses 1100 px', () => {
   })
   afterEach(() => {
     window.innerWidth = 1024
+    vi.useRealTimers()
     w?.unmount()
     vi.unstubAllGlobals()
     vi.restoreAllMocks()
@@ -87,8 +85,7 @@ describe('where the story lands after the window crosses 1100 px', () => {
   const content = (): HTMLElement =>
     document.querySelector('.lq-paper-content') as HTMLElement
   /** The cards of the two sides, as drawn now, are twice as tall as the column's lines. */
-  const scale = (): number =>
-    document.querySelector('.lq-one-column') ? 1 : sidesScale
+  const scale = (): number => (document.querySelector('.lq-one-column') ? 1 : 2)
   const heightOf = (index: number, count: number): number =>
     (index === count - 1 ? newestHeight : TURN_HEIGHT) * scale()
   const totalHeight = (count: number): number =>
@@ -175,6 +172,22 @@ describe('where the story lands after the window crosses 1100 px', () => {
     await cross(false)
     expect(pane().scrollTop).toBe(totalHeight(5) - PANE)
     expect(document.querySelector('.lq-more-below')).toBeNull()
+  })
+
+  it('takes the view again once the window size has settled', async () => {
+    vi.useFakeTimers()
+    newestHeight = 900
+    sides = true
+    await mountWith(5)
+    await readNewest()
+    window.innerWidth = 420
+    pane().dispatchEvent(new Event('scroll')) // the size changed: frozen
+    vi.advanceTimersByTime(1000) // settled: the view is taken at the new size
+    pane().scrollTop = topOf(1)
+    pane().dispatchEvent(new Event('scroll'))
+    await cross(false)
+    expect(pane().scrollTop).toBe(topOf(1))
+    vi.useRealTimers()
   })
 
   it('keeps a scrolled-back player in place whatever the browser did to the old layout first', async () => {
