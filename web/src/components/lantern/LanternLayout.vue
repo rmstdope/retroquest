@@ -1460,6 +1460,7 @@ watch(
           :class="{ 'lq-sheet': !wide, 'lq-sheet-over': phoneStage }"
           :foldable="!wide"
           :stage="wide"
+          :words-showing="showHide"
           @click="clearArrival"
           @input="clearArrival"
           @fold="fold"

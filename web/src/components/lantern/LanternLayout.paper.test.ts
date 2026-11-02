@@ -330,6 +330,44 @@ describe('the narration paper', () => {
     box.remove()
   })
 
+  it('hides narrator cards with Escape from the real command box before stepping back', async () => {
+    await mountWith([turn(1, 'Only the narrator.')])
+    game.acceptInput = true
+    await nextTick()
+    document.querySelector<HTMLButtonElement>('[data-type]')?.click()
+    await nextTick()
+    await nextTick()
+    const box = document.querySelector<HTMLInputElement>(
+      'input[aria-label="Command"]',
+    )
+    if (!box) throw new Error('No command box')
+    box.focus()
+    box.value = 'xyz'
+    box.dispatchEvent(new Event('input', { bubbles: true }))
+    await nextTick()
+    // An open word list closes first (text kept); then the words hide.
+    if (box.getAttribute('aria-expanded') === 'true') {
+      press('Escape', box)
+      await nextTick()
+      expect(tab()).toBeNull()
+    }
+    press('Escape', box)
+    await nextTick()
+    await nextTick()
+    expect(tab()).not.toBeNull()
+    expect(document.activeElement).toBe(box)
+    expect(box.value).toBe('xyz')
+    // Hidden: the box's own steps, one per press (a held key is one press).
+    press('Escape', box)
+    await nextTick()
+    expect(box.value).toBe('')
+    expect(document.activeElement).toBe(box)
+    press('Escape', box)
+    await nextTick()
+    await nextTick()
+    expect(document.querySelector('input[aria-label="Command"]')).toBeNull()
+  })
+
   it('only skips on Escape while the narrator speaks, hiding nothing', async () => {
     await mountTalking()
     useSettingsStore().narrationOn = true

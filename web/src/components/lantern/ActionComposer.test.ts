@@ -1451,6 +1451,7 @@ describe('ActionComposer on the stage', () => {
 
     it('leaves the Escape to a speech on the picture', async () => {
       const { w, input } = await typing()
+      await w.setProps({ wordsShowing: true })
       useStageSpeechStore().observe({
         id: 1,
         command: 'talk to mira',
@@ -1467,6 +1468,45 @@ describe('ActionComposer on the stage', () => {
       expect(useStageSpeechStore().visible.length).toBeGreaterThan(0)
       await esc(input)
       expect(w.find('input[aria-label="Command"]').exists()).toBe(true)
+      w.unmount()
+    })
+
+    it('leaves the Escape to the layout while words are showing on the stage', async () => {
+      const w = mount(ActionComposer, {
+        props: { stage: true, wordsShowing: true },
+        attachTo: document.body,
+      })
+      await click(w, '[data-type]')
+      const input = w.get('input[aria-label="Command"]')
+      const event = new KeyboardEvent('keydown', {
+        key: 'Escape',
+        cancelable: true,
+      })
+      input.element.dispatchEvent(event)
+      expect(event.defaultPrevented).toBe(false)
+      expect(w.find('input[aria-label="Command"]').exists()).toBe(true)
+      w.unmount()
+    })
+
+    it('steps on the stage when the words are hidden, even with speech kept', async () => {
+      const { w, input } = await typing('xyz')
+      useStageSpeechStore().observe({
+        id: 1,
+        command: 'talk to mira',
+        text:
+          '[character_name]Mira[/character_name]\n' +
+          '[dialogue]Hello.[/dialogue]',
+        room: 'Hut',
+        description: null,
+        gained: [],
+        lost: [],
+        arrival: null,
+        addressed: 'Mira',
+      })
+      // The first Escape closes the word list; the second clears the text.
+      await esc(input)
+      await esc(input)
+      expect((input.element as HTMLInputElement).value).toBe('')
       w.unmount()
     })
 
