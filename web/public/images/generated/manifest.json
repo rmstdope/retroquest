@@ -88,5 +88,10 @@
     "file": "act1-village-well.png",
     "width": 640,
     "height": 360
+  },
+  "portrait-grandmother": {
+    "file": "portrait-grandmother.png",
+    "width": 480,
+    "height": 640
   }
 }
