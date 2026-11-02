@@ -250,6 +250,24 @@ describe('useStoryFollow', () => {
       fake.api.refollow()
       expect(fake.story.scrollTop).toBe(500 - VIEW + 2 * LINE)
     })
+
+    it('refollows a spoken line of the column whole, as it was announced', async () => {
+      fake = await mountStory()
+      read()
+      // The row of a spoken line, its ringed bubble inside it.
+      const row = fake.word(800)
+      row.className = 'lq-cl'
+      row.getBoundingClientRect = () =>
+        ({
+          top: 100 + 600 - fake.story.scrollTop,
+          bottom: 100 + 800 - fake.story.scrollTop,
+        }) as DOMRect
+      const bubble = document.createElement('div')
+      bubble.className = 'lq-line lq-speaking'
+      row.appendChild(bubble)
+      fake.api.refollow()
+      expect(fake.story.scrollTop).toBe(800 - VIEW + 2 * LINE)
+    })
   })
 
   describe('holding the pane still', () => {

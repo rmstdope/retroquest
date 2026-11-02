@@ -62,7 +62,7 @@ export interface StoryFollow {
   moveTo(top: number, animate?: boolean): void
   /** Scroll just enough to keep `el` in view as the rule says, never past its top; a `unit` counts by its first line. */
   follow(el: Element, unit?: boolean): void
-  /** Bring the lit word (or the unit being spoken) back into view at once, after the pane changed size. */
+  /** Bring the lit word (the unit, or the column's spoken line, being spoken) back into view at once, after the pane changed size. */
   refollow(): void
 }
 
@@ -168,10 +168,15 @@ export function useStoryFollow(story: Ref<HTMLElement | null>): StoryFollow {
   function refollow(): void {
     const pane = story.value
     if (!pane || !held.value) return
-    const el =
+    const lit =
       pane.querySelector('.lq-w-now') ?? pane.querySelector('.lq-speaking')
-    if (!el) return
-    const unit = !el.classList.contains('lq-w-now')
+    if (!lit) return
+    // A spoken line of the column is followed whole, its row as announced.
+    const line = lit.classList.contains('lq-w-now')
+      ? null
+      : lit.closest('.lq-cl')
+    const el = line ?? lit
+    const unit = !line && !lit.classList.contains('lq-w-now')
     stopGlide()
     follow(el, unit)
     // A change of size is answered at once, not with a glide.

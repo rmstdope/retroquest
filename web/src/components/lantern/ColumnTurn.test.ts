@@ -155,6 +155,33 @@ describe('ColumnTurn', () => {
     w.unmount()
   })
 
+  it('follows the first of the paragraphs ringed at once (a quote without word timings)', async () => {
+    const speech = useStageSpeechStore()
+    const t = turn(say('Elior', 'First page.\nSecond page.'), {
+      command: 'use journal',
+      addressed: undefined,
+    })
+    speech.observe(t)
+    speech.revealAll()
+    const reading = ref(false)
+    vi.spyOn(speech, 'lineSpeaking').mockImplementation(() => reading.value)
+    const w = mount(ColumnTurn, {
+      props: { turn: t, age: 'new' },
+      attachTo: document.body,
+    })
+    const followed: string[] = []
+    w.element.addEventListener(FOLLOW_EVENT, (event: Event) => {
+      if (event.target instanceof Element)
+        followed.push(
+          event.target.querySelector('.lq-line')?.textContent?.trim() ?? '',
+        )
+    })
+    reading.value = true
+    await flushPromises()
+    expect(followed).toEqual(['First page.'])
+    w.unmount()
+  })
+
   it('tells the room after a load on one card with no command', () => {
     const t = turn('', {
       command: null,
