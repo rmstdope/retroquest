@@ -73,6 +73,8 @@ describe('where the story lands after the window crosses 1100 px', () => {
     )
   })
   afterEach(() => {
+    window.innerWidth = 1024
+    vi.useRealTimers()
     w?.unmount()
     vi.unstubAllGlobals()
     vi.restoreAllMocks()
@@ -107,7 +109,7 @@ describe('where the story lands after the window crosses 1100 px', () => {
     })
     vi.spyOn(Element.prototype, 'getBoundingClientRect').mockImplementation(
       function (this: Element): DOMRect {
-        if (this === el) return { top: 0 } as DOMRect
+        if (this === el) return { top: 0, bottom: PANE } as DOMRect
         if (this.classList.contains('lq-w-now'))
           return {
             top: 4 * TURN_HEIGHT * scale() + 700 - el.scrollTop,
@@ -119,6 +121,7 @@ describe('where the story lands after the window crosses 1100 px', () => {
         if (index < 0) return { top: 0, height: 0 } as DOMRect
         return {
           top: topOf(index) - el.scrollTop,
+          bottom: topOf(index) - el.scrollTop + heightOf(index, kids.length),
           height: heightOf(index, kids.length),
         } as DOMRect
       },
@@ -156,6 +159,48 @@ describe('where the story lands after the window crosses 1100 px', () => {
     await cross(false)
     expect(pane().scrollTop).toBe(totalHeight(5) - PANE)
     expect(document.querySelector('.lq-more-below')).toBeNull()
+  })
+
+  it('opens the column on the newest for a player who rested at the bottom, whatever the browser did to the old layout first', async () => {
+    sides = true
+    await mountWith(5)
+    await readNewest()
+    // The browser re-lays the old cards at the new width and moves the pane before the crossing is noticed.
+    window.innerWidth = 420
+    pane().scrollTop = 40
+    pane().dispatchEvent(new Event('scroll'))
+    await cross(false)
+    expect(pane().scrollTop).toBe(totalHeight(5) - PANE)
+    expect(document.querySelector('.lq-more-below')).toBeNull()
+  })
+
+  it('takes the view again once the window size has settled', async () => {
+    vi.useFakeTimers()
+    newestHeight = 900
+    sides = true
+    await mountWith(5)
+    await readNewest()
+    window.innerWidth = 420
+    pane().dispatchEvent(new Event('scroll')) // the size changed: frozen
+    vi.advanceTimersByTime(1000) // settled: the view is taken at the new size
+    pane().scrollTop = topOf(1)
+    pane().dispatchEvent(new Event('scroll'))
+    await cross(false)
+    expect(pane().scrollTop).toBe(topOf(1))
+    vi.useRealTimers()
+  })
+
+  it('keeps a scrolled-back player in place whatever the browser did to the old layout first', async () => {
+    newestHeight = 900
+    sides = true
+    await mountWith(5)
+    pane().scrollTop = topOf(1)
+    pane().dispatchEvent(new Event('scroll'))
+    window.innerWidth = 420
+    pane().scrollTop = topOf(3) + 20
+    pane().dispatchEvent(new Event('scroll'))
+    await cross(false)
+    expect(pane().scrollTop).toBe(topOf(1))
   })
 
   it('opens the column on a long newest turn at its start', async () => {
