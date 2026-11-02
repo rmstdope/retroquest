@@ -506,6 +506,88 @@ describe('the narration paper', () => {
     expect(document.querySelector('.lq-speech-zone')).not.toBeNull()
   })
 
+  it('keeps what was said in the one column when the window widens to two sides, and the reverse', async () => {
+    const listeners: Record<string, (e: { matches: boolean }) => void> = {}
+    let sides = false
+    vi.stubGlobal(
+      'matchMedia',
+      vi.fn((query: string) => ({
+        matches: query.includes('1100px')
+          ? sides
+          : !query.includes('max-height'),
+        addEventListener: (
+          _: string,
+          fn: (e: { matches: boolean }) => void,
+        ) => {
+          listeners[query] = fn
+        },
+        removeEventListener: vi.fn(),
+      })),
+    )
+    const said = {
+      ...turn(
+        1,
+        '[character_name]Mira[/character_name]\n[dialogue]There you are.[/dialogue]',
+        'talk to mira',
+      ),
+      addressed: 'Mira',
+    }
+    await mountWith([])
+    game.turns = [said]
+    await settle()
+    await nextTick()
+    expect(document.querySelector('.lq-speech-zone')).toBeNull()
+    sides = true
+    listeners['(min-width: 1100px)']({ matches: true })
+    await settle()
+    await nextTick()
+    expect(
+      document.querySelectorAll('[data-testid="speech-line"]'),
+    ).toHaveLength(1)
+  })
+
+  it('keeps what was said in the one column when a phone widens to two sides', async () => {
+    const listeners: Record<string, (e: { matches: boolean }) => void> = {}
+    let sides = false
+    vi.stubGlobal(
+      'matchMedia',
+      vi.fn((query: string) => ({
+        matches: query.includes('1100px')
+          ? sides
+          : query.includes('1100px') || query.includes('1024px')
+            ? sides
+            : !query.includes('max-height'),
+        addEventListener: (
+          _: string,
+          fn: (e: { matches: boolean }) => void,
+        ) => {
+          listeners[query] = fn
+        },
+        removeEventListener: vi.fn(),
+      })),
+    )
+    const said = {
+      ...turn(
+        1,
+        '[character_name]Mira[/character_name]\n[dialogue]There you are.[/dialogue]',
+        'talk to mira',
+      ),
+      addressed: 'Mira',
+    }
+    await mountWith([])
+    game.turns = [said]
+    await settle()
+    await nextTick()
+    expect(document.querySelector('.lq-speech-zone')).toBeNull()
+    sides = true
+    for (const fn of Object.values(listeners)) fn({ matches: true })
+    await settle()
+    await nextTick()
+    expect(
+      document.querySelectorAll('[data-testid="speech-line"]'),
+    ).toHaveLength(1)
+  })
+
   it('keeps every turn in the story, with no Hide, on a short screen', async () => {
     stubScreen('short')
     await mountWith([turn(1, 'First.'), turn(2, 'Second.')])

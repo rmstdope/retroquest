@@ -282,7 +282,8 @@ let actionsResize: ResizeObserver | undefined
 watch(wide, (isWide) => {
   if (isWide) section.value = 'story'
   drawerTab.value = null
-  speech.clear()
+  // What was said stays when the picture stays staged (a phone widening to a
+  // laptop, or the reverse): the `staged` watcher clears it when it does not.
   clearArrival()
 })
 watch(staged, () => {
