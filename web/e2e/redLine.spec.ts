@@ -50,7 +50,7 @@ const ACTS: ActPlay[] = [
     beats: [
       {
         name: 'Act I dream voice: the three words in the opening dream',
-        text: '…and let them rest… Elior.',
+        text: '…let them rest… Elior.',
       },
       {
         name: 'Act I amulet: Mira gives it to him',

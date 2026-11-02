@@ -10,16 +10,17 @@ import { Act4 } from '@/act4/Act4'
 import type { Act } from '@/engine'
 import { Character } from '@/engine'
 import { displayName } from './displayName'
-import { narrationText } from './narrationKey'
+import { PORTRAIT_PROMPTS, PORTRAIT_PROMPT_START } from './portraitPrompts'
 import {
   IMAGE_HEIGHT,
   IMAGE_WIDTH,
   PORTRAIT_HEIGHT,
   PORTRAIT_WIDTH,
+  SHARED_PORTRAITS,
   allImages,
   characterImages,
+  portraitId,
   roomImages,
-  withoutSpeech,
 } from './imageLists'
 
 const SLUG = /^[a-z0-9]+(-[a-z0-9]+)*$/
@@ -95,17 +96,53 @@ describe('characterImages', () => {
     expect(titles.filter((t) => t === 'Sir Cedric')).toHaveLength(1)
     // The first class registered wins.
     expect(characterImages(new Act4()).map((i) => i.id)).toContain(
-      'act4-portrait-sir-cedric',
+      'portrait-sir-cedric',
     )
   })
 
-  it('gives ids that are slugs, unique among rooms and portraits of the game', () => {
-    const ids = ACTS.flatMap((act) => allImages(act).map((i) => i.id))
-    expect(new Set(ids).size).toBe(ids.length)
-    for (const id of ids) expect(id).toMatch(SLUG)
+  it('gives ids that are slugs, unique among rooms and portraits of an act', () => {
+    for (const act of ACTS) {
+      const ids = allImages(act, ACTS).map((i) => i.id)
+      expect(new Set(ids).size).toBe(ids.length)
+      for (const id of ids) expect(id).toMatch(SLUG)
+    }
     expect(characterImages(new Act1()).map((i) => i.id)).toContain(
-      'act1-portrait-mira',
+      'portrait-mira',
     )
+  })
+
+  it('gives a character in several acts one portrait id and one entry in every act', () => {
+    const lists = ACTS.map((act) => characterImages(act, ACTS))
+    const mira = lists.flatMap((list) =>
+      list.filter((i) => i.id === 'portrait-mira'),
+    )
+    expect(mira).toHaveLength(3)
+    expect(mira[1]).toEqual(mira[0])
+    expect(mira[2]).toEqual(mira[0])
+    expect(lists[1].map((i) => i.id)).toContain('portrait-sir-cedric')
+    expect(lists[3].map((i) => i.id)).toContain('portrait-grandmother')
+  })
+
+  it('repeats an id across the acts only for a shared portrait, and lists SHARED_PORTRAITS as exactly the characters of several acts', () => {
+    const acts = new Map<string, Set<string>>()
+    for (const act of ACTS)
+      for (const [key, C] of Object.entries(act.classes))
+        if (C.prototype instanceof Character)
+          acts.set(key, (acts.get(key) ?? new Set()).add(act.name))
+    const recurring = [...acts].filter(([, a]) => a.size > 1).map(([k]) => k)
+    expect([...SHARED_PORTRAITS].sort()).toEqual(recurring.sort())
+    const ids = ACTS.flatMap((act) =>
+      characterImages(act, ACTS).map((i) => i.id),
+    )
+    const repeated = ids.filter((id, i) => ids.indexOf(id) !== i)
+    expect(new Set(repeated)).toEqual(
+      new Set(SHARED_PORTRAITS.map((key) => portraitId('Act1', key))),
+    )
+  })
+
+  it('keeps a character of one act under that act', () => {
+    expect(portraitId('Act1', 'Deer')).toBe('act1-portrait-deer')
+    expect(portraitId('Act4', 'Mira')).toBe('portrait-mira')
   })
 
   it('lists the rooms first and the portraits after them', () => {
@@ -115,37 +152,36 @@ describe('characterImages', () => {
     expect(allImages(act).slice(rooms)).toEqual(characterImages(act))
   })
 
-  it('describes how a character looks, with no line of speech in it', () => {
-    const knight = characterImages(new Act4()).find(
-      (i) => i.id === 'act4-portrait-knight-of-despair',
-    )
-    expect(knight?.description.endsWith('his voice is hollow.')).toBe(true)
+  it('starts every portrait prompt with a face portrait, in every act', () => {
     for (const act of ACTS) {
-      for (const [key, C] of Object.entries(act.classes)) {
-        if (!(C.prototype instanceof Character)) continue
-        const character = new (C as unknown as new () => Character)()
-        const spoken = [
-          ...character.description.matchAll(
-            /\[dialogue\]([\s\S]*?)\[\/dialogue\]/g,
-          ),
-        ].map((m) => m[1] ?? '')
-        const image = characterImages(act).find(
-          (i) =>
-            i.title.toLowerCase() === displayName(character.name).toLowerCase(),
+      for (const image of characterImages(act)) {
+        expect(image.description, image.id).toMatch(
+          new RegExp(`^${PORTRAIT_PROMPT_START}\\S`),
         )
-        for (const words of spoken) {
-          expect(image?.description, key).not.toContain(narrationText(words))
-        }
       }
     }
   })
 
-  it('keeps a character named in the prose when removing a line of speech', () => {
-    const markup =
-      'A [character_name]Mira[/character_name] waves. ' +
-      '[character_name]Bob[/character_name]\n[dialogue]Hi[/dialogue] End.'
-    expect(withoutSpeech(markup)).toBe(
-      'A [character_name]Mira[/character_name] waves.  End.',
-    )
+  it('has a prompt for every listed character and no stray ones', () => {
+    const keys = new Set<string>()
+    for (const act of ACTS) {
+      for (const [key, C] of Object.entries(act.classes)) {
+        if (C.prototype instanceof Character) keys.add(key)
+      }
+    }
+    // A class sharing a name with another is listed once, so it needs no prompt.
+    for (const key of Object.keys(PORTRAIT_PROMPTS)) {
+      expect(keys.has(key), key).toBe(true)
+    }
+    for (const act of ACTS) expect(() => characterImages(act)).not.toThrow()
+  })
+
+  it('lists a shared character with the identical entry in every act', () => {
+    const entry = (act: Act): unknown =>
+      characterImages(act, ACTS).find((i) => i.id === 'portrait-mira')
+    expect(entry(ACTS[0]!)).toBeDefined()
+    for (const act of ACTS.filter((a) => 'Mira' in a.classes)) {
+      expect(entry(act)).toEqual(entry(ACTS[0]!))
+    }
   })
 })

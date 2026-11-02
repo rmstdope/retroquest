@@ -1,10 +1,13 @@
 // @vitest-environment jsdom
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { mount } from '@vue/test-utils'
+import { flushPromises, mount } from '@vue/test-utils'
 import { createPinia, setActivePinia } from 'pinia'
+import { ref } from 'vue'
 import ColumnTurn from './ColumnTurn.vue'
+import { FOLLOW_EVENT } from '@/composables/useStoryFollow'
 import type { Turn } from '@/stores/useGameStore'
 import { useStageSpeechStore } from '@/stores/useStageSpeechStore'
+import { useNarrationStore } from '@/stores/useNarrationStore'
 
 let nextId = 1
 
@@ -119,6 +122,67 @@ describe('ColumnTurn', () => {
     expect(older.find('.lq-line').classes()).not.toContain('lq-speaking')
   })
 
+  it('asks the story to follow each of Elior’s lines as it is read, outside a conversation too', async () => {
+    const speech = useStageSpeechStore()
+    const t = turn(
+      `The ink is smudged.\n${say('Elior', 'First page.\nSecond page.')}`,
+      { command: 'use journal', addressed: undefined },
+    )
+    speech.observe(t)
+    speech.revealAll()
+    // Which paragraph (by its first word) the narrator reads; none at first.
+    const reading = ref(-1)
+    vi.spyOn(speech, 'lineSpeaking').mockImplementation(
+      (_turnId, _unit, firstWord) => firstWord === reading.value,
+    )
+    const w = mount(ColumnTurn, {
+      props: { turn: t, age: 'new' },
+      attachTo: document.body,
+    })
+    const followed: string[] = []
+    w.element.addEventListener(FOLLOW_EVENT, (event: Event) => {
+      // Announced whole, not by its first line as a unit.
+      const unit = event instanceof CustomEvent && event.detail?.unit === true
+      if (!unit && event.target instanceof Element)
+        followed.push(
+          event.target.querySelector('.lq-line')?.textContent?.trim() ?? '',
+        )
+    })
+    reading.value = 0
+    await flushPromises()
+    reading.value = 2
+    await flushPromises()
+    expect(followed).toEqual(['First page.', 'Second page.'])
+    w.unmount()
+  })
+
+  it('follows the first of the paragraphs ringed at once (a quote without word timings)', async () => {
+    const speech = useStageSpeechStore()
+    const t = turn(say('Elior', 'First page.\nSecond page.'), {
+      command: 'use journal',
+      addressed: undefined,
+    })
+    speech.observe(t)
+    speech.revealAll()
+    const reading = ref(false)
+    vi.spyOn(speech, 'lineSpeaking').mockImplementation(() => reading.value)
+    const w = mount(ColumnTurn, {
+      props: { turn: t, age: 'new' },
+      attachTo: document.body,
+    })
+    const followed: string[] = []
+    w.element.addEventListener(FOLLOW_EVENT, (event: Event) => {
+      if (event.target instanceof Element)
+        followed.push(
+          event.target.querySelector('.lq-line')?.textContent?.trim() ?? '',
+        )
+    })
+    reading.value = true
+    await flushPromises()
+    expect(followed).toEqual(['First page.'])
+    w.unmount()
+  })
+
   it('tells the room after a load on one card with no command', () => {
     const t = turn('', {
       command: null,
@@ -135,5 +199,113 @@ describe('ColumnTurn', () => {
     expect(w.findAll('[data-testid="turn"]')).toHaveLength(1)
     expect(w.find('[data-testid="command"]').exists()).toBe(false)
     expect(w.text()).toContain('Cosy.')
+  })
+
+  it('lights the word being read in Elior’s journal line, counted across its paragraphs (rq-v66a)', async () => {
+    const speech = useStageSpeechStore()
+    const narration = useNarrationStore()
+    const audio = {
+      play: () => Promise.resolve(),
+      pause: () => undefined,
+      volume: 1,
+      currentTime: 0,
+      onended: null,
+      onerror: null,
+    }
+    narration.setAudioFactory(() => audio)
+    const quote = 'The storm came.\nI dreamed of fire.'
+    const words = quote.split(/\s+/)
+    const t = turn(say('Elior', quote), {
+      command: 'use journal',
+      addressed: undefined,
+    })
+    narration.begin(
+      t.id,
+      [
+        {
+          kind: 'block',
+          parts: [
+            {
+              markup: quote,
+              clip: {
+                file: 'x.mp3',
+                speaker: 'elior',
+                duration: 9,
+                words: words.map((word, i) => ({ word, start: i, end: i + 1 })),
+              },
+            },
+          ],
+        },
+      ],
+      'act1',
+    )
+    speech.observe(t)
+    const w = mount(ColumnTurn, { props: { turn: t, age: 'new' } })
+    audio.currentTime = 1.5
+    await vi.advanceTimersByTimeAsync(60)
+    expect(w.findAll('.lq-w-now').map((el) => el.text())).toEqual(['storm'])
+    // The fifth word of the quote is the second word of its second paragraph.
+    audio.currentTime = 4.5
+    await vi.advanceTimersByTimeAsync(60)
+    const lines = w.findAll('[data-testid="speech-line"]')
+    expect(lines[1].findAll('.lq-w-now').map((el) => el.text())).toEqual([
+      'dreamed',
+    ])
+    expect(lines[0].findAll('.lq-w-now')).toHaveLength(0)
+  })
+
+  it('leaves a narrator card’s unit and lit word to the card (rq-v66a)', async () => {
+    const speech = useStageSpeechStore()
+    const narration = useNarrationStore()
+    const audio = {
+      play: () => Promise.resolve(),
+      pause: () => undefined,
+      volume: 1,
+      currentTime: 0,
+      onended: null,
+      onerror: null,
+    }
+    narration.setAudioFactory(() => audio)
+    const told = 'She smiles at you warmly.'
+    const words = told.split(/\s+/)
+    const t = turn(`${told}\n${say('Mira', 'Hello.')}`)
+    speech.observe(t)
+    const w = mount(ColumnTurn, {
+      props: { turn: t, age: 'new' },
+      attachTo: document.body,
+    })
+    let unitFollows = 0
+    w.element.addEventListener(FOLLOW_EVENT, (event: Event) => {
+      if (event instanceof CustomEvent && event.detail?.unit === true)
+        unitFollows++
+    })
+    narration.begin(
+      t.id,
+      [
+        {
+          kind: 'block',
+          parts: [
+            {
+              markup: told,
+              clip: {
+                file: 'x.mp3',
+                speaker: 'narrator',
+                duration: 9,
+                words: words.map((word, i) => ({ word, start: i, end: i + 1 })),
+              },
+            },
+          ],
+        },
+        { kind: 'block', parts: [] },
+      ],
+      'act1',
+    )
+    await flushPromises()
+    // The card announces its own unit once; the column adds nothing.
+    expect(unitFollows).toBe(1)
+    audio.currentTime = 1.5
+    await vi.advanceTimersByTimeAsync(60)
+    expect(w.findAll('.lq-w-now').map((el) => el.text())).toEqual(['smiles'])
+    w.unmount()
   })
 })

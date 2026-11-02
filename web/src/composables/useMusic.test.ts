@@ -8,6 +8,8 @@ import {
   useMusic,
 } from './useMusic'
 import { useSettingsStore } from '@/stores/useSettingsStore'
+import { FakeAudioContext } from '@/testing/fakeAudioContext'
+import { sharedAudioContext } from './musicVoice'
 
 /**
  * Minimal localStorage mock for Node test environment.
@@ -38,8 +40,13 @@ function createMockAudio() {
     src: '',
     paused: true,
     volume: 1,
-    play: vi.fn(() => Promise.resolve()),
-    pause: vi.fn(),
+    play: vi.fn(function (this: { paused: boolean }) {
+      this.paused = false
+      return Promise.resolve()
+    }),
+    pause: vi.fn(function (this: { paused: boolean }) {
+      this.paused = true
+    }),
     load: vi.fn(),
     removeAttribute: vi.fn(),
   } as unknown as HTMLAudioElement
@@ -573,5 +580,236 @@ describe('useMusic', () => {
       settings.musicOn = true
       expect(audio.play).toHaveBeenCalledTimes(1)
     })
+  })
+})
+
+describe('useMusic on Web Audio', () => {
+  const createdAudios: HTMLAudioElement[] = []
+  let audio: HTMLAudioElement
+  let ctx: FakeAudioContext
+
+  /** Lets a pending fetch and decode settle. */
+  async function ready(): Promise<void> {
+    for (let i = 0; i < 5; i++) await Promise.resolve()
+    await new Promise((resolve) => setTimeout(resolve, 0))
+  }
+
+  beforeEach(() => {
+    audio = createMockAudio()
+    createdAudios.length = 0
+    vi.stubGlobal(
+      'Audio',
+      class {
+        constructor() {
+          const el = createMockAudio()
+          createdAudios.push(el)
+          return el
+        }
+      },
+    )
+    localStorageMock.clear()
+    setActivePinia(createPinia())
+    vi.stubGlobal('AudioContext', FakeAudioContext)
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(() =>
+        Promise.resolve({
+          ok: true,
+          arrayBuffer: () => Promise.resolve(new ArrayBuffer(1)),
+        }),
+      ),
+    )
+    ctx = sharedAudioContext() as unknown as FakeAudioContext
+    ctx.failDecode = false
+    ctx.sources.length = 0
+    ctx.gains.length = 0
+  })
+  afterEach(() => {
+    vi.useRealTimers()
+    vi.unstubAllGlobals()
+    vi.resetModules()
+  })
+
+  it('starts the first music straight in at the set volume, with no ramp', async () => {
+    const settings = useSettingsStore()
+    settings.musicVolume = 60
+    const music = useMusic(audio)
+    music.loadTrack('a.mp3', 'A')
+    expect(ctx.sources).toHaveLength(0)
+    await ready()
+    expect(ctx.sources).toHaveLength(1)
+    expect(ctx.sources[0].loop).toBe(true)
+    expect(ctx.gains.at(-1)?.gain.value).toBeCloseTo(0.6)
+    expect(music.currentMusicFile.value).toBe('a.mp3')
+    expect(audio.play).not.toHaveBeenCalled()
+  })
+
+  it('starts the music ducked when a voice is already speaking', async () => {
+    const narrating = ref(true)
+    useSettingsStore().musicVolume = 100
+    const music = useMusic(audio, narrating)
+    music.loadTrack('a.mp3', 'A')
+    await ready()
+    expect(ctx.gains.at(-1)?.gain.value).toBeCloseTo(MUSIC_DUCK)
+  })
+
+  it('keeps the old music going, ducked, while the new loads, then crossfades', async () => {
+    vi.useFakeTimers()
+    const narrating = ref(false)
+    useSettingsStore().musicVolume = 100
+    const music = useMusic(audio, narrating)
+    music.loadTrack('a.mp3', 'A')
+    await vi.advanceTimersByTimeAsync(0)
+    const first = ctx.gains.at(-1)!
+    let release: () => void = () => {}
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(
+        () =>
+          new Promise((resolve) => {
+            release = () =>
+              resolve({
+                ok: true,
+                arrayBuffer: () => Promise.resolve(new ArrayBuffer(1)),
+              })
+          }),
+      ),
+    )
+    music.loadTrack('b.mp3', 'B')
+    narrating.value = true
+    await nextTick()
+    await vi.advanceTimersByTimeAsync(MUSIC_DUCK_FADE_MS)
+    expect(first.gain.value).toBeCloseTo(MUSIC_DUCK)
+    expect(ctx.sources[0].stop).not.toHaveBeenCalled()
+    expect(music.currentMusicFile.value).toBe('a.mp3')
+    release()
+    await vi.advanceTimersByTimeAsync(0)
+    const second = ctx.gains.at(-1)!
+    expect(second).not.toBe(first)
+    expect(second.gain.value).toBe(0)
+    await vi.advanceTimersByTimeAsync(MUSIC_CROSSFADE_MS)
+    expect(second.gain.value).toBeCloseTo(MUSIC_DUCK)
+    expect(ctx.sources[0].stop).toHaveBeenCalled()
+    expect(music.currentMusicFile.value).toBe('b.mp3')
+  })
+
+  it('plays the room the player is in now when they move on before it is ready', async () => {
+    const music = useMusic(audio)
+    music.loadTrack('a.mp3', 'A')
+    music.loadTrack('b.mp3', 'B')
+    await ready()
+    expect(ctx.sources).toHaveLength(1)
+    expect(music.currentMusicFile.value).toBe('b.mp3')
+  })
+
+  it('plays the file on an element when it cannot be decoded, without a message', async () => {
+    ctx.failDecode = true
+    const music = useMusic(audio)
+    music.loadTrack('a.mp3', 'A')
+    await ready()
+    expect(ctx.sources).toHaveLength(0)
+    expect(audio.src).toBe('/audio/music/a.mp3')
+    expect(audio.play).toHaveBeenCalled()
+  })
+
+  it('stays silent while muted and starts the loop when switched on', async () => {
+    const settings = useSettingsStore()
+    settings.musicOn = false
+    const music = useMusic(audio)
+    music.loadTrack('a.mp3', 'A')
+    await ready()
+    expect(ctx.sources).toHaveLength(0)
+    settings.musicOn = true
+    expect(ctx.sources).toHaveLength(1)
+  })
+
+  it('stops the loop when muted, and when the track is cleared', async () => {
+    const settings = useSettingsStore()
+    const music = useMusic(audio)
+    music.loadTrack('a.mp3', 'A')
+    await ready()
+    settings.musicOn = false
+    expect(ctx.sources[0].stop).toHaveBeenCalled()
+    settings.musicOn = true
+    music.loadTrack('', '')
+    expect(ctx.sources.at(-1)?.stop).toHaveBeenCalled()
+  })
+
+  it('drops a load still under way when the track is cleared', async () => {
+    const music = useMusic(audio)
+    music.loadTrack('a.mp3', 'A')
+    music.loadTrack('', '')
+    await ready()
+    expect(ctx.sources).toHaveLength(0)
+  })
+
+  it('goes on with the music playing when the player returns to its room while another loads', async () => {
+    const music = useMusic(audio)
+    music.loadTrack('a.mp3', 'A')
+    await ready()
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(() => new Promise(() => {})),
+    )
+    music.loadTrack('b.mp3', 'B')
+    music.loadTrack('a.mp3', 'A')
+    expect(fetch).toHaveBeenCalledTimes(1)
+    expect(ctx.sources).toHaveLength(1)
+    expect(ctx.sources[0].stop).not.toHaveBeenCalled()
+    expect(music.currentMusicFile.value).toBe('a.mp3')
+  })
+
+  it('keeps playing after the track is cleared and two element tracks follow', async () => {
+    vi.useFakeTimers()
+    ctx.failDecode = true
+    const music = useMusic(audio)
+    music.loadTrack('', '')
+    music.loadTrack('a.mp3', 'A')
+    await vi.advanceTimersByTimeAsync(0)
+    music.loadTrack('b.mp3', 'B')
+    await vi.advanceTimersByTimeAsync(0)
+    await vi.advanceTimersByTimeAsync(MUSIC_CROSSFADE_MS + 100)
+    expect(music.currentMusicFile.value).toBe('b.mp3')
+    const sounding = [audio, ...createdAudios].filter(
+      (el) => el.src.endsWith('b.mp3') && !el.paused,
+    )
+    expect(sounding).toHaveLength(1)
+  })
+
+  it('wakes the context on an input while the first music is still decoding', () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(() => new Promise(() => {})),
+    )
+    const music = useMusic(audio)
+    music.loadTrack('a.mp3', 'A')
+    music.ensureMusicStarted()
+    expect(ctx.resume).toHaveBeenCalled()
+  })
+
+  it('fades back up a loop still fading out when the player returns to its room', async () => {
+    vi.useFakeTimers()
+    useSettingsStore().musicVolume = 100
+    const music = useMusic(audio)
+    music.loadTrack('a.mp3', 'A')
+    await vi.advanceTimersByTimeAsync(0)
+    music.loadTrack('b.mp3', 'B')
+    await vi.advanceTimersByTimeAsync(0)
+    await vi.advanceTimersByTimeAsync(MUSIC_CROSSFADE_MS / 2)
+    const fetches = vi.mocked(fetch).mock.calls.length
+    music.loadTrack('a.mp3', 'A')
+    await vi.advanceTimersByTimeAsync(MUSIC_CROSSFADE_MS + 100)
+    expect(vi.mocked(fetch).mock.calls.length).toBe(fetches)
+    expect(music.currentMusicFile.value).toBe('a.mp3')
+    expect(ctx.gains[0].gain.value).toBeCloseTo(1)
+  })
+
+  it('wakes a suspended context on a later input', async () => {
+    const music = useMusic(audio)
+    music.loadTrack('a.mp3', 'A')
+    await ready()
+    ctx.state = 'suspended'
+    music.ensureMusicStarted()
+    expect(ctx.resume).toHaveBeenCalled()
   })
 })

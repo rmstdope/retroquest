@@ -116,76 +116,76 @@
     "title": "Blacksmith",
     "width": 480,
     "height": 640,
-    "description": "Borin, the village smith: forearms like fence posts and an old burn on every knuckle. He talks while he works, and he doesn't stop working."
+    "description": "A face portrait of a broad, bearded village smith, his cheeks flushed from the forge and a smudge of soot on his brow, with a keen, busy look."
   },
   {
     "id": "act1-portrait-deer",
     "title": "Deer",
     "width": 480,
     "height": 640,
-    "description": "A deer, red-brown and very still, standing where the moss is thickest. It does not startle when you move."
+    "description": "A face portrait of a red-brown deer, its dark eyes calm and unafraid and its ears turned toward you."
   },
   {
     "id": "act1-portrait-dream-voice",
     "title": "Voice",
     "width": 480,
     "height": 640,
-    "description": "It has no face you can find, only a height and a nearness. When it speaks, it speaks your name."
+    "description": "A face portrait of a tall dark figure in rain-soaked shadow, with no face you can make out, only a pale blur where a face should be, like smoke."
   },
   {
     "id": "act1-portrait-fisherman",
     "title": "Fisherman",
     "width": 480,
     "height": 640,
-    "description": "An old man on an upturned crate at the bend, his line in the water and his bad arm held close to his side."
+    "description": "A face portrait of an old man with a sun-creased face and a white stubbled beard, patient eyes, and a battered cloth cap."
   },
   {
-    "id": "act1-portrait-grandmother",
+    "id": "portrait-grandmother",
     "title": "Grandmother",
     "width": 480,
     "height": 640,
-    "description": "Your grandmother, flour on her apron and her sleeves pushed up. She has raised you since your parents went away, and she keeps her hands busy when she would rather not answer."
+    "description": "A face portrait of an elderly woman with a lined, kind face, grey hair pinned back, and a guarded, tired look in her eyes."
   },
   {
     "id": "act1-portrait-merchant",
     "title": "Merchant",
     "width": 480,
     "height": 640,
-    "description": "A travelling merchant with a loaded cart and a thin grey mare who stands on three good shoes. He has the look of a man two days from his last meal."
+    "description": "A face portrait of a travelling merchant, lean and hungry-looking, with sharp cheekbones, shrewd tired eyes and a road-worn hat."
   },
   {
-    "id": "act1-portrait-mira",
+    "id": "portrait-mira",
     "title": "Mira",
     "width": 480,
     "height": 640,
-    "description": "Mira, the village healer. Her hut smells of drying sage, and she looks at you a moment longer than people usually do."
+    "description": "A face portrait of a village healer in middle age, with a calm, steady gaze that rests on you a moment longer than is comfortable, and a sprig of dried sage tucked behind one ear."
   },
   {
     "id": "act1-portrait-priest",
     "title": "Priest",
     "width": 480,
     "height": 640,
-    "description": "The chapel's priest, thin and a little stooped, with old candle wax on both sleeves."
+    "description": "A face portrait of a thin, slightly stooped old priest with a gentle, worried face."
   },
   {
     "id": "act1-portrait-patches",
     "title": "Patches",
     "width": 480,
     "height": 640,
-    "description": "A small cat with a patchwork coat of ginger, black and white, and wide green eyes."
+    "description": "A face portrait of a small cat with a patchwork coat of ginger, black and white, and wide green eyes."
   },
   {
     "id": "act1-portrait-shopkeeper",
     "title": "Shopkeeper",
     "width": 480,
     "height": 640,
-    "description": "Old Man Hemlock, who keeps the General Store. He glances at the door every time it creaks."
+    "description": "A face portrait of an old storekeeper with a nervous, sideways glance and thinning white hair."
   },
   {
     "id": "act1-portrait-villager",
     "title": "Tilda",
     "width": 480,
     "height": 640,
-    "description": "Tilda, the baker's wife, flour to the elbows. She knows what everyone in Willowbrook had for breakfast, and who they ate it with."
+    "description": "A face portrait of a plump, cheerful baker’s wife with flour on her cheek, bright gossiping eyes and a headscarf."
   }
 ]

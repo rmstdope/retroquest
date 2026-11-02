@@ -1,10 +1,13 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, nextTick, ref, watch } from 'vue'
 import type { Turn } from '@/stores/useGameStore'
 import { useGameStore } from '@/stores/useGameStore'
 import { useStageSpeechStore } from '@/stores/useStageSpeechStore'
+import { FOLLOW_EVENT } from '@/composables/useStoryFollow'
+import { useReadAlong } from '@/composables/useReadAlong'
 import { columnPieces } from '@/lantern/columnPieces'
 import { parseTurn } from '@/lantern/parseTurn'
+import type { SpeechLine } from '@/lantern/stageSpeech'
 import { renderMarkup } from '@/utils/theme'
 import SpeechPortrait from './SpeechPortrait.vue'
 import StoryTurn from './StoryTurn.vue'
@@ -20,6 +23,11 @@ import StoryTurn from './StoryTurn.vue'
  * told stops at the first line that has not appeared yet, so later cards
  * never come before the line they follow. The lines are the conversation's
  * (`useStageSpeechStore`) while it holds them, and shown once it lets go.
+ * The line being read is announced to the held story with the read-along's
+ * `lq-follow` event, whole, so the story brings all of it into view as it
+ * starts (its top first when it is taller than the pane), whether or not the
+ * turn is a conversation; then its spoken word is lit and followed like the
+ * narrator's, counted from the paragraph's place in the quote.
  */
 const props = defineProps<{
   turn: Turn
@@ -45,6 +53,46 @@ const told = computed(() => {
   return stop === -1 ? all : all.slice(0, stop)
 })
 
+const root = ref<HTMLElement | null>(null)
+
+// The cards light their own words; the column lights its lines'.
+const { html } = useReadAlong(() => props.turn.id, root, { within: '.lq-cl' })
+
+/** A line's HTML, its words marked while its quote is read (Elior's own `say` words are no unit, never read). */
+function lineHtml(line: SpeechLine): string {
+  return line.unit < 0
+    ? renderMarkup(line.markup)
+    : html(line.markup, line.unit, 0, Number.POSITIVE_INFINITY, line.firstWord)
+}
+
+/**
+ * The told line being read aloud now, as its piece index (-1 for none): the
+ * first one ringed, since a quote without word timings rings all its
+ * paragraphs and is read from its first.
+ */
+const speakingIndex = computed(() =>
+  told.value.findIndex(
+    (piece) =>
+      piece.kind === 'line' &&
+      speech.lineSpeaking(props.turn.id, piece.line.unit, piece.line.firstWord),
+  ),
+)
+
+// A line that starts being read asks the held story to keep it in view.
+watch(
+  speakingIndex,
+  async (index) => {
+    if (index < 0) return
+    await nextTick()
+    root.value
+      ?.querySelector(`[data-piece="${index}"]`)
+      ?.dispatchEvent(
+        new CustomEvent(FOLLOW_EVENT, { bubbles: true, cancelable: true }),
+      )
+  },
+  { flush: 'post' },
+)
+
 /** Whether piece `index` starts a run, so carries the speaker's name and portrait. */
 function heads(index: number): boolean {
   const piece = told.value[index]
@@ -58,6 +106,7 @@ function heads(index: number): boolean {
 
 <template>
   <div
+    ref="root"
     class="lq-column-turn"
     :class="`lq-age-${age}`"
     data-testid="column-turn"
@@ -75,6 +124,7 @@ function heads(index: number): boolean {
         class="lq-cl"
         :class="[`lq-cl-${piece.line.side}`, { 'lq-cl-head': heads(index) }]"
         :data-unit="piece.line.unit >= 0 ? piece.line.unit : undefined"
+        :data-piece="index"
         data-testid="speech-line"
       >
         <SpeechPortrait
@@ -98,7 +148,7 @@ function heads(index: number): boolean {
               ),
             }"
           >
-            <span v-html="renderMarkup(piece.line.markup)"></span>
+            <span v-html="lineHtml(piece.line)"></span>
           </div>
           <!-- eslint-enable vue/no-v-html -->
         </div>
@@ -201,5 +251,12 @@ function heads(index: number): boolean {
   box-shadow:
     0 0 0 2px var(--lq-accent),
     0 2px 10px rgba(0, 0, 0, 0.18);
+}
+/* The spoken word, lit as in the narrator's cards. */
+.lq-line :deep(.lq-w-now) {
+  background: var(--lq-accent-soft);
+  color: var(--lq-accent-text);
+  border-radius: 3px;
+  box-shadow: 0 0 0 2px var(--lq-accent-soft);
 }
 </style>

@@ -124,5 +124,8 @@ export function extractActMusic(number: string): MusicTrack[] {
  * as `images.json` holds them.
  */
 export function extractActImages(number: string): GameImage[] {
-  return allImages(sourceOf(number).make())
+  return allImages(
+    sourceOf(number).make(),
+    ACT_NUMBERS.map((n) => sourceOf(n).make()),
+  )
 }

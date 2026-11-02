@@ -464,7 +464,7 @@ export const useNarrationStore = defineStore('narration', () => {
     finish(true)
   }
 
-  /** A tap on the story: hurry, or skip on a second tap within 300 ms. */
+  /** A tap on the story, the picture's speech or a chapter page: hurry, or skip on a second tap within 300 ms. */
   function tap(): void {
     if (!active.value) return
     const now = Date.now()

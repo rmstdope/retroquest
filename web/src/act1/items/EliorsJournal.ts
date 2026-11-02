@@ -41,7 +41,7 @@ export class EliorsJournal extends Item {
           'and a tall figure that whispered my name. ' +
           'When I answered it, it said three words more, ' +
           'and I wrote them down the moment I woke so I would not lose them: ' +
-          '…and let them rest…',
+          '…let them rest…',
       ) +
       '\n\n' +
       dialogue(

@@ -25,7 +25,8 @@ const GESTURES = ['keydown', 'click', 'touchstart'] as const
 const MEDIA_KEYS: readonly MediaSessionAction[] = ['play', 'pause', 'stop']
 
 /**
- * The current act's background music, looping. Browsers block autoplay until
+ * The current act's background music, looping (gaplessly on Web Audio where
+ * the browser can, else on an element). Browsers block autoplay until
  * the player interacts, so it also starts on a key press, click or touch; and
  * since a headset taken out can still pause it, every later input brings it
  * back. A headset's or media key's pause and play are taken from the browser

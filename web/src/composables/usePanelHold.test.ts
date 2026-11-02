@@ -203,7 +203,7 @@ describe('usePanelHold: the music of a narrated move', () => {
     // "The whisper comes once more…"
     expect(game.musicRoomKey).toBe('TheDream')
     await endVoice()
-    // "…and let them rest… Elior." in the voice's own voice
+    // "…let them rest… Elior." in the voice's own voice
     expect(game.musicRoomKey).toBe('TheDream')
     await endVoice()
     // "The dark lets go of you, and you wake in your own bed…"

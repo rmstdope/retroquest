@@ -5,6 +5,8 @@ import { createPinia, setActivePinia } from 'pinia'
 import StageSpeech from './StageSpeech.vue'
 import type { Turn } from '@/stores/useGameStore'
 import { useStageSpeechStore } from '@/stores/useStageSpeechStore'
+import { useNarrationStore } from '@/stores/useNarrationStore'
+import type { NarrationUnit } from '@/lantern/narrationUnits'
 
 let nextId = 1
 
@@ -167,5 +169,94 @@ describe('StageSpeech', () => {
     expect(w.findAll('[data-testid="speech-line"]')).toHaveLength(1)
     await w.get('[data-testid="speech-zone"]').trigger('click')
     expect(w.findAll('[data-testid="speech-line"]')).toHaveLength(3)
+  })
+
+  it('hurries a narrated turn one block when the speech is pressed, and reads on (rq-cynd)', async () => {
+    const { speech, w } = mounted()
+    const narration = useNarrationStore()
+    // A voice that plays until it is stopped.
+    narration.setAudioFactory(() => ({
+      play: () => Promise.resolve(),
+      pause: () => undefined,
+      volume: 1,
+      currentTime: 0,
+      onended: null,
+      onerror: null,
+    }))
+    const voiced = (markup: string): NarrationUnit => ({
+      kind: 'block',
+      parts: [
+        {
+          markup,
+          clip: { file: 'x.mp3', speaker: 'elior', duration: 5, words: [] },
+        },
+      ],
+    })
+    const journal = turn(
+      say('Elior', 'The storm.') + '\n\n' + say('Elior', 'I dreamed.'),
+      null,
+      'use journal',
+    )
+    narration.begin(
+      journal.id,
+      [voiced('The storm.'), voiced('I dreamed.')],
+      'act1',
+    )
+    speech.observe(journal)
+    await w.vm.$nextTick()
+    expect(narration.speaking(journal.id)?.unit).toBe(0)
+    await w.get('[data-testid="speech-zone"]').trigger('click')
+    await vi.advanceTimersByTimeAsync(100)
+    // The next block is read, not the rest of the turn passed over.
+    expect(narration.speaking(journal.id)?.unit).toBe(1)
+  })
+
+  it('lights the word being read in a narrated line, counted across its paragraphs (rq-v66a)', async () => {
+    const { speech, w } = mounted()
+    const narration = useNarrationStore()
+    const audio = {
+      play: () => Promise.resolve(),
+      pause: () => undefined,
+      volume: 1,
+      currentTime: 0,
+      onended: null,
+      onerror: null,
+    }
+    narration.setAudioFactory(() => audio)
+    const quote = 'The storm came.\nI dreamed of fire.'
+    const words = quote.split(/\s+/)
+    const said = turn(say('Mira', quote), 'Mira')
+    narration.begin(
+      said.id,
+      [
+        {
+          kind: 'block',
+          parts: [
+            {
+              markup: quote,
+              clip: {
+                file: 'x.mp3',
+                speaker: 'mira',
+                duration: 9,
+                words: words.map((word, i) => ({ word, start: i, end: i + 1 })),
+              },
+            },
+          ],
+        },
+      ],
+      'act1',
+    )
+    speech.observe(said)
+    audio.currentTime = 1.5
+    await vi.advanceTimersByTimeAsync(60)
+    expect(w.findAll('.lq-w-now').map((el) => el.text())).toEqual(['storm'])
+    // The fifth word of the quote is the second word of its second paragraph.
+    audio.currentTime = 4.5
+    await vi.advanceTimersByTimeAsync(60)
+    const lines = w.findAll('[data-testid="speech-line"]')
+    expect(lines[1].findAll('.lq-w-now').map((el) => el.text())).toEqual([
+      'dreamed',
+    ])
+    expect(lines[0].findAll('.lq-w-now')).toHaveLength(0)
   })
 })

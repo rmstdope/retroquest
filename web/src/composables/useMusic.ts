@@ -1,6 +1,12 @@
 import { computed, ref, watch, type Ref } from 'vue'
 import { escapeHtml } from '@/utils/theme'
 import { useSettingsStore } from '@/stores/useSettingsStore'
+import {
+  HtmlMusicVoice,
+  prepareWebAudioVoice,
+  sharedAudioContext,
+  type MusicVoice,
+} from './musicVoice'
 
 const MUSIC_BASE_PATH = '/audio/music/'
 const URL_PATTERN = /(https?:\/\/[^\s]+)/g
@@ -23,6 +29,11 @@ const FADE_STEPS = 10
  * playing on its own element and fades out while the new one fades in on a
  * second element (`MUSIC_CROSSFADE_MS`), so the old loop never reloads and
  * never drops out; the same track again changes nothing.
+ *
+ * Loops play on Web Audio (see `musicVoice.ts`): a track is decoded first, the
+ * music already playing goes on until it is ready, and the loop then comes
+ * round without a click. A browser that cannot decode it plays the element, as
+ * before.
  */
 export function useMusic(
   audio: HTMLAudioElement,
@@ -33,49 +44,100 @@ export function useMusic(
   const currentMusicFile = ref('')
   const musicInfo = ref('')
 
-  /** The element playing the current track; the other one is the spare. */
-  let active = audio
-  let spare: HTMLAudioElement | null = null
+  /** The voice playing the current track; the other one is the spare. */
+  const base = new HtmlMusicVoice(audio)
+  let active: MusicVoice = base
+  let spare: HtmlMusicVoice | null = null
+  /** Counts loads; a load that finds a newer one asked for is dropped. */
+  let request = 0
+  /** The file asked for last, also while its loop is still being prepared. */
+  let requestedFile = ''
+
+  function urlFor(file: string): string {
+    return MUSIC_BASE_PATH + file.split('/').map(encodeURIComponent).join('/')
+  }
 
   function loadTrack(file: string, info: string): void {
     if (!file) {
+      request++
+      requestedFile = ''
       stopCrossfade()
       currentMusicFile.value = ''
       musicInfo.value = ''
-      active.pause()
-      active.removeAttribute('src')
-      active.load()
+      if (active !== base) retire(active)
+      active = base
+      audio.pause()
+      audio.removeAttribute('src')
+      audio.load()
       return
     }
 
-    if (file === currentMusicFile.value) return
-
-    const crossfade =
-      currentMusicFile.value !== '' &&
-      !active.paused &&
-      !musicMuted.value &&
-      typeof Audio !== 'undefined'
-    // The element already playing is left alone, so it never reloads and
-    // the old loop never drops out; the new loop goes on the other element.
-    let next = active
-    let comingBack = false
-    if (crossfade) {
-      // Going back to the loop that is still fading out: fade it up again.
-      const returning = takeFadingOut(file)
-      comingBack = returning !== null
-      next = returning ?? takeSpare()
-      fadeOutActive()
-      next.loop = true
-      if (!comingBack) next.volume = 0
-      active = next
+    if (file === requestedFile) return
+    requestedFile = file
+    if (file === currentMusicFile.value) {
+      // Back to the music that is playing: drop the load under way.
+      request++
+      return
     }
+    const id = ++request
 
+    const returning = takeFadingOut(file)
+    const context = returning ? null : sharedAudioContext()
+    if (returning || !context) {
+      // Today's playback: an element, ready at once.
+      startVoice(
+        file,
+        info,
+        returning ?? htmlVoiceFor(file),
+        returning !== null,
+      )
+      return
+    }
+    // A loop is decoded first; the music playing goes on until it is ready.
+    void prepareWebAudioVoice(context, urlFor(file)).then((voice) => {
+      if (id !== request) {
+        voice?.dispose()
+        return
+      }
+      startVoice(file, info, voice ?? htmlVoiceFor(file), false)
+    })
+  }
+
+  /** An element-based voice for `file`, reusing the spare element if any. */
+  function htmlVoiceFor(file: string): MusicVoice {
+    const crossfade =
+      currentMusicFile.value !== '' && !active.paused && !musicMuted.value
+    // With nothing audible to fade out, the element in hand is loaded again.
+    const voice =
+      !crossfade && active instanceof HtmlMusicVoice ? active : takeSpare()
+    voice.element.loop = true
+    voice.element.src = urlFor(file)
+    return voice
+  }
+
+  /** Makes `next` the current loop, crossfading from the one playing. */
+  function startVoice(
+    file: string,
+    info: string,
+    next: MusicVoice,
+    comingBack: boolean,
+  ): void {
+    const crossfade =
+      currentMusicFile.value !== '' && !active.paused && !musicMuted.value
+    if (crossfade) {
+      fadeOutActive()
+      if (!comingBack) next.volume = 0
+    } else if (next !== active) {
+      if (fade) clearInterval(fade)
+      fade = null
+      stopCrossfade()
+      retire(active)
+      // Straight in at the set volume, ducked under a voice; no fade-in.
+      if (!comingBack) next.volume = targetVolume.value
+    }
+    active = next
     currentMusicFile.value = file
     musicInfo.value = info
-    if (!comingBack) {
-      next.src =
-        MUSIC_BASE_PATH + file.split('/').map(encodeURIComponent).join('/')
-    }
 
     if (crossfade) fadeTo(targetVolume.value, MUSIC_CROSSFADE_MS)
     if (!musicMuted.value) {
@@ -83,15 +145,22 @@ export function useMusic(
     }
   }
 
+  /** Lets go of a voice nobody plays any more; an element is kept as the spare. */
+  function retire(voice: MusicVoice): void {
+    voice.pause()
+    if (voice instanceof HtmlMusicVoice) spare = voice
+    else voice.dispose()
+  }
+
   /** The loops still fading out, each with the timer that fades it. */
   const outgoing: {
-    old: HTMLAudioElement
+    old: MusicVoice
     file: string
     timer: ReturnType<typeof setInterval>
   }[] = []
 
-  /** Takes back the element still fading out `file`, or null if none is. */
-  function takeFadingOut(file: string): HTMLAudioElement | null {
+  /** Takes back the voice still fading out `file`, or null if none is. */
+  function takeFadingOut(file: string): MusicVoice | null {
     const index = outgoing.findIndex((entry) => entry.file === file)
     if (index < 0) return null
     const [entry] = outgoing.splice(index, 1)
@@ -101,41 +170,41 @@ export function useMusic(
 
   /**
    * The element for the next loop: the spare, else the loop that has been
-   * fading out longest (cut), else a new one.
+   * fading out longest (cut) if it is an element, else a new one.
    */
-  function takeSpare(): HTMLAudioElement {
+  function takeSpare(): HtmlMusicVoice {
     if (spare) {
-      const el = spare
+      const voice = spare
       spare = null
-      return el
+      return voice
     }
-    const oldest = outgoing.shift()
-    if (oldest) {
+    const index = outgoing.findIndex((e) => e.old instanceof HtmlMusicVoice)
+    if (index >= 0) {
+      const [oldest] = outgoing.splice(index, 1)
       clearInterval(oldest.timer)
       oldest.old.pause()
-      return oldest.old
+      return oldest.old as HtmlMusicVoice
     }
-    return new Audio()
+    return new HtmlMusicVoice(new Audio())
   }
 
   /** Silences every loop still fading out. */
   function stopCrossfade(): void {
     for (const { old, timer } of outgoing.splice(0)) {
       clearInterval(timer)
-      old.pause()
-      spare ??= old
+      retire(old)
     }
   }
 
   /**
-   * Fades the active element out, then pauses it and keeps it as the spare.
-   * It follows a voice's dip like the active one does, so it never sounds
-   * louder than the ducked level.
+   * Fades the active voice out, then pauses it and lets it go. It follows a
+   * voice's dip like the active one does, so it never sounds louder than the
+   * ducked level.
    */
   function fadeOutActive(): void {
     const old = active
     const duckAtStart = narrating.value ? MUSIC_DUCK : 1
-    const base = old.volume / duckAtStart
+    const startVolume = old.volume / duckAtStart
     let step = 0
     const entry = {
       old,
@@ -143,12 +212,11 @@ export function useMusic(
       timer: setInterval(() => {
         step++
         const duck = narrating.value ? MUSIC_DUCK : 1
-        old.volume = Math.max(0, base * duck * (1 - step / FADE_STEPS))
+        old.volume = Math.max(0, startVolume * duck * (1 - step / FADE_STEPS))
         if (step >= FADE_STEPS) {
           clearInterval(entry.timer)
-          old.pause()
           outgoing.splice(outgoing.indexOf(entry), 1)
-          spare = old
+          retire(old)
         }
       }, MUSIC_CROSSFADE_MS / FADE_STEPS),
     }
@@ -191,7 +259,7 @@ export function useMusic(
     }, ms / FADE_STEPS)
   }
 
-  audio.volume = targetVolume.value
+  base.volume = targetVolume.value
   // A voice starting or ending fades the music; a settings change applies at once.
   watch(narrating, () => fadeTo(targetVolume.value))
   watch(
@@ -208,6 +276,10 @@ export function useMusic(
   }
 
   function ensureMusicStarted(): void {
+    // Also while the first music is still decoding: this input is the
+    // gesture that lets the context run.
+    const context = sharedAudioContext()
+    if (context && context.state !== 'running') void context.resume()
     if (!currentMusicFile.value || musicMuted.value) return
     if (active.paused) {
       active.play().catch(() => {})

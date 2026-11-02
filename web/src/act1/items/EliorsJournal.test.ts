@@ -12,7 +12,7 @@ describe('EliorsJournal', () => {
 
     expect(entry).toContain(
       'it said three words more, and I wrote them down the moment I woke so ' +
-        'I would not lose them: …and let them rest…',
+        'I would not lose them: …let them rest…',
     )
   })
 

@@ -316,3 +316,158 @@ test('reads the opening chapter page, and Continue mid-sentence moves on', async
   await expect(page.locator('.lq-speaking')).toHaveCount(0)
   await expect(page.getByRole('region', { name: 'Actions' })).toBeVisible()
 })
+
+test('in the one column the held story follows Elior’s journal lines as they are read (rq-s738)', async ({
+  page,
+}): Promise<void> => {
+  await page.setViewportSize({ width: 390, height: 720 })
+  await slowNarrationClips(page)
+  await startAct1(page)
+  const story = page.getByRole('region', { name: 'Story' })
+
+  // Into the cottage with the lantern lit; each reading skipped.
+  for (const command of ['talk to voice', 'use lantern']) {
+    await enter(page, command)
+    await expect(page.locator('.lq-speaking')).not.toHaveCount(0)
+    await expect
+      .poll(async () => {
+        await page.keyboard.press('Escape')
+        return page.locator('.lq-speaking').count()
+      })
+      .toBe(0)
+  }
+
+  await enter(page, 'use journal')
+  // Elior's line being read is ringed, and the held story has brought all of
+  // it into view (from its top, when it is taller than the story).
+  const line = page
+    .getByTestId('column-turn')
+    .last()
+    .getByTestId('speech-line')
+    .filter({ has: page.locator('.lq-speaking') })
+    .first()
+  await expect(line).toHaveCount(1)
+  await expect
+    .poll(async () => {
+      const lineBox = await line.boundingBox()
+      const storyBox = await story.boundingBox()
+      if (!lineBox || !storyBox) return false
+      const storyBottom = storyBox.y + storyBox.height
+      const tall = lineBox.height > storyBox.height
+      return (
+        lineBox.y >= storyBox.y - 1 &&
+        (tall || lineBox.y + lineBox.height <= storyBottom + 1)
+      )
+    })
+    .toBe(true)
+})
+
+/** The ways a skip reaches the narration in rq-cynd's test, and what each presses. */
+const SKIPS = {
+  Space: null,
+  'tap on the story': '.lq-story [data-testid="turn"]:last-child',
+  'tap on the picture': '.lq-stage-picture',
+  'tap on the speech': '[data-testid="speech-zone"]',
+} as const
+
+for (const { name, width, height } of [
+  { name: 'desktop', width: 1280, height: 800 },
+  { name: 'phone', width: 390, height: 720 },
+]) {
+  for (const [how, target] of Object.entries(SKIPS)) {
+    // The phone tells speech in the one column: it has no speech zone.
+    if (name === 'phone' && how === 'tap on the speech') continue
+    test(`on ${name} a ${how} during Elior's journal skips one block at a time (rq-cynd)`, async ({
+      page,
+    }): Promise<void> => {
+      await page.setViewportSize({ width, height })
+      await slowNarrationClips(page)
+      await startAct1(page)
+
+      // Into the cottage with the lantern lit; each reading skipped.
+      for (const command of ['talk to voice', 'use lantern']) {
+        await enter(page, command)
+        await expect(page.locator('.lq-speaking')).not.toHaveCount(0)
+        await expect
+          .poll(async () => {
+            await page.keyboard.press('Escape')
+            return page.locator('.lq-speaking').count()
+          })
+          .toBe(0)
+      }
+
+      await enter(page, 'use journal')
+      const speaking = page.locator('.lq-speaking').first()
+      const skip = async (): Promise<void> => {
+        if (target === null) {
+          // Space hurries while focus is not in the command box.
+          await page.evaluate(() =>
+            (document.activeElement as HTMLElement | null)?.blur(),
+          )
+          await page.keyboard.press(' ')
+          return
+        }
+        // Never so soon after the last tap that the two make a double tap.
+        await page.waitForTimeout(400)
+        await page.locator(target).first().dispatchEvent('click')
+      }
+      await expect(speaking).toContainText('The ink is slightly')
+      await skip()
+      await expect(speaking).toContainText('The storm kept me up')
+      await skip()
+      await expect(speaking).toContainText('When I slept, I dreamed')
+    })
+  }
+}
+
+for (const { name, width, height } of [
+  { name: 'desktop', width: 1280, height: 800 },
+  { name: 'phone', width: 390, height: 720 },
+]) {
+  test(`on ${name} Elior's journal lines light the word being read (rq-v66a)`, async ({
+    page,
+  }): Promise<void> => {
+    await page.setViewportSize({ width, height })
+    await slowNarrationClips(page)
+    // A narrated clip's time runs from when it is played, as a real one would.
+    await page.addInitScript(() => {
+      const started = new WeakMap<HTMLMediaElement, number>()
+      const play = HTMLMediaElement.prototype.play
+      HTMLMediaElement.prototype.play = function (this: HTMLMediaElement) {
+        started.set(this, performance.now())
+        return play.call(this)
+      }
+      Object.defineProperty(HTMLMediaElement.prototype, 'currentTime', {
+        get(this: HTMLMediaElement): number {
+          const from = started.get(this)
+          return from === undefined ? 0 : (performance.now() - from) / 1000
+        },
+        set(): void {},
+      })
+    })
+    await startAct1(page)
+
+    // Into the cottage with the lantern lit; each reading skipped.
+    for (const command of ['talk to voice', 'use lantern']) {
+      await enter(page, command)
+      await expect(page.locator('.lq-speaking')).not.toHaveCount(0)
+      await expect
+        .poll(async () => {
+          await page.keyboard.press('Escape')
+          return page.locator('.lq-speaking').count()
+        })
+        .toBe(0)
+    }
+
+    await enter(page, 'use journal')
+    const lit = page
+      .getByTestId('speech-line')
+      .filter({ hasText: 'The storm kept me up' })
+      .locator('.lq-w-now')
+    await expect(lit).not.toHaveCount(0)
+    await expect(lit.first()).not.toHaveCSS(
+      'background-color',
+      'rgba(0, 0, 0, 0)',
+    )
+  })
+}
