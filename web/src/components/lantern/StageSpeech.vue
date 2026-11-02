@@ -278,6 +278,8 @@ function clearAndFocus(): void {
     transparent
   );
   pointer-events: none;
+  /* The name label measures its room in the column's own width. */
+  container-type: inline-size;
 }
 .lq-thread::-webkit-scrollbar {
   display: none;
@@ -348,7 +350,15 @@ function clearAndFocus(): void {
 .lq-line-name {
   position: absolute;
   bottom: 100%;
-  white-space: nowrap;
+  /* A name reads whole: it wraps between words (or at a hyphen) when the
+     column minus the portrait and its gap is too narrow, and only a single
+     word wider than that may break. */
+  width: max-content;
+  max-width: calc(100cqw - 54px);
+  white-space: normal;
+  overflow-wrap: break-word;
+  word-break: normal;
+  hyphens: manual;
   margin-bottom: 3px;
   padding: 1px 9px;
   border-radius: 9px;
@@ -387,6 +397,19 @@ function clearAndFocus(): void {
   left: 8px;
   right: 8px;
   width: auto;
+  padding-top: calc(36px * var(--lq-text-scale));
+  /* The soft fade ends above a two-line name. */
+  mask-image: linear-gradient(
+    to bottom,
+    transparent,
+    #000 calc(36px * var(--lq-text-scale) + 4px),
+    #000 calc(100% - 12px),
+    transparent
+  );
+}
+/* On the narrow phone a name may take two lines, so a run has room for both above its first line. */
+.lq-phone-speech .lq-run-first:not(:first-child) {
+  margin-top: calc(36px * var(--lq-text-scale));
 }
 .lq-phone-speech .lq-line {
   max-width: 250px;
