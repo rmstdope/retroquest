@@ -5,7 +5,11 @@
  * music can be made for them; the game keeps playing its own files.
  * The tts scripts `extract-act.ts` and `extract-shared.ts` write them.
  */
-import { NEW_QUEST_FILE, QUEST_COMPLETE_FILE } from '@/composables/questSounds'
+import {
+  NEW_QUEST_FILE,
+  NEW_SPELL_FILE,
+  QUEST_COMPLETE_FILE,
+} from '@/composables/questSounds'
 import type { Act } from '@/engine'
 import { narrationText } from './narrationKey'
 
@@ -160,7 +164,7 @@ export function roomLoops(act: Act): MusicTrack[] {
   }))
 }
 
-/** The stingers: the sounds for a new quest and a completed quest, by the files the game plays. */
+/** The stingers: the sounds for a new quest, a completed quest and a learned spell, by the files the game plays. */
 export function questStingers(): MusicTrack[] {
   const length = 5
   return [
@@ -180,6 +184,14 @@ export function questStingers(): MusicTrack[] {
       plays: 'When a quest is completed',
       brief:
         'short triumphant fanfare for a quest completed, instrumental, no vocals',
+      seconds: length,
+    },
+    {
+      id: 'spell-learned',
+      title: NEW_SPELL_FILE.replace(/^Voicy_|\.mp3$/g, ''),
+      file: `${SOUND_EFFECTS_DIR}${NEW_SPELL_FILE}`,
+      plays: 'When a spell is learned',
+      brief: 'short magical chime for a spell learned, instrumental, no vocals',
       seconds: length,
     },
   ]

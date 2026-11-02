@@ -1,6 +1,6 @@
 /**
  * The game's track lists for Content Studio: one loop per act, briefed after the
- * track the act plays today, and the two quest stingers. The committed lists in
+ * track the act plays today, and the three stingers. The committed lists in
  * `tts/` are what a refresh from the game writes, so they must equal these.
  */
 import { existsSync, readFileSync } from 'node:fs'
@@ -10,7 +10,11 @@ import { Act2 } from '@/act2/Act2'
 import { Act3 } from '@/act3/Act3'
 import { Act4 } from '@/act4/Act4'
 import type { Act } from '@/engine'
-import { NEW_QUEST_FILE, QUEST_COMPLETE_FILE } from '@/composables/questSounds'
+import {
+  NEW_QUEST_FILE,
+  NEW_SPELL_FILE,
+  QUEST_COMPLETE_FILE,
+} from '@/composables/questSounds'
 import {
   actLoopId,
   actLoops,
@@ -136,9 +140,13 @@ describe('actLoopId', () => {
 })
 
 describe('questStingers', () => {
-  it('lists the new-quest and quest-complete sounds, at most 10 seconds each', () => {
+  it('lists the new-quest, quest-complete and spell-learned sounds, at most 10 seconds each', () => {
     const stingers = questStingers()
-    expect(stingers.map((s) => s.id)).toEqual(['new-quest', 'quest-complete'])
+    expect(stingers.map((s) => s.id)).toEqual([
+      'new-quest',
+      'quest-complete',
+      'spell-learned',
+    ])
     for (const stinger of stingers) {
       expect(stinger.seconds).toBeLessThanOrEqual(10)
       expect(stinger.id).toMatch(SLUG)
@@ -146,6 +154,8 @@ describe('questStingers', () => {
   })
 
   it('names the files the game plays', () => {
+    // The spell-learned take is made by the navigator after the merge, so its
+    // file is not required to exist yet.
     for (const file of [NEW_QUEST_FILE, QUEST_COMPLETE_FILE]) {
       expect(existsSync(repoUrl(`web/public/audio/soundeffects/${file}`))).toBe(
         true,
@@ -154,6 +164,7 @@ describe('questStingers', () => {
     expect(questStingers().map((s) => s.plays)).toEqual([
       expect.stringContaining('new quest'),
       expect.stringContaining('quest is completed'),
+      expect.stringContaining('spell is learned'),
     ])
   })
 
@@ -162,8 +173,11 @@ describe('questStingers', () => {
     expect(files).toEqual([
       `web/public/audio/soundeffects/${NEW_QUEST_FILE}`,
       `web/public/audio/soundeffects/${QUEST_COMPLETE_FILE}`,
+      `web/public/audio/soundeffects/${NEW_SPELL_FILE}`,
     ])
-    for (const file of files) expect(existsSync(repoUrl(file ?? ''))).toBe(true)
+    for (const file of files.slice(0, 2)) {
+      expect(existsSync(repoUrl(file ?? ''))).toBe(true)
+    }
   })
 
   it('has ids unique across the whole game', () => {
