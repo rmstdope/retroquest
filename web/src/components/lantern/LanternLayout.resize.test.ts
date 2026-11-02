@@ -31,9 +31,22 @@ describe('where the story lands after the window crosses 1100 px', () => {
   let listeners: Record<string, (e: { matches: boolean }) => void>
   /** The height of the newest turn in the fake layout. */
   let newestHeight: number
+  /** The callbacks of the ResizeObservers the layout made. */
+  let observers: Array<() => void>
 
   beforeEach(() => {
     setActivePinia(createPinia())
+    observers = []
+    vi.stubGlobal(
+      'ResizeObserver',
+      class {
+        constructor(callback: () => void) {
+          observers.push(callback)
+        }
+        observe(): void {}
+        disconnect(): void {}
+      },
+    )
     sides = false
     listeners = {}
     newestHeight = TURN_HEIGHT
@@ -207,5 +220,45 @@ describe('where the story lands after the window crosses 1100 px', () => {
     const wordTop = topOf(4) + 700
     expect(pane().scrollTop).toBeGreaterThan(wordTop - PANE)
     expect(pane().scrollTop).toBeLessThanOrEqual(wordTop)
+  })
+
+  /** The browser finishes laying the crossing out: sizes change, observers fire. */
+  function settle(): void {
+    for (const callback of observers) callback()
+  }
+
+  it('lands a short newest turn at the bottom once the layout has settled', async () => {
+    sides = true
+    await mountWith(5)
+    await readNewest()
+    await cross(false)
+    // The turns grow after the crossing was first measured.
+    newestHeight = 190
+    settle()
+    expect(pane().scrollTop).toBe(totalHeight(5) - PANE)
+    expect(document.querySelector('.lq-more-below')).toBeNull()
+  })
+
+  it('keeps a long newest turn at its start once the layout has settled', async () => {
+    newestHeight = 900
+    await mountWith(5)
+    await readNewest()
+    await cross(true)
+    newestHeight = 1200
+    settle()
+    expect(pane().scrollTop).toBe(topOf(4))
+  })
+
+  it('stops landing once the player has scrolled away from it', async () => {
+    newestHeight = 900
+    sides = true
+    await mountWith(5)
+    await readNewest()
+    await cross(false)
+    pane().scrollTop = topOf(2)
+    pane().dispatchEvent(new Event('wheel'))
+    pane().dispatchEvent(new Event('scroll'))
+    settle()
+    expect(pane().scrollTop).toBe(topOf(2))
   })
 })

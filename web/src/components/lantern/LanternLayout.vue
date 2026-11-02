@@ -473,12 +473,26 @@ function answerTooLong(): boolean {
   return !!story && !!last && last.offsetHeight > story.clientHeight
 }
 
+/** How long (ms) after a crossing of 1100 px the browser may still be laying the story out. */
+const LANDING_SETTLE_MS = 600
+/** Puts the story where the last crossing of 1100 px meant it to be, until the layout has settled or the player moves it. */
+let landing: (() => void) | null = null
+let landingTimer: ReturnType<typeof setTimeout> | undefined
+
+/** Stop landing: the layout has settled, or the player has taken the story over. */
+function endLanding(): void {
+  landing = null
+  clearTimeout(landingTimer)
+}
+
 /**
  * The window crossing about 1100 px redraws the story's turns (the column or
  * the cards) in the same pane. The story re-forms where a fresh answer would
  * have put it: the newest turn from its start (a short one whole at the
  * bottom), unless the player had scrolled back, whose turn then stays in view
- * (the same share of it above the view, as its height changes). Taken before the redraw, finished after it.
+ * (the same share of it above the view, as its height changes). Taken before
+ * the redraw, finished after it, and finished again each time the pane or its
+ * turns change size while the browser settles the new layout.
  */
 watch(
   [column, staged],
@@ -499,21 +513,26 @@ watch(
     const offset = anchorRect.top - storyTop
     const oldHeight = anchorRect.height
     const atNewest = anchor === turns.length - 1 || !moreBelow.value
+    endLanding()
     await nextTick()
-    const target = atNewest
-      ? content.lastElementChild
-      : content.children[anchor]
-    if (!target) return
-    const into =
-      target.getBoundingClientRect().top -
-      story.getBoundingClientRect().top +
-      story.scrollTop
-    // The turn is a different height now: keep the same share of it above the view.
-    const newHeight = target.getBoundingClientRect().height
-    const kept = oldHeight > 0 ? (offset * newHeight) / oldHeight : offset
-    moveStory(atNewest ? into : into - kept, false)
-    if (storyHeld.value) refollow()
-    updateMoreBelow()
+    landing = (): void => {
+      const target = atNewest
+        ? content.lastElementChild
+        : content.children[anchor]
+      if (!target) return
+      const into =
+        target.getBoundingClientRect().top -
+        story.getBoundingClientRect().top +
+        story.scrollTop
+      // The turn is a different height now: keep the same share of it above the view.
+      const newHeight = target.getBoundingClientRect().height
+      const kept = oldHeight > 0 ? (offset * newHeight) / oldHeight : offset
+      moveStory(atNewest ? into : into - kept, false)
+      if (storyHeld.value) refollow()
+      updateMoreBelow()
+    }
+    landing()
+    landingTimer = setTimeout(endLanding, LANDING_SETTLE_MS)
   },
   { flush: 'pre' },
 )
@@ -637,10 +656,12 @@ onMounted(() => {
   if (game.showModal) void nextTick(focusPopUp)
   if (typeof ResizeObserver !== 'undefined' && storyEl.value) {
     storyResize = new ResizeObserver(() => {
+      if (landing) landing()
       updateMoreBelow()
       refollow()
     })
     storyResize.observe(storyEl.value)
+    if (contentEl.value) storyResize.observe(contentEl.value)
   }
 })
 
@@ -763,6 +784,7 @@ onUnmounted(() => {
   document.removeEventListener('focusout', onFocusChange)
   narration.skipAll()
   storyResize?.disconnect()
+  endLanding()
   actionsResize?.disconnect()
 })
 
@@ -1004,6 +1026,7 @@ function continueFromChapter(): void {
 watch(
   () => game.turns.at(-1)?.id,
   async () => {
+    endLanding()
     const away = !wide.value && section.value !== 'story'
     section.value = 'story'
     await nextTick()
@@ -1403,6 +1426,9 @@ watch(
             @click="onStoryClick"
             @keydown="onNameKeydown"
             @scroll.passive="updateMoreBelow"
+            @wheel.passive="endLanding"
+            @touchstart.passive="endLanding"
+            @pointerdown.passive="endLanding"
           >
             <h2 class="lq-sr-only">Story</h2>
             <div ref="contentEl" class="lq-paper-content">
