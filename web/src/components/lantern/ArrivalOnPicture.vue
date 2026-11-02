@@ -608,9 +608,15 @@ onBeforeUnmount(() => {
     transform: scaleX(0);
   }
 }
+/* A quick cross-fade. The leaving card is taken out of the row (kept centred by
+   the stage) so it never pushes the entering one sideways; both stay mounted
+   together so the cut into pages still measures the new card's pill and head. */
+.lq-arrival-fade-leave-active {
+  position: absolute;
+}
 .lq-arrival-fade-enter-active,
 .lq-arrival-fade-leave-active {
-  transition: opacity calc(0.4s * var(--lq-motion));
+  transition: opacity calc(0.15s * var(--lq-motion));
 }
 .lq-arrival-fade-enter-from,
 .lq-arrival-fade-leave-to {

@@ -616,4 +616,28 @@ describe('ArrivalOnPicture', () => {
       expect(arrival.active).toBe(false)
     })
   })
+
+  describe('the change between messages', () => {
+    it('takes the leaving message out of the row, so it cannot push the new one sideways', () => {
+      const source = read('./ArrivalOnPicture.vue')
+      expect(source).not.toContain('mode="out-in"')
+      expect(source).toMatch(
+        /\.lq-arrival-fade-leave-active \{\s*position: absolute;\s*\}/,
+      )
+    })
+
+    it('fades quickly, by opacity alone', () => {
+      const source = read('./ArrivalOnPicture.vue')
+      const active = source.match(
+        /\.lq-arrival-fade-enter-active,\s*\.lq-arrival-fade-leave-active \{([^}]*)\}/,
+      )
+      expect(active?.[1]).toContain(
+        'transition: opacity calc(0.15s * var(--lq-motion))',
+      )
+      const ends = source.match(
+        /\.lq-arrival-fade-enter-from,\s*\.lq-arrival-fade-leave-to \{([^}]*)\}/,
+      )
+      expect(ends?.[1].trim()).toBe('opacity: 0;')
+    })
+  })
 })
