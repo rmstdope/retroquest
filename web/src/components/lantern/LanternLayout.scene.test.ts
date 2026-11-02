@@ -17,13 +17,15 @@ import { startedHoldStore } from '@/testing/holdGame'
 describe('LanternLayout: change of scene', () => {
   let w: VueWrapper
 
-  /** Mount a started game on the laptop stage, the Hall's picture up. */
-  async function stage(): Promise<ReturnType<typeof useGameStore>> {
+  /** Mount a started game on the laptop stage (or the phone's), the Hall's picture up. */
+  async function stage(
+    phone = false,
+  ): Promise<ReturnType<typeof useGameStore>> {
     setActivePinia(createPinia())
     vi.stubGlobal(
       'matchMedia',
       vi.fn((query: string) => ({
-        matches: query.includes('min-width'),
+        matches: !phone && query.includes('min-width'),
         addEventListener: vi.fn(),
         removeEventListener: vi.fn(),
       })),
@@ -118,6 +120,25 @@ describe('LanternLayout: change of scene', () => {
     if (input.exists()) await input.trigger('keydown', { key: 'Enter' })
     else document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }))
     expect(scene.turn).toBeNull()
+  })
+
+  it('on a phone skips on an Enter on the folded Actions, which stays folded', async () => {
+    const game = await stage(true)
+    const scene = useSceneStore()
+    game.submitCommand('go north')
+    await w.vm.$nextTick()
+    await w.vm.$nextTick()
+    expect(scene.turn).not.toBeNull()
+    const actions = w.get('.lq-dock-open').element
+    const enter = new KeyboardEvent('keydown', {
+      key: 'Enter',
+      bubbles: true,
+      cancelable: true,
+    })
+    actions.dispatchEvent(enter)
+    expect(scene.turn).toBeNull()
+    // Handled: the browser does not also press the button and open the sheet.
+    expect(enter.defaultPrevented).toBe(true)
   })
 
   it('a command during the change skips it and leaves the new room up', async () => {
