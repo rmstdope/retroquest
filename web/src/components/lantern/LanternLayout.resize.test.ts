@@ -33,6 +33,8 @@ describe('where the story lands after the window crosses 1100 px', () => {
   let newestHeight: number
   /** How much taller the oldest turn has grown since the crossing was first measured. */
   let extra: number
+  /** Room the pane gains at its end (padding) without any element changing size. */
+  let trailing: number
   /** The callbacks of the ResizeObservers the layout made. */
   let observers: Array<() => void>
 
@@ -53,6 +55,7 @@ describe('where the story lands after the window crosses 1100 px', () => {
     listeners = {}
     newestHeight = TURN_HEIGHT
     extra = 0
+    trailing = 0
     vi.stubGlobal(
       'matchMedia',
       vi.fn((query: string) => ({
@@ -84,7 +87,10 @@ describe('where the story lands after the window crosses 1100 px', () => {
   const heightOf = (index: number, count: number): number =>
     (index === count - 1 ? newestHeight : TURN_HEIGHT) * scale()
   const totalHeight = (count: number): number =>
-    (count - 1) * TURN_HEIGHT * scale() + newestHeight * scale() + extra
+    (count - 1) * TURN_HEIGHT * scale() +
+    newestHeight * scale() +
+    extra +
+    trailing
   const topOf = (index: number): number =>
     index * TURN_HEIGHT * scale() + (index > 0 ? extra : 0)
 
@@ -241,6 +247,18 @@ describe('where the story lands after the window crosses 1100 px', () => {
     settle()
     expect(pane().scrollTop).toBe(totalHeight(5) - PANE)
     expect(document.querySelector('.lq-more-below')).toBeNull()
+  })
+
+  it('lands a short newest turn at the very bottom when only the room at the end grows', async () => {
+    sides = true
+    await mountWith(5)
+    await readNewest()
+    await cross(false)
+    // The end padding settles later; no observer fires, the browser only paints a frame.
+    trailing = 56
+    await new Promise<void>((done) => requestAnimationFrame(() => done()))
+    await new Promise<void>((done) => requestAnimationFrame(() => done()))
+    expect(pane().scrollTop).toBe(totalHeight(5) - PANE)
   })
 
   it('keeps a long newest turn at its start once the layout has settled', async () => {
