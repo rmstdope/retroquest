@@ -44,6 +44,11 @@
     "width": 640,
     "height": 360
   },
+  "act1-portrait-grandmother": {
+    "file": "act1-portrait-grandmother.png",
+    "width": 480,
+    "height": 640
+  },
   "act1-riverbank": {
     "file": "act1-riverbank.png",
     "width": 640,
