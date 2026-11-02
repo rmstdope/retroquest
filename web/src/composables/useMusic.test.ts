@@ -194,6 +194,34 @@ describe('useMusic', () => {
       expect(audio.volume).toBe(1)
     })
 
+    it('ramps after the first input when autoplay was blocked', async () => {
+      const play = audio.play as ReturnType<typeof vi.fn>
+      play.mockRejectedValueOnce(new Error('Autoplay blocked'))
+      const { loadTrack, ensureMusicStarted } = useMusic(audio)
+      loadTrack('a.mp3', 'A', MUSIC_FADE_IN_MS)
+      await vi.advanceTimersByTimeAsync(MUSIC_FADE_IN_MS * 3)
+      expect(audio.volume).toBe(0)
+      ensureMusicStarted()
+      await vi.advanceTimersByTimeAsync(MUSIC_FADE_IN_MS)
+      expect(audio.volume).toBeCloseTo(1)
+    })
+
+    it('keeps the ramp when a voice starts or ends before the sound does', async () => {
+      const narrating = ref(false)
+      let start: () => void = () => {}
+      ;(audio.play as ReturnType<typeof vi.fn>).mockImplementation(
+        () => new Promise<void>((resolve) => (start = resolve)),
+      )
+      const { loadTrack } = useMusic(audio, narrating)
+      loadTrack('a.mp3', 'A', MUSIC_FADE_IN_MS)
+      narrating.value = true
+      await vi.advanceTimersByTimeAsync(MUSIC_DUCK_FADE_MS * 2)
+      expect(audio.volume).toBe(0)
+      start()
+      await vi.advanceTimersByTimeAsync(MUSIC_FADE_IN_MS)
+      expect(audio.volume).toBeCloseTo(MUSIC_DUCK)
+    })
+
     it('starts the ramp only when playback has started', async () => {
       let start: () => void = () => {}
       ;(audio.play as ReturnType<typeof vi.fn>).mockImplementation(

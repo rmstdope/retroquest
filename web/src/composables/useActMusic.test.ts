@@ -113,7 +113,7 @@ describe('useActMusic', () => {
     vi.useRealTimers()
   })
 
-  it('starts at full volume when there is no title page (a continued save)', async () => {
+  it('starts at full volume when there is no title page', async () => {
     const scope = effectScope()
     scope.run(() => useActMusic())
     useGameStore().musicFile = 'willowbrook.mp3'

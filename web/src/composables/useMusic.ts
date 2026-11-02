@@ -64,6 +64,7 @@ export function useMusic(
     if (!file) {
       request++
       requestedFile = ''
+      pendingFadeIn = 0
       stopCrossfade()
       currentMusicFile.value = ''
       musicInfo.value = ''
@@ -143,6 +144,7 @@ export function useMusic(
       if (!comingBack) next.volume = targetVolume.value
     }
     // The element in hand may be the one that plays on: silence it first.
+    pendingFadeIn = fadeIn ? fadeInMs : 0
     if (fadeIn) next.volume = 0
     active = next
     currentMusicFile.value = file
@@ -150,16 +152,29 @@ export function useMusic(
 
     if (crossfade) fadeTo(targetVolume.value, MUSIC_CROSSFADE_MS)
     if (!musicMuted.value) {
-      const started = next.play()
-      // The ramp starts when the sound does, after any wait for a key press.
-      if (fadeIn)
-        void started
-          .then(() => {
-            if (active === next) fadeTo(targetVolume.value, fadeInMs)
-          })
-          .catch(() => {})
-      else started.catch(() => {})
+      playActive()
     }
+  }
+
+  /** The fade-in still to run, in ms; 0 when none waits for the sound. */
+  let pendingFadeIn = 0
+
+  /**
+   * Starts the active voice. A fade-in waiting for the sound runs once play
+   * has started, so it is heard also when the browser held the music back
+   * until a key press and a later call here starts it.
+   */
+  function playActive(): void {
+    const voice = active
+    voice
+      .play()
+      .then(() => {
+        if (pendingFadeIn === 0 || active !== voice) return
+        const ms = pendingFadeIn
+        pendingFadeIn = 0
+        fadeTo(targetVolume.value, ms)
+      })
+      .catch(() => {})
   }
 
   /** Lets go of a voice nobody plays any more; an element is kept as the spare. */
@@ -248,7 +263,7 @@ export function useMusic(
         stopCrossfade()
         active.pause()
       } else if (currentMusicFile.value) {
-        active.play().catch(() => {})
+        playActive()
       }
     },
     { flush: 'sync' },
@@ -278,7 +293,10 @@ export function useMusic(
 
   base.volume = targetVolume.value
   // A voice starting or ending fades the music; a settings change applies at once.
-  watch(narrating, () => fadeTo(targetVolume.value))
+  watch(narrating, () => {
+    // A music not yet sounding keeps its silence for the fade-in to rise from.
+    if (pendingFadeIn === 0) fadeTo(targetVolume.value)
+  })
   watch(
     () => settings.musicVolume,
     () => {
@@ -298,9 +316,7 @@ export function useMusic(
     const context = sharedAudioContext()
     if (context && context.state !== 'running') void context.resume()
     if (!currentMusicFile.value || musicMuted.value) return
-    if (active.paused) {
-      active.play().catch(() => {})
-    }
+    if (active.paused) playActive()
   }
 
   function buildAttributionHtml(): string {
