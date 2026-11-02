@@ -469,6 +469,44 @@ function answerTooLong(): boolean {
   return !!story && !!last && last.offsetHeight > story.clientHeight
 }
 
+/**
+ * The window crossing about 1100 px redraws the story's turns (the column or
+ * the cards) in the same pane. The story re-forms where a fresh answer would
+ * have put it: the newest turn from its start (a short one whole at the
+ * bottom), unless the player had scrolled back, whose turn then stays at the
+ * same place in view. Taken before the redraw, finished after it.
+ */
+watch(
+  column,
+  async () => {
+    const story = storyEl.value
+    const content = contentEl.value
+    if (!story || !content || content.children.length === 0) return
+    const storyTop = story.getBoundingClientRect().top
+    const turns = Array.from(content.children)
+    let anchor = 0
+    turns.forEach((turn, index) => {
+      if (turn.getBoundingClientRect().top <= storyTop + END_SLACK)
+        anchor = index
+    })
+    const offset = turns[anchor].getBoundingClientRect().top - storyTop
+    const atNewest = anchor === turns.length - 1 || !moreBelow.value
+    await nextTick()
+    const target = atNewest
+      ? content.lastElementChild
+      : content.children[anchor]
+    if (!target) return
+    const into =
+      target.getBoundingClientRect().top -
+      story.getBoundingClientRect().top +
+      story.scrollTop
+    moveStory(atNewest ? into : into - offset, false)
+    if (storyHeld.value) refollow()
+    updateMoreBelow()
+  },
+  { flush: 'pre' },
+)
+
 // The story also changes size without scrolling: the sheet opens or folds,
 // the window turns, a section is shown again, the room card grows.
 let storyResize: ResizeObserver | undefined
