@@ -633,8 +633,14 @@ test.describe('Lantern UI (the default)', () => {
     )
     await expect(page.locator('.lq-line-right .lq-initial')).toHaveText('G')
     await expect(page.locator('.lq-line-left')).toHaveCount(0)
+    // His lines ask for the one shared Elior portrait; it is not painted yet,
+    // so the E card stands in.
+    const eliorFace = page.waitForRequest(
+      /images\/generated\/portrait-elior\.png/,
+    )
     await input.fill('say hello to grandmother')
     await input.press('Enter')
+    await eliorFace
     await expect(page.locator('.lq-line-left .lq-initial')).toHaveText('E')
     await expect(page.locator('.lq-line-left .lq-line-name')).toHaveText(
       'Elior',
