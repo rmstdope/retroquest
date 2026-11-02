@@ -125,7 +125,7 @@ the MisoTTS scripts were removed; they are in this branch's history.
 Content Studio's images workspace lists the pictures the game needs. **Refresh dialog** on an act
 also writes `act<N>/images.json`: one image per room, then one portrait per character the act
 registers (480x640, upright; a name two classes share is listed once; ids `act<N>-portrait-<class>`, or `portrait-<class>` for a
-character in several acts, listed with the same entry in each of them),
+character in several acts, listed with the same entry in each of them; then Elior, the player, who is no class: `portrait-elior`, the same entry in every act),
 each `{ id, title, width, height, description }`, where the description is the room's base
 description with the markup removed, or, for a portrait, the character's hand-written face
 portrait prompt from `web/src/lantern/portraitPrompts.ts` (it begins "A face portrait of"; the

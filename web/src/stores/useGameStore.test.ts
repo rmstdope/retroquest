@@ -1238,7 +1238,10 @@ describe('useGameStore', () => {
       expect(store.portraitFor('mira')).toMatch(
         /images\/generated\/portrait-mira\.png$/,
       )
-      expect(store.portraitFor('Elior')).toBe('')
+      expect(store.portraitFor('Elior')).toMatch(
+        /images\/generated\/portrait-elior\.png$/,
+      )
+      expect(store.portraitFor('Stranger')).toBe('')
     })
 
     it('records the arrival look after the act intro as the first turn', async () => {

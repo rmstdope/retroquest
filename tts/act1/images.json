@@ -187,5 +187,12 @@
     "width": 480,
     "height": 640,
     "description": "A face portrait of a plump, cheerful baker’s wife with flour on her cheek, bright gossiping eyes and a headscarf."
+  },
+  {
+    "id": "portrait-elior",
+    "title": "Elior",
+    "width": 480,
+    "height": 640,
+    "description": "A face portrait of a farm boy of about nineteen, sun-browned and freckled, with untidy brown hair, an earnest, searching look, and the frayed collar of a homespun shirt."
   }
 ]
