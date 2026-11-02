@@ -345,19 +345,29 @@ describe('the narration paper', () => {
     box.value = 'xyz'
     box.dispatchEvent(new Event('input', { bubbles: true }))
     await nextTick()
-    // An open word list closes first (text kept); then the words hide.
-    if (box.getAttribute('aria-expanded') === 'true') {
-      press('Escape', box)
-      await nextTick()
-      expect(tab()).toBeNull()
-    }
+    // The open word list closes first (text kept); then the words hide.
+    expect(box.getAttribute('aria-expanded')).toBe('true')
+    press('Escape', box)
+    await nextTick()
+    expect(tab()).toBeNull()
     press('Escape', box)
     await nextTick()
     await nextTick()
     expect(tab()).not.toBeNull()
     expect(document.activeElement).toBe(box)
     expect(box.value).toBe('xyz')
-    // Hidden: the box's own steps, one per press (a held key is one press).
+    // A held key goes no further than the Hide: a repeat takes no step.
+    box.dispatchEvent(
+      new KeyboardEvent('keydown', {
+        key: 'Escape',
+        repeat: true,
+        bubbles: true,
+        cancelable: true,
+      }),
+    )
+    await nextTick()
+    expect(box.value).toBe('xyz')
+    // Hidden: the box's own steps, one per press.
     press('Escape', box)
     await nextTick()
     expect(box.value).toBe('')

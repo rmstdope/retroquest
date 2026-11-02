@@ -1449,9 +1449,11 @@ describe('ActionComposer on the stage', () => {
       w.unmount()
     })
 
-    it('leaves the Escape to a speech on the picture', async () => {
-      const { w, input } = await typing()
-      await w.setProps({ wordsShowing: true })
+    it('leaves the Escape to a speech on a phone (no stage)', async () => {
+      useSettingsStore().startMode = 'type'
+      const w = mount(ActionComposer, { attachTo: document.body })
+      await w.vm.$nextTick()
+      const input = w.get('input[aria-label="Command"]')
       useStageSpeechStore().observe({
         id: 1,
         command: 'talk to mira',
@@ -1466,8 +1468,12 @@ describe('ActionComposer on the stage', () => {
         addressed: 'Mira',
       })
       expect(useStageSpeechStore().visible.length).toBeGreaterThan(0)
-      await esc(input)
-      expect(w.find('input[aria-label="Command"]').exists()).toBe(true)
+      const event = new KeyboardEvent('keydown', {
+        key: 'Escape',
+        cancelable: true,
+      })
+      input.element.dispatchEvent(event)
+      expect(event.defaultPrevented).toBe(false)
       w.unmount()
     })
 
