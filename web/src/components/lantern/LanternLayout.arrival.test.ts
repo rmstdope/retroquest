@@ -433,7 +433,11 @@ describe('LanternLayout: the arrival on the picture', () => {
     it('is told in the middle, one piece after the other, then leaves slim lines on the card', async () => {
       const w = await ready(true, false)
       useSettingsStore(pinia).narrationOn = false
-      const audio = { playNewQuest: vi.fn(), playQuestComplete: vi.fn() }
+      const audio = {
+        playNewQuest: vi.fn(),
+        playQuestComplete: vi.fn(),
+        playNewSpell: vi.fn(),
+      }
       useGameStore(pinia).setAudioPlayer(audio)
       pushTurn(news())
       await vi.advanceTimersByTimeAsync(0)
@@ -460,6 +464,7 @@ describe('LanternLayout: the arrival on the picture', () => {
       useGameStore(pinia).setAudioPlayer({
         playNewQuest: vi.fn(),
         playQuestComplete: vi.fn(),
+        playNewSpell: vi.fn(),
       })
       pushTurn(news())
       await vi.advanceTimersByTimeAsync(0)
@@ -476,6 +481,7 @@ describe('LanternLayout: the arrival on the picture', () => {
       useGameStore(pinia).setAudioPlayer({
         playNewQuest: vi.fn(),
         playQuestComplete: vi.fn(),
+        playNewSpell: vi.fn(),
       })
       pushTurn(news())
       await vi.advanceTimersByTimeAsync(0)
@@ -488,7 +494,11 @@ describe('LanternLayout: the arrival on the picture', () => {
       const w = await ready(true, false)
       useSettingsStore(pinia).narrationOn = false
       const game = useGameStore(pinia)
-      game.setAudioPlayer({ playNewQuest: vi.fn(), playQuestComplete: vi.fn() })
+      game.setAudioPlayer({
+        playNewQuest: vi.fn(),
+        playQuestComplete: vi.fn(),
+        playNewSpell: vi.fn(),
+      })
       const open = vi.spyOn(game, 'openQuestInJournal')
       pushTurn(news())
       await vi.advanceTimersByTimeAsync(0)
@@ -660,5 +670,75 @@ describe('LanternLayout: the arrival on the picture', () => {
     await vi.advanceTimersByTimeAsync(0)
     await vi.waitFor(() => expect(card(w)).toBe(''))
     expect(useArrivalStore(pinia).active).toBe(false)
+  })
+
+  describe('spell news', () => {
+    const LEARNED = 'You have learned [spell_name]revive[/spell_name].'
+    const spell = { name: 'Revive', text: 'Calls a thing back.' }
+    /** A turn that taught a spell and finished a quest. */
+    function pushSpellTurn(): void {
+      useGameStore(pinia).turns.push({
+        id: 90,
+        command: 'talk to grandmother',
+        text: `She smiles.\n${LEARNED}`,
+        room: 'Square',
+        description: null,
+        gained: [],
+        lost: [],
+        arrival: null,
+        spells: [spell],
+        quests: [
+          {
+            kind: 'completed',
+            name: 'Hint of Magic',
+            main: false,
+            text: 'It stayed.',
+            progress: { completed: 1, total: 11 },
+            fanfare: true,
+          },
+        ],
+      })
+    }
+
+    it('is told before the quest news, with its sound, and the card never carries the learned line', async () => {
+      const w = await ready(true, false)
+      useSettingsStore(pinia).narrationOn = false
+      const game = useGameStore(pinia)
+      const audio = {
+        playNewQuest: vi.fn(),
+        playQuestComplete: vi.fn(),
+        playNewSpell: vi.fn(),
+      }
+      game.setAudioPlayer(audio)
+      pushSpellTurn()
+      await vi.advanceTimersByTimeAsync(0)
+      expect(card(w)).toContain('New spell')
+      expect(card(w)).toContain('Revive')
+      expect(card(w)).toContain('Calls a thing back.')
+      expect(audio.playNewSpell).toHaveBeenCalledOnce()
+      expect(audio.playQuestComplete).not.toHaveBeenCalled()
+      await w.get('[data-testid="arrival-on-picture"]').trigger('click')
+      expect(card(w)).toContain('Side quest complete')
+      expect(audio.playQuestComplete).toHaveBeenCalledOnce()
+      await w.get('[data-testid="arrival-on-picture"]').trigger('click')
+      expect(card(w)).toBe('')
+      expect(w.get('.lq-story').text()).toContain('She smiles.')
+      expect(w.get('.lq-story').text()).not.toContain('You have learned')
+      expect(game.turns.at(-1)?.fullText).toContain('You have learned')
+    })
+
+    it('leaves the line on the card where nothing is told in the middle', async () => {
+      const w = await ready('short', false)
+      useSettingsStore(pinia).narrationOn = false
+      useGameStore(pinia).setAudioPlayer({
+        playNewQuest: vi.fn(),
+        playQuestComplete: vi.fn(),
+        playNewSpell: vi.fn(),
+      })
+      pushSpellTurn()
+      await vi.advanceTimersByTimeAsync(0)
+      expect(card(w)).toBe('')
+      expect(w.get('.lq-story').text()).toContain('You have learned')
+    })
   })
 })

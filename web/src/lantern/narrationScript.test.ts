@@ -16,6 +16,7 @@ import {
   linesOfTurn,
   arrivalBlocks,
   newQuestBlocks,
+  newSpellBlocks,
   questCompleteBlocks,
   questTextBlocks,
   turnBlocks,
@@ -153,6 +154,16 @@ describe('the voiced blocks a surface shows', () => {
     ])
   })
 
+  it('reads a new spell’s heading and name before its description', () => {
+    expect(
+      newSpellBlocks({ name: 'Revive', text: 'Calls a thing back.' }),
+    ).toEqual([
+      { speaker: 'narrator', markup: 'New spell' },
+      { speaker: 'narrator', markup: 'Revive' },
+      { speaker: 'narrator', markup: 'Calls a thing back.' },
+    ])
+  })
+
   it('reads a completed quest’s heading and name before its completion text', () => {
     expect(
       questCompleteBlocks({
@@ -210,6 +221,14 @@ describe('actScript for Act I', () => {
           line.speaker === 'narrator' &&
           line.text.startsWith('The heart of Willowbrook: cobblestones'),
       ),
+    ).toBe(true)
+  })
+
+  it('reads the spell news of a spell learned along the path, and the turn without its learned line', () => {
+    expect(find('New spell')?.speaker).toBe('narrator')
+    expect(find('Revive')?.speaker).toBe('narrator')
+    expect(
+      script.some((line) => line.text.startsWith('You have learned')),
     ).toBe(true)
   })
 

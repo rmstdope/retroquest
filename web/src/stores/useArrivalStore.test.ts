@@ -355,7 +355,11 @@ describe('useArrivalStore', () => {
       expect(arrival.active).toBe(true)
       expect(arrival.part?.kind).toBe('news')
       expect(arrival.barMs).toBe(6000)
-      expect(arrival.newsUp).toEqual({ turnId: 1, index: 0 })
+      expect(arrival.newsUp).toEqual({
+        turnId: 1,
+        index: 0,
+        spell: false,
+      })
       vi.advanceTimersByTime(6000)
       expect(arrival.active).toBe(false)
       expect(arrival.newsUp).toBeNull()
@@ -369,6 +373,38 @@ describe('useArrivalStore', () => {
       expect(arrival.barMs).toBe(6000)
       vi.advanceTimersByTime(6000)
       expect(arrival.active).toBe(false)
+    })
+
+    const spell = (unit: number, voiced: boolean): ArrivalPart => ({
+      kind: 'news',
+      spell: { name: 'Revive', text: 'Calls back.' },
+      lines: [{ unit, markup: 'Calls back.' }],
+      voiced,
+    })
+
+    it('tells the spells first, then the quests, numbering each kind from 0', () => {
+      arrival.show(
+        1,
+        [spell(0, false), spell(1, false), quest(2, false), quest(3, false)],
+        false,
+      )
+      expect(arrival.newsUp).toEqual({ turnId: 1, index: 0, spell: true })
+      arrival.next()
+      expect(arrival.newsUp).toEqual({ turnId: 1, index: 1, spell: true })
+      arrival.next()
+      expect(arrival.newsUp).toEqual({ turnId: 1, index: 0, spell: false })
+      arrival.next()
+      expect(arrival.newsUp).toEqual({ turnId: 1, index: 1, spell: false })
+      arrival.next()
+      expect(arrival.active).toBe(false)
+    })
+
+    it('marks the turn told once its spell news is up, and pending until it has cleared', () => {
+      arrival.show(1, [spell(0, false)], false)
+      expect(arrival.told).toContain(1)
+      expect(arrival.newsPending(1)).toBe(true)
+      vi.advanceTimersByTime(6000)
+      expect(arrival.newsPending(1)).toBe(false)
     })
 
     it('ends all the news at once with clear', () => {

@@ -37,7 +37,7 @@ import { arrivesOnPicture } from '@/lantern/stageArrival'
 const props = defineProps<{
   turn: Turn
   card?: boolean
-  /** The full record (Story so far): quest news is always shown as its cards. */
+  /** The full record (Story so far): quest news is always shown as its cards, and the learned spells' lines stay. */
   record?: boolean
 }>()
 const narration = useNarrationStore()
@@ -73,7 +73,12 @@ const questCards = computed(() =>
     : (props.turn.quests?.length ?? 0),
 )
 
-const blocks = computed(() => parseTurn(props.turn.text))
+/** The answer's blocks: the whole record, or what the card shows once the learned spells are told in the middle. */
+const blocks = computed(() =>
+  parseTurn(
+    props.record ? (props.turn.fullText ?? props.turn.text) : props.turn.text,
+  ),
+)
 
 /** The quotes of a conversation turn go to the speech on the right (the store's own rule). */
 const speechTurn = computed(

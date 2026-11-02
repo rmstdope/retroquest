@@ -11,6 +11,7 @@ import {
   type PageLine,
 } from '@/lantern/arrivalPages'
 import { newsSlimHeading } from '@/lantern/stageArrival'
+import { SPELL_HEADING } from '@/lantern/spellNews'
 import { renderMarkup } from '@/utils/theme'
 import { useSettingsStore } from '@/stores/useSettingsStore'
 
@@ -41,7 +42,7 @@ import { useSettingsStore } from '@/stores/useSettingsStore'
  * while the narrator speaks, glides to keep the lit word in view (the
  * `lq-follow` event of the read-along); with reduced motion it jumps.
  *
- * Quest news (`news` parts) is told the same way: a round seal (completions),
+ * News (`news` parts: a learned spell, quest news) is told the same way: a round seal (a violet ✦ for a spell, a tick for a completion),
  * the heading, the quest's name in large type and then its text, which is the
  * part that is paged or scrolls; the head above it stays on every page.
  */
@@ -58,6 +59,20 @@ const pill = ref<HTMLElement | null>(null)
 const head = ref<HTMLElement | null>(null)
 /** The quest news of the part up, or null. */
 const news = computed(() => arrival.part?.news ?? null)
+/** The learned spell the part up tells, or null. */
+const spell = computed(() => arrival.part?.spell ?? null)
+/** The piece of news up (a spell or a quest): its heading and name, or null. */
+const piece = computed(() => {
+  if (spell.value)
+    return { heading: SPELL_HEADING, name: spell.value.name, spell: true }
+  if (news.value)
+    return {
+      heading: newsSlimHeading(news.value),
+      name: news.value.name,
+      spell: false,
+    }
+  return null
+})
 /** The count after a completion's heading: shown, not read aloud. */
 const newsCount = computed(() => {
   const progress = news.value?.progress
@@ -257,9 +272,16 @@ onBeforeUnmount(() => {
         :key="`${arrival.part.kind}-${arrival.part.lines[0]?.unit}`"
         class="lq-arrival-card"
       >
-        <div v-if="news" ref="head" class="lq-news-head">
+        <div v-if="piece" ref="head" class="lq-news-head">
           <span
-            v-if="news.kind === 'completed'"
+            v-if="spell"
+            class="lq-news-seal lq-news-spark"
+            aria-hidden="true"
+            data-testid="spell-seal"
+            >✦</span
+          >
+          <span
+            v-else-if="news?.kind === 'completed'"
             class="lq-news-seal"
             aria-hidden="true"
             data-testid="news-seal"
@@ -278,17 +300,15 @@ onBeforeUnmount(() => {
             </svg>
           </span>
           <!-- eslint-disable vue/no-v-html -->
-          <p class="lq-news-kicker">
+          <p class="lq-news-kicker" :class="{ 'lq-news-kicker-spell': spell }">
             <span
-              v-html="
-                html(newsSlimHeading(news), arrival.part.lines[0].unit, 0, 1)
-              "
+              v-html="html(piece.heading, arrival.part.lines[0].unit, 0, 1)"
             ></span
             >{{ newsCount }}
           </p>
           <p
             class="lq-news-name"
-            v-html="html(news.name, arrival.part.lines[0].unit, 1, 2)"
+            v-html="html(piece.name, arrival.part.lines[0].unit, 1, 2)"
           ></p>
           <!-- eslint-enable vue/no-v-html -->
         </div>
@@ -311,7 +331,7 @@ onBeforeUnmount(() => {
               "
             ></p>
           </template>
-          <template v-else-if="news">
+          <template v-else-if="piece">
             <p
               v-for="line in shown"
               :key="`${line.unit}-${line.wordStart}`"
@@ -507,6 +527,17 @@ onBeforeUnmount(() => {
   background: var(--lq-accent);
   color: #fff;
   text-shadow: none;
+}
+.lq-news-spark {
+  background: #6b3fa0;
+  font-size: 24px;
+}
+.lq-news-kicker-spell,
+.lq-arrival-stage.lq-bare .lq-news-kicker-spell {
+  color: #d9c2ff;
+}
+.lq-arrival-stage.lq-bare .lq-news-kicker-spell {
+  color: #6b3fa0;
 }
 .lq-news-kicker {
   margin: 0;

@@ -750,4 +750,23 @@ describe('StoryTurn quest news told in the middle', () => {
     expect(w.classes()).toContain('lq-slim')
     expect(w.find('[data-testid="news-line"]').exists()).toBe(true)
   })
+
+  describe('a turn whose learned spell is told in the middle', () => {
+    const told = {
+      text: 'She nods.',
+      fullText: 'She nods.\nYou have learned [spell_name]revive[/spell_name].',
+      spells: [{ name: 'Revive', text: 'Calls back.' }],
+    }
+
+    it('shows the card without the learned line', () => {
+      const w = mount(StoryTurn, { props: { turn: turn(told), card: true } })
+      expect(visibleText(w)).toContain('She nods.')
+      expect(visibleText(w)).not.toContain('You have learned')
+    })
+
+    it('keeps the line in the record', () => {
+      const w = mount(StoryTurn, { props: { turn: turn(told), record: true } })
+      expect(visibleText(w)).toContain('You have learned revive.')
+    })
+  })
 })

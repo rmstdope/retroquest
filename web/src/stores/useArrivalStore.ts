@@ -35,7 +35,8 @@ export interface PageStart {
  * word of the next page turns it, `next` turns it (the narrator jumping to
  * it), and a part nobody speaks reads each page for its own reading time.
  *
- * Quest news follows the arrival's parts as `news` parts, one for each piece.
+ * News follows the arrival's parts as `news` parts, one for each piece: the
+ * turn's learned spells first, then its quest news.
  * A turn that has only news waits (`active` false, nothing in the middle)
  * until the turn's words are told: the narrator reaching the first piece, or,
  * when nobody narrates, the conversation on the picture having shown every
@@ -72,12 +73,21 @@ export const useArrivalStore = defineStore('arrival', () => {
   const part = computed(() =>
     current.value?.shown ? current.value.parts[current.value.index] : null,
   )
-  /** The piece of quest news on screen: its turn and its number among the turn's news. */
+  /**
+   * The piece of news on screen: its turn, whether it tells a spell, and its
+   * number among the turn's spells or, for quest news, among its quests.
+   */
   const newsUp = computed(() => {
     const now = current.value
     if (!now?.shown || part.value?.kind !== 'news') return null
     const first = now.parts.findIndex((each) => each.kind === 'news')
-    return { turnId: now.turnId, index: now.index - first }
+    const spell = !!part.value.spell
+    const spells = now.parts.filter((each) => each.spell).length
+    return {
+      turnId: now.turnId,
+      index: now.index - first - (spell ? 0 : spells),
+      spell,
+    }
   })
   /** The page of the part up (0 for the first). */
   const page = computed(() => current.value?.page ?? 0)
@@ -101,7 +111,7 @@ export const useArrivalStore = defineStore('arrival', () => {
       : '',
   )
 
-  /** Whether turn `turnId` still has quest news to tell (waiting or up). */
+  /** Whether turn `turnId` still has news to tell (waiting or up). */
   function newsPending(turnId: number): boolean {
     const now = current.value
     return (
