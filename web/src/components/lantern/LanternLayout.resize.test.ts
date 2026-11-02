@@ -261,6 +261,37 @@ describe('where the story lands after the window crosses 1100 px', () => {
     expect(pane().scrollTop).toBe(totalHeight(5) - PANE)
   })
 
+  /** One animation frame passes. */
+  function frame(): Promise<void> {
+    return new Promise<void>((done) => requestAnimationFrame(() => done()))
+  }
+
+  it('keeps a long newest turn at its start when only the room at the end grows', async () => {
+    newestHeight = 900
+    sides = true
+    await mountWith(5)
+    await readNewest()
+    await cross(false)
+    trailing = 56
+    await frame()
+    await frame()
+    expect(pane().scrollTop).toBe(topOf(4))
+  })
+
+  it('does not pull the story back on a frame once the player has scrolled away', async () => {
+    sides = true
+    await mountWith(5)
+    await readNewest()
+    await cross(false)
+    const where = topOf(2)
+    pane().scrollTop = where
+    pane().dispatchEvent(new Event('wheel'))
+    trailing = 56
+    await frame()
+    await frame()
+    expect(pane().scrollTop).toBe(where)
+  })
+
   it('keeps a long newest turn at its start once the layout has settled', async () => {
     newestHeight = 900
     await mountWith(5)
