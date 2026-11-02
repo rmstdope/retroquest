@@ -127,8 +127,9 @@ also writes `act<N>/images.json`: one image per room, then one portrait per char
 registers (480x640, upright; a name two classes share is listed once; ids `act<N>-portrait-<class>`, or `portrait-<class>` for a
 character in several acts, listed with the same entry in each of them),
 each `{ id, title, width, height, description }`, where the description is the room's base
-description, or the character's own, with the markup and any line of speech removed (the
-studio's starting prompt) and the
+description with the markup removed, or, for a portrait, the character's hand-written face
+portrait prompt from `web/src/lantern/portraitPrompts.ts` (it begins "A face portrait of"; the
+in-game description is not used), the studio's starting prompt, and the
 room's id is its music track id. The look all images share is
 `images/style.json`, written by hand: the look (`look`), things to keep out (`keepOut`, added to
 the prompt as words, since the image models read no negative prompt, so anything drawn by naming

@@ -144,90 +144,90 @@
     "title": "Ancient Dragon",
     "width": 480,
     "height": 640,
-    "description": "A dragon lies coiled around the hall's centre. The scales along its flank are worn dull where they have pressed the floor for a very long time. Its golden eyes open slowly, and close slower."
+    "description": "A face portrait of an ancient dragon, its head heavy with dull worn scales, with golden eyes half open and unhurried."
   },
   {
     "id": "act3-portrait-ash-scholar",
     "title": "Ash Scholar",
     "width": 480,
     "height": 640,
-    "description": "A scholar in soot-streaked robes, with a sheaf of notes on mirror angles tied to one wrist so the wind cannot take it."
+    "description": "A face portrait of a scholar with soot-streaked cheeks, singed eyebrows, tired intelligent eyes and wind-tousled hair."
   },
   {
     "id": "act3-portrait-mine-overseer",
     "title": "Mine Overseer",
     "width": 480,
     "height": 640,
-    "description": "A foreman in a coat grey with rock dust, a ring of keys at his belt. He keeps looking past you, into the dark."
+    "description": "A face portrait of a mine overseer with a face grey with rock dust, a heavy brow and uneasy eyes looking past you."
   },
   {
     "id": "act3-portrait-miners",
     "title": "Miners",
     "width": 480,
     "height": 640,
-    "description": "Half a dozen miners, grey with rock dust, passing timbers hand to hand. The oldest of them gives the orders, and nobody argues."
+    "description": "A face portrait of a grizzled old miner, his face grey with rock dust, with a deep frown and a lamp-lit stare."
   },
   {
     "id": "portrait-mira",
     "title": "Mira",
     "width": 480,
     "height": 640,
-    "description": "Mira, the village healer. Her hut smells of drying sage, and she looks at you a moment longer than people usually do."
+    "description": "A face portrait of a village healer in middle age, with a calm, steady gaze that rests on you a moment longer than is comfortable, and a sprig of dried sage tucked behind one ear."
   },
   {
     "id": "act3-portrait-phoenix",
     "title": "Phoenix",
     "width": 480,
     "height": 640,
-    "description": "A phoenix the size of a cottage roof lies in the crater's glass. Its feathers go from gold to red as it breathes, and it watches you without any hurry."
+    "description": "A face portrait of a phoenix, its head feathers shading from gold to red, with a sharp beak and calm, unhurried amber eyes."
   },
   {
     "id": "act3-portrait-phoenix-guardian",
     "title": "Phoenix Guardian",
     "width": 480,
     "height": 640,
-    "description": "A tall, masked figure in fire-etched robes stands by the vents, staff in hand. His head is turned to the vents, and his lips move as if he is counting."
+    "description": "A face portrait of a masked guardian in a fire-etched mask and hood, only the eyes and lips showing, the lips moving as if counting."
   },
   {
     "id": "act3-portrait-pier-warden",
     "title": "Pier Warden",
     "width": 480,
     "height": 640,
-    "description": "An old man in a salt-stiff coat, sitting on the last sound plank of the jetty with his eyes on the water."
+    "description": "A face portrait of an old man with a salt-stiff collar, a seamed, sea-beaten face and pale eyes fixed on the water."
   },
   {
     "id": "act3-portrait-silence-keeper",
     "title": "Silence Keeper",
     "width": 480,
     "height": 640,
-    "description": "A tall figure in a deep hood stands at the water's edge. Their feet make no sound on the stone, and you find you have lowered your voice."
+    "description": "A face portrait of a figure in a deep hood, the face in shadow, with a pale chin and calm, still features."
   },
   {
     "id": "portrait-sir-cedric",
     "title": "Sir Cedric",
     "width": 480,
     "height": 640,
-    "description": "A tall knight in old, dented mail. A pale patch on his surcoat shows where his device has been unpicked, and the scabbard at his hip hangs empty. He stands as if he were still on watch."
+    "description": "A face portrait of a tall knight in his fifties with a weathered, tired face and a steady, watchful stare, a steel mail coif and a dented gorget around his neck."
   },
   {
     "id": "act3-portrait-tide-born-guardian",
     "title": "Tide-Born Guardian",
     "width": 480,
     "height": 640,
-    "description": "A shape of standing water the height of a man. Ward-sigils drift in it like weed in a current."
+    "description": "A face portrait of a guardian shaped of standing water, a face of clear liquid with ward-sigils drifting in it like weed."
   },
   {
     "id": "act3-portrait-tobin",
     "title": "Tobin",
     "width": 480,
     "height": 640,
-    "description": "A boy of perhaps fifteen sits apart from the others on an upturned bucket, knees drawn up, a cracked lamp in his lap. His throat is wrapped in a strip of torn shirt. He watches the ceiling, not you."
+    "description": "A face portrait of a boy of about fifteen, thin and pale, with his throat wrapped in a strip of torn shirt and his eyes turned upward and away."
   },
   {
     "id": "act3-portrait-wandering-phantoms",
     "title": "Wandering Phantoms",
     "width": 480,
     "height": 640,
-    "description": "Grey figures, thin as breath on glass, move among the pools. Each does one thing over and over: lifts a hand, turns, reaches for a door that is not there. They whisper all the time."
+    "description": "A face portrait of a grey phantom, thin as breath on glass, a faint hollow face with open, whispering lips."
   }
 ]

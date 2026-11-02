@@ -74,97 +74,97 @@
     "title": "Malakar",
     "width": 480,
     "height": 640,
-    "description": "A tall man in a grey robe that was once a Warden's blue. His hair is white, though he cannot be much older than your father would have been. He leans on the throne as if it is the only thing holding him up. He is looking at the wound, not at you."
+    "description": "A face portrait of a gaunt man in a grey robe, with white hair though not old, hollow cheeks and exhausted, sorrowful eyes."
   },
   {
     "id": "act4-portrait-king-alden",
     "title": "King Alden",
     "width": 480,
     "height": 640,
-    "description": "The king of Eldoria, grey and thin, as if each week in here had been a year. His crown is dark."
+    "description": "A face portrait of a grey, thin king, aged by captivity, with sunken eyes and a dark, dull crown."
   },
   {
     "id": "portrait-grandmother",
     "title": "Grandmother",
     "width": 480,
     "height": 640,
-    "description": "Your grandmother, flour on her apron and her sleeves pushed up. She has raised you since your parents went away, and she keeps her hands busy when she would rather not answer."
+    "description": "A face portrait of an elderly woman with a lined, kind face, grey hair pinned back, and a guarded, tired look in her eyes."
   },
   {
     "id": "portrait-mira",
     "title": "Mira",
     "width": 480,
     "height": 640,
-    "description": "Mira, the village healer. Her hut smells of drying sage, and she looks at you a moment longer than people usually do."
+    "description": "A face portrait of a village healer in middle age, with a calm, steady gaze that rests on you a moment longer than is comfortable, and a sprig of dried sage tucked behind one ear."
   },
   {
     "id": "portrait-sir-cedric",
     "title": "Sir Cedric",
     "width": 480,
     "height": 640,
-    "description": "A tall knight in old, dented mail. A pale patch on his surcoat shows where his device has been unpicked, and the scabbard at his hip hangs empty. He stands as if he were still on watch."
+    "description": "A face portrait of a tall knight in his fifties with a weathered, tired face and a steady, watchful stare, a steel mail coif and a dented gorget around his neck."
   },
   {
     "id": "portrait-nyx",
     "title": "Nyx",
     "width": 480,
     "height": 640,
-    "description": "A woman no taller than you, barefoot, with leaves caught in her hair. The moss is greener where she has stood."
+    "description": "A face portrait of a young woman with wild hair and green leaves caught in it, a pale, watchful face and bright, curious eyes."
   },
   {
     "id": "act4-portrait-whispers",
     "title": "Whispers",
     "width": 480,
     "height": 640,
-    "description": "Voices without mouths, thick on the stair, saying the same thing again and again."
+    "description": "A face portrait of a whisper made visible: pale mouthless faces in dark mist, features barely forming."
   },
   {
     "id": "act4-portrait-shadow-of-the-past",
     "title": "Shadow",
     "width": 480,
     "height": 640,
-    "description": "It is the shape of a man, thin as smoke. It reaches for the orbs, and they slip through its fingers."
+    "description": "A face portrait of the shadow of a man, thin as smoke, with a blurred face and sorrowful empty eyes."
   },
   {
     "id": "act4-portrait-sorceress-of-lies",
     "title": "Sorceress of Lies",
     "width": 480,
     "height": 640,
-    "description": "She is beautiful in the way the chamber is beautiful: a little too perfect, a little wrong. Her smile never reaches her eyes."
+    "description": "A face portrait of a beautiful woman, a little too perfect, with a smile that never reaches her cold eyes."
   },
   {
     "id": "act4-portrait-captain-of-the-guard",
     "title": "Captain of the Guard",
     "width": 480,
     "height": 640,
-    "description": "A captain of the royal guard, his tabard black with soot. His eyes are open but see nothing, and his hand rests on a sword he has forgotten how to draw."
+    "description": "A face portrait of a royal guard captain with a soot-black tabard collar, open eyes that see nothing, and a slack face."
   },
   {
     "id": "act4-portrait-knight-of-despair",
     "title": "Knight of Despair",
     "width": 480,
     "height": 640,
-    "description": "A knight in tarnished armour, a shredded grey cloak hanging from his shoulders. He stands with his back to the door you came in by. His visor is down, and he does not move. When he speaks, his voice is hollow."
+    "description": "A face portrait of a knight in tarnished armour, his visor down, a shredded grey cloak hood around his helm."
   },
   {
     "id": "act4-portrait-ghostly-warriors",
     "title": "Ghostly Warriors",
     "width": 480,
     "height": 640,
-    "description": "Pale shapes of soldiers drift among the banners, fighting a battle that ended long ago. Their blades pass through one another without a sound."
+    "description": "A face portrait of a pale ghostly soldier, translucent and grim, with an old battered helm and hollow eyes."
   },
   {
     "id": "act4-portrait-true-self",
     "title": "True Self",
     "width": 480,
     "height": 640,
-    "description": "Your own reflection, in the plain mirror at the labyrinth's heart. It does not copy you. It waits, watching, as if it already knows what you will say."
+    "description": "A face portrait of your own reflection in a plain mirror, a watchful, knowing face, a little different from yours."
   },
   {
     "id": "act4-portrait-trapped-servants",
     "title": "Trapped Servants",
     "width": 480,
     "height": 640,
-    "description": "Grey figures walk the courtyard paths in circles, chains of shadow at their ankles. They wear what is left of kitchen aprons and stable coats. None of them looks up."
+    "description": "A face portrait of a grey, shadowed servant, with downcast eyes, a kitchen cap, and a chain of shadow at the neck."
   }
 ]
