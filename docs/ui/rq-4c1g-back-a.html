@@ -1,0 +1,148 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Scrolled back, then resized — option A: keep their place</title><!doctype html><html><head><meta charset="utf-8"><title>A narrow laptop window — option A: one column in the middle</title><style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Fraunces:opsz,wght@9..144,600&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=swap');
+:root{--bg:#f5f0e6;--surface:#fffcf5;--ink:#2b2418;--muted:#7a6f5c;--accent:#f29e00;--line:#e3dccb}
+body{margin:0;background:#e9e3d6;font-family:'DM Sans',sans-serif;color:var(--ink);padding:24px 16px 80px}
+h1.page{font-family:Fraunces,serif;font-size:28px;margin:0 0 6px}
+p.lead{max-width:900px;margin:0 0 24px;line-height:1.5}
+h2.f{font-family:Fraunces,serif;font-size:19px;margin:36px 0 4px}
+p.n{margin:0 0 10px;color:#4b4232;max-width:1000px;line-height:1.45;font-size:15px}
+.frame{zoom:.72;width:1440px;height:900px;position:relative;overflow:hidden;border:1px solid #c9bfa9;border-radius:6px;background:var(--bg);box-shadow:0 6px 24px rgba(0,0,0,.15)}
+.hdr{height:60px;display:flex;align-items:center;padding:0 16px;gap:26px;border-bottom:1px solid var(--line);background:var(--bg);font-size:15px}
+.hdr .logo{font-family:Fraunces,serif;font-size:21px;font-weight:600}
+.hdr .act{color:var(--muted);font-size:13px;margin-left:-14px}
+.hdr .sp{flex:1}
+.bar{display:inline-block;width:96px;height:6px;background:#e6dfcf;border-radius:3px;vertical-align:middle;margin:0 6px}
+.stage{position:absolute;top:61px;left:0;right:0;bottom:70px;background:url(../../web/public/images/generated/act1-eliors-cottage.png) center/cover}
+.dock{position:absolute;left:0;right:0;bottom:0;height:70px;background:var(--bg);border-top:1px solid var(--line);display:flex;align-items:center;gap:8px;padding:0 12px}
+.dock .b{border:1px solid var(--line);background:#efe8d9;border-radius:8px;padding:12px 15px;font-size:15px}
+.dock .in{flex:1;border:2px solid #2f5aa8;border-radius:8px;padding:12px;font-family:monospace;color:#999;background:#fff}
+.dock .go{background:var(--accent);border-radius:8px;padding:13px 18px;font-weight:600}
+.plate{position:absolute;top:16px;left:16px;background:rgba(255,252,245,.95);border-radius:10px;padding:14px 16px;box-shadow:0 2px 10px rgba(0,0,0,.2)}
+.plate small{letter-spacing:.08em;color:var(--muted);font-size:11px}
+.plate .nm{font-family:Fraunces,serif;font-size:23px;margin:4px 0 10px}
+.chip{display:inline-block;border-radius:14px;padding:5px 12px;font-size:13px;margin-right:6px;border:1px solid #9cb6e0;background:#e8eefa;color:#2f4f8a}
+.chip.g{border-color:#a9cfa4;background:#eaf5e6;color:#35632f}
+.btns{position:absolute;top:16px;right:16px;display:flex;gap:8px}
+.btns span{background:rgba(255,252,245,.95);border-radius:20px;padding:11px 14px;font-size:14px;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+.dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--accent);margin-left:6px;vertical-align:middle}
+/* right: speech */
+.speech{position:absolute;right:16px;bottom:16px;width:640px;display:flex;flex-direction:column;gap:8px;align-items:flex-end}
+.row{display:flex;align-items:flex-end;gap:10px;width:100%;justify-content:flex-end}
+.card{background:rgba(255,252,245,.94);border-radius:10px;padding:10px 14px;box-shadow:0 2px 10px rgba(0,0,0,.18);font-family:'Source Serif 4',serif;font-size:17px;line-height:1.4;max-width:480px;border:2px solid transparent}
+.card .who{font-family:'DM Sans';font-size:12.5px;font-weight:600;color:#2f4f8a;margin-bottom:2px}
+.card.old{opacity:.6}
+.card.now{border-color:#2f5aa8}
+.card.el .who{color:#9a5b10}
+.card.el{background:rgba(255,243,222,.96)}
+.card.el.now{border-color:#c47a1a}
+.por{width:140px;height:180px;border-radius:10px;background:#7b5a3c;color:#fff;font-family:Fraunces,serif;font-size:64px;display:flex;flex-direction:column;justify-content:center;align-items:center;border:3px solid #fff;position:relative;flex:none;box-shadow:0 2px 10px rgba(0,0,0,.3)}
+.por b{position:absolute;bottom:0;left:0;right:0;font:600 13px 'DM Sans';background:rgba(0,0,0,.35);padding:5px 8px}
+.por.el{background:#c47a1a}
+.mini{width:38px;height:38px;border-radius:50%;background:#c47a1a;color:#fff;font:600 17px Fraunces,serif;display:flex;align-items:center;justify-content:center;border:2px solid #fff;flex:none;box-shadow:0 1px 6px rgba(0,0,0,.3)}
+.cardcol{display:flex;flex-direction:column;gap:8px;align-items:flex-end}
+a{color:#2f4f8a;text-decoration:none}
+.sp-l{color:#6b3fa0}
+/* left: narration, option A cards */
+.narr{position:absolute;left:16px;bottom:16px;width:520px;display:flex;flex-direction:column;gap:8px}
+.ncard{background:rgba(255,252,245,.95);border-radius:4px 10px 10px 4px;padding:12px 16px;box-shadow:0 2px 10px rgba(0,0,0,.18);font-family:'Source Serif 4',serif;font-size:17px;line-height:1.45;border-left:4px solid #b9a77f}
+.ncard .cmd{font-family:monospace;font-size:13px;color:var(--muted);margin-bottom:4px}
+.ncard.old{opacity:.6}
+.ncard p{margin:0 0 8px}.ncard p:last-child{margin:0}
+.ncard i.w{display:block;padding-left:14px}
+.ncard.err{border-left-color:#b23a2a;background:rgba(253,236,233,.96);color:#8f2a1d}
+.ncard.scroll{max-height:470px;overflow:hidden;position:relative}
+.ncard.scroll:after{content:'';position:absolute;left:0;right:0;bottom:0;height:60px;background:linear-gradient(transparent,rgba(255,252,245,1))}
+.more{align-self:flex-start;background:rgba(43,36,24,.85);color:#fff;border-radius:16px;padding:6px 12px;font-size:13px}
+.hide{position:absolute;left:16px;top:220px;background:rgba(255,252,245,.92);border-radius:14px;padding:5px 11px;font-size:13px;box-shadow:0 1px 6px rgba(0,0,0,.2)}
+/* left: narration, option B on picture */
+.shade{position:absolute;left:0;top:0;bottom:0;width:640px;background:linear-gradient(90deg,rgba(20,14,6,.72),rgba(20,14,6,.45) 70%,transparent)}
+.ntext{position:absolute;left:28px;bottom:24px;width:520px;color:#fff;font-family:'Source Serif 4',serif;font-size:19px;line-height:1.5;text-shadow:0 1px 3px rgba(0,0,0,.8)}
+.ntext p{margin:0 0 10px}
+.ntext .cmd{font-family:monospace;font-size:13px;opacity:.75}
+.ntext .old{opacity:.55}
+.ntext i.w{display:block;padding-left:14px}
+.ntext a{color:#bcd3ff}
+.ntext .err{color:#ffb3a6}
+/* centre */
+.centre{position:absolute;left:50%;top:46%;transform:translate(-50%,-50%);width:760px;text-align:center;color:#fff;text-shadow:0 2px 6px rgba(0,0,0,.85);font-family:'Source Serif 4',serif}
+.dim{position:absolute;inset:0;background:rgba(15,10,4,.45)}
+.centre .k{font:600 14px 'DM Sans';letter-spacing:.12em;text-transform:uppercase;color:#ffd27a}
+.centre .t{font-family:Fraunces,serif;font-size:44px;margin:6px 0 12px}
+.centre .d{font-size:22px;line-height:1.5}
+.centre .tick{display:inline-flex;width:46px;height:46px;border-radius:50%;background:var(--accent);color:#fff;align-items:center;justify-content:center;font-size:26px;margin-bottom:10px;text-shadow:none}
+.pill{display:inline-block;margin-top:22px;background:rgba(20,14,6,.85);color:#fff;border-radius:18px;padding:8px 14px;font:500 14px 'DM Sans';text-shadow:none}
+.qcard{position:absolute;left:50%;top:46%;transform:translate(-50%,-50%);width:600px;background:#fff6dc;border:2px solid #e9b949;border-radius:12px;padding:24px 28px;box-shadow:0 10px 40px rgba(0,0,0,.45);font-family:'Source Serif 4',serif}
+.qcard .k{font:600 13px 'DM Sans';letter-spacing:.1em;text-transform:uppercase;color:#8a5a00}
+.qcard .t{font-family:Fraunces,serif;font-size:28px;margin:4px 0 8px}
+.qcard .d{font-size:17px;line-height:1.5;font-style:italic}
+.qcard hr{border:0;border-top:1px solid #e9cf8f;margin:18px 0}
+.qcard .go{display:inline-block;margin-top:18px;background:var(--accent);border-radius:8px;padding:10px 18px;font:600 15px 'DM Sans'}
+.ghost{opacity:.35}
+.note{position:absolute;background:#ffef8a;color:#3a3000;font:500 13px 'DM Sans';padding:6px 9px;border-radius:4px;box-shadow:0 2px 6px rgba(0,0,0,.3);max-width:260px;line-height:1.35}
+
+.av{width:46px;height:46px;border-radius:50%;background:#7b5a3c;color:#fff;font:600 20px Fraunces,serif;display:flex;align-items:center;justify-content:center;border:2px solid #fff;flex:none;box-shadow:0 1px 6px rgba(0,0,0,.35)}
+.av.el{background:#c47a1a}.av.bo{background:#4d6b7a}
+.ln{display:flex;gap:8px;align-items:flex-end}
+.ln.me{align-self:flex-start;flex-direction:row}
+.ln.them{align-self:flex-end}
+.ln.old{opacity:.6}
+.sc{position:absolute;right:16px;bottom:16px;width:600px;display:flex;flex-direction:column;gap:8px}
+.card.old{opacity:1}
+.hav{display:flex;gap:9px;align-items:center;margin-bottom:3px}
+.hav .av{width:30px;height:30px;font-size:14px}
+.hav .who{margin:0}
+/* phone */
+.ph{zoom:.9;width:390px;height:844px;position:relative;overflow:hidden;border:1px solid #c9bfa9;border-radius:28px;background:#f5f0e6;box-shadow:0 6px 24px rgba(0,0,0,.15);display:inline-block;vertical-align:top;margin-right:28px}
+.ph .top{height:58px;display:flex;align-items:center;gap:8px;padding:0 10px;font-size:13px;color:#7a6f5c}
+.ph .top b{border:1px solid #e3dccb;border-radius:10px;padding:8px 10px;background:#fffcf5;color:#2b2418}
+.ph .pic{position:absolute;top:58px;left:0;right:0;bottom:118px;background:url(../../web/public/images/generated/act1-eliors-cottage.png) 38% center/cover}
+.ph .plt{position:absolute;top:8px;left:8px;right:8px;background:rgba(255,252,245,.95);border-radius:12px;padding:8px 10px;display:flex;gap:8px;align-items:center;font:600 18px Fraunces,serif;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+.ph .plt .chip{font:13px 'DM Sans';padding:3px 9px}
+.ph .act{position:absolute;bottom:62px;left:8px;right:8px;height:48px;display:flex;gap:8px}
+.ph .act span{flex:1;background:#f29e00;border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:600}
+.ph .act i{width:52px;border:1px solid #e3dccb;background:#fffcf5;border-radius:10px}
+.ph .tabs{position:absolute;bottom:0;left:0;right:0;height:56px;display:flex;justify-content:space-around;align-items:center;font-size:13px;background:#fffcf5;border-top:1px solid #e3dccb}
+.ph .col{position:absolute;left:8px;right:8px;bottom:8px;top:64px;display:flex;flex-direction:column;justify-content:flex-end;gap:6px;overflow:hidden;-webkit-mask-image:linear-gradient(transparent,#000 50px)}
+.ph .card,.ph .ncard{font-size:15px;padding:7px 10px;max-width:none}
+.ph .av{width:32px;height:32px;font-size:14px}
+.ph .ln.them .card{max-width:290px}.ph .ln.me .card{max-width:290px}
+.ph .band{position:absolute;left:8px;right:8px;display:flex;flex-direction:column;justify-content:flex-end;gap:6px;overflow:hidden}
+
+.hidebtn{background:rgba(255,252,245,.95);border-radius:14px;padding:5px 11px;font-size:13px;box-shadow:0 1px 6px rgba(0,0,0,.2);font-family:'DM Sans'}
+.tab{position:absolute;bottom:0;background:rgba(255,252,245,.97);border-radius:10px 10px 0 0;padding:8px 14px;font-size:14px;box-shadow:0 -1px 8px rgba(0,0,0,.2)}
+.focus{outline:3px solid #2f5aa8;outline-offset:2px}
+.x{position:absolute;width:30px;height:30px;border-radius:50%;background:rgba(255,252,245,.95);box-shadow:0 1px 6px rgba(0,0,0,.3);display:flex;align-items:center;justify-content:center;font-size:15px}
+.gone{text-decoration:line-through;opacity:.6}
+.note{position:absolute;background:#ffef8a;color:#3a3000;font:500 13px 'DM Sans';padding:6px 9px;border-radius:4px;box-shadow:0 2px 6px rgba(0,0,0,.3);max-width:260px;line-height:1.35;z-index:5}
+
+.frame.nw{width:1060px}
+.frame.nw .narr{width:420px}.frame.nw .sc{width:440px}
+.frame.nw .card{max-width:340px}
+.lift .narr,.lift .sc{bottom:56px}
+.tip{position:absolute;background:#2b2418;color:#fff;font:13px 'DM Sans';padding:5px 9px;border-radius:5px;white-space:nowrap}
+
+.ph .col{bottom:40px}
+.ph .col.nohide{bottom:8px}
+.ph .hb{position:absolute;left:50%;bottom:8px;transform:translateX(-50%)}
+.ph .tabr{position:absolute;left:50%;bottom:0;transform:translateX(-50%)}
+.ph .card .who,.hav .who{font-size:11.5px}
+.d1{opacity:.55}.d2{opacity:.3}
+.cont{padding-left:40px}.ln.them .cont{padding:0}
+.ln.them.cont{padding-right:40px}
+.ln.me.cont{padding-left:40px}
+.ph .plt .sf{font:13px DM Sans;margin-left:auto}
+.pin{position:absolute;background:#ffef8a;color:#3a3000;font:500 12px 'DM Sans';padding:5px 8px;border-radius:4px;box-shadow:0 2px 6px rgba(0,0,0,.3);max-width:200px;line-height:1.3;z-index:5}
+.frame.nw .ccol{position:absolute;bottom:56px;top:150px;display:flex;flex-direction:column;justify-content:flex-end;gap:8px;overflow:hidden;-webkit-mask-image:linear-gradient(transparent,#000 50px)}
+.frame.nw .ccol .card{max-width:440px}
+.wrap{display:flex;flex-wrap:wrap;gap:8px 0;align-items:flex-start}
+.cap{font:500 13px 'DM Sans';color:#4b4232;width:351px;margin:6px 0 0}
+</style></head><body><h1 class="page">A narrow laptop window — option A: one column in the middle</h1><p class="lead">Below about 1100 px wide, the one column sits in the middle of the picture, about 620 px wide, so lines stay a comfortable length and the picture shows at both sides. The one Hide stays at the bottom centre.</p><div class="frame nw"><div class="hdr"><span class="logo">RetroQuest</span><span class="act">Act I</span><span class="sp"></span><span style="color:#7a6f5c">Quests<span class="bar"></span>0/11</span><span>Save</span><span>Load</span><span>Stats</span><span>Settings</span><span>Help</span></div><div class="stage"><div class="ccol" style="left:50%;width:620px;transform:translateX(-50%)"><div class="ncard d1"><div class="cmd">› talk to grandmother</div><p>You find her at the hearth.</p></div><div class="ln them d1" style="align-self:flex-end"><div class="card "><div class="who">Grandmother</div>There you are. Sit down a minute, the bread's nearly done.</div><div class="av">G</div></div><div class="ncard d1"><p>She does not sit down herself.</p></div><div class="ln them d1" style="align-self:flex-end"><div class="card "><div class="who">Grandmother</div>If you're going out, call on <a>Mira</a>, north of the square.</div><div class="av">G</div></div><div class="ncard "><div class="cmd">› say have you heard anything about the old mill to grandmother</div></div><div class="ln me "><div class="av el">E</div><div class="card el"><div class="who">Elior</div>Have you heard anything about the old mill?</div></div><div class="ncard "><p>She stops stirring for a moment.</p></div><div class="ln them " style="align-self:flex-end"><div class="card now"><div class="who">Grandmother</div>The mill? Not since the wheel stopped. Ask <a>Borin</a>, he was there the day it did.</div><div class="av">G</div></div></div><span class="hidebtn" style="position:absolute;left:50%;bottom:16px;transform:translateX(-50%)">▾ Hide</span><div class="plate"><small>YOU ARE IN</small><div class="nm">Elior's Cottage</div><span class="chip">Grandmother</span><span class="chip g">Hearth</span><span class="chip g">Elior's Journal</span></div><div class="btns"><span>Bag · 2</span><span>Spells · 1</span><span>Quests · 0</span><span>◦ Story so far</span><span>🧭 Map</span></div></div><div class="dock"><span class="b">Actions <small style="border:1px solid #ccc;border-radius:4px;padding:1px 5px">Esc</small></span><span class="in">What do you do?</span><span class="go">Do it ▸</span></div></div></body></html><style>
+.pair{display:flex;gap:28px;align-items:flex-start;flex-wrap:wrap}
+.pair .frame{zoom:.55}
+.arrow{font:600 40px Fraunces,serif;align-self:center;color:#7a6f5c}
+.lbl{font:600 13px 'DM Sans';letter-spacing:.08em;text-transform:uppercase;color:#7a6f5c;margin:0 0 6px}
+.ccol.scr{justify-content:flex-start !important;-webkit-mask-image:linear-gradient(transparent,#000 40px,#000 calc(100% - 40px),transparent) !important}
+.mb{position:absolute;left:50%;transform:translateX(-50%);bottom:64px;background:rgba(43,36,24,.88);color:#fff;border-radius:16px;padding:6px 12px;font:500 14px 'DM Sans';z-index:4}
+.cut{opacity:1}
+</style>
+</head><body><h1 class="page">Scrolled back, then resized — option A: keep their place</h1><p class="lead">If the player had scrolled back to re-read an older turn, the resize keeps that turn in view; “More below ↓” still offers the way down. Only a player who was already at the newest is brought to the newest.</p><h2 class="f">Before: reading an older turn</h2><p class="n"></p><div class="frame nw"><div class="hdr"><span class="logo">RetroQuest</span><span class="act">Act I</span><span class="sp"></span><span style="color:#7a6f5c">Quests<span class="bar"></span>0/11</span><span>Save</span><span>Load</span><span>Stats</span><span>Settings</span><span>Help</span></div><div class="stage"><div class="ccol scr" style="left:50%;width:620px;transform:translateX(-50%)"><div class="ncard d2"><div class="cmd">› look</div><p>Sunlight through the shutters. The hearth is still warm.</p></div><div class="ncard d1"><div class="cmd">› talk to grandmother</div><p>You find her at the hearth.</p></div><div class="ln them d1" style="align-self:flex-end"><div class="card "><div class="who">Grandmother</div>There you are. Sit down a minute, the bread's nearly done.</div><div class="av">G</div></div><div class="ncard d1"><p>She does not sit down herself.</p></div><div class="ln them d1" style="align-self:flex-end"><div class="card "><div class="who">Grandmother</div>If you're going out, call on <a>Mira</a>, north of the square.</div><div class="av">G</div></div></div><span class="mb">More below <span aria-hidden="true">↓</span></span><span class="hidebtn" style="position:absolute;left:50%;bottom:16px;transform:translateX(-50%)">▾ Hide</span><div class="plate"><small>YOU ARE IN</small><div class="nm">Elior's Cottage</div><span class="chip">Grandmother</span><span class="chip g">Hearth</span><span class="chip g">Elior's Journal</span></div><div class="btns"><span>Bag · 2</span><span>Spells · 1</span><span>Quests · 0</span><span>◦ Story so far</span><span>🧭 Map</span></div><div class="note" style="left:760px;top:140px">Before the resize the player had scrolled back to re-read Grandmother's first words.</div></div><div class="dock"><span class="b">Actions <small style="border:1px solid #ccc;border-radius:4px;padding:1px 5px">Esc</small></span><span class="in">What do you do?</span><span class="go">Do it ▸</span></div></div><h2 class="f">After the resize</h2><p class="n">The same older turn stays in view, with “More below ↓”.</p><div class="frame nw"><div class="hdr"><span class="logo">RetroQuest</span><span class="act">Act I</span><span class="sp"></span><span style="color:#7a6f5c">Quests<span class="bar"></span>0/11</span><span>Save</span><span>Load</span><span>Stats</span><span>Settings</span><span>Help</span></div><div class="stage"><div class="ccol scr" style="left:50%;width:620px;transform:translateX(-50%)"><div class="ncard d2"><div class="cmd">› look</div><p>Sunlight through the shutters. The hearth is still warm.</p></div><div class="ncard d1"><div class="cmd">› talk to grandmother</div><p>You find her at the hearth.</p></div><div class="ln them d1" style="align-self:flex-end"><div class="card "><div class="who">Grandmother</div>There you are. Sit down a minute, the bread's nearly done.</div><div class="av">G</div></div><div class="ncard d1"><p>She does not sit down herself.</p></div><div class="ln them d1" style="align-self:flex-end"><div class="card "><div class="who">Grandmother</div>If you're going out, call on <a>Mira</a>, north of the square.</div><div class="av">G</div></div></div><span class="mb">More below <span aria-hidden="true">↓</span></span><span class="hidebtn" style="position:absolute;left:50%;bottom:16px;transform:translateX(-50%)">▾ Hide</span><div class="plate"><small>YOU ARE IN</small><div class="nm">Elior's Cottage</div><span class="chip">Grandmother</span><span class="chip g">Hearth</span><span class="chip g">Elior's Journal</span></div><div class="btns"><span>Bag · 2</span><span>Spells · 1</span><span>Quests · 0</span><span>◦ Story so far</span><span>🧭 Map</span></div><div class="note" style="left:760px;top:140px">Same place. “More below ↓” takes them to the newest.</div></div><div class="dock"><span class="b">Actions <small style="border:1px solid #ccc;border-radius:4px;padding:1px 5px">Esc</small></span><span class="in">What do you do?</span><span class="go">Do it ▸</span></div></div></body></html>
