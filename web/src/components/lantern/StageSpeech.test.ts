@@ -5,6 +5,8 @@ import { createPinia, setActivePinia } from 'pinia'
 import StageSpeech from './StageSpeech.vue'
 import type { Turn } from '@/stores/useGameStore'
 import { useStageSpeechStore } from '@/stores/useStageSpeechStore'
+import { useNarrationStore } from '@/stores/useNarrationStore'
+import type { NarrationUnit } from '@/lantern/narrationUnits'
 
 let nextId = 1
 
@@ -167,5 +169,45 @@ describe('StageSpeech', () => {
     expect(w.findAll('[data-testid="speech-line"]')).toHaveLength(1)
     await w.get('[data-testid="speech-zone"]').trigger('click')
     expect(w.findAll('[data-testid="speech-line"]')).toHaveLength(3)
+  })
+
+  it('hurries a narrated turn one block when the speech is pressed, and reads on (rq-cynd)', async () => {
+    const { speech, w } = mounted()
+    const narration = useNarrationStore()
+    // A voice that plays until it is stopped.
+    narration.setAudioFactory(() => ({
+      play: () => Promise.resolve(),
+      pause: () => undefined,
+      volume: 1,
+      currentTime: 0,
+      onended: null,
+      onerror: null,
+    }))
+    const voiced = (markup: string): NarrationUnit => ({
+      kind: 'block',
+      parts: [
+        {
+          markup,
+          clip: { file: 'x.mp3', speaker: 'elior', duration: 5, words: [] },
+        },
+      ],
+    })
+    const journal = turn(
+      say('Elior', 'The storm.') + '\n\n' + say('Elior', 'I dreamed.'),
+      null,
+      'use journal',
+    )
+    narration.begin(
+      journal.id,
+      [voiced('The storm.'), voiced('I dreamed.')],
+      'act1',
+    )
+    speech.observe(journal)
+    await w.vm.$nextTick()
+    expect(narration.speaking(journal.id)?.unit).toBe(0)
+    await w.get('[data-testid="speech-zone"]').trigger('click')
+    await vi.advanceTimersByTimeAsync(100)
+    // The next block is read, not the rest of the turn passed over.
+    expect(narration.speaking(journal.id)?.unit).toBe(1)
   })
 })
