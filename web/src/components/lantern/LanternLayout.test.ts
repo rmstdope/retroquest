@@ -991,7 +991,7 @@ describe('LanternLayout', () => {
       const w = mountLayout()
       await say(w, WORDS, 'Grandmother')
 
-      expect(w.get('.lq-sp-right .lq-foot').text()).toBe('Grandmother')
+      expect(w.get('.lq-line-right .lq-line-name').text()).toBe('Grandmother')
       expect(w.get('[data-testid="speech-line"]').text()).toContain(
         'There you are.',
       )

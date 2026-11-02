@@ -50,48 +50,64 @@ describe('StageSpeech', () => {
     expect(w.find('button').exists()).toBe(false)
   })
 
-  it('shows the one spoken to on the right, with the left empty', async () => {
+  it('shows the one spoken to at the right edge, named once, with a portrait', async () => {
     const { speech, w } = mounted()
     speech.observe(turn(say('Grandmother', 'There you are.'), 'Grandmother'))
     await w.vm.$nextTick()
     expect(w.findAll('[data-testid="portrait"]')).toHaveLength(1)
-    expect(w.get('.lq-sp-right .lq-foot').text()).toBe('Grandmother')
-    expect(w.find('.lq-sp-left').exists()).toBe(false)
     const line = w.get('[data-testid="speech-line"]')
     expect(line.classes()).toContain('lq-line-right')
     expect(line.get('.lq-line-name').text()).toBe('Grandmother')
     expect(line.text()).toContain('There you are.')
+    expect(w.get('[data-testid="portrait"]').text()).toBe('G')
   })
 
-  it('brings Elior in on the left once he speaks, and dims the side that is quiet', async () => {
+  it('puts Elior at the left of the column, named, with his own portrait', async () => {
     const { speech, w } = mounted()
     speech.observe(turn(say('Grandmother', 'One.'), 'Grandmother'))
     speech.observe(turn('', 'Grandmother', 'say why to grandmother'))
     await w.vm.$nextTick()
-    expect(w.get('.lq-sp-left .lq-foot').text()).toBe('Elior')
-    expect(w.get('.lq-sp-right').classes()).toContain('lq-dim')
-    expect(w.get('.lq-sp-left').classes()).not.toContain('lq-dim')
-    speech.observe(turn(say('Grandmother', 'Because.'), 'Grandmother'))
-    await w.vm.$nextTick()
-    expect(w.get('.lq-sp-left').classes()).toContain('lq-dim')
-    expect(w.get('.lq-sp-right').classes()).not.toContain('lq-dim')
+    const rows = w.findAll('[data-testid="speech-line"]')
+    expect(rows.map((row) => row.classes().includes('lq-line-left'))).toEqual([
+      false,
+      true,
+    ])
+    expect(rows[1].get('.lq-line-name').text()).toBe('Elior')
+    expect(rows[1].get('[data-testid="portrait"]').text()).toBe('E')
   })
 
-  it('changes the right portrait to a second speaker and keeps the earlier names', async () => {
+  it('names a run once and shows one portrait beside its first line', async () => {
+    const { speech, w } = mounted()
+    speech.observe(turn(say('Mira', 'A.\n\nB.\n\nC.'), 'Mira'))
+    speech.revealAll()
+    await w.vm.$nextTick()
+    expect(w.findAll('.lq-line-name')).toHaveLength(1)
+    expect(w.findAll('[data-testid="portrait"]')).toHaveLength(1)
+    const rows = w.findAll('[data-testid="speech-line"]')
+    expect(rows[0].find('[data-testid="portrait"]').exists()).toBe(true)
+    expect(rows[1].find('[data-testid="portrait"]').exists()).toBe(false)
+  })
+
+  it('gives each of three speakers a run of their own', async () => {
     const { speech, w } = mounted()
     speech.observe(
       turn(
-        say('Grandmother', 'One.') + '\n' + say('Villager', 'Two.'),
+        say('Grandmother', 'One.') +
+          '\n' +
+          say('Villager', 'Two.') +
+          '\n' +
+          say('Mira', 'Three.'),
         'Grandmother',
       ),
     )
     vi.runAllTimers()
     await w.vm.$nextTick()
-    expect(w.get('.lq-sp-right .lq-foot').text()).toBe('Villager')
     expect(w.findAll('.lq-line-name').map((name) => name.text())).toEqual([
       'Grandmother',
       'Villager',
+      'Mira',
     ])
+    expect(w.findAll('[data-testid="portrait"]')).toHaveLength(3)
   })
 
   it('fades the lines by how long ago they were said', async () => {
@@ -101,7 +117,7 @@ describe('StageSpeech', () => {
     await w.vm.$nextTick()
     expect(
       w
-        .findAll('[data-testid="speech-line"]')
+        .findAll('.lq-line')
         .map((line) =>
           line.classes().find((name) => name.startsWith('lq-age-')),
         ),

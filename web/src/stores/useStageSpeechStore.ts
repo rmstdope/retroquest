@@ -54,18 +54,6 @@ export const useStageSpeechStore = defineStore('stageSpeech', () => {
     () => conversation.value?.lines.filter(isShown) ?? [],
   )
 
-  /** The last character on the right to have spoken, or null. */
-  const rightSpeaker = computed(
-    () =>
-      [...visible.value].reverse().find((line) => line.side === 'right')
-        ?.speaker ?? null,
-  )
-
-  /** Whether Elior has a line yet (the left portrait stands from then on). */
-  const leftSpeaking = computed(() =>
-    visible.value.some((line) => line.side === 'left'),
-  )
-
   /** Whether a line is the one being read aloud now. */
   function isSpeaking(line: StageLine): boolean {
     const now = narration.speaking(line.turnId)
@@ -148,8 +136,6 @@ export const useStageSpeechStore = defineStore('stageSpeech', () => {
   return {
     conversation,
     visible,
-    rightSpeaker,
-    leftSpeaking,
     isSpeaking,
     revealAll,
     clear,

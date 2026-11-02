@@ -47,8 +47,6 @@ describe('useStageSpeechStore', () => {
     const speech = useStageSpeechStore()
     expect(speech.conversation).toBeNull()
     expect(speech.visible).toEqual([])
-    expect(speech.rightSpeaker).toBeNull()
-    expect(speech.leftSpeaking).toBe(false)
   })
 
   it('shows nothing when a talk moves Elior to another room', () => {
@@ -63,7 +61,6 @@ describe('useStageSpeechStore', () => {
     speech.observe(turn(say('Grandmother', 'Hm.'), 'Grandmother'))
     // Turns in other rooms went unobserved (narrow window); this talk did not move.
     speech.observe(turn(say('Grandmother', 'There.'), 'Grandmother'))
-    expect(speech.rightSpeaker).toBe('Grandmother')
   })
 
   it('starts a conversation with the one addressed and shows what they say', () => {
@@ -72,8 +69,6 @@ describe('useStageSpeechStore', () => {
     expect(speech.visible.map((l) => [l.speaker, l.markup])).toEqual([
       ['Grandmother', 'There you are.'],
     ])
-    expect(speech.rightSpeaker).toBe('Grandmother')
-    expect(speech.leftSpeaking).toBe(false)
   })
 
   it('stacks while the same character is addressed, whatever the case', () => {
@@ -92,7 +87,6 @@ describe('useStageSpeechStore', () => {
       ['Elior', 'left'],
       ['Grandmother', 'right'],
     ])
-    expect(speech.leftSpeaking).toBe(true)
   })
 
   it('shows a second speaker on the right and keeps the earlier names', () => {
@@ -104,7 +98,6 @@ describe('useStageSpeechStore', () => {
       ),
     )
     vi.runAllTimers()
-    expect(speech.rightSpeaker).toBe('Villager')
     expect(speech.visible.map((l) => l.speaker)).toEqual([
       'Grandmother',
       'Villager',
