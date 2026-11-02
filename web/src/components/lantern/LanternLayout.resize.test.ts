@@ -76,6 +76,7 @@ describe('where the story lands after the window crosses 1100 px', () => {
     )
   })
   afterEach(() => {
+    window.innerWidth = 1024
     w?.unmount()
     vi.unstubAllGlobals()
     vi.restoreAllMocks()
@@ -163,17 +164,30 @@ describe('where the story lands after the window crosses 1100 px', () => {
     expect(document.querySelector('.lq-more-below')).toBeNull()
   })
 
-  it('opens the column on the newest for a player resting at the bottom of the sides', async () => {
-    // Short cards on the sides: the view's top edge is in an older card, the newest whole below it.
-    sidesScale = 0.5
+  it('opens the column on the newest for a player who rested at the bottom, whatever the browser did to the old layout first', async () => {
     sides = true
-    await mountWith(8)
-    // The pill was up at the top; the player is now at the bottom (the pill not yet updated).
-    observers.forEach((notify) => notify())
-    pane().scrollTop = totalHeight(8) - PANE
+    await mountWith(5)
+    await readNewest()
+    // The browser re-lays the old cards at the new width and moves the pane before the crossing is noticed.
+    window.innerWidth = 420
+    pane().scrollTop = 40
+    pane().dispatchEvent(new Event('scroll'))
     await cross(false)
-    expect(pane().scrollTop).toBe(totalHeight(8) - PANE)
+    expect(pane().scrollTop).toBe(totalHeight(5) - PANE)
     expect(document.querySelector('.lq-more-below')).toBeNull()
+  })
+
+  it('keeps a scrolled-back player in place whatever the browser did to the old layout first', async () => {
+    newestHeight = 900
+    sides = true
+    await mountWith(5)
+    pane().scrollTop = topOf(1)
+    pane().dispatchEvent(new Event('scroll'))
+    window.innerWidth = 420
+    pane().scrollTop = topOf(3) + 20
+    pane().dispatchEvent(new Event('scroll'))
+    await cross(false)
+    expect(pane().scrollTop).toBe(topOf(1))
   })
 
   it('opens the column on a long newest turn at its start', async () => {
