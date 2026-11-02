@@ -1422,9 +1422,10 @@ watch(
           </button>
         </div>
 
-        <!-- Choosing an action or typing clears an arrival on the picture. Bubbling
-             listeners, not capture: a render before the command box's own v-model
-             has read the text would give the first typed character back. -->
+        <!-- Choosing an action or typing clears an arrival on the picture. Typing
+             listens bubbling, not capture: a render before the command box's own
+             v-model has read the text would give the first typed character back.
+             A click is captured, so a turn the click plays keeps the arrival it starts. -->
         <div v-if="sheetOpen" class="lq-scrim" aria-hidden="true"></div>
         <ActionComposer
           v-show="wide || (section === 'story' && dockOpen)"
