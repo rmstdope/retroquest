@@ -432,6 +432,7 @@ function updateMoreBelow(): void {
 function readOn(): void {
   const story = storyEl.value
   if (!story) return
+  endLanding()
   const still =
     getComputedStyle(document.documentElement)
       .getPropertyValue('--lq-motion')
@@ -478,6 +479,23 @@ const LANDING_SETTLE_MS = 600
 /** Puts the story where the last crossing of 1100 px meant it to be, until the layout has settled or the player moves it. */
 let landing: (() => void) | null = null
 let landingTimer: ReturnType<typeof setTimeout> | undefined
+
+/** Keys that scroll the story, and so take it over from the landing. */
+const SCROLL_KEYS = new Set([
+  'ArrowUp',
+  'ArrowDown',
+  'PageUp',
+  'PageDown',
+  'Home',
+  'End',
+  ' ',
+])
+
+/** Keys pressed in the story: a scrolling key ends the landing, then the name keys have their say. */
+function onStoryKeydown(event: KeyboardEvent): void {
+  if (SCROLL_KEYS.has(event.key)) endLanding()
+  onNameKeydown(event)
+}
 
 /** Stop landing: the layout has settled, or the player has taken the story over. */
 function endLanding(): void {
@@ -540,6 +558,7 @@ watch(
 // The story also changes size without scrolling: the sheet opens or folds,
 // the window turns, a section is shown again, the room card grows.
 let storyResize: ResizeObserver | undefined
+let contentResize: ResizeObserver | undefined
 
 /** Whether a pop-up, menu or dialog is open (it has its own keys). */
 function dialogOpen(): boolean {
@@ -661,7 +680,13 @@ onMounted(() => {
       refollow()
     })
     storyResize.observe(storyEl.value)
-    if (contentEl.value) storyResize.observe(contentEl.value)
+    // The turns also settle after a crossing; a reading's new paragraphs must not jump the follow.
+    if (contentEl.value) {
+      contentResize = new ResizeObserver(() => {
+        if (landing) landing()
+      })
+      contentResize.observe(contentEl.value)
+    }
   }
 })
 
@@ -784,6 +809,7 @@ onUnmounted(() => {
   document.removeEventListener('focusout', onFocusChange)
   narration.skipAll()
   storyResize?.disconnect()
+  contentResize?.disconnect()
   endLanding()
   actionsResize?.disconnect()
 })
@@ -1424,7 +1450,7 @@ watch(
             tabindex="-1"
             aria-label="Story"
             @click="onStoryClick"
-            @keydown="onNameKeydown"
+            @keydown="onStoryKeydown"
             @scroll.passive="updateMoreBelow"
             @wheel.passive="endLanding"
             @touchstart.passive="endLanding"

@@ -31,6 +31,8 @@ describe('where the story lands after the window crosses 1100 px', () => {
   let listeners: Record<string, (e: { matches: boolean }) => void>
   /** The height of the newest turn in the fake layout. */
   let newestHeight: number
+  /** How much taller the oldest turn has grown since the crossing was first measured. */
+  let extra: number
   /** The callbacks of the ResizeObservers the layout made. */
   let observers: Array<() => void>
 
@@ -50,6 +52,7 @@ describe('where the story lands after the window crosses 1100 px', () => {
     sides = false
     listeners = {}
     newestHeight = TURN_HEIGHT
+    extra = 0
     vi.stubGlobal(
       'matchMedia',
       vi.fn((query: string) => ({
@@ -81,8 +84,9 @@ describe('where the story lands after the window crosses 1100 px', () => {
   const heightOf = (index: number, count: number): number =>
     (index === count - 1 ? newestHeight : TURN_HEIGHT) * scale()
   const totalHeight = (count: number): number =>
-    (count - 1) * TURN_HEIGHT * scale() + newestHeight * scale()
-  const topOf = (index: number): number => index * TURN_HEIGHT * scale()
+    (count - 1) * TURN_HEIGHT * scale() + newestHeight * scale() + extra
+  const topOf = (index: number): number =>
+    index * TURN_HEIGHT * scale() + (index > 0 ? extra : 0)
 
   /** Lay the pane and its turns out by hand (jsdom has no layout). */
   function layOut(): void {
@@ -244,7 +248,8 @@ describe('where the story lands after the window crosses 1100 px', () => {
     await mountWith(5)
     await readNewest()
     await cross(true)
-    newestHeight = 1200
+    // An older turn grows after the crossing: the newest turn's start moves down.
+    extra = 80
     settle()
     expect(pane().scrollTop).toBe(topOf(4))
   })
@@ -255,10 +260,69 @@ describe('where the story lands after the window crosses 1100 px', () => {
     await mountWith(5)
     await readNewest()
     await cross(false)
-    pane().scrollTop = topOf(2)
+    const where = topOf(2)
+    pane().scrollTop = where
     pane().dispatchEvent(new Event('wheel'))
-    pane().dispatchEvent(new Event('scroll'))
+    extra = 80
     settle()
-    expect(pane().scrollTop).toBe(topOf(2))
+    expect(pane().scrollTop).toBe(where)
+  })
+
+  it('stops landing once the player presses a scrolling key', async () => {
+    newestHeight = 900
+    sides = true
+    await mountWith(5)
+    await readNewest()
+    await cross(false)
+    pane().dispatchEvent(new KeyboardEvent('keydown', { key: 'PageDown' }))
+    const where = pane().scrollTop
+    extra = 80
+    settle()
+    expect(pane().scrollTop).toBe(where)
+  })
+
+  it('stops landing once the layout has had time to settle', async () => {
+    vi.useFakeTimers()
+    try {
+      newestHeight = 900
+      sides = true
+      await mountWith(5)
+      await readNewest()
+      await cross(false)
+      const where = pane().scrollTop
+      vi.advanceTimersByTime(700)
+      extra = 80
+      settle()
+      expect(pane().scrollTop).toBe(where)
+    } finally {
+      vi.useRealTimers()
+    }
+  })
+
+  it('stops landing when a new turn arrives', async () => {
+    newestHeight = 900
+    sides = true
+    await mountWith(5)
+    await readNewest()
+    await cross(false)
+    useGameStore().turns = [...useGameStore().turns, turn(6, 'Turn 6.')]
+    await nextTick()
+    await nextTick()
+    pane().scrollTop = 7
+    extra = 80
+    settle()
+    expect(pane().scrollTop).toBe(7)
+  })
+
+  it('keeps the older turn in view for a player who had scrolled back, after settling', async () => {
+    newestHeight = 900
+    sides = true
+    await mountWith(5)
+    pane().scrollTop = topOf(1)
+    pane().dispatchEvent(new Event('scroll'))
+    await cross(false)
+    extra = 80
+    settle()
+    expect(pane().scrollTop).toBe(topOf(1))
   })
 })
