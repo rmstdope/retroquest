@@ -1,10 +1,11 @@
 // @vitest-environment jsdom
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 import { mount, type VueWrapper } from '@vue/test-utils'
-import { nextTick } from 'vue'
+import { nextTick, ref } from 'vue'
 import { createPinia, setActivePinia } from 'pinia'
 import LanternLayout from './LanternLayout.vue'
 import { useGameStore, type Turn } from '@/stores/useGameStore'
+import { useNarrationStore } from '@/stores/useNarrationStore'
 
 /** A turn that tells `text`. */
 function turn(id: number, text: string): Turn {
@@ -84,6 +85,12 @@ describe('where the story lands after the window crosses 1100 px', () => {
     vi.spyOn(Element.prototype, 'getBoundingClientRect').mockImplementation(
       function (this: Element): DOMRect {
         if (this === el) return { top: 0 } as DOMRect
+        if (this.classList.contains('lq-w-now'))
+          return {
+            top: 4 * TURN_HEIGHT * scale() + 700 - el.scrollTop,
+            bottom: 4 * TURN_HEIGHT * scale() + 720 - el.scrollTop,
+            height: 20,
+          } as DOMRect
         const kids = Array.from(content().children)
         const index = kids.indexOf(this)
         if (index < 0) return { top: 0, height: 0 } as DOMRect
@@ -125,6 +132,7 @@ describe('where the story lands after the window crosses 1100 px', () => {
     await readNewest()
     await cross(false)
     expect(pane().scrollTop).toBe(totalHeight(5) - PANE)
+    expect(document.querySelector('.lq-more-below')).toBeNull()
   })
 
   it('opens the column on a long newest turn at its start', async () => {
@@ -134,6 +142,7 @@ describe('where the story lands after the window crosses 1100 px', () => {
     await readNewest()
     await cross(false)
     expect(pane().scrollTop).toBe(topOf(4))
+    expect(document.querySelector('.lq-more-below')).not.toBeNull()
   })
 
   it('opens the sides on the newest turn from its start when widening', async () => {
@@ -163,5 +172,40 @@ describe('where the story lands after the window crosses 1100 px', () => {
     await cross(true)
     await cross(false)
     expect(pane().scrollTop).toBe(topOf(4))
+  })
+
+  it('keeps a turn the player was part-way into in view when it shrinks', async () => {
+    newestHeight = 900
+    sides = true
+    await mountWith(5)
+    // Three quarters into the second card (200 px tall on the two sides).
+    pane().scrollTop = topOf(1) + 150
+    pane().dispatchEvent(new Event('scroll'))
+    await cross(false)
+    const top = topOf(1)
+    expect(pane().scrollTop).toBeGreaterThanOrEqual(top)
+    expect(pane().scrollTop).toBeLessThan(top + TURN_HEIGHT)
+    expect(document.querySelector('.lq-more-below')).not.toBeNull()
+  })
+
+  it('follows the lit word of a reading in progress after the crossing', async () => {
+    newestHeight = 900
+    sides = true
+    const reading = ref(false)
+    Object.defineProperty(useNarrationStore(), 'storyReading', {
+      configurable: true,
+      get: () => reading.value,
+    })
+    await mountWith(5)
+    const word = document.createElement('span')
+    word.className = 'lq-w-now'
+    pane().appendChild(word)
+    await readNewest()
+    reading.value = true
+    await cross(false)
+    // The word sits 700 px into the newest turn: it is in view, near the bottom.
+    const wordTop = topOf(4) + 700
+    expect(pane().scrollTop).toBeGreaterThan(wordTop - PANE)
+    expect(pane().scrollTop).toBeLessThanOrEqual(wordTop)
   })
 })
