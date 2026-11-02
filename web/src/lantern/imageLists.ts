@@ -47,7 +47,7 @@ export function portraitId(actName: string, classKey: string): string {
 
 /** One image in Content Studio's format. */
 export interface GameImage {
-  /** Slug naming the image's files in the studio; unique across the game; a room's is its music track id, a portrait's `act<N>-portrait-<class>`, or `portrait-<class>` when the character is in several acts. */
+  /** Slug naming the image's files in the studio; unique across the game apart from a shared portrait, which every act that has the character lists; a room's is its music track id, a portrait's `act<N>-portrait-<class>`, or `portrait-<class>` when the character is in several acts. */
   id: string
   /** Shown in the studio: the room's or the character's name. */
   title: string
