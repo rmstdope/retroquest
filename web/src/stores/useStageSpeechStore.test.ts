@@ -174,6 +174,18 @@ describe('useStageSpeechStore', () => {
     ])
   })
 
+  it('answers for a line by turn and unit: held back until released, shown once the conversation lets go of it', () => {
+    const speech = useStageSpeechStore()
+    const first = turn(say('Mira', 'One.') + '\n' + say('Mira', 'Two.'), 'Mira')
+    speech.observe(first)
+    // Block 0 is shown at once (the first line of the unnarrated turn is released with no wait), block 1 is not yet.
+    expect(speech.lineShown(first.id, 0, 0)).toBe(true)
+    expect(speech.lineShown(first.id, 1, 0)).toBe(false)
+    speech.clear()
+    expect(speech.lineShown(first.id, 1, 0)).toBe(true)
+    expect(speech.lineSpeaking(first.id, 1, 0)).toBe(false)
+  })
+
   it('stops releasing lines once cleared', () => {
     const speech = useStageSpeechStore()
     speech.observe(turn(say('Mira', 'A.\n\nB.'), 'Mira'))

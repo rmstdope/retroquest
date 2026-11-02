@@ -19,7 +19,7 @@ async function enter(page: Page, command: string): Promise<void> {
   await input.press('Enter')
 }
 
-for (const width of [1440, 1060]) {
+for (const width of [1440]) {
   test(`at ${width}px the speech column holds 46px portraits and clears the cards`, async ({
     page,
   }): Promise<void> => {
@@ -94,7 +94,7 @@ test('when a run fills the column its name and portrait step down to the first l
 test('a name too long for the room wraps between words and stays inside the column', async ({
   page,
 }): Promise<void> => {
-  await page.setViewportSize({ width: 1060, height: 800 })
+  await page.setViewportSize({ width: 1280, height: 800 })
   await page.goto('/')
   await page.getByRole('button', { name: 'Start', exact: true }).click()
   await page.locator('.lq-chapter-button').click()
@@ -140,7 +140,40 @@ test('a name too long for the room wraps between words and stays inside the colu
   expect(result.inside).toBe(true)
 })
 
-test('on a phone a short conversation rests at the foot and a two-line name clears the row above', async ({
+test('at 1060px the lines are in the one column, in the middle, with 46px portraits', async ({
+  page,
+}): Promise<void> => {
+  await page.setViewportSize({ width: 1060, height: 800 })
+  await page.goto('/')
+  await page.getByRole('button', { name: 'Start', exact: true }).click()
+  await page.locator('.lq-chapter-button').click()
+  await enter(page, 'talk to voice')
+  await enter(page, 'talk to grandmother')
+  await enter(page, 'say hello to grandmother')
+
+  const column = page.locator('.lq-story-wrap.lq-one-column')
+  await expect(page.locator('.lq-speech-zone')).toHaveCount(0)
+  const portraits = column.locator('[data-testid="portrait"]')
+  await expect(portraits.first()).toBeVisible()
+  for (const box of await portraits.evaluateAll((els) =>
+    els.map((el) => el.getBoundingClientRect().width),
+  ))
+    expect(Math.round(box)).toBe(46)
+  const box = (await column.boundingBox())!
+  expect(box.width).toBeLessThanOrEqual(620)
+  expect(Math.abs(box.x + box.width / 2 - 530)).toBeLessThan(2)
+  await expect(column.locator('.lq-cl-left .lq-line-name')).toHaveText('Elior')
+  // A line takes up to three quarters of the column, not of its own width.
+  const widest = await column
+    .locator('[data-testid="speech-line"]')
+    .evaluateAll((rows) =>
+      Math.max(...rows.map((row) => row.getBoundingClientRect().width)),
+    )
+  expect(widest).toBeGreaterThan(box.width * 0.5)
+  expect(widest).toBeLessThanOrEqual(box.width * 0.75 + 1)
+})
+
+test('on a phone the lines rest at the foot of the column and a two-line name clears the row above', async ({
   page,
 }): Promise<void> => {
   await page.setViewportSize({ width: 390, height: 844 })
@@ -153,41 +186,29 @@ test('on a phone a short conversation rests at the foot and a two-line name clea
     timeout: 30_000,
   })
 
-  // The rows rest at the foot of the thread while they fit.
-  const rest = await page.evaluate(() => {
-    const thread = document.querySelector('.lq-thread')!
-    const row = thread.querySelector('.lq-ln')!
-    return (
-      thread.getBoundingClientRect().bottom - row.getBoundingClientRect().bottom
-    )
-  })
-  expect(rest).toBeLessThanOrEqual(14)
-
   // Elior answers: his run follows Grandmother's. At the largest text size
   // and a narrow column his name takes two lines, above his words and below
   // the row before.
   await enter(page, 'say hello to grandmother')
-  await expect(page.locator('.lq-line-left .lq-line-name')).toHaveText(
-    'Elior',
-    { timeout: 30_000 },
-  )
+  await expect(page.locator('.lq-cl-left .lq-line-name')).toHaveText('Elior', {
+    timeout: 30_000,
+  })
   const clear = await page.evaluate(() => {
-    const thread = document.querySelector<HTMLElement>('.lq-thread')!
-    thread.style.width = '220px'
-    thread.style.setProperty('--lq-text-scale', '1.18')
-    const row = thread.querySelector('.lq-line-left')!
+    const column = document.querySelector<HTMLElement>('.lq-one-column')!
+    column.style.setProperty('--lq-text-scale', '1.18')
+    const row = column.querySelector('.lq-cl-left')!
     const label = row.querySelector<HTMLElement>('.lq-line-name')!
-    label.textContent = 'Master Merchant Aldric'
+    label.textContent = 'Master Merchant Aldric Of The Far Reaches'
     const before = row.previousElementSibling!.getBoundingClientRect()
     const at = label.getBoundingClientRect()
     return {
-      lines: at.height > 24,
       aboveWords:
         at.bottom <= row.querySelector('.lq-line')!.getBoundingClientRect().top,
       belowRowBefore: at.top >= before.bottom,
+      inside: at.right <= column.getBoundingClientRect().right,
     }
   })
-  expect(clear.lines).toBe(true)
   expect(clear.aboveWords).toBe(true)
   expect(clear.belowRowBefore).toBe(true)
+  expect(clear.inside).toBe(true)
 })

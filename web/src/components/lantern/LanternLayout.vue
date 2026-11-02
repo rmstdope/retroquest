@@ -29,12 +29,12 @@ import { nameActions, type NameAction } from '@/lantern/nameActions'
 import { parseCountedName } from '@/lantern/inventoryChanges'
 import { useStoryFollow } from '@/composables/useStoryFollow'
 import { useNarrationPaper } from '@/composables/useNarrationPaper'
-import { paperHeight } from '@/lantern/paperHeight'
 import {
   SHORT_QUERY,
   useMediaQuery,
   KEYBOARD_QUERY,
   WIDE_QUERY,
+  SIDES_QUERY,
 } from '@/composables/useMediaQuery'
 import ActionComposer from './ActionComposer.vue'
 import ArrivalOnPicture from './ArrivalOnPicture.vue'
@@ -58,6 +58,7 @@ import SectionNav, { type Section } from './SectionNav.vue'
 import StageButtons from './StageButtons.vue'
 import StagePicture from './StagePicture.vue'
 import StageSpeech from './StageSpeech.vue'
+import ColumnTurn from './ColumnTurn.vue'
 import StoryDrawer from './StoryDrawer.vue'
 import StoryNameMenu from './StoryNameMenu.vue'
 import { NAME_SELECTOR, useNameStops } from '@/composables/useNameStops'
@@ -79,19 +80,21 @@ import TitlePage from './TitlePage.vue'
  * pill. One "▾ Hide" on its own line at the bottom centre of the picture (or N,
  * or Escape when nothing is narrated) clears both the cards and the speech,
  * leaving a "▴ Show" tab in its place; the tab, N or the next turn with a card
- * brings both back as they were, and every turn is read in the story drawer. A
- * phone keeps the paper as a band under the picture, with its own Hide and
- * "▴ Narration" tab.
+ * brings both back as they were, and every turn is read in the story drawer.
+ * Under about 1100 px wide (a laptop window too narrow for two sides, and
+ * every phone's picture stage) there is no side for speech: the cards and the
+ * chat-style lines share one column over the picture, in the order they
+ * happened (`ColumnTurn`), about 620px wide in the middle on a laptop window
+ * and across the picture on a phone, down to the same Hide and Show.
  * The first time the player walks into a room its arrival is told on the
  * middle of the picture instead (`ArrivalOnPicture`, `useArrivalStore`): the
- * cards and the speech are clear (no Hide or tab on the laptop; a phone's paper
- * slides down to its "▴ Narration" tab) and the cards come back when the arrival
- * clears (on the laptop as a slim card with the command, the room itself having
- * been told in the middle). Enter or Space goes on, a click on the
+ * words are clear (no Hide or Show) and the cards come back when the arrival
+ * clears (as a slim card with the command, the room itself having been told
+ * in the middle). Enter or Space goes on, a click on the
  * picture too; Escape, the tab, an action or typing clear it at once.
  * Smaller screens that are not short (a phone upright) play the same stage
  * arranged for a tall screen: the plate across the top with "⟲ Story so far"
- * (the whole story over the stage), speech and the paper over the lower half
+ * (the whole story over the stage), the one column over the picture
  * and the folded bar above the section tabs (Story, Bag, Spells, Quests, Map);
  * the actions are a sheet (at most 62% of the height) over the picture that
  * folds after every turn. A short screen (a phone on its side) keeps the text
@@ -126,6 +129,12 @@ const short = useMediaQuery(SHORT_QUERY)
 const phoneStage = computed(() => !wide.value && !short.value)
 /** The room is played on its picture: the laptop stage or the phone's. */
 const staged = computed(() => wide.value || phoneStage.value)
+/** The laptop window is wide enough for the narrator on one side and speech on the other. */
+const sides = useMediaQuery(SIDES_QUERY)
+/** The laptop stage with a side each for the narrator and for speech. */
+const twoSides = computed(() => wide.value && sides.value)
+/** Everything is told in one column over the picture: a phone, or a laptop window too narrow for two sides. */
+const column = computed(() => staged.value && !twoSides.value)
 /** A mouse and keyboard: the narration hint names keys instead of taps. */
 const keyboardPlayer = useMediaQuery(KEYBOARD_QUERY)
 /** The cursor is in a text field (the command box): only Esc steers the voice there. */
@@ -250,10 +259,6 @@ function onPicturePress(event: MouseEvent): void {
   if (speech.conversation) narration.skipAll()
 }
 
-/** The ✕ on the picture cleared it: focus goes to the story band. */
-function focusStory(): void {
-  storyEl.value?.focus({ preventScroll: true })
-}
 watch(
   () => drawerTab.value !== null,
   (open) => {
@@ -294,13 +299,13 @@ const paperEl = ref<HTMLElement | null>(null)
 const contentEl = ref<HTMLElement | null>(null)
 const tabEl = ref<HTMLButtonElement | null>(null)
 
-/** The narration paper of the laptop stage (see `useNarrationPaper`). */
+/** The narration paper of the stage, a column of cards (see `useNarrationPaper`). */
 const paper = useNarrationPaper(
   () => game.turns,
   () => stageKey.value,
-  () => wide.value,
+  () => staged.value,
 )
-/** What the story pane holds: the narration cards on the laptop, the paper's turn on a phone, every turn elsewhere. */
+/** What the story pane holds: the narration cards on the stage, every turn elsewhere. */
 const storyTurns = computed(() =>
   staged.value ? paper.shownTurns.value : game.turns,
 )
@@ -312,50 +317,29 @@ const paperAway = computed(
     (paper.hidden.value || arrival.active),
 )
 /**
- * Something is on the picture for the one Hide to clear: on the laptop either
- * side (the narrator's cards or the speech), elsewhere the paper.
+ * Something is on the picture for the one Hide to clear: the narrator's
+ * cards, or on the two-sided laptop stage the speech beside them.
  */
 const wordsVisible = computed(
-  () => paper.visible.value || (wide.value && speech.visible.length > 0),
+  () => paper.visible.value || (twoSides.value && speech.visible.length > 0),
 )
-/** The laptop's "▾ Hide": the words are showing and no arrival holds them away. */
+/** The "▾ Hide": the words are showing and no arrival holds them away. */
 const showHide = computed(
   () =>
-    wide.value && wordsVisible.value && !paper.hidden.value && !arrival.active,
+    staged.value &&
+    wordsVisible.value &&
+    !paper.hidden.value &&
+    !arrival.active,
 )
-/** The tab that brings the words back: on the laptop "▴ Show" (not during an arrival), elsewhere the paper's own tab. */
-const showTab = computed(() =>
-  wide.value
-    ? wordsVisible.value && paper.hidden.value && !arrival.active
-    : paperAway.value,
+/** The "▴ Show" that brings the words back (not during an arrival). */
+const showTab = computed(
+  () =>
+    staged.value && wordsVisible.value && paper.hidden.value && !arrival.active,
 )
-/** The laptop's Hide button, which hands focus to the tab. */
+/** The Hide button, which hands focus to the tab. */
 const hideEl = ref<HTMLButtonElement | null>(null)
-/** The paper's height in px, or null before it was measured (and off the stage). */
-const paperPx = ref<number | null>(null)
 
-/**
- * Set the paper's height from its content: grown to fit up to half the play
- * area. Its CSS glides the change.
- */
-function measurePaper(): void {
-  const wrap = paperEl.value
-  const story = storyEl.value
-  const content = contentEl.value
-  const area = mainEl.value
-  // The laptop's cards are a column: they grow up the side, not a band.
-  if (!staged.value || wide.value || !wrap || !story || !content || !area) {
-    paperPx.value = null
-    return
-  }
-  const style = getComputedStyle(story)
-  const padding =
-    (parseFloat(style.paddingTop) || 0) + (parseFloat(style.paddingBottom) || 0)
-  const chrome = wrap.offsetHeight - story.clientHeight + padding
-  paperPx.value = paperHeight(content.offsetHeight, chrome, area.clientHeight)
-}
-
-/** Hide the words (on the laptop both sides); focus goes to the tab they leave. */
+/** Hide the words (the column, or both sides); focus goes to the tab they leave. */
 async function hidePaper(): Promise<void> {
   paper.hide()
   await nextTick()
@@ -378,40 +362,21 @@ function setWordsHidden(hide: boolean): void {
   else if (focusWasOnTab && !hide) void showPaper()
 }
 
-// An arrival holds the paper away (inert) and ends by giving it back: focus
-// in the paper when it goes moves to the tab, and focus on the tab when it
-// goes (the tab leaves with it) moves on to the paper's Hide button.
-watch(
-  () => arrival.active,
-  (active) => {
-    const focus = document.activeElement
-    // The laptop shows neither Hide nor tab during an arrival.
-    if (wide.value) return
-    if (active && staged.value && paperEl.value?.contains(focus))
-      void nextTick(() => tabEl.value?.focus())
-    else if (!active && focus && focus === tabEl.value)
-      void nextTick(() =>
-        paperEl.value?.querySelector<HTMLElement>('.lq-paper-corner')?.focus(),
-      )
-  },
-)
-
 /** Bring the paper back; focus goes to its Hide button. */
 async function showPaper(): Promise<void> {
   // The tab also ends an arrival told on the picture, which holds the paper away.
   clearArrival()
   paper.show()
   await nextTick()
-  if (wide.value) hideEl.value?.focus()
-  else paperEl.value?.querySelector<HTMLElement>('.lq-paper-corner')?.focus()
+  hideEl.value?.focus()
 }
 
-/** The keys N steers: only on the laptop, only with a paper (or its tab) to steer. */
+/** The keys N steers: only on the stage, only with words (or the tab) to steer. */
 function onPaperKey(event: KeyboardEvent): void {
   if (event.key !== 'n' && event.key !== 'N') return
   if (event.defaultPrevented || event.repeat) return
   if (event.ctrlKey || event.metaKey || event.altKey) return
-  if (!wide.value || !wordsVisible.value || dialogOpen()) return
+  if (!staged.value || !wordsVisible.value || dialogOpen()) return
   // An arrival on the picture holds the paper away; Escape, Enter or the tab end it.
   if (arrival.active) return
   const target = event.target instanceof Element ? event.target : null
@@ -498,7 +463,6 @@ function answerTooLong(): boolean {
 // The story also changes size without scrolling: the sheet opens or folds,
 // the window turns, a section is shown again, the room card grows.
 let storyResize: ResizeObserver | undefined
-let paperResize: ResizeObserver | undefined
 
 /** Whether a pop-up, menu or dialog is open (it has its own keys). */
 function dialogOpen(): boolean {
@@ -537,20 +501,20 @@ function isEmptyBoxEnter(event: KeyboardEvent): boolean {
 
 /** Keys that steer the narration; see `onNarrationKey`. */
 function onNarrationKey(event: KeyboardEvent): void {
-  // Escape (unless a drawer, the map or a menu took it first) clears the
-  // speech on a phone; on the laptop it does what Hide does, when nothing is
-  // being narrated (while it is, Escape only skips, below).
-  if (event.key === 'Escape' && !event.defaultPrevented && staged.value) {
-    if (!wide.value) speech.clear()
-    else if (
-      wordsVisible.value &&
-      !paper.hidden.value &&
-      !narration.isNarrating &&
-      !arrival.active &&
-      !dialogOpen()
-    )
-      setWordsHidden(true)
-  }
+  // Escape (unless a drawer, the map or a menu took it first) does what Hide
+  // does on the stage, when nothing is being narrated (while it is, Escape
+  // only skips, below).
+  if (
+    event.key === 'Escape' &&
+    !event.defaultPrevented &&
+    staged.value &&
+    wordsVisible.value &&
+    !paper.hidden.value &&
+    !narration.isNarrating &&
+    !arrival.active &&
+    !dialogOpen()
+  )
+    setWordsHidden(true)
   if (!(narration.isNarrating || arrival.active)) return
   // The command box handles its own Enter (and marks it handled); on an
   // arrival an empty box still lets that Enter go on.
@@ -620,33 +584,35 @@ onMounted(() => {
     })
     storyResize.observe(storyEl.value)
   }
-  if (typeof ResizeObserver !== 'undefined') {
-    // The paper grows with its content, and with the play area it may fill half of.
-    paperResize = new ResizeObserver(measurePaper)
-    if (contentEl.value) paperResize.observe(contentEl.value)
-    if (mainEl.value) paperResize.observe(mainEl.value)
-  }
-  measurePaper()
 })
 
-/** The least height (px) the conversation needs to show the newest line's speaker and first line whole. */
+/** The least height (px) the column needs to show the newest line's speaker and first line whole. */
 const MIN_SPEECH_ROOM = 120
 /**
  * The phone's room plate is folded to one row. It folds when a conversation is
- * on the picture under an open narration paper and the conversation's room
- * (reported by the speech zone) is under `MIN_SPEECH_ROOM`; then it stays
+ * on the picture under an open column of words and the column's room
+ * (its height) is under `MIN_SPEECH_ROOM`; then it stays
  * folded, so it does not fold and open line by line, until the conversation
  * is cleared or the narration is hidden. Nothing is saved.
  */
 const plateFolded = ref(false)
 
-/** The conversation's room as the speech zone last reported it (px). */
+/** The column's room as last measured (px). */
 const speechRoom = ref(Number.POSITIVE_INFINITY)
-
-/** The speech zone's height changed. */
-function onSpeechRoom(height: number): void {
-  speechRoom.value = height
-}
+let columnResize: ResizeObserver | undefined
+watch(
+  paperEl,
+  (el) => {
+    columnResize?.disconnect()
+    if (!el || typeof ResizeObserver === 'undefined') return
+    columnResize = new ResizeObserver(() => {
+      speechRoom.value = el.clientHeight
+    })
+    columnResize.observe(el)
+  },
+  { flush: 'post' },
+)
+onUnmounted(() => columnResize?.disconnect())
 
 watch(
   () =>
@@ -688,9 +654,9 @@ watch(
 onUnmounted(() => widePlateResize?.disconnect())
 
 /** Faded by how far back the card is: 0 newest, 1 the one before, 2 older (as speech lines). */
-function cardAge(index: number, count: number): string {
+function cardAge(index: number, count: number): 'new' | 'prev' | 'old' {
   const back = count - 1 - index
-  return back === 0 ? 'lq-age-new' : back === 1 ? 'lq-age-prev' : 'lq-age-old'
+  return back === 0 ? 'new' : back === 1 ? 'prev' : 'old'
 }
 
 /** The phone's plate height, which the arrival on the picture stays clear of. */
@@ -740,20 +706,10 @@ onUnmounted(() => {
   narration.skipAll()
   storyResize?.disconnect()
   actionsResize?.disconnect()
-  paperResize?.disconnect()
 })
 
-// Larger or smaller text changes how much of the turn is still below, and how
-// tall the paper grows.
-watch(
-  () => settings.textSize,
-  () => {
-    measurePaper()
-    updateMoreBelow()
-  },
-  { flush: 'post' },
-)
-watch(staged, measurePaper, { flush: 'post' })
+// Larger or smaller text changes how much of the turn is still below.
+watch(() => settings.textSize, updateMoreBelow, { flush: 'post' })
 
 // A reading that ends (above all a skip) draws the rest of the turn at once,
 // which grows the story without scrolling it (the room kept for the hint
@@ -765,7 +721,7 @@ watch(storyHeld, async (held) => {
   if (held) return
   await nextTick()
   const latest = contentEl.value?.lastElementChild
-  if (wide.value && !narration.readToEnd && latest && storyEl.value) {
+  if (staged.value && !narration.readToEnd && latest && storyEl.value) {
     const top =
       latest.getBoundingClientRect().top -
       storyEl.value.getBoundingClientRect().top +
@@ -1350,14 +1306,11 @@ watch(
           @story="drawerTab = 'story'"
         />
         <StageSpeech
-          v-if="staged"
+          v-if="twoSides"
           v-show="section === 'story'"
-          :class="{ 'lq-covered': sheetOpen, 'lq-above-hide': wide }"
-          :phone="phoneStage"
-          :folded="plateFolded"
-          :away="wide && (paper.hidden.value || arrival.active)"
-          @focus-story="focusStory"
-          @room="onSpeechRoom"
+          class="lq-above-hide"
+          :class="{ 'lq-covered': sheetOpen }"
+          :away="paper.hidden.value || arrival.active"
         />
         <div
           v-show="
@@ -1368,7 +1321,8 @@ watch(
           ref="paperEl"
           class="lq-story-wrap"
           :class="{
-            'lq-cards': wide,
+            'lq-cards': staged,
+            'lq-one-column': column,
             'lq-hint-room': storyHeld,
             'lq-paper-away': paperAway,
             'lq-covered': sheetOpen,
@@ -1379,9 +1333,7 @@ watch(
                   top: `${cardsTop}px`,
                   bottom: `calc(${actionsHeight}px + var(--lq-hide-line) + 12px)`,
                 }
-              : staged && paperPx !== null
-                ? { height: `${paperPx}px` }
-                : {}
+              : {}
           "
           :inert="paperAway || undefined"
         >
@@ -1396,23 +1348,25 @@ watch(
           >
             <h2 class="lq-sr-only">Story</h2>
             <div ref="contentEl" class="lq-paper-content">
-              <StoryTurn
-                v-for="(turn, index) in storyTurns"
-                :key="turn.id"
-                :turn="turn"
-                :card="wide"
-                :class="wide ? cardAge(index, storyTurns.length) : undefined"
-              />
+              <template v-for="(turn, index) in storyTurns" :key="turn.id">
+                <ColumnTurn
+                  v-if="column"
+                  :turn="turn"
+                  :age="cardAge(index, storyTurns.length)"
+                />
+                <StoryTurn
+                  v-else
+                  :turn="turn"
+                  :card="staged"
+                  :class="
+                    staged
+                      ? `lq-age-${cardAge(index, storyTurns.length)}`
+                      : undefined
+                  "
+                />
+              </template>
             </div>
           </section>
-          <button
-            v-if="phoneStage"
-            type="button"
-            class="lq-paper-corner lq-paper-hide"
-            @click="hidePaper"
-          >
-            ▾ Hide
-          </button>
           <p
             v-if="narration.hintVisible"
             class="lq-narration-hint"
@@ -1434,18 +1388,15 @@ watch(
           v-if="staged"
           v-show="section === 'story'"
           class="lq-paper-tabrow"
-          :class="{
-            'lq-paper-none': !wordsVisible,
-            'lq-covered': sheetOpen,
-          }"
+          :class="{ 'lq-covered': sheetOpen }"
         >
           <button
             v-if="showHide"
             ref="hideEl"
             type="button"
             class="lq-words-hide"
-            title="Hide the words (N)"
-            aria-keyshortcuts="N"
+            :title="wide ? 'Hide the words (N)' : undefined"
+            :aria-keyshortcuts="wide ? 'N' : undefined"
             @click="hidePaper"
           >
             ▾ Hide
@@ -1459,7 +1410,7 @@ watch(
             :aria-keyshortcuts="wide ? 'N' : undefined"
             @click="showPaper"
           >
-            {{ wide ? '▴ Show' : '▴ Narration' }}
+            ▴ Show
           </button>
         </div>
 
@@ -1706,8 +1657,8 @@ watch(
   gap: 8px;
 }
 .lq-staged .lq-story-wrap.lq-cards.lq-paper-away {
-  transform: none;
   opacity: 0;
+  visibility: hidden;
   /* Fades out, then leaves reach (as the paper did when it slid down). */
   transition:
     opacity calc(0.2s * var(--lq-motion)) ease,
@@ -1715,14 +1666,6 @@ watch(
 }
 .lq-cards.lq-hint-room {
   padding-bottom: 40px;
-}
-.lq-cards .lq-paper-corner {
-  order: -1;
-  position: static;
-  align-self: flex-start;
-  flex: 0 0 auto;
-  margin: 0 0 6px 12px;
-  pointer-events: auto;
 }
 .lq-cards .lq-narration-hint {
   left: 12px;
@@ -1738,30 +1681,38 @@ watch(
 .lq-cards .lq-narration-hint.lq-hint-raised {
   bottom: 56px;
 }
-/* The phone: the plate across the top, the paper across the width, the sheet over the picture. */
+/* One column over the picture, on a laptop window too narrow for two sides:
+   in the middle, about 620px wide, so lines stay a comfortable length and the
+   picture shows at both sides. */
+.lq-staged .lq-story-wrap.lq-cards.lq-one-column {
+  left: max(16px, calc(50% - 310px));
+  width: min(620px, calc(100% - 32px));
+}
+/* The phone: the plate across the top, then the one column across the width
+   (8px margins) down to the Hide line above the folded bar; the sheet is over the picture. */
+.lq-phone .lq-story-wrap.lq-cards.lq-one-column {
+  --lq-portrait: 32px;
+  position: relative;
+  left: auto;
+  width: auto;
+  flex: 1 1 0;
+  min-height: 0;
+  margin: 0 8px var(--lq-hide-line);
+}
 .lq-phone-plate {
   position: relative;
   z-index: 1;
   flex: 0 0 auto;
   margin: 8px 8px 0;
 }
-.lq-phone .lq-story-wrap {
-  padding: 0 16px;
-  margin-bottom: 0;
-}
-.lq-phone .lq-paper-corner {
-  right: 16px;
-}
-.lq-phone .lq-paper-tab {
-  right: 12px;
-}
-/* The laptop: one Hide on its own slim line at the foot of the picture, the
-   cards and the speech ending above it; hidden, the "▴ Show" tab rests in
-   its place. Both sit at the bottom centre. */
-.lq-wide {
+/* The stage: one Hide on its own slim line at the foot of the picture, just
+   above the actions (the laptop's row, the phone's folded bar), the words
+   ending above it; hidden, the "▴ Show" tab rests in its place. Both sit at
+   the bottom centre. */
+.lq-staged {
   --lq-hide-line: 40px;
 }
-.lq-wide .lq-paper-tab {
+.lq-staged .lq-paper-tab {
   right: auto;
   left: 50%;
   transform: translateX(-50%);
@@ -1824,36 +1775,10 @@ watch(
   overflow-y: auto;
   padding: 16px;
 }
-/* Hidden: slid down behind the actions, and out of reach until the tab brings it back. */
-.lq-staged .lq-story-wrap.lq-paper-away {
-  transform: translateY(100%);
-  visibility: hidden;
-  transition:
-    transform calc(0.2s * var(--lq-motion)) ease,
-    visibility 0s linear calc(0.2s * var(--lq-motion));
-}
 .lq-paper-content {
   display: flex;
   flex-direction: column;
   gap: calc(18px * var(--lq-density));
-}
-.lq-paper-corner {
-  position: absolute;
-  top: 8px;
-  right: 24px;
-  z-index: 1;
-  height: 32px;
-  padding: 0 12px;
-  border: 1px solid var(--lq-line);
-  border-radius: 16px;
-  background: var(--lq-raised);
-  color: var(--lq-muted);
-  font: inherit;
-  font-size: 13px;
-  cursor: pointer;
-}
-.lq-paper-corner:hover {
-  color: var(--lq-fg);
 }
 /* A zero-height row on the edge of the actions, so the tab rests on them. */
 .lq-paper-tabrow {
@@ -1861,9 +1786,10 @@ watch(
   z-index: 3;
   flex: 0 0 0;
 }
-/* With no paper (an empty turn) the row takes over pushing the
-   actions to the foot of the stage. */
-.lq-paper-tabrow.lq-paper-none {
+/* The row (and the actions after it) rests at the foot of the stage when
+   nothing in the flow above it takes the room: no words yet, or the column
+   of a laptop window lying over the picture. */
+.lq-paper-tabrow {
   margin-top: auto;
 }
 .lq-paper-tab {

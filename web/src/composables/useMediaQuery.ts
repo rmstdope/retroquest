@@ -2,6 +2,8 @@ import { onScopeDispose, ref, type Ref } from 'vue'
 
 /** Screens that get the laptop layout (side column, room card). */
 export const WIDE_QUERY = '(min-width: 1024px) and (min-height: 560px)'
+/** Laptop windows wide enough for the narrator on one side and speech on the other; narrower ones (and phones) tell everything in one column. */
+export const SIDES_QUERY = '(min-width: 1100px)'
 /** A mouse or trackpad and a keyboard: the player has keys to press, not taps. */
 export const KEYBOARD_QUERY = '(hover: hover) and (pointer: fine)'
 /** Short screens (phone landscape): the section tabs move into the header. */

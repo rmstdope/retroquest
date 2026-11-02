@@ -71,14 +71,14 @@ describe('LanternLayout: the stage on a phone', () => {
       expect(w.find('.lq-story-drawer').exists()).toBe(false)
     })
 
-    it('opens the sheet over the picture from the bar, covering the paper and speech', async () => {
+    it('opens the sheet over the picture from the bar, covering the words', async () => {
       await w.get('.lq-dock-open').trigger('click')
       expect(w.find('.lq-sheet').exists()).toBe(true)
       expect(w.get('.lq-sheet').isVisible()).toBe(true)
       expect(w.find('.lq-scrim').exists()).toBe(true)
       expect(w.find('.lq-dock').exists()).toBe(false)
       expect(w.get('.lq-story-wrap').classes()).toContain('lq-covered')
-      expect(w.get('.lq-speech-zone').classes()).toContain('lq-covered')
+      expect(w.find('.lq-speech-zone').exists()).toBe(false)
     })
 
     it('folds the sheet after a turn, so the answer is read on the picture', async () => {
@@ -128,7 +128,23 @@ describe('LanternLayout: the stage on a phone', () => {
     const WORDS =
       '[character_name]Grandmother[/character_name]\n[dialogue]There you are.[/dialogue]'
 
-    beforeEach(() => mountOn('upright'))
+    /** The column's height changes: the observers the layout set are told. */
+    const observers: (() => void)[] = []
+
+    beforeEach(async () => {
+      observers.length = 0
+      vi.stubGlobal(
+        'ResizeObserver',
+        class {
+          constructor(callback: () => void) {
+            observers.push(callback)
+          }
+          observe(): void {}
+          disconnect(): void {}
+        },
+      )
+      await mountOn('upright')
+    })
 
     /** A turn answered with Grandmother's words, addressed to her. */
     async function grandmotherSpeaks(): Promise<void> {
@@ -147,9 +163,13 @@ describe('LanternLayout: the stage on a phone', () => {
       await flushPromises()
     }
 
-    /** The conversation's room is `height` px tall, as the speech zone reports. */
+    /** The column has `height` px of room between the plate and the Hide. */
     async function roomIs(height: number): Promise<void> {
-      w.findComponent({ name: 'StageSpeech' }).vm.$emit('room', height)
+      Object.defineProperty(w.get('.lq-story-wrap').element, 'clientHeight', {
+        configurable: true,
+        value: height,
+      })
+      observers.forEach((notify) => notify())
       await flushPromises()
     }
 
@@ -165,7 +185,6 @@ describe('LanternLayout: the stage on a phone', () => {
       await grandmotherSpeaks()
       await roomIs(58)
       expect(plate().classes()).toContain('lq-plate-folded')
-      expect(w.get('.lq-speech-zone').classes()).toContain('lq-speech-folded')
       await roomIs(140)
       await grandmotherSpeaks()
       await roomIs(58)
@@ -177,17 +196,11 @@ describe('LanternLayout: the stage on a phone', () => {
       expect(plate().classes()).not.toContain('lq-plate-folded')
     })
 
-    it('opens again when the conversation is cleared with ✕', async () => {
+    it('opens again on Escape, which hides the words', async () => {
       await grandmotherSpeaks()
       await roomIs(58)
-      await w.get('.lq-clear').trigger('click')
-      await flushPromises()
-      expect(plate().classes()).not.toContain('lq-plate-folded')
-    })
-
-    it('opens again on Escape', async () => {
-      await grandmotherSpeaks()
-      await roomIs(58)
+      useGameStore().dismissTitle()
+      useGameStore().showModal = false
       document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }))
       await flushPromises()
       expect(plate().classes()).not.toContain('lq-plate-folded')
@@ -196,7 +209,7 @@ describe('LanternLayout: the stage on a phone', () => {
     it('opens again when the narration is hidden, and does not fold again while hidden', async () => {
       await grandmotherSpeaks()
       await roomIs(58)
-      await w.get('.lq-paper-hide').trigger('click')
+      await w.get('.lq-words-hide').trigger('click')
       await flushPromises()
       expect(plate().classes()).not.toContain('lq-plate-folded')
       await roomIs(58)

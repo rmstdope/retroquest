@@ -54,12 +54,12 @@ const initial = computed(() => props.name.trim().charAt(0).toUpperCase())
 </template>
 
 <style scoped>
-/* A fixed size: the portrait does not scale with the window. */
+/* A fixed size (46px, or what `--lq-portrait` says: 32px on the phone's column): the portrait does not scale with the window. */
 .lq-portrait {
   position: relative;
   flex: none;
-  width: 46px;
-  height: 46px;
+  width: var(--lq-portrait, 46px);
+  height: var(--lq-portrait, 46px);
   border-radius: 50%;
   border: 2px solid #fff;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
