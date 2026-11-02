@@ -14,10 +14,10 @@ import {
 
 /**
  * The conversation shown on the room's picture (never saved). A command that
- * addresses a character starts or continues a conversation with them; any
- * other turn clears it (showing only Elior's own words, such as his journal,
- * when it has any), and so does a turn that moves Elior to another room, and so does addressing someone else (which starts a
- * fresh one). The lines of each turn are the quotes of its answer
+ * addresses a character starts or continues a conversation with them, and
+ * addressing someone else starts a fresh one. A turn that moves Elior to
+ * another room clears it. Any other turn clears it too, and shows only Elior's
+ * own words (such as his journal) when it has any. The lines of each turn are the quotes of its answer
  * (`speechLines`), shown as the narrator reaches them when the turn is
  * narrated, and otherwise one at a time by a reading pause (`readingPauseMs`);
  * `revealAll` shows the rest of the turn at once.
