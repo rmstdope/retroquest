@@ -83,6 +83,40 @@ export const useStageSpeechStore = defineStore('stageSpeech', () => {
     return !later
   }
 
+  /** The conversation's line a turn's unit and paragraph made, if the conversation still holds it. */
+  function lineAt(
+    turnId: number,
+    unit: number,
+    firstWord: number,
+  ): StageLine | undefined {
+    return conversation.value?.lines.find(
+      (line) =>
+        line.turnId === turnId &&
+        line.unit === unit &&
+        line.firstWord === firstWord,
+    )
+  }
+
+  /**
+   * Whether the line a turn made (by unit and first word) is on the page now.
+   * A line the conversation no longer holds (an older turn, or one it was
+   * cleared of) was shown long ago.
+   */
+  function lineShown(turnId: number, unit: number, firstWord: number): boolean {
+    const line = lineAt(turnId, unit, firstWord)
+    return !line || isShown(line)
+  }
+
+  /** Whether that line is the one being read aloud now. */
+  function lineSpeaking(
+    turnId: number,
+    unit: number,
+    firstWord: number,
+  ): boolean {
+    const line = lineAt(turnId, unit, firstWord)
+    return !!line && isSpeaking(line)
+  }
+
   /** Release the next line of an unnarrated turn after the reading pause of the one before it. */
   function release(previous: StageLine | null): void {
     clearTimeout(timer)
@@ -150,6 +184,8 @@ export const useStageSpeechStore = defineStore('stageSpeech', () => {
     visible,
     isSpeaking,
     told,
+    lineShown,
+    lineSpeaking,
     revealAll,
     clear,
     observe,

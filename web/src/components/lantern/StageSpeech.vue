@@ -21,20 +21,16 @@ import SpeechPortrait from './SpeechPortrait.vue'
  * oldest leaves at the top, under a soft fade. A line taller than the room
  * never loses its top: the thread scrolls so the newest line shows from its
  * speaker down, its end faded at the bottom (the story band has every word).
- * The conversation is kept by `useStageSpeechStore`. On a phone a round ✕ at
- * the top right clears it (the story band keeps every line) and hands focus
- * to the story band (`focus-story`), and Escape clears it too, which the
- * layout handles with the other keys. On the laptop there is no control here:
- * the one Hide of the layout clears both sides, and `away` says the words are
- * hidden, so the zone fades out and is unreachable while the lines are kept. The zone fills the space under the stage's top (on a
- * phone, between the plate and the paper, the thread starting 44px under the plate); a
- * press on it shows the rest of the turn's lines at once. Not shown while
- * there is no conversation. The zone reports its height (`room`) whenever it
- * changes, so the layout can fold the plate when the room is too small;
- * `folded` says the plate is folded, and the phone's ✕ then sits at the very top.
+ * The conversation is kept by `useStageSpeechStore`. This is the laptop
+ * stage with a side each for the narrator and for speech; a phone and a narrow
+ * window tell speech in the one column with the cards (`ColumnTurn`). There is
+ * no control here: the one Hide of the layout clears both sides, and `away`
+ * says the words are hidden, so the zone fades out and is unreachable while
+ * the lines are kept. The zone fills the space under the stage's top; a press
+ * on it shows the rest of the turn's lines at once. Not shown while there is no
+ * conversation.
  */
-defineProps<{ phone?: boolean; folded?: boolean; away?: boolean }>()
-const emit = defineEmits<{ 'focus-story': []; room: [height: number] }>()
+defineProps<{ away?: boolean }>()
 const game = useGameStore()
 const speech = useStageSpeechStore()
 const narration = useNarrationStore()
@@ -121,39 +117,17 @@ watch(thread, (el) => {
 })
 onBeforeUnmount(() => threadResize?.disconnect())
 
-/** The room's element, whose height is reported to the layout. */
-const zone = ref<HTMLElement | null>(null)
-let zoneResize: ResizeObserver | undefined
-watch(zone, (el) => {
-  zoneResize?.disconnect()
-  if (!el || typeof ResizeObserver === 'undefined') return
-  zoneResize = new ResizeObserver(() => emit('room', el.clientHeight))
-  zoneResize.observe(el)
-})
-onBeforeUnmount(() => zoneResize?.disconnect())
-
 /** Show the rest of the turn at once (the narrator, if reading, stops too). */
 function hurry(): void {
   speech.revealAll()
   narration.skipAll()
 }
-
-/** Clear the picture and give focus to the story band. */
-function clearAndFocus(): void {
-  speech.clear()
-  emit('focus-story')
-}
 </script>
 
 <template>
   <div
-    ref="zone"
     class="lq-speech-zone"
-    :class="{
-      'lq-phone-speech': phone,
-      'lq-speech-folded': folded,
-      'lq-speech-away': away,
-    }"
+    :class="{ 'lq-speech-away': away }"
     :inert="away || undefined"
     data-testid="speech-zone"
     @click="hurry"
@@ -215,16 +189,6 @@ function clearAndFocus(): void {
         </div>
         <!-- eslint-enable vue/no-v-html -->
       </div>
-      <button
-        v-if="phone"
-        type="button"
-        class="lq-clear"
-        aria-label="Clear the conversation"
-        title="Clear the conversation"
-        @click.stop="clearAndFocus"
-      >
-        ✕
-      </button>
     </div>
   </div>
 </template>
@@ -386,61 +350,5 @@ function clearAndFocus(): void {
   from {
     opacity: 0;
   }
-}
-/*
- * The phone: the same chat-style lines, the column as wide as the picture
- * between its margins, in the place speech has today.
- */
-.lq-phone-speech .lq-thread {
-  top: 44px;
-  bottom: 0;
-  left: 8px;
-  right: 8px;
-  width: auto;
-  padding-top: calc(36px * var(--lq-text-scale));
-  /* The soft fade ends above a two-line name. */
-  mask-image: linear-gradient(
-    to bottom,
-    transparent,
-    #000 calc(36px * var(--lq-text-scale) + 4px),
-    #000 calc(100% - 12px),
-    transparent
-  );
-}
-/* On the narrow phone a name may take two lines, so a run has room for both above its first line. */
-.lq-phone-speech .lq-run-first:not(:first-child) {
-  margin-top: calc(36px * var(--lq-text-scale));
-}
-.lq-phone-speech .lq-line {
-  max-width: 250px;
-  padding: 7px 10px;
-}
-.lq-phone-speech .lq-clear {
-  top: 6px;
-  right: 8px;
-}
-.lq-phone-speech.lq-speech-folded .lq-clear {
-  top: 2px;
-}
-.lq-clear {
-  position: absolute;
-  top: 74px;
-  right: 16px;
-  width: 30px;
-  height: 30px;
-  display: grid;
-  place-items: center;
-  border-radius: 50%;
-  border: 1px solid var(--lq-line);
-  background: var(--lq-surface);
-  color: var(--lq-fg);
-  font-size: 13px;
-  cursor: pointer;
-  pointer-events: auto;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
-}
-.lq-clear:focus-visible {
-  outline: 2px solid var(--lq-accent);
-  outline-offset: 2px;
 }
 </style>

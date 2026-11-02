@@ -63,8 +63,6 @@ describe('the narration paper', () => {
     document.querySelector('.lq-story-wrap') as HTMLElement
   const hideButton = (): HTMLElement | null =>
     document.querySelector('.lq-words-hide')
-  const phoneHide = (): HTMLElement | null =>
-    document.querySelector('.lq-paper-hide')
   const speechZone = (): HTMLElement =>
     document.querySelector('[data-testid="speech-zone"]') as HTMLElement
   const tab = (): HTMLElement | null => document.querySelector('.lq-paper-tab')
@@ -163,7 +161,7 @@ describe('the narration paper', () => {
     expect(hideButton()?.getAttribute('title')).toBe('Hide the words (N)')
     // One Hide, outside the cards and not above them.
     expect(paper().contains(hideButton())).toBe(false)
-    expect(phoneHide()).toBeNull()
+
     expect(tab()).toBeNull()
 
     await settle()
@@ -384,41 +382,6 @@ describe('the narration paper', () => {
     expect(speechZone().hasAttribute('inert')).toBe(false)
   })
 
-  it('sizes the phone paper to its content, up to half the play area', async () => {
-    stubScreen(false)
-    const heights: Record<string, number> = {
-      'lq-paper-content': 200,
-      'lq-story-wrap': 260,
-    }
-    vi.spyOn(HTMLElement.prototype, 'offsetHeight', 'get').mockImplementation(
-      function (this: HTMLElement) {
-        const name = Object.keys(heights).find((c) =>
-          this.classList.contains(c),
-        )
-        return name ? (heights[name] ?? 0) : 0
-      },
-    )
-    vi.spyOn(HTMLElement.prototype, 'clientHeight', 'get').mockImplementation(
-      function (this: HTMLElement) {
-        if (this.classList.contains('lq-main')) return 1000
-        if (this.classList.contains('lq-story')) return 240
-        return 0
-      },
-    )
-    await mountWith([turn(1, 'First.')])
-    // chrome = wrap 260 - story 240 (+ no padding in jsdom) = 20
-    expect(paper().style.height).toBe('220px')
-
-    heights['lq-paper-content'] = 900
-    game.turns.push(turn(2, 'Long.'))
-    await nextTick()
-    const { useSettingsStore } = await import('@/stores/useSettingsStore')
-    useSettingsStore().textSize = 'large'
-    await nextTick()
-    await nextTick()
-    expect(paper().style.height).toBe('500px')
-  })
-
   it('lets the tab row push the actions down when there is no paper', async () => {
     await mountWith([turn(1, '', null)])
     expect(
@@ -475,17 +438,39 @@ describe('the narration paper', () => {
     expect(await helpText()).not.toContain('hide or show the')
   })
 
-  it('has the paper with Hide on a phone, and no N key', async () => {
+  it('tells a phone everything in one column with the one Hide, which N works too', async () => {
     stubScreen(false)
     await mountWith([turn(1, 'First.'), turn(2, 'Second.')])
     expect(
-      document.querySelectorAll('.lq-story [data-testid="turn"]'),
-    ).toHaveLength(1)
-    expect(phoneHide()).not.toBeNull()
-    expect(hideButton()).toBeNull()
+      document.querySelectorAll('.lq-story [data-testid="column-turn"]'),
+    ).toHaveLength(2)
+    expect(paper().classList.contains('lq-one-column')).toBe(true)
+    expect(document.querySelector('.lq-speech-zone')).toBeNull()
+    expect(document.querySelector('.lq-paper-corner')).toBeNull()
+    expect(hideButton()).not.toBeNull()
     press('n')
     await nextTick()
-    expect(tab()).toBeNull()
+    expect(tab()?.textContent?.trim()).toBe('▴ Show')
+    expect(hideButton()).toBeNull()
+  })
+
+  it('tells a laptop window under 1100 px wide in one column too, with the sides above it', async () => {
+    vi.stubGlobal(
+      'matchMedia',
+      vi.fn((query: string) => ({
+        matches: !query.includes('1100px'),
+        addEventListener: vi.fn(),
+        removeEventListener: vi.fn(),
+      })),
+    )
+    await mountWith([turn(1, 'First.')])
+    expect(paper().classList.contains('lq-one-column')).toBe(true)
+    expect(document.querySelector('.lq-speech-zone')).toBeNull()
+    w?.unmount()
+    stubScreen(true)
+    await mountWith([turn(1, 'First.')])
+    expect(paper().classList.contains('lq-one-column')).toBe(false)
+    expect(document.querySelector('.lq-speech-zone')).not.toBeNull()
   })
 
   it('keeps every turn in the story, with no Hide, on a short screen', async () => {

@@ -23,7 +23,7 @@ async function enter(page: Page, command: string): Promise<void> {
   await input.press('Enter')
 }
 
-for (const width of [1440, 1060]) {
+for (const width of [1440]) {
   test(`at ${width}px the cards sit up the left, under the plate, clear of the speech`, async ({
     page,
   }): Promise<void> => {
@@ -55,6 +55,36 @@ for (const width of [1440, 1060]) {
     }
   })
 }
+
+test('at 1060px the cards and the lines share one column in the middle, under the plate', async ({
+  page,
+}): Promise<void> => {
+  await page.setViewportSize({ width: 1060, height: 800 })
+  await start(page)
+  await enter(page, 'talk to voice')
+  await page.keyboard.press('Escape')
+  await enter(page, 'look')
+  await enter(page, 'talk to grandmother')
+
+  const column = page.locator('.lq-story-wrap.lq-one-column')
+  await expect(column.getByText('› talk to grandmother')).toBeVisible()
+  await expect(column.getByText('› look')).toBeVisible()
+  const lines = column.getByTestId('speech-line')
+  await expect(lines.first()).toBeVisible()
+
+  const wrap = (await column.boundingBox())!
+  const plate = (await page.locator('.lq-stage-plate').boundingBox())!
+  expect(wrap.y).toBeGreaterThanOrEqual(plate.y + plate.height)
+  expect(wrap.width).toBeLessThanOrEqual(620)
+  expect(Math.abs(wrap.x + wrap.width / 2 - 530)).toBeLessThan(2)
+  // The speech is in the column, none beside it.
+  await expect(page.locator('.lq-speech-zone')).toHaveCount(0)
+  for (let i = 0; i < (await lines.count()); i++) {
+    const box = (await lines.nth(i).boundingBox())!
+    expect(box.x).toBeGreaterThanOrEqual(wrap.x)
+    expect(box.x + box.width).toBeLessThanOrEqual(wrap.x + wrap.width + 1)
+  }
+})
 
 test.describe('with the narrator reading', () => {
   // Narration on, as for a new player (the config turns it off for the other specs).

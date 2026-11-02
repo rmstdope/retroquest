@@ -14,6 +14,7 @@ import StoryArrival from './StoryArrival.vue'
 import { useNarrationStore } from '@/stores/useNarrationStore'
 import { useReadAlong } from '@/composables/useReadAlong'
 import { arrivesOnPicture } from '@/lantern/stageArrival'
+import type { CardPiece } from '@/lantern/columnPieces'
 
 /**
  * One turn in the Lantern story: the command echo, the answer's blocks and
@@ -33,10 +34,18 @@ import { arrivesOnPicture } from '@/lantern/stageArrival'
  * is not on the card while it waits or is told, and leaves one slim line for
  * each piece (`QuestSlimLine`) once it has cleared; where it is not told in
  * the middle, the quest cards stay in the story.
+ *
+ * In the single column of a phone or a narrow window (`piece`, see
+ * `columnPieces`) the turn is told as several cards with the spoken lines
+ * between them, and each card is one `StoryTurn` that tells only its piece:
+ * its blocks, and the command, room, chips and news only when the piece
+ * carries them. A piece with nothing to show yet renders nothing.
  */
 const props = defineProps<{
   turn: Turn
   card?: boolean
+  /** Tell only this piece of the turn (the single column's card). */
+  piece?: CardPiece
   /** The full record (Story so far): quest news is always shown as its cards, and the learned spells' lines stay. */
   record?: boolean
 }>()
@@ -67,10 +76,11 @@ const newsPending = computed(
   () => !props.record && arrivalStore.newsPending(props.turn.id),
 )
 /** How many quest cards the story shows for the turn (none while the news is told in the middle). */
+const questCount = computed(() => props.turn.quests?.length ?? 0)
 const questCards = computed(() =>
-  newsInMiddle.value || newsPending.value
+  newsInMiddle.value || newsPending.value || !newsHere.value
     ? 0
-    : (props.turn.quests?.length ?? 0),
+    : questCount.value,
 )
 
 /** The answer's blocks: the whole record, or what the card shows once the learned spells are told in the middle. */
@@ -88,22 +98,31 @@ const speechTurn = computed(
 function onSpeech(block: TurnBlock): boolean {
   return (
     !!props.card &&
+    !props.piece &&
     speechTurn.value &&
     block.kind === 'dialogue' &&
     !!block.speaker
   )
 }
+/** Whether the piece (if any) tells block `index`. */
+function inPiece(index: number): boolean {
+  return !props.piece || props.piece.blocks.includes(index)
+}
 /** The room's description is told in the middle of the picture, not on the card. */
 const arrivalInMiddle = computed(() => arrivesOnPicture(props.turn))
 /** The card tells the room as a bare description. */
 const roomOnCard = computed(
-  () => !!props.card && !!props.turn.arrival && !arrivalInMiddle.value,
+  () =>
+    !!props.card &&
+    !!props.turn.arrival &&
+    !arrivalInMiddle.value &&
+    roomHere.value,
 )
 /** Nothing on the card but the command. */
 const slim = computed(
   () =>
     !!props.card &&
-    !blocks.value.some((block) => !onSpeech(block)) &&
+    !blocks.value.some((block, index) => inPiece(index) && !onSpeech(block)) &&
     !roomOnCard.value &&
     !chips.value.length &&
     !questCards.value,
@@ -111,7 +130,9 @@ const slim = computed(
 /** Only silent information: a red-edged card. */
 const errorCard = computed(() => {
   if (!props.card || roomOnCard.value) return false
-  const told = blocks.value.filter((block) => !onSpeech(block))
+  const told = blocks.value.filter(
+    (block, index) => inPiece(index) && !onSpeech(block),
+  )
   return (
     told.length > 0 &&
     told.every((block) => block.kind === 'failure') &&
@@ -132,10 +153,45 @@ const speakerLabels = computed(() => {
   })
 })
 
-const chips = computed(() => [
-  ...props.turn.gained.map((chip) => ({ chip, sign: '+', spoken: 'Gained' })),
-  ...props.turn.lost.map((chip) => ({ chip, sign: '−', spoken: 'Lost' })),
-])
+const chips = computed(() =>
+  props.piece && !props.piece.chips
+    ? []
+    : [
+        ...props.turn.gained.map((chip) => ({
+          chip,
+          sign: '+',
+          spoken: 'Gained',
+        })),
+        ...props.turn.lost.map((chip) => ({
+          chip,
+          sign: '−',
+          spoken: 'Lost',
+        })),
+      ],
+)
+
+/** Whether the piece (if any) carries the room told as a description. */
+const roomHere = computed(() => !props.piece || props.piece.arrival)
+/** Whether the piece (if any) carries the turn's quest news. */
+const newsHere = computed(() => !props.piece || props.piece.news)
+/** Whether the piece (if any) starts with the command. */
+const commandHere = computed(() => !props.piece || props.piece.command)
+
+/** How many news lines or cards the piece shows now. */
+const newsShown = computed(() => {
+  return newsHere.value && !newsPending.value ? questCount.value : 0
+})
+/** A piece with nothing to show yet (its words not reached, or no news told): no card at all. */
+const hollow = computed(() => {
+  if (!props.piece) return false
+  return (
+    !commandHere.value &&
+    !props.piece.blocks.some((index) => shown(index)) &&
+    !(roomHere.value && !!props.turn.arrival && shown(arrivalUnit.value)) &&
+    !chips.value.length &&
+    !newsShown.value
+  )
+})
 
 function chipLabel(chip: Chip): string {
   const count = chip.count > 1 ? ` ×${chip.count}` : ''
@@ -145,6 +201,7 @@ function chipLabel(chip: Chip): string {
 
 <template>
   <article
+    v-if="!hollow"
     ref="root"
     class="lq-turn"
     :class="{
@@ -154,12 +211,16 @@ function chipLabel(chip: Chip): string {
     }"
     data-testid="turn"
   >
-    <div v-if="turn.command" class="lq-command" data-testid="command">
+    <div
+      v-if="turn.command && commandHere"
+      class="lq-command"
+      data-testid="command"
+    >
       › {{ turn.command }}
     </div>
 
     <template v-for="(block, index) in blocks" :key="index">
-      <template v-if="shown(index) && !onSpeech(block)">
+      <template v-if="inPiece(index) && shown(index) && !onSpeech(block)">
         <!-- eslint-disable vue/no-v-html -->
         <p
           v-if="block.kind === 'text'"
@@ -235,7 +296,12 @@ function chipLabel(chip: Chip): string {
     </template>
 
     <StoryArrival
-      v-if="turn.arrival && shown(arrivalUnit) && !(card && arrivalInMiddle)"
+      v-if="
+        turn.arrival &&
+        roomHere &&
+        shown(arrivalUnit) &&
+        !(card && arrivalInMiddle)
+      "
       :arrival="turn.arrival"
       :command="turn.command"
       :stayed="!turn.description?.moved"
@@ -268,7 +334,7 @@ function chipLabel(chip: Chip): string {
       >
     </div>
 
-    <template v-if="newsInMiddle || newsPending">
+    <template v-if="newsHere && (newsInMiddle || newsPending)">
       <template v-if="newsInMiddle && !newsPending">
         <QuestSlimLine
           v-for="(news, index) in turn.quests ?? []"

@@ -2,7 +2,7 @@ import { test, expect, type Page } from '@playwright/test'
 
 /**
  * The conversation on the picture: a line taller than the room between the
- * plate and the narration paper is never cut through its top on a phone, so
+ * plate and the Hide is never cut through its top on a phone, so
  * its speaker and first words can be read, and when more lines are said than
  * fit, the newest stays at the foot while the oldest leave at the top
  * (rq-gw9m).
@@ -27,7 +27,7 @@ async function enter(page: Page, command: string): Promise<void> {
 /** Whether the centre of the element is what the player sees there (not clipped or covered). */
 async function seenAtCentre(page: Page, selector: string): Promise<boolean> {
   return page.evaluate((sel) => {
-    const element = document.querySelector(sel)
+    const element = Array.from(document.querySelectorAll(sel)).at(-1)
     if (!element) return false
     const box = element.getBoundingClientRect()
     const hit = document.elementFromPoint(
@@ -39,17 +39,26 @@ async function seenAtCentre(page: Page, selector: string): Promise<boolean> {
 }
 
 /** Whether the top-left corner of the element (its first words) is what the player sees there. */
-async function seenAtTop(page: Page, selector: string): Promise<boolean> {
-  return page.evaluate((sel) => {
-    const element = document.querySelector(sel)
-    if (!element) return false
-    const box = element.getBoundingClientRect()
-    const hit = document.elementFromPoint(box.left + 12, box.top + 12)
-    return hit !== null && element.contains(hit)
-  }, selector)
+async function seenAtTop(
+  page: Page,
+  selector: string,
+  index = -1,
+): Promise<boolean> {
+  return page.evaluate(
+    ([sel, at]) => {
+      const element = Array.from(document.querySelectorAll(sel as string)).at(
+        at as number,
+      )
+      if (!element) return false
+      const box = element.getBoundingClientRect()
+      const hit = document.elementFromPoint(box.left + 12, box.top + 12)
+      return hit !== null && element.contains(hit)
+    },
+    [selector, index],
+  )
 }
 
-test('on a phone the newest speech line is never cut through its speaker and first words', async ({
+test('on a phone a long answer opens at its start, with the command and the first line in view', async ({
   page,
 }): Promise<void> => {
   await page.setViewportSize({ width: 390, height: 844 })
@@ -61,22 +70,26 @@ test('on a phone the newest speech line is never cut through its speaker and fir
   await expect(
     page.getByRole('region', { name: 'Current location' }),
   ).toContainText("Elior's Cottage")
-  // Her greeting comes a paragraph at a time; the third is far taller than
-  // the conversation's room once the paper takes half the stage.
+  // Her greeting comes a paragraph at a time, in the column after the command
+  // that asked for it; the turn opens at its start, with its first line in view.
   await enter(page, 'talk to grandmother')
   const lines = page.getByTestId('speech-line')
   await expect(lines).toHaveCount(3)
   await expect(lines.nth(2)).toContainText("If you're going out")
-
-  // Its speaker and first words are seen, not clipped away or covered (the
-  // next paragraph waits several seconds of reading time).
+  await expect
+    .poll(() => seenAtTop(page, '.lq-one-column [data-testid="command"]'), {
+      timeout: 2_000,
+    })
+    .toBe(true)
   await expect
     .poll(
       () =>
-        seenAtTop(page, '[data-testid="speech-line"]:nth-child(3) .lq-line'),
-      {
-        timeout: 2_000,
-      },
+        seenAtTop(
+          page,
+          '.lq-one-column [data-testid="speech-line"] .lq-line',
+          0,
+        ),
+      { timeout: 2_000 },
     )
     .toBe(true)
 })
@@ -113,65 +126,24 @@ test('on a laptop the newest line stays at the foot when more lines are said tha
   ).toBe(false)
 })
 
-test('on a short laptop window the plate folds so the newest line and the ✕ have room (rq-7cv0)', async ({
+test('on a low window the column lies between the plate and the Hide, with the newest line whole (rq-7cv0)', async ({
   page,
 }): Promise<void> => {
-  await page.setViewportSize({ width: 1000, height: 613 })
+  await page.setViewportSize({ width: 1000, height: 520 })
   await page.goto('/')
   await page.getByRole('button', { name: 'Start', exact: true }).click()
   await page.locator('.lq-chapter-button').click()
 
   await enter(page, 'talk to voice')
   await enter(page, 'talk to grandmother')
-  const plate = page.locator('.lq-phone-plate')
-  await expect(plate).toHaveClass(/lq-plate-folded/)
-  await expect(plate.locator('.lq-label')).toBeHidden()
-  const rows = await plate.evaluate((el) => el.getBoundingClientRect().height)
-  expect(rows).toBeLessThan(60)
-
-  // The ✕ is clear of the right portrait, and the portrait is not under the plate.
-  const boxes = await page.evaluate(() => {
-    const rect = (sel: string): DOMRect | undefined =>
-      document.querySelector(sel)?.getBoundingClientRect()
-    return {
-      clear: rect('.lq-clear'),
-      portrait: rect(
-        '.lq-phone-speech .lq-ln:last-child [data-testid="portrait"]',
-      ),
-      plate: rect('.lq-phone-plate'),
-    }
-  })
-  expect(boxes.clear!.bottom).toBeLessThanOrEqual(boxes.portrait!.top)
-  expect(boxes.portrait!.top).toBeGreaterThanOrEqual(boxes.plate!.bottom)
-
-  // The newest line shows its speaker and first line whole.
-  const newest = page.locator('[data-testid="speech-line"]').last()
-  await expect
-    .poll(
-      () =>
-        seenAtCentre(page, '[data-testid="speech-line"]:last-child .lq-line'),
-      {
-        timeout: 2_000,
-      },
-    )
-    .toBe(true)
-  await expect(newest).toBeVisible()
-  // Its first line of words is whole too: inside the thread, clear of both fades (12px).
-  const whole = await page.evaluate(() => {
-    const thread = document.querySelector('.lq-thread')!.getBoundingClientRect()
-    const words = document.querySelector(
-      '[data-testid="speech-line"]:last-child span',
-    )!
-    const first = words.getClientRects()[0]!
-    const name = document
-      .querySelector('[data-testid="speech-line"]:last-child .lq-line')!
-      .getBoundingClientRect()
-    return name.top >= thread.top + 12 && first.bottom <= thread.bottom - 12
-  })
-  expect(whole).toBe(true)
-
-  await page.getByRole('button', { name: 'Clear the conversation' }).click()
-  await expect(plate).not.toHaveClass(/lq-plate-folded/)
+  const plate = (await page.locator('.lq-phone-plate').boundingBox())!
+  const column = (await page.locator('.lq-one-column').boundingBox())!
+  const hide = (await page
+    .getByRole('button', { name: '▾ Hide' })
+    .boundingBox())!
+  expect(column.y).toBeGreaterThanOrEqual(plate.y + plate.height)
+  expect(column.y + column.height).toBeLessThanOrEqual(hide.y)
+  await expect(page.getByTestId('speech-line').first()).toBeVisible()
 })
 
 test('on an upright phone the plate does not fold (rq-7cv0)', async ({

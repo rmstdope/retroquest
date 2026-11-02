@@ -18,6 +18,7 @@ import { turnUnits } from '@/lantern/narrationUnits'
 import { useArrivalStore } from '@/stores/useArrivalStore'
 import type { ArrivalPart } from '@/lantern/stageArrival'
 import type { QuestNews } from '@/lantern/questNews'
+import type { CardPiece } from '@/lantern/columnPieces'
 
 function turn(partial: Partial<Turn>): Turn {
   return {
@@ -767,6 +768,87 @@ describe('StoryTurn quest news told in the middle', () => {
     it('keeps the line in the record', () => {
       const w = mount(StoryTurn, { props: { turn: turn(told), record: true } })
       expect(visibleText(w)).toContain('You have learned revive.')
+    })
+  })
+
+  describe('a piece of the turn in the single column', () => {
+    const piece = (over: Partial<CardPiece> = {}): CardPiece => ({
+      kind: 'card',
+      blocks: [],
+      command: false,
+      arrival: false,
+      chips: false,
+      news: false,
+      ...over,
+    })
+    const text = 'First.\nSecond.'
+
+    it('tells only the blocks of its piece', () => {
+      const w = mount(StoryTurn, {
+        props: {
+          turn: turn({ command: 'look', text }),
+          card: true,
+          piece: piece({ blocks: [1] }),
+        },
+      })
+      expect(visibleText(w)).toBe('Second.')
+    })
+
+    it('types the command only on the piece that carries it', () => {
+      const t = turn({ command: 'look', text })
+      const first = mount(StoryTurn, {
+        props: {
+          turn: t,
+          card: true,
+          piece: piece({ blocks: [0], command: true }),
+        },
+      })
+      expect(first.find('[data-testid="command"]').text()).toBe('› look')
+      const later = mount(StoryTurn, {
+        props: { turn: t, card: true, piece: piece({ blocks: [1] }) },
+      })
+      expect(later.find('[data-testid="command"]').exists()).toBe(false)
+    })
+
+    it('is a slim card when the piece holds only the command', () => {
+      const w = mount(StoryTurn, {
+        props: {
+          turn: turn({ command: 'talk to mira', text }),
+          card: true,
+          piece: piece({ command: true }),
+        },
+      })
+      expect(w.classes()).toContain('lq-slim')
+    })
+
+    it('puts the chips only on the piece that carries them', () => {
+      const t = turn({
+        text,
+        gained: [{ kind: 'item', name: 'key', count: 1 }],
+      })
+      const without = mount(StoryTurn, {
+        props: { turn: t, card: true, piece: piece({ blocks: [0] }) },
+      })
+      expect(without.findAll('[data-testid="chip"]')).toHaveLength(0)
+      const withChips = mount(StoryTurn, {
+        props: {
+          turn: t,
+          card: true,
+          piece: piece({ blocks: [1], chips: true }),
+        },
+      })
+      expect(withChips.findAll('[data-testid="chip"]')).toHaveLength(1)
+    })
+
+    it('renders nothing for a piece with nothing to show', () => {
+      const w = mount(StoryTurn, {
+        props: {
+          turn: turn({ text }),
+          card: true,
+          piece: piece({ news: true }),
+        },
+      })
+      expect(w.find('article').exists()).toBe(false)
     })
   })
 })

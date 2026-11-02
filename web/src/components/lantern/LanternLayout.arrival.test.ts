@@ -267,12 +267,12 @@ describe('LanternLayout: the arrival on the picture', () => {
     expect(storyAside(w)).toBe(false)
   })
 
-  it('clears with the Narration tab on a phone', async () => {
+  it('shows neither Hide nor Show while the arrival is told on a phone', async () => {
     const w = await ready(false)
+    useSettingsStore(pinia).narrationOn = false
     await run('go north')
-    await w.get('.lq-paper-tab').trigger('click')
-    expect(card(w)).toBe('')
-    expect(useNarrationStore(pinia).isNarrating).toBe(false)
+    expect(w.find('.lq-words-hide').exists()).toBe(false)
+    expect(w.find('.lq-paper-tab').exists()).toBe(false)
   })
 
   it('clears when an action is chosen', async () => {
@@ -549,62 +549,6 @@ describe('LanternLayout: the arrival on the picture', () => {
     await vi.advanceTimersByTimeAsync(0)
     expect(card(w)).toBe('')
     expect(storyAside(w)).toBe(false)
-  })
-
-  it('lets Enter press the Narration tab on a phone, which clears the arrival and takes focus to Hide', async () => {
-    const w = await ready(false)
-    useSettingsStore(pinia).narrationOn = false
-    useGameStore(pinia).turns.push({
-      id: 96,
-      command: 'south',
-      text: 'A man leaves.',
-      room: 'Garden',
-      description: { moved: true, firstVisit: true },
-      gained: [],
-      lost: [],
-      arrival: {
-        room: 'Garden',
-        description: 'A green garden.',
-        characters: [],
-        items: [],
-        exits: {},
-      },
-      narrate: true,
-    })
-    await vi.advanceTimersByTimeAsync(0)
-    const tab = w.get('.lq-paper-tab').element as HTMLElement
-    tab.focus()
-    const down = new KeyboardEvent('keydown', {
-      key: 'Enter',
-      bubbles: true,
-      cancelable: true,
-    })
-    tab.dispatchEvent(down)
-    // Not taken as "go on": the button itself is pressed (a click follows).
-    expect(down.defaultPrevented).toBe(false)
-    expect(card(w)).toContain('A man leaves.')
-    await w.get('.lq-paper-tab').trigger('click')
-    await vi.advanceTimersByTimeAsync(0)
-    expect(card(w)).toBe('')
-    expect(document.activeElement).toBe(w.get('.lq-paper-corner').element)
-  })
-
-  it('moves focus from the tab to Hide when the arrival ends by itself, on a phone', async () => {
-    const w = await ready(false)
-    useSettingsStore(pinia).narrationOn = false
-    await run('go north')
-    ;(w.get('.lq-paper-tab').element as HTMLElement).focus()
-    await vi.advanceTimersByTimeAsync(6000)
-    expect(card(w)).toBe('')
-    expect(document.activeElement).toBe(w.get('.lq-paper-corner').element)
-  })
-
-  it('moves focus from the paper to the tab when an arrival starts, on a phone', async () => {
-    const w = await ready(false)
-    useSettingsStore(pinia).narrationOn = false
-    ;(w.get('.lq-paper-corner').element as HTMLElement).focus()
-    await run('go north')
-    expect(document.activeElement).toBe(w.get('.lq-paper-tab').element)
   })
 
   it('does not let a held key run through the parts', async () => {

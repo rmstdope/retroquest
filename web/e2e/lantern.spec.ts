@@ -662,12 +662,13 @@ test.describe('Lantern UI (the default)', () => {
     await input.press('Enter')
     await expect(lines).toHaveCount(0)
 
-    // A phone keeps today's story layout: no speech on a picture.
+    // A phone tells the same turns in the one column: nothing is lost.
     await input.fill('talk to grandmother')
     await input.press('Enter')
     await expect(lines.first()).toBeVisible()
     await page.setViewportSize({ width: 390, height: 844 })
-    await expect(lines).toHaveCount(0)
+    await expect(lines.first()).toBeVisible()
+    await expect(page.locator('.lq-speech-zone')).toHaveCount(0)
   })
 
   test('a phone shows chat-style lines with a small round portrait, named once (rq-c15r.2)', async ({
@@ -687,13 +688,13 @@ test.describe('Lantern UI (the default)', () => {
     await say('talk to voice')
     await say('talk to grandmother')
 
-    const portrait = page.locator('.lq-phone-speech [data-testid="portrait"]')
+    const portrait = page.locator('.lq-one-column [data-testid="portrait"]')
     await expect(portrait.first()).toBeVisible()
     const size = await portrait.first().boundingBox()
-    expect(Math.round(size!.width)).toBe(46)
-    expect(Math.round(size!.height)).toBe(46)
+    expect(Math.round(size!.width)).toBe(32)
+    expect(Math.round(size!.height)).toBe(32)
     await expect(
-      page.locator('.lq-phone-speech .lq-line-name').first(),
+      page.locator('.lq-one-column .lq-line-name').first(),
     ).toHaveText('Grandmother')
   })
 

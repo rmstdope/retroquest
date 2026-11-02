@@ -140,21 +140,6 @@ describe('StageSpeech', () => {
     expect(w.get('.lq-thread').attributes('aria-hidden')).toBe('true')
   })
 
-  it('has one control on the phone, named for what it does, and nothing else to focus', async () => {
-    const speech = useStageSpeechStore()
-    const w = mount(StageSpeech, {
-      props: { phone: true },
-      attachTo: document.body,
-    })
-    speech.observe(turn(say('Mira', 'Hello.'), 'Mira'))
-    await w.vm.$nextTick()
-    const buttons = w.findAll('button, a, input, [tabindex]')
-    expect(buttons).toHaveLength(1)
-    expect(buttons[0].text()).toBe('✕')
-    expect(buttons[0].attributes('aria-label')).toBe('Clear the conversation')
-    expect(buttons[0].attributes('title')).toBe('Clear the conversation')
-  })
-
   it('is cleared away, and unreachable, while the words are hidden', async () => {
     const { speech, w } = mounted()
     speech.observe(turn(say('Mira', 'Hello.'), 'Mira'))
@@ -165,20 +150,6 @@ describe('StageSpeech', () => {
     expect(w.attributes('inert')).toBeDefined()
     // The lines are kept: hiding loses nothing.
     expect(w.findAll('[data-testid="speech-line"]')).toHaveLength(1)
-  })
-
-  it('clears with the phone button, which hands focus to the story band', async () => {
-    const speech = useStageSpeechStore()
-    const w = mount(StageSpeech, {
-      props: { phone: true },
-      attachTo: document.body,
-    })
-    speech.observe(turn(say('Mira', 'Hello.'), 'Mira'))
-    await w.vm.$nextTick()
-    await w.get('button').trigger('click')
-    expect(speech.conversation).toBeNull()
-    expect(w.emitted('focus-story')).toHaveLength(1)
-    expect(w.find('[data-testid="portrait"]').exists()).toBe(false)
   })
 
   it('shows no button until a line is shown', async () => {
@@ -196,42 +167,5 @@ describe('StageSpeech', () => {
     expect(w.findAll('[data-testid="speech-line"]')).toHaveLength(1)
     await w.get('[data-testid="speech-zone"]').trigger('click')
     expect(w.findAll('[data-testid="speech-line"]')).toHaveLength(3)
-  })
-
-  it('takes the phone arrangement when asked', () => {
-    const w = mount(StageSpeech, { props: { phone: true } })
-    expect(w.get('[data-testid="speech-zone"]').classes()).toContain(
-      'lq-phone-speech',
-    )
-  })
-
-  it('says how tall its room is, and again when the room changes', async () => {
-    const callbacks: Array<() => void> = []
-    vi.stubGlobal(
-      'ResizeObserver',
-      class {
-        constructor(callback: () => void) {
-          callbacks.push(callback)
-        }
-        observe(): void {}
-        disconnect(): void {}
-      },
-    )
-    const { w } = mounted()
-    await w.vm.$nextTick()
-    const zone = w.get('.lq-speech-zone').element
-    let height = 58
-    Object.defineProperty(zone, 'clientHeight', { get: () => height })
-    callbacks.forEach((callback) => callback())
-    height = 140
-    callbacks.forEach((callback) => callback())
-    expect(w.emitted('room')).toEqual([[58], [140]])
-  })
-
-  it('marks its zone when the plate above it is folded', async () => {
-    const { w } = mounted()
-    expect(w.get('.lq-speech-zone').classes()).not.toContain('lq-speech-folded')
-    await w.setProps({ folded: true })
-    expect(w.get('.lq-speech-zone').classes()).toContain('lq-speech-folded')
   })
 })
