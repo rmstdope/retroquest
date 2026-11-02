@@ -1,7 +1,7 @@
 /**
  * The lists of music Content Studio's Music workspace reads from the game: each
- * act's loop (`tts/act<N>/music.json`) and the quest stingers
- * (`tts/stingers.json`). They describe the tracks the game plays today, so new
+ * act's loop (`tts/act<N>/music.json`) and the stingers for quests
+ * and spells (`tts/stingers.json`). They describe the tracks the game plays today, so new
  * music can be made for them; the game keeps playing its own files.
  * The tts scripts `extract-act.ts` and `extract-shared.ts` write them.
  */

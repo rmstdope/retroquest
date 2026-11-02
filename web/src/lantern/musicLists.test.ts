@@ -175,8 +175,10 @@ describe('questStingers', () => {
       `web/public/audio/soundeffects/${QUEST_COMPLETE_FILE}`,
       `web/public/audio/soundeffects/${NEW_SPELL_FILE}`,
     ])
-    for (const file of files.slice(0, 2)) {
-      expect(existsSync(repoUrl(file ?? ''))).toBe(true)
+    for (const name of [NEW_QUEST_FILE, QUEST_COMPLETE_FILE]) {
+      expect(existsSync(repoUrl(`web/public/audio/soundeffects/${name}`))).toBe(
+        true,
+      )
     }
   })
 
