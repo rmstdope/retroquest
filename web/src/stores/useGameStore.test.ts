@@ -1236,7 +1236,7 @@ describe('useGameStore', () => {
       ])
       await startPlaying()
       expect(store.portraitFor('mira')).toMatch(
-        /images\/generated\/act1-portrait-mira\.png$/,
+        /images\/generated\/portrait-mira\.png$/,
       )
       expect(store.portraitFor('Elior')).toBe('')
     })

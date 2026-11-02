@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import { portraitUrl, roomPictureUrl } from './roomPicture'
 import { roomTrackId } from './musicLists'
-import { characterImages } from './imageLists'
+import { characterImages, portraitId } from './imageLists'
 import { Act1 } from '@/act1/Act1'
 
 describe('roomPictureUrl', () => {
@@ -27,6 +27,17 @@ describe('portraitUrl', () => {
     )
   })
 
+  it('is the same file in every act for a character who appears in several', () => {
+    const url = (act: string) => portraitUrl(act, 'Mira')
+    expect(url('Act3')).toBe(url('Act1'))
+    expect(url('Act4')).toBe(url('Act1'))
+    expect(url('Act1')).toMatch(/images\/generated\/portrait-mira\.png$/)
+  })
+
+  it('keeps the act in the file of a character of one act', () => {
+    expect(portraitUrl('Act1', 'Deer')).toMatch(/act1-portrait-deer\.png$/)
+  })
+
   it('is empty without an act or a class', () => {
     expect(portraitUrl('', 'Mira')).toBe('')
     expect(portraitUrl('Act1', '')).toBe('')
@@ -41,8 +52,6 @@ describe('the characters of each act and their portraits', () => {
     const cast = new GameController(new Game([act])).getActCharacters()
     const ids = characterImages(act).map((image) => image.id)
     expect(cast.length).toBe(ids.length)
-    expect(
-      cast.map((entry) => roomTrackId(act.name, `Portrait ${entry.key}`)),
-    ).toEqual(ids)
+    expect(cast.map((entry) => portraitId(act.name, entry.key))).toEqual(ids)
   })
 })

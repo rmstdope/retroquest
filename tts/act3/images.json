@@ -168,11 +168,11 @@
     "description": "Half a dozen miners, grey with rock dust, passing timbers hand to hand. The oldest of them gives the orders, and nobody argues."
   },
   {
-    "id": "act3-portrait-mira",
+    "id": "portrait-mira",
     "title": "Mira",
     "width": 480,
     "height": 640,
-    "description": "The village healer, with chalk dust still on her sleeves from the circle in the castle yard. She watches you the way she watches a fever."
+    "description": "Mira, the village healer. Her hut smells of drying sage, and she looks at you a moment longer than people usually do."
   },
   {
     "id": "act3-portrait-phoenix",
@@ -203,11 +203,11 @@
     "description": "A tall figure in a deep hood stands at the water's edge. Their feet make no sound on the stone, and you find you have lowered your voice."
   },
   {
-    "id": "act3-portrait-sir-cedric",
+    "id": "portrait-sir-cedric",
     "title": "Sir Cedric",
     "width": 480,
     "height": 640,
-    "description": "A tall knight in old, dented mail, his sword at his hip again. He keeps half a step behind you and to one side, where a guard walks."
+    "description": "A tall knight in old, dented mail. A pale patch on his surcoat shows where his device has been unpicked, and the scabbard at his hip hangs empty. He stands as if he were still on watch."
   },
   {
     "id": "act3-portrait-tide-born-guardian",

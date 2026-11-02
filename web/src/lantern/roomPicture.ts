@@ -3,6 +3,7 @@
  * room, named by the same id as the room's entry in the act's image list.
  */
 import { roomTrackId } from './musicLists'
+import { portraitId } from './imageLists'
 
 /**
  * The URL of the picture of a room, or '' while no room is known. The file may
@@ -17,9 +18,10 @@ export function roomPictureUrl(actName: string, roomKey: string): string {
 /**
  * The URL of a character's portrait: the image Content Studio made for the
  * character class `classKey` of the act, named as the act's image list names
- * it. The file may not exist yet; the speech then shows an initial card.
+ * it (one file for a character who appears in several acts). The file may
+ * not exist yet; the speech then shows an initial card.
  */
 export function portraitUrl(actName: string, classKey: string): string {
   if (!actName || !classKey) return ''
-  return `${import.meta.env.BASE_URL}images/generated/${roomTrackId(actName, `Portrait ${classKey}`)}.png`
+  return `${import.meta.env.BASE_URL}images/generated/${portraitId(actName, classKey)}.png`
 }
