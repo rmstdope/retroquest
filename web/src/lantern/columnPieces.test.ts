@@ -80,6 +80,21 @@ describe('columnPieces', () => {
     expect(kinds(t)).toEqual(['card'])
   })
 
+  it('tells the quotes as lines when the talk itself leaves the room', () => {
+    const t = turn(`The whisper comes.\n${say('voice', 'Rest.')}\nYou wake.`, {
+      command: 'say who are you to voice',
+      addressed: 'voice',
+      description: { moved: true, firstVisit: true },
+    })
+    expect(kinds(t)).toEqual([
+      'card',
+      'line:Elior',
+      'card',
+      'line:Voice',
+      'card',
+    ])
+  })
+
   it('has no command card for a turn without a command', () => {
     const t = turn('The room.', { command: null, addressed: undefined })
     const pieces = columnPieces(t, parseTurn(t.text))

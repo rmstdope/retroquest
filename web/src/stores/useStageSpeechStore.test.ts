@@ -49,11 +49,15 @@ describe('useStageSpeechStore', () => {
     expect(speech.visible).toEqual([])
   })
 
-  it('shows nothing when a talk moves Elior to another room', () => {
+  it('shows what is said when the talk itself moves Elior to another room, in a fresh conversation', () => {
     const speech = useStageSpeechStore()
+    speech.observe(turn(say('Mira', 'Hello.'), 'Mira'))
     speech.observe(turn(say('Voice', 'Wake.'), 'Voice', 'talk to voice', true))
-    expect(speech.conversation).toBeNull()
-    expect(speech.visible).toEqual([])
+    speech.revealAll()
+    expect(speech.conversation?.with).toBe('Voice')
+    expect(speech.visible.map((l) => [l.speaker, l.side, l.markup])).toEqual([
+      ['Voice', 'right', 'Wake.'],
+    ])
   })
 
   it('starts a conversation after turns it did not observe elsewhere', () => {

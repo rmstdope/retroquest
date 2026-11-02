@@ -567,6 +567,30 @@ describe('useArrivalStore', () => {
       expect(arrival.told).toContain(1)
     })
 
+    it('waits, after a talk that moved Elior, for the narrator to tell the talk first', async () => {
+      narration.begin(1, [voiced, voiced, silent], 'act1')
+      const line: ArrivalPart = {
+        kind: 'events',
+        lines: [{ unit: 1, markup: 'You are in the Cottage.' }],
+        voiced: true,
+        afterWords: true,
+      }
+      const room: ArrivalPart = {
+        kind: 'description',
+        lines: [{ unit: 2, markup: WORDS_48 }],
+        voiced: false,
+      }
+      arrival.show(1, [line, room], true)
+      expect(arrival.active).toBe(false)
+      expect(arrival.part).toBeNull()
+      FakeAudio.all[0].onended?.()
+      await nextTick()
+      vi.advanceTimersByTime(1000)
+      await nextTick()
+      expect(arrival.active).toBe(true)
+      expect(arrival.part?.kind).toBe('events')
+    })
+
     it('comes after the arrival when the turn also walked into a room', () => {
       arrival.show(1, [...parts(false, false), quest(1, false)], false)
       expect(arrival.part?.kind).toBe('description')

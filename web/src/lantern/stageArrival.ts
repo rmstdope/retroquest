@@ -1,7 +1,7 @@
 import type { RoomDescription } from '@/engine'
 import { narrationWords } from './narrationManifest'
 import type { NarrationUnit } from './narrationUnits'
-import { parseTurn } from './parseTurn'
+import { parseTurn, type TurnBlock } from './parseTurn'
 import { SPELL_HEADING, type SpellNews } from './spellNews'
 import {
   newQuestKicker,
@@ -41,6 +41,8 @@ export interface ArrivalPart {
   lines: ArrivalLine[]
   /** Whether the narrator speaks any of it (it has a recording). */
   voiced: boolean
+  /** The first part of an arrival whose talk is told on the sides first (`sideBlocks`): it waits until those words are told. */
+  afterWords?: true
 }
 
 /** How long a part is read when it is not narrated (ms). */
@@ -70,16 +72,39 @@ export function arrivesOnPicture(turn: {
 }
 
 /**
+ * How many of the answer's first blocks are told on the sides (the narrator's
+ * card and the speech) before the arrival comes up in the middle. A talk that
+ * takes Elior to another room (answering the dream's voice) is told as every
+ * conversation is, up to the arrival lines it ends on ("You are in …"); any
+ * other move tells its whole answer in the middle, so none.
+ */
+export function sideBlocks(
+  turn: { addressed?: string },
+  blocks: TurnBlock[],
+): number {
+  if (!turn.addressed) return 0
+  let count = blocks.length
+  while (count > 0 && blocks[count - 1].kind === 'event') count--
+  return count
+}
+
+/**
  * The parts of an arrival: the answer's words (a departure line, an event)
- * if there are any, then the room's description. `units` are the turn's
- * narration units, to say which part has a voice; the description is the unit
- * after the answer's blocks.
+ * if there are any, then the room's description. A talk that moved Elior
+ * leaves its words to the sides (`sideBlocks`), and its first part waits for
+ * them (`afterWords`). `units` are the turn's narration units, to say which
+ * part has a voice; the description is the unit after the answer's blocks.
  */
 export function arrivalParts(
-  turn: { text: string; arrival: { description: string } | null },
+  turn: {
+    text: string
+    arrival: { description: string } | null
+    addressed?: string
+  },
   units: NarrationUnit[],
 ): ArrivalPart[] {
   const blocks = parseTurn(turn.text)
+  const aside = sideBlocks(turn, blocks)
   /** Whether any line has a recording, from part `from` of its unit on. */
   const spoken = (lines: ArrivalLine[], from = 0): boolean =>
     lines.some((line) =>
@@ -87,7 +112,7 @@ export function arrivalParts(
     )
   const events: ArrivalLine[] = []
   blocks.forEach((block, unit) => {
-    if (block.kind !== 'checklist' && block.markup.trim())
+    if (unit >= aside && block.kind !== 'checklist' && block.markup.trim())
       events.push(
         block.kind === 'dialogue'
           ? { unit, markup: block.markup, joinsPrevious: true }
@@ -109,6 +134,7 @@ export function arrivalParts(
     // The unit's first part is the room's name, which the plate shows.
     parts.push({ kind: 'description', lines, voiced: spoken(lines, 1) })
   }
+  if (aside > 0 && parts.length) parts[0].afterWords = true
   return parts
 }
 

@@ -136,7 +136,10 @@ test.describe('the arrival told on the picture', () => {
       // The click that plays the turn must not also clear the arrival it starts.
       await actions.getByRole('button', { name: 'Voice', exact: true }).click()
       const lines = arrival(page).locator('.lq-arrival-line')
-      await expect(lines.first()).toContainText('You answer it')
+      // The answer is told on the sides first (rq-uqp8); the middle opens on the arrival line.
+      await expect(lines.first()).toContainText("You are in Elior's Cottage", {
+        timeout: 20_000,
+      })
       // The narrator goes on into Elior's Cottage, described as any arrival is.
       await expect(lines.first()).toContainText('A modest cottage', {
         timeout: 20_000,
