@@ -119,8 +119,9 @@ test('opens a journal drawer at once while the voice reads, and a press inside i
   // The card is away while the walk is told in the middle: it is there, not in view.
   await expect(lastTurnBlocks(page).first()).toBeAttached()
   await expect(page.locator('.lq-speaking')).toHaveCount(1)
-  // Block 1 is being read: the panels are still the ones from before the turn.
-  await expect(roomName).toHaveText(before ?? '')
+  // The room's picture went through the dark before the voice began, and the
+  // room's name changed in the dark; the rest of the panels still wait.
+  await expect(roomName).not.toHaveText(before ?? '')
 
   // A stage button is not a held panel: it opens its drawer, the voice reads on.
   const turns = await page.getByTestId('turn').count()

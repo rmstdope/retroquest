@@ -4,6 +4,7 @@ import { nextTick } from 'vue'
 import { createPinia, setActivePinia } from 'pinia'
 import { useNarrationStore, type NarrationAudio } from './useNarrationStore'
 import { useSettingsStore } from './useSettingsStore'
+import { useSceneStore } from './useSceneStore'
 import type { NarrationUnit } from '@/lantern/narrationUnits'
 import type { NarrationClip } from '@/lantern/narrationManifest'
 
@@ -492,5 +493,44 @@ describe('useNarrationStore', () => {
       expect(narration.revealed(1, 1)).toBe(true)
       expect(narration.speaking(1)?.unit).toBe(1)
     })
+  })
+})
+
+describe('a narrated move whose picture is still changing', () => {
+  beforeEach(() => {
+    setActivePinia(createPinia())
+    vi.useFakeTimers()
+    FakeAudio.all = []
+    useNarrationStore().setAudioFactory((src) => new FakeAudio(src))
+  })
+  afterEach(() => vi.useRealTimers())
+
+  it('shows nothing until the scene is up', () => {
+    const scene = useSceneStore()
+    const narration = useNarrationStore()
+    scene.settled('a.png')
+    scene.begin(7, 'b.png', () => {})
+    expect(narration.revealed(7, 0)).toBe(false)
+    expect(narration.revealed(8, 0)).toBe(true)
+    scene.skip()
+    expect(narration.revealed(7, 0)).toBe(true)
+  })
+
+  it('does not speak a held turn until it is started', () => {
+    const narration = useNarrationStore()
+    narration.begin(1, [voiced()], 'act1', true)
+    expect(narration.narrates(1)).toBe(true)
+    expect(FakeAudio.all).toHaveLength(0)
+    narration.start(1)
+    expect(FakeAudio.all).toHaveLength(1)
+    expect(narration.revealed(1, 0)).toBe(true)
+  })
+
+  it('a turn cut in on while held is not started', () => {
+    const narration = useNarrationStore()
+    narration.begin(1, [voiced()], 'act1', true)
+    narration.skipAll()
+    narration.start(1)
+    expect(FakeAudio.all).toHaveLength(0)
   })
 })

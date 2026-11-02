@@ -17,6 +17,11 @@ export const MUSIC_DUCK = 0.35
 export const MUSIC_DUCK_FADE_MS = 400
 /** How long one loop takes to fade out while the next fades in, in ms. */
 export const MUSIC_CROSSFADE_MS = 1500
+/**
+ * How long a change of loop through the dark takes (a change of scene), in ms:
+ * the old loop fades out over the first half, the new one rises over the second.
+ */
+export const MUSIC_THROUGH_MS = 2000
 /** How long the title page's music takes to rise from silence, in ms. */
 export const MUSIC_FADE_IN_MS = 2000
 /** Steps per fade. */
@@ -30,7 +35,9 @@ const FADE_STEPS = 10
  * When a different track replaces one that is playing, the old one keeps
  * playing on its own element and fades out while the new one fades in on a
  * second element (`MUSIC_CROSSFADE_MS`), so the old loop never reloads and
- * never drops out; the same track again changes nothing. A track loaded with
+ * never drops out; the same track again changes nothing. A change `through`
+ * the dark (a change of scene) fades the old loop out over the first half of
+ * `MUSIC_THROUGH_MS` and raises the new one over the second. A track loaded with
  * a fade-in time, with nothing playing, rises from silence once it sounds.
  *
  * Loops play on Web Audio (see `musicVoice.ts`): a track is decoded first, the
@@ -60,7 +67,12 @@ export function useMusic(
     return MUSIC_BASE_PATH + file.split('/').map(encodeURIComponent).join('/')
   }
 
-  function loadTrack(file: string, info: string, fadeInMs: number = 0): void {
+  function loadTrack(
+    file: string,
+    info: string,
+    fadeInMs: number = 0,
+    through: boolean = false,
+  ): void {
     if (!file) {
       request++
       requestedFile = ''
@@ -95,6 +107,7 @@ export function useMusic(
         returning ?? htmlVoiceFor(file),
         returning !== null,
         fadeInMs,
+        through,
       )
       return
     }
@@ -104,7 +117,14 @@ export function useMusic(
         voice?.dispose()
         return
       }
-      startVoice(file, info, voice ?? htmlVoiceFor(file), false, fadeInMs)
+      startVoice(
+        file,
+        info,
+        voice ?? htmlVoiceFor(file),
+        false,
+        fadeInMs,
+        through,
+      )
     })
   }
 
@@ -127,13 +147,14 @@ export function useMusic(
     next: MusicVoice,
     comingBack: boolean,
     fadeInMs: number = 0,
+    through: boolean = false,
   ): void {
     const crossfade =
       currentMusicFile.value !== '' && !active.paused && !musicMuted.value
     const fadeIn =
       fadeInMs > 0 && !crossfade && !comingBack && !musicMuted.value
     if (crossfade) {
-      fadeOutActive()
+      fadeOutActive(through ? MUSIC_THROUGH_MS / 2 : MUSIC_CROSSFADE_MS)
       if (!comingBack) next.volume = 0
     } else if (next !== active) {
       if (fade) clearInterval(fade)
@@ -150,7 +171,17 @@ export function useMusic(
     currentMusicFile.value = file
     musicInfo.value = info
 
-    if (crossfade) fadeTo(targetVolume.value, MUSIC_CROSSFADE_MS)
+    clearTimeout(rise)
+    rise = undefined
+    if (crossfade && through) {
+      // Through the dark: the new loop waits for the old one to be gone.
+      if (fade) clearInterval(fade)
+      fade = null
+      rise = setTimeout(() => {
+        rise = undefined
+        fadeTo(targetVolume.value, MUSIC_THROUGH_MS / 2)
+      }, MUSIC_THROUGH_MS / 2)
+    } else if (crossfade) fadeTo(targetVolume.value, MUSIC_CROSSFADE_MS)
     if (!musicMuted.value) {
       playActive()
     }
@@ -158,6 +189,8 @@ export function useMusic(
 
   /** The fade-in still to run, in ms; 0 when none waits for the sound. */
   let pendingFadeIn = 0
+  /** The wait before a loop changed through the dark rises. */
+  let rise: ReturnType<typeof setTimeout> | undefined
 
   /**
    * Starts the active voice. A fade-in waiting for the sound runs once play
@@ -222,6 +255,8 @@ export function useMusic(
 
   /** Silences every loop still fading out. */
   function stopCrossfade(): void {
+    clearTimeout(rise)
+    rise = undefined
     for (const { old, timer } of outgoing.splice(0)) {
       clearInterval(timer)
       retire(old)
@@ -233,7 +268,7 @@ export function useMusic(
    * voice's dip like the active one does, so it never sounds louder than the
    * ducked level.
    */
-  function fadeOutActive(): void {
+  function fadeOutActive(ms: number): void {
     const old = active
     const duckAtStart = narrating.value ? MUSIC_DUCK : 1
     const startVolume = old.volume / duckAtStart
@@ -250,7 +285,7 @@ export function useMusic(
           outgoing.splice(outgoing.indexOf(entry), 1)
           retire(old)
         }
-      }, MUSIC_CROSSFADE_MS / FADE_STEPS),
+      }, ms / FADE_STEPS),
     }
     outgoing.push(entry)
   }
@@ -295,7 +330,7 @@ export function useMusic(
   // A voice starting or ending fades the music; a settings change applies at once.
   watch(narrating, () => {
     // A music not yet sounding keeps its silence for the fade-in to rise from.
-    if (pendingFadeIn === 0) fadeTo(targetVolume.value)
+    if (pendingFadeIn === 0 && !rise) fadeTo(targetVolume.value)
   })
   watch(
     () => settings.musicVolume,

@@ -1,10 +1,13 @@
 // @vitest-environment jsdom
-import { describe, it, expect, vi, afterEach } from 'vitest'
+import { describe, it, expect, vi, afterEach, beforeEach } from 'vitest'
+import { createPinia, setActivePinia } from 'pinia'
+import { SCENE_HALF_MS, useSceneStore } from '@/stores/useSceneStore'
 import { mount } from '@vue/test-utils'
 import { nextTick } from 'vue'
 import StagePicture from './StagePicture.vue'
 
 describe('StagePicture', () => {
+  beforeEach(() => setActivePinia(createPinia()))
   afterEach(() => vi.useRealTimers())
 
   it('shows the paper backdrop when the room has no picture', () => {
@@ -68,5 +71,75 @@ describe('StagePicture', () => {
   it('is decorative', () => {
     const w = mount(StagePicture, { props: { src: '' } })
     expect(w.attributes('aria-hidden')).toBe('true')
+  })
+})
+
+describe('StagePicture during a change of scene', () => {
+  beforeEach(() => {
+    setActivePinia(createPinia())
+    vi.useFakeTimers()
+  })
+  afterEach(() => vi.useRealTimers())
+
+  it('keeps the old picture under the veil, then puts the new one in place in the dark', async () => {
+    const scene = useSceneStore()
+    const w = mount(StagePicture, { props: { src: '/a.png' } })
+    await w.get('img.lq-loading').trigger('load')
+    expect(scene.shown).toBe('/a.png')
+    scene.begin(1, '/b.png', () => {})
+    await w.setProps({ src: '/b.png' })
+    await w.get('img.lq-loading').trigger('load')
+    expect(w.classes()).toContain('lq-scene-out')
+    expect(w.findAll('img.lq-pic').map((i) => i.attributes('src'))).toEqual([
+      '/a.png',
+    ])
+    vi.advanceTimersByTime(SCENE_HALF_MS)
+    await nextTick()
+    expect(w.classes()).toContain('lq-scene-in')
+    expect(w.findAll('img.lq-pic').map((i) => i.attributes('src'))).toEqual([
+      '/b.png',
+    ])
+    vi.advanceTimersByTime(SCENE_HALF_MS)
+    await nextTick()
+    expect(scene.shown).toBe('/b.png')
+  })
+
+  it('reports a missing picture and rises as the backdrop', async () => {
+    const scene = useSceneStore()
+    const w = mount(StagePicture, { props: { src: '/a.png' } })
+    await w.get('img.lq-loading').trigger('load')
+    scene.begin(1, '/gone.png', () => {})
+    await w.setProps({ src: '/gone.png' })
+    await w.get('img.lq-loading').trigger('error')
+    vi.advanceTimersByTime(SCENE_HALF_MS)
+    await nextTick()
+    expect(w.find('img.lq-pic').exists()).toBe(false)
+    expect(scene.target).toBe('')
+  })
+
+  it('fades to the backdrop when the next room has no picture', async () => {
+    const scene = useSceneStore()
+    const w = mount(StagePicture, { props: { src: '/a.png' } })
+    await w.get('img.lq-loading').trigger('load')
+    scene.begin(1, '', () => {})
+    await w.setProps({ src: '' })
+    expect(w.find('img.lq-pic').exists()).toBe(true)
+    vi.advanceTimersByTime(SCENE_HALF_MS)
+    await nextTick()
+    expect(w.find('img.lq-pic').exists()).toBe(false)
+  })
+
+  it('shows the backdrop, never the old room, when skipped before the picture has loaded', async () => {
+    const scene = useSceneStore()
+    const w = mount(StagePicture, { props: { src: '/a.png' } })
+    await w.get('img.lq-loading').trigger('load')
+    scene.begin(1, '/b.png', () => {})
+    await w.setProps({ src: '/b.png' })
+    scene.skip()
+    await nextTick()
+    expect(w.find('img.lq-pic').exists()).toBe(false)
+    expect(w.classes()).toContain('lq-scene-idle')
+    await w.get('img.lq-loading').trigger('load')
+    expect(w.get('img.lq-pic').attributes('src')).toBe('/b.png')
   })
 })

@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { computed, ref, watch } from 'vue'
 import { useSettingsStore } from './useSettingsStore'
+import { useSceneStore } from './useSceneStore'
 import {
   narrationWords,
   wordAt,
@@ -107,6 +108,7 @@ export interface Speaking {
 /** Playback state and control for the story's narration. */
 export const useNarrationStore = defineStore('narration', () => {
   const settings = useSettingsStore()
+  const scene = useSceneStore()
   const active = ref<ActiveNarration | null>(null)
   const manifests = ref<Record<string, NarrationManifest>>({})
   const loading: Record<string, Promise<void>> = {}
@@ -175,8 +177,13 @@ export const useNarrationStore = defineStore('narration', () => {
     audioFactory = factory
   }
 
-  /** Whether unit `unit` of turn `turnId` is shown: every unit of a turn that is not being narrated is. */
+  /**
+   * Whether unit `unit` of turn `turnId` is shown: every unit of a turn that is
+   * not being narrated is, except while the picture of its move is still
+   * changing (`useSceneStore`), when none is.
+   */
   function revealed(turnId: number, unit: number): boolean {
+    if (scene.holds(turnId)) return false
     const now = active.value
     return !now || now.turnId !== turnId || unit < now.revealed
   }
@@ -283,7 +290,8 @@ export const useNarrationStore = defineStore('narration', () => {
    */
   function step(): void {
     const now = active.value
-    if (!now) return
+    // A hurry or tap while the picture of the move changes does not start the voice.
+    if (!now || scene.holds(now.turnId)) return
     for (;;) {
       if (now.unit >= now.units.length) return finish()
       const unit = now.units[now.unit]
@@ -372,9 +380,15 @@ export const useNarrationStore = defineStore('narration', () => {
   /**
    * Narrate a turn: cut in on any turn being narrated, then show its units as
    * they are spoken. A turn with no voiced unit, or narration switched off,
-   * stays as it is.
+   * stays as it is. `held` keeps it from speaking until `start` (the
+   * picture of the move is still changing).
    */
-  function begin(turnId: number, units: NarrationUnit[], folder: string): void {
+  function begin(
+    turnId: number,
+    units: NarrationUnit[],
+    folder: string,
+    held = false,
+  ): void {
     if (active.value) finish(true)
     const voiced = units.some((unit) => unit.parts.some((part) => part.clip))
     if (!settings.narrationOn || !voiced) return
@@ -392,7 +406,13 @@ export const useNarrationStore = defineStore('narration', () => {
     }
     // The chapter page and pop-ups (negative ids) are not story turns.
     if (turnId >= 1) narratedTurns.value++
-    step()
+    if (!held) step()
+  }
+
+  /** Begin speaking a turn started `held`; does nothing if it was cut in on meanwhile. */
+  function start(turnId: number): void {
+    const now = active.value
+    if (now?.turnId === turnId && !now.speaking && now.unit === 0) step()
   }
 
   /** Complete the block being spoken (or, in a pause, bring the next one now). */
@@ -490,6 +510,7 @@ export const useNarrationStore = defineStore('narration', () => {
     manifestFor,
     preload,
     begin,
+    start,
     hurry,
     skipTo,
     seekToWord,

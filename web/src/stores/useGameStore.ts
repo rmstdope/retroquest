@@ -285,6 +285,8 @@ export const useGameStore = defineStore('game', () => {
    * in, until the narration reaches the new scene (`releaseMusic`).
    */
   let musicHeld = false
+  /** Whether the picture and music follow the room at once (see `setScenePicture`). */
+  const scenePicture = ref(false)
   /** The room key the engine plays in now, which `musicRoomKey` takes on release. */
   let latestRoomKey = ''
 
@@ -433,7 +435,7 @@ export const useGameStore = defineStore('game', () => {
       releasePanels(heldTurn.value, [...PANEL_GROUPS], false)
     heldTurn.value = turnId
     held.value = { place: true, quests: true, stock: true }
-    musicHeld = true
+    musicHeld = !scenePicture.value
   }
 
   /** Whether the panels of `group` are in the hold. */
@@ -562,6 +564,15 @@ export const useGameStore = defineStore('game', () => {
     if (turnId !== heldTurn.value || !musicHeld) return
     musicHeld = false
     musicRoomKey.value = latestRoomKey
+  }
+
+  /**
+   * The layout plays the room on its picture stage: the picture and music move
+   * at the press (the change of scene), so a narrated command no longer holds
+   * the music's room back for the narrator. Off: it does, as before.
+   */
+  function setScenePicture(enabled: boolean): void {
+    scenePicture.value = enabled
   }
 
   /** Let the layout hold the panels of narrated commands (off: they change at once). */
@@ -1317,6 +1328,8 @@ export const useGameStore = defineStore('game', () => {
     panelFlash,
     // Actions
     setPanelHold,
+    scenePicture,
+    setScenePicture,
     releasePanels,
     releaseMusic,
     setBridge,
