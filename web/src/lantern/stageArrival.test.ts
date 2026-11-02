@@ -179,6 +179,26 @@ describe('quest news on the picture', () => {
     )
   })
 
+  it('tells a spell first, then the quest news, each in its own unit', () => {
+    const spell = { name: 'Revive', text: 'Calls a thing back.' }
+    const turn = { text: 'Hi.', arrival: null, spells: [spell], quests: [done] }
+    const parts = newsParts(turn, [unit(false), unit(true), unit(false)])
+    expect(parts.map((p) => p.lines[0].unit)).toEqual([1, 2])
+    expect(parts[0].spell).toBe(spell)
+    expect(parts[0].news).toBeUndefined()
+    expect(parts[0].lines[0].markup).toBe('Calls a thing back.')
+    // "New spell" + "Revive" come before the text.
+    expect(parts[0].lines[0].wordBase).toBe(3)
+    expect(parts[0].voiced).toBe(true)
+    expect(parts[1].news).toBe(done)
+    expect(parts[1].voiced).toBe(false)
+  })
+
+  it('has news to tell for a spell alone', () => {
+    expect(newsOnPicture({ spells: [{ name: 'R', text: 'T.' }] })).toBe(true)
+    expect(newsOnPicture({})).toBe(false)
+  })
+
   it('heads a piece of news without the count', () => {
     expect(newsSlimHeading(done)).toBe('Side quest complete')
     expect(newsSlimHeading(fresh)).toBe('New main quest')

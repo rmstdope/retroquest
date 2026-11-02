@@ -3,6 +3,7 @@ import { narrationKey } from './narrationKey'
 import { narrationWords, type NarrationManifest } from './narrationManifest'
 import {
   chapterUnits,
+  firstQuestUnit,
   POPUP_NARRATION_ID,
   readsArrival,
   SCENE_PAUSE_MS,
@@ -295,5 +296,54 @@ describe('turnUnits on the stage', () => {
     expect(units[2].pauseBefore).toBe(6000)
     expect(units[3].pauseBefore).toBe(12000)
     expect(turnUnits(two, true, manifest)[2].pauseBefore).toBeUndefined()
+  })
+})
+
+describe('turnUnits with spell news', () => {
+  const spell = { name: 'Revive', text: 'Calls a thing back.' }
+  const quest = { kind: 'new' as const, name: 'Q', main: false, text: 'T.' }
+  const turn = {
+    text: 'She nods.',
+    arrival: null,
+    spells: [spell],
+    quests: [quest],
+  }
+  const manifest = manifestOf(
+    [NARRATOR, 'New spell'],
+    [NARRATOR, 'Revive'],
+    [NARRATOR, 'Calls a thing back.'],
+    [NARRATOR, 'New side quest'],
+  )
+
+  it('puts the spell unit after the answer and before the quest units', () => {
+    const units = turnUnits(turn, true, manifest, { spellNews: true })
+    expect(units.map((unit) => unit.kind)).toEqual(['block', 'spell', 'quest'])
+    expect(units[1].parts.map((part) => part.markup)).toEqual([
+      'New spell',
+      'Revive',
+      'Calls a thing back.',
+    ])
+    expect(units[1].parts.every((part) => part.clip)).toBe(true)
+  })
+
+  it('keeps the unit silent when the spell is not told in the middle', () => {
+    const units = turnUnits(turn, true, manifest)
+    expect(units[1].kind).toBe('spell')
+    expect(units[1].parts).toEqual([])
+  })
+
+  it('counts the spells before the first quest unit', () => {
+    expect(firstQuestUnit(turn)).toBe(2)
+    expect(firstQuestUnit({ ...turn, spells: [spell, spell] })).toBe(3)
+  })
+
+  it('makes the piece after a silent spell wait for it to be read', () => {
+    const units = turnUnits(
+      turn,
+      true,
+      {},
+      { spellNews: true, readSilentNews: true },
+    )
+    expect(units[2].pauseBefore).toBeGreaterThan(0)
   })
 })

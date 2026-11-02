@@ -14,6 +14,7 @@
 
 import type { RoomDescription } from '@/engine'
 import type { QuestNews } from './questNews'
+import type { SpellNews } from './spellNews'
 import {
   findClip,
   type NarrationClip,
@@ -24,6 +25,7 @@ import {
   blockVoice,
   chapterHeading,
   newQuestBlocks,
+  newSpellBlocks,
   questCompleteBlocks,
 } from './narrationScript'
 import { parseTurn } from './parseTurn'
@@ -38,9 +40,9 @@ export interface NarrationPart {
 /** The breath before a new scene: a room arrival, or a chapter page's text after its heading (ms). */
 export const SCENE_PAUSE_MS = 1000
 
-/** One thing the view reveals at a time: an answer's block, an arrival's description or a quest card. */
+/** One thing the view reveals at a time: an answer's block, an arrival's description, a learned spell or a quest card. */
 export interface NarrationUnit {
-  kind: 'block' | 'arrival' | 'quest'
+  kind: 'block' | 'arrival' | 'spell' | 'quest'
   /** The lines spoken in turn; empty when the unit is silent. */
   parts: NarrationPart[]
   /** A longer pause before the unit is shown and read (ms), counted from the last voice. */
@@ -51,6 +53,8 @@ export interface NarrationUnit {
 export interface NarratedTurnInput {
   text: string
   arrival: { room: string; description: string } | null
+  /** Spells the turn taught: one unit each, after the arrival and before the quest cards. */
+  spells?: SpellNews[]
   quests?: QuestNews[]
 }
 
@@ -65,9 +69,13 @@ function partsOf(
   }))
 }
 
-/** The unit of a turn's first quest card: after its answer's blocks and its arrival. */
+/** The unit of a turn's first quest card: after its answer's blocks, its arrival and its spells. */
 export function firstQuestUnit(turn: NarratedTurnInput): number {
-  return parseTurn(turn.text).length + (turn.arrival ? 1 : 0)
+  return (
+    parseTurn(turn.text).length +
+    (turn.arrival ? 1 : 0) +
+    (turn.spells?.length ?? 0)
+  )
 }
 
 /**
@@ -92,6 +100,12 @@ export interface StageUnitOptions {
    * waits that long (counted from the last voice).
    */
   readSilentNews?: boolean
+  /**
+   * Learned spells are told in the middle of the picture: their units are
+   * voiced (heading, name, description). Otherwise they stay silent, since
+   * the answer's own "You have learned …" line is the one read.
+   */
+  spellNews?: boolean
 }
 
 /**
@@ -123,6 +137,19 @@ export function turnUnits(
         : [],
     })
   let unread = 0
+  for (const spell of turn.spells ?? []) {
+    const parts = options.spellNews
+      ? partsOf(newSpellBlocks(spell), manifest)
+      : []
+    units.push({
+      kind: 'spell',
+      parts,
+      ...(options.readSilentNews && unread ? { pauseBefore: unread } : {}),
+    })
+    unread = parts.some((part) => part.clip)
+      ? 0
+      : unread + (options.spellNews ? readingTimeMs(spell.text) : 0)
+  }
   for (const news of turn.quests ?? []) {
     const parts =
       news.kind === 'new'

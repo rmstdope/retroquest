@@ -1,6 +1,10 @@
 import { computed } from 'vue'
 import { useSettingsStore } from '@/stores/useSettingsStore'
-import { NEW_QUEST_FILE, QUEST_COMPLETE_FILE } from './questSounds'
+import {
+  NEW_QUEST_FILE,
+  NEW_SPELL_FILE,
+  QUEST_COMPLETE_FILE,
+} from './questSounds'
 
 const SFX_BASE_PATH = '/audio/soundeffects/'
 
@@ -41,6 +45,11 @@ export function useAudio(audioFactory: AudioFactory = defaultAudioFactory) {
     playSound(QUEST_COMPLETE_FILE)
   }
 
+  /** Play the learned-spell sound effect (nothing until its file is supplied). */
+  function playNewSpell(): void {
+    if (NEW_SPELL_FILE) playSound(NEW_SPELL_FILE)
+  }
+
   /** Toggle sound effects on or off (saved with the player's settings). */
   function toggleMute(): void {
     settings.effectsOn = !settings.effectsOn
@@ -50,6 +59,7 @@ export function useAudio(audioFactory: AudioFactory = defaultAudioFactory) {
     soundMuted,
     playNewQuest,
     playQuestComplete,
+    playNewSpell,
     toggleMute,
   }
 }

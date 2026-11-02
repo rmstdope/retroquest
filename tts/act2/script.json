@@ -1305,6 +1305,26 @@
     "text": "The old woman at the end bench runs her thumb along a split bowl, murmuring, and the crack closes behind her thumb. She hands you a second bowl and has you do it, again and again, until the wood answers you too. You have learned mend."
   },
   {
+    "key": "1d8373b816e792",
+    "speaker": "narrator",
+    "text": "New spell"
+  },
+  {
+    "key": "16f3fd520e3d83",
+    "speaker": "narrator",
+    "text": "Mend"
+  },
+  {
+    "key": "099a2ba79af9b4",
+    "speaker": "narrator",
+    "text": "The old woman at the end bench taught you over a split bowl: close what is cracked, slowly."
+  },
+  {
+    "key": "1aa0cde6f14c42",
+    "speaker": "narrator",
+    "text": "The old woman at the end bench runs her thumb along a split bowl, murmuring, and the crack closes behind her thumb. She hands you a second bowl and has you do it, again and again, until the wood answers you too."
+  },
+  {
     "key": "04d58e2664c2cf",
     "speaker": "families",
     "text": "You're the one who helped the old folk over the cobbles. Sit a moment, if you like. Nobody on this lane forgets a kindness."
@@ -1610,6 +1630,21 @@
     "text": "'Let it be recorded: the one called Malakar seeks the blood of Willowbrook. If any Warden yet lives, let them guard it.'"
   },
   {
+    "key": "011625cd68861d",
+    "speaker": "narrator",
+    "text": "Dispel"
+  },
+  {
+    "key": "1114005347407a",
+    "speaker": "narrator",
+    "text": "The Wardens' unbinding, from their chronicle: loosen what another hand has bound."
+  },
+  {
+    "key": "0f0523f01ff1e7",
+    "speaker": "narrator",
+    "text": "You study the pages until the words settle in your mind."
+  },
+  {
     "key": "1be5906c7ed74a",
     "speaker": "spectral librarian",
     "text": "You have read what was left. The rest is not written on any shelf of mine."
@@ -1660,6 +1695,16 @@
     "text": "Quest Complete: The Healer's Apprentice"
   },
   {
+    "key": "061afc32968e16",
+    "speaker": "narrator",
+    "text": "Greater Heal"
+  },
+  {
+    "key": "0cef9e4cb4217a",
+    "speaker": "narrator",
+    "text": "Lyria taught you over the carter's bed: gather your healing into a narrow light. It makes the weak strong. It does not lift a curse."
+  },
+  {
     "key": "05f1e8b3e6a1fa",
     "speaker": "narrator",
     "text": "Over the carter's bed, with the crystal focus between her hands and then yours, Lyria taught you greater heal. He will live."
@@ -1698,6 +1743,16 @@
     "key": "142b943ec09b8c",
     "speaker": "narrator",
     "text": "You have learned nature sense."
+  },
+  {
+    "key": "148d5c3478ecf3",
+    "speaker": "narrator",
+    "text": "Nature Sense"
+  },
+  {
+    "key": "0428305c7c293a",
+    "speaker": "narrator",
+    "text": "Read from the runes on the standing stones: a way of listening to everything that grows."
   },
   {
     "key": "16873065a868b9",
@@ -2048,6 +2103,16 @@
     "key": "1a7067dadf0daf",
     "speaker": "ancient tree spirit",
     "text": "You can hear them now. The grove is uneasy. The nymphs in the glade east of the entrance have something for these roots. Answer them, and bring back what they give you."
+  },
+  {
+    "key": "1c94f4554960d7",
+    "speaker": "narrator",
+    "text": "Forest Speech"
+  },
+  {
+    "key": "1ac0ffe88f3b66",
+    "speaker": "narrator",
+    "text": "The tree spirit's gift for your acorn: the talk of roots, branches and small creatures, in words."
   },
   {
     "key": "1f98b5456a65d4",
@@ -2878,6 +2943,16 @@
     "key": "185c71f4466343",
     "speaker": "narrator",
     "text": "The words from the stone in the glade. You read them aloud there and did not know what they meant. You still do not, quite."
+  },
+  {
+    "key": "162e6d98dcb9fa",
+    "speaker": "narrator",
+    "text": "Prophetic Vision"
+  },
+  {
+    "key": "06251f9fd737ab",
+    "speaker": "narrator",
+    "text": "Nyx's gift: a look at what is coming. She told you not to look at it alone."
   },
   {
     "key": "0456b160c9fe9a",

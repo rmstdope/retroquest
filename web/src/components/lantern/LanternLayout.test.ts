@@ -1901,7 +1901,11 @@ describe('LanternLayout', () => {
 
     it('rings a chime for each quest card as its reading starts, not when the turn starts', async () => {
       const w = await ready()
-      const audio = { playNewQuest: vi.fn(), playQuestComplete: vi.fn() }
+      const audio = {
+        playNewQuest: vi.fn(),
+        playQuestComplete: vi.fn(),
+        playNewSpell: vi.fn(),
+      }
       useGameStore().setAudioPlayer(audio)
       const card = (name: string, text: string) => ({
         kind: 'new' as const,
@@ -1932,7 +1936,11 @@ describe('LanternLayout', () => {
 
     it('rings one chime at once for quest cards shown together', async () => {
       await ready()
-      const audio = { playNewQuest: vi.fn(), playQuestComplete: vi.fn() }
+      const audio = {
+        playNewQuest: vi.fn(),
+        playQuestComplete: vi.fn(),
+        playNewSpell: vi.fn(),
+      }
       useGameStore().setAudioPlayer(audio)
       await say(
         narratedTurn(1, {
@@ -2397,6 +2405,7 @@ describe('LanternLayout', () => {
         useGameStore().setAudioPlayer({
           playNewQuest: vi.fn(),
           playQuestComplete: vi.fn(),
+          playNewSpell: vi.fn(),
         })
         await say(
           narratedTurn(1, {

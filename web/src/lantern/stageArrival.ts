@@ -2,6 +2,7 @@ import type { RoomDescription } from '@/engine'
 import { narrationWords } from './narrationManifest'
 import type { NarrationUnit } from './narrationUnits'
 import { parseTurn } from './parseTurn'
+import { SPELL_HEADING, type SpellNews } from './spellNews'
 import {
   newQuestKicker,
   questCompleteKicker,
@@ -35,6 +36,8 @@ export interface ArrivalPart {
   kind: 'events' | 'description' | 'news'
   /** For `news`: the quest news this part tells. */
   news?: QuestNews
+  /** For `news` that tells a learned spell: the spell (then `news` is absent). */
+  spell?: SpellNews
   lines: ArrivalLine[]
   /** Whether the narrator speaks any of it (it has a recording). */
   voiced: boolean
@@ -109,9 +112,12 @@ export function arrivalParts(
   return parts
 }
 
-/** Whether a turn has quest news to tell in the middle of the picture (on the stage, once its words are told). */
-export function newsOnPicture(turn: { quests?: QuestNews[] }): boolean {
-  return (turn.quests?.length ?? 0) > 0
+/** Whether a turn has news (a learned spell, quest news) to tell in the middle of the picture (on the stage, once its words are told). */
+export function newsOnPicture(turn: {
+  quests?: QuestNews[]
+  spells?: SpellNews[]
+}): boolean {
+  return (turn.quests?.length ?? 0) + (turn.spells?.length ?? 0) > 0
 }
 
 /** The heading of a piece of quest news (the slim line has no count; the middle adds the act's count to a completion). */
@@ -123,20 +129,43 @@ export function newsSlimHeading(news: QuestNews): string {
 }
 
 /**
- * The parts for a turn's quest news, one for each piece, after the answer's
- * blocks and the arrival. `units` are the turn's narration units, to say
- * which piece has a voice; a piece's unit is its heading, its name, then its
- * text, so the text's words start after the first two.
+ * The parts for a turn's news, one for each piece, after the answer's blocks
+ * and the arrival: the learned spells first, in the order learned, then the
+ * quest news. `units` are the turn's narration units, to say which piece has
+ * a voice; a piece's unit is its heading, its name, then its text, so the
+ * text's words start after the first two.
  */
 export function newsParts(
-  turn: { text: string; arrival: unknown; quests?: QuestNews[] },
+  turn: {
+    text: string
+    arrival: unknown
+    spells?: SpellNews[]
+    quests?: QuestNews[]
+  },
   units: NarrationUnit[],
 ): ArrivalPart[] {
   const first = parseTurn(turn.text).length + (turn.arrival ? 1 : 0)
-  return (turn.quests ?? []).map((news, index) => {
-    const unit = first + index
+  const spells = turn.spells ?? []
+  const spoken = (unit: number): boolean =>
+    !!units[unit]?.parts.some((part) => part.clip !== null)
+  const told: ArrivalPart[] = spells.map((spell, index) => ({
+    kind: 'news',
+    spell,
+    lines: [
+      {
+        unit: first + index,
+        markup: spell.text,
+        wordBase:
+          narrationWords(SPELL_HEADING).length +
+          narrationWords(spell.name).length,
+      },
+    ],
+    voiced: spoken(first + index),
+  }))
+  for (const [index, news] of (turn.quests ?? []).entries()) {
+    const unit = first + spells.length + index
     const heading = newsSlimHeading(news)
-    return {
+    told.push({
       kind: 'news',
       news,
       lines: [
@@ -147,7 +176,8 @@ export function newsParts(
             narrationWords(heading).length + narrationWords(news.name).length,
         },
       ],
-      voiced: !!units[unit]?.parts.some((part) => part.clip !== null),
-    }
-  })
+      voiced: spoken(unit),
+    })
+  }
+  return told
 }

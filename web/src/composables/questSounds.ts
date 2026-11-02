@@ -2,3 +2,8 @@
 export const NEW_QUEST_FILE = 'Voicy_New Quest.mp3'
 /** The sound played when a quest is completed. */
 export const QUEST_COMPLETE_FILE = 'Voicy_Quest Completed.mp3'
+/**
+ * The sound played as a learned spell is told. The team supplies it later;
+ * until a file is named here the news is silent.
+ */
+export const NEW_SPELL_FILE: string | null = null

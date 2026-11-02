@@ -574,4 +574,46 @@ describe('ArrivalOnPicture', () => {
       expect(w.get('.lq-arrival-hint').text()).toBe('Tap to continue')
     })
   })
+
+  describe('spell news', () => {
+    const spellPart = (): ArrivalPart => ({
+      kind: 'news',
+      spell: {
+        name: 'Revive',
+        text: 'Your father’s word for calling a thing back.',
+      },
+      lines: [
+        {
+          unit: 0,
+          markup: 'Your father’s word for calling a thing back.',
+          wordBase: 3,
+        },
+      ],
+      voiced: false,
+    })
+
+    it('tells a spell with the violet ✦ seal, "New spell", the capitalised name and the description', async () => {
+      const w = mount(ArrivalOnPicture, { props: { pictured: true } })
+      useArrivalStore().show(1, [spellPart()], false)
+      await w.vm.$nextTick()
+      expect(w.get('[data-testid="spell-seal"]').text()).toBe('✦')
+      expect(w.find('[data-testid="news-seal"]').exists()).toBe(false)
+      expect(w.get('.lq-news-kicker').text()).toBe('New spell')
+      expect(w.get('.lq-news-name').text()).toBe('Revive')
+      expect(w.get('.lq-arrival-line').text()).toBe(
+        'Your father’s word for calling a thing back.',
+      )
+      expect(w.get('.lq-arrival-hint').text()).toBe(
+        'Click or press Enter to continue',
+      )
+    })
+
+    it('clears on a click', async () => {
+      const w = mount(ArrivalOnPicture, { props: { pictured: true } })
+      const arrival = useArrivalStore()
+      arrival.show(1, [spellPart()], false)
+      await w.trigger('click')
+      expect(arrival.active).toBe(false)
+    })
+  })
 })

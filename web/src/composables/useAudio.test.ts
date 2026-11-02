@@ -208,4 +208,13 @@ describe('useAudio', () => {
       expect(factory).not.toHaveBeenCalled()
     })
   })
+
+  it('plays nothing for a learned spell until its sound is supplied', () => {
+    const { factory, playFn } = createMockFactory()
+
+    useAudio(factory).playNewSpell()
+
+    expect(factory).not.toHaveBeenCalled()
+    expect(playFn).not.toHaveBeenCalled()
+  })
 })

@@ -13,6 +13,11 @@ import type { useBridge } from '@/composables/useBridge'
 import { LOADED_ROOM, normalizeSaveName, type RoomDescription } from '@/engine'
 import { inventoryChanges, type Chip } from '@/lantern/inventoryChanges'
 import { toQuestNews, type QuestNews } from '@/lantern/questNews'
+import {
+  toSpellNews,
+  withoutLearnedLines,
+  type SpellNews,
+} from '@/lantern/spellNews'
 import { parseActIntro, type ActIntro } from '@/lantern/parseActIntro'
 import { actFolder } from '@/lantern/narrationManifest'
 import { portraitUrl, roomPictureUrl } from '@/lantern/roomPicture'
@@ -28,6 +33,7 @@ export type GameBridge = ReturnType<typeof useBridge>
 export interface QuestAudioPlayer {
   playNewQuest(): void
   playQuestComplete(): void
+  playNewSpell(): void
 }
 
 /** Most recent turns kept for the story view; older ones are dropped. */
@@ -69,6 +75,14 @@ export interface Turn {
   arrival: Arrival | null
   /** Quests that started, moved on or were completed with this turn. */
   quests?: QuestNews[]
+  /** Spells this turn taught, in the order learned: told in the middle of the picture before any quest news. */
+  spells?: SpellNews[]
+  /**
+   * The answer as the engine wrote it, kept only when `text` had the learned
+   * spells' lines taken off because they are told in the middle
+   * (`tellSpellsInMiddle`); Story so far shows this one.
+   */
+  fullText?: string
   /** Set on a player's command and on the arrival that opens an act: its answer is narrated (never on a load). */
   narrate?: true
   /** The room character a player's command was for (talk to, say … to, give … to), when it was for one. */
@@ -345,6 +359,7 @@ export const useGameStore = defineStore('game', () => {
     lastSpells = spellList
 
     const shown = actRunning ? description : null
+    const spells = showChips ? learnedSpells(spellChanges.gained, b) : []
     turns.value.push({
       id: turnId,
       command,
@@ -355,6 +370,7 @@ export const useGameStore = defineStore('game', () => {
       lost,
       // The engine only says "You move north to …"; keep what the room looked
       // like now so the story can show it later.
+      ...(spells.length ? { spells } : {}),
       ...(narrate ? { narrate: true as const } : {}),
       ...(addressed ? { addressed } : {}),
       // A look shows the room again without having moved.
@@ -372,6 +388,36 @@ export const useGameStore = defineStore('game', () => {
     if (turns.value.length > MAX_TURNS) {
       turns.value.splice(0, turns.value.length - MAX_TURNS)
     }
+  }
+
+  /** The news of the spells a command taught: their names as the bag lists them, with the descriptions. */
+  function learnedSpells(gained: Chip[], b: GameBridge): SpellNews[] {
+    const known = b.controller.getSpells()
+    return gained.flatMap((chip) => {
+      const spell = known.find(
+        (entry) => entry.name.replace(/\[\/?spell_name\]/g, '') === chip.name,
+      )
+      return spell ? [toSpellNews(spell.name, spell.description)] : []
+    })
+  }
+
+  /**
+   * The turn's learned spells are told in the middle of the picture: take
+   * their "You have learned …" lines off the turn the narrator's card shows
+   * and keep the whole text for Story so far. Once is enough.
+   */
+  function tellSpellsInMiddle(turnId: number): void {
+    const turn = turns.value.find((entry) => entry.id === turnId)
+    if (!turn?.spells?.length || turn.fullText !== undefined) return
+    const text = withoutLearnedLines(turn.text, turn.spells)
+    if (text === turn.text) return
+    turn.fullText = turn.text
+    turn.text = text
+  }
+
+  /** The spell sound as a piece of spell news comes up. */
+  function ringSpellSound(): void {
+    audioPlayer?.playNewSpell()
   }
 
   /** Let a command's panels wait (applying an older turn's first). */
@@ -1226,6 +1272,8 @@ export const useGameStore = defineStore('game', () => {
     loadNumber,
     restartGame,
     ringQuestSounds,
+    ringSpellSound,
+    tellSpellsInMiddle,
     setActEndGate,
     resumeActEnd,
     actEndPending,

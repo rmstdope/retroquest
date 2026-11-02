@@ -305,7 +305,11 @@ describe('useGameStore', () => {
     })
 
     it('plays the chime for a quest started by the first look', async () => {
-      const audio = { playNewQuest: vi.fn(), playQuestComplete: vi.fn() }
+      const audio = {
+        playNewQuest: vi.fn(),
+        playQuestComplete: vi.fn(),
+        playNewSpell: vi.fn(),
+      }
       store.setAudioPlayer(audio)
       bridge.controller.isAcceptingInput.mockReturnValue(true)
       bridge.controller.activateQuest
@@ -659,7 +663,11 @@ describe('useGameStore', () => {
     })
 
     it('puts a completed quest in the story with its fanfare owed, never in a pop-up', () => {
-      const audio = { playNewQuest: vi.fn(), playQuestComplete: vi.fn() }
+      const audio = {
+        playNewQuest: vi.fn(),
+        playQuestComplete: vi.fn(),
+        playNewSpell: vi.fn(),
+      }
       store.setAudioPlayer(audio)
       store.submitCommand('look')
       bridge.controller.completeQuest
@@ -678,7 +686,11 @@ describe('useGameStore', () => {
     })
 
     it('plays the fanfare alone when a completion shows together with a new quest', () => {
-      const audio = { playNewQuest: vi.fn(), playQuestComplete: vi.fn() }
+      const audio = {
+        playNewQuest: vi.fn(),
+        playQuestComplete: vi.fn(),
+        playNewSpell: vi.fn(),
+      }
       store.setAudioPlayer(audio)
       store.submitCommand('look')
       const turn = store.turns.at(-1)!
@@ -709,7 +721,11 @@ describe('useGameStore', () => {
     })
 
     it('owes the chime for an activated quest until its card shows, then rings it once', () => {
-      const audio = { playNewQuest: vi.fn(), playQuestComplete: vi.fn() }
+      const audio = {
+        playNewQuest: vi.fn(),
+        playQuestComplete: vi.fn(),
+        playNewSpell: vi.fn(),
+      }
       store.setAudioPlayer(audio)
       bridge.controller.activateQuest
         .mockReturnValueOnce(quest('Quest A'))
@@ -727,7 +743,11 @@ describe('useGameStore', () => {
     })
 
     it('calls playNewQuest when a quest is updated', () => {
-      const audio = { playNewQuest: vi.fn(), playQuestComplete: vi.fn() }
+      const audio = {
+        playNewQuest: vi.fn(),
+        playQuestComplete: vi.fn(),
+        playNewSpell: vi.fn(),
+      }
       store.setAudioPlayer(audio)
       bridge.controller.updateQuest
         .mockReturnValueOnce(quest('Quest updated'))
@@ -739,7 +759,11 @@ describe('useGameStore', () => {
     })
 
     it('plays the fanfare for a completed quest when its record shows', () => {
-      const audio = { playNewQuest: vi.fn(), playQuestComplete: vi.fn() }
+      const audio = {
+        playNewQuest: vi.fn(),
+        playQuestComplete: vi.fn(),
+        playNewSpell: vi.fn(),
+      }
       store.setAudioPlayer(audio)
       store.submitCommand('look')
       bridge.controller.completeQuest
@@ -1447,6 +1471,81 @@ describe('useGameStore', () => {
       expect(store.spellsHaveNew).toBe(true)
     })
 
+    describe('spell news', () => {
+      const learned = [
+        named('Heal'),
+        { name: '[spell_name]revive[/spell_name]', description: 'Calls back.' },
+      ]
+
+      it('gives the turn the spells it taught, named as a heading, with their descriptions', async () => {
+        await startPlaying()
+        bridge.controller.getSpells.mockReturnValue(learned)
+
+        store.submitCommand('talk to grandmother')
+
+        expect(store.turns.at(-1)?.spells).toEqual([
+          { name: 'Revive', text: 'Calls back.' },
+        ])
+      })
+
+      it('gives a turn that taught nothing no spells', async () => {
+        await startPlaying()
+
+        store.submitCommand('look')
+
+        expect(store.turns.at(-1)?.spells).toBeUndefined()
+      })
+
+      it('tells no spell news for the arrival or a load', async () => {
+        bridge.controller.getSpells.mockReturnValue(learned)
+        await startPlaying()
+
+        expect(store.turns[0].spells).toBeUndefined()
+      })
+
+      it('takes the learned line off the turn when it is told in the middle, and keeps the record', async () => {
+        await startPlaying()
+        bridge.controller.takeTurn.mockReturnValue(
+          'She nods.\nYou have learned [spell_name]revive[/spell_name].',
+        )
+        bridge.controller.getSpells.mockReturnValue(learned)
+        store.submitCommand('talk to grandmother')
+        const turn = store.turns.at(-1)!
+
+        store.tellSpellsInMiddle(turn.id)
+        store.tellSpellsInMiddle(turn.id)
+
+        expect(turn.text).toBe('She nods.')
+        expect(turn.fullText).toBe(
+          'She nods.\nYou have learned [spell_name]revive[/spell_name].',
+        )
+      })
+
+      it('leaves a turn without spells alone', async () => {
+        await startPlaying()
+        store.submitCommand('look')
+        const turn = store.turns.at(-1)!
+
+        store.tellSpellsInMiddle(turn.id)
+
+        expect(turn.fullText).toBeUndefined()
+      })
+
+      it('plays the spell sound through the audio player', () => {
+        const audio = {
+          playNewQuest: vi.fn(),
+          playQuestComplete: vi.fn(),
+          playNewSpell: vi.fn(),
+        }
+        store.setAudioPlayer(audio)
+
+        store.ringSpellSound()
+
+        expect(audio.playNewSpell).toHaveBeenCalledOnce()
+        expect(audio.playNewQuest).not.toHaveBeenCalled()
+      })
+    })
+
     it('records items lost by a command without marking the bag new', async () => {
       await startPlaying()
       bridge.controller.getInventory.mockReturnValue([])
@@ -1858,7 +1957,11 @@ describe('useGameStore', () => {
     })
 
     it('owes a chime per quest card: one for cards shown together, one each when read in turn', () => {
-      const audio = { playNewQuest: vi.fn(), playQuestComplete: vi.fn() }
+      const audio = {
+        playNewQuest: vi.fn(),
+        playQuestComplete: vi.fn(),
+        playNewSpell: vi.fn(),
+      }
       store.setAudioPlayer(audio)
       bridge.controller.activateQuest
         .mockReturnValueOnce(quest(NEW))
@@ -1889,7 +1992,11 @@ describe('useGameStore', () => {
     })
 
     it('lets the fanfare alone mark a turn that also completes a quest', () => {
-      const audio = { playNewQuest: vi.fn(), playQuestComplete: vi.fn() }
+      const audio = {
+        playNewQuest: vi.fn(),
+        playQuestComplete: vi.fn(),
+        playNewSpell: vi.fn(),
+      }
       store.setAudioPlayer(audio)
       bridge.controller.activateQuest
         .mockReturnValueOnce(quest(NEW))

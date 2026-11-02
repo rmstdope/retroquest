@@ -325,6 +325,21 @@
     "text": "You have learned revive."
   },
   {
+    "key": "1d8373b816e792",
+    "speaker": "narrator",
+    "text": "New spell"
+  },
+  {
+    "key": "0cb17cd6836df3",
+    "speaker": "narrator",
+    "text": "Revive"
+  },
+  {
+    "key": "1cf34526961217",
+    "speaker": "narrator",
+    "text": "Your father's word for calling a thing back when it is nearly gone. Grandmother remembered it for you."
+  },
+  {
     "key": "09acfbb0c60912",
     "speaker": "narrator",
     "text": "Magic for real"
@@ -1475,6 +1490,16 @@
     "text": "You have learned purify."
   },
   {
+    "key": "1eac196fd4e96f",
+    "speaker": "narrator",
+    "text": "Purify"
+  },
+  {
+    "key": "1a4ca6bf516af9",
+    "speaker": "narrator",
+    "text": "Your mother taught it to the fisherman at the bend, and he gave it back to you. It makes foul water clean."
+  },
+  {
     "key": "1f7bafbd054b56",
     "speaker": "narrator",
     "text": "You brought the fisherman a fish, and he gave you back something of your mother's: the spell she taught him at the bend."
@@ -1860,6 +1885,16 @@
     "text": "You have learned bless."
   },
   {
+    "key": "16d5a63e36c045",
+    "speaker": "narrator",
+    "text": "Bless"
+  },
+  {
+    "key": "1413c725f46207",
+    "speaker": "narrator",
+    "text": "The blessing the priest said over you when you found the founders' locket."
+  },
+  {
     "key": "02f19afee901ad",
     "speaker": "narrator",
     "text": "The locket springs open."
@@ -1948,6 +1983,36 @@
     "key": "1f37b7e6bea224",
     "speaker": "mira",
     "text": "Now, the road. You'll need warmth, protection, food, boots and a map. And learn what else this village can teach you, and go with a blessing on you. When you're ready, the ancient amulet is yours."
+  },
+  {
+    "key": "1a90603ec1e524",
+    "speaker": "narrator",
+    "text": "Heal"
+  },
+  {
+    "key": "0ffc2d47f6f4b1",
+    "speaker": "narrator",
+    "text": "The first thing Mira showed you: how to mend."
+  },
+  {
+    "key": "13d20d4b5aac61",
+    "speaker": "narrator",
+    "text": "Unlock"
+  },
+  {
+    "key": "1fec6171144310",
+    "speaker": "narrator",
+    "text": "The second thing Mira showed you: how to open."
+  },
+  {
+    "key": "04dded345c5f7e",
+    "speaker": "narrator",
+    "text": "Light"
+  },
+  {
+    "key": "06f21e3920c256",
+    "speaker": "narrator",
+    "text": "The third thing Mira showed you: how to make a light."
   },
   {
     "key": "193be0a872654f",
@@ -2468,6 +2533,21 @@
     "key": "1c3baeb777c912",
     "speaker": "narrator",
     "text": "You read them aloud. They mean nothing to you, and yet they stay with you."
+  },
+  {
+    "key": "0768b2642cf4ed",
+    "speaker": "narrator",
+    "text": "Grow"
+  },
+  {
+    "key": "03008de9d04e24",
+    "speaker": "narrator",
+    "text": "Read word by word off the mossy stone in the glade. It feels like your own."
+  },
+  {
+    "key": "0faffd5d3f2f06",
+    "speaker": "narrator",
+    "text": "You read them slowly, and the spell comes with the reading. It does not wake in you the way the others did; this one you read, word by word, off the stone, and it feels like your own."
   },
   {
     "key": "092ea580f172c6",

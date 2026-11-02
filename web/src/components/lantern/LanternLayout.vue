@@ -798,13 +798,17 @@ watch(
     const manifest = folder ? narration.manifestFor(folder) : null
     const onPicture =
       !!turn && staged.value && !game.showModal && arrivesOnPicture(turn)
-    // Quest news is told in the middle too, after the turn's words (and its arrival).
+    // News (a learned spell, then quest news) is told in the middle too, after
+    // the turn's words (and its arrival). The learned lines leave the card
+    // first: the narration and the story read the turn's text after this.
     const news =
       !!turn && staged.value && !game.showModal && newsOnPicture(turn)
+    const spells = news && !!turn?.spells?.length
+    if (turn && spells) game.tellSpellsInMiddle(turn.id)
     // The units the narration plays; the arrival on the picture waits to read
     // its description while events that nobody speaks are read, and a quest
     // piece nobody speaks is read before the next one.
-    const unitOptions = { readSilentNews: news }
+    const unitOptions = { readSilentNews: news, spellNews: spells }
     let units =
       turn?.narrate && (manifest || onPicture)
         ? turnUnits(turn, readsArrival(turn), manifest ?? {}, unitOptions)
@@ -908,11 +912,22 @@ watch(
   },
 )
 
-// A piece of quest news told in the middle rings as it comes up.
+// A piece of news told in the middle rings as it comes up: a spell's own
+// sound, or a quest's chime or fanfare. The same piece up again (its part is
+// rebuilt when the narrator ends) rings nothing.
+let ringedNews = ''
 watch(
   () => arrival.newsUp,
   (up) => {
-    if (up) game.ringQuestSounds(up.turnId, [up.index])
+    if (!up) {
+      ringedNews = ''
+      return
+    }
+    const key = `${up.turnId}-${up.spell ? 'spell' : 'quest'}-${up.index}`
+    if (key === ringedNews) return
+    ringedNews = key
+    if (up.spell) game.ringSpellSound()
+    else game.ringQuestSounds(up.turnId, [up.index])
   },
 )
 

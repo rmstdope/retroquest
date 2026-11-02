@@ -13,6 +13,7 @@
  *   ("Act I: The Call to Adventure"), then its paragraphs. A closing chapter
  *   page's body is an answer (`turnBlocks`).
  * - `arrivalBlocks`: a room arrival: the room's name, then its description.
+ * - `newSpellBlocks`: a learned spell's news: heading, name, description.
  * - `newQuestBlocks` / `questCompleteBlocks`: a new quest's card and a
  *   completed quest's pop-up: heading, quest name, then the quest's text
  *   (`questTextBlocks`: its paragraphs, then each checklist item).
@@ -31,6 +32,12 @@ import { narrationKey, narrationText } from './narrationKey'
 import { parseActIntro } from './parseActIntro'
 import { parseTurn, type TurnBlock } from './parseTurn'
 import { newQuestKicker, questCompleteKicker } from './questNews'
+import {
+  SPELL_HEADING,
+  toSpellNews,
+  withoutLearnedLines,
+  type SpellNews,
+} from './spellNews'
 
 /** The speaker of everything that is not a character's speech. */
 export const NARRATOR = 'narrator'
@@ -135,6 +142,15 @@ export function newQuestBlocks(quest: QuestShown): VoicedBlock[] {
     { speaker: NARRATOR, markup: newQuestKicker(quest.main) },
     { speaker: NARRATOR, markup: quest.name },
     ...questTextBlocks(quest.text),
+  ]
+}
+
+/** A new spell: its heading ("New spell"), its name, then its description. */
+export function newSpellBlocks(spell: SpellNews): VoicedBlock[] {
+  return [
+    { speaker: NARRATOR, markup: SPELL_HEADING },
+    { speaker: NARRATOR, markup: spell.name },
+    { speaker: NARRATOR, markup: spell.text },
   ]
 }
 
@@ -263,6 +279,26 @@ export function actScript(
     add(arrivalBlocks(room, play.getRoomDescription()))
   }
   arrive()
+  /**
+   * Add a command's answer and, when it taught spells, their news and the
+   * answer without the learned lines (as the stage tells them in the middle;
+   * the whole answer stays for the layouts that do not).
+   */
+  const addAnswer = (
+    controller: GameController,
+    answer: () => string,
+  ): void => {
+    const before = controller.getSpells().length
+    const text = answer()
+    add(turnBlocks(text))
+    const learned = controller
+      .getSpells()
+      .slice(before)
+      .map((spell) => toSpellNews(spell.name, spell.description))
+    if (!learned.length) return
+    for (const news of learned) add(newSpellBlocks(news))
+    add(turnBlocks(withoutLearnedLines(text, learned)))
+  }
   const playBranches = (after: number): void => {
     for (const branch of branches.filter((b) => b.after === after)) {
       probe.loadSaveData(game.toSaveData())
@@ -270,7 +306,7 @@ export function actScript(
       for (const flag of branch.unset ?? [])
         probe.state.setStoryFlag(flag, false)
       for (const step of branch.commands) {
-        add(turnBlocks(tryOut.takeTurn(step)))
+        addAnswer(tryOut, () => tryOut.takeTurn(step))
         settle(tryOut)
       }
     }
@@ -279,7 +315,7 @@ export function actScript(
     const save = game.toSaveData()
     for (const command of probes(game)) {
       probe.loadSaveData(save)
-      add(turnBlocks(tryOut.handleCommand(command)))
+      addAnswer(tryOut, () => tryOut.handleCommand(command))
     }
   }
   const settle = (controller: GameController): void => {
@@ -291,7 +327,7 @@ export function actScript(
   tryProbes()
   playBranches(-1)
   for (const [index, command] of commands.entries()) {
-    add(turnBlocks(play.takeTurn(command)))
+    addAnswer(play, () => play.takeTurn(command))
     settle(play)
     playBranches(index)
     if (!game.isActRunning()) {
