@@ -44,6 +44,16 @@
     "width": 640,
     "height": 360
   },
+  "act1-portrait-blacksmith": {
+    "file": "act1-portrait-blacksmith.png",
+    "width": 480,
+    "height": 640
+  },
+  "act1-portrait-deer": {
+    "file": "act1-portrait-deer.png",
+    "width": 480,
+    "height": 640
+  },
   "act1-portrait-dream-voice": {
     "file": "act1-portrait-dream-voice.png",
     "width": 480,
@@ -56,6 +66,31 @@
   },
   "act1-portrait-grandmother": {
     "file": "act1-portrait-grandmother.png",
+    "width": 480,
+    "height": 640
+  },
+  "act1-portrait-merchant": {
+    "file": "act1-portrait-merchant.png",
+    "width": 480,
+    "height": 640
+  },
+  "act1-portrait-patches": {
+    "file": "act1-portrait-patches.png",
+    "width": 480,
+    "height": 640
+  },
+  "act1-portrait-priest": {
+    "file": "act1-portrait-priest.png",
+    "width": 480,
+    "height": 640
+  },
+  "act1-portrait-shopkeeper": {
+    "file": "act1-portrait-shopkeeper.png",
+    "width": 480,
+    "height": 640
+  },
+  "act1-portrait-villager": {
+    "file": "act1-portrait-villager.png",
     "width": 480,
     "height": 640
   },
@@ -96,6 +131,11 @@
   },
   "portrait-grandmother": {
     "file": "portrait-grandmother.png",
+    "width": 480,
+    "height": 640
+  },
+  "portrait-mira": {
+    "file": "portrait-mira.png",
     "width": 480,
     "height": 640
   }

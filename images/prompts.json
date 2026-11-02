@@ -16,6 +16,10 @@
       "words": "The inside of a small hut hung with drying herbs: lavender, sage, and roots in bundles from the rafters. Shelves of bottles line the walls, every one labelled. Mira, the mysterious healer, moves among them without looking, the way you move through your own kitchen.",
       "gameWas": "A small hut hung with drying herbs: lavender, sage, and roots in bundles from the rafters. Shelves of bottles line the walls, every one labelled. Mira moves among them without looking, the way you move through your own kitchen."
     },
+    "act1-portrait-deer": {
+      "words": "A face portrait of a red-brown deer, its dark eyes calm and unafraid and its ears turned toward you. The deer is standing in the middle of a forest.",
+      "gameWas": "A face portrait of a red-brown deer, its dark eyes calm and unafraid and its ears turned toward you."
+    },
     "act1-portrait-dream-voice": {
       "words": "A face portrait of a cloaked man but the face is hidden and you can only see a siluette. The background is a stormy night with thunder and lightning.",
       "gameWas": "It has no face you can find, only a height and a nearness. When it speaks, it speaks your name."
@@ -31,6 +35,10 @@
     "portrait-grandmother": {
       "words": "A face portrait of your grandmother.",
       "gameWas": "Your grandmother, flour on her apron and her sleeves pushed up. She has raised you since your parents went away, and she keeps her hands busy when she would rather not answer."
+    },
+    "portrait-mira": {
+      "words": "A face portrait of a village female healer in middle age, with a calm, steady gaze that rests on you a moment longer than is comfortable, and a sprig of dried sage tucked behind one ear.",
+      "gameWas": "A face portrait of a village healer in middle age, with a calm, steady gaze that rests on you a moment longer than is comfortable, and a sprig of dried sage tucked behind one ear."
     }
   },
   "style": {}
