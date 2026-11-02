@@ -266,7 +266,7 @@ onBeforeUnmount(() => {
     <div class="lq-arrival-measure" aria-hidden="true">
       <div ref="twin" class="lq-arrival-twin"></div>
     </div>
-    <Transition name="lq-arrival-fade" mode="out-in">
+    <Transition name="lq-arrival-fade">
       <div
         v-if="arrival.part"
         :key="`${arrival.part.kind}-${arrival.part.lines[0]?.unit}`"
@@ -608,8 +608,12 @@ onBeforeUnmount(() => {
     transform: scaleX(0);
   }
 }
-/* A quick fade, one message out before the next in (`out-in`), so the stage's
-   row never holds two cards that push each other sideways. */
+/* A quick cross-fade. The leaving card is taken out of the row (kept centred by
+   the stage) so it never pushes the entering one sideways; both stay mounted
+   together so the cut into pages still measures the new card's pill and head. */
+.lq-arrival-fade-leave-active {
+  position: absolute;
+}
 .lq-arrival-fade-enter-active,
 .lq-arrival-fade-leave-active {
   transition: opacity calc(0.15s * var(--lq-motion));

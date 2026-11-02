@@ -618,10 +618,11 @@ describe('ArrivalOnPicture', () => {
   })
 
   describe('the change between messages', () => {
-    it('fades the old message out before the new one fades in, so nothing is pushed sideways', () => {
+    it('takes the leaving message out of the row, so it cannot push the new one sideways', () => {
       const source = read('./ArrivalOnPicture.vue')
+      expect(source).not.toContain('mode="out-in"')
       expect(source).toMatch(
-        /<Transition\s+name="lq-arrival-fade"\s+mode="out-in"/,
+        /\.lq-arrival-fade-leave-active \{\s*position: absolute;\s*\}/,
       )
     })
 
