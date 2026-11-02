@@ -144,7 +144,7 @@
     "title": "Brenn",
     "width": 480,
     "height": 640,
-    "description": "A face portrait of a young caravan guard with a wary, startled expression, a dirty bandage across one cheek, and tousled hair."
+    "description": "A face portrait of a young caravan guard with a wary, startled expression and tousled hair."
   },
   {
     "id": "act2-portrait-caravan-master-thorne",
@@ -179,7 +179,7 @@
     "title": "Forest Hermit",
     "width": 480,
     "height": 640,
-    "description": "A face portrait of a thin, weathered hermit under a moss-green hood, with sharp wary eyes and charms of bark and braided grass at the throat."
+    "description": "A face portrait of a thin, weathered hermit under a moss-green hood, with sharp wary eyes and a guarded look."
   },
   {
     "id": "act2-portrait-forest-sprites",
@@ -207,7 +207,7 @@
     "title": "Historians",
     "width": 480,
     "height": 640,
-    "description": "A face portrait of an elderly scholar with ink-stained fingers raised to thick round spectacles, curious and absent-minded."
+    "description": "A face portrait of an elderly scholar with thick round spectacles, curious and absent-minded."
   },
   {
     "id": "act2-portrait-innkeeper-marcus",
@@ -284,14 +284,14 @@
     "title": "Town Crier",
     "width": 480,
     "height": 640,
-    "description": "A face portrait of a red-faced town crier with a loud, open mouth, round cheeks and a feathered cap in Greendale’s colours."
+    "description": "A face portrait of a red-faced town crier with round cheeks and a feathered cap."
   },
   {
     "id": "act2-portrait-training-master",
     "title": "Training Master",
     "width": 480,
     "height": 640,
-    "description": "A face portrait of a grey-haired knight with a rough, weathered face, a scarred chin and a hard, sharp-eyed stare."
+    "description": "A face portrait of a grey-haired knight with a rough, weathered face and a hard, sharp-eyed stare."
   },
   {
     "id": "act2-portrait-water-nymphs",

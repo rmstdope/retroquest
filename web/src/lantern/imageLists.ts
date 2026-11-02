@@ -82,8 +82,9 @@ function portraitPrompt(classKey: string): string {
 
 /**
  * One portrait for each character the act registers (`act.classes`, so those
- * who arrive mid-story are found too), described by the character's own
- * description without any line of speech. A name two classes share is listed
+ * who arrive mid-story are found too), described by its hand-written face
+ * portrait prompt in `PORTRAIT_PROMPTS` (the character itself supplies only the
+ * name for the title). A name two classes share is listed
  * once, the first class winning. Ids come from `portraitId`. A shared portrait
  * is listed in every act it appears in with the title and description of the
  * first of `acts` (the whole game, in order) that registers it, so the studio

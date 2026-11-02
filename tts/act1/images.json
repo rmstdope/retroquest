@@ -123,7 +123,7 @@
     "title": "Deer",
     "width": 480,
     "height": 640,
-    "description": "A face portrait of a red-brown deer, its dark eyes calm and unafraid, its ears turned toward you, with moss on its muzzle."
+    "description": "A face portrait of a red-brown deer, its dark eyes calm and unafraid and its ears turned toward you."
   },
   {
     "id": "act1-portrait-dream-voice",
@@ -165,7 +165,7 @@
     "title": "Priest",
     "width": 480,
     "height": 640,
-    "description": "A face portrait of a thin, slightly stooped old priest with a gentle, worried face and a bald head, a speck of candle wax on his collar."
+    "description": "A face portrait of a thin, slightly stooped old priest with a gentle, worried face."
   },
   {
     "id": "act1-portrait-patches",
@@ -179,7 +179,7 @@
     "title": "Shopkeeper",
     "width": 480,
     "height": 640,
-    "description": "A face portrait of an old storekeeper with a nervous, sideways glance, thinning white hair and wire spectacles."
+    "description": "A face portrait of an old storekeeper with a nervous, sideways glance and thinning white hair."
   },
   {
     "id": "act1-portrait-villager",

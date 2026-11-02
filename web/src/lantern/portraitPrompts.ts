@@ -35,7 +35,7 @@ export const PORTRAIT_PROMPTS: Readonly<Record<string, string>> = {
     'a keen, busy look.',
   Deer:
     'A face portrait of a red-brown deer, its dark eyes calm and ' +
-    'unafraid, its ears turned toward you, with moss on its muzzle.',
+    'unafraid and its ears turned toward you.',
   DreamVoice:
     'A face portrait of a tall dark figure in rain-soaked shadow, ' +
     'with no face you can make out, only a pale blur where a face ' +
@@ -48,14 +48,13 @@ export const PORTRAIT_PROMPTS: Readonly<Record<string, string>> = {
     'with sharp cheekbones, shrewd tired eyes and a road-worn hat.',
   Priest:
     'A face portrait of a thin, slightly stooped old priest with a ' +
-    'gentle, worried face and a bald head, a speck of candle wax on ' +
-    'his collar.',
+    'gentle, worried face.',
   Patches:
     'A face portrait of a small cat with a patchwork coat of ginger, ' +
     'black and white, and wide green eyes.',
   Shopkeeper:
     'A face portrait of an old storekeeper with a nervous, ' +
-    'sideways glance, thinning white hair and wire spectacles.',
+    'sideways glance and thinning white hair.',
   Villager:
     'A face portrait of a plump, cheerful baker’s wife with flour ' +
     'on her cheek, bright gossiping eyes and a headscarf.',
@@ -70,8 +69,7 @@ export const PORTRAIT_PROMPTS: Readonly<Record<string, string>> = {
     'eyes, her pale skin faintly shadowed, her hair tied back.',
   Brenn:
     'A face portrait of a young caravan guard with a wary, ' +
-    'startled expression, a dirty bandage across one cheek, and ' +
-    'tousled hair.',
+    'startled expression and tousled hair.',
   CaravanMasterThorne:
     'A face portrait of a weather-beaten caravan master with ' +
     'road dust in the creases of his skin, squinting eyes and ' +
@@ -88,8 +86,7 @@ export const PORTRAIT_PROMPTS: Readonly<Record<string, string>> = {
     'weathered and warm, with a child’s face peeking beside them.',
   ForestHermit:
     'A face portrait of a thin, weathered hermit under a moss-green ' +
-    'hood, with sharp wary eyes and charms of bark and braided grass ' +
-    'at the throat.',
+    'hood, with sharp wary eyes and a guarded look.',
   ForestSprites:
     'A face portrait of a tiny forest sprite, a mote of light ' +
     'with a small bright face and wings like a split beech-nut husk.',
@@ -101,8 +98,8 @@ export const PORTRAIT_PROMPTS: Readonly<Record<string, string>> = {
     'a long nose and a hard, scrutinising stare, in a tabard collar ' +
     'bearing the royal arms.',
   Historians:
-    'A face portrait of an elderly scholar with ink-stained fingers ' +
-    'raised to thick round spectacles, curious and absent-minded.',
+    'A face portrait of an elderly scholar with thick round ' +
+    'spectacles, curious and absent-minded.',
   InnkeeperMarcus:
     'A face portrait of a big, broad-faced innkeeper with a ' +
     'friendly grin that does not reach his anxious eyes, and a ' +
@@ -130,11 +127,11 @@ export const PORTRAIT_PROMPTS: Readonly<Record<string, string>> = {
     'A face portrait of a young squire, flushed and freckled, ' +
     'with a leather practice cap and a sidelong, whispering look.',
   TownCrier:
-    'A face portrait of a red-faced town crier with a loud, open ' +
-    'mouth, round cheeks and a feathered cap in Greendale’s colours.',
+    'A face portrait of a red-faced town crier with round cheeks ' +
+    'and a feathered cap.',
   TrainingMaster:
     'A face portrait of a grey-haired knight with a rough, ' +
-    'weathered face, a scarred chin and a hard, sharp-eyed stare.',
+    'weathered face and a hard, sharp-eyed stare.',
   WaterNymphs:
     'A face portrait of a water nymph, her face and hair made ' +
     'of clear flowing stream water, with pale shifting eyes.',
@@ -157,8 +154,7 @@ export const PORTRAIT_PROMPTS: Readonly<Record<string, string>> = {
     'gold to red, with a sharp beak and calm, unhurried amber eyes.',
   PhoenixGuardian:
     'A face portrait of a masked guardian in a fire-etched ' +
-    'mask and hood, only the eyes and lips showing, the lips ' +
-    'moving as if counting.',
+    'mask and hood, only the eyes and lips showing.',
   PierWarden:
     'A face portrait of an old man with a salt-stiff collar, ' +
     'a seamed, sea-beaten face and pale eyes fixed on the water.',
@@ -203,8 +199,8 @@ export const PORTRAIT_PROMPTS: Readonly<Record<string, string>> = {
     'and grim, with an old battered helm and hollow eyes.',
   TrueSelf:
     'A face portrait of your own reflection in a plain mirror, ' +
-    'a watchful, knowing face, a little different from yours.',
+    'a watchful face that seems to know what you will say.',
   TrappedServants:
     'A face portrait of a grey, shadowed servant, with downcast ' +
-    'eyes, a kitchen cap, and a chain of shadow at the neck.',
+    'eyes, a kitchen cap, and a grey, shadowed look.',
 }
