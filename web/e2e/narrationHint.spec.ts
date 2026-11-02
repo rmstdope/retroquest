@@ -213,3 +213,34 @@ test('on a wide desktop the hint sits at the height of the Hide button and cover
     "the hint off the Hide's height, in px",
   ).toBeLessThan(2)
 })
+
+/**
+ * On a phone with the room for a picture (390x650), the story is the one
+ * column of narrator's cards and the hint floats at the bottom of it: while
+ * a card is read the cards keep the room for the hint below the words, so no
+ * line of the newest card lies under it (rq-x720).
+ */
+test('on a tall phone no word of the newest card being read sits under the hint', async ({
+  page,
+}): Promise<void> => {
+  await page.setViewportSize({ width: 390, height: 650 })
+  await quickNarrationClips(page)
+  await page.goto('/')
+  await page.getByRole('button', { name: 'Start', exact: true }).click()
+  await page.locator('.lq-chapter-button').click()
+  const input = page.getByLabel('Command', { exact: true })
+  const enter = async (command: string): Promise<void> => {
+    if (!(await input.isVisible()))
+      await page
+        .getByRole('button', { name: /^Type( a command)?$/ })
+        .first()
+        .click()
+    await input.fill(command)
+    await input.press('Enter')
+  }
+  await enter('talk to voice')
+  await expect(page.getByTestId('arrival-on-picture')).toBeVisible()
+  await enter('look')
+  await expect(page.locator('.lq-narration-hint')).toBeVisible()
+  expectClear(await watchReading(page), 'look')
+})

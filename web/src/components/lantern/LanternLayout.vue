@@ -1926,8 +1926,14 @@ watch(
     opacity calc(0.2s * var(--lq-motion)) ease,
     visibility 0s linear calc(0.2s * var(--lq-motion));
 }
-.lq-cards.lq-hint-room {
-  padding-bottom: 40px;
+/* The one column (a phone, a narrow laptop) keeps the hint in the cards, so
+   while a turn is read the cards keep the hint's room below the words. Written
+   as specific as the cards' own `padding: 0`, which would otherwise win (rq-x720);
+   with the cards' 6px of story padding it ends the words exactly where the
+   let-go story's blank room ends them, so nothing moves when the reading ends.
+   Two sides need no room: the hint sits on the Hide line below the cards. */
+.lq-staged .lq-story-wrap.lq-cards.lq-one-column.lq-hint-room {
+  padding-bottom: calc(var(--lq-hint-room) - 6px);
 }
 .lq-cards .lq-narration-hint {
   left: 12px;
