@@ -1907,7 +1907,7 @@ watch(
   flex: 0 1 auto;
   gap: 8px;
   /* The top padding keeps the fade on empty space, so a lone card is fully lit. */
-  padding: 16px 12px 6px 12px;
+  padding: 16px 12px var(--lq-cards-story-end) 12px;
   /* The oldest card leaves at the top under a soft fade. */
   mask-image: linear-gradient(to bottom, transparent, #000 16px);
   scrollbar-width: none;
@@ -1926,8 +1926,14 @@ watch(
     opacity calc(0.2s * var(--lq-motion)) ease,
     visibility 0s linear calc(0.2s * var(--lq-motion));
 }
-.lq-cards.lq-hint-room {
-  padding-bottom: 40px;
+/* The one column (a phone, a narrow laptop) keeps the hint in the cards, so
+   while a turn is read the cards keep the hint's room below the words. Written
+   as specific as the cards' own `padding: 0`, which would otherwise win (rq-x720);
+   with the cards' story end padding it ends the words exactly where the
+   let-go story's blank room ends them, so nothing moves when the reading ends.
+   Two sides need no room: the hint sits on the Hide line below the cards. */
+.lq-staged .lq-story-wrap.lq-cards.lq-one-column.lq-hint-room {
+  padding-bottom: calc(var(--lq-hint-room) - var(--lq-cards-story-end));
 }
 .lq-cards .lq-narration-hint {
   left: 12px;
@@ -2122,6 +2128,8 @@ watch(
    words never move when a reading starts or lets go. */
 .lq-story-wrap {
   --lq-hint-room: 48px;
+  /* The cards' story padding below the newest card (the held room counts it). */
+  --lq-cards-story-end: 6px;
 }
 .lq-story-wrap.lq-hint-room {
   padding-bottom: var(--lq-hint-room);
