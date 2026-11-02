@@ -473,6 +473,51 @@ function answerTooLong(): boolean {
   return !!story && !!last && last.offsetHeight > story.clientHeight
 }
 
+/**
+ * The window crossing about 1100 px redraws the story's turns (the column or
+ * the cards) in the same pane. The story re-forms where a fresh answer would
+ * have put it: the newest turn from its start (a short one whole at the
+ * bottom), unless the player had scrolled back, whose turn then stays in view
+ * (the same share of it above the view, as its height changes). Taken before the redraw, finished after it.
+ */
+watch(
+  [column, staged],
+  async ([_column, nowStaged], [_wasColumn, wasStaged]) => {
+    // Only a crossing of 1100 px: the text page and the picture stage list different turns.
+    if (nowStaged !== wasStaged) return
+    const story = storyEl.value
+    const content = contentEl.value
+    if (!story || !content || content.children.length === 0) return
+    const storyTop = story.getBoundingClientRect().top
+    const turns = Array.from(content.children)
+    let anchor = 0
+    turns.forEach((turn, index) => {
+      if (turn.getBoundingClientRect().top <= storyTop + END_SLACK)
+        anchor = index
+    })
+    const anchorRect = turns[anchor].getBoundingClientRect()
+    const offset = anchorRect.top - storyTop
+    const oldHeight = anchorRect.height
+    const atNewest = anchor === turns.length - 1 || !moreBelow.value
+    await nextTick()
+    const target = atNewest
+      ? content.lastElementChild
+      : content.children[anchor]
+    if (!target) return
+    const into =
+      target.getBoundingClientRect().top -
+      story.getBoundingClientRect().top +
+      story.scrollTop
+    // The turn is a different height now: keep the same share of it above the view.
+    const newHeight = target.getBoundingClientRect().height
+    const kept = oldHeight > 0 ? (offset * newHeight) / oldHeight : offset
+    moveStory(atNewest ? into : into - kept, false)
+    if (storyHeld.value) refollow()
+    updateMoreBelow()
+  },
+  { flush: 'pre' },
+)
+
 // The story also changes size without scrolling: the sheet opens or folds,
 // the window turns, a section is shown again, the room card grows.
 let storyResize: ResizeObserver | undefined
