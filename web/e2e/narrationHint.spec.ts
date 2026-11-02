@@ -1,9 +1,11 @@
 /**
  * The narration hint ("Space to hurry · Esc to skip", "Tap to hurry ·
- * double-tap to skip") floats over the bottom of the story. While a paragraph
- * at the bottom of the story is read aloud, none of its words may sit under
- * it, on desktop or on a phone, and making room for it must not make the story
- * jump when the reading lets it go (rq-7juz).
+ * double-tap to skip") floats over the bottom of the story; on a laptop wide
+ * enough for two sides it sits below the narrator's cards instead, level with
+ * the "▾ Hide" (rq-7tei). While a paragraph at the bottom of the story is read
+ * aloud, none of its words may sit under it, on desktop or on a phone, and
+ * making room for it must not make the story jump when the reading lets it go
+ * (rq-7juz).
  */
 import { test, expect, type Page } from '@playwright/test'
 
@@ -176,7 +178,9 @@ for (const { name, width, height } of [
 /**
  * On a laptop wide enough for two sides the narrator's cards end above the
  * "▾ Hide" line: the hint sits on that line, beside the Hide, and so never
- * over the newest card (rq-7tei).
+ * over the newest card (rq-7tei). The hint is then outside the story pane,
+ * so no word can count as covered: the guard that it stays off the cards is
+ * that it is level with the Hide.
  */
 test('on a wide desktop the hint sits at the height of the Hide button and covers no word being read', async ({
   page,
