@@ -5,7 +5,7 @@ import { createPinia, setActivePinia } from 'pinia'
 import { useActMusic } from './useActMusic'
 import { useGameStore } from '@/stores/useGameStore'
 import { useNarrationStore } from '@/stores/useNarrationStore'
-import { MUSIC_DUCK, MUSIC_DUCK_FADE_MS } from './useMusic'
+import { MUSIC_DUCK, MUSIC_DUCK_FADE_MS, MUSIC_FADE_IN_MS } from './useMusic'
 
 /** Lets the manifest fetch settle and the watchers run. */
 async function settle(): Promise<void> {
@@ -93,6 +93,32 @@ describe('useActMusic', () => {
 
     expect(FakeAudio.last.loop).toBe(true)
     expect(FakeAudio.last.src).toContain('willowbrook.mp3')
+    scope.stop()
+  })
+
+  it('fades the title page music in, and only that', async () => {
+    vi.useFakeTimers()
+    const scope = effectScope()
+    scope.run(() => useActMusic())
+    const game = useGameStore()
+    game.showTitle = true
+    game.musicFile = 'willowbrook.mp3'
+    await vi.advanceTimersByTimeAsync(0)
+    await nextTick()
+    await vi.advanceTimersByTimeAsync(0)
+    expect(FakeAudio.last.volume).toBe(0)
+    await vi.advanceTimersByTimeAsync(MUSIC_FADE_IN_MS)
+    expect(FakeAudio.last.volume).toBeCloseTo(1)
+    scope.stop()
+    vi.useRealTimers()
+  })
+
+  it('starts at full volume when there is no title page', async () => {
+    const scope = effectScope()
+    scope.run(() => useActMusic())
+    useGameStore().musicFile = 'willowbrook.mp3'
+    await settle()
+    expect(FakeAudio.last.volume).toBe(1)
     scope.stop()
   })
 

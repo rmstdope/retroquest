@@ -5,6 +5,7 @@ import {
   MUSIC_CROSSFADE_MS,
   MUSIC_DUCK,
   MUSIC_DUCK_FADE_MS,
+  MUSIC_FADE_IN_MS,
   useMusic,
 } from './useMusic'
 import { useSettingsStore } from '@/stores/useSettingsStore'
@@ -153,6 +154,86 @@ describe('useMusic', () => {
       await vi.waitFor(() => {
         expect(audio.play).toHaveBeenCalled()
       })
+    })
+  })
+
+  describe('fading the first music in', () => {
+    beforeEach(() => vi.useFakeTimers())
+    afterEach(() => vi.useRealTimers())
+
+    it('rises from silence to the set volume over the fade time', async () => {
+      useSettingsStore().musicVolume = 80
+      const { loadTrack } = useMusic(audio)
+      loadTrack('a.mp3', 'A', MUSIC_FADE_IN_MS)
+      await vi.advanceTimersByTimeAsync(0)
+      expect(audio.play).toHaveBeenCalled()
+      expect(audio.volume).toBe(0)
+      await vi.advanceTimersByTimeAsync(MUSIC_FADE_IN_MS / 2)
+      expect(audio.volume).toBeGreaterThan(0)
+      expect(audio.volume).toBeLessThan(0.8)
+      await vi.advanceTimersByTimeAsync(MUSIC_FADE_IN_MS / 2)
+      expect(audio.volume).toBeCloseTo(0.8)
+    })
+
+    it('lasts two seconds', () => {
+      expect(MUSIC_FADE_IN_MS).toBe(2000)
+    })
+
+    it('starts at full volume without a fade time', () => {
+      const { loadTrack } = useMusic(audio)
+      loadTrack('a.mp3', 'A')
+      expect(audio.volume).toBe(1)
+    })
+
+    it('does not ramp while muted', async () => {
+      localStorage.setItem('retroquest_music_muted', 'true')
+      const { loadTrack } = useMusic(audio)
+      loadTrack('a.mp3', 'A', MUSIC_FADE_IN_MS)
+      await vi.advanceTimersByTimeAsync(MUSIC_FADE_IN_MS)
+      expect(audio.play).not.toHaveBeenCalled()
+      expect(audio.volume).toBe(1)
+    })
+
+    it('ramps after the first input when autoplay was blocked', async () => {
+      const play = audio.play as ReturnType<typeof vi.fn>
+      play.mockRejectedValueOnce(new Error('Autoplay blocked'))
+      const { loadTrack, ensureMusicStarted } = useMusic(audio)
+      loadTrack('a.mp3', 'A', MUSIC_FADE_IN_MS)
+      await vi.advanceTimersByTimeAsync(MUSIC_FADE_IN_MS * 3)
+      expect(audio.volume).toBe(0)
+      ensureMusicStarted()
+      await vi.advanceTimersByTimeAsync(MUSIC_FADE_IN_MS)
+      expect(audio.volume).toBeCloseTo(1)
+    })
+
+    it('keeps the ramp when a voice starts or ends before the sound does', async () => {
+      const narrating = ref(false)
+      let start: () => void = () => {}
+      ;(audio.play as ReturnType<typeof vi.fn>).mockImplementation(
+        () => new Promise<void>((resolve) => (start = resolve)),
+      )
+      const { loadTrack } = useMusic(audio, narrating)
+      loadTrack('a.mp3', 'A', MUSIC_FADE_IN_MS)
+      narrating.value = true
+      await vi.advanceTimersByTimeAsync(MUSIC_DUCK_FADE_MS * 2)
+      expect(audio.volume).toBe(0)
+      start()
+      await vi.advanceTimersByTimeAsync(MUSIC_FADE_IN_MS)
+      expect(audio.volume).toBeCloseTo(MUSIC_DUCK)
+    })
+
+    it('starts the ramp only when playback has started', async () => {
+      let start: () => void = () => {}
+      ;(audio.play as ReturnType<typeof vi.fn>).mockImplementation(
+        () => new Promise<void>((resolve) => (start = resolve)),
+      )
+      const { loadTrack } = useMusic(audio)
+      loadTrack('a.mp3', 'A', MUSIC_FADE_IN_MS)
+      await vi.advanceTimersByTimeAsync(MUSIC_FADE_IN_MS * 3)
+      expect(audio.volume).toBe(0)
+      start()
+      await vi.advanceTimersByTimeAsync(MUSIC_FADE_IN_MS)
+      expect(audio.volume).toBeCloseTo(1)
     })
   })
 
@@ -642,6 +723,17 @@ describe('useMusic on Web Audio', () => {
     expect(ctx.gains.at(-1)?.gain.value).toBeCloseTo(0.6)
     expect(music.currentMusicFile.value).toBe('a.mp3')
     expect(audio.play).not.toHaveBeenCalled()
+  })
+
+  it('fades the first music in on Web Audio when asked to', async () => {
+    vi.useFakeTimers()
+    useSettingsStore().musicVolume = 100
+    const music = useMusic(audio)
+    music.loadTrack('a.mp3', 'A', MUSIC_FADE_IN_MS)
+    await vi.advanceTimersByTimeAsync(0)
+    expect(ctx.gains.at(-1)?.gain.value).toBe(0)
+    await vi.advanceTimersByTimeAsync(MUSIC_FADE_IN_MS)
+    expect(ctx.gains.at(-1)?.gain.value).toBeCloseTo(1)
   })
 
   it('starts the music ducked when a voice is already speaking', async () => {
