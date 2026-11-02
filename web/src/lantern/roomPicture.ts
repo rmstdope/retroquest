@@ -3,7 +3,7 @@
  * room, named by the same id as the room's entry in the act's image list.
  */
 import { roomTrackId } from './musicLists'
-import { portraitId } from './imageLists'
+import { ELIOR_PORTRAIT_ID, portraitId } from './imageLists'
 
 /**
  * The URL of the picture of a room, or '' while no room is known. The file may
@@ -24,4 +24,12 @@ export function roomPictureUrl(actName: string, roomKey: string): string {
 export function portraitUrl(actName: string, classKey: string): string {
   if (!actName || !classKey) return ''
   return `${import.meta.env.BASE_URL}images/generated/${portraitId(actName, classKey)}.png`
+}
+
+/**
+ * The URL of Elior's portrait, one file for every act. The file may not exist
+ * yet; his lines then show the initial card.
+ */
+export function eliorPortraitUrl(): string {
+  return `${import.meta.env.BASE_URL}images/generated/${ELIOR_PORTRAIT_ID}.png`
 }

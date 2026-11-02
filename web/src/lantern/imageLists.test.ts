@@ -10,12 +10,17 @@ import { Act4 } from '@/act4/Act4'
 import type { Act } from '@/engine'
 import { Character } from '@/engine'
 import { displayName } from './displayName'
-import { PORTRAIT_PROMPTS, PORTRAIT_PROMPT_START } from './portraitPrompts'
+import {
+  ELIOR_PORTRAIT_PROMPT,
+  PORTRAIT_PROMPTS,
+  PORTRAIT_PROMPT_START,
+} from './portraitPrompts'
 import {
   IMAGE_HEIGHT,
   IMAGE_WIDTH,
   PORTRAIT_HEIGHT,
   PORTRAIT_WIDTH,
+  ELIOR_PORTRAIT_ID,
   SHARED_PORTRAITS,
   allImages,
   characterImages,
@@ -72,8 +77,8 @@ describe('characterImages', () => {
       const images = characterImages(act)
       expect(images.length).toBeGreaterThan(0)
       expect(images.map((i) => i.title.toLowerCase()).sort()).toEqual(
-        characterNames(act)
-          .map((n) => displayName(n).toLowerCase())
+        [...characterNames(act).map((n) => displayName(n)), 'Elior']
+          .map((n) => n.toLowerCase())
           .sort(),
       )
       for (const image of images) {
@@ -135,8 +140,12 @@ describe('characterImages', () => {
       characterImages(act, ACTS).map((i) => i.id),
     )
     const repeated = ids.filter((id, i) => ids.indexOf(id) !== i)
+    // Elior is no class but is listed, identically, in every act.
     expect(new Set(repeated)).toEqual(
-      new Set(SHARED_PORTRAITS.map((key) => portraitId('Act1', key))),
+      new Set([
+        ...SHARED_PORTRAITS.map((key) => portraitId('Act1', key)),
+        ELIOR_PORTRAIT_ID,
+      ]),
     )
   })
 
@@ -183,5 +192,27 @@ describe('characterImages', () => {
     for (const act of ACTS.filter((a) => 'Mira' in a.classes)) {
       expect(entry(act)).toEqual(entry(ACTS[0]!))
     }
+  })
+})
+
+describe('the portrait of Elior', () => {
+  it('is listed once in every act, identical in each, with the agreed words', () => {
+    const entries = ACTS.map((act) =>
+      characterImages(act, ACTS).filter((i) => i.id === ELIOR_PORTRAIT_ID),
+    )
+    for (const list of entries) expect(list).toHaveLength(1)
+    expect(ELIOR_PORTRAIT_ID).toBe('portrait-elior')
+    expect(entries[0]![0]).toEqual({
+      id: 'portrait-elior',
+      title: 'Elior',
+      width: PORTRAIT_WIDTH,
+      height: PORTRAIT_HEIGHT,
+      description:
+        'A face portrait of a farm boy of about nineteen, sun-browned and ' +
+        'freckled, with untidy brown hair, an earnest, searching look, and ' +
+        'the frayed collar of a homespun shirt.',
+    })
+    for (const list of entries) expect(list[0]).toEqual(entries[0]![0])
+    expect(ELIOR_PORTRAIT_PROMPT.startsWith(PORTRAIT_PROMPT_START)).toBe(true)
   })
 })

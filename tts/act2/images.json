@@ -299,5 +299,12 @@
     "width": 480,
     "height": 640,
     "description": "A face portrait of a water nymph, her face and hair made of clear flowing stream water, with pale shifting eyes."
+  },
+  {
+    "id": "portrait-elior",
+    "title": "Elior",
+    "width": 480,
+    "height": 640,
+    "description": "A face portrait of a farm boy of about nineteen, sun-browned and freckled, with untidy brown hair, an earnest, searching look, and the frayed collar of a homespun shirt."
   }
 ]

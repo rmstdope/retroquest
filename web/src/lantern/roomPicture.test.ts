@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest'
-import { portraitUrl, roomPictureUrl } from './roomPicture'
+import { eliorPortraitUrl, portraitUrl, roomPictureUrl } from './roomPicture'
 import { roomTrackId } from './musicLists'
-import { characterImages, portraitId } from './imageLists'
+import { ELIOR_PORTRAIT_ID, characterImages, portraitId } from './imageLists'
 import { Act1 } from '@/act1/Act1'
 
 describe('roomPictureUrl', () => {
@@ -50,8 +50,19 @@ describe('the characters of each act and their portraits', () => {
     const { GameController } = await import('@/engine/GameController')
     const act = new Act1()
     const cast = new GameController(new Game([act])).getActCharacters()
-    const ids = characterImages(act).map((image) => image.id)
+    // Elior is no character of the cast; his portrait is listed after theirs.
+    const ids = characterImages(act)
+      .map((image) => image.id)
+      .filter((id) => id !== ELIOR_PORTRAIT_ID)
     expect(cast.length).toBe(ids.length)
     expect(cast.map((entry) => portraitId(act.name, entry.key))).toEqual(ids)
+  })
+})
+
+describe('eliorPortraitUrl', () => {
+  it('names the one shared Elior portrait file', () => {
+    expect(eliorPortraitUrl()).toMatch(
+      /images\/generated\/portrait-elior\.png$/,
+    )
   })
 })

@@ -10,6 +10,16 @@
 /** Every prompt must begin with these words, so the studio draws a face and not a full figure. */
 export const PORTRAIT_PROMPT_START = 'A face portrait of '
 
+/**
+ * The portrait prompt of Elior, the player. He is no character class, so his
+ * prompt is kept apart from `PORTRAIT_PROMPTS`; the same one is listed in every
+ * act. It shows nothing of magic, as the same face is used from his first line.
+ */
+export const ELIOR_PORTRAIT_PROMPT =
+  'A face portrait of a farm boy of about nineteen, sun-browned and ' +
+  'freckled, with untidy brown hair, an earnest, searching look, and ' +
+  'the frayed collar of a homespun shirt.'
+
 /** The portrait prompt of each character class, from every act. */
 export const PORTRAIT_PROMPTS: Readonly<Record<string, string>> = {
   // Shared by several acts

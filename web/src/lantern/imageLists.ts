@@ -10,7 +10,7 @@
 import { Character, type Act } from '@/engine'
 import { displayName } from './displayName'
 import { narrationText } from './narrationKey'
-import { PORTRAIT_PROMPTS } from './portraitPrompts'
+import { ELIOR_PORTRAIT_PROMPT, PORTRAIT_PROMPTS } from './portraitPrompts'
 import { roomTrackId } from './musicLists'
 
 /** Width in pixels of every image. */
@@ -34,6 +34,9 @@ export const SHARED_PORTRAITS: readonly string[] = [
   'Nyx',
   'SirCedric',
 ]
+
+/** The id of Elior's portrait, the one face his lines wear in every act. */
+export const ELIOR_PORTRAIT_ID = 'portrait-elior'
 
 /**
  * The id of the portrait of character class `classKey` in act `actName`: the
@@ -88,7 +91,7 @@ function portraitPrompt(classKey: string): string {
  * once, the first class winning. Ids come from `portraitId`. A shared portrait
  * is listed in every act it appears in with the title and description of the
  * first of `acts` (the whole game, in order) that registers it, so the studio
- * sees one entry.
+ * sees one entry. Elior, who is no class, is listed last, the same in every act.
  */
 export function characterImages(act: Act, acts: Act[] = [act]): GameImage[] {
   const seen = new Set<string>()
@@ -112,6 +115,13 @@ export function characterImages(act: Act, acts: Act[] = [act]): GameImage[] {
       description: portraitPrompt(key),
     })
   }
+  images.push({
+    id: ELIOR_PORTRAIT_ID,
+    title: 'Elior',
+    width: PORTRAIT_WIDTH,
+    height: PORTRAIT_HEIGHT,
+    description: ELIOR_PORTRAIT_PROMPT,
+  })
   return images
 }
 

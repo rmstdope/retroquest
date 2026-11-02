@@ -5,7 +5,7 @@ import { speakerColor } from '@/lantern/stageSpeech'
 /**
  * A speaker's small round portrait beside their first line: the face cut from
  * the top of the upright portrait file. Until the file is there (none are
- * made yet, Elior has none, or it fails to load) a circle in the character's
+ * made yet, or it fails to load) a circle in the character's
  * own steady colour shows their initial in white instead. Decorative: the
  * words are in the story band.
  */

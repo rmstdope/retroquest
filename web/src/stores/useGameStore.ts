@@ -20,7 +20,12 @@ import {
 } from '@/lantern/spellNews'
 import { parseActIntro, type ActIntro } from '@/lantern/parseActIntro'
 import { actFolder } from '@/lantern/narrationManifest'
-import { portraitUrl, roomPictureUrl } from '@/lantern/roomPicture'
+import {
+  eliorPortraitUrl,
+  portraitUrl,
+  roomPictureUrl,
+} from '@/lantern/roomPicture'
+import { ELIOR } from '@/lantern/stageSpeech'
 import type { Chapter } from '@/lantern/chapter'
 
 /**
@@ -291,8 +296,9 @@ export const useGameStore = defineStore('game', () => {
   /** The running act's characters by class key and name, for their portraits. */
   const actCast = ref<{ key: string; name: string }[]>([])
 
-  /** The portrait of a character of the running act, '' when the name is not on its list (Elior, or a name the act does not register). */
+  /** The portrait of Elior, or of a character of the running act; '' when the name is not on its list (a name the act does not register). */
   function portraitFor(name: string): string {
+    if (name.toLowerCase() === ELIOR.toLowerCase()) return eliorPortraitUrl()
     const entry = actCast.value.find(
       (cast) => cast.name.toLowerCase() === name.toLowerCase(),
     )
