@@ -118,7 +118,12 @@ function onKeydown(event: KeyboardEvent): void {
       @keydown="onBodyKeydown"
       @scroll.passive="updatePill"
     >
-      <StoryTurn v-for="turn in game.turns" :key="turn.id" :turn="turn" />
+      <StoryTurn
+        v-for="turn in game.turns"
+        :key="turn.id"
+        :turn="turn"
+        record
+      />
     </div>
     <button v-if="pill" type="button" class="lq-newest" @click="toNewest(true)">
       Newest <span aria-hidden="true">↓</span>

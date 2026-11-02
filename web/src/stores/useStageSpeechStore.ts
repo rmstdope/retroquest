@@ -54,6 +54,18 @@ export const useStageSpeechStore = defineStore('stageSpeech', () => {
     () => conversation.value?.lines.filter(isShown) ?? [],
   )
 
+  /**
+   * Whether everything said in turn `turnId` is on the picture (also when it
+   * said nothing there): what quest news told after the words waits for.
+   */
+  function told(turnId: number): boolean {
+    return (
+      conversation.value?.lines
+        .filter((line) => line.turnId === turnId)
+        .every(isShown) ?? true
+    )
+  }
+
   /** Whether a line is the one being read aloud now. */
   function isSpeaking(line: StageLine): boolean {
     const now = narration.speaking(line.turnId)
@@ -137,6 +149,7 @@ export const useStageSpeechStore = defineStore('stageSpeech', () => {
     conversation,
     visible,
     isSpeaking,
+    told,
     revealAll,
     clear,
     observe,

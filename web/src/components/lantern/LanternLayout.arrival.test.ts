@@ -4,7 +4,7 @@ import { nextTick } from 'vue'
 import { mount, type VueWrapper } from '@vue/test-utils'
 import { createPinia, setActivePinia, type Pinia } from 'pinia'
 import LanternLayout from './LanternLayout.vue'
-import { useGameStore } from '@/stores/useGameStore'
+import { useGameStore, type Turn } from '@/stores/useGameStore'
 import { useArrivalStore } from '@/stores/useArrivalStore'
 import { useSettingsStore } from '@/stores/useSettingsStore'
 import {
@@ -355,7 +355,7 @@ describe('LanternLayout: the arrival on the picture', () => {
     expect(card(w)).toBe('')
   })
 
-  it('tells what happens on arrival first, in italics, then the description, and keeps quest news for the story', async () => {
+  it('tells what happens on arrival first, in italics, then the description, and then the quest news', async () => {
     const w = await ready()
     useSettingsStore(pinia).narrationOn = false
     useGameStore(pinia).turns.push({
@@ -383,8 +383,119 @@ describe('LanternLayout: the arrival on the picture', () => {
     expect(card(w)).toContain('A creaky windmill.')
     expect(card(w)).not.toContain('Go.')
     await w.get('[data-testid="arrival-on-picture"]').trigger('click')
+    expect(card(w)).toContain('New side quest')
+    expect(card(w)).toContain('Go.')
+    await w.get('[data-testid="arrival-on-picture"]').trigger('click')
     expect(card(w)).toBe('')
-    expect(w.get('.lq-story').text()).toContain('Go.')
+    expect(w.get('.lq-story').text()).toContain('New side quest · Q')
+  })
+
+  describe('quest news', () => {
+    const news = (id = 90): Parameters<typeof pushTurn>[0] => ({
+      id,
+      command: 'talk to grandmother',
+      text: 'She smiles.',
+      quests: [
+        {
+          kind: 'completed',
+          name: 'Hint of Magic',
+          main: false,
+          text: 'It stayed.',
+          progress: { completed: 1, total: 11 },
+          fanfare: true,
+        },
+        {
+          kind: 'updated',
+          name: 'The cat',
+          main: false,
+          text: 'Later.',
+          chime: true,
+        },
+      ],
+    })
+    /** Push a turn with no room onto the game. */
+    function pushTurn(turn: {
+      id: number
+      command: string
+      text: string
+      quests: NonNullable<Turn['quests']>
+    }): void {
+      useGameStore(pinia).turns.push({
+        room: 'Square',
+        description: null,
+        gained: [],
+        lost: [],
+        arrival: null,
+        ...turn,
+      })
+    }
+
+    it('is told in the middle, one piece after the other, then leaves slim lines on the card', async () => {
+      const w = await ready(true, false)
+      useSettingsStore(pinia).narrationOn = false
+      const audio = { playNewQuest: vi.fn(), playQuestComplete: vi.fn() }
+      useGameStore(pinia).setAudioPlayer(audio)
+      pushTurn(news())
+      await vi.advanceTimersByTimeAsync(0)
+      expect(card(w)).toContain('Side quest complete · 1 of 11')
+      expect(card(w)).toContain('Hint of Magic')
+      expect(storyAside(w)).toBe(true)
+      expect(audio.playQuestComplete).toHaveBeenCalledOnce()
+      expect(audio.playNewQuest).not.toHaveBeenCalled()
+      await w.get('[data-testid="arrival-on-picture"]').trigger('click')
+      expect(card(w)).toContain('Quest updated')
+      expect(audio.playNewQuest).toHaveBeenCalledOnce()
+      await w.get('[data-testid="arrival-on-picture"]').trigger('click')
+      expect(card(w)).toBe('')
+      expect(storyAside(w)).toBe(false)
+      const lines = w.findAll('[data-testid="news-line"]')
+      expect(lines).toHaveLength(2)
+      expect(lines[0].text()).toContain('Side quest complete · Hint of Magic')
+      expect(lines[1].text()).toContain('Quest updated · The cat')
+    })
+
+    it('goes on with Space, and Enter after the last piece clears it', async () => {
+      const w = await ready(true, false)
+      useSettingsStore(pinia).narrationOn = false
+      useGameStore(pinia).setAudioPlayer({
+        playNewQuest: vi.fn(),
+        playQuestComplete: vi.fn(),
+      })
+      pushTurn(news())
+      await vi.advanceTimersByTimeAsync(0)
+      expect(card(w)).toContain('Hint of Magic')
+      await key(' ')
+      expect(card(w)).toContain('Quest updated')
+      await key('Enter')
+      expect(card(w)).toBe('')
+    })
+
+    it('ends all the news of the turn with Escape', async () => {
+      const w = await ready(true, false)
+      useSettingsStore(pinia).narrationOn = false
+      useGameStore(pinia).setAudioPlayer({
+        playNewQuest: vi.fn(),
+        playQuestComplete: vi.fn(),
+      })
+      pushTurn(news())
+      await vi.advanceTimersByTimeAsync(0)
+      await key('Escape')
+      expect(card(w)).toBe('')
+      expect(w.findAll('[data-testid="news-line"]')).toHaveLength(2)
+    })
+
+    it('opens the journal at the quest from its slim line', async () => {
+      const w = await ready(true, false)
+      useSettingsStore(pinia).narrationOn = false
+      const game = useGameStore(pinia)
+      game.setAudioPlayer({ playNewQuest: vi.fn(), playQuestComplete: vi.fn() })
+      const open = vi.spyOn(game, 'openQuestInJournal')
+      pushTurn(news())
+      await vi.advanceTimersByTimeAsync(0)
+      await key('Escape')
+      await w.findAll('[data-testid="news-line"] button')[0].trigger('click')
+      expect(open).toHaveBeenCalledWith('Hint of Magic')
+    })
   })
 
   it('shows a turn that is not narrated and has no room as it is', async () => {

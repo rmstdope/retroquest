@@ -99,9 +99,8 @@ for (const { name, width, height } of [
     const speaking = page.locator('.lq-block-text.lq-speaking')
     await expect(speaking).toHaveCount(1)
     const block = await speaking.boundingBox()
-    const story = await page
-      .getByRole('region', { name: 'Story' })
-      .boundingBox()
+    // The quest news may already be told in the middle, which sets the story aside.
+    const story = await page.locator('.lq-story').boundingBox()
     expect(block?.x).toBeGreaterThanOrEqual(story?.x ?? Infinity)
   })
 }

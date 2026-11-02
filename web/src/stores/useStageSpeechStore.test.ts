@@ -340,3 +340,24 @@ describe('useStageSpeechStore while the turn is narrated', () => {
     expect(speech.visible).toHaveLength(2)
   })
 })
+
+describe('useStageSpeechStore.told', () => {
+  beforeEach(() => {
+    vi.useFakeTimers()
+    setActivePinia(createPinia())
+  })
+  afterEach(() => vi.useRealTimers())
+
+  it('has told a turn that said nothing on the picture, and one whose lines have all shown', () => {
+    const speech = useStageSpeechStore()
+    expect(speech.told(99)).toBe(true)
+    const said = turn(
+      `${say('Mira', 'Hello there.')}\n${say('Mira', 'And welcome.')}`,
+      'Mira',
+    )
+    speech.observe(said)
+    expect(speech.told(said.id)).toBe(false)
+    vi.advanceTimersByTime(60000)
+    expect(speech.told(said.id)).toBe(true)
+  })
+})

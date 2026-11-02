@@ -17,6 +17,8 @@ import { actFolder } from '@/lantern/narrationManifest'
 import {
   arrivalParts,
   arrivesOnPicture,
+  newsOnPicture,
+  newsParts,
   readingTimeMs,
 } from '@/lantern/stageArrival'
 import { usePanelHold } from '@/composables/usePanelHold'
@@ -796,31 +798,35 @@ watch(
     const manifest = folder ? narration.manifestFor(folder) : null
     const onPicture =
       !!turn && staged.value && !game.showModal && arrivesOnPicture(turn)
-    // The units the narration plays; the arrival on the picture keeps quest
-    // news for the story and waits to read its description while events that
-    // nobody speaks are read.
+    // Quest news is told in the middle too, after the turn's words (and its arrival).
+    const news =
+      !!turn && staged.value && !game.showModal && newsOnPicture(turn)
+    // The units the narration plays; the arrival on the picture waits to read
+    // its description while events that nobody speaks are read, and a quest
+    // piece nobody speaks is read before the next one.
+    const unitOptions = { readSilentNews: news }
     let units =
       turn?.narrate && (manifest || onPicture)
-        ? turnUnits(turn, readsArrival(turn), manifest ?? {}, {
-            silentQuests: onPicture,
-          })
+        ? turnUnits(turn, readsArrival(turn), manifest ?? {}, unitOptions)
         : []
     const parts = turn && onPicture ? arrivalParts(turn, units) : []
     const events = parts[0]?.kind === 'events' && !parts[0].voiced
     if (turn?.narrate && events)
       units = turnUnits(turn, readsArrival(turn), manifest ?? {}, {
-        silentQuests: true,
+        ...unitOptions,
         arrivalPauseMs: readingTimeMs(
           parts[0].lines.map((line) => line.markup).join(' '),
         ),
       })
+    if (turn && news) parts.push(...newsParts(turn, units))
     if (turn?.narrate && folder && manifest && !game.showModal)
       narration.begin(turn.id, units, folder)
+    // The conversation on the picture (laptop only) follows the turn; it reads
+    // the narration just begun, so it comes after it and before the news
+    // that waits for it.
+    if (turn && staged.value) speech.observe(turn)
     if (turn && parts.length)
       arrival.show(turn.id, parts, narration.narrates(turn.id))
-    // The conversation on the picture (laptop only) follows the turn; it reads
-    // the narration just begun, so it comes after it.
-    if (turn && staged.value) speech.observe(turn)
     // Its panels wait for the voice, or, with none to wait for, change now.
     if (!turn) return
     if (narration.narrates(turn.id)) panelHold.track(turn)
@@ -866,7 +872,8 @@ watch(
 onUnmounted(() => game.setActEndGate(null))
 
 // Each quest card's chime rings when the card shows: as the narration reaches
-// it, or at once with its turn (cards shown together ring once). A new turn
+// it, or at once with its turn (cards shown together ring once). News told in
+// the middle rings as each piece comes up instead. A new turn
 // shows the previous one whole, so chimes still owed ring then.
 let chimeTurn: { id: number; cards: number } | null = null
 let stopChime: (() => void) | null = null
@@ -884,6 +891,8 @@ watch(
     const cards = turn?.quests?.length ?? 0
     chimeTurn = turn && cards ? { id: turn.id, cards } : null
     if (!turn || !cards) return
+    // News told in the middle rings as each piece comes up (below).
+    if (arrival.told.includes(turn.id)) return
     const first = firstQuestUnit(turn)
     stopChime = watch(
       () =>
@@ -899,6 +908,14 @@ watch(
   },
 )
 
+// A piece of quest news told in the middle rings as it comes up.
+watch(
+  () => arrival.newsUp,
+  (up) => {
+    if (up) game.ringQuestSounds(up.turnId, [up.index])
+  },
+)
+
 // A pop-up, or a new game, stops the voice (a pop-up's own narration follows).
 watch(
   () => [game.showModal, game.gameNumber] as const,
@@ -909,6 +926,8 @@ watch(
 
 // A new game counts its narrated turns (for the hint) from the start.
 watch(() => game.gameNumber, narration.resetGame)
+// A new game forgets which turns told their news in the middle.
+watch(() => game.gameNumber, arrival.reset)
 
 // Switching narration off in Settings ends the turn being spoken.
 watch(
