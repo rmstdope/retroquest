@@ -18,4 +18,9 @@ export class VillageSquare extends Room {
       exits: { west: 'EliorsCottage', north: 'MirasHut', east: 'GeneralStore' },
     })
   }
+
+  /** Give a save made before the rewrite the current description. */
+  override refreshSavedText(): void {
+    this.description = new VillageSquare().description
+  }
 }

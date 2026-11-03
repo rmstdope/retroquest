@@ -39,6 +39,11 @@ export class AbandonedShed extends Room {
     })
   }
 
+  /** Give a save made before the rewrite the current description. */
+  override refreshSavedText(): void {
+    this.description = new AbandonedShed().description
+  }
+
   /** Unlock the shed, add the unlock items, and return a descriptive message. */
   unlock(): string {
     if (!this.locked) {

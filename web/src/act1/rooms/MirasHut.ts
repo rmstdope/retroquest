@@ -28,6 +28,11 @@ export class MirasHut extends Room {
     })
   }
 
+  /** Give a save made before the rewrite the current description. */
+  override refreshSavedText(): void {
+    this.description = new MirasHut().description
+  }
+
   /**
    * The hut's text with the amulet's glow or the empty stand added. Saves
    * made before this was computed may carry either sentence in the stored
