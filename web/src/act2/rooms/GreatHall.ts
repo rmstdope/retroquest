@@ -42,6 +42,11 @@ export class GreatHall extends Room {
     })
   }
 
+  /** Give a save made with older wording the current description. */
+  override refreshSavedText(): void {
+    this.description = GREAT_HALL_DESCRIPTION
+  }
+
   /** Conduct lineage research through progressive flag checks. */
   override search(gameState: GameState): string {
     if (!gameState.getStoryFlag(FLAG_COURT_HERALD_FORMAL_PRESENTATION)) {

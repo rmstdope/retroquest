@@ -27,7 +27,7 @@ export class TheInnkeepersDaughterQuest extends Quest {
   }
 
   /** Bring the log up to date in a save made with the older wording. */
-  refreshText(): void {
+  override refreshSavedText(): void {
     this.description = INNKEEPERS_DAUGHTER_DESCRIPTION
     this.completion = INNKEEPERS_DAUGHTER_COMPLETION
   }

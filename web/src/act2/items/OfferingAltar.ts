@@ -19,6 +19,11 @@ export class OfferingAltar extends Item {
     })
   }
 
+  /** Give a save made with older wording the current description. */
+  override refreshSavedText(): void {
+    this.description = OFFERING_ALTAR_DESCRIPTION
+  }
+
   /**
    * Also answers to plain "altar", in code rather than a short name so that
    * saves made before this change reach it too.

@@ -17,6 +17,11 @@ export class CityNoticeBoard extends Item {
     })
   }
 
+  /** Give a save made with older wording the current description. */
+  override refreshSavedText(): void {
+    this.description = CITY_NOTICE_BOARD_DESCRIPTION
+  }
+
   /** Read the postings on the board. */
   override examine(_gameState: GameState): string {
     return (

@@ -19,6 +19,11 @@ export class Coins extends Item {
     })
   }
 
+  /** Give a save made with older wording the current description. */
+  override refreshSavedText(): void {
+    this.description = COINS_DESCRIPTION
+  }
+
   /** Count every coin carried, not just this one. */
   override use(gameState: GameState): string {
     return (

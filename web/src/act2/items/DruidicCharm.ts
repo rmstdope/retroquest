@@ -17,6 +17,11 @@ export class DruidicCharm extends Item {
     })
   }
 
+  /** Give a save made with older wording the current description. */
+  override refreshSavedText(): void {
+    this.description = DRUIDIC_CHARM_DESCRIPTION
+  }
+
   /** The charm is only warm from the hand, in every room. */
   override use(_gameState: GameState): string {
     return 'The charm is warm from your hand.'

@@ -21,4 +21,9 @@ export class HealersHouse extends Room {
       exits: { south: 'ResidentialQuarter' },
     })
   }
+
+  /** Give a save made with older wording the current description. */
+  override refreshSavedText(): void {
+    this.description = HEALERS_HOUSE_DESCRIPTION
+  }
 }

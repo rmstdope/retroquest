@@ -30,6 +30,11 @@ export class CastleApproach extends Room {
     })
   }
 
+  /** Give a save made with older wording the current description. */
+  override refreshSavedText(): void {
+    this.description = CASTLE_APPROACH_DESCRIPTION
+  }
+
   /** Return exits; withhold the west exit until protocol is fulfilled. */
   override getExits(gameState: GameState): Exits {
     const exits: Exits = { ...super.getExits(gameState) }

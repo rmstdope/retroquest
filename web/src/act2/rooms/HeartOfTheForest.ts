@@ -19,4 +19,9 @@ export class HeartOfTheForest extends Room {
       exits: { north: 'AncientGrove' },
     })
   }
+
+  /** Give a save made with older wording the current description. */
+  override refreshSavedText(): void {
+    this.description = HEART_OF_THE_FOREST_DESCRIPTION
+  }
 }

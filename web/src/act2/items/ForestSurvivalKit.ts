@@ -22,6 +22,11 @@ export class ForestSurvivalKit extends Item {
     })
   }
 
+  /** Give a save made with older wording the current description. */
+  override refreshSavedText(): void {
+    this.description = FOREST_SURVIVAL_KIT_DESCRIPTION
+  }
+
   /** Use the kit; in the Forest Transition it plays the camp scene that completes the hermit's warning. */
   override use(gameState: GameState): string {
     // Check if we're in Forest Transition for special handling

@@ -166,6 +166,7 @@ describe('Forest Entrance paths', () => {
     game.state.allRooms.ForestEntrance.description =
       'Old text. Two paths diverge deeper: one toward an ancient grove.'
     new Act2().afterLoad(game.state)
+    game.state.refreshSavedText()
     expect(describeRoom(game)).not.toContain('Two paths diverge')
     expect(describeRoom(game)).toContain(EAST_DARK)
   })

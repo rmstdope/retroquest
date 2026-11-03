@@ -17,6 +17,11 @@ export class CrystalClearWater extends Item {
     })
   }
 
+  /** Give a save made with older wording the current description. */
+  override refreshSavedText(): void {
+    this.description = CRYSTAL_CLEAR_WATER_DESCRIPTION
+  }
+
   /** Use crystal-clear water on a character to purify them. */
   override useOnCharacter(gameState: GameState, target: Character): string {
     // Special handling for Elena's curse purification

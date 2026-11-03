@@ -17,6 +17,11 @@ export class MerchantsFlyer extends Item {
     })
   }
 
+  /** Give a save made with older wording the current description. */
+  override refreshSavedText(): void {
+    this.description = FLYER_DESCRIPTION
+  }
+
   override use(_gameState: GameState): string {
     return (
       "The merchant's flyer advertises quality goods from Master " +

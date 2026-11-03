@@ -17,4 +17,9 @@ export class SilverLeaves extends Item {
       canBeCarried: true,
     })
   }
+
+  /** Give a save made with older wording the current description. */
+  override refreshSavedText(): void {
+    this.description = SILVER_LEAVES_DESCRIPTION
+  }
 }

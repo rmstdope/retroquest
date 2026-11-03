@@ -31,6 +31,7 @@ describe('Act2.afterLoad clue wording', () => {
     quest.completion = "free from the wizard's curse!"
 
     new Act2().afterLoad(game.state)
+    game.state.refreshSavedText()
 
     expect(hermit.description).toBe(MOUNTAIN_HERMIT_DESCRIPTION)
     expect(quest.description).toBe(INNKEEPERS_DAUGHTER_DESCRIPTION)
@@ -48,6 +49,7 @@ describe('Act2.afterLoad flyer wording', () => {
     game.state.inventory.push(flyer)
 
     new Act2().afterLoad(game.state)
+    game.state.refreshSavedText()
 
     expect(flyer.description).toBe(FLYER_DESCRIPTION)
     expect(flyer.description).toContain('Bring this, and be welcome.')

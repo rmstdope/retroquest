@@ -21,6 +21,11 @@ export class SecretDocuments extends Item {
     })
   }
 
+  /** Give a save made with older wording the current description. */
+  override refreshSavedText(): void {
+    this.description = SECRET_DOCUMENTS_DESCRIPTION
+  }
+
   /** Make no sense before the diary is read; afterwards reveal the confession and letter. */
   override examine(gameState: GameState): string {
     if (!gameState.getStoryFlag(FLAG_READ_SQUIRES_DIARY)) {

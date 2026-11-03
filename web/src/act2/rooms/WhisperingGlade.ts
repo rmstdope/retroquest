@@ -18,4 +18,9 @@ export class WhisperingGlade extends Room {
       exits: { west: 'ForestEntrance' },
     })
   }
+
+  /** Give a save made with older wording the current description. */
+  override refreshSavedText(): void {
+    this.description = WHISPERING_GLADE_DESCRIPTION
+  }
 }

@@ -14,6 +14,11 @@ export class NyxToken extends Item {
     })
   }
 
+  /** Give a save made with older wording the current description. */
+  override refreshSavedText(): void {
+    this.description = NYX_TOKEN_DESCRIPTION
+  }
+
   /** Named after a person, so it takes no "the" and keeps its capitals. */
   override nameInSentence(options?: NameOptions): string {
     return super.nameInSentence({ ...options, bare: true })

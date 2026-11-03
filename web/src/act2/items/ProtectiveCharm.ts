@@ -19,6 +19,11 @@ export class ProtectiveCharm extends Item {
     })
   }
 
+  /** Give a save made with older wording the current description. */
+  override refreshSavedText(): void {
+    this.description = PROTECTIVE_CHARM_DESCRIPTION
+  }
+
   /** Opens the sprites' path at the forest entrance; elsewhere it is only braided grass. */
   override use(gameState: GameState): string {
     if (gameState.currentRoom instanceof ForestEntrance) {

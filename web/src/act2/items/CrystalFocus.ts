@@ -17,6 +17,11 @@ export class CrystalFocus extends Item {
     })
   }
 
+  /** Give a save made with older wording the current description. */
+  override refreshSavedText(): void {
+    this.description = CRYSTAL_FOCUS_DESCRIPTION
+  }
+
   /** This item enhances magical understanding and comprehension of ancient texts. */
   useItem(_gameState: GameState): string {
     return (

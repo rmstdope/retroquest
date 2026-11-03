@@ -19,6 +19,11 @@ export class MendSpell extends Spell {
     })
   }
 
+  /** Give a spell learned in an older save the current description. */
+  override refreshSavedText(): void {
+    this.description = new MendSpell().description
+  }
+
   /** Cast mend without a target; nothing nearby needs repair. */
   override castSpell(_gameState: GameState): string {
     return (

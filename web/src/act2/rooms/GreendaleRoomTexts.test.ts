@@ -36,6 +36,7 @@ describe('Greendale room texts', () => {
     rooms.HealersHouse.description = 'old'
     rooms.ResidentialQuarter.description = 'old'
     new Act2().afterLoad(game.state)
+    game.state.refreshSavedText()
     expect(rooms.MainSquare.description).toBe(MAIN_SQUARE_DESCRIPTION)
     expect(rooms.HealersHouse.description).toBe(HEALERS_HOUSE_DESCRIPTION)
     expect(rooms.ResidentialQuarter.description).toBe(

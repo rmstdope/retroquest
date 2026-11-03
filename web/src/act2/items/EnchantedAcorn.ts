@@ -17,6 +17,11 @@ export class EnchantedAcorn extends Item {
     })
   }
 
+  /** Give a save made with older wording the current description. */
+  override refreshSavedText(): void {
+    this.description = ENCHANTED_ACORN_DESCRIPTION
+  }
+
   /** The acorn turns toward the silver-barked tree in the grove, and lies still elsewhere. */
   override use(gameState: GameState): string {
     const currentRoom = gameState.currentRoom.name

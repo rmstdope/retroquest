@@ -17,6 +17,11 @@ export class Moonflowers extends Item {
     })
   }
 
+  /** Give a save made with older wording the current description. */
+  override refreshSavedText(): void {
+    this.description = MOONFLOWERS_DESCRIPTION
+  }
+
   /** In the Healer's House Lyria waves the blooms away; elsewhere they glow or lie dormant. */
   override use(gameState: GameState): string {
     const currentRoom = gameState.currentRoom.name

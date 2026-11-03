@@ -26,6 +26,11 @@ export class AncientGrove extends Room {
     })
   }
 
+  /** Give a save made with older wording the current description. */
+  override refreshSavedText(): void {
+    this.description = ANCIENT_GROVE_DESCRIPTION
+  }
+
   /** Return exits, revealing south only after the whispers quest is completed. */
   override getExits(gameState: GameState): Exits {
     const baseExits: Exits = { north: 'ForestEntrance' }

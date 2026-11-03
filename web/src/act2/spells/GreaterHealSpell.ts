@@ -17,6 +17,11 @@ export class GreaterHealSpell extends Spell {
     })
   }
 
+  /** Give a spell learned in an older save the current description. */
+  override refreshSavedText(): void {
+    this.description = new GreaterHealSpell().description
+  }
+
   override castSpell(_gameState: GameState): string {
     return (
       '[success]Powerful healing energy radiates outward, ready to cure ' +

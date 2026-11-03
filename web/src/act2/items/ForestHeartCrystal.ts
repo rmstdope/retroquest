@@ -14,4 +14,9 @@ export class ForestHeartCrystal extends Item {
       description: FOREST_HEART_CRYSTAL_DESCRIPTION,
     })
   }
+
+  /** Give a save made with older wording the current description. */
+  override refreshSavedText(): void {
+    this.description = FOREST_HEART_CRYSTAL_DESCRIPTION
+  }
 }

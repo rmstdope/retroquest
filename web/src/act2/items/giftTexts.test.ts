@@ -100,6 +100,7 @@ describe('Act2.afterLoad', () => {
     altar.description = 'old text'
 
     new Act2().afterLoad(game.state)
+    game.state.refreshSavedText()
 
     expect(gifts.map((item) => item.description)).toEqual(fresh)
     expect(altar.description).toContain('Three hollows are carved')

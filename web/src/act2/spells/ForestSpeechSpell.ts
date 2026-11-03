@@ -23,6 +23,11 @@ export class ForestSpeechSpell extends Spell {
     })
   }
 
+  /** Give a spell learned in an older save the current description. */
+  override refreshSavedText(): void {
+    this.description = new ForestSpeechSpell().description
+  }
+
   /** Cast the spell in the current room; handle ravine discovery and flavor text. */
   override castSpell(gameState: GameState): string {
     const currentRoom = gameState.currentRoom

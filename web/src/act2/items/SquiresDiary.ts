@@ -19,6 +19,11 @@ export class SquiresDiary extends Item {
     })
   }
 
+  /** Give a save made with older wording the current description. */
+  override refreshSavedText(): void {
+    this.description = SQUIRES_DIARY_DESCRIPTION
+  }
+
   /** Use the diary: set story flag, remove the item, and return narrative text. */
   override use(gameState: GameState): string {
     // Set the flag that the squire's diary has been read

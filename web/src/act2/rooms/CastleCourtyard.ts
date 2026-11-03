@@ -43,6 +43,11 @@ export class CastleCourtyard extends Room {
     })
   }
 
+  /** Give a save made with older wording the current description. */
+  override refreshSavedText(): void {
+    this.description = CASTLE_COURTYARD_DESCRIPTION
+  }
+
   /** Leaving the courtyard mid-bout abandons it: Cedric starts the bout over next time. */
   override onEnter(_gameState: GameState): void {
     for (const character of this.characters)

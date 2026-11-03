@@ -33,6 +33,11 @@ export class ResidentialQuarter extends Room {
     })
   }
 
+  /** Give a save made with older wording the current description. */
+  override refreshSavedText(): void {
+    this.description = RESIDENTIAL_QUARTER_DESCRIPTION
+  }
+
   /** The description, ending with the cellar hint or its "after" sentence. */
   override descriptionFor(gameState: GameState): string {
     const found = gameState.getStoryFlag(FLAG_ANCIENT_LIBRARY_ACCEPTED)

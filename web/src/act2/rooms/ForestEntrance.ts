@@ -37,6 +37,11 @@ export class ForestEntrance extends Room {
     })
   }
 
+  /** Give a save made with older wording the current description. */
+  override refreshSavedText(): void {
+    this.description = FOREST_ENTRANCE_DESCRIPTION
+  }
+
   /** Whether the protective charm has been used here. */
   private charmUsed(gameState: GameState): boolean {
     return gameState.getStoryFlag(FLAG_PROTECTIVE_CHARM_USED_FOREST_ENTRANCE)

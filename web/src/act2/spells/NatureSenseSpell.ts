@@ -24,6 +24,11 @@ export class NatureSenseSpell extends Spell {
     })
   }
 
+  /** Give a spell learned in an older save the current description. */
+  override refreshSavedText(): void {
+    this.description = new NatureSenseSpell().description
+  }
+
   /**
    * Cast in the current room: nymphs in the Whispering Glade, the ravine at the
    * Forest Entrance (found once, then a dim recast line), flavour text elsewhere.

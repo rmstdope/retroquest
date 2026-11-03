@@ -28,4 +28,9 @@ export class MainSquare extends Room {
       },
     })
   }
+
+  /** Give a save made with older wording the current description. */
+  override refreshSavedText(): void {
+    this.description = MAIN_SQUARE_DESCRIPTION
+  }
 }

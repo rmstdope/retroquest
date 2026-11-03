@@ -16,6 +16,11 @@ export class NaturesCharm extends Item {
     })
   }
 
+  /** Give a save made with older wording the current description. */
+  override refreshSavedText(): void {
+    this.description = NATURES_CHARM_DESCRIPTION
+  }
+
   override useWith(gameState: GameState, other: Item): string {
     if (other instanceof OfferingAltar) {
       return other.useWith(gameState, this)

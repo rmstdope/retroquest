@@ -47,6 +47,11 @@ export class PropheticVision extends Spell {
     })
   }
 
+  /** Give a spell learned in an older save the current description. */
+  override refreshSavedText(): void {
+    this.description = new PropheticVision().description
+  }
+
   /** Cast the prophetic vision; variant depends on Cedric presence and story flags. */
   override castSpell(gameState: GameState): string {
     // Check if Sir Cedric is present in the current room

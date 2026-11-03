@@ -46,7 +46,7 @@ export class CedricksLostHonorQuest extends Quest {
   }
 
   /** Bring the quest's stored texts up to date in a save made with older wording. */
-  refreshText(gameState: GameState): void {
+  override refreshSavedText(gameState: GameState): void {
     this.completion = COMPLETION_TEXT
     // Started quests are rebuilt on load; settle the rest without reporting news.
     if (this.completed) this.checkUpdate(gameState)

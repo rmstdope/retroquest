@@ -228,6 +228,7 @@ describe('saves', () => {
       find(game, SirCedric).description = 'A noble knight in gleaming armor.'
       find(game, CityNoticeBoard).description = 'old'
       new Act2().afterLoad(game.state)
+      game.state.refreshSavedText()
       expect(find(game, SirCedric).description).toBe(
         cleared ? CEDRIC_AFTER : CEDRIC_BEFORE,
       )

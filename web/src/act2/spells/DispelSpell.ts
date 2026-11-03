@@ -26,6 +26,11 @@ export class DispelSpell extends Spell {
     })
   }
 
+  /** Give a spell learned in an older save the current description. */
+  override refreshSavedText(): void {
+    this.description = new DispelSpell().description
+  }
+
   /** Cast dispel without a target: no active magic nearby. */
   override castSpell(_gameState: GameState): string {
     return (
