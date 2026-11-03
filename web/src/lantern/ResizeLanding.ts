@@ -117,13 +117,18 @@ export class ResizeLanding {
     this.viewSize = this.ports.windowSize()
   }
 
-  /** Note where the player is reading, from the layout as it stands; not while landing, nor while the window's size settles. */
+  /** Note where the player is reading, from the layout as it stands (at the newest when no turn is shown); not while landing, nor while the window's size settles. */
   note(): void {
     if (this.landing) return
     if (this.ports.windowSize() !== this.viewSize) this.freezeView()
     if (this.viewFrozen) return
     const geometry = this.ports.measure()
-    if (!geometry || geometry.turns.length === 0) return
+    if (!geometry) return
+    // No turn shown (a stage whose newest move left no card): nothing to have scrolled back to.
+    if (geometry.turns.length === 0) {
+      this.view = { anchor: 0, offset: 0, height: 0, atNewest: true }
+      return
+    }
     const { turns, paneHeight, moreBelow } = geometry
     let anchor = 0
     turns.forEach((turn, index) => {
