@@ -22,6 +22,8 @@ export interface SaveSlot {
   timestamp: string | null
   /** The act's quests done/total when saved (null for older saves). */
   quests: { completed: number; total: number } | null
+  /** True for a save made by an older version of the game, which can no longer be loaded. */
+  outdated?: boolean
 }
 
 /** Direction → destination room name. */
