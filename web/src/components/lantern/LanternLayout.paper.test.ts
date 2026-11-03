@@ -8,6 +8,9 @@ import { useGameStore, type Turn } from '@/stores/useGameStore'
 import { useStageSpeechStore } from '@/stores/useStageSpeechStore'
 import { useNarrationStore } from '@/stores/useNarrationStore'
 import { useSettingsStore } from '@/stores/useSettingsStore'
+import { useFlightStore } from '@/stores/useFlightStore'
+import { useArrivalStore } from '@/stores/useArrivalStore'
+import { useSceneStore } from '@/stores/useSceneStore'
 
 /** A turn that tells `text` (nothing when empty). */
 function turn(id: number, text: string, command: string | null = 'look'): Turn {
@@ -245,6 +248,80 @@ describe('the narration paper', () => {
     await nextTick()
     await settle()
   }
+
+  describe('a gained item or spell', () => {
+    const taking = (id: number): Turn => ({
+      ...turn(id, 'You take them.', 'take bread'),
+      gained: [
+        { kind: 'item', name: 'bread', count: 2 },
+        { kind: 'spell', name: 'revive', count: 1 },
+      ],
+    })
+
+    it('flies to its button once the turn lets go of the bag, and not again', async () => {
+      await mountWith([turn(1, 'First.')])
+      const flights = useFlightStore()
+      game.turns.push(taking(2))
+      await nextTick()
+      expect(flights.current?.name).toBe('bread')
+      const first = flights.current?.key
+      await nextTick()
+      expect(flights.current?.key).toBe(first)
+      expect(paper().querySelector('[data-testid="chip"]')).toBeNull()
+    })
+
+    it('stops flying when the next command comes', async () => {
+      await mountWith([turn(1, 'First.')])
+      const flights = useFlightStore()
+      game.turns.push(taking(2))
+      await nextTick()
+      game.turns.push(turn(3, 'Then.'))
+      await nextTick()
+      expect(flights.current).toBeNull()
+    })
+
+    it('is still shown and told under Reduce motion (it only does not move)', async () => {
+      document.documentElement.style.setProperty('--lq-motion', '0')
+      await mountWith([turn(1, 'First.')])
+      game.turns.push(taking(2))
+      await nextTick()
+      document.documentElement.style.removeProperty('--lq-motion')
+      expect(useFlightStore().current?.name).toBe('bread')
+    })
+
+    it('waits for a pop-up to close, and for a change of scene to end', async () => {
+      await mountWith([turn(1, 'First.')])
+      const flights = useFlightStore()
+      game.showModal = true
+      game.turns.push(taking(2))
+      await nextTick()
+      expect(flights.current).toBeNull()
+      const scene = useSceneStore()
+      scene.settled('a.png')
+      scene.begin(2, 'b.png', () => {})
+      game.showModal = false
+      await nextTick()
+      expect(flights.current).toBeNull()
+      scene.skip()
+      await nextTick()
+      expect(flights.current?.name).toBe('bread')
+    })
+
+    it('waits until the middle of the picture is clear of the news of the turn', async () => {
+      await mountWith([turn(1, 'First.')])
+      const flights = useFlightStore()
+      game.turns.push({
+        ...taking(2),
+        quests: [{ kind: 'new', name: 'Q', main: false, text: 'Go.' }],
+      })
+      await nextTick()
+      expect(useArrivalStore().turnId).toBe(2)
+      expect(flights.current).toBeNull()
+      useArrivalStore().clear()
+      await nextTick()
+      expect(flights.current?.name).toBe('bread')
+    })
+  })
 
   it('does not scroll back to an older turn when the newest tells nothing on the left', async () => {
     await mountWith([turn(1, 'Long look one.\n\nLong look two.')])

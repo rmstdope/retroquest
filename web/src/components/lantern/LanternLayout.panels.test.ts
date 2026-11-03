@@ -4,6 +4,8 @@ import { mount, type VueWrapper } from '@vue/test-utils'
 import { createPinia, setActivePinia } from 'pinia'
 import LanternLayout from './LanternLayout.vue'
 import { useGameStore } from '@/stores/useGameStore'
+import { useFlightStore } from '@/stores/useFlightStore'
+import { useArrivalStore } from '@/stores/useArrivalStore'
 import { useSettingsStore } from '@/stores/useSettingsStore'
 import {
   useNarrationStore,
@@ -13,7 +15,7 @@ import { narrationKey } from '@/lantern/narrationKey'
 import { narrationWords } from '@/lantern/narrationManifest'
 import { arrivalBlocks } from '@/lantern/narrationScript'
 import { SCENE_PAUSE_MS } from '@/lantern/narrationUnits'
-import { startedHoldStore } from '@/testing/holdGame'
+import { GEM, startedHoldStore } from '@/testing/holdGame'
 
 /** The recorded lines of the garden's arrival: its name, then its description. */
 const GARDEN = arrivalBlocks('Garden', 'A green garden.')
@@ -95,6 +97,29 @@ describe('LanternLayout: panels wait for the narration', () => {
     wrapper = undefined
     vi.useRealTimers()
     vi.unstubAllGlobals()
+    vi.restoreAllMocks()
+  })
+
+  it('flies a gained item to the Bag only once the narrator lets go of the bag', async () => {
+    // The quest the gem starts chimes, which jsdom cannot play.
+    vi.spyOn(HTMLMediaElement.prototype, 'play').mockResolvedValue()
+    await ready()
+    const narration = useNarrationStore()
+    const clip = { file: 'x.mp3', speaker: 'narrator', duration: 5, words: [] }
+    vi.spyOn(narration, 'manifestFor').mockReturnValue(
+      new Proxy({}, { get: () => clip }),
+    )
+    useGameStore().submitCommand(`take ${GEM.toLowerCase()}`)
+    await vi.advanceTimersByTimeAsync(0)
+    expect(narration.isNarrating).toBe(true)
+    expect(useFlightStore().current).toBeNull()
+    narration.skipAll()
+    await vi.advanceTimersByTimeAsync(0)
+    // The gem starts a quest: the flight waits for its news in the middle.
+    expect(useFlightStore().current).toBeNull()
+    useArrivalStore().clear()
+    await vi.advanceTimersByTimeAsync(0)
+    expect(useFlightStore().current?.name).toBe(GEM)
   })
 
   it('keeps the old plate and map until the arrival is read, then lights them', async () => {

@@ -588,18 +588,16 @@ describe('StoryTurn as a narration card', () => {
     expect(w.find('[data-testid="command"]').exists()).toBe(false)
   })
 
-  it('gives an event, a failure and the chips a bubble each', () => {
+  it('gives an event and a failure a bubble each', () => {
     const w = mountCard({
       command: 'take lantern',
       text: 'You lift it.\n[event]The lantern is lit.[/event]\n[failure]It is hot.[/failure]',
-      gained: [{ name: 'Lantern', count: 1, kind: 'item' }],
     })
 
     expect(bubbles(w)).toEqual([
       'You lift it.',
       '◆The lantern is lit.',
       '⊝It is hot.',
-      '+ Gained Lantern',
     ])
     expect(w.get('.lq-block-failure').classes()).toContain('lq-bubble-failure')
   })
@@ -670,14 +668,32 @@ describe('StoryTurn as a narration card', () => {
     expect(w.get('.lq-bubble').classes()).toContain('lq-bubble-failure')
   })
 
-  it('keeps the item chips on the card', () => {
+  it('leaves a gained thing off the card (it flies to its button instead), and keeps what was lost', () => {
     const w = mountCard({
-      command: 'take bread',
-      text: 'Taken.',
-      gained: [{ name: 'Bread', count: 1, kind: 'item' }],
+      command: 'trade bread for coin',
+      text: 'Done.',
+      gained: [{ name: 'Coin', count: 1, kind: 'item' }],
+      lost: [{ name: 'Bread', count: 1, kind: 'item' }],
     })
 
-    expect(w.find('[data-testid="chip"]').exists()).toBe(true)
+    expect(
+      w
+        .findAll('[data-testid="chip"]')
+        .map((chip) => chip.text().replace(/\s+/g, ' ')),
+    ).toEqual(['− Lost Bread'])
+  })
+
+  it('keeps the chips in the record and outside the stage', () => {
+    const gained = {
+      command: 'take bread',
+      text: 'Taken.',
+      gained: [{ name: 'Bread', count: 1, kind: 'item' as const }],
+    }
+    expect(mountTurn(gained).find('[data-testid="chip"]').exists()).toBe(true)
+    const record = mount(StoryTurn, {
+      props: { turn: turn(gained), record: true },
+    })
+    expect(record.find('[data-testid="chip"]').exists()).toBe(true)
   })
 
   it('does not have the card look in the story drawer', () => {
@@ -865,15 +881,11 @@ describe('StoryTurn quest news told in the middle', () => {
       expect(w.find('article').exists()).toBe(false)
     })
 
-    it('puts the chips only on the piece that carries them', () => {
+    it('puts no gained chip on any piece (the gained thing flies to its button instead)', () => {
       const t = turn({
         text,
         gained: [{ kind: 'item', name: 'key', count: 1 }],
       })
-      const without = mount(StoryTurn, {
-        props: { turn: t, card: true, piece: piece({ blocks: [0] }) },
-      })
-      expect(without.findAll('[data-testid="chip"]')).toHaveLength(0)
       const withChips = mount(StoryTurn, {
         props: {
           turn: t,
@@ -881,7 +893,7 @@ describe('StoryTurn quest news told in the middle', () => {
           piece: piece({ blocks: [1], chips: true }),
         },
       })
-      expect(withChips.findAll('[data-testid="chip"]')).toHaveLength(1)
+      expect(withChips.findAll('[data-testid="chip"]')).toHaveLength(0)
     })
 
     it('renders nothing for a piece with nothing to show', () => {

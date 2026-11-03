@@ -27,9 +27,10 @@ import { toldAsSpeech } from '@/lantern/stageSpeech'
  *
  * As a narration card (`card`, the laptop stage's left column) the turn is
  * what the narrator tells, one bubble (`lq-bubble`) for each paragraph, as the
- * speech on the right has one for each line: an event, a failure (red-edged),
- * a room told as a bare description and the turn's chips are bubbles of their
- * own. The command the player typed is not echoed, nor the closing arrival
+ * speech on the right has one for each line: an event, a failure (red-edged)
+ * and a room told as a bare description are bubbles of their own, and so is
+ * what the bag lost (its chips). A gained item or spell is not on the card:
+ * it flies to its button instead (`AcquiredFlight`). The command the player typed is not echoed, nor the closing arrival
  * line of a talk that moved Elior ("You are in …", `recordOnlyFrom`). What belongs to other
  * places is left out: a character's quotes in a conversation (they are on the
  * right, as `useStageSpeechStore` decides), the description of a room told in
@@ -151,11 +152,12 @@ const speakerLabels = computed(() => {
   })
 })
 
+/** The bag's changes; a narration card has only its losses (a gained thing flies to its button, `AcquiredFlight`). */
 const chips = computed(() =>
   props.piece && !props.piece.chips
     ? []
     : [
-        ...props.turn.gained.map((chip) => ({
+        ...(props.card ? [] : props.turn.gained).map((chip) => ({
           chip,
           sign: '+',
           spoken: 'Gained',

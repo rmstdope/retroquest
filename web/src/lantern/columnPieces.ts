@@ -6,7 +6,8 @@
  * column exactly where they happened between the lines. The command is marked
  * on the first card, or on a card of its own when the turn begins with speech
  * (the stage does not echo it, `StoryTurn`); item chips stay on the card that
- * names them; the turn's news comes last, after the last spoken line.
+ * names them (on the stage only what the bag lost: a gained thing flies to
+ * its button); the turn's news comes last, after the last spoken line.
  */
 import type { Turn } from '@/stores/useGameStore'
 import { arrivesOnPicture } from './stageArrival'

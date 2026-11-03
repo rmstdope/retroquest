@@ -551,6 +551,11 @@ export const useGameStore = defineStore('game', () => {
     if (!panelsHeld.value) heldTurn.value = null
   }
 
+  /** Whether the panels of `group` still show the state from before the narrated turn. */
+  function groupHeld(group: PanelGroup): boolean {
+    return held.value[group]
+  }
+
   /** Forget a hold without applying it (a load or a new game refreshes the panels itself). */
   function dropHold(): void {
     heldTurn.value = null
@@ -1331,6 +1336,7 @@ export const useGameStore = defineStore('game', () => {
     portraitFor,
     heldTurn,
     panelsHeld,
+    groupHeld,
     panelFlash,
     // Actions
     setPanelHold,

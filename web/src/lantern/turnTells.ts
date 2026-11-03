@@ -21,17 +21,18 @@ export function turnTells(turn: Turn): boolean {
 
 /**
  * Whether a turn leaves something on the stage's narration paper, so it is
- * one of its cards (`StoryTurn` decides what each card shows): the bag's
- * chips, a room told on the card (a look, a revisit, a load: not one told in
- * the middle of the picture), or a block of the answer. Not the command (it
- * is not echoed), not quest news (the stage tells it in the middle), and not
- * the closing arrival lines of a talk that moved Elior (`recordOnlyFrom`).
+ * one of its cards (`StoryTurn` decides what each card shows): a room told on
+ * the card (a look, a revisit, a load: not one told in the middle of the
+ * picture), a block of the answer, or what the bag lost (its chips). Not the
+ * command (it is not echoed), not quest news (the stage tells it in the
+ * middle), not what the bag gained (it flies to its button), and not the
+ * closing arrival lines of a talk that moved Elior (`recordOnlyFrom`).
  * With the speech told beside the paper (`speechBeside`, the two-sided
  * laptop) a character's quote told as speech (`toldAsSpeech`) is not the
  * paper's either; in the one column it is.
  */
 export function turnHasCard(turn: Turn, speechBeside = false): boolean {
-  if (turn.gained.length > 0 || turn.lost.length > 0) return true
+  if (turn.lost.length > 0) return true
   if (turn.arrival && !arrivesOnPicture(turn)) return true
   const blocks = parseTurn(turn.text)
   return blocks

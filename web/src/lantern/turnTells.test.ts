@@ -88,15 +88,24 @@ describe('turnHasCard', () => {
     expect(turnHasCard(talk, true)).toBe(false)
   })
 
-  it('is true for a command whose answer the narrator tells, or that changes the bag', () => {
+  it('is true for a command whose answer the narrator tells, and for a loss to the bag but not a gain alone', () => {
     expect(turnHasCard(turn({ command: 'look', text: 'It is quiet.' }))).toBe(
       true,
     )
+    // The gained thing flies to its button; a lost one keeps its chip.
     expect(
       turnHasCard(
         turn({
           command: 'take bread',
           gained: [{ name: 'Bread', count: 1, kind: 'item' }],
+        }),
+      ),
+    ).toBe(false)
+    expect(
+      turnHasCard(
+        turn({
+          command: 'give bread',
+          lost: [{ name: 'Bread', count: 1, kind: 'item' }],
         }),
       ),
     ).toBe(true)

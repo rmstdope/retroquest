@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, nextTick, onUnmounted, ref, watch } from 'vue'
 import { useGameStore } from '@/stores/useGameStore'
+import { useFlightStore } from '@/stores/useFlightStore'
 import CompassPanel from './CompassPanel.vue'
 
 /**
@@ -13,7 +14,9 @@ import CompassPanel from './CompassPanel.vue'
  * open. Escape closes the map (asking the layout to, which returns focus to
  * the button) and nothing else hears it. The buttons open their drawers at
  * once, even while a turn is read aloud; only the map's ways out are a held
- * panel (`data-panel`), where a first press catches up.
+ * panel (`data-panel`), where a first press catches up. Bag and Spells are
+ * where a gained item or spell flies to (`data-flight-target`,
+ * `AcquiredFlight`), and the one it lands in bumps.
  */
 type Tab = 'bag' | 'spells' | 'quests'
 
@@ -25,6 +28,7 @@ const emit = defineEmits<{
   close: []
 }>()
 const game = useGameStore()
+const flights = useFlightStore()
 
 const root = ref<HTMLElement | null>(null)
 const mapOpen = computed(() => props.drawer === 'map')
@@ -34,16 +38,19 @@ const journalButtons = computed(() => [
     tab: 'bag' as const,
     label: `Bag · ${game.rawInventory.length}`,
     dot: game.bagHasNew,
+    flight: 'item' as const,
   },
   {
     tab: 'spells' as const,
     label: `Spells · ${game.rawSpells.length}`,
     dot: game.spellsHaveNew,
+    flight: 'spell' as const,
   },
   {
     tab: 'quests' as const,
     label: `Quests · ${game.activeQuests.length}`,
     dot: game.questsHaveNew,
+    flight: undefined,
   },
 ])
 
@@ -82,8 +89,12 @@ defineExpose({ focusButton })
         :key="button.tab"
         type="button"
         class="lq-stage-btn"
-        :class="{ 'lq-lit': props.drawer === button.tab }"
+        :class="{
+          'lq-lit': props.drawer === button.tab,
+          'lq-landed': !!button.flight && flights.landed === button.flight,
+        }"
         :data-button="button.tab"
+        :data-flight-target="button.flight"
         :aria-pressed="props.drawer === button.tab ? 'true' : 'false'"
         @click="emit('journal', button.tab)"
       >
@@ -169,5 +180,13 @@ defineExpose({ focusButton })
   z-index: 5;
   width: 300px;
   padding-top: 6px;
+}
+/* A gained item or spell has just flown in: the button bumps (AcquiredFlight). */
+.lq-stage-btn.lq-landed {
+  transform: scale(1.12);
+  transition: transform calc(140ms * var(--lq-motion)) ease-out;
+}
+.lq-stage-btn:not(.lq-landed) {
+  transition: transform calc(300ms * var(--lq-motion)) ease-in;
 }
 </style>

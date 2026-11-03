@@ -156,14 +156,15 @@ test.describe('Lantern UI (the default)', () => {
       /* eslint-disable @typescript-eslint/no-explicit-any */
       const app = (document.querySelector('#app') as any).__vue_app__
       const store = app.config.globalProperties.$pinia.state.value.game
-      const gained = [
+      // Lost things keep their chips on the stage (gained ones fly to the Bag).
+      const lost = [
         'Faded Photograph',
         'Wandering Boots',
         'Travel Cloak',
         'Magnetic Fishing Rod',
         'Lantern',
       ].map((name) => ({ kind: 'item', name, count: 1 }))
-      store.turns = [{ ...store.turns[0], command: 'search', gained }]
+      store.turns = [{ ...store.turns[0], command: 'give all', lost }]
       /* eslint-enable @typescript-eslint/no-explicit-any */
     })
 

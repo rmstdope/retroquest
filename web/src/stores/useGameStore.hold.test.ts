@@ -63,6 +63,16 @@ describe('useGameStore: panels held while a turn is narrated', () => {
     expect(store.musicRoomKey).toBe('EliorsCottage')
   })
 
+  it('says whether a group of panels is still held for the narrator', async () => {
+    const store = await startedStore()
+    expect(store.groupHeld('stock')).toBe(false)
+    store.submitCommand(`take ${GEM.toLowerCase()}`)
+    const turn = store.turns.at(-1)!
+    expect(store.groupHeld('stock')).toBe(true)
+    store.releasePanels(turn.id, ['stock'], true)
+    expect(store.groupHeld('stock')).toBe(false)
+  })
+
   it('shows the room a debug script ends in as soon as it ends', async () => {
     vi.stubGlobal(
       'fetch',

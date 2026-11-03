@@ -7,6 +7,7 @@ import { useNarrationStore } from '@/stores/useNarrationStore'
 import { useStageSpeechStore } from '@/stores/useStageSpeechStore'
 import { useArrivalStore } from '@/stores/useArrivalStore'
 import { useSceneStore } from '@/stores/useSceneStore'
+import { useFlightStore } from '@/stores/useFlightStore'
 import {
   POPUP_NARRATION_ID,
   chapterUnits,
@@ -42,6 +43,7 @@ import {
 } from '@/composables/useMediaQuery'
 import ActionComposer from './ActionComposer.vue'
 import ArrivalOnPicture from './ArrivalOnPicture.vue'
+import AcquiredFlight from './AcquiredFlight.vue'
 import ChapterPage from './ChapterPage.vue'
 import CompassPanel from './CompassPanel.vue'
 import DockBar from './DockBar.vue'
@@ -1150,6 +1152,33 @@ function changeScene(turn: Turn, at: number): void {
   }
 }
 
+const flights = useFlightStore()
+/** The newest turn whose gained things have flown (or were let be): each turn's fly once. */
+let flownTurn = game.turns.at(-1)?.id ?? null
+// A new command stops what is still flying (its counts are already up).
+watch(
+  () => game.turns.at(-1)?.id,
+  () => flights.clear(),
+)
+// On the picture stage, a turn's gained items and spells fly to the Bag and
+// Spells buttons once the turn lets go of them (as their counts change) and
+// the middle of the picture is clear: no news or arrival told or waiting
+// there, no change of scene, and no pop-up over it.
+watch(
+  () => {
+    const turn = game.turns.at(-1)
+    const clear =
+      arrival.turnId === null && scene.turn === null && !game.showModal
+    return turn && clear && !game.groupHeld('stock') ? turn.id : null
+  },
+  (id) => {
+    const turn = game.turns.at(-1)
+    if (id === null || !turn || id === flownTurn) return
+    flownTurn = id
+    if (staged.value && turn.gained.length) flights.launch(turn.gained)
+  },
+)
+
 // The room's name (the place panels) changes at the darkest moment of a change of scene.
 watch(
   () => scene.darkTurn,
@@ -1848,6 +1877,7 @@ watch(
         class="lq-nav-bottom"
         @press="onSectionPress"
       />
+      <AcquiredFlight v-if="staged" />
 
       <SaveToast />
 
