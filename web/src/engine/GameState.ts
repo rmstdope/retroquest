@@ -255,6 +255,27 @@ export class GameState {
   }
 
   /**
+   * Ask every saved room, the items and characters in it, every carried item,
+   * every known spell and every quest to give its saved static text the
+   * current wording. Run on every load, after the act's `afterLoad`.
+   */
+  refreshSavedText(): void {
+    for (const room of Object.values(this.allRooms)) {
+      room.refreshSavedText(this)
+      for (const item of room.items) item.refreshSavedText(this)
+      for (const character of room.characters) character.refreshSavedText(this)
+    }
+    for (const item of this.inventory) item.refreshSavedText(this)
+    for (const spell of this.knownSpells) spell.refreshSavedText(this)
+    for (const quest of [
+      ...this.nonActivatedQuests,
+      ...this.activatedQuests,
+      ...this.completedQuests,
+    ])
+      quest.refreshSavedText(this)
+  }
+
+  /**
    * Rebuild the log of every active quest from the story flags, without
    * reporting anything as news. A save made before quests kept their log as
    * data lacks it; this brings a loaded game level with a played one.

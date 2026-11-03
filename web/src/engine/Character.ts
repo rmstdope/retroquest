@@ -19,6 +19,14 @@ export class Character {
   }
 
   /**
+   * Give the static text a save keeps (a description, a name) the current
+   * wording after a load. The engine calls it on every saved room, room item,
+   * room character, carried item, known spell and quest, after the act's
+   * `afterLoad`; it must be idempotent. Does nothing by default.
+   */
+  refreshSavedText(_gameState: GameState): void {}
+
+  /**
    * Whether the player's word for a character names this one; by default
    * its name, compared case-insensitively. Override to accept other names.
    */

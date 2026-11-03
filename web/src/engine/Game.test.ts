@@ -1368,6 +1368,36 @@ describe('Game', () => {
       expect(afterLoad).toHaveBeenCalledWith(fresh.state)
     })
 
+    it('refreshes saved text after the act migrates and before quest logs rebuild', () => {
+      const game = twoActGame()
+      advanceToSecondAct(game)
+      const data = game.toSaveData()
+      const fresh = twoActGame()
+      const order: string[] = []
+      vi.spyOn(fresh.acts[1], 'afterLoad').mockImplementation(() => {
+        order.push('afterLoad')
+      })
+      vi.spyOn(GameState.prototype, 'refreshSavedText').mockImplementation(
+        () => {
+          order.push('refreshSavedText')
+        },
+      )
+      vi.spyOn(GameState.prototype, 'refreshQuestLogs').mockImplementation(
+        () => {
+          order.push('refreshQuestLogs')
+        },
+      )
+
+      fresh.loadSaveData(data)
+      vi.restoreAllMocks()
+
+      expect(order).toEqual([
+        'afterLoad',
+        'refreshSavedText',
+        'refreshQuestLogs',
+      ])
+    })
+
     it('loads a save made after the last act ended into that act', () => {
       const storage = new MemorySaveStorage()
       const game = twoActGame(storage)

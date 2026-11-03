@@ -1,4 +1,5 @@
-import { describe, it, expect, beforeEach } from 'vitest'
+import { describe, it, expect, beforeEach, vi } from 'vitest'
+import { Character } from './Character'
 import { GameState } from './GameState'
 import { Item } from './Item'
 import { Quest } from './Quest'
@@ -67,6 +68,32 @@ describe('GameState', () => {
     expect(gs.nonActivatedQuests).toEqual([quest1, quest2])
     expect(gs.activatedQuests).toEqual([])
     expect(gs.completedQuests).toEqual([])
+  })
+
+  describe('refreshSavedText', () => {
+    it('asks every saved room, room item and character, carried item, known spell and quest', () => {
+      const lying = item('stone')
+      const carried = item('coin')
+      const person = new Character({ name: 'Ada', description: 'Ada.' })
+      const spell = new Spell({
+        id: 'glow',
+        name: 'glow',
+        description: 'Glow.',
+      })
+      room.addItem(lying)
+      room.addCharacter(person)
+      gs.addItemToInventory(carried)
+      gs.learnSpell(spell)
+      gs.nextActivatedQuest()
+      const done = new DummyQuest('Done')
+      gs.completedQuests.push(done)
+      const asked = [room, lying, person, carried, spell, quest1, quest2, done]
+      const spies = asked.map((target) => vi.spyOn(target, 'refreshSavedText'))
+
+      gs.refreshSavedText()
+
+      for (const spy of spies) expect(spy).toHaveBeenCalledWith(gs)
+    })
   })
 
   describe('quests', () => {
