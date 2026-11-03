@@ -987,6 +987,43 @@ describe('useMusic on Web Audio', () => {
       expect(rainSources()).toHaveLength(2)
     })
 
+    it('dips the effects with the music under a voice', async () => {
+      vi.useFakeTimers()
+      const narrating = ref(false)
+      const music = useMusic(audio, narrating, rainOnA)
+      music.loadTrack('a.mp3', 'A')
+      await vi.advanceTimersByTimeAsync(0)
+      narrating.value = true
+      await nextTick()
+      await vi.advanceTimersByTimeAsync(MUSIC_DUCK_FADE_MS)
+      expect(rainGain()).toBeCloseTo(MUSIC_DUCK)
+    })
+
+    it('fades the effects back up when the player returns mid-fade', async () => {
+      vi.useFakeTimers()
+      const music = useMusic(audio, ref(false), rainOnA)
+      music.loadTrack('a.mp3', 'A')
+      await vi.advanceTimersByTimeAsync(0)
+      music.loadTrack('b.mp3', 'B')
+      await vi.advanceTimersByTimeAsync(0)
+      await vi.advanceTimersByTimeAsync(MUSIC_CROSSFADE_MS / 2)
+      music.loadTrack('a.mp3', 'A')
+      await vi.advanceTimersByTimeAsync(MUSIC_CROSSFADE_MS + 100)
+      expect(rainGain()).toBeCloseTo(1)
+      expect(rainSources()).toHaveLength(1)
+      expect(rainSources()[0].stop).not.toHaveBeenCalled()
+    })
+
+    it('plays the music when its effects fail to prepare', async () => {
+      const music = useMusic(audio, ref(false), () =>
+        Promise.reject(new Error('bad manifest')),
+      )
+      music.loadTrack('a.mp3', 'A')
+      await ready()
+      expect(ctx.sources).toHaveLength(1)
+      expect(ctx.sources[0].start).toHaveBeenCalled()
+    })
+
     it('lets go of the effects of a track the player left before it was ready', async () => {
       const music = useMusic(audio, ref(false), rainOnA)
       music.loadTrack('a.mp3', 'A')

@@ -132,7 +132,8 @@ export function useMusic(
     // A loop (and its effects) is decoded first; the music playing goes on until it is ready.
     void Promise.all([
       prepareWebAudioVoice(context, urlFor(file)),
-      ambienceFor(file, context),
+      // Effects that fail to prepare never hold the music back.
+      ambienceFor(file, context).catch(() => null),
     ]).then(([voice, ambience]) => {
       if (id !== request || !voice) ambience?.dispose()
       if (id !== request) {

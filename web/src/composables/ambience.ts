@@ -8,19 +8,14 @@
  * through the dark, the title page's rise, the dip under a voice): the
  * effects sound at the same share of their level as the music of its own.
  */
+import type { EffectPlay } from '@/lantern/effectLists'
 import type { MusicVoice } from './musicVoice'
 
 /** How one decoded effect plays: round and round, or once after a random wait, again and again. */
-export type AmbientClip = { buffer: AudioBuffer } & (
-  | { loops: true }
-  | { loops: false; everySeconds: readonly [number, number] }
-)
+export type AmbientClip = { buffer: AudioBuffer } & EffectPlay
 
 /** Where an effect's clip is, and how it plays. */
-export type AmbientClipSource = { url: string } & (
-  | { loops: true }
-  | { loops: false; everySeconds: readonly [number, number] }
-)
+export type AmbientClipSource = { url: string } & EffectPlay
 
 /** The effects of one music track, played on Web Audio through one gain into `output`. */
 export class Ambience {
@@ -111,9 +106,12 @@ export class Ambience {
 /**
  * A music voice with its track's effects: the effects start and stop with the
  * music, and each change of the music's volume is followed by the effects as
- * a share of `fullLevel` (the music's own volume setting, 0 to 1).
+ * a share of `fullLevel` (the music's own volume setting, 0 to 1). With the
+ * music turned all the way down the effects are silent too, as with the
+ * music off.
  */
 export class AmbientVoice implements MusicVoice {
+  /** Wraps `music` with `ambience`, which takes the music's present volume. */
   constructor(
     private readonly music: MusicVoice,
     private readonly ambience: Ambience,
@@ -121,27 +119,32 @@ export class AmbientVoice implements MusicVoice {
   ) {
     this.volume = music.volume
   }
+  /** The music's volume, 0 to 1. */
   get volume(): number {
     return this.music.volume
   }
+  /** Sets the music's volume; the effects follow it as a share of the full level. */
   set volume(value: number) {
     this.music.volume = value
     const full = this.fullLevel()
-    // With the music turned all the way down there is no fade to follow.
-    this.ambience.follow(full > 0 ? Math.min(1, Math.max(0, value / full)) : 1)
+    this.ambience.follow(full > 0 ? Math.min(1, Math.max(0, value / full)) : 0)
   }
+  /** True while the music is not sounding. */
   get paused(): boolean {
     return this.music.paused
   }
+  /** Starts the music and its effects. */
   play(): Promise<void> {
     const started = this.music.play()
     this.ambience.play()
     return started
   }
+  /** Stops the music and its effects. */
   pause(): void {
     this.music.pause()
     this.ambience.pause()
   }
+  /** Lets go of the music and its effects. */
   dispose(): void {
     this.music.dispose()
     this.ambience.dispose()

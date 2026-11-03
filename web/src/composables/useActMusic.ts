@@ -70,11 +70,13 @@ export function useActMusic(): ReturnType<typeof useMusic> {
     settings.effectsOn ? settings.effectsVolume / 100 : 0
   /** Where every effect plays into, at the effects volume; made with the first. */
   let effectsBus: GainNode | null = null
+  /** Set when the scope ends, so an ambience still being prepared makes no bus. */
+  let disposed = false
   const ambienceFor: AmbienceSource = async (file, context) => {
     const clips = chosen.value
       ? ambientClipsFor(file, chosen.value, await chosenEffects)
       : []
-    if (clips.length === 0) return null
+    if (clips.length === 0 || disposed) return null
     if (!effectsBus) {
       effectsBus = context.createGain()
       effectsBus.gain.value = effectsLevel()
@@ -141,6 +143,7 @@ export function useActMusic(): ReturnType<typeof useMusic> {
     for (const gesture of GESTURES) window.removeEventListener(gesture, resume)
     setMediaKeyHandlers(null)
     music.loadTrack('', '')
+    disposed = true
     effectsBus?.disconnect()
   })
 

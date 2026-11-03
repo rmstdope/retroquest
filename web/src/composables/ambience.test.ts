@@ -151,10 +151,10 @@ describe('AmbientVoice', () => {
     expect(ctx.gains[0].gain.value).toBe(0)
   })
 
-  it('plays the effects at their level when the music volume is set to nothing', () => {
+  it('silences the effects with the music volume set to nothing', () => {
     const voice = new AmbientVoice(new FakeMusic(), storm(), () => 0)
     voice.volume = 0
-    expect(ctx.gains[0].gain.value).toBe(1)
+    expect(ctx.gains[0].gain.value).toBe(0)
   })
 
   it('starts and stops the effects with the music', async () => {
