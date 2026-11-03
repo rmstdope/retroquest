@@ -26,6 +26,7 @@ import {
 } from '@/lantern/stageArrival'
 import { parseTurn } from '@/lantern/parseTurn'
 import { decideHurryKey } from '@/lantern/hurryKeys'
+import { ResizeLanding, type StoryGeometry } from '@/lantern/ResizeLanding'
 import { usePanelHold } from '@/composables/usePanelHold'
 import { useAudio } from '@/composables/useAudio'
 import { useActMusic } from '@/composables/useActMusic'
@@ -453,7 +454,7 @@ function updateMoreBelow(): void {
     story.scrollTop + story.clientHeight <
       story.scrollHeight - trailing - END_SLACK
   if (hadFocus && !moreBelow.value) focusActions()
-  if (!landing) noteView()
+  resizeLanding.note()
 }
 
 /** Scroll on by almost a screen, keeping a line or two for context. */
@@ -512,24 +513,56 @@ function answerTooLong(): boolean {
   return !!story && !!last && last.offsetHeight > story.clientHeight
 }
 
-/** How long (ms) after a crossing of 1100 px the browser may still be laying the story out. */
-const LANDING_SETTLE_MS = 600
-/** How long (ms) after a resize the view of the player's reading is kept, longer than the landing. */
-const VIEW_FREEZE_MS = 800
-/** Puts the story where the last crossing of 1100 px meant it to be, until the layout has settled or the player moves it. */
-let landing: (() => void) | null = null
-let landingTimer: ReturnType<typeof setTimeout> | undefined
-/** The frame that lands the story again, while the layout settles: room at the story's end can grow with no element changing size. */
-let landingFrame: number | undefined
+/**
+ * Keeps the player's reading place across a crossing of 1100 px. It owns the
+ * view, the decision and the landing; the layout only measures the story for
+ * it and moves the story where it says.
+ */
+const resizeLanding = new ResizeLanding({
+  measure: (): StoryGeometry | null => {
+    const story = storyEl.value
+    const content = contentEl.value
+    if (!story || !content) return null
+    const pane = story.getBoundingClientRect()
+    return {
+      paneHeight: pane.bottom - pane.top,
+      moreBelow: moreBelow.value,
+      turns: Array.from(content.children, (turn) => {
+        const rect = turn.getBoundingClientRect()
+        return {
+          top: rect.top - pane.top,
+          bottom: rect.bottom - pane.top,
+          height: rect.height,
+        }
+      }),
+    }
+  },
+  measureTarget: (
+    index: number | 'newest',
+  ): { top: number; height: number } | null => {
+    const story = storyEl.value
+    const content = contentEl.value
+    const turn =
+      index === 'newest' ? content?.lastElementChild : content?.children[index]
+    if (!story || !turn) return null
+    const rect = turn.getBoundingClientRect()
+    return {
+      top: rect.top - story.getBoundingClientRect().top,
+      height: rect.height,
+    }
+  },
+  scrollTop: (): number => storyEl.value?.scrollTop ?? 0,
+  land: (top: number): void => {
+    moveStory(top, false)
+    if (storyHeld.value) refollow()
+    updateMoreBelow()
+  },
+  windowSize: (): string => `${window.innerWidth}x${window.innerHeight}`,
+})
 
-/** Land again on every frame until the landing ends. */
-function landOnFrames(): void {
-  if (typeof requestAnimationFrame !== 'function') return
-  landingFrame = requestAnimationFrame(() => {
-    if (!landing) return
-    landing()
-    landOnFrames()
-  })
+/** Stop landing: the player has taken the story over, or a new turn has come. */
+function endLanding(): void {
+  resizeLanding.end()
 }
 
 /** Keys that scroll the story, and so take it over from the landing. */
@@ -549,83 +582,12 @@ function onStoryKeydown(event: KeyboardEvent): void {
   onNameKeydown(event)
 }
 
-/** Stop landing: the layout has settled, or the player has taken the story over. */
-function endLanding(): void {
-  landing = null
-  clearTimeout(landingTimer)
-  if (landingFrame !== undefined && typeof cancelAnimationFrame === 'function')
-    cancelAnimationFrame(landingFrame)
-  landingFrame = undefined
-}
-
-/** Where the player was reading: the turn at the pane's top edge, how far it starts above it, how tall it was, and whether that is the newest. */
-interface StoryView {
-  anchor: number
-  offset: number
-  height: number
-  atNewest: boolean
-}
-/** The view as last seen at rest; the browser has already re-laid the old turns when a crossing is noticed, so it cannot be measured then. */
-let view: StoryView = { anchor: 0, offset: 0, height: 0, atNewest: true }
-
-/** The window size the view was taken at; the old turns are laid out afresh at a new size before the crossing is noticed, so a view is not taken until the layout has settled there. */
-let viewSize = ''
-/** Whether the view is being kept as it was, while the window changes size. */
-let viewFrozen = false
-/** Ends the freeze once no view has been asked for during `VIEW_FREEZE_MS`. */
-let viewFreezeTimer: ReturnType<typeof setTimeout> | undefined
-
-/** The window's size now. */
-function windowSize(): string {
-  return `${window.innerWidth}x${window.innerHeight}`
-}
-
-/** The window changed size: keep the view as it was, until the layout has settled. */
-function freezeView(): void {
-  viewFrozen = true
-  clearTimeout(viewFreezeTimer)
-  viewFreezeTimer = setTimeout(() => {
-    viewFrozen = false
-    viewSize = windowSize()
-    if (!landing) noteView()
-  }, VIEW_FREEZE_MS)
-}
-
-/** Note where the player is reading, from the layout as it stands (each time the pill is worked out, but not while a crossing is being landed, whose scrolling is ours). */
-function noteView(): void {
-  if (windowSize() !== viewSize) freezeView()
-  if (viewFrozen) return
-  const story = storyEl.value
-  const content = contentEl.value
-  if (!story || !content || content.children.length === 0) return
-  const storyTop = story.getBoundingClientRect().top
-  const turns = Array.from(content.children)
-  let anchor = 0
-  turns.forEach((turn, index) => {
-    if (turn.getBoundingClientRect().top <= storyTop + END_SLACK) anchor = index
-  })
-  const rect = turns[anchor].getBoundingClientRect()
-  view = {
-    anchor,
-    offset: rect.top - storyTop,
-    height: rect.height,
-    atNewest:
-      anchor === turns.length - 1 ||
-      !moreBelow.value ||
-      turns[turns.length - 1].getBoundingClientRect().bottom <=
-        story.getBoundingClientRect().bottom + END_SLACK,
-  }
-}
-
 /**
  * The window crossing about 1100 px redraws the story's turns (the column or
- * the cards) in the same pane. The story re-forms where a fresh answer would
- * have put it: the newest turn from its start (a short one whole at the
- * bottom; a player resting at the bottom, the newest whole in view, is at the
- * newest), unless the player had scrolled back, whose turn then stays in view
- * (the same share of it above the view, as its height changes). Taken before
- * the redraw, finished after it, and finished again each time the pane or its
- * turns change size, and on every frame, while the browser settles the new layout.
+ * the cards) in the same pane; `ResizeLanding` re-forms the story where the
+ * player was reading. The view is taken before the redraw and landed after
+ * it, again each time the pane or its turns change size, and on every frame,
+ * while the browser settles the new layout.
  */
 watch(
   [column, staged],
@@ -635,31 +597,10 @@ watch(
     const story = storyEl.value
     const content = contentEl.value
     if (!story || !content || content.children.length === 0) return
-    const { anchor, offset, height: oldHeight, atNewest } = view
-    endLanding()
+    const view = resizeLanding.capture()
+    resizeLanding.end()
     await nextTick()
-    landing = (): void => {
-      const target = atNewest
-        ? content.lastElementChild
-        : content.children[anchor]
-      if (!target) return
-      const into =
-        target.getBoundingClientRect().top -
-        story.getBoundingClientRect().top +
-        story.scrollTop
-      // The turn is a different height now: keep the same share of it above the view.
-      const newHeight = target.getBoundingClientRect().height
-      const kept = oldHeight > 0 ? (offset * newHeight) / oldHeight : offset
-      moveStory(atNewest ? into : into - kept, false)
-      if (storyHeld.value) refollow()
-      updateMoreBelow()
-    }
-    landing()
-    landOnFrames()
-    landingTimer = setTimeout(() => {
-      endLanding()
-      noteView()
-    }, LANDING_SETTLE_MS)
+    resizeLanding.begin(view)
   },
   { flush: 'pre' },
 )
@@ -770,7 +711,7 @@ function onSpaceUp(event: KeyboardEvent): void {
 
 onMounted(() => {
   fieldFocused.value = !!document.activeElement?.matches(COMMAND_BOX)
-  viewSize = windowSize()
+  resizeLanding.start()
   document.addEventListener('keydown', noteEmptyBoxEnter, true)
   document.addEventListener('keydown', onNarrationKey)
   document.addEventListener('keydown', onPaperKey)
@@ -781,16 +722,14 @@ onMounted(() => {
   if (game.showModal) void nextTick(focusPopUp)
   if (typeof ResizeObserver !== 'undefined' && storyEl.value) {
     storyResize = new ResizeObserver(() => {
-      if (landing) landing()
+      resizeLanding.reland()
       updateMoreBelow()
       refollow()
     })
     storyResize.observe(storyEl.value)
     // The turns also settle after a crossing; a reading's new paragraphs must not jump the follow.
     if (contentEl.value) {
-      contentResize = new ResizeObserver(() => {
-        if (landing) landing()
-      })
+      contentResize = new ResizeObserver(() => resizeLanding.reland())
       contentResize.observe(contentEl.value)
     }
   }
@@ -823,9 +762,6 @@ watch(
   { flush: 'post' },
 )
 onUnmounted(() => columnResize?.disconnect())
-onUnmounted(() => {
-  clearTimeout(viewFreezeTimer)
-})
 
 watch(
   () =>
@@ -916,7 +852,7 @@ onUnmounted(() => {
   narration.skipAll()
   storyResize?.disconnect()
   contentResize?.disconnect()
-  endLanding()
+  resizeLanding.dispose()
   actionsResize?.disconnect()
 })
 
