@@ -12,7 +12,7 @@ import {
   TheInnkeepersDaughterQuest,
 } from './quests/TheInnkeepersDaughter'
 
-describe('Act2.afterLoad clue wording', () => {
+describe('refreshSavedText clue wording', () => {
   it('brings the hermit and the Elena quest up to date in older saves', () => {
     const game = new Game([new Act2()])
     const hermit = Object.values(game.state.allRooms)
@@ -41,7 +41,7 @@ describe('Act2.afterLoad clue wording', () => {
   })
 })
 
-describe('Act2.afterLoad flyer wording', () => {
+describe('refreshSavedText flyer wording', () => {
   it('gives the merchant flyer its current description in older saves', () => {
     const game = new Game([new Act2()])
     const flyer = new MerchantsFlyer()

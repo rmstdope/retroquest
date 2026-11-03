@@ -70,7 +70,6 @@ export class SirCedric extends Character {
 
   /** Give an older save his name in title case and his current description. */
   override refreshSavedText(): void {
-    if (!this.answersTo(CEDRIC_NAME)) return
     this.name = CEDRIC_NAME
     this.description = CEDRIC_DESCRIPTION
   }
