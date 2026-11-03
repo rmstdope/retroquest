@@ -678,13 +678,14 @@ function isEmptyBoxEnter(event: KeyboardEvent): boolean {
 }
 
 /**
- * Whether this is Enter on the folded bar's Actions: on a phone the sheet
- * folds as a command is sent and focus lands there, so the Enter a player
- * presses next to hurry the change of scene finds that button, not the box.
+ * Whether this is Enter or Space on the folded bar's Actions: on a phone the
+ * sheet folds as a command is sent and focus lands there, so the Enter or
+ * Space a player presses next to hurry the change of scene finds that button,
+ * not the box.
  */
-function isFoldedActionsEnter(event: KeyboardEvent): boolean {
+function isFoldedActionsPress(event: KeyboardEvent): boolean {
   return (
-    event.key === 'Enter' &&
+    (event.key === 'Enter' || event.key === ' ') &&
     event.target instanceof Element &&
     !!event.target.closest('.lq-dock-open')
   )
@@ -708,10 +709,11 @@ function onNarrationKey(event: KeyboardEvent): void {
     if (
       event.key === 'Escape' ||
       isEmptyBoxEnter(event) ||
-      isFoldedActionsEnter(event) ||
+      isFoldedActionsPress(event) ||
       !(field || control)
     ) {
       event.preventDefault()
+      spaceTaken = event.key === ' '
       scene.skip()
       return
     }
@@ -772,7 +774,10 @@ function onNarrationKey(event: KeyboardEvent): void {
   else narration.skipAll()
 }
 
-/** A Space went on an arrival: its key-up must not press the focused button. */
+/**
+ * A Space went on an arrival or a change of scene: its key-up must not press
+ * the focused button.
+ */
 let spaceTaken = false
 
 /** Swallow the key-up of a Space that `onNarrationKey` used to go on. */
