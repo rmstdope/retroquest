@@ -2,6 +2,7 @@ import type { RoomDescription } from '@/engine'
 import { narrationWords } from './narrationManifest'
 import type { NarrationUnit } from './narrationUnits'
 import { parseTurn, type TurnBlock } from './parseTurn'
+import { blockVoice, NARRATOR } from './narrationScript'
 import { SPELL_HEADING, type SpellNews } from './spellNews'
 import {
   newQuestKicker,
@@ -86,6 +87,24 @@ export function sideBlocks(
   let count = blocks.length
   while (count > 0 && blocks[count - 1].kind === 'event') count--
   return count
+}
+
+/**
+ * Where the scene of a talk that took Elior to another room changes: the
+ * narrator's last paragraph on the sides, which tells the move (the dream's
+ * "The dark lets go of you…", Mira's "…traces a prism…"); a speaker's line
+ * after it (Sir Cedric at the fortress gate) comes in the new room. Everything
+ * before it is told over the old picture. -1 for any other turn, or a moving
+ * talk with no narrator's paragraph on the sides.
+ */
+export function sceneBlock(
+  turn: { addressed?: string; description: { moved: boolean } | null },
+  blocks: TurnBlock[],
+): number {
+  if (!turn.description?.moved) return -1
+  for (let i = sideBlocks(turn, blocks) - 1; i >= 0; i--)
+    if (blockVoice(blocks[i])?.speaker === NARRATOR) return i
+  return -1
 }
 
 /**

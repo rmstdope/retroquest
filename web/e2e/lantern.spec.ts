@@ -615,14 +615,16 @@ test.describe('Lantern UI (the default)', () => {
     const lines = page.getByTestId('speech-line')
 
     // Talking to the Voice wakes Elior in his cottage: the talk is told as
-    // any conversation is (rq-uqp8), the Voice's line on the right.
+    // any conversation is (rq-uqp8), the Voice's line on the right, and
+    // leaves the screen with the dream.
     await input.fill('talk to voice')
     await input.press('Enter')
+    await expect(lines).toHaveCount(1)
+    await expect(page.locator('.lq-line-right')).toContainText('let them rest')
     await expect(
       page.getByRole('region', { name: 'Current location' }),
     ).toContainText("Elior's Cottage")
-    await expect(lines).toHaveCount(1)
-    await expect(page.locator('.lq-line-right')).toContainText('let them rest')
+    await expect(lines).toHaveCount(0)
 
     // Talking to his grandmother: no portrait is made yet, so the initial
     // card stands in, on the right.
@@ -699,9 +701,8 @@ test.describe('Lantern UI (the default)', () => {
     const size = await portrait.first().boundingBox()
     expect(Math.round(size!.width)).toBe(32)
     expect(Math.round(size!.height)).toBe(32)
-    // The Voice's line from the dream comes first in the column (rq-uqp8).
+    // The Voice's line from the dream left the column with the dream.
     await expect(page.locator('.lq-one-column .lq-line-name')).toHaveText([
-      'Voice',
       'Grandmother',
     ])
   })

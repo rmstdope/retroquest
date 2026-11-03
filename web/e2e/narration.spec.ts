@@ -52,6 +52,27 @@ async function enter(page: Page, command: string): Promise<void> {
   await input.press('Enter')
 }
 
+/** The app's game store, as much of it as the tests read. */
+interface AppRoot extends Element {
+  __vue_app__?: {
+    config: {
+      globalProperties: {
+        $pinia: { state: { value: { game: { turns: unknown[] } } } }
+      }
+    }
+  }
+}
+
+/** How many turns the game has told (its record, not the cards on screen). */
+async function turnCount(page: Page): Promise<number> {
+  return page.evaluate(() => {
+    const root: AppRoot | null = document.querySelector('#app')
+    const game =
+      root?.__vue_app__?.config.globalProperties.$pinia.state.value.game
+    return game?.turns.length ?? -1
+  })
+}
+
 /** The narration paragraphs of the newest turn. */
 const lastTurnBlocks = (page: Page) =>
   page.getByTestId('turn').last().locator('.lq-block-text')
@@ -116,15 +137,15 @@ test('opens a journal drawer at once while the voice reads, and a press inside i
   const input = page.getByLabel('Command', { exact: true })
   await input.fill('talk to voice')
   await input.press('Enter')
-  // The card is away while the walk is told in the middle: it is there, not in view.
+  // The answer is read over the dream first.
   await expect(lastTurnBlocks(page).first()).toBeAttached()
   await expect(page.locator('.lq-speaking')).toHaveCount(1)
-  // The room's picture went through the dark before the voice began, and the
-  // room's name changed in the dark; the rest of the panels still wait.
+  // Before the waking the room's picture goes through the dark and the room's
+  // name changes there; the rest of the panels still wait.
   await expect(roomName).not.toHaveText(before ?? '')
 
   // A stage button is not a held panel: it opens its drawer, the voice reads on.
-  const turns = await page.getByTestId('turn').count()
+  const commands = await turnCount(page)
   await page.getByRole('button', { name: /^Quests/ }).click()
   const drawer = page.getByRole('complementary', { name: 'Journal drawer' })
   await expect(drawer).toHaveCount(1)
@@ -139,7 +160,7 @@ test('opens a journal drawer at once while the voice reads, and a press inside i
     'aria-selected',
     'true',
   )
-  await expect(page.getByTestId('turn')).toHaveCount(turns)
+  expect(await turnCount(page)).toBe(commands)
 })
 
 test('Space and Enter press a focused verb and the voice keeps reading', async ({

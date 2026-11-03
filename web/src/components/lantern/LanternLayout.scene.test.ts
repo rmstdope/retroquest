@@ -8,6 +8,11 @@ import { useSceneStore, SCENE_HALF_MS } from '@/stores/useSceneStore'
 import { useNarrationStore } from '@/stores/useNarrationStore'
 import { useArrivalStore } from '@/stores/useArrivalStore'
 import { startedHoldStore } from '@/testing/holdGame'
+import { useStageSpeechStore } from '@/stores/useStageSpeechStore'
+import { useBridge, type ActClass } from '@/composables/useBridge'
+import { readingPauseMs } from '@/lantern/stageSpeech'
+import { parseTurn } from '@/lantern/parseTurn'
+import { Act1 } from '@/act1/Act1'
 
 /**
  * The change of scene on the picture stage over the real engine: a move to a
@@ -46,6 +51,7 @@ describe('LanternLayout: change of scene', () => {
   afterEach(() => {
     w.unmount()
     vi.unstubAllGlobals()
+    vi.restoreAllMocks()
     vi.useRealTimers()
   })
 
@@ -58,7 +64,7 @@ describe('LanternLayout: change of scene', () => {
     await w.vm.$nextTick()
     const turn = game.turns.at(-1)!
     expect(scene.turn).toBe(turn.id)
-    expect(scene.holds(turn.id)).toBe(true)
+    expect(scene.holds(turn.id, 0)).toBe(true)
     expect(useNarrationStore().revealed(turn.id, 0)).toBe(false)
     // The new picture loads out of sight; the old one stays under the veil.
     await w.get('img.lq-loading').trigger('load')
@@ -70,10 +76,10 @@ describe('LanternLayout: change of scene', () => {
     vi.advanceTimersByTime(SCENE_HALF_MS)
     await w.vm.$nextTick()
     expect(game.roomName).toBe('Garden')
-    expect(scene.holds(turn.id)).toBe(true)
+    expect(scene.holds(turn.id, 0)).toBe(true)
     vi.advanceTimersByTime(SCENE_HALF_MS)
     await w.vm.$nextTick()
-    expect(scene.holds(turn.id)).toBe(false)
+    expect(scene.holds(turn.id, 0)).toBe(false)
     expect(useNarrationStore().revealed(turn.id, 0)).toBe(true)
     expect(scene.shown).toContain('garden')
   })
@@ -179,7 +185,7 @@ describe('LanternLayout: change of scene', () => {
     await w.vm.$nextTick()
     await w.vm.$nextTick()
     expect(first).not.toBeNull()
-    expect(scene.holds(first!)).toBe(false)
+    expect(scene.holds(first!, 0)).toBe(false)
     // The room now up is the Garden's: looking again changes nothing.
     expect(scene.shown).toContain('garden')
     expect(scene.turn).toBeNull()
@@ -205,5 +211,238 @@ describe('LanternLayout: change of scene', () => {
     await w.vm.$nextTick()
     expect(scene.turn).toBeNull()
     expect(useArrivalStore().active).toBe(false)
+  })
+
+  /** Mount Act I's opening dream on the laptop stage (or a phone), its picture up. */
+  async function dream(
+    phone = false,
+  ): Promise<ReturnType<typeof useGameStore>> {
+    setActivePinia(createPinia())
+    vi.stubGlobal(
+      'matchMedia',
+      vi.fn((query: string) => ({
+        matches: !phone && query.includes('min-width'),
+        addEventListener: vi.fn(),
+        removeEventListener: vi.fn(),
+      })),
+    )
+    // Act I has music, which jsdom cannot play.
+    vi.spyOn(HTMLMediaElement.prototype, 'play').mockResolvedValue()
+    vi.spyOn(HTMLMediaElement.prototype, 'pause').mockReturnValue()
+    const game = useGameStore()
+    game.setBridge(useBridge(async (): Promise<ActClass[]> => [Act1]))
+    await game.initGame()
+    game.dismissModal()
+    game.showTitle = false
+    w = mount(LanternLayout, { attachTo: document.body })
+    await w.vm.$nextTick()
+    await w.vm.$nextTick()
+    await w.get('img.lq-loading').trigger('load')
+    return game
+  }
+
+  it('tells the answer to the dream voice over the dream, and changes scene before the waking', async () => {
+    const game = await dream()
+    const scene = useSceneStore()
+    const narration = useNarrationStore()
+    expect(scene.shown).toContain('the-dream')
+    game.submitCommand('talk to voice')
+    await w.vm.$nextTick()
+    await w.vm.$nextTick()
+    const turn = game.turns.at(-1)!
+    const blocks = parseTurn(turn.text)
+    const waking = blocks.findIndex(
+      (block) =>
+        block.kind === 'text' && block.markup.startsWith('The dark lets go'),
+    )
+    // The words up to the voice's are told over the dream, in the dream; the
+    // waking and the arrival in the middle wait.
+    expect(scene.turn).toBeNull()
+    expect(scene.shown).toContain('the-dream')
+    expect(game.musicRoomKey).toBe('TheDream')
+    expect(game.roomName).toBe('The Dream')
+    expect(narration.revealed(turn.id, waking - 1)).toBe(true)
+    expect(narration.revealed(turn.id, waking)).toBe(false)
+    expect(useArrivalStore().active).toBe(false)
+    const voice = useStageSpeechStore().visible.at(-1)!
+    expect(voice.markup).toContain('let them rest')
+    vi.advanceTimersByTime(readingPauseMs(voice.markup) - 1)
+    expect(scene.turn).toBeNull()
+    // Once the voice's line is read, the dream goes dark and the waking waits.
+    vi.advanceTimersByTime(1)
+    await w.vm.$nextTick()
+    expect(scene.turn).toBe(turn.id)
+    expect(game.musicRoomKey).toBe('EliorsCottage')
+    expect(narration.revealed(turn.id, waking - 1)).toBe(true)
+    expect(narration.revealed(turn.id, waking)).toBe(false)
+    vi.advanceTimersByTime(3 * SCENE_HALF_MS)
+    await w.vm.$nextTick()
+    expect(scene.turn).toBeNull()
+    expect(narration.revealed(turn.id, waking)).toBe(true)
+    expect(game.roomName).toBe("Elior's Cottage")
+    expect(useArrivalStore().active).toBe(true)
+  })
+
+  /** Submit `talk to voice` and return the turn and the index of its waking paragraph. */
+  async function answerVoice(
+    game: ReturnType<typeof useGameStore>,
+  ): Promise<{ id: number; waking: number }> {
+    game.submitCommand('talk to voice')
+    await w.vm.$nextTick()
+    await w.vm.$nextTick()
+    const turn = game.turns.at(-1)!
+    const waking = parseTurn(turn.text).findIndex(
+      (block) =>
+        block.kind === 'text' && block.markup.startsWith('The dark lets go'),
+    )
+    return { id: turn.id, waking }
+  }
+
+  it('under Reduce motion changes picture and room at the same point, with no fade', async () => {
+    const game = await dream()
+    const scene = useSceneStore()
+    const narration = useNarrationStore()
+    document.documentElement.style.setProperty('--lq-motion', '0')
+    const turn = await answerVoice(game)
+    expect(game.musicRoomKey).toBe('TheDream')
+    expect(narration.revealed(turn.id, turn.waking)).toBe(false)
+    const voice = useStageSpeechStore().visible.at(-1)!
+    vi.advanceTimersByTime(readingPauseMs(voice.markup))
+    await w.vm.$nextTick()
+    expect(scene.turn).toBeNull()
+    expect(game.musicRoomKey).toBe('EliorsCottage')
+    expect(game.roomName).toBe("Elior's Cottage")
+    expect(narration.revealed(turn.id, turn.waking)).toBe(true)
+    document.documentElement.style.removeProperty('--lq-motion')
+  })
+
+  it('a press on a held panel before the scene changes brings the cottage up at once', async () => {
+    const game = await dream()
+    const scene = useSceneStore()
+    const narration = useNarrationStore()
+    const turn = await answerVoice(game)
+    expect(game.panelsHeld).toBe(true)
+    await w.get('[data-panel] button').trigger('click')
+    expect(scene.turn).toBeNull()
+    expect(game.musicRoomKey).toBe('EliorsCottage')
+    expect(game.roomName).toBe("Elior's Cottage")
+    expect(game.panelsHeld).toBe(false)
+    expect(narration.revealed(turn.id, turn.waking)).toBe(true)
+  })
+
+  it('a new command before the scene changes shows the whole answer at once, from the waking on', async () => {
+    const game = await dream()
+    const narration = useNarrationStore()
+    const turn = await answerVoice(game)
+    game.submitCommand('look')
+    await w.vm.$nextTick()
+    await w.vm.$nextTick()
+    expect(narration.revealed(turn.id, turn.waking)).toBe(true)
+    const story = w.get('.lq-story').text()
+    expect(story).toContain('The dark lets go of you')
+    expect(story).not.toContain('You answer it')
+    expect(story).not.toContain('talk to voice')
+  })
+
+  for (const phone of [false, true])
+    it(`clears what was told in the dream once the room changes${phone ? ', on a phone' : ''}`, async () => {
+      const game = await dream(phone)
+      const scene = useSceneStore()
+      await answerVoice(game)
+      const story = (): string => w.get('.lq-story').text()
+      /** The story shows no card that tells nothing. */
+      const noEmptyCard = (): void =>
+        expect(
+          w
+            .findAll('.lq-story [data-testid="turn"]')
+            .map((card) => card.text().trim())
+            .filter((text) => text === ''),
+        ).toEqual([])
+      expect(story()).toContain('The whisper comes once more')
+      // The voice's line is read: the dream fades, and its words go with it.
+      const voice = useStageSpeechStore().visible.at(-1)!
+      vi.advanceTimersByTime(readingPauseMs(voice.markup))
+      await w.vm.$nextTick()
+      expect(scene.turn).not.toBeNull()
+      expect(story()).not.toContain('You answer it')
+      noEmptyCard()
+      // A press brings the cottage up at once.
+      await w.get('[data-panel] button').trigger('click')
+      await w.vm.$nextTick()
+      expect(scene.turn).toBeNull()
+      noEmptyCard()
+      expect(story()).toContain('The dark lets go of you')
+      expect(story()).not.toContain('talk to voice')
+      expect(story()).not.toContain('You answer it')
+      expect(story()).not.toContain('The whisper comes once more')
+      expect(story()).not.toContain('let them rest')
+      expect(useStageSpeechStore().visible).toEqual([])
+    })
+
+  /** Give every line a recording whose voice ends when the test says; the voices made so far. */
+  function recordEverything(): { onended: (() => void) | null }[] {
+    const narration = useNarrationStore()
+    const voices: { onended: (() => void) | null }[] = []
+    narration.setAudioFactory(() => {
+      const voice = {
+        volume: 1,
+        currentTime: 0,
+        onended: null,
+        onerror: null,
+        play: (): Promise<void> => Promise.resolve(),
+        pause: (): void => {},
+      }
+      voices.push(voice)
+      return voice
+    })
+    const clip = { file: 'x.mp3', speaker: 'narrator', duration: 1, words: [] }
+    vi.spyOn(narration, 'manifestFor').mockReturnValue(
+      new Proxy({}, { get: () => clip }),
+    )
+    return voices
+  }
+
+  it('narrated, a skip before the change leaves only the waking on screen', async () => {
+    const game = await dream()
+    const narration = useNarrationStore()
+    recordEverything()
+    const turn = await answerVoice(game)
+    expect(narration.narrates(turn.id)).toBe(true)
+    narration.skipAll()
+    await w.vm.$nextTick()
+    const story = w.get('.lq-story').text()
+    expect(game.musicRoomKey).toBe('EliorsCottage')
+    expect(story).toContain('The dark lets go of you')
+    expect(story).not.toContain('You answer it')
+  })
+
+  it('narrated, the narrator stops before the waking while the dream changes to the cottage', async () => {
+    const game = await dream()
+    const scene = useSceneStore()
+    const narration = useNarrationStore()
+    const voices = recordEverything()
+    const turn = await answerVoice(game)
+    expect(narration.narrates(turn.id)).toBe(true)
+    for (let i = 0; i < 10 && !narration.atSceneChange(turn.id); i++) {
+      voices.at(-1)?.onended?.()
+      await vi.advanceTimersByTimeAsync(400)
+    }
+    expect(narration.atSceneChange(turn.id)).toBe(true)
+    await w.vm.$nextTick()
+    // The voice's line is told; the dream goes dark and the waking waits.
+    expect(narration.revealed(turn.id, turn.waking - 1)).toBe(true)
+    expect(narration.revealed(turn.id, turn.waking)).toBe(false)
+    expect(scene.turn).toBe(turn.id)
+    expect(game.musicRoomKey).toBe('EliorsCottage')
+    const spoken = voices.length
+    await vi.advanceTimersByTimeAsync(3 * SCENE_HALF_MS)
+    await w.vm.$nextTick()
+    expect(scene.turn).toBeNull()
+    expect(game.roomName).toBe("Elior's Cottage")
+    expect(narration.revealed(turn.id, turn.waking)).toBe(true)
+    expect(voices.length).toBe(spoken + 1)
+    // The rest of the turn (its quest news rings) is not left to run after the test.
+    narration.skipAll()
+    await vi.runAllTimersAsync()
   })
 })

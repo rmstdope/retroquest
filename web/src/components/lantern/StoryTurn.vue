@@ -12,6 +12,7 @@ import { displayName } from '@/lantern/displayName'
 import { renderMarkup } from '@/utils/theme'
 import StoryArrival from './StoryArrival.vue'
 import { useNarrationStore } from '@/stores/useNarrationStore'
+import { useSceneStore } from '@/stores/useSceneStore'
 import { useReadAlong } from '@/composables/useReadAlong'
 import { arrivesOnPicture } from '@/lantern/stageArrival'
 import type { CardPiece } from '@/lantern/columnPieces'
@@ -41,6 +42,10 @@ import { toldAsSpeech } from '@/lantern/stageSpeech'
  * between them, and each card is one `StoryTurn` that tells only its piece:
  * its blocks, and the command, room, chips and news only when the piece
  * carries them. A piece with nothing to show yet renders nothing.
+ *
+ * A talk that took Elior to another room keeps on its card only what it told
+ * in the new room (`useSceneStore.firstUnit`): its command and the words
+ * before the change go with the old room. The full record keeps them.
  */
 const props = defineProps<{
   turn: Turn
@@ -105,8 +110,14 @@ function onSpeech(block: TurnBlock): boolean {
     toldAsSpeech(props.turn, block.speaker)
   )
 }
-/** Whether the piece (if any) tells block `index`. */
+const scene = useSceneStore()
+/** The first block the card tells: where the talk's room changed, or null (always null outside a card). */
+const firstBlock = computed(() =>
+  props.card && !props.record ? scene.firstUnit(props.turn.id) : null,
+)
+/** Whether the piece (if any) tells block `index`, and it was told in the room the card is in. */
 function inPiece(index: number): boolean {
+  if (firstBlock.value !== null && index < firstBlock.value) return false
   return !props.piece || props.piece.blocks.includes(index)
 }
 /** The room's description is told in the middle of the picture, not on the card. */
@@ -176,18 +187,23 @@ const roomHere = computed(() => !props.piece || props.piece.arrival)
 /** Whether the piece (if any) carries the turn's quest news. */
 const newsHere = computed(() => !props.piece || props.piece.news)
 /** Whether the piece (if any) starts with the command. */
-const commandHere = computed(() => !props.piece || props.piece.command)
+const commandHere = computed(
+  () => firstBlock.value === null && (!props.piece || props.piece.command),
+)
 
 /** How many news lines or cards the piece shows now. */
 const newsShown = computed(() => {
   return newsHere.value && !newsPending.value ? questCount.value : 0
 })
-/** A piece with nothing to show yet (its words not reached, or no news told): no card at all. */
+/** A piece (or a card cut where its talk's room changed) with nothing to show yet: no card at all. */
 const hollow = computed(() => {
-  if (!props.piece) return false
+  // A whole card is never hollow, unless its talk's room changed: then what it told before is gone.
+  if (!props.piece && firstBlock.value === null) return false
   return (
     !commandHere.value &&
-    !props.piece.blocks.some((index) => shown(index)) &&
+    !blocks.value.some(
+      (block, index) => inPiece(index) && shown(index) && !onSpeech(block),
+    ) &&
     !(roomHere.value && !!props.turn.arrival && shown(arrivalUnit.value)) &&
     !chips.value.length &&
     !newsShown.value

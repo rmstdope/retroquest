@@ -3,6 +3,7 @@ import { computed, nextTick, ref, watch } from 'vue'
 import type { Turn } from '@/stores/useGameStore'
 import { useGameStore } from '@/stores/useGameStore'
 import { useStageSpeechStore } from '@/stores/useStageSpeechStore'
+import { useSceneStore } from '@/stores/useSceneStore'
 import { FOLLOW_EVENT } from '@/composables/useStoryFollow'
 import { useReadAlong } from '@/composables/useReadAlong'
 import { columnPieces } from '@/lantern/columnPieces'
@@ -37,11 +38,20 @@ const props = defineProps<{
 }>()
 const game = useGameStore()
 const speech = useStageSpeechStore()
+const scene = useSceneStore()
 
-/** The turn's pieces in the order they happened. */
-const pieces = computed(() =>
-  columnPieces(props.turn, parseTurn(props.turn.text)),
-)
+/**
+ * The turn's pieces in the order they happened; of a talk that took Elior to
+ * another room, only the lines said in the new room (its cards drop the rest
+ * themselves).
+ */
+const pieces = computed(() => {
+  const first = scene.firstUnit(props.turn.id)
+  return columnPieces(props.turn, parseTurn(props.turn.text)).filter(
+    (piece) =>
+      piece.kind !== 'line' || first === null || piece.line.unit >= first,
+  )
+})
 
 /** The pieces told so far: up to the first spoken line that has not appeared. */
 const told = computed(() => {

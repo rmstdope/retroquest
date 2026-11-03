@@ -1,6 +1,9 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 import { setActivePinia, createPinia } from 'pinia'
 import { GEM, startedHoldStore as startedStore } from '@/testing/holdGame'
+import { useBridge, type ActClass } from '@/composables/useBridge'
+import { Act1 } from '@/act1/Act1'
+import { useGameStore } from './useGameStore'
 
 describe('useGameStore: panels held while a turn is narrated', () => {
   beforeEach(() => {
@@ -43,6 +46,21 @@ describe('useGameStore: panels held while a turn is narrated', () => {
     staged.submitCommand('go north')
     expect(staged.heldTurn).not.toBeNull()
     expect(staged.musicRoomKey).toBe('Garden')
+  })
+
+  it('on a picture stage holds the music for a talk that moves Elior, until its scene', async () => {
+    const store = useGameStore()
+    store.setBridge(useBridge(async (): Promise<ActClass[]> => [Act1]))
+    await store.initGame()
+    store.dismissModal()
+    store.setPanelHold(true)
+    store.setScenePicture(true)
+    expect(store.musicRoomKey).toBe('TheDream')
+    store.submitCommand('talk to voice')
+    const turn = store.turns.at(-1)!
+    expect(store.musicRoomKey).toBe('TheDream')
+    store.releaseMusic(turn.id)
+    expect(store.musicRoomKey).toBe('EliorsCottage')
   })
 
   it('shows the room a debug script ends in as soon as it ends', async () => {

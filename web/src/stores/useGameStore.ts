@@ -344,7 +344,7 @@ export const useGameStore = defineStore('game', () => {
     const turnId = nextTurnId++
     // A player's command in a narrated game keeps the panels as they were
     // until the narration reaches them (see `releasePanels`).
-    if (hold) startHold(turnId)
+    if (hold) startHold(turnId, addressed !== null)
     // The command that ends the game keeps its room and chips.
     const actRunning = b.controller.isActRunning() || b.controller.isGameOver()
     const room = actRunning ? b.controller.getRoomName() : lastTurnRoom
@@ -428,14 +428,19 @@ export const useGameStore = defineStore('game', () => {
     audioPlayer?.playNewSpell()
   }
 
-  /** Let a command's panels wait (applying an older turn's first). */
-  function startHold(turnId: number): void {
+  /**
+   * Let a command's panels wait (applying an older turn's first). The music
+   * waits too, except on a picture stage, where it moves at the press; a talk
+   * (`talked`) that moves Elior is told over the old picture first, so there
+   * it waits for its scene even on the stage.
+   */
+  function startHold(turnId: number, talked: boolean): void {
     if (!panelHoldEnabled) return
     if (heldTurn.value !== null)
       releasePanels(heldTurn.value, [...PANEL_GROUPS], false)
     heldTurn.value = turnId
     held.value = { place: true, quests: true, stock: true }
-    musicHeld = !scenePicture.value
+    musicHeld = !scenePicture.value || talked
   }
 
   /** Whether the panels of `group` are in the hold. */
@@ -569,7 +574,8 @@ export const useGameStore = defineStore('game', () => {
   /**
    * The layout plays the room on its picture stage: the picture and music move
    * at the press (the change of scene), so a narrated command no longer holds
-   * the music's room back for the narrator. Off: it does, as before.
+   * the music's room back for the narrator, unless it is a talk (which the
+   * layout releases where the talk's scene changes). Off: it does, as before.
    */
   function setScenePicture(enabled: boolean): void {
     scenePicture.value = enabled
