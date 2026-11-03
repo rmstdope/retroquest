@@ -14,7 +14,8 @@
  * a command is sent and focus lands on the folded bar's Actions: a change of
  * scene takes both Enter and Space from that button, but ordinary narration
  * takes only Space (the hurry the hint invites) and leaves Enter as the
- * button's own press.
+ * button's own press. The same holds for a button in the actions panel, where
+ * focus stays after a verb is sent on a laptop.
  */
 
 /** A key press as the layout hears it: what it is, where it lands, and what is going on. */
@@ -37,6 +38,8 @@ export interface HurryKeyPress {
   onControl: boolean
   /** The target is in the folded bar's Actions button. */
   onFoldedActions: boolean
+  /** The target is a button in the actions panel (a verb, an exit, a target). */
+  onActionButton: boolean
   /** The target is in the paper's tab. */
   onPaperTab: boolean
   /** The target is in an open word list (`[aria-expanded="true"]`). */
@@ -147,17 +150,19 @@ function arrivalKey(press: HurryKeyPress): HurryKeyDecision | null {
  * Space and Enter, and an open word list takes Escape to close itself; any
  * other Escape skips, text kept. A button, link or summary presses on Space
  * or Enter, so building a command goes on while the voice reads, except Space
- * on the folded bar's Actions: that is the hurry the hint invites, so the
- * sheet stays folded and the release is swallowed. Enter there stays the
- * button's own press.
+ * on the folded bar's Actions or on a button in the actions panel: that is
+ * the hurry the hint invites, so the sheet stays folded, the verb is not sent
+ * again and the release is swallowed. Enter there stays the button's own
+ * press.
  */
 function narrationKey(press: HurryKeyPress): HurryKeyDecision | null {
   const hurries = goesOn(press.key)
   if (press.inField && (hurries || press.inOpenList)) return null
-  const foldedActionsSpace = press.key === ' ' && press.onFoldedActions
-  if (hurries && !foldedActionsSpace && press.onControl) return null
-  if (press.arrival) return take('arrival-clear', foldedActionsSpace)
-  return take(hurries ? 'hurry' : 'skip-all', foldedActionsSpace)
+  const actionsSpace =
+    press.key === ' ' && (press.onFoldedActions || press.onActionButton)
+  if (hurries && !actionsSpace && press.onControl) return null
+  if (press.arrival) return take('arrival-clear', actionsSpace)
+  return take(hurries ? 'hurry' : 'skip-all', actionsSpace)
 }
 
 /**

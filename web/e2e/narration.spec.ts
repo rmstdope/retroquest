@@ -163,7 +163,7 @@ test('opens a journal drawer at once while the voice reads, and a press inside i
   expect(await turnCount(page)).toBe(commands)
 })
 
-test('Space and Enter press a focused verb and the voice keeps reading', async ({
+test('Enter presses a focused verb as the voice reads, and Space hurries without pressing it', async ({
   page,
 }): Promise<void> => {
   // A short screen: the text page, where the sheet is the composer (a taller
@@ -176,35 +176,31 @@ test('Space and Enter press a focused verb and the voice keeps reading', async (
 
   // Back to the verbs, as the default mode has it, with one of them focused.
   await page.getByRole('button', { name: 'Actions ▴' }).click()
-  await page
-    .getByRole('region', { name: 'Actions' })
-    .getByRole('button', { name: 'Actions', exact: true })
-    .click()
-  const verb = page
-    .getByRole('region', { name: 'Actions' })
-    .getByRole('button', { name: 'Talk', exact: true })
+  const actions = page.getByRole('region', { name: 'Actions' })
+  await actions.getByRole('button', { name: 'Actions', exact: true }).click()
+  const verb = actions.getByRole('button', { name: 'Talk', exact: true })
+  const cancel = actions.getByRole('button', { name: 'Cancel' })
+
+  // Enter presses the verb (its builder's ✕, read as Cancel, shows) and the
+  // voice reads on; Enter on the focused Cancel presses it too.
   await verb.focus()
-  const shown = await lastTurnBlocks(page).count()
-
-  await page.keyboard.press(' ')
-  // The press opened the builder (its ✕, read as Cancel, shows); nothing was
-  // hurried.
-  await expect(
-    page.getByRole('region', { name: 'Actions' }).getByRole('button', {
-      name: 'Cancel',
-    }),
-  ).toBeVisible()
-  expect(await lastTurnBlocks(page).count()).toBeLessThanOrEqual(shown + 1)
+  await page.keyboard.press('Enter')
+  await expect(cancel).toBeVisible()
   await expect(page.locator('.lq-speaking')).not.toHaveCount(0)
-
-  // Enter on the focused Cancel presses it too, and the voice still reads.
-  const cancel = page
-    .getByRole('region', { name: 'Actions' })
-    .getByRole('button', { name: 'Cancel' })
   await cancel.focus()
   await page.keyboard.press('Enter')
   await expect(cancel).toHaveCount(0)
   await expect(page.locator('.lq-speaking')).not.toHaveCount(0)
+
+  // Space on the focused verb is the hurry the hint invites: the verb is not
+  // pressed, and no turn is sent.
+  const commands = await turnCount(page)
+  await verb.focus()
+  await page.keyboard.press(' ')
+  // Let a press, had there been one, open the builder before looking.
+  await page.waitForTimeout(300)
+  expect(await cancel.count()).toBe(0)
+  expect(await turnCount(page)).toBe(commands)
 })
 
 test('typing keeps the voice reading, and Esc in the command box skips it', async ({

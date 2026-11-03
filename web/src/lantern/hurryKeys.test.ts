@@ -13,6 +13,7 @@ function press(over: Partial<HurryKeyPress>): HurryKeyPress {
     inField: false,
     onControl: false,
     onFoldedActions: false,
+    onActionButton: false,
     onPaperTab: false,
     inOpenList: false,
     scene: false,
@@ -184,6 +185,16 @@ describe('decideHurryKey while the story is narrated', () => {
         }),
       ),
     ).toEqual({ action: 'hurry', consume: true, swallowSpaceUp: true })
+  })
+
+  it('hurries on Space from an action button and swallows its release, leaving Enter to it', () => {
+    const verb = { ...narrating, onControl: true, onActionButton: true }
+    expect(decideHurryKey(press({ ...verb, key: SPACE }))).toEqual({
+      action: 'hurry',
+      consume: true,
+      swallowSpaceUp: true,
+    })
+    expect(decideHurryKey(press(verb))).toBeNull()
   })
 
   it('leaves Enter on the folded Actions to the button, unlike a scene', () => {
