@@ -25,6 +25,7 @@ import {
   sceneBlock,
 } from '@/lantern/stageArrival'
 import { parseTurn } from '@/lantern/parseTurn'
+import { decideHurryKey } from '@/lantern/hurryKeys'
 import { usePanelHold } from '@/composables/usePanelHold'
 import { useAudio } from '@/composables/useAudio'
 import { useActMusic } from '@/composables/useActMusic'
@@ -704,108 +705,54 @@ function isEmptyBoxEnter(event: KeyboardEvent): boolean {
 }
 
 /**
- * Whether this is Enter or Space on the folded bar's Actions: on a phone the
- * sheet folds as a command is sent and focus lands there, so the Enter or
- * Space a player presses next to hurry the change of scene finds that button,
- * not the box (and so does the Space that hurries the narration after it).
+ * Keys that steer the narration: describe the press and let `decideHurryKey`
+ * say who owns it, then carry out its answer.
  */
-function isFoldedActionsPress(event: KeyboardEvent): boolean {
-  return (
-    (event.key === 'Enter' || event.key === ' ') &&
-    event.target instanceof Element &&
-    !!event.target.closest('.lq-dock-open')
-  )
-}
-
-/** Keys that steer the narration; see `onNarrationKey`. */
 function onNarrationKey(event: KeyboardEvent): void {
-  // Enter (or Space, or Escape) during a change of scene brings the new room
-  // up at once; the command box and buttons keep their own Enter and Space,
-  // except an empty box and the folded bar's Actions (which stays folded).
-  if (
-    scene.turn !== null &&
-    (!event.defaultPrevented || isEmptyBoxEnter(event)) &&
-    !(event.ctrlKey || event.metaKey || event.altKey) &&
-    (event.key === 'Enter' || event.key === ' ' || event.key === 'Escape') &&
-    !dialogOpen()
-  ) {
-    const target = event.target instanceof Element ? event.target : null
-    const field = target?.closest('input, textarea, select, [contenteditable]')
-    const control = target?.closest('button, a, [role="button"], summary')
-    if (
-      event.key === 'Escape' ||
-      isEmptyBoxEnter(event) ||
-      isFoldedActionsPress(event) ||
-      !(field || control)
-    ) {
-      event.preventDefault()
-      spaceTaken = event.key === ' '
-      scene.skip()
-      return
-    }
-  }
-  // Escape (unless a drawer, the map or a menu took it first) does what Hide
-  // does on the stage, when nothing is being narrated (while it is, Escape
-  // only skips, below).
-  if (
-    event.key === 'Escape' &&
-    !event.defaultPrevented &&
-    staged.value &&
-    wordsVisible.value &&
-    !paper.hidden.value &&
-    !narration.isNarrating &&
-    !arrival.active &&
-    !dialogOpen()
-  )
-    setWordsHidden(true)
-  if (!(narration.isNarrating || arrival.active)) return
-  // The command box handles its own Enter (and marks it handled); on an
-  // arrival an empty box still lets that Enter go on.
-  if (event.defaultPrevented && !(arrival.active && isEmptyBoxEnter(event)))
-    return
-  if (event.ctrlKey || event.metaKey || event.altKey) return
-  const hurries = event.key === ' ' || event.key === 'Enter'
-  if (!hurries && event.key !== 'Escape') return
-  // A menu or dialog has its own keys (Escape closes it first).
-  if (dialogOpen()) return
   const target = event.target instanceof Element ? event.target : null
-  const field = target?.closest('input, textarea, select, [contenteditable]')
-  if (arrival.active && hurries) {
-    // The paper's tab is pressed as a button (it ends the arrival and takes
-    // focus on); holding a key down goes on once, not through the parts.
-    if (target?.closest('.lq-paper-tab') || event.repeat) return
-    // An arrival on the picture takes Enter and Space even from a focused
-    // button (focus stays where it was, the button is not pressed); a field
-    // keeps them (a space, the command), but an empty command box goes on.
-    if (field && !isEmptyBoxEnter(event)) return
-    spaceTaken = event.key === ' '
-  } else {
-    // A field keeps Space and Enter (a space, the command), and an open word
-    // list takes Escape to close itself; any other Escape skips, text kept.
-    if (field && (hurries || target?.closest('[aria-expanded="true"]'))) return
-    // A button, link or summary presses on Space or Enter: building a command
-    // goes on while the voice reads (the press that completes it cuts in).
-    // The folded bar's Actions, where focus lands after a command on a phone,
-    // takes no Space: that is the hurry the hint invites, so it stays folded.
-    const foldedActionsSpace = event.key === ' ' && isFoldedActionsPress(event)
-    if (
-      hurries &&
-      !foldedActionsSpace &&
-      target?.closest('button, a, [role="button"], summary')
-    )
-      return
-    spaceTaken = foldedActionsSpace
+  const decision = decideHurryKey({
+    key: event.key,
+    repeat: event.repeat,
+    modified: event.ctrlKey || event.metaKey || event.altKey,
+    handled: event.defaultPrevented,
+    emptyBoxEnter: isEmptyBoxEnter(event),
+    dialogOpen: dialogOpen(),
+    inField: !!target?.closest('input, textarea, select, [contenteditable]'),
+    onControl: !!target?.closest('button, a, [role="button"], summary'),
+    onFoldedActions: !!target?.closest('.lq-dock-open'),
+    onPaperTab: !!target?.closest('.lq-paper-tab'),
+    inOpenList: !!target?.closest('[aria-expanded="true"]'),
+    scene: scene.turn !== null,
+    arrival: arrival.active,
+    narrating: narration.isNarrating,
+    canHide: staged.value && wordsVisible.value && !paper.hidden.value,
+  })
+  if (!decision) return
+  if (decision.consume) {
+    event.preventDefault()
+    spaceTaken = decision.swallowSpaceUp
   }
-  event.preventDefault()
-  // An arrival on the picture goes on a part, or clears (the narrator with it).
-  if (arrival.active) {
-    if (hurries) arrival.next()
-    else {
+  switch (decision.action) {
+    case 'skip-scene':
+      scene.skip()
+      break
+    case 'hide-words':
+      setWordsHidden(true)
+      break
+    case 'arrival-next':
+      arrival.next()
+      break
+    case 'arrival-clear':
       arrival.clear()
       narration.skipAll()
-    }
-  } else if (hurries) narration.hurry()
-  else narration.skipAll()
+      break
+    case 'hurry':
+      narration.hurry()
+      break
+    case 'skip-all':
+      narration.skipAll()
+      break
+  }
 }
 
 /**
