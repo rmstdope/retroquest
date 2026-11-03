@@ -387,12 +387,14 @@ function chipLabel(chip: Chip): string {
 
 <style scoped>
 /* A narration card: the turn's bubbles one under another, as the speech on
-   the right has its lines. The card itself has no frame. */
+   the right has its lines. The card itself has no frame, but takes the
+   presses and the wheel between its bubbles as the story's. */
 .lq-turn.lq-card {
   max-width: none;
   flex: 0 0 auto;
   gap: 8px;
   align-items: flex-start;
+  pointer-events: auto;
 }
 /* One paragraph (or event, failure, room, chips, checklist, quote) of the
    narrator: a bubble like a line of speech, edged in the narrator's tan. It

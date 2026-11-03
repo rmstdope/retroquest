@@ -17,7 +17,12 @@ function turn(id: number, text = 'Something happens.'): Turn {
   }
 }
 
-function setup(turns: Turn[] = [turn(1)], wide = false, speechBeside = false) {
+function setup(
+  turns: Turn[] = [turn(1)],
+  wide = false,
+  speechBeside = false,
+  movePending: (turn: Turn) => boolean = () => false,
+) {
   const list = ref<Turn[]>(turns)
   const key = ref('a')
   const paper = useNarrationPaper(
@@ -25,6 +30,7 @@ function setup(turns: Turn[] = [turn(1)], wide = false, speechBeside = false) {
     () => key.value,
     () => wide,
     () => speechBeside,
+    movePending,
   )
   return { list, key, paper }
 }
@@ -75,6 +81,17 @@ describe('useNarrationPaper', () => {
 
 describe('useNarrationPaper on the laptop (cards)', () => {
   const moved = { moved: true, firstVisit: false }
+
+  it('keeps the cards before a talk that moves Elior until its room has changed', () => {
+    const talk = { ...turn(3), description: moved, addressed: 'voice' }
+    const turns = [turn(1), turn(2), talk]
+    let pending = true
+    const { paper } = setup(turns, true, false, (t) => pending && t.id === 3)
+    expect(paper.shownTurns.value.map((t) => t.id)).toEqual([1, 2, 3])
+    pending = false
+    const after = setup(turns, true, false, () => pending)
+    expect(after.paper.shownTurns.value.map((t) => t.id)).toEqual([3])
+  })
 
   it('keeps a card for every turn since the last room change, newest last', () => {
     const { paper } = setup(

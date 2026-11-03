@@ -101,4 +101,12 @@ describe('AcquiredFlight', () => {
       'left: 900px',
     )
   })
+
+  it('does not tell earlier gains again when it is drawn anew', async () => {
+    const flights = useFlightStore()
+    flights.launch([{ kind: 'item', name: 'coin', count: 1 }])
+    w = mount(AcquiredFlight)
+    await vi.advanceTimersByTimeAsync(50)
+    expect(w.get('[aria-live="polite"]').text()).toBe('')
+  })
 })

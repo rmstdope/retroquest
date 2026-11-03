@@ -344,7 +344,8 @@ export const useGameStore = defineStore('game', () => {
     const turnId = nextTurnId++
     // A player's command in a narrated game keeps the panels as they were
     // until the narration reaches them (see `releasePanels`).
-    if (hold) startHold(turnId, addressed !== null)
+    if (hold)
+      startHold(turnId, addressed !== null && description?.moved === true)
     // The command that ends the game keeps its room and chips.
     const actRunning = b.controller.isActRunning() || b.controller.isGameOver()
     const room = actRunning ? b.controller.getRoomName() : lastTurnRoom
@@ -431,16 +432,16 @@ export const useGameStore = defineStore('game', () => {
   /**
    * Let a command's panels wait (applying an older turn's first). The music
    * waits too, except on a picture stage, where it moves at the press; a talk
-   * (`talked`) that moves Elior is told over the old picture first, so there
-   * it waits for its scene even on the stage.
+   * that moves Elior (`movingTalk`) is told over the old picture first, so
+   * there it waits for its scene even on the stage.
    */
-  function startHold(turnId: number, talked: boolean): void {
+  function startHold(turnId: number, movingTalk: boolean): void {
     if (!panelHoldEnabled) return
     if (heldTurn.value !== null)
       releasePanels(heldTurn.value, [...PANEL_GROUPS], false)
     heldTurn.value = turnId
     held.value = { place: true, quests: true, stock: true }
-    musicHeld = !scenePicture.value || talked
+    musicHeld = !scenePicture.value || movingTalk
   }
 
   /** Whether the panels of `group` are in the hold. */

@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import type { Chip, ChipKind } from '@/lantern/inventoryChanges'
+import { displayName } from '@/lantern/displayName'
 
 /** How long a gained thing takes to come up on the picture (ms). */
 export const FLIGHT_SHOW_MS = 320
@@ -15,6 +16,12 @@ export const FLIGHT_LAND_MS = 450
 export interface Flight extends Chip {
   /** Unique within the session, so the view starts each flight afresh. */
   key: number
+}
+
+/** A gained thing's name as the story shows it, with how many when more than one. */
+export function flightLabel(chip: Chip): string {
+  const count = chip.count > 1 ? ` ×${chip.count}` : ''
+  return `${displayName(chip.name)}${count}`
 }
 
 /** Where the flight in hand is: coming up and resting, or flying to its button. */
@@ -32,6 +39,8 @@ export const useFlightStore = defineStore('flight', () => {
   const phase = ref<FlightPhase>('show')
   /** The kind of the thing that has just landed, whose button is bumped; null otherwise. */
   const landed = ref<ChipKind | null>(null)
+  /** What a screen reader is told of the latest gains ("Gained …", "Learned …"), all of them as they are queued. */
+  const told = ref<string[]>([])
   let queue: Flight[] = []
   let nextKey = 1
   let timers: ReturnType<typeof setTimeout>[] = []
@@ -62,20 +71,25 @@ export const useFlightStore = defineStore('flight', () => {
     next()
   }
 
-  /** Fly these gained things to their buttons, after any still flying. */
+  /** Fly these gained things to their buttons, after any still flying; each is told at once. */
   function launch(chips: Chip[]): void {
+    told.value = chips.map(
+      (chip) =>
+        `${chip.kind === 'item' ? 'Gained' : 'Learned'} ${flightLabel(chip)}`,
+    )
     queue.push(...chips.map((chip) => ({ ...chip, key: nextKey++ })))
     if (!current.value) next()
   }
 
-  /** Stop at once: nothing more flies, no button stays bumped. */
+  /** Stop at once: nothing more flies, no button stays bumped, nothing is left to tell. */
   function clear(): void {
     timers.forEach(clearTimeout)
     timers = []
     queue = []
     current.value = null
     landed.value = null
+    told.value = []
   }
 
-  return { current, phase, landed, launch, clear }
+  return { current, phase, landed, told, launch, clear }
 })

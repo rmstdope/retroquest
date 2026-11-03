@@ -86,8 +86,9 @@ import TitlePage from './TitlePage.vue'
  * quest news told in the middle leaves nothing here. The newest turn grows as
  * the narrator reaches each part and, when it is taller than the room under
  * the plate, scrolls with a "More below" pill. One "▾ Hide" on its own line at the bottom centre of the picture (or N,
- * or Escape when nothing is narrated) clears both the cards and the speech,
- * leaving a "▴ Show" tab in its place; the tab, N or the next turn with a card
+ * or Escape when nothing is narrated) clears both the narrator's bubbles and
+ * the speech, leaving a "▴ Show" tab in its place; the tab, N or the next turn
+ * that tells something
  * brings both back as they were, and every turn is read in the story drawer.
  * Under about 1100 px wide (a laptop window too narrow for two sides, and
  * every phone's picture stage) there is no side for speech: the cards and the
@@ -338,6 +339,10 @@ const paper = useNarrationPaper(
   () => stageKey.value,
   () => staged.value,
   () => twoSides.value,
+  // A talk that moves Elior keeps the cards before it until its scene changes (`scene.cut`).
+  (turn) =>
+    scene.firstUnit(turn.id) === null &&
+    sceneBlock(turn, parseTurn(turn.text)) >= 0,
 )
 /** What the story pane holds: the narration cards on the stage, every turn elsewhere. */
 const storyTurns = computed(() =>

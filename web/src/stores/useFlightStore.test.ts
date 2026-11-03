@@ -67,4 +67,17 @@ describe('useFlightStore', () => {
     flights.launch([lantern])
     expect(flights.current?.key).not.toBe(first)
   })
+
+  it('tells every gain as it is queued, the ones still to fly too', () => {
+    const flights = useFlightStore()
+    flights.launch([lantern, revive])
+    expect(flights.told).toEqual(['Gained Lantern', 'Learned Revive'])
+  })
+
+  it('forgets what it told when cleared', () => {
+    const flights = useFlightStore()
+    flights.launch([lantern])
+    flights.clear()
+    expect(flights.told).toEqual([])
+  })
 })

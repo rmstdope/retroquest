@@ -298,6 +298,22 @@ describe('LanternLayout: change of scene', () => {
     return { id: turn.id, waking }
   }
 
+  it('keeps what was told in the dream before the talk until the room changes', async () => {
+    const game = await dream()
+    game.submitCommand('look')
+    await w.vm.$nextTick()
+    await vi.advanceTimersByTimeAsync(0)
+    const looked = (): boolean =>
+      w.get('.lq-story').text().includes('it is raining hard')
+    expect(looked()).toBe(true)
+    await answerVoice(game)
+    // Over the dream, the look is still on the left.
+    expect(looked()).toBe(true)
+    await w.get('[data-panel] button').trigger('click')
+    await w.vm.$nextTick()
+    expect(looked()).toBe(false)
+  })
+
   it('under Reduce motion changes picture and room at the same point, with no fade', async () => {
     const game = await dream()
     const scene = useSceneStore()

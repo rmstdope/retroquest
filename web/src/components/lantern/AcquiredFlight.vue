@@ -1,7 +1,10 @@
 <script setup lang="ts">
 import { computed, onUnmounted, ref, watch } from 'vue'
-import { FLIGHT_FLY_MS, useFlightStore } from '@/stores/useFlightStore'
-import { displayName } from '@/lantern/displayName'
+import {
+  FLIGHT_FLY_MS,
+  flightLabel,
+  useFlightStore,
+} from '@/stores/useFlightStore'
 
 /**
  * A thing the player has just gained, flown from the picture to its button
@@ -11,7 +14,8 @@ import { displayName } from '@/lantern/displayName'
  * (or tab on a phone) that carries `data-flight-target` of its kind and is
  * shown. Where the flight starts and lands is measured when it starts and
  * when it flies. Under Reduce motion it does not move: it is shown, then
- * at its button. A screen reader hears "Gained …" or "Learned …" instead.
+ * at its button. A screen reader hears "Gained …" or "Learned …" for every
+ * gain as it is queued, whether or not it gets to fly.
  */
 const flights = useFlightStore()
 
@@ -41,12 +45,9 @@ function centre(element: Element | null): Point | null {
 }
 
 /** The name as the story shows it, with how many when more than one. */
-const label = computed(() => {
-  const flight = flights.current
-  if (!flight) return ''
-  const count = flight.count > 1 ? ` ×${flight.count}` : ''
-  return `${displayName(flight.name)}${count}`
-})
+const label = computed(() =>
+  flights.current ? flightLabel(flights.current) : '',
+)
 
 // A new flight comes up in the middle of the picture.
 watch(
@@ -61,18 +62,26 @@ watch(
       y: window.innerHeight / 2,
     }
     end.value = start.value
-    // Emptied first, so the same gain twice in a row is told twice.
-    const told = `${flight.kind === 'item' ? 'Gained' : 'Learned'} ${label.value}`
-    announcement.value = ''
-    clearTimeout(tellTimer)
-    tellTimer = setTimeout(() => {
-      announcement.value = told
-    }, ANNOUNCE_GAP_MS)
     enterTimer = setTimeout(() => {
       entered.value = true
     }, 20)
   },
   { immediate: true },
+)
+
+// Every gain is told as it is queued, whether or not it gets to fly; emptied
+// first, so the same gain twice in a row is told twice. Drawn anew (the stage
+// came back), it does not tell earlier gains again.
+watch(
+  () => flights.told,
+  (told) => {
+    announcement.value = ''
+    clearTimeout(tellTimer)
+    if (!told.length) return
+    tellTimer = setTimeout(() => {
+      announcement.value = told.join('. ')
+    }, ANNOUNCE_GAP_MS)
+  },
 )
 
 // It flies to the shown button of its kind (or stays where it is, if none is shown).

@@ -73,6 +73,19 @@ describe('useGameStore: panels held while a turn is narrated', () => {
     expect(store.groupHeld('stock')).toBe(false)
   })
 
+  it('on a picture stage does not hold the music for a talk that stays in the room', async () => {
+    const store = useGameStore()
+    store.setBridge(useBridge(async (): Promise<ActClass[]> => [Act1]))
+    await store.initGame()
+    store.dismissModal()
+    store.setPanelHold(true)
+    store.setScenePicture(true)
+    store.submitCommand('talk to voice')
+    store.submitCommand('talk to grandmother')
+    // The second talk stays in the cottage: the music is not held for it.
+    expect(store.musicRoomKey).toBe('EliorsCottage')
+  })
+
   it('shows the room a debug script ends in as soon as it ends', async () => {
     vi.stubGlobal(
       'fetch',

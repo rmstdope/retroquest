@@ -25,10 +25,7 @@ export function useBubbleAges(
 
   /** Mark every bubble with its age. */
   function mark(root: HTMLElement): void {
-    // In document order, whichever part of the selector each one matched.
-    const bubbles = Array.from(root.querySelectorAll(selector)).sort((a, b) =>
-      a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1,
-    )
+    const bubbles = Array.from(root.querySelectorAll(selector))
     // A bubble that stopped matching (shown no longer) loses its old mark.
     root.querySelectorAll('[data-age]').forEach((marked) => {
       if (!bubbles.includes(marked)) marked.removeAttribute('data-age')
