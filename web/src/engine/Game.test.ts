@@ -1492,7 +1492,7 @@ describe('Game', () => {
       expect(game.loadSaveData('not json')).toContain(
         '[failure]Failed to load game',
       )
-      expect(game.loadSaveData('{"version":99}')).toContain(
+      expect(game.loadSaveData('{"version":99,"state":{}}')).toContain(
         '[failure]Failed to load game',
       )
       expect(game.loadSaveData('{"version":1}')).toContain(

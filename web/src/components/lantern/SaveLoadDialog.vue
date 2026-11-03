@@ -11,8 +11,8 @@ import LanternDialog from './LanternDialog.vue'
  * at once; replacing a save or loading one asks first, inside its card.
  * A load closes the dialog; a save stays, marked "Just saved" (or the
  * dialog says the save failed). A save from an older version is dimmed with
- * its reason: it cannot be picked to load, but its slot can be saved over. Escape in a question cancels it first;
- * the next Escape closes the dialog.
+ * its reason: it cannot be picked to load, but its slot can be saved over.
+ * Escape in a question cancels it first; the next Escape closes the dialog.
  */
 const props = defineProps<{ mode: 'save' | 'load' }>()
 const emit = defineEmits<{ close: [] }>()

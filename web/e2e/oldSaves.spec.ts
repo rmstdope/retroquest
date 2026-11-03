@@ -57,6 +57,14 @@ test('old saves are dimmed with their reason and cannot be loaded', async ({
     'The quick save is from an older version',
   )
 
+  await page.getByRole('button', { name: /^Save game/ }).click()
+  const saving = page.getByRole('dialog', { name: 'Save game' })
+  await saving.locator('[data-slot="1"] .lq-slot-btn').click()
+  await expect(saving.locator('[data-slot="1"]')).toContainText('Just saved')
+  await page.keyboard.press('Escape')
+  await expect(saving).toHaveCount(0)
+
+  await page.getByRole('button', { name: 'Game menu' }).click()
   await page.getByRole('button', { name: /^Load game/ }).click()
   const dialog = page.getByRole('dialog', { name: 'Load game' })
   await expect(dialog.getByText('Pick a save to go back to.')).toBeVisible()
@@ -68,6 +76,9 @@ test('old saves are dimmed with their reason and cannot be loaded', async ({
   await expect(dialog.locator('[data-slot="2"]')).toContainText(
     'The Whispering Marsh',
   )
+  const good = dialog.locator('[data-slot="1"]')
+  await expect(good.locator('.lq-slot-btn')).toBeEnabled()
+  await expect(good.locator('.lq-slot-why')).toHaveCount(0)
   await page.keyboard.press('Escape')
   await expect(dialog).toHaveCount(0)
 })
@@ -102,12 +113,17 @@ test('typing load for an old save says so and leaves the game as it was', async 
     .getByRole('button', { name: /^Type( a command)?$/ })
     .first()
     .click()
+  const turns = page.locator('.lq-story .lq-turn')
+  const act = page.getByTestId('act')
+  const actBefore = await act.textContent()
+  const turnsBefore = await turns.count()
   const input = page.getByLabel('Command')
   await input.fill('load')
   await input.press('Enter')
 
-  const last = page.locator('.lq-story .lq-turn').last()
-  await expect(last).toContainText(OLD_LINE)
+  await expect(turns).toHaveCount(turnsBefore + 1)
+  await expect(turns.last()).toContainText(OLD_LINE)
+  await expect(act).toHaveText(actBefore ?? '')
   await expect(page.locator('.lq-story')).not.toContainText(
     'Failed to load game',
   )
