@@ -4,13 +4,15 @@ import LanternDialog from './LanternDialog.vue'
 
 /**
  * The game menu (the ☰ sheet on phones): Quick save and Quick load, then
- * Save game, Load game, Stats, Settings and Help.
+ * Save game, Load game, Stats, Settings and Help. Quick load is dimmed,
+ * and says why, when the quick save is from an older version.
  */
 export type InfoKind = 'stats' | 'help'
 export type MenuKind = 'save' | 'load' | 'settings' | InfoKind
 
 const emit = defineEmits<{ close: []; open: [kind: MenuKind] }>()
 const game = useGameStore()
+const quickSaveOld = game.getQuickSave()?.outdated === true
 
 function quickSave(): void {
   game.saveGame()
@@ -42,9 +44,18 @@ const ROWS: Array<{ kind: MenuKind; label: string; note: string }> = [
         <span class="lq-quick-label">Quick save</span>
         <span class="lq-note">Replaces the quick save</span>
       </button>
-      <button type="button" class="lq-quick-btn" @click="quickLoad">
+      <button
+        type="button"
+        class="lq-quick-btn"
+        :disabled="quickSaveOld"
+        @click="quickLoad"
+      >
         <span class="lq-quick-label">Quick load</span>
-        <span class="lq-note">Back to the quick save</span>
+        <span class="lq-note">{{
+          quickSaveOld
+            ? 'The quick save is from an older version'
+            : 'Back to the quick save'
+        }}</span>
       </button>
     </div>
     <div class="lq-menu-rows">
@@ -81,6 +92,10 @@ const ROWS: Array<{ kind: MenuKind; label: string; note: string }> = [
   font: inherit;
   text-align: left;
   cursor: pointer;
+}
+.lq-quick-btn:disabled {
+  opacity: 0.5;
+  cursor: default;
 }
 .lq-quick-label {
   font-size: 15px;
