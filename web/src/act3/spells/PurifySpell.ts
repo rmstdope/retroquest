@@ -14,6 +14,11 @@ export class PurifySpell extends Spell {
     })
   }
 
+  /** Give a spell known in an older save the current description, which says who taught it. */
+  override refreshSavedText(): void {
+    this.description = new PurifySpell().description
+  }
+
   /** Cast purify spell providing cleansing aura. */
   override castSpell(_gameState: GameState): string {
     // Act III version has no global gating; it always responds with a cleansing aura

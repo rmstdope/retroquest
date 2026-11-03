@@ -20,6 +20,11 @@ export class MendSpell extends Spell {
     })
   }
 
+  /** Give a spell known in an older save the current description, which says who taught it. */
+  override refreshSavedText(): void {
+    this.description = new MendSpell().description
+  }
+
   /** Cast the mend spell without a specific target. */
   override castSpell(_gameState: GameState): string {
     const name = this.name

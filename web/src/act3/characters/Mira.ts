@@ -69,6 +69,12 @@ export class Mira extends Character {
     super({ name: 'Mira', description: Mira.DESCRIPTION })
   }
 
+  /** Give an older save her current description, unless she has confessed (her description then follows the story). */
+  override refreshSavedText(gameState: GameState): void {
+    if (!gameState.getStoryFlag(FLAG_ACT3_MIRA_CONFESSED))
+      this.description = Mira.DESCRIPTION
+  }
+
   /**
    * Handle conversation with Mira, including quest start and teleportation.
    * No line repeats the typed command, so when her answer opens with a quote

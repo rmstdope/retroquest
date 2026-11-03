@@ -28,6 +28,11 @@ export class OuterWards extends Room {
     })
   }
 
+  /** Give a save made with older wording the current description. */
+  override refreshSavedText(): void {
+    this.description = new OuterWards().description
+  }
+
   /** Describe the courtyard and warding pillars without performing attunement. */
   override search(_gameState: GameState): string {
     return (

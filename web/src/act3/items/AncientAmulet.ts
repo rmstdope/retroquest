@@ -72,7 +72,7 @@ export class AncientAmulet extends Item {
   }
 
   /** Put the picture for the current stage back, so an older save shows the current wording. */
-  refreshDescription(): void {
+  override refreshSavedText(): void {
     this.description = PICTURES[this.stage]
   }
 

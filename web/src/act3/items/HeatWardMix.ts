@@ -18,6 +18,11 @@ export class HeatWardMix extends Item {
     })
   }
 
+  /** Give a save made with older wording the current description. */
+  override refreshSavedText(): void {
+    this.description = new HeatWardMix().description
+  }
+
   /**
    * Allow applying the mix directly to a target exposing `applyHeatWard`
    * (the fumarole room helper); otherwise fail.

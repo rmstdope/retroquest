@@ -11,6 +11,11 @@ export class LightSpell extends Spell {
     })
   }
 
+  /** Give a spell known in an older save the current description, which says who taught it. */
+  override refreshSavedText(): void {
+    this.description = new LightSpell().description
+  }
+
   /** Cast light spell, checking for room-specific lighting effects. */
   override castSpell(gameState: GameState): string {
     const room = gameState.currentRoom

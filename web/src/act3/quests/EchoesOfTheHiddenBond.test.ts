@@ -121,7 +121,7 @@ describe('Echoes of the Hidden Bond quest', () => {
 
   it('refreshes the completion text of an older save', () => {
     quest.completion = 'once apprentices to Malakar'
-    quest.refreshText(game.state)
+    quest.refreshSavedText(game.state)
     expect(quest.completion).toBe(new EchoesOfTheHiddenBondQuest().completion)
   })
 
@@ -134,7 +134,7 @@ describe('Echoes of the Hidden Bond quest', () => {
       items: [{ done: true, text: 'An old line' }],
     }
 
-    quest.refreshText(game.state)
+    quest.refreshSavedText(game.state)
 
     const details = quest.details()
     if (details.kind !== 'checklist') throw new Error('expected a checklist')
@@ -154,6 +154,7 @@ describe('Echoes of the Hidden Bond quest', () => {
     saved.completion = 'once apprentices to Malakar'
 
     new Act3().afterLoad(game.state)
+    game.state.refreshSavedText()
 
     expect(saved.completion).toBe(new EchoesOfTheHiddenBondQuest().completion)
   })

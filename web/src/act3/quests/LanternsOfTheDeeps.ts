@@ -25,6 +25,12 @@ export class LanternsOfTheDeepsQuest extends Quest {
     })
   }
 
+  /** Give an offered or finished quest from an older save the current completion text. */
+  override refreshSavedText(gameState: GameState): void {
+    if (gameState.nonActivatedQuests.includes(this)) return
+    this.completion = new LanternsOfTheDeepsQuest().completion
+  }
+
   /**
    * Trigger only after sigils complete and lantern brackets were found.
    *

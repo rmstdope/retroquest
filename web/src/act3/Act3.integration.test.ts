@@ -968,6 +968,7 @@ describe('Tobin and the saves', () => {
     const fresh = new Game([new Act3()])
     expect(fresh.loadSaveData(game.toSaveData())).toContain('loaded')
     new Act3().afterLoad(fresh.state)
+    fresh.state.refreshSavedText()
 
     expect(galleries(fresh).filter((n) => n === 'Tobin')).toHaveLength(1)
   })
@@ -975,6 +976,7 @@ describe('Tobin and the saves', () => {
   it('leaves Tobin out of a save from before the rescue', () => {
     const game = new Game([new Act3()])
     new Act3().afterLoad(game.state)
+    game.state.refreshSavedText()
     expect(galleries(game)).not.toContain('Tobin')
   })
 })
@@ -1037,6 +1039,7 @@ describe('Act 3 saves from before the stillwater phial stilled the pools', () =>
     game.state.setStoryFlag(FLAG_ACT3_OATH_OF_STILLNESS_COMPLETED, true)
 
     new Act3().afterLoad(game.state)
+    game.state.refreshSavedText()
 
     expect(phial.description).toContain('a young woman at a long table')
     expect(vestibule.items.some((i) => i instanceof DarkPool)).toBe(true)
@@ -1076,6 +1079,7 @@ describe('Act 3 saves from before the fortress threshold was reworded', () => {
     elixir.description = 'Old elixir text.'
 
     new Act3().afterLoad(game.state)
+    game.state.refreshSavedText()
 
     expect(entrance.description).toBe(new FortressEntrance().description)
     expect(gates.description).toBe(new FortressGates().description)

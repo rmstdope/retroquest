@@ -19,6 +19,12 @@ export class BreathOfTheMountain extends Quest {
     })
   }
 
+  /** Give an offered or finished quest from an older save the current completion text. */
+  override refreshSavedText(gameState: GameState): void {
+    if (gameState.nonActivatedQuests.includes(this)) return
+    this.completion = new BreathOfTheMountain().completion
+  }
+
   /** Mark quest as started. */
   override checkTrigger(gameState: GameState): boolean {
     return gameState.getStoryFlag(FLAG_ACT3_BREATH_OF_THE_MOUNTAIN_STARTED)

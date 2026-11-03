@@ -18,6 +18,11 @@ export class BlessSpell extends Spell {
     })
   }
 
+  /** Give a spell known in an older save the current description, which says who taught it. */
+  override refreshSavedText(): void {
+    this.description = new BlessSpell().description
+  }
+
   /** Cast bless on self. */
   override castSpell(gameState: GameState): string {
     gameState.setStoryFlag('journey_bless_completed', true)

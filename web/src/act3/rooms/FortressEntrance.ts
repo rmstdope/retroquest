@@ -21,4 +21,9 @@ export class FortressEntrance extends Room {
       exits: {},
     })
   }
+
+  /** Give a save made with older wording the current description. */
+  override refreshSavedText(): void {
+    this.description = new FortressEntrance().description
+  }
 }

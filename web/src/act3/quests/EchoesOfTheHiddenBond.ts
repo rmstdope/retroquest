@@ -59,7 +59,7 @@ export class EchoesOfTheHiddenBondQuest extends Quest {
    * flags, so an older save shows the current wording, a finished quest's
    * list included.
    */
-  refreshText(gameState: GameState): void {
+  override refreshSavedText(gameState: GameState): void {
     this.completion = COMPLETION
     this.rebuildLog(gameState)
   }

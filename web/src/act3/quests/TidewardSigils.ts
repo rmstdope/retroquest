@@ -20,6 +20,12 @@ export class TidewardSigilsQuest extends Quest {
     })
   }
 
+  /** Give an offered or finished quest from an older save the current description. */
+  override refreshSavedText(gameState: GameState): void {
+    if (gameState.nonActivatedQuests.includes(this)) return
+    this.description = new TidewardSigilsQuest().description
+  }
+
   /** Check if quest should trigger when reaching Shoreline Markers. */
   override checkTrigger(gameState: GameState): boolean {
     // Activate when the game has set the Tideward Sigils started flag.
