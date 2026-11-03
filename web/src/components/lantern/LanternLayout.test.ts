@@ -2135,16 +2135,12 @@ describe('LanternLayout', () => {
     })
 
     it('hurries on a Space on a focused action button, which is not pressed again', async () => {
-      await ready()
+      const w = await ready()
       await say(narratedTurn(1))
       const hurry = vi.spyOn(useNarrationStore(), 'hurry')
       // A verb sent from the laptop's actions keeps focus (Look, say).
-      const panel = document.createElement('section')
-      panel.className = 'lq-composer'
-      const look = document.createElement('button')
-      look.className = 'lq-verb'
-      panel.appendChild(look)
-      document.body.appendChild(panel)
+      const look = w.get('.lq-composer .lq-verb').element as HTMLElement
+      look.focus()
       const down = new KeyboardEvent('keydown', {
         key: ' ',
         bubbles: true,
@@ -2170,7 +2166,6 @@ describe('LanternLayout', () => {
       look.dispatchEvent(enter)
       expect(enter.defaultPrevented).toBe(false)
       expect(hurry).toHaveBeenCalledOnce()
-      panel.remove()
     })
 
     it('leaves Enter to the folded Actions: it opens and the voice goes on', async () => {
