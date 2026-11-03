@@ -13,6 +13,11 @@ export class Light extends Spell {
     })
   }
 
+  /** Give a save made before the Act IV wording review the current description. */
+  override refreshSavedText(): void {
+    this.description = new Light().description
+  }
+
   /** Cast light spell without a specific target. */
   override castSpell(gameState: GameState): string {
     // Every room has a light hook; rooms without a special effect answer by default

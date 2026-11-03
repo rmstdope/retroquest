@@ -29,6 +29,11 @@ export class Grow extends Spell {
     })
   }
 
+  /** Give a save made before the Act IV wording review the current description. */
+  override refreshSavedText(): void {
+    this.description = new Grow().description
+  }
+
   /** Greens the field when cast at home; otherwise the plants answer. */
   override castSpell(gameState: GameState): string {
     if (gameState.getStoryFlag(FLAG_ACT4_HOME_REACHED)) {

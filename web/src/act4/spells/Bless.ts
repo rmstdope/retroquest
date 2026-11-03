@@ -22,6 +22,11 @@ export class Bless extends Spell {
     })
   }
 
+  /** Give a save made before the Act IV wording review the current description. */
+  override refreshSavedText(): void {
+    this.description = new Bless().description
+  }
+
   /** Cast bless spell without a specific target. */
   override castSpell(gameState: GameState): string {
     // Check if the current room has a castBless method and call it
