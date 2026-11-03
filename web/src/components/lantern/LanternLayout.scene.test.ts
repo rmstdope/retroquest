@@ -141,6 +141,25 @@ describe('LanternLayout: change of scene', () => {
     expect(enter.defaultPrevented).toBe(true)
   })
 
+  it('on a phone skips on a Space on the folded Actions, which stays folded', async () => {
+    const game = await stage(true)
+    const scene = useSceneStore()
+    game.submitCommand('go north')
+    await w.vm.$nextTick()
+    await w.vm.$nextTick()
+    expect(scene.turn).not.toBeNull()
+    const actions = w.get('.lq-dock-open').element
+    const space = new KeyboardEvent('keydown', {
+      key: ' ',
+      bubbles: true,
+      cancelable: true,
+    })
+    actions.dispatchEvent(space)
+    expect(scene.turn).toBeNull()
+    // Handled: the browser does not also press the button and open the sheet.
+    expect(space.defaultPrevented).toBe(true)
+  })
+
   it('a command during the change skips it and leaves the new room up', async () => {
     const game = await stage()
     const scene = useSceneStore()
