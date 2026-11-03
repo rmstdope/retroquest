@@ -5,6 +5,8 @@ import { createPinia, setActivePinia } from 'pinia'
 import { useActMusic } from './useActMusic'
 import { useGameStore } from '@/stores/useGameStore'
 import { useNarrationStore } from '@/stores/useNarrationStore'
+import { useSettingsStore } from '@/stores/useSettingsStore'
+import { FakeAudioContext } from '@/testing/fakeAudioContext'
 import {
   MUSIC_DUCK,
   MUSIC_DUCK_FADE_MS,
@@ -344,5 +346,96 @@ describe('useActMusic', () => {
       expect(mainAudio.src).toBe(`/audio/music/${encodeURIComponent(MARKET)}`)
       scope.stop()
     })
+  })
+})
+
+/**
+ * Last in the file: the page's one AudioContext, once made, stays for every
+ * test after.
+ */
+describe('useActMusic with the effects of a room', () => {
+  let ctx: FakeAudioContext
+  const DREAM_MUSIC = { 'act1-the-dream': { file: 'dream.mp3', duration: 60 } }
+  const EFFECTS = {
+    rain: { file: 'rain.mp3', duration: 20 },
+    lightning: { file: 'lightning.mp3', duration: 4 },
+  }
+
+  /** Serves the two manifests as JSON and any other file as audio. */
+  function serve(): void {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn((url: string) =>
+        Promise.resolve({
+          ok: true,
+          json: () =>
+            Promise.resolve(
+              url.startsWith('/audio/music/') ? DREAM_MUSIC : EFFECTS,
+            ),
+          arrayBuffer: () => Promise.resolve(new ArrayBuffer(1)),
+        }),
+      ),
+    )
+  }
+
+  /** Lets the manifests, the fetches and the decodes settle. */
+  async function ready(): Promise<void> {
+    for (let i = 0; i < 3; i++) await settle()
+  }
+
+  /** The gain every effect plays into: the one an ambience's own gain connects to. */
+  function effectsBus() {
+    return [...ctx.gains]
+      .reverse()
+      .find((gain) =>
+        ctx.gains.some((other) => other.connect.mock.calls[0]?.[0] === gain),
+      )
+  }
+
+  /** Starts the music in The Dream and returns the scope. */
+  async function startInTheDream(): Promise<ReturnType<typeof effectScope>> {
+    const scope = effectScope()
+    scope.run(() => useActMusic())
+    const game = useGameStore()
+    game.musicFile = 'Conquest - Market (freetouse.com).mp3'
+    game.musicActName = 'Act1'
+    game.musicRoomKey = 'TheDream'
+    await ready()
+    return scope
+  }
+
+  beforeEach(() => {
+    setActivePinia(createPinia())
+    vi.stubGlobal('Audio', FakeAudio)
+    vi.stubGlobal('AudioContext', FakeAudioContext)
+    serve()
+  })
+  afterEach(() => vi.unstubAllGlobals())
+
+  it("plays the rain round and round with The Dream's music", async () => {
+    const scope = await startInTheDream()
+    ctx = FakeAudioContext.last
+    const loops = ctx.sources.filter((source) => source.loop)
+    // The music's loop and the rain's.
+    expect(loops).toHaveLength(2)
+    for (const loop of loops) expect(loop.start).toHaveBeenCalled()
+    scope.stop()
+    for (const loop of loops) expect(loop.stop).toHaveBeenCalled()
+  })
+
+  it('plays the effects at the effects volume, and none with effects off', async () => {
+    const settings = useSettingsStore()
+    settings.effectsVolume = 40
+    const scope = await startInTheDream()
+    ctx = FakeAudioContext.last
+    expect(effectsBus()?.gain.value).toBeCloseTo(0.4)
+    settings.effectsOn = false
+    await nextTick()
+    expect(effectsBus()?.gain.value).toBe(0)
+    settings.effectsOn = true
+    settings.effectsVolume = 80
+    await nextTick()
+    expect(effectsBus()?.gain.value).toBeCloseTo(0.8)
+    scope.stop()
   })
 })

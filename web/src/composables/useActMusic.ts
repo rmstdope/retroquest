@@ -2,7 +2,10 @@ import { onScopeDispose, ref, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useGameStore } from '@/stores/useGameStore'
 import { useNarrationStore } from '@/stores/useNarrationStore'
-import { MUSIC_FADE_IN_MS, useMusic } from './useMusic'
+import { useSettingsStore } from '@/stores/useSettingsStore'
+import { MUSIC_FADE_IN_MS, useMusic, type AmbienceSource } from './useMusic'
+import { prepareAmbience } from './ambience'
+import { ambientClipsFor, loadChosenEffects } from './chosenEffects'
 import {
   chooseTrack,
   GENERATED_MUSIC_DIR,
@@ -41,6 +44,10 @@ const MEDIA_KEYS: readonly MediaSessionAction[] = ['play', 'pause', 'stop']
  * The first track, when it loads under the game's title page, fades in over
  * `MUSIC_FADE_IN_MS`.
  *
+ * A room's chosen take plays the room's chosen sound effects with it (see
+ * `effectLists.ts`), through one effects bus at the player's effects volume:
+ * they start with the take, fade with it and stop with it.
+ *
  * When the calling component's scope ends, the music stops and the
  * listeners are removed.
  */
@@ -57,10 +64,31 @@ export function useActMusic(): ReturnType<typeof useMusic> {
   void loadChosenManifest().then((manifest) => {
     chosen.value = manifest
   })
+  const chosenEffects = loadChosenEffects()
+  const settings = useSettingsStore()
+  const effectsLevel = (): number =>
+    settings.effectsOn ? settings.effectsVolume / 100 : 0
+  /** Where every effect plays into, at the effects volume; made with the first. */
+  let effectsBus: GainNode | null = null
+  const ambienceFor: AmbienceSource = async (file, context) => {
+    const clips = chosen.value
+      ? ambientClipsFor(file, chosen.value, await chosenEffects)
+      : []
+    if (clips.length === 0) return null
+    if (!effectsBus) {
+      effectsBus = context.createGain()
+      effectsBus.gain.value = effectsLevel()
+      effectsBus.connect(context.destination)
+    }
+    return prepareAmbience(context, clips, effectsBus)
+  }
+  watch(effectsLevel, (level) => {
+    if (effectsBus) effectsBus.gain.value = level
+  })
   const audio = new Audio()
   audio.loop = true
   const { isNarrating } = storeToRefs(useNarrationStore())
-  const music = useMusic(audio, isNarrating)
+  const music = useMusic(audio, isNarrating, ambienceFor)
   /** Whether a track has been asked for yet; only the first can be the title page's. */
   let started = false
 
@@ -113,6 +141,7 @@ export function useActMusic(): ReturnType<typeof useMusic> {
     for (const gesture of GESTURES) window.removeEventListener(gesture, resume)
     setMediaKeyHandlers(null)
     music.loadTrack('', '')
+    effectsBus?.disconnect()
   })
 
   return music

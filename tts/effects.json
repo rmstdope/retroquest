@@ -1,0 +1,13 @@
+[
+  {
+    "id": "rain",
+    "description": "heavy rain beating on wooden shutters in the dark, a steady downpour, no thunder",
+    "seconds": 20,
+    "loops": true
+  },
+  {
+    "id": "lightning",
+    "description": "a lightning strike very close by, a sharp crack of thunder that shakes the air and rolls away into the distance",
+    "seconds": 5
+  }
+]

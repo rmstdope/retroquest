@@ -71,5 +71,14 @@
       "manifest": "web/public/images/generated/manifest.json"
     }
   },
+  "effects": {
+    "refresh": "cd web && npx -y tsx@4.23.15 --tsconfig tsconfig.json ../tts/extract-effects.ts",
+    "paths": {
+      "list": "tts/effects.json",
+      "lock": "effects/effects.lock.json",
+      "clips": "web/public/audio/soundeffects/generated",
+      "manifest": "web/public/audio/soundeffects/generated/manifest.json"
+    }
+  },
   "takeFade": 0.5
 }
