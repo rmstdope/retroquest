@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
-import { useGameStore, type Turn } from '@/stores/useGameStore'
+import { useGameStore } from '@/stores/useGameStore'
 import { renderMarkup } from '@/utils/theme'
 import { useSettingsStore } from '@/stores/useSettingsStore'
 import { useNarrationStore } from '@/stores/useNarrationStore'
@@ -8,22 +8,8 @@ import { useStageSpeechStore } from '@/stores/useStageSpeechStore'
 import { useArrivalStore } from '@/stores/useArrivalStore'
 import { useSceneStore } from '@/stores/useSceneStore'
 import { useFlightStore } from '@/stores/useFlightStore'
-import {
-  POPUP_NARRATION_ID,
-  chapterUnits,
-  firstQuestUnit,
-  readsArrival,
-  turnUnits,
-} from '@/lantern/narrationUnits'
-import { actFolder } from '@/lantern/narrationManifest'
-import {
-  arrivalParts,
-  arrivesOnPicture,
-  newsOnPicture,
-  newsParts,
-  readingTimeMs,
-  sceneBlock,
-} from '@/lantern/stageArrival'
+import { firstQuestUnit } from '@/lantern/narrationUnits'
+import { sceneBlock } from '@/lantern/stageArrival'
 import { parseTurn } from '@/lantern/parseTurn'
 import { decideHurryKey } from '@/lantern/hurryKeys'
 import {
@@ -31,7 +17,7 @@ import {
   ResizeLanding,
   type StoryGeometry,
 } from '@/lantern/ResizeLanding'
-import { usePanelHold } from '@/composables/usePanelHold'
+import { useLanternPresentation } from '@/composables/useLanternPresentation'
 import { useAudio } from '@/composables/useAudio'
 import { useActMusic } from '@/composables/useActMusic'
 import { useFocusTrap } from '@/composables/useFocusTrap'
@@ -119,8 +105,9 @@ import TitlePage from './TitlePage.vue'
  * After the last act, Finish the game asks to save (FinishDialog), then
  * only the end screen shows; the act's music keeps playing under it.
  * A player's command, and the arrival that opens an act, is narrated when the
- * act has recordings and narration is on (`useNarrationStore`): the layout
- * starts it with the new turn, a click on
+ * act has recordings and narration is on (`useNarrationStore`):
+ * `useLanternPresentation` starts it with the new turn (and reads a chapter
+ * page, and decides what stops either), a click on
  * the story hurries it (two skip), Space/Enter hurry while focus is not on a
  * field or a control (Space also on the folded bar's Actions; an arrival on the picture goes on a part instead), Escape skips (also in the command box, unless its word
  * list is open), and a pop-up stops it. Building a command (typing, verbs,
@@ -146,7 +133,6 @@ const narration = useNarrationStore()
 const speech = useStageSpeechStore()
 const arrival = useArrivalStore()
 const scene = useSceneStore()
-const panelHold = usePanelHold()
 const wide = useMediaQuery(WIDE_QUERY)
 const short = useMediaQuery(SHORT_QUERY)
 /** A phone (or any screen under the laptop stage) that is not short: the picture stage, arranged for a tall screen. */
@@ -851,7 +837,6 @@ onUnmounted(() => {
   document.removeEventListener('keyup', onSpaceUp)
   document.removeEventListener('focusin', onFocusChange)
   document.removeEventListener('focusout', onFocusChange)
-  narration.skipAll()
   storyResize?.disconnect()
   contentResize?.disconnect()
   resizeLanding.dispose()
@@ -882,165 +867,11 @@ watch(storyHeld, async (held) => {
   updateMoreBelow()
 })
 
-// The running act's recordings load in good time for its first answer.
-watch(
-  () => game.narrationFolder,
-  (folder) => {
-    if (folder) void narration.preload(folder)
-  },
-  { immediate: true },
-)
-
-// A new answer cuts in on the one being narrated, then is narrated itself
-// when it is a player's command or an act's opening arrival in an act with
-// recordings (never behind a pop-up). Runs before the story renders, so nothing flashes unspoken.
-watch(
-  () => game.turns.at(-1)?.id,
-  () => {
-    // The change of scene of the move before is brought up first (its words are
-    // told, then cut in on below); a talk still to change scene lets go of its words.
-    speech.changeSceneNow()
-    scene.skip()
-    arrival.clear()
-    narration.skipAll()
-    const turn = game.turns.at(-1)
-    const folder = game.narrationFolder
-    const manifest = folder ? narration.manifestFor(folder) : null
-    const onPicture =
-      !!turn && staged.value && !game.showModal && arrivesOnPicture(turn)
-    // News (a learned spell, then quest news) is told in the middle too, after
-    // the turn's words (and its arrival). The learned lines leave the card
-    // first: the narration and the story read the turn's text after this.
-    const news =
-      !!turn && staged.value && !game.showModal && newsOnPicture(turn)
-    const spells = news && !!turn?.spells?.length
-    if (turn && spells) game.tellSpellsInMiddle(turn.id)
-    // The units the narration plays; the arrival on the picture waits to read
-    // its description while events that nobody speaks are read, and a quest
-    // piece nobody speaks is read before the next one.
-    const unitOptions = { readSilentNews: news, spellNews: spells }
-    let units =
-      turn?.narrate && (manifest || onPicture)
-        ? turnUnits(turn, readsArrival(turn), manifest ?? {}, unitOptions)
-        : []
-    const parts = turn && onPicture ? arrivalParts(turn, units) : []
-    const events = parts[0]?.kind === 'events' && !parts[0].voiced
-    if (turn?.narrate && events)
-      units = turnUnits(turn, readsArrival(turn), manifest ?? {}, {
-        ...unitOptions,
-        arrivalPauseMs: readingTimeMs(
-          parts[0].lines.map((line) => line.markup).join(' '),
-        ),
-      })
-    if (turn && news) parts.push(...newsParts(turn, units))
-    // A move to a room with another picture is a change of scene: the words
-    // and the narrator wait until the new picture is fully up.
-    const changing =
-      !!turn &&
-      staged.value &&
-      !game.showModal &&
-      !motionReduced() &&
-      scene.shown !== null &&
-      game.roomPicture !== scene.shown
-    // A talk that moves Elior keeps the old picture and changes scene partway.
-    const sceneAt =
-      !!turn &&
-      !changing &&
-      staged.value &&
-      !game.showModal &&
-      scene.shown !== null
-        ? sceneBlock(turn, parseTurn(turn.text))
-        : -1
-    if (turn?.narrate && folder && manifest && !game.showModal)
-      narration.begin(turn.id, units, folder, changing, sceneAt)
-    if (turn && changing) scene.begin(turn.id, game.roomPicture, tellTurn)
-    else tellTurn()
-    /** The conversation, the arrival and the narrator of the turn: now, or once its picture is up. */
-    function tellTurn(): void {
-      if (!turn) return
-      // The room's name goes with the picture (at the dark, or here when skipped
-      // or with no fade); a talk's goes where its scene changes (`changeScene`).
-      if (
-        changing ||
-        (staged.value && !game.showModal && motionReduced() && sceneAt < 0)
-      )
-        game.releasePanels(turn.id, ['place'], true)
-      if (changing) narration.start(turn.id)
-      // The conversation on the picture (laptop only) follows the turn; it reads
-      // the narration just begun, so it comes after it and before the news
-      // that waits for it.
-      const unnarratedScene =
-        sceneAt >= 0 && !narration.narrates(turn.id)
-          ? { unit: sceneAt, reached: () => changeScene(turn, sceneAt) }
-          : null
-      if (staged.value) speech.observe(turn, unnarratedScene)
-      if (parts.length)
-        arrival.show(turn.id, parts, narration.narrates(turn.id))
-      // Its panels wait for the voice, or, with none to wait for, change now.
-      if (narration.narrates(turn.id)) panelHold.track(turn)
-      else if (!unnarratedScene) panelHold.settle(turn)
-    }
-  },
-)
-
-/** The latest talk that moves Elior and where its room changes, until it has. */
-let talkCut: { turn: number; at: number } | null = null
-watch(
-  () => game.turns.at(-1),
-  (turn) => {
-    const at = turn ? sceneBlock(turn, parseTurn(turn.text)) : -1
-    talkCut = turn && at >= 0 ? { turn: turn.id, at } : null
-  },
-  { flush: 'sync' },
-)
-// The music moves with the room: when the talk's does (its scene changes, it is
-// skipped, a newer command cuts in), what it told in the old room leaves the screen.
-watch(
-  () => game.musicRoomKey,
-  () => {
-    if (!talkCut) return
-    scene.cut(talkCut.turn, talkCut.at)
-    talkCut = null
-  },
-  { flush: 'sync' },
-)
-
-// A narrated talk that moves Elior changes scene where the narrator stops for it.
-watch(
-  () => {
-    const turn = game.turns.at(-1)
-    return turn && narration.atSceneChange(turn.id) ? turn : null
-  },
-  (turn) => {
-    if (turn) changeScene(turn, sceneBlock(turn, parseTurn(turn.text)))
-  },
-)
-
-/**
- * The scene of talk `turn` changes now, before its block `at`: what it told
- * in the old room leaves the screen, the music and the picture move to the
- * new room through the dark, and the rest of the talk waits until the
- * picture is up. Under Reduce motion, or with the same picture,
- * they (and the room's name) move at once with no fade. Nothing happens once a
- * newer turn has come.
- */
-function changeScene(turn: Turn, at: number): void {
-  if (game.turns.at(-1)?.id !== turn.id) return
-  game.releaseMusic(turn.id)
-  const narrated = narration.narrates(turn.id)
-  const up = (): void => {
-    // A newer turn brings this one up only to cut in on it: no voice starts.
-    if (game.turns.at(-1)?.id !== turn.id) return
-    if (narrated) narration.passSceneChange(turn.id)
-    else panelHold.settle(turn)
-  }
-  if (game.roomPicture !== scene.shown && !motionReduced())
-    scene.begin(turn.id, game.roomPicture, up, at)
-  else {
-    game.releasePanels(turn.id, ['place'], true)
-    up()
-  }
-}
+/** When the story's and the chapter pages' presentations start, and what stops them. */
+const presentation = useLanternPresentation({
+  staged: () => staged.value,
+  motionReduced,
+})
 
 const flights = useFlightStore()
 /** The newest turn whose gained things have flown (or were let be): each turn's fly once. */
@@ -1069,14 +900,6 @@ watch(
   },
 )
 
-// The room's name (the place panels) changes at the darkest moment of a change of scene.
-watch(
-  () => scene.darkTurn,
-  (id) => {
-    if (id !== null) game.releasePanels(id, ['place'], true)
-  },
-)
-
 // The picture and music follow the room at once on the picture stage.
 watch(staged, (on) => game.setScenePicture(on), { immediate: true })
 onUnmounted(() => game.setScenePicture(false))
@@ -1090,10 +913,6 @@ function motionReduced(): boolean {
   )
 }
 
-// The panels of a narrated command are held for this layout; leaving lets go.
-game.setPanelHold(true)
-onUnmounted(() => game.setPanelHold(false))
-
 /**
  * A press on something in a held panel (room card, map, journal, the exits
  * bar) only brings the panels up to date; the player presses again to act.
@@ -1103,32 +922,13 @@ function onPanelPress(event: MouseEvent): void {
   const target = event.target instanceof Element ? event.target : null
   if (!target?.closest('[data-panel] :is(button, a, [role="button"])')) return
   // A press during a change of scene (or before a talk's) brings the new room up first.
-  speech.changeSceneNow()
-  scene.skip()
+  presentation.bringSceneUp()
   // Opening the sheet changes nothing the voice holds: it never waits for it.
   if (target.closest('.lq-dock-open, .lq-dock-icon')) return
-  if (!panelHold.catchUp()) return
+  if (!presentation.catchUpPanels()) return
   event.stopPropagation()
   event.preventDefault()
 }
-
-// The act-complete page waits while the act's last turn is read aloud (a
-// pop-up would cut the voice off), then opens; with nothing to read, at once.
-game.setActEndGate(
-  (turn) =>
-    !!turn.narrate &&
-    settings.narrationOn &&
-    !!game.narrationFolder &&
-    !!narration.manifestFor(game.narrationFolder),
-)
-watch(
-  () => [game.actEndPending, narration.isNarrating] as const,
-  ([pending, narrating]) => {
-    if (pending && !narrating) game.resumeActEnd()
-  },
-  { flush: 'post' },
-)
-onUnmounted(() => game.setActEndGate(null))
 
 // Each quest card's chime rings when the card shows: as the narration reaches
 // it, or at once with its turn (cards shown together ring once). News told in
@@ -1185,57 +985,6 @@ watch(
     else game.ringQuestSounds(up.turnId, [up.index])
   },
 )
-
-// A pop-up, or a new game, stops the voice (a pop-up's own narration follows).
-watch(
-  () => [game.showModal, game.gameNumber] as const,
-  ([open]) => {
-    if (open || narration.isNarrating) narration.skipAll()
-  },
-)
-
-// A new game counts its narrated turns (for the hint) from the start.
-watch(() => game.gameNumber, narration.resetGame)
-// A new game forgets which turns told their news in the middle.
-watch(() => game.gameNumber, arrival.reset)
-
-// Switching narration off in Settings ends the turn being spoken.
-watch(
-  () => settings.narrationOn,
-  (on) => {
-    if (!on) {
-      narration.skipAll()
-      clearArrival()
-    }
-  },
-)
-
-// A chapter page is read aloud when its act has recordings; one page
-// following another cuts in on it, and closing the last one stops the voice;
-// a page under the title page is read once that is gone. Declared after the watch above so the old voice is cut
-// first, and before the render so nothing flashes unspoken.
-watch(
-  () => [game.showModal, game.modalChapter, game.showTitle] as const,
-  async ([open, chapter, title]) => {
-    narration.skipAll()
-    // The game's first chapter page waits under the title page.
-    if (!open || title || !chapter) return
-    const folder = actFolder(chapter.act)
-    if (!folder) return
-    await narration.preload(folder)
-    // Still the same page once the recordings are in?
-    if (!game.showModal || game.modalChapter !== chapter) return
-    const manifest = narration.manifestFor(folder)
-    if (!manifest) return
-    narration.begin(POPUP_NARRATION_ID, chapterUnits(chapter, manifest), folder)
-  },
-)
-
-/** Leave a chapter page: its voice stops, then the game goes on (also for Escape). */
-function continueFromChapter(): void {
-  narration.skipAll()
-  game.continueChapter()
-}
 
 // Show a new turn from its start (jsdom has no scrollIntoView). A command
 // run from another section (Use, Cast, Go) first brings the story back, and
@@ -1487,7 +1236,7 @@ const chapterTrap = useFocusTrap(chapterDialog)
 function onChapterKeydown(event: KeyboardEvent): void {
   if (event.key === 'Escape') {
     event.stopPropagation()
-    continueFromChapter()
+    presentation.continueChapter()
   } else chapterTrap.onKeydown(event)
 }
 
@@ -1843,7 +1592,7 @@ watch(
           ref="chapterPage"
           :chapter="game.modalChapter"
           title-id="lq-dialog-title"
-          @continue="continueFromChapter()"
+          @continue="presentation.continueChapter()"
         />
       </section>
 
