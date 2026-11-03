@@ -22,7 +22,7 @@
 export const LANDING_SETTLE_MS = 600
 /** How long (ms) after a resize the view of the player's reading is kept, longer than the landing. */
 export const VIEW_FREEZE_MS = 800
-/** Slack (px) so rounding never misplaces a turn's edge against the pane's. */
+/** Slack (px) so rounding never misplaces a turn's edge against the pane's, nor leaves the pill up at the very end (shared with the layout's pill, so the two agree). */
 export const END_SLACK = 8
 
 /** Where the player was reading: the turn at the pane's top edge, how far it starts above it, how tall it was, and whether that is the newest. */

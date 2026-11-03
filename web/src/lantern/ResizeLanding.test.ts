@@ -257,14 +257,33 @@ describe('ResizeLanding', () => {
       expect(clock.pendingFrames).toBe(0)
     })
 
-    it('stops everything when disposed', () => {
+    it('stops landing when disposed', () => {
       scroll = topOf(4)
       landing.note()
       landing.begin(landing.capture())
-      size = '420x800'
       landing.dispose()
       expect(landing.landing).toBe(false)
       expect(clock.pendingFrames).toBe(0)
+    })
+
+    it('stops waiting for the window to settle when disposed', () => {
+      let measured = 0
+      const counted = new ResizeLanding(
+        {
+          ...ports,
+          measure: () => {
+            measured++
+            return ports.measure()
+          },
+        },
+        clock,
+      )
+      counted.start()
+      size = '420x800'
+      counted.note()
+      counted.dispose()
+      clock.advance(VIEW_FREEZE_MS)
+      expect(measured).toBe(0)
     })
   })
 })

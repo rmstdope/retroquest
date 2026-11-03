@@ -26,7 +26,11 @@ import {
 } from '@/lantern/stageArrival'
 import { parseTurn } from '@/lantern/parseTurn'
 import { decideHurryKey } from '@/lantern/hurryKeys'
-import { ResizeLanding, type StoryGeometry } from '@/lantern/ResizeLanding'
+import {
+  END_SLACK,
+  ResizeLanding,
+  type StoryGeometry,
+} from '@/lantern/ResizeLanding'
 import { usePanelHold } from '@/composables/usePanelHold'
 import { useAudio } from '@/composables/useAudio'
 import { useActMusic } from '@/composables/useActMusic'
@@ -430,8 +434,6 @@ const { held: storyHeld, moveTo: moveStory, refollow } = useStoryFollow(storyEl)
 /** Unread story below the visible part (a long turn opens at its start). */
 const moreBelow = ref(false)
 const moreBelowButton = ref<HTMLButtonElement | null>(null)
-/** Slack so rounding never leaves the pill up at the very end. */
-const END_SLACK = 8
 /** A story sliver (beside the open sheet on a small phone) has no room for it. */
 const PILL_ROOM = 96
 
