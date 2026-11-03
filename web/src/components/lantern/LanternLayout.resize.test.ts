@@ -431,20 +431,78 @@ describe('where the story lands after the window crosses 1100 px', () => {
     expect(pane().scrollTop).toBe(topOf(1))
   })
 
+  /** Change the window to `width` by `height`, and tell the layout which of its sizes that is. */
+  async function resizeTo(width: number, height: number): Promise<void> {
+    window.innerWidth = width
+    window.innerHeight = height
+    wide = width >= 1024 && height >= 560
+    short = height < 520
+    for (const [query, fn] of Object.entries(listeners)) {
+      if (query.includes('max-height')) fn({ matches: short })
+      else if (query.includes('min-height')) fn({ matches: wide })
+    }
+    await nextTick()
+    await nextTick()
+  }
+
   it('opens the transcript on the newest turn when the window becomes short', async () => {
     wide = false
     window.innerWidth = 900
     window.innerHeight = 757
     await mountWith(5)
     await readNewest()
-    // The window is made about 480 px high: the stage gives way to the transcript.
-    window.innerHeight = 480
-    short = true
-    for (const [query, fn] of Object.entries(listeners))
-      if (query.includes('max-height')) fn({ matches: true })
-    await nextTick()
-    await nextTick()
+    await resizeTo(900, 480)
     expect(content().children.length).toBe(5)
     expect(pane().scrollTop).toBe(totalHeight(5) - PANE)
+  })
+
+  it('opens the transcript on the newest turn when a laptop window becomes short', async () => {
+    newestHeight = 900
+    window.innerWidth = 1024
+    window.innerHeight = 768
+    await mountWith(5)
+    await readNewest()
+    await resizeTo(1024, 480)
+    expect(content().children.length).toBe(5)
+    expect(pane().scrollTop).toBe(topOf(4))
+  })
+
+  it('opens the transcript on the newest turn when the stage showed no card', async () => {
+    window.innerWidth = 1024
+    window.innerHeight = 768
+    useGameStore().turns = Array.from({ length: 5 }, (_, i) => turn(i + 1, ''))
+    w = mount(LanternLayout, { attachTo: document.body })
+    await nextTick()
+    layOut()
+    expect(content().children.length).toBe(0)
+    await resizeTo(1024, 480)
+    expect(content().children.length).toBe(5)
+    expect(pane().scrollTop).toBe(totalHeight(5) - PANE)
+  })
+
+  it('leaves a player scrolled back on the stage where the transcript opens', async () => {
+    newestHeight = 900
+    window.innerWidth = 1024
+    window.innerHeight = 768
+    await mountWith(5)
+    const where = topOf(1)
+    pane().scrollTop = where
+    pane().dispatchEvent(new Event('scroll'))
+    await resizeTo(1024, 480)
+    expect(content().children.length).toBe(5)
+    expect(pane().scrollTop).toBe(where)
+  })
+
+  it('leaves the stage to place its card when a short window grows tall again', async () => {
+    wide = false
+    short = true
+    window.innerWidth = 900
+    window.innerHeight = 480
+    await mountWith(5)
+    await readNewest()
+    pane().scrollTop = 150
+    await resizeTo(900, 757)
+    expect(document.querySelector('.lq-cards')).not.toBeNull()
+    expect(pane().scrollTop).toBe(150)
   })
 })

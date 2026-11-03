@@ -583,11 +583,13 @@ function onStoryKeydown(event: KeyboardEvent): void {
 watch(
   [column, staged],
   async ([_column, nowStaged], [_wasColumn, wasStaged]) => {
-    const story = storyEl.value
-    const content = contentEl.value
-    if (!story || !content || content.children.length === 0) return
+    const toText = nowStaged !== wasStaged
     const view = resizeLanding.capture()
-    if (nowStaged !== wasStaged && (nowStaged || !view.atNewest)) return
+    if (toText && (nowStaged || !view.atNewest)) return
+    const content = contentEl.value
+    if (!storyEl.value || !content) return
+    // A stage with no card still opens a text page with every turn on it.
+    if (!toText && content.children.length === 0) return
     resizeLanding.end()
     await nextTick()
     resizeLanding.begin(view)
