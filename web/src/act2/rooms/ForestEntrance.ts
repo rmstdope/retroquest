@@ -7,7 +7,7 @@ import {
 import { EnchantedAcorn } from '../items/EnchantedAcorn'
 import { ForestSprites } from '../characters/ForestSprites'
 
-/** The Forest Entrance base text; `Act2.afterLoad` restores it in older saves. */
+/** The Forest Entrance base text; `refreshSavedText` restores it in older saves. */
 export const FOREST_ENTRANCE_DESCRIPTION =
   'Massive trees create a natural cathedral as you enter the Enchanted Forest. ' +
   'Dappled sunlight filters through the dense canopy, and the path ahead ' +

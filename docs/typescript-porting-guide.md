@@ -71,11 +71,12 @@ default in `web/src/engine/`; content classes override only what they need.
 | `Character` | `receiveSpell(gs, spell)` | take over a spell cast on the character before the spell's own `castOnCharacter` |
 | `Spell` | `castOnName(gs, target)` | a cast on a name that is neither an item nor a character in reach |
 | `Quest` | `setJournal(earlier, latest)` / `setChecklist(checklist, description)` | the quest log as a journal of stages, or as a checklist; `details()` is what the UI reads |
+| `Room`, `Item`, `Character`, `Spell`, `Quest` | `refreshSavedText(gs)` | give static text a save keeps (a description, a name) its current wording; called on every load, after the act's `afterLoad`, for every room, room item and character, carried item, known spell and quest; idempotent |
 | `Quest` | `hint(gs)` | the line `hint` gives for this quest; the default is the newest journal entry or the next open checklist item |
 | `Act` | `getCompletionHook(gs)` | the line that opens the act-complete page |
 | `Act` | `unknownSpell(gs, name)` | the failure for a spell the player does not know, when the story has taken spells away |
 | `Act` | `carriedFlags()` | the story flags whose values travel into every later act (virtues always do) |
-| `Act` | `afterLoad(gs)` | bring a loaded save up to date; idempotent |
+| `Act` | `afterLoad(gs)` | migrate a loaded save's state (add what it lacks, carry old flags over); wording belongs to `refreshSavedText`; idempotent |
 | `Act` | `onRoomChanged(gs, from, to)` | after a walk, before the new room's `onEnter`; lets characters follow |
 
 The `Game` starts an act in the first room of its `rooms` map. A character may

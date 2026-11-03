@@ -4,7 +4,7 @@ import {
   FLAG_READ_SQUIRES_DIARY,
 } from '../Act2StoryFlags'
 
-/** The documents' description; `Act2.afterLoad` restores it in older saves. */
+/** The documents' description; `refreshSavedText` restores it in older saves. */
 export const SECRET_DOCUMENTS_DESCRIPTION =
   'A sealed packet of papers: a sworn confession and a letter closed with ' +
   'black wax.'

@@ -1,6 +1,6 @@
 import { Room } from '@/engine'
 
-/** The room's description; `Act2.afterLoad` restores it in older saves. */
+/** The room's description; `refreshSavedText` restores it in older saves. */
 export const WHISPERING_GLADE_DESCRIPTION =
   'A meadow opens round a small stream that runs over smooth stones. ' +
   "Wildflowers grow thick to the water's edge. Under the sound of the " +

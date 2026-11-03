@@ -1,7 +1,7 @@
 import { type NameOptions, Item, type GameState, writing } from '@/engine'
 import { FLAG_READ_SQUIRES_DIARY } from '../Act2StoryFlags'
 
-/** The diary's description; `Act2.afterLoad` restores it in older saves. */
+/** The diary's description; `refreshSavedText` restores it in older saves. */
 export const SQUIRES_DIARY_DESCRIPTION =
   'A worn leather-bound diary belonging to a former squire. The pages are ' +
   'filled with observations about castle life and training exercises. There are ' +

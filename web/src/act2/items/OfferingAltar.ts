@@ -4,7 +4,7 @@ import { DruidicCharm } from './DruidicCharm'
 import { NaturesCharm } from './NaturesCharm'
 import { ProtectiveCharm } from './ProtectiveCharm'
 
-/** The altar's description; `Act2.afterLoad` restores it in older saves. */
+/** The altar's description; `refreshSavedText` restores it in older saves. */
 export const OFFERING_ALTAR_DESCRIPTION =
   'An altar cut from one block of starstone, pale and speckled. Three ' +
   'hollows are carved in its top, and beside each a sign is cut: an oak ' +

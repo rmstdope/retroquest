@@ -15,7 +15,7 @@ const CELLAR_AFTER =
   'At the end of one lane, where the cellar door was bricked up, the way down ' +
   'to the hidden library stands open.'
 
-/** The Residential Quarter description; `Act2.afterLoad` restores it on older saves. */
+/** The Residential Quarter description; `refreshSavedText` restores it on older saves. */
 export const RESIDENTIAL_QUARTER_DESCRIPTION =
   'Quiet lanes of two-storey houses, each with a small garden and a ' +
   'workshop. Craftsmen work at benches in the open doorways, and neighbours ' +

@@ -3,7 +3,7 @@ import type { Exits, GameState } from '@/engine'
 import { SilverTree } from '../items/SilverTree'
 import { FLAG_WHISPERS_IN_WIND_COMPLETED } from '../Act2StoryFlags'
 
-/** The room's description; `Act2.afterLoad` restores it in older saves. */
+/** The room's description; `refreshSavedText` restores it in older saves. */
 export const ANCIENT_GROVE_DESCRIPTION =
   'A ring of trees so old their trunks are wider than a cottage. Signs ' +
   'are carved in their bark, older than any letters you know. In the ' +

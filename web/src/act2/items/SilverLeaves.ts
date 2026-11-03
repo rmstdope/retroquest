@@ -1,6 +1,6 @@
 import { Item } from '@/engine'
 
-/** The item's description; `Act2.afterLoad` restores it in older saves. */
+/** The item's description; `refreshSavedText` restores it in older saves. */
 export const SILVER_LEAVES_DESCRIPTION =
   'Leaves from the silver-barked tree, cool and stiff, with a silver ' +
   'sheen even in shadow. A healer would know what to do with these.'

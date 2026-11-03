@@ -5,7 +5,7 @@ import {
 } from '../Act2StoryFlags'
 import { ForestTransition } from '../rooms/ForestTransition'
 
-/** The item's description; `Act2.afterLoad` restores it in older saves. */
+/** The item's description; `refreshSavedText` restores it in older saves. */
 export const FOREST_SURVIVAL_KIT_DESCRIPTION =
   'A canvas roll with everything for a night in the open: dried food, ' +
   'flint and steel, a water skin, a blanket, and a ring of small warding ' +

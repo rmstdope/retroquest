@@ -1,7 +1,7 @@
 import { Item, type GameState } from '@/engine'
 import { OfferingAltar } from './OfferingAltar'
 
-/** The charm's description; `Act2.afterLoad` restores it in older saves. */
+/** The charm's description; `refreshSavedText` restores it in older saves. */
 export const NATURES_CHARM_DESCRIPTION =
   'A small wooden charm, dark with handling, carved with a sword laid ' +
   "across a branch. Sir Cedric's family has kept it since the knights first " +

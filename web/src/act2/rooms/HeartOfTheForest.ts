@@ -1,7 +1,7 @@
 import { Room } from '@/engine'
 import { OfferingAltar } from '../items/OfferingAltar'
 
-/** The room's description; `Act2.afterLoad` restores it in older saves. */
+/** The room's description; `refreshSavedText` restores it in older saves. */
 export const HEART_OF_THE_FOREST_DESCRIPTION =
   'The deepest part of the forest. The light here is green and gold and ' +
   'does not seem to come from the sky. A tree vaster than any other holds ' +

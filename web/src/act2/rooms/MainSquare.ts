@@ -3,7 +3,7 @@ import { CityNoticeBoard } from '../items/CityNoticeBoard'
 import { MerchantsFlyer } from '../items/MerchantsFlyer'
 import { TownCrier } from '../characters/TownCrier'
 
-/** The Main Square's description; `Act2.afterLoad` restores it on older saves. */
+/** The Main Square's description; `refreshSavedText` restores it on older saves. */
 export const MAIN_SQUARE_DESCRIPTION =
   'The heart of Greendale: a great fountain of old heroes fighting beasts, ' +
   'stalls under bright awnings, red roofs all round. The square is crowded, ' +
