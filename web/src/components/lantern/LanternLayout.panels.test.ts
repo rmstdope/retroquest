@@ -172,10 +172,9 @@ describe('LanternLayout: panels wait for the narration', () => {
     const w = await ready()
     await goNorth()
     await w.get('[data-verb="look"]').trigger('click')
-    // The walk's card stays above the new one.
-    const turns = w.findAll('[data-testid="turn"]')
-    expect(turns).toHaveLength(2)
-    expect(turns[1]?.text()).toContain('› look')
+    // The look is the newest turn; no command is echoed on the left.
+    expect(useGameStore().turns.at(-1)?.command).toBe('look')
+    expect(w.find('[data-testid="command"]').exists()).toBe(false)
     expect(cardName(w)).toBe('Garden')
   })
 

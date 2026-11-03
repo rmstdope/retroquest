@@ -73,26 +73,29 @@ describe('the narration paper', () => {
     )
   }
 
-  it('holds a card for each turn since the last room change, the newest lit and older ones dimmed', async () => {
+  /** The narrator's bubbles on the paper, in order. */
+  const bubbles = (): Element[] => [...paper().querySelectorAll('.lq-bubble')]
+
+  it('holds a bubble for each paragraph since the last room change, the newest lit and older ones dimmed, with no command', async () => {
     await mountWith([
       turn(1, 'First.', 'look'),
       turn(2, 'Second.', 'wait'),
-      turn(3, 'Third.', 'listen'),
-      turn(4, 'Fourth.', 'sit'),
+      turn(3, 'Third.\n\nFourth.', 'listen'),
     ])
-    const cards = [...paper().querySelectorAll('[data-testid="turn"]')]
-    expect(cards.map((c) => c.textContent)).toEqual([
-      expect.stringContaining('› look'),
-      expect.stringContaining('› wait'),
-      expect.stringContaining('› listen'),
-      expect.stringContaining('› sit'),
+    await nextTick()
+    expect(bubbles().map((b) => b.textContent)).toEqual([
+      'First.',
+      'Second.',
+      'Third.',
+      'Fourth.',
     ])
-    expect(cards.map((c) => c.className)).toEqual([
-      expect.stringContaining('lq-age-old'),
-      expect.stringContaining('lq-age-old'),
-      expect.stringContaining('lq-age-prev'),
-      expect.stringContaining('lq-age-new'),
+    expect(bubbles().map((b) => b.getAttribute('data-age'))).toEqual([
+      'old',
+      'old',
+      'prev',
+      'new',
     ])
+    expect(paper().querySelector('[data-testid="command"]')).toBeNull()
   })
 
   it('clears the cards when the player walks into another room', async () => {
@@ -102,10 +105,8 @@ describe('the narration paper', () => {
       description: { moved: true, firstVisit: false },
     })
     await nextTick()
-    const cards = [...paper().querySelectorAll('[data-testid="turn"]')]
-    expect(cards).toHaveLength(1)
-    expect(cards[0]?.textContent).toContain('› go north')
-    expect(cards[0]?.classList.contains('lq-slim')).toBe(true)
+    // The walk itself tells nothing on the paper (its command is not echoed).
+    expect(paper().querySelectorAll('[data-testid="turn"]')).toHaveLength(0)
   })
 
   it('tells the room on one card after a load, with no command line', async () => {
@@ -128,7 +129,7 @@ describe('the narration paper', () => {
     expect(paper().querySelector('[data-testid="command"]')).toBeNull()
   })
 
-  it('shows silent information as a red-edged card above which the earlier card stays', async () => {
+  it('shows silent information as a red-edged bubble under the earlier one', async () => {
     await mountWith([
       turn(1, 'She does not sit down.', 'talk to grandmother'),
       turn(
@@ -137,10 +138,10 @@ describe('the narration paper', () => {
         'talk to mira',
       ),
     ])
-    const cards = [...paper().querySelectorAll('[data-testid="turn"]')]
-    expect(cards[1]?.classList.contains('lq-card-error')).toBe(true)
-    expect(cards[1]?.textContent).toContain('⊝')
-    expect(cards[0]?.classList.contains('lq-age-prev')).toBe(true)
+    await nextTick()
+    expect(bubbles()[1]?.classList.contains('lq-bubble-failure')).toBe(true)
+    expect(bubbles()[1]?.textContent).toContain('⊝')
+    expect(bubbles()[0]?.getAttribute('data-age')).toBe('prev')
   })
 
   it('is a column up the left, with no inline band height', async () => {
@@ -237,13 +238,25 @@ describe('the narration paper', () => {
     addressed: 'Mira',
   })
 
-  /** Mount with a conversation shown on the right and a card on the left. */
+  /** Mount with a narrator's line on the left and a conversation on the right. */
   async function mountTalking(): Promise<void> {
-    await mountWith([])
-    game.turns.push(talk(1, 'Hello.'))
+    await mountWith([turn(1, 'The square is busy.')])
+    game.turns.push(talk(2, 'Hello.'))
     await nextTick()
     await settle()
   }
+
+  it('does not scroll back to an older turn when the newest tells nothing on the left', async () => {
+    await mountWith([turn(1, 'Long look one.\n\nLong look two.')])
+    const scrolled = vi.fn()
+    const before = Element.prototype.scrollIntoView
+    Element.prototype.scrollIntoView = scrolled
+    game.turns.push(talk(2, 'Hello.'))
+    await nextTick()
+    await nextTick()
+    Element.prototype.scrollIntoView = before
+    expect(scrolled).not.toHaveBeenCalled()
+  })
 
   it('has one Hide whenever either side has something, and none when neither has', async () => {
     await mountWith([turn(1, '', null)])
@@ -291,12 +304,14 @@ describe('the narration paper', () => {
     await mountTalking()
     hideButton()?.click()
     await nextTick()
-    game.turns.push(talk(2, 'Again.'))
+    game.turns.push(talk(3, 'Again.'))
     await nextTick()
     expect(tab()).toBeNull()
     expect(hideButton()).not.toBeNull()
     expect(speechZone().hasAttribute('inert')).toBe(false)
-    expect(paper().querySelectorAll('[data-testid="turn"]')).toHaveLength(2)
+    expect(
+      speechZone().querySelectorAll('[data-testid="speech-line"]'),
+    ).toHaveLength(2)
   })
 
   it('loses the tab when the player walks into another room', async () => {
@@ -304,7 +319,7 @@ describe('the narration paper', () => {
     hideButton()?.click()
     await nextTick()
     game.turns.push({
-      ...turn(2, '', 'go north'),
+      ...turn(4, '', 'go north'),
       description: { moved: true, firstVisit: false },
     })
     await nextTick()

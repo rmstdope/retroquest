@@ -7,6 +7,7 @@ import {
   newsParts,
   newsSlimHeading,
   readingTimeMs,
+  recordOnlyFrom,
   sceneBlock,
 } from './stageArrival'
 import type { NarrationUnit } from './narrationUnits'
@@ -132,7 +133,7 @@ describe('arrivalParts', () => {
     expect(parts[1].voiced).toBe(true)
   })
 
-  it('leaves a talk that moves Elior to the sides, and tells only its closing arrival line', () => {
+  it('leaves a talk that moves Elior to the sides, and its closing arrival line to the record', () => {
     const text =
       'You answer it.\n\n' +
       'The whisper comes once more.\n' +
@@ -140,17 +141,28 @@ describe('arrivalParts', () => {
       '\n\n' +
       'You wake in your own bed.\n\n' +
       event('You are in [room_name]Cottage[/room_name].')
-    const blocks = parseTurn(text)
     const parts = arrivalParts({ text, arrival: room, addressed: 'voice' }, [])
-    expect(parts.map((part) => part.kind)).toEqual(['events', 'description'])
-    expect(parts[0].lines).toEqual([
-      {
-        unit: blocks.length - 1,
-        markup: 'You are in [room_name]Cottage[/room_name].',
-      },
-    ])
+    expect(parts.map((part) => part.kind)).toEqual(['description'])
     expect(parts[0].afterWords).toBe(true)
-    expect(parts[1].afterWords).toBeUndefined()
+  })
+
+  it('says where the closing arrival lines of a talk that moved Elior begin', () => {
+    const text =
+      'You wake in your own bed.\n\n' +
+      event('You are in [room_name]Cottage[/room_name].')
+    const blocks = parseTurn(text)
+    const moved = { moved: true }
+    expect(
+      recordOnlyFrom({ addressed: 'voice', description: moved }, blocks),
+    ).toBe(1)
+    // Not a talk, or a talk that stayed: every block is told on the stage.
+    expect(recordOnlyFrom({ description: moved }, blocks)).toBe(2)
+    expect(
+      recordOnlyFrom(
+        { addressed: 'voice', description: { moved: false } },
+        blocks,
+      ),
+    ).toBe(2)
   })
 
   it('changes the scene of a moving talk at its last narrator paragraph on the sides', () => {

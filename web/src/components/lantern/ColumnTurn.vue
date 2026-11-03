@@ -15,12 +15,13 @@ import StoryTurn from './StoryTurn.vue'
 
 /**
  * One turn told in the single column of a phone or a narrow window: the
- * narrator's paper cards and the chat-style spoken lines in the order they
+ * narrator's bubbles and the chat-style spoken lines in the order they
  * happened (see `columnPieces`). Everyone but Elior speaks at the column's
  * right edge with a small round portrait on the right, Elior at its left with
  * his on the left; the name and portrait show once per run of lines from one
- * speaker, and a narrator card in between ends the run. The whole turn wears
- * the dimming for how many turns ago it was (`age`). A turn that is still being
+ * speaker, and a narrator card in between ends the run. Each bubble and line
+ * is dimmed by how far back it was told (`useBubbleAges`, run by the layout
+ * over the whole column). A turn that is still being
  * told stops at the first line that has not appeared yet, so later cards
  * never come before the line they follow, and a turn whose move is still
  * changing the picture shows no line at all. The lines are the conversation's
@@ -33,8 +34,6 @@ import StoryTurn from './StoryTurn.vue'
  */
 const props = defineProps<{
   turn: Turn
-  /** How many turns back this one is: the newest is lit, the one before is dimmed a step, older ones a further step. */
-  age: 'new' | 'prev' | 'old'
 }>()
 const game = useGameStore()
 const speech = useStageSpeechStore()
@@ -119,7 +118,6 @@ function heads(index: number): boolean {
   <div
     ref="root"
     class="lq-column-turn"
-    :class="`lq-age-${age}`"
     data-testid="column-turn"
     @click="speech.revealAll()"
   >
@@ -175,16 +173,17 @@ function heads(index: number): boolean {
 </template>
 
 <style scoped>
-/* A turn's pieces one under another; the whole turn is dimmed by its age. */
+/* A turn's pieces one under another. */
 .lq-column-turn {
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
-.lq-column-turn.lq-age-prev {
+/* Older lines dim as older bubbles do: one step, then a further one (see `useBubbleAges`). */
+.lq-cl[data-age='prev'] {
   opacity: 0.55;
 }
-.lq-column-turn.lq-age-old {
+.lq-cl[data-age='old'] {
   opacity: 0.3;
 }
 /* One row: the portrait (or a gap of its width) at the edge, the words beside it. */

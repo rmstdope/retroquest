@@ -31,6 +31,7 @@ import { useFocusTrap } from '@/composables/useFocusTrap'
 import { nameActions, type NameAction } from '@/lantern/nameActions'
 import { parseCountedName } from '@/lantern/inventoryChanges'
 import { useStoryFollow } from '@/composables/useStoryFollow'
+import { STAGE_BUBBLES, useBubbleAges } from '@/composables/useBubbleAges'
 import { useNarrationPaper } from '@/composables/useNarrationPaper'
 import {
   SHORT_QUERY,
@@ -74,13 +75,15 @@ import TitlePage from './TitlePage.vue'
  * room is played on its picture, which fills the play area: a plate (room
  * and who and what is here) top-left, the buttons Bag, Spells, Quests, Story
  * so far and Map top-right (the journal and the story open as a drawer from
- * the right, the map beneath its button), the narrator's words as paper cards
- * up the left side and the actions as one row along the bottom.
- * The cards are the narration paper: one per turn since the last room change
- * (`useNarrationPaper`), the newest lit and older ones dimmed, each starting
- * with the command; the newest grows as the narrator reaches each part and,
- * when it is taller than the room under the plate, scrolls with a "More below"
- * pill. One "▾ Hide" on its own line at the bottom centre of the picture (or N,
+ * the right, the map beneath its button), the narrator's words up the left
+ * side and the actions as one row along the bottom.
+ * The left side is the narration paper: the turns since the last room change
+ * (`useNarrationPaper`), each told as one bubble per paragraph like the speech
+ * on the right (`StoryTurn`), the newest bubble lit and older ones dimmed
+ * (`useBubbleAges`); the command is not echoed (Story so far keeps it), and
+ * quest news told in the middle leaves nothing here. The newest turn grows as
+ * the narrator reaches each part and, when it is taller than the room under
+ * the plate, scrolls with a "More below" pill. One "▾ Hide" on its own line at the bottom centre of the picture (or N,
  * or Escape when nothing is narrated) clears both the cards and the speech,
  * leaving a "▴ Show" tab in its place; the tab, N or the next turn with a card
  * brings both back as they were, and every turn is read in the story drawer.
@@ -91,9 +94,8 @@ import TitlePage from './TitlePage.vue'
  * and across the picture on a phone, down to the same Hide and Show.
  * The first time the player walks into a room its arrival is told on the
  * middle of the picture instead (`ArrivalOnPicture`, `useArrivalStore`): the
- * words are clear (no Hide or Show) and the cards come back when the arrival
- * clears (as a slim card with the command, the room itself having been told
- * in the middle). Enter or Space goes on, a click on the
+ * words are clear (no Hide or Show) and the bubbles come back when the
+ * arrival clears (the room itself having been told in the middle). Enter or Space goes on, a click on the
  * picture too; Escape, the tab, an action or typing clear it at once.
  * Smaller screens that are not short (a phone upright) play the same stage
  * arranged for a tall screen: the plate across the top with "⟲ Story so far"
@@ -333,6 +335,7 @@ const paper = useNarrationPaper(
   () => game.turns,
   () => stageKey.value,
   () => staged.value,
+  () => twoSides.value,
 )
 /** What the story pane holds: the narration cards on the stage, every turn elsewhere. */
 const storyTurns = computed(() =>
@@ -481,13 +484,23 @@ async function openDock(mode: 'actions' | 'type'): Promise<void> {
   composer.value?.focus()
 }
 
+/**
+ * The story's element for the game's newest turn, or null when that turn
+ * shows nothing there (a talk told only as speech, a turn not reached yet):
+ * then nothing is scrolled to, measured or followed for it.
+ */
+function newestTurnEl(): HTMLElement | null {
+  const id = game.turns.at(-1)?.id
+  if (id === undefined) return null
+  return (
+    contentEl.value?.querySelector<HTMLElement>(`[data-turn="${id}"]`) ?? null
+  )
+}
+
 /** Whether the newest turn is taller than the story area beside the actions. */
 function answerTooLong(): boolean {
   const story = storyEl.value
-  const last = contentEl.value?.lastElementChild as
-    | HTMLElement
-    | null
-    | undefined
+  const last = newestTurnEl()
   return !!story && !!last && last.offsetHeight > story.clientHeight
 }
 
@@ -899,11 +912,8 @@ watch(
 )
 onUnmounted(() => widePlateResize?.disconnect())
 
-/** Faded by how far back the card is: 0 newest, 1 the one before, 2 older (as speech lines). */
-function cardAge(index: number, count: number): 'new' | 'prev' | 'old' {
-  const back = count - 1 - index
-  return back === 0 ? 'new' : back === 1 ? 'prev' : 'old'
-}
+// The narrator's bubbles and the column's lines dim by how far back they were told, as speech does.
+useBubbleAges(contentEl, STAGE_BUBBLES)
 
 /** The phone's plate height, which the arrival on the picture stays clear of. */
 const plateHeight = ref(108)
@@ -968,7 +978,7 @@ watch(() => settings.textSize, updateMoreBelow, { flush: 'post' })
 watch(storyHeld, async (held) => {
   if (held) return
   await nextTick()
-  const latest = contentEl.value?.lastElementChild
+  const latest = newestTurnEl()
   if (staged.value && !narration.readToEnd && latest && storyEl.value) {
     const top =
       latest.getBoundingClientRect().top -
@@ -1320,7 +1330,7 @@ watch(
     const away = !wide.value && section.value !== 'story'
     section.value = 'story'
     await nextTick()
-    const latest = contentEl.value?.lastElementChild
+    const latest = newestTurnEl()
     // A held story is moved only through `moveStory`, which knows where it belongs.
     if (storyHeld.value && latest && storyEl.value)
       moveStory(
@@ -1722,21 +1732,13 @@ watch(
           >
             <h2 class="lq-sr-only">Story</h2>
             <div ref="contentEl" class="lq-paper-content">
-              <template v-for="(turn, index) in storyTurns" :key="turn.id">
-                <ColumnTurn
-                  v-if="column"
-                  :turn="turn"
-                  :age="cardAge(index, storyTurns.length)"
-                />
+              <template v-for="turn in storyTurns" :key="turn.id">
+                <ColumnTurn v-if="column" :turn="turn" :data-turn="turn.id" />
                 <StoryTurn
                   v-else
                   :turn="turn"
                   :card="staged"
-                  :class="
-                    staged
-                      ? `lq-age-${cardAge(index, storyTurns.length)}`
-                      : undefined
-                  "
+                  :data-turn="turn.id"
                 />
               </template>
             </div>

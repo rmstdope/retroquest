@@ -987,7 +987,7 @@ describe('LanternLayout', () => {
       await w.vm.$nextTick()
     }
 
-    it('shows what the one spoken to says on the picture, leaving a slim card on the left', async () => {
+    it('shows what the one spoken to says on the picture, leaving nothing on the left', async () => {
       const w = mountLayout()
       await say(w, WORDS, 'Grandmother')
 
@@ -996,7 +996,7 @@ describe('LanternLayout', () => {
         'There you are.',
       )
       const story = w.get('section[aria-label="Story"]').text()
-      expect(story).toContain('› talk to grandmother')
+      expect(story).not.toContain('› talk to grandmother')
       expect(story).not.toContain('There you are.')
     })
 

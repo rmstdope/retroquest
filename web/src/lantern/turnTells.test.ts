@@ -56,8 +56,63 @@ describe('turnTells', () => {
 })
 
 describe('turnHasCard', () => {
-  it('is true for a typed command even when nothing is told (a slim card)', () => {
-    expect(turnHasCard(turn({ command: 'talk to grandmother' }))).toBe(true)
+  it('is false for a command that leaves no bubble: nothing told, speech only, or news told in the middle', () => {
+    expect(turnHasCard(turn({ command: 'wait' }))).toBe(false)
+    expect(
+      turnHasCard(
+        turn({
+          command: 'talk to grandmother',
+          addressed: 'Grandmother',
+          text: '[character_name]Grandmother[/character_name]\n[dialogue]Sit.[/dialogue]',
+        }),
+        true,
+      ),
+    ).toBe(false)
+    expect(
+      turnHasCard(
+        turn({
+          command: 'kneel',
+          quests: [{ kind: 'new', name: 'Q', main: false, text: 'Go.' }],
+        }),
+      ),
+    ).toBe(false)
+  })
+
+  it('keeps a speech-only talk where the speech is told in the same column', () => {
+    const talk = turn({
+      command: 'talk to grandmother',
+      addressed: 'Grandmother',
+      text: '[character_name]Grandmother[/character_name]\n[dialogue]Sit.[/dialogue]',
+    })
+    expect(turnHasCard(talk, false)).toBe(true)
+    expect(turnHasCard(talk, true)).toBe(false)
+  })
+
+  it('is true for a command whose answer the narrator tells, or that changes the bag', () => {
+    expect(turnHasCard(turn({ command: 'look', text: 'It is quiet.' }))).toBe(
+      true,
+    )
+    expect(
+      turnHasCard(
+        turn({
+          command: 'take bread',
+          gained: [{ name: 'Bread', count: 1, kind: 'item' }],
+        }),
+      ),
+    ).toBe(true)
+  })
+
+  it('leaves no card for a moving talk whose only narrator line is its closing arrival line', () => {
+    expect(
+      turnHasCard(
+        turn({
+          command: 'talk to voice',
+          addressed: 'voice',
+          description: { moved: true, firstVisit: false },
+          text: '[event]You are in [room_name]Cottage[/room_name].[/event]',
+        }),
+      ),
+    ).toBe(false)
   })
 
   it('is true for a turn with no command that tells something, false for an empty system turn', () => {

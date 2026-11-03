@@ -108,10 +108,27 @@ export function sceneBlock(
 }
 
 /**
+ * The first block of a talk that took Elior to another room that only the
+ * record (Story so far) tells: every event line it ends on, after its words
+ * on the sides (`sideBlocks`), which today is only the dream's closing "You
+ * are in …". The stage tells neither them nor, in the middle, anything but
+ * the room, so a new event at the end of such a talk is only in Story so far
+ * too. `blocks.length` (every block is told on the stage) for any other turn.
+ */
+export function recordOnlyFrom(
+  turn: { addressed?: string; description: { moved: boolean } | null },
+  blocks: TurnBlock[],
+): number {
+  if (!turn.addressed || !turn.description?.moved) return blocks.length
+  return sideBlocks(turn, blocks)
+}
+
+/**
  * The parts of an arrival: the answer's words (a departure line, an event)
  * if there are any, then the room's description. A talk that moved Elior
- * leaves its words to the sides (`sideBlocks`), and its first part waits for
- * them (`afterWords`). `units` are the turn's narration units, to say which
+ * leaves its words to the sides (`sideBlocks`) and its closing arrival lines
+ * to the record (`recordOnlyFrom`), so only the room is told, once the words
+ * are (`afterWords`). `units` are the turn's narration units, to say which
  * part has a voice; the description is the unit after the answer's blocks.
  */
 export function arrivalParts(
@@ -131,7 +148,7 @@ export function arrivalParts(
     )
   const events: ArrivalLine[] = []
   blocks.forEach((block, unit) => {
-    if (unit >= aside && block.kind !== 'checklist' && block.markup.trim())
+    if (aside === 0 && block.kind !== 'checklist' && block.markup.trim())
       events.push(
         block.kind === 'dialogue'
           ? { unit, markup: block.markup, joinsPrevious: true }

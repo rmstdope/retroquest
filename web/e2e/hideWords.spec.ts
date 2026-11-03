@@ -67,7 +67,8 @@ for (const width of [1440]) {
 
     await show.click()
     await expect(hide).toBeFocused()
-    await expect(cards.getByText('› talk to grandmother')).toBeVisible()
+    // The look's description is back on the left (no command is echoed).
+    await expect(cards.locator('.lq-bubble').last()).toBeVisible()
     await expect(page.getByTestId('speech-line').first()).toBeVisible()
   })
 }
@@ -109,6 +110,6 @@ for (const size of [
 
     await show.click()
     await expect(hide).toBeFocused()
-    await expect(column.getByText('› talk to grandmother')).toBeVisible()
+    await expect(column.getByTestId('speech-line').first()).toBeVisible()
   })
 }

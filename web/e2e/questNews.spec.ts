@@ -55,7 +55,7 @@ async function pushNews(page: Page): Promise<void> {
 const middle = (page: Page) => page.getByTestId('arrival-on-picture')
 
 test.describe('quest news told in the middle of the picture', () => {
-  test('comes one piece after the other, a click clearing each, and leaves slim lines on the card', async ({
+  test('comes one piece after the other, a click clearing each, and leaves no line on the left', async ({
     page,
   }) => {
     await startAct1(page)
@@ -79,12 +79,7 @@ test.describe('quest news told in the middle of the picture', () => {
     await page.keyboard.press('Enter')
     await expect(middle(page).locator('.lq-news-kicker')).toHaveCount(0)
 
-    const lines = page.getByTestId('news-line')
-    await expect(lines).toHaveCount(2)
-    await expect(lines.nth(0)).toContainText(
-      'Side quest complete · Hint of Magic',
-    )
-    await expect(lines.nth(1)).toContainText('New side quest · Magic for real')
+    await expect(page.getByTestId('news-line')).toHaveCount(0)
   })
 
   test('Escape ends all the news at once', async ({ page }) => {
@@ -93,7 +88,7 @@ test.describe('quest news told in the middle of the picture', () => {
     await expect(middle(page).locator('.lq-news-kicker').last()).toBeVisible()
     await page.keyboard.press('Escape')
     await expect(middle(page).locator('.lq-news-kicker')).toHaveCount(0)
-    await expect(page.getByTestId('news-line')).toHaveCount(2)
+    await expect(page.getByTestId('news-line')).toHaveCount(0)
   })
 
   test('is told on a phone too, with "Tap to continue"', async ({ page }) => {

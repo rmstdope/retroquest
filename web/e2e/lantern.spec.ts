@@ -707,7 +707,7 @@ test.describe('Lantern UI (the default)', () => {
     ])
   })
 
-  test('tells each turn on a card that grows up to the room plate, hides to a tab', async ({
+  test('tells each turn in bubbles that grow up to the room plate, hides to a tab', async ({
     page,
   }) => {
     await page.setViewportSize({ width: 1280, height: 800 })
@@ -738,8 +738,9 @@ test.describe('Lantern UI (the default)', () => {
     const height = async () => (await cards.boundingBox())!.height
 
     await tell(2, 'You take the bread.', 'take bread')
-    await expect(paper.getByText('› take bread')).toBeVisible()
-    // The cards before it stay above, dimmed.
+    await expect(paper.getByText('You take the bread.')).toBeVisible()
+    await expect(paper.getByText('› take bread')).toHaveCount(0)
+    // The bubbles before it stay above, dimmed.
     await expect(paper.getByText('The heart of')).toBeVisible()
     const small = await height()
     expect(small).toBeLessThan(400)
@@ -768,12 +769,14 @@ test.describe('Lantern UI (the default)', () => {
 
     await tell(4, 'The wind turns.', 'wait')
     await expect(tab).toHaveCount(0)
-    await expect(paper.getByText('› wait')).toBeVisible()
+    await expect(paper.getByText('The wind turns.')).toBeVisible()
 
-    // A turn with nothing to tell still leaves a slim card with its command.
+    // A turn with nothing to tell adds no bubble, and the paper stays open.
+    const bubbles = await paper.locator('.lq-bubble').count()
     await tell(5, '', 'wait')
-    await expect(paper.getByText('› wait').last()).toBeVisible()
     await expect(tab).toHaveCount(0)
+    await expect(paper.locator('.lq-bubble')).toHaveCount(bubbles)
+    await expect(paper.getByText('› wait')).toHaveCount(0)
   })
 
   test('keeps the story and actions in view in a busy room on a laptop', async ({
@@ -1062,16 +1065,15 @@ test.describe('Lantern UI (the default)', () => {
       /* eslint-enable @typescript-eslint/no-explicit-any */
     })
 
-    // Told in the middle of the picture, never as a pop-up; the story keeps a slim line.
+    // Told in the middle of the picture, never as a pop-up; it leaves no line in the story.
     const middle = page.getByTestId('arrival-on-picture')
     await expect(middle.getByText('Oath of Stillness')).toBeVisible()
     await expect(middle.getByText('Side quest complete · 5 of 8')).toBeVisible()
     await expect(page.getByRole('dialog')).toHaveCount(0)
     await page.keyboard.press('Escape')
+    await expect(middle.getByText('Oath of Stillness')).toHaveCount(0)
     const story = page.getByRole('region', { name: 'Story' })
-    await expect(
-      story.getByText('Side quest complete · Oath of Stillness'),
-    ).toBeVisible()
+    await expect(story).not.toContainText('Oath of Stillness')
   })
 
   test('keeps the failed-load screen reachable with a long error on a short screen', async ({
