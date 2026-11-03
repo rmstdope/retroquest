@@ -58,7 +58,7 @@ async function seenAtTop(
   )
 }
 
-test('on a phone a long answer opens at its start, with the command and the first line in view', async ({
+test('on a phone a long answer opens at its start, with the first line in view', async ({
   page,
 }): Promise<void> => {
   await page.setViewportSize({ width: 390, height: 844 })
@@ -70,25 +70,20 @@ test('on a phone a long answer opens at its start, with the command and the firs
   await expect(
     page.getByRole('region', { name: 'Current location' }),
   ).toContainText("Elior's Cottage")
-  // Her greeting comes a paragraph at a time, in the column after the command
-  // that asked for it; the turn opens at its start, with its first line in view.
-  // The Voice's line from the dream is the column's first line (rq-uqp8).
+  // Her greeting comes a paragraph at a time; the turn opens at its start,
+  // with its first line in view.
+  // The Voice's line from the dream left the column with the dream.
   await enter(page, 'talk to grandmother')
   const lines = page.getByTestId('speech-line')
-  await expect(lines).toHaveCount(4)
-  await expect(lines.nth(3)).toContainText("If you're going out")
-  await expect
-    .poll(() => seenAtTop(page, '.lq-one-column [data-testid="command"]'), {
-      timeout: 2_000,
-    })
-    .toBe(true)
+  await expect(lines).toHaveCount(3)
+  await expect(lines.nth(2)).toContainText("If you're going out")
   await expect
     .poll(
       () =>
         seenAtTop(
           page,
           '.lq-one-column [data-testid="speech-line"] .lq-line',
-          1,
+          0,
         ),
       { timeout: 2_000 },
     )

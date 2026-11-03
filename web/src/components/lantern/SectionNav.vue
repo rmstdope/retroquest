@@ -1,10 +1,13 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useGameStore } from '@/stores/useGameStore'
+import { useFlightStore } from '@/stores/useFlightStore'
 
 /**
  * Section tabs on phones: Story, Bag, Spells, Quests and Map. A dot marks
- * Bag, Spells or Quests while something new is in it.
+ * Bag, Spells or Quests while something new is in it. Bag and Spells are
+ * where a gained item or spell flies to on a phone (`data-flight-target`,
+ * `AcquiredFlight`), and the tab it lands in bumps.
  */
 export type Section = 'story' | 'bag' | 'spells' | 'quests' | 'map'
 
@@ -12,6 +15,7 @@ const current = defineModel<Section>({ required: true })
 /** Every tap on a tab, also on the one already shown (the phone stage closes the story so far on it). */
 const emit = defineEmits<{ press: [section: Section] }>()
 const game = useGameStore()
+const flights = useFlightStore()
 
 /** Show the section and tell the layout it was tapped. */
 function choose(id: Section): void {
@@ -20,11 +24,21 @@ function choose(id: Section): void {
 }
 
 const sections = computed(() => [
-  { id: 'story' as const, label: 'Story', dot: false },
-  { id: 'bag' as const, label: 'Bag', dot: game.bagHasNew },
-  { id: 'spells' as const, label: 'Spells', dot: game.spellsHaveNew },
-  { id: 'quests' as const, label: 'Quests', dot: game.questsHaveNew },
-  { id: 'map' as const, label: 'Map', dot: false },
+  { id: 'story' as const, label: 'Story', dot: false, flight: undefined },
+  { id: 'bag' as const, label: 'Bag', dot: game.bagHasNew, flight: 'item' },
+  {
+    id: 'spells' as const,
+    label: 'Spells',
+    dot: game.spellsHaveNew,
+    flight: 'spell',
+  },
+  {
+    id: 'quests' as const,
+    label: 'Quests',
+    dot: game.questsHaveNew,
+    flight: undefined,
+  },
+  { id: 'map' as const, label: 'Map', dot: false, flight: undefined },
 ])
 </script>
 
@@ -35,6 +49,8 @@ const sections = computed(() => [
       :key="s.id"
       type="button"
       class="lq-nav-btn"
+      :class="{ 'lq-landed': !!s.flight && flights.landed === s.flight }"
+      :data-flight-target="s.flight"
       :aria-current="current === s.id ? 'page' : undefined"
       @click="choose(s.id)"
     >
@@ -98,5 +114,13 @@ const sections = computed(() => [
   overflow: hidden;
   clip: rect(0 0 0 0);
   white-space: nowrap;
+}
+/* A gained item or spell has just flown in: the button bumps (AcquiredFlight). */
+.lq-nav-btn.lq-landed {
+  transform: scale(1.12);
+  transition: transform calc(140ms * var(--lq-motion)) ease-out;
+}
+.lq-nav-btn:not(.lq-landed) {
+  transition: transform calc(300ms * var(--lq-motion)) ease-in;
 }
 </style>

@@ -28,6 +28,9 @@ import type { NarrationUnit } from '@/lantern/narrationUnits'
  *   two seconds after each `nudgeHint` (a scroll attempt on the held story).
  * - `storyReading` is true while a story turn (not the chapter page or a
  *   pop-up) is narrated: the story is then held still and follows the word.
+ * - A talk that moves Elior can stop before the unit where its scene changes
+ *   (`begin`'s `sceneAt`): `atSceneChange` says it is there, and
+ *   `passSceneChange` lets it go on once the new picture is up.
  * - Nothing here is saved; a turn that is not the active one shows whole.
  */
 
@@ -87,6 +90,10 @@ interface ActiveNarration {
   waited: number
   /** The unit whose own pause (`pauseBefore`) has been waited, or -1. */
   pausedFor: number
+  /** The unit the narrator stops before, for the scene to change, or -1. */
+  sceneAt: number
+  /** Whether the narrator has stopped there. */
+  atScene: boolean
 }
 
 /** What is being spoken now in a turn. */
@@ -180,10 +187,10 @@ export const useNarrationStore = defineStore('narration', () => {
   /**
    * Whether unit `unit` of turn `turnId` is shown: every unit of a turn that is
    * not being narrated is, except while the picture of its move is still
-   * changing (`useSceneStore`), when none is.
+   * changing (`useSceneStore`), when none that waits for it is.
    */
   function revealed(turnId: number, unit: number): boolean {
-    if (scene.holds(turnId)) return false
+    if (scene.holds(turnId, unit)) return false
     const now = active.value
     return !now || now.turnId !== turnId || unit < now.revealed
   }
@@ -291,9 +298,14 @@ export const useNarrationStore = defineStore('narration', () => {
   function step(): void {
     const now = active.value
     // A hurry or tap while the picture of the move changes does not start the voice.
-    if (!now || scene.holds(now.turnId)) return
+    if (!now || scene.holds(now.turnId, now.unit)) return
     for (;;) {
       if (now.unit >= now.units.length) return finish()
+      // The scene changes here: the narrator waits until it is let through.
+      if (now.sceneAt >= 0 && now.unit >= now.sceneAt) {
+        now.atScene = true
+        return
+      }
       const unit = now.units[now.unit]
       const index = unit.parts.findIndex((p, i) => i >= now.part && !!p.clip)
       // A unit that asks for a longer breath (a room, a chapter's text after
@@ -366,7 +378,8 @@ export const useNarrationStore = defineStore('narration', () => {
     const more = hurried
       ? voicedAfter(now, unit, Number.POSITIVE_INFINITY)
       : voicedAfter(now, unit, part)
-    if (!more) return finish()
+    // With nothing voiced left the turn ends, unless its scene is still to change.
+    if (!more && now.sceneAt < 0) return finish()
     const mine = generation
     const gap = hurried ? HURRIED_GAP_MS : GAP_MS
     now.waited = gap
@@ -381,13 +394,15 @@ export const useNarrationStore = defineStore('narration', () => {
    * Narrate a turn: cut in on any turn being narrated, then show its units as
    * they are spoken. A turn with no voiced unit, or narration switched off,
    * stays as it is. `held` keeps it from speaking until `start` (the
-   * picture of the move is still changing).
+   * picture of the move is still changing). `sceneAt` (a talk that moves
+   * Elior) is the unit it stops before until `passSceneChange`.
    */
   function begin(
     turnId: number,
     units: NarrationUnit[],
     folder: string,
     held = false,
+    sceneAt = -1,
   ): void {
     if (active.value) finish(true)
     const voiced = units.some((unit) => unit.parts.some((part) => part.clip))
@@ -403,6 +418,8 @@ export const useNarrationStore = defineStore('narration', () => {
       word: -1,
       waited: 0,
       pausedFor: -1,
+      sceneAt,
+      atScene: false,
     }
     // The chapter page and pop-ups (negative ids) are not story turns.
     if (turnId >= 1) narratedTurns.value++
@@ -413,6 +430,21 @@ export const useNarrationStore = defineStore('narration', () => {
   function start(turnId: number): void {
     const now = active.value
     if (now?.turnId === turnId && !now.speaking && now.unit === 0) step()
+  }
+
+  /** Whether the narration of turn `turnId` has stopped where its scene changes. */
+  function atSceneChange(turnId: number): boolean {
+    const now = active.value
+    return now?.turnId === turnId && now.atScene
+  }
+
+  /** Let the narration of turn `turnId` go on past where its scene changes (the new picture is up). */
+  function passSceneChange(turnId: number): void {
+    const now = active.value
+    if (now?.turnId !== turnId || now.sceneAt < 0) return
+    now.sceneAt = -1
+    now.atScene = false
+    step()
   }
 
   /** Complete the block being spoken (or, in a pause, bring the next one now). */
@@ -511,6 +543,8 @@ export const useNarrationStore = defineStore('narration', () => {
     preload,
     begin,
     start,
+    atSceneChange,
+    passSceneChange,
     hurry,
     skipTo,
     seekToWord,

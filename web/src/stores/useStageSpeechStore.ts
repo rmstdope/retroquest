@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { computed, ref } from 'vue'
+import { computed, ref, shallowRef } from 'vue'
 import type { Turn } from './useGameStore'
 import { useNarrationStore } from './useNarrationStore'
 import { useSceneStore } from './useSceneStore'
@@ -22,8 +22,18 @@ import {
  * own words (such as his journal) when it has any. The lines of each turn are the quotes of its answer
  * (`speechLines`), shown as the narrator reaches them when the turn is
  * narrated, and otherwise one at a time by a reading pause (`readingPauseMs`);
- * `revealAll` shows the rest of the turn at once.
+ * `revealAll` shows the rest of the turn at once. An unnarrated talk that
+ * moves Elior says when its scene may change (`SceneChange`): once the lines
+ * before it are read, or at once when the turn is shown whole.
  */
+
+/** Where an unnarrated turn's scene changes: before unit `unit`, by calling `reached` once. */
+export interface SceneChange {
+  /** The first unit told after the change; it and the units after it wait until then. */
+  unit: number
+  /** Begins the change; called once, when the lines before it are read or the turn is shown whole or cleared. */
+  reached: () => void
+}
 
 /** One line of the conversation, with where it came from and whether it is shown. */
 export interface StageLine extends SpeechLine {
@@ -44,10 +54,15 @@ export const useStageSpeechStore = defineStore('stageSpeech', () => {
   const conversation = ref<{ with: string; lines: StageLine[] } | null>(null)
   let nextKey = 1
   let timer: ReturnType<typeof setTimeout> | undefined
+  /** The scene change the unnarrated turn being read waits to reach, and that turn, if any. */
+  const sceneChange = shallowRef<(SceneChange & { turnId: number }) | null>(
+    null,
+  )
 
   /** Whether a line is on the picture now. */
   function isShown(line: StageLine): boolean {
-    if (!line.narrated) return line.shown
+    if (!line.narrated)
+      return line.shown && !scene.holds(line.turnId, line.unit)
     if (!narration.revealed(line.turnId, line.unit)) return false
     // A quote is one recording: its later paragraphs wait for the narrator's word.
     const now = narration.speaking(line.turnId)
@@ -55,19 +70,30 @@ export const useStageSpeechStore = defineStore('stageSpeech', () => {
     return line.firstWord === 0 || now.offset + now.word >= line.firstWord
   }
 
+  /** Whether a line was said after its talk's room changed (or the room never did): the picture keeps it. */
+  function kept(line: StageLine): boolean {
+    const first = scene.firstUnit(line.turnId)
+    // Elior's own words (unit -1) come before the change too.
+    return first === null || line.unit >= first
+  }
+
   /** The lines on the picture now, in the order they were said. */
   const visible = computed(
-    () => conversation.value?.lines.filter(isShown) ?? [],
+    () =>
+      conversation.value?.lines.filter((line) => kept(line) && isShown(line)) ??
+      [],
   )
 
   /**
    * Whether everything said in turn `turnId` is on the picture (also when it
-   * said nothing there): what quest news told after the words waits for.
+   * said nothing there): what quest news told after the words waits for. A
+   * turn whose scene is still to change has not told everything yet.
    */
   function told(turnId: number): boolean {
+    if (sceneChange.value?.turnId === turnId) return false
     return (
       conversation.value?.lines
-        .filter((line) => line.turnId === turnId)
+        .filter((line) => line.turnId === turnId && kept(line))
         .every(isShown) ?? true
     )
   }
@@ -111,7 +137,7 @@ export const useStageSpeechStore = defineStore('stageSpeech', () => {
    * before the conversation has taken the turn in.
    */
   function lineShown(turnId: number, unit: number, firstWord: number): boolean {
-    if (scene.holds(turnId)) return false
+    if (scene.holds(turnId, unit)) return false
     const line = lineAt(turnId, unit, firstWord)
     return !line || isShown(line)
   }
@@ -126,15 +152,39 @@ export const useStageSpeechStore = defineStore('stageSpeech', () => {
     return !!line && isSpeaking(line)
   }
 
-  /** Release the next line of an unnarrated turn after the reading pause of the one before it. */
+  /** Wait with turn `turn`'s words from `change`'s unit on until its scene changes (none: nothing waits). */
+  function holdScene(turn: Turn, change: SceneChange | null): void {
+    if (!change) return
+    sceneChange.value = { ...change, turnId: turn.id }
+    scene.wait(turn.id, change.unit)
+  }
+
+  /** The scene of the turn being read changes now, if it is still to (once). */
+  function changeSceneNow(): void {
+    const change = sceneChange.value
+    if (!change) return
+    sceneChange.value = null
+    scene.unwait()
+    change.reached()
+  }
+
+  /**
+   * Release the next line of an unnarrated turn after the reading pause of the
+   * one before it; the scene change waiting before the next line (or at the
+   * end of the lines) comes after that pause instead, and the lines go on.
+   */
   function release(previous: StageLine | null): void {
     clearTimeout(timer)
     const next = conversation.value?.lines.find(
       (line) => !line.narrated && !line.shown,
     )
-    if (!next) return
+    const change = sceneChange.value
+    const atScene = !!change && (!next || next.unit >= change.unit)
+    if (!next && !atScene) return
     const wait = previous ? readingPauseMs(previous.markup) : 0
     const show = (): void => {
+      if (atScene) changeSceneNow()
+      if (!next) return
       next.shown = true
       release(next)
     }
@@ -146,12 +196,14 @@ export const useStageSpeechStore = defineStore('stageSpeech', () => {
   function revealAll(): void {
     clearTimeout(timer)
     for (const line of conversation.value?.lines ?? []) line.shown = true
+    changeSceneNow()
   }
 
-  /** Clear the picture; the story keeps everything said. */
+  /** Clear the picture; the story keeps everything said, and a scene still to change changes now. */
   function clear(): void {
     clearTimeout(timer)
     conversation.value = null
+    changeSceneNow()
   }
 
   /**
@@ -160,9 +212,10 @@ export const useStageSpeechStore = defineStore('stageSpeech', () => {
    * when it addressed someone (the talk itself moved Elior); one that
    * addresses no one clears it too and shows only Elior's own quotes
    * (`toldAsSpeech`); one that addresses someone else starts a new one; one
-   * that addresses the same character adds to it.
+   * that addresses the same character adds to it. `change` is where the
+   * scene of an unnarrated talk that moves Elior changes (see `SceneChange`).
    */
-  function observe(turn: Turn): void {
+  function observe(turn: Turn, change: SceneChange | null = null): void {
     revealAll()
     const moved = turn.description?.moved === true
     const addressed = turn.addressed ?? null
@@ -170,7 +223,11 @@ export const useStageSpeechStore = defineStore('stageSpeech', () => {
       toldAsSpeech(turn, line.speaker),
     )
     // Leaving the room ends the conversation; a talk that moved Elior starts a new one.
-    if (!addressed && (moved || !said.length)) return clear()
+    if (!addressed && (moved || !said.length)) {
+      // Nothing is said on the picture: a scene to change changes at once.
+      holdScene(turn, change)
+      return clear()
+    }
     // A turn that addresses no one shows only Elior's own words, on their own.
     const partner = addressed ?? ELIOR
     if (
@@ -181,6 +238,7 @@ export const useStageSpeechStore = defineStore('stageSpeech', () => {
       clear()
       conversation.value = { with: partner, lines: [] }
     }
+    holdScene(turn, change)
     const narrated = narration.narrates(turn.id)
     // Elior's own words come first and need no narrator or pause.
     const own = addressed ? eliorLine(turn.command) : null
@@ -208,6 +266,7 @@ export const useStageSpeechStore = defineStore('stageSpeech', () => {
     lineShown,
     lineSpeaking,
     revealAll,
+    changeSceneNow,
     clear,
     observe,
   }

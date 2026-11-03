@@ -23,20 +23,32 @@ export interface NarrationPaper {
  * `resetKey` (a new game, a load, a new act), opens the paper on the current
  * turn again. On the laptop (`wide`) the paper is the column of narration
  * cards: one for every turn that leaves one since the last room change (see
- * `startsFresh`), at most `MAX_CARDS`, derived from the turns themselves.
+ * `startsFresh`), at most `MAX_CARDS`, derived from the turns themselves; with
+ * the speech told beside the paper (`speechBeside`) a turn told only as speech
+ * leaves none. A talk that moves Elior clears the cards before it only once
+ * its room has changed (`movePending` says it has not yet).
  */
 export function useNarrationPaper(
   turns: () => Turn[],
   resetKey: () => string,
   wide: () => boolean = () => false,
+  speechBeside: () => boolean = () => false,
+  movePending: (turn: Turn) => boolean = () => false,
 ): NarrationPaper {
   const hidden = ref(false)
   const last = computed(() => turns().at(-1))
   const cards = computed(() => {
     const all = turns()
     let fresh = all.length - 1
-    while (fresh > 0 && !startsFresh(all[fresh])) fresh--
-    return all.slice(Math.max(fresh, 0)).filter(turnHasCard).slice(-MAX_CARDS)
+    // The newest turn's move still to come (a talk told over the old picture) clears nothing yet.
+    const starts = (index: number): boolean =>
+      startsFresh(all[index]) &&
+      !(index === all.length - 1 && movePending(all[index]))
+    while (fresh > 0 && !starts(fresh)) fresh--
+    return all
+      .slice(Math.max(fresh, 0))
+      .filter((turn) => turnHasCard(turn, speechBeside()))
+      .slice(-MAX_CARDS)
   })
   const visible = computed(() =>
     wide() ? cards.value.length > 0 : !!last.value && turnTells(last.value),
@@ -45,8 +57,9 @@ export function useNarrationPaper(
     wide() ? cards.value : last.value ? [last.value] : [],
   )
 
-  // A new turn with a card (or something to tell) opens the paper again; one
-  // with neither leaves it as it is. A new game, a load or a new act always do.
+  // A new turn that tells something on the stage, on the paper or as speech
+  // beside it, opens the words again; one with nothing leaves them as they
+  // are. A new game, a load or a new act always do.
   watch(
     () => last.value?.id,
     () => {

@@ -2,6 +2,7 @@ import type { RoomDescription } from '@/engine'
 import { narrationWords } from './narrationManifest'
 import type { NarrationUnit } from './narrationUnits'
 import { parseTurn, type TurnBlock } from './parseTurn'
+import { blockVoice, NARRATOR } from './narrationScript'
 import { SPELL_HEADING, type SpellNews } from './spellNews'
 import {
   newQuestKicker,
@@ -89,10 +90,45 @@ export function sideBlocks(
 }
 
 /**
+ * Where the scene of a talk that took Elior to another room changes: the
+ * narrator's last paragraph on the sides, which tells the move (the dream's
+ * "The dark lets go of you…", Mira's "…traces a prism…"); a speaker's line
+ * after it (Sir Cedric at the fortress gate) comes in the new room. Everything
+ * before it is told over the old picture. -1 for any other turn, or a moving
+ * talk with no narrator's paragraph on the sides.
+ */
+export function sceneBlock(
+  turn: { addressed?: string; description: { moved: boolean } | null },
+  blocks: TurnBlock[],
+): number {
+  if (!turn.description?.moved) return -1
+  for (let i = sideBlocks(turn, blocks) - 1; i >= 0; i--)
+    if (blockVoice(blocks[i])?.speaker === NARRATOR) return i
+  return -1
+}
+
+/**
+ * The first block of a talk that took Elior to another room that only the
+ * record (Story so far) tells: every event line it ends on, after its words
+ * on the sides (`sideBlocks`), which today is only the dream's closing "You
+ * are in …". The stage tells neither them nor, in the middle, anything but
+ * the room, so a new event at the end of such a talk is only in Story so far
+ * too. `blocks.length` (every block is told on the stage) for any other turn.
+ */
+export function recordOnlyFrom(
+  turn: { addressed?: string; description: { moved: boolean } | null },
+  blocks: TurnBlock[],
+): number {
+  if (!turn.addressed || !turn.description?.moved) return blocks.length
+  return sideBlocks(turn, blocks)
+}
+
+/**
  * The parts of an arrival: the answer's words (a departure line, an event)
  * if there are any, then the room's description. A talk that moved Elior
- * leaves its words to the sides (`sideBlocks`), and its first part waits for
- * them (`afterWords`). `units` are the turn's narration units, to say which
+ * leaves its words to the sides (`sideBlocks`) and its closing arrival lines
+ * to the record (`recordOnlyFrom`), so only the room is told, once the words
+ * are (`afterWords`). `units` are the turn's narration units, to say which
  * part has a voice; the description is the unit after the answer's blocks.
  */
 export function arrivalParts(
@@ -112,7 +148,7 @@ export function arrivalParts(
     )
   const events: ArrivalLine[] = []
   blocks.forEach((block, unit) => {
-    if (unit >= aside && block.kind !== 'checklist' && block.markup.trim())
+    if (aside === 0 && block.kind !== 'checklist' && block.markup.trim())
       events.push(
         block.kind === 'dialogue'
           ? { unit, markup: block.markup, joinsPrevious: true }

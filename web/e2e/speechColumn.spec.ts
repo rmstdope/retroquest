@@ -199,7 +199,11 @@ test('on a phone the lines rest at the foot of the column and a two-line name cl
     const row = column.querySelector('.lq-cl-left')!
     const label = row.querySelector<HTMLElement>('.lq-line-name')!
     label.textContent = 'Master Merchant Aldric Of The Far Reaches'
-    const before = row.previousElementSibling!.getBoundingClientRect()
+    // The row above: in the same turn, or the last one of the turn before.
+    const above =
+      row.previousElementSibling ??
+      row.parentElement!.previousElementSibling!.lastElementChild!
+    const before = above.getBoundingClientRect()
     const at = label.getBoundingClientRect()
     return {
       aboveWords:

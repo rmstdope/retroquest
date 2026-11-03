@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
-import { useGameStore } from '@/stores/useGameStore'
+import { useGameStore, type Turn } from '@/stores/useGameStore'
 import { renderMarkup } from '@/utils/theme'
 import { useSettingsStore } from '@/stores/useSettingsStore'
 import { useNarrationStore } from '@/stores/useNarrationStore'
 import { useStageSpeechStore } from '@/stores/useStageSpeechStore'
 import { useArrivalStore } from '@/stores/useArrivalStore'
 import { useSceneStore } from '@/stores/useSceneStore'
+import { useFlightStore } from '@/stores/useFlightStore'
 import {
   POPUP_NARRATION_ID,
   chapterUnits,
@@ -21,7 +22,9 @@ import {
   newsOnPicture,
   newsParts,
   readingTimeMs,
+  sceneBlock,
 } from '@/lantern/stageArrival'
+import { parseTurn } from '@/lantern/parseTurn'
 import { usePanelHold } from '@/composables/usePanelHold'
 import { useAudio } from '@/composables/useAudio'
 import { useActMusic } from '@/composables/useActMusic'
@@ -29,6 +32,7 @@ import { useFocusTrap } from '@/composables/useFocusTrap'
 import { nameActions, type NameAction } from '@/lantern/nameActions'
 import { parseCountedName } from '@/lantern/inventoryChanges'
 import { useStoryFollow } from '@/composables/useStoryFollow'
+import { STAGE_BUBBLES, useBubbleAges } from '@/composables/useBubbleAges'
 import { useNarrationPaper } from '@/composables/useNarrationPaper'
 import {
   SHORT_QUERY,
@@ -39,6 +43,7 @@ import {
 } from '@/composables/useMediaQuery'
 import ActionComposer from './ActionComposer.vue'
 import ArrivalOnPicture from './ArrivalOnPicture.vue'
+import AcquiredFlight from './AcquiredFlight.vue'
 import ChapterPage from './ChapterPage.vue'
 import CompassPanel from './CompassPanel.vue'
 import DockBar from './DockBar.vue'
@@ -72,15 +77,18 @@ import TitlePage from './TitlePage.vue'
  * room is played on its picture, which fills the play area: a plate (room
  * and who and what is here) top-left, the buttons Bag, Spells, Quests, Story
  * so far and Map top-right (the journal and the story open as a drawer from
- * the right, the map beneath its button), the narrator's words as paper cards
- * up the left side and the actions as one row along the bottom.
- * The cards are the narration paper: one per turn since the last room change
- * (`useNarrationPaper`), the newest lit and older ones dimmed, each starting
- * with the command; the newest grows as the narrator reaches each part and,
- * when it is taller than the room under the plate, scrolls with a "More below"
- * pill. One "▾ Hide" on its own line at the bottom centre of the picture (or N,
- * or Escape when nothing is narrated) clears both the cards and the speech,
- * leaving a "▴ Show" tab in its place; the tab, N or the next turn with a card
+ * the right, the map beneath its button), the narrator's words up the left
+ * side and the actions as one row along the bottom.
+ * The left side is the narration paper: the turns since the last room change
+ * (`useNarrationPaper`), each told as one bubble per paragraph like the speech
+ * on the right (`StoryTurn`), the newest bubble lit and older ones dimmed
+ * (`useBubbleAges`); the command is not echoed (Story so far keeps it), and
+ * quest news told in the middle leaves nothing here. The newest turn grows as
+ * the narrator reaches each part and, when it is taller than the room under
+ * the plate, scrolls with a "More below" pill. One "▾ Hide" on its own line at the bottom centre of the picture (or N,
+ * or Escape when nothing is narrated) clears both the narrator's bubbles and
+ * the speech, leaving a "▴ Show" tab in its place; the tab, N or the next turn
+ * that tells something
  * brings both back as they were, and every turn is read in the story drawer.
  * Under about 1100 px wide (a laptop window too narrow for two sides, and
  * every phone's picture stage) there is no side for speech: the cards and the
@@ -89,9 +97,8 @@ import TitlePage from './TitlePage.vue'
  * and across the picture on a phone, down to the same Hide and Show.
  * The first time the player walks into a room its arrival is told on the
  * middle of the picture instead (`ArrivalOnPicture`, `useArrivalStore`): the
- * words are clear (no Hide or Show) and the cards come back when the arrival
- * clears (as a slim card with the command, the room itself having been told
- * in the middle). Enter or Space goes on, a click on the
+ * words are clear (no Hide or Show) and the bubbles come back when the
+ * arrival clears (the room itself having been told in the middle). Enter or Space goes on, a click on the
  * picture too; Escape, the tab, an action or typing clear it at once.
  * Smaller screens that are not short (a phone upright) play the same stage
  * arranged for a tall screen: the plate across the top with "⟲ Story so far"
@@ -121,7 +128,11 @@ import TitlePage from './TitlePage.vue'
  * scene (`useSceneStore`, `StagePicture`): the old picture goes dark, the new
  * one rises, the room's name changes in the dark, and the move's words and
  * narrator wait until the picture is up; Enter, a click on the picture, a
- * press in a panel or a new command bring the new room up at once.
+ * press in a panel or a new command bring the new room up at once. A talk
+ * that moves Elior (answering the dream's voice) is told over the old picture
+ * and changes scene partway (`sceneBlock`), before the narrator's last
+ * paragraph on the sides: when the narrator reaches it, or, unnarrated, once
+ * the lines before it are read; a speaker's line after it comes in the new room.
  */
 const game = useGameStore()
 const settings = useSettingsStore()
@@ -327,6 +338,11 @@ const paper = useNarrationPaper(
   () => game.turns,
   () => stageKey.value,
   () => staged.value,
+  () => twoSides.value,
+  // A talk that moves Elior keeps the cards before it until its scene changes (`scene.cut`).
+  (turn) =>
+    scene.firstUnit(turn.id) === null &&
+    sceneBlock(turn, parseTurn(turn.text)) >= 0,
 )
 /** What the story pane holds: the narration cards on the stage, every turn elsewhere. */
 const storyTurns = computed(() =>
@@ -475,13 +491,23 @@ async function openDock(mode: 'actions' | 'type'): Promise<void> {
   composer.value?.focus()
 }
 
+/**
+ * The story's element for the game's newest turn, or null when that turn
+ * shows nothing there (a talk told only as speech, a turn not reached yet):
+ * then nothing is scrolled to, measured or followed for it.
+ */
+function newestTurnEl(): HTMLElement | null {
+  const id = game.turns.at(-1)?.id
+  if (id === undefined) return null
+  return (
+    contentEl.value?.querySelector<HTMLElement>(`[data-turn="${id}"]`) ?? null
+  )
+}
+
 /** Whether the newest turn is taller than the story area beside the actions. */
 function answerTooLong(): boolean {
   const story = storyEl.value
-  const last = contentEl.value?.lastElementChild as
-    | HTMLElement
-    | null
-    | undefined
+  const last = newestTurnEl()
   return !!story && !!last && last.offsetHeight > story.clientHeight
 }
 
@@ -893,11 +919,8 @@ watch(
 )
 onUnmounted(() => widePlateResize?.disconnect())
 
-/** Faded by how far back the card is: 0 newest, 1 the one before, 2 older (as speech lines). */
-function cardAge(index: number, count: number): 'new' | 'prev' | 'old' {
-  const back = count - 1 - index
-  return back === 0 ? 'new' : back === 1 ? 'prev' : 'old'
-}
+// The narrator's bubbles and the column's lines dim by how far back they were told, as speech does.
+useBubbleAges(contentEl, STAGE_BUBBLES)
 
 /** The phone's plate height, which the arrival on the picture stays clear of. */
 const plateHeight = ref(108)
@@ -962,7 +985,7 @@ watch(() => settings.textSize, updateMoreBelow, { flush: 'post' })
 watch(storyHeld, async (held) => {
   if (held) return
   await nextTick()
-  const latest = contentEl.value?.lastElementChild
+  const latest = newestTurnEl()
   if (staged.value && !narration.readToEnd && latest && storyEl.value) {
     const top =
       latest.getBoundingClientRect().top -
@@ -989,7 +1012,9 @@ watch(
 watch(
   () => game.turns.at(-1)?.id,
   () => {
-    // The change of scene of the move before is brought up first (its words are told, then cut in on below).
+    // The change of scene of the move before is brought up first (its words are
+    // told, then cut in on below); a talk still to change scene lets go of its words.
+    speech.changeSceneNow()
     scene.skip()
     arrival.clear()
     narration.skipAll()
@@ -1032,27 +1057,130 @@ watch(
       !motionReduced() &&
       scene.shown !== null &&
       game.roomPicture !== scene.shown
+    // A talk that moves Elior keeps the old picture and changes scene partway.
+    const sceneAt =
+      !!turn &&
+      !changing &&
+      staged.value &&
+      !game.showModal &&
+      scene.shown !== null
+        ? sceneBlock(turn, parseTurn(turn.text))
+        : -1
     if (turn?.narrate && folder && manifest && !game.showModal)
-      narration.begin(turn.id, units, folder, changing)
+      narration.begin(turn.id, units, folder, changing, sceneAt)
     if (turn && changing) scene.begin(turn.id, game.roomPicture, tellTurn)
     else tellTurn()
     /** The conversation, the arrival and the narrator of the turn: now, or once its picture is up. */
     function tellTurn(): void {
       if (!turn) return
-      // The room's name goes with the picture (at the dark, or here when skipped or with no fade).
-      if (changing || (staged.value && !game.showModal && motionReduced()))
+      // The room's name goes with the picture (at the dark, or here when skipped
+      // or with no fade); a talk's goes where its scene changes (`changeScene`).
+      if (
+        changing ||
+        (staged.value && !game.showModal && motionReduced() && sceneAt < 0)
+      )
         game.releasePanels(turn.id, ['place'], true)
       if (changing) narration.start(turn.id)
       // The conversation on the picture (laptop only) follows the turn; it reads
       // the narration just begun, so it comes after it and before the news
       // that waits for it.
-      if (staged.value) speech.observe(turn)
+      const unnarratedScene =
+        sceneAt >= 0 && !narration.narrates(turn.id)
+          ? { unit: sceneAt, reached: () => changeScene(turn, sceneAt) }
+          : null
+      if (staged.value) speech.observe(turn, unnarratedScene)
       if (parts.length)
         arrival.show(turn.id, parts, narration.narrates(turn.id))
       // Its panels wait for the voice, or, with none to wait for, change now.
       if (narration.narrates(turn.id)) panelHold.track(turn)
-      else panelHold.settle(turn)
+      else if (!unnarratedScene) panelHold.settle(turn)
     }
+  },
+)
+
+/** The latest talk that moves Elior and where its room changes, until it has. */
+let talkCut: { turn: number; at: number } | null = null
+watch(
+  () => game.turns.at(-1),
+  (turn) => {
+    const at = turn ? sceneBlock(turn, parseTurn(turn.text)) : -1
+    talkCut = turn && at >= 0 ? { turn: turn.id, at } : null
+  },
+  { flush: 'sync' },
+)
+// The music moves with the room: when the talk's does (its scene changes, it is
+// skipped, a newer command cuts in), what it told in the old room leaves the screen.
+watch(
+  () => game.musicRoomKey,
+  () => {
+    if (!talkCut) return
+    scene.cut(talkCut.turn, talkCut.at)
+    talkCut = null
+  },
+  { flush: 'sync' },
+)
+
+// A narrated talk that moves Elior changes scene where the narrator stops for it.
+watch(
+  () => {
+    const turn = game.turns.at(-1)
+    return turn && narration.atSceneChange(turn.id) ? turn : null
+  },
+  (turn) => {
+    if (turn) changeScene(turn, sceneBlock(turn, parseTurn(turn.text)))
+  },
+)
+
+/**
+ * The scene of talk `turn` changes now, before its block `at`: what it told
+ * in the old room leaves the screen, the music and the picture move to the
+ * new room through the dark, and the rest of the talk waits until the
+ * picture is up. Under Reduce motion, or with the same picture,
+ * they (and the room's name) move at once with no fade. Nothing happens once a
+ * newer turn has come.
+ */
+function changeScene(turn: Turn, at: number): void {
+  if (game.turns.at(-1)?.id !== turn.id) return
+  game.releaseMusic(turn.id)
+  const narrated = narration.narrates(turn.id)
+  const up = (): void => {
+    // A newer turn brings this one up only to cut in on it: no voice starts.
+    if (game.turns.at(-1)?.id !== turn.id) return
+    if (narrated) narration.passSceneChange(turn.id)
+    else panelHold.settle(turn)
+  }
+  if (game.roomPicture !== scene.shown && !motionReduced())
+    scene.begin(turn.id, game.roomPicture, up, at)
+  else {
+    game.releasePanels(turn.id, ['place'], true)
+    up()
+  }
+}
+
+const flights = useFlightStore()
+/** The newest turn whose gained things have flown (or were let be): each turn's fly once. */
+let flownTurn = game.turns.at(-1)?.id ?? null
+// A new command stops what is still flying (its counts are already up).
+watch(
+  () => game.turns.at(-1)?.id,
+  () => flights.clear(),
+)
+// On the picture stage, a turn's gained items and spells fly to the Bag and
+// Spells buttons once the turn lets go of them (as their counts change) and
+// the middle of the picture is clear: no news or arrival told or waiting
+// there, no change of scene, and no pop-up over it.
+watch(
+  () => {
+    const turn = game.turns.at(-1)
+    const clear =
+      arrival.turnId === null && scene.turn === null && !game.showModal
+    return turn && clear && !game.groupHeld('stock') ? turn.id : null
+  },
+  (id) => {
+    const turn = game.turns.at(-1)
+    if (id === null || !turn || id === flownTurn) return
+    flownTurn = id
+    if (staged.value && turn.gained.length) flights.launch(turn.gained)
   },
 )
 
@@ -1089,7 +1217,8 @@ onUnmounted(() => game.setPanelHold(false))
 function onPanelPress(event: MouseEvent): void {
   const target = event.target instanceof Element ? event.target : null
   if (!target?.closest('[data-panel] :is(button, a, [role="button"])')) return
-  // A press during a change of scene brings the new room up first.
+  // A press during a change of scene (or before a talk's) brings the new room up first.
+  speech.changeSceneNow()
   scene.skip()
   // Opening the sheet changes nothing the voice holds: it never waits for it.
   if (target.closest('.lq-dock-open, .lq-dock-icon')) return
@@ -1235,7 +1364,7 @@ watch(
     const away = !wide.value && section.value !== 'story'
     section.value = 'story'
     await nextTick()
-    const latest = contentEl.value?.lastElementChild
+    const latest = newestTurnEl()
     // A held story is moved only through `moveStory`, which knows where it belongs.
     if (storyHeld.value && latest && storyEl.value)
       moveStory(
@@ -1637,21 +1766,13 @@ watch(
           >
             <h2 class="lq-sr-only">Story</h2>
             <div ref="contentEl" class="lq-paper-content">
-              <template v-for="(turn, index) in storyTurns" :key="turn.id">
-                <ColumnTurn
-                  v-if="column"
-                  :turn="turn"
-                  :age="cardAge(index, storyTurns.length)"
-                />
+              <template v-for="turn in storyTurns" :key="turn.id">
+                <ColumnTurn v-if="column" :turn="turn" :data-turn="turn.id" />
                 <StoryTurn
                   v-else
                   :turn="turn"
                   :card="staged"
-                  :class="
-                    staged
-                      ? `lq-age-${cardAge(index, storyTurns.length)}`
-                      : undefined
-                  "
+                  :data-turn="turn.id"
                 />
               </template>
             </div>
@@ -1761,6 +1882,7 @@ watch(
         class="lq-nav-bottom"
         @press="onSectionPress"
       />
+      <AcquiredFlight v-if="staged" />
 
       <SaveToast />
 

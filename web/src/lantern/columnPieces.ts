@@ -3,10 +3,11 @@
  * the pieces of the turn in the order they happened, like a play script. A
  * piece is either a narrator card (a run of the answer's blocks that no
  * character speaks) or one spoken line; the narrator's words come in the
- * column exactly where they happened between the lines. The command is typed
- * on the first card, or on a slim card of its own when the turn begins with
- * speech; item chips stay on the card that names them; the turn's news lines
- * come last, after the last spoken line.
+ * column exactly where they happened between the lines. The command is marked
+ * on the first card, or on a card of its own when the turn begins with speech
+ * (the stage does not echo it, `StoryTurn`); item chips stay on the card that
+ * names them (on the stage only what the bag lost: a gained thing flies to
+ * its button); the turn's news comes last, after the last spoken line.
  */
 import type { Turn } from '@/stores/useGameStore'
 import { arrivesOnPicture } from './stageArrival'

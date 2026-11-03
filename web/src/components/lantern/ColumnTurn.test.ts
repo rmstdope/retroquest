@@ -50,12 +50,13 @@ describe('ColumnTurn', () => {
       `${say('Mira', 'Hello.')}\nShe smiles.\n${say('Mira', 'Again.')}`,
     )
     speech.observe(t)
-    const w = mount(ColumnTurn, { props: { turn: t, age: 'new' } })
+    const w = mount(ColumnTurn, { props: { turn: t } })
     // The second line waits for its reading pause; nothing after it is out.
-    expect(order(w)).toEqual(['card', 'line:Hello.', 'card'])
+    // The command is not echoed, so no card comes before the first line.
+    expect(order(w)).toEqual(['line:Hello.', 'card'])
     speech.revealAll()
     await w.vm.$nextTick()
-    expect(order(w)).toEqual(['card', 'line:Hello.', 'card', 'line:Again.'])
+    expect(order(w)).toEqual(['line:Hello.', 'card', 'line:Again.'])
   })
 
   it('holds back a card that follows a line which has not appeared yet', () => {
@@ -64,7 +65,7 @@ describe('ColumnTurn', () => {
       `${say('Mira', 'Hello.')}\n${say('Mira', 'Again.')}\nShe smiles.`,
     )
     speech.observe(t)
-    const w = mount(ColumnTurn, { props: { turn: t, age: 'new' } })
+    const w = mount(ColumnTurn, { props: { turn: t } })
     expect(w.text()).not.toContain('She smiles.')
     expect(w.text()).not.toContain('Again.')
   })
@@ -76,7 +77,7 @@ describe('ColumnTurn', () => {
     const speech = useStageSpeechStore()
     speech.observe(t)
     speech.revealAll()
-    const w = mount(ColumnTurn, { props: { turn: t, age: 'new' } })
+    const w = mount(ColumnTurn, { props: { turn: t } })
     expect(w.findAll('.lq-line-name').map((n) => n.text())).toEqual([
       'Mira',
       'Mira',
@@ -89,23 +90,15 @@ describe('ColumnTurn', () => {
     const speech = useStageSpeechStore()
     speech.observe(t)
     speech.revealAll()
-    const w = mount(ColumnTurn, { props: { turn: t, age: 'new' } })
+    const w = mount(ColumnTurn, { props: { turn: t } })
     const lines = w.findAll('[data-testid="speech-line"]')
     expect(lines.map((l) => l.classes('lq-cl-left'))).toEqual([true, false])
     expect(lines[0].text()).toContain('hello')
   })
 
-  it('wears the dimming of its age', () => {
-    const t = turn('Hm.', { addressed: undefined })
-    for (const age of ['new', 'prev', 'old'] as const) {
-      const w = mount(ColumnTurn, { props: { turn: t, age } })
-      expect(w.classes()).toContain(`lq-age-${age}`)
-    }
-  })
-
   it('keeps the lines of an older turn once the conversation has let go of them', () => {
     const t = turn(say('Mira', 'Hello.'))
-    const w = mount(ColumnTurn, { props: { turn: t, age: 'old' } })
+    const w = mount(ColumnTurn, { props: { turn: t } })
     expect(w.text()).toContain('Hello.')
   })
 
@@ -115,10 +108,10 @@ describe('ColumnTurn', () => {
     speech.observe(t)
     speech.revealAll()
     vi.spyOn(speech, 'lineSpeaking').mockReturnValue(true)
-    const reading = mount(ColumnTurn, { props: { turn: t, age: 'new' } })
+    const reading = mount(ColumnTurn, { props: { turn: t } })
     expect(reading.find('.lq-line').classes()).toContain('lq-speaking')
     vi.mocked(speech.lineSpeaking).mockReturnValue(false)
-    const older = mount(ColumnTurn, { props: { turn: t, age: 'old' } })
+    const older = mount(ColumnTurn, { props: { turn: t } })
     expect(older.find('.lq-line').classes()).not.toContain('lq-speaking')
   })
 
@@ -136,7 +129,7 @@ describe('ColumnTurn', () => {
       (_turnId, _unit, firstWord) => firstWord === reading.value,
     )
     const w = mount(ColumnTurn, {
-      props: { turn: t, age: 'new' },
+      props: { turn: t },
       attachTo: document.body,
     })
     const followed: string[] = []
@@ -167,7 +160,7 @@ describe('ColumnTurn', () => {
     const reading = ref(false)
     vi.spyOn(speech, 'lineSpeaking').mockImplementation(() => reading.value)
     const w = mount(ColumnTurn, {
-      props: { turn: t, age: 'new' },
+      props: { turn: t },
       attachTo: document.body,
     })
     const followed: string[] = []
@@ -195,7 +188,7 @@ describe('ColumnTurn', () => {
         exits: {},
       },
     })
-    const w = mount(ColumnTurn, { props: { turn: t, age: 'new' } })
+    const w = mount(ColumnTurn, { props: { turn: t } })
     expect(w.findAll('[data-testid="turn"]')).toHaveLength(1)
     expect(w.find('[data-testid="command"]').exists()).toBe(false)
     expect(w.text()).toContain('Cosy.')
@@ -240,7 +233,7 @@ describe('ColumnTurn', () => {
       'act1',
     )
     speech.observe(t)
-    const w = mount(ColumnTurn, { props: { turn: t, age: 'new' } })
+    const w = mount(ColumnTurn, { props: { turn: t } })
     audio.currentTime = 1.5
     await vi.advanceTimersByTimeAsync(60)
     expect(w.findAll('.lq-w-now').map((el) => el.text())).toEqual(['storm'])
@@ -271,7 +264,7 @@ describe('ColumnTurn', () => {
     const t = turn(`${told}\n${say('Mira', 'Hello.')}`)
     speech.observe(t)
     const w = mount(ColumnTurn, {
-      props: { turn: t, age: 'new' },
+      props: { turn: t },
       attachTo: document.body,
     })
     let unitFollows = 0

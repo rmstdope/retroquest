@@ -104,8 +104,17 @@ describe('LanternLayout: the arrival on the picture', () => {
 
   const card = (w: VueWrapper): string =>
     w.find('.lq-arrival-card').exists() ? w.get('.lq-arrival-card').text() : ''
-  const storyAside = (w: VueWrapper): boolean =>
+  /** The story is slid aside for the arrival (the class; an empty paper is not shown at all). */
+  const slidAside = (w: VueWrapper): boolean =>
     w.get('.lq-story-wrap').classes().includes('lq-paper-away')
+  /** The story is out of the way: slid aside, or not shown at all (nothing on it). */
+  const storyAside = (w: VueWrapper): boolean => {
+    const wrap = w.get('.lq-story-wrap')
+    return (
+      wrap.classes().includes('lq-paper-away') ||
+      (wrap.element as HTMLElement).style.display === 'none'
+    )
+  }
   const key = async (name: string): Promise<void> => {
     document.dispatchEvent(
       new KeyboardEvent('keydown', { key: name, bubbles: true }),
@@ -143,7 +152,7 @@ describe('LanternLayout: the arrival on the picture', () => {
     expect(w.find('.lq-words-hide').exists()).toBe(false)
   })
 
-  it('clears 1½ s after the narrator finishes, and the cards come back with a slim card for the walk', async () => {
+  it('clears 1½ s after the narrator finishes, leaving nothing of the walk on the left', async () => {
     const w = await ready()
     await run('go north')
     await vi.advanceTimersByTimeAsync(SCENE_PAUSE_MS)
@@ -154,10 +163,10 @@ describe('LanternLayout: the arrival on the picture', () => {
     expect(card(w)).not.toBe('')
     await vi.advanceTimersByTimeAsync(1)
     expect(card(w)).toBe('')
-    expect(storyAside(w)).toBe(false)
+    expect(slidAside(w)).toBe(false)
     expect(w.find('.lq-paper-tab').exists()).toBe(false)
-    // The room was told in the middle: the card keeps only the command.
-    expect(w.get('.lq-story').text()).toContain('› go north')
+    // The room was told in the middle, and the command is not echoed.
+    expect(w.get('.lq-story').text()).not.toContain('› go north')
     expect(w.get('.lq-story').text()).not.toContain('A green garden.')
   })
 
@@ -171,7 +180,7 @@ describe('LanternLayout: the arrival on the picture', () => {
     expect(card(w)).not.toBe('')
     await vi.advanceTimersByTimeAsync(1)
     expect(card(w)).toBe('')
-    expect(storyAside(w)).toBe(false)
+    expect(slidAside(w)).toBe(false)
   })
 
   it('does the same when the room has no recording yet', async () => {
@@ -187,7 +196,7 @@ describe('LanternLayout: the arrival on the picture', () => {
     await key('Enter')
     expect(card(w)).toBe('')
     expect(useNarrationStore(pinia).isNarrating).toBe(false)
-    expect(storyAside(w)).toBe(false)
+    expect(slidAside(w)).toBe(false)
   })
 
   it('goes on with a click on the picture', async () => {
@@ -232,7 +241,7 @@ describe('LanternLayout: the arrival on the picture', () => {
     input.dispatchEvent(down)
     await vi.advanceTimersByTimeAsync(0)
     expect(card(w)).toBe('')
-    expect(storyAside(w)).toBe(false)
+    expect(slidAside(w)).toBe(false)
     expect(useGameStore(pinia).turns).toHaveLength(turns)
   })
 
@@ -264,7 +273,7 @@ describe('LanternLayout: the arrival on the picture', () => {
     await key('Escape')
     expect(card(w)).toBe('')
     expect(useNarrationStore(pinia).isNarrating).toBe(false)
-    expect(storyAside(w)).toBe(false)
+    expect(slidAside(w)).toBe(false)
   })
 
   it('shows neither Hide nor Show while the arrival is told on a phone', async () => {
@@ -311,7 +320,7 @@ describe('LanternLayout: the arrival on the picture', () => {
     await run('go north')
     await run('inventory')
     expect(card(w)).toBe('')
-    expect(storyAside(w)).toBe(false)
+    expect(slidAside(w)).toBe(false)
   })
 
   it('does not tell a room already visited, nor a look', async () => {
@@ -319,12 +328,12 @@ describe('LanternLayout: the arrival on the picture', () => {
     useSettingsStore(pinia).narrationOn = false
     await run('look')
     expect(card(w)).toBe('')
-    expect(storyAside(w)).toBe(false)
+    expect(slidAside(w)).toBe(false)
     await run('go north')
     await key('Escape')
     await run('go south')
     expect(card(w)).toBe('')
-    expect(storyAside(w)).toBe(false)
+    expect(slidAside(w)).toBe(false)
   })
 
   it('tells the arrival on a phone too, with its own hint', async () => {
@@ -387,7 +396,8 @@ describe('LanternLayout: the arrival on the picture', () => {
     expect(card(w)).toContain('Go.')
     await w.get('[data-testid="arrival-on-picture"]').trigger('click')
     expect(card(w)).toBe('')
-    expect(w.get('.lq-story').text()).toContain('New side quest · Q')
+    // The news was told in the middle: it leaves no line on the left.
+    expect(w.get('.lq-story').text()).not.toContain('New side quest')
   })
 
   describe('quest news', () => {
@@ -431,7 +441,7 @@ describe('LanternLayout: the arrival on the picture', () => {
       })
     }
 
-    it('is told in the middle, one piece after the other, then leaves slim lines on the card', async () => {
+    it('is told in the middle, one piece after the other, and leaves no line on the left', async () => {
       const w = await ready(true, false)
       useSettingsStore(pinia).narrationOn = false
       const audio = {
@@ -452,14 +462,12 @@ describe('LanternLayout: the arrival on the picture', () => {
       expect(audio.playNewQuest).toHaveBeenCalledOnce()
       await w.get('[data-testid="arrival-on-picture"]').trigger('click')
       expect(card(w)).toBe('')
-      expect(storyAside(w)).toBe(false)
-      const lines = w.findAll('[data-testid="news-line"]')
-      expect(lines).toHaveLength(2)
-      expect(lines[0].text()).toContain('Side quest complete · Hint of Magic')
-      expect(lines[1].text()).toContain('Quest updated · The cat')
+      expect(slidAside(w)).toBe(false)
+      expect(w.findAll('[data-testid="news-line"]')).toHaveLength(0)
+      expect(w.get('.lq-story').text()).not.toContain('Hint of Magic')
     })
 
-    it('tells a turn whose news still waits for the narrator as slim lines, and rings its sounds, when the player moves on', async () => {
+    it('rings the sounds of a turn whose news still waits for the narrator when the player moves on, leaving no line', async () => {
       const w = await ready(true, true)
       const audio = {
         playNewQuest: vi.fn(),
@@ -473,9 +481,7 @@ describe('LanternLayout: the arrival on the picture', () => {
       expect(card(w)).toBe('')
       expect(w.findAll('[data-testid="news-line"]')).toHaveLength(0)
       await run('look')
-      const lines = w.findAll('[data-testid="news-line"]')
-      expect(lines).toHaveLength(2)
-      expect(lines[0].text()).toContain('Side quest complete · Hint of Magic')
+      expect(w.findAll('[data-testid="news-line"]')).toHaveLength(0)
       expect(audio.playQuestComplete).toHaveBeenCalledOnce()
     })
 
@@ -527,24 +533,7 @@ describe('LanternLayout: the arrival on the picture', () => {
       await vi.advanceTimersByTimeAsync(0)
       await key('Escape')
       expect(card(w)).toBe('')
-      expect(w.findAll('[data-testid="news-line"]')).toHaveLength(2)
-    })
-
-    it('opens the journal at the quest from its slim line', async () => {
-      const w = await ready(true, false)
-      useSettingsStore(pinia).narrationOn = false
-      const game = useGameStore(pinia)
-      game.setAudioPlayer({
-        playNewQuest: vi.fn(),
-        playQuestComplete: vi.fn(),
-        playNewSpell: vi.fn(),
-      })
-      const open = vi.spyOn(game, 'openQuestInJournal')
-      pushTurn(news())
-      await vi.advanceTimersByTimeAsync(0)
-      await key('Escape')
-      await w.findAll('[data-testid="news-line"] button')[0].trigger('click')
-      expect(open).toHaveBeenCalledWith('Hint of Magic')
+      expect(w.findAll('[data-testid="news-line"]')).toHaveLength(0)
     })
   })
 
@@ -563,12 +552,14 @@ describe('LanternLayout: the arrival on the picture', () => {
     expect(w.get('.lq-story').text()).toContain('The heart of Willowbrook.')
   })
 
-  it('keeps the paper away and inert only while the arrival is told', async () => {
+  it('keeps the paper away only while the arrival is told', async () => {
     const w = await ready()
     useSettingsStore(pinia).narrationOn = false
     await run('go north')
-    expect(w.get('.lq-story-wrap').attributes('inert')).toBeDefined()
+    expect(storyAside(w)).toBe(true)
     await key('Escape')
+    await run('look')
+    expect(slidAside(w)).toBe(false)
     expect(w.get('.lq-story-wrap').attributes('inert')).toBeUndefined()
   })
 
@@ -588,7 +579,7 @@ describe('LanternLayout: the arrival on the picture', () => {
     useSettingsStore(pinia).narrationOn = false
     await vi.advanceTimersByTimeAsync(0)
     expect(card(w)).toBe('')
-    expect(storyAside(w)).toBe(false)
+    expect(slidAside(w)).toBe(false)
   })
 
   it('does not let a held key run through the parts', async () => {
