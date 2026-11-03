@@ -10,7 +10,8 @@ import LanternDialog from './LanternDialog.vue'
  * first) as cards with the act, room, quests and time. An empty slot saves
  * at once; replacing a save or loading one asks first, inside its card.
  * A load closes the dialog; a save stays, marked "Just saved" (or the
- * dialog says the save failed). Escape in a question cancels it first;
+ * dialog says the save failed). A save from an older version is dimmed with
+ * its reason: it cannot be picked to load, but its slot can be saved over. Escape in a question cancels it first;
  * the next Escape closes the dialog.
  */
 const props = defineProps<{ mode: 'save' | 'load' }>()
@@ -18,6 +19,7 @@ const emit = defineEmits<{ close: [] }>()
 const game = useGameStore()
 
 const QUICK = 0
+const OUTDATED = "Made by an older version · can't be loaded"
 const saving = computed(() => props.mode === 'save')
 const version = ref(0) // bumped after a save so the cards are read again
 const asking = ref<number | null>(null)
@@ -118,7 +120,8 @@ function cardLabel(card: SaveSlot): string {
     .filter(Boolean)
     .join(', ')
   const action = `${saving.value ? 'Save to' : 'Load'} ${name}`
-  return details ? `${action}: ${details}` : action
+  const label = details ? `${action}: ${details}` : action
+  return card.outdated ? `${label}. ${OUTDATED}` : label
 }
 </script>
 
@@ -146,13 +149,14 @@ function cardLabel(card: SaveSlot): string {
         class="lq-slot"
         :class="{
           'lq-slot-filled': filled(card),
+          'lq-slot-old': card.outdated,
           'lq-slot-on': asking === card.slot || justSaved === card.slot,
         }"
       >
         <button
           type="button"
           class="lq-slot-btn"
-          :disabled="!saving && !filled(card)"
+          :disabled="!saving && (!filled(card) || card.outdated)"
           :aria-label="cardLabel(card)"
           @click="pick(card)"
         >
@@ -181,11 +185,17 @@ function cardLabel(card: SaveSlot): string {
                 </template>
                 <span>{{ savedWhen(card.timestamp) }}</span>
               </span>
+              <span v-if="card.outdated" class="lq-slot-why">{{
+                OUTDATED
+              }}</span>
             </template>
             <span v-else class="lq-slot-empty">{{
               saving ? 'Empty slot · tap to save here' : 'Empty slot'
             }}</span>
           </span>
+          <span v-if="card.outdated" class="lq-slot-lock" aria-hidden="true"
+            >⊘</span
+          >
           <span v-if="justSaved === card.slot" class="lq-new">Just saved</span>
         </button>
         <div
@@ -250,6 +260,9 @@ function cardLabel(card: SaveSlot): string {
   border-style: solid;
   background: var(--lq-raised);
 }
+.lq-slot-old {
+  background: transparent;
+}
 .lq-slot-on {
   border-color: var(--lq-accent-line);
   background: var(--lq-accent-soft);
@@ -294,6 +307,20 @@ function cardLabel(card: SaveSlot): string {
   background: var(--lq-accent);
   color: var(--lq-on-accent);
 }
+.lq-slot-old .lq-slot-badge {
+  border-color: var(--lq-line2);
+  color: var(--lq-muted);
+}
+.lq-slot-old .lq-slot-quick {
+  background: var(--lq-line2);
+  color: var(--lq-muted);
+}
+.lq-slot-old .lq-slot-main {
+  opacity: 0.6;
+}
+.lq-slot-old .lq-slot-act {
+  color: var(--lq-muted);
+}
 .lq-slot-main {
   flex: 1;
   min-width: 0;
@@ -334,6 +361,16 @@ function cardLabel(card: SaveSlot): string {
   display: block;
   height: 4px;
   background: var(--lq-accent);
+}
+.lq-slot-why {
+  margin-top: 4px;
+  font-size: 12px;
+  color: var(--lq-failure);
+}
+.lq-slot-lock {
+  flex: 0 0 auto;
+  font-size: 15px;
+  color: var(--lq-muted);
 }
 .lq-slot-empty {
   font-size: 13px;

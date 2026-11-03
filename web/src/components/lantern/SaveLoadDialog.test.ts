@@ -249,4 +249,75 @@ describe('SaveLoadDialog', () => {
       'Saves are kept in this browser only.',
     )
   })
+
+  describe('a save from an older version', () => {
+    const REASON = "Made by an older version · can't be loaded"
+
+    beforeEach(() => {
+      slots[2] = {
+        slot: 3,
+        act: 'Act 3',
+        room: 'The Whispering Marsh',
+        timestamp: null,
+        quests: null,
+        outdated: true,
+      }
+      vi.mocked(useGameStore().getQuickSave).mockReturnValue({
+        ...slot(0, true),
+        outdated: true,
+      })
+    })
+
+    it('is dimmed with its reason and cannot be picked when loading', async () => {
+      const w = mountDialog('load')
+      const old = card(w, '3')
+
+      expect(old.classes()).toContain('lq-slot-old')
+      expect(old.text()).toContain('Act III')
+      expect(old.text()).toContain('The Whispering Marsh')
+      expect(old.get('.lq-slot-why').text()).toBe(REASON)
+      expect(old.find('.lq-slot-lock').exists()).toBe(true)
+      expect(old.get('button').attributes()).toHaveProperty('disabled')
+      expect(old.get('button').attributes('aria-label')).toBe(
+        `Load slot 3: Act III, The Whispering Marsh. ${REASON}`,
+      )
+      expect(card(w, 'Q').get('button').attributes()).toHaveProperty('disabled')
+      expect(card(w, 'Q').get('.lq-slot-why').text()).toBe(REASON)
+
+      await old.get('button').trigger('click')
+      expect(old.find('[role="group"]').exists()).toBe(false)
+      expect(useGameStore().loadFromSlot).not.toHaveBeenCalled()
+    })
+
+    it('leaves loadable saves and the top line as they are', () => {
+      const w = mountDialog('load')
+
+      expect(w.get('.lq-intro').text()).toBe('Pick a save to go back to.')
+      const good = card(w, '2')
+      expect(good.classes()).not.toContain('lq-slot-old')
+      expect(good.find('.lq-slot-why').exists()).toBe(false)
+      expect(good.get('button').attributes()).not.toHaveProperty('disabled')
+    })
+
+    it('asks before replacing it when saving, and is a normal save after', async () => {
+      const w = mountDialog('save')
+      const old = card(w, '3')
+
+      expect(old.get('.lq-slot-why').text()).toBe(REASON)
+      expect(old.get('button').attributes()).not.toHaveProperty('disabled')
+      await old.get('button').trigger('click')
+      const ask = old.get('[role="group"]')
+      expect(ask.text()).toContain('Replace this save with your current game?')
+      expect(useGameStore().saveToSlot).not.toHaveBeenCalled()
+
+      await ask
+        .findAll('button')
+        .find((b) => b.text() === 'Replace')!
+        .trigger('click')
+
+      expect(useGameStore().saveToSlot).toHaveBeenCalledWith(3)
+      expect(card(w, '3').classes()).not.toContain('lq-slot-old')
+      expect(card(w, '3').text()).toContain('Just saved')
+    })
+  })
 })
