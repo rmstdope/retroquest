@@ -6,7 +6,7 @@ import {
   type ThemeSetting,
 } from '@/stores/useSettingsStore'
 import { useMediaQuery } from '@/composables/useMediaQuery'
-import type { LanternTextSize } from '@/lantern/tokens'
+import { LANTERN_TEXT_SIZES } from '@/lantern/tokens'
 import LanternDialog from './LanternDialog.vue'
 
 /**
@@ -28,13 +28,6 @@ const THEMES: Array<{ value: ThemeSetting; label: string }> = [
   { value: 'device', label: 'Device' },
   { value: 'light', label: 'Light' },
   { value: 'dark', label: 'Dark' },
-]
-const SIZES: Array<{ value: LanternTextSize; label: string; px: number }> = [
-  { value: 'smallest', label: 'Smallest text', px: 9 },
-  { value: 'extraSmall', label: 'Extra small text', px: 11 },
-  { value: 'small', label: 'Small text', px: 13 },
-  { value: 'medium', label: 'Medium text', px: 17 },
-  { value: 'large', label: 'Large text', px: 21 },
 ]
 const STARTS: Array<{ value: StartMode; label: string }> = [
   { value: 'actions', label: 'Actions' },
@@ -87,7 +80,7 @@ function volume(event: Event): number {
         >
         <div class="lq-seg" role="group" aria-label="Text size">
           <button
-            v-for="s in SIZES"
+            v-for="s in LANTERN_TEXT_SIZES"
             :key="s.value"
             type="button"
             class="lq-seg-btn"
