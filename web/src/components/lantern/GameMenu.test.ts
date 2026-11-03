@@ -8,7 +8,10 @@ import { useGameStore } from '@/stores/useGameStore'
 describe('GameMenu', () => {
   let wrapper: VueWrapper | undefined
 
-  beforeEach(() => setActivePinia(createPinia()))
+  beforeEach(() => {
+    setActivePinia(createPinia())
+    vi.spyOn(useGameStore(), 'getQuickSave').mockReturnValue(null)
+  })
   afterEach(() => {
     wrapper?.unmount()
     wrapper = undefined
@@ -61,6 +64,35 @@ describe('GameMenu', () => {
       ['settings'],
       ['help'],
     ])
+  })
+
+  it('dims Quick load, and says why, when the quick save is from an older version', async () => {
+    const game = useGameStore()
+    vi.mocked(game.getQuickSave).mockReturnValue({
+      slot: 0,
+      act: 'Act 3',
+      room: null,
+      timestamp: null,
+      quests: null,
+      outdated: true,
+    })
+    const load = vi.spyOn(game, 'loadGame').mockImplementation(() => {})
+    const w = mountMenu()
+    const quickLoad = item(w, 'Quick load')
+
+    expect(quickLoad.attributes()).toHaveProperty('disabled')
+    expect(quickLoad.get('.lq-note').text()).toBe(
+      'The quick save is from an older version',
+    )
+    await quickLoad.trigger('click')
+    expect(load).not.toHaveBeenCalled()
+  })
+
+  it('leaves Quick load as it is otherwise', () => {
+    const quickLoad = item(mountMenu(), 'Quick load')
+
+    expect(quickLoad.attributes()).not.toHaveProperty('disabled')
+    expect(quickLoad.get('.lq-note').text()).toBe('Back to the quick save')
   })
 
   it('closes with its close button', async () => {

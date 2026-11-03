@@ -988,13 +988,7 @@ export const useGameStore = defineStore('game', () => {
 
   function loadGame(command: string | null = null): void {
     const b = requireBridge()
-    const result = b.quickLoadGame()
-    dropHold()
-    rememberLoadedAct(b)
-    loadNumber.value++
-    clearNewDots()
-    showLoaded(command, result, 'Game loaded')
-    refreshPanels()
+    afterLoad(b, command, b.quickLoadGame(), 'Game loaded')
   }
 
   function saveNamedGame(name: string, command: string | null = null): boolean {
@@ -1008,31 +1002,35 @@ export const useGameStore = defineStore('game', () => {
 
   function loadNamedGame(name: string, command: string | null = null): void {
     const b = requireBridge()
-    const result = b.loadNamedGame(name)
-    dropHold()
-    rememberLoadedAct(b)
-    loadNumber.value++
-    clearNewDots()
-    showLoaded(command, result, `Game loaded · ${name}`)
-    refreshPanels()
+    afterLoad(b, command, b.loadNamedGame(name), `Game loaded · ${name}`)
   }
 
   /**
-   * A load: a notice and the room in the story (under the command, when one
-   * was typed), or the engine's failure. A
-   * load plays on in the loaded act, so an act-complete page still held for
-   * narration is dropped.
+   * After a load. A failed one (no save, or a save too old to load) only
+   * shows the engine's line under the command, and the game, the room and the
+   * turn stay as they were. A loaded game starts afresh (hold, act, music,
+   * dots and panels): a notice, and the room in the story under the command
+   * when one was typed. It plays on in the loaded act, so an act-complete
+   * page still held for narration is dropped.
    */
-  function showLoaded(
+  function afterLoad(
+    b: GameBridge,
     command: string | null,
     result: string,
     text: string,
   ): void {
-    if (showNotice(result, text)) {
-      actEndPending.value = false
-      // The typed word stays on the turn (the narration card's command line).
-      showOutput(command, '', { chips: false, description: LOADED_ROOM })
-    } else showOutput(command, result, { chips: false })
+    if (!showNotice(result, text)) {
+      showOutput(command, result, { chips: false })
+      return
+    }
+    dropHold()
+    rememberLoadedAct(b)
+    loadNumber.value++
+    clearNewDots()
+    actEndPending.value = false
+    // The typed word stays on the turn (the narration card's command line).
+    showOutput(command, '', { chips: false, description: LOADED_ROOM })
+    refreshPanels()
   }
 
   /** The engine's stats or help text, for a dialog (adds nothing to the story). */
@@ -1060,13 +1058,7 @@ export const useGameStore = defineStore('game', () => {
 
   function loadFromSlot(slot: number): void {
     const b = requireBridge()
-    const result = b.loadFromSlot(slot)
-    dropHold()
-    rememberLoadedAct(b)
-    loadNumber.value++
-    clearNewDots()
-    showLoaded(null, result, `Game loaded · Slot ${slot}`)
-    refreshPanels()
+    afterLoad(b, null, b.loadFromSlot(slot), `Game loaded · Slot ${slot}`)
   }
 
   /**

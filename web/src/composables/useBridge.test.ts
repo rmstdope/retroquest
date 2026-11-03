@@ -291,6 +291,7 @@ describe('useBridge', () => {
         room: null,
         timestamp: null,
         quests: null,
+        outdated: false,
       })
       localStorageMock._setRaw('retroquest_save_meta', 'null')
       expect(bridge.getQuickSave()!.room).toBe(null)
@@ -480,6 +481,42 @@ describe('useBridge', () => {
       )
       localStorageMock._setRaw('retroquest_save_slots', 'garbage')
       expect(bridge.getSaveSlots()).toHaveLength(8)
+    })
+
+    it('marks saves from an older version, keeps them, and clears the mark once saved over', async () => {
+      const bridge = await runningBridge()
+      bridge.saveToSlot(1)
+      const older = JSON.stringify({ version: 2, actIndex: 2, state: {} })
+      const stored = JSON.parse(
+        localStorageMock.getItem('retroquest_save_slots')!,
+      ) as ({ data: string } | null)[]
+      stored[1] = { ...stored[0]!, data: older }
+      const slotsRaw = JSON.stringify(stored)
+      localStorageMock._setRaw('retroquest_save_slots', slotsRaw)
+      localStorageMock._setRaw('retroquest_save', older)
+
+      expect(bridge.getQuickSave()!.outdated).toBe(true)
+      const slots = bridge.getSaveSlots()
+      expect(slots.map((s) => s.outdated ?? false)).toEqual([
+        false,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+      ])
+      expect(slots[1].room).toBe("Elior's Cottage")
+      expect(bridge.loadFromSlot(2)).toMatch(/older version of RetroQuest/)
+      expect(bridge.quickLoadGame()).toMatch(/older version of RetroQuest/)
+      expect(localStorageMock.getItem('retroquest_save_slots')).toBe(slotsRaw)
+      expect(localStorageMock.getItem('retroquest_save')).toBe(older)
+
+      bridge.saveToSlot(2)
+      bridge.quickSaveGame()
+      expect(bridge.getSaveSlots()[1].outdated).toBe(false)
+      expect(bridge.getQuickSave()!.outdated).toBe(false)
     })
   })
 })

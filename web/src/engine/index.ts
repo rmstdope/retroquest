@@ -20,6 +20,7 @@ export {
   Game,
   GameRunState,
   MemorySaveStorage,
+  isOutdatedSave,
   normalizeSaveName,
   type CompletionTree,
   type GameOptions,

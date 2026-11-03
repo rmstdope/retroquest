@@ -65,6 +65,10 @@ interface SavePayload {
 const PICKUP_LINE = 'This might come in handy, so you decide to pick it up.'
 
 const SAVE_VERSION = 4
+/** What loading a save from an older version answers. */
+const OUTDATED_SAVE =
+  '[failure]That save was made by an older version of RetroQuest' +
+  ' and can no longer be loaded.[/failure]'
 const DEFAULT_SAVE_NAME = 'retroquest'
 const SAVE_NAME = /^[a-z0-9_-]+$/
 const INVALID_SAVE_NAME =
@@ -901,6 +905,7 @@ Welcome to
 
   /** Restore the state and act from save data made by `toSaveData`, and play on in that act. */
   loadSaveData(data: string): string {
+    if (isOutdatedSave(data)) return OUTDATED_SAVE
     try {
       const payload = JSON.parse(data) as Partial<SavePayload>
       if (payload.version !== SAVE_VERSION || !payload.state) {
@@ -930,6 +935,27 @@ Welcome to
     }
     return '[event]Game loaded successfully.[/event]'
   }
+}
+
+/**
+ * True for save data written by an older version of the game, in a save
+ * format it has since replaced (a lower format version). Such a save can
+ * never be loaded; broken data or an unknown newer format is not "older".
+ */
+export function isOutdatedSave(data: string): boolean {
+  let payload: unknown
+  try {
+    payload = JSON.parse(data)
+  } catch {
+    return false
+  }
+  return (
+    typeof payload === 'object' &&
+    payload !== null &&
+    'version' in payload &&
+    typeof payload.version === 'number' &&
+    payload.version < SAVE_VERSION
+  )
 }
 
 /**

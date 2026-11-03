@@ -36,6 +36,8 @@ describe('LanternLayout', () => {
   // the picture stage on a phone has its own tests (LanternLayout.phone.test.ts).
   beforeEach(() => {
     setActivePinia(createPinia())
+    // The game menu reads the quick save; these tests run with no game.
+    vi.spyOn(useGameStore(), 'getQuickSave').mockReturnValue(null)
     vi.stubGlobal(
       'matchMedia',
       vi.fn((query: string) => ({
@@ -1882,6 +1884,7 @@ describe('LanternLayout', () => {
         // No storage in this environment.
       }
       setActivePinia(createPinia())
+      vi.spyOn(useGameStore(), 'getQuickSave').mockReturnValue(null)
       useSettingsStore().narrationOn = true
     })
     afterEach(() => {

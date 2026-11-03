@@ -5,6 +5,7 @@ import {
   Game,
   GameRunState,
   MemorySaveStorage,
+  isOutdatedSave,
   normalizeSaveName,
   type SaveStorage,
 } from './Game'
@@ -1491,17 +1492,38 @@ describe('Game', () => {
       expect(game.loadSaveData('not json')).toContain(
         '[failure]Failed to load game',
       )
-      expect(game.loadSaveData('{"version":99}')).toContain(
+      expect(game.loadSaveData('{"version":99,"state":{}}')).toContain(
         '[failure]Failed to load game',
       )
       expect(game.loadSaveData('{"version":1}')).toContain(
-        '[failure]Failed to load game',
+        'older version of RetroQuest',
       )
-      const oldSave = JSON.parse(data) as Record<string, unknown>
-      oldSave.version = 3
-      expect(game.loadSaveData(JSON.stringify(oldSave))).toContain(
+      expect(game.loadSaveData('{"version":4}')).toContain(
         'unsupported save format',
       )
+    })
+
+    it('recognises a save from an older version and says so on load', () => {
+      const game = twoActGame()
+      const data = game.toSaveData()
+      const older = (version: number): string =>
+        JSON.stringify({
+          ...(JSON.parse(data) as Record<string, unknown>),
+          version,
+        })
+      expect(isOutdatedSave(older(2))).toBe(true)
+      expect(isOutdatedSave(older(3))).toBe(true)
+      expect(isOutdatedSave(data)).toBe(false)
+      expect(isOutdatedSave('{"version":99}')).toBe(false)
+      expect(isOutdatedSave('{}')).toBe(false)
+      expect(isOutdatedSave('not json')).toBe(false)
+
+      const state = game.state
+      expect(game.loadSaveData(older(3))).toBe(
+        '[failure]That save was made by an older version of RetroQuest' +
+          ' and can no longer be loaded.[/failure]',
+      )
+      expect(game.state).toBe(state)
     })
 
     it('keeps a known spell castable by its shown name after a save round-trip', () => {

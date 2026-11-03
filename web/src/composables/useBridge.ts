@@ -2,7 +2,7 @@
  * Vue composable wrapping the TypeScript game engine. Provides typed access
  * to the game and its controller, and keeps saves in the browser's storage.
  */
-import { Game, GameController, type Act } from '@/engine'
+import { Game, GameController, isOutdatedSave, type Act } from '@/engine'
 import type { SaveSlot } from '@/types/bridge'
 
 type StoredNamedSave = {
@@ -189,9 +189,13 @@ export function useBridge(loader: () => Promise<ActClass[]> = loadActs) {
     return requireGame().game.loadSaveData(data)
   }
 
-  /** The quick save as a card (slot 0), or null when there is none this engine can read. */
+  /**
+   * The quick save as a card (slot 0), or null when there is none this engine
+   * can read. A save from an older version is a card marked `outdated`.
+   */
   function getQuickSave(): SaveSlot | null {
-    if (!isSaveData(localStorage.getItem(QUICK_KEY))) return null
+    const data = localStorage.getItem(QUICK_KEY)
+    if (!isSaveData(data)) return null
     const meta = readQuickMeta()
     return {
       slot: 0,
@@ -199,9 +203,11 @@ export function useBridge(loader: () => Promise<ActClass[]> = loadActs) {
       room: meta.room ?? null,
       timestamp: meta.timestamp ?? null,
       quests: meta.quests ?? null,
+      outdated: isOutdatedSave(data),
     }
   }
 
+  /** The 8 slots as cards; a save from an older version is marked `outdated`. */
   function getSaveSlots(): SaveSlot[] {
     const stored = readStoredSaveSlots()
     return Array.from({ length: SLOT_COUNT }, (_, i) => {
@@ -215,6 +221,7 @@ export function useBridge(loader: () => Promise<ActClass[]> = loadActs) {
         room: entry.room ?? null,
         timestamp: entry.timestamp ?? null,
         quests: entry.quests ?? null,
+        outdated: isOutdatedSave(entry.data),
       }
     })
   }

@@ -2261,6 +2261,34 @@ describe('useGameStore', () => {
       )
     })
 
+    it.each([
+      ['load', () => bridge.quickLoadGame],
+      ['load morning', () => bridge.loadNamedGame],
+      [null, () => bridge.loadFromSlot],
+    ])(
+      'leaves the game as it was when a save is too old to load (%s)',
+      (command, answer) => {
+        const OLD =
+          '[failure]That save was made by an older version of RetroQuest' +
+          ' and can no longer be loaded.[/failure]'
+        answer().mockReturnValue(OLD)
+        store.questsHaveNew = true
+        const loads = store.loadNumber
+        const actLabel = store.actLabel
+        bridge.controller.getActIntro.mockClear()
+
+        if (command) store.submitCommand(command)
+        else store.loadFromSlot(2)
+
+        expect(store.loadNumber).toBe(loads)
+        expect(store.questsHaveNew).toBe(true)
+        expect(store.actLabel).toBe(actLabel)
+        expect(bridge.controller.getActIntro).not.toHaveBeenCalled()
+        expect(store.notice).toBe(null)
+        expect(store.turns.at(-1)).toMatchObject({ command, text: OLD })
+      },
+    )
+
     it('keeps a failed save in the story', () => {
       bridge.quickSaveGame.mockReturnValue('[failure]Could not save.[/failure]')
 

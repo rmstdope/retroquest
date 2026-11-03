@@ -44,6 +44,8 @@ describe('the narration paper', () => {
   beforeEach(() => {
     setActivePinia(createPinia())
     game = useGameStore()
+    // The game menu reads the quick save; these tests run with no game.
+    vi.spyOn(game, 'getQuickSave').mockReturnValue(null)
     stubScreen(true)
   })
   afterEach(() => {
