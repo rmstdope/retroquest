@@ -3,7 +3,7 @@ import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useGameStore } from '@/stores/useGameStore'
 import { useSettingsStore } from '@/stores/useSettingsStore'
 import { useFullscreen } from '@/composables/useFullscreen'
-import type { LanternTextSize } from '@/lantern/tokens'
+import { LANTERN_TEXT_SIZES } from '@/lantern/tokens'
 
 /**
  * `compact` (phones): one row with the room name and "Act I · Quests 4/11"
@@ -50,14 +50,6 @@ function onDocumentClick(e: MouseEvent): void {
     textSizeOpen.value = false
   }
 }
-const SIZES: Array<{ value: LanternTextSize; label: string; px: number }> = [
-  { value: 'smallest', label: 'Smallest text', px: 9 },
-  { value: 'extraSmall', label: 'Extra small text', px: 11 },
-  { value: 'small', label: 'Small text', px: 13 },
-  { value: 'medium', label: 'Medium text', px: 17 },
-  { value: 'large', label: 'Large text', px: 21 },
-]
-
 // --- Theme toggle: device preference until the player picks one ---
 const deviceLight = ref(false)
 let mediaQuery: MediaQueryList | null = null
@@ -224,7 +216,7 @@ function toggleTheme(): void {
           aria-label="Text size"
         >
           <button
-            v-for="size in SIZES"
+            v-for="size in LANTERN_TEXT_SIZES"
             :key="size.value"
             type="button"
             class="lq-size"

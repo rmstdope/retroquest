@@ -122,6 +122,22 @@ export const LANTERN_TEXT_SCALE = {
 
 export type LanternTextSize = keyof typeof LANTERN_TEXT_SCALE
 
+/**
+ * The text-size options both size controls offer, smallest first: the stored
+ * value, the button's accessible label and the preview "A" size in pixels.
+ */
+export const LANTERN_TEXT_SIZES: ReadonlyArray<{
+  value: LanternTextSize
+  label: string
+  px: number
+}> = [
+  { value: 'smallest', label: 'Smallest text', px: 9 },
+  { value: 'extraSmall', label: 'Extra small text', px: 11 },
+  { value: 'small', label: 'Small text', px: 13 },
+  { value: 'medium', label: 'Medium text', px: 17 },
+  { value: 'large', label: 'Large text', px: 21 },
+]
+
 /** CSS custom property for a palette key, e.g. `accentText` → `--lq-accent-text`. */
 export function cssVariableName(key: string): string {
   return `--lq-${key.replace(/[A-Z]/g, (c) => `-${c.toLowerCase()}`)}`
