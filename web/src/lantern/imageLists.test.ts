@@ -48,6 +48,7 @@ describe('roomImages', () => {
       roomImages(act).forEach((image, i) => {
         expect(image.width).toBe(IMAGE_WIDTH)
         expect(image.height).toBe(IMAGE_HEIGHT)
+        expect([image.width, image.height]).toEqual([1920, 1080])
         expect(image.title).toBe(rooms[i].name)
       })
     }
