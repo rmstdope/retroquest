@@ -4,6 +4,7 @@ import { mount } from '@vue/test-utils'
 import { createPinia, setActivePinia } from 'pinia'
 import SectionNav, { type Section } from './SectionNav.vue'
 import { useGameStore } from '@/stores/useGameStore'
+import { useFlightStore } from '@/stores/useFlightStore'
 
 describe('SectionNav', () => {
   beforeEach(() => setActivePinia(createPinia()))
@@ -18,6 +19,17 @@ describe('SectionNav', () => {
       .map((b) => b.text())
 
     expect(labels).toEqual(['Story', 'Bag', 'Spells', 'Quests', 'Map'])
+  })
+
+  it('is where gained items and spells fly to on a phone, and bumps the tab they land in', async () => {
+    const w = mountNav()
+    const [, bag, spells] = w.findAll('button')
+    expect(bag.attributes('data-flight-target')).toBe('item')
+    expect(spells.attributes('data-flight-target')).toBe('spell')
+    useFlightStore().landed = 'item'
+    await w.vm.$nextTick()
+    expect(bag.classes()).toContain('lq-landed')
+    expect(spells.classes()).not.toContain('lq-landed')
   })
 
   it('marks the current section', () => {

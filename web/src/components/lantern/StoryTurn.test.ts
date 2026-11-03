@@ -571,23 +571,59 @@ describe('StoryTurn as a narration card', () => {
     expect(w.get('.lq-block-dialogue').text()).toContain('The ink is smudged.')
   })
 
-  it('is a slim card with only the command when nobody but a speaker talks', () => {
+  /** The texts of the card's bubbles, in order. */
+  const bubbles = (w: ReturnType<typeof mountCard>): string[] =>
+    w.findAll('.lq-bubble').map((bubble) => bubble.text().replace(/\s+/g, ' '))
+
+  it('tells each paragraph of the narrator in a bubble of its own, with no command echo', () => {
+    const w = mountCard({
+      command: 'talk to voice',
+      text: 'You answer it.\n\nThe whisper comes once more.',
+    })
+
+    expect(bubbles(w)).toEqual([
+      'You answer it.',
+      'The whisper comes once more.',
+    ])
+    expect(w.find('[data-testid="command"]').exists()).toBe(false)
+  })
+
+  it('gives an event and a failure a bubble each', () => {
+    const w = mountCard({
+      command: 'take lantern',
+      text: 'You lift it.\n[event]The lantern is lit.[/event]\n[failure]It is hot.[/failure]',
+    })
+
+    expect(bubbles(w)).toEqual([
+      'You lift it.',
+      '◆The lantern is lit.',
+      '⊝It is hot.',
+    ])
+    expect(w.get('.lq-block-failure').classes()).toContain('lq-bubble-failure')
+  })
+
+  it('leaves the closing arrival line of a talk that moved Elior to the record', () => {
+    const moving = {
+      command: 'talk to voice',
+      addressed: 'voice',
+      description: { moved: true, firstVisit: true },
+      text: 'You wake.\n[event]You are in [room_name]Cottage[/room_name].[/event]',
+    }
+    expect(bubbles(mountCard(moving))).toEqual(['You wake.'])
+    const record = mount(StoryTurn, {
+      props: { turn: turn(moving), record: true },
+    })
+    expect(record.text()).toContain('You are in Cottage.')
+  })
+
+  it('shows nothing when nobody but a speaker talks', () => {
     const w = mountCard({
       command: 'talk to grandmother',
       addressed: 'grandmother',
       text: "[character_name]Grandmother[/character_name]\n[dialogue]'Sit down.'[/dialogue]",
     })
 
-    expect(w.get('[data-testid="command"]').text()).toBe(
-      '› talk to grandmother',
-    )
-    expect(w.classes()).toContain('lq-slim')
-  })
-
-  it('is not slim when it has words', () => {
-    const w = mountCard({ command: 'look', text: 'It is quiet.' })
-
-    expect(w.classes()).not.toContain('lq-slim')
+    expect(w.find('article').exists()).toBe(false)
   })
 
   it('has no command line when none was typed', () => {
@@ -600,14 +636,14 @@ describe('StoryTurn as a narration card', () => {
     expect(w.text()).toContain('A busy square.')
   })
 
-  it('tells the room as a bare description on a look or a revisit, with no divider', () => {
+  it('tells the room as a bare description in a bubble on a look or a revisit, with no divider', () => {
     const w = mountCard({
       command: 'look',
       arrival: ROOM,
       description: { moved: false, firstVisit: false },
     })
 
-    expect(w.text()).toContain('A busy square.')
+    expect(bubbles(w).join(' ')).toContain('A busy square.')
     expect(w.find('[data-testid="divider"]').exists()).toBe(false)
   })
 
@@ -619,37 +655,45 @@ describe('StoryTurn as a narration card', () => {
       description: { moved: true, firstVisit: true },
     })
 
-    expect(w.text()).not.toContain('A busy square.')
-    expect(w.classes()).toContain('lq-slim')
+    expect(w.find('article').exists()).toBe(false)
   })
 
-  it('marks silent information with ⊝ and a red-edged card', () => {
+  it('marks silent information with ⊝ in a red-edged bubble', () => {
     const w = mountCard({
       command: 'talk to mira',
       text: "[failure]There is no character named 'mira' here to speak to.[/failure]",
     })
 
     expect(w.get('.lq-failure-mark').text()).toBe('⊝')
-    expect(w.classes()).toContain('lq-card-error')
+    expect(w.get('.lq-bubble').classes()).toContain('lq-bubble-failure')
   })
 
-  it('is not a red card when the failure comes with other words', () => {
+  it('leaves a gained thing off the card (it flies to its button instead), and keeps what was lost', () => {
     const w = mountCard({
-      command: 'use key',
-      text: 'You try.\n[failure]It will not turn.[/failure]',
+      command: 'trade bread for coin',
+      text: 'Done.',
+      gained: [{ name: 'Coin', count: 1, kind: 'item' }],
+      lost: [{ name: 'Bread', count: 1, kind: 'item' }],
     })
 
-    expect(w.classes()).not.toContain('lq-card-error')
+    expect(
+      w
+        .findAll('[data-testid="chip"]')
+        .map((chip) => chip.text().replace(/\s+/g, ' ')),
+    ).toEqual(['− Lost Bread'])
   })
 
-  it('keeps the item chips on the card', () => {
-    const w = mountCard({
+  it('keeps the chips in the record and outside the stage', () => {
+    const gained = {
       command: 'take bread',
       text: 'Taken.',
-      gained: [{ name: 'Bread', count: 1, kind: 'item' }],
+      gained: [{ name: 'Bread', count: 1, kind: 'item' as const }],
+    }
+    expect(mountTurn(gained).find('[data-testid="chip"]').exists()).toBe(true)
+    const record = mount(StoryTurn, {
+      props: { turn: turn(gained), record: true },
     })
-
-    expect(w.find('[data-testid="chip"]').exists()).toBe(true)
+    expect(record.find('[data-testid="chip"]').exists()).toBe(true)
   })
 
   it('does not have the card look in the story drawer', () => {
@@ -745,23 +789,31 @@ describe('StoryTurn quest news told in the middle', () => {
     expect(cleared.find('[data-testid="news-line"]').exists()).toBe(false)
   })
 
-  it('is a slim card when the turn only had speech and its news was told in the middle', () => {
+  it('shows no quest news on a card, even news not told in the middle', () => {
+    const w = mount(StoryTurn, {
+      props: {
+        card: true,
+        turn: turn({ command: 'x', text: 'Done.', quests: [done] }),
+      },
+    })
+    expect(w.text()).toContain('Done.')
+    expect(w.find('.lq-quest-card').exists()).toBe(false)
+    expect(w.text()).not.toContain('Hint of Magic')
+  })
+
+  it('leaves no line on a card for news told in the middle', () => {
     const arrival = useArrivalStore()
     arrival.show(1, [piece(done, 1)], false)
     arrival.clear()
     const w = mount(StoryTurn, {
       props: {
         card: true,
-        turn: turn({
-          command: 'talk to mira',
-          addressed: 'Mira',
-          text: '[character_name]Mira[/character_name]\n[dialogue]Hello.[/dialogue]',
-          quests: [done],
-        }),
+        turn: turn({ command: 'x', text: 'Done.', quests: [done] }),
       },
     })
-    expect(w.classes()).toContain('lq-slim')
-    expect(w.find('[data-testid="news-line"]').exists()).toBe(true)
+    expect(w.text()).toContain('Done.')
+    expect(w.find('[data-testid="news-line"]').exists()).toBe(false)
+    expect(w.text()).not.toContain('Hint of Magic')
   })
 
   describe('a turn whose learned spell is told in the middle', () => {
@@ -806,23 +858,19 @@ describe('StoryTurn quest news told in the middle', () => {
       expect(visibleText(w)).toBe('Second.')
     })
 
-    it('types the command only on the piece that carries it', () => {
-      const t = turn({ command: 'look', text })
-      const first = mount(StoryTurn, {
+    it('never echoes the command, even on the piece that carries it', () => {
+      const w = mount(StoryTurn, {
         props: {
-          turn: t,
+          turn: turn({ command: 'look', text }),
           card: true,
           piece: piece({ blocks: [0], command: true }),
         },
       })
-      expect(first.find('[data-testid="command"]').text()).toBe('› look')
-      const later = mount(StoryTurn, {
-        props: { turn: t, card: true, piece: piece({ blocks: [1] }) },
-      })
-      expect(later.find('[data-testid="command"]').exists()).toBe(false)
+      expect(w.find('[data-testid="command"]').exists()).toBe(false)
+      expect(visibleText(w)).toBe('First.')
     })
 
-    it('is a slim card when the piece holds only the command', () => {
+    it('renders nothing when the piece holds only the command', () => {
       const w = mount(StoryTurn, {
         props: {
           turn: turn({ command: 'talk to mira', text }),
@@ -830,18 +878,14 @@ describe('StoryTurn quest news told in the middle', () => {
           piece: piece({ command: true }),
         },
       })
-      expect(w.classes()).toContain('lq-slim')
+      expect(w.find('article').exists()).toBe(false)
     })
 
-    it('puts the chips only on the piece that carries them', () => {
+    it('puts no gained chip on any piece (the gained thing flies to its button instead)', () => {
       const t = turn({
         text,
         gained: [{ kind: 'item', name: 'key', count: 1 }],
       })
-      const without = mount(StoryTurn, {
-        props: { turn: t, card: true, piece: piece({ blocks: [0] }) },
-      })
-      expect(without.findAll('[data-testid="chip"]')).toHaveLength(0)
       const withChips = mount(StoryTurn, {
         props: {
           turn: t,
@@ -849,7 +893,7 @@ describe('StoryTurn quest news told in the middle', () => {
           piece: piece({ blocks: [1], chips: true }),
         },
       })
-      expect(withChips.findAll('[data-testid="chip"]')).toHaveLength(1)
+      expect(withChips.findAll('[data-testid="chip"]')).toHaveLength(0)
     })
 
     it('renders nothing for a piece with nothing to show', () => {

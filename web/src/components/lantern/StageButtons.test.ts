@@ -5,6 +5,7 @@ import { nextTick } from 'vue'
 import { createPinia, setActivePinia } from 'pinia'
 import StageButtons from './StageButtons.vue'
 import { useGameStore } from '@/stores/useGameStore'
+import { useFlightStore } from '@/stores/useFlightStore'
 
 function pointer(type: string, pointerType = 'mouse'): Event {
   const event = new Event(type, { bubbles: true })
@@ -30,6 +31,20 @@ describe('StageButtons', () => {
   })
   afterEach(() => {
     w?.unmount()
+  })
+
+  it('is where gained items and spells fly to, and bumps the one they land in', async () => {
+    const w = mountButtons()
+    expect(w.get('[data-button="bag"]').attributes('data-flight-target')).toBe(
+      'item',
+    )
+    expect(
+      w.get('[data-button="spells"]').attributes('data-flight-target'),
+    ).toBe('spell')
+    useFlightStore().landed = 'spell'
+    await nextTick()
+    expect(w.get('[data-button="spells"]').classes()).toContain('lq-landed')
+    expect(w.get('[data-button="bag"]').classes()).not.toContain('lq-landed')
   })
 
   it('has the five buttons in order, with the counts', () => {

@@ -12,8 +12,9 @@ import { displayName } from '@/lantern/displayName'
 import { renderMarkup } from '@/utils/theme'
 import StoryArrival from './StoryArrival.vue'
 import { useNarrationStore } from '@/stores/useNarrationStore'
+import { useSceneStore } from '@/stores/useSceneStore'
 import { useReadAlong } from '@/composables/useReadAlong'
-import { arrivesOnPicture } from '@/lantern/stageArrival'
+import { arrivesOnPicture, recordOnlyFrom } from '@/lantern/stageArrival'
 import type { CardPiece } from '@/lantern/columnPieces'
 import { toldAsSpeech } from '@/lantern/stageSpeech'
 
@@ -24,23 +25,29 @@ import { toldAsSpeech } from '@/lantern/stageSpeech'
  * spoken and has the spoken word lit; the chips wait for the end. Unit `i`
  * is block `i`; then the arrival, then the quest cards (as `turnUnits`).
  *
- * As a narration card (`card`, the laptop stage's left column) the turn is a
- * paper card: the command first, then what the narrator tells. What belongs to
- * other places is left out: a character's quotes in a conversation (they are
- * on the right, as `useStageSpeechStore` decides) and the description of a
- * room told in the middle of the picture on a first visit; a look, a revisit
- * and a load tell the room here, as a bare description. A card with nothing
- * but the command is slim, and one that only holds silent information has a
- * red edge. Quest news told in the middle of the picture (`useArrivalStore`)
- * is not on the card while it waits or is told, and leaves one slim line for
- * each piece (`QuestSlimLine`) once it has cleared; where it is not told in
- * the middle, the quest cards stay in the story.
+ * As a narration card (`card`, the laptop stage's left column) the turn is
+ * what the narrator tells, one bubble (`lq-bubble`) for each paragraph, as the
+ * speech on the right has one for each line: an event, a failure (red-edged)
+ * and a room told as a bare description are bubbles of their own, and so is
+ * what the bag lost (its chips). A gained item or spell is not on the card:
+ * it flies to its button instead (`AcquiredFlight`). The command the player typed is not echoed, nor the closing arrival
+ * line of a talk that moved Elior ("You are in …", `recordOnlyFrom`). What belongs to other
+ * places is left out: a character's quotes in a conversation (they are on the
+ * right, as `useStageSpeechStore` decides), the description of a room told in
+ * the middle of the picture on a first visit (a look, a revisit and a load
+ * tell the room here) and quest news, which the stage tells in the middle of
+ * the picture (`useArrivalStore`) and Story so far and the journal keep. A
+ * card with nothing to tell renders nothing.
  *
  * In the single column of a phone or a narrow window (`piece`, see
  * `columnPieces`) the turn is told as several cards with the spoken lines
  * between them, and each card is one `StoryTurn` that tells only its piece:
- * its blocks, and the command, room, chips and news only when the piece
- * carries them. A piece with nothing to show yet renders nothing.
+ * its blocks, and the room, chips and news only when the piece carries them.
+ * A piece with nothing to show yet renders nothing.
+ *
+ * A talk that took Elior to another room keeps on its card only what it told
+ * in the new room (`useSceneStore.firstUnit`): its command and the words
+ * before the change go with the old room. The full record keeps them.
  */
 const props = defineProps<{
   turn: Turn
@@ -68,7 +75,7 @@ const arrivalUnit = computed(() =>
 )
 const firstQuestUnit = computed(() => firstQuestOf(props.turn))
 const arrivalStore = useArrivalStore()
-/** The turn's quest news was told in the middle of the picture: the card keeps slim lines instead of cards. */
+/** The turn's quest news was told in the middle of the picture: the story keeps slim lines instead of cards (a narration card keeps nothing). */
 const newsInMiddle = computed(
   () => !props.record && arrivalStore.told.includes(props.turn.id),
 )
@@ -76,10 +83,10 @@ const newsInMiddle = computed(
 const newsPending = computed(
   () => !props.record && arrivalStore.newsPending(props.turn.id),
 )
-/** How many quest cards the story shows for the turn (none while the news is told in the middle). */
+/** How many quest cards the story shows for the turn (none on a narration card, nor while the news is told in the middle). */
 const questCount = computed(() => props.turn.quests?.length ?? 0)
 const questCards = computed(() =>
-  newsInMiddle.value || newsPending.value || !newsHere.value
+  props.card || newsInMiddle.value || newsPending.value || !newsHere.value
     ? 0
     : questCount.value,
 )
@@ -105,8 +112,21 @@ function onSpeech(block: TurnBlock): boolean {
     toldAsSpeech(props.turn, block.speaker)
   )
 }
-/** Whether the piece (if any) tells block `index`. */
+const scene = useSceneStore()
+/** The first block the card tells: where the talk's room changed, or null (always null outside a card). */
+const firstBlock = computed(() =>
+  props.card && !props.record ? scene.firstUnit(props.turn.id) : null,
+)
+/** The first block only the record tells (a moving talk's "You are in …"), on a card; every block elsewhere. */
+const recordFrom = computed(() =>
+  props.card && !props.record
+    ? recordOnlyFrom(props.turn, blocks.value)
+    : blocks.value.length,
+)
+/** Whether the piece (if any) tells block `index`, it was told in the room the card is in, and it is not left to the record. */
 function inPiece(index: number): boolean {
+  if (firstBlock.value !== null && index < firstBlock.value) return false
+  if (index >= recordFrom.value) return false
   return !props.piece || props.piece.blocks.includes(index)
 }
 /** The room's description is told in the middle of the picture, not on the card. */
@@ -119,28 +139,6 @@ const roomOnCard = computed(
     !arrivalInMiddle.value &&
     roomHere.value,
 )
-/** Nothing on the card but the command. */
-const slim = computed(
-  () =>
-    !!props.card &&
-    !blocks.value.some((block, index) => inPiece(index) && !onSpeech(block)) &&
-    !roomOnCard.value &&
-    !chips.value.length &&
-    !questCards.value,
-)
-/** Only silent information: a red-edged card. */
-const errorCard = computed(() => {
-  if (!props.card || roomOnCard.value) return false
-  const told = blocks.value.filter(
-    (block, index) => inPiece(index) && !onSpeech(block),
-  )
-  return (
-    told.length > 0 &&
-    told.every((block) => block.kind === 'failure') &&
-    !chips.value.length &&
-    !questCards.value
-  )
-})
 
 /** Label a quote only when its speaker differs from the previous quote's. */
 const speakerLabels = computed(() => {
@@ -154,11 +152,12 @@ const speakerLabels = computed(() => {
   })
 })
 
+/** The bag's changes; a narration card has only its losses (a gained thing flies to its button, `AcquiredFlight`). */
 const chips = computed(() =>
   props.piece && !props.piece.chips
     ? []
     : [
-        ...props.turn.gained.map((chip) => ({
+        ...(props.card ? [] : props.turn.gained).map((chip) => ({
           chip,
           sign: '+',
           spoken: 'Gained',
@@ -176,23 +175,21 @@ const roomHere = computed(() => !props.piece || props.piece.arrival)
 /** Whether the piece (if any) carries the turn's quest news. */
 const newsHere = computed(() => !props.piece || props.piece.news)
 /** Whether the piece (if any) starts with the command. */
-const commandHere = computed(() => !props.piece || props.piece.command)
+const commandHere = computed(
+  () => !props.card && (!props.piece || props.piece.command),
+)
 
-/** How many news lines or cards the piece shows now. */
-const newsShown = computed(() => {
-  return newsHere.value && !newsPending.value ? questCount.value : 0
-})
-/** A piece with nothing to show yet (its words not reached, or no news told): no card at all. */
-const hollow = computed(() => {
-  if (!props.piece) return false
-  return (
-    !commandHere.value &&
-    !props.piece.blocks.some((index) => shown(index)) &&
-    !(roomHere.value && !!props.turn.arrival && shown(arrivalUnit.value)) &&
+/** A card (or a piece of one) with no bubble to show yet: no card at all. */
+const hollow = computed(
+  () =>
+    !!props.card &&
+    !blocks.value.some(
+      (block, index) => inPiece(index) && shown(index) && !onSpeech(block),
+    ) &&
+    !(roomOnCard.value && shown(arrivalUnit.value)) &&
     !chips.value.length &&
-    !newsShown.value
-  )
-})
+    !questCards.value,
+)
 
 function chipLabel(chip: Chip): string {
   const count = chip.count > 1 ? ` ×${chip.count}` : ''
@@ -205,11 +202,7 @@ function chipLabel(chip: Chip): string {
     v-if="!hollow"
     ref="root"
     class="lq-turn"
-    :class="{
-      'lq-card': card,
-      'lq-slim': slim,
-      'lq-card-error': errorCard,
-    }"
+    :class="{ 'lq-card': card }"
     data-testid="turn"
   >
     <div
@@ -226,14 +219,18 @@ function chipLabel(chip: Chip): string {
         <p
           v-if="block.kind === 'text'"
           class="lq-block-text"
-          :class="{ 'lq-speaking': isSpeaking(index), 'lq-appear': fade }"
+          :class="{
+            'lq-speaking': isSpeaking(index),
+            'lq-appear': fade,
+            'lq-bubble': card,
+          }"
           :data-unit="index"
           v-html="html(block.markup, index)"
         ></p>
         <p
           v-else-if="block.kind === 'event'"
           class="lq-block-event"
-          :class="{ 'lq-appear': fade }"
+          :class="{ 'lq-appear': fade, 'lq-bubble lq-bubble-event': card }"
           :data-unit="index"
         >
           <span class="lq-diamond" aria-hidden="true">◆</span>
@@ -242,7 +239,11 @@ function chipLabel(chip: Chip): string {
         <p
           v-else-if="block.kind === 'failure'"
           class="lq-block-failure"
-          :class="{ 'lq-speaking': isSpeaking(index), 'lq-appear': fade }"
+          :class="{
+            'lq-speaking': isSpeaking(index),
+            'lq-appear': fade,
+            'lq-bubble lq-bubble-failure': card,
+          }"
           :data-unit="index"
         >
           <span v-if="card" class="lq-failure-mark" aria-hidden="true">⊝</span>
@@ -266,7 +267,11 @@ function chipLabel(chip: Chip): string {
         <blockquote
           v-else-if="block.kind === 'dialogue'"
           class="lq-block-dialogue"
-          :class="{ 'lq-speaking': isSpeaking(index), 'lq-appear': fade }"
+          :class="{
+            'lq-speaking': isSpeaking(index),
+            'lq-appear': fade,
+            'lq-bubble': card,
+          }"
           :data-unit="index"
         >
           <div v-if="speakerLabels[index]" class="lq-speaker">
@@ -277,7 +282,7 @@ function chipLabel(chip: Chip): string {
         <ul
           v-else-if="block.kind === 'checklist'"
           class="lq-block-checklist"
-          :class="{ 'lq-appear': fade }"
+          :class="{ 'lq-appear': fade, 'lq-bubble': card }"
           :data-unit="index"
         >
           <li
@@ -309,14 +314,21 @@ function chipLabel(chip: Chip): string {
       :bare="card"
       :name-html="html(turn.arrival.room, arrivalUnit, 0, 1)"
       :description-html="html(turn.arrival.description, arrivalUnit, 1)"
-      :class="{ 'lq-speaking': isSpeaking(arrivalUnit), 'lq-appear': fade }"
+      :class="{
+        'lq-speaking': isSpeaking(arrivalUnit),
+        'lq-appear': fade,
+        'lq-bubble': card,
+      }"
       :data-unit="arrivalUnit"
     />
 
     <div
       v-if="chips.length"
       class="lq-chips"
-      :class="{ 'lq-pending': narration.narrates(turn.id) }"
+      :class="{
+        'lq-pending': narration.narrates(turn.id),
+        'lq-bubble': card,
+      }"
       role="group"
       aria-label="Changes"
     >
@@ -335,7 +347,7 @@ function chipLabel(chip: Chip): string {
       >
     </div>
 
-    <template v-if="newsHere && (newsInMiddle || newsPending)">
+    <template v-if="!card && newsHere && (newsInMiddle || newsPending)">
       <template v-if="newsInMiddle && !newsPending">
         <QuestSlimLine
           v-for="(news, index) in turn.quests ?? []"
@@ -374,37 +386,55 @@ function chipLabel(chip: Chip): string {
 </template>
 
 <style scoped>
-/* A narration card on the laptop stage: a paper strip with a tan edge. */
+/* A narration card: the turn's bubbles one under another, as the speech on
+   the right has its lines. The card itself has no frame, but takes the
+   presses and the wheel between its bubbles as the story's. */
 .lq-turn.lq-card {
   max-width: none;
   flex: 0 0 auto;
-  padding: 12px 16px;
-  border-radius: 4px 10px 10px 4px;
-  border-left: 4px solid var(--lq-line2);
-  background: color-mix(in srgb, var(--lq-surface) 95%, transparent);
+  gap: 8px;
+  align-items: flex-start;
+  pointer-events: auto;
+}
+/* One paragraph (or event, failure, room, chips, checklist, quote) of the
+   narrator: a bubble like a line of speech, edged in the narrator's tan. It
+   overrides each block's own padding, margin and corners, so every bubble is
+   shaped alike. */
+.lq-turn .lq-bubble {
+  margin: 0;
+  max-width: 100%;
+  box-sizing: border-box;
+  padding: 9px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--lq-line2);
+  background: color-mix(in srgb, var(--lq-surface) 96%, transparent);
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.18);
   pointer-events: auto;
 }
-.lq-card.lq-slim {
-  padding-block: 7px;
-}
-.lq-card.lq-slim .lq-command {
-  margin: 0;
-}
-.lq-card.lq-card-error {
-  border-left-color: var(--lq-failure);
+.lq-turn .lq-bubble.lq-bubble-failure {
+  border-color: var(--lq-failure);
   background: color-mix(in srgb, var(--lq-failure-soft) 96%, transparent);
 }
-.lq-card.lq-card-error .lq-block-failure {
-  padding: 0;
-  background: none;
+/* The bubble being read wears the speech's read-along ring instead of the
+   rule at the left edge, so its words stay where they were. */
+.lq-turn .lq-bubble.lq-speaking {
+  margin-left: 0;
+  padding-left: 14px;
+  box-shadow:
+    0 0 0 2px var(--lq-accent),
+    0 2px 10px rgba(0, 0, 0, 0.18);
 }
-/* Older cards dim as older speech does: one step, then a further one (kept readable over the picture). */
-.lq-card.lq-age-prev {
-  opacity: 0.6;
+.lq-turn .lq-bubble.lq-bubble-failure.lq-speaking {
+  box-shadow:
+    0 0 0 2px var(--lq-failure),
+    0 2px 10px rgba(0, 0, 0, 0.18);
 }
-.lq-card.lq-age-old {
-  opacity: 0.4;
+/* Older bubbles dim as older speech does: one step, then a further one (see `useBubbleAges`). */
+.lq-bubble[data-age='prev'] {
+  opacity: 0.55;
+}
+.lq-bubble[data-age='old'] {
+  opacity: 0.3;
 }
 .lq-failure-mark {
   flex: 0 0 auto;

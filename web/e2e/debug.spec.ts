@@ -46,9 +46,10 @@ test.describe('debug command (dev server)', () => {
     await input.press('Enter')
     await expect(page.getByText("Debug script 'act1' played")).toBeVisible()
 
+    // The last command finishes the act: its chapter page opens.
     await input.fill('use map')
     await input.press('Enter')
-    await expect(page.getByText(/main quest complete/i).first()).toBeVisible()
+    await expect(page.getByText(/Act I complete/i).first()).toBeVisible()
   })
 
   test('names a script that does not exist', async ({ page }) => {

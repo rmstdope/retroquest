@@ -156,12 +156,35 @@ async function readPages(page: Page, header: string): Promise<string[]> {
   }
 }
 
-/** Type one command into the command box and wait until it is the story's newest turn. */
+/** The app's game store, as much of it as this test reads. */
+interface AppRoot extends Element {
+  __vue_app__?: {
+    config: {
+      globalProperties: {
+        $pinia: {
+          state: { value: { game: { turns: { command: string | null }[] } } }
+        }
+      }
+    }
+  }
+}
+
+/** The command of the game's newest turn (the stage does not echo it). */
+async function newestCommand(page: Page): Promise<string | null> {
+  return page.evaluate(() => {
+    const root: AppRoot | null = document.querySelector('#app')
+    const turns =
+      root?.__vue_app__?.config.globalProperties.$pinia.state.value.game.turns
+    return turns?.at(-1)?.command ?? null
+  })
+}
+
+/** Type one command into the command box and wait until it is the game's newest turn. */
 async function type(page: Page, command: string): Promise<void> {
   const input = page.getByLabel('Command')
   await input.fill(command)
   await input.press('Enter')
-  await expect(page.getByTestId('command').last()).toHaveText(`› ${command}`)
+  await expect.poll(() => newestCommand(page)).toBe(command)
 }
 
 test('plays the red line from Act I to the Willowbrook epilogue', async ({

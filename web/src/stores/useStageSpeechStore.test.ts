@@ -421,3 +421,91 @@ describe('useStageSpeechStore during a change of scene', () => {
     expect(speech.lineShown(moving.id, 0, 0)).toBe(true)
   })
 })
+
+describe('useStageSpeechStore: a talk that changes the scene partway', () => {
+  beforeEach(() => {
+    vi.useFakeTimers()
+    setActivePinia(createPinia())
+  })
+  afterEach(() => vi.useRealTimers())
+
+  const words = '…let them rest…'
+  /** The dream's ending in short: two narrator blocks, the voice (block 2), the waking (3), the arrival line (4). */
+  const waking = (): Turn =>
+    turn(
+      'You answer it.\n\nThe whisper comes once more.\n' +
+        say('voice', words) +
+        '\n\nYou wake.\n\n[event]You are in the Cottage.[/event]',
+      'voice',
+      'talk to voice',
+      true,
+    )
+
+  it('says the scene may change once the lines before it are read, unnarrated', () => {
+    const speech = useStageSpeechStore()
+    const reached = vi.fn()
+    speech.observe(waking(), { unit: 3, reached })
+    expect(speech.visible.map((line) => line.markup)).toEqual([words])
+    expect(reached).not.toHaveBeenCalled()
+    vi.advanceTimersByTime(readingPauseMs(words) - 1)
+    expect(reached).not.toHaveBeenCalled()
+    vi.advanceTimersByTime(1)
+    expect(reached).toHaveBeenCalledTimes(1)
+    vi.runAllTimers()
+    expect(reached).toHaveBeenCalledTimes(1)
+  })
+
+  it('holds the words from the scene change on until it is reached', () => {
+    const speech = useStageSpeechStore()
+    const scene = useSceneStore()
+    const moving = waking()
+    speech.observe(moving, { unit: 3, reached: () => {} })
+    expect(scene.holds(moving.id, 2)).toBe(false)
+    expect(scene.holds(moving.id, 3)).toBe(true)
+    expect(scene.holds(moving.id, 4)).toBe(true)
+    vi.runAllTimers()
+    expect(scene.holds(moving.id, 3)).toBe(false)
+  })
+
+  it('changes the scene at once when the picture is cleared (the stage goes)', () => {
+    const speech = useStageSpeechStore()
+    const reached = vi.fn()
+    speech.observe(waking(), { unit: 3, reached })
+    speech.clear()
+    expect(reached).toHaveBeenCalledTimes(1)
+  })
+
+  it('clears the lines said before the room changed, and counts the rest as told', () => {
+    const speech = useStageSpeechStore()
+    const scene = useSceneStore()
+    const moving = waking()
+    speech.observe(moving)
+    expect(speech.visible.map((line) => line.markup)).toEqual([words])
+    scene.cut(moving.id, 3)
+    expect(speech.visible).toEqual([])
+    expect(speech.told(moving.id)).toBe(true)
+  })
+
+  it('changes the scene at once when the turn is shown whole', () => {
+    const speech = useStageSpeechStore()
+    const reached = vi.fn()
+    speech.observe(waking(), { unit: 3, reached })
+    speech.revealAll()
+    expect(reached).toHaveBeenCalledTimes(1)
+    vi.runAllTimers()
+    expect(reached).toHaveBeenCalledTimes(1)
+  })
+
+  it('holds a line from where the scene changes until the picture is up', () => {
+    const speech = useStageSpeechStore()
+    const scene = useSceneStore()
+    scene.settled('a.png')
+    const moving = waking()
+    speech.observe(moving)
+    scene.begin(moving.id, 'b.png', () => {}, 2)
+    expect(speech.visible).toEqual([])
+    expect(speech.lineShown(moving.id, 2, 0)).toBe(false)
+    scene.skip()
+    expect(speech.visible.map((line) => line.markup)).toEqual([words])
+  })
+})

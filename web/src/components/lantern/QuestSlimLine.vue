@@ -5,8 +5,9 @@ import { newsSlimHeading } from '@/lantern/stageArrival'
 import { useGameStore } from '@/stores/useGameStore'
 
 /**
- * The slim line a turn's narrator card keeps for a piece of quest news once it
- * has been told in the middle of the picture: an amber line with a round mark
+ * The slim line the story (outside the stage's narration cards, which keep
+ * nothing) shows for a piece of quest news once it has been told in the
+ * middle of the picture: an amber line with a round mark
  * (a tick for a completion), the heading, " · ", the quest's name in bold, and
  * "Open in journal" at its right end, which opens the journal at that quest.
  * The button is described by the line, so several lines are told apart.

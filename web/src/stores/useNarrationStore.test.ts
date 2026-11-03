@@ -526,6 +526,54 @@ describe('a narrated move whose picture is still changing', () => {
     expect(narration.revealed(1, 0)).toBe(true)
   })
 
+  it('stops before the unit where the scene changes, and goes on once let through', async () => {
+    const narration = useNarrationStore()
+    narration.begin(1, [voiced(), voiced(), voiced()], 'act1', false, 1)
+    expect(narration.revealed(1, 0)).toBe(true)
+    expect(narration.atSceneChange(1)).toBe(false)
+    last().onended?.()
+    await vi.advanceTimersByTimeAsync(400)
+    expect(narration.atSceneChange(1)).toBe(true)
+    expect(narration.revealed(1, 1)).toBe(false)
+    expect(FakeAudio.all).toHaveLength(1)
+    // A hurry does not take the narrator past it.
+    narration.hurry()
+    expect(FakeAudio.all).toHaveLength(1)
+    narration.passSceneChange(1)
+    expect(narration.atSceneChange(1)).toBe(false)
+    expect(narration.revealed(1, 1)).toBe(true)
+    expect(FakeAudio.all).toHaveLength(2)
+  })
+
+  it('waits for the scene to come up before going on past where it changed', async () => {
+    const narration = useNarrationStore()
+    const scene = useSceneStore()
+    scene.settled('a.png')
+    narration.begin(1, [voiced(), voiced()], 'act1', false, 1)
+    last().onended?.()
+    await vi.advanceTimersByTimeAsync(400)
+    scene.begin(1, 'b.png', () => narration.passSceneChange(1), 1)
+    // The words already told stay; the narrator waits for the picture.
+    expect(narration.revealed(1, 0)).toBe(true)
+    expect(narration.revealed(1, 1)).toBe(false)
+    scene.skip()
+    expect(narration.revealed(1, 1)).toBe(true)
+    expect(FakeAudio.all).toHaveLength(2)
+  })
+
+  it('stops at the scene change also when nothing after it has a recording', async () => {
+    const narration = useNarrationStore()
+    narration.begin(1, [voiced(), silent, silent], 'act1', false, 1)
+    last().onended?.()
+    await vi.advanceTimersByTimeAsync(400)
+    expect(narration.narrates(1)).toBe(true)
+    expect(narration.atSceneChange(1)).toBe(true)
+    expect(narration.revealed(1, 1)).toBe(false)
+    narration.passSceneChange(1)
+    expect(narration.narrates(1)).toBe(false)
+    expect(narration.revealed(1, 2)).toBe(true)
+  })
+
   it('a turn cut in on while held is not started', () => {
     const narration = useNarrationStore()
     narration.begin(1, [voiced()], 'act1', true)

@@ -5,6 +5,7 @@ import { useArrivalStore } from './useArrivalStore'
 import { useNarrationStore, type NarrationAudio } from './useNarrationStore'
 import { useSettingsStore } from './useSettingsStore'
 import { useStageSpeechStore } from './useStageSpeechStore'
+import { useSceneStore } from './useSceneStore'
 import type { NarrationUnit } from '@/lantern/narrationUnits'
 import {
   ARRIVAL_CLEAR_AFTER_MS,
@@ -620,6 +621,56 @@ describe('useArrivalStore', () => {
       for (let i = 0; i < 120 && !arrival.active; i++)
         await vi.advanceTimersByTimeAsync(250)
       expect(speech.told(1)).toBe(true)
+      expect(arrival.part?.kind).toBe('events')
+    })
+
+    it('after a talk whose scene changes partway, waits until the scene is up', async () => {
+      const speech = useStageSpeechStore()
+      const scene = useSceneStore()
+      scene.settled('dream.png')
+      const said =
+        'You answer it.\n' +
+        `[character_name]voice[/character_name]\n[dialogue]Rest.[/dialogue]\n\n` +
+        'You wake.\n\n' +
+        `[event]You are in the Cottage.[/event]`
+      let reached = false
+      speech.observe(
+        {
+          id: 1,
+          command: 'talk to voice',
+          text: said,
+          room: 'Cottage',
+          description: { moved: true, firstVisit: true },
+          gained: [],
+          lost: [],
+          arrival: null,
+          addressed: 'voice',
+        },
+        {
+          unit: 2,
+          reached: () => {
+            reached = true
+            scene.begin(1, 'cottage.png', () => {}, 2)
+          },
+        },
+      )
+      const line: ArrivalPart = {
+        kind: 'events',
+        lines: [{ unit: 3, markup: 'You are in the Cottage.' }],
+        voiced: false,
+        afterWords: true,
+      }
+      arrival.show(1, [line], false)
+      // The voice's line is out, but the scene has not changed yet.
+      expect(speech.told(1)).toBe(false)
+      expect(arrival.active).toBe(false)
+      for (let i = 0; i < 120 && !reached; i++)
+        await vi.advanceTimersByTimeAsync(250)
+      expect(reached).toBe(true)
+      // The picture is changing: the arrival still waits.
+      expect(arrival.active).toBe(false)
+      scene.skip()
+      await nextTick()
       expect(arrival.part?.kind).toBe('events')
     })
 

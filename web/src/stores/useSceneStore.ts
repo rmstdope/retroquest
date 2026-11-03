@@ -11,8 +11,13 @@ export type ScenePhase = 'idle' | 'out' | 'dark' | 'in'
  * The change of scene when the player moves to a room with another picture:
  * the old picture fades to the dark stage (`SCENE_HALF_MS`), the new one
  * rises out of it (`SCENE_HALF_MS`), and the words of the move wait until it
- * is fully up (`holds`). The stage picture draws the phases; this keeps the
- * clock and runs `onUp` once when the picture is up, by time or by `skip`.
+ * is fully up (`holds`). A talk that moves Elior changes the scene partway
+ * through its answer: only the words from there on wait, and they wait from
+ * the moment the talk is told (`wait`) until the change begins. What the talk
+ * told before the change is cleared from the screen with the old room
+ * (`cut`, `firstUnit`). The stage
+ * picture draws the phases; this keeps the clock and runs `onUp` once when
+ * the picture is up, by time or by `skip`.
  * A picture slow to load keeps the stage dark for at most one more
  * `SCENE_HALF_MS`; after that, or when it is missing, the paper backdrop
  * ('') rises instead. Nothing here is saved.
@@ -24,6 +29,12 @@ export const useSceneStore = defineStore('scene', () => {
   /** The picture rising (or about to), '' for the backdrop. */
   const target = ref('')
   const turn = ref<number | null>(null)
+  /** The first unit of the turn that waits for the picture (0: the whole turn). */
+  const from = ref(0)
+  /** The talk whose room changed partway, and its first unit told in the new room. */
+  const fresh = ref<{ turn: number; from: number } | null>(null)
+  /** A talk whose scene changes partway, told up to its unit `from` before the change begins. */
+  const pending = ref<{ turn: number; from: number } | null>(null)
   /** Whether the target has loaded (true), is missing (false), or is not known yet (null). */
   const ready = ref<boolean | null>(null)
   /** The turn whose change has just reached its darkest moment (the room's name changes), until it is up. */
@@ -44,15 +55,45 @@ export const useSceneStore = defineStore('scene', () => {
     if (phase.value === 'idle') shown.value = src
   }
 
-  /** Whether the words of turn `id` wait for the picture. */
-  function holds(id: number): boolean {
-    return turn.value === id
+  /**
+   * Whether unit `unit` of turn `id` waits for the picture. A change that
+   * starts with the turn holds all of it, Elior's own words (unit -1) too.
+   */
+  function holds(id: number, unit: number): boolean {
+    const later = pending.value
+    if (later?.turn === id && unit >= later.from) return true
+    return turn.value === id && (from.value === 0 || unit >= from.value)
   }
 
-  /** Start the change for turn `id` towards `src` ('' for the backdrop); `up` runs once it is fully up. */
-  function begin(id: number, src: string, up: () => void): void {
+  /** The room changes before unit `from` of talk `id`: what it told before goes from the screen. */
+  function cut(id: number, from: number): void {
+    fresh.value = { turn: id, from }
+  }
+
+  /** The first unit of turn `id` the screen shows: where its room changed, or null when it did not. */
+  function firstUnit(id: number): number | null {
+    return fresh.value?.turn === id ? fresh.value.from : null
+  }
+
+  /** Hold the words of turn `id` from unit `start` on: its scene changes there, later (`begin`). */
+  function wait(id: number, start: number): void {
+    pending.value = { turn: id, from: start }
+  }
+
+  /** Let go of the words held by `wait` (the change begins now, or is not coming). */
+  function unwait(): void {
+    pending.value = null
+  }
+
+  /**
+   * Start the change for turn `id` towards `src` ('' for the backdrop); `up`
+   * runs once it is fully up. `start` is the turn's first unit that waits for
+   * it (a talk that moves Elior is told up to there over the old picture).
+   */
+  function begin(id: number, src: string, up: () => void, start = 0): void {
     skip()
     turn.value = id
+    from.value = start
     target.value = src
     ready.value = src ? null : true
     onUp = up
@@ -106,6 +147,8 @@ export const useSceneStore = defineStore('scene', () => {
   /** Forget the picture and any change (a new game, a load, a new act); the words are not run. */
   function reset(): void {
     stopTimer()
+    pending.value = null
+    fresh.value = null
     onUp = null
     shown.value = null
     phase.value = 'idle'
@@ -121,6 +164,10 @@ export const useSceneStore = defineStore('scene', () => {
     darkTurn,
     settled,
     holds,
+    wait,
+    unwait,
+    cut,
+    firstUnit,
     begin,
     targetReady,
     skip,

@@ -36,8 +36,9 @@ for (const width of [1440]) {
     await enter(page, 'talk to grandmother')
 
     const cards = page.locator('.lq-story-wrap.lq-cards')
-    await expect(cards.getByText('› talk to grandmother')).toBeVisible()
-    await expect(cards.getByText('› look')).toBeVisible()
+    // The look's description is a bubble on the left; no command is echoed.
+    await expect(cards.locator('.lq-bubble').first()).toBeVisible()
+    await expect(cards.getByTestId('command')).toHaveCount(0)
     const lines = page.getByTestId('speech-line')
     await expect(lines.first()).toBeVisible()
 
@@ -67,8 +68,8 @@ test('at 1060px the cards and the lines share one column in the middle, under th
   await enter(page, 'talk to grandmother')
 
   const column = page.locator('.lq-story-wrap.lq-one-column')
-  await expect(column.getByText('› talk to grandmother')).toBeVisible()
-  await expect(column.getByText('› look')).toBeVisible()
+  await expect(column.locator('.lq-bubble').first()).toBeVisible()
+  await expect(column.getByTestId('command')).toHaveCount(0)
   const lines = column.getByTestId('speech-line')
   await expect(lines.first()).toBeVisible()
 
@@ -90,7 +91,7 @@ test.describe('with the narrator reading', () => {
   // Narration on, as for a new player (the config turns it off for the other specs).
   test.use({ storageState: { cookies: [], origins: [] } })
 
-  test('after Escape skips an answer the newest card is in view at its start', async ({
+  test('after Escape skips an answer the newest turn is in view at its start', async ({
     page,
   }): Promise<void> => {
     // Narrated clips end three seconds after they start (no audio device in CI).
@@ -114,14 +115,17 @@ test.describe('with the narrator reading', () => {
     await page.keyboard.press('Escape')
 
     const wrap = page.locator('.lq-story-wrap.lq-cards')
-    const newestCommand = wrap.getByTestId('command').last()
-    await expect(newestCommand).toHaveText('› look')
+    // The look's first bubble (the room) is the newest turn's start.
+    const newestStart = wrap
+      .getByTestId('turn')
+      .last()
+      .locator('.lq-bubble')
+      .first()
+    await expect(newestStart).toBeVisible()
     const view = (await wrap.locator('.lq-story').boundingBox())!
-    const command = (await newestCommand.boundingBox())!
-    expect(command.y).toBeGreaterThanOrEqual(view.y)
-    // Clear of the "More below" pill at the foot.
-    expect(command.y + command.height).toBeLessThanOrEqual(
-      view.y + view.height - 48,
-    )
+    const top = (await newestStart.boundingBox())!.y
+    expect(top).toBeGreaterThanOrEqual(view.y)
+    // Its top is clear of the "More below" pill at the foot.
+    expect(top + 24).toBeLessThanOrEqual(view.y + view.height - 48)
   })
 })

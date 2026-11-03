@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import { computed, ref, watch } from 'vue'
 import { useNarrationStore } from './useNarrationStore'
 import { useStageSpeechStore } from './useStageSpeechStore'
+import { useSceneStore } from './useSceneStore'
 import {
   ARRIVAL_CLEAR_AFTER_MS,
   readingTimeMs,
@@ -247,11 +248,17 @@ export const useArrivalStore = defineStore('arrival', () => {
       newsTurns.value.push(now.turnId)
   }
 
-  /** Whether the words of the turn before its news are told: the narrator is at the news, or the conversation is out. */
+  /**
+   * Whether the words of the turn before its news are told: the narrator is at
+   * the news, or the conversation is out and the picture of a talk that moved
+   * Elior is up.
+   */
   function wordsTold(now: NonNullable<typeof current.value>): boolean {
+    const unit = now.parts[0].lines[0].unit
     return now.narrated
-      ? narration.revealed(now.turnId, now.parts[0].lines[0].unit)
-      : useStageSpeechStore().told(now.turnId)
+      ? narration.revealed(now.turnId, unit)
+      : useStageSpeechStore().told(now.turnId) &&
+          !useSceneStore().holds(now.turnId, unit)
   }
 
   /** Go on to the next page, or part (the narrator jumps with it); on the last one, clear. */
