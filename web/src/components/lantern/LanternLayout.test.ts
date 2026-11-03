@@ -2106,6 +2106,34 @@ describe('LanternLayout', () => {
       button.remove()
     })
 
+    it('hurries on a Space on the folded Actions, which stays folded', async () => {
+      await ready()
+      await say(narratedTurn(1))
+      const hurry = vi.spyOn(useNarrationStore(), 'hurry')
+      // A command folds the phone's sheet and leaves focus on its Actions.
+      const actions = document.createElement('button')
+      actions.className = 'lq-dock-open'
+      document.body.appendChild(actions)
+      const down = new KeyboardEvent('keydown', {
+        key: ' ',
+        bubbles: true,
+        cancelable: true,
+      })
+      actions.dispatchEvent(down)
+      expect(hurry).toHaveBeenCalledOnce()
+      // Handled, key-up too: the browser does not also press the button and
+      // open the sheet.
+      expect(down.defaultPrevented).toBe(true)
+      const up = new KeyboardEvent('keyup', {
+        key: ' ',
+        bubbles: true,
+        cancelable: true,
+      })
+      actions.dispatchEvent(up)
+      expect(up.defaultPrevented).toBe(true)
+      actions.remove()
+    })
+
     it('leaves Space and Enter to the command box', async () => {
       await ready()
       await say(narratedTurn(1))

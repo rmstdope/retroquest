@@ -681,7 +681,7 @@ function isEmptyBoxEnter(event: KeyboardEvent): boolean {
  * Whether this is Enter or Space on the folded bar's Actions: on a phone the
  * sheet folds as a command is sent and focus lands there, so the Enter or
  * Space a player presses next to hurry the change of scene finds that button,
- * not the box.
+ * not the box (and so does the Space that hurries the narration after it).
  */
 function isFoldedActionsPress(event: KeyboardEvent): boolean {
   return (
@@ -759,8 +759,16 @@ function onNarrationKey(event: KeyboardEvent): void {
     if (field && (hurries || target?.closest('[aria-expanded="true"]'))) return
     // A button, link or summary presses on Space or Enter: building a command
     // goes on while the voice reads (the press that completes it cuts in).
-    if (hurries && target?.closest('button, a, [role="button"], summary'))
+    // The folded bar's Actions, where focus lands after a command on a phone,
+    // takes no Space: that is the hurry the hint invites, so it stays folded.
+    const foldedActionsSpace = event.key === ' ' && isFoldedActionsPress(event)
+    if (
+      hurries &&
+      !foldedActionsSpace &&
+      target?.closest('button, a, [role="button"], summary')
+    )
       return
+    spaceTaken = foldedActionsSpace
   }
   event.preventDefault()
   // An arrival on the picture goes on a part, or clears (the narrator with it).
