@@ -1,7 +1,7 @@
 import { Item, type Character, type GameState, characterName } from '@/engine'
 import { BarmaidElena } from '../characters/BarmaidElena'
 
-/** The item's description; `Act2.afterLoad` restores it in older saves. */
+/** The item's description; `refreshSavedText` restores it in older saves. */
 export const CRYSTAL_CLEAR_WATER_DESCRIPTION =
   "Water from the nymphs' stream, so clear the flask looks empty until " +
   'you tip it. No bucket has ever gone down that spring.'
@@ -15,6 +15,11 @@ export class CrystalClearWater extends Item {
       description: CRYSTAL_CLEAR_WATER_DESCRIPTION,
       canBeCarried: true,
     })
+  }
+
+  /** Give a save made with older wording the current description. */
+  override refreshSavedText(): void {
+    this.description = CRYSTAL_CLEAR_WATER_DESCRIPTION
   }
 
   /** Use crystal-clear water on a character to purify them. */

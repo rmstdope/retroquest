@@ -63,6 +63,7 @@ describe('Act II spell descriptions', () => {
     }
     for (const spell of game.state.knownSpells) spell.description = 'old'
     new Act2().afterLoad(game.state)
+    game.state.refreshSavedText()
     expect(game.state.knownSpells.map((s) => s.description)).toEqual(
       DESCRIPTIONS.map(([, , text]) => text),
     )

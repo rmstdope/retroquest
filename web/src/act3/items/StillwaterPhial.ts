@@ -20,6 +20,11 @@ export class StillwaterPhial extends Item {
     })
   }
 
+  /** Give a save made with older wording the current description. */
+  override refreshSavedText(): void {
+    this.description = new StillwaterPhial().description
+  }
+
   /** Use the phial with the pool or the echo stones to still the pools; the phial is kept. */
   override useWith(gameState: GameState, other: Item): string {
     if (other instanceof DarkPool || other instanceof EchoStones) {

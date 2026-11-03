@@ -43,6 +43,11 @@ export class AncientAmulet extends Item {
     })
   }
 
+  /** Give a save made before the Act IV wording review the current description. */
+  override refreshSavedText(): void {
+    this.description = new AncientAmulet().description
+  }
+
   /**
    * The amulet's look: the picture of the third figure follows the story
    * (orbs mended, refrain said, Redemption). Justice and Sacrifice stay at

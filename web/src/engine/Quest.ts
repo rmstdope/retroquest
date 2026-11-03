@@ -52,6 +52,14 @@ export class Quest {
     this.completion = completion ?? `You have completed the quest '${name}'.`
   }
 
+  /**
+   * Give the static text a save keeps (a description, a name) the current
+   * wording after a load. The engine calls it on every saved room, room item,
+   * room character, carried item, known spell and quest, after the act's
+   * `afterLoad`; it must be idempotent. Does nothing by default.
+   */
+  refreshSavedText(_gameState: GameState): void {}
+
   checkTrigger(_gameState: GameState): boolean {
     return false
   }

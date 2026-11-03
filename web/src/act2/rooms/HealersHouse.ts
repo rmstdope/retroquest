@@ -1,7 +1,7 @@
 import { Room } from '@/engine'
 import { MasterHealerLyria } from '../characters/MasterHealerLyria'
 
-/** The Healer's House description; `Act2.afterLoad` restores it on older saves. */
+/** The Healer's House description; `refreshSavedText` restores it on older saves. */
 export const HEALERS_HOUSE_DESCRIPTION =
   'A small stone house that smells of crushed herbs. A few bundles of dried ' +
   'plants still hang from the rafters, but the shelves below them are nearly ' +
@@ -20,5 +20,10 @@ export class HealersHouse extends Room {
       characters: [new MasterHealerLyria()],
       exits: { south: 'ResidentialQuarter' },
     })
+  }
+
+  /** Give a save made with older wording the current description. */
+  override refreshSavedText(): void {
+    this.description = HEALERS_HOUSE_DESCRIPTION
   }
 }

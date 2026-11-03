@@ -18,6 +18,11 @@ export class Locket extends Item {
     })
   }
 
+  /** Give a save made before the rewrite the current description. */
+  override refreshSavedText(): void {
+    this.description = new Locket().description
+  }
+
   /** Teach Bless spell when picked up if the spell is not yet known. */
   override pickedUp(gameState: GameState): string {
     if (!gameState.hasSpell(new BlessSpell().id)) {

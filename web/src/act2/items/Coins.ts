@@ -1,6 +1,6 @@
 import { Item, type GameState } from '@/engine'
 
-/** The coins' description; `Act2.afterLoad` restores it in older saves. */
+/** The coins' description; `refreshSavedText` restores it in older saves. */
 export const COINS_DESCRIPTION =
   'Gold coins, kept in a pouch at your belt. These will be useful for ' +
   'purchasing supplies and equipment in Greendale.'
@@ -17,6 +17,11 @@ export class Coins extends Item {
       description: COINS_DESCRIPTION,
       canBeCarried: true,
     })
+  }
+
+  /** Give a save made with older wording the current description. */
+  override refreshSavedText(): void {
+    this.description = COINS_DESCRIPTION
   }
 
   /** Count every coin carried, not just this one. */

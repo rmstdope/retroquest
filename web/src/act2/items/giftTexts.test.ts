@@ -79,7 +79,7 @@ describe('the enchanted acorn', () => {
   })
 })
 
-describe('Act2.afterLoad', () => {
+describe('refreshSavedText after load', () => {
   it('gives older saves the new wording of the altar, charms, acorn and gifts', () => {
     const game = new Game([new Act2()])
     const gifts = [
@@ -100,6 +100,7 @@ describe('Act2.afterLoad', () => {
     altar.description = 'old text'
 
     new Act2().afterLoad(game.state)
+    game.state.refreshSavedText()
 
     expect(gifts.map((item) => item.description)).toEqual(fresh)
     expect(altar.description).toContain('Three hollows are carved')

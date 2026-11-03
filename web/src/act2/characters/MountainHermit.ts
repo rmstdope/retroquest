@@ -39,6 +39,11 @@ export class MountainHermit extends Character {
     })
   }
 
+  /** Give a save made with older wording the current description. */
+  override refreshSavedText(): void {
+    this.description = MOUNTAIN_HERMIT_DESCRIPTION
+  }
+
   /** Greet the player, hand over Cedric's sword, or point them onward. */
   override talkTo(gameState: GameState): string {
     const name = this.name

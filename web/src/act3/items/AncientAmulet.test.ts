@@ -99,6 +99,7 @@ describe('AncientAmulet', () => {
     amulet.description = 'A family heirloom whose runes glint like dew at dawn.'
 
     new Act3().afterLoad(game.state)
+    game.state.refreshSavedText()
 
     expect(amulet.description).toBe(AFTER_INSCRIPTION)
   })

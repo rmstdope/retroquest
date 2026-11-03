@@ -1,6 +1,6 @@
 import { Item } from '@/engine'
 
-/** The crystal's description; `Act2.afterLoad` restores it in older saves. */
+/** The crystal's description; `refreshSavedText` restores it in older saves. */
 export const FOREST_HEART_CRYSTAL_DESCRIPTION =
   'A crystal the size of a plum. Inside it, tiny lights drift like ' +
   'fireflies over a forest you could almost walk into. Held close, it ' +
@@ -13,5 +13,10 @@ export class ForestHeartCrystal extends Item {
       name: 'forest heart crystal',
       description: FOREST_HEART_CRYSTAL_DESCRIPTION,
     })
+  }
+
+  /** Give a save made with older wording the current description. */
+  override refreshSavedText(): void {
+    this.description = FOREST_HEART_CRYSTAL_DESCRIPTION
   }
 }

@@ -3,7 +3,7 @@ import type { Exits, GameState } from '@/engine'
 import { Herald } from '../characters/Herald'
 import { CastleGuardCaptain } from '../characters/CastleGuardCaptain'
 
-/** The Castle Approach description; `Act2.afterLoad` restores it in older saves. */
+/** The Castle Approach description; `refreshSavedText` restores it in older saves. */
 export const CASTLE_APPROACH_DESCRIPTION =
   "A wide avenue lined with statues of Greendale's heroes leads to an impressive " +
   'castle of white stone. Tall spires reach toward the sky, and colorful banners ' +
@@ -28,6 +28,11 @@ export class CastleApproach extends Room {
       characters: [new Herald(), new CastleGuardCaptain()],
       exits: { south: 'MainSquare', west: 'CastleCourtyard' },
     })
+  }
+
+  /** Give a save made with older wording the current description. */
+  override refreshSavedText(): void {
+    this.description = CASTLE_APPROACH_DESCRIPTION
   }
 
   /** Return exits; withhold the west exit until protocol is fulfilled. */

@@ -15,7 +15,7 @@ const VISITOR_ENTRY =
   'families who came there. Would not give his name. Said he came on the ' +
   "business of Malakar.'"
 
-/** The Great Hall description; `Act2.afterLoad` restores it in older saves. */
+/** The Great Hall description; `refreshSavedText` restores it in older saves. */
 export const GREAT_HALL_DESCRIPTION =
   'A magnificent hall with soaring ceilings supported by massive stone columns. ' +
   'Tapestries depicting legendary battles cover the walls, and the ' +
@@ -40,6 +40,11 @@ export class GreatHall extends Room {
       characters: [new CourtHerald(), new Historians(), new LordCommander()],
       exits: { east: 'CastleCourtyard' },
     })
+  }
+
+  /** Give a save made with older wording the current description. */
+  override refreshSavedText(): void {
+    this.description = GREAT_HALL_DESCRIPTION
   }
 
   /** Conduct lineage research through progressive flag checks. */

@@ -17,4 +17,9 @@ export class BlacksmithsForge extends Room {
       exits: { west: 'VillageWell', north: 'GeneralStore' },
     })
   }
+
+  /** Give a save made before the rewrite the current description. */
+  override refreshSavedText(): void {
+    this.description = new BlacksmithsForge().description
+  }
 }

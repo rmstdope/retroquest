@@ -68,6 +68,12 @@ export class SirCedric extends Character {
     })
   }
 
+  /** Give an older save his name in title case and his current description. */
+  override refreshSavedText(): void {
+    this.name = CEDRIC_NAME
+    this.description = CEDRIC_DESCRIPTION
+  }
+
   /** He answers to "sir cedric" and to "cedric", however it is cased. */
   override answersTo(name: string): boolean {
     const wanted = name.trim().toLowerCase()

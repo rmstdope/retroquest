@@ -1,7 +1,7 @@
 import { Item, type GameState } from '@/engine'
 import { ForestEntrance } from '../rooms/ForestEntrance'
 
-/** The acorn's description; `Act2.afterLoad` restores it in older saves. */
+/** The acorn's description; `refreshSavedText` restores it in older saves. */
 export const ENCHANTED_ACORN_DESCRIPTION =
   'An acorn, perfectly shaped, with fine veins of silver running through ' +
   'the shell like roots. It is warm, as if someone had just been holding it.'
@@ -15,6 +15,11 @@ export class EnchantedAcorn extends Item {
       description: ENCHANTED_ACORN_DESCRIPTION,
       canBeCarried: true,
     })
+  }
+
+  /** Give a save made with older wording the current description. */
+  override refreshSavedText(): void {
+    this.description = ENCHANTED_ACORN_DESCRIPTION
   }
 
   /** The acorn turns toward the silver-barked tree in the grove, and lies still elsewhere. */

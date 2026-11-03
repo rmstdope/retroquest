@@ -21,6 +21,11 @@ export class EchoChambers extends Room {
     })
   }
 
+  /** Give a save made with older wording the current description. */
+  override refreshSavedText(): void {
+    this.description = new EchoChambers().description
+  }
+
   /**
    * Light cast here finds the writing above reach: a rewarded second use of
    * the spell in the act, nothing gained but the sight.

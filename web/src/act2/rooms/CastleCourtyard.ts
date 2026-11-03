@@ -10,7 +10,7 @@ import {
   FLAG_VISION_SHARED,
 } from '../Act2StoryFlags'
 
-/** The Castle Courtyard description; `Act2.afterLoad` restores it in older saves. */
+/** The Castle Courtyard description; `refreshSavedText` restores it in older saves. */
 export const CASTLE_COURTYARD_DESCRIPTION =
   'An expansive courtyard within the castle walls, featuring training grounds ' +
   'where knights practice their swordwork. Ancient oak trees provide shade for ' +
@@ -41,6 +41,11 @@ export class CastleCourtyard extends Room {
         west: 'GreatHall',
       },
     })
+  }
+
+  /** Give a save made with older wording the current description. */
+  override refreshSavedText(): void {
+    this.description = CASTLE_COURTYARD_DESCRIPTION
   }
 
   /** Leaving the courtyard mid-bout abandons it: Cedric starts the bout over next time. */

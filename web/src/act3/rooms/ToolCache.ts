@@ -20,6 +20,11 @@ export class ToolCache extends Room {
     })
   }
 
+  /** Give a save made with older wording the current description. */
+  override refreshSavedText(): void {
+    this.description = new ToolCache().description
+  }
+
   /** Describe the supply crate and hint at its importance. */
   override search(_gameState: GameState): string {
     if (this.crateDiscovered) {

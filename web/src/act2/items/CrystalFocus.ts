@@ -1,6 +1,6 @@
 import { Item, type GameState } from '@/engine'
 
-/** The item's description; `Act2.afterLoad` restores it in older saves. */
+/** The item's description; `refreshSavedText` restores it in older saves. */
 export const CRYSTAL_FOCUS_DESCRIPTION =
   'A clear crystal the length of your finger, cut with many faces. Hold ' +
   'it to the light and the light comes out the other side narrower and ' +
@@ -15,6 +15,11 @@ export class CrystalFocus extends Item {
       description: CRYSTAL_FOCUS_DESCRIPTION,
       canBeCarried: true,
     })
+  }
+
+  /** Give a save made with older wording the current description. */
+  override refreshSavedText(): void {
+    this.description = CRYSTAL_FOCUS_DESCRIPTION
   }
 
   /** This item enhances magical understanding and comprehension of ancient texts. */

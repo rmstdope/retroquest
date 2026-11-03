@@ -17,4 +17,9 @@ export class RoadToGreendale extends Room {
       exits: { west: 'VillageChapel' },
     })
   }
+
+  /** Give a save made before the rewrite the current description. */
+  override refreshSavedText(): void {
+    this.description = new RoadToGreendale().description
+  }
 }

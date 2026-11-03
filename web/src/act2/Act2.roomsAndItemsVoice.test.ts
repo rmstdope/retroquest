@@ -57,6 +57,7 @@ describe('Act II rooms say one true thing', () => {
       expect(room.description).toBe(wording)
       room.description = 'old wording'
       new Act2().afterLoad(game.state)
+      game.state.refreshSavedText()
       expect(room.description).toBe(wording)
     })
   }
@@ -96,6 +97,7 @@ describe('Act II items say one true thing', () => {
     game.state.currentRoom.items.push(water, flowers)
     game.state.inventory.push(leaves, focus, kit)
     new Act2().afterLoad(game.state)
+    game.state.refreshSavedText()
     expect(focus.description).toContain('narrower and brighter')
     expect(kit.description).toContain('ring of small warding stones')
     expect(water.description).toContain('nymphs')

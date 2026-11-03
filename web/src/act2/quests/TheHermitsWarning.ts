@@ -28,7 +28,7 @@ export class TheHermitsWarningQuest extends Quest {
   }
 
   /** Bring the log up to date in a save made with the older wording. */
-  refreshText(): void {
+  override refreshSavedText(): void {
     this.description = DESCRIPTION
     this.completion = COMPLETION
   }

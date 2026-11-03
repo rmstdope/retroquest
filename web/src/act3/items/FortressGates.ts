@@ -15,6 +15,11 @@ export class FortressGates extends Item {
     })
   }
 
+  /** Give a save made with older wording the current description. */
+  override refreshSavedText(): void {
+    this.description = new FortressGates().description
+  }
+
   /** Handle examining the fortress gates. */
   override examine(gameState: GameState): string {
     if (!gameState.getStoryFlag(FLAG_ACT3_FORTRESS_GATES_EXAMINED)) {

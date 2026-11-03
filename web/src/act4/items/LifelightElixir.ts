@@ -26,6 +26,11 @@ export class LifelightElixir extends Item {
     })
   }
 
+  /** Give a save made before the Act IV wording review the current description. */
+  override refreshSavedText(): void {
+    this.description = new LifelightElixir().description
+  }
+
   /** The elixir's look. */
   override examine(_gameState: GameState): string {
     return this.description

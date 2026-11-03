@@ -143,6 +143,11 @@ export class SirCedric extends Character {
     })
   }
 
+  /** Give an older save the description that matches whether his name has been cleared. */
+  override refreshSavedText(gameState: GameState): void {
+    this.refreshDescription(gameState)
+  }
+
   /** Also answers to his short name, which the `say truth to cedric` command uses. */
   override answersTo(name: string): boolean {
     return super.answersTo(name) || name.toLowerCase() === 'cedric'

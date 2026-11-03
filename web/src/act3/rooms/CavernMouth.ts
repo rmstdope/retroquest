@@ -15,4 +15,9 @@ export class CavernMouth extends Room {
       exits: { north: 'ToolCache', east: 'StillnessVestibule' },
     })
   }
+
+  /** Give a save made with older wording the current description. */
+  override refreshSavedText(): void {
+    this.description = new CavernMouth().description
+  }
 }

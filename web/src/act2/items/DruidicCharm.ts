@@ -1,7 +1,7 @@
 import { Item, type GameState } from '@/engine'
 import { OfferingAltar } from './OfferingAltar'
 
-/** The charm's description; `Act2.afterLoad` restores it in older saves. */
+/** The charm's description; `refreshSavedText` restores it in older saves. */
 export const DRUIDIC_CHARM_DESCRIPTION =
   'A pendant of dark oak on a leather cord, bound with silver wire, with an ' +
   'oak leaf carved on its face. It hung over the door of the Silver Stag for ' +
@@ -15,6 +15,11 @@ export class DruidicCharm extends Item {
       description: DRUIDIC_CHARM_DESCRIPTION,
       canBeCarried: true,
     })
+  }
+
+  /** Give a save made with older wording the current description. */
+  override refreshSavedText(): void {
+    this.description = DRUIDIC_CHARM_DESCRIPTION
   }
 
   /** The charm is only warm from the hand, in every room. */

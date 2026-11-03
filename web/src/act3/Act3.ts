@@ -1,9 +1,6 @@
-import { Act, type GameState, type Quest, type Room } from '@/engine'
+import { Act, type GameState, type Room } from '@/engine'
 import { AncientAmulet } from './items/AncientAmulet'
 import { DarkPool } from './items/DarkPool'
-import { StillwaterPhial } from './items/StillwaterPhial'
-import { FortressGates } from './items/FortressGates'
-import { LifelightElixir } from './items/LifelightElixir'
 import { MirasHut } from './rooms/MirasHut'
 import { TidalCauseway } from './rooms/TidalCauseway'
 import { ShorelineMarkers } from './rooms/ShorelineMarkers'
@@ -24,8 +21,6 @@ import { EchoChambers } from './rooms/EchoChambers'
 import { StillnessVestibule } from './rooms/StillnessVestibule'
 import { DragonsHall } from './rooms/DragonsHall'
 import { FortressEntrance } from './rooms/FortressEntrance'
-import { CrystalOfLight } from './items/CrystalOfLight'
-import { HeatWardMix } from './items/HeatWardMix'
 import { TheThreeVirtuesQuest } from './quests/TheThreeVirtues'
 import { EchoesOfTheHiddenBondQuest } from './quests/EchoesOfTheHiddenBond'
 import { TidewardSigilsQuest } from './quests/TidewardSigils'
@@ -44,13 +39,11 @@ import { ACT3_GOLDEN_PATH } from './Act3GoldenPath'
 import {
   FLAG_ACT3_FORTRESS_GATES_EXAMINED,
   FLAG_ACT3_MINERS_RESCUE_COMPLETED,
-  FLAG_ACT3_MIRA_CONFESSED,
   FLAG_ACT3_OATH_OF_STILLNESS_COMPLETED,
   FLAG_ACT3_POOLS_STILLED,
 } from './Act3StoryFlags'
-import { Mira } from './characters/Mira'
 import { Tobin } from './characters/Tobin'
-import { CEDRIC_DESCRIPTION, CEDRIC_NAME } from './CedricLines'
+import { CEDRIC_NAME } from './CedricLines'
 
 /** Act 3 of RetroQuest: The Awakening. */
 export class Act3 extends Act {
@@ -168,27 +161,12 @@ export class Act3 extends Act {
   }
 
   /**
-   * Saves from before Sir Cedric was shown in title case still name him in
-   * lower case, saves from before the Act III rewrite keep his and Mira's
-   * old descriptions (hers until she confesses), saves from before the hut was
-   * reworded keep its old description, and saves already past the
-   * miners' rescue lack Tobin. Every spell the player knows takes the
-   * description of Act III's own copy, so older saves show who taught it.
-   * The Echoes completion text and the amulet's description are set again
-   * to the current wording.
+   * Saves already past the miners' rescue lack Tobin, and saves from before
+   * the Stillwater Phial stilled the pools have no pool (a save past the oath
+   * counts as stilled). Saved wording is refreshed by the rooms, items,
+   * characters, spells and quests themselves (`refreshSavedText`).
    */
   override afterLoad(gameState: GameState): void {
-    gameState.allRooms.MirasHut.description = new MirasHut().description
-    for (const spell of [
-      new PurifySpell(),
-      new UnlockSpell(),
-      new LightSpell(),
-      new MendSpell(),
-      new BlessSpell(),
-    ]) {
-      const known = gameState.knownSpells.find((s) => s.id === spell.id)
-      if (known) known.description = spell.description
-    }
     const galleries = gameState.allRooms.CollapsedGalleries
     if (
       galleries &&
@@ -196,127 +174,6 @@ export class Act3 extends Act {
       !galleries.getCharacterByName('tobin')
     ) {
       galleries.addCharacter(new Tobin())
-    }
-    for (const room of Object.values(gameState.allRooms)) {
-      const cedric = room.getCharacterByName(CEDRIC_NAME)
-      if (!cedric) continue
-      cedric.name = CEDRIC_NAME
-      cedric.description = CEDRIC_DESCRIPTION
-    }
-    if (!gameState.getStoryFlag(FLAG_ACT3_MIRA_CONFESSED)) {
-      for (const room of Object.values(gameState.allRooms))
-        for (const character of room.characters)
-          if (character instanceof Mira)
-            character.description = Mira.DESCRIPTION
-    }
-    this.patchStillnessVestibule(gameState)
-    this.patchFortressThreshold(gameState)
-    this.patchQuestLogs(gameState)
-    this.patchParentsStory(gameState)
-    this.patchPlainDescriptions(gameState)
-  }
-
-  /**
-   * Saves from before the side quest logs told what happened keep the old
-   * wording; the main quest rebuilds its own log from the story flags.
-   */
-  private patchQuestLogs(gameState: GameState): void {
-    const quests: Quest[] = [
-      ...gameState.activatedQuests,
-      ...gameState.completedQuests,
-    ]
-    for (const quest of quests) {
-      if (quest instanceof BreathOfTheMountain)
-        quest.completion = new BreathOfTheMountain().completion
-      if (quest instanceof TidewardSigilsQuest)
-        quest.description = new TidewardSigilsQuest().description
-      if (quest instanceof LanternsOfTheDeepsQuest)
-        quest.completion = new LanternsOfTheDeepsQuest().completion
-    }
-  }
-
-  /**
-   * Saves from before the cavern, echo and coast rooms, the crystal and the
-   * heat-ward mix were reworded keep the old descriptions.
-   */
-  private patchPlainDescriptions(gameState: GameState): void {
-    const rooms: Record<string, string> = {
-      CavernMouth: new CavernMouth().description,
-      CollapsedGalleries: new CollapsedGalleries().description,
-      ToolCache: new ToolCache().description,
-      EchoChambers: new EchoChambers().description,
-      OuterWards: new OuterWards().description,
-      SubmergedAntechamber: new SubmergedAntechamber().description,
-    }
-    for (const [name, description] of Object.entries(rooms)) {
-      const room = gameState.allRooms[name]
-      if (room) room.description = description
-    }
-    const items = [
-      ...gameState.inventory,
-      ...Object.values(gameState.allRooms).flatMap((room) => room.items),
-    ]
-    for (const item of items) {
-      if (item instanceof CrystalOfLight)
-        item.description = new CrystalOfLight().description
-      if (item instanceof HeatWardMix)
-        item.description = new HeatWardMix().description
-    }
-  }
-
-  /**
-   * Saves from before the fortress threshold was reworded keep the old
-   * descriptions of the entrance, its gates and the lifelight elixir.
-   */
-  private patchFortressThreshold(gameState: GameState): void {
-    const entrance = gameState.allRooms.FortressEntrance
-    if (entrance) entrance.description = new FortressEntrance().description
-    const items = [
-      ...gameState.inventory,
-      ...Object.values(gameState.allRooms).flatMap((room) => room.items),
-    ]
-    for (const item of items) {
-      if (item instanceof FortressGates)
-        item.description = new FortressGates().description
-      if (item instanceof LifelightElixir)
-        item.description = new LifelightElixir().description
-    }
-  }
-
-  /**
-   * Saves from before the parents' story was reworded keep the old
-   * completion text of the Echoes quest and the old description of the amulet.
-   */
-  private patchParentsStory(gameState: GameState): void {
-    for (const quest of [
-      ...gameState.nonActivatedQuests,
-      ...gameState.activatedQuests,
-      ...gameState.completedQuests,
-    ]) {
-      if (quest instanceof EchoesOfTheHiddenBondQuest)
-        quest.refreshText(gameState)
-    }
-    const carried = [
-      ...gameState.inventory,
-      ...Object.values(gameState.allRooms).flatMap((room) => room.items),
-    ]
-    for (const item of carried) {
-      if (item instanceof AncientAmulet) item.refreshDescription()
-    }
-  }
-
-  /**
-   * Saves from before the Stillwater Phial stilled the pools keep the old
-   * phial text and have no pool; a save past the oath counts as stilled.
-   */
-  private patchStillnessVestibule(gameState: GameState): void {
-    const phialText = new StillwaterPhial().description
-    const items = [
-      ...gameState.inventory,
-      ...Object.values(gameState.allRooms).flatMap((room) => room.items),
-    ]
-    for (const item of items) {
-      if (item instanceof StillwaterPhial) item.description = phialText
     }
     const vestibule = gameState.allRooms.StillnessVestibule
     if (

@@ -22,6 +22,11 @@ export class CollapsedGalleries extends Room {
     })
   }
 
+  /** Give a save made with older wording the current description. */
+  override refreshSavedText(): void {
+    this.description = new CollapsedGalleries().description
+  }
+
   /** Hide east exit until the miners' rescue is completed. */
   override getExits(gameState: GameState): Exits {
     const exits = { ...this.exits }

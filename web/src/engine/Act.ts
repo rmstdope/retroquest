@@ -91,7 +91,9 @@ export class Act {
 
   /**
    * Bring a state loaded from a save up to date, e.g. drop data that older
-   * saves still hold. Runs on every load, so it must be idempotent.
+   * saves still hold or add what they lack. Runs on every load, so it must be
+   * idempotent. Saved wording is not refreshed here: each content class does
+   * that in its own `refreshSavedText`, which the engine calls afterwards.
    */
   afterLoad(_gameState: GameState): void {}
 

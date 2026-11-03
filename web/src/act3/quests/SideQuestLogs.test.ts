@@ -40,8 +40,27 @@ describe('Act III side quest logs in older saves', () => {
     game.state.activatedQuests.push(sigils)
     game.state.completedQuests.push(breath, lanterns)
     new Act3().afterLoad(game.state)
+    game.state.refreshSavedText()
     expect(breath.completion).toBe(new BreathOfTheMountain().completion)
     expect(sigils.description).toBe(new TidewardSigilsQuest().description)
     expect(lanterns.completion).toBe(new LanternsOfTheDeepsQuest().completion)
+  })
+})
+
+describe('Act III side quest logs not yet offered in an older save', () => {
+  it('keep the text they were saved with', () => {
+    const game = new Game([new Act3()])
+    const breath = new BreathOfTheMountain()
+    const sigils = new TidewardSigilsQuest()
+    const lanterns = new LanternsOfTheDeepsQuest()
+    breath.completion = 'old'
+    sigils.description = 'old'
+    lanterns.completion = 'old'
+    game.state.nonActivatedQuests = [breath, sigils, lanterns]
+    new Act3().afterLoad(game.state)
+    game.state.refreshSavedText()
+    expect(breath.completion).toBe('old')
+    expect(sigils.description).toBe('old')
+    expect(lanterns.completion).toBe('old')
   })
 })

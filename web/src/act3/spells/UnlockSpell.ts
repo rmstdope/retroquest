@@ -12,6 +12,11 @@ export class UnlockSpell extends Spell {
     })
   }
 
+  /** Give a spell known in an older save the current description, which says who taught it. */
+  override refreshSavedText(): void {
+    this.description = new UnlockSpell().description
+  }
+
   /** Cast unlock on an item: the fused locker, or the miners' supply crate. */
   override castOnItem(gameState: GameState, targetItem: Item): string {
     if (targetItem instanceof Locker) {
