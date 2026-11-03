@@ -13,10 +13,10 @@ import { narrationText } from './narrationKey'
 import { ELIOR_PORTRAIT_PROMPT, PORTRAIT_PROMPTS } from './portraitPrompts'
 import { roomTrackId } from './musicLists'
 
-/** Width in pixels of every image. */
-export const IMAGE_WIDTH = 640
-/** Height in pixels of every image. */
-export const IMAGE_HEIGHT = 360
+/** Width in pixels of every room image. */
+export const IMAGE_WIDTH = 1920
+/** Height in pixels of every room image. */
+export const IMAGE_HEIGHT = 1080
 
 /** Width in pixels of every portrait. */
 export const PORTRAIT_WIDTH = 480
