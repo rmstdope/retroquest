@@ -109,7 +109,7 @@ import TitlePage from './TitlePage.vue'
  * act has recordings and narration is on (`useNarrationStore`): the layout
  * starts it with the new turn, a click on
  * the story hurries it (two skip), Space/Enter hurry while focus is not on a
- * field or a control (an arrival on the picture goes on a part instead), Escape skips (also in the command box, unless its word
+ * field or a control (Space also on the folded bar's Actions; an arrival on the picture goes on a part instead), Escape skips (also in the command box, unless its word
  * list is open), and a pop-up stops it. Building a command (typing, verbs,
  * targets) never stops it: only the complete command cuts in.
  * While a command is narrated the panels (plate, buttons, map, drawer, the
@@ -783,8 +783,8 @@ function onNarrationKey(event: KeyboardEvent): void {
 }
 
 /**
- * A Space went on an arrival or a change of scene: its key-up must not press
- * the focused button.
+ * A Space went on an arrival, a change of scene or (from the folded bar's
+ * Actions) a narration: its key-up must not press the focused button.
  */
 let spaceTaken = false
 
