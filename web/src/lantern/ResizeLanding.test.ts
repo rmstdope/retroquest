@@ -177,6 +177,32 @@ describe('ResizeLanding', () => {
         atNewest: true,
       })
     })
+
+    it('is at the newest once the story has no turns left to read back to', () => {
+      let shown = true
+      const story = new ResizeLanding(
+        {
+          ...ports,
+          measure: (): StoryGeometry | null =>
+            shown
+              ? ports.measure()
+              : { paneHeight: PANE, moreBelow: false, turns: [] },
+        },
+        clock,
+      )
+      story.start()
+      scroll = topOf(1)
+      story.note()
+      expect(story.capture().atNewest).toBe(false)
+      shown = false
+      story.note()
+      expect(story.capture()).toEqual({
+        anchor: 0,
+        offset: 0,
+        height: 0,
+        atNewest: true,
+      })
+    })
   })
 
   describe('landing after a crossing', () => {
