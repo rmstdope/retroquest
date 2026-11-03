@@ -156,8 +156,16 @@ describe('LanternLayout: change of scene', () => {
     })
     actions.dispatchEvent(space)
     expect(scene.turn).toBeNull()
-    // Handled: the browser does not also press the button and open the sheet.
+    // Handled, key-up too: the browser does not also press the button and
+    // open the sheet.
     expect(space.defaultPrevented).toBe(true)
+    const up = new KeyboardEvent('keyup', {
+      key: ' ',
+      bubbles: true,
+      cancelable: true,
+    })
+    actions.dispatchEvent(up)
+    expect(up.defaultPrevented).toBe(true)
   })
 
   it('a command during the change skips it and leaves the new room up', async () => {

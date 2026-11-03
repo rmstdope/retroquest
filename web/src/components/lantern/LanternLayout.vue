@@ -713,6 +713,7 @@ function onNarrationKey(event: KeyboardEvent): void {
       !(field || control)
     ) {
       event.preventDefault()
+      spaceTaken = event.key === ' '
       scene.skip()
       return
     }
@@ -773,7 +774,10 @@ function onNarrationKey(event: KeyboardEvent): void {
   else narration.skipAll()
 }
 
-/** A Space went on an arrival: its key-up must not press the focused button. */
+/**
+ * A Space went on an arrival or a change of scene: its key-up must not press
+ * the focused button.
+ */
 let spaceTaken = false
 
 /** Swallow the key-up of a Space that `onNarrationKey` used to go on. */

@@ -3,8 +3,8 @@ import { test, expect } from '@playwright/test'
 /**
  * Hurrying past a change of scene on the phone's picture stage (rq-dxpb): a
  * command folds the actions sheet and puts focus on the bar's Actions, so the
- * next Enter or Space (rq-vx2c) lands there; during the change it brings the new room up and
- * leaves the sheet folded.
+ * next Enter or Space (rq-vx2c) lands there; during the change it brings the
+ * new room up and leaves the sheet folded.
  */
 for (const key of ['Enter', 'Space']) {
   test(`on a phone ${key === 'Enter' ? 'an Enter' : 'a Space'} during a change of scene brings the room up and leaves the actions folded`, async ({
