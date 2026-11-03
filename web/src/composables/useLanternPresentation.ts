@@ -45,8 +45,12 @@ export interface LanternPresentation {
  * Coordinates when the Lantern's presentations start and what stops them, so
  * the layout does not have to know the order. Call it once, during the
  * layout's setup: it watches the game and keeps watching until the layout
- * goes. Its watchers run in the order they are declared here, after the
- * layout's watchers declared before the call and before those after it.
+ * goes. Where its watchers share a trigger with each other or with the
+ * layout's, they run in the order declared: these in the order here, after
+ * the layout's declared before the call and before those after it. The
+ * layout calls it where its new-turn watcher stood, so the story's new turn
+ * is cut in on after the layout's own drawer watcher and before its item
+ * flights and quest chimes.
  *
  * The story policy: a new turn first brings up the change of scene of the
  * turn before and cuts in on everything still told of it (speech, arrival,
