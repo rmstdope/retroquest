@@ -28,6 +28,10 @@ const TURN_HEIGHT = 100
 describe('where the story lands after the window crosses 1100 px', () => {
   let w: VueWrapper | undefined
   let sides: boolean
+  /** Whether the window is a laptop's (at least 1024 by 560 px). */
+  let wide: boolean
+  /** Whether the window is short (under 520 px high): the transcript layout under the laptop stage. */
+  let short: boolean
   let listeners: Record<string, (e: { matches: boolean }) => void>
   /** The height of the newest turn in the fake layout. */
   let newestHeight: number
@@ -52,6 +56,8 @@ describe('where the story lands after the window crosses 1100 px', () => {
       },
     )
     sides = false
+    wide = true
+    short = false
     listeners = {}
     newestHeight = TURN_HEIGHT
     extra = 0
@@ -61,7 +67,11 @@ describe('where the story lands after the window crosses 1100 px', () => {
       vi.fn((query: string) => ({
         matches: query.includes('1100px')
           ? sides
-          : !query.includes('max-height'),
+          : query.includes('max-height')
+            ? short
+            : query.includes('min-height')
+              ? wide
+              : true,
         addEventListener: (
           _: string,
           fn: (e: { matches: boolean }) => void,
@@ -74,6 +84,7 @@ describe('where the story lands after the window crosses 1100 px', () => {
   })
   afterEach(() => {
     window.innerWidth = 1024
+    window.innerHeight = 768
     vi.useRealTimers()
     w?.unmount()
     vi.unstubAllGlobals()
@@ -418,5 +429,22 @@ describe('where the story lands after the window crosses 1100 px', () => {
     extra = 80
     settle()
     expect(pane().scrollTop).toBe(topOf(1))
+  })
+
+  it('opens the transcript on the newest turn when the window becomes short', async () => {
+    wide = false
+    window.innerWidth = 900
+    window.innerHeight = 757
+    await mountWith(5)
+    await readNewest()
+    // The window is made about 480 px high: the stage gives way to the transcript.
+    window.innerHeight = 480
+    short = true
+    for (const [query, fn] of Object.entries(listeners))
+      if (query.includes('max-height')) fn({ matches: true })
+    await nextTick()
+    await nextTick()
+    expect(content().children.length).toBe(5)
+    expect(pane().scrollTop).toBe(totalHeight(5) - PANE)
   })
 })

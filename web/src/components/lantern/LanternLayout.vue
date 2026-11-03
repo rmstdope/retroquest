@@ -575,17 +575,19 @@ function onStoryKeydown(event: KeyboardEvent): void {
  * the cards) in the same pane; `ResizeLanding` re-forms the story where the
  * player was reading. The view is taken before the redraw and landed after
  * it, again each time the pane or its turns change size, and on every frame,
- * while the browser settles the new layout.
+ * while the browser settles the new layout. A change from the picture stage
+ * to the text page (the window becoming short) lands only a player at the
+ * newest, on the newest: the two list different turns, so an older turn's
+ * place does not carry over, and the stage keeps its cards its own way.
  */
 watch(
   [column, staged],
   async ([_column, nowStaged], [_wasColumn, wasStaged]) => {
-    // Only a crossing of 1100 px: the text page and the picture stage list different turns.
-    if (nowStaged !== wasStaged) return
     const story = storyEl.value
     const content = contentEl.value
     if (!story || !content || content.children.length === 0) return
     const view = resizeLanding.capture()
+    if (nowStaged !== wasStaged && (nowStaged || !view.atNewest)) return
     resizeLanding.end()
     await nextTick()
     resizeLanding.begin(view)
