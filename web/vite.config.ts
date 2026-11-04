@@ -2,15 +2,10 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import { resolve } from 'node:path'
 import { debugScriptsPlugin } from './debugScripts.config'
-import { effectVolumesPlugin } from './effectVolumes.config'
 import { shouldOpenBrowser } from './devServerOpen.config'
 
 export default defineConfig({
-  plugins: [
-    vue(),
-    debugScriptsPlugin(resolve(__dirname, 'debug-scripts')),
-    effectVolumesPlugin(resolve(__dirname, 'src/lantern/effectVolumes.json')),
-  ],
+  plugins: [vue(), debugScriptsPlugin(resolve(__dirname, 'debug-scripts'))],
   resolve: {
     alias: {
       '@': resolve(__dirname, 'src'),

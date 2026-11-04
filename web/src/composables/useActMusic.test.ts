@@ -6,7 +6,6 @@ import { useActMusic } from './useActMusic'
 import { useGameStore } from '@/stores/useGameStore'
 import { useNarrationStore } from '@/stores/useNarrationStore'
 import { useSettingsStore } from '@/stores/useSettingsStore'
-import { useEffectMixStore } from '@/stores/useEffectMixStore'
 import { FakeAudioContext } from '@/testing/fakeAudioContext'
 import {
   MUSIC_DUCK,
@@ -393,6 +392,8 @@ describe('useActMusic with the effects of a room', () => {
 
   /** How many gains the shared context had made when this test started (it lives on across tests). */
   let gainsBefore = 0
+  /** How many sources it had made then. */
+  let sourcesBefore = 0
 
   /**
    * The gain every effect plays into: the one, made in this test, out to the
@@ -414,6 +415,7 @@ describe('useActMusic with the effects of a room', () => {
     soundState = '',
   ): Promise<ReturnType<typeof effectScope>> {
     gainsBefore = FakeAudioContext.last?.gains.length ?? 0
+    sourcesBefore = FakeAudioContext.last?.sources.length ?? 0
     const scope = effectScope()
     scope.run(() => useActMusic())
     const game = useGameStore()
@@ -432,9 +434,9 @@ describe('useActMusic with the effects of a room', () => {
 
   /** The loops sounding now: the music's and the effects'. */
   function loopsSounding() {
-    return ctx.sources.filter(
-      (source) => source.loop && source.stop.mock.calls.length === 0,
-    )
+    return ctx.sources
+      .slice(sourcesBefore)
+      .filter((source) => source.loop && source.stop.mock.calls.length === 0)
   }
 
   beforeEach(() => {
@@ -537,48 +539,45 @@ describe('useActMusic with the effects of a room', () => {
     scope.stop()
   })
 
-  /** The level a source plays at: the gain it connects to. */
-  function levelOf(source: { connect: { mock: { calls: unknown[][] } } }) {
-    return (source.connect.mock.calls[0][0] as { gain: { value: number } }).gain
-      .value
+  /** Serves `manifest` as the chosen music's, everything else as before. */
+  function serveMusic(manifest: Record<string, unknown>): void {
+    const served = vi.mocked(fetch).getMockImplementation()!
+    vi.mocked(fetch).mockImplementation((url) =>
+      String(url).startsWith('/audio/music/') && String(url).endsWith('.json')
+        ? Promise.resolve({
+            ok: true,
+            json: () => Promise.resolve(manifest),
+          } as Response)
+        : served(url),
+    )
   }
 
-  it("plays each effect at its room's volume, and follows a change at once", async () => {
-    const mix = useEffectMixStore()
-    mix.setVolume('act1-old-mill', 'wind-gusts', 0.5)
+  it("plays the room's effects under the act's own file when the room has no take", async () => {
+    serveMusic({ 'act1-the-dream': DREAM_MUSIC['act1-the-dream'] })
     const scope = await startIn('OldMill', 'whirring')
     ctx = FakeAudioContext.last
-    // The music's loop, the wind's (made third) and the whir's.
-    const [, wind, whir] = loopsSounding()
-    expect(levelOf(wind)).toBeCloseTo(0.5)
-    expect(levelOf(whir)).toBe(1)
-    mix.setVolume('act1-old-mill', 'mechanism-whir', 2)
-    await nextTick()
-    expect(levelOf(whir)).toBe(2)
+    // The act's file, the wind and the whir.
+    expect(loopsSounding()).toHaveLength(3)
     scope.stop()
+    expect(loopsSounding()).toHaveLength(0)
   })
 
-  it('plays a one-shot of the room now when asked', async () => {
-    const scope = await startInTheDream()
-    ctx = FakeAudioContext.last
-    const before = ctx.sources.length
-    useEffectMixStore().playNow('act1-the-dream', 'lightning')
-    await nextTick()
-    const played = ctx.sources.slice(before)
-    expect(played).toHaveLength(1)
-    expect(played[0].loop).toBe(false)
-    scope.stop()
-  })
-
-  it('solos one effect of the room, silencing the rest', async () => {
+  it('swaps the effects for the next room when the music carries on into it', async () => {
+    const shared = DREAM_MUSIC['act1-old-mill']
+    serveMusic({ 'act1-old-mill': shared, 'act1-abandoned-shed': shared })
     const scope = await startIn('OldMill', 'whirring')
     ctx = FakeAudioContext.last
-    const [, wind, whir] = loopsSounding()
-    useEffectMixStore().toggleSolo('act1-old-mill', 'mechanism-whir')
-    await nextTick()
-    expect(levelOf(wind)).toBe(0)
-    expect(levelOf(whir)).toBe(1)
+    const [music, ...mill] = loopsSounding()
+    expect(mill).toHaveLength(2)
+    await walkTo('AbandonedShed')
+    // The one music plays on; the mill's effects fade out for the shed's.
+    expect(music.stop).not.toHaveBeenCalled()
+    for (const loop of mill) expect(loop.stop).toHaveBeenCalled()
+    expect(
+      loopsSounding().filter((loop) => !mill.includes(loop)),
+    ).not.toHaveLength(0)
     scope.stop()
+    expect(loopsSounding()).toHaveLength(0)
   })
 
   it('fetches and plays no effects at all while effects are off', async () => {

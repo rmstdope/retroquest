@@ -2,6 +2,7 @@
 import { describe, it, expect, vi, afterEach } from 'vitest'
 import {
   HtmlMusicVoice,
+  SilentMusicVoice,
   WebAudioMusicVoice,
   prepareWebAudioVoice,
   sharedAudioContext,
@@ -52,6 +53,33 @@ describe('WebAudioMusicVoice', () => {
     expect(voice.paused).toBe(true)
     await voice.play()
     expect(ctx.sources).toHaveLength(2)
+  })
+
+  it('raises or lowers the music by its level, on top of its volume', () => {
+    const ctx = new FakeAudioContext()
+    const voice = new WebAudioMusicVoice(
+      ctx as unknown as AudioContext,
+      {} as AudioBuffer,
+    )
+    voice.volume = 0.5
+    voice.level = 2.5
+    expect(voice.volume).toBe(0.5)
+    expect(ctx.gains[0].gain.value).toBeCloseTo(1.25)
+    voice.volume = 0.2
+    expect(ctx.gains[0].gain.value).toBeCloseTo(0.5)
+  })
+})
+
+describe('SilentMusicVoice', () => {
+  it('plays and pauses nothing, keeping the volume it is faded to', async () => {
+    const voice = new SilentMusicVoice()
+    expect(voice.paused).toBe(true)
+    await voice.play()
+    expect(voice.paused).toBe(false)
+    voice.volume = 0.3
+    expect(voice.volume).toBe(0.3)
+    voice.pause()
+    expect(voice.paused).toBe(true)
   })
 })
 

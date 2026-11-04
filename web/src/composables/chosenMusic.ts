@@ -5,6 +5,7 @@
  * the act loop's take across the act, and its own file where no take was made.
  */
 import { actLoopId, roomTrackId } from '@/lantern/musicLists'
+import type { SceneEntry } from '@/lantern/sceneMix'
 
 /** Where the studio's chosen takes live, below the game's music directory. */
 export const GENERATED_MUSIC_DIR = 'generated/'
@@ -40,6 +41,41 @@ export function chooseTrack(
     if (take) return take
   }
   return null
+}
+
+/** What a scene plays where no chosen take does: the act's own music file. */
+export const ACT_FILE = 'act-file'
+
+/** A scene's music: a chosen take, the act's own file (`ACT_FILE`) or none (null), at the mix's level. */
+export interface SceneMusicChoice {
+  /** What plays. */
+  music: ChosenTake | typeof ACT_FILE | null
+  /** The music's level, 0 to 3, 1 as chosen. */
+  level: number
+}
+
+/**
+ * The music of a scene at `place`. Where its mix entry gives no music, what
+ * the game chooses (the room's take, else the act loop's, else the act's own
+ * file) at 1; else the track the mix names at its level, and no music for no
+ * track or for one with no chosen take.
+ */
+export function sceneMusic(
+  place: { actName: string; roomKey: string },
+  musicFile: string,
+  manifest: ChosenManifest,
+  entry: SceneEntry | undefined,
+): SceneMusicChoice {
+  const mixed = entry?.music
+  if (!mixed)
+    return {
+      music: chooseTrack(manifest, trackIdsAt(place, musicFile)) ?? ACT_FILE,
+      level: 1,
+    }
+  const { track, level } = mixed
+  const take =
+    track !== null && Object.hasOwn(manifest, track) ? manifest[track] : null
+  return { music: take, level }
 }
 
 /** How long the game waits for the manifest before playing its own files, in ms. */

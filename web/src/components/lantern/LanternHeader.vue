@@ -1,11 +1,5 @@
 <script setup lang="ts">
-import {
-  computed,
-  defineAsyncComponent,
-  onMounted,
-  onUnmounted,
-  ref,
-} from 'vue'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useGameStore } from '@/stores/useGameStore'
 import { useSettingsStore } from '@/stores/useSettingsStore'
 import { useFullscreen } from '@/composables/useFullscreen'
@@ -20,22 +14,14 @@ import { LANTERN_TEXT_SIZES } from '@/lantern/tokens'
 defineProps<{
   compact?: boolean
   hideRoom?: boolean
-  /** Whether the dev build's room effects panel is open. */
-  effectsOpen?: boolean
 }>()
 const emit = defineEmits<{
   menu: []
-  /** The dev build's room effects button was pressed. */
-  effects: []
   open: [kind: 'save' | 'load' | 'stats' | 'settings' | 'help']
 }>()
 const game = useGameStore()
 const settings = useSettingsStore()
 const fullscreen = useFullscreen()
-/** The dev build's room effects button, loaded only there. */
-const DevEffectsButton = import.meta.env.DEV
-  ? defineAsyncComponent(() => import('./DevEffectsButton.vue'))
-  : null
 
 const ROMAN = ['I', 'II', 'III', 'IV', 'V']
 
@@ -188,12 +174,6 @@ function toggleTheme(): void {
     </nav>
 
     <div class="lq-actions">
-      <DevEffectsButton
-        v-if="DevEffectsButton"
-        class="lq-icon-btn lq-fx-btn"
-        :open="effectsOpen === true"
-        @click="emit('effects')"
-      />
       <button
         v-if="fullscreen.supported"
         type="button"
@@ -419,13 +399,6 @@ function toggleTheme(): void {
   background: var(--lq-surface);
   color: var(--lq-fg);
   cursor: pointer;
-}
-.lq-fx-btn {
-  color: var(--lq-accent-text);
-}
-.lq-fx-btn[aria-pressed='true'] {
-  background: var(--lq-accent-soft);
-  border-color: var(--lq-accent-line);
 }
 .lq-aa {
   font-family: var(--lq-font-display);

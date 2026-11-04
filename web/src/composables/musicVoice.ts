@@ -2,13 +2,21 @@
  * The voices a music loop plays on. A voice is what `useMusic` fades, ducks,
  * starts and stops. `WebAudioMusicVoice` loops a decoded buffer, so the loop
  * comes round without a click; `HtmlMusicVoice` is today's element-based
- * playback, kept for a browser that cannot prepare a loop for Web Audio.
+ * playback, kept for a browser that cannot prepare a loop for Web Audio;
+ * `SilentMusicVoice` plays nothing, for a scene with no music whose effects
+ * still follow a voice's fades (see `ambience.ts`).
  */
 
 /** What `useMusic` needs from a playing loop. */
 export interface MusicVoice {
-  /** Loudness, 0 to 1. */
+  /** Loudness, 0 to 1: the player's setting, with every fade and dip. */
   volume: number
+  /**
+   * The music's own level from the scene mix, 0 to 3, 1 as chosen; it raises
+   * or lowers the music on top of `volume`. A voice that cannot go above 1
+   * ignores it.
+   */
+  level: number
   /** True while the loop is not sounding. */
   readonly paused: boolean
   /** Starts (or restarts) the loop. */
@@ -21,6 +29,8 @@ export interface MusicVoice {
 
 /** A loop played on an `HTMLAudioElement` (with `loop = true`), as before. */
 export class HtmlMusicVoice implements MusicVoice {
+  /** Kept but not heard: an element cannot be raised above its full volume. */
+  level = 1
   constructor(readonly element: HTMLAudioElement) {}
   get volume(): number {
     return this.element.volume
@@ -42,10 +52,12 @@ export class HtmlMusicVoice implements MusicVoice {
   }
 }
 
-/** A loop played from a decoded buffer on a looping source node, through a gain. */
+/** A loop played from a decoded buffer on a looping source node, through a gain at its volume times its level. */
 export class WebAudioMusicVoice implements MusicVoice {
   private readonly gain: GainNode
   private source: AudioBufferSourceNode | null = null
+  private loudness = 1
+  private ownLevel = 1
 
   constructor(
     private readonly context: AudioContext,
@@ -55,10 +67,18 @@ export class WebAudioMusicVoice implements MusicVoice {
     this.gain.connect(context.destination)
   }
   get volume(): number {
-    return this.gain.gain.value
+    return this.loudness
   }
   set volume(value: number) {
-    this.gain.gain.value = value
+    this.loudness = value
+    this.gain.gain.value = value * this.ownLevel
+  }
+  get level(): number {
+    return this.ownLevel
+  }
+  set level(value: number) {
+    this.ownLevel = value
+    this.gain.gain.value = this.loudness * value
   }
   get paused(): boolean {
     return this.source === null
@@ -84,6 +104,26 @@ export class WebAudioMusicVoice implements MusicVoice {
   dispose(): void {
     this.pause()
     this.gain.disconnect()
+  }
+}
+
+/** A voice that plays nothing: a scene with no music, whose effects still follow its fades. */
+export class SilentMusicVoice implements MusicVoice {
+  volume = 1
+  level = 1
+  paused = true
+  /** Starts the silence. */
+  play(): Promise<void> {
+    this.paused = false
+    return Promise.resolve()
+  }
+  /** Stops the silence. */
+  pause(): void {
+    this.paused = true
+  }
+  /** Holds nothing to let go of. */
+  dispose(): void {
+    this.paused = true
   }
 }
 

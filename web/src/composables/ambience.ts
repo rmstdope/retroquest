@@ -1,36 +1,39 @@
 /**
- * The sound effects that play with a room's music: rain round and round,
- * lightning now and then, a shop bell once on entering, and a whir only while
- * the room is in the state that has it. An `Ambience` plays the effects of
- * one track on Web Audio through one gain, into an output that sets the
- * player's effects level (`useActMusic`'s effects bus); `setState` follows
- * the room's sound state, fading out and in only the clips that change.
- * An `AmbientVoice` wraps the track's music voice with it, so the effects
- * start and stop with the music and follow every fade `useMusic` gives it (a
- * crossfade, a change through the dark, the title page's rise, the dip under
- * a voice): the effects sound at the same share of their level as the music
- * of its own.
+ * The sound effects of a scene: rain round and round, lightning now and then,
+ * a shop bell once on entering, and a whir only while the room is in the
+ * state that has it (see `sceneMix.ts`). An `Ambience` plays the effects of
+ * one scene on Web Audio through one gain, into an output that sets the
+ * player's effects level (`useActMusic`'s effects bus), each row of the mix
+ * at its own level; `setState` follows the scene's sound state, fading out
+ * and in only the clips that change.
+ * An `AmbientVoice` wraps the music voice with the effects of the scene it
+ * plays in, so they start and stop with the music and follow every fade
+ * `useMusic` gives it (a crossfade, a change through the dark, the title
+ * page's rise, the dip under a voice) but not the music's own level. Entering
+ * a scene whose music carries on swaps the effects (`swap`). A scene with no
+ * music plays its effects on a silent voice (`SilentMusicVoice`).
  */
-import type { EffectPlay, EffectWhen } from '@/lantern/effectLists'
+import type { ScenePlay } from '@/lantern/sceneMix'
 import { fetchAudioBuffer, type MusicVoice } from './musicVoice'
 
-/** Which effect a clip is, and how loud it plays. */
-export interface ClipLevel {
-  /** The effect's id, by which its volume is changed, it is played on request or soloed. */
-  id?: string
+/** How an effect plays as its scene sounds: round and round, now and then, or once (a trigger is not played here). */
+export type AmbientPlay = Exclude<ScenePlay, { mode: 'trigger' }>
+
+/** How one effect plays, in which state and how loud. */
+export interface ClipPlay {
+  /** How it plays. */
+  play: AmbientPlay
+  /** The scene's state it plays in; absent for one that always plays. */
+  state?: string
   /** Its volume: 1 (the default) as made, more to raise it, less to lower it. */
   volume?: number
 }
 
-/** How one decoded effect plays (round and round, after a random wait again and again, or once), in which state and how loud. */
-export type AmbientClip = { buffer: AudioBuffer } & EffectPlay &
-  EffectWhen &
-  ClipLevel
+/** One decoded effect, with how it plays, in which state and how loud. */
+export type AmbientClip = { buffer: AudioBuffer } & ClipPlay
 
 /** Where an effect's clip is, how it plays, in which state and how loud. */
-export type AmbientClipSource = { url: string } & EffectPlay &
-  EffectWhen &
-  ClipLevel
+export type AmbientClipSource = { url: string } & ClipPlay
 
 /** How long a clip fades in or out as the room's sound state changes, in seconds. */
 const STATE_FADE_SECONDS = 0.3
@@ -38,7 +41,7 @@ const STATE_FADE_SECONDS = 0.3
 /** How often a clip played once looks again while the browser holds the sound back, in seconds. */
 const ONCE_RETRY_SECONDS = 0.25
 
-/** The effects of one music track, played on Web Audio through one gain into `output`. */
+/** The effects of one scene, played on Web Audio through one gain into `output`. */
 export class Ambience {
   private readonly gain: GainNode
   private playing = false
@@ -49,8 +52,6 @@ export class Ambience {
     clip: AmbientClip
     node: AudioBufferSourceNode
     level: GainNode
-    /** Played on request (Play now): at its own volume, through any solo. */
-    asked: boolean
   }[] = []
   /** The sources fading out after a change of state; a pause cuts them. */
   private fading: { node: AudioBufferSourceNode; level: GainNode }[] = []
@@ -61,10 +62,6 @@ export class Ambience {
   }[] = []
   /** Set once the ambience is let go of. */
   private gone = false
-  /** The volumes set since it was made, by effect id; they win over each clip's own. */
-  private levels: Record<string, number> = {}
-  /** The effect id soloed: every other clip is silent. Null when none is. */
-  private soloed: string | null = null
   /** The clips played once that have sounded; they do not sound again. */
   private readonly sounded = new Set<AmbientClip>()
 
@@ -87,12 +84,15 @@ export class Ambience {
   /**
    * Starts the loops and the waits before each one-shot, and before each clip
    * played once that has not sounded yet, of the clips that play in the
-   * present state; nothing when already playing.
+   * present state; nothing when already playing. With `fade`, the loops
+   * rise from silence (`STATE_FADE_SECONDS`), as when the scene changes under
+   * music that carries on.
    */
-  play(): void {
-    if (this.playing) return
+  play(fade = false): void {
+    if (this.playing || this.gone) return
     this.playing = true
-    for (const clip of this.clips) if (this.playsNow(clip)) this.start(clip)
+    for (const clip of this.clips)
+      if (this.playsNow(clip)) this.start(clip, fade)
   }
 
   /**
@@ -131,53 +131,26 @@ export class Ambience {
     this.gone = true
   }
 
-  /** Sets the volume of the effect `id` (1 as made), at once for what sounds and for its next start. */
-  setVolume(id: string, volume: number): void {
-    this.levels[id] = volume
-    this.relevel()
-  }
-
   /**
-   * Plays the one-shot effect `id` at once, besides its own waits, at its own
-   * volume even while another effect is soloed; nothing while stopped.
+   * Lets go of the ambience as its scene is left under music that carries
+   * on: the loops and any one-shot under way fade out
+   * (`STATE_FADE_SECONDS`), the waits are cancelled, and the rest is let go
+   * of once the fade is over.
    */
-  audition(id: string): void {
-    if (!this.playing) return
-    const clip = this.clips.find((each) => each.id === id && !each.loops)
-    if (clip) this.sound(clip, false, false, true)
-  }
-
-  /** Silences every clip but the effect `id`; null gives them all their volume back. */
-  solo(id: string | null): void {
-    this.soloed = id
-    this.relevel()
+  release(): void {
+    if (this.gone) return
+    this.playing = false
+    for (const clip of this.clips) this.stop(clip, true)
+    this.gone = true
+    setTimeout(() => {
+      this.pause()
+      this.gain.disconnect()
+    }, STATE_FADE_SECONDS * 1000)
   }
 
   /** Whether the ambience has been let go of. */
   get disposed(): boolean {
     return this.gone
-  }
-
-  /** How loud `clip` sounds now: silent while another is soloed, else its volume. */
-  private levelOf(clip: AmbientClip): number {
-    if (this.soloed !== null && clip.id !== this.soloed) return 0
-    return this.volumeOf(clip)
-  }
-
-  /** The volume of `clip`: as set since the ambience was made, else its own, else 1. */
-  private volumeOf(clip: AmbientClip): number {
-    const set = clip.id === undefined ? undefined : this.levels[clip.id]
-    return set ?? clip.volume ?? 1
-  }
-
-  /** Gives every source sounding its clip's level now. */
-  private relevel(): void {
-    // A fade-in under way is cancelled first, or its ramp would undo the level.
-    const now = this.context.currentTime
-    for (const { clip, level, asked } of this.sources) {
-      level.gain.cancelScheduledValues(now)
-      level.gain.value = asked ? this.volumeOf(clip) : this.levelOf(clip)
-    }
   }
 
   /** Whether `clip` plays in the present state: always, for one with none. */
@@ -187,9 +160,10 @@ export class Ambience {
 
   /** Starts `clip` as it plays: round and round (fading in when `fade`), after a random wait, or once. */
   private start(clip: AmbientClip, fade = false): void {
-    if (clip.loops) this.sound(clip, true, fade)
-    else if ('afterSeconds' in clip) this.once(clip, clip.afterSeconds)
-    else this.wait(clip, clip.everySeconds)
+    const { play } = clip
+    if (play.mode === 'loop') this.sound(clip, true, fade)
+    else if (play.mode === 'once') this.once(clip, play.afterSeconds)
+    else this.wait(clip, play.everySeconds)
   }
 
   /** Stops `clip`'s waits and its sources: at once, or fading out when `fade`. */
@@ -282,17 +256,11 @@ export class Ambience {
 
   /**
    * Starts a source playing `clip` through its own gain into the ambience's,
-   * at the clip's level now (its own volume, through any solo, when `asked`
-   * for by Play now), rising from silence to it when `fade`; a one-shot lets
-   * go of itself when it ends.
+   * at the clip's volume, rising from silence to it when `fade`; a one-shot
+   * lets go of itself when it ends.
    */
-  private sound(
-    clip: AmbientClip,
-    loop: boolean,
-    fade = false,
-    asked = false,
-  ): void {
-    const at = asked ? this.volumeOf(clip) : this.levelOf(clip)
+  private sound(clip: AmbientClip, loop: boolean, fade = false): void {
+    const at = clip.volume ?? 1
     const node = this.context.createBufferSource()
     node.buffer = clip.buffer
     node.loop = loop
@@ -304,7 +272,7 @@ export class Ambience {
     } else level.gain.value = at
     node.connect(level)
     level.connect(this.gain)
-    const entry = { clip, node, level, asked }
+    const entry = { clip, node, level }
     if (!loop)
       node.onended = () => {
         const index = this.sources.indexOf(entry)
@@ -318,31 +286,45 @@ export class Ambience {
 }
 
 /**
- * A music voice with its track's effects: the effects start and stop with the
- * music, and each change of the music's volume is followed by the effects as
- * a share of `fullLevel` (the music's own volume setting, 0 to 1). With the
- * music turned all the way down the effects are silent too, as with the
- * music off. The effects may come after the music has started (`attach`), so
- * they never hold it back.
+ * A music voice with the effects of the scene it plays in: the effects start
+ * and stop with the music, and each change of the music's volume is followed
+ * by the effects as a share of `fullLevel` (the music's own volume setting,
+ * 0 to 1). With the music turned all the way down the effects are silent too,
+ * as with the music off. The music's own level (`level`, set from the mix)
+ * is the music's alone. The effects may come after the music has started
+ * (`attach`), so they never hold it back, and are swapped for another
+ * scene's as the music carries on into it (`swap`).
  */
 export class AmbientVoice implements MusicVoice {
   /** Set once the voice is let go of; effects arriving later are let go of too. */
   private gone = false
+  /** Counts the swaps; effects for a swap overtaken by another are let go of. */
+  private swaps = 0
+  /** The scene whose effects it plays. */
+  private sceneId: string
 
-  /** Wraps `music` with `ambience` (or none yet), which takes the music's present volume. */
+  /** Wraps `music` with `ambience` (or none yet) of `scene`, which takes the music's present volume. */
   constructor(
     private readonly music: MusicVoice,
     private ambience: Ambience | null,
     private readonly fullLevel: () => number,
+    scene = '',
   ) {
+    this.sceneId = scene
     this.volume = music.volume
+  }
+
+  /** The scene whose effects it plays. */
+  get scene(): string {
+    return this.sceneId
   }
 
   /**
    * Adds effects that arrived after the music: at the music's present share,
-   * and sounding at once when the music does. After `dispose` they are let go of.
+   * and sounding at once when the music does (their loops rising when
+   * `fade`). After `dispose` they are let go of.
    */
-  attach(ambience: Ambience): void {
+  attach(ambience: Ambience, fade = false): void {
     if (this.gone) {
       ambience.dispose()
       return
@@ -350,7 +332,25 @@ export class AmbientVoice implements MusicVoice {
     this.ambience?.dispose()
     this.ambience = ambience
     this.follow()
-    if (!this.music.paused) ambience.play()
+    if (!this.music.paused) ambience.play(fade)
+  }
+
+  /**
+   * Takes the effects of `scene` as the music carries on into it: those of
+   * the scene left fade out at once, and `effects` come in when they arrive
+   * (their loops rising, unless not `fade`: the first effects of a voice
+   * follow its own fade), unless another swap came first.
+   */
+  swap(scene: string, effects: Promise<Ambience | null>, fade = true): void {
+    this.sceneId = scene
+    const ticket = ++this.swaps
+    this.ambience?.release()
+    this.ambience = null
+    void effects.then((ambience) => {
+      if (!ambience) return
+      if (ticket !== this.swaps) ambience.dispose()
+      else this.attach(ambience, fade)
+    })
   }
 
   /** The music's volume, 0 to 1. */
@@ -361,6 +361,14 @@ export class AmbientVoice implements MusicVoice {
   set volume(value: number) {
     this.music.volume = value
     this.follow()
+  }
+  /** The music's own level, 0 to 3; the effects do not follow it. */
+  get level(): number {
+    return this.music.level
+  }
+  /** Sets the music's own level. */
+  set level(value: number) {
+    this.music.level = value
   }
   /** True while the music is not sounding. */
   get paused(): boolean {
