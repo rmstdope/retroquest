@@ -49,6 +49,8 @@ const SHORT_DIRECTIONS: Record<string, string> = {
 const TALK_PREFIXES = ['talk to ', 'speak to ', 'converse with ']
 const GIVE_PREFIXES = ['give ', 'hand ']
 const EXAMINE_PREFIXES = ['look at ', 'inspect ', 'examine ', 'check ', 'look ']
+/** The examine verbs typed with nothing named; `look` alone is `look`. */
+const BARE_EXAMINE_VERBS = ['look at', 'inspect', 'examine', 'check']
 const TAKE_PREFIXES = ['take ', 'pick up ', 'grab ', 'get ']
 const DROP_PREFIXES = ['drop ', 'discard ']
 
@@ -111,6 +113,7 @@ export class CommandParser {
 
     if (['look', 'observe', 'survey', 'l'].includes(cmd))
       return this.game.look()
+    if (BARE_EXAMINE_VERBS.includes(cmd)) return this.game.examine('')
     const examineTarget = afterPrefix(cmd, EXAMINE_PREFIXES)
     if (examineTarget !== null) return this.game.examine(examineTarget)
     if (cmd === 'search' || cmd === 'investigate') return this.game.search()
