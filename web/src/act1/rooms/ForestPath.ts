@@ -54,6 +54,11 @@ export class ForestPath extends Room {
       : ''
   }
 
+  /** The room's sound states, the one it starts in first. */
+  override soundStates(): readonly string[] {
+    return ['', ForestPath.SOUND_KIT_TRAPPED]
+  }
+
   /**
    * Describe the path with the vines while they remain; once they are cut,
    * with the opened alcove and what lies in it (the caught kit, or the cut

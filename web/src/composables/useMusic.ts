@@ -5,6 +5,7 @@ import {
   HtmlMusicVoice,
   prepareWebAudioVoice,
   sharedAudioContext,
+  SilentMusicVoice,
   type MusicVoice,
 } from './musicVoice'
 import { AmbientVoice, type Ambience } from './ambience'
@@ -29,11 +30,28 @@ export const MUSIC_FADE_IN_MS = 2000
 const FADE_STEPS = 10
 
 /**
- * The sound effects that play with a music file, prepared on `context`; null
- * when the file has none. See `ambience.ts`.
+ * The file to load for a scene with no music: its effects play on their own,
+ * on a silent voice that fades as music would.
+ */
+export const SILENCE = 'silence:'
+
+/** Where the music plays: the scene whose effects sound with it, and the music's own level (0 to 3). */
+export interface MusicScene {
+  /** The scene's id; '' for none, which has no effects. */
+  scene: string
+  /** The music's level from the scene's mix, 1 as chosen. */
+  level: number
+}
+
+/** Music that plays in no scene, at its level as chosen. */
+const NO_SCENE: MusicScene = { scene: '', level: 1 }
+
+/**
+ * The sound effects of a scene, prepared on `context`; null when it has none.
+ * See `ambience.ts`.
  */
 export type AmbienceSource = (
-  file: string,
+  scene: string,
   context: AudioContext,
 ) => Promise<Ambience | null>
 
@@ -58,9 +76,14 @@ const NO_AMBIENCE: AmbienceSource = () => Promise.resolve(null)
  * round without a click. A browser that cannot decode it plays the element, as
  * before.
  *
- * A track `ambienceFor` gives sound effects plays them with its loop on Web
- * Audio (see `ambience.ts`): they start and stop with the music and follow
- * each of its fades. A track played on an element plays none.
+ * Each track is loaded in a scene (`MusicScene`): the scene's sound effects,
+ * which `ambienceFor` gives, play with its loop on Web Audio (see
+ * `ambience.ts`). They start and stop with the music and follow each of its
+ * fades, but not the music's own level, which raises or lowers the loop
+ * alone. The same track loaded in another scene carries on, at the new level
+ * at once, and swaps the effects for the new scene's; so does a loop taken
+ * back while it fades out. `SILENCE` plays a scene's effects with no music.
+ * A track played on an element plays no effects and ignores its level.
  */
 export function useMusic(
   audio: HTMLAudioElement,
@@ -80,6 +103,8 @@ export function useMusic(
   let request = 0
   /** The file asked for last, also while its loop is still being prepared. */
   let requestedFile = ''
+  /** The scene it was asked for in last. */
+  let requested: MusicScene = NO_SCENE
 
   function urlFor(file: string): string {
     return MUSIC_BASE_PATH + file.split('/').map(encodeURIComponent).join('/')
@@ -90,7 +115,9 @@ export function useMusic(
     info: string,
     fadeInMs: number = 0,
     through: boolean = false,
+    at: MusicScene = NO_SCENE,
   ): void {
+    requested = at
     if (!file) {
       request++
       requestedFile = ''
@@ -106,17 +133,32 @@ export function useMusic(
       return
     }
 
-    if (file === requestedFile) return
+    if (file === requestedFile) {
+      applyScene()
+      return
+    }
     requestedFile = file
     if (file === currentMusicFile.value) {
       // Back to the music that is playing: drop the load under way.
       request++
+      applyScene()
       return
     }
     const id = ++request
 
     const returning = takeFadingOut(file)
     const context = returning ? null : sharedAudioContext()
+    if (!returning && file === SILENCE) {
+      const silent = new AmbientVoice(
+        new SilentMusicVoice(),
+        null,
+        () => settings.musicVolume / 100,
+        at.scene,
+      )
+      if (context) silent.swap(at.scene, effectsOf(at.scene, context), false)
+      startVoice(file, info, silent, false, fadeInMs, through)
+      return
+    }
     if (returning || !context) {
       // Today's playback: an element, ready at once.
       startVoice(
@@ -127,27 +169,59 @@ export function useMusic(
         fadeInMs,
         through,
       )
+      applyScene()
       return
     }
     // A loop is decoded first; the music playing goes on until it is ready.
     // Its effects come when they are ready and never hold it back; effects
     // that fail to prepare, or come after the loop is gone, are let go of.
-    const effects = ambienceFor(file, context).catch(() => null)
+    const effects = effectsOf(at.scene, context)
     void prepareWebAudioVoice(context, urlFor(file)).then((voice) => {
       if (id !== request || !voice) {
         voice?.dispose()
         void effects.then((ambience) => ambience?.dispose())
         if (id !== request) return
       }
-      const next = voice
-        ? new AmbientVoice(voice, null, () => settings.musicVolume / 100)
-        : htmlVoiceFor(file)
+      let next: MusicVoice
+      if (voice) {
+        const ambient = new AmbientVoice(
+          voice,
+          null,
+          () => settings.musicVolume / 100,
+          at.scene,
+        )
+        ambient.swap(at.scene, effects, false)
+        next = ambient
+      } else next = htmlVoiceFor(file)
       startVoice(file, info, next, false, fadeInMs, through)
-      if (next instanceof AmbientVoice)
-        void effects.then((ambience) => {
-          if (ambience) next.attach(ambience)
-        })
+      // The player may have walked on to another scene while it was prepared.
+      applyScene()
     })
+  }
+
+  /** The effects of `scene`, prepared on `context`; none when they fail to prepare. */
+  function effectsOf(
+    scene: string,
+    context: AudioContext,
+  ): Promise<Ambience | null> {
+    return ambienceFor(scene, context).catch(() => null)
+  }
+
+  /**
+   * Gives the music playing the scene it was last asked for in: its level at
+   * once, and that scene's effects in place of another's. Nothing while the
+   * music asked for is still being prepared.
+   */
+  function applyScene(): void {
+    if (currentMusicFile.value !== requestedFile) return
+    active.level = requested.level
+    if (!(active instanceof AmbientVoice)) return
+    if (active.scene === requested.scene) return
+    const context = sharedAudioContext()
+    active.swap(
+      requested.scene,
+      context ? effectsOf(requested.scene, context) : Promise.resolve(null),
+    )
   }
 
   /** An element-based voice for `file`, reusing the spare element if any. */

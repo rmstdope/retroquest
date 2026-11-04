@@ -1,76 +1,77 @@
-/** Which chosen effect clips play with which music file. */
+/** Which chosen effect clips play in a scene, as the scene mix gives them. */
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import type { ChosenManifest } from './chosenMusic'
-import {
-  ambientClipsFor,
-  loadChosenEffects,
-  trackOfTake,
-} from './chosenEffects'
+import { loadChosenEffects, sceneClips } from './chosenEffects'
 
-const music: ChosenManifest = {
-  'act1-the-dream': { file: 'act1-the-dream.mp3', duration: 60 },
-  market: { file: 'market.mp3', duration: 60 },
-}
 const effects: ChosenManifest = {
   rain: { file: 'rain.mp3', duration: 20 },
   lightning: { file: 'lightning.mp3', duration: 4.2 },
 }
 
-describe('ambientClipsFor', () => {
-  it("plays The Dream's rain and lightning with The Dream's chosen take", () => {
+describe('sceneClips', () => {
+  const generated = '/audio/soundeffects/generated/'
+
+  it('plays each row of the scene with its chosen take, as it plays, in its state and at its level', () => {
     expect(
-      ambientClipsFor('generated/act1-the-dream.mp3', music, effects),
+      sceneClips(
+        {
+          effects: [
+            { id: 'rain', play: { mode: 'loop' }, state: 'storm', level: 1 },
+            {
+              id: 'lightning',
+              play: { mode: 'random', everySeconds: [3, 8] },
+              level: 2.5,
+            },
+            {
+              id: 'lightning',
+              play: { mode: 'once', afterSeconds: 0 },
+              level: 0.5,
+            },
+          ],
+        },
+        effects,
+      ),
     ).toEqual([
       {
-        id: 'rain',
-        url: '/audio/soundeffects/generated/rain.mp3',
-        loops: true,
+        url: generated + effects.rain.file,
+        play: { mode: 'loop' },
+        state: 'storm',
+        volume: 1,
       },
       {
-        id: 'lightning',
-        url: '/audio/soundeffects/generated/lightning.mp3',
-        loops: false,
-        everySeconds: [3, 8],
+        url: generated + effects.lightning.file,
+        play: { mode: 'random', everySeconds: [3, 8] },
+        volume: 2.5,
+      },
+      {
+        url: generated + effects.lightning.file,
+        play: { mode: 'once', afterSeconds: 0 },
+        volume: 0.5,
       },
     ])
   })
 
-  it('leaves out an effect with no chosen take', () => {
+  it('leaves out a row with no chosen take, and one the game fires', () => {
     expect(
-      ambientClipsFor('generated/act1-the-dream.mp3', music, {
-        rain: effects.rain,
-      }),
-    ).toEqual([
-      {
-        id: 'rain',
-        url: '/audio/soundeffects/generated/rain.mp3',
-        loops: true,
-      },
-    ])
-  })
-
-  it('plays nothing with a track that has no effects', () => {
-    expect(ambientClipsFor('generated/market.mp3', music, effects)).toEqual([])
-  })
-
-  it("plays nothing with the game's own files, where no take was chosen", () => {
-    expect(
-      ambientClipsFor('Conquest - Market (freetouse.com).mp3', music, effects),
+      sceneClips(
+        {
+          effects: [
+            { id: 'hearth-fire', play: { mode: 'loop' }, level: 1 },
+            {
+              id: 'rain',
+              play: { mode: 'trigger', trigger: 'door-opens' },
+              level: 1,
+            },
+            { id: 'toString', play: { mode: 'loop' }, level: 1 },
+          ],
+        },
+        effects,
+      ),
     ).toEqual([])
   })
-})
 
-describe('trackOfTake', () => {
-  it('names the track whose chosen take a music file is', () => {
-    expect(trackOfTake('generated/act1-the-dream.mp3', music)).toBe(
-      'act1-the-dream',
-    )
-  })
-
-  it("is null for the game's own files", () => {
-    expect(trackOfTake('Conquest - Market (freetouse.com).mp3', music)).toBe(
-      null,
-    )
+  it('plays nothing in a scene the mix has no entry for', () => {
+    expect(sceneClips(undefined, effects)).toEqual([])
   })
 })
 

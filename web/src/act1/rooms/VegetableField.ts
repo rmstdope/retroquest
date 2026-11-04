@@ -55,6 +55,11 @@ export class VegetableField extends Room {
       : VegetableField.SOUND_WITHERED
   }
 
+  /** The room's sound states, the one it starts in first. */
+  override soundStates(): readonly string[] {
+    return [VegetableField.SOUND_WITHERED, VegetableField.SOUND_GREEN]
+  }
+
   /** The field withered or, once watered, recovered. */
   override descriptionFor(gameState: GameState): string {
     return gameState.getStoryFlag(FLAG_VEGETABLE_FIELD_WATERED)

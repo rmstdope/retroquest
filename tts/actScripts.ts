@@ -1,7 +1,8 @@
 /**
  * What `tts/extract-act.ts` writes, as functions: the per-act source table
- * (`ACT_SOURCES`), the act's narration script (`extractActScript`) and its music
- * loop (`extractActMusic`). Nothing here reads `process.argv` or writes a file,
+ * (`ACT_SOURCES`), the act's narration script (`extractActScript`), its music
+ * loops (`extractActMusic`), images (`extractActImages`) and scenes
+ * (`extractActScenes`). Nothing here reads `process.argv` or writes a file,
  * so a vitest test can compare the result with the committed
  * `tts/act<N>/script.json` and `music.json`. Unsigned writing is given to its
  * writer by `act<N>/writers.json`; lines opening as in `act<N>/silent.json` stay
@@ -36,6 +37,7 @@ import {
 } from '../web/src/lantern/narrationScript'
 import { actLoops, roomLoops, type MusicTrack } from '../web/src/lantern/musicLists'
 import { allImages, type GameImage } from '../web/src/lantern/imageLists'
+import { actScenes, type SceneDeclaration } from '../web/src/lantern/sceneLists'
 
 /** What the extractor needs of an act: a fresh act and the commands that play it to its end. */
 export interface ActSource {
@@ -128,4 +130,9 @@ export function extractActImages(number: string): GameImage[] {
     sourceOf(number).make(),
     ACT_NUMBERS.map((n) => sourceOf(n).make()),
   )
+}
+
+/** Returns a scene for each room of the act, as `scenes.json` holds them. */
+export function extractActScenes(number: string): SceneDeclaration[] {
+  return actScenes(sourceOf(number).make())
 }

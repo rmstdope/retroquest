@@ -1,0 +1,122 @@
+[
+  {
+    "id": "act3-miras-hut",
+    "name": "Mira's Hut",
+    "states": [],
+    "triggers": []
+  },
+  {
+    "id": "act3-tidal-causeway",
+    "name": "Tidal Causeway",
+    "states": [],
+    "triggers": []
+  },
+  {
+    "id": "act3-shoreline-markers",
+    "name": "Shoreline Markers",
+    "states": [],
+    "triggers": []
+  },
+  {
+    "id": "act3-outer-wards",
+    "name": "Outer Wards",
+    "states": [],
+    "triggers": []
+  },
+  {
+    "id": "act3-collapsed-pier",
+    "name": "Collapsed Pier",
+    "states": [],
+    "triggers": []
+  },
+  {
+    "id": "act3-submerged-antechamber",
+    "name": "Submerged Antechamber",
+    "states": [],
+    "triggers": []
+  },
+  {
+    "id": "act3-sanctum-of-the-tide",
+    "name": "Sanctum of the Tide",
+    "states": [],
+    "triggers": []
+  },
+  {
+    "id": "act3-lower-switchbacks",
+    "name": "Lower Switchbacks",
+    "states": [],
+    "triggers": []
+  },
+  {
+    "id": "act3-obsidian-outcrops",
+    "name": "Obsidian Outcrops",
+    "states": [],
+    "triggers": []
+  },
+  {
+    "id": "act3-mirror-terraces",
+    "name": "Mirror Terraces",
+    "states": [],
+    "triggers": []
+  },
+  {
+    "id": "act3-fumarole-passages",
+    "name": "Fumarole Passages",
+    "states": [],
+    "triggers": []
+  },
+  {
+    "id": "act3-ember-gallery",
+    "name": "Ember Gallery",
+    "states": [],
+    "triggers": []
+  },
+  {
+    "id": "act3-phoenix-crater",
+    "name": "Phoenix Crater",
+    "states": [],
+    "triggers": []
+  },
+  {
+    "id": "act3-cavern-mouth",
+    "name": "Cavern Mouth",
+    "states": [],
+    "triggers": []
+  },
+  {
+    "id": "act3-tool-cache",
+    "name": "Tool Cache",
+    "states": [],
+    "triggers": []
+  },
+  {
+    "id": "act3-collapsed-galleries",
+    "name": "Collapsed Galleries",
+    "states": [],
+    "triggers": []
+  },
+  {
+    "id": "act3-echo-chambers",
+    "name": "Echo Chambers",
+    "states": [],
+    "triggers": []
+  },
+  {
+    "id": "act3-stillness-vestibule",
+    "name": "Stillness Vestibule",
+    "states": [],
+    "triggers": []
+  },
+  {
+    "id": "act3-dragons-hall",
+    "name": "Dragon's Hall",
+    "states": [],
+    "triggers": []
+  },
+  {
+    "id": "act3-fortress-entrance",
+    "name": "Entrance to Malakar's Fortress",
+    "states": [],
+    "triggers": []
+  }
+]

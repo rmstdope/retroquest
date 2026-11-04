@@ -10,6 +10,7 @@ import type { MusicVoice } from './musicVoice'
 /** A music voice with a plain volume that records play and pause. */
 class FakeMusic implements MusicVoice {
   volume = 1
+  level = 1
   paused = true
   play = vi.fn(() => {
     this.paused = false
@@ -33,8 +34,8 @@ function storm(random = () => 0): Ambience {
   return new Ambience(
     ctx as unknown as AudioContext,
     [
-      { buffer: rain, loops: true },
-      { buffer: strike, loops: false, everySeconds: [3, 8] },
+      { buffer: rain, play: { mode: 'loop' } },
+      { buffer: strike, play: { mode: 'random', everySeconds: [3, 8] } },
     ],
     bus,
     random,
@@ -129,7 +130,7 @@ describe('Ambience', () => {
     function shop(): Ambience {
       return new Ambience(
         ctx as unknown as AudioContext,
-        [{ buffer: bell, loops: false, afterSeconds: 1.5 }],
+        [{ buffer: bell, play: { mode: 'once', afterSeconds: 1.5 } }],
         bus,
       )
     }
@@ -203,12 +204,11 @@ describe('Ambience', () => {
       return new Ambience(
         ctx as unknown as AudioContext,
         [
-          { buffer: wind, loops: true },
-          { buffer: whir, loops: true, state: 'whirring' },
+          { buffer: wind, play: { mode: 'loop' } },
+          { buffer: whir, play: { mode: 'loop' }, state: 'whirring' },
           {
             buffer: creak,
-            loops: false,
-            everySeconds: [5, 5],
+            play: { mode: 'random', everySeconds: [5, 5] },
             state: 'jammed',
           },
         ],
@@ -262,8 +262,8 @@ describe('Ambience', () => {
       const ambience = new Ambience(
         ctx as unknown as AudioContext,
         [
-          { buffer: whir, loops: true, state: 'whirring' },
-          { buffer: wail, loops: true, state: 'jammed' },
+          { buffer: whir, play: { mode: 'loop' }, state: 'whirring' },
+          { buffer: wail, play: { mode: 'loop' }, state: 'jammed' },
         ],
         bus,
       )
@@ -344,108 +344,98 @@ describe('Ambience', () => {
         .gain
     }
 
-    /** A storm whose lightning plays at `volume` (rain at its own 1). */
-    function loudStorm(volume: number): Ambience {
-      return new Ambience(
+    it('plays each clip at its own volume, the full one by default', () => {
+      new Ambience(
         ctx as unknown as AudioContext,
         [
-          { buffer: rain, loops: true, id: 'rain' },
+          { buffer: rain, play: { mode: 'loop' } },
           {
             buffer: strike,
-            loops: false,
-            everySeconds: [3, 8],
-            id: 'lightning',
-            volume,
+            play: { mode: 'random', everySeconds: [3, 8] },
+            volume: 2.5,
           },
         ],
         bus,
         () => 0,
-      )
-    }
-
-    it('plays each clip at its own volume, the full one by default', () => {
-      loudStorm(2.5).play()
+      ).play()
       vi.advanceTimersByTime(3000)
       expect(levelOf(sourcesOf(rain)[0]).value).toBe(1)
       expect(levelOf(sourcesOf(strike)[0]).value).toBe(2.5)
     })
 
-    it('changes a clip’s volume as it plays, and for its next start', () => {
-      const ambience = loudStorm(1)
-      ambience.play()
-      ambience.setVolume('rain', 0.4)
-      expect(levelOf(sourcesOf(rain)[0]).value).toBeCloseTo(0.4)
-      ambience.setVolume('lightning', 3)
-      vi.advanceTimersByTime(3000)
-      expect(levelOf(sourcesOf(strike)[0]).value).toBe(3)
+    it('waits at least a tenth of a second between the starts of a random clip', () => {
+      new Ambience(
+        ctx as unknown as AudioContext,
+        [{ buffer: strike, play: { mode: 'random', everySeconds: [0, 0] } }],
+        bus,
+      ).play()
+      vi.advanceTimersByTime(0)
+      expect(sourcesOf(strike)).toHaveLength(0)
+      vi.advanceTimersByTime(1000)
+      expect(sourcesOf(strike)).toHaveLength(10)
     })
 
-    it('plays a one-shot at once when asked, besides its own waits', () => {
-      const ambience = loudStorm(1)
-      ambience.play()
-      ambience.audition('lightning')
-      expect(sourcesOf(strike)).toHaveLength(1)
+    it('plays one clip in two rows each at its own volume', () => {
+      new Ambience(
+        ctx as unknown as AudioContext,
+        [
+          {
+            buffer: strike,
+            play: { mode: 'once', afterSeconds: 0 },
+            volume: 3,
+          },
+          {
+            buffer: strike,
+            play: { mode: 'random', everySeconds: [3, 3] },
+            volume: 0.5,
+          },
+        ],
+        bus,
+      ).play()
       vi.advanceTimersByTime(3000)
-      expect(sourcesOf(strike)).toHaveLength(2)
+      expect(sourcesOf(strike).map((source) => levelOf(source).value)).toEqual([
+        3, 0.5,
+      ])
     })
+  })
 
-    it('plays nothing on request while the music is stopped', () => {
-      loudStorm(1).audition('lightning')
+  describe('a scene left under music that carries on', () => {
+    /** The gain a source plays through. */
+    function rampOf(source: FakeSource): ReturnType<typeof vi.fn> {
+      return (
+        source.connect.mock.calls[0][0] as {
+          gain: { linearRampToValueAtTime: ReturnType<typeof vi.fn> }
+        }
+      ).gain.linearRampToValueAtTime
+    }
+
+    it('fades its loops out, cancels its waits and then lets go of its gain', () => {
+      const ambience = storm()
+      ambience.play()
+      ctx.currentTime = 4
+      ambience.release()
+      const [loop] = sourcesOf(rain)
+      expect(rampOf(loop)).toHaveBeenCalledWith(0, 4.3)
+      expect(loop.stop).toHaveBeenCalledWith(4.3)
+      expect(ambience.disposed).toBe(true)
+      expect(ctx.gains[0].disconnect).not.toHaveBeenCalled()
+      vi.advanceTimersByTime(300)
+      expect(ctx.gains[0].disconnect).toHaveBeenCalled()
+      vi.advanceTimersByTime(60_000)
       expect(sourcesOf(strike)).toHaveLength(0)
     })
 
-    it('plays a one-shot asked for at its own volume, even while another is soloed', () => {
-      const ambience = loudStorm(2)
+    it('plays no more once released', () => {
+      const ambience = storm()
+      ambience.release()
       ambience.play()
-      ambience.solo('rain')
-      ambience.audition('lightning')
-      expect(levelOf(sourcesOf(strike)[0]).value).toBe(2)
+      expect(ctx.sources).toHaveLength(0)
     })
 
-    it('keeps a one-shot asked for sounding while levels change under a solo', () => {
-      const ambience = loudStorm(2)
-      ambience.play()
-      ambience.solo('rain')
-      ambience.audition('lightning')
-      ambience.setVolume('rain', 0.5)
-      expect(levelOf(sourcesOf(strike)[0]).value).toBe(2)
-    })
-
-    it('takes a level set during a fade-in at once, without the ramp undoing it', () => {
-      const wail = { duration: 20 } as unknown as AudioBuffer
-      const ambience = new Ambience(
-        ctx as unknown as AudioContext,
-        [
-          { buffer: rain, loops: true, id: 'rain' },
-          { buffer: wail, loops: true, id: 'wail', state: 'lit' },
-        ],
-        bus,
-      )
-      ambience.play()
-      ambience.setState('lit')
-      ctx.currentTime = 5
-      ambience.solo('rain')
-      const gain = (
-        sourcesOf(wail)[0].connect.mock.calls[0][0] as {
-          gain: {
-            value: number
-            cancelScheduledValues: ReturnType<typeof vi.fn>
-          }
-        }
-      ).gain
-      expect(gain.cancelScheduledValues).toHaveBeenCalledWith(5)
-      expect(gain.value).toBe(0)
-    })
-
-    it('silences every other clip while one is soloed, and gives them back after', () => {
-      const ambience = loudStorm(2)
-      ambience.play()
-      ambience.solo('lightning')
-      expect(levelOf(sourcesOf(rain)[0]).value).toBe(0)
-      vi.advanceTimersByTime(3000)
-      expect(levelOf(sourcesOf(strike)[0]).value).toBe(2)
-      ambience.solo(null)
-      expect(levelOf(sourcesOf(rain)[0]).value).toBe(1)
+    it('fades its loops in when it starts under music already sounding', () => {
+      ctx.currentTime = 2
+      storm().play(true)
+      expect(rampOf(sourcesOf(rain)[0])).toHaveBeenCalledWith(1, 2.3)
     })
   })
 
@@ -522,6 +512,45 @@ describe('AmbientVoice', () => {
     expect(ctx.gains[0].disconnect).toHaveBeenCalled()
   })
 
+  it('swaps the effects for another scene’s as the music carries on', async () => {
+    const voice = new AmbientVoice(new FakeMusic(), storm(), () => 1, 'dream')
+    await voice.play()
+    const [oldRain] = sourcesOf(rain)
+    const bell = { duration: 2 } as unknown as AudioBuffer
+    const next = new Ambience(
+      ctx as unknown as AudioContext,
+      [{ buffer: bell, play: { mode: 'loop' } }],
+      bus,
+    )
+    voice.swap('store', Promise.resolve(next))
+    expect(voice.scene).toBe('store')
+    expect(oldRain.stop).toHaveBeenCalledWith(0.3)
+    await vi.advanceTimersByTimeAsync(0)
+    expect(sourcesOf(bell)).toHaveLength(1)
+  })
+
+  it('lets go of the effects of a swap another came after', async () => {
+    const voice = new AmbientVoice(new FakeMusic(), null, () => 1, 'a')
+    await voice.play()
+    let first: (ambience: Ambience | null) => void = () => {}
+    voice.swap('b', new Promise((resolve) => (first = resolve)))
+    voice.swap('c', Promise.resolve(null))
+    const late = storm()
+    first(late)
+    await vi.advanceTimersByTimeAsync(0)
+    expect(late.disposed).toBe(true)
+    expect(ctx.sources).toHaveLength(0)
+  })
+
+  it('sets the music’s own level, which the effects do not follow', () => {
+    const music = new FakeMusic()
+    const voice = new AmbientVoice(music, storm(), () => 1)
+    voice.level = 2
+    expect(music.level).toBe(2)
+    expect(voice.level).toBe(2)
+    expect(ctx.gains[0].gain.value).toBe(1)
+  })
+
   it('lets go of both on dispose', () => {
     const music = new FakeMusic()
     const voice = new AmbientVoice(music, storm(), () => 1)
@@ -550,7 +579,7 @@ describe('prepareAmbience', () => {
   it('decodes each clip and plays it as asked', async () => {
     const ambience = await prepareAmbience(
       ctx as unknown as AudioContext,
-      [{ url: '/rain.mp3', loops: true }],
+      [{ url: '/rain.mp3', play: { mode: 'loop' } }],
       bus,
     )
     ambience?.play()
@@ -562,8 +591,8 @@ describe('prepareAmbience', () => {
     const ambience = await prepareAmbience(
       ctx as unknown as AudioContext,
       [
-        { url: '/missing.mp3', loops: true },
-        { url: '/rain.mp3', loops: true },
+        { url: '/missing.mp3', play: { mode: 'loop' } },
+        { url: '/rain.mp3', play: { mode: 'loop' } },
       ],
       bus,
     )
@@ -576,7 +605,7 @@ describe('prepareAmbience', () => {
     expect(
       await prepareAmbience(
         ctx as unknown as AudioContext,
-        [{ url: '/rain.mp3', loops: true }],
+        [{ url: '/rain.mp3', play: { mode: 'loop' } }],
         bus,
       ),
     ).toBeNull()

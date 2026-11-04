@@ -3,18 +3,23 @@ import { storeToRefs } from 'pinia'
 import { useGameStore } from '@/stores/useGameStore'
 import { useNarrationStore } from '@/stores/useNarrationStore'
 import { useSettingsStore } from '@/stores/useSettingsStore'
-import { MUSIC_FADE_IN_MS, useMusic, type AmbienceSource } from './useMusic'
+import {
+  MUSIC_FADE_IN_MS,
+  SILENCE,
+  useMusic,
+  type AmbienceSource,
+} from './useMusic'
 import { prepareAmbience, type Ambience } from './ambience'
-import { ambientClipsAt, loadChosenEffects, trackOfTake } from './chosenEffects'
+import { loadChosenEffects, sceneClips } from './chosenEffects'
 import { fetchAudioBuffer } from './musicVoice'
 import { roomTrackId } from '@/lantern/musicLists'
-import { ambienceAt } from '@/lantern/effectLists'
-import { useEffectMixStore } from '@/stores/useEffectMixStore'
+import { sceneMixOf } from '@/lantern/sceneMix'
+import { PLAIN_SOUND_STATE, sceneStateOf } from '@/lantern/sceneLists'
 import {
-  chooseTrack,
+  ACT_FILE,
   GENERATED_MUSIC_DIR,
   loadChosenManifest,
-  trackIdsAt,
+  sceneMusic,
   type ChosenManifest,
 } from './chosenMusic'
 
@@ -40,20 +45,24 @@ const MEDIA_KEYS: readonly MediaSessionAction[] = ['play', 'pause', 'stop']
  * and ignored, so neither the music nor the narration reacts to them. It dips
  * while a turn, chapter page or pop-up is narrated, so the voices stand out.
  *
- * A take chosen in Content Studio plays in place of the act's file: the room's
- * own take in that room, else the act loop's take across the act (see
+ * Each room is a scene of Content Studio's scene mix (`sceneMix.ts`, under the
+ * room's track id), which may name its music and level. Where it names none, a
+ * take chosen in the studio plays in place of the act's file: the room's own
+ * take in that room, else the act loop's take across the act (see
  * `chosenMusic.ts`). The track waits for the list of takes to load, so it never
  * starts on the file and then swaps.
  *
  * The first track, when it loads under the game's title page, fades in over
  * `MUSIC_FADE_IN_MS`.
  *
- * A room's chosen take plays the room's chosen sound effects with it (see
- * `effectLists.ts`), through one effects bus at the player's effects volume:
- * they start with the take, fade with it and stop with it. The effects follow
- * the room's sound state (`musicSoundState`), held and released with the
- * music's room: a whir stops as the mechanism is jammed. With the effects
- * off, none are fetched; a clip shared by the last two rooms is decoded once.
+ * A room plays the chosen sound effects its scene's mix lists, through one
+ * effects bus at the player's effects volume, with its music or with none:
+ * they start with the music, fade with it and stop with it, and walking on
+ * under music that carries on swaps them for the next room's. The effects
+ * follow the room's sound state (`musicSoundState`, '' read as the scenes'
+ * `plain`), held and released with the music's room: a whir stops as the
+ * mechanism is jammed. With the effects off, none are fetched; a clip shared
+ * by the last two rooms is decoded once.
  *
  * When the calling component's scope ends, the music stops and the
  * listeners are removed.
@@ -74,23 +83,31 @@ export function useActMusic(): ReturnType<typeof useMusic> {
   })
   const chosenEffects = loadChosenEffects()
   const settings = useSettingsStore()
-  const mix = useEffectMixStore()
   const effectsLevel = (): number =>
     settings.effectsOn ? settings.effectsVolume / 100 : 0
   /** Where every effect plays into, at the effects volume; made with the first. */
   let effectsBus: GainNode | null = null
   /** Set when the scope ends, so an ambience still being prepared makes no bus. */
   let disposed = false
-  /** The ambiences not yet let go of, each with its track: the room's and any fading out. */
-  let ambiences: { track: string; ambience: Ambience }[] = []
-  /** The track of the room the music plays in. */
-  const roomTrack = (): string =>
-    roomTrackId(musicActName.value, musicRoomKey.value)
-  /** Gives the room's sound state to its own track's ambience; the others keep theirs. */
+  /** The ambiences not yet let go of, each with its scene: the room's and any fading out. */
+  let ambiences: { scene: string; ambience: Ambience }[] = []
+  /** The scene of the room the music plays in; '' outside a room. */
+  const roomScene = (): string =>
+    musicActName.value === '' || musicRoomKey.value === ''
+      ? ''
+      : roomTrackId(musicActName.value, musicRoomKey.value)
+  /** The sound state each scene was last in while the music played there. */
+  const lastStates: Record<string, string> = {}
+  /**
+   * Gives the room's sound state to its own scene's ambience; the others keep
+   * the state their scene was left in, even one that arrives after it.
+   */
   const followSoundState = (): void => {
+    const room = roomScene()
+    if (room !== '') lastStates[room] = sceneStateOf(musicSoundState.value)
     ambiences = ambiences.filter(({ ambience }) => !ambience.disposed)
-    for (const { track, ambience } of ambiences)
-      if (track === roomTrack()) ambience.setState(musicSoundState.value)
+    for (const { scene, ambience } of ambiences)
+      ambience.setState(lastStates[scene] ?? PLAIN_SOUND_STATE)
   }
   /**
    * The decoded clips by URL, so a clip shared by rooms is decoded once. Only
@@ -109,20 +126,13 @@ export function useActMusic(): ReturnType<typeof useMusic> {
       if (!urls.includes(url) && !previousUrls.includes(url))
         decoded.delete(url)
   }
-  const ambienceFor: AmbienceSource = async (file, context) => {
+  const ambienceFor: AmbienceSource = async (scene, context) => {
     // With the effects off, nothing is fetched; they come with the next room.
     if (effectsLevel() === 0) return null
-    const music = chosen.value
-    const track = music ? trackOfTake(file, music) : null
     const clips =
-      track === null
-        ? []
-        : ambientClipsAt(track, await chosenEffects).map((clip) => ({
-            ...clip,
-            volume: clip.id === undefined ? 1 : mix.volumeOf(track, clip.id),
-          }))
+      scene === '' ? [] : sceneClips(sceneMixOf(scene), await chosenEffects)
     keepClips(clips.map((clip) => clip.url))
-    if (track === null || clips.length === 0 || disposed) return null
+    if (clips.length === 0 || disposed) return null
     if (!effectsBus) {
       effectsBus = context.createGain()
       effectsBus.gain.value = effectsLevel()
@@ -143,43 +153,14 @@ export function useActMusic(): ReturnType<typeof useMusic> {
     }
     const ambience = await prepareAmbience(context, clips, effectsBus, load)
     if (ambience) {
-      const soloed = mix.soloed
-      if (soloed?.track === track) ambience.solo(soloed.id)
-      ambiences.push({ track, ambience })
+      ambiences.push({ scene, ambience })
       followSoundState()
     }
     return ambience
   }
-  watch([musicActName, musicRoomKey, musicSoundState], followSoundState)
-  /** The live ambiences of `track`. */
-  const ambiencesOf = (track: string): Ambience[] =>
-    ambiences
-      .filter((entry) => entry.track === track && !entry.ambience.disposed)
-      .map((entry) => entry.ambience)
-  // The room effects panel: a level, a one-shot played now, a solo.
-  watch(
-    () => mix.volumes,
-    () => {
-      for (const { track, ambience } of ambiences)
-        for (const effect of ambienceAt(track))
-          ambience.setVolume(effect.id, mix.volumeOf(track, effect.id))
-    },
-  )
-  watch(
-    () => mix.request,
-    (request) => {
-      if (request)
-        for (const ambience of ambiencesOf(request.track))
-          ambience.audition(request.id)
-    },
-  )
-  watch(
-    () => mix.soloed,
-    (soloed) => {
-      for (const { track, ambience } of ambiences)
-        ambience.solo(soloed?.track === track ? soloed.id : null)
-    },
-  )
+  watch([musicActName, musicRoomKey, musicSoundState], followSoundState, {
+    immediate: true,
+  })
   watch(effectsLevel, (level) => {
     if (effectsBus) effectsBus.gain.value = level
   })
@@ -197,12 +178,12 @@ export function useActMusic(): ReturnType<typeof useMusic> {
     [musicFile, musicInfo, musicActName, musicRoomKey, chosen],
     () => {
       if (chosen.value === null) return
-      const take = chooseTrack(
+      const scene = roomScene()
+      const { music: choice, level } = sceneMusic(
+        { actName: musicActName.value, roomKey: musicRoomKey.value },
+        musicFile.value,
         chosen.value,
-        trackIdsAt(
-          { actName: musicActName.value, roomKey: musicRoomKey.value },
-          musicFile.value,
-        ),
+        scene === '' ? undefined : sceneMixOf(scene),
       )
       // The title page's music rises over two seconds; no other starts so.
       const fadeInMs = !started && showTitle.value ? MUSIC_FADE_IN_MS : 0
@@ -216,14 +197,20 @@ export function useActMusic(): ReturnType<typeof useMusic> {
         musicRoomKey.value !== '' &&
         played.room !== musicRoomKey.value
       played = { act: musicActName.value, room: musicRoomKey.value }
-      if (take)
+      const at = { scene, level }
+      if (musicFile.value === '') music.loadTrack('', '')
+      else if (choice === ACT_FILE)
+        music.loadTrack(musicFile.value, musicInfo.value, fadeInMs, through, at)
+      else if (choice === null)
+        music.loadTrack(SILENCE, '', fadeInMs, through, at)
+      else
         music.loadTrack(
-          GENERATED_MUSIC_DIR + take.file,
+          GENERATED_MUSIC_DIR + choice.file,
           CHOSEN_TAKE_CREDIT,
           fadeInMs,
           through,
+          at,
         )
-      else music.loadTrack(musicFile.value, musicInfo.value, fadeInMs, through)
     },
     { immediate: true },
   )
