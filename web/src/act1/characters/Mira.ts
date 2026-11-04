@@ -49,7 +49,8 @@ export class Mira extends Character {
       | 'initial'
       | 'quest_conditions_not_met'
       | 'quest_complete_amulet_given'
-      | 'post_amulet',
+      | 'post_amulet'
+      | 'post_amulet_after_remark',
   ): string {
     switch (stage) {
       case 'initial':
@@ -100,6 +101,14 @@ export class Mira extends Character {
       case 'post_amulet':
         return (
           `${characterName(this.name)} doesn't look up from her herbs. ` +
+          speech(
+            'Still here? Go and say a proper goodbye to your grandmother. ' +
+              'Then go.',
+          )
+        )
+      case 'post_amulet_after_remark':
+        return (
+          'She turns back to her herbs. ' +
           speech(
             'Still here? Go and say a proper goodbye to your grandmother. ' +
               'Then go.',
@@ -221,12 +230,13 @@ export class Mira extends Character {
     return attributeSpeech(this.name, this.talkAnswer(gameState))
   }
 
-  /** What Mira answers when spoken to, before the speaker is labelled. */
+  /**
+   * What Mira answers when spoken to, before the speaker is labelled. When her
+   * forest remark opens the turn, her answer is told as following on from it.
+   */
   private talkAnswer(gameState: GameState): string {
-    const answer = this.talkByProgress(gameState)
     const remark = this.forestRemark(gameState)
-    if (!remark) return answer
-    return remark + answer
+    return remark + this.talkByProgress(gameState, remark !== '')
   }
 
   /** Her one-time remark, placed before her answer, once the fox kit is freed; else ''. */
@@ -252,11 +262,17 @@ export class Mira extends Character {
     )
   }
 
-  /** Her dialogue for the stage Elior has reached in the act. */
-  private talkByProgress(gameState: GameState): string {
+  /**
+   * Her dialogue for the stage Elior has reached in the act. `afterRemark` is
+   * true when her forest remark, in which she glances at Elior, comes first
+   * in the same turn.
+   */
+  private talkByProgress(gameState: GameState, afterRemark: boolean): string {
     // 1. Give the post_amulet message if amulet is in inventory
     if (gameState.hasItem('Ancient Amulet')) {
-      return this.dialogue('post_amulet')
+      return this.dialogue(
+        afterRemark ? 'post_amulet_after_remark' : 'post_amulet',
+      )
     }
 
     // 2. Give the initial message if the story flag 'magic_fully_unlocked' is not set
