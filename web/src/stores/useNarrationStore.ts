@@ -8,6 +8,7 @@ import {
   type NarrationManifest,
 } from '@/lantern/narrationManifest'
 import type { NarrationUnit } from '@/lantern/narrationUnits'
+import { readingPauseMs } from '@/lantern/stageSpeech'
 
 /**
  * Playback of a narrated turn in the story view.
@@ -31,6 +32,12 @@ import type { NarrationUnit } from '@/lantern/narrationUnits'
  * - A talk that moves Elior can stop before the unit where its scene changes
  *   (`begin`'s `sceneAt`): `atSceneChange` says it is there, and
  *   `passSceneChange` lets it go on once the new picture is up.
+ * - Words of the turn shown unspoken (by a hurry, a skip, or a block with no
+ *   voice, such as an event line) are owed their reading time
+ *   (`readingPauseMs` per paragraph): news after them (a spell or quest unit)
+ *   waits until it has passed, and `owedReadingMs` tells the news of a
+ *   skipped turn how long to wait, so a card never covers lines the player
+ *   has not seen.
  * - Nothing here is saved; a turn that is not the active one shows whole.
  */
 
@@ -94,6 +101,8 @@ interface ActiveNarration {
   sceneAt: number
   /** Whether the narrator has stopped there. */
   atScene: boolean
+  /** Until when (`Date.now()`) the words a hurry showed unspoken are read: news waits for it. */
+  owedUntil: number
 }
 
 /** What is being spoken now in a turn. */
@@ -128,7 +137,12 @@ export const useNarrationStore = defineStore('narration', () => {
   let nudgeTimer: ReturnType<typeof setTimeout> | undefined
 
   /** How the latest narrated turn ended. */
-  const lastEnd = ref<{ turnId: number; skipped: boolean } | null>(null)
+  const lastEnd = ref<{
+    turnId: number
+    skipped: boolean
+    /** Until when the words the skip showed unspoken are read. */
+    owedUntil: number
+  } | null>(null)
 
   /** How many turns have begun narrating in this game. */
   const narratedTurns = ref(0)
@@ -215,6 +229,22 @@ export const useNarrationStore = defineStore('narration', () => {
     }
   }
 
+  /**
+   * How long (ms) the words of turn `turnId` that a hurry or skip showed
+   * unspoken still need to be read: what its news waits for. 0 when nothing
+   * is owed.
+   */
+  function owedReadingMs(turnId: number): number {
+    const now = active.value
+    const until =
+      now?.turnId === turnId
+        ? now.owedUntil
+        : lastEnd.value?.turnId === turnId
+          ? lastEnd.value.owedUntil
+          : 0
+    return Math.max(0, until - Date.now())
+  }
+
   /** Whether turn `turnId` was the latest to end, and was cut short (skipped, cut in on) rather than read. */
   function endedBySkip(turnId: number): boolean {
     return lastEnd.value?.turnId === turnId && lastEnd.value.skipped
@@ -269,10 +299,51 @@ export const useNarrationStore = defineStore('narration', () => {
     }
   }
 
+  /** Whether a unit is news told after the turn's words (a learned spell, a quest). */
+  function isNews(unit: NarrationUnit): boolean {
+    return unit.kind === 'spell' || unit.kind === 'quest'
+  }
+
+  /** The reading time of the words of the turn (its blocks) not yet spoken from the voice in hand on; `all` counts the units not yet shown too. */
+  function unspokenMs(now: ActiveNarration, all: boolean): number {
+    let ms = 0
+    const read = (markup: string): void => {
+      if (narrationWords(markup).length) ms += readingPauseMs(markup)
+    }
+    const unit = now.units[now.unit]
+    // The block in hand: from the word being spoken on, or, between two of its
+    // recordings, its parts still to come.
+    if (unit?.kind === 'block' && now.unit < now.revealed)
+      unit.parts.slice(now.part).forEach((part, i) => {
+        const words = narrationWords(part.markup)
+        read(
+          i === 0 && now.speaking
+            ? words.slice(now.word + 1).join(' ')
+            : part.markup,
+        )
+      })
+    if (unit?.kind === 'block' && now.unit < now.revealed && unit.silent)
+      read(unit.silent)
+    if (all)
+      now.units.forEach((each, u) => {
+        if (u < now.revealed || each.kind !== 'block') return
+        each.parts.forEach((part) => read(part.markup))
+        if (each.silent) read(each.silent)
+      })
+    return ms
+  }
+
   /** The turn is over: everything shows. `skipped` says it was cut short, not read. */
   function finish(skipped = false): void {
+    const now = active.value
+    const owedUntil = now
+      ? Math.max(
+          now.owedUntil,
+          Date.now() + (skipped ? unspokenMs(now, true) : 0),
+        )
+      : 0
     stopVoice()
-    if (active.value) lastEnd.value = { turnId: active.value.turnId, skipped }
+    if (now) lastEnd.value = { turnId: now.turnId, skipped, owedUntil }
     active.value = null
     clearTimeout(nudgeTimer)
     hintNudged.value = false
@@ -311,18 +382,26 @@ export const useNarrationStore = defineStore('narration', () => {
       // A unit that asks for a longer breath (a room, a chapter's text after
       // its heading) is shown and read once it has passed.
       const pause = unit.pauseBefore ?? 0
-      if (index >= 0 && now.pausedFor !== now.unit && pause > now.waited) {
+      // News waits, too, for words a hurry showed unspoken to be read.
+      const owed = isNews(unit) ? Math.max(0, now.owedUntil - Date.now()) : 0
+      const wait = Math.max(index >= 0 ? pause - now.waited : 0, owed)
+      if (now.pausedFor !== now.unit && wait > 0) {
         now.pausedFor = now.unit
         const mine = generation
         timers.push(
           setTimeout(() => {
             if (mine === generation) step()
-          }, pause - now.waited),
+          }, wait),
         )
         return
       }
       if (now.part === 0) now.revealed = now.unit + 1
       if (index < 0) {
+        // A block shown with no voice (an event line) is owed its reading: news waits for it.
+        if (unit.kind === 'block') {
+          const ms = unspokenMs(now, false)
+          if (ms) now.owedUntil = Math.max(now.owedUntil, Date.now()) + ms
+        }
         now.unit++
         now.part = 0
         continue
@@ -370,6 +449,12 @@ export const useNarrationStore = defineStore('narration', () => {
     const now = active.value
     if (!now) return
     const { unit, part } = now
+    // The hurried block's words not yet spoken are shown now: they are owed their reading.
+    if (hurried)
+      now.owedUntil = Math.max(
+        now.owedUntil,
+        Date.now() + unspokenMs(now, false),
+      )
     stopVoice()
     if (hurried) {
       now.unit++
@@ -420,6 +505,7 @@ export const useNarrationStore = defineStore('narration', () => {
       pausedFor: -1,
       sceneAt,
       atScene: false,
+      owedUntil: 0,
     }
     // The chapter page and pop-ups (negative ids) are not story turns.
     if (turnId >= 1) narratedTurns.value++
@@ -537,6 +623,7 @@ export const useNarrationStore = defineStore('narration', () => {
     revealed,
     narrates,
     endedBySkip,
+    owedReadingMs,
     readToEnd,
     speaking,
     manifestFor,

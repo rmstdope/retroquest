@@ -660,7 +660,8 @@ function onNarrationKey(event: KeyboardEvent): void {
     onPaperTab: !!target?.closest('.lq-paper-tab'),
     inOpenList: !!target?.closest('[aria-expanded="true"]'),
     scene: scene.turn !== null,
-    arrival: arrival.active,
+    // News held while the lines before it are read takes the keys as if it were up.
+    arrival: arrival.active || arrival.holding,
     narrating: narration.isNarrating,
     canHide: staged.value && wordsVisible.value && !paper.hidden.value,
     canShow: showTab.value,

@@ -125,5 +125,9 @@
     {
         "after": 166,
         "commands": ["talk to villager", "say truth to tilda", "say truth to tilda"]
+    },
+    {
+        "after": 22,
+        "commands": ["go east", "talk to shopkeeper", "talk to shopkeeper"]
     }
 ]

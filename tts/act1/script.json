@@ -590,6 +590,51 @@
     "text": "The truth about what, love? You've lost me."
   },
   {
+    "key": "10666258a6313c",
+    "speaker": "narrator",
+    "text": "Hemlock looks up from the window, his face creased with worry."
+  },
+  {
+    "key": "1cd2d2616c1ea9",
+    "speaker": "hemlock",
+    "text": "Oh! Forgive me, lad. Hemlock's the name, and this is my store. Or it would be, if I could keep my mind on it. My cat, Patches, has been gone for days. Can't think about business with Patches out there in the cold, so the store stays shut until she's home."
+  },
+  {
+    "key": "0b0e05805a4399",
+    "speaker": "hemlock",
+    "text": "She was last seen near the old well. If you find her, there's a reward in it for you."
+  },
+  {
+    "key": "11c7032963ce8b",
+    "speaker": "hemlock",
+    "text": "And the caravans have stopped coming, now the king is ill and the roads are what they are. Malakar's luck, my father would have called it."
+  },
+  {
+    "key": "1593819dbbca6e",
+    "speaker": "narrator",
+    "text": "He raps the counter twice with his knuckles."
+  },
+  {
+    "key": "09d7037c370abe",
+    "speaker": "narrator",
+    "text": "Curiosity killed the cat"
+  },
+  {
+    "key": "0bb835c014e34d",
+    "speaker": "narrator",
+    "text": "Old Man Hemlock has shut the General Store until his cat, Patches, comes home. She was last seen near the old well, where a locked shed keeps its secrets. What will you discover if you find a way inside?"
+  },
+  {
+    "key": "199115fffed9f7",
+    "speaker": "narrator",
+    "text": "Hemlock shakes his head before you can say anything."
+  },
+  {
+    "key": "06e7efa71fe3ef",
+    "speaker": "hemlock",
+    "text": "No sign of Patches, then. I put a saucer out every night, near the old well where she was last seen. It's always still full in the morning. The store stays shut till she's home, lad."
+  },
+  {
     "key": "0d49024e6a4c8b",
     "speaker": "narrator",
     "text": "Village Square"
@@ -783,16 +828,6 @@
     "key": "0844b4b9abc5e8",
     "speaker": "borin",
     "text": "How is that blade holding up? Keep that edge oiled, mind, or the damp will have it dull again before you know it."
-  },
-  {
-    "key": "09d7037c370abe",
-    "speaker": "narrator",
-    "text": "Curiosity killed the cat"
-  },
-  {
-    "key": "0bb835c014e34d",
-    "speaker": "narrator",
-    "text": "Old Man Hemlock has shut the General Store until his cat, Patches, comes home. She was last seen near the old well, where a locked shed keeps its secrets. What will you discover if you find a way inside?"
   },
   {
     "key": "0b7c094082210e",
@@ -1670,9 +1705,9 @@
     "text": "You search around the Hidden Glade, but find nothing of interest beyond what you can already see."
   },
   {
-    "key": "0b9a210212362a",
+    "key": "0813d37e31b6fa",
     "speaker": "narrator",
-    "text": "You take a moment to rest in the tranquil glade. After a while you stop listening for anything, and a Deer steps out of the brambles. It stands and looks at you, quite still. Near the mossy stone, where there was only moss, a rare flower has opened."
+    "text": "You take a moment to rest in the tranquil glade. After a while you stop listening for anything, and a deer steps out of the brambles. It stands and looks at you, quite still. Near the mossy stone, where there was only moss, a rare flower has opened."
   },
   {
     "key": "0201b4ec21d3af",
@@ -1705,9 +1740,9 @@
     "text": "Its dark eyes hold yours for a long moment. Then its gaze drifts to the mossy stone and the shadowed runes upon it... then to you, patient, as if waiting for you to bring something to light."
   },
   {
-    "key": "067a11c05b8321",
+    "key": "16827b9f20e9d4",
     "speaker": "narrator",
-    "text": "You take a moment to rest in the tranquil glade. The Deer continues to graze peacefully."
+    "text": "You take a moment to rest in the tranquil glade. The deer continues to graze peacefully."
   },
   {
     "key": "1174c72ff016c4",

@@ -216,7 +216,7 @@ const REST_LINES: Record<number, string[]> = {
     'You rest for a moment, gathering your strength.',
     'You are asleep already. The voice says your name again, nearer.',
     'You rest a while. Birds, the grey grass, a stone you cannot read. Nothing comes. You catch yourself watching the brambles for it, whatever it is.',
-    'You take a moment to rest in the tranquil glade. The Deer continues to graze peacefully.',
+    'You take a moment to rest in the tranquil glade. The deer continues to graze peacefully.',
   ],
   2: ['You rest for a moment, gathering your strength.'],
   3: [

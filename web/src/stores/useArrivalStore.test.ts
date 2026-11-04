@@ -11,6 +11,7 @@ import {
   ARRIVAL_CLEAR_AFTER_MS,
   type ArrivalPart,
 } from '@/lantern/stageArrival'
+import { readingPauseMs } from '@/lantern/stageSpeech'
 
 const WORDS_48 = Array.from({ length: 48 }, () => 'w').join(' ')
 
@@ -59,6 +60,24 @@ const voiced: NarrationUnit = {
   ],
 }
 const silent: NarrationUnit = { kind: 'block', parts: [] }
+/** A voiced unit of quest news. */
+const newsUnit: NarrationUnit = { ...voiced, kind: 'quest' }
+/** Every word of a speech whose voice has not started: all of it is unspoken. */
+const SPEECH_REST = 'You found her! Here, take this for your trouble.'
+/** A voiced speech of the turn, one recording. */
+const speech: NarrationUnit = {
+  kind: 'block',
+  parts: [
+    {
+      markup: SPEECH_REST,
+      clip: { file: 's.mp3', speaker: 'narrator', duration: 4, words: [] },
+    },
+  ],
+}
+/** A line of the turn with no recording. */
+function lineOf(markup: string): NarrationUnit {
+  return { kind: 'block', parts: [{ markup, clip: null }] }
+}
 
 describe('useArrivalStore', () => {
   let arrival: ReturnType<typeof useArrivalStore>
@@ -494,16 +513,93 @@ describe('useArrivalStore', () => {
     })
 
     it('tells every piece, one after the other, when the narrator is skipped while the news waits', async () => {
-      narration.begin(1, [voiced, voiced, voiced], 'act1')
+      narration.begin(1, [voiced, newsUnit, newsUnit], 'act1')
       arrival.show(1, [quest(1, true), quest(2, true)], true)
       expect(arrival.active).toBe(false)
       narration.skipAll()
-      await vi.advanceTimersByTimeAsync(0)
+      // The skip brought up the words "a b" unspoken: they are read first.
+      await vi.advanceTimersByTimeAsync(readingPauseMs('a b'))
       expect(arrival.newsUp?.index).toBe(0)
       expect(arrival.barMs).toBe(6000)
       await vi.advanceTimersByTimeAsync(6000)
       expect(arrival.newsUp?.index).toBe(1)
       await vi.advanceTimersByTimeAsync(6000)
+      expect(arrival.active).toBe(false)
+    })
+
+    it('after a skip, waits for the lines it brought up unspoken to be read before the news is up', async () => {
+      const told = 'Patches curls up beside the till.'
+      narration.begin(
+        1,
+        [speech, lineOf('You receive a coin.'), lineOf(told), newsUnit],
+        'act1',
+      )
+      arrival.show(1, [quest(3, true)], true)
+      narration.skipAll()
+      await vi.advanceTimersByTimeAsync(0)
+      // The lines are on the page now; the card does not cover them yet.
+      expect(narration.revealed(1, 2)).toBe(true)
+      expect(arrival.active).toBe(false)
+      const owed =
+        readingPauseMs(SPEECH_REST) +
+        readingPauseMs('You receive a coin.') +
+        readingPauseMs(told)
+      await vi.advanceTimersByTimeAsync(owed - 1)
+      expect(arrival.active).toBe(false)
+      await vi.advanceTimersByTimeAsync(1)
+      expect(arrival.newsUp?.index).toBe(0)
+    })
+
+    it('after a hurry, waits for the rest of the hurried speech to be read before the news is up', async () => {
+      narration.begin(1, [speech, newsUnit], 'act1')
+      arrival.show(1, [quest(1, true)], true)
+      narration.hurry()
+      await vi.advanceTimersByTimeAsync(200)
+      expect(arrival.active).toBe(false)
+      await vi.advanceTimersByTimeAsync(readingPauseMs(SPEECH_REST))
+      expect(arrival.newsUp?.index).toBe(0)
+      expect(narration.speaking(1)?.unit).toBe(1)
+    })
+
+    it('counts the event lines a skip brought up, with no voice, in the wait', async () => {
+      const event: NarrationUnit = {
+        kind: 'block',
+        parts: [],
+        silent: 'You receive a coin.',
+      }
+      narration.begin(1, [voiced, event, newsUnit], 'act1')
+      arrival.show(1, [quest(2, true)], true)
+      FakeAudio.all[0].onended?.()
+      narration.skipAll()
+      await vi.advanceTimersByTimeAsync(
+        readingPauseMs('You receive a coin.') - 1,
+      )
+      expect(arrival.active).toBe(false)
+      await vi.advanceTimersByTimeAsync(1)
+      expect(arrival.active).toBe(true)
+    })
+
+    it('a next while the news is held for the lines brings it up at once', async () => {
+      narration.begin(1, [speech, newsUnit], 'act1')
+      arrival.show(1, [quest(1, true)], true)
+      narration.skipAll()
+      await vi.advanceTimersByTimeAsync(0)
+      expect(arrival.holding).toBe(true)
+      arrival.next()
+      expect(arrival.holding).toBe(false)
+      expect(arrival.newsUp?.index).toBe(0)
+      expect(arrival.barMs).toBe(6000)
+    })
+
+    it('a clear while the news is held ends it, leaving its slim lines', async () => {
+      narration.begin(1, [speech, newsUnit], 'act1')
+      arrival.show(1, [quest(1, true)], true)
+      narration.skipAll()
+      await vi.advanceTimersByTimeAsync(0)
+      arrival.clear()
+      expect(arrival.holding).toBe(false)
+      expect(arrival.told).toContain(1)
+      await vi.advanceTimersByTimeAsync(10000)
       expect(arrival.active).toBe(false)
     })
 
@@ -590,6 +686,21 @@ describe('useArrivalStore', () => {
       await nextTick()
       expect(arrival.active).toBe(true)
       expect(arrival.part?.kind).toBe('events')
+    })
+
+    it('brings up the arrival after a talk at once when the talk is skipped (only news waits for the lines)', async () => {
+      narration.begin(1, [speech, voiced, silent], 'act1')
+      const line: ArrivalPart = {
+        kind: 'events',
+        lines: [{ unit: 1, markup: 'You are in the Cottage.' }],
+        voiced: true,
+        afterWords: true,
+      }
+      arrival.show(1, [line], true)
+      narration.skipAll()
+      await vi.advanceTimersByTimeAsync(0)
+      expect(arrival.holding).toBe(false)
+      expect(arrival.active).toBe(true)
     })
 
     it('waits, after a talk that moved Elior and nobody narrates, for its lines on the picture', async () => {

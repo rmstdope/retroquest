@@ -262,6 +262,20 @@ describe('Mira and the fox kit', () => {
     expect(answer).toContain(REMARK)
     expect(answer).toContain('Still here?')
   })
+
+  it('does not glance at Elior and then not look up, in the same post-amulet answer', () => {
+    const game = gameInMirasHut()
+    game.state.addItemToInventory(new AncientAmulet())
+    game.state.setStoryFlag(FLAG_FOX_KIT_FREED, true)
+
+    const first = executeCommands(game, ['talk to mira'])
+    const second = executeCommands(game, ['talk to mira'])
+
+    expect(first).toContain('She glances at you.')
+    expect(first).not.toContain("doesn't look up")
+    expect(first).toContain('She turns back to her herbs.')
+    expect(second).toContain("doesn't look up from her herbs.")
+  })
 })
 
 describe('Mira on the land and the king', () => {
