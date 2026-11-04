@@ -20,4 +20,11 @@ export class Coin extends Item {
       '[item_name]coin[/item_name], perhaps for trading.'
     )
   }
+
+  /** The line the story tells when Elior takes it, wherever it is lying. */
+  override pickedUp(_gameState: GameState): string {
+    return (
+      'It is small, and the stamp is worn. ' + 'Not much, but it is something.'
+    )
+  }
 }

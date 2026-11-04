@@ -37,4 +37,12 @@ export class RustyHoe extends Item {
         "have much effect here. It's a sturdy (but rusty) tool, though.",
     )
   }
+
+  /** The line the story tells when Elior takes it, wherever it is lying. */
+  override pickedUp(_gameState: GameState): string {
+    return (
+      'Rust comes off on your palm. ' +
+      'Someone worked a field with it for years.'
+    )
+  }
 }

@@ -1,4 +1,4 @@
-import { Item } from '@/engine'
+import { Item, type GameState } from '@/engine'
 
 /** Wandering boots item that aids in travel. */
 export class WanderingBoots extends Item {
@@ -11,5 +11,13 @@ export class WanderingBoots extends Item {
       shortName: 'boots',
       canBeCarried: true,
     })
+  }
+
+  /** The line the story tells when Elior takes it, wherever it is lying. */
+  override pickedUp(_gameState: GameState): string {
+    return (
+      "The leather is soft from other people's roads. " +
+      'They feel ready to go, even if you are not.'
+    )
   }
 }

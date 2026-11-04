@@ -40,4 +40,11 @@ export class Matches extends Item {
     }
     return super.useWith(gameState, other)
   }
+
+  /** The line the story tells when Elior takes it, wherever it is lying. */
+  override pickedUp(_gameState: GameState): string {
+    return (
+      'The box rattles, nearly full. ' + 'You keep it away from anything damp.'
+    )
+  }
 }

@@ -142,6 +142,18 @@ describe('Shopkeeper and the priest matches', () => {
     ).toHaveLength(1)
   })
 
+  it('lets Elior take the handed-over matches again after a drop (rq-3uug)', () => {
+    const game = gameInStore({ priestTalkedTo: true })
+    game.commandParser.parse('talk to shopkeeper')
+
+    game.commandParser.parse('drop matches')
+    const answer = game.commandParser.parse('take matches')
+
+    expect(answer).toBe(
+      'The box rattles, nearly full. You keep it away from anything damp.',
+    )
+  })
+
   it.each([
     { handedOver: true, onTheHouse: false },
     { handedOver: false, onTheHouse: true },

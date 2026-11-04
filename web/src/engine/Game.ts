@@ -597,6 +597,8 @@ Welcome to
    * Take every item with the name from the room; some may refuse. A single
    * item with its own pickup line is taken in that line alone, which already
    * says what happens; items without one answer `PICKUP_LINE`, once, narrated.
+   * Several items taken together say each different line once, in the order
+   * taken, with `PICKUP_LINE` first only when some item has no line of its own.
    */
   take(itemName: string): string {
     const candidates = this.findAllItems(itemName, { inventory: false })
@@ -620,8 +622,9 @@ Welcome to
     if (taken.length === 1) {
       responses.push(taken[0][1] || PICKUP_LINE)
     } else if (taken.length > 1) {
-      responses.push(PICKUP_LINE)
-      responses.push(...taken.map(([, message]) => message).filter(Boolean))
+      if (taken.some(([, message]) => !message)) responses.push(PICKUP_LINE)
+      const messages = taken.map(([, message]) => message).filter(Boolean)
+      responses.push(...new Set(messages))
     }
     responses.push(...prevented)
     return responses.join('\n')

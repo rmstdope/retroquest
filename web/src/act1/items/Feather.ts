@@ -1,4 +1,4 @@
-import { Item } from '@/engine'
+import { Item, type GameState } from '@/engine'
 
 /** Lightweight byproduct item used for flavor and simple crafting. */
 export class Feather extends Item {
@@ -10,5 +10,13 @@ export class Feather extends Item {
         'writing, crafting, or tickling.',
       canBeCarried: true,
     })
+  }
+
+  /** The line the story tells when Elior takes it, wherever it is lying. */
+  override pickedUp(_gameState: GameState): string {
+    return (
+      'It weighs nothing at all. ' +
+      'You tuck it away before the wind can take it.'
+    )
   }
 }

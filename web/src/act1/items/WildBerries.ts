@@ -1,4 +1,4 @@
-import { Item } from '@/engine'
+import { Item, type GameState } from '@/engine'
 
 /** Foraged berries that may be edible but carry risk; currently flavor-only. */
 export class WildBerries extends Item {
@@ -11,5 +11,12 @@ export class WildBerries extends Item {
       shortName: 'berries',
       canBeCarried: true,
     })
+  }
+
+  /** The line the story tells when Elior takes it, wherever it is lying. */
+  override pickedUp(_gameState: GameState): string {
+    return (
+      'They stain your fingers dark. ' + 'You do not know yet if they are safe.'
+    )
   }
 }

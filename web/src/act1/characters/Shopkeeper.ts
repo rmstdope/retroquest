@@ -272,6 +272,7 @@ export class Shopkeeper extends Character {
       gameState.currentRoom.removeItem('Matches')
 
       const newMatches = new Matches() // Create a new instance for the inventory
+      newMatches.canBeCarried = true // handed over, so Elior may carry them
       gameState.addItemToInventory(newMatches)
 
       // Remember the hand-over so the matches can't be given again

@@ -20,4 +20,12 @@ export class Magnet extends Item {
     }
     return super.useWith(gameState, other)
   }
+
+  /** The line the story tells when Elior takes it, wherever it is lying. */
+  override pickedUp(_gameState: GameState): string {
+    return (
+      'It snaps to the nearest bit of iron and has to be pulled free. ' +
+      'Small as it is, it does not let go easily.'
+    )
+  }
 }
