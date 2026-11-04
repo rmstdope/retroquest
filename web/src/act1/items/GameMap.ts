@@ -85,28 +85,36 @@ export class GameMap extends Item {
   }
 
   /**
+   * What still keeps Elior in Willowbrook, in the words the map's refusal
+   * uses; empty when the act may end. The one readiness rule of Act I's end,
+   * read by the map and by the main quest's hint.
+   */
+  static unfinishedBeforeTheRoad(gameState: GameState): string[] {
+    const preparationQuestName = 'Preparing for the road'
+    const incompleteSideQuests = [
+      ...gameState.nonActivatedQuests,
+      ...gameState.activatedQuests,
+    ].filter((quest) => !quest.isMain() && quest.name !== preparationQuestName)
+    const missingRequirements: string[] = []
+    if (!gameState.hasItem('ancient amulet')) {
+      missingRequirements.push('the amulet Mira still keeps for you')
+    }
+    if (!gameState.isQuestCompleted(preparationQuestName)) {
+      missingRequirements.push('your preparations for the road')
+    }
+    if (incompleteSideQuests.length > 0) {
+      missingRequirements.push('the tasks you began in the village')
+    }
+    return missingRequirements
+  }
+
+  /**
    * On the Road to Greendale, once Elior is ready, plays the farewell scene
    * and completes the act; elsewhere, or when not ready, only describes the map.
    */
   override use(gameState: GameState): string {
     if (gameState.currentRoom.name.toLowerCase() === 'road to greendale') {
-      const preparationQuestName = 'Preparing for the road'
-      const incompleteSideQuests = [
-        ...gameState.nonActivatedQuests,
-        ...gameState.activatedQuests,
-      ].filter(
-        (quest) => !quest.isMain() && quest.name !== preparationQuestName,
-      )
-      const missingRequirements: string[] = []
-      if (!gameState.hasItem('ancient amulet')) {
-        missingRequirements.push('the amulet Mira still keeps for you')
-      }
-      if (!gameState.isQuestCompleted(preparationQuestName)) {
-        missingRequirements.push('your preparations for the road')
-      }
-      if (incompleteSideQuests.length > 0) {
-        missingRequirements.push('the tasks you began in the village')
-      }
+      const missingRequirements = GameMap.unfinishedBeforeTheRoad(gameState)
       if (missingRequirements.length > 0) {
         const last = missingRequirements.pop()
         const unfinished =

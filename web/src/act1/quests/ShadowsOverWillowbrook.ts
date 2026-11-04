@@ -13,6 +13,8 @@ import {
   FLAG_WELL_EXAMINED,
   FLAG_WOKE_FROM_DREAM,
 } from '../Act1StoryFlags'
+import { GameMap } from '../items/GameMap'
+import { RoadToGreendale } from '../rooms/RoadToGreendale'
 
 /**
  * Main Act I quest tracking the unfolding village corruption mystery.
@@ -133,6 +135,26 @@ export class ShadowsOverWillowbrookQuest extends Quest {
     const stages = [dream, ...shown.map(([, text]) => `\n${text}`)]
     this.setJournal(stages.slice(0, -1), stages[stages.length - 1])
     return updated
+  }
+
+  /**
+   * Once nothing keeps Elior in Willowbrook (`GameMap.unfinishedBeforeTheRoad`),
+   * he carries the map and stands on the Road to Greendale, points toward the
+   * map that ends the act; the newest journal entry otherwise.
+   */
+  override hint(gameState: GameState): string | null {
+    if (
+      gameState.currentRoom instanceof RoadToGreendale &&
+      gameState.hasItem('map') &&
+      GameMap.unfinishedBeforeTheRoad(gameState).length === 0
+    ) {
+      return (
+        'Nothing is left undone in Willowbrook. ' +
+        'The [item_name]map[/item_name] in your pack may know the way on ' +
+        'from here.'
+      )
+    }
+    return super.hint(gameState)
   }
 
   override checkCompletion(gameState: GameState): boolean {

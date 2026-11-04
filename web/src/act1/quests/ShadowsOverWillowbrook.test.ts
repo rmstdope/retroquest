@@ -12,6 +12,8 @@ import {
   FLAG_VILLAGER_TALKED_TO,
 } from '../Act1StoryFlags'
 import { ShadowsOverWillowbrookQuest } from './ShadowsOverWillowbrook'
+import { ACT1_GOLDEN_PATH } from '../Act1GoldenPath'
+import { executeCommands } from '@/testing/gameHelpers'
 
 describe('Shadows Over Willowbrook log', () => {
   it('starts as a journal of the dream alone', () => {
@@ -187,5 +189,43 @@ describe('Shadows Over Willowbrook log', () => {
       `${characterName('Tilda')} has more rumours than bread`,
     )
     expect(quest.earlierStages?.join('')).toContain('King Alden lies ill')
+  })
+
+  it('turns the hint toward the map once everything is done and Elior is on the road', () => {
+    const game = new Game([new Act1()])
+    executeCommands(game, ACT1_GOLDEN_PATH)
+    expect(game.state.currentRoom.name).toBe('Road to Greendale')
+
+    const hint = game.hint()
+
+    expect(hint).toContain('[item_name]map[/item_name]')
+    expect(hint).not.toMatch(/\buse\b/i)
+  })
+
+  it('keeps the journal hint while a side quest is still open on the road', () => {
+    const game = new Game([new Act1()])
+    executeCommands(game, ACT1_GOLDEN_PATH)
+    const sideQuest = game.state.completedQuests.find(
+      (quest) => !quest.isMain(),
+    )
+    if (!sideQuest) throw new Error('expected a completed side quest')
+    game.state.activatedQuests.push(sideQuest)
+
+    expect(game.hint()).not.toContain('[item_name]map[/item_name]')
+  })
+
+  it('keeps the journal hint away from the road', () => {
+    const game = new Game([new Act1()])
+    executeCommands(game, [...ACT1_GOLDEN_PATH, 'go west'])
+
+    expect(game.hint()).not.toContain('[item_name]map[/item_name]')
+  })
+
+  it('does not send Elior to a map he has put down', () => {
+    const game = new Game([new Act1()])
+    executeCommands(game, [...ACT1_GOLDEN_PATH, 'drop map'])
+    expect(game.state.hasItem('map')).toBe(false)
+
+    expect(game.hint()).not.toContain('[item_name]map[/item_name]')
   })
 })
