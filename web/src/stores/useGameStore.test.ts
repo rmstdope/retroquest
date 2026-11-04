@@ -647,6 +647,15 @@ describe('useGameStore', () => {
       expect(store.titleLoadError).toBe('No save file found.')
     })
 
+    it('says so when the storage cannot be read', () => {
+      bridge.loadFromSlot.mockImplementation(() => {
+        throw new Error('blocked')
+      })
+      expect(store.loadFromTitle(2)).toBe(false)
+      expect(store.titleLoadError).toContain('could not be read')
+      expect(store.showTitle).toBe(true)
+    })
+
     it('forgets an earlier failure on the next attempt', () => {
       bridge.loadFromSlot.mockReturnValueOnce('[failure]No save.[/failure]')
       store.loadFromTitle(2)

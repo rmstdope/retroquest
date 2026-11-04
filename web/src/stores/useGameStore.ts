@@ -691,7 +691,14 @@ export const useGameStore = defineStore('game', () => {
   function loadFromTitle(slot: number): boolean {
     const b = requireBridge()
     titleLoadError.value = ''
-    const result = slot === 0 ? b.quickLoadGame() : b.loadFromSlot(slot)
+    let result: string
+    try {
+      result = slot === 0 ? b.quickLoadGame() : b.loadFromSlot(slot)
+    } catch {
+      titleLoadError.value =
+        "Your saves could not be read: this browser's storage is blocked."
+      return false
+    }
     if (result.includes('[failure]')) {
       titleLoadError.value = result.replace(/\[[^\]]*\]/g, '').trim()
       return false

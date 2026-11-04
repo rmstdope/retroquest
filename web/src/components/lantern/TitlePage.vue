@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, nextTick, onMounted, ref, useId } from 'vue'
 import { parseTitle } from '@/lantern/parseTitle'
-import { continueLine, newestLoadable } from '@/lantern/saveCard'
+import { continueLine, filled, newestLoadable } from '@/lantern/saveCard'
 import type { SaveSlot } from '@/types/bridge'
 import { useFocusTrap } from '@/composables/useFocusTrap'
 
@@ -31,9 +31,7 @@ const props = withDefaults(
   { musicInfo: '', saves: () => [], error: '' },
 )
 const emit = defineEmits<{ start: []; continue: []; load: [] }>()
-const hasSaves = computed(() =>
-  props.saves.some((save) => save.slot === 0 || save.room !== null),
-)
+const hasSaves = computed(() => props.saves.some(filled))
 const newest = computed(() => newestLoadable(props.saves))
 const loadButton = ref<HTMLButtonElement | null>(null)
 

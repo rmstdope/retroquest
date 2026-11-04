@@ -45,7 +45,7 @@ export function savedWhen(timestamp: string | null, now = new Date()): string {
 }
 
 /** A slot that holds a save (the quick save is only listed when there is one). */
-function filled(card: SaveSlot): boolean {
+export function filled(card: SaveSlot): boolean {
   return card.slot === 0 || card.room !== null
 }
 

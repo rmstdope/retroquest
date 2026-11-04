@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, nextTick, ref } from 'vue'
 import { useGameStore } from '@/stores/useGameStore'
-import { actLabel, savedWhen } from '@/lantern/saveCard'
+import { actLabel, filled, savedWhen } from '@/lantern/saveCard'
 import type { SaveSlot } from '@/types/bridge'
 import LanternDialog from './LanternDialog.vue'
 
@@ -36,11 +36,6 @@ const cards = computed<SaveSlot[]>(() => {
   const quick = saving.value ? null : game.getQuickSave()
   return quick ? [quick, ...slots] : slots
 })
-
-/** A slot in use (the quick save is only listed when there is one). */
-function filled(card: SaveSlot): boolean {
-  return card.slot === QUICK || card.room !== null
-}
 
 function badge(card: SaveSlot): string {
   return card.slot === QUICK ? 'Q' : String(card.slot)

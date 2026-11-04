@@ -1287,6 +1287,12 @@ function continueFromTitle(): void {
   if (newest) game.loadFromTitle(newest.slot)
 }
 
+/** Open the Load game window over the title page, with no old failure showing. */
+function openTitleLoad(): void {
+  game.titleLoadError = ''
+  titleLoad.value = true
+}
+
 /** The Load game window closed: back to the title page, focus on Load game. */
 async function closeTitleLoad(): Promise<void> {
   titleLoad.value = false
@@ -1607,7 +1613,7 @@ watch(
         :error="game.titleLoadError"
         @start="startGame"
         @continue="continueFromTitle"
-        @load="titleLoad = true"
+        @load="openTitleLoad"
       />
       <!-- Load game from the title page: above it, and a pick loads at once. -->
       <div v-if="game.showTitle && titleLoad" class="lq-over-title">
