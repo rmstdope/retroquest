@@ -158,7 +158,9 @@ export function useActMusic(): ReturnType<typeof useMusic> {
     }
     return ambience
   }
-  watch([musicActName, musicRoomKey, musicSoundState], followSoundState)
+  watch([musicActName, musicRoomKey, musicSoundState], followSoundState, {
+    immediate: true,
+  })
   watch(effectsLevel, (level) => {
     if (effectsBus) effectsBus.gain.value = level
   })

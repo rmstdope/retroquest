@@ -606,6 +606,40 @@ describe('useActMusic with the effects of a room', () => {
     scope.stop()
   })
 
+  it('keeps the state of the room the music starts in, for effects that arrive after it', async () => {
+    const served = vi.mocked(fetch).getMockImplementation()!
+    let letWhirIn = (): void => {}
+    const whirHeld = new Promise<void>((resolve) => (letWhirIn = resolve))
+    vi.mocked(fetch).mockImplementation((url) =>
+      String(url).endsWith('/whir.' + 'mp3')
+        ? whirHeld.then(() => served(url))
+        : served(url),
+    )
+    sourcesBefore = FakeAudioContext.last?.sources.length ?? 0
+    // The game is in the mill before the music starts.
+    const game = useGameStore()
+    game.musicFile = 'Conquest - Market (freetouse.com).mp3'
+    game.musicActName = 'Act1'
+    game.musicRoomKey = 'OldMill'
+    game.musicSoundState = 'whirring'
+    const scope = effectScope()
+    scope.run(() => useActMusic())
+    await ready()
+    game.musicRoomKey = 'TheDream'
+    game.musicSoundState = ''
+    await ready()
+    letWhirIn()
+    await ready()
+    ctx = FakeAudioContext.last
+    // The Dream's music and rain, and the mill's music, wind and whir as it fades out.
+    expect(
+      ctx.sources
+        .slice(sourcesBefore)
+        .filter((source) => source.loop && source.start.mock.calls.length > 0),
+    ).toHaveLength(5)
+    scope.stop()
+  })
+
   it('plays the effects but no music where the mix names no track', async () => {
     mixOf['act1-old-mill'] = {
       music: { track: null, level: 1 },
