@@ -5,11 +5,11 @@
  * `parseTurn`, so the view finds unit `i` for block `i`), then the room
  * name and description of an arrival, then one unit per quest card. A unit is
  * made of parts, each a voiced line (`blockVoice`, `arrivalBlocks`,
- * `newQuestBlocks`, `questCompleteBlocks`) with its
+ * `newQuestBlocks`, `questCompleteBlocks`, `questUpdatedBlocks`) with its
  * recording or none. A unit with no part is silent: events, plain failures,
- * checklists, a revisited room and a quest update appear at once; a new
- * room, a room looked at again, a new quest's card and a completed quest's
- * record are read.
+ * checklists and a revisited room appear at once; a new
+ * room, a room looked at again, a new quest's card, a quest's update and a
+ * completed quest's record are read.
  */
 
 import type { RoomDescription } from '@/engine'
@@ -27,6 +27,7 @@ import {
   newQuestBlocks,
   newSpellBlocks,
   questCompleteBlocks,
+  questUpdatedBlocks,
 } from './narrationScript'
 import { parseTurn } from './parseTurn'
 import { readingTimeMs } from './stageArrival'
@@ -158,7 +159,7 @@ export function turnUnits(
         ? partsOf(newQuestBlocks(news), manifest)
         : news.kind === 'completed'
           ? partsOf(questCompleteBlocks(news), manifest)
-          : []
+          : partsOf(questUpdatedBlocks(news), manifest)
     units.push({
       kind: 'quest',
       parts,

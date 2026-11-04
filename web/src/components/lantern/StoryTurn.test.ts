@@ -508,6 +508,151 @@ describe('StoryTurn while it is narrated', () => {
     await vi.advanceTimersByTimeAsync(60)
     expect(w.findAll('.lq-w-now').map((e) => e.text())).toEqual(['the'])
   })
+
+  it('opens an updated notice by itself when the narrator reaches it, lighting its words', async () => {
+    const w = narrated(
+      {
+        text: 'Done.',
+        quests: [
+          { kind: 'updated', name: 'Key', main: false, text: 'Find the key.' },
+        ],
+      },
+      {
+        ...recorded('Done.'),
+        ...recorded('Quest updated'),
+        ...recorded('Key'),
+        ...recorded('Find the key.'),
+      },
+    )
+    expect(w.find('.lq-update').exists()).toBe(false)
+    audios[0].onended?.()
+    await vi.advanceTimersByTimeAsync(GAP + 10)
+
+    expect(w.get('.lq-update').attributes('aria-expanded')).toBe('true')
+    expect(w.get('.lq-update-toggle').text()).toBe('Hide ▴')
+    audios[1].currentTime = 2
+    await vi.advanceTimersByTimeAsync(60)
+    expect(w.findAll('.lq-w-now').map((e) => e.text())).toEqual(['updated'])
+    audios[1].onended?.()
+    await vi.advanceTimersByTimeAsync(GAP + 10)
+    audios[2].onended?.()
+    await vi.advanceTimersByTimeAsync(GAP + 10)
+    audios[3].currentTime = 1
+    await vi.advanceTimersByTimeAsync(60)
+    expect(w.get('.lq-update-body').text()).toBe('Find the key.')
+    expect(w.findAll('.lq-w-now').map((e) => e.text())).toEqual(['the'])
+    audios[3].onended?.()
+    await vi.advanceTimersByTimeAsync(GAP + 10)
+    expect(w.get('.lq-update').attributes('aria-expanded')).toBe('true')
+  })
+
+  it('lets Hide fold an updated notice while it is read, and the reading goes on', async () => {
+    const w = narrated(
+      {
+        text: 'Done.',
+        quests: [
+          { kind: 'updated', name: 'Key', main: false, text: 'Find the key.' },
+        ],
+      },
+      { ...recorded('Done.'), ...recorded('Quest updated') },
+    )
+    audios[0].onended?.()
+    await vi.advanceTimersByTimeAsync(GAP + 10)
+    await w.get('.lq-update').trigger('click')
+
+    expect(w.get('.lq-update').attributes('aria-expanded')).toBe('false')
+    audios[1].onended?.()
+    await vi.advanceTimersByTimeAsync(GAP + 10)
+    expect(w.get('.lq-update').attributes('aria-expanded')).toBe('false')
+  })
+
+  it('opens an updated notice that has no recording, at its place', async () => {
+    const w = narrated(
+      {
+        text: 'Done.',
+        quests: [
+          { kind: 'updated', name: 'Key', main: false, text: 'Find the key.' },
+        ],
+      },
+      recorded('Done.'),
+    )
+    audios[0].onended?.()
+    await vi.advanceTimersByTimeAsync(GAP + 10)
+
+    expect(w.get('.lq-update').attributes('aria-expanded')).toBe('true')
+  })
+
+  it('opens an updated notice the player skipped past, without a highlight', async () => {
+    const w = narrated(
+      {
+        text: 'Done.',
+        quests: [
+          { kind: 'updated', name: 'Key', main: false, text: 'Find the key.' },
+        ],
+      },
+      {
+        ...recorded('Done.'),
+        ...recorded('Quest updated'),
+        ...recorded('Key'),
+        ...recorded('Find the key.'),
+      },
+    )
+    useNarrationStore().skipAll()
+    await vi.advanceTimersByTimeAsync(GAP + 10)
+
+    expect(w.get('.lq-update').attributes('aria-expanded')).toBe('true')
+    expect(w.findAll('.lq-w-now')).toHaveLength(0)
+  })
+
+  it('opens several updated notices one after another, each when its turn comes', async () => {
+    const note = (name: string, text: string) =>
+      ({ kind: 'updated', name, main: false, text }) as const
+    const w = narrated(
+      {
+        text: 'Done.',
+        quests: [note('Key', 'Find it.'), note('Map', 'Draw it.')],
+      },
+      {
+        ...recorded('Done.'),
+        ...recorded('Quest updated'),
+        ...recorded('Key'),
+        ...recorded('Find it.'),
+        ...recorded('Map'),
+        ...recorded('Draw it.'),
+      },
+    )
+    audios[0].onended?.()
+    await vi.advanceTimersByTimeAsync(GAP + 10)
+    expect(w.findAll('.lq-update')).toHaveLength(1)
+    for (const index of [1, 2, 3]) {
+      audios[index].onended?.()
+      await vi.advanceTimersByTimeAsync(GAP + 10)
+    }
+
+    const banners = w.findAll('.lq-update')
+    expect(banners).toHaveLength(2)
+    expect(banners.map((b) => b.attributes('aria-expanded'))).toEqual([
+      'true',
+      'true',
+    ])
+    expect(w.findAll('.lq-update-body').map((b) => b.text())).toEqual([
+      'Find it.',
+      'Draw it.',
+    ])
+  })
+
+  it('leaves an updated notice folded when the turn is not narrated', () => {
+    setActivePinia(createPinia())
+    const w = mountTurn({
+      text: 'Done.',
+      quests: [
+        { kind: 'updated', name: 'Key', main: false, text: 'Find the key.' },
+      ],
+    })
+
+    expect(w.get('.lq-update').attributes('aria-expanded')).toBe('false')
+    expect(w.get('.lq-update-toggle').text()).toBe('Show ▾')
+  })
 })
 
 describe('StoryTurn as a narration card', () => {

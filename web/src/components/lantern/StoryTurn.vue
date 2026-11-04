@@ -3,7 +3,11 @@ import { computed, ref, watch } from 'vue'
 import type { Turn } from '@/stores/useGameStore'
 import type { Chip } from '@/lantern/inventoryChanges'
 import { parseTurn, type TurnBlock } from '@/lantern/parseTurn'
-import { newQuestKicker, questCompleteKicker } from '@/lantern/questNews'
+import {
+  newQuestKicker,
+  QUEST_UPDATED_KICKER,
+  questCompleteKicker,
+} from '@/lantern/questNews'
 import { questTextHtml } from '@/lantern/questTextHtml'
 import { firstQuestUnit as firstQuestOf } from '@/lantern/narrationUnits'
 import QuestNewsCard from './QuestNewsCard.vue'
@@ -60,7 +64,7 @@ const props = defineProps<{
 }>()
 const narration = useNarrationStore()
 const root = ref<HTMLElement | null>(null)
-/** Whether this turn is narrated, kept once it has been so the fade only plays for the first showing. */
+/** Whether this turn is narrated, kept once it has been so the fade only plays for the first showing, and an updated notice opens by itself even after a skip. */
 const fade = ref(narration.narrates(props.turn.id))
 watch(
   () => narration.narrates(props.turn.id),
@@ -371,7 +375,9 @@ function chipLabel(chip: Chip): string {
           html(
             news.kind === 'completed'
               ? questCompleteKicker(news.main)
-              : newQuestKicker(news.main),
+              : news.kind === 'updated'
+                ? QUEST_UPDATED_KICKER
+                : newQuestKicker(news.main),
             firstQuestUnit + index,
             0,
             1,
@@ -379,6 +385,7 @@ function chipLabel(chip: Chip): string {
         "
         :name-html="html(news.name, firstQuestUnit + index, 1, 2)"
         :body-html="mark(questTextHtml(news.text), firstQuestUnit + index, 2)"
+        :auto-open="!record && fade"
         :class="{
           'lq-speaking': isSpeaking(firstQuestUnit + index),
           'lq-appear': fade,
