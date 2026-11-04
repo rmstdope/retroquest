@@ -14,6 +14,11 @@ import { WildBerries } from '../items/WildBerries'
 import { WitheredCarrot } from '../items/WitheredCarrot'
 import { PreparingForTheRoadQuest } from './PreparingForTheRoad'
 
+/** The food requirement as the checklist, the card and the narration read it. */
+const FOOD_LINE =
+  'Food for the road (any four kinds: bread, apple, egg, carrot, ' +
+  'berries or fish)'
+
 describe('Preparing for the road checklist', () => {
   it('marks met requirements as success', () => {
     const game = new Game([new Act1()])
@@ -93,7 +98,7 @@ describe('Preparing for the road checklist', () => {
 })
 
 describe('A finished Preparing for the road', () => {
-  it('keeps the list it had at completion, food count included', () => {
+  it('keeps the list it had at completion', () => {
     const game = new Game([new Act1()])
     vi.spyOn(game.state, 'hasSpell').mockReturnValue(true)
     game.state.setStoryFlag(FLAG_JOURNEY_BLESS_COMPLETED, true)
@@ -121,9 +126,7 @@ describe('A finished Preparing for the road', () => {
     expect(frozen).toMatchObject({ kind: 'checklist' })
     const food =
       frozen.kind === 'checklist' ? frozen.items[2].text : 'not a checklist'
-    expect(food).toBe(
-      'Food for the road (4 of 6 kinds gathered, any 4 will do)',
-    )
+    expect(food).toBe(FOOD_LINE)
 
     // Eating something afterwards changes nothing.
     game.state.removeItemFromInventory('apple')
@@ -147,16 +150,14 @@ describe('Food for the road', () => {
     return details.items[2]
   }
 
-  it('counts how many of the six kinds of food are gathered', () => {
+  it('reads the same however much food is gathered, so one recording fits', () => {
     const game = new Game([new Act1()])
+    expect(foodLine(game)).toEqual({ done: false, text: FOOD_LINE })
+
     game.state.addItemToInventory(new Apple())
     game.state.addItemToInventory(new Egg())
     game.state.addItemToInventory(new FreshBread())
-
-    expect(foodLine(game)).toEqual({
-      done: false,
-      text: 'Food for the road (3 of 6 kinds gathered, any 4 will do)',
-    })
+    expect(foodLine(game)).toEqual({ done: false, text: FOOD_LINE })
   })
 
   it("is met by any four kinds, grandmother's bread and the fish among them", () => {
@@ -172,18 +173,22 @@ describe('Food for the road', () => {
   it('counts both loaves of bread as one kind', () => {
     const game = new Game([new Act1()])
     game.state.addItemToInventory(new FreshBread())
-    expect(foodLine(game).text).toContain('1 of 6')
     game.state.addItemToInventory(new Bread())
-    expect(foodLine(game).text).toContain('1 of 6')
+    game.state.addItemToInventory(new Apple())
+    game.state.addItemToInventory(new Egg())
+    expect(foodLine(game).done).toBe(false)
   })
 
   it('counts the carrot only once it has been revived', () => {
     const game = new Game([new Act1()])
     const carrot = new WitheredCarrot()
     game.state.addItemToInventory(carrot)
+    game.state.addItemToInventory(new Apple())
+    game.state.addItemToInventory(new Egg())
+    game.state.addItemToInventory(new Fish())
 
-    expect(foodLine(game).text).toContain('0 of 6')
+    expect(foodLine(game).done).toBe(false)
     carrot.revive()
-    expect(foodLine(game).text).toContain('1 of 6')
+    expect(foodLine(game).done).toBe(true)
   })
 })

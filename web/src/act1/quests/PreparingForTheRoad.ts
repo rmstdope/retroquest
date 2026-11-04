@@ -103,9 +103,10 @@ export class PreparingForTheRoadQuest extends Quest {
     const requirements: [string, boolean][] = [
       ['Warm clothing', this.hasTravelCloak],
       ['Magical protection', this.journeyBlessCompleted],
+      // No count: the line is narrated, and a recording fits one wording only.
       [
-        `Food for the road (${foodKinds.length} of ${FOOD_KINDS.length} ` +
-          `kinds gathered, any ${FOOD_KINDS_NEEDED} will do)`,
+        'Food for the road (any four kinds: bread, apple, egg, carrot, ' +
+          'berries or fish)',
         this.allFoodCollected,
       ],
       ['Sturdy footwear', this.hasWanderingBoots],
