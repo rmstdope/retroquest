@@ -163,6 +163,28 @@ describe('where the story lands after the window crosses 1100 px', () => {
     pane().dispatchEvent(new Event('scroll'))
   }
 
+  it('ends the cards above the action row a frame after the row changes height, not while its change is delivered', async () => {
+    const frames: FrameRequestCallback[] = []
+    vi.stubGlobal('requestAnimationFrame', (run: FrameRequestCallback) =>
+      frames.push(run),
+    )
+    sides = true
+    await mountWith(1)
+    const row = document.querySelector('.lq-composer') as HTMLElement
+    Object.defineProperty(row, 'offsetHeight', {
+      configurable: true,
+      value: 61,
+    })
+    const wrap = document.querySelector('.lq-story-wrap') as HTMLElement
+    // Resizing the observed column inside the callback loops the observers.
+    observers.forEach((notify) => notify())
+    await nextTick()
+    expect(wrap.style.bottom).not.toContain('61px')
+    frames.splice(0).forEach((run) => run(0))
+    await nextTick()
+    expect(wrap.style.bottom).toContain('61px')
+  })
+
   it('opens the column on a short newest turn, whole at the bottom', async () => {
     sides = true
     await mountWith(5)

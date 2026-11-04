@@ -32,8 +32,8 @@ import { useNarrationStore } from '@/stores/useNarrationStore'
  * pop-ups are not held and do not follow). An event with `detail.end` says
  * the reading has left that unit (hurried, or gone on to a line spoken in
  * the speech column): the pane then brings the unit's end up to its bottom
- * edge, never so far that the unit's top leaves, so a card is not left cut
- * off below the edge while nothing in the pane is read.
+ * edge, never so far that the unit's top leaves and never back up, so a card
+ * is not left cut off below the edge while nothing in the pane is read.
  */
 
 /** Event the read-along fires on the lit word, on a unit that starts speaking, or on one it leaves. */
@@ -177,8 +177,9 @@ export function useStoryFollow(story: Ref<HTMLElement | null>): StoryFollow {
     const top = rect.top - paneTop + pane.scrollTop
     const bottom = rect.bottom - paneTop + pane.scrollTop
     const from = goal ?? pane.scrollTop
-    if (bottom > from + pane.clientHeight)
-      moveTo(Math.min(bottom - pane.clientHeight, top))
+    // Only forward: a tall unit already read past its top stays where it is.
+    const target = Math.min(bottom - pane.clientHeight, top)
+    if (target > from) moveTo(target)
   }
 
   /** Bring the lit word back into view at once; see `StoryFollow.refollow`. */

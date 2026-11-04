@@ -10,9 +10,10 @@ import { test, expect, type Page } from '@playwright/test'
 test.use({ storageState: { cookies: [], origins: [] } })
 
 /**
- * Narrated clips end shortly after they start and carry no word timings (the
- * browser has no audio device in CI), so a card is followed as one unit; every
- * error event the window sees is kept in `window.__errors`.
+ * Narrated clips end shortly after they start and their time never moves (the
+ * browser has no audio device in CI), so a card is followed at its first word
+ * and no further, as a hurried one is; every error event the window sees is
+ * kept in `window.__errors`.
  */
 async function prepare(page: Page): Promise<void> {
   await page.addInitScript(() => {

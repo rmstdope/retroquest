@@ -32,10 +32,10 @@ export interface ReadAlongOptions {
  * (`detail.unit` is true for a unit) so the story pane, which is held still
  * and follows the word (`useStoryFollow`), can scroll itself; a surface where
  * nobody handles it (the chapter page, a pop-up) has the unit scrolled into
- * view as before, and the word is not followed. When the reading leaves a
- * unit (it ends, is hurried, or goes on to a line spoken elsewhere) the unit
- * is announced again with `detail.end`, so the pane can bring the rest of
- * it into view; nobody else scrolls for that.
+ * view as before, and the word is not followed. When another unit starts
+ * speaking (the last one was read, hurried, or the reading goes on to a line
+ * spoken elsewhere) the unit left is announced again with `detail.end`, so the
+ * pane can bring the rest of it into view; nobody else scrolls for that.
  *
  * A surface that holds another surface's words (the phone column, whose cards
  * are story turns with a read-along of their own) passes `options.within`: it
@@ -101,7 +101,7 @@ export function useReadAlong(
   }
 
   const scope = options.within ? `${options.within} ` : ''
-  /** The unit spoken when the watcher last ran, or null. */
+  /** The unit last spoken, or null before any. */
   let lastUnit: number | null = null
 
   /** Announce that the reading has left unit `unit`, so its end can be shown. */
@@ -129,11 +129,11 @@ export function useReadAlong(
         el.classList.remove('lq-w-now')
       })
       const now = speaking.value
-      const left = lastUnit
-      lastUnit = now?.unit ?? null
-      if (left !== null && left !== lastUnit && !options.within)
-        announceLeft(left)
+      // Left only once another unit speaks: a pause between parts is not leaving.
       if (!now) return
+      if (lastUnit !== null && lastUnit !== now.unit && !options.within)
+        announceLeft(lastUnit)
+      lastUnit = now.unit
       if (now.word >= 0) {
         const lit = root.value?.querySelectorAll(
           `${scope}[data-w="${now.offset + now.word}"]`,

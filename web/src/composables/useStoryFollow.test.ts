@@ -482,6 +482,11 @@ describe('useStoryFollow', () => {
       // A unit already whole in view leaves the pane where it is.
       leave(unit(900, 1000))
       expect(fake.story.scrollTop).toBe(800)
+
+      // A tall unit read past its top is never pulled back up to it.
+      fake.api.moveTo(1000, false)
+      leave(unit(900, 1500))
+      expect(fake.story.scrollTop).toBe(1000)
     })
   })
 })
