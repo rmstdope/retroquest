@@ -154,7 +154,7 @@ describe('LanternLayout', () => {
       kind: 'complete' as const,
       act: 'Act IV',
       title: 'The Long Night Ends',
-      body: 'Congratulations — you have completed Act 4!',
+      body: 'Congratulations — you have completed Act IV!',
       stats: { questsCompleted: 6, questsTotal: 6, spells: 14, places: 18 },
       final: true,
     }

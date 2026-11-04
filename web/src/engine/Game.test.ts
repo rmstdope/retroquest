@@ -257,7 +257,7 @@ describe('Game', () => {
       firstDone = true
       game.newTurn()
       expect(game.getActCompleteText()).toMatch(
-        /^A hook\.\n\nCongratulations — you have completed Act 1!/,
+        /^A hook\.\n\nCongratulations — you have completed Act I!/,
       )
       expect(
         new Act({ ...options, name: 'Plain' }).getCompletionHook(game.state),
@@ -298,11 +298,11 @@ describe('Game', () => {
       expect(game.currentAct).toBe(0)
       expect(game.state).toBe(firstState)
       expect(game.getResultText()).toContain(
-        'Congratulations — you have completed Act 1!',
+        'Congratulations — you have completed Act I!',
       )
-      expect(game.getResultText()).toContain('Get ready for Act 2')
+      expect(game.getResultText()).toContain('Get ready for Act II,')
       expect(game.getActCompleteText()).toMatch(
-        /^Congratulations — you have completed Act 1!\n\nTake a moment.*Act 2.*\.$/s,
+        /^Congratulations — you have completed Act I!\n\nTake a moment.*Act II,.*\.$/s,
       )
       game.newTurn()
       expect(game.getActCompleteText()).toBeNull()
@@ -313,6 +313,10 @@ describe('Game', () => {
       game.newTurn()
       secondDone = true
       game.newTurn()
+      expect(game.getActCompleteText()).toBe(
+        'Congratulations — you have completed Act II, ' +
+          'the final act of RetroQuest!',
+      )
       expect(game.isRunning).toBe(false)
       expect(game.acceptInput).toBe(false)
     })
@@ -544,11 +548,11 @@ describe('Game', () => {
       expect(game.currentAct).toBe(0)
       expect(game.getActName()).toBe('Act 1')
       expect(game.getResultText()).toContain(
-        'Congratulations — you have completed Act 1, ' +
+        'Congratulations — you have completed Act I, ' +
           'the final act of RetroQuest!',
       )
       expect(game.getActCompleteText()).toBe(
-        'Congratulations — you have completed Act 1, ' +
+        'Congratulations — you have completed Act I, ' +
           'the final act of RetroQuest!',
       )
       game.newTurn()

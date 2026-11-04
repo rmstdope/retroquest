@@ -25,7 +25,7 @@ const COMPLETE: Chapter = {
   kind: 'complete',
   act: 'Act I',
   title: 'The Call to Adventure',
-  body: 'Congratulations — you have completed Act 1!',
+  body: 'Congratulations — you have completed Act I!',
   stats: { questsCompleted: 10, questsTotal: 11, spells: 4, places: 15 },
   nextAct: 'Act II',
 }
