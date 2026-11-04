@@ -22,6 +22,7 @@ import {
   FLAG_PATCHES_RETURNED,
   FLAG_PATCHES_STAYED_WITH_GRANDMOTHER,
   FLAG_RUSTY_HOE_SECOND_COIN_FOUND,
+  TRIGGER_PATCHES_RETURNS,
 } from '../Act1StoryFlags'
 
 /** Python's str.capitalize(): first character upper-cased, the rest lower-cased. */
@@ -158,6 +159,7 @@ export class Shopkeeper extends Character {
    */
   private welcomePatchesHome(gameState: GameState): string {
     gameState.setStoryFlag(FLAG_PATCHES_RETURNED, true)
+    gameState.fireSound(TRIGGER_PATCHES_RETURNS)
     gameState.setStoryFlag(FLAG_MET_HEMLOCK, true)
     gameState.currentRoom.addCharacter(new Patches())
     const paid = !gameState.getStoryFlag(FLAG_RUSTY_HOE_SECOND_COIN_FOUND)

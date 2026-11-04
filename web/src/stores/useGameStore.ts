@@ -10,7 +10,12 @@ import type {
   RoomWare,
 } from '@/types/bridge'
 import type { useBridge } from '@/composables/useBridge'
-import { LOADED_ROOM, normalizeSaveName, type RoomDescription } from '@/engine'
+import {
+  LOADED_ROOM,
+  normalizeSaveName,
+  type RoomDescription,
+  type SoundFiring,
+} from '@/engine'
 import { inventoryChanges, type Chip } from '@/lantern/inventoryChanges'
 import { toQuestNews, type QuestNews } from '@/lantern/questNews'
 import {
@@ -294,10 +299,23 @@ export const useGameStore = defineStore('game', () => {
   /** That room's sound state now, which `musicSoundState` takes on release. */
   let latestSoundState = ''
 
-  /** The music moves to the room the engine plays in now, with its sound state. */
+  /** The sound triggers the game fired and the music's room has not taken yet. */
+  let latestSoundFirings: SoundFiring[] = []
+  /**
+   * The sound triggers fired by the latest commands, each with its room's
+   * key, published as the music moves to the room (a new list each time, never
+   * repeated).
+   */
+  const musicSoundFirings = ref<SoundFiring[]>([])
+
+  /** The music moves to the room the engine plays in now, with its sound state and the triggers fired. */
   function moveMusic(): void {
     musicRoomKey.value = latestRoomKey
     musicSoundState.value = latestSoundState
+    if (latestSoundFirings.length > 0) {
+      musicSoundFirings.value = latestSoundFirings
+      latestSoundFirings = []
+    }
   }
 
   /** The picture of the room the player is in (follows the held music room, so it changes as the narration reaches the new scene). */
@@ -953,6 +971,10 @@ export const useGameStore = defineStore('game', () => {
     actCast.value = b.controller.getActCharacters()
     latestRoomKey = isIntroShowing() ? '' : place.roomKey
     latestSoundState = isIntroShowing() ? '' : place.soundState
+    latestSoundFirings = [
+      ...latestSoundFirings,
+      ...b.controller.takeSoundFirings(),
+    ]
     if (!musicHeld) moveMusic()
   }
 
@@ -1337,6 +1359,7 @@ export const useGameStore = defineStore('game', () => {
     musicActName,
     musicRoomKey,
     musicSoundState,
+    musicSoundFirings,
     roomPicture,
     portraitFor,
     heldTurn,

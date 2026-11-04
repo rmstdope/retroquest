@@ -51,23 +51,43 @@ describe('sceneClips', () => {
     ])
   })
 
-  it('leaves out a row with no chosen take, and one the game fires', () => {
+  it('leaves out a row with no chosen take', () => {
     expect(
       sceneClips(
         {
           effects: [
             { id: 'hearth-fire', play: { mode: 'loop' }, level: 1 },
-            {
-              id: 'rain',
-              play: { mode: 'trigger', trigger: 'door-opens' },
-              level: 1,
-            },
             { id: 'toString', play: { mode: 'loop' }, level: 1 },
           ],
         },
         effects,
       ),
     ).toEqual([])
+  })
+
+  it('keeps a row the game fires as a clip waiting for its trigger', () => {
+    expect(
+      sceneClips(
+        {
+          effects: [
+            {
+              id: 'rain',
+              play: { mode: 'trigger', trigger: 'door-opens' },
+              state: 'storm',
+              level: 2,
+            },
+          ],
+        },
+        effects,
+      ),
+    ).toEqual([
+      {
+        url: generated + effects.rain.file,
+        play: { mode: 'trigger', trigger: 'door-opens' },
+        state: 'storm',
+        volume: 2,
+      },
+    ])
   })
 
   it('plays nothing in a scene the mix has no entry for', () => {

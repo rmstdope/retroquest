@@ -390,4 +390,36 @@ describe('GameState', () => {
       expect(state.virtues).toEqual(['mercy', 'mercy', 'truth'])
     })
   })
+  describe('sound triggers', () => {
+    /** A room that declares the trigger 'bell'. */
+    class BellRoom extends Room {
+      override soundTriggers(): readonly string[] {
+        return ['bell']
+      }
+    }
+
+    it('records a declared trigger with the key of the room it was fired in', () => {
+      const bells = new BellRoom({ name: 'Bells', description: 'Ding.' })
+      const state = new GameState(bells, { BellRoom: bells }, [])
+      state.fireSound('bell')
+      expect(state.takeFiredSounds()).toEqual([
+        { roomKey: 'BellRoom', trigger: 'bell' },
+      ])
+    })
+
+    it('ignores a trigger the room does not declare', () => {
+      const state = new GameState(room, { TestRoom: room }, [])
+      state.fireSound('bell')
+      expect(state.takeFiredSounds()).toEqual([])
+    })
+
+    it('hands each firing over once', () => {
+      const bells = new BellRoom({ name: 'Bells', description: 'Ding.' })
+      const state = new GameState(bells, { BellRoom: bells }, [])
+      state.fireSound('bell')
+      state.fireSound('bell')
+      expect(state.takeFiredSounds()).toHaveLength(2)
+      expect(state.takeFiredSounds()).toEqual([])
+    })
+  })
 })

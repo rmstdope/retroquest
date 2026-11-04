@@ -10,6 +10,7 @@ import {
   FLAG_PATCHES_STAYED_WITH_GRANDMOTHER,
   FLAG_PRIEST_TALKED_TO,
   FLAG_RUSTY_HOE_SECOND_COIN_FOUND,
+  TRIGGER_PATCHES_RETURNS,
 } from '../Act1StoryFlags'
 import { Coin } from '../items/Coin'
 import { Bread } from '../items/Bread'
@@ -239,6 +240,20 @@ describe('Hemlock and his missing cat', () => {
     expect(game.commandParser.parse('buy rope from shopkeeper')).toContain(
       'You receive a [item_name]rope[/item_name]',
     )
+  })
+
+  it("fires the store's patches-returns sound trigger as Patches comes home, once", () => {
+    const game = gameInStore({ shopOpen: false })
+    game.state.setStoryFlag(FLAG_PATCHES_FOUND, true)
+    expect(game.state.takeFiredSounds()).toEqual([])
+
+    game.commandParser.parse('talk to shopkeeper')
+
+    expect(game.state.takeFiredSounds()).toEqual([
+      { roomKey: 'GeneralStore', trigger: TRIGGER_PATCHES_RETURNS },
+    ])
+    game.commandParser.parse('talk to shopkeeper')
+    expect(game.state.takeFiredSounds()).toEqual([])
   })
 
   it('takes Patches back first when Elior tries to buy while carrying her', () => {

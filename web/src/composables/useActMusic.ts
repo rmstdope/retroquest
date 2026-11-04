@@ -61,7 +61,9 @@ const MEDIA_KEYS: readonly MediaSessionAction[] = ['play', 'pause', 'stop']
  * under music that carries on swaps them for the next room's. The effects
  * follow the room's sound state (`musicSoundState`, '' read as the scenes'
  * `plain`), held and released with the music's room: a whir stops as the
- * mechanism is jammed. With the effects off, none are fetched; a clip shared
+ * mechanism is jammed. A trigger the game fires in the room sounds, once each
+ * time, the effects its mix binds to it, as the narration reaches the scene
+ * (`musicSoundFirings`); it is not kept for effects not yet loaded. With the effects off, none are fetched; a clip shared
  * by the last two rooms is decoded once.
  *
  * When the calling component's scope ends, the music stops and the
@@ -74,6 +76,7 @@ export function useActMusic(): ReturnType<typeof useMusic> {
     musicActName,
     musicRoomKey,
     musicSoundState,
+    musicSoundFirings,
     showTitle,
     scenePicture,
   } = storeToRefs(useGameStore())
@@ -160,6 +163,16 @@ export function useActMusic(): ReturnType<typeof useMusic> {
   }
   watch([musicActName, musicRoomKey, musicSoundState], followSoundState, {
     immediate: true,
+  })
+  /** Sounds the effects bound to each trigger the game fired in the music's room. */
+  watch(musicSoundFirings, (firings) => {
+    for (const { roomKey, trigger } of firings) {
+      if (roomKey !== musicRoomKey.value) continue
+      const scene = roomTrackId(musicActName.value, roomKey)
+      for (const entry of ambiences)
+        if (entry.scene === scene && !entry.ambience.disposed)
+          entry.ambience.fire(trigger)
+    }
   })
   watch(effectsLevel, (level) => {
     if (effectsBus) effectsBus.gain.value = level

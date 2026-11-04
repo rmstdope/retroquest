@@ -48,11 +48,17 @@ describe('actScenes', () => {
     expect(byId.get('act1-old-mill')?.states).toEqual(['whirring', 'jammed'])
   })
 
-  it('declares no states for a room that always sounds the same, and no triggers yet', () => {
+  it('declares no states for a room that always sounds the same, and no triggers where none are fired', () => {
     expect(byId.get('act1-the-dream')).toMatchObject({
       states: [],
       triggers: [],
     })
+  })
+
+  it('lists the triggers a room declares', () => {
+    expect(byId.get('act1-general-store')?.triggers).toEqual([
+      'patches-returns',
+    ])
   })
 
   it('gives every scene, state and trigger a slug, unique across the game', () => {

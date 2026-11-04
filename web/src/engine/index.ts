@@ -1,7 +1,7 @@
 export { Act, type ActOptions } from './Act'
 export { Character, type CharacterOptions } from './Character'
 export { GameState } from './GameState'
-export type { QuestChanges } from './GameState'
+export type { QuestChanges, SoundFiring } from './GameState'
 export { Item, type ItemOptions } from './Item'
 export {
   Quest,

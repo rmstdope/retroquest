@@ -115,6 +115,74 @@ describe('Ambience', () => {
     expect(sourcesOf(strike)).toHaveLength(1)
   })
 
+  describe('triggers', () => {
+    const creak = { duration: 1 } as unknown as AudioBuffer
+    const purr = { duration: 6 } as unknown as AudioBuffer
+
+    /** An ambience with a creak on the trigger 'door-opens' and a purr on it only in the state 'cat-home'. */
+    function store(): Ambience {
+      return new Ambience(
+        ctx as unknown as AudioContext,
+        [
+          {
+            buffer: creak,
+            play: { mode: 'trigger', trigger: 'door-opens' },
+            volume: 2,
+          },
+          {
+            buffer: purr,
+            play: { mode: 'trigger', trigger: 'door-opens' },
+            state: 'cat-home',
+          },
+          { buffer: rain, play: { mode: 'loop' } },
+        ],
+        bus,
+      )
+    }
+
+    it('waits silently until the game fires the trigger', () => {
+      store().play()
+      vi.advanceTimersByTime(60_000)
+      expect(sourcesOf(creak)).toHaveLength(0)
+    })
+
+    it('plays the clips bound to it once each time it is fired, not the others', () => {
+      const ambience = store()
+      ambience.play()
+      ambience.fire('door-opens')
+      expect(sourcesOf(creak)).toHaveLength(1)
+      expect(sourcesOf(creak)[0].loop).toBe(false)
+      expect(sourcesOf(creak)[0].start).toHaveBeenCalledTimes(1)
+      expect(sourcesOf(rain)).toHaveLength(1)
+      ambience.fire('door-opens')
+      expect(sourcesOf(creak)).toHaveLength(2)
+      ambience.fire('cat-wakes')
+      expect(sourcesOf(creak)).toHaveLength(2)
+    })
+
+    it('plays a clip with a state only while the scene is in it', () => {
+      const ambience = store()
+      ambience.play()
+      ambience.fire('door-opens')
+      expect(sourcesOf(purr)).toHaveLength(0)
+      ambience.setState('cat-home')
+      ambience.fire('door-opens')
+      expect(sourcesOf(purr)).toHaveLength(1)
+    })
+
+    it('is not heard before play, after pause, or while the browser holds the sound back', () => {
+      const ambience = store()
+      ambience.fire('door-opens')
+      ambience.play()
+      ctx.state = 'suspended'
+      ambience.fire('door-opens')
+      ctx.state = 'running'
+      ambience.pause()
+      ambience.fire('door-opens')
+      expect(sourcesOf(creak)).toHaveLength(0)
+    })
+  })
+
   it('plays into its output at the envelope it follows', () => {
     const ambience = storm()
     expect(ctx.gains[0].connect).toHaveBeenCalledWith(bus)

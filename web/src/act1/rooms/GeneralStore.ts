@@ -9,6 +9,7 @@ import {
   FLAG_PATCHES_RETURNED,
   FLAG_PATCHES_STAYED_WITH_GRANDMOTHER,
   FLAG_RUSTY_HOE_SECOND_COIN_FOUND,
+  TRIGGER_PATCHES_RETURNS,
 } from '../Act1StoryFlags'
 
 const SHUT_TEXT =
@@ -53,6 +54,11 @@ export class GeneralStore extends Room {
   /** The room's sound states, the one it starts in first. */
   override soundStates(): readonly string[] {
     return ['', GeneralStore.SOUND_CAT_HOME]
+  }
+
+  /** The sound triggers the store can fire. */
+  override soundTriggers(): readonly string[] {
+    return [TRIGGER_PATCHES_RETURNS]
   }
 
   /**

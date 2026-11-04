@@ -48,8 +48,29 @@ class GemQuest extends Quest {
 /** The hall's sound state once the gem has been taken from it. */
 export const HALL_GEM_TAKEN = 'gem-taken'
 
-/** A hall that sounds different once its gem has been taken. */
+/** The sound trigger the hall fires when its gem is picked up. */
+export const HALL_CHIME = 'chime'
+
+/** A gem that chimes in the hall when it is picked up. */
+class ChimingGem extends Item {
+  constructor() {
+    super({ name: GEM, description: 'Shiny.', canBeCarried: true })
+  }
+
+  /** Fires the hall's chime. */
+  override pickedUp(gameState: GameState): string {
+    gameState.fireSound(HALL_CHIME)
+    return ''
+  }
+}
+
+/** A hall that sounds different once its gem has been taken, and can chime. */
 class Hall extends Room {
+  /** The hall's one sound trigger. */
+  override soundTriggers(): readonly string[] {
+    return [HALL_CHIME]
+  }
+
   /** `HALL_GEM_TAKEN` once the gem is gone from the hall; '' before. */
   override soundState(_gameState: GameState): string {
     return this.getItemByName(GEM) ? '' : HALL_GEM_TAKEN
@@ -66,14 +87,12 @@ class HoldAct extends Act {
           name: 'Hall',
           description: 'A quiet hall.',
           exits: { north: 'Garden' },
-          items: [
-            new Item({ name: GEM, description: 'Shiny.', canBeCarried: true }),
-          ],
+          items: [new ChimingGem()],
         }),
         Garden: new Room({ name: 'Garden', description: 'A green garden.' }),
       },
       quests: [new FirstQuest(), new GemQuest()],
-      classes: { FirstQuest, GemQuest, Hall },
+      classes: { FirstQuest, GemQuest, Hall, ChimingGem },
       musicFile: '',
       musicInfo: '',
     })

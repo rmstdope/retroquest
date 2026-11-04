@@ -510,6 +510,16 @@ describe('Game', () => {
       expect(game.currentMusicPlace().roomKey).toBe('VegetableField')
     })
 
+    it('drops the sound triggers a save held, which sounded when they were fired', () => {
+      const game = makeGame()
+      game.newTurn()
+      game.newTurn()
+      game.state.firedSounds = [{ roomKey: 'EliorsCottage', trigger: 'bell' }]
+      const data = game.toSaveData()
+      game.loadSaveData(data)
+      expect(game.state.takeFiredSounds()).toEqual([])
+    })
+
     it('enters game over when the last act completes, staying in that act', () => {
       const only = new Act({
         name: 'Only',
