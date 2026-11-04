@@ -59,6 +59,11 @@ export class HiddenGlade extends Room {
     return this.lightSpellCast ? HiddenGlade.SOUND_LIT : HiddenGlade.SOUND_DIM
   }
 
+  /** The room's sound states, the one it starts in first. */
+  override soundStates(): readonly string[] {
+    return [HiddenGlade.SOUND_DIM, HiddenGlade.SOUND_LIT]
+  }
+
   /**
    * The glade's text, built from its dynamic segments: dim or sunlit, the
    * glowing amulet, and the Deer and Rare Flower once they have appeared.

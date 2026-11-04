@@ -1,0 +1,62 @@
+[
+  {
+    "id": "act4-fortress-gates",
+    "name": "Fortress Gates",
+    "states": [],
+    "triggers": []
+  },
+  {
+    "id": "act4-outer-courtyard",
+    "name": "Outer Courtyard",
+    "states": [],
+    "triggers": []
+  },
+  {
+    "id": "act4-mirror-labyrinth",
+    "name": "Mirror Labyrinth",
+    "states": [],
+    "triggers": []
+  },
+  {
+    "id": "act4-hall-of-echoes",
+    "name": "Hall of Echoes",
+    "states": [],
+    "triggers": []
+  },
+  {
+    "id": "act4-tower-of-shadows",
+    "name": "Tower of Shadows",
+    "states": [],
+    "triggers": []
+  },
+  {
+    "id": "act4-chamber-of-whispers",
+    "name": "Chamber of Whispers",
+    "states": [],
+    "triggers": []
+  },
+  {
+    "id": "act4-memory-vault",
+    "name": "Memory Vault",
+    "states": [],
+    "triggers": []
+  },
+  {
+    "id": "act4-parents-vault",
+    "name": "Parents' Vault",
+    "states": [],
+    "triggers": []
+  },
+  {
+    "id": "act4-throne-chamber",
+    "name": "Throne Chamber",
+    "states": [],
+    "triggers": []
+  },
+  {
+    "id": "act4-willowbrook-field",
+    "name": "Willowbrook Field",
+    "states": [],
+    "triggers": []
+  }
+]

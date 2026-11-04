@@ -1,0 +1,110 @@
+[
+  {
+    "id": "act2-mountain-path",
+    "name": "Mountain Path",
+    "states": [],
+    "triggers": []
+  },
+  {
+    "id": "act2-greendale-gates",
+    "name": "Greendale Gates",
+    "states": [],
+    "triggers": []
+  },
+  {
+    "id": "act2-main-square",
+    "name": "Main Square",
+    "states": [],
+    "triggers": []
+  },
+  {
+    "id": "act2-market-district",
+    "name": "Market District",
+    "states": [],
+    "triggers": []
+  },
+  {
+    "id": "act2-silver-stag-inn",
+    "name": "The Silver Stag Inn",
+    "states": [],
+    "triggers": []
+  },
+  {
+    "id": "act2-inn-rooms",
+    "name": "Inn Rooms",
+    "states": [],
+    "triggers": []
+  },
+  {
+    "id": "act2-merchants-warehouse",
+    "name": "Merchant's Warehouse",
+    "states": [],
+    "triggers": []
+  },
+  {
+    "id": "act2-castle-approach",
+    "name": "Castle Approach",
+    "states": [],
+    "triggers": []
+  },
+  {
+    "id": "act2-castle-courtyard",
+    "name": "Castle Courtyard",
+    "states": [],
+    "triggers": []
+  },
+  {
+    "id": "act2-great-hall",
+    "name": "Great Hall",
+    "states": [],
+    "triggers": []
+  },
+  {
+    "id": "act2-residential-quarter",
+    "name": "Residential Quarter",
+    "states": [],
+    "triggers": []
+  },
+  {
+    "id": "act2-healers-house",
+    "name": "Healer's House",
+    "states": [],
+    "triggers": []
+  },
+  {
+    "id": "act2-hidden-library",
+    "name": "Hidden Library",
+    "states": [],
+    "triggers": []
+  },
+  {
+    "id": "act2-forest-transition",
+    "name": "Forest Transition",
+    "states": [],
+    "triggers": []
+  },
+  {
+    "id": "act2-forest-entrance",
+    "name": "Forest Entrance",
+    "states": [],
+    "triggers": []
+  },
+  {
+    "id": "act2-ancient-grove",
+    "name": "Ancient Grove",
+    "states": [],
+    "triggers": []
+  },
+  {
+    "id": "act2-whispering-glade",
+    "name": "Whispering Glade",
+    "states": [],
+    "triggers": []
+  },
+  {
+    "id": "act2-heart-of-the-forest",
+    "name": "Heart of the Forest",
+    "states": [],
+    "triggers": []
+  }
+]
