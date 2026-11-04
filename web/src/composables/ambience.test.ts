@@ -166,6 +166,19 @@ describe('Ambience', () => {
       expect(sourcesOf(bell)).toHaveLength(1)
     })
 
+    it('plays as soon as the browser lets the sound go, while the music plays on', () => {
+      const ambience = shop()
+      ctx.state = 'suspended'
+      ambience.play()
+      vi.advanceTimersByTime(5000)
+      expect(sourcesOf(bell)).toHaveLength(0)
+      ctx.state = 'running'
+      vi.advanceTimersByTime(250)
+      expect(sourcesOf(bell)).toHaveLength(1)
+      vi.advanceTimersByTime(60_000)
+      expect(sourcesOf(bell)).toHaveLength(1)
+    })
+
     it('still plays when the browser held the sound back as it was due', () => {
       const ambience = shop()
       ctx.state = 'suspended'

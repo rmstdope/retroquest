@@ -20,6 +20,9 @@ export type AmbientClip = { buffer: AudioBuffer } & EffectPlay & EffectWhen
 /** Where an effect's clip is, how it plays and in which state. */
 export type AmbientClipSource = { url: string } & EffectPlay & EffectWhen
 
+/** How often a clip played once looks again while the browser holds the sound back, in seconds. */
+const ONCE_RETRY_SECONDS = 0.25
+
 /** The effects of one music track, played on Web Audio through one gain into `output`. */
 export class Ambience {
   private readonly gain: GainNode
@@ -161,15 +164,19 @@ export class Ambience {
 
   /**
    * Plays `clip` after `seconds`, the one time it sounds for this ambience.
-   * A pause before then, or the browser holding the sound back as it is due,
-   * leaves it for the next play. Going straight back into a room whose music
-   * is still fading out picks up that same ambience, so its clip played once
-   * does not sound again.
+   * While the browser holds the sound back as it is due, it looks again every
+   * `ONCE_RETRY_SECONDS` and plays as soon as the sound is let go; a pause
+   * before then leaves it for the next play. Going straight back into a room
+   * whose music is still fading out picks up that same ambience, so its clip
+   * played once does not sound again.
    */
   private once(clip: AmbientClip, seconds: number): void {
     if (this.sounded.has(clip)) return
     this.after(clip, seconds * 1000, () => {
-      if (this.context.state !== 'running') return
+      if (this.context.state !== 'running') {
+        this.once(clip, ONCE_RETRY_SECONDS)
+        return
+      }
       this.sounded.add(clip)
       this.sound(clip, false)
     })
