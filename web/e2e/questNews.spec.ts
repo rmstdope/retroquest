@@ -15,9 +15,29 @@ async function startAct1(
     .click({ position: { x: 300, y: 300 } })
 }
 
-/** Push a turn with two pieces of quest news, as the engine reports them. */
-async function pushNews(page: Page): Promise<void> {
-  await page.evaluate(() => {
+/** A checklist quest's text, as Preparing for the road starts out. */
+const CHECKLIST =
+  '[character_name]Mira[/character_name] has tasked you with preparing for your journey. ' +
+  'She says you will need: \n' +
+  '[pending] * Warm clothing[/pending]\n' +
+  '[pending] * Magical protection[/pending]\n' +
+  '[pending] * Food for the road (any four kinds: bread, apple, egg, carrot, berries or fish)[/pending]'
+
+/** Push a turn with quest news, as the engine reports them: by default a completed and a new quest. */
+async function pushNews(
+  page: Page,
+  quests: unknown[] = [
+    {
+      kind: 'completed',
+      name: 'Hint of Magic',
+      main: false,
+      text: 'It stayed.',
+      progress: { completed: 1, total: 11 },
+    },
+    { kind: 'new', name: 'Magic for real', main: false, text: 'Go on.' },
+  ],
+): Promise<void> {
+  await page.evaluate((quests) => {
     const app = (
       document.querySelector('#app') as unknown as {
         __vue_app__: {
@@ -38,18 +58,9 @@ async function pushNews(page: Page): Promise<void> {
       gained: [],
       lost: [],
       arrival: null,
-      quests: [
-        {
-          kind: 'completed',
-          name: 'Hint of Magic',
-          main: false,
-          text: 'It stayed.',
-          progress: { completed: 1, total: 11 },
-        },
-        { kind: 'new', name: 'Magic for real', main: false, text: 'Go on.' },
-      ],
+      quests,
     })
-  })
+  }, quests)
 }
 
 const middle = (page: Page) => page.getByTestId('arrival-on-picture')
@@ -99,4 +110,45 @@ test.describe('quest news told in the middle of the picture', () => {
     )
     await expect(middle(page).getByText('Tap to continue').last()).toBeVisible()
   })
+
+  for (const [width, height] of [
+    [1512, 813],
+    [390, 844],
+  ]) {
+    test(`wraps a checklist quest's intro and needs inside the picture at ${width} wide`, async ({
+      page,
+    }) => {
+      await startAct1(page, width, height)
+      await pushNews(page, [
+        {
+          kind: 'new',
+          name: 'Preparing for the road',
+          main: false,
+          text: CHECKLIST,
+        },
+      ])
+      await expect(middle(page).locator('.lq-news-name').last()).toHaveText(
+        'Preparing for the road',
+      )
+      const box = middle(page).locator('.lq-arrival-text').last()
+      await expect(box).toBeVisible()
+      await expect(box.locator('.lq-quest-checklist li')).toHaveCount(3)
+      const overflow = await box.evaluate((text) => {
+        // While the narrator speaks, the read-along puts each word in a span
+        // (wrapWords); lay the card out as it is then.
+        text.querySelectorAll('.lq-quest-para, li').forEach((el) => {
+          el.innerHTML = el.innerHTML.replace(
+            /([^\s<>]+)(?![^<]*>)/g,
+            '<span class="lq-w">$1</span>',
+          )
+        })
+        const edge = text.getBoundingClientRect()
+        return [...text.querySelectorAll('.lq-quest-para, li')]
+          .map((el) => el.getBoundingClientRect())
+          .filter((r) => r.left < edge.left - 1 || r.right > edge.right + 1)
+          .map((r) => `${Math.round(r.left)}..${Math.round(r.right)}`)
+      })
+      expect(overflow).toEqual([])
+    })
+  }
 })
