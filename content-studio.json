@@ -59,7 +59,8 @@
       "lock": "music/music.lock.json",
       "clips": "web/public/audio/music/generated",
       "manifest": "web/public/audio/music/generated/manifest.json"
-    }
+    },
+    "model": "careful"
   },
   "images": {
     "paths": {
@@ -78,7 +79,8 @@
       "lock": "effects/effects.lock.json",
       "clips": "web/public/audio/soundeffects/generated",
       "manifest": "web/public/audio/soundeffects/generated/manifest.json"
-    }
+    },
+    "model": "open-1"
   },
   "takeFade": 0.5
 }
