@@ -1024,6 +1024,50 @@ describe('useMusic on Web Audio', () => {
       expect(ctx.sources[0].start).toHaveBeenCalled()
     })
 
+    /** An ambience source for `a.mp3` whose rain arrives only when `arrive` is called. */
+    function lateRainOnA(): {
+      source: (file: string, context: AudioContext) => Promise<Ambience | null>
+      arrive: () => void
+    } {
+      let arrive = (): void => {}
+      const source = (file: string, context: AudioContext) =>
+        file !== 'a.mp3'
+          ? Promise.resolve(null)
+          : new Promise<Ambience | null>((resolve) => {
+              arrive = () => void rainOnA(file, context).then(resolve)
+            })
+      return { source, arrive: () => arrive() }
+    }
+
+    it('starts the music without waiting for its effects, and adds them as they arrive', async () => {
+      useSettingsStore().musicVolume = 50
+      const late = lateRainOnA()
+      const music = useMusic(audio, ref(false), late.source)
+      music.loadTrack('a.mp3', 'A')
+      await ready()
+      expect(ctx.sources).toHaveLength(1)
+      expect(ctx.sources[0].start).toHaveBeenCalled()
+      late.arrive()
+      await ready()
+      expect(rainSources()).toHaveLength(1)
+      expect(rainSources()[0].start).toHaveBeenCalled()
+      expect(rainGain()).toBeCloseTo(1)
+    })
+
+    it('lets go of effects that arrive after their music is gone', async () => {
+      vi.useFakeTimers()
+      const late = lateRainOnA()
+      const music = useMusic(audio, ref(false), late.source)
+      music.loadTrack('a.mp3', 'A')
+      await vi.advanceTimersByTimeAsync(0)
+      music.loadTrack('b.mp3', 'B')
+      await vi.advanceTimersByTimeAsync(MUSIC_CROSSFADE_MS + 100)
+      late.arrive()
+      await vi.advanceTimersByTimeAsync(0)
+      expect(rainSources()).toHaveLength(0)
+      expect(ctx.gains[made[0].gain].disconnect).toHaveBeenCalled()
+    })
+
     it('lets go of the effects of a track the player left before it was ready', async () => {
       const music = useMusic(audio, ref(false), rainOnA)
       music.loadTrack('a.mp3', 'A')

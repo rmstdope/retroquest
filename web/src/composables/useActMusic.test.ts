@@ -358,6 +358,8 @@ describe('useActMusic with the effects of a room', () => {
   const DREAM_MUSIC = {
     'act1-the-dream': { file: 'dream.mp3', duration: 60 },
     'act1-old-mill': { file: 'mill.mp3', duration: 60 },
+    'act1-abandoned-shed': { file: 'shed.mp3', duration: 60 },
+    'act1-eliors-cottage': { file: 'cottage.mp3', duration: 60 },
   }
   const EFFECTS = {
     rain: { file: 'rain.mp3', duration: 20 },
@@ -388,12 +390,17 @@ describe('useActMusic with the effects of a room', () => {
     for (let i = 0; i < 3; i++) await settle()
   }
 
-  /** The gain every effect plays into: the one an ambience's own gain connects to. */
+  /**
+   * The gain every effect plays into: the newest one out to the speakers that
+   * an ambience's own gain connects to (the context lives on across tests).
+   */
   function effectsBus() {
     return [...ctx.gains]
       .reverse()
-      .find((gain) =>
-        ctx.gains.some((other) => other.connect.mock.calls[0]?.[0] === gain),
+      .find(
+        (gain) =>
+          gain.connect.mock.calls[0]?.[0] === ctx.destination &&
+          ctx.gains.some((other) => other.connect.mock.calls[0]?.[0] === gain),
       )
   }
 
@@ -467,6 +474,54 @@ describe('useActMusic with the effects of a room', () => {
     await nextTick()
     // The mill fades out whole, its whir with it, while The Dream comes in.
     for (const loop of mill) expect(loop.stop).not.toHaveBeenCalled()
+    scope.stop()
+  })
+
+  /** How often the clip file `name` was fetched. */
+  function fetchesOf(name: string): number {
+    return vi
+      .mocked(fetch)
+      .mock.calls.filter(
+        ([url]) => String(url) === `/audio/soundeffects/generated/${name}`,
+      ).length
+  }
+
+  /** Walks the music to Act I's room `roomKey` and lets it settle. */
+  async function walkTo(roomKey: string): Promise<void> {
+    const game = useGameStore()
+    game.musicRoomKey = roomKey
+    game.musicSoundState = ''
+    await ready()
+  }
+
+  it('decodes a clip shared by two rooms once, walking from one to the other', async () => {
+    const scope = await startIn('OldMill', 'whirring')
+    await walkTo('AbandonedShed')
+    expect(fetchesOf('wind.mp3')).toBe(1)
+    scope.stop()
+  })
+
+  it('keeps the clips of the last two rooms only', async () => {
+    const scope = await startIn('OldMill', 'whirring')
+    await walkTo('TheDream')
+    await walkTo('EliorsCottage')
+    await walkTo('AbandonedShed')
+    expect(fetchesOf('wind.mp3')).toBe(2)
+    scope.stop()
+  })
+
+  it('fetches and plays no effects at all while effects are off', async () => {
+    useSettingsStore().effectsOn = false
+    const scope = await startInTheDream()
+    ctx = FakeAudioContext.last
+    const fetched = vi.mocked(fetch).mock.calls.map(([url]) => String(url))
+    expect(
+      fetched.some(
+        (url) => url.includes('/soundeffects/') && url.endsWith('.mp3'),
+      ),
+    ).toBe(false)
+    // Only the music's own loop.
+    expect(loopsSounding()).toHaveLength(1)
     scope.stop()
   })
 

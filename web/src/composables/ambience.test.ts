@@ -246,6 +246,44 @@ describe('Ambience', () => {
       expect(sourcesOf(wind)).toHaveLength(1)
     })
 
+    /** The gain a source plays through: its own, the one it connects to. */
+    function gainOf(source: FakeSource) {
+      return source.connect.mock.calls[0][0] as unknown as {
+        gain: {
+          setValueAtTime: ReturnType<typeof vi.fn>
+          linearRampToValueAtTime: ReturnType<typeof vi.fn>
+        }
+      }
+    }
+
+    it('fades the old state’s loop out and the new one’s in, rather than cutting', () => {
+      const wail = { duration: 20 } as unknown as AudioBuffer
+      const ambience = new Ambience(
+        ctx as unknown as AudioContext,
+        [
+          { buffer: whir, loops: true, state: 'whirring' },
+          { buffer: wail, loops: true, state: 'jammed' },
+        ],
+        bus,
+      )
+      ambience.setState('whirring')
+      ambience.play()
+      ctx.currentTime = 10
+      ambience.setState('jammed')
+      const [old] = sourcesOf(whir)
+      expect(gainOf(old).gain.linearRampToValueAtTime).toHaveBeenCalledWith(
+        0,
+        10.3,
+      )
+      expect(old.stop).toHaveBeenCalledWith(10.3)
+      const [fresh] = sourcesOf(wail)
+      expect(gainOf(fresh).gain.setValueAtTime).toHaveBeenCalledWith(0, 10)
+      expect(gainOf(fresh).gain.linearRampToValueAtTime).toHaveBeenCalledWith(
+        1,
+        10.3,
+      )
+    })
+
     it('starts nothing when the state changes while paused, until it plays', () => {
       const ambience = mill()
       ambience.setState('jammed')
@@ -320,6 +358,32 @@ describe('AmbientVoice', () => {
     voice.pause()
     expect(music.pause).toHaveBeenCalled()
     expect(sourcesOf(rain)[0].stop).toHaveBeenCalled()
+  })
+
+  it('takes effects that arrive after the music started, at its present share', async () => {
+    const music = new FakeMusic()
+    const voice = new AmbientVoice(music, null, () => 1)
+    await voice.play()
+    voice.volume = 0.5
+    voice.attach(storm())
+    expect(sourcesOf(rain)[0].start).toHaveBeenCalled()
+    expect(ctx.gains[0].gain.value).toBeCloseTo(0.5)
+  })
+
+  it('keeps effects that arrive while the music is stopped for its next play', async () => {
+    const voice = new AmbientVoice(new FakeMusic(), null, () => 1)
+    voice.attach(storm())
+    expect(sourcesOf(rain)).toHaveLength(0)
+    await voice.play()
+    expect(sourcesOf(rain)).toHaveLength(1)
+  })
+
+  it('lets go of effects that arrive after it was let go of', () => {
+    const voice = new AmbientVoice(new FakeMusic(), null, () => 1)
+    voice.dispose()
+    voice.attach(storm())
+    expect(sourcesOf(rain)).toHaveLength(0)
+    expect(ctx.gains[0].disconnect).toHaveBeenCalled()
   })
 
   it('lets go of both on dispose', () => {

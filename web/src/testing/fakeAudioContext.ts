@@ -10,9 +10,13 @@ export class FakeSource {
   disconnect = vi.fn()
 }
 
-/** A fake gain node with a plain `gain.value`. */
+/** A fake gain node with a plain `gain.value` and recorded ramps. */
 export class FakeGain {
-  gain = { value: 1 }
+  gain = {
+    value: 1,
+    setValueAtTime: vi.fn(),
+    linearRampToValueAtTime: vi.fn(),
+  }
   connect = vi.fn()
   disconnect = vi.fn()
 }
@@ -24,6 +28,7 @@ export class FakeGain {
 export class FakeAudioContext {
   static last: FakeAudioContext
   state = 'suspended'
+  currentTime = 0
   destination = {}
   gains: FakeGain[] = []
   sources: FakeSource[] = []

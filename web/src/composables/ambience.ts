@@ -4,7 +4,7 @@
  * the room is in the state that has it. An `Ambience` plays the effects of
  * one track on Web Audio through one gain, into an output that sets the
  * player's effects level (`useActMusic`'s effects bus); `setState` follows
- * the room's sound state, stopping and starting only the clips that change.
+ * the room's sound state, fading out and in only the clips that change.
  * An `AmbientVoice` wraps the track's music voice with it, so the effects
  * start and stop with the music and follow every fade `useMusic` gives it (a
  * crossfade, a change through the dark, the title page's rise, the dip under
@@ -12,13 +12,16 @@
  * of its own.
  */
 import type { EffectPlay, EffectWhen } from '@/lantern/effectLists'
-import type { MusicVoice } from './musicVoice'
+import { fetchAudioBuffer, type MusicVoice } from './musicVoice'
 
 /** How one decoded effect plays (round and round, after a random wait again and again, or once), and in which state. */
 export type AmbientClip = { buffer: AudioBuffer } & EffectPlay & EffectWhen
 
 /** Where an effect's clip is, how it plays and in which state. */
 export type AmbientClipSource = { url: string } & EffectPlay & EffectWhen
+
+/** How long a clip fades in or out as the room's sound state changes, in seconds. */
+const STATE_FADE_SECONDS = 0.3
 
 /** How often a clip played once looks again while the browser holds the sound back, in seconds. */
 const ONCE_RETRY_SECONDS = 0.25
@@ -29,8 +32,12 @@ export class Ambience {
   private playing = false
   /** The room's sound state; a clip with a state plays only in it. */
   private state = ''
-  /** The sources sounding now, by clip: the loops and any one-shot under way. */
-  private sources: { clip: AmbientClip; node: AudioBufferSourceNode }[] = []
+  /** The sources sounding now, by clip, each through its own gain: the loops and any one-shot under way. */
+  private sources: {
+    clip: AmbientClip
+    node: AudioBufferSourceNode
+    level: GainNode
+  }[] = []
   /** The waits before each one-shot's next start, by clip. */
   private timers: {
     clip: AmbientClip
@@ -70,7 +77,8 @@ export class Ambience {
 
   /**
    * Takes the room's sound state. While playing, the clips of the old state
-   * stop and those of the new start; the clips that play in every state go on.
+   * fade out and those of the new fade in (`STATE_FADE_SECONDS`); the clips
+   * that play in every state go on.
    */
   setState(state: string): void {
     if (state === this.state) return
@@ -80,8 +88,8 @@ export class Ambience {
     for (const clip of this.clips) {
       const was = before.includes(clip)
       const is = this.playsNow(clip)
-      if (was && !is) this.stop(clip)
-      else if (!was && is) this.start(clip)
+      if (was && !is) this.stop(clip, true)
+      else if (!was && is) this.start(clip, true)
     }
   }
 
@@ -108,19 +116,31 @@ export class Ambience {
     return clip.state === undefined || clip.state === this.state
   }
 
-  /** Starts `clip` as it plays: round and round, after a random wait, or once. */
-  private start(clip: AmbientClip): void {
-    if (clip.loops) this.sound(clip, true)
+  /** Starts `clip` as it plays: round and round (fading in when `fade`), after a random wait, or once. */
+  private start(clip: AmbientClip, fade = false): void {
+    if (clip.loops) this.sound(clip, true, fade)
     else if ('afterSeconds' in clip) this.once(clip, clip.afterSeconds)
     else this.wait(clip, clip.everySeconds)
   }
 
-  /** Stops `clip`'s sources and its waits. */
-  private stop(clip: AmbientClip): void {
+  /** Stops `clip`'s waits and its sources: at once, or fading out when `fade`. */
+  private stop(clip: AmbientClip, fade = false): void {
     for (const { timer } of this.take(this.timers, clip)) clearTimeout(timer)
-    for (const { node } of this.take(this.sources, clip)) {
-      node.stop()
-      node.disconnect()
+    for (const { node, level } of this.take(this.sources, clip)) {
+      const letGo = (): void => {
+        node.disconnect()
+        level.disconnect()
+      }
+      if (!fade) {
+        node.stop()
+        letGo()
+        continue
+      }
+      const now = this.context.currentTime
+      level.gain.setValueAtTime(level.gain.value, now)
+      level.gain.linearRampToValueAtTime(0, now + STATE_FADE_SECONDS)
+      node.onended = letGo
+      node.stop(now + STATE_FADE_SECONDS)
     }
   }
 
@@ -182,18 +202,29 @@ export class Ambience {
     })
   }
 
-  /** Starts a source playing `clip` through the gain; a one-shot lets go of itself when it ends. */
-  private sound(clip: AmbientClip, loop: boolean): void {
+  /**
+   * Starts a source playing `clip` through its own gain into the ambience's,
+   * rising from silence when `fade`; a one-shot lets go of itself when it ends.
+   */
+  private sound(clip: AmbientClip, loop: boolean, fade = false): void {
     const node = this.context.createBufferSource()
     node.buffer = clip.buffer
     node.loop = loop
-    node.connect(this.gain)
-    const entry = { clip, node }
+    const level = this.context.createGain()
+    if (fade) {
+      const now = this.context.currentTime
+      level.gain.setValueAtTime(0, now)
+      level.gain.linearRampToValueAtTime(1, now + STATE_FADE_SECONDS)
+    }
+    node.connect(level)
+    level.connect(this.gain)
+    const entry = { clip, node, level }
     if (!loop)
       node.onended = () => {
         const index = this.sources.indexOf(entry)
         if (index >= 0) this.sources.splice(index, 1)
         node.disconnect()
+        level.disconnect()
       }
     node.start()
     this.sources.push(entry)
@@ -205,17 +236,37 @@ export class Ambience {
  * music, and each change of the music's volume is followed by the effects as
  * a share of `fullLevel` (the music's own volume setting, 0 to 1). With the
  * music turned all the way down the effects are silent too, as with the
- * music off.
+ * music off. The effects may come after the music has started (`attach`), so
+ * they never hold it back.
  */
 export class AmbientVoice implements MusicVoice {
-  /** Wraps `music` with `ambience`, which takes the music's present volume. */
+  /** Set once the voice is let go of; effects arriving later are let go of too. */
+  private gone = false
+
+  /** Wraps `music` with `ambience` (or none yet), which takes the music's present volume. */
   constructor(
     private readonly music: MusicVoice,
-    private readonly ambience: Ambience,
+    private ambience: Ambience | null,
     private readonly fullLevel: () => number,
   ) {
     this.volume = music.volume
   }
+
+  /**
+   * Adds effects that arrived after the music: at the music's present share,
+   * and sounding at once when the music does. After `dispose` they are let go of.
+   */
+  attach(ambience: Ambience): void {
+    if (this.gone) {
+      ambience.dispose()
+      return
+    }
+    this.ambience?.dispose()
+    this.ambience = ambience
+    this.follow()
+    if (!this.music.paused) ambience.play()
+  }
+
   /** The music's volume, 0 to 1. */
   get volume(): number {
     return this.music.volume
@@ -223,8 +274,7 @@ export class AmbientVoice implements MusicVoice {
   /** Sets the music's volume; the effects follow it as a share of the full level. */
   set volume(value: number) {
     this.music.volume = value
-    const full = this.fullLevel()
-    this.ambience.follow(full > 0 ? Math.min(1, Math.max(0, value / full)) : 0)
+    this.follow()
   }
   /** True while the music is not sounding. */
   get paused(): boolean {
@@ -233,39 +283,47 @@ export class AmbientVoice implements MusicVoice {
   /** Starts the music and its effects. */
   play(): Promise<void> {
     const started = this.music.play()
-    this.ambience.play()
+    this.ambience?.play()
     return started
   }
   /** Stops the music and its effects. */
   pause(): void {
     this.music.pause()
-    this.ambience.pause()
+    this.ambience?.pause()
   }
   /** Lets go of the music and its effects. */
   dispose(): void {
+    this.gone = true
     this.music.dispose()
-    this.ambience.dispose()
+    this.ambience?.dispose()
+  }
+
+  /** Sets the effects to the music's present share of its full level. */
+  private follow(): void {
+    const full = this.fullLevel()
+    const value = this.music.volume
+    this.ambience?.follow(full > 0 ? Math.min(1, Math.max(0, value / full)) : 0)
   }
 }
 
-/** Fetches and decodes each clip into an ambience playing into `output`, leaving out any that fails; null when none could be. */
+/** Gives the decoded clip at a URL; null when it cannot be had. */
+export type ClipLoader = (url: string) => Promise<AudioBuffer | null>
+
+/**
+ * Decodes each clip (through `load`, which may keep clips it has decoded
+ * before) into an ambience playing into `output`, leaving out any that fails;
+ * null when none could be.
+ */
 export async function prepareAmbience(
   context: AudioContext,
   sources: readonly AmbientClipSource[],
   output: AudioNode,
+  load: ClipLoader = (url) => fetchAudioBuffer(context, url),
 ): Promise<Ambience | null> {
   const clips = await Promise.all(
     sources.map(async ({ url, ...play }): Promise<AmbientClip | null> => {
-      try {
-        const response = await fetch(url)
-        if (!response.ok) return null
-        const buffer = await context.decodeAudioData(
-          await response.arrayBuffer(),
-        )
-        return { buffer, ...play }
-      } catch {
-        return null
-      }
+      const buffer = await load(url)
+      return buffer ? { buffer, ...play } : null
     }),
   )
   const ready = clips.filter((clip): clip is AmbientClip => clip !== null)

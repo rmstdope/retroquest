@@ -129,27 +129,24 @@ export function useMusic(
       )
       return
     }
-    // A loop (and its effects) is decoded first; the music playing goes on until it is ready.
-    void Promise.all([
-      prepareWebAudioVoice(context, urlFor(file)),
-      // Effects that fail to prepare never hold the music back.
-      ambienceFor(file, context).catch(() => null),
-    ]).then(([voice, ambience]) => {
-      if (id !== request || !voice) ambience?.dispose()
-      if (id !== request) {
+    // A loop is decoded first; the music playing goes on until it is ready.
+    // Its effects come when they are ready and never hold it back; effects
+    // that fail to prepare, or come after the loop is gone, are let go of.
+    const effects = ambienceFor(file, context).catch(() => null)
+    void prepareWebAudioVoice(context, urlFor(file)).then((voice) => {
+      if (id !== request || !voice) {
         voice?.dispose()
-        return
+        void effects.then((ambience) => ambience?.dispose())
+        if (id !== request) return
       }
-      startVoice(
-        file,
-        info,
-        voice && ambience
-          ? new AmbientVoice(voice, ambience, () => settings.musicVolume / 100)
-          : (voice ?? htmlVoiceFor(file)),
-        false,
-        fadeInMs,
-        through,
-      )
+      const next = voice
+        ? new AmbientVoice(voice, null, () => settings.musicVolume / 100)
+        : htmlVoiceFor(file)
+      startVoice(file, info, next, false, fadeInMs, through)
+      if (next instanceof AmbientVoice)
+        void effects.then((ambience) => {
+          if (ambience) next.attach(ambience)
+        })
     })
   }
 

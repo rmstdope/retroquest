@@ -44,7 +44,14 @@ export function ambientClipsFor(
   effects: ChosenManifest,
 ): AmbientClipSource[] {
   const track = trackOfTake(file, music)
-  if (track === null) return []
+  return track === null ? [] : ambientClipsAt(track, effects)
+}
+
+/** The chosen effects of `track`, each with how it plays and in which sound state; those with no chosen take are left out. */
+export function ambientClipsAt(
+  track: string,
+  effects: ChosenManifest,
+): AmbientClipSource[] {
   return ambienceAt(track).flatMap(({ id, ...play }) => {
     const take = effects[id]
     return take ? [{ url: GENERATED_EFFECTS_PATH + take.file, ...play }] : []
