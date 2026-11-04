@@ -1,5 +1,10 @@
 import { readFileSync } from 'node:fs'
 import { describe, expect, it } from 'vitest'
+import { Game, GameController } from '@/engine'
+import { Act1 } from '@/act1/Act1'
+import { ACT1_GOLDEN_PATH } from '@/act1/Act1GoldenPath'
+import { pathIndex } from '@/testing/gameHelpers'
+import { linesOfTurn, type WriterRule } from './narrationScript'
 import {
   ACT_NUMBERS,
   extractActImages,
@@ -62,5 +67,37 @@ describe('Act I off-path lines are in the narration script', () => {
     "The truth about what, love? You've lost me.",
   ])('has "%s"', (text) => {
     expect(texts).toContain(text)
+  })
+})
+
+/**
+ * Hemlock keeps the General Store shut until Patches is home, and the golden
+ * path only reaches the store with her in Elior's arms; every line the shut
+ * store can show must still be in the script, so it can be recorded.
+ */
+describe('Act I shut General Store lines are in the narration script', () => {
+  it('has every line Hemlock and the narrator say before Patches is home', () => {
+    const script = committed('1', 'script.json') as { key: string }[]
+    const keys = new Set(script.map((line) => line.key))
+    const writers = committed('1', 'writers.json') as WriterRule[]
+    const play = new GameController(new Game([new Act1()]))
+    play.advanceToRunning()
+    const inSquare = pathIndex(ACT1_GOLDEN_PATH, 'take bucket')
+    for (const command of ACT1_GOLDEN_PATH.slice(0, inSquare))
+      play.takeTurn(command)
+    expect(play.getRoomName()).toBe('Village Square')
+
+    const answers = [
+      'go east',
+      'talk to shopkeeper',
+      'talk to shopkeeper',
+      'buy rope from shopkeeper',
+    ].map((command) => play.takeTurn(command))
+    expect(play.getRoomName()).toBe('General Store')
+    const missing = answers
+      .flatMap((answer) => linesOfTurn(answer, writers))
+      .filter((line) => !keys.has(line.key))
+      .map((line) => `${line.speaker}: ${line.text}`)
+    expect(missing).toEqual([])
   })
 })
