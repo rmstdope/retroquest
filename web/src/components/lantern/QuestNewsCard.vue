@@ -11,7 +11,8 @@ import { escapeHtml } from '@/utils/theme'
 
 /**
  * Quest news inside the story (non-blocking): a new quest is a card with its
- * description, a checklist quest's needs shown as a list (`questTextHtml`); an update is a one-line banner that expands to show the
+ * description, a checklist quest's needs shown as a list (`questTextHtml`);
+ * an update is a one-line banner that expands to show the
  * newest part, since updates come often. The revealed part opens inside
  * the banner's frame. Opening it scrolls the revealed part into view, as
  * the banner often sits at the bottom of the story.
@@ -186,49 +187,9 @@ const doneCount = computed(() => {
   line-height: var(--lq-story-line-height);
   color: var(--lq-prose);
 }
-/* A checklist quest's needs: one line each, a filled tick for what is done
-   and a dashed ring for what is still open. The marks are drawn here, not
-   written in the text, so the read-along numbers only the spoken words. */
-.lq-quest-body :deep(.lq-quest-para) {
-  margin: 0;
-}
-.lq-quest-body :deep(.lq-quest-checklist) {
-  list-style: none;
-  margin: 6px 0 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-.lq-quest-body :deep(.lq-quest-checklist li) {
-  display: flex;
-  align-items: baseline;
-  gap: 8px;
-}
-.lq-quest-body :deep(.lq-quest-checklist li)::before {
-  flex: 0 0 auto;
-  width: 14px;
-  height: 14px;
-  border-radius: 7px;
-  box-sizing: border-box;
-  align-self: center;
-  font-size: 10px;
-  font-weight: 700;
-  line-height: 14px;
-  text-align: center;
-}
-.lq-quest-body :deep(.lq-quest-checklist .lq-check-done)::before {
-  content: '✓' / 'done';
-  background: var(--lq-item-soft);
-  color: var(--lq-success);
-  border: 1px solid var(--lq-item-line);
-}
+/* An open need is dimmed on the card (the list itself is in lantern.css). */
 .lq-quest-body :deep(.lq-quest-checklist .lq-check-pending) {
   color: var(--lq-muted);
-}
-.lq-quest-body :deep(.lq-quest-checklist .lq-check-pending)::before {
-  content: '' / 'not yet';
-  border: 1.5px dashed var(--lq-muted);
 }
 .lq-open-journal {
   align-self: flex-start;

@@ -49,6 +49,16 @@ describe('splitting', () => {
     expect(splitSentences(piece).map((s) => s.wordStart)).toEqual([0, 2, 5])
   })
 
+  it("numbers a checklist's needs without their bullets, which are not read", () => {
+    const pieces = splitParagraphs({
+      unit: 0,
+      markup:
+        'You will need: \n[success] * Warm clothing[/success]\n' +
+        '[pending] * Sturdy footwear[/pending]',
+    })
+    expect(pieces.map((p) => p.wordStart)).toEqual([0, 3, 5])
+  })
+
   it('keeps tags balanced when a tag spans sentences', () => {
     const [piece] = splitParagraphs({
       unit: 0,
