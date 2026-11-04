@@ -590,6 +590,51 @@
     "text": "The truth about what, love? You've lost me."
   },
   {
+    "key": "020b05ee27c15e",
+    "speaker": "narrator",
+    "text": "The shopkeeper looks up from the window, his face creased with worry."
+  },
+  {
+    "key": "178a43bc7e6e3b",
+    "speaker": "shopkeeper",
+    "text": "Oh! Forgive me, lad. Hemlock's the name, and this is my store. Or it would be, if I could keep my mind on it. My cat, Patches, has been gone for days. Can't think about business with Patches out there in the cold, so the store stays shut until she's home."
+  },
+  {
+    "key": "176b684c99771a",
+    "speaker": "shopkeeper",
+    "text": "She was last seen near the old well. If you find her, there's a reward in it for you."
+  },
+  {
+    "key": "03a214ad65458c",
+    "speaker": "shopkeeper",
+    "text": "And the caravans have stopped coming, now the king is ill and the roads are what they are. Malakar's luck, my father would have called it."
+  },
+  {
+    "key": "1593819dbbca6e",
+    "speaker": "narrator",
+    "text": "He raps the counter twice with his knuckles."
+  },
+  {
+    "key": "09d7037c370abe",
+    "speaker": "narrator",
+    "text": "Curiosity killed the cat"
+  },
+  {
+    "key": "0bb835c014e34d",
+    "speaker": "narrator",
+    "text": "Old Man Hemlock has shut the General Store until his cat, Patches, comes home. She was last seen near the old well, where a locked shed keeps its secrets. What will you discover if you find a way inside?"
+  },
+  {
+    "key": "1803e0246750ac",
+    "speaker": "narrator",
+    "text": "The shopkeeper shakes his head before you can say anything."
+  },
+  {
+    "key": "080c778c4b4f77",
+    "speaker": "shopkeeper",
+    "text": "No sign of Patches, then. I put a saucer out every night, near the old well where she was last seen. It's always still full in the morning. The store stays shut till she's home, lad."
+  },
+  {
     "key": "0d49024e6a4c8b",
     "speaker": "narrator",
     "text": "Village Square"
@@ -783,16 +828,6 @@
     "key": "0844b4b9abc5e8",
     "speaker": "borin",
     "text": "How is that blade holding up? Keep that edge oiled, mind, or the damp will have it dull again before you know it."
-  },
-  {
-    "key": "09d7037c370abe",
-    "speaker": "narrator",
-    "text": "Curiosity killed the cat"
-  },
-  {
-    "key": "0bb835c014e34d",
-    "speaker": "narrator",
-    "text": "Old Man Hemlock has shut the General Store until his cat, Patches, comes home. She was last seen near the old well, where a locked shed keeps its secrets. What will you discover if you find a way inside?"
   },
   {
     "key": "0b7c094082210e",
