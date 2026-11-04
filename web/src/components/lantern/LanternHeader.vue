@@ -11,14 +11,23 @@ import { LANTERN_TEXT_SIZES } from '@/lantern/tokens'
  * progress bar; the title stays as a hidden top-level heading. The
  * full-screen button (where supported) is left out under 360px wide.
  */
-defineProps<{ compact?: boolean; hideRoom?: boolean }>()
+defineProps<{
+  compact?: boolean
+  hideRoom?: boolean
+  /** Whether the dev build's room effects panel is open. */
+  effectsOpen?: boolean
+}>()
 const emit = defineEmits<{
   menu: []
+  /** The dev build's room effects button was pressed. */
+  effects: []
   open: [kind: 'save' | 'load' | 'stats' | 'settings' | 'help']
 }>()
 const game = useGameStore()
 const settings = useSettingsStore()
 const fullscreen = useFullscreen()
+/** Whether this is the dev build, which has the room effects panel. */
+const devBuild = import.meta.env.DEV
 
 const ROMAN = ['I', 'II', 'III', 'IV', 'V']
 
@@ -171,6 +180,29 @@ function toggleTheme(): void {
     </nav>
 
     <div class="lq-actions">
+      <button
+        v-if="devBuild"
+        type="button"
+        class="lq-icon-btn lq-fx-btn"
+        aria-label="Room effects"
+        title="Room effects (dev)"
+        :aria-pressed="effectsOpen === true"
+        @click="emit('effects')"
+      >
+        <svg
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          aria-hidden="true"
+        >
+          <path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3" />
+          <path d="M1 14h6M9 8h6M17 16h6" />
+        </svg>
+      </button>
       <button
         v-if="fullscreen.supported"
         type="button"
@@ -396,6 +428,13 @@ function toggleTheme(): void {
   background: var(--lq-surface);
   color: var(--lq-fg);
   cursor: pointer;
+}
+.lq-fx-btn {
+  color: var(--lq-accent-text);
+}
+.lq-fx-btn[aria-pressed='true'] {
+  background: var(--lq-accent-soft);
+  border-color: var(--lq-accent-line);
 }
 .lq-aa {
   font-family: var(--lq-font-display);

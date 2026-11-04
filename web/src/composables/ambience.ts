@@ -14,11 +14,23 @@
 import type { EffectPlay, EffectWhen } from '@/lantern/effectLists'
 import { fetchAudioBuffer, type MusicVoice } from './musicVoice'
 
-/** How one decoded effect plays (round and round, after a random wait again and again, or once), and in which state. */
-export type AmbientClip = { buffer: AudioBuffer } & EffectPlay & EffectWhen
+/** Which effect a clip is, and how loud it plays. */
+export interface ClipLevel {
+  /** The effect's id, by which its volume is changed, it is played on request or soloed. */
+  id?: string
+  /** Its volume: 1 (the default) as made, more to raise it, less to lower it. */
+  volume?: number
+}
 
-/** Where an effect's clip is, how it plays and in which state. */
-export type AmbientClipSource = { url: string } & EffectPlay & EffectWhen
+/** How one decoded effect plays (round and round, after a random wait again and again, or once), in which state and how loud. */
+export type AmbientClip = { buffer: AudioBuffer } & EffectPlay &
+  EffectWhen &
+  ClipLevel
+
+/** Where an effect's clip is, how it plays, in which state and how loud. */
+export type AmbientClipSource = { url: string } & EffectPlay &
+  EffectWhen &
+  ClipLevel
 
 /** How long a clip fades in or out as the room's sound state changes, in seconds. */
 const STATE_FADE_SECONDS = 0.3
@@ -47,6 +59,10 @@ export class Ambience {
   }[] = []
   /** Set once the ambience is let go of. */
   private gone = false
+  /** The volumes set since it was made, by effect id; they win over each clip's own. */
+  private levels: Record<string, number> = {}
+  /** The effect id soloed: every other clip is silent. Null when none is. */
+  private soloed: string | null = null
   /** The clips played once that have sounded; they do not sound again. */
   private readonly sounded = new Set<AmbientClip>()
 
@@ -113,9 +129,41 @@ export class Ambience {
     this.gone = true
   }
 
+  /** Sets the volume of the effect `id` (1 as made), at once for what sounds and for its next start. */
+  setVolume(id: string, volume: number): void {
+    this.levels[id] = volume
+    this.relevel()
+  }
+
+  /** Plays the one-shot effect `id` at once, besides its own waits; nothing while stopped. */
+  audition(id: string): void {
+    if (!this.playing) return
+    const clip = this.clips.find((each) => each.id === id && !each.loops)
+    if (clip) this.sound(clip, false)
+  }
+
+  /** Silences every clip but the effect `id`; null gives them all their volume back. */
+  solo(id: string | null): void {
+    this.soloed = id
+    this.relevel()
+  }
+
   /** Whether the ambience has been let go of. */
   get disposed(): boolean {
     return this.gone
+  }
+
+  /** How loud `clip` sounds now: silent while another is soloed, else its volume. */
+  private levelOf(clip: AmbientClip): number {
+    if (this.soloed !== null && clip.id !== this.soloed) return 0
+    const set = clip.id === undefined ? undefined : this.levels[clip.id]
+    return set ?? clip.volume ?? 1
+  }
+
+  /** Gives every source sounding its clip's level now. */
+  private relevel(): void {
+    for (const { clip, level } of this.sources)
+      level.gain.value = this.levelOf(clip)
   }
 
   /** Whether `clip` plays in the present state: always, for one with none. */
@@ -219,8 +267,9 @@ export class Ambience {
   }
 
   /**
-   * Starts a source playing `clip` through its own gain into the ambience's,
-   * rising from silence when `fade`; a one-shot lets go of itself when it ends.
+   * Starts a source playing `clip` through its own gain (at the clip's level)
+   * into the ambience's, rising from silence to it when `fade`; a one-shot
+   * lets go of itself when it ends.
    */
   private sound(clip: AmbientClip, loop: boolean, fade = false): void {
     const node = this.context.createBufferSource()
@@ -230,8 +279,11 @@ export class Ambience {
     if (fade) {
       const now = this.context.currentTime
       level.gain.setValueAtTime(0, now)
-      level.gain.linearRampToValueAtTime(1, now + STATE_FADE_SECONDS)
-    }
+      level.gain.linearRampToValueAtTime(
+        this.levelOf(clip),
+        now + STATE_FADE_SECONDS,
+      )
+    } else level.gain.value = this.levelOf(clip)
     node.connect(level)
     level.connect(this.gain)
     const entry = { clip, node, level }

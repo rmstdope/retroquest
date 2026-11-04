@@ -32,6 +32,14 @@ describe('LanternHeader', () => {
     }
   }
 
+  it('in the dev build, opens the room effects panel, showing whether it is open', async () => {
+    wrapper = mount(LanternHeader, { props: { effectsOpen: true } })
+    const button = wrapper.get('button[aria-label="Room effects"]')
+    expect(button.attributes('aria-pressed')).toBe('true')
+    await button.trigger('click')
+    expect(wrapper.emitted('effects')).toHaveLength(1)
+  })
+
   it('shows the game title', () => {
     expect(mountHeader().text()).toContain('RetroQuest')
   })

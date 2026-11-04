@@ -54,6 +54,8 @@ export function ambientClipsAt(
 ): AmbientClipSource[] {
   return ambienceAt(track).flatMap(({ id, ...play }) => {
     const take = effects[id]
-    return take ? [{ url: GENERATED_EFFECTS_PATH + take.file, ...play }] : []
+    return take
+      ? [{ id, url: GENERATED_EFFECTS_PATH + take.file, ...play }]
+      : []
   })
 }

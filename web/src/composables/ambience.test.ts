@@ -337,6 +337,75 @@ describe('Ambience', () => {
     })
   })
 
+  describe('the volume of each clip', () => {
+    /** The gain a source plays through: its own, the one it connects to. */
+    function levelOf(source: FakeSource): { value: number } {
+      return (source.connect.mock.calls[0][0] as { gain: { value: number } })
+        .gain
+    }
+
+    /** A storm whose lightning plays at `volume` (rain at its own 1). */
+    function loudStorm(volume: number): Ambience {
+      return new Ambience(
+        ctx as unknown as AudioContext,
+        [
+          { buffer: rain, loops: true, id: 'rain' },
+          {
+            buffer: strike,
+            loops: false,
+            everySeconds: [3, 8],
+            id: 'lightning',
+            volume,
+          },
+        ],
+        bus,
+        () => 0,
+      )
+    }
+
+    it('plays each clip at its own volume, the full one by default', () => {
+      loudStorm(2.5).play()
+      vi.advanceTimersByTime(3000)
+      expect(levelOf(sourcesOf(rain)[0]).value).toBe(1)
+      expect(levelOf(sourcesOf(strike)[0]).value).toBe(2.5)
+    })
+
+    it('changes a clip’s volume as it plays, and for its next start', () => {
+      const ambience = loudStorm(1)
+      ambience.play()
+      ambience.setVolume('rain', 0.4)
+      expect(levelOf(sourcesOf(rain)[0]).value).toBeCloseTo(0.4)
+      ambience.setVolume('lightning', 3)
+      vi.advanceTimersByTime(3000)
+      expect(levelOf(sourcesOf(strike)[0]).value).toBe(3)
+    })
+
+    it('plays a one-shot at once when asked, besides its own waits', () => {
+      const ambience = loudStorm(1)
+      ambience.play()
+      ambience.audition('lightning')
+      expect(sourcesOf(strike)).toHaveLength(1)
+      vi.advanceTimersByTime(3000)
+      expect(sourcesOf(strike)).toHaveLength(2)
+    })
+
+    it('plays nothing on request while the music is stopped', () => {
+      loudStorm(1).audition('lightning')
+      expect(sourcesOf(strike)).toHaveLength(0)
+    })
+
+    it('silences every other clip while one is soloed, and gives them back after', () => {
+      const ambience = loudStorm(2)
+      ambience.play()
+      ambience.solo('lightning')
+      expect(levelOf(sourcesOf(rain)[0]).value).toBe(0)
+      vi.advanceTimersByTime(3000)
+      expect(levelOf(sourcesOf(strike)[0]).value).toBe(2)
+      ambience.solo(null)
+      expect(levelOf(sourcesOf(rain)[0]).value).toBe(1)
+    })
+  })
+
   it('lets go of its gain on dispose', () => {
     const ambience = storm()
     ambience.play()

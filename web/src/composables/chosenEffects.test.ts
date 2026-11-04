@@ -21,8 +21,13 @@ describe('ambientClipsFor', () => {
     expect(
       ambientClipsFor('generated/act1-the-dream.mp3', music, effects),
     ).toEqual([
-      { url: '/audio/soundeffects/generated/rain.mp3', loops: true },
       {
+        id: 'rain',
+        url: '/audio/soundeffects/generated/rain.mp3',
+        loops: true,
+      },
+      {
+        id: 'lightning',
         url: '/audio/soundeffects/generated/lightning.mp3',
         loops: false,
         everySeconds: [3, 8],
@@ -35,7 +40,13 @@ describe('ambientClipsFor', () => {
       ambientClipsFor('generated/act1-the-dream.mp3', music, {
         rain: effects.rain,
       }),
-    ).toEqual([{ url: '/audio/soundeffects/generated/rain.mp3', loops: true }])
+    ).toEqual([
+      {
+        id: 'rain',
+        url: '/audio/soundeffects/generated/rain.mp3',
+        loops: true,
+      },
+    ])
   })
 
   it('plays nothing with a track that has no effects', () => {
