@@ -1019,6 +1019,17 @@ describe('Game', () => {
       expect(game.give('apple to villager')).toBe('Villager takes the apple.')
     })
 
+    it('lets the character answer for something not held as an item', () => {
+      const villager = character('Villager')
+      villager.giveUnheld = (_state, name) =>
+        name === 'cat' ? 'Villager takes the cat.' : null
+      rooms.EliorsCottage.addCharacter(villager)
+      expect(game.give('cat to villager')).toBe('Villager takes the cat.')
+      expect(game.give('dog to villager')).toBe(
+        "[failure]You don't have a 'dog' to give.[/failure]",
+      )
+    })
+
     it('reports missing items, missing characters and bad formats', () => {
       rooms.EliorsCottage.addCharacter(character('Villager'))
       expect(game.give('nonexistent_item to villager')).toBe(
