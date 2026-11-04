@@ -136,7 +136,7 @@ describe('useGameStore over the real engine: game over', () => {
       kind: 'complete',
       final: true,
       body: expect.stringContaining(
-        'Congratulations — you have completed Act 1, the final act of RetroQuest!',
+        'Congratulations — you have completed Act I, the final act of RetroQuest!',
       ),
       stats: { questsCompleted: 1, questsTotal: 1, spells: 0, places: 1 },
     })

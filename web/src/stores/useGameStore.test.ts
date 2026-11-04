@@ -2201,7 +2201,7 @@ describe('useGameStore', () => {
       bridge.controller.isActRunning.mockReturnValue(false)
       bridge.controller.getActStats.mockReturnValue(STATS)
       bridge.controller.getActCompleteText.mockReturnValue(
-        'Congratulations — you have completed Act 1!',
+        'Congratulations — you have completed Act I!',
       )
       bridge.controller.getNextActIntro.mockReturnValue(INTRO_2)
 
@@ -2211,7 +2211,7 @@ describe('useGameStore', () => {
         kind: 'complete',
         act: 'Act I',
         title: 'The Call to Adventure',
-        body: 'Congratulations — you have completed Act 1!',
+        body: 'Congratulations — you have completed Act I!',
         stats: STATS,
         nextAct: 'Act II',
       })
@@ -2236,7 +2236,7 @@ describe('useGameStore', () => {
       bridge.controller.isAcceptingInput.mockReturnValue(false)
       bridge.controller.isActRunning.mockReturnValue(false)
       bridge.controller.getActCompleteText.mockReturnValue(
-        'Congratulations — you have completed Act 2!',
+        'Congratulations — you have completed Act II!',
       )
       bridge.controller.getNextActIntro.mockReturnValue(
         '[bold]ACT III: THE AWAKENING[/bold]\n\nText.',
@@ -2439,7 +2439,7 @@ describe('useGameStore', () => {
     }
     const CLOSING =
       'The realm breathes again.\n\nCongratulations — you have completed ' +
-      'Act 4, the final act of RetroQuest!\n'
+      'Act IV, the final act of RetroQuest!\n'
 
     beforeEach(async () => {
       bridge.controller.advanceTurn
@@ -2467,7 +2467,7 @@ describe('useGameStore', () => {
       kind: 'complete',
       act: 'Act IV',
       title: 'The Long Night Ends',
-      body: 'Congratulations — you have completed Act 4, the final act of RetroQuest!',
+      body: 'Congratulations — you have completed Act IV, the final act of RetroQuest!',
       stats: STATS,
       final: true,
     }
