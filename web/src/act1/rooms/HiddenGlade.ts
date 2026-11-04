@@ -84,7 +84,7 @@ export class HiddenGlade extends Room {
     if (this.getCharacterByName('Deer')) {
       dynamicParts.push(
         'A graceful ' +
-          characterName('Deer') +
+          characterName('deer') +
           ' grazes quietly, occasionally ' +
           'lifting its head to watch you with wise, gentle eyes.',
       )
@@ -112,7 +112,7 @@ export class HiddenGlade extends Room {
         this.addCharacter(deer)
         messages.push(
           'After a while you stop listening for anything, and a ' +
-            characterName('Deer') +
+            characterName('deer') +
             ' steps out of the brambles. It stands and looks at you, quite still.',
         )
         this.addItem(new RareFlower())
@@ -123,7 +123,7 @@ export class HiddenGlade extends Room {
       } else {
         messages.push(
           'The ' +
-            characterName('Deer') +
+            characterName('deer') +
             ' continues to graze ' +
             'peacefully.',
         )

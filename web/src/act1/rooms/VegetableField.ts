@@ -13,6 +13,11 @@ const WITHERED_DESCRIPTION =
   'cracked and dry, with only a few stubborn carrots and a rusty hoe hinting at ' +
   'better days. A faint breeze rustles the brittle leaves, carrying the scent ' +
   'of soil and distant rain. These rows were green a month ago.'
+const WITHERED_WITHOUT_HOE_DESCRIPTION =
+  'Rows of withered crops stretch beneath a brooding gray sky. The earth is ' +
+  'cracked and dry, with only a few stubborn carrots hinting at better days. ' +
+  'A faint breeze rustles the brittle leaves, carrying the scent of soil and ' +
+  'distant rain. These rows were green a month ago.'
 const WATERED_DESCRIPTION =
   'Rows of green crops stretch beneath an open sky. The earth is dark and soft ' +
   'where the clean well water soaked in, and young leaves stand tall where ' +
@@ -26,7 +31,8 @@ const WATERED_DESCRIPTION =
  * Entering the field sets FLAG_INVESTIGATED_WITHERED_CROPS unprompted. Once
  * it is watered with purified well water (FLAG_VEGETABLE_FIELD_WATERED) the
  * description shows the field recovered; `descriptionFor` reads the flag
- * each time the room is shown.
+ * each time the room is shown. The withered field mentions the rusty hoe only
+ * while the hoe still lies in it.
  */
 export class VegetableField extends Room {
   /** The sound state of the field before it is watered. */
@@ -60,11 +66,13 @@ export class VegetableField extends Room {
     return [VegetableField.SOUND_WITHERED, VegetableField.SOUND_GREEN]
   }
 
-  /** The field withered or, once watered, recovered. */
+  /** The field withered (with or without its rusty hoe) or, once watered, recovered. */
   override descriptionFor(gameState: GameState): string {
-    return gameState.getStoryFlag(FLAG_VEGETABLE_FIELD_WATERED)
-      ? WATERED_DESCRIPTION
-      : WITHERED_DESCRIPTION
+    if (gameState.getStoryFlag(FLAG_VEGETABLE_FIELD_WATERED))
+      return WATERED_DESCRIPTION
+    return this.items.some((item) => item instanceof RustyHoe)
+      ? WITHERED_DESCRIPTION
+      : WITHERED_WITHOUT_HOE_DESCRIPTION
   }
 
   /** Set the investigation story flag when the player enters the field. */
