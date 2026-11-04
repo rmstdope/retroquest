@@ -456,6 +456,20 @@ describe('useActMusic with the effects of a room', () => {
     scope.stop()
   })
 
+  it("leaves the effects of a room it walks out of in that room's state", async () => {
+    const scope = await startIn('OldMill', 'whirring')
+    ctx = FakeAudioContext.last
+    const mill = loopsSounding()
+    expect(mill).toHaveLength(3)
+    const game = useGameStore()
+    game.musicRoomKey = 'TheDream'
+    game.musicSoundState = ''
+    await nextTick()
+    // The mill fades out whole, its whir with it, while The Dream comes in.
+    for (const loop of mill) expect(loop.stop).not.toHaveBeenCalled()
+    scope.stop()
+  })
+
   it('plays the effects at the effects volume, and none with effects off', async () => {
     const settings = useSettingsStore()
     settings.effectsVolume = 40

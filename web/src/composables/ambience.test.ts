@@ -165,6 +165,19 @@ describe('Ambience', () => {
       vi.advanceTimersByTime(1500)
       expect(sourcesOf(bell)).toHaveLength(1)
     })
+
+    it('still plays when the browser held the sound back as it was due', () => {
+      const ambience = shop()
+      ctx.state = 'suspended'
+      ambience.play()
+      vi.advanceTimersByTime(1500)
+      expect(sourcesOf(bell)).toHaveLength(0)
+      ambience.pause()
+      ctx.state = 'running'
+      ambience.play()
+      vi.advanceTimersByTime(1500)
+      expect(sourcesOf(bell)).toHaveLength(1)
+    })
   })
 
   describe('clips that follow the room’s sound state', () => {
@@ -228,6 +241,15 @@ describe('Ambience', () => {
       ambience.play()
       vi.advanceTimersByTime(5000)
       expect(sourcesOf(creak)).toHaveLength(1)
+    })
+
+    it('cancels the waits of the old state’s one-shots as it changes', () => {
+      const ambience = mill()
+      ambience.setState('jammed')
+      ambience.play()
+      ambience.setState('whirring')
+      vi.advanceTimersByTime(60_000)
+      expect(sourcesOf(creak)).toHaveLength(0)
     })
 
     it('changes nothing when told the state it is in', () => {

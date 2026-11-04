@@ -161,13 +161,17 @@ export class Ambience {
 
   /**
    * Plays `clip` after `seconds`, the one time it sounds for this ambience.
-   * A pause before then cancels it until the next play.
+   * A pause before then, or the browser holding the sound back as it is due,
+   * leaves it for the next play. Going straight back into a room whose music
+   * is still fading out picks up that same ambience, so its clip played once
+   * does not sound again.
    */
   private once(clip: AmbientClip, seconds: number): void {
     if (this.sounded.has(clip)) return
     this.after(clip, seconds * 1000, () => {
+      if (this.context.state !== 'running') return
       this.sounded.add(clip)
-      if (this.context.state === 'running') this.sound(clip, false)
+      this.sound(clip, false)
     })
   }
 
