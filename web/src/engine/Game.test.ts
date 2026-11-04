@@ -1040,6 +1040,12 @@ describe('Game', () => {
       )
     })
 
+    it('names a missing character before refusing something not held', () => {
+      expect(game.give('cat to ghost')).toBe(
+        "[failure]There is no character named 'Ghost' here.[/failure]",
+      )
+    })
+
     it('reports missing items, missing characters and bad formats', () => {
       rooms.EliorsCottage.addCharacter(character('Villager'))
       expect(game.give('nonexistent_item to villager')).toBe(
