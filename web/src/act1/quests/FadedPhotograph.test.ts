@@ -8,7 +8,7 @@ const OPENING =
   'An old photograph of your parents, hidden away in a drawer. ' +
   "On the back is a line in your mother's hand."
 
-describe('The Faded Photograph quest', () => {
+describe('The faded photograph quest', () => {
   it('opens with what was found, not what to do next', () => {
     const quest = new FadedPhotographQuest()
     expect(quest.description).toBe(OPENING)
@@ -18,7 +18,7 @@ describe('The Faded Photograph quest', () => {
 
   it('keeps its name and completion line', () => {
     const quest = new FadedPhotographQuest()
-    expect(quest.name).toBe('The Faded Photograph')
+    expect(quest.name).toBe('The faded photograph')
     expect(quest.completion).toContain('At the river bend you found')
   })
 
@@ -35,7 +35,7 @@ describe('The Faded Photograph quest', () => {
       'search',
     ])
     const quest = game.state.activatedQuests.find(
-      (q) => q.name === 'The Faded Photograph',
+      (q) => q.name === 'The faded photograph',
     )
     expect(quest?.description).toBe(OPENING)
     expect(quest?.hint(game.state)).toBe(OPENING)

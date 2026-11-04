@@ -408,7 +408,7 @@ describe('LanternLayout: the arrival on the picture', () => {
       quests: [
         {
           kind: 'completed',
-          name: 'Hint of Magic',
+          name: 'Hint of magic',
           main: false,
           text: 'It stayed.',
           progress: { completed: 1, total: 11 },
@@ -453,7 +453,7 @@ describe('LanternLayout: the arrival on the picture', () => {
       pushTurn(news())
       await vi.advanceTimersByTimeAsync(0)
       expect(card(w)).toContain('Side quest complete · 1 of 11')
-      expect(card(w)).toContain('Hint of Magic')
+      expect(card(w)).toContain('Hint of magic')
       expect(storyAside(w)).toBe(true)
       expect(audio.playQuestComplete).toHaveBeenCalledOnce()
       expect(audio.playNewQuest).not.toHaveBeenCalled()
@@ -464,7 +464,7 @@ describe('LanternLayout: the arrival on the picture', () => {
       expect(card(w)).toBe('')
       expect(slidAside(w)).toBe(false)
       expect(w.findAll('[data-testid="news-line"]')).toHaveLength(0)
-      expect(w.get('.lq-story').text()).not.toContain('Hint of Magic')
+      expect(w.get('.lq-story').text()).not.toContain('Hint of magic')
     })
 
     it('rings the sounds of a turn whose news still waits for the narrator when the player moves on, leaving no line', async () => {
@@ -514,7 +514,7 @@ describe('LanternLayout: the arrival on the picture', () => {
       })
       pushTurn(news())
       await vi.advanceTimersByTimeAsync(0)
-      expect(card(w)).toContain('Hint of Magic')
+      expect(card(w)).toContain('Hint of magic')
       await key(' ')
       expect(card(w)).toContain('Quest updated')
       await key('Enter')
@@ -537,7 +537,7 @@ describe('LanternLayout: the arrival on the picture', () => {
       expect(storyAside(w)).toBe(false)
       expect(w.get('.lq-story').text()).toContain('A green garden.')
       await key(' ')
-      expect(card(w)).toContain('Hint of Magic')
+      expect(card(w)).toContain('Hint of magic')
 
       pushTurn({ ...news(91), text: 'A green garden.', narrate: true })
       await vi.advanceTimersByTimeAsync(0)
@@ -694,7 +694,7 @@ describe('LanternLayout: the arrival on the picture', () => {
         quests: [
           {
             kind: 'completed',
-            name: 'Hint of Magic',
+            name: 'Hint of magic',
             main: false,
             text: 'It stayed.',
             progress: { completed: 1, total: 11 },

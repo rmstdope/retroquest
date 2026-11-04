@@ -83,7 +83,7 @@ describe('GameMap act completion', () => {
 
   it('requires every other side quest to be complete', () => {
     const { act, game, map } = setupGameAtRoad()
-    completeSideQuestsExcept(game, 'The Faded Photograph')
+    completeSideQuestsExcept(game, 'The faded photograph')
     game.state.addItemToInventory(new AncientAmulet())
 
     const response = map.use(game.state)

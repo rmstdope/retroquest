@@ -119,19 +119,19 @@ describe('Merchant', () => {
     expect(executeCommands(game, ['talk to merchant'])).not.toContain('Alden')
   })
 
-  it('adds the news to Shadows Over Willowbrook and keeps it through a save', () => {
+  it('adds the news to Shadows over Willowbrook and keeps it through a save', () => {
     const game = gameAtMerchant()
     game.state.settleQuests()
     game.commandParser.parse('talk to merchant')
     const changes = game.state.settleQuests()
     expect(changes.updated.map((q) => q.name)).toEqual([
-      'Shadows Over Willowbrook',
+      'Shadows over Willowbrook',
     ])
 
     const fresh = new Game([new Act1()])
     fresh.loadSaveData(game.toSaveData())
     const quest = fresh.state.activatedQuests.find(
-      (q) => q.name === 'Shadows Over Willowbrook',
+      (q) => q.name === 'Shadows over Willowbrook',
     )
 
     expect(quest?.description).toContain('King Alden lies ill')

@@ -17,7 +17,7 @@ import { ShadowsOverWillowbrookQuest } from './ShadowsOverWillowbrook'
 import { ACT1_GOLDEN_PATH } from '../Act1GoldenPath'
 import { executeCommands } from '@/testing/gameHelpers'
 
-describe('Shadows Over Willowbrook log', () => {
+describe('Shadows over Willowbrook log', () => {
   it('starts as a journal of the dream alone', () => {
     const game = new Game([new Act1()])
     const quest = new ShadowsOverWillowbrookQuest()

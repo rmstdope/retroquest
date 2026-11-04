@@ -2,7 +2,7 @@
 
 ## Quests in Act I
 
-- **Name:** Hint of Magic
+- **Name:** Hint of magic
 
   - **Trigger:** Starting of the game.
   - **Completion:** Learn the 'revive' spell from Grandmother.
@@ -48,14 +48,14 @@
   - **Trigger:** Learn magic from Mira.
   - **Completion:** Obtain all items needed for the journey.
 
-- **Name:** The Faded Photograph
+- **Name:** The faded photograph
 
   - **Trigger:** Search Elior's Cottage and discover the photograph.
   - **Steps:** Examine the photograph to read its message (_Seek the truth where the river bends_), then show it to Grandmother. She reveals that Elior's family is connected to the darkness threatening Eldoria, and that his mother loved the river: the old fisherman at the Riverbank will remember her. The Riverbank is the bend. Show the photograph to the fisherman: he was the mother's friend, and tells of a tin she hid in the mud under the smooth stone the night before she went away. Search the Riverbank to find the tin and the mother's letter inside it.
   - **Completion:** Read the mother's letter.
   - **Reward:** A fragment of a letter from Elior's mother. It names Malakar once, as a friend gone wrong ("If Malakar comes asking about our line, do not answer him. He is not the friend we knew."), and says Mira keeps the amulet for him and that "when you are ready, it will know you". Carried into Mira's hut, it makes the amulet glow brighter (see _Story Beats_). It is the one voice in Act I that names Malakar as a man; the village knows him only as a byword (see _Story Beats_).
 
-- **Name:** Shadows Over Willowbrook (Main Quest)
+- **Name:** Shadows over Willowbrook (Main Quest)
   - **Trigger:** At the start of the act; Elior's dream introduces the mystery.
   - **Update:** Investigate the withered crops in the Vegetable Field.
   - **Update:** Speak with a villager about the disturbances in Willowbrook.
@@ -313,7 +313,7 @@ Optional virtue moments; none blocks the golden path, none adds a puzzle or comb
       - Spell Learned: `revive` (can not be used until magic is learned for real)
     - Search the cottage and take the faded photograph.
     - Examine the photograph to read the message on its back, then show it to Grandmother to learn more about Elior's family. _She points him to the old fisherman at the Riverbank, who will remember his mother._
-    - **Note:** You cannot leave Elior’s Cottage until you have completed the sub-quest _Hint of Magic_ by learning the 'revive' spell from Grandmother.
+    - **Note:** You cannot leave Elior’s Cottage until you have completed the sub-quest _Hint of magic_ by learning the 'revive' spell from Grandmother.
 
 2.  **Vegetable Field:**
 
@@ -395,7 +395,7 @@ Optional virtue moments; none blocks the golden path, none adds a puzzle or comb
     - Give faded photograph to fisherman. _He reads the message on the back: this very spot is the bend. Elior's mother came here near every evening to study the river's old magic, and the night before she went away she hid a tin under the smooth stone and made him promise to watch over it._
       - Item shown: `faded photograph` (it stays with Elior)
     - Search. _Elior tips the smooth stone aside and digs a small tin, sealed with wax, out of the mud. Inside lies the mother's letter._
-    - Take letter, then examine letter. _A water-stained fragment in his mother's hand: it warns him not to answer anyone who comes asking after the family, and names the amulet Mira keeps for Elior. Completes: The Faded Photograph._
+    - Take letter, then examine letter. _A water-stained fragment in his mother's hand: it warns him not to answer anyone who comes asking after the family, and names the amulet Mira keeps for Elior. Completes: The faded photograph._
       - Item obtained: `mother's letter`
 
 13. **Forest Path:**
@@ -469,7 +469,7 @@ Optional virtue moments; none blocks the golden path, none adds a puzzle or comb
     - Use `extended magnetic fishing rod` with the well. _Elior carefully lowers the extended magnetic tool into the depths, and it snags a shiny ring! Something else clings to the magnet: a black-iron rune token, colder than the water. Wells do not grow things like this; someone put it there. Shiny ring and rune token are added to inventory._
       - Item used: `extended magnetic fishing rod`
       - Item obtained: `shiny ring`, `rune token`
-    - _Optional:_ Use bucket with the well to tip out the murky water and draw clear water, go west and use the bucket in the Vegetable Field. _The soil drinks it in and the whole field recovers; the Shadows Over Willowbrook journal records it._
+    - _Optional:_ Use bucket with the well to tip out the murky water and draw clear water, go west and use the bucket in the Vegetable Field. _The soil drinks it in and the whole field recovers; the Shadows over Willowbrook journal records it._
 
 22. **Return to Hidden Glade:**
 
@@ -525,8 +525,8 @@ Optional virtue moments; none blocks the golden path, none adds a puzzle or comb
     - `Fishing Rod` (to catch `fish` for the `purify` spell, and to retrieve the `shiny ring`)
     - `Magnet` (to retrieve the `shiny ring` from the well)
     - `Fish` (to give to the Fisherman to learn the `purify` spell)
-    - `Faded Photograph` (read, then shown to Grandmother and to the Fisherman, for _The Faded Photograph_)
-    - `Mother's Letter` (found under the smooth stone at the Riverbank; reading it completes _The Faded Photograph_)
+    - `Faded Photograph` (read, then shown to Grandmother and to the Fisherman, for _The faded photograph_)
+    - `Mother's Letter` (found under the smooth stone at the Riverbank; reading it completes _The faded photograph_)
     - `Stick` (to use with `fishing rod` and `magnet` to retrieve the `shiny ring`)
     - `Shiny Ring` (to trade for `wandering boots` with Merchant; the `horseshoe` can be traded instead)
     - `Rare Flower` (to give to Mira to learn spells and get quest)
@@ -591,7 +591,7 @@ This list tracks items obtained in the Golden Path and their subsequent uses wit
 20. **`Fish`** (Obtained: Step 12):
     - Used in Step 12 by giving it to the Fisherman to learn the `purify` spell.
 21. **`Mother's Letter`** (Obtained: Step 12, by searching the Riverbank once the Fisherman has told of the tin):
-    - Read in Step 12 to complete the "Faded Photograph" quest.
+    - Read in Step 12 to complete the "The faded photograph" quest.
 22. **`Stick`** (Obtained: Step 13):
     - Combined with the `magnetic fishing rod` in Step 21 to create an `extended magnetic fishing rod`.
 23. **`Rare Flower`** (Obtained: Step 14):

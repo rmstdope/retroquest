@@ -208,7 +208,7 @@ describe('arrivalParts', () => {
 describe('quest news on the picture', () => {
   const done = {
     kind: 'completed' as const,
-    name: 'Hint of Magic',
+    name: 'Hint of magic',
     main: false,
     text: 'You did it.',
     progress: { completed: 1, total: 11 },
@@ -239,7 +239,7 @@ describe('quest news on the picture', () => {
     expect(parts.map((p) => p.voiced)).toEqual([true, false])
     expect(parts[0].news).toBe(done)
     expect(parts[0].lines[0].markup).toBe('You did it.')
-    // "Side quest complete" + "Hint of Magic" come before the text.
+    // "Side quest complete" + "Hint of magic" come before the text.
     expect(parts[0].lines[0].wordBase).toBe(6)
   })
 

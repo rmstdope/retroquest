@@ -28,7 +28,7 @@ export class ShadowsOverWillowbrookQuest extends Quest {
 
   constructor() {
     super({
-      name: 'Shadows Over Willowbrook',
+      name: 'Shadows over Willowbrook',
       description:
         'Something is wrong in Willowbrook. The crops are failing, the well ' +
         'smells sour, and the village keeps its voice down.',

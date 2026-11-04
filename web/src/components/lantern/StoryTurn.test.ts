@@ -214,10 +214,10 @@ describe('StoryTurn', () => {
     setActivePinia(createPinia())
     const w = mountTurn({
       text: 'You feel strange.',
-      quests: [{ kind: 'new', name: 'Hint of Magic', main: false, text: 'x' }],
+      quests: [{ kind: 'new', name: 'Hint of magic', main: false, text: 'x' }],
     })
 
-    expect(w.get('.lq-quest-card .lq-quest-title').text()).toBe('Hint of Magic')
+    expect(w.get('.lq-quest-card .lq-quest-title').text()).toBe('Hint of magic')
   })
 })
 
@@ -718,7 +718,7 @@ describe('StoryTurn as a narration card', () => {
 describe('StoryTurn quest news told in the middle', () => {
   const done: QuestNews = {
     kind: 'completed',
-    name: 'Hint of Magic',
+    name: 'Hint of magic',
     main: false,
     text: 'You did it.',
     progress: { completed: 1, total: 11 },
@@ -768,7 +768,7 @@ describe('StoryTurn quest news told in the middle', () => {
     })
     const lines = w.findAll('[data-testid="news-line"]')
     expect(lines.map((line) => line.text().replace(/\s+/g, ' '))).toEqual([
-      '✓ Side quest complete · Hint of Magic Open in journal',
+      '✓ Side quest complete · Hint of magic Open in journal',
       'New side quest · Magic for real Open in journal',
     ])
     expect(w.text()).not.toContain('You did it.')
@@ -809,7 +809,7 @@ describe('StoryTurn quest news told in the middle', () => {
     })
     expect(w.text()).toContain('Done.')
     expect(w.find('.lq-quest-card').exists()).toBe(false)
-    expect(w.text()).not.toContain('Hint of Magic')
+    expect(w.text()).not.toContain('Hint of magic')
   })
 
   it('leaves no line on a card for news told in the middle', () => {
@@ -824,7 +824,7 @@ describe('StoryTurn quest news told in the middle', () => {
     })
     expect(w.text()).toContain('Done.')
     expect(w.find('[data-testid="news-line"]').exists()).toBe(false)
-    expect(w.text()).not.toContain('Hint of Magic')
+    expect(w.text()).not.toContain('Hint of magic')
   })
 
   describe('a turn whose learned spell is told in the middle', () => {

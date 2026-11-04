@@ -5,7 +5,7 @@ import { FLAG_WOKE_FROM_DREAM } from '../Act1StoryFlags'
 export class HintOfMagicQuest extends Quest {
   constructor() {
     super({
-      name: 'Hint of Magic',
+      name: 'Hint of magic',
       description:
         'You woke with three words written down and a tune still going in the house. ' +
         `${characterName('Grandmother')} is at the hearth, ` +

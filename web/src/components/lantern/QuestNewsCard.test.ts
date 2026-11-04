@@ -13,7 +13,7 @@ describe('QuestNewsCard', () => {
       props: {
         news: {
           kind: 'new',
-          name: 'Hint of Magic',
+          name: 'Hint of magic',
           main: false,
           text: 'A [character_name]force[/character_name] stirs.',
         },
@@ -21,9 +21,9 @@ describe('QuestNewsCard', () => {
     })
 
     expect(w.get('.lq-kicker').text()).toBe('New side quest')
-    expect(w.get('.lq-quest-title').text()).toBe('Hint of Magic')
+    expect(w.get('.lq-quest-title').text()).toBe('Hint of magic')
     expect(w.get('.lq-quest-body .theme-character_name').text()).toBe('force')
-    expect(w.attributes('aria-label')).toBe('New side quest: Hint of Magic')
+    expect(w.attributes('aria-label')).toBe('New side quest: Hint of magic')
   })
 
   it("shows a checklist quest's needs as a list, not as '* ' lines", () => {
@@ -114,27 +114,27 @@ describe('QuestNewsCard', () => {
   it('opens a new quest in the journal', async () => {
     const w = mount(QuestNewsCard, {
       props: {
-        news: { kind: 'new', name: 'Hint of Magic', main: false, text: 'x' },
+        news: { kind: 'new', name: 'Hint of magic', main: false, text: 'x' },
       },
     })
 
     await w.get('button.lq-open-journal').trigger('click')
 
     expect(w.get('button.lq-open-journal').text()).toBe('Open in journal')
-    expect(useGameStore().questToOpen).toBe('Hint of Magic')
+    expect(useGameStore().questToOpen).toBe('Hint of magic')
   })
 
   it('ties each Open in journal button to its quest name', () => {
     const w = mount(QuestNewsCard, {
       props: {
-        news: { kind: 'new', name: 'Hint of Magic', main: false, text: 'x' },
+        news: { kind: 'new', name: 'Hint of magic', main: false, text: 'x' },
       },
       attachTo: document.body,
     })
 
     const id = w.get('button.lq-open-journal').attributes('aria-describedby')
     expect(id).toBeTruthy()
-    expect(document.getElementById(id!)?.textContent).toBe('Hint of Magic')
+    expect(document.getElementById(id!)?.textContent).toBe('Hint of magic')
     w.unmount()
   })
 
@@ -143,7 +143,7 @@ describe('QuestNewsCard', () => {
       props: {
         news: {
           kind: 'completed',
-          name: 'Hint of Magic',
+          name: 'Hint of magic',
           main: false,
           text: 'Your journey has begun.',
           progress: { completed: 5, total: 11 },
@@ -154,12 +154,12 @@ describe('QuestNewsCard', () => {
     expect(w.get('.lq-record .lq-kicker').text()).toBe(
       'Side quest complete · 5 of 11',
     )
-    expect(w.get('.lq-record .lq-quest-title').text()).toBe('Hint of Magic')
+    expect(w.get('.lq-record .lq-quest-title').text()).toBe('Hint of magic')
     expect(w.get('.lq-record .lq-record-text').text()).toBe(
       'Your journey has begun.',
     )
     expect(w.attributes('aria-label')).toBe(
-      'Side quest complete: Hint of Magic',
+      'Side quest complete: Hint of magic',
     )
     expect(w.find('button.lq-open-journal').exists()).toBe(false)
   })

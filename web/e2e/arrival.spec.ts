@@ -143,7 +143,7 @@ test.describe('the arrival told on the picture', () => {
         timeout: 20_000,
       })
       // And then the quests the waking starts.
-      await expect(arrival(page)).toContainText('Shadows Over Willowbrook', {
+      await expect(arrival(page)).toContainText('Shadows over Willowbrook', {
         timeout: 20_000,
       })
     })
