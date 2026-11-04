@@ -11,11 +11,11 @@ import { GeneralStore } from './GeneralStore'
 
 const SHUT =
   'A cluttered shop with the shutters half down. Rope, apples, matches and ' +
-  'trinkets crowd the shelves in the gloom. The [character_name]shopkeeper[/character_name] ' +
+  'trinkets crowd the shelves in the gloom. [character_name]Hemlock[/character_name] ' +
   'stands at the window, watching the lane.'
 const OPEN =
   'A cluttered shop. Rope, apples, matches and trinkets crowd the shelves, ' +
-  'and the air smells of fruit, wax and old wood. The [character_name]shopkeeper[/character_name] ' +
+  'and the air smells of fruit, wax and old wood. [character_name]Hemlock[/character_name] ' +
   'dusts jars between customers'
 const CAT = ', and every so often looks at the counter, where his cat sleeps.'
 

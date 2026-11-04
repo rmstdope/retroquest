@@ -29,7 +29,7 @@ function seeTheDeer(game: Game): void {
 
 describe('Borin sharpening the knife', () => {
   const TRADE =
-    'The blacksmith pockets the coin and puts the dull knife to the ' +
+    'Borin pockets the coin and puts the dull knife to the ' +
     'whetstone. It sings for a minute. He tests the edge on his thumbnail ' +
     'before he hands it back.\nYou receive a sharp knife.'
 
@@ -62,7 +62,7 @@ describe('Borin sharpening the knife', () => {
     const response = executeCommands(game, ['give dull knife to blacksmith'])
 
     expect(plain(response)).toContain(
-      'The blacksmith eyes the dull knife. That edge has seen better days. ' +
+      'Borin eyes the dull knife. That edge has seen better days. ' +
         "I'll put it right for you, lad, but it'll cost a coin.",
     )
     expect(game.state.hasItem('dull knife')).toBe(true)
@@ -128,7 +128,7 @@ describe('Borin as the act goes on', () => {
     const response = executeCommands(game, ['talk to blacksmith'])
 
     expect(response).toContain("What've you got for me?")
-    expectDialogueSpeaker(response, 'blacksmith')
+    expectDialogueSpeaker(response, 'Borin')
   })
 
   it('reminds Elior to oil the edge he sharpened', () => {
@@ -140,7 +140,7 @@ describe('Borin as the act goes on', () => {
     const response = executeCommands(game, ['talk to blacksmith'])
 
     expect(response).toContain('Keep that edge oiled')
-    expectDialogueSpeaker(response, 'blacksmith')
+    expectDialogueSpeaker(response, 'Borin')
     expect(findMarkupProblems(response)).toEqual([])
   })
 
@@ -151,7 +151,7 @@ describe('Borin as the act goes on', () => {
     const response = executeCommands(game, ['talk to blacksmith'])
 
     expect(response).toContain('Saw it, did you?')
-    expectDialogueSpeaker(response, 'blacksmith')
+    expectDialogueSpeaker(response, 'Borin')
     expect(findMarkupProblems(response)).toEqual([])
   })
 
@@ -171,7 +171,7 @@ describe('Borin as the act goes on', () => {
     expect(lines[1]).toContain('Saw it, did you?')
     expect(lines[2]).toContain('Keep that edge oiled')
     expect(lines[3]).toContain("Can't hammer that into shape")
-    for (const line of lines) expectDialogueSpeaker(line, 'blacksmith')
+    for (const line of lines) expectDialogueSpeaker(line, 'Borin')
   })
 
   it('comments on what is newest when Elior visits once after each event', () => {
@@ -211,6 +211,49 @@ describe('Borin as the act goes on', () => {
 
     expect(response).toContain('sit down, rest a while')
     expect(response).toContain('[room_name]Hidden Glade[/room_name]')
-    expectDialogueSpeaker(response, 'blacksmith')
+    expectDialogueSpeaker(response, 'Borin')
+  })
+})
+
+describe('Borin, named from the first moment', () => {
+  it('is Borin before Elior has spoken to him, and answers to his old names', () => {
+    const game = new Game([new Act1()])
+    game.state.currentRoom = game.state.allRooms.BlacksmithsForge
+    const smith = game.state.currentRoom.characters[0]
+
+    expect(smith.name).toBe('Borin')
+    for (const word of ['blacksmith', 'borin', 'Borin']) {
+      expect(smith.answersTo(word)).toBe(true)
+    }
+  })
+
+  it('speaks under his name and is named in narration, not by his trade', () => {
+    const game = new Game([new Act1()])
+    game.state.currentRoom = game.state.allRooms.BlacksmithsForge
+
+    const talk = game.commandParser.parse('talk to blacksmith')
+    const nothing = game.commandParser.parse('buy rope from borin')
+
+    expectDialogueSpeaker(talk, 'Borin')
+    expect(nothing).toBe(
+      '[character_name]Borin[/character_name] has nothing to sell you.',
+    )
+  })
+
+  it('is called Borin after loading a save made while he was the blacksmith', () => {
+    const game = new Game([new Act1()])
+    game.state.currentRoom = game.state.allRooms.BlacksmithsForge
+    game.state.currentRoom.characters[0].name = 'blacksmith'
+
+    const loaded = new Game([new Act1()])
+    loaded.loadSaveData(game.toSaveData())
+
+    expect(loaded.state.currentRoom.characters.map((c) => c.name)).toEqual([
+      'Borin',
+    ])
+    expectDialogueSpeaker(
+      loaded.commandParser.parse('talk to blacksmith'),
+      'Borin',
+    )
   })
 })

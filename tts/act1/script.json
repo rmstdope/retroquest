@@ -690,33 +690,33 @@
     "text": "A sturdy wooden bucket with a rope handle. It is full of murky water, with a sour smell drawn from the well."
   },
   {
-    "key": "16d8fd12d20d7d",
+    "key": "1592dd00e61289",
     "speaker": "narrator",
-    "text": "The blacksmith gives it a glance and hands it back."
+    "text": "Borin gives it a glance and hands it back."
   },
   {
-    "key": "1cedf8cdf63e07",
-    "speaker": "blacksmith",
+    "key": "015d02c84a6444",
+    "speaker": "borin",
     "text": "Can't melt it, can't mend it. No use to me, lad."
   },
   {
-    "key": "1829dbae932fd2",
+    "key": "10adc84facab35",
     "speaker": "narrator",
-    "text": "The blacksmith eyes the dull knife."
+    "text": "Borin eyes the dull knife."
   },
   {
-    "key": "0212eb8dabfa49",
-    "speaker": "blacksmith",
+    "key": "0ea5d072a2a48b",
+    "speaker": "borin",
     "text": "That edge has seen better days. I'll put it right for you, lad, but it'll cost a coin. Whetstones don't grow on trees."
   },
   {
-    "key": "10ff3024e15d07",
+    "key": "16edfcea3ba8e5",
     "speaker": "narrator",
-    "text": "The blacksmith eyes the coin."
+    "text": "Borin eyes the coin."
   },
   {
-    "key": "0b7271d3f682d6",
-    "speaker": "blacksmith",
+    "key": "1bfabcc75c79cd",
+    "speaker": "borin",
     "text": "A coin's no use to me without something to put an edge on, lad. Bring the dull knife as well."
   },
   {
@@ -725,9 +725,9 @@
     "text": "Blacksmith's Forge"
   },
   {
-    "key": "1007997f192420",
+    "key": "07ac1fda167358",
     "speaker": "narrator",
-    "text": "A hot, smoky forge. Coals glow in the hearth and the anvil rings. Hinges, ploughshares and horseshoes hang from the walls, waiting to be mended or fetched, and the blacksmith wipes his brow without putting down the hammer."
+    "text": "A hot, smoky forge. Coals glow in the hearth and the anvil rings. Hinges, ploughshares and horseshoes hang from the walls, waiting to be mended or fetched, and Borin wipes his brow without putting down the hammer."
   },
   {
     "key": "160b587b246d02",
@@ -735,8 +735,8 @@
     "text": "A heavy iron horseshoe, slightly bent. It might bring luck or be useful for repairs."
   },
   {
-    "key": "0b0c487c57980a",
-    "speaker": "blacksmith",
+    "key": "0d4dfb9e4f90e8",
+    "speaker": "borin",
     "text": "Mind the sparks, lad."
   },
   {
@@ -745,8 +745,8 @@
     "text": "He doesn't stop hammering."
   },
   {
-    "key": "0f9c839fddfaaf",
-    "speaker": "blacksmith",
+    "key": "0d96157167ceda",
+    "speaker": "borin",
     "text": "Borin. I make what this village breaks, and I mend what it won't throw away. Got anything with an edge gone soft? Bring it here."
   },
   {
@@ -760,14 +760,14 @@
     "text": "You search around the Blacksmith's Forge, but find nothing of interest beyond what you can already see."
   },
   {
-    "key": "0be2c322a1f36a",
-    "speaker": "blacksmith",
+    "key": "0911457e9acd93",
+    "speaker": "borin",
     "text": "Back again, lad? Forge is hot. What've you got for me?"
   },
   {
-    "key": "0d222db6e06369",
+    "key": "03e6bcbcc23058",
     "speaker": "narrator",
-    "text": "The blacksmith pockets the coin and puts the dull knife to the whetstone. It sings for a minute. He tests the edge on his thumbnail before he hands it back."
+    "text": "Borin pockets the coin and puts the dull knife to the whetstone. It sings for a minute. He tests the edge on his thumbnail before he hands it back."
   },
   {
     "key": "111eb026e4b756",
@@ -780,8 +780,8 @@
     "text": "A well-sharpened knife. It looks like it could cut through almost anything."
   },
   {
-    "key": "1810aa84e25214",
-    "speaker": "blacksmith",
+    "key": "0844b4b9abc5e8",
+    "speaker": "borin",
     "text": "How is that blade holding up? Keep that edge oiled, mind, or the damp will have it dull again before you know it."
   },
   {
@@ -960,18 +960,18 @@
     "text": "Patches blinks at you slowly from beside the hearth and begins to purr."
   },
   {
-    "key": "1e75064e03807c",
+    "key": "0e695490a6f205",
     "speaker": "narrator",
-    "text": "The shopkeeper hurries over the moment you come in."
+    "text": "Hemlock hurries over the moment you come in."
   },
   {
-    "key": "0af5bbf0fb8712",
-    "speaker": "shopkeeper",
+    "key": "07df83ae92a4b5",
+    "speaker": "hemlock",
     "text": "Your grandmother sent word, lad. Patches is safe and warm by her hearth. I'll not drag her back; she always did like a fire better than a draughty old store, and I can call in and see her."
   },
   {
-    "key": "0e9e175535a167",
-    "speaker": "shopkeeper",
+    "key": "08d70c58e48563",
+    "speaker": "hemlock",
     "text": "The reward was for bringing her home, and she found a new one. But you'll not leave empty-handed: take this rope, on the house, and there's always an apple to go with it. And the store's open again, so have a look around."
   },
   {
@@ -1125,28 +1125,28 @@
     "text": "Shadows Over Willowbrook: Mira says the sickness in the fields and the sickness of the king feel like one wound. She wants a rare flower from the Hidden Glade, one that opens only for someone the land trusts."
   },
   {
-    "key": "0cd9ab01c1f999",
+    "key": "04405c2ac93375",
     "speaker": "narrator",
-    "text": "The shopkeeper quickly steps over."
+    "text": "Hemlock quickly steps over."
   },
   {
-    "key": "1875997df3a14d",
-    "speaker": "shopkeeper",
+    "key": "18a634b13c6937",
+    "speaker": "hemlock",
     "text": "Hold on there, friend! That sword is merchandise, not a free sample. If you want it, you'll need to buy it proper-like."
   },
   {
-    "key": "01e33e35988200",
-    "speaker": "shopkeeper",
+    "key": "0d7084eeab0255",
+    "speaker": "hemlock",
     "text": "Hold on there, friend! That armor is merchandise, not a free sample. If you want it, you'll need to buy it proper-like."
   },
   {
-    "key": "1b2055f0fdd403",
+    "key": "15449396fc9e72",
     "speaker": "narrator",
-    "text": "The shopkeeper chuckles and pushes it back across the counter."
+    "text": "Hemlock chuckles and pushes it back across the counter."
   },
   {
-    "key": "0dd0b50f7da05b",
-    "speaker": "shopkeeper",
+    "key": "024791c675bb7a",
+    "speaker": "hemlock",
     "text": "I sell things, lad. I don't take them in."
   },
   {
@@ -1165,9 +1165,9 @@
     "text": "General Store"
   },
   {
-    "key": "08d6d50894abad",
+    "key": "10b509fdf677ac",
     "speaker": "narrator",
-    "text": "A cluttered shop with the shutters half down. Rope, apples, matches and trinkets crowd the shelves in the gloom. The shopkeeper stands at the window, watching the lane."
+    "text": "A cluttered shop with the shutters half down. Rope, apples, matches and trinkets crowd the shelves in the gloom. Hemlock stands at the window, watching the lane."
   },
   {
     "key": "051b996a4feda1",
@@ -1195,13 +1195,13 @@
     "text": "A sturdy leather armor vest that provides protection from harm. Well-crafted and reliable."
   },
   {
-    "key": "16778eaf46482c",
+    "key": "1f8cc97cf69e5e",
     "speaker": "narrator",
-    "text": "Patches butts her head against the shopkeeper's hand, and his face lights up."
+    "text": "Patches butts her head against Hemlock's hand, and his face lights up."
   },
   {
-    "key": "1fbe5a0b7a0e10",
-    "speaker": "shopkeeper",
+    "key": "0871d6111622f6",
+    "speaker": "hemlock",
     "text": "Patches! You found her! Old Hemlock won't forget this. Here, the reward I promised. It isn't much, but it's honestly given. And the store's open again, so have a look around."
   },
   {
@@ -1220,18 +1220,18 @@
     "text": "Old Man Hemlock, who keeps the General Store. He glances at the door every time it creaks."
   },
   {
-    "key": "024e14903a4d2a",
-    "speaker": "shopkeeper",
+    "key": "0d6e46de26749d",
+    "speaker": "hemlock",
     "text": "Hold on there, friend! That apple is merchandise, not a free sample. If you want it, you'll need to buy it proper-like."
   },
   {
-    "key": "02560cd52c3616",
-    "speaker": "shopkeeper",
+    "key": "00349a1acbeace",
+    "speaker": "hemlock",
     "text": "Hold on there, friend! That rope is merchandise, not a free sample. If you want it, you'll need to buy it proper-like."
   },
   {
-    "key": "0341f6975f6267",
-    "speaker": "shopkeeper",
+    "key": "187efa42477b5d",
+    "speaker": "hemlock",
     "text": "Hold on there, friend! Those matches are set aside for the priest. He gets them on the house whenever he asks."
   },
   {
@@ -1240,13 +1240,13 @@
     "text": "You carried Patches home to Old Man Hemlock, and the General Store is open again. Curiosity did not kill this cat after all."
   },
   {
-    "key": "1a067f272fbff0",
+    "key": "0d16c6451512ea",
     "speaker": "narrator",
-    "text": "The shopkeeper says:"
+    "text": "Hemlock says:"
   },
   {
-    "key": "1fd0d12d436dec",
-    "speaker": "shopkeeper",
+    "key": "16e742381cddfa",
+    "speaker": "hemlock",
     "text": "Only store in Willowbrook, so I suppose that makes it the finest. Here's what I've got for sale: - Rope: 1 coin - Sword: 5 coins - Armor: 10 coins And there's an apple with everything. My mother's rule."
   },
   {
@@ -1320,13 +1320,13 @@
     "text": "A chunk of stone broken from the old mill's grinding wheel. It's heavy and rough, but could be useful for repairs or as a tool."
   },
   {
-    "key": "10e066e55f37c2",
+    "key": "10759638e49eed",
     "speaker": "narrator",
-    "text": "The blacksmith takes the millstone fragment and turns it over in his calloused hands."
+    "text": "Borin takes the millstone fragment and turns it over in his calloused hands."
   },
   {
-    "key": "016504f33352a0",
-    "speaker": "blacksmith",
+    "key": "051862ee636284",
+    "speaker": "borin",
     "text": "From the old mill, that. Good stone. My grandfather said they built the mill where they did for a reason. The ground there's older than the village."
   },
   {
@@ -1335,8 +1335,8 @@
     "text": "He sets it on the bench."
   },
   {
-    "key": "1d048e0cbc8c8b",
-    "speaker": "blacksmith",
+    "key": "065c0d1816300c",
+    "speaker": "borin",
     "text": "He told me something else, too. There's a deer in the Hidden Glade that comes to folk who keep still. Not to hunters. Not to talkers. You go there, sit down, rest a while, and stop looking for it. That's when it comes."
   },
   {
@@ -1805,18 +1805,18 @@
     "text": "Let there be light: The priest is out of matches and his candle is cold. Hemlock at the General Store keeps a box for him."
   },
   {
-    "key": "125609050865dc",
-    "speaker": "blacksmith",
+    "key": "0d768eda5b0858",
+    "speaker": "borin",
     "text": "Saw it, did you? The deer? My grandfather swore by that deer. Said it only shows itself to them as the land has need of."
   },
   {
-    "key": "17786ab24c98d2",
+    "key": "19e1c902bb676a",
     "speaker": "narrator",
-    "text": "The shopkeeper leans in."
+    "text": "Hemlock leans in."
   },
   {
-    "key": "1cb7ce56d7eb58",
-    "speaker": "shopkeeper",
+    "key": "0dca7112ae9e08",
+    "speaker": "hemlock",
     "text": "Been to see the priest, have you? He does get through his matches."
   },
   {
@@ -1825,8 +1825,8 @@
     "text": "He takes a box from under the counter."
   },
   {
-    "key": "13c153a34c68e2",
-    "speaker": "shopkeeper",
+    "key": "077a6868a25d1a",
+    "speaker": "hemlock",
     "text": "They're on the house. Always have been; my father said a chapel without a light is bad luck, and I've never been brave enough to find out."
   },
   {
@@ -1925,9 +1925,9 @@
     "text": "Thank you for the light, child. Show that to your grandmother. She will know it better than I."
   },
   {
-    "key": "02d80d342013aa",
+    "key": "0f0f0539bfea13",
     "speaker": "narrator",
-    "text": "The blacksmith has nothing to sell you."
+    "text": "Borin has nothing to sell you."
   },
   {
     "key": "02e5f249f72efe",
@@ -1935,8 +1935,8 @@
     "text": "Patches has nothing to sell you."
   },
   {
-    "key": "0bef1fc0430199",
-    "speaker": "shopkeeper",
+    "key": "00e004cb1e103e",
+    "speaker": "hemlock",
     "text": "Not something I carry, lad. Not since the caravans stopped, anyway."
   },
   {
@@ -2165,34 +2165,34 @@
     "text": "The cleansing runs over Patches and finds nothing to wash away."
   },
   {
-    "key": "030394996b1f92",
+    "key": "0310b306f599da",
     "speaker": "narrator",
-    "text": "A divine light surrounds shopkeeper, and they seem strengthened and more resolute."
+    "text": "A divine light surrounds Hemlock, and they seem strengthened and more resolute."
   },
   {
-    "key": "0ec6eea8ba07d5",
+    "key": "007d64959315ea",
     "speaker": "narrator",
-    "text": "A warm light settles over the shopkeeper. There was nothing in them that needed mending."
+    "text": "A warm light settles over Hemlock. There was nothing in them that needed mending."
   },
   {
-    "key": "1435eb109c487e",
+    "key": "0c2868b80583f2",
     "speaker": "narrator",
-    "text": "The cleansing runs over the shopkeeper and finds nothing to wash away."
+    "text": "The cleansing runs over Hemlock and finds nothing to wash away."
   },
   {
-    "key": "126d76c822145c",
+    "key": "1a51b9f84fdaa3",
     "speaker": "narrator",
-    "text": "A divine light surrounds blacksmith, and they seem strengthened and more resolute."
+    "text": "A divine light surrounds Borin, and they seem strengthened and more resolute."
   },
   {
-    "key": "1778e2ab0df0f4",
+    "key": "161b5dc256db64",
     "speaker": "narrator",
-    "text": "A warm light settles over the blacksmith. There was nothing in them that needed mending."
+    "text": "A warm light settles over Borin. There was nothing in them that needed mending."
   },
   {
-    "key": "0e9bb18aa9f734",
+    "key": "0fd247f44682f4",
     "speaker": "narrator",
-    "text": "The cleansing runs over the blacksmith and finds nothing to wash away."
+    "text": "The cleansing runs over Borin and finds nothing to wash away."
   },
   {
     "key": "0f6caabec47913",

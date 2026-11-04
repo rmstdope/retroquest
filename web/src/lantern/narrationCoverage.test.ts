@@ -35,7 +35,7 @@ const OPTIONAL_LINES: Record<number, { speaker: string; opening: string }[]> = {
     },
     { speaker: 'mira', opening: 'Not that one, Elior. Not yet.' },
     {
-      speaker: 'shopkeeper',
+      speaker: 'hemlock',
       opening: 'Hold on there, friend! That sword is merchandise',
     },
     { speaker: 'narrator', opening: 'You lift the smooth stone a little' },
@@ -56,8 +56,8 @@ const OPTIONAL_LINES: Record<number, { speaker: string; opening: string }[]> = {
     { speaker: 'fisherman', opening: 'Under the smooth stone, lad' },
     { speaker: 'grandmother', opening: 'The three of you.' },
     { speaker: 'grandmother', opening: "I'll make a pie." },
-    { speaker: 'shopkeeper', opening: 'Hold on there, friend! That armor' },
-    { speaker: 'shopkeeper', opening: 'I sell things, lad.' },
+    { speaker: 'hemlock', opening: 'Hold on there, friend! That armor' },
+    { speaker: 'hemlock', opening: 'I sell things, lad.' },
     { speaker: 'merchant', opening: "That's kind, friend" },
     { speaker: 'mira', opening: 'I have told you what I know of it' },
     { speaker: 'narrator', opening: 'The old water splashes out' },
@@ -91,7 +91,7 @@ const OPTIONAL_LINES: Record<number, { speaker: string; opening: string }[]> = {
     },
     {
       speaker: 'narrator',
-      opening: 'The blacksmith gives it a glance and hands it back.',
+      opening: 'Borin gives it a glance and hands it back.',
     },
     {
       speaker: 'narrator',
@@ -109,7 +109,7 @@ const OPTIONAL_LINES: Record<number, { speaker: string; opening: string }[]> = {
     { speaker: 'narrator', opening: 'Tilda has nothing to sell you.' },
     { speaker: 'narrator', opening: 'Patches has nothing to sell you.' },
     {
-      speaker: 'shopkeeper',
+      speaker: 'hemlock',
       opening: 'Not something I carry, lad.',
     },
     { speaker: 'narrator', opening: "You don't see that here." },
@@ -188,7 +188,7 @@ describe('Act I stock replies in the script (rq-bio)', () => {
       'The deer sniffs at it',
       'Grandmother turns it over',
       'Mira regards it',
-      'The blacksmith gives it a glance',
+      'Borin gives it a glance',
       'The fisherman eyes it',
       'The merchant weighs it',
       'Patches sniffs at your offering',

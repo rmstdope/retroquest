@@ -46,14 +46,14 @@
     "title": "Blacksmith's Forge",
     "width": 1920,
     "height": 1080,
-    "description": "A hot, smoky forge. Coals glow in the hearth and the anvil rings. Hinges, ploughshares and horseshoes hang from the walls, waiting to be mended or fetched, and the blacksmith wipes his brow without putting down the hammer."
+    "description": "A hot, smoky forge. Coals glow in the hearth and the anvil rings. Hinges, ploughshares and horseshoes hang from the walls, waiting to be mended or fetched, and Borin wipes his brow without putting down the hammer."
   },
   {
     "id": "act1-general-store",
     "title": "General Store",
     "width": 1920,
     "height": 1080,
-    "description": "A cluttered shop with the shutters half down. Rope, apples, matches and trinkets crowd the shelves in the gloom. The shopkeeper stands at the window, watching the lane."
+    "description": "A cluttered shop with the shutters half down. Rope, apples, matches and trinkets crowd the shelves in the gloom. Hemlock stands at the window, watching the lane."
   },
   {
     "id": "act1-village-well",
@@ -113,7 +113,7 @@
   },
   {
     "id": "act1-portrait-blacksmith",
-    "title": "Blacksmith",
+    "title": "Borin",
     "width": 480,
     "height": 640,
     "description": "A face portrait of a broad, bearded village smith, his cheeks flushed from the forge and a smudge of soot on his brow, with a keen, busy look."
@@ -176,7 +176,7 @@
   },
   {
     "id": "act1-portrait-shopkeeper",
-    "title": "Shopkeeper",
+    "title": "Hemlock",
     "width": 480,
     "height": 640,
     "description": "A face portrait of an old storekeeper with a nervous, sideways glance and thinning white hair."

@@ -2,7 +2,6 @@ import {
   Character,
   type GameState,
   type Item,
-  type NameOptions,
   characterName,
   speech,
   clue,
@@ -71,28 +70,37 @@ export class Shopkeeper extends Character {
 
   constructor() {
     super({
-      name: 'shopkeeper',
-      description:
-        `Old Man ${characterName('Hemlock')}, who keeps the General Store. ` +
-        'He glances at the door every time it creaks.',
+      name: Shopkeeper.NAME,
+      description: Shopkeeper.DESCRIPTION,
     })
   }
 
+  private static readonly NAME = 'Hemlock'
+  private static readonly DESCRIPTION =
+    `Old Man ${characterName(Shopkeeper.NAME)}, who keeps the General Store. ` +
+    'He glances at the door every time it creaks.'
+
   /**
-   * Also answers to his name as the game gives it, "Hemlock", "Old Hemlock"
-   * or "Old Man Hemlock": his description, the notice and his own
-   * introduction all name him.
+   * Bring a shopkeeper from a save made before he was named up to date: he
+   * is Hemlock now. Safe to run more than once.
+   */
+  migrateLegacyName(): void {
+    this.name = Shopkeeper.NAME
+    this.description = Shopkeeper.DESCRIPTION
+  }
+
+  /**
+   * Answers to his name, Hemlock, and still to shopkeeper, "Old Hemlock" and
+   * "Old Man Hemlock": his description, the notice and his own introduction
+   * all name him so.
    */
   override answersTo(name: string): boolean {
     return (
       super.answersTo(name) ||
-      ['hemlock', 'old hemlock', 'old man hemlock'].includes(name.toLowerCase())
+      ['shopkeeper', 'old hemlock', 'old man hemlock'].includes(
+        name.toLowerCase(),
+      )
     )
-  }
-
-  /** Named by what it is, so it reads "the shopkeeper" (see `nameInSentence`). */
-  override nameInSentence(options?: NameOptions): string {
-    return super.nameInSentence({ ...options, common: true })
   }
 
   /**

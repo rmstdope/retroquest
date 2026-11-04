@@ -55,9 +55,9 @@ const REFUSALS: [string, () => Character, string][] = [
       speech('I have no need for this, child.'),
   ],
   [
-    'the blacksmith',
+    'Borin',
     () => new Blacksmith(),
-    `The ${characterName('blacksmith')} gives it a glance and hands it back. ` +
+    `${characterName('Borin')} gives it a glance and hands it back. ` +
       speech("Can't melt it, can't mend it. No use to me, lad."),
   ],
   [

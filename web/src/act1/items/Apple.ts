@@ -14,10 +14,7 @@ export class Apple extends Item {
   override preventPickup(): string {
     if (!this.canBeCarried) {
       return (
-        nameInSentence('character', 'shopkeeper', {
-          common: true,
-          atStart: true,
-        }) +
+        nameInSentence('character', 'Hemlock', { atStart: true }) +
         ' quickly steps over. ' +
         speech(
           `Hold on there, friend! That [item_name]${this.name}[/item_name] ` +

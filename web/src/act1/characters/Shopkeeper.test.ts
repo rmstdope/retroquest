@@ -70,7 +70,7 @@ describe('Shopkeeper dialogue markup', () => {
       answer = game.commandParser.parse('talk to shopkeeper')
     expect(answer).toContain('for sale')
     expectQuotesInsideDialogue(answer)
-    expectDialogueSpeaker(answer, 'shopkeeper')
+    expectDialogueSpeaker(answer, 'Hemlock')
   })
 
   it('keeps the closed-shop reply inside dialogue', () => {
@@ -79,7 +79,7 @@ describe('Shopkeeper dialogue markup', () => {
     )
     expect(answer).toContain('Patches')
     expectQuotesInsideDialogue(answer)
-    expectDialogueSpeaker(answer, 'shopkeeper')
+    expectDialogueSpeaker(answer, 'Hemlock')
   })
 
   it('keeps the matches hand-over inside dialogue', () => {
@@ -88,7 +88,7 @@ describe('Shopkeeper dialogue markup', () => {
     )
     expect(answer).toContain('on the house')
     expectQuotesInsideDialogue(answer)
-    expectDialogueSpeaker(answer, 'shopkeeper')
+    expectDialogueSpeaker(answer, 'Hemlock')
   })
 
   it('keeps the unknown-ware reply inside dialogue', () => {
@@ -97,7 +97,7 @@ describe('Shopkeeper dialogue markup', () => {
     )
     expect(answer).toContain('Not something I carry, lad.')
     expectQuotesInsideDialogue(answer)
-    expectDialogueSpeaker(answer, 'shopkeeper')
+    expectDialogueSpeaker(answer, 'Hemlock')
   })
 
   it('reports a purchase without stray quotes', () => {
@@ -114,7 +114,7 @@ describe('Shopkeeper dialogue markup', () => {
     const answer = game.commandParser.parse('give coin to shopkeeper')
     expect(answer).toContain("I don't take them in")
     expectQuotesInsideDialogue(answer)
-    expectDialogueSpeaker(answer, 'shopkeeper')
+    expectDialogueSpeaker(answer, 'Hemlock')
   })
 })
 
@@ -170,7 +170,7 @@ describe('Shopkeeper and the priest matches', () => {
 
     expect(answer).toContain('priest')
     expect(answer).not.toContain('is yours for')
-    expectDialogueSpeaker(answer, 'shopkeeper')
+    expectDialogueSpeaker(answer, 'Hemlock')
   })
 })
 
@@ -189,7 +189,7 @@ describe('Hemlock and his missing cat', () => {
     const again = game.commandParser.parse('talk to shopkeeper')
     expect(again).not.toEqual(first)
     expect(again).toContain('[character_name]Patches[/character_name]')
-    expectDialogueSpeaker(again, 'shopkeeper')
+    expectDialogueSpeaker(again, 'Hemlock')
   })
 
   it('grumbles about the stopped caravans with Malakar as a byword on the first talk', () => {
@@ -225,7 +225,7 @@ describe('Hemlock and his missing cat', () => {
     const answer = game.commandParser.parse('talk to shopkeeper')
 
     expect(answer).toContain('[character_name]Hemlock[/character_name]')
-    expectDialogueSpeaker(answer, 'shopkeeper')
+    expectDialogueSpeaker(answer, 'Hemlock')
     expectQuotesInsideDialogue(answer)
     expect(coins(game)).toBe(1)
     expect(game.state.getStoryFlag(FLAG_PATCHES_RETURNED)).toBe(true)
@@ -275,7 +275,7 @@ describe('Hemlock and his missing cat', () => {
 
     expect(answer).not.toContain("You don't have")
     expect(answer).toContain('You found her')
-    expectDialogueSpeaker(answer, 'shopkeeper')
+    expectDialogueSpeaker(answer, 'Hemlock')
     expect(game.state.getStoryFlag(FLAG_PATCHES_RETURNED)).toBe(true)
     expect(coins(game)).toBe(1)
   })
@@ -300,7 +300,7 @@ describe('Hemlock and his missing cat', () => {
 
     const answer = game.commandParser.parse('talk to shopkeeper')
 
-    expectDialogueSpeaker(answer, 'shopkeeper')
+    expectDialogueSpeaker(answer, 'Hemlock')
     expect(game.state.getStoryFlag(FLAG_PATCHES_RETURNED)).toBe(true)
     expect(coins(game)).toBe(0)
   })
@@ -354,7 +354,7 @@ describe('Shopkeeper when Patches stays with grandmother', () => {
     const answer = game.commandParser.parse('talk to shopkeeper')
 
     expect(answer).toContain('[character_name]grandmother[/character_name]')
-    expectDialogueSpeaker(answer, 'shopkeeper')
+    expectDialogueSpeaker(answer, 'Hemlock')
     expect(game.state.hasItem('rope')).toBe(true)
     expect(game.state.hasItem('apple')).toBe(true)
     expect(game.state.inventory.some((i) => i instanceof Coin)).toBe(false)
@@ -392,24 +392,24 @@ describe('Shopkeeper when Patches stays with grandmother', () => {
   })
 })
 
-describe('Shopkeeper named as a common noun', () => {
-  const SHOPKEEPER = '[character_name]shopkeeper[/character_name]'
+describe('Shopkeeper named as Hemlock, a proper name', () => {
+  const HEMLOCK = '[character_name]Hemlock[/character_name]'
 
-  it('refuses a gift as "The shopkeeper"', () => {
+  it('refuses a gift as "Hemlock"', () => {
     const game = gameInStore()
     game.state.addItemToInventory(new Coin())
     const answer = game.commandParser.parse('give coin to shopkeeper')
     expect(
-      answer.startsWith(`The ${SHOPKEEPER} chuckles and pushes it back`),
+      answer.startsWith(`${HEMLOCK} chuckles and pushes it back`),
       answer,
     ).toBe(true)
   })
 
   it.each(['rope', 'apple', 'matches', 'sword', 'armor'])(
-    'stops an unpaid %s as "The shopkeeper"',
+    'stops an unpaid %s as "Hemlock"',
     (ware) => {
       const answer = gameInStore().commandParser.parse(`take ${ware}`)
-      expect(answer).toContain(`The ${SHOPKEEPER} quickly steps over.`)
+      expect(answer).toContain(`${HEMLOCK} quickly steps over.`)
     },
   )
 
@@ -417,37 +417,35 @@ describe('Shopkeeper named as a common noun', () => {
     ['talks while the store is shut', { shopOpen: false }],
     ['lists the wares', {}],
     ['hands over the priest matches', { priestTalkedTo: true }],
-  ])('never reads "Shopkeeper" when he %s', (_case, options) => {
+  ])('never reads "shopkeeper" when he %s', (_case, options) => {
     const answer =
       gameInStore(options).commandParser.parse('talk to shopkeeper')
-    expect(answer).toContain(`The ${SHOPKEEPER}`)
+    expect(answer).toContain(HEMLOCK)
+    expect(answer).not.toContain('[character_name]shopkeeper')
     expect(answer).not.toContain('[character_name]Shopkeeper')
   })
 
-  it('reads "the shopkeeper\'s hand" when Patches comes home', () => {
+  it('reads "Hemlock\'s hand" when Patches comes home', () => {
     const game = gameInStore({ shopOpen: false })
     game.state.setStoryFlag(FLAG_PATCHES_FOUND, true)
     const answer = game.commandParser.parse('talk to shopkeeper')
-    expect(answer).toContain(`butts her head against the ${SHOPKEEPER}'s hand`)
+    expect(answer).toContain(`butts her head against ${HEMLOCK}'s hand`)
   })
 
-  it('opens with "The shopkeeper" when grandmother has kept Patches', () => {
+  it('opens with "Hemlock" when grandmother has kept Patches', () => {
     const game = gameInStore({ shopOpen: false })
     game.state.setStoryFlag(FLAG_PATCHES_STAYED_WITH_GRANDMOTHER, true)
     const answer = game.commandParser.parse('talk to shopkeeper')
-    expect(answer.startsWith(`The ${SHOPKEEPER} hurries over`), answer).toBe(
-      true,
-    )
+    expect(answer.startsWith(`${HEMLOCK} hurries over`), answer).toBe(true)
   })
 
-  it('shakes his head as "The shopkeeper" once Elior has met him', () => {
+  it('shakes his head as "Hemlock" once Elior has met him', () => {
     const game = gameInStore({ shopOpen: false })
     game.state.setStoryFlag(FLAG_MET_HEMLOCK, true)
     const answer = game.commandParser.parse('talk to shopkeeper')
-    expect(
-      answer.startsWith(`The ${SHOPKEEPER} shakes his head before`),
-      answer,
-    ).toBe(true)
+    expect(answer.startsWith(`${HEMLOCK} shakes his head before`), answer).toBe(
+      true,
+    )
   })
 })
 
@@ -458,7 +456,7 @@ describe('the shopkeeper answers to his name', () => {
     const talk = game.commandParser.parse('talk to hemlock')
 
     expect(talk).not.toContain('There is no character')
-    expectDialogueSpeaker(talk, 'shopkeeper')
+    expectDialogueSpeaker(talk, 'Hemlock')
   })
 
   it.each(['old hemlock', 'old man hemlock'])(
@@ -480,7 +478,7 @@ describe('the shopkeeper answers to his name', () => {
     const give = game.commandParser.parse('give bread to hemlock')
 
     expect(talk).not.toContain('There is no character')
-    expectDialogueSpeaker(talk, 'shopkeeper')
+    expectDialogueSpeaker(talk, 'Hemlock')
     expect(give).not.toContain('There is no character')
     expect(give).toContain("I don't take them in")
   })
@@ -516,5 +514,51 @@ describe('Hemlock idle lines', () => {
 
     expect(answer).toContain('Only store in Willowbrook')
     expect(answer).not.toContain('humble store')
+  })
+})
+
+describe('Hemlock, named from the first moment', () => {
+  it('is Hemlock before Elior has spoken to him, and answers to his old names', () => {
+    const game = gameInStore()
+    const keeper = game.state.currentRoom.characters[0]
+
+    expect(keeper.name).toBe('Hemlock')
+    for (const word of [
+      'shopkeeper',
+      'hemlock',
+      'old hemlock',
+      'old man hemlock',
+    ]) {
+      expect(keeper.answersTo(word)).toBe(true)
+    }
+  })
+
+  it('is named in narration, not by his trade, in the shut and open store', () => {
+    for (const shopOpen of [false, true]) {
+      const game = gameInStore({ shopOpen })
+      const answer = game.commandParser.parse('give coin to shopkeeper')
+      expect(answer).not.toMatch(/shopkeeper/i)
+    }
+    const game = gameInStore()
+    game.state.addItemToInventory(new Coin())
+    expect(game.commandParser.parse('give coin to hemlock')).toContain(
+      '[character_name]Hemlock[/character_name] chuckles and pushes it',
+    )
+  })
+
+  it('is called Hemlock after loading a save made while he was the shopkeeper', () => {
+    const game = gameInStore()
+    game.state.currentRoom.characters[0].name = 'shopkeeper'
+
+    const loaded = new Game([new Act1()])
+    loaded.loadSaveData(game.toSaveData())
+
+    expect(loaded.state.currentRoom.characters.map((c) => c.name)).toEqual([
+      'Hemlock',
+    ])
+    expectDialogueSpeaker(
+      loaded.commandParser.parse('talk to shopkeeper'),
+      'Hemlock',
+    )
   })
 })
