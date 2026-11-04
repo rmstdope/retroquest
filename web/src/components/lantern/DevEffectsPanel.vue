@@ -118,7 +118,11 @@ onMounted(() => {
   measure()
   window.addEventListener('resize', measure)
 })
-onBeforeUnmount(() => window.removeEventListener('resize', measure))
+onBeforeUnmount(() => {
+  window.removeEventListener('resize', measure)
+  // A solo left behind would keep the room part-silent with nothing to say why.
+  mix.clearSolo()
+})
 </script>
 
 <template>
@@ -176,6 +180,7 @@ onBeforeUnmount(() => window.removeEventListener('resize', measure))
           <button
             type="button"
             class="lq-fx-play"
+            :aria-label="row.loops ? `Solo ${row.id}` : `Play ${row.id} now`"
             :aria-pressed="row.loops ? row.soloed : undefined"
             @click="onPlay(row)"
           >
@@ -183,9 +188,7 @@ onBeforeUnmount(() => window.removeEventListener('resize', measure))
           </button>
         </div>
         <div class="lq-fx-line">
-          <label :for="`fx-${row.id}`" class="lq-fx-note lq-fx-label"
-            >Volume</label
-          >
+          <span class="lq-fx-note lq-fx-label" aria-hidden="true">Volume</span>
           <input
             :id="`fx-${row.id}`"
             type="range"
@@ -193,6 +196,8 @@ onBeforeUnmount(() => window.removeEventListener('resize', measure))
             :max="MAX_EFFECT_VOLUME * 100"
             step="5"
             :value="row.percent"
+            :aria-label="`${row.id} volume`"
+            :aria-valuetext="`${row.label} (${row.db})`"
             class="lq-fx-slider"
             @input="onSlide(row.id, $event)"
           />
@@ -229,7 +234,7 @@ onBeforeUnmount(() => window.removeEventListener('resize', measure))
     </div>
 
     <div class="lq-fx-foot">
-      <span class="lq-fx-status">
+      <span class="lq-fx-status" role="status">
         <span class="lq-fx-dot" :class="mix.saveState" aria-hidden="true" />
         {{ status }}
       </span>

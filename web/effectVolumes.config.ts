@@ -4,15 +4,17 @@
  * them to `src/lantern/effectVolumes.json`, so the next run starts there and
  * the production build plays by them. Writing the file reloads nothing in the
  * running game, which has the volumes already; the next page load reads the
- * file fresh. It applies to the dev server only.
+ * file fresh. The plugin imports only the volumes' shape, never the file: a
+ * file the config imports restarts the dev server when it changes, which
+ * reloads the game. It applies to the dev server only.
  */
 import { writeFileSync } from 'node:fs'
-import type { Plugin } from 'vite'
+import { normalizePath, type Plugin } from 'vite'
 import {
   EFFECT_VOLUMES_URL,
   isEffectVolumes,
   type EffectVolumes,
-} from './src/lantern/effectVolumes'
+} from './src/lantern/effectVolumesShape'
 
 /** The largest request body taken, in bytes: far more than every room's volumes. */
 const MAX_BODY_BYTES = 64 * 1024
@@ -70,7 +72,7 @@ export function effectVolumesPlugin(file: string): Plugin {
       })
     },
     handleHotUpdate({ file: changed, modules, server }) {
-      if (changed !== file) return undefined
+      if (changed !== normalizePath(file)) return undefined
       for (const module of modules) server.moduleGraph.invalidateModule(module)
       return []
     },

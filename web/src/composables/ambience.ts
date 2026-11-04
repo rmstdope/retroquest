@@ -135,11 +135,14 @@ export class Ambience {
     this.relevel()
   }
 
-  /** Plays the one-shot effect `id` at once, besides its own waits; nothing while stopped. */
+  /**
+   * Plays the one-shot effect `id` at once, besides its own waits, at its own
+   * volume even while another effect is soloed; nothing while stopped.
+   */
   audition(id: string): void {
     if (!this.playing) return
     const clip = this.clips.find((each) => each.id === id && !each.loops)
-    if (clip) this.sound(clip, false)
+    if (clip) this.sound(clip, false, false, this.volumeOf(clip))
   }
 
   /** Silences every clip but the effect `id`; null gives them all their volume back. */
@@ -156,14 +159,23 @@ export class Ambience {
   /** How loud `clip` sounds now: silent while another is soloed, else its volume. */
   private levelOf(clip: AmbientClip): number {
     if (this.soloed !== null && clip.id !== this.soloed) return 0
+    return this.volumeOf(clip)
+  }
+
+  /** The volume of `clip`: as set since the ambience was made, else its own, else 1. */
+  private volumeOf(clip: AmbientClip): number {
     const set = clip.id === undefined ? undefined : this.levels[clip.id]
     return set ?? clip.volume ?? 1
   }
 
   /** Gives every source sounding its clip's level now. */
   private relevel(): void {
-    for (const { clip, level } of this.sources)
+    // A fade-in under way is cancelled first, or its ramp would undo the level.
+    const now = this.context.currentTime
+    for (const { clip, level } of this.sources) {
+      level.gain.cancelScheduledValues(now)
       level.gain.value = this.levelOf(clip)
+    }
   }
 
   /** Whether `clip` plays in the present state: always, for one with none. */
@@ -267,11 +279,16 @@ export class Ambience {
   }
 
   /**
-   * Starts a source playing `clip` through its own gain (at the clip's level)
-   * into the ambience's, rising from silence to it when `fade`; a one-shot
-   * lets go of itself when it ends.
+   * Starts a source playing `clip` through its own gain (at level `at`, the
+   * clip's level now unless given) into the ambience's, rising from silence to
+   * it when `fade`; a one-shot lets go of itself when it ends.
    */
-  private sound(clip: AmbientClip, loop: boolean, fade = false): void {
+  private sound(
+    clip: AmbientClip,
+    loop: boolean,
+    fade = false,
+    at: number = this.levelOf(clip),
+  ): void {
     const node = this.context.createBufferSource()
     node.buffer = clip.buffer
     node.loop = loop
@@ -279,11 +296,8 @@ export class Ambience {
     if (fade) {
       const now = this.context.currentTime
       level.gain.setValueAtTime(0, now)
-      level.gain.linearRampToValueAtTime(
-        this.levelOf(clip),
-        now + STATE_FADE_SECONDS,
-      )
-    } else level.gain.value = this.levelOf(clip)
+      level.gain.linearRampToValueAtTime(at, now + STATE_FADE_SECONDS)
+    } else level.gain.value = at
     node.connect(level)
     level.connect(this.gain)
     const entry = { clip, node, level }

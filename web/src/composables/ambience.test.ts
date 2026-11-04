@@ -394,6 +394,40 @@ describe('Ambience', () => {
       expect(sourcesOf(strike)).toHaveLength(0)
     })
 
+    it('plays a one-shot asked for at its own volume, even while another is soloed', () => {
+      const ambience = loudStorm(2)
+      ambience.play()
+      ambience.solo('rain')
+      ambience.audition('lightning')
+      expect(levelOf(sourcesOf(strike)[0]).value).toBe(2)
+    })
+
+    it('takes a level set during a fade-in at once, without the ramp undoing it', () => {
+      const wail = { duration: 20 } as unknown as AudioBuffer
+      const ambience = new Ambience(
+        ctx as unknown as AudioContext,
+        [
+          { buffer: rain, loops: true, id: 'rain' },
+          { buffer: wail, loops: true, id: 'wail', state: 'lit' },
+        ],
+        bus,
+      )
+      ambience.play()
+      ambience.setState('lit')
+      ctx.currentTime = 5
+      ambience.solo('rain')
+      const gain = (
+        sourcesOf(wail)[0].connect.mock.calls[0][0] as {
+          gain: {
+            value: number
+            cancelScheduledValues: ReturnType<typeof vi.fn>
+          }
+        }
+      ).gain
+      expect(gain.cancelScheduledValues).toHaveBeenCalledWith(5)
+      expect(gain.value).toBe(0)
+    })
+
     it('silences every other clip while one is soloed, and gives them back after', () => {
       const ambience = loudStorm(2)
       ambience.play()

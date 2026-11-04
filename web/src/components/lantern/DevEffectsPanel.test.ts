@@ -109,6 +109,27 @@ describe('DevEffectsPanel', () => {
     expect(w.text()).toContain('No effects in this room')
   })
 
+  it('lets go of a solo when it closes, so the room is heard whole again', () => {
+    const w = panelIn('TheDream')
+    useEffectMixStore().toggleSolo('act1-the-dream', 'rain')
+    w.unmount()
+    wrapper = undefined
+    expect(useEffectMixStore().soloed).toBeNull()
+  })
+
+  it('names each control after its effect, and reads the level out', async () => {
+    const w = panelIn('TheDream')
+    useEffectMixStore().setVolume('act1-the-dream', 'lightning', 2.5)
+    await w.vm.$nextTick()
+    const slider = w.get('input[aria-label="lightning volume"]')
+    expect(slider.attributes('aria-valuetext')).toBe('250% (+8.0 dB)')
+    expect(w.find('button[aria-label="Play lightning now"]').exists()).toBe(
+      true,
+    )
+    expect(w.find('button[aria-label="Solo rain"]').exists()).toBe(true)
+    expect(w.get('[role="status"]').text()).toContain('Saving')
+  })
+
   it('closes', async () => {
     const w = panelIn('TheDream')
     await w.get('button[aria-label="Close room effects"]').trigger('click')

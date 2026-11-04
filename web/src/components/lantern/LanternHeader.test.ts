@@ -34,7 +34,13 @@ describe('LanternHeader', () => {
 
   it('in the dev build, opens the room effects panel, showing whether it is open', async () => {
     wrapper = mount(LanternHeader, { props: { effectsOpen: true } })
-    const button = wrapper.get('button[aria-label="Room effects"]')
+    // Loaded only in the dev build, so it comes a moment after the header.
+    const header = wrapper
+    const button = await vi.waitFor(() => {
+      const found = header.find('button[aria-label="Room effects"]')
+      if (!found.exists()) throw new Error('not loaded yet')
+      return found
+    })
     expect(button.attributes('aria-pressed')).toBe('true')
     await button.trigger('click')
     expect(wrapper.emitted('effects')).toHaveLength(1)

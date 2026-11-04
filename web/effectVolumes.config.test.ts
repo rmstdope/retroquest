@@ -39,6 +39,22 @@ describe('writeEffectVolumes', () => {
   )
 })
 
+/** The relative modules `file` (a path under web/) imports. */
+function importsOf(file: string): string[] {
+  const text = readFileSync(new URL(file, import.meta.url), 'utf8')
+  return [...text.matchAll(/from '(\.[^']+)'/g)].map((match) => match[1])
+}
+
+describe('the config import graph', () => {
+  it('never reaches the volumes file, so a save does not restart the dev server', () => {
+    // Vite restarts (and the game reloads) when a file the config imports changes.
+    expect(importsOf('./effectVolumes.config.ts')).toEqual([
+      './src/lantern/effectVolumesShape',
+    ])
+    expect(importsOf('./src/lantern/effectVolumesShape.ts')).toEqual([])
+  })
+})
+
 describe('effectVolumesPlugin', () => {
   it('only exists under the dev server', () => {
     expect(effectVolumesPlugin(freshFile()).apply).toBe('serve')

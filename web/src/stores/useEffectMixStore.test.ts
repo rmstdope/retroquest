@@ -48,6 +48,25 @@ describe('useEffectMixStore', () => {
     expect(mix.saveState).toBe('saved')
   })
 
+  it('stays saving while a newer change waits, and only the latest save says saved', async () => {
+    let answer = (_ok: boolean): void => {}
+    vi.mocked(fetch).mockImplementationOnce(
+      () =>
+        new Promise((resolve) => {
+          answer = (ok) => resolve({ ok } as Response)
+        }),
+    )
+    const mix = useEffectMixStore()
+    mix.setVolume(DREAM, 'rain', 0.5)
+    await vi.advanceTimersByTimeAsync(SAVE_DELAY_MS)
+    mix.setVolume(DREAM, 'rain', 0.4)
+    answer(true)
+    await vi.advanceTimersByTimeAsync(0)
+    expect(mix.saveState).toBe('saving')
+    await vi.advanceTimersByTimeAsync(SAVE_DELAY_MS)
+    expect(mix.saveState).toBe('saved')
+  })
+
   it('says so when the volumes could not be saved', async () => {
     vi.mocked(fetch).mockResolvedValue({ ok: false } as Response)
     const mix = useEffectMixStore()

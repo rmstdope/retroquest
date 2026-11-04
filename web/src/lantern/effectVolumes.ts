@@ -7,43 +7,21 @@
  * `effectVolumes.config.ts`), so the levels carry over to the next run.
  */
 import saved from './effectVolumes.json'
+import {
+  isEffectVolumes,
+  MAX_EFFECT_VOLUME,
+  type EffectVolumes,
+} from './effectVolumesShape'
 
-/** Where the dev server takes the volumes to save (a PUT of the whole file). */
-export const EFFECT_VOLUMES_URL = '/__effect-volumes'
-
-/** Volumes by music track, then by effect id. */
-export type EffectVolumes = Record<string, Record<string, number>>
-
-/** The loudest an effect may be set: three times as made. */
-export const MAX_EFFECT_VOLUME = 3
+export {
+  EFFECT_VOLUMES_URL,
+  isEffectVolumes,
+  MAX_EFFECT_VOLUME,
+  type EffectVolumes,
+} from './effectVolumesShape'
 
 /** The step volumes are kept to: 5 %. */
 const VOLUME_STEP = 0.05
-
-/** A track id or effect id: lower-case words joined by hyphens. */
-const SLUG = /^[a-z0-9]+(-[a-z0-9]+)*$/
-
-/** Whether `value` is a plain object (not null, not an array). */
-function isRecord(value: unknown): value is Record<string, unknown> {
-  return typeof value === 'object' && value !== null && !Array.isArray(value)
-}
-
-/** Whether `value` has the shape of the saved volumes, every volume in range. */
-export function isEffectVolumes(value: unknown): value is EffectVolumes {
-  if (!isRecord(value)) return false
-  return Object.entries(value).every(
-    ([track, effects]) =>
-      SLUG.test(track) &&
-      isRecord(effects) &&
-      Object.entries(effects).every(
-        ([id, volume]) =>
-          SLUG.test(id) &&
-          typeof volume === 'number' &&
-          volume >= 0 &&
-          volume <= MAX_EFFECT_VOLUME,
-      ),
-  )
-}
 
 /** The volumes saved in `effectVolumes.json`; none when the file is not well formed. */
 export const SAVED_EFFECT_VOLUMES: EffectVolumes = isEffectVolumes(saved)

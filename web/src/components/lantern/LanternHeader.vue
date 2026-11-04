@@ -1,5 +1,11 @@
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, ref } from 'vue'
+import {
+  computed,
+  defineAsyncComponent,
+  onMounted,
+  onUnmounted,
+  ref,
+} from 'vue'
 import { useGameStore } from '@/stores/useGameStore'
 import { useSettingsStore } from '@/stores/useSettingsStore'
 import { useFullscreen } from '@/composables/useFullscreen'
@@ -26,8 +32,10 @@ const emit = defineEmits<{
 const game = useGameStore()
 const settings = useSettingsStore()
 const fullscreen = useFullscreen()
-/** Whether this is the dev build, which has the room effects panel. */
-const devBuild = import.meta.env.DEV
+/** The dev build's room effects button, loaded only there. */
+const DevEffectsButton = import.meta.env.DEV
+  ? defineAsyncComponent(() => import('./DevEffectsButton.vue'))
+  : null
 
 const ROMAN = ['I', 'II', 'III', 'IV', 'V']
 
@@ -180,29 +188,12 @@ function toggleTheme(): void {
     </nav>
 
     <div class="lq-actions">
-      <button
-        v-if="devBuild"
-        type="button"
+      <DevEffectsButton
+        v-if="DevEffectsButton"
         class="lq-icon-btn lq-fx-btn"
-        aria-label="Room effects"
-        title="Room effects (dev)"
-        :aria-pressed="effectsOpen === true"
+        :open="effectsOpen === true"
         @click="emit('effects')"
-      >
-        <svg
-          width="18"
-          height="18"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          aria-hidden="true"
-        >
-          <path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3" />
-          <path d="M1 14h6M9 8h6M17 16h6" />
-        </svg>
-      </button>
+      />
       <button
         v-if="fullscreen.supported"
         type="button"

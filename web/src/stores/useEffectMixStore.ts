@@ -37,6 +37,10 @@ export const useEffectMixStore = defineStore('effectMix', () => {
   const request = ref<PlayRequest | null>(null)
   const soloed = ref<RoomEffect | null>(null)
   let saveTimer: ReturnType<typeof setTimeout> | undefined
+  /** Counts the changes, so only a save of the latest one says it is saved. */
+  let changes = 0
+  /** The saves one after another, so an older one never lands after a newer. */
+  let saving: Promise<void> = Promise.resolve()
 
   /** The volume of effect `id` in `track`'s room: as set, else 1. */
   function volumeOf(track: string, id: string): number {
@@ -47,23 +51,32 @@ export const useEffectMixStore = defineStore('effectMix', () => {
   function setVolume(track: string, id: string, volume: number): void {
     volumes.value = withVolume(volumes.value, track, id, volume)
     if (!import.meta.env.DEV) return
+    changes++
     saveState.value = 'saving'
     clearTimeout(saveTimer)
-    saveTimer = setTimeout(() => void save(), SAVE_DELAY_MS)
+    saveTimer = setTimeout(() => {
+      saving = saving.then(save)
+    }, SAVE_DELAY_MS)
   }
 
-  /** Writes the volumes to the file through the dev server. */
+  /**
+   * Writes the volumes to the file through the dev server. Only a save of the
+   * latest change sets the state: with a newer change waiting, it stays saving.
+   */
   async function save(): Promise<void> {
+    const saved = changes
+    let state: MixSaveState
     try {
       const response = await fetch(EFFECT_VOLUMES_URL, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(volumes.value),
       })
-      saveState.value = response.ok ? 'saved' : 'failed'
+      state = response.ok ? 'saved' : 'failed'
     } catch {
-      saveState.value = 'failed'
+      state = 'failed'
     }
+    if (saved === changes) saveState.value = state
   }
 
   /** Asks for the one-shot effect `id` of `track`'s room to play now. */
@@ -77,6 +90,11 @@ export const useEffectMixStore = defineStore('effectMix', () => {
     soloed.value = same ? null : { track, id }
   }
 
+  /** Lets go of any solo, so every effect is heard again. */
+  function clearSolo(): void {
+    soloed.value = null
+  }
+
   return {
     volumes,
     saveState,
@@ -86,5 +104,6 @@ export const useEffectMixStore = defineStore('effectMix', () => {
     setVolume,
     playNow,
     toggleSolo,
+    clearSolo,
   }
 })
