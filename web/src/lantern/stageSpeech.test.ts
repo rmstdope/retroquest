@@ -7,6 +7,7 @@ import {
   runHeads,
   speakerColor,
   speechLines,
+  type RunLine,
 } from './stageSpeech'
 
 describe('speechLines', () => {
@@ -149,8 +150,12 @@ describe('readingPauseMs', () => {
 })
 
 describe('runHeads', () => {
+  /** Lines all said in one turn. */
+  const oneTurn = (...speakers: string[]): RunLine[] =>
+    speakers.map((speaker) => ({ speaker, turnId: 1 }))
+
   it('marks the first line of each run of one speaker', () => {
-    expect(runHeads(['G', 'G', 'G', 'Elior', 'G'], 0)).toEqual([
+    expect(runHeads(oneTurn('G', 'G', 'G', 'Elior', 'G'), 0)).toEqual([
       true,
       false,
       false,
@@ -160,7 +165,7 @@ describe('runHeads', () => {
   })
 
   it('steps a run down to its first line still showing', () => {
-    expect(runHeads(['G', 'G', 'G', 'Elior'], 1)).toEqual([
+    expect(runHeads(oneTurn('G', 'G', 'G', 'Elior'), 1)).toEqual([
       false,
       true,
       false,
@@ -169,7 +174,24 @@ describe('runHeads', () => {
   })
 
   it('gives a run that has left altogether no head', () => {
-    expect(runHeads(['G', 'G', 'Elior'], 2)).toEqual([false, false, true])
+    expect(runHeads(oneTurn('G', 'G', 'Elior'), 2)).toEqual([
+      false,
+      false,
+      true,
+    ])
+  })
+
+  it('starts a new run with each turn, though the same speaker spoke last (rq-h7xh)', () => {
+    expect(
+      runHeads(
+        [
+          { speaker: 'Mira', turnId: 1 },
+          { speaker: 'Mira', turnId: 2 },
+          { speaker: 'Mira', turnId: 2 },
+        ],
+        0,
+      ),
+    ).toEqual([true, true, false])
   })
 
   it('has nothing to mark without lines', () => {

@@ -129,16 +129,38 @@ export function readingPauseMs(markup: string): number {
   return Math.min(6000, Math.max(900, 600 + 35 * length))
 }
 
+/** What of a line on the picture decides the run it belongs to. */
+export interface RunLine {
+  /** Who says it. */
+  speaker: string
+  /** The turn it was said in. */
+  turnId: number
+}
+
 /**
- * Which lines head a run of one speaker (the ones that carry the name and the
- * portrait), given each line's speaker and the index of the first line still
- * showing at the top of the picture. Lines before it have left; a run whose
- * first line has left is headed by its first line still showing.
+ * Whether `line` goes on the run of the line before it: the same speaker in
+ * the same turn. A new turn always starts a new run, so its first line
+ * carries the name and portrait even when the same speaker spoke last.
  */
-export function runHeads(speakers: string[], firstShowing: number): boolean[] {
-  return speakers.map(
-    (speaker, index) =>
+export function continuesRun(
+  line: RunLine,
+  before: RunLine | undefined,
+): boolean {
+  return (
+    !!before && before.speaker === line.speaker && before.turnId === line.turnId
+  )
+}
+
+/**
+ * Which lines head a run of one speaker in one turn (the ones that carry the
+ * name and the portrait), given each line and the index of the first line
+ * still showing at the top of the picture. Lines before it have left; a run
+ * whose first line has left is headed by its first line still showing.
+ */
+export function runHeads(lines: RunLine[], firstShowing: number): boolean[] {
+  return lines.map(
+    (line, index) =>
       index >= firstShowing &&
-      (index === firstShowing || speakers[index - 1] !== speaker),
+      (index === firstShowing || !continuesRun(line, lines[index - 1])),
   )
 }

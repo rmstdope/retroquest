@@ -3,7 +3,7 @@ import { computed, nextTick, onBeforeUnmount, ref, watch } from 'vue'
 import { useGameStore } from '@/stores/useGameStore'
 import { useStageSpeechStore } from '@/stores/useStageSpeechStore'
 import { useNarrationStore } from '@/stores/useNarrationStore'
-import { runHeads } from '@/lantern/stageSpeech'
+import { continuesRun, runHeads } from '@/lantern/stageSpeech'
 import { renderMarkup } from '@/utils/theme'
 import { useReadAlong } from '@/composables/useReadAlong'
 import type { StageLine } from '@/stores/useStageSpeechStore'
@@ -13,7 +13,8 @@ import SpeechPortrait from './SpeechPortrait.vue'
  * What characters say, shown on the room's picture chat-style in one column
  * at its right: everyone but Elior at the right edge with their small round
  * portrait on the right of their lines, Elior at the left of the column with
- * his on the left. Several lines in a row from one speaker are a run: the
+ * his on the left. Several lines in a row from one speaker in one turn are a
+ * run (a new turn starts a new run, also when the same speaker spoke last): the
  * name shows once above its first line still showing, and one portrait
  * beside it (the run's later lines carry only their words, lined up under
  * the first); when the first line leaves at the top, the name and portrait
@@ -67,21 +68,13 @@ function lineHtml(line: StageLine): string {
 const firstShowing = ref(0)
 
 /** Which lines head a run, so carry its name and portrait. */
-const heads = computed(() =>
-  runHeads(
-    speech.visible.map((line) => line.speaker),
-    firstShowing.value,
-  ),
-)
+const heads = computed(() => runHeads(speech.visible, firstShowing.value))
 
 /** How far back the run of a line ends: the age its name and portrait wear. */
 function runAge(index: number): 'new' | 'prev' | 'old' {
   const lines = speech.visible
   let last = index
-  while (
-    last + 1 < lines.length &&
-    lines[last + 1].speaker === lines[index].speaker
-  )
+  while (last + 1 < lines.length && continuesRun(lines[last + 1], lines[last]))
     last++
   return age(last)
 }
@@ -174,9 +167,7 @@ function hurry(): void {
           :class="[
             `lq-line-${line.side}`,
             {
-              'lq-run-first':
-                index === 0 ||
-                speech.visible[index - 1].speaker !== line.speaker,
+              'lq-run-first': !continuesRun(line, speech.visible[index - 1]),
             },
           ]"
           data-testid="speech-line"
