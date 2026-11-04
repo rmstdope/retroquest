@@ -52,6 +52,11 @@ export const useStageSpeechStore = defineStore('stageSpeech', () => {
   const narration = useNarrationStore()
   const scene = useSceneStore()
   const conversation = ref<{ with: string; lines: StageLine[] } | null>(null)
+  /**
+   * The newest turns taken in, oldest first (three tell the ages apart),
+   * whether or not anyone spoke in them.
+   */
+  const recentTurns = ref<number[]>([])
   let nextKey = 1
   let timer: ReturnType<typeof setTimeout> | undefined
   /** The scene change the unnarrated turn being read waits to reach, and that turn, if any. */
@@ -216,6 +221,7 @@ export const useStageSpeechStore = defineStore('stageSpeech', () => {
    * scene of an unnarrated talk that moves Elior changes (see `SceneChange`).
    */
   function observe(turn: Turn, change: SceneChange | null = null): void {
+    recentTurns.value = [...recentTurns.value, turn.id].slice(-3)
     revealAll()
     const moved = turn.description?.moved === true
     const addressed = turn.addressed ?? null
@@ -256,9 +262,21 @@ export const useStageSpeechStore = defineStore('stageSpeech', () => {
     )
   }
 
+  /**
+   * How far back turn `turnId` was told, every turn counting: `new` for the
+   * newest, `prev` for the one before it, `old` for any earlier one. The
+   * speech on the picture dims by this, a turn with no speech included.
+   */
+  function ageOf(turnId: number): 'new' | 'prev' | 'old' {
+    const back =
+      recentTurns.value.length - 1 - recentTurns.value.indexOf(turnId)
+    return back === 0 ? 'new' : back === 1 ? 'prev' : 'old'
+  }
+
   return {
     conversation,
     visible,
+    ageOf,
     isSpeaking,
     told,
     lineShown,

@@ -125,18 +125,27 @@ describe('StageSpeech', () => {
     expect(w.findAll('[data-testid="portrait"]')).toHaveLength(3)
   })
 
-  it('fades the lines by how long ago they were said', async () => {
+  it('fades the lines by the turn they were said in, a turn with no speech counting too', async () => {
     const { speech, w } = mounted()
-    speech.observe(turn(say('Mira', 'A.\n\nB.\n\nC.\n\nD.'), 'Mira'))
+    const ages = (selector: string): (string | undefined)[] =>
+      w
+        .findAll(selector)
+        .map((el) => el.classes().find((name) => name.startsWith('lq-age-')))
+    speech.observe(turn(say('Mira', 'A.\n\nB.'), 'Mira'))
     speech.revealAll()
     await w.vm.$nextTick()
-    expect(
-      w
-        .findAll('.lq-line')
-        .map((line) =>
-          line.classes().find((name) => name.startsWith('lq-age-')),
-        ),
-    ).toEqual(['lq-age-old', 'lq-age-old', 'lq-age-prev', 'lq-age-new'])
+    expect(ages('.lq-line')).toEqual(['lq-age-new', 'lq-age-new'])
+    speech.observe(turn('Mira smiles.', 'Mira', 'give coin to mira'))
+    await w.vm.$nextTick()
+    expect(ages('.lq-line')).toEqual(['lq-age-prev', 'lq-age-prev'])
+    speech.observe(turn('Mira shrugs.', 'Mira', 'give pebble to mira'))
+    await w.vm.$nextTick()
+    expect(ages('.lq-line')).toEqual(['lq-age-old', 'lq-age-old'])
+    speech.observe(turn(say('Mira', 'C.'), 'Mira'))
+    speech.revealAll()
+    await w.vm.$nextTick()
+    expect(ages('.lq-line')).toEqual(['lq-age-old', 'lq-age-old', 'lq-age-new'])
+    expect(ages('.lq-line-name')).toEqual(['lq-age-old', 'lq-age-new'])
   })
 
   it('makes each paragraph of a long speech its own line', async () => {
