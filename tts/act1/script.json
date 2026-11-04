@@ -3100,6 +3100,11 @@
     "text": "The map aligns with the landscape, revealing a hidden path that shortens the journey to Greendale. You tuck your parents' amulet beneath your mother's cloak, and set forth."
   },
   {
+    "key": "0d2175b5f606f7",
+    "speaker": "narrator",
+    "text": "Shadows Over Willowbrook: Nothing is left undone in Willowbrook. The map in your pack may know the way on from here."
+  },
+  {
     "key": "091ab964b0dd1c",
     "speaker": "narrator",
     "text": "Main quest complete"

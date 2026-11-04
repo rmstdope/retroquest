@@ -135,6 +135,28 @@ export class ShadowsOverWillowbrookQuest extends Quest {
     return updated
   }
 
+  /**
+   * Once every side quest is done, the amulet is carried and Elior stands on
+   * the Road to Greendale, points toward the map that ends the act; the
+   * newest journal entry otherwise. Mirrors the readiness the map checks.
+   */
+  override hint(gameState: GameState): string | null {
+    const sideQuestsOpen = [
+      ...gameState.nonActivatedQuests,
+      ...gameState.activatedQuests,
+    ].some((quest) => !quest.isMain())
+    const onTheRoad =
+      gameState.currentRoom.name.toLowerCase() === 'road to greendale'
+    if (onTheRoad && !sideQuestsOpen && gameState.hasItem('ancient amulet')) {
+      return (
+        'Nothing is left undone in Willowbrook. ' +
+        'The [item_name]map[/item_name] in your pack may know the way on ' +
+        'from here.'
+      )
+    }
+    return super.hint(gameState)
+  }
+
   override checkCompletion(gameState: GameState): boolean {
     return gameState.getStoryFlag(FLAG_SHADOWS_OVER_WILLOWBROOK_COMPLETED)
   }
