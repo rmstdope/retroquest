@@ -382,14 +382,18 @@ body {
   flex-direction: column;
   gap: 0.25em;
 }
+/* Each need is plain text with its mark hung in the indent (the mark's
+   0.95em at 0.95em plus its margin is 1.4em of the need), so its words (one
+   span each while the read-along runs) wrap like any other line. */
 .lq-quest-checklist li {
-  display: flex;
-  align-items: baseline;
-  gap: 0.5em;
+  padding-left: 1.4em;
+  text-indent: -1.4em;
 }
 .lq-quest-checklist li::before {
-  flex: 0 0 auto;
-  align-self: center;
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 0.52em;
+  text-indent: 0;
   width: 0.95em;
   height: 0.95em;
   border-radius: 50%;
