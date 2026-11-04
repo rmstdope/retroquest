@@ -153,7 +153,7 @@ test.describe('quest news told in the middle of the picture', () => {
   }
 
   for (const [width, height] of [
-    [1440, 560],
+    [850, 757],
     [390, 600],
   ]) {
     test(`keeps one left edge for a checklist split over pages at ${width} wide`, async ({
@@ -178,12 +178,14 @@ test.describe('quest news told in the middle of the picture', () => {
       ])
       const box = middle(page).locator('.lq-arrival-text').last()
       await expect(box.locator('.lq-quest-checklist')).toBeVisible()
-      // Each page's list by its first line, so a page seen twice counts once.
+      // Each page's list by its text, so a page seen twice counts once.
+      let alone = ''
       const lefts: Record<string, number> = {}
       for (let turn = 0; turn < 14; turn++) {
         const list = box.locator('.lq-quest-checklist')
         if ((await list.count()) === 0) break
         const first = await list.first().innerText({ timeout: 1500 })
+        if ((await list.first().locator('li').count()) === 1) alone = first
         const bounds = await list.first().boundingBox({ timeout: 1500 })
         lefts[first] = Math.round(bounds?.x ?? -1)
         // The last click ends the news and takes the card away.
@@ -192,9 +194,8 @@ test.describe('quest news told in the middle of the picture', () => {
           .catch(() => undefined)
       }
       expect(Object.keys(lefts).length).toBeGreaterThan(1)
-      expect(Object.keys(lefts).some((text) => text.endsWith('Magic'))).toBe(
-        true,
-      )
+      // A page holds the short need alone: the case that shrank the line.
+      expect(alone).toMatch(/Magic$/)
       expect(new Set(Object.values(lefts)).size).toBe(1)
     })
   }
