@@ -1,4 +1,10 @@
-import { Spell, type Character, type GameState, type Item } from '@/engine'
+import {
+  Spell,
+  type Character,
+  type GameState,
+  type Item,
+  characterName,
+} from '@/engine'
 import { Fisherman } from '../characters/Fisherman'
 import { Snare } from '../items/Snare'
 
@@ -8,8 +14,13 @@ export class HealSpell extends Spell {
     super({
       id: 'heal',
       name: 'heal',
-      description: 'The first thing Mira showed you: how to mend.',
+      description: `The first thing ${characterName('Mira')} showed you: how to mend.`,
     })
+  }
+
+  /** Give a spell known in an older save the current description, which colours who taught it. */
+  override refreshSavedText(): void {
+    this.description = new HealSpell().description
   }
 
   /** Cast the spell without a target (self-cast behavior). */

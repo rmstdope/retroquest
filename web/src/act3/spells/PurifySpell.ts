@@ -1,4 +1,10 @@
-import { Spell, type Character, type GameState, type Item } from '@/engine'
+import {
+  Spell,
+  type Character,
+  type GameState,
+  type Item,
+  characterName,
+} from '@/engine'
 import { WardingPillars } from '../items/WardingPillars'
 import { Steles } from '../items/Steles'
 
@@ -9,7 +15,7 @@ export class PurifySpell extends Spell {
       id: 'purify',
       name: 'purify',
       description:
-        'Your mother taught it to the fisherman at the bend, and he gave it ' +
+        `Your mother taught it to the ${characterName('fisherman')} at the bend, and he gave it ` +
         'back to you. It makes foul water clean.',
     })
   }

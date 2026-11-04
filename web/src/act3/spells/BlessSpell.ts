@@ -13,7 +13,7 @@ export class BlessSpell extends Spell {
       id: 'bless',
       name: 'bless',
       description:
-        'The blessing the priest said over you when you found the ' +
+        `The blessing the ${characterName('priest')} said over you when you found the ` +
         "founders' locket.",
     })
   }

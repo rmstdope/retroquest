@@ -1,4 +1,10 @@
-import { Spell, type Character, type GameState, type Item } from '@/engine'
+import {
+  Spell,
+  type Character,
+  type GameState,
+  type Item,
+  characterName,
+} from '@/engine'
 import { Well } from '../items/Well'
 import { River } from '../items/River'
 import { FLAG_MAGIC_FULLY_UNLOCKED } from '../Act1StoryFlags'
@@ -10,9 +16,14 @@ export class PurifySpell extends Spell {
       id: 'purify',
       name: 'purify',
       description:
-        'Your mother taught it to the fisherman at the bend, and he gave ' +
+        `Your mother taught it to the ${characterName('fisherman')} at the bend, and he gave ` +
         'it back to you. It makes foul water clean.',
     })
+  }
+
+  /** Give a spell known in an older save the current description, which colours who taught it. */
+  override refreshSavedText(): void {
+    this.description = new PurifySpell().description
   }
 
   private fizzle(): string {

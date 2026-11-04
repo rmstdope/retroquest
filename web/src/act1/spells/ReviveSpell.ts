@@ -4,6 +4,7 @@ import {
   type GameState,
   type Item,
   clue,
+  characterName,
 } from '@/engine'
 import { WitheredCarrot } from '../items/WitheredCarrot'
 import { Bush } from '../items/Bush'
@@ -17,8 +18,13 @@ export class ReviveSpell extends Spell {
       name: 'revive',
       description:
         "Your father's word for calling a thing back when it is nearly " +
-        'gone. Grandmother remembered it for you.',
+        `gone. ${characterName('Grandmother')} remembered it for you.`,
     })
+  }
+
+  /** Give a spell known in an older save the current description, which colours who taught it. */
+  override refreshSavedText(): void {
+    this.description = new ReviveSpell().description
   }
 
   private outOfReach(): string {

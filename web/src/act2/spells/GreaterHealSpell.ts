@@ -1,4 +1,10 @@
-import { Spell, type Character, type GameState, type Item } from '@/engine'
+import {
+  Spell,
+  type Character,
+  type GameState,
+  type Item,
+  characterName,
+} from '@/engine'
 import { BarmaidElena } from '../characters/BarmaidElena'
 import { Caravan } from '../items/Caravan'
 
@@ -12,7 +18,7 @@ export class GreaterHealSpell extends Spell {
       id: 'greater_heal',
       name: 'greater heal',
       description:
-        "Lyria taught you over the carter's bed: gather your healing into a " +
+        `${characterName('Lyria')} taught you over the carter's bed: gather your healing into a ` +
         'narrow light. It makes the weak strong. It does not lift a curse.',
     })
   }

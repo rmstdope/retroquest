@@ -12,9 +12,14 @@ export class BlessSpell extends Spell {
       id: 'bless',
       name: 'bless',
       description:
-        'The blessing the priest said over you when you found the ' +
+        `The blessing the ${characterName('priest')} said over you when you found the ` +
         "founders' locket.",
     })
+  }
+
+  /** Give a spell known in an older save the current description, which colours who taught it. */
+  override refreshSavedText(): void {
+    this.description = new BlessSpell().description
   }
 
   /** Bless Elior himself, readying him for the journey. */

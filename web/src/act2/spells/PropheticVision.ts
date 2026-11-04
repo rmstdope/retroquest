@@ -42,7 +42,7 @@ export class PropheticVision extends Spell {
       id: 'prophetic_vision',
       name: 'prophetic vision',
       description:
-        "Nyx's gift: a look at what is coming. She told you not to look at " +
+        `${characterName('Nyx')}'s gift: a look at what is coming. She told you not to look at ` +
         'it alone.',
     })
   }

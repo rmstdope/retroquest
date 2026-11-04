@@ -22,6 +22,12 @@ describe('displayName', () => {
     expect(displayName('Crystal of Light')).toBe('Crystal of Light')
   })
 
+  it('keeps "of" and "the" small after the first word', () => {
+    expect(displayName('sack of flour')).toBe('Sack of Flour')
+    expect(displayName('crown of the north')).toBe('Crown of the North')
+    expect(displayName('the old mill')).toBe('The Old Mill')
+  })
+
   it('collapses extra spaces', () => {
     expect(displayName('  water   nymphs ')).toBe('Water Nymphs')
   })
