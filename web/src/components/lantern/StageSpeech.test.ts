@@ -138,7 +138,7 @@ describe('StageSpeech', () => {
     speech.observe(turn('Mira smiles.', 'Mira', 'give coin to mira'))
     await w.vm.$nextTick()
     expect(ages('.lq-line')).toEqual(['lq-age-prev', 'lq-age-prev'])
-    speech.observe(turn('Nothing.', 'Mira', 'use coin'))
+    speech.observe(turn('Mira shrugs.', 'Mira', 'give pebble to mira'))
     await w.vm.$nextTick()
     expect(ages('.lq-line')).toEqual(['lq-age-old', 'lq-age-old'])
     speech.observe(turn(say('Mira', 'C.'), 'Mira'))

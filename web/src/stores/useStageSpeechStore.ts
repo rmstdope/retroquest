@@ -52,7 +52,10 @@ export const useStageSpeechStore = defineStore('stageSpeech', () => {
   const narration = useNarrationStore()
   const scene = useSceneStore()
   const conversation = ref<{ with: string; lines: StageLine[] } | null>(null)
-  /** The newest turns taken in, oldest first (three are enough to tell the ages apart), whether or not anyone spoke in them. */
+  /**
+   * The newest turns taken in, oldest first (three tell the ages apart),
+   * whether or not anyone spoke in them.
+   */
   const recentTurns = ref<number[]>([])
   let nextKey = 1
   let timer: ReturnType<typeof setTimeout> | undefined

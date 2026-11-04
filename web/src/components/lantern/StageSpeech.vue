@@ -21,7 +21,8 @@ import SpeechPortrait from './SpeechPortrait.vue'
  * step down to the next line showing. Lines dim by turn, every turn counting
  * (also one where nobody speaks): everything said in the newest turn is full
  * strength, the turn before about 55% and older turns about 30%; a run's name
- * and portrait are as bright as their run (a run never spans two turns). When the room is full the
+ * and portrait are as bright as their run (a run never spans two turns).
+ * When the room is full the
  * oldest leaves at the top, under a soft fade. A line taller than the room
  * never loses its top: the thread scrolls so the newest line shows from its
  * speaker down, its end faded at the bottom (the story band has every word).
