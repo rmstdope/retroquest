@@ -1,5 +1,6 @@
+import { readFileSync } from 'node:fs'
 import { beforeAll, describe, expect, it } from 'vitest'
-import { Game } from '@/engine'
+import { Game, GameController } from '@/engine'
 import { Act1 } from '@/act1/Act1'
 import { Act2 } from '@/act2/Act2'
 import { ACT2_GOLDEN_PATH } from '@/act2/Act2GoldenPath'
@@ -357,6 +358,36 @@ describe('actScript for Act I', () => {
     ).toBe('narrator')
   })
 
+  it('reads a room’s description in every state the golden path shows it, not only on the first visit', () => {
+    const keys = new Set(script.map((line) => line.key))
+    const game = new Game([new Act1()])
+    const play = new GameController(game)
+    play.advanceToRunning()
+    for (const command of ACT_SOURCES['1'].commands) {
+      play.takeTurn(command)
+      play.settleQuests()
+      if (!game.isActRunning()) break
+      for (const block of arrivalBlocks(
+        play.getRoomName(),
+        play.getRoomDescription(),
+      ))
+        expect(
+          keys.has(narrationKey(block.speaker, block.markup)),
+          `${command}: ${block.markup}`,
+        ).toBe(true)
+    }
+  })
+
+  it('reads the Old Mill once its mechanism is jammed', () => {
+    expect(
+      script.some((line) =>
+        line.text.includes(
+          'the black-iron mechanism stands jammed with a rope, silent at last.',
+        ),
+      ),
+    ).toBe(true)
+  })
+
   it('lists every line once, with words', () => {
     const keys = script.map((line) => line.key)
     expect(new Set(keys).size).toBe(keys.length)
@@ -391,6 +422,64 @@ describe('actScript branches', () => {
     const keys = new Set(branched.map((line) => line.key))
     expect(plain.every((line) => keys.has(line.key))).toBe(true)
   })
+})
+
+describe('actScript branches of Act I', () => {
+  const branches = JSON.parse(
+    readFileSync(
+      new URL('../../../tts/act1/branches.json', import.meta.url),
+      'utf8',
+    ),
+  ) as ScriptBranch[]
+  /** Act I is played with every branch; that is slow under a loaded machine. */
+  const SLOW = 60_000
+  let keys = new Set<string>()
+  beforeAll(() => {
+    keys = new Set(
+      actScript(
+        () => new Game([new Act1()]),
+        ACT_SOURCES['1'].commands,
+        WRITERS,
+        SILENT,
+        branches,
+      ).map((line) => line.key),
+    )
+  }, SLOW)
+
+  it(
+    'reads a room’s description in every state a branch leaves it in',
+    () => {
+      const game = new Game([new Act1()])
+      const play = new GameController(game)
+      const copy = new Game([new Act1()])
+      const branch = new GameController(copy)
+      play.advanceToRunning()
+      for (const [index, command] of ACT_SOURCES['1'].commands.entries()) {
+        play.takeTurn(command)
+        play.settleQuests()
+        for (const scene of branches.filter((b) => b.after === index)) {
+          copy.loadSaveData(game.toSaveData())
+          for (const flag of scene.unset ?? [])
+            copy.state.setStoryFlag(flag, false)
+          for (const step of scene.commands) {
+            branch.takeTurn(step)
+            branch.settleQuests()
+            if (!copy.isActRunning()) break
+            for (const block of arrivalBlocks(
+              branch.getRoomName(),
+              branch.getRoomDescription(),
+            ))
+              expect(
+                keys.has(narrationKey(block.speaker, block.markup)),
+                `${scene.commands.join(', ')}: ${block.markup}`,
+              ).toBe(true)
+          }
+        }
+        if (!game.isActRunning()) break
+      }
+    },
+    SLOW,
+  )
 })
 
 describe('actScript branches before the first command', () => {

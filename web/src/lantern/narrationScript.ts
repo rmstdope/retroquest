@@ -23,7 +23,8 @@
  * on its first visit and every quest card. At each step it also tries
  * examining, using and talking to whatever is at hand, looking, asking for a hint and resting, on a copy of the game,
  * so optional lines are recorded too, and plays each `ScriptBranch` (an
- * optional scene the golden path does not take) on a copy. Who voices a line is its block's speaker,
+ * optional scene the golden path does not take) on a copy, reading the room
+ * after each of its steps. Who voices a line is its block's speaker,
  * except unsigned writing, which goes to its writer (`WriterRule`).
  */
 
@@ -308,6 +309,9 @@ export function actScript(
       for (const step of branch.commands) {
         addAnswer(tryOut, () => tryOut.takeTurn(step))
         settle(tryOut)
+        // The room as the scene leaves it, which the path may never show.
+        if (probe.isActRunning())
+          add(arrivalBlocks(tryOut.getRoomName(), tryOut.getRoomDescription()))
       }
     }
   }

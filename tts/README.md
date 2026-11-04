@@ -30,8 +30,10 @@ A script.json or music.json that differs from what the extractor writes now fail
 - **The script** (`act<N>/script.json`, committed) is gathered by playing the act's golden path
   through the real engine, trying examine/use/talk/look at every step on a copy of the game. Each
   line has its speaker and a key made from the speaker and the words (`narrationKey` in
-  `web/src/lantern/`), so changed wording means a new key and the old clip goes stale. Lines the
-  game builds from its state are not in it and play silently.
+  `web/src/lantern/`), so changed wording means a new key and the old clip goes stale. A room's
+  description is read again at every step and after every step of a branch (below), so each state
+  the path or a branch leaves a room in is in it. Other lines the game builds from its state (a
+  count, a name) are not in it and play silently.
 - **Retiring clips.** When a wording change leaves a clip whose line left the script,
   `narrationCasts.test.ts` is red until it is retired. After regenerating the script, run
   `(cd web && npx -y tsx@4.23.15 --tsconfig tsconfig.json ../tts/retire-orphans.ts)` (or name the
