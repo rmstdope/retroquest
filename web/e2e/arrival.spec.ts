@@ -377,6 +377,20 @@ test.describe('a long arrival on a narrow window (rq-fc9f)', () => {
       )
   }
 
+  /** Every sentence of the Dream's description, each of which must be shown. */
+  const DREAM = [
+    'It is dark, and it is raining hard.',
+    'You hear it beating on shutters, though you cannot see any.',
+    'Thunder breaks so close that the dark shakes with it.',
+    'Shadows drift past like smoke.',
+    'A man’s hand reaches out of the dark, lifts a child and holds it against his shoulder, and then both of them are gone.',
+    'Somewhere a slow tune climbs three notes and settles home again.',
+    'A tall figure stands among the shadows.',
+    'It has no face you can find.',
+    'It is too far away to reach, and too close to be only a dream.',
+    'It is whispering, at the very edge of hearing, and what it whispers is your name.',
+  ]
+
   test('shows every line of the Dream before Enter moves on, after Escape', async ({
     page,
   }) => {
@@ -392,11 +406,26 @@ test.describe('a long arrival on a narrow window (rq-fc9f)', () => {
       await expect(
         arrival(page).locator('.lq-arrival-line').first(),
       ).toBeVisible()
-      seen.push(...(await endsShown(page)))
+      const shown = await endsShown(page)
+      seen.push(...shown)
+      const before = await arrival(page)
+        .locator('.lq-arrival-line')
+        .allTextContents()
       await page.keyboard.press('Enter')
-      // A page or part that goes away fades out first.
-      await page.waitForTimeout(400)
+      // The page up gives way to the next page, the next part, or nothing.
+      await expect
+        .poll(async () =>
+          (await card.count()) === 0
+            ? null
+            : await arrival(page)
+                .locator(
+                  '.lq-arrival-card:not(.lq-arrival-fade-leave-active) .lq-arrival-line',
+                )
+                .allTextContents(),
+        )
+        .not.toEqual(before)
     }
-    expect(seen.join(' ')).toContain('whispers is your name.')
+    const told = seen.join(' ')
+    for (const sentence of DREAM) expect(told).toContain(sentence)
   })
 })
