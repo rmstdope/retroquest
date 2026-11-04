@@ -24,6 +24,11 @@ import {
   FLAG_MIRA_FOREST_REMARK_SAID,
 } from '../Act1StoryFlags'
 
+/** Her words once the amulet is Elior's, after either opening narration. */
+const GOODBYE = speech(
+  'Still here? Go and say a proper goodbye to your grandmother. Then go.',
+)
+
 /** Village healer and wise woman who teaches spells and guides quests. */
 export class Mira extends Character {
   /** Flag set when the rare flower is given to Mira. */
@@ -101,19 +106,10 @@ export class Mira extends Character {
       case 'post_amulet':
         return (
           `${characterName(this.name)} doesn't look up from her herbs. ` +
-          speech(
-            'Still here? Go and say a proper goodbye to your grandmother. ' +
-              'Then go.',
-          )
+          GOODBYE
         )
       case 'post_amulet_after_remark':
-        return (
-          'She turns back to her herbs. ' +
-          speech(
-            'Still here? Go and say a proper goodbye to your grandmother. ' +
-              'Then go.',
-          )
-        )
+        return 'She turns back to her herbs. ' + GOODBYE
     }
   }
 
