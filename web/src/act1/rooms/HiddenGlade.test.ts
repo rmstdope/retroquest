@@ -91,6 +91,28 @@ describe('Hidden Glade', () => {
     })
   })
 
+  describe('the deer', () => {
+    it('is a lower-case deer mid-sentence when it steps out, grazes and stays', () => {
+      const game = gameInGlade()
+      game.commandParser.parse('cast light')
+      game.state.setStoryFlag('deer_can_be_observed', true)
+      const arrival = game.commandParser.parse('rest')
+      const lit = game.state.currentRoom.describe(game.state)
+      const again = game.commandParser.parse('rest')
+      expect(arrival).toContain(
+        'and a [character_name]deer[/character_name] steps out',
+      )
+      expect(lit).toContain(
+        'A graceful [character_name]deer[/character_name] grazes',
+      )
+      expect(again).toContain(
+        'The [character_name]deer[/character_name] continues',
+      )
+      for (const text of [arrival, lit, again])
+        expect(text).not.toContain('[character_name]Deer[/character_name]')
+    })
+  })
+
   describe('lighting the stone', () => {
     it('reads the runes plainly and teaches grow as a reading', () => {
       const game = gameInGlade()

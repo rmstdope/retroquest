@@ -24,3 +24,20 @@ describe('Vegetable Field sound', () => {
     expect(field.soundState(game.state)).toBe(VegetableField.SOUND_GREEN)
   })
 })
+
+describe('Vegetable Field rusty hoe', () => {
+  it('stops mentioning the rusty hoe once Elior has taken it, and again once it is dropped back', () => {
+    const game = new Game([new Act1()])
+    game.state.currentRoom = game.state.allRooms.VegetableField
+    const controller = new GameController(game)
+    expect(controller.getRoomDescription()).toContain('rusty hoe')
+    game.commandParser.parse('take rusty hoe')
+    expect(game.state.hasItem('Rusty Hoe')).toBe(true)
+    const text = controller.getRoomDescription()
+    expect(text).toContain('Rows of withered crops')
+    expect(text).toContain('a few stubborn carrots')
+    expect(text).not.toContain('hoe')
+    game.commandParser.parse('drop rusty hoe')
+    expect(controller.getRoomDescription()).toContain('rusty hoe')
+  })
+})
