@@ -473,9 +473,15 @@ describe('ArrivalOnPicture', () => {
       expect(lines(w)).toHaveLength(3)
     })
 
-    it('does not page a phone, which scrolls', async () => {
+    it('pages a phone too, so a tap never moves on past unread lines (rq-fc9f)', async () => {
       const w = await told(long, true)
-      expect(lines(w)).toHaveLength(3)
+      expect(lines(w)).toEqual(['Aaaaaaaaaa bbbb.', 'Cccccccccc dddd.'])
+      expect(w.get('.lq-arrival-hint').text()).toBe('Tap to continue')
+      await w.trigger('click')
+      await w.vm.$nextTick()
+      expect(lines(w)).toEqual(['Eeee.'])
+      await w.trigger('click')
+      expect(w.find('.lq-arrival-card').exists()).toBe(false)
     })
   })
 

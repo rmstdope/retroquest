@@ -201,10 +201,11 @@ test.describe('the arrival told on the picture', () => {
     )
     const text = arrival(page).locator('.lq-arrival-text')
     await expect(text).toBeVisible()
+    // It is cut into pages that fit, so nothing is hidden below (rq-fc9f).
     const scrolls = await text.evaluate(
-      (el) => el.scrollHeight > el.clientHeight,
+      (el) => el.scrollHeight > el.clientHeight + 1,
     )
-    expect(scrolls).toBe(true)
+    expect(scrolls).toBe(false)
     const box = await text.boundingBox()
     const pill = await arrival(page).locator('.lq-arrival-pill').boundingBox()
     const stage = await arrival(page).boundingBox()
@@ -351,5 +352,51 @@ test.describe('the arrival told on the picture', () => {
       expect(before).toBeLessThan(5)
       await clearOfTheChrome(page)
     })
+  })
+})
+
+test.describe('a long arrival on a narrow window (rq-fc9f)', () => {
+  /** The text of each line whose end shows inside its text box (not cut off or faded below it). */
+  async function endsShown(page: Page): Promise<string[]> {
+    return arrival(page)
+      .locator('.lq-arrival-line')
+      .evaluateAll((lines) =>
+        lines
+          .filter((line) => {
+            const box = line
+              .closest('.lq-arrival-text')!
+              .getBoundingClientRect()
+            // The bottom 44 px of a box with more below are faded out.
+            const faded = line
+              .closest('.lq-arrival-text')!
+              .classList.contains('lq-fade-b')
+            const floor = box.bottom - (faded ? 44 : 0)
+            return line.getBoundingClientRect().bottom <= floor + 1
+          })
+          .map((line) => line.textContent ?? ''),
+      )
+  }
+
+  test('shows every line of the Dream before Enter moves on, after Escape', async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 564, height: 717 })
+    await page.goto('/')
+    await page.getByRole('button', { name: 'Start', exact: true }).click()
+    await expect(page.locator('.lq-chapter-button')).toBeVisible()
+    await page.keyboard.press('Escape')
+    const card = arrival(page).locator('.lq-arrival-card')
+    await expect(card).toHaveCount(1)
+    const seen: string[] = []
+    for (let i = 0; i < 12 && (await card.count()); i++) {
+      await expect(
+        arrival(page).locator('.lq-arrival-line').first(),
+      ).toBeVisible()
+      seen.push(...(await endsShown(page)))
+      await page.keyboard.press('Enter')
+      // A page or part that goes away fades out first.
+      await page.waitForTimeout(400)
+    }
+    expect(seen.join(' ')).toContain('whispers is your name.')
   })
 })
