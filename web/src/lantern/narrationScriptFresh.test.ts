@@ -4,6 +4,7 @@ import {
   ACT_NUMBERS,
   extractActImages,
   extractActMusic,
+  extractActScenes,
   extractActScript,
 } from '../../../tts/actScripts'
 
@@ -21,7 +22,7 @@ function committed(number: string, file: string): unknown {
 }
 
 /**
- * The committed narration script and music list of each act are what the
+ * The committed narration script, music, image and scene lists of each act are what the
  * extractor would write now. A change to what the game says that leaves them
  * behind fails here; regenerate with `tts/extract-act.ts <N>`.
  */
@@ -41,6 +42,9 @@ describe('committed narration files are current', () => {
     })
     it(`tts/act${number}/images.json is what extract-act.ts writes`, () => {
       expect(extractActImages(number)).toEqual(committed(number, 'images.json'))
+    })
+    it(`tts/act${number}/scenes.json is what extract-act.ts writes`, () => {
+      expect(extractActScenes(number)).toEqual(committed(number, 'scenes.json'))
     })
   }
 })

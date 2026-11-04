@@ -1,7 +1,8 @@
 /**
- * Writes `tts/act<N>/script.json`, `music.json` and `images.json` from
- * `extractActScript`, `extractActMusic` and `extractActImages` (see `actScripts.ts`, where the work is and which a vitest
- * test checks against the committed files).
+ * Writes `tts/act<N>/script.json`, `music.json`, `images.json` and
+ * `scenes.json` from `extractActScript`, `extractActMusic`, `extractActImages`
+ * and `extractActScenes` (see `actScripts.ts`, where the work is and which a
+ * vitest test checks against the committed files).
  * Run from `web/`: `npx -y tsx@4.23.15 --tsconfig tsconfig.json ../tts/extract-act.ts 2`.
  */
 import { writeFileSync } from 'node:fs'
@@ -9,6 +10,7 @@ import {
   ACT_NUMBERS,
   extractActImages,
   extractActMusic,
+  extractActScenes,
   extractActScript,
 } from './actScripts'
 
@@ -35,3 +37,9 @@ writeFileSync(
   JSON.stringify(images, null, 2) + '\n',
 )
 console.log(`${images.length} images written to tts/act${number}/images.json`)
+const scenes = extractActScenes(number)
+writeFileSync(
+  new URL('scenes.json', here),
+  JSON.stringify(scenes, null, 2) + '\n',
+)
+console.log(`${scenes.length} scenes written to tts/act${number}/scenes.json`)

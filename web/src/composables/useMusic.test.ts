@@ -6,6 +6,7 @@ import {
   MUSIC_DUCK,
   MUSIC_DUCK_FADE_MS,
   MUSIC_FADE_IN_MS,
+  SILENCE,
   useMusic,
 } from './useMusic'
 import { useSettingsStore } from '@/stores/useSettingsStore'
@@ -908,19 +909,22 @@ describe('useMusic on Web Audio', () => {
 
   describe('with the effects of a track', () => {
     const rain = { duration: 20 } as unknown as AudioBuffer
-    /** The ambiences made, by the file they were made for. */
-    let made: { file: string; ambience: Ambience; gain: number }[]
+    /** The scene of `a.mp3` in most tests, with the rain; that of `b.mp3`, with none. */
+    const inA = { scene: 'a', level: 1 }
+    const inB = { scene: 'b', level: 1 }
+    /** The ambiences made, by the scene they were made for. */
+    let made: { scene: string; ambience: Ambience; gain: number }[]
 
-    /** An ambience source giving `a.mp3` a rain loop and nothing else any. */
-    function rainOnA(file: string, context: AudioContext) {
-      if (file !== 'a.mp3') return Promise.resolve(null)
+    /** An ambience source giving scene `a` a rain loop and no other scene any. */
+    function rainOnA(scene: string, context: AudioContext) {
+      if (scene !== 'a') return Promise.resolve(null)
       const gain = ctx.gains.length
       const ambience = new Ambience(
         context,
-        [{ buffer: rain, loops: true }],
+        [{ buffer: rain, play: { mode: 'loop' } }],
         ctx as unknown as AudioNode,
       )
-      made.push({ file, ambience, gain })
+      made.push({ scene, ambience, gain })
       return Promise.resolve(ambience)
     }
 
@@ -942,7 +946,7 @@ describe('useMusic on Web Audio', () => {
     it('starts the effects with the music of their track, at the music’s share', async () => {
       useSettingsStore().musicVolume = 50
       const music = useMusic(audio, ref(false), rainOnA)
-      music.loadTrack('a.mp3', 'A')
+      music.loadTrack('a.mp3', 'A', 0, false, inA)
       await ready()
       expect(rainSources()).toHaveLength(1)
       expect(rainSources()[0].start).toHaveBeenCalled()
@@ -952,7 +956,7 @@ describe('useMusic on Web Audio', () => {
     it('fades the effects in with the title page music', async () => {
       vi.useFakeTimers()
       const music = useMusic(audio, ref(false), rainOnA)
-      music.loadTrack('a.mp3', 'A', MUSIC_FADE_IN_MS)
+      music.loadTrack('a.mp3', 'A', MUSIC_FADE_IN_MS, false, inA)
       await vi.advanceTimersByTimeAsync(0)
       expect(rainGain()).toBe(0)
       await vi.advanceTimersByTimeAsync(MUSIC_FADE_IN_MS / 2)
@@ -964,9 +968,9 @@ describe('useMusic on Web Audio', () => {
     it('fades the effects out with their music, then stops them', async () => {
       vi.useFakeTimers()
       const music = useMusic(audio, ref(false), rainOnA)
-      music.loadTrack('a.mp3', 'A')
+      music.loadTrack('a.mp3', 'A', 0, false, inA)
       await vi.advanceTimersByTimeAsync(0)
-      music.loadTrack('b.mp3', 'B')
+      music.loadTrack('b.mp3', 'B', 0, false, inB)
       await vi.advanceTimersByTimeAsync(0)
       await vi.advanceTimersByTimeAsync(MUSIC_CROSSFADE_MS / 2)
       expect(rainGain()).toBeCloseTo(0.5)
@@ -979,7 +983,7 @@ describe('useMusic on Web Audio', () => {
     it('stops the effects when the music is turned off, and starts them again with it', async () => {
       const settings = useSettingsStore()
       const music = useMusic(audio, ref(false), rainOnA)
-      music.loadTrack('a.mp3', 'A')
+      music.loadTrack('a.mp3', 'A', 0, false, inA)
       await ready()
       settings.musicOn = false
       expect(rainSources()[0].stop).toHaveBeenCalled()
@@ -991,7 +995,7 @@ describe('useMusic on Web Audio', () => {
       vi.useFakeTimers()
       const narrating = ref(false)
       const music = useMusic(audio, narrating, rainOnA)
-      music.loadTrack('a.mp3', 'A')
+      music.loadTrack('a.mp3', 'A', 0, false, inA)
       await vi.advanceTimersByTimeAsync(0)
       narrating.value = true
       await nextTick()
@@ -1002,12 +1006,12 @@ describe('useMusic on Web Audio', () => {
     it('fades the effects back up when the player returns mid-fade', async () => {
       vi.useFakeTimers()
       const music = useMusic(audio, ref(false), rainOnA)
-      music.loadTrack('a.mp3', 'A')
+      music.loadTrack('a.mp3', 'A', 0, false, inA)
       await vi.advanceTimersByTimeAsync(0)
-      music.loadTrack('b.mp3', 'B')
+      music.loadTrack('b.mp3', 'B', 0, false, inB)
       await vi.advanceTimersByTimeAsync(0)
       await vi.advanceTimersByTimeAsync(MUSIC_CROSSFADE_MS / 2)
-      music.loadTrack('a.mp3', 'A')
+      music.loadTrack('a.mp3', 'A', 0, false, inA)
       await vi.advanceTimersByTimeAsync(MUSIC_CROSSFADE_MS + 100)
       expect(rainGain()).toBeCloseTo(1)
       expect(rainSources()).toHaveLength(1)
@@ -1018,23 +1022,23 @@ describe('useMusic on Web Audio', () => {
       const music = useMusic(audio, ref(false), () =>
         Promise.reject(new Error('bad manifest')),
       )
-      music.loadTrack('a.mp3', 'A')
+      music.loadTrack('a.mp3', 'A', 0, false, inA)
       await ready()
       expect(ctx.sources).toHaveLength(1)
       expect(ctx.sources[0].start).toHaveBeenCalled()
     })
 
-    /** An ambience source for `a.mp3` whose rain arrives only when `arrive` is called. */
+    /** An ambience source for scene `a` whose rain arrives only when `arrive` is called. */
     function lateRainOnA(): {
-      source: (file: string, context: AudioContext) => Promise<Ambience | null>
+      source: (scene: string, context: AudioContext) => Promise<Ambience | null>
       arrive: () => void
     } {
       let arrive = (): void => {}
-      const source = (file: string, context: AudioContext) =>
-        file !== 'a.mp3'
+      const source = (scene: string, context: AudioContext) =>
+        scene !== 'a'
           ? Promise.resolve(null)
           : new Promise<Ambience | null>((resolve) => {
-              arrive = () => void rainOnA(file, context).then(resolve)
+              arrive = () => void rainOnA(scene, context).then(resolve)
             })
       return { source, arrive: () => arrive() }
     }
@@ -1043,7 +1047,7 @@ describe('useMusic on Web Audio', () => {
       useSettingsStore().musicVolume = 50
       const late = lateRainOnA()
       const music = useMusic(audio, ref(false), late.source)
-      music.loadTrack('a.mp3', 'A')
+      music.loadTrack('a.mp3', 'A', 0, false, inA)
       await ready()
       expect(ctx.sources).toHaveLength(1)
       expect(ctx.sources[0].start).toHaveBeenCalled()
@@ -1058,9 +1062,9 @@ describe('useMusic on Web Audio', () => {
       vi.useFakeTimers()
       const late = lateRainOnA()
       const music = useMusic(audio, ref(false), late.source)
-      music.loadTrack('a.mp3', 'A')
+      music.loadTrack('a.mp3', 'A', 0, false, inA)
       await vi.advanceTimersByTimeAsync(0)
-      music.loadTrack('b.mp3', 'B')
+      music.loadTrack('b.mp3', 'B', 0, false, inB)
       await vi.advanceTimersByTimeAsync(MUSIC_CROSSFADE_MS + 100)
       late.arrive()
       await vi.advanceTimersByTimeAsync(0)
@@ -1070,11 +1074,83 @@ describe('useMusic on Web Audio', () => {
 
     it('lets go of the effects of a track the player left before it was ready', async () => {
       const music = useMusic(audio, ref(false), rainOnA)
-      music.loadTrack('a.mp3', 'A')
-      music.loadTrack('b.mp3', 'B')
+      music.loadTrack('a.mp3', 'A', 0, false, inA)
+      music.loadTrack('b.mp3', 'B', 0, false, inB)
       await ready()
       expect(rainSources()).toHaveLength(0)
       expect(ctx.gains[made[0].gain].disconnect).toHaveBeenCalled()
+    })
+
+    it('swaps the effects for the next scene’s as the same music carries on into it', async () => {
+      vi.useFakeTimers()
+      const music = useMusic(audio, ref(false), rainOnA)
+      music.loadTrack('a.mp3', 'A', 0, false, inA)
+      await vi.advanceTimersByTimeAsync(0)
+      const fetches = vi.mocked(fetch).mock.calls.length
+      ctx.currentTime = 7
+      music.loadTrack('a.mp3', 'A', 0, false, inB)
+      await vi.advanceTimersByTimeAsync(0)
+      expect(vi.mocked(fetch).mock.calls.length).toBe(fetches)
+      expect(rainSources()[0].stop).toHaveBeenCalledWith(7.3)
+      music.loadTrack('a.mp3', 'A', 0, false, inA)
+      await vi.advanceTimersByTimeAsync(0)
+      expect(rainSources()).toHaveLength(2)
+      expect(rainSources()[1].start).toHaveBeenCalled()
+    })
+
+    it('plays the effects of a scene with no music on silence, fetching none', async () => {
+      const music = useMusic(audio, ref(false), rainOnA)
+      music.loadTrack(SILENCE, '', 0, false, inA)
+      await ready()
+      expect(fetch).not.toHaveBeenCalled()
+      expect(rainSources()).toHaveLength(1)
+      expect(rainSources()[0].start).toHaveBeenCalled()
+    })
+
+    it('crossfades the effects into a scene with no music, as with music', async () => {
+      vi.useFakeTimers()
+      const music = useMusic(audio, ref(false), rainOnA)
+      music.loadTrack('b.mp3', 'B', 0, false, inB)
+      await vi.advanceTimersByTimeAsync(0)
+      music.loadTrack(SILENCE, '', 0, false, inA)
+      await vi.advanceTimersByTimeAsync(0)
+      expect(rainGain()).toBe(0)
+      await vi.advanceTimersByTimeAsync(MUSIC_CROSSFADE_MS)
+      expect(rainGain()).toBeCloseTo(1)
+    })
+
+    it('swaps the effects of a loop taken back while it fades out, entered from another scene', async () => {
+      vi.useFakeTimers()
+      const music = useMusic(audio, ref(false), rainOnA)
+      music.loadTrack('a.mp3', 'A', 0, false, { scene: 'x', level: 1 })
+      await vi.advanceTimersByTimeAsync(0)
+      music.loadTrack('b.mp3', 'B', 0, false, inB)
+      await vi.advanceTimersByTimeAsync(0)
+      await vi.advanceTimersByTimeAsync(MUSIC_CROSSFADE_MS / 2)
+      music.loadTrack('a.mp3', 'A', 0, false, inA)
+      await vi.advanceTimersByTimeAsync(0)
+      expect(rainSources()).toHaveLength(1)
+      expect(rainSources()[0].start).toHaveBeenCalled()
+    })
+
+    it('swaps the effects of music still being prepared as the player walks on', async () => {
+      const music = useMusic(audio, ref(false), rainOnA)
+      music.loadTrack('a.mp3', 'A', 0, false, { scene: 'x', level: 1 })
+      music.loadTrack('a.mp3', 'A', 0, false, inA)
+      await ready()
+      expect(rainSources()).toHaveLength(1)
+    })
+  })
+
+  describe('at the scene’s music level', () => {
+    it('raises the music by the level, the effects not, and changes it at once as the music carries on', async () => {
+      useSettingsStore().musicVolume = 50
+      const music = useMusic(audio)
+      music.loadTrack('a.mp3', 'A', 0, false, { scene: 'a', level: 2 })
+      await ready()
+      expect(ctx.gains[0].gain.value).toBeCloseTo(1)
+      music.loadTrack('a.mp3', 'A', 0, false, { scene: 'b', level: 0.5 })
+      expect(ctx.gains[0].gain.value).toBeCloseTo(0.25)
     })
   })
 })

@@ -1,7 +1,9 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import {
+  ACT_FILE,
   chooseTrack,
   loadChosenManifest,
+  sceneMusic,
   trackIdsAt,
   type ChosenManifest,
 } from './chosenMusic'
@@ -85,5 +87,64 @@ describe('chooseTrack', () => {
 
   it('chooses nothing when no take was made', () => {
     expect(chooseTrack({}, ['act1-forest-path', 'market'])).toBeNull()
+  })
+})
+
+describe('sceneMusic', () => {
+  const square = { actName: 'Act1', roomKey: 'VillageSquare' }
+  const shed = { actName: 'Act1', roomKey: 'AbandonedShed' }
+  const actFile = 'Conquest - Market (freetouse.com).mp3'
+
+  it("plays what the game chooses at 1 where the mix gives no music: the room's take, the act loop's, the act's file", () => {
+    expect(sceneMusic(square, actFile, manifest, undefined)).toEqual({
+      music: manifest['act1-village-square'],
+      level: 1,
+    })
+    expect(sceneMusic(shed, actFile, manifest, { effects: [] })).toEqual({
+      music: manifest.market,
+      level: 1,
+    })
+    expect(sceneMusic(shed, actFile, {}, undefined)).toEqual({
+      music: ACT_FILE,
+      level: 1,
+    })
+  })
+
+  it('plays the track the mix names at its level', () => {
+    expect(
+      sceneMusic(shed, actFile, manifest, {
+        music: { track: 'act1-village-square', level: 2.5 },
+        effects: [],
+      }),
+    ).toEqual({ music: manifest['act1-village-square'], level: 2.5 })
+  })
+
+  it("plays the act's own file at the mix's level for the act loop with no take", () => {
+    expect(
+      sceneMusic(
+        shed,
+        actFile,
+        {},
+        {
+          music: { track: 'market', level: 0.8 },
+          effects: [],
+        },
+      ),
+    ).toEqual({ music: ACT_FILE, level: 0.8 })
+  })
+
+  it('plays no music for no track, or for a track with no chosen take', () => {
+    expect(
+      sceneMusic(square, actFile, manifest, {
+        music: { track: null, level: 1 },
+        effects: [],
+      }),
+    ).toEqual({ music: null, level: 1 })
+    expect(
+      sceneMusic(square, actFile, manifest, {
+        music: { track: 'act1-the-dream', level: 0.5 },
+        effects: [],
+      }),
+    ).toEqual({ music: null, level: 0.5 })
   })
 })

@@ -59,6 +59,11 @@ export class OldMill extends Room {
     return this.isJammed() ? OldMill.SOUND_JAMMED : OldMill.SOUND_WHIRRING
   }
 
+  /** The room's sound states, the one it starts in first. */
+  override soundStates(): readonly string[] {
+    return [OldMill.SOUND_WHIRRING, OldMill.SOUND_JAMMED]
+  }
+
   /**
    * The mill with its mechanism whirring or jammed; once it is jammed and
    * Elior carries the amulet, the amulet hums.

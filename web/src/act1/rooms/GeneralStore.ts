@@ -50,6 +50,11 @@ export class GeneralStore extends Room {
       : ''
   }
 
+  /** The room's sound states, the one it starts in first. */
+  override soundStates(): readonly string[] {
+    return ['', GeneralStore.SOUND_CAT_HOME]
+  }
+
   /**
    * The shut shop while Patches is missing; once the store is open, the busy
    * shop, with the sleeping cat only when Patches was carried home.

@@ -1,15 +1,10 @@
 /**
  * The game's sound effects: the clips Content Studio's Sound effects workspace
- * makes (`tts/effects.json`, written by `tts/extract-effects.ts`), and which
- * rooms play them and how. A clip is made once and may play in several rooms,
- * each at its own pace: round and round, now and then, or once on entering,
- * and some only while the room is in one sound state (see `EffectWhen`).
- * The effects of a room belong to its own music track: they start when that
- * track starts and fade out with it (see `ambience.ts`). Until the navigator
+ * makes (`tts/effects.json`, written by `tts/extract-effects.ts`). A clip is
+ * made once and may play in several scenes; which scenes play it, how and how
+ * loud is the studio's scene mix (see `sceneMix.ts`). Until the navigator
  * chooses a take in the studio, an effect is silent.
  */
-import { roomTrackId } from './musicLists'
-
 /** A sound effect in Content Studio's list format. */
 export interface EffectEntry {
   /** Slug naming the effect's clip; unique across the game. */
@@ -21,32 +16,6 @@ export interface EffectEntry {
   /** True for a clip made to play round and round; absent for a one-shot. */
   loops?: true
 }
-
-/** How an effect plays while its track does: round and round, now and then, or once. */
-export type EffectPlay =
-  | { loops: true }
-  | {
-      loops: false
-      /** The wait from one start to the next, in seconds: a random time between the two. */
-      everySeconds: readonly [number, number]
-    }
-  | {
-      loops: false
-      /** The wait after the track starts before the one time it plays, in seconds. */
-      afterSeconds: number
-    }
-
-/**
- * When an effect plays: always, or only while its room is in one sound state
- * (the room's `soundState`, such as a withered field or a lit glade).
- */
-export interface EffectWhen {
-  /** The room's sound state the effect plays in; absent for an effect that always plays. */
-  state?: string
-}
-
-/** One effect of a track's ambience: its clip's id, how it plays and when. */
-export type AmbientEffect = { id: string } & EffectPlay & EffectWhen
 
 /** Every clip of the game, in the order the studio lists them. */
 export const GAME_EFFECTS: readonly EffectEntry[] = [
@@ -252,100 +221,9 @@ export const GAME_EFFECTS: readonly EffectEntry[] = [
   },
 ]
 
-/** The track of an Act I room by its key, as `roomTrackId` gives it. */
-function act1(roomKey: string): string {
-  return roomTrackId('Act1', roomKey)
-}
-
-/** The effects of each room's track, by track id: which clip plays and how. */
-export const ROOM_AMBIENCE: Readonly<Record<string, readonly AmbientEffect[]>> =
-  {
-    [act1('TheDream')]: [
-      { id: 'rain', loops: true },
-      { id: 'lightning', loops: false, everySeconds: [3, 8] },
-    ],
-    [act1('EliorsCottage')]: [{ id: 'hearth-fire', loops: true }],
-    [act1('VegetableField')]: [
-      { id: 'breeze-leaves', loops: true },
-      {
-        id: 'crow-caw',
-        loops: false,
-        everySeconds: [10, 25],
-        state: 'withered',
-      },
-      { id: 'birdsong', loops: true, state: 'green' },
-    ],
-    [act1('ChickenCoop')]: [
-      { id: 'chickens', loops: true },
-      { id: 'hen-squawk', loops: false, everySeconds: [6, 15] },
-    ],
-    [act1('VillageWell')]: [
-      { id: 'well-drip', loops: false, everySeconds: [4, 10] },
-    ],
-    [act1('BlacksmithsForge')]: [
-      { id: 'forge-fire', loops: true },
-      { id: 'anvil-strike', loops: false, everySeconds: [4, 9] },
-    ],
-    [act1('GeneralStore')]: [
-      { id: 'shop-bell', loops: false, afterSeconds: 1.5 },
-      { id: 'glass-clink', loops: false, everySeconds: [15, 30] },
-      { id: 'cat-purr', loops: true, state: 'cat-home' },
-    ],
-    [act1('VillageSquare')]: [
-      { id: 'village-murmur', loops: true },
-      { id: 'fountain', loops: true },
-    ],
-    [act1('MirasHut')]: [
-      { id: 'glass-clink', loops: false, everySeconds: [8, 20] },
-    ],
-    [act1('AbandonedShed')]: [
-      { id: 'wind-gusts', loops: true },
-      { id: 'wood-creak', loops: false, everySeconds: [6, 14] },
-    ],
-    [act1('OldMill')]: [
-      { id: 'wind-gusts', loops: true },
-      { id: 'mechanism-whir', loops: true, state: 'whirring' },
-      { id: 'wood-creak', loops: false, everySeconds: [5, 12] },
-    ],
-    [act1('Riverbank')]: [
-      { id: 'river', loops: true },
-      { id: 'insects-hum', loops: true },
-    ],
-    [act1('ForestPath')]: [
-      { id: 'birdsong', loops: true },
-      { id: 'twig-snap', loops: false, everySeconds: [8, 20] },
-      {
-        id: 'fox-whimper',
-        loops: false,
-        everySeconds: [10, 20],
-        state: 'kit-trapped',
-      },
-    ],
-    [act1('HiddenGlade')]: [
-      { id: 'glade-hush', loops: true, state: 'dim' },
-      { id: 'birdsong', loops: true, state: 'lit' },
-      { id: 'breeze-leaves', loops: true, state: 'lit' },
-    ],
-    [act1('VillageChapel')]: [
-      { id: 'chapel-door', loops: false, afterSeconds: 1.5 },
-      { id: 'chapel-hush', loops: true },
-      { id: 'wood-creak', loops: false, everySeconds: [15, 30] },
-    ],
-    [act1('RoadToGreendale')]: [
-      { id: 'birdsong', loops: true },
-      { id: 'breeze-leaves', loops: true },
-      { id: 'horse-snort', loops: false, everySeconds: [12, 25] },
-    ],
-  }
-
 /** The clips as Content Studio's list: id, description, length and, for a loop, `loops`. */
 export function effectsList(): EffectEntry[] {
   return GAME_EFFECTS.map(({ id, description, seconds, loops }) =>
     loops ? { id, description, seconds, loops } : { id, description, seconds },
   )
-}
-
-/** The effects that play with `track`, each with how it plays; none for a track without any. */
-export function ambienceAt(track: string): AmbientEffect[] {
-  return Object.hasOwn(ROOM_AMBIENCE, track) ? [...ROOM_AMBIENCE[track]] : []
 }

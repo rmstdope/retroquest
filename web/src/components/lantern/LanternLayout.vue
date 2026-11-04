@@ -1,13 +1,5 @@
 <script setup lang="ts">
-import {
-  computed,
-  defineAsyncComponent,
-  nextTick,
-  onMounted,
-  onUnmounted,
-  ref,
-  watch,
-} from 'vue'
+import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useGameStore } from '@/stores/useGameStore'
 import { renderMarkup } from '@/utils/theme'
 import { useSettingsStore } from '@/stores/useSettingsStore'
@@ -1042,16 +1034,6 @@ watch(
 game.setAudioPlayer(useAudio())
 const music = useActMusic()
 
-/**
- * The dev build's room effects panel (see `DevEffectsPanel.vue`), loaded only
- * there, so the production build carries none of it.
- */
-const DevEffectsPanel = import.meta.env.DEV
-  ? defineAsyncComponent(() => import('./DevEffectsPanel.vue'))
-  : null
-/** Whether the room effects panel is open. */
-const effectsOpen = ref(false)
-
 // --- Game menu, Stats and Help (dialogs the player opens) ---
 const gameDialog = ref<'menu' | MenuKind | null>(null)
 const INFO_TITLES: Record<InfoKind, string> = { stats: 'Stats', help: 'Help' }
@@ -1304,19 +1286,13 @@ watch(
       <LanternHeader
         :compact="!wide"
         :hide-room="phoneStage"
-        :effects-open="effectsOpen"
         @menu="openGameDialog('menu')"
         @open="openGameDialog"
-        @effects="effectsOpen = !effectsOpen"
       >
         <template v-if="!wide && short" #nav>
           <SectionNav v-model="section" class="lq-nav-top" />
         </template>
       </LanternHeader>
-      <DevEffectsPanel
-        v-if="DevEffectsPanel && effectsOpen"
-        @close="effectsOpen = false"
-      />
 
       <main
         ref="mainEl"

@@ -1,27 +1,12 @@
 /**
- * The game's sound effects for Content Studio, and where the game plays them:
- * the list in `tts/effects.json` is what a refresh from the game writes, so it
+ * The game's sound effects for Content Studio: the list in `tts/effects.json` is what a refresh from the game writes, so it
  * must equal `effectsList()`.
  */
 import { readFileSync } from 'node:fs'
 import { describe, expect, it } from 'vitest'
-import { Act1 } from '@/act1/Act1'
-import { ForestPath } from '@/act1/rooms/ForestPath'
-import { GeneralStore } from '@/act1/rooms/GeneralStore'
-import { HiddenGlade } from '@/act1/rooms/HiddenGlade'
-import { OldMill } from '@/act1/rooms/OldMill'
-import { VegetableField } from '@/act1/rooms/VegetableField'
-import { roomTrackId } from './musicLists'
-import {
-  ambienceAt,
-  effectsList,
-  GAME_EFFECTS,
-  ROOM_AMBIENCE,
-  type EffectEntry,
-} from './effectLists'
+import { effectsList, type EffectEntry } from './effectLists'
 
 const SLUG = /^[a-z0-9]+(-[a-z0-9]+)*$/
-const DREAM_TRACK = roomTrackId('Act1', 'TheDream')
 
 /** Reads a JSON file of the repository (relative to its root). */
 function readJson<T>(path: string): T {
@@ -70,123 +55,5 @@ describe('effectsList', () => {
       clips: 'web/public/audio/soundeffects/generated',
       manifest: 'web/public/audio/soundeffects/generated/manifest.json',
     })
-  })
-})
-
-describe('ambienceAt', () => {
-  const act = new Act1()
-  const roomTracks = Object.keys(act.rooms).map((key) =>
-    roomTrackId(act.name, key),
-  )
-  const clips = new Map(GAME_EFFECTS.map((clip) => [clip.id, clip]))
-  const placements = Object.entries(ROOM_AMBIENCE).flatMap(([track, effects]) =>
-    effects.map((effect) => ({ track, ...effect })),
-  )
-
-  it('plays the rain round and round in The Dream', () => {
-    expect(ambienceAt(DREAM_TRACK)).toContainEqual({
-      id: 'rain',
-      loops: true,
-    })
-  })
-
-  it('strikes lightning in The Dream every 3 to 8 seconds', () => {
-    expect(ambienceAt(DREAM_TRACK)).toContainEqual({
-      id: 'lightning',
-      loops: false,
-      everySeconds: [3, 8],
-    })
-  })
-
-  it('rings the shop bell once, as the General Store is entered', () => {
-    expect(ambienceAt(roomTrackId('Act1', 'GeneralStore'))).toContainEqual({
-      id: 'shop-bell',
-      loops: false,
-      afterSeconds: 1.5,
-    })
-  })
-
-  it('plays one clip in several rooms, each at its own pace', () => {
-    for (const key of ['AbandonedShed', 'OldMill', 'VillageChapel'])
-      expect(
-        ambienceAt(roomTrackId('Act1', key)).map((effect) => effect.id),
-      ).toContain('wood-creak')
-  })
-
-  it('plays the crow over the withered field and birds once it is green', () => {
-    const field = ambienceAt(roomTrackId('Act1', 'VegetableField'))
-    expect(field).toContainEqual({
-      id: 'crow-caw',
-      loops: false,
-      everySeconds: [10, 25],
-      state: VegetableField.SOUND_WITHERED,
-    })
-    expect(field).toContainEqual({
-      id: 'birdsong',
-      loops: true,
-      state: VegetableField.SOUND_GREEN,
-    })
-    expect(field).toContainEqual({ id: 'breeze-leaves', loops: true })
-  })
-
-  it('names only sound states its room has', () => {
-    const states: Record<string, string[]> = {
-      VegetableField: [
-        VegetableField.SOUND_WITHERED,
-        VegetableField.SOUND_GREEN,
-      ],
-      GeneralStore: [GeneralStore.SOUND_CAT_HOME],
-      OldMill: [OldMill.SOUND_WHIRRING, OldMill.SOUND_JAMMED],
-      ForestPath: [ForestPath.SOUND_KIT_TRAPPED],
-      HiddenGlade: [HiddenGlade.SOUND_DIM, HiddenGlade.SOUND_LIT],
-    }
-    for (const key of Object.keys(act.rooms))
-      for (const effect of ambienceAt(roomTrackId('Act1', key)))
-        if (effect.state !== undefined)
-          expect(states[key] ?? [], `${key}: ${effect.id}`).toContain(
-            effect.state,
-          )
-  })
-
-  it('plays nothing where no effect is listed', () => {
-    expect(ambienceAt('market')).toEqual([])
-    expect(ambienceAt('')).toEqual([])
-  })
-
-  it('plays effects only on the tracks of real rooms', () => {
-    for (const track of Object.keys(ROOM_AMBIENCE))
-      expect(roomTracks).toContain(track)
-  })
-
-  it('plays only listed clips, a loop round and round and a one-shot not', () => {
-    for (const placement of placements) {
-      const clip = clips.get(placement.id)
-      expect(clip, placement.id).toBeDefined()
-      expect(placement.loops, placement.id).toBe(clip?.loops === true)
-    }
-  })
-
-  it('plays every listed clip somewhere', () => {
-    const played = new Set(placements.map((placement) => placement.id))
-    for (const clip of GAME_EFFECTS) expect(played).toContain(clip.id)
-  })
-
-  it('plays a clip at most once in a room in each state', () => {
-    for (const effects of Object.values(ROOM_AMBIENCE)) {
-      const keys = effects.map((effect) => `${effect.id}/${effect.state}`)
-      expect(new Set(keys).size).toBe(keys.length)
-    }
-  })
-
-  it('gives every wait a positive length, the shortest no longer than the longest', () => {
-    for (const placement of placements) {
-      if ('everySeconds' in placement) {
-        const [min, max] = placement.everySeconds
-        expect(min).toBeGreaterThan(0)
-        expect(max).toBeGreaterThanOrEqual(min)
-      }
-      if ('afterSeconds' in placement)
-        expect(placement.afterSeconds).toBeGreaterThanOrEqual(0)
-    }
   })
 })

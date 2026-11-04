@@ -106,6 +106,15 @@ export class Room {
     return ''
   }
 
+  /**
+   * Every sound state `soundState` can answer, the one the room starts in
+   * first ('' included where it is one of them); none for a room that always
+   * sounds the same. Content Studio's scene declarations list them.
+   */
+  soundStates(): readonly string[] {
+    return []
+  }
+
   /** What `listen` with no target hears; rooms override it to react to the game state. */
   getAmbientSound(_gameState: GameState): string {
     return 'It is quiet here.'
