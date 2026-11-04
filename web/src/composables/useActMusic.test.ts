@@ -5,6 +5,8 @@ import { createPinia, setActivePinia } from 'pinia'
 import { useActMusic } from './useActMusic'
 import { useGameStore } from '@/stores/useGameStore'
 import { useNarrationStore } from '@/stores/useNarrationStore'
+import { useSettingsStore } from '@/stores/useSettingsStore'
+import { FakeAudioContext } from '@/testing/fakeAudioContext'
 import {
   MUSIC_DUCK,
   MUSIC_DUCK_FADE_MS,
@@ -344,5 +346,226 @@ describe('useActMusic', () => {
       expect(mainAudio.src).toBe(`/audio/music/${encodeURIComponent(MARKET)}`)
       scope.stop()
     })
+  })
+})
+
+/**
+ * Last in the file: the page's one AudioContext, once made, stays for every
+ * test after.
+ */
+describe('useActMusic with the effects of a room', () => {
+  let ctx: FakeAudioContext
+  const DREAM_MUSIC = {
+    'act1-the-dream': { file: 'dream.mp3', duration: 60 },
+    'act1-old-mill': { file: 'mill.mp3', duration: 60 },
+    'act1-abandoned-shed': { file: 'shed.mp3', duration: 60 },
+    'act1-eliors-cottage': { file: 'cottage.mp3', duration: 60 },
+  }
+  const EFFECTS = {
+    rain: { file: 'rain.mp3', duration: 20 },
+    lightning: { file: 'lightning.mp3', duration: 4 },
+    'wind-gusts': { file: 'wind.mp3', duration: 20 },
+    'mechanism-whir': { file: 'whir.mp3', duration: 20 },
+  }
+
+  /** Serves the two manifests as JSON and any other file as audio. */
+  function serve(): void {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn((url: string) =>
+        Promise.resolve({
+          ok: true,
+          json: () =>
+            Promise.resolve(
+              url.startsWith('/audio/music/') ? DREAM_MUSIC : EFFECTS,
+            ),
+          arrayBuffer: () => Promise.resolve(new ArrayBuffer(1)),
+        }),
+      ),
+    )
+  }
+
+  /** Lets the manifests, the fetches and the decodes settle. */
+  async function ready(): Promise<void> {
+    for (let i = 0; i < 3; i++) await settle()
+  }
+
+  /** How many gains the shared context had made when this test started (it lives on across tests). */
+  let gainsBefore = 0
+
+  /**
+   * The gain every effect plays into: the one, made in this test, out to the
+   * speakers that an ambience's own gain connects to.
+   */
+  function effectsBus() {
+    return ctx.gains
+      .slice(gainsBefore)
+      .find(
+        (gain) =>
+          gain.connect.mock.calls[0]?.[0] === ctx.destination &&
+          ctx.gains.some((other) => other.connect.mock.calls[0]?.[0] === gain),
+      )
+  }
+
+  /** Starts the music in Act I's room `roomKey`, in `soundState`, and returns the scope. */
+  async function startIn(
+    roomKey: string,
+    soundState = '',
+  ): Promise<ReturnType<typeof effectScope>> {
+    gainsBefore = FakeAudioContext.last?.gains.length ?? 0
+    const scope = effectScope()
+    scope.run(() => useActMusic())
+    const game = useGameStore()
+    game.musicFile = 'Conquest - Market (freetouse.com).mp3'
+    game.musicActName = 'Act1'
+    game.musicRoomKey = roomKey
+    game.musicSoundState = soundState
+    await ready()
+    return scope
+  }
+
+  /** Starts the music in The Dream and returns the scope. */
+  function startInTheDream(): Promise<ReturnType<typeof effectScope>> {
+    return startIn('TheDream')
+  }
+
+  /** The loops sounding now: the music's and the effects'. */
+  function loopsSounding() {
+    return ctx.sources.filter(
+      (source) => source.loop && source.stop.mock.calls.length === 0,
+    )
+  }
+
+  beforeEach(() => {
+    // The settings are saved; a test that turns the effects off must not leave them off.
+    try {
+      localStorage.clear()
+    } catch {
+      // No storage here: nothing was saved.
+    }
+    setActivePinia(createPinia())
+    vi.stubGlobal('Audio', FakeAudio)
+    vi.stubGlobal('AudioContext', FakeAudioContext)
+    serve()
+  })
+  afterEach(() => vi.unstubAllGlobals())
+
+  it("plays the rain round and round with The Dream's music", async () => {
+    const scope = await startInTheDream()
+    ctx = FakeAudioContext.last
+    const loops = ctx.sources.filter((source) => source.loop)
+    // The music's loop and the rain's.
+    expect(loops).toHaveLength(2)
+    for (const loop of loops) expect(loop.start).toHaveBeenCalled()
+    scope.stop()
+    for (const loop of loops) expect(loop.stop).toHaveBeenCalled()
+  })
+
+  it("plays the effects of the room's sound state, and follows it as it changes", async () => {
+    const scope = await startIn('OldMill', 'whirring')
+    ctx = FakeAudioContext.last
+    // The music's loop, the wind's and the mechanism's whir.
+    expect(loopsSounding()).toHaveLength(3)
+    useGameStore().musicSoundState = 'jammed'
+    await nextTick()
+    // The whir falls silent; the music and the wind go on.
+    expect(loopsSounding()).toHaveLength(2)
+    scope.stop()
+  })
+
+  it("leaves the effects of a room it walks out of in that room's state", async () => {
+    const scope = await startIn('OldMill', 'whirring')
+    ctx = FakeAudioContext.last
+    const mill = loopsSounding()
+    expect(mill).toHaveLength(3)
+    const game = useGameStore()
+    game.musicRoomKey = 'TheDream'
+    game.musicSoundState = ''
+    await nextTick()
+    // The mill fades out whole, its whir with it, while The Dream comes in.
+    for (const loop of mill) expect(loop.stop).not.toHaveBeenCalled()
+    scope.stop()
+  })
+
+  /** How often the clip file `name` was fetched. */
+  function fetchesOf(name: string): number {
+    return vi
+      .mocked(fetch)
+      .mock.calls.filter(
+        ([url]) => String(url) === `/audio/soundeffects/generated/${name}`,
+      ).length
+  }
+
+  /** Walks the music to Act I's room `roomKey` and lets it settle. */
+  async function walkTo(roomKey: string): Promise<void> {
+    const game = useGameStore()
+    game.musicRoomKey = roomKey
+    game.musicSoundState = ''
+    await ready()
+  }
+
+  it('decodes a clip shared by two rooms once, walking from one to the other', async () => {
+    const scope = await startIn('OldMill', 'whirring')
+    await walkTo('AbandonedShed')
+    expect(fetchesOf('wind.mp3')).toBe(1)
+    scope.stop()
+  })
+
+  it('tries a clip that could not be had again in the next room', async () => {
+    const served = vi.mocked(fetch).getMockImplementation()!
+    let failed = false
+    vi.mocked(fetch).mockImplementation((url) => {
+      if (String(url).endsWith('/wind.mp3') && !failed) {
+        failed = true
+        return Promise.resolve({ ok: false } as Response)
+      }
+      return served(url)
+    })
+    const scope = await startIn('OldMill', 'whirring')
+    await walkTo('AbandonedShed')
+    expect(fetchesOf('wind.mp3')).toBe(2)
+    scope.stop()
+  })
+
+  it('keeps the clips of the last two rooms only', async () => {
+    const scope = await startIn('OldMill', 'whirring')
+    await walkTo('TheDream')
+    await walkTo('EliorsCottage')
+    await walkTo('AbandonedShed')
+    expect(fetchesOf('wind.mp3')).toBe(2)
+    scope.stop()
+  })
+
+  it('fetches and plays no effects at all while effects are off', async () => {
+    useSettingsStore().effectsOn = false
+    const scope = await startInTheDream()
+    ctx = FakeAudioContext.last
+    const fetched = vi.mocked(fetch).mock.calls.map(([url]) => String(url))
+    expect(
+      fetched.some(
+        (url) => url.includes('/soundeffects/') && url.endsWith('.mp3'),
+      ),
+    ).toBe(false)
+    // Only the music's own loop.
+    expect(loopsSounding()).toHaveLength(1)
+    scope.stop()
+  })
+
+  it('plays the effects at the effects volume, and none with effects off', async () => {
+    const settings = useSettingsStore()
+    settings.effectsVolume = 40
+    const scope = await startInTheDream()
+    ctx = FakeAudioContext.last
+    // The effects join the music as they are decoded.
+    await vi.waitFor(() => expect(effectsBus()).toBeDefined())
+    expect(effectsBus()?.gain.value).toBeCloseTo(0.4)
+    settings.effectsOn = false
+    await nextTick()
+    expect(effectsBus()?.gain.value).toBe(0)
+    settings.effectsOn = true
+    settings.effectsVolume = 80
+    await nextTick()
+    expect(effectsBus()?.gain.value).toBeCloseTo(0.8)
+    scope.stop()
   })
 })

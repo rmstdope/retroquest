@@ -39,6 +39,11 @@ const AMULET_HUM =
  * from the mechanism and the amulet each time the room is shown.
  */
 export class OldMill extends Room {
+  /** The sound state of the mill while the stranger's mechanism whirs. */
+  static readonly SOUND_WHIRRING = 'whirring'
+  /** The sound state of the mill once the mechanism is jammed. */
+  static readonly SOUND_JAMMED = 'jammed'
+
   constructor() {
     super({
       name: 'Old Mill',
@@ -49,19 +54,27 @@ export class OldMill extends Room {
     })
   }
 
+  /** Whirs while the mechanism works; falls silent once it is jammed. */
+  override soundState(_gameState: GameState): string {
+    return this.isJammed() ? OldMill.SOUND_JAMMED : OldMill.SOUND_WHIRRING
+  }
+
   /**
    * The mill with its mechanism whirring or jammed; once it is jammed and
    * Elior carries the amulet, the amulet hums.
    */
   override descriptionFor(gameState: GameState): string {
-    const jammed = this.items.some(
-      (item) => item instanceof Mechanism && item.repaired,
-    )
+    const jammed = this.isJammed()
     return (
       DESCRIPTION_START +
       (jammed ? MECHANISM_JAMMED : MECHANISM_WORKING) +
       (jammed && gameState.hasItem('Ancient Amulet') ? AMULET_HUM : '')
     )
+  }
+
+  /** Whether the stranger's mechanism has been jammed. */
+  private isJammed(): boolean {
+    return this.items.some((item) => item instanceof Mechanism && item.repaired)
   }
 
   /**

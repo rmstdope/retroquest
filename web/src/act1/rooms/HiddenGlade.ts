@@ -14,6 +14,11 @@ import { GrowSpell } from '../spells/GrowSpell'
  * description show the refrain carved beneath the runes.
  */
 export class HiddenGlade extends Room {
+  /** The sound state of the glade under its unnatural darkness. */
+  static readonly SOUND_DIM = 'dim'
+  /** The sound state of the glade once `light` has lifted the darkness. */
+  static readonly SOUND_LIT = 'lit'
+
   lightSpellCast = false
 
   constructor() {
@@ -48,6 +53,11 @@ export class HiddenGlade extends Room {
   private static readonly CARVING_SENTENCE =
     ' Beneath it, in a plainer hand, is carved: ' +
     `\u201c${HiddenGlade.REFRAIN}\u201d`
+
+  /** Hushed while dim; once lit, birds and a breeze. */
+  override soundState(_gameState: GameState): string {
+    return this.lightSpellCast ? HiddenGlade.SOUND_LIT : HiddenGlade.SOUND_DIM
+  }
 
   /**
    * The glade's text, built from its dynamic segments: dim or sunlit, the

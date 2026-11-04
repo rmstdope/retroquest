@@ -6,6 +6,7 @@ import {
   FLAG_PATCHES_STAYED_WITH_GRANDMOTHER,
   FLAG_RUSTY_HOE_SECOND_COIN_FOUND,
 } from '../Act1StoryFlags'
+import { GeneralStore } from './GeneralStore'
 
 const SHUT =
   'A cluttered shop with the shutters half down. Rope, apples, matches and ' +
@@ -49,5 +50,20 @@ describe('General Store room text', () => {
     expect(controller.getRoomDescription()).toBe(SHUT)
     game.state.setStoryFlag(FLAG_PATCHES_RETURNED, true)
     expect(controller.getRoomDescription()).toBe(OPEN + CAT)
+  })
+})
+
+describe('General Store sound', () => {
+  /** The store's sound state in a fresh game with the given flags set. */
+  function storeSound(...flags: string[]): string {
+    const game = new Game([new Act1()])
+    flags.forEach((flag) => game.state.setStoryFlag(flag, true))
+    return game.state.allRooms.GeneralStore.soundState(game.state)
+  }
+
+  it('has the cat purring only once Patches is home on the counter', () => {
+    expect(storeSound()).toBe('')
+    expect(storeSound(FLAG_PATCHES_STAYED_WITH_GRANDMOTHER)).toBe('')
+    expect(storeSound(FLAG_PATCHES_RETURNED)).toBe(GeneralStore.SOUND_CAT_HOME)
   })
 })

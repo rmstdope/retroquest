@@ -97,6 +97,15 @@ export class Room {
     return ''
   }
 
+  /**
+   * The room's sound state: a name for how it sounds now, so its sound
+   * effects can follow the story (a withered field, a lit glade). Rooms whose
+   * sound changes override it; '' (the default) means it always sounds the same.
+   */
+  soundState(_gameState: GameState): string {
+    return ''
+  }
+
   /** What `listen` with no target hears; rooms override it to react to the game state. */
   getAmbientSound(_gameState: GameState): string {
     return 'It is quiet here.'

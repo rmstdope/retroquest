@@ -7,6 +7,7 @@ import {
   sharedAudioContext,
   type MusicVoice,
 } from './musicVoice'
+import { AmbientVoice, type Ambience } from './ambience'
 
 const MUSIC_BASE_PATH = '/audio/music/'
 const URL_PATTERN = /(https?:\/\/[^\s]+)/g
@@ -28,6 +29,18 @@ export const MUSIC_FADE_IN_MS = 2000
 const FADE_STEPS = 10
 
 /**
+ * The sound effects that play with a music file, prepared on `context`; null
+ * when the file has none. See `ambience.ts`.
+ */
+export type AmbienceSource = (
+  file: string,
+  context: AudioContext,
+) => Promise<Ambience | null>
+
+/** No music file has sound effects. */
+const NO_AMBIENCE: AmbienceSource = () => Promise.resolve(null)
+
+/**
  * Background music for the current act. On/off and volume come from the
  * player's settings, so changes made anywhere (top bar, Settings dialog)
  * apply immediately. While `narrating` is true the music fades down to
@@ -44,10 +57,15 @@ const FADE_STEPS = 10
  * music already playing goes on until it is ready, and the loop then comes
  * round without a click. A browser that cannot decode it plays the element, as
  * before.
+ *
+ * A track `ambienceFor` gives sound effects plays them with its loop on Web
+ * Audio (see `ambience.ts`): they start and stop with the music and follow
+ * each of its fades. A track played on an element plays none.
  */
 export function useMusic(
   audio: HTMLAudioElement,
   narrating: Readonly<Ref<boolean>> = ref(false),
+  ambienceFor: AmbienceSource = NO_AMBIENCE,
 ) {
   const settings = useSettingsStore()
   const musicMuted = computed(() => !settings.musicOn)
@@ -112,19 +130,23 @@ export function useMusic(
       return
     }
     // A loop is decoded first; the music playing goes on until it is ready.
+    // Its effects come when they are ready and never hold it back; effects
+    // that fail to prepare, or come after the loop is gone, are let go of.
+    const effects = ambienceFor(file, context).catch(() => null)
     void prepareWebAudioVoice(context, urlFor(file)).then((voice) => {
-      if (id !== request) {
+      if (id !== request || !voice) {
         voice?.dispose()
-        return
+        void effects.then((ambience) => ambience?.dispose())
+        if (id !== request) return
       }
-      startVoice(
-        file,
-        info,
-        voice ?? htmlVoiceFor(file),
-        false,
-        fadeInMs,
-        through,
-      )
+      const next = voice
+        ? new AmbientVoice(voice, null, () => settings.musicVolume / 100)
+        : htmlVoiceFor(file)
+      startVoice(file, info, next, false, fadeInMs, through)
+      if (next instanceof AmbientVoice)
+        void effects.then((ambience) => {
+          if (ambience) next.attach(ambience)
+        })
     })
   }
 

@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest'
 import { Game, GameController } from '@/engine'
 import { Act1 } from '../Act1'
 import { Snare } from '../items/Snare'
+import { ForestPath } from './ForestPath'
 
 /** An Act I game on the Forest Path with the vines cut and the kit snared. */
 function gameWithVinesCut(): Game {
@@ -29,5 +30,19 @@ describe('Forest Path room card', () => {
     expect(new GameController(game).getRoomDescription()).toContain(
       'cut and empty',
     )
+  })
+})
+
+describe('Forest Path sound', () => {
+  it('has the kit whimpering only while it is caught in the snare', () => {
+    const blocked = new Game([new Act1()])
+    expect(blocked.state.allRooms.ForestPath.soundState(blocked.state)).toBe('')
+    const game = gameWithVinesCut()
+    const path = game.state.currentRoom
+    expect(path.soundState(game.state)).toBe(ForestPath.SOUND_KIT_TRAPPED)
+    const snare = path.items.find((i) => i instanceof Snare)
+    if (!(snare instanceof Snare)) throw new Error('no snare')
+    snare.freed = true
+    expect(path.soundState(game.state)).toBe('')
   })
 })

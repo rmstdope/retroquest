@@ -86,3 +86,15 @@ describe('the Old Mill room card', () => {
     expect(text).not.toContain('hums softly')
   })
 })
+
+describe('Old Mill sound', () => {
+  it('whirs until the mechanism is jammed', () => {
+    const game = new Game([new Act1()])
+    const mill = game.state.allRooms.OldMill
+    expect(mill.soundState(game.state)).toBe(OldMill.SOUND_WHIRRING)
+    const mechanism = mill.items.find((item) => item instanceof Mechanism)
+    if (!(mechanism instanceof Mechanism)) throw new Error('no mechanism')
+    mechanism.repaired = true
+    expect(mill.soundState(game.state)).toBe(OldMill.SOUND_JAMMED)
+  })
+})

@@ -82,10 +82,12 @@ export interface MusicInfo {
   musicInfo: string
 }
 
-/** Where the music plays: the act's name and the key of the player's room, both '' while nothing plays. */
+/** Where the music plays: the act's name, the key of the player's room and its sound state, all '' while nothing plays. */
 export interface MusicPlace {
   actName: string
   roomKey: string
+  /** The room's `soundState`, which its sound effects follow. */
+  soundState: string
 }
 
 /** A character selling wares, like the act shopkeepers. */

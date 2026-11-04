@@ -280,6 +280,8 @@ export const useGameStore = defineStore('game', () => {
   /** The act and room the music plays in (see `getMusicPlace`), '' while nothing plays. */
   const musicActName = ref('')
   const musicRoomKey = ref('')
+  /** The sound state of the music's room (see `getMusicPlace`), held and released with it. */
+  const musicSoundState = ref('')
   /**
    * Whether a narrated command keeps the room's music at the room it started
    * in, until the narration reaches the new scene (`releaseMusic`).
@@ -289,6 +291,14 @@ export const useGameStore = defineStore('game', () => {
   const scenePicture = ref(false)
   /** The room key the engine plays in now, which `musicRoomKey` takes on release. */
   let latestRoomKey = ''
+  /** That room's sound state now, which `musicSoundState` takes on release. */
+  let latestSoundState = ''
+
+  /** The music moves to the room the engine plays in now, with its sound state. */
+  function moveMusic(): void {
+    musicRoomKey.value = latestRoomKey
+    musicSoundState.value = latestSoundState
+  }
 
   /** The picture of the room the player is in (follows the held music room, so it changes as the narration reaches the new scene). */
   const roomPicture = computed(() =>
@@ -563,7 +573,7 @@ export const useGameStore = defineStore('game', () => {
     held.value = { place: false, quests: false, stock: false }
     pendingDots = { bag: false, spells: false, quests: false }
     musicHeld = false
-    musicRoomKey.value = latestRoomKey
+    moveMusic()
   }
 
   /**
@@ -574,7 +584,7 @@ export const useGameStore = defineStore('game', () => {
   function releaseMusic(turnId: number): void {
     if (turnId !== heldTurn.value || !musicHeld) return
     musicHeld = false
-    musicRoomKey.value = latestRoomKey
+    moveMusic()
   }
 
   /**
@@ -942,7 +952,8 @@ export const useGameStore = defineStore('game', () => {
     musicActName.value = place.actName
     actCast.value = b.controller.getActCharacters()
     latestRoomKey = isIntroShowing() ? '' : place.roomKey
-    if (!musicHeld) musicRoomKey.value = latestRoomKey
+    latestSoundState = isIntroShowing() ? '' : place.soundState
+    if (!musicHeld) moveMusic()
   }
 
   /** Whether an act's intro pop-up is on screen. */
@@ -1325,6 +1336,7 @@ export const useGameStore = defineStore('game', () => {
     musicInfo,
     musicActName,
     musicRoomKey,
+    musicSoundState,
     roomPicture,
     portraitFor,
     heldTurn,

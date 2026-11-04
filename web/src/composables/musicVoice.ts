@@ -92,11 +92,19 @@ export async function prepareWebAudioVoice(
   context: AudioContext,
   url: string,
 ): Promise<MusicVoice | null> {
+  const buffer = await fetchAudioBuffer(context, url)
+  return buffer ? new WebAudioMusicVoice(context, buffer) : null
+}
+
+/** Fetches and decodes the audio file at `url` on `context`; null when it cannot be fetched or decoded. */
+export async function fetchAudioBuffer(
+  context: AudioContext,
+  url: string,
+): Promise<AudioBuffer | null> {
   try {
     const response = await fetch(url)
     if (!response.ok) return null
-    const buffer = await context.decodeAudioData(await response.arrayBuffer())
-    return new WebAudioMusicVoice(context, buffer)
+    return await context.decodeAudioData(await response.arrayBuffer())
   } catch {
     return null
   }

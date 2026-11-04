@@ -181,6 +181,11 @@ describe('Room', () => {
       expect(r.onEnter(gs)).toBeUndefined()
     })
 
+    it('has no sound state of its own', () => {
+      const r = new Room({ name: 'R', description: 'Desc' })
+      expect(r.soundState(gameState())).toBe('')
+    })
+
     it('searches around the room by name, with "the" before it', () => {
       const r = new Room({ name: 'Old Mill', description: 'Desc' })
       expect(r.search(gameState())).toBe(

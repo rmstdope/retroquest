@@ -1,4 +1,12 @@
 {
+ "act1-abandoned-shed": {
+  "file": "act1-abandoned-shed.mp3",
+  "duration": 60.0
+ },
+ "act1-blacksmiths-forge": {
+  "file": "act1-blacksmiths-forge.mp3",
+  "duration": 60.0
+ },
  "act1-chicken-coop": {
   "file": "act1-chicken-coop.mp3",
   "duration": 60.0
@@ -7,8 +15,16 @@
   "file": "act1-eliors-cottage.mp3",
   "duration": 60.0
  },
+ "act1-general-store": {
+  "file": "act1-general-store.mp3",
+  "duration": 60.0
+ },
  "act1-miras-hut": {
   "file": "act1-miras-hut.mp3",
+  "duration": 60.0
+ },
+ "act1-riverbank": {
+  "file": "act1-riverbank.mp3",
   "duration": 60.0
  },
  "act1-the-dream": {
@@ -21,6 +37,10 @@
  },
  "act1-village-square": {
   "file": "act1-village-square.mp3",
+  "duration": 60.0
+ },
+ "act1-village-well": {
+  "file": "act1-village-well.mp3",
   "duration": 60.0
  },
  "market": {

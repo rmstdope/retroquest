@@ -2,7 +2,12 @@ import { onScopeDispose, ref, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useGameStore } from '@/stores/useGameStore'
 import { useNarrationStore } from '@/stores/useNarrationStore'
-import { MUSIC_FADE_IN_MS, useMusic } from './useMusic'
+import { useSettingsStore } from '@/stores/useSettingsStore'
+import { MUSIC_FADE_IN_MS, useMusic, type AmbienceSource } from './useMusic'
+import { prepareAmbience, type Ambience } from './ambience'
+import { ambientClipsAt, loadChosenEffects, trackOfTake } from './chosenEffects'
+import { fetchAudioBuffer } from './musicVoice'
+import { roomTrackId } from '@/lantern/musicLists'
 import {
   chooseTrack,
   GENERATED_MUSIC_DIR,
@@ -41,6 +46,13 @@ const MEDIA_KEYS: readonly MediaSessionAction[] = ['play', 'pause', 'stop']
  * The first track, when it loads under the game's title page, fades in over
  * `MUSIC_FADE_IN_MS`.
  *
+ * A room's chosen take plays the room's chosen sound effects with it (see
+ * `effectLists.ts`), through one effects bus at the player's effects volume:
+ * they start with the take, fade with it and stop with it. The effects follow
+ * the room's sound state (`musicSoundState`), held and released with the
+ * music's room: a whir stops as the mechanism is jammed. With the effects
+ * off, none are fetched; a clip shared by the last two rooms is decoded once.
+ *
  * When the calling component's scope ends, the music stops and the
  * listeners are removed.
  */
@@ -50,6 +62,7 @@ export function useActMusic(): ReturnType<typeof useMusic> {
     musicInfo,
     musicActName,
     musicRoomKey,
+    musicSoundState,
     showTitle,
     scenePicture,
   } = storeToRefs(useGameStore())
@@ -57,10 +70,84 @@ export function useActMusic(): ReturnType<typeof useMusic> {
   void loadChosenManifest().then((manifest) => {
     chosen.value = manifest
   })
+  const chosenEffects = loadChosenEffects()
+  const settings = useSettingsStore()
+  const effectsLevel = (): number =>
+    settings.effectsOn ? settings.effectsVolume / 100 : 0
+  /** Where every effect plays into, at the effects volume; made with the first. */
+  let effectsBus: GainNode | null = null
+  /** Set when the scope ends, so an ambience still being prepared makes no bus. */
+  let disposed = false
+  /** The ambiences not yet let go of, each with its track: the room's and any fading out. */
+  let ambiences: { track: string; ambience: Ambience }[] = []
+  /** The track of the room the music plays in. */
+  const roomTrack = (): string =>
+    roomTrackId(musicActName.value, musicRoomKey.value)
+  /** Gives the room's sound state to its own track's ambience; the others keep theirs. */
+  const followSoundState = (): void => {
+    ambiences = ambiences.filter(({ ambience }) => !ambience.disposed)
+    for (const { track, ambience } of ambiences)
+      if (track === roomTrack()) ambience.setState(musicSoundState.value)
+  }
+  /**
+   * The decoded clips by URL, so a clip shared by rooms is decoded once. Only
+   * the clips of the last two rooms are kept (a 20 s loop is megabytes).
+   */
+  const decoded = new Map<string, Promise<AudioBuffer | null>>()
+  /** The clip URLs of the room before the latest. */
+  let previousUrls: string[] = []
+  /** The clip URLs of the latest room. */
+  let latestUrls: string[] = []
+  /** Keeps the clips of `urls` and of the room before; lets go of the rest. */
+  const keepClips = (urls: string[]): void => {
+    previousUrls = latestUrls
+    latestUrls = urls
+    for (const url of [...decoded.keys()])
+      if (!urls.includes(url) && !previousUrls.includes(url))
+        decoded.delete(url)
+  }
+  const ambienceFor: AmbienceSource = async (file, context) => {
+    // With the effects off, nothing is fetched; they come with the next room.
+    if (effectsLevel() === 0) return null
+    const music = chosen.value
+    const track = music ? trackOfTake(file, music) : null
+    const clips =
+      track === null ? [] : ambientClipsAt(track, await chosenEffects)
+    keepClips(clips.map((clip) => clip.url))
+    if (track === null || clips.length === 0 || disposed) return null
+    if (!effectsBus) {
+      effectsBus = context.createGain()
+      effectsBus.gain.value = effectsLevel()
+      effectsBus.connect(context.destination)
+    }
+    const load = (url: string): Promise<AudioBuffer | null> => {
+      let buffer = decoded.get(url)
+      if (!buffer) {
+        buffer = fetchAudioBuffer(context, url)
+        decoded.set(url, buffer)
+        // A clip that could not be had is tried again in the next room.
+        const pending = buffer
+        void pending.then((clip) => {
+          if (!clip && decoded.get(url) === pending) decoded.delete(url)
+        })
+      }
+      return buffer
+    }
+    const ambience = await prepareAmbience(context, clips, effectsBus, load)
+    if (ambience) {
+      ambiences.push({ track, ambience })
+      followSoundState()
+    }
+    return ambience
+  }
+  watch([musicActName, musicRoomKey, musicSoundState], followSoundState)
+  watch(effectsLevel, (level) => {
+    if (effectsBus) effectsBus.gain.value = level
+  })
   const audio = new Audio()
   audio.loop = true
   const { isNarrating } = storeToRefs(useNarrationStore())
-  const music = useMusic(audio, isNarrating)
+  const music = useMusic(audio, isNarrating, ambienceFor)
   /** Whether a track has been asked for yet; only the first can be the title page's. */
   let started = false
 
@@ -113,6 +200,8 @@ export function useActMusic(): ReturnType<typeof useMusic> {
     for (const gesture of GESTURES) window.removeEventListener(gesture, resume)
     setMediaKeyHandlers(null)
     music.loadTrack('', '')
+    disposed = true
+    effectsBus?.disconnect()
   })
 
   return music

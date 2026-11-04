@@ -45,13 +45,17 @@ export function chooseTrack(
 /** How long the game waits for the manifest before playing its own files, in ms. */
 const MANIFEST_TIMEOUT_MS = 3000
 
-/** Fetches the manifest of chosen takes; a missing, unreadable, malformed or slow one means none were made. */
-export async function loadChosenManifest(): Promise<ChosenManifest> {
+/**
+ * Fetches the manifest of chosen takes (the music's, unless `url` names
+ * another); a missing, unreadable, malformed or slow one means none were made.
+ */
+export async function loadChosenManifest(
+  url: string = `/audio/music/${GENERATED_MUSIC_DIR}manifest.json`,
+): Promise<ChosenManifest> {
   try {
-    const response = await fetch(
-      `/audio/music/${GENERATED_MUSIC_DIR}manifest.json`,
-      { signal: AbortSignal.timeout(MANIFEST_TIMEOUT_MS) },
-    )
+    const response = await fetch(url, {
+      signal: AbortSignal.timeout(MANIFEST_TIMEOUT_MS),
+    })
     if (response.ok) {
       const manifest: unknown = await response.json()
       if (typeof manifest === 'object' && manifest !== null)

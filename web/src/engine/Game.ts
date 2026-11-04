@@ -206,17 +206,20 @@ export class Game implements CommandTarget {
 
   /**
    * Where the music plays: the current act's name and the key of the room the
-   * player is in, so a room may have a track of its own. Empty exactly when
+   * player is in, so a room may have a track of its own, and the room's
+   * sound state, which its sound effects follow. Empty exactly when
    * `currentMusic` is. The key is found in the state's own rooms, so it is
    * right after a load too.
    */
   currentMusicPlace(): MusicPlace {
-    if (!this.isMusicPlaying()) return { actName: '', roomKey: '' }
+    if (!this.isMusicPlaying())
+      return { actName: '', roomKey: '', soundState: '' }
     const rooms = Object.entries(this.state.allRooms)
     const here = rooms.find(([, room]) => room === this.state.currentRoom)
     return {
       actName: this.acts[this.currentAct].name,
       roomKey: here?.[0] ?? '',
+      soundState: this.state.currentRoom.soundState(this.state),
     }
   }
 
