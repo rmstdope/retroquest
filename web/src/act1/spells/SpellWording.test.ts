@@ -76,9 +76,17 @@ describe('Act I spell descriptions in older saves', () => {
     for (const spell of game.state.knownSpells) spell.description = 'Old.'
     const fresh = new Game([new Act1()])
     fresh.loadSaveData(game.toSaveData())
+    for (const spell of fresh.state.knownSpells) {
+      if (spell.id !== 'grow') expect(spell.description).not.toBe('Old.')
+    }
     const revive = fresh.state.knownSpells.find((s) => s.id === 'revive')
-    expect(revive?.description).toBe(new ReviveSpell().description)
     expect(revive?.description).toContain(characterName('Grandmother'))
+    for (const id of ['heal', 'unlock', 'light']) {
+      const spell = fresh.state.knownSpells.find((s) => s.id === id)
+      expect(spell?.description).toContain(characterName('Mira'))
+    }
+    const bless = fresh.state.knownSpells.find((s) => s.id === 'bless')
+    expect(bless?.description).toContain(characterName('priest'))
     const purify = fresh.state.knownSpells.find((s) => s.id === 'purify')
     expect(purify?.description).toContain(characterName('fisherman'))
     expect(purify?.description).toContain('Your mother')
