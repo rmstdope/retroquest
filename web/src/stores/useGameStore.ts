@@ -591,6 +591,8 @@ export const useGameStore = defineStore('game', () => {
     held.value = { place: false, quests: false, stock: false }
     pendingDots = { bag: false, spells: false, quests: false }
     musicHeld = false
+    // The firings of an abandoned turn never sound.
+    latestSoundFirings = []
     moveMusic()
   }
 

@@ -166,6 +166,8 @@ export function useActMusic(): ReturnType<typeof useMusic> {
   })
   /** Sounds the effects bound to each trigger the game fired in the music's room. */
   watch(musicSoundFirings, (firings) => {
+    // A state change published with the firing is taken first.
+    followSoundState()
     for (const { roomKey, trigger } of firings) {
       if (roomKey !== musicRoomKey.value) continue
       const scene = roomTrackId(musicActName.value, roomKey)

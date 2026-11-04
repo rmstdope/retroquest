@@ -93,6 +93,13 @@ describe('useGameStore: panels held while a turn is narrated', () => {
     expect(store.musicSoundFirings).toBe(published)
   })
 
+  it('never publishes the firings of a turn whose hold was dropped', async () => {
+    const store = await startedStore()
+    store.submitCommand(`take ${GEM.toLowerCase()}`)
+    store.restartGame()
+    expect(store.musicSoundFirings).toEqual([])
+  })
+
   it('says whether a group of panels is still held for the narrator', async () => {
     const store = await startedStore()
     expect(store.groupHeld('stock')).toBe(false)

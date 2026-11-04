@@ -744,6 +744,27 @@ describe('useActMusic with the effects of a room', () => {
       scope.stop()
     })
 
+    it('plays a clip bound to a trigger and a state when the state is published with the firing', async () => {
+      mixOf['act1-eliors-cottage'] = {
+        effects: [
+          {
+            id: 'rain',
+            play: { mode: 'trigger', trigger: 'ding' },
+            state: 'warm',
+            level: 1,
+          },
+        ],
+      }
+      const scope = await startIn('EliorsCottage')
+      ctx = FakeAudioContext.last
+      const game = useGameStore()
+      game.musicSoundState = 'warm'
+      game.musicSoundFirings = [{ roomKey: 'EliorsCottage', trigger: 'ding' }]
+      await nextTick()
+      expect(oneShots()).toHaveLength(1)
+      scope.stop()
+    })
+
     it('plays nothing while effects are off', async () => {
       bindRainToDing()
       useSettingsStore().effectsOn = false

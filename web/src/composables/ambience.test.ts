@@ -170,6 +170,15 @@ describe('Ambience', () => {
       expect(sourcesOf(purr)).toHaveLength(1)
     })
 
+    it('is not started by a change of state, which leaves no wait behind', () => {
+      const ambience = store()
+      ambience.play()
+      ambience.setState('cat-home')
+      vi.advanceTimersByTime(60_000)
+      expect(sourcesOf(creak)).toHaveLength(0)
+      expect(sourcesOf(purr)).toHaveLength(0)
+    })
+
     it('is not heard before play, after pause, or while the browser holds the sound back', () => {
       const ambience = store()
       ambience.fire('door-opens')
