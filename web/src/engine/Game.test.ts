@@ -920,6 +920,20 @@ describe('Game', () => {
       expect(game.examine('blacksmith JOHN')).toBe('Strong and sturdy.')
     })
 
+    it('asks what to examine when the verb is typed alone', () => {
+      game.runState = GameRunState.ActRunning
+      for (const verb of [
+        'examine',
+        'inspect',
+        'check',
+        'look at',
+        'EXAMINE  ',
+      ]) {
+        game.handleInput(verb)
+        expect(game.commandResult).toBe('Examine what?')
+      }
+    })
+
     it('asks what to examine and reports unknown targets', () => {
       expect(game.examine('')).toBe('Examine what?')
       expect(game.examine('dragon')).toBe(
