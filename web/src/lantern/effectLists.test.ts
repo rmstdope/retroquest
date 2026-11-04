@@ -11,6 +11,7 @@ import {
   ambienceAt,
   effectsList,
   GAME_EFFECTS,
+  ROOM_AMBIENCE,
   type EffectEntry,
 } from './effectLists'
 
@@ -68,6 +69,15 @@ describe('effectsList', () => {
 })
 
 describe('ambienceAt', () => {
+  const act = new Act1()
+  const roomTracks = Object.keys(act.rooms).map((key) =>
+    roomTrackId(act.name, key),
+  )
+  const clips = new Map(GAME_EFFECTS.map((clip) => [clip.id, clip]))
+  const placements = Object.entries(ROOM_AMBIENCE).flatMap(([track, effects]) =>
+    effects.map((effect) => ({ track, ...effect })),
+  )
+
   it('plays the rain round and round in The Dream', () => {
     expect(ambienceAt(DREAM_TRACK)).toContainEqual({
       id: 'rain',
@@ -83,25 +93,60 @@ describe('ambienceAt', () => {
     })
   })
 
+  it('rings the shop bell once, as the General Store is entered', () => {
+    expect(ambienceAt(roomTrackId('Act1', 'GeneralStore'))).toContainEqual({
+      id: 'shop-bell',
+      loops: false,
+      afterSeconds: 1.5,
+    })
+  })
+
+  it('plays one clip in several rooms, each at its own pace', () => {
+    for (const key of ['AbandonedShed', 'OldMill', 'VillageChapel'])
+      expect(
+        ambienceAt(roomTrackId('Act1', key)).map((effect) => effect.id),
+      ).toContain('wood-creak')
+  })
+
   it('plays nothing where no effect is listed', () => {
-    expect(ambienceAt(roomTrackId('Act1', 'EliorsCottage'))).toEqual([])
+    expect(ambienceAt('market')).toEqual([])
     expect(ambienceAt('')).toEqual([])
   })
 
-  it('plays every effect on the track of a real room', () => {
-    const act = new Act1()
-    const tracks = Object.keys(act.rooms).map((key) =>
-      roomTrackId(act.name, key),
-    )
-    for (const effect of GAME_EFFECTS) expect(tracks).toContain(effect.track)
+  it('plays effects only on the tracks of real rooms', () => {
+    for (const track of Object.keys(ROOM_AMBIENCE))
+      expect(roomTracks).toContain(track)
   })
 
-  it('gives every interval a shortest wait no longer than its longest', () => {
-    for (const effect of GAME_EFFECTS)
-      if ('everySeconds' in effect) {
-        const [min, max] = effect.everySeconds
+  it('plays only listed clips, a loop round and round and a one-shot not', () => {
+    for (const placement of placements) {
+      const clip = clips.get(placement.id)
+      expect(clip, placement.id).toBeDefined()
+      expect(placement.loops, placement.id).toBe(clip?.loops === true)
+    }
+  })
+
+  it('plays every listed clip somewhere', () => {
+    const played = new Set(placements.map((placement) => placement.id))
+    for (const clip of GAME_EFFECTS) expect(played).toContain(clip.id)
+  })
+
+  it('plays a clip at most once in a room', () => {
+    for (const effects of Object.values(ROOM_AMBIENCE)) {
+      const ids = effects.map((effect) => effect.id)
+      expect(new Set(ids).size).toBe(ids.length)
+    }
+  })
+
+  it('gives every wait a positive length, the shortest no longer than the longest', () => {
+    for (const placement of placements) {
+      if ('everySeconds' in placement) {
+        const [min, max] = placement.everySeconds
         expect(min).toBeGreaterThan(0)
         expect(max).toBeGreaterThanOrEqual(min)
       }
+      if ('afterSeconds' in placement)
+        expect(placement.afterSeconds).toBeGreaterThanOrEqual(0)
+    }
   })
 })

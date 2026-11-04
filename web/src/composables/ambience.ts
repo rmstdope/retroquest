@@ -1,6 +1,6 @@
 /**
  * The sound effects that play with a room's music: rain round and round,
- * lightning now and then. An `Ambience` plays the effects of one track on Web
+ * lightning now and then, a shop bell once on entering. An `Ambience` plays the effects of one track on Web
  * Audio through one gain, into an output that sets the player's effects level
  * (`useActMusic`'s effects bus). An `AmbientVoice`
  * wraps the track's music voice with it, so the effects start and stop with
@@ -11,7 +11,7 @@
 import type { EffectPlay } from '@/lantern/effectLists'
 import type { MusicVoice } from './musicVoice'
 
-/** How one decoded effect plays: round and round, or once after a random wait, again and again. */
+/** How one decoded effect plays: round and round, after a random wait again and again, or once. */
 export type AmbientClip = { buffer: AudioBuffer } & EffectPlay
 
 /** Where an effect's clip is, and how it plays. */
@@ -25,6 +25,8 @@ export class Ambience {
   private sources: AudioBufferSourceNode[] = []
   /** The waits before each one-shot's next start. */
   private timers: ReturnType<typeof setTimeout>[] = []
+  /** The clips played once that have sounded; they do not sound again. */
+  private readonly sounded = new Set<AudioBuffer>()
 
   /** `random` picks each wait between a one-shot's shortest and longest. */
   constructor(
@@ -42,12 +44,16 @@ export class Ambience {
     this.gain.gain.value = envelope
   }
 
-  /** Starts the loops and the waits before each one-shot; nothing when already playing. */
+  /**
+   * Starts the loops and the waits before each one-shot, and before each clip
+   * played once that has not sounded yet; nothing when already playing.
+   */
   play(): void {
     if (this.playing) return
     this.playing = true
     for (const clip of this.clips) {
       if (clip.loops) this.sound(clip.buffer, true)
+      else if ('afterSeconds' in clip) this.once(clip.buffer, clip.afterSeconds)
       else this.wait(clip.buffer, clip.everySeconds)
     }
   }
@@ -83,6 +89,20 @@ export class Ambience {
       if (this.context.state === 'running') this.sound(buffer, false)
       this.wait(buffer, [shortest, longest])
     }, ms)
+    this.timers.push(timer)
+  }
+
+  /**
+   * Plays `buffer` after `seconds`, the one time it sounds for this ambience.
+   * A pause before then cancels it until the next play.
+   */
+  private once(buffer: AudioBuffer, seconds: number): void {
+    if (this.sounded.has(buffer)) return
+    const timer = setTimeout(() => {
+      this.timers.splice(this.timers.indexOf(timer), 1)
+      this.sounded.add(buffer)
+      if (this.context.state === 'running') this.sound(buffer, false)
+    }, seconds * 1000)
     this.timers.push(timer)
   }
 

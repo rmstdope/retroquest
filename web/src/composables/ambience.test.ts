@@ -122,6 +122,51 @@ describe('Ambience', () => {
     expect(ctx.gains[0].gain.value).toBeCloseTo(0.5)
   })
 
+  describe('a clip played once on entry', () => {
+    const bell = { duration: 2 } as unknown as AudioBuffer
+
+    /** An ambience of a bell rung once, 1.5 s after the room's music starts. */
+    function shop(): Ambience {
+      return new Ambience(
+        ctx as unknown as AudioContext,
+        [{ buffer: bell, loops: false, afterSeconds: 1.5 }],
+        bus,
+      )
+    }
+
+    it('plays once, after its wait', () => {
+      shop().play()
+      vi.advanceTimersByTime(1499)
+      expect(sourcesOf(bell)).toHaveLength(0)
+      vi.advanceTimersByTime(1)
+      expect(sourcesOf(bell)).toHaveLength(1)
+      expect(sourcesOf(bell)[0].loop).toBe(false)
+      vi.advanceTimersByTime(60_000)
+      expect(sourcesOf(bell)).toHaveLength(1)
+    })
+
+    it('does not play again when the music stops and starts again', () => {
+      const ambience = shop()
+      ambience.play()
+      vi.advanceTimersByTime(1500)
+      ambience.pause()
+      ambience.play()
+      vi.advanceTimersByTime(60_000)
+      expect(sourcesOf(bell)).toHaveLength(1)
+    })
+
+    it('still plays when the music stopped before it sounded', () => {
+      const ambience = shop()
+      ambience.play()
+      ambience.pause()
+      vi.advanceTimersByTime(60_000)
+      expect(sourcesOf(bell)).toHaveLength(0)
+      ambience.play()
+      vi.advanceTimersByTime(1500)
+      expect(sourcesOf(bell)).toHaveLength(1)
+    })
+  })
+
   it('lets go of its gain on dispose', () => {
     const ambience = storm()
     ambience.play()

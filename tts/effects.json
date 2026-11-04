@@ -9,5 +9,121 @@
     "id": "lightning",
     "description": "a lightning strike very close by, a sharp crack of thunder that shakes the air and rolls away into the distance",
     "seconds": 5
+  },
+  {
+    "id": "hearth-fire",
+    "description": "a small wood fire crackling gently in a cottage hearth, soft pops and hisses, warm and close",
+    "seconds": 20,
+    "loops": true
+  },
+  {
+    "id": "wind-gusts",
+    "description": "wind gusting around an old wooden building, whistling softly through gaps in the boards",
+    "seconds": 20,
+    "loops": true
+  },
+  {
+    "id": "wood-creak",
+    "description": "old wooden boards creaking under strain, a single slow groan of weathered timber",
+    "seconds": 3
+  },
+  {
+    "id": "breeze-leaves",
+    "description": "a light breeze rustling through leaves and tall grass in the open countryside, calm, no birds",
+    "seconds": 20,
+    "loops": true
+  },
+  {
+    "id": "crow-caw",
+    "description": "a lone crow cawing twice, somewhere in the distance over open fields",
+    "seconds": 3
+  },
+  {
+    "id": "chickens",
+    "description": "a small flock of hens clucking and scratching in straw inside a wooden coop, close by",
+    "seconds": 20,
+    "loops": true
+  },
+  {
+    "id": "hen-squawk",
+    "description": "a startled hen squawking and flapping its wings in a wooden coop",
+    "seconds": 3
+  },
+  {
+    "id": "well-drip",
+    "description": "a single drop of water falling into a deep stone well, a small echoing plink",
+    "seconds": 2
+  },
+  {
+    "id": "forge-fire",
+    "description": "the low roar of hot coals in a blacksmith forge, a steady draught and crackle, no hammering",
+    "seconds": 20,
+    "loops": true
+  },
+  {
+    "id": "anvil-strike",
+    "description": "a blacksmith hammer ringing on an anvil, three steady blows on hot iron, the metal ringing after",
+    "seconds": 4
+  },
+  {
+    "id": "shop-bell",
+    "description": "a small brass bell over a shop door jingling as the door opens and closes",
+    "seconds": 2
+  },
+  {
+    "id": "glass-clink",
+    "description": "glass bottles and jars clinking softly as they are moved on a wooden shelf",
+    "seconds": 2
+  },
+  {
+    "id": "village-murmur",
+    "description": "a quiet village square, a few hushed voices at market stalls and footsteps on cobblestones, no words can be made out",
+    "seconds": 20,
+    "loops": true
+  },
+  {
+    "id": "fountain",
+    "description": "an old stone fountain trickling and splashing softly into its basin",
+    "seconds": 20,
+    "loops": true
+  },
+  {
+    "id": "birdsong",
+    "description": "songbirds calling and answering in a sunlit wood, near and far, no wind",
+    "seconds": 20,
+    "loops": true
+  },
+  {
+    "id": "twig-snap",
+    "description": "a twig snapping underfoot somewhere in the undergrowth, then a short rustle of leaves",
+    "seconds": 2
+  },
+  {
+    "id": "river",
+    "description": "a gentle river flowing slowly past reeds, soft lapping at a muddy bank",
+    "seconds": 20,
+    "loops": true
+  },
+  {
+    "id": "insects-hum",
+    "description": "summer insects humming and buzzing lazily over still water, dragonflies and gnats",
+    "seconds": 20,
+    "loops": true
+  },
+  {
+    "id": "chapel-door",
+    "description": "a heavy wooden chapel door swinging shut with a deep thud that echoes through a stone hall",
+    "seconds": 3
+  },
+  {
+    "id": "chapel-hush",
+    "description": "the hush of a cool, empty stone chapel, a faint echo of distant air, very quiet",
+    "seconds": 20,
+    "loops": true
+  },
+  {
+    "id": "horse-snort",
+    "description": "a horse snorting and stamping a hoof on a dirt road, then tearing at grass",
+    "seconds": 3
   }
 ]
