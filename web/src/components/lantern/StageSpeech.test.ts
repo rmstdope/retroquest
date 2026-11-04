@@ -90,6 +90,19 @@ describe('StageSpeech', () => {
     expect(rows[1].find('[data-testid="portrait"]').exists()).toBe(false)
   })
 
+  it("heads a new turn's first line with its speaker, though they also spoke last (rq-h7xh)", async () => {
+    const { speech, w } = mounted()
+    speech.observe(turn(say('Mira', 'Welcome.'), 'Mira'))
+    speech.observe(turn(say('Mira', 'Elior. Come in, mind the sage.'), 'Mira'))
+    vi.runAllTimers()
+    await w.vm.$nextTick()
+    const rows = w.findAll('[data-testid="speech-line"]')
+    expect(rows).toHaveLength(2)
+    expect(rows[1].get('.lq-line-name').text()).toBe('Mira')
+    expect(rows[1].find('[data-testid="portrait"]').exists()).toBe(true)
+    expect(rows[0].find('[data-testid="portrait"]').exists()).toBe(true)
+  })
+
   it('gives each of three speakers a run of their own', async () => {
     const { speech, w } = mounted()
     speech.observe(
