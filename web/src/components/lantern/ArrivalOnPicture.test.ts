@@ -436,6 +436,61 @@ describe('ArrivalOnPicture', () => {
       )
     })
 
+    it('gives every page of a checklist the width of its widest list', async () => {
+      Object.defineProperty(proto, 'offsetWidth', {
+        configurable: true,
+        get(this: HTMLElement): number {
+          return this.classList.contains('lq-quest-checklist')
+            ? Math.max(
+                0,
+                ...[...this.querySelectorAll('li')].map(
+                  (li) => (li.textContent ?? '').length * 10,
+                ),
+              )
+            : 0
+        },
+      })
+      try {
+        const w = await told({
+          kind: 'news',
+          news: { kind: 'new', name: 'Road', main: false, text: 'x' },
+          lines: [
+            {
+              unit: 0,
+              markup: '[pending] * Boots[/pending]',
+            },
+            {
+              unit: 1,
+              markup: '[success] * Sturdy footwear for the road[/success]',
+            },
+          ],
+          voiced: false,
+        })
+        const stage = w.get('[data-testid="arrival-on-picture"]')
+        expect(w.findAll('.lq-arrival-text li').length).toBe(1)
+        expect(stage.attributes('style')).toContain(
+          '--lq-checklist-width: 280px',
+        )
+        await w.trigger('click')
+        await w.vm.$nextTick()
+        expect(w.get('.lq-arrival-text li').text()).toBe(
+          'Sturdy footwear for the road',
+        )
+        expect(stage.attributes('style')).toContain(
+          '--lq-checklist-width: 280px',
+        )
+      } finally {
+        Reflect.deleteProperty(proto, 'offsetWidth')
+      }
+    })
+
+    it('leaves the checklist width at nothing for a part without a list', async () => {
+      const w = await told(long)
+      expect(
+        w.get('[data-testid="arrival-on-picture"]').attributes('style'),
+      ).toContain('--lq-checklist-width: 0px')
+    })
+
     it('shows a part that fits as one page', async () => {
       const w = await told({ ...long, lines: [long.lines[2]] })
       expect(lines(w)).toEqual(['Eeee.'])
@@ -603,6 +658,9 @@ describe('ArrivalOnPicture', () => {
       expect(body).toContain('margin-inline: auto')
       expect(body).toContain('text-align: left')
       expect(body).not.toContain('align-items: center')
+      expect(body).toContain(
+        'min-width: min(var(--lq-checklist-width, 0px), 100%)',
+      )
     })
 
     it('says "Tap to continue" on a phone', async () => {
