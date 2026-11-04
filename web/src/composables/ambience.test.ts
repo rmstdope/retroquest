@@ -402,6 +402,15 @@ describe('Ambience', () => {
       expect(levelOf(sourcesOf(strike)[0]).value).toBe(2)
     })
 
+    it('keeps a one-shot asked for sounding while levels change under a solo', () => {
+      const ambience = loudStorm(2)
+      ambience.play()
+      ambience.solo('rain')
+      ambience.audition('lightning')
+      ambience.setVolume('rain', 0.5)
+      expect(levelOf(sourcesOf(strike)[0]).value).toBe(2)
+    })
+
     it('takes a level set during a fade-in at once, without the ramp undoing it', () => {
       const wail = { duration: 20 } as unknown as AudioBuffer
       const ambience = new Ambience(

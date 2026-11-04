@@ -49,6 +49,8 @@ export class Ambience {
     clip: AmbientClip
     node: AudioBufferSourceNode
     level: GainNode
+    /** Played on request (Play now): at its own volume, through any solo. */
+    asked: boolean
   }[] = []
   /** The sources fading out after a change of state; a pause cuts them. */
   private fading: { node: AudioBufferSourceNode; level: GainNode }[] = []
@@ -142,7 +144,7 @@ export class Ambience {
   audition(id: string): void {
     if (!this.playing) return
     const clip = this.clips.find((each) => each.id === id && !each.loops)
-    if (clip) this.sound(clip, false, false, this.volumeOf(clip))
+    if (clip) this.sound(clip, false, false, true)
   }
 
   /** Silences every clip but the effect `id`; null gives them all their volume back. */
@@ -172,9 +174,9 @@ export class Ambience {
   private relevel(): void {
     // A fade-in under way is cancelled first, or its ramp would undo the level.
     const now = this.context.currentTime
-    for (const { clip, level } of this.sources) {
+    for (const { clip, level, asked } of this.sources) {
       level.gain.cancelScheduledValues(now)
-      level.gain.value = this.levelOf(clip)
+      level.gain.value = asked ? this.volumeOf(clip) : this.levelOf(clip)
     }
   }
 
@@ -279,16 +281,18 @@ export class Ambience {
   }
 
   /**
-   * Starts a source playing `clip` through its own gain (at level `at`, the
-   * clip's level now unless given) into the ambience's, rising from silence to
-   * it when `fade`; a one-shot lets go of itself when it ends.
+   * Starts a source playing `clip` through its own gain into the ambience's,
+   * at the clip's level now (its own volume, through any solo, when `asked`
+   * for by Play now), rising from silence to it when `fade`; a one-shot lets
+   * go of itself when it ends.
    */
   private sound(
     clip: AmbientClip,
     loop: boolean,
     fade = false,
-    at: number = this.levelOf(clip),
+    asked = false,
   ): void {
+    const at = asked ? this.volumeOf(clip) : this.levelOf(clip)
     const node = this.context.createBufferSource()
     node.buffer = clip.buffer
     node.loop = loop
@@ -300,7 +304,7 @@ export class Ambience {
     } else level.gain.value = at
     node.connect(level)
     level.connect(this.gain)
-    const entry = { clip, node, level }
+    const entry = { clip, node, level, asked }
     if (!loop)
       node.onended = () => {
         const index = this.sources.indexOf(entry)
