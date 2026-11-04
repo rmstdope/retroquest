@@ -105,3 +105,23 @@ describe('The Abandoned Shed as a workshop', () => {
     expect(game.commandParser.parse('use key with door')).toContain('workbench')
   })
 })
+
+describe('The Abandoned Shed seen from outside', () => {
+  it('describes only the outside on arrival while the door is locked', () => {
+    const game = new Game([new Act1()])
+    game.state.currentRoom = game.state.allRooms.VillageWell
+    game.commandParser.parse('go south')
+    expect(game.state.currentRoom).toBeInstanceOf(AbandonedShed)
+    const arrival = game.state.currentRoom.describe(game.state)
+    for (const inside of ['workbench', 'crates', 'dust']) {
+      expect(arrival).not.toContain(inside)
+    }
+    expect(arrival).toContain('locked')
+    expect(findMarkupProblems(arrival)).toEqual([])
+  })
+
+  it('describes the inside once the key opens the door', () => {
+    const game = gameInUnlockedShed()
+    expect(game.state.currentRoom.describe(game.state)).toContain('workbench')
+  })
+})

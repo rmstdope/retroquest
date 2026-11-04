@@ -4,6 +4,7 @@ import { Act1 } from './Act1'
 import { Locket } from './items/Locket'
 import { Well } from './items/Well'
 import { Vines } from './items/Vines'
+import { AbandonedShed } from './rooms/AbandonedShed'
 import { executeCommands } from '@/testing/gameHelpers'
 
 /** An Act I game with Elior standing in the named room. */
@@ -69,10 +70,16 @@ describe('Act I room and item texts say one true thing', () => {
 
   it('ends the shed description on lamp oil and refuses the locked search plainly', () => {
     expect(describeRoom('AbandonedShed')).toContain(
+      'Near them the air smells of old earth and lamp oil.',
+    )
+    const game = gameIn('AbandonedShed')
+    const shed = game.state.currentRoom
+    if (shed instanceof AbandonedShed) shed.locked = false
+    expect(shed.descriptionFor(game.state)).toContain(
       'Little light gets past the grimy boards, and the air smells of old ' +
         'earth and lamp oil.',
     )
-    const game = gameIn('AbandonedShed')
+    if (shed instanceof AbandonedShed) shed.locked = true
     expect(executeCommands(game, ['search'])).toContain(
       'The door is locked. Through a gap in the boards there is only dark, ' +
         'and a smell of dust.',
