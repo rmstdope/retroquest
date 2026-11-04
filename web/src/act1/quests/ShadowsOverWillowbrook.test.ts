@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest'
 import { characterName, Game } from '@/engine'
 import { Act1 } from '../Act1'
 import {
+  FLAG_CONNECT_WITH_NATURE,
   FLAG_INVESTIGATED_WITHERED_CROPS,
   FLAG_FOUND_RUNE_TOKEN,
   FLAG_MAGIC_FULLY_UNLOCKED,
@@ -10,6 +11,7 @@ import {
   FLAG_STRANGER_SEEN_AT_MILL,
   FLAG_VEGETABLE_FIELD_WATERED,
   FLAG_VILLAGER_TALKED_TO,
+  FLAG_WELL_EXAMINED,
 } from '../Act1StoryFlags'
 import { ShadowsOverWillowbrookQuest } from './ShadowsOverWillowbrook'
 import { ACT1_GOLDEN_PATH } from '../Act1GoldenPath'
@@ -48,9 +50,7 @@ describe('Shadows Over Willowbrook log', () => {
         .map((stage) => `[dim]${stage}[/dim]`)
         .join('') + quest.latestStage,
     )
-    expect(
-      quest.description.startsWith(`[dim]${characterName('Elior')} dreamed`),
-    ).toBe(true)
+    expect(quest.description.startsWith('[dim]You dreamed')).toBe(true)
   })
 
   it('shows its log right after loading a save made before logs were data', () => {
@@ -80,12 +80,14 @@ describe('Shadows Over Willowbrook log', () => {
     quest.checkUpdate(new Game([new Act1()]).state)
 
     expect(quest.description).toContain(
-      `${characterName('Elior')} dreamed of a storm, a tune, and a figure in the dark that ` +
-        'whispered his name. He woke with three words written down: ' +
+      'You dreamed of a storm, a tune, and a figure in the dark that ' +
+        'whispered your name. You woke with three words written down: ' +
         '…let them rest…',
     )
     expect(quest.completion).toContain('The well was poisoned on purpose')
     expect(quest.completion).toContain('on the road to Greendale')
+    expect(quest.completion).toContain('You carry that amulet now')
+    expect(quest.completion).not.toContain('Elior')
     expect(quest.completion).not.toContain('key to protecting')
   })
 
@@ -99,11 +101,36 @@ describe('Shadows Over Willowbrook log', () => {
     expect(quest.checkUpdate(game.state)).toBe(true)
     expect(quest.latestStage).toBe(
       '\nAt the [room_name]Old Mill[/room_name] a man in a grey cloak stood ' +
-        'at the far door with his back to ' +
-        `${characterName('Elior')}. He left toward the river without turning.`,
+        'at the far door with his back to you. He left toward the river ' +
+        'without turning.',
     )
     expect(quest.earlierStages?.join('')).toContain('rune token')
     expect(quest.checkUpdate(game.state)).toBe(false)
+  })
+
+  it('speaks to the player in every beat and never names Elior', () => {
+    const game = new Game([new Act1()])
+    const quest = new ShadowsOverWillowbrookQuest()
+    for (const flag of [
+      FLAG_INVESTIGATED_WITHERED_CROPS,
+      FLAG_VILLAGER_TALKED_TO,
+      FLAG_WELL_EXAMINED,
+      FLAG_CONNECT_WITH_NATURE,
+      FLAG_MAGIC_FULLY_UNLOCKED,
+      FLAG_FOUND_RUNE_TOKEN,
+      FLAG_STRANGER_SEEN_AT_MILL,
+      FLAG_VEGETABLE_FIELD_WATERED,
+      FLAG_MIRA_NAMED_FOULING_SIGIL,
+      FLAG_MERCHANT_NEWS_HEARD,
+    ]) {
+      game.state.setStoryFlag(flag, true)
+    }
+
+    quest.checkUpdate(game.state)
+
+    expect(quest.description).not.toContain('Elior')
+    expect(quest.description).not.toMatch(/\b(him|he woke)\b/)
+    expect(quest.description).toContain('brought the')
   })
 
   it('records the amulet promise rather than a druid once magic is unlocked', () => {
