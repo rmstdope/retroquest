@@ -1,0 +1,28 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Option B — the list as a narrower centred column, lines left-aligned inside it</title>
+<link href="https://fonts.googleapis.com/css2?family=Literata:ital,wght@0,400;0,500;1,400&family=Inter:wght@500;600&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#1d1a16;color:#eee;font-family:Inter,sans-serif;padding:24px}
+h1{font-size:18px;margin:0 0 4px} p.note{margin:0 0 20px;color:#c9c0b0;max-width:900px;font-size:14px;line-height:1.5}
+.row{display:flex;gap:28px;flex-wrap:wrap;align-items:flex-start}
+.lab{font-size:12px;color:#a99;margin-bottom:6px;text-transform:uppercase;letter-spacing:.1em}
+.stage{position:relative;background:url(../../web/public/images/generated/act1-miras-hut.png) center/cover;display:flex;justify-content:center;align-items:center;padding:28px 24px;box-sizing:border-box;border-radius:8px;overflow:hidden}
+.stage::before{content:"";position:absolute;inset:0;background:rgba(10,8,5,.55)}
+.lap{width:900px;height:620px}.ph{width:375px;height:740px;padding:20px 16px}
+.card{position:relative;width:min(760px,100%);display:flex;flex-direction:column;align-items:center;gap:14px;text-align:center;color:#fbf3e4;text-shadow:0 1px 3px #000,0 0 14px rgba(0,0,0,.8)}
+.kick{font:600 13px Inter;letter-spacing:.14em;text-transform:uppercase;color:#f2c56b}
+.title{font:500 30px Literata,serif}
+.line{margin:0;font-family:Literata,serif;font-size:24px;line-height:1.5}
+.ph .line{font-size:17px}.ph .title{font-size:24px}
+ul{list-style:none;margin:.4em 0 0;padding:0;display:flex;flex-direction:column;gap:.25em;align-items:center}
+li{padding-left:1.4em;text-indent:-1.4em}
+li::before{content:"";display:inline-block;vertical-align:middle;margin-right:.52em;text-indent:0;width:.95em;height:.95em;border-radius:50%;box-sizing:border-box;font-size:.95em;font-weight:700;line-height:.95em;text-align:center}
+li.d::before{content:"✓";background:rgba(120,190,120,.25);color:#9be39b;border:1px solid rgba(155,227,155,.6)}
+li.p{color:#d8cfbf}li.p::before{border:1.5px dashed currentColor}
+.pill{margin-top:6px;font:500 13px Inter;padding:8px 16px;border-radius:999px;background:rgba(255,255,255,.15);text-shadow:none}
+ul{align-items:stretch;width:fit-content;max-width:min(100%,22em);margin-left:auto;margin-right:auto;text-align:left}
+</style></head><body>
+<h1>Option B — the list as a narrower centred column, lines left-aligned inside it</h1><p class="note">Same as A, but the list's column is held to a set width (about 22 letters' worth of the large text), so it stays visibly narrower than the paragraph above and sits in the middle like a list on a page. The long food line wraps onto more lines.</p>
+<div class="row">
+<div><div class="lab">Laptop</div><div class="stage lap"><div class="card"><div class="kick">New quest</div><div class="title">Preparing for the road</div><div class="line">Mira has tasked you with preparing for your journey. She says you will need:<ul><li class="d">Warm clothing</li><li class="p">Magical protection</li><li class="p">Food for the road (any four kinds: bread, apple, egg, carrot, berries or fish)</li><li class="d">Sturdy footwear</li><li class="p">A map to find your way</li><li class="d">All basic magic learned</li></ul></div><div class="pill">Continue</div></div></div></div>
+<div><div class="lab">Phone</div><div class="stage ph"><div class="card"><div class="kick">New quest</div><div class="title">Preparing for the road</div><div class="line">Mira has tasked you with preparing for your journey. She says you will need:<ul><li class="d">Warm clothing</li><li class="p">Magical protection</li><li class="p">Food for the road (any four kinds: bread, apple, egg, carrot, berries or fish)</li><li class="d">Sturdy footwear</li><li class="p">A map to find your way</li><li class="d">All basic magic learned</li></ul></div><div class="pill">Continue</div></div></div></div>
+</div></body></html>
