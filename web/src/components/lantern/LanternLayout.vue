@@ -79,8 +79,9 @@ import TitlePage from './TitlePage.vue'
  * the narrator reaches each part and, when it is taller than the room under
  * the plate, scrolls with a "More below" pill. One "▾ Hide" on its own line at the bottom centre of the picture (or N,
  * or Escape when nothing is narrated) clears both the narrator's bubbles and
- * the speech, leaving a "▴ Show" tab in its place; the tab, N or the next turn
- * that tells something
+ * the speech, leaving a "▴ Show" tab in its place; the tab, N, Escape again
+ * (unless typed in a field, where the command box takes its own steps back)
+ * or the next turn that tells something
  * brings both back as they were, and every turn is read in the story drawer.
  * Under about 1100 px wide (a laptop window too narrow for two sides, and
  * every phone's picture stage) there is no side for speech: the cards and the
@@ -662,6 +663,7 @@ function onNarrationKey(event: KeyboardEvent): void {
     arrival: arrival.active,
     narrating: narration.isNarrating,
     canHide: staged.value && wordsVisible.value && !paper.hidden.value,
+    canShow: showTab.value,
   })
   if (!decision) return
   if (decision.consume) {
@@ -674,6 +676,9 @@ function onNarrationKey(event: KeyboardEvent): void {
       break
     case 'hide-words':
       setWordsHidden(true)
+      break
+    case 'show-words':
+      setWordsHidden(false)
       break
     case 'arrival-next':
       arrival.next()

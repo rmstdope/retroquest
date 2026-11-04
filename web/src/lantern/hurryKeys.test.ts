@@ -20,6 +20,7 @@ function press(over: Partial<HurryKeyPress>): HurryKeyPress {
     arrival: false,
     narrating: false,
     canHide: false,
+    canShow: false,
     ...over,
   }
 }
@@ -109,6 +110,33 @@ describe('decideHurryKey with nothing narrated', () => {
     ).toBeNull()
     expect(
       decideHurryKey(press({ key: 'Escape', canHide: true, dialogOpen: true })),
+    ).toBeNull()
+  })
+
+  it('shows the hidden words again on a second Escape, mirroring Show', () => {
+    expect(decideHurryKey(press({ key: 'Escape', canShow: true }))).toEqual({
+      action: 'show-words',
+      consume: false,
+      swallowSpaceUp: false,
+    })
+    expect(
+      decideHurryKey(press({ key: 'Escape', canShow: true, onControl: true })),
+    ).toMatchObject({ action: 'show-words' })
+  })
+
+  it('leaves the Escape that would show the words to a field, a dialog or whoever took it', () => {
+    expect(
+      decideHurryKey(press({ key: 'Escape', canShow: true, inField: true })),
+    ).toBeNull()
+    expect(
+      decideHurryKey(press({ key: 'Escape', canShow: true, handled: true })),
+    ).toBeNull()
+    expect(
+      decideHurryKey(press({ key: 'Escape', canShow: true, dialogOpen: true })),
+    ).toBeNull()
+    // A held key does not flip the words back and forth.
+    expect(
+      decideHurryKey(press({ key: 'Escape', canShow: true, repeat: true })),
     ).toBeNull()
   })
 

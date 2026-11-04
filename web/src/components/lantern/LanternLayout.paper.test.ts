@@ -423,6 +423,38 @@ describe('the narration paper', () => {
     box.remove()
   })
 
+  it('shows the words again on a second Escape when focus is not in a field', async () => {
+    await mountWith([turn(1, 'Only the narrator.')])
+    press('Escape')
+    await nextTick()
+    expect(tab()).not.toBeNull()
+    expect(hideButton()).toBeNull()
+    press('Escape')
+    await nextTick()
+    expect(tab()).toBeNull()
+    expect(hideButton()).not.toBeNull()
+    expect(paper().hasAttribute('inert')).toBe(false)
+    // A held Escape hides once and goes no further: no flicker.
+    const held = (): void => {
+      document.body.dispatchEvent(
+        new KeyboardEvent('keydown', {
+          key: 'Escape',
+          repeat: true,
+          bubbles: true,
+          cancelable: true,
+        }),
+      )
+    }
+    press('Escape')
+    await nextTick()
+    held()
+    await nextTick()
+    held()
+    held()
+    await nextTick()
+    expect(tab()).not.toBeNull()
+  })
+
   it('hides narrator cards with Escape from the real command box before stepping back', async () => {
     await mountWith([turn(1, 'Only the narrator.')])
     game.acceptInput = true
@@ -464,6 +496,7 @@ describe('the narration paper', () => {
     press('Escape', box)
     await nextTick()
     expect(box.value).toBe('')
+    expect(tab()).not.toBeNull()
     expect(document.activeElement).toBe(box)
     press('Escape', box)
     await nextTick()
