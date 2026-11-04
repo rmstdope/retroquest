@@ -10,7 +10,9 @@ import {
   recordOnlyFrom,
   sceneBlock,
 } from './stageArrival'
-import type { NarrationUnit } from './narrationUnits'
+import { turnUnits, type NarrationUnit } from './narrationUnits'
+import { narrationKey } from './narrationKey'
+import type { NarrationManifest } from './narrationManifest'
 import { parseTurn } from './parseTurn'
 import { dialogue, event } from '@/engine'
 
@@ -241,6 +243,23 @@ describe('quest news on the picture', () => {
     expect(parts[0].lines[0].markup).toBe('You did it.')
     // "Side quest complete" + "Hint of Magic" come before the text.
     expect(parts[0].lines[0].wordBase).toBe(6)
+  })
+
+  it('tells an update with the narrator’s voice once its heading is recorded', () => {
+    const turn = { text: '', arrival: null, quests: [update] }
+    const recorded = {
+      [narrationKey('narrator', 'Quest updated')]: {
+        file: 'x.mp3',
+        words: [],
+      },
+    } as unknown as NarrationManifest
+    const parts = (manifest: NarrationManifest) =>
+      newsParts(turn, turnUnits(turn, false, manifest))
+    expect(parts(recorded)[0].voiced).toBe(true)
+    expect(parts({})[0].voiced).toBe(false)
+    expect(parts({})[0].lines[0].wordBase).toBe(
+      2 + update.name.split(' ').length,
+    )
   })
 
   it('counts the arrival unit when the turn has one', () => {

@@ -604,6 +604,43 @@ describe('StoryTurn while it is narrated', () => {
     expect(w.findAll('.lq-w-now')).toHaveLength(0)
   })
 
+  it('opens several updated notices one after another, each when its turn comes', async () => {
+    const note = (name: string, text: string) =>
+      ({ kind: 'updated', name, main: false, text }) as const
+    const w = narrated(
+      {
+        text: 'Done.',
+        quests: [note('Key', 'Find it.'), note('Map', 'Draw it.')],
+      },
+      {
+        ...recorded('Done.'),
+        ...recorded('Quest updated'),
+        ...recorded('Key'),
+        ...recorded('Find it.'),
+        ...recorded('Map'),
+        ...recorded('Draw it.'),
+      },
+    )
+    audios[0].onended?.()
+    await vi.advanceTimersByTimeAsync(GAP + 10)
+    expect(w.findAll('.lq-update')).toHaveLength(1)
+    for (const index of [1, 2, 3]) {
+      audios[index].onended?.()
+      await vi.advanceTimersByTimeAsync(GAP + 10)
+    }
+
+    const banners = w.findAll('.lq-update')
+    expect(banners).toHaveLength(2)
+    expect(banners.map((b) => b.attributes('aria-expanded'))).toEqual([
+      'true',
+      'true',
+    ])
+    expect(w.findAll('.lq-update-body').map((b) => b.text())).toEqual([
+      'Find it.',
+      'Draw it.',
+    ])
+  })
+
   it('leaves an updated notice folded when the turn is not narrated', () => {
     setActivePinia(createPinia())
     const w = mountTurn({
