@@ -20,4 +20,12 @@ export class Stick extends Item {
     }
     return super.useWith(gameState, other)
   }
+
+  /** The line the story tells when Elior takes it, wherever it is lying. */
+  override pickedUp(_gameState: GameState): string {
+    return (
+      'It is straight and sound, and about the right length. ' +
+      'A good stick is worth keeping.'
+    )
+  }
 }

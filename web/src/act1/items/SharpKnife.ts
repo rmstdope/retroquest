@@ -25,4 +25,12 @@ export class SharpKnife extends Item {
     }
     return super.useWith(gameState, other)
   }
+
+  /** The line the story tells when Elior takes it, wherever it is lying. */
+  override pickedUp(_gameState: GameState): string {
+    return (
+      'The new edge catches the light. ' +
+      'You hold it by the handle, and carefully.'
+    )
+  }
 }

@@ -119,4 +119,12 @@ export class Bucket extends Item {
       'empty, the whole [room_name]Vegetable Field[/room_name] is breathing again.'
     )
   }
+
+  /** The line the story tells when Elior takes it, wherever it is lying. */
+  override pickedUp(_gameState: GameState): string {
+    return (
+      'The handle creaks, but it holds. ' +
+      'Most things in Willowbrook are like that.'
+    )
+  }
 }

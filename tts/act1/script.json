@@ -215,9 +215,9 @@
     "text": "A leather-bound journal filled with Elior's careful handwriting. The pages are full of notes, sketches, and secrets."
   },
   {
-    "key": "0cf8dcdb267d33",
+    "key": "0cdc6ab7134945",
     "speaker": "narrator",
-    "text": "This might come in handy, so you decide to pick it up."
+    "text": "The crust gives under your thumb. It smells like morning."
   },
   {
     "key": "1c66ff8c216536",
@@ -233,6 +233,11 @@
     "key": "087d0e7421fe92",
     "speaker": "narrator",
     "text": "You are not particularly hungry."
+  },
+  {
+    "key": "0f934961783f9e",
+    "speaker": "narrator",
+    "text": "The brass is worn smooth where hands have held it. It has lit your way home for as long as you can remember."
   },
   {
     "key": "1198ba6187843e",
@@ -400,6 +405,11 @@
     "text": "The Faded Photograph: An old photograph of your parents, hidden away in a drawer. On the back is a line in your mother's hand."
   },
   {
+    "key": "00b30025477f94",
+    "speaker": "narrator",
+    "text": "You hold it by the edges so as not to smudge the faces. The child in it is you, though you do not remember the day."
+  },
+  {
     "key": "1f0a016b014864",
     "speaker": "narrator",
     "text": "Your grandmother takes the photograph and holds it close to the window."
@@ -500,6 +510,11 @@
     "text": "Know your village: Something pulls at you to walk every lane of Willowbrook, and to look properly at the places you have passed a thousand times."
   },
   {
+    "key": "10067a099782f8",
+    "speaker": "narrator",
+    "text": "Rust comes off on your palm. Someone worked a field with it for years."
+  },
+  {
     "key": "0d9183b0f6f76b",
     "speaker": "narrator",
     "text": "The ground is tough, and you unearth a small, tarnished coin! You quickly pocket it."
@@ -510,6 +525,11 @@
     "text": "Rows of withered crops stretch beneath a brooding gray sky. The earth is cracked and dry, with only a few stubborn carrots hinting at better days. A faint breeze rustles the brittle leaves, carrying the scent of soil and distant rain. These rows were green a month ago."
   },
   {
+    "key": "1ebd9a997e44fa",
+    "speaker": "narrator",
+    "text": "It is small, and the stamp is worn. Not much, but it is something."
+  },
+  {
     "key": "064d680bbfe540",
     "speaker": "narrator",
     "text": "A small, circular piece of metal, likely used as currency. It has a simple stamp on one side."
@@ -518,6 +538,16 @@
     "key": "183f821d2aac3b",
     "speaker": "narrator",
     "text": "The coin lands heads up. Seems like a regular coin, perhaps for trading."
+  },
+  {
+    "key": "0d5fca4e49a460",
+    "speaker": "narrator",
+    "text": "You test the edge with your thumb. It would not cut bread."
+  },
+  {
+    "key": "066355cd593a88",
+    "speaker": "narrator",
+    "text": "It bends in your fingers, soft and nearly gone. It is still a carrot, just."
   },
   {
     "key": "0079706338d1c0",
@@ -533,6 +563,11 @@
     "key": "072bb04e4e7edc",
     "speaker": "narrator",
     "text": "A small wooden coop stands here, its planks patched and weathered. Nervous chickens cluck and flutter, their feathers ruffled as they dart between straw nests. The air is thick with the scent of hay and the occasional squawk. Sunbeams slip through the slats, casting striped shadows on the dirt floor. High on a rafter, out of reach, something glints where no hen could have put it."
+  },
+  {
+    "key": "0b9c1c18fe7ec5",
+    "speaker": "narrator",
+    "text": "It weighs nothing at all. You tuck it away before the wind can take it."
   },
   {
     "key": "18767cb9b0671b",
@@ -568,6 +603,16 @@
     "key": "0101c352eb31e8",
     "speaker": "narrator",
     "text": "A small, rusty key. It looks like it might unlock something."
+  },
+  {
+    "key": "05dc527c0c4e3a",
+    "speaker": "narrator",
+    "text": "It is small and rusty, and the teeth are worn. Someone used it often, once."
+  },
+  {
+    "key": "002a8f0cc3e6d7",
+    "speaker": "narrator",
+    "text": "It is still warm, and you hold it carefully. One wrong step and it is gone."
   },
   {
     "key": "13d8c3545b7f3a",
@@ -685,6 +730,11 @@
     "text": "You search around the Village Square, but find nothing of interest beyond what you can already see."
   },
   {
+    "key": "07c7494529d5ac",
+    "speaker": "narrator",
+    "text": "The handle creaks, but it holds. Most things in Willowbrook are like that."
+  },
+  {
     "key": "195e7d2fc2417f",
     "speaker": "narrator",
     "text": "The bucket is no use with that. Perhaps near something with water?"
@@ -790,6 +840,11 @@
     "text": "A coin's no use to me without something to put an edge on, lad. Bring the dull knife as well."
   },
   {
+    "key": "0456a9d57a4bdb",
+    "speaker": "narrator",
+    "text": "It is heavy, and bent at one heel. Iron like this does not go to waste."
+  },
+  {
     "key": "160b587b246d02",
     "speaker": "narrator",
     "text": "A heavy iron horseshoe, slightly bent. It might bring luck or be useful for repairs."
@@ -833,6 +888,11 @@
     "key": "111eb026e4b756",
     "speaker": "narrator",
     "text": "You receive a sharp knife."
+  },
+  {
+    "key": "153ac46a338682",
+    "speaker": "narrator",
+    "text": "The new edge catches the light. You hold it by the handle, and carefully."
   },
   {
     "key": "16dbffbea6a688",
@@ -920,6 +980,11 @@
     "text": "Patches flicks an ear at you, but the words mean nothing to her."
   },
   {
+    "key": "18b79c34c55b61",
+    "speaker": "narrator",
+    "text": "The handle shifts where it is cracked. It will dig, if you are gentle with it."
+  },
+  {
     "key": "1d1933af2244eb",
     "speaker": "narrator",
     "text": "The shed door is unlocked and slightly ajar."
@@ -970,9 +1035,19 @@
     "text": "You search around the shed again, but find nothing else of interest among the clutter."
   },
   {
+    "key": "115d4179075a76",
+    "speaker": "narrator",
+    "text": "It bends more than a rod should. It will have to do."
+  },
+  {
     "key": "13c26768bcc0c8",
     "speaker": "narrator",
     "text": "You could force the magnet onto the rod, but it would likely prevent you from fishing — and you are really keen on doing some fishing!"
+  },
+  {
+    "key": "099ef7427214cf",
+    "speaker": "narrator",
+    "text": "It snaps to the nearest bit of iron and has to be pulled free. Small as it is, it does not let go easily."
   },
   {
     "key": "1e0db63760df0d",
@@ -1315,6 +1390,16 @@
     "text": "He counts the coin twice and hands over the rope, and an apple with it."
   },
   {
+    "key": "1c9a1c1c3d07dd",
+    "speaker": "narrator",
+    "text": "It is crisp and cold, and nearly too red. You save it for later."
+  },
+  {
+    "key": "0f211fb3db5538",
+    "speaker": "narrator",
+    "text": "You loop it over your shoulder. It is good rope, and it was not cheap."
+  },
+  {
     "key": "0c5e064199040e",
     "speaker": "narrator",
     "text": "You put a hand to the gears. They turn under it and keep turning; fingers will not stop them."
@@ -1378,6 +1463,11 @@
     "key": "099e1e369bb72e",
     "speaker": "narrator",
     "text": "A chunk of stone broken from the old mill's grinding wheel. It's heavy and rough, but could be useful for repairs or as a tool."
+  },
+  {
+    "key": "17bf7483d1fede",
+    "speaker": "narrator",
+    "text": "It is rough and heavy, and the edge where it broke is still pale. Whoever built that mill meant it to last."
   },
   {
     "key": "10759638e49eed",
@@ -1508,6 +1598,11 @@
     "key": "0e033f88a0be02",
     "speaker": "narrator",
     "text": "You add the fish to your inventory."
+  },
+  {
+    "key": "18cb16685fcd14",
+    "speaker": "narrator",
+    "text": "It is slippery and cold. It will not keep for long."
   },
   {
     "key": "0a3736238c7386",
@@ -1650,6 +1745,11 @@
     "text": "The rest has blurred away in the water stains."
   },
   {
+    "key": "107645184b309e",
+    "speaker": "narrator",
+    "text": "You fold it along its old creases and put it inside your shirt, where it will stay dry. Your hands are not quite steady."
+  },
+  {
     "key": "08e4e978483387",
     "speaker": "narrator",
     "text": "At the river bend you found your mother's letter, hidden beneath the smooth stone. Its words raise more questions than they answer, but they are hers."
@@ -1720,6 +1820,11 @@
     "text": "A fox kit, no bigger than a cat, one hind leg caught fast in the wire. It watches you and does not struggle."
   },
   {
+    "key": "1e459a121953cc",
+    "speaker": "narrator",
+    "text": "It is straight and sound, and about the right length. A good stick is worth keeping."
+  },
+  {
     "key": "150ecc75a68785",
     "speaker": "narrator",
     "text": "Hidden Glade"
@@ -1728,6 +1833,11 @@
     "key": "108b4faf369d64",
     "speaker": "narrator",
     "text": "A hushed clearing hidden deep within the forest, dim and overgrown. Brambles crowd its edges, and the tall grass stands grey and still beneath branches that shut out the sun. In the center, a mossy stone bears a faint inscription, too deep in shadow to read. An unnatural darkness lingers here, though the sky above the branches is clear."
+  },
+  {
+    "key": "1017d150140e3d",
+    "speaker": "narrator",
+    "text": "It is warm, warmer than the sun could make it. You keep it anyway."
   },
   {
     "key": "1a40afb1558cf8",
@@ -1778,6 +1888,11 @@
     "key": "16827b9f20e9d4",
     "speaker": "narrator",
     "text": "You take a moment to rest in the tranquil glade. The deer continues to graze peacefully."
+  },
+  {
+    "key": "04214f26c5fd27",
+    "speaker": "narrator",
+    "text": "The petals stay open in your hand. You hold it carefully, the way you would hold something that trusted you."
   },
   {
     "key": "1174c72ff016c4",
@@ -1905,6 +2020,11 @@
     "text": "You receive a box of matches."
   },
   {
+    "key": "05d19eb05563fe",
+    "speaker": "narrator",
+    "text": "The box rattles, nearly full. You keep it away from anything damp."
+  },
+  {
     "key": "013aaa55350b1c",
     "speaker": "narrator",
     "text": "The candle now casts a warm glow. The flickering candlelight reveals a locket that was previously unseen!"
@@ -1963,6 +2083,11 @@
     "key": "1413c725f46207",
     "speaker": "narrator",
     "text": "The blessing the priest said over you when you found the founders' locket."
+  },
+  {
+    "key": "138271b8b561ec",
+    "speaker": "narrator",
+    "text": "The silver is cool against your palm. You keep it where you can feel it."
   },
   {
     "key": "02f19afee901ad",
@@ -2355,6 +2480,11 @@
     "text": "The mysterious box is now empty."
   },
   {
+    "key": "14e071982b1199",
+    "speaker": "narrator",
+    "text": "You fold it so the village is on top. Some of the paths on it you have never walked."
+  },
+  {
     "key": "03f858ec732f26",
     "speaker": "narrator",
     "text": "An open, ornate wooden box. Only a folded note remains inside, in your father's careful, slanting hand:"
@@ -2378,6 +2508,11 @@
     "key": "1309044bd823d1",
     "speaker": "narrator",
     "text": "A vibrant, healthy carrot, freshly revived. It looks delicious and full of nutrients."
+  },
+  {
+    "key": "15d9006cd3e57f",
+    "speaker": "narrator",
+    "text": "It is cool and firm, with soil still on it. Not long ago it was barely alive."
   },
   {
     "key": "0bfc61cc655209",
@@ -2458,6 +2593,16 @@
     "key": "1864112ce187d8",
     "speaker": "narrator",
     "text": "The well gave up a silver ring, and something else besides."
+  },
+  {
+    "key": "0274d452c5f316",
+    "speaker": "narrator",
+    "text": "It is small and cold, and it fits in the hollow of your palm. You close your hand around it before you think to."
+  },
+  {
+    "key": "044350b2478cee",
+    "speaker": "narrator",
+    "text": "It is cold, and it stays cold. You put it away, and you do not like having it."
   },
   {
     "key": "0554391f98fcd8",
@@ -2660,6 +2805,11 @@
     "text": "A handful of small, juicy berries. They look edible, but you can't be sure they're safe."
   },
   {
+    "key": "0aa9663e4bf7da",
+    "speaker": "narrator",
+    "text": "They stain your fingers dark. You do not know yet if they are safe."
+  },
+  {
     "key": "0fef245d4b77eb",
     "speaker": "grandmother",
     "text": "Look at you: wild berries, and your fingers purple to the knuckle, same as when you were six."
@@ -2708,6 +2858,16 @@
     "key": "1df4f139719b03",
     "speaker": "narrator",
     "text": "You receive a travel cloak."
+  },
+  {
+    "key": "0f447a662c8d5b",
+    "speaker": "narrator",
+    "text": "It is heavy, and it smells of cedar. She must have kept it a long time."
+  },
+  {
+    "key": "074dceb06f4be1",
+    "speaker": "narrator",
+    "text": "It is warm through the cloth. It smells of home, and of her kitchen."
   },
   {
     "key": "0c5f5b929a897d",
@@ -2830,6 +2990,11 @@
     "text": "The cleansing runs over the merchant and finds nothing to wash away."
   },
   {
+    "key": "0d7761379b2cbf",
+    "speaker": "narrator",
+    "text": "The teeth are dull and orange with rust. It will cut something soft, once or twice."
+  },
+  {
     "key": "04e3c6b9a3c930",
     "speaker": "narrator",
     "text": "An old, rusty saw with a worn wooden handle. It looks like it could still cut through something soft, but might break on anything tough."
@@ -2888,6 +3053,11 @@
     "key": "1d32015bd63445",
     "speaker": "narrator",
     "text": "You have gathered all the items needed for your journey. With your preparations complete, you are ready to face whatever lies beyond Willowbrook."
+  },
+  {
+    "key": "064150cf1b3ad1",
+    "speaker": "narrator",
+    "text": "The leather is soft from other people's roads. They feel ready to go, even if you are not."
   },
   {
     "key": "166b8ce7d73f50",

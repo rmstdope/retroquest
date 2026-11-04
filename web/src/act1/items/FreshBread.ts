@@ -1,4 +1,4 @@
-import { Item } from '@/engine'
+import { Item, type GameState } from '@/engine'
 
 /**
  * The loaf grandmother bakes for Elior's road once Mira has taught him.
@@ -14,5 +14,13 @@ export class FreshBread extends Item {
         'It smells of home.',
       canBeCarried: true,
     })
+  }
+
+  /** The line the story tells when Elior takes it, wherever it is lying. */
+  override pickedUp(_gameState: GameState): string {
+    return (
+      'It is warm through the cloth. ' +
+      'It smells of home, and of her kitchen.'
+    )
   }
 }

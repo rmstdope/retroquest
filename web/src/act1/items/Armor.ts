@@ -37,4 +37,12 @@ export class Armor extends Item {
   override equip(_gameState: GameState): string {
     return 'You feel more protected and ready for danger.'
   }
+
+  /** The line the story tells when Elior takes it, wherever it is lying. */
+  override pickedUp(_gameState: GameState): string {
+    return (
+      'It is stiff, and it smells of new leather. ' +
+      'It will soften with wearing.'
+    )
+  }
 }

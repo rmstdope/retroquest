@@ -738,6 +738,18 @@ describe('Game', () => {
       expect(game.state.getItemCount('gem')).toBe(1)
     })
 
+    it('says each pickup line once when every item taken has its own (rq-3uug)', () => {
+      rooms.EliorsCottage.items.push(
+        new TakeItem('coin', true, 'The coin is small.'),
+        new TakeItem('coin', true, 'The coin is small.'),
+        new TakeItem('coin', true, 'The other coin is worn.'),
+      )
+      expect(game.take('coin')).toBe(
+        'The coin is small.\nThe other coin is worn.',
+      )
+      expect(game.state.getItemCount('coin')).toBe(3)
+    })
+
     it('only reports the prevention when nothing could be taken', () => {
       rooms.EliorsCottage.items.push(new TakeItem('anvil', false))
       expect(game.take('anvil')).toBe(
