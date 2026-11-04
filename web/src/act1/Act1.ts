@@ -104,8 +104,8 @@ export class Act1 extends Act {
 
   /**
    * Bring older saves up to date: drop the matches the store's wares still
-   * sell, name the villager Tilda, the smith Borin and the shopkeeper Hemlock, and give the cottage the hearth
-   * it lacked. Rooms and items whose saved wording changed refresh it
+   * sell, name the villager Tilda, the smith Borin and the shopkeeper
+   * Hemlock, and give the cottage the hearth it lacked. Rooms and items whose saved wording changed refresh it
    * themselves (`refreshSavedText`).
    */
   override afterLoad(gameState: GameState): void {
@@ -115,10 +115,12 @@ export class Act1 extends Act {
     }
     for (const room of Object.values(gameState.allRooms)) {
       for (const character of room.characters) {
-        if (character instanceof Shopkeeper) character.migrateLegacyWares()
+        if (character instanceof Shopkeeper) {
+          character.migrateLegacyWares()
+          character.migrateLegacyName()
+        }
         if (character instanceof Villager) character.migrateLegacyName()
         if (character instanceof Blacksmith) character.migrateLegacyName()
-        if (character instanceof Shopkeeper) character.migrateLegacyName()
       }
     }
   }

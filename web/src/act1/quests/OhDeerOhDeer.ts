@@ -1,7 +1,7 @@
 import { characterName, Quest, type GameState } from '@/engine'
 import { FLAG_DEER_CAN_BE_OBSERVED } from '../Act1StoryFlags'
 
-/** Side quest: witness the magical deer the Blacksmith spoke of. */
+/** Side quest: witness the magical deer Borin spoke of. */
 export class OhDeerOhDeerQuest extends Quest {
   constructor() {
     super({

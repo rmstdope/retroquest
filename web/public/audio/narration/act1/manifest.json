@@ -98,6 +98,123 @@
    }
   ]
  },
+ "00349a1acbeace": {
+  "file": "02560cd52c3616.mp3",
+  "speaker": "hemlock",
+  "duration": 8.406,
+  "words": [
+   {
+    "word": "Hold",
+    "start": 0.0,
+    "end": 0.36
+   },
+   {
+    "word": "on",
+    "start": 0.36,
+    "end": 0.62
+   },
+   {
+    "word": "there,",
+    "start": 0.62,
+    "end": 0.88
+   },
+   {
+    "word": "friend!",
+    "start": 1.06,
+    "end": 1.34
+   },
+   {
+    "word": "That",
+    "start": 1.64,
+    "end": 2.14
+   },
+   {
+    "word": "rope",
+    "start": 2.14,
+    "end": 2.5
+   },
+   {
+    "word": "is",
+    "start": 2.5,
+    "end": 2.72
+   },
+   {
+    "word": "merchandise,",
+    "start": 2.72,
+    "end": 3.34
+   },
+   {
+    "word": "not",
+    "start": 3.76,
+    "end": 4.06
+   },
+   {
+    "word": "a",
+    "start": 4.06,
+    "end": 4.2
+   },
+   {
+    "word": "free",
+    "start": 4.2,
+    "end": 4.42
+   },
+   {
+    "word": "sample.",
+    "start": 4.42,
+    "end": 4.94
+   },
+   {
+    "word": "If",
+    "start": 5.22,
+    "end": 5.52
+   },
+   {
+    "word": "you",
+    "start": 5.52,
+    "end": 5.66
+   },
+   {
+    "word": "want",
+    "start": 5.66,
+    "end": 5.96
+   },
+   {
+    "word": "it,",
+    "start": 5.96,
+    "end": 6.08
+   },
+   {
+    "word": "you'll",
+    "start": 6.26,
+    "end": 6.54
+   },
+   {
+    "word": "need",
+    "start": 6.54,
+    "end": 6.7
+   },
+   {
+    "word": "to",
+    "start": 6.7,
+    "end": 6.86
+   },
+   {
+    "word": "buy",
+    "start": 6.86,
+    "end": 7.16
+   },
+   {
+    "word": "it",
+    "start": 7.16,
+    "end": 7.32
+   },
+   {
+    "word": "proper-like.",
+    "start": 7.32,
+    "end": 8.14
+   }
+  ]
+ },
  "00372589396b2b": {
   "file": "00372589396b2b.mp3",
   "speaker": "narrator",
@@ -1313,6 +1430,68 @@
    }
   ]
  },
+ "00e004cb1e103e": {
+  "file": "0bef1fc0430199.mp3",
+  "speaker": "hemlock",
+  "duration": 4.505,
+  "words": [
+   {
+    "word": "Not",
+    "start": 0.0,
+    "end": 0.26
+   },
+   {
+    "word": "something",
+    "start": 0.26,
+    "end": 0.6
+   },
+   {
+    "word": "I",
+    "start": 0.6,
+    "end": 0.84
+   },
+   {
+    "word": "carry,",
+    "start": 0.84,
+    "end": 1.2
+   },
+   {
+    "word": "lad.",
+    "start": 1.36,
+    "end": 1.58
+   },
+   {
+    "word": "Not",
+    "start": 1.88,
+    "end": 2.38
+   },
+   {
+    "word": "since",
+    "start": 2.38,
+    "end": 2.64
+   },
+   {
+    "word": "the",
+    "start": 2.64,
+    "end": 2.8
+   },
+   {
+    "word": "caravans",
+    "start": 2.8,
+    "end": 3.3
+   },
+   {
+    "word": "stopped,",
+    "start": 3.3,
+    "end": 3.66
+   },
+   {
+    "word": "anyway.",
+    "start": 3.66,
+    "end": 4.0
+   }
+  ]
+ },
  "00fe52ce0497c7": {
   "file": "00fe52ce0497c7.mp3",
   "speaker": "narrator",
@@ -2460,6 +2639,68 @@
     "word": "ready.",
     "start": 7.16,
     "end": 7.48
+   }
+  ]
+ },
+ "015d02c84a6444": {
+  "file": "1cedf8cdf63e07.mp3",
+  "speaker": "borin",
+  "duration": 3.111,
+  "words": [
+   {
+    "word": "Can't",
+    "start": 0.0,
+    "end": 0.28
+   },
+   {
+    "word": "melt",
+    "start": 0.28,
+    "end": 0.54
+   },
+   {
+    "word": "it,",
+    "start": 0.54,
+    "end": 0.72
+   },
+   {
+    "word": "can't",
+    "start": 0.88,
+    "end": 1.18
+   },
+   {
+    "word": "mend",
+    "start": 1.18,
+    "end": 1.44
+   },
+   {
+    "word": "it.",
+    "start": 1.44,
+    "end": 1.6
+   },
+   {
+    "word": "No",
+    "start": 1.74,
+    "end": 2.0
+   },
+   {
+    "word": "use",
+    "start": 2.0,
+    "end": 2.24
+   },
+   {
+    "word": "to",
+    "start": 2.24,
+    "end": 2.38
+   },
+   {
+    "word": "me,",
+    "start": 2.38,
+    "end": 2.58
+   },
+   {
+    "word": "lad.",
+    "start": 2.58,
+    "end": 2.76
    }
   ]
  },
@@ -4162,6 +4403,58 @@
     "word": "thanks.",
     "start": 9.86,
     "end": 10.18
+   }
+  ]
+ },
+ "024791c675bb7a": {
+  "file": "0dd0b50f7da05b.mp3",
+  "speaker": "hemlock",
+  "duration": 3.344,
+  "words": [
+   {
+    "word": "I",
+    "start": 0.0,
+    "end": 0.22
+   },
+   {
+    "word": "sell",
+    "start": 0.22,
+    "end": 0.58
+   },
+   {
+    "word": "things,",
+    "start": 0.58,
+    "end": 0.94
+   },
+   {
+    "word": "lad.",
+    "start": 1.1,
+    "end": 1.38
+   },
+   {
+    "word": "I",
+    "start": 1.62,
+    "end": 1.92
+   },
+   {
+    "word": "don't",
+    "start": 1.92,
+    "end": 2.26
+   },
+   {
+    "word": "take",
+    "start": 2.26,
+    "end": 2.5
+   },
+   {
+    "word": "them",
+    "start": 2.5,
+    "end": 2.7
+   },
+   {
+    "word": "in.",
+    "start": 2.7,
+    "end": 3.02
    }
   ]
  },
@@ -10169,6 +10462,148 @@
    }
   ]
  },
+ "051862ee636284": {
+  "file": "016504f33352a0.mp3",
+  "speaker": "borin",
+  "duration": 8.452,
+  "words": [
+   {
+    "word": "From",
+    "start": 0.0,
+    "end": 0.18
+   },
+   {
+    "word": "the",
+    "start": 0.18,
+    "end": 0.32
+   },
+   {
+    "word": "old",
+    "start": 0.32,
+    "end": 0.56
+   },
+   {
+    "word": "mill,",
+    "start": 0.56,
+    "end": 0.9
+   },
+   {
+    "word": "that.",
+    "start": 1.2,
+    "end": 1.42
+   },
+   {
+    "word": "Good",
+    "start": 1.42,
+    "end": 1.98
+   },
+   {
+    "word": "stone.",
+    "start": 1.98,
+    "end": 2.38
+   },
+   {
+    "word": "My",
+    "start": 2.64,
+    "end": 2.98
+   },
+   {
+    "word": "grandfather",
+    "start": 2.98,
+    "end": 3.48
+   },
+   {
+    "word": "said",
+    "start": 3.48,
+    "end": 3.82
+   },
+   {
+    "word": "they",
+    "start": 3.82,
+    "end": 4.0
+   },
+   {
+    "word": "built",
+    "start": 4.0,
+    "end": 4.28
+   },
+   {
+    "word": "the",
+    "start": 4.28,
+    "end": 4.44
+   },
+   {
+    "word": "mill",
+    "start": 4.44,
+    "end": 4.7
+   },
+   {
+    "word": "where",
+    "start": 4.7,
+    "end": 4.94
+   },
+   {
+    "word": "they",
+    "start": 4.94,
+    "end": 5.1
+   },
+   {
+    "word": "did",
+    "start": 5.1,
+    "end": 5.32
+   },
+   {
+    "word": "for",
+    "start": 5.32,
+    "end": 5.5
+   },
+   {
+    "word": "a",
+    "start": 5.5,
+    "end": 5.7
+   },
+   {
+    "word": "reason.",
+    "start": 5.7,
+    "end": 6.0
+   },
+   {
+    "word": "The",
+    "start": 6.28,
+    "end": 6.56
+   },
+   {
+    "word": "ground",
+    "start": 6.56,
+    "end": 6.88
+   },
+   {
+    "word": "there's",
+    "start": 6.88,
+    "end": 7.22
+   },
+   {
+    "word": "older",
+    "start": 7.22,
+    "end": 7.52
+   },
+   {
+    "word": "than",
+    "start": 7.52,
+    "end": 7.72
+   },
+   {
+    "word": "the",
+    "start": 7.72,
+    "end": 7.84
+   },
+   {
+    "word": "village.",
+    "start": 7.84,
+    "end": 8.22
+   }
+  ]
+ },
  "051b996a4feda1": {
   "file": "051b996a4feda1.mp3",
   "speaker": "narrator",
@@ -12572,6 +13007,228 @@
     "word": "side.",
     "start": 6.64,
     "end": 6.9
+   }
+  ]
+ },
+ "065c0d1816300c": {
+  "file": "1d048e0cbc8c8b.mp3",
+  "speaker": "borin",
+  "duration": 13.05,
+  "words": [
+   {
+    "word": "He",
+    "start": 0.0,
+    "end": 0.14
+   },
+   {
+    "word": "told",
+    "start": 0.14,
+    "end": 0.4
+   },
+   {
+    "word": "me",
+    "start": 0.4,
+    "end": 0.6
+   },
+   {
+    "word": "something",
+    "start": 0.6,
+    "end": 0.98
+   },
+   {
+    "word": "else,",
+    "start": 0.98,
+    "end": 1.3
+   },
+   {
+    "word": "too.",
+    "start": 1.3,
+    "end": 1.56
+   },
+   {
+    "word": "There's",
+    "start": 1.86,
+    "end": 2.22
+   },
+   {
+    "word": "a",
+    "start": 2.22,
+    "end": 2.32
+   },
+   {
+    "word": "deer",
+    "start": 2.32,
+    "end": 2.62
+   },
+   {
+    "word": "in",
+    "start": 2.62,
+    "end": 2.84
+   },
+   {
+    "word": "the",
+    "start": 2.84,
+    "end": 2.94
+   },
+   {
+    "word": "Hidden",
+    "start": 2.94,
+    "end": 3.18
+   },
+   {
+    "word": "Glade",
+    "start": 3.18,
+    "end": 3.58
+   },
+   {
+    "word": "that",
+    "start": 3.58,
+    "end": 3.74
+   },
+   {
+    "word": "comes",
+    "start": 3.74,
+    "end": 4.02
+   },
+   {
+    "word": "to",
+    "start": 4.02,
+    "end": 4.18
+   },
+   {
+    "word": "folk",
+    "start": 4.18,
+    "end": 4.44
+   },
+   {
+    "word": "who",
+    "start": 4.44,
+    "end": 4.58
+   },
+   {
+    "word": "keep",
+    "start": 4.58,
+    "end": 4.82
+   },
+   {
+    "word": "still.",
+    "start": 4.82,
+    "end": 5.22
+   },
+   {
+    "word": "Not",
+    "start": 5.46,
+    "end": 5.78
+   },
+   {
+    "word": "to",
+    "start": 5.78,
+    "end": 5.94
+   },
+   {
+    "word": "hunters.",
+    "start": 5.94,
+    "end": 6.28
+   },
+   {
+    "word": "Not",
+    "start": 6.6,
+    "end": 6.82
+   },
+   {
+    "word": "to",
+    "start": 6.82,
+    "end": 6.98
+   },
+   {
+    "word": "talkers.",
+    "start": 6.98,
+    "end": 7.44
+   },
+   {
+    "word": "You",
+    "start": 7.66,
+    "end": 7.88
+   },
+   {
+    "word": "go",
+    "start": 7.88,
+    "end": 8.08
+   },
+   {
+    "word": "there,",
+    "start": 8.08,
+    "end": 8.4
+   },
+   {
+    "word": "sit",
+    "start": 8.64,
+    "end": 8.92
+   },
+   {
+    "word": "down,",
+    "start": 8.92,
+    "end": 9.28
+   },
+   {
+    "word": "rest",
+    "start": 9.54,
+    "end": 9.78
+   },
+   {
+    "word": "a",
+    "start": 9.78,
+    "end": 9.94
+   },
+   {
+    "word": "while,",
+    "start": 9.94,
+    "end": 10.2
+   },
+   {
+    "word": "and",
+    "start": 10.38,
+    "end": 10.58
+   },
+   {
+    "word": "stop",
+    "start": 10.58,
+    "end": 10.88
+   },
+   {
+    "word": "looking",
+    "start": 10.88,
+    "end": 11.16
+   },
+   {
+    "word": "for",
+    "start": 11.16,
+    "end": 11.44
+   },
+   {
+    "word": "it.",
+    "start": 11.44,
+    "end": 11.62
+   },
+   {
+    "word": "That's",
+    "start": 11.8,
+    "end": 12.14
+   },
+   {
+    "word": "when",
+    "start": 12.14,
+    "end": 12.28
+   },
+   {
+    "word": "it",
+    "start": 12.28,
+    "end": 12.4
+   },
+   {
+    "word": "comes.",
+    "start": 12.4,
+    "end": 12.66
    }
   ]
  },
@@ -14986,6 +15643,148 @@
    }
   ]
  },
+ "077a6868a25d1a": {
+  "file": "13c153a34c68e2.mp3",
+  "speaker": "hemlock",
+  "duration": 8.545,
+  "words": [
+   {
+    "word": "They're",
+    "start": 0.0,
+    "end": 0.3
+   },
+   {
+    "word": "on",
+    "start": 0.3,
+    "end": 0.46
+   },
+   {
+    "word": "the",
+    "start": 0.46,
+    "end": 0.58
+   },
+   {
+    "word": "house.",
+    "start": 0.58,
+    "end": 0.98
+   },
+   {
+    "word": "Always",
+    "start": 1.38,
+    "end": 1.9
+   },
+   {
+    "word": "have",
+    "start": 1.9,
+    "end": 2.22
+   },
+   {
+    "word": "been;",
+    "start": 2.22,
+    "end": 2.52
+   },
+   {
+    "word": "my",
+    "start": 2.76,
+    "end": 3.06
+   },
+   {
+    "word": "father",
+    "start": 3.06,
+    "end": 3.44
+   },
+   {
+    "word": "said",
+    "start": 3.44,
+    "end": 3.7
+   },
+   {
+    "word": "a",
+    "start": 3.7,
+    "end": 3.86
+   },
+   {
+    "word": "chapel",
+    "start": 3.86,
+    "end": 4.22
+   },
+   {
+    "word": "without",
+    "start": 4.22,
+    "end": 4.48
+   },
+   {
+    "word": "a",
+    "start": 4.48,
+    "end": 4.76
+   },
+   {
+    "word": "light",
+    "start": 4.76,
+    "end": 4.94
+   },
+   {
+    "word": "is",
+    "start": 4.94,
+    "end": 5.14
+   },
+   {
+    "word": "bad",
+    "start": 5.14,
+    "end": 5.42
+   },
+   {
+    "word": "luck,",
+    "start": 5.42,
+    "end": 5.76
+   },
+   {
+    "word": "and",
+    "start": 5.94,
+    "end": 6.2
+   },
+   {
+    "word": "I've",
+    "start": 6.2,
+    "end": 6.42
+   },
+   {
+    "word": "never",
+    "start": 6.42,
+    "end": 6.64
+   },
+   {
+    "word": "been",
+    "start": 6.64,
+    "end": 6.88
+   },
+   {
+    "word": "brave",
+    "start": 6.88,
+    "end": 7.22
+   },
+   {
+    "word": "enough",
+    "start": 7.22,
+    "end": 7.48
+   },
+   {
+    "word": "to",
+    "start": 7.48,
+    "end": 7.66
+   },
+   {
+    "word": "find",
+    "start": 7.66,
+    "end": 7.96
+   },
+   {
+    "word": "out.",
+    "start": 7.96,
+    "end": 8.28
+   }
+  ]
+ },
  "07876550bd9ae0": {
   "file": "07876550bd9ae0.mp3",
   "speaker": "priest",
@@ -15080,6 +15879,203 @@
     "word": "I.",
     "start": 5.24,
     "end": 5.64
+   }
+  ]
+ },
+ "07df83ae92a4b5": {
+  "file": "0af5bbf0fb8712.mp3",
+  "speaker": "hemlock",
+  "duration": 13.003,
+  "words": [
+   {
+    "word": "Your",
+    "start": 0.0,
+    "end": 0.18
+   },
+   {
+    "word": "grandmother",
+    "start": 0.18,
+    "end": 0.68
+   },
+   {
+    "word": "sent",
+    "start": 0.68,
+    "end": 1.06
+   },
+   {
+    "word": "word,",
+    "start": 1.06,
+    "end": 1.42
+   },
+   {
+    "word": "lad.",
+    "start": 1.56,
+    "end": 1.8
+   },
+   {
+    "word": "Patches",
+    "start": 2.26,
+    "end": 2.76
+   },
+   {
+    "word": "is",
+    "start": 2.76,
+    "end": 2.94
+   },
+   {
+    "word": "safe",
+    "start": 2.94,
+    "end": 3.34
+   },
+   {
+    "word": "and",
+    "start": 3.34,
+    "end": 3.52
+   },
+   {
+    "word": "warm",
+    "start": 3.52,
+    "end": 3.9
+   },
+   {
+    "word": "by",
+    "start": 3.9,
+    "end": 4.12
+   },
+   {
+    "word": "her",
+    "start": 4.12,
+    "end": 4.34
+   },
+   {
+    "word": "hearth.",
+    "start": 4.34,
+    "end": 4.8
+   },
+   {
+    "word": "I'll",
+    "start": 5.02,
+    "end": 5.46
+   },
+   {
+    "word": "not",
+    "start": 5.46,
+    "end": 5.7
+   },
+   {
+    "word": "drag",
+    "start": 5.7,
+    "end": 6.0
+   },
+   {
+    "word": "her",
+    "start": 6.0,
+    "end": 6.22
+   },
+   {
+    "word": "back;",
+    "start": 6.22,
+    "end": 6.62
+   },
+   {
+    "word": "she",
+    "start": 6.78,
+    "end": 7.12
+   },
+   {
+    "word": "always",
+    "start": 7.12,
+    "end": 7.6
+   },
+   {
+    "word": "did",
+    "start": 7.6,
+    "end": 7.96
+   },
+   {
+    "word": "like",
+    "start": 7.96,
+    "end": 8.22
+   },
+   {
+    "word": "a",
+    "start": 8.22,
+    "end": 8.36
+   },
+   {
+    "word": "fire",
+    "start": 8.36,
+    "end": 8.74
+   },
+   {
+    "word": "better",
+    "start": 8.74,
+    "end": 9.04
+   },
+   {
+    "word": "than",
+    "start": 9.04,
+    "end": 9.26
+   },
+   {
+    "word": "a",
+    "start": 9.26,
+    "end": 9.4
+   },
+   {
+    "word": "draughty",
+    "start": 9.4,
+    "end": 9.92
+   },
+   {
+    "word": "old",
+    "start": 9.92,
+    "end": 10.18
+   },
+   {
+    "word": "store,",
+    "start": 10.18,
+    "end": 10.7
+   },
+   {
+    "word": "and",
+    "start": 10.86,
+    "end": 11.2
+   },
+   {
+    "word": "I",
+    "start": 11.2,
+    "end": 11.34
+   },
+   {
+    "word": "can",
+    "start": 11.34,
+    "end": 11.5
+   },
+   {
+    "word": "call",
+    "start": 11.5,
+    "end": 11.8
+   },
+   {
+    "word": "in",
+    "start": 11.8,
+    "end": 12.06
+   },
+   {
+    "word": "and",
+    "start": 12.06,
+    "end": 12.28
+   },
+   {
+    "word": "see",
+    "start": 12.28,
+    "end": 12.56
+   },
+   {
+    "word": "her.",
+    "start": 12.56,
+    "end": 12.8
    }
   ]
  },
@@ -15492,6 +16488,128 @@
    }
   ]
  },
+ "0844b4b9abc5e8": {
+  "file": "1810aa84e25214.mp3",
+  "speaker": "borin",
+  "duration": 6.13,
+  "words": [
+   {
+    "word": "How",
+    "start": 0.0,
+    "end": 0.18
+   },
+   {
+    "word": "is",
+    "start": 0.18,
+    "end": 0.32
+   },
+   {
+    "word": "that",
+    "start": 0.32,
+    "end": 0.52
+   },
+   {
+    "word": "blade",
+    "start": 0.52,
+    "end": 0.84
+   },
+   {
+    "word": "holding",
+    "start": 0.84,
+    "end": 1.12
+   },
+   {
+    "word": "up?",
+    "start": 1.12,
+    "end": 1.42
+   },
+   {
+    "word": "Keep",
+    "start": 1.64,
+    "end": 2.08
+   },
+   {
+    "word": "that",
+    "start": 2.08,
+    "end": 2.3
+   },
+   {
+    "word": "edge",
+    "start": 2.3,
+    "end": 2.58
+   },
+   {
+    "word": "oiled,",
+    "start": 2.58,
+    "end": 3.02
+   },
+   {
+    "word": "mind,",
+    "start": 3.02,
+    "end": 3.3
+   },
+   {
+    "word": "or",
+    "start": 3.52,
+    "end": 3.74
+   },
+   {
+    "word": "the",
+    "start": 3.74,
+    "end": 3.88
+   },
+   {
+    "word": "damp",
+    "start": 3.88,
+    "end": 4.14
+   },
+   {
+    "word": "will",
+    "start": 4.14,
+    "end": 4.3
+   },
+   {
+    "word": "have",
+    "start": 4.3,
+    "end": 4.48
+   },
+   {
+    "word": "it",
+    "start": 4.48,
+    "end": 4.58
+   },
+   {
+    "word": "dull",
+    "start": 4.58,
+    "end": 4.8
+   },
+   {
+    "word": "again",
+    "start": 4.8,
+    "end": 5.06
+   },
+   {
+    "word": "before",
+    "start": 5.06,
+    "end": 5.36
+   },
+   {
+    "word": "you",
+    "start": 5.36,
+    "end": 5.58
+   },
+   {
+    "word": "know",
+    "start": 5.58,
+    "end": 5.74
+   },
+   {
+    "word": "it.",
+    "start": 5.74,
+    "end": 5.92
+   }
+  ]
+ },
  "08466bf39067a5": {
   "file": "08466bf39067a5.mp3",
   "speaker": "narrator",
@@ -15548,6 +16666,168 @@
     "word": "glade.",
     "start": 1.08,
     "end": 1.52
+   }
+  ]
+ },
+ "0871d6111622f6": {
+  "file": "1fbe5a0b7a0e10.mp3",
+  "speaker": "hemlock",
+  "duration": 13.05,
+  "words": [
+   {
+    "word": "Patches!",
+    "start": 0.0,
+    "end": 0.66
+   },
+   {
+    "word": "You",
+    "start": 0.8,
+    "end": 1.16
+   },
+   {
+    "word": "found",
+    "start": 1.16,
+    "end": 1.56
+   },
+   {
+    "word": "her!",
+    "start": 1.56,
+    "end": 1.84
+   },
+   {
+    "word": "Old",
+    "start": 2.22,
+    "end": 2.78
+   },
+   {
+    "word": "Hemlock",
+    "start": 2.78,
+    "end": 3.26
+   },
+   {
+    "word": "won't",
+    "start": 3.26,
+    "end": 3.58
+   },
+   {
+    "word": "forget",
+    "start": 3.58,
+    "end": 3.92
+   },
+   {
+    "word": "this.",
+    "start": 3.92,
+    "end": 4.32
+   },
+   {
+    "word": "Here,",
+    "start": 4.6,
+    "end": 5.16
+   },
+   {
+    "word": "the",
+    "start": 5.36,
+    "end": 5.6
+   },
+   {
+    "word": "reward",
+    "start": 5.6,
+    "end": 6.0
+   },
+   {
+    "word": "I",
+    "start": 6.0,
+    "end": 6.2
+   },
+   {
+    "word": "promised.",
+    "start": 6.2,
+    "end": 6.7
+   },
+   {
+    "word": "It",
+    "start": 6.96,
+    "end": 7.34
+   },
+   {
+    "word": "isn't",
+    "start": 7.34,
+    "end": 7.66
+   },
+   {
+    "word": "much,",
+    "start": 7.66,
+    "end": 7.98
+   },
+   {
+    "word": "but",
+    "start": 8.14,
+    "end": 8.4
+   },
+   {
+    "word": "it's",
+    "start": 8.4,
+    "end": 8.6
+   },
+   {
+    "word": "honestly",
+    "start": 8.6,
+    "end": 9.06
+   },
+   {
+    "word": "given.",
+    "start": 9.06,
+    "end": 9.46
+   },
+   {
+    "word": "And",
+    "start": 9.74,
+    "end": 10.12
+   },
+   {
+    "word": "the",
+    "start": 10.12,
+    "end": 10.28
+   },
+   {
+    "word": "store's",
+    "start": 10.28,
+    "end": 10.66
+   },
+   {
+    "word": "open",
+    "start": 10.66,
+    "end": 10.92
+   },
+   {
+    "word": "again,",
+    "start": 10.92,
+    "end": 11.28
+   },
+   {
+    "word": "so",
+    "start": 11.48,
+    "end": 11.76
+   },
+   {
+    "word": "have",
+    "start": 11.76,
+    "end": 11.98
+   },
+   {
+    "word": "a",
+    "start": 11.98,
+    "end": 12.08
+   },
+   {
+    "word": "look",
+    "start": 12.08,
+    "end": 12.26
+   },
+   {
+    "word": "around.",
+    "start": 12.26,
+    "end": 12.5
    }
   ]
  },
@@ -16648,6 +17928,228 @@
    }
   ]
  },
+ "08d70c58e48563": {
+  "file": "0e9e175535a167.mp3",
+  "speaker": "hemlock",
+  "duration": 14.536,
+  "words": [
+   {
+    "word": "The",
+    "start": 0.0,
+    "end": 0.26
+   },
+   {
+    "word": "reward",
+    "start": 0.26,
+    "end": 0.7
+   },
+   {
+    "word": "was",
+    "start": 0.7,
+    "end": 0.98
+   },
+   {
+    "word": "for",
+    "start": 0.98,
+    "end": 1.16
+   },
+   {
+    "word": "bringing",
+    "start": 1.16,
+    "end": 1.48
+   },
+   {
+    "word": "her",
+    "start": 1.48,
+    "end": 1.74
+   },
+   {
+    "word": "home,",
+    "start": 1.74,
+    "end": 2.16
+   },
+   {
+    "word": "and",
+    "start": 2.16,
+    "end": 2.58
+   },
+   {
+    "word": "she",
+    "start": 2.58,
+    "end": 2.78
+   },
+   {
+    "word": "found",
+    "start": 2.78,
+    "end": 3.12
+   },
+   {
+    "word": "a",
+    "start": 3.12,
+    "end": 3.3
+   },
+   {
+    "word": "new",
+    "start": 3.3,
+    "end": 3.5
+   },
+   {
+    "word": "one.",
+    "start": 3.5,
+    "end": 3.86
+   },
+   {
+    "word": "But",
+    "start": 4.08,
+    "end": 4.52
+   },
+   {
+    "word": "you'll",
+    "start": 4.52,
+    "end": 4.76
+   },
+   {
+    "word": "not",
+    "start": 4.76,
+    "end": 4.98
+   },
+   {
+    "word": "leave",
+    "start": 4.98,
+    "end": 5.24
+   },
+   {
+    "word": "empty-handed:",
+    "start": 5.24,
+    "end": 5.96
+   },
+   {
+    "word": "take",
+    "start": 6.3,
+    "end": 6.68
+   },
+   {
+    "word": "this",
+    "start": 6.68,
+    "end": 6.96
+   },
+   {
+    "word": "rope,",
+    "start": 6.96,
+    "end": 7.36
+   },
+   {
+    "word": "on",
+    "start": 7.56,
+    "end": 7.9
+   },
+   {
+    "word": "the",
+    "start": 7.9,
+    "end": 8.04
+   },
+   {
+    "word": "house,",
+    "start": 8.04,
+    "end": 8.44
+   },
+   {
+    "word": "and",
+    "start": 8.64,
+    "end": 8.9
+   },
+   {
+    "word": "there's",
+    "start": 8.9,
+    "end": 9.16
+   },
+   {
+    "word": "always",
+    "start": 9.16,
+    "end": 9.5
+   },
+   {
+    "word": "an",
+    "start": 9.5,
+    "end": 9.72
+   },
+   {
+    "word": "apple",
+    "start": 9.72,
+    "end": 10.08
+   },
+   {
+    "word": "to",
+    "start": 10.08,
+    "end": 10.28
+   },
+   {
+    "word": "go",
+    "start": 10.28,
+    "end": 10.48
+   },
+   {
+    "word": "with",
+    "start": 10.48,
+    "end": 10.74
+   },
+   {
+    "word": "it.",
+    "start": 10.74,
+    "end": 10.96
+   },
+   {
+    "word": "And",
+    "start": 11.12,
+    "end": 11.46
+   },
+   {
+    "word": "the",
+    "start": 11.46,
+    "end": 11.62
+   },
+   {
+    "word": "store's",
+    "start": 11.62,
+    "end": 12.08
+   },
+   {
+    "word": "open",
+    "start": 12.08,
+    "end": 12.4
+   },
+   {
+    "word": "again,",
+    "start": 12.4,
+    "end": 12.76
+   },
+   {
+    "word": "so",
+    "start": 12.96,
+    "end": 13.24
+   },
+   {
+    "word": "have",
+    "start": 13.24,
+    "end": 13.48
+   },
+   {
+    "word": "a",
+    "start": 13.48,
+    "end": 13.58
+   },
+   {
+    "word": "look",
+    "start": 13.58,
+    "end": 13.78
+   },
+   {
+    "word": "around.",
+    "start": 13.78,
+    "end": 14.0
+   }
+  ]
+ },
  "08d7eef1035f6f": {
   "file": "08d7eef1035f6f.mp3",
   "speaker": "narrator",
@@ -17309,6 +18811,68 @@
     "word": "place.",
     "start": 5.26,
     "end": 5.6
+   }
+  ]
+ },
+ "0911457e9acd93": {
+  "file": "0be2c322a1f36a.mp3",
+  "speaker": "borin",
+  "duration": 3.483,
+  "words": [
+   {
+    "word": "Back",
+    "start": 0.0,
+    "end": 0.3
+   },
+   {
+    "word": "again,",
+    "start": 0.3,
+    "end": 0.58
+   },
+   {
+    "word": "lad?",
+    "start": 0.58,
+    "end": 0.86
+   },
+   {
+    "word": "Forge",
+    "start": 1.32,
+    "end": 1.72
+   },
+   {
+    "word": "is",
+    "start": 1.72,
+    "end": 1.86
+   },
+   {
+    "word": "hot.",
+    "start": 1.86,
+    "end": 2.12
+   },
+   {
+    "word": "What've",
+    "start": 2.12,
+    "end": 2.6
+   },
+   {
+    "word": "you",
+    "start": 2.6,
+    "end": 2.68
+   },
+   {
+    "word": "got",
+    "start": 2.68,
+    "end": 2.9
+   },
+   {
+    "word": "for",
+    "start": 2.9,
+    "end": 3.1
+   },
+   {
+    "word": "me?",
+    "start": 3.1,
+    "end": 3.3
    }
   ]
  },
@@ -24921,6 +26485,33 @@
    }
   ]
  },
+ "0d4dfb9e4f90e8": {
+  "file": "0b0c487c57980a.mp3",
+  "speaker": "borin",
+  "duration": 1.393,
+  "words": [
+   {
+    "word": "Mind",
+    "start": 0.0,
+    "end": 0.34
+   },
+   {
+    "word": "the",
+    "start": 0.34,
+    "end": 0.48
+   },
+   {
+    "word": "sparks,",
+    "start": 0.48,
+    "end": 0.86
+   },
+   {
+    "word": "lad.",
+    "start": 0.88,
+    "end": 1.14
+   }
+  ]
+ },
  "0d53995cd0ee6f": {
   "file": "0d53995cd0ee6f.mp3",
   "speaker": "narrator",
@@ -25406,6 +26997,240 @@
    }
   ]
  },
+ "0d6e46de26749d": {
+  "file": "024e14903a4d2a.mp3",
+  "speaker": "hemlock",
+  "duration": 8.406,
+  "words": [
+   {
+    "word": "Hold",
+    "start": 0.0,
+    "end": 0.3
+   },
+   {
+    "word": "on",
+    "start": 0.3,
+    "end": 0.54
+   },
+   {
+    "word": "there,",
+    "start": 0.54,
+    "end": 0.76
+   },
+   {
+    "word": "friend!",
+    "start": 0.92,
+    "end": 1.18
+   },
+   {
+    "word": "That",
+    "start": 1.48,
+    "end": 2.02
+   },
+   {
+    "word": "apple",
+    "start": 2.02,
+    "end": 2.36
+   },
+   {
+    "word": "is",
+    "start": 2.36,
+    "end": 2.62
+   },
+   {
+    "word": "merchandise,",
+    "start": 2.62,
+    "end": 3.2
+   },
+   {
+    "word": "not",
+    "start": 3.6,
+    "end": 3.88
+   },
+   {
+    "word": "a",
+    "start": 3.88,
+    "end": 4.02
+   },
+   {
+    "word": "free",
+    "start": 4.02,
+    "end": 4.24
+   },
+   {
+    "word": "sample.",
+    "start": 4.24,
+    "end": 4.72
+   },
+   {
+    "word": "If",
+    "start": 5.04,
+    "end": 5.44
+   },
+   {
+    "word": "you",
+    "start": 5.44,
+    "end": 5.6
+   },
+   {
+    "word": "want",
+    "start": 5.6,
+    "end": 5.92
+   },
+   {
+    "word": "it,",
+    "start": 5.92,
+    "end": 6.08
+   },
+   {
+    "word": "you'll",
+    "start": 6.08,
+    "end": 6.44
+   },
+   {
+    "word": "need",
+    "start": 6.44,
+    "end": 6.72
+   },
+   {
+    "word": "to",
+    "start": 6.72,
+    "end": 6.9
+   },
+   {
+    "word": "buy",
+    "start": 6.9,
+    "end": 7.22
+   },
+   {
+    "word": "it",
+    "start": 7.22,
+    "end": 7.36
+   },
+   {
+    "word": "proper-like.",
+    "start": 7.36,
+    "end": 8.14
+   }
+  ]
+ },
+ "0d7084eeab0255": {
+  "file": "01e33e35988200.mp3",
+  "speaker": "hemlock",
+  "duration": 8.545,
+  "words": [
+   {
+    "word": "Hold",
+    "start": 0.0,
+    "end": 0.3
+   },
+   {
+    "word": "on",
+    "start": 0.3,
+    "end": 0.5
+   },
+   {
+    "word": "there,",
+    "start": 0.5,
+    "end": 0.72
+   },
+   {
+    "word": "friend!",
+    "start": 0.88,
+    "end": 1.12
+   },
+   {
+    "word": "That",
+    "start": 1.38,
+    "end": 1.88
+   },
+   {
+    "word": "armor",
+    "start": 1.88,
+    "end": 2.28
+   },
+   {
+    "word": "is",
+    "start": 2.28,
+    "end": 2.58
+   },
+   {
+    "word": "merchandise,",
+    "start": 2.58,
+    "end": 3.2
+   },
+   {
+    "word": "not",
+    "start": 3.68,
+    "end": 3.94
+   },
+   {
+    "word": "a",
+    "start": 3.94,
+    "end": 4.1
+   },
+   {
+    "word": "free",
+    "start": 4.1,
+    "end": 4.28
+   },
+   {
+    "word": "sample.",
+    "start": 4.28,
+    "end": 4.78
+   },
+   {
+    "word": "If",
+    "start": 5.12,
+    "end": 5.56
+   },
+   {
+    "word": "you",
+    "start": 5.56,
+    "end": 5.7
+   },
+   {
+    "word": "want",
+    "start": 5.7,
+    "end": 6.04
+   },
+   {
+    "word": "it,",
+    "start": 6.04,
+    "end": 6.16
+   },
+   {
+    "word": "you'll",
+    "start": 6.38,
+    "end": 6.72
+   },
+   {
+    "word": "need",
+    "start": 6.72,
+    "end": 6.9
+   },
+   {
+    "word": "to",
+    "start": 6.9,
+    "end": 7.08
+   },
+   {
+    "word": "buy",
+    "start": 7.08,
+    "end": 7.36
+   },
+   {
+    "word": "it",
+    "start": 7.36,
+    "end": 7.5
+   },
+   {
+    "word": "proper-like.",
+    "start": 7.5,
+    "end": 8.24
+   }
+  ]
+ },
  "0d72fc56c5715a": {
   "file": "0d72fc56c5715a.mp3",
   "speaker": "narrator",
@@ -25450,6 +27275,138 @@
     "word": "up.",
     "start": 2.18,
     "end": 2.48
+   }
+  ]
+ },
+ "0d768eda5b0858": {
+  "file": "125609050865dc.mp3",
+  "speaker": "borin",
+  "duration": 7.291,
+  "words": [
+   {
+    "word": "Saw",
+    "start": 0.0,
+    "end": 0.3
+   },
+   {
+    "word": "it,",
+    "start": 0.3,
+    "end": 0.52
+   },
+   {
+    "word": "did",
+    "start": 0.64,
+    "end": 0.86
+   },
+   {
+    "word": "you?",
+    "start": 0.86,
+    "end": 1.08
+   },
+   {
+    "word": "The",
+    "start": 1.24,
+    "end": 1.46
+   },
+   {
+    "word": "deer?",
+    "start": 1.46,
+    "end": 1.76
+   },
+   {
+    "word": "My",
+    "start": 2.0,
+    "end": 2.36
+   },
+   {
+    "word": "grandfather",
+    "start": 2.36,
+    "end": 2.84
+   },
+   {
+    "word": "swore",
+    "start": 2.84,
+    "end": 3.3
+   },
+   {
+    "word": "by",
+    "start": 3.3,
+    "end": 3.46
+   },
+   {
+    "word": "that",
+    "start": 3.46,
+    "end": 3.68
+   },
+   {
+    "word": "deer.",
+    "start": 3.68,
+    "end": 3.96
+   },
+   {
+    "word": "Said",
+    "start": 4.34,
+    "end": 4.6
+   },
+   {
+    "word": "it",
+    "start": 4.6,
+    "end": 4.7
+   },
+   {
+    "word": "only",
+    "start": 4.7,
+    "end": 4.94
+   },
+   {
+    "word": "shows",
+    "start": 4.94,
+    "end": 5.26
+   },
+   {
+    "word": "itself",
+    "start": 5.26,
+    "end": 5.6
+   },
+   {
+    "word": "to",
+    "start": 5.6,
+    "end": 5.78
+   },
+   {
+    "word": "them",
+    "start": 5.78,
+    "end": 5.96
+   },
+   {
+    "word": "as",
+    "start": 5.96,
+    "end": 6.12
+   },
+   {
+    "word": "the",
+    "start": 6.12,
+    "end": 6.24
+   },
+   {
+    "word": "land",
+    "start": 6.24,
+    "end": 6.48
+   },
+   {
+    "word": "has",
+    "start": 6.48,
+    "end": 6.72
+   },
+   {
+    "word": "need",
+    "start": 6.72,
+    "end": 6.92
+   },
+   {
+    "word": "of.",
+    "start": 6.92,
+    "end": 7.14
    }
   ]
  },
@@ -25532,6 +27489,138 @@
     "word": "it.",
     "start": 5.82,
     "end": 6.02
+   }
+  ]
+ },
+ "0d96157167ceda": {
+  "file": "0f9c839fddfaaf.mp3",
+  "speaker": "borin",
+  "duration": 7.755,
+  "words": [
+   {
+    "word": "Borin.",
+    "start": 0.0,
+    "end": 0.74
+   },
+   {
+    "word": "I",
+    "start": 0.74,
+    "end": 1.06
+   },
+   {
+    "word": "make",
+    "start": 1.06,
+    "end": 1.3
+   },
+   {
+    "word": "what",
+    "start": 1.3,
+    "end": 1.44
+   },
+   {
+    "word": "this",
+    "start": 1.44,
+    "end": 1.64
+   },
+   {
+    "word": "village",
+    "start": 1.64,
+    "end": 1.96
+   },
+   {
+    "word": "breaks,",
+    "start": 1.96,
+    "end": 2.36
+   },
+   {
+    "word": "and",
+    "start": 2.58,
+    "end": 2.88
+   },
+   {
+    "word": "I",
+    "start": 2.88,
+    "end": 3.04
+   },
+   {
+    "word": "mend",
+    "start": 3.04,
+    "end": 3.26
+   },
+   {
+    "word": "what",
+    "start": 3.26,
+    "end": 3.42
+   },
+   {
+    "word": "it",
+    "start": 3.42,
+    "end": 3.56
+   },
+   {
+    "word": "won't",
+    "start": 3.56,
+    "end": 3.8
+   },
+   {
+    "word": "throw",
+    "start": 3.8,
+    "end": 4.0
+   },
+   {
+    "word": "away.",
+    "start": 4.0,
+    "end": 4.4
+   },
+   {
+    "word": "Got",
+    "start": 4.74,
+    "end": 5.02
+   },
+   {
+    "word": "anything",
+    "start": 5.02,
+    "end": 5.38
+   },
+   {
+    "word": "with",
+    "start": 5.38,
+    "end": 5.6
+   },
+   {
+    "word": "an",
+    "start": 5.6,
+    "end": 5.72
+   },
+   {
+    "word": "edge",
+    "start": 5.72,
+    "end": 5.94
+   },
+   {
+    "word": "gone",
+    "start": 5.94,
+    "end": 6.18
+   },
+   {
+    "word": "soft?",
+    "start": 6.18,
+    "end": 6.58
+   },
+   {
+    "word": "Bring",
+    "start": 6.78,
+    "end": 7.1
+   },
+   {
+    "word": "it",
+    "start": 7.1,
+    "end": 7.26
+   },
+   {
+    "word": "here.",
+    "start": 7.26,
+    "end": 7.5
    }
   ]
  },
@@ -25636,6 +27725,78 @@
     "word": "someone.",
     "start": 0.46,
     "end": 0.88
+   }
+  ]
+ },
+ "0dca7112ae9e08": {
+  "file": "1cb7ce56d7eb58.mp3",
+  "speaker": "hemlock",
+  "duration": 4.551,
+  "words": [
+   {
+    "word": "Been",
+    "start": 0.0,
+    "end": 0.26
+   },
+   {
+    "word": "to",
+    "start": 0.26,
+    "end": 0.42
+   },
+   {
+    "word": "see",
+    "start": 0.42,
+    "end": 0.62
+   },
+   {
+    "word": "the",
+    "start": 0.62,
+    "end": 0.8
+   },
+   {
+    "word": "priest,",
+    "start": 0.8,
+    "end": 1.22
+   },
+   {
+    "word": "have",
+    "start": 1.4,
+    "end": 1.54
+   },
+   {
+    "word": "you?",
+    "start": 1.54,
+    "end": 1.7
+   },
+   {
+    "word": "He",
+    "start": 2.2,
+    "end": 2.6
+   },
+   {
+    "word": "does",
+    "start": 2.6,
+    "end": 2.92
+   },
+   {
+    "word": "get",
+    "start": 2.92,
+    "end": 3.18
+   },
+   {
+    "word": "through",
+    "start": 3.18,
+    "end": 3.42
+   },
+   {
+    "word": "his",
+    "start": 3.42,
+    "end": 3.7
+   },
+   {
+    "word": "matches.",
+    "start": 3.7,
+    "end": 4.08
    }
   ]
  },
@@ -27083,6 +29244,128 @@
     "word": "enough.",
     "start": 2.52,
     "end": 2.84
+   }
+  ]
+ },
+ "0ea5d072a2a48b": {
+  "file": "0212eb8dabfa49.mp3",
+  "speaker": "borin",
+  "duration": 7.338,
+  "words": [
+   {
+    "word": "That",
+    "start": 0.0,
+    "end": 0.26
+   },
+   {
+    "word": "edge",
+    "start": 0.26,
+    "end": 0.54
+   },
+   {
+    "word": "has",
+    "start": 0.54,
+    "end": 0.72
+   },
+   {
+    "word": "seen",
+    "start": 0.72,
+    "end": 0.98
+   },
+   {
+    "word": "better",
+    "start": 0.98,
+    "end": 1.28
+   },
+   {
+    "word": "days.",
+    "start": 1.28,
+    "end": 1.7
+   },
+   {
+    "word": "I'll",
+    "start": 1.96,
+    "end": 2.34
+   },
+   {
+    "word": "put",
+    "start": 2.34,
+    "end": 2.52
+   },
+   {
+    "word": "it",
+    "start": 2.52,
+    "end": 2.64
+   },
+   {
+    "word": "right",
+    "start": 2.64,
+    "end": 2.84
+   },
+   {
+    "word": "for",
+    "start": 2.84,
+    "end": 3.04
+   },
+   {
+    "word": "you,",
+    "start": 3.04,
+    "end": 3.2
+   },
+   {
+    "word": "lad,",
+    "start": 3.2,
+    "end": 3.54
+   },
+   {
+    "word": "but",
+    "start": 3.76,
+    "end": 4.0
+   },
+   {
+    "word": "it'll",
+    "start": 4.0,
+    "end": 4.22
+   },
+   {
+    "word": "cost",
+    "start": 4.22,
+    "end": 4.54
+   },
+   {
+    "word": "a",
+    "start": 4.54,
+    "end": 4.66
+   },
+   {
+    "word": "coin.",
+    "start": 4.66,
+    "end": 5.0
+   },
+   {
+    "word": "Whetstones",
+    "start": 5.4,
+    "end": 5.92
+   },
+   {
+    "word": "don't",
+    "start": 5.92,
+    "end": 6.26
+   },
+   {
+    "word": "grow",
+    "start": 6.26,
+    "end": 6.44
+   },
+   {
+    "word": "on",
+    "start": 6.44,
+    "end": 6.68
+   },
+   {
+    "word": "trees.",
+    "start": 6.68,
+    "end": 7.04
    }
   ]
  },
@@ -39548,6 +41831,208 @@
    }
   ]
  },
+ "16e742381cddfa": {
+  "file": "1fd0d12d436dec.mp3",
+  "speaker": "hemlock",
+  "duration": 14.768,
+  "words": [
+   {
+    "word": "Only",
+    "start": 0.0,
+    "end": 0.44
+   },
+   {
+    "word": "store",
+    "start": 0.44,
+    "end": 0.8
+   },
+   {
+    "word": "in",
+    "start": 0.8,
+    "end": 0.98
+   },
+   {
+    "word": "Willowbrook,",
+    "start": 0.98,
+    "end": 1.62
+   },
+   {
+    "word": "so",
+    "start": 1.74,
+    "end": 2.02
+   },
+   {
+    "word": "I",
+    "start": 2.02,
+    "end": 2.16
+   },
+   {
+    "word": "suppose",
+    "start": 2.16,
+    "end": 2.5
+   },
+   {
+    "word": "that",
+    "start": 2.5,
+    "end": 2.82
+   },
+   {
+    "word": "makes",
+    "start": 2.82,
+    "end": 3.1
+   },
+   {
+    "word": "it",
+    "start": 3.1,
+    "end": 3.24
+   },
+   {
+    "word": "the",
+    "start": 3.24,
+    "end": 3.38
+   },
+   {
+    "word": "finest.",
+    "start": 3.38,
+    "end": 3.7
+   },
+   {
+    "word": "Here's",
+    "start": 4.12,
+    "end": 4.58
+   },
+   {
+    "word": "what",
+    "start": 4.58,
+    "end": 4.74
+   },
+   {
+    "word": "I've",
+    "start": 4.74,
+    "end": 4.94
+   },
+   {
+    "word": "got",
+    "start": 4.94,
+    "end": 5.14
+   },
+   {
+    "word": "for",
+    "start": 5.14,
+    "end": 5.3
+   },
+   {
+    "word": "sale:",
+    "start": 5.3,
+    "end": 5.74
+   },
+   {
+    "word": "-",
+    "start": 5.74,
+    "end": 6.18
+   },
+   {
+    "word": "Rope:",
+    "start": 6.18,
+    "end": 6.58
+   },
+   {
+    "word": "1",
+    "start": 6.7,
+    "end": 7.02
+   },
+   {
+    "word": "coin",
+    "start": 7.02,
+    "end": 7.44
+   },
+   {
+    "word": "-",
+    "start": 7.44,
+    "end": 7.7
+   },
+   {
+    "word": "Sword:",
+    "start": 7.7,
+    "end": 8.22
+   },
+   {
+    "word": "5",
+    "start": 8.42,
+    "end": 8.7
+   },
+   {
+    "word": "coins",
+    "start": 8.7,
+    "end": 9.16
+   },
+   {
+    "word": "-",
+    "start": 9.16,
+    "end": 9.6
+   },
+   {
+    "word": "Armor:",
+    "start": 9.6,
+    "end": 9.84
+   },
+   {
+    "word": "10",
+    "start": 10.08,
+    "end": 10.22
+   },
+   {
+    "word": "coins",
+    "start": 10.22,
+    "end": 10.74
+   },
+   {
+    "word": "And",
+    "start": 11.0,
+    "end": 11.26
+   },
+   {
+    "word": "there's",
+    "start": 11.26,
+    "end": 11.52
+   },
+   {
+    "word": "an",
+    "start": 11.52,
+    "end": 11.64
+   },
+   {
+    "word": "apple",
+    "start": 11.64,
+    "end": 12.04
+   },
+   {
+    "word": "with",
+    "start": 12.04,
+    "end": 12.4
+   },
+   {
+    "word": "everything.",
+    "start": 12.4,
+    "end": 12.98
+   },
+   {
+    "word": "My",
+    "start": 13.3,
+    "end": 13.64
+   },
+   {
+    "word": "mother's",
+    "start": 13.64,
+    "end": 14.14
+   },
+   {
+    "word": "rule.",
+    "start": 14.14,
+    "end": 14.42
+   }
+  ]
+ },
  "1708cfdea28399": {
   "file": "1708cfdea28399.mp3",
   "speaker": "grandmother",
@@ -42750,6 +45235,118 @@
    }
   ]
  },
+ "187efa42477b5d": {
+  "file": "0341f6975f6267.mp3",
+  "speaker": "hemlock",
+  "duration": 6.548,
+  "words": [
+   {
+    "word": "Hold",
+    "start": 0.0,
+    "end": 0.3
+   },
+   {
+    "word": "on",
+    "start": 0.3,
+    "end": 0.5
+   },
+   {
+    "word": "there,",
+    "start": 0.5,
+    "end": 0.72
+   },
+   {
+    "word": "friend!",
+    "start": 0.84,
+    "end": 1.1
+   },
+   {
+    "word": "Those",
+    "start": 1.42,
+    "end": 1.82
+   },
+   {
+    "word": "matches",
+    "start": 1.82,
+    "end": 2.22
+   },
+   {
+    "word": "are",
+    "start": 2.22,
+    "end": 2.44
+   },
+   {
+    "word": "set",
+    "start": 2.44,
+    "end": 2.7
+   },
+   {
+    "word": "aside",
+    "start": 2.7,
+    "end": 3.04
+   },
+   {
+    "word": "for",
+    "start": 3.04,
+    "end": 3.26
+   },
+   {
+    "word": "the",
+    "start": 3.26,
+    "end": 3.38
+   },
+   {
+    "word": "priest.",
+    "start": 3.38,
+    "end": 3.76
+   },
+   {
+    "word": "He",
+    "start": 3.98,
+    "end": 4.32
+   },
+   {
+    "word": "gets",
+    "start": 4.32,
+    "end": 4.6
+   },
+   {
+    "word": "them",
+    "start": 4.6,
+    "end": 4.78
+   },
+   {
+    "word": "on",
+    "start": 4.78,
+    "end": 4.92
+   },
+   {
+    "word": "the",
+    "start": 4.92,
+    "end": 5.04
+   },
+   {
+    "word": "house",
+    "start": 5.04,
+    "end": 5.32
+   },
+   {
+    "word": "whenever",
+    "start": 5.32,
+    "end": 5.58
+   },
+   {
+    "word": "he",
+    "start": 5.58,
+    "end": 5.84
+   },
+   {
+    "word": "asks.",
+    "start": 5.84,
+    "end": 6.26
+   }
+  ]
+ },
  "18864a414506da": {
   "file": "18864a414506da.mp3",
   "speaker": "narrator",
@@ -43110,6 +45707,123 @@
     "word": "combat.",
     "start": 2.9,
     "end": 3.28
+   }
+  ]
+ },
+ "18a634b13c6937": {
+  "file": "1875997df3a14d.mp3",
+  "speaker": "hemlock",
+  "duration": 8.266,
+  "words": [
+   {
+    "word": "Hold",
+    "start": 0.0,
+    "end": 0.3
+   },
+   {
+    "word": "on",
+    "start": 0.3,
+    "end": 0.5
+   },
+   {
+    "word": "there,",
+    "start": 0.5,
+    "end": 0.7
+   },
+   {
+    "word": "friend!",
+    "start": 0.86,
+    "end": 1.08
+   },
+   {
+    "word": "That",
+    "start": 1.34,
+    "end": 1.76
+   },
+   {
+    "word": "sword",
+    "start": 1.76,
+    "end": 2.2
+   },
+   {
+    "word": "is",
+    "start": 2.2,
+    "end": 2.48
+   },
+   {
+    "word": "merchandise,",
+    "start": 2.48,
+    "end": 3.1
+   },
+   {
+    "word": "not",
+    "start": 3.5,
+    "end": 3.8
+   },
+   {
+    "word": "a",
+    "start": 3.8,
+    "end": 4.0
+   },
+   {
+    "word": "free",
+    "start": 4.0,
+    "end": 4.24
+   },
+   {
+    "word": "sample.",
+    "start": 4.24,
+    "end": 4.74
+   },
+   {
+    "word": "If",
+    "start": 5.04,
+    "end": 5.4
+   },
+   {
+    "word": "you",
+    "start": 5.4,
+    "end": 5.52
+   },
+   {
+    "word": "want",
+    "start": 5.52,
+    "end": 5.82
+   },
+   {
+    "word": "it,",
+    "start": 5.82,
+    "end": 5.94
+   },
+   {
+    "word": "you'll",
+    "start": 6.1,
+    "end": 6.4
+   },
+   {
+    "word": "need",
+    "start": 6.4,
+    "end": 6.58
+   },
+   {
+    "word": "to",
+    "start": 6.58,
+    "end": 6.76
+   },
+   {
+    "word": "buy",
+    "start": 6.76,
+    "end": 7.04
+   },
+   {
+    "word": "it",
+    "start": 7.04,
+    "end": 7.2
+   },
+   {
+    "word": "proper-like.",
+    "start": 7.2,
+    "end": 7.98
    }
   ]
  },
@@ -50193,6 +52907,113 @@
     "word": "go.",
     "start": 4.78,
     "end": 5.12
+   }
+  ]
+ },
+ "1bfabcc75c79cd": {
+  "file": "0b7271d3f682d6.mp3",
+  "speaker": "borin",
+  "duration": 5.201,
+  "words": [
+   {
+    "word": "A",
+    "start": 0.0,
+    "end": 0.14
+   },
+   {
+    "word": "coin's",
+    "start": 0.14,
+    "end": 0.5
+   },
+   {
+    "word": "no",
+    "start": 0.5,
+    "end": 0.68
+   },
+   {
+    "word": "use",
+    "start": 0.68,
+    "end": 0.94
+   },
+   {
+    "word": "to",
+    "start": 0.94,
+    "end": 1.08
+   },
+   {
+    "word": "me",
+    "start": 1.08,
+    "end": 1.28
+   },
+   {
+    "word": "without",
+    "start": 1.28,
+    "end": 1.52
+   },
+   {
+    "word": "something",
+    "start": 1.52,
+    "end": 1.98
+   },
+   {
+    "word": "to",
+    "start": 1.98,
+    "end": 2.16
+   },
+   {
+    "word": "put",
+    "start": 2.16,
+    "end": 2.34
+   },
+   {
+    "word": "an",
+    "start": 2.34,
+    "end": 2.46
+   },
+   {
+    "word": "edge",
+    "start": 2.46,
+    "end": 2.7
+   },
+   {
+    "word": "on,",
+    "start": 2.7,
+    "end": 2.92
+   },
+   {
+    "word": "lad.",
+    "start": 2.92,
+    "end": 3.24
+   },
+   {
+    "word": "Bring",
+    "start": 3.58,
+    "end": 3.84
+   },
+   {
+    "word": "the",
+    "start": 3.84,
+    "end": 4.0
+   },
+   {
+    "word": "dull",
+    "start": 4.0,
+    "end": 4.22
+   },
+   {
+    "word": "knife",
+    "start": 4.22,
+    "end": 4.52
+   },
+   {
+    "word": "as",
+    "start": 4.52,
+    "end": 4.74
+   },
+   {
+    "word": "well.",
+    "start": 4.74,
+    "end": 5.02
    }
   ]
  },

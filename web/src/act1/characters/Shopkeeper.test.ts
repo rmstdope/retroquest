@@ -536,7 +536,9 @@ describe('Hemlock, named from the first moment', () => {
   it('is named in narration, not by his trade, in the shut and open store', () => {
     for (const shopOpen of [false, true]) {
       const game = gameInStore({ shopOpen })
+      game.state.addItemToInventory(new Coin())
       const answer = game.commandParser.parse('give coin to shopkeeper')
+      expect(answer).toContain('[character_name]Hemlock[/character_name]')
       expect(answer).not.toMatch(/shopkeeper/i)
     }
     const game = gameInStore()
