@@ -510,10 +510,15 @@ onBeforeUnmount(() => {
   font-size: calc(24px * var(--lq-text-scale, 1));
   line-height: 1.5;
 }
-/* A checklist quest's needs stay a block in the middle, like the text around them. */
+/* A checklist quest's needs are one left-aligned column, as wide as its longest
+   line but at most 22em of the text's own size, centred under the paragraph;
+   a phone's card is narrower, so there the column fills it. */
 .lq-arrival-line :deep(.lq-quest-checklist),
 .lq-arrival-twin :deep(.lq-quest-checklist) {
-  align-items: center;
+  width: fit-content;
+  max-width: min(22em, 100%);
+  margin-inline: auto;
+  text-align: left;
 }
 .lq-arrival-event,
 .lq-arrival-twin :deep(.lq-arrival-event) {
