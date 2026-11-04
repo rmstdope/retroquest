@@ -128,9 +128,13 @@ describe('Act I stock replies', () => {
     )
   })
 
-  it('says only that something is not there, never the word typed', () => {
+  it('names the thing that is not there, as a failure line', () => {
     const game = new Game([new Act1()])
-    expect(game.examine('dragon')).toBe("You don't see that here.")
-    expect(game.examine('unicorn')).toBe("You don't see that here.")
+    expect(game.examine('dragon')).toBe(
+      "[failure]You don't see a 'dragon' to examine here or in your inventory.[/failure]",
+    )
+    expect(game.examine('unicorn')).toBe(
+      "[failure]You don't see a 'unicorn' to examine here or in your inventory.[/failure]",
+    )
   })
 })

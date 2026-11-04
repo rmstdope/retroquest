@@ -922,7 +922,27 @@ describe('Game', () => {
 
     it('asks what to examine and reports unknown targets', () => {
       expect(game.examine('')).toBe('Examine what?')
-      expect(game.examine('dragon')).toBe("You don't see that here.")
+      expect(game.examine('dragon')).toBe(
+        "[failure]You don't see a 'dragon' to examine here or in your inventory.[/failure]",
+      )
+      game.runState = GameRunState.ActRunning
+      game.handleInput('look at dragon')
+      expect(game.commandResult).toContain(
+        "You don't see a 'dragon' to examine here or in your inventory.",
+      )
+      for (const [name, article] of [
+        ['umbrella', 'an'],
+        ['ewer', 'an'],
+        ['user', 'a'],
+        ['usual coin', 'a'],
+        ['euphorbia', 'a'],
+        ['one coin', 'a'],
+      ]) {
+        expect(game.examine(name)).toContain(`see ${article} '${name}'`)
+      }
+      expect(game.examine('apple')).toBe(
+        "[failure]You don't see an 'apple' to examine here or in your inventory.[/failure]",
+      )
     })
   })
 

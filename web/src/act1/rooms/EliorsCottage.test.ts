@@ -31,14 +31,14 @@ describe("Elior's Cottage hearth", () => {
 
   it('can be examined, and answers about the hearth', () => {
     const answer = cottage().examine('hearth')
-    expect(answer).not.toContain("You don't see that here")
+    expect(answer).not.toContain("You don't see")
     expect(answer).toMatch(/hearth/i)
   })
 
   it('is scenery that stays put, and leaves the bread hidden', () => {
     const game = cottage()
     game.examine('hearth')
-    expect(game.examine('bread')).toContain("You don't see that here")
+    expect(game.examine('bread')).toContain("You don't see a 'bread'")
     expect(game.state.currentRoom.getItemByName('hearth')).not.toBeNull()
   })
 

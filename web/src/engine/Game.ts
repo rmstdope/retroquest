@@ -541,13 +541,19 @@ Welcome to
     return ''
   }
 
+  /** Describe the named item or character; a thing not here is a silent failure line. */
   examine(target: string): string {
     if (!target) return 'Examine what?'
     const item = this.findItem(target)
     if (item) return item.examine(this.state)
     const character = this.findCharacter(target)
     if (character) return character.examine(this.state)
-    return "You don't see that here."
+    const vowelSound = /^(?!uni|use|usu|eu|one)[aeiou]/i.test(target.trim())
+    const article = vowelSound ? 'an' : 'a'
+    return (
+      `[failure]You don't see ${article} '${target}' to examine ` +
+      'here or in your inventory.[/failure]'
+    )
   }
 
   /** The visited rooms and their exits. */
