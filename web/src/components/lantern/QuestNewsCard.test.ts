@@ -163,4 +163,49 @@ describe('QuestNewsCard', () => {
     )
     expect(w.find('button.lq-open-journal').exists()).toBe(false)
   })
+
+  describe('an updated quest read aloud', () => {
+    const update = {
+      kind: 'updated' as const,
+      name: 'Hint of Magic',
+      main: false,
+      text: 'The force grows.',
+    }
+
+    it('stays folded unless it is told to open', () => {
+      const w = mount(QuestNewsCard, { props: { news: update } })
+      expect(w.get('.lq-update').attributes('aria-expanded')).toBe('false')
+      expect(w.get('.lq-update-toggle').text()).toBe('Show ▾')
+      expect(w.find('.lq-update-body').exists()).toBe(false)
+    })
+
+    it('opens by itself when told to, and Hide folds it again', async () => {
+      const w = mount(QuestNewsCard, {
+        props: { news: update, autoOpen: true },
+      })
+      expect(w.get('.lq-update').attributes('aria-expanded')).toBe('true')
+      expect(w.get('.lq-update-toggle').text()).toBe('Hide ▴')
+      expect(w.get('.lq-update-body').text()).toBe('The force grows.')
+      await w.get('.lq-update').trigger('click')
+      expect(w.get('.lq-update').attributes('aria-expanded')).toBe('false')
+      await w.setProps({ kickerHtml: 'Quest updated' })
+      expect(w.get('.lq-update').attributes('aria-expanded')).toBe('false')
+    })
+
+    it('opens when told to after it is up, and shows the marked words', async () => {
+      const w = mount(QuestNewsCard, {
+        props: {
+          news: update,
+          kickerHtml: '<span data-w="0">Quest</span> updated',
+          nameHtml: '<span data-w="2">Hint</span>',
+          bodyHtml: '<span data-w="3">The</span> force grows.',
+        },
+      })
+      expect(w.find('.lq-update-body').exists()).toBe(false)
+      await w.setProps({ autoOpen: true })
+      expect(w.get('.lq-update-body [data-w="3"]').text()).toBe('The')
+      expect(w.get('.lq-update-text [data-w="0"]').text()).toBe('Quest')
+      expect(w.get('.lq-update-text [data-w="2"]').text()).toBe('Hint')
+    })
+  })
 })

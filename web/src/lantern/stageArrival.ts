@@ -6,6 +6,7 @@ import { blockVoice, NARRATOR } from './narrationScript'
 import { SPELL_HEADING, type SpellNews } from './spellNews'
 import {
   newQuestKicker,
+  QUEST_UPDATED_KICKER,
   questCompleteKicker,
   type QuestNews,
 } from './questNews'
@@ -184,7 +185,7 @@ export function newsOnPicture(turn: {
 
 /** The heading of a piece of quest news (the slim line has no count; the middle adds the act's count to a completion). */
 export function newsSlimHeading(news: QuestNews): string {
-  if (news.kind === 'updated') return 'Quest updated'
+  if (news.kind === 'updated') return QUEST_UPDATED_KICKER
   return news.kind === 'new'
     ? newQuestKicker(news.main)
     : questCompleteKicker(news.main)

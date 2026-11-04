@@ -20,6 +20,7 @@ import {
   newSpellBlocks,
   questCompleteBlocks,
   questTextBlocks,
+  questUpdatedBlocks,
   turnBlocks,
   UNSIGNED,
   type ScriptBranch,
@@ -176,6 +177,20 @@ describe('the voiced blocks a surface shows', () => {
       { speaker: 'narrator', markup: 'Main quest complete' },
       { speaker: 'narrator', markup: 'The Faded Photograph' },
       { speaker: 'narrator', markup: 'You found it.' },
+    ])
+  })
+
+  it('reads an updated quest’s heading and name before its new entry', () => {
+    expect(
+      questUpdatedBlocks({
+        main: false,
+        name: 'Hint of Magic',
+        text: 'The force grows.',
+      }),
+    ).toEqual([
+      { speaker: 'narrator', markup: 'Quest updated' },
+      { speaker: 'narrator', markup: 'Hint of Magic' },
+      { speaker: 'narrator', markup: 'The force grows.' },
     ])
   })
 

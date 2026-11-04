@@ -35,3 +35,6 @@ export function newQuestKicker(main: boolean): string {
 export function questCompleteKicker(main: boolean): string {
   return `${main ? 'Main' : 'Side'} quest complete`
 }
+
+/** The heading of a quest's update: "Quest updated". */
+export const QUEST_UPDATED_KICKER = 'Quest updated'

@@ -32,7 +32,11 @@ import { GameController, type Game } from '@/engine'
 import { narrationKey, narrationText } from './narrationKey'
 import { parseActIntro } from './parseActIntro'
 import { parseTurn, type TurnBlock } from './parseTurn'
-import { newQuestKicker, questCompleteKicker } from './questNews'
+import {
+  newQuestKicker,
+  QUEST_UPDATED_KICKER,
+  questCompleteKicker,
+} from './questNews'
 import {
   SPELL_HEADING,
   toSpellNews,
@@ -159,6 +163,15 @@ export function newSpellBlocks(spell: SpellNews): VoicedBlock[] {
 export function questCompleteBlocks(quest: QuestShown): VoicedBlock[] {
   return [
     { speaker: NARRATOR, markup: questCompleteKicker(quest.main) },
+    { speaker: NARRATOR, markup: quest.name },
+    ...questTextBlocks(quest.text),
+  ]
+}
+
+/** A quest's update: its heading ("Quest updated"), its name, then its new journal entry or checklist lines. */
+export function questUpdatedBlocks(quest: QuestShown): VoicedBlock[] {
+  return [
+    { speaker: NARRATOR, markup: QUEST_UPDATED_KICKER },
     { speaker: NARRATOR, markup: quest.name },
     ...questTextBlocks(quest.text),
   ]
@@ -329,7 +342,7 @@ export function actScript(
   const settle = (controller: GameController): void => {
     const quests = controller.settleQuests()
     for (const report of quests.activated) add(newQuestBlocks(report))
-    for (const report of quests.updated) add(questTextBlocks(report.text))
+    for (const report of quests.updated) add(questUpdatedBlocks(report))
     for (const report of quests.completed) add(questCompleteBlocks(report))
   }
   tryProbes()

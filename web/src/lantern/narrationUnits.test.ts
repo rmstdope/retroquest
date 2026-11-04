@@ -88,13 +88,14 @@ describe('turnUnits', () => {
     expect(again.at(-1)?.parts).toEqual([])
   })
 
-  it('reads a new quest card as its heading, name, text and each checklist item, and no other quest record', () => {
+  it('reads a new quest card as its heading, name, text and each checklist item, and an update likewise under its own heading', () => {
     const card = 'Find the key.\n[pending]* Look in the barn[/pending]'
     const clips = manifestOf(
       [NARRATOR, 'New main quest'],
       [NARRATOR, 'Key'],
       [NARRATOR, 'Find the key.'],
       [NARRATOR, 'Look in the barn'],
+      [NARRATOR, 'Quest updated'],
     )
     const quest = (kind: 'new' | 'updated') => ({
       kind,
@@ -115,7 +116,18 @@ describe('turnUnits', () => {
       'Look in the barn',
     ])
     expect(units[0].parts.every((p) => p.clip)).toBe(true)
-    expect(units[1].parts).toEqual([])
+    expect(units[1].parts.map((p) => p.markup)).toEqual([
+      'Quest updated',
+      'Key',
+      'Find the key.',
+      'Look in the barn',
+    ])
+    expect(units[1].parts.map((p) => !!p.clip)).toEqual([
+      true,
+      true,
+      true,
+      true,
+    ])
   })
 })
 

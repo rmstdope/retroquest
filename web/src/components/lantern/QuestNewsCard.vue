@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { computed, nextTick, ref, useId } from 'vue'
+import { computed, nextTick, ref, useId, watch } from 'vue'
 import {
   newQuestKicker,
+  QUEST_UPDATED_KICKER,
   questCompleteKicker,
   type QuestNews,
 } from '@/lantern/questNews'
@@ -29,11 +30,23 @@ const props = defineProps<{
   nameHtml?: string
   /** The card's text as HTML with its words marked, while it is read aloud. */
   bodyHtml?: string
+  /**
+   * An update opens by itself (narration on, the notice reached): it opens
+   * when this turns true and never folds it again, so Hide stays Hide.
+   */
+  autoOpen?: boolean
 }>()
-const open = ref(false)
+const open = ref(props.autoOpen === true)
 const game = useGameStore()
 const updateBody = ref<HTMLElement | null>(null)
 const titleId = useId()
+
+watch(
+  () => props.autoOpen,
+  (auto) => {
+    if (auto) open.value = true
+  },
+)
 
 async function toggle(): Promise<void> {
   open.value = !open.value
@@ -139,7 +152,11 @@ const doneCount = computed(() => {
         <path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z" />
       </svg>
       <span class="lq-update-text"
-        >Quest updated · <strong>{{ news.name }}</strong></span
+        ><!-- eslint-disable vue/no-v-html --><span
+          v-html="kickerHtml ?? escapeHtml(QUEST_UPDATED_KICKER)"
+        ></span>
+        · <strong v-html="nameHtml ?? escapeHtml(news.name)"></strong
+        ><!-- eslint-enable vue/no-v-html --></span
       >
       <span class="lq-update-toggle" aria-hidden="true">{{
         open ? 'Hide ▴' : 'Show ▾'
@@ -150,7 +167,7 @@ const doneCount = computed(() => {
       v-if="open"
       ref="updateBody"
       class="lq-quest-body lq-update-body"
-      v-html="questTextHtml(news.text)"
+      v-html="bodyHtml ?? questTextHtml(news.text)"
     ></div>
     <!-- eslint-enable vue/no-v-html -->
   </div>
