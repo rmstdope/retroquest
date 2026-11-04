@@ -68,17 +68,15 @@ export interface SpeechTurn {
 }
 
 /**
- * Whether `speaker`'s quotes in `turn` are told as speech on the right rather
- * than on the narrator's card. A conversation (a turn that addresses someone)
- * tells every speaker's, also when the talk itself takes Elior to another
- * room (answering the dream's voice); any other turn that leaves the room
- * tells none; any other turn tells only Elior's own words, such as his
- * journal.
+ * Whether a named speaker's quotes in `turn` are told as speech on the right
+ * rather than on the narrator's card: in every turn that stays in the room,
+ * whatever the command (a talk, a spell cast on someone, an item used), and in
+ * a conversation (a turn that addresses someone) also when the talk itself
+ * takes Elior to another room (answering the dream's voice). Any other turn
+ * that leaves the room tells none: its picture is of the room left behind.
  */
-export function toldAsSpeech(turn: SpeechTurn, speaker: string): boolean {
-  if (turn.addressed) return true
-  if (turn.description?.moved === true) return false
-  return displayName(speaker) === ELIOR
+export function toldAsSpeech(turn: SpeechTurn): boolean {
+  return !!turn.addressed || turn.description?.moved !== true
 }
 
 /** The "say <words> to <character>" command: what Elior says, and to whom. */

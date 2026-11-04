@@ -139,7 +139,7 @@ describe('useStageSpeechStore', () => {
     expect(speech.visible).toEqual([])
   })
 
-  it("shows Elior's own lines from a turn that addresses no one, and only his", () => {
+  it('shows every named line of a turn that addresses no one, on a fresh conversation', () => {
     const speech = useStageSpeechStore()
     speech.observe(turn(say('Mira', 'Hello.'), 'Mira'))
     speech.observe(
@@ -152,6 +152,22 @@ describe('useStageSpeechStore', () => {
     speech.revealAll()
     expect(speech.visible.map((l) => [l.speaker, l.side, l.markup])).toEqual([
       ['Elior', 'left', 'The storm.'],
+      ['Mira', 'right', 'Hm.'],
+    ])
+  })
+
+  it("shows a character's reply to a spell cast on them as speech", () => {
+    const speech = useStageSpeechStore()
+    speech.observe(
+      turn(
+        `Warmth spreads through his arm.\n${say('fisherman', 'Not a twinge.')}`,
+        null,
+        'cast heal on fisherman',
+      ),
+    )
+    speech.revealAll()
+    expect(speech.visible.map((l) => [l.speaker, l.side, l.markup])).toEqual([
+      ['Fisherman', 'right', 'Not a twinge.'],
     ])
   })
 

@@ -88,6 +88,19 @@ describe('turnHasCard', () => {
     expect(turnHasCard(talk, true)).toBe(false)
   })
 
+  it('leaves a quote-only reply to the speech when nobody is addressed, unless the turn leaves the room', () => {
+    const text =
+      '[character_name]Fisherman[/character_name]\n[dialogue]Not a twinge.[/dialogue]'
+    const cast = turn({ command: 'cast heal on fisherman', text })
+    expect(turnHasCard(cast, true)).toBe(false)
+    const left = turn({
+      command: 'go north',
+      text,
+      description: { moved: true, firstVisit: false },
+    })
+    expect(turnHasCard(left, true)).toBe(true)
+  })
+
   it('is true for a command whose answer the narrator tells, and for a loss to the bag but not a gain alone', () => {
     expect(turnHasCard(turn({ command: 'look', text: 'It is quiet.' }))).toBe(
       true,

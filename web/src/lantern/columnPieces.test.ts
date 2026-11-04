@@ -58,17 +58,17 @@ describe('columnPieces', () => {
     expect(kinds(t)).toEqual(['card', 'line:Elior', 'line:Mira'])
   })
 
-  it('leaves the quotes with the narrator when nobody is addressed', () => {
+  it('tells the quotes as lines when nobody is addressed', () => {
     const t = turn(say('Mira', 'Hello.'), { addressed: undefined })
-    expect(kinds(t)).toEqual(['card'])
+    expect(kinds(t)).toEqual(['card', 'line:Mira'])
   })
 
-  it("puts Elior's own lines on the speech side even when nobody is addressed", () => {
+  it("puts Elior's and everyone's lines on the speech side when nobody is addressed", () => {
     const t = turn(
       `The ink is smudged.\n${say('Elior', 'The storm.')}\n${say('Mira', 'Hello.')}`,
       { command: 'use journal', addressed: undefined },
     )
-    expect(kinds(t)).toEqual(['card', 'line:Elior', 'card'])
+    expect(kinds(t)).toEqual(['card', 'line:Elior', 'line:Mira'])
   })
 
   it("leaves Elior's lines with the narrator when the turn leaves the room", () => {
