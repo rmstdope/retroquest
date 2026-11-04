@@ -15,12 +15,24 @@
   "file": "act1-eliors-cottage.mp3",
   "duration": 60.0
  },
+ "act1-forest-path": {
+  "file": "act1-forest-path.mp3",
+  "duration": 60.0
+ },
  "act1-general-store": {
   "file": "act1-general-store.mp3",
   "duration": 60.0
  },
+ "act1-hidden-glade": {
+  "file": "act1-hidden-glade.mp3",
+  "duration": 60.0
+ },
  "act1-miras-hut": {
   "file": "act1-miras-hut.mp3",
+  "duration": 60.0
+ },
+ "act1-old-mill": {
+  "file": "act1-old-mill.mp3",
   "duration": 60.0
  },
  "act1-riverbank": {
@@ -33,6 +45,10 @@
  },
  "act1-vegetable-field": {
   "file": "act1-vegetable-field.mp3",
+  "duration": 60.0
+ },
+ "act1-village-chapel": {
+  "file": "act1-village-chapel.mp3",
   "duration": 60.0
  },
  "act1-village-square": {

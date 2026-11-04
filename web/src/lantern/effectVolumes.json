@@ -1,1 +1,37 @@
-{}
+{
+  "act1-blacksmiths-forge": {
+    "anvil-strike": 0.5
+  },
+  "act1-chicken-coop": {
+    "chickens": 0.65,
+    "hen-squawk": 0.65
+  },
+  "act1-eliors-cottage": {
+    "hearth-fire": 1.5
+  },
+  "act1-general-store": {
+    "glass-clink": 0.5,
+    "shop-bell": 0.6
+  },
+  "act1-miras-hut": {
+    "glass-clink": 0.3
+  },
+  "act1-riverbank": {
+    "insects-hum": 0.2,
+    "river": 0.3
+  },
+  "act1-the-dream": {
+    "lightning": 2.8,
+    "rain": 1.5
+  },
+  "act1-vegetable-field": {
+    "crow-caw": 2.25
+  },
+  "act1-village-square": {
+    "fountain": 0.4,
+    "village-murmur": 1.4
+  },
+  "act1-village-well": {
+    "well-drip": 0.6
+  }
+}

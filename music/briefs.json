@@ -6,8 +6,10 @@
  "act1-general-store": {"bpm":70,"key":"A major"},
  "act1-miras-hut": {"brief":"instrumental background loop for Mira's Hut: A small hut hung with drying herbs: lavender, sage, and roots in bundles from the rafters. Shelves of bottles line the walls, every one labelled, no vocals. Mysterious and dark.","bpm":75,"key":"F minor"},
  "act1-riverbank": {"bpm":68,"key":"F major"},
+ "act1-road-to-greendale": {"bpm":50,"key":"A major"},
  "act1-the-dream": {"brief":"Dark. Stormy. Piano and violin playing staccato.","bpm":180,"key":"D minor"},
  "act1-vegetable-field": {"bpm":60,"key":"G minor"},
+ "act1-village-chapel": {"brief":"instrumental background loop for Village Chapel: A small stone chapel. Its stained glass windows cast colours across the worn pews, and the air is cool and smells of candle wax. A kindly priest tends the altar, no vocals. only organ."},
  "act1-village-square": {"brief":"instrumental background loop for Village Square: The heart of the medieval village Willowbrook: cobblestones around an old stone fountain, and a weathered notice board covered in faded announcements. Half the market stalls stand empty, no vocals. soft but cheerful.","bpm":115,"key":"C major"},
  "act1-village-well": {"bpm":45,"key":"F major"}
 }

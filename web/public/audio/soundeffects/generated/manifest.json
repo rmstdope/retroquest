@@ -1,14 +1,86 @@
 {
+ "anvil-strike": {
+  "file": "anvil-strike.mp3",
+  "duration": 3.911
+ },
+ "birdsong": {
+  "file": "birdsong.mp3",
+  "duration": 20.0
+ },
+ "breeze-leaves": {
+  "file": "breeze-leaves.mp3",
+  "duration": 20.0
+ },
+ "cat-purr": {
+  "file": "cat-purr.mp3",
+  "duration": 20.0
+ },
+ "chapel-hush": {
+  "file": "chapel-hush.mp3",
+  "duration": 20.0
+ },
+ "chickens": {
+  "file": "chickens.mp3",
+  "duration": 20.0
+ },
+ "crow-caw": {
+  "file": "crow-caw.mp3",
+  "duration": 2.812
+ },
+ "fountain": {
+  "file": "fountain.mp3",
+  "duration": 20.0
+ },
+ "fox-whimper": {
+  "file": "fox-whimper.mp3",
+  "duration": 2.778
+ },
+ "glade-hush": {
+  "file": "glade-hush.mp3",
+  "duration": 20.0
+ },
+ "glass-clink": {
+  "file": "glass-clink.mp3",
+  "duration": 1.524
+ },
  "hearth-fire": {
   "file": "hearth-fire.mp3",
+  "duration": 20.0
+ },
+ "hen-squawk": {
+  "file": "hen-squawk.mp3",
+  "duration": 2.765
+ },
+ "insects-hum": {
+  "file": "insects-hum.mp3",
   "duration": 20.0
  },
  "lightning": {
   "file": "lightning.mp3",
   "duration": 4.626
  },
+ "mechanism-whir": {
+  "file": "mechanism-whir.mp3",
+  "duration": 20.0
+ },
  "rain": {
   "file": "rain.mp3",
   "duration": 20.0
+ },
+ "river": {
+  "file": "river.mp3",
+  "duration": 20.0
+ },
+ "shop-bell": {
+  "file": "shop-bell.mp3",
+  "duration": 1.989
+ },
+ "village-murmur": {
+  "file": "village-murmur.mp3",
+  "duration": 20.0
+ },
+ "well-drip": {
+  "file": "well-drip.mp3",
+  "duration": 1.536
  }
 }
