@@ -521,6 +521,35 @@ describe('LanternLayout: the arrival on the picture', () => {
       expect(card(w)).toBe('')
     })
 
+    it('after Escape, shows the skipped lines first and holds the card; Space brings it up, a second Escape ends it', async () => {
+      const w = await ready(true, true)
+      useGameStore(pinia).setAudioPlayer({
+        playNewQuest: vi.fn(),
+        playQuestComplete: vi.fn(),
+        playNewSpell: vi.fn(),
+      })
+      pushTurn({ ...news(), text: 'A green garden.', narrate: true })
+      await vi.advanceTimersByTimeAsync(0)
+      await key('Escape')
+      await vi.advanceTimersByTimeAsync(0)
+      // The skipped line is on the story, not pushed aside by the card.
+      expect(card(w)).toBe('')
+      expect(storyAside(w)).toBe(false)
+      expect(w.get('.lq-story').text()).toContain('A green garden.')
+      await key(' ')
+      expect(card(w)).toContain('Hint of Magic')
+
+      pushTurn({ ...news(91), text: 'A green garden.', narrate: true })
+      await vi.advanceTimersByTimeAsync(0)
+      await key('Escape')
+      await vi.advanceTimersByTimeAsync(0)
+      expect(useArrivalStore(pinia).holding).toBe(true)
+      await key('Escape')
+      expect(useArrivalStore(pinia).holding).toBe(false)
+      await vi.advanceTimersByTimeAsync(10000)
+      expect(card(w)).toBe('')
+    })
+
     it('ends all the news of the turn with Escape', async () => {
       const w = await ready(true, false)
       useSettingsStore(pinia).narrationOn = false

@@ -310,15 +310,22 @@ export const useNarrationStore = defineStore('narration', () => {
       if (narrationWords(markup).length) ms += readingPauseMs(markup)
     }
     const unit = now.units[now.unit]
-    if (now.speaking && unit?.kind === 'block')
+    // The block in hand: from the word being spoken on, or, between two of its
+    // recordings, its parts still to come.
+    if (unit?.kind === 'block' && now.unit < now.revealed)
       unit.parts.slice(now.part).forEach((part, i) => {
         const words = narrationWords(part.markup)
-        read(i === 0 ? words.slice(now.word + 1).join(' ') : part.markup)
+        read(
+          i === 0 && now.speaking
+            ? words.slice(now.word + 1).join(' ')
+            : part.markup,
+        )
       })
     if (all)
       now.units.forEach((each, u) => {
-        if (u >= now.revealed && each.kind === 'block')
-          each.parts.forEach((part) => read(part.markup))
+        if (u < now.revealed || each.kind !== 'block') return
+        each.parts.forEach((part) => read(part.markup))
+        if (each.silent) read(each.silent)
       })
     return ms
   }

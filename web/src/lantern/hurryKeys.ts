@@ -46,7 +46,7 @@ export interface HurryKeyPress {
   inOpenList: boolean
   /** A change of scene is under way. */
   scene: boolean
-  /** An arrival is shown on the picture. */
+  /** An arrival is shown on the picture, or its news is held for the lines before it to be read. */
   arrival: boolean
   /** The narrator is reading. */
   narrating: boolean

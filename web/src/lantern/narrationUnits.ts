@@ -45,6 +45,8 @@ export interface NarrationUnit {
   kind: 'block' | 'arrival' | 'spell' | 'quest'
   /** The lines spoken in turn; empty when the unit is silent. */
   parts: NarrationPart[]
+  /** A block nobody voices (an event line): its words, read for their time when a skip shows them unspoken. */
+  silent?: string
   /** A longer pause before the unit is shown and read (ms), counted from the last voice. */
   pauseBefore?: number
 }
@@ -120,10 +122,10 @@ export function turnUnits(
 ): NarrationUnit[] {
   const units: NarrationUnit[] = parseTurn(turn.text).map((block) => {
     const voice = blockVoice(block)
-    return {
-      kind: 'block',
-      parts: voice ? partsOf([voice], manifest) : [],
-    }
+    if (voice) return { kind: 'block', parts: partsOf([voice], manifest) }
+    return 'markup' in block
+      ? { kind: 'block', parts: [], silent: block.markup }
+      : { kind: 'block', parts: [] }
   })
   if (turn.arrival)
     units.push({
