@@ -32,11 +32,12 @@ import { readingPauseMs } from '@/lantern/stageSpeech'
  * - A talk that moves Elior can stop before the unit where its scene changes
  *   (`begin`'s `sceneAt`): `atSceneChange` says it is there, and
  *   `passSceneChange` lets it go on once the new picture is up.
- * - Words of the turn that a hurry or a skip shows unspoken are owed their
- *   reading time (`readingPauseMs` per paragraph): news after them (a spell
- *   or quest unit) waits until it has passed, and `owedReadingMs` tells the
- *   news of a skipped turn how long to wait, so a card never covers lines the
- *   player has not seen.
+ * - Words of the turn shown unspoken (by a hurry, a skip, or a block with no
+ *   voice, such as an event line) are owed their reading time
+ *   (`readingPauseMs` per paragraph): news after them (a spell or quest unit)
+ *   waits until it has passed, and `owedReadingMs` tells the news of a
+ *   skipped turn how long to wait, so a card never covers lines the player
+ *   has not seen.
  * - Nothing here is saved; a turn that is not the active one shows whole.
  */
 
@@ -321,6 +322,8 @@ export const useNarrationStore = defineStore('narration', () => {
             : part.markup,
         )
       })
+    if (unit?.kind === 'block' && now.unit < now.revealed && unit.silent)
+      read(unit.silent)
     if (all)
       now.units.forEach((each, u) => {
         if (u < now.revealed || each.kind !== 'block') return
@@ -394,6 +397,11 @@ export const useNarrationStore = defineStore('narration', () => {
       }
       if (now.part === 0) now.revealed = now.unit + 1
       if (index < 0) {
+        // A block shown with no voice (an event line) is owed its reading: news waits for it.
+        if (unit.kind === 'block') {
+          const ms = unspokenMs(now, false)
+          if (ms) now.owedUntil = Math.max(now.owedUntil, Date.now()) + ms
+        }
         now.unit++
         now.part = 0
         continue

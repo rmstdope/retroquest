@@ -180,6 +180,20 @@ describe('useNarrationStore', () => {
       expect(narration.speaking(1)?.unit).toBe(1)
     })
 
+    it('a hurry that passes an event line on its way to the news holds the news for it too', async () => {
+      narration.begin(1, [twoParts, event, quest], 'act1')
+      narration.hurry()
+      const owed =
+        readingPauseMs('w0 w1 w2 w3') +
+        readingPauseMs('Forgive me if I am short with you.') +
+        readingPauseMs('You receive a coin.')
+      await vi.advanceTimersByTimeAsync(owed - 1)
+      expect(narration.revealed(1, 1)).toBe(true)
+      expect(narration.revealed(1, 2)).toBe(false)
+      await vi.advanceTimersByTimeAsync(1)
+      expect(narration.revealed(1, 2)).toBe(true)
+    })
+
     it('a second hurry while the news is held brings it now', async () => {
       narration.begin(1, [twoParts, quest], 'act1')
       narration.hurry()
