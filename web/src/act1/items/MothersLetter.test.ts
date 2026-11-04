@@ -70,19 +70,19 @@ describe("The mother's letter at the river bend", () => {
     expect(description).toContain('amulet')
   })
 
-  it('completes The Faded Photograph when it is read, not before', () => {
+  it('completes The faded photograph when it is read, not before', () => {
     executeCommands(game, [
       'examine faded photograph',
       'give faded photograph to fisherman',
       'search',
       'take letter',
     ])
-    expect(game.state.isQuestCompleted('The Faded Photograph')).toBe(false)
+    expect(game.state.isQuestCompleted('The faded photograph')).toBe(false)
 
     executeCommands(game, ['examine letter'])
 
     expect(game.state.getStoryFlag(FLAG_READ_MOTHERS_LETTER)).toBe(true)
-    expect(game.state.isQuestCompleted('The Faded Photograph')).toBe(true)
+    expect(game.state.isQuestCompleted('The faded photograph')).toBe(true)
   })
 
   it('can be read by using it as well', () => {

@@ -28,7 +28,7 @@ export class ShadowsOverWillowbrookQuest extends Quest {
 
   constructor() {
     super({
-      name: 'Shadows Over Willowbrook',
+      name: 'Shadows over Willowbrook',
       description:
         'Something is wrong in Willowbrook. The crops are failing, the well ' +
         'smells sour, and the village keeps its voice down.',
@@ -37,6 +37,13 @@ export class ShadowsOverWillowbrookQuest extends Quest {
         'Willowbrook looking for an amulet. ' +
         'You carry that amulet now, on the road to Greendale.',
     })
+  }
+
+  /** Give a save made with the title-case name the current name and completion. */
+  override refreshSavedText(): void {
+    const current = new ShadowsOverWillowbrookQuest()
+    this.name = current.name
+    this.completion = current.completion
   }
 
   /** Given when the player wakes from the dream in the cottage. */

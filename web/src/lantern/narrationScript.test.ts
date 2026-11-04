@@ -170,12 +170,12 @@ describe('the voiced blocks a surface shows', () => {
     expect(
       questCompleteBlocks({
         main: true,
-        name: 'The Faded Photograph',
+        name: 'The faded photograph',
         text: 'You found it.',
       }),
     ).toEqual([
       { speaker: 'narrator', markup: 'Main quest complete' },
-      { speaker: 'narrator', markup: 'The Faded Photograph' },
+      { speaker: 'narrator', markup: 'The faded photograph' },
       { speaker: 'narrator', markup: 'You found it.' },
     ])
   })
@@ -331,7 +331,7 @@ describe('actScript for Act I', () => {
       'New side quest',
       'Side quest complete',
       'Main quest complete',
-      'The Faded Photograph',
+      'The faded photograph',
     ])
       expect(find(words)?.speaker, words).toBe('narrator')
   })
@@ -559,7 +559,7 @@ describe('actScript hints', () => {
   it('reads a quest line whole, with the quest name in front', () => {
     const line = script.find((l) =>
       l.text.startsWith(
-        'Shadows Over Willowbrook: In the square, Tilda has more',
+        'Shadows over Willowbrook: In the square, Tilda has more',
       ),
     )
     expect(line?.speaker).toBe('narrator')

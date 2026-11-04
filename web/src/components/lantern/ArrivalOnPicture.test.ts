@@ -411,7 +411,7 @@ describe('ArrivalOnPicture', () => {
         kind: 'news',
         news: {
           kind: 'completed',
-          name: 'Hint of Magic',
+          name: 'Hint of magic',
           main: false,
           text: 'x',
           progress: { completed: 1, total: 11 },
@@ -425,11 +425,11 @@ describe('ArrivalOnPicture', () => {
       await w.trigger('click')
       await w.vm.$nextTick()
       expect(lines(w)).toEqual(['Cccccccccc dddd.'])
-      expect(w.get('.lq-news-name').text()).toBe('Hint of Magic')
+      expect(w.get('.lq-news-name').text()).toBe('Hint of magic')
       await w.trigger('click')
       await w.vm.$nextTick()
       expect(lines(w)).toEqual(['Eeee.'])
-      expect(w.get('.lq-news-name').text()).toBe('Hint of Magic')
+      expect(w.get('.lq-news-name').text()).toBe('Hint of magic')
       expect(w.find('.lq-news-seal').exists()).toBe(true)
       expect(w.get('.lq-news-kicker').text()).toBe(
         'Side quest complete · 1 of 11',
@@ -580,7 +580,7 @@ describe('ArrivalOnPicture', () => {
     })
     const done: QuestNews = {
       kind: 'completed',
-      name: 'Hint of Magic',
+      name: 'Hint of magic',
       main: false,
       text: 'It [bold]stayed[/bold].',
       progress: { completed: 1, total: 11 },
@@ -606,7 +606,7 @@ describe('ArrivalOnPicture', () => {
       expect(w.get('.lq-news-kicker').text()).toBe(
         'Side quest complete · 1 of 11',
       )
-      expect(w.get('.lq-news-name').text()).toBe('Hint of Magic')
+      expect(w.get('.lq-news-name').text()).toBe('Hint of magic')
       expect(w.get('.lq-arrival-line').text()).toBe('It stayed.')
       expect(w.get('.lq-arrival-hint').text()).toBe(
         'Click or press Enter to continue',

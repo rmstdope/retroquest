@@ -5,7 +5,7 @@ import { FLAG_WOKE_FROM_DREAM } from '../Act1StoryFlags'
 export class HintOfMagicQuest extends Quest {
   constructor() {
     super({
-      name: 'Hint of Magic',
+      name: 'Hint of magic',
       description:
         'You woke with three words written down and a tune still going in the house. ' +
         `${characterName('Grandmother')} is at the hearth, ` +
@@ -15,6 +15,13 @@ export class HintOfMagicQuest extends Quest {
         'and his word for calling a thing back. ' +
         'It came to you as she spoke, and it stayed.',
     })
+  }
+
+  /** Give a save made with the title-case name the current name and completion. */
+  override refreshSavedText(): void {
+    const current = new HintOfMagicQuest()
+    this.name = current.name
+    this.completion = current.completion
   }
 
   /** Given when Elior wakes from the dream in his cottage. */

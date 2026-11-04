@@ -14,7 +14,7 @@ function plain(text: string): string {
 
 const LOGS: Array<[string, Quest, string, string]> = [
   [
-    'Hint of Magic',
+    'Hint of magic',
     new HintOfMagicQuest(),
     'You woke with three words written down and a tune still going in the house. ' +
       'Grandmother is at the hearth, and she will want to hear about the dream.',

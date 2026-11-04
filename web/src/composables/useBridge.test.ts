@@ -195,7 +195,7 @@ describe('useBridge', () => {
         completed: 0,
         total: 11,
         actNumber: 1,
-        mainQuest: 'Shadows Over Willowbrook',
+        mainQuest: 'Shadows over Willowbrook',
       })
       expect(bridge.controller.getActStats()).toEqual({
         questsCompleted: 0,

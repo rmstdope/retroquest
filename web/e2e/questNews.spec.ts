@@ -29,7 +29,7 @@ async function pushNews(
   quests: unknown[] = [
     {
       kind: 'completed',
-      name: 'Hint of Magic',
+      name: 'Hint of magic',
       main: false,
       text: 'It stayed.',
       progress: { completed: 1, total: 11 },
@@ -76,7 +76,7 @@ test.describe('quest news told in the middle of the picture', () => {
       'Side quest complete · 1 of 11',
     )
     await expect(middle(page).locator('.lq-news-name').last()).toHaveText(
-      'Hint of Magic',
+      'Hint of magic',
     )
     await expect(
       middle(page).getByText('Click or press Enter to continue').last(),
@@ -106,7 +106,7 @@ test.describe('quest news told in the middle of the picture', () => {
     await startAct1(page, 390, 844)
     await pushNews(page)
     await expect(middle(page).locator('.lq-news-name').last()).toHaveText(
-      'Hint of Magic',
+      'Hint of magic',
     )
     await expect(middle(page).getByText('Tap to continue').last()).toBeVisible()
   })

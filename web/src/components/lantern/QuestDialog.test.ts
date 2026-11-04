@@ -17,7 +17,7 @@ describe('QuestDialog', () => {
   }
 
   const JOURNAL = {
-    name: 'Shadows Over Willowbrook',
+    name: 'Shadows over Willowbrook',
     main: true,
     done: false,
     details: {
@@ -30,7 +30,7 @@ describe('QuestDialog', () => {
   it('names the quest and tells what kind it is', () => {
     const w = mountQuest(JOURNAL)
 
-    expect(w.get('[role="dialog"] h2').text()).toBe('Shadows Over Willowbrook')
+    expect(w.get('[role="dialog"] h2').text()).toBe('Shadows over Willowbrook')
     const tags = w.findAll('.lq-tag').map((t) => t.text())
     expect(tags).toEqual(['Main quest', '3 entries'])
   })

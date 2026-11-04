@@ -8,7 +8,7 @@ import { useGameStore } from '@/stores/useGameStore'
 
 const done: QuestNews = {
   kind: 'completed',
-  name: 'Hint of Magic',
+  name: 'Hint of magic',
   main: false,
   text: 'x',
   progress: { completed: 1, total: 11 },
@@ -21,9 +21,9 @@ describe('QuestSlimLine', () => {
     const w = mount(QuestSlimLine, { props: { news: done } })
     expect(w.get('.lq-slim-mark').text()).toBe('✓')
     expect(w.text().replace(/\s+/g, ' ')).toBe(
-      '✓ Side quest complete · Hint of Magic Open in journal',
+      '✓ Side quest complete · Hint of magic Open in journal',
     )
-    expect(w.get('strong').text()).toBe('Hint of Magic')
+    expect(w.get('strong').text()).toBe('Hint of magic')
   })
 
   it('tells a new quest and an update without a tick', () => {
@@ -42,12 +42,12 @@ describe('QuestSlimLine', () => {
     const game = useGameStore()
     const w = mount(QuestSlimLine, { props: { news: done } })
     await w.get('button').trigger('click')
-    expect(game.questToOpen).toBe('Hint of Magic')
+    expect(game.questToOpen).toBe('Hint of magic')
   })
 
   it('describes its button by the line', () => {
     const w = mount(QuestSlimLine, { props: { news: done } })
     const id = w.get('button').attributes('aria-describedby')
-    expect(w.get(`[id="${id}"]`).text()).toContain('Hint of Magic')
+    expect(w.get(`[id="${id}"]`).text()).toContain('Hint of magic')
   })
 })

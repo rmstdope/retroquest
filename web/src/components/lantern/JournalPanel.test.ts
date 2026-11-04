@@ -39,14 +39,14 @@ describe('JournalPanel', () => {
     ]
     game.activeQuests = [
       quest(
-        'Shadows Over Willowbrook',
+        'Shadows over Willowbrook',
         true,
         false,
         'Elior dreams of a [character_name]shadowy figure[/character_name].',
       ),
       quest('Know your village', false, false, 'Explore Willowbrook.'),
     ]
-    game.completedQuests = [quest('Hint of Magic', false, true, 'Done.')]
+    game.completedQuests = [quest('Hint of magic', false, true, 'Done.')]
     submit = vi.fn<(command: string) => void>()
     markSeen = vi.fn<(tab: 'bag' | 'spells' | 'quests') => void>()
     vi.spyOn(game, 'submitCommand').mockImplementation(submit)
@@ -141,9 +141,9 @@ describe('JournalPanel', () => {
 
     const names = w.findAll('.lq-quest-name').map((n) => n.text())
     expect(names).toEqual([
-      'Shadows Over Willowbrook',
+      'Shadows over Willowbrook',
       'Know your village',
-      'Hint of Magic',
+      'Hint of magic',
     ])
     expect(w.findAll('.lq-badge-main')).toHaveLength(1)
     expect(w.findAll('.lq-badge-done')).toHaveLength(1)
@@ -157,7 +157,7 @@ describe('JournalPanel', () => {
 
     await row.trigger('click')
 
-    expect(useGameStore().shownQuest).toBe('Shadows Over Willowbrook')
+    expect(useGameStore().shownQuest).toBe('Shadows over Willowbrook')
   })
 
   it('disables the row actions while the game is not accepting input', () => {

@@ -24,8 +24,8 @@ import {
   expectStoryFlag,
 } from '@/testing/gameHelpers'
 
-const MAIN = 'Shadows Over Willowbrook'
-const PHOTO = 'The Faded Photograph'
+const MAIN = 'Shadows over Willowbrook'
+const PHOTO = 'The faded photograph'
 const CAT = 'Curiosity killed the cat'
 
 describe('Act 1 golden path', () => {
@@ -53,7 +53,7 @@ describe('Act 1 golden path', () => {
     expectStoryFlag(state, FLAG_WOKE_FROM_DREAM, true)
 
     // Step 1: Elior's Cottage
-    expectQuests(state, [MAIN, 'Hint of Magic'])
+    expectQuests(state, [MAIN, 'Hint of magic'])
     expectItemInRoom(room(), 'bread', false)
     expectItemInRoom(room(), "Elior's Journal", false)
     executeCommands(game, ['use lantern'])
@@ -64,7 +64,7 @@ describe('Act 1 golden path', () => {
     expectItemInInventory(state, 'bread')
     expectItemInInventory(state, 'lantern (lit)')
     expectItemInRoom(room(), 'bread', false)
-    expectQuests(state, [MAIN, 'Hint of Magic'])
+    expectQuests(state, [MAIN, 'Hint of magic'])
     executeCommands(game, ['use journal', 'talk to grandmother'])
     expectSpellKnown(state, 'revive')
     expectQuests(state, [MAIN, 'Magic for real'])

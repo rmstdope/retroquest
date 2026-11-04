@@ -78,7 +78,7 @@ function createMockBridge() {
       completed: 4,
       total: 11,
       actNumber: 1,
-      mainQuest: 'Shadows Over Willowbrook',
+      mainQuest: 'Shadows over Willowbrook',
     })),
     handleCommand: vi.fn((): string => ''),
     getShortNames: vi.fn((): Record<string, string> => ({})),
@@ -509,7 +509,7 @@ describe('useGameStore', () => {
       bridge.controller.activateQuest.mockReturnValue(null)
       bridge.controller.updateQuest.mockReturnValue(null)
       bridge.controller.completeQuest
-        .mockReturnValueOnce(quest('Hint of Magic complete!'))
+        .mockReturnValueOnce(quest('Hint of magic complete!'))
         .mockReturnValueOnce(null)
 
       store.submitCommand('talk to grandmother')
@@ -1814,14 +1814,14 @@ describe('useGameStore', () => {
         completed: 4,
         total: 11,
         actNumber: 1,
-        mainQuest: 'Shadows Over Willowbrook',
+        mainQuest: 'Shadows over Willowbrook',
       })
 
       bridge.controller.getQuestProgress.mockReturnValue({
         completed: 5,
         total: 11,
         actNumber: 1,
-        mainQuest: 'Shadows Over Willowbrook',
+        mainQuest: 'Shadows over Willowbrook',
       })
       store.dismissModal()
       store.submitCommand('give amulet to mira')
@@ -1979,7 +1979,7 @@ describe('useGameStore', () => {
 
   describe('quest news in the story', () => {
     const NEW =
-      '[quest_name]Hint of Magic (side quest)[/quest_name]\n\nA force stirs.'
+      '[quest_name]Hint of magic (side quest)[/quest_name]\n\nA force stirs.'
     const UPDATED =
       '[quest_name]Shadows (main quest)[/quest_name]\n\n[dim]Old.[/dim]\nNew.'
 
@@ -2003,7 +2003,7 @@ describe('useGameStore', () => {
       expect(store.turns.at(-1)!.quests).toEqual([
         {
           kind: 'new',
-          name: 'Hint of Magic',
+          name: 'Hint of magic',
           main: false,
           text: 'A force stirs.',
           chime: true,
@@ -2152,9 +2152,9 @@ describe('useGameStore', () => {
     })
 
     it('asks the journal to open a quest', () => {
-      store.openQuestInJournal('Hint of Magic')
+      store.openQuestInJournal('Hint of magic')
 
-      expect(store.questToOpen).toBe('Hint of Magic')
+      expect(store.questToOpen).toBe('Hint of magic')
     })
 
     it('leaves turns without news empty', () => {

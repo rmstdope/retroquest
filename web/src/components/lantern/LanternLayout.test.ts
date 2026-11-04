@@ -362,18 +362,18 @@ describe('LanternLayout', () => {
     const game = useGameStore()
     game.completedQuests = [
       {
-        name: 'Hint of Magic',
+        name: 'Hint of magic',
         main: false,
         done: true,
         details: { kind: 'journal', latest: 'You found it.', earlier: [] },
       },
     ]
 
-    game.shownQuest = 'Hint of Magic'
+    game.shownQuest = 'Hint of magic'
     await w.vm.$nextTick()
 
     const dialog = w.get('[role="dialog"]')
-    expect(dialog.get('h2').text()).toBe('Hint of Magic')
+    expect(dialog.get('h2').text()).toBe('Hint of magic')
     expect(dialog.text()).toContain('Done')
     await dialog.get('button[aria-label="Close"]').trigger('click')
     expect(game.shownQuest).toBe(null)
@@ -384,13 +384,13 @@ describe('LanternLayout', () => {
     const game = useGameStore()
     game.activeQuests = [
       {
-        name: 'Hint of Magic',
+        name: 'Hint of magic',
         main: false,
         done: false,
         details: { kind: 'journal', latest: 'Look.', earlier: [] },
       },
     ]
-    game.shownQuest = 'Hint of Magic'
+    game.shownQuest = 'Hint of magic'
     await w.vm.$nextTick()
 
     game.modalChapter = { kind: 'intro', act: 'Act II', title: 'T', body: 'B' }
@@ -1294,7 +1294,7 @@ describe('LanternLayout', () => {
     it('switches to Quests when a quest is opened from the story', async () => {
       const w = mountLayout()
 
-      useGameStore().openQuestInJournal('Hint of Magic')
+      useGameStore().openQuestInJournal('Hint of magic')
       await flushPromises()
 
       expect(sections(w).get('[aria-current="page"]').text()).toMatch(/^Quests/)

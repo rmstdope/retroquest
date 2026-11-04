@@ -29,7 +29,7 @@ async function injectMockState(page: Page) {
       completed: 4,
       total: 11,
       actNumber: 1,
-      mainQuest: 'Shadows Over Willowbrook',
+      mainQuest: 'Shadows over Willowbrook',
     }
     store.turns = [
       {
@@ -1450,7 +1450,7 @@ test.describe('Lantern UI (the default)', () => {
           quests: [
             {
               kind: 'updated',
-              name: 'Shadows Over Willowbrook',
+              name: 'Shadows over Willowbrook',
               main: true,
               text: 'The villagers whisper of shadows beyond the mill.',
             },

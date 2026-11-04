@@ -2,7 +2,7 @@ import { Quest, type GameState } from '@/engine'
 import { FLAG_FOUND_PHOTO, FLAG_READ_MOTHERS_LETTER } from '../Act1StoryFlags'
 
 /**
- * The Faded Photograph quest: find the photograph in Elior's cottage, read the
+ * The faded photograph quest: find the photograph in Elior's cottage, read the
  * cryptic message on its back, ask Grandmother about it, then follow the
  * message to the river bend, where the fisherman leads Elior to his mother's
  * letter. Reading the letter completes the quest.
@@ -10,7 +10,7 @@ import { FLAG_FOUND_PHOTO, FLAG_READ_MOTHERS_LETTER } from '../Act1StoryFlags'
 export class FadedPhotographQuest extends Quest {
   constructor() {
     super({
-      name: 'The Faded Photograph',
+      name: 'The faded photograph',
       description:
         'An old photograph of your parents, hidden away in a drawer. ' +
         "On the back is a line in your mother's hand.",
@@ -18,6 +18,13 @@ export class FadedPhotographQuest extends Quest {
         "At the river bend you found your mother's letter, hidden beneath the smooth stone. " +
         'Its words raise more questions than they answer, but they are hers.',
     })
+  }
+
+  /** Give a save made with the title-case name the current name and completion. */
+  override refreshSavedText(): void {
+    const current = new FadedPhotographQuest()
+    this.name = current.name
+    this.completion = current.completion
   }
 
   /** Triggered when the player finds the photograph. */
