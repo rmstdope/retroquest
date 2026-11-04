@@ -18,9 +18,10 @@ import SpeechPortrait from './SpeechPortrait.vue'
  * name shows once above its first line still showing, and one portrait
  * beside it (the run's later lines carry only their words, lined up under
  * the first); when the first line leaves at the top, the name and portrait
- * step down to the next line showing. The newest line is full strength, the
- * one before it about 55% and the rest about 30%; a run's name and portrait
- * are as bright as the newest line of the run. When the room is full the
+ * step down to the next line showing. Lines dim by turn, every turn counting
+ * (also one where nobody speaks): everything said in the newest turn is full
+ * strength, the turn before about 55% and older turns about 30%; a run's name
+ * and portrait are as bright as their run (a run never spans two turns). When the room is full the
  * oldest leaves at the top, under a soft fade. A line taller than the room
  * never loses its top: the thread scrolls so the newest line shows from its
  * speaker down, its end faded at the bottom (the story band has every word).
@@ -38,12 +39,6 @@ defineProps<{ away?: boolean }>()
 const game = useGameStore()
 const speech = useStageSpeechStore()
 const narration = useNarrationStore()
-
-/** Faded by how far back it was said: 0 newest, 1 the one before, 2 older. */
-function age(index: number): 'new' | 'prev' | 'old' {
-  const back = speech.visible.length - 1 - index
-  return back === 0 ? 'new' : back === 1 ? 'prev' : 'old'
-}
 
 /** The turn being narrated among the conversation's lines (0 for none). */
 const readTurn = computed(
@@ -69,15 +64,6 @@ const firstShowing = ref(0)
 
 /** Which lines head a run, so carry its name and portrait. */
 const heads = computed(() => runHeads(speech.visible, firstShowing.value))
-
-/** How far back the run of a line ends: the age its name and portrait wear. */
-function runAge(index: number): 'new' | 'prev' | 'old' {
-  const lines = speech.visible
-  let last = index
-  while (last + 1 < lines.length && continuesRun(lines[last + 1], lines[last]))
-    last++
-  return age(last)
-}
 
 /** The thread of lines, while there is one. */
 const thread = ref<HTMLElement | null>(null)
@@ -174,7 +160,7 @@ function hurry(): void {
         >
           <SpeechPortrait
             v-if="heads[index] && line.side === 'left'"
-            :class="`lq-age-${runAge(index)}`"
+            :class="`lq-age-${speech.ageOf(line.turnId)}`"
             :name="line.speaker"
             :src="game.portraitFor(line.speaker)"
           />
@@ -183,13 +169,13 @@ function hurry(): void {
             <b
               v-if="heads[index]"
               class="lq-line-name"
-              :class="`lq-age-${runAge(index)}`"
+              :class="`lq-age-${speech.ageOf(line.turnId)}`"
               >{{ line.speaker }}</b
             >
             <div
               class="lq-line"
               :class="[
-                `lq-age-${age(index)}`,
+                `lq-age-${speech.ageOf(line.turnId)}`,
                 { 'lq-speaking': speech.isSpeaking(line) },
               ]"
             >
@@ -198,7 +184,7 @@ function hurry(): void {
           </div>
           <SpeechPortrait
             v-if="heads[index] && line.side === 'right'"
-            :class="`lq-age-${runAge(index)}`"
+            :class="`lq-age-${speech.ageOf(line.turnId)}`"
             :name="line.speaker"
             :src="game.portraitFor(line.speaker)"
           />
