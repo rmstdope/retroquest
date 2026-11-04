@@ -130,7 +130,8 @@ describe('Shadows Over Willowbrook log', () => {
 
     expect(quest.description).not.toContain('Elior')
     expect(quest.description).not.toMatch(/\b(him|he woke)\b/)
-    expect(quest.description).toContain('brought the')
+    expect(quest.description).toContain('you brought the')
+    expect(quest.description).toContain('The flower opened for you')
   })
 
   it('records the amulet promise rather than a druid once magic is unlocked', () => {

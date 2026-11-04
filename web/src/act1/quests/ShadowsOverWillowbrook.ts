@@ -34,7 +34,8 @@ export class ShadowsOverWillowbrookQuest extends Quest {
         'smells sour, and the village keeps its voice down.',
       completion:
         'The well was poisoned on purpose, and whoever did it came to ' +
-        'Willowbrook looking for an amulet. You carry that amulet now, on the road to Greendale.',
+        'Willowbrook looking for an amulet. ' +
+        'You carry that amulet now, on the road to Greendale.',
     })
   }
 
