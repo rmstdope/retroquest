@@ -112,7 +112,6 @@ const OPTIONAL_LINES: Record<number, { speaker: string; opening: string }[]> = {
       speaker: 'hemlock',
       opening: 'Not something I carry, lad.',
     },
-    { speaker: 'narrator', opening: "You don't see that here." },
     { speaker: 'narrator', opening: 'A divine light surrounds Tilda' },
     { speaker: 'narrator', opening: 'A warm light settles over Tilda' },
     { speaker: 'narrator', opening: 'The cleansing runs over Tilda' },

@@ -922,7 +922,12 @@ describe('Game', () => {
 
     it('asks what to examine and reports unknown targets', () => {
       expect(game.examine('')).toBe('Examine what?')
-      expect(game.examine('dragon')).toBe("You don't see that here.")
+      expect(game.examine('dragon')).toBe(
+        "[failure]You don't see a 'dragon' to examine here or in your inventory.[/failure]",
+      )
+      expect(game.examine('apple')).toBe(
+        "[failure]You don't see an 'apple' to examine here or in your inventory.[/failure]",
+      )
     })
   })
 
