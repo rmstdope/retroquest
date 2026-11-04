@@ -167,6 +167,79 @@ describe('Ambience', () => {
     })
   })
 
+  describe('clips that follow the room’s sound state', () => {
+    const whir = { duration: 20 } as unknown as AudioBuffer
+    const wind = { duration: 20 } as unknown as AudioBuffer
+    const creak = { duration: 3 } as unknown as AudioBuffer
+
+    /** A mill: wind always, a whir while `whirring`, a creak every 5 s once `jammed`. */
+    function mill(): Ambience {
+      return new Ambience(
+        ctx as unknown as AudioContext,
+        [
+          { buffer: wind, loops: true },
+          { buffer: whir, loops: true, state: 'whirring' },
+          {
+            buffer: creak,
+            loops: false,
+            everySeconds: [5, 5],
+            state: 'jammed',
+          },
+        ],
+        bus,
+      )
+    }
+
+    it('plays a clip with a state only in that state', () => {
+      const ambience = mill()
+      ambience.setState('whirring')
+      ambience.play()
+      vi.advanceTimersByTime(10_000)
+      expect(sourcesOf(wind)).toHaveLength(1)
+      expect(sourcesOf(whir)).toHaveLength(1)
+      expect(sourcesOf(creak)).toHaveLength(0)
+    })
+
+    it('plays none of them in no state', () => {
+      mill().play()
+      vi.advanceTimersByTime(10_000)
+      expect(sourcesOf(wind)).toHaveLength(1)
+      expect(sourcesOf(whir)).toHaveLength(0)
+      expect(sourcesOf(creak)).toHaveLength(0)
+    })
+
+    it('stops the old state’s clips and starts the new one’s as it changes, leaving the rest', () => {
+      const ambience = mill()
+      ambience.setState('whirring')
+      ambience.play()
+      ambience.setState('jammed')
+      expect(sourcesOf(whir)[0].stop).toHaveBeenCalled()
+      expect(sourcesOf(wind)[0].stop).not.toHaveBeenCalled()
+      vi.advanceTimersByTime(5000)
+      expect(sourcesOf(creak)).toHaveLength(1)
+      expect(sourcesOf(wind)).toHaveLength(1)
+    })
+
+    it('starts nothing when the state changes while paused, until it plays', () => {
+      const ambience = mill()
+      ambience.setState('jammed')
+      vi.advanceTimersByTime(10_000)
+      expect(ctx.sources).toHaveLength(0)
+      ambience.play()
+      vi.advanceTimersByTime(5000)
+      expect(sourcesOf(creak)).toHaveLength(1)
+    })
+
+    it('changes nothing when told the state it is in', () => {
+      const ambience = mill()
+      ambience.setState('whirring')
+      ambience.play()
+      ambience.setState('whirring')
+      expect(sourcesOf(whir)).toHaveLength(1)
+      expect(sourcesOf(whir)[0].stop).not.toHaveBeenCalled()
+    })
+  })
+
   it('lets go of its gain on dispose', () => {
     const ambience = storm()
     ambience.play()

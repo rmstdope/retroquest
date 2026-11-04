@@ -2,7 +2,8 @@
  * The game's sound effects: the clips Content Studio's Sound effects workspace
  * makes (`tts/effects.json`, written by `tts/extract-effects.ts`), and which
  * rooms play them and how. A clip is made once and may play in several rooms,
- * each at its own pace: round and round, now and then, or once on entering.
+ * each at its own pace: round and round, now and then, or once on entering,
+ * and some only while the room is in one sound state (see `EffectWhen`).
  * The effects of a room belong to its own music track: they start when that
  * track starts and fade out with it (see `ambience.ts`). Until the navigator
  * chooses a take in the studio, an effect is silent.
@@ -35,8 +36,17 @@ export type EffectPlay =
       afterSeconds: number
     }
 
-/** One effect of a track's ambience: its clip's id and how it plays. */
-export type AmbientEffect = { id: string } & EffectPlay
+/**
+ * When an effect plays: always, or only while its room is in one sound state
+ * (the room's `soundState`, such as a withered field or a lit glade).
+ */
+export interface EffectWhen {
+  /** The room's sound state the effect plays in; absent for an effect that always plays. */
+  state?: string
+}
+
+/** One effect of a track's ambience: its clip's id, how it plays and when. */
+export type AmbientEffect = { id: string } & EffectPlay & EffectWhen
 
 /** Every clip of the game, in the order the studio lists them. */
 export const GAME_EFFECTS: readonly EffectEntry[] = [
@@ -210,6 +220,36 @@ export const GAME_EFFECTS: readonly EffectEntry[] = [
       'tearing at grass',
     seconds: 3,
   },
+  {
+    id: 'cat-purr',
+    description:
+      'a cat purring contentedly in its sleep, close by, slow and soft',
+    seconds: 20,
+    loops: true,
+  },
+  {
+    id: 'mechanism-whir',
+    description:
+      'a small black-iron clockwork mechanism whirring and ticking to ' +
+      'itself, steady and faintly wrong',
+    seconds: 20,
+    loops: true,
+  },
+  {
+    id: 'fox-whimper',
+    description:
+      'a small fox kit whimpering weakly, tired and frightened, in the ' +
+      'undergrowth',
+    seconds: 3,
+  },
+  {
+    id: 'glade-hush',
+    description:
+      'an unnatural, heavy stillness in a dark forest clearing, a faint ' +
+      'low hum, no birds, no wind',
+    seconds: 20,
+    loops: true,
+  },
 ]
 
 /** The track of an Act I room by its key, as `roomTrackId` gives it. */
@@ -227,7 +267,13 @@ export const ROOM_AMBIENCE: Readonly<Record<string, readonly AmbientEffect[]>> =
     [act1('EliorsCottage')]: [{ id: 'hearth-fire', loops: true }],
     [act1('VegetableField')]: [
       { id: 'breeze-leaves', loops: true },
-      { id: 'crow-caw', loops: false, everySeconds: [10, 25] },
+      {
+        id: 'crow-caw',
+        loops: false,
+        everySeconds: [10, 25],
+        state: 'withered',
+      },
+      { id: 'birdsong', loops: true, state: 'green' },
     ],
     [act1('ChickenCoop')]: [
       { id: 'chickens', loops: true },
@@ -243,6 +289,7 @@ export const ROOM_AMBIENCE: Readonly<Record<string, readonly AmbientEffect[]>> =
     [act1('GeneralStore')]: [
       { id: 'shop-bell', loops: false, afterSeconds: 1.5 },
       { id: 'glass-clink', loops: false, everySeconds: [15, 30] },
+      { id: 'cat-purr', loops: true, state: 'cat-home' },
     ],
     [act1('VillageSquare')]: [
       { id: 'village-murmur', loops: true },
@@ -257,6 +304,7 @@ export const ROOM_AMBIENCE: Readonly<Record<string, readonly AmbientEffect[]>> =
     ],
     [act1('OldMill')]: [
       { id: 'wind-gusts', loops: true },
+      { id: 'mechanism-whir', loops: true, state: 'whirring' },
       { id: 'wood-creak', loops: false, everySeconds: [5, 12] },
     ],
     [act1('Riverbank')]: [
@@ -266,6 +314,17 @@ export const ROOM_AMBIENCE: Readonly<Record<string, readonly AmbientEffect[]>> =
     [act1('ForestPath')]: [
       { id: 'birdsong', loops: true },
       { id: 'twig-snap', loops: false, everySeconds: [8, 20] },
+      {
+        id: 'fox-whimper',
+        loops: false,
+        everySeconds: [10, 20],
+        state: 'kit-trapped',
+      },
+    ],
+    [act1('HiddenGlade')]: [
+      { id: 'glade-hush', loops: true, state: 'dim' },
+      { id: 'birdsong', loops: true, state: 'lit' },
+      { id: 'breeze-leaves', loops: true, state: 'lit' },
     ],
     [act1('VillageChapel')]: [
       { id: 'chapel-door', loops: false, afterSeconds: 1.5 },

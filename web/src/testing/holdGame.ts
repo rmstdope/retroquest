@@ -1,6 +1,7 @@
 /**
  * A small real-engine game for tests of the held panels: two rooms, a gem
- * whose pick-up changes the bag and starts a second quest.
+ * whose pick-up changes the bag, starts a second quest and changes the
+ * hall's sound state.
  */
 import { Act, Item, Quest, Room, type GameState } from '@/engine'
 import type { Pinia } from 'pinia'
@@ -44,13 +45,24 @@ class GemQuest extends Quest {
   }
 }
 
+/** The hall's sound state once the gem has been taken from it. */
+export const HALL_GEM_TAKEN = 'gem-taken'
+
+/** A hall that sounds different once its gem has been taken. */
+class Hall extends Room {
+  /** `HALL_GEM_TAKEN` once the gem is gone from the hall; '' before. */
+  override soundState(_gameState: GameState): string {
+    return this.getItemByName(GEM) ? '' : HALL_GEM_TAKEN
+  }
+}
+
 /** Two rooms, a gem and two quests. */
 class HoldAct extends Act {
   constructor() {
     super({
       name: 'Hold Act',
       rooms: {
-        Hall: new Room({
+        Hall: new Hall({
           name: 'Hall',
           description: 'A quiet hall.',
           exits: { north: 'Garden' },
@@ -61,7 +73,7 @@ class HoldAct extends Act {
         Garden: new Room({ name: 'Garden', description: 'A green garden.' }),
       },
       quests: [new FirstQuest(), new GemQuest()],
-      classes: { FirstQuest, GemQuest },
+      classes: { FirstQuest, GemQuest, Hall },
       musicFile: '',
       musicInfo: '',
     })

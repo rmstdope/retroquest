@@ -1,7 +1,11 @@
 /** Which chosen effect clips play with which music file. */
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import type { ChosenManifest } from './chosenMusic'
-import { ambientClipsFor, loadChosenEffects } from './chosenEffects'
+import {
+  ambientClipsFor,
+  loadChosenEffects,
+  trackOfTake,
+} from './chosenEffects'
 
 const music: ChosenManifest = {
   'act1-the-dream': { file: 'act1-the-dream.mp3', duration: 60 },
@@ -42,6 +46,20 @@ describe('ambientClipsFor', () => {
     expect(
       ambientClipsFor('Conquest - Market (freetouse.com).mp3', music, effects),
     ).toEqual([])
+  })
+})
+
+describe('trackOfTake', () => {
+  it('names the track whose chosen take a music file is', () => {
+    expect(trackOfTake('generated/act1-the-dream.mp3', music)).toBe(
+      'act1-the-dream',
+    )
+  })
+
+  it("is null for the game's own files", () => {
+    expect(trackOfTake('Conquest - Market (freetouse.com).mp3', music)).toBe(
+      null,
+    )
   })
 })
 

@@ -4,8 +4,13 @@ import { useGameStore } from '@/stores/useGameStore'
 import { useNarrationStore } from '@/stores/useNarrationStore'
 import { useSettingsStore } from '@/stores/useSettingsStore'
 import { MUSIC_FADE_IN_MS, useMusic, type AmbienceSource } from './useMusic'
-import { prepareAmbience } from './ambience'
-import { ambientClipsFor, loadChosenEffects } from './chosenEffects'
+import { prepareAmbience, type Ambience } from './ambience'
+import {
+  ambientClipsFor,
+  loadChosenEffects,
+  trackOfTake,
+} from './chosenEffects'
+import { roomTrackId } from '@/lantern/musicLists'
 import {
   chooseTrack,
   GENERATED_MUSIC_DIR,
@@ -46,7 +51,9 @@ const MEDIA_KEYS: readonly MediaSessionAction[] = ['play', 'pause', 'stop']
  *
  * A room's chosen take plays the room's chosen sound effects with it (see
  * `effectLists.ts`), through one effects bus at the player's effects volume:
- * they start with the take, fade with it and stop with it.
+ * they start with the take, fade with it and stop with it. The effects follow
+ * the room's sound state (`musicSoundState`), held and released with the
+ * music's room: a whir stops as the mechanism is jammed.
  *
  * When the calling component's scope ends, the music stops and the
  * listeners are removed.
@@ -57,6 +64,7 @@ export function useActMusic(): ReturnType<typeof useMusic> {
     musicInfo,
     musicActName,
     musicRoomKey,
+    musicSoundState,
     showTitle,
     scenePicture,
   } = storeToRefs(useGameStore())
@@ -72,18 +80,35 @@ export function useActMusic(): ReturnType<typeof useMusic> {
   let effectsBus: GainNode | null = null
   /** Set when the scope ends, so an ambience still being prepared makes no bus. */
   let disposed = false
+  /** The ambiences not yet let go of, each with its track: the room's and any fading out. */
+  let ambiences: { track: string; ambience: Ambience }[] = []
+  /** The track of the room the music plays in. */
+  const roomTrack = (): string =>
+    roomTrackId(musicActName.value, musicRoomKey.value)
+  /** Gives the room's sound state to its own track's ambience; the others keep theirs. */
+  const followSoundState = (): void => {
+    ambiences = ambiences.filter(({ ambience }) => !ambience.disposed)
+    for (const { track, ambience } of ambiences)
+      if (track === roomTrack()) ambience.setState(musicSoundState.value)
+  }
   const ambienceFor: AmbienceSource = async (file, context) => {
-    const clips = chosen.value
-      ? ambientClipsFor(file, chosen.value, await chosenEffects)
-      : []
-    if (clips.length === 0 || disposed) return null
+    const music = chosen.value
+    const clips = music ? ambientClipsFor(file, music, await chosenEffects) : []
+    const track = music ? trackOfTake(file, music) : null
+    if (clips.length === 0 || track === null || disposed) return null
     if (!effectsBus) {
       effectsBus = context.createGain()
       effectsBus.gain.value = effectsLevel()
       effectsBus.connect(context.destination)
     }
-    return prepareAmbience(context, clips, effectsBus)
+    const ambience = await prepareAmbience(context, clips, effectsBus)
+    if (ambience) {
+      ambiences.push({ track, ambience })
+      followSoundState()
+    }
+    return ambience
   }
+  watch([musicActName, musicRoomKey, musicSoundState], followSoundState)
   watch(effectsLevel, (level) => {
     if (effectsBus) effectsBus.gain.value = level
   })

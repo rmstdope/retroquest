@@ -125,5 +125,28 @@
     "id": "horse-snort",
     "description": "a horse snorting and stamping a hoof on a dirt road, then tearing at grass",
     "seconds": 3
+  },
+  {
+    "id": "cat-purr",
+    "description": "a cat purring contentedly in its sleep, close by, slow and soft",
+    "seconds": 20,
+    "loops": true
+  },
+  {
+    "id": "mechanism-whir",
+    "description": "a small black-iron clockwork mechanism whirring and ticking to itself, steady and faintly wrong",
+    "seconds": 20,
+    "loops": true
+  },
+  {
+    "id": "fox-whimper",
+    "description": "a small fox kit whimpering weakly, tired and frightened, in the undergrowth",
+    "seconds": 3
+  },
+  {
+    "id": "glade-hush",
+    "description": "an unnatural, heavy stillness in a dark forest clearing, a faint low hum, no birds, no wind",
+    "seconds": 20,
+    "loops": true
   }
 ]

@@ -6,6 +6,11 @@
 import { readFileSync } from 'node:fs'
 import { describe, expect, it } from 'vitest'
 import { Act1 } from '@/act1/Act1'
+import { ForestPath } from '@/act1/rooms/ForestPath'
+import { GeneralStore } from '@/act1/rooms/GeneralStore'
+import { HiddenGlade } from '@/act1/rooms/HiddenGlade'
+import { OldMill } from '@/act1/rooms/OldMill'
+import { VegetableField } from '@/act1/rooms/VegetableField'
 import { roomTrackId } from './musicLists'
 import {
   ambienceAt,
@@ -108,6 +113,41 @@ describe('ambienceAt', () => {
       ).toContain('wood-creak')
   })
 
+  it('plays the crow over the withered field and birds once it is green', () => {
+    const field = ambienceAt(roomTrackId('Act1', 'VegetableField'))
+    expect(field).toContainEqual({
+      id: 'crow-caw',
+      loops: false,
+      everySeconds: [10, 25],
+      state: VegetableField.SOUND_WITHERED,
+    })
+    expect(field).toContainEqual({
+      id: 'birdsong',
+      loops: true,
+      state: VegetableField.SOUND_GREEN,
+    })
+    expect(field).toContainEqual({ id: 'breeze-leaves', loops: true })
+  })
+
+  it('names only sound states its room has', () => {
+    const states: Record<string, string[]> = {
+      VegetableField: [
+        VegetableField.SOUND_WITHERED,
+        VegetableField.SOUND_GREEN,
+      ],
+      GeneralStore: [GeneralStore.SOUND_CAT_HOME],
+      OldMill: [OldMill.SOUND_WHIRRING, OldMill.SOUND_JAMMED],
+      ForestPath: [ForestPath.SOUND_KIT_TRAPPED],
+      HiddenGlade: [HiddenGlade.SOUND_DIM, HiddenGlade.SOUND_LIT],
+    }
+    for (const key of Object.keys(act.rooms))
+      for (const effect of ambienceAt(roomTrackId('Act1', key)))
+        if (effect.state !== undefined)
+          expect(states[key] ?? [], `${key}: ${effect.id}`).toContain(
+            effect.state,
+          )
+  })
+
   it('plays nothing where no effect is listed', () => {
     expect(ambienceAt('market')).toEqual([])
     expect(ambienceAt('')).toEqual([])
@@ -131,10 +171,10 @@ describe('ambienceAt', () => {
     for (const clip of GAME_EFFECTS) expect(played).toContain(clip.id)
   })
 
-  it('plays a clip at most once in a room', () => {
+  it('plays a clip at most once in a room in each state', () => {
     for (const effects of Object.values(ROOM_AMBIENCE)) {
-      const ids = effects.map((effect) => effect.id)
-      expect(new Set(ids).size).toBe(ids.length)
+      const keys = effects.map((effect) => `${effect.id}/${effect.state}`)
+      expect(new Set(keys).size).toBe(keys.length)
     }
   })
 

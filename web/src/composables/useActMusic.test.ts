@@ -355,10 +355,15 @@ describe('useActMusic', () => {
  */
 describe('useActMusic with the effects of a room', () => {
   let ctx: FakeAudioContext
-  const DREAM_MUSIC = { 'act1-the-dream': { file: 'dream.mp3', duration: 60 } }
+  const DREAM_MUSIC = {
+    'act1-the-dream': { file: 'dream.mp3', duration: 60 },
+    'act1-old-mill': { file: 'mill.mp3', duration: 60 },
+  }
   const EFFECTS = {
     rain: { file: 'rain.mp3', duration: 20 },
     lightning: { file: 'lightning.mp3', duration: 4 },
+    'wind-gusts': { file: 'wind.mp3', duration: 20 },
+    'mechanism-whir': { file: 'whir.mp3', duration: 20 },
   }
 
   /** Serves the two manifests as JSON and any other file as audio. */
@@ -392,16 +397,32 @@ describe('useActMusic with the effects of a room', () => {
       )
   }
 
-  /** Starts the music in The Dream and returns the scope. */
-  async function startInTheDream(): Promise<ReturnType<typeof effectScope>> {
+  /** Starts the music in Act I's room `roomKey`, in `soundState`, and returns the scope. */
+  async function startIn(
+    roomKey: string,
+    soundState = '',
+  ): Promise<ReturnType<typeof effectScope>> {
     const scope = effectScope()
     scope.run(() => useActMusic())
     const game = useGameStore()
     game.musicFile = 'Conquest - Market (freetouse.com).mp3'
     game.musicActName = 'Act1'
-    game.musicRoomKey = 'TheDream'
+    game.musicRoomKey = roomKey
+    game.musicSoundState = soundState
     await ready()
     return scope
+  }
+
+  /** Starts the music in The Dream and returns the scope. */
+  function startInTheDream(): Promise<ReturnType<typeof effectScope>> {
+    return startIn('TheDream')
+  }
+
+  /** The loops sounding now: the music's and the effects'. */
+  function loopsSounding() {
+    return ctx.sources.filter(
+      (source) => source.loop && source.stop.mock.calls.length === 0,
+    )
   }
 
   beforeEach(() => {
@@ -421,6 +442,18 @@ describe('useActMusic with the effects of a room', () => {
     for (const loop of loops) expect(loop.start).toHaveBeenCalled()
     scope.stop()
     for (const loop of loops) expect(loop.stop).toHaveBeenCalled()
+  })
+
+  it("plays the effects of the room's sound state, and follows it as it changes", async () => {
+    const scope = await startIn('OldMill', 'whirring')
+    ctx = FakeAudioContext.last
+    // The music's loop, the wind's and the mechanism's whir.
+    expect(loopsSounding()).toHaveLength(3)
+    useGameStore().musicSoundState = 'jammed'
+    await nextTick()
+    // The whir falls silent; the music and the wind go on.
+    expect(loopsSounding()).toHaveLength(2)
+    scope.stop()
   })
 
   it('plays the effects at the effects volume, and none with effects off', async () => {

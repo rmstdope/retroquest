@@ -21,20 +21,30 @@ export function loadChosenEffects(): Promise<ChosenManifest> {
   return loadChosenManifest(`${GENERATED_EFFECTS_PATH}manifest.json`)
 }
 
+/** The track whose chosen take the music file `file` is; null for the game's own files. */
+export function trackOfTake(
+  file: string,
+  music: ChosenManifest,
+): string | null {
+  return (
+    Object.keys(music).find(
+      (id) => GENERATED_MUSIC_DIR + music[id].file === file,
+    ) ?? null
+  )
+}
+
 /**
  * The clips that play with the music file `file`: the chosen effects of the
- * track whose chosen take it is, each with how it plays. None for the game's
- * own files, which are no room's take.
+ * track whose chosen take it is, each with how it plays and in which sound
+ * state. None for the game's own files, which are no room's take.
  */
 export function ambientClipsFor(
   file: string,
   music: ChosenManifest,
   effects: ChosenManifest,
 ): AmbientClipSource[] {
-  const track = Object.keys(music).find(
-    (id) => GENERATED_MUSIC_DIR + music[id].file === file,
-  )
-  if (track === undefined) return []
+  const track = trackOfTake(file, music)
+  if (track === null) return []
   return ambienceAt(track).flatMap(({ id, ...play }) => {
     const take = effects[id]
     return take ? [{ url: GENERATED_EFFECTS_PATH + take.file, ...play }] : []

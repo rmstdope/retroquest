@@ -1,6 +1,10 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 import { setActivePinia, createPinia } from 'pinia'
-import { GEM, startedHoldStore as startedStore } from '@/testing/holdGame'
+import {
+  GEM,
+  HALL_GEM_TAKEN,
+  startedHoldStore as startedStore,
+} from '@/testing/holdGame'
 import { useBridge, type ActClass } from '@/composables/useBridge'
 import { Act1 } from '@/act1/Act1'
 import { useGameStore } from './useGameStore'
@@ -61,6 +65,16 @@ describe('useGameStore: panels held while a turn is narrated', () => {
     expect(store.musicRoomKey).toBe('TheDream')
     store.releaseMusic(turn.id)
     expect(store.musicRoomKey).toBe('EliorsCottage')
+  })
+
+  it("holds the room's sound state with the music, until the place is released", async () => {
+    const store = await startedStore()
+    expect(store.musicSoundState).toBe('')
+    store.submitCommand(`take ${GEM.toLowerCase()}`)
+    const turn = store.turns.at(-1)!
+    expect(store.musicSoundState).toBe('')
+    store.releasePanels(turn.id, ['place'], true)
+    expect(store.musicSoundState).toBe(HALL_GEM_TAKEN)
   })
 
   it('says whether a group of panels is still held for the narrator', async () => {

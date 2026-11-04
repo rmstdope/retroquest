@@ -456,15 +456,40 @@ describe('Game', () => {
         musicInfo: 'A',
       })
       const game = new Game([act])
-      expect(game.currentMusicPlace()).toEqual({ actName: '', roomKey: '' })
+      expect(game.currentMusicPlace()).toEqual({
+        actName: '',
+        roomKey: '',
+        soundState: '',
+      })
       game.newTurn()
       game.newTurn()
       expect(game.currentMusicPlace()).toEqual({
         actName: 'Only',
         roomKey: 'EliorsCottage',
+        soundState: '',
       })
       game.handleInput('go south')
       expect(game.currentMusicPlace().roomKey).toBe('VegetableField')
+    })
+
+    it("gives the room's sound state, as the room reads it from the game", () => {
+      const rooms = basicRooms()
+      rooms.VegetableField.soundState = (state) =>
+        state.getStoryFlag('watered') ? 'green' : 'withered'
+      const act = new Act({
+        name: 'Only',
+        rooms,
+        quests: [],
+        musicFile: 'a.mp3',
+        musicInfo: 'A',
+      })
+      const game = new Game([act])
+      game.newTurn()
+      game.newTurn()
+      game.handleInput('go south')
+      expect(game.currentMusicPlace().soundState).toBe('withered')
+      game.state.setStoryFlag('watered', true)
+      expect(game.currentMusicPlace().soundState).toBe('green')
     })
 
     it('names the room after a save and load too', () => {

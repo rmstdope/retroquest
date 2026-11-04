@@ -32,6 +32,9 @@ const SNARE_CUT_SENTENCE =
  * builds the text from the items in the room each time it is shown.
  */
 export class ForestPath extends Room {
+  /** The sound state of the path while the fox kit is caught in the snare. */
+  static readonly SOUND_KIT_TRAPPED = 'kit-trapped'
+
   constructor() {
     super({
       name: 'Forest Path',
@@ -40,6 +43,15 @@ export class ForestPath extends Room {
       characters: [],
       exits: { north: 'Riverbank', south: 'HiddenGlade' },
     })
+  }
+
+  /** The kit whimpers while the vines are cut and it is still caught; otherwise the plain path. */
+  override soundState(_gameState: GameState): string {
+    if (this.items.some((item) => item instanceof Vines)) return ''
+    const snare = this.items.find((item) => item instanceof Snare)
+    return snare instanceof Snare && !snare.freed
+      ? ForestPath.SOUND_KIT_TRAPPED
+      : ''
   }
 
   /**

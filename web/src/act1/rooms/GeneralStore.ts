@@ -30,6 +30,9 @@ const CAT_CLAUSE =
  * the room is shown.
  */
 export class GeneralStore extends Room {
+  /** The sound state of the store once Patches sleeps on the counter. */
+  static readonly SOUND_CAT_HOME = 'cat-home'
+
   constructor() {
     super({
       name: 'General Store',
@@ -38,6 +41,13 @@ export class GeneralStore extends Room {
       characters: [new Shopkeeper()],
       exits: { west: 'VillageSquare', south: 'BlacksmithsForge' },
     })
+  }
+
+  /** Purrs with the cat once Patches was carried home; otherwise the plain store. */
+  override soundState(gameState: GameState): string {
+    return gameState.getStoryFlag(FLAG_PATCHES_RETURNED)
+      ? GeneralStore.SOUND_CAT_HOME
+      : ''
   }
 
   /**

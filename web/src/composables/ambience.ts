@@ -1,32 +1,42 @@
 /**
  * The sound effects that play with a room's music: rain round and round,
- * lightning now and then, a shop bell once on entering. An `Ambience` plays the effects of one track on Web
- * Audio through one gain, into an output that sets the player's effects level
- * (`useActMusic`'s effects bus). An `AmbientVoice`
- * wraps the track's music voice with it, so the effects start and stop with
- * the music and follow every fade `useMusic` gives it (a crossfade, a change
- * through the dark, the title page's rise, the dip under a voice): the
- * effects sound at the same share of their level as the music of its own.
+ * lightning now and then, a shop bell once on entering, and a whir only while
+ * the room is in the state that has it. An `Ambience` plays the effects of
+ * one track on Web Audio through one gain, into an output that sets the
+ * player's effects level (`useActMusic`'s effects bus); `setState` follows
+ * the room's sound state, stopping and starting only the clips that change.
+ * An `AmbientVoice` wraps the track's music voice with it, so the effects
+ * start and stop with the music and follow every fade `useMusic` gives it (a
+ * crossfade, a change through the dark, the title page's rise, the dip under
+ * a voice): the effects sound at the same share of their level as the music
+ * of its own.
  */
-import type { EffectPlay } from '@/lantern/effectLists'
+import type { EffectPlay, EffectWhen } from '@/lantern/effectLists'
 import type { MusicVoice } from './musicVoice'
 
-/** How one decoded effect plays: round and round, after a random wait again and again, or once. */
-export type AmbientClip = { buffer: AudioBuffer } & EffectPlay
+/** How one decoded effect plays (round and round, after a random wait again and again, or once), and in which state. */
+export type AmbientClip = { buffer: AudioBuffer } & EffectPlay & EffectWhen
 
-/** Where an effect's clip is, and how it plays. */
-export type AmbientClipSource = { url: string } & EffectPlay
+/** Where an effect's clip is, how it plays and in which state. */
+export type AmbientClipSource = { url: string } & EffectPlay & EffectWhen
 
 /** The effects of one music track, played on Web Audio through one gain into `output`. */
 export class Ambience {
   private readonly gain: GainNode
   private playing = false
-  /** The sources sounding now: the loops and any one-shot under way. */
-  private sources: AudioBufferSourceNode[] = []
-  /** The waits before each one-shot's next start. */
-  private timers: ReturnType<typeof setTimeout>[] = []
+  /** The room's sound state; a clip with a state plays only in it. */
+  private state = ''
+  /** The sources sounding now, by clip: the loops and any one-shot under way. */
+  private sources: { clip: AmbientClip; node: AudioBufferSourceNode }[] = []
+  /** The waits before each one-shot's next start, by clip. */
+  private timers: {
+    clip: AmbientClip
+    timer: ReturnType<typeof setTimeout>
+  }[] = []
+  /** Set once the ambience is let go of. */
+  private gone = false
   /** The clips played once that have sounded; they do not sound again. */
-  private readonly sounded = new Set<AudioBuffer>()
+  private readonly sounded = new Set<AmbientClip>()
 
   /** `random` picks each wait between a one-shot's shortest and longest. */
   constructor(
@@ -46,80 +56,136 @@ export class Ambience {
 
   /**
    * Starts the loops and the waits before each one-shot, and before each clip
-   * played once that has not sounded yet; nothing when already playing.
+   * played once that has not sounded yet, of the clips that play in the
+   * present state; nothing when already playing.
    */
   play(): void {
     if (this.playing) return
     this.playing = true
+    for (const clip of this.clips) if (this.playsNow(clip)) this.start(clip)
+  }
+
+  /**
+   * Takes the room's sound state. While playing, the clips of the old state
+   * stop and those of the new start; the clips that play in every state go on.
+   */
+  setState(state: string): void {
+    if (state === this.state) return
+    const before = this.clips.filter((clip) => this.playsNow(clip))
+    this.state = state
+    if (!this.playing) return
     for (const clip of this.clips) {
-      if (clip.loops) this.sound(clip.buffer, true)
-      else if ('afterSeconds' in clip) this.once(clip.buffer, clip.afterSeconds)
-      else this.wait(clip.buffer, clip.everySeconds)
+      const was = before.includes(clip)
+      const is = this.playsNow(clip)
+      if (was && !is) this.stop(clip)
+      else if (!was && is) this.start(clip)
     }
   }
 
   /** Stops every effect and the waits before the next. */
   pause(): void {
     this.playing = false
-    for (const timer of this.timers.splice(0)) clearTimeout(timer)
-    for (const source of this.sources.splice(0)) {
-      source.stop()
-      source.disconnect()
-    }
+    for (const clip of this.clips) this.stop(clip)
   }
 
   /** Lets go of what the ambience holds; it is not used again. */
   dispose(): void {
     this.pause()
     this.gain.disconnect()
+    this.gone = true
+  }
+
+  /** Whether the ambience has been let go of. */
+  get disposed(): boolean {
+    return this.gone
+  }
+
+  /** Whether `clip` plays in the present state: always, for one with none. */
+  private playsNow(clip: AmbientClip): boolean {
+    return clip.state === undefined || clip.state === this.state
+  }
+
+  /** Starts `clip` as it plays: round and round, after a random wait, or once. */
+  private start(clip: AmbientClip): void {
+    if (clip.loops) this.sound(clip, true)
+    else if ('afterSeconds' in clip) this.once(clip, clip.afterSeconds)
+    else this.wait(clip, clip.everySeconds)
+  }
+
+  /** Stops `clip`'s sources and its waits. */
+  private stop(clip: AmbientClip): void {
+    for (const { timer } of this.take(this.timers, clip)) clearTimeout(timer)
+    for (const { node } of this.take(this.sources, clip)) {
+      node.stop()
+      node.disconnect()
+    }
+  }
+
+  /** Removes and returns the entries of `list` for `clip`. */
+  private take<T extends { clip: AmbientClip }>(
+    list: T[],
+    clip: AmbientClip,
+  ): T[] {
+    const taken = list.filter((entry) => entry.clip === clip)
+    for (const entry of taken) list.splice(list.indexOf(entry), 1)
+    return taken
+  }
+
+  /** Waits `ms`, then runs `then` for `clip`, forgetting the wait as it ends. */
+  private after(clip: AmbientClip, ms: number, then: () => void): void {
+    const entry = {
+      clip,
+      timer: setTimeout(() => {
+        this.timers.splice(this.timers.indexOf(entry), 1)
+        then()
+      }, ms),
+    }
+    this.timers.push(entry)
   }
 
   /**
-   * Plays `buffer` once after a random wait in `everySeconds`, then waits
+   * Plays `clip` once after a random wait in `everySeconds`, then waits
    * again. While the browser holds the sound back, the strike is skipped
    * rather than kept, so none pile up for the moment it lets go.
    */
   private wait(
-    buffer: AudioBuffer,
+    clip: AmbientClip,
     [shortest, longest]: readonly [number, number],
   ): void {
     const ms = (shortest + this.random() * (longest - shortest)) * 1000
-    const timer = setTimeout(() => {
-      this.timers.splice(this.timers.indexOf(timer), 1)
-      if (this.context.state === 'running') this.sound(buffer, false)
-      this.wait(buffer, [shortest, longest])
-    }, ms)
-    this.timers.push(timer)
+    this.after(clip, ms, () => {
+      if (this.context.state === 'running') this.sound(clip, false)
+      this.wait(clip, [shortest, longest])
+    })
   }
 
   /**
-   * Plays `buffer` after `seconds`, the one time it sounds for this ambience.
+   * Plays `clip` after `seconds`, the one time it sounds for this ambience.
    * A pause before then cancels it until the next play.
    */
-  private once(buffer: AudioBuffer, seconds: number): void {
-    if (this.sounded.has(buffer)) return
-    const timer = setTimeout(() => {
-      this.timers.splice(this.timers.indexOf(timer), 1)
-      this.sounded.add(buffer)
-      if (this.context.state === 'running') this.sound(buffer, false)
-    }, seconds * 1000)
-    this.timers.push(timer)
+  private once(clip: AmbientClip, seconds: number): void {
+    if (this.sounded.has(clip)) return
+    this.after(clip, seconds * 1000, () => {
+      this.sounded.add(clip)
+      if (this.context.state === 'running') this.sound(clip, false)
+    })
   }
 
-  /** Starts a source playing `buffer` through the gain; a one-shot lets go of itself when it ends. */
-  private sound(buffer: AudioBuffer, loop: boolean): void {
-    const source = this.context.createBufferSource()
-    source.buffer = buffer
-    source.loop = loop
-    source.connect(this.gain)
+  /** Starts a source playing `clip` through the gain; a one-shot lets go of itself when it ends. */
+  private sound(clip: AmbientClip, loop: boolean): void {
+    const node = this.context.createBufferSource()
+    node.buffer = clip.buffer
+    node.loop = loop
+    node.connect(this.gain)
+    const entry = { clip, node }
     if (!loop)
-      source.onended = () => {
-        const index = this.sources.indexOf(source)
+      node.onended = () => {
+        const index = this.sources.indexOf(entry)
         if (index >= 0) this.sources.splice(index, 1)
-        source.disconnect()
+        node.disconnect()
       }
-    source.start()
-    this.sources.push(source)
+    node.start()
+    this.sources.push(entry)
   }
 }
 

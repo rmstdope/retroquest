@@ -3,6 +3,7 @@ import { Game, GameController } from '@/engine'
 import { Act1 } from '../Act1'
 import { LightSpell } from '../spells/LightSpell'
 import { AncientAmulet } from '../items/AncientAmulet'
+import { HiddenGlade } from './HiddenGlade'
 
 /** An Act I game standing in the Hidden Glade, knowing `light`. */
 function gameInGlade(): Game {
@@ -210,5 +211,15 @@ describe('the Hidden Glade room card', () => {
     game.commandParser.parse('go north')
     game.commandParser.parse('go south')
     expect(card.getRoomDescription()).toContain(SENTENCE)
+  })
+})
+
+describe('Hidden Glade sound', () => {
+  it('sounds dim until light is cast, then lit', () => {
+    const game = gameInGlade()
+    const glade = game.state.currentRoom
+    expect(glade.soundState(game.state)).toBe(HiddenGlade.SOUND_DIM)
+    game.commandParser.parse('cast light')
+    expect(glade.soundState(game.state)).toBe(HiddenGlade.SOUND_LIT)
   })
 })

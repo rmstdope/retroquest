@@ -29,6 +29,11 @@ const WATERED_DESCRIPTION =
  * each time the room is shown.
  */
 export class VegetableField extends Room {
+  /** The sound state of the field before it is watered. */
+  static readonly SOUND_WITHERED = 'withered'
+  /** The sound state of the field once it is watered. */
+  static readonly SOUND_GREEN = 'green'
+
   constructor() {
     super({
       name: 'Vegetable Field',
@@ -41,6 +46,13 @@ export class VegetableField extends Room {
         south: 'ChickenCoop',
       },
     })
+  }
+
+  /** Sounds withered or, once watered, green: the crow gives way to birds. */
+  override soundState(gameState: GameState): string {
+    return gameState.getStoryFlag(FLAG_VEGETABLE_FIELD_WATERED)
+      ? VegetableField.SOUND_GREEN
+      : VegetableField.SOUND_WITHERED
   }
 
   /** The field withered or, once watered, recovered. */
