@@ -367,7 +367,7 @@ body {
 }
 
 /* A checklist quest's needs on a quest card or the stage (questTextHtml): one
-   line each, a filled tick for what is done and a dashed ring for what is
+   item each, a filled tick for what is done and a dashed ring for what is
    still open. The marks are drawn here, not written in the text, so the
    read-along numbers only the spoken words; browsers without alt text in
    `content` keep the plain mark. */
