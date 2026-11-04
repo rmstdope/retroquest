@@ -20,8 +20,8 @@ export function loadChosenEffects(): Promise<ChosenManifest> {
 /**
  * The clips that play as the scene of `entry` sounds: each row of its mix
  * with a chosen take, as it plays, in its state and at its level. A row the
- * game fires (a trigger) is not among them, nor is any in a scene the mix has
- * no entry for.
+ * game fires (a trigger) is among them, waiting for its firing; a scene the
+ * mix has no entry for has none.
  */
 export function sceneClips(
   entry: SceneEntry | undefined,
@@ -29,7 +29,7 @@ export function sceneClips(
 ): AmbientClipSource[] {
   return (entry?.effects ?? []).flatMap(({ id, play, state, level }) => {
     const take = Object.hasOwn(effects, id) ? effects[id] : undefined
-    if (!take || play.mode === 'trigger') return []
+    if (!take) return []
     const url = GENERATED_EFFECTS_PATH + take.file
     return [
       state === undefined

@@ -91,6 +91,18 @@ describe('GameController', () => {
     expect(ctrl.start()).toContain('Welcome to')
   })
 
+  it('hands over the fired sound triggers once, with their rooms', () => {
+    const ctrl = makeController()
+    expect(ctrl.takeSoundFirings()).toEqual([])
+    ctrl.game.state.firedSounds = [
+      { roomKey: 'EliorsCottage', trigger: 'bell' },
+    ]
+    expect(ctrl.takeSoundFirings()).toEqual([
+      { roomKey: 'EliorsCottage', trigger: 'bell' },
+    ])
+    expect(ctrl.takeSoundFirings()).toEqual([])
+  })
+
   it('runs commands through the parser', () => {
     const ctrl = makeController()
     expect(ctrl.handleCommand('xyzzy')).toContain("I don't understand")

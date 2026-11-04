@@ -4,6 +4,7 @@
  */
 import { Character } from './Character'
 import type { CompletionTree, Game } from './Game'
+import type { SoundFiring } from './GameState'
 import type { Item } from './Item'
 import type { Quest, QuestDetails } from './Quest'
 
@@ -509,6 +510,14 @@ export class GameController {
   /** The act and room the music plays in, for a track of its own; empty exactly when `getCurrentMusic` is. */
   getMusicPlace(): MusicPlace {
     return this.game.currentMusicPlace()
+  }
+
+  /**
+   * The sound triggers the game fired since the last call, oldest first, each
+   * with the key of its room; the queue is emptied, so each is heard once.
+   */
+  takeSoundFirings(): SoundFiring[] {
+    return this.game.state.takeFiredSounds()
   }
 
   /** The intro of the act that follows while a closing page shows; null otherwise. */

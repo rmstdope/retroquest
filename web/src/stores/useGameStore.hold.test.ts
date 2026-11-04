@@ -2,6 +2,7 @@ import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 import { setActivePinia, createPinia } from 'pinia'
 import {
   GEM,
+  HALL_CHIME,
   HALL_GEM_TAKEN,
   startedHoldStore as startedStore,
 } from '@/testing/holdGame'
@@ -75,6 +76,28 @@ describe('useGameStore: panels held while a turn is narrated', () => {
     expect(store.musicSoundState).toBe('')
     store.releasePanels(turn.id, ['place'], true)
     expect(store.musicSoundState).toBe(HALL_GEM_TAKEN)
+  })
+
+  it("holds a sound trigger the turn fired with the music's room, then publishes it once", async () => {
+    const store = await startedStore()
+    expect(store.musicSoundFirings).toEqual([])
+    store.submitCommand(`take ${GEM.toLowerCase()}`)
+    const turn = store.turns.at(-1)!
+    expect(store.musicSoundFirings).toEqual([])
+    store.releasePanels(turn.id, ['place'], true)
+    expect(store.musicSoundFirings).toEqual([
+      { roomKey: 'Hall', trigger: HALL_CHIME },
+    ])
+    const published = store.musicSoundFirings
+    store.refreshPanels()
+    expect(store.musicSoundFirings).toBe(published)
+  })
+
+  it('never publishes the firings of a turn whose hold was dropped', async () => {
+    const store = await startedStore()
+    store.submitCommand(`take ${GEM.toLowerCase()}`)
+    store.restartGame()
+    expect(store.musicSoundFirings).toEqual([])
   })
 
   it('says whether a group of panels is still held for the narrator', async () => {

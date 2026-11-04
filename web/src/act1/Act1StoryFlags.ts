@@ -81,3 +81,6 @@ export const FLAG_MIRA_FOREST_REMARK_SAID = 'mira_forest_remark_said'
 export const VIRTUE_MERCY = 'mercy'
 export const VIRTUE_TRUTH = 'truth'
 export const VIRTUE_SELFLESS = 'selfless'
+
+/** The General Store's sound trigger, fired as the shopkeeper takes Patches back and the store reopens. */
+export const TRIGGER_PATCHES_RETURNS = 'patches-returns'

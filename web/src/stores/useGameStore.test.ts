@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 import { setActivePinia, createPinia } from 'pinia'
 import { useGameStore, MAX_TURNS } from './useGameStore'
-import type { RoomDescription } from '@/engine'
+import type { RoomDescription, SoundFiring } from '@/engine'
 import type {
   CompletionTree,
   QuestReport,
@@ -102,6 +102,7 @@ function createMockBridge() {
     })),
     getMusicPlace: vi.fn(() => ({ actName: '', roomKey: '', soundState: '' })),
     getActCharacters: vi.fn((): { key: string; name: string }[] => []),
+    takeSoundFirings: vi.fn((): SoundFiring[] => []),
     lastTurnAddressee: vi.fn((): string | null => null),
     getCommandCompletions: vi.fn((): CompletionTree => ({})),
   }

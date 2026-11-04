@@ -51,7 +51,9 @@
       "plain",
       "cat-home"
     ],
-    "triggers": []
+    "triggers": [
+      "patches-returns"
+    ]
   },
   {
     "id": "act1-village-well",

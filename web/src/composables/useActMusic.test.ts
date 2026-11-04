@@ -702,6 +702,83 @@ describe('useActMusic with the effects of a room', () => {
     expect(loopsSounding()).toHaveLength(0)
   })
 
+  describe('sound triggers', () => {
+    /** The one-shots started since the test began. */
+    function oneShots() {
+      return ctx.sources.slice(sourcesBefore).filter((source) => !source.loop)
+    }
+
+    /** The cottage plays the rain whenever the game fires 'ding'. */
+    function bindRainToDing(): void {
+      mixOf['act1-eliors-cottage'] = {
+        effects: [
+          { id: 'rain', play: { mode: 'trigger', trigger: 'ding' }, level: 1 },
+        ],
+      }
+    }
+
+    it("plays the scene's effects bound to a trigger the game fires in the room", async () => {
+      bindRainToDing()
+      const scope = await startIn('EliorsCottage')
+      ctx = FakeAudioContext.last
+      expect(oneShots()).toHaveLength(0)
+      useGameStore().musicSoundFirings = [
+        { roomKey: 'EliorsCottage', trigger: 'ding' },
+      ]
+      await nextTick()
+      expect(oneShots()).toHaveLength(1)
+      expect(oneShots()[0].start).toHaveBeenCalled()
+      scope.stop()
+    })
+
+    it('plays nothing for a trigger fired in another room, or one nothing is bound to', async () => {
+      bindRainToDing()
+      const scope = await startIn('EliorsCottage')
+      ctx = FakeAudioContext.last
+      useGameStore().musicSoundFirings = [
+        { roomKey: 'TheDream', trigger: 'ding' },
+        { roomKey: 'EliorsCottage', trigger: 'dong' },
+      ]
+      await nextTick()
+      expect(oneShots()).toHaveLength(0)
+      scope.stop()
+    })
+
+    it('plays a clip bound to a trigger and a state when the state is published with the firing', async () => {
+      mixOf['act1-eliors-cottage'] = {
+        effects: [
+          {
+            id: 'rain',
+            play: { mode: 'trigger', trigger: 'ding' },
+            state: 'warm',
+            level: 1,
+          },
+        ],
+      }
+      const scope = await startIn('EliorsCottage')
+      ctx = FakeAudioContext.last
+      const game = useGameStore()
+      game.musicSoundState = 'warm'
+      game.musicSoundFirings = [{ roomKey: 'EliorsCottage', trigger: 'ding' }]
+      await nextTick()
+      expect(oneShots()).toHaveLength(1)
+      scope.stop()
+    })
+
+    it('plays nothing while effects are off', async () => {
+      bindRainToDing()
+      useSettingsStore().effectsOn = false
+      const scope = await startIn('EliorsCottage')
+      ctx = FakeAudioContext.last
+      useGameStore().musicSoundFirings = [
+        { roomKey: 'EliorsCottage', trigger: 'ding' },
+      ]
+      await nextTick()
+      expect(oneShots()).toHaveLength(0)
+      scope.stop()
+    })
+  })
+
   it('fetches and plays no effects at all while effects are off', async () => {
     useSettingsStore().effectsOn = false
     const scope = await startInTheDream()

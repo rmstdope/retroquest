@@ -16,8 +16,8 @@
 import type { ScenePlay } from '@/lantern/sceneMix'
 import { fetchAudioBuffer, type MusicVoice } from './musicVoice'
 
-/** How an effect plays as its scene sounds: round and round, now and then, or once (a trigger is not played here). */
-export type AmbientPlay = Exclude<ScenePlay, { mode: 'trigger' }>
+/** How an effect plays in its scene: round and round, now and then, once, or when the game fires its trigger. */
+export type AmbientPlay = ScenePlay
 
 /** How one effect plays, in which state and how loud. */
 export interface ClipPlay {
@@ -116,6 +116,23 @@ export class Ambience {
     }
   }
 
+  /**
+   * The game fires the sound trigger `trigger`: every clip bound to it that
+   * plays in the present state sounds once, now. Nothing is heard (nor kept
+   * for later) before play, after pause, or while the browser holds the sound
+   * back.
+   */
+  fire(trigger: string): void {
+    if (!this.playing || this.gone || this.context.state !== 'running') return
+    for (const clip of this.clips)
+      if (
+        clip.play.mode === 'trigger' &&
+        clip.play.trigger === trigger &&
+        this.playsNow(clip)
+      )
+        this.sound(clip, false)
+  }
+
   /** Stops every effect and the waits before the next. */
   pause(): void {
     this.playing = false
@@ -161,12 +178,15 @@ export class Ambience {
     return clip.state === undefined || clip.state === this.state
   }
 
-  /** Starts `clip` as it plays: round and round (fading in when `fade`), after a random wait, or once. */
+  /**
+   * Starts `clip` as it plays: round and round (fading in when `fade`), after
+   * a random wait, or once. A clip bound to a trigger waits for `fire`.
+   */
   private start(clip: AmbientClip, fade = false): void {
     const { play } = clip
     if (play.mode === 'loop') this.sound(clip, true, fade)
     else if (play.mode === 'once') this.once(clip, play.afterSeconds)
-    else this.wait(clip, play.everySeconds)
+    else if (play.mode === 'random') this.wait(clip, play.everySeconds)
   }
 
   /** Stops `clip`'s waits and its sources: at once, or fading out when `fade`. */

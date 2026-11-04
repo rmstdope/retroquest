@@ -237,6 +237,10 @@ describe('the committed mixes', () => {
         expect(clips.has(effect.id), `${id}: ${effect.id}`).toBe(true)
         if (effect.state !== undefined)
           expect(scene?.states, `${id}: ${effect.id}`).toContain(effect.state)
+        if (effect.play.mode === 'trigger')
+          expect(scene?.triggers, `${id}: ${effect.id}`).toContain(
+            effect.play.trigger,
+          )
       }
     }
   })

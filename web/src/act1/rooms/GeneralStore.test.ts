@@ -5,6 +5,7 @@ import {
   FLAG_PATCHES_RETURNED,
   FLAG_PATCHES_STAYED_WITH_GRANDMOTHER,
   FLAG_RUSTY_HOE_SECOND_COIN_FOUND,
+  TRIGGER_PATCHES_RETURNS,
 } from '../Act1StoryFlags'
 import { GeneralStore } from './GeneralStore'
 
@@ -65,5 +66,14 @@ describe('General Store sound', () => {
     expect(storeSound()).toBe('')
     expect(storeSound(FLAG_PATCHES_STAYED_WITH_GRANDMOTHER)).toBe('')
     expect(storeSound(FLAG_PATCHES_RETURNED)).toBe(GeneralStore.SOUND_CAT_HOME)
+  })
+})
+
+describe('General Store sound triggers', () => {
+  it('declares the one the shopkeeper fires as Patches comes home', () => {
+    expect(new GeneralStore().soundTriggers()).toEqual([
+      TRIGGER_PATCHES_RETURNS,
+    ])
+    expect(TRIGGER_PATCHES_RETURNS).toBe('patches-returns')
   })
 })

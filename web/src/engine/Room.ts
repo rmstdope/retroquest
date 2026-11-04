@@ -115,6 +115,15 @@ export class Room {
     return []
   }
 
+  /**
+   * The names of the sound triggers the game can fire in the room
+   * (`GameState.fireSound`); none by default. Content Studio's scene
+   * declarations list them, and its mix binds effects to them.
+   */
+  soundTriggers(): readonly string[] {
+    return []
+  }
+
   /** What `listen` with no target hears; rooms override it to react to the game state. */
   getAmbientSound(_gameState: GameState): string {
     return 'It is quiet here.'

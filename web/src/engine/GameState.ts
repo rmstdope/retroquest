@@ -14,6 +14,12 @@ export interface QuestChanges {
   completed: Quest[]
 }
 
+/** A sound trigger the game fired: the key of the room it was fired in and its name. */
+export interface SoundFiring {
+  roomKey: string
+  trigger: string
+}
+
 /**
  * The mutable state of the act being played: where the player is, what they
  * carry and know, which rooms they have seen, story flags and quest progress.
@@ -36,6 +42,11 @@ export class GameState {
    * with constants.
    */
   virtues: string[] = []
+  /**
+   * The sound triggers fired since the UI last took them. Declared without a
+   * value so that saves made before it existed still load; `fireSound` makes it.
+   */
+  firedSounds?: SoundFiring[]
 
   constructor(
     startingRoom: Room,
@@ -46,6 +57,29 @@ export class GameState {
     this.allRooms = allRooms
     this.visitedRooms = [startingRoom.name]
     this.nonActivatedQuests = [...allQuests]
+  }
+
+  /**
+   * Fires the sound trigger `trigger` in the room the player is in, for the
+   * scene's effects that the mix binds to it. A name the room does not declare
+   * (`Room.soundTriggers`) is ignored.
+   */
+  fireSound(trigger: string): void {
+    const room = this.currentRoom
+    if (!room.soundTriggers().includes(trigger)) return
+    const here = Object.entries(this.allRooms).find(([, r]) => r === room)
+    if (!here) return
+    this.firedSounds = [
+      ...(this.firedSounds ?? []),
+      { roomKey: here[0], trigger },
+    ]
+  }
+
+  /** The sound triggers fired since the last call, oldest first; the queue is emptied. */
+  takeFiredSounds(): SoundFiring[] {
+    const fired = this.firedSounds ?? []
+    this.firedSounds = undefined
+    return fired
   }
 
   markVisited(room: Room): void {

@@ -938,6 +938,8 @@ Welcome to
       this.acts[payload.actIndex].afterLoad(state)
       state.refreshSavedText()
       state.refreshQuestLogs()
+      // A saved queue of sound triggers is stale: they sounded when they were fired.
+      state.firedSounds = undefined
       this.state = state
       this.currentAct = payload.actIndex
       // Play on in the loaded act, even when the load comes between acts or
