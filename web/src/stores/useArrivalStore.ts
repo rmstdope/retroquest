@@ -42,7 +42,9 @@ export interface PageStart {
  * (`afterWords`), waits (`active` false, nothing in the middle) until the
  * turn's words are told: the narrator reaching the first piece, or,
  * when nobody narrates, the conversation on the picture having shown every
- * line. `told` remembers the turns whose news went through the middle, or was cut short by a clear (the
+ * line. News a skip reached waits, too, until the lines the skip showed
+ * unspoken are read (`owedReadingMs`); while it is held (`holding`), `next`
+ * brings it up at once and `clear` ends it. `told` remembers the turns whose news went through the middle, or was cut short by a clear (the
  * story shows their slim lines once `newsPending` is false) and `newsUp`
  * says which piece is on screen, for its sound.
  */
@@ -65,6 +67,8 @@ export const useArrivalStore = defineStore('arrival', () => {
   } | null>(null)
   /** Turns whose quest news was told in the middle or cut short (any clear), for the story's slim lines. */
   const newsTurns = ref<number[]>([])
+  /** Waiting news whose turn's words are told, held while the lines a skip showed unspoken are read. */
+  const holding = ref(false)
   let timer: ReturnType<typeof setTimeout> | undefined
 
   /** Whether an arrival is on the picture. */
@@ -265,6 +269,8 @@ export const useArrivalStore = defineStore('arrival', () => {
   function next(): void {
     const now = current.value
     if (!now) return
+    // News held for the lines' reading comes up at once.
+    if (holding.value) return bringUp(now)
     if (turnPage()) return
     if (now.index >= now.parts.length - 1) return clear()
     if (now.narrated && !now.ended) {
@@ -280,6 +286,7 @@ export const useArrivalStore = defineStore('arrival', () => {
   /** End it at once; a narrator still telling it is stopped. */
   function clear(): void {
     stopTimer()
+    holding.value = false
     const now = current.value
     current.value = null
     // News cut short before it came up (a new command, Escape, a tab) still leaves its slim lines.
@@ -296,14 +303,29 @@ export const useArrivalStore = defineStore('arrival', () => {
     (ready) => {
       const now = current.value
       if (!ready || !now) return
-      now.shown = true
-      // The narrator was skipped before it got to the news: all of it is read for its time.
-      if (now.narrated && !narration.narrates(now.turnId))
-        now.parts = now.parts.map((each) => ({ ...each, voiced: false }))
-      markTold(now)
-      if (!now.narrated || silentNews()) readPart()
+      // Lines a skip showed unspoken are read before the news covers them.
+      const owed =
+        now.narrated && now.parts[0].kind === 'news'
+          ? narration.owedReadingMs(now.turnId)
+          : 0
+      if (owed <= 0) return bringUp(now)
+      holding.value = true
+      later(owed, () => bringUp(now))
     },
   )
+
+  /** The waiting news (or arrival after a talk) of `now` comes up, if it is still the one being told. */
+  function bringUp(now: NonNullable<typeof current.value>): void {
+    if (current.value !== now || now.shown) return
+    holding.value = false
+    stopTimer()
+    now.shown = true
+    // The narrator was skipped before it got to the news: all of it is read for its time.
+    if (now.narrated && !narration.narrates(now.turnId))
+      now.parts = now.parts.map((each) => ({ ...each, voiced: false }))
+    markTold(now)
+    if (!now.narrated || silentNews()) readPart()
+  }
 
   // Each narrated part comes up when the narrator reaches it: the first one
   // it has revealed beyond the part up, so a piece nobody speaks (which it
@@ -397,6 +419,7 @@ export const useArrivalStore = defineStore('arrival', () => {
     barMs,
     barKey,
     newsUp,
+    holding,
     told: newsTurns,
     newsPending,
     reset,

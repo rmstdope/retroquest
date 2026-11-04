@@ -7,6 +7,7 @@ import { useSettingsStore } from './useSettingsStore'
 import { useSceneStore } from './useSceneStore'
 import type { NarrationUnit } from '@/lantern/narrationUnits'
 import type { NarrationClip } from '@/lantern/narrationManifest'
+import { readingPauseMs } from '@/lantern/stageSpeech'
 
 /** A recorded clip of `words` words, each a second long. */
 function clip(words: number, duration = words): NarrationClip {
@@ -117,6 +118,106 @@ describe('useNarrationStore', () => {
     useSettingsStore().narrationVolume = 40
     narration.begin(1, [voiced()], 'act1')
     expect(last().volume).toBeCloseTo(0.4)
+  })
+
+  describe('the reading owed for words shown unspoken', () => {
+    /** A block of two recordings, the words of each in its markup. */
+    const twoParts: NarrationUnit = {
+      kind: 'block',
+      parts: [
+        { markup: 'w0 w1 w2 w3', clip: clip(4) },
+        { markup: 'Forgive me if I am short with you.', clip: clip(8) },
+      ],
+    }
+    const quest: NarrationUnit = { ...voiced(), kind: 'quest' }
+    const event: NarrationUnit = {
+      kind: 'block',
+      parts: [],
+      silent: 'You receive a coin.',
+    }
+
+    it('owes nothing for a turn read to its end', async () => {
+      narration.begin(1, [voiced()], 'act1')
+      last().onended?.()
+      expect(narration.owedReadingMs(1)).toBe(0)
+    })
+
+    it('a skip owes the rest of the block being spoken and every block not yet shown, events included', () => {
+      narration.begin(1, [twoParts, voiced(), event, quest], 'act1')
+      last().currentTime = 1.5
+      vi.advanceTimersByTime(50)
+      narration.skipAll()
+      expect(narration.owedReadingMs(1)).toBe(
+        readingPauseMs('w2 w3') +
+          readingPauseMs('Forgive me if I am short with you.') +
+          readingPauseMs('a b') +
+          readingPauseMs('You receive a coin.'),
+      )
+      vi.advanceTimersByTime(500)
+      expect(narration.owedReadingMs(2)).toBe(0)
+    })
+
+    it('a skip between two recordings of a block owes the recordings still to come', async () => {
+      narration.begin(1, [twoParts, quest], 'act1')
+      last().onended?.()
+      expect(narration.speaking(1)).toBeNull()
+      narration.skipAll()
+      expect(narration.owedReadingMs(1)).toBe(
+        readingPauseMs('Forgive me if I am short with you.'),
+      )
+    })
+
+    it('a hurry holds the news after it until the rest of the block is read', async () => {
+      narration.begin(1, [twoParts, quest], 'act1')
+      narration.hurry()
+      const owed =
+        readingPauseMs('w0 w1 w2 w3') +
+        readingPauseMs('Forgive me if I am short with you.')
+      await vi.advanceTimersByTimeAsync(owed - 1)
+      expect(narration.revealed(1, 1)).toBe(false)
+      await vi.advanceTimersByTimeAsync(1)
+      expect(narration.revealed(1, 1)).toBe(true)
+      expect(narration.speaking(1)?.unit).toBe(1)
+    })
+
+    it('a hurry that passes an event line on its way to the news holds the news for it too', async () => {
+      narration.begin(1, [twoParts, event, quest], 'act1')
+      narration.hurry()
+      const owed =
+        readingPauseMs('w0 w1 w2 w3') +
+        readingPauseMs('Forgive me if I am short with you.') +
+        readingPauseMs('You receive a coin.')
+      await vi.advanceTimersByTimeAsync(owed - 1)
+      expect(narration.revealed(1, 1)).toBe(true)
+      expect(narration.revealed(1, 2)).toBe(false)
+      await vi.advanceTimersByTimeAsync(1)
+      expect(narration.revealed(1, 2)).toBe(true)
+    })
+
+    it('a second hurry while the news is held brings it now', async () => {
+      narration.begin(1, [twoParts, quest], 'act1')
+      narration.hurry()
+      await vi.advanceTimersByTimeAsync(100)
+      narration.hurry()
+      expect(narration.revealed(1, 1)).toBe(true)
+    })
+
+    it('a hurry holds nothing but news: the next block of the turn follows at once', async () => {
+      narration.begin(1, [twoParts, voiced()], 'act1')
+      narration.hurry()
+      await vi.advanceTimersByTimeAsync(100)
+      expect(narration.revealed(1, 1)).toBe(true)
+    })
+
+    it('a hurry on the last voice keeps what it owes after the turn ends', () => {
+      narration.begin(1, [twoParts, { ...quest, parts: [] }], 'act1')
+      narration.hurry()
+      expect(narration.isNarrating).toBe(false)
+      expect(narration.owedReadingMs(1)).toBe(
+        readingPauseMs('w0 w1 w2 w3') +
+          readingPauseMs('Forgive me if I am short with you.'),
+      )
+    })
   })
 
   describe('storyReading', () => {
