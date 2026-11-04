@@ -1,4 +1,5 @@
 {
+ "hearth-fire": {"fp":"7dffaefafff75611","model":"open-1","seed":1819283579,"take":2,"inputs":{"description":"a small wood fire crackling gently in a cottage hearth, soft pops and hisses, warm and close","seconds":20,"loops":true},"at":"2026-11-04T08:21:04.405Z"},
  "lightning": {"fp":"ee5930ca7ac52e85","model":"open-1","seed":1831059875,"take":2,"inputs":{"description":"a lightning strike very close by, a sharp crack of thunder that shakes the air and rolls away into the distance","seconds":5},"at":"2026-11-04T00:33:28.279Z"},
  "rain": {"fp":"c30ba4e181c37999","model":"open-1","seed":302392180,"take":3,"inputs":{"description":"heavy rain beating on wooden shutters in the dark, a steady downpour, no thunder","seconds":20,"loops":true},"at":"2026-11-03T20:57:41.192Z"}
 }

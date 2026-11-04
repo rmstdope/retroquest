@@ -1,4 +1,8 @@
 {
+ "hearth-fire": {
+  "file": "hearth-fire.mp3",
+  "duration": 20.0
+ },
  "lightning": {
   "file": "lightning.mp3",
   "duration": 4.626
