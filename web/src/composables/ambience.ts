@@ -38,6 +38,8 @@ export class Ambience {
     node: AudioBufferSourceNode
     level: GainNode
   }[] = []
+  /** The sources fading out after a change of state; a pause cuts them. */
+  private fading: { node: AudioBufferSourceNode; level: GainNode }[] = []
   /** The waits before each one-shot's next start, by clip. */
   private timers: {
     clip: AmbientClip
@@ -97,6 +99,11 @@ export class Ambience {
   pause(): void {
     this.playing = false
     for (const clip of this.clips) this.stop(clip)
+    for (const { node, level } of this.fading.splice(0)) {
+      node.stop()
+      node.disconnect()
+      level.disconnect()
+    }
   }
 
   /** Lets go of what the ambience holds; it is not used again. */
@@ -136,10 +143,19 @@ export class Ambience {
         letGo()
         continue
       }
+      // From where any fade-in under way has got to, so it never swells first.
       const now = this.context.currentTime
-      level.gain.setValueAtTime(level.gain.value, now)
+      const from = level.gain.value
+      level.gain.cancelScheduledValues(now)
+      level.gain.setValueAtTime(from, now)
       level.gain.linearRampToValueAtTime(0, now + STATE_FADE_SECONDS)
-      node.onended = letGo
+      const entry = { node, level }
+      this.fading.push(entry)
+      node.onended = () => {
+        const index = this.fading.indexOf(entry)
+        if (index >= 0) this.fading.splice(index, 1)
+        letGo()
+      }
       node.stop(now + STATE_FADE_SECONDS)
     }
   }

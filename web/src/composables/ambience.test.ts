@@ -252,6 +252,7 @@ describe('Ambience', () => {
         gain: {
           setValueAtTime: ReturnType<typeof vi.fn>
           linearRampToValueAtTime: ReturnType<typeof vi.fn>
+          cancelScheduledValues: ReturnType<typeof vi.fn>
         }
       }
     }
@@ -282,6 +283,29 @@ describe('Ambience', () => {
         1,
         10.3,
       )
+    })
+
+    it('fades out from where a fade-in had got to, without swelling first', () => {
+      const ambience = mill()
+      ambience.play()
+      ctx.currentTime = 1
+      ambience.setState('whirring')
+      ctx.currentTime = 1.1
+      ambience.setState('')
+      const [whirring] = sourcesOf(whir)
+      expect(gainOf(whirring).gain.cancelScheduledValues).toHaveBeenCalledWith(
+        1.1,
+      )
+    })
+
+    it('cuts a clip still fading out when the music stops', () => {
+      const ambience = mill()
+      ambience.setState('whirring')
+      ambience.play()
+      ambience.setState('jammed')
+      const [old] = sourcesOf(whir)
+      ambience.pause()
+      expect(old.stop).toHaveBeenLastCalledWith()
     })
 
     it('starts nothing when the state changes while paused, until it plays', () => {

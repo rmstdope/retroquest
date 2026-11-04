@@ -501,6 +501,22 @@ describe('useActMusic with the effects of a room', () => {
     scope.stop()
   })
 
+  it('tries a clip that could not be had again in the next room', async () => {
+    const served = vi.mocked(fetch).getMockImplementation()!
+    let failed = false
+    vi.mocked(fetch).mockImplementation((url) => {
+      if (String(url).endsWith('/wind.mp3') && !failed) {
+        failed = true
+        return Promise.resolve({ ok: false } as Response)
+      }
+      return served(url)
+    })
+    const scope = await startIn('OldMill', 'whirring')
+    await walkTo('AbandonedShed')
+    expect(fetchesOf('wind.mp3')).toBe(2)
+    scope.stop()
+  })
+
   it('keeps the clips of the last two rooms only', async () => {
     const scope = await startIn('OldMill', 'whirring')
     await walkTo('TheDream')

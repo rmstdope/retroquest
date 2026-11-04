@@ -126,8 +126,9 @@ export function useActMusic(): ReturnType<typeof useMusic> {
         buffer = fetchAudioBuffer(context, url)
         decoded.set(url, buffer)
         // A clip that could not be had is tried again in the next room.
-        void buffer.then((clip) => {
-          if (!clip) decoded.delete(url)
+        const pending = buffer
+        void pending.then((clip) => {
+          if (!clip && decoded.get(url) === pending) decoded.delete(url)
         })
       }
       return buffer
