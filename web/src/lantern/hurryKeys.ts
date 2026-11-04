@@ -122,11 +122,13 @@ function sceneKey(press: HurryKeyPress): HurryKeyDecision | null {
  * does on the stage, when nothing is being narrated (while it is, Escape only
  * skips); once the words are hidden, a second Escape does what Show does,
  * except in a field, where the command box keeps its own steps back (clear
- * the text, then leave the box). The key is not consumed.
+ * the text, then leave the box). A held key takes no step, so the words do
+ * not flicker. The key is not consumed.
  */
 function hideKey(press: HurryKeyPress): HurryKeyDecision | null {
   if (
     press.key !== 'Escape' ||
+    press.repeat ||
     press.handled ||
     press.narrating ||
     press.arrival ||

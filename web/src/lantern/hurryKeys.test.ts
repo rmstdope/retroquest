@@ -134,6 +134,10 @@ describe('decideHurryKey with nothing narrated', () => {
     expect(
       decideHurryKey(press({ key: 'Escape', canShow: true, dialogOpen: true })),
     ).toBeNull()
+    // A held key does not flip the words back and forth.
+    expect(
+      decideHurryKey(press({ key: 'Escape', canShow: true, repeat: true })),
+    ).toBeNull()
   })
 
   it('leaves Enter and Space alone', () => {
