@@ -609,6 +609,61 @@ describe('useGameStore', () => {
     })
   })
 
+  describe('loadFromTitle', () => {
+    beforeEach(async () => {
+      await store.initGame()
+    })
+
+    it('loads a slot and leaves the title page and the opening chapter page', () => {
+      expect(store.showTitle).toBe(true)
+      expect(store.showModal).toBe(true)
+      bridge.controller.getRoomName.mockReturnValue('Saved Room')
+
+      expect(store.loadFromTitle(3)).toBe(true)
+
+      expect(bridge.loadFromSlot).toHaveBeenCalledWith(3)
+      expect(store.showTitle).toBe(false)
+      expect(store.showModal).toBe(false)
+      expect(store.modalChapter).toBeNull()
+      expect(store.acceptInput).toBe(true)
+      expect(store.roomName).toBe('Saved Room')
+    })
+
+    it('loads the quick save for slot 0', () => {
+      expect(store.loadFromTitle(0)).toBe(true)
+      expect(bridge.quickLoadGame).toHaveBeenCalledOnce()
+      expect(store.showTitle).toBe(false)
+    })
+
+    it('stays on the title page with the engine line when the load fails', () => {
+      bridge.loadFromSlot.mockReturnValue(
+        '[failure]No save file found.[/failure]',
+      )
+
+      expect(store.loadFromTitle(2)).toBe(false)
+
+      expect(store.showTitle).toBe(true)
+      expect(store.showModal).toBe(true)
+      expect(store.titleLoadError).toBe('No save file found.')
+    })
+
+    it('says so when the storage cannot be read', () => {
+      bridge.loadFromSlot.mockImplementation(() => {
+        throw new Error('blocked')
+      })
+      expect(store.loadFromTitle(2)).toBe(false)
+      expect(store.titleLoadError).toContain('could not be read')
+      expect(store.showTitle).toBe(true)
+    })
+
+    it('forgets an earlier failure on the next attempt', () => {
+      bridge.loadFromSlot.mockReturnValueOnce('[failure]No save.[/failure]')
+      store.loadFromTitle(2)
+      store.loadFromTitle(2)
+      expect(store.titleLoadError).toBe('')
+    })
+  })
+
   // --- saveNamedGame / loadNamedGame ---
 
   describe('saveNamedGame', () => {
