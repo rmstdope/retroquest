@@ -598,7 +598,7 @@ describe('ArrivalOnPicture', () => {
         /\.lq-arrival-line :deep\(\.lq-quest-checklist\),\s*\.lq-arrival-twin :deep\(\.lq-quest-checklist\) \{([^}]*)\}/,
       )
       const body = rule?.[1] ?? ''
-      expect(body).toContain('width: fit-content')
+      expect(body).toMatch(/(^|\n)\s*width: fit-content;/)
       expect(body).toContain('max-width: min(22em, 100%)')
       expect(body).toContain('margin-inline: auto')
       expect(body).toContain('text-align: left')
