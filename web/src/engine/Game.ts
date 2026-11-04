@@ -73,6 +73,10 @@ const DEFAULT_SAVE_NAME = 'retroquest'
 const SAVE_NAME = /^[a-z0-9_-]+$/
 const INVALID_SAVE_NAME =
   '[failure]Invalid save name. Use only letters, digits, hyphens, and underscores.[/failure]'
+
+/** The Roman numerals the act-complete page names acts by, first act first. */
+const ACT_NUMERALS = ['I', 'II', 'III', 'IV', 'V', 'VI']
+
 const CARDINAL_DIRECTIONS = ['north', 'south', 'east', 'west'] as const
 
 const ENGINE_CLASSES = { GameState, Item, Character, Spell, Quest, Room }
@@ -257,14 +261,19 @@ export class Game implements CommandTarget {
     return (hook ? `${hook}\n\n` : '') + this.sharedActCompleteWords()
   }
 
-  /** The words every act-complete page shares. */
+  /**
+   * The words every act-complete page shares, naming acts in Roman numerals
+   * like the rest of the page.
+   */
   private sharedActCompleteWords(): string {
+    const finished = ACT_NUMERALS[this.currentAct]
+    const next = ACT_NUMERALS[this.currentAct + 1]
     return this.runState === GameRunState.GameOver
-      ? `Congratulations — you have completed Act ${this.currentAct + 1}, ` +
+      ? `Congratulations — you have completed Act ${finished}, ` +
           'the final act of RetroQuest!'
-      : `Congratulations — you have completed Act ${this.currentAct + 1}!\n\n` +
+      : `Congratulations — you have completed Act ${finished}!\n\n` +
           'Take a moment to catch your breath and grab a cup of coffee. ' +
-          `Get ready for Act ${this.currentAct + 2}, where new challenges, ` +
+          `Get ready for Act ${next}, where new challenges, ` +
           'characters, and mysteries await.'
   }
 
@@ -597,6 +606,8 @@ Welcome to
    * Take every item with the name from the room; some may refuse. A single
    * item with its own pickup line is taken in that line alone, which already
    * says what happens; items without one answer `PICKUP_LINE`, once, narrated.
+   * Several items taken together say each different line once, in the order
+   * taken, with `PICKUP_LINE` first only when some item has no line of its own.
    */
   take(itemName: string): string {
     const candidates = this.findAllItems(itemName, { inventory: false })
@@ -620,8 +631,9 @@ Welcome to
     if (taken.length === 1) {
       responses.push(taken[0][1] || PICKUP_LINE)
     } else if (taken.length > 1) {
-      responses.push(PICKUP_LINE)
-      responses.push(...taken.map(([, message]) => message).filter(Boolean))
+      if (taken.some(([, message]) => !message)) responses.push(PICKUP_LINE)
+      const messages = taken.map(([, message]) => message).filter(Boolean)
+      responses.push(...new Set(messages))
     }
     responses.push(...prevented)
     return responses.join('\n')

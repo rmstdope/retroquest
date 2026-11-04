@@ -1,4 +1,4 @@
-import { Item } from '@/engine'
+import { Item, type GameState } from '@/engine'
 
 /**
  * A bent iron horseshoe from the forge. The merchant on the Road to Greendale
@@ -13,5 +13,13 @@ export class Horseshoe extends Item {
         'repairs.',
       canBeCarried: true,
     })
+  }
+
+  /** The line the story tells when Elior takes it, wherever it is lying. */
+  override pickedUp(_gameState: GameState): string {
+    return (
+      'It is heavy, and bent at one heel. ' +
+      'Iron like this does not go to waste.'
+    )
   }
 }

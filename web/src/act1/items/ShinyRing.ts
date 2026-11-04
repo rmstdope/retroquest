@@ -32,4 +32,12 @@ export class ShinyRing extends Item {
     this.description = ringDescription()
     return super.examine(gameState)
   }
+
+  /** The line the story tells when Elior takes it, wherever it is lying. */
+  override pickedUp(_gameState: GameState): string {
+    return (
+      'It is small and cold, and it fits in the hollow of your palm. ' +
+      'You close your hand around it before you think to.'
+    )
+  }
 }

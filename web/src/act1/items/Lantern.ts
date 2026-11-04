@@ -51,4 +51,12 @@ export class Lantern extends Item {
     }
     return `[failure]The [item_name]${this.name}[/item_name] is already lit.[/failure]`
   }
+
+  /** The line the story tells when Elior takes it, wherever it is lying. */
+  override pickedUp(_gameState: GameState): string {
+    return (
+      'The brass is worn smooth where hands have held it. ' +
+      'It has lit your way home for as long as you can remember.'
+    )
+  }
 }

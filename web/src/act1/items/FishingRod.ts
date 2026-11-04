@@ -50,4 +50,9 @@ export class FishingRod extends Item {
     }
     return super.useWith(gameState, other)
   }
+
+  /** The line the story tells when Elior takes it, wherever it is lying. */
+  override pickedUp(_gameState: GameState): string {
+    return 'It bends more than a rod should. ' + 'It will have to do.'
+  }
 }

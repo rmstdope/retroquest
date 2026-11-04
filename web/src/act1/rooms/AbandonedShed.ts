@@ -9,10 +9,18 @@ import { Lantern } from '../items/Lantern'
 import { Patches } from '../characters/Patches'
 import { FLAG_PATCHES_FOUND } from '../Act1StoryFlags'
 
+/** The shed as Elior sees it from outside, while its door is locked. */
+const LOCKED_DESCRIPTION =
+  'A rickety shed leans precariously at the edge of Willowbrook, its weathered ' +
+  'boards creaking in the wind. The [item_name]shed door[/item_name] is ' +
+  'locked, and no light gets past the grimy boards, but the air smells of ' +
+  'old earth and lamp oil.'
+
 /**
  * Abandoned Shed room: staged unlock and layered search progression.
  *
- * Once the workshop of Elior's father, it is dark inside. `unlock()` toggles
+ * Once the workshop of Elior's father, it is dark inside. While the door is
+ * locked, `descriptionFor` tells only of the outside. `unlock()` toggles
  * the locked state and injects the MysteriousBox, BrokenShovel and Patches,
  * the missing cat; the first search after unlocking adds the FishingRod and
  * Magnet, but only by the light of a lit lantern Elior holds or of the
@@ -42,6 +50,14 @@ export class AbandonedShed extends Room {
   /** Give a save made before the rewrite the current description. */
   override refreshSavedText(): void {
     this.description = new AbandonedShed().description
+  }
+
+  /**
+   * The outside of the shed while its door is locked, since Elior cannot yet
+   * see in; the inside once it is open.
+   */
+  override descriptionFor(_gameState: GameState): string {
+    return this.locked ? LOCKED_DESCRIPTION : this.description
   }
 
   /** Unlock the shed, add the unlock items, and return a descriptive message. */

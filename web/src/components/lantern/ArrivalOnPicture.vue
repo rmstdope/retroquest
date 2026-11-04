@@ -81,6 +81,8 @@ const newsCount = computed(() => {
 })
 /** The pages of the part up; empty until it is cut. */
 const pages = ref<ArrivalPage[]>([])
+/** The width (px) of the widest checklist anywhere in the part up, so every page's list keeps one left edge; 0 when it has none. */
+const checklistWidth = ref(0)
 /** The gap between the text and the pill (px), as in the card's rule. */
 const CARD_GAP = 14
 
@@ -120,13 +122,8 @@ function recut(): void {
     return
   }
   const available = room()
-  const fits = (pieces: ArrivalPiece[]): boolean => {
-    measure.innerHTML = pageLines({
-      pieces,
-      firstUnit: 0,
-      firstWord: 0,
-      scrolls: false,
-    })
+  const html = (lines: PageLine[]): string =>
+    lines
       .map((line) =>
         part.kind === 'news'
           ? `<div class="lq-arrival-line">${questTextHtml(line.markup)}</div>`
@@ -134,9 +131,31 @@ function recut(): void {
             `${renderMarkup(line.markup)}</p>`,
       )
       .join('')
+  // The whole part at once, each list as wide as its own lines make it.
+  measure.style.setProperty('--lq-checklist-width', '0px')
+  measure.innerHTML = html(
+    part.lines.map((line) => ({
+      unit: line.unit,
+      markup: line.markup,
+      wordStart: 0,
+    })),
+  )
+  checklistWidth.value = Math.max(
+    0,
+    ...Array.from(
+      measure.querySelectorAll<HTMLElement>('.lq-quest-checklist'),
+    ).map((list) => list.offsetWidth),
+  )
+  // The pages are measured with the width they will be drawn with.
+  measure.style.setProperty('--lq-checklist-width', `${checklistWidth.value}px`)
+  const fits = (pieces: ArrivalPiece[]): boolean => {
+    measure.innerHTML = html(
+      pageLines({ pieces, firstUnit: 0, firstWord: 0, scrolls: false }),
+    )
     return measure.offsetHeight <= available
   }
   const cut = paginate(part.lines, fits)
+  measure.style.removeProperty('--lq-checklist-width')
   measure.innerHTML = ''
   pages.value = cut
   const base = (unit: number): number =>
@@ -256,6 +275,7 @@ onBeforeUnmount(() => {
   <div
     ref="root"
     class="lq-arrival-stage"
+    :style="{ '--lq-checklist-width': `${checklistWidth}px` }"
     :class="{
       'lq-bare': !pictured,
       'lq-on': arrival.active,
@@ -510,10 +530,16 @@ onBeforeUnmount(() => {
   font-size: calc(24px * var(--lq-text-scale, 1));
   line-height: 1.5;
 }
-/* A checklist quest's needs stay a block in the middle, like the text around them. */
+/* A checklist quest's needs are one left-aligned column, as wide as its longest
+   line but at most 22em of the text's own size, centred under the paragraph;
+   a phone's card is narrower, so there the column fills it. */
 .lq-arrival-line :deep(.lq-quest-checklist),
 .lq-arrival-twin :deep(.lq-quest-checklist) {
-  align-items: center;
+  width: fit-content;
+  min-width: min(var(--lq-checklist-width, 0px), 100%);
+  max-width: min(22em, 100%);
+  margin-inline: auto;
+  text-align: left;
 }
 .lq-arrival-event,
 .lq-arrival-twin :deep(.lq-arrival-event) {

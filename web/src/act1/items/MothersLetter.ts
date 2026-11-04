@@ -59,4 +59,12 @@ export class MothersLetter extends Item {
   override nameInSentence(options?: NameOptions): string {
     return super.nameInSentence({ ...options, bare: true })
   }
+
+  /** The line the story tells when Elior takes it, wherever it is lying. */
+  override pickedUp(_gameState: GameState): string {
+    return (
+      'You fold it along its old creases and put it inside your shirt, where it will stay dry. ' +
+      'Your hands are not quite steady.'
+    )
+  }
 }

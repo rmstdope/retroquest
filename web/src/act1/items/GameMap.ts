@@ -143,4 +143,12 @@ export class GameMap extends Item {
       'surprising detail.'
     )
   }
+
+  /** The line the story tells when Elior takes it, wherever it is lying. */
+  override pickedUp(_gameState: GameState): string {
+    return (
+      'You fold it so the village is on top. ' +
+      'Some of the paths on it you have never walked.'
+    )
+  }
 }

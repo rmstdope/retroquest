@@ -90,9 +90,9 @@
     "text": "Shadows Over Willowbrook"
   },
   {
-    "key": "02ead14d12fc21",
+    "key": "1b021bc216da8c",
     "speaker": "narrator",
-    "text": "Elior dreamed of a storm, a tune, and a figure in the dark that whispered his name. He woke with three words written down: …let them rest…"
+    "text": "You dreamed of a storm, a tune, and a figure in the dark that whispered your name. You woke with three words written down: …let them rest…"
   },
   {
     "key": "0678b14852e2e7",
@@ -115,6 +115,16 @@
     "text": "You'd rather light the lantern before you carry it anywhere; it is no use to you dark."
   },
   {
+    "key": "1ce01e698ceb2f",
+    "speaker": "narrator",
+    "text": "Elior's Cottage"
+  },
+  {
+    "key": "1c7d5a0dd93ef5",
+    "speaker": "narrator",
+    "text": "A modest cottage with a straw roof and a cozy hearth. The scent of fresh bread and old books fills the air. Sunlight filters through lace curtains, illuminating shelves lined with trinkets and memories. A sturdy wooden table sits in the center, and a gentle fire crackles in the hearth. Grandmother stands by it, humming, and keeps an eye on the bread."
+  },
+  {
     "key": "151113c15ddf05",
     "speaker": "narrator",
     "text": "You don't see that here."
@@ -133,16 +143,6 @@
     "key": "126089c08d01aa",
     "speaker": "grandmother",
     "text": "I'm not sure what you mean, dear, but I do like to hear you talk."
-  },
-  {
-    "key": "1ce01e698ceb2f",
-    "speaker": "narrator",
-    "text": "Elior's Cottage"
-  },
-  {
-    "key": "1c7d5a0dd93ef5",
-    "speaker": "narrator",
-    "text": "A modest cottage with a straw roof and a cozy hearth. The scent of fresh bread and old books fills the air. Sunlight filters through lace curtains, illuminating shelves lined with trinkets and memories. A sturdy wooden table sits in the center, and a gentle fire crackles in the hearth. Grandmother stands by it, humming, and keeps an eye on the bread."
   },
   {
     "key": "08d4c458b986f2",
@@ -185,9 +185,9 @@
     "text": "You stop and think over what you know."
   },
   {
-    "key": "13c7352845b63e",
+    "key": "1306b80ade10a7",
     "speaker": "narrator",
-    "text": "Shadows Over Willowbrook: Elior dreamed of a storm, a tune, and a figure in the dark that whispered his name. He woke with three words written down: …let them rest…"
+    "text": "Shadows Over Willowbrook: You dreamed of a storm, a tune, and a figure in the dark that whispered your name. You woke with three words written down: …let them rest…"
   },
   {
     "key": "173e85cde1cf46",
@@ -215,9 +215,9 @@
     "text": "A leather-bound journal filled with Elior's careful handwriting. The pages are full of notes, sketches, and secrets."
   },
   {
-    "key": "0cf8dcdb267d33",
+    "key": "0cdc6ab7134945",
     "speaker": "narrator",
-    "text": "This might come in handy, so you decide to pick it up."
+    "text": "The crust gives under your thumb. It smells like morning."
   },
   {
     "key": "1c66ff8c216536",
@@ -233,6 +233,11 @@
     "key": "087d0e7421fe92",
     "speaker": "narrator",
     "text": "You are not particularly hungry."
+  },
+  {
+    "key": "0f934961783f9e",
+    "speaker": "narrator",
+    "text": "The brass is worn smooth where hands have held it. It has lit your way home for as long as you can remember."
   },
   {
     "key": "1198ba6187843e",
@@ -400,6 +405,11 @@
     "text": "The Faded Photograph: An old photograph of your parents, hidden away in a drawer. On the back is a line in your mother's hand."
   },
   {
+    "key": "00b30025477f94",
+    "speaker": "narrator",
+    "text": "You hold it by the edges so as not to smudge the faces. The child in it is you, though you do not remember the day."
+  },
+  {
     "key": "1f0a016b014864",
     "speaker": "narrator",
     "text": "Your grandmother takes the photograph and holds it close to the window."
@@ -500,9 +510,24 @@
     "text": "Know your village: Something pulls at you to walk every lane of Willowbrook, and to look properly at the places you have passed a thousand times."
   },
   {
+    "key": "10067a099782f8",
+    "speaker": "narrator",
+    "text": "Rust comes off on your palm. Someone worked a field with it for years."
+  },
+  {
     "key": "0d9183b0f6f76b",
     "speaker": "narrator",
     "text": "The ground is tough, and you unearth a small, tarnished coin! You quickly pocket it."
+  },
+  {
+    "key": "0d6adf5b5b587b",
+    "speaker": "narrator",
+    "text": "Rows of withered crops stretch beneath a brooding gray sky. The earth is cracked and dry, with only a few stubborn carrots hinting at better days. A faint breeze rustles the brittle leaves, carrying the scent of soil and distant rain. These rows were green a month ago."
+  },
+  {
+    "key": "1ebd9a997e44fa",
+    "speaker": "narrator",
+    "text": "It is small, and the stamp is worn. Not much, but it is something."
   },
   {
     "key": "064d680bbfe540",
@@ -513,6 +538,16 @@
     "key": "183f821d2aac3b",
     "speaker": "narrator",
     "text": "The coin lands heads up. Seems like a regular coin, perhaps for trading."
+  },
+  {
+    "key": "0d5fca4e49a460",
+    "speaker": "narrator",
+    "text": "You test the edge with your thumb. It would not cut bread."
+  },
+  {
+    "key": "066355cd593a88",
+    "speaker": "narrator",
+    "text": "It bends in your fingers, soft and nearly gone. It is still a carrot, just."
   },
   {
     "key": "0079706338d1c0",
@@ -528,6 +563,11 @@
     "key": "072bb04e4e7edc",
     "speaker": "narrator",
     "text": "A small wooden coop stands here, its planks patched and weathered. Nervous chickens cluck and flutter, their feathers ruffled as they dart between straw nests. The air is thick with the scent of hay and the occasional squawk. Sunbeams slip through the slats, casting striped shadows on the dirt floor. High on a rafter, out of reach, something glints where no hen could have put it."
+  },
+  {
+    "key": "0b9c1c18fe7ec5",
+    "speaker": "narrator",
+    "text": "It weighs nothing at all. You tuck it away before the wind can take it."
   },
   {
     "key": "18767cb9b0671b",
@@ -565,6 +605,16 @@
     "text": "A small, rusty key. It looks like it might unlock something."
   },
   {
+    "key": "05dc527c0c4e3a",
+    "speaker": "narrator",
+    "text": "It is small and rusty, and the teeth are worn. Someone used it often, once."
+  },
+  {
+    "key": "002a8f0cc3e6d7",
+    "speaker": "narrator",
+    "text": "It is still warm, and you hold it carefully. One wrong step and it is gone."
+  },
+  {
     "key": "13d8c3545b7f3a",
     "speaker": "grandmother",
     "text": "So the chickens gave up my little secret. I tucked that key up in the coop rafters years ago. It opens the old shed by the mill. It was a workshop once... your father's. I never could bring myself to go in. It's dark as a cellar in there, dear; take the lantern with you."
@@ -580,6 +630,16 @@
     "text": "Don't go giving your things away, love. People will talk."
   },
   {
+    "key": "0d49024e6a4c8b",
+    "speaker": "narrator",
+    "text": "Village Square"
+  },
+  {
+    "key": "087a91050d11c4",
+    "speaker": "narrator",
+    "text": "The heart of Willowbrook: cobblestones around an old stone fountain, and a weathered notice board covered in faded announcements. Half the market stalls stand empty. The people at the others keep their voices down, and stop talking when you pass."
+  },
+  {
     "key": "06c9636081f1d2",
     "speaker": "narrator",
     "text": "Tilda has nothing to sell you."
@@ -588,6 +648,16 @@
     "key": "1cafb496c9a807",
     "speaker": "tilda",
     "text": "The truth about what, love? You've lost me."
+  },
+  {
+    "key": "124d5c3ce7ffcb",
+    "speaker": "narrator",
+    "text": "General Store"
+  },
+  {
+    "key": "10b509fdf677ac",
+    "speaker": "narrator",
+    "text": "A cluttered shop with the shutters half down. Rope, apples, matches and trinkets crowd the shelves in the gloom. Hemlock stands at the window, watching the lane."
   },
   {
     "key": "10666258a6313c",
@@ -635,16 +705,6 @@
     "text": "No sign of Patches, then. I put a saucer out every night, near the old well where she was last seen. It's always still full in the morning. The store stays shut till she's home, lad."
   },
   {
-    "key": "0d49024e6a4c8b",
-    "speaker": "narrator",
-    "text": "Village Square"
-  },
-  {
-    "key": "087a91050d11c4",
-    "speaker": "narrator",
-    "text": "The heart of Willowbrook: cobblestones around an old stone fountain, and a weathered notice board covered in faded announcements. Half the market stalls stand empty. The people at the others keep their voices down, and stop talking when you pass."
-  },
-  {
     "key": "0c2f77642b7cb8",
     "speaker": "narrator",
     "text": "A sturdy wooden bucket with a rope handle. It's perfect for drawing water from a well or carrying supplies."
@@ -668,6 +728,11 @@
     "key": "145b9dc5201213",
     "speaker": "narrator",
     "text": "You search around the Village Square, but find nothing of interest beyond what you can already see."
+  },
+  {
+    "key": "07c7494529d5ac",
+    "speaker": "narrator",
+    "text": "The handle creaks, but it holds. Most things in Willowbrook are like that."
   },
   {
     "key": "195e7d2fc2417f",
@@ -745,6 +810,16 @@
     "text": "Can't melt it, can't mend it. No use to me, lad."
   },
   {
+    "key": "0c64c7e367b44a",
+    "speaker": "narrator",
+    "text": "Blacksmith's Forge"
+  },
+  {
+    "key": "07ac1fda167358",
+    "speaker": "narrator",
+    "text": "A hot, smoky forge. Coals glow in the hearth and the anvil rings. Hinges, ploughshares and horseshoes hang from the walls, waiting to be mended or fetched, and Borin wipes his brow without putting down the hammer."
+  },
+  {
     "key": "10adc84facab35",
     "speaker": "narrator",
     "text": "Borin eyes the dull knife."
@@ -765,14 +840,9 @@
     "text": "A coin's no use to me without something to put an edge on, lad. Bring the dull knife as well."
   },
   {
-    "key": "0c64c7e367b44a",
+    "key": "0456a9d57a4bdb",
     "speaker": "narrator",
-    "text": "Blacksmith's Forge"
-  },
-  {
-    "key": "07ac1fda167358",
-    "speaker": "narrator",
-    "text": "A hot, smoky forge. Coals glow in the hearth and the anvil rings. Hinges, ploughshares and horseshoes hang from the walls, waiting to be mended or fetched, and Borin wipes his brow without putting down the hammer."
+    "text": "It is heavy, and bent at one heel. Iron like this does not go to waste."
   },
   {
     "key": "160b587b246d02",
@@ -820,6 +890,11 @@
     "text": "You receive a sharp knife."
   },
   {
+    "key": "153ac46a338682",
+    "speaker": "narrator",
+    "text": "The new edge catches the light. You hold it by the handle, and carefully."
+  },
+  {
     "key": "16dbffbea6a688",
     "speaker": "narrator",
     "text": "A well-sharpened knife. It looks like it could cut through almost anything."
@@ -835,9 +910,9 @@
     "text": "Abandoned Shed"
   },
   {
-    "key": "171f9e8202e847",
+    "key": "17af0d0fc2534a",
     "speaker": "narrator",
-    "text": "A rickety shed leans precariously at the edge of Willowbrook, its weathered boards creaking in the wind. Rusty tools and broken crates are scattered about a long workbench, and a thick layer of dust covers everything. Little light gets past the grimy boards, and the air smells of old earth and lamp oil."
+    "text": "A rickety shed leans precariously at the edge of Willowbrook, its weathered boards creaking in the wind. The shed door is locked, and no light gets past the grimy boards, but the air smells of old earth and lamp oil."
   },
   {
     "key": "17ced776faa8d7",
@@ -870,6 +945,11 @@
     "text": "The mysterious box is locked, and there is no keyhole. The runes around the lid are the only way in, and they do not answer to hands."
   },
   {
+    "key": "171f9e8202e847",
+    "speaker": "narrator",
+    "text": "A rickety shed leans precariously at the edge of Willowbrook, its weathered boards creaking in the wind. Rusty tools and broken crates are scattered about a long workbench, and a thick layer of dust covers everything. Little light gets past the grimy boards, and the air smells of old earth and lamp oil."
+  },
+  {
     "key": "1e3e27116da665",
     "speaker": "narrator",
     "text": "A small nose twitches behind the crates. Curiosity gets the better of her."
@@ -898,6 +978,11 @@
     "key": "0350b91735f95b",
     "speaker": "narrator",
     "text": "Patches flicks an ear at you, but the words mean nothing to her."
+  },
+  {
+    "key": "18b79c34c55b61",
+    "speaker": "narrator",
+    "text": "The handle shifts where it is cracked. It will dig, if you are gentle with it."
   },
   {
     "key": "1d1933af2244eb",
@@ -950,9 +1035,19 @@
     "text": "You search around the shed again, but find nothing else of interest among the clutter."
   },
   {
+    "key": "115d4179075a76",
+    "speaker": "narrator",
+    "text": "It bends more than a rod should. It will have to do."
+  },
+  {
     "key": "13c26768bcc0c8",
     "speaker": "narrator",
     "text": "You could force the magnet onto the rod, but it would likely prevent you from fishing — and you are really keen on doing some fishing!"
+  },
+  {
+    "key": "099ef7427214cf",
+    "speaker": "narrator",
+    "text": "It snaps to the nearest bit of iron and has to be pulled free. Small as it is, it does not let go easily."
   },
   {
     "key": "1e0db63760df0d",
@@ -993,6 +1088,11 @@
     "key": "0ea1159058b214",
     "speaker": "narrator",
     "text": "Patches blinks at you slowly from beside the hearth and begins to purr."
+  },
+  {
+    "key": "11a6e02fe6a0b9",
+    "speaker": "narrator",
+    "text": "A cluttered shop. Rope, apples, matches and trinkets crowd the shelves, and the air smells of fruit, wax and old wood. Hemlock dusts jars between customers."
   },
   {
     "key": "0e695490a6f205",
@@ -1050,6 +1150,16 @@
     "text": "Those herbs are part of my stores, Elior. They are not for taking, but for healing those who truly need them."
   },
   {
+    "key": "1d8e270a441a9c",
+    "speaker": "narrator",
+    "text": "Mira's Hut"
+  },
+  {
+    "key": "16e6a86be68933",
+    "speaker": "narrator",
+    "text": "A small hut hung with drying herbs: lavender, sage, and roots in bundles from the rafters. Shelves of bottles line the walls, every one labelled. Mira moves among them without looking, the way you move through your own kitchen."
+  },
+  {
     "key": "00382f3f08c6be",
     "speaker": "narrator",
     "text": "Mira puts her hand over the amulet before yours gets there."
@@ -1068,16 +1178,6 @@
     "key": "1578d421fda558",
     "speaker": "mira",
     "text": "I have no need for this, child."
-  },
-  {
-    "key": "1d8e270a441a9c",
-    "speaker": "narrator",
-    "text": "Mira's Hut"
-  },
-  {
-    "key": "16e6a86be68933",
-    "speaker": "narrator",
-    "text": "A small hut hung with drying herbs: lavender, sage, and roots in bundles from the rafters. Shelves of bottles line the walls, every one labelled. Mira moves among them without looking, the way you move through your own kitchen."
   },
   {
     "key": "0e4bf89a769eb9",
@@ -1195,16 +1295,6 @@
     "text": "It looks like it would provide good protection if worn."
   },
   {
-    "key": "124d5c3ce7ffcb",
-    "speaker": "narrator",
-    "text": "General Store"
-  },
-  {
-    "key": "10b509fdf677ac",
-    "speaker": "narrator",
-    "text": "A cluttered shop with the shutters half down. Rope, apples, matches and trinkets crowd the shelves in the gloom. Hemlock stands at the window, watching the lane."
-  },
-  {
     "key": "051b996a4feda1",
     "speaker": "narrator",
     "text": "A long, sturdy coil of rope. Useful for climbing, tying, or hauling things."
@@ -1290,19 +1380,29 @@
     "text": "Patches blinks at you slowly from the counter and begins to purr."
   },
   {
+    "key": "13b9ea49da77c5",
+    "speaker": "narrator",
+    "text": "A cluttered shop. Rope, apples, matches and trinkets crowd the shelves, and the air smells of fruit, wax and old wood. Hemlock dusts jars between customers, and every so often looks at the counter, where his cat sleeps."
+  },
+  {
     "key": "05feedc880605f",
     "speaker": "narrator",
     "text": "He counts the coin twice and hands over the rope, and an apple with it."
   },
   {
+    "key": "1c9a1c1c3d07dd",
+    "speaker": "narrator",
+    "text": "It is crisp and cold, and nearly too red. You save it for later."
+  },
+  {
+    "key": "0f211fb3db5538",
+    "speaker": "narrator",
+    "text": "You loop it over your shoulder. It is good rope, and it was not cheap."
+  },
+  {
     "key": "0c5e064199040e",
     "speaker": "narrator",
     "text": "You put a hand to the gears. They turn under it and keep turning; fingers will not stop them."
-  },
-  {
-    "key": "0debb7a078ccd8",
-    "speaker": "narrator",
-    "text": "You hear a faint whirring and clicking from within the strange mechanism, and beneath it a low hum, as if something were being drawn up from far below."
   },
   {
     "key": "129314440d0b65",
@@ -1313,6 +1413,11 @@
     "key": "1a8eaaafa0c48b",
     "speaker": "narrator",
     "text": "A creaky windmill towers above, its sails turning slowly in the breeze. Dusty gears and cobwebs fill the interior, and the scent of flour hangs in the air. Sunlight streams through broken windows, illuminating sacks of grain and a heavy millstone. Amidst the old workings, you notice a strange mechanism of black iron, whirring to itself, that doesn't belong to the mill's original design."
+  },
+  {
+    "key": "0debb7a078ccd8",
+    "speaker": "narrator",
+    "text": "You hear a faint whirring and clicking from within the strange mechanism, and beneath it a low hum, as if something were being drawn up from far below."
   },
   {
     "key": "0fb97f6bf77433",
@@ -1345,6 +1450,11 @@
     "text": "The strange mechanism is silent now, its gears jammed fast."
   },
   {
+    "key": "0169571959bc2e",
+    "speaker": "narrator",
+    "text": "A creaky windmill towers above, its sails turning slowly in the breeze. Dusty gears and cobwebs fill the interior, and the scent of flour hangs in the air. Sunlight streams through broken windows, illuminating sacks of grain and a heavy millstone. Amidst the old workings, the black-iron mechanism stands jammed with a rope, silent at last."
+  },
+  {
     "key": "0bcb5f657bc789",
     "speaker": "narrator",
     "text": "The strange mechanism stands jammed with a rope, its gears locked and its whirring stilled. The floor no longer hums beneath it. A compartment hangs open."
@@ -1353,6 +1463,11 @@
     "key": "099e1e369bb72e",
     "speaker": "narrator",
     "text": "A chunk of stone broken from the old mill's grinding wheel. It's heavy and rough, but could be useful for repairs or as a tool."
+  },
+  {
+    "key": "17bf7483d1fede",
+    "speaker": "narrator",
+    "text": "It is rough and heavy, and the edge where it broke is still pale. Whoever built that mill meant it to last."
   },
   {
     "key": "10759638e49eed",
@@ -1395,11 +1510,6 @@
     "text": "You lift the smooth stone a little, then set it back. It belongs here, at the bend of the river."
   },
   {
-    "key": "08d85789dda6e1",
-    "speaker": "narrator",
-    "text": "You have a rod, but you're not quite sure how to fish effectively yet. Perhaps someone could teach you."
-  },
-  {
     "key": "1c76c403ae9607",
     "speaker": "narrator",
     "text": "Riverbank"
@@ -1408,6 +1518,11 @@
     "key": "139edb34a8e6fc",
     "speaker": "narrator",
     "text": "A gentle river flows past the village and makes a slow bend here, past the reeds and a broad, flat stone at the water's edge. Insects hum over the water. A weathered fisherman sits on an upturned crate at the bend, his line in."
+  },
+  {
+    "key": "08d85789dda6e1",
+    "speaker": "narrator",
+    "text": "You have a rod, but you're not quite sure how to fish effectively yet. Perhaps someone could teach you."
   },
   {
     "key": "1fbe63de89a20b",
@@ -1483,6 +1598,11 @@
     "key": "0e033f88a0be02",
     "speaker": "narrator",
     "text": "You add the fish to your inventory."
+  },
+  {
+    "key": "18cb16685fcd14",
+    "speaker": "narrator",
+    "text": "It is slippery and cold. It will not keep for long."
   },
   {
     "key": "0a3736238c7386",
@@ -1625,6 +1745,11 @@
     "text": "The rest has blurred away in the water stains."
   },
   {
+    "key": "107645184b309e",
+    "speaker": "narrator",
+    "text": "You fold it along its old creases and put it inside your shirt, where it will stay dry. Your hands are not quite steady."
+  },
+  {
     "key": "08e4e978483387",
     "speaker": "narrator",
     "text": "At the river bend you found your mother's letter, hidden beneath the smooth stone. Its words raise more questions than they answer, but they are hers."
@@ -1670,9 +1795,19 @@
     "text": "The wire is pulled tight around the kit's leg, too tight for fingers."
   },
   {
+    "key": "05d740c9dea2d1",
+    "speaker": "narrator",
+    "text": "A winding path snakes into the heart of the woods, dappled sunlight flickering through the canopy above. Where thick vines once blocked a small alcove, they now lie cut, revealing the opening. The air is alive with the scent of pine and wildflowers, and the ground is soft with moss and fallen leaves. Birds flit between branches, and the occasional snap of a twig hints at unseen creatures nearby. In the alcove a fox kit is caught in a poacher's snare, too tired now to struggle."
+  },
+  {
     "key": "0335c4695a33b6",
     "speaker": "narrator",
     "text": "You kneel and saw through the wire, slow and careful. The moment it gives, the fox kit twists free, stares at you for one heartbeat, and bolts into the undergrowth."
+  },
+  {
+    "key": "0aa89527aebd32",
+    "speaker": "narrator",
+    "text": "A winding path snakes into the heart of the woods, dappled sunlight flickering through the canopy above. Where thick vines once blocked a small alcove, they now lie cut, revealing the opening. The air is alive with the scent of pine and wildflowers, and the ground is soft with moss and fallen leaves. Birds flit between branches, and the occasional snap of a twig hints at unseen creatures nearby. In the alcove lies a poacher's snare, cut and empty."
   },
   {
     "key": "01863f61be3887",
@@ -1685,6 +1820,11 @@
     "text": "A fox kit, no bigger than a cat, one hind leg caught fast in the wire. It watches you and does not struggle."
   },
   {
+    "key": "1e459a121953cc",
+    "speaker": "narrator",
+    "text": "It is straight and sound, and about the right length. A good stick is worth keeping."
+  },
+  {
     "key": "150ecc75a68785",
     "speaker": "narrator",
     "text": "Hidden Glade"
@@ -1693,6 +1833,11 @@
     "key": "108b4faf369d64",
     "speaker": "narrator",
     "text": "A hushed clearing hidden deep within the forest, dim and overgrown. Brambles crowd its edges, and the tall grass stands grey and still beneath branches that shut out the sun. In the center, a mossy stone bears a faint inscription, too deep in shadow to read. An unnatural darkness lingers here, though the sky above the branches is clear."
+  },
+  {
+    "key": "1017d150140e3d",
+    "speaker": "narrator",
+    "text": "It is warm, warmer than the sun could make it. You keep it anyway."
   },
   {
     "key": "1a40afb1558cf8",
@@ -1743,6 +1888,11 @@
     "key": "16827b9f20e9d4",
     "speaker": "narrator",
     "text": "You take a moment to rest in the tranquil glade. The deer continues to graze peacefully."
+  },
+  {
+    "key": "04214f26c5fd27",
+    "speaker": "narrator",
+    "text": "The petals stay open in your hand. You hold it carefully, the way you would hold something that trusted you."
   },
   {
     "key": "1174c72ff016c4",
@@ -1870,6 +2020,11 @@
     "text": "You receive a box of matches."
   },
   {
+    "key": "05d19eb05563fe",
+    "speaker": "narrator",
+    "text": "The box rattles, nearly full. You keep it away from anything damp."
+  },
+  {
     "key": "013aaa55350b1c",
     "speaker": "narrator",
     "text": "The candle now casts a warm glow. The flickering candlelight reveals a locket that was previously unseen!"
@@ -1930,6 +2085,11 @@
     "text": "The blessing the priest said over you when you found the founders' locket."
   },
   {
+    "key": "138271b8b561ec",
+    "speaker": "narrator",
+    "text": "The silver is cool against your palm. You keep it where you can feel it."
+  },
+  {
     "key": "02f19afee901ad",
     "speaker": "narrator",
     "text": "The locket springs open."
@@ -1973,6 +2133,11 @@
     "key": "00e004cb1e103e",
     "speaker": "hemlock",
     "text": "Not something I carry, lad. Not since the caravans stopped, anyway."
+  },
+  {
+    "key": "19d76ee1d2aa4c",
+    "speaker": "narrator",
+    "text": "A small hut hung with drying herbs: lavender, sage, and roots in bundles from the rafters. Shelves of bottles line the walls, every one labelled. Mira moves among them without looking, the way you move through your own kitchen. On its stand, the ancient amulet glows brighter as you step in, as if something you carry has woken it."
   },
   {
     "key": "06e59d8bf016e5",
@@ -2090,9 +2255,9 @@
     "text": "All basic magic learned"
   },
   {
-    "key": "0b10d15228a70d",
+    "key": "053cf06d097caf",
     "speaker": "narrator",
-    "text": "The flower opened for Elior. Mira showed him how to mend, how to open and how to make a light, and promised him the ancient amulet once he is ready for the road."
+    "text": "The flower opened for you. Mira showed you how to mend, how to open and how to make a light, and promised you the ancient amulet once you are ready for the road."
   },
   {
     "key": "14f81e7e1c94a7",
@@ -2160,9 +2325,9 @@
     "text": "Not yet. I'll not send you out half-dressed and half-taught. Come back when you're ready for the road, with a blessing on you for it."
   },
   {
-    "key": "179b6c4be7cbd6",
+    "key": "1a7bbc82bd3eb1",
     "speaker": "narrator",
-    "text": "Shadows Over Willowbrook: The flower opened for Elior. Mira showed him how to mend, how to open and how to make a light, and promised him the ancient amulet once he is ready for the road."
+    "text": "Shadows Over Willowbrook: The flower opened for you. Mira showed you how to mend, how to open and how to make a light, and promised you the ancient amulet once you are ready for the road."
   },
   {
     "key": "094309f8faa785",
@@ -2315,6 +2480,11 @@
     "text": "The mysterious box is now empty."
   },
   {
+    "key": "14e071982b1199",
+    "speaker": "narrator",
+    "text": "You fold it so the village is on top. Some of the paths on it you have never walked."
+  },
+  {
     "key": "03f858ec732f26",
     "speaker": "narrator",
     "text": "An open, ornate wooden box. Only a folded note remains inside, in your father's careful, slanting hand:"
@@ -2338,6 +2508,11 @@
     "key": "1309044bd823d1",
     "speaker": "narrator",
     "text": "A vibrant, healthy carrot, freshly revived. It looks delicious and full of nutrients."
+  },
+  {
+    "key": "15d9006cd3e57f",
+    "speaker": "narrator",
+    "text": "It is cool and firm, with soil still on it. Not long ago it was barely alive."
   },
   {
     "key": "0bfc61cc655209",
@@ -2390,6 +2565,11 @@
     "text": "The old water splashes out onto the stones, and the bucket comes up again full of clear water."
   },
   {
+    "key": "1be208a0d05c61",
+    "speaker": "narrator",
+    "text": "An old stone well stands between the field and the forge, its stones worn smooth by countless hands. The water below glimmers with a crystalline clarity, and the air is cool and damp. Moss creeps up the sides."
+  },
+  {
     "key": "140315ff327bcd",
     "speaker": "narrator",
     "text": "An old stone well, its surface worn smooth, its shaft disappearing into the depths. The water within is crystal clear. You can see something shiny at the bottom, but it's still too deep to reach by hand."
@@ -2405,14 +2585,24 @@
     "text": "Something else clings to the magnet beside it: a rune token of black iron, scored with a twisted rune. It is cold, far colder than the water it came from. Wells do not grow things like this. Someone put it there."
   },
   {
-    "key": "1399c1c1451751",
+    "key": "01df5a0bd6f8b4",
     "speaker": "narrator",
-    "text": "Fishing the ring from the purified well, Elior drew up something else: a rune token of black iron, scored with a twisted rune and colder than the water. The well did not sour by itself."
+    "text": "Fishing the ring from the purified well, you drew up something else: a rune token of black iron, scored with a twisted rune and colder than the water. The well did not sour by itself."
   },
   {
     "key": "1864112ce187d8",
     "speaker": "narrator",
     "text": "The well gave up a silver ring, and something else besides."
+  },
+  {
+    "key": "0274d452c5f316",
+    "speaker": "narrator",
+    "text": "It is small and cold, and it fits in the hollow of your palm. You close your hand around it before you think to."
+  },
+  {
+    "key": "044350b2478cee",
+    "speaker": "narrator",
+    "text": "It is cold, and it stays cold. You put it away, and you do not like having it."
   },
   {
     "key": "0554391f98fcd8",
@@ -2440,9 +2630,9 @@
     "text": "A small disc of black iron, cold to the touch however long you hold it. A twisted rune, like a root strangling itself, is scored deep into its face. Nothing about it was lost by accident; someone made it, and made it to last."
   },
   {
-    "key": "054a2f940dd0c4",
+    "key": "043f48f8b21bf7",
     "speaker": "narrator",
-    "text": "Shadows Over Willowbrook: Fishing the ring from the purified well, Elior drew up something else: a rune token of black iron, scored with a twisted rune and colder than the water. The well did not sour by itself."
+    "text": "Shadows Over Willowbrook: Fishing the ring from the purified well, you drew up something else: a rune token of black iron, scored with a twisted rune and colder than the water. The well did not sour by itself."
   },
   {
     "key": "1bc47d048327f6",
@@ -2450,9 +2640,9 @@
     "text": "A man in a grey cloak stands at the far door with his back to you, quite still, his head bent as if he were listening to the floor. You have made no sound, and yet he knows you are there. He does not turn. He steps out into the light toward the river, and when you reach the door the path is empty."
   },
   {
-    "key": "193dd378d0bc22",
+    "key": "0a6c48ce9a3a69",
     "speaker": "narrator",
-    "text": "At the Old Mill a man in a grey cloak stood at the far door with his back to Elior. He left toward the river without turning."
+    "text": "At the Old Mill a man in a grey cloak stood at the far door with his back to you. He left toward the river without turning."
   },
   {
     "key": "1ea4811e078146",
@@ -2460,9 +2650,9 @@
     "text": "The spell finds nothing to turn. The black iron has no lock; it was never meant to be opened, only to run, and now not even that."
   },
   {
-    "key": "1ee59169da28d9",
+    "key": "13813698c46ff9",
     "speaker": "narrator",
-    "text": "Shadows Over Willowbrook: At the Old Mill a man in a grey cloak stood at the far door with his back to Elior. He left toward the river without turning."
+    "text": "Shadows Over Willowbrook: At the Old Mill a man in a grey cloak stood at the far door with his back to you. He left toward the river without turning."
   },
   {
     "key": "04d65f3ff1cd0b",
@@ -2590,6 +2780,11 @@
     "text": "The grass at your feet stands a little taller. Nothing here was waiting for it."
   },
   {
+    "key": "0180ba60de464d",
+    "speaker": "narrator",
+    "text": "A peaceful clearing bathed in golden sunlight, hidden deep within the forest. Wildflowers carpet the ground, and a gentle breeze stirs the tall grass. In the center, a mossy stone bears a faint, magical inscription. Beneath it, in a plainer hand, is carved: “Power follows purpose; purpose follows truth.” A graceful deer grazes quietly, occasionally lifting its head to watch you with wise, gentle eyes. You recall picking a beautiful rare flower that once bloomed near the mossy stone."
+  },
+  {
     "key": "0245e6ba2c8489",
     "speaker": "narrator",
     "text": "The deer does not answer, not in words. It lifts its head toward the glowing stone, then dips it to you, slow and deliberate, as if in thanks."
@@ -2608,6 +2803,11 @@
     "key": "02625eaf626e1f",
     "speaker": "narrator",
     "text": "A handful of small, juicy berries. They look edible, but you can't be sure they're safe."
+  },
+  {
+    "key": "0aa9663e4bf7da",
+    "speaker": "narrator",
+    "text": "They stain your fingers dark. You do not know yet if they are safe."
   },
   {
     "key": "0fef245d4b77eb",
@@ -2658,6 +2858,16 @@
     "key": "1df4f139719b03",
     "speaker": "narrator",
     "text": "You receive a travel cloak."
+  },
+  {
+    "key": "0f447a662c8d5b",
+    "speaker": "narrator",
+    "text": "It is heavy, and it smells of cedar. She must have kept it a long time."
+  },
+  {
+    "key": "074dceb06f4be1",
+    "speaker": "narrator",
+    "text": "It is warm through the cloth. It smells of home, and of her kitchen."
   },
   {
     "key": "0c5f5b929a897d",
@@ -2745,6 +2955,16 @@
     "text": "I'd not get a copper for that in Greendale, friend."
   },
   {
+    "key": "182c839e0a2572",
+    "speaker": "narrator",
+    "text": "Road to Greendale"
+  },
+  {
+    "key": "0a06acda3b39a7",
+    "speaker": "narrator",
+    "text": "The main road out of Willowbrook runs east under old oaks, their branches meeting overhead. The way is well trodden, lined with wildflowers and fallen leaves. A merchant's cart stands at the roadside, and his thin grey mare grazes beside it on three good shoes."
+  },
+  {
     "key": "06c49bbc27a458",
     "speaker": "merchant",
     "text": "That's kind, friend, but you'll want every bite of that where you're going. Keep it."
@@ -2770,14 +2990,9 @@
     "text": "The cleansing runs over the merchant and finds nothing to wash away."
   },
   {
-    "key": "182c839e0a2572",
+    "key": "0d7761379b2cbf",
     "speaker": "narrator",
-    "text": "Road to Greendale"
-  },
-  {
-    "key": "0a06acda3b39a7",
-    "speaker": "narrator",
-    "text": "The main road out of Willowbrook runs east under old oaks, their branches meeting overhead. The way is well trodden, lined with wildflowers and fallen leaves. A merchant's cart stands at the roadside, and his thin grey mare grazes beside it on three good shoes."
+    "text": "The teeth are dull and orange with rust. It will cut something soft, once or twice."
   },
   {
     "key": "04e3c6b9a3c930",
@@ -2838,6 +3053,11 @@
     "key": "1d32015bd63445",
     "speaker": "narrator",
     "text": "You have gathered all the items needed for your journey. With your preparations complete, you are ready to face whatever lies beyond Willowbrook."
+  },
+  {
+    "key": "064150cf1b3ad1",
+    "speaker": "narrator",
+    "text": "The leather is soft from other people's roads. They feel ready to go, even if you are not."
   },
   {
     "key": "166b8ce7d73f50",
@@ -3040,6 +3260,11 @@
     "text": "Still here? Go and say a proper goodbye to your grandmother. Then go."
   },
   {
+    "key": "116aac75767bd3",
+    "speaker": "narrator",
+    "text": "A small hut hung with drying herbs: lavender, sage, and roots in bundles from the rafters. Shelves of bottles line the walls, every one labelled. Mira moves among them without looking, the way you move through your own kitchen. The stand where the amulet rested stands empty."
+  },
+  {
     "key": "05633832d62aae",
     "speaker": "tilda",
     "text": "Mira's amulet... you're leaving, aren't you? Well. Don't you dare go without a proper send-off from the bakery. And mind you come home, love."
@@ -3070,9 +3295,19 @@
     "text": "A mysterious amulet inscribed with runes. At its centre, a sun rises over three linked rings. It hums softly in your hand, as if answering something stirring beneath the floor."
   },
   {
+    "key": "007ceb3ed3f3ce",
+    "speaker": "narrator",
+    "text": "A creaky windmill towers above, its sails turning slowly in the breeze. Dusty gears and cobwebs fill the interior, and the scent of flour hangs in the air. Sunlight streams through broken windows, illuminating sacks of grain and a heavy millstone. Amidst the old workings, the black-iron mechanism stands jammed with a rope, silent at last. At your side, the ancient amulet hums softly, as if answering something stirring beneath the floor."
+  },
+  {
     "key": "01ec643e83edc4",
     "speaker": "narrator",
     "text": "A mysterious amulet inscribed with runes. At its centre, a sun rises over three linked rings. It glows in your hand, brightest when you hold it near the mossy stone."
+  },
+  {
+    "key": "0b311f2a9c19ba",
+    "speaker": "narrator",
+    "text": "A peaceful clearing bathed in golden sunlight, hidden deep within the forest. Wildflowers carpet the ground, and a gentle breeze stirs the tall grass. In the center, a mossy stone bears a faint, magical inscription. Beneath it, in a plainer hand, is carved: “Power follows purpose; purpose follows truth.” Beside the mossy stone, the ancient amulet in your hand begins to glow. A graceful deer grazes quietly, occasionally lifting its head to watch you with wise, gentle eyes. You recall picking a beautiful rare flower that once bloomed near the mossy stone."
   },
   {
     "key": "14cc1c80d9153b",
@@ -3145,9 +3380,9 @@
     "text": "Main quest complete"
   },
   {
-    "key": "08c6c37898c1d8",
+    "key": "179884ac56aaea",
     "speaker": "narrator",
-    "text": "The well was poisoned on purpose, and whoever did it came to Willowbrook looking for an amulet. Elior carries that amulet now, on the road to Greendale."
+    "text": "The well was poisoned on purpose, and whoever did it came to Willowbrook looking for an amulet. You carry that amulet now, on the road to Greendale."
   },
   {
     "key": "008b6b53a7eaca",

@@ -1,4 +1,4 @@
-import { Item } from '@/engine'
+import { Item, type GameState } from '@/engine'
 
 /** Derelict digging tool hinting at future repair or crafting systems. */
 export class BrokenShovel extends Item {
@@ -12,5 +12,13 @@ export class BrokenShovel extends Item {
       shortName: 'shovel',
       canBeCarried: true,
     })
+  }
+
+  /** The line the story tells when Elior takes it, wherever it is lying. */
+  override pickedUp(_gameState: GameState): string {
+    return (
+      'The handle shifts where it is cracked. ' +
+      'It will dig, if you are gentle with it.'
+    )
   }
 }

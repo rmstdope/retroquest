@@ -1,4 +1,4 @@
-import { Item } from '@/engine'
+import { Item, type GameState } from '@/engine'
 
 /** A shriveled carrot that can be revived into a fresh carrot. */
 export class WitheredCarrot extends Item {
@@ -24,6 +24,20 @@ export class WitheredCarrot extends Item {
       'The [item_name]' +
       this.name.toLowerCase() +
       '[/item_name] looks vibrant and healthy!'
+    )
+  }
+
+  /** The line for the carrot as it is when taken: withered, or fresh once revived. */
+  override pickedUp(_gameState: GameState): string {
+    if (this.name === 'fresh carrot') {
+      return (
+        'It is cool and firm, with soil still on it. ' +
+        'Not long ago it was barely alive.'
+      )
+    }
+    return (
+      'It bends in your fingers, soft and nearly gone. ' +
+      'It is still a carrot, just.'
     )
   }
 }
