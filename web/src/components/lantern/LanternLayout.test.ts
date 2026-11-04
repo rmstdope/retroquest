@@ -13,6 +13,19 @@ import {
 import { narrationKey } from '@/lantern/narrationKey'
 import { narrationWords } from '@/lantern/narrationManifest'
 import type { Turn } from '@/stores/useGameStore'
+import type * as SceneMixModule from '@/lantern/sceneMix'
+import type { SceneEntry } from '@/lantern/sceneMix'
+
+/** Scenes whose mix a test gives in place of the committed one. */
+const mixOf = vi.hoisted(() => ({}) as Record<string, SceneEntry>)
+vi.mock('@/lantern/sceneMix', async (importOriginal) => {
+  const actual = await importOriginal<typeof SceneMixModule>()
+  return {
+    ...actual,
+    sceneMixOf: (scene: string): SceneEntry | undefined =>
+      mixOf[scene] ?? actual.sceneMixOf(scene),
+  }
+})
 
 /** Wait for the next animation frame (an open name menu listens for scrolls from then on). */
 function nextFrame(): Promise<void> {
@@ -1696,7 +1709,14 @@ describe('LanternLayout', () => {
         return w.get('.lq-now-playing').text()
       }
 
-      afterEach(() => vi.unstubAllGlobals())
+      // The square plays what the game chooses, whatever music the committed mix names.
+      beforeEach(() => {
+        mixOf['act1-village-square'] = { effects: [] }
+      })
+      afterEach(() => {
+        vi.unstubAllGlobals()
+        delete mixOf['act1-village-square']
+      })
 
       it('credits a studio take to Content Studio', async () => {
         const text = await settingsWith({

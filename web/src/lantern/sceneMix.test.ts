@@ -197,16 +197,17 @@ describe('sceneMixOf', () => {
   })
 
   it('reads the committed mixes of every act', () => {
+    // The levels are tuned in the studio, so only the clips are pinned.
     expect(sceneMixOf(DREAM)?.effects).toContainEqual({
       id: 'rain',
       play: { mode: 'loop' },
-      level: 1,
+      level: expect.any(Number),
     })
     expect(sceneMixOf(STORE)?.effects).toContainEqual({
       id: 'cat-purr',
       play: { mode: 'loop' },
       state: 'cat-home',
-      level: 1,
+      level: expect.any(Number),
     })
   })
 })
