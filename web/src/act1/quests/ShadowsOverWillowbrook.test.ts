@@ -213,4 +213,19 @@ describe('Shadows Over Willowbrook log', () => {
 
     expect(game.hint()).not.toContain('[item_name]map[/item_name]')
   })
+
+  it('keeps the journal hint away from the road', () => {
+    const game = new Game([new Act1()])
+    executeCommands(game, [...ACT1_GOLDEN_PATH, 'go west'])
+
+    expect(game.hint()).not.toContain('[item_name]map[/item_name]')
+  })
+
+  it('does not send Elior to a map he has put down', () => {
+    const game = new Game([new Act1()])
+    executeCommands(game, [...ACT1_GOLDEN_PATH, 'drop map'])
+    expect(game.state.hasItem('map')).toBe(false)
+
+    expect(game.hint()).not.toContain('[item_name]map[/item_name]')
+  })
 })

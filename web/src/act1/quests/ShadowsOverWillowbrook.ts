@@ -13,6 +13,8 @@ import {
   FLAG_WELL_EXAMINED,
   FLAG_WOKE_FROM_DREAM,
 } from '../Act1StoryFlags'
+import { GameMap } from '../items/GameMap'
+import { RoadToGreendale } from '../rooms/RoadToGreendale'
 
 /**
  * Main Act I quest tracking the unfolding village corruption mystery.
@@ -136,18 +138,16 @@ export class ShadowsOverWillowbrookQuest extends Quest {
   }
 
   /**
-   * Once every side quest is done, the amulet is carried and Elior stands on
-   * the Road to Greendale, points toward the map that ends the act; the
-   * newest journal entry otherwise. Mirrors the readiness the map checks.
+   * Once nothing keeps Elior in Willowbrook (`GameMap.unfinishedBeforeTheRoad`),
+   * he carries the map and stands on the Road to Greendale, points toward the
+   * map that ends the act; the newest journal entry otherwise.
    */
   override hint(gameState: GameState): string | null {
-    const sideQuestsOpen = [
-      ...gameState.nonActivatedQuests,
-      ...gameState.activatedQuests,
-    ].some((quest) => !quest.isMain())
-    const onTheRoad =
-      gameState.currentRoom.name.toLowerCase() === 'road to greendale'
-    if (onTheRoad && !sideQuestsOpen && gameState.hasItem('ancient amulet')) {
+    if (
+      gameState.currentRoom instanceof RoadToGreendale &&
+      gameState.hasItem('map') &&
+      GameMap.unfinishedBeforeTheRoad(gameState).length === 0
+    ) {
       return (
         'Nothing is left undone in Willowbrook. ' +
         'The [item_name]map[/item_name] in your pack may know the way on ' +
