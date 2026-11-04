@@ -682,27 +682,24 @@ Welcome to
   }
 
   /**
-   * "give <item> to <character>". Something not held as an item is first
+   * "give <item> to <character>". A character not in the room is named as
+   * absent first, whatever is offered. Something not held as an item is then
    * offered to the character's `giveUnheld`, then refused as not held.
    */
   give(args: string): string {
     const split = this.splitCommand(args, 'give', 'to')
     if (typeof split === 'string') return split
     const [itemName, characterName] = split
-    const item = this.findItem(itemName, { room: false })
-    if (!item) {
-      const unheld = this.findCharacter(characterName)?.giveUnheld(
-        this.state,
-        itemName,
-      )
-      return (
-        unheld ??
-        `[failure]You don't have ${indefiniteArticle(itemName)} '${itemName}' to give.[/failure]`
-      )
-    }
     const character = this.findCharacter(characterName)
     if (!character) {
       return `[failure]There is no character named '${capitalize(characterName)}' here.[/failure]`
+    }
+    const item = this.findItem(itemName, { room: false })
+    if (!item) {
+      return (
+        character.giveUnheld(this.state, itemName) ??
+        `[failure]You don't have ${indefiniteArticle(itemName)} '${itemName}' to give.[/failure]`
+      )
     }
     return character.giveItem(this.state, item)
   }

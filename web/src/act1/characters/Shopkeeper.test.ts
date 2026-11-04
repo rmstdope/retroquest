@@ -280,6 +280,19 @@ describe('Hemlock and his missing cat', () => {
     expect(coins(game)).toBe(1)
   })
 
+  it('names his absence when Elior gives Patches away from the store', () => {
+    const game = gameInStore({ shopOpen: false })
+    game.state.setStoryFlag(FLAG_PATCHES_FOUND, true)
+    game.state.currentRoom = game.state.allRooms.AbandonedShed
+
+    const answer = game.commandParser.parse('give patches to shopkeeper')
+
+    expect(answer).toBe(
+      "[failure]There is no character named 'Shopkeeper' here.[/failure]",
+    )
+    expect(game.state.getStoryFlag(FLAG_PATCHES_RETURNED)).toBe(false)
+  })
+
   it('lets Patches purr from the counter once she is home', () => {
     const game = gameInStore({ shopOpen: false })
     game.state.setStoryFlag(FLAG_PATCHES_FOUND, true)
