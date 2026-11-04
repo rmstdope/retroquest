@@ -28,15 +28,15 @@ import { useSettingsStore } from '@/stores/useSettingsStore'
  * paper in the light theme. The text is also in the story, which waits aside:
  * the layer is a polite live region for screen readers.
  *
- * On the laptop stage a part taller than the clear space (below the top
- * buttons, above the story tab and the actions) is cut into pages that each
- * fit, in the same full-size type (`arrivalPages`): the view measures the
+ * A part taller than the clear space (below the top buttons or the phone's
+ * plate, above the story tab and the actions) is cut into pages that each
+ * fit, in the type it is shown in (`arrivalPages`): the view measures the
  * pieces in a hidden twin of the text box, shows the page up
  * (`useArrivalStore.page`) and reports where each page starts to the store,
  * which turns them. The cut is made afresh when the part or the stage's size
- * changes. Only a single sentence too tall for any page scrolls inside its
- * own box, as the phone's arrival does: on a phone (`phone`) the text is not
- * paged and a description too tall scrolls inside its box
+ * changes. A phone (`phone`) is paged the same way, at its narrower card
+ * and smaller type, so a tap never moves on past lines still hidden. Only a
+ * single sentence too tall for any page scrolls inside its own box
  * (`.lq-arrival-text`) above the pill, which never leaves the bottom of the
  * space. A scrolling box fades out at an edge where the text continues, and,
  * while the narrator speaks, glides to keep the lit word in view (the
@@ -78,7 +78,7 @@ const newsCount = computed(() => {
   const progress = news.value?.progress
   return progress ? ` · ${progress.completed} of ${progress.total}` : ''
 })
-/** The pages of the part up (laptop only); empty until it is cut. */
+/** The pages of the part up; empty until it is cut. */
 const pages = ref<ArrivalPage[]>([])
 /** The gap between the text and the pill (px), as in the card's rule. */
 const CARD_GAP = 14
@@ -110,11 +110,11 @@ function room(): number {
   )
 }
 
-/** Cut the part up into pages that fit (not on a phone, which scrolls). */
+/** Cut the part up into pages that fit. */
 function recut(): void {
   const part = arrival.part
   const measure = twin.value
-  if (props.phone || !part || !measure) {
+  if (!part || !measure) {
     pages.value = []
     return
   }
@@ -406,10 +406,12 @@ onBeforeUnmount(() => {
   /* Clear of the plate across the top, and of the bar and the paper's tab. */
   padding: calc(var(--lq-plate-h, 108px) + 24px) 20px 110px;
 }
-.lq-phone-arrival .lq-arrival-card {
+.lq-phone-arrival .lq-arrival-card,
+.lq-phone-arrival .lq-arrival-twin {
   width: min(320px, 100%);
 }
-.lq-phone-arrival .lq-arrival-line {
+.lq-phone-arrival .lq-arrival-line,
+.lq-phone-arrival .lq-arrival-twin :deep(.lq-arrival-line) {
   font-size: calc(17px * var(--lq-text-scale, 1));
 }
 .lq-arrival-stage.lq-on {
