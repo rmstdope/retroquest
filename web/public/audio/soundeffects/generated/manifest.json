@@ -15,6 +15,10 @@
   "file": "cat-purr.mp3",
   "duration": 20.0
  },
+ "chapel-door": {
+  "file": "chapel-door.mp3",
+  "duration": 2.171
+ },
  "chapel-hush": {
   "file": "chapel-hush.mp3",
   "duration": 20.0
@@ -54,6 +58,10 @@
  "hen-squawk": {
   "file": "hen-squawk.mp3",
   "duration": 2.765
+ },
+ "horse-snort": {
+  "file": "horse-snort.mp3",
+  "duration": 2.082
  },
  "insects-hum": {
   "file": "insects-hum.mp3",

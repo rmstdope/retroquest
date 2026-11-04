@@ -1,381 +1,130 @@
 {
   "scenes": {
     "act1-the-dream": {
+      "music": { "track": "act1-the-dream", "level": 1 },
       "effects": [
-        {
-          "id": "rain",
-          "play": {
-            "mode": "loop"
-          },
-          "level": 1
-        },
-        {
-          "id": "lightning",
-          "play": {
-            "mode": "random",
-            "everySeconds": [
-              3,
-              8
-            ]
-          },
-          "level": 1
-        }
+        { "id": "rain", "play": { "mode": "loop" }, "level": 0.85 },
+        { "id": "lightning", "play": { "mode": "random", "everySeconds": [3, 8] }, "level": 2.75 }
       ]
     },
     "act1-eliors-cottage": {
+      "music": { "track": "act1-eliors-cottage", "level": 1 },
       "effects": [
-        {
-          "id": "hearth-fire",
-          "play": {
-            "mode": "loop"
-          },
-          "level": 1
-        }
+        { "id": "hearth-fire", "play": { "mode": "loop" }, "level": 1.5 }
       ]
     },
     "act1-vegetable-field": {
+      "music": { "track": "act1-vegetable-field", "level": 1 },
       "effects": [
-        {
-          "id": "breeze-leaves",
-          "play": {
-            "mode": "loop"
-          },
-          "level": 1
-        },
+        { "id": "breeze-leaves", "play": { "mode": "loop" }, "level": 1 },
         {
           "id": "crow-caw",
-          "play": {
-            "mode": "random",
-            "everySeconds": [
-              10,
-              25
-            ]
-          },
+          "play": { "mode": "random", "everySeconds": [10, 15] },
           "state": "withered",
           "level": 1
         },
-        {
-          "id": "birdsong",
-          "play": {
-            "mode": "loop"
-          },
-          "state": "green",
-          "level": 1
-        }
+        { "id": "birdsong", "play": { "mode": "loop" }, "state": "green", "level": 1 }
       ]
     },
     "act1-chicken-coop": {
+      "music": { "track": "act1-chicken-coop", "level": 1 },
       "effects": [
-        {
-          "id": "chickens",
-          "play": {
-            "mode": "loop"
-          },
-          "level": 1
-        },
-        {
-          "id": "hen-squawk",
-          "play": {
-            "mode": "random",
-            "everySeconds": [
-              6,
-              15
-            ]
-          },
-          "level": 1
-        }
+        { "id": "chickens", "play": { "mode": "loop" }, "level": 0.5 },
+        { "id": "hen-squawk", "play": { "mode": "random", "everySeconds": [6, 15] }, "level": 0.5 }
       ]
     },
     "act1-village-square": {
+      "music": { "track": "act1-village-square", "level": 1 },
       "effects": [
-        {
-          "id": "village-murmur",
-          "play": {
-            "mode": "loop"
-          },
-          "level": 1
-        },
-        {
-          "id": "fountain",
-          "play": {
-            "mode": "loop"
-          },
-          "level": 1
-        }
+        { "id": "village-murmur", "play": { "mode": "loop" }, "level": 2.35 },
+        { "id": "fountain", "play": { "mode": "loop" }, "level": 0.5 }
       ]
     },
     "act1-miras-hut": {
+      "music": { "track": "act1-miras-hut", "level": 1 },
       "effects": [
-        {
-          "id": "glass-clink",
-          "play": {
-            "mode": "random",
-            "everySeconds": [
-              8,
-              20
-            ]
-          },
-          "level": 1
-        }
+        { "id": "glass-clink", "play": { "mode": "random", "everySeconds": [6, 10] }, "level": 1 },
+        { "id": "hearth-fire", "play": { "mode": "loop" }, "level": 1 }
       ]
     },
     "act1-blacksmiths-forge": {
+      "music": { "track": "act1-blacksmiths-forge", "level": 1 },
       "effects": [
-        {
-          "id": "forge-fire",
-          "play": {
-            "mode": "loop"
-          },
-          "level": 1
-        },
-        {
-          "id": "anvil-strike",
-          "play": {
-            "mode": "random",
-            "everySeconds": [
-              4,
-              9
-            ]
-          },
-          "level": 1
-        }
+        { "id": "forge-fire", "play": { "mode": "loop" }, "level": 1.65 },
+        { "id": "anvil-strike", "play": { "mode": "random", "everySeconds": [4, 9] }, "level": 1 }
       ]
     },
     "act1-general-store": {
+      "music": { "track": "act1-general-store", "level": 1 },
       "effects": [
-        {
-          "id": "shop-bell",
-          "play": {
-            "mode": "once",
-            "afterSeconds": 1.5
-          },
-          "level": 1
-        },
-        {
-          "id": "glass-clink",
-          "play": {
-            "mode": "random",
-            "everySeconds": [
-              15,
-              30
-            ]
-          },
-          "level": 1
-        },
-        {
-          "id": "cat-purr",
-          "play": {
-            "mode": "loop"
-          },
-          "state": "cat-home",
-          "level": 1
-        }
+        { "id": "shop-bell", "play": { "mode": "once", "afterSeconds": 1.5 }, "level": 1 },
+        { "id": "glass-clink", "play": { "mode": "random", "everySeconds": [8, 13] }, "level": 1 },
+        { "id": "cat-purr", "play": { "mode": "loop" }, "state": "cat-home", "level": 1.5 }
       ]
     },
     "act1-village-well": {
+      "music": { "track": "act1-village-well", "level": 1 },
       "effects": [
-        {
-          "id": "well-drip",
-          "play": {
-            "mode": "random",
-            "everySeconds": [
-              4,
-              10
-            ]
-          },
-          "level": 1
-        }
+        { "id": "well-drip", "play": { "mode": "random", "everySeconds": [4, 6] }, "level": 1 }
       ]
     },
     "act1-abandoned-shed": {
+      "music": { "track": "act1-abandoned-shed", "level": 1 },
       "effects": [
-        {
-          "id": "wind-gusts",
-          "play": {
-            "mode": "loop"
-          },
-          "level": 1
-        },
-        {
-          "id": "wood-creak",
-          "play": {
-            "mode": "random",
-            "everySeconds": [
-              6,
-              14
-            ]
-          },
-          "level": 1
-        }
+        { "id": "wind-gusts", "play": { "mode": "loop" }, "level": 1.4 },
+        { "id": "wood-creak", "play": { "mode": "random", "everySeconds": [5, 9] }, "level": 1.25 }
       ]
     },
     "act1-old-mill": {
+      "music": { "track": "act1-old-mill", "level": 1 },
       "effects": [
-        {
-          "id": "wind-gusts",
-          "play": {
-            "mode": "loop"
-          },
-          "level": 1
-        },
-        {
-          "id": "mechanism-whir",
-          "play": {
-            "mode": "loop"
-          },
-          "state": "whirring",
-          "level": 1
-        },
-        {
-          "id": "wood-creak",
-          "play": {
-            "mode": "random",
-            "everySeconds": [
-              5,
-              12
-            ]
-          },
-          "level": 1
-        }
+        { "id": "wind-gusts", "play": { "mode": "loop" }, "level": 1 },
+        { "id": "mechanism-whir", "play": { "mode": "loop" }, "state": "whirring", "level": 0.4 },
+        { "id": "wood-creak", "play": { "mode": "random", "everySeconds": [3, 6] }, "level": 1 }
       ]
     },
     "act1-riverbank": {
+      "music": { "track": "act1-riverbank", "level": 1 },
       "effects": [
-        {
-          "id": "river",
-          "play": {
-            "mode": "loop"
-          },
-          "level": 1
-        },
-        {
-          "id": "insects-hum",
-          "play": {
-            "mode": "loop"
-          },
-          "level": 1
-        }
+        { "id": "river", "play": { "mode": "loop" }, "level": 0.65 },
+        { "id": "insects-hum", "play": { "mode": "loop" }, "level": 0.2 }
       ]
     },
     "act1-forest-path": {
+      "music": { "track": "act1-forest-path", "level": 1 },
       "effects": [
-        {
-          "id": "birdsong",
-          "play": {
-            "mode": "loop"
-          },
-          "level": 1
-        },
-        {
-          "id": "twig-snap",
-          "play": {
-            "mode": "random",
-            "everySeconds": [
-              8,
-              20
-            ]
-          },
-          "level": 1
-        },
+        { "id": "birdsong", "play": { "mode": "loop" }, "level": 1 },
+        { "id": "twig-snap", "play": { "mode": "random", "everySeconds": [1, 3] }, "level": 1 },
         {
           "id": "fox-whimper",
-          "play": {
-            "mode": "random",
-            "everySeconds": [
-              10,
-              20
-            ]
-          },
+          "play": { "mode": "random", "everySeconds": [4, 8] },
           "state": "kit-trapped",
           "level": 1
         }
       ]
     },
     "act1-hidden-glade": {
+      "music": { "track": "act1-hidden-glade", "level": 1 },
       "effects": [
-        {
-          "id": "glade-hush",
-          "play": {
-            "mode": "loop"
-          },
-          "state": "dim",
-          "level": 1
-        },
-        {
-          "id": "birdsong",
-          "play": {
-            "mode": "loop"
-          },
-          "state": "lit",
-          "level": 1
-        },
-        {
-          "id": "breeze-leaves",
-          "play": {
-            "mode": "loop"
-          },
-          "state": "lit",
-          "level": 1
-        }
+        { "id": "glade-hush", "play": { "mode": "loop" }, "state": "dim", "level": 2.2 },
+        { "id": "birdsong", "play": { "mode": "loop" }, "state": "lit", "level": 1 },
+        { "id": "breeze-leaves", "play": { "mode": "loop" }, "state": "lit", "level": 0.95 }
       ]
     },
     "act1-village-chapel": {
+      "music": { "track": "act1-village-chapel", "level": 1 },
       "effects": [
-        {
-          "id": "chapel-door",
-          "play": {
-            "mode": "once",
-            "afterSeconds": 1.5
-          },
-          "level": 1
-        },
-        {
-          "id": "chapel-hush",
-          "play": {
-            "mode": "loop"
-          },
-          "level": 1
-        },
-        {
-          "id": "wood-creak",
-          "play": {
-            "mode": "random",
-            "everySeconds": [
-              15,
-              30
-            ]
-          },
-          "level": 1
-        }
+        { "id": "chapel-door", "play": { "mode": "once", "afterSeconds": 1.5 }, "level": 1 },
+        { "id": "chapel-hush", "play": { "mode": "loop" }, "level": 1.2 },
+        { "id": "wood-creak", "play": { "mode": "random", "everySeconds": [5, 10] }, "level": 1.75 }
       ]
     },
     "act1-road-to-greendale": {
+      "music": { "track": "act1-road-to-greendale", "level": 1 },
       "effects": [
-        {
-          "id": "birdsong",
-          "play": {
-            "mode": "loop"
-          },
-          "level": 1
-        },
-        {
-          "id": "breeze-leaves",
-          "play": {
-            "mode": "loop"
-          },
-          "level": 1
-        },
-        {
-          "id": "horse-snort",
-          "play": {
-            "mode": "random",
-            "everySeconds": [
-              12,
-              25
-            ]
-          },
-          "level": 1
-        }
+        { "id": "birdsong", "play": { "mode": "loop" }, "level": 1 },
+        { "id": "breeze-leaves", "play": { "mode": "loop" }, "level": 1 },
+        { "id": "horse-snort", "play": { "mode": "random", "everySeconds": [4, 10] }, "level": 1 }
       ]
     }
   }
