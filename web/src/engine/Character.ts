@@ -89,6 +89,16 @@ export class Character {
   }
 
   /**
+   * The player offers something by name that is not an item in the
+   * inventory, such as an animal carried in the story. Return the story text
+   * when the character takes it, or null (the default) for the engine's plain
+   * "You don't have ..." failure.
+   */
+  giveUnheld(_gameState: GameState, _name: string): string | null {
+    return null
+  }
+
+  /**
    * The player offers an item. By default the character refuses it, the
    * sentence opening with the name (see `nameInSentence`) and the verb agreeing
    * with it (see `isPlural`).

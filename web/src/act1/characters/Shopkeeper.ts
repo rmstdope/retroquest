@@ -322,6 +322,19 @@ export class Shopkeeper extends Character {
     delete this.wares.matches
   }
 
+  /**
+   * Patches is carried in the story, not held as an item: giving her to him
+   * while Elior carries her welcomes her home, as talking to him does.
+   */
+  override giveUnheld(gameState: GameState, name: string): string | null {
+    const carrying =
+      gameState.getStoryFlag(FLAG_PATCHES_FOUND) &&
+      !gameState.getStoryFlag(FLAG_PATCHES_RETURNED) &&
+      !gameState.getStoryFlag(FLAG_PATCHES_STAYED_WITH_GRANDMOTHER)
+    if (!carrying || !new Patches().answersTo(name)) return null
+    return this.talkTo(gameState)
+  }
+
   /** The shopkeeper does not accept gifts. */
   override giveItem(_gameState: GameState, _item: Item): string {
     return (

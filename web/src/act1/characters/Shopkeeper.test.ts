@@ -252,6 +252,19 @@ describe('Hemlock and his missing cat', () => {
     expect(coins(game)).toBe(1)
   })
 
+  it('takes Patches back when Elior gives her to him while carrying her', () => {
+    const game = gameInStore({ shopOpen: false })
+    game.state.setStoryFlag(FLAG_PATCHES_FOUND, true)
+
+    const answer = game.commandParser.parse('give patches to shopkeeper')
+
+    expect(answer).not.toContain("You don't have")
+    expect(answer).toContain('You found her')
+    expectDialogueSpeaker(answer, 'shopkeeper')
+    expect(game.state.getStoryFlag(FLAG_PATCHES_RETURNED)).toBe(true)
+    expect(coins(game)).toBe(1)
+  })
+
   it('lets Patches purr from the counter once she is home', () => {
     const game = gameInStore({ shopOpen: false })
     game.state.setStoryFlag(FLAG_PATCHES_FOUND, true)
