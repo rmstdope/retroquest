@@ -2,7 +2,7 @@
  * Who owns a key that may hurry the story.
  *
  * Enter, Space and Escape can hurry a change of scene, go on an arrival on the
- * picture, hurry the narration, or hide the words on the stage, and the same
+ * picture, hurry the narration, or hide or show the words on the stage, and the same
  * keys also belong to the command box, buttons, word lists and dialogs. This
  * module is the one place that decides, from the game's mode, the key and
  * what it is aimed at, which of them gets the press, and whether the release
@@ -52,12 +52,15 @@ export interface HurryKeyPress {
   narrating: boolean
   /** The stage's words are shown and may be hidden. */
   canHide: boolean
+  /** The stage's words are hidden and may be shown again. */
+  canShow: boolean
 }
 
 /** What a taken key does. */
 export type HurryKeyAction =
   | 'skip-scene'
   | 'hide-words'
+  | 'show-words'
   | 'arrival-next'
   | 'arrival-clear'
   | 'hurry'
@@ -117,18 +120,23 @@ function sceneKey(press: HurryKeyPress): HurryKeyDecision | null {
 /**
  * Escape (unless a drawer, the map or a menu took it first) does what Hide
  * does on the stage, when nothing is being narrated (while it is, Escape only
- * skips). The key is not consumed.
+ * skips); once the words are hidden, a second Escape does what Show does,
+ * except in a field, where the command box keeps its own steps back (clear
+ * the text, then leave the box). The key is not consumed.
  */
 function hideKey(press: HurryKeyPress): HurryKeyDecision | null {
   if (
-    press.key === 'Escape' &&
-    !press.handled &&
-    press.canHide &&
-    !press.narrating &&
-    !press.arrival &&
-    !press.dialogOpen
+    press.key !== 'Escape' ||
+    press.handled ||
+    press.narrating ||
+    press.arrival ||
+    press.dialogOpen
   )
+    return null
+  if (press.canHide)
     return { action: 'hide-words', consume: false, swallowSpaceUp: false }
+  if (press.canShow && !press.inField)
+    return { action: 'show-words', consume: false, swallowSpaceUp: false }
   return null
 }
 

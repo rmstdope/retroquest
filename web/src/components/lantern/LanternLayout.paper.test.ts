@@ -423,6 +423,19 @@ describe('the narration paper', () => {
     box.remove()
   })
 
+  it('shows the words again on a second Escape when focus is not in a field', async () => {
+    await mountWith([turn(1, 'Only the narrator.')])
+    press('Escape')
+    await nextTick()
+    expect(tab()).not.toBeNull()
+    expect(hideButton()).toBeNull()
+    press('Escape')
+    await nextTick()
+    expect(tab()).toBeNull()
+    expect(hideButton()).not.toBeNull()
+    expect(paper().hasAttribute('inert')).toBe(false)
+  })
+
   it('hides narrator cards with Escape from the real command box before stepping back', async () => {
     await mountWith([turn(1, 'Only the narrator.')])
     game.acceptInput = true
