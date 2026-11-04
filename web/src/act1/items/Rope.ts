@@ -17,10 +17,7 @@ export class Rope extends Item {
     if (!this.canBeCarried) {
       const nameHtml = `[item_name]${this.name}[/item_name]`
       return (
-        nameInSentence('character', 'shopkeeper', {
-          common: true,
-          atStart: true,
-        }) +
+        nameInSentence('character', 'Hemlock', { atStart: true }) +
         ' quickly steps over. ' +
         speech(
           'Hold on there, friend! That ' +

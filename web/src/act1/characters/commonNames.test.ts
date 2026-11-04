@@ -17,7 +17,8 @@ function gameWith(character: Character): Game {
 }
 
 /**
- * The Act I characters named by what they are, not who: the engine's own
+ * The Act I characters named by what they are, not who (Borin and Hemlock
+ * are named, see below): the engine's own
  * replies call them "the merchant" mid-sentence and "The merchant" at the
  * start of one, never "Merchant" as if it were a proper name.
  */
@@ -25,7 +26,6 @@ describe.each([
   ['merchant', (): Character => new Merchant()],
   ['deer', (): Character => new Deer()],
   ['fisherman', (): Character => new Fisherman()],
-  ['blacksmith', (): Character => new Blacksmith()],
   ['priest', (): Character => new Priest()],
 ])('the %s, a common-noun character', (name, make) => {
   const marked = `[character_name]${name}[/character_name]`
@@ -47,12 +47,23 @@ describe.each([
   })
 })
 
-describe('the shopkeeper, a common-noun character who sells', () => {
-  it('is "the" one mid-sentence when it does not understand', () => {
-    const game = gameWith(new Shopkeeper())
+describe('Borin and Hemlock, named from the start', () => {
+  it.each([
+    ['borin', 'Borin', (): Character => new Blacksmith()],
+    ['hemlock', 'Hemlock', (): Character => new Shopkeeper()],
+  ])('%s is a proper name, with no article', (word, name, make) => {
+    const game = gameWith(make())
 
-    expect(game.commandParser.parse('say hello to shopkeeper')).toContain(
-      "You say 'hello' to the [character_name]shopkeeper[/character_name], but",
+    expect(game.commandParser.parse(`say hello to ${word}`)).toContain(
+      `You say 'hello' to [character_name]${name}[/character_name], but`,
+    )
+  })
+
+  it('Borin sells nothing, and says so by name', () => {
+    const game = gameWith(new Blacksmith())
+
+    expect(game.commandParser.parse('buy rope from borin')).toBe(
+      '[character_name]Borin[/character_name] has nothing to sell you.',
     )
   })
 })

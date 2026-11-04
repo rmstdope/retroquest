@@ -15,11 +15,11 @@ import {
 const SHUT_TEXT =
   'A cluttered shop with the shutters half down. Rope, apples, matches and ' +
   'trinkets crowd the shelves in the gloom. ' +
-  `The ${characterName('shopkeeper')} stands at the window, watching the lane.`
+  `${characterName('Hemlock')} stands at the window, watching the lane.`
 const OPEN_TEXT =
   'A cluttered shop. Rope, apples, matches and trinkets crowd the shelves, ' +
   'and the air smells of fruit, wax and old wood. ' +
-  `The ${characterName('shopkeeper')} dusts jars between customers`
+  `${characterName('Hemlock')} dusts jars between customers`
 const CAT_CLAUSE =
   ', and every so often looks at the counter, where his cat sleeps'
 

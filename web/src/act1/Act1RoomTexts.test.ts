@@ -34,8 +34,9 @@ describe('Act I room and item texts say one true thing', () => {
     expect(text).toContain(
       'A hot, smoky forge. Coals glow in the hearth and the anvil rings. ' +
         'Hinges, ploughshares and horseshoes hang from the walls, waiting to ' +
-        'be mended or fetched, and the ',
+        'be mended or fetched, and ',
     )
+    expect(text).toContain('Borin')
     expect(text).toContain(' wipes his brow without putting down the hammer.')
   })
 

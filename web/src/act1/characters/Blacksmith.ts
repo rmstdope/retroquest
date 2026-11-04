@@ -2,7 +2,6 @@ import {
   Character,
   type GameState,
   type Item,
-  type NameOptions,
   characterName,
   speech,
   attributeSpeech,
@@ -35,22 +34,29 @@ export class Blacksmith extends Character {
 
   constructor() {
     super({
-      name: 'blacksmith',
-      description:
-        `${characterName('Borin')}, the village smith: forearms like fence ` +
-        'posts and an old burn on every knuckle. He talks while he works, ' +
-        "and he doesn't stop working.",
+      name: Blacksmith.NAME,
+      description: Blacksmith.DESCRIPTION,
     })
   }
 
-  /** Also answers to Borin, the name he introduces himself by. */
-  override answersTo(name: string): boolean {
-    return super.answersTo(name) || name.toLowerCase() === 'borin'
+  private static readonly NAME = 'Borin'
+  private static readonly DESCRIPTION =
+    `${characterName(Blacksmith.NAME)}, the village smith: forearms like fence ` +
+    'posts and an old burn on every knuckle. He talks while he works, ' +
+    "and he doesn't stop working."
+
+  /**
+   * Bring a smith from a save made before he was named up to date: he is
+   * Borin now. Safe to run more than once.
+   */
+  migrateLegacyName(): void {
+    this.name = Blacksmith.NAME
+    this.description = Blacksmith.DESCRIPTION
   }
 
-  /** Named by what it is, so it reads "the blacksmith" (see `nameInSentence`). */
-  override nameInSentence(options?: NameOptions): string {
-    return super.nameInSentence({ ...options, common: true })
+  /** He answers to his name, Borin, and still to blacksmith. */
+  override answersTo(name: string): boolean {
+    return super.answersTo(name) || name.toLowerCase() === 'blacksmith'
   }
 
   /** Dialogue when the player talks to the blacksmith; varies by story flags. */
@@ -124,7 +130,7 @@ export class Blacksmith extends Character {
   /** What Borin makes of the black-iron rune token; he hands it back. */
   private readRuneToken(): string {
     return (
-      `The ${characterName(this.name)} weighs the token in his palm, then ` +
+      `${characterName(this.name)} weighs the token in his palm, then ` +
       'frowns and rubs his thumb over the rune. ' +
       speech(
         "Cold iron. Stays cold, too, however long you hold it. That's no " +
@@ -156,7 +162,7 @@ export class Blacksmith extends Character {
         gameState.setStoryFlag(FLAG_BLACKSMITH_SHARPENED_KNIFE, true)
 
         return (
-          `The ${characterName(this.name)} pockets the ` +
+          `${characterName(this.name)} pockets the ` +
           `[item_name]${coinInstance.name}[/item_name] and puts the ` +
           `[item_name]${dullKnifeInstance.name}[/item_name] to the ` +
           'whetstone. It sings for a minute. He tests the edge on his ' +
@@ -166,7 +172,7 @@ export class Blacksmith extends Character {
       }
       if (item instanceof DullKnife) {
         return (
-          `The ${characterName(this.name)} eyes the ` +
+          `${characterName(this.name)} eyes the ` +
           `[item_name]${item.name}[/item_name]. ` +
           speech(
             'That edge has seen better days. ' +
@@ -176,7 +182,7 @@ export class Blacksmith extends Character {
         )
       }
       return (
-        `The ${characterName(this.name)} eyes the ` +
+        `${characterName(this.name)} eyes the ` +
         `[item_name]${item.name}[/item_name]. ` +
         speech(
           "A coin's no use to me without something to put an edge on, " +
@@ -191,7 +197,7 @@ export class Blacksmith extends Character {
       gameState.setStoryFlag(FLAG_DEER_CAN_BE_OBSERVED, true)
 
       return (
-        `The ${characterName(this.name)} takes the ` +
+        `${characterName(this.name)} takes the ` +
         `[item_name]${item.name}[/item_name] and turns it over in ` +
         'his calloused hands. ' +
         speech(
@@ -211,7 +217,7 @@ export class Blacksmith extends Character {
     }
 
     return (
-      `The ${characterName(this.name)} gives it a glance and hands it back. ` +
+      `${characterName(this.name)} gives it a glance and hands it back. ` +
       speech("Can't melt it, can't mend it. No use to me, lad.")
     )
   }
