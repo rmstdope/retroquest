@@ -8,6 +8,8 @@ import { prepareAmbience, type Ambience } from './ambience'
 import { ambientClipsAt, loadChosenEffects, trackOfTake } from './chosenEffects'
 import { fetchAudioBuffer } from './musicVoice'
 import { roomTrackId } from '@/lantern/musicLists'
+import { ambienceAt } from '@/lantern/effectLists'
+import { useEffectMixStore } from '@/stores/useEffectMixStore'
 import {
   chooseTrack,
   GENERATED_MUSIC_DIR,
@@ -72,6 +74,7 @@ export function useActMusic(): ReturnType<typeof useMusic> {
   })
   const chosenEffects = loadChosenEffects()
   const settings = useSettingsStore()
+  const mix = useEffectMixStore()
   const effectsLevel = (): number =>
     settings.effectsOn ? settings.effectsVolume / 100 : 0
   /** Where every effect plays into, at the effects volume; made with the first. */
@@ -112,7 +115,12 @@ export function useActMusic(): ReturnType<typeof useMusic> {
     const music = chosen.value
     const track = music ? trackOfTake(file, music) : null
     const clips =
-      track === null ? [] : ambientClipsAt(track, await chosenEffects)
+      track === null
+        ? []
+        : ambientClipsAt(track, await chosenEffects).map((clip) => ({
+            ...clip,
+            volume: clip.id === undefined ? 1 : mix.volumeOf(track, clip.id),
+          }))
     keepClips(clips.map((clip) => clip.url))
     if (track === null || clips.length === 0 || disposed) return null
     if (!effectsBus) {
@@ -135,12 +143,43 @@ export function useActMusic(): ReturnType<typeof useMusic> {
     }
     const ambience = await prepareAmbience(context, clips, effectsBus, load)
     if (ambience) {
+      const soloed = mix.soloed
+      if (soloed?.track === track) ambience.solo(soloed.id)
       ambiences.push({ track, ambience })
       followSoundState()
     }
     return ambience
   }
   watch([musicActName, musicRoomKey, musicSoundState], followSoundState)
+  /** The live ambiences of `track`. */
+  const ambiencesOf = (track: string): Ambience[] =>
+    ambiences
+      .filter((entry) => entry.track === track && !entry.ambience.disposed)
+      .map((entry) => entry.ambience)
+  // The room effects panel: a level, a one-shot played now, a solo.
+  watch(
+    () => mix.volumes,
+    () => {
+      for (const { track, ambience } of ambiences)
+        for (const effect of ambienceAt(track))
+          ambience.setVolume(effect.id, mix.volumeOf(track, effect.id))
+    },
+  )
+  watch(
+    () => mix.request,
+    (request) => {
+      if (request)
+        for (const ambience of ambiencesOf(request.track))
+          ambience.audition(request.id)
+    },
+  )
+  watch(
+    () => mix.soloed,
+    (soloed) => {
+      for (const { track, ambience } of ambiences)
+        ambience.solo(soloed?.track === track ? soloed.id : null)
+    },
+  )
   watch(effectsLevel, (level) => {
     if (effectsBus) effectsBus.gain.value = level
   })

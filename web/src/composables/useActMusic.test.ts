@@ -6,6 +6,7 @@ import { useActMusic } from './useActMusic'
 import { useGameStore } from '@/stores/useGameStore'
 import { useNarrationStore } from '@/stores/useNarrationStore'
 import { useSettingsStore } from '@/stores/useSettingsStore'
+import { useEffectMixStore } from '@/stores/useEffectMixStore'
 import { FakeAudioContext } from '@/testing/fakeAudioContext'
 import {
   MUSIC_DUCK,
@@ -533,6 +534,50 @@ describe('useActMusic with the effects of a room', () => {
     await walkTo('EliorsCottage')
     await walkTo('AbandonedShed')
     expect(fetchesOf('wind.mp3')).toBe(2)
+    scope.stop()
+  })
+
+  /** The level a source plays at: the gain it connects to. */
+  function levelOf(source: { connect: { mock: { calls: unknown[][] } } }) {
+    return (source.connect.mock.calls[0][0] as { gain: { value: number } }).gain
+      .value
+  }
+
+  it("plays each effect at its room's volume, and follows a change at once", async () => {
+    const mix = useEffectMixStore()
+    mix.setVolume('act1-old-mill', 'wind-gusts', 0.5)
+    const scope = await startIn('OldMill', 'whirring')
+    ctx = FakeAudioContext.last
+    // The music's loop, the wind's (made third) and the whir's.
+    const [, wind, whir] = loopsSounding()
+    expect(levelOf(wind)).toBeCloseTo(0.5)
+    expect(levelOf(whir)).toBe(1)
+    mix.setVolume('act1-old-mill', 'mechanism-whir', 2)
+    await nextTick()
+    expect(levelOf(whir)).toBe(2)
+    scope.stop()
+  })
+
+  it('plays a one-shot of the room now when asked', async () => {
+    const scope = await startInTheDream()
+    ctx = FakeAudioContext.last
+    const before = ctx.sources.length
+    useEffectMixStore().playNow('act1-the-dream', 'lightning')
+    await nextTick()
+    const played = ctx.sources.slice(before)
+    expect(played).toHaveLength(1)
+    expect(played[0].loop).toBe(false)
+    scope.stop()
+  })
+
+  it('solos one effect of the room, silencing the rest', async () => {
+    const scope = await startIn('OldMill', 'whirring')
+    ctx = FakeAudioContext.last
+    const [, wind, whir] = loopsSounding()
+    useEffectMixStore().toggleSolo('act1-old-mill', 'mechanism-whir')
+    await nextTick()
+    expect(levelOf(wind)).toBe(0)
+    expect(levelOf(whir)).toBe(1)
     scope.stop()
   })
 
