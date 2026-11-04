@@ -571,6 +571,27 @@ describe('ArrivalOnPicture', () => {
       expect(w.get('.lq-news-name').text()).toBe('Curiosity killed the cat')
     })
 
+    it("shows a checklist quest's needs as a list, not as '* ' lines", async () => {
+      const w = mount(ArrivalOnPicture, { props: { pictured: true } })
+      const checklist: QuestNews = {
+        kind: 'new',
+        name: 'Preparing for the road',
+        main: false,
+        text:
+          'Mira has tasked you. She says you will need: \n' +
+          '[success] * Warm clothing[/success]\n' +
+          '[pending] * Sturdy footwear[/pending]',
+      }
+      useArrivalStore().show(1, [piece(checklist)], false)
+      await w.vm.$nextTick()
+      const text = w.get('.lq-arrival-text')
+      expect(text.text()).not.toContain('*')
+      expect(text.findAll('li').map((li) => li.text())).toEqual([
+        'Warm clothing',
+        'Sturdy footwear',
+      ])
+    })
+
     it('says "Tap to continue" on a phone', async () => {
       const w = mount(ArrivalOnPicture, {
         props: { pictured: true, phone: true },

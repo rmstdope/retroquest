@@ -365,3 +365,49 @@ body {
   outline-offset: 2px;
   border-radius: 3px;
 }
+
+/* A checklist quest's needs on a quest card or the stage (questTextHtml): one
+   line each, a filled tick for what is done and a dashed ring for what is
+   still open. The marks are drawn here, not written in the text, so the
+   read-along numbers only the spoken words; browsers without alt text in
+   `content` keep the plain mark. */
+.lq-quest-para {
+  margin: 0;
+}
+.lq-quest-checklist {
+  list-style: none;
+  margin: 0.4em 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25em;
+}
+.lq-quest-checklist li {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5em;
+}
+.lq-quest-checklist li::before {
+  flex: 0 0 auto;
+  align-self: center;
+  width: 0.95em;
+  height: 0.95em;
+  border-radius: 50%;
+  box-sizing: border-box;
+  font-size: 0.95em;
+  font-weight: 700;
+  line-height: 0.95em;
+  text-align: center;
+}
+.lq-quest-checklist .lq-check-done::before {
+  content: '✓';
+  content: '✓' / 'done';
+  background: var(--lq-item-soft);
+  color: var(--lq-success);
+  border: 1px solid var(--lq-item-line);
+}
+.lq-quest-checklist .lq-check-pending::before {
+  content: '';
+  content: '' / 'not yet';
+  border: 1.5px dashed currentColor;
+}

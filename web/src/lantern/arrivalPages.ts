@@ -1,5 +1,5 @@
 import { balance } from './parseTurn'
-import { narrationWords } from './narrationManifest'
+import { shownWords } from './questTextHtml'
 
 /**
  * Cutting an arrival part into pages (the laptop stage). A part taller than
@@ -63,7 +63,7 @@ function piecesOf(
   return texts.map((text, i) => {
     const markup = balance(text, open)
     const piece: ArrivalPiece = { unit, markup, sep: seps[i], wordStart: words }
-    words += narrationWords(markup).length
+    words += shownWords(markup).length
     return piece
   })
 }

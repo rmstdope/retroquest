@@ -4,6 +4,7 @@ import type { Turn } from '@/stores/useGameStore'
 import type { Chip } from '@/lantern/inventoryChanges'
 import { parseTurn, type TurnBlock } from '@/lantern/parseTurn'
 import { newQuestKicker, questCompleteKicker } from '@/lantern/questNews'
+import { questTextHtml } from '@/lantern/questTextHtml'
 import { firstQuestUnit as firstQuestOf } from '@/lantern/narrationUnits'
 import QuestNewsCard from './QuestNewsCard.vue'
 import QuestSlimLine from './QuestSlimLine.vue'
@@ -68,7 +69,10 @@ watch(
   },
 )
 
-const { shown, isSpeaking, html } = useReadAlong(() => props.turn.id, root)
+const { shown, isSpeaking, html, mark } = useReadAlong(
+  () => props.turn.id,
+  root,
+)
 /** The unit of the room arrival, and of the first quest card. */
 const arrivalUnit = computed(() =>
   props.turn.arrival ? blocks.value.length : -1,
@@ -374,7 +378,7 @@ function chipLabel(chip: Chip): string {
           )
         "
         :name-html="html(news.name, firstQuestUnit + index, 1, 2)"
-        :body-html="html(news.text, firstQuestUnit + index, 2)"
+        :body-html="mark(questTextHtml(news.text), firstQuestUnit + index, 2)"
         :class="{
           'lq-speaking': isSpeaking(firstQuestUnit + index),
           'lq-appear': fade,

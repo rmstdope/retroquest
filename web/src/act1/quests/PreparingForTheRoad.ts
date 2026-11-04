@@ -18,6 +18,14 @@ const FOOD_KINDS = [
   ['fish'],
 ]
 const FOOD_KINDS_NEEDED = 4
+/**
+ * The food need as the checklist, the card and the narration read it. It
+ * names `FOOD_KINDS` and `FOOD_KINDS_NEEDED` in words and has no count, since
+ * a recording fits one wording only: change it with them.
+ */
+const FOOD_NEED =
+  'Food for the road (any four kinds: bread, apple, egg, carrot, ' +
+  'berries or fish)'
 
 /** Checklist quest: done requirements are [success], unmet ones are [pending]. */
 export class PreparingForTheRoadQuest extends Quest {
@@ -36,8 +44,7 @@ export class PreparingForTheRoadQuest extends Quest {
         'She says you will need: \n' +
         ' - Warm clothing -\n' +
         ' - Magical protection -\n' +
-        ' - Food for the road (any four kinds: bread, apple, egg, carrot, ' +
-        'berries or fish) -\n' +
+        ` - ${FOOD_NEED} -\n` +
         ' - Sturdy footwear -\n' +
         ' - A map to find your way, and to have learned all the basic magic ' +
         'the village elders can teach you -\n' +
@@ -103,11 +110,7 @@ export class PreparingForTheRoadQuest extends Quest {
     const requirements: [string, boolean][] = [
       ['Warm clothing', this.hasTravelCloak],
       ['Magical protection', this.journeyBlessCompleted],
-      [
-        `Food for the road (${foodKinds.length} of ${FOOD_KINDS.length} ` +
-          `kinds gathered, any ${FOOD_KINDS_NEEDED} will do)`,
-        this.allFoodCollected,
-      ],
+      [FOOD_NEED, this.allFoodCollected],
       ['Sturdy footwear', this.hasWanderingBoots],
       ['A map to find your way', this.hasMap],
       ['All basic magic learned', this.knowsAllSpells],

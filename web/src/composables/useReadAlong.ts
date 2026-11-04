@@ -25,6 +25,8 @@ export interface ReadAlongOptions {
  *   markup is only a piece of those parts, starting that many words into them
  *   (a page of an arrival), and its words are numbered from there. A unit shown in several places, such
  *   as a room's name and its description, marks each place with its parts.
+ * - `mark(rendered, unit, from, to, wordStart)`: the same for HTML the
+ *   surface rendered itself (a quest card's checklist, `questTextHtml`).
  *
  * The composable also lights the spoken word (`.lq-w-now`, found by
  * `[data-w]` inside `root`) and keeps the unit being spoken (`[data-unit]`)
@@ -51,6 +53,13 @@ export function useReadAlong(
   isSpeaking: (unit: number) => boolean
   html: (
     markup: string,
+    unit: number,
+    from?: number,
+    to?: number,
+    wordStart?: number,
+  ) => string
+  mark: (
+    rendered: string,
     unit: number,
     from?: number,
     to?: number,
@@ -84,7 +93,17 @@ export function useReadAlong(
     to = Number.POSITIVE_INFINITY,
     wordStart?: number,
   ): string {
-    const plain = renderMarkup(markup)
+    return mark(renderMarkup(markup), unit, from, to, wordStart)
+  }
+
+  /** `plain`, HTML already rendered (parts `from` to `to` of unit `unit`), with each word marked while the unit is spoken. */
+  function mark(
+    plain: string,
+    unit: number,
+    from = 0,
+    to = Number.POSITIVE_INFINITY,
+    wordStart?: number,
+  ): string {
     const [markedUnit, counts] = wordMarking.value.split(':')
     if (!counts || Number(markedUnit) !== unit) return plain
     const lengths = counts.split(',').map(Number)
@@ -158,5 +177,5 @@ export function useReadAlong(
     { flush: 'post' },
   )
 
-  return { shown, isSpeaking, html }
+  return { shown, isSpeaking, html, mark }
 }

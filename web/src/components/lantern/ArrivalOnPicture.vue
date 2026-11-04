@@ -2,6 +2,7 @@
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { useArrivalStore } from '@/stores/useArrivalStore'
 import { useReadAlong } from '@/composables/useReadAlong'
+import { questTextHtml } from '@/lantern/questTextHtml'
 import { FOLLOW_EVENT } from '@/composables/useStoryFollow'
 import {
   pageLines,
@@ -49,7 +50,7 @@ import { useSettingsStore } from '@/stores/useSettingsStore'
 const props = defineProps<{ pictured: boolean; phone?: boolean }>()
 const arrival = useArrivalStore()
 const root = ref<HTMLElement | null>(null)
-const { html } = useReadAlong(() => arrival.turnId ?? 0, root)
+const { html, mark } = useReadAlong(() => arrival.turnId ?? 0, root)
 
 /** The twin of the text box the pieces are measured in. */
 const twin = ref<HTMLElement | null>(null)
@@ -126,10 +127,11 @@ function recut(): void {
       firstWord: 0,
       scrolls: false,
     })
-      .map(
-        (line) =>
-          `<p class="lq-arrival-line${part.kind === 'events' ? ' lq-arrival-event' : ''}">` +
-          `${renderMarkup(line.markup)}</p>`,
+      .map((line) =>
+        part.kind === 'news'
+          ? `<div class="lq-arrival-line">${questTextHtml(line.markup)}</div>`
+          : `<p class="lq-arrival-line${part.kind === 'events' ? ' lq-arrival-event' : ''}">` +
+            `${renderMarkup(line.markup)}</p>`,
       )
       .join('')
     return measure.offsetHeight <= available
@@ -332,15 +334,21 @@ onBeforeUnmount(() => {
             ></p>
           </template>
           <template v-else-if="piece">
-            <p
+            <div
               v-for="line in shown"
               :key="`${line.unit}-${line.wordStart}`"
               class="lq-arrival-line"
               :data-unit="line.unit"
               v-html="
-                html(line.markup, line.unit, 2, undefined, line.wordStart)
+                mark(
+                  questTextHtml(line.markup),
+                  line.unit,
+                  2,
+                  undefined,
+                  line.wordStart,
+                )
               "
-            ></p>
+            ></div>
           </template>
           <template v-else>
             <p
@@ -501,6 +509,11 @@ onBeforeUnmount(() => {
   font-family: var(--lq-font-prose);
   font-size: calc(24px * var(--lq-text-scale, 1));
   line-height: 1.5;
+}
+/* A checklist quest's needs stay a block in the middle, like the text around them. */
+.lq-arrival-line :deep(.lq-quest-checklist),
+.lq-arrival-twin :deep(.lq-quest-checklist) {
+  align-items: center;
 }
 .lq-arrival-event,
 .lq-arrival-twin :deep(.lq-arrival-event) {

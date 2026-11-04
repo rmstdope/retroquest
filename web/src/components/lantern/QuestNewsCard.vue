@@ -5,12 +5,14 @@ import {
   questCompleteKicker,
   type QuestNews,
 } from '@/lantern/questNews'
+import { questTextHtml } from '@/lantern/questTextHtml'
 import { useGameStore } from '@/stores/useGameStore'
-import { escapeHtml, renderMarkup } from '@/utils/theme'
+import { escapeHtml } from '@/utils/theme'
 
 /**
  * Quest news inside the story (non-blocking): a new quest is a card with its
- * description; an update is a one-line banner that expands to show the
+ * description, a checklist quest's needs shown as a list (`questTextHtml`);
+ * an update is a one-line banner that expands to show the
  * newest part, since updates come often. The revealed part opens inside
  * the banner's frame. Opening it scrolls the revealed part into view, as
  * the banner often sits at the bottom of the story.
@@ -64,7 +66,10 @@ const doneCount = computed(() => {
     ></span>
     <!-- eslint-enable vue/no-v-html -->
     <!-- eslint-disable vue/no-v-html -->
-    <p class="lq-quest-body" v-html="bodyHtml ?? renderMarkup(news.text)"></p>
+    <div
+      class="lq-quest-body"
+      v-html="bodyHtml ?? questTextHtml(news.text)"
+    ></div>
     <!-- eslint-enable vue/no-v-html -->
     <button
       type="button"
@@ -107,7 +112,7 @@ const doneCount = computed(() => {
       ></span>
       <span
         class="lq-record-text"
-        v-html="bodyHtml ?? renderMarkup(news.text)"
+        v-html="bodyHtml ?? questTextHtml(news.text)"
       ></span>
       <!-- eslint-enable vue/no-v-html -->
     </span>
@@ -141,12 +146,12 @@ const doneCount = computed(() => {
       }}</span>
     </button>
     <!-- eslint-disable vue/no-v-html -->
-    <p
+    <div
       v-if="open"
       ref="updateBody"
       class="lq-quest-body lq-update-body"
-      v-html="renderMarkup(news.text)"
-    ></p>
+      v-html="questTextHtml(news.text)"
+    ></div>
     <!-- eslint-enable vue/no-v-html -->
   </div>
 </template>
@@ -181,6 +186,10 @@ const doneCount = computed(() => {
   font-size: calc(15px * var(--lq-text-scale));
   line-height: var(--lq-story-line-height);
   color: var(--lq-prose);
+}
+/* An open need is dimmed on the card (the list itself is in lantern.css). */
+.lq-quest-body :deep(.lq-quest-checklist .lq-check-pending) {
+  color: var(--lq-muted);
 }
 .lq-open-journal {
   align-self: flex-start;

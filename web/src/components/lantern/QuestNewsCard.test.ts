@@ -26,6 +26,34 @@ describe('QuestNewsCard', () => {
     expect(w.attributes('aria-label')).toBe('New side quest: Hint of Magic')
   })
 
+  it("shows a checklist quest's needs as a list, not as '* ' lines", () => {
+    const w = mount(QuestNewsCard, {
+      props: {
+        news: {
+          kind: 'new',
+          name: 'Preparing for the road',
+          main: false,
+          text:
+            'Mira has tasked you. She says you will need: \n' +
+            '[success] * Warm clothing[/success]\n' +
+            '[pending] * Sturdy footwear[/pending]',
+        },
+      },
+    })
+
+    const body = w.get('.lq-quest-body')
+    expect(body.text()).not.toContain('*')
+    expect(body.findAll('li').map((li) => li.text())).toEqual([
+      'Warm clothing',
+      'Sturdy footwear',
+    ])
+    expect(body.findAll('li').map((li) => li.classes())).toEqual([
+      expect.arrayContaining(['lq-check-done']),
+      expect.arrayContaining(['lq-check-pending']),
+    ])
+    expect(body.text()).toContain('Mira has tasked you.')
+  })
+
   it('names a new main quest', () => {
     const w = mount(QuestNewsCard, {
       props: { news: { kind: 'new', name: 'Shadows', main: true, text: 'x' } },
