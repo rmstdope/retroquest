@@ -42,7 +42,8 @@ export interface PageStart {
  * (`afterWords`), waits (`active` false, nothing in the middle) until the
  * turn's words are told: the narrator reaching the first piece, or,
  * when nobody narrates, the conversation on the picture having shown every
- * line. `told` remembers the turns whose news went through the middle, or was cut short by a clear (the
+ * line. News a skip reached waits, too, until the lines the skip showed
+ * unspoken are read (`owedReadingMs`). `told` remembers the turns whose news went through the middle, or was cut short by a clear (the
  * story shows their slim lines once `newsPending` is false) and `newsUp`
  * says which piece is on screen, for its sound.
  */
@@ -296,14 +297,23 @@ export const useArrivalStore = defineStore('arrival', () => {
     (ready) => {
       const now = current.value
       if (!ready || !now) return
-      now.shown = true
-      // The narrator was skipped before it got to the news: all of it is read for its time.
-      if (now.narrated && !narration.narrates(now.turnId))
-        now.parts = now.parts.map((each) => ({ ...each, voiced: false }))
-      markTold(now)
-      if (!now.narrated || silentNews()) readPart()
+      // Lines a skip showed unspoken are read before the news covers them.
+      const owed = now.narrated ? narration.owedReadingMs(now.turnId) : 0
+      if (owed > 0) later(owed, () => bringUp(now))
+      else bringUp(now)
     },
   )
+
+  /** The waiting news (or arrival after a talk) of `now` comes up, if it is still the one being told. */
+  function bringUp(now: NonNullable<typeof current.value>): void {
+    if (current.value !== now || now.shown) return
+    now.shown = true
+    // The narrator was skipped before it got to the news: all of it is read for its time.
+    if (now.narrated && !narration.narrates(now.turnId))
+      now.parts = now.parts.map((each) => ({ ...each, voiced: false }))
+    markTold(now)
+    if (!now.narrated || silentNews()) readPart()
+  }
 
   // Each narrated part comes up when the narrator reaches it: the first one
   // it has revealed beyond the part up, so a piece nobody speaks (which it
