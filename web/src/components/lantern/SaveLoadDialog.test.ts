@@ -320,4 +320,50 @@ describe('SaveLoadDialog', () => {
       expect(card(w, '3').text()).toContain('Just saved')
     })
   })
+
+  describe('opened from the title page', () => {
+    it('loads a picked save at once, with no question', async () => {
+      const game = useGameStore()
+      const load = vi.spyOn(game, 'loadFromTitle').mockReturnValue(true)
+      const w = mount(SaveLoadDialog, {
+        props: { mode: 'load', fromTitle: true },
+        attachTo: document.body,
+      })
+      wrapper = w
+      await w.get('[data-slot="2"] .lq-slot-btn').trigger('click')
+
+      expect(load).toHaveBeenCalledWith(2)
+      expect(w.find('.lq-ask').exists()).toBe(false)
+      expect(w.emitted('close')).toHaveLength(1)
+    })
+
+    it('loads the quick save as slot 0', async () => {
+      const game = useGameStore()
+      const load = vi.spyOn(game, 'loadFromTitle').mockReturnValue(true)
+      const w = mount(SaveLoadDialog, {
+        props: { mode: 'load', fromTitle: true },
+        attachTo: document.body,
+      })
+      wrapper = w
+      await w.get('[data-slot="0"] .lq-slot-btn').trigger('click')
+      expect(load).toHaveBeenCalledWith(0)
+    })
+
+    it('stays open and says why when the load fails', async () => {
+      const game = useGameStore()
+      vi.spyOn(game, 'loadFromTitle').mockImplementation(() => {
+        game.titleLoadError = 'No save file found.'
+        return false
+      })
+      const w = mount(SaveLoadDialog, {
+        props: { mode: 'load', fromTitle: true },
+        attachTo: document.body,
+      })
+      wrapper = w
+      await w.get('[data-slot="2"] .lq-slot-btn').trigger('click')
+
+      expect(w.emitted('close')).toBeUndefined()
+      expect(w.get('[role="alert"]').text()).toBe('No save file found.')
+    })
+  })
 })

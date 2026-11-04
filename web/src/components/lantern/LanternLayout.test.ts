@@ -591,6 +591,52 @@ describe('LanternLayout', () => {
     vi.unstubAllGlobals()
   })
 
+  it('Continue on the title page loads the newest save and shows no chapter page', async () => {
+    wrapper = mount(LanternLayout, { attachTo: document.body })
+    const game = useGameStore()
+    vi.spyOn(game, 'getQuickSave').mockReturnValue(null)
+    vi.spyOn(game, 'getSaveSlots').mockReturnValue([
+      {
+        slot: 1,
+        act: 'Act 1',
+        room: 'Old Room',
+        timestamp: '2026-11-01T10:00:00',
+        quests: null,
+      },
+      {
+        slot: 2,
+        act: 'Act 2',
+        room: 'The Old Mill',
+        timestamp: '2026-11-03T21:14:00',
+        quests: null,
+      },
+    ])
+    const load = vi.spyOn(game, 'loadFromTitle').mockImplementation(() => {
+      game.showTitle = false
+      game.showModal = false
+      game.modalChapter = null
+      return true
+    })
+    game.modalChapter = {
+      kind: 'intro',
+      act: 'Act I',
+      title: 'The Call to Adventure',
+      body: 'You are Elior.',
+    }
+    game.showModal = true
+    game.showTitle = true
+    await flushPromises()
+
+    const cont = wrapper.get('.lq-title-start')
+    expect(cont.text()).toContain('Act II · The Old Mill')
+    await cont.trigger('click')
+    await flushPromises()
+
+    expect(load).toHaveBeenCalledWith(2)
+    expect(wrapper.find('.lq-title-page').exists()).toBe(false)
+    expect(wrapper.find('.lq-chapter-button').exists()).toBe(false)
+  })
+
   it('shows the title page over the first chapter, then the chapter', async () => {
     wrapper = mount(LanternLayout, { attachTo: document.body })
     const game = useGameStore()

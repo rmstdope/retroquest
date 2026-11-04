@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { computed, nextTick, onMounted, ref, useId } from 'vue'
 import { parseTitle } from '@/lantern/parseTitle'
+import { continueLine, newestLoadable } from '@/lantern/saveCard'
+import type { SaveSlot } from '@/types/bridge'
 import { useFocusTrap } from '@/composables/useFocusTrap'
 
 /**
@@ -9,15 +11,37 @@ import { useFocusTrap } from '@/composables/useFocusTrap'
  * a plain wordmark under 400px wide, where the art gets too small), the
  * music credits and Start. Enter on Start or Escape goes on.
  *
+ * A returning player has `saves` (the quick save and the slots in use): the
+ * page then offers Continue (the newest save that can be loaded, named under
+ * the word), New game and Load game, and Escape does nothing. When every
+ * save is from an older version there is no Continue and New game is the
+ * main button. `error` is why the last load from here failed.
+ *
  * `musicInfo` is the credit of the music actually playing (a take chosen in
  * Content Studio has its own), as the layout's music player holds it; until
  * the player has a track, the credits in the game's own `text` stand.
  */
 const props = withDefaults(
-  defineProps<{ text: string; musicInfo?: string }>(),
-  { musicInfo: '' },
+  defineProps<{
+    text: string
+    musicInfo?: string
+    saves?: SaveSlot[]
+    error?: string
+  }>(),
+  { musicInfo: '', saves: () => [], error: '' },
 )
-const emit = defineEmits<{ start: [] }>()
+const emit = defineEmits<{ start: []; continue: []; load: [] }>()
+const hasSaves = computed(() =>
+  props.saves.some((save) => save.slot === 0 || save.room !== null),
+)
+const newest = computed(() => newestLoadable(props.saves))
+const loadButton = ref<HTMLButtonElement | null>(null)
+
+/** Put focus on Load game (after its window closed). */
+function focusLoad(): void {
+  loadButton.value?.focus()
+}
+defineExpose({ focusLoad })
 const titleId = useId()
 const page = ref<HTMLElement | null>(null)
 const trap = useFocusTrap(page)
@@ -40,7 +64,7 @@ function credit(line: string): { text: string; href: string | null } {
 function onKeydown(event: KeyboardEvent): void {
   if (event.key === 'Escape') {
     event.stopPropagation()
-    emit('start')
+    if (!hasSaves.value) emit('start')
   } else trap.onKeydown(event)
 }
 
@@ -77,14 +101,45 @@ onMounted(() => nextTick(trap.focusFirst))
           <span v-else>{{ line }}</span>
         </template>
       </p>
-      <button
-        type="button"
-        class="lq-title-start"
-        data-autofocus
-        @click="emit('start')"
-      >
-        Start
-      </button>
+      <p v-if="error" class="lq-title-error" role="alert">{{ error }}</p>
+      <template v-if="!hasSaves">
+        <button
+          type="button"
+          class="lq-title-start"
+          data-autofocus
+          @click="emit('start')"
+        >
+          Start
+        </button>
+      </template>
+      <template v-else>
+        <button
+          v-if="newest"
+          type="button"
+          class="lq-title-start"
+          data-autofocus
+          @click="emit('continue')"
+        >
+          Continue
+          <span class="lq-title-line">{{ continueLine(newest) }}</span>
+        </button>
+        <button
+          type="button"
+          :class="newest ? 'lq-title-second' : 'lq-title-start'"
+          :data-autofocus="newest ? undefined : ''"
+          @click="emit('start')"
+        >
+          New game
+        </button>
+        <button
+          ref="loadButton"
+          type="button"
+          class="lq-title-second"
+          @click="emit('load')"
+        >
+          Load game
+        </button>
+      </template>
     </div>
   </section>
 </template>
@@ -168,7 +223,7 @@ onMounted(() => nextTick(trap.focusFirst))
 }
 .lq-title-start {
   min-width: 200px;
-  height: 52px;
+  min-height: 52px;
   padding: 0 28px;
   border: none;
   border-radius: 12px;
@@ -178,6 +233,34 @@ onMounted(() => nextTick(trap.focusFirst))
   font-size: 16px;
   font-weight: 600;
   cursor: pointer;
+}
+.lq-title-line {
+  display: block;
+  margin-top: 2px;
+  font-size: 12px;
+  font-weight: 400;
+  opacity: 0.85;
+}
+.lq-title-second {
+  min-width: 200px;
+  height: 48px;
+  padding: 0 28px;
+  border: 1px solid var(--lq-accent-line);
+  border-radius: 12px;
+  background: transparent;
+  color: var(--lq-accent-text);
+  font: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.lq-title-error {
+  margin: 0;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: var(--lq-failure-soft);
+  color: var(--lq-failure);
+  font-size: 14px;
 }
 .lq-sr-only {
   position: absolute;

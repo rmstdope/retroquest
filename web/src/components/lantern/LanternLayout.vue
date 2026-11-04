@@ -62,6 +62,8 @@ import StoryNameMenu from './StoryNameMenu.vue'
 import { NAME_SELECTOR, useNameStops } from '@/composables/useNameStops'
 import StoryTurn from './StoryTurn.vue'
 import TitlePage from './TitlePage.vue'
+import { newestLoadable } from '@/lantern/saveCard'
+import type { SaveSlot } from '@/types/bridge'
 
 /**
  * Shell of the Lantern UI (the only UI; old `?ui=` links open it too): header, story (one
@@ -1256,6 +1258,41 @@ async function startGame(): Promise<void> {
   await nextTick()
   focusPopUp()
 }
+const titlePage = ref<InstanceType<typeof TitlePage> | null>(null)
+/** The Load game window is open over the title page. */
+const titleLoad = ref(false)
+/** The saves the title page offers, read each time it opens. */
+const titleSaves = ref<SaveSlot[]>([])
+watch(
+  () => game.showTitle,
+  (shown) => {
+    titleLoad.value = false
+    if (!shown) return
+    try {
+      const quick = game.getQuickSave()
+      titleSaves.value = quick
+        ? [quick, ...game.getSaveSlots()]
+        : game.getSaveSlots()
+    } catch {
+      // Saves that cannot be read count as none: the title page offers Start.
+      titleSaves.value = []
+    }
+  },
+  { immediate: true, flush: 'sync' },
+)
+
+/** Continue: load the newest save that can be loaded. */
+function continueFromTitle(): void {
+  const newest = newestLoadable(titleSaves.value)
+  if (newest) game.loadFromTitle(newest.slot)
+}
+
+/** The Load game window closed: back to the title page, focus on Load game. */
+async function closeTitleLoad(): Promise<void> {
+  titleLoad.value = false
+  await nextTick()
+  titlePage.value?.focusLoad()
+}
 const chapterDialog = ref<HTMLElement | null>(null)
 const chapterTrap = useFocusTrap(chapterDialog)
 
@@ -1563,10 +1600,19 @@ watch(
       <!-- The game's title page, over the first act's chapter page. -->
       <TitlePage
         v-if="game.showTitle"
+        ref="titlePage"
         :text="game.titleText"
         :music-info="music.musicInfo.value"
+        :saves="titleSaves"
+        :error="game.titleLoadError"
         @start="startGame"
+        @continue="continueFromTitle"
+        @load="titleLoad = true"
       />
+      <!-- Load game from the title page: above it, and a pick loads at once. -->
+      <div v-if="game.showTitle && titleLoad" class="lq-over-title">
+        <SaveLoadDialog mode="load" from-title @close="closeTitleLoad" />
+      </div>
 
       <!-- Dialogs the player opens (a game pop-up takes precedence). -->
       <template v-if="!game.showModal">
@@ -2024,6 +2070,10 @@ watch(
   color: var(--lq-on-accent);
   font-weight: 600;
   cursor: pointer;
+}
+/* The Load game window opened from the title page sits above it. */
+.lq-over-title :deep(.lq-dialog-layer) {
+  z-index: 80;
 }
 .lq-chapter-dialog {
   position: fixed;
