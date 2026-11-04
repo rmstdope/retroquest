@@ -146,7 +146,8 @@ function recut(): void {
       measure.querySelectorAll<HTMLElement>('.lq-quest-checklist'),
     ).map((list) => list.offsetWidth),
   )
-  measure.style.removeProperty('--lq-checklist-width')
+  // The pages are measured with the width they will be drawn with.
+  measure.style.setProperty('--lq-checklist-width', `${checklistWidth.value}px`)
   const fits = (pieces: ArrivalPiece[]): boolean => {
     measure.innerHTML = html(
       pageLines({ pieces, firstUnit: 0, firstWord: 0, scrolls: false }),
@@ -154,6 +155,7 @@ function recut(): void {
     return measure.offsetHeight <= available
   }
   const cut = paginate(part.lines, fits)
+  measure.style.removeProperty('--lq-checklist-width')
   measure.innerHTML = ''
   pages.value = cut
   const base = (unit: number): number =>

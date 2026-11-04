@@ -457,11 +457,11 @@ describe('ArrivalOnPicture', () => {
           lines: [
             {
               unit: 0,
-              markup: '[pending] * Sturdy footwear for the road[/pending]',
+              markup: '[pending] * Boots[/pending]',
             },
             {
               unit: 1,
-              markup: '[success] * All basic magic learned[/success]',
+              markup: '[success] * Sturdy footwear for the road[/success]',
             },
           ],
           voiced: false,
@@ -474,7 +474,7 @@ describe('ArrivalOnPicture', () => {
         await w.trigger('click')
         await w.vm.$nextTick()
         expect(w.get('.lq-arrival-text li').text()).toBe(
-          'All basic magic learned',
+          'Sturdy footwear for the road',
         )
         expect(stage.attributes('style')).toContain(
           '--lq-checklist-width: 280px',
@@ -482,6 +482,13 @@ describe('ArrivalOnPicture', () => {
       } finally {
         Reflect.deleteProperty(proto, 'offsetWidth')
       }
+    })
+
+    it('leaves the checklist width at nothing for a part without a list', async () => {
+      const w = await told(long)
+      expect(
+        w.get('[data-testid="arrival-on-picture"]').attributes('style'),
+      ).toContain('--lq-checklist-width: 0px')
     })
 
     it('shows a part that fits as one page', async () => {
