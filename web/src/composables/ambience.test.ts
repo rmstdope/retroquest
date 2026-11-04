@@ -363,6 +363,18 @@ describe('Ambience', () => {
       expect(levelOf(sourcesOf(strike)[0]).value).toBe(2.5)
     })
 
+    it('waits at least a tenth of a second between the starts of a random clip', () => {
+      new Ambience(
+        ctx as unknown as AudioContext,
+        [{ buffer: strike, play: { mode: 'random', everySeconds: [0, 0] } }],
+        bus,
+      ).play()
+      vi.advanceTimersByTime(0)
+      expect(sourcesOf(strike)).toHaveLength(0)
+      vi.advanceTimersByTime(1000)
+      expect(sourcesOf(strike)).toHaveLength(10)
+    })
+
     it('plays one clip in two rows each at its own volume', () => {
       new Ambience(
         ctx as unknown as AudioContext,

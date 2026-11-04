@@ -14,7 +14,7 @@ import { loadChosenEffects, sceneClips } from './chosenEffects'
 import { fetchAudioBuffer } from './musicVoice'
 import { roomTrackId } from '@/lantern/musicLists'
 import { sceneMixOf } from '@/lantern/sceneMix'
-import { sceneStateOf } from '@/lantern/sceneLists'
+import { PLAIN_SOUND_STATE, sceneStateOf } from '@/lantern/sceneLists'
 import {
   ACT_FILE,
   GENERATED_MUSIC_DIR,
@@ -96,12 +96,18 @@ export function useActMusic(): ReturnType<typeof useMusic> {
     musicActName.value === '' || musicRoomKey.value === ''
       ? ''
       : roomTrackId(musicActName.value, musicRoomKey.value)
-  /** Gives the room's sound state to its own scene's ambience; the others keep theirs. */
+  /** The sound state each scene was last in while the music played there. */
+  const lastStates: Record<string, string> = {}
+  /**
+   * Gives the room's sound state to its own scene's ambience; the others keep
+   * the state their scene was left in, even one that arrives after it.
+   */
   const followSoundState = (): void => {
+    const room = roomScene()
+    if (room !== '') lastStates[room] = sceneStateOf(musicSoundState.value)
     ambiences = ambiences.filter(({ ambience }) => !ambience.disposed)
     for (const { scene, ambience } of ambiences)
-      if (scene === roomScene())
-        ambience.setState(sceneStateOf(musicSoundState.value))
+      ambience.setState(lastStates[scene] ?? PLAIN_SOUND_STATE)
   }
   /**
    * The decoded clips by URL, so a clip shared by rooms is decoded once. Only

@@ -16,7 +16,7 @@ export type ScenePlay =
   | { mode: 'loop' }
   | {
       mode: 'random'
-      /** The wait before each start, in seconds: a random time between the two. */
+      /** The wait before each start, in seconds: a random time between the two, the first 0 or more and no longer than the second. */
       everySeconds: readonly [number, number]
     }
   | {
@@ -86,7 +86,7 @@ function playOf(value: unknown): ScenePlay | undefined {
         every.length === 2 &&
         typeof every[0] === 'number' &&
         typeof every[1] === 'number' &&
-        every[0] > 0 &&
+        every[0] >= 0 &&
         every[0] <= every[1]
       )
         return { mode: 'random', everySeconds: [every[0], every[1]] }

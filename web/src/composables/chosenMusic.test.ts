@@ -119,6 +119,20 @@ describe('sceneMusic', () => {
     ).toEqual({ music: manifest['act1-village-square'], level: 2.5 })
   })
 
+  it("plays the act's own file at the mix's level for the act loop with no take", () => {
+    expect(
+      sceneMusic(
+        shed,
+        actFile,
+        {},
+        {
+          music: { track: 'market', level: 0.8 },
+          effects: [],
+        },
+      ),
+    ).toEqual({ music: ACT_FILE, level: 0.8 })
+  })
+
   it('plays no music for no track, or for a track with no chosen take', () => {
     expect(
       sceneMusic(square, actFile, manifest, {

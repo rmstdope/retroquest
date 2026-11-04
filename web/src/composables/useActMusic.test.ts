@@ -7,12 +7,25 @@ import { useGameStore } from '@/stores/useGameStore'
 import { useNarrationStore } from '@/stores/useNarrationStore'
 import { useSettingsStore } from '@/stores/useSettingsStore'
 import { FakeAudioContext } from '@/testing/fakeAudioContext'
+import type * as SceneMixModule from '@/lantern/sceneMix'
+import type { SceneEntry } from '@/lantern/sceneMix'
 import {
   MUSIC_DUCK,
   MUSIC_DUCK_FADE_MS,
   MUSIC_FADE_IN_MS,
   MUSIC_THROUGH_MS,
 } from './useMusic'
+
+/** Scenes whose mix a test gives in place of the committed one. */
+const mixOf = vi.hoisted(() => ({}) as Record<string, SceneEntry>)
+vi.mock('@/lantern/sceneMix', async (importOriginal) => {
+  const actual = await importOriginal<typeof SceneMixModule>()
+  return {
+    ...actual,
+    sceneMixOf: (scene: string): SceneEntry | undefined =>
+      mixOf[scene] ?? actual.sceneMixOf(scene),
+  }
+})
 
 /** Lets the manifest fetch settle and the watchers run. */
 async function settle(): Promise<void> {
@@ -451,7 +464,10 @@ describe('useActMusic with the effects of a room', () => {
     vi.stubGlobal('AudioContext', FakeAudioContext)
     serve()
   })
-  afterEach(() => vi.unstubAllGlobals())
+  afterEach(() => {
+    vi.unstubAllGlobals()
+    for (const scene of Object.keys(mixOf)) delete mixOf[scene]
+  })
 
   it("plays the rain round and round with The Dream's music", async () => {
     const scope = await startInTheDream()
@@ -561,6 +577,78 @@ describe('useActMusic with the effects of a room', () => {
     scope.stop()
     expect(loopsSounding()).toHaveLength(0)
   })
+
+  it("plays the effects of a room left before they arrived in that room's state", async () => {
+    const served = vi.mocked(fetch).getMockImplementation()!
+    let letWhirIn = (): void => {}
+    const whirHeld = new Promise<void>((resolve) => (letWhirIn = resolve))
+    vi.mocked(fetch).mockImplementation((url) =>
+      String(url).endsWith('/whir.' + 'mp3')
+        ? whirHeld.then(() => served(url))
+        : served(url),
+    )
+    const scope = await startIn('OldMill', 'whirring')
+    ctx = FakeAudioContext.last
+    // Only the mill's music: its wind waits for the whir to be decoded.
+    expect(loopsSounding()).toHaveLength(1)
+    const game = useGameStore()
+    game.musicRoomKey = 'TheDream'
+    game.musicSoundState = ''
+    await ready()
+    letWhirIn()
+    await ready()
+    // The Dream's music and rain, and the mill's music, wind and whir as it fades out.
+    expect(
+      ctx.sources
+        .slice(sourcesBefore)
+        .filter((source) => source.loop && source.start.mock.calls.length > 0),
+    ).toHaveLength(5)
+    scope.stop()
+  })
+
+  it('plays the effects but no music where the mix names no track', async () => {
+    mixOf['act1-old-mill'] = {
+      music: { track: null, level: 1 },
+      effects: [{ id: 'wind-gusts', play: { mode: 'loop' }, level: 1 }],
+    }
+    const scope = await startIn('OldMill')
+    ctx = FakeAudioContext.last
+    // The wind alone: no music is fetched, from the takes or the act's file.
+    expect(loopsSounding()).toHaveLength(1)
+    expect(
+      vi
+        .mocked(fetch)
+        .mock.calls.some(
+          ([url]) =>
+            String(url).includes('/mill.') || String(url).includes('Market'),
+        ),
+    ).toBe(false)
+    scope.stop()
+    expect(loopsSounding()).toHaveLength(0)
+  })
+
+  it("plays the music at the level the scene's mix gives it", async () => {
+    /** The gain the music's loop (the first loop made) plays through. */
+    const musicGain = (): number => levelOf(loopsSounding()[0])
+    const plain = await startIn('OldMill')
+    ctx = FakeAudioContext.last
+    const atOne = musicGain()
+    plain.stop()
+    mixOf['act1-old-mill'] = {
+      music: { track: 'act1-old-mill', level: 2 },
+      effects: [],
+    }
+    const louder = await startIn('OldMill')
+    expect(atOne).toBeGreaterThan(0)
+    expect(musicGain()).toBeCloseTo(atOne * 2)
+    louder.stop()
+  })
+
+  /** The level a source plays at: the gain it connects to. */
+  function levelOf(source: { connect: { mock: { calls: unknown[][] } } }) {
+    return (source.connect.mock.calls[0][0] as { gain: { value: number } }).gain
+      .value
+  }
 
   it('swaps the effects for the next room when the music carries on into it', async () => {
     const shared = DREAM_MUSIC['act1-old-mill']

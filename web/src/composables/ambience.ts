@@ -38,6 +38,9 @@ export type AmbientClipSource = { url: string } & ClipPlay
 /** How long a clip fades in or out as the room's sound state changes, in seconds. */
 const STATE_FADE_SECONDS = 0.3
 
+/** The shortest wait between the starts of a random clip, in seconds, so a wait of none never starts one on every tick. */
+const MIN_RANDOM_WAIT_SECONDS = 0.1
+
 /** How often a clip played once looks again while the browser holds the sound back, in seconds. */
 const ONCE_RETRY_SECONDS = 0.25
 
@@ -227,7 +230,8 @@ export class Ambience {
     clip: AmbientClip,
     [shortest, longest]: readonly [number, number],
   ): void {
-    const ms = (shortest + this.random() * (longest - shortest)) * 1000
+    const seconds = shortest + this.random() * (longest - shortest)
+    const ms = Math.max(seconds, MIN_RANDOM_WAIT_SECONDS) * 1000
     this.after(clip, ms, () => {
       if (this.context.state === 'running') this.sound(clip, false)
       this.wait(clip, [shortest, longest])

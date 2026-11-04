@@ -57,8 +57,9 @@ export interface SceneMusicChoice {
 /**
  * The music of a scene at `place`. Where its mix entry gives no music, what
  * the game chooses (the room's take, else the act loop's, else the act's own
- * file) at 1; else the track the mix names at its level, and no music for no
- * track or for one with no chosen take.
+ * file) at 1; else the track the mix names at its level: its chosen take, the
+ * act's own file for the act loop with none, and no music for no track or for
+ * one with neither.
  */
 export function sceneMusic(
   place: { actName: string; roomKey: string },
@@ -73,9 +74,10 @@ export function sceneMusic(
       level: 1,
     }
   const { track, level } = mixed
-  const take =
-    track !== null && Object.hasOwn(manifest, track) ? manifest[track] : null
-  return { music: take, level }
+  if (track !== null && Object.hasOwn(manifest, track))
+    return { music: manifest[track], level }
+  const ownFile = musicFile !== '' && track === actLoopId(musicFile)
+  return { music: ownFile ? ACT_FILE : null, level }
 }
 
 /** How long the game waits for the manifest before playing its own files, in ms. */

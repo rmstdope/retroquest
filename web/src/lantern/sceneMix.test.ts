@@ -79,6 +79,40 @@ describe('readSceneMix', () => {
     })
   })
 
+  it('reads a random wait from 0 seconds, up to a longest no shorter', () => {
+    for (const every of [
+      [0, 4],
+      [0, 0],
+      [5, 5],
+    ])
+      expect(
+        readSceneMix({
+          scenes: {
+            rain: {
+              effects: [
+                {
+                  id: 'drip',
+                  play: { mode: 'random', everySeconds: every },
+                  level: 1,
+                },
+              ],
+            },
+          },
+        }),
+        JSON.stringify(every),
+      ).toEqual({
+        rain: {
+          effects: [
+            {
+              id: 'drip',
+              play: { mode: 'random', everySeconds: every },
+              level: 1,
+            },
+          ],
+        },
+      })
+  })
+
   it('reads a null track as no music, and absent music and effects as none given', () => {
     expect(
       readSceneMix({
@@ -109,7 +143,7 @@ describe('readSceneMix', () => {
         effects: [
           {
             id: 'rain',
-            play: { mode: 'random', everySeconds: [0, 4] },
+            play: { mode: 'random', everySeconds: [5, 4] },
             level: 1,
           },
         ],
@@ -118,7 +152,7 @@ describe('readSceneMix', () => {
         effects: [
           {
             id: 'rain',
-            play: { mode: 'random', everySeconds: [5, 4] },
+            play: { mode: 'random', everySeconds: [-1, 4] },
             level: 1,
           },
         ],
