@@ -592,6 +592,19 @@ describe('ArrivalOnPicture', () => {
       ])
     })
 
+    it('lays the checklist out as one left-aligned column, centred and at most 22em wide', () => {
+      const source = read('./ArrivalOnPicture.vue')
+      const rule = source.match(
+        /\.lq-arrival-line :deep\(\.lq-quest-checklist\),\s*\.lq-arrival-twin :deep\(\.lq-quest-checklist\) \{([^}]*)\}/,
+      )
+      const body = rule?.[1] ?? ''
+      expect(body).toMatch(/(^|\n)\s*width: fit-content;/)
+      expect(body).toContain('max-width: min(22em, 100%)')
+      expect(body).toContain('margin-inline: auto')
+      expect(body).toContain('text-align: left')
+      expect(body).not.toContain('align-items: center')
+    })
+
     it('says "Tap to continue" on a phone', async () => {
       const w = mount(ArrivalOnPicture, {
         props: { pictured: true, phone: true },
