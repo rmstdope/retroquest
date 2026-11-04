@@ -220,6 +220,11 @@
     "text": "The stone is dark. Your light shows only its runes."
   },
   {
+    "key": "0a8202e796647e",
+    "speaker": "narrator",
+    "text": "You stand just inside the fortress gates. The ward stones are dark, and the violet wall is gone; the ways north and east lie open. On the arch behind you, under the black, an older carving shows through: a sun rising over three linked rings. Just inside the threshold Mira keeps the way out, her back to the gatepost."
+  },
+  {
     "key": "1c87c3e79d433c",
     "speaker": "narrator",
     "text": "The ward stones are dark. Your light shows only their runes."
@@ -310,6 +315,16 @@
     "text": "The servants flinch from the light and keep walking. They do not know you, and they have learned what strangers bring."
   },
   {
+    "key": "043a6a9f6e0001",
+    "speaker": "narrator",
+    "text": "Outer Courtyard"
+  },
+  {
+    "key": "0c87a947e5f2d2",
+    "speaker": "narrator",
+    "text": "This was a garden once. The fountains still stand under a sky that never quite rains, but what runs down them is black and slow, and the statues have all turned their faces away. Grey figures walk the paths in circles, chains of shadow at their ankles, never looking up. By the dry fountain a soldier in a soot-black royal tabard stands rigid, staring at nothing."
+  },
+  {
     "key": "05ec706f6c0dc0",
     "speaker": "narrator",
     "text": "The room is already well lit."
@@ -328,16 +343,6 @@
     "key": "16f646a4026c28",
     "speaker": "narrator",
     "text": "The captain stares through you. His hands do not close on it, and you keep it."
-  },
-  {
-    "key": "043a6a9f6e0001",
-    "speaker": "narrator",
-    "text": "Outer Courtyard"
-  },
-  {
-    "key": "0c87a947e5f2d2",
-    "speaker": "narrator",
-    "text": "This was a garden once. The fountains still stand under a sky that never quite rains, but what runs down them is black and slow, and the statues have all turned their faces away. Grey figures walk the paths in circles, chains of shadow at their ankles, never looking up. By the dry fountain a soldier in a soot-black royal tabard stands rigid, staring at nothing."
   },
   {
     "key": "0554374320630e",
@@ -440,6 +445,11 @@
     "text": "He turns toward the gates. The shadows draw away from the light at his throat, and at the arch he lifts a hand to you before he goes."
   },
   {
+    "key": "198b35510f4346",
+    "speaker": "narrator",
+    "text": "The fountains have stopped running black, and the sky has thinned to grey. The freed servants rest by the fountains, their chains gone, and the captain's place among them is empty."
+  },
+  {
     "key": "1681cbe8503c34",
     "speaker": "narrator",
     "text": "The Maze of Mirrors"
@@ -448,6 +458,16 @@
     "key": "1f6288fd341524",
     "speaker": "narrator",
     "text": "Countless mirrors show false paths and twisted reflections. Find the one true way through the labyrinth."
+  },
+  {
+    "key": "08a00495e868bc",
+    "speaker": "narrator",
+    "text": "Mirror Labyrinth"
+  },
+  {
+    "key": "1362e2b21ab537",
+    "speaker": "narrator",
+    "text": "Corridors of mirror run away from you in every direction, and in each of them a different Elior looks back. You stand at the mouth of the maze, facing north."
   },
   {
     "key": "19e8c8bd37959f",
@@ -470,6 +490,16 @@
     "text": "A knight in a grey cloak stands before the stair to the Tower of Shadows and does not move. Learn the truth of him, and find a way past."
   },
   {
+    "key": "07429567d9aa12",
+    "speaker": "narrator",
+    "text": "Hall of Echoes"
+  },
+  {
+    "key": "1a9c646eaf6aa6",
+    "speaker": "narrator",
+    "text": "A long hall, so high the ceiling is lost. Everything that was ever said here is still being said, very quietly: orders, jokes, names, someone counting. Tattered banners hang high along the walls, grimed past reading. At the far end, before the stair, a knight in tarnished armour stands without moving, the way a man stands at a grave. Sir Cedric stands by the south door, the way out at his back, his eyes on the knight."
+  },
+  {
     "key": "17c43d0dcec9ed",
     "speaker": "narrator",
     "text": "You stand still and listen. Beneath the battle cries and laments, one voice repeats the same words over and over, patient as a heartbeat:"
@@ -490,9 +520,19 @@
     "text": "You turn left, and the glass lets you through."
   },
   {
+    "key": "0889df2f4985fa",
+    "speaker": "narrator",
+    "text": "The corridor narrows and bends, and you face north again. Fewer reflections follow you here, and they walk a little behind."
+  },
+  {
     "key": "171824ccbe69f6",
     "speaker": "narrator",
     "text": "You turn left again, and the glass lets you through."
+  },
+  {
+    "key": "157c00bce6947c",
+    "speaker": "narrator",
+    "text": "The corridor ends in a last fork, facing north. To the north and to the east, your reflection waits in the glass, and both of them beckon."
   },
   {
     "key": "1ec2d7bfc68c71",
@@ -528,6 +568,11 @@
     "key": "1ab30b347af233",
     "speaker": "narrator",
     "text": "Guided by the servants' pendant and the hall's echoes, Elior walks the one true path through the mirrors, and learns to see through illusion."
+  },
+  {
+    "key": "121c621908d98a",
+    "speaker": "narrator",
+    "text": "The false mirrors stand dark and silent now. A single clear corridor runs through the labyrinth to a plain mirror at its heart, where your own reflection waits, keeping still."
   },
   {
     "key": "0e2f39816f6f47",
@@ -600,19 +645,14 @@
     "text": "A captain of the royal guard, his tabard black with soot. He sits among the servants, opening and closing his sword hand as if it belonged to someone else."
   },
   {
+    "key": "1ccafe0a94d3c9",
+    "speaker": "narrator",
+    "text": "The fountains have stopped running black, and the sky has thinned to grey. The freed servants rest by the fountains, their chains gone, and the captain of the guard sits among them with his head in his hands."
+  },
+  {
     "key": "1bde72fcb6c832",
     "speaker": "narrator",
     "text": "The pendant glows faintly. Whoever is behind you has nothing to say here."
-  },
-  {
-    "key": "08a00495e868bc",
-    "speaker": "narrator",
-    "text": "Mirror Labyrinth"
-  },
-  {
-    "key": "1362e2b21ab537",
-    "speaker": "narrator",
-    "text": "Corridors of mirror run away from you in every direction, and in each of them a different Elior looks back. You stand at the mouth of the maze, facing north."
   },
   {
     "key": "0da99ce8d79169",
@@ -628,16 +668,6 @@
     "key": "086a5f90189194",
     "speaker": "narrator",
     "text": "The Maze of Mirrors: Countless mirrors show false paths and twisted reflections. Find the one true way through the labyrinth."
-  },
-  {
-    "key": "07429567d9aa12",
-    "speaker": "narrator",
-    "text": "Hall of Echoes"
-  },
-  {
-    "key": "1a9c646eaf6aa6",
-    "speaker": "narrator",
-    "text": "A long hall, so high the ceiling is lost. Everything that was ever said here is still being said, very quietly: orders, jokes, names, someone counting. Tattered banners hang high along the walls, grimed past reading. At the far end, before the stair, a knight in tarnished armour stands without moving, the way a man stands at a grave. Sir Cedric stands by the south door, the way out at his back, his eyes on the knight."
   },
   {
     "key": "18837c729fab57",
@@ -910,6 +940,11 @@
     "text": "If they can be let go, so can this. I forgive you. Get up."
   },
   {
+    "key": "0b242390f8528b",
+    "speaker": "narrator",
+    "text": "A long hall, so high the ceiling is lost. The echoes have softened to a murmur. By the stair to the east the knight kneels with his helm beside him, his grey cloak folded on the stone. Sir Cedric sits on the stair beside the knight. Neither of them is saying much."
+  },
+  {
     "key": "0b239fe49bb1a4",
     "speaker": "sir cedric",
     "text": "Go on up. I will wait here with him. Someone should."
@@ -958,6 +993,11 @@
     "key": "1212238ccabfa3",
     "speaker": "narrator",
     "text": "The Final Stand: The Knight of Despair was the stranger from Willowbrook. He fouled the well, framed Sir Cedric and let the king be taken, and he confessed it to Sir Cedric's face."
+  },
+  {
+    "key": "0508b1cf89cdf8",
+    "speaker": "narrator",
+    "text": "A long hall, so high the ceiling is lost. The echoes have softened to a murmur. By the stair to the east the knight kneels with his helm beside him, his grey cloak folded on the stone. Among the tattered banners, ghostly warriors still fight a battle that ended long ago. Sir Cedric stands by the south door, the way out at his back, his eyes on the knight."
   },
   {
     "key": "1fede627b89ee9",
@@ -1035,6 +1075,11 @@
     "text": "The token is quiet and warm. The whispers are gone."
   },
   {
+    "key": "0db5559265e4b8",
+    "speaker": "narrator",
+    "text": "A stair winds up inside the black stone, narrow and dark. The walls are cold, and there are no windows. The shadows on the stair move a moment after you do. With every step, something quiet at your ear tells you why you should not have come. The whispers are gone. The stair winds up into the dark, and it is only a stair."
+  },
+  {
     "key": "1e113540f7ca91",
     "speaker": "narrator",
     "text": "The Sorceress of Lies"
@@ -1050,11 +1095,6 @@
     "text": "She laughs, and the chamber laughs with her. Whatever you came to give her is lost among the whispers."
   },
   {
-    "key": "1de7bf2acfbcf7",
-    "speaker": "narrator",
-    "text": "The north arch is a wall of whispering crystal. It will not open while the Sorceress holds the chamber."
-  },
-  {
     "key": "162c69256764e6",
     "speaker": "narrator",
     "text": "Chamber of Whispers"
@@ -1063,6 +1103,11 @@
     "key": "00981e1ed2bec9",
     "speaker": "narrator",
     "text": "A round room at the top of the tower, and the only beautiful room in the fortress. That is what is wrong with it. Crystals grow from the walls, each humming something kind and untrue, and the floor gives a little under your feet, like ice that might hold. At the chamber's heart the Sorceress of Lies waits, her staff crowned with a small silver mask. Your breath catches: it is the mask from Elena's wrist."
+  },
+  {
+    "key": "1de7bf2acfbcf7",
+    "speaker": "narrator",
+    "text": "The north arch is a wall of whispering crystal. It will not open while the Sorceress holds the chamber."
   },
   {
     "key": "152e0f064d5af9",
@@ -1205,6 +1250,11 @@
     "text": "You turn the mask over in your hands. Somewhere ahead is someone who needs to see that a liar can choose the truth."
   },
   {
+    "key": "1234289ac6702e",
+    "speaker": "narrator",
+    "text": "The chamber is still now. The crystals have stopped whispering, and the floor lies flat and plain beneath your feet. The Sorceress sits by the open north arch; her staff lies across her knees, bare where the mask once sat."
+  },
+  {
     "key": "0ab8df02b81236",
     "speaker": "narrator",
     "text": "Her staff lies across her knees, bare where the mask once sat."
@@ -1245,6 +1295,16 @@
     "text": "The Shadow does not see you. The memories around it are too broken."
   },
   {
+    "key": "0c793f67112a24",
+    "speaker": "narrator",
+    "text": "Memory Vault"
+  },
+  {
+    "key": "16028a7f3cae68",
+    "speaker": "narrator",
+    "text": "Glass orbs hang in the air at every height, each one cracked, each one holding a scene that breaks apart before it settles. Among them stands a shadow in the shape of a man. In the east wall is a round door of pale stone."
+  },
+  {
     "key": "02b420b5a7defe",
     "speaker": "narrator",
     "text": "The Shadow cannot see the mask through the broken memories."
@@ -1263,16 +1323,6 @@
     "key": "03f32585124dc5",
     "speaker": "narrator",
     "text": "The sealed door will not move. Its runes are dark."
-  },
-  {
-    "key": "0c793f67112a24",
-    "speaker": "narrator",
-    "text": "Memory Vault"
-  },
-  {
-    "key": "16028a7f3cae68",
-    "speaker": "narrator",
-    "text": "Glass orbs hang in the air at every height, each one cracked, each one holding a scene that breaks apart before it settles. Among them stands a shadow in the shape of a man. In the east wall is a round door of pale stone."
   },
   {
     "key": "16e911cd88bb09",
@@ -1333,6 +1383,11 @@
     "key": "10dafc66369f9e",
     "speaker": "shadow of the past",
     "text": "Patience is for those who still have hope. I have none left."
+  },
+  {
+    "key": "0909452c12ea1a",
+    "speaker": "narrator",
+    "text": "The orbs hang whole and still now, each holding its scene like a held breath. The Shadow of the Past stands among them, almost solid, its eyes on the sealed door to the east."
   },
   {
     "key": "0cfbfce54fe08a",
@@ -1555,6 +1610,11 @@
     "text": "The Final Stand: In the vault you saw it all. Malakar tore at time to save your parents from the Wasting. They poured themselves into the ward that holds his wound shut, and the ward lives in you. Malakar waits past the north door."
   },
   {
+    "key": "10ee04243af525",
+    "speaker": "narrator",
+    "text": "The lanterns hang dim and still now, their memories told. The room is quiet, the way a house is quiet after everyone has gone to sleep. To the north, the door to the throne room stands open."
+  },
+  {
     "key": "16aed33be01696",
     "speaker": "narrator",
     "text": "Throne Chamber"
@@ -1705,6 +1765,11 @@
     "text": "The lifelight elixir is warm in your hand. It can be used only once. It could break the crystal and free the king, or it could be offered to Malakar, to heal the wound that is killing him."
   },
   {
+    "key": "0818496184bdea",
+    "speaker": "narrator",
+    "text": "The light of the ward fills the chamber from the open amulet. King Alden hangs in his crystal prison, the wound bleeds in the air beside him, and Malakar waits on his knees between them. The lifelight elixir is warm in your hand."
+  },
+  {
     "key": "03d05846565a74",
     "speaker": "narrator",
     "text": "You kneel and hold the elixir to Malakar's lips. He drinks. The grey goes out of his face, and for a moment he is the young man at the workbench again."
@@ -1723,6 +1788,11 @@
     "key": "0fa03869aa3f48",
     "speaker": "narrator",
     "text": "The lifelight elixir is gone."
+  },
+  {
+    "key": "18aac6b5867900",
+    "speaker": "narrator",
+    "text": "Malakar sits by the wound, the grey gone from his face, watching it with the eyes of the young man at the workbench. The wound still flickers in the air. King Alden hangs in his prison, waiting."
   },
   {
     "key": "070cd86f1b8171",
@@ -1820,6 +1890,11 @@
     "text": "The wound is closed and the king is free. Your parents are at rest."
   },
   {
+    "key": "06b4257b525da7",
+    "speaker": "narrator",
+    "text": "The dome is quiet. Where the wound was there is only air. King Alden sits among the shards of his prison, alive, and Malakar sits beside him, himself again. Behind the throne an arch stands open on the road home."
+  },
+  {
     "key": "065ebf6dd8a2e0",
     "speaker": "narrator",
     "text": "You walk out of the fortress and do not look back. The road home is long, and somehow shorter than it was. Days later the hedges of Willowbrook close around you, and then you are standing at the edge of your own field."
@@ -1853,6 +1928,16 @@
     "key": "03008de9d04e24",
     "speaker": "narrator",
     "text": "Read word by word off the mossy stone in the glade. It feels like your own."
+  },
+  {
+    "key": "175471f86e37b6",
+    "speaker": "narrator",
+    "text": "Willowbrook Field"
+  },
+  {
+    "key": "0491fbc4b379cc",
+    "speaker": "narrator",
+    "text": "The field behind your home: rows of withered crops under a pale sky, the earth cracked and grey. Grandmother waits at the gate. Mira stands beside her, and Sir Cedric leans on the fence. In the hedge a small light flickers: Nyx, keeping close. The air is quiet."
   },
   {
     "key": "1f454af63ceb22",
@@ -1898,6 +1983,11 @@
     "key": "17f698be9bfdcb",
     "speaker": "narrator",
     "text": "You pour the elixir over the crystal. It cracks like ice in spring, and King Alden falls free, gasping, alive. But the wound still stands open, and Malakar still stands beside it."
+  },
+  {
+    "key": "028beb17fc1272",
+    "speaker": "narrator",
+    "text": "The crystal lies in shards around the ritual circle. King Alden sits among them, weak but alive. The wound still stands open, and Malakar stands beside it, greyer than before."
   },
   {
     "key": "0915045d3002e9",
@@ -1950,6 +2040,11 @@
     "text": "You named what he did, and you did not hate him for it. That is the hardest kind of fair."
   },
   {
+    "key": "0f4bbc430ea59b",
+    "speaker": "narrator",
+    "text": "The dome is quiet. Where the wound was, a seal of gold and pale light hangs in the air, and Malakar is somewhere inside it. King Alden stands at the throne, alive, his crown bright again. Behind the throne an arch stands open on the road home."
+  },
+  {
     "key": "113d50a4c7ad2c",
     "speaker": "king alden",
     "text": "The kingdom will remember what you did here, farmer. I will see that it does."
@@ -1993,6 +2088,11 @@
     "key": "0daa4c89ba2e8a",
     "speaker": "lysa",
     "text": "You gave our gift back to close what he opened, and kept the one thing that was yours."
+  },
+  {
+    "key": "1fd75c426be5e1",
+    "speaker": "narrator",
+    "text": "The dome is quiet. Where the wound was there is only air. King Alden stands at the throne, alive, and Malakar kneels before him, grey and powerless, waiting to be judged. Behind the throne an arch stands open on the road home."
   },
   {
     "key": "1651c569ad74c6",
@@ -2138,16 +2238,6 @@
     "key": "0a8e1f8fdbdc52",
     "speaker": "narrator",
     "text": "The king of Eldoria, alive, his crown bright again."
-  },
-  {
-    "key": "175471f86e37b6",
-    "speaker": "narrator",
-    "text": "Willowbrook Field"
-  },
-  {
-    "key": "0491fbc4b379cc",
-    "speaker": "narrator",
-    "text": "The field behind your home: rows of withered crops under a pale sky, the earth cracked and grey. Grandmother waits at the gate. Mira stands beside her, and Sir Cedric leans on the fence. In the hedge a small light flickers: Nyx, keeping close. The air is quiet."
   },
   {
     "key": "07097f5f9018ce",

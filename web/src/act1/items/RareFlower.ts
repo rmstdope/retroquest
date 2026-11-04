@@ -1,4 +1,4 @@
-import { Item } from '@/engine'
+import { Item, type GameState } from '@/engine'
 
 /** Collectible flower from a secluded area, hinting at mystical undercurrents. */
 export class RareFlower extends Item {
@@ -11,5 +11,13 @@ export class RareFlower extends Item {
       shortName: 'flower',
       canBeCarried: true,
     })
+  }
+
+  /** The line the story tells when Elior takes it, wherever it is lying. */
+  override pickedUp(_gameState: GameState): string {
+    return (
+      'The petals stay open in your hand. ' +
+      'You hold it carefully, the way you would hold something that trusted you.'
+    )
   }
 }

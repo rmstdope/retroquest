@@ -1,4 +1,4 @@
-import { Item } from '@/engine'
+import { Item, type GameState } from '@/engine'
 
 /** Minor collectible pebble that glints; currently flavor-only. */
 export class ShinyPebble extends Item {
@@ -11,5 +11,12 @@ export class ShinyPebble extends Item {
       shortName: 'pebble',
       canBeCarried: true,
     })
+  }
+
+  /** The line the story tells when Elior takes it, wherever it is lying. */
+  override pickedUp(_gameState: GameState): string {
+    return (
+      'It is warm, warmer than the sun could make it. ' + 'You keep it anyway.'
+    )
   }
 }

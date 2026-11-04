@@ -609,6 +609,61 @@ describe('useGameStore', () => {
     })
   })
 
+  describe('loadFromTitle', () => {
+    beforeEach(async () => {
+      await store.initGame()
+    })
+
+    it('loads a slot and leaves the title page and the opening chapter page', () => {
+      expect(store.showTitle).toBe(true)
+      expect(store.showModal).toBe(true)
+      bridge.controller.getRoomName.mockReturnValue('Saved Room')
+
+      expect(store.loadFromTitle(3)).toBe(true)
+
+      expect(bridge.loadFromSlot).toHaveBeenCalledWith(3)
+      expect(store.showTitle).toBe(false)
+      expect(store.showModal).toBe(false)
+      expect(store.modalChapter).toBeNull()
+      expect(store.acceptInput).toBe(true)
+      expect(store.roomName).toBe('Saved Room')
+    })
+
+    it('loads the quick save for slot 0', () => {
+      expect(store.loadFromTitle(0)).toBe(true)
+      expect(bridge.quickLoadGame).toHaveBeenCalledOnce()
+      expect(store.showTitle).toBe(false)
+    })
+
+    it('stays on the title page with the engine line when the load fails', () => {
+      bridge.loadFromSlot.mockReturnValue(
+        '[failure]No save file found.[/failure]',
+      )
+
+      expect(store.loadFromTitle(2)).toBe(false)
+
+      expect(store.showTitle).toBe(true)
+      expect(store.showModal).toBe(true)
+      expect(store.titleLoadError).toBe('No save file found.')
+    })
+
+    it('says so when the storage cannot be read', () => {
+      bridge.loadFromSlot.mockImplementation(() => {
+        throw new Error('blocked')
+      })
+      expect(store.loadFromTitle(2)).toBe(false)
+      expect(store.titleLoadError).toContain('could not be read')
+      expect(store.showTitle).toBe(true)
+    })
+
+    it('forgets an earlier failure on the next attempt', () => {
+      bridge.loadFromSlot.mockReturnValueOnce('[failure]No save.[/failure]')
+      store.loadFromTitle(2)
+      store.loadFromTitle(2)
+      expect(store.titleLoadError).toBe('')
+    })
+  })
+
   // --- saveNamedGame / loadNamedGame ---
 
   describe('saveNamedGame', () => {
@@ -2146,7 +2201,7 @@ describe('useGameStore', () => {
       bridge.controller.isActRunning.mockReturnValue(false)
       bridge.controller.getActStats.mockReturnValue(STATS)
       bridge.controller.getActCompleteText.mockReturnValue(
-        'Congratulations — you have completed Act 1!',
+        'Congratulations — you have completed Act I!',
       )
       bridge.controller.getNextActIntro.mockReturnValue(INTRO_2)
 
@@ -2156,7 +2211,7 @@ describe('useGameStore', () => {
         kind: 'complete',
         act: 'Act I',
         title: 'The Call to Adventure',
-        body: 'Congratulations — you have completed Act 1!',
+        body: 'Congratulations — you have completed Act I!',
         stats: STATS,
         nextAct: 'Act II',
       })
@@ -2181,7 +2236,7 @@ describe('useGameStore', () => {
       bridge.controller.isAcceptingInput.mockReturnValue(false)
       bridge.controller.isActRunning.mockReturnValue(false)
       bridge.controller.getActCompleteText.mockReturnValue(
-        'Congratulations — you have completed Act 2!',
+        'Congratulations — you have completed Act II!',
       )
       bridge.controller.getNextActIntro.mockReturnValue(
         '[bold]ACT III: THE AWAKENING[/bold]\n\nText.',
@@ -2384,7 +2439,7 @@ describe('useGameStore', () => {
     }
     const CLOSING =
       'The realm breathes again.\n\nCongratulations — you have completed ' +
-      'Act 4, the final act of RetroQuest!\n'
+      'Act IV, the final act of RetroQuest!\n'
 
     beforeEach(async () => {
       bridge.controller.advanceTurn
@@ -2412,7 +2467,7 @@ describe('useGameStore', () => {
       kind: 'complete',
       act: 'Act IV',
       title: 'The Long Night Ends',
-      body: 'Congratulations — you have completed Act 4, the final act of RetroQuest!',
+      body: 'Congratulations — you have completed Act IV, the final act of RetroQuest!',
       stats: STATS,
       final: true,
     }

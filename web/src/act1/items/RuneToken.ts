@@ -1,4 +1,4 @@
-import { Item } from '@/engine'
+import { Item, type GameState } from '@/engine'
 
 /**
  * A black-iron token scored with a twisted rune, drawn up from the purified
@@ -16,5 +16,13 @@ export class RuneToken extends Item {
         'Nothing about it was lost by accident; someone made it, and made it to last.',
       canBeCarried: true,
     })
+  }
+
+  /** The line the story tells when Elior takes it, wherever it is lying. */
+  override pickedUp(_gameState: GameState): string {
+    return (
+      'It is cold, and it stays cold. ' +
+      'You put it away, and you do not like having it.'
+    )
   }
 }

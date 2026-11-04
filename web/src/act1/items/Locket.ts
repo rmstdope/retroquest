@@ -23,7 +23,10 @@ export class Locket extends Item {
     this.description = new Locket().description
   }
 
-  /** Teach Bless spell when picked up if the spell is not yet known. */
+  /**
+   * Teach Bless spell when picked up if the spell is not yet known, in the
+   * priest's scene; once it is known, taking the locket again answers its own line.
+   */
   override pickedUp(gameState: GameState): string {
     if (!gameState.hasSpell(new BlessSpell().id)) {
       const blessSpell = new BlessSpell()
@@ -43,7 +46,10 @@ export class Locket extends Item {
         'You have learned [spell_name]bless[/spell_name].'
       )
     }
-    return ''
+    return (
+      'The silver is cool against your palm. ' +
+      'You keep it where you can feel it.'
+    )
   }
 
   /** Open the locket to read the engraving inside its lid. */

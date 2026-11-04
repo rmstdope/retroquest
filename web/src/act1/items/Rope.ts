@@ -37,4 +37,12 @@ export class Rope extends Item {
     }
     return super.useWith(gameState, other)
   }
+
+  /** The line the story tells when Elior takes it, wherever it is lying. */
+  override pickedUp(_gameState: GameState): string {
+    return (
+      'You loop it over your shoulder. ' +
+      'It is good rope, and it was not cheap.'
+    )
+  }
 }

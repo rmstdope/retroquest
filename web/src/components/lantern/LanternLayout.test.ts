@@ -13,6 +13,19 @@ import {
 import { narrationKey } from '@/lantern/narrationKey'
 import { narrationWords } from '@/lantern/narrationManifest'
 import type { Turn } from '@/stores/useGameStore'
+import type * as SceneMixModule from '@/lantern/sceneMix'
+import type { SceneEntry } from '@/lantern/sceneMix'
+
+/** Scenes whose mix a test gives in place of the committed one. */
+const mixOf = vi.hoisted(() => ({}) as Record<string, SceneEntry>)
+vi.mock('@/lantern/sceneMix', async (importOriginal) => {
+  const actual = await importOriginal<typeof SceneMixModule>()
+  return {
+    ...actual,
+    sceneMixOf: (scene: string): SceneEntry | undefined =>
+      mixOf[scene] ?? actual.sceneMixOf(scene),
+  }
+})
 
 /** Wait for the next animation frame (an open name menu listens for scrolls from then on). */
 function nextFrame(): Promise<void> {
@@ -141,7 +154,7 @@ describe('LanternLayout', () => {
       kind: 'complete' as const,
       act: 'Act IV',
       title: 'The Long Night Ends',
-      body: 'Congratulations — you have completed Act 4!',
+      body: 'Congratulations — you have completed Act IV!',
       stats: { questsCompleted: 6, questsTotal: 6, spells: 14, places: 18 },
       final: true,
     }
@@ -576,6 +589,52 @@ describe('LanternLayout', () => {
 
     expect(submit).toHaveBeenCalledWith("take elior's journal")
     vi.unstubAllGlobals()
+  })
+
+  it('Continue on the title page loads the newest save and shows no chapter page', async () => {
+    wrapper = mount(LanternLayout, { attachTo: document.body })
+    const game = useGameStore()
+    vi.spyOn(game, 'getQuickSave').mockReturnValue(null)
+    vi.spyOn(game, 'getSaveSlots').mockReturnValue([
+      {
+        slot: 1,
+        act: 'Act 1',
+        room: 'Old Room',
+        timestamp: '2026-11-01T10:00:00',
+        quests: null,
+      },
+      {
+        slot: 2,
+        act: 'Act 2',
+        room: 'The Old Mill',
+        timestamp: '2026-11-03T21:14:00',
+        quests: null,
+      },
+    ])
+    const load = vi.spyOn(game, 'loadFromTitle').mockImplementation(() => {
+      game.showTitle = false
+      game.showModal = false
+      game.modalChapter = null
+      return true
+    })
+    game.modalChapter = {
+      kind: 'intro',
+      act: 'Act I',
+      title: 'The Call to Adventure',
+      body: 'You are Elior.',
+    }
+    game.showModal = true
+    game.showTitle = true
+    await flushPromises()
+
+    const cont = wrapper.get('.lq-title-start')
+    expect(cont.text()).toContain('Act II · The Old Mill')
+    await cont.trigger('click')
+    await flushPromises()
+
+    expect(load).toHaveBeenCalledWith(2)
+    expect(wrapper.find('.lq-title-page').exists()).toBe(false)
+    expect(wrapper.find('.lq-chapter-button').exists()).toBe(false)
   })
 
   it('shows the title page over the first chapter, then the chapter', async () => {
@@ -1696,7 +1755,14 @@ describe('LanternLayout', () => {
         return w.get('.lq-now-playing').text()
       }
 
-      afterEach(() => vi.unstubAllGlobals())
+      // The square plays what the game chooses, whatever music the committed mix names.
+      beforeEach(() => {
+        mixOf['act1-village-square'] = { effects: [] }
+      })
+      afterEach(() => {
+        vi.unstubAllGlobals()
+        delete mixOf['act1-village-square']
+      })
 
       it('credits a studio take to Content Studio', async () => {
         const text = await settingsWith({

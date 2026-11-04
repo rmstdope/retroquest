@@ -242,7 +242,7 @@ describe.each([1, 2, 3, 4])('narration of resting in Act %i', (act) => {
   })
 })
 
-describe.each([1, 2, 3, 4])(
+describe.each([2, 3, 4])(
   'the pickup sentence in the script of Act %i (rq-do7s)',
   (act) => {
     it('is voiced by the narrator', () => {

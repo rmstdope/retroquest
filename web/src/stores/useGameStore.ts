@@ -674,8 +674,48 @@ export const useGameStore = defineStore('game', () => {
   const titleText = ref('')
   const showTitle = ref(false)
 
+  /** Why the last load from the title page failed (the engine's line, plain), else ''. */
+  const titleLoadError = ref('')
+
   function dismissTitle(): void {
     showTitle.value = false
+    titleLoadError.value = ''
+  }
+
+  /**
+   * Load a save from the title page (`0` is the quick save). No game is in
+   * play, so the title page and the opening chapter page give way at once and
+   * the player lands in the saved room. A failed load changes nothing but
+   * `titleLoadError`; true when the game was loaded.
+   */
+  function loadFromTitle(slot: number): boolean {
+    const b = requireBridge()
+    titleLoadError.value = ''
+    let result: string
+    try {
+      result = slot === 0 ? b.quickLoadGame() : b.loadFromSlot(slot)
+    } catch {
+      titleLoadError.value =
+        "Your saves could not be read: this browser's storage is blocked."
+      return false
+    }
+    if (result.includes('[failure]')) {
+      titleLoadError.value = result.replace(/\[[^\]]*\]/g, '').trim()
+      return false
+    }
+    modalQueue.value = []
+    showModal.value = false
+    modalChapter.value = null
+    pendingLookOnDismiss = false
+    afterLoad(
+      b,
+      null,
+      result,
+      slot === 0 ? 'Game loaded' : `Game loaded · Slot ${slot}`,
+    )
+    acceptInput.value = b.controller.isAcceptingInput()
+    dismissTitle()
+    return true
   }
 
   /** From the game's logo to the first act's intro pop-up (input waits for it). */
@@ -1323,6 +1363,8 @@ export const useGameStore = defineStore('game', () => {
     finishGame,
     titleText,
     showTitle,
+    titleLoadError,
+    loadFromTitle,
     dismissTitle,
     gameNumber,
     loadNumber,

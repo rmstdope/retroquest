@@ -1,3 +1,5 @@
+import type { SaveSlot } from '@/types/bridge'
+
 const ROMAN = ['I', 'II', 'III', 'IV', 'V', 'VI']
 const MONTHS = [
   'Jan',
@@ -40,4 +42,39 @@ export function savedWhen(timestamp: string | null, now = new Date()): string {
   if (sameDay(time, now)) return `Today · ${clock}`
   if (sameDay(time, yesterday)) return `Yesterday · ${clock}`
   return `${time.getDate()} ${MONTHS[time.getMonth()]} · ${clock}`
+}
+
+/** A slot that holds a save (the quick save is only listed when there is one). */
+export function filled(card: SaveSlot): boolean {
+  return card.slot === 0 || card.room !== null
+}
+
+/**
+ * The newest save that can be loaded (not empty, not from an older version),
+ * the quick save or a slot. The first listed wins a tie; null when none.
+ */
+export function newestLoadable(saves: SaveSlot[]): SaveSlot | null {
+  let best: SaveSlot | null = null
+  let bestTime = -Infinity
+  for (const save of saves) {
+    if (!filled(save) || save.outdated) continue
+    const time = save.timestamp ? new Date(save.timestamp).getTime() : NaN
+    const at = Number.isNaN(time) ? -Infinity : time
+    if (best === null || at > bestTime) {
+      best = save
+      bestTime = at
+    }
+  }
+  return best
+}
+
+/** The line under Continue: "Act II · The Old Mill · Yesterday · 21:14", as the save card reads. */
+export function continueLine(card: SaveSlot, now = new Date()): string {
+  return [
+    actLabel(card.act),
+    card.room ?? 'Quick save',
+    savedWhen(card.timestamp, now),
+  ]
+    .filter(Boolean)
+    .join(' · ')
 }

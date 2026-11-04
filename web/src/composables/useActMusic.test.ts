@@ -8,7 +8,8 @@ import { useNarrationStore } from '@/stores/useNarrationStore'
 import { useSettingsStore } from '@/stores/useSettingsStore'
 import { FakeAudioContext } from '@/testing/fakeAudioContext'
 import type * as SceneMixModule from '@/lantern/sceneMix'
-import type { SceneEntry } from '@/lantern/sceneMix'
+import { SCENE_MIX, type SceneEntry } from '@/lantern/sceneMix'
+import { roomTrackId } from '@/lantern/musicLists'
 import {
   MUSIC_DUCK,
   MUSIC_DUCK_FADE_MS,
@@ -263,6 +264,15 @@ describe('useActMusic', () => {
       market: { file: 'market.mp3', duration: 90 },
       'act1-village-square': { file: 'square.mp3', duration: 60 },
     }
+
+    // These rooms play what the game chooses, whatever music the committed mix names.
+    beforeEach(() => {
+      for (const room of ['VillageSquare', 'ForestPath'])
+        mixOf[roomTrackId('Act1', room)] = { effects: [] }
+    })
+    afterEach(() => {
+      for (const scene of Object.keys(mixOf)) delete mixOf[scene]
+    })
 
     /** Starts the music with `manifest` served (or the fetch failing) and returns the scope. */
     async function start(
@@ -570,6 +580,9 @@ describe('useActMusic with the effects of a room', () => {
 
   it("plays the room's effects under the act's own file when the room has no take", async () => {
     serveMusic({ 'act1-the-dream': DREAM_MUSIC['act1-the-dream'] })
+    // The mill's effects, without the music the committed mix names.
+    const mill = roomTrackId('Act1', 'OldMill')
+    mixOf[mill] = { effects: SCENE_MIX[mill]?.effects ?? [] }
     const scope = await startIn('OldMill', 'whirring')
     ctx = FakeAudioContext.last
     // The act's file, the wind and the whir.

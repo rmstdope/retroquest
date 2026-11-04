@@ -1,4 +1,4 @@
-import { Item } from '@/engine'
+import { Item, type GameState } from '@/engine'
 
 /** Dull kitchen knife item, could be sharpened for future use. */
 export class DullKnife extends Item {
@@ -11,5 +11,10 @@ export class DullKnife extends Item {
       shortName: 'knife',
       canBeCarried: true,
     })
+  }
+
+  /** The line the story tells when Elior takes it, wherever it is lying. */
+  override pickedUp(_gameState: GameState): string {
+    return 'You test the edge with your thumb. ' + 'It would not cut bread.'
   }
 }

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, nextTick, ref } from 'vue'
 import { useGameStore } from '@/stores/useGameStore'
-import { actLabel, savedWhen } from '@/lantern/saveCard'
+import { actLabel, filled, savedWhen } from '@/lantern/saveCard'
 import type { SaveSlot } from '@/types/bridge'
 import LanternDialog from './LanternDialog.vue'
 
@@ -13,8 +13,11 @@ import LanternDialog from './LanternDialog.vue'
  * dialog says the save failed). A save from an older version is dimmed with
  * its reason: it cannot be picked to load, but its slot can be saved over.
  * Escape in a question cancels it first; the next Escape closes the dialog.
+ * Opened from the title page (`fromTitle`) no game is in play, so a picked
+ * save loads at once, with no question, and a failed load stays here with
+ * the engine's line.
  */
-const props = defineProps<{ mode: 'save' | 'load' }>()
+const props = defineProps<{ mode: 'save' | 'load'; fromTitle?: boolean }>()
 const emit = defineEmits<{ close: [] }>()
 const game = useGameStore()
 
@@ -33,11 +36,6 @@ const cards = computed<SaveSlot[]>(() => {
   const quick = saving.value ? null : game.getQuickSave()
   return quick ? [quick, ...slots] : slots
 })
-
-/** A slot in use (the quick save is only listed when there is one). */
-function filled(card: SaveSlot): boolean {
-  return card.slot === QUICK || card.room !== null
-}
 
 function badge(card: SaveSlot): string {
   return card.slot === QUICK ? 'Q' : String(card.slot)
@@ -92,6 +90,10 @@ async function ask(slot: number): Promise<void> {
 
 function pick(card: SaveSlot): void {
   justSaved.value = null
+  if (props.fromTitle) {
+    if (game.loadFromTitle(card.slot)) emit('close')
+    return
+  }
   if (saving.value && !filled(card)) void save(card.slot)
   else void ask(card.slot)
 }
@@ -140,6 +142,13 @@ function cardLabel(card: SaveSlot): string {
     </p>
     <p v-if="saveFailed" class="lq-save-error" role="alert">
       Your game could not be saved: this browser's storage is full or blocked.
+    </p>
+    <p
+      v-if="fromTitle && game.titleLoadError"
+      class="lq-save-error"
+      role="alert"
+    >
+      {{ game.titleLoadError }}
     </p>
     <ul ref="list" class="lq-slots">
       <li

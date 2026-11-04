@@ -34,12 +34,12 @@ export class ShadowsOverWillowbrookQuest extends Quest {
         'smells sour, and the village keeps its voice down.',
       completion:
         'The well was poisoned on purpose, and whoever did it came to ' +
-        `Willowbrook looking for an amulet. ${characterName('Elior')} carries ` +
-        'that amulet now, on the road to Greendale.',
+        'Willowbrook looking for an amulet. ' +
+        'You carry that amulet now, on the road to Greendale.',
     })
   }
 
-  /** Given when Elior wakes from the dream in his cottage. */
+  /** Given when the player wakes from the dream in the cottage. */
   override checkTrigger(gameState: GameState): boolean {
     return gameState.getStoryFlag(FLAG_WOKE_FROM_DREAM)
   }
@@ -58,9 +58,9 @@ export class ShadowsOverWillowbrookQuest extends Quest {
    */
   override checkUpdate(gameState: GameState): boolean {
     const dream =
-      `${characterName('Elior')} dreamed of a storm, a tune, and a figure in ` +
-      'the dark that whispered his name. He woke with three words written ' +
-      'down: …let them rest…'
+      'You dreamed of a storm, a tune, and a figure in the dark that ' +
+      'whispered your name. You woke with three words written down: ' +
+      '…let them rest…'
     const beats: [string, string][] = [
       [
         FLAG_INVESTIGATED_WITHERED_CROPS,
@@ -87,14 +87,14 @@ export class ShadowsOverWillowbrookQuest extends Quest {
       ],
       [
         FLAG_MAGIC_FULLY_UNLOCKED,
-        `The flower opened for ${characterName('Elior')}. ` +
-          `${characterName('Mira')} showed him how to mend, how to open and ` +
-          'how to make a light, and promised him the ' +
-          '[item_name]ancient amulet[/item_name] once he is ready for the road.',
+        'The flower opened for you. ' +
+          `${characterName('Mira')} showed you how to mend, how to open and ` +
+          'how to make a light, and promised you the ' +
+          '[item_name]ancient amulet[/item_name] once you are ready for the road.',
       ],
       [
         FLAG_FOUND_RUNE_TOKEN,
-        `Fishing the ring from the purified well, ${characterName('Elior')} ` +
+        'Fishing the ring from the purified well, you ' +
           'drew up something else: a [item_name]rune token[/item_name] of black ' +
           'iron, scored with a twisted rune and colder than the water. ' +
           'The well did not sour by itself.',
@@ -102,12 +102,12 @@ export class ShadowsOverWillowbrookQuest extends Quest {
       [
         FLAG_STRANGER_SEEN_AT_MILL,
         'At the [room_name]Old Mill[/room_name] a man in a grey cloak stood at ' +
-          `the far door with his back to ${characterName('Elior')}. He left ` +
+          'the far door with his back to you. He left ' +
           'toward the river without turning.',
       ],
       [
         FLAG_VEGETABLE_FIELD_WATERED,
-        `With clean water from the well, ${characterName('Elior')} brought ` +
+        'With clean water from the well, you brought ' +
           'the [room_name]Vegetable Field[/room_name] back to life. ' +
           'Where the blight is lifted, the land remembers how to grow.',
       ],
@@ -138,9 +138,9 @@ export class ShadowsOverWillowbrookQuest extends Quest {
   }
 
   /**
-   * Once nothing keeps Elior in Willowbrook (`GameMap.unfinishedBeforeTheRoad`),
-   * he carries the map and stands on the Road to Greendale, points toward the
-   * map that ends the act; the newest journal entry otherwise.
+   * Once nothing keeps the player in Willowbrook (`GameMap.unfinishedBeforeTheRoad`),
+   * the map is in the pack and the player stands on the Road to Greendale,
+   * points toward the map that ends the act; the newest journal entry otherwise.
    */
   override hint(gameState: GameState): string | null {
     if (

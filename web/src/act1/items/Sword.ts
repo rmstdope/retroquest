@@ -37,4 +37,12 @@ export class Sword extends Item {
   override equip(_gameState: GameState): string {
     return 'You feel more confident and prepared for any threats.'
   }
+
+  /** The line the story tells when Elior takes it, wherever it is lying. */
+  override pickedUp(_gameState: GameState): string {
+    return (
+      'It sits well in your hand, better than you expected. ' +
+      'You hope you will not need it.'
+    )
+  }
 }

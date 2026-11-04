@@ -21,4 +21,12 @@ export class FadedPhotograph extends Item {
     gameState.setStoryFlag(FLAG_READ_PHOTO_MESSAGE, true)
     return super.examine(gameState)
   }
+
+  /** The line the story tells when Elior takes it, wherever it is lying. */
+  override pickedUp(_gameState: GameState): string {
+    return (
+      'You hold it by the edges so as not to smudge the faces. ' +
+      'The child in it is you, though you do not remember the day.'
+    )
+  }
 }

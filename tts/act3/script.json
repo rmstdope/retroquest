@@ -330,6 +330,11 @@
     "text": "Echoes of the Hidden Bond: Your parents made the three relics, long before you were born. Mira says they left words behind them: by the sea, on the mountain and under the hills. On the mountain: something they left on Mount Ember."
   },
   {
+    "key": "1c2579a18fd54e",
+    "speaker": "narrator",
+    "text": "Thin causeways of old stone lift from the black water like ribs. Moonlight skims the wet stones; salt and wind carry half‑heard songs. Broken arches stand like quiet mouths, guarding what the sea keeps. Dead sea birds line the stones, and the surf runs grey."
+  },
+  {
     "key": "05d73e62e50b54",
     "speaker": "narrator",
     "text": "Your light catches a patch of pigment and a small hollow. In the shadowed cranny, something metallic flakes free — a corroded key rests in the rock."
@@ -460,6 +465,16 @@
     "text": "You'll have seen the causeway. Birds by the hundred, and the surf gone grey. I've known bad seasons on this coast, forty years of them. It's only a bad season, isn't it? Tell me the sea will mend on its own."
   },
   {
+    "key": "033cc29645073c",
+    "speaker": "narrator",
+    "text": "Collapsed Pier"
+  },
+  {
+    "key": "06cd9c1529a07c",
+    "speaker": "narrator",
+    "text": "The pier surrenders to the tide. Warped planks gape and blackened vaults yawn where light forgets to go. Barnacled timbers rise like buried ribs, and the water sings a low, patient counting of losses."
+  },
+  {
     "key": "1a1f3171893811",
     "speaker": "narrator",
     "text": "You tell the Pier Warden what you know: this is no season. Something is draining the king, and the sea with him, and it is getting worse."
@@ -493,16 +508,6 @@
     "key": "0018d31862a669",
     "speaker": "pier warden",
     "text": "I said keep it, lad."
-  },
-  {
-    "key": "033cc29645073c",
-    "speaker": "narrator",
-    "text": "Collapsed Pier"
-  },
-  {
-    "key": "06cd9c1529a07c",
-    "speaker": "narrator",
-    "text": "The pier surrenders to the tide. Warped planks gape and blackened vaults yawn where light forgets to go. Barnacled timbers rise like buried ribs, and the water sings a low, patient counting of losses."
   },
   {
     "key": "0335233ece7341",
@@ -670,6 +675,11 @@
     "text": "You step down into the black water. It is cold to the knees, and you cannot see your own hands."
   },
   {
+    "key": "19f1f2e046323e",
+    "speaker": "narrator",
+    "text": "Black water to your knees. You cannot see your own hands."
+  },
+  {
     "key": "114166fe8a0dd7",
     "speaker": "narrator",
     "text": "The water climbs to your waist. Then a voice like Mira's, close behind you:"
@@ -678,6 +688,11 @@
     "key": "1b40dc0e8100d2",
     "speaker": "mira",
     "text": "Turn back, Elior. There is nothing out there."
+  },
+  {
+    "key": "0e5665acfec3db",
+    "speaker": "narrator",
+    "text": "Black water to your waist. You cannot see your own hands."
   },
   {
     "key": "12a201dc7817cd",
@@ -698,6 +713,11 @@
     "key": "177260660d2610",
     "speaker": "narrator",
     "text": "A prism the size of your palm, cold and clear. Light moves in it like water under a moon."
+  },
+  {
+    "key": "10dcdc9f07dfbb",
+    "speaker": "narrator",
+    "text": "The water stands parted around you. The crystal of light burns in its basin, the only light in the world."
   },
   {
     "key": "04105b8102597c",
@@ -1010,6 +1030,11 @@
     "text": "Echoes of the Hidden Bond: Your parents made the three relics, long before you were born. Mira says they left words behind them: by the sea, on the mountain and under the hills. Under the hills: something they left in the Caverns of Shadow."
   },
   {
+    "key": "00267d07584775",
+    "speaker": "narrator",
+    "text": "Stepped platforms rise in concentric benches, each ring studded with sockets for polished mirrors and brass mounts. Channels are neatly etched into the stone to carry and focus light up the slope; stray rays catch on alignment wedges and glint like cold flame. The air hums faintly with residual heat, and dusted ash settles on worktables where scholars and attendants file, polish, and fit mirror segments. The place smells of warm metal, singed cloth, and the mineral tang of cooling slag. Ash falls over the terraces like slow grey rain, and down the slope the braziers have guttered to embers."
+  },
+  {
     "key": "196f377213fdd4",
     "speaker": "narrator",
     "text": "A brass-and-stone mount fixed into the terrace socket. It needs a brass segment and binding resin to secure and repair the mirror face."
@@ -1040,6 +1065,11 @@
     "text": "The deeper cut fills. Malakar's name sits level with your parents' again, as it was the day they wrote it."
   },
   {
+    "key": "0f935984bdbd30",
+    "speaker": "narrator",
+    "text": "Stepped platforms rise in concentric benches, each ring studded with sockets for polished mirrors and brass mounts. Channels are neatly etched into the stone to carry and focus light up the slope; stray rays catch on alignment wedges and glint like cold flame. The air hums faintly with residual heat, and dusted ash settles on worktables where scholars and attendants file, polish, and fit mirror segments. The place smells of warm metal, singed cloth, and the mineral tang of cooling slag. The mended mirrors stand ready, their bright faces still waiting on the sun. Ash falls over the terraces like slow grey rain, and down the slope the braziers have guttered to embers."
+  },
+  {
     "key": "1d382b3fb34138",
     "speaker": "narrator",
     "text": "The three names sit level and whole. There is nothing left to mend."
@@ -1053,6 +1083,16 @@
     "key": "1d1eeeff2bed5d",
     "speaker": "narrator",
     "text": "Elior gathers the scattered brass mirror segments and, with care and skill, restores the ancient light channel atop Mount Ember. The mirrors blaze with reflected sunlight, opening the way to the volcano's heart and the Phoenix's trial of wisdom."
+  },
+  {
+    "key": "0cc90a1a463a37",
+    "speaker": "narrator",
+    "text": "Ember Gallery"
+  },
+  {
+    "key": "1f32809c0e955f",
+    "speaker": "narrator",
+    "text": "A vaulted cavern veined with cooling flows; the air smells of charcoal and iron. Streaks of glassed lava lace the walls, catching stray cinders that glow like embers in the gloom. Steam sighs from fissures and pools of blackened water mirror faint, dancing light. Worktables gather scattered fragments of fireglass and ash‑tumbled tools where attendants hammer and sort cooled slag for wards. The heat here is a steady, low thrum — a reminder that the mountain breathes beneath your feet."
   },
   {
     "key": "1676af8853f7e1",
@@ -1075,6 +1115,21 @@
     "text": "The Fumarole Passages exhale waves of heat and steam, blocking the way forward. Find a way to cross the shifting vents and reach the heights to the south."
   },
   {
+    "key": "063646d201b312",
+    "speaker": "narrator",
+    "text": "Fumarole Passages"
+  },
+  {
+    "key": "0de2e0f0f3e197",
+    "speaker": "narrator",
+    "text": "Narrow tunnels exhale a rhythmic, breath-like heat; stone vents chuff and sigh as if the mountain itself sleeps and dreams. Curtains of steam veil the low passages, and the air tastes faintly of sulfur and warm metal. Here and there a vent hisses sparks that glass the rock into smoky, translucent streaks, while the floor bears the pale scars of old fittings—tiny holes and rubbed brass where mounts were once bolted. Each step sends a warm gust that carries a distant clink of metal and the steady, low sigh of fumaroles farther below."
+  },
+  {
+    "key": "1dd03a06df2eb7",
+    "speaker": "narrator",
+    "text": "The vents gust and sputter without rhythm; there is no telling when they will breathe next."
+  },
+  {
     "key": "0009c3628c5ada",
     "speaker": "narrator",
     "text": "The vents click and a rhythmic hiss grows steadier—the timing seems closer to being synchronized."
@@ -1088,6 +1143,11 @@
     "key": "19b66f09ae22ce",
     "speaker": "narrator",
     "text": "The rock grows a touch cooler around your hands as the ward seals into place. Down the tunnel you notice the gusting heat flatten into a steady breath—passage through the fumaroles is now safe for a short interval. The wild gusting settles into a slow, even breath: out, a held pause, and in. Each time it draws in, a cool draught runs south."
+  },
+  {
+    "key": "0ae49756583bd8",
+    "speaker": "narrator",
+    "text": "The vents exhale. A scalding gust roars up out of the southern tunnel."
   },
   {
     "key": "18856bbe16809f",
@@ -1115,9 +1175,24 @@
     "text": "You set the vent stones, sealed the vents with ash-fern and slag, counted the mountain's breath, and crossed to the crater on the in-breath."
   },
   {
+    "key": "14accdcd7e3aa0",
+    "speaker": "narrator",
+    "text": "Phoenix Crater"
+  },
+  {
+    "key": "070602dd01b54d",
+    "speaker": "narrator",
+    "text": "A luminous bowl of vitrified rock where warm drafts swirl and cinders dance in spirals. The air smells of ozone, resin, and warm iron; the whole bowl feels like a giant hearth that remembers how to forge stars. The warmth is drowsy here, as if the bowl would rather you sat and rested a while."
+  },
+  {
     "key": "1968accc3aa8ca",
     "speaker": "narrator",
     "text": "As your eyes close, the air grows warmer. When you open them, a phoenix is lying in the crater with you, watching you as if it has been there all along."
+  },
+  {
+    "key": "04a2ef3a6d2a92",
+    "speaker": "narrator",
+    "text": "A luminous bowl of vitrified rock where warm drafts swirl and cinders dance in spirals. The air smells of ozone, resin, and warm iron; the whole bowl feels like a giant hearth that remembers how to forge stars. At the crater's heart the phoenix lies on a bed of cooled slag, its feathers red-gold and steaming. Each breath it lets out sends sparks up out of the bowl. Now and then a feather comes loose and cools on the rim to a shard that still hums."
   },
   {
     "key": "0e80a77c3d3ef2",
@@ -1195,16 +1270,6 @@
     "text": "Remember him when time is short for you."
   },
   {
-    "key": "0cc90a1a463a37",
-    "speaker": "narrator",
-    "text": "Ember Gallery"
-  },
-  {
-    "key": "1f32809c0e955f",
-    "speaker": "narrator",
-    "text": "A vaulted cavern veined with cooling flows; the air smells of charcoal and iron. Streaks of glassed lava lace the walls, catching stray cinders that glow like embers in the gloom. Steam sighs from fissures and pools of blackened water mirror faint, dancing light. Worktables gather scattered fragments of fireglass and ash‑tumbled tools where attendants hammer and sort cooled slag for wards. The heat here is a steady, low thrum — a reminder that the mountain breathes beneath your feet."
-  },
-  {
     "key": "0ae65649159141",
     "speaker": "narrator",
     "text": "A brittle frond blackened by the mountain's breath. When mixed with cooled slag it can form a rudimentary heat‑ward paste."
@@ -1223,21 +1288,6 @@
     "key": "0187d8c245a315",
     "speaker": "narrator",
     "text": "A coarse paste of ash-fern and cooled slag prepared to seal and stabilize vent stones against the mountain's heat."
-  },
-  {
-    "key": "063646d201b312",
-    "speaker": "narrator",
-    "text": "Fumarole Passages"
-  },
-  {
-    "key": "0de2e0f0f3e197",
-    "speaker": "narrator",
-    "text": "Narrow tunnels exhale a rhythmic, breath-like heat; stone vents chuff and sigh as if the mountain itself sleeps and dreams. Curtains of steam veil the low passages, and the air tastes faintly of sulfur and warm metal. Here and there a vent hisses sparks that glass the rock into smoky, translucent streaks, while the floor bears the pale scars of old fittings—tiny holes and rubbed brass where mounts were once bolted. Each step sends a warm gust that carries a distant clink of metal and the steady, low sigh of fumaroles farther below."
-  },
-  {
-    "key": "1dd03a06df2eb7",
-    "speaker": "narrator",
-    "text": "The vents gust and sputter without rhythm; there is no telling when they will breathe next."
   },
   {
     "key": "0be4bf29f4d565",
@@ -1303,21 +1353,6 @@
     "key": "1068fac62c0d5e",
     "speaker": "phoenix guardian",
     "text": "The ward holds, but the mountain still breathes. Count its breath. Walk when it draws in."
-  },
-  {
-    "key": "0ae49756583bd8",
-    "speaker": "narrator",
-    "text": "The vents exhale. A scalding gust roars up out of the southern tunnel."
-  },
-  {
-    "key": "14accdcd7e3aa0",
-    "speaker": "narrator",
-    "text": "Phoenix Crater"
-  },
-  {
-    "key": "070602dd01b54d",
-    "speaker": "narrator",
-    "text": "A luminous bowl of vitrified rock where warm drafts swirl and cinders dance in spirals. The air smells of ozone, resin, and warm iron; the whole bowl feels like a giant hearth that remembers how to forge stars. The warmth is drowsy here, as if the bowl would rather you sat and rested a while."
   },
   {
     "key": "037c838a76b61d",
@@ -1790,6 +1825,16 @@
     "text": "Carefully made rubbings of ancient runes containing the Resonant Chant: 'Let stillness echo, let silence bind.'"
   },
   {
+    "key": "0e8d73eea987bd",
+    "speaker": "narrator",
+    "text": "Stillness Vestibule"
+  },
+  {
+    "key": "1362c286d221ea",
+    "speaker": "narrator",
+    "text": "A hush falls over this chamber like a shroud. Dark pools mirror the ceiling, so still they look frozen in time, and the stone seems to swallow every sound. At the centre, three weathered echo stones stand in a triangle. Their carved channels look made to catch whispered words and hold them."
+  },
+  {
     "key": "0f3b197d21ce42",
     "speaker": "narrator",
     "text": "Tobin turns the pale stone over in his fingers. As his hand closes around it, the creak of the new braces seems to step back a pace, and his shoulders come down for the first time since you met him."
@@ -1863,16 +1908,6 @@
     "key": "110ed88eddc4e0",
     "speaker": "narrator",
     "text": "The whispering falters. One by one the figures turn toward you, and the hurry goes out of them. They thin until you can see the far wall through them, and then they are gone. The chamber is quieter for it, but not yet still."
-  },
-  {
-    "key": "0e8d73eea987bd",
-    "speaker": "narrator",
-    "text": "Stillness Vestibule"
-  },
-  {
-    "key": "1362c286d221ea",
-    "speaker": "narrator",
-    "text": "A hush falls over this chamber like a shroud. Dark pools mirror the ceiling, so still they look frozen in time, and the stone seems to swallow every sound. At the centre, three weathered echo stones stand in a triangle. Their carved channels look made to catch whispered words and hold them."
   },
   {
     "key": "0befddcdf0d398",
@@ -2145,6 +2180,11 @@
     "text": "Your words ring true, young one. It is heavier than it looks."
   },
   {
+    "key": "17befb3297eb48",
+    "speaker": "narrator",
+    "text": "A hall of living stone opens beyond sight, its ceiling lost in shadow. Embers burn slowly along the floor, pulsing like a heartbeat, and somewhere in the dark, water drips. Rings of old sigils spiral across the black tiles around the Ancient Dragon. It lies coiled at the centre, scales like polished obsidian, and each slow breath hums in your bones. The old dripping has stopped; from the mines beyond comes no sound of picks at all."
+  },
+  {
     "key": "1a4a72b4e4b659",
     "speaker": "elior",
     "text": "I take what is given, and I return myself."
@@ -2200,6 +2240,11 @@
     "text": "You said you would give back. Most forget by the time they reach the door. Your parents would not have forgotten."
   },
   {
+    "key": "115509d183aff4",
+    "speaker": "narrator",
+    "text": "A hall of living stone opens beyond sight, its ceiling lost in shadow. Embers burn slowly along the floor, pulsing like a heartbeat, and somewhere in the dark, water drips. Rings of old sigils spiral across the black tiles around the Ancient Dragon. It lies coiled at the centre, scales like polished obsidian, and each slow breath hums in your bones. The old dripping has stopped; from the mines beyond comes no sound of picks at all. The sigils around the dragon burn steady and whole again."
+  },
+  {
     "key": "1f875adda26fc7",
     "speaker": "ancient dragon",
     "text": "Go with my blessing, young one. The prison holds."
@@ -2213,6 +2258,11 @@
     "key": "1c47bec0c3110d",
     "speaker": "narrator",
     "text": "The Three Virtues: You have the dragon's scale, heavy in your pack. With all three relics in hand, Mira's Warding Rite is all that is left."
+  },
+  {
+    "key": "13263cd6f330e8",
+    "speaker": "narrator",
+    "text": "A hall of living stone opens beyond sight, its ceiling lost in shadow. Embers burn slowly along the floor, pulsing like a heartbeat, and somewhere in the dark, water drips. Rings of old sigils spiral across the black tiles around the Ancient Dragon. It lies coiled at the centre, scales like polished obsidian, and each slow breath hums in your bones. The old dripping has stopped; from the mines beyond comes no sound of picks at all. Where the scale lay, the sigils around the dragon have dimmed, and a hairline crack runs through the nearest ring."
   },
   {
     "key": "116679d911420f",

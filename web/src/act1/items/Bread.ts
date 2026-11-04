@@ -37,4 +37,9 @@ export class Bread extends Item {
       `[item_name]${other.name}[/item_name].[/failure]`
     )
   }
+
+  /** The line the story tells when Elior takes it, wherever it is lying. */
+  override pickedUp(_gameState: GameState): string {
+    return 'The crust gives under your thumb. ' + 'It smells like morning.'
+  }
 }

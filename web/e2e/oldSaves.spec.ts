@@ -36,10 +36,10 @@ async function seedOldSaves(page: Page): Promise<void> {
   })
 }
 
-/** Start a new game and close the opening chapter page. */
+/** Start a new game (the title page offers New game when saves exist) and close the opening chapter page. */
 async function start(page: Page): Promise<void> {
   await page.goto('/')
-  await page.getByRole('button', { name: 'Start', exact: true }).click()
+  await page.getByRole('button', { name: 'New game', exact: true }).click()
   await page.locator('.lq-chapter-button').click()
 }
 

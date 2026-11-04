@@ -19,4 +19,12 @@ export class Key extends Item {
     }
     return super.useWith(gameState, other)
   }
+
+  /** The line the story tells when Elior takes it, wherever it is lying. */
+  override pickedUp(_gameState: GameState): string {
+    return (
+      'It is small and rusty, and the teeth are worn. ' +
+      'Someone used it often, once.'
+    )
+  }
 }

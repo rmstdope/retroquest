@@ -1,4 +1,4 @@
-import { Item, nameInSentence, speech } from '@/engine'
+import { Item, nameInSentence, speech, type GameState } from '@/engine'
 
 /** Basic food item; the shopkeeper blocks pickup until it has been bought. */
 export class Apple extends Item {
@@ -24,5 +24,12 @@ export class Apple extends Item {
       )
     }
     return ''
+  }
+
+  /** The line the story tells when Elior takes it, wherever it is lying. */
+  override pickedUp(_gameState: GameState): string {
+    return (
+      'It is crisp and cold, and nearly too red. ' + 'You save it for later.'
+    )
   }
 }

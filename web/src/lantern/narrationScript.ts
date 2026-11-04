@@ -20,10 +20,11 @@
  *
  * `actScript` plays an act's golden path through the real engine and collects
  * every voiced line: the chapter pages, every answer, each room's description
- * on its first visit and every quest card. At each step it also tries
+ * as each step leaves it (read again by looking around) and every quest card. At each step it also tries
  * examining, using and talking to whatever is at hand, looking, asking for a hint and resting, on a copy of the game,
  * so optional lines are recorded too, and plays each `ScriptBranch` (an
- * optional scene the golden path does not take) on a copy. Who voices a line is its block's speaker,
+ * optional scene the golden path does not take) on a copy, reading the room
+ * after each of its steps. Who voices a line is its block's speaker,
  * except unsigned writing, which goes to its writer (`WriterRule`).
  */
 
@@ -224,7 +225,7 @@ export interface ScriptBranch {
   unset?: string[]
 }
 
-/** The commands that try what is at hand: examine everything, use what is carried, talk to everyone, look, search, ask for a hint, rest. */
+/** The commands that try what is at hand: examine everything, use what is carried, talk to everyone, look, search, ask for a hint, rest. Looking around is also tried as the player's look, which reads the room again (see `actScript`). */
 function probes(game: Game): string[] {
   const state = game.state
   const room = state.currentRoom
@@ -308,6 +309,9 @@ export function actScript(
       for (const step of branch.commands) {
         addAnswer(tryOut, () => tryOut.takeTurn(step))
         settle(tryOut)
+        // The room as the scene leaves it, which the path may never show.
+        if (probe.isActRunning())
+          add(arrivalBlocks(tryOut.getRoomName(), tryOut.getRoomDescription()))
       }
     }
   }
@@ -317,6 +321,10 @@ export function actScript(
       probe.loadSaveData(save)
       addAnswer(tryOut, () => tryOut.handleCommand(command))
     }
+    // Looking around reads the room again as the story has left it.
+    probe.loadSaveData(save)
+    addAnswer(tryOut, () => tryOut.look())
+    add(arrivalBlocks(tryOut.getRoomName(), tryOut.getRoomDescription()))
   }
   const settle = (controller: GameController): void => {
     const quests = controller.settleQuests()
