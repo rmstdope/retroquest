@@ -20,7 +20,7 @@
  *
  * `actScript` plays an act's golden path through the real engine and collects
  * every voiced line: the chapter pages, every answer, each room's description
- * on its first visit and every quest card. At each step it also tries
+ * as each step leaves it (read again by looking around) and every quest card. At each step it also tries
  * examining, using and talking to whatever is at hand, looking, asking for a hint and resting, on a copy of the game,
  * so optional lines are recorded too, and plays each `ScriptBranch` (an
  * optional scene the golden path does not take) on a copy, reading the room

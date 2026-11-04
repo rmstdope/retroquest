@@ -425,26 +425,21 @@ describe('actScript branches', () => {
 })
 
 describe('actScript branches of Act I', () => {
-  const branches = JSON.parse(
-    readFileSync(
-      new URL('../../../tts/act1/branches.json', import.meta.url),
-      'utf8',
-    ),
-  ) as ScriptBranch[]
+  /** Reads a file of `tts/act1/`, which the extractor reads and writes. */
+  const act1 = <T>(file: string): T =>
+    JSON.parse(
+      readFileSync(
+        new URL(`../../../tts/act1/${file}`, import.meta.url),
+        'utf8',
+      ),
+    ) as T
+  const branches = act1<ScriptBranch[]>('branches.json')
+  // The committed script, which narrationScriptFresh.test.ts pins to the extractor.
+  const keys = new Set(
+    act1<ScriptLine[]>('script.json').map((line) => line.key),
+  )
   /** Act I is played with every branch; that is slow under a loaded machine. */
   const SLOW = 60_000
-  let keys = new Set<string>()
-  beforeAll(() => {
-    keys = new Set(
-      actScript(
-        () => new Game([new Act1()]),
-        ACT_SOURCES['1'].commands,
-        WRITERS,
-        SILENT,
-        branches,
-      ).map((line) => line.key),
-    )
-  }, SLOW)
 
   it(
     'reads a room’s description in every state a branch leaves it in',
@@ -459,6 +454,7 @@ describe('actScript branches of Act I', () => {
         play.settleQuests()
         for (const scene of branches.filter((b) => b.after === index)) {
           copy.loadSaveData(game.toSaveData())
+          for (const virtue of scene.virtues ?? []) copy.state.addVirtue(virtue)
           for (const flag of scene.unset ?? [])
             copy.state.setStoryFlag(flag, false)
           for (const step of scene.commands) {
