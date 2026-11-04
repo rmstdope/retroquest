@@ -151,4 +151,51 @@ test.describe('quest news told in the middle of the picture', () => {
       expect(overflow).toEqual([])
     })
   }
+
+  for (const [width, height] of [
+    [1440, 560],
+    [390, 600],
+  ]) {
+    test(`keeps one left edge for a checklist split over pages at ${width} wide`, async ({
+      page,
+    }) => {
+      await startAct1(page, width, height)
+      const needs = [
+        'Warm clothing, a coat of thick wool that keeps out the wind',
+        'Magical protection against whatever waits on the road ahead',
+        'Food for the road (any four kinds: bread, apple, egg, carrot, berries or fish)',
+        'Magic',
+      ]
+      await pushNews(page, [
+        {
+          kind: 'new',
+          name: 'Preparing for the road',
+          main: false,
+          text:
+            'Mira has tasked you with preparing for your journey. She says you will need: \n' +
+            needs.map((n) => `[pending] * ${n}[/pending]`).join('\n'),
+        },
+      ])
+      const box = middle(page).locator('.lq-arrival-text').last()
+      await expect(box.locator('.lq-quest-checklist')).toBeVisible()
+      // Each page's list by its first line, so a page seen twice counts once.
+      const lefts: Record<string, number> = {}
+      for (let turn = 0; turn < 14; turn++) {
+        const list = box.locator('.lq-quest-checklist')
+        if ((await list.count()) === 0) break
+        const first = await list.first().innerText({ timeout: 1500 })
+        const bounds = await list.first().boundingBox({ timeout: 1500 })
+        lefts[first] = Math.round(bounds?.x ?? -1)
+        // The last click ends the news and takes the card away.
+        await middle(page)
+          .click({ position: { x: 20, y: 20 }, timeout: 1500 })
+          .catch(() => undefined)
+      }
+      expect(Object.keys(lefts).length).toBeGreaterThan(1)
+      expect(Object.keys(lefts).some((text) => text.endsWith('Magic'))).toBe(
+        true,
+      )
+      expect(new Set(Object.values(lefts)).size).toBe(1)
+    })
+  }
 })
