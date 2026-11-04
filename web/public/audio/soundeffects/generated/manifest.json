@@ -27,6 +27,10 @@
   "file": "crow-caw.mp3",
   "duration": 2.812
  },
+ "forge-fire": {
+  "file": "forge-fire.mp3",
+  "duration": 20.0
+ },
  "fountain": {
   "file": "fountain.mp3",
   "duration": 20.0
@@ -75,6 +79,10 @@
   "file": "shop-bell.mp3",
   "duration": 1.989
  },
+ "twig-snap": {
+  "file": "twig-snap.mp3",
+  "duration": 1.227
+ },
  "village-murmur": {
   "file": "village-murmur.mp3",
   "duration": 20.0
@@ -82,5 +90,13 @@
  "well-drip": {
   "file": "well-drip.mp3",
   "duration": 1.536
+ },
+ "wind-gusts": {
+  "file": "wind-gusts.mp3",
+  "duration": 20.0
+ },
+ "wood-creak": {
+  "file": "wood-creak.mp3",
+  "duration": 2.12
  }
 }

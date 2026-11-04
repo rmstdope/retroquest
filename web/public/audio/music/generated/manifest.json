@@ -39,6 +39,10 @@
   "file": "act1-riverbank.mp3",
   "duration": 60.0
  },
+ "act1-road-to-greendale": {
+  "file": "act1-road-to-greendale.mp3",
+  "duration": 60.0
+ },
  "act1-the-dream": {
   "file": "act1-the-dream.mp3",
   "duration": 60.0
