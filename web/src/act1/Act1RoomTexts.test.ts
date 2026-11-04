@@ -70,7 +70,8 @@ describe('Act I room and item texts say one true thing', () => {
 
   it('ends the shed description on lamp oil and refuses the locked search plainly', () => {
     expect(describeRoom('AbandonedShed')).toContain(
-      'Near them the air smells of old earth and lamp oil.',
+      'no light gets past the grimy boards, but the air smells of old earth ' +
+        'and lamp oil.',
     )
     const game = gameIn('AbandonedShed')
     const shed = game.state.currentRoom

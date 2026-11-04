@@ -270,6 +270,11 @@
     "text": "A small, steady light the colour of a candle flame, left where the last guardian stood. Whoever the guardians were made from was brave once. The light remembers it."
   },
   {
+    "key": "0a8202e796647e",
+    "speaker": "narrator",
+    "text": "You stand just inside the fortress gates. The ward stones are dark, and the violet wall is gone; the ways north and east lie open. On the arch behind you, under the black, an older carving shows through: a sun rising over three linked rings. Just inside the threshold Mira keeps the way out, her back to the gatepost."
+  },
+  {
     "key": "02253af9fd4ed6",
     "speaker": "narrator",
     "text": "The chain is warm, and its crystals brighten a little in your hands."
@@ -600,6 +605,11 @@
     "text": "A captain of the royal guard, his tabard black with soot. He sits among the servants, opening and closing his sword hand as if it belonged to someone else."
   },
   {
+    "key": "1ccafe0a94d3c9",
+    "speaker": "narrator",
+    "text": "The fountains have stopped running black, and the sky has thinned to grey. The freed servants rest by the fountains, their chains gone, and the captain of the guard sits among them with his head in his hands."
+  },
+  {
     "key": "1bde72fcb6c832",
     "speaker": "narrator",
     "text": "The pendant glows faintly. Whoever is behind you has nothing to say here."
@@ -730,6 +740,16 @@
     "text": "Left, then left, then the way your reflection does not go."
   },
   {
+    "key": "0889df2f4985fa",
+    "speaker": "narrator",
+    "text": "The corridor narrows and bends, and you face north again. Fewer reflections follow you here, and they walk a little behind."
+  },
+  {
+    "key": "157c00bce6947c",
+    "speaker": "narrator",
+    "text": "The corridor ends in a last fork, facing north. To the north and to the east, your reflection waits in the glass, and both of them beckon."
+  },
+  {
     "key": "16770703ee51e4",
     "speaker": "narrator",
     "text": "Your reflection still walks the north corridor. The east corridor stays empty."
@@ -758,6 +778,11 @@
     "key": "0c17abe789e161",
     "speaker": "narrator",
     "text": "Your own reflection, in the plain mirror at the labyrinth's heart. It does not copy you. It waits, watching, as if it already knows what you will say."
+  },
+  {
+    "key": "121c621908d98a",
+    "speaker": "narrator",
+    "text": "The false mirrors stand dark and silent now. A single clear corridor runs through the labyrinth to a plain mirror at its heart, where your own reflection waits, keeping still."
   },
   {
     "key": "1aafbd08d7741f",
@@ -960,6 +985,11 @@
     "text": "The Final Stand: The Knight of Despair was the stranger from Willowbrook. He fouled the well, framed Sir Cedric and let the king be taken, and he confessed it to Sir Cedric's face."
   },
   {
+    "key": "0508b1cf89cdf8",
+    "speaker": "narrator",
+    "text": "A long hall, so high the ceiling is lost. The echoes have softened to a murmur. By the stair to the east the knight kneels with his helm beside him, his grey cloak folded on the stone. Among the tattered banners, ghostly warriors still fight a battle that ended long ago. Sir Cedric stands by the south door, the way out at his back, his eyes on the knight."
+  },
+  {
     "key": "1fede627b89ee9",
     "speaker": "narrator",
     "text": "You set your foot on the stair, and the whispers close in: your friends have left you, no one is coming, you were always alone. You stumble back down."
@@ -1033,6 +1063,11 @@
     "key": "1309fe5aca036a",
     "speaker": "narrator",
     "text": "The token is quiet and warm. The whispers are gone."
+  },
+  {
+    "key": "0db5559265e4b8",
+    "speaker": "narrator",
+    "text": "A stair winds up inside the black stone, narrow and dark. The walls are cold, and there are no windows. The shadows on the stair move a moment after you do. With every step, something quiet at your ear tells you why you should not have come. The whispers are gone. The stair winds up into the dark, and it is only a stair."
   },
   {
     "key": "1e113540f7ca91",
@@ -1230,6 +1265,11 @@
     "text": "Without the chamber's glamour she looks tired and ordinary, a woman who has not slept in years. She keeps her eyes on the arch."
   },
   {
+    "key": "1234289ac6702e",
+    "speaker": "narrator",
+    "text": "The chamber is still now. The crystals have stopped whispering, and the floor lies flat and plain beneath your feet. The Sorceress sits by the open north arch; her staff lies across her knees, bare where the mask once sat."
+  },
+  {
     "key": "1c3b42c14173f4",
     "speaker": "narrator",
     "text": "The Shadow of the Past"
@@ -1373,6 +1413,11 @@
     "key": "1d9245aa1d7acc",
     "speaker": "narrator",
     "text": "A man made of shadow, almost solid now. His face is kind and very tired. You have never seen it before, and you know it all the same."
+  },
+  {
+    "key": "0909452c12ea1a",
+    "speaker": "narrator",
+    "text": "The orbs hang whole and still now, each holding its scene like a held breath. The Shadow of the Past stands among them, almost solid, its eyes on the sealed door to the east."
   },
   {
     "key": "0fdb269ac2ad82",
@@ -1553,6 +1598,11 @@
     "key": "09c23857c0b12d",
     "speaker": "narrator",
     "text": "The Final Stand: In the vault you saw it all. Malakar tore at time to save your parents from the Wasting. They poured themselves into the ward that holds his wound shut, and the ward lives in you. Malakar waits past the north door."
+  },
+  {
+    "key": "10ee04243af525",
+    "speaker": "narrator",
+    "text": "The lanterns hang dim and still now, their memories told. The room is quiet, the way a house is quiet after everyone has gone to sleep. To the north, the door to the throne room stands open."
   },
   {
     "key": "16aed33be01696",
@@ -2075,6 +2125,11 @@
     "text": "Malakar does not answer. He is staring at the open amulet."
   },
   {
+    "key": "0818496184bdea",
+    "speaker": "narrator",
+    "text": "The light of the ward fills the chamber from the open amulet. King Alden hangs in his crystal prison, the wound bleeds in the air beside him, and Malakar waits on his knees between them. The lifelight elixir is warm in your hand."
+  },
+  {
     "key": "0039063aba0672",
     "speaker": "malakar",
     "text": "And not for the first time, I think. You have shown mercy before, where none was owed. I can see it on you."
@@ -2093,6 +2148,11 @@
     "key": "1c5cce29587eef",
     "speaker": "narrator",
     "text": "Malakar looks up at you like a man waiting to be forgiven."
+  },
+  {
+    "key": "18aac6b5867900",
+    "speaker": "narrator",
+    "text": "Malakar sits by the wound, the grey gone from his face, watching it with the eyes of the young man at the workbench. The wound still flickers in the air. King Alden hangs in his prison, waiting."
   },
   {
     "key": "0cedbc37093123",
@@ -2138,6 +2198,11 @@
     "key": "0a8e1f8fdbdc52",
     "speaker": "narrator",
     "text": "The king of Eldoria, alive, his crown bright again."
+  },
+  {
+    "key": "06b4257b525da7",
+    "speaker": "narrator",
+    "text": "The dome is quiet. Where the wound was there is only air. King Alden sits among the shards of his prison, alive, and Malakar sits beside him, himself again. Behind the throne an arch stands open on the road home."
   },
   {
     "key": "175471f86e37b6",
