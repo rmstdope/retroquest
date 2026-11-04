@@ -647,6 +647,13 @@ describe('ArrivalOnPicture', () => {
       ])
     })
 
+    it('lets a line holding a checklist span the card, so its width cap is the card', () => {
+      const source = read('./ArrivalOnPicture.vue')
+      expect(source).toMatch(
+        /\.lq-arrival-line:has\(\.lq-quest-checklist\),\s*\.lq-arrival-twin :deep\(\.lq-arrival-line:has\(\.lq-quest-checklist\)\) \{\s*align-self: stretch;/,
+      )
+    })
+
     it('lays the checklist out as one left-aligned column, centred and at most 22em wide', () => {
       const source = read('./ArrivalOnPicture.vue')
       const rule = source.match(

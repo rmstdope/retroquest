@@ -541,6 +541,12 @@ onBeforeUnmount(() => {
   margin-inline: auto;
   text-align: left;
 }
+/* A line holding a checklist spans the card, so the list's cap resolves against
+   the card and not against a line that shrank to a short list on a later page. */
+.lq-arrival-line:has(.lq-quest-checklist),
+.lq-arrival-twin :deep(.lq-arrival-line:has(.lq-quest-checklist)) {
+  align-self: stretch;
+}
 .lq-arrival-event,
 .lq-arrival-twin :deep(.lq-arrival-event) {
   font-style: italic;
