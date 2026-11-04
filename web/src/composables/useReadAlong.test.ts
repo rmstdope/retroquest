@@ -202,6 +202,29 @@ describe('useReadAlong', () => {
       await nextTick()
       expect(scrolled).toHaveLength(0)
     })
+
+    it('announces the end of a unit the reading leaves before its last word, with no scrolling of its own', async () => {
+      const scrolled: Element[] = []
+      Element.prototype.scrollIntoView = function (this: Element) {
+        scrolled.push(this)
+      }
+      const w = mountReader()
+      const ends: Element[] = []
+      w.element.addEventListener('lq-follow', (e: Event) => {
+        if (e instanceof CustomEvent && e.detail?.end === true)
+          ends.push(e.target as Element)
+      })
+      start()
+      await nextTick()
+      await nextTick()
+      scrolled.length = 0
+      // Hurried on its first word: the rest shows at once, unread.
+      useNarrationStore().hurry()
+      await nextTick()
+      await nextTick()
+      expect(ends).toEqual([w.find('p').element])
+      expect(scrolled).toHaveLength(0)
+    })
   })
 
   it('numbers a piece of a part’s text from its place in the part', async () => {

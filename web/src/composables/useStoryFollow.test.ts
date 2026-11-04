@@ -445,5 +445,43 @@ describe('useStoryFollow', () => {
       expect(held.defaultPrevented).toBe(true)
       expect(fake.story.scrollTop).toBe(900 - VIEW + 2 * LINE)
     })
+
+    it('bring the whole of a unit the reading has left into view, its end at the bottom and never past its top', async () => {
+      fake = await mountStory()
+      read()
+      /** A unit from `top` to `bottom` in the pane's content. */
+      const unit = (top: number, bottom: number): HTMLElement => {
+        const el = document.createElement('p')
+        el.style.lineHeight = `${LINE}px`
+        el.getBoundingClientRect = () =>
+          ({
+            top: 100 + top - fake.story.scrollTop,
+            bottom: 100 + bottom - fake.story.scrollTop,
+          }) as DOMRect
+        fake.story.appendChild(el)
+        return el
+      }
+      const leave = (el: HTMLElement): CustomEvent => {
+        const event = new CustomEvent('lq-follow', {
+          bubbles: true,
+          cancelable: true,
+          detail: { unit: true, end: true },
+        })
+        el.dispatchEvent(event)
+        return event
+      }
+
+      // A card whose last lines are below the bottom: its end comes up to the edge.
+      expect(leave(unit(300, 500)).defaultPrevented).toBe(true)
+      expect(fake.story.scrollTop).toBe(500 - VIEW)
+
+      // A unit taller than the pane keeps its top at the top.
+      leave(unit(800, 1300))
+      expect(fake.story.scrollTop).toBe(800)
+
+      // A unit already whole in view leaves the pane where it is.
+      leave(unit(900, 1000))
+      expect(fake.story.scrollTop).toBe(800)
+    })
   })
 })

@@ -786,9 +786,13 @@ watch(
     const el = current?.$el
     if (typeof ResizeObserver === 'undefined' || !(el instanceof HTMLElement))
       return
-    widePlateResize = new ResizeObserver(() => {
-      cardsTop.value = PLATE_TOP + el.offsetHeight + PLATE_GAP
-    })
+    // On the next frame: the cards' column is resized and observed too, and
+    // resizing it while the plate's change is delivered loops the observers.
+    widePlateResize = new ResizeObserver(() =>
+      requestAnimationFrame(() => {
+        cardsTop.value = PLATE_TOP + el.offsetHeight + PLATE_GAP
+      }),
+    )
     widePlateResize.observe(el)
   },
   { flush: 'post' },
@@ -828,9 +832,12 @@ watch(
       !(actions instanceof HTMLElement)
     )
       return
-    actionsResize = new ResizeObserver(() => {
-      actionsHeight.value = actions.offsetHeight
-    })
+    // On the next frame, as the plate's: the cards' column ends above the row.
+    actionsResize = new ResizeObserver(() =>
+      requestAnimationFrame(() => {
+        actionsHeight.value = actions.offsetHeight
+      }),
+    )
     actionsResize.observe(actions)
   },
   { flush: 'post' },
