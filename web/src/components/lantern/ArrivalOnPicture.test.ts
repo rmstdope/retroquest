@@ -614,6 +614,20 @@ describe('ArrivalOnPicture', () => {
       )
     })
 
+    it('colours a met person in the description as a character name', async () => {
+      const part = spellPart()
+      const text =
+        'It was taught to the [character_name]fisherman[/character_name].'
+      part.spell = { name: 'Purify', text }
+      part.lines = [{ unit: 0, markup: text, wordBase: 3 }]
+      const w = mount(ArrivalOnPicture, { props: { pictured: true } })
+      useArrivalStore().show(1, [part], false)
+      await w.vm.$nextTick()
+      expect(w.get('.lq-arrival-line .theme-character_name').text()).toBe(
+        'fisherman',
+      )
+    })
+
     it('clears on a click', async () => {
       const w = mount(ArrivalOnPicture, { props: { pictured: true } })
       const arrival = useArrivalStore()

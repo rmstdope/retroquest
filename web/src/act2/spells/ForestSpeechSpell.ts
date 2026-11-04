@@ -1,4 +1,10 @@
-import { Spell, type Character, type GameState, clue } from '@/engine'
+import {
+  Spell,
+  type Character,
+  type GameState,
+  clue,
+  characterName,
+} from '@/engine'
 import { FLAG_FOUND_RAVINE, FLAG_RAVINE_STORY_PENDING } from '../Act2StoryFlags'
 import { Ravine } from '../items/Ravine'
 import { ForestEntrance } from '../rooms/ForestEntrance'
@@ -18,7 +24,7 @@ export class ForestSpeechSpell extends Spell {
       id: 'forest_speech',
       name: 'forest speech',
       description:
-        "The tree spirit's gift for your acorn: the talk of roots, branches " +
+        `The ${characterName('tree spirit')}'s gift for your acorn: the talk of roots, branches ` +
         'and small creatures, in words.',
     })
   }

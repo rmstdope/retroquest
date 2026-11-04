@@ -1,4 +1,4 @@
-import { Spell, clue, type GameState, type Item } from '@/engine'
+import { Spell, clue, type GameState, type Item, characterName } from '@/engine'
 import { Locker } from '../items/Locker'
 import { SupplyCrate } from '../items/SupplyCrate'
 
@@ -8,7 +8,7 @@ export class UnlockSpell extends Spell {
     super({
       id: 'unlock',
       name: 'unlock',
-      description: 'The second thing Mira showed you: how to open.',
+      description: `The second thing ${characterName('Mira')} showed you: how to open.`,
     })
   }
 

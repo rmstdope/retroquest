@@ -20,7 +20,7 @@ const DESCRIPTIONS: [string, () => Spell, string][] = [
   [
     'greater heal',
     () => new GreaterHealSpell(),
-    "Lyria taught you over the carter's bed: gather your healing into a narrow light. It makes the weak strong. It does not lift a curse.",
+    "[character_name]Lyria[/character_name] taught you over the carter's bed: gather your healing into a narrow light. It makes the weak strong. It does not lift a curse.",
   ],
   [
     'dispel',
@@ -35,12 +35,12 @@ const DESCRIPTIONS: [string, () => Spell, string][] = [
   [
     'forest speech',
     () => new ForestSpeechSpell(),
-    "The tree spirit's gift for your acorn: the talk of roots, branches and small creatures, in words.",
+    "The [character_name]tree spirit[/character_name]'s gift for your acorn: the talk of roots, branches and small creatures, in words.",
   ],
   [
     'prophetic vision',
     () => new PropheticVision(),
-    "Nyx's gift: a look at what is coming. She told you not to look at it alone.",
+    "[character_name]Nyx[/character_name]'s gift: a look at what is coming. She told you not to look at it alone.",
   ],
 ]
 

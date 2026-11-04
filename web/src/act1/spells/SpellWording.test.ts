@@ -35,21 +35,30 @@ describe('Act I spell descriptions remember who gave the spell', () => {
     [
       ReviveSpell,
       "Your father's word for calling a thing back when it is nearly " +
-        'gone. Grandmother remembered it for you.',
+        'gone. [character_name]Grandmother[/character_name] remembered it for you.',
     ],
     [
       PurifySpell,
-      'Your mother taught it to the fisherman at the bend, and he gave ' +
+      'Your mother taught it to the [character_name]fisherman[/character_name] at the bend, and he gave ' +
         'it back to you. It makes foul water clean.',
     ],
     [
       BlessSpell,
-      'The blessing the priest said over you when you found the ' +
+      'The blessing the [character_name]priest[/character_name] said over you when you found the ' +
         "founders' locket.",
     ],
-    [HealSpell, 'The first thing Mira showed you: how to mend.'],
-    [UnlockSpell, 'The second thing Mira showed you: how to open.'],
-    [LightSpell, 'The third thing Mira showed you: how to make a light.'],
+    [
+      HealSpell,
+      'The first thing [character_name]Mira[/character_name] showed you: how to mend.',
+    ],
+    [
+      UnlockSpell,
+      'The second thing [character_name]Mira[/character_name] showed you: how to open.',
+    ],
+    [
+      LightSpell,
+      'The third thing [character_name]Mira[/character_name] showed you: how to make a light.',
+    ],
     [
       GrowSpell,
       'Read word by word off the mossy stone in the glade. It feels ' +
@@ -58,6 +67,29 @@ describe('Act I spell descriptions remember who gave the spell', () => {
   ]
   it.each(expected)('%o reads as agreed', (SpellClass, text) => {
     expect(new SpellClass().description).toBe(text)
+  })
+})
+
+describe('Act I spell descriptions in older saves', () => {
+  it('colour the people you can meet after loading', () => {
+    const game = awake()
+    for (const spell of game.state.knownSpells) spell.description = 'Old.'
+    const fresh = new Game([new Act1()])
+    fresh.loadSaveData(game.toSaveData())
+    for (const spell of fresh.state.knownSpells) {
+      if (spell.id !== 'grow') expect(spell.description).not.toBe('Old.')
+    }
+    const revive = fresh.state.knownSpells.find((s) => s.id === 'revive')
+    expect(revive?.description).toContain(characterName('Grandmother'))
+    for (const id of ['heal', 'unlock', 'light']) {
+      const spell = fresh.state.knownSpells.find((s) => s.id === id)
+      expect(spell?.description).toContain(characterName('Mira'))
+    }
+    const bless = fresh.state.knownSpells.find((s) => s.id === 'bless')
+    expect(bless?.description).toContain(characterName('priest'))
+    const purify = fresh.state.knownSpells.find((s) => s.id === 'purify')
+    expect(purify?.description).toContain(characterName('fisherman'))
+    expect(purify?.description).toContain('Your mother')
   })
 })
 

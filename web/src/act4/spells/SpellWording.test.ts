@@ -12,10 +12,10 @@ const OLD_ELIXIR = 'A shimmering elixir that seems to contain liquid starlight.'
 describe('Act IV spells remember who taught them', () => {
   it('names the teacher of light, bless and grow', () => {
     expect(new Light().description).toBe(
-      'The third thing Mira showed you: how to make a light.',
+      'The third thing [character_name]Mira[/character_name] showed you: how to make a light.',
     )
     expect(new Bless().description).toBe(
-      "The blessing the priest said over you when you found the founders' " +
+      "The blessing the [character_name]priest[/character_name] said over you when you found the founders' " +
         'locket.',
     )
     expect(new Grow().description).toBe(

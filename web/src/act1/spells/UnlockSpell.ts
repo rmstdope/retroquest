@@ -4,6 +4,7 @@ import {
   type GameState,
   type Item,
   clue,
+  characterName,
 } from '@/engine'
 import { MysteriousBox } from '../items/MysteriousBox'
 import { Mechanism } from '../items/Mechanism'
@@ -14,8 +15,13 @@ export class UnlockSpell extends Spell {
     super({
       id: 'unlock',
       name: 'unlock',
-      description: 'The second thing Mira showed you: how to open.',
+      description: `The second thing ${characterName('Mira')} showed you: how to open.`,
     })
+  }
+
+  /** Give a spell known in an older save the current description, which colours who taught it. */
+  override refreshSavedText(): void {
+    this.description = new UnlockSpell().description
   }
 
   /** Handle casting without an explicit target: prompt for an object to unlock. */

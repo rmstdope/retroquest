@@ -1,3 +1,4 @@
+import { characterName } from '@/engine'
 import { describe, expect, it } from 'vitest'
 import {
   SPELL_HEADING,
@@ -116,5 +117,16 @@ describe('withoutLearnedLines', () => {
         [revive],
       ),
     ).toBe('[success]Done. More words.[/success]')
+  })
+
+  it('strips a described line that colours a name', () => {
+    const text = `${characterName('Grandmother')} remembered it for you.`
+    const spells = [{ name: 'Revive', text }]
+    expect(
+      withoutLearnedLines(
+        `You have learned [spell_name]revive[/spell_name]. ${text}`,
+        spells,
+      ),
+    ).toBe('')
   })
 })

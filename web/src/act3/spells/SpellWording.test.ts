@@ -10,15 +10,17 @@ import { BlessSpell } from './BlessSpell'
 /** The agreed description of each Act III spell, by spell id. */
 const EXPECTED: Record<string, string> = {
   purify:
-    'Your mother taught it to the fisherman at the bend, and he gave it ' +
+    'Your mother taught it to the [character_name]fisherman[/character_name] at the bend, and he gave it ' +
     'back to you. It makes foul water clean.',
-  unlock: 'The second thing Mira showed you: how to open.',
-  light: 'The third thing Mira showed you: how to make a light.',
+  unlock:
+    'The second thing [character_name]Mira[/character_name] showed you: how to open.',
+  light:
+    'The third thing [character_name]Mira[/character_name] showed you: how to make a light.',
   mend:
     'The old woman at the end bench in Greendale taught you over a split ' +
     'bowl: close what is cracked, slowly.',
   bless:
-    "The blessing the priest said over you when you found the founders' " +
+    "The blessing the [character_name]priest[/character_name] said over you when you found the founders' " +
     'locket.',
 }
 

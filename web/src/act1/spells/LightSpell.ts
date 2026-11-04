@@ -1,4 +1,4 @@
-import { Spell, type GameState } from '@/engine'
+import { Spell, type GameState, characterName } from '@/engine'
 
 /** Spell that produces a small sphere of light to illuminate dark places. */
 export class LightSpell extends Spell {
@@ -6,8 +6,13 @@ export class LightSpell extends Spell {
     super({
       id: 'light',
       name: 'light',
-      description: 'The third thing Mira showed you: how to make a light.',
+      description: `The third thing ${characterName('Mira')} showed you: how to make a light.`,
     })
+  }
+
+  /** Give a spell known in an older save the current description, which colours who taught it. */
+  override refreshSavedText(): void {
+    this.description = new LightSpell().description
   }
 
   /** Delegate the effect to the current room's light method. */

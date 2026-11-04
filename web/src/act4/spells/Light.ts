@@ -1,4 +1,4 @@
-import { Spell, type GameState, type Item } from '@/engine'
+import { Spell, type GameState, type Item, characterName } from '@/engine'
 import { WardStone } from '../items/WardStone'
 import { WardStones } from '../items/WardStones'
 import { FortressGates } from '../rooms/FortressGates'
@@ -9,7 +9,7 @@ export class Light extends Spell {
     super({
       id: 'light',
       name: 'light',
-      description: 'The third thing Mira showed you: how to make a light.',
+      description: `The third thing ${characterName('Mira')} showed you: how to make a light.`,
     })
   }
 
