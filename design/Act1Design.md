@@ -591,7 +591,7 @@ This list tracks items obtained in the Golden Path and their subsequent uses wit
 20. **`Fish`** (Obtained: Step 12):
     - Used in Step 12 by giving it to the Fisherman to learn the `purify` spell.
 21. **`Mother's Letter`** (Obtained: Step 12, by searching the Riverbank once the Fisherman has told of the tin):
-    - Read in Step 12 to complete the "The faded photograph" quest.
+    - Read in Step 12 to complete _The faded photograph_.
 22. **`Stick`** (Obtained: Step 13):
     - Combined with the `magnetic fishing rod` in Step 21 to create an `extended magnetic fishing rod`.
 23. **`Rare Flower`** (Obtained: Step 14):

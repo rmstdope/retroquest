@@ -101,7 +101,7 @@ clip are ignored. Content Studio checks every take this way as it records; `chec
 closer look at one clip, with its line's words in a text file:
 
 ```sh
-python3 tts/check.py line.txt web/public/audio/narration/act1/0016e4860763bd.mp3
+python3 tts/check.py line.txt web/public/audio/narration/act1/0028ec78cb405e.mp3
 ```
 
 ## Voice prompts

@@ -39,6 +39,13 @@ export class ShadowsOverWillowbrookQuest extends Quest {
     })
   }
 
+  /** Give a save made with the title-case name the current name and completion. */
+  override refreshSavedText(): void {
+    const current = new ShadowsOverWillowbrookQuest()
+    this.name = current.name
+    this.completion = current.completion
+  }
+
   /** Given when the player wakes from the dream in the cottage. */
   override checkTrigger(gameState: GameState): boolean {
     return gameState.getStoryFlag(FLAG_WOKE_FROM_DREAM)

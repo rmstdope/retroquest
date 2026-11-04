@@ -20,6 +20,13 @@ export class FadedPhotographQuest extends Quest {
     })
   }
 
+  /** Give a save made with the title-case name the current name and completion. */
+  override refreshSavedText(): void {
+    const current = new FadedPhotographQuest()
+    this.name = current.name
+    this.completion = current.completion
+  }
+
   /** Triggered when the player finds the photograph. */
   override checkTrigger(gameState: GameState): boolean {
     return gameState.getStoryFlag(FLAG_FOUND_PHOTO)

@@ -17,6 +17,13 @@ export class HintOfMagicQuest extends Quest {
     })
   }
 
+  /** Give a save made with the title-case name the current name and completion. */
+  override refreshSavedText(): void {
+    const current = new HintOfMagicQuest()
+    this.name = current.name
+    this.completion = current.completion
+  }
+
   /** Given when Elior wakes from the dream in his cottage. */
   override checkTrigger(gameState: GameState): boolean {
     return gameState.getStoryFlag(FLAG_WOKE_FROM_DREAM)
