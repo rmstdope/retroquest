@@ -296,6 +296,8 @@ onUnmounted(() => document.removeEventListener('pointerdown', onOutsidePress))
 /** The height of the action row, which the story drawer stops above. */
 const actionsHeight = ref(0)
 let actionsResize: ResizeObserver | undefined
+/** The frame that applies the action row's new height, while one is waiting. */
+let actionsFrame = 0
 
 // The laptop shows everything at once; coming back from it starts on the story.
 // Turning the phone, or changing the stage, starts the stage afresh.
@@ -779,21 +781,32 @@ const cardsTop = ref(140)
 const PLATE_TOP = 16
 const PLATE_GAP = 12
 let widePlateResize: ResizeObserver | undefined
+/** The frame that applies the plate's new height, while one is waiting. */
+let widePlateFrame = 0
 watch(
   widePlate,
   (current) => {
     widePlateResize?.disconnect()
+    cancelAnimationFrame(widePlateFrame)
     const el = current?.$el
     if (typeof ResizeObserver === 'undefined' || !(el instanceof HTMLElement))
       return
+    // On the next frame: the cards' column is resized and observed too, and
+    // resizing it while the plate's change is delivered loops the observers.
     widePlateResize = new ResizeObserver(() => {
-      cardsTop.value = PLATE_TOP + el.offsetHeight + PLATE_GAP
+      cancelAnimationFrame(widePlateFrame)
+      widePlateFrame = requestAnimationFrame(() => {
+        cardsTop.value = PLATE_TOP + el.offsetHeight + PLATE_GAP
+      })
     })
     widePlateResize.observe(el)
   },
   { flush: 'post' },
 )
-onUnmounted(() => widePlateResize?.disconnect())
+onUnmounted(() => {
+  widePlateResize?.disconnect()
+  cancelAnimationFrame(widePlateFrame)
+})
 
 // The narrator's bubbles and the column's lines dim by how far back they were told, as speech does.
 useBubbleAges(contentEl, STAGE_BUBBLES)
@@ -822,14 +835,19 @@ watch(
   composer,
   (current) => {
     actionsResize?.disconnect()
+    cancelAnimationFrame(actionsFrame)
     const actions = current?.$el
     if (
       typeof ResizeObserver === 'undefined' ||
       !(actions instanceof HTMLElement)
     )
       return
+    // On the next frame, as the plate's: the cards' column ends above the row.
     actionsResize = new ResizeObserver(() => {
-      actionsHeight.value = actions.offsetHeight
+      cancelAnimationFrame(actionsFrame)
+      actionsFrame = requestAnimationFrame(() => {
+        actionsHeight.value = actions.offsetHeight
+      })
     })
     actionsResize.observe(actions)
   },
@@ -846,6 +864,7 @@ onUnmounted(() => {
   contentResize?.disconnect()
   resizeLanding.dispose()
   actionsResize?.disconnect()
+  cancelAnimationFrame(actionsFrame)
 })
 
 // Larger or smaller text changes how much of the turn is still below.

@@ -29,10 +29,14 @@ import { useNarrationStore } from '@/stores/useNarrationStore'
  * The read-along announces the word (or the unit) to follow with a bubbling,
  * cancelable `lq-follow` event on its element; this composable handles it,
  * only while held, and otherwise leaves it alone (the chapter page and
- * pop-ups are not held and do not follow).
+ * pop-ups are not held and do not follow). An event with `detail.end` says
+ * the reading has left that unit (hurried, or gone on to a line spoken in
+ * the speech column): the pane then brings the unit's end up to its bottom
+ * edge, never so far that the unit's top leaves and never back up, so a card
+ * is not left cut off below the edge while nothing in the pane is read.
  */
 
-/** Event the read-along fires on the lit word, or on a unit that starts speaking. */
+/** Event the read-along fires on the lit word, on a unit that starts speaking, or on one it leaves. */
 export const FOLLOW_EVENT = 'lq-follow'
 /** Lines of room kept below the word. */
 const ROOM_LINES = 2
@@ -164,6 +168,20 @@ export function useStoryFollow(story: Ref<HTMLElement | null>): StoryFollow {
     else if (top < from) moveTo(top)
   }
 
+  /** Bring the end of `el`, a unit the reading has left, into view, never past its top. */
+  function followEnd(el: Element): void {
+    const pane = story.value
+    if (!pane) return
+    const paneTop = pane.getBoundingClientRect().top
+    const rect = el.getBoundingClientRect()
+    const top = rect.top - paneTop + pane.scrollTop
+    const bottom = rect.bottom - paneTop + pane.scrollTop
+    const from = goal ?? pane.scrollTop
+    // Only forward: a tall unit already read past its top stays where it is.
+    const target = Math.min(bottom - pane.clientHeight, top)
+    if (target > from) moveTo(target)
+  }
+
   /** Bring the lit word back into view at once; see `StoryFollow.refollow`. */
   function refollow(): void {
     const pane = story.value
@@ -231,8 +249,9 @@ export function useStoryFollow(story: Ref<HTMLElement | null>): StoryFollow {
   function onFollow(event: Event): void {
     if (!held.value || !(event.target instanceof Element)) return
     event.preventDefault()
-    const unit = event instanceof CustomEvent && event.detail?.unit === true
-    follow(event.target, unit)
+    const custom = event instanceof CustomEvent
+    if (custom && event.detail?.end === true) followEnd(event.target)
+    else follow(event.target, custom && event.detail?.unit === true)
   }
 
   // The pane's own listeners follow the element, which can be replaced.

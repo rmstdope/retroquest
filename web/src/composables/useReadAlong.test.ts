@@ -202,6 +202,89 @@ describe('useReadAlong', () => {
       await nextTick()
       expect(scrolled).toHaveLength(0)
     })
+
+    it('announces the end of a unit hurried on to a line read elsewhere, with no scrolling of its own', async () => {
+      const scrolled: Element[] = []
+      Element.prototype.scrollIntoView = function (this: Element) {
+        scrolled.push(this)
+      }
+      const LINE = 'Six seven.'
+      const w = mountReader()
+      const ends: Element[] = []
+      w.element.addEventListener('lq-follow', (e: Event) => {
+        if (e instanceof CustomEvent && e.detail?.end === true)
+          ends.push(e.target as Element)
+      })
+      // The second unit is not drawn here, as a line read in the speech column.
+      useNarrationStore().begin(
+        7,
+        turnUnits({ text: `${TEXT}\n${LINE}`, arrival: null }, false, {
+          ...manifest,
+          [narrationKey('narrator', LINE)]: {
+            file: 'b.mp3',
+            speaker: 'narrator',
+            duration: 2,
+            words: [],
+          },
+        }),
+        'act1',
+      )
+      await nextTick()
+      await nextTick()
+      scrolled.length = 0
+      // Hurried on its first word: the rest shows at once, unread.
+      useNarrationStore().hurry()
+      await nextTick()
+      await nextTick()
+      expect(ends).toEqual([])
+      await new Promise((r) => setTimeout(r, 150))
+      await nextTick()
+      await nextTick()
+      expect(ends).toEqual([w.find('p').element])
+      expect(scrolled).toHaveLength(0)
+    })
+  })
+
+  it('does not announce the end of a unit in the pause between its parts', async () => {
+    const narration = useNarrationStore()
+    const clipOf = (markup: string) => ({
+      file: 'a.mp3',
+      speaker: 'narrator',
+      duration: 3,
+      words: narrationWords(markup).map((word, i) => ({
+        word,
+        start: i,
+        end: i + 1,
+      })),
+    })
+    const manifest = {
+      [narrationKey('narrator', 'Cellar')]: clipOf('Cellar'),
+      [narrationKey('narrator', TEXT)]: clipOf(TEXT),
+    }
+    const w = mountReader(8, () => [
+      h('div', { 'data-unit': 0 }, [h('h3', 'Cellar'), h('p', TEXT)]),
+    ])
+    const ends: Element[] = []
+    w.element.addEventListener('lq-follow', (e: Event) => {
+      if (e instanceof CustomEvent && e.detail?.end === true)
+        ends.push(e.target as Element)
+    })
+    narration.begin(
+      8,
+      turnUnits(
+        { text: '', arrival: { room: 'Cellar', description: TEXT } },
+        true,
+        manifest,
+      ),
+      'act1',
+    )
+    await new Promise((r) => setTimeout(r, SCENE_PAUSE_MS + 50))
+    await nextTick()
+    // The room's name is read; its description is still to come.
+    audio.onended?.()
+    await nextTick()
+    await nextTick()
+    expect(ends).toEqual([])
   })
 
   it('numbers a piece of a part’s text from its place in the part', async () => {
