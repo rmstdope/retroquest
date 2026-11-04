@@ -390,13 +390,16 @@ describe('useActMusic with the effects of a room', () => {
     for (let i = 0; i < 3; i++) await settle()
   }
 
+  /** How many gains the shared context had made when this test started (it lives on across tests). */
+  let gainsBefore = 0
+
   /**
-   * The gain every effect plays into: the newest one out to the speakers that
-   * an ambience's own gain connects to (the context lives on across tests).
+   * The gain every effect plays into: the one, made in this test, out to the
+   * speakers that an ambience's own gain connects to.
    */
   function effectsBus() {
-    return [...ctx.gains]
-      .reverse()
+    return ctx.gains
+      .slice(gainsBefore)
       .find(
         (gain) =>
           gain.connect.mock.calls[0]?.[0] === ctx.destination &&
@@ -409,6 +412,7 @@ describe('useActMusic with the effects of a room', () => {
     roomKey: string,
     soundState = '',
   ): Promise<ReturnType<typeof effectScope>> {
+    gainsBefore = FakeAudioContext.last?.gains.length ?? 0
     const scope = effectScope()
     scope.run(() => useActMusic())
     const game = useGameStore()
@@ -433,6 +437,12 @@ describe('useActMusic with the effects of a room', () => {
   }
 
   beforeEach(() => {
+    // The settings are saved; a test that turns the effects off must not leave them off.
+    try {
+      localStorage.clear()
+    } catch {
+      // No storage here: nothing was saved.
+    }
     setActivePinia(createPinia())
     vi.stubGlobal('Audio', FakeAudio)
     vi.stubGlobal('AudioContext', FakeAudioContext)
@@ -546,6 +556,8 @@ describe('useActMusic with the effects of a room', () => {
     settings.effectsVolume = 40
     const scope = await startInTheDream()
     ctx = FakeAudioContext.last
+    // The effects join the music as they are decoded.
+    await vi.waitFor(() => expect(effectsBus()).toBeDefined())
     expect(effectsBus()?.gain.value).toBeCloseTo(0.4)
     settings.effectsOn = false
     await nextTick()
