@@ -543,8 +543,19 @@ describe('StoryTurn as a narration card', () => {
     expect(w.text()).toContain('She does not sit down herself.')
   })
 
-  it('keeps a quote when the turn is not a conversation', () => {
-    const w = mountCard({ command: 'read letter', text: TALK })
+  it("leaves a character's quote to the speech when the turn is not a conversation", () => {
+    const w = mountCard({ command: 'cast heal on grandmother', text: TALK })
+
+    expect(w.find('.lq-block-dialogue').exists()).toBe(false)
+    expect(w.text()).toContain('She does not sit down herself.')
+  })
+
+  it('keeps a quote when the turn leaves the room without a conversation', () => {
+    const w = mountCard({
+      command: 'go north',
+      text: TALK,
+      description: { moved: true, firstVisit: false },
+    })
 
     expect(w.find('.lq-block-dialogue').exists()).toBe(true)
   })

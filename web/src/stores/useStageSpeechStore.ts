@@ -18,8 +18,8 @@ import {
  * addresses a character starts or continues a conversation with them, and
  * addressing someone else starts a fresh one. A turn that moves Elior to
  * another room clears it; when the talk itself moved him, its lines start a
- * fresh conversation. Any other turn clears it too, and shows only Elior's
- * own words (such as his journal) when it has any. The lines of each turn are the quotes of its answer
+ * fresh conversation. Any other turn clears it too, and shows the words
+ * it has (Elior's journal, a reply to a spell) on their own. The lines of each turn are the quotes of its answer
  * (`speechLines`), shown as the narrator reaches them when the turn is
  * narrated, and otherwise one at a time by a reading pause (`readingPauseMs`);
  * `revealAll` shows the rest of the turn at once. An unnarrated talk that
@@ -210,7 +210,7 @@ export const useStageSpeechStore = defineStore('stageSpeech', () => {
    * Take a new turn in: the previous turn's lines show in full first. A turn
    * that ends in another room clears the conversation, and starts a new one
    * when it addressed someone (the talk itself moved Elior); one that
-   * addresses no one clears it too and shows only Elior's own quotes
+   * addresses no one clears it too and shows its own quotes on their own
    * (`toldAsSpeech`); one that addresses someone else starts a new one; one
    * that addresses the same character adds to it. `change` is where the
    * scene of an unnarrated talk that moves Elior changes (see `SceneChange`).
@@ -219,16 +219,14 @@ export const useStageSpeechStore = defineStore('stageSpeech', () => {
     revealAll()
     const moved = turn.description?.moved === true
     const addressed = turn.addressed ?? null
-    const said = speechLines(parseTurn(turn.text)).filter((line) =>
-      toldAsSpeech(turn, line.speaker),
-    )
+    const said = toldAsSpeech(turn) ? speechLines(parseTurn(turn.text)) : []
     // Leaving the room ends the conversation; a talk that moved Elior starts a new one.
     if (!addressed && (moved || !said.length)) {
       // Nothing is said on the picture: a scene to change changes at once.
       holdScene(turn, change)
       return clear()
     }
-    // A turn that addresses no one shows only Elior's own words, on their own.
+    // A turn that addresses no one shows its own words, on their own.
     const partner = addressed ?? ELIOR
     if (
       moved ||

@@ -45,7 +45,7 @@ export function turnHasCard(turn: Turn, speechBeside = false): boolean {
             speechBeside &&
             block.kind === 'dialogue' &&
             !!block.speaker &&
-            toldAsSpeech(turn, block.speaker)
+            toldAsSpeech(turn)
           ),
     )
 }

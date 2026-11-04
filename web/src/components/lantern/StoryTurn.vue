@@ -109,7 +109,7 @@ function onSpeech(block: TurnBlock): boolean {
     !props.piece &&
     block.kind === 'dialogue' &&
     !!block.speaker &&
-    toldAsSpeech(props.turn, block.speaker)
+    toldAsSpeech(props.turn)
   )
 }
 const scene = useSceneStore()
