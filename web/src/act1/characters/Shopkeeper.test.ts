@@ -118,6 +118,45 @@ describe('Shopkeeper dialogue markup', () => {
   })
 })
 
+describe('Shopkeeper wares and gifts keep their pickup lines (rq-3uug)', () => {
+  const ROPE_LINE =
+    'You loop it over your shoulder. It is good rope, and it was not cheap.'
+  const APPLE_LINE =
+    'It is crisp and cold, and nearly too red. You save it for later.'
+
+  it('lets Elior take the gift rope and apple again after a drop', () => {
+    const game = gameInStore()
+    game.state.setStoryFlag(FLAG_PATCHES_STAYED_WITH_GRANDMOTHER, true)
+    game.commandParser.parse('talk to shopkeeper')
+    game.state.currentRoom = game.state.allRooms.VillageSquare
+    game.commandParser.parse('drop rope')
+    game.commandParser.parse('drop apple')
+    expect(game.commandParser.parse('take rope')).toBe(ROPE_LINE)
+    expect(game.commandParser.parse('take apple')).toBe(APPLE_LINE)
+  })
+
+  it('lets Elior take a bought rope and its apple again after a drop', () => {
+    const game = gameInStore()
+    game.state.addItemToInventory(new Coin())
+    game.commandParser.parse('buy rope from shopkeeper')
+    game.state.currentRoom = game.state.allRooms.VillageSquare
+    game.commandParser.parse('drop rope')
+    game.commandParser.parse('drop apple')
+    expect(game.commandParser.parse('take rope')).toBe(ROPE_LINE)
+    expect(game.commandParser.parse('take apple')).toBe(APPLE_LINE)
+  })
+
+  it('answers the shop rope with the refusal after a bought one is dropped in the store', () => {
+    const game = gameInStore()
+    game.state.addItemToInventory(new Coin())
+    game.commandParser.parse('buy rope from shopkeeper')
+    game.commandParser.parse('drop rope')
+    const answer = game.commandParser.parse('take rope')
+    expect(answer).toContain(ROPE_LINE)
+    expect(answer).toContain('merchandise')
+  })
+})
+
 describe('Shopkeeper and the priest matches', () => {
   it('does not list the matches for sale', () => {
     const game = gameInStore()

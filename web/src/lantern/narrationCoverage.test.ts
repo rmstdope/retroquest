@@ -158,7 +158,7 @@ const OPTIONAL_LINES: Record<number, { speaker: string; opening: string }[]> = {
   ],
 }
 
-describe.each([2, 3, 4])('narration coverage of Act %i', (act) => {
+describe.each([1, 2, 3, 4])('narration coverage of Act %i', (act) => {
   const script = readJson<ScriptLine[]>(`tts/act${act}/script.json`)
   const manifest = readJson<NarrationManifest>(
     `web/public/audio/narration/act${act}/manifest.json`,
@@ -232,7 +232,7 @@ const REST_LINES: Record<number, string[]> = {
   ],
 }
 
-describe.each([2, 3, 4])('narration of resting in Act %i', (act) => {
+describe.each([1, 2, 3, 4])('narration of resting in Act %i', (act) => {
   const script = readJson<ScriptLine[]>(`tts/act${act}/script.json`)
 
   it.each(REST_LINES[act])('has the narrator read "%s"', (words) => {

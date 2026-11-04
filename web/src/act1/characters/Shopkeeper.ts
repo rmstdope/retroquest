@@ -199,7 +199,9 @@ export class Shopkeeper extends Character {
     gameState.setStoryFlag(FLAG_MET_HEMLOCK, true)
     const gift = !gameState.getStoryFlag(FLAG_RUSTY_HOE_SECOND_COIN_FOUND)
     if (gift) {
-      gameState.addItemToInventory(new Rope())
+      const rope = new Rope()
+      rope.canBeCarried = true
+      gameState.addItemToInventory(rope)
       const apple = new Apple()
       apple.canBeCarried = true
       gameState.addItemToInventory(apple)
