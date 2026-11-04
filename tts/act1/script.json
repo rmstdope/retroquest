@@ -505,6 +505,11 @@
     "text": "The ground is tough, and you unearth a small, tarnished coin! You quickly pocket it."
   },
   {
+    "key": "0d6adf5b5b587b",
+    "speaker": "narrator",
+    "text": "Rows of withered crops stretch beneath a brooding gray sky. The earth is cracked and dry, with only a few stubborn carrots hinting at better days. A faint breeze rustles the brittle leaves, carrying the scent of soil and distant rain. These rows were green a month ago."
+  },
+  {
     "key": "064d680bbfe540",
     "speaker": "narrator",
     "text": "A small, circular piece of metal, likely used as currency. It has a simple stamp on one side."
@@ -835,9 +840,9 @@
     "text": "Abandoned Shed"
   },
   {
-    "key": "171f9e8202e847",
+    "key": "17af0d0fc2534a",
     "speaker": "narrator",
-    "text": "A rickety shed leans precariously at the edge of Willowbrook, its weathered boards creaking in the wind. Rusty tools and broken crates are scattered about a long workbench, and a thick layer of dust covers everything. Little light gets past the grimy boards, and the air smells of old earth and lamp oil."
+    "text": "A rickety shed leans precariously at the edge of Willowbrook, its weathered boards creaking in the wind. The shed door is locked, and no light gets past the grimy boards, but the air smells of old earth and lamp oil."
   },
   {
     "key": "17ced776faa8d7",
@@ -928,6 +933,11 @@
     "key": "0443cad94a38f2",
     "speaker": "narrator",
     "text": "A pair of frightened green eyes watches you from behind the crates."
+  },
+  {
+    "key": "171f9e8202e847",
+    "speaker": "narrator",
+    "text": "A rickety shed leans precariously at the edge of Willowbrook, its weathered boards creaking in the wind. Rusty tools and broken crates are scattered about a long workbench, and a thick layer of dust covers everything. Little light gets past the grimy boards, and the air smells of old earth and lamp oil."
   },
   {
     "key": "1bcc09b892cdeb",
@@ -1290,6 +1300,11 @@
     "text": "Patches blinks at you slowly from the counter and begins to purr."
   },
   {
+    "key": "13b9ea49da77c5",
+    "speaker": "narrator",
+    "text": "A cluttered shop. Rope, apples, matches and trinkets crowd the shelves, and the air smells of fruit, wax and old wood. Hemlock dusts jars between customers, and every so often looks at the counter, where his cat sleeps."
+  },
+  {
     "key": "05feedc880605f",
     "speaker": "narrator",
     "text": "He counts the coin twice and hands over the rope, and an apple with it."
@@ -1353,6 +1368,11 @@
     "key": "099e1e369bb72e",
     "speaker": "narrator",
     "text": "A chunk of stone broken from the old mill's grinding wheel. It's heavy and rough, but could be useful for repairs or as a tool."
+  },
+  {
+    "key": "0169571959bc2e",
+    "speaker": "narrator",
+    "text": "A creaky windmill towers above, its sails turning slowly in the breeze. Dusty gears and cobwebs fill the interior, and the scent of flour hangs in the air. Sunlight streams through broken windows, illuminating sacks of grain and a heavy millstone. Amidst the old workings, the black-iron mechanism stands jammed with a rope, silent at last."
   },
   {
     "key": "10759638e49eed",
@@ -1685,6 +1705,11 @@
     "text": "A fox kit, no bigger than a cat, one hind leg caught fast in the wire. It watches you and does not struggle."
   },
   {
+    "key": "05d740c9dea2d1",
+    "speaker": "narrator",
+    "text": "A winding path snakes into the heart of the woods, dappled sunlight flickering through the canopy above. Where thick vines once blocked a small alcove, they now lie cut, revealing the opening. The air is alive with the scent of pine and wildflowers, and the ground is soft with moss and fallen leaves. Birds flit between branches, and the occasional snap of a twig hints at unseen creatures nearby. In the alcove a fox kit is caught in a poacher's snare, too tired now to struggle."
+  },
+  {
     "key": "150ecc75a68785",
     "speaker": "narrator",
     "text": "Hidden Glade"
@@ -1983,6 +2008,11 @@
     "key": "02ff119b0dff79",
     "speaker": "narrator",
     "text": "A mysterious amulet inscribed with runes. At its centre, a sun rises over three linked rings. Its glow quickens as you lean closer, steady as a heartbeat."
+  },
+  {
+    "key": "19d76ee1d2aa4c",
+    "speaker": "narrator",
+    "text": "A small hut hung with drying herbs: lavender, sage, and roots in bundles from the rafters. Shelves of bottles line the walls, every one labelled. Mira moves among them without looking, the way you move through your own kitchen. On its stand, the ancient amulet glows brighter as you step in, as if something you carry has woken it."
   },
   {
     "key": "11b854417ed0e2",
@@ -2395,6 +2425,11 @@
     "text": "An old stone well, its surface worn smooth, its shaft disappearing into the depths. The water within is crystal clear. You can see something shiny at the bottom, but it's still too deep to reach by hand."
   },
   {
+    "key": "1be208a0d05c61",
+    "speaker": "narrator",
+    "text": "An old stone well stands between the field and the forge, its stones worn smooth by countless hands. The water below glimmers with a crystalline clarity, and the air is cool and damp. Moss creeps up the sides."
+  },
+  {
     "key": "0e9c78c177a2b7",
     "speaker": "narrator",
     "text": "After some careful maneuvering, you manage to retrieve a shiny ring!"
@@ -2598,6 +2633,11 @@
     "key": "1d4db1040d0138",
     "speaker": "narrator",
     "text": "It lifts its head toward the glowing stone, then dips it to you, slow and deliberate, as if in thanks."
+  },
+  {
+    "key": "0180ba60de464d",
+    "speaker": "narrator",
+    "text": "A peaceful clearing bathed in golden sunlight, hidden deep within the forest. Wildflowers carpet the ground, and a gentle breeze stirs the tall grass. In the center, a mossy stone bears a faint, magical inscription. Beneath it, in a plainer hand, is carved: “Power follows purpose; purpose follows truth.” A graceful deer grazes quietly, occasionally lifting its head to watch you with wise, gentle eyes. You recall picking a beautiful rare flower that once bloomed near the mossy stone."
   },
   {
     "key": "03fc34fcfaf0cd",
@@ -3040,6 +3080,11 @@
     "text": "Still here? Go and say a proper goodbye to your grandmother. Then go."
   },
   {
+    "key": "116aac75767bd3",
+    "speaker": "narrator",
+    "text": "A small hut hung with drying herbs: lavender, sage, and roots in bundles from the rafters. Shelves of bottles line the walls, every one labelled. Mira moves among them without looking, the way you move through your own kitchen. The stand where the amulet rested stands empty."
+  },
+  {
     "key": "05633832d62aae",
     "speaker": "tilda",
     "text": "Mira's amulet... you're leaving, aren't you? Well. Don't you dare go without a proper send-off from the bakery. And mind you come home, love."
@@ -3070,9 +3115,19 @@
     "text": "A mysterious amulet inscribed with runes. At its centre, a sun rises over three linked rings. It hums softly in your hand, as if answering something stirring beneath the floor."
   },
   {
+    "key": "007ceb3ed3f3ce",
+    "speaker": "narrator",
+    "text": "A creaky windmill towers above, its sails turning slowly in the breeze. Dusty gears and cobwebs fill the interior, and the scent of flour hangs in the air. Sunlight streams through broken windows, illuminating sacks of grain and a heavy millstone. Amidst the old workings, the black-iron mechanism stands jammed with a rope, silent at last. At your side, the ancient amulet hums softly, as if answering something stirring beneath the floor."
+  },
+  {
     "key": "01ec643e83edc4",
     "speaker": "narrator",
     "text": "A mysterious amulet inscribed with runes. At its centre, a sun rises over three linked rings. It glows in your hand, brightest when you hold it near the mossy stone."
+  },
+  {
+    "key": "0b311f2a9c19ba",
+    "speaker": "narrator",
+    "text": "A peaceful clearing bathed in golden sunlight, hidden deep within the forest. Wildflowers carpet the ground, and a gentle breeze stirs the tall grass. In the center, a mossy stone bears a faint, magical inscription. Beneath it, in a plainer hand, is carved: “Power follows purpose; purpose follows truth.” Beside the mossy stone, the ancient amulet in your hand begins to glow. A graceful deer grazes quietly, occasionally lifting its head to watch you with wise, gentle eyes. You recall picking a beautiful rare flower that once bloomed near the mossy stone."
   },
   {
     "key": "14cc1c80d9153b",

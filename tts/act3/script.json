@@ -330,6 +330,11 @@
     "text": "Echoes of the Hidden Bond: Your parents made the three relics, long before you were born. Mira says they left words behind them: by the sea, on the mountain and under the hills. On the mountain: something they left on Mount Ember."
   },
   {
+    "key": "1c2579a18fd54e",
+    "speaker": "narrator",
+    "text": "Thin causeways of old stone lift from the black water like ribs. Moonlight skims the wet stones; salt and wind carry half‑heard songs. Broken arches stand like quiet mouths, guarding what the sea keeps. Dead sea birds line the stones, and the surf runs grey."
+  },
+  {
     "key": "05d73e62e50b54",
     "speaker": "narrator",
     "text": "Your light catches a patch of pigment and a small hollow. In the shadowed cranny, something metallic flakes free — a corroded key rests in the rock."
@@ -670,6 +675,11 @@
     "text": "You step down into the black water. It is cold to the knees, and you cannot see your own hands."
   },
   {
+    "key": "19f1f2e046323e",
+    "speaker": "narrator",
+    "text": "Black water to your knees. You cannot see your own hands."
+  },
+  {
     "key": "114166fe8a0dd7",
     "speaker": "narrator",
     "text": "The water climbs to your waist. Then a voice like Mira's, close behind you:"
@@ -678,6 +688,11 @@
     "key": "1b40dc0e8100d2",
     "speaker": "mira",
     "text": "Turn back, Elior. There is nothing out there."
+  },
+  {
+    "key": "0e5665acfec3db",
+    "speaker": "narrator",
+    "text": "Black water to your waist. You cannot see your own hands."
   },
   {
     "key": "12a201dc7817cd",
@@ -698,6 +713,11 @@
     "key": "177260660d2610",
     "speaker": "narrator",
     "text": "A prism the size of your palm, cold and clear. Light moves in it like water under a moon."
+  },
+  {
+    "key": "10dcdc9f07dfbb",
+    "speaker": "narrator",
+    "text": "The water stands parted around you. The crystal of light burns in its basin, the only light in the world."
   },
   {
     "key": "04105b8102597c",
@@ -1010,6 +1030,11 @@
     "text": "Echoes of the Hidden Bond: Your parents made the three relics, long before you were born. Mira says they left words behind them: by the sea, on the mountain and under the hills. Under the hills: something they left in the Caverns of Shadow."
   },
   {
+    "key": "00267d07584775",
+    "speaker": "narrator",
+    "text": "Stepped platforms rise in concentric benches, each ring studded with sockets for polished mirrors and brass mounts. Channels are neatly etched into the stone to carry and focus light up the slope; stray rays catch on alignment wedges and glint like cold flame. The air hums faintly with residual heat, and dusted ash settles on worktables where scholars and attendants file, polish, and fit mirror segments. The place smells of warm metal, singed cloth, and the mineral tang of cooling slag. Ash falls over the terraces like slow grey rain, and down the slope the braziers have guttered to embers."
+  },
+  {
     "key": "196f377213fdd4",
     "speaker": "narrator",
     "text": "A brass-and-stone mount fixed into the terrace socket. It needs a brass segment and binding resin to secure and repair the mirror face."
@@ -1195,6 +1220,11 @@
     "text": "Remember him when time is short for you."
   },
   {
+    "key": "0f935984bdbd30",
+    "speaker": "narrator",
+    "text": "Stepped platforms rise in concentric benches, each ring studded with sockets for polished mirrors and brass mounts. Channels are neatly etched into the stone to carry and focus light up the slope; stray rays catch on alignment wedges and glint like cold flame. The air hums faintly with residual heat, and dusted ash settles on worktables where scholars and attendants file, polish, and fit mirror segments. The place smells of warm metal, singed cloth, and the mineral tang of cooling slag. The mended mirrors stand ready, their bright faces still waiting on the sun. Ash falls over the terraces like slow grey rain, and down the slope the braziers have guttered to embers."
+  },
+  {
     "key": "0cc90a1a463a37",
     "speaker": "narrator",
     "text": "Ember Gallery"
@@ -1333,6 +1363,11 @@
     "key": "09151a312ed310",
     "speaker": "narrator",
     "text": "The heat of the crater soaks into you, and the ache goes out of your legs."
+  },
+  {
+    "key": "04a2ef3a6d2a92",
+    "speaker": "narrator",
+    "text": "A luminous bowl of vitrified rock where warm drafts swirl and cinders dance in spirals. The air smells of ozone, resin, and warm iron; the whole bowl feels like a giant hearth that remembers how to forge stars. At the crater's heart the phoenix lies on a bed of cooled slag, its feathers red-gold and steaming. Each breath it lets out sends sparks up out of the bowl. Now and then a feather comes loose and cools on the rim to a shard that still hums."
   },
   {
     "key": "0df082a08a37e9",
@@ -2160,6 +2195,11 @@
     "text": "A mysterious amulet inscribed with runes. At its centre is the sigil of the Wardens of the Dawn: the sun rising over three linked rings. In its depths Aren and Lysa stand hand in hand. The third figure keeps his back turned."
   },
   {
+    "key": "17befb3297eb48",
+    "speaker": "narrator",
+    "text": "A hall of living stone opens beyond sight, its ceiling lost in shadow. Embers burn slowly along the floor, pulsing like a heartbeat, and somewhere in the dark, water drips. Rings of old sigils spiral across the black tiles around the Ancient Dragon. It lies coiled at the centre, scales like polished obsidian, and each slow breath hums in your bones. The old dripping has stopped; from the mines beyond comes no sound of picks at all."
+  },
+  {
     "key": "10600cc922a965",
     "speaker": "elior",
     "text": "I take what is given, and I return everything."
@@ -2213,6 +2253,11 @@
     "key": "1c47bec0c3110d",
     "speaker": "narrator",
     "text": "The Three Virtues: You have the dragon's scale, heavy in your pack. With all three relics in hand, Mira's Warding Rite is all that is left."
+  },
+  {
+    "key": "13263cd6f330e8",
+    "speaker": "narrator",
+    "text": "A hall of living stone opens beyond sight, its ceiling lost in shadow. Embers burn slowly along the floor, pulsing like a heartbeat, and somewhere in the dark, water drips. Rings of old sigils spiral across the black tiles around the Ancient Dragon. It lies coiled at the centre, scales like polished obsidian, and each slow breath hums in your bones. The old dripping has stopped; from the mines beyond comes no sound of picks at all. Where the scale lay, the sigils around the dragon have dimmed, and a hairline crack runs through the nearest ring."
   },
   {
     "key": "116679d911420f",

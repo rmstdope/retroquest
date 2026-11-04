@@ -224,6 +224,19 @@ describe('actScript for Act I', () => {
     ).toBe(true)
   })
 
+  it('reads a room’s description as looking around reads it, once the story has changed it', () => {
+    // The shed is first seen locked; its inside is read only on a look once it is open.
+    expect(
+      script.some(
+        (line) =>
+          line.speaker === 'narrator' &&
+          line.text.includes(
+            'Rusty tools and broken crates are scattered about a long workbench',
+          ),
+      ),
+    ).toBe(true)
+  })
+
   it('reads the spell news of a spell learned along the path, and the turn without its learned line', () => {
     expect(find('New spell')?.speaker).toBe('narrator')
     expect(find('Revive')?.speaker).toBe('narrator')

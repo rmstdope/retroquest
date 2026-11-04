@@ -224,7 +224,7 @@ export interface ScriptBranch {
   unset?: string[]
 }
 
-/** The commands that try what is at hand: examine everything, use what is carried, talk to everyone, look, search, ask for a hint, rest. */
+/** The commands that try what is at hand: examine everything, use what is carried, talk to everyone, look, search, ask for a hint, rest. Looking around is also tried as the player's look, which reads the room again (see `actScript`). */
 function probes(game: Game): string[] {
   const state = game.state
   const room = state.currentRoom
@@ -317,6 +317,10 @@ export function actScript(
       probe.loadSaveData(save)
       addAnswer(tryOut, () => tryOut.handleCommand(command))
     }
+    // Looking around reads the room again as the story has left it.
+    probe.loadSaveData(save)
+    addAnswer(tryOut, () => tryOut.look())
+    add(arrivalBlocks(tryOut.getRoomName(), tryOut.getRoomDescription()))
   }
   const settle = (controller: GameController): void => {
     const quests = controller.settleQuests()

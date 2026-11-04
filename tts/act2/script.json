@@ -1015,6 +1015,11 @@
     "text": "A plain leather journal, its cover rubbed grey at the corners. There is no name inside. The pages are crowded with notes in a small, careful hand, and many of them look copied from somewhere else."
   },
   {
+    "key": "13af74b541947c",
+    "speaker": "narrator",
+    "text": "Comfortable guest rooms on the upper floor of The Silver Stag Inn. Each room has a cozy bed, a writing desk, and a window overlooking the Market District. The rooms are clean and well-maintained, offering a peaceful retreat for travelers. Faint conversation drifts up from the common room below. The loose floorboard beside the bed sits back in its place, the hiding place beneath it empty."
+  },
+  {
     "key": "1fd7f1c63b9431",
     "speaker": "narrator",
     "text": "You count your coins. You have 70 gold pieces to spend on supplies and equipment."
@@ -1505,6 +1510,11 @@
     "text": "The Ancient Library: Behind a bricked-up cellar door in the Residential Quarter, steps lead down to a library nobody in Greendale talks about."
   },
   {
+    "key": "1f822b8a8512dd",
+    "speaker": "narrator",
+    "text": "Quiet lanes of two-storey houses, each with a small garden and a workshop. Craftsmen work at benches in the open doorways, and neighbours sit on their steps. Half the garden plots have gone grey. At the end of one lane, where the cellar door was bricked up, the way down to the hidden library stands open."
+  },
+  {
     "key": "1b370ac31db011",
     "speaker": "narrator",
     "text": "Hidden Library"
@@ -1880,6 +1890,11 @@
     "text": "The Gathering Storm: At the standing stones you slept on the forest's doorstep, as the hermit asked, and dreamed of a grey field with someone at its far edge. In the morning the hermit said she had let you. Somewhere inside the forest, Nyx is waiting."
   },
   {
+    "key": "1e62f12b8080d8",
+    "speaker": "narrator",
+    "text": "The mountain path ends at a ring of standing stones, grey and mossed, with runes cut deep in them. Past the stones the trees begin all at once, close and dark. The forest hermit sits by the cold ashes of your camp in the lee of the oldest stone."
+  },
+  {
     "key": "0b2fbba095ac22",
     "speaker": "narrator",
     "text": "Forest Entrance"
@@ -1993,6 +2008,16 @@
     "key": "1c1159c1cd7607",
     "speaker": "forest sprites",
     "text": "—so the grove path is yours. No tricks."
+  },
+  {
+    "key": "1eee1543d2b94b",
+    "speaker": "narrator",
+    "text": "Massive trees create a natural cathedral as you enter the Enchanted Forest. Dappled sunlight filters through the dense canopy, and the path ahead disappears into green shadows. The air is alive with birds and rustling leaves, but beneath it lies an expectant silence, as if the forest itself is watching. A path leads south toward an ancient grove; the forest sprites have drawn aside from it and dance among the trees. To the east the undergrowth grows thick and dark."
+  },
+  {
+    "key": "0ac47407017474",
+    "speaker": "narrator",
+    "text": "Massive trees create a natural cathedral as you enter the Enchanted Forest. Dappled sunlight filters through the dense canopy, and the path ahead disappears into green shadows. The air is alive with birds and rustling leaves, but beneath it lies an expectant silence, as if the forest itself is watching. A path leads south toward an ancient grove; the forest sprites have drawn aside from it and dance among the trees. To the east, your lantern's blue light picks out a narrow path through the undergrowth, toward a tranquil glade."
   },
   {
     "key": "15b314c42e98da",
@@ -3088,6 +3113,11 @@
     "key": "106be89fc58191",
     "speaker": "narrator",
     "text": "You have completed the quest 'The Gathering Storm'."
+  },
+  {
+    "key": "16dfdbedd2d254",
+    "speaker": "narrator",
+    "text": "Sir Cedric is still waiting for you, his hand on his sword."
   },
   {
     "key": "0169889a2a7fe6",
