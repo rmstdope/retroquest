@@ -399,6 +399,7 @@ describe('Innkeeper Marcus price sentence', () => {
       expect(answer).not.toContain('I can offer you')
       expect(answer).not.toContain('- ')
       expect(answer).toContain('Elena')
+      expect(answer.match(/\[dialogue\]/g)).toHaveLength(knowsCurse ? 3 : 2)
     },
   )
 

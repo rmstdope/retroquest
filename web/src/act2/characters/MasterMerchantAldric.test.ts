@@ -232,3 +232,16 @@ describe('Master Merchant Aldric restored from a save made before the rewrite', 
     expect(open).not.toContain('An old idle line.')
   })
 })
+
+describe('Master Merchant Aldric price sentence', () => {
+  it('follows each of his four opening lines in the same bubble', () => {
+    const game = createGameWithOpenShop()
+    for (let i = 0; i < 4; i++) {
+      const answer = game.commandParser.parse('talk to master merchant aldric')
+      expect(answer).toContain(
+        "the [item_name]quality rope[/item_name]'s twenty.[/dialogue]",
+      )
+      expect(answer.match(/\[dialogue\]/g)).toHaveLength(1)
+    }
+  })
+})
