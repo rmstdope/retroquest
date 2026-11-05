@@ -192,3 +192,12 @@ describe('Food for the road', () => {
     expect(foodLine(game).done).toBe(true)
   })
 })
+
+describe('Preparing for the road completion', () => {
+  it('speaks in the story, not as a system message', () => {
+    const completion = new PreparingForTheRoadQuest().completion
+
+    expect(completion).not.toMatch(/gathered all the items/i)
+    expect(completion).toContain('The road is next.')
+  })
+})

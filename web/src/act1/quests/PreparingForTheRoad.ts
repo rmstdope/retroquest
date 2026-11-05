@@ -50,9 +50,8 @@ export class PreparingForTheRoadQuest extends Quest {
         'the village elders can teach you -\n' +
         ' - To have learned all the basic magic the village elders can teach you -\n',
       completion:
-        'You have gathered all the items needed for your journey. With your ' +
-        'preparations complete, you are ready to face whatever lies beyond ' +
-        'Willowbrook.',
+        'Everything Mira asked for is in your pack, and the elders have ' +
+        'taught you all they can. The road is next.',
     })
   }
 

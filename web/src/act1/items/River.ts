@@ -33,7 +33,7 @@ export class River extends Item {
           'here recently.'
         return (
           'After a moment, you feel a tug and reel in a plump ' +
-          '[item_name]fish[/item_name]!\nYou add the fish to your inventory.'
+          '[item_name]fish[/item_name]!\nYou tuck it into your pack.'
         )
       }
       return (
