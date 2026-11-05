@@ -8,6 +8,7 @@ import { useStageSpeechStore } from '@/stores/useStageSpeechStore'
 import {
   POPUP_NARRATION_ID,
   chapterUnits,
+  ownWordsClip,
   readsArrival,
   turnUnits,
 } from '@/lantern/narrationUnits'
@@ -154,7 +155,14 @@ export function useLanternPresentation(
           ? sceneBlock(turn, parseTurn(turn.text))
           : -1
       if (turn?.narrate && folder && manifest && !game.showModal)
-        narration.begin(turn.id, units, folder, changing, sceneAt)
+        narration.begin(
+          turn.id,
+          units,
+          folder,
+          changing,
+          sceneAt,
+          ownWordsClip(turn, manifest),
+        )
       if (turn && changing) scene.begin(turn.id, game.roomPicture, tellTurn)
       else tellTurn()
       /** The conversation, the arrival and the narrator of the turn: now, or once its picture is up. */

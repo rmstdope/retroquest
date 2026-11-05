@@ -5,6 +5,7 @@ import { useSceneStore } from './useSceneStore'
 import {
   narrationWords,
   wordAt,
+  type NarrationClip,
   type NarrationManifest,
 } from '@/lantern/narrationManifest'
 import type { NarrationUnit } from '@/lantern/narrationUnits'
@@ -38,6 +39,8 @@ import { readingPauseMs } from '@/lantern/stageSpeech'
  *   waits until it has passed, and `owedReadingMs` tells the news of a
  *   skipped turn how long to wait, so a card never covers lines the player
  *   has not seen.
+ * - Elior's own words of a say command (`begin`'s `own`) are spoken first,
+ *   before the turn's first unit shows; a hurry cuts them like a block.
  * - Nothing here is saved; a turn that is not the active one shows whole.
  */
 
@@ -103,6 +106,10 @@ interface ActiveNarration {
   atScene: boolean
   /** Until when (`Date.now()`) the words a hurry showed unspoken are read: news waits for it. */
   owedUntil: number
+  /** Elior's own words of a say command, still to be spoken before the turn's units, or null. */
+  own: NarrationClip | null
+  /** Whether Elior's own words are being spoken now (before any unit shows). */
+  owning: boolean
 }
 
 /** What is being spoken now in a turn. */
@@ -212,7 +219,8 @@ export const useNarrationStore = defineStore('narration', () => {
   /** What is being spoken in turn `turnId`, or null. */
   function speaking(turnId: number): Speaking | null {
     const now = active.value
-    if (!now || now.turnId !== turnId || !now.speaking) return null
+    if (!now || now.turnId !== turnId || !now.speaking || now.owning)
+      return null
     const lengths = now.units[now.unit].parts.map(
       (part) => narrationWords(part.markup).length,
     )
@@ -295,6 +303,7 @@ export const useNarrationStore = defineStore('narration', () => {
     }
     if (active.value) {
       active.value.speaking = false
+      active.value.owning = false
       active.value.word = -1
     }
   }
@@ -370,6 +379,12 @@ export const useNarrationStore = defineStore('narration', () => {
     const now = active.value
     // A hurry or tap while the picture of the move changes does not start the voice.
     if (!now || scene.holds(now.turnId, now.unit)) return
+    // Elior's own words come first, before anything of the answer shows.
+    if (now.own) {
+      const clip = now.own
+      now.own = null
+      return playClip(now, clip, true)
+    }
     for (;;) {
       if (now.unit >= now.units.length) return finish()
       // The scene changes here: the narrator waits until it is let through.
@@ -415,8 +430,18 @@ export const useNarrationStore = defineStore('narration', () => {
   function play(now: ActiveNarration): void {
     const clip = now.units[now.unit].parts[now.part].clip
     if (!clip) return step()
+    playClip(now, clip, false)
+  }
+
+  /** Play `clip` with its guards: a part of the turn, or Elior's own words (`own`). */
+  function playClip(
+    now: ActiveNarration,
+    clip: NarrationClip,
+    own: boolean,
+  ): void {
     const mine = ++generation
     now.speaking = true
+    now.owning = own
     now.word = -1
     const element = audioFactory(`${NARRATION_PATH}${now.folder}/${clip.file}`)
     element.volume = settings.narrationVolume / 100
@@ -448,6 +473,7 @@ export const useNarrationStore = defineStore('narration', () => {
   function completePart(hurried: boolean): void {
     const now = active.value
     if (!now) return
+    if (now.owning) return completeOwnWords(now, hurried)
     const { unit, part } = now
     // The hurried block's words not yet spoken are shown now: they are owed their reading.
     if (hurried)
@@ -475,12 +501,27 @@ export const useNarrationStore = defineStore('narration', () => {
     )
   }
 
+  /** Elior's own words are over (spoken, failed or hurried): the turn's units follow after a pause. */
+  function completeOwnWords(now: ActiveNarration, hurried: boolean): void {
+    stopVoice()
+    if (!voicedAfter(now, -1, 0) && now.sceneAt < 0) return finish()
+    const mine = generation
+    const gap = hurried ? HURRIED_GAP_MS : GAP_MS
+    now.waited = gap
+    timers.push(
+      setTimeout(() => {
+        if (mine === generation) step()
+      }, gap),
+    )
+  }
+
   /**
    * Narrate a turn: cut in on any turn being narrated, then show its units as
    * they are spoken. A turn with no voiced unit, or narration switched off,
    * stays as it is. `held` keeps it from speaking until `start` (the
    * picture of the move is still changing). `sceneAt` (a talk that moves
-   * Elior) is the unit it stops before until `passSceneChange`.
+   * Elior) is the unit it stops before until `passSceneChange`. `own` is
+   * the recording of Elior's own words of a say command, spoken first.
    */
   function begin(
     turnId: number,
@@ -488,9 +529,11 @@ export const useNarrationStore = defineStore('narration', () => {
     folder: string,
     held = false,
     sceneAt = -1,
+    own: NarrationClip | null = null,
   ): void {
     if (active.value) finish(true)
-    const voiced = units.some((unit) => unit.parts.some((part) => part.clip))
+    const voiced =
+      !!own || units.some((unit) => unit.parts.some((part) => part.clip))
     if (!settings.narrationOn || !voiced) return
     active.value = {
       turnId,
@@ -506,6 +549,8 @@ export const useNarrationStore = defineStore('narration', () => {
       sceneAt,
       atScene: false,
       owedUntil: 0,
+      own,
+      owning: false,
     }
     // The chapter page and pop-ups (negative ids) are not story turns.
     if (turnId >= 1) narratedTurns.value++
@@ -582,7 +627,8 @@ export const useNarrationStore = defineStore('narration', () => {
     }
     const clip = parts[part]?.clip
     // The voice already on that part only moves; anything else starts afresh.
-    const here = now.speaking && now.unit === unit && now.part === part
+    const here =
+      now.speaking && !now.owning && now.unit === unit && now.part === part
     if (!here) {
       stopVoice()
       now.unit = Math.max(now.unit, unit)
