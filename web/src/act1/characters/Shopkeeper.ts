@@ -120,8 +120,7 @@ export class Shopkeeper extends Character {
 
   /**
    * Answers to his name, Hemlock, and still to shopkeeper, "Old Hemlock" and
-   * "Old Man Hemlock": his description, the notice and his own introduction
-   * all name him so.
+   * "Old Man Hemlock": his description and the notice name him so.
    */
   override answersTo(name: string): boolean {
     return (
@@ -146,8 +145,8 @@ export class Shopkeeper extends Character {
   }
 
   /**
-   * Why the store is shut: Hemlock introduces himself the first time, then
-   * only asks after Patches.
+   * Why the store is shut: Hemlock frets about Patches the first time, then
+   * only asks after her.
    */
   private shutDialogue(gameState: GameState): string {
     if (!gameState.getStoryFlag(FLAG_MET_HEMLOCK)) {
@@ -156,11 +155,11 @@ export class Shopkeeper extends Character {
         `${this.nameInSentence({ atStart: true })} looks up from the window, ` +
         'his face creased with worry. ' +
         speech(
-          `Oh! Forgive me, lad. ${characterName('Hemlock')}'s the name, ` +
-            'and this is my store. Or it would be, if I could keep my mind ' +
-            `on it. My cat, ${characterName('Patches')}, has been gone for days. ` +
-            `Can't think about business with ${characterName('Patches')} ` +
-            "out there in the cold, so the store stays shut until she's home.",
+          'Oh! Forgive me, lad, I was watching for her. ' +
+            `${characterName('Patches')}. Gone for days now, and you've seen ` +
+            'her on this counter often enough to know she never goes far. ' +
+            "Can't think about business with her out there in the cold, so " +
+            "the store stays shut until she's home.",
         ) +
         '\n' +
         speech(

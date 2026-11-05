@@ -69,11 +69,13 @@ export class Grandmother extends Character {
         speech(
           "The village is on edge, you'll have noticed. Folk keep their " +
             'voices down in the square these days, and nobody will say why.\n' +
-            `If you're going out, call on ${characterName('Mira')}, north of ` +
-            'the square. She has a way with herbs, and with... other things. ' +
-            `Old Man ${characterName('Hemlock')} at the ` +
-            '[room_name]General Store[/room_name] hears everything, and ' +
-            `${characterName('Borin')} at the forge keeps the tools sharp.\n` +
+            `If you're going out, look in on ${characterName('Mira')} at her ` +
+            'hut; she was asking after you. You know she has a way with ' +
+            'herbs, and with... other things. ' +
+            `${characterName('Hemlock')} will have heard whatever there is ` +
+            'to hear at the [room_name]General Store[/room_name]; he always ' +
+            'does. And show your face at the forge, or ' +
+            `${characterName('Borin')} will think you've forgotten him.\n` +
             `You've a good heart, ${characterName('Elior')}. ` +
             "Don't let anyone talk you out of it.",
         )

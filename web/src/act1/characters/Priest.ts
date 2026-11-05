@@ -83,10 +83,9 @@ export class Priest extends Character {
       '\nHe sighs. ' +
       speech(
         "And now I can't even light a candle in their chapel. I'm out of " +
-          `matches. ${characterName('Hemlock')} at the ` +
-          '[room_name]General Store[/room_name] keeps a box ' +
-          'for me; he has never once let me pay. ' +
-          "If you're passing that way...",
+          `matches. ${characterName('Hemlock')} keeps a box for me under ` +
+          'his counter; he has never once let me pay. ' +
+          "If you're passing the [room_name]General Store[/room_name]...",
       )
     )
   }

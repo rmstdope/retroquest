@@ -180,9 +180,9 @@
     "text": "She does not sit down herself."
   },
   {
-    "key": "0362fb29e2eec2",
+    "key": "17d4ca14565432",
     "speaker": "grandmother",
-    "text": "The village is on edge, you'll have noticed. Folk keep their voices down in the square these days, and nobody will say why. If you're going out, call on Mira, north of the square. She has a way with herbs, and with... other things. Old Man Hemlock at the General Store hears everything, and Borin at the forge keeps the tools sharp. You've a good heart, Elior. Don't let anyone talk you out of it."
+    "text": "The village is on edge, you'll have noticed. Folk keep their voices down in the square these days, and nobody will say why. If you're going out, look in on Mira at her hut; she was asking after you. You know she has a way with herbs, and with... other things. Hemlock will have heard whatever there is to hear at the General Store; he always does. And show your face at the forge, or Borin will think you've forgotten him. You've a good heart, Elior. Don't let anyone talk you out of it."
   },
   {
     "key": "177a6e95fe57b9",
@@ -720,9 +720,9 @@
     "text": "Hemlock looks up from the window, his face creased with worry."
   },
   {
-    "key": "1cd2d2616c1ea9",
+    "key": "1ae2ce53054694",
     "speaker": "hemlock",
-    "text": "Oh! Forgive me, lad. Hemlock's the name, and this is my store. Or it would be, if I could keep my mind on it. My cat, Patches, has been gone for days. Can't think about business with Patches out there in the cold, so the store stays shut until she's home."
+    "text": "Oh! Forgive me, lad, I was watching for her. Patches. Gone for days now, and you've seen her on this counter often enough to know she never goes far. Can't think about business with her out there in the cold, so the store stays shut until she's home."
   },
   {
     "key": "0b0e05805a4399",
@@ -980,9 +980,9 @@
     "text": "He doesn't stop hammering."
   },
   {
-    "key": "0d96157167ceda",
+    "key": "011b31566ffa85",
     "speaker": "borin",
-    "text": "Borin. I make what this village breaks, and I mend what it won't throw away. Got anything with an edge gone soft? Bring it here."
+    "text": "Not seen you down here since the harvest. Still the same work: I make what this village breaks, and I mend what it won't throw away. Got anything with an edge gone soft? Bring it here."
   },
   {
     "key": "1ae731a85479cc",
@@ -2280,9 +2280,9 @@
     "text": "He sighs."
   },
   {
-    "key": "09a00198cd57cb",
+    "key": "110d6cfcca75e0",
     "speaker": "priest",
-    "text": "And now I can't even light a candle in their chapel. I'm out of matches. Hemlock at the General Store keeps a box for me; he has never once let me pay. If you're passing that way..."
+    "text": "And now I can't even light a candle in their chapel. I'm out of matches. Hemlock keeps a box for me under his counter; he has never once let me pay. If you're passing the General Store..."
   },
   {
     "key": "15767444734418",
