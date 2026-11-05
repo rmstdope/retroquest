@@ -165,6 +165,84 @@ function handAssembledLabels(file: string): string[] {
   return found
 }
 
+/** Whether `node` is a call of `speech(...)` or `dialogue(...)`: a quote. */
+function isQuoteCall(node: ts.Node): boolean {
+  return (
+    ts.isCallExpression(node) &&
+    ts.isIdentifier(node.expression) &&
+    (node.expression.text === 'speech' || node.expression.text === 'dialogue')
+  )
+}
+
+/** The text a string or template operand ends with, or `undefined` for any other node. */
+function trailingText(node: ts.Node): string | undefined {
+  if (ts.isStringLiteralLike(node)) return node.text
+  if (ts.isTemplateExpression(node)) {
+    return node.templateSpans[node.templateSpans.length - 1]?.literal.text
+  }
+  return undefined
+}
+
+/** Whether `text` ends in a colon, ignoring trailing whitespace. */
+function endsInColon(text: string | undefined): boolean {
+  return text !== undefined && text.trimEnd().endsWith(':')
+}
+
+/**
+ * The `file:line` of every narration that only introduces a quote: a text
+ * ending in a colon directly before a `speech(...)` or `dialogue(...)` call in
+ * a `+` chain, whitespace-only pieces between them skipped, or directly
+ * before such a call in a template ("One of them adds, more quietly:"). The
+ * story view shows such a line as a card of its own, standing apart from the
+ * words it leads into.
+ */
+function colonLeadIns(file: string): string[] {
+  const source = ts.createSourceFile(
+    file,
+    readFileSync(file, 'utf8'),
+    ts.ScriptTarget.Latest,
+    true,
+  )
+  const found: string[] = []
+  const report = (node: ts.Node): void => {
+    const line = source.getLineAndCharacterOfPosition(node.getStart()).line
+    found.push(`${file}:${line + 1}`)
+  }
+  const visit = (node: ts.Node): void => {
+    if (ts.isTemplateExpression(node)) {
+      const texts = [
+        node.head.text,
+        ...node.templateSpans.map((span) => span.literal.text),
+      ]
+      node.templateSpans.forEach((span, index) => {
+        if (endsInColon(texts[index]) && isQuoteCall(span.expression))
+          report(span)
+      })
+    } else if (ts.isBinaryExpression(node)) {
+      // Whitespace-only pieces ('\n\n') render nothing between the two.
+      const parts = operands(node).filter(
+        (part) => !(ts.isStringLiteralLike(part) && part.text.trim() === ''),
+      )
+      if (parts.length > 1) {
+        parts.forEach((part, index) => {
+          const next = parts[index + 1]
+          if (
+            endsInColon(trailingText(part)) &&
+            next !== undefined &&
+            isQuoteCall(next)
+          )
+            report(part)
+        })
+        parts.forEach(visit)
+        return
+      }
+    }
+    ts.forEachChild(node, visit)
+  }
+  visit(source)
+  return found
+}
+
 describe('Act II markup', () => {
   it('is written through the engine helpers, never as hand-spelled tags', () => {
     const offenders = contentFiles(__dirname).filter((file) =>
@@ -180,6 +258,11 @@ describe('Act II markup', () => {
 
   it('never assembles a speaker label by hand', () => {
     const offenders = contentFiles(__dirname).flatMap(handAssembledLabels)
+    expect(offenders).toEqual([])
+  })
+
+  it('leaves no narration that only introduces a quote (rq-lb90)', () => {
+    const offenders = contentFiles(__dirname).flatMap(colonLeadIns)
     expect(offenders).toEqual([])
   })
 })

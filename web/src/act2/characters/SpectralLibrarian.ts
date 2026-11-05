@@ -145,7 +145,7 @@ export class SpectralLibrarian extends Character {
         'I am a keeper, not a teller. What you came for is in that ' +
           'chronicle, under the mark on its cover. Read it.',
       ) +
-      ' They gesture to a crystal resting on the shelf: ' +
+      ' They gesture to a crystal resting on the shelf. ' +
       speech(
         `And take this [item_name]${crystalFocus.name.toLowerCase()}[/item_name]. ` +
           "It was made for a healer's hands, and it has waited long enough.",

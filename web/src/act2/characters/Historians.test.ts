@@ -139,7 +139,7 @@ describe('The Historians and the week the king went', () => {
   const WEEK_LINE =
     'You saw the last entry in our register, then. The week the king went. We have ' +
     'told ourselves it means nothing, and none of us believes it.'
-  const LEAD_IN = 'One of them adds, more quietly:'
+  const LEAD_IN = 'One of them lowers their voice.'
 
   it('adds the line as a quiet aside after the archive, every talk', () => {
     const game = newGame()

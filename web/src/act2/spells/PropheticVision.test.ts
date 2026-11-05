@@ -273,13 +273,13 @@ describe('Prophetic Vision first cast', () => {
           'distance. Above it all, small and far, a crowned man hangs in a ' +
           'prison of crystal, and grey light runs out of him like water.' +
           '\n\n' +
-          'Then the voice from your dream, the one that called your name on ' +
-          'the night of the storm:\n\n' +
+          'Then you hear the voice from your dream, the one that called your ' +
+          'name on the night of the storm.\n\n' +
           dialogue(
             'voice',
             'Elior… how you have grown. Do not be afraid of me.',
           ) +
-          '\n\nAnd then, fainter, as if carried off by the wind:\n\n' +
+          '\n\nThen it comes again, fainter, as if carried off by the wind.\n\n' +
           dialogue('voice', '…close what I opened…') +
           '\n\nIt is closer than it was. You do ' +
           'not know whose it is, only that you have heard it before, long ' +
