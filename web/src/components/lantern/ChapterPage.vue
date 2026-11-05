@@ -22,7 +22,9 @@ import { useSettingsStore } from '@/stores/useSettingsStore'
  * The kicker, numbers and button are always there (the button in a footer
  * pinned to the page's bottom edge, so it never scrolls out of view). While
  * the act's recordings are still loading the title and text are held back
- * (their room kept) so unspoken text never flashes.
+ * (their room kept) so unspoken text never flashes. A block not yet spoken
+ * keeps its room too, as a hidden placeholder, so the page does not grow and
+ * the button does not move while it is read.
  */
 const props = defineProps<{ chapter: Chapter; titleId: string }>()
 const emit = defineEmits<{ continue: [] }>()
@@ -192,6 +194,14 @@ defineExpose({ focus })
             <span v-html="html(block.markup, index + 1)"></span>
             <!-- eslint-enable vue/no-v-html -->
           </p>
+          <p v-else class="lq-chapter-unshown" aria-hidden="true">
+            <span v-if="block.speaker" class="lq-chapter-speaker">{{
+              block.speaker
+            }}</span>
+            <!-- eslint-disable vue/no-v-html -->
+            <span v-html="html(block.markup, index + 1)"></span>
+            <!-- eslint-enable vue/no-v-html -->
+          </p>
         </template>
       </div>
 
@@ -274,8 +284,13 @@ defineExpose({ focus })
   line-height: 1.7;
   color: var(--lq-prose);
 }
-.lq-chapter-block {
+.lq-chapter-block,
+.lq-chapter-unshown {
   margin: 0 0 0.8em;
+}
+/* A block not yet spoken keeps its room, so nothing below it moves. */
+.lq-chapter-unshown {
+  visibility: hidden;
 }
 .lq-chapter-speaker {
   display: block;
@@ -302,8 +317,7 @@ defineExpose({ focus })
   border-radius: 3px;
   box-shadow: 0 0 0 2px var(--lq-accent-soft);
 }
-.lq-chapter-body:not(.lq-chapter-closing)
-  > .lq-chapter-block:first-of-type::first-letter {
+.lq-chapter-body:not(.lq-chapter-closing) > p:first-of-type::first-letter {
   float: left;
   padding: 6px 10px 0 0;
   font-family: var(--lq-font-display);
@@ -318,7 +332,8 @@ defineExpose({ focus })
 /* A centred line hugs its text, so the speaking rule sits beside the words;
    the side padding is always there, so nothing shifts when the rule shows.
    `hugText` narrows the block further to its widest wrapped line. */
-.lq-chapter-closing .lq-chapter-block {
+.lq-chapter-closing .lq-chapter-block,
+.lq-chapter-closing .lq-chapter-unshown {
   width: fit-content;
   max-width: 100%;
   margin-inline: auto;
