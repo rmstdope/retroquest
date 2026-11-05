@@ -63,7 +63,15 @@ describe('Master Merchant Aldric dialogue markup', () => {
 
     const answer = game.commandParser.parse('talk to master merchant aldric')
 
-    expect(answer).toContain("Here's what I have:")
+    expect(answer).not.toContain("Here's what I have:")
+    expect(answer).toContain(
+      "A [item_name]forest survival kit[/item_name]'s fifty " +
+        '[item_name]gold coins[/item_name], the ' +
+        "[item_name]enhanced lantern[/item_name]'s forty and the " +
+        "[item_name]quality rope[/item_name]'s twenty.[/dialogue]",
+    )
+    expect(answer).not.toContain('- ')
+    expect(answer.match(/\[dialogue\]/g)).toHaveLength(1)
     expectAldricSpeaks(answer)
   })
 
@@ -160,9 +168,9 @@ describe('Master Merchant Aldric and the blight', () => {
     expect(talks[3]).toContain(ALDRIC_BLIGHT)
     expect(talks[4]).toContain('Welcome to Aldric')
     for (const talk of talks.slice(0, 3)) expect(talk).not.toContain('Bread')
-    expect(talks[3]).toContain("Here's what I have:")
+    expect(talks[3]).toContain('[item_name]forest survival kit[/item_name]')
     expect(talks[3].indexOf(ALDRIC_BLIGHT)).toBeLessThan(
-      talks[3].indexOf("Here's what I have:"),
+      talks[3].indexOf('[item_name]forest survival kit[/item_name]'),
     )
     expectAldricSpeaks(talks[3])
   })
@@ -222,5 +230,18 @@ describe('Master Merchant Aldric restored from a save made before the rewrite', 
     )
     const open = loaded.commandParser.parse('talk to master merchant aldric')
     expect(open).not.toContain('An old idle line.')
+  })
+})
+
+describe('Master Merchant Aldric price sentence', () => {
+  it('follows each of his four opening lines in the same bubble', () => {
+    const game = createGameWithOpenShop()
+    for (let i = 0; i < 4; i++) {
+      const answer = game.commandParser.parse('talk to master merchant aldric')
+      expect(answer).toContain(
+        "the [item_name]quality rope[/item_name]'s twenty.[/dialogue]",
+      )
+      expect(answer.match(/\[dialogue\]/g)).toHaveLength(1)
+    }
   })
 })
