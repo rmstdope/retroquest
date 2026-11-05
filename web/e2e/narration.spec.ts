@@ -335,6 +335,46 @@ test('reads the opening chapter page, and Continue mid-sentence moves on', async
   await expect(page.getByRole('region', { name: 'Actions' })).toBeVisible()
 })
 
+for (const viewport of [
+  { name: 'desktop', width: 1280, height: 720 },
+  { name: 'phone', width: 390, height: 844 },
+]) {
+  test(`Begin keeps its place while the opening page's paragraphs appear, on ${viewport.name} (rq-m98d)`, async ({
+    page,
+  }): Promise<void> => {
+    await page.setViewportSize(viewport)
+    await slowNarrationClips(page)
+    await page.goto('/')
+    await page.getByRole('button', { name: 'Start', exact: true }).click()
+
+    // While the title is read no paragraph is shown yet.
+    const button = page.locator('.lq-chapter-button')
+    await expect(page.locator('.lq-chapter-title.lq-speaking')).toHaveCount(1)
+    await expect(page.locator('.lq-chapter-block')).toHaveCount(0)
+    const before = await button.boundingBox()
+
+    // Each paragraph appears as its voice starts; Begin does not move.
+    const blocks = page.locator('.lq-chapter-block')
+    // Every paragraph's room is there from the start; the reading is over once all are shown.
+    const unshown = page.locator('.lq-chapter-unshown')
+    let seen = 0
+    await expect
+      .poll(
+        async () => {
+          const count = await blocks.count()
+          if (count > seen) {
+            seen = count
+            expect(await button.boundingBox()).toEqual(before)
+          }
+          return count > 0 && (await unshown.count()) === 0
+        },
+        { intervals: [100], timeout: 25_000 },
+      )
+      .toBe(true)
+    expect(seen).toBeGreaterThan(1)
+  })
+}
+
 test('in the one column the held story follows Elior’s journal lines as they are read (rq-s738)', async ({
   page,
 }): Promise<void> => {

@@ -196,6 +196,30 @@ describe('ChapterPage', () => {
       expect(w.find('.lq-w').exists()).toBe(true)
     })
 
+    it('keeps the room of a paragraph not yet spoken, hidden, so the page does not grow (rq-m98d)', async () => {
+      const w = start()
+      await nextTick()
+      const unshown = w.findAll('.lq-chapter-unshown')
+      expect(unshown.map((b) => b.text())).toEqual([
+        'The wind rises.',
+        'Help.',
+        'A door opens.',
+      ])
+      for (const b of unshown) {
+        expect(b.attributes('aria-hidden')).toBe('true')
+        expect(b.attributes('data-unit')).toBeUndefined()
+      }
+      useNarrationStore().skipAll()
+      await nextTick()
+      expect(w.findAll('.lq-chapter-unshown')).toHaveLength(0)
+      expect(
+        w.findAll('.lq-chapter-block').map((b) => b.attributes('data-unit')),
+      ).toEqual(['1', '2', '3'])
+      expect(
+        w.get('.lq-chapter-block').attributes('aria-hidden'),
+      ).toBeUndefined()
+    })
+
     it('reads a completion page’s heading first, lighting only the title', async () => {
       const closing: Chapter = { ...chapter, kind: 'complete' }
       const w = mount(ChapterPage, {
