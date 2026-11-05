@@ -2,6 +2,7 @@ import { Room } from '@/engine'
 import { Egg } from '../items/Egg'
 import { Feather } from '../items/Feather'
 import { Chicken } from '../items/Chicken'
+import { Scenery } from '../items/Scenery'
 
 /** Chicken Coop room: light agricultural ambience with small resource items. */
 export class ChickenCoop extends Room {
@@ -15,7 +16,12 @@ export class ChickenCoop extends Room {
         'squawk. Sunbeams slip through the slats, casting striped shadows on the ' +
         'dirt floor. High on a rafter, out of reach, something glints where no hen ' +
         'could have put it.',
-      items: [new Chicken(), new Egg(), new Feather()],
+      items: [
+        new Chicken(),
+        new Egg(),
+        new Feather(),
+        ...Scenery.forRoom('ChickenCoop'),
+      ],
       characters: [],
       exits: { north: 'VegetableField' },
     })

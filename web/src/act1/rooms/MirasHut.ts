@@ -2,6 +2,7 @@ import { type NameOptions, characterName, Room, type GameState } from '@/engine'
 import { HealingHerb } from '../items/HealingHerb'
 import { AncientAmulet } from '../items/AncientAmulet'
 import { Mira } from '../characters/Mira'
+import { Scenery } from '../items/Scenery'
 
 const GLOW =
   ' On its stand, the [item_name]ancient amulet[/item_name] glows brighter as you ' +
@@ -22,7 +23,11 @@ export class MirasHut extends Room {
         'bundles from the rafters. Shelves of bottles line the walls, every ' +
         `one labelled. ${characterName('Mira')} moves among them without looking, ` +
         'the way you move through your own kitchen.',
-      items: [new HealingHerb(), new AncientAmulet()],
+      items: [
+        new HealingHerb(),
+        new AncientAmulet(),
+        ...Scenery.forRoom('MirasHut'),
+      ],
       characters: [new Mira()],
       exits: { south: 'VillageSquare' },
     })

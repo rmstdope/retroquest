@@ -1,3 +1,4 @@
+import { Scenery } from '../items/Scenery'
 import { characterName, Room, type GameState } from '@/engine'
 import { Rope } from '../items/Rope'
 import { Apple } from '../items/Apple'
@@ -38,7 +39,14 @@ export class GeneralStore extends Room {
     super({
       name: 'General Store',
       description: SHUT_TEXT,
-      items: [new Rope(), new Apple(), new Matches(), new Sword(), new Armor()],
+      items: [
+        new Rope(),
+        new Apple(),
+        new Matches(),
+        new Sword(),
+        new Armor(),
+        ...Scenery.forRoom('GeneralStore'),
+      ],
       characters: [new Shopkeeper()],
       exits: { west: 'VillageSquare', south: 'BlacksmithsForge' },
     })

@@ -16,6 +16,8 @@ import { HiddenGlade } from './rooms/HiddenGlade'
 import { VillageChapel } from './rooms/VillageChapel'
 import { RoadToGreendale } from './rooms/RoadToGreendale'
 import { Hearth } from './items/Hearth'
+import { Scenery } from './items/Scenery'
+import { Vines } from './items/Vines'
 import { HintOfMagicQuest } from './quests/HintOfMagic'
 import { CuriosityKilledTheCatQuest } from './quests/CuriosityKilledTheCat'
 import { FishingExpeditionQuest } from './quests/FishingExpedition'
@@ -112,6 +114,17 @@ export class Act1 extends Act {
     const rooms = gameState.allRooms
     if (!rooms.EliorsCottage.getItemByName('hearth')) {
       rooms.EliorsCottage.addItem(new Hearth())
+    }
+    for (const [roomKey, room] of Object.entries(rooms)) {
+      Scenery.ensure(room, roomKey)
+    }
+    const shed = rooms.AbandonedShed
+    if (shed instanceof AbandonedShed && !shed.locked) {
+      Scenery.ensure(shed, 'AbandonedShed', 'open')
+    }
+    const path = rooms.ForestPath
+    if (!path.items.some((item) => item instanceof Vines)) {
+      Scenery.ensure(path, 'ForestPath', 'cut')
     }
     for (const room of Object.values(gameState.allRooms)) {
       for (const character of room.characters) {

@@ -1,3 +1,4 @@
+import { Scenery } from '../items/Scenery'
 import { Room } from '@/engine'
 import type { GameState } from '@/engine'
 import { WitheredCarrot } from '../items/WitheredCarrot'
@@ -44,7 +45,12 @@ export class VegetableField extends Room {
     super({
       name: 'Vegetable Field',
       description: WITHERED_DESCRIPTION,
-      items: [new WitheredCarrot(), new RustyHoe(), new DullKnife()],
+      items: [
+        new WitheredCarrot(),
+        new RustyHoe(),
+        new DullKnife(),
+        ...Scenery.forRoom('VegetableField'),
+      ],
       characters: [],
       exits: {
         north: 'EliorsCottage',

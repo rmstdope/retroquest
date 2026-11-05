@@ -5,6 +5,7 @@ import { Lantern } from '../items/Lantern'
 import { Grandmother } from '../characters/Grandmother'
 import { FadedPhotograph } from '../items/FadedPhotograph'
 import { FLAG_FOUND_PHOTO } from '../Act1StoryFlags'
+import { Scenery } from '../items/Scenery'
 
 /**
  * Elior's Cottage room: tutorial sanctuary with gated exits and first search reward.
@@ -24,7 +25,7 @@ export class EliorsCottage extends Room {
         'table sits in the center, and a gentle fire crackles in the ' +
         `hearth. ${characterName('Grandmother')} stands by it, humming, ` +
         'and keeps an eye on the bread.',
-      items: [new Hearth(), new Lantern()],
+      items: [new Hearth(), new Lantern(), ...Scenery.forRoom('EliorsCottage')],
       characters: [new Grandmother()],
       exits: {},
     })

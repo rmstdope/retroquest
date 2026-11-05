@@ -1,3 +1,4 @@
+import { Scenery } from '../items/Scenery'
 import { characterName, Room, type GameState } from '@/engine'
 import { SmoothStone } from '../items/SmoothStone'
 import { River } from '../items/River'
@@ -25,7 +26,7 @@ export class Riverbank extends Room {
         'Insects hum over the water. ' +
         `A weathered ${characterName('fisherman')} sits on an upturned crate ` +
         'at the bend, watching the water.',
-      items: [new SmoothStone(), new River()],
+      items: [new SmoothStone(), new River(), ...Scenery.forRoom('Riverbank')],
       characters: [new Fisherman()],
       exits: { west: 'OldMill', south: 'ForestPath' },
     })

@@ -1,5 +1,6 @@
 import { Room, type GameState } from '@/engine'
 import { Well } from '../items/Well'
+import { Scenery } from '../items/Scenery'
 
 const DESCRIPTION_START =
   'An old stone well stands between the field and the forge, its stones ' +
@@ -24,7 +25,7 @@ export class VillageWell extends Room {
     super({
       name: 'Village Well',
       description: DESCRIPTION_START + MURKY_WATER + DESCRIPTION_END,
-      items: [new Well()],
+      items: [new Well(), ...Scenery.forRoom('VillageWell')],
       characters: [],
       exits: {
         west: 'VegetableField',

@@ -1,3 +1,4 @@
+import { Scenery } from '../items/Scenery'
 import { Room, type GameState } from '@/engine'
 import { SackOfFlour } from '../items/SackOfFlour'
 import { Mechanism } from '../items/Mechanism'
@@ -48,7 +49,11 @@ export class OldMill extends Room {
     super({
       name: 'Old Mill',
       description: DESCRIPTION_START + MECHANISM_WORKING,
-      items: [new SackOfFlour(), new Mechanism()],
+      items: [
+        new SackOfFlour(),
+        new Mechanism(),
+        ...Scenery.forRoom('OldMill'),
+      ],
       characters: [],
       exits: { north: 'AbandonedShed', east: 'Riverbank' },
     })

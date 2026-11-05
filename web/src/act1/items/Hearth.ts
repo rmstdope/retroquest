@@ -11,4 +11,9 @@ export class Hearth extends Item {
       canBeCarried: false,
     })
   }
+
+  /** The hearth also answers to "fire", as the room's description says. */
+  override answersTo(name: string): boolean {
+    return super.answersTo(name) || name.toLowerCase() === 'fire'
+  }
 }
