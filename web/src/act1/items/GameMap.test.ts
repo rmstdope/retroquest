@@ -119,6 +119,9 @@ describe('GameMap farewell on the Road to Greendale', () => {
     expect(findMarkupProblems(answer)).toEqual([])
     expectDialogueSpeaker(answer, 'grandmother')
     expect(answer).toContain("Wear your mother's cloak. She'd want you warm.")
+    expect(answer).toContain(
+      'the chapel bell rings once, with no hand on the rope.',
+    )
     const bell = answer.indexOf('chapel bell rings once')
     expect(bell).toBeGreaterThan(answer.indexOf('Wear your mother'))
     expect(answer.indexOf('hidden path')).toBeGreaterThan(bell)
