@@ -648,6 +648,9 @@ test.describe('Lantern UI (the default)', () => {
     await expect(page.locator('.lq-line-left .lq-line-name')).toHaveText(
       'Elior',
     )
+    // Her answer is read before the next command: one that cut it off would
+    // leave it on the picture (rq-dvj2).
+    await expect(lines.last()).toContainText('I do like to hear you talk')
 
     // The one Hide clears both sides and leaves the Show tab, with focus on it.
     await page.getByRole('button', { name: '▾ Hide' }).click()
