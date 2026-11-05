@@ -3,6 +3,7 @@ import type { GameState } from '@/engine'
 import { Vines } from '../items/Vines'
 import { Bush } from '../items/Bush'
 import { Snare } from '../items/Snare'
+import { Scenery } from '../items/Scenery'
 
 const BLOCKED_DESCRIPTION =
   'A winding path snakes into the heart of the woods, dappled sunlight ' +
@@ -39,7 +40,7 @@ export class ForestPath extends Room {
     super({
       name: 'Forest Path',
       description: BLOCKED_DESCRIPTION,
-      items: [new Vines(), new Bush()],
+      items: [new Vines(), new Bush(), ...Scenery.forRoom('ForestPath')],
       characters: [],
       exits: { north: 'Riverbank', south: 'HiddenGlade' },
     })

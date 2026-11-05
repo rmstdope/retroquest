@@ -3,6 +3,7 @@ import type { GameState } from '@/engine'
 import { WitheredCarrot } from '../items/WitheredCarrot'
 import { RustyHoe } from '../items/RustyHoe'
 import { DullKnife } from '../items/DullKnife'
+import { Scenery } from '../items/Scenery'
 import {
   FLAG_INVESTIGATED_WITHERED_CROPS,
   FLAG_VEGETABLE_FIELD_WATERED,
@@ -44,7 +45,12 @@ export class VegetableField extends Room {
     super({
       name: 'Vegetable Field',
       description: WITHERED_DESCRIPTION,
-      items: [new WitheredCarrot(), new RustyHoe(), new DullKnife()],
+      items: [
+        new WitheredCarrot(),
+        new RustyHoe(),
+        new DullKnife(),
+        ...Scenery.forRoom('VegetableField'),
+      ],
       characters: [],
       exits: {
         north: 'EliorsCottage',

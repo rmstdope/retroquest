@@ -16,6 +16,8 @@ import { HiddenGlade } from './rooms/HiddenGlade'
 import { VillageChapel } from './rooms/VillageChapel'
 import { RoadToGreendale } from './rooms/RoadToGreendale'
 import { Hearth } from './items/Hearth'
+import { Scenery } from './items/Scenery'
+import { Vines } from './items/Vines'
 import { HintOfMagicQuest } from './quests/HintOfMagic'
 import { CuriosityKilledTheCatQuest } from './quests/CuriosityKilledTheCat'
 import { FishingExpeditionQuest } from './quests/FishingExpedition'
@@ -105,13 +107,26 @@ export class Act1 extends Act {
   /**
    * Bring older saves up to date: drop the matches the store's wares still
    * sell, name the villager Tilda, the smith Borin and the shopkeeper
-   * Hemlock, and give the cottage the hearth it lacked. Rooms and items whose saved wording changed refresh it
+   * Hemlock, and give the cottage the hearth it lacked, and give every room the
+   * examinable things it names (the shed's once its door is open, the forest
+   * alcove's once the vines are cut). Rooms and items whose saved wording changed refresh it
    * themselves (`refreshSavedText`).
    */
   override afterLoad(gameState: GameState): void {
     const rooms = gameState.allRooms
     if (!rooms.EliorsCottage.getItemByName('hearth')) {
       rooms.EliorsCottage.addItem(new Hearth())
+    }
+    for (const [roomKey, room] of Object.entries(rooms)) {
+      Scenery.ensure(room, roomKey)
+    }
+    const shed = rooms.AbandonedShed
+    if (shed instanceof AbandonedShed && !shed.locked) {
+      Scenery.ensure(shed, 'AbandonedShed', 'open')
+    }
+    const path = rooms.ForestPath
+    if (!path.items.some((item) => item instanceof Vines)) {
+      Scenery.ensure(path, 'ForestPath', 'cut')
     }
     for (const room of Object.values(gameState.allRooms)) {
       for (const character of room.characters) {

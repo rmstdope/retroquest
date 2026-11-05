@@ -4,6 +4,7 @@ import { RareFlower } from '../items/RareFlower'
 import { ShinyPebble } from '../items/ShinyPebble'
 import { Deer } from '../characters/Deer'
 import { GrowSpell } from '../spells/GrowSpell'
+import { Scenery } from '../items/Scenery'
 
 /**
  * Hidden Glade room: enchanted clearing with conditional fauna and spell gain.
@@ -25,7 +26,7 @@ export class HiddenGlade extends Room {
     super({
       name: 'Hidden Glade',
       description: HiddenGlade.DIM_DESCRIPTION,
-      items: [new ShinyPebble()],
+      items: [new ShinyPebble(), ...Scenery.forRoom('HiddenGlade')],
       characters: [],
       exits: { north: 'ForestPath', south: 'VillageChapel' },
     })

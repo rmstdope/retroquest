@@ -21,6 +21,8 @@ const OPTIONAL_LINES: Record<number, { speaker: string; opening: string }[]> = {
   /** Act I: the authored replies to what the golden path does not try (take, use, cast, give). */
   1: [
     { speaker: 'narrator', opening: "You'd rather light the lantern" },
+    { speaker: 'narrator', opening: 'Young leaves, green and cool' },
+    { speaker: 'narrator', opening: 'The earth is dark and gives' },
     { speaker: 'narrator', opening: 'The bucket is no use with that.' },
     { speaker: 'narrator', opening: 'You could force the magnet onto the rod' },
     {

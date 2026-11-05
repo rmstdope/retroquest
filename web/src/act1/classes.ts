@@ -21,6 +21,7 @@ import { Fish } from './items/Fish'
 import { FishingRod } from './items/FishingRod'
 import { FreshBread } from './items/FreshBread'
 import { HealingHerb } from './items/HealingHerb'
+import { Scenery } from './items/Scenery'
 import { Hearth } from './items/Hearth'
 import { Horseshoe } from './items/Horseshoe'
 import { Key } from './items/Key'
@@ -126,6 +127,7 @@ export const ACT1_CLASSES = {
   FreshBread,
   HealingHerb,
   Hearth,
+  Scenery,
   Horseshoe,
   Key,
   Lantern,

@@ -1,6 +1,7 @@
 import { Item, type GameState } from '@/engine'
 import { Chicken } from './Chicken'
 import { Key } from './Key'
+import { FLAG_COOP_KEY_FELL } from '../Act1StoryFlags'
 
 /** Edible lure item used to coax chickens into dropping a hidden key. */
 export class Bread extends Item {
@@ -24,6 +25,7 @@ export class Bread extends Item {
     if (other instanceof Chicken) {
       gameState.removeItemFromInventory(this.name)
       gameState.currentRoom.addItem(new Key())
+      gameState.setStoryFlag(FLAG_COOP_KEY_FELL, true)
       return (
         'The [item_name]chickens[/item_name] peck at the ' +
         '[item_name]bread[/item_name] excitedly, and in the flapping ' +

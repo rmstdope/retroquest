@@ -8,6 +8,7 @@ import { ShedDoor } from '../items/ShedDoor'
 import { Lantern } from '../items/Lantern'
 import { Patches } from '../characters/Patches'
 import { FLAG_PATCHES_FOUND } from '../Act1StoryFlags'
+import { Scenery } from '../items/Scenery'
 
 /** The shed as Elior sees it from outside, while its door is locked. */
 const LOCKED_DESCRIPTION =
@@ -41,7 +42,7 @@ export class AbandonedShed extends Room {
         'about a long workbench, and a thick layer of dust covers everything. ' +
         'Little light gets past the grimy boards, and the air smells of old ' +
         'earth and lamp oil.',
-      items: [new ShedDoor()],
+      items: [new ShedDoor(), ...Scenery.forRoom('AbandonedShed')],
       characters: [],
       exits: { north: 'VillageWell', south: 'OldMill' },
     })
@@ -69,6 +70,9 @@ export class AbandonedShed extends Room {
     this.addItem(new MysteriousBox())
     this.addItem(new BrokenShovel())
     this.addCharacter(new Patches())
+    for (const thing of Scenery.forRoom('AbandonedShed', 'open')) {
+      this.addItem(thing)
+    }
     return (
       'The old wooden door creaks open with a groan, revealing the dusty interior ' +
       'of the Abandoned Shed. A [item_name]mysterious box[/item_name] sits on an old ' +

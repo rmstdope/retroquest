@@ -2,6 +2,7 @@ import { characterName, Room } from '@/engine'
 import { Candle } from '../items/Candle'
 import { PrayerBook } from '../items/PrayerBook'
 import { Priest } from '../characters/Priest'
+import { Scenery } from '../items/Scenery'
 
 /** Village Chapel room: reflective spiritual focal point. */
 export class VillageChapel extends Room {
@@ -15,7 +16,11 @@ export class VillageChapel extends Room {
         'By the door the bell rope hangs straight and still. ' +
         'Over the door a shape is cut into the stone, worn almost smooth. ' +
         'A dark corner by the altar swallows the light.',
-      items: [new Candle(), new PrayerBook()],
+      items: [
+        new Candle(),
+        new PrayerBook(),
+        ...Scenery.forRoom('VillageChapel'),
+      ],
       characters: [new Priest()],
       exits: { north: 'HiddenGlade', east: 'RoadToGreendale' },
     })

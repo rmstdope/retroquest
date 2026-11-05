@@ -161,5 +161,5 @@
     {"after": 37, "commands": ["go north", "go west", "go north", "say stay to grandmother"]},
     {"after": 76, "commands": ["take snare", "use sharp knife on snare", "go north", "go west", "go north", "go north", "go west", "go north", "go east", "go north", "talk to mira"]},
     {"after": 112, "commands": ["go south", "go west", "go south", "go east", "go east", "talk to blacksmith"]},
-    {"after": 128, "commands": ["use bucket on well", "go west", "use bucket"]}
+    {"after": 128, "commands": ["use bucket on well", "go west", "use bucket", "examine crops", "examine earth"]}
 ]

@@ -4,6 +4,7 @@ import { Apple } from '../items/Apple'
 import { Matches } from '../items/Matches'
 import { Armor } from '../items/Armor'
 import { Sword } from '../items/Sword'
+import { Scenery } from '../items/Scenery'
 import { Shopkeeper } from '../characters/Shopkeeper'
 import {
   FLAG_PATCHES_RETURNED,
@@ -38,7 +39,14 @@ export class GeneralStore extends Room {
     super({
       name: 'General Store',
       description: SHUT_TEXT,
-      items: [new Rope(), new Apple(), new Matches(), new Sword(), new Armor()],
+      items: [
+        new Rope(),
+        new Apple(),
+        new Matches(),
+        new Sword(),
+        new Armor(),
+        ...Scenery.forRoom('GeneralStore'),
+      ],
       characters: [new Shopkeeper()],
       exits: { west: 'VillageSquare', south: 'BlacksmithsForge' },
     })
