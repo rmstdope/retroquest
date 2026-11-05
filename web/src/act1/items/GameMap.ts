@@ -65,7 +65,7 @@ function farewell(gameState: GameState): string {
     revelation() +
     '\nShe kisses your brow, and turns for home before you can see her cry.\n' +
     'As you look back at Willowbrook, the chapel bell rings once, ' +
-    'though no hand is on the rope.'
+    'with no hand on the rope.'
   )
 }
 
