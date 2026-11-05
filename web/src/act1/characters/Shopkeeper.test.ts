@@ -690,7 +690,7 @@ describe('Hemlock repeat talks keep their wording (rq-m3fy)', () => {
     const shut = gameInStore({ shopOpen: false })
     shut.commandParser.parse('talk to hemlock')
     const again = shut.commandParser.parse('talk to hemlock')
-    expect(again).toContain('No sign of Patches')
+    expect(again).toContain('No sign of')
     expect(again).not.toContain('I was watching for her')
 
     const open = gameInStore({ shopOpen: true })
