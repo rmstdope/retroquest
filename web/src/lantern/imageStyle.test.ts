@@ -20,7 +20,8 @@ interface Style {
   acts: Record<string, string>
 }
 interface Studio {
-  narration: { parts: { id: string }[] }
+  version: number
+  parts: { id: string }[]
   images: { paths: { list: string; style: string } }
 }
 
@@ -71,9 +72,7 @@ describe('images/style.json', () => {
   })
 
   it('adds to the style only for acts of the game', () => {
-    const ids = readJson<Studio>('content-studio.json').narration.parts.map(
-      (p) => p.id,
-    )
+    const ids = readJson<Studio>('content-studio.json').parts.map((p) => p.id)
     for (const act of Object.keys(style.acts)) expect(ids).toContain(act)
   })
 
@@ -95,15 +94,17 @@ describe('images/style.json', () => {
 })
 
 describe('content-studio.json images section', () => {
-  const { narration, images } = readJson<Studio>('content-studio.json')
+  const { version, parts, images } = readJson<Studio>('content-studio.json')
+
+  it('is in Content Studio format version 2', () => {
+    expect(version).toBe(2)
+  })
 
   it('finds the style file and every act image list', () => {
     const root = new URL('../../../', import.meta.url)
     expect(existsSync(new URL(images.paths.style, root))).toBe(true)
-    expect(narration.parts.map((p) => p.id)).toEqual(
-      ACT_NUMBERS.map((n) => `act${n}`),
-    )
-    for (const part of narration.parts)
+    expect(parts.map((p) => p.id)).toEqual(ACT_NUMBERS.map((n) => `act${n}`))
+    for (const part of parts)
       expect(
         existsSync(new URL(images.paths.list.replace('{part}', part.id), root)),
       ).toBe(true)

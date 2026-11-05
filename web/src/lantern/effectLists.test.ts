@@ -46,9 +46,10 @@ describe('effectsList', () => {
 
   it('content-studio.json declares the effects paths and the refresh', () => {
     const project = readJson<{
-      effects: { refresh: string; paths: Record<string, string> }
+      refresh: { shared: string }
+      effects: { paths: Record<string, string> }
     }>('content-studio.json')
-    expect(project.effects.refresh).toContain('tts/extract-effects.ts')
+    expect(project.refresh.shared).toContain('tts/extract-effects.ts')
     expect(project.effects.paths).toEqual({
       list: 'tts/effects.json',
       lock: 'effects/effects.lock.json',

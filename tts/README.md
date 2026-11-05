@@ -55,8 +55,8 @@ A script.json or music.json that differs from what the extractor writes now fail
   so it is judged by its takes in the audition. Names need help: "Elior" came out as "Elia" or
   "Hylia" until `pronounce` spelled it out.
 - **`act<N>/narration.lock.json`** is Content Studio's record of what each clip was made from, so it
-  knows which lines are up to date. Its own state (auditions, cached takes) is in `.content-studio/`,
-  which is not committed.
+  knows which lines are up to date. Its own working state (auditions, takes not chosen, personal settings) is in
+  `content-studio/cache/`, which is not committed.
 - Clips are 64 kbps mono MP3, levelled to −16 LUFS as `level.py` levels them, in
   `web/public/audio/narration/act<N>/` with `manifest.json` (key -> file, speaker, duration, word
   timings), which the story view reads. Each line is sent to Fish's free model (long ones in
