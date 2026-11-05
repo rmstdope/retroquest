@@ -73,13 +73,12 @@
     "manifest": "web/public/images/generated/manifest.json"
   },
   "effects": {
-    "paths": {
-      "list": "tts/effects.json",
-      "lock": "effects/effects.lock.json",
-      "clips": "web/public/audio/soundeffects/generated",
-      "manifest": "web/public/audio/soundeffects/generated/manifest.json"
+    "from": {
+      "shared": "tts/effects.json"
     },
-    "model": "open-1"
+    "model": "open-1",
+    "clips": "web/public/audio/soundeffects/generated",
+    "manifest": "web/public/audio/soundeffects/generated/manifest.json"
   },
   "scenes": {
     "paths": {

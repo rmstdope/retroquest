@@ -1,0 +1,7 @@
+{
+ "chapel-door": {"text":"a heavy wooden chapel door creaks and then makes a deep thud that echoes through a stone hall","gameWas":"a heavy wooden chapel door swinging shut with a deep thud that echoes through a stone hall"},
+ "forge-fire": {"text":"the low roar of a fire burning in a blacksmith forge, a steady draught and crackle, no hammering","gameWas":"the low roar of hot coals in a blacksmith forge, a steady draught and crackle, no hammering"},
+ "horse-snort": {"text":"a snorting horse","gameWas":"a horse snorting and stamping a hoof on a dirt road, then tearing at grass"},
+ "wind-gusts": {"text":"wind gusting and whistling softly","gameWas":"wind gusting around an old wooden building, whistling softly through gaps in the boards"},
+ "wood-creak": {"text":"old wooden boards creaking slowly under strain, a single very slow groan of weathered timber","gameWas":"old wooden boards creaking under strain, a single slow groan of weathered timber"}
+}

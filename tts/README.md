@@ -61,6 +61,8 @@ A script.json or music.json that differs from what the extractor writes now fail
   knows which lines are up to date. Its own working state (auditions, takes not chosen, personal settings) is in
   `content-studio/cache/`, which is not committed. A checkout made before Content Studio's version 2 format
   moves its old cache once: `mkdir -p content-studio && mv .content-studio content-studio/cache`.
+  `content-studio/cache/effects.json` is no longer read: the sound effects' rewordings are now in
+  the committed `content-studio/effects/edits.json`.
 - Clips are 64 kbps mono MP3, levelled to −16 LUFS as `level.py` levels them, in
   `web/public/audio/narration/act<N>/` with `manifest.json` (line id -> file, speaker, duration, word
   timings), which the story view reads. Each line is sent to Fish's free model (long ones in
@@ -90,6 +92,27 @@ lengths, tempos and keys changed in the studio (a changed brief as `text`, with 
 was written over as `gameWas`), and **`lock.json`**, the take chosen for each track and what it was
 made from. Both are committed; never edit them by hand. The game reads only the chosen tracks'
 `web/public/audio/music/generated/manifest.json`.
+
+## Sound effects
+
+Content Studio's Sound effects workspace lists the game's sound effects, one list for the whole
+game. **Refresh from the game** on the Sound effects page runs the same `refresh.shared` command as
+the Stingers page, which also runs `extract-effects.ts`, writing `effects.json`:
+
+```sh
+(cd web && npx -y tsx@4.23.15 --tsconfig tsconfig.json ../tts/extract-effects.ts)  # writes tts/effects.json
+```
+
+The list comes from `web/src/lantern/effectLists.ts`: each effect is `{ id, text, seconds, loops? }`,
+its `text` the game's starting words for the studio's model and `loops` true for one that plays
+round and round. Which scenes play an effect, and how loud, is the studio's scene mix
+(`web/src/lantern/scenes/`).
+
+Content Studio keeps its own effects files in `content-studio/effects/`: **`edits.json`**, the
+effects reworded in the studio (the studio's words as `text`, with the game's words they were
+written over as `gameWas`), and **`lock.json`**, the take chosen for each effect and what it was
+made from. Both are committed; never edit them by hand. The game reads only the chosen effects'
+`web/public/audio/soundeffects/generated/manifest.json`.
 
 ## Getting the text
 
