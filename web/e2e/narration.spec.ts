@@ -355,20 +355,22 @@ for (const viewport of [
 
     // Each paragraph appears as its voice starts; Begin does not move.
     const blocks = page.locator('.lq-chapter-block')
-    const speaking = page.locator('.lq-speaking')
+    // Every paragraph's room is there from the start; the reading is over once all are shown.
+    const unshown = page.locator('.lq-chapter-unshown')
     let seen = 0
-    let quiet = 0
-    for (;;) {
-      const count = await blocks.count()
-      if (count > seen) {
-        seen = count
-        expect(await button.boundingBox()).toEqual(before)
-      }
-      // The reading is over once nothing has been spoken for a second.
-      quiet = (await speaking.count()) === 0 ? quiet + 1 : 0
-      if (count > 0 && quiet >= 10) break
-      await page.waitForTimeout(100)
-    }
+    await expect
+      .poll(
+        async () => {
+          const count = await blocks.count()
+          if (count > seen) {
+            seen = count
+            expect(await button.boundingBox()).toEqual(before)
+          }
+          return count > 0 && (await unshown.count()) === 0
+        },
+        { intervals: [100], timeout: 25_000 },
+      )
+      .toBe(true)
     expect(seen).toBeGreaterThan(1)
   })
 }

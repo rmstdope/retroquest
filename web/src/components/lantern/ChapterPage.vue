@@ -182,19 +182,14 @@ defineExpose({ focus })
       <div class="lq-chapter-body" :class="{ 'lq-chapter-closing': !intro }">
         <template v-for="(block, index) in blocks" :key="index">
           <p
-            v-if="shown(index + 1)"
-            class="lq-chapter-block"
-            :class="{ 'lq-speaking': isSpeaking(index + 1) }"
-            :data-unit="index + 1"
+            :class="
+              shown(index + 1)
+                ? ['lq-chapter-block', { 'lq-speaking': isSpeaking(index + 1) }]
+                : 'lq-chapter-unshown'
+            "
+            :data-unit="shown(index + 1) ? index + 1 : undefined"
+            :aria-hidden="shown(index + 1) ? undefined : 'true'"
           >
-            <span v-if="block.speaker" class="lq-chapter-speaker">{{
-              block.speaker
-            }}</span>
-            <!-- eslint-disable vue/no-v-html -->
-            <span v-html="html(block.markup, index + 1)"></span>
-            <!-- eslint-enable vue/no-v-html -->
-          </p>
-          <p v-else class="lq-chapter-unshown" aria-hidden="true">
             <span v-if="block.speaker" class="lq-chapter-speaker">{{
               block.speaker
             }}</span>
