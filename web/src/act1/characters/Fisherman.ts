@@ -32,8 +32,8 @@ export class Fisherman extends Character {
     super({
       name: 'fisherman',
       description:
-        'An old man on an upturned crate at the bend, his line in the ' +
-        'water and his bad arm held close to his side.',
+        'An old man on an upturned crate at the bend, watching the water, ' +
+        'his bad arm held close to his side.',
     })
   }
 

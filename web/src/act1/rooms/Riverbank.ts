@@ -24,7 +24,7 @@ export class Riverbank extends Room {
         "past the reeds and a broad, flat stone at the water's edge. " +
         'Insects hum over the water. ' +
         `A weathered ${characterName('fisherman')} sits on an upturned crate ` +
-        'at the bend, his line in.',
+        'at the bend, watching the water.',
       items: [new SmoothStone(), new River()],
       characters: [new Fisherman()],
       exits: { west: 'OldMill', south: 'ForestPath' },
