@@ -4,147 +4,147 @@
     "title": "Act 3 Opening",
     "file": "web/public/audio/music/Orchestronika - Feel The Storm (freetouse.com).mp3",
     "plays": "Act III, throughout",
-    "brief": "dramatic orchestral, rolling strings and drums, stormy and tense, instrumental, no vocals",
+    "text": "dramatic orchestral, rolling strings and drums, stormy and tense, instrumental, no vocals",
     "seconds": 98
   },
   {
     "id": "act3-miras-hut",
     "title": "Mira's Hut",
     "plays": "Act III, Mira's Hut",
-    "brief": "instrumental background loop for Mira's Hut: A small hut hung with drying herbs: lavender, sage, and roots in bundles from the rafters. Shelves of bottles line the walls, every one labelled, no vocals",
+    "text": "instrumental background loop for Mira's Hut: A small hut hung with drying herbs: lavender, sage, and roots in bundles from the rafters. Shelves of bottles line the walls, every one labelled, no vocals",
     "seconds": 60
   },
   {
     "id": "act3-tidal-causeway",
     "title": "Tidal Causeway",
     "plays": "Act III, Tidal Causeway",
-    "brief": "instrumental background loop for Tidal Causeway: Thin causeways of old stone lift from the black water like ribs. Moonlight skims the wet stones; salt and wind carry half‑heard songs, no vocals",
+    "text": "instrumental background loop for Tidal Causeway: Thin causeways of old stone lift from the black water like ribs. Moonlight skims the wet stones; salt and wind carry half‑heard songs, no vocals",
     "seconds": 60
   },
   {
     "id": "act3-shoreline-markers",
     "title": "Shoreline Markers",
     "plays": "Act III, Shoreline Markers",
-    "brief": "instrumental background loop for Shoreline Markers: The shore here is quiet and cold. Weathered steles rise from the sand, their worn faces full of shallow marks, no vocals",
+    "text": "instrumental background loop for Shoreline Markers: The shore here is quiet and cold. Weathered steles rise from the sand, their worn faces full of shallow marks, no vocals",
     "seconds": 60
   },
   {
     "id": "act3-outer-wards",
     "title": "Outer Wards",
     "plays": "Act III, Outer Wards",
-    "brief": "instrumental background loop for Outer Wards: The courtyard lies half-swallowed by the sea. Three ancient pillars rise from the black water, their faces scored with shallow marks, no vocals",
+    "text": "instrumental background loop for Outer Wards: The courtyard lies half-swallowed by the sea. Three ancient pillars rise from the black water, their faces scored with shallow marks, no vocals",
     "seconds": 60
   },
   {
     "id": "act3-collapsed-pier",
     "title": "Collapsed Pier",
     "plays": "Act III, Collapsed Pier",
-    "brief": "instrumental background loop for Collapsed Pier: The pier surrenders to the tide. Warped planks gape and blackened vaults yawn where light forgets to go. Barnacled timbers rise like buried ribs, and the water sings a low, patient counting of losses, no vocals",
+    "text": "instrumental background loop for Collapsed Pier: The pier surrenders to the tide. Warped planks gape and blackened vaults yawn where light forgets to go. Barnacled timbers rise like buried ribs, and the water sings a low, patient counting of losses, no vocals",
     "seconds": 60
   },
   {
     "id": "act3-submerged-antechamber",
     "title": "Submerged Antechamber",
     "plays": "Act III, Submerged Antechamber",
-    "brief": "instrumental background loop for Submerged Antechamber: The hall lies half-swallowed by tide and time. Salt-smoothed stone arches bear weathered carvings that pulse with a cold, inner glow, no vocals",
+    "text": "instrumental background loop for Submerged Antechamber: The hall lies half-swallowed by tide and time. Salt-smoothed stone arches bear weathered carvings that pulse with a cold, inner glow, no vocals",
     "seconds": 60
   },
   {
     "id": "act3-sanctum-of-the-tide",
     "title": "Sanctum of the Tide",
     "plays": "Act III, Sanctum of the Tide",
-    "brief": "instrumental background loop for Sanctum of the Tide: A vaulted chamber where water hangs like a dark mirror, its surface etched with sigils that breathe and shift, no vocals",
+    "text": "instrumental background loop for Sanctum of the Tide: A vaulted chamber where water hangs like a dark mirror, its surface etched with sigils that breathe and shift, no vocals",
     "seconds": 60
   },
   {
     "id": "act3-lower-switchbacks",
     "title": "Lower Switchbacks",
     "plays": "Act III, Lower Switchbacks",
-    "brief": "instrumental background loop for Lower Switchbacks: Wind‑carved paths snake across black, glassy rock; ash skims the air and the scent of iron hangs on the wind, no vocals",
+    "text": "instrumental background loop for Lower Switchbacks: Wind‑carved paths snake across black, glassy rock; ash skims the air and the scent of iron hangs on the wind, no vocals",
     "seconds": 60
   },
   {
     "id": "act3-obsidian-outcrops",
     "title": "Obsidian Outcrops",
     "plays": "Act III, Obsidian Outcrops",
-    "brief": "instrumental background loop for Obsidian Outcrops: Needle-sharp obsidian towers rise like black teeth from the ash, their surfaces catching and fracturing the light into jagged, glassy facets, no vocals",
+    "text": "instrumental background loop for Obsidian Outcrops: Needle-sharp obsidian towers rise like black teeth from the ash, their surfaces catching and fracturing the light into jagged, glassy facets, no vocals",
     "seconds": 60
   },
   {
     "id": "act3-mirror-terraces",
     "title": "Mirror Terraces",
     "plays": "Act III, Mirror Terraces",
-    "brief": "instrumental background loop for Mirror Terraces: Stepped platforms rise in concentric benches, each ring studded with sockets for polished mirrors and brass mounts, no vocals",
+    "text": "instrumental background loop for Mirror Terraces: Stepped platforms rise in concentric benches, each ring studded with sockets for polished mirrors and brass mounts, no vocals",
     "seconds": 60
   },
   {
     "id": "act3-fumarole-passages",
     "title": "Fumarole Passages",
     "plays": "Act III, Fumarole Passages",
-    "brief": "instrumental background loop for Fumarole Passages: Narrow tunnels exhale a rhythmic, breath-like heat; stone vents chuff and sigh as if the mountain itself sleeps and dreams, no vocals",
+    "text": "instrumental background loop for Fumarole Passages: Narrow tunnels exhale a rhythmic, breath-like heat; stone vents chuff and sigh as if the mountain itself sleeps and dreams, no vocals",
     "seconds": 60
   },
   {
     "id": "act3-ember-gallery",
     "title": "Ember Gallery",
     "plays": "Act III, Ember Gallery",
-    "brief": "instrumental background loop for Ember Gallery: A vaulted cavern veined with cooling flows; the air smells of charcoal and iron. Streaks of glassed lava lace the walls, catching stray cinders that glow like embers in the gloom, no vocals",
+    "text": "instrumental background loop for Ember Gallery: A vaulted cavern veined with cooling flows; the air smells of charcoal and iron. Streaks of glassed lava lace the walls, catching stray cinders that glow like embers in the gloom, no vocals",
     "seconds": 60
   },
   {
     "id": "act3-phoenix-crater",
     "title": "Phoenix Crater",
     "plays": "Act III, Phoenix Crater",
-    "brief": "instrumental background loop for Phoenix Crater: A luminous bowl of vitrified rock where warm drafts swirl and cinders dance in spirals, no vocals",
+    "text": "instrumental background loop for Phoenix Crater: A luminous bowl of vitrified rock where warm drafts swirl and cinders dance in spirals, no vocals",
     "seconds": 60
   },
   {
     "id": "act3-cavern-mouth",
     "title": "Cavern Mouth",
     "plays": "Act III, Cavern Mouth",
-    "brief": "instrumental background loop for Cavern Mouth: A broad arch opens into the hill, hung with cold mist. Lantern light dims a step inside it. Old signs are cut into the arch stone, worn too smooth to read, no vocals",
+    "text": "instrumental background loop for Cavern Mouth: A broad arch opens into the hill, hung with cold mist. Lantern light dims a step inside it. Old signs are cut into the arch stone, worn too smooth to read, no vocals",
     "seconds": 60
   },
   {
     "id": "act3-tool-cache",
     "title": "Tool Cache",
     "plays": "Act III, Tool Cache",
-    "brief": "instrumental background loop for Tool Cache: A side chamber shored with old timbers and stacked with crates of braces, iron fittings and coils of hemp rope. The walls are scored with tool marks, and the air smells of iron and wet earth, no vocals",
+    "text": "instrumental background loop for Tool Cache: A side chamber shored with old timbers and stacked with crates of braces, iron fittings and coils of hemp rope. The walls are scored with tool marks, and the air smells of iron and wet earth, no vocals",
     "seconds": 60
   },
   {
     "id": "act3-collapsed-galleries",
     "title": "Collapsed Galleries",
     "plays": "Act III, Collapsed Galleries",
-    "brief": "instrumental background loop for Collapsed Galleries: A gallery choked with fallen stone, floor to roof. The timbers that held it lie snapped under the pile, and dust hangs in the still air, no vocals",
+    "text": "instrumental background loop for Collapsed Galleries: A gallery choked with fallen stone, floor to roof. The timbers that held it lie snapped under the pile, and dust hangs in the still air, no vocals",
     "seconds": 60
   },
   {
     "id": "act3-echo-chambers",
     "title": "Echo Chambers",
     "plays": "Act III, Echo Chambers",
-    "brief": "instrumental background loop for Echo Chambers: Smooth caverns of bare stone. Every step comes back to you from the alcoves, and so does every word, a breath late, as if someone were copying you, no vocals",
+    "text": "instrumental background loop for Echo Chambers: Smooth caverns of bare stone. Every step comes back to you from the alcoves, and so does every word, a breath late, as if someone were copying you, no vocals",
     "seconds": 60
   },
   {
     "id": "act3-stillness-vestibule",
     "title": "Stillness Vestibule",
     "plays": "Act III, Stillness Vestibule",
-    "brief": "instrumental background loop for Stillness Vestibule: A hush falls over this chamber like a shroud. Dark pools mirror the ceiling, so still they look frozen in time, and the stone seems to swallow every sound, no vocals",
+    "text": "instrumental background loop for Stillness Vestibule: A hush falls over this chamber like a shroud. Dark pools mirror the ceiling, so still they look frozen in time, and the stone seems to swallow every sound, no vocals",
     "seconds": 60
   },
   {
     "id": "act3-dragons-hall",
     "title": "Dragon's Hall",
     "plays": "Act III, Dragon's Hall",
-    "brief": "instrumental background loop for Dragon's Hall: A hall of living stone opens beyond sight, its ceiling lost in shadow. Embers burn slowly along the floor, pulsing like a heartbeat, and somewhere in the dark, water drips, no vocals",
+    "text": "instrumental background loop for Dragon's Hall: A hall of living stone opens beyond sight, its ceiling lost in shadow. Embers burn slowly along the floor, pulsing like a heartbeat, and somewhere in the dark, water drips, no vocals",
     "seconds": 60
   },
   {
     "id": "act3-fortress-entrance",
     "title": "Entrance to Malakar's Fortress",
     "plays": "Act III, Entrance to Malakar's Fortress",
-    "brief": "instrumental background loop for Entrance to Malakar's Fortress: A bastion of black stone rises from a shattered ridge. Iron lattices close its gates, and sigils glow behind them, slow as breathing. The wind up here is cold and smells of metal, no vocals",
+    "text": "instrumental background loop for Entrance to Malakar's Fortress: A bastion of black stone rises from a shattered ridge. Iron lattices close its gates, and sigils glow behind them, slow as breathing. The wind up here is cold and smells of metal, no vocals",
     "seconds": 60
   }
 ]

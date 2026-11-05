@@ -26,8 +26,8 @@ export interface MusicTrack {
   title: string
   /** Where the game plays it. */
   plays: string
-  /** The game's starting brief for new music, always instrumental. */
-  brief: string
+  /** The game's starting brief for new music (Content Studio's `text`), always instrumental. */
+  text: string
   /** Length in seconds (a stinger is at most 10). */
   seconds: number
   /** The music file the game plays for it now: a path inside the project root, which the studio only plays. */
@@ -39,34 +39,34 @@ export interface MusicTrack {
 }
 
 /** What describes a loop beyond its file name: where it plays, how it sounds and how long it is. */
-type LoopBrief = Pick<MusicTrack, 'plays' | 'brief' | 'seconds'>
+type LoopBrief = Pick<MusicTrack, 'plays' | 'text' | 'seconds'>
 
 /** The loops by the music file the act plays today. */
 const LOOP_BRIEFS: Record<string, LoopBrief> = {
   'Conquest - Market (freetouse.com).mp3': {
     plays: 'Act I, throughout',
-    brief:
+    text:
       'lively medieval market, plucked strings and light percussion, ' +
       'bustling and cheerful, instrumental, no vocals',
     seconds: 126,
   },
   'Walen - Medieval Village (freetouse.com).mp3': {
     plays: 'Act II, throughout',
-    brief:
+    text:
       'gentle medieval village, lute and recorder, warm and unhurried, ' +
       'instrumental, no vocals',
     seconds: 132,
   },
   'Orchestronika - Feel The Storm (freetouse.com).mp3': {
     plays: 'Act III, throughout',
-    brief:
+    text:
       'dramatic orchestral, rolling strings and drums, ' +
       'stormy and tense, instrumental, no vocals',
     seconds: 98,
   },
   'Conquest - The Silver Grail (freetouse.com).mp3': {
     plays: 'Act IV, throughout',
-    brief:
+    text:
       'epic and solemn orchestral, brass and strings, ' +
       'heroic and resolute, instrumental, no vocals',
     seconds: 90,
@@ -157,7 +157,7 @@ export function roomLoops(act: Act): MusicTrack[] {
     id: roomTrackId(act.name, key),
     title: room.name,
     plays: `${actLabel(act.name)}, ${room.name}`,
-    brief:
+    text:
       `instrumental background loop for ${room.name}: ` +
       `${descriptionOpening(room.description)}, no vocals`,
     seconds: ROOM_LOOP_SECONDS,
@@ -173,8 +173,7 @@ export function questStingers(): MusicTrack[] {
       title: NEW_QUEST_FILE.replace(/^Voicy_|\.mp3$/g, ''),
       file: `${SOUND_EFFECTS_DIR}${NEW_QUEST_FILE}`,
       plays: 'When a new quest begins',
-      brief:
-        'short bright fanfare announcing a new quest, instrumental, no vocals',
+      text: 'short bright fanfare announcing a new quest, instrumental, no vocals',
       seconds: length,
     },
     {
@@ -182,8 +181,7 @@ export function questStingers(): MusicTrack[] {
       title: QUEST_COMPLETE_FILE.replace(/^Voicy_|\.mp3$/g, ''),
       file: `${SOUND_EFFECTS_DIR}${QUEST_COMPLETE_FILE}`,
       plays: 'When a quest is completed',
-      brief:
-        'short triumphant fanfare for a quest completed, instrumental, no vocals',
+      text: 'short triumphant fanfare for a quest completed, instrumental, no vocals',
       seconds: length,
     },
     {
@@ -191,7 +189,7 @@ export function questStingers(): MusicTrack[] {
       title: NEW_SPELL_FILE.replace(/^Voicy_|\.mp3$/g, ''),
       file: `${SOUND_EFFECTS_DIR}${NEW_SPELL_FILE}`,
       plays: 'When a spell is learned',
-      brief: 'short magical chime for a spell learned, instrumental, no vocals',
+      text: 'short magical chime for a spell learned, instrumental, no vocals',
       seconds: length,
     },
   ]

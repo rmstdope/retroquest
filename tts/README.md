@@ -81,9 +81,15 @@ from the game** on the Stingers page runs `extract-shared.ts`, which writes `sti
 ```
 
 The lists come from `web/src/lantern/musicLists.ts`: a loop is named after the act's music file and
-briefed in that file's table. The game keeps playing its freetouse.com and Voicy files; each track
-carries a `file`, the path of the file the game plays for it, which the studio plays as "The game's
-file" until a take is chosen.
+briefed in that file's table; each track's brief is its `text`. The game keeps playing its
+freetouse.com and Voicy files; each track carries a `file`, the path of the file the game plays for
+it, which the studio plays as "The game's file" until a take is chosen.
+
+Content Studio keeps its own music files in `content-studio/music/`: **`edits.json`**, the briefs,
+lengths, tempos and keys changed in the studio (a changed brief as `text`, with the game's brief it
+was written over as `gameWas`), and **`lock.json`**, the take chosen for each track and what it was
+made from. Both are committed; never edit them by hand. The game reads only the chosen tracks'
+`web/public/audio/music/generated/manifest.json`.
 
 ## Getting the text
 
