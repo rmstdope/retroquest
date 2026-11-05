@@ -140,7 +140,7 @@
 - **Items:** Rope (store stock), apple (bonus with each purchase), matches (kept for the Priest and not for sale — not among the wares, cannot be bought or taken; gifted after speaking with the Priest), Sword (display stock; 5 coins), Armor (display stock; 10 coins). The Sword and Armor have no use in Act I and cannot be bought with the two coins available in the act (the hoe's and Hemlock's reward).
 - **Spells:** None.
 - **Usable Items:** Coin (2nd, purchase rope and receive an apple bonus).
-- **Characters:** Shopkeeper — Old Man Hemlock (sells goods, shares gossip). On the first talk he does not give his name; he speaks of Patches as a cat Elior has seen on his counter, mentions that the caravans have stopped coming because the king is ill and the roads are unsafe ("Malakar's luck, my father would have called it"), and keeps the store shut until Patches is returned; then Patches (his cat) sits on the counter. If Patches stays with Grandmother instead, Hemlock has heard the news, reopens the store and gives Elior a `rope` and an `apple` (no coin), so the act stays completable without the second coin.
+- **Characters:** Shopkeeper — Old Man Hemlock (sells goods, shares gossip). On the first talk while the store is shut he does not give his name; he speaks of Patches as a cat Elior has seen on his counter, mentions that the caravans have stopped coming because the king is ill and the roads are unsafe ("Malakar's luck, my father would have called it"), and keeps the store shut until Patches is returned; then Patches (his cat) sits on the counter. If Patches stays with Grandmother instead, Hemlock has heard the news, reopens the store and gives Elior a `rope` and an `apple` (no coin), so the act stays completable without the second coin.
 - **Save compatibility:** saves made when the hoe still gave a second coin keep the store open, and returning Patches in such a save earns no second coin.
 - **Exits:** Village Square (west), Blacksmith’s Forge (south)
 
@@ -361,7 +361,7 @@ Optional virtue moments; none blocks the golden path, none adds a puzzle or comb
 
 8.  **General Store:**
 
-    - Speak to the shopkeeper. _Old Man Hemlock is overjoyed to have Patches home: pays the notice's reward and reopens the store, and grumbles that the caravans stopped coming now that the king is ill. Patches curls up on the counter. Completes: Curiosity killed the cat._
+    - Speak to the shopkeeper. _Old Man Hemlock is overjoyed to have Patches home: he pays the notice's reward and reopens the store. Patches curls up on the counter. Completes: Curiosity killed the cat._
       - Item obtained: `coin` (2nd)
     - Use coin (2nd) to buy rope. _Coin (2nd) is removed from inventory; rope and a bonus apple are added to inventory._
       - Item used: `coin` (2nd)
