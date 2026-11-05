@@ -22,6 +22,7 @@ import {
   FLAG_MIRA_NAMED_FOULING_SIGIL,
   FLAG_FOX_KIT_FREED,
   FLAG_MIRA_FOREST_REMARK_SAID,
+  FLAG_MIRA_MET,
 } from '../Act1StoryFlags'
 
 /** Her words once the amulet is Elior's, after either opening narration. */
@@ -52,6 +53,8 @@ export class Mira extends Character {
   private dialogue(
     stage:
       | 'initial'
+      | 'reminder_before_request'
+      | 'reminder_flower'
       | 'quest_conditions_not_met'
       | 'quest_complete_amulet_given'
       | 'post_amulet'
@@ -66,6 +69,23 @@ export class Mira extends Character {
           '\nShe studies your face. ' +
           speech(
             "You've been dreaming. It's written all over you. What brings you?",
+          )
+        )
+      case 'reminder_before_request':
+        return (
+          `${characterName(this.name)} glances up, a sprig of sage between ` +
+          'her fingers. ' +
+          speech(
+            `Back already, ${characterName('Elior')}. Tell me what you've seen.`,
+          )
+        )
+      case 'reminder_flower':
+        return (
+          `${characterName(this.name)} doesn't put the herbs down. ` +
+          speech(
+            'The flower, ' +
+              `${characterName('Elior')}. The [room_name]Hidden Glade[/room_name]. ` +
+              "I'll know the rest when I see it open.",
           )
         )
       case 'quest_conditions_not_met':
@@ -274,8 +294,11 @@ export class Mira extends Character {
     // 2. Give the initial message if the story flag 'magic_fully_unlocked' is not set
     //    (i.e., flower hasn't been given yet)
     if (!gameState.getStoryFlag(FLAG_MAGIC_FULLY_UNLOCKED)) {
+      const met = gameState.getStoryFlag(FLAG_MIRA_MET)
+      gameState.setStoryFlag(FLAG_MIRA_MET, true)
       // Check if all three story flags are set
       if (
+        !gameState.getStoryFlag(FLAG_CONNECT_WITH_NATURE) &&
         gameState.getStoryFlag(FLAG_INVESTIGATED_WITHERED_CROPS) &&
         gameState.getStoryFlag(FLAG_VILLAGER_TALKED_TO) &&
         gameState.getStoryFlag(FLAG_WELL_EXAMINED)
@@ -305,7 +328,15 @@ export class Mira extends Character {
             "And look at that well again on your way. Water doesn't sour " +
               'without a reason.',
           )
-        return this.dialogue('initial') + extra
+        // Once met, the request alone follows; the first meeting is not replayed.
+        return met ? extra.trimStart() : this.dialogue('initial') + extra
+      }
+      if (met) {
+        return this.dialogue(
+          gameState.getStoryFlag(FLAG_CONNECT_WITH_NATURE)
+            ? 'reminder_flower'
+            : 'reminder_before_request',
+        )
       }
       return this.dialogue('initial')
     }

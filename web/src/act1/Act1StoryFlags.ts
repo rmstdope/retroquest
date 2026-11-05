@@ -71,6 +71,8 @@ export const FLAG_HEMLOCK_HEARD_PATCHES_STAYED = 'hemlock_heard_patches_stayed'
 export const FLAG_TILDA_SPRING_LINE_SAID = 'tilda_spring_line_said'
 /** Set when the fox kit has been cut free of the poacher's snare. */
 export const FLAG_FOX_KIT_FREED = 'fox_kit_freed'
+/** Set once Mira has had her first meeting with Elior, so she does not repeat it. */
+export const FLAG_MIRA_MET = 'mira_met'
 /** Set when Mira has made her one-time remark about the freed fox kit. */
 export const FLAG_MIRA_FOREST_REMARK_SAID = 'mira_forest_remark_said'
 
