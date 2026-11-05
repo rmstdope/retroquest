@@ -138,17 +138,19 @@ Content Studio's images workspace lists the pictures the game needs. **Refresh d
 also writes `act<N>/images.json`: one image per room, then one portrait per character the act
 registers (480x640, upright; a name two classes share is listed once; ids `act<N>-portrait-<class>`, or `portrait-<class>` for a
 character in several acts, listed with the same entry in each of them; then Elior, the player, who is no class: `portrait-elior`, the same entry in every act),
-each `{ id, title, width, height, description }`, where the description is the room's base
+each `{ id, title, width, height, text }`, where the text is the room's base
 description with the markup removed, or, for a portrait, the character's hand-written face
 portrait prompt from `web/src/lantern/portraitPrompts.ts` (it begins "A face portrait of"; the
 in-game description is not used), the studio's starting prompt, and the
-room's id is its music track id. The look all images share is
-`images/style.json`, written by hand: the look (`look`), things to keep out (`keepOut`, added to
+room's id is its music track id. The look all images share is the studio's own, the `style` of
+`content-studio/images/edits.json`, changed in the studio's Style page (or by hand): the look
+(`look`), things to keep out (`keepOut`, added to
 the prompt as words, since the image models read no negative prompt, so anything drawn by naming
-it is said as "no …" in the look instead) and an optional addition per act (`acts`). The look and
+it is said as "no …" in the look instead) and an optional addition per act (`parts`). The look and
 the act additions say only light, colour and mood, never a thing: whatever they name is drawn in
 every room (an early "lantern light" put a lantern in each one), and each room's own description
 sets its light. It lists no `palette`: the images keep full colour and the studio only brings each
-take to size. The `images` section of `content-studio.json` points at
-both. Prompt overrides live in the studio, never in the game; the lists come from
-`web/src/lantern/imageLists.ts` and a vitest test fails when a committed list is stale.
+take to size. The `images` section of `content-studio.json` points at the lists
+(`from.part`). Prompt overrides are the studio's, in the same edits file (`images`), never in the
+game's code, and the chosen take of each image is in `content-studio/images/lock.json`; the lists
+come from `web/src/lantern/imageLists.ts` and a vitest test fails when a committed list is stale.

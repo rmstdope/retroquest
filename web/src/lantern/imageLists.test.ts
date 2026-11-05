@@ -1,6 +1,6 @@
 /**
  * The game's image lists for Content Studio: one image per room of an act, with
- * its dimensions and its description free of markup.
+ * its dimensions and its words (`text`) free of markup.
  */
 import { describe, expect, it } from 'vitest'
 import { Act1 } from '@/act1/Act1'
@@ -57,8 +57,8 @@ describe('roomImages', () => {
   it('describes each room without markup', () => {
     for (const act of ACTS)
       for (const image of roomImages(act)) {
-        expect(image.description).not.toMatch(/\[[^\]]*\]/)
-        expect(image.description.length).toBeGreaterThan(0)
+        expect(image.text).not.toMatch(/\[[^\]]*\]/)
+        expect(image.text.length).toBeGreaterThan(0)
       }
   })
 })
@@ -85,8 +85,8 @@ describe('characterImages', () => {
       for (const image of images) {
         expect(image.width).toBe(PORTRAIT_WIDTH)
         expect(image.height).toBe(PORTRAIT_HEIGHT)
-        expect(image.description).not.toMatch(/\[[^\]]*\]/)
-        expect(image.description.length).toBeGreaterThan(0)
+        expect(image.text).not.toMatch(/\[[^\]]*\]/)
+        expect(image.text.length).toBeGreaterThan(0)
       }
     },
   )
@@ -165,7 +165,7 @@ describe('characterImages', () => {
   it('starts every portrait prompt with a face portrait, in every act', () => {
     for (const act of ACTS) {
       for (const image of characterImages(act)) {
-        expect(image.description, image.id).toMatch(
+        expect(image.text, image.id).toMatch(
           new RegExp(`^${PORTRAIT_PROMPT_START}\\S`),
         )
       }
@@ -208,7 +208,7 @@ describe('the portrait of Elior', () => {
       title: 'Elior',
       width: PORTRAIT_WIDTH,
       height: PORTRAIT_HEIGHT,
-      description:
+      text:
         'A face portrait of a farm boy of about nineteen, sun-browned and ' +
         'freckled, with untidy brown hair, an earnest, searching look, and ' +
         'the frayed collar of a homespun shirt.',

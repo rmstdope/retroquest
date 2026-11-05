@@ -1,7 +1,7 @@
 /**
- * The game's shared image style (`images/style.json`) and the `images` section
- * of `content-studio.json`, which points Content Studio at it and at each act's
- * image list.
+ * The shared image style, Content Studio's own, in its images edits
+ * (`content-studio/images/edits.json`), and the `images` section of
+ * `content-studio.json`, which points the studio at each act's image list.
  */
 import { existsSync, readFileSync } from 'node:fs'
 import { describe, expect, it } from 'vitest'
@@ -17,26 +17,29 @@ function readJson<T>(path: string): T {
 interface Style {
   look: string
   keepOut: string
-  acts: Record<string, string>
+  parts: Record<string, string>
 }
 interface Studio {
   version: number
   parts: { id: string }[]
-  images: { paths: { list: string; style: string } }
+  images: { from: { part: string } }
 }
 
-/** The fields Content Studio reads from a style file; any other is ignored, so a renamed field is lost. */
+/** Where Content Studio keeps the style, with its changes to the images. */
+const EDITS_FILE = 'content-studio/images/edits.json'
+
+/** The fields Content Studio reads from the style; any other is ignored, so a renamed field is lost. */
 const STYLE_FIELDS = [
   'look',
   'keepOut',
   'palette',
   'colourDepth',
   'dithering',
-  'acts',
+  'parts',
 ]
 
-describe('images/style.json', () => {
-  const style = readJson<Style>('images/style.json')
+describe('the style in content-studio/images/edits.json', () => {
+  const style = readJson<{ style: Style }>(EDITS_FILE).style
 
   it('uses only the fields Content Studio reads', () => {
     for (const field of Object.keys(style))
@@ -73,12 +76,12 @@ describe('images/style.json', () => {
 
   it('adds to the style only for acts of the game', () => {
     const ids = readJson<Studio>('content-studio.json').parts.map((p) => p.id)
-    for (const act of Object.keys(style.acts)) expect(ids).toContain(act)
+    for (const act of Object.keys(style.parts)) expect(ids).toContain(act)
   })
 
   it('gives every act its agreed mood of light and colour', () => {
     // Whatever an act's addition names is drawn in every room of the act.
-    expect(style.acts).toEqual({
+    expect(style.parts).toEqual({
       act1: 'Warm late-day light, earthy greens and straw golds, homely and lived-in',
       act2:
         'Clear daylight and richer colour, deep greens, warm reds and creams, ' +
@@ -100,13 +103,14 @@ describe('content-studio.json images section', () => {
     expect(version).toBe(2)
   })
 
-  it('finds the style file and every act image list', () => {
+  it('finds every act image list, and the studio keeps the style in its own folder', () => {
     const root = new URL('../../../', import.meta.url)
-    expect(existsSync(new URL(images.paths.style, root))).toBe(true)
+    expect(existsSync(new URL(EDITS_FILE, root))).toBe(true)
+    expect(existsSync(new URL('images/style.json', root))).toBe(false)
     expect(parts.map((p) => p.id)).toEqual(ACT_NUMBERS.map((n) => `act${n}`))
     for (const part of parts)
       expect(
-        existsSync(new URL(images.paths.list.replace('{part}', part.id), root)),
+        existsSync(new URL(images.from.part.replace('{part}', part.id), root)),
       ).toBe(true)
   })
 })
