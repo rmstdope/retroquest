@@ -174,8 +174,8 @@ Run each check as its own command and read its exit status; never chain them wit
 
 ### Images
 
-- The images on the game's image list are made and chosen by the navigator, by hand, in the studio. No agent generates, draws or picks such an image, and no bead is filed to make one.
-- A change may add or change the game's image descriptions and its image list (and the shared style file the studio reads), and ships without a new image. The navigator makes the images after the merge.
+- The images on the game's image list (`web/public/images/generated/`, and Content Studio's files in `content-studio/images/`: the edits, which hold the shared style, and the lock) are made and chosen by the navigator, by hand, in the studio. No agent generates, draws or picks such an image, and no bead is filed to make one.
+- A change may add or change the game's image descriptions and its image list (and the shared style in `content-studio/images/edits.json`), and ships without a new image. The navigator makes the images after the merge.
 - An image that has not been made yet is not a defect. A test may require that every image belongs to an entry of the list, never that every entry of the list has an image.
 
 ### Save/Load Compatibility

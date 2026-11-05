@@ -2,9 +2,10 @@
  * The list of images Content Studio's images workspace reads from the game
  * (`tts/act<N>/images.json`): one image per room of each act, then one portrait
  * per character the act registers (one portrait, in every act, for a character
- * who appears in several). The description is the room's base
+ * who appears in several). An image's words (`text`) are the room's base
  * description with the markup removed, or the character's hand-written face
- * portrait prompt, the studio's starting prompt; the shared style is in `images/style.json`. The tts script
+ * portrait prompt, the studio's starting prompt; the shared style is the
+ * studio's, in `content-studio/images/edits.json`. The tts script
  * `extract-act.ts` writes the lists.
  */
 import { Character, type Act } from '@/engine'
@@ -60,7 +61,7 @@ export interface GameImage {
   /** Height in pixels. */
   height: number
   /** The room's description, markup removed, or the character's face portrait prompt, which the studio starts its prompt from. */
-  description: string
+  text: string
 }
 
 /** One image for each room of the act, described by the room's own description. */
@@ -70,7 +71,7 @@ export function roomImages(act: Act): GameImage[] {
     title: room.name,
     width: IMAGE_WIDTH,
     height: IMAGE_HEIGHT,
-    description: narrationText(room.description),
+    text: narrationText(room.description),
   }))
 }
 
@@ -89,7 +90,7 @@ function portraitPrompt(classKey: string): string {
  * portrait prompt in `PORTRAIT_PROMPTS` (the character itself supplies only the
  * name for the title). A name two classes share is listed
  * once, the first class winning. Ids come from `portraitId`. A shared portrait
- * is listed in every act it appears in with the title and description of the
+ * is listed in every act it appears in with the title and words of the
  * first of `acts` (the whole game, in order) that registers it, so the studio
  * sees one entry. Elior, who is no class, is listed last, the same in every act.
  */
@@ -112,7 +113,7 @@ export function characterImages(act: Act, acts: Act[] = [act]): GameImage[] {
       title: displayName(character.name),
       width: PORTRAIT_WIDTH,
       height: PORTRAIT_HEIGHT,
-      description: portraitPrompt(key),
+      text: portraitPrompt(key),
     })
   }
   images.push({
@@ -120,7 +121,7 @@ export function characterImages(act: Act, acts: Act[] = [act]): GameImage[] {
     title: 'Elior',
     width: PORTRAIT_WIDTH,
     height: PORTRAIT_HEIGHT,
-    description: ELIOR_PORTRAIT_PROMPT,
+    text: ELIOR_PORTRAIT_PROMPT,
   })
   return images
 }

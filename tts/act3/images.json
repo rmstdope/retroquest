@@ -4,237 +4,237 @@
     "title": "Mira's Hut",
     "width": 1920,
     "height": 1080,
-    "description": "A small hut hung with drying herbs: lavender, sage, and roots in bundles from the rafters. Shelves of bottles line the walls, every one labelled. Mira moves among them without looking, the way you cross your own kitchen in the dark."
+    "text": "A small hut hung with drying herbs: lavender, sage, and roots in bundles from the rafters. Shelves of bottles line the walls, every one labelled. Mira moves among them without looking, the way you cross your own kitchen in the dark."
   },
   {
     "id": "act3-tidal-causeway",
     "title": "Tidal Causeway",
     "width": 1920,
     "height": 1080,
-    "description": "Thin causeways of old stone lift from the black water like ribs. Moonlight skims the wet stones; salt and wind carry half‑heard songs. Broken arches stand like quiet mouths, guarding what the sea keeps."
+    "text": "Thin causeways of old stone lift from the black water like ribs. Moonlight skims the wet stones; salt and wind carry half‑heard songs. Broken arches stand like quiet mouths, guarding what the sea keeps."
   },
   {
     "id": "act3-shoreline-markers",
     "title": "Shoreline Markers",
     "width": 1920,
     "height": 1080,
-    "description": "The shore here is quiet and cold. Weathered steles rise from the sand, their worn faces full of shallow marks. Salt and time have smudged many lines, but faint moon sigils still show when the tide drops. Loose pale flakes sit in the grooves; they shimmer like old stars. When the moon is high, the stones seem to hum with a slow, patient voice—an old magic tied to the sea."
+    "text": "The shore here is quiet and cold. Weathered steles rise from the sand, their worn faces full of shallow marks. Salt and time have smudged many lines, but faint moon sigils still show when the tide drops. Loose pale flakes sit in the grooves; they shimmer like old stars. When the moon is high, the stones seem to hum with a slow, patient voice—an old magic tied to the sea."
   },
   {
     "id": "act3-outer-wards",
     "title": "Outer Wards",
     "width": 1920,
     "height": 1080,
-    "description": "The courtyard lies half-swallowed by the sea. Three ancient pillars rise from the black water, their faces scored with shallow marks. Brine beads along the carved lines and they catch the moon in small rings of light."
+    "text": "The courtyard lies half-swallowed by the sea. Three ancient pillars rise from the black water, their faces scored with shallow marks. Brine beads along the carved lines and they catch the moon in small rings of light."
   },
   {
     "id": "act3-collapsed-pier",
     "title": "Collapsed Pier",
     "width": 1920,
     "height": 1080,
-    "description": "The pier surrenders to the tide. Warped planks gape and blackened vaults yawn where light forgets to go. Barnacled timbers rise like buried ribs, and the water sings a low, patient counting of losses."
+    "text": "The pier surrenders to the tide. Warped planks gape and blackened vaults yawn where light forgets to go. Barnacled timbers rise like buried ribs, and the water sings a low, patient counting of losses."
   },
   {
     "id": "act3-submerged-antechamber",
     "title": "Submerged Antechamber",
     "width": 1920,
     "height": 1080,
-    "description": "The hall lies half-swallowed by tide and time. Salt-smoothed stone arches bear weathered carvings that pulse with a cold, inner glow. A hush hangs in the air as if the sea itself listens; faint, distant echoes suggest something patient and watchful beyond the veil of gloom. Somewhere further in, water drips, slow and patient."
+    "text": "The hall lies half-swallowed by tide and time. Salt-smoothed stone arches bear weathered carvings that pulse with a cold, inner glow. A hush hangs in the air as if the sea itself listens; faint, distant echoes suggest something patient and watchful beyond the veil of gloom. Somewhere further in, water drips, slow and patient."
   },
   {
     "id": "act3-sanctum-of-the-tide",
     "title": "Sanctum of the Tide",
     "width": 1920,
     "height": 1080,
-    "description": "A vaulted chamber where water hangs like a dark mirror, its surface etched with sigils that breathe and shift. Pale motes of light drift along the ripples, arranging themselves into slow, impatient runes. At the room's heart a shallow basin holds a cold, humming brightness; the air tastes of brine and vows left unsaid."
+    "text": "A vaulted chamber where water hangs like a dark mirror, its surface etched with sigils that breathe and shift. Pale motes of light drift along the ripples, arranging themselves into slow, impatient runes. At the room's heart a shallow basin holds a cold, humming brightness; the air tastes of brine and vows left unsaid."
   },
   {
     "id": "act3-lower-switchbacks",
     "title": "Lower Switchbacks",
     "width": 1920,
     "height": 1080,
-    "description": "Wind‑carved paths snake across black, glassy rock; ash skims the air and the scent of iron hangs on the wind. A small scholars' camp clings to a lee: canvas shelters patched with soot, low braziers for warmth, and drying racks where scorched notes and map fragments flutter. Workbenches hold polishing stones and brass fittings—evidence of a diligent, makeshift atelier repairing mirror segments found among the outcrops. Beyond the camp, the slope falls into jagged obsidian ribs and steaming vents where fumaroles hiss; sparks drift like trapped fireflies when the wind turns."
+    "text": "Wind‑carved paths snake across black, glassy rock; ash skims the air and the scent of iron hangs on the wind. A small scholars' camp clings to a lee: canvas shelters patched with soot, low braziers for warmth, and drying racks where scorched notes and map fragments flutter. Workbenches hold polishing stones and brass fittings—evidence of a diligent, makeshift atelier repairing mirror segments found among the outcrops. Beyond the camp, the slope falls into jagged obsidian ribs and steaming vents where fumaroles hiss; sparks drift like trapped fireflies when the wind turns."
   },
   {
     "id": "act3-obsidian-outcrops",
     "title": "Obsidian Outcrops",
     "width": 1920,
     "height": 1080,
-    "description": "Needle-sharp obsidian towers rise like black teeth from the ash, their surfaces catching and fracturing the light into jagged, glassy facets. Between the towers, thin seams and crevices hide weathered mirror fragments and the faint scars of old mounts—brass filings, dull polish, and tiny holes that speak of a long-vanished craft. A dry, metallic tang rides the hot wind, and every step sets off a tiny cascade of glass flakes into echoing gullies below."
+    "text": "Needle-sharp obsidian towers rise like black teeth from the ash, their surfaces catching and fracturing the light into jagged, glassy facets. Between the towers, thin seams and crevices hide weathered mirror fragments and the faint scars of old mounts—brass filings, dull polish, and tiny holes that speak of a long-vanished craft. A dry, metallic tang rides the hot wind, and every step sets off a tiny cascade of glass flakes into echoing gullies below."
   },
   {
     "id": "act3-mirror-terraces",
     "title": "Mirror Terraces",
     "width": 1920,
     "height": 1080,
-    "description": "Stepped platforms rise in concentric benches, each ring studded with sockets for polished mirrors and brass mounts. Channels are neatly etched into the stone to carry and focus light up the slope; stray rays catch on alignment wedges and glint like cold flame. The air hums faintly with residual heat, and dusted ash settles on worktables where scholars and attendants file, polish, and fit mirror segments. The place smells of warm metal, singed cloth, and the mineral tang of cooling slag."
+    "text": "Stepped platforms rise in concentric benches, each ring studded with sockets for polished mirrors and brass mounts. Channels are neatly etched into the stone to carry and focus light up the slope; stray rays catch on alignment wedges and glint like cold flame. The air hums faintly with residual heat, and dusted ash settles on worktables where scholars and attendants file, polish, and fit mirror segments. The place smells of warm metal, singed cloth, and the mineral tang of cooling slag."
   },
   {
     "id": "act3-fumarole-passages",
     "title": "Fumarole Passages",
     "width": 1920,
     "height": 1080,
-    "description": "Narrow tunnels exhale a rhythmic, breath-like heat; stone vents chuff and sigh as if the mountain itself sleeps and dreams. Curtains of steam veil the low passages, and the air tastes faintly of sulfur and warm metal. Here and there a vent hisses sparks that glass the rock into smoky, translucent streaks, while the floor bears the pale scars of old fittings—tiny holes and rubbed brass where mounts were once bolted. Each step sends a warm gust that carries a distant clink of metal and the steady, low sigh of fumaroles farther below."
+    "text": "Narrow tunnels exhale a rhythmic, breath-like heat; stone vents chuff and sigh as if the mountain itself sleeps and dreams. Curtains of steam veil the low passages, and the air tastes faintly of sulfur and warm metal. Here and there a vent hisses sparks that glass the rock into smoky, translucent streaks, while the floor bears the pale scars of old fittings—tiny holes and rubbed brass where mounts were once bolted. Each step sends a warm gust that carries a distant clink of metal and the steady, low sigh of fumaroles farther below."
   },
   {
     "id": "act3-ember-gallery",
     "title": "Ember Gallery",
     "width": 1920,
     "height": 1080,
-    "description": "A vaulted cavern veined with cooling flows; the air smells of charcoal and iron. Streaks of glassed lava lace the walls, catching stray cinders that glow like embers in the gloom. Steam sighs from fissures and pools of blackened water mirror faint, dancing light. Worktables gather scattered fragments of fireglass and ash‑tumbled tools where attendants hammer and sort cooled slag for wards. The heat here is a steady, low thrum — a reminder that the mountain breathes beneath your feet."
+    "text": "A vaulted cavern veined with cooling flows; the air smells of charcoal and iron. Streaks of glassed lava lace the walls, catching stray cinders that glow like embers in the gloom. Steam sighs from fissures and pools of blackened water mirror faint, dancing light. Worktables gather scattered fragments of fireglass and ash‑tumbled tools where attendants hammer and sort cooled slag for wards. The heat here is a steady, low thrum — a reminder that the mountain breathes beneath your feet."
   },
   {
     "id": "act3-phoenix-crater",
     "title": "Phoenix Crater",
     "width": 1920,
     "height": 1080,
-    "description": "A luminous bowl of vitrified rock where warm drafts swirl and cinders dance in spirals. The air smells of ozone, resin, and warm iron; the whole bowl feels like a giant hearth that remembers how to forge stars."
+    "text": "A luminous bowl of vitrified rock where warm drafts swirl and cinders dance in spirals. The air smells of ozone, resin, and warm iron; the whole bowl feels like a giant hearth that remembers how to forge stars."
   },
   {
     "id": "act3-cavern-mouth",
     "title": "Cavern Mouth",
     "width": 1920,
     "height": 1080,
-    "description": "A broad arch opens into the hill, hung with cold mist. Lantern light dims a step inside it. Old signs are cut into the arch stone, worn too smooth to read."
+    "text": "A broad arch opens into the hill, hung with cold mist. Lantern light dims a step inside it. Old signs are cut into the arch stone, worn too smooth to read."
   },
   {
     "id": "act3-tool-cache",
     "title": "Tool Cache",
     "width": 1920,
     "height": 1080,
-    "description": "A side chamber shored with old timbers and stacked with crates of braces, iron fittings and coils of hemp rope. The walls are scored with tool marks, and the air smells of iron and wet earth."
+    "text": "A side chamber shored with old timbers and stacked with crates of braces, iron fittings and coils of hemp rope. The walls are scored with tool marks, and the air smells of iron and wet earth."
   },
   {
     "id": "act3-collapsed-galleries",
     "title": "Collapsed Galleries",
     "width": 1920,
     "height": 1080,
-    "description": "A gallery choked with fallen stone, floor to roof. The timbers that held it lie snapped under the pile, and dust hangs in the still air."
+    "text": "A gallery choked with fallen stone, floor to roof. The timbers that held it lie snapped under the pile, and dust hangs in the still air."
   },
   {
     "id": "act3-echo-chambers",
     "title": "Echo Chambers",
     "width": 1920,
     "height": 1080,
-    "description": "Smooth caverns of bare stone. Every step comes back to you from the alcoves, and so does every word, a breath late, as if someone were copying you. Runes cover the walls, cut by three hands, the same words over and over."
+    "text": "Smooth caverns of bare stone. Every step comes back to you from the alcoves, and so does every word, a breath late, as if someone were copying you. Runes cover the walls, cut by three hands, the same words over and over."
   },
   {
     "id": "act3-stillness-vestibule",
     "title": "Stillness Vestibule",
     "width": 1920,
     "height": 1080,
-    "description": "A hush falls over this chamber like a shroud. Dark pools mirror the ceiling, so still they look frozen in time, and the stone seems to swallow every sound. At the centre, three weathered echo stones stand in a triangle. Their carved channels look made to catch whispered words and hold them."
+    "text": "A hush falls over this chamber like a shroud. Dark pools mirror the ceiling, so still they look frozen in time, and the stone seems to swallow every sound. At the centre, three weathered echo stones stand in a triangle. Their carved channels look made to catch whispered words and hold them."
   },
   {
     "id": "act3-dragons-hall",
     "title": "Dragon's Hall",
     "width": 1920,
     "height": 1080,
-    "description": "A hall of living stone opens beyond sight, its ceiling lost in shadow. Embers burn slowly along the floor, pulsing like a heartbeat, and somewhere in the dark, water drips. Rings of old sigils spiral across the black tiles around the Ancient Dragon. It lies coiled at the centre, scales like polished obsidian, and each slow breath hums in your bones."
+    "text": "A hall of living stone opens beyond sight, its ceiling lost in shadow. Embers burn slowly along the floor, pulsing like a heartbeat, and somewhere in the dark, water drips. Rings of old sigils spiral across the black tiles around the Ancient Dragon. It lies coiled at the centre, scales like polished obsidian, and each slow breath hums in your bones."
   },
   {
     "id": "act3-fortress-entrance",
     "title": "Entrance to Malakar's Fortress",
     "width": 1920,
     "height": 1080,
-    "description": "A bastion of black stone rises from a shattered ridge. Iron lattices close its gates, and sigils glow behind them, slow as breathing. The wind up here is cold and smells of metal. Where the gate arch meets the wall an older carving shows through the black: a sun rising over three linked rings."
+    "text": "A bastion of black stone rises from a shattered ridge. Iron lattices close its gates, and sigils glow behind them, slow as breathing. The wind up here is cold and smells of metal. Where the gate arch meets the wall an older carving shows through the black: a sun rising over three linked rings."
   },
   {
     "id": "act3-portrait-ancient-dragon",
     "title": "Ancient Dragon",
     "width": 480,
     "height": 640,
-    "description": "A face portrait of an ancient dragon, its head heavy with dull worn scales, with golden eyes half open and unhurried."
+    "text": "A face portrait of an ancient dragon, its head heavy with dull worn scales, with golden eyes half open and unhurried."
   },
   {
     "id": "act3-portrait-ash-scholar",
     "title": "Ash Scholar",
     "width": 480,
     "height": 640,
-    "description": "A face portrait of a scholar with soot-streaked cheeks, singed eyebrows, tired intelligent eyes and wind-tousled hair."
+    "text": "A face portrait of a scholar with soot-streaked cheeks, singed eyebrows, tired intelligent eyes and wind-tousled hair."
   },
   {
     "id": "act3-portrait-mine-overseer",
     "title": "Mine Overseer",
     "width": 480,
     "height": 640,
-    "description": "A face portrait of a mine overseer with a face grey with rock dust, a heavy brow and uneasy eyes looking past you."
+    "text": "A face portrait of a mine overseer with a face grey with rock dust, a heavy brow and uneasy eyes looking past you."
   },
   {
     "id": "act3-portrait-miners",
     "title": "Miners",
     "width": 480,
     "height": 640,
-    "description": "A face portrait of a grizzled old miner, his face grey with rock dust, with a deep frown and a lamp-lit stare."
+    "text": "A face portrait of a grizzled old miner, his face grey with rock dust, with a deep frown and a lamp-lit stare."
   },
   {
     "id": "portrait-mira",
     "title": "Mira",
     "width": 480,
     "height": 640,
-    "description": "A face portrait of a village healer in middle age, with a calm, steady gaze that rests on you a moment longer than is comfortable, and a sprig of dried sage tucked behind one ear."
+    "text": "A face portrait of a village healer in middle age, with a calm, steady gaze that rests on you a moment longer than is comfortable, and a sprig of dried sage tucked behind one ear."
   },
   {
     "id": "act3-portrait-phoenix",
     "title": "Phoenix",
     "width": 480,
     "height": 640,
-    "description": "A face portrait of a phoenix, its head feathers shading from gold to red, with a sharp beak and calm, unhurried amber eyes."
+    "text": "A face portrait of a phoenix, its head feathers shading from gold to red, with a sharp beak and calm, unhurried amber eyes."
   },
   {
     "id": "act3-portrait-phoenix-guardian",
     "title": "Phoenix Guardian",
     "width": 480,
     "height": 640,
-    "description": "A face portrait of a masked guardian in a fire-etched mask and hood, only the eyes and lips showing."
+    "text": "A face portrait of a masked guardian in a fire-etched mask and hood, only the eyes and lips showing."
   },
   {
     "id": "act3-portrait-pier-warden",
     "title": "Pier Warden",
     "width": 480,
     "height": 640,
-    "description": "A face portrait of an old man with a salt-stiff collar, a seamed, sea-beaten face and pale eyes fixed on the water."
+    "text": "A face portrait of an old man with a salt-stiff collar, a seamed, sea-beaten face and pale eyes fixed on the water."
   },
   {
     "id": "act3-portrait-silence-keeper",
     "title": "Silence Keeper",
     "width": 480,
     "height": 640,
-    "description": "A face portrait of a figure in a deep hood, the face in shadow, with a pale chin and calm, still features."
+    "text": "A face portrait of a figure in a deep hood, the face in shadow, with a pale chin and calm, still features."
   },
   {
     "id": "portrait-sir-cedric",
     "title": "Sir Cedric",
     "width": 480,
     "height": 640,
-    "description": "A face portrait of a tall knight in his fifties with a weathered, tired face and a steady, watchful stare, a steel mail coif and a dented gorget around his neck."
+    "text": "A face portrait of a tall knight in his fifties with a weathered, tired face and a steady, watchful stare, a steel mail coif and a dented gorget around his neck."
   },
   {
     "id": "act3-portrait-tide-born-guardian",
     "title": "Tide-Born Guardian",
     "width": 480,
     "height": 640,
-    "description": "A face portrait of a guardian shaped of standing water, a face of clear liquid with ward-sigils drifting in it like weed."
+    "text": "A face portrait of a guardian shaped of standing water, a face of clear liquid with ward-sigils drifting in it like weed."
   },
   {
     "id": "act3-portrait-tobin",
     "title": "Tobin",
     "width": 480,
     "height": 640,
-    "description": "A face portrait of a boy of about fifteen, thin and pale, with his throat wrapped in a strip of torn shirt and his eyes turned upward and away."
+    "text": "A face portrait of a boy of about fifteen, thin and pale, with his throat wrapped in a strip of torn shirt and his eyes turned upward and away."
   },
   {
     "id": "act3-portrait-wandering-phantoms",
     "title": "Wandering Phantoms",
     "width": 480,
     "height": 640,
-    "description": "A face portrait of a grey phantom, thin as breath on glass, a faint hollow face with open, whispering lips."
+    "text": "A face portrait of a grey phantom, thin as breath on glass, a faint hollow face with open, whispering lips."
   },
   {
     "id": "portrait-elior",
     "title": "Elior",
     "width": 480,
     "height": 640,
-    "description": "A face portrait of a farm boy of about nineteen, sun-browned and freckled, with untidy brown hair, an earnest, searching look, and the frayed collar of a homespun shirt."
+    "text": "A face portrait of a farm boy of about nineteen, sun-browned and freckled, with untidy brown hair, an earnest, searching look, and the frayed collar of a homespun shirt."
   }
 ]
