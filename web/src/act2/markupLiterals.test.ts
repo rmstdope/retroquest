@@ -183,11 +183,18 @@ function trailingText(node: ts.Node): string | undefined {
   return undefined
 }
 
+/** Whether `text` ends in a colon, ignoring trailing whitespace. */
+function endsInColon(text: string | undefined): boolean {
+  return text !== undefined && text.trimEnd().endsWith(':')
+}
+
 /**
  * The `file:line` of every narration that only introduces a quote: a text
  * ending in a colon directly before a `speech(...)` or `dialogue(...)` call in
- * a `+` chain ("One of them adds, more quietly:"). The story view shows such a
- * line as a card of its own, standing apart from the words it leads into.
+ * a `+` chain, whitespace-only pieces between them skipped, or directly
+ * before such a call in a template ("One of them adds, more quietly:"). The
+ * story view shows such a line as a card of its own, standing apart from the
+ * words it leads into.
  */
 function colonLeadIns(file: string): string[] {
   const source = ts.createSourceFile(
@@ -197,24 +204,34 @@ function colonLeadIns(file: string): string[] {
     true,
   )
   const found: string[] = []
+  const report = (node: ts.Node): void => {
+    const line = source.getLineAndCharacterOfPosition(node.getStart()).line
+    found.push(`${file}:${line + 1}`)
+  }
   const visit = (node: ts.Node): void => {
-    if (ts.isBinaryExpression(node)) {
-      const parts = operands(node)
+    if (ts.isTemplateExpression(node)) {
+      const texts = [
+        node.head.text,
+        ...node.templateSpans.map((span) => span.literal.text),
+      ]
+      node.templateSpans.forEach((span, index) => {
+        if (endsInColon(texts[index]) && isQuoteCall(span.expression))
+          report(span)
+      })
+    } else if (ts.isBinaryExpression(node)) {
+      // Whitespace-only pieces ('\n\n') render nothing between the two.
+      const parts = operands(node).filter(
+        (part) => !(ts.isStringLiteralLike(part) && part.text.trim() === ''),
+      )
       if (parts.length > 1) {
         parts.forEach((part, index) => {
           const next = parts[index + 1]
-          const text = trailingText(part)
           if (
-            text !== undefined &&
-            text.trimEnd().endsWith(':') &&
+            endsInColon(trailingText(part)) &&
             next !== undefined &&
             isQuoteCall(next)
-          ) {
-            const line = source.getLineAndCharacterOfPosition(
-              part.getStart(),
-            ).line
-            found.push(`${file}:${line + 1}`)
-          }
+          )
+            report(part)
         })
         parts.forEach(visit)
         return
