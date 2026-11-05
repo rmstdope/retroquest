@@ -65,6 +65,14 @@ describe("Elior's Cottage bread", () => {
     expect(new GameController(game).getRoomDescription()).toMatch(/loaf/i)
   })
 
+  it('is no longer said to cool on the table once Elior has taken it', () => {
+    const game = cottage()
+    executeCommands(game, ['take bread'])
+    const text = new GameController(game).getRoomDescription()
+    expect(text).not.toMatch(/loaf/i)
+    expect(text).toMatch(/sturdy wooden table sits in the center/i)
+  })
+
   it('can be taken without lighting the lantern', () => {
     const game = cottage()
     executeCommands(game, ['take bread'])
