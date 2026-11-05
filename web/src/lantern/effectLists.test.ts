@@ -47,12 +47,13 @@ describe('effectsList', () => {
   it('content-studio.json declares the effects list, clips and manifest, and the refresh', () => {
     const project = readJson<{
       refresh: { shared: string }
-      effects: Record<string, unknown>
+      effects: { from: unknown; clips: string; manifest: string }
     }>('content-studio.json')
     expect(project.refresh.shared).toContain('tts/extract-effects.ts')
-    expect(project.effects).toEqual({
+    // Only the paths: the studio saves `effects.model` from its Setup page.
+    const { from, clips, manifest } = project.effects
+    expect({ from, clips, manifest }).toEqual({
       from: { shared: 'tts/effects.json' },
-      model: 'open-1',
       clips: 'web/public/audio/soundeffects/generated',
       manifest: 'web/public/audio/soundeffects/generated/manifest.json',
     })

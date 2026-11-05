@@ -61,6 +61,8 @@ A script.json or music.json that differs from what the extractor writes now fail
   knows which lines are up to date. Its own working state (auditions, takes not chosen, personal settings) is in
   `content-studio/cache/`, which is not committed. A checkout made before Content Studio's version 2 format
   moves its old cache once: `mkdir -p content-studio && mv .content-studio content-studio/cache`.
+  `content-studio/cache/effects.json` is no longer read: the sound effects' rewordings are now in
+  the committed `content-studio/effects/edits.json`.
 - Clips are 64 kbps mono MP3, levelled to −16 LUFS as `level.py` levels them, in
   `web/public/audio/narration/act<N>/` with `manifest.json` (line id -> file, speaker, duration, word
   timings), which the story view reads. Each line is sent to Fish's free model (long ones in
