@@ -115,6 +115,11 @@
     "text": "You rest for a moment, gathering your strength."
   },
   {
+    "key": "15af56a59f0d06",
+    "speaker": "mira",
+    "text": "You should read the note I gave you first, Elior. I wrote it for the road, and I want it read before we go."
+  },
+  {
     "key": "1f7d39c44976a9",
     "speaker": "narrator",
     "text": "New main quest"
@@ -138,11 +143,6 @@
     "key": "01cc90dd8651b3",
     "speaker": "narrator",
     "text": "She has underlined the last line twice."
-  },
-  {
-    "key": "15af56a59f0d06",
-    "speaker": "mira",
-    "text": "You should read the note I gave you first, Elior. I wrote it for the road, and I want it read before we go."
   },
   {
     "key": "09940a4ad697b2",
@@ -210,6 +210,11 @@
     "text": "Echoes of the Hidden Bond: Your parents made the three relics, long before you were born. Mira says they left words behind them: by the sea, on the mountain and under the hills. By the sea: something they left in the Sunken Ruins."
   },
   {
+    "key": "10ea66bdf30843",
+    "speaker": "mira",
+    "text": "The crystal of light is somewhere in these ruins. It answers to courage. It parts veils and steadies the spirit. When you stand before the tide-born guardian, speak your vow, and mean it."
+  },
+  {
     "key": "1766a66115e457",
     "speaker": "narrator",
     "text": "Tidal Causeway"
@@ -228,11 +233,6 @@
     "key": "1b2da321941744",
     "speaker": "narrator",
     "text": "A jagged remnant of timber studded with barnacles. It juts from the pier, more anchor than object."
-  },
-  {
-    "key": "10ea66bdf30843",
-    "speaker": "mira",
-    "text": "The crystal of light is somewhere in these ruins. It answers to courage. It parts veils and steadies the spirit. When you stand before the tide-born guardian, speak your vow, and mean it."
   },
   {
     "key": "114e88bbe80e92",
@@ -480,6 +480,11 @@
     "text": "The pier surrenders to the tide. Warped planks gape and blackened vaults yawn where light forgets to go. Barnacled timbers rise like buried ribs, and the water sings a low, patient counting of losses."
   },
   {
+    "key": "1056cb8900cebc",
+    "speaker": "elior",
+    "text": "truth"
+  },
+  {
     "key": "1a1f3171893811",
     "speaker": "narrator",
     "text": "You tell the Pier Warden what you know: this is no season. Something is draining the king, and the sea with him, and it is getting worse."
@@ -533,6 +538,11 @@
     "key": "06a1e37c2e4c5f",
     "speaker": "narrator",
     "text": "You search around the Collapsed Pier, but find nothing of interest beyond what you can already see."
+  },
+  {
+    "key": "0c9cbcf73926f3",
+    "speaker": "pier warden",
+    "text": "Nothing to say? Then it's a bad season, and it'll pass. It always has."
   },
   {
     "key": "16030f93810545",
@@ -725,6 +735,11 @@
     "text": "The water stands parted around you. The crystal of light burns in its basin, the only light in the world."
   },
   {
+    "key": "0ffdc21e4400b0",
+    "speaker": "elior",
+    "text": "myself"
+  },
+  {
     "key": "04105b8102597c",
     "speaker": "narrator",
     "text": "The water draws back from you, all the way to the walls. The crystal of light sits loose in its basin."
@@ -815,6 +830,11 @@
     "text": "I had the wall that night. I heard nothing. Every day he is weaker, I hear it."
   },
   {
+    "key": "003315c54c313b",
+    "speaker": "mira",
+    "text": "A phoenix nests at the top of this mountain, where the rock is hottest. Only it can give the feather, and it asks for wisdom. The scholar camped on this path has read these slopes for years; start with him. And Elior: this mountain will not be hurried."
+  },
+  {
     "key": "04801b4e567481",
     "speaker": "narrator",
     "text": "Lower Switchbacks"
@@ -860,11 +880,6 @@
     "text": "You receive a charred notebook."
   },
   {
-    "key": "003315c54c313b",
-    "speaker": "mira",
-    "text": "A phoenix nests at the top of this mountain, where the rock is hottest. Only it can give the feather, and it asks for wisdom. The scholar camped on this path has read these slopes for years; start with him. And Elior: this mountain will not be hurried."
-  },
-  {
     "key": "1f202bfe647b47",
     "speaker": "sir cedric",
     "text": "We stand about reading vents while he fades. Let me go through that heat first and see what it does."
@@ -878,6 +893,16 @@
     "key": "09ec25e07db3f0",
     "speaker": "narrator",
     "text": "You search around the Lower Switchbacks, but find nothing of interest beyond what you can already see."
+  },
+  {
+    "key": "1136d4387ebd9e",
+    "speaker": "narrator",
+    "text": "The Ash Scholar taps a page of notes."
+  },
+  {
+    "key": "06db4dc242e57a",
+    "speaker": "ash scholar",
+    "text": "The mount on the terraces takes four segments, by my notes. Seek the outcrops for what the mountain has shed."
   },
   {
     "key": "035a7e5f53d3f2",
@@ -903,16 +928,6 @@
     "key": "18dbc36ed50d0e",
     "speaker": "narrator",
     "text": "The second entry is pressed so hard into the page that the pen has torn it. The names in it are your parents'."
-  },
-  {
-    "key": "1136d4387ebd9e",
-    "speaker": "narrator",
-    "text": "The Ash Scholar taps a page of notes."
-  },
-  {
-    "key": "06db4dc242e57a",
-    "speaker": "ash scholar",
-    "text": "The mount on the terraces takes four segments, by my notes. Seek the outcrops for what the mountain has shed."
   },
   {
     "key": "163954f189406a",
@@ -1220,6 +1235,11 @@
     "text": "I asked this once of the Warden of Wisdom, when he came to me with his two friends. He knew the answer, and did not keep it."
   },
   {
+    "key": "0c774125ade89b",
+    "speaker": "elior",
+    "text": "patience"
+  },
+  {
     "key": "0af366233c2c8e",
     "speaker": "narrator",
     "text": "The phoenix bends its neck, draws a single feather from its breast and lays it in your hands."
@@ -1450,6 +1470,11 @@
     "text": "Weaker still. And I stood on a mountain, waiting on a bird."
   },
   {
+    "key": "0fd55800c87c13",
+    "speaker": "mira",
+    "text": "There are miners trapped somewhere under this hill, Elior. Help them first. The way to the dragon goes through their galleries, and I would not walk past them if it did not."
+  },
+  {
     "key": "02d6c0ed0ee59f",
     "speaker": "narrator",
     "text": "Cavern Mouth"
@@ -1495,11 +1520,6 @@
     "text": "You receive the miner's key."
   },
   {
-    "key": "0fd55800c87c13",
-    "speaker": "mira",
-    "text": "There are miners trapped somewhere under this hill, Elior. Help them first. The way to the dragon goes through their galleries, and I would not walk past them if it did not."
-  },
-  {
     "key": "0435dce01363b8",
     "speaker": "sir cedric",
     "text": "People under the rock. That I understand. Point me at the heavy end."
@@ -1515,6 +1535,16 @@
     "text": "You search around the Cavern Mouth, but find nothing of interest beyond what you can already see."
   },
   {
+    "key": "009f1cec590817",
+    "speaker": "narrator",
+    "text": "The Mine Overseer has not moved from the arch."
+  },
+  {
+    "key": "0cef8b39f77bd6",
+    "speaker": "mine overseer",
+    "text": "Still nothing from the galleries. The Tool Cache is north."
+  },
+  {
     "key": "01fef373a5e7f4",
     "speaker": "narrator",
     "text": "Miners' Rescue"
@@ -1528,16 +1558,6 @@
     "key": "15ab21edcdf585",
     "speaker": "narrator",
     "text": "A heavy iron key, pitted with age, used to open the supply crates."
-  },
-  {
-    "key": "009f1cec590817",
-    "speaker": "narrator",
-    "text": "The Mine Overseer has not moved from the arch."
-  },
-  {
-    "key": "0cef8b39f77bd6",
-    "speaker": "mine overseer",
-    "text": "Still nothing from the galleries. The Tool Cache is north."
   },
   {
     "key": "05ef3432624e57",
@@ -1725,16 +1745,6 @@
     "text": "Half a dozen miners, grey with rock dust, passing timbers hand to hand. The oldest of them gives the orders, and nobody argues."
   },
   {
-    "key": "02ef658f8e4205",
-    "speaker": "narrator",
-    "text": "You stabilized the collapse and led the miners to safety. The route to the inner caverns is now open."
-  },
-  {
-    "key": "0864464ceeb95d",
-    "speaker": "sir cedric",
-    "text": "They are out. The old man was right. I have a king to fetch."
-  },
-  {
     "key": "1dadd89a01f3f8",
     "speaker": "narrator",
     "text": "The miners look up from their work, tools in hand:"
@@ -1745,6 +1755,16 @@
     "text": "Still here, Elior? Beams are going in. The way east to the Echo Chambers is sound. Go when you're ready."
   },
   {
+    "key": "02ef658f8e4205",
+    "speaker": "narrator",
+    "text": "You stabilized the collapse and led the miners to safety. The route to the inner caverns is now open."
+  },
+  {
+    "key": "0864464ceeb95d",
+    "speaker": "sir cedric",
+    "text": "They are out. The old man was right. I have a king to fetch."
+  },
+  {
     "key": "1787c6017ef1ae",
     "speaker": "narrator",
     "text": "Tobin looks at you for a long moment. His lips part, then close again. He turns the cracked lamp over in his hands and goes back to watching the ceiling."
@@ -1753,6 +1773,16 @@
     "key": "05aabde91a91b1",
     "speaker": "narrator",
     "text": "A boy of perhaps fifteen sits apart from the others on an upturned bucket, knees drawn up, a cracked lamp in his lap. His throat is wrapped in a strip of torn shirt. He watches the ceiling, not you."
+  },
+  {
+    "key": "10e084668527d8",
+    "speaker": "narrator",
+    "text": "Tobin swallows, and you see what it costs him. No sound comes. He shakes his head, once."
+  },
+  {
+    "key": "0afbe6c86735d6",
+    "speaker": "narrator",
+    "text": "Tobin does not look up. His thumb traces the crack in the lamp's glass, back and forth."
   },
   {
     "key": "143283441007a0",
@@ -1910,6 +1940,11 @@
     "text": "Through the murmur, one word comes clear, over and over: rest … rest …"
   },
   {
+    "key": "084f8616937cd2",
+    "speaker": "elior",
+    "text": "rest"
+  },
+  {
     "key": "110ed88eddc4e0",
     "speaker": "narrator",
     "text": "The whispering falters. One by one the figures turn toward you, and the hurry goes out of them. They thin until you can see the far wall through them, and then they are gone. The chamber is quieter for it, but not yet still."
@@ -1965,6 +2000,16 @@
     "text": "You search around the Stillness Vestibule, but find nothing of interest beyond what you can already see."
   },
   {
+    "key": "1d5dbf7856d53f",
+    "speaker": "narrator",
+    "text": "The Silence Keeper does not turn:"
+  },
+  {
+    "key": "120b3395ebb522",
+    "speaker": "silence keeper",
+    "text": "Forty years I have listened to those stones. They are cold. Bless the stones; give them the chant. But a chant will not carry over troubled water, and these pools are not as still as they seem."
+  },
+  {
     "key": "1dce594469d8e4",
     "speaker": "narrator",
     "text": "As the blessing leaves your lips, the echo stones hum, and you feel it in your bones. Silver light runs along their carved channels like water finding its course. Then the light settles into a slow, steady glow."
@@ -1990,6 +2035,11 @@
     "text": "Oath of Stillness: Grey figures drift among the pools of the Stillness Vestibule, saying the same thing over, as they have for years. The way to the dragon's hall stays shut until the echo stones there are blessed and given the old chant. Its words are cut into the walls of the Echo Chambers."
   },
   {
+    "key": "001d8f20f5945a",
+    "speaker": "silence keeper",
+    "text": "Forty years I have listened to those stones. They are warm again. Give them the chant. But a chant will not carry over troubled water, and these pools are not as still as they seem."
+  },
+  {
     "key": "171403adb2ff8a",
     "speaker": "narrator",
     "text": "You unstopper the phial and let a single drop fall into the nearest pool. The ripple does not spread; it sinks, and the stillness goes down after it until the black water lies flat as glass, holding the stones and the dark above in perfect reflection."
@@ -2008,6 +2058,11 @@
     "key": "08fc8a058da719",
     "speaker": "silence keeper",
     "text": "The stones in this room were cut to carry a whisper to the sleeper without waking it. They have gone cold. Bless them, and give them the old chant from the walls of the Echo Chambers, and the way will open. The water lies true now; it will hold your words."
+  },
+  {
+    "key": "08236ac6c08c00",
+    "speaker": "silence keeper",
+    "text": "Forty years I have listened to those stones. They are warm again. Give them the chant. The water lies true now; it will hold your words."
   },
   {
     "key": "19df34d39fbdb7",
@@ -2170,6 +2225,11 @@
     "text": "Your parents were not Malakar's victims. They were his closest friends, Wardens of the Dawn like him, and when he tore at time they became the ward that hides you. The dragon says they are warded away, not dead."
   },
   {
+    "key": "01fcb0a92b3baa",
+    "speaker": "elior",
+    "text": "it"
+  },
+  {
     "key": "067c3e83a7ff7f",
     "speaker": "elior",
     "text": "I take what is given, and I return it."
@@ -2195,6 +2255,11 @@
     "text": "I take what is given, and I return myself."
   },
   {
+    "key": "12b890057dd4ea",
+    "speaker": "elior",
+    "text": "what I take"
+  },
+  {
     "key": "0027b9825039cb",
     "speaker": "elior",
     "text": "I take what is given, and I return what I take."
@@ -2203,6 +2268,11 @@
     "key": "05a3ca979b02f0",
     "speaker": "narrator",
     "text": "A mysterious amulet inscribed with runes. At its centre is the sigil of the Wardens of the Dawn: the sun rising over three linked rings. In its depths Aren and Lysa stand hand in hand. The third figure keeps his back turned."
+  },
+  {
+    "key": "113de035c9d367",
+    "speaker": "elior",
+    "text": "everything"
   },
   {
     "key": "10600cc922a965",
@@ -2395,36 +2465,6 @@
     "text": "And ask me anything you like now — about your parents, Malakar, the amulet, your grandmother. I will not hide from you again."
   },
   {
-    "key": "01f30a4c8bc04a",
-    "speaker": "narrator",
-    "text": "Mira closes her eyes. For a moment she looks younger, and very tired."
-  },
-  {
-    "key": "19c7aebac93628",
-    "speaker": "mira",
-    "text": "Thank you. I did not dare ask for that. I will try to deserve it."
-  },
-  {
-    "key": "13a11b7a40b800",
-    "speaker": "narrator",
-    "text": "Mira does not look away."
-  },
-  {
-    "key": "1e35c127b2486e",
-    "speaker": "mira",
-    "text": "I should have. I chose the seal over you every day, and I would choose it again. But I am sorry for every one of those days."
-  },
-  {
-    "key": "00d7ab3713233a",
-    "speaker": "sir cedric",
-    "text": "Do what she needs, Elior. I have waited this long. I can wait one more hour."
-  },
-  {
-    "key": "1521653efe2a9e",
-    "speaker": "narrator",
-    "text": "Low on one facet, almost lost in the light, someone has scratched a seven with a bar through it. Lysa's hand. Your mother cut this prism."
-  },
-  {
     "key": "1d09d386f73f92",
     "speaker": "mira",
     "text": "The three relics resonate, Elior. Listen. They were made together, and they know it."
@@ -2455,6 +2495,51 @@
     "text": "It is done. This can stop what he is doing to the king. Take it, and tell me when you are ready for the fortress."
   },
   {
+    "key": "07b3a59eb29c51",
+    "speaker": "mira",
+    "text": "The elixir, Elior. You must take the lifelight elixir before we depart. I did not make it to leave it on my table."
+  },
+  {
+    "key": "1a99a334b43ec4",
+    "speaker": "elior",
+    "text": "forgive"
+  },
+  {
+    "key": "01f30a4c8bc04a",
+    "speaker": "narrator",
+    "text": "Mira closes her eyes. For a moment she looks younger, and very tired."
+  },
+  {
+    "key": "19c7aebac93628",
+    "speaker": "mira",
+    "text": "Thank you. I did not dare ask for that. I will try to deserve it."
+  },
+  {
+    "key": "006780e0a013e4",
+    "speaker": "elior",
+    "text": "you should have told me"
+  },
+  {
+    "key": "13a11b7a40b800",
+    "speaker": "narrator",
+    "text": "Mira does not look away."
+  },
+  {
+    "key": "1e35c127b2486e",
+    "speaker": "mira",
+    "text": "I should have. I chose the seal over you every day, and I would choose it again. But I am sorry for every one of those days."
+  },
+  {
+    "key": "00d7ab3713233a",
+    "speaker": "sir cedric",
+    "text": "Do what she needs, Elior. I have waited this long. I can wait one more hour."
+  },
+  {
+    "key": "1521653efe2a9e",
+    "speaker": "narrator",
+    "text": "Low on one facet, almost lost in the light, someone has scratched a seven with a bar through it. Lysa's hand. Your mother cut this prism."
+  },
+  {
     "key": "09c6c09e6fbc99",
     "speaker": "narrator",
     "text": "The village healer — and, you know now, the Wardens' pupil, who stayed in Willowbrook for your sake. She meets your eyes more easily than before."
@@ -2473,11 +2558,6 @@
     "key": "005878fc7621a2",
     "speaker": "narrator",
     "text": "A small glass vial the colour of first light. Something moves in it: a white glint, a thread of flame, a dark shimmer like a scale turning. Mira made it from the three relics, to stop what Malakar is doing to the king."
-  },
-  {
-    "key": "07b3a59eb29c51",
-    "speaker": "mira",
-    "text": "The elixir, Elior. You must take the lifelight elixir before we depart. I did not make it to leave it on my table."
   },
   {
     "key": "1e20ca49f69161",
@@ -2513,6 +2593,31 @@
     "key": "19c1738da846ec",
     "speaker": "narrator",
     "text": "Words carved beneath the runes of a sunlit glade come back to you."
+  },
+  {
+    "key": "14154d166b42fd",
+    "speaker": "narrator",
+    "text": "Mira leans on the cold stone of the gate. Her hands are still shaking from the last circle."
+  },
+  {
+    "key": "10692b67a6c6d7",
+    "speaker": "mira",
+    "text": "I know how I look, Elior. Do not ask me to stay behind."
+  },
+  {
+    "key": "074228999c93ea",
+    "speaker": "mira",
+    "text": "Your parents walked into the dark without me once. I will not let you do the same. I am coming with you."
+  },
+  {
+    "key": "06f653d13b782f",
+    "speaker": "mira",
+    "text": "I am right behind you, Elior. The gates will not open themselves."
+  },
+  {
+    "key": "157f1d30afbc24",
+    "speaker": "elior",
+    "text": "refrain"
   },
   {
     "key": "193eec83ac0f7f",
@@ -2558,21 +2663,6 @@
     "key": "1642d24dabb87b",
     "speaker": "narrator",
     "text": "In your pack, the lifelight elixir is warm. Act III is complete. The final confrontation awaits."
-  },
-  {
-    "key": "14154d166b42fd",
-    "speaker": "narrator",
-    "text": "Mira leans on the cold stone of the gate. Her hands are still shaking from the last circle."
-  },
-  {
-    "key": "10692b67a6c6d7",
-    "speaker": "mira",
-    "text": "I know how I look, Elior. Do not ask me to stay behind."
-  },
-  {
-    "key": "074228999c93ea",
-    "speaker": "mira",
-    "text": "Your parents walked into the dark without me once. I will not let you do the same. I am coming with you."
   },
   {
     "key": "1d78843bd3416f",

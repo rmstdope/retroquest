@@ -80,6 +80,11 @@
     "text": "Nothing here answers to that. The voice says your name."
   },
   {
+    "key": "15be0c5891cd29",
+    "speaker": "elior",
+    "text": "hello"
+  },
+  {
     "key": "1f7d39c44976a9",
     "speaker": "narrator",
     "text": "New main quest"
@@ -110,11 +115,6 @@
     "text": "You woke with three words written down and a tune still going in the house. Grandmother is at the hearth, and she will want to hear about the dream."
   },
   {
-    "key": "1aaa7b34be5670",
-    "speaker": "narrator",
-    "text": "You'd rather light the lantern before you carry it anywhere; it is no use to you dark."
-  },
-  {
     "key": "1ce01e698ceb2f",
     "speaker": "narrator",
     "text": "Elior's Cottage"
@@ -123,6 +123,11 @@
     "key": "1c7d5a0dd93ef5",
     "speaker": "narrator",
     "text": "A modest cottage with a straw roof and a cozy hearth. The scent of fresh bread and old books fills the air. Sunlight filters through lace curtains, illuminating shelves lined with trinkets and memories. A sturdy wooden table sits in the center, and a gentle fire crackles in the hearth. Grandmother stands by it, humming, and keeps an eye on the bread."
+  },
+  {
+    "key": "1aaa7b34be5670",
+    "speaker": "narrator",
+    "text": "You'd rather light the lantern before you carry it anywhere; it is no use to you dark."
   },
   {
     "key": "041e30b4ecb790",
@@ -195,6 +200,11 @@
     "text": "You rest for a moment, gathering your strength."
   },
   {
+    "key": "134db2673b0e04",
+    "speaker": "grandmother",
+    "text": "Back again? There's bread on the board, if you're hungry."
+  },
+  {
     "key": "0967c6683e4888",
     "speaker": "narrator",
     "text": "The flickering light reveals more of the room. A small loaf of bread and a journal appear in the light."
@@ -238,11 +248,6 @@
     "key": "1198ba6187843e",
     "speaker": "narrator",
     "text": "Grandmother has nothing to sell you."
-  },
-  {
-    "key": "134db2673b0e04",
-    "speaker": "grandmother",
-    "text": "Back again? There's bread on the board, if you're hungry."
   },
   {
     "key": "1ce3d721f05512",
@@ -340,6 +345,11 @@
     "text": "Your father's word for calling a thing back when it is nearly gone. Grandmother remembered it for you."
   },
   {
+    "key": "057092a4b7c2fb",
+    "speaker": "narrator",
+    "text": "You already have it by heart: his words, and the way she told them."
+  },
+  {
     "key": "09acfbb0c60912",
     "speaker": "narrator",
     "text": "Magic for real"
@@ -358,11 +368,6 @@
     "key": "1ae65964e4b172",
     "speaker": "narrator",
     "text": "Grandmother told you of your father's journal, and his word for calling a thing back. It came to you as she spoke, and it stayed."
-  },
-  {
-    "key": "057092a4b7c2fb",
-    "speaker": "narrator",
-    "text": "You already have it by heart: his words, and the way she told them."
   },
   {
     "key": "1a943f14540283",
@@ -645,6 +650,11 @@
     "text": "Tilda has nothing to sell you."
   },
   {
+    "key": "1056cb8900cebc",
+    "speaker": "elior",
+    "text": "truth"
+  },
+  {
     "key": "1cafb496c9a807",
     "speaker": "tilda",
     "text": "The truth about what, love? You've lost me."
@@ -730,6 +740,31 @@
     "text": "You search around the Village Square, but find nothing of interest beyond what you can already see."
   },
   {
+    "key": "0b241988fa6096",
+    "speaker": "tilda",
+    "text": "Last night, someone spotted a cloaked stranger near the old well, asking after an old amulet, from a family that left. Nobody would tell him a thing, and he took the road to the mill."
+  },
+  {
+    "key": "1549afc4c6cb71",
+    "speaker": "tilda",
+    "text": "The animals are restless. My neighbor's dog howled at nothing for hours, and the chickens refuse to leave their coop after dusk. Malakar's weather, my mother would have called it, and knocked on wood."
+  },
+  {
+    "key": "060314cc7a5c68",
+    "speaker": "tilda",
+    "text": "Somebody's been down at the river bend. Good boots, not from round here. The prints go right to the water's edge and just stand there, my cousin says, like he waited a long while."
+  },
+  {
+    "key": "18b3b06bd05a76",
+    "speaker": "tilda",
+    "text": "Did you know the chapel bell rang once by itself? Years back, at midnight, with no hand on the rope. My mother knocked on wood for a week."
+  },
+  {
+    "key": "0ad028f7384bd2",
+    "speaker": "tilda",
+    "text": "They say the king's taken to his bed in Greendale, and not one physician can name what ails him. And the flour cart didn't come Thursday. Eleven years, and it's never once missed a Thursday."
+  },
+  {
     "key": "07c7494529d5ac",
     "speaker": "narrator",
     "text": "The handle creaks, but it holds. Most things in Willowbrook are like that."
@@ -743,11 +778,6 @@
     "key": "0757c018bcdd53",
     "speaker": "narrator",
     "text": "In the square, Tilda has more rumours than bread, and the people around her keep their voices down."
-  },
-  {
-    "key": "0b241988fa6096",
-    "speaker": "tilda",
-    "text": "Last night, someone spotted a cloaked stranger near the old well, asking after an old amulet, from a family that left. Nobody would tell him a thing, and he took the road to the mill."
   },
   {
     "key": "1ebff5a67616ba",
@@ -1015,6 +1045,26 @@
     "text": "A pair of frightened green eyes watches you from behind the crates."
   },
   {
+    "key": "1429f221f0f02b",
+    "speaker": "elior",
+    "text": "stay"
+  },
+  {
+    "key": "00a4d1d822a2a8",
+    "speaker": "narrator",
+    "text": "Patches sniffs the rug, circles twice and curls up at your grandmother's feet. She laughs softly."
+  },
+  {
+    "key": "046c8379d4b6f9",
+    "speaker": "grandmother",
+    "text": "Well, that's settled, then. I'll send word to Hemlock this very afternoon. He's a kind old soul; he'll be glad she's safe, and his store will be open again by the time you get there."
+  },
+  {
+    "key": "09352ca76d96c1",
+    "speaker": "narrator",
+    "text": "You let Patches stay by your grandmother's hearth, and she sent word to Old Man Hemlock. The General Store is open again. Curiosity did not kill this cat after all."
+  },
+  {
     "key": "1bcc09b892cdeb",
     "speaker": "narrator",
     "text": "Curiosity killed the cat: Patches was hiding in the Abandoned Shed. Carry her home to Old Man Hemlock at the General Store."
@@ -1060,19 +1110,9 @@
     "text": "You lift the bucket, then think better of it. The sour water from the well would only sicken the soil further."
   },
   {
-    "key": "00a4d1d822a2a8",
-    "speaker": "narrator",
-    "text": "Patches sniffs the rug, circles twice and curls up at your grandmother's feet. She laughs softly."
-  },
-  {
-    "key": "046c8379d4b6f9",
-    "speaker": "grandmother",
-    "text": "Well, that's settled, then. I'll send word to Hemlock this very afternoon. He's a kind old soul; he'll be glad she's safe, and his store will be open again by the time you get there."
-  },
-  {
-    "key": "09352ca76d96c1",
-    "speaker": "narrator",
-    "text": "You let Patches stay by your grandmother's hearth, and she sent word to Old Man Hemlock. The General Store is open again. Curiosity did not kill this cat after all."
+    "key": "1e1e8c4f733e9c",
+    "speaker": "elior",
+    "text": "yes"
   },
   {
     "key": "1a498b8e00d04e",
@@ -1260,11 +1300,6 @@
     "text": "You search around Mira's Hut, but find nothing of interest beyond what you can already see."
   },
   {
-    "key": "06e6ecd984e766",
-    "speaker": "narrator",
-    "text": "Mira says the sickness in the fields and the sickness of the king feel like one wound. She wants a rare flower from the Hidden Glade, one that opens only for someone the land trusts."
-  },
-  {
     "key": "0b5ee01ab41e2c",
     "speaker": "narrator",
     "text": "Mira doesn't put the herbs down."
@@ -1273,6 +1308,11 @@
     "key": "03b8c0d72f89d0",
     "speaker": "mira",
     "text": "The flower, Elior. The Hidden Glade. I'll know the rest when I see it open."
+  },
+  {
+    "key": "06e6ecd984e766",
+    "speaker": "narrator",
+    "text": "Mira says the sickness in the fields and the sickness of the king feel like one wound. She wants a rare flower from the Hidden Glade, one that opens only for someone the land trusts."
   },
   {
     "key": "19d92e21fb9ffd",
@@ -1365,6 +1405,21 @@
     "text": "Old Man Hemlock, who keeps the General Store. He glances at the door every time it creaks."
   },
   {
+    "key": "16e742381cddfa",
+    "speaker": "hemlock",
+    "text": "Only store in Willowbrook, so I suppose that makes it the finest. Here's what I've got for sale: - Rope: 1 coin - Sword: 5 coins - Armor: 10 coins And there's an apple with everything. My mother's rule."
+  },
+  {
+    "key": "104798b953f7b1",
+    "speaker": "hemlock",
+    "text": "That rope's good hemp, from before the caravans stopped. There'll be no more till spring, so mind what you tie with it. Here's what I've got for sale: - Rope: 1 coin - Sword: 5 coins - Armor: 10 coins And there's an apple with everything. My mother's rule."
+  },
+  {
+    "key": "1becf2f6870f7e",
+    "speaker": "hemlock",
+    "text": "That sword's hung on that wall since my father's day. Nobody in Willowbrook has ever needed one. I'd like it to stay that way. Here's what I've got for sale: - Rope: 1 coin - Sword: 5 coins - Armor: 10 coins And there's an apple with everything. My mother's rule."
+  },
+  {
     "key": "0d6e46de26749d",
     "speaker": "hemlock",
     "text": "Hold on there, friend! That apple is merchandise, not a free sample. If you want it, you'll need to buy it proper-like."
@@ -1383,11 +1438,6 @@
     "key": "05be8d8ce0f1a2",
     "speaker": "narrator",
     "text": "You carried Patches home to Old Man Hemlock, and the General Store is open again. Curiosity did not kill this cat after all."
-  },
-  {
-    "key": "16e742381cddfa",
-    "speaker": "hemlock",
-    "text": "Only store in Willowbrook, so I suppose that makes it the finest. Here's what I've got for sale: - Rope: 1 coin - Sword: 5 coins - Armor: 10 coins And there's an apple with everything. My mother's rule."
   },
   {
     "key": "0aa00c23e6adc8",
@@ -1580,16 +1630,6 @@
     "text": "You search along the bank, among the reeds and the mud, but find nothing of interest."
   },
   {
-    "key": "0dec4340207d8f",
-    "speaker": "narrator",
-    "text": "Fishing expedition"
-  },
-  {
-    "key": "025145c406c663",
-    "speaker": "narrator",
-    "text": "The fisherman at the bend can't fish with his stiff arm, and he would give a good deal for a fresh fish."
-  },
-  {
     "key": "0a580128f2ca54",
     "speaker": "narrator",
     "text": "The fisherman smiles."
@@ -1598,6 +1638,16 @@
     "key": "121938ab3d1673",
     "speaker": "fisherman",
     "text": "Anything biting? Reeds, lad. Always the reeds."
+  },
+  {
+    "key": "0dec4340207d8f",
+    "speaker": "narrator",
+    "text": "Fishing expedition"
+  },
+  {
+    "key": "025145c406c663",
+    "speaker": "narrator",
+    "text": "The fisherman at the bend can't fish with his stiff arm, and he would give a good deal for a fresh fish."
   },
   {
     "key": "08afa82ad5846f",
@@ -1825,6 +1875,26 @@
     "text": "A winding path snakes into the heart of the woods, dappled sunlight flickering through the canopy above. Where thick vines once blocked a small alcove, they now lie cut, revealing the opening. The air is alive with the scent of pine and wildflowers, and the ground is soft with moss and fallen leaves. Birds flit between branches, and the occasional snap of a twig hints at unseen creatures nearby. In the alcove lies a poacher's snare, cut and empty."
   },
   {
+    "key": "19d76ee1d2aa4c",
+    "speaker": "narrator",
+    "text": "A small hut hung with drying herbs: lavender, sage, and roots in bundles from the rafters. Shelves of bottles line the walls, every one labelled. Mira moves among them without looking, the way you move through your own kitchen. On its stand, the ancient amulet glows brighter as you step in, as if something you carry has woken it."
+  },
+  {
+    "key": "088a807840d732",
+    "speaker": "mira",
+    "text": "A fox kit came past my door this morning with a bit of snare wire still round its leg. I took it off."
+  },
+  {
+    "key": "0e57414b2f9c46",
+    "speaker": "narrator",
+    "text": "She glances at you."
+  },
+  {
+    "key": "1fa05113ba57ba",
+    "speaker": "mira",
+    "text": "It didn't get out of that snare on its own. That was kindly done, Elior."
+  },
+  {
     "key": "01863f61be3887",
     "speaker": "narrator",
     "text": "A sturdy stick, perfect for walking, poking, or perhaps as a makeshift weapon."
@@ -1980,16 +2050,6 @@
     "text": "You search around the Village Chapel, but find nothing of interest beyond what you can already see."
   },
   {
-    "key": "1c6599d8336db4",
-    "speaker": "narrator",
-    "text": "Let there be light"
-  },
-  {
-    "key": "01e57df7539fac",
-    "speaker": "narrator",
-    "text": "The priest is out of matches and his candle is cold. Hemlock at the General Store keeps a box for him."
-  },
-  {
     "key": "1f1153d27ddfc1",
     "speaker": "narrator",
     "text": "The priest glances at the cold candle by the altar."
@@ -1998,6 +2058,16 @@
     "key": "17c1fde3aac372",
     "speaker": "priest",
     "text": "Any luck with those matches, child? The General Store has always been kind to this chapel."
+  },
+  {
+    "key": "1c6599d8336db4",
+    "speaker": "narrator",
+    "text": "Let there be light"
+  },
+  {
+    "key": "01e57df7539fac",
+    "speaker": "narrator",
+    "text": "The priest is out of matches and his candle is cold. Hemlock at the General Store keeps a box for him."
   },
   {
     "key": "060dea079edd60",
@@ -2148,11 +2218,6 @@
     "key": "00e004cb1e103e",
     "speaker": "hemlock",
     "text": "Not something I carry, lad. Not since the caravans stopped, anyway."
-  },
-  {
-    "key": "19d76ee1d2aa4c",
-    "speaker": "narrator",
-    "text": "A small hut hung with drying herbs: lavender, sage, and roots in bundles from the rafters. Shelves of bottles line the walls, every one labelled. Mira moves among them without looking, the way you move through your own kitchen. On its stand, the ancient amulet glows brighter as you step in, as if something you carry has woken it."
   },
   {
     "key": "06e59d8bf016e5",
@@ -2330,6 +2395,11 @@
     "text": "A warm light envelops you, and you feel your wounds mending."
   },
   {
+    "key": "0f69f116fbf436",
+    "speaker": "borin",
+    "text": "Magic, eh? Word gets round, young Elior. Can't hammer that into shape, but I'd wager it wants the same as iron: patience, and a steady hand."
+  },
+  {
     "key": "0d72fc56c5715a",
     "speaker": "narrator",
     "text": "Mira looks you over, from your boots up."
@@ -2448,6 +2518,11 @@
     "key": "15deece007a2f7",
     "speaker": "narrator",
     "text": "You receive a fresh bread."
+  },
+  {
+    "key": "07d130d329b869",
+    "speaker": "grandmother",
+    "text": "Packed yet? Don't tell me you'll manage. You'll manage cold and hungry. I want you warm and fed, do you hear?"
   },
   {
     "key": "0d1d08d0535a2c",
@@ -2583,6 +2658,26 @@
     "key": "1be208a0d05c61",
     "speaker": "narrator",
     "text": "An old stone well stands between the field and the forge, its stones worn smooth by countless hands. The water below glimmers with a crystalline clarity, and the air is cool and damp. Moss creeps up the sides."
+  },
+  {
+    "key": "165f4af82ac339",
+    "speaker": "narrator",
+    "text": "You walk the rows, pouring the clear well water along the cracked earth."
+  },
+  {
+    "key": "06dd491708c63c",
+    "speaker": "narrator",
+    "text": "The soil darkens and drinks it in. Before your eyes, the brittle leaves uncurl and green shoots push up between the rows. By the time the bucket is empty, the whole Vegetable Field is breathing again."
+  },
+  {
+    "key": "0e4f75da1f4733",
+    "speaker": "narrator",
+    "text": "With clean water from the well, you brought the Vegetable Field back to life. Where the blight is lifted, the land remembers how to grow."
+  },
+  {
+    "key": "1e4af0ee1e8732",
+    "speaker": "narrator",
+    "text": "Rows of green crops stretch beneath an open sky. The earth is dark and soft where the clean well water soaked in, and young leaves stand tall where brittle ones once curled. A breeze carries the scent of damp soil. The field feels awake again, as if it has finally let out the breath it was holding."
   },
   {
     "key": "140315ff327bcd",
@@ -3040,6 +3135,11 @@
     "text": "You search around the Road to Greendale, but find nothing of interest beyond what you can already see."
   },
   {
+    "key": "0200b035e089fb",
+    "speaker": "merchant",
+    "text": "Boots, friend? I've one good pair of wandering boots left, walked in and soft, and the soles will outlast you. I'll not take coin for them; coin I can earn anywhere. Something small and fine would buy them. A ring, say. Failing that, my old mare threw a shoe on the hill road; a good iron horseshoe would do me nearly as well. Forgive me if I'm short, friend. I've not eaten since the hill road, and there's no inn this side of Greendale."
+  },
+  {
     "key": "0660ceb90bfd31",
     "speaker": "narrator",
     "text": "The merchant holds the shiny ring up to the light, and his eyebrows go up."
@@ -3095,6 +3195,11 @@
     "text": "You'll want news, if you're bound for Greendale. It's a sombre city this season: they say King Alden has fallen ill, and no physician can name the sickness. And the roads have gone bad besides. I passed a cart on its side by the hill road, and nobody with it. And it's not only your fields that are failing. I've seen crops gone grey in every valley from here to the capital, ever since the king took to his bed. Keep to the daylight, friend. How are the boots? Give them a week and they'll know your feet better than you do. Forgive me if I'm short, friend. I've not eaten since the hill road, and there's no inn this side of Greendale."
   },
   {
+    "key": "02d5b07d379eab",
+    "speaker": "merchant",
+    "text": "How are the boots? Give them a week and they'll know your feet better than you do. Forgive me if I'm short, friend. I've not eaten since the hill road, and there's no inn this side of Greendale."
+  },
+  {
     "key": "088262cbf14bd0",
     "speaker": "tilda",
     "text": "The water's clean! I've not had dough rise so light in a year. Was that you, Elior?"
@@ -3118,6 +3223,11 @@
     "key": "056aeef4c3c4ca",
     "speaker": "tilda",
     "text": "I know, love. Your secret's safe with me, and so's your loaf."
+  },
+  {
+    "key": "02549c9fc3abc3",
+    "speaker": "tilda",
+    "text": "Not a word, eh? Then it'll be the old spring clearing itself, like my gran always said it would. Funny old world."
   },
   {
     "key": "1f9e60b785fb3f",
@@ -3178,6 +3288,16 @@
     "key": "04b6e65057b84f",
     "speaker": "mira",
     "text": "Your road leads to Greendale, Elior. Once there, show the amulet to no one lightly. Those who know what it is will find you."
+  },
+  {
+    "key": "18708bfe81a990",
+    "speaker": "narrator",
+    "text": "Mira doesn't look up from her herbs."
+  },
+  {
+    "key": "1bcce557e73274",
+    "speaker": "mira",
+    "text": "Still here? Go and say a proper goodbye to your grandmother. Then go."
   },
   {
     "key": "0e4e8bf1670acc",
@@ -3263,16 +3383,6 @@
     "key": "11a0ba67289d79",
     "speaker": "narrator",
     "text": "A mysterious amulet inscribed with runes. At its centre, a sun rises over three linked rings. It is faintly warm in your hand."
-  },
-  {
-    "key": "18708bfe81a990",
-    "speaker": "narrator",
-    "text": "Mira doesn't look up from her herbs."
-  },
-  {
-    "key": "1bcce557e73274",
-    "speaker": "mira",
-    "text": "Still here? Go and say a proper goodbye to your grandmother. Then go."
   },
   {
     "key": "116aac75767bd3",
