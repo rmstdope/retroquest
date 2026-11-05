@@ -3,7 +3,11 @@
  * one command at a time, through the Abandoned Shed and north out of it,
  * never reloads the page or sends the player back to the title page
  * (rq-b8xq: once, during an automated session, the page went back to the
- * title page as Elior walked north out of the shed).
+ * title page as Elior walked north out of the shed). It is a guard, not a
+ * reproduction: no such reload was found in the game. It runs on the Vite dev
+ * server, whose client can reload the page by itself (a dependency
+ * re-optimisation, a restarted server), so a failure here is first read as
+ * "did Vite reload?" before "did the game reload itself?".
  */
 import { test, expect, type Page } from '@playwright/test'
 import { ACT1_GOLDEN_PATH } from '../src/act1/Act1GoldenPath'
@@ -22,7 +26,9 @@ interface AppRoot extends Element {
         $pinia: {
           state: {
             value: {
-              game: { turns: { command: string | null; room: string }[] }
+              game: {
+                turns: { id: number; command: string | null; room: string }[]
+              }
             }
           }
         }
@@ -31,17 +37,25 @@ interface AppRoot extends Element {
   }
 }
 
-/** The command and room of the game's newest turn. */
-async function newestTurn(
-  page: Page,
-): Promise<{ command: string | null; room: string } | null> {
+/** The game's newest turn, as much of it as this test reads. */
+interface NewestTurn {
+  /** The turn's id; each new turn's id is higher than the last. */
+  id: number
+  /** The command that made the turn. */
+  command: string | null
+  /** The room the turn ended in. */
+  room: string
+}
+
+/** The id, command and room of the game's newest turn. */
+async function newestTurn(page: Page): Promise<NewestTurn | null> {
   return page.evaluate(() => {
     const root: AppRoot | null = document.querySelector('#app')
     const turn =
       root?.__vue_app__?.config.globalProperties.$pinia.state.value.game.turns.at(
         -1,
       )
-    return turn ? { command: turn.command, room: turn.room } : null
+    return turn ? { id: turn.id, command: turn.command, room: turn.room } : null
   })
 }
 
@@ -51,14 +65,24 @@ async function clearPages(page: Page): Promise<void> {
   while (await chapterButton.isVisible()) await chapterButton.click()
 }
 
-/** Type one command into the command box and wait until it is the game's newest turn. */
+/**
+ * Type one command into the command box and wait until a new turn made by it
+ * is the game's newest, so a repeated command (two `go north`) is waited for too.
+ */
 async function type(page: Page, command: string): Promise<void> {
   await clearPages(page)
+  const before = (await newestTurn(page))?.id ?? -1
   const input = page.getByLabel('Command')
   await input.fill(command, { timeout: 5_000 })
   await input.press('Enter')
   await expect
-    .poll(async () => (await newestTurn(page))?.command, { message: command })
+    .poll(
+      async () => {
+        const turn = await newestTurn(page)
+        return turn && turn.id > before ? turn.command : null
+      },
+      { message: command },
+    )
     .toBe(command)
 }
 
