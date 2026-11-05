@@ -1405,19 +1405,19 @@
     "text": "Old Man Hemlock, who keeps the General Store. He glances at the door every time it creaks."
   },
   {
-    "key": "16e742381cddfa",
+    "key": "0a6e83930959fd",
     "speaker": "hemlock",
-    "text": "Only store in Willowbrook, so I suppose that makes it the finest. Here's what I've got for sale: - Rope: 1 coin - Sword: 5 coins - Armor: 10 coins And there's an apple with everything. My mother's rule."
+    "text": "Only store in Willowbrook, so I suppose that makes it the finest. Rope's a coin, the sword's five and the armor's ten. And there's an apple with everything. My mother's rule."
   },
   {
-    "key": "104798b953f7b1",
+    "key": "19677378066d16",
     "speaker": "hemlock",
-    "text": "That rope's good hemp, from before the caravans stopped. There'll be no more till spring, so mind what you tie with it. Here's what I've got for sale: - Rope: 1 coin - Sword: 5 coins - Armor: 10 coins And there's an apple with everything. My mother's rule."
+    "text": "That rope's good hemp, from before the caravans stopped. There'll be no more till spring, so mind what you tie with it. Rope's a coin, the sword's five and the armor's ten. And there's an apple with everything. My mother's rule."
   },
   {
-    "key": "1becf2f6870f7e",
+    "key": "1e949c5524b976",
     "speaker": "hemlock",
-    "text": "That sword's hung on that wall since my father's day. Nobody in Willowbrook has ever needed one. I'd like it to stay that way. Here's what I've got for sale: - Rope: 1 coin - Sword: 5 coins - Armor: 10 coins And there's an apple with everything. My mother's rule."
+    "text": "That sword's hung on that wall since my father's day. Nobody in Willowbrook has ever needed one. I'd like it to stay that way. Rope's a coin, the sword's five and the armor's ten. And there's an apple with everything. My mother's rule."
   },
   {
     "key": "0d6e46de26749d",
@@ -2773,6 +2773,11 @@
     "key": "019c14b217e7b0",
     "speaker": "fisherman",
     "text": "Well, would you look at that! Not a twinge. Your mother mended my scrapes the same way, down by the bend. Thank you, lad. Tomorrow I'll cast my own line again."
+  },
+  {
+    "key": "00090556652da5",
+    "speaker": "narrator",
+    "text": "An old man on an upturned crate at the bend, watching the water, his mended arm resting easy on his knee."
   },
   {
     "key": "09687532d9b027",

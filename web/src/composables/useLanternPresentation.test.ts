@@ -4,6 +4,7 @@ import { defineComponent, h } from 'vue'
 import { mount, type VueWrapper } from '@vue/test-utils'
 import { createPinia, setActivePinia } from 'pinia'
 import { useGameStore, type Turn } from '@/stores/useGameStore'
+import { useStageSpeechStore } from '@/stores/useStageSpeechStore'
 import { useSettingsStore } from '@/stores/useSettingsStore'
 import {
   useNarrationStore,
@@ -106,8 +107,8 @@ describe('useLanternPresentation', () => {
     )
   }
 
-  /** Mount a component that uses the coordinator, off the picture stage. */
-  async function present(held = false): Promise<void> {
+  /** Mount a component that uses the coordinator, off the picture stage unless `staged`. */
+  async function present(held = false, staged = false): Promise<void> {
     stubRecordings(held)
     useNarrationStore().setAudioFactory((src) => {
       played.push(src.split('/').at(-1) ?? src)
@@ -127,7 +128,7 @@ describe('useLanternPresentation', () => {
     const Host = defineComponent({
       setup() {
         presentation = useLanternPresentation({
-          staged: () => false,
+          staged: () => staged,
           motionReduced: () => false,
         })
         return () => h('div')
@@ -198,6 +199,64 @@ describe('useLanternPresentation', () => {
       await present()
       await say({ ...narratedTurn(1), command: `say ${HELLO} to nobody` })
       expect(played).toEqual(['first.mp3'])
+    })
+
+    describe('speech a new command cuts off', () => {
+      /** A narrated talk: the narrator's first line, then Grandmother's two lines. */
+      function talk(id: number): Turn {
+        return {
+          ...narratedTurn(id),
+          command: 'talk to grandmother',
+          text:
+            `${FIRST}\n[character_name]Grandmother[/character_name]\n` +
+            '[dialogue]Some voices are older than memory.\nSometimes I think it worked.[/dialogue]',
+          addressed: 'Grandmother',
+        }
+      }
+
+      /** A turn that addresses nobody and says nothing (nothing of it is recorded); `moved` when it leaves the room. */
+      function examine(id: number, moved = false): Turn {
+        return {
+          ...narratedTurn(id),
+          command: moved ? 'go north' : 'examine hearth',
+          text: 'The hearth is warm.',
+          description: moved ? { moved: true, firstVisit: false } : null,
+        }
+      }
+
+      it('stays on the picture, dimmed as the turn before, when a command cuts the talk off before it appeared', async () => {
+        await present(false, true)
+        const speech = useStageSpeechStore()
+        await say(talk(1))
+        expect(speech.visible).toEqual([])
+        await say(examine(2))
+        expect(
+          speech.visible.map((line) => [line.speaker, line.markup]),
+        ).toEqual([
+          ['Grandmother', 'Some voices are older than memory.'],
+          ['Grandmother', 'Sometimes I think it worked.'],
+        ])
+        expect(speech.ageOf(1)).toBe('prev')
+      })
+
+      it('is cleared with the rest when the command leaves the room', async () => {
+        await present(false, true)
+        const speech = useStageSpeechStore()
+        await say(talk(1))
+        await say(examine(2, true))
+        expect(speech.visible).toEqual([])
+      })
+
+      it('is cleared as before when the player skipped the talk first and saw its lines', async () => {
+        await present(false, true)
+        const speech = useStageSpeechStore()
+        await say(talk(1))
+        useNarrationStore().skipAll()
+        await vi.advanceTimersByTimeAsync(0)
+        expect(speech.visible).toHaveLength(2)
+        await say(examine(2))
+        expect(speech.visible).toEqual([])
+      })
     })
 
     it('a pop-up interrupts the story, and closing it does not resume it', async () => {

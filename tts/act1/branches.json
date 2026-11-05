@@ -55,7 +55,11 @@
     { "after": 131, "commands": ["cast unlock on strange mechanism"] },
     {
         "after": 132,
-        "commands": ["cast heal on fisherman", "cast purify on river"]
+        "commands": [
+            "cast heal on fisherman",
+            "examine fisherman",
+            "cast purify on river"
+        ]
     },
     {
         "after": 133,

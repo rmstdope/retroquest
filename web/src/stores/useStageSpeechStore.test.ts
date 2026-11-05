@@ -128,6 +128,59 @@ describe('useStageSpeechStore', () => {
     },
   )
 
+  it('keeps, dimmed as the turn before, an unread journal a later command cut off', () => {
+    const speech = useStageSpeechStore()
+    const journal = turn(
+      `${say('Elior', 'The storm.')}\n${say('Elior', 'The voice.')}`,
+      null,
+      'use journal',
+    )
+    speech.observe(journal)
+    expect(speech.visible.map((l) => l.markup)).toEqual(['The storm.'])
+    speech.observe(turn('The hearth is warm.', null, 'examine hearth'))
+    expect(speech.visible.map((l) => l.markup)).toEqual([
+      'The storm.',
+      'The voice.',
+    ])
+    expect(speech.ageOf(journal.id)).toBe('prev')
+    // A later turn clears them as usual, once they have been on the picture.
+    speech.observe(turn('Nothing happens.', null, 'look'))
+    expect(speech.visible).toEqual([])
+  })
+
+  it('keeps a cut-off talk while someone else is addressed, and lets it go once it has been seen', () => {
+    const speech = useStageSpeechStore()
+    speech.observe(
+      turn(
+        `${say('Grandmother', 'One.')}\n${say('Grandmother', 'Two.')}`,
+        'Grandmother',
+      ),
+    )
+    speech.observe(turn(say('Mira', 'Hello.'), 'Mira'))
+    expect(speech.conversation?.with).toBe('Mira')
+    expect(speech.visible.map((l) => [l.speaker, l.markup])).toEqual([
+      ['Grandmother', 'One.'],
+      ['Grandmother', 'Two.'],
+      ['Mira', 'Hello.'],
+    ])
+    vi.runAllTimers()
+    speech.observe(turn(say('Mira', 'Again.'), 'Mira'))
+    vi.runAllTimers()
+    expect(speech.visible.map((l) => [l.speaker, l.markup])).toEqual([
+      ['Mira', 'Hello.'],
+      ['Mira', 'Again.'],
+    ])
+  })
+
+  it('clears a cut-off talk when the command leaves the room', () => {
+    const speech = useStageSpeechStore()
+    speech.observe(
+      turn(`${say('Mira', 'One.')}\n${say('Mira', 'Two.')}`, 'Mira'),
+    )
+    speech.observe(turn('You walk.', null, 'go north', true))
+    expect(speech.visible).toEqual([])
+  })
+
   it('shows nothing of unsigned writing or narration', () => {
     const speech = useStageSpeechStore()
     speech.observe(

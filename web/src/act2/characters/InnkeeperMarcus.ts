@@ -6,6 +6,7 @@ import {
   clue,
   remembered,
   dialogue,
+  numberInWords,
 } from '@/engine'
 import { RoomKey } from '../items/RoomKey'
 import { DruidicCharm } from '../items/DruidicCharm'
@@ -16,12 +17,24 @@ import {
   VIRTUE_TRUTH,
 } from '../Act2StoryFlags'
 
-/** Python's str.title(): every word starts upper-cased, the rest lower-cased. */
-function title(text: string): string {
-  return text.replace(
-    /[A-Za-z]+/g,
-    (word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase(),
-  )
+/**
+ * The prices as one spoken sentence: "A [kit]'s fifty [gold coins], the
+ * [lantern]'s forty and the [rope]'s twenty." Only the first ware names the
+ * coin. Returns an empty string when there is nothing for sale.
+ */
+function priceSentence(
+  wares: Record<string, { item: Item; price: number }>,
+): string {
+  const spoken = Object.entries(wares).map(([name, details], index) => {
+    const ware = `[item_name]${name}[/item_name]'s `
+    return index === 0
+      ? `A ${ware}${numberInWords(details.price)} ` +
+          '[item_name]gold coins[/item_name]'
+      : `the ${ware}${numberInWords(details.price)}`
+  })
+  const last = spoken.pop()
+  if (last === undefined) return ''
+  return spoken.length === 0 ? `${last}.` : `${spoken.join(', ')} and ${last}.`
 }
 
 /**
@@ -143,18 +156,9 @@ export class InnkeeperMarcus extends Character {
       }
     }
 
-    // Build wares information
-    let waresInfo = 'I can offer you:\n'
-    const entries = Object.entries(this.wares)
-    if (entries.length > 0) {
-      for (const [wareName, details] of entries) {
-        waresInfo +=
-          `- [item_name]${title(wareName)}[/item_name]: ${details.price} ` +
-          '[item_name]gold coins[/item_name]\n'
-      }
-    } else {
-      waresInfo = "I'm currently not offering any services.\n"
-    }
+    // His prices, spoken in the same bubble as his opening line
+    const waresInfo =
+      priceSentence(this.wares) || "I'm currently not offering any services."
 
     // Cycle through dialogue options
     const option = InnkeeperMarcus.IDLE_LINES[this.dialogueIndex]
@@ -163,8 +167,7 @@ export class InnkeeperMarcus extends Character {
     const name = this.name
 
     if (gameState.getStoryFlag(FLAG_KNOWS_ELENA_CURSE)) {
-      const dialogueBlock =
-        dialogue(name, `${option} ${waresInfo.trim()}`) + '\n\n'
+      const dialogueBlock = dialogue(name, `${option} ${waresInfo}`) + '\n\n'
       const plea = dialogue(
         name,
         "You've spoken with " +
@@ -181,8 +184,7 @@ export class InnkeeperMarcus extends Character {
         )
       return dialogueBlock + plea + weekTheKingWent
     } else {
-      const dialogueBlock =
-        dialogue(name, `${option} ${waresInfo.trim()}`) + '\n\n'
+      const dialogueBlock = dialogue(name, `${option} ${waresInfo}`) + '\n\n'
       const closing = dialogue(
         name,
         "My girl, Elena. She's been poorly three weeks. … Talk to her, if " +

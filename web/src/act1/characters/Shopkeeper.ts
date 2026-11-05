@@ -6,6 +6,7 @@ import {
   speech,
   clue,
   attributeSpeech,
+  numberInWords,
 } from '@/engine'
 import { Rope } from '../items/Rope'
 import { Apple } from '../items/Apple'
@@ -79,6 +80,34 @@ export class Shopkeeper extends Character {
   private static readonly DESCRIPTION =
     `Old Man ${characterName(Shopkeeper.NAME)}, who keeps the General Store. ` +
     'He glances at the door every time it creaks.'
+
+  /**
+   * His prices as one spoken sentence, in the order of the wares: the first
+   * ware names its coin ("[Rope]'s a [coin]"), the rest only their number.
+   * When the shelves are bare it is the empty-shelf line instead.
+   */
+  private priceSentence(): string {
+    const entries = Object.entries(this.wares)
+    if (entries.length === 0) return "I've nothing left on the shelves."
+    const spoken = entries.map(([name, details], index) => {
+      const ware = `[item_name]${index === 0 ? capitalize(name) : name}[/item_name]`
+      const price =
+        index === 0
+          ? this.firstPrice(details.price)
+          : numberInWords(details.price)
+      return index === 0 ? `${ware}'s ${price}` : `the ${ware}'s ${price}`
+    })
+    const last = spoken.pop()
+    return spoken.length === 0
+      ? `${last}.`
+      : `${spoken.join(', ')} and ${last}.`
+  }
+
+  /** The first price, with its coin word: "a [coin]" or "five [coins]". */
+  private firstPrice(price: number): string {
+    const coin = `[item_name]${coins(price)}[/item_name]`
+    return price === 1 ? `a ${coin}` : `${numberInWords(price)} ${coin}`
+  }
 
   /**
    * Bring a shopkeeper from a save made before he was named up to date: he
@@ -298,29 +327,18 @@ export class Shopkeeper extends Character {
     }
 
     // Standard dialogue if matches aren't being given for the priest
-    let waresInfo = "Here's what I've got for sale:\n"
-    const entries = Object.entries(this.wares)
-    if (entries.length > 0) {
-      for (const [name, details] of entries) {
-        waresInfo +=
-          `- [item_name]${capitalize(name)}[/item_name]: ${details.price} ` +
-          `[item_name]${coins(details.price)}[/item_name]\n`
-      }
-    } else {
-      waresInfo = "I've nothing left on the shelves.\n"
-    }
-
-    waresInfo +=
-      "And there's an [item_name]apple[/item_name] with everything. " +
-      "My mother's rule.\n"
+    const waresInfo =
+      this.priceSentence() +
+      " And there's an [item_name]apple[/item_name] with everything. " +
+      "My mother's rule."
 
     const lines = Shopkeeper.IDLE_LINES
     const dialogue = lines[this.dialogueIndex % lines.length]
     this.dialogueIndex = (this.dialogueIndex + 1) % lines.length
 
     return (
-      `${this.nameInSentence({ atStart: true })}\n` +
-      speech(`${dialogue} ${waresInfo.trim()}`)
+      `${this.nameInSentence({ atStart: true })}
+` + speech(`${dialogue} ${waresInfo}`)
     )
   }
 
