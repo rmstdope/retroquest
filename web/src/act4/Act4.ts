@@ -122,8 +122,7 @@ export class Act4 extends Act {
         "If it goes quiet in there, say our names. We'll hear.",
       ) +
       '\n\n' +
-      'The rest of the way is yours to walk, but they will not be far.\n\n' +
-      "Let's begin. (Type 'help' for a list of commands.)\n"
+      'The rest of the way is yours to walk, but they will not be far.\n'
     )
   }
 

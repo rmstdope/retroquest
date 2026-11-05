@@ -126,8 +126,7 @@ export class Act3 extends Act {
       'from the beam. She has not yet said how a village healer learned ' +
       'to do that.\n\n' +
       'Now she is the only one who can say what must be done next, and ' +
-      'where the road to Malakar begins.\n\n' +
-      "Let's begin. (Type 'help' for a list of commands.)\n"
+      'where the road to Malakar begins.\n'
     )
   }
 

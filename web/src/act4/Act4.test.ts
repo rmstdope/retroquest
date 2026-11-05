@@ -78,10 +78,10 @@ describe('Act4', () => {
       'You receive a [item_name]loyalty token[/item_name].',
       "If it goes quiet in there, say our names. We'll hear.",
       'The rest of the way is yours to walk, but they will not be far.',
-      "Let's begin. (Type 'help' for a list of commands.)",
     ].map((line) => intro.indexOf(line))
     expect(order.every((i) => i >= 0)).toBe(true)
     expect([...order].sort((a, b) => a - b)).toEqual(order)
+    expect(intro).not.toContain('Type')
     expect(intro).not.toContain('you go on alone')
     expect(intro).not.toContain('culmination')
     expect(intro).not.toContain('echo through eternity')

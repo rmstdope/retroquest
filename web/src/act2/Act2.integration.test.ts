@@ -1252,9 +1252,7 @@ describe('Act 2 complete page', () => {
     for (let turn = 0; turn < 3; turn++) game.newTurn()
     const hook = 'Malakar is real. And the bloodline he seeks is yours.'
     expect(
-      game
-        .getActCompleteText()
-        ?.startsWith(`${hook}\n\nCongratulations — you have completed`),
+      game.getActCompleteText()?.startsWith(`${hook}\n\nAct I ends here`),
     ).toBe(true)
     const fresh = new Game([new Act2()])
     expect(fresh.loadSaveData(game.toSaveData())).toContain('loaded')
@@ -1283,7 +1281,7 @@ describe('Act 2 answering Cedric after the vision', () => {
     expect(game.acts[game.currentAct].isCompleted(game.state)).toBe(true)
     expect(game.state.virtues).toEqual([])
     for (let turn = 0; turn < 3; turn++) game.newTurn()
-    expect(game.getActCompleteText()).toContain('Congratulations')
+    expect(game.getActCompleteText()).toContain('ends here')
   })
 
   it('lets the player roam while he waits and keeps the wait through a save', () => {

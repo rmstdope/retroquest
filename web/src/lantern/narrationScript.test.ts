@@ -28,11 +28,13 @@ import {
   type WriterRule,
 } from './narrationScript'
 
-/** Lines that stay silent: the chapter page's help line and the closing page's shared words. */
+/** Lines that stay silent: the closing page's shared words, which the one-act extractor cannot number. */
 const SILENT = [
-  "Let's get started!",
-  'Congratulations — you have completed Act',
-  'Take a moment to catch your breath',
+  'Act I ends here',
+  'Act II ends here',
+  'Act III ends here',
+  'Act IV ends here',
+  'The road goes on, into Act',
 ]
 
 const WRITERS: WriterRule[] = [
@@ -314,8 +316,11 @@ describe('actScript for Act I', () => {
     expect(find('Warm clothing')?.speaker).toBe('narrator')
   })
 
-  it('leaves the closing page’s shared congratulations silent', () => {
+  it('leaves the closing page’s shared words silent', () => {
     expect(script.some((line) => line.text.startsWith('Congratulations'))).toBe(
+      false,
+    )
+    expect(script.some((line) => line.text.startsWith('Act I ends here'))).toBe(
       false,
     )
   })

@@ -710,7 +710,7 @@ describe('Act 3 golden path', () => {
       const hook =
         "Your parents were Malakar's closest friends. The Dragon says they are warded away, not dead."
       expect(game.getActCompleteText()).toMatch(
-        new RegExp(`^${hook}\\n\\nCongratulations — you have completed`),
+        new RegExp(`^${hook}\\n\\nAct I ends here`),
       )
       const fresh = new Game([new Act3()])
       expect(fresh.loadSaveData(game.toSaveData())).toContain('loaded')

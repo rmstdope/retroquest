@@ -91,8 +91,7 @@ export class Act1 extends Act {
       `You are ${characterName('Elior')}, a farmer boy in the village of Willowbrook, on the outskirts of Eldoria. ` +
       `Your ${characterName('grandmother')} raised you after your parents vanished, and your days are the crops, the hens and the weather.\n` +
       '\nTonight the weather is a storm, and a light that is not lightning has split the sky over the fields. ' +
-      'Sleep, when it comes, is not quiet.\n' +
-      "\nLet's get started! (Type 'help' for a list of commands.)\n"
+      'Sleep, when it comes, is not quiet.\n'
     )
   }
 

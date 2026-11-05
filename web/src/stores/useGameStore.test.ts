@@ -24,7 +24,7 @@ function quest(report: string): QuestReport {
   return { name: match[1], main: match[2] === 'main', text: match[3] }
 }
 
-/** Result screens whose act-complete text starts at "Congratulations", if any. */
+/** Result screens whose act-complete text starts at "Congratulations" in these fixtures, if any. */
 function screens(texts: string[]): ResultScreen[] {
   return texts.map((text) => {
     const at = text.indexOf('Congratulations')

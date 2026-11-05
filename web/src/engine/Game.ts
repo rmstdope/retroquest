@@ -269,12 +269,8 @@ export class Game implements CommandTarget {
     const finished = ACT_NUMERALS[this.currentAct]
     const next = ACT_NUMERALS[this.currentAct + 1]
     return this.runState === GameRunState.GameOver
-      ? `Congratulations — you have completed Act ${finished}, ` +
-          'the final act of RetroQuest!'
-      : `Congratulations — you have completed Act ${finished}!\n\n` +
-          'Take a moment to catch your breath and grab a cup of coffee. ' +
-          `Get ready for Act ${next}, where new challenges, ` +
-          'characters, and mysteries await.'
+      ? `Act ${finished} ends here, and the road ends with it.`
+      : `Act ${finished} ends here.\n\n` + `The road goes on, into Act ${next}.`
   }
 
   /**

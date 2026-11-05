@@ -592,7 +592,7 @@ describe('GameController', () => {
       expect(ctrl.getActName()).toBe('Act 1')
       expect(ctrl.getCurrentMusic()).toEqual(music)
       expect(ctrl.getNextActIntro()).toBe(ctrl.game.acts[1].getActIntro())
-      expect(ctrl.getActCompleteText()).toContain('Act I!')
+      expect(ctrl.getActCompleteText()).toContain('Act I ends here.')
       ctrl.game.newTurn()
       expect(ctrl.getRoomName()).toBe('Gate')
       expect(ctrl.getNextActIntro()).toBeNull()
