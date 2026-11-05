@@ -103,7 +103,7 @@ export class Act2 extends Act {
       'The mountain path took you up through rock and pine, and from the ' +
       'last ridge you see Greendale: stone houses, more chimneys than you ' +
       'can count, and a white castle above the walls. No banner flies from ' +
-      "its highest spire.\n\nMira's parting words go with you: " +
+      "its highest spire.\n\nMira's parting words go with you. " +
       speech(
         'Your road leads to Greendale, ' +
           characterName('Elior') +

@@ -16452,43 +16452,6 @@
    }
   ]
  },
- "060fc572a68d2e": {
-  "file": "060fc572a68d2e.mp3",
-  "speaker": "narrator",
-  "duration": 2.415,
-  "words": [
-   {
-    "word": "One",
-    "start": 0.0,
-    "end": 0.2
-   },
-   {
-    "word": "of",
-    "start": 0.2,
-    "end": 0.3
-   },
-   {
-    "word": "them",
-    "start": 0.3,
-    "end": 0.48
-   },
-   {
-    "word": "adds,",
-    "start": 0.48,
-    "end": 0.86
-   },
-   {
-    "word": "more",
-    "start": 1.04,
-    "end": 1.52
-   },
-   {
-    "word": "quietly:",
-    "start": 1.52,
-    "end": 2.04
-   }
-  ]
- },
  "061afc32968e16": {
   "file": "061afc32968e16.mp3",
   "speaker": "narrator",
@@ -19960,103 +19923,6 @@
     "word": "speak.",
     "start": 2.56,
     "end": 2.9
-   }
-  ]
- },
- "0780d6d0ed85a2": {
-  "file": "0780d6d0ed85a2.mp3",
-  "speaker": "narrator",
-  "duration": 5.201,
-  "words": [
-   {
-    "word": "Then",
-    "start": 0.0,
-    "end": 0.28
-   },
-   {
-    "word": "the",
-    "start": 0.28,
-    "end": 0.48
-   },
-   {
-    "word": "voice",
-    "start": 0.48,
-    "end": 0.84
-   },
-   {
-    "word": "from",
-    "start": 0.84,
-    "end": 1.06
-   },
-   {
-    "word": "your",
-    "start": 1.06,
-    "end": 1.26
-   },
-   {
-    "word": "dream,",
-    "start": 1.26,
-    "end": 1.66
-   },
-   {
-    "word": "the",
-    "start": 1.94,
-    "end": 2.36
-   },
-   {
-    "word": "one",
-    "start": 2.36,
-    "end": 2.58
-   },
-   {
-    "word": "that",
-    "start": 2.58,
-    "end": 2.76
-   },
-   {
-    "word": "called",
-    "start": 2.76,
-    "end": 3.14
-   },
-   {
-    "word": "your",
-    "start": 3.14,
-    "end": 3.34
-   },
-   {
-    "word": "name",
-    "start": 3.34,
-    "end": 3.68
-   },
-   {
-    "word": "on",
-    "start": 3.68,
-    "end": 3.88
-   },
-   {
-    "word": "the",
-    "start": 3.88,
-    "end": 4.0
-   },
-   {
-    "word": "night",
-    "start": 4.0,
-    "end": 4.26
-   },
-   {
-    "word": "of",
-    "start": 4.26,
-    "end": 4.42
-   },
-   {
-    "word": "the",
-    "start": 4.42,
-    "end": 4.54
-   },
-   {
-    "word": "storm:",
-    "start": 4.54,
-    "end": 4.94
    }
   ]
  },
@@ -43876,43 +43742,6 @@
    }
   ]
  },
- "11e7538286f2d5": {
-  "file": "11e7538286f2d5.mp3",
-  "speaker": "narrator",
-  "duration": 2.461,
-  "words": [
-   {
-    "word": "Mira's",
-    "start": 0.0,
-    "end": 0.72
-   },
-   {
-    "word": "parting",
-    "start": 0.72,
-    "end": 1.02
-   },
-   {
-    "word": "words",
-    "start": 1.02,
-    "end": 1.54
-   },
-   {
-    "word": "go",
-    "start": 1.54,
-    "end": 1.8
-   },
-   {
-    "word": "with",
-    "start": 1.8,
-    "end": 2.08
-   },
-   {
-    "word": "you:",
-    "start": 2.08,
-    "end": 2.28
-   }
-  ]
- },
  "1209932e6b1c66": {
   "file": "1209932e6b1c66.mp3",
   "speaker": "narrator",
@@ -53763,58 +53592,6 @@
    }
   ]
  },
- "16c9ebcd490175": {
-  "file": "16c9ebcd490175.mp3",
-  "speaker": "narrator",
-  "duration": 3.158,
-  "words": [
-   {
-    "word": "They",
-    "start": 0.0,
-    "end": 0.46
-   },
-   {
-    "word": "gesture",
-    "start": 0.46,
-    "end": 0.94
-   },
-   {
-    "word": "to",
-    "start": 0.94,
-    "end": 1.18
-   },
-   {
-    "word": "a",
-    "start": 1.18,
-    "end": 1.38
-   },
-   {
-    "word": "crystal",
-    "start": 1.38,
-    "end": 1.78
-   },
-   {
-    "word": "resting",
-    "start": 1.78,
-    "end": 2.26
-   },
-   {
-    "word": "on",
-    "start": 2.26,
-    "end": 2.48
-   },
-   {
-    "word": "the",
-    "start": 2.48,
-    "end": 2.6
-   },
-   {
-    "word": "shelf:",
-    "start": 2.6,
-    "end": 2.92
-   }
-  ]
- },
  "16dbc33d48d0a6": {
   "file": "16dbc33d48d0a6.mp3",
   "speaker": "master healer lyria",
@@ -58571,63 +58348,6 @@
     "word": "Well?",
     "start": 0.0,
     "end": 0.44
-   }
-  ]
- },
- "192a0873206d1f": {
-  "file": "192a0873206d1f.mp3",
-  "speaker": "narrator",
-  "duration": 3.808,
-  "words": [
-   {
-    "word": "And",
-    "start": 0.0,
-    "end": 0.2
-   },
-   {
-    "word": "then,",
-    "start": 0.2,
-    "end": 0.46
-   },
-   {
-    "word": "fainter,",
-    "start": 0.46,
-    "end": 1.28
-   },
-   {
-    "word": "as",
-    "start": 1.46,
-    "end": 2.0
-   },
-   {
-    "word": "if",
-    "start": 2.0,
-    "end": 2.14
-   },
-   {
-    "word": "carried",
-    "start": 2.14,
-    "end": 2.56
-   },
-   {
-    "word": "off",
-    "start": 2.56,
-    "end": 2.86
-   },
-   {
-    "word": "by",
-    "start": 2.86,
-    "end": 3.12
-   },
-   {
-    "word": "the",
-    "start": 3.12,
-    "end": 3.26
-   },
-   {
-    "word": "wind:",
-    "start": 3.26,
-    "end": 3.5
    }
   ]
  },
@@ -73034,38 +72754,6 @@
     "word": "branch.",
     "start": 14.02,
     "end": 14.32
-   }
-  ]
- },
- "1efd1503d0efbd": {
-  "file": "1efd1503d0efbd.mp3",
-  "speaker": "narrator",
-  "duration": 2.368,
-  "words": [
-   {
-    "word": "The",
-    "start": 0.0,
-    "end": 0.4
-   },
-   {
-    "word": "Master",
-    "start": 0.4,
-    "end": 0.8
-   },
-   {
-    "word": "Merchant",
-    "start": 0.8,
-    "end": 1.24
-   },
-   {
-    "word": "Aldric",
-    "start": 1.24,
-    "end": 1.76
-   },
-   {
-    "word": "says:",
-    "start": 1.76,
-    "end": 2.12
    }
   ]
  },

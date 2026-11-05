@@ -114,7 +114,7 @@ describe('Spectral Librarian dialogue markup', () => {
       THANKS,
       KEEPER_STAGE,
       KEEPER,
-      ' They gesture to a crystal resting on the shelf: ',
+      ' They gesture to a crystal resting on the shelf. ',
       "And take this [item_name]crystal focus[/item_name]. It was made for a healer's hands, and it has waited long enough.",
     ]
     let from = 0
@@ -209,7 +209,7 @@ describe('Spectral Librarian notices the amulet', () => {
       `${CONFESSION}`,
       KEEPER_STAGE,
       'I am a keeper, not a teller.',
-      ' They gesture to a crystal resting on the shelf: ',
+      ' They gesture to a crystal resting on the shelf. ',
     ])
     expect(answer.startsWith('[success]')).toBe(true)
     expect(game.state.getStoryFlag(FLAG_LIBRARIAN_CONFESSED)).toBe(true)

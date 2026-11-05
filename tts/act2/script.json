@@ -10,9 +10,9 @@
     "text": "You left Willowbrook to the sound of the chapel bell, ringing once with no hand on the rope. The mountain path took you up through rock and pine, and from the last ridge you see Greendale: stone houses, more chimneys than you can count, and a white castle above the walls. No banner flies from its highest spire."
   },
   {
-    "key": "11e7538286f2d5",
+    "key": "14e79a60881dec",
     "speaker": "narrator",
-    "text": "Mira's parting words go with you:"
+    "text": "Mira's parting words go with you."
   },
   {
     "key": "1ec5339c1ad652",
@@ -850,11 +850,6 @@
     "text": "Fifty feet of strong, reliable rope suitable for climbing, securing loads, and emergency situations. The rope is treated to resist weather and magical corrosion."
   },
   {
-    "key": "1efd1503d0efbd",
-    "speaker": "narrator",
-    "text": "The Master Merchant Aldric says:"
-  },
-  {
     "key": "0b5a31e85387c7",
     "speaker": "master merchant aldric",
     "text": "Welcome to Aldric's. Rope that holds, lanterns that stay lit, and nothing that comes apart on the road. A forest survival kit's fifty gold coins, the enhanced lantern's forty and the quality rope's twenty."
@@ -1180,9 +1175,9 @@
     "text": "These are the court's archives: birth rolls, land grants, family registers, three hundred years of them. If you have brought something written, show us. We read everything."
   },
   {
-    "key": "060fc572a68d2e",
+    "key": "18e0dd299c5440",
     "speaker": "narrator",
-    "text": "One of them adds, more quietly:"
+    "text": "One of them lowers their voice."
   },
   {
     "key": "00dbdbed280dc5",
@@ -1655,9 +1650,9 @@
     "text": "I am a keeper, not a teller. What you came for is in that chronicle, under the mark on its cover. Read it."
   },
   {
-    "key": "16c9ebcd490175",
+    "key": "0c878c5adfeb9d",
     "speaker": "narrator",
-    "text": "They gesture to a crystal resting on the shelf:"
+    "text": "They gesture to a crystal resting on the shelf."
   },
   {
     "key": "06450cd300a18e",
@@ -3100,9 +3095,9 @@
     "text": "A village at dusk, its roofs low and familiar. Beyond it, a field withered to grey stalks, the way yours was the morning all this began. And at the field's edge, a robed figure, its face lost in shadow, reaching one hand toward you as if across a great distance. Above it all, small and far, a crowned man hangs in a prison of crystal, and grey light runs out of him like water."
   },
   {
-    "key": "0780d6d0ed85a2",
+    "key": "01afc5b4dc0809",
     "speaker": "narrator",
-    "text": "Then the voice from your dream, the one that called your name on the night of the storm:"
+    "text": "Then you hear the voice from your dream, the one that called your name on the night of the storm."
   },
   {
     "key": "17c5a1b2cc6575",
@@ -3110,9 +3105,9 @@
     "text": "Elior… how you have grown. Do not be afraid of me."
   },
   {
-    "key": "192a0873206d1f",
+    "key": "0b02b7e9fee463",
     "speaker": "narrator",
-    "text": "And then, fainter, as if carried off by the wind:"
+    "text": "Then it comes again, fainter, as if carried off by the wind."
   },
   {
     "key": "1ea6dbab7a5473",

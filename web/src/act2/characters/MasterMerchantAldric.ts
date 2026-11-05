@@ -91,16 +91,11 @@ export class MasterMerchantAldric extends Character {
       'My racks are bare till the next cart comes in.'
 
     // Cycle through dialogue options like Act 1 Shopkeeper
-    const dialogue = MasterMerchantAldric.IDLE_LINES[this.dialogueIndex]
+    const line = MasterMerchantAldric.IDLE_LINES[this.dialogueIndex]
     this.dialogueIndex =
       (this.dialogueIndex + 1) % MasterMerchantAldric.IDLE_LINES.length
 
-    return (
-      'The ' +
-      characterName('Master Merchant Aldric') +
-      ' says: ' +
-      speech(`${dialogue} ${waresInfo}`)
-    )
+    return dialogue('Master Merchant Aldric', `${line} ${waresInfo}`)
   }
 
   /** Handle giving items to Master Merchant Aldric. */

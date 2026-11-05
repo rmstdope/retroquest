@@ -78,7 +78,7 @@ describe('Act II ancient amulet', () => {
   it('quotes only what Act I said, and names the amulet as an item', () => {
     const intro = new Act2().getActIntro()
     expect(intro).toContain(
-      "Mira's parting words go with you: " +
+      "Mira's parting words go with you. " +
         '[dialogue]Your road leads to Greendale, [character_name]Elior[/character_name]. Once there, show the ' +
         'amulet to no one lightly. Those who know what it is will find you.[/dialogue] ' +
         'The [item_name]ancient amulet[/item_name] your parents left you lies ' +

@@ -49,7 +49,7 @@ export class Historians extends Character {
             'place. Whatever he came for, someone hid it from him before he ' +
             'ever sat down.',
         ) +
-        '\n\nOne of them adds, more quietly:\n\n' +
+        '\n\nOne of them lowers their voice.\n\n' +
         speech(
           'You saw the last entry in our register, then. The week the king ' +
             'went. We ' +
@@ -71,7 +71,7 @@ export class Historians extends Character {
             'registers, three hundred years of them. If you have brought ' +
             'something written, show us. We read everything.',
         ) +
-        '\n\nOne of them adds, more quietly:\n\n' +
+        '\n\nOne of them lowers their voice.\n\n' +
         speech(
           'We have searched every record for a king who simply vanished from his ' +
             "own bed. There is none, not in all of Greendale's history.",
