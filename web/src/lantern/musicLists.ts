@@ -8,6 +8,7 @@
 import {
   NEW_QUEST_FILE,
   NEW_SPELL_FILE,
+  SPELL_LEARNED_ID,
   QUEST_COMPLETE_FILE,
 } from '@/composables/questSounds'
 import type { Act } from '@/engine'
@@ -185,7 +186,7 @@ export function questStingers(): MusicTrack[] {
       seconds: length,
     },
     {
-      id: 'spell-learned',
+      id: SPELL_LEARNED_ID,
       title: NEW_SPELL_FILE.replace(/^Voicy_|\.mp3$/g, ''),
       file: `${SOUND_EFFECTS_DIR}${NEW_SPELL_FILE}`,
       plays: 'When a spell is learned',

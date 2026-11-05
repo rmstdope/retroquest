@@ -1,7 +1,8 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest'
 import { setActivePinia, createPinia } from 'pinia'
 import { useAudio } from './useAudio'
-import { NEW_SPELL_FILE } from './questSounds'
+import { SPELL_LEARNED_ID } from './questSounds'
+import type { ChosenManifest } from './chosenMusic'
 import { useSettingsStore } from '@/stores/useSettingsStore'
 import type { AudioFactory } from './useAudio'
 
@@ -210,14 +211,82 @@ describe('useAudio', () => {
     })
   })
 
-  it('plays its own sound for a learned spell', () => {
-    const { factory, playFn } = createMockFactory()
+  describe('playNewSpell', () => {
+    const TAKE: ChosenManifest = {
+      [SPELL_LEARNED_ID]: { file: 'spell-learned.mp3', duration: 2.85 },
+    }
+    const loaded = (manifest: ChosenManifest) => () => Promise.resolve(manifest)
+    const flush = () => new Promise<void>((resolve) => setTimeout(resolve, 0))
 
-    useAudio(factory).playNewSpell()
+    it('plays the take chosen in the studio at the effects volume', async () => {
+      const { factory, playFn, created } = createMockFactory()
+      useSettingsStore().effectsVolume = 40
+      const audio = useAudio(factory, loaded(TAKE))
+      await flush()
 
-    expect(factory).toHaveBeenCalledWith(
-      `/audio/soundeffects/${encodeURIComponent(NEW_SPELL_FILE)}`,
-    )
-    expect(playFn).toHaveBeenCalledOnce()
+      audio.playNewSpell()
+
+      expect(factory).toHaveBeenCalledWith(
+        '/audio/music/generated/spell-learned.mp3',
+      )
+      expect(created[0].volume).toBeCloseTo(0.4)
+      expect(playFn).toHaveBeenCalledOnce()
+    })
+
+    it('rings once for each piece of spell news', async () => {
+      const { factory, playFn } = createMockFactory()
+      const audio = useAudio(factory, loaded(TAKE))
+      await flush()
+      audio.playNewSpell()
+      audio.playNewSpell()
+      expect(playFn).toHaveBeenCalledTimes(2)
+    })
+
+    it('is silent when no take was chosen', async () => {
+      const { factory } = createMockFactory()
+      const audio = useAudio(factory, loaded({}))
+      await flush()
+      audio.playNewSpell()
+      expect(factory).not.toHaveBeenCalled()
+    })
+
+    it('is silent when the manifest cannot be read', async () => {
+      const { factory } = createMockFactory()
+      const audio = useAudio(factory, () => Promise.reject(new Error('down')))
+      await flush()
+      expect(() => audio.playNewSpell()).not.toThrow()
+      expect(factory).not.toHaveBeenCalled()
+    })
+
+    it('is silent with sound effects off, and does not replay when they return', async () => {
+      const { factory } = createMockFactory()
+      const settings = useSettingsStore()
+      settings.effectsOn = false
+      const audio = useAudio(factory, loaded(TAKE))
+      await flush()
+      audio.playNewSpell()
+      settings.effectsOn = true
+      expect(factory).not.toHaveBeenCalled()
+    })
+
+    it('still plays with the music off', async () => {
+      const { factory, playFn } = createMockFactory()
+      const settings = useSettingsStore()
+      settings.musicOn = false
+      const audio = useAudio(factory, loaded(TAKE))
+      await flush()
+      audio.playNewSpell()
+      expect(playFn).toHaveBeenCalledOnce()
+    })
+
+    it('shows nothing when the file fails to play', async () => {
+      const failing = vi.fn(() => Promise.reject(new Error('no source')))
+      const factory = vi.fn(() => ({ play: failing, volume: 1 }))
+      const audio = useAudio(factory, loaded(TAKE))
+      await flush()
+      expect(() => audio.playNewSpell()).not.toThrow()
+      await flush()
+      expect(failing).toHaveBeenCalledOnce()
+    })
   })
 })
