@@ -54,6 +54,7 @@ export class Mira extends Character {
     stage:
       | 'initial'
       | 'reminder_before_request'
+      | 'reminder_before_request_after_remark'
       | 'reminder_flower'
       | 'quest_conditions_not_met'
       | 'quest_complete_amulet_given'
@@ -78,6 +79,10 @@ export class Mira extends Character {
           speech(
             `Back already, ${characterName('Elior')}. Tell me what you've seen.`,
           )
+        )
+      case 'reminder_before_request_after_remark':
+        return speech(
+          `Back already, ${characterName('Elior')}. Tell me what you've seen.`,
         )
       case 'reminder_flower':
         return (
@@ -294,7 +299,10 @@ export class Mira extends Character {
     // 2. Give the initial message if the story flag 'magic_fully_unlocked' is not set
     //    (i.e., flower hasn't been given yet)
     if (!gameState.getStoryFlag(FLAG_MAGIC_FULLY_UNLOCKED)) {
-      const met = gameState.getStoryFlag(FLAG_MIRA_MET)
+      // A save from before the flag existed has heard the request, so has met her.
+      const met =
+        gameState.getStoryFlag(FLAG_MIRA_MET) ||
+        gameState.getStoryFlag(FLAG_CONNECT_WITH_NATURE)
       gameState.setStoryFlag(FLAG_MIRA_MET, true)
       // Check if all three story flags are set
       if (
@@ -335,7 +343,9 @@ export class Mira extends Character {
         return this.dialogue(
           gameState.getStoryFlag(FLAG_CONNECT_WITH_NATURE)
             ? 'reminder_flower'
-            : 'reminder_before_request',
+            : afterRemark
+              ? 'reminder_before_request_after_remark'
+              : 'reminder_before_request',
         )
       }
       return this.dialogue('initial')

@@ -362,4 +362,12 @@ describe('Mira spoken to again before the flower', () => {
     expect(response).toContain('None of that is weather.')
     expect(game.state.getStoryFlag(FLAG_CONNECT_WITH_NATURE)).toBe(true)
   })
+
+  it('reminds a save that heard the request before the flag existed, not the first meeting', () => {
+    const game = gameInMirasHut()
+    game.state.setStoryFlag(FLAG_CONNECT_WITH_NATURE, true)
+    const response = executeCommands(game, ['talk to mira'])
+    expect(response).not.toContain(FIRST_MEETING)
+    expect(response).toContain('The flower, ')
+  })
 })

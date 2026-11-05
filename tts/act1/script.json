@@ -1140,14 +1140,24 @@
     "text": "It's very quiet here, with you out all day. If you'd have her stay with me, say so, and I'll square it with Hemlock myself. Or carry her home to him. He'll be worried sick."
   },
   {
-    "key": "11a62c8885cd34",
+    "key": "0f969b061b4c06",
     "speaker": "narrator",
-    "text": "Mira gently but firmly stops you."
+    "text": "Mira looks up from the herbs she is tying."
   },
   {
-    "key": "1dea0929da2b19",
+    "key": "0586f7fe81dd2b",
     "speaker": "mira",
-    "text": "Those herbs are part of my stores, Elior. They are not for taking, but for healing those who truly need them."
+    "text": "Elior. Come in, mind the sage."
+  },
+  {
+    "key": "0b536e37b7bbab",
+    "speaker": "narrator",
+    "text": "She studies your face."
+  },
+  {
+    "key": "036f6c36044cda",
+    "speaker": "mira",
+    "text": "You've been dreaming. It's written all over you. What brings you?"
   },
   {
     "key": "1d8e270a441a9c",
@@ -1158,6 +1168,26 @@
     "key": "16e6a86be68933",
     "speaker": "narrator",
     "text": "A small hut hung with drying herbs: lavender, sage, and roots in bundles from the rafters. Shelves of bottles line the walls, every one labelled. Mira moves among them without looking, the way you move through your own kitchen."
+  },
+  {
+    "key": "08a208fffd8241",
+    "speaker": "narrator",
+    "text": "Mira glances up, a sprig of sage between her fingers."
+  },
+  {
+    "key": "0d1a2b0ed0ac2b",
+    "speaker": "mira",
+    "text": "Back already, Elior. Tell me what you've seen."
+  },
+  {
+    "key": "11a62c8885cd34",
+    "speaker": "narrator",
+    "text": "Mira gently but firmly stops you."
+  },
+  {
+    "key": "1dea0929da2b19",
+    "speaker": "mira",
+    "text": "Those herbs are part of my stores, Elior. They are not for taking, but for healing those who truly need them."
   },
   {
     "key": "00382f3f08c6be",
@@ -1188,26 +1218,6 @@
     "key": "14da17371d9c97",
     "speaker": "narrator",
     "text": "A mysterious amulet inscribed with runes. At its centre, a sun rises over three linked rings. It is faintly warm, as if someone had only just set it down."
-  },
-  {
-    "key": "0f969b061b4c06",
-    "speaker": "narrator",
-    "text": "Mira looks up from the herbs she is tying."
-  },
-  {
-    "key": "0586f7fe81dd2b",
-    "speaker": "mira",
-    "text": "Elior. Come in, mind the sage."
-  },
-  {
-    "key": "0b536e37b7bbab",
-    "speaker": "narrator",
-    "text": "She studies your face."
-  },
-  {
-    "key": "036f6c36044cda",
-    "speaker": "mira",
-    "text": "You've been dreaming. It's written all over you. What brings you?"
   },
   {
     "key": "11540ba3f2512e",
