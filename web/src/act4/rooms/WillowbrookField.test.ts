@@ -449,7 +449,7 @@ describe('casting grow at home', () => {
       game.newTurn()
       const page = game.getActCompleteText() ?? ''
       expect(page.startsWith(hooks[ending])).toBe(true)
-      expect(page).toContain('the final act of RetroQuest!')
+      expect(page).toContain('the road ends with it.')
     }
   })
 

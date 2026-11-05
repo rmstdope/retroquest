@@ -28,12 +28,8 @@ import {
   type WriterRule,
 } from './narrationScript'
 
-/** Lines that stay silent: the chapter page's help line and the closing page's shared words. */
-const SILENT = [
-  "Let's get started!",
-  'Congratulations — you have completed Act',
-  'Take a moment to catch your breath',
-]
+/** Lines that stay silent: none of the chapter pages' words are instructions any more. */
+const SILENT: string[] = []
 
 const WRITERS: WriterRule[] = [
   { opening: 'My dearest', speaker: 'mother' },
@@ -314,9 +310,12 @@ describe('actScript for Act I', () => {
     expect(find('Warm clothing')?.speaker).toBe('narrator')
   })
 
-  it('leaves the closing page’s shared congratulations silent', () => {
+  it('reads the closing page’s shared words, with no congratulations', () => {
     expect(script.some((line) => line.text.startsWith('Congratulations'))).toBe(
       false,
+    )
+    expect(script.some((line) => line.text.startsWith('Act I ends here'))).toBe(
+      true,
     )
   })
 

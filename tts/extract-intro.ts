@@ -17,7 +17,6 @@ const intro = new Act1()
   )
   .replace(/\[\/?dialogue\]/g, '"')
   .replace(/\[\/?[a-z_]+\]/g, '')
-  .replace(/\nLet's get started![^\n]*\n?/, '')
   .trim()
 
 console.log(intro)

@@ -257,7 +257,7 @@ describe('Game', () => {
       firstDone = true
       game.newTurn()
       expect(game.getActCompleteText()).toMatch(
-        /^A hook\.\n\nCongratulations — you have completed Act I!/,
+        /^A hook\.\n\nAct I ends here\./,
       )
       expect(
         new Act({ ...options, name: 'Plain' }).getCompletionHook(game.state),
@@ -297,12 +297,11 @@ describe('Game', () => {
       expect(game.acceptInput).toBe(false)
       expect(game.currentAct).toBe(0)
       expect(game.state).toBe(firstState)
-      expect(game.getResultText()).toContain(
-        'Congratulations — you have completed Act I!',
-      )
-      expect(game.getResultText()).toContain('Get ready for Act II,')
+      expect(game.getResultText()).toContain('Act I ends here.')
+      expect(game.getResultText()).toContain('into Act II.')
+      expect(game.getResultText()).not.toMatch(/Congratulations|coffee/)
       expect(game.getActCompleteText()).toMatch(
-        /^Congratulations — you have completed Act I!\n\nTake a moment.*Act II,.*\.$/s,
+        /^Act I ends here\.\n\nThe road goes on, into Act II\.$/,
       )
       game.newTurn()
       expect(game.getActCompleteText()).toBeNull()
@@ -314,8 +313,7 @@ describe('Game', () => {
       secondDone = true
       game.newTurn()
       expect(game.getActCompleteText()).toBe(
-        'Congratulations — you have completed Act II, ' +
-          'the final act of RetroQuest!',
+        'Act II ends here, and the road ends with it.',
       )
       expect(game.isRunning).toBe(false)
       expect(game.acceptInput).toBe(false)
@@ -548,12 +546,10 @@ describe('Game', () => {
       expect(game.currentAct).toBe(0)
       expect(game.getActName()).toBe('Act 1')
       expect(game.getResultText()).toContain(
-        'Congratulations — you have completed Act I, ' +
-          'the final act of RetroQuest!',
+        'Act I ends here, and the road ends with it.',
       )
       expect(game.getActCompleteText()).toBe(
-        'Congratulations — you have completed Act I, ' +
-          'the final act of RetroQuest!',
+        'Act I ends here, and the road ends with it.',
       )
       game.newTurn()
       expect(game.isGameOver()).toBe(true)

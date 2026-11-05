@@ -623,7 +623,7 @@ describe('Act 1 golden path', () => {
     game.newTurn()
     expect(game.isGameOver()).toBe(true)
     expect(game.getActCompleteText()).toMatch(
-      new RegExp(`^${hook}\\n\\nCongratulations — you have completed Act I`),
+      new RegExp(`^${hook}\\n\\nAct I ends here`),
     )
     const fresh = new Game([new Act1()])
     expect(fresh.loadSaveData(game.toSaveData())).toContain('loaded')
