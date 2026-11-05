@@ -1,0 +1,30 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hemlock's prices, spoken</title><style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Fraunces:opsz,wght@9..144,600&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=swap');
+:root{--bg:#10151a;--surface:#161d24;--line:#26313b;--fg:#ece6d6;--prose:#d9d3c3;--muted:#a39d8e;--accent-text:#ffb836;--accent-line:#a8740f;--character:#7fb0e6;--item:#9fd38a;--page:#0b0f13;--bad:#e06c5a}
+*{box-sizing:border-box}body{margin:0;background:var(--page);color:var(--fg);font:15px/1.5 'DM Sans',system-ui,sans-serif;padding:24px 16px}
+.wrap{max-width:980px;margin:0 auto}.kicker{color:var(--accent-text);font-size:12px;letter-spacing:.12em;text-transform:uppercase}
+h1{font:600 26px/1.15 Fraunces,serif;margin:4px 0 8px}.intro{color:var(--prose)}.cost{color:var(--muted);font-size:13px;border-left:2px solid var(--accent-line);padding-left:10px}
+h2{font:600 13px 'DM Sans';color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin:26px 0 8px}
+.row{display:flex;gap:24px;flex-wrap:wrap;align-items:flex-start}
+.stage{flex:1 1 420px;border:1px solid var(--line);border-radius:14px;background:linear-gradient(#1c2630,#121920);padding:18px;min-height:300px;position:relative}
+.stage.phone{flex:0 0 360px;max-width:100%}
+.pic{position:absolute;inset:0;border-radius:14px;background:radial-gradient(circle at 30% 40%,#3a2f22 0,#1a1f24 60%);opacity:.55}
+.thread{position:relative;display:flex;flex-direction:column;gap:8px;align-items:flex-end}
+.b{max-width:78%;background:rgba(22,29,36,.94);border:1px solid var(--line);border-radius:14px 14px 4px 14px;padding:8px 12px;font:italic 15px/1.55 'Source Serif 4',Georgia,serif;color:var(--fg)}
+.who{font:600 11px 'DM Sans';letter-spacing:.14em;text-transform:uppercase;color:var(--character);margin-bottom:2px;font-style:normal}
+.i{color:var(--item);font-style:normal}.bad{outline:2px dashed var(--bad);outline-offset:2px}
+.cmd{position:relative;font:13px ui-monospace,monospace;color:var(--muted);margin-bottom:10px}
+.tag{font:600 11px 'DM Sans';color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin:0 0 6px}
+.ware{display:grid;grid-template-columns:auto 1fr;column-gap:18px;font-style:normal;font-family:'DM Sans';font-size:14px;margin:6px 0}
+.ware span:nth-child(even){color:var(--muted)}
+.story{position:relative;margin-top:12px;background:rgba(22,29,36,.94);border:1px solid var(--line);border-radius:10px;padding:10px 14px;font:15px/1.55 'Source Serif 4',Georgia,serif;color:var(--prose)}
+.note{color:var(--muted);font:13px 'DM Sans';margin-top:8px}
+</style></head><body><div class="wrap"><div class="kicker">Option A, all three sellers · the words to confirm</div><h1>Every seller says his prices in one breath</h1>
+<p class="intro">Hemlock, Innkeeper Marcus and Master Merchant Aldric each say their prices as one spoken sentence in place of the dashed list. Everything else they say is unchanged. Item names keep their green highlight. Each opening line still rotates as it does today; the price sentence always follows it.</p>
+<h2>Hemlock · General Store (Act I)</h2><div class="row"><div class="stage"><div class="pic"></div><div class="cmd">› talk to hemlock</div><div class="thread"><div class="b"><div class=who>Hemlock</div>Only store in Willowbrook, so I suppose that makes it the finest. <span class=i>Rope</span>'s a <span class=i>coin</span>, the <span class=i>sword</span>'s five and the <span class=i>armor</span>'s ten. And there's an <span class=i>apple</span> with everything. My mother's rule.</div></div></div></div>
+<h2>Innkeeper Marcus · The Silver Stag (Act II) · before Elena's cure</h2><div class="row"><div class="stage"><div class="pic"></div><div class="cmd">› talk to marcus</div><div class="thread"><div class="b"><div class=who>Innkeeper Marcus</div>Welcome to The Silver Stag. Hot stew, clean sheets, and a door that locks. A <span class=i>room key</span>'s ten <span class=i>gold coins</span>.</div><div class="b">My girl, Elena. She's been poorly three weeks. … Talk to her, if you've a kind word to spare. She'll tell it better than I can.</div></div></div></div>
+<p class="note">His second bubble, about Elena, is a separate line today and stays one.</p>
+<h2>Master Merchant Aldric (Act II) · after the flyer</h2><div class="row"><div class="stage"><div class="pic"></div><div class="cmd">› talk to aldric</div><div class="thread"><div class="b"><div class=who>Master Merchant Aldric</div>Welcome to Aldric's. Rope that holds, lanterns that stay lit, and nothing that comes apart on the road. A <span class=i>forest survival kit</span>'s fifty <span class=i>gold coins</span>, the <span class=i>enhanced lantern</span>'s forty and the <span class=i>quality rope</span>'s twenty.</div></div></div></div>
+<h2>Phone · Aldric, the longest</h2><div class="row"><div class="stage phone"><div class="pic"></div><div class="cmd">› talk to aldric</div><div class="thread"><div class="b"><div class=who>Master Merchant Aldric</div>Welcome to Aldric's. Rope that holds, lanterns that stay lit, and nothing that comes apart on the road. A <span class=i>forest survival kit</span>'s fifty <span class=i>gold coins</span>, the <span class=i>enhanced lantern</span>'s forty and the <span class=i>quality rope</span>'s twenty.</div></div></div></div>
+<p class="note">On a phone the one bubble simply wraps; nothing else on the screen moves.</p></div></body></html>
