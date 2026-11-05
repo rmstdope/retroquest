@@ -206,9 +206,10 @@ describe('the committed lists', () => {
 
   it('content-studio.json declares the music paths and the shared refresh', () => {
     const project = readJson<{
-      music: { refreshShared: string; paths: Record<string, string> }
+      refresh: { shared: string }
+      music: { paths: Record<string, string> }
     }>('content-studio.json')
-    expect(project.music.refreshShared).toContain('tts/extract-shared.ts')
+    expect(project.refresh.shared).toContain('tts/extract-shared.ts')
     expect(project.music.paths).toEqual({
       loops: 'tts/{part}/music.json',
       stingers: 'tts/stingers.json',

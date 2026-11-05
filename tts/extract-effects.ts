@@ -1,6 +1,6 @@
 /**
  * Writes `tts/effects.json`: the game's sound effects in Content Studio's list format
- * (see `effectsList`). It is the `effects.refresh` command of `content-studio.json`.
+ * (see `effectsList`). It runs in the `refresh.shared` command of `content-studio.json`.
  * Run from `web/`: `npx -y tsx@4.23.15 --tsconfig tsconfig.json ../tts/extract-effects.ts`.
  */
 import { writeFileSync } from 'node:fs'

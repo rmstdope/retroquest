@@ -7,7 +7,11 @@ ENV/
 env.bak/
 venv.bak/
 
-# Content Studio's own state: audition sessions and cached takes
+# Content Studio's cache: audition sessions, takes not chosen, personal settings
+# (content-studio/.gitignore, written by the studio, says the same)
+content-studio/cache/
+# The cache's place before version 2; the studio refuses to start until it is moved:
+# mkdir -p content-studio && mv .content-studio content-studio/cache
 .content-studio/
 
 # Mac OS
