@@ -2,12 +2,14 @@ import { describe, it, expect } from 'vitest'
 import { Game } from '@/engine'
 import { Act1 } from '../Act1'
 import { Key } from './Key'
+import { Bread } from './Bread'
 import { SharpKnife } from './SharpKnife'
 import { Candle } from './Candle'
 import { Mechanism } from './Mechanism'
 import { Scenery } from './Scenery'
 import { SCENERY_BY_ROOM } from './sceneryLines'
 import {
+  FLAG_COOP_KEY_FELL,
   FLAG_PATCHES_FOUND,
   FLAG_PATCHES_RETURNED,
   FLAG_VEGETABLE_FIELD_WATERED,
@@ -106,6 +108,19 @@ describe('Scenery that follows the story', () => {
     const game = gameIn('ChickenCoop')
     expect(say(game, 'examine rafter')).toContain('out of your reach')
     game.state.currentRoom.addItem(new Key())
+    expect(say(game, 'examine rafter')).toContain('Only dust')
+  })
+
+  it('rafter: the bread that drops the key sets the flag', () => {
+    const game = gameIn('ChickenCoop')
+    game.state.addItemToInventory(new Bread())
+    say(game, 'use bread with chicken')
+    expect(game.state.getStoryFlag(FLAG_COOP_KEY_FELL)).toBe(true)
+  })
+
+  it('rafter: an old save with the shed already open reads as fallen', () => {
+    const game = gameIn('ChickenCoop')
+    ;(game.state.allRooms.AbandonedShed as AbandonedShed).locked = false
     expect(say(game, 'examine rafter')).toContain('Only dust')
   })
 

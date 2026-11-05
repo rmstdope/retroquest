@@ -4,7 +4,7 @@
  * examine reads, in the order the chips appear. Lines that follow the story
  * read the game state when they are examined, so a load never needs to
  * refresh them. The table is code, not saved state: a saved `Scenery` keeps
- * only its key.
+ * its key and chip label, and takes the rest from here.
  */
 import { writing, type GameState, type Room } from '@/engine'
 import {
@@ -34,6 +34,7 @@ export interface SceneryDef {
   appears?: SceneryAppearance
 }
 
+/** A thing whose line never changes. */
 function plain(
   key: string,
   name: string,
@@ -44,6 +45,7 @@ function plain(
   return { key, name, aliases, line: () => text, appears }
 }
 
+/** A thing whose line follows the game state when it is examined. */
 function staged(
   key: string,
   name: string,

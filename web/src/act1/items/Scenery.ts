@@ -7,19 +7,17 @@ import {
 
 /**
  * A thing a room's description names that can be examined but not taken:
- * the altar, the fountain, the workbench. It keeps only its `key`; the words
- * it answers to and the line examine reads come from the table in
- * `sceneryLines.ts`, so a line that follows the story is always current.
+ * the altar, the fountain, the workbench. A save keeps its `key` and its chip
+ * label; the other typed words and the line examine reads come from the table
+ * in `sceneryLines.ts` (and `refreshSavedText` refreshes the label), so a line that follows the story is always current.
  */
 export class Scenery extends Item {
   key: string
-  aliases: string[]
 
   constructor(key: string) {
     const def = SCENERY_BY_KEY[key]
     super({ name: def.name, description: '', canBeCarried: false })
     this.key = key
-    this.aliases = def.aliases
   }
 
   /** Answers to its chip label and the other typed words of its table entry. */
@@ -27,8 +25,16 @@ export class Scenery extends Item {
     const wanted = name.toLowerCase()
     return (
       super.answersTo(name) ||
-      this.aliases.some((alias) => alias.toLowerCase() === wanted)
+      SCENERY_BY_KEY[this.key].aliases.some(
+        (alias) => alias.toLowerCase() === wanted,
+      )
     )
+  }
+
+  /** Give a saved chip the table's current label. */
+  override refreshSavedText(_gameState: GameState): void {
+    this.name = SCENERY_BY_KEY[this.key].name
+    this.shortName = this.name
   }
 
   /** The table's line for the story as it stands now. */

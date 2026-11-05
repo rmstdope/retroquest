@@ -107,7 +107,9 @@ export class Act1 extends Act {
   /**
    * Bring older saves up to date: drop the matches the store's wares still
    * sell, name the villager Tilda, the smith Borin and the shopkeeper
-   * Hemlock, and give the cottage the hearth it lacked. Rooms and items whose saved wording changed refresh it
+   * Hemlock, and give the cottage the hearth it lacked, and give every room the
+   * examinable things it names (the shed's once its door is open, the forest
+   * alcove's once the vines are cut). Rooms and items whose saved wording changed refresh it
    * themselves (`refreshSavedText`).
    */
   override afterLoad(gameState: GameState): void {

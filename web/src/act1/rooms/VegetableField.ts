@@ -1,9 +1,9 @@
-import { Scenery } from '../items/Scenery'
 import { Room } from '@/engine'
 import type { GameState } from '@/engine'
 import { WitheredCarrot } from '../items/WitheredCarrot'
 import { RustyHoe } from '../items/RustyHoe'
 import { DullKnife } from '../items/DullKnife'
+import { Scenery } from '../items/Scenery'
 import {
   FLAG_INVESTIGATED_WITHERED_CROPS,
   FLAG_VEGETABLE_FIELD_WATERED,

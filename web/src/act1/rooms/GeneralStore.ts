@@ -1,10 +1,10 @@
-import { Scenery } from '../items/Scenery'
 import { characterName, Room, type GameState } from '@/engine'
 import { Rope } from '../items/Rope'
 import { Apple } from '../items/Apple'
 import { Matches } from '../items/Matches'
 import { Armor } from '../items/Armor'
 import { Sword } from '../items/Sword'
+import { Scenery } from '../items/Scenery'
 import { Shopkeeper } from '../characters/Shopkeeper'
 import {
   FLAG_PATCHES_RETURNED,

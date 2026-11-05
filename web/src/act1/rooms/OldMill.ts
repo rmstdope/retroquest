@@ -1,7 +1,7 @@
-import { Scenery } from '../items/Scenery'
 import { Room, type GameState } from '@/engine'
 import { SackOfFlour } from '../items/SackOfFlour'
 import { Mechanism } from '../items/Mechanism'
+import { Scenery } from '../items/Scenery'
 import {
   FLAG_FOUND_RUNE_TOKEN,
   FLAG_STRANGER_SEEN_AT_MILL,

@@ -1,8 +1,8 @@
-import { Scenery } from '../items/Scenery'
 import { characterName, Room, type GameState } from '@/engine'
 import { SmoothStone } from '../items/SmoothStone'
 import { River } from '../items/River'
 import { MothersLetter } from '../items/MothersLetter'
+import { Scenery } from '../items/Scenery'
 import { Fisherman } from '../characters/Fisherman'
 import {
   FLAG_FISHERMAN_TOLD_OF_TIN,
