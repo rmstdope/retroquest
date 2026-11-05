@@ -2,7 +2,8 @@
  * Act I text follows the markup conventions on every answer of the golden
  * path: every character is named through `[character_name]`, spoken and
  * written words sit in `[dialogue]` without quote marks of their own, and no
- * quoted speech is left in the narration.
+ * quoted speech is left in the narration, and no narration that only
+ * introduces a quote ("Hemlock says:") is left standing before it.
  */
 import { describe, expect, it } from 'vitest'
 import { Game } from '@/engine'
@@ -15,6 +16,8 @@ const CHARACTER_WORDS =
 const NAMED_SPANS =
   /\[(character_name|room_name|item_name|spell_name|quest_name)\][\s\S]*?\[\/\1\]/g
 const DIALOGUE_BLOCK = /\[dialogue\]([\s\S]*?)\[\/dialogue\]/g
+/** Narration ending in a colon right before a quote: it only introduces it. */
+const COLON_BEFORE_QUOTE = /[^\n]*:\s*\[dialogue\]/
 
 /** Every answer of the golden path, each paired with the command that gave it. */
 function goldenPathAnswers(): { command: string; answer: string }[] {
@@ -49,6 +52,15 @@ describe('Act I markup conventions', () => {
           /^['"]|['"]$/,
         )
       }
+    }
+  })
+
+  it('leaves no narration that only introduces a quote (rq-i2iu)', () => {
+    for (const { command, answer } of answers) {
+      expect(
+        answer.match(COLON_BEFORE_QUOTE)?.[0],
+        `a line ending in a colon before a quote after "${command}"`,
+      ).toBe(undefined)
     }
   })
 })

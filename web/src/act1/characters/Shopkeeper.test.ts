@@ -562,6 +562,16 @@ describe('Hemlock and the byword', () => {
 })
 
 describe('Hemlock idle lines', () => {
+  it('opens his wares with no narration that only introduces them (rq-i2iu)', () => {
+    const game = gameInStore()
+
+    const answer = game.commandParser.parse('talk to shopkeeper')
+
+    expect(answer).toContain('for sale')
+    expectDialogueSpeaker(answer, 'Hemlock')
+    expect(answer).not.toMatch(/:\s*\[dialogue\]/)
+  })
+
   it('speaks his current lines after loading a save that holds the old ones', () => {
     const game = gameInStore()
     const shopkeeper = game.state.currentRoom.getCharacterByName('shopkeeper')
