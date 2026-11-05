@@ -104,6 +104,15 @@ describe('Fisherman', () => {
       expect(response).not.toContain('Thank you')
     })
 
+    it('is described without a bad arm once healed', () => {
+      executeCommands(game, ['cast heal on fisherman'])
+
+      const response = executeCommands(game, ['examine fisherman'])
+
+      expect(response).toContain('his mended arm resting easy on his knee.')
+      expect(response).not.toContain('bad arm')
+    })
+
     it('no longer speaks of a bad arm when talked to without a rod', () => {
       executeCommands(game, ['cast heal on fisherman'])
 

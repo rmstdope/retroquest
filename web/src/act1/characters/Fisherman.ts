@@ -75,6 +75,17 @@ export class Fisherman extends Character {
     }
   }
 
+  /** Once heal has mended his arm, the description no longer calls it bad. */
+  override examine(gameState: GameState): string {
+    if (gameState.getStoryFlag(FLAG_HEALED_FISHERMAN_ARM)) {
+      return (
+        'An old man on an upturned crate at the bend, watching the water, ' +
+        'his mended arm resting easy on his knee.'
+      )
+    }
+    return super.examine(gameState)
+  }
+
   /** Named by what it is, so it reads "the fisherman" (see `nameInSentence`). */
   override nameInSentence(options?: NameOptions): string {
     return super.nameInSentence({ ...options, common: true })
