@@ -20,7 +20,7 @@ describe('Act I set-up descriptions', () => {
         'Insects hum over the water. A weathered ',
     )
     expect(text).toContain(
-      'sits on an upturned crate at the bend, his line in.',
+      'sits on an upturned crate at the bend, watching the water.',
     )
     expect(text).not.toContain('humming')
     expect(text).not.toContain('time seems to slow')
@@ -30,8 +30,8 @@ describe('Act I set-up descriptions', () => {
     const game = gameIn('Riverbank')
     const text = executeCommands(game, ['examine fisherman'])
     expect(text).toContain(
-      'An old man on an upturned crate at the bend, his line in the water ' +
-        'and his bad arm held close to his side.',
+      'An old man on an upturned crate at the bend, watching the water, ' +
+        'his bad arm held close to his side.',
     )
     expect(text).not.toContain('humming')
   })
