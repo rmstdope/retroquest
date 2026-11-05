@@ -1003,6 +1003,8 @@ watch(
 // sound, or a quest's chime or fanfare. The same piece up again (its part is
 // rebuilt when the narrator ends) rings nothing.
 let ringedNews = ''
+/** The last turn whose spell sound has rung (its news came up, or was cut short). */
+let spellRungTurn: number | null = null
 watch(
   () => arrival.newsUp,
   (up) => {
@@ -1013,8 +1015,29 @@ watch(
     const key = `${up.turnId}-${up.spell ? 'spell' : 'quest'}-${up.index}`
     if (key === ringedNews) return
     ringedNews = key
-    if (up.spell) game.ringSpellSound()
-    else game.ringQuestSounds(up.turnId, [up.index])
+    if (up.spell) {
+      spellRungTurn = up.turnId
+      game.ringSpellSound()
+    } else game.ringQuestSounds(up.turnId, [up.index])
+  },
+)
+
+// News cut short before its spell came up (a second Escape on the held news,
+// a new command) still rings the spell's sound as it goes, as the quest cards
+// still ring theirs. A turn no longer in the story (a new game, a load) rings
+// nothing.
+watch(
+  () => {
+    const turn = game.turns.at(-1)
+    return turn?.spells?.length && arrival.newsPending(turn.id) ? turn.id : null
+  },
+  (_pending, before) => {
+    if (before === null || before === undefined || before === spellRungTurn)
+      return
+    if (!game.turns.some((turn) => turn.id === before && turn.spells?.length))
+      return
+    spellRungTurn = before
+    game.ringSpellSound()
   },
 )
 

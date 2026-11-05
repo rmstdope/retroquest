@@ -731,6 +731,56 @@ describe('LanternLayout: the arrival on the picture', () => {
       expect(game.turns.at(-1)?.fullText).toContain('You have learned')
     })
 
+    /** A narrated turn that taught a spell and finished a quest, with the audio it rings. */
+    async function narratedSpellTurn(): Promise<{
+      playNewQuest: ReturnType<typeof vi.fn>
+      playQuestComplete: ReturnType<typeof vi.fn>
+      playNewSpell: ReturnType<typeof vi.fn>
+    }> {
+      const audio = {
+        playNewQuest: vi.fn(),
+        playQuestComplete: vi.fn(),
+        playNewSpell: vi.fn(),
+      }
+      useGameStore(pinia).setAudioPlayer(audio)
+      pushSpellTurn()
+      const turn = useGameStore(pinia).turns.at(-1)
+      if (turn) {
+        turn.text = `A green garden.\n${LEARNED}`
+        turn.narrate = true
+      }
+      await vi.advanceTimersByTimeAsync(0)
+      return audio
+    }
+
+    it('rings the spell sound once when the talk is skipped with Escape', async () => {
+      await ready(true, true)
+      const audio = await narratedSpellTurn()
+      await key('Escape')
+      await vi.advanceTimersByTimeAsync(20000)
+      expect(audio.playNewSpell).toHaveBeenCalledOnce()
+      expect(audio.playQuestComplete).toHaveBeenCalledOnce()
+    })
+
+    it('rings the spell sound once when a second Escape ends the held news', async () => {
+      await ready(true, true)
+      const audio = await narratedSpellTurn()
+      await key('Escape')
+      await key('Escape')
+      await vi.advanceTimersByTimeAsync(20000)
+      expect(audio.playNewSpell).toHaveBeenCalledOnce()
+      expect(audio.playQuestComplete).toHaveBeenCalledOnce()
+    })
+
+    it('rings the spell sound once when the player moves on before the news comes up', async () => {
+      await ready(true, true)
+      const audio = await narratedSpellTurn()
+      await run('look')
+      await vi.advanceTimersByTimeAsync(20000)
+      expect(audio.playNewSpell).toHaveBeenCalledOnce()
+      expect(audio.playQuestComplete).toHaveBeenCalledOnce()
+    })
+
     it('leaves the line on the card where nothing is told in the middle', async () => {
       const w = await ready('short', false)
       useSettingsStore(pinia).narrationOn = false
