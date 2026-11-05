@@ -36858,82 +36858,82 @@
  "0d9d5363ea4b1c": {
   "file": "0d9d5363ea4b1c.mp3",
   "speaker": "grandmother",
-  "duration": 6.269,
+  "duration": 6.687,
   "words": [
    {
     "word": "Your",
     "start": 0.0,
-    "end": 0.22
+    "end": 0.2
    },
    {
     "word": "parents",
-    "start": 0.22,
-    "end": 0.68
+    "start": 0.2,
+    "end": 0.66
    },
    {
     "word": "didn't",
-    "start": 0.68,
-    "end": 1.1
+    "start": 0.66,
+    "end": 1.08
    },
    {
     "word": "just",
-    "start": 1.1,
-    "end": 1.36
+    "start": 1.08,
+    "end": 1.4
    },
    {
     "word": "leave,",
-    "start": 1.36,
-    "end": 1.84
+    "start": 1.4,
+    "end": 1.94
    },
    {
     "word": "Elior.",
-    "start": 1.94,
-    "end": 2.34
+    "start": 2.12,
+    "end": 2.44
    },
    {
     "word": "They",
-    "start": 2.54,
-    "end": 2.88
+    "start": 2.72,
+    "end": 3.16
    },
    {
     "word": "went",
-    "start": 2.88,
-    "end": 3.18
+    "start": 3.16,
+    "end": 3.46
    },
    {
     "word": "toward",
-    "start": 3.18,
-    "end": 3.5
+    "start": 3.46,
+    "end": 3.84
    },
    {
     "word": "something.",
-    "start": 3.5,
-    "end": 4.08
+    "start": 3.84,
+    "end": 4.34
    },
    {
     "word": "I",
-    "start": 4.38,
-    "end": 4.84
+    "start": 4.64,
+    "end": 5.16
    },
    {
     "word": "begged",
-    "start": 4.84,
-    "end": 5.18
+    "start": 5.16,
+    "end": 5.54
    },
    {
     "word": "them",
-    "start": 5.18,
-    "end": 5.4
+    "start": 5.54,
+    "end": 5.76
    },
    {
     "word": "not",
-    "start": 5.4,
-    "end": 5.7
+    "start": 5.76,
+    "end": 6.06
    },
    {
     "word": "to.",
-    "start": 5.7,
-    "end": 5.98
+    "start": 6.06,
+    "end": 6.36
    }
   ]
  },

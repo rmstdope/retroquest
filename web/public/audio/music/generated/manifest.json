@@ -66,5 +66,9 @@
  "market": {
   "file": "market.mp3",
   "duration": 60.0
+ },
+ "spell-learned": {
+  "file": "spell-learned.mp3",
+  "duration": 3.0
  }
 }
