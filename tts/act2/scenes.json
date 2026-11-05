@@ -1,109 +1,109 @@
 [
   {
     "id": "act2-mountain-path",
-    "name": "Mountain Path",
+    "title": "Mountain Path",
     "states": [],
     "triggers": []
   },
   {
     "id": "act2-greendale-gates",
-    "name": "Greendale Gates",
+    "title": "Greendale Gates",
     "states": [],
     "triggers": []
   },
   {
     "id": "act2-main-square",
-    "name": "Main Square",
+    "title": "Main Square",
     "states": [],
     "triggers": []
   },
   {
     "id": "act2-market-district",
-    "name": "Market District",
+    "title": "Market District",
     "states": [],
     "triggers": []
   },
   {
     "id": "act2-silver-stag-inn",
-    "name": "The Silver Stag Inn",
+    "title": "The Silver Stag Inn",
     "states": [],
     "triggers": []
   },
   {
     "id": "act2-inn-rooms",
-    "name": "Inn Rooms",
+    "title": "Inn Rooms",
     "states": [],
     "triggers": []
   },
   {
     "id": "act2-merchants-warehouse",
-    "name": "Merchant's Warehouse",
+    "title": "Merchant's Warehouse",
     "states": [],
     "triggers": []
   },
   {
     "id": "act2-castle-approach",
-    "name": "Castle Approach",
+    "title": "Castle Approach",
     "states": [],
     "triggers": []
   },
   {
     "id": "act2-castle-courtyard",
-    "name": "Castle Courtyard",
+    "title": "Castle Courtyard",
     "states": [],
     "triggers": []
   },
   {
     "id": "act2-great-hall",
-    "name": "Great Hall",
+    "title": "Great Hall",
     "states": [],
     "triggers": []
   },
   {
     "id": "act2-residential-quarter",
-    "name": "Residential Quarter",
+    "title": "Residential Quarter",
     "states": [],
     "triggers": []
   },
   {
     "id": "act2-healers-house",
-    "name": "Healer's House",
+    "title": "Healer's House",
     "states": [],
     "triggers": []
   },
   {
     "id": "act2-hidden-library",
-    "name": "Hidden Library",
+    "title": "Hidden Library",
     "states": [],
     "triggers": []
   },
   {
     "id": "act2-forest-transition",
-    "name": "Forest Transition",
+    "title": "Forest Transition",
     "states": [],
     "triggers": []
   },
   {
     "id": "act2-forest-entrance",
-    "name": "Forest Entrance",
+    "title": "Forest Entrance",
     "states": [],
     "triggers": []
   },
   {
     "id": "act2-ancient-grove",
-    "name": "Ancient Grove",
+    "title": "Ancient Grove",
     "states": [],
     "triggers": []
   },
   {
     "id": "act2-whispering-glade",
-    "name": "Whispering Glade",
+    "title": "Whispering Glade",
     "states": [],
     "triggers": []
   },
   {
     "id": "act2-heart-of-the-forest",
-    "name": "Heart of the Forest",
+    "title": "Heart of the Forest",
     "states": [],
     "triggers": []
   }

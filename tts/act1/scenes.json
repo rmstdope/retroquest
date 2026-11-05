@@ -1,19 +1,19 @@
 [
   {
     "id": "act1-the-dream",
-    "name": "The Dream",
+    "title": "The Dream",
     "states": [],
     "triggers": []
   },
   {
     "id": "act1-eliors-cottage",
-    "name": "Elior's Cottage",
+    "title": "Elior's Cottage",
     "states": [],
     "triggers": []
   },
   {
     "id": "act1-vegetable-field",
-    "name": "Vegetable Field",
+    "title": "Vegetable Field",
     "states": [
       "withered",
       "green"
@@ -22,31 +22,31 @@
   },
   {
     "id": "act1-chicken-coop",
-    "name": "Chicken Coop",
+    "title": "Chicken Coop",
     "states": [],
     "triggers": []
   },
   {
     "id": "act1-village-square",
-    "name": "Village Square",
+    "title": "Village Square",
     "states": [],
     "triggers": []
   },
   {
     "id": "act1-miras-hut",
-    "name": "Mira's Hut",
+    "title": "Mira's Hut",
     "states": [],
     "triggers": []
   },
   {
     "id": "act1-blacksmiths-forge",
-    "name": "Blacksmith's Forge",
+    "title": "Blacksmith's Forge",
     "states": [],
     "triggers": []
   },
   {
     "id": "act1-general-store",
-    "name": "General Store",
+    "title": "General Store",
     "states": [
       "plain",
       "cat-home"
@@ -57,19 +57,19 @@
   },
   {
     "id": "act1-village-well",
-    "name": "Village Well",
+    "title": "Village Well",
     "states": [],
     "triggers": []
   },
   {
     "id": "act1-abandoned-shed",
-    "name": "Abandoned Shed",
+    "title": "Abandoned Shed",
     "states": [],
     "triggers": []
   },
   {
     "id": "act1-old-mill",
-    "name": "Old Mill",
+    "title": "Old Mill",
     "states": [
       "whirring",
       "jammed"
@@ -78,13 +78,13 @@
   },
   {
     "id": "act1-riverbank",
-    "name": "Riverbank",
+    "title": "Riverbank",
     "states": [],
     "triggers": []
   },
   {
     "id": "act1-forest-path",
-    "name": "Forest Path",
+    "title": "Forest Path",
     "states": [
       "plain",
       "kit-trapped"
@@ -93,7 +93,7 @@
   },
   {
     "id": "act1-hidden-glade",
-    "name": "Hidden Glade",
+    "title": "Hidden Glade",
     "states": [
       "dim",
       "lit"
@@ -102,13 +102,13 @@
   },
   {
     "id": "act1-village-chapel",
-    "name": "Village Chapel",
+    "title": "Village Chapel",
     "states": [],
     "triggers": []
   },
   {
     "id": "act1-road-to-greendale",
-    "name": "Road to Greendale",
+    "title": "Road to Greendale",
     "states": [],
     "triggers": []
   }

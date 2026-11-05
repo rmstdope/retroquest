@@ -16,7 +16,7 @@ export interface SceneDeclaration {
   /** The room's music track id; unique across the game. */
   id: string
   /** What the studio calls it: the room's name. */
-  name: string
+  title: string
   /** The scene's named sound states, the default first; none when it always sounds the same. */
   states: string[]
   /** The names the game can fire in the scene (`Room.soundTriggers`). */
@@ -32,7 +32,7 @@ export function sceneStateOf(state: string): string {
 export function actScenes(act: Act): SceneDeclaration[] {
   return Object.entries(act.rooms).map(([key, room]) => ({
     id: roomTrackId(act.name, key),
-    name: room.name,
+    title: room.name,
     states: room.soundStates().map(sceneStateOf),
     triggers: [...room.soundTriggers()],
   }))
