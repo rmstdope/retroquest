@@ -319,7 +319,7 @@ export class Shopkeeper extends Character {
     this.dialogueIndex = (this.dialogueIndex + 1) % lines.length
 
     return (
-      `${this.nameInSentence({ atStart: true })} says: ` +
+      `${this.nameInSentence({ atStart: true })}\n` +
       speech(`${dialogue} ${waresInfo.trim()}`)
     )
   }

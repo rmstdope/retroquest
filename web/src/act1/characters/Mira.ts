@@ -111,7 +111,7 @@ export class Mira extends Character {
           'stand, puts it in your hand and closes your fingers over it. It ' +
           'is warm.' +
           '\nYou now carry the [item_name]ancient amulet[/item_name].' +
-          '\nThen, more quietly: ' +
+          '\nShe lowers her voice. ' +
           speech(
             'I knew your parents better than I have said. ' +
               'Once you are truly ready, I will tell you.',

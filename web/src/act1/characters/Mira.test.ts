@@ -128,14 +128,14 @@ describe('Mira handing over the ancient amulet', () => {
       'I knew your parents better than I have said. ' +
       'Once you are truly ready, I will tell you.'
 
-    expect(response).toContain('Then, more quietly:')
+    expect(response).toContain('She lowers her voice.')
     expect(response).toContain(hint)
     const gift = response.indexOf('You now carry the')
     expect(gift).toBeGreaterThan(-1)
-    expect(response.indexOf('Then, more quietly:')).toBeLessThan(
+    expect(response.indexOf('She lowers her voice.')).toBeLessThan(
       response.indexOf(hint),
     )
-    expect(response.indexOf('Then, more quietly:')).toBeGreaterThan(gift)
+    expect(response.indexOf('She lowers her voice.')).toBeGreaterThan(gift)
     expect(response.indexOf(hint)).toBeLessThan(
       response.indexOf('She holds your hand a moment longer'),
     )
