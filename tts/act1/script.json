@@ -155,6 +155,21 @@
     "text": "A well-used brass lantern. Its glass is clean and the wick is fresh, ready to light up the darkest corners."
   },
   {
+    "key": "0fd99fd3579d4f",
+    "speaker": "narrator",
+    "text": "A sturdy table, scrubbed pale. There are knife marks at one end, where the bread is always cut."
+  },
+  {
+    "key": "004775343491fd",
+    "speaker": "narrator",
+    "text": "Trinkets crowd the shelves: a chipped cup, a carved bird, a shell from a sea you have never seen. Grandmother dusts around them and never moves them."
+  },
+  {
+    "key": "0db8a239e1ef03",
+    "speaker": "narrator",
+    "text": "Old books with soft, cracked spines, most of them almanacs. They have been read more than they have been dusted."
+  },
+  {
     "key": "1638fe58e0bba6",
     "speaker": "grandmother",
     "text": "There you are. Sit down a minute, the bread's nearly done."
@@ -500,6 +515,16 @@
     "text": "A small kitchen knife with a dull blade. It won't cut much, but could be sharpened."
   },
   {
+    "key": "01670348ed160f",
+    "speaker": "narrator",
+    "text": "The leaves curl brown at the edges and break when you touch them. The stalks are still standing."
+  },
+  {
+    "key": "100b39279be6cd",
+    "speaker": "narrator",
+    "text": "The earth is cracked into plates. It is dry a finger deep."
+  },
+  {
     "key": "0098d73fd3fadf",
     "speaker": "narrator",
     "text": "You search around the Vegetable Field, but find nothing of interest beyond what you can already see."
@@ -590,6 +615,21 @@
     "text": "A soft white feather, likely from one of the chickens. It could be used for writing, crafting, or tickling."
   },
   {
+    "key": "02ef615ea12338",
+    "speaker": "narrator",
+    "text": "The planks have been patched with whatever came to hand: a cupboard door, part of a cart."
+  },
+  {
+    "key": "1afb8b68169817",
+    "speaker": "narrator",
+    "text": "Straw nests in a row along the wall, each pressed into the shape of the hen that keeps it."
+  },
+  {
+    "key": "0579f850ec78bf",
+    "speaker": "narrator",
+    "text": "The rafter is high and dusty. Something on it catches the light, out of your reach."
+  },
+  {
     "key": "10c506910d7a04",
     "speaker": "narrator",
     "text": "You swing the rusty hoe, but it doesn't seem to have much effect here. It's a sturdy (but rusty) tool, though."
@@ -603,6 +643,11 @@
     "key": "0bc4e614e40208",
     "speaker": "narrator",
     "text": "The chickens peck at the bread excitedly, and in the flapping commotion something shiny is knocked from a high rafter. It's a small key, hidden up there long ago by someone who did not want it found!"
+  },
+  {
+    "key": "0accae5b7d4844",
+    "speaker": "narrator",
+    "text": "Only dust and a few feathers on the rafter now."
   },
   {
     "key": "0101c352eb31e8",
@@ -725,6 +770,26 @@
     "text": "A faded piece of parchment pinned to the notice board. The writing is barely legible, but it might contain a clue or warning."
   },
   {
+    "key": "14f7cc1fe01384",
+    "speaker": "narrator",
+    "text": "Water trickles from the mouth of a stone fish into the basin. The rim is worn smooth where people sit, but no one is sitting there today."
+  },
+  {
+    "key": "0bbef40c35526f",
+    "speaker": "narrator",
+    "text": "Old cobbles, rounded by feet and cartwheels. A few have been lifted and never put back."
+  },
+  {
+    "key": "0d887a91976a26",
+    "speaker": "narrator",
+    "text": "Notices pinned over notices, most too faded to read. The newest is about a lost cat."
+  },
+  {
+    "key": "1d640862fce075",
+    "speaker": "narrator",
+    "text": "Half the stalls are bare boards with the awnings rolled up. The ones still open sell bread, onions and very little else."
+  },
+  {
     "key": "06e536f7a07539",
     "speaker": "tilda",
     "text": "Have you seen the fields? Green on market day, grey by the next morning. My husband says it's the soil. He also said it would rain last Tuesday."
@@ -805,6 +870,11 @@
     "text": "An old stone well, its surface worn smooth, its shaft disappearing into the depths. The water below is dark and still, and it smells sour, the way milk does when it has turned. Far down, something glints, or you think it does. It is much too deep to reach."
   },
   {
+    "key": "0c617e03566713",
+    "speaker": "narrator",
+    "text": "Moss grows thick on the north side of the stones, where the sun never reaches."
+  },
+  {
     "key": "056fa02e7b1c06",
     "speaker": "narrator",
     "text": "You search around the Village Well, but find nothing of interest beyond what you can already see."
@@ -880,6 +950,26 @@
     "text": "A heavy iron horseshoe, slightly bent. It might bring luck or be useful for repairs."
   },
   {
+    "key": "06c1ee650d9fd0",
+    "speaker": "narrator",
+    "text": "The coals glow orange under a crust of grey. Borin feeds them without looking."
+  },
+  {
+    "key": "016c9dd37a8c59",
+    "speaker": "narrator",
+    "text": "The anvil is bright on top and black everywhere else. It rings for a long time after each blow."
+  },
+  {
+    "key": "06fceab0fa1e36",
+    "speaker": "narrator",
+    "text": "Hinges and ploughshares hang on the walls, each tied with a scrap of cloth with a name on it. You know most of the names."
+  },
+  {
+    "key": "0e85b77d959b49",
+    "speaker": "narrator",
+    "text": "Borin's hammer. The handle is dark where his hand goes."
+  },
+  {
     "key": "0d4dfb9e4f90e8",
     "speaker": "borin",
     "text": "Mind the sparks, lad."
@@ -948,6 +1038,11 @@
     "key": "17ced776faa8d7",
     "speaker": "narrator",
     "text": "It's a sturdy wooden door, locked tight. There's a keyhole visible."
+  },
+  {
+    "key": "0ce6a2cd855e28",
+    "speaker": "narrator",
+    "text": "Grey boards, warped and grimy. Light comes through the cracks in thin lines."
   },
   {
     "key": "049507346fab7e",
@@ -1030,6 +1125,26 @@
     "text": "A rusty, splintered shovel with a cracked wooden handle. It looks like it hasn't been used in years, but might still be useful for digging in soft earth."
   },
   {
+    "key": "02c06af3904102",
+    "speaker": "narrator",
+    "text": "A long workbench, its top cut and scorched by years of work. Pegs above it still hold the shapes of tools in the dust."
+  },
+  {
+    "key": "080665154cabbe",
+    "speaker": "narrator",
+    "text": "Broken crates, stacked any way. Something small shifts behind them, and goes still."
+  },
+  {
+    "key": "1b7af1a9ce621a",
+    "speaker": "narrator",
+    "text": "Rusty tools, laid in careful rows long ago and scattered since."
+  },
+  {
+    "key": "06bf6f7f9588e7",
+    "speaker": "narrator",
+    "text": "Dusty shelves above the workbench: jars of screws, a coil of wire, a candle stub."
+  },
+  {
     "key": "09190627801c4b",
     "speaker": "narrator",
     "text": "A small cat with a patchwork coat of ginger, black and white, and wide green eyes."
@@ -1063,6 +1178,11 @@
     "key": "09352ca76d96c1",
     "speaker": "narrator",
     "text": "You let Patches stay by your grandmother's hearth, and she sent word to Old Man Hemlock. The General Store is open again. Curiosity did not kill this cat after all."
+  },
+  {
+    "key": "191c0726efd79c",
+    "speaker": "narrator",
+    "text": "Broken crates, stacked any way, and a hollow in the dust behind them just the size of a cat."
   },
   {
     "key": "1bcc09b892cdeb",
@@ -1260,6 +1380,16 @@
     "text": "A mysterious amulet inscribed with runes. At its centre, a sun rises over three linked rings. It is faintly warm, as if someone had only just set it down."
   },
   {
+    "key": "10fa88e6237bc9",
+    "speaker": "narrator",
+    "text": "Lavender, sage and roots hang drying in bundles, each tied with the same green thread."
+  },
+  {
+    "key": "02777008ee8a7f",
+    "speaker": "narrator",
+    "text": "Every bottle is labelled in Mira's small, upright hand. Some of the labels are older than you are."
+  },
+  {
     "key": "11540ba3f2512e",
     "speaker": "narrator",
     "text": "You tell Mira about the grey crops, the hushed square and the sour smell of the well. She stops tying herbs."
@@ -1380,6 +1510,21 @@
     "text": "A sturdy leather armor vest that provides protection from harm. Well-crafted and reliable."
   },
   {
+    "key": "08f90b35baa77e",
+    "speaker": "narrator",
+    "text": "Between the rope and the apples sit trinkets nobody has bought in years: a brass bell, a doll with one shoe, a tin of buttons."
+  },
+  {
+    "key": "14513dd8aac4cf",
+    "speaker": "narrator",
+    "text": "Jars of nails, buttons and boiled sweets, every lid dusted."
+  },
+  {
+    "key": "1d4a7ac553c120",
+    "speaker": "narrator",
+    "text": "The counter is worn into a dip where things are set down. A folded blanket lies at one end, with cat hair on it."
+  },
+  {
     "key": "1f8cc97cf69e5e",
     "speaker": "narrator",
     "text": "Patches butts her head against Hemlock's hand, and his face lights up."
@@ -1440,6 +1585,11 @@
     "text": "You carried Patches home to Old Man Hemlock, and the General Store is open again. Curiosity did not kill this cat after all."
   },
   {
+    "key": "0b44b4f8d8c78e",
+    "speaker": "narrator",
+    "text": "Patches sleeps on her folded blanket at the end of the counter. One ear turns toward you."
+  },
+  {
     "key": "0aa00c23e6adc8",
     "speaker": "narrator",
     "text": "Patches blinks at you slowly from the counter and begins to purr."
@@ -1495,6 +1645,21 @@
     "text": "A strange mechanism of black iron, all levers and gears, that doesn't belong to the old mill's design. It whirs on its own, and a faint pull tugs at the floorboards around it, as if it were drawing something up from deep beneath the mill. A twisted rune is scored into its housing. Its gears turn freely; something threaded through them might stop them."
   },
   {
+    "key": "1e904ef36af08a",
+    "speaker": "narrator",
+    "text": "The sails turn slowly. One is torn, and it slaps on every turn."
+  },
+  {
+    "key": "19c84fa76f03b5",
+    "speaker": "narrator",
+    "text": "Wooden gears, furred with dust and cobwebs. They don't move; the whirring comes from the iron thing among them."
+  },
+  {
+    "key": "021ef9030173a4",
+    "speaker": "narrator",
+    "text": "The millstone is so heavy you can't think how it was brought here. It has not turned in a long time."
+  },
+  {
     "key": "1766f6a0d7e9fe",
     "speaker": "narrator",
     "text": "You search around the Old Mill, but find nothing of interest beyond what you can already see."
@@ -1523,6 +1688,11 @@
     "key": "0bcb5f657bc789",
     "speaker": "narrator",
     "text": "The strange mechanism stands jammed with a rope, its gears locked and its whirring stilled. The floor no longer hums beneath it. A compartment hangs open."
+  },
+  {
+    "key": "19f80a5cde9e85",
+    "speaker": "narrator",
+    "text": "Wooden gears, furred with dust. The mill is quiet now."
   },
   {
     "key": "099e1e369bb72e",
@@ -1598,6 +1768,21 @@
     "key": "083872253564e5",
     "speaker": "narrator",
     "text": "A gentle river, its waters flowing steadily. It looks like a good spot for fishing."
+  },
+  {
+    "key": "103167bad018d7",
+    "speaker": "narrator",
+    "text": "Tall reeds lean with the current. A heron's tracks run through the mud between them."
+  },
+  {
+    "key": "107ca0f46be2d5",
+    "speaker": "narrator",
+    "text": "The fisherman's crate, turned upside down. He has sat on it so long it has his shape."
+  },
+  {
+    "key": "15999167a0b7c3",
+    "speaker": "narrator",
+    "text": "The river slows at the bend and runs deep and dark under the far bank."
   },
   {
     "key": "196c52ea87c658",
@@ -1840,6 +2025,21 @@
     "text": "A dense, leafy bush. It looks like it might be hiding something, or just be a bush."
   },
   {
+    "key": "0ef0dd2b72e790",
+    "speaker": "narrator",
+    "text": "Pines and old birches, their branches meeting overhead. The light comes down in pieces."
+  },
+  {
+    "key": "10fa17f68fbf4e",
+    "speaker": "narrator",
+    "text": "Soft moss over the roots, and last autumn's leaves."
+  },
+  {
+    "key": "07423e61bcf7cc",
+    "speaker": "narrator",
+    "text": "Small brown birds. They move off ahead of you, branch by branch."
+  },
+  {
     "key": "18864a414506da",
     "speaker": "narrator",
     "text": "You search around the Forest Path, but find nothing of interest beyond what you can already see."
@@ -1905,6 +2105,11 @@
     "text": "A fox kit, no bigger than a cat, one hind leg caught fast in the wire. It watches you and does not struggle."
   },
   {
+    "key": "05884e8ea608f0",
+    "speaker": "narrator",
+    "text": "A small hollow under the bank, sheltered by roots."
+  },
+  {
     "key": "1e459a121953cc",
     "speaker": "narrator",
     "text": "It is straight and sound, and about the right length. A good stick is worth keeping."
@@ -1928,6 +2133,21 @@
     "key": "1a40afb1558cf8",
     "speaker": "narrator",
     "text": "A small, smooth pebble that glints in the sunlight. It feels oddly warm to the touch."
+  },
+  {
+    "key": "0d9bbbb778d80d",
+    "speaker": "narrator",
+    "text": "A waist-high stone, furred with moss. Writing is cut into it, but the shadow lies so deep you can't make out a letter."
+  },
+  {
+    "key": "0f6d6074e56c6a",
+    "speaker": "narrator",
+    "text": "The brambles grow thick around the edge of the clearing."
+  },
+  {
+    "key": "111a1c751f5aa1",
+    "speaker": "narrator",
+    "text": "The grass is grey and still, though there is a breeze above the branches."
   },
   {
     "key": "1a098a4b51b42b",
@@ -1998,6 +2218,31 @@
     "key": "02b609ce9a5cf9",
     "speaker": "narrator",
     "text": "A small, leather-bound book filled with prayers and hymns. The pages are worn from years of use."
+  },
+  {
+    "key": "14e3d078c5c067",
+    "speaker": "narrator",
+    "text": "A plain stone altar under a white cloth, darned at one corner. The priest keeps it very straight."
+  },
+  {
+    "key": "069677785bd63f",
+    "speaker": "narrator",
+    "text": "The rope is old and soft with handling. It hangs straight down from a hole in the ceiling, and nobody is touching it."
+  },
+  {
+    "key": "1bfd6f61e1d358",
+    "speaker": "narrator",
+    "text": "A tree under two moons, cut into the stone over the door. The weather has worn it almost smooth."
+  },
+  {
+    "key": "1a9f6bee833823",
+    "speaker": "narrator",
+    "text": "Worn wooden pews, the ends polished pale by hands. The front one has a cushion; the rest do not."
+  },
+  {
+    "key": "0c62d35c8645b7",
+    "speaker": "narrator",
+    "text": "The corner by the altar is so dark that your eyes slide off it."
   },
   {
     "key": "1d786e925274de",
@@ -2123,6 +2368,11 @@
     "key": "1f753ab98e262f",
     "speaker": "narrator",
     "text": "The candle is lit, casting a warm, steady light."
+  },
+  {
+    "key": "0ea6f5198de3ab",
+    "speaker": "narrator",
+    "text": "In the candlelight it is only a corner: old stone, and a gap low in the wall."
   },
   {
     "key": "11a958a310bf0b",
@@ -2680,6 +2930,16 @@
     "text": "Rows of green crops stretch beneath an open sky. The earth is dark and soft where the clean well water soaked in, and young leaves stand tall where brittle ones once curled. A breeze carries the scent of damp soil. The field feels awake again, as if it has finally let out the breath it was holding."
   },
   {
+    "key": "1b32f594f2d253",
+    "speaker": "narrator",
+    "text": "Young leaves, green and cool, stand up from the rows. The stalks bend in the breeze and come back."
+  },
+  {
+    "key": "06923c0dda6bb5",
+    "speaker": "narrator",
+    "text": "The earth is dark and gives under your boot. Water still shines in the furrows."
+  },
+  {
     "key": "140315ff327bcd",
     "speaker": "narrator",
     "text": "An old stone well, its surface worn smooth, its shaft disappearing into the depths. The water within is crystal clear. You can see something shiny at the bottom, but it's still too deep to reach by hand."
@@ -2900,6 +3160,16 @@
     "text": "A peaceful clearing bathed in golden sunlight, hidden deep within the forest. Wildflowers carpet the ground, and a gentle breeze stirs the tall grass. In the center, a mossy stone bears a faint, magical inscription. Beneath it, in a plainer hand, is carved: “Power follows purpose; purpose follows truth.” A graceful deer grazes quietly, occasionally lifting its head to watch you with wise, gentle eyes. You recall picking a beautiful rare flower that once bloomed near the mossy stone."
   },
   {
+    "key": "17c8ca22d78b65",
+    "speaker": "narrator",
+    "text": "The runes stand out clear on the mossy stone. Beneath them, in a plainer hand:"
+  },
+  {
+    "key": "15448b17d25eb0",
+    "speaker": "narrator",
+    "text": "Tall grass stirs in the breeze."
+  },
+  {
     "key": "0245e6ba2c8489",
     "speaker": "narrator",
     "text": "The deer does not answer, not in words. It lifts its head toward the glowing stone, then dips it to you, slow and deliberate, as if in thanks."
@@ -3113,6 +3383,21 @@
     "key": "04e3c6b9a3c930",
     "speaker": "narrator",
     "text": "An old, rusty saw with a worn wooden handle. It looks like it could still cut through something soft, but might break on anything tough."
+  },
+  {
+    "key": "0b57d3c3bfc799",
+    "speaker": "narrator",
+    "text": "Old oaks, their branches meeting over the road. Their roots have lifted its edges."
+  },
+  {
+    "key": "14205ed202314b",
+    "speaker": "narrator",
+    "text": "The merchant's cart, its canvas patched and roped down. There is not much under it now."
+  },
+  {
+    "key": "0342633c924d03",
+    "speaker": "narrator",
+    "text": "A thin grey mare. She grazes with one hind hoof lifted: the one without a shoe."
   },
   {
     "key": "00c05f23541c0f",
