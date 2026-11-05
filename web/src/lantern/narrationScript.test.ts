@@ -79,7 +79,7 @@ describe('linesOfTurn', () => {
       ['narrator', 'She looks up.'],
       ['mira', 'Come in, child.'],
     ])
-    expect(lines[1].key).toBe(narrationKey('mira', 'Come in, child.'))
+    expect(lines[1].id).toBe(narrationKey('mira', 'Come in, child.'))
   })
 
   it('leaves events, failures and checklists silent', () => {
@@ -106,7 +106,7 @@ describe('linesOfTurn', () => {
       WRITERS,
     )
     expect(line.speaker).toBe('elior')
-    expect(line.key).toBe(narrationKey('narrator', line.text))
+    expect(line.id).toBe(narrationKey('narrator', line.text))
   })
 })
 
@@ -278,7 +278,7 @@ describe('actScript for Act I', () => {
       line.text.startsWith('My dearest Elior'),
     )
     expect(letter?.speaker).toBe('mother')
-    expect(letter?.key).toBe(narrationKey(UNSIGNED, letter?.text ?? ''))
+    expect(letter?.id).toBe(narrationKey(UNSIGNED, letter?.text ?? ''))
   })
 
   it('reads the act-complete heading before the closing page', () => {
@@ -379,7 +379,7 @@ describe('actScript for Act I', () => {
   })
 
   it('reads a room’s description in every state the golden path shows it, not only on the first visit', () => {
-    const keys = new Set(script.map((line) => line.key))
+    const keys = new Set(script.map((line) => line.id))
     const game = new Game([new Act1()])
     const play = new GameController(game)
     play.advanceToRunning()
@@ -409,7 +409,7 @@ describe('actScript for Act I', () => {
   })
 
   it('lists every line once, with words', () => {
-    const keys = script.map((line) => line.key)
+    const keys = script.map((line) => line.id)
     expect(new Set(keys).size).toBe(keys.length)
     expect(script.every((line) => line.text.length > 0)).toBe(true)
   })
@@ -439,8 +439,8 @@ describe('actScript branches', () => {
   })
 
   it('leaves the lines of the golden path as they were', () => {
-    const keys = new Set(branched.map((line) => line.key))
-    expect(plain.every((line) => keys.has(line.key))).toBe(true)
+    const keys = new Set(branched.map((line) => line.id))
+    expect(plain.every((line) => keys.has(line.id))).toBe(true)
   })
 })
 
@@ -455,9 +455,7 @@ describe('actScript branches of Act I', () => {
     ) as T
   const branches = act1<ScriptBranch[]>('branches.json')
   // The committed script, which narrationScriptFresh.test.ts pins to the extractor.
-  const keys = new Set(
-    act1<ScriptLine[]>('script.json').map((line) => line.key),
-  )
+  const keys = new Set(act1<ScriptLine[]>('script.json').map((line) => line.id))
   /** Act I is played with every branch; that is slow under a loaded machine. */
   const SLOW = 60_000
 
@@ -544,7 +542,7 @@ describe('actScript said words', () => {
       [dream],
     )
     expect(lines).toContainEqual({
-      key: narrationKey('elior', 'hello'),
+      id: narrationKey('elior', 'hello'),
       speaker: 'elior',
       text: 'hello',
     })

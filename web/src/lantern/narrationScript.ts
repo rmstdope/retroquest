@@ -67,9 +67,9 @@ export interface WriterRule {
   speaker: string
 }
 
-/** One voiced line of the script: its recording key, the voice that reads it and its words. */
+/** One voiced line of the script: its id (the recording key), the voice that reads it and its words. */
 export interface ScriptLine {
-  key: string
+  id: string
   speaker: string
   text: string
 }
@@ -225,7 +225,7 @@ function scriptLines(
 ): ScriptLine[] {
   return blocks
     .map((block) => ({
-      key: narrationKey(block.speaker, block.markup),
+      id: narrationKey(block.speaker, block.markup),
       speaker: voiceOf(block, writers),
       text: narrationText(block.markup),
     }))
@@ -296,7 +296,7 @@ export function actScript(
   const add = (blocks: VoicedBlock[]): void => {
     for (const entry of scriptLines(blocks, writers)) {
       const quiet = silent.some((opening) => entry.text.startsWith(opening))
-      if (!quiet && !script.has(entry.key)) script.set(entry.key, entry)
+      if (!quiet && !script.has(entry.id)) script.set(entry.id, entry)
     }
   }
   const game = newGame()

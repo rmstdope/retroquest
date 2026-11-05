@@ -29,16 +29,18 @@ A script.json or music.json that differs from what the extractor writes now fail
 
 - **The script** (`act<N>/script.json`, committed) is gathered by playing the act's golden path
   through the real engine, trying examine/use/talk/look at every step on a copy of the game. Each
-  line has its speaker and a key made from the speaker and the words (`narrationKey` in
-  `web/src/lantern/`), so changed wording means a new key and the old clip goes stale. A room's
+  line has its speaker and an `id` made from the speaker and the words (`narrationKey` in
+  `web/src/lantern/`), so changed wording means a new id and the old clip goes stale. A room's
   description is read again at every step and after every step of a branch (below), so each state
   the path or a branch leaves a room in is in it. Other lines the game builds from its state (a
   count, a name) are not in it and play silently.
 - **Retiring clips.** When a wording change leaves a clip whose line left the script,
   `narrationCasts.test.ts` is red until it is retired. After regenerating the script, run
   `(cd web && npx -y tsx@4.23.15 --tsconfig tsconfig.json ../tts/retire-orphans.ts)` (or name the
-  acts): it drops those clips from `manifest.json` and `narration.lock.json` and deletes their
-  mp3s. Never edit those generated files by hand. `cues.json` is written by hand: move or drop a key-scene direction whose line changed.
+  acts): it drops those clips from `manifest.json` and the act's lock
+  (`content-studio/narration/act<N>.lock.json`) and deletes their mp3s. Never edit those generated
+  files by hand. The act's key-scene directions (`content-studio/narration/act<N>.edits.json`) are
+  the studio's: move or drop one whose line changed there.
 - **`act<N>/branches.json`** (Acts II to IV) lists optional scenes the golden path skips, each
   `{ after: <index of a path command>, commands: [...] }`, played on a copy so their lines are
   recorded too (Marcus told the truth, Brenn forgiven, Tobin and the Quiet Charm).
@@ -46,20 +48,21 @@ A script.json or music.json that differs from what the extractor writes now fail
   opening words (the mother's letter, the father's note, Elior's journal); other writing is the
   narrator's. **`act<N>/silent.json`** lists openings that stay silent (the chapter page's help
   line).
-- **`cast.json`** is one cast for the whole game: each speaker's library voice and fixed style cue
-  (a speaker sounds the same in every act), and `pronounce` for words said differently from how
-  they are written ("Act I" is said "Act One"). **`act<N>/cues.json`** replaces the style on
-  key-scene lines (and keeps the mother's Act III manner on her lines there). S2 models act
+- **`content-studio/narration/cast.json`** is one cast for the whole game: each speaker's library
+  voice and fixed style cue (a speaker sounds the same in every act), and `pronounce`, by language
+  (`en`), for words said differently from how they are written ("Act I" is said "Act One").
+  **`content-studio/narration/act<N>.edits.json`** holds the act's `cues`, by line id, which
+  replace the style on key-scene lines (and keeps the mother's Act III manner on her lines there). S2 models act
   bracketed directions rather than read them: `[hushed, uneasy]`, `[pause]`, `[whispering]`. A
   library voice is only a clone of its uploader's clips, and its title and tags are often wrong,
   so it is judged by its takes in the audition. Names need help: "Elior" came out as "Elia" or
   "Hylia" until `pronounce` spelled it out.
-- **`act<N>/narration.lock.json`** is Content Studio's record of what each clip was made from, so it
+- **`content-studio/narration/act<N>.lock.json`** is Content Studio's record of what each clip was made from, so it
   knows which lines are up to date. Its own working state (auditions, takes not chosen, personal settings) is in
   `content-studio/cache/`, which is not committed. A checkout made before Content Studio's version 2 format
   moves its old cache once: `mkdir -p content-studio && mv .content-studio content-studio/cache`.
 - Clips are 64 kbps mono MP3, levelled to −16 LUFS as `level.py` levels them, in
-  `web/public/audio/narration/act<N>/` with `manifest.json` (key -> file, speaker, duration, word
+  `web/public/audio/narration/act<N>/` with `manifest.json` (line id -> file, speaker, duration, word
   timings), which the story view reads. Each line is sent to Fish's free model (long ones in
   sentence-sized pieces) and the best of up to three takes is kept, aiming for 90% of the words
   heard. Until October 2026 this was `narrate.py`; Content Studio writes the same manifest (checked

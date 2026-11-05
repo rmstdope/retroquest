@@ -25,12 +25,12 @@ describe('retireOrphans', () => {
       const read = (url: string): string =>
         readFileSync(new URL(url, import.meta.url), 'utf8')
       const script = JSON.parse(read(`../../../tts/act${act}/script.json`)) as {
-        key: string
+        id: string
       }[]
       const result = retireOrphans(
-        script.map((line) => line.key),
+        script.map((line) => line.id),
         read(`../../public/audio/narration/act${act}/manifest.json`),
-        read(`../../../tts/act${act}/narration.lock.json`),
+        read(`../../../content-studio/narration/act${act}.lock.json`),
       )
       expect(result.retired).toEqual([])
     },

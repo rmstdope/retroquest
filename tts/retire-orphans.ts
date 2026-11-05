@@ -1,7 +1,8 @@
 /**
  * Retires the clips whose line left the script: for each act, drops the entries of
- * `web/public/audio/narration/act<N>/manifest.json` and `tts/act<N>/narration.lock.json`
- * whose key is not in `tts/act<N>/script.json`, and deletes their mp3 files. Run it after
+ * `web/public/audio/narration/act<N>/manifest.json` and Content Studio's lock,
+ * `content-studio/narration/act<N>.lock.json`, whose key is not a line id of
+ * `tts/act<N>/script.json`, and deletes their mp3 files. Run it after
  * `extract-act.ts` when a wording change has left a clip behind (the "has no clip for a
  * line that left the script" test in `narrationCasts.test.ts` is red until then).
  * The files are edited as text, entry by entry, so what Content Studio wrote is kept byte
@@ -23,12 +24,15 @@ function retireAct(act: number): void {
   const script = JSON.parse(
     readFileSync(new URL('script.json', tts), 'utf8'),
   ) as {
-    key: string
+    id: string
   }[]
   const manifestFile = new URL('manifest.json', audio)
-  const lockFile = new URL('narration.lock.json', tts)
+  const lockFile = new URL(
+    `../content-studio/narration/act${act}.lock.json`,
+    import.meta.url,
+  )
   const result = retireOrphans(
-    script.map((line) => line.key),
+    script.map((line) => line.id),
     readFileSync(manifestFile, 'utf8'),
     readFileSync(lockFile, 'utf8'),
   )
