@@ -79,7 +79,7 @@
 ### 1. Elior’s Cottage
 
 - **Description:** A modest cottage with a straw roof and a cozy hearth.
-- **Items:** Lantern (start), bread (later), Elior’s journal (later; the dream entry records a voice that called his name, achingly familiar though Elior cannot place it, and three words he wrote down on waking: "…let them rest…"), travel cloak (later).
+- **Items:** Lantern (start), bread (on the table from the start), Elior’s journal (later, revealed by the lantern; the dream entry records a voice that called his name, achingly familiar though Elior cannot place it, and three words he wrote down on waking: "…let them rest…"), travel cloak (later).
 - **Spells:** `revive` (learned from Grandmother).
 - **Usable Items:** Lantern (lights the cottage; once lit it can be taken and carried, and held lit it lights the dark Abandoned Shed), Elior's journal (read for story), hidden locket (give to Grandmother).
 - **Characters:** Grandmother (offers advice, can be spoken to). While Elior carries the shed key she admits she hid it in the coop rafters years ago: the shed was his father's workshop, she never could go in, and it is dark, so he should take the lantern. Her lines follow Elior's journey: the first time he talks to her after Mira's teaching she sees in him "your mother's gift" (she knows the truth, and only hints at it) and bakes him a `fresh bread` for the road, which counts as food; after that she asks after his preparations; once he carries the Ancient Amulet she says "So it's true, then. Come back to me, child." When Elior comes to her with the dream she is humming at the hearth, a slow tune that climbs three notes and settles (the cradle song of Acts III and IV; he knows it and cannot say from where), and stops when she sees his face. Asked whether the voice said anything but his name, he tells her the three words he caught, let them rest; she goes quiet, turns to the bread and says only "Some voices are older than memory." She is guarded and plainly knows more, but never ties the voice to a parent. She tells the journal tale again only when she has nothing newer to say. While Elior carries Patches she offers to keep the cat (`say stay to grandmother`, see _Elior's choices_); once Patches has stayed, she mentions her asleep by the hearth.
@@ -305,7 +305,7 @@ Optional virtue moments; none blocks the golden path, none adds a puzzle or comb
 
 1.  **Elior’s Cottage:**
 
-    - Use lantern to light up the room. _The lantern illuminates the cottage, revealing the bread and Elior’s journal._
+    - Use lantern to light up the room. _The lantern illuminates the cottage, revealing Elior’s journal; the bread already lies on the table._
       - Take bread. _Bread is added to inventory._
       - Take lantern. _The lit lantern is added to inventory; it will light the dark Abandoned Shed._
       - Read journal. Opens up new conversion story with Grandmother. _The dream entry records the voice that called for help, achingly familiar but unplaced._
@@ -546,9 +546,9 @@ Optional virtue moments; none blocks the golden path, none adds a puzzle or comb
 This list tracks items obtained in the Golden Path and their subsequent uses within Act I:
 
 1.  **`Lantern`** (Available in Elior's Cottage from the start):
-    - Used in Step 1 to reveal the bread and Elior's journal, then taken lit.
+    - Used in Step 1 to reveal Elior's journal, then taken lit.
     - Held lit in Step 7 to search the dark Abandoned Shed.
-2.  **`Bread`** (Obtained: Step 1):
+2.  **`Bread`** (Obtained: Step 1, lying on the cottage table from the start):
     - Used in Step 3 to feed chickens and obtain the `key`.
     - Optionally, after Step 18: talking to Grandmother gives a `fresh bread`, which counts as a kind of food for "Food for the road".
 3.  **`Faded Photograph`** (Obtained: Step 1):

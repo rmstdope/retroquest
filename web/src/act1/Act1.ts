@@ -16,6 +16,8 @@ import { HiddenGlade } from './rooms/HiddenGlade'
 import { VillageChapel } from './rooms/VillageChapel'
 import { RoadToGreendale } from './rooms/RoadToGreendale'
 import { Hearth } from './items/Hearth'
+import { Lantern } from './items/Lantern'
+import { Bread } from './items/Bread'
 import { Scenery } from './items/Scenery'
 import { Vines } from './items/Vines'
 import { HintOfMagicQuest } from './quests/HintOfMagic'
@@ -116,6 +118,7 @@ export class Act1 extends Act {
     if (!rooms.EliorsCottage.getItemByName('hearth')) {
       rooms.EliorsCottage.addItem(new Hearth())
     }
+    this.restoreCottageLoaf(gameState)
     for (const [roomKey, room] of Object.entries(rooms)) {
       Scenery.ensure(room, roomKey)
     }
@@ -136,6 +139,29 @@ export class Act1 extends Act {
         if (character instanceof Villager) character.migrateLegacyName()
         if (character instanceof Blacksmith) character.migrateLegacyName()
       }
+    }
+  }
+
+  /**
+   * Saves made while the lantern was still unlit never had the loaf, which
+   * used to appear only on lighting it; it now lies in the cottage from the
+   * start. A lit lantern means the loaf was already revealed (and maybe eaten
+   * by the chickens), so only an unlit one gets it back, and never while
+   * Elior already carries it.
+   */
+  private restoreCottageLoaf(gameState: GameState): void {
+    const cottage = gameState.allRooms.EliorsCottage
+    const lantern = cottage.items.find((item) => item instanceof Lantern)
+    const carriesBread = gameState.inventory.some(
+      (item) => item instanceof Bread,
+    )
+    if (
+      lantern instanceof Lantern &&
+      !lantern.isLit() &&
+      !carriesBread &&
+      !cottage.getItemByName('bread')
+    ) {
+      cottage.addItem(new Bread())
     }
   }
 

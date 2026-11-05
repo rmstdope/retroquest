@@ -111,10 +111,11 @@ describe('useBridge', () => {
 
     it('runs commands and advances the turn', async () => {
       const bridge = await runningBridge()
-      expect(bridge.controller.getRoomItems()).not.toContain('bread')
+      expect(bridge.controller.getRoomItems()).toContain('bread')
+      expect(bridge.controller.getRoomItems()).not.toContain("elior's journal")
       const result = bridge.controller.takeTurn('use lantern')
       expect(result).toContain('The flickering light')
-      expect(bridge.controller.getRoomItems()).toContain('bread')
+      expect(bridge.controller.getRoomItems()).toContain("elior's journal")
       expect(bridge.controller.takeTurn('xyzzy')).toContain(
         "I don't understand",
       )
@@ -166,6 +167,7 @@ describe('useBridge', () => {
       expect(bridge.controller.getRoomItems()).toEqual([
         'hearth',
         'lantern',
+        'bread',
         'table',
         'shelves',
         'books',
