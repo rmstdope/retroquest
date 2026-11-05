@@ -120,9 +120,9 @@
     "text": "Elior's Cottage"
   },
   {
-    "key": "1c7d5a0dd93ef5",
+    "key": "11724b96042a0a",
     "speaker": "narrator",
-    "text": "A modest cottage with a straw roof and a cozy hearth. The scent of fresh bread and old books fills the air. Sunlight filters through lace curtains, illuminating shelves lined with trinkets and memories. A sturdy wooden table sits in the center, and a gentle fire crackles in the hearth. Grandmother stands by it, humming, and keeps an eye on the bread."
+    "text": "A modest cottage with a straw roof and a cozy hearth. The scent of fresh bread and old books fills the air. Sunlight filters through lace curtains, illuminating shelves lined with trinkets and memories. A sturdy wooden table sits in the center, with a small loaf cooling on it, and a gentle fire crackles in the hearth. Grandmother stands by it, humming, and keeps an eye on the bread."
   },
   {
     "key": "1aaa7b34be5670",
@@ -153,6 +153,11 @@
     "key": "012f399dbf78f7",
     "speaker": "narrator",
     "text": "A well-used brass lantern. Its glass is clean and the wick is fresh, ready to light up the darkest corners."
+  },
+  {
+    "key": "19fb7327022cdb",
+    "speaker": "narrator",
+    "text": "A small loaf of fresh, crusty bread. It smells delicious and could restore a bit of energy."
   },
   {
     "key": "0fd99fd3579d4f",
@@ -220,14 +225,9 @@
     "text": "Back again? There's bread on the board, if you're hungry."
   },
   {
-    "key": "0967c6683e4888",
+    "key": "138e12e1b614fb",
     "speaker": "narrator",
-    "text": "The flickering light reveals more of the room. A small loaf of bread and a journal appear in the light."
-  },
-  {
-    "key": "19fb7327022cdb",
-    "speaker": "narrator",
-    "text": "A small loaf of fresh, crusty bread. It smells delicious and could restore a bit of energy."
+    "text": "The flickering light reveals more of the room. A journal appears in the light."
   },
   {
     "key": "0343646184b98f",

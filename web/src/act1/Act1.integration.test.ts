@@ -54,7 +54,7 @@ describe('Act 1 golden path', () => {
 
     // Step 1: Elior's Cottage
     expectQuests(state, [MAIN, 'Hint of magic'])
-    expectItemInRoom(room(), 'bread', false)
+    expectItemInRoom(room(), 'bread')
     expectItemInRoom(room(), "Elior's Journal", false)
     executeCommands(game, ['use lantern'])
     expectItemInRoom(room(), 'bread')

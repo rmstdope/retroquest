@@ -12,6 +12,19 @@ function cottageGame(): Game {
 }
 
 describe('Lantern', () => {
+  it('reveals only the journal, and says nothing about bread', () => {
+    const game = cottageGame()
+    const answer = executeCommands(game, ['use lantern'])
+    expect(answer).toContain('journal')
+    expect(answer).not.toMatch(/bread|loaf/i)
+    expect(
+      game.state.currentRoom.getItemByName("Elior's Journal"),
+    ).not.toBeNull()
+    expect(
+      game.state.currentRoom.items.filter((i) => i.name === 'bread'),
+    ).toHaveLength(1)
+  })
+
   it('cannot be taken before it is lit', () => {
     const game = cottageGame()
     const answer = executeCommands(game, ['take lantern'])

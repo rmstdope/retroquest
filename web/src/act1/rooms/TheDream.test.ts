@@ -103,7 +103,7 @@ describe('The Dream, where Act I opens', () => {
     executeCommands(game, ['talk to voice'])
     expect(game.map()).not.toContain('The Dream')
     const lit = executeCommands(game, ['use lantern'])
-    expect(lit).toContain('bread')
+    expect(lit).toContain('journal')
   })
 
   it('survives a save and load made inside the dream', () => {

@@ -1,5 +1,4 @@
 import { Item, type GameState, clue } from '@/engine'
-import { Bread } from './Bread'
 import { EliorsJournal } from './EliorsJournal'
 
 /**
@@ -36,17 +35,15 @@ export class Lantern extends Item {
     )
   }
 
-  /** Light the lantern and reveal hidden items the first time it is used. */
+  /** Light the lantern and reveal the journal the first time it is used. */
   override use(gameState: GameState): string {
     if (!this.isLit()) {
       this.name = 'lantern (lit)'
       this.shortName = 'lantern'
-      gameState.currentRoom.addItem(new Bread())
       gameState.currentRoom.addItem(new EliorsJournal())
       return (
-        'The flickering light reveals more of the room. A small loaf of ' +
-        '[item_name]bread[/item_name] and a [item_name]journal[/item_name] ' +
-        'appear in the light.'
+        'The flickering light reveals more of the room. A ' +
+        '[item_name]journal[/item_name] appears in the light.'
       )
     }
     return `[failure]The [item_name]${this.name}[/item_name] is already lit.[/failure]`
