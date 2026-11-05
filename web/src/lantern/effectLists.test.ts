@@ -22,14 +22,14 @@ describe('effectsList', () => {
     for (const id of ids) expect(id).toMatch(SLUG)
   })
 
-  it('gives the studio only its own fields: id, description, seconds and whether it loops', () => {
+  it('gives the studio only its own fields: id, text, seconds and whether it loops', () => {
     for (const entry of effectsList()) {
       expect(Object.keys(entry).sort()).toEqual(
         entry.loops
-          ? ['description', 'id', 'loops', 'seconds']
-          : ['description', 'id', 'seconds'],
+          ? ['id', 'loops', 'seconds', 'text']
+          : ['id', 'seconds', 'text'],
       )
-      expect(entry.description.length).toBeGreaterThan(0)
+      expect(entry.text.length).toBeGreaterThan(0)
       expect(entry.seconds).toBeGreaterThan(0)
     }
   })
@@ -44,15 +44,15 @@ describe('effectsList', () => {
     expect(readJson<EffectEntry[]>('tts/effects.json')).toEqual(effectsList())
   })
 
-  it('content-studio.json declares the effects paths and the refresh', () => {
+  it('content-studio.json declares the effects list, clips and manifest, and the refresh', () => {
     const project = readJson<{
       refresh: { shared: string }
-      effects: { paths: Record<string, string> }
+      effects: Record<string, unknown>
     }>('content-studio.json')
     expect(project.refresh.shared).toContain('tts/extract-effects.ts')
-    expect(project.effects.paths).toEqual({
-      list: 'tts/effects.json',
-      lock: 'effects/effects.lock.json',
+    expect(project.effects).toEqual({
+      from: { shared: 'tts/effects.json' },
+      model: 'open-1',
       clips: 'web/public/audio/soundeffects/generated',
       manifest: 'web/public/audio/soundeffects/generated/manifest.json',
     })

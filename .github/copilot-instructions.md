@@ -169,6 +169,7 @@ Run each check as its own command and read its exit status; never chain them wit
 
 - The narration audio (`web/public/audio/narration/`, and Content Studio's files in `content-studio/narration/`: the cast, each act's edits and lock) is recorded by the navigator, by hand, with Content Studio (`tts/README.md`). No agent records narration, and no bead is filed to record it.
 - The generated music (`web/public/audio/music/generated/`, and Content Studio's files in `content-studio/music/`: the edits and the lock) is made and chosen by the navigator with Content Studio (`tts/README.md`). Never edit those files by hand.
+- The sound effects (`web/public/audio/soundeffects/generated/`, and Content Studio's files in `content-studio/effects/`: the edits, which hold the studio's rewordings, and the lock) are made and chosen by the navigator with Content Studio (`tts/README.md`). Never edit those files by hand. A change may add or change an effect in `web/src/lantern/effectLists.ts` (and so `tts/effects.json`) and ships without a take.
 - A change that adds or changes a spoken line puts the line in its act's script (`tts/act<N>/script.json`, written by `tts/extract-act.ts`) and ships without a recording. The navigator records new lines after the merge.
 - A line with no recording yet is not a defect. A test may require that every recording belongs to a line of the script, never that every line of the script has a recording.
 

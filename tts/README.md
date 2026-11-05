@@ -91,6 +91,27 @@ was written over as `gameWas`), and **`lock.json`**, the take chosen for each tr
 made from. Both are committed; never edit them by hand. The game reads only the chosen tracks'
 `web/public/audio/music/generated/manifest.json`.
 
+## Sound effects
+
+Content Studio's Sound effects workspace lists the game's sound effects, one list for the whole
+game. **Refresh from the game** on the Sound effects page runs the same `refresh.shared` command as
+the Stingers page, which also runs `extract-effects.ts`, writing `effects.json`:
+
+```sh
+(cd web && npx -y tsx@4.23.15 --tsconfig tsconfig.json ../tts/extract-effects.ts)  # writes tts/effects.json
+```
+
+The list comes from `web/src/lantern/effectLists.ts`: each effect is `{ id, text, seconds, loops? }`,
+its `text` the game's starting words for the studio's model and `loops` true for one that plays
+round and round. Which scenes play an effect, and how loud, is the studio's scene mix
+(`web/src/lantern/scenes/`).
+
+Content Studio keeps its own effects files in `content-studio/effects/`: **`edits.json`**, the
+effects reworded in the studio (the studio's words as `text`, with the game's words they were
+written over as `gameWas`), and **`lock.json`**, the take chosen for each effect and what it was
+made from. Both are committed; never edit them by hand. The game reads only the chosen effects'
+`web/public/audio/soundeffects/generated/manifest.json`.
+
 ## Getting the text
 
 `extract-intro.ts` prints the Act I intro as plain text (markup stripped, the title as a spoken
