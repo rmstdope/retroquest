@@ -30,7 +30,7 @@ describe('retireOrphans', () => {
       const result = retireOrphans(
         script.map((line) => line.id),
         read(`../../public/audio/narration/act${act}/manifest.json`),
-        read(`../../../tts/act${act}/narration.lock.json`),
+        read(`../../../content-studio/narration/act${act}.lock.json`),
       )
       expect(result.retired).toEqual([])
     },

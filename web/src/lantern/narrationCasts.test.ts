@@ -3,16 +3,18 @@ import { describe, expect, it } from 'vitest'
 import type { NarrationManifest } from './narrationManifest'
 
 /**
- * The recording tools' files, read from the repository: one cast for the whole game
- * (`tts/cast.json`, Content Studio's), and each act's script and key-scene directions
- * (`tts/act<N>/`).
+ * The recording tools' files, read from the repository: each act's script
+ * (`tts/act<N>/script.json`, the game's), and Content Studio's own: one cast for the
+ * whole game (`content-studio/narration/cast.json`) and each act's key-scene
+ * directions (`content-studio/narration/act<N>.edits.json`).
  */
 const TTS = new URL('../../../tts/', import.meta.url)
+const NARRATION = new URL('../../../content-studio/narration/', import.meta.url)
 const AUDIO = new URL('../../public/audio/narration/', import.meta.url)
 
 interface Cast {
   speakers: Record<string, { voice: string; style: string }>
-  pronounce: Record<string, string>
+  pronounce: Record<string, Record<string, string>>
 }
 interface Line {
   id: string
@@ -27,15 +29,29 @@ function read<T>(act: number, file: string): T {
   ) as T
 }
 
+/** The key-scene directions of an act by line id (the `cues` of its edits file). */
+function cuesOf(act: number): Record<string, string> {
+  return (
+    JSON.parse(
+      readFileSync(new URL(`act${act}.edits.json`, NARRATION), 'utf8'),
+    ) as { cues: Record<string, string> }
+  ).cues
+}
+
 /** The one cast: a speaker has one voice and manner in every act. */
-const CAST = JSON.parse(readFileSync(new URL('cast.json', TTS), 'utf8')) as Cast
+const CAST = JSON.parse(
+  readFileSync(new URL('cast.json', NARRATION), 'utf8'),
+) as Cast
+
+/** How the English lines say words that are not said as they are written. */
+const PRONOUNCE = CAST.pronounce.en ?? {}
 
 /** The mother's manner in Act III, kept as a direction on each of her lines there. */
 const MOTHER_IN_ACT_III = '[tender, steady, afraid for a friend]'
 
 describe.each([1, 2, 3, 4])('the recordings of Act %i', (act) => {
   const script = read<Line[]>(act, 'script.json')
-  const cues = read<Record<string, string>>(act, 'cues.json')
+  const cues = cuesOf(act)
 
   it('casts every speaker of its script', () => {
     const uncast = [...new Set(script.map((line) => line.speaker))].filter(
@@ -65,8 +81,8 @@ describe.each([1, 2, 3, 4])('the recordings of Act %i', (act) => {
 
   it('says the act’s title in words', () => {
     const numeral = ['', 'I', 'II', 'III', 'IV'][act]
-    expect(CAST.pronounce[`Act ${numeral}:`]).toMatch(/^Act \w+:$/)
-    expect(CAST.pronounce[`Act ${numeral} complete.`]).toMatch(
+    expect(PRONOUNCE[`Act ${numeral}:`]).toMatch(/^Act \w+:$/)
+    expect(PRONOUNCE[`Act ${numeral} complete.`]).toMatch(
       /^Act \w+ complete\.$/,
     )
   })
@@ -135,7 +151,7 @@ describe('lines the engine picks at random', () => {
 
 /** The key-scene directions of an act: its cues, without the mother's Act III manner. */
 function keyScenes(act: number): string[] {
-  const cues = read<Record<string, string>>(act, 'cues.json')
+  const cues = cuesOf(act)
   return Object.keys(cues).filter((key) => cues[key] !== MOTHER_IN_ACT_III)
 }
 
@@ -177,7 +193,7 @@ describe('speakers who share a voice', () => {
 
 describe('the one cast', () => {
   it('keeps the mother’s Act III manner on each of her lines there', () => {
-    const cues = read<Record<string, string>>(3, 'cues.json')
+    const cues = cuesOf(3)
     const hers = read<Line[]>(3, 'script.json').filter(
       (line) => line.speaker === 'mother',
     )

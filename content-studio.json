@@ -28,13 +28,15 @@
     "shared": "cd web && npx -y tsx@4.23.15 --tsconfig tsconfig.json ../tts/extract-shared.ts && npx -y tsx@4.23.15 --tsconfig tsconfig.json ../tts/extract-effects.ts"
   },
   "narration": {
-    "characters": "tts/cast.json",
-    "paths": {
-      "dialog": "tts/{part}/script.json",
-      "cues": "tts/{part}/cues.json",
-      "lock": "tts/{part}/narration.lock.json",
-      "clips": "web/public/audio/narration/{part}",
-      "manifest": "web/public/audio/narration/{part}/manifest.json"
+    "from": {
+      "part": "tts/{part}/script.json"
+    },
+    "models": {
+      "fish": {
+        "audition": "s2.1-pro-free",
+        "draft": "s2.1-pro-free",
+        "final": "drama-3"
+      }
     },
     "output": {
       "codec": "mp3",
@@ -42,18 +44,17 @@
       "channels": 1,
       "lufs": -16
     },
-    "quality": {
-      "soundAlike": [
-        ["all right", "alright"],
-        ["deer", "dear"],
-        ["guard", "god"]
-      ]
+    "generate": {
+      "soundAlike": {
+        "en": [
+          ["all right", "alright"],
+          ["deer", "dear"],
+          ["guard", "god"]
+        ]
+      }
     },
-    "models": {
-      "audition": "s2.1-pro-free",
-      "draft": "s2.1-pro-free",
-      "final": "drama-3"
-    }
+    "clips": "web/public/audio/narration/{part}",
+    "manifest": "web/public/audio/narration/{part}/manifest.json"
   },
   "music": {
     "paths": {
