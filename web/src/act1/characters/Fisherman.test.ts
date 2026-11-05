@@ -104,6 +104,32 @@ describe('Fisherman', () => {
       expect(response).not.toContain('Thank you')
     })
 
+    it('is described with his bad arm before he is healed', () => {
+      const response = executeCommands(game, ['examine fisherman'])
+
+      expect(response).toContain('his bad arm held close to his side.')
+    })
+
+    it('stays described without a bad arm after a save is loaded', () => {
+      executeCommands(game, ['cast heal on fisherman'])
+      const loaded = new Game([new Act1()])
+      expect(loaded.loadSaveData(game.toSaveData())).toContain('loaded')
+
+      const response = loaded.commandParser.parse('examine fisherman')
+
+      expect(response).toContain('his mended arm resting easy on his knee.')
+      expect(response).not.toContain('bad arm')
+    })
+
+    it('is described without a bad arm once healed', () => {
+      executeCommands(game, ['cast heal on fisherman'])
+
+      const response = executeCommands(game, ['examine fisherman'])
+
+      expect(response).toContain('his mended arm resting easy on his knee.')
+      expect(response).not.toContain('bad arm')
+    })
+
     it('no longer speaks of a bad arm when talked to without a rod', () => {
       executeCommands(game, ['cast heal on fisherman'])
 
