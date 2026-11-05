@@ -286,6 +286,7 @@ describe('useAudio', () => {
       await flush()
       expect(() => audio.playNewSpell()).not.toThrow()
       await flush()
+      expect(failing).toHaveBeenCalledOnce()
     })
   })
 })
