@@ -81,7 +81,7 @@ describe('The Dream, where Act I opens', () => {
   it('wakes him when he says anything to the voice, and the voice stays behind', () => {
     const game = newGame()
     const answer = executeCommands(game, ['say help to voice'])
-    expect(answer).toContain('You say it into the dark: help.')
+    expect(answer).toContain('…let them rest…')
     expectCurrentRoom(game.state, "Elior's Cottage")
     expect(game.commandParser.parse('talk to voice')).toContain(
       'There is no character named',
@@ -89,6 +89,13 @@ describe('The Dream, where Act I opens', () => {
     expect(game.state.allRooms.TheDream.characters[0]).toBeInstanceOf(
       DreamVoice,
     )
+  })
+
+  it('does not repeat the said word: Elior has already said it on the picture', () => {
+    const answer = executeCommands(newGame(), ['say hello to voice'])
+    expect(answer).not.toMatch(/hello/i)
+    expect(answer).not.toContain('You say')
+    expect(answer.startsWith('The whisper comes once more')).toBe(true)
   })
 
   it('leaves the dream off the map and the cottage ready to play', () => {

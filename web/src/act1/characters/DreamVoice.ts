@@ -39,9 +39,12 @@ export class DreamVoice extends Character {
     )
   }
 
-  /** Anything said into the dream is an answer, and ends it (see `wake`). */
-  override sayTo(gameState: GameState, words: string): string {
-    return `You say it into the dark: ${words}.\n\n` + this.wake(gameState)
+  /**
+   * Anything said into the dream is an answer, and ends it (see `wake`). The
+   * words are not repeated: Elior's own line on the picture already says them.
+   */
+  override sayTo(gameState: GameState, _words: string): string {
+    return this.wake(gameState)
   }
 
   /**
