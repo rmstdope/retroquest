@@ -148,6 +148,30 @@ describe('useStageSpeechStore', () => {
     expect(speech.visible).toEqual([])
   })
 
+  it('keeps a cut-off talk while someone else is addressed, and lets it go once it has been seen', () => {
+    const speech = useStageSpeechStore()
+    speech.observe(
+      turn(
+        `${say('Grandmother', 'One.')}\n${say('Grandmother', 'Two.')}`,
+        'Grandmother',
+      ),
+    )
+    speech.observe(turn(say('Mira', 'Hello.'), 'Mira'))
+    expect(speech.conversation?.with).toBe('Mira')
+    expect(speech.visible.map((l) => [l.speaker, l.markup])).toEqual([
+      ['Grandmother', 'One.'],
+      ['Grandmother', 'Two.'],
+      ['Mira', 'Hello.'],
+    ])
+    vi.runAllTimers()
+    speech.observe(turn(say('Mira', 'Again.'), 'Mira'))
+    vi.runAllTimers()
+    expect(speech.visible.map((l) => [l.speaker, l.markup])).toEqual([
+      ['Mira', 'Hello.'],
+      ['Mira', 'Again.'],
+    ])
+  })
+
   it('clears a cut-off talk when the command leaves the room', () => {
     const speech = useStageSpeechStore()
     speech.observe(

@@ -49,6 +49,8 @@ export interface StageLine extends SpeechLine {
   shown: boolean
   /** Whether it was on the picture before a newer turn came (`noteSeen`). */
   seen: boolean
+  /** Whether a newer turn that cut it off kept it (`observe`): the next turn lets it go once seen. */
+  carried: boolean
 }
 
 /** The conversation on the picture. */
@@ -210,11 +212,11 @@ export const useStageSpeechStore = defineStore('stageSpeech', () => {
       if (isShown(line)) line.seen = true
   }
 
-  /** The lines of every turn that still had a line to show when the new turn came. */
+  /** The lines the picture keeps of every turn that still had a line to show when the new turn came. */
   function cutOff(): StageLine[] {
-    const lines = conversation.value?.lines ?? []
+    const lines = (conversation.value?.lines ?? []).filter(kept)
     const turns = new Set(
-      lines.filter((line) => !line.seen && kept(line)).map((l) => l.turnId),
+      lines.filter((line) => !line.seen).map((line) => line.turnId),
     )
     return lines.filter((line) => turns.has(line.turnId))
   }
@@ -224,7 +226,11 @@ export const useStageSpeechStore = defineStore('stageSpeech', () => {
     const before = conversation.value?.with ?? null
     clear()
     const name = partner ?? (lines.length ? before : null)
-    if (name) conversation.value = { with: name, lines: [...lines] }
+    if (name)
+      conversation.value = {
+        with: name,
+        lines: lines.map((line) => Object.assign(line, { carried: true })),
+      }
   }
 
   /** Show the rest of the turn's lines at once. */
@@ -250,7 +256,8 @@ export const useStageSpeechStore = defineStore('stageSpeech', () => {
    * that addresses the same character adds to it. `change` is where the
    * scene of an unnarrated talk that moves Elior changes (see `SceneChange`).
    * Whatever it clears, it keeps the lines of a turn it cut off before they
-   * all appeared, unless it moved Elior.
+   * all appeared, unless it moved Elior; the next turn lets them go once
+   * they have been seen.
    */
   function observe(turn: Turn, change: SceneChange | null = null): void {
     recentTurns.value = [...recentTurns.value, turn.id].slice(-3)
@@ -258,6 +265,11 @@ export const useStageSpeechStore = defineStore('stageSpeech', () => {
     // it), so it is noted here too; a narrated one only by the earlier `noteSeen`.
     for (const line of conversation.value?.lines ?? [])
       if (!line.narrated && isShown(line)) line.seen = true
+    // Kept lines go once seen, as the turn that kept them would have cleared them.
+    if (conversation.value)
+      conversation.value.lines = conversation.value.lines.filter(
+        (line) => !line.carried || !line.seen,
+      )
     const moved = turn.description?.moved === true
     // Lines cut off before they appeared stay (shown now), unless Elior left the room.
     const cut = moved ? [] : cutOff()
@@ -283,12 +295,23 @@ export const useStageSpeechStore = defineStore('stageSpeech', () => {
     // Elior's own words come first and need no narrator or pause.
     const own = addressed ? eliorLine(turn.command) : null
     const lines = [
-      ...(own ? [{ ...own, narrated: false, shown: true, seen: false }] : []),
+      ...(own
+        ? [
+            {
+              ...own,
+              narrated: false,
+              shown: true,
+              seen: false,
+              carried: false,
+            },
+          ]
+        : []),
       ...said.map((line) => ({
         ...line,
         narrated,
         shown: false,
         seen: false,
+        carried: false,
       })),
     ].map((line) => ({ ...line, turnId: turn.id, key: nextKey++ }))
     conversation.value?.lines.push(...lines)
