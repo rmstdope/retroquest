@@ -101,6 +101,8 @@ export function useLanternPresentation(
     () => {
       // The change of scene of the move before is brought up first (its words are
       // told, then cut in on below); a talk still to change scene lets go of its words.
+      // What the picture shows is noted first: the lines cut off below stay (`observe`).
+      speech.noteSeen()
       speech.changeSceneNow()
       scene.skip()
       arrival.clear()

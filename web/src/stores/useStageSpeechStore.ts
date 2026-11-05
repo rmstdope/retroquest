@@ -24,7 +24,9 @@ import {
  * narrated, and otherwise one at a time by a reading pause (`readingPauseMs`);
  * `revealAll` shows the rest of the turn at once. An unnarrated talk that
  * moves Elior says when its scene may change (`SceneChange`): once the lines
- * before it are read, or at once when the turn is shown whole.
+ * before it are read, or at once when the turn is shown whole. Lines a new
+ * command cut off before they appeared (`noteSeen` remembers the rest) are not
+ * cleared by it: they stay, dimmed as the turn before, unless it leaves the room.
  */
 
 /** Where an unnarrated turn's scene changes: before unit `unit`, by calling `reached` once. */
@@ -45,6 +47,8 @@ export interface StageLine extends SpeechLine {
   narrated: boolean
   /** For an unnarrated turn: whether its reading pause has passed. */
   shown: boolean
+  /** Whether it was on the picture before a newer turn came (`noteSeen`). */
+  seen: boolean
 }
 
 /** The conversation on the picture. */
@@ -197,6 +201,32 @@ export const useStageSpeechStore = defineStore('stageSpeech', () => {
     else timer = setTimeout(show, wait)
   }
 
+  /**
+   * Remember which lines are on the picture now: a new turn calls it before it
+   * cuts in on the rest, so the lines it cut off are known (see `observe`).
+   */
+  function noteSeen(): void {
+    for (const line of conversation.value?.lines ?? [])
+      if (isShown(line)) line.seen = true
+  }
+
+  /** The lines of every turn that still had a line to show when the new turn came. */
+  function cutOff(): StageLine[] {
+    const lines = conversation.value?.lines ?? []
+    const turns = new Set(
+      lines.filter((line) => !line.seen && kept(line)).map((l) => l.turnId),
+    )
+    return lines.filter((line) => turns.has(line.turnId))
+  }
+
+  /** Clear the picture but keep `lines` (none: a plain clear), in a conversation with `partner` when given. */
+  function restart(lines: StageLine[], partner: string | null): void {
+    const before = conversation.value?.with ?? null
+    clear()
+    const name = partner ?? (lines.length ? before : null)
+    if (name) conversation.value = { with: name, lines: [...lines] }
+  }
+
   /** Show the rest of the turn's lines at once. */
   function revealAll(): void {
     clearTimeout(timer)
@@ -219,18 +249,26 @@ export const useStageSpeechStore = defineStore('stageSpeech', () => {
    * (`toldAsSpeech`); one that addresses someone else starts a new one; one
    * that addresses the same character adds to it. `change` is where the
    * scene of an unnarrated talk that moves Elior changes (see `SceneChange`).
+   * Whatever it clears, it keeps the lines of a turn it cut off before they
+   * all appeared, unless it moved Elior.
    */
   function observe(turn: Turn, change: SceneChange | null = null): void {
     recentTurns.value = [...recentTurns.value, turn.id].slice(-3)
-    revealAll()
+    // An unnarrated line's showing is its own (no skip of the narrator touches
+    // it), so it is noted here too; a narrated one only by the earlier `noteSeen`.
+    for (const line of conversation.value?.lines ?? [])
+      if (!line.narrated && isShown(line)) line.seen = true
     const moved = turn.description?.moved === true
+    // Lines cut off before they appeared stay (shown now), unless Elior left the room.
+    const cut = moved ? [] : cutOff()
+    revealAll()
     const addressed = turn.addressed ?? null
     const said = toldAsSpeech(turn) ? speechLines(parseTurn(turn.text)) : []
     // Leaving the room ends the conversation; a talk that moved Elior starts a new one.
     if (!addressed && (moved || !said.length)) {
       // Nothing is said on the picture: a scene to change changes at once.
       holdScene(turn, change)
-      return clear()
+      return restart(cut, null)
     }
     // A turn that addresses no one shows its own words, on their own.
     const partner = addressed ?? ELIOR
@@ -238,20 +276,19 @@ export const useStageSpeechStore = defineStore('stageSpeech', () => {
       moved ||
       !addressed ||
       conversation.value?.with.toLowerCase() !== partner.toLowerCase()
-    ) {
-      clear()
-      conversation.value = { with: partner, lines: [] }
-    }
+    )
+      restart(cut, partner)
     holdScene(turn, change)
     const narrated = narration.narrates(turn.id)
     // Elior's own words come first and need no narrator or pause.
     const own = addressed ? eliorLine(turn.command) : null
     const lines = [
-      ...(own ? [{ ...own, narrated: false, shown: true }] : []),
+      ...(own ? [{ ...own, narrated: false, shown: true, seen: false }] : []),
       ...said.map((line) => ({
         ...line,
         narrated,
         shown: false,
+        seen: false,
       })),
     ].map((line) => ({ ...line, turnId: turn.id, key: nextKey++ }))
     conversation.value?.lines.push(...lines)
@@ -283,6 +320,7 @@ export const useStageSpeechStore = defineStore('stageSpeech', () => {
     lineSpeaking,
     revealAll,
     changeSceneNow,
+    noteSeen,
     clear,
     observe,
   }

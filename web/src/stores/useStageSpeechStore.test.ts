@@ -128,6 +128,35 @@ describe('useStageSpeechStore', () => {
     },
   )
 
+  it('keeps, dimmed as the turn before, an unread journal a later command cut off', () => {
+    const speech = useStageSpeechStore()
+    const journal = turn(
+      `${say('Elior', 'The storm.')}\n${say('Elior', 'The voice.')}`,
+      null,
+      'use journal',
+    )
+    speech.observe(journal)
+    expect(speech.visible.map((l) => l.markup)).toEqual(['The storm.'])
+    speech.observe(turn('The hearth is warm.', null, 'examine hearth'))
+    expect(speech.visible.map((l) => l.markup)).toEqual([
+      'The storm.',
+      'The voice.',
+    ])
+    expect(speech.ageOf(journal.id)).toBe('prev')
+    // A later turn clears them as usual, once they have been on the picture.
+    speech.observe(turn('Nothing happens.', null, 'look'))
+    expect(speech.visible).toEqual([])
+  })
+
+  it('clears a cut-off talk when the command leaves the room', () => {
+    const speech = useStageSpeechStore()
+    speech.observe(
+      turn(`${say('Mira', 'One.')}\n${say('Mira', 'Two.')}`, 'Mira'),
+    )
+    speech.observe(turn('You walk.', null, 'go north', true))
+    expect(speech.visible).toEqual([])
+  })
+
   it('shows nothing of unsigned writing or narration', () => {
     const speech = useStageSpeechStore()
     speech.observe(
