@@ -92,3 +92,16 @@ describe('Priest dialogue', () => {
     expect(response).toContain('never once received it')
   })
 })
+
+describe('The priest speaks to Elior as a neighbour (rq-m3fy)', () => {
+  it('names the General Store only in the closing pointer', () => {
+    const game = new Game([new Act1()])
+    game.state.currentRoom = game.state.allRooms.VillageChapel
+
+    const response = executeCommands(game, ['talk to priest'])
+
+    expect(response).toContain('keeps a box for me under his counter')
+    expect(response).not.toContain('[/character_name] at the')
+    expect(response).toMatch(/If you're passing the .*General Store.*\.\.\./)
+  })
+})

@@ -391,3 +391,22 @@ describe('Grandmother and Patches', () => {
     )
   })
 })
+
+describe('Grandmother speaks of the villagers as old neighbours (rq-m3fy)', () => {
+  it('sends Elior to Mira, Hemlock and Borin as errands among people he knows', () => {
+    const game = cottageGame()
+
+    const response = executeCommands(game, ['talk to grandmother'])
+
+    expect(response).toContain('look in on')
+    expect(response).toContain('at her hut; she was asking after you.')
+    expect(response).toContain('You know she has a way with herbs')
+    expect(response).toContain(
+      'will have heard whatever there is to hear at the',
+    )
+    expect(response).toContain('he always does.')
+    expect(response).toContain("will think you've forgotten him.")
+    expect(response).not.toContain('north of the square')
+    expect(response).not.toContain('Old Man')
+  })
+})

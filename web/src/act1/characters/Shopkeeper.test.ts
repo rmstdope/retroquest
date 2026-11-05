@@ -668,3 +668,19 @@ describe('Shopkeeper price sentence', () => {
     },
   )
 })
+
+describe('Hemlock speaks to Elior as a neighbour (rq-m3fy)', () => {
+  it('talks of Patches as a cat Elior knows, without introducing himself', () => {
+    const game = gameInStore({ shopOpen: false })
+
+    const answer = game.commandParser.parse('talk to hemlock')
+
+    expect(answer).toContain('I was watching for her.')
+    expect(answer).toContain(
+      "you've seen her on this counter often enough to know she never goes far",
+    )
+    expect(answer).not.toContain("'s the name")
+    expect(answer).not.toContain('this is my store')
+    expect(answer).toContain('She was last seen near the old well.')
+  })
+})

@@ -257,3 +257,17 @@ describe('Borin, named from the first moment', () => {
     )
   })
 })
+
+describe('Borin speaks to Elior as a neighbour (rq-m3fy)', () => {
+  it('remarks that Elior has not been by since the harvest, without giving his name', () => {
+    const game = new Game([new Act1()])
+    game.state.currentRoom = game.state.allRooms.BlacksmithsForge
+
+    const first = executeCommands(game, ['talk to blacksmith'])
+
+    expect(first).toContain('Mind the sparks, lad.')
+    expect(first).toContain('Not seen you down here since the harvest.')
+    expect(first).toContain('Still the same work: I make what this village')
+    expect(first).not.toMatch(/Borin\[\/character_name\]\. I make/)
+  })
+})

@@ -85,9 +85,9 @@ export class Blacksmith extends Character {
       speech('Mind the sparks, lad.') +
       " He doesn't stop hammering. " +
       speech(
-        `${characterName('Borin')}. I make what this village breaks, and I ` +
-          "mend what it won't throw away. Got anything with an edge gone " +
-          'soft? Bring it here.',
+        'Not seen you down here since the harvest. Still the same work: ' +
+          "I make what this village breaks, and I mend what it won't throw " +
+          'away. Got anything with an edge gone soft? Bring it here.',
       )
     )
   }

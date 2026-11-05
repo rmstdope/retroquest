@@ -156,11 +156,11 @@ export class Shopkeeper extends Character {
         `${this.nameInSentence({ atStart: true })} looks up from the window, ` +
         'his face creased with worry. ' +
         speech(
-          `Oh! Forgive me, lad. ${characterName('Hemlock')}'s the name, ` +
-            'and this is my store. Or it would be, if I could keep my mind ' +
-            `on it. My cat, ${characterName('Patches')}, has been gone for days. ` +
-            `Can't think about business with ${characterName('Patches')} ` +
-            "out there in the cold, so the store stays shut until she's home.",
+          'Oh! Forgive me, lad, I was watching for her. ' +
+            `${characterName('Patches')}. Gone for days now, and you've seen ` +
+            'her on this counter often enough to know she never goes far. ' +
+            "Can't think about business with her out there in the cold, so " +
+            "the store stays shut until she's home.",
         ) +
         '\n' +
         speech(
