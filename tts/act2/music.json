@@ -4,133 +4,133 @@
     "title": "Act 2 Opening",
     "file": "web/public/audio/music/Walen - Medieval Village (freetouse.com).mp3",
     "plays": "Act II, throughout",
-    "brief": "gentle medieval village, lute and recorder, warm and unhurried, instrumental, no vocals",
+    "text": "gentle medieval village, lute and recorder, warm and unhurried, instrumental, no vocals",
     "seconds": 132
   },
   {
     "id": "act2-mountain-path",
     "title": "Mountain Path",
     "plays": "Act II, Mountain Path",
-    "brief": "instrumental background loop for Mountain Path: A trail climbs through rock and pine between Willowbrook and Greendale. From the overlooks you can see both: Greendale ahead, and Willowbrook small and far behind you, no vocals",
+    "text": "instrumental background loop for Mountain Path: A trail climbs through rock and pine between Willowbrook and Greendale. From the overlooks you can see both: Greendale ahead, and Willowbrook small and far behind you, no vocals",
     "seconds": 60
   },
   {
     "id": "act2-greendale-gates",
     "title": "Greendale Gates",
     "plays": "Act II, Greendale Gates",
-    "brief": "instrumental background loop for Greendale Gates: A magnificent stone archway marks the entrance to Greendale, the largest settlement you have encountered. Guards in polished mail stand watch, banners fluttering in the mountain breeze, no vocals",
+    "text": "instrumental background loop for Greendale Gates: A magnificent stone archway marks the entrance to Greendale, the largest settlement you have encountered. Guards in polished mail stand watch, banners fluttering in the mountain breeze, no vocals",
     "seconds": 60
   },
   {
     "id": "act2-main-square",
     "title": "Main Square",
     "plays": "Act II, Main Square",
-    "brief": "instrumental background loop for Main Square: The heart of Greendale: a great fountain of old heroes fighting beasts, stalls under bright awnings, red roofs all round, no vocals",
+    "text": "instrumental background loop for Main Square: The heart of Greendale: a great fountain of old heroes fighting beasts, stalls under bright awnings, red roofs all round, no vocals",
     "seconds": 60
   },
   {
     "id": "act2-market-district",
     "title": "Market District",
     "plays": "Act II, Market District",
-    "brief": "instrumental background loop for Market District: Narrow streets crammed with shops and trading posts weave a maze of commerce. Spices, leather, and fresh bread scent the air, no vocals",
+    "text": "instrumental background loop for Market District: Narrow streets crammed with shops and trading posts weave a maze of commerce. Spices, leather, and fresh bread scent the air, no vocals",
     "seconds": 60
   },
   {
     "id": "act2-silver-stag-inn",
     "title": "The Silver Stag Inn",
     "plays": "Act II, The Silver Stag Inn",
-    "brief": "instrumental background loop for The Silver Stag Inn: A three-story inn glows with warm yellow light. Conversations from travelers and locals merge into a comforting din while tales are traded over bread and ale, no vocals",
+    "text": "instrumental background loop for The Silver Stag Inn: A three-story inn glows with warm yellow light. Conversations from travelers and locals merge into a comforting din while tales are traded over bread and ale, no vocals",
     "seconds": 60
   },
   {
     "id": "act2-inn-rooms",
     "title": "Inn Rooms",
     "plays": "Act II, Inn Rooms",
-    "brief": "instrumental background loop for Inn Rooms: Comfortable guest rooms on the upper floor of The Silver Stag Inn. Each room has a cozy bed, a writing desk, and a window overlooking the Market District, no vocals",
+    "text": "instrumental background loop for Inn Rooms: Comfortable guest rooms on the upper floor of The Silver Stag Inn. Each room has a cozy bed, a writing desk, and a window overlooking the Market District, no vocals",
     "seconds": 60
   },
   {
     "id": "act2-merchants-warehouse",
     "title": "Merchant's Warehouse",
     "plays": "Act II, Merchant's Warehouse",
-    "brief": "instrumental background loop for Merchant's Warehouse: A large stone building packed with goods from distant lands. Crates and barrels form narrow corridors between tall shelving. Exotic spice and lacquer aromas mingle in the cool still air, no vocals",
+    "text": "instrumental background loop for Merchant's Warehouse: A large stone building packed with goods from distant lands. Crates and barrels form narrow corridors between tall shelving. Exotic spice and lacquer aromas mingle in the cool still air, no vocals",
     "seconds": 60
   },
   {
     "id": "act2-castle-approach",
     "title": "Castle Approach",
     "plays": "Act II, Castle Approach",
-    "brief": "instrumental background loop for Castle Approach: A wide avenue lined with statues of Greendale's heroes leads to an impressive castle of white stone. Tall spires reach toward the sky, and colorful banners snap in the wind, no vocals",
+    "text": "instrumental background loop for Castle Approach: A wide avenue lined with statues of Greendale's heroes leads to an impressive castle of white stone. Tall spires reach toward the sky, and colorful banners snap in the wind, no vocals",
     "seconds": 60
   },
   {
     "id": "act2-castle-courtyard",
     "title": "Castle Courtyard",
     "plays": "Act II, Castle Courtyard",
-    "brief": "instrumental background loop for Castle Courtyard: An expansive courtyard within the castle walls, featuring training grounds where knights practice their swordwork, no vocals",
+    "text": "instrumental background loop for Castle Courtyard: An expansive courtyard within the castle walls, featuring training grounds where knights practice their swordwork, no vocals",
     "seconds": 60
   },
   {
     "id": "act2-great-hall",
     "title": "Great Hall",
     "plays": "Act II, Great Hall",
-    "brief": "instrumental background loop for Great Hall: A magnificent hall with soaring ceilings supported by massive stone columns, no vocals",
+    "text": "instrumental background loop for Great Hall: A magnificent hall with soaring ceilings supported by massive stone columns, no vocals",
     "seconds": 60
   },
   {
     "id": "act2-residential-quarter",
     "title": "Residential Quarter",
     "plays": "Act II, Residential Quarter",
-    "brief": "instrumental background loop for Residential Quarter: Quiet lanes of two-storey houses, each with a small garden and a workshop. Craftsmen work at benches in the open doorways, and neighbours sit on their steps. Half the garden plots have gone grey, no vocals",
+    "text": "instrumental background loop for Residential Quarter: Quiet lanes of two-storey houses, each with a small garden and a workshop. Craftsmen work at benches in the open doorways, and neighbours sit on their steps. Half the garden plots have gone grey, no vocals",
     "seconds": 60
   },
   {
     "id": "act2-healers-house",
     "title": "Healer's House",
     "plays": "Act II, Healer's House",
-    "brief": "instrumental background loop for Healer's House: A small stone house that smells of crushed herbs. A few bundles of dried plants still hang from the rafters, but the shelves below them are nearly bare: rows of empty bottles, rinsed and waiting, no vocals",
+    "text": "instrumental background loop for Healer's House: A small stone house that smells of crushed herbs. A few bundles of dried plants still hang from the rafters, but the shelves below them are nearly bare: rows of empty bottles, rinsed and waiting, no vocals",
     "seconds": 60
   },
   {
     "id": "act2-hidden-library",
     "title": "Hidden Library",
     "plays": "Act II, Hidden Library",
-    "brief": "instrumental background loop for Hidden Library: Discovered beneath Greendale through a secret passage, this ancient library holds countless volumes of magical lore. Glowing crystals provide soft illumination and the air hums with residual energy, no vocals",
+    "text": "instrumental background loop for Hidden Library: Discovered beneath Greendale through a secret passage, this ancient library holds countless volumes of magical lore. Glowing crystals provide soft illumination and the air hums with residual energy, no vocals",
     "seconds": 60
   },
   {
     "id": "act2-forest-transition",
     "title": "Forest Transition",
     "plays": "Act II, Forest Transition",
-    "brief": "instrumental background loop for Forest Transition: The mountain path ends at a ring of standing stones, grey and mossed, with runes cut deep in them. Past the stones the trees begin all at once, close and dark, no vocals",
+    "text": "instrumental background loop for Forest Transition: The mountain path ends at a ring of standing stones, grey and mossed, with runes cut deep in them. Past the stones the trees begin all at once, close and dark, no vocals",
     "seconds": 60
   },
   {
     "id": "act2-forest-entrance",
     "title": "Forest Entrance",
     "plays": "Act II, Forest Entrance",
-    "brief": "instrumental background loop for Forest Entrance: Massive trees create a natural cathedral as you enter the Enchanted Forest. Dappled sunlight filters through the dense canopy, and the path ahead disappears into green shadows, no vocals",
+    "text": "instrumental background loop for Forest Entrance: Massive trees create a natural cathedral as you enter the Enchanted Forest. Dappled sunlight filters through the dense canopy, and the path ahead disappears into green shadows, no vocals",
     "seconds": 60
   },
   {
     "id": "act2-ancient-grove",
     "title": "Ancient Grove",
     "plays": "Act II, Ancient Grove",
-    "brief": "instrumental background loop for Ancient Grove: A ring of trees so old their trunks are wider than a cottage. Signs are carved in their bark, older than any letters you know, no vocals",
+    "text": "instrumental background loop for Ancient Grove: A ring of trees so old their trunks are wider than a cottage. Signs are carved in their bark, older than any letters you know, no vocals",
     "seconds": 60
   },
   {
     "id": "act2-whispering-glade",
     "title": "Whispering Glade",
     "plays": "Act II, Whispering Glade",
-    "brief": "instrumental background loop for Whispering Glade: A meadow opens round a small stream that runs over smooth stones. Wildflowers grow thick to the water's edge, no vocals",
+    "text": "instrumental background loop for Whispering Glade: A meadow opens round a small stream that runs over smooth stones. Wildflowers grow thick to the water's edge, no vocals",
     "seconds": 60
   },
   {
     "id": "act2-heart-of-the-forest",
     "title": "Heart of the Forest",
     "plays": "Act II, Heart of the Forest",
-    "brief": "instrumental background loop for Heart of the Forest: The deepest part of the forest. The light here is green and gold and does not seem to come from the sky, no vocals",
+    "text": "instrumental background loop for Heart of the Forest: The deepest part of the forest. The light here is green and gold and does not seem to come from the sky, no vocals",
     "seconds": 60
   }
 ]

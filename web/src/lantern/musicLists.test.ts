@@ -63,7 +63,7 @@ describe('actLoops', () => {
       for (const track of actLoops(act)) {
         expect(track.id).toMatch(SLUG)
         expect(track.plays.length).toBeGreaterThan(0)
-        expect(track.brief).toContain('instrumental')
+        expect(track.text).toContain('instrumental')
         expect(track.seconds).toBeGreaterThan(10)
       }
     }
@@ -119,16 +119,16 @@ describe('roomLoops', () => {
     const room = act.rooms.VillageSquare
     expect(square?.title).toBe(room.name)
     expect(square?.plays).toBe(`Act I, ${room.name}`)
-    expect(square?.brief).toContain(room.name)
-    expect(square?.brief).toContain('instrumental')
-    expect(square?.brief).not.toMatch(/\[\/?[a-z_]+\]/)
+    expect(square?.text).toContain(room.name)
+    expect(square?.text).toContain('instrumental')
+    expect(square?.text).not.toMatch(/\[\/?[a-z_]+\]/)
     expect(square?.file).toBeUndefined()
   })
 
   it('keeps every brief short enough to read in the studio', () => {
     for (const act of ACTS)
       for (const track of roomLoops(act))
-        expect(track.brief.length).toBeLessThan(400)
+        expect(track.text.length).toBeLessThan(400)
   })
 })
 
@@ -204,19 +204,23 @@ describe('the committed lists', () => {
     expect(readJson<MusicTrack[]>('tts/stingers.json')).toEqual(questStingers())
   })
 
-  it('content-studio.json declares the music paths and the shared refresh', () => {
+  it('content-studio.json declares the music lists, where the takes go, and the shared refresh', () => {
     const project = readJson<{
       refresh: { shared: string }
-      music: { paths: Record<string, string> }
+      music: { from: Record<string, string>; clips: string; manifest: string }
     }>('content-studio.json')
     expect(project.refresh.shared).toContain('tts/extract-shared.ts')
-    expect(project.music.paths).toEqual({
-      loops: 'tts/{part}/music.json',
-      stingers: 'tts/stingers.json',
-      briefs: 'music/briefs.json',
-      lock: 'music/music.lock.json',
+    expect(project.music).toMatchObject({
+      from: { part: 'tts/{part}/music.json', shared: 'tts/stingers.json' },
       clips: 'web/public/audio/music/generated',
       manifest: 'web/public/audio/music/generated/manifest.json',
     })
+  })
+
+  it("keeps Content Studio's music edits and lock in content-studio/music", () => {
+    expect(existsSync(repoUrl('content-studio/music/edits.json'))).toBe(true)
+    expect(existsSync(repoUrl('content-studio/music/lock.json'))).toBe(true)
+    expect(existsSync(repoUrl('music/briefs.json'))).toBe(false)
+    expect(existsSync(repoUrl('music/music.lock.json'))).toBe(false)
   })
 })

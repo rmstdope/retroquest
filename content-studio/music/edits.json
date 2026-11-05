@@ -1,0 +1,16 @@
+{
+ "act1-abandoned-shed": {"bpm":65,"key":"D major"},
+ "act1-blacksmiths-forge": {"bpm":65,"key":"D minor"},
+ "act1-chicken-coop": {"bpm":110,"key":"a major"},
+ "act1-eliors-cottage": {"text":"instrumental background loop for Elior's Cottage: lute and drums, humming voices, cozy and ambient.","gameWas":"instrumental background loop for Elior's Cottage: A modest cottage with a straw roof and a cozy hearth. The scent of fresh bread and old books fills the air, no vocals","bpm":80,"key":"A minor"},
+ "act1-general-store": {"bpm":70,"key":"A major"},
+ "act1-miras-hut": {"text":"instrumental background loop for Mira's Hut: A small hut hung with drying herbs: lavender, sage, and roots in bundles from the rafters. Shelves of bottles line the walls, every one labelled, no vocals. Mysterious and dark.","gameWas":"instrumental background loop for Mira's Hut: A small hut hung with drying herbs: lavender, sage, and roots in bundles from the rafters. Shelves of bottles line the walls, every one labelled, no vocals","bpm":75,"key":"F minor"},
+ "act1-riverbank": {"bpm":68,"key":"F major"},
+ "act1-road-to-greendale": {"bpm":50,"key":"A major"},
+ "act1-the-dream": {"text":"Dark. Stormy. Piano and violin playing staccato.","gameWas":"instrumental background loop for The Dream: It is dark, and it is raining hard. You hear it beating on shutters, though you cannot see any. Thunder breaks so close that the dark shakes with it. Shadows drift past like smoke, no vocals","bpm":180,"key":"D minor"},
+ "act1-vegetable-field": {"bpm":60,"key":"G minor"},
+ "act1-village-chapel": {"text":"instrumental background loop for Village Chapel: A small stone chapel. Its stained glass windows cast colours across the worn pews, and the air is cool and smells of candle wax. A kindly priest tends the altar, no vocals. only organ.","gameWas":"instrumental background loop for Village Chapel: A small stone chapel. Its stained glass windows cast colours across the worn pews, and the air is cool and smells of candle wax. A kindly priest tends the altar, no vocals"},
+ "act1-village-square": {"text":"instrumental background loop for Village Square: The heart of the medieval village Willowbrook: cobblestones around an old stone fountain, and a weathered notice board covered in faded announcements. Half the market stalls stand empty, no vocals. soft but cheerful.","gameWas":"instrumental background loop for Village Square: The heart of Willowbrook: cobblestones around an old stone fountain, and a weathered notice board covered in faded announcements. Half the market stalls stand empty, no vocals","bpm":115,"key":"C major"},
+ "act1-village-well": {"bpm":45,"key":"F major"},
+ "spell-learned": {"text":"short, mysterious chime for a spell learned, instrumental, no vocals","gameWas":"short magical chime for a spell learned, instrumental, no vocals","seconds":3}
+}
