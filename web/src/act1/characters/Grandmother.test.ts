@@ -410,3 +410,15 @@ describe('Grandmother speaks of the villagers as old neighbours (rq-m3fy)', () =
     expect(response).not.toContain('Old Man')
   })
 })
+
+describe('Grandmother repeat talk keeps its wording (rq-m3fy)', () => {
+  it("offers bread with 'Back again?' the second time", () => {
+    const game = cottageGame()
+    executeCommands(game, ['talk to grandmother'])
+
+    const response = executeCommands(game, ['talk to grandmother'])
+
+    expect(response).toContain('Back again?')
+    expect(response).not.toContain('look in on')
+  })
+})

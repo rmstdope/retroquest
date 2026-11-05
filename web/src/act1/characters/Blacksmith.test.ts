@@ -271,3 +271,13 @@ describe('Borin speaks to Elior as a neighbour (rq-m3fy)', () => {
     expect(first).not.toMatch(/Borin\[\/character_name\]\. I make/)
   })
 })
+
+describe('Borin repeat talk keeps its wording (rq-m3fy)', () => {
+  it("greets Elior with 'Back again, lad?' the second time", () => {
+    const game = gameAtForge()
+
+    expect(executeCommands(game, ['talk to blacksmith'])).toContain(
+      'Back again, lad?',
+    )
+  })
+})

@@ -120,8 +120,7 @@ export class Shopkeeper extends Character {
 
   /**
    * Answers to his name, Hemlock, and still to shopkeeper, "Old Hemlock" and
-   * "Old Man Hemlock": his description, the notice and his own introduction
-   * all name him so.
+   * "Old Man Hemlock": his description and the notice name him so.
    */
   override answersTo(name: string): boolean {
     return (
@@ -146,8 +145,8 @@ export class Shopkeeper extends Character {
   }
 
   /**
-   * Why the store is shut: Hemlock introduces himself the first time, then
-   * only asks after Patches.
+   * Why the store is shut: Hemlock frets about Patches the first time, then
+   * only asks after her.
    */
   private shutDialogue(gameState: GameState): string {
     if (!gameState.getStoryFlag(FLAG_MET_HEMLOCK)) {
