@@ -22,6 +22,7 @@ describe('Act I set-up descriptions', () => {
     expect(text).toContain(
       'sits on an upturned crate at the bend, watching the water.',
     )
+    expect(text).not.toContain('line in')
     expect(text).not.toContain('humming')
     expect(text).not.toContain('time seems to slow')
   })
@@ -33,6 +34,7 @@ describe('Act I set-up descriptions', () => {
       'An old man on an upturned crate at the bend, watching the water, ' +
         'his bad arm held close to his side.',
     )
+    expect(text).not.toContain('line in')
     expect(text).not.toContain('humming')
   })
 
