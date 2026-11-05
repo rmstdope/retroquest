@@ -375,3 +375,39 @@ describe('Innkeeper Marcus restored from a save made before the rewrite', () => 
     expect(answer).not.toContain('An old idle line.')
   })
 })
+
+describe('Innkeeper Marcus price sentence', () => {
+  const PRICES =
+    "A [item_name]room key[/item_name]'s ten " +
+    '[item_name]gold coins[/item_name].'
+
+  function gameBeforeCure(knowsCurse: boolean): Game {
+    const game = new Game([new Act2()])
+    game.state.currentRoom = game.state.allRooms.SilverStagInn
+    game.state.setStoryFlag(FLAG_KNOWS_ELENA_CURSE, knowsCurse)
+    return game
+  }
+
+  it.each([false, true])(
+    'ends his first bubble with the prices, curse known: %s',
+    (knowsCurse) => {
+      const game = gameBeforeCure(knowsCurse)
+
+      const answer = game.commandParser.parse('talk to innkeeper marcus')
+
+      expect(answer).toContain(`${PRICES}[/dialogue]\n\n`)
+      expect(answer).not.toContain('I can offer you')
+      expect(answer).not.toContain('- ')
+      expect(answer).toContain('Elena')
+    },
+  )
+
+  it('keeps the price sentence after every opening line', () => {
+    const game = gameBeforeCure(false)
+    for (let i = 0; i < 3; i++) {
+      expect(game.commandParser.parse('talk to innkeeper marcus')).toContain(
+        `${PRICES}[/dialogue]`,
+      )
+    }
+  })
+})

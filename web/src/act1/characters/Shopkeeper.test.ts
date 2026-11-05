@@ -68,7 +68,7 @@ describe('Shopkeeper dialogue markup', () => {
     let answer = ''
     for (let i = 0; i < talks; i++)
       answer = game.commandParser.parse('talk to shopkeeper')
-    expect(answer).toContain('for sale')
+    expect(answer).toContain('[item_name]sword[/item_name]')
     expectQuotesInsideDialogue(answer)
     expectDialogueSpeaker(answer, 'Hemlock')
   })
@@ -236,7 +236,7 @@ describe('Hemlock and his missing cat', () => {
     const first = game.commandParser.parse('talk to shopkeeper')
     expect(first).toContain('[character_name]Hemlock[/character_name]')
     expect(first).toContain('[character_name]Patches[/character_name]')
-    expect(first).not.toContain('for sale')
+    expect(first).not.toContain('[item_name]sword[/item_name]')
     const again = game.commandParser.parse('talk to shopkeeper')
     expect(again).not.toEqual(first)
     expect(again).toContain('[character_name]Patches[/character_name]')
@@ -283,7 +283,9 @@ describe('Hemlock and his missing cat', () => {
     expect(
       game.state.currentRoom.characters.some((c) => c instanceof Patches),
     ).toBe(true)
-    expect(game.commandParser.parse('talk to shopkeeper')).toContain('for sale')
+    expect(game.commandParser.parse('talk to shopkeeper')).toContain(
+      '[item_name]sword[/item_name]',
+    )
     expect(game.commandParser.parse('talk to shopkeeper')).not.toContain(
       'You receive',
     )
@@ -354,7 +356,9 @@ describe('Hemlock and his missing cat', () => {
   it('keeps the store open for a save that found the second hoe coin', () => {
     const game = gameInStore({ shopOpen: false })
     game.state.setStoryFlag(FLAG_RUSTY_HOE_SECOND_COIN_FOUND, true)
-    expect(game.commandParser.parse('talk to shopkeeper')).toContain('for sale')
+    expect(game.commandParser.parse('talk to shopkeeper')).toContain(
+      '[item_name]sword[/item_name]',
+    )
   })
 
   it('gives no second reward to a save that found the second hoe coin', () => {
@@ -436,7 +440,7 @@ describe('Shopkeeper when Patches stays with grandmother', () => {
 
     const answer = game.commandParser.parse('talk to shopkeeper')
 
-    expect(answer).toContain('for sale')
+    expect(answer).toContain('[item_name]sword[/item_name]')
     expect(game.state.inventory.filter((i) => i.name === 'rope')).toHaveLength(
       1,
     )
@@ -637,4 +641,30 @@ describe('Hemlock, named from the first moment', () => {
       'Hemlock',
     )
   })
+})
+
+describe('Shopkeeper price sentence', () => {
+  const PRICES =
+    "[item_name]Rope[/item_name]'s a [item_name]coin[/item_name], the " +
+    "[item_name]sword[/item_name]'s five and the " +
+    "[item_name]armor[/item_name]'s ten."
+  const APPLE_RULE =
+    "And there's an [item_name]apple[/item_name] with everything. " +
+    "My mother's rule."
+
+  it.each([0, 1, 2])(
+    'says the prices in one bubble after opening line %i',
+    (turn) => {
+      const game = gameInStore()
+      let answer = ''
+      for (let i = 0; i <= turn; i++)
+        answer = game.commandParser.parse('talk to shopkeeper')
+
+      expect(answer).toContain(`${PRICES} ${APPLE_RULE}[/dialogue]`)
+      expect(answer.match(/\[dialogue\]/g)).toHaveLength(1)
+      expect(answer).not.toContain('- ')
+      expect(answer).not.toContain('for sale')
+      expect(answer).not.toContain('\n')
+    },
+  )
 })

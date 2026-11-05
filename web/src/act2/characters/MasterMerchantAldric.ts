@@ -7,18 +7,31 @@ import {
   dialogue,
   clue,
   speech,
+  numberInWords,
 } from '@/engine'
 import { ForestSurvivalKit } from '../items/ForestSurvivalKit'
 import { EnhancedLantern } from '../items/EnhancedLantern'
 import { QualityRope } from '../items/QualityRope'
 import { MerchantsFlyer } from '../items/MerchantsFlyer'
 
-/** Python's str.title(): the first letter of every word upper-cased, the rest lower. */
-function title(text: string): string {
-  return text.replace(
-    /[A-Za-z]+/g,
-    (word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase(),
-  )
+/**
+ * The prices as one spoken sentence: "A [kit]'s fifty [gold coins], the
+ * [lantern]'s forty and the [rope]'s twenty." Only the first ware names the
+ * coin. Returns an empty string when there is nothing for sale.
+ */
+function priceSentence(
+  wares: Record<string, { item: Item; price: number }>,
+): string {
+  const spoken = Object.entries(wares).map(([name, details], index) => {
+    const ware = `[item_name]${name}[/item_name]'s `
+    return index === 0
+      ? `A ${ware}${numberInWords(details.price)} ` +
+          '[item_name]gold coins[/item_name]'
+      : `the ${ware}${numberInWords(details.price)}`
+  })
+  const last = spoken.pop()
+  if (last === undefined) return ''
+  return spoken.length === 0 ? `${last}.` : `${spoken.join(', ')} and ${last}.`
 }
 
 /** A room that can lay out display wares, like the Market District. */
@@ -72,18 +85,10 @@ export class MasterMerchantAldric extends Character {
       return MasterMerchantAldric.CLOSED_DIALOGUE
     }
 
-    // Build wares information similar to Act 1 Shopkeeper
-    let waresInfo = "Here's what I have:\n"
-    const entries = Object.entries(this.wares)
-    if (entries.length > 0) {
-      for (const [name, details] of entries) {
-        waresInfo +=
-          `- [item_name]${title(name)}[/item_name]: ${details.price} ` +
-          '[item_name]gold coins[/item_name]\n'
-      }
-    } else {
-      waresInfo = 'My racks are bare till the next cart comes in.\n'
-    }
+    // His prices, spoken in the same bubble as his opening line
+    const waresInfo =
+      priceSentence(this.wares) ||
+      'My racks are bare till the next cart comes in.'
 
     // Cycle through dialogue options like Act 1 Shopkeeper
     const dialogue = MasterMerchantAldric.IDLE_LINES[this.dialogueIndex]
@@ -94,7 +99,7 @@ export class MasterMerchantAldric extends Character {
       'The ' +
       characterName('Master Merchant Aldric') +
       ' says: ' +
-      speech(`${dialogue} ${waresInfo.trim()}`)
+      speech(`${dialogue} ${waresInfo}`)
     )
   }
 
