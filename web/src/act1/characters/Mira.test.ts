@@ -249,7 +249,7 @@ describe('Mira and the fox kit', () => {
     )
     expectDialogueSpeaker(first, 'Mira')
     expect(second).not.toContain('snare')
-    expect(second).toContain('Come in, mind the sage.')
+    expect(second).toContain('Back already')
   })
 
   it('also precedes the post-amulet line, whenever in the act the kit was freed', () => {
@@ -319,5 +319,55 @@ describe('Mira and the blessing for the road', () => {
       expect(answer).toContain('a blessing on you')
       expect(answer).not.toContain('[character_name]priest[/character_name]')
     }
+  })
+})
+
+describe('Mira spoken to again before the flower', () => {
+  const FIRST_MEETING = 'Come in, mind the sage.'
+
+  /** Elior has seen the crops, the square and the well. */
+  function setThreeSigns(game: Game): void {
+    game.state.setStoryFlag(FLAG_INVESTIGATED_WITHERED_CROPS, true)
+    game.state.setStoryFlag(FLAG_VILLAGER_TALKED_TO, true)
+    game.state.setStoryFlag(FLAG_WELL_EXAMINED, true)
+  }
+
+  it('greets a first visit with the first meeting, a second one with a short reminder', () => {
+    const game = gameInMirasHut()
+    const first = executeCommands(game, ['talk to mira'])
+    const second = executeCommands(game, ['talk to mira'])
+    expect(first).toContain(FIRST_MEETING)
+    expect(second).not.toContain(FIRST_MEETING)
+    expect(second).toContain('Back already')
+    expect(second.length).toBeLessThan(first.length)
+  })
+
+  it('reminds him of the flower, not the whole request, once she has asked for it', () => {
+    const game = gameInMirasHut()
+    setThreeSigns(game)
+    const first = executeCommands(game, ['talk to mira'])
+    const second = executeCommands(game, ['talk to mira'])
+    expect(first).toContain('None of that is weather.')
+    expect(second).not.toContain(FIRST_MEETING)
+    expect(second).not.toContain('None of that is weather.')
+    expect(second).toContain('The flower, ')
+  })
+
+  it('still makes the request when the signs are gathered after a bare first meeting', () => {
+    const game = gameInMirasHut()
+    executeCommands(game, ['talk to mira'])
+    setThreeSigns(game)
+    const response = executeCommands(game, ['talk to mira'])
+    expect(response).not.toContain(FIRST_MEETING)
+    expect(response).toContain('None of that is weather.')
+    expect(game.state.getStoryFlag(FLAG_CONNECT_WITH_NATURE)).toBe(true)
+  })
+
+  it('reminds a save that heard the request before the flag existed, not the first meeting', () => {
+    const game = gameInMirasHut()
+    game.state.setStoryFlag(FLAG_CONNECT_WITH_NATURE, true)
+    const response = executeCommands(game, ['talk to mira'])
+    expect(response).not.toContain(FIRST_MEETING)
+    expect(response).toContain('The flower, ')
   })
 })

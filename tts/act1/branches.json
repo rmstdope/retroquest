@@ -5,6 +5,11 @@
         "unset": ["deer_can_be_observed"]
     },
     { "after": 0, "commands": ["take lantern"] },
+    {
+        "after": 45,
+        "commands": ["talk to mira", "talk to mira"],
+        "unset": ["well_examined"]
+    },
     { "after": 2, "commands": ["give bread to grandmother"] },
     { "after": 8, "commands": ["give faded photograph to grandmother"] },
     { "after": 23, "commands": ["use bucket on old notice"] },
