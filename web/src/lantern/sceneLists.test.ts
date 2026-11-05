@@ -25,12 +25,13 @@ describe('actScenes', () => {
   const scenes = actScenes(new Act1())
   const byId = new Map(scenes.map((scene) => [scene.id, scene]))
 
-  it("declares each room as a scene under its track's id, named as the room", () => {
+  it("declares each room as a scene under its track's id, titled as the room", () => {
     const act = new Act1()
     expect(scenes.map((scene) => scene.id)).toEqual(
       Object.keys(act.rooms).map((key) => roomTrackId(act.name, key)),
     )
-    expect(byId.get('act1-general-store')?.name).toBe('General Store')
+    expect(byId.get('act1-general-store')?.title).toBe('General Store')
+    expect(byId.get('act1-general-store')).not.toHaveProperty('name')
   })
 
   it("names a room's default '' state plain, first", () => {
@@ -104,12 +105,10 @@ describe('sceneStateOf', () => {
 
 describe('content-studio.json', () => {
   it('declares where the scenes and their mix live', () => {
-    const project = readJson<{ scenes: { paths: Record<string, string> } }>(
+    const project = readJson<{ scenes: { from: unknown; mix: unknown } }>(
       'content-studio.json',
     )
-    expect(project.scenes.paths).toEqual({
-      declarations: 'tts/{part}/scenes.json',
-      mix: 'web/src/lantern/scenes/{part}.mix.json',
-    })
+    expect(project.scenes.from).toEqual({ part: 'tts/{part}/scenes.json' })
+    expect(project.scenes.mix).toBe('web/src/lantern/scenes/{part}.mix.json')
   })
 })

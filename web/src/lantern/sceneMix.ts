@@ -1,6 +1,6 @@
 /**
  * The scene mix Content Studio writes (`scenes/act<N>.mix.json`, one per act,
- * the `scenes.paths.mix` of `content-studio.json`): for each scene the
+ * the `scenes.mix` of `content-studio.json`): for each scene the
  * declarations list (`sceneLists.ts`), its music and level and the effects that
  * play in it, how, in which state and how loud. The game reads the mix scene
  * by scene: an entry with a problem is left out, so that scene plays as if it

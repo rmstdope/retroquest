@@ -62,7 +62,9 @@ A script.json or music.json that differs from what the extractor writes now fail
   `content-studio/cache/`, which is not committed. A checkout made before Content Studio's version 2 format
   moves its old cache once: `mkdir -p content-studio && mv .content-studio content-studio/cache`.
   `content-studio/cache/effects.json` is no longer read: the sound effects' rewordings are now in
-  the committed `content-studio/effects/edits.json`.
+  the committed `content-studio/effects/edits.json`. `content-studio/cache/scene-loudness.json` is
+  no longer read either: the scenes' kept loudness is now in the committed
+  `content-studio/scenes/act<N>.lock.json`.
 - Clips are 64 kbps mono MP3, levelled to −16 LUFS as `level.py` levels them, in
   `web/public/audio/narration/act<N>/` with `manifest.json` (line id -> file, speaker, duration, word
   timings), which the story view reads. Each line is sent to Fish's free model (long ones in
@@ -113,6 +115,19 @@ effects reworded in the studio (the studio's words as `text`, with the game's wo
 written over as `gameWas`), and **`lock.json`**, the take chosen for each effect and what it was
 made from. Both are committed; never edit them by hand. The game reads only the chosen effects'
 `web/public/audio/soundeffects/generated/manifest.json`.
+
+## Scenes
+
+Content Studio's Scenes workspace sets what plays in each room: its music and level, and the sound
+effects with it, how, in which state and how loud. **Refresh from the game** on an act's Scenes page
+runs the same `refresh.part` command as Refresh dialog, which writes `act<N>/scenes.json` from
+`web/src/lantern/sceneLists.ts`: one scene per room, `{ id, title, states, triggers }`, its `id` the
+room's music track id and its `title` the room's name.
+
+The studio writes each act's mix, `web/src/lantern/scenes/act<N>.mix.json`, which the game reads
+(`sceneMix.ts`), and keeps the loudness each scene was last measured at, against the `scenes.output`
+target in `content-studio.json`, in **`content-studio/scenes/act<N>.lock.json`**. Both are
+committed; never edit them by hand.
 
 ## Getting the text
 

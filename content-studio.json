@@ -81,13 +81,13 @@
     "manifest": "web/public/audio/soundeffects/generated/manifest.json"
   },
   "scenes": {
-    "paths": {
-      "declarations": "tts/{part}/scenes.json",
-      "mix": "web/src/lantern/scenes/{part}.mix.json"
+    "from": {
+      "part": "tts/{part}/scenes.json"
     },
-    "loudness": {
-      "target": -20,
+    "output": {
+      "lufs": -20,
       "tolerance": 2
-    }
+    },
+    "mix": "web/src/lantern/scenes/{part}.mix.json"
   }
 }
