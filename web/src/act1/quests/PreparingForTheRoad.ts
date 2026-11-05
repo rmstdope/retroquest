@@ -50,8 +50,8 @@ export class PreparingForTheRoadQuest extends Quest {
         'the village elders can teach you -\n' +
         ' - To have learned all the basic magic the village elders can teach you -\n',
       completion:
-        'Everything Mira asked for is in your pack, and the elders have ' +
-        'taught you all they can. The road is next.',
+        `You have everything ${characterName('Mira')} asked for, and the ` +
+        'elders have taught you all they can. The road is next.',
     })
   }
 
