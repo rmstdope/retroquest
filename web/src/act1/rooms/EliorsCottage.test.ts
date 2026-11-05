@@ -79,7 +79,7 @@ describe("Elior's Cottage bread", () => {
     expect(room.getItemByName('bread')).not.toBeNull()
   })
 
-  it('is not brought back once the lantern is lit and the bread is gone', () => {
+  it('is not brought back once the lantern is lit', () => {
     const game = cottage()
     executeCommands(game, [
       'use lantern',
@@ -90,5 +90,17 @@ describe("Elior's Cottage bread", () => {
     room.items = room.items.filter((item) => item.name !== 'bread')
     new Act1().afterLoad(game.state)
     expect(room.getItemByName('bread')).toBeNull()
+  })
+
+  it('is not copied when Elior already carries it, through a real save', () => {
+    const game = cottage()
+    executeCommands(game, ['take bread'])
+    const loaded = cottage()
+    expect(loaded.loadSaveData(game.toSaveData())).toContain('loaded')
+    const loaves = [
+      ...loaded.state.inventory,
+      ...loaded.state.allRooms.EliorsCottage.items,
+    ].filter((item) => item.name === 'bread')
+    expect(loaves).toHaveLength(1)
   })
 })

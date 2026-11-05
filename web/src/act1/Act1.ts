@@ -146,14 +146,19 @@ export class Act1 extends Act {
    * Saves made while the lantern was still unlit never had the loaf, which
    * used to appear only on lighting it; it now lies in the cottage from the
    * start. A lit lantern means the loaf was already revealed (and maybe eaten
-   * by the chickens), so only an unlit one gets it back.
+   * by the chickens), so only an unlit one gets it back, and never while
+   * Elior already carries it.
    */
   private restoreCottageLoaf(gameState: GameState): void {
     const cottage = gameState.allRooms.EliorsCottage
     const lantern = cottage.items.find((item) => item instanceof Lantern)
+    const carriesBread = gameState.inventory.some(
+      (item) => item instanceof Bread,
+    )
     if (
       lantern instanceof Lantern &&
       !lantern.isLit() &&
+      !carriesBread &&
       !cottage.getItemByName('bread')
     ) {
       cottage.addItem(new Bread())
