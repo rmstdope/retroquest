@@ -6,7 +6,8 @@
  * name and description of an arrival, then one unit per quest card. A unit is
  * made of parts, each a voiced line (`blockVoice`, `arrivalBlocks`,
  * `newQuestBlocks`, `questCompleteBlocks`, `questUpdatedBlocks`) with its
- * recording or none. A unit with no part is silent: events, plain failures,
+ * recording or none. Elior's own words of a say command belong to no
+ * block; their recording (`ownWordsClip`) is spoken before the units. A unit with no part is silent: events, plain failures,
  * checklists and a revisited room appear at once; a new
  * room, a room looked at again, a new quest's card, a quest's update and a
  * completed quest's record are read.
@@ -26,6 +27,7 @@ import {
   chapterHeading,
   newQuestBlocks,
   newSpellBlocks,
+  ownWordsBlocks,
   questCompleteBlocks,
   questUpdatedBlocks,
 } from './narrationScript'
@@ -70,6 +72,19 @@ function partsOf(
     markup: block.markup,
     clip: findClip(manifest, block.speaker, block.markup),
   }))
+}
+
+/**
+ * The recording of Elior's own words when the turn was a say command that
+ * reached someone (`ownWordsBlocks`), spoken before its units; null for any
+ * other turn, or when the words have no recording.
+ */
+export function ownWordsClip(
+  turn: { command: string | null; addressed?: string },
+  manifest: NarrationManifest,
+): NarrationClip | null {
+  const [own] = ownWordsBlocks(turn.command, !!turn.addressed)
+  return own ? findClip(manifest, own.speaker, own.markup) : null
 }
 
 /** The unit of a turn's first quest card: after its answer's blocks, its arrival and its spells. */

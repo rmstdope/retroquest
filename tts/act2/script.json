@@ -120,6 +120,16 @@
     "text": "You rest for a moment, gathering your strength."
   },
   {
+    "key": "075915c3158718",
+    "speaker": "narrator",
+    "text": "The mountain hermit jerks his chin toward Greendale."
+  },
+  {
+    "key": "05a92239ed6bd6",
+    "speaker": "mountain hermit",
+    "text": "You've still got that blade, I see. Get it to Cedric, and mind you give him my words."
+  },
+  {
     "key": "0cf8dcdb267d33",
     "speaker": "narrator",
     "text": "This might come in handy, so you decide to pick it up."
@@ -168,16 +178,6 @@
     "key": "1f8ad93750fa8c",
     "speaker": "narrator",
     "text": "You practice a few sword forms with the training sword. The balance is good. Somebody swung this a great deal, a long time ago."
-  },
-  {
-    "key": "075915c3158718",
-    "speaker": "narrator",
-    "text": "The mountain hermit jerks his chin toward Greendale."
-  },
-  {
-    "key": "05a92239ed6bd6",
-    "speaker": "mountain hermit",
-    "text": "You've still got that blade, I see. Get it to Cedric, and mind you give him my words."
   },
   {
     "key": "11bc0c666349f4",
@@ -510,6 +510,21 @@
     "text": "You find nothing under the benches but old leaves. A few of the squires watch you look, and whisper."
   },
   {
+    "key": "10c79f2f9d16a9",
+    "speaker": "sir cedric",
+    "text": "Not yet. Show me what you can do with a blade first; then we will talk of the rest."
+  },
+  {
+    "key": "137ca05dd7bec1",
+    "speaker": "narrator",
+    "text": "The Training Master nods."
+  },
+  {
+    "key": "0aeb05a94e0ab8",
+    "speaker": "training master",
+    "text": "Still at it? Good. Ask the squires. Boys and girls in a barracks hear things an old knight never does."
+  },
+  {
     "key": "0678b14852e2e7",
     "speaker": "narrator",
     "text": "New side quest"
@@ -540,11 +555,6 @@
     "text": "A mysterious amulet inscribed with runes. At its centre is the sigil of the Wardens of the Dawn: the sun rising over three linked rings. It is faintly warm in your hand."
   },
   {
-    "key": "10c79f2f9d16a9",
-    "speaker": "sir cedric",
-    "text": "Not yet. Show me what you can do with a blade first; then we will talk of the rest."
-  },
-  {
     "key": "15b889fd26aeab",
     "speaker": "narrator",
     "text": "The Gathering Storm: Sir Cedric knew the sigil on your amulet: the sun rising over three linked rings, the mark of the Wardens of the Dawn. Whoever wore it before you was a Warden, he says, and your family is bound to them."
@@ -563,6 +573,11 @@
     "key": "1b27693862092d",
     "speaker": "sir cedric",
     "text": "Talk after."
+  },
+  {
+    "key": "111c1cc359fc83",
+    "speaker": "elior",
+    "text": "guard"
   },
   {
     "key": "19a796f9581e71",
@@ -590,6 +605,11 @@
     "text": "He drives straight at your middle."
   },
   {
+    "key": "1c7a67d4426fda",
+    "speaker": "elior",
+    "text": "turn"
+  },
+  {
     "key": "0a938ff226a338",
     "speaker": "narrator",
     "text": "You step aside and his point slides past your ribs."
@@ -613,6 +633,11 @@
     "key": "1cbf9f665d2bdf",
     "speaker": "narrator",
     "text": "He swings wide and leaves his chest open."
+  },
+  {
+    "key": "0ec29fd4d25029",
+    "speaker": "elior",
+    "text": "strike"
   },
   {
     "key": "1c691731bed9d1",
@@ -725,6 +750,11 @@
     "text": "Supplies for the Journey: Sir Cedric gave you coin for the forest: a survival kit, an enhanced lantern and rope, from the Market District."
   },
   {
+    "key": "165ef0f72b4428",
+    "speaker": "sir cedric",
+    "text": "How goes your preparation? Whatever is coming does not wait on us. Neither should you."
+  },
+  {
     "key": "1811267582c948",
     "speaker": "narrator",
     "text": "Gold coins, kept in a pouch at your belt. These will be useful for purchasing supplies and equipment in Greendale."
@@ -733,11 +763,6 @@
     "key": "17cdbaef827df3",
     "speaker": "narrator",
     "text": "You count your coins. You have 150 gold pieces to spend on supplies and equipment."
-  },
-  {
-    "key": "165ef0f72b4428",
-    "speaker": "sir cedric",
-    "text": "How goes your preparation? Whatever is coming does not wait on us. Neither should you."
   },
   {
     "key": "08c16b88d2ec63",
@@ -795,6 +820,11 @@
     "text": "You search around the Market District, but find nothing of interest beyond what you can already see."
   },
   {
+    "key": "0b7023bc33c04d",
+    "speaker": "caravan master thorne",
+    "text": "Any word? … No. I've stopped counting the goods. I count the days."
+  },
+  {
     "key": "112c7c120a78a9",
     "speaker": "narrator",
     "text": "Master Merchant Aldric turns the flyer over and finds his own name on it."
@@ -828,6 +858,21 @@
     "key": "0b5a31e85387c7",
     "speaker": "master merchant aldric",
     "text": "Welcome to Aldric's. Rope that holds, lanterns that stay lit, and nothing that comes apart on the road. A forest survival kit's fifty gold coins, the enhanced lantern's forty and the quality rope's twenty."
+  },
+  {
+    "key": "0433d34e3fd9d8",
+    "speaker": "master merchant aldric",
+    "text": "Planning an expedition? Tell me where, and I'll tell you what you'll wish you'd brought. A forest survival kit's fifty gold coins, the enhanced lantern's forty and the quality rope's twenty."
+  },
+  {
+    "key": "04f58ef251ed30",
+    "speaker": "master merchant aldric",
+    "text": "I've heard tales of strange happenings in the forest. The carters who still go in buy two things from me: a lantern and a good rope. A forest survival kit's fifty gold coins, the enhanced lantern's forty and the quality rope's twenty."
+  },
+  {
+    "key": "1dd05e11e52160",
+    "speaker": "master merchant aldric",
+    "text": "Bread costs near twice what it did in spring. The farms west of the city send half the grain they used to, and what does come is grey at the husk. Not my trade, mind, but my suppliers talk of little else. A forest survival kit's fifty gold coins, the enhanced lantern's forty and the quality rope's twenty."
   },
   {
     "key": "01af4f0cf2d83a",
@@ -883,11 +928,6 @@
     "key": "06727e251b7517",
     "speaker": "brenn",
     "text": "If you've come from Thorne, you'll have heard. The path just went, out from under the wagons. I was hanging over the ravine by one hand. When I got up I ran for help, I swear I did. But the forest turned me round, and I couldn't find the road again for two days. So I came back. Somebody had to tell him."
-  },
-  {
-    "key": "0b7023bc33c04d",
-    "speaker": "caravan master thorne",
-    "text": "Any word? … No. I've stopped counting the goods. I count the days."
   },
   {
     "key": "0cb4d7c9de4646",
@@ -955,6 +995,21 @@
     "text": "Hard times or not, this house changes its sheets every week. A room key's ten gold coins."
   },
   {
+    "key": "1079cdee84bb0e",
+    "speaker": "innkeeper marcus",
+    "text": "A night in a room of your own does more for a body than any healer. A room key's ten gold coins."
+  },
+  {
+    "key": "1b17883178ca55",
+    "speaker": "narrator",
+    "text": "Elena pulls her shawl tighter."
+  },
+  {
+    "key": "0f7cd59a9b17c7",
+    "speaker": "barmaid elena",
+    "text": "Still here. Still cold. … Don't look like that. You're the first in weeks who came back to ask."
+  },
+  {
     "key": "0ab360c1a12c5a",
     "speaker": "narrator",
     "text": "The Innkeeper's Daughter"
@@ -973,16 +1028,6 @@
     "key": "045e9d8eef4e41",
     "speaker": "innkeeper marcus",
     "text": "It came on her the week the king went. The whole town was out in the streets asking after him, and I was upstairs with a cold cloth."
-  },
-  {
-    "key": "1b17883178ca55",
-    "speaker": "narrator",
-    "text": "Elena pulls her shawl tighter."
-  },
-  {
-    "key": "0f7cd59a9b17c7",
-    "speaker": "barmaid elena",
-    "text": "Still here. Still cold. … Don't look like that. You're the first in weeks who came back to ask."
   },
   {
     "key": "0275b3e6aedafb",
@@ -1620,14 +1665,14 @@
     "text": "And take this crystal focus. It was made for a healer's hands, and it has waited long enough."
   },
   {
-    "key": "086fc9002eefa3",
-    "speaker": "narrator",
-    "text": "A clear crystal the length of your finger, cut with many faces. Hold it to the light and the light comes out the other side narrower and brighter."
-  },
-  {
     "key": "05c0ee76410738",
     "speaker": "spectral librarian",
     "text": "The chronicle is waiting on its stand. It was written for whoever would read it; I cannot read it for you."
+  },
+  {
+    "key": "086fc9002eefa3",
+    "speaker": "narrator",
+    "text": "A clear crystal the length of your finger, cut with many faces. Hold it to the light and the light comes out the other side narrower and brighter."
   },
   {
     "key": "0c19fde121af93",
@@ -1820,6 +1865,16 @@
     "text": "You search around the Forest Transition, but find nothing of interest beyond what you can already see."
   },
   {
+    "key": "1a6e9032a80821",
+    "speaker": "narrator",
+    "text": "The forest hermit looks at the treeline, then at your pack."
+  },
+  {
+    "key": "1a33c109030ab7",
+    "speaker": "forest hermit",
+    "text": "Not tonight. Make camp first; let her get a look at you."
+  },
+  {
     "key": "1fc8ace3b8036a",
     "speaker": "narrator",
     "text": "The standing stones continue to pulse with ancient magic, their druidic runes a testament to the old ways."
@@ -1863,16 +1918,6 @@
     "key": "085143070b290a",
     "speaker": "narrator",
     "text": "The braided grass is dry and light in your hand."
-  },
-  {
-    "key": "1a6e9032a80821",
-    "speaker": "narrator",
-    "text": "The forest hermit looks at the treeline, then at your pack."
-  },
-  {
-    "key": "1a33c109030ab7",
-    "speaker": "forest hermit",
-    "text": "Not tonight. Make camp first; let her get a look at you."
   },
   {
     "key": "05289d1d3ea818",
@@ -2000,6 +2045,26 @@
     "text": "You search around the Forest Entrance, but find nothing of interest beyond what you can already see."
   },
   {
+    "key": "0e52d6fd25ae05",
+    "speaker": "forest sprites",
+    "text": "Back again—"
+  },
+  {
+    "key": "1bd152aa311d58",
+    "speaker": "forest sprites",
+    "text": "—did you forget?"
+  },
+  {
+    "key": "12b3f099c692e9",
+    "speaker": "forest sprites",
+    "text": "Nymphs are east—"
+  },
+  {
+    "key": "1f438c6c51f9e4",
+    "speaker": "forest sprites",
+    "text": "—with their riddles."
+  },
+  {
     "key": "0694c5307e130e",
     "speaker": "narrator",
     "text": "It is warm in your palm. The forest sprites go quiet, all at once, and watch you put it away."
@@ -2043,26 +2108,6 @@
     "key": "0d6ddebd421ac4",
     "speaker": "narrator",
     "text": "The forest sprites say the water nymphs, east of the Forest Entrance, have riddles for travellers who want the deep paths."
-  },
-  {
-    "key": "0e52d6fd25ae05",
-    "speaker": "forest sprites",
-    "text": "Back again—"
-  },
-  {
-    "key": "1bd152aa311d58",
-    "speaker": "forest sprites",
-    "text": "—did you forget?"
-  },
-  {
-    "key": "12b3f099c692e9",
-    "speaker": "forest sprites",
-    "text": "Nymphs are east—"
-  },
-  {
-    "key": "1f438c6c51f9e4",
-    "speaker": "forest sprites",
-    "text": "—with their riddles."
   },
   {
     "key": "07e612c6222ed2",
@@ -2230,6 +2275,11 @@
     "text": "Three of them, or four; it is hard to count water. They sit waist-deep in the stream, and the stream runs through them. When you lean closer, every one of them leans closer too."
   },
   {
+    "key": "183db35d5e5fe2",
+    "speaker": "elior",
+    "text": "water"
+  },
+  {
     "key": "038a1a27e9ced7",
     "speaker": "narrator",
     "text": "The stream runs a little faster round your boots. The water nymphs nod."
@@ -2250,6 +2300,11 @@
     "text": "Back so soon? Do you remember where we were? The second one, wasn't it?"
   },
   {
+    "key": "1008afa7d2c87d",
+    "speaker": "elior",
+    "text": "mask"
+  },
+  {
     "key": "0909a976acc72e",
     "speaker": "narrator",
     "text": "For a moment every one of the water nymphs wears your face. Then they nod."
@@ -2263,6 +2318,11 @@
     "key": "1bf24b863a5102",
     "speaker": "water nymphs",
     "text": "Back so soon? Do you remember where we were? The third one, wasn't it?"
+  },
+  {
+    "key": "1056cb8900cebc",
+    "speaker": "elior",
+    "text": "truth"
   },
   {
     "key": "1f7e5bbd95dcca",
@@ -2405,9 +2465,24 @@
     "text": "The merchant caravan is in rough shape but the people are safe. The wagon's wheels are cracked and the canvas cover is torn, but the structure is sound. Several merchants tend to minor injuries while sorting through their goods. You see spice containers, bolts of fine cloth, and various trade items. The merchants look at you with deep gratitude—you clearly saved their lives."
   },
   {
+    "key": "0f85dffe7dcf62",
+    "speaker": "caravan master thorne",
+    "text": "My people are home, and I still wake up counting them. Those papers I gave you: I hope they find the knight they were meant for."
+  },
+  {
+    "key": "091d6ab55c3801",
+    "speaker": "caravan master thorne",
+    "text": "Which leaves Brenn. A guard who runs is no guard. He's sitting in the warehouse waiting for his wages, and wages are all he'll get from me."
+  },
+  {
     "key": "03d006e80303c7",
     "speaker": "brenn",
     "text": "They're home? All of them? … Thank you. Thorne says I'm to have my wages and not a copper more. I suppose that's fair. I ran. Unless somebody told him what it was like out there. He'd never hear it from me."
+  },
+  {
+    "key": "1a99a334b43ec4",
+    "speaker": "elior",
+    "text": "forgive"
   },
   {
     "key": "0c6001fc867625",
@@ -2428,16 +2503,6 @@
     "key": "1aa01ee4fe46b2",
     "speaker": "narrator",
     "text": "A sworn confession and a letter closed with black wax. They speak of gold, a gate and a night, but without knowing whose night, you cannot make sense of them."
-  },
-  {
-    "key": "0f85dffe7dcf62",
-    "speaker": "caravan master thorne",
-    "text": "My people are home, and I still wake up counting them. Those papers I gave you: I hope they find the knight they were meant for."
-  },
-  {
-    "key": "091d6ab55c3801",
-    "speaker": "caravan master thorne",
-    "text": "Which leaves Brenn. A guard who runs is no guard. He's sitting in the warehouse waiting for his wages, and wages are all he'll get from me."
   },
   {
     "key": "1c7296918e36fb",
@@ -2555,6 +2620,16 @@
     "text": "Elena, quick on her feet again, with a tray on each arm. When she catches your eye she lifts one to you, like a toast."
   },
   {
+    "key": "14210ae72a55d1",
+    "speaker": "innkeeper marcus",
+    "text": "My daughter is healthy and happy again. Hear her? Singing over the trays. Your room's free here as long as this house stands."
+  },
+  {
+    "key": "1849fd6c45b2cc",
+    "speaker": "innkeeper marcus",
+    "text": "An ill wind, that's all it was. Bad luck, blown in off the road, settling on the one soul in this house who never harmed anyone."
+  },
+  {
     "key": "0a268538fbf28c",
     "speaker": "narrator",
     "text": "You tell Marcus about the silver mask on Elena's wrist: the curse was no ill wind. Someone set it on her on purpose."
@@ -2575,16 +2650,6 @@
     "text": "The charm is warm from your hand."
   },
   {
-    "key": "14210ae72a55d1",
-    "speaker": "innkeeper marcus",
-    "text": "My daughter is healthy and happy again. Hear her? Singing over the trays. Your room's free here as long as this house stands."
-  },
-  {
-    "key": "1849fd6c45b2cc",
-    "speaker": "innkeeper marcus",
-    "text": "An ill wind, that's all it was. Bad luck, blown in off the road, settling on the one soul in this house who never harmed anyone."
-  },
-  {
     "key": "1f4b5d005bd240",
     "speaker": "narrator",
     "text": "Cedric's Lost Honor"
@@ -2603,16 +2668,6 @@
     "key": "1e12323cac004b",
     "speaker": "sir cedric",
     "text": "You will have heard what they say of me. I held the king's wall the night he vanished, and he was lost on my watch. Whatever else is true, that is. I will not make excuses."
-  },
-  {
-    "key": "137ca05dd7bec1",
-    "speaker": "narrator",
-    "text": "The Training Master nods."
-  },
-  {
-    "key": "0aeb05a94e0ab8",
-    "speaker": "training master",
-    "text": "Still at it? Good. Ask the squires. Boys and girls in a barracks hear things an old knight never does."
   },
   {
     "key": "1c3a892ce5260c",
@@ -2865,14 +2920,14 @@
     "text": "A tall knight in old, dented mail. His sword hangs at his hip once more, and he carries himself like a man who has been given back his name."
   },
   {
-    "key": "09bf74e18e6320",
-    "speaker": "narrator",
-    "text": "A small wooden charm, dark with handling, carved with a sword laid across a branch. Sir Cedric's family has kept it since the knights first made pacts with the forest spirits."
-  },
-  {
     "key": "081c50e0919d17",
     "speaker": "sir cedric",
     "text": "Thanks to you, my knighthood is restored and the charge struck from my record. Now I can turn to what matters: the king, and whoever wears that old name."
+  },
+  {
+    "key": "09bf74e18e6320",
+    "speaker": "narrator",
+    "text": "A small wooden charm, dark with handling, carved with a sword laid across a branch. Sir Cedric's family has kept it since the knights first made pacts with the forest spirits."
   },
   {
     "key": "151fa207436379",
@@ -3000,6 +3055,16 @@
     "text": "A woman no taller than you, barefoot, with leaves caught in her hair. The moss is greener where she has stood."
   },
   {
+    "key": "0444e0f9f83e4f",
+    "speaker": "narrator",
+    "text": "Nyx is already half leaves again."
+  },
+  {
+    "key": "114ce008350d0b",
+    "speaker": "nyx",
+    "text": "Go home the long way, Elior. Look before you step."
+  },
+  {
     "key": "1917fa8b97aa51",
     "speaker": "narrator",
     "text": "Nyx judged you worthy and gave you the Prophetic Vision spell, her token and the forest heart crystal. She left you with the words from the glade stone: power follows purpose; purpose follows truth. When every other task in Greendale is done, cast the vision with Sir Cedric beside you, so you can both see what is coming."
@@ -3013,16 +3078,6 @@
     "key": "06e7c0278ab680",
     "speaker": "narrator",
     "text": "A crystal the size of a plum. Inside it, tiny lights drift like fireflies over a forest you could almost walk into. Held close, it sounds like wind in leaves."
-  },
-  {
-    "key": "0444e0f9f83e4f",
-    "speaker": "narrator",
-    "text": "Nyx is already half leaves again."
-  },
-  {
-    "key": "114ce008350d0b",
-    "speaker": "nyx",
-    "text": "Go home the long way, Elior. Look before you step."
   },
   {
     "key": "1c35ae46025c4e",

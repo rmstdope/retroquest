@@ -600,6 +600,11 @@
     "text": "It is the knight's voice."
   },
   {
+    "key": "12d42e42f3fd34",
+    "speaker": "elior",
+    "text": "redemption"
+  },
+  {
     "key": "01c195fbdec713",
     "speaker": "narrator",
     "text": "You open your mouth, and the knight's despair rolls over you like cold water. The word dies in your throat. Nothing stands between you and his sorrow, and the chain is gone with the captain. But you are not as alone as the knight would have you believe."
@@ -768,6 +773,11 @@
     "key": "12d714f7f3c79e",
     "speaker": "true self",
     "text": "You tell everyone you came for the king. Tell me the truth: why did you really come?"
+  },
+  {
+    "key": "1056cb8900cebc",
+    "speaker": "elior",
+    "text": "truth"
   },
   {
     "key": "08067b1c8f836a",
@@ -1040,6 +1050,11 @@
     "text": "You search around the Tower of Shadows, but find nothing of interest beyond what you can already see."
   },
   {
+    "key": "1d0adb6b8b53f2",
+    "speaker": "elior",
+    "text": "mira"
+  },
+  {
     "key": "05bdc4c871c3c1",
     "speaker": "narrator",
     "text": "The token warms against your palm, and the whispers falter."
@@ -1050,6 +1065,11 @@
     "text": "I'm at the gate, Elior. I said I'd hold it, and I'm holding it."
   },
   {
+    "key": "175bfe7b94cfea",
+    "speaker": "elior",
+    "text": "cedric"
+  },
+  {
     "key": "17dd60785dbceb",
     "speaker": "narrator",
     "text": "The token warms again. The whispers draw back from the stair."
@@ -1058,6 +1078,11 @@
     "key": "1f6d4ed81f1703",
     "speaker": "sir cedric",
     "text": "I am in the hall behind you, Elior. I have not left. Go on up."
+  },
+  {
+    "key": "0d9b0077d256bf",
+    "speaker": "elior",
+    "text": "nyx"
   },
   {
     "key": "14407e80704d0b",
@@ -1093,6 +1118,11 @@
     "key": "15a858c6473a02",
     "speaker": "narrator",
     "text": "At the top of the tower the Sorceress of Lies holds court, and the mask on her staff is the mark from Elena's wrist. Listen past her lies, to what is under them."
+  },
+  {
+    "key": "1996e7ce01c4e0",
+    "speaker": "elior",
+    "text": "understanding"
   },
   {
     "key": "03703bbf9d50b7",
@@ -1293,6 +1323,11 @@
     "key": "178cd0c3334b9b",
     "speaker": "narrator",
     "text": "Among the broken memories a shadow reaches for scenes it cannot hold. Mend what it has lost, and learn whose voice it is."
+  },
+  {
+    "key": "0c774125ade89b",
+    "speaker": "elior",
+    "text": "patience"
   },
   {
     "key": "0c02c841eb1082",
@@ -1705,6 +1740,11 @@
     "text": "You search around the Throne Chamber, but find nothing of interest beyond what you can already see."
   },
   {
+    "key": "00917c43819a98",
+    "speaker": "malakar",
+    "text": "They would wake, Elior. Your mother would laugh at something your father said. Is one boy and one tired king too much to pay for that? Give me the amulet."
+  },
+  {
     "key": "096334c2f1e66f",
     "speaker": "narrator",
     "text": "Malakar's hand closes on the amulet, and for a moment neither of you lets go. Then you do."
@@ -1733,6 +1773,11 @@
     "key": "1b80a20d45dd14",
     "speaker": "malakar",
     "text": "You saw. Then you know I was not lying."
+  },
+  {
+    "key": "157f1d30afbc24",
+    "speaker": "elior",
+    "text": "refrain"
   },
   {
     "key": "193eec83ac0f7f",
@@ -1798,6 +1843,11 @@
     "key": "18aac6b5867900",
     "speaker": "narrator",
     "text": "Malakar sits by the wound, the grey gone from his face, watching it with the eyes of the young man at the workbench. The wound still flickers in the air. King Alden hangs in his prison, waiting."
+  },
+  {
+    "key": "0f9d39a7f7f92c",
+    "speaker": "elior",
+    "text": "forgiveness"
   },
   {
     "key": "070cd86f1b8171",
@@ -1995,6 +2045,11 @@
     "text": "The crystal lies in shards around the ritual circle. King Alden sits among them, weak but alive. The wound still stands open, and Malakar stands beside it, greyer than before."
   },
   {
+    "key": "1d4dea31ccc83d",
+    "speaker": "elior",
+    "text": "justice"
+  },
+  {
     "key": "0915045d3002e9",
     "speaker": "elior",
     "text": "You tore the world, Malakar. You drained the king. You sent a man to hunt a child in Willowbrook, and you had Sir Cedric framed for taking the king. I will not pretend you didn't."
@@ -2055,6 +2110,11 @@
     "text": "The kingdom will remember what you did here, farmer. I will see that it does."
   },
   {
+    "key": "04f802a671ffef",
+    "speaker": "elior",
+    "text": "sacrifice"
+  },
+  {
     "key": "0e28c3062eb242",
     "speaker": "elior",
     "text": "Take my magic. All of it. Close the wound with that."
@@ -2113,11 +2173,6 @@
     "key": "1892d189aeb0af",
     "speaker": "malakar",
     "text": "You would waste it on me? Keep it for them, then. Give me the amulet, Elior, and your mother wakes before that glass is empty."
-  },
-  {
-    "key": "00917c43819a98",
-    "speaker": "malakar",
-    "text": "They would wake, Elior. Your mother would laugh at something your father said. Is one boy and one tired king too much to pay for that? Give me the amulet."
   },
   {
     "key": "060b8d8b8c1572",
@@ -2333,6 +2388,11 @@
     "key": "126162c0ed6194",
     "speaker": "narrator",
     "text": "You search around the Willowbrook Field, but find nothing of interest beyond what you can already see."
+  },
+  {
+    "key": "197bdc78b445f1",
+    "speaker": "grandmother",
+    "text": "Go on, dear. The field first. The bread will keep."
   },
   {
     "key": "0d82522fa81715",

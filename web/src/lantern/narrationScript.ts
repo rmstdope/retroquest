@@ -13,6 +13,8 @@
  *   ("Act I: The Call to Adventure"), then its paragraphs. A closing chapter
  *   page's body is an answer (`turnBlocks`).
  * - `arrivalBlocks`: a room arrival: the room's name, then its description.
+ * - `ownWordsBlocks`: Elior's own words of a `say <words> to <someone>`
+ *   addressed to someone, said before the answer (`eliorLine`).
  * - `newSpellBlocks`: a learned spell's news: heading, name, description.
  * - `newQuestBlocks` / `questCompleteBlocks`: a new quest's card and a
  *   completed quest's pop-up: heading, quest name, then the quest's text
@@ -22,9 +24,11 @@
  * every voiced line: the chapter pages, every answer, each room's description
  * as each step leaves it (read again by looking around) and every quest card. At each step it also tries
  * examining, using and talking to whatever is at hand, looking, asking for a hint and resting, on a copy of the game,
- * so optional lines are recorded too, and plays each `ScriptBranch` (an
+ * and talks to each character there several times in a row (`TALKS`), so
+ * optional lines and what a character says in turn are recorded too, and plays each `ScriptBranch` (an
  * optional scene the golden path does not take) on a copy, reading the room
- * after each of its steps. Who voices a line is its block's speaker,
+ * after each of its steps. Elior's own words of each say command it plays are
+ * read too. Who voices a line is its block's speaker,
  * except unsigned writing, which goes to its writer (`WriterRule`).
  */
 
@@ -32,6 +36,7 @@ import { GameController, type Game } from '@/engine'
 import { narrationKey, narrationText } from './narrationKey'
 import { parseActIntro } from './parseActIntro'
 import { parseTurn, type TurnBlock } from './parseTurn'
+import { ELIOR, eliorLine } from './stageSpeech'
 import {
   newQuestKicker,
   QUEST_UPDATED_KICKER,
@@ -177,6 +182,19 @@ export function questUpdatedBlocks(quest: QuestShown): VoicedBlock[] {
   ]
 }
 
+/**
+ * Elior's own words when `command` was `say <words> to <someone>` and it
+ * reached someone (`addressed`): one block in his voice, read before the
+ * answer. None for any other command.
+ */
+export function ownWordsBlocks(
+  command: string | null,
+  addressed: boolean,
+): VoicedBlock[] {
+  const own = addressed ? eliorLine(command) : null
+  return own ? [{ speaker: ELIOR.toLowerCase(), markup: own.markup }] : []
+}
+
 /** A room arrival: the room's name, then its description. */
 export function arrivalBlocks(
   room: string,
@@ -237,6 +255,9 @@ export interface ScriptBranch {
   virtues?: string[]
   unset?: string[]
 }
+
+/** How many times in a row each character at hand is talked to, so what they say in turn (rumours, news) is read. */
+const TALKS = 8
 
 /** The commands that try what is at hand: examine everything, use what is carried, talk to everyone, look, search, ask for a hint, rest. Looking around is also tried as the player's look, which reads the room again (see `actScript`). */
 function probes(game: Game): string[] {
@@ -313,6 +334,13 @@ export function actScript(
     for (const news of learned) add(newSpellBlocks(news))
     add(turnBlocks(withoutLearnedLines(text, learned)))
   }
+  /** Play a turn of `command`: Elior's own words (a say command), then its answer. */
+  const addTurn = (controller: GameController, command: string): void =>
+    addAnswer(controller, () => {
+      const text = controller.takeTurn(command)
+      add(ownWordsBlocks(command, controller.lastTurnAddressee() !== null))
+      return text
+    })
   const playBranches = (after: number): void => {
     for (const branch of branches.filter((b) => b.after === after)) {
       probe.loadSaveData(game.toSaveData())
@@ -320,7 +348,7 @@ export function actScript(
       for (const flag of branch.unset ?? [])
         probe.state.setStoryFlag(flag, false)
       for (const step of branch.commands) {
-        addAnswer(tryOut, () => tryOut.takeTurn(step))
+        addTurn(tryOut, step)
         settle(tryOut)
         // The room as the scene leaves it, which the path may never show.
         if (probe.isActRunning())
@@ -333,6 +361,14 @@ export function actScript(
     for (const command of probes(game)) {
       probe.loadSaveData(save)
       addAnswer(tryOut, () => tryOut.handleCommand(command))
+    }
+    // Talking again draws out what a character says in turn (rumours, news).
+    for (const character of game.state.currentRoom.characters) {
+      probe.loadSaveData(save)
+      for (let time = 0; time < TALKS; time++)
+        addAnswer(tryOut, () =>
+          tryOut.handleCommand(`talk to ${character.name}`),
+        )
     }
     // Looking around reads the room again as the story has left it.
     probe.loadSaveData(save)
@@ -348,7 +384,7 @@ export function actScript(
   tryProbes()
   playBranches(-1)
   for (const [index, command] of commands.entries()) {
-    addAnswer(play, () => play.takeTurn(command))
+    addTurn(play, command)
     settle(play)
     playBranches(index)
     if (!game.isActRunning()) {

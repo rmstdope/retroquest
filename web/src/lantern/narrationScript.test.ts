@@ -509,6 +509,58 @@ describe('actScript branches before the first command', () => {
   })
 })
 
+describe('actScript talking again', () => {
+  it('reads what a character says only when talked to again, such as each of Tilda’s rumours', () => {
+    const square = ACT1_GOLDEN_PATH.indexOf('talk to villager')
+    const lines = actScript(
+      () => new Game([new Act1()]),
+      ACT1_GOLDEN_PATH.slice(0, square),
+      [],
+    )
+    expect(
+      lines.some((line) =>
+        line.text.startsWith('Did you know the chapel bell rang once'),
+      ),
+    ).toBe(true)
+  })
+})
+
+describe('actScript said words', () => {
+  it('reads Elior’s own words of a say command he addresses to someone, in his voice', () => {
+    const dream: ScriptBranch = {
+      after: -1,
+      commands: ['say hello to voice'],
+    }
+    const lines = actScript(
+      () => new Game([new Act1()]),
+      ACT1_GOLDEN_PATH.slice(0, 1),
+      [],
+      [],
+      [dream],
+    )
+    expect(lines).toContainEqual({
+      key: narrationKey('elior', 'hello'),
+      speaker: 'elior',
+      text: 'hello',
+    })
+  })
+
+  it('reads no words of a say command that reaches nobody', () => {
+    const nobody: ScriptBranch = {
+      after: 0,
+      commands: ['say hello to xyz'],
+    }
+    const lines = actScript(
+      () => new Game([new Act1()]),
+      ACT1_GOLDEN_PATH.slice(0, 1),
+      [],
+      [],
+      [nobody],
+    )
+    expect(lines.some((line) => line.speaker === 'elior')).toBe(false)
+  })
+})
+
 describe('actScript branches with story flags cleared', () => {
   const QUIET =
     'You rest a while. Birds, the grey grass, a stone you cannot read. Nothing comes. You catch yourself watching the brambles for it, whatever it is.'

@@ -28,6 +28,8 @@ describe('useLanternPresentation', () => {
   const CALL = 'Act I: The Call'
   const ROAD = 'Act I: The Road'
   const BODY = 'The wind rises.'
+  /** What Elior says to someone, recorded in his voice. */
+  const HELLO = 'hello'
   /** The recording each line is read from, by line. */
   const FILES: Record<string, string> = {
     [FIRST]: 'first.mp3',
@@ -69,12 +71,20 @@ describe('useLanternPresentation', () => {
 
   /** The act's manifest, held back until `deliver` when `held`. */
   function stubRecordings(held: boolean): void {
+    const lines: [string, string, string][] = [
+      ...Object.entries(FILES).map(([line, file]): [string, string, string] => [
+        'narrator',
+        line,
+        file,
+      ]),
+      ['elior', HELLO, 'hello.mp3'],
+    ]
     const manifest = Object.fromEntries(
-      Object.entries(FILES).map(([line, file]) => [
-        narrationKey('narrator', line),
+      lines.map(([speaker, line, file]) => [
+        narrationKey(speaker, line),
         {
           file,
-          speaker: 'narrator',
+          speaker,
           duration: 5,
           words: narrationWords(line).map((word, i) => ({
             word,
@@ -172,6 +182,23 @@ describe('useLanternPresentation', () => {
       expect(narration.narrates(1)).toBe(false)
       expect(narration.narrates(2)).toBe(true)
       expect(played).toEqual(['first.mp3', 'first.mp3'])
+    })
+
+    it('speaks Elior’s own words of a say command before the answer', async () => {
+      await present()
+      await say({
+        ...narratedTurn(1),
+        command: `say ${HELLO} to grandmother`,
+        addressed: 'Grandmother',
+      })
+      expect(played).toEqual(['hello.mp3'])
+      expect(useNarrationStore().revealed(1, 0)).toBe(false)
+    })
+
+    it('speaks no own words of a say command that reached nobody', async () => {
+      await present()
+      await say({ ...narratedTurn(1), command: `say ${HELLO} to nobody` })
+      expect(played).toEqual(['first.mp3'])
     })
 
     describe('speech a new command cuts off', () => {

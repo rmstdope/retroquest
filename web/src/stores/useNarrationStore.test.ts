@@ -597,6 +597,61 @@ describe('useNarrationStore', () => {
   })
 })
 
+describe('Elior’s own words of a say command', () => {
+  let narration: ReturnType<typeof useNarrationStore>
+  const own = clip(1)
+  own.file = 'elior.mp3'
+
+  beforeEach(() => {
+    vi.useFakeTimers()
+    FakeAudio.all = []
+    setActivePinia(createPinia())
+    narration = useNarrationStore()
+    narration.setAudioFactory((src) => new FakeAudio(src))
+  })
+  afterEach(() => {
+    vi.useRealTimers()
+  })
+
+  it('are spoken before the answer, which waits for them', async () => {
+    narration.begin(1, [voiced()], 'act1', false, -1, own)
+    expect(last().src).toBe('/audio/narration/act1/elior.mp3')
+    expect(narration.revealed(1, 0)).toBe(false)
+    expect(narration.speaking(1)).toBeNull()
+
+    last().onended?.()
+    await vi.advanceTimersByTimeAsync(350)
+    expect(narration.revealed(1, 0)).toBe(true)
+    expect(narration.speaking(1)).toMatchObject({ unit: 0, part: 0 })
+    expect(last().src).toBe('/audio/narration/act1/2.mp3')
+  })
+
+  it('are spoken when nothing of the answer has a recording', async () => {
+    narration.begin(1, [silent], 'act1', false, -1, own)
+    expect(narration.isNarrating).toBe(true)
+    expect(last().src).toBe('/audio/narration/act1/elior.mp3')
+    last().onended?.()
+    expect(narration.isNarrating).toBe(false)
+    expect(narration.revealed(1, 0)).toBe(true)
+  })
+
+  it('are cut by a hurry, and the answer follows', async () => {
+    narration.begin(1, [voiced()], 'act1', false, -1, own)
+    const words = last()
+    narration.hurry()
+    expect(words.paused).toBe(true)
+    await vi.advanceTimersByTimeAsync(80)
+    expect(narration.speaking(1)).toMatchObject({ unit: 0, part: 0 })
+  })
+
+  it('wait, like the answer, for a held turn to be started', () => {
+    narration.begin(1, [voiced()], 'act1', true, -1, own)
+    expect(FakeAudio.all).toHaveLength(0)
+    narration.start(1)
+    expect(last().src).toBe('/audio/narration/act1/elior.mp3')
+  })
+})
+
 describe('a narrated move whose picture is still changing', () => {
   beforeEach(() => {
     setActivePinia(createPinia())

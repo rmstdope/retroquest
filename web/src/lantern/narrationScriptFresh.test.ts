@@ -4,7 +4,13 @@ import { Game, GameController } from '@/engine'
 import { Act1 } from '@/act1/Act1'
 import { ACT1_GOLDEN_PATH } from '@/act1/Act1GoldenPath'
 import { pathIndex } from '@/testing/gameHelpers'
-import { linesOfTurn, type WriterRule } from './narrationScript'
+import { FLAG_VEGETABLE_FIELD_WATERED } from '@/act1/Act1StoryFlags'
+import { narrationKey } from './narrationKey'
+import {
+  linesOfTurn,
+  type ScriptLine,
+  type WriterRule,
+} from './narrationScript'
 import {
   ACT_NUMBERS,
   extractActImages,
@@ -65,9 +71,51 @@ describe('Act I off-path lines are in the narration script', () => {
     'You put a hand to the gears. They turn under it and keep turning; fingers will not stop them.',
     "You can't unlock a person!",
     "The truth about what, love? You've lost me.",
+    // Tilda's later rumours, told only when she is talked to again.
+    "The animals are restless. My neighbor's dog howled at nothing for hours, and the " +
+      'chickens refuse to leave their coop after dusk. ' +
+      "Malakar's weather, my mother would have called it, and knocked on wood.",
+    "Somebody's been down at the river bend. Good boots, not from round " +
+      "here. The prints go right to the water's edge and just stand there, " +
+      'my cousin says, like he waited a long while.',
+    'Did you know the chapel bell rang once by itself? Years back, at ' +
+      'midnight, with no hand on the rope. My mother knocked on wood for ' +
+      'a week.',
+    "They say the king's taken to his bed in Greendale, and not one " +
+      "physician can name what ails him. And the flour cart didn't come " +
+      "Thursday. Eleven years, and it's never once missed a Thursday.",
+    // Mira, once the fox kit is freed off the path.
+    'A fox kit came past my door this morning with a bit of snare wire ' +
+      'still round its leg. I took it off.',
+    'She glances at you.',
+    // Borin, once Elior has learned magic for real.
+    'Magic, eh? Word gets round, young Elior. ' +
+      "Can't hammer that into shape, but I'd wager it wants the same " +
+      'as iron: patience, and a steady hand.',
   ])('has "%s"', (text) => {
     expect(texts).toContain(text)
   })
+
+  it('has the Vegetable Field as watering it leaves it', () => {
+    const state = new Game([new Act1()]).state
+    const field = state.allRooms.VegetableField
+    state.setStoryFlag(FLAG_VEGETABLE_FIELD_WATERED, true)
+    const watered = linesOfTurn(field.descriptionFor(state), [])
+    expect(watered.length).toBeGreaterThan(0)
+    for (const line of watered) expect(texts).toContain(line.text)
+  })
+
+  it.each(['truth', 'stay', 'hello'])(
+    'has Elior saying "%s", as he says it on the picture',
+    (words) => {
+      const script = committed('1', 'script.json') as ScriptLine[]
+      expect(script).toContainEqual({
+        key: narrationKey('elior', words),
+        speaker: 'elior',
+        text: words,
+      })
+    },
+  )
 })
 
 /**
