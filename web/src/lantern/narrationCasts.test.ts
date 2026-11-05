@@ -15,7 +15,7 @@ interface Cast {
   pronounce: Record<string, string>
 }
 interface Line {
-  key: string
+  id: string
   speaker: string
   text: string
 }
@@ -59,7 +59,7 @@ describe.each([1, 2, 3, 4])('the recordings of Act %i', (act) => {
   })
 
   it('gives every key-scene direction to a line of the script', () => {
-    const keys = new Set(script.map((line) => line.key))
+    const keys = new Set(script.map((line) => line.id))
     expect(Object.keys(cues).filter((key) => !keys.has(key))).toEqual([])
   })
 
@@ -78,7 +78,7 @@ describe.each([1, 2, 3, 4])('the recordings of Act %i', (act) => {
       readFileSync(manifestFile, 'utf8'),
     ) as NarrationManifest
     // A line with no recording yet is not a defect; a clip with no line is.
-    const keys = new Set(script.map((line) => line.key))
+    const keys = new Set(script.map((line) => line.id))
     expect(Object.keys(manifest).filter((key) => !keys.has(key))).toEqual([])
     for (const clip of Object.values(manifest))
       expect(existsSync(new URL(`act${act}/${clip.file}`, AUDIO))).toBe(true)
@@ -88,8 +88,8 @@ describe.each([1, 2, 3, 4])('the recordings of Act %i', (act) => {
     const manifest = JSON.parse(
       readFileSync(new URL(`act${act}/manifest.json`, AUDIO), 'utf8'),
     ) as NarrationManifest
-    for (const line of script.filter((entry) => manifest[entry.key]))
-      expect(manifest[line.key]?.speaker).toBe(line.speaker)
+    for (const line of script.filter((entry) => manifest[entry.id]))
+      expect(manifest[line.id]?.speaker).toBe(line.speaker)
   })
 })
 
@@ -182,7 +182,7 @@ describe('the one cast', () => {
       (line) => line.speaker === 'mother',
     )
     // A key-scene direction of her own replaces the manner; every other line carries it.
-    expect(hers.filter((line) => !cues[line.key])).toEqual([])
-    expect(hers.some((line) => cues[line.key] === MOTHER_IN_ACT_III)).toBe(true)
+    expect(hers.filter((line) => !cues[line.id])).toEqual([])
+    expect(hers.some((line) => cues[line.id] === MOTHER_IN_ACT_III)).toBe(true)
   })
 })

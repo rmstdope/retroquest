@@ -33,7 +33,7 @@ const SOURCES = import.meta.glob<string>(
 
 /** One line of a committed narration script. */
 interface ScriptLine {
-  key: string
+  id: string
   speaker: string
   text: string
 }

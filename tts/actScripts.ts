@@ -85,7 +85,7 @@ function readJson<T>(number: string, file: string, fallback?: T): T {
 /**
  * Lines the engine picks at random (the phantoms' whispers) must all be in the
  * script, and the script must not depend on a roll: the act is played once for
- * each of these fixed rolls and the lines are merged by key.
+ * each of these fixed rolls and the lines are merged by id.
  */
 const ROLLS = [0, 0.25, 0.5, 0.75]
 
@@ -107,7 +107,7 @@ export function extractActScript(number: string): ScriptLine[] {
         silent,
         branches,
       ))
-        if (!lines.has(line.key)) lines.set(line.key, line)
+        if (!lines.has(line.id)) lines.set(line.id, line)
     }
   } finally {
     Math.random = random

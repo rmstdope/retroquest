@@ -23,12 +23,12 @@ function retireAct(act: number): void {
   const script = JSON.parse(
     readFileSync(new URL('script.json', tts), 'utf8'),
   ) as {
-    key: string
+    id: string
   }[]
   const manifestFile = new URL('manifest.json', audio)
   const lockFile = new URL('narration.lock.json', tts)
   const result = retireOrphans(
-    script.map((line) => line.key),
+    script.map((line) => line.id),
     readFileSync(manifestFile, 'utf8'),
     readFileSync(lockFile, 'utf8'),
   )

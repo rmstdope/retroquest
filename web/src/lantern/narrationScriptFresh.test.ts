@@ -110,7 +110,7 @@ describe('Act I off-path lines are in the narration script', () => {
     (words) => {
       const script = committed('1', 'script.json') as ScriptLine[]
       expect(script).toContainEqual({
-        key: narrationKey('elior', words),
+        id: narrationKey('elior', words),
         speaker: 'elior',
         text: words,
       })
@@ -125,8 +125,8 @@ describe('Act I off-path lines are in the narration script', () => {
  */
 describe('Act I shut General Store lines are in the narration script', () => {
   it('has every line Hemlock and the narrator say before Patches is home', () => {
-    const script = committed('1', 'script.json') as { key: string }[]
-    const keys = new Set(script.map((line) => line.key))
+    const script = committed('1', 'script.json') as { id: string }[]
+    const keys = new Set(script.map((line) => line.id))
     const writers = committed('1', 'writers.json') as WriterRule[]
     const play = new GameController(new Game([new Act1()]))
     play.advanceToRunning()
@@ -144,7 +144,7 @@ describe('Act I shut General Store lines are in the narration script', () => {
     expect(play.getRoomName()).toBe('General Store')
     const missing = answers
       .flatMap((answer) => linesOfTurn(answer, writers))
-      .filter((line) => !keys.has(line.key))
+      .filter((line) => !keys.has(line.id))
       .map((line) => `${line.speaker}: ${line.text}`)
     expect(missing).toEqual([])
   })
