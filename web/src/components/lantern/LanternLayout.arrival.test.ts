@@ -781,6 +781,14 @@ describe('LanternLayout: the arrival on the picture', () => {
       expect(audio.playQuestComplete).toHaveBeenCalledOnce()
     })
 
+    it('rings no spell sound when a new game starts while the news is pending', async () => {
+      await ready(true, true)
+      const audio = await narratedSpellTurn()
+      useGameStore(pinia).restartGame()
+      await vi.advanceTimersByTimeAsync(20000)
+      expect(audio.playNewSpell).not.toHaveBeenCalled()
+    })
+
     it('leaves the line on the card where nothing is told in the middle', async () => {
       const w = await ready('short', false)
       useSettingsStore(pinia).narrationOn = false

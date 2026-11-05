@@ -1024,8 +1024,8 @@ watch(
 
 // News cut short before its spell came up (a second Escape on the held news,
 // a new command) still rings the spell's sound as it goes, as the quest cards
-// still ring theirs. A turn no longer in the story (a new game, a load) rings
-// nothing.
+// still ring theirs (a load, which keeps the story, rings it too). A turn no
+// longer in the story (a new game) rings nothing.
 watch(
   () => {
     const turn = game.turns.at(-1)
