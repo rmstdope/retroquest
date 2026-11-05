@@ -571,7 +571,7 @@ describe('Hemlock idle lines', () => {
 
     const answer = game.commandParser.parse('talk to shopkeeper')
 
-    expect(answer).toContain('for sale')
+    expect(answer).toContain('[item_name]sword[/item_name]')
     expectDialogueSpeaker(answer, 'Hemlock')
     expect(answer).not.toMatch(/:\s*\[dialogue\]/)
   })
@@ -664,7 +664,7 @@ describe('Shopkeeper price sentence', () => {
       expect(answer.match(/\[dialogue\]/g)).toHaveLength(1)
       expect(answer).not.toContain('- ')
       expect(answer).not.toContain('for sale')
-      expect(answer).not.toContain('\n')
+      expect(answer.split('\n')).toHaveLength(2)
     },
   )
 })

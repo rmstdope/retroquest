@@ -338,8 +338,7 @@ export class Shopkeeper extends Character {
 
     return (
       `${this.nameInSentence({ atStart: true })}
-` +
-      speech(`${dialogue} ${waresInfo}`)
+` + speech(`${dialogue} ${waresInfo}`)
     )
   }
 
