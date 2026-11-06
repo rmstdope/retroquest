@@ -185,9 +185,9 @@
     "text": "A well-used brass lantern. Its glass is clean and the wick is fresh, ready to light up the darkest corners."
   },
   {
-    "id": "19fb7327022cdb",
+    "id": "05d76f197c6624",
     "speaker": "narrator",
-    "text": "A small loaf of fresh, crusty bread. It smells delicious and could restore a bit of energy."
+    "text": "A small loaf with a crisp crust, still smelling of the oven."
   },
   {
     "id": "0fd99fd3579d4f",
@@ -575,9 +575,9 @@
     "text": "A shriveled, orange carrot barely clinging to life. It looks edible, but only just."
   },
   {
-    "id": "014a4d92abe59d",
+    "id": "1631094bc20b51",
     "speaker": "narrator",
-    "text": "A gardening hoe with a rusted blade and a splintered handle. It might still be useful for tilling soil."
+    "text": "A hoe with a rusted blade and a splintered handle."
   },
   {
     "id": "17858ecf6998f0",
@@ -730,14 +730,14 @@
     "text": "A live, clucking chicken. It seems restless and might peck if you're not careful."
   },
   {
-    "id": "1b3528a568defa",
+    "id": "06738c5a4e69dd",
     "speaker": "narrator",
-    "text": "A freshly laid egg, still warm. It could be cooked or used in a recipe."
+    "text": "An egg, still warm from the nest."
   },
   {
-    "id": "034dc6b94ad671",
+    "id": "13ef03ced059eb",
     "speaker": "narrator",
-    "text": "A soft white feather, likely from one of the chickens. It could be used for writing, crafting, or tickling."
+    "text": "A white feather from one of the hens, still soft."
   },
   {
     "id": "02ef615ea12338",
@@ -880,9 +880,9 @@
     "text": "No sign of Patches, then. I put a saucer out every night, near the old well where she was last seen. It's always still full in the morning. The store stays shut till she's home, lad."
   },
   {
-    "id": "0c2f77642b7cb8",
+    "id": "11ff5e8e067f69",
     "speaker": "narrator",
-    "text": "A sturdy wooden bucket with a rope handle. It's perfect for drawing water from a well or carrying supplies."
+    "text": "A wooden bucket with a rope handle."
   },
   {
     "id": "1f6db2925e8815",
@@ -1075,9 +1075,9 @@
     "text": "The dull blade only bruises the vines. It would need an edge first."
   },
   {
-    "id": "160b587b246d02",
+    "id": "09dbad01a111e2",
     "speaker": "narrator",
-    "text": "A heavy iron horseshoe, slightly bent. It might bring luck or be useful for repairs."
+    "text": "A heavy iron horseshoe, bent a little at one heel."
   },
   {
     "id": "06c1ee650d9fd0",
@@ -1205,9 +1205,9 @@
     "text": "A small, ornate wooden box covered in strange runes. The lid is tightly shut, and it feels oddly heavy for its size. You sense something important is hidden inside."
   },
   {
-    "id": "16e35ada801376",
+    "id": "1c67850ad38b8e",
     "speaker": "narrator",
-    "text": "A rusty, splintered shovel with a cracked wooden handle. It looks like it hasn't been used in years, but might still be useful for digging in soft earth."
+    "text": "A shovel with a cracked wooden handle and rust on the blade. It has not been used in years."
   },
   {
     "id": "02c06af3904102",
@@ -1280,9 +1280,9 @@
     "text": "A simple fishing rod. It looks a bit flimsy."
   },
   {
-    "id": "0f68534e9ba49a",
+    "id": "130a3708cc21a9",
     "speaker": "narrator",
-    "text": "A small, surprisingly strong magnet. It might be useful for retrieving metallic objects from hard-to-reach places."
+    "text": "A small magnet, stronger than it looks."
   },
   {
     "id": "0ba54359667b64",
@@ -1460,9 +1460,9 @@
     "text": "I have no need for this, child."
   },
   {
-    "id": "0e4bf89a769eb9",
+    "id": "0fe509c70e418d",
     "speaker": "narrator",
-    "text": "A bundle of fragrant green herbs, known for their restorative properties. Useful for healing wounds or brewing potions."
+    "text": "A bundle of green herbs, tied with thread. Mira's hut smells of them."
   },
   {
     "id": "14da17371d9c97",
@@ -1575,19 +1575,19 @@
     "text": "It looks like it would provide good protection if worn."
   },
   {
-    "id": "051b996a4feda1",
+    "id": "14455f0f284f29",
     "speaker": "narrator",
-    "text": "A long, sturdy coil of rope. Useful for climbing, tying, or hauling things."
+    "text": "A coil of good hemp rope, thick as a thumb."
   },
   {
-    "id": "0dd90e29972a20",
+    "id": "0c4aafa580c4a3",
     "speaker": "narrator",
-    "text": "A crisp, red apple. It looks fresh and delicious, perfect for a quick snack."
+    "text": "A red apple, firm, with an unbroken skin."
   },
   {
-    "id": "088ec12d954463",
+    "id": "15d41cf43389d2",
     "speaker": "narrator",
-    "text": "A small box of matches. Useful for lighting fires, candles, or lanterns."
+    "text": "A small box of matches, the heads still dry."
   },
   {
     "id": "181a1d62695253",
@@ -1730,9 +1730,9 @@
     "text": "The blade skitters off the turning teeth, and they turn on. It would take something threaded through them, not poked between."
   },
   {
-    "id": "0fb97f6bf77433",
+    "id": "1171f1b18a69c5",
     "speaker": "narrator",
-    "text": "A heavy burlap sack filled with fine white flour. Essential for baking, but a bit unwieldy to carry."
+    "text": "A heavy burlap sack of fine white flour. It leaves a pale dust on your sleeve."
   },
   {
     "id": "1ac71bc4b41ee6",
@@ -1790,9 +1790,9 @@
     "text": "Wooden gears, furred with dust. The mill is quiet now."
   },
   {
-    "id": "099e1e369bb72e",
+    "id": "10c5fb298c3e23",
     "speaker": "narrator",
-    "text": "A chunk of stone broken from the old mill's grinding wheel. It's heavy and rough, but could be useful for repairs or as a tool."
+    "text": "A chunk of stone broken from the old mill's grinding wheel, heavy and rough."
   },
   {
     "id": "17bf7483d1fede",
@@ -2240,9 +2240,9 @@
     "text": "It didn't get out of that snare on its own. That was kindly done, Elior."
   },
   {
-    "id": "01863f61be3887",
+    "id": "01d468f24328b1",
     "speaker": "narrator",
-    "text": "A sturdy stick, perfect for walking, poking, or perhaps as a makeshift weapon."
+    "text": "A straight stick, sound all the way through."
   },
   {
     "id": "0c90bdfaa996bf",
@@ -3295,9 +3295,9 @@
     "text": "The grass at your feet stands a little taller. Nothing here was waiting for it."
   },
   {
-    "id": "0180ba60de464d",
+    "id": "12836b38154f96",
     "speaker": "narrator",
-    "text": "A peaceful clearing bathed in golden sunlight, hidden deep within the forest. Wildflowers carpet the ground, and a gentle breeze stirs the tall grass. In the center, a mossy stone bears a faint, magical inscription. Beneath it, in a plainer hand, is carved: “Power follows purpose; purpose follows truth.” A graceful deer grazes quietly, occasionally lifting its head to watch you with wise, gentle eyes. You recall picking a beautiful rare flower that once bloomed near the mossy stone."
+    "text": "A clearing in full sun, deep in the forest. Wildflowers cover the ground, and a light breeze moves the tall grass. In the center, a mossy stone bears an inscription. Beneath it, in a plainer hand, is carved: “Power follows purpose; purpose follows truth.” A deer grazes at the edge of the clearing, and lifts its head to watch you. A rare flower once bloomed near the mossy stone. You picked it."
   },
   {
     "id": "17c8ca22d78b65",
@@ -3545,9 +3545,9 @@
     "text": "The cleansing runs over the merchant and finds nothing to wash away."
   },
   {
-    "id": "04e3c6b9a3c930",
+    "id": "0314b74449aafc",
     "speaker": "narrator",
-    "text": "An old, rusty saw with a worn wooden handle. It looks like it could still cut through something soft, but might break on anything tough."
+    "text": "An old saw with a worn wooden handle and a rusted blade."
   },
   {
     "id": "0b57d3c3bfc799",
@@ -3910,9 +3910,9 @@
     "text": "A mysterious amulet inscribed with runes. At its centre, a sun rises over three linked rings. It glows in your hand, brightest when you hold it near the mossy stone."
   },
   {
-    "id": "0b311f2a9c19ba",
+    "id": "12999e9d8879cf",
     "speaker": "narrator",
-    "text": "A peaceful clearing bathed in golden sunlight, hidden deep within the forest. Wildflowers carpet the ground, and a gentle breeze stirs the tall grass. In the center, a mossy stone bears a faint, magical inscription. Beneath it, in a plainer hand, is carved: “Power follows purpose; purpose follows truth.” Beside the mossy stone, the ancient amulet in your hand begins to glow. A graceful deer grazes quietly, occasionally lifting its head to watch you with wise, gentle eyes. You recall picking a beautiful rare flower that once bloomed near the mossy stone."
+    "text": "A clearing in full sun, deep in the forest. Wildflowers cover the ground, and a light breeze moves the tall grass. In the center, a mossy stone bears an inscription. Beneath it, in a plainer hand, is carved: “Power follows purpose; purpose follows truth.” Beside the mossy stone, the ancient amulet in your hand begins to glow. A deer grazes at the edge of the clearing, and lifts its head to watch you. A rare flower once bloomed near the mossy stone. You picked it."
   },
   {
     "id": "14cc1c80d9153b",
