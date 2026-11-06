@@ -704,6 +704,9 @@ describe('Act 1 optional watering of the Vegetable Field', () => {
   })
 })
 
+/** The command that shows Grandmother the ring at the cottage. */
+const RING_TO_GRANDMOTHER = 'give shiny ring to grandmother'
+
 describe('Act 1 with the alternative choices', () => {
   /**
    * The golden path, but Elior keeps his mother's ring (trading the forge's
@@ -741,6 +744,50 @@ describe('Act 1 with the alternative choices', () => {
       game.acts[game.currentAct].isCompleted(state),
       'Act I completed',
     ).toBe(true)
+  })
+
+  it('has grandmother see the ring at the farewell when it was never shown to her', () => {
+    const game = new Game([new Act1()])
+    executeCommands(game, alternativePath())
+
+    const farewell = executeCommands(game, ACT1_COMPLETING_COMMANDS)
+
+    expect(farewell).toContain('Her eyes catch on your hand')
+    expect(farewell).not.toContain('And you kept her ring')
+  })
+
+  it('has grandmother know the kept ring at the farewell when Elior gave it to her at the cottage', () => {
+    const game = new Game([new Act1()])
+    const path = alternativePath()
+    path.splice(
+      path.indexOf('give locket to grandmother') + 1,
+      0,
+      RING_TO_GRANDMOTHER,
+    )
+    executeCommands(game, path)
+
+    const farewell = executeCommands(game, ACT1_COMPLETING_COMMANDS)
+
+    expect(farewell).toContain('And you kept her ring. Good.')
+    expect(farewell).not.toContain('Her eyes catch on your hand')
+  })
+
+  it('has grandmother learn where the shown ring went when it was traded afterwards', () => {
+    const game = new Game([new Act1()])
+    const path = [...ACT1_GOLDEN_PATH]
+    path.splice(
+      path.indexOf('give locket to grandmother') + 1,
+      0,
+      RING_TO_GRANDMOTHER,
+    )
+    executeCommands(game, path)
+
+    const farewell = executeCommands(game, ACT1_COMPLETING_COMMANDS)
+
+    expect(farewell).toContain(
+      'has her ring now. He showed it me in the square.',
+    )
+    expect(farewell).not.toContain('wedding ring')
   })
 
   it('keeps the choices through a save and load round-trip', () => {
