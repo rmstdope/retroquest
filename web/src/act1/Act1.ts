@@ -135,6 +135,7 @@ export class Act1 extends Act {
         if (character instanceof Shopkeeper) {
           character.migrateLegacyWares()
           character.migrateLegacyName()
+          character.migrateLegacyRope(gameState)
         }
         if (character instanceof Villager) character.migrateLegacyName()
         if (character instanceof Blacksmith) character.migrateLegacyName()

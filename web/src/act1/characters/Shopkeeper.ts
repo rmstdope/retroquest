@@ -14,6 +14,7 @@ import { Matches } from '../items/Matches'
 import { Coin } from '../items/Coin'
 import { Armor } from '../items/Armor'
 import { Sword } from '../items/Sword'
+import { Mechanism } from '../items/Mechanism'
 import { Patches } from './Patches'
 import {
   FLAG_HEMLOCK_HEARD_PATCHES_STAYED,
@@ -48,6 +49,10 @@ function coins(price: number): string {
  *
  * The store's matches are kept for the priest: they are not among the wares
  * and are handed over for free once Elior has spoken with the priest.
+ *
+ * He has only the one good rope: once it is sold, or given when Patches
+ * stays, it is off his shelves, so a coin is always left for Borin's
+ * whetstone.
  */
 export class Shopkeeper extends Character {
   wares: Record<string, { item: Item; price: number }> = {
@@ -56,6 +61,8 @@ export class Shopkeeper extends Character {
     armor: { item: new Armor(), price: 10 },
   }
   priestMatchesGiven = false
+  /** Whether Hemlock has sold his one rope. */
+  ropeSold = false
   /**
    * The lines he opens with once the store is open, in turn. Kept out of the
    * saved fields so a save always hears the current wording.
@@ -84,10 +91,13 @@ export class Shopkeeper extends Character {
   /**
    * His prices as one spoken sentence, in the order of the wares: the first
    * ware names its coin ("[Rope]'s a [coin]"), the rest only their number.
-   * When the shelves are bare it is the empty-shelf line instead.
+   * When the shelves are bare it is the empty-shelf line instead. The rope
+   * is left out once it is gone.
    */
-  private priceSentence(): string {
-    const entries = Object.entries(this.wares)
+  private priceSentence(gameState: GameState): string {
+    const entries = Object.entries(this.wares).filter(
+      ([name]) => name !== 'rope' || !this.ropeGone(gameState),
+    )
     if (entries.length === 0) return "I've nothing left on the shelves."
     const spoken = entries.map(([name, details], index) => {
       const ware = `[item_name]${index === 0 ? capitalize(name) : name}[/item_name]`
@@ -101,6 +111,19 @@ export class Shopkeeper extends Character {
     return spoken.length === 0
       ? `${last}.`
       : `${spoken.join(', ')} and ${last}.`
+  }
+
+  /**
+   * Whether his one rope is gone: sold, or given to Elior when Patches
+   * stayed with grandmother (read from the story, so a save made after the
+   * gift agrees).
+   */
+  private ropeGone(gameState: GameState): boolean {
+    return (
+      this.ropeSold ||
+      (gameState.getStoryFlag(FLAG_HEMLOCK_HEARD_PATCHES_STAYED) &&
+        !gameState.getStoryFlag(FLAG_RUSTY_HOE_SECOND_COIN_FOUND))
+    )
   }
 
   /** The first price, with its coin word: "a [coin]" or "five [coins]". */
@@ -327,7 +350,7 @@ export class Shopkeeper extends Character {
 
     // Standard dialogue if matches aren't being given for the priest
     const waresInfo =
-      this.priceSentence() +
+      this.priceSentence(gameState) +
       " And there's an [item_name]apple[/item_name] with everything. " +
       "My mother's rule."
 
@@ -350,6 +373,25 @@ export class Shopkeeper extends Character {
   migrateLegacyWares(): void {
     this.priestMatchesGiven ??= !('matches' in this.wares)
     delete this.wares.matches
+  }
+
+  /**
+   * Bring a shopkeeper from a save made before he had only the one rope up
+   * to date. Such saves have no `ropeSold`; a rope comes only from Hemlock,
+   * so one that Elior holds, or that jams the mill's mechanism, was sold
+   * unless it was his gift when Patches stayed. Safe to run more than once.
+   */
+  migrateLegacyRope(gameState: GameState): void {
+    if (typeof this.ropeSold === 'boolean') return
+    const giftGiven =
+      gameState.getStoryFlag(FLAG_HEMLOCK_HEARD_PATCHES_STAYED) &&
+      !gameState.getStoryFlag(FLAG_RUSTY_HOE_SECOND_COIN_FOUND)
+    const ropeHad =
+      gameState.inventory.some((item) => item instanceof Rope) ||
+      Object.values(gameState.allRooms).some((room) =>
+        room.items.some((item) => item instanceof Mechanism && item.repaired),
+      )
+    this.ropeSold = ropeHad && !giftGiven
   }
 
   /**
@@ -377,8 +419,8 @@ export class Shopkeeper extends Character {
   /**
    * Sell a ware for coins, adding the bonus apple to the inventory. Nothing
    * is sold while the store is shut (Patches in Elior's arms is welcomed home
-   * instead), and the matches are kept for the priest
-   * and never sold.
+   * instead), the matches are kept for the priest
+   * and never sold, and his one rope is sold only once.
    */
   override buyItem(gameState: GameState, itemName: string): string {
     return attributeSpeech(this.name, this.buyAnswer(gameState, itemName))
@@ -393,6 +435,11 @@ export class Shopkeeper extends Character {
       return speech(
         `Those [item_name]matches[/item_name] are the ${characterName('priest')}'s. ` +
           "He gets them on the house whenever he asks, so they're not for sale.",
+      )
+    }
+    if (itemNameToBuy === 'rope' && this.ropeGone(gameState)) {
+      return speech(
+        "That was my last good rope, lad. There'll be no more till spring.",
       )
     }
     if (!(itemNameToBuy in this.wares)) {
@@ -434,6 +481,7 @@ export class Shopkeeper extends Character {
     let newItem: Item
     if (itemNameToBuy === 'rope') {
       newItem = new Rope()
+      this.ropeSold = true
     } else if (itemNameToBuy === 'sword') {
       newItem = new Sword()
     } else if (itemNameToBuy === 'armor') {
@@ -445,7 +493,7 @@ export class Shopkeeper extends Character {
     newItem.canBeCarried = true
     gameState.addItemToInventory(newItem)
 
-    // The store has infinite stock; the player buys one instance.
+    // The sword and armor have infinite stock; the rope is sold only once.
 
     return (
       `He counts the ${coins(price)} twice and hands over the ` +
