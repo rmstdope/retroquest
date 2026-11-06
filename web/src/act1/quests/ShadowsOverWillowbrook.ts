@@ -206,10 +206,13 @@ export class ShadowsOverWillowbrookQuest extends Quest {
       )
     }
     if (gameState.hasItem('ancient amulet')) {
-      return (
-        'The amulet is yours, but Willowbrook still holds you: something ' +
-        'you began here is unfinished.'
-      )
+      const frame = 'The amulet is yours, but Willowbrook still holds you: '
+      if (GameMap.hasBegunOpenTask(gameState)) {
+        return `${frame}something you began here is unfinished.`
+      }
+      const [lead] = GameMap.unstartedLeads(gameState)
+      if (lead) return `${frame}${lead.hint}`
+      return `${frame}something you began here is unfinished.`
     }
     if (flag(FLAG_MAGIC_FULLY_UNLOCKED)) {
       return (

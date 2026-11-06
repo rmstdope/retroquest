@@ -16,6 +16,8 @@ import {
   FLAG_WELL_EXAMINED,
   FLAG_WOKE_FROM_DREAM,
 } from '../Act1StoryFlags'
+import { FishingExpeditionQuest } from './FishingExpedition'
+import { MagnetFishingExpeditionQuest } from './MagnetFishingExpedition'
 import { ShadowsOverWillowbrookQuest } from './ShadowsOverWillowbrook'
 import { ACT1_GOLDEN_PATH } from '../Act1GoldenPath'
 import { executeCommands } from '@/testing/gameHelpers'
@@ -315,6 +317,34 @@ describe('Shadows over Willowbrook log', () => {
 
     expect(game.hint()).not.toContain('The [item_name]map[/item_name] in your')
     expect(game.hint()).toContain('Willowbrook still holds you')
+  })
+
+  it('leads to the first never-started task once no begun one is open', () => {
+    const game = new Game([new Act1()])
+    executeCommands(game, ACT1_GOLDEN_PATH)
+    game.state.nonActivatedQuests.push(
+      new FishingExpeditionQuest(),
+      new MagnetFishingExpeditionQuest(),
+    )
+
+    expect(game.hint()).toContain(
+      'The amulet is yours, but Willowbrook still holds you: the ' +
+        `${characterName('fisherman')} at the river bend still sits with an empty line.`,
+    )
+    game.state.nonActivatedQuests.shift()
+    expect(game.hint()).toContain(
+      'The amulet is yours, but Willowbrook still holds you: far down in ' +
+        'the [item_name]well[/item_name], something still glints.',
+    )
+  })
+
+  it('says the begun line before any lead', () => {
+    const game = new Game([new Act1()])
+    executeCommands(game, ACT1_GOLDEN_PATH)
+    game.state.nonActivatedQuests.push(new MagnetFishingExpeditionQuest())
+    game.state.activatedQuests.push(new FishingExpeditionQuest())
+
+    expect(game.hint()).toContain(LINE_6)
   })
 
   it('points to the road, not the map in the pack, away from the road', () => {

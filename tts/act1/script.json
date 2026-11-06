@@ -1090,6 +1090,16 @@
     "text": "You search around the Village Well, but find nothing of interest beyond what you can already see."
   },
   {
+    "id": "0a585f21456625",
+    "speaker": "narrator",
+    "text": "Magnet fishing expedition"
+  },
+  {
+    "id": "1aa449b37919a1",
+    "speaker": "narrator",
+    "text": "Something glints far down in the well, much too deep for hands."
+  },
+  {
     "id": "0c987e32628d79",
     "speaker": "narrator",
     "text": "The village well smells sour, and far down in the dark water something glints."
@@ -1098,6 +1108,11 @@
     "id": "0f602a94279537",
     "speaker": "narrator",
     "text": "Shadows over Willowbrook: Mira, in her hut north of the square, would want to hear what you have seen."
+  },
+  {
+    "id": "059688285c9e2b",
+    "speaker": "narrator",
+    "text": "Magnet fishing expedition: Something glints far down in the well, much too deep for hands."
   },
   {
     "id": "0fc739302b683a",
@@ -3390,14 +3405,9 @@
     "text": "The magnet clamps onto the end of the fishing rod: it is a magnetic fishing rod now."
   },
   {
-    "id": "0a585f21456625",
+    "id": "134f4b8ebc7c4f",
     "speaker": "narrator",
-    "text": "Magnet fishing expedition"
-  },
-  {
-    "id": "105ab9e789e284",
-    "speaker": "narrator",
-    "text": "Something shiny lies at the bottom of the well, too deep for hands. The magnet might reach it, on a long enough rod."
+    "text": "The magnet might reach it, on a long enough rod."
   },
   {
     "id": "0716aa64111c1f",
@@ -3405,9 +3415,9 @@
     "text": "A fishing rod with a magnet attached to the end. Good for attracting metallic objects."
   },
   {
-    "id": "03051d06808bc8",
+    "id": "1bf036c9236f26",
     "speaker": "narrator",
-    "text": "Magnet fishing expedition: Something shiny lies at the bottom of the well, too deep for hands. The magnet might reach it, on a long enough rod."
+    "text": "Magnet fishing expedition: The magnet might reach it, on a long enough rod."
   },
   {
     "id": "04e363bbc0b9ca",
