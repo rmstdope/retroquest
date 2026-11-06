@@ -2,7 +2,7 @@ import { Item, type GameState, clue } from '@/engine'
 import { Fish } from './Fish'
 import { FishingRod } from './FishingRod'
 
-/** Natural fishing location with a one-time catch until reset. */
+/** Natural fishing location that gives one fish per game, and never another. */
 export class River extends Item {
   fishAvailable = true
 
@@ -29,16 +29,16 @@ export class River extends Item {
         gameState.addItemToInventory(new Fish())
         this.fishAvailable = false
         this.description =
-          "A gentle river, its waters flowing steadily. You've already fished " +
-          'here recently.'
+          'A gentle river, its waters flowing steadily. It gave you one fish, ' +
+          'and it will not give another.'
         return (
           'After a moment, you feel a tug and reel in a plump ' +
           '[item_name]fish[/item_name]!\nYou tuck it into your pack.'
         )
       }
-      return (
-        "[failure]You cast your line again, but the fish aren't biting " +
-        'right now.[/failure]'
+      return clue(
+        'Nothing bites. The river gave you one fish, and it will not ' +
+          'give another.',
       )
     }
     return super.useWith(gameState, other)

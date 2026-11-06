@@ -16,8 +16,8 @@ import { PreparingForTheRoadQuest } from './PreparingForTheRoad'
 
 /** The food requirement as the checklist, the card and the narration read it. */
 const FOOD_LINE =
-  'Food for the road (any four kinds: bread, apple, egg, carrot, ' +
-  'berries or fish)'
+  'Food for the road (any four kinds: bread, apple, egg, carrot ' +
+  'or berries)'
 
 describe('Preparing for the road checklist', () => {
   it('marks met requirements as success', () => {
@@ -108,7 +108,7 @@ describe('A finished Preparing for the road', () => {
       new WanderingBoots(),
       new Apple(),
       new Egg(),
-      new Fish(),
+      new FreshBread(),
       new WildBerries(),
     ])
       game.state.addItemToInventory(item)
@@ -160,14 +160,24 @@ describe('Food for the road', () => {
     expect(foodLine(game)).toEqual({ done: false, text: FOOD_LINE })
   })
 
-  it("is met by any four kinds, grandmother's bread and the fish among them", () => {
+  it("is met by any four kinds, grandmother's bread among them", () => {
+    const game = new Game([new Act1()])
+    game.state.addItemToInventory(new FreshBread())
+    game.state.addItemToInventory(new Apple())
+    game.state.addItemToInventory(new Egg())
+    game.state.addItemToInventory(new WildBerries())
+
+    expect(foodLine(game).done).toBe(true)
+  })
+
+  it('does not count the fish, which goes to the fisherman', () => {
     const game = new Game([new Act1()])
     game.state.addItemToInventory(new FreshBread())
     game.state.addItemToInventory(new Fish())
     game.state.addItemToInventory(new Egg())
     game.state.addItemToInventory(new WildBerries())
 
-    expect(foodLine(game).done).toBe(true)
+    expect(foodLine(game).done).toBe(false)
   })
 
   it('counts both loaves of bread as one kind', () => {
@@ -185,7 +195,7 @@ describe('Food for the road', () => {
     game.state.addItemToInventory(carrot)
     game.state.addItemToInventory(new Apple())
     game.state.addItemToInventory(new Egg())
-    game.state.addItemToInventory(new Fish())
+    game.state.addItemToInventory(new WildBerries())
 
     expect(foodLine(game).done).toBe(false)
     carrot.revive()

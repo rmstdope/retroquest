@@ -21,7 +21,7 @@ const CHECKLIST =
   'She says you will need: \n' +
   '[pending] * Warm clothing[/pending]\n' +
   '[pending] * Magical protection[/pending]\n' +
-  '[pending] * Food for the road (any four kinds: bread, apple, egg, carrot, berries or fish)[/pending]'
+  '[pending] * Food for the road (any four kinds: bread, apple, egg, carrot or berries)[/pending]'
 
 /** Push a turn with quest news, as the engine reports them: by default a completed and a new quest. */
 async function pushNews(
@@ -163,7 +163,8 @@ test.describe('quest news told in the middle of the picture', () => {
       const needs = [
         'Warm clothing, a coat of thick wool that keeps out the wind',
         'Magical protection against whatever waits on the road ahead',
-        'Food for the road (any four kinds: bread, apple, egg, carrot, berries or fish)',
+        'Food for the road (any four kinds: bread, apple, egg, carrot or berries)',
+        'Sturdy footwear for the long road',
         'Magic',
       ]
       await pushNews(page, [

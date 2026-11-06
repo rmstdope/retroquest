@@ -36,7 +36,7 @@ const KING_NEWS =
   'ever since the king took to his bed. ' +
   'Keep to the daylight, friend.\n'
 
-/** Whether the item is food Elior needs for the road (not the fresh bread). */
+/** Whether the item is food the merchant won't take from a traveller (not the fresh bread). */
 function isRoadFood(item: Item): boolean {
   return (
     item instanceof Bread ||
