@@ -379,6 +379,10 @@ const JAMMED_LEAD =
 const FRAGMENT_LEAD =
   ' The [item_name]millstone fragment[/item_name] is old stone. ' +
   `${characterName('Borin')} at the forge knows old stone.`
+const FLOWER_IN_HAND =
+  'The [item_name]rare flower[/item_name] opened for you in the ' +
+  `[room_name]Hidden Glade[/room_name]. ${characterName('Mira')} is ` +
+  'waiting for it.'
 const LINE_4 =
   'The [item_name]rune token[/item_name] from the well is cold, and not ' +
   `from here. ${characterName('Mira')} may know what it is.`
@@ -474,10 +478,12 @@ describe('Shadows over Willowbrook hint', () => {
       expect(new ShadowsOverWillowbrookQuest().hint(game.state)).toBe(LINE_3)
     })
 
-    it('waits for the flower alone once it is in hand', () => {
+    it('points the flower in hand back to Mira (rq-b282)', () => {
       const game = gameWith(asked)
       game.state.addItemToInventory(new RareFlower())
-      expect(new ShadowsOverWillowbrookQuest().hint(game.state)).toBe(LINE_3)
+      expect(new ShadowsOverWillowbrookQuest().hint(game.state)).toBe(
+        FLOWER_IN_HAND,
+      )
     })
 
     it('never names a command', () => {
@@ -486,6 +492,8 @@ describe('Shadows over Willowbrook hint', () => {
       jamMechanism(game)
       hints.push(new ShadowsOverWillowbrookQuest().hint(game.state))
       game.state.addItemToInventory(new MillstoneFragment())
+      hints.push(new ShadowsOverWillowbrookQuest().hint(game.state))
+      game.state.addItemToInventory(new RareFlower())
       hints.push(new ShadowsOverWillowbrookQuest().hint(game.state))
       for (const hint of hints) {
         expect(hint).not.toMatch(

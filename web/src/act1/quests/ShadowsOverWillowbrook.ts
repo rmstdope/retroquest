@@ -225,6 +225,12 @@ export class ShadowsOverWillowbrookQuest extends Quest {
       )
     }
     if (flag(FLAG_CONNECT_WITH_NATURE)) {
+      if (gameState.inventory.some((item) => item instanceof RareFlower)) {
+        return (
+          'The [item_name]rare flower[/item_name] opened for you in the ' +
+          `[room_name]Hidden Glade[/room_name]. ${mira} is waiting for it.`
+        )
+      }
       return (
         `${mira} is waiting for the [item_name]rare flower[/item_name] ` +
         'from the [room_name]Hidden Glade[/room_name], the one that opens ' +
@@ -252,15 +258,10 @@ export class ShadowsOverWillowbrookQuest extends Quest {
    * While the flower has not opened, the next link of the chain that brings
    * the deer: the mechanism still drawing on the land, then the fragment it
    * gave up, then Borin, who knows the old stone. Empty once Borin has told
-   * of the deer or the flower is in hand.
+   * of the deer. Never asked with the flower in hand: `hint` sends it to Mira.
    */
   private static flowerLead(gameState: GameState): string {
-    if (
-      gameState.getStoryFlag(FLAG_DEER_CAN_BE_OBSERVED) ||
-      gameState.inventory.some((item) => item instanceof RareFlower)
-    ) {
-      return ''
-    }
+    if (gameState.getStoryFlag(FLAG_DEER_CAN_BE_OBSERVED)) return ''
     if (gameState.inventory.some((item) => item instanceof MillstoneFragment)) {
       return (
         ' The [item_name]millstone fragment[/item_name] is old stone. ' +
