@@ -4640,6 +4640,111 @@
     "text": "She turns back to the hearth, and her hands are not quite steady."
   },
   {
+    "id": "1326c0d7d01a17",
+    "speaker": "narrator",
+    "text": "Tilda keeps her floury hands behind her back."
+  },
+  {
+    "id": "1a62cbd2e7c708",
+    "speaker": "tilda",
+    "text": "Not with these, love. That's Mira's, and it's not for passing round the square."
+  },
+  {
+    "id": "1d82efd86b9d87",
+    "speaker": "tilda",
+    "text": "There was a stranger asking after an old amulet. Keep that one under your shirt."
+  },
+  {
+    "id": "0f64b423d22c2a",
+    "speaker": "narrator",
+    "text": "She glances round the square, as if somebody might be listening."
+  },
+  {
+    "id": "10fe24cf49af4b",
+    "speaker": "narrator",
+    "text": "Hemlock leans over the counter for a look, and keeps both hands on his ledger."
+  },
+  {
+    "id": "01d98c9e9b06e0",
+    "speaker": "hemlock",
+    "text": "That's not shop goods, lad, and I'd not put a price on it if it were."
+  },
+  {
+    "id": "14c5c5af617e71",
+    "speaker": "narrator",
+    "text": "He glances at the door."
+  },
+  {
+    "id": "1f718fd9e7b094",
+    "speaker": "hemlock",
+    "text": "Put it away. Things like that get asked after."
+  },
+  {
+    "id": "12bd192e54741b",
+    "speaker": "narrator",
+    "text": "The priest does not take it. He looks at it a long moment, his hands folded in his sleeves."
+  },
+  {
+    "id": "1d30122517db40",
+    "speaker": "priest",
+    "text": "That was made with care, child, and for no altar of mine. Whoever gave it to you trusts you a great deal."
+  },
+  {
+    "id": "055fd55ba63171",
+    "speaker": "narrator",
+    "text": "He sketches a blessing over it, and over you."
+  },
+  {
+    "id": "0c1c29bef30ca9",
+    "speaker": "priest",
+    "text": "Carry it as though you knew what it was worth."
+  },
+  {
+    "id": "0b80dd52b77ec1",
+    "speaker": "narrator",
+    "text": "The merchant's hand stops halfway to it, and goes back to the strap of his pack."
+  },
+  {
+    "id": "1f7ee06bb2d3dd",
+    "speaker": "merchant",
+    "text": "Some things you don't put a price on, friend, and you don't show them on the road either."
+  },
+  {
+    "id": "0f234d560949a9",
+    "speaker": "narrator",
+    "text": "He looks up the road toward Greendale."
+  },
+  {
+    "id": "12f57266e9591b",
+    "speaker": "merchant",
+    "text": "Keep that under your cloak till you get where you are going."
+  },
+  {
+    "id": "007ceb3ed3f3ce",
+    "speaker": "narrator",
+    "text": "A creaky windmill towers above, its sails turning slowly in the breeze. Dusty gears and cobwebs fill the interior, and the scent of flour hangs in the air. Sunlight streams through broken windows, illuminating sacks of grain and a heavy millstone. Amidst the old workings, the black-iron mechanism stands jammed with a rope, silent at last. At your side, the ancient amulet hums softly, as if answering something stirring beneath the floor."
+  },
+  {
+    "id": "0b221ce0e53214",
+    "speaker": "narrator",
+    "text": "The fisherman looks at it a long while, and does not reach for it."
+  },
+  {
+    "id": "02e37fc0e6b7ef",
+    "speaker": "fisherman",
+    "text": "I've seen that before, lad. A long time back, at this bend."
+  },
+  {
+    "id": "11d17567ccb135",
+    "speaker": "narrator",
+    "text": "He nods at your pocket."
+  },
+  {
+    "id": "052f75bd684493",
+    "speaker": "fisherman",
+    "text": "Keep it out of the river. Some things the water doesn't give back."
+  },
+  {
     "id": "11a0ba67289d79",
     "speaker": "narrator",
     "text": "A mysterious amulet inscribed with runes. At its centre, a sun rises over three linked rings. It is faintly warm in your hand."
@@ -4668,11 +4773,6 @@
     "id": "19b2e4198a16d3",
     "speaker": "grandmother",
     "text": "Come back to me, child."
-  },
-  {
-    "id": "007ceb3ed3f3ce",
-    "speaker": "narrator",
-    "text": "A creaky windmill towers above, its sails turning slowly in the breeze. Dusty gears and cobwebs fill the interior, and the scent of flour hangs in the air. Sunlight streams through broken windows, illuminating sacks of grain and a heavy millstone. Amidst the old workings, the black-iron mechanism stands jammed with a rope, silent at last. At your side, the ancient amulet hums softly, as if answering something stirring beneath the floor."
   },
   {
     "id": "1617d901ed64b1",

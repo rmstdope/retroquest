@@ -10,6 +10,7 @@ import {
 import { Fish } from '../items/Fish'
 import { FadedPhotograph } from '../items/FadedPhotograph'
 import { MothersLetter } from '../items/MothersLetter'
+import { AncientAmulet } from '../items/AncientAmulet'
 import { RuneToken } from '../items/RuneToken'
 import { PurifySpell } from '../spells/PurifySpell'
 import {
@@ -177,7 +178,8 @@ export class Fisherman extends Character {
 
   /**
    * Handle items offered to the fisherman and teach spells if appropriate;
-   * the family keepsakes and the rune token get answers of their own.
+   * the family keepsakes, the amulet and the rune token get answers of
+   * their own.
    */
   override giveItem(gameState: GameState, item: Item): string {
     if (item instanceof Fish && !this.receivedFish) {
@@ -217,6 +219,22 @@ export class Fisherman extends Character {
           speech(
             "So you lifted the stone. I sat by it more years than I'll own " +
               "to, lad, and never once did. Wasn't mine to.",
+          ),
+      )
+    }
+
+    if (item instanceof AncientAmulet) {
+      return attributeSpeech(
+        this.name,
+        `The ${characterName('fisherman')} looks at it a long while, and ` +
+          'does not reach for it. ' +
+          speech(
+            "I've seen that before, lad. A long time back, at this bend.",
+          ) +
+          ' He nods at your pocket. ' +
+          speech(
+            "Keep it out of the river. Some things the water doesn't give " +
+              'back.',
           ),
       )
     }

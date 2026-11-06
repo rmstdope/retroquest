@@ -10,6 +10,7 @@ import {
 import { Candle } from '../items/Candle'
 import { Locket } from '../items/Locket'
 import { Matches } from '../items/Matches'
+import { AncientAmulet } from '../items/AncientAmulet'
 import { RuneToken } from '../items/RuneToken'
 import { BlessSpell } from '../spells/BlessSpell'
 import {
@@ -42,14 +43,28 @@ export class Priest extends Character {
   }
 
   /**
-   * He gently gives any gift back; the rune token he reads as a mark cut
-   * for harm, and the matches he asked for he hands back warmly, asking
-   * Elior to light the candle (or thanking Elior once it is lit). Only the
+   * He gently gives any gift back; the amulet he blesses as careful work and
+   * a trust placed in Elior, the rune token he reads as a mark cut for harm,
+   * and the matches he asked for he hands back warmly, asking Elior to light
+   * the candle (or thanking Elior once it is lit). Only the amulet's, the
    * token's and the matches' replies name what they are.
    */
   override giveItem(gameState: GameState, item: Item): string {
     if (item instanceof Matches) {
       return attributeSpeech(this.name, this.matchesAnswer(gameState))
+    }
+    if (item instanceof AncientAmulet) {
+      return attributeSpeech(
+        this.name,
+        `The ${characterName(this.name)} does not take it. He looks at it a ` +
+          'long moment, his hands folded in his sleeves. ' +
+          speech(
+            'That was made with care, child, and for no altar of mine. ' +
+              'Whoever gave it to you trusts you a great deal.',
+          ) +
+          ' He sketches a blessing over it, and over you. ' +
+          speech('Carry it as though you knew what it was worth.'),
+      )
     }
     if (item instanceof RuneToken) {
       return attributeSpeech(

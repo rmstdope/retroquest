@@ -13,6 +13,7 @@ import { Rope } from '../items/Rope'
 import { Apple } from '../items/Apple'
 import { Matches } from '../items/Matches'
 import { Coin } from '../items/Coin'
+import { AncientAmulet } from '../items/AncientAmulet'
 import { RuneToken } from '../items/RuneToken'
 import { Armor } from '../items/Armor'
 import { Sword } from '../items/Sword'
@@ -509,7 +510,8 @@ export class Shopkeeper extends Character {
 
   /**
    * The shopkeeper does not accept gifts: a coin he sends back for spending,
-   * the rune token he will not have on his counter.
+   * the amulet he will not price and bids Elior put away, the rune token he
+   * will not have on his counter.
    */
   override giveItem(_gameState: GameState, item: Item): string {
     if (item instanceof Coin) {
@@ -519,6 +521,18 @@ export class Shopkeeper extends Character {
         speech(
           "Put your coin away, lad, till there's something you want for it.",
         )
+      )
+    }
+    if (item instanceof AncientAmulet) {
+      return (
+        `${this.nameInSentence({ atStart: true })} leans over the counter ` +
+        'for a look, and keeps both hands on his ledger. ' +
+        speech(
+          "That's not shop goods, lad, and I'd not put a price on it if it " +
+            'were.',
+        ) +
+        ' He glances at the door. ' +
+        speech('Put it away. Things like that get asked after.')
       )
     }
     if (item instanceof RuneToken) {

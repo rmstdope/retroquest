@@ -17,6 +17,7 @@ import { Apple } from '../items/Apple'
 import { Egg } from '../items/Egg'
 import { Fish } from '../items/Fish'
 import { Coin } from '../items/Coin'
+import { AncientAmulet } from '../items/AncientAmulet'
 import { RuneToken } from '../items/RuneToken'
 import { WildBerries } from '../items/WildBerries'
 import { WitheredCarrot } from '../items/WitheredCarrot'
@@ -147,8 +148,8 @@ export class Merchant extends Character {
 
   /**
    * Trade the boots for the ring or the horseshoe, once; taking the
-   * horseshoe sets FLAG_KEPT_MOTHERS_RING. A coin and the rune token are
-   * handed back with a line of their own; anything else is declined.
+   * horseshoe sets FLAG_KEPT_MOTHERS_RING. A coin, the amulet and the rune
+   * token are handed back with a line of their own; anything else is declined.
    */
   override giveItem(gameState: GameState, item: Item): string {
     return attributeSpeech(this.name, this.giveAnswer(gameState, item))
@@ -195,6 +196,18 @@ export class Merchant extends Character {
         `The ${characterName(this.name)} laughs and drops it back into your ` +
         'palm. ' +
         speech('Keep your coin, friend. Coin I can earn anywhere.')
+      )
+    }
+    if (item instanceof AncientAmulet) {
+      return (
+        `The ${characterName(this.name)}'s hand stops halfway to it, and ` +
+        'goes back to the strap of his pack. ' +
+        speech(
+          "Some things you don't put a price on, friend, and you don't show " +
+            'them on the road either.',
+        ) +
+        ' He looks up the road toward Greendale. ' +
+        speech('Keep that under your cloak till you get where you are going.')
       )
     }
     if (item instanceof RuneToken) {
