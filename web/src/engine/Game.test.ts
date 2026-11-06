@@ -1067,6 +1067,50 @@ describe('Game', () => {
     })
   })
 
+  describe('a leading "the" in an item target', () => {
+    it('reaches the item through take, use, use with and examine', () => {
+      const bread = new TakeItem('bread', true, 'Taken: bread')
+      rooms.EliorsCottage.addItem(bread)
+      const lantern = item('lantern')
+      lantern.use = () => 'Used: lantern'
+      lantern.useWith = (_state, other) => `Used with: ${other.name}`
+      lantern.examine = () => 'Examined: lantern'
+      const matches = item('matches')
+      game.state.inventory.push(lantern, matches)
+      expect(game.take('the bread')).toBe('Taken: bread')
+      expect(game.state.inventory).toContain(bread)
+      expect(game.use('the lantern')).toBe('Used: lantern')
+      expect(game.use('the lantern', 'the matches')).toBe('Used with: matches')
+      expect(game.examine('the lantern')).toBe('Examined: lantern')
+    })
+
+    it('reaches the item through give, cast on and open', () => {
+      const villager = character('Villager')
+      villager.giveItem = (_state, given) => `Given: ${given.name}`
+      rooms.EliorsCottage.addCharacter(villager)
+      const chest = item('chest')
+      chest.open = () => 'Opened: chest'
+      rooms.EliorsCottage.addItem(chest)
+      game.state.inventory.push(item('apple'))
+      game.state.knownSpells.push(new EchoSpell('light'))
+      expect(game.give('the apple to villager')).toBe('Given: apple')
+      expect(game.cast('light on the chest')).not.toContain('[failure]')
+      expect(game.open('the chest')).toBe('Opened: chest')
+    })
+
+    it('still finds an item whose own name begins with "the"', () => {
+      const tome = item('The Tome')
+      tome.examine = () => 'Examined: tome'
+      game.state.inventory.push(tome)
+      expect(game.examine('the tome')).toBe('Examined: tome')
+    })
+
+    it('does not treat "the" alone as a name', () => {
+      rooms.EliorsCottage.addItem(item('bread'))
+      expect(game.take('the')).toContain("There is no 'the' here to take.")
+    })
+  })
+
   describe('give', () => {
     it('hands an inventory item to a character in the room', () => {
       const apple = item('apple')

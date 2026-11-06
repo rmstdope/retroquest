@@ -434,8 +434,8 @@ Welcome to
     const room = this.state.currentRoom
     const found = room.getCharacterByName(target)
     if (found) return found
-    const article = /^the\s+(\S.*)$/i.exec(target.trim())
-    return article ? room.getCharacterByName(article[1]) : null
+    const bare = withoutArticle(target)
+    return bare === null ? null : room.getCharacterByName(bare)
   }
 
   /**
@@ -450,18 +450,26 @@ Welcome to
 
   /**
    * The first item named by full or short name, looking in the inventory
-   * first and then in the room, or null.
+   * first and then in the room, or null. A leading "the" is dropped as
+   * `findAllItems` drops it.
    */
   findItem(
     target: string,
     { inventory = true, room = true } = {},
   ): Item | null {
-    return this.state.findItem(target, { inventory, room })
+    return this.findAllItems(target, { inventory, room })[0] ?? null
   }
 
-  /** Every item named by full or short name, inventory first, then the room. */
+  /**
+   * Every item named by full or short name, inventory first, then the room.
+   * A leading "the" is dropped when the name as typed names nothing, so
+   * "the lantern" reaches the lantern.
+   */
   findAllItems(target: string, { inventory = true, room = true } = {}): Item[] {
-    return this.state.findItems(target, { inventory, room })
+    const found = this.state.findItems(target, { inventory, room })
+    if (found.length > 0) return found
+    const bare = withoutArticle(target)
+    return bare === null ? [] : this.state.findItems(bare, { inventory, room })
   }
 
   move(direction: string): string {
@@ -983,6 +991,12 @@ export function normalizeSaveName(name: string): string | null {
 
 function message(error: unknown): string {
   return error instanceof Error ? error.message : String(error)
+}
+
+/** The name without a leading "the", or null when it has none ("the" alone stays a name). */
+function withoutArticle(name: string): string | null {
+  const article = /^the\s+(\S.*)$/i.exec(name.trim())
+  return article ? article[1] : null
 }
 
 function capitalize(text: string): string {
