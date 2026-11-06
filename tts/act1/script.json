@@ -660,6 +660,11 @@
     "text": "A small, rusty key. It looks like it might unlock something."
   },
   {
+    "id": "08624987a30ac5",
+    "speaker": "narrator",
+    "text": "A small wooden coop stands here, its planks patched and weathered. Nervous chickens cluck and flutter, their feathers ruffled as they dart between straw nests. The air is thick with the scent of hay and the occasional squawk. Sunbeams slip through the slats, casting striped shadows on the dirt floor."
+  },
+  {
     "id": "05dc527c0c4e3a",
     "speaker": "narrator",
     "text": "It is small and rusty, and the teeth are worn. Someone used it often, once."
@@ -2135,9 +2140,9 @@
     "text": "It is warm, warmer than the sun could make it. You keep it anyway."
   },
   {
-    "id": "1a40afb1558cf8",
+    "id": "15140ba61d73d7",
     "speaker": "narrator",
-    "text": "A small, smooth pebble that glints in the sunlight. It feels oddly warm to the touch."
+    "text": "A small, smooth pebble that glints faintly, as if it kept a light of its own. It feels oddly warm to the touch."
   },
   {
     "id": "0d9bbbb778d80d",
@@ -2215,9 +2220,9 @@
     "text": "A small stone chapel. Its stained glass windows cast colours across the worn pews, and the air is cool and smells of candle wax. A kindly priest tends the altar. By the door the bell rope hangs straight and still. Over the door a shape is cut into the stone, worn almost smooth. A dark corner by the altar swallows the light."
   },
   {
-    "id": "1018f12794002f",
+    "id": "073c6d58d2326c",
     "speaker": "narrator",
-    "text": "A simple beeswax candle. It provides a warm, steady light and a faint, comforting scent."
+    "text": "A simple beeswax candle on the altar, its wick cold. It has a faint, comforting scent."
   },
   {
     "id": "02b609ce9a5cf9",
@@ -2393,6 +2398,11 @@
     "id": "025ee993cf1408",
     "speaker": "priest",
     "text": "Look there, child. The light has found something."
+  },
+  {
+    "id": "105f9a07a06b71",
+    "speaker": "narrator",
+    "text": "A small stone chapel. Its stained glass windows cast colours across the worn pews, and the air is cool and smells of candle wax. A kindly priest tends the altar. By the door the bell rope hangs straight and still. Over the door a shape is cut into the stone, worn almost smooth. The candle burns on the altar, and the corner beside it is dark no longer."
   },
   {
     "id": "1ac4291eb09877",

@@ -6,11 +6,16 @@ export class ShinyPebble extends Item {
     super({
       name: 'shiny pebble',
       description:
-        'A small, smooth pebble that glints in the sunlight. It feels oddly ' +
-        'warm to the touch.',
+        'A small, smooth pebble that glints faintly, as if it kept a light ' +
+        'of its own. It feels oddly warm to the touch.',
       shortName: 'pebble',
       canBeCarried: true,
     })
+  }
+
+  /** Give a pebble from an older save the current wording. */
+  override refreshSavedText(_gameState: GameState): void {
+    this.description = new ShinyPebble().description
   }
 
   /** The line the story tells when Elior takes it, wherever it is lying. */
