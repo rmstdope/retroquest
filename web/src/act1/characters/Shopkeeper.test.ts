@@ -18,6 +18,7 @@ import { Rope } from '../items/Rope'
 import { Bread } from '../items/Bread'
 import { Matches } from '../items/Matches'
 import { Mechanism } from '../items/Mechanism'
+import { RuneToken } from '../items/RuneToken'
 import { Patches } from './Patches'
 import { Shopkeeper } from './Shopkeeper'
 import { expectDialogueSpeaker } from '@/testing/gameHelpers'
@@ -799,6 +800,23 @@ describe('Hemlock and the byword', () => {
       "Malakar's luck, my father would have called it.[/dialogue] " +
         'He raps the counter twice with his knuckles.',
     )
+  })
+})
+
+describe('Hemlock and the rune token (rq-hkep)', () => {
+  it("answers with his own gesture, not Tilda's knock, and without his byword", () => {
+    const game = gameInStore()
+    game.state.addItemToInventory(new RuneToken())
+
+    const answer = game.commandParser.parse('give rune token to hemlock')
+
+    expect(answer).toContain("I'll not have that on my counter, lad.")
+    expect(answer).toContain('edge of his ledger')
+    expect(answer.toLowerCase()).not.toContain('knock')
+    expect(answer).not.toContain('my father would have called it')
+    expect(answer).not.toContain("Malakar's luck")
+    expectQuotesInsideDialogue(answer)
+    expectDialogueSpeaker(answer, 'Hemlock')
   })
 })
 
