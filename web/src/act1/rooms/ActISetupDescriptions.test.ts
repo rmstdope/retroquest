@@ -42,8 +42,8 @@ describe('Act I set-up descriptions', () => {
     const game = gameIn('VillageChapel')
     const text = game.state.currentRoom.describe(game.state)
     expect(text).toContain(
-      'A small stone chapel. Its stained glass windows cast colours across ' +
-        'the worn pews, and the air is cool and smells of candle wax. A kindly ',
+      'A small stone chapel at the end of the village lane. ' +
+        'Its stained glass windows cast colours across the worn pews, and the air is cool and smells of candle wax. A kindly ',
     )
     expect(text).toContain(
       'tends the altar. By the door the bell rope hangs straight and still. ' +

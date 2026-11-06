@@ -28,7 +28,7 @@ export class HiddenGlade extends Room {
       description: HiddenGlade.DIM_DESCRIPTION,
       items: [new ShinyPebble(), ...Scenery.forRoom('HiddenGlade')],
       characters: [],
-      exits: { north: 'ForestPath', south: 'VillageChapel' },
+      exits: { north: 'ForestPath' },
     })
   }
 
@@ -54,6 +54,11 @@ export class HiddenGlade extends Room {
   private static readonly CARVING_SENTENCE =
     ' Beneath it, in a plainer hand, is carved: ' +
     `\u201c${HiddenGlade.REFRAIN}\u201d`
+
+  /** Give a save made when the glade still led south the dead end it is now. */
+  override refreshSavedText(): void {
+    this.exits = new HiddenGlade().exits
+  }
 
   /** Hushed while dim; once lit, birds and a breeze. */
   override soundState(_gameState: GameState): string {

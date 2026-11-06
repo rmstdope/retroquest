@@ -20,6 +20,15 @@ const REFRAIN = 'Power follows purpose; purpose follows truth.'
 const SENTENCE = `Beneath it, in a plainer hand, is carved: \u201c${REFRAIN}\u201d`
 
 describe('Hidden Glade', () => {
+  it('is a dead end: the only way out is north (rq-un37)', () => {
+    const game = gameInGlade()
+    expect(game.state.currentRoom.getExits(game.state)).toEqual({
+      north: 'ForestPath',
+    })
+    game.commandParser.parse('go south')
+    expect(game.state.currentRoom.name).toBe('Hidden Glade')
+  })
+
   it('is dim and overgrown until light is cast', () => {
     const game = gameInGlade()
     const before = game.state.currentRoom.describe(game.state)

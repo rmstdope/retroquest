@@ -342,8 +342,18 @@ describe('Act 1 golden path', () => {
     expectItemInRoom(room(), 'rare flower', false)
     expectCharacterInRoom(room(), 'deer')
 
-    // Step 15: Village Chapel (first visit, part 1)
-    executeCommands(game, ['go south'])
+    // Step 15: Village Chapel (first visit, part 1); the glade is a dead end,
+    // so the way to the chapel runs back through the village lane (rq-un37)
+    executeCommands(game, [
+      'go north',
+      'go north',
+      'go west',
+      'go north',
+      'go north',
+      'go east',
+      'go north',
+      'go east',
+    ])
     expectCurrentRoom(state, 'Village Chapel')
     expectItemInRoom(room(), 'candle')
     executeCommands(game, ['talk to priest'])
@@ -355,16 +365,7 @@ describe('Act 1 golden path', () => {
     ])
 
     // Step 16: General Store (matches)
-    executeCommands(game, [
-      'go north',
-      'go north',
-      'go north',
-      'go west',
-      'go north',
-      'go north',
-      'go east',
-      'go north',
-    ])
+    executeCommands(game, ['go west'])
     expectCurrentRoom(state, 'General Store')
     expectItemInRoom(room(), 'matches')
     executeCommands(game, ['talk to shopkeeper'])
@@ -372,16 +373,7 @@ describe('Act 1 golden path', () => {
     expectItemInRoom(room(), 'matches', false)
 
     // Step 17: Village Chapel (first visit, part 2)
-    executeCommands(game, [
-      'go south',
-      'go west',
-      'go south',
-      'go south',
-      'go east',
-      'go south',
-      'go south',
-      'go south',
-    ])
+    executeCommands(game, ['go east'])
     expectCurrentRoom(state, 'Village Chapel')
     expectItemInRoom(room(), 'locket', false)
     expectItemInInventory(state, 'matches')
@@ -400,18 +392,7 @@ describe('Act 1 golden path', () => {
     expectSpellKnown(state, 'bless')
 
     // Step 18: back to Mira's Hut
-    executeCommands(game, [
-      'go north',
-      'go north',
-      'go north',
-      'go west',
-      'go north',
-      'go north',
-      'go east',
-      'go north',
-      'go west',
-      'go north',
-    ])
+    executeCommands(game, ['go west', 'go west', 'go north'])
     expectCurrentRoom(state, "Mira's Hut")
     expectQuests(state, [MAIN, 'Magic for real', 'Know your village'])
     executeCommands(game, ['give rare flower to mira'])
@@ -533,16 +514,7 @@ describe('Act 1 golden path', () => {
     expectItemInInventory(state, 'travel cloak')
 
     // Step 25: Village Chapel (prepare for the journey)
-    executeCommands(game, [
-      'go south',
-      'go east',
-      'go south',
-      'go south',
-      'go east',
-      'go south',
-      'go south',
-      'go south',
-    ])
+    executeCommands(game, ['go east', 'go east', 'go east'])
     expectCurrentRoom(state, 'Village Chapel')
     executeCommands(game, ['cast bless'])
     expectStoryFlag(state, 'journey_bless_completed', true)
@@ -559,19 +531,7 @@ describe('Act 1 golden path', () => {
     expectQuests(state, [MAIN])
 
     // Step 27: Mira's Hut (final visit)
-    executeCommands(game, [
-      'go west',
-      'go north',
-      'go north',
-      'go north',
-      'go west',
-      'go north',
-      'go north',
-      'go west',
-      'go north',
-      'go east',
-      'go north',
-    ])
+    executeCommands(game, ['go west', 'go west', 'go west', 'go north'])
     expectCurrentRoom(state, "Mira's Hut")
     for (const name of [
       'travel cloak',
@@ -603,19 +563,7 @@ describe('Act 1 golden path', () => {
     expectItemInInventory(state, 'ancient amulet')
 
     // Step 28: Road to Greendale (departure)
-    executeCommands(game, [
-      'go south',
-      'go west',
-      'go south',
-      'go east',
-      'go south',
-      'go south',
-      'go east',
-      'go south',
-      'go south',
-      'go south',
-      'go east',
-    ])
+    executeCommands(game, ['go south', 'go east', 'go east', 'go east'])
     expectCurrentRoom(state, 'Road to Greendale')
     expectItemInInventory(state, 'map')
     expectItemInInventory(state, 'ancient amulet')
