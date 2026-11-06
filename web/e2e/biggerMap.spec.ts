@@ -115,14 +115,10 @@ test('every place of Act I fits across the bigger map (rq-7319)', async ({
 
   // The body may scroll down, as every window's does, but never sideways:
   // a sideways scroll hides on a laptop and cuts off the places at the edge.
-  const body = dialog.locator('.lq-dialog-content')
-  const view = await body.boundingBox()
-  const cut: string[] = []
-  for (const place of await dialog.locator('[data-place]').all()) {
-    const box = await place.boundingBox()
-    if (!view || !box) continue
-    if (box.x < view.x || box.x + box.width > view.x + view.width)
-      cut.push((await place.getAttribute('data-place')) ?? '')
-  }
-  expect(cut).toEqual([])
+  const overflow = (selector: string): Promise<number> =>
+    dialog
+      .locator(selector)
+      .evaluate((element) => element.scrollWidth - element.clientWidth)
+  expect(await overflow('.lq-bigmap-scroll')).toBe(0)
+  expect(await overflow('.lq-dialog-content')).toBe(0)
 })

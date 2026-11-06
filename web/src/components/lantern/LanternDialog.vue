@@ -15,7 +15,8 @@ import { useFocusTrap } from '@/composables/useFocusTrap'
  * working). On close it gives focus back to what had it when it opened,
  * unless `restoreFocus` is off (the game's own pop-ups send it to the
  * actions instead). `wide` gives a body that needs room, like the map, a
- * panel at least 680px wide that grows to fit its body, up to the window.
+ * panel at least 680px wide that grows to fit its body, up to the window
+ * (on a phone it is the full-width sheet like any other).
  */
 const props = withDefaults(
   defineProps<{
@@ -222,6 +223,10 @@ defineExpose({ focusFirst: trap.focusFirst })
     border-top: 1px solid var(--lq-accent-line);
     border-radius: 18px 18px 0 0;
     box-shadow: 0 -20px 40px rgb(0 0 0 / 0.45);
+  }
+  .lq-dialog-wide {
+    width: 100%;
+    min-width: 0;
   }
   .lq-dialog-grabber {
     display: block;
