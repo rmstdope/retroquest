@@ -422,3 +422,44 @@ describe('Grandmother repeat talk keeps its wording (rq-m3fy)', () => {
     expect(response).not.toContain('look in on')
   })
 })
+
+describe('Grandmother and what lies in the cottage', () => {
+  const READ = ['use lantern', 'take lantern', 'use journal']
+
+  it('never sees the journal under Elior’s arm, since it cannot be carried', () => {
+    const game = cottageGame()
+    executeCommands(game, READ)
+
+    const first = executeCommands(game, ['talk to grandmother'])
+    const again = executeCommands(game, ['talk to grandmother'])
+
+    expect(game.state.hasItem("elior's journal")).toBe(false)
+    expect(first).toContain('Your father wrote in one like that')
+    expect(again).toContain('Your father wrote in one like that')
+    expect(first).not.toContain('under your arm')
+    expect(again).not.toContain('under your arm')
+    expect(again).toContain('[item_name]journal[/item_name]')
+  })
+
+  it('offers the bread on the board while the loaf still lies there', () => {
+    const game = cottageGame()
+    executeCommands(game, ['talk to grandmother'])
+
+    const response = executeCommands(game, ['talk to grandmother'])
+
+    expect(response).toContain("There's bread on the board")
+    expectDialogueSpeaker(response, 'grandmother')
+  })
+
+  it('offers no bread on the board once Elior has taken the loaf', () => {
+    const game = cottageGame()
+    executeCommands(game, ['talk to grandmother', 'take bread'])
+
+    const response = executeCommands(game, ['talk to grandmother'])
+
+    expect(game.state.hasItem('bread')).toBe(true)
+    expect(response).toContain('Back again?')
+    expect(response).not.toContain('bread on the board')
+    expectDialogueSpeaker(response, 'grandmother')
+  })
+})

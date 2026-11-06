@@ -260,6 +260,11 @@
     "text": "You are not particularly hungry."
   },
   {
+    "id": "13a5eb33c8b578",
+    "speaker": "grandmother",
+    "text": "Back again? You've had the loaf, I see. I'll bake another."
+  },
+  {
     "id": "0f934961783f9e",
     "speaker": "narrator",
     "text": "The brass is worn smooth where hands have held it. It has lit your way home for as long as you can remember."
@@ -320,9 +325,9 @@
     "text": "Some voices are older than memory."
   },
   {
-    "id": "033d5ccbf999ee",
+    "id": "0941207b352bec",
     "speaker": "narrator",
-    "text": "She wipes her hands and looks at the journal under your arm."
+    "text": "She wipes her hands and looks at the journal lying open where you left it."
   },
   {
     "id": "1a35a4f872fc47",
