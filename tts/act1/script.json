@@ -625,6 +625,11 @@
     "text": "It weighs nothing at all. You tuck it away before the wind can take it."
   },
   {
+    "id": "0f50824fab0e1e",
+    "speaker": "narrator",
+    "text": "Even at full stretch it falls well short of the rafter. The hens scatter from the swing, and their wings go higher than your arm does."
+  },
+  {
     "id": "18767cb9b0671b",
     "speaker": "narrator",
     "text": "A live, clucking chicken. It seems restless and might peck if you're not careful."
@@ -970,6 +975,66 @@
     "text": "It is heavy, and bent at one heel. Iron like this does not go to waste."
   },
   {
+    "id": "0b7c094082210e",
+    "speaker": "narrator",
+    "text": "Abandoned Shed"
+  },
+  {
+    "id": "17af0d0fc2534a",
+    "speaker": "narrator",
+    "text": "A rickety shed leans precariously at the edge of Willowbrook, its weathered boards creaking in the wind. The shed door is locked, and no light gets past the grimy boards, but the air smells of old earth and lamp oil."
+  },
+  {
+    "id": "1903ec3e502025",
+    "speaker": "narrator",
+    "text": "The key turns in the lock! The shed door creaks open."
+  },
+  {
+    "id": "0ed700def39039",
+    "speaker": "narrator",
+    "text": "In the gloom you make out an old workbench and a few interesting things. From the shadows comes a frightened mew, and a small patchwork shape bolts behind the broken crates."
+  },
+  {
+    "id": "171f9e8202e847",
+    "speaker": "narrator",
+    "text": "A rickety shed leans precariously at the edge of Willowbrook, its weathered boards creaking in the wind. Rusty tools and broken crates are scattered about a long workbench, and a thick layer of dust covers everything. Little light gets past the grimy boards, and the air smells of old earth and lamp oil."
+  },
+  {
+    "id": "129314440d0b65",
+    "speaker": "narrator",
+    "text": "Old Mill"
+  },
+  {
+    "id": "1a8eaaafa0c48b",
+    "speaker": "narrator",
+    "text": "A creaky windmill towers above, its sails turning slowly in the breeze. Dusty gears and cobwebs fill the interior, and the scent of flour hangs in the air. Sunlight streams through broken windows, illuminating sacks of grain and a heavy millstone. Amidst the old workings, you notice a strange mechanism of black iron, whirring to itself, that doesn't belong to the mill's original design."
+  },
+  {
+    "id": "1c76c403ae9607",
+    "speaker": "narrator",
+    "text": "Riverbank"
+  },
+  {
+    "id": "0fc269c6b88a07",
+    "speaker": "narrator",
+    "text": "A gentle river flows past the village and makes a slow bend here, past the reeds and a broad, flat stone at the water's edge. Insects hum over the water. A weathered fisherman sits on an upturned crate at the bend, watching the water."
+  },
+  {
+    "id": "0d28fe08434f5e",
+    "speaker": "narrator",
+    "text": "Forest Path"
+  },
+  {
+    "id": "04b25fea5e2fc9",
+    "speaker": "narrator",
+    "text": "A winding path snakes into the heart of the woods, dappled sunlight flickering through the canopy above. Beside the path, thick, thorny vines block a small alcove. The air is alive with the scent of pine and wildflowers, and the ground is soft with moss and fallen leaves. Birds flit between branches, and the occasional snap of a twig hints at unseen creatures nearby."
+  },
+  {
+    "id": "13d2621768d838",
+    "speaker": "narrator",
+    "text": "The dull blade only bruises the vines. It would need an edge first."
+  },
+  {
     "id": "160b587b246d02",
     "speaker": "narrator",
     "text": "A heavy iron horseshoe, slightly bent. It might bring luck or be useful for repairs."
@@ -1050,16 +1115,6 @@
     "text": "How is that blade holding up? Keep that edge oiled, mind, or the damp will have it dull again before you know it."
   },
   {
-    "id": "0b7c094082210e",
-    "speaker": "narrator",
-    "text": "Abandoned Shed"
-  },
-  {
-    "id": "17af0d0fc2534a",
-    "speaker": "narrator",
-    "text": "A rickety shed leans precariously at the edge of Willowbrook, its weathered boards creaking in the wind. The shed door is locked, and no light gets past the grimy boards, but the air smells of old earth and lamp oil."
-  },
-  {
     "id": "17ced776faa8d7",
     "speaker": "narrator",
     "text": "It's a sturdy wooden door, locked tight. There's a keyhole visible."
@@ -1080,24 +1135,9 @@
     "text": "Curiosity killed the cat: Old Man Hemlock has shut the General Store until his cat, Patches, comes home. She was last seen near the old well, where a locked shed keeps its secrets. What will you discover if you find a way inside?"
   },
   {
-    "id": "1903ec3e502025",
-    "speaker": "narrator",
-    "text": "The key turns in the lock! The shed door creaks open."
-  },
-  {
-    "id": "0ed700def39039",
-    "speaker": "narrator",
-    "text": "In the gloom you make out an old workbench and a few interesting things. From the shadows comes a frightened mew, and a small patchwork shape bolts behind the broken crates."
-  },
-  {
     "id": "1e331fe69bedcf",
     "speaker": "narrator",
     "text": "The mysterious box is locked, and there is no keyhole. The runes around the lid are the only way in, and they do not answer to hands."
-  },
-  {
-    "id": "171f9e8202e847",
-    "speaker": "narrator",
-    "text": "A rickety shed leans precariously at the edge of Willowbrook, its weathered boards creaking in the wind. Rusty tools and broken crates are scattered about a long workbench, and a thick layer of dust covers everything. Little light gets past the grimy boards, and the air smells of old earth and lamp oil."
   },
   {
     "id": "1e3e27116da665",
@@ -1133,6 +1173,11 @@
     "id": "18b79c34c55b61",
     "speaker": "narrator",
     "text": "The handle shifts where it is cracked. It will dig, if you are gentle with it."
+  },
+  {
+    "id": "186f6d735b5495",
+    "speaker": "narrator",
+    "text": "The blade finds no seam to work and no keyhole to pick. The runes around the lid are the only way in, and they do not answer to steel."
   },
   {
     "id": "1d1933af2244eb",
@@ -1248,6 +1293,11 @@
     "id": "1e0db63760df0d",
     "speaker": "narrator",
     "text": "The rod is too short to reach the water."
+  },
+  {
+    "id": "17703e5a017194",
+    "speaker": "narrator",
+    "text": "Your arm does not reach the water, and a magnet dropped down there would not come back up. It would want something long to hang from."
   },
   {
     "id": "182833db6adeb7",
@@ -1660,19 +1710,19 @@
     "text": "You put a hand to the gears. They turn under it and keep turning; fingers will not stop them."
   },
   {
-    "id": "129314440d0b65",
-    "speaker": "narrator",
-    "text": "Old Mill"
-  },
-  {
-    "id": "1a8eaaafa0c48b",
-    "speaker": "narrator",
-    "text": "A creaky windmill towers above, its sails turning slowly in the breeze. Dusty gears and cobwebs fill the interior, and the scent of flour hangs in the air. Sunlight streams through broken windows, illuminating sacks of grain and a heavy millstone. Amidst the old workings, you notice a strange mechanism of black iron, whirring to itself, that doesn't belong to the mill's original design."
-  },
-  {
     "id": "0debb7a078ccd8",
     "speaker": "narrator",
     "text": "You hear a faint whirring and clicking from within the strange mechanism, and beneath it a low hum, as if something were being drawn up from far below."
+  },
+  {
+    "id": "1f95c77acf9c40",
+    "speaker": "narrator",
+    "text": "The line is too fine for those gears. They would cut it like thread and keep turning; whatever stops them has to be thicker than that."
+  },
+  {
+    "id": "14dc09f2056221",
+    "speaker": "narrator",
+    "text": "The blade skitters off the turning teeth, and they turn on. It would take something threaded through them, not poked between."
   },
   {
     "id": "0fb97f6bf77433",
@@ -1783,16 +1833,6 @@
     "id": "181e2d1f42f778",
     "speaker": "narrator",
     "text": "You lift the smooth stone a little, then set it back. It belongs here, at the bend of the river."
-  },
-  {
-    "id": "1c76c403ae9607",
-    "speaker": "narrator",
-    "text": "Riverbank"
-  },
-  {
-    "id": "0fc269c6b88a07",
-    "speaker": "narrator",
-    "text": "A gentle river flows past the village and makes a slow bend here, past the reeds and a broad, flat stone at the water's edge. Insects hum over the water. A weathered fisherman sits on an upturned crate at the bend, watching the water."
   },
   {
     "id": "08d85789dda6e1",
@@ -2075,14 +2115,49 @@
     "text": "So you lifted the stone. I sat by it more years than I'll own to, lad, and never once did. Wasn't mine to."
   },
   {
-    "id": "0d28fe08434f5e",
+    "id": "150ecc75a68785",
     "speaker": "narrator",
-    "text": "Forest Path"
+    "text": "Hidden Glade"
   },
   {
-    "id": "04b25fea5e2fc9",
+    "id": "108b4faf369d64",
     "speaker": "narrator",
-    "text": "A winding path snakes into the heart of the woods, dappled sunlight flickering through the canopy above. Beside the path, thick, thorny vines block a small alcove. The air is alive with the scent of pine and wildflowers, and the ground is soft with moss and fallen leaves. Birds flit between branches, and the occasional snap of a twig hints at unseen creatures nearby."
+    "text": "A hushed clearing hidden deep within the forest, dim and overgrown. Brambles crowd its edges, and the tall grass stands grey and still beneath branches that shut out the sun. In the center, a mossy stone bears a faint inscription, too deep in shadow to read. An unnatural darkness lingers here, though the sky above the branches is clear."
+  },
+  {
+    "id": "1174c72ff016c4",
+    "speaker": "narrator",
+    "text": "Village Chapel"
+  },
+  {
+    "id": "120f846e60a8f4",
+    "speaker": "narrator",
+    "text": "A small stone chapel. Its stained glass windows cast colours across the worn pews, and the air is cool and smells of candle wax. A kindly priest tends the altar. By the door the bell rope hangs straight and still. Over the door a shape is cut into the stone, worn almost smooth. A dark corner by the altar swallows the light."
+  },
+  {
+    "id": "1fdaf546da1586",
+    "speaker": "narrator",
+    "text": "You have walked every corner of Willowbrook. The pull has gone quiet, and the village feels like home."
+  },
+  {
+    "id": "182c839e0a2572",
+    "speaker": "narrator",
+    "text": "Road to Greendale"
+  },
+  {
+    "id": "0a06acda3b39a7",
+    "speaker": "narrator",
+    "text": "The main road out of Willowbrook runs east under old oaks, their branches meeting overhead. The way is well trodden, lined with wildflowers and fallen leaves. A merchant's cart stands at the roadside, and his thin grey mare grazes beside it on three good shoes."
+  },
+  {
+    "id": "0d7761379b2cbf",
+    "speaker": "narrator",
+    "text": "The teeth are dull and orange with rust. It will cut something soft, once or twice."
+  },
+  {
+    "id": "1de220eb6ff89a",
+    "speaker": "narrator",
+    "text": "The rusty teeth catch in the thorns and stick. These vines are tougher than they look, and the saw would break before they did. A keen edge might part them."
   },
   {
     "id": "07603951eb8444",
@@ -2185,16 +2260,6 @@
     "text": "It is straight and sound, and about the right length. A good stick is worth keeping."
   },
   {
-    "id": "150ecc75a68785",
-    "speaker": "narrator",
-    "text": "Hidden Glade"
-  },
-  {
-    "id": "108b4faf369d64",
-    "speaker": "narrator",
-    "text": "A hushed clearing hidden deep within the forest, dim and overgrown. Brambles crowd its edges, and the tall grass stands grey and still beneath branches that shut out the sun. In the center, a mossy stone bears a faint inscription, too deep in shadow to read. An unnatural darkness lingers here, though the sky above the branches is clear."
-  },
-  {
     "id": "1017d150140e3d",
     "speaker": "narrator",
     "text": "It is warm, warmer than the sun could make it. You keep it anyway."
@@ -2268,16 +2333,6 @@
     "id": "04214f26c5fd27",
     "speaker": "narrator",
     "text": "The petals stay open in your hand. You hold it carefully, the way you would hold something that trusted you."
-  },
-  {
-    "id": "1174c72ff016c4",
-    "speaker": "narrator",
-    "text": "Village Chapel"
-  },
-  {
-    "id": "120f846e60a8f4",
-    "speaker": "narrator",
-    "text": "A small stone chapel. Its stained glass windows cast colours across the worn pews, and the air is cool and smells of candle wax. A kindly priest tends the altar. By the door the bell rope hangs straight and still. Over the door a shape is cut into the stone, worn almost smooth. A dark corner by the altar swallows the light."
   },
   {
     "id": "073c6d58d2326c",
@@ -2383,6 +2438,11 @@
     "id": "01e57df7539fac",
     "speaker": "narrator",
     "text": "The priest is out of matches and his candle is cold. Hemlock at the General Store keeps a box for him."
+  },
+  {
+    "id": "17f3d7bdd76591",
+    "speaker": "narrator",
+    "text": "The lantern's light goes into the corner and does not come out again. The corner keeps its dark, as if it were waiting for a light of its own."
   },
   {
     "id": "060dea079edd60",
@@ -3490,11 +3550,6 @@
     "text": "Preparing for the road: Mira has tasked you with preparing for your journey. She says you will need: Sturdy footwear"
   },
   {
-    "id": "1fdaf546da1586",
-    "speaker": "narrator",
-    "text": "You have walked every corner of Willowbrook. The pull has gone quiet, and the village feels like home."
-  },
-  {
     "id": "04b08f693320b1",
     "speaker": "narrator",
     "text": "The merchant weighs it in his palm and hands it back."
@@ -3503,16 +3558,6 @@
     "id": "08e05dac14195d",
     "speaker": "merchant",
     "text": "I'd not get a copper for that in Greendale, friend."
-  },
-  {
-    "id": "182c839e0a2572",
-    "speaker": "narrator",
-    "text": "Road to Greendale"
-  },
-  {
-    "id": "0a06acda3b39a7",
-    "speaker": "narrator",
-    "text": "The main road out of Willowbrook runs east under old oaks, their branches meeting overhead. The way is well trodden, lined with wildflowers and fallen leaves. A merchant's cart stands at the roadside, and his thin grey mare grazes beside it on three good shoes."
   },
   {
     "id": "06c49bbc27a458",
@@ -3538,11 +3583,6 @@
     "id": "16c9244b673666",
     "speaker": "narrator",
     "text": "The cleansing runs over the merchant and finds nothing to wash away."
-  },
-  {
-    "id": "0d7761379b2cbf",
-    "speaker": "narrator",
-    "text": "The teeth are dull and orange with rust. It will cut something soft, once or twice."
   },
   {
     "id": "04e3c6b9a3c930",

@@ -42,6 +42,11 @@ export class Scenery extends Item {
     return SCENERY_BY_KEY[this.key].line(gameState)
   }
 
+  /** The table's answer for a near miss used with this thing, if it has one. */
+  override answerUseFrom(gameState: GameState, item: Item): string {
+    return SCENERY_BY_KEY[this.key].useFrom?.(gameState, item) ?? ''
+  }
+
   /** The things of `roomKey` that show from the first visit, or from `appears`. */
   static forRoom(roomKey: string, appears?: SceneryAppearance): Scenery[] {
     return (SCENERY_BY_ROOM[roomKey] ?? [])

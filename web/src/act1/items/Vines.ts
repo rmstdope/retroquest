@@ -1,4 +1,6 @@
-import { Item, type GameState } from '@/engine'
+import { Item, type GameState, clue } from '@/engine'
+import { DullKnife } from './DullKnife'
+import { RustySaw } from './RustySaw'
 import { SharpKnife } from './SharpKnife'
 import { Scenery } from './Scenery'
 import { Snare } from './Snare'
@@ -32,5 +34,25 @@ export class Vines extends Item {
       )
     }
     return super.useWith(gameState, other)
+  }
+
+  /**
+   * The near misses: the rusty saw sticks in the thorns and the dull knife
+   * only bruises them, which points at a keen edge.
+   */
+  override answerUseFrom(_gameState: GameState, item: Item): string {
+    if (item instanceof RustySaw) {
+      return clue(
+        'The rusty teeth catch in the thorns and stick. ' +
+          'These vines are tougher than they look, and the saw would break ' +
+          'before they did. A keen edge might part them.',
+      )
+    }
+    if (item instanceof DullKnife) {
+      return clue(
+        'The dull blade only bruises the vines. It would need an edge first.',
+      )
+    }
+    return ''
   }
 }

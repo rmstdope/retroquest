@@ -67,6 +67,24 @@ const OPTIONAL_LINES: Record<number, { speaker: string; opening: string }[]> = {
     { speaker: 'narrator', opening: 'A small nose twitches' },
     { speaker: 'narrator', opening: "You have a rod, but you're not quite" },
     { speaker: 'narrator', opening: 'The grass at your feet stands' },
+    /** Act I's near misses at its puzzles (rq-8v75). */
+    {
+      speaker: 'narrator',
+      opening: 'Even at full stretch it falls well short',
+    },
+    { speaker: 'narrator', opening: 'The dull blade only bruises the vines.' },
+    { speaker: 'narrator', opening: 'The blade finds no seam to work' },
+    { speaker: 'narrator', opening: 'Your arm does not reach the water' },
+    { speaker: 'narrator', opening: 'The line is too fine for those gears.' },
+    {
+      speaker: 'narrator',
+      opening: 'The blade skitters off the turning teeth',
+    },
+    { speaker: 'narrator', opening: 'The rusty teeth catch in the thorns' },
+    {
+      speaker: 'narrator',
+      opening: "The lantern's light goes into the corner",
+    },
     /** Act I's stock replies (rq-bio): one fixed line per person, never naming the item. */
     {
       speaker: 'narrator',

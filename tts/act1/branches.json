@@ -169,5 +169,12 @@
     {"after": 169, "commands": ["give mother's letter to mira"]},
     {"after": 76, "commands": ["take snare", "use sharp knife on snare", "go north", "go west", "go north", "go north", "go west", "go north", "go east", "go north", "talk to mira"]},
     {"after": 112, "commands": ["go south", "go west", "go south", "go east", "go east", "talk to blacksmith"]},
-    {"after": 128, "commands": ["use bucket on well", "go west", "use bucket", "examine crops", "examine earth"]}
+    {"after": 128, "commands": ["use bucket on well", "go west", "use bucket", "examine crops", "examine earth"]},
+    {"after": 16, "commands": ["use rusty hoe with rafter"]},
+    {"after": 30, "commands": ["go west", "go south", "use key with door", "go south", "go east", "go south", "use dull knife with vines"]},
+    {"after": 36, "commands": ["use sharp knife with mysterious box"]},
+    {"after": 41, "commands": ["use magnet with well"]},
+    {"after": 57, "commands": ["use fishing rod with mechanism", "use sharp knife with mechanism"]},
+    {"after": 75, "commands": ["go south", "go south", "go east", "take rusty saw", "go west", "go north", "go north", "use rusty saw with vines"]},
+    {"after": 82, "commands": ["use lantern with dark corner"]}
 ]

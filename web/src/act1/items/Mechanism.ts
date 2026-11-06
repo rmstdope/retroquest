@@ -1,6 +1,11 @@
-import { Item, type GameState } from '@/engine'
+import { Item, type GameState, clue } from '@/engine'
+import { DullKnife } from './DullKnife'
+import { ExtendedMagneticFishingRod } from './ExtendedMagneticFishingRod'
+import { FishingRod } from './FishingRod'
+import { MagneticFishingRod } from './MagneticFishingRod'
 import { MillstoneFragment } from './MillstoneFragment'
 import { Rope } from './Rope'
+import { SharpKnife } from './SharpKnife'
 
 const WORKING_DESCRIPTION =
   'A strange mechanism of black iron, all levers and gears, ' +
@@ -79,6 +84,33 @@ export class Mechanism extends Item {
       )
     }
     return super.useWith(gameState, other)
+  }
+
+  /**
+   * The near misses: a rod's line is too fine for the gears and a knife only
+   * skitters off them, which points at something thicker threaded through.
+   * Once jammed, any of them meets the jammed gears.
+   */
+  override answerUseFrom(_gameState: GameState, item: Item): string {
+    const rod =
+      item instanceof FishingRod ||
+      item instanceof MagneticFishingRod ||
+      item instanceof ExtendedMagneticFishingRod
+    const knife = item instanceof DullKnife || item instanceof SharpKnife
+    if (!rod && !knife) return ''
+    if (this.repaired) {
+      return `[failure]The [item_name]${this.name}[/item_name] is jammed fast.[/failure]`
+    }
+    if (rod) {
+      return clue(
+        'The line is too fine for those gears. They would cut it like thread ' +
+          'and keep turning; whatever stops them has to be thicker than that.',
+      )
+    }
+    return clue(
+      'The blade skitters off the turning teeth, and they turn on. ' +
+        'It would take something threaded through them, not poked between.',
+    )
   }
 
   /** A draining whir while it works; silence once it is jammed. */
