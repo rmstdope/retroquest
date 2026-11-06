@@ -50,8 +50,8 @@ export class HealSpell extends Spell {
       return character.healArm(gameState)
     }
     return (
-      `A warm light settles over ${character.nameInSentence()}. ` +
-      'There was nothing in them that needed mending.'
+      `A warm light settles over ${character.nameInSentence()} ` +
+      'and finds nothing that needs mending.'
     )
   }
 }

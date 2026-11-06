@@ -128,8 +128,8 @@ export class Item {
   /** Called by the grow spell. */
   grow(_gameState: GameState): string {
     return (
-      `[failure]${this.nameInSentence({ atStart: true })} does not respond to ` +
-      'the [spell_name]grow[/spell_name] spell.[/failure]'
+      '[failure]The [spell_name]grow[/spell_name] spell finds nothing to ' +
+      `wake in ${this.nameInSentence()}.[/failure]`
     )
   }
 

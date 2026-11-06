@@ -117,7 +117,8 @@ describe('Act II spell fallback lines', () => {
     )
     const other = new Character({ name: 'Bystander', description: 'Someone.' })
     expect(new GreaterHealSpell().castOnCharacter(game.state, other)).toBe(
-      '[success]Golden light settles over them. There was nothing in them that needed it.[/success]',
+      '[success]Golden light settles over [character_name]Bystander[/character_name] ' +
+        'and finds nothing that needs it.[/success]',
     )
   })
 })

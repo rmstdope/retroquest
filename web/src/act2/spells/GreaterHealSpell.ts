@@ -44,6 +44,7 @@ export class GreaterHealSpell extends Spell {
     return super.castOnItem(gameState, targetItem)
   }
 
+  /** Heal a character: Elena's staged recovery, anyone else finds nothing to mend. */
   override castOnCharacter(
     gameState: GameState,
     targetCharacter: Character,
@@ -54,8 +55,8 @@ export class GreaterHealSpell extends Spell {
       return targetCharacter.receiveGreaterHeal(gameState)
     }
     return (
-      '[success]Golden light settles over them. There was nothing in them ' +
-      'that needed it.[/success]'
+      `[success]Golden light settles over ${targetCharacter.nameInSentence()} ` +
+      'and finds nothing that needs it.[/success]'
     )
   }
 }

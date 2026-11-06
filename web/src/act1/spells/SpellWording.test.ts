@@ -97,8 +97,8 @@ describe('Act I fallback cast lines speak in the world', () => {
   it('heal on someone with nothing to mend', () => {
     const out = executeCommands(awake(), ['cast heal on Mira'])
     expect(out).toContain(
-      'A warm light settles over [character_name]Mira[/character_name]. There was nothing in them ' +
-        'that needed mending.',
+      'A warm light settles over [character_name]Mira[/character_name] and finds nothing ' +
+        'that needs mending.',
     )
   })
 
@@ -130,10 +130,49 @@ describe('Act I fallback cast lines speak in the world', () => {
     game.state.currentRoom = game.state.allRooms.VillageChapel
     const priest = `the ${characterName('priest')}`
     expect(executeCommands(game, ['cast heal on priest'])).toContain(
-      `A warm light settles over ${priest}.`,
+      `A warm light settles over ${priest} and finds nothing`,
     )
     expect(executeCommands(game, ['cast purify on priest'])).toContain(
       `The cleansing runs over ${priest} `,
     )
+  })
+})
+
+describe('Act I fallback cast lines read right for their target', () => {
+  it('heal never calls a named character them', () => {
+    const game = awake()
+    game.state.currentRoom = game.state.allRooms.VillageChapel
+    const out = executeCommands(game, ['cast heal on priest'])
+    expect(out).not.toContain('them')
+  })
+
+  it('bless names a character known by what it is with its article, and no them', () => {
+    const game = awake()
+    game.state.currentRoom = game.state.allRooms.VillageChapel
+    const out = executeCommands(game, ['cast bless on priest'])
+    expect(out).toContain(
+      `A divine light surrounds the ${characterName('priest')} and leaves ` +
+        'strength and resolve behind.',
+    )
+    expect(out).not.toContain('they')
+  })
+
+  it('grow on the vines does not say "vines does"', () => {
+    const game = awake()
+    game.state.currentRoom = game.state.allRooms.ForestPath
+    const out = executeCommands(game, ['cast grow on vines'])
+    expect(out).not.toContain('does not respond')
+    expect(out).toContain(
+      'The [spell_name]grow[/spell_name] spell finds nothing to wake in ' +
+        'the [item_name]vines[/item_name].',
+    )
+  })
+
+  it('light in the outdoor vegetable field does not call it a room', () => {
+    const game = awake()
+    game.state.currentRoom = game.state.allRooms.VegetableField
+    const out = executeCommands(game, ['cast light'])
+    expect(out).not.toContain('The room is already')
+    expect(out).toContain('It is already light enough here.')
   })
 })

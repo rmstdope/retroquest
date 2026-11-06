@@ -35,11 +35,9 @@ export class BlessSpell extends Spell {
   override castOnCharacter(gameState: GameState, character: Character): string {
     if (character instanceof Priest)
       gameState.setStoryFlag(FLAG_PRIEST_BLESSED, true)
-    const name = character.name
     return (
-      'A divine light surrounds ' +
-      `${characterName(name)}, and they seem ` +
-      'strengthened and more resolute.'
+      `A divine light surrounds ${character.nameInSentence()} ` +
+      'and leaves strength and resolve behind.'
     )
   }
 }
