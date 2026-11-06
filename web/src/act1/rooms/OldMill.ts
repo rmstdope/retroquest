@@ -83,7 +83,7 @@ export class OldMill extends Room {
   }
 
   /** Whether the stranger's mechanism has been jammed. */
-  private isJammed(): boolean {
+  isJammed(): boolean {
     return this.items.some((item) => item instanceof Mechanism && item.repaired)
   }
 

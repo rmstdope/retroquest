@@ -3,8 +3,11 @@ import { characterName, Game } from '@/engine'
 import { Act1 } from '../Act1'
 import { AncientAmulet } from '../items/AncientAmulet'
 import { RareFlower } from '../items/RareFlower'
+import { Mechanism } from '../items/Mechanism'
+import { MillstoneFragment } from '../items/MillstoneFragment'
 import {
   FLAG_CONNECT_WITH_NATURE,
+  FLAG_DEER_CAN_BE_OBSERVED,
   FLAG_INVESTIGATED_WITHERED_CROPS,
   FLAG_FOUND_RUNE_TOKEN,
   FLAG_MAGIC_FULLY_UNLOCKED,
@@ -366,6 +369,17 @@ const LINE_3 =
   '[item_name]rare flower[/item_name] from the ' +
   '[room_name]Hidden Glade[/room_name], the one that opens only for ' +
   'someone the land trusts.'
+const MILL_LEAD =
+  ' The land has no reason to trust anyone yet: something in the ' +
+  '[room_name]Old Mill[/room_name] is still drawing on it.'
+const JAMMED_LEAD =
+  ' The [item_name]strange mechanism[/item_name] in the ' +
+  '[room_name]Old Mill[/room_name] is still now, and it gave up a ' +
+  '[item_name]millstone fragment[/item_name] when it stopped.'
+const FRAGMENT_LEAD =
+  ' The [item_name]millstone fragment[/item_name] is old stone. ' +
+  `${characterName('Borin')} at the forge knows stone, and the stories ` +
+  'his grandfather told about it.'
 const LINE_4 =
   'The [item_name]rune token[/item_name] from the well is cold, and not ' +
   `from here. ${characterName('Mira')} may know what it is.`
@@ -385,10 +399,25 @@ const LINE_8 =
 
 /** The hint of a fresh game with the given flags set. */
 function hintWith(flags: string[], amulet = false): string | null {
-  const game = new Game([new Act1()])
-  for (const flag of flags) game.state.setStoryFlag(flag, true)
+  const game = gameWith(flags)
   if (amulet) game.state.addItemToInventory(new AncientAmulet())
   return new ShadowsOverWillowbrookQuest().hint(game.state)
+}
+
+/** A fresh Act I game with the given flags set. */
+function gameWith(flags: string[]): Game {
+  const game = new Game([new Act1()])
+  for (const flag of flags) game.state.setStoryFlag(flag, true)
+  return game
+}
+
+/** Jam the stranger's mechanism in the Old Mill, as the rope does. */
+function jamMechanism(game: Game): void {
+  const mechanism = game.state.allRooms.OldMill.items.find(
+    (item) => item instanceof Mechanism,
+  )
+  if (!(mechanism instanceof Mechanism)) throw new Error('no mechanism')
+  mechanism.repaired = true
 }
 
 describe('Shadows over Willowbrook hint', () => {
@@ -413,7 +442,56 @@ describe('Shadows over Willowbrook hint', () => {
       FLAG_CONNECT_WITH_NATURE,
       FLAG_MERCHANT_NEWS_HEARD,
     ]
-    expect(hintWith(flags)).toBe(LINE_3)
+    expect(hintWith(flags)).toBe(LINE_3 + MILL_LEAD)
+  })
+
+  describe('with the flower missing from the glade (rq-srn6)', () => {
+    const asked = [...looked, FLAG_CONNECT_WITH_NATURE]
+
+    it('points at the mill while the mechanism still runs', () => {
+      expect(hintWith(asked)).toBe(LINE_3 + MILL_LEAD)
+    })
+
+    it('points at the fragment once the mechanism is jammed', () => {
+      const game = gameWith(asked)
+      jamMechanism(game)
+      expect(new ShadowsOverWillowbrookQuest().hint(game.state)).toBe(
+        LINE_3 + JAMMED_LEAD,
+      )
+    })
+
+    it('points the fragment in hand at Borin', () => {
+      const game = gameWith(asked)
+      jamMechanism(game)
+      game.state.addItemToInventory(new MillstoneFragment())
+      expect(new ShadowsOverWillowbrookQuest().hint(game.state)).toBe(
+        LINE_3 + FRAGMENT_LEAD,
+      )
+    })
+
+    it('waits for the flower alone once Borin has told of the deer', () => {
+      const game = gameWith([...asked, FLAG_DEER_CAN_BE_OBSERVED])
+      jamMechanism(game)
+      expect(new ShadowsOverWillowbrookQuest().hint(game.state)).toBe(LINE_3)
+    })
+
+    it('waits for the flower alone once it is in hand', () => {
+      const game = gameWith(asked)
+      game.state.addItemToInventory(new RareFlower())
+      expect(new ShadowsOverWillowbrookQuest().hint(game.state)).toBe(LINE_3)
+    })
+
+    it('never names a command', () => {
+      const game = gameWith(asked)
+      const hints = [new ShadowsOverWillowbrookQuest().hint(game.state)]
+      jamMechanism(game)
+      hints.push(new ShadowsOverWillowbrookQuest().hint(game.state))
+      game.state.addItemToInventory(new MillstoneFragment())
+      hints.push(new ShadowsOverWillowbrookQuest().hint(game.state))
+      for (const hint of hints) {
+        expect(hint).not.toMatch(/\b(use|give|rest|talk|take|jam)\b/i)
+      }
+    })
   })
 
   it('points the unread rune token to Mira, also after the mill sighting', () => {

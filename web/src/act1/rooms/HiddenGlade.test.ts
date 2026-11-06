@@ -3,6 +3,7 @@ import { Game, GameController } from '@/engine'
 import { Act1 } from '../Act1'
 import { LightSpell } from '../spells/LightSpell'
 import { AncientAmulet } from '../items/AncientAmulet'
+import { Mechanism } from '../items/Mechanism'
 import { HiddenGlade } from './HiddenGlade'
 
 /** An Act I game standing in the Hidden Glade, knowing `light`. */
@@ -72,8 +73,24 @@ describe('Hidden Glade', () => {
   })
 
   describe('resting', () => {
+    it('feels the land drawn on while the mill mechanism runs (rq-srn6)', () => {
+      const game = gameInGlade()
+      const text = game.commandParser.parse('rest')
+      expect(text).toContain(
+        'You rest a while. Birds, the grey grass, a stone you cannot read. ' +
+          'Nothing comes. Even here the ground feels thin, as if something ' +
+          'far off were drawing on it.',
+      )
+      expect(text).not.toContain('watching the brambles')
+    })
+
     it('refuses too early without telling the player to do more', () => {
       const game = gameInGlade()
+      const mechanism = game.state.allRooms.OldMill.items.find(
+        (item) => item instanceof Mechanism,
+      )
+      if (!(mechanism instanceof Mechanism)) throw new Error('no mechanism')
+      mechanism.repaired = true
       const text = game.commandParser.parse('rest')
       expect(text).toContain(
         'You rest a while. Birds, the grey grass, a stone you cannot read. ' +
