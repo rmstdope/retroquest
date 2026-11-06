@@ -16,7 +16,8 @@ import CompassPanel from './CompassPanel.vue'
  * once, even while a turn is read aloud; only the map's ways out are a held
  * panel (`data-panel`), where a first press catches up. Bag and Spells are
  * where a gained item or spell flies to (`data-flight-target`,
- * `AcquiredFlight`), and the one it lands in bumps.
+ * `AcquiredFlight`), and the one it lands in bumps; the Bag dips as a lost
+ * item rises out of it.
  */
 type Tab = 'bag' | 'spells' | 'quests'
 
@@ -92,6 +93,7 @@ defineExpose({ focusButton })
         :class="{
           'lq-lit': props.drawer === button.tab,
           'lq-landed': !!button.flight && flights.landed === button.flight,
+          'lq-dipped': !!button.flight && flights.dipped === button.flight,
         }"
         :data-button="button.tab"
         :data-flight-target="button.flight"
@@ -186,7 +188,12 @@ defineExpose({ focusButton })
   transform: scale(1.12);
   transition: transform calc(140ms * var(--lq-motion)) ease-out;
 }
-.lq-stage-btn:not(.lq-landed) {
+/* An item is rising out of the button (AcquiredFlight): it dips. */
+.lq-stage-btn.lq-dipped {
+  transform: scale(0.88);
+  transition: transform calc(140ms * var(--lq-motion)) ease-out;
+}
+.lq-stage-btn:not(.lq-landed, .lq-dipped) {
   transition: transform calc(300ms * var(--lq-motion)) ease-in;
 }
 </style>

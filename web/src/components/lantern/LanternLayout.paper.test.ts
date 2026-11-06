@@ -272,6 +272,19 @@ describe('the narration paper', () => {
       expect(paper().querySelector('[data-testid="chip"]')).toBeNull()
     })
 
+    it('flies a lost item out of the Bag first, and leaves it off the card', async () => {
+      await mountWith([turn(1, 'First.')])
+      const flights = useFlightStore()
+      game.turns.push({
+        ...taking(2),
+        lost: [{ kind: 'item', name: 'rope', count: 1 }],
+      })
+      await nextTick()
+      expect(flights.current?.name).toBe('rope')
+      expect(flights.current?.leaving).toBe(true)
+      expect(paper().querySelector('[data-testid="chip"]')).toBeNull()
+    })
+
     it('does not fly for a turn a load brought back', async () => {
       await mountWith([turn(1, 'First.')])
       const flights = useFlightStore()

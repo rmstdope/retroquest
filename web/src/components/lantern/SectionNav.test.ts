@@ -32,6 +32,15 @@ describe('SectionNav', () => {
     expect(spells.classes()).not.toContain('lq-landed')
   })
 
+  it('dips the Bag tab as an item rises out of it', async () => {
+    const w = mountNav()
+    const [, bag, spells] = w.findAll('button')
+    useFlightStore().dipped = 'item'
+    await w.vm.$nextTick()
+    expect(bag.classes()).toContain('lq-dipped')
+    expect(spells.classes()).not.toContain('lq-dipped')
+  })
+
   it('marks the current section', () => {
     const w = mountNav('map')
 

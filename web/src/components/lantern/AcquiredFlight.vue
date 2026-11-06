@@ -2,6 +2,8 @@
 import { computed, onUnmounted, ref, watch } from 'vue'
 import {
   FLIGHT_FLY_MS,
+  LEAVE_RISE_MS,
+  LEAVE_SINK_MS,
   flightLabel,
   useFlightStore,
 } from '@/stores/useFlightStore'
@@ -14,8 +16,11 @@ import {
  * (or tab on a phone) that carries `data-flight-target` of its kind and is
  * shown. Where the flight starts and lands is measured when it starts and
  * when it flies. Under Reduce motion it does not move: it is shown, then
- * at its button. A screen reader hears "Gained …" or "Learned …" for every
- * gain as it is queued, whether or not it gets to fly.
+ * at its button. An item the turn lost goes the other way, in warm grey with a
+ * minus sign: it rises out of the Bag button (or tab) to the middle of the
+ * picture, rests, then sinks and fades; the first frame is the button's if
+ * none is shown, the picture's. A screen reader hears "Lost …", "Gained …" or
+ * "Learned …" for every change as it is queued, whether or not it gets to fly.
  */
 const flights = useFlightStore()
 
@@ -62,6 +67,13 @@ watch(
       y: window.innerHeight / 2,
     }
     end.value = start.value
+    // A loss rises from its button; with none shown, it starts on the picture.
+    if (flight.leaving) {
+      start.value =
+        Array.from(document.querySelectorAll('[data-flight-target="item"]'))
+          .map(centre)
+          .find((point): point is Point => point !== null) ?? end.value
+    }
     enterTimer = setTimeout(() => {
       entered.value = true
     }, 20)
@@ -107,7 +119,33 @@ onUnmounted(() => {
   clearTimeout(tellTimer)
 })
 
+/** A leaving item: at the button as it rises, on the picture as it rests, a little lower as it sinks. */
+const leaveStyle = computed(() => {
+  const phase = flights.phase
+  const rising = phase === 'rise' && !entered.value
+  const sinking = phase === 'sink'
+  const at = rising
+    ? start.value
+    : { x: end.value.x, y: end.value.y + (sinking ? 30 : 0) }
+  const ms = (time: number): string => `calc(${time}ms * var(--lq-motion, 1))`
+  const rise = ms(LEAVE_RISE_MS)
+  const move = `left ${rise} ease-out, top ${rise} ease-out, transform ${rise} ease-out, opacity ${rise} ease-out`
+  const sink = ms(LEAVE_SINK_MS)
+  return {
+    left: `${at.x}px`,
+    top: `${at.y}px`,
+    opacity: rising ? 0.35 : sinking ? 0 : 1,
+    transform: `translate(-50%, -50%) scale(${rising ? 0.22 : sinking ? 0.9 : 1})`,
+    transition: rising
+      ? 'none'
+      : sinking
+        ? `top ${sink} ease-in, transform ${sink} ease-in, opacity ${sink} ease-in`
+        : move,
+  }
+})
+
 const style = computed(() => {
+  if (flights.current?.leaving) return leaveStyle.value
   const flying = flights.phase === 'fly'
   const at = flying ? end.value : start.value
   const curve = 'cubic-bezier(0.55, 0, 0.75, 0.35)'
@@ -137,11 +175,16 @@ const style = computed(() => {
     v-if="flights.current"
     :key="flights.current.key"
     class="lq-flight"
-    :class="`lq-flight-${flights.current.kind}`"
+    :class="
+      flights.current.leaving
+        ? 'lq-flight-lost'
+        : `lq-flight-${flights.current.kind}`
+    "
     :style="style"
     aria-hidden="true"
     data-testid="flight"
   >
+    <span v-if="flights.current.leaving" class="lq-flight-minus">−</span>
     <svg
       v-if="flights.current.kind === 'item'"
       class="lq-flight-icon"
@@ -193,6 +236,17 @@ const style = computed(() => {
   border: 1px solid var(--lq-item-line);
   background: var(--lq-item-soft);
   color: var(--lq-item);
+}
+.lq-flight-lost {
+  border: 1px solid var(--lq-lost-line);
+  background: var(--lq-lost-soft);
+  color: var(--lq-lost);
+}
+.lq-flight-minus {
+  font-family: var(--lq-font-display);
+  font-weight: 600;
+  font-size: calc(30px * var(--lq-text-scale, 1));
+  margin-right: -4px;
 }
 .lq-flight-spell {
   border: 1px solid var(--lq-spell-line);
