@@ -41,6 +41,12 @@ const MALAKAR = /malakar/i
 /** A dream, or dreams or dreaming, said anywhere in the words. */
 const DREAM = /\bdream/i
 
+/** Elior's father, whom she sees in him. */
+const FATHER = /\bfather\b/i
+
+/** The spell from his father's journal, once she has told of it. */
+const REVIVE = /\brevive\b/i
+
 /** Elior's grandmother: wise elder who guides the player and grants items. */
 export class Grandmother extends Character {
   dialogueState: Record<string, boolean> = {
@@ -349,8 +355,9 @@ export class Grandmother extends Character {
    * Saying "stay" (or "yes" or "keep") while Elior carries Patches lets her
    * stay by the hearth: grandmother sends word to Hemlock, who reopens the
    * store. The byword "Malakar" gets a knock on the bread board, the same
-   * every time; a word of a dream turns her back to the bread. Other words
-   * only get a fond look.
+   * every time; his father's name, she sees in Elior's frown,
+   * and, once she has told of it, his spell to her herbs; a word of a dream
+   * turns her back to the bread. Other words only get a fond look.
    */
   override sayTo(gameState: GameState, words: string): string {
     if (MALAKAR.test(words)) {
@@ -374,6 +381,25 @@ export class Grandmother extends Character {
             `${characterName('Hemlock')} this very afternoon. He's a kind ` +
             "old soul; he'll be glad she's safe, and his store will be open " +
             'again by the time you get there.',
+        )
+      )
+    }
+    if (FATHER.test(words)) {
+      return (
+        `Your ${characterName(this.name)}'s hands go still in the dough, ` +
+        'then start again. ' +
+        speech("You have his way of frowning when you're thinking, dear.") +
+        ' She pushes the bread board toward you. ' +
+        speech('Eat something.')
+      )
+    }
+    if (REVIVE.test(words) && gameState.hasSpell('revive')) {
+      return (
+        `Your ${characterName(this.name)} smiles without looking up from ` +
+        'the dough. ' +
+        speech(
+          "Your father's word. If it brings back my herbs, dear, " +
+            'you may say it as often as you like.',
         )
       )
     }

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { Game, GameController, type Item } from '@/engine'
+import { Game, GameController, findMarkupProblems, type Item } from '@/engine'
 import { Act1 } from '../Act1'
 import {
   FLAG_CONNECT_WITH_NATURE,
@@ -1045,3 +1045,80 @@ describe('The store tells one story about its apples (rq-03s1)', () => {
 function tookApple(answer: string): boolean {
   return answer.includes('It is crisp and cold')
 }
+
+describe('Hemlock answers the name of his cat', () => {
+  const STOCK = "You'd best ask someone with more time than I have"
+
+  it('talks of Patches as home on the counter once she is back', () => {
+    const game = gameInStore()
+    game.state.setStoryFlag(FLAG_MET_HEMLOCK, true)
+
+    const answer = game.commandParser.parse('say patches to hemlock')
+
+    expect(answer).not.toContain(STOCK)
+    expect(answer).toContain('not stirred off that counter since')
+    expectDialogueSpeaker(answer, 'Hemlock')
+  })
+
+  it('talks of Patches by the hearth once she stays with grandmother', () => {
+    const game = gameInStore({ shopOpen: false })
+    game.state.setStoryFlag(FLAG_PATCHES_FOUND, true)
+    game.state.setStoryFlag(FLAG_PATCHES_STAYED_WITH_GRANDMOTHER, true)
+    game.state.setStoryFlag(FLAG_HEMLOCK_HEARD_PATCHES_STAYED, true)
+    game.state.setStoryFlag(FLAG_MET_HEMLOCK, true)
+
+    const answer = game.commandParser.parse('say patches to hemlock')
+
+    expect(answer).not.toContain(STOCK)
+    expect(answer).toContain('warm spot by the hearth')
+    expectDialogueSpeaker(answer, 'Hemlock')
+    expect(findMarkupProblems(answer)).toEqual([])
+  })
+
+  it('asks after Patches while she is still missing', () => {
+    const game = gameInStore({ shopOpen: false })
+    game.state.setStoryFlag(FLAG_MET_HEMLOCK, true)
+
+    const answer = game.commandParser.parse('say patches to hemlock')
+
+    expect(answer).not.toContain(STOCK)
+    expect(answer).toContain("You've not seen her, have you, lad?")
+    expectDialogueSpeaker(answer, 'Hemlock')
+    expect(findMarkupProblems(answer)).toEqual([])
+  })
+
+  it('meets Elior over her name the first time, as speaking to him does', () => {
+    const game = gameInStore({ shopOpen: false })
+
+    const answer = game.commandParser.parse('say patches to hemlock')
+
+    expect(answer).toContain('Gone for days now')
+    expect(game.state.getStoryFlag(FLAG_MET_HEMLOCK)).toBe(true)
+    expect(game.commandParser.parse('talk to hemlock')).not.toContain(
+      'Gone for days now',
+    )
+  })
+
+  it('gives the news of her staying when he has not yet told it', () => {
+    const game = gameInStore({ shopOpen: false })
+    game.state.setStoryFlag(FLAG_PATCHES_FOUND, true)
+    game.state.setStoryFlag(FLAG_PATCHES_STAYED_WITH_GRANDMOTHER, true)
+
+    const answer = game.commandParser.parse('say patches to hemlock')
+
+    expect(answer).toContain('sent word, lad.')
+    expect(game.state.getStoryFlag(FLAG_HEMLOCK_HEARD_PATCHES_STAYED)).toBe(
+      true,
+    )
+  })
+
+  it('takes her home when Elior says her name with her in his arms', () => {
+    const game = gameInStore({ shopOpen: false })
+    game.state.setStoryFlag(FLAG_PATCHES_FOUND, true)
+
+    const answer = game.commandParser.parse('say patches to hemlock')
+
+    expect(answer).toContain('You found her!')
+    expect(game.state.getStoryFlag(FLAG_PATCHES_RETURNED)).toBe(true)
+  })
+})

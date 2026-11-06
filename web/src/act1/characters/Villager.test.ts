@@ -366,3 +366,16 @@ describe('Tilda and the chapel bell', () => {
     expect(bell).not.toContain('rang by itself at midnight.')
   })
 })
+
+describe('Tilda answers the healer by name', () => {
+  it('gossips about Mira instead of asking what the word means', () => {
+    const game = gameInSquare()
+
+    const answer = game.commandParser.parse('say mira to tilda')
+
+    expect(answer).not.toContain("tell me what that's about")
+    expect(answer).toContain('swore by her')
+    expectDialogueSpeaker(answer, 'Tilda')
+    expect(findMarkupProblems(answer)).toEqual([])
+  })
+})
