@@ -608,7 +608,8 @@ describe('actScript hints', () => {
   it('reads a quest line whole, with the quest name in front', () => {
     const line = script.find((l) =>
       l.text.startsWith(
-        'Shadows over Willowbrook: In the square, Tilda has more',
+        'Shadows over Willowbrook: Something is wrong in Willowbrook. ' +
+          'The fields, the square and the well',
       ),
     )
     expect(line?.speaker).toBe('narrator')

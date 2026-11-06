@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import { characterName, Game } from '@/engine'
 import { Act1 } from '../Act1'
+import { AncientAmulet } from '../items/AncientAmulet'
 import {
   FLAG_CONNECT_WITH_NATURE,
   FLAG_INVESTIGATED_WITHERED_CROPS,
@@ -239,21 +240,133 @@ describe('Shadows over Willowbrook log', () => {
     if (!sideQuest) throw new Error('expected a completed side quest')
     game.state.activatedQuests.push(sideQuest)
 
-    expect(game.hint()).not.toContain('[item_name]map[/item_name]')
+    expect(game.hint()).not.toContain('The [item_name]map[/item_name] in your')
+    expect(game.hint()).toContain('Willowbrook still holds you')
   })
 
-  it('keeps the journal hint away from the road', () => {
+  it('points to the road, not the map in the pack, away from the road', () => {
     const game = new Game([new Act1()])
     executeCommands(game, [...ACT1_GOLDEN_PATH, 'go west'])
 
-    expect(game.hint()).not.toContain('[item_name]map[/item_name]')
+    expect(game.hint()).toContain(LINE_7)
   })
 
-  it('does not send Elior to a map he has put down', () => {
+  it('points to the road, not the map in the pack, once he has put the map down', () => {
     const game = new Game([new Act1()])
     executeCommands(game, [...ACT1_GOLDEN_PATH, 'drop map'])
     expect(game.state.hasItem('map')).toBe(false)
 
-    expect(game.hint()).not.toContain('[item_name]map[/item_name]')
+    expect(game.hint()).not.toContain(LINE_8)
+    expect(game.hint()).toContain(LINE_7)
+  })
+})
+
+const LINE_1 =
+  'Something is wrong in Willowbrook. The fields, the square and the well ' +
+  'each hold a part of it.'
+const LINE_2 =
+  `${characterName('Mira')}, in her hut north of the square, would want to ` +
+  'hear what you have seen.'
+const LINE_3 =
+  `${characterName('Mira')} is waiting for the ` +
+  '[item_name]rare flower[/item_name] from the ' +
+  '[room_name]Hidden Glade[/room_name], the one that opens only for ' +
+  'someone the land trusts.'
+const LINE_4 =
+  'The [item_name]rune token[/item_name] from the well is cold, and not ' +
+  `from here. ${characterName('Mira')} may know what it is.`
+const LINE_5 =
+  `${characterName('Mira')} keeps the [item_name]ancient amulet[/item_name] ` +
+  'for you until you are ready for the road.'
+const LINE_6 =
+  'The amulet is yours, but Willowbrook still holds you: something you ' +
+  'began here is unfinished.'
+const LINE_7 =
+  'Nothing is left undone in Willowbrook. The ' +
+  '[room_name]Road to Greendale[/room_name] starts past the chapel, and ' +
+  'the [item_name]map[/item_name] may know the way on.'
+const LINE_8 =
+  'Nothing is left undone in Willowbrook. The [item_name]map[/item_name] ' +
+  'in your pack may know the way on from here.'
+
+/** The hint of a fresh game with the given flags set. */
+function hintWith(flags: string[], amulet = false): string | null {
+  const game = new Game([new Act1()])
+  for (const flag of flags) game.state.setStoryFlag(flag, true)
+  if (amulet) game.state.addItemToInventory(new AncientAmulet())
+  return new ShadowsOverWillowbrookQuest().hint(game.state)
+}
+
+describe('Shadows over Willowbrook hint', () => {
+  const looked = [
+    FLAG_INVESTIGATED_WITHERED_CROPS,
+    FLAG_VILLAGER_TALKED_TO,
+    FLAG_WELL_EXAMINED,
+  ]
+
+  it('says something is wrong at the start', () => {
+    expect(hintWith([])).toBe(LINE_1)
+    expect(hintWith([FLAG_VILLAGER_TALKED_TO])).toBe(LINE_1)
+  })
+
+  it('sends Elior to Mira once he has looked at all three', () => {
+    expect(hintWith(looked)).toBe(LINE_2)
+  })
+
+  it('waits for the flower once Mira has asked, not the merchant news', () => {
+    const flags = [
+      ...looked,
+      FLAG_CONNECT_WITH_NATURE,
+      FLAG_MERCHANT_NEWS_HEARD,
+    ]
+    expect(hintWith(flags)).toBe(LINE_3)
+  })
+
+  it('points the unread rune token to Mira, also after the mill sighting', () => {
+    const flags = [
+      ...looked,
+      FLAG_CONNECT_WITH_NATURE,
+      FLAG_MAGIC_FULLY_UNLOCKED,
+      FLAG_FOUND_RUNE_TOKEN,
+      FLAG_STRANGER_SEEN_AT_MILL,
+    ]
+    expect(hintWith(flags)).toBe(LINE_4)
+  })
+
+  it('waits for the amulet once the flower is given', () => {
+    const given = [
+      ...looked,
+      FLAG_CONNECT_WITH_NATURE,
+      FLAG_MAGIC_FULLY_UNLOCKED,
+    ]
+    expect(hintWith(given)).toBe(LINE_5)
+    expect(
+      hintWith([
+        ...given,
+        FLAG_FOUND_RUNE_TOKEN,
+        FLAG_MIRA_NAMED_FOULING_SIGIL,
+      ]),
+    ).toBe(LINE_5)
+  })
+
+  it('says the village still holds Elior once the amulet is in hand', () => {
+    const flags = [
+      ...looked,
+      FLAG_CONNECT_WITH_NATURE,
+      FLAG_MAGIC_FULLY_UNLOCKED,
+      FLAG_FOUND_RUNE_TOKEN,
+    ]
+    expect(hintWith(flags, true)).toBe(LINE_6)
+  })
+
+  it('reads the same after a save is loaded', () => {
+    const game = new Game([new Act1()])
+    executeCommands(game, ACT1_GOLDEN_PATH)
+    const before = game.hint()
+    const fresh = new Game([new Act1()])
+    fresh.loadSaveData(game.toSaveData())
+
+    expect(before).toContain(LINE_8)
+    expect(fresh.hint()).toBe(before)
   })
 })
