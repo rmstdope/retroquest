@@ -9,6 +9,7 @@ import {
 } from '@/engine'
 import { Candle } from '../items/Candle'
 import { Locket } from '../items/Locket'
+import { Matches } from '../items/Matches'
 import { RuneToken } from '../items/RuneToken'
 import { BlessSpell } from '../spells/BlessSpell'
 import {
@@ -39,9 +40,14 @@ export class Priest extends Character {
 
   /**
    * He gently gives any gift back; the rune token he reads as a mark cut
-   * for harm. Only the token's reply names what it is.
+   * for harm, and the matches he asked for he hands back warmly, asking
+   * Elior to light the candle (or thanking Elior once it is lit). Only the
+   * token's and the matches' replies name what they are.
    */
-  override giveItem(_gameState: GameState, item: Item): string {
+  override giveItem(gameState: GameState, item: Item): string {
+    if (item instanceof Matches) {
+      return attributeSpeech(this.name, this.matchesAnswer(gameState))
+    }
     if (item instanceof RuneToken) {
       return attributeSpeech(
         this.name,
@@ -62,6 +68,27 @@ export class Priest extends Character {
       `The ${characterName(this.name)} shakes his head and folds your ` +
         'fingers back over it. ' +
         speech('Keep it, child. The road will want it more than I do.'),
+    )
+  }
+
+  /** His answer to the matches: light the candle, or keep them once it is lit. */
+  private matchesAnswer(gameState: GameState): string {
+    const priest = characterName(this.name)
+    const candle = gameState.getItem('candle')
+    if (candle instanceof Candle && candle.isLit) {
+      return (
+        `The ${priest} glances at the candle burning by the altar and ` +
+        'closes your hand around the box. ' +
+        speech('The candle is lit, child, and that was your doing. Keep them.')
+      )
+    }
+    return (
+      `The ${priest} turns the box over once, smiling, and presses it back ` +
+      'into your hand. ' +
+      speech(
+        'Bless you, child. Will you light it for me? My hands shake more ' +
+          'than the flame likes.',
+      )
     )
   }
 

@@ -2,7 +2,9 @@ import { describe, it, expect, beforeEach } from 'vitest'
 import { Game } from '@/engine'
 import { executeCommands } from '@/testing/gameHelpers'
 import { Act1 } from '../Act1'
+import { Candle } from '../items/Candle'
 import { Matches } from '../items/Matches'
+import { Stick } from '../items/Stick'
 import { FLAG_PRIEST_BLESSED, FLAG_PRIEST_TALKED_TO } from '../Act1StoryFlags'
 
 describe('Priest dialogue', () => {
@@ -103,5 +105,54 @@ describe('The priest speaks to Elior as a neighbour (rq-m3fy)', () => {
     expect(response).toContain('keeps a box for me under his counter')
     expect(response).not.toContain('[/character_name] at the')
     expect(response).toMatch(/If you're passing the .*General Store.*\.\.\./)
+  })
+})
+
+describe('The priest answers the matches he asked for (rq-dmwp)', () => {
+  const STOCK = 'The road will want it more than I do.'
+  let game: Game
+
+  beforeEach(() => {
+    game = new Game([new Act1()])
+    game.state.currentRoom = game.state.allRooms.VillageChapel
+    executeCommands(game, ['talk to priest'])
+    game.state.addItemToInventory(new Matches())
+  })
+
+  it('hands the matches back and asks Elior to light the cold candle', () => {
+    const response = executeCommands(game, ['give matches to priest'])
+
+    expect(response).not.toContain(STOCK)
+    expect(response).toContain('Will you light it for me?')
+    expect(game.state.inventory.some((item) => item instanceof Matches)).toBe(
+      true,
+    )
+    const candle = game.state.getItem('candle')
+    expect(candle instanceof Candle && candle.isLit).toBe(false)
+  })
+
+  it('still lets Elior light the candle after the matches are handed back', () => {
+    executeCommands(game, ['give matches to priest'])
+
+    const response = executeCommands(game, ['use matches with candle'])
+
+    expect(response).toContain('now casts a warm glow')
+  })
+
+  it('lets Elior keep the matches once the candle is lit', () => {
+    executeCommands(game, ['use matches with candle'])
+
+    const response = executeCommands(game, ['give matches to priest'])
+
+    expect(response).not.toContain(STOCK)
+    expect(response).toContain('that was your doing')
+  })
+
+  it('keeps his stock give-back line for other things', () => {
+    game.state.addItemToInventory(new Stick())
+
+    const response = executeCommands(game, ['give stick to priest'])
+
+    expect(response).toContain(STOCK)
   })
 })
