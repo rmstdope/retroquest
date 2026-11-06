@@ -15,6 +15,7 @@ import {
 } from '../Act1StoryFlags'
 import { AncientAmulet } from '../items/AncientAmulet'
 import { Well } from '../items/Well'
+import { RuneToken } from '../items/RuneToken'
 
 /** The byword for Malakar, said anywhere in the words. */
 const MALAKAR = /malakar/i
@@ -75,8 +76,27 @@ export class Villager extends Character {
     this.dialogueOptions = [...Villager.RUMOURS]
   }
 
-  /** She hands any gift back with a warning; the reply never names the item. */
-  override giveItem(_gameState: GameState, _item: Item): string {
+  /**
+   * She hands any gift back with a warning; the rune token she will not
+   * touch, and knocks on wood. Only the token's reply names what it is.
+   */
+  override giveItem(_gameState: GameState, item: Item): string {
+    if (item instanceof RuneToken) {
+      return attributeSpeech(
+        this.name,
+        `${characterName(this.name)} snatches her hand back before the ` +
+          'token can touch it. ' +
+          speech(
+            "That's an ill thing, love. My mother would have knocked on wood " +
+              'just to look at it.',
+          ) +
+          ' She knocks on the nearest wood, to be sure. ' +
+          speech(
+            "Put it away before somebody sees, or it'll be all round the " +
+              'village by supper.',
+          ),
+      )
+    }
     return attributeSpeech(
       this.name,
       `${characterName(this.name)} looks it over with interest and gives it ` +

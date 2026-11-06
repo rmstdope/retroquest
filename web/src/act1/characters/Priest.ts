@@ -9,6 +9,7 @@ import {
 } from '@/engine'
 import { Candle } from '../items/Candle'
 import { Locket } from '../items/Locket'
+import { RuneToken } from '../items/RuneToken'
 import { BlessSpell } from '../spells/BlessSpell'
 import {
   FLAG_JOURNEY_BLESS_COMPLETED,
@@ -36,8 +37,26 @@ export class Priest extends Character {
     return super.nameInSentence({ ...options, common: true })
   }
 
-  /** He gently gives any gift back; the reply never names the item. */
-  override giveItem(_gameState: GameState, _item: Item): string {
+  /**
+   * He gently gives any gift back; the rune token he reads as a mark cut
+   * for harm. Only the token's reply names what it is.
+   */
+  override giveItem(_gameState: GameState, item: Item): string {
+    if (item instanceof RuneToken) {
+      return attributeSpeech(
+        this.name,
+        `The ${characterName(this.name)} does not take it. He looks at the ` +
+          'rune a long while. ' +
+          speech(
+            'Whoever cut that meant harm by it, child. That is no mark the ' +
+              'founders made.',
+          ) +
+          ' He hands it back by its edge, as he would a hot coal. ' +
+          speech(
+            'Keep it close, and pray you never meet the hand that made it.',
+          ),
+      )
+    }
     return attributeSpeech(
       this.name,
       `The ${characterName(this.name)} shakes his head and folds your ` +

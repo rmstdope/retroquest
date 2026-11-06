@@ -16,6 +16,8 @@ import { Bread } from '../items/Bread'
 import { Apple } from '../items/Apple'
 import { Egg } from '../items/Egg'
 import { Fish } from '../items/Fish'
+import { Coin } from '../items/Coin'
+import { RuneToken } from '../items/RuneToken'
 import { WildBerries } from '../items/WildBerries'
 import { WitheredCarrot } from '../items/WitheredCarrot'
 import {
@@ -145,7 +147,8 @@ export class Merchant extends Character {
 
   /**
    * Trade the boots for the ring or the horseshoe, once; taking the
-   * horseshoe sets FLAG_KEPT_MOTHERS_RING. Anything else is declined.
+   * horseshoe sets FLAG_KEPT_MOTHERS_RING. A coin and the rune token are
+   * handed back with a line of their own; anything else is declined.
    */
   override giveItem(gameState: GameState, item: Item): string {
     return attributeSpeech(this.name, this.giveAnswer(gameState, item))
@@ -185,6 +188,25 @@ export class Merchant extends Character {
         ) +
         '\n\n' +
         `You receive a pair of [item_name]${boots.name}[/item_name].`
+      )
+    }
+    if (item instanceof Coin) {
+      return (
+        `The ${characterName(this.name)} laughs and drops it back into your ` +
+        'palm. ' +
+        speech('Keep your coin, friend. Coin I can earn anywhere.')
+      )
+    }
+    if (item instanceof RuneToken) {
+      return (
+        `The ${characterName(this.name)} looks at the token, and does not ` +
+        'reach for it. ' +
+        speech(
+          "No, friend. I've carried all sorts on the road, and never " +
+            'anything that cold.',
+        ) +
+        ' He shifts his pack, as if it had grown heavier. ' +
+        speech('Keep that out of sight.')
       )
     }
     return (

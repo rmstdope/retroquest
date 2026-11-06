@@ -13,6 +13,7 @@ import { Rope } from '../items/Rope'
 import { Apple } from '../items/Apple'
 import { Matches } from '../items/Matches'
 import { Coin } from '../items/Coin'
+import { RuneToken } from '../items/RuneToken'
 import { Armor } from '../items/Armor'
 import { Sword } from '../items/Sword'
 import { Mechanism } from '../items/Mechanism'
@@ -506,8 +507,32 @@ export class Shopkeeper extends Character {
     return this.talkTo(gameState)
   }
 
-  /** The shopkeeper does not accept gifts. */
-  override giveItem(_gameState: GameState, _item: Item): string {
+  /**
+   * The shopkeeper does not accept gifts: a coin he sends back for spending,
+   * the rune token he will not have on his counter.
+   */
+  override giveItem(_gameState: GameState, item: Item): string {
+    if (item instanceof Coin) {
+      return (
+        `${this.nameInSentence({ atStart: true })} pushes it back across ` +
+        'the counter. ' +
+        speech(
+          "Put your coin away, lad, till there's something you want for it.",
+        )
+      )
+    }
+    if (item instanceof RuneToken) {
+      return (
+        `${this.nameInSentence({ atStart: true })} will not touch it. He ` +
+        'sweeps it back to you with the edge of his ledger. ' +
+        speech(
+          "I'll not have that on my counter, lad. Malakar's luck, my father " +
+            "would have called it, and I've had my fill of that since the " +
+            'caravans stopped.',
+        ) +
+        ' He knocks on the counter.'
+      )
+    }
     return (
       `${this.nameInSentence({ atStart: true })} chuckles and pushes it ` +
       'back across the counter. ' +

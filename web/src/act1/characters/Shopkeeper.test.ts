@@ -13,6 +13,7 @@ import {
   TRIGGER_PATCHES_RETURNS,
 } from '../Act1StoryFlags'
 import { Coin } from '../items/Coin'
+import { Stick } from '../items/Stick'
 import { Rope } from '../items/Rope'
 import { Bread } from '../items/Bread'
 import { Matches } from '../items/Matches'
@@ -112,8 +113,8 @@ describe('Shopkeeper dialogue markup', () => {
 
   it('keeps the refusal of a gift inside dialogue', () => {
     const game = gameInStore()
-    game.state.addItemToInventory(new Coin())
-    const answer = game.commandParser.parse('give coin to shopkeeper')
+    game.state.addItemToInventory(new Stick())
+    const answer = game.commandParser.parse('give stick to shopkeeper')
     expect(answer).toContain("I don't take them in")
     expectQuotesInsideDialogue(answer)
     expectDialogueSpeaker(answer, 'Hemlock')
@@ -701,8 +702,8 @@ describe('Shopkeeper named as Hemlock, a proper name', () => {
 
   it('refuses a gift as "Hemlock"', () => {
     const game = gameInStore()
-    game.state.addItemToInventory(new Coin())
-    const answer = game.commandParser.parse('give coin to shopkeeper')
+    game.state.addItemToInventory(new Stick())
+    const answer = game.commandParser.parse('give stick to shopkeeper')
     expect(
       answer.startsWith(`${HEMLOCK} chuckles and pushes it back`),
       answer,
@@ -898,14 +899,14 @@ describe('Hemlock, named from the first moment', () => {
   it('is named in narration, not by his trade, in the shut and open store', () => {
     for (const shopOpen of [false, true]) {
       const game = gameInStore({ shopOpen })
-      game.state.addItemToInventory(new Coin())
-      const answer = game.commandParser.parse('give coin to shopkeeper')
+      game.state.addItemToInventory(new Stick())
+      const answer = game.commandParser.parse('give stick to shopkeeper')
       expect(answer).toContain('[character_name]Hemlock[/character_name]')
       expect(answer).not.toMatch(/shopkeeper/i)
     }
     const game = gameInStore()
-    game.state.addItemToInventory(new Coin())
-    expect(game.commandParser.parse('give coin to hemlock')).toContain(
+    game.state.addItemToInventory(new Stick())
+    expect(game.commandParser.parse('give stick to hemlock')).toContain(
       '[character_name]Hemlock[/character_name] chuckles and pushes it',
     )
   })
