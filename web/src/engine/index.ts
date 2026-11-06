@@ -32,6 +32,8 @@ export {
   LOADED_ROOM,
   type RoomDescription,
   type ActStats,
+  type MapExit,
+  type MapPlace,
   type MusicInfo,
   type MusicPlace,
   type NamedItem,

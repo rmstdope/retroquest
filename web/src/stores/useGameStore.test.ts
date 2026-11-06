@@ -4,6 +4,7 @@ import { useGameStore, MAX_TURNS } from './useGameStore'
 import type { RoomDescription, SoundFiring } from '@/engine'
 import type {
   CompletionTree,
+  MapPlace,
   QuestReport,
   QuestSummary,
   ResultScreen,
@@ -47,6 +48,7 @@ function createMockBridge() {
     getRoomCharacters: vi.fn(() => ['Mira']),
     getRoomItems: vi.fn(() => ['Map']),
     getRoomExits: vi.fn(() => ({ north: 'Forest' }) as Record<string, string>),
+    getMapPlaces: vi.fn(() => [] as MapPlace[]),
     getRoomWares: vi.fn(
       () => [] as Array<{ name: string; price: number; seller: string }>,
     ),
@@ -104,6 +106,7 @@ function createMockBridge() {
     getActCharacters: vi.fn((): { key: string; name: string }[] => []),
     takeSoundFirings: vi.fn((): SoundFiring[] => []),
     lastTurnAddressee: vi.fn((): string | null => null),
+    lastTurnHadArrivalScene: vi.fn((): boolean => false),
     getCommandCompletions: vi.fn((): CompletionTree => ({})),
   }
   // The tests script each kind of quest event with the three mocks above, one

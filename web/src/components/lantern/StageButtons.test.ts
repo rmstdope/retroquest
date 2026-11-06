@@ -150,6 +150,18 @@ describe('StageButtons', () => {
     expect(w.emitted('close')).toHaveLength(1)
   })
 
+  it('leaves Escape to a dialog that is open over the map', () => {
+    const w = mountButtons('map')
+    const layer = document.createElement('div')
+    layer.className = 'lq-dialog-layer'
+    document.body.append(layer)
+    document.dispatchEvent(
+      new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }),
+    )
+    layer.remove()
+    expect(w.emitted('close')).toBeUndefined()
+  })
+
   it('puts focus on a named button on request', async () => {
     const w = mountButtons()
     ;(w.vm as unknown as { focusButton(t: string): Promise<void> }).focusButton(

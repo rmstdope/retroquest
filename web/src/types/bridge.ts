@@ -2,6 +2,8 @@
 export type {
   ActStats,
   CompletionTree,
+  MapExit,
+  MapPlace,
   MusicInfo,
   NamedItem,
   QuestDetails,

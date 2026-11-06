@@ -91,6 +91,31 @@ export interface MusicPlace {
   soundState: string
 }
 
+/** One way out of a place on the map: the room it leads to and what the way is called. */
+export interface MapExit {
+  /** Key of the room the way leads to. */
+  to: string
+  /** The room's own label for the way, or the destination's name. */
+  label: string
+}
+
+/**
+ * A place on the act's map: a visited room, or a room a visited room has a
+ * way to. Only visited places list their exits (the ways open right now).
+ */
+export interface MapPlace {
+  /** The room's key. */
+  key: string
+  /** The room's name. */
+  name: string
+  /** True once the player has been there. */
+  visited: boolean
+  /** True for the room the player is in. */
+  current: boolean
+  /** Direction → the way out; empty for a place not visited. */
+  exits: Record<string, MapExit>
+}
+
 /** A character selling wares, like the act shopkeepers. */
 interface Merchant extends Character {
   wares: Record<string, { item: Item; price: number }>
@@ -191,6 +216,7 @@ export class GameController {
     this.addressee = this.game.addresseeOf(command)
     const visitedBefore = this.getVisitedRooms()
     this.game.hasChangedRoom = false
+    this.game.arrivalHadScene = false
     const result = this.handleCommand(command)
     const roomAfter = this.game.state.currentRoom.name
     const moved = roomAfter !== roomBefore
@@ -209,6 +235,11 @@ export class GameController {
    */
   lastTurnRoomDescription(): RoomDescription | null {
     return this.roomDescription
+  }
+
+  /** True when the last `takeTurn` moved the player into a room that played a scene on entering. */
+  lastTurnHadArrivalScene(): boolean {
+    return this.game.arrivalHadScene
   }
 
   /**
@@ -479,6 +510,54 @@ export class GameController {
         room.exitLabel(this.game.state, direction) ?? rooms[key]?.name ?? key,
       ]),
     )
+  }
+
+  /**
+   * The act's map: every visited room, then every room a visited room has a
+   * way to that the player has not been to, in the order they were found.
+   * Visited rooms list the ways open right now, labelled as `getRoomExits`
+   * labels them; seen rooms list none.
+   */
+  getMapPlaces(): MapPlace[] {
+    const state = this.game.state
+    const rooms = state.allRooms
+    const keyOf = (name: string): string | undefined =>
+      Object.keys(rooms).find((key) => rooms[key].name === name)
+    const visitedKeys = state.visitedRooms.flatMap((name) => {
+      const key = keyOf(name)
+      return key === undefined ? [] : [key]
+    })
+    const places: MapPlace[] = visitedKeys.map((key) => {
+      const room = rooms[key]
+      const exits: Record<string, MapExit> = {}
+      for (const [direction, to] of Object.entries(room.getExits(state))) {
+        if (!rooms[to]) continue
+        exits[direction] = {
+          to,
+          label: room.exitLabel(state, direction) ?? rooms[to].name,
+        }
+      }
+      return {
+        key,
+        name: room.name,
+        visited: true,
+        current: room === state.currentRoom,
+        exits,
+      }
+    })
+    for (const place of [...places]) {
+      for (const { to } of Object.values(place.exits)) {
+        if (places.some((other) => other.key === to)) continue
+        places.push({
+          key: to,
+          name: rooms[to].name,
+          visited: false,
+          current: false,
+          exits: {},
+        })
+      }
+    }
+    return places
   }
 
   isGameRunning(): boolean {

@@ -180,6 +180,94 @@ describe('GameController', () => {
       expect(ctrl.getRoomExits()).toEqual({ east: 'Village Square' })
     })
 
+    describe('getMapPlaces', () => {
+      class Door extends Room {
+        open = false
+        override getExits(): Record<string, string> {
+          return this.open ? { ...this.exits, up: 'Loft' } : this.exits
+        }
+      }
+      function mapGame(): { game: Game; door: Door } {
+        const door = new Door({
+          name: 'Hall',
+          description: 'A hall.',
+          exits: { east: 'Yard' },
+        })
+        const yard = new Room({
+          name: 'Yard',
+          description: 'A yard.',
+          exits: { west: 'Hall', east: 'Road' },
+        })
+        const road = new Room({ name: 'Road', description: 'A road.' })
+        const loft = new Room({ name: 'Loft', description: 'A loft.' })
+        const game = new Game([
+          simpleAct({ Hall: door, Yard: yard, Road: road, Loft: loft }),
+        ])
+        return { game, door }
+      }
+
+      it('lists the visited places and the places seen from them', () => {
+        const { game } = mapGame()
+        const ctrl = new GameController(game)
+        expect(ctrl.getMapPlaces()).toEqual([
+          {
+            key: 'Hall',
+            name: 'Hall',
+            visited: true,
+            current: true,
+            exits: { east: { to: 'Yard', label: 'Yard' } },
+          },
+          {
+            key: 'Yard',
+            name: 'Yard',
+            visited: false,
+            current: false,
+            exits: {},
+          },
+        ])
+        ctrl.takeTurn('go east')
+        const places = ctrl.getMapPlaces()
+        expect(places.map((p) => [p.key, p.visited, p.current])).toEqual([
+          ['Hall', true, false],
+          ['Yard', true, true],
+          ['Road', false, false],
+        ])
+        expect(places[1].exits).toEqual({
+          west: { to: 'Hall', label: 'Hall' },
+          east: { to: 'Road', label: 'Road' },
+        })
+      })
+
+      it('shows only the ways that are open now', () => {
+        const { game, door } = mapGame()
+        const ctrl = new GameController(game)
+        expect(Object.keys(ctrl.getMapPlaces()[0].exits)).toEqual(['east'])
+        door.open = true
+        expect(Object.keys(ctrl.getMapPlaces()[0].exits)).toEqual([
+          'east',
+          'up',
+        ])
+      })
+
+      it('uses the room label for a way', () => {
+        class Gate extends Room {
+          override exitLabel(): string | null {
+            return 'the way home'
+          }
+        }
+        const gate = new Gate({
+          name: 'Gate',
+          description: 'A gate.',
+          exits: { north: 'Field' },
+        })
+        const field = new Room({ name: 'Field', description: 'A field.' })
+        const ctrl = new GameController(
+          new Game([simpleAct({ Gate: gate, Field: field })]),
+        )
+        expect(ctrl.getMapPlaces()[0].exits.north.label).toBe('the way home')
+      })
+    })
+
     it('shows a room label for an exit instead of the destination name', () => {
       class Gate extends Room {
         override exitLabel(): string | null {
