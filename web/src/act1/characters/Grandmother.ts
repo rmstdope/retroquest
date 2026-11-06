@@ -13,6 +13,8 @@ import { Locket } from '../items/Locket'
 import { FadedPhotograph } from '../items/FadedPhotograph'
 import { Key } from '../items/Key'
 import { AncientAmulet } from '../items/AncientAmulet'
+import { ShinyRing } from '../items/ShinyRing'
+import { MothersLetter } from '../items/MothersLetter'
 import { FreshBread } from '../items/FreshBread'
 import { Patches } from './Patches'
 import {
@@ -390,10 +392,54 @@ export class Grandmother extends Character {
       )
     }
 
+    if (item instanceof ShinyRing) return this.ringAnswer()
+    if (item instanceof MothersLetter) return this.letterAnswer()
+    if (item instanceof TravelCloak) return this.cloakAnswer()
+
     return (
       `${characterName('Grandmother')} turns it over in her hands and gives ` +
       'it back. ' +
       speech('Keep it, love. My shelves are full enough.')
+    )
+  }
+
+  /** Her daughter's wedding ring: she names whose it is and gives it back. */
+  private ringAnswer(): string {
+    return (
+      `Your ${characterName('grandmother')} takes the ring, and her hands ` +
+      'go still on it. ' +
+      speech(
+        "Your mother's. Your father walked to Greendale and back in a day " +
+          'to fetch that.',
+      ) +
+      ' She turns it once, so the letters inside catch the light, and ' +
+      'gives it back. ' +
+      speech("Keep it, love. That one doesn't go on a shelf.")
+    )
+  }
+
+  /** The mother's letter: she reads it, says a little and hands it back. */
+  private letterAnswer(): string {
+    return (
+      'She reads it standing, and then again. Her mouth goes thin at one ' +
+      'line, and she does not say which. ' +
+      speech(
+        "That's her, all over. Telling you what to do from wherever she is.",
+      ) +
+      '\nShe folds it along its creases and hands it back. ' +
+      speech('Keep it dry. And do as she says.') +
+      ' She turns to the bread.'
+    )
+  }
+
+  /** The travel cloak she kept for him: she pushes it back into his arms. */
+  private cloakAnswer(): string {
+    return (
+      `Your ${characterName('grandmother')} pushes it back into your arms. ` +
+      speech(
+        'I kept that in paper all these years so you could hand it back to ' +
+          'me? She left it for you. Wear it.',
+      )
     )
   }
 }

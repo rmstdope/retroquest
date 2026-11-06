@@ -2010,6 +2010,16 @@
     "text": "At the river bend you found your mother's letter, hidden beneath the smooth stone. Its words raise more questions than they answer, but they are hers."
   },
   {
+    "id": "166a26242914c1",
+    "speaker": "narrator",
+    "text": "The fisherman knows the paper before he reads a word, and does not read it."
+  },
+  {
+    "id": "113cab27668f90",
+    "speaker": "fisherman",
+    "text": "So you lifted the stone. I sat by it more years than I'll own to, lad, and never once did. Wasn't mine to."
+  },
+  {
     "id": "0d28fe08434f5e",
     "speaker": "narrator",
     "text": "Forest Path"
@@ -2650,6 +2660,41 @@
     "text": "A warm light envelops you, and you feel your wounds mending."
   },
   {
+    "id": "1a7e84b599c375",
+    "speaker": "narrator",
+    "text": "Mira reads it to the end, and her thumb stays on one line."
+  },
+  {
+    "id": "18e9312e8643aa",
+    "speaker": "mira",
+    "text": "She always did trust me with more than I asked for."
+  },
+  {
+    "id": "1031c3358ab49c",
+    "speaker": "narrator",
+    "text": "She hands it back."
+  },
+  {
+    "id": "0555c702da0393",
+    "speaker": "mira",
+    "text": "When you are ready, Elior. Not before. Those are her words, and they are mine."
+  },
+  {
+    "id": "00ce12430a7364",
+    "speaker": "narrator",
+    "text": "Mira holds it by the edges, the way you do, and looks at it a long time."
+  },
+  {
+    "id": "189694e46d5920",
+    "speaker": "mira",
+    "text": "You were a loud baby."
+  },
+  {
+    "id": "096245bee997c4",
+    "speaker": "narrator",
+    "text": "She gives it back. That is all she says."
+  },
+  {
     "id": "0f69f116fbf436",
     "speaker": "borin",
     "text": "Magic, eh? Word gets round, young Elior. Can't hammer that into shape, but I'd wager it wants the same as iron: patience, and a steady hand."
@@ -3260,6 +3305,61 @@
     "text": "It is warm through the cloth. It smells of home, and of her kitchen."
   },
   {
+    "id": "068378a4163763",
+    "speaker": "narrator",
+    "text": "Your grandmother takes the ring, and her hands go still on it."
+  },
+  {
+    "id": "14e5690b08e369",
+    "speaker": "grandmother",
+    "text": "Your mother's. Your father walked to Greendale and back in a day to fetch that."
+  },
+  {
+    "id": "00f29403875661",
+    "speaker": "narrator",
+    "text": "She turns it once, so the letters inside catch the light, and gives it back."
+  },
+  {
+    "id": "1ca6578314156d",
+    "speaker": "grandmother",
+    "text": "Keep it, love. That one doesn't go on a shelf."
+  },
+  {
+    "id": "0dbfcc030c7fa9",
+    "speaker": "narrator",
+    "text": "She reads it standing, and then again. Her mouth goes thin at one line, and she does not say which."
+  },
+  {
+    "id": "0fa0d6f12ce332",
+    "speaker": "grandmother",
+    "text": "That's her, all over. Telling you what to do from wherever she is."
+  },
+  {
+    "id": "128ab64e2c015c",
+    "speaker": "narrator",
+    "text": "She folds it along its creases and hands it back."
+  },
+  {
+    "id": "1aeceeabe555fa",
+    "speaker": "grandmother",
+    "text": "Keep it dry. And do as she says."
+  },
+  {
+    "id": "0ebf5fffb2d67f",
+    "speaker": "narrator",
+    "text": "She turns to the bread."
+  },
+  {
+    "id": "1ebb45903f0d26",
+    "speaker": "narrator",
+    "text": "Your grandmother pushes it back into your arms."
+  },
+  {
+    "id": "11dd4f19fe2e0e",
+    "speaker": "grandmother",
+    "text": "I kept that in paper all these years so you could hand it back to me? She left it for you. Wear it."
+  },
+  {
     "id": "0c5f5b929a897d",
     "speaker": "narrator",
     "text": "A heavy, hooded cloak made for travel. It offers warmth and protection from the elements."
@@ -3675,14 +3775,34 @@
     "text": "Shadows over Willowbrook: Mira named the token a fouling sigil: someone poisoned the well on purpose. Whoever carried it, perhaps the cloaked stranger the villagers whisper about, was searching Willowbrook for something, or for someone."
   },
   {
-    "id": "11a0ba67289d79",
+    "id": "0cceb4fb10bbd0",
     "speaker": "narrator",
-    "text": "A mysterious amulet inscribed with runes. At its centre, a sun rises over three linked rings. It is faintly warm in your hand."
+    "text": "Mira reads it, then looks at the amulet you carry."
+  },
+  {
+    "id": "12513ed1a64ab2",
+    "speaker": "mira",
+    "text": "I kept it. Now you keep it."
+  },
+  {
+    "id": "0c8b6de2231bbf",
+    "speaker": "narrator",
+    "text": "She hands the letter back."
+  },
+  {
+    "id": "18820eb4ab1c46",
+    "speaker": "mira",
+    "text": "And mind what she says about answering questions."
   },
   {
     "id": "116aac75767bd3",
     "speaker": "narrator",
     "text": "A small hut hung with drying herbs: lavender, sage, and roots in bundles from the rafters. Shelves of bottles line the walls, every one labelled. Mira moves among them without looking, the way you move through your own kitchen. The stand where the amulet rested stands empty."
+  },
+  {
+    "id": "11a0ba67289d79",
+    "speaker": "narrator",
+    "text": "A mysterious amulet inscribed with runes. At its centre, a sun rises over three linked rings. It is faintly warm in your hand."
   },
   {
     "id": "05633832d62aae",

@@ -8,6 +8,8 @@ import {
 } from '@/engine'
 import { RareFlower } from '../items/RareFlower'
 import { AncientAmulet } from '../items/AncientAmulet'
+import { MothersLetter } from '../items/MothersLetter'
+import { FadedPhotograph } from '../items/FadedPhotograph'
 import { Mechanism } from '../items/Mechanism'
 import { RuneToken } from '../items/RuneToken'
 import { HealSpell } from '../spells/HealSpell'
@@ -236,9 +238,48 @@ export class Mira extends Character {
         )
       )
     }
+    if (item instanceof MothersLetter) return this.letterAnswer(gameState)
+    if (item instanceof FadedPhotograph) return this.photographAnswer()
     return (
       `${characterName('Mira')} regards it, then shakes her head gently. ` +
       speech('I have no need for this, child.')
+    )
+  }
+
+  /**
+   * The mother's letter: she reads it to the end and hands it back. Before
+   * Elior carries the amulet she asks him to wait until he is ready; once he
+   * carries it, she tells him she kept it and he must now.
+   */
+  private letterAnswer(gameState: GameState): string {
+    if (gameState.inventory.some((item) => item instanceof AncientAmulet)) {
+      return (
+        `${characterName('Mira')} reads it, then looks at the ` +
+        '[item_name]amulet[/item_name] you carry. ' +
+        speech('I kept it. Now you keep it.') +
+        '\nShe hands the letter back. ' +
+        speech('And mind what she says about answering questions.')
+      )
+    }
+    return (
+      `${characterName('Mira')} reads it to the end, and her thumb stays on ` +
+      'one line. ' +
+      speech('She always did trust me with more than I asked for.') +
+      '\nShe hands it back. ' +
+      speech(
+        'When you are ready, Elior. Not before. ' +
+          'Those are her words, and they are mine.',
+      )
+    )
+  }
+
+  /** The faded photograph: she looks long, says one thing and gives it back. */
+  private photographAnswer(): string {
+    return (
+      `${characterName('Mira')} holds it by the edges, the way you do, and ` +
+      'looks at it a long time. ' +
+      speech('You were a loud baby.') +
+      ' She gives it back. That is all she says.'
     )
   }
 

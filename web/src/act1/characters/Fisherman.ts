@@ -9,6 +9,7 @@ import {
 } from '@/engine'
 import { Fish } from '../items/Fish'
 import { FadedPhotograph } from '../items/FadedPhotograph'
+import { MothersLetter } from '../items/MothersLetter'
 import { PurifySpell } from '../spells/PurifySpell'
 import {
   FLAG_FISHERMAN_TOLD_OF_TIN,
@@ -186,6 +187,18 @@ export class Fisherman extends Character {
 
     if (item instanceof FadedPhotograph) {
       return this.showPhotograph(gameState)
+    }
+
+    if (item instanceof MothersLetter) {
+      return attributeSpeech(
+        this.name,
+        `The ${characterName('fisherman')} knows the paper before he reads a ` +
+          'word, and does not read it. ' +
+          speech(
+            "So you lifted the stone. I sat by it more years than I'll own " +
+              "to, lad, and never once did. Wasn't mine to.",
+          ),
+      )
     }
 
     return attributeSpeech(
