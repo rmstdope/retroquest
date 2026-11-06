@@ -16,6 +16,9 @@ import {
 import { AncientAmulet } from '../items/AncientAmulet'
 import { Well } from '../items/Well'
 
+/** The byword for Malakar, said anywhere in the words. */
+const MALAKAR = /malakar/i
+
 /**
  * Tilda, the baker's wife: a friendly Willowbrook local who cycles through
  * village rumors (one of them uses Malakar's name as the village does, a
@@ -138,7 +141,8 @@ export class Villager extends Character {
   }
 
   /**
-   * Take the truth about the well. Once the well is purified and she has
+   * Hush at the byword "Malakar" (knocking on wood, whatever else is
+   * going on). Take the truth about the well. Once the well is purified and she has
    * asked, saying "truth" or "yes" tells her it was Elior: her reply and the
    * remembered line, recorded once. Earlier she is lost ("truth") or gives the
    * usual reply (anything else); later she keeps the secret. Other words,
@@ -146,6 +150,7 @@ export class Villager extends Character {
    * truth.
    */
   override sayTo(gameState: GameState, words: string): string {
+    if (MALAKAR.test(words)) return this.knock()
     const asked = gameState.getStoryFlag(FLAG_TILDA_ASKED_ABOUT_WELL)
     const isTruth = /\btruth\b/i.test(words)
     const isYes = /\byes\b/i.test(words)
@@ -190,6 +195,17 @@ export class Villager extends Character {
     )
   }
 
+  /** Her hush at the byword: the same every time, so it never moves her turn. */
+  private knock(): string {
+    return attributeSpeech(
+      this.name,
+      `${this.nameInSentence({ atStart: true })} knocks on the nearest bit of wood, quick, the way her mother did. ` +
+        speech(
+          'Hush, love. Not out loud, not with the fields the way they are.',
+        ),
+    )
+  }
+
   /** Whether the village well has been purified. */
   private wellIsPurified(gameState: GameState): boolean {
     return (
@@ -197,5 +213,19 @@ export class Villager extends Character {
         (item) => item instanceof Well && item.isPurified,
       ) ?? false
     )
+  }
+
+  /** The two answers to a word with no particular reply, given in turn. */
+  protected override unknownWordAnswers(): readonly string[] {
+    return [
+      `${this.nameInSentence({ atStart: true })} cocks her head. ` +
+        speech(
+          "That's a new one on me, love, and I hear everything in this square.",
+        ),
+      `${this.nameInSentence({ atStart: true })} laughs. ` +
+        speech(
+          "Whatever that means, love, nobody's told me, and that's a first.",
+        ),
+    ]
   }
 }

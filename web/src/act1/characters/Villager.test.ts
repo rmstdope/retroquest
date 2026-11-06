@@ -199,7 +199,7 @@ describe('Tilda and the truth about the well', () => {
     const answer = game.commandParser.parse('say maybe to tilda')
 
     expect(answer).toContain('Come now, love. Tell me the truth.')
-    expect(answer).not.toContain("don't seem to understand")
+    expect(answer).not.toContain("That's a new one on me")
     expect(game.state.hasVirtue(VIRTUE_TRUTH)).toBe(false)
     expectDialogueSpeaker(answer, 'Tilda')
   })
@@ -209,7 +209,7 @@ describe('Tilda and the truth about the well', () => {
     game.commandParser.parse('talk to tilda')
 
     expect(game.commandParser.parse('say maybe to tilda')).toContain(
-      "don't seem to understand",
+      "That's a new one on me, love",
     )
   })
 
@@ -218,7 +218,19 @@ describe('Tilda and the truth about the well', () => {
     game.state.addItemToInventory(new AncientAmulet())
 
     expect(game.commandParser.parse('say goodbye to tilda')).toContain(
-      "don't seem to understand",
+      "That's a new one on me, love",
+    )
+  })
+
+  it('knocks on wood at Malakar, not nudging, and nudges again after', () => {
+    const game = gameWhereTildaHasAsked()
+
+    const answer = game.commandParser.parse('say Malakar to tilda')
+
+    expect(answer).toContain('Hush, love. Not out loud')
+    expect(answer).not.toContain('Tell me the truth')
+    expect(game.commandParser.parse('say maybe to tilda')).toContain(
+      'Come now, love. Tell me the truth.',
     )
   })
 
@@ -230,12 +242,12 @@ describe('Tilda and the truth about the well', () => {
     )
   })
 
-  it('gives the stock reply to "yes" before she has asked', () => {
+  it('gives her unknown-word answer to "yes" before she has asked', () => {
     const game = gameInSquare()
 
     const answer = game.commandParser.parse('say yes to tilda')
 
-    expect(answer).toContain("don't seem to understand")
+    expect(answer).toContain("That's a new one on me")
     expect(game.state.hasVirtue(VIRTUE_TRUTH)).toBe(false)
   })
 
@@ -313,7 +325,7 @@ describe('Tilda and the truth about the well', () => {
     game.commandParser.parse('say truth to tilda')
 
     expect(game.commandParser.parse('say hello to tilda')).toContain(
-      "don't seem to understand",
+      "That's a new one on me, love",
     )
   })
 

@@ -220,4 +220,18 @@ export class Merchant extends Character {
       `You receive a pair of [item_name]${boots.name}[/item_name].`
     )
   }
+
+  /** The two answers to a word with no particular reply, given in turn. */
+  protected override unknownWordAnswers(): readonly string[] {
+    return [
+      `${this.nameInSentence({ atStart: true })} grins. ` +
+        speech(
+          "Never heard that one, friend, and I've walked every road between here and Greendale.",
+        ),
+      `${this.nameInSentence({ atStart: true })} shakes his head. ` +
+        speech(
+          "You'd fetch a poor price for that word on any road I know, friend.",
+        ),
+    ]
+  }
 }

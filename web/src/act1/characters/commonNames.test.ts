@@ -30,11 +30,11 @@ describe.each([
 ])('the %s, a common-noun character', (name, make) => {
   const marked = `[character_name]${name}[/character_name]`
 
-  it('is "the" one mid-sentence when it does not understand', () => {
+  it('is "The" one at the start of its answer to an unknown word', () => {
     const game = gameWith(make())
 
     expect(game.commandParser.parse(`say hello to ${name}`)).toContain(
-      `You say 'hello' to the ${marked}, but`,
+      `The ${marked} `,
     )
   })
 
@@ -55,7 +55,7 @@ describe('Borin and Hemlock, named from the start', () => {
     const game = gameWith(make())
 
     expect(game.commandParser.parse(`say hello to ${word}`)).toContain(
-      `You say 'hello' to [character_name]${name}[/character_name], but`,
+      `[character_name]${name}[/character_name] `,
     )
   })
 

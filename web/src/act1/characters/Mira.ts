@@ -441,4 +441,14 @@ export class Mira extends Character {
     // Conditions not fulfilled: give quest_conditions_not_met message
     return this.dialogue('quest_conditions_not_met')
   }
+
+  /** The two answers to a word with no particular reply, given in turn. */
+  protected override unknownWordAnswers(): readonly string[] {
+    return [
+      `${this.nameInSentence({ atStart: true })} glances up from the herbs, and back down. ` +
+        speech('Not a word I know, Elior.'),
+      `${this.nameInSentence({ atStart: true })} ties off a bundle of sage before she answers. ` +
+        speech("If it matters, you'll tell me what it means."),
+    ]
+  }
 }

@@ -145,4 +145,31 @@ describe('A plural character', () => {
       false,
     )
   })
+
+  describe('unknown words', () => {
+    /** A character with two answers for words it does not know. */
+    class Answerer extends Character {
+      protected override unknownWordAnswers(): readonly string[] {
+        return ['[dialogue]One.[/dialogue]', '[dialogue]Two.[/dialogue]']
+      }
+    }
+
+    it('alternates its answers, labelled with its name, and never repeats the words', () => {
+      const who = new Answerer({ name: 'Ana', description: 'd' })
+      const first = who.sayTo(gs, 'zork')
+      expect(first).toBe(
+        '[character_name]Ana[/character_name]\n[dialogue]One.[/dialogue]',
+      )
+      expect(who.sayTo(gs, 'zork')).toContain('Two.')
+      expect(who.sayTo(gs, 'zork')).toContain('One.')
+      expect(first).not.toContain('zork')
+    })
+
+    it('keeps each character its own turn', () => {
+      const a = new Answerer({ name: 'Ana', description: 'd' })
+      const b = new Answerer({ name: 'Bo', description: 'd' })
+      a.sayTo(gs, 'x')
+      expect(b.sayTo(gs, 'x')).toContain('One.')
+    })
+  })
 })

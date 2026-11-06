@@ -1,5 +1,6 @@
 import type { GameState } from './GameState'
 import type { Item } from './Item'
+import { attributeSpeech } from './markup'
 import { nameInSentence, type NameOptions } from './names'
 import type { Spell } from './Spell'
 
@@ -12,6 +13,8 @@ export interface CharacterOptions {
 export class Character {
   name: string
   description: string
+  /** How many unknown words the character has answered; absent in older saves. */
+  unknownWordTurn?: number
 
   constructor({ name, description }: CharacterOptions) {
     this.name = name
@@ -70,13 +73,33 @@ export class Character {
     return `${this.nameInSentence({ atStart: true })} ${this.verb('has', 'have')} nothing to say right now.`
   }
 
-  /** The player says specific words to the character. */
+  /**
+   * The character's answers to words it has no particular reply to, each
+   * already marked up, taking turns in order. Empty by default, which keeps
+   * the engine's stock line.
+   */
+  protected unknownWordAnswers(): readonly string[] {
+    return []
+  }
+
+  /**
+   * The player says specific words to the character. Without answers of its
+   * own (see `unknownWordAnswers`) it gives the engine's stock line; otherwise
+   * the next answer in turn, labelled with the speaker's name. The words
+   * are never shown back.
+   */
   sayTo(_gameState: GameState, words: string): string {
-    return (
-      `[dialogue]You say '${words}' to ${this.nameInSentence()}, ` +
-      "but they don't seem to understand or respond to that particular phrase." +
-      '[/dialogue]'
-    )
+    const answers = this.unknownWordAnswers()
+    if (answers.length === 0) {
+      return (
+        `[dialogue]You say '${words}' to ${this.nameInSentence()}, ` +
+        "but they don't seem to understand or respond to that particular phrase." +
+        '[/dialogue]'
+      )
+    }
+    const turn = this.unknownWordTurn ?? 0
+    this.unknownWordTurn = (turn + 1) % answers.length
+    return attributeSpeech(this.name, answers[turn % answers.length])
   }
 
   /**
