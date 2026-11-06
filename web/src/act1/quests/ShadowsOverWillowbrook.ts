@@ -63,7 +63,9 @@ export class ShadowsOverWillowbrookQuest extends Quest {
    * set, in the order the flags were first noticed (`flagState` keeps its
    * insertion order, in saves too), so the newest beat is usually the latest.
    * The village's signs and Mira's words on them always come before the
-   * flower, even when noticed after it, so the log never steps backwards.
+   * flower, even when noticed after it, so the log never steps backwards;
+   * her words carry her request for the flower only when she did not have
+   * it yet.
    * True only when the newest entry changed: a beat folded in among the
    * earlier ones is not news, or the story would repeat the newest entry.
    */
@@ -92,9 +94,7 @@ export class ShadowsOverWillowbrookQuest extends Quest {
       [
         FLAG_CONNECT_WITH_NATURE,
         `${characterName('Mira')} says the sickness in the fields and the ` +
-          'sickness of the king feel like one wound. She wants a rare flower ' +
-          'from the Hidden Glade, one that opens only for someone the land ' +
-          'trusts.',
+          'sickness of the king feel like one wound.',
       ],
       [
         FLAG_MAGIC_FULLY_UNLOCKED,
@@ -151,7 +151,22 @@ export class ShadowsOverWillowbrookQuest extends Quest {
       ([a], [b]) =>
         chapter(a) - chapter(b) || noticed.indexOf(a) - noticed.indexOf(b),
     )
-    const stages = [dream, ...shown.map(([, text]) => `\n${text}`)]
+    // Her request for the flower is news only while she does not have it.
+    const flowerFirst =
+      noticed.includes(FLAG_MAGIC_FULLY_UNLOCKED) &&
+      noticed.indexOf(FLAG_MAGIC_FULLY_UNLOCKED) <
+        noticed.indexOf(FLAG_CONNECT_WITH_NATURE)
+    const request =
+      ' She wants a rare flower from the Hidden Glade, one that opens only ' +
+      'for someone the land trusts.'
+    const stages = [
+      dream,
+      ...shown.map(
+        ([flag, text]) =>
+          `\n${text}` +
+          (flag === FLAG_CONNECT_WITH_NATURE && !flowerFirst ? request : ''),
+      ),
+    ]
     const latestBefore = this.latestStage
     this.setJournal(stages.slice(0, -1), stages[stages.length - 1])
     return updated && this.latestStage !== latestBefore
