@@ -4,6 +4,9 @@ import { GameMap } from './GameMap'
 /** The words Elior's father left in the box for him. */
 const FATHERS_NOTE = 'For when the light comes back to you.'
 
+/** The words a player may use for the note once the box is open. */
+const NOTE_NAMES = ['note', 'folded note', "father's note"]
+
 /**
  * Small locked container introducing multi-step acquisition and object state
  * transitions. Elior's father sealed it in his workshop so that only Elior's
@@ -22,6 +25,15 @@ export class MysteriousBox extends Item {
         'something important is hidden inside.',
       shortName: 'box',
     })
+  }
+
+  /**
+   * Once opened, the box also answers to the note left inside it, so
+   * examining the note reads the box's description and the father's line.
+   */
+  override answersTo(name: string): boolean {
+    if (super.answersTo(name)) return true
+    return !this.containsMap && NOTE_NAMES.includes(name.toLowerCase())
   }
 
   /** Unlock the box if locked, otherwise report already unlocked (called by UnlockSpell). */
