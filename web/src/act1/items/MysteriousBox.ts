@@ -51,7 +51,8 @@ export class MysteriousBox extends Item {
 
   /**
    * Open the box if unlocked, dispense the map and show the father's note,
-   * which stays in the box; otherwise report it locked or empty.
+   * which stays in the box; otherwise say it is locked, or that it lies open
+   * with only the note inside.
    */
   override open(gameState: GameState): string {
     const nameHtml = `[item_name]${this.name}[/item_name]`
@@ -79,6 +80,8 @@ export class MysteriousBox extends Item {
         'sealed so that only your magic could ever open it.'
       )
     }
-    return `The ${nameHtml} is now empty.`
+    return (
+      `The ${nameHtml} lies open. Only your father's note remains ` + 'inside.'
+    )
   }
 }

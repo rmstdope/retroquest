@@ -52,6 +52,18 @@ describe('MysteriousBox', () => {
 
     expect(game.commandParser.parse('examine note')).toContain(NOTE)
     expect(game.commandParser.parse('examine folded note')).toContain(NOTE)
+    expect(game.commandParser.parse("examine father's note")).toContain(NOTE)
+  })
+
+  it('says the note remains, not that the box is empty, when opened again', () => {
+    const { game } = gameWithUnlockedBox()
+    game.commandParser.parse('open box')
+
+    for (const command of ['open box', 'open note']) {
+      const answer = game.commandParser.parse(command)
+      expect(answer).not.toContain('empty')
+      expect(answer).toContain("your father's note")
+    }
   })
 
   it('has no note to examine before the box is opened', () => {
