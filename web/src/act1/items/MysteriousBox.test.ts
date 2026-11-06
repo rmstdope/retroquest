@@ -77,7 +77,9 @@ describe('MysteriousBox', () => {
     ]) {
       const answer = game.commandParser.parse(command)
       expect(answer).not.toContain('mysterious box')
-      expect(answer).toContain('note')
+      expect(answer).toContain(
+        'The note stays in the box, where your father left it for you.',
+      )
       expect(findMarkupProblems(answer)).toEqual([])
     }
     expect(game.state.hasItem('mysterious box')).toBe(false)
