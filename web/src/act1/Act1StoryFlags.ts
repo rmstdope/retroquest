@@ -66,6 +66,12 @@ export const FLAG_TILDA_ASKED_ABOUT_WELL = 'tilda_asked_about_well'
  */
 export const FLAG_KEPT_MOTHERS_RING = 'kept_mothers_ring'
 /**
+ * Set the first time Elior gives his mother's ring to Grandmother, when she
+ * remarks on where it was found. The farewell reads it to know whether she
+ * has seen the ring.
+ */
+export const FLAG_SHOWED_GRANDMOTHER_RING = 'showed_grandmother_ring'
+/**
  * Choice: set when Elior lets Patches stay with grandmother instead of
  * carrying her home to Hemlock (the golden path).
  */

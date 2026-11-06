@@ -13,6 +13,7 @@ import {
   FLAG_PATCHES_RETURNED,
   FLAG_PATCHES_STAYED_WITH_GRANDMOTHER,
   FLAG_SHADOWS_OVER_WILLOWBROOK_COMPLETED,
+  FLAG_SHOWED_GRANDMOTHER_RING,
 } from '../Act1StoryFlags'
 
 /** The name of the quest that is counted apart from the side quests. */
@@ -92,18 +93,51 @@ function revelation(): string {
 }
 
 /**
+ * Grandmother's word on the ring, as she could know it: whether Elior kept it
+ * or traded it, and whether he ever gave it to her at the cottage. A kept ring
+ * she never saw she finds now, in his hand.
+ */
+function ringBeat(gameState: GameState): string {
+  const kept = gameState.getStoryFlag(FLAG_KEPT_MOTHERS_RING)
+  const shown = gameState.getStoryFlag(FLAG_SHOWED_GRANDMOTHER_RING)
+  if (kept && shown) {
+    return speech(
+      'And you kept her ring. Good. Let a little of her go with you.',
+    )
+  }
+  if (kept) {
+    return (
+      'Her eyes catch on your hand, closed around something. She opens your ' +
+      'fingers, and the ring lies in your palm.\n' +
+      speech("Your mother's.") +
+      '\nYou tell her where you found it: at the bottom of the well. She ' +
+      'looks at it a long moment.\n' +
+      speech('She never took it off. Not once.') +
+      '\nShe closes your fingers over it again.\n' +
+      speech('Then keep it. Let a little of her go with you.')
+    )
+  }
+  if (shown) {
+    return speech(
+      `So the ${characterName('merchant')} has her ring now. He showed it ` +
+        "me in the square. No, don't fret; she'd have given it for your " +
+        'boots in a heartbeat.',
+    )
+  }
+  return speech(
+    `The ${characterName('merchant')} showed me the ring he had of you. ` +
+      "It was your mother's wedding ring, child. No, don't fret; " +
+      "she'd have given it for your boots in a heartbeat.",
+  )
+}
+
+/**
  * The farewell on the Road to Greendale that ends Act I: grandmother has
  * walked out to see Elior off, with a word on the ring and on Patches that
  * follows his choices; then the chapel bell rings once by itself.
  */
 function farewell(gameState: GameState): string {
-  const ringLine = gameState.getStoryFlag(FLAG_KEPT_MOTHERS_RING)
-    ? speech('And you kept her ring. Good. Let a little of her go with you.')
-    : speech(
-        `The ${characterName('merchant')} showed me the ring he had of you. ` +
-          "It was your mother's wedding ring, child. No, don't fret; " +
-          "she'd have given it for your boots in a heartbeat.",
-      )
+  const ringLine = ringBeat(gameState)
   let patchesLine = ''
   if (gameState.getStoryFlag(FLAG_PATCHES_STAYED_WITH_GRANDMOTHER)) {
     patchesLine = speech(

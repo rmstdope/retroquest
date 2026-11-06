@@ -6,11 +6,13 @@ import {
   FLAG_PATCHES_FOUND,
   FLAG_PATCHES_RETURNED,
   FLAG_PATCHES_STAYED_WITH_GRANDMOTHER,
+  FLAG_SHOWED_GRANDMOTHER_RING,
 } from '../Act1StoryFlags'
 import { Patches } from './Patches'
 import { AncientAmulet } from '../items/AncientAmulet'
 import { FreshBread } from '../items/FreshBread'
 import { Act1 } from '../Act1'
+import { ShinyRing } from '../items/ShinyRing'
 import { Locket } from '../items/Locket'
 import { FadedPhotograph } from '../items/FadedPhotograph'
 import { Key } from '../items/Key'
@@ -589,5 +591,50 @@ describe('Grandmother between the Revive tale and the flower', () => {
     loaded.loadSaveData(game.toSaveData())
 
     expect(executeCommands(loaded, ['talk to grandmother'])).toContain(RIVER)
+  })
+})
+
+describe('Grandmother and the ring from the well', () => {
+  const GIVE = ['give shiny ring to grandmother']
+  const WELL_BEAT = 'She never took it off. Not once.'
+
+  it('remarks once on the well the first time she is given the ring', () => {
+    const game = cottageGame()
+    game.state.addItemToInventory(new ShinyRing())
+
+    const first = executeCommands(game, GIVE)
+
+    expect(first).toContain(
+      'You tell her where you found it. She looks up at you, and back at the ring.',
+    )
+    expect(first).toContain(WELL_BEAT)
+    expect(first.indexOf('Your father walked to Greendale')).toBeLessThan(
+      first.indexOf(WELL_BEAT),
+    )
+    expect(first.indexOf(WELL_BEAT)).toBeLessThan(
+      first.indexOf("That one doesn't go on a shelf."),
+    )
+    expect(game.state.getStoryFlag(FLAG_SHOWED_GRANDMOTHER_RING)).toBe(true)
+  })
+
+  it('gives today’s answer without the well beat from the second time', () => {
+    const game = cottageGame()
+    game.state.addItemToInventory(new ShinyRing())
+    executeCommands(game, GIVE)
+
+    const second = executeCommands(game, GIVE)
+
+    expect(second).toContain("That one doesn't go on a shelf.")
+    expect(second).not.toContain(WELL_BEAT)
+  })
+
+  it('does not repeat the well beat after a save and reload', () => {
+    const game = cottageGame()
+    game.state.addItemToInventory(new ShinyRing())
+    executeCommands(game, GIVE)
+    const loaded = cottageGame()
+    loaded.loadSaveData(game.toSaveData())
+
+    expect(executeCommands(loaded, GIVE)).not.toContain(WELL_BEAT)
   })
 })

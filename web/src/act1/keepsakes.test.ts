@@ -83,12 +83,6 @@ describe('family keepsakes', () => {
     string,
   ][] = [
     [
-      'ring to Grandmother',
-      () => new Grandmother(),
-      () => new ShinyRing(),
-      RING_TO_GRANDMOTHER,
-    ],
-    [
       'letter to Grandmother',
       () => new Grandmother(),
       () => new MothersLetter(),
@@ -138,10 +132,22 @@ describe('family keepsakes', () => {
     },
   )
 
+  it('answers the ring to Grandmother as before from the second gift on, keeping the item', () => {
+    const game = new Game([new Act1()])
+    const ring = new ShinyRing()
+    game.state.addItemToInventory(ring)
+    new Grandmother().giveItem(game.state, ring)
+    const again = withoutLabel(new Grandmother().giveItem(game.state, ring))
+    expect(again).toBe(RING_TO_GRANDMOTHER)
+    expect(game.state.inventory).toContain(ring)
+  })
+
   it('answers the same whether or not the ring was examined', () => {
     const game = new Game([new Act1()])
     const ring = new ShinyRing()
     game.state.addItemToInventory(ring)
+    // The first gift tells the story of the well; compare the later answers.
+    new Grandmother().giveItem(game.state, ring)
     const unexamined = withoutLabel(
       new Grandmother().giveItem(game.state, ring),
     )
