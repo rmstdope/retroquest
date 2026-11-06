@@ -830,9 +830,9 @@
     "text": "General Store"
   },
   {
-    "id": "02c0b17fff58f5",
+    "id": "0856770984804a",
     "speaker": "narrator",
-    "text": "A cluttered shop with the shutters half down. Rope, apples and trinkets crowd the shelves in the gloom. Hemlock stands at the window, watching the lane."
+    "text": "A cluttered shop with the shutters half down. Rope, apples and trinkets crowd the shelves in the gloom. Hemlock stands at the window, watching the lane to the chapel."
   },
   {
     "id": "10666258a6313c",
@@ -1340,9 +1340,9 @@
     "text": "Patches blinks at you slowly from beside the hearth and begins to purr."
   },
   {
-    "id": "0e071135b02fb5",
+    "id": "140734003dbe75",
     "speaker": "narrator",
-    "text": "A cluttered shop. Rope, apples and trinkets crowd the shelves, and the air smells of fruit, wax and old wood. Hemlock dusts jars between customers."
+    "text": "A cluttered shop. Rope, apples and trinkets crowd the shelves, and the air smells of fruit, wax and old wood. Outside, the lane runs east to the chapel. Hemlock dusts jars between customers."
   },
   {
     "id": "0e695490a6f205",
@@ -1685,9 +1685,9 @@
     "text": "Patches blinks at you slowly from the counter and begins to purr."
   },
   {
-    "id": "0b25cd2e8b499a",
+    "id": "114d655e33e497",
     "speaker": "narrator",
-    "text": "A cluttered shop. Rope, apples and trinkets crowd the shelves, and the air smells of fruit, wax and old wood. Hemlock dusts jars between customers, and every so often looks at the counter, where his cat sleeps."
+    "text": "A cluttered shop. Rope, apples and trinkets crowd the shelves, and the air smells of fruit, wax and old wood. Outside, the lane runs east to the chapel. Hemlock dusts jars between customers, and every so often looks at the counter, where his cat sleeps."
   },
   {
     "id": "05feedc880605f",
@@ -2115,29 +2115,14 @@
     "text": "So you lifted the stone. I sat by it more years than I'll own to, lad, and never once did. Wasn't mine to."
   },
   {
-    "id": "150ecc75a68785",
-    "speaker": "narrator",
-    "text": "Hidden Glade"
-  },
-  {
-    "id": "108b4faf369d64",
-    "speaker": "narrator",
-    "text": "A hushed clearing hidden deep within the forest, dim and overgrown. Brambles crowd its edges, and the tall grass stands grey and still beneath branches that shut out the sun. In the center, a mossy stone bears a faint inscription, too deep in shadow to read. An unnatural darkness lingers here, though the sky above the branches is clear."
-  },
-  {
     "id": "1174c72ff016c4",
     "speaker": "narrator",
     "text": "Village Chapel"
   },
   {
-    "id": "120f846e60a8f4",
+    "id": "17b5d6f03fee46",
     "speaker": "narrator",
-    "text": "A small stone chapel. Its stained glass windows cast colours across the worn pews, and the air is cool and smells of candle wax. A kindly priest tends the altar. By the door the bell rope hangs straight and still. Over the door a shape is cut into the stone, worn almost smooth. A dark corner by the altar swallows the light."
-  },
-  {
-    "id": "1fdaf546da1586",
-    "speaker": "narrator",
-    "text": "You have walked every corner of Willowbrook. The pull has gone quiet, and the village feels like home."
+    "text": "A small stone chapel at the end of the village lane. Its stained glass windows cast colours across the worn pews, and the air is cool and smells of candle wax. A kindly priest tends the altar. By the door the bell rope hangs straight and still. Over the door a shape is cut into the stone, worn almost smooth. A dark corner by the altar swallows the light."
   },
   {
     "id": "182c839e0a2572",
@@ -2260,6 +2245,16 @@
     "text": "It is straight and sound, and about the right length. A good stick is worth keeping."
   },
   {
+    "id": "150ecc75a68785",
+    "speaker": "narrator",
+    "text": "Hidden Glade"
+  },
+  {
+    "id": "108b4faf369d64",
+    "speaker": "narrator",
+    "text": "A hushed clearing hidden deep within the forest, dim and overgrown. Brambles crowd its edges, and the tall grass stands grey and still beneath branches that shut out the sun. In the center, a mossy stone bears a faint inscription, too deep in shadow to read. An unnatural darkness lingers here, though the sky above the branches is clear."
+  },
+  {
     "id": "15140ba61d73d7",
     "speaker": "narrator",
     "text": "A small, smooth pebble that glints faintly, as if it kept a light of its own. It feels oddly warm to the touch."
@@ -2328,6 +2323,16 @@
     "id": "04214f26c5fd27",
     "speaker": "narrator",
     "text": "The petals stay open in your hand. You hold it carefully, the way you would hold something that trusted you."
+  },
+  {
+    "id": "0f0f0539bfea13",
+    "speaker": "narrator",
+    "text": "Borin has nothing to sell you."
+  },
+  {
+    "id": "0d768eda5b0858",
+    "speaker": "borin",
+    "text": "Saw it, did you? The deer? My grandfather swore by that deer. Said it only shows itself to them as the land has need of."
   },
   {
     "id": "073c6d58d2326c",
@@ -2445,11 +2450,6 @@
     "text": "Let there be light: The priest is out of matches and his candle is cold. Hemlock at the General Store keeps a box for him."
   },
   {
-    "id": "0d768eda5b0858",
-    "speaker": "borin",
-    "text": "Saw it, did you? The deer? My grandfather swore by that deer. Said it only shows itself to them as the land has need of."
-  },
-  {
     "id": "0e9b1243224f12",
     "speaker": "hemlock",
     "text": "The priest's matches? They're under the counter, and they'll keep. I'll see to him the day Patches is home; I've no head for anything else till then."
@@ -2515,9 +2515,9 @@
     "text": "Look there, child. The light has found something."
   },
   {
-    "id": "105f9a07a06b71",
+    "id": "1d743b29f3bb45",
     "speaker": "narrator",
-    "text": "A small stone chapel. Its stained glass windows cast colours across the worn pews, and the air is cool and smells of candle wax. A kindly priest tends the altar. By the door the bell rope hangs straight and still. Over the door a shape is cut into the stone, worn almost smooth. The candle burns on the altar, and the corner beside it is dark no longer."
+    "text": "A small stone chapel at the end of the village lane. Its stained glass windows cast colours across the worn pews, and the air is cool and smells of candle wax. A kindly priest tends the altar. By the door the bell rope hangs straight and still. Over the door a shape is cut into the stone, worn almost smooth. The candle burns on the altar, and the corner beside it is dark no longer."
   },
   {
     "id": "1ac4291eb09877",
@@ -2578,11 +2578,6 @@
     "id": "07876550bd9ae0",
     "speaker": "priest",
     "text": "Thank you for the light, child. Show that to your grandmother. She will know it better than I."
-  },
-  {
-    "id": "0f0f0539bfea13",
-    "speaker": "narrator",
-    "text": "Borin has nothing to sell you."
   },
   {
     "id": "02e5f249f72efe",
@@ -3455,6 +3450,21 @@
     "text": "Preparing for the road: Mira has tasked you with preparing for your journey. She says you will need: Magical protection"
   },
   {
+    "id": "145eb33e4b8a92",
+    "speaker": "tilda",
+    "text": "The water's clean! I've not had dough rise so light in a year. Was that you, Elior? Go on, love, tell me true."
+  },
+  {
+    "id": "143b15276ea453",
+    "speaker": "narrator",
+    "text": "She looks at you, and waits."
+  },
+  {
+    "id": "02549c9fc3abc3",
+    "speaker": "tilda",
+    "text": "Not a word, eh? Then it'll be the old spring clearing itself, like my gran always said it would. Funny old world."
+  },
+  {
     "id": "04202bf0542090",
     "speaker": "narrator",
     "text": "The priest shakes his head and folds your fingers back over it."
@@ -3513,6 +3523,11 @@
     "id": "07040f5fea63ad",
     "speaker": "narrator",
     "text": "Preparing for the road: Mira has tasked you with preparing for your journey. She says you will need: Sturdy footwear"
+  },
+  {
+    "id": "1fdaf546da1586",
+    "speaker": "narrator",
+    "text": "You have walked every corner of Willowbrook. The pull has gone quiet, and the village feels like home."
   },
   {
     "id": "04b08f693320b1",
@@ -3655,16 +3670,6 @@
     "text": "How are the boots? Give them a week and they'll know your feet better than you do. Forgive me if I'm short, friend. I've not eaten since the hill road, and there's no inn this side of Greendale."
   },
   {
-    "id": "145eb33e4b8a92",
-    "speaker": "tilda",
-    "text": "The water's clean! I've not had dough rise so light in a year. Was that you, Elior? Go on, love, tell me true."
-  },
-  {
-    "id": "143b15276ea453",
-    "speaker": "narrator",
-    "text": "She looks at you, and waits."
-  },
-  {
     "id": "16b565f80843a4",
     "speaker": "narrator",
     "text": "You tell Tilda it was you: a spell, and a little help from the healer."
@@ -3688,11 +3693,6 @@
     "id": "1c67d822746b7e",
     "speaker": "tilda",
     "text": "Come now, love. Tell me the truth."
-  },
-  {
-    "id": "02549c9fc3abc3",
-    "speaker": "tilda",
-    "text": "Not a word, eh? Then it'll be the old spring clearing itself, like my gran always said it would. Funny old world."
   },
   {
     "id": "1f9e60b785fb3f",
@@ -3880,11 +3880,6 @@
     "text": "Shadows over Willowbrook: Nothing is left undone in Willowbrook. The Road to Greendale starts past the chapel, and the map may know the way on."
   },
   {
-    "id": "05633832d62aae",
-    "speaker": "tilda",
-    "text": "Mira's amulet... you're leaving, aren't you? Well. Don't you dare go without a proper send-off from the bakery. And mind you come home, love."
-  },
-  {
     "id": "1b36f3fe081248",
     "speaker": "narrator",
     "text": "Her eyes fall on the amulet you carry, and she goes very still."
@@ -3905,14 +3900,19 @@
     "text": "Come back to me, child."
   },
   {
+    "id": "007ceb3ed3f3ce",
+    "speaker": "narrator",
+    "text": "A creaky windmill towers above, its sails turning slowly in the breeze. Dusty gears and cobwebs fill the interior, and the scent of flour hangs in the air. Sunlight streams through broken windows, illuminating sacks of grain and a heavy millstone. Amidst the old workings, the black-iron mechanism stands jammed with a rope, silent at last. At your side, the ancient amulet hums softly, as if answering something stirring beneath the floor."
+  },
+  {
     "id": "1617d901ed64b1",
     "speaker": "narrator",
     "text": "A mysterious amulet inscribed with runes. At its centre, a sun rises over three linked rings. It hums softly in your hand, as if answering something stirring beneath the floor."
   },
   {
-    "id": "007ceb3ed3f3ce",
+    "id": "12999e9d8879cf",
     "speaker": "narrator",
-    "text": "A creaky windmill towers above, its sails turning slowly in the breeze. Dusty gears and cobwebs fill the interior, and the scent of flour hangs in the air. Sunlight streams through broken windows, illuminating sacks of grain and a heavy millstone. Amidst the old workings, the black-iron mechanism stands jammed with a rope, silent at last. At your side, the ancient amulet hums softly, as if answering something stirring beneath the floor."
+    "text": "A clearing in full sun, deep in the forest. Wildflowers cover the ground, and a light breeze moves the tall grass. In the center, a mossy stone bears an inscription. Beneath it, in a plainer hand, is carved: “Power follows purpose; purpose follows truth.” Beside the mossy stone, the ancient amulet in your hand begins to glow. A deer grazes at the edge of the clearing, and lifts its head to watch you. A rare flower once bloomed near the mossy stone. You picked it."
   },
   {
     "id": "01ec643e83edc4",
@@ -3920,9 +3920,9 @@
     "text": "A mysterious amulet inscribed with runes. At its centre, a sun rises over three linked rings. It glows in your hand, brightest when you hold it near the mossy stone."
   },
   {
-    "id": "12999e9d8879cf",
-    "speaker": "narrator",
-    "text": "A clearing in full sun, deep in the forest. Wildflowers cover the ground, and a light breeze moves the tall grass. In the center, a mossy stone bears an inscription. Beneath it, in a plainer hand, is carved: “Power follows purpose; purpose follows truth.” Beside the mossy stone, the ancient amulet in your hand begins to glow. A deer grazes at the edge of the clearing, and lifts its head to watch you. A rare flower once bloomed near the mossy stone. You picked it."
+    "id": "05633832d62aae",
+    "speaker": "tilda",
+    "text": "Mira's amulet... you're leaving, aren't you? Well. Don't you dare go without a proper send-off from the bakery. And mind you come home, love."
   },
   {
     "id": "14cc1c80d9153b",

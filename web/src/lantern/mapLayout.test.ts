@@ -1,5 +1,8 @@
 import { describe, it, expect } from 'vitest'
-import type { MapPlace } from '@/engine'
+import { Game, GameController, type MapPlace } from '@/engine'
+import { executeCommands } from '@/testing/gameHelpers'
+import { Act1 } from '../act1/Act1'
+import { ACT1_GOLDEN_PATH } from '../act1/Act1GoldenPath'
 import { layoutMap } from './mapLayout'
 
 function place(
@@ -27,6 +30,22 @@ function at(
   if (!box) throw new Error(`no box ${key}`)
   return [box.col, box.row]
 }
+
+describe('layoutMap of the village lane (rq-un37)', () => {
+  it('lays the chapel and the road east of the store on its row, and the glade alone', () => {
+    const game = new Game([new Act1()])
+    const upToChapel = ACT1_GOLDEN_PATH.indexOf('use candle with matches')
+    executeCommands(game, ACT1_GOLDEN_PATH.slice(0, upToChapel))
+    const layout = layoutMap(new GameController(game).getMapPlaces())
+    const [storeCol, storeRow] = at(layout, 'GeneralStore')
+    expect(at(layout, 'VillageChapel')).toEqual([storeCol + 1, storeRow])
+    expect(at(layout, 'RoadToGreendale')).toEqual([storeCol + 2, storeRow])
+    const gladePaths = layout.paths.filter(
+      (path) => path.from === 'HiddenGlade' || path.to === 'HiddenGlade',
+    )
+    expect(gladePaths).toHaveLength(1)
+  })
+})
 
 describe('layoutMap', () => {
   it('shows a lone place by itself', () => {

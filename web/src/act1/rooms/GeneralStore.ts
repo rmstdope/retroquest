@@ -16,10 +16,12 @@ import {
 const SHUT_TEXT =
   'A cluttered shop with the shutters half down. Rope, apples and ' +
   'trinkets crowd the shelves in the gloom. ' +
-  `${characterName('Hemlock')} stands at the window, watching the lane.`
+  `${characterName('Hemlock')} stands at the window, ` +
+  'watching the lane to the chapel.'
 const OPEN_TEXT =
   'A cluttered shop. Rope, apples and trinkets crowd the shelves, ' +
   'and the air smells of fruit, wax and old wood. ' +
+  'Outside, the lane runs east to the chapel. ' +
   `${characterName('Hemlock')} dusts jars between customers`
 const CAT_CLAUSE =
   ', and every so often looks at the counter, where his cat sleeps'
@@ -48,8 +50,17 @@ export class GeneralStore extends Room {
         ...Scenery.forRoom('GeneralStore'),
       ],
       characters: [new Shopkeeper()],
-      exits: { west: 'VillageSquare', south: 'BlacksmithsForge' },
+      exits: {
+        west: 'VillageSquare',
+        east: 'VillageChapel',
+        south: 'BlacksmithsForge',
+      },
     })
+  }
+
+  /** Give a save made before the lane to the chapel the store's current ways out. */
+  override refreshSavedText(): void {
+    this.exits = new GeneralStore().exits
   }
 
   /** Purrs with the cat once Patches was carried home; otherwise the plain store. */

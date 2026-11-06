@@ -12,10 +12,11 @@ import { GeneralStore } from './GeneralStore'
 const SHUT =
   'A cluttered shop with the shutters half down. Rope, apples and ' +
   'trinkets crowd the shelves in the gloom. [character_name]Hemlock[/character_name] ' +
-  'stands at the window, watching the lane.'
+  'stands at the window, watching the lane to the chapel.'
 const OPEN =
   'A cluttered shop. Rope, apples and trinkets crowd the shelves, ' +
-  'and the air smells of fruit, wax and old wood. [character_name]Hemlock[/character_name] ' +
+  'and the air smells of fruit, wax and old wood. ' +
+  'Outside, the lane runs east to the chapel. [character_name]Hemlock[/character_name] ' +
   'dusts jars between customers'
 const CAT = ', and every so often looks at the counter, where his cat sleeps.'
 
@@ -26,6 +27,18 @@ function storeText(...flags: string[]): string {
   flags.forEach((flag) => game.state.setStoryFlag(flag, true))
   return new GameController(game).getRoomDescription()
 }
+
+describe('General Store ways out (rq-un37)', () => {
+  it('leads west to the square, east to the chapel and south to the forge', () => {
+    const game = new Game([new Act1()])
+    const store = game.state.allRooms.GeneralStore
+    expect(store.getExits(game.state)).toEqual({
+      west: 'VillageSquare',
+      east: 'VillageChapel',
+      south: 'BlacksmithsForge',
+    })
+  })
+})
 
 describe('General Store room text', () => {
   it("never puts the priest's matches on the shelves (rq-03s1)", () => {

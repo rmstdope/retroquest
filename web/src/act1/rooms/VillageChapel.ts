@@ -6,8 +6,9 @@ import { Scenery } from '../items/Scenery'
 
 /** The chapel's description up to its last sentence, which follows the candle. */
 const CHAPEL_DESCRIPTION =
-  'A small stone chapel. Its stained glass windows cast colours across ' +
-  'the worn pews, and the air is cool and smells of candle wax. ' +
+  'A small stone chapel at the end of the village lane. ' +
+  'Its stained glass windows cast colours across the worn pews, ' +
+  'and the air is cool and smells of candle wax. ' +
   `A kindly ${characterName('priest')} tends the altar. ` +
   'By the door the bell rope hangs straight and still. ' +
   'Over the door a shape is cut into the stone, worn almost smooth. '
@@ -33,8 +34,13 @@ export class VillageChapel extends Room {
         ...Scenery.forRoom('VillageChapel'),
       ],
       characters: [new Priest()],
-      exits: { north: 'HiddenGlade', east: 'RoadToGreendale' },
+      exits: { west: 'GeneralStore', east: 'RoadToGreendale' },
     })
+  }
+
+  /** Give a save made before the lane from the store the chapel's current ways out. */
+  override refreshSavedText(): void {
+    this.exits = new VillageChapel().exits
   }
 
   /** Whether the chapel's candle has been lit. */

@@ -142,7 +142,7 @@
 - **Usable Items:** Coin (2nd, purchase rope and receive an apple bonus).
 - **Characters:** Shopkeeper — Old Man Hemlock (sells goods, shares gossip). On the first talk while the store is shut he does not give his name; he speaks of Patches as a cat Elior has seen on his counter, mentions that the caravans have stopped coming because the king is ill and the roads are unsafe ("Malakar's luck, my father would have called it"), and keeps the store shut until Patches is returned. The caravans line is said once, in whichever scene Elior first meets him in: the shut-store talk, or the reunion (or the news that Patches stays with Grandmother) when Elior first walks in with Patches, as on the golden path; then Patches (his cat) sits on the counter. If Patches stays with Grandmother instead, Hemlock has heard the news, reopens the store and gives Elior a `rope` and an `apple` (no coin), so the act stays completable without the second coin.
 - **Save compatibility:** saves made when the hoe still gave a second coin keep the store open, and returning Patches in such a save earns no second coin.
-- **Exits:** Village Square (west), Blacksmith’s Forge (south)
+- **Exits:** Village Square (west), Village Chapel (east, along the lane Hemlock watches from his window), Blacksmith’s Forge (south)
 
 ### 8. Village Well
 
@@ -203,11 +203,11 @@
 - **Spells:** `grow` (learned from inscriptions on a stone; the learn text says it does not wake in Elior the way the others did, he reads it off the stone and it feels like his own, which Act IV's Parents' Vault and Sacrifice ending pay off: it is the one spell he did not inherit). Beneath the `grow` inscription the refrain is carved: "Power follows purpose; purpose follows truth." Elior reads it aloud and does not know what it means. If he carries the Ancient Amulet it glows beside the stone.
 - **Usable Items:** `light` spell (cast in the glade to illuminate the moss-covered stone).
 - **Characters:** Deer (present only when Elior rests in the room after having been informed about the deer; it is Nyx's, as she says in Act II, which Act I never reveals). It never speaks: `talk to deer` or `examine deer` gives a wordless moment, its gaze drifting to the mossy stone, then to Elior, nudging him to `light`; once the glade is lit it bows its head beside the glowing stone.
-- **Exits:** Forest Path (north), Village Chapel (south)
+- **Exits:** Forest Path (north). The glade is a dead end: the only way in and out is the Forest Path.
 
 ### 14. Village Chapel
 
-- **Description:** A small stone chapel with stained glass windows. Over the door a shape is cut into the stone, worn almost smooth (the founders' mark the Priest names). A dark corner by the altar swallows the light (the locket is not mentioned until the candle reveals it).
+- **Description:** A small stone chapel at the end of the village lane, with stained glass windows. Over the door a shape is cut into the stone, worn almost smooth (the founders' mark the Priest names). A dark corner by the altar swallows the light (the locket is not mentioned until the candle reveals it).
 - **Items:** Candle (start), hidden locket (later).
 - **Unusable:** prayer book (start).
 - **Spells:** `bless` (learned when picking up the hidden locket; the Priest recognizes it).
@@ -215,7 +215,7 @@
 - **Characters:** Priest (offers blessings, shares lore). His first talk tells the story of the founders, their relic and the bell; after that he answers in one short line that follows Elior's progress, the latest milestone winning: blessed by Elior (`cast bless on priest`) → Elior has cast `bless` on himself → Elior carries the locket (he points him to Grandmother) → the locket has gone home → the candle is lit but the locket not yet taken (he points to the corner) → otherwise he asks after the matches.
 
 **The locket's history.** The locket is the founders' relic: an heirloom bearing the founders' crest (a silver tree beneath twin moons) that has passed down Elior's mother's family, from Grandmother to her daughter. The crest is the older form of the Warden sigil (the founders were the first Wardens, which Act I never says); the Priest's tale adds that the mark is cut over the chapel door, nearly weathered away. Elior's mother hid it in the chapel the night she left; that night the chapel bell rang at midnight with no hand on the rope. The Priest knows the legend and recognises the crest of the founders' line; Grandmother recognises it as her daughter's. This quietly sets up Elior's heritage and Act II's bloodline research.
-- **Exits:** Hidden Glade (north), Road to Greendale (east)
+- **Exits:** General Store (west), Road to Greendale (east)
 
 ### 15. Road to Greendale
 
@@ -232,7 +232,7 @@
 ```
                                 [Mira's Hut]
                                      |
-            [Elior's Cottage]--[Village Square]--[General Store]
+            [Elior's Cottage]--[Village Square]--[General Store]--[Village Chapel]--[Road to Greendale]
                     |                                   |
             [Vegetable Field]--[Village Well]--[Blacksmith's Forge]
                     |                 |
@@ -244,8 +244,6 @@
                                                    [Forest Path]
                                                          |
                                                    [Hidden Glade]
-                                                         |
-                                                  [Village Chapel]--[Road to Greendale]
 ```
 
 ## Learnable Spells in Act I
@@ -413,6 +411,7 @@ Optional virtue moments; none blocks the golden path, none adds a puzzle or comb
 
 15. **Village Chapel (First Visit - Part 1):**
 
+    - Walk there from the General Store, east along the village lane; the Hidden Glade is a dead end and does not lead to the chapel.
     - Speak to priest. _The priest shares concerns about a growing shadow. He tells the story of the founders: they brought a relic to the valley and hung the chapel bell to watch over it; the relic passed quietly down their line until one night, years ago, it was lost, and the bell rang at midnight with no hand on the rope. He also mentions that he is out of matches. He usually get his matches for free from the general store._
 
 16. **General Store (Visit for Matches):**

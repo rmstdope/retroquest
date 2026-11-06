@@ -22,6 +22,55 @@ function lightCandle(game: Game): void {
   executeCommands(game, ['use candle with matches'])
 }
 
+describe('Village Chapel lane (rq-un37)', () => {
+  it('opens on the end of the village lane and leads west to the store and east to the road', () => {
+    const game = gameInChapel()
+    const chapel = game.state.currentRoom
+    expect(chapel.descriptionFor(game.state)).toContain(
+      'A small stone chapel at the end of the village lane. ',
+    )
+    expect(chapel.getExits(game.state)).toEqual({
+      west: 'GeneralStore',
+      east: 'RoadToGreendale',
+    })
+  })
+
+  it('gives a save made before the lane the new ways and words', () => {
+    const game = gameInChapel()
+    const rooms = game.state.allRooms
+    rooms.VillageChapel.exits = {
+      north: 'HiddenGlade',
+      east: 'RoadToGreendale',
+    }
+    rooms.HiddenGlade.exits = { north: 'ForestPath', south: 'VillageChapel' }
+    rooms.GeneralStore.exits = {
+      west: 'VillageSquare',
+      south: 'BlacksmithsForge',
+    }
+    rooms.VillageChapel.description = 'A small stone chapel.'
+    const loaded = new Game([new Act1()])
+    expect(loaded.loadSaveData(game.toSaveData())).toContain('loaded')
+    const after = loaded.state.allRooms
+    expect(loaded.state.currentRoom.name).toBe('Village Chapel')
+    expect(after.VillageChapel.exits).toEqual({
+      west: 'GeneralStore',
+      east: 'RoadToGreendale',
+    })
+    expect(after.HiddenGlade.exits).toEqual({ north: 'ForestPath' })
+    expect(after.GeneralStore.exits).toEqual({
+      west: 'VillageSquare',
+      east: 'VillageChapel',
+      south: 'BlacksmithsForge',
+    })
+    expect(loaded.state.currentRoom.describe(loaded.state)).toContain(
+      'at the end of the village lane',
+    )
+    loaded.state.currentRoom = after.HiddenGlade
+    loaded.commandParser.parse('go south')
+    expect(loaded.state.currentRoom.name).toBe('Hidden Glade')
+  })
+})
+
 describe('Village Chapel', () => {
   it('has a dark corner by the altar while the candle is cold', () => {
     const game = gameInChapel()
