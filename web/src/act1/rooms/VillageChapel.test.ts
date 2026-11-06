@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { Game } from '@/engine'
+import { Game, clue } from '@/engine'
 import { executeCommands } from '@/testing/gameHelpers'
 import { Act1 } from '../Act1'
 import { Matches } from '../items/Matches'
@@ -51,7 +51,12 @@ describe('Village Chapel', () => {
     const game = gameInChapel()
     const text = executeCommands(game, ['cast light'])
     expect(text).not.toContain('already well lit')
-    expect(text).toContain('dark corner')
+    expect(text).toBe(
+      clue(
+        'Your light goes into the dark corner by the altar and does not come ' +
+          'out again. The corner keeps its dark.',
+      ),
+    )
     expect(game.state.currentRoom.getItemByName('locket')).toBeNull()
   })
 
@@ -59,6 +64,8 @@ describe('Village Chapel', () => {
     const game = gameInChapel()
     lightCandle(game)
     const text = executeCommands(game, ['cast light'])
-    expect(text).toContain('The candle already lights the corner by the altar.')
+    expect(text).toBe(
+      '[failure]The candle already lights the corner by the altar.[/failure]',
+    )
   })
 })

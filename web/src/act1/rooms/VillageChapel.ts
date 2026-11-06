@@ -1,4 +1,4 @@
-import { characterName, Room, type GameState } from '@/engine'
+import { characterName, clue, Room, type GameState } from '@/engine'
 import { Candle } from '../items/Candle'
 import { PrayerBook } from '../items/PrayerBook'
 import { Priest } from '../characters/Priest'
@@ -53,11 +53,11 @@ export class VillageChapel extends Room {
   /** A light spell does not reach into the dark corner; only the candle lights it. */
   override light(_gameState: GameState): string {
     if (this.candleLit()) {
-      return 'The candle already lights the corner by the altar.'
+      return '[failure]The candle already lights the corner by the altar.[/failure]'
     }
-    return (
+    return clue(
       'Your light goes into the dark corner by the altar and does not come ' +
-      'out again. The corner keeps its dark.'
+        'out again. The corner keeps its dark.',
     )
   }
 }
