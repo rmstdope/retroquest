@@ -55,7 +55,7 @@ describe('Priest dialogue', () => {
 
     expect(response).not.toContain('Any luck with those matches')
     expect(response).not.toContain('General Store')
-    expect(response).toContain('candle')
+    expect(response).toContain('sees the box in your hand')
   })
 
   it('points to what the candlelight revealed before the locket is taken', () => {

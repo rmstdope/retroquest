@@ -32,7 +32,7 @@ describe('Let there be light', () => {
     executeCommands(game, ['look'])
 
     expect(quest().hint).not.toContain('General Store')
-    expect(quest().hint).toContain('candle')
+    expect(quest().hint).toContain('still cold')
   })
 
   it('keeps the matches stage through a save and load', () => {
