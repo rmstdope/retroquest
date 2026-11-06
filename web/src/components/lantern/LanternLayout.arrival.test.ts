@@ -810,6 +810,28 @@ describe('LanternLayout: the arrival on the picture', () => {
       expect(audio.playNewSpell).not.toHaveBeenCalled()
     })
 
+    it('rings no spell sound when a save is loaded while the news is pending', async () => {
+      const stored: Record<string, string> = {}
+      vi.stubGlobal('localStorage', {
+        getItem: (key: string): string | null => stored[key] ?? null,
+        setItem: (key: string, value: string): void => {
+          stored[key] = value
+        },
+        removeItem: (key: string): void => {
+          delete stored[key]
+        },
+      })
+      await ready(true, true)
+      const game = useGameStore(pinia)
+      expect(game.saveGame()).toBe(true)
+      const audio = await narratedSpellTurn()
+      game.loadGame()
+      await vi.advanceTimersByTimeAsync(20000)
+      expect(game.turns.every((turn) => turn.restored)).toBe(true)
+      expect(audio.playNewSpell).not.toHaveBeenCalled()
+      expect(audio.playQuestComplete).not.toHaveBeenCalled()
+    })
+
     it('leaves the line on the card where nothing is told in the middle', async () => {
       const w = await ready('short', false)
       useSettingsStore(pinia).narrationOn = false

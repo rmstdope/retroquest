@@ -363,6 +363,48 @@ describe('useBridge', () => {
       },
     )
 
+    it('keeps the quick save, and no older story, when its story cannot be stored', async () => {
+      const bridge = await runningBridge()
+      bridge.quickSaveGame(STORY)
+      const real = localStorageMock.setItem.getMockImplementation()
+      localStorageMock.setItem.mockImplementation(
+        (key: string, value: string) => {
+          if (key === 'retroquest_save_story')
+            throw new Error('QuotaExceededError')
+          real?.(key, value)
+        },
+      )
+      try {
+        expect(bridge.quickSaveGame([{ text: 'Newer.' }])).toBe('Game saved.')
+      } finally {
+        localStorageMock.setItem.mockImplementation(real ?? (() => undefined))
+      }
+      expect(bridge.quickLoadGame()).not.toContain('[failure]')
+      expect(bridge.takeLoadedStory()).toBe(null)
+    })
+
+    it.each([
+      [
+        'a slot',
+        (b: Bridge) => b.saveToSlot(4, STORY),
+        (b: Bridge) => b.loadFromSlot(4),
+      ],
+      [
+        'a named save',
+        (b: Bridge) => b.saveNamedGame('full', STORY),
+        (b: Bridge) => b.loadNamedGame('full'),
+      ],
+    ])(
+      'keeps %s without its story when the storage cannot hold both',
+      async (_kind, save, load) => {
+        const bridge = await runningBridge()
+        storageFull()
+        expect(save(bridge)).toBe('Game saved.')
+        expect(load(bridge)).not.toContain('[failure]')
+        expect(bridge.takeLoadedStory()).toBe(null)
+      },
+    )
+
     it('gives back no story for a save made without one, nor for a failed load', async () => {
       const bridge = await runningBridge()
       bridge.quickSaveGame(STORY)

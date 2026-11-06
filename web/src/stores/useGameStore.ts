@@ -122,7 +122,13 @@ function isStory(value: unknown): value is Turn[] {
         'gained' in entry &&
         Array.isArray(entry.gained) &&
         'lost' in entry &&
-        Array.isArray(entry.lost),
+        Array.isArray(entry.lost) &&
+        'command' in entry &&
+        (entry.command === null || typeof entry.command === 'string') &&
+        'description' in entry &&
+        typeof entry.description === 'object' &&
+        'arrival' in entry &&
+        typeof entry.arrival === 'object',
     )
   )
 }

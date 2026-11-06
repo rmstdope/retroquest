@@ -271,24 +271,43 @@ export function useBridge(loader: () => Promise<ActClass[]> = loadActs) {
     })
   }
 
-  /** Save to slot `slot` (1–8), with `story` (the UI's story so far) beside it. */
+  /**
+   * Run `write` with the story, and when the storage cannot hold it, again
+   * without: the game is kept even when its story is not. SAVED, or
+   * SAVE_FAILED when even the game cannot be stored.
+   */
+  function withStoryIfRoom(
+    story: unknown,
+    write: (story: unknown) => void,
+  ): string {
+    try {
+      write(story)
+    } catch {
+      if (story === null) return SAVE_FAILED
+      try {
+        write(null)
+      } catch {
+        return SAVE_FAILED
+      }
+    }
+    return SAVED
+  }
+
+  /** Save to slot `slot` (1–8), with `story` (the UI's story so far) beside it when there is room. */
   function saveToSlot(slot: number, story: unknown = null): string {
     if (slot < 1 || slot > SLOT_COUNT)
       return '[failure]Invalid save slot.[/failure]'
     const { game } = requireGame()
-    try {
+    return withStoryIfRoom(story, (told) => {
       const stored = readStoredSaveSlots()
       stored[slot - 1] = {
         slot,
         data: game.toSaveData(),
         ...saveDetails(),
-        ...(story === null ? {} : { story }),
+        ...(told === null ? {} : { story: told }),
       }
       localStorage.setItem(SLOTS_KEY, JSON.stringify(stored))
-    } catch {
-      return SAVE_FAILED
-    }
-    return SAVED
+    })
   }
 
   function loadFromSlot(slot: number): string {
@@ -298,25 +317,22 @@ export function useBridge(loader: () => Promise<ActClass[]> = loadActs) {
     return loadWithStory(entry.data, entry.story)
   }
 
-  /** Save under `name`, with `story` (the UI's story so far) beside it. */
+  /** Save under `name`, with `story` (the UI's story so far) beside it when there is room. */
   function saveNamedGame(name: string, story: unknown = null): string {
     const { game } = requireGame()
-    try {
+    return withStoryIfRoom(story, (told) => {
       const saves = readStoredNamedSaves()
       const entry: StoredNamedSave = {
         name,
         timestamp: new Date().toISOString(),
         data: game.toSaveData(),
-        ...(story === null ? {} : { story }),
+        ...(told === null ? {} : { story: told }),
       }
       const existing = saves.findIndex((s) => s.name === name)
       if (existing >= 0) saves[existing] = entry
       else saves.push(entry)
       localStorage.setItem(NAMED_KEY, JSON.stringify(saves))
-    } catch {
-      return SAVE_FAILED
-    }
-    return SAVED
+    })
   }
 
   function loadNamedGame(name: string): string {

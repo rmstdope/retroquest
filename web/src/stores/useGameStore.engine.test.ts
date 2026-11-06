@@ -355,23 +355,42 @@ describe('useGameStore over the real engine: the story so far in a save', () => 
     },
   )
 
-  it('shows only the room for a save made before the story was kept', async () => {
-    const store = await startedStore()
-    store.submitCommand('look')
-    store.submitCommand(`examine ${CROWN}`)
-    expect(store.saveGame()).toBe(true)
-    // What a save made before the fix holds: the game and its details only.
-    for (const key of Object.keys(stored))
-      if (key !== 'retroquest_save' && key !== 'retroquest_save_meta')
-        delete stored[key]
+  /** Drop the story from every save in the storage, as a save made before the fix has none. */
+  function forgetStories(): void {
+    delete stored['retroquest_save_story']
+    for (const key of ['retroquest_save_slots', 'retroquest_named_saves']) {
+      if (!stored[key]) continue
+      const entries = JSON.parse(stored[key]) as ({ story?: unknown } | null)[]
+      for (const entry of entries) if (entry) delete entry.story
+      stored[key] = JSON.stringify(entries)
+    }
+  }
 
-    const reloaded = await reloadedStore()
-    reloaded.submitCommand('look')
-    reloaded.loadGame()
+  it.each([
+    ['the quick save', (s: Store) => s.saveGame(), (s: Store) => s.loadGame()],
+    ['a slot', (s: Store) => s.saveToSlot(2), (s: Store) => s.loadFromSlot(2)],
+    [
+      'a named save',
+      (s: Store) => s.saveNamedGame('hall'),
+      (s: Store) => s.loadNamedGame('hall'),
+    ],
+  ])(
+    'shows only the room for %s made before the story was kept',
+    async (_kind, save, load) => {
+      const store = await startedStore()
+      store.submitCommand('look')
+      store.submitCommand(`examine ${CROWN}`)
+      expect(save(store)).toBe(true)
+      forgetStories()
 
-    expect(reloaded.turns).toHaveLength(1)
-    expect(reloaded.turns[0].arrival?.room).toBe('Hall')
-  })
+      const reloaded = await reloadedStore()
+      reloaded.submitCommand('look')
+      load(reloaded)
+
+      expect(reloaded.turns).toHaveLength(1)
+      expect(reloaded.turns[0].arrival?.room).toBe('Hall')
+    },
+  )
 
   it('compares the next command with the loaded bag, not the one before the load', async () => {
     const store = await startedStore()
