@@ -17,6 +17,9 @@ import {
   FLAG_PRIEST_TALKED_TO,
 } from '../Act1StoryFlags'
 
+/** The byword for Malakar, said anywhere in the words. */
+const MALAKAR = /malakar/i
+
 /**
  * The chapel's kindly priest. He keeps the story of the village founders,
  * their relic and the bell, and his words follow Elior's progress: the
@@ -168,12 +171,29 @@ export class Priest extends Character {
     )
   }
 
+  /**
+   * Touches the altar rail at the byword "Malakar", the way the village
+   * knocks on wood, the same every time; any other word gets his
+   * turn-taking answers.
+   */
+  override sayTo(gameState: GameState, words: string): string {
+    if (!MALAKAR.test(words)) return super.sayTo(gameState, words)
+    return attributeSpeech(
+      this.name,
+      `${this.nameInSentence({ atStart: true })} touches the altar rail, quick, the way the village knocks on wood. ` +
+        speech(
+          'Not in the chapel, child. That word has never done Willowbrook any good.',
+        ),
+    )
+  }
+
   /** The two answers to a word with no particular reply, given in turn. */
   protected override unknownWordAnswers(): readonly string[] {
     return [
       `${this.nameInSentence({ atStart: true })} folds his hands. ` +
         speech(
-          'I have heard a great many words in this chapel, child. Not that one.',
+          'I have heard a great many words in this chapel, child. ' +
+            'Not all of them were meant for me.',
         ),
       `${this.nameInSentence({ atStart: true })} smiles. ` +
         speech('If it is a prayer, child, it is not one of ours.'),

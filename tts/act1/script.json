@@ -190,6 +190,21 @@
     "text": "I'm not sure what you mean, dear, but I do like to hear you talk."
   },
   {
+    "id": "1ea121b2bccd2f",
+    "speaker": "elior",
+    "text": "malakar"
+  },
+  {
+    "id": "0396ee90cce0cf",
+    "speaker": "narrator",
+    "text": "Your grandmother knocks twice on the bread board."
+  },
+  {
+    "id": "0e59743bb5af09",
+    "speaker": "grandmother",
+    "text": "We don't say that one in this house, dear. Tell me what you'd like on your bread instead."
+  },
+  {
     "id": "08d4c458b986f2",
     "speaker": "narrator",
     "text": "A fire burns low in the stone hearth, and the bricks above it are black from many winters."
@@ -920,9 +935,9 @@
     "text": "Tilda cocks her head."
   },
   {
-    "id": "1a5c2c34384d9c",
+    "id": "12b0d566e2e5dd",
     "speaker": "tilda",
-    "text": "That's a new one on me, love, and I hear everything in this square."
+    "text": "Hush, love, you'll have the whole square guessing at it."
   },
   {
     "id": "186ac889011508",
@@ -935,14 +950,9 @@
     "text": "Tilda laughs."
   },
   {
-    "id": "06c1c8c52a024c",
+    "id": "087756e8d1df4c",
     "speaker": "tilda",
-    "text": "Whatever that means, love, nobody's told me, and that's a first."
-  },
-  {
-    "id": "1ea121b2bccd2f",
-    "speaker": "elior",
-    "text": "malakar"
+    "text": "Keep that one to yourself, love, or it'll be round the square by supper."
   },
   {
     "id": "14712adbad5179",
@@ -1575,9 +1585,9 @@
     "text": "Mira glances up from the herbs, and back down."
   },
   {
-    "id": "011cc4d2928345",
+    "id": "0e8945e6c303ea",
     "speaker": "mira",
-    "text": "Not a word I know, Elior."
+    "text": "Some words keep, Elior. That one can keep a while."
   },
   {
     "id": "0b3681cd475072",
@@ -1585,9 +1595,34 @@
     "text": "Mira ties off a bundle of sage before she answers."
   },
   {
-    "id": "08bf54881901da",
+    "id": "19b46aeb837cf0",
     "speaker": "mira",
-    "text": "If it matters, you'll tell me what it means."
+    "text": "If it matters, Elior, it will still matter tomorrow."
+  },
+  {
+    "id": "18dafc6bd0a2fc",
+    "speaker": "narrator",
+    "text": "Mira's hands stop on the sage, then go on."
+  },
+  {
+    "id": "1c1be7f56e4f60",
+    "speaker": "mira",
+    "text": "That's an old word to bring into a healer's hut, Elior. Leave it at the door."
+  },
+  {
+    "id": "0f5b9c4f8e6175",
+    "speaker": "elior",
+    "text": "dream"
+  },
+  {
+    "id": "17bee7a63cc1e9",
+    "speaker": "narrator",
+    "text": "Mira looks at you a moment, then back at her herbs."
+  },
+  {
+    "id": "1e2b5e2fcc5d0a",
+    "speaker": "mira",
+    "text": "Some dreams are worth keeping, Elior. Keep yours a while longer, and tell me if it comes again."
   },
   {
     "id": "0fe509c70e418d",
@@ -1710,9 +1745,9 @@
     "text": "Hemlock scratches his chin."
   },
   {
-    "id": "18d83d99e911e1",
+    "id": "0748b3dcb075d0",
     "speaker": "hemlock",
-    "text": "Can't say I follow you, lad."
+    "text": "You'd best ask someone with more time than I have, lad."
   },
   {
     "id": "04b5623889f63f",
@@ -1720,9 +1755,9 @@
     "text": "Hemlock glances at the door, then back at you."
   },
   {
-    "id": "0844ab18a2255f",
+    "id": "17e1cb133266c5",
     "speaker": "hemlock",
-    "text": "Means nothing to me, lad. Sorry."
+    "text": "Keep it for later, lad. I've a shop to mind."
   },
   {
     "id": "091bea33b2d36f",
@@ -2080,9 +2115,9 @@
     "text": "The fisherman shrugs."
   },
   {
-    "id": "1fa040d88b0db9",
+    "id": "1c2881f61be783",
     "speaker": "fisherman",
-    "text": "Never heard it, lad. Ask the river."
+    "text": "Ask the river, lad. It's been listening longer than I have."
   },
   {
     "id": "1fbe63de89a20b",
@@ -2703,6 +2738,36 @@
     "id": "01e57df7539fac",
     "speaker": "narrator",
     "text": "The priest is out of matches and his candle is cold. Hemlock at the General Store keeps a box for him."
+  },
+  {
+    "id": "0cd5dc1a586f26",
+    "speaker": "narrator",
+    "text": "The priest folds his hands."
+  },
+  {
+    "id": "18a27f35740368",
+    "speaker": "priest",
+    "text": "I have heard a great many words in this chapel, child. Not all of them were meant for me."
+  },
+  {
+    "id": "14c6d7ba6b1f0a",
+    "speaker": "narrator",
+    "text": "The priest smiles."
+  },
+  {
+    "id": "171506b6cf1ced",
+    "speaker": "priest",
+    "text": "If it is a prayer, child, it is not one of ours."
+  },
+  {
+    "id": "06b818fa3bc2cd",
+    "speaker": "narrator",
+    "text": "The priest touches the altar rail, quick, the way the village knocks on wood."
+  },
+  {
+    "id": "070a45c6e5cc68",
+    "speaker": "priest",
+    "text": "Not in the chapel, child. That word has never done Willowbrook any good."
   },
   {
     "id": "17f3d7bdd76591",
@@ -3860,11 +3925,6 @@
     "text": "Keep it close, and pray you never meet the hand that made it."
   },
   {
-    "id": "14c6d7ba6b1f0a",
-    "speaker": "narrator",
-    "text": "The priest smiles."
-  },
-  {
     "id": "0f2ddec47b3d3f",
     "speaker": "priest",
     "text": "The chapel is brighter for your kindness, child. The founders would be glad of you."
@@ -4030,6 +4090,26 @@
     "text": "You have everything Mira asked for, and the elders have taught you all they can. The road is next."
   },
   {
+    "id": "0538db6a1900fb",
+    "speaker": "narrator",
+    "text": "The merchant grins."
+  },
+  {
+    "id": "166a53270d2316",
+    "speaker": "merchant",
+    "text": "Tell it to the road, friend. I've walked every road between here and Greendale, and not one of them ever answered."
+  },
+  {
+    "id": "064c6df0d7ae3f",
+    "speaker": "narrator",
+    "text": "The merchant shakes his head."
+  },
+  {
+    "id": "15b38225b42399",
+    "speaker": "merchant",
+    "text": "You'd fetch a poor price for that word on any road I know, friend."
+  },
+  {
     "id": "166b8ce7d73f50",
     "speaker": "narrator",
     "text": "Sturdy leather boots, well-worn and comfortable. They seem to hum with a faint energy, eager for the road."
@@ -4038,11 +4118,6 @@
     "id": "135db8b9e2c8cd",
     "speaker": "narrator",
     "text": "The map stays a plain map of Willowbrook. The hidden road will not show itself while something here is unfinished: the amulet Mira still keeps for you and the rune token Mira has not yet seen."
-  },
-  {
-    "id": "0538db6a1900fb",
-    "speaker": "narrator",
-    "text": "The merchant grins."
   },
   {
     "id": "0365b2c22b2690",

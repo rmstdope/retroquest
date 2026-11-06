@@ -27,6 +27,12 @@ import {
   FLAG_MIRA_MET,
 } from '../Act1StoryFlags'
 
+/** The byword for Malakar, said anywhere in the words. */
+const MALAKAR = /malakar/i
+
+/** A dream, or dreams or dreaming, said anywhere in the words. */
+const DREAM = /\bdream/i
+
 /** Her words once the amulet is Elior's, after either opening narration. */
 const GOODBYE = speech(
   'Still here? Go and say a proper goodbye to your grandmother. Then go.',
@@ -442,13 +448,42 @@ export class Mira extends Character {
     return this.dialogue('quest_conditions_not_met')
   }
 
+  /**
+   * Answers the byword "Malakar" and any word of a dream, each the same
+   * every time and without moving her turn; any other word gets her
+   * turn-taking answers.
+   */
+  override sayTo(gameState: GameState, words: string): string {
+    if (MALAKAR.test(words)) {
+      return attributeSpeech(
+        this.name,
+        `${this.nameInSentence({ atStart: true })}'s hands stop on the sage, then go on. ` +
+          speech(
+            "That's an old word to bring into a healer's hut, Elior. " +
+              'Leave it at the door.',
+          ),
+      )
+    }
+    if (DREAM.test(words)) {
+      return attributeSpeech(
+        this.name,
+        `${this.nameInSentence({ atStart: true })} looks at you a moment, then back at her herbs. ` +
+          speech(
+            'Some dreams are worth keeping, Elior. ' +
+              'Keep yours a while longer, and tell me if it comes again.',
+          ),
+      )
+    }
+    return super.sayTo(gameState, words)
+  }
+
   /** The two answers to a word with no particular reply, given in turn. */
   protected override unknownWordAnswers(): readonly string[] {
     return [
       `${this.nameInSentence({ atStart: true })} glances up from the herbs, and back down. ` +
-        speech('Not a word I know, Elior.'),
+        speech('Some words keep, Elior. That one can keep a while.'),
       `${this.nameInSentence({ atStart: true })} ties off a bundle of sage before she answers. ` +
-        speech("If it matters, you'll tell me what it means."),
+        speech('If it matters, Elior, it will still matter tomorrow.'),
     ]
   }
 }

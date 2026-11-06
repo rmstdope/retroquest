@@ -34,6 +34,9 @@ import {
   FLAG_TALKED_TO_GRANDMOTHER_ABOUT_PHOTO,
 } from '../Act1StoryFlags'
 
+/** The byword for Malakar, said anywhere in the words. */
+const MALAKAR = /malakar/i
+
 /** Elior's grandmother: wise elder who guides the player and grants items. */
 export class Grandmother extends Character {
   dialogueState: Record<string, boolean> = {
@@ -305,9 +308,19 @@ export class Grandmother extends Character {
   /**
    * Saying "stay" (or "yes" or "keep") while Elior carries Patches lets her
    * stay by the hearth: grandmother sends word to Hemlock, who reopens the
-   * store. Other words only get a fond look.
+   * store. The byword "Malakar" gets a knock on the bread board, the same
+   * every time. Other words only get a fond look.
    */
   override sayTo(gameState: GameState, words: string): string {
+    if (MALAKAR.test(words)) {
+      return (
+        `Your ${characterName(this.name)} knocks twice on the bread board. ` +
+        speech(
+          "We don't say that one in this house, dear. " +
+            "Tell me what you'd like on your bread instead.",
+        )
+      )
+    }
     const yes = /\b(stay|yes|keep)\b/i.test(words)
     if (yes && this.carryingPatches(gameState)) {
       gameState.setStoryFlag(FLAG_PATCHES_STAYED_WITH_GRANDMOTHER, true)

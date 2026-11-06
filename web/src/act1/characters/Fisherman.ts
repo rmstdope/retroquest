@@ -314,7 +314,7 @@ export class Fisherman extends Character {
       `${this.nameInSentence({ atStart: true })} keeps his eyes on the water. ` +
         speech("Keep your voice down, lad. You'll put the fish off."),
       `${this.nameInSentence({ atStart: true })} shrugs. ` +
-        speech('Never heard it, lad. Ask the river.'),
+        speech("Ask the river, lad. It's been listening longer than I have."),
     ]
   }
 }
