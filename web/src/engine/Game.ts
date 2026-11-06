@@ -611,7 +611,7 @@ Welcome to
     const taken: [Item, string][] = []
     const prevented: string[] = []
     for (const item of candidates) {
-      const refusal = item.preventPickup(this.state)
+      const refusal = item.preventPickup(this.state, itemName)
       if (refusal) {
         prevented.push(refusal)
         continue

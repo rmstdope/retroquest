@@ -66,6 +66,34 @@ describe('MysteriousBox', () => {
     }
   })
 
+  it('answers about the note, not the box, when the note is taken', () => {
+    const { game } = gameWithUnlockedBox()
+    game.commandParser.parse('open box')
+
+    for (const command of [
+      'take note',
+      'take folded note',
+      "take father's note",
+    ]) {
+      const answer = game.commandParser.parse(command)
+      expect(answer).not.toContain('mysterious box')
+      expect(answer).toContain(
+        'The note stays in the box, where your father left it for you.',
+      )
+      expect(findMarkupProblems(answer)).toEqual([])
+    }
+    expect(game.state.hasItem('mysterious box')).toBe(false)
+  })
+
+  it('still refuses the box itself by its own name once open', () => {
+    const { game } = gameWithUnlockedBox()
+    game.commandParser.parse('open box')
+
+    expect(game.commandParser.parse('take box')).toContain(
+      "You can't take the [item_name]mysterious box[/item_name].",
+    )
+  })
+
   it('has no note to examine before the box is opened', () => {
     const { game } = gameWithUnlockedBox()
 

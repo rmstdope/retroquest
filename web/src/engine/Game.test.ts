@@ -760,6 +760,24 @@ describe('Game', () => {
       )
     })
 
+    it('tells the refusing item the word the player used (rq-moss)', () => {
+      const words: string[] = []
+      /** An item that records the word it was taken by. */
+      class Listener extends Item {
+        override preventPickup(_gameState: GameState, name: string): string {
+          words.push(name)
+          return '[failure]No.[/failure]'
+        }
+      }
+      rooms.EliorsCottage.items.push(
+        new Listener({ name: 'anvil', description: 'Heavy.' }),
+      )
+
+      game.take('ANVIL')
+
+      expect(words).toEqual(['ANVIL'])
+    })
+
     it('does not understand drop or discard, and leaves the bag alone', () => {
       const lantern = item('lantern')
       game.state.inventory.push(lantern)
