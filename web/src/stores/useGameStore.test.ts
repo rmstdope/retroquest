@@ -4,6 +4,7 @@ import { useGameStore, MAX_TURNS } from './useGameStore'
 import type { RoomDescription, SoundFiring } from '@/engine'
 import type {
   CompletionTree,
+  MapPlace,
   QuestReport,
   QuestSummary,
   ResultScreen,
@@ -47,6 +48,7 @@ function createMockBridge() {
     getRoomCharacters: vi.fn(() => ['Mira']),
     getRoomItems: vi.fn(() => ['Map']),
     getRoomExits: vi.fn(() => ({ north: 'Forest' }) as Record<string, string>),
+    getMapPlaces: vi.fn(() => [] as MapPlace[]),
     getRoomWares: vi.fn(
       () => [] as Array<{ name: string; price: number; seller: string }>,
     ),

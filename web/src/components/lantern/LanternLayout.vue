@@ -266,7 +266,7 @@ function onOutsidePress(event: Event): void {
   const target = event.target instanceof Element ? event.target : null
   if (
     target?.closest(
-      '.lq-drawer, .lq-story-drawer, .lq-buttons, .lq-name-menu, .lq-story-so-far, .lq-nav-bottom',
+      '.lq-drawer, .lq-story-drawer, .lq-buttons, .lq-name-menu, .lq-story-so-far, .lq-nav-bottom, .lq-dialog-layer',
     )
   )
     return

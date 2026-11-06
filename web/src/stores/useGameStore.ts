@@ -4,6 +4,7 @@ import type {
   NamedItem,
   RoomExits,
   CompletionTree,
+  MapPlace,
   SaveSlot,
   QuestProgress,
   QuestSummary,
@@ -17,6 +18,7 @@ import {
   type SoundFiring,
 } from '@/engine'
 import { inventoryChanges, type Chip } from '@/lantern/inventoryChanges'
+import { routeTo } from '@/lantern/mapRoute'
 import { toQuestNews, type QuestNews } from '@/lantern/questNews'
 import {
   toSpellNews,
@@ -164,6 +166,8 @@ interface PanelSnapshot {
     characters: string[]
     items: string[]
     exits: RoomExits
+    /** The act's map: visited places and those seen from them. */
+    mapPlaces: MapPlace[]
     roomWares: RoomWare[]
     actNumber: number | null
     /** What the command box offers: words of the place the panels show. */
@@ -201,6 +205,8 @@ export const useGameStore = defineStore('game', () => {
   /** Short item names the story uses ("journal") → full names (room and bag). */
   const shortNames = ref<Record<string, string>>({})
   const exits = ref<RoomExits>({})
+  /** The act's map (visited places, and those seen from them), as the place panels show it. */
+  const mapPlaces = ref<MapPlace[]>([])
   /** What merchants in the room sell (for the Buy action). */
   const roomWares = ref<RoomWare[]>([])
 
@@ -561,6 +567,7 @@ export const useGameStore = defineStore('game', () => {
       characters.value = place.characters
       items.value = place.items
       exits.value = place.exits
+      mapPlaces.value = place.mapPlaces
       roomWares.value = place.roomWares
       completionTree.value = place.completions
       if (questProgress.value && place.actNumber !== null)
@@ -879,6 +886,31 @@ export const useGameStore = defineStore('game', () => {
     playCommand(command)
   }
 
+  /**
+   * Walk to a place on the map: one `go` per step of the route through the
+   * visited places (the last step may enter a seen one), each played and
+   * shown as if typed. The trip stops where walking would: when a step is
+   * refused, leaves the player elsewhere than the route says, or the game
+   * stops taking input (a pop-up, the end of the act). Does nothing while the
+   * game is busy, for the place the player is in, or for an unknown place.
+   */
+  function travelTo(targetKey: string): void {
+    if (!acceptInput.value) return
+    const b = requireBridge()
+    const places = b.controller.getMapPlaces()
+    const route = routeTo(places, targetKey)
+    if (route === null) return
+    let here = places.find((place) => place.current)
+    for (const direction of route) {
+      const next = here?.exits[direction]
+      if (!next) return
+      const answer = playCommand(`go ${direction}`)
+      if (answer.includes('[failure]') || !acceptInput.value) return
+      here = b.controller.getMapPlaces().find((place) => place.current)
+      if (here?.key !== next.to) return
+    }
+  }
+
   /** Run one command as the player typed it: log it, refresh, raise quest news. */
   function playCommand(command: string): string {
     const b = requireBridge()
@@ -1012,6 +1044,7 @@ export const useGameStore = defineStore('game', () => {
         characters: b.controller.getRoomCharacters(),
         items: b.controller.getRoomItems(),
         exits: b.controller.getRoomExits(),
+        mapPlaces: b.controller.getMapPlaces(),
         roomWares: b.controller.getRoomWares(),
         actNumber: progress ? progress.actNumber : null,
         completions: b.controller.getCommandCompletions(),
@@ -1463,6 +1496,8 @@ export const useGameStore = defineStore('game', () => {
     characters,
     items,
     exits,
+    mapPlaces,
+    travelTo,
     acceptInput,
     showModal,
     modalChapter,

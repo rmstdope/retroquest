@@ -14,7 +14,8 @@ import { useFocusTrap } from '@/composables/useFocusTrap'
  * itself (it takes focus when its text is clicked, so Escape and Tab keep
  * working). On close it gives focus back to what had it when it opened,
  * unless `restoreFocus` is off (the game's own pop-ups send it to the
- * actions instead).
+ * actions instead). `wide` gives a body that needs room, like the map, a
+ * wider panel.
  */
 const props = withDefaults(
   defineProps<{
@@ -22,8 +23,9 @@ const props = withDefaults(
     eyebrow?: string
     closable?: boolean
     restoreFocus?: boolean
+    wide?: boolean
   }>(),
-  { eyebrow: '', closable: true, restoreFocus: true },
+  { eyebrow: '', closable: true, restoreFocus: true, wide: false },
 )
 const emit = defineEmits<{ close: [] }>()
 const titleId = useId()
@@ -62,6 +64,7 @@ defineExpose({ focusFirst: trap.focusFirst })
     <section
       ref="panel"
       class="lq-dialog-panel"
+      :class="{ 'lq-dialog-wide': wide }"
       role="dialog"
       aria-modal="true"
       tabindex="-1"
@@ -134,6 +137,9 @@ defineExpose({ focusFirst: trap.focusFirst })
   color: var(--lq-fg);
   font-family: var(--lq-font-ui);
   box-shadow: 0 30px 60px rgb(0 0 0 / 0.45);
+}
+.lq-dialog-wide {
+  max-width: 680px;
 }
 /* Not a Tab stop: it only holds focus when nothing inside can. */
 .lq-dialog-panel:focus {

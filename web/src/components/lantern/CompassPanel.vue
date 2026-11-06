@@ -1,18 +1,23 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, nextTick, ref } from 'vue'
 import { useGameStore } from '@/stores/useGameStore'
 import { displayName } from '@/lantern/displayName'
 import { exitArrow } from '@/lantern/exitArrow'
 import { usePanelFlash } from '@/composables/usePanelFlash'
+import { WIDE_QUERY, useMediaQuery } from '@/composables/useMediaQuery'
+import BiggerMapDialog from './BiggerMapDialog.vue'
 
 /**
  * The map compass beside the story on laptops: the exits laid out around the
  * current room in a 3 × 3 grid (up/down in the top/bottom-right corners),
  * other named exits listed below. Each exit is a button that moves there.
  * As a phone section it gets a "Map" heading (`heading`). On the stage
- * (`stage`) the middle cell says only "Here": the plate names the room.
+ * (`stage`) the middle cell says only "Here": the plate names the room, and
+ * on a wide window a "⤢ Bigger map" button under the grid opens the bigger
+ * map (`BiggerMapDialog`, in the page body); closing it puts focus back on
+ * the button and leaves this map as it was.
  */
-defineProps<{ heading?: boolean; stage?: boolean }>()
+const props = defineProps<{ heading?: boolean; stage?: boolean }>()
 const game = useGameStore()
 const { flashing, endFlash } = usePanelFlash(['place'])
 
@@ -40,6 +45,18 @@ const otherExits = computed(() =>
     .map(([dir, room]) => ({ dir, room })),
 )
 const hasExits = computed(() => Object.keys(game.exits).length > 0)
+
+const wide = useMediaQuery(WIDE_QUERY)
+const canEnlarge = computed(() => props.stage && wide.value)
+const biggerOpen = ref(false)
+const biggerButton = ref<HTMLButtonElement | null>(null)
+
+/** Close the bigger map and put focus back on the button that opened it. */
+async function closeBigger(): Promise<void> {
+  biggerOpen.value = false
+  await nextTick()
+  biggerButton.value?.focus()
+}
 
 function go(direction: string): void {
   if (game.acceptInput) game.submitCommand(`go ${direction}`)
@@ -99,6 +116,21 @@ function go(direction: string): void {
     </div>
 
     <p v-if="!hasExits" class="lq-no-exits">No exits from here.</p>
+
+    <button
+      v-if="canEnlarge"
+      ref="biggerButton"
+      type="button"
+      class="lq-bigger"
+      data-bigger-map
+      aria-haspopup="dialog"
+      @click="biggerOpen = true"
+    >
+      <span class="lq-bigger-icon" aria-hidden="true">⤢</span> Bigger map
+    </button>
+    <Teleport to="body">
+      <BiggerMapDialog v-if="biggerOpen" @close="closeBigger" />
+    </Teleport>
   </section>
 </template>
 
@@ -186,6 +218,20 @@ function go(direction: string): void {
 }
 .lq-other-exits .lq-exit {
   flex: 1 1 120px;
+}
+.lq-bigger {
+  min-height: 40px;
+  border-radius: 10px;
+  border: 1px solid var(--lq-line);
+  background: var(--lq-raised, var(--lq-surface));
+  color: var(--lq-fg);
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+}
+.lq-bigger-icon {
+  color: var(--lq-accent-text);
+  font-size: 16px;
 }
 .lq-no-exits {
   margin: 0;

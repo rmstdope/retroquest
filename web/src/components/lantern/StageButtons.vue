@@ -54,9 +54,13 @@ const journalButtons = computed(() => [
   },
 ])
 
-/** Escape closes the map, if it is open, and nothing else hears it. */
+/**
+ * Escape closes the map, if it is open, and nothing else hears it; but not
+ * while a dialog is up (the bigger map), which takes the key itself.
+ */
 function onDocumentKey(event: KeyboardEvent): void {
   if (event.key !== 'Escape' || !mapOpen.value) return
+  if (document.querySelector('.lq-dialog-layer')) return
   event.stopPropagation()
   event.preventDefault()
   emit('close')
