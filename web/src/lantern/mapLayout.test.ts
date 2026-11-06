@@ -171,3 +171,29 @@ describe('layoutMap: paths and boxes', () => {
     ])
   })
 })
+
+describe('layoutMap: cut-off groups', () => {
+  it('never draws a compass way against its heading', () => {
+    // x is cut off from a; its west way back to a would be drawn crooked.
+    const layout = layoutMap([
+      place('a', true, {}, true),
+      place('x', true, { west: 'a', south: 'y' }),
+      place('y', true, { north: 'x' }),
+    ])
+    expect(layout.paths.map((p) => [p.from, p.to])).toEqual([['x', 'y']])
+  })
+
+  it('keeps two cut-off groups clear of each other and of the main map', () => {
+    const layout = layoutMap([
+      place('a', true, { north: 'b' }, true),
+      place('b', true),
+      place('x', true, { north: 'x2' }),
+      place('x2', true),
+      place('y', true, { north: 'y2' }),
+      place('y2', true),
+    ])
+    const cells = layout.boxes.map((b) => `${b.col},${b.row}`)
+    expect(new Set(cells).size).toBe(cells.length)
+    expect(layout.paths).toHaveLength(3)
+  })
+})

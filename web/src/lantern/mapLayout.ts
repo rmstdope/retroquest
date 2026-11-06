@@ -71,6 +71,18 @@ const HALF_HEIGHT = 0.27
 /** The longest a path is lengthened before the layout gives up keeping it clear of other boxes. */
 const MAX_LENGTH = 12
 
+/** True when the line from one box to another runs the way `direction` says (a compass way keeps its heading; other ways may go anywhere). */
+function alignedWith(direction: string, from: MapBox, to: MapBox): boolean {
+  if (!COMPASS.includes(direction)) return true
+  const [dc, dr] = STEPS[direction]
+  const dCol = to.col - from.col
+  const dRow = to.row - from.row
+  return (
+    (dc === 0 ? dCol === 0 : Math.sign(dCol) === dc && dRow === 0) &&
+    (dr === 0 ? dRow === 0 : Math.sign(dRow) === dr && dCol === 0)
+  )
+}
+
 /** True when the straight line between two cells passes through the box of a third. */
 function crossesBox(
   from: MapBox,
@@ -158,6 +170,7 @@ export function layoutMap(places: MapPlace[]): MapLayout {
           target = put(there, here.col + placed[0], here.row + placed[1])
           if (there.visited) queue.push(there)
         }
+        if (!alignedWith(direction, here, target)) continue
         const pair = [here.key, target.key].sort().join('\n')
         if (joined.has(pair)) continue
         joined.add(pair)
@@ -176,7 +189,10 @@ export function layoutMap(places: MapPlace[]): MapLayout {
   for (const place of places) {
     if (cells.has(place.key) || !place.visited) continue
     const col = Math.min(...[...cells.values()].map((b) => b.col))
-    const row = Math.max(...[...cells.values()].map((b) => b.row)) + 2
+    // Room enough below for a chain that runs north from the group's first place.
+    const unplaced = places.filter((p) => !cells.has(p.key)).length
+    const row =
+      Math.max(...[...cells.values()].map((b) => b.row)) + 2 + unplaced
     put(place, col, row)
     spread(place)
   }

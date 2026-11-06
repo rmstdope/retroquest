@@ -137,7 +137,7 @@ describe('BiggerMapDialog', () => {
     expect(w.get('[data-place="Forge"]').attributes('disabled')).toBeUndefined()
   })
 
-  it('reaches each place with Tab and presses it with Enter', async () => {
+  it('gives each pressable place a focusable button that travels when pressed', async () => {
     const w = mountMap()
     const forge = w.get('[data-place="Forge"]').element as HTMLButtonElement
     forge.focus()
