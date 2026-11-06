@@ -15,10 +15,12 @@ import {
 } from '../Act1StoryFlags'
 import { Candle } from './Candle'
 import { DullKnife } from './DullKnife'
+import { FishingRod } from './FishingRod'
 import { Key } from './Key'
 import { Lantern } from './Lantern'
 import { Matches } from './Matches'
 import { Mechanism } from './Mechanism'
+import { River } from './River'
 import { Rope } from './Rope'
 import { RustyHoe } from './RustyHoe'
 import { RustySaw } from './RustySaw'
@@ -47,6 +49,8 @@ export interface SceneryDef {
    * a puzzle; '' (or no function) leaves the generic refusal.
    */
   useFrom?: (gameState: GameState, item: Item) => string
+  /** What the thing says when it is used on its own; no function leaves the generic refusal. */
+  use?: (gameState: GameState) => string
 }
 
 /** A thing whose line never changes. */
@@ -183,6 +187,23 @@ function gladeLit(gameState: GameState): boolean {
   return 'lightSpellCast' in room && room.lightSpellCast === true
 }
 
+/** The hoe used with the field's earth or crops digs, as `use hoe` does. */
+function hoeDigs(gameState: GameState, item: Item): string {
+  return item instanceof RustyHoe ? item.use(gameState) : ''
+}
+
+/**
+ * The rod used with the reeds fishes the river, where the fisherman says
+ * the fish hide.
+ */
+function reedsUseFrom(gameState: GameState, item: Item): string {
+  if (!(item instanceof FishingRod)) return ''
+  const river = gameState.currentRoom.items.find(
+    (thing) => thing instanceof River,
+  )
+  return river ? river.useWith(gameState, item) : ''
+}
+
 /** The refrain carved on the glade's stone, word for word. */
 const REFRAIN = 'Power follows purpose; purpose follows truth.'
 
@@ -213,18 +234,28 @@ export const SCENERY_BY_ROOM: Record<string, SceneryDef[]> = {
     ),
   ],
   VegetableField: [
-    staged(VEGETABLE_FIELD_CROPS_KEY, 'crops', ['rows', 'leaves'], (gs) =>
-      gs.getStoryFlag(FLAG_VEGETABLE_FIELD_WATERED)
-        ? 'Young leaves, green and cool, stand up from the rows. ' +
-          'The stalks bend in the breeze and come back.'
-        : 'The leaves curl brown at the edges and break when you touch them. ' +
-          'The stalks are still standing.',
+    staged(
+      VEGETABLE_FIELD_CROPS_KEY,
+      'crops',
+      ['rows', 'leaves'],
+      (gs) =>
+        gs.getStoryFlag(FLAG_VEGETABLE_FIELD_WATERED)
+          ? 'Young leaves, green and cool, stand up from the rows. ' +
+            'The stalks bend in the breeze and come back.'
+          : 'The leaves curl brown at the edges and break when you touch them. ' +
+            'The stalks are still standing.',
+      hoeDigs,
     ),
-    staged('VegetableField.earth', 'earth', ['soil', 'ground'], (gs) =>
-      gs.getStoryFlag(FLAG_VEGETABLE_FIELD_WATERED)
-        ? 'The earth is dark and gives under your boot. ' +
-          'Water still shines in the furrows.'
-        : 'The earth is cracked into plates. It is dry a finger deep.',
+    staged(
+      'VegetableField.earth',
+      'earth',
+      ['soil', 'ground'],
+      (gs) =>
+        gs.getStoryFlag(FLAG_VEGETABLE_FIELD_WATERED)
+          ? 'The earth is dark and gives under your boot. ' +
+            'Water still shines in the furrows.'
+          : 'The earth is cracked into plates. It is dry a finger deep.',
+      hoeDigs,
     ),
   ],
   ChickenCoop: [
@@ -461,12 +492,15 @@ export const SCENERY_BY_ROOM: Record<string, SceneryDef[]> = {
     ),
   ],
   Riverbank: [
-    plain(
-      'Riverbank.reeds',
-      'reeds',
-      [],
-      "Tall reeds lean with the current. A heron's tracks run through the mud between them.",
-    ),
+    {
+      ...plain(
+        'Riverbank.reeds',
+        'reeds',
+        [],
+        "Tall reeds lean with the current. A heron's tracks run through the mud between them.",
+      ),
+      useFrom: reedsUseFrom,
+    },
     plain(
       'Riverbank.crate',
       'crate',
@@ -563,14 +597,21 @@ export const SCENERY_BY_ROOM: Record<string, SceneryDef[]> = {
       'A plain stone altar under a white cloth, darned at one corner. ' +
         'The priest keeps it very straight.',
     ),
-    plain(
-      'VillageChapel.bellRope',
-      'bell rope',
-      [],
-      'The rope is old and soft with handling. ' +
-        'It hangs straight down from a hole in the ceiling, ' +
-        'and nobody is touching it.',
-    ),
+    {
+      ...plain(
+        'VillageChapel.bellRope',
+        'bell rope',
+        [],
+        'The rope is old and soft with handling. ' +
+          'It hangs straight down from a hole in the ceiling, ' +
+          'and nobody is touching it.',
+      ),
+      use: () =>
+        clue(
+          'The rope is soft in your hand, and you let it go. ' +
+            "The bell is the priest's to ring.",
+        ),
+    },
     plain(
       'VillageChapel.mark',
       'mark over the door',

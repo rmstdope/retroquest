@@ -61,6 +61,14 @@ export class FishingRod extends Item {
     return super.useWith(gameState, other)
   }
 
+  /** At the river, the rod on its own fishes it; elsewhere the generic refusal. */
+  override use(gameState: GameState): string {
+    const river = gameState.currentRoom.items.find(
+      (item) => item instanceof River,
+    )
+    return river ? river.useWith(gameState, this) : super.use(gameState)
+  }
+
   /** The line the story tells when Elior takes it, wherever it is lying. */
   override pickedUp(_gameState: GameState): string {
     return 'It bends more than a rod should. ' + 'It will have to do.'

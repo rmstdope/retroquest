@@ -47,6 +47,11 @@ export class Scenery extends Item {
     return SCENERY_BY_KEY[this.key].useFrom?.(gameState, item) ?? ''
   }
 
+  /** The table's answer when the thing is used on its own, if it has one. */
+  override use(gameState: GameState): string {
+    return SCENERY_BY_KEY[this.key].use?.(gameState) ?? super.use(gameState)
+  }
+
   /** The things of `roomKey` that show from the first visit, or from `appears`. */
   static forRoom(roomKey: string, appears?: SceneryAppearance): Scenery[] {
     return (SCENERY_BY_ROOM[roomKey] ?? [])
