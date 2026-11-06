@@ -5,6 +5,7 @@ import { ShinyPebble } from '../items/ShinyPebble'
 import { Deer } from '../characters/Deer'
 import { GrowSpell } from '../spells/GrowSpell'
 import { Scenery } from '../items/Scenery'
+import { OldMill } from './OldMill'
 
 /**
  * Hidden Glade room: enchanted clearing with conditional fauna and spell gain.
@@ -108,7 +109,11 @@ export class HiddenGlade extends Room {
     return baseDescription + ' ' + dynamicParts.join(' ')
   }
 
-  /** Resting spawns the Deer and RareFlower once the deer can be observed. */
+  /**
+   * Resting spawns the Deer and RareFlower once the deer can be observed.
+   * Before that nothing comes; while the stranger's mechanism in the Old Mill
+   * still runs, the ground here feels drawn on, which points back at it.
+   */
   override rest(gameState: GameState): string {
     if (gameState.getStoryFlag('deer_can_be_observed')) {
       const messages = ['You take a moment to rest in the tranquil glade.']
@@ -134,6 +139,14 @@ export class HiddenGlade extends Room {
         )
       }
       return messages.join(' ')
+    }
+    const mill = gameState.allRooms.OldMill
+    if (mill instanceof OldMill && !mill.isJammed()) {
+      return (
+        'You rest a while. Birds, the grey grass, a stone you cannot read. ' +
+        'Nothing comes. Even here the ground feels thin, as if something ' +
+        'far off were drawing on it.'
+      )
     }
     return (
       'You rest a while. Birds, the grey grass, a stone you cannot read. ' +

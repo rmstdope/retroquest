@@ -1,5 +1,9 @@
 [
     {
+        "after": 46,
+        "commands": ["go south", "go east", "go south", "go west", "go south", "go south", "go east", "go south", "use sharp knife with vines", "go south", "rest"]
+    },
+    {
         "after": 68,
         "commands": [
             "give faded photograph to fisherman",

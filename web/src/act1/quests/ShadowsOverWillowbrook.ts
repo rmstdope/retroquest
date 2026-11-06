@@ -1,6 +1,7 @@
 import { characterName, Quest, type GameState } from '@/engine'
 import {
   FLAG_CONNECT_WITH_NATURE,
+  FLAG_DEER_CAN_BE_OBSERVED,
   FLAG_FOUND_RUNE_TOKEN,
   FLAG_INVESTIGATED_WITHERED_CROPS,
   FLAG_MAGIC_FULLY_UNLOCKED,
@@ -14,6 +15,9 @@ import {
   FLAG_WOKE_FROM_DREAM,
 } from '../Act1StoryFlags'
 import { GameMap } from '../items/GameMap'
+import { MillstoneFragment } from '../items/MillstoneFragment'
+import { RareFlower } from '../items/RareFlower'
+import { OldMill } from '../rooms/OldMill'
 import { RoadToGreendale } from '../rooms/RoadToGreendale'
 
 /**
@@ -224,7 +228,8 @@ export class ShadowsOverWillowbrookQuest extends Quest {
       return (
         `${mira} is waiting for the [item_name]rare flower[/item_name] ` +
         'from the [room_name]Hidden Glade[/room_name], the one that opens ' +
-        'only for someone the land trusts.'
+        'only for someone the land trusts.' +
+        ShadowsOverWillowbrookQuest.flowerLead(gameState)
       )
     }
     if (
@@ -240,6 +245,39 @@ export class ShadowsOverWillowbrookQuest extends Quest {
     return (
       'Something is wrong in Willowbrook. ' +
       'The fields, the square and the well each hold a part of it.'
+    )
+  }
+
+  /**
+   * While the flower has not opened, the next link of the chain that brings
+   * the deer: the mechanism still drawing on the land, then the fragment it
+   * gave up, then Borin, who knows the old stone. Empty once Borin has told
+   * of the deer or the flower is in hand.
+   */
+  private static flowerLead(gameState: GameState): string {
+    if (
+      gameState.getStoryFlag(FLAG_DEER_CAN_BE_OBSERVED) ||
+      gameState.inventory.some((item) => item instanceof RareFlower)
+    ) {
+      return ''
+    }
+    if (gameState.inventory.some((item) => item instanceof MillstoneFragment)) {
+      return (
+        ' The [item_name]millstone fragment[/item_name] is old stone. ' +
+        `${characterName('Borin')} at the forge knows old stone.`
+      )
+    }
+    const mill = gameState.allRooms.OldMill
+    if (mill instanceof OldMill && mill.isJammed()) {
+      return (
+        ' The [item_name]strange mechanism[/item_name] in the ' +
+        '[room_name]Old Mill[/room_name] is still now, and it gave up a ' +
+        '[item_name]millstone fragment[/item_name] when it stopped.'
+      )
+    }
+    return (
+      ' The land has no reason to trust anyone yet: something in the ' +
+      '[room_name]Old Mill[/room_name] is still drawing on it.'
     )
   }
 
