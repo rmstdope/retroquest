@@ -94,6 +94,10 @@ const OPTIONAL_LINES: Record<number, { speaker: string; opening: string }[]> = {
     { speaker: 'narrator', opening: 'Held high, the lantern shows a glint' },
     /** More natural tries at Act I's puzzles (rq-miya). */
     { speaker: 'narrator', opening: 'The flame sits behind' },
+    /** The tries found after rq-miya (rq-3r2v). */
+    { speaker: 'narrator', opening: 'The door holds. It is locked' },
+    { speaker: 'narrator', opening: 'The rope is soft in your hand' },
+    { speaker: 'narrator', opening: 'Nothing bites. The river gave' },
     { speaker: 'narrator', opening: 'Lashed on now, the stick' },
     { speaker: 'narrator', opening: 'The lantern lights the moss' },
     { speaker: 'narrator', opening: 'A bare rope let down the well' },

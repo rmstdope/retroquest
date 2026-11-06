@@ -63,6 +63,12 @@ export class Candle extends Item {
     return super.useWith(gameState, other)
   }
 
+  /** With the matches in hand, the candle on its own is lit with them. */
+  override use(gameState: GameState): string {
+    const matches = gameState.inventory.find((item) => item instanceof Matches)
+    return matches ? this.useWith(gameState, matches) : super.use(gameState)
+  }
+
   /** The lantern used with the candle says why it cannot light it. */
   override answerUseFrom(_gameState: GameState, item: Item): string {
     return item instanceof Lantern ? this.fromLantern() : ''

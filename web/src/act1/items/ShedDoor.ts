@@ -1,4 +1,4 @@
-import { Item, type GameState } from '@/engine'
+import { Item, type GameState, clue } from '@/engine'
 import { AbandonedShed } from '../rooms/AbandonedShed'
 import { Key } from './Key'
 
@@ -14,6 +14,17 @@ export class ShedDoor extends Item {
         "There's a keyhole visible.",
       shortName: 'door',
     })
+  }
+
+  /** Opening by hand: the locked door holds; the unlocked one is already ajar. */
+  override open(_gameState: GameState): string {
+    if (this.locked) {
+      return clue('The door holds. It is locked, and it has a keyhole.')
+    }
+    return (
+      `[failure]The [item_name]${this.name}[/item_name] already stands ` +
+      'ajar.[/failure]'
+    )
   }
 
   /**

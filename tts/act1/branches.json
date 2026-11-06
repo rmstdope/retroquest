@@ -259,5 +259,7 @@
     {"after": 53, "commands": ["go south", "go west", "use rope with well"]},
     {"after": 108, "commands": ["cast revive on crops"]},
     {"after": 113, "commands": ["cast purify on bucket"]},
-    {"after": 114, "commands": ["cast purify on bucket"]}
+    {"after": 114, "commands": ["cast purify on bucket"]},
+    {"after": 35, "commands": ["open shed door"]},
+    {"after": 92, "commands": ["use bell rope"]}
 ]

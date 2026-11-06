@@ -2465,6 +2465,11 @@
     "text": "Grey boards, warped and grimy, and nailed so close that hardly a crack shows between them."
   },
   {
+    "id": "048c85835e0cb7",
+    "speaker": "narrator",
+    "text": "The door holds. It is locked, and it has a keyhole."
+  },
+  {
     "id": "1e331fe69bedcf",
     "speaker": "narrator",
     "text": "The mysterious box is locked, and there is no keyhole. The runes around the lid are the only way in, and they do not answer to hands."
@@ -3210,6 +3215,11 @@
     "text": "A plump river fish. It looks fresh and would make a good meal or perhaps a gift."
   },
   {
+    "id": "1959d189436cc3",
+    "speaker": "narrator",
+    "text": "Nothing bites. The river gave you one fish, and it will not give another."
+  },
+  {
     "id": "03407d37d2246d",
     "speaker": "narrator",
     "text": "The magic fizzles out, achieving nothing. It feels like the magic is just out of reach."
@@ -3618,6 +3628,11 @@
     "id": "1a97d68d8988f0",
     "speaker": "narrator",
     "text": "The flame sits behind the lantern's glass, and the candle's wick will not reach in through it. The candle wants a flame of its own, struck for it."
+  },
+  {
+    "id": "130a1238466a58",
+    "speaker": "narrator",
+    "text": "The rope is soft in your hand, and you let it go. The bell is the priest's to ring."
   },
   {
     "id": "00010af0e27d3f",

@@ -7,6 +7,7 @@ import { Candle } from './Candle'
 import { DullKnife } from './DullKnife'
 import { ExtendedMagneticFishingRod } from './ExtendedMagneticFishingRod'
 import { FishingRod } from './FishingRod'
+import { Key } from './Key'
 import { Lantern } from './Lantern'
 import { Magnet } from './Magnet'
 import { Matches } from './Matches'
@@ -418,5 +419,114 @@ describe('wrong tries at Act I puzzles', () => {
     ]) {
       expectMarkupWellFormed(line)
     }
+  })
+})
+
+/**
+ * The natural tries found after rq-miya was filed (rq-3r2v): the ones that
+ * should simply work now do, and the rest say something true in-world.
+ */
+describe('more natural tries at Act I puzzles', () => {
+  const SHED_LOCKED = clue(
+    'The door holds. It is locked, and it has a keyhole.',
+  )
+  const BELL_ROPE = clue(
+    'The rope is soft in your hand, and you let it go. ' +
+      "The bell is the priest's to ring.",
+  )
+
+  it.each(['earth', 'soil', 'ground', 'crops', 'rows'])(
+    'digs the field when the hoe is used with the %s',
+    (target) => {
+      const game = gameIn('VegetableField', [new RustyHoe()])
+      const text = executeCommands(game, [`use rusty hoe with ${target}`])
+      expect(text).toContain('you unearth a small, tarnished')
+      expect(game.state.hasItem('coin')).toBe(true)
+    },
+  )
+
+  it('tills the field again with the hoe and the earth like use hoe', () => {
+    const game = gameIn('VegetableField', [new RustyHoe()])
+    executeCommands(game, ['use hoe'])
+    const again = executeCommands(game, ['use hoe with earth'])
+    expect(again).toContain("you've already found what was hidden here")
+  })
+
+  /** A game on the Riverbank with the rod, taught by the fisherman or not. */
+  function atTheRiver(taught: boolean): Game {
+    const game = gameIn('Riverbank', [new FishingRod()])
+    game.state.setStoryFlag('learned_fishing_basics', taught)
+    return game
+  }
+
+  it.each(['use fishing rod with reeds', 'use fishing rod', 'use rod'])(
+    'fishes the river on %s once the fisherman has taught Elior',
+    (command) => {
+      const game = atTheRiver(true)
+      const text = executeCommands(game, [command])
+      expect(text).toContain('you feel a tug and reel in a plump')
+      expect(game.state.hasItem('fish')).toBe(true)
+    },
+  )
+
+  it.each(['use fishing rod with reeds', 'use fishing rod'])(
+    'says the river gives no second fish on %s',
+    (command) => {
+      const game = atTheRiver(true)
+      executeCommands(game, ['use fishing rod with river'])
+      expect(executeCommands(game, [command])).toBe(
+        clue(
+          'Nothing bites. The river gave you one fish, and it will not ' +
+            'give another.',
+        ),
+      )
+    },
+  )
+
+  it.each(['use fishing rod with reeds', 'use fishing rod'])(
+    'answers %s like the river before the fisherman has taught Elior',
+    (command) => {
+      const text = executeCommands(atTheRiver(false), [command])
+      expect(text).toBe(
+        executeCommands(atTheRiver(false), ['use fishing rod with river']),
+      )
+    },
+  )
+
+  it.each(['open shed door', 'open door'])(
+    'says the locked door holds on %s',
+    (command) => {
+      const text = executeCommands(gameIn('AbandonedShed', []), [command])
+      expect(text).toBe(SHED_LOCKED)
+    },
+  )
+
+  it('says the unlocked shed door already stands open', () => {
+    const game = gameIn('AbandonedShed', [new Key()])
+    executeCommands(game, ['use key with door'])
+    const text = executeCommands(game, ['open shed door'])
+    expect(text).toBe(
+      '[failure]The [item_name]shed door[/item_name] already stands ' +
+        'ajar.[/failure]',
+    )
+  })
+
+  it('lights the candle with the matches in hand on use candle', () => {
+    const game = gameIn('VillageChapel', [new Matches()])
+    const text = executeCommands(game, ['use candle'])
+    expect(text).toContain('now casts a warm glow')
+    expect(game.state.currentRoom.getItemByName('locket')).not.toBeNull()
+    expect(executeCommands(game, ['use candle'])).toBe(
+      '[failure]The [item_name]candle[/item_name] is already lit.[/failure]',
+    )
+  })
+
+  it('says the bell is the priest to ring on use bell rope', () => {
+    const text = executeCommands(gameIn('VillageChapel', []), ['use bell rope'])
+    expect(text).toBe(BELL_ROPE)
+  })
+
+  it('writes every new refusal in well-formed markup', () => {
+    for (const line of [SHED_LOCKED, BELL_ROPE]) expectMarkupWellFormed(line)
   })
 })
