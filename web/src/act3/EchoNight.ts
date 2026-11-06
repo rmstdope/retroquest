@@ -3,14 +3,9 @@ import { FLAG_ACT3_ECHO_HEARD } from './Act3StoryFlags'
 
 /**
  * The echo of the night Aren, Lysa and Malakar parted, shared by the Echo
- * Chambers (`listen`) and the runic walls (a second examine). The voices are
+ * Chambers and the runic walls (a second examine). The voices are
  * tagged by kind, never named by the game.
  */
-
-/** The short line `listen` gives once the echo has been heard. */
-export const ECHO_AFTER =
-  '[dim]Only your own breath comes back from the stone, and under it, ' +
-  'very faintly, a door closing.[/dim]'
 
 const ECHO_NIGHT =
   'You hold still. The whispers in the alcoves gather, and for a moment ' +

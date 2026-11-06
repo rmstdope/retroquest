@@ -174,7 +174,6 @@ describe('Room', () => {
     it('is quiet, finds nothing, rests, is lit and does nothing on enter', () => {
       const r = new Room({ name: 'R', description: 'Desc' })
       const gs = gameState()
-      expect(r.getAmbientSound(gs)).toBe('It is quiet here.')
       expect(r.search(gs)).toContain('find nothing of interest')
       expect(r.rest(gs)).toBe('You rest for a moment, gathering your strength.')
       expect(r.light(gs)).toBe('It is already light enough here.')

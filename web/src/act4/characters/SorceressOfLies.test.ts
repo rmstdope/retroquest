@@ -47,8 +47,6 @@ const THREE_HEARTS = [
 ]
 const SMILES =
   'She smiles, and the crystals hum your word back to you, sweeter, and wrong.'
-const LISTEN_EARLY =
-  'The crystals hum kind, untrue things, and under them she is laughing at you. If there is anything beneath the laughing, it does not let you near.'
 const NORTH_WALL =
   'The north arch is a wall of whispering crystal. It will not open while the Sorceress holds the chamber.'
 
@@ -229,51 +227,14 @@ describe('The Sorceress of Lies', () => {
     )
   })
 
-  it('is redeemed by listening too, with the same gates as the word', () => {
-    const early = inChamber()
-    const listenEarly = executeCommands(early, ['listen'])
-    expect(listenEarly).toContain(LISTEN_EARLY)
-    expect(listenEarly).not.toContain('Whatever you came to give her')
-    executeCommands(early, ["use knight's redemption"])
-    expect(executeCommands(early, ['listen'])).toContain(
-      'You cannot answer a pain you cannot hear.',
-    )
-
+  it('does not know listen, in the chamber or anywhere at it', () => {
     const game = inChamber()
-    executeCommands(game, ["use knight's redemption", ...THREE_HEARTS])
-    const heard = executeCommands(game, ['listen'])
-    expect(heard).toContain(
-      '[effect]You say nothing.[/effect] You stand in the middle of her chamber and listen, ' +
-        'to all of it, for as long as it takes. The Sorceress goes very ' +
-        'still. One by one the crystals stop whispering',
-    )
-    expect(heard).not.toContain('[character_name]Elior')
-    expect(heard).toContain('Elena. The girl at the inn.')
-    expectItemInInventory(game.state, "Sorceress's Truth", true)
-    expect(executeCommands(game, ['listen'])).toContain(
-      'She has already been heard. The chamber is quiet.',
-    )
-  })
-
-  it('answers listening to the whispers and the staff with ears alone', () => {
-    const game = inChamber()
-    expect(executeCommands(game, ['listen to whispers'])).toContain(
-      'Whatever is under them is too quiet for ears alone.',
-    )
-    expect(executeCommands(game, ['listen to staff'])).toContain(
-      'Whatever it is hiding wants more than ears.',
-    )
-    executeCommands(game, [
-      "use knight's redemption",
-      ...THREE_HEARTS,
-      'say understanding to sorceress',
-    ])
-    expect(executeCommands(game, ['listen to whispers'])).toContain(
-      'The crystals are silent now.',
-    )
-    expect(executeCommands(game, ['listen to staff'])).toContain(
-      'The bare staff makes no sound.',
-    )
+    for (const command of ['listen', 'listen to whispers', 'listen to staff']) {
+      expect(executeCommands(game, [command])).toContain(
+        `I don't understand the command: '${command}'`,
+      )
+    }
+    expectItemInInventory(game.state, "Sorceress's Truth", false)
   })
 
   it('is redeemed by understanding, with one scene of confession', () => {

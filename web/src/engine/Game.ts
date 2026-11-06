@@ -506,7 +506,6 @@ Welcome to
       '  look, observe, survey, l\n' +
       '  look at <object>, inspect <object>, examine <object>, check <object>\n' +
       '  search, investigate\n' +
-      '  listen, listen to <object>\n' +
       '\n' +
       '[bold]Inventory Management:[/bold]\n' +
       '  take <item>, pick up <item>, grab <item>, get <item>\n' +
@@ -820,13 +819,6 @@ Welcome to
       return '[dim]You think it over. Nothing presses on you just now.[/dim]'
     }
     return ['You stop and think over what you know.', ...lines].join('\n')
-  }
-
-  listen(target?: string): string {
-    if (!target) return this.state.currentRoom.getAmbientSound(this.state)
-    const item = this.findItem(target)
-    if (item) return item.listen(this.state)
-    return `[failure]You don't see a '${target}' to listen to here or in your inventory.[/failure]`
   }
 
   rest(): string {

@@ -93,11 +93,11 @@
     {"after": 136, "commands": ["give lantern to merchant", "buy rope from merchant", "cast bless on merchant", "cast heal on merchant", "cast purify on merchant"]},
     {
         "after": -1,
-        "commands": ["go north", "listen", "talk to xyz"]
+        "commands": ["go north", "talk to xyz"]
     },
     {
         "after": 0,
-        "commands": ["listen", "say hello to grandmother"]
+        "commands": ["say hello to grandmother"]
     },
     {
         "after": 36,
@@ -113,11 +113,7 @@
     },
     {
         "after": 57,
-        "commands": ["use strange mechanism", "listen to strange mechanism"]
-    },
-    {
-        "after": 58,
-        "commands": ["listen to strange mechanism"]
+        "commands": ["use strange mechanism"]
     },
     {
         "after": 70,

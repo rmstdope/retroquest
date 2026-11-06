@@ -1054,7 +1054,7 @@ describe('Act 3 lullaby', () => {
   it('keeps what Elior has heard across a save and load', () => {
     const game = new Game([new Act3()])
     game.state.currentRoom.addItem(new PolishedShell())
-    game.listen('shell')
+    game.use('shell')
     new WanderingPhantoms().talkTo(game.state)
 
     const fresh = new Game([new Act3()])
@@ -1062,7 +1062,7 @@ describe('Act 3 lullaby', () => {
 
     expectStoryFlag(fresh.state, FLAG_ACT3_SHELL_HEARD, true)
     expectStoryFlag(fresh.state, FLAG_ACT3_PHANTOMS_HEARD, true)
-    expect(fresh.listen('shell')).toContain('still humming')
+    expect(fresh.use('shell')).toContain('still humming')
   })
 })
 

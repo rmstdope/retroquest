@@ -31,23 +31,29 @@ describe('The Echo Chambers echo and the Silence Keeper', () => {
     expect(keeper?.talkTo(loaded.state)).toContain('They are moments')
   })
 
-  it('is reached by the typed command, as the design names it', () => {
+  it('is reached by a second examine of the runic walls, and listen is unknown', () => {
     const game = new Game([new Act3()])
     game.state.currentRoom = game.state.allRooms.EchoChambers
-    expect(executeCommands(game, ['listen'])).toContain('Three voices')
+    expect(executeCommands(game, ['listen'])).toContain(
+      "I don't understand the command: 'listen'",
+    )
+    expectStoryFlag(game.state, FLAG_ACT3_ECHO_HEARD, false)
+    executeCommands(game, ['examine walls'])
+    expect(executeCommands(game, ['examine walls'])).toContain('Three voices')
     expectStoryFlag(game.state, FLAG_ACT3_ECHO_HEARD, true)
   })
 
   it('keeps the echo heard and the Keeper line told across a save and load', () => {
     const game = new Game([new Act3()])
     game.state.currentRoom = game.state.allRooms.EchoChambers
-    game.listen()
+    executeCommands(game, ['examine walls', 'examine walls'])
 
     const heard = reload(game)
     expectStoryFlag(heard.state, FLAG_ACT3_ECHO_HEARD, true)
     heard.state.currentRoom = heard.state.allRooms.EchoChambers
-    expect(heard.listen()).toContain('a door closing')
-    expect(heard.listen()).not.toContain('Three voices')
+    expect(executeCommands(heard, ['examine walls'])).not.toContain(
+      'Three voices',
+    )
 
     heard.state.currentRoom = heard.state.allRooms.StillnessVestibule
     const keeper = heard.state.currentRoom.getCharacterByName('Silence Keeper')

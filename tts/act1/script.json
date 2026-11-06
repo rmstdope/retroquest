@@ -85,11 +85,6 @@
     "text": "You go that way, and it is the same dark, the same rain, the same tune. There is no door in this. There is only the voice, and it says your name."
   },
   {
-    "id": "11c74bf14404bc",
-    "speaker": "narrator",
-    "text": "The rain, and the thunder under it. Under the thunder, the tune: three notes climbing, and settling home. You know it, and could not say from where. Under the tune, a whisper, and the whisper is your name."
-  },
-  {
     "id": "1b4ebbdd79fc8d",
     "speaker": "narrator",
     "text": "Nothing here answers to that. The voice says your name."
@@ -173,11 +168,6 @@
     "id": "1eb7550bdce639",
     "speaker": "grandmother",
     "text": "Back again? You've had the loaf, I see. I'll bake another. And light that lantern before you go feeling about in your corner; you'll have the shelf down."
-  },
-  {
-    "id": "041e30b4ecb790",
-    "speaker": "narrator",
-    "text": "It is quiet here."
   },
   {
     "id": "1a4b47847265b2",
@@ -1925,11 +1915,6 @@
     "text": "You put a hand to the gears. They turn under it and keep turning; fingers will not stop them."
   },
   {
-    "id": "0debb7a078ccd8",
-    "speaker": "narrator",
-    "text": "You hear a faint whirring and clicking from within the strange mechanism, and beneath it a low hum, as if something were being drawn up from far below."
-  },
-  {
     "id": "1f95c77acf9c40",
     "speaker": "narrator",
     "text": "The line is too fine for those gears. They would cut it like thread and keep turning; whatever stops them has to be thicker than that."
@@ -1990,16 +1975,6 @@
     "text": "With a clunk, a hidden compartment slides open, revealing a fragment of the old millstone!"
   },
   {
-    "id": "0b7095bd4f6ce5",
-    "speaker": "narrator",
-    "text": "The strange mechanism is silent now, its gears jammed fast."
-  },
-  {
-    "id": "0169571959bc2e",
-    "speaker": "narrator",
-    "text": "A creaky windmill towers above, its sails turning slowly in the breeze. Dusty gears and cobwebs fill the interior, and the scent of flour hangs in the air. Sunlight streams through broken windows, illuminating sacks of grain and a heavy millstone. Amidst the old workings, the black-iron mechanism stands jammed with a rope, silent at last."
-  },
-  {
     "id": "0bcb5f657bc789",
     "speaker": "narrator",
     "text": "The strange mechanism stands jammed with a rope, its gears locked and its whirring stilled. The floor no longer hums beneath it. A compartment hangs open."
@@ -2013,6 +1988,11 @@
     "id": "10c5fb298c3e23",
     "speaker": "narrator",
     "text": "A chunk of stone broken from the old mill's grinding wheel, heavy and rough."
+  },
+  {
+    "id": "0169571959bc2e",
+    "speaker": "narrator",
+    "text": "A creaky windmill towers above, its sails turning slowly in the breeze. Dusty gears and cobwebs fill the interior, and the scent of flour hangs in the air. Sunlight streams through broken windows, illuminating sacks of grain and a heavy millstone. Amidst the old workings, the black-iron mechanism stands jammed with a rope, silent at last."
   },
   {
     "id": "17bf7483d1fede",

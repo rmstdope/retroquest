@@ -146,7 +146,7 @@ rule that all side quests must be completed before the main quest can be finishe
     -   **Type:** Side Quest (Required)
     -   **Trigger:** Face the second lieutenant in the Chamber of Whispers
     -   **Prerequisites:** "The Knight of Despair" completed; Knight's Redemption
-    -   **Completion:** Use the Knight's Redemption, then hear all three of the chamber's hearts with `hearts_truth`: the Sorceress herself (the girl sold for grain), her staff (the lonely silver mask) and the whispers (her own voice, repeating every lie so that she never has to hear the silence). Then say understanding, or simply `listen`: standing still and listening to all of it is understanding too, with the same gates
+    -   **Completion:** Use the Knight's Redemption, then hear all three of the chamber's hearts with `hearts_truth`: the Sorceress herself (the girl sold for grain), her staff (the lonely silver mask) and the whispers (her own voice, repeating every lie so that she never has to hear the silence). Then say understanding
     -   **Rewards:** Sorceress's Truth, the secret passage to the Memory
         Vault
     -   **Who she is:** **The mark on Elena's curse in Greendale (Act II)** was the silver mask
@@ -776,7 +776,7 @@ where they would occur. The `examine` and `talk to` steps below that `ACT4_GOLDE
     - `cast heart's truth on staff` → the silver mask, made to be looked at and never looked at
     - `cast heart's truth on whispers` → the whispers are one voice, hers
     - (all three hearts are needed before understanding works; each shows once, then a dim line)
-    - `say understanding to sorceress` (or `listen`)
+    - `say understanding to sorceress`
         - Quest completed: "The Sorceress of Lies"
         - Item obtained: `Sorceress's Truth`
 

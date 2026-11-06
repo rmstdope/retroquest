@@ -948,7 +948,7 @@ describe('Game', () => {
     })
   })
 
-  describe('look, search, rest, listen', () => {
+  describe('look, search, rest', () => {
     it('looks around and flags the room for re-description', () => {
       game.hasChangedRoom = false
       expect(game.look()).toBe('')
@@ -960,19 +960,6 @@ describe('Game', () => {
       rooms.EliorsCottage.rest = () => 'You nap.'
       expect(game.search()).toBe('You find a coin.')
       expect(game.rest()).toBe('You nap.')
-    })
-
-    it('listens to the room or an item', () => {
-      rooms.EliorsCottage.getAmbientSound = (state) =>
-        state === game.state ? 'Leaves rustle.' : 'Silence.'
-      expect(game.listen()).toBe('Leaves rustle.')
-      const shell = item('Whispering Shell')
-      shell.listen = () => 'You hear the sea.'
-      rooms.EliorsCottage.addItem(shell)
-      expect(game.listen('whispering SHELL')).toBe('You hear the sea.')
-      expect(game.listen('relic')).toBe(
-        "[failure]You don't see a 'relic' to listen to here or in your inventory.[/failure]",
-      )
     })
   })
 
@@ -1265,6 +1252,10 @@ describe('Game', () => {
       expect(help).toContain('sleep, rest, wait')
       expect(help.toLowerCase()).not.toContain('cheat')
       expect(help).not.toContain('drop')
+      expect(help).not.toContain('listen')
+      expect(help).toContain(
+        '  search, investigate\n\n[bold]Inventory Management:[/bold]',
+      )
       expect(help).not.toContain('discard')
       expect(game.getCommandCompletions()).not.toHaveProperty('cheat')
     })

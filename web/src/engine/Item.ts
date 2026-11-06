@@ -117,10 +117,6 @@ export class Item {
     return this.description
   }
 
-  listen(_gameState: GameState): string {
-    return `[failure]${this.nameInSentence({ atStart: true })} is silent.[/failure]`
-  }
-
   /** Called after the player takes the item; the text is shown after the pickup. */
   pickedUp(_gameState: GameState): string {
     return ''

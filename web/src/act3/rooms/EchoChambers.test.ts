@@ -119,16 +119,15 @@ describe('Echo Chambers echo', () => {
     'You hold still. The whispers in the alcoves gather, and for a moment ' +
     'they are not copying you at all.'
   const CLOSING = 'Somewhere in the stone, a door closes.'
-  const AFTER =
-    'Only your own breath comes back from the stone, and under it, very ' +
-    'faintly, a door closing.'
 
-  it('plays the echo on the first listen, then the short line', () => {
+  it('plays the echo on the second examine of the walls, and no after-line follows', () => {
     const game = new Game([new Act3()])
     const room = new EchoChambers()
     game.state.currentRoom = room
 
-    const first = game.listen()
+    const walls = room.getItemByName('walls')
+    walls?.examine(game.state)
+    const first = walls?.examine(game.state) ?? ''
     expect(first).toContain(OPENING)
     expect(first).toContain("A man's voice, steady")
     expect(first).toContain('Mal. Put the lamp down and listen to me.')
@@ -146,14 +145,6 @@ describe('Echo Chambers echo', () => {
     expectMarkupWellFormed(first)
     expectStoryFlag(game.state, FLAG_ACT3_ECHO_HEARD, true)
 
-    expect(game.listen()).toBe(`[dim]${AFTER}[/dim]`)
-    expect(game.listen()).toBe(`[dim]${AFTER}[/dim]`)
-  })
-
-  it('leaves listen alone in other rooms', () => {
-    const game = new Game([new Act3()])
-    game.state.currentRoom = new Room({ name: 'Elsewhere', description: '' })
-    expect(game.listen()).toBe('It is quiet here.')
-    expectStoryFlag(game.state, FLAG_ACT3_ECHO_HEARD, false)
+    expect(walls?.examine(game.state)).not.toContain('Only your own breath')
   })
 })

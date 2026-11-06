@@ -51,11 +51,6 @@ class RecordingGame implements CommandTarget {
   search() {
     return this.record('search')
   }
-  listen(target?: string) {
-    return target === undefined
-      ? this.record('listen')
-      : this.record('listen', target)
-  }
   hint() {
     return this.record('hint')
   }
@@ -201,9 +196,14 @@ describe('CommandParser', () => {
       'look at': ['examine', ''],
       search: ['search'],
       investigate: ['search'],
-      listen: ['listen'],
-      'listen to shell': ['listen', 'shell'],
-      'listen shell': ['listen', 'shell'],
+    })
+  })
+
+  it('no longer recognises listen', () => {
+    expectCalls(game, parser, {
+      listen: ['unknown', 'listen'],
+      'listen to shell': ['unknown', 'listen to shell'],
+      'listen shell': ['unknown', 'listen shell'],
     })
   })
 

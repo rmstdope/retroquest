@@ -124,11 +124,6 @@ export class Room {
     return []
   }
 
-  /** What `listen` with no target hears; rooms override it to react to the game state. */
-  getAmbientSound(_gameState: GameState): string {
-    return 'It is quiet here.'
-  }
-
   /** The first item in the room named by full or short name, or null. */
   getItemByName(itemName: string): Item | null {
     return this.items.find((item) => isNamed(item, itemName)) ?? null
