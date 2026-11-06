@@ -216,6 +216,7 @@ export class GameController {
     this.addressee = this.game.addresseeOf(command)
     const visitedBefore = this.getVisitedRooms()
     this.game.hasChangedRoom = false
+    this.game.arrivalHadScene = false
     const result = this.handleCommand(command)
     const roomAfter = this.game.state.currentRoom.name
     const moved = roomAfter !== roomBefore
@@ -234,6 +235,11 @@ export class GameController {
    */
   lastTurnRoomDescription(): RoomDescription | null {
     return this.roomDescription
+  }
+
+  /** True when the last `takeTurn` moved the player into a room that played a scene on entering. */
+  lastTurnHadArrivalScene(): boolean {
+    return this.game.arrivalHadScene
   }
 
   /**

@@ -106,6 +106,7 @@ function createMockBridge() {
     getActCharacters: vi.fn((): { key: string; name: string }[] => []),
     takeSoundFirings: vi.fn((): SoundFiring[] => []),
     lastTurnAddressee: vi.fn((): string | null => null),
+    lastTurnHadArrivalScene: vi.fn((): boolean => false),
     getCommandCompletions: vi.fn((): CompletionTree => ({})),
   }
   // The tests script each kind of quest event with the three mocks above, one

@@ -89,6 +89,8 @@ export class Game implements CommandTarget {
   readonly commandParser: CommandParser
   /** True when the room should be described again after the command. */
   hasChangedRoom = false
+  /** Set by a move whose arrival text is more than the room itself (a scene on entering); cleared by the controller each turn. */
+  arrivalHadScene = false
   runState: GameRunState = GameRunState.ShowLogo
   acceptInput = false
   commandResult = ''
@@ -483,7 +485,9 @@ Welcome to
     next.onEnter(this.state)
     this.state.markVisited(next)
     this.hasChangedRoom = true
-    return departure + next.enterText(this.state)
+    const arrival = next.enterText(this.state)
+    if (arrival !== '') this.arrivalHadScene = true
+    return departure + arrival
   }
 
   help(): string {

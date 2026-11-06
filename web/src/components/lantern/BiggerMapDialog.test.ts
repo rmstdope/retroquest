@@ -126,6 +126,43 @@ describe('BiggerMapDialog', () => {
     expect(travel).not.toHaveBeenCalled()
   })
 
+  it('draws a visited place that no open way leads to, but does not let it be pressed', async () => {
+    const game = useGameStore()
+    game.mapPlaces = [...game.mapPlaces, place("Mira's Hut", true)]
+    const w = mountMap()
+    const hut = w.get('[data-place="Mira\'s Hut"]')
+    expect(hut.attributes('disabled')).toBeDefined()
+    await hut.trigger('click')
+    expect(travel).not.toHaveBeenCalled()
+    expect(w.get('[data-place="Forge"]').attributes('disabled')).toBeUndefined()
+  })
+
+  it('reaches each place with Tab and presses it with Enter', async () => {
+    const w = mountMap()
+    const forge = w.get('[data-place="Forge"]').element as HTMLButtonElement
+    forge.focus()
+    expect(document.activeElement).toBe(forge)
+    await w.get('[data-place="Forge"]').trigger('click')
+    expect(travel).toHaveBeenCalledWith('Forge')
+  })
+
+  it('lets a long name wrap inside its box', () => {
+    const game = useGameStore()
+    game.mapPlaces = [
+      place(
+        'Village Well',
+        true,
+        { east: 'The Very Long Name of a Place' },
+        true,
+      ),
+      place('The Very Long Name of a Place', false),
+    ]
+    const w = mountMap()
+    expect(w.get('[data-place^="The Very"] .lq-name').text()).toBe(
+      'The Very Long Name of a Place',
+    )
+  })
+
   it('shows a lone place alone', () => {
     const game = useGameStore()
     game.mapPlaces = [place('Village Well', true, {}, true)]

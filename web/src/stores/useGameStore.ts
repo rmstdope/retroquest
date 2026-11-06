@@ -906,6 +906,9 @@ export const useGameStore = defineStore('game', () => {
       if (!next) return
       const answer = playCommand(`go ${direction}`)
       if (answer.includes('[failure]') || !acceptInput.value) return
+      // A scene on entering, or news of a quest, is where walking would stop to read.
+      if (b.controller.lastTurnHadArrivalScene()) return
+      if (turns.value.at(-1)?.quests?.length) return
       here = b.controller.getMapPlaces().find((place) => place.current)
       if (here?.key !== next.to) return
     }

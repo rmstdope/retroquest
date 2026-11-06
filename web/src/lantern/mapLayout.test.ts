@@ -109,3 +109,65 @@ describe('layoutMap', () => {
     ])
   })
 })
+
+describe('layoutMap: places the current place cannot walk to', () => {
+  it('draws a visited place with no open way to it, below the rest', () => {
+    const layout = layoutMap([
+      place('hut', true, {}),
+      place('a', true, { east: 'b' }, true),
+      place('b', true),
+    ])
+    expect(layout.boxes.map((b) => b.key).sort()).toEqual(['a', 'b', 'hut'])
+    const [, hutRow] = at(layout, 'hut')
+    expect(hutRow).toBeGreaterThan(0)
+  })
+
+  it('lays the cut-off group out from its first place, seen places included', () => {
+    const layout = layoutMap([
+      place('a', true, {}, true),
+      place('x', true, { south: 'y' }),
+      place('y', false),
+    ])
+    expect(layout.boxes).toHaveLength(3)
+    expect(layout.paths.map((p) => [p.from, p.to, p.dashed])).toEqual([
+      ['x', 'y', true],
+    ])
+  })
+})
+
+describe('layoutMap: paths and boxes', () => {
+  it('keeps a lengthened path from running through a box', () => {
+    // East of a is taken by b; going up from a needs (1,-1), free; but
+    // north-then-east of c collides: x must not hide behind u.
+    const layout = layoutMap([
+      place('a', true, { east: 'b', north: 'n' }, true),
+      place('b', true),
+      place('n', true, { east: 'x', south: 'a' }),
+      place('x', true),
+    ])
+    for (const path of layout.paths) {
+      const from = layout.boxes.find((b) => b.key === path.from)!
+      const to = layout.boxes.find((b) => b.key === path.to)!
+      for (const box of layout.boxes) {
+        if (box === from || box === to) continue
+        const onRow = box.row === from.row && from.row === to.row
+        const between =
+          box.col > Math.min(from.col, to.col) &&
+          box.col < Math.max(from.col, to.col)
+        expect(onRow && between).toBe(false)
+      }
+    }
+  })
+
+  it('leaves out a way between two placed boxes that would cross a third', () => {
+    const layout = layoutMap([
+      place('a', true, { east: 'b' }, true),
+      place('b', true, { east: 'c' }),
+      place('c', true, { west: 'a' }),
+    ])
+    expect(layout.paths.map((p) => [p.from, p.to])).toEqual([
+      ['a', 'b'],
+      ['b', 'c'],
+    ])
+  })
+})

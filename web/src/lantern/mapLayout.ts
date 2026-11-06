@@ -36,8 +36,13 @@ const STEPS: Readonly<Record<string, readonly [number, number]>> = {
   up: [1, -1],
   down: [1, 1],
 }
-/** Where any other named way (a secret passage) puts its place: up and to the right. */
-const NAMED_WAY_STEP: readonly [number, number] = [1, -1]
+/** Where any other named way (a secret passage) puts its place: diagonally beside, up and to the right first. */
+const NAMED_WAY_STEPS: ReadonlyArray<readonly [number, number]> = [
+  [1, -1],
+  [-1, -1],
+  [1, 1],
+  [-1, 1],
+]
 
 /** Tags for the ways that are not on the compass. */
 const WAY_TAGS: Readonly<Record<string, string>> = {
@@ -47,10 +52,12 @@ const WAY_TAGS: Readonly<Record<string, string>> = {
 
 const COMPASS = ['north', 'east', 'south', 'west']
 
-function stepOf(direction: string): readonly [number, number] {
-  return Object.hasOwn(STEPS, direction) ? STEPS[direction] : NAMED_WAY_STEP
+/** The grid steps (columns, rows) a way may put its place at, the best first. */
+function stepsOf(direction: string): ReadonlyArray<readonly [number, number]> {
+  return Object.hasOwn(STEPS, direction) ? [STEPS[direction]] : NAMED_WAY_STEPS
 }
 
+/** The tag a path carries for its way: none for the compass, the way's name for the rest. */
 function tagOf(direction: string): string | null {
   if (COMPASS.includes(direction)) return null
   return Object.hasOwn(WAY_TAGS, direction)
@@ -58,13 +65,43 @@ function tagOf(direction: string): string | null {
     : displayName(direction)
 }
 
+/** How far (in columns and rows) a box reaches from its cell's centre: the box is 136 × 52 px in a 170 × 96 px cell. */
+const HALF_WIDTH = 0.4
+const HALF_HEIGHT = 0.27
+/** The longest a path is lengthened before the layout gives up keeping it clear of other boxes. */
+const MAX_LENGTH = 12
+
+/** True when the straight line between two cells passes through the box of a third. */
+function crossesBox(
+  from: MapBox,
+  to: MapBox,
+  boxes: Iterable<MapBox>,
+): boolean {
+  for (const box of boxes) {
+    if (box.key === from.key || box.key === to.key) continue
+    for (let t = 0.05; t < 1; t += 0.05) {
+      const col = from.col + (to.col - from.col) * t
+      const row = from.row + (to.row - from.row) * t
+      if (
+        Math.abs(col - box.col) < HALF_WIDTH &&
+        Math.abs(row - box.row) < HALF_HEIGHT
+      )
+        return true
+    }
+  }
+  return false
+}
+
 /**
  * Lay the act's places out on a grid, the way the small map does: from the
  * current place outwards, each way putting its place one step north, east,
  * south or west (up and down diagonally to the right). A path grows longer,
- * in the same direction, until its place has a cell of its own. Places seen
- * but not visited are placed from the visited places only, so they are leaves.
- * Two places joined by a way get one path, solid unless one end is unvisited.
+ * in the same direction, until its place has a cell of its own and the path
+ * does not run through another box. Places seen but not visited are placed
+ * from the visited places only, so they are leaves. Two places joined by a
+ * way get one path, solid unless one end is unvisited; a path that could only
+ * be drawn through another box is left out. Visited places the current place
+ * cannot walk to are laid out beneath, from the first of them.
  */
 export function layoutMap(places: MapPlace[]): MapLayout {
   const byKey = new Map(places.map((place) => [place.key, place]))
@@ -85,35 +122,71 @@ export function layoutMap(places: MapPlace[]): MapLayout {
     taken.add(`${col},${row}`)
     return box
   }
-  put(start, 0, 0)
   const paths: MapPath[] = []
   const joined = new Set<string>()
-  const queue: MapPlace[] = [start]
-  for (let next = queue.shift(); next; next = queue.shift()) {
-    const here = cells.get(next.key)
-    if (!here) continue
-    for (const [direction, exit] of Object.entries(next.exits)) {
-      const there = byKey.get(exit.to)
-      if (!there) continue
-      let target = cells.get(there.key)
-      if (!target) {
-        const [dc, dr] = stepOf(direction)
-        let length = 1
-        while (taken.has(`${here.col + dc * length},${here.row + dr * length}`))
-          length++
-        target = put(there, here.col + dc * length, here.row + dr * length)
-        if (there.visited) queue.push(there)
+  const freeAt = (col: number, row: number): boolean =>
+    !taken.has(`${col},${row}`)
+
+  /** Lay out everything reachable from a placed box. */
+  const spread = (first: MapPlace): void => {
+    const queue: MapPlace[] = [first]
+    for (let next = queue.shift(); next; next = queue.shift()) {
+      const here = cells.get(next.key)
+      if (!here) continue
+      for (const [direction, exit] of Object.entries(next.exits)) {
+        const there = byKey.get(exit.to)
+        if (!there) continue
+        let target = cells.get(there.key)
+        if (!target) {
+          let placed: [number, number] | null = null
+          for (const [dc, dr] of stepsOf(direction)) {
+            for (let length = 1; length <= MAX_LENGTH && !placed; length++) {
+              let clear = true
+              for (let k = 1; k <= length; k++)
+                if (!freeAt(here.col + dc * k, here.row + dr * k)) clear = false
+              if (clear) placed = [dc * length, dr * length]
+            }
+            if (placed) break
+          }
+          if (!placed) {
+            const [dc, dr] = stepsOf(direction)[0]
+            let length = 1
+            while (!freeAt(here.col + dc * length, here.row + dr * length))
+              length++
+            placed = [dc * length, dr * length]
+          }
+          target = put(there, here.col + placed[0], here.row + placed[1])
+          if (there.visited) queue.push(there)
+        }
+        const pair = [here.key, target.key].sort().join('\n')
+        if (joined.has(pair)) continue
+        joined.add(pair)
+        paths.push({
+          from: here.key,
+          to: target.key,
+          dashed: !here.visited || !target.visited,
+          tag: tagOf(direction),
+        })
       }
-      const pair = [here.key, target.key].sort().join('\n')
-      if (joined.has(pair)) continue
-      joined.add(pair)
-      paths.push({
-        from: here.key,
-        to: target.key,
-        dashed: !here.visited || !target.visited,
-        tag: tagOf(direction),
-      })
     }
   }
-  return { boxes: [...cells.values()], paths }
+
+  put(start, 0, 0)
+  spread(start)
+  for (const place of places) {
+    if (cells.has(place.key) || !place.visited) continue
+    const col = Math.min(...[...cells.values()].map((b) => b.col))
+    const row = Math.max(...[...cells.values()].map((b) => b.row)) + 2
+    put(place, col, row)
+    spread(place)
+  }
+  const boxes = [...cells.values()]
+  return {
+    boxes,
+    paths: paths.filter((path) => {
+      const from = cells.get(path.from)
+      const to = cells.get(path.to)
+      return !from || !to || !crossesBox(from, to, boxes)
+    }),
+  }
 }

@@ -2,6 +2,7 @@
 import { computed, nextTick, onMounted, ref } from 'vue'
 import { useGameStore } from '@/stores/useGameStore'
 import { layoutMap } from '@/lantern/mapLayout'
+import { routeTo } from '@/lantern/mapRoute'
 import LanternDialog from './LanternDialog.vue'
 
 /**
@@ -11,7 +12,8 @@ import LanternDialog from './LanternDialog.vue'
  * into a place not visited is dashed; up, down and secret ways carry a tag.
  * Pressing a place (all but the one the player is in) asks the store to walk
  * there and closes the window; × and Escape close it without moving. The
- * places dim while the game is busy. It opens with "You are here" in view.
+ * places dim while the game is busy, and a visited place that no open way
+ * leads to from here (a hut with no door) is drawn but cannot be pressed. It opens with "You are here" in view.
  */
 const emit = defineEmits<{ close: [] }>()
 const game = useGameStore()
@@ -59,6 +61,7 @@ const boxes = computed(() =>
     const c = centre(box.key)
     return {
       ...box,
+      reachable: routeTo(game.mapPlaces, box.key) !== null,
       style: {
         left: `${c.x - BOX_WIDTH / 2}px`,
         top: `${c.y - BOX_HEIGHT / 2}px`,
@@ -161,7 +164,7 @@ onMounted(() => {
             :data-place="box.name"
             :style="box.style"
             :aria-label="`Go to ${box.name}`"
-            :disabled="!game.acceptInput"
+            :disabled="!game.acceptInput || !box.reachable"
             @click="go(box.key)"
           >
             <span class="lq-name" aria-hidden="true">{{ box.name }}</span>

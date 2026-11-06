@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 import { setActivePinia, createPinia } from 'pinia'
-import { Act, Room, type GameState } from '@/engine'
+import { Act, Quest, Room, type GameState } from '@/engine'
 import { useBridge, type ActClass } from '@/composables/useBridge'
 import { useGameStore } from './useGameStore'
 
@@ -14,6 +14,40 @@ class Yard extends Room {
     return gateShut && direction === 'east'
       ? '[failure]The gate is shut.[/failure]'
       : null
+  }
+}
+
+/** Whether the yard sets a quest going when entered. */
+let yardQuest = false
+
+/** A quest that starts when the player stands in the yard and `yardQuest` is set. */
+class YardQuest extends Quest {
+  constructor() {
+    super({ name: 'Mind the Gate', description: 'Look at the gate.' })
+  }
+
+  /** Starts in the yard. */
+  override checkTrigger(gameState: GameState): boolean {
+    return yardQuest && gameState.currentRoom.name === 'Yard'
+  }
+
+  /** Never done. */
+  override checkCompletion(): boolean {
+    return false
+  }
+}
+
+/** Whether a stranger is seen on the first walk into the road. */
+let strangerComing = false
+
+/** A road that plays a scene the first time it is entered while `strangerComing`. */
+class Road extends Room {
+  /** The sighting, once. */
+  override enterText(_gameState: GameState): string {
+    if (!strangerComing) return ''
+    strangerComing = false
+    yardQuest = false
+    return 'A cloaked stranger watches you from the bend.'
   }
 }
 
@@ -33,7 +67,7 @@ class RowAct extends Act {
           description: 'A yard.',
           exits: { west: 'Hall', east: 'Road' },
         }),
-        Road: new Room({
+        Road: new Road({
           name: 'Road',
           description: 'A road.',
           exits: { west: 'Yard', east: 'Pier' },
@@ -45,8 +79,8 @@ class RowAct extends Act {
         }),
         Cellar: new Room({ name: 'Cellar', description: 'A cellar.' }),
       },
-      quests: [],
-      classes: { Yard },
+      quests: [new YardQuest()],
+      classes: { Yard, Road, YardQuest },
       musicFile: 'row.mp3',
       musicInfo: 'Row',
     })
@@ -73,6 +107,7 @@ describe('useGameStore travelTo', () => {
   beforeEach(() => {
     setActivePinia(createPinia())
     gateShut = false
+    strangerComing = false
     vi.stubGlobal('localStorage', {
       getItem: (): string | null => null,
       setItem: (): void => {},
@@ -128,7 +163,39 @@ describe('useGameStore travelTo', () => {
     expect(store.roomName).toBe('Yard')
   })
 
-  it('does nothing for the place the player is in, an unknown place or a busy game', async () => {
+  it('stops at a scene that plays on entering a place', async () => {
+    const store = await startedStore()
+    for (const c of ['go east', 'go east', 'go east']) store.submitCommand(c)
+    for (const c of ['go west', 'go west', 'go west']) store.submitCommand(c)
+    strangerComing = true
+    const before = commands(store).length
+    store.travelTo('Pier')
+    expect(commands(store).slice(before)).toEqual(['go east', 'go east'])
+    expect(store.roomName).toBe('Road')
+    expect(store.turns.at(-1)?.text).toContain('cloaked stranger')
+  })
+
+  it('stops where a quest begins on the way', async () => {
+    const store = await startedStore()
+    for (const c of ['go east', 'go east', 'go east']) store.submitCommand(c)
+    for (const c of ['go west', 'go west', 'go west']) store.submitCommand(c)
+    yardQuest = true
+    const before = commands(store).length
+    store.travelTo('Pier')
+    expect(commands(store).slice(before)).toEqual(['go east'])
+    expect(store.roomName).toBe('Yard')
+  })
+
+  it('does nothing while the game is busy', async () => {
+    const store = await startedStore()
+    store.submitCommand('go east')
+    store.acceptInput = false
+    const before = store.turns.length
+    store.travelTo('Hall')
+    expect(store.turns.length).toBe(before)
+  })
+
+  it('does nothing for the place the player is in or an unknown place', async () => {
     const store = await startedStore()
     const before = store.turns.length
     store.travelTo('Hall')
