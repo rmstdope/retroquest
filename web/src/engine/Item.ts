@@ -58,9 +58,11 @@ export class Item {
 
   /**
    * Why the item cannot be taken, or '' when it can. The game state lets an
-   * item's refusal follow the story; most items ignore it.
+   * item's refusal follow the story; most items ignore it. `_name` is the
+   * word the player took it by, for an item that answers to more than one
+   * thing.
    */
-  preventPickup(_gameState: GameState): string {
+  preventPickup(_gameState: GameState, _name: string = this.name): string {
     return this.canBeCarried
       ? ''
       : `[failure]You can't take ${this.nameInSentence()}.[/failure]`

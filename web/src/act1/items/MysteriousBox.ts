@@ -39,6 +39,18 @@ export class MysteriousBox extends Item {
   }
 
   /**
+   * Taking the note, once the box is open, answers about the note: it stays
+   * where Elior's father left it. The box itself refuses as any item does.
+   */
+  override preventPickup(
+    gameState: GameState,
+    name: string = this.name,
+  ): string {
+    if (super.answersTo(name)) return super.preventPickup(gameState, name)
+    return clue('The note stays in the box, where your father left it for you.')
+  }
+
+  /**
    * A knife at the lid finds no seam and no keyhole, which points back at the
    * runes; once unlocked there is nothing for a blade to do.
    */
