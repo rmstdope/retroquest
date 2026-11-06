@@ -436,6 +436,9 @@ describe('LanternLayout', () => {
       const menu = w.get('[role="menu"]')
       expect(menu.findAll('[role="menuitem"]').map((m) => m.text())).toEqual([
         'Take',
+        'Use',
+        'Open',
+        'Close',
         'Examine',
       ])
       expect(document.activeElement?.textContent?.trim()).toBe('Take')
@@ -585,9 +588,17 @@ describe('LanternLayout', () => {
     await wrapper
       .get('[aria-label="Current location"] button.lq-here-item')
       .trigger('click')
-    await wrapper.get('[role="menuitem"]').trigger('click')
+    const items = wrapper.findAll('[role="menuitem"]')
+    expect(items.map((m) => m.text())).toEqual([
+      'Take',
+      'Use',
+      'Open',
+      'Close',
+      'Examine',
+    ])
+    await items[2].trigger('click')
 
-    expect(submit).toHaveBeenCalledWith("take elior's journal")
+    expect(submit).toHaveBeenCalledWith("open elior's journal")
     vi.unstubAllGlobals()
   })
 
