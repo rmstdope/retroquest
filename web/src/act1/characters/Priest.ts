@@ -71,7 +71,10 @@ export class Priest extends Character {
     )
   }
 
-  /** His answer to the matches: light the candle, or keep them once it is lit. */
+  /**
+   * His answer to the matches: he hands them back and asks Elior to light
+   * the candle, or lets Elior keep them once it is lit.
+   */
   private matchesAnswer(gameState: GameState): string {
     const priest = characterName(this.name)
     const candle = gameState.getItem('candle')
