@@ -2,9 +2,9 @@ import { dialogue, type GameState } from '@/engine'
 import { FLAG_ACT3_ECHO_HEARD } from './Act3StoryFlags'
 
 /**
- * The echo of the night Aren, Lysa and Malakar parted, shared by the Echo
- * Chambers and the runic walls (a second examine). The voices are
- * tagged by kind, never named by the game.
+ * The echo of the night Aren, Lysa and Malakar parted, played by the runic
+ * walls (a second examine). The voices are tagged by kind, never named by
+ * the game.
  */
 
 const ECHO_NIGHT =

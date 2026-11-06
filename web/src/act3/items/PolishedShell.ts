@@ -2,15 +2,14 @@ import { Item, type GameState } from '@/engine'
 import { FLAG_ACT3_SHELL_HEARD } from '../Act3StoryFlags'
 
 /** What the shell plays the first time it is used. */
-const FIRST_LISTEN =
+const FIRST_PLAY =
   'You hold the shell to your ear. Beneath the hush of the sea, a woman is ' +
   'humming: a slow tune that climbs three notes and settles home again. You ' +
   'almost know how it goes on. When you lower the shell, the tune stays ' +
   'with you a moment longer.'
 
 /** What the shell plays every time after the first. */
-const LATER_LISTEN =
-  'The woman in the shell is still humming the same slow tune.'
+const LATER_PLAY = 'The woman in the shell is still humming the same slow tune.'
 
 /** The hint, appended to the description, that the shell hums. */
 const HUM_HINT = 'Held to your ear, it seems to hum.'
@@ -48,9 +47,9 @@ export class PolishedShell extends Item {
 
   /** Play the tune: the full passage once, then one short line. */
   private play(gameState: GameState): string {
-    if (gameState.getStoryFlag(FLAG_ACT3_SHELL_HEARD)) return LATER_LISTEN
+    if (gameState.getStoryFlag(FLAG_ACT3_SHELL_HEARD)) return LATER_PLAY
     gameState.setStoryFlag(FLAG_ACT3_SHELL_HEARD, true)
-    return FIRST_LISTEN
+    return FIRST_PLAY
   }
 
   /** Using the shell holds it to the ear and plays the tune. */
