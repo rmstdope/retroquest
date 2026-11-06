@@ -11,6 +11,9 @@ const KIT_DESCRIPTION =
 const SNARE_CUT =
   "In the alcove lies a poacher's [item_name]snare[/item_name], cut and empty."
 
+/** The other words the snare, with the kit in it, answers to. */
+const KIT_WORDS: readonly string[] = ['fox', 'kit', 'fox kit']
+
 /** The line when the snare is tried without a blade. */
 const NEED_BLADE =
   "The wire is pulled tight around the kit's leg, too tight for fingers."
@@ -19,7 +22,7 @@ const NEED_BLADE =
  * A poacher's snare in the Forest Path alcove, found once the vines are cut,
  * with a fox kit caught in it. Cutting it with the sharp knife frees the kit
  * and records the mercy virtue; the cut, empty snare stays in the alcove. The
- * snare also answers to `fox` and `kit`.
+ * snare also answers to `fox`, `kit` and `fox kit`.
  */
 export class Snare extends Item {
   /** Whether the kit has been cut free. */
@@ -32,10 +35,9 @@ export class Snare extends Item {
     })
   }
 
-  /** The snare answers to its name and to `fox` and `kit`. */
+  /** The snare answers to its name and to `fox`, `kit` and `fox kit`. */
   override answersTo(name: string): boolean {
-    const wanted = name.toLowerCase()
-    return super.answersTo(name) || wanted === 'fox' || wanted === 'kit'
+    return super.answersTo(name) || KIT_WORDS.includes(name.toLowerCase())
   }
 
   /** The kit while it is caught; the cut, empty snare afterwards. */

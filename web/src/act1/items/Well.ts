@@ -5,6 +5,7 @@ import { ExtendedMagneticFishingRod } from './ExtendedMagneticFishingRod'
 import { FishingRod } from './FishingRod'
 import { Magnet } from './Magnet'
 import { MagneticFishingRod } from './MagneticFishingRod'
+import { Rope } from './Rope'
 
 const FIELD_HINT =
   ' Clean water at last; the parched [room_name]Vegetable Field[/room_name] ' +
@@ -57,7 +58,7 @@ export class Well extends Item {
     return super.examine(gameState)
   }
 
-  /** Delegate to bucket/fishing rod variants for retrieval attempts. */
+  /** Delegate to bucket/fishing rod variants for retrieval attempts; the rope answers itself. */
   override useWith(gameState: GameState, other: Item): string {
     if (
       other instanceof Bucket ||
@@ -67,14 +68,22 @@ export class Well extends Item {
     ) {
       return other.useWith(gameState, this)
     }
+    if (other instanceof Rope) return this.answerUseFrom(gameState, other)
     return super.useWith(gameState, other)
   }
 
   /**
    * The magnet on its own: it would sink and stay sunk, which says it needs
    * something long to hang from; once the ring is up there is nothing to find.
+   * A bare rope comes up wet, wanting something on its end.
    */
   override answerUseFrom(_gameState: GameState, item: Item): string {
+    if (item instanceof Rope) {
+      return clue(
+        'A bare rope let down the well comes back up wet, and nothing more. ' +
+          'It would want something on its end, to carry or to catch.',
+      )
+    }
     if (!(item instanceof Magnet)) return ''
     if (!this.containsRing) {
       return '[failure]Nothing glints down there now for the magnet to find.[/failure]'

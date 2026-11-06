@@ -132,6 +132,31 @@ export class Bucket extends Item {
     )
   }
 
+  /**
+   * What purify does to the bucket: nothing in an empty one, nothing more in
+   * clear water, and sour water clouds again, since the sourness lives in
+   * the well it came from.
+   */
+  purify(gameState: GameState): string {
+    if (this.name === 'bucket') {
+      return (
+        '[failure]The [item_name]bucket[/item_name] is empty; there is ' +
+        'nothing in it to cleanse.[/failure]'
+      )
+    }
+    if (this.hasPurifiedWater(gameState)) {
+      return (
+        '[failure]The water in the [item_name]bucket[/item_name] is ' +
+        'already clear.[/failure]'
+      )
+    }
+    return clue(
+      'The water in the bucket clears for a breath, then clouds again from ' +
+        'the bottom up. The sourness came up with it from the well, and that ' +
+        'is where it lives.',
+    )
+  }
+
   /** The line the story tells when Elior takes it, wherever it is lying. */
   override pickedUp(_gameState: GameState): string {
     return (

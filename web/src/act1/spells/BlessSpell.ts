@@ -5,6 +5,9 @@ import {
   FLAG_PRIEST_BLESSED,
 } from '../Act1StoryFlags'
 
+/** The words for Elior himself that `cast bless on …` accepts. */
+const SELF_WORDS: readonly string[] = ['me', 'myself', 'elior']
+
 /** The priest's blessing, remembered: gives strength to Elior or another character. */
 export class BlessSpell extends Spell {
   constructor() {
@@ -29,6 +32,11 @@ export class BlessSpell extends Spell {
       'A quiet warmth settles on your shoulders and stays, the way the ' +
       `${characterName('priest')}'s hand did.`
     )
+  }
+
+  /** Bless Elior when he names himself (`me`, `myself`, `Elior`), as a bare cast does. */
+  override castOnName(gameState: GameState, target: string): string | null {
+    return SELF_WORDS.includes(target) ? this.castSpell(gameState) : null
   }
 
   /** Bless another character; the priest remembers being blessed. */

@@ -2,6 +2,7 @@ import { Item, type GameState, clue } from '@/engine'
 import { Magnet } from './Magnet'
 import { MagneticFishingRod } from './MagneticFishingRod'
 import { River } from './River'
+import { Stick } from './Stick'
 import { Well } from './Well'
 
 /** Fishing rod tool with upgrade path to a MagneticFishingRod. */
@@ -15,7 +16,10 @@ export class FishingRod extends Item {
     })
   }
 
-  /** Combine with Magnet if spell is learned, interact with River, or fail with Well. */
+  /**
+   * Combine with Magnet if spell is learned, interact with River, or fail
+   * with Well; the Stick goes on last, after whatever takes the rod's end.
+   */
   override useWith(gameState: GameState, other: Item): string {
     if (other instanceof Magnet) {
       if (gameState.hasSpell('purify')) {
@@ -35,6 +39,13 @@ export class FishingRod extends Item {
       return clue(
         'With a magnet on the line, the rod would catch iron and never a fish. ' +
           'Not yet, then.',
+      )
+    }
+
+    if (other instanceof Stick) {
+      return clue(
+        'Lashed on now, the stick would cover the end of the rod, where ' +
+          'something else may want to go first. The length can come last.',
       )
     }
 

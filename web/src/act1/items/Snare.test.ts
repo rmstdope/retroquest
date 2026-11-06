@@ -69,11 +69,14 @@ describe('cutting the vines', () => {
 })
 
 describe('the snare', () => {
-  it.each(['snare', 'fox', 'kit'])('shows the kit on look at %s', (word) => {
-    const answer = executeCommands(gameWithVinesCut(), [`look at ${word}`])
+  it.each(['snare', 'fox', 'kit', 'fox kit'])(
+    'shows the kit on look at %s',
+    (word) => {
+      const answer = executeCommands(gameWithVinesCut(), [`look at ${word}`])
 
-    expect(answer).toContain(KIT_LOOK)
-  })
+      expect(answer).toContain(KIT_LOOK)
+    },
+  )
 
   it.each(['take snare', 'use snare', 'open snare'])(
     'needs a blade on %s',
@@ -106,6 +109,15 @@ describe('the snare', () => {
     expect(game.state.hasVirtue(VIRTUE_MERCY)).toBe(true)
     expect(game.state.getStoryFlag(FLAG_FOX_KIT_FREED)).toBe(true)
     expect(game.state.hasItem('sharp knife')).toBe(true)
+  })
+
+  it('frees the kit when the knife is used with the fox kit', () => {
+    const game = gameWithVinesCut()
+
+    const answer = executeCommands(game, ['use sharp knife with fox kit'])
+
+    expect(answer).toContain('the fox kit twists free')
+    expect(game.state.getStoryFlag(FLAG_FOX_KIT_FREED)).toBe(true)
   })
 
   it('leaves the cut, empty snare in the alcove and in the description', () => {

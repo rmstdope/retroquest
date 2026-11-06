@@ -525,6 +525,20 @@ export const SCENERY_BY_ROOM: Record<string, SceneryDef[]> = {
             writing(REFRAIN)
           : 'A waist-high stone, furred with moss. ' +
             "Writing is cut into it, but the shadow lies so deep you can't make out a letter.",
+      (gs, item) => {
+        if (!(item instanceof Lantern)) return ''
+        if (gladeLit(gs)) {
+          return (
+            '[failure]The runes stand out clear in the sunlight; the ' +
+            'lantern adds nothing to them.[/failure]'
+          )
+        }
+        return clue(
+          'The lantern lights the moss and not a letter beneath it. ' +
+            'This shadow lies over the whole glade, and a flame held close ' +
+            'does not lift it.',
+        )
+      },
     ),
     plain(
       'HiddenGlade.brambles',
