@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { Game, GameController } from '@/engine'
+import { Game, GameController, type Item } from '@/engine'
 import { Act1 } from '../Act1'
 import {
   FLAG_CONNECT_WITH_NATURE,
@@ -13,6 +13,7 @@ import {
   TRIGGER_PATCHES_RETURNS,
 } from '../Act1StoryFlags'
 import { Coin } from '../items/Coin'
+import { Rope } from '../items/Rope'
 import { Bread } from '../items/Bread'
 import { Matches } from '../items/Matches'
 import { Mechanism } from '../items/Mechanism'
@@ -489,6 +490,85 @@ describe('Hemlock has only the one rope (rq-28te)', () => {
       )
     },
   )
+
+  /** The store's own rope: the one on the shelf, not one Elior dropped. */
+  function shelfRopes(game: Game): Item[] {
+    return game.state.allRooms.GeneralStore.items.filter(
+      (item) => item instanceof Rope && !item.canBeCarried,
+    )
+  }
+
+  it('takes the rope off his shelf once it is sold (rq-kkhw)', () => {
+    const game = gameInStore()
+    game.state.addItemToInventory(new Coin())
+    game.state.addItemToInventory(new Coin())
+    game.commandParser.parse('buy rope from shopkeeper')
+    game.commandParser.parse('drop rope')
+    game.commandParser.parse('take rope')
+
+    const take = game.commandParser.parse('take rope')
+
+    expect(shelfRopes(game)).toHaveLength(0)
+    expect(take).not.toContain('merchandise')
+    expect(game.state.inventory.filter((i) => i instanceof Coin)).toHaveLength(
+      1,
+    )
+  })
+
+  it('takes the rope off his shelf once he gives it when Patches stays (rq-kkhw)', () => {
+    const game = gameInStore({ shopOpen: false })
+    game.state.setStoryFlag(FLAG_PATCHES_FOUND, true)
+    game.state.setStoryFlag(FLAG_PATCHES_STAYED_WITH_GRANDMOTHER, true)
+    game.commandParser.parse('talk to shopkeeper')
+
+    expect(shelfRopes(game)).toHaveLength(0)
+    expect(game.commandParser.parse('take rope')).not.toContain('merchandise')
+  })
+
+  it.each([
+    ['sold', false],
+    ['given when Patches stayed', true],
+  ])(
+    'clears the shelf in a save that still shows the rope he has %s (rq-kkhw)',
+    (_case, gift) => {
+      const game = gameInStore({ shopOpen: !gift })
+      if (gift) {
+        game.state.setStoryFlag(FLAG_PATCHES_FOUND, true)
+        game.state.setStoryFlag(FLAG_PATCHES_STAYED_WITH_GRANDMOTHER, true)
+        game.commandParser.parse('talk to shopkeeper')
+      } else {
+        game.state.addItemToInventory(new Coin())
+        game.commandParser.parse('buy rope from shopkeeper')
+      }
+      if (shelfRopes(game).length === 0) {
+        game.state.allRooms.GeneralStore.items.unshift(new Rope())
+      }
+      const loaded = new Game([new Act1()])
+      expect(loaded.loadSaveData(game.toSaveData())).toContain('loaded')
+
+      expect(shelfRopes(loaded)).toHaveLength(0)
+      expect(loaded.state.hasItem('rope')).toBe(true)
+    },
+  )
+
+  it('still says apples come with every sale once the rope is gone (rq-kkhw)', () => {
+    const game = gameInStore()
+    game.state.addItemToInventory(new Coin())
+    game.commandParser.parse('buy rope from shopkeeper')
+
+    expect(game.commandParser.parse('buy apple from shopkeeper')).toContain(
+      "There's one with everything you buy.",
+    )
+  })
+
+  it('keeps the rope on his shelf while it is still for sale (rq-kkhw)', () => {
+    const game = gameInStore()
+    const loaded = new Game([new Act1()])
+    expect(loaded.loadSaveData(game.toSaveData())).toContain('loaded')
+
+    expect(shelfRopes(loaded)).toHaveLength(1)
+    expect(loaded.commandParser.parse('take rope')).toContain('merchandise')
+  })
 
   it('still sells the rope in a save made before the rule with no rope bought', () => {
     const game = gameInStore()

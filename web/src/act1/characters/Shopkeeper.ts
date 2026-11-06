@@ -2,6 +2,7 @@ import {
   Character,
   type GameState,
   type Item,
+  type Room,
   characterName,
   speech,
   clue,
@@ -51,8 +52,8 @@ function coins(price: number): string {
  * and are handed over for free once Elior has spoken with the priest.
  *
  * He has only the one good rope: once it is sold, or given when Patches
- * stays, it is off his shelves, so a coin is always left for Borin's
- * whetstone.
+ * stays, it is off his shelves (the store's rope is taken from the room),
+ * so a coin is always left for Borin's whetstone.
  */
 export class Shopkeeper extends Character {
   wares: Record<string, { item: Item; price: number }> = {
@@ -267,6 +268,7 @@ export class Shopkeeper extends Character {
     gameState.setStoryFlag(FLAG_MET_HEMLOCK, true)
     const gift = !gameState.getStoryFlag(FLAG_RUSTY_HOE_SECOND_COIN_FOUND)
     if (gift) {
+      Shopkeeper.clearShelfRope(gameState.currentRoom)
       const rope = new Rope()
       rope.canBeCarried = true
       gameState.addItemToInventory(rope)
@@ -394,13 +396,37 @@ export class Shopkeeper extends Character {
   }
 
   /**
-   * Bring a shopkeeper from a save made before he had only the one rope up
-   * to date. Such saves have no `ropeSold`; a rope comes only from Hemlock,
-   * so one that Elior holds, or that jams the mill's mechanism, was sold
-   * unless it was his gift when Patches stayed. Safe to run more than once.
+   * Bring a shopkeeper from an older save up to date on his one rope. Saves
+   * made before he had only the one have no `ropeSold`, which is read from
+   * the story; saves made before the rope left his shelf with its sale still
+   * show it, and it is taken off. Safe to run more than once.
    */
   migrateLegacyRope(gameState: GameState): void {
-    if (typeof this.ropeSold === 'boolean') return
+    if (typeof this.ropeSold !== 'boolean')
+      this.ropeSold = this.legacyRopeSold(gameState)
+    if (!this.ropeGone(gameState)) return
+    for (const room of Object.values(gameState.allRooms)) {
+      if (room.characters.includes(this)) Shopkeeper.clearShelfRope(room)
+    }
+  }
+
+  /**
+   * Take his one rope off the shelf once it is gone, so the store no longer
+   * offers it: the rope on display is the one Elior may not carry, never one
+   * he bought or was given and dropped here.
+   */
+  private static clearShelfRope(room: Room): void {
+    room.items = room.items.filter(
+      (item) => !(item instanceof Rope && !item.canBeCarried),
+    )
+  }
+
+  /**
+   * Whether a save made before he had only the one rope had sold it: a rope
+   * comes only from Hemlock, so one that Elior holds, or that jams the
+   * mill's mechanism, was sold unless it was his gift when Patches stayed.
+   */
+  private legacyRopeSold(gameState: GameState): boolean {
     const giftGiven =
       gameState.getStoryFlag(FLAG_HEMLOCK_HEARD_PATCHES_STAYED) &&
       !gameState.getStoryFlag(FLAG_RUSTY_HOE_SECOND_COIN_FOUND)
@@ -409,7 +435,7 @@ export class Shopkeeper extends Character {
       Object.values(gameState.allRooms).some((room) =>
         room.items.some((item) => item instanceof Mechanism && item.repaired),
       )
-    this.ropeSold = ropeHad && !giftGiven
+    return ropeHad && !giftGiven
   }
 
   /**
@@ -507,6 +533,7 @@ export class Shopkeeper extends Character {
     if (itemNameToBuy === 'rope') {
       newItem = new Rope()
       this.ropeSold = true
+      Shopkeeper.clearShelfRope(gameState.currentRoom)
     } else if (itemNameToBuy === 'sword') {
       newItem = new Sword()
     } else if (itemNameToBuy === 'armor') {
