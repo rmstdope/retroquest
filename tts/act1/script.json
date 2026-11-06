@@ -3130,6 +3130,26 @@
     "text": "Can't land one myself with this arm. I'd still give a good deal for a fresh fish."
   },
   {
+    "id": "04d65f3ff1cd0b",
+    "speaker": "narrator",
+    "text": "A warm light gathers around the fisherman's arm. He flexes his fingers, then lifts the arm above his head and laughs."
+  },
+  {
+    "id": "019c14b217e7b0",
+    "speaker": "fisherman",
+    "text": "Well, would you look at that! Not a twinge. Your mother mended my scrapes the same way, down by the bend. Thank you, lad. Tomorrow I'll cast my own line again."
+  },
+  {
+    "id": "0b5187ee8276fa",
+    "speaker": "narrator",
+    "text": "You mended the fisherman's arm, but he won't cast his own line till tomorrow. Today he would still give a good deal for a fresh fish."
+  },
+  {
+    "id": "187da1b775a242",
+    "speaker": "fisherman",
+    "text": "Arm's mended, but the river's sulking yet. Today I'd still give a good deal for a fresh fish."
+  },
+  {
     "id": "08afa82ad5846f",
     "speaker": "narrator",
     "text": "Fishing expedition: The fisherman at the bend can't fish with his stiff arm, and he would give a good deal for a fresh fish."
@@ -3993,16 +4013,6 @@
     "id": "1ea4811e078146",
     "speaker": "narrator",
     "text": "The spell finds nothing to turn. The black iron has no lock; it was never meant to be opened, only to run, and now not even that."
-  },
-  {
-    "id": "04d65f3ff1cd0b",
-    "speaker": "narrator",
-    "text": "A warm light gathers around the fisherman's arm. He flexes his fingers, then lifts the arm above his head and laughs."
-  },
-  {
-    "id": "019c14b217e7b0",
-    "speaker": "fisherman",
-    "text": "Well, would you look at that! Not a twinge. Your mother mended my scrapes the same way, down by the bend. Thank you, lad. Tomorrow I'll cast my own line again."
   },
   {
     "id": "00090556652da5",

@@ -187,7 +187,8 @@ describe('Fisherman after the fishing lesson (rq-d0vu)', () => {
     const response = executeCommands(game, ['talk to fisherman'])
 
     expect(response).toContain('fresh fish')
-    expect(response).not.toContain('stiff')
+    expect(response).toContain("Arm's mended")
+    expect(response).not.toContain('this arm')
     expectDialogueSpeaker(response, 'fisherman')
   })
 })

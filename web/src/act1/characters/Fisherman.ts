@@ -54,8 +54,8 @@ export class Fisherman extends Character {
           ' He looks at the water. ' +
           speech(
             gameState.getStoryFlag(FLAG_HEALED_FISHERMAN_ARM)
-              ? "I'll cast my own line tomorrow. Today I'd still give a " +
-                  'good deal for a fresh fish.'
+              ? "Arm's mended, but the river's sulking yet. Today I'd still " +
+                  'give a good deal for a fresh fish.'
               : "Can't land one myself with this arm. I'd still give a " +
                   'good deal for a fresh fish.',
           )
