@@ -168,6 +168,24 @@ export class Shopkeeper extends Character {
   }
 
   /**
+   * Hemlock's byword over the stopped caravans, with a knock on the counter,
+   * as a new line after what he has said: spoken in whichever scene Elior
+   * first meets him in, so a player who walks in carrying Patches hears it
+   * too.
+   */
+  private byword(): string {
+    return (
+      '\n' +
+      speech(
+        'And the caravans have stopped coming, now the king is ill and the ' +
+          "roads are what they are. Malakar's luck, my father would have " +
+          'called it.',
+      ) +
+      ' He raps the counter twice with his knuckles.'
+    )
+  }
+
+  /**
    * Why the store is shut: Hemlock frets about Patches the first time, then
    * only asks after her.
    */
@@ -189,13 +207,7 @@ export class Shopkeeper extends Character {
           'She was last seen near the old well. If you find her, ' +
             "there's a reward in it for you.",
         ) +
-        '\n' +
-        speech(
-          'And the caravans have stopped coming, now the king is ill and the ' +
-            "roads are what they are. Malakar's luck, my father would have " +
-            'called it.',
-        ) +
-        ' He raps the counter twice with his knuckles.'
+        this.byword()
       )
     }
     return (
@@ -214,9 +226,11 @@ export class Shopkeeper extends Character {
   /**
    * Take Patches back from Elior, pay the notice's coin (unless the save
    * already had the hoe's second coin), reopen the store and settle her on
-   * the counter.
+   * the counter. When this is the first time Elior meets him, he adds his
+   * byword.
    */
   private welcomePatchesHome(gameState: GameState): string {
+    const firstMeeting = !gameState.getStoryFlag(FLAG_MET_HEMLOCK)
     gameState.setStoryFlag(FLAG_PATCHES_RETURNED, true)
     gameState.fireSound(TRIGGER_PATCHES_RETURNS)
     gameState.setStoryFlag(FLAG_MET_HEMLOCK, true)
@@ -235,6 +249,7 @@ export class Shopkeeper extends Character {
           `${reward} And the store's open again, so have a look around.`,
       ) +
       (paid ? '\n' + 'You receive a [item_name]coin[/item_name].' : '') +
+      (firstMeeting ? this.byword() : '') +
       '\n' +
       `${characterName('Patches')} curls up beside the till and begins to purr.`
     )
@@ -243,9 +258,11 @@ export class Shopkeeper extends Character {
   /**
    * Hemlock's first word after grandmother has kept Patches: he thanks Elior
    * and, unless the save already had the hoe's second coin, gives him a rope
-   * and the apple that goes with every sale, in place of the coin.
+   * and the apple that goes with every sale, in place of the coin. When this
+   * is the first time Elior meets him, he adds his byword.
    */
   private patchesStayedNews(gameState: GameState): string {
+    const firstMeeting = !gameState.getStoryFlag(FLAG_MET_HEMLOCK)
     gameState.setStoryFlag(FLAG_HEMLOCK_HEARD_PATCHES_STAYED, true)
     gameState.setStoryFlag(FLAG_MET_HEMLOCK, true)
     const gift = !gameState.getStoryFlag(FLAG_RUSTY_HOE_SECOND_COIN_FOUND)
@@ -278,7 +295,8 @@ export class Shopkeeper extends Character {
         ? '\n' +
           ('You receive a [item_name]rope[/item_name] and an ' +
             '[item_name]apple[/item_name].')
-        : '')
+        : '') +
+      (firstMeeting ? this.byword() : '')
     )
   }
 

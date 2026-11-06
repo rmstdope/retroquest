@@ -661,6 +661,54 @@ describe('Hemlock and the byword', () => {
   })
 })
 
+describe('Hemlock and the byword when first met with Patches (rq-12mz)', () => {
+  const BYWORD =
+    "Malakar's luck, my father would have called it.[/dialogue] " +
+    'He raps the counter twice with his knuckles.'
+
+  it('says the byword when Elior first meets him carrying Patches', () => {
+    const game = gameInStore({ shopOpen: false })
+    game.state.setStoryFlag(FLAG_PATCHES_FOUND, true)
+
+    const answer = game.commandParser.parse('talk to shopkeeper')
+
+    expect(answer).toContain('You found her!')
+    expect(answer).toContain(
+      '[dialogue]And the caravans have stopped coming, now the king is ill',
+    )
+    expect(answer).toContain(BYWORD)
+    expectQuotesInsideDialogue(answer)
+    expect(game.commandParser.parse('talk to shopkeeper')).not.toContain(
+      "Malakar's luck",
+    )
+  })
+
+  it('says the byword when he is first met after Patches stayed with grandmother', () => {
+    const game = gameInStore({ shopOpen: false })
+    game.state.setStoryFlag(FLAG_PATCHES_FOUND, true)
+    game.state.setStoryFlag(FLAG_PATCHES_STAYED_WITH_GRANDMOTHER, true)
+
+    const answer = game.commandParser.parse('talk to shopkeeper')
+
+    expect(answer).toContain('sent word')
+    expect(answer).toContain(BYWORD)
+    expectQuotesInsideDialogue(answer)
+  })
+
+  it('does not repeat the byword in the reunion once he has said it', () => {
+    const game = gameInStore({ shopOpen: false })
+    expect(game.commandParser.parse('talk to shopkeeper')).toContain(
+      "Malakar's luck",
+    )
+    game.state.setStoryFlag(FLAG_PATCHES_FOUND, true)
+
+    const answer = game.commandParser.parse('talk to shopkeeper')
+
+    expect(answer).toContain('You found her!')
+    expect(answer).not.toContain("Malakar's luck")
+  })
+})
+
 describe('Hemlock idle lines', () => {
   it('opens his wares with no narration that only introduces them (rq-i2iu)', () => {
     const game = gameInStore()

@@ -646,6 +646,30 @@ describe('Act 1 golden path', () => {
   })
 })
 
+describe("Act 1 byword: Hemlock's 'Malakar's luck' (rq-12mz)", () => {
+  /** How many times `text` holds Hemlock's byword. */
+  function bywordCount(text: string): number {
+    return text.split("Malakar's luck").length - 1
+  }
+
+  it('is heard once on the golden path, where Elior meets him carrying Patches', () => {
+    const game = new Game([new Act1()])
+    const played = executeCommands(game, ACT1_GOLDEN_PATH)
+    expect(bywordCount(played)).toBe(1)
+  })
+
+  it('is heard once when Patches stays with grandmother before Elior meets him', () => {
+    const path = [...ACT1_GOLDEN_PATH]
+    const home = path.indexOf('talk to patches') + 6
+    expect(path[home]).toBe('go north')
+    path.splice(home + 1, 0, 'say stay to grandmother')
+    path.splice(path.indexOf('buy rope from shopkeeper'), 1)
+    const game = new Game([new Act1()])
+    const played = executeCommands(game, path)
+    expect(bywordCount(played)).toBe(1)
+  })
+})
+
 describe('Act 1 optional watering of the Vegetable Field', () => {
   it('lets Elior refill the bucket from the purified well and revive the field', () => {
     const game = new Game([new Act1()])
