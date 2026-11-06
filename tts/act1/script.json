@@ -1620,6 +1620,21 @@
     "text": "You loop it over your shoulder. It is good rope, and it was not cheap."
   },
   {
+    "id": "1e614cd27d8a85",
+    "speaker": "hemlock",
+    "text": "Only store in Willowbrook, so I suppose that makes it the finest. Sword's five coins and the armor's ten. And there's an apple with everything. My mother's rule."
+  },
+  {
+    "id": "0c9bbad53e6aef",
+    "speaker": "hemlock",
+    "text": "That rope's good hemp, from before the caravans stopped. There'll be no more till spring, so mind what you tie with it. Sword's five coins and the armor's ten. And there's an apple with everything. My mother's rule."
+  },
+  {
+    "id": "1df6d1eb1f0e4a",
+    "speaker": "hemlock",
+    "text": "That sword's hung on that wall since my father's day. Nobody in Willowbrook has ever needed one. I'd like it to stay that way. Sword's five coins and the armor's ten. And there's an apple with everything. My mother's rule."
+  },
+  {
     "id": "0c5e064199040e",
     "speaker": "narrator",
     "text": "You put a hand to the gears. They turn under it and keep turning; fingers will not stop them."
@@ -2473,6 +2488,11 @@
     "id": "00e004cb1e103e",
     "speaker": "hemlock",
     "text": "Not something I carry, lad. Not since the caravans stopped, anyway."
+  },
+  {
+    "id": "1dc03c326f9676",
+    "speaker": "hemlock",
+    "text": "That was my last good rope, lad. There'll be no more till spring."
   },
   {
     "id": "06e59d8bf016e5",

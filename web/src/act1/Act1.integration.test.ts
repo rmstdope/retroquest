@@ -717,6 +717,62 @@ describe('Act 1 with the alternative choices', () => {
   })
 })
 
+describe('Act 1 when Elior buys more rope before the knife is sharpened', () => {
+  /**
+   * Moves the coin for the dull knife from its place on the path to just
+   * before the millstone fragment goes to Borin, after the store, and puts
+   * the given purchases right after Elior first talks to Hemlock.
+   */
+  function sharpenAfterTheStore(path: string[], purchases: string[]): string[] {
+    const moved = [...path]
+    moved.splice(moved.indexOf('give coin to blacksmith'), 1)
+    moved.splice(
+      moved.indexOf('give millstone fragment to blacksmith'),
+      0,
+      'give coin to blacksmith',
+    )
+    moved.splice(moved.indexOf('talk to shopkeeper') + 1, 0, ...purchases)
+    return moved
+  }
+
+  /** Plays `path`, then the completing commands, and checks Act I is done. */
+  function expectCompleted(path: string[]): string {
+    const game = new Game([new Act1()])
+    const played = executeCommands(game, path)
+    expectItemInInventory(game.state, 'sharp knife')
+    executeCommands(game, ACT1_COMPLETING_COMMANDS)
+    expect(
+      game.acts[game.currentAct].isCompleted(game.state),
+      'Act I completed',
+    ).toBe(true)
+    return played
+  }
+
+  it('keeps a coin for Borin when Patches comes home and rope is bought twice', () => {
+    const path = [...ACT1_GOLDEN_PATH]
+    path.splice(path.indexOf('buy rope from shopkeeper'), 1)
+    const played = expectCompleted(
+      sharpenAfterTheStore(path, [
+        'buy rope from shopkeeper',
+        'buy rope from shopkeeper',
+      ]),
+    )
+    expect(played).toContain('That was my last good rope, lad.')
+  })
+
+  it('keeps the hoe coin for Borin when Patches stays home and rope is bought', () => {
+    const path = [...ACT1_GOLDEN_PATH]
+    const home = path.indexOf('talk to patches') + 6
+    expect(path[home]).toBe('go north')
+    path.splice(home + 1, 0, 'say stay to grandmother')
+    path.splice(path.indexOf('buy rope from shopkeeper'), 1)
+    const played = expectCompleted(
+      sharpenAfterTheStore(path, ['buy rope from shopkeeper']),
+    )
+    expect(played).toContain('That was my last good rope, lad.')
+  })
+})
+
 describe('Act 1 with the optional virtue moments', () => {
   /** The golden path with the fox kit freed right after the vines are cut. */
   function pathWithKit(): string[] {

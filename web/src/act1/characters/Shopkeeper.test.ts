@@ -440,7 +440,7 @@ describe('Shopkeeper when Patches stays with grandmother', () => {
 
     const answer = game.commandParser.parse('talk to shopkeeper')
 
-    expect(answer).toContain('[item_name]sword[/item_name]')
+    expect(answer).toContain("[item_name]Sword[/item_name]'s five")
     expect(game.state.inventory.filter((i) => i.name === 'rope')).toHaveLength(
       1,
     )
@@ -456,6 +456,57 @@ describe('Shopkeeper when Patches stays with grandmother', () => {
     )
     expect(game.state.inventory.filter((i) => i.name === 'rope')).toHaveLength(
       1,
+    )
+  })
+})
+
+describe('Hemlock has only the one rope (rq-28te)', () => {
+  const LAST_ROPE =
+    "That was my last good rope, lad. There'll be no more till spring."
+
+  it('sells the rope once, keeps the second coin and drops it from his prices', () => {
+    const game = gameInStore()
+    game.state.addItemToInventory(new Coin())
+    game.state.addItemToInventory(new Coin())
+    game.commandParser.parse('buy rope from shopkeeper')
+
+    const second = game.commandParser.parse('buy rope from shopkeeper')
+    const prices = game.commandParser.parse('talk to shopkeeper')
+
+    expect(second).toContain(LAST_ROPE)
+    expectDialogueSpeaker(second, 'Hemlock')
+    expect(game.state.inventory.filter((i) => i instanceof Coin)).toHaveLength(
+      1,
+    )
+    expect(prices).toContain("[item_name]Sword[/item_name]'s five")
+    expect(prices).not.toContain("[item_name]Rope[/item_name]'s")
+  })
+
+  it('sells no rope after giving one when Patches stays with grandmother', () => {
+    const game = gameInStore({ shopOpen: false })
+    game.state.setStoryFlag(FLAG_PATCHES_FOUND, true)
+    game.state.setStoryFlag(FLAG_PATCHES_STAYED_WITH_GRANDMOTHER, true)
+    game.state.addItemToInventory(new Coin())
+    game.commandParser.parse('talk to shopkeeper')
+
+    const answer = game.commandParser.parse('buy rope from shopkeeper')
+
+    expect(answer).toContain(LAST_ROPE)
+    expect(game.state.inventory.filter((i) => i instanceof Coin)).toHaveLength(
+      1,
+    )
+  })
+
+  it('remembers the sold rope through a save and load', () => {
+    const game = gameInStore()
+    game.state.addItemToInventory(new Coin())
+    game.state.addItemToInventory(new Coin())
+    game.commandParser.parse('buy rope from shopkeeper')
+    const loaded = new Game([new Act1()])
+    expect(loaded.loadSaveData(game.toSaveData())).toContain('loaded')
+
+    expect(loaded.commandParser.parse('buy rope from shopkeeper')).toContain(
+      LAST_ROPE,
     )
   })
 })
