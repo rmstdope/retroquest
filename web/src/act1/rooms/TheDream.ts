@@ -9,7 +9,8 @@ import { Scenery } from '../items/Scenery'
  * Elior's name. The shadows, the man and the child can be examined, but
  * nothing can be carried out of it and no way leads anywhere;
  * answering the voice (talking to it, or saying anything to it) ends it,
- * and Elior wakes in his cottage.
+ * and Elior wakes in his cottage. Asking for a hint here points at the
+ * voice, since no quest is open yet.
  */
 export class TheDream extends Room {
   constructor() {
@@ -57,6 +58,14 @@ export class TheDream extends Room {
   /** He is asleep already. */
   override rest(_gameState: GameState): string {
     return 'You are asleep already. The voice says your name again, nearer.'
+  }
+
+  /** No quest is open yet; what presses on him is the voice, unanswered. */
+  override hint(_gameState: GameState): string {
+    return (
+      'You think it over. The voice keeps saying your name, nearer ' +
+      'each time, as if it is waiting for you to answer it.'
+    )
   }
 
   /** Any other name spoken into the dark is answered by the one voice. */

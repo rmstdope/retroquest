@@ -162,6 +162,16 @@ export class Room {
     return null
   }
 
+  /**
+   * What the room gives a player who asks for a hint while no active quest
+   * has anything to say. Null (the default) leaves the engine's quiet line;
+   * a room whose way forward is not yet a quest overrides it, in-world and
+   * never naming a command.
+   */
+  hint(_gameState: GameState): string | null {
+    return null
+  }
+
   /** The full description with items (counted), characters and exits. */
   describe(gameState: GameState): string {
     let desc = `[bold]${this.name}[/bold]\n${this.descriptionFor(gameState)}\n`

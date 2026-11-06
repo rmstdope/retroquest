@@ -143,9 +143,9 @@ const OPTIONAL_LINES: Record<number, { speaker: string; opening: string }[]> = {
     { speaker: 'narrator', opening: 'A divine light surrounds Tilda' },
     { speaker: 'narrator', opening: 'A warm light settles over Tilda' },
     { speaker: 'narrator', opening: 'The cleansing runs over Tilda' },
-    /** The `hint` answer: its opening line, the quiet line and each quest's line under its name. */
+    /** The `hint` answer: its opening line, the Dream's line and each quest's line under its name. */
     { speaker: 'narrator', opening: 'You stop and think over what you know.' },
-    { speaker: 'narrator', opening: 'You think it over. Nothing presses' },
+    { speaker: 'narrator', opening: 'You think it over. The voice keeps' },
     {
       speaker: 'narrator',
       opening: 'Shadows over Willowbrook: Something is wrong in Willowbrook.',

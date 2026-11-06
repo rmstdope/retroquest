@@ -39692,63 +39692,6 @@
    }
   ]
  },
- "12ca45e13de2eb": {
-  "file": "12ca45e13de2eb.mp3",
-  "speaker": "narrator",
-  "duration": 3.622,
-  "words": [
-   {
-    "word": "You",
-    "start": 0.0,
-    "end": 0.18
-   },
-   {
-    "word": "think",
-    "start": 0.18,
-    "end": 0.46
-   },
-   {
-    "word": "it",
-    "start": 0.46,
-    "end": 0.6
-   },
-   {
-    "word": "over.",
-    "start": 0.6,
-    "end": 0.9
-   },
-   {
-    "word": "Nothing",
-    "start": 1.2,
-    "end": 1.76
-   },
-   {
-    "word": "presses",
-    "start": 1.76,
-    "end": 2.26
-   },
-   {
-    "word": "on",
-    "start": 2.26,
-    "end": 2.58
-   },
-   {
-    "word": "you",
-    "start": 2.58,
-    "end": 2.74
-   },
-   {
-    "word": "just",
-    "start": 2.74,
-    "end": 3.02
-   },
-   {
-    "word": "now.",
-    "start": 3.02,
-    "end": 3.4
-   }
-  ]
- },
  "12d6d09fe880f3": {
   "file": "12d6d09fe880f3.mp3",
   "speaker": "narrator",
