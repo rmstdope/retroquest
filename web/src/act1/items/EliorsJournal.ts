@@ -14,8 +14,7 @@ export class EliorsJournal extends Item {
       name: "elior's journal",
       description:
         `A leather-bound journal filled with ${characterName('Elior')}'s careful ` +
-        'handwriting. The pages ' +
-        'are full of notes, sketches, and secrets.',
+        'handwriting. The newest page is smudged.',
       shortName: 'journal',
     })
   }

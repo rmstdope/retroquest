@@ -93,7 +93,18 @@ const KNIFE_BOX = clue(
     'to steel.',
 )
 
+const MAGNET_ROD_TOO_SOON = clue(
+  'With a magnet on the line, the rod would catch iron and never a fish. ' +
+    'Not yet, then.',
+)
+
 describe('wrong tries at Act I puzzles', () => {
+  it('says why the magnet stays off the rod while it is still for fishing', () => {
+    const game = gameIn('VillageWell', [new FishingRod(), new Magnet()])
+    const text = executeCommands(game, ['use fishing rod with magnet'])
+    expect(text).toBe(MAGNET_ROD_TOO_SOON)
+  })
+
   it('says why the magnet alone will not fetch what is down the well', () => {
     const game = gameIn('VillageWell', [new Magnet()])
     const text = executeCommands(game, ['use magnet with well'])

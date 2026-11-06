@@ -5,9 +5,7 @@ export class Chicken extends Item {
   constructor() {
     super({
       name: 'chicken',
-      description:
-        'A live, clucking chicken. It seems restless and' +
-        " might peck if you're not careful.",
+      description: 'A live chicken. It will not keep still.',
     })
   }
 }

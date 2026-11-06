@@ -8,8 +8,7 @@ export class SharpKnife extends Item {
     super({
       name: 'sharp knife',
       description:
-        'A well-sharpened knife. It looks like it could cut through ' +
-        'almost anything.',
+        'A small kitchen knife, freshly sharpened by the blacksmith.',
       shortName: 'knife',
       canBeCarried: true,
     })
