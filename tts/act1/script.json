@@ -1850,6 +1850,11 @@
     "text": "You carried Patches home to Old Man Hemlock, and the General Store is open again. Curiosity did not kill this cat after all."
   },
   {
+    "id": "041534e9c03f15",
+    "speaker": "grandmother",
+    "text": "Hemlock was by for flour, whistling. He says you found his Patches. I've not heard him whistle in a year."
+  },
+  {
     "id": "1764529af62301",
     "speaker": "narrator",
     "text": "Hemlock pushes it back across the counter."
@@ -2368,6 +2373,21 @@
     "id": "08e4e978483387",
     "speaker": "narrator",
     "text": "At the river bend you found your mother's letter, hidden beneath the smooth stone. Its words raise more questions than they answer, but they are hers."
+  },
+  {
+    "id": "1604be25b1dead",
+    "speaker": "narrator",
+    "text": "She sees the letter at your pocket, and she knows the hand from across the room."
+  },
+  {
+    "id": "185d7f8693acec",
+    "speaker": "grandmother",
+    "text": "Keep that dry."
+  },
+  {
+    "id": "023bfae04c7a13",
+    "speaker": "narrator",
+    "text": "She does not ask what it says. She turns back to the bread."
   },
   {
     "id": "166a26242914c1",
