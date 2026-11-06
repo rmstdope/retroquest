@@ -2,12 +2,14 @@ import { describe, it, expect } from 'vitest'
 import { Game, GameController } from '@/engine'
 import { Act1 } from '../Act1'
 import {
+  FLAG_PATCHES_FOUND,
   FLAG_PATCHES_RETURNED,
   FLAG_PATCHES_STAYED_WITH_GRANDMOTHER,
   FLAG_RUSTY_HOE_SECOND_COIN_FOUND,
   TRIGGER_PATCHES_RETURNS,
 } from '../Act1StoryFlags'
 import { GeneralStore } from './GeneralStore'
+import { Coin } from '../items/Coin'
 
 const SHUT =
   'A cluttered shop with the shutters half down. Rope, apples and ' +
@@ -69,6 +71,57 @@ describe('General Store room text', () => {
     expect(controller.getRoomDescription()).toBe(SHUT)
     game.state.setStoryFlag(FLAG_PATCHES_RETURNED, true)
     expect(controller.getRoomDescription()).toBe(OPEN + CAT)
+  })
+})
+
+describe("General Store room text after Hemlock's last rope (rq-25qz)", () => {
+  it('stops naming rope on the shelves once the rope is sold', () => {
+    const game = new Game([new Act1()])
+    game.state.currentRoom = game.state.allRooms.GeneralStore
+    game.state.setStoryFlag(FLAG_PATCHES_RETURNED, true)
+    game.state.addItemToInventory(new Coin())
+    game.commandParser.parse('buy rope from shopkeeper')
+
+    const text = new GameController(game).getRoomDescription()
+
+    expect(text).toContain('Apples and trinkets crowd the shelves')
+    expect(text).not.toMatch(/rope/i)
+  })
+
+  it('stops naming rope on the shelves once the rope is given', () => {
+    const game = new Game([new Act1()])
+    game.state.currentRoom = game.state.allRooms.GeneralStore
+    game.state.setStoryFlag(FLAG_PATCHES_FOUND, true)
+    game.state.setStoryFlag(FLAG_PATCHES_STAYED_WITH_GRANDMOTHER, true)
+    game.commandParser.parse('talk to shopkeeper')
+
+    const text = new GameController(game).getRoomDescription()
+
+    expect(text).toBe(
+      OPEN.replace('Rope, apples and trinkets', 'Apples and trinkets') + '.',
+    )
+  })
+
+  it('stops putting rope beside the trinkets once the rope is sold', () => {
+    const game = new Game([new Act1()])
+    game.state.currentRoom = game.state.allRooms.GeneralStore
+    game.state.setStoryFlag(FLAG_PATCHES_RETURNED, true)
+    expect(game.commandParser.parse('examine shelves')).toContain(
+      'Between the rope and the apples',
+    )
+    game.state.addItemToInventory(new Coin())
+    game.commandParser.parse('buy rope from shopkeeper')
+
+    const line = game.commandParser.parse('examine shelves')
+
+    expect(line).toContain('Beside the apples sit trinkets')
+    expect(line).not.toMatch(/rope/i)
+  })
+
+  it('still names the rope while it is on the shelf', () => {
+    expect(storeText(FLAG_PATCHES_RETURNED)).toContain(
+      'Rope, apples and trinkets',
+    )
   })
 })
 
