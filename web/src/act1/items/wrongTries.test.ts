@@ -13,6 +13,7 @@ import { Matches } from './Matches'
 import { MagneticFishingRod } from './MagneticFishingRod'
 import { Mechanism } from './Mechanism'
 import { MysteriousBox } from './MysteriousBox'
+import { Rope } from './Rope'
 import { RustyHoe } from './RustyHoe'
 import { RustySaw } from './RustySaw'
 import { SharpKnife } from './SharpKnife'
@@ -78,7 +79,7 @@ const MAGNET_MECHANISM = clue(
   'The magnet snaps to the black iron and holds, and the gears turn on ' +
     'beside it. It would take something threaded through them, not stuck on.',
 )
-const KNIFE_GEARS = clue(
+const STILL_GEARS = clue(
   'These wooden gears have not moved in years. ' +
     'The turning is in the iron thing among them.',
 )
@@ -143,9 +144,19 @@ describe('wrong tries at Act I puzzles', () => {
     (name, knife) => {
       const game = gameIn('OldMill', [knife])
       const text = executeCommands(game, [`use ${name} with gears`])
-      expect(text).toBe(KNIFE_GEARS)
+      expect(text).toBe(STILL_GEARS)
     },
   )
+
+  it.each([
+    ['rope', new Rope()],
+    ['magnet', new Magnet()],
+    ['fishing rod', new FishingRod()],
+  ])('points the %s from the still gears at the iron thing', (name, item) => {
+    const game = gameIn('OldMill', [item])
+    const text = executeCommands(game, [`use ${name} with gears`])
+    expect(text).toBe(STILL_GEARS)
+  })
 
   it('says the gears are still once the mechanism is jammed', () => {
     const game = gameIn('OldMill', [new SharpKnife()])
@@ -304,7 +315,7 @@ describe('wrong tries at Act I puzzles', () => {
       KNIFE_BOX,
       MATCHES_CORNER,
       MAGNET_MECHANISM,
-      KNIFE_GEARS,
+      STILL_GEARS,
       LANTERN_RAFTER,
     ]) {
       expectMarkupWellFormed(line)

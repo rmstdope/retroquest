@@ -137,11 +137,10 @@ function darkCornerUseFrom(gameState: GameState, item: Item): string {
 }
 
 /**
- * A knife at the mill's wooden gears meets gears that have not moved in
- * years, which points at the iron mechanism among them.
+ * Anything tried at the mill's wooden gears meets gears that have not moved
+ * in years, which points at the iron mechanism among them.
  */
-function gearsUseFrom(gameState: GameState, item: Item): string {
-  if (!(item instanceof DullKnife || item instanceof SharpKnife)) return ''
+function gearsUseFrom(gameState: GameState, _item: Item): string {
   if (mechanismJammed(gameState)) {
     return (
       '[failure]The gears are still, and the iron thing among them is ' +
