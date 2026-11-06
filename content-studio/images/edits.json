@@ -74,6 +74,50 @@
       "text": "An old stone well stands between the field and the forge, its stones worn smooth by countless hands. The water below lies dark and still. Moss creeps up the sides.",
       "gameWas": "An old stone well stands between the field and the forge, its stones worn smooth by countless hands. The water below lies dark and still, and a faint sour smell hangs in the cool, damp air. Moss creeps up the sides."
     },
+    "act2-ancient-grove": {
+      "text": "A ring of trees so old their trunks are wider than a cottage. Text is carved in their bark, older than any letters you know. In the middle stands one tree taller than the rest, with bark the colour of tarnished silver. There are no houses here.",
+      "gameWas": "A ring of trees so old their trunks are wider than a cottage. Signs are carved in their bark, older than any letters you know. In the middle stands one tree taller than the rest, with bark the colour of tarnished silver."
+    },
+    "act2-forest-entrance": {
+      "text": "Massive trees create a natural cathedral as you enter the Enchanted Forest. Dappled sunlight filters through the dense canopy, and the path ahead disappears into green shadows. The air is alive with birds and rustling leaves, but beneath it lies an expectant silence, as if the forest itself is watching. the further into the forest you look, the more trees there are.",
+      "gameWas": "Massive trees create a natural cathedral as you enter the Enchanted Forest. Dappled sunlight filters through the dense canopy, and the path ahead disappears into green shadows. The air is alive with birds and rustling leaves, but beneath it lies an expectant silence, as if the forest itself is watching."
+    },
+    "act2-greendale-gates": {
+      "text": "A magnificent stone archway marks the entrance to Greendale, the largest settlement you have encountered. Guards in polished mail stand watch, banners fluttering in the mountain breeze. Beyond, cobblestone streets wind between stone houses and bustling shops. The air carries the sounds of commerce—a stark contrast to Willowbrook's quiet charm. There is no text on the gate.",
+      "gameWas": "A magnificent stone archway marks the entrance to Greendale, the largest settlement you have encountered. Guards in polished mail stand watch, banners fluttering in the mountain breeze. Beyond, cobblestone streets wind between stone houses and bustling shops. The air carries the sounds of commerce—a stark contrast to Willowbrook's quiet charm."
+    },
+    "act2-healers-house": {
+      "text": "Inside of a small stone house that smells of crushed herbs. A few bundles of dried plants still hang from the rafters, but the shelves below them are nearly bare: rows of empty bottles, rinsed and waiting. A fire burns in the hearth, and a door at the back stands half shut.",
+      "gameWas": "A small stone house that smells of crushed herbs. A few bundles of dried plants still hang from the rafters, but the shelves below them are nearly bare: rows of empty bottles, rinsed and waiting. A fire burns in the hearth, and a door at the back stands half shut."
+    },
+    "act2-heart-of-the-forest": {
+      "text": "The deepest part of the forest. The light here is green and gold and does not seem to come from the sky. A tree vaster than any other holds up the branches overhead, and before it stands an altar with a carved star on it The forest is so thick so the only way out is back the way you came..",
+      "gameWas": "The deepest part of the forest. The light here is green and gold and does not seem to come from the sky. A tree vaster than any other holds up the branches overhead, and before it stands an altar of starstone. The only way out is back north, to the grove."
+    },
+    "act2-hidden-library": {
+      "text": "Discovered beneath Greendale through a secret passage, this ancient library holds countless volumes of magical lore. Glowing crystals mounted as torches provide soft illumination and the air hums with residual energy. Protective enchantments shimmer around the most valuable texts. Somewhere on these shelves may be an answer about the mark you carry.",
+      "gameWas": "Discovered beneath Greendale through a secret passage, this ancient library holds countless volumes of magical lore. Glowing crystals provide soft illumination and the air hums with residual energy. Protective enchantments shimmer around the most valuable texts. Somewhere on these shelves may be an answer about the mark you carry."
+    },
+    "act2-inn-rooms": {
+      "text": "A comfortable guest room. The room has a cozy bed, a writing desk, and a window overlooking the Market District. The room is clean and well-maintained, offering a peaceful retreat for travelers. Faint conversation drifts up from the common room below.",
+      "gameWas": "Comfortable guest rooms on the upper floor of The Silver Stag Inn. Each room has a cozy bed, a writing desk, and a window overlooking the Market District. The rooms are clean and well-maintained, offering a peaceful retreat for travelers. Faint conversation drifts up from the common room below."
+    },
+    "act2-main-square": {
+      "text": "The heart of Greendale: a great fountain with statues of old heroes fighting beasts, stalls under bright awnings, red roofs all round. The square is crowded, but the talk is low, and it stops when a guard walks past. Castle towers rise to the north.",
+      "gameWas": "The heart of Greendale: a great fountain of old heroes fighting beasts, stalls under bright awnings, red roofs all round. The square is crowded, but the talk is low, and it stops when a guard walks past. Castle towers rise to the north."
+    },
+    "act2-residential-quarter": {
+      "text": "Quiet lanes of two-storey houses in the midst of a medieval city, each with a small garden and a workshop. Craftsmen work at benches in the open doorways, and neighbours sit on their steps. Half the garden plots have gone grey.",
+      "gameWas": "Quiet lanes of two-storey houses, each with a small garden and a workshop. Craftsmen work at benches in the open doorways, and neighbours sit on their steps. Half the garden plots have gone grey."
+    },
+    "act2-silver-stag-inn": {
+      "text": "The iinside of an inn glows with warm yellow light. Conversations from travelers and locals merge into a comforting din while tales are traded over bread and ale. Stag mounts and adventuring trophies line the walls. The place feels welcoming; information flows here as freely as the drink.",
+      "gameWas": "A three-story inn glows with warm yellow light. Conversations from travelers and locals merge into a comforting din while tales are traded over bread and ale. Stag mounts and adventuring trophies line the walls. The place feels welcoming; information flows here as freely as the drink."
+    },
+    "act2-whispering-glade": {
+      "text": "In the midst of the forest, a meadow opens round a small stream that runs over smooth stones. Wildflowers grow thick to the water's edge. Under the sound of the water there are other sounds, almost voices, and they stop when you listen for them.",
+      "gameWas": "A meadow opens round a small stream that runs over smooth stones. Wildflowers grow thick to the water's edge. Under the sound of the water there are other sounds, almost voices, and they stop when you listen for them."
+    },
     "portrait-mira": {
       "text": "A face portrait of a village female healer in middle age, with a calm, steady gaze that rests on you a moment longer than is comfortable, and a sprig of dried sage tucked behind one ear.",
       "gameWas": "A face portrait of a village healer in middle age, with a calm, steady gaze that rests on you a moment longer than is comfortable, and a sprig of dried sage tucked behind one ear."

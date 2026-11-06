@@ -129,6 +129,36 @@
     "width": 1920,
     "height": 1080
   },
+  "act2-castle-approach": {
+    "file": "act2-castle-approach.png",
+    "width": 1920,
+    "height": 1080
+  },
+  "act2-castle-courtyard": {
+    "file": "act2-castle-courtyard.png",
+    "width": 1920,
+    "height": 1080
+  },
+  "act2-forest-transition": {
+    "file": "act2-forest-transition.png",
+    "width": 1920,
+    "height": 1080
+  },
+  "act2-great-hall": {
+    "file": "act2-great-hall.png",
+    "width": 1920,
+    "height": 1080
+  },
+  "act2-market-district": {
+    "file": "act2-market-district.png",
+    "width": 1920,
+    "height": 1080
+  },
+  "act2-mountain-path": {
+    "file": "act2-mountain-path.png",
+    "width": 1920,
+    "height": 1080
+  },
   "portrait-elior": {
     "file": "portrait-elior.png",
     "width": 480,
