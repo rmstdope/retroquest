@@ -14,6 +14,7 @@ import { Matches } from '../items/Matches'
 import { Coin } from '../items/Coin'
 import { Armor } from '../items/Armor'
 import { Sword } from '../items/Sword'
+import { Mechanism } from '../items/Mechanism'
 import { Patches } from './Patches'
 import {
   FLAG_HEMLOCK_HEARD_PATCHES_STAYED,
@@ -372,6 +373,25 @@ export class Shopkeeper extends Character {
   migrateLegacyWares(): void {
     this.priestMatchesGiven ??= !('matches' in this.wares)
     delete this.wares.matches
+  }
+
+  /**
+   * Bring a shopkeeper from a save made before he had only the one rope up
+   * to date. Such saves have no `ropeSold`; a rope comes only from Hemlock,
+   * so one that Elior holds, or that jams the mill's mechanism, was sold
+   * unless it was his gift when Patches stayed. Safe to run more than once.
+   */
+  migrateLegacyRope(gameState: GameState): void {
+    if (typeof this.ropeSold === 'boolean') return
+    const giftGiven =
+      gameState.getStoryFlag(FLAG_HEMLOCK_HEARD_PATCHES_STAYED) &&
+      !gameState.getStoryFlag(FLAG_RUSTY_HOE_SECOND_COIN_FOUND)
+    const ropeHad =
+      gameState.inventory.some((item) => item instanceof Rope) ||
+      Object.values(gameState.allRooms).some((room) =>
+        room.items.some((item) => item instanceof Mechanism && item.repaired),
+      )
+    this.ropeSold = ropeHad && !giftGiven
   }
 
   /**

@@ -15,6 +15,7 @@ import {
 import { Coin } from '../items/Coin'
 import { Bread } from '../items/Bread'
 import { Matches } from '../items/Matches'
+import { Mechanism } from '../items/Mechanism'
 import { Patches } from './Patches'
 import { Shopkeeper } from './Shopkeeper'
 import { expectDialogueSpeaker } from '@/testing/gameHelpers'
@@ -508,6 +509,50 @@ describe('Hemlock has only the one rope (rq-28te)', () => {
     expect(loaded.commandParser.parse('buy rope from shopkeeper')).toContain(
       LAST_ROPE,
     )
+  })
+
+  it.each([
+    ['still holds the rope', false],
+    ['has jammed the mechanism with it', true],
+  ])(
+    'counts the rope as sold in a save made before the rule when Elior %s',
+    (_case, jammed) => {
+      const game = gameInStore()
+      game.state.addItemToInventory(new Coin())
+      game.state.addItemToInventory(new Coin())
+      game.commandParser.parse('buy rope from shopkeeper')
+      if (jammed) {
+        game.state.removeItemFromInventory('rope')
+        const mechanism = Object.values(game.state.allRooms)
+          .flatMap((room) => room.items)
+          .find((item) => item instanceof Mechanism)
+        if (!(mechanism instanceof Mechanism)) throw new Error('no mechanism')
+        mechanism.repaired = true
+      }
+      const shopkeeper = game.state.currentRoom.getCharacterByName('shopkeeper')
+      if (!(shopkeeper instanceof Shopkeeper)) throw new Error('no shopkeeper')
+      Reflect.deleteProperty(shopkeeper, 'ropeSold')
+      const loaded = new Game([new Act1()])
+      expect(loaded.loadSaveData(game.toSaveData())).toContain('loaded')
+
+      expect(loaded.commandParser.parse('buy rope from shopkeeper')).toContain(
+        LAST_ROPE,
+      )
+    },
+  )
+
+  it('still sells the rope in a save made before the rule with no rope bought', () => {
+    const game = gameInStore()
+    game.state.addItemToInventory(new Coin())
+    const shopkeeper = game.state.currentRoom.getCharacterByName('shopkeeper')
+    if (!(shopkeeper instanceof Shopkeeper)) throw new Error('no shopkeeper')
+    Reflect.deleteProperty(shopkeeper, 'ropeSold')
+    const loaded = new Game([new Act1()])
+    expect(loaded.loadSaveData(game.toSaveData())).toContain('loaded')
+
+    loaded.commandParser.parse('buy rope from shopkeeper')
+
+    expect(loaded.state.hasItem('rope')).toBe(true)
   })
 })
 
