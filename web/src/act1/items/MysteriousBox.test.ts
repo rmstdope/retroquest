@@ -110,6 +110,8 @@ describe('MysteriousBox', () => {
         expect(answer, `${verb} ${noun}`).not.toContain('mysterious box')
         expect(findMarkupProblems(answer)).toEqual([])
       }
+      const reverse = game.commandParser.parse(`use ${noun} with knife`)
+      expect(reverse, `use ${noun} with knife`).not.toContain('mysterious box')
     }
     expect(game.commandParser.parse('use note')).toContain(
       "You can't use your [item_name]father's note[/item_name] in any " +

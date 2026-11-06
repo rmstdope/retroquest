@@ -51,7 +51,8 @@ export class Item {
    * The item that answers when the player names this one by `name` (a word
    * `answersTo` accepted): this item itself by default. Override for an item
    * that answers to a part of itself, so every verb tried on the part is
-   * answered by the part (the note in Act I's opened box).
+   * answered by the part (the note in Act I's opened box). A part lies in no
+   * room or bag of its own, so it must refuse pickup in `preventPickup`.
    */
   partNamed(_name: string): Item {
     return this
