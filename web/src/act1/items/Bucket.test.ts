@@ -173,6 +173,21 @@ describe('Watering the Vegetable Field', () => {
     expect(response).toContain('is empty')
     expect(game.state.getStoryFlag(FLAG_VEGETABLE_FIELD_WATERED)).toBe(false)
   })
+
+  it.each(['use bucket', 'use bucket with crops', 'use bucket with earth'])(
+    'never calls the watered rows parched when the empty bucket answers %s',
+    (command) => {
+      const { game } = gameInTheField(true)
+      executeCommands(game, ['use bucket'])
+
+      const response = executeCommands(game, [command])
+
+      expectMarkupWellFormed(response)
+      expect(response).toContain('is empty')
+      expect(response).not.toContain('parched')
+      expect(response).not.toContain('need water')
+    },
+  )
 })
 
 describe('A full bucket used with something else', () => {
