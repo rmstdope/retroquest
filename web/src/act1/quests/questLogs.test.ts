@@ -51,8 +51,7 @@ const LOGS: Array<[string, Quest, string, string]> = [
   [
     'Magnet fishing expedition',
     new MagnetFishingExpeditionQuest(),
-    'Something shiny lies at the bottom of the well, too deep for hands. ' +
-      'The magnet might reach it, on a long enough rod.',
+    'Something glints far down in the well, much too deep for hands.',
     'The well gave up a silver ring, and something else besides.',
   ],
 ]

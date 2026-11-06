@@ -10,6 +10,9 @@ import {
 } from '../Act1StoryFlags'
 import { Act1 } from '../Act1'
 import { AncientAmulet } from './AncientAmulet'
+import { FishingExpeditionQuest } from '../quests/FishingExpedition'
+import { LetThereBeLightQuest } from '../quests/LetThereBeLight'
+import { MagnetFishingExpeditionQuest } from '../quests/MagnetFishingExpedition'
 import { GameMap } from './GameMap'
 
 function setupGameAtRoad(): {
@@ -48,6 +51,72 @@ function completeSideQuestsExcept(
   )
 }
 
+const LEADS = [
+  'Old Man [character_name]Hemlock[/character_name] is still waiting for his cat',
+  'the [character_name]fisherman[/character_name] at the river bend still sits with an empty line',
+  'the [character_name]priest[/character_name] in the chapel has not had his say',
+  'something still glints far down in the village [item_name]well[/item_name]',
+  '[character_name]Borin[/character_name] at the forge still has a story about the [room_name]Hidden Glade[/room_name] to tell',
+]
+const LAST_LEAD = 'a drawer at home still holds something you have not seen'
+const WELL_LEAD = LEADS[3]
+
+/** An at-the-road game with the amulet and preparations done. */
+function setupReadyExcept(): ReturnType<typeof setupGameAtRoad> {
+  const setup = setupGameAtRoad()
+  completeSideQuestsExcept(setup.game, 'Preparing for the road')
+  setup.game.state.addItemToInventory(new AncientAmulet())
+  setup.game.state.completedQuests.push(
+    ...setup.game.state.nonActivatedQuests.filter(
+      (q) => q.name === 'Preparing for the road',
+    ),
+  )
+  setup.game.state.nonActivatedQuests =
+    setup.game.state.nonActivatedQuests.filter((q) => q.isMain())
+  return setup
+}
+
+describe('GameMap leads at the road', () => {
+  it('leads to a never-started task instead of calling it begun', () => {
+    const { game, map } = setupReadyExcept()
+    game.state.nonActivatedQuests.push(new MagnetFishingExpeditionQuest())
+
+    expect(map.use(game.state)).toContain(`unfinished: ${WELL_LEAD}.`)
+  })
+
+  it('says begun tasks first, then every lead, in one sentence', () => {
+    const { game, map } = setupReadyExcept()
+    game.state.nonActivatedQuests.push(
+      new FishingExpeditionQuest(),
+      new MagnetFishingExpeditionQuest(),
+    )
+    game.state.activatedQuests.push(new LetThereBeLightQuest())
+
+    expect(map.use(game.state)).toContain(
+      'unfinished: the tasks you began in the village, ' +
+        `${LEADS[1]} and ${WELL_LEAD}.`,
+    )
+  })
+
+  it('reads as before when only begun tasks are open', () => {
+    const { game, map } = setupReadyExcept()
+    game.state.activatedQuests.push(new LetThereBeLightQuest())
+
+    expect(map.use(game.state)).toContain(
+      'unfinished: the tasks you began in the village.',
+    )
+  })
+
+  it('keeps the amulet first', () => {
+    const { game, map } = setupGameAtRoad()
+    completeSideQuestsExcept(game, 'Magnet fishing expedition')
+
+    expect(map.use(game.state)).toContain(
+      'unfinished: the amulet Mira still keeps for you ' + `and ${WELL_LEAD}.`,
+    )
+  })
+})
+
 describe('GameMap act completion', () => {
   it('does not complete the act without the ancient amulet', () => {
     const { act, game, map } = setupGameAtRoad()
@@ -67,7 +136,7 @@ describe('GameMap act completion', () => {
     expect(response).toContain(
       'The hidden road will not show itself while something here is ' +
         'unfinished: the amulet Mira still keeps for you, your preparations ' +
-        'for the road and the tasks you began in the village.',
+        `for the road, ${LEADS.join(', ')} and ${LAST_LEAD}.`,
     )
     expect(response).not.toMatch(/receive|You must|You need/)
   })

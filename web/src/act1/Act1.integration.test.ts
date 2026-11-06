@@ -147,7 +147,13 @@ describe('Act 1 golden path', () => {
     // Step 7: Abandoned Shed - use key, find Patches
     executeCommands(game, ['go west', 'go south'])
     // Nothing at the locked shed tells of a cat yet: the quest waits for her mew.
-    expectQuests(state, [MAIN, PHOTO, 'Magic for real', 'Know your village'])
+    expectQuests(state, [
+      MAIN,
+      PHOTO,
+      'Magic for real',
+      'Know your village',
+      'Magnet fishing expedition',
+    ])
     expectCurrentRoom(state, 'Abandoned Shed')
     expectItemInRoom(room(), 'mysterious box', false)
 
@@ -165,6 +171,7 @@ describe('Act 1 golden path', () => {
       'Magic for real',
       'Know your village',
       CAT,
+      'Magnet fishing expedition',
     ])
 
     executeCommands(game, ['talk to patches'])
@@ -199,6 +206,7 @@ describe('Act 1 golden path', () => {
       'Magic for real',
       'Know your village',
       CAT,
+      'Magnet fishing expedition',
     ])
 
     // Step 8: General Store - return Patches, buy rope
@@ -212,7 +220,13 @@ describe('Act 1 golden path', () => {
     expectItemInInventory(state, 'coin')
     expectCharacterInRoom(room(), 'patches')
     expectQuestCompleted(state, CAT)
-    expectQuests(state, [MAIN, PHOTO, 'Magic for real', 'Know your village'])
+    expectQuests(state, [
+      MAIN,
+      PHOTO,
+      'Magic for real',
+      'Know your village',
+      'Magnet fishing expedition',
+    ])
     executeCommands(game, ['buy rope from shopkeeper'])
     expectItemInInventory(state, 'apple')
     expectItemInInventory(state, 'rope')
@@ -236,7 +250,13 @@ describe('Act 1 golden path', () => {
     // Step 11: back to the Blacksmith's Forge
     executeCommands(game, ['go north', 'go north', 'go east'])
     expectCurrentRoom(state, "Blacksmith's Forge")
-    expectQuests(state, [MAIN, PHOTO, 'Magic for real', 'Know your village'])
+    expectQuests(state, [
+      MAIN,
+      PHOTO,
+      'Magic for real',
+      'Know your village',
+      'Magnet fishing expedition',
+    ])
     executeCommands(game, ['give millstone fragment to blacksmith'])
     expectItemInInventory(state, 'millstone fragment', false)
     expectQuests(state, [
@@ -245,6 +265,7 @@ describe('Act 1 golden path', () => {
       'Magic for real',
       'Know your village',
       'Oh deer, oh deer',
+      'Magnet fishing expedition',
     ])
 
     // Step 12: Riverbank
@@ -260,6 +281,7 @@ describe('Act 1 golden path', () => {
       'Know your village',
       'Oh deer, oh deer',
       'Fishing expedition',
+      'Magnet fishing expedition',
     ])
     executeCommands(game, ['use fishing rod with river'])
     expectItemInInventory(state, 'fish')
@@ -270,6 +292,7 @@ describe('Act 1 golden path', () => {
       'Know your village',
       'Oh deer, oh deer',
       'Fishing expedition',
+      'Magnet fishing expedition',
     ])
     executeCommands(game, ['give fish to fisherman'])
     expectItemInInventory(state, 'fish', false)
@@ -280,6 +303,7 @@ describe('Act 1 golden path', () => {
       'Magic for real',
       'Know your village',
       'Oh deer, oh deer',
+      'Magnet fishing expedition',
     ])
     executeCommands(game, ['give faded photograph to fisherman'])
     expectStoryFlag(state, 'fisherman_told_of_tin', true)
@@ -294,6 +318,7 @@ describe('Act 1 golden path', () => {
       'Magic for real',
       'Know your village',
       'Oh deer, oh deer',
+      'Magnet fishing expedition',
     ])
     executeCommands(game, ['examine letter'])
     expectQuestCompleted(state, PHOTO)
@@ -302,6 +327,7 @@ describe('Act 1 golden path', () => {
       'Magic for real',
       'Know your village',
       'Oh deer, oh deer',
+      'Magnet fishing expedition',
     ])
 
     // Step 13: Forest Path
@@ -328,11 +354,17 @@ describe('Act 1 golden path', () => {
       'Magic for real',
       'Know your village',
       'Oh deer, oh deer',
+      'Magnet fishing expedition',
     ])
     executeCommands(game, ['rest'])
     expectCharacterInRoom(room(), 'deer')
     expectItemInRoom(room(), 'rare flower')
-    expectQuests(state, [MAIN, 'Magic for real', 'Know your village'])
+    expectQuests(state, [
+      MAIN,
+      'Magic for real',
+      'Know your village',
+      'Magnet fishing expedition',
+    ])
     executeCommands(game, ['take rare flower'])
     expectItemInInventory(state, 'rare flower')
     expectItemInRoom(room(), 'rare flower', false)
@@ -358,6 +390,7 @@ describe('Act 1 golden path', () => {
       'Magic for real',
       'Know your village',
       'Let there be light',
+      'Magnet fishing expedition',
     ])
 
     // Step 16: General Store (matches)
@@ -378,10 +411,16 @@ describe('Act 1 golden path', () => {
       'Magic for real',
       'Know your village',
       'Let there be light',
+      'Magnet fishing expedition',
     ])
     executeCommands(game, ['use candle with matches'])
     expectItemInRoom(room(), 'locket')
-    expectQuests(state, [MAIN, 'Magic for real', 'Know your village'])
+    expectQuests(state, [
+      MAIN,
+      'Magic for real',
+      'Know your village',
+      'Magnet fishing expedition',
+    ])
     executeCommands(game, ['take locket'])
     expectItemInInventory(state, 'locket')
     expectItemInRoom(room(), 'locket', false)
@@ -390,14 +429,24 @@ describe('Act 1 golden path', () => {
     // Step 18: back to Mira's Hut
     executeCommands(game, ['go west', 'go west', 'go north'])
     expectCurrentRoom(state, "Mira's Hut")
-    expectQuests(state, [MAIN, 'Magic for real', 'Know your village'])
+    expectQuests(state, [
+      MAIN,
+      'Magic for real',
+      'Know your village',
+      'Magnet fishing expedition',
+    ])
     executeCommands(game, ['give rare flower to mira'])
     expectItemInInventory(state, 'rare flower', false)
     expectSpellKnown(state, 'heal')
     expectSpellKnown(state, 'unlock')
     expectSpellKnown(state, 'light')
     expectStoryFlag(state, 'magic_fully_unlocked', true)
-    expectQuests(state, [MAIN, 'Know your village', 'Preparing for the road'])
+    expectQuests(state, [
+      MAIN,
+      'Know your village',
+      'Preparing for the road',
+      'Magnet fishing expedition',
+    ])
 
     // Step 19: Abandoned Shed (second visit)
     executeCommands(game, [

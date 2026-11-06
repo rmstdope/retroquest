@@ -8,6 +8,61 @@ import {
   FLAG_SHADOWS_OVER_WILLOWBROOK_COMPLETED,
 } from '../Act1StoryFlags'
 
+/** The name of the quest that is counted apart from the side quests. */
+const PREPARATION_QUEST = 'Preparing for the road'
+
+/** What leads Elior to a side quest he never started, in two wordings. */
+export interface RoadLead {
+  /** The side quest this leads to. */
+  quest: string
+  /** The words in the map's refusal. */
+  map: string
+  /** The words in the main quest's hint, ready to follow its frame. */
+  hint: string
+}
+
+/** One lead per missable side quest, in the order the act meets them. */
+const ROAD_LEADS: RoadLead[] = [
+  {
+    quest: 'Curiosity killed the cat',
+    map: `Old Man ${characterName('Hemlock')} is still waiting for his cat`,
+    hint: `Old Man ${characterName('Hemlock')} is still waiting for his cat.`,
+  },
+  {
+    quest: 'Fishing expedition',
+    map:
+      `the ${characterName('fisherman')} at the river bend still sits ` +
+      'with an empty line',
+    hint:
+      `the ${characterName('fisherman')} at the river bend still sits ` +
+      'with an empty line.',
+  },
+  {
+    quest: 'Let there be light',
+    map: `the ${characterName('priest')} in the chapel has not had his say`,
+    hint: `the ${characterName('priest')} in the chapel has not had his say.`,
+  },
+  {
+    quest: 'Magnet fishing expedition',
+    map: 'something still glints far down in the village [item_name]well[/item_name]',
+    hint: 'far down in the [item_name]well[/item_name], something still glints.',
+  },
+  {
+    quest: 'Oh deer, oh deer',
+    map:
+      `${characterName('Borin')} at the forge still has a story about the ` +
+      '[room_name]Hidden Glade[/room_name] to tell',
+    hint:
+      `${characterName('Borin')} at the forge still has a story about the ` +
+      '[room_name]Hidden Glade[/room_name] to tell.',
+  },
+  {
+    quest: 'The faded photograph',
+    map: 'a drawer at home still holds something you have not seen',
+    hint: 'a drawer at home still holds something you have not seen.',
+  },
+]
+
 /**
  * The revelation in the farewell: grandmother names Elior's parents for the
  * first time, says the amulet was theirs and warns that someone is looking for it.
@@ -93,11 +148,6 @@ export class GameMap extends Item {
    * read keeps Elior here, since the act's ending tells what she read in it.
    */
   static unfinishedBeforeTheRoad(gameState: GameState): string[] {
-    const preparationQuestName = 'Preparing for the road'
-    const incompleteSideQuests = [
-      ...gameState.nonActivatedQuests,
-      ...gameState.activatedQuests,
-    ].filter((quest) => !quest.isMain() && quest.name !== preparationQuestName)
     const missingRequirements: string[] = []
     if (!gameState.hasItem('ancient amulet')) {
       missingRequirements.push('the amulet Mira still keeps for you')
@@ -108,13 +158,33 @@ export class GameMap extends Item {
     ) {
       missingRequirements.push('the rune token Mira has not yet seen')
     }
-    if (!gameState.isQuestCompleted(preparationQuestName)) {
+    if (!gameState.isQuestCompleted(PREPARATION_QUEST)) {
       missingRequirements.push('your preparations for the road')
     }
-    if (incompleteSideQuests.length > 0) {
+    if (GameMap.hasBegunOpenTask(gameState)) {
       missingRequirements.push('the tasks you began in the village')
     }
+    missingRequirements.push(
+      ...GameMap.unstartedLeads(gameState).map((lead) => lead.map),
+    )
     return missingRequirements
+  }
+
+  /** True while a side quest Elior began is still open. */
+  static hasBegunOpenTask(gameState: GameState): boolean {
+    return gameState.activatedQuests.some(
+      (quest) => !quest.isMain() && quest.name !== PREPARATION_QUEST,
+    )
+  }
+
+  /**
+   * The leads of the side quests Elior never started, in the order the act
+   * meets them: each in the words of the map's refusal and of the hint.
+   */
+  static unstartedLeads(gameState: GameState): RoadLead[] {
+    return ROAD_LEADS.filter(({ quest }) =>
+      gameState.nonActivatedQuests.some((open) => open.name === quest),
+    )
   }
 
   /**
