@@ -22,6 +22,7 @@ import {
   FLAG_WELL_EXAMINED,
   FLAG_CONNECT_WITH_NATURE,
   FLAG_MIRA_NAMED_FOULING_SIGIL,
+  FLAG_FOUND_RUNE_TOKEN,
   FLAG_FOX_KIT_FREED,
   FLAG_MIRA_FOREST_REMARK_SAID,
   FLAG_MIRA_MET,
@@ -30,6 +31,16 @@ import {
 /** Her words once the amulet is Elior's, after either opening narration. */
 const GOODBYE = speech(
   'Still here? Go and say a proper goodbye to your grandmother. Then go.',
+)
+
+/**
+ * Her words once the amulet is Elior's while the rune token he drew from the
+ * well is still unread: she sees it is not a goodbye that brought him back.
+ */
+const TOKEN_UNREAD = speech(
+  "You've not come to say goodbye. " +
+    "You've brought something up out of that well, and it's sitting heavy " +
+    'on you. Show me.',
 )
 
 /** Her request for the rare flower, and the well, after she names the one wound. */
@@ -75,7 +86,9 @@ export class Mira extends Character {
       | 'quest_conditions_not_met'
       | 'quest_complete_amulet_given'
       | 'post_amulet'
-      | 'post_amulet_after_remark',
+      | 'post_amulet_after_remark'
+      | 'post_amulet_token_unread'
+      | 'post_amulet_token_unread_after_remark',
   ): string {
     switch (stage) {
       case 'initial':
@@ -151,6 +164,14 @@ export class Mira extends Character {
         )
       case 'post_amulet_after_remark':
         return 'She turns back to her herbs. ' + GOODBYE
+      case 'post_amulet_token_unread':
+        return (
+          `${characterName(this.name)} looks up from her herbs, and her ` +
+          'eyes stay on you. ' +
+          TOKEN_UNREAD
+        )
+      case 'post_amulet_token_unread_after_remark':
+        return 'Her eyes stay on you. ' + TOKEN_UNREAD
     }
   }
 
@@ -394,8 +415,20 @@ export class Mira extends Character {
       return this.oneWound()
     }
 
-    // 1. Give the post_amulet message if amulet is in inventory
+    // 1. Give the post_amulet message if amulet is in inventory; while the
+    //    rune token is found but unread she asks to see it instead (the same
+    //    rule that keeps the map from leading Elior out).
     if (gameState.hasItem('Ancient Amulet')) {
+      if (
+        gameState.getStoryFlag(FLAG_FOUND_RUNE_TOKEN) &&
+        !gameState.getStoryFlag(FLAG_MIRA_NAMED_FOULING_SIGIL)
+      ) {
+        return this.dialogue(
+          afterRemark
+            ? 'post_amulet_token_unread_after_remark'
+            : 'post_amulet_token_unread',
+        )
+      }
       return this.dialogue(
         afterRemark ? 'post_amulet_after_remark' : 'post_amulet',
       )
