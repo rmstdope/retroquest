@@ -163,6 +163,10 @@
     {"after": 145, "commands": ["talk to grandmother", "drop fresh bread", "take fresh bread"]},
     {"after": -1, "commands": ["say hello to voice"]},
     {"after": 37, "commands": ["go north", "go west", "go north", "say stay to grandmother"]},
+    {"after": 74, "commands": ["give mother's letter to fisherman"]},
+    {"after": 112, "commands": ["give mother's letter to mira", "give faded photograph to mira"]},
+    {"after": 145, "commands": ["give shiny ring to grandmother", "give mother's letter to grandmother", "give travel cloak to grandmother"]},
+    {"after": 169, "commands": ["give mother's letter to mira"]},
     {"after": 76, "commands": ["take snare", "use sharp knife on snare", "go north", "go west", "go north", "go north", "go west", "go north", "go east", "go north", "talk to mira"]},
     {"after": 112, "commands": ["go south", "go west", "go south", "go east", "go east", "talk to blacksmith"]},
     {"after": 128, "commands": ["use bucket on well", "go west", "use bucket", "examine crops", "examine earth"]}
