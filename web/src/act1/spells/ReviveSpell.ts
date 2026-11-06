@@ -9,13 +9,11 @@ import {
 import { WitheredCarrot } from '../items/WitheredCarrot'
 import { Bush } from '../items/Bush'
 import { Scenery } from '../items/Scenery'
+import { VEGETABLE_FIELD_CROPS_KEY } from '../items/sceneryLines'
 import {
   FLAG_MAGIC_FULLY_UNLOCKED,
   FLAG_VEGETABLE_FIELD_WATERED,
 } from '../Act1StoryFlags'
-
-/** The scenery key of the Vegetable Field's crops. */
-const CROPS_KEY = 'VegetableField.crops'
 
 /** Restore life to withered plants; the carrot and the bush answer, living people do not. */
 export class ReviveSpell extends Spell {
@@ -79,7 +77,7 @@ export class ReviveSpell extends Spell {
       return revivalMessage
     }
     if (item instanceof Bush) return item.revive(gameState)
-    if (item instanceof Scenery && item.key === CROPS_KEY) {
+    if (item instanceof Scenery && item.key === VEGETABLE_FIELD_CROPS_KEY) {
       return this.onCrops(gameState)
     }
     const name = item.name

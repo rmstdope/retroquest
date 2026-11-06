@@ -75,13 +75,13 @@ export class Well extends Item {
   /**
    * The magnet on its own: it would sink and stay sunk, which says it needs
    * something long to hang from; once the ring is up there is nothing to find.
-   * A bare rope comes up wet, wanting something on its end.
+   * A bare rope comes up wet; water wants a bucket.
    */
   override answerUseFrom(_gameState: GameState, item: Item): string {
     if (item instanceof Rope) {
       return clue(
         'A bare rope let down the well comes back up wet, and nothing more. ' +
-          'It would want something on its end, to carry or to catch.',
+          'Water wants a bucket to come up in.',
       )
     }
     if (!(item instanceof Magnet)) return ''

@@ -2950,6 +2950,11 @@
     "text": "Patches blinks at you slowly from the counter and begins to purr."
   },
   {
+    "id": "081fb7915c0a0e",
+    "speaker": "narrator",
+    "text": "A bare rope let down the well comes back up wet, and nothing more. Water wants a bucket to come up in."
+  },
+  {
     "id": "19e0884a698243",
     "speaker": "narrator",
     "text": "Beside the apples sit trinkets nobody has bought in years: a brass bell, a doll with one shoe, a tin of buttons."
@@ -3315,6 +3320,11 @@
     "text": "The cut vines lie in a heap at the mouth of the alcove, thorns and all."
   },
   {
+    "id": "18f2d88ab8dacc",
+    "speaker": "narrator",
+    "text": "Lashed on now, the stick would cover the end of the rod, where something else may want to go first. The length can come last."
+  },
+  {
     "id": "15140ba61d73d7",
     "speaker": "narrator",
     "text": "A small, smooth pebble that glints faintly, as if it kept a light of its own. It feels oddly warm to the touch."
@@ -3353,6 +3363,11 @@
     "id": "052eed951d110a",
     "speaker": "narrator",
     "text": "The deer lowers its head to the grass, then lifts it again to look at you."
+  },
+  {
+    "id": "02fb5321565ff7",
+    "speaker": "narrator",
+    "text": "The lantern lights the moss and not a letter beneath it. This shadow lies over the whole glade, and a flame held close does not lift it."
   },
   {
     "id": "173eaeef97cb8d",
@@ -3533,6 +3548,11 @@
     "id": "076bad59847d28",
     "speaker": "priest",
     "text": "Bless you, child. Will you light it for me? My hands shake more than the flame likes."
+  },
+  {
+    "id": "1a97d68d8988f0",
+    "speaker": "narrator",
+    "text": "The flame sits behind the lantern's glass, and the candle's wick will not reach in through it. The candle wants a flame of its own, struck for it."
   },
   {
     "id": "00010af0e27d3f",
@@ -3890,6 +3910,11 @@
     "text": "The map depicts the local area with surprising detail."
   },
   {
+    "id": "10e7f85d0df973",
+    "speaker": "narrator",
+    "text": "The warmth runs into the leaves and straight back out again. These crops are not gone, only thirsty; what they are calling for is water."
+  },
+  {
     "id": "1309044bd823d1",
     "speaker": "narrator",
     "text": "A vibrant, healthy carrot, freshly revived. It looks delicious and full of nutrients."
@@ -3908,6 +3933,11 @@
     "id": "060ee47babb935",
     "speaker": "narrator",
     "text": "A long fishing rod with a magnet on the end, reinforced with a sturdy stick. Perfect for reaching and retrieving metallic items from a distance."
+  },
+  {
+    "id": "056fb9e3eefd3c",
+    "speaker": "narrator",
+    "text": "The water in the bucket clears for a breath, then clouds again from the bottom up. The sourness came up with it from the well, and that is where it lives."
   },
   {
     "id": "0c59aed631a6a2",
@@ -3943,6 +3973,11 @@
     "id": "06923c0dda6bb5",
     "speaker": "narrator",
     "text": "The earth is dark and gives under your boot. Water still shines in the furrows."
+  },
+  {
+    "id": "1e68f8262bc48e",
+    "speaker": "narrator",
+    "text": "The water in the bucket clears for a breath, then clouds again. It was drawn before the well ran clean, and the well has better water now."
   },
   {
     "id": "140315ff327bcd",

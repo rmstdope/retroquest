@@ -104,7 +104,7 @@ const LANTERN_STONE = clue(
 )
 const ROPE_WELL = clue(
   'A bare rope let down the well comes back up wet, and nothing more. ' +
-    'It would want something on its end, to carry or to catch.',
+    'Water wants a bucket to come up in.',
 )
 const KNIFE_BOX = clue(
   'The blade finds no seam to work and no keyhole to pick. ' +

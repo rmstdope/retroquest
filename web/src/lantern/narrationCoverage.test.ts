@@ -92,6 +92,13 @@ const OPTIONAL_LINES: Record<number, { speaker: string; opening: string }[]> = {
     { speaker: 'narrator', opening: 'The magnet snaps to the black iron' },
     { speaker: 'narrator', opening: 'These wooden gears have not moved' },
     { speaker: 'narrator', opening: 'Held high, the lantern shows a glint' },
+    /** More natural tries at Act I's puzzles (rq-miya). */
+    { speaker: 'narrator', opening: 'The flame sits behind' },
+    { speaker: 'narrator', opening: 'Lashed on now, the stick' },
+    { speaker: 'narrator', opening: 'The lantern lights the moss' },
+    { speaker: 'narrator', opening: 'A bare rope let down the well' },
+    { speaker: 'narrator', opening: 'The warmth runs into the leaves' },
+    { speaker: 'narrator', opening: 'The water in the bucket clears' },
     /** Act I's stock replies (rq-bio): one fixed line per person, never naming the item. */
     {
       speaker: 'narrator',

@@ -50,6 +50,11 @@ const PURIFY_BUCKET = clue(
     'bottom up. The sourness came up with it from the well, and that is ' +
     'where it lives.',
 )
+const STALE_BUCKET = clue(
+  'The water in the bucket clears for a breath, then clouds again. ' +
+    'It was drawn before the well ran clean, and the well has better ' +
+    'water now.',
+)
 
 describe('wrong casts at Act I puzzles', () => {
   it.each(['crops', 'rows'])(
@@ -79,6 +84,14 @@ describe('wrong casts at Act I puzzles', () => {
     expect(
       game.state.inventory.find((i) => i instanceof Bucket)?.description,
     ).toContain('murky')
+  })
+
+  it('says sour bucket water drawn before the well ran clean is stale', () => {
+    const game = withDrawnBucket(awakeIn('VillageWell'))
+    game.state.setStoryFlag(FLAG_WELL_EXAMINED, true)
+    executeCommands(game, ['cast purify on well'])
+    const text = executeCommands(game, ['cast purify on bucket'])
+    expect(text).toBe(STALE_BUCKET)
   })
 
   it('says a bucket of clear water is already clean', () => {
@@ -116,7 +129,7 @@ describe('wrong casts at Act I puzzles', () => {
   )
 
   it('writes every reply in well-formed markup', () => {
-    for (const line of [REVIVE_CROPS, PURIFY_BUCKET]) {
+    for (const line of [REVIVE_CROPS, PURIFY_BUCKET, STALE_BUCKET]) {
       expectMarkupWellFormed(line)
     }
   })

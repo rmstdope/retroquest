@@ -135,7 +135,8 @@ export class Bucket extends Item {
   /**
    * What purify does to the bucket: nothing in an empty one, nothing more in
    * clear water, and sour water clouds again, since the sourness lives in
-   * the well it came from.
+   * the well it came from (or, once the well runs clear, since the well has
+   * better water now).
    */
   purify(gameState: GameState): string {
     if (this.name === 'bucket') {
@@ -148,6 +149,14 @@ export class Bucket extends Item {
       return (
         '[failure]The water in the [item_name]bucket[/item_name] is ' +
         'already clear.[/failure]'
+      )
+    }
+    const well = gameState.getRoom('Village Well')?.getItemByName('well')
+    if (well instanceof Well && well.isPurified) {
+      return clue(
+        'The water in the bucket clears for a breath, then clouds again. ' +
+          'It was drawn before the well ran clean, and the well has better ' +
+          'water now.',
       )
     }
     return clue(

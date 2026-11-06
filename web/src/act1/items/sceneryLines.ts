@@ -24,6 +24,9 @@ import { RustyHoe } from './RustyHoe'
 import { RustySaw } from './RustySaw'
 import { SharpKnife } from './SharpKnife'
 
+/** The key of the Vegetable Field's crops, which revive answers. */
+export const VEGETABLE_FIELD_CROPS_KEY = 'VegetableField.crops'
+
 /** When a chip first shows, if not from the first visit. */
 export type SceneryAppearance = 'open' | 'cut'
 
@@ -210,7 +213,7 @@ export const SCENERY_BY_ROOM: Record<string, SceneryDef[]> = {
     ),
   ],
   VegetableField: [
-    staged('VegetableField.crops', 'crops', ['rows', 'leaves'], (gs) =>
+    staged(VEGETABLE_FIELD_CROPS_KEY, 'crops', ['rows', 'leaves'], (gs) =>
       gs.getStoryFlag(FLAG_VEGETABLE_FIELD_WATERED)
         ? 'Young leaves, green and cool, stand up from the rows. ' +
           'The stalks bend in the breeze and come back.'
