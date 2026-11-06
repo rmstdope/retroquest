@@ -22,7 +22,14 @@ describe('The Dream, where Act I opens', () => {
     expectCurrentRoom(game.state, 'The Dream')
     expectCharacterInRoom(game.state.currentRoom, 'voice')
     expect(game.state.currentRoom).toBeInstanceOf(TheDream)
-    expect(game.state.currentRoom.items).toEqual([])
+    expect(game.state.currentRoom.items.map((i) => i.name)).toEqual([
+      'shadows',
+      'man',
+      'child',
+    ])
+    expect(game.state.currentRoom.items.every((i) => !i.canBeCarried)).toBe(
+      true,
+    )
     expect(game.state.inventory).toEqual([])
     const look = executeCommands(game, ['look'])
     expect(look).not.toContain('Exits:')

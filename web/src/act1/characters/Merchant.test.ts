@@ -30,6 +30,16 @@ function gameAtMerchant(): Game {
 }
 
 describe('Merchant', () => {
+  it('has a cart with not much left on it, as the cart itself says', () => {
+    const game = gameAtMerchant()
+    const merchant = executeCommands(game, ['examine merchant'])
+    expect(merchant).not.toContain('loaded cart')
+    expect(merchant).toContain('half-empty cart')
+    expect(executeCommands(game, ['examine cart'])).toContain(
+      'There is not much under it now.',
+    )
+  })
+
   it('asks for the ring, or failing that a horseshoe', () => {
     const answer = executeCommands(gameAtMerchant(), ['talk to merchant'])
 

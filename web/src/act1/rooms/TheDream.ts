@@ -1,11 +1,13 @@
 import { Room } from '@/engine'
 import type { Exits, GameState } from '@/engine'
 import { DreamVoice } from '../characters/DreamVoice'
+import { Scenery } from '../items/Scenery'
 
 /**
  * The Dream: where the game opens. One dark room with a storm in it, the
  * cradle tune, a man's hand lifting a child, and a tall figure whispering
- * Elior's name. Nothing can be carried out of it and no way leads anywhere;
+ * Elior's name. The shadows, the man and the child can be examined, but
+ * nothing can be carried out of it and no way leads anywhere;
  * answering the voice (talking to it, or saying anything to it) ends it,
  * and Elior wakes in his cottage.
  */
@@ -24,7 +26,7 @@ export class TheDream extends Room {
         'find. It is too far away to reach, and too close to be only a dream. ' +
         'It is whispering, at the very edge of hearing, and what it ' +
         'whispers is your name.',
-      items: [],
+      items: Scenery.forRoom('TheDream'),
       characters: [new DreamVoice()],
       exits: {},
     })

@@ -68,7 +68,7 @@ export class Merchant extends Character {
     super({
       name: 'merchant',
       description:
-        `A travelling ${characterName('merchant')} with a loaded cart and a ` +
+        `A travelling ${characterName('merchant')} with a half-empty cart and a ` +
         'thin grey mare who stands on three good shoes. He has the look of a ' +
         'man two days from his last meal.',
     })
