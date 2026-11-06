@@ -10,6 +10,7 @@ import {
 import { Fish } from '../items/Fish'
 import { FadedPhotograph } from '../items/FadedPhotograph'
 import { MothersLetter } from '../items/MothersLetter'
+import { RuneToken } from '../items/RuneToken'
 import { PurifySpell } from '../spells/PurifySpell'
 import {
   FLAG_FISHERMAN_TOLD_OF_TIN,
@@ -158,7 +159,10 @@ export class Fisherman extends Character {
     return `${rod} I can't cast with this arm, but I can show you. Here.`
   }
 
-  /** Handle items offered to the fisherman and teach spells if appropriate. */
+  /**
+   * Handle items offered to the fisherman and teach spells if appropriate;
+   * the family keepsakes and the rune token get answers of their own.
+   */
   override giveItem(gameState: GameState, item: Item): string {
     if (item instanceof Fish && !this.receivedFish) {
       this.receivedFish = true
@@ -197,6 +201,18 @@ export class Fisherman extends Character {
           speech(
             "So you lifted the stone. I sat by it more years than I'll own " +
               "to, lad, and never once did. Wasn't mine to.",
+          ),
+      )
+    }
+
+    if (item instanceof RuneToken) {
+      return attributeSpeech(
+        this.name,
+        `The ${characterName('fisherman')} turns it over once and hands it ` +
+          'straight back. ' +
+          speech(
+            'Cold, that. Colder than the river in March. Whatever it is, lad, ' +
+              "keep it away from the water. Water's had enough done to it.",
           ),
       )
     }

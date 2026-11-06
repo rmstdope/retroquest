@@ -179,5 +179,16 @@
     {"after": 90, "commands": ["talk to shopkeeper", "take matches"], "unset": ["patches_found", "patches_returned"]},
     {"after": 16, "commands": ["use dull knife with rafter", "use lantern with rafter"]},
     {"after": 57, "commands": ["use magnet with mechanism", "use sharp knife with gears"]},
-    {"after": 92, "commands": ["use matches with dark corner"]}
+    {"after": 92, "commands": ["use matches with dark corner"]},
+    {"after": 21, "commands": ["give coin to grandmother"]},
+    {"after": 52, "commands": ["give coin to hemlock", "go east", "go east", "give coin to merchant"]},
+    {"after": 69, "commands": ["go west", "go north", "go north", "go west", "go north", "give fish to grandmother"]},
+    {"after": 85, "commands": ["go west", "go north", "give rare flower to grandmother"]},
+    {"after": 118, "commands": ["give rune token to fisherman"]},
+    {"after": 130, "commands": ["give rune token to grandmother"]},
+    {"after": 132, "commands": ["give rune token to tilda"]},
+    {"after": 133, "commands": ["give rune token to hemlock"]},
+    {"after": 134, "commands": ["give rune token to priest"]},
+    {"after": 136, "commands": ["give rune token to merchant"]},
+    {"after": 143, "commands": ["go south", "go west", "give ancient amulet to grandmother"]}
 ]

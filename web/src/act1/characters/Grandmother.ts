@@ -15,6 +15,10 @@ import { Key } from '../items/Key'
 import { AncientAmulet } from '../items/AncientAmulet'
 import { ShinyRing } from '../items/ShinyRing'
 import { MothersLetter } from '../items/MothersLetter'
+import { RuneToken } from '../items/RuneToken'
+import { RareFlower } from '../items/RareFlower'
+import { Fish } from '../items/Fish'
+import { Coin } from '../items/Coin'
 import { FreshBread } from '../items/FreshBread'
 import { Bread } from '../items/Bread'
 import { Patches } from './Patches'
@@ -429,6 +433,11 @@ export class Grandmother extends Character {
     if (item instanceof ShinyRing) return this.ringAnswer()
     if (item instanceof MothersLetter) return this.letterAnswer()
     if (item instanceof TravelCloak) return this.cloakAnswer()
+    if (item instanceof AncientAmulet) return this.amuletAnswer()
+    if (item instanceof RuneToken) return this.tokenAnswer()
+    if (item instanceof RareFlower) return this.flowerAnswer()
+    if (item instanceof Fish) return this.fishAnswer()
+    if (item instanceof Coin) return this.coinAnswer()
 
     return (
       `${characterName('Grandmother')} turns it over in her hands and gives ` +
@@ -474,6 +483,65 @@ export class Grandmother extends Character {
         'I kept that in paper all these years so you could hand it back to ' +
           'me? She left it for you. Wear it.',
       )
+    )
+  }
+
+  /** The amulet Mira gave him: she will not hold it, and bids him hide it. */
+  private amuletAnswer(): string {
+    return (
+      `Your ${characterName('grandmother')} will not take it. She folds ` +
+      'your fingers back over the [item_name]amulet[/item_name] and holds ' +
+      'them shut a moment. ' +
+      speech(
+        'That was never mine to hold, love. Put it away, where nobody sees ' +
+          'it.',
+      ) +
+      ' She turns back to the hearth, and her hands are not quite steady.'
+    )
+  }
+
+  /** The cold rune token from the well: she wants it out of her kitchen. */
+  private tokenAnswer(): string {
+    return (
+      `Your ${characterName('grandmother')} takes it, and lets go of it ` +
+      'almost at once. ' +
+      speech('Cold as a grave, that. Where did you find such a thing?') +
+      ' She does not wait for an answer, and pushes it back to you with ' +
+      'the end of her spoon. ' +
+      speech("Whatever it is, love, I'll not have it in my kitchen.")
+    )
+  }
+
+  /** The rare flower that opened for him: it puts her in mind of her daughter. */
+  private flowerAnswer(): string {
+    return (
+      `Your ${characterName('grandmother')} looks at the flower a long ` +
+      'time, and does not touch it. ' +
+      speech(
+        "It's open for you. Your mother used to come home with her hands " +
+          'full of things like that.',
+      ) +
+      ' She turns back to the hearth. ' +
+      speech('Take it where it is wanted, love.')
+    )
+  }
+
+  /** A fish: not on her clean board. */
+  private fishAnswer(): string {
+    return (
+      `Your ${characterName('grandmother')} wrinkles her nose. ` +
+      speech(
+        'Not on my clean board, love. Fish is for folk who sit by the ' +
+          'river all day waiting for one.',
+      )
+    )
+  }
+
+  /** A coin: nobody pays at her table. */
+  private coinAnswer(): string {
+    return (
+      `Your ${characterName('grandmother')} closes your hand over it. ` +
+      speech('Keep your coin, love. Nobody pays at this table.')
     )
   }
 }
