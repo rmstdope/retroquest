@@ -44,6 +44,9 @@ function coins(price: number): string {
 /** The byword for Malakar, said anywhere in the words. */
 const MALAKAR = /malakar/i
 
+/** His cat's name, which he answers as a man who knows her. */
+const PATCHES = /\bpatches\b/i
+
 /**
  * Old Man Hemlock, the shopkeeper of Willowbrook's General Store.
  *
@@ -652,14 +655,66 @@ export class Shopkeeper extends Character {
 
   /**
    * Raps the counter at the byword "Malakar", the same every time and in
-   * every state of the store; any other word gets his turn-taking answers.
+   * every state of the store. Answers the name of his cat as a man who
+   * knows her (see `patchesAnswer`); any other word gets his turn-taking
+   * answers.
    */
   override sayTo(gameState: GameState, words: string): string {
-    if (!MALAKAR.test(words)) return super.sayTo(gameState, words)
+    if (!MALAKAR.test(words)) {
+      if (PATCHES.test(words)) return this.patchesAnswer(gameState)
+      return super.sayTo(gameState, words)
+    }
     return attributeSpeech(
       this.name,
       `${this.nameInSentence({ atStart: true })} raps the counter twice with his knuckles. ` +
         speech("Not under this roof, lad. We've had luck enough this year."),
+    )
+  }
+
+  /**
+   * His answer to his cat's name: with her in Elior's arms, or news of her
+   * still to hear, the same scene as speaking to him; then where she is now,
+   * by grandmother's hearth or home on his counter, or, while she is still
+   * missing, his hope that Elior has seen her.
+   */
+  private patchesAnswer(gameState: GameState): string {
+    const stayed = gameState.getStoryFlag(FLAG_PATCHES_STAYED_WITH_GRANDMOTHER)
+    const carried =
+      gameState.getStoryFlag(FLAG_PATCHES_FOUND) &&
+      !gameState.getStoryFlag(FLAG_PATCHES_RETURNED) &&
+      !stayed
+    const newsToHear =
+      stayed && !gameState.getStoryFlag(FLAG_HEMLOCK_HEARD_PATCHES_STAYED)
+    if (carried || newsToHear) return this.talkTo(gameState)
+    if (stayed) {
+      return attributeSpeech(
+        this.name,
+        `${this.nameInSentence({ atStart: true })} smiles. ` +
+          speech(
+            `Your ${characterName('grandmother')} tells me she's taken the ` +
+              "warm spot by the hearth. I call in when I can, lad, and she's " +
+              'never once got up for me.',
+          ),
+      )
+    }
+    if (gameState.getStoryFlag(FLAG_PATCHES_RETURNED)) {
+      return attributeSpeech(
+        this.name,
+        `${characterName('Patches')} is asleep by the till. ` +
+          `${this.nameInSentence({ atStart: true })} nods at her. ` +
+          speech(
+            "Home where she belongs, and she's not stirred off that counter " +
+              'since.',
+          ),
+      )
+    }
+    return attributeSpeech(
+      this.name,
+      `${this.nameInSentence({ atStart: true })} looks up at once. ` +
+        speech(
+          `${characterName('Patches')}? You've not seen her, have you, lad? ` +
+            'She was last seen near the old well.',
+        ),
     )
   }
 

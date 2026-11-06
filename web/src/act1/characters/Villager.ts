@@ -20,6 +20,9 @@ import { RuneToken } from '../items/RuneToken'
 /** The byword for Malakar, said anywhere in the words. */
 const MALAKAR = /malakar/i
 
+/** The healer's name, which she answers with gossip. */
+const MIRA = /\bmira\b/i
+
 /**
  * Tilda, the baker's wife: a friendly Willowbrook local who cycles through
  * village rumors (one of them uses Malakar's name as the village does, a
@@ -184,7 +187,7 @@ export class Villager extends Character {
    * remembered line, recorded once. Earlier she is lost ("truth") or gives the
    * usual reply (anything else); later she keeps the secret. Other words,
    * while she still waits for an answer, are met with a nudge toward the
-   * truth.
+   * truth; Mira's name gets her gossip about the healer.
    */
   override sayTo(gameState: GameState, words: string): string {
     if (MALAKAR.test(words)) return this.knock()
@@ -203,6 +206,7 @@ export class Villager extends Character {
       )
     }
     if (!isTruth && !(asked && isYes)) {
+      if (MIRA.test(words)) return this.miraGossip()
       return super.sayTo(gameState, words)
     }
     if (!gameState.getStoryFlag(FLAG_TILDA_ASKED_ABOUT_WELL)) {
@@ -229,6 +233,19 @@ export class Villager extends Character {
       ) +
       '\n' +
       remembered('Truth')
+    )
+  }
+
+  /** Her gossip about the healer, whose name everyone in the square knows. */
+  private miraGossip(): string {
+    return attributeSpeech(
+      this.name,
+      `${this.nameInSentence({ atStart: true })} lowers her voice. ` +
+        speech(
+          `${characterName('Mira')}? My mother swore by her for a cough. ` +
+            "Folk say she knows things she oughtn't, love, but nobody's " +
+            'ever turned her from their door.',
+        ),
     )
   }
 

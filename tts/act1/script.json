@@ -510,6 +510,46 @@
     "text": "Grandmother told you of your father's journal, and his word for calling a thing back. It came to you as she spoke, and it stayed."
   },
   {
+    "id": "1f124eef27a612",
+    "speaker": "elior",
+    "text": "father"
+  },
+  {
+    "id": "116f755b0c7a2e",
+    "speaker": "narrator",
+    "text": "Your grandmother's hands go still in the dough, then start again."
+  },
+  {
+    "id": "1b43fc506eb53e",
+    "speaker": "grandmother",
+    "text": "He sat at this table every night, writing. You have his way of frowning at a page, dear."
+  },
+  {
+    "id": "112615204825a7",
+    "speaker": "narrator",
+    "text": "She pushes the bread board toward you."
+  },
+  {
+    "id": "1d3e057e3aab6a",
+    "speaker": "grandmother",
+    "text": "Eat something."
+  },
+  {
+    "id": "109af3cf46b360",
+    "speaker": "elior",
+    "text": "revive"
+  },
+  {
+    "id": "12e333a93c9153",
+    "speaker": "narrator",
+    "text": "Your grandmother nods at the pots on the sill."
+  },
+  {
+    "id": "1f25ca891effda",
+    "speaker": "grandmother",
+    "text": "Your father's word. If it brings back my parsley, dear, you may say it as often as you like."
+  },
+  {
     "id": "1a943f14540283",
     "speaker": "narrator",
     "text": "Magic for real: You know a spell now, but when you reach for it the warmth comes and nothing answers. Grandmother says Mira has a way with herbs, and with other things."
@@ -1015,6 +1055,21 @@
     "text": "Hush, love. Not out loud, not with the fields the way they are."
   },
   {
+    "id": "104ce8512b7839",
+    "speaker": "elior",
+    "text": "patches"
+  },
+  {
+    "id": "1b51d914293fef",
+    "speaker": "narrator",
+    "text": "Hemlock looks up at once."
+  },
+  {
+    "id": "04c935f95e78d0",
+    "speaker": "hemlock",
+    "text": "Patches? You've not seen her, have you, lad? She was last seen near the old well."
+  },
+  {
     "id": "11ff5e8e067f69",
     "speaker": "narrator",
     "text": "A wooden bucket with a rope handle."
@@ -1103,6 +1158,21 @@
     "id": "0757c018bcdd53",
     "speaker": "narrator",
     "text": "In the square, Tilda has more rumours than bread, and the people around her keep their voices down."
+  },
+  {
+    "id": "1d0adb6b8b53f2",
+    "speaker": "elior",
+    "text": "mira"
+  },
+  {
+    "id": "1e22b799d33e59",
+    "speaker": "narrator",
+    "text": "Tilda lowers her voice."
+  },
+  {
+    "id": "016844396b280a",
+    "speaker": "tilda",
+    "text": "Mira? My mother swore by her for a cough. Folk say she knows things she oughtn't, love, but nobody's ever turned her from their door."
   },
   {
     "id": "097a4dd86d48ab",
@@ -2565,6 +2635,41 @@
     "text": "You let Patches stay by your grandmother's hearth, and she sent word to Old Man Hemlock. The General Store is open again. Curiosity did not kill this cat after all."
   },
   {
+    "id": "140734003dbe75",
+    "speaker": "narrator",
+    "text": "A cluttered shop. Rope, apples and trinkets crowd the shelves, and the air smells of fruit, wax and old wood. Outside, the lane runs east to the chapel. Hemlock dusts jars between customers."
+  },
+  {
+    "id": "0e695490a6f205",
+    "speaker": "narrator",
+    "text": "Hemlock hurries over the moment you come in."
+  },
+  {
+    "id": "07df83ae92a4b5",
+    "speaker": "hemlock",
+    "text": "Your grandmother sent word, lad. Patches is safe and warm by her hearth. I'll not drag her back; she always did like a fire better than a draughty old store, and I can call in and see her."
+  },
+  {
+    "id": "1b8f12856cd6c5",
+    "speaker": "hemlock",
+    "text": "There was to be a reward for bringing her home, and she found a new one. But you'll not leave empty-handed: take this rope, on the house, and there's always an apple to go with it. And the store's open again, so have a look around."
+  },
+  {
+    "id": "16b82ff79d5054",
+    "speaker": "narrator",
+    "text": "A cluttered shop. Apples and trinkets crowd the shelves, and the air smells of fruit, wax and old wood. Outside, the lane runs east to the chapel. Hemlock dusts jars between customers."
+  },
+  {
+    "id": "02dc158d29c293",
+    "speaker": "narrator",
+    "text": "Hemlock smiles."
+  },
+  {
+    "id": "1d1883215f16e7",
+    "speaker": "hemlock",
+    "text": "Your grandmother tells me she's taken the warm spot by the hearth. I call in when I can, lad, and she's never once got up for me."
+  },
+  {
     "id": "191c0726efd79c",
     "speaker": "narrator",
     "text": "Broken crates, stacked any way, and a hollow in the dust behind them just the size of a cat."
@@ -2628,31 +2733,6 @@
     "id": "0ea1159058b214",
     "speaker": "narrator",
     "text": "Patches blinks at you slowly from beside the hearth and begins to purr."
-  },
-  {
-    "id": "140734003dbe75",
-    "speaker": "narrator",
-    "text": "A cluttered shop. Rope, apples and trinkets crowd the shelves, and the air smells of fruit, wax and old wood. Outside, the lane runs east to the chapel. Hemlock dusts jars between customers."
-  },
-  {
-    "id": "0e695490a6f205",
-    "speaker": "narrator",
-    "text": "Hemlock hurries over the moment you come in."
-  },
-  {
-    "id": "07df83ae92a4b5",
-    "speaker": "hemlock",
-    "text": "Your grandmother sent word, lad. Patches is safe and warm by her hearth. I'll not drag her back; she always did like a fire better than a draughty old store, and I can call in and see her."
-  },
-  {
-    "id": "1b8f12856cd6c5",
-    "speaker": "hemlock",
-    "text": "There was to be a reward for bringing her home, and she found a new one. But you'll not leave empty-handed: take this rope, on the house, and there's always an apple to go with it. And the store's open again, so have a look around."
-  },
-  {
-    "id": "16b82ff79d5054",
-    "speaker": "narrator",
-    "text": "A cluttered shop. Apples and trinkets crowd the shelves, and the air smells of fruit, wax and old wood. Outside, the lane runs east to the chapel. Hemlock dusts jars between customers."
   },
   {
     "id": "083f9e2e23d369",
@@ -2958,6 +3038,16 @@
     "id": "05347c75636d39",
     "speaker": "merchant",
     "text": "Keep your coin, friend. Coin I can earn anywhere."
+  },
+  {
+    "id": "023b7b3d52a1b9",
+    "speaker": "narrator",
+    "text": "Patches is asleep by the till. Hemlock nods at her."
+  },
+  {
+    "id": "010d62d148c0fb",
+    "speaker": "hemlock",
+    "text": "Home where she belongs, and she's not stirred off that counter since."
   },
   {
     "id": "0b44b4f8d8c78e",

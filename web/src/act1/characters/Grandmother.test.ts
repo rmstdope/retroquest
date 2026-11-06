@@ -16,6 +16,7 @@ import { ShinyRing } from '../items/ShinyRing'
 import { Locket } from '../items/Locket'
 import { FadedPhotograph } from '../items/FadedPhotograph'
 import { Key } from '../items/Key'
+import { ReviveSpell } from '../spells/ReviveSpell'
 import { WildBerries } from '../items/WildBerries'
 import { MothersLetter } from '../items/MothersLetter'
 import { FLAG_TALKED_TO_GRANDMOTHER_ABOUT_PHOTO } from '../Act1StoryFlags'
@@ -636,5 +637,32 @@ describe('Grandmother and the ring from the well', () => {
     loaded.loadSaveData(game.toSaveData())
 
     expect(executeCommands(loaded, GIVE)).not.toContain(WELL_BEAT)
+  })
+})
+
+describe("Grandmother answers Elior's father and his spell by name", () => {
+  const STOCK = 'Talk to me while I work, dear.'
+
+  it('speaks of his father at the table', () => {
+    const game = cottageGame()
+
+    const answer = executeCommands(game, ['say father to grandmother'])
+
+    expect(answer).not.toContain(STOCK)
+    expect(answer).toContain('his way of frowning at a page')
+    expectDialogueSpeaker(answer, 'Grandmother')
+    expect(findMarkupProblems(answer)).toEqual([])
+  })
+
+  it('speaks of revive once she has told of it', () => {
+    const game = cottageGame()
+    game.state.knownSpells.push(new ReviveSpell())
+
+    const answer = executeCommands(game, ['say revive to grandmother'])
+
+    expect(answer).not.toContain(STOCK)
+    expect(answer).toContain("Your father's word")
+    expectDialogueSpeaker(answer, 'Grandmother')
+    expect(findMarkupProblems(answer)).toEqual([])
   })
 })

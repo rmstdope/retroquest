@@ -1027,3 +1027,51 @@ describe('The store tells one story about its apples (rq-03s1)', () => {
 function tookApple(answer: string): boolean {
   return answer.includes('It is crisp and cold')
 }
+
+describe('Hemlock answers the name of his cat', () => {
+  const STOCK = "You'd best ask someone with more time than I have"
+
+  it('talks of Patches as home on the counter once she is back', () => {
+    const game = gameInStore()
+
+    const answer = game.commandParser.parse('say patches to hemlock')
+
+    expect(answer).not.toContain(STOCK)
+    expect(answer).toContain('not stirred off that counter since')
+    expectDialogueSpeaker(answer, 'Hemlock')
+  })
+
+  it('talks of Patches by the hearth once she stays with grandmother', () => {
+    const game = gameInStore({ shopOpen: false })
+    game.state.setStoryFlag(FLAG_PATCHES_FOUND, true)
+    game.state.setStoryFlag(FLAG_PATCHES_STAYED_WITH_GRANDMOTHER, true)
+    game.state.setStoryFlag(FLAG_HEMLOCK_HEARD_PATCHES_STAYED, true)
+    game.state.setStoryFlag(FLAG_MET_HEMLOCK, true)
+
+    const answer = game.commandParser.parse('say patches to hemlock')
+
+    expect(answer).not.toContain(STOCK)
+    expect(answer).toContain('warm spot by the hearth')
+    expectDialogueSpeaker(answer, 'Hemlock')
+  })
+
+  it('asks after Patches while she is still missing', () => {
+    const game = gameInStore({ shopOpen: false })
+
+    const answer = game.commandParser.parse('say patches to hemlock')
+
+    expect(answer).not.toContain(STOCK)
+    expect(answer).toContain("You've not seen her, have you, lad?")
+    expectDialogueSpeaker(answer, 'Hemlock')
+  })
+
+  it('takes her home when Elior says her name with her in his arms', () => {
+    const game = gameInStore({ shopOpen: false })
+    game.state.setStoryFlag(FLAG_PATCHES_FOUND, true)
+
+    const answer = game.commandParser.parse('say patches to hemlock')
+
+    expect(answer).toContain('You found her!')
+    expect(game.state.getStoryFlag(FLAG_PATCHES_RETURNED)).toBe(true)
+  })
+})
