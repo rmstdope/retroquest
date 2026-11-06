@@ -13,16 +13,29 @@ import {
   TRIGGER_PATCHES_RETURNS,
 } from '../Act1StoryFlags'
 
-const SHUT_TEXT =
-  'A cluttered shop with the shutters half down. Rope, apples and ' +
-  'trinkets crowd the shelves in the gloom. ' +
-  `${characterName('Hemlock')} stands at the window, ` +
-  'watching the lane to the chapel.'
-const OPEN_TEXT =
-  'A cluttered shop. Rope, apples and trinkets crowd the shelves, ' +
-  'and the air smells of fruit, wax and old wood. ' +
-  'Outside, the lane runs east to the chapel. ' +
-  `${characterName('Hemlock')} dusts jars between customers`
+const SHELVES_WITH_ROPE = 'Rope, apples and trinkets'
+const SHELVES_WITHOUT_ROPE = 'Apples and trinkets'
+
+/** The shut shop, its shelves named as they stand. */
+function shutText(shelves: string): string {
+  return (
+    `A cluttered shop with the shutters half down. ${shelves} ` +
+    'crowd the shelves in the gloom. ' +
+    `${characterName('Hemlock')} stands at the window, ` +
+    'watching the lane to the chapel.'
+  )
+}
+
+/** The open shop, its shelves named as they stand, before the cat clause. */
+function openText(shelves: string): string {
+  return (
+    `A cluttered shop. ${shelves} crowd the shelves, ` +
+    'and the air smells of fruit, wax and old wood. ' +
+    'Outside, the lane runs east to the chapel. ' +
+    `${characterName('Hemlock')} dusts jars between customers`
+  )
+}
+
 const CAT_CLAUSE =
   ', and every so often looks at the counter, where his cat sleeps'
 
@@ -30,8 +43,9 @@ const CAT_CLAUSE =
  * General Store room: early merchant hub with multi-category items.
  *
  * The description follows whether Hemlock has the store shut or open (the
- * same story flags as the Shopkeeper); `descriptionFor` computes it each time
- * the room is shown.
+ * same story flags as the Shopkeeper), and names rope on the shelves only
+ * while his one rope is still on display; `descriptionFor` computes it each
+ * time the room is shown.
  */
 export class GeneralStore extends Room {
   /** The sound state of the store once Patches sleeps on the counter. */
@@ -40,7 +54,7 @@ export class GeneralStore extends Room {
   constructor() {
     super({
       name: 'General Store',
-      description: SHUT_TEXT,
+      description: shutText(SHELVES_WITH_ROPE),
       items: [
         new Rope(),
         new Apple(),
@@ -82,15 +96,21 @@ export class GeneralStore extends Room {
 
   /**
    * The shut shop while Patches is missing; once the store is open, the busy
-   * shop, with the sleeping cat only when Patches was carried home.
+   * shop, with the sleeping cat only when Patches was carried home. Rope is
+   * named on the shelves only while Hemlock's rope is still on display there.
    */
   override descriptionFor(gameState: GameState): string {
+    const shelves = this.items.some(
+      (item) => item instanceof Rope && !item.canBeCarried,
+    )
+      ? SHELVES_WITH_ROPE
+      : SHELVES_WITHOUT_ROPE
     const catHome = gameState.getStoryFlag(FLAG_PATCHES_RETURNED)
     const open =
       catHome ||
       gameState.getStoryFlag(FLAG_PATCHES_STAYED_WITH_GRANDMOTHER) ||
       gameState.getStoryFlag(FLAG_RUSTY_HOE_SECOND_COIN_FOUND)
-    if (!open) return SHUT_TEXT
-    return OPEN_TEXT + (catHome ? CAT_CLAUSE : '') + '.'
+    if (!open) return shutText(shelves)
+    return openText(shelves) + (catHome ? CAT_CLAUSE : '') + '.'
   }
 }

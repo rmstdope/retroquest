@@ -1455,6 +1455,11 @@
     "text": "You receive a rope and an apple."
   },
   {
+    "id": "16b82ff79d5054",
+    "speaker": "narrator",
+    "text": "A cluttered shop. Apples and trinkets crowd the shelves, and the air smells of fruit, wax and old wood. Outside, the lane runs east to the chapel. Hemlock dusts jars between customers."
+  },
+  {
     "id": "083f9e2e23d369",
     "speaker": "narrator",
     "text": "You search around the General Store, but find nothing of interest beyond what you can already see."
@@ -1848,6 +1853,11 @@
     "id": "1df6d1eb1f0e4a",
     "speaker": "hemlock",
     "text": "That sword's hung on that wall since my father's day. Nobody in Willowbrook has ever needed one. I'd like it to stay that way. Sword's five coins and the armor's ten. And there's an apple with everything. My mother's rule."
+  },
+  {
+    "id": "124ca56876b4aa",
+    "speaker": "narrator",
+    "text": "A cluttered shop. Apples and trinkets crowd the shelves, and the air smells of fruit, wax and old wood. Outside, the lane runs east to the chapel. Hemlock dusts jars between customers, and every so often looks at the counter, where his cat sleeps."
   },
   {
     "id": "0c5e064199040e",
@@ -2633,6 +2643,11 @@
     "id": "0e9b1243224f12",
     "speaker": "hemlock",
     "text": "The priest's matches? They're under the counter, and they'll keep. I'll see to him the day Patches is home; I've no head for anything else till then."
+  },
+  {
+    "id": "0a66127b8f93a4",
+    "speaker": "narrator",
+    "text": "A cluttered shop with the shutters half down. Apples and trinkets crowd the shelves in the gloom. Hemlock stands at the window, watching the lane to the chapel."
   },
   {
     "id": "19e1c902bb676a",
