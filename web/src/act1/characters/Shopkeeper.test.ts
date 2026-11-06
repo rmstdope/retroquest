@@ -216,6 +216,23 @@ describe("Hemlock and the priest's errand while the store is shut (rq-l4ud)", ()
     expect(game.state.inventory.some((i) => i instanceof Matches)).toBe(false)
   })
 
+  it('keeps the errand out of the refusal while Elior carries Patches', () => {
+    const game = gameInStore({ shopOpen: false, priestTalkedTo: true })
+    game.state.setStoryFlag(FLAG_PATCHES_FOUND, true)
+
+    expect(game.commandParser.parse('take matches')).not.toContain(ERRAND)
+  })
+
+  it('gives the errand after his byword on the first meeting', () => {
+    const game = gameInStore({ shopOpen: false, priestTalkedTo: true })
+
+    const answer = game.commandParser.parse('talk to hemlock')
+
+    expect(answer.indexOf(ERRAND)).toBeGreaterThan(
+      answer.indexOf('raps the counter'),
+    )
+  })
+
   it('hands the matches over once Patches is home', () => {
     const game = gameInStore({ shopOpen: false, priestTalkedTo: true })
     game.commandParser.parse('talk to hemlock')

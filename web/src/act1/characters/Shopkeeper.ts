@@ -190,11 +190,13 @@ export class Shopkeeper extends Character {
    * Hemlock's word on the priest's errand while the store is shut, or null
    * when there is none to give: once the priest has sent Elior for his
    * matches and they have not been handed over, he has not forgotten them,
-   * but sees to nothing until Patches is home.
+   * but sees to nothing until Patches is home. Not while Elior carries
+   * Patches: she is about to be home.
    */
   priestErrandWhileShut(gameState: GameState): string | null {
     if (
       this.isOpen(gameState) ||
+      gameState.getStoryFlag(FLAG_PATCHES_FOUND) ||
       !gameState.getStoryFlag(FLAG_PRIEST_TALKED_TO) ||
       this.priestMatchesGiven
     ) {
@@ -237,8 +239,8 @@ export class Shopkeeper extends Character {
           'She was last seen near the old well. If you find her, ' +
             "there's a reward in it for you.",
         ) +
-        this.errandAfter(gameState) +
-        this.byword()
+        this.byword() +
+        this.errandAfter(gameState)
       )
     }
     return (
