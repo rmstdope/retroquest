@@ -1147,4 +1147,16 @@ describe('Hemlock answers the healer by name', () => {
 
     expect(answer).toContain('set my wrist')
   })
+
+  it('answers her name before they have met, leaving the meeting to a talk', () => {
+    const game = gameInStore({ shopOpen: false })
+
+    expect(game.commandParser.parse('say mira to hemlock')).toContain(
+      'set my wrist',
+    )
+    expect(game.state.getStoryFlag(FLAG_MET_HEMLOCK)).toBe(false)
+    expect(game.commandParser.parse('talk to hemlock')).toContain(
+      'Gone for days now',
+    )
+  })
 })
