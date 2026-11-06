@@ -90,6 +90,19 @@ describe('StoryTurn', () => {
     )
   })
 
+  it('renders a clue line as narrator text, apart from a plain refusal', () => {
+    const w = mountTurn({
+      text:
+        '[failure][clue]The mysterious box is locked.[/clue][/failure]\n' +
+        "[failure]You can't go that way.[/failure]",
+    })
+
+    expect(w.get('.lq-block-text').text()).toBe('The mysterious box is locked.')
+    expect(w.findAll('.lq-block-failure').map((f) => f.text())).toEqual([
+      "You can't go that way.",
+    ])
+  })
+
   it('shows dialogue with a capitalised speaker label', () => {
     const w = mountTurn({
       text:
@@ -324,7 +337,7 @@ describe('StoryTurn while it is narrated', () => {
     expect(w.get('.lq-block-dialogue').classes()).toContain('lq-speaking')
   })
 
-  it('marks and lights a clue failure, while a plain refusal stays unmarked', async () => {
+  it('reads a clue line aloud as narrator text, outside the failure box', async () => {
     const clueText = 'Something shiny.'
     const w = narrated(
       {
@@ -336,12 +349,15 @@ describe('StoryTurn while it is narrated', () => {
       recorded(clueText),
     )
     await vi.advanceTimersByTimeAsync(0)
-    const failures = w.findAll('.lq-block-failure')
-    expect(failures).toHaveLength(1)
-    expect(failures[0].classes()).toContain('lq-speaking')
+    expect(w.findAll('.lq-block-failure').map((f) => f.text())).not.toContain(
+      clueText,
+    )
+    const clue = w.find('.lq-block-text')
+    expect(clue.text()).toBe(clueText)
+    expect(clue.classes()).toContain('lq-speaking')
     audios[0].currentTime = 0.3
     await vi.advanceTimersByTimeAsync(60)
-    expect(failures[0].findAll('.lq-w-now').map((x) => x.text())).toEqual([
+    expect(clue.findAll('.lq-w-now').map((x) => x.text())).toEqual([
       'Something',
     ])
     expect(w.find('.lq-block-event').classes()).not.toContain('lq-speaking')

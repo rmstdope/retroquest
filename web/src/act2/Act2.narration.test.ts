@@ -46,10 +46,10 @@ function sources(dir: string): { file: string; text: string }[] {
   })
 }
 
-/** The kinds of the blocks that answer `command`; a narrated failure is a `clue`. */
+/** The kinds of the blocks that answer `command`; a clue line is a `clue`. */
 function kinds(game: Game, command: string): string[] {
   return parseTurn(game.commandParser.parse(command)).map((block) =>
-    block.kind === 'failure' && block.narrated ? 'clue' : block.kind,
+    block.kind === 'text' && block.clue ? 'clue' : block.kind,
   )
 }
 

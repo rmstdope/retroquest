@@ -322,7 +322,7 @@ describe('parseTurn', () => {
     expect(blocks).toEqual([{ kind: 'text', markup: '[name] [target]' }])
   })
 
-  it('marks a clue failure as narrated and drops the clue tags', () => {
+  it('makes a clue failure plain narration and drops its tags', () => {
     const blocks = parseTurn(
       '[event]You peer in.[/event]\n' +
         '[failure][clue]Something shiny.[/clue][/failure]\n' +
@@ -331,7 +331,7 @@ describe('parseTurn', () => {
 
     expect(blocks).toEqual([
       { kind: 'event', markup: 'You peer in.' },
-      { kind: 'failure', markup: 'Something shiny.', narrated: true },
+      { kind: 'text', markup: 'Something shiny.', clue: true },
       { kind: 'failure', markup: 'Nothing here.' },
     ])
   })

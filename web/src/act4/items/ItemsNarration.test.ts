@@ -206,12 +206,12 @@ describe('Act IV items narrate their effect', () => {
     expect(nonText(new VaultDoor().openWith(state))).toEqual([])
   })
 
-  it('reads the red boxes that say something and keeps no bare no among the items', () => {
+  it('reads the clue lines and keeps no bare no among the items', () => {
     const early = inRoom('MemoryVault')
     expect(parseTurn(new VaultDoor().openWith(early))).toEqual([
       {
-        kind: 'failure',
-        narrated: true,
+        kind: 'text',
+        clue: true,
         markup:
           "The door's runes stay dark under the amulet. The Shadow is still " +
           'watching you.',
@@ -221,8 +221,8 @@ describe('Act IV items narrate their effect', () => {
     const throne = inRoom('ThroneChamber')
     expect(parseTurn(new Wound().closeWithAmulet(throne))).toEqual([
       {
-        kind: 'failure',
-        narrated: true,
+        kind: 'text',
+        clue: true,
         markup:
           'Not yet. The wound is not yours to close while Malakar still ' +
           'waits for you.',
@@ -230,8 +230,8 @@ describe('Act IV items narrate their effect', () => {
     ])
     expect(parseTurn(new Wound().forgive(throne))).toEqual([
       {
-        kind: 'failure',
-        narrated: true,
+        kind: 'text',
+        clue: true,
         markup: 'Forgiveness has not been spoken yet.',
       },
     ])
@@ -240,8 +240,8 @@ describe('Act IV items narrate their effect', () => {
       parseTurn(new LifelightElixir().useWith(throne, new Mirrors())),
     ).toEqual([
       {
-        kind: 'failure',
-        narrated: true,
+        kind: 'text',
+        clue: true,
         markup: "The elixir is for the king's prison, or for Malakar's wound.",
       },
     ])

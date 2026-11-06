@@ -30,8 +30,8 @@ describe('Well', () => {
     well.containsRing = false
     const blocks = parseTurn(well.search(game.state))
     expect(blocks).toHaveLength(1)
-    expect(blocks[0].kind).toBe('failure')
-    expect(blocks[0]).toHaveProperty('narrated', true)
+    expect(blocks[0].kind).toBe('text')
+    expect(blocks[0]).toHaveProperty('clue', true)
     expect(well.search(game.state)).toContain(
       "It's too dark and unclear to see anything of interest.",
     )

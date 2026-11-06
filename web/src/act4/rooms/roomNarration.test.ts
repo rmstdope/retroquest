@@ -28,10 +28,10 @@ function newGame(): { game: Game; act: Act4 } {
   return { game: new Game([act]), act }
 }
 
-/** The block kinds of an answer, with a star on a read red box. */
+/** The block kinds of an answer, with `clue` for a clue line. */
 function shape(text: string | null): string[] {
   return parseTurn(text ?? '').map((b: TurnBlock) =>
-    b.kind === 'failure' && b.narrated ? 'failure*' : b.kind,
+    b.kind === 'text' && b.clue ? 'clue' : b.kind,
   )
 }
 
@@ -47,7 +47,7 @@ function only(text: string): string {
 }
 
 describe('Act IV rooms narrate their effect', () => {
-  it('every blocked way is a read red box, except the way home', () => {
+  it('every blocked way is a clue line, except the way home', () => {
     const { game, act } = newGame()
     const cases: [string, string | null][] = [
       [
@@ -98,7 +98,7 @@ describe('Act IV rooms narrate their effect', () => {
       ],
     ]
     for (const [name, answer] of cases) {
-      expect(shape(answer), name).toEqual(['failure*'])
+      expect(shape(answer), name).toEqual(['clue'])
     }
     const home = (act.rooms.WillowbrookField as WillowbrookField).blockedExit(
       game.state,
@@ -117,19 +117,19 @@ describe('Act IV rooms narrate their effect', () => {
   })
 
   describe('Fortress Gates', () => {
-    it('light with no target and on all three stones are read red boxes', () => {
+    it('light with no target and on all three stones are clue lines', () => {
       const { game, act } = newGame()
       const gates = act.rooms.FortressGates as FortressGates
-      expect(shape(gates.light(game.state))).toEqual(['failure*'])
-      expect(shape(gates.lightAllStones(game.state))).toEqual(['failure*'])
+      expect(shape(gates.light(game.state))).toEqual(['clue'])
+      expect(shape(gates.lightAllStones(game.state))).toEqual(['clue'])
     })
 
-    it('light on a wrong stone is a read red box', () => {
+    it('light on a wrong stone is a clue line', () => {
       const { game, act } = newGame()
       const gates = act.rooms.FortressGates as FortressGates
       expect(
         shape(gates.lightStone(game.state, new WardStone('left'))),
-      ).toEqual(['failure*'])
+      ).toEqual(['clue'])
     })
 
     it('light on the right stone is read, then the stones are plain dark runes', () => {
@@ -166,9 +166,9 @@ describe('Act IV rooms narrate their effect', () => {
       )
     })
 
-    it('a wrong turn is a read red box', () => {
+    it('a wrong turn is a clue line', () => {
       const { game } = inMaze()
-      expect(shape(game.move('north'))).toEqual(['failure*'])
+      expect(shape(game.move('north'))).toEqual(['clue'])
     })
 
     it('leaving south is a read retracing of steps', () => {
@@ -213,13 +213,13 @@ describe('Act IV rooms narrate their effect', () => {
       expect(shape(out)).not.toContain('event')
     })
 
-    it('the mask before the orbs are mended is a read red box', () => {
+    it('the mask before the orbs are mended is a clue line', () => {
       const { game, act } = newGame()
       const vault = act.rooms.MemoryVault as MemoryVault
       expect(parseTurn(vault.showMask(game.state))).toEqual([
         {
-          kind: 'failure',
-          narrated: true,
+          kind: 'text',
+          clue: true,
           markup: 'The Shadow cannot see the mask through the broken memories.',
         },
       ])
@@ -239,10 +239,10 @@ describe('Act IV rooms narrate their effect', () => {
   })
 
   describe('Outer Courtyard', () => {
-    it('blessing strangers is a read red box, the freeing is read', () => {
+    it('blessing strangers is a clue line, the freeing is read', () => {
       const { game, act } = newGame()
       const yard = act.rooms.OuterCourtyard as OuterCourtyard
-      expect(shape(yard.castBless(game.state))).toEqual(['failure*'])
+      expect(shape(yard.castBless(game.state))).toEqual(['clue'])
       game.state.setStoryFlag(FLAG_ACT4_SERVANTS_TRUST_EARNED, true)
       expect(shape(yard.castBless(game.state))).toEqual(['text'])
     })

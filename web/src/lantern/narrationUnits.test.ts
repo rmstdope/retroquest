@@ -28,8 +28,8 @@ function manifestOf(...lines: [string, string][]): NarrationManifest {
   return manifest
 }
 
-describe('turnUnits clue failures', () => {
-  it('voices a clue failure, and leaves the echo and a plain refusal silent', () => {
+describe('turnUnits clue lines', () => {
+  it('voices a clue line, and leaves the echo and a plain refusal silent', () => {
     const text =
       '[event]You peer in.[/event]\n' +
       '[failure][clue]Something shiny.[/clue][/failure]\n' +

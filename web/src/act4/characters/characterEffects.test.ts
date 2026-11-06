@@ -10,7 +10,7 @@ import { executeCommands } from '@/testing/gameHelpers'
 /** The kinds of the blocks that one answer is made of. */
 function kinds(answer: string): string[] {
   return parseTurn(answer).map((block) =>
-    block.kind === 'failure' && block.narrated ? 'clue' : block.kind,
+    block.kind === 'text' && block.clue ? 'clue' : block.kind,
   )
 }
 

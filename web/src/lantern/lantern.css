@@ -340,7 +340,6 @@ body {
 .lq-chapter-block.lq-speaking,
 .lq-block-text.lq-speaking,
 .lq-block-dialogue.lq-speaking,
-.lq-block-failure.lq-speaking,
 .lq-arrival.lq-speaking {
   box-shadow: inset var(--lq-rule-width, 2px) 0 0
     var(--lq-rule-colour, var(--lq-accent));
