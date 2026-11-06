@@ -36,9 +36,9 @@ export class River extends Item {
           '[item_name]fish[/item_name]!\nYou tuck it into your pack.'
         )
       }
-      return (
-        '[failure]You cast your line again. Nothing bites: the river gave ' +
-        'you one fish, and it will not give another.[/failure]'
+      return clue(
+        'Nothing bites. The river gave you one fish, and it will not ' +
+          'give another.',
       )
     }
     return super.useWith(gameState, other)
