@@ -39,7 +39,7 @@ export class Priest extends Character {
 
   /**
    * He gently gives any gift back; the rune token he reads as a mark cut
-   * for harm. The reply never names the item.
+   * for harm. Only the token's reply names what it is.
    */
   override giveItem(_gameState: GameState, item: Item): string {
     if (item instanceof RuneToken) {
@@ -51,7 +51,7 @@ export class Priest extends Character {
             'Whoever cut that meant harm by it, child. That is no mark the ' +
               'founders made.',
           ) +
-          ' He folds your fingers back over the cold iron. ' +
+          ' He hands it back by its edge, as he would a hot coal. ' +
           speech(
             'Keep it close, and pray you never meet the hand that made it.',
           ),

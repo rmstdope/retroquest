@@ -78,7 +78,7 @@ export class Villager extends Character {
 
   /**
    * She hands any gift back with a warning; the rune token she will not
-   * touch, and knocks on wood. The reply never names the item.
+   * touch, and knocks on wood. Only the token's reply names what it is.
    */
   override giveItem(_gameState: GameState, item: Item): string {
     if (item instanceof RuneToken) {

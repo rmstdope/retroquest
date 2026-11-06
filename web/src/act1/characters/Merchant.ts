@@ -192,14 +192,15 @@ export class Merchant extends Character {
     }
     if (item instanceof Coin) {
       return (
-        `The ${characterName(this.name)} closes your hand over it. ` +
+        `The ${characterName(this.name)} laughs and drops it back into your ` +
+        'palm. ' +
         speech('Keep your coin, friend. Coin I can earn anywhere.')
       )
     }
     if (item instanceof RuneToken) {
       return (
-        `The ${characterName(this.name)} takes his hand back before the ` +
-        'token can touch it. ' +
+        `The ${characterName(this.name)} looks at the token, and does not ` +
+        'reach for it. ' +
         speech(
           "No, friend. I've carried all sorts on the road, and never " +
             'anything that cold.',

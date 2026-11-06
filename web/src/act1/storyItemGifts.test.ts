@@ -19,6 +19,7 @@ import { Coin } from './items/Coin'
 import { Fish } from './items/Fish'
 import { RareFlower } from './items/RareFlower'
 import { RuneToken } from './items/RuneToken'
+import { Stick } from './items/Stick'
 
 const GRANDMOTHER_STOCK = 'My shelves are full enough.'
 const TILDA_STOCK = 'People will talk.'
@@ -113,7 +114,10 @@ describe('story items given in Willowbrook', () => {
       const who = person()
       const first = who.giveItem(game.state, gift)
       expect(first).not.toContain(stock)
-      expect(first).toContain('[character_name]')
+      // Not the answer the same person gives to clutter.
+      const stick = new Stick()
+      game.state.addItemToInventory(stick)
+      expect(first).not.toBe(who.giveItem(game.state, stick))
       expect(who.giveItem(game.state, gift)).toBe(first)
       expect(game.state.inventory).toContain(gift)
       expect(JSON.stringify(game.state.storyFlags)).toBe(flagsBefore)
