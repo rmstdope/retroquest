@@ -1,5 +1,5 @@
 /**
- * Act 1's story items handed to the people of Willowbrook (rq-nqk7): the
+ * Act 1's story items handed to the people of Willowbrook (rq-nqk7, rq-1jyd): the
  * amulet, the cursed rune token, the rare flower, a fish and a coin each get
  * an answer of their own from the people the bead names, never the stock
  * give-back line meant for clutter. The item stays with Elior and nothing
@@ -58,6 +58,36 @@ const CASES: [string, () => Character, () => Item, string][] = [
     () => new Grandmother(),
     () => new Coin(),
     GRANDMOTHER_STOCK,
+  ],
+  [
+    'the amulet to Tilda',
+    () => new Villager(),
+    () => new AncientAmulet(),
+    TILDA_STOCK,
+  ],
+  [
+    'the amulet to Hemlock',
+    () => new Shopkeeper(),
+    () => new AncientAmulet(),
+    HEMLOCK_STOCK,
+  ],
+  [
+    'the amulet to the fisherman',
+    () => new Fisherman(),
+    () => new AncientAmulet(),
+    FISHERMAN_STOCK,
+  ],
+  [
+    'the amulet to the priest',
+    () => new Priest(),
+    () => new AncientAmulet(),
+    PRIEST_STOCK,
+  ],
+  [
+    'the amulet to the merchant',
+    () => new Merchant(),
+    () => new AncientAmulet(),
+    MERCHANT_STOCK,
   ],
   [
     'the rune token to Tilda',

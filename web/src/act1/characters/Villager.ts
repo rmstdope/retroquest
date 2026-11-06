@@ -77,10 +77,27 @@ export class Villager extends Character {
   }
 
   /**
-   * She hands any gift back with a warning; the rune token she will not
-   * touch, and knocks on wood. Only the token's reply names what it is.
+   * She hands any gift back with a warning; Mira's amulet she will not take
+   * with floury hands and bids him hide, and the rune token she will not
+   * touch, and knocks on wood. Only those two replies name what they are.
    */
   override giveItem(_gameState: GameState, item: Item): string {
+    if (item instanceof AncientAmulet) {
+      return attributeSpeech(
+        this.name,
+        `${characterName(this.name)} keeps her floury hands behind her back. ` +
+          speech(
+            "Not with these, love. That's Mira's, and it's not for passing " +
+              'round the square.',
+          ) +
+          ' She lowers her voice. ' +
+          speech(
+            'There was a stranger asking after an old amulet. Keep that one ' +
+              'under your shirt.',
+          ) +
+          ' She knocks on the nearest wood, to be sure.',
+      )
+    }
     if (item instanceof RuneToken) {
       return attributeSpeech(
         this.name,

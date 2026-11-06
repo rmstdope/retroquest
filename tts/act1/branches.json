@@ -201,6 +201,7 @@
     {"after": 134, "commands": ["give rune token to priest"]},
     {"after": 136, "commands": ["give rune token to merchant"]},
     {"after": 143, "commands": ["go south", "go west", "give ancient amulet to grandmother"]},
+    {"after": 143, "commands": ["go south", "give ancient amulet to tilda", "go east", "give ancient amulet to hemlock", "go east", "give ancient amulet to priest", "go east", "give ancient amulet to merchant", "go west", "go west", "go south", "go west", "go south", "go south", "go east", "give ancient amulet to fisherman"]},
     {"after": 92, "commands": ["give matches to priest"]},
     {"after": 93, "commands": ["give matches to priest"]},
     {"after": 131, "commands": ["give shiny ring to grandmother", "go east", "go east", "go east", "cast bless", "go east", "give shiny ring to merchant", "go west", "go west", "go west", "go north", "give rune token to mira", "talk to mira", "go south", "go east", "go east", "go east", "use map"]},
