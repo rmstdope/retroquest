@@ -91,9 +91,15 @@ const paths = computed(() =>
 
 const map = ref<HTMLElement | null>(null)
 
+/**
+ * The places wait while the game is busy, and while the voice still reads the
+ * move that brought Elior here (the map shows the place he left until then).
+ */
+const busy = computed(() => !game.acceptInput || game.groupHeld('place'))
+
 /** Press a place: walk there, and the window closes. */
 function go(key: string): void {
-  if (!game.acceptInput) return
+  if (busy.value) return
   game.travelTo(key)
   emit('close')
 }
@@ -164,7 +170,7 @@ onMounted(() => {
             :data-place="box.name"
             :style="box.style"
             :aria-label="`Go to ${box.name}`"
-            :disabled="!game.acceptInput || !box.reachable"
+            :disabled="busy || !box.reachable"
             @click="go(box.key)"
           >
             <span class="lq-name" aria-hidden="true">{{ box.name }}</span>

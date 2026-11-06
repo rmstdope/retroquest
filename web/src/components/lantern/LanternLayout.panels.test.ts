@@ -163,6 +163,21 @@ describe('LanternLayout: panels wait for the narration', () => {
     await w.get('[data-bigger-map]').trigger('click')
     expect(document.querySelector('.lq-dialog-layer')).not.toBeNull()
     expect(useNarrationStore().isNarrating).toBe(true)
+    // The window shows the place the voice is still reading from, dimmed.
+    const places = [
+      ...document.querySelectorAll<HTMLButtonElement>('button.lq-place'),
+    ]
+    expect(places.length).toBeGreaterThan(0)
+    expect(places.every((p) => p.disabled)).toBe(true)
+    expect(
+      document.querySelector('[data-current="true"]')?.textContent,
+    ).toContain('Hall')
+    // Once the arrival is read the map catches up.
+    await vi.advanceTimersByTimeAsync(SCENE_PAUSE_MS)
+    expect(
+      document.querySelector('[data-current="true"]')?.textContent,
+    ).toContain('Garden')
+    expect(useGameStore().groupHeld('place')).toBe(false)
   })
 
   it('opens Story so far on the first press while the voice reads on', async () => {
