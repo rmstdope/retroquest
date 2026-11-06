@@ -166,7 +166,7 @@ describe('Grandmother and the journey', () => {
     const response = executeCommands(game, ['talk to grandmother'])
 
     expect(response).toContain("So it's true, then.")
-    expect(response).toContain('She turns the loaf on the board')
+    expect(response).toContain('She brushes flour from the board')
     expect(response).not.toContain('I knew this day would come')
     expect(response).toContain('Come back to me, child.')
     expect(response).not.toContain('warm and fed')
@@ -257,8 +257,8 @@ describe('Grandmother and the dream', () => {
     expect(response).toContain(
       'You tell her the three words you caught at the very end, the ones ' +
         'you wrote down before they could go: let them rest. She goes ' +
-        'quiet. She turns to the bread on the board and does not turn back ' +
-        'for a while.',
+        'quiet. She turns to the hearth, where the next loaf is rising, and ' +
+        'does not turn back for a while.',
     )
     expect(response).toContain('Some voices are older than memory.')
     expect(response).not.toContain('No. No, of course not.')
@@ -439,6 +439,27 @@ describe('Grandmother and what lies in the cottage', () => {
     expect(first).not.toContain('under your arm')
     expect(again).not.toContain('under your arm')
     expect(again).toContain('[item_name]journal[/item_name]')
+  })
+
+  it('turns to no loaf on the board over the dream once Elior has taken it', () => {
+    const game = cottageGame()
+    executeCommands(game, ['take bread', ...READ])
+
+    const response = executeCommands(game, ['talk to grandmother'])
+
+    expect(response).toContain('let them rest. She goes quiet.')
+    expect(response).not.toContain('on the board')
+  })
+
+  it('turns no loaf on the board in her farewell once the loaf is gone', () => {
+    const game = gameAfterMirasTeaching()
+    executeCommands(game, ['take bread', 'talk to grandmother'])
+    game.state.addItemToInventory(new AncientAmulet())
+
+    const response = executeCommands(game, ['talk to grandmother'])
+
+    expect(response).toContain("So it's true, then.")
+    expect(response).not.toContain('on the board')
   })
 
   it('offers the bread on the board while the loaf still lies there', () => {

@@ -153,8 +153,8 @@ export class Grandmother extends Character {
       ) +
       '\nYou tell her the three words you caught at the very end, the ones ' +
       'you wrote down before they could go: let them rest. She goes ' +
-      'quiet. She turns to the bread on the board and does not turn back ' +
-      'for a while. ' +
+      'quiet. She turns to the hearth, where the next loaf is rising, and ' +
+      'does not turn back for a while. ' +
       speech('Some voices are older than memory.')
     )
   }
@@ -199,7 +199,7 @@ export class Grandmother extends Character {
         'Her eyes fall on the [item_name]amulet[/item_name] you carry, and ' +
         'she goes very still. ' +
         speech("So it's true, then.") +
-        ' She turns the loaf on the board, though it does not need turning. ' +
+        ' She brushes flour from the board, though there is none to brush. ' +
         speech('Come back to me, child.')
       )
     }
