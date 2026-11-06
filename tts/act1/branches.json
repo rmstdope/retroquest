@@ -190,5 +190,7 @@
     {"after": 133, "commands": ["give rune token to hemlock"]},
     {"after": 134, "commands": ["give rune token to priest"]},
     {"after": 136, "commands": ["give rune token to merchant"]},
-    {"after": 143, "commands": ["go south", "go west", "give ancient amulet to grandmother"]}
+    {"after": 143, "commands": ["go south", "go west", "give ancient amulet to grandmother"]},
+    {"after": 92, "commands": ["give matches to priest"]},
+    {"after": 93, "commands": ["give matches to priest"]}
 ]

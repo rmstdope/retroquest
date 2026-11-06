@@ -2755,6 +2755,16 @@
     "text": "A match flares at the corner and gutters out before the dark gives anything back. It wants a light that stays."
   },
   {
+    "id": "0f3c2d63e6eaaa",
+    "speaker": "narrator",
+    "text": "The priest turns the box over once, smiling, and presses it back into your hand."
+  },
+  {
+    "id": "076bad59847d28",
+    "speaker": "priest",
+    "text": "Bless you, child. Will you light it for me? My hands shake more than the flame likes."
+  },
+  {
     "id": "013aaa55350b1c",
     "speaker": "narrator",
     "text": "The candle now casts a warm glow. The flickering candlelight reveals a locket that was previously unseen!"
@@ -2763,6 +2773,21 @@
     "id": "08a13e79ccfb3f",
     "speaker": "narrator",
     "text": "The candle is lit, and in the dark corner by the altar its light found a locket."
+  },
+  {
+    "id": "1b638fc2669e8c",
+    "speaker": "narrator",
+    "text": "The priest glances at the candle burning by the altar and closes your hand around the box."
+  },
+  {
+    "id": "0dbc8b71a30632",
+    "speaker": "priest",
+    "text": "The candle is lit, child, and that was your doing. Keep them."
+  },
+  {
+    "id": "1d743b29f3bb45",
+    "speaker": "narrator",
+    "text": "A small stone chapel at the end of the village lane. Its stained glass windows cast colours across the worn pews, and the air is cool and smells of candle wax. A kindly priest tends the altar. By the door the bell rope hangs straight and still. Over the door a shape is cut into the stone, worn almost smooth. The candle burns on the altar, and the corner beside it is dark no longer."
   },
   {
     "id": "1f753ab98e262f",
@@ -2788,11 +2813,6 @@
     "id": "025ee993cf1408",
     "speaker": "priest",
     "text": "Look there, child. The light has found something."
-  },
-  {
-    "id": "1d743b29f3bb45",
-    "speaker": "narrator",
-    "text": "A small stone chapel at the end of the village lane. Its stained glass windows cast colours across the worn pews, and the air is cool and smells of candle wax. A kindly priest tends the altar. By the door the bell rope hangs straight and still. Over the door a shape is cut into the stone, worn almost smooth. The candle burns on the altar, and the corner beside it is dark no longer."
   },
   {
     "id": "1ac4291eb09877",
