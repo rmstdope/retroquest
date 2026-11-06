@@ -205,3 +205,49 @@ describe('Old saves', () => {
     expect(counts).toHaveLength(5)
   })
 })
+
+describe('Scenery that agrees with its room', () => {
+  it('shed boards: no light comes through them, as the room says', () => {
+    const game = gameIn('AbandonedShed')
+    expect(game.state.currentRoom.descriptionFor(game.state)).toContain(
+      'no light gets past the grimy boards',
+    )
+    const boards = say(game, 'examine boards')
+    expect(boards).not.toMatch(/light comes through/i)
+    expect(boards).toBe(
+      'Grey boards, warped and grimy, ' +
+        'and nailed so close that hardly a crack shows between them.',
+    )
+  })
+
+  it('mill gears: still while the sails turn, because the shaft misses them', () => {
+    const game = gameIn('OldMill')
+    expect(game.state.currentRoom.descriptionFor(game.state)).toContain(
+      'its sails turning slowly in the breeze',
+    )
+    expect(say(game, 'examine gears')).toBe(
+      'Wooden gears, furred with dust and cobwebs. ' +
+        'The shaft from the sails turns above them and never meets them, ' +
+        "and they don't move; the whirring comes from the iron thing among them.",
+    )
+    const mech = game.state.currentRoom.items.find(
+      (i) => i instanceof Mechanism,
+    ) as Mechanism
+    mech.repaired = true
+    expect(say(game, 'examine gears')).toBe(
+      'Wooden gears, furred with dust. ' +
+        'The shaft from the sails turns above them and never meets them. ' +
+        'The mill is quiet now.',
+    )
+  })
+
+  it('dream: the man, the child and the shadows each read as themselves', () => {
+    const game = gameIn('TheDream')
+    const man = say(game, 'examine man')
+    expect(man).not.toContain('no face')
+    expect(man).toContain('hand')
+    expect(say(game, 'examine hand')).toBe(man)
+    expect(say(game, 'examine child')).toContain('Gone with him')
+    expect(say(game, 'examine shadows')).toContain('like smoke')
+  })
+})

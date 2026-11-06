@@ -302,6 +302,29 @@ export const SCENERY_BY_ROOM: Record<string, SceneryDef[]> = {
           'A folded blanket lies at one end, with cat hair on it.',
     ),
   ],
+  TheDream: [
+    plain(
+      'TheDream.shadows',
+      'shadows',
+      [],
+      'They drift past like smoke, and your hand goes through them. ' +
+        'The tall figure does not drift with them.',
+    ),
+    plain(
+      'TheDream.man',
+      'man',
+      ['hand'],
+      'He is gone. You saw only his hand, ' +
+        'and how carefully it lifted the child.',
+    ),
+    plain(
+      'TheDream.child',
+      'child',
+      [],
+      'Gone with him, into the dark. ' +
+        'It was small enough to hold against a shoulder, and it did not cry.',
+    ),
+  ],
   VillageWell: [
     plain(
       'VillageWell.moss',
@@ -316,7 +339,8 @@ export const SCENERY_BY_ROOM: Record<string, SceneryDef[]> = {
       'AbandonedShed.boards',
       'boards',
       [],
-      'Grey boards, warped and grimy. Light comes through the cracks in thin lines.',
+      'Grey boards, warped and grimy, ' +
+        'and nailed so close that hardly a crack shows between them.',
     ),
     plain(
       'AbandonedShed.workbench',
@@ -361,9 +385,12 @@ export const SCENERY_BY_ROOM: Record<string, SceneryDef[]> = {
     ),
     staged('OldMill.gears', 'gears', ['cobwebs'], (gs) =>
       mechanismJammed(gs)
-        ? 'Wooden gears, furred with dust. The mill is quiet now.'
-        : "Wooden gears, furred with dust and cobwebs. They don't move; " +
-          'the whirring comes from the iron thing among them.',
+        ? 'Wooden gears, furred with dust. ' +
+          'The shaft from the sails turns above them and never meets them. ' +
+          'The mill is quiet now.'
+        : 'Wooden gears, furred with dust and cobwebs. ' +
+          'The shaft from the sails turns above them and never meets them, ' +
+          "and they don't move; the whirring comes from the iron thing among them.",
     ),
     plain(
       'OldMill.millstone',

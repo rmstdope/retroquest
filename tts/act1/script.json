@@ -25,6 +25,21 @@
     "text": "It is dark, and it is raining hard. You hear it beating on shutters, though you cannot see any. Thunder breaks so close that the dark shakes with it. Shadows drift past like smoke. A man’s hand reaches out of the dark, lifts a child and holds it against his shoulder, and then both of them are gone. Somewhere a slow tune climbs three notes and settles home again. A tall figure stands among the shadows. It has no face you can find. It is too far away to reach, and too close to be only a dream. It is whispering, at the very edge of hearing, and what it whispers is your name."
   },
   {
+    "id": "039b782d29ebe8",
+    "speaker": "narrator",
+    "text": "They drift past like smoke, and your hand goes through them. The tall figure does not drift with them."
+  },
+  {
+    "id": "10a079820a3ec5",
+    "speaker": "narrator",
+    "text": "He is gone. You saw only his hand, and how carefully it lifted the child."
+  },
+  {
+    "id": "0c22f656ae3349",
+    "speaker": "narrator",
+    "text": "Gone with him, into the dark. It was small enough to hold against a shoulder, and it did not cry."
+  },
+  {
     "id": "136e4c997d932c",
     "speaker": "narrator",
     "text": "You answer it. You do not know with what: your own name back, or the question under it."
@@ -1140,9 +1155,9 @@
     "text": "It's a sturdy wooden door, locked tight. There's a keyhole visible."
   },
   {
-    "id": "0ce6a2cd855e28",
+    "id": "06f9af686e26e3",
     "speaker": "narrator",
-    "text": "Grey boards, warped and grimy. Light comes through the cracks in thin lines."
+    "text": "Grey boards, warped and grimy, and nailed so close that hardly a crack shows between them."
   },
   {
     "id": "049507346fab7e",
@@ -1745,9 +1760,9 @@
     "text": "The sails turn slowly. One is torn, and it slaps on every turn."
   },
   {
-    "id": "19c84fa76f03b5",
+    "id": "0f6310c32b666f",
     "speaker": "narrator",
-    "text": "Wooden gears, furred with dust and cobwebs. They don't move; the whirring comes from the iron thing among them."
+    "text": "Wooden gears, furred with dust and cobwebs. The shaft from the sails turns above them and never meets them, and they don't move; the whirring comes from the iron thing among them."
   },
   {
     "id": "021ef9030173a4",
@@ -1785,9 +1800,9 @@
     "text": "The strange mechanism stands jammed with a rope, its gears locked and its whirring stilled. The floor no longer hums beneath it. A compartment hangs open."
   },
   {
-    "id": "19f80a5cde9e85",
+    "id": "183cf4431ff93f",
     "speaker": "narrator",
-    "text": "Wooden gears, furred with dust. The mill is quiet now."
+    "text": "Wooden gears, furred with dust. The shaft from the sails turns above them and never meets them. The mill is quiet now."
   },
   {
     "id": "10c5fb298c3e23",
@@ -3600,9 +3615,9 @@
     "text": "You'll want news, if you're bound for Greendale. It's a sombre city this season: they say King Alden has fallen ill, and no physician can name the sickness. And the roads have gone bad besides. I passed a cart on its side by the hill road, and nobody with it. And it's not only your fields that are failing. I've seen crops gone grey in every valley from here to the capital, ever since the king took to his bed. Keep to the daylight, friend. Boots, friend? I've one good pair of wandering boots left, walked in and soft, and the soles will outlast you. I'll not take coin for them; coin I can earn anywhere. Something small and fine would buy them. A ring, say. Failing that, my old mare threw a shoe on the hill road; a good iron horseshoe would do me nearly as well. Forgive me if I'm short, friend. I've not eaten since the hill road, and there's no inn this side of Greendale."
   },
   {
-    "id": "1fb285babc0d61",
+    "id": "0750595b52d3ff",
     "speaker": "narrator",
-    "text": "A travelling merchant with a loaded cart and a thin grey mare who stands on three good shoes. He has the look of a man two days from his last meal."
+    "text": "A travelling merchant with a half-empty cart and a thin grey mare who stands on three good shoes. He has the look of a man two days from his last meal."
   },
   {
     "id": "17ca10006970d9",

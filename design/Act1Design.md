@@ -72,8 +72,8 @@
 ### 0. The Dream
 
 - **Description:** Where the game opens. Dark, with a storm in it: rain against shutters Elior cannot see, thunder that shakes the dark, shadows moving like smoke. A man's hand lifts a child out of the dark and holds it against a shoulder. A slow tune climbs three notes and settles home again. A tall figure without a face whispers Elior's name.
-- **Items:** none. Elior carries nothing in the dream.
-- **Characters:** the voice (answers to voice, figure, shadow, stranger, man). Talking to it, or saying anything to it, ends the dream: the whisper says "…let them rest…" and his name, and Elior wakes in Elior's Cottage with the tune still going out by the hearth, where Grandmother is humming it. The voice stays in the dream.
+- **Items:** nothing to carry. The shadows, the man (also _hand_) and the child can be examined, each as itself; Elior carries nothing in the dream.
+- **Characters:** the voice (answers to voice, figure, shadow, stranger; not to man, who is the dream's own scenery). Talking to it, or saying anything to it, ends the dream: the whisper says "…let them rest…" and his name, and Elior wakes in Elior's Cottage with the tune still going out by the hearth, where Grandmother is humming it. The voice stays in the dream.
 - **Exits:** none. Going any way, resting, searching or calling any other name keeps him in the dream with a line of its own; `listen` hears the storm, the tune and the name. Once he wakes the dream is not on the map, and _Know your village_ does not count it.
 
 ### 1. Elior’s Cottage
