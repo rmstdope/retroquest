@@ -7,6 +7,7 @@ import { Candle } from './Candle'
 import { DullKnife } from './DullKnife'
 import { ExtendedMagneticFishingRod } from './ExtendedMagneticFishingRod'
 import { FishingRod } from './FishingRod'
+import { Key } from './Key'
 import { Lantern } from './Lantern'
 import { Magnet } from './Magnet'
 import { Matches } from './Matches'
@@ -18,7 +19,6 @@ import { RustyHoe } from './RustyHoe'
 import { RustySaw } from './RustySaw'
 import { SharpKnife } from './SharpKnife'
 import { Stick } from './Stick'
-import { Key } from './Key'
 import { Well } from './Well'
 
 /**
@@ -466,6 +466,20 @@ describe('more natural tries at Act I puzzles', () => {
       const text = executeCommands(game, [command])
       expect(text).toContain('you feel a tug and reel in a plump')
       expect(game.state.hasItem('fish')).toBe(true)
+    },
+  )
+
+  it.each(['use fishing rod with reeds', 'use fishing rod'])(
+    'says the river gives no second fish on %s',
+    (command) => {
+      const game = atTheRiver(true)
+      executeCommands(game, ['use fishing rod with river'])
+      expect(executeCommands(game, [command])).toBe(
+        clue(
+          'Nothing bites. The river gave you one fish, and it will not ' +
+            'give another.',
+        ),
+      )
     },
   )
 

@@ -20,7 +20,6 @@ import { Key } from './Key'
 import { Lantern } from './Lantern'
 import { Matches } from './Matches'
 import { Mechanism } from './Mechanism'
-import { River } from './River'
 import { Rope } from './Rope'
 import { RustyHoe } from './RustyHoe'
 import { RustySaw } from './RustySaw'
@@ -197,11 +196,7 @@ function hoeDigs(gameState: GameState, item: Item): string {
  * the fish hide.
  */
 function reedsUseFrom(gameState: GameState, item: Item): string {
-  if (!(item instanceof FishingRod)) return ''
-  const river = gameState.currentRoom.items.find(
-    (thing) => thing instanceof River,
-  )
-  return river ? river.useWith(gameState, item) : ''
+  return item instanceof FishingRod ? item.use(gameState) : ''
 }
 
 /** The refrain carved on the glade's stone, word for word. */
