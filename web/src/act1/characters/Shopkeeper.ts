@@ -38,6 +38,9 @@ function coins(price: number): string {
   return price === 1 ? 'coin' : 'coins'
 }
 
+/** The byword for Malakar, said anywhere in the words. */
+const MALAKAR = /malakar/i
+
 /**
  * Old Man Hemlock, the shopkeeper of Willowbrook's General Store.
  *
@@ -595,7 +598,7 @@ export class Shopkeeper extends Character {
    * every state of the store; any other word gets his turn-taking answers.
    */
   override sayTo(gameState: GameState, words: string): string {
-    if (!/malakar/i.test(words)) return super.sayTo(gameState, words)
+    if (!MALAKAR.test(words)) return super.sayTo(gameState, words)
     return attributeSpeech(
       this.name,
       `${this.nameInSentence({ atStart: true })} raps the counter twice with his knuckles. ` +

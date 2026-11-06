@@ -13,7 +13,7 @@ export interface CharacterOptions {
 export class Character {
   name: string
   description: string
-  /** How many unknown words the character has answered; absent in older saves. */
+  /** The index of the answer to give next to an unknown word; absent in older saves. */
   unknownWordTurn?: number
 
   constructor({ name, description }: CharacterOptions) {

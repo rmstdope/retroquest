@@ -67,8 +67,8 @@ export class Deer extends Character {
   /** The deer answers a word with two wordless moments, in turn. */
   protected override unknownWordAnswers(): readonly string[] {
     return [
-      `The ${characterName(this.name)} watches you, ears forward, and does not answer, not in words.`,
-      `The ${characterName(this.name)} lowers its head to the grass, then lifts it again to look at you.`,
+      `${this.nameInSentence({ atStart: true })} watches you, ears forward, and does not answer, not in words.`,
+      `${this.nameInSentence({ atStart: true })} lowers its head to the grass, then lifts it again to look at you.`,
     ]
   }
 }

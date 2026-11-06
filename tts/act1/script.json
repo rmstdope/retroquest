@@ -895,6 +895,51 @@
     "text": "No sign of Patches, then. I put a saucer out every night, near the old well where she was last seen. It's always still full in the morning. The store stays shut till she's home, lad."
   },
   {
+    "id": "0839d66fd8ca5d",
+    "speaker": "elior",
+    "text": "zork"
+  },
+  {
+    "id": "0a8eefa3c1935b",
+    "speaker": "narrator",
+    "text": "Tilda cocks her head."
+  },
+  {
+    "id": "1a5c2c34384d9c",
+    "speaker": "tilda",
+    "text": "That's a new one on me, love, and I hear everything in this square."
+  },
+  {
+    "id": "186ac889011508",
+    "speaker": "elior",
+    "text": "quux"
+  },
+  {
+    "id": "0834e092546ce0",
+    "speaker": "narrator",
+    "text": "Tilda laughs."
+  },
+  {
+    "id": "06c1c8c52a024c",
+    "speaker": "tilda",
+    "text": "Whatever that means, love, nobody's told me, and that's a first."
+  },
+  {
+    "id": "1ea121b2bccd2f",
+    "speaker": "elior",
+    "text": "malakar"
+  },
+  {
+    "id": "14712adbad5179",
+    "speaker": "narrator",
+    "text": "Tilda knocks on the nearest bit of wood, quick, the way her mother did."
+  },
+  {
+    "id": "0329cd9f132a75",
+    "speaker": "tilda",
+    "text": "Hush, love. Not out loud, not with the fields the way they are."
+  },
+  {
     "id": "11ff5e8e067f69",
     "speaker": "narrator",
     "text": "A wooden bucket with a rope handle."
@@ -1033,6 +1078,26 @@
     "id": "015d02c84a6444",
     "speaker": "borin",
     "text": "Can't melt it, can't mend it. No use to me, lad."
+  },
+  {
+    "id": "0065faa20bb5e8",
+    "speaker": "narrator",
+    "text": "Borin doesn't stop hammering."
+  },
+  {
+    "id": "04adba89654611",
+    "speaker": "borin",
+    "text": "Can't hear a word over this, lad. If it's got an edge, bring it here."
+  },
+  {
+    "id": "0a8ad721671d93",
+    "speaker": "narrator",
+    "text": "Borin lowers the hammer for a moment."
+  },
+  {
+    "id": "15e5a1228a3272",
+    "speaker": "borin",
+    "text": "Words aren't my trade, lad. Iron is."
   },
   {
     "id": "0b7c094082210e",
@@ -1480,6 +1545,26 @@
     "text": "I have no need for this, child."
   },
   {
+    "id": "03b2a91ae4d914",
+    "speaker": "narrator",
+    "text": "Mira glances up from the herbs, and back down."
+  },
+  {
+    "id": "011cc4d2928345",
+    "speaker": "mira",
+    "text": "Not a word I know, Elior."
+  },
+  {
+    "id": "0b3681cd475072",
+    "speaker": "narrator",
+    "text": "Mira ties off a bundle of sage before she answers."
+  },
+  {
+    "id": "08bf54881901da",
+    "speaker": "mira",
+    "text": "If it matters, you'll tell me what it means."
+  },
+  {
     "id": "0fe509c70e418d",
     "speaker": "narrator",
     "text": "A bundle of green herbs, tied with thread. Mira's hut smells of them."
@@ -1593,6 +1678,36 @@
     "id": "00a4c4d212e8de",
     "speaker": "narrator",
     "text": "It looks like it would provide good protection if worn."
+  },
+  {
+    "id": "0e1f2012f63bb1",
+    "speaker": "narrator",
+    "text": "Hemlock scratches his chin."
+  },
+  {
+    "id": "18d83d99e911e1",
+    "speaker": "hemlock",
+    "text": "Can't say I follow you, lad."
+  },
+  {
+    "id": "04b5623889f63f",
+    "speaker": "narrator",
+    "text": "Hemlock glances at the door, then back at you."
+  },
+  {
+    "id": "0844ab18a2255f",
+    "speaker": "hemlock",
+    "text": "Means nothing to me, lad. Sorry."
+  },
+  {
+    "id": "091bea33b2d36f",
+    "speaker": "narrator",
+    "text": "Hemlock raps the counter twice with his knuckles."
+  },
+  {
+    "id": "1ddc73e1fcdbbd",
+    "speaker": "hemlock",
+    "text": "Not under this roof, lad. We've had luck enough this year."
   },
   {
     "id": "14455f0f284f29",
@@ -1863,6 +1978,26 @@
     "id": "08d85789dda6e1",
     "speaker": "narrator",
     "text": "You have a rod, but you're not quite sure how to fish effectively yet. Perhaps someone could teach you."
+  },
+  {
+    "id": "1cad0bd5555486",
+    "speaker": "narrator",
+    "text": "The fisherman keeps his eyes on the water."
+  },
+  {
+    "id": "1335e5c273bb29",
+    "speaker": "fisherman",
+    "text": "Keep your voice down, lad. You'll put the fish off."
+  },
+  {
+    "id": "14dbe48f97a24d",
+    "speaker": "narrator",
+    "text": "The fisherman shrugs."
+  },
+  {
+    "id": "1fa040d88b0db9",
+    "speaker": "fisherman",
+    "text": "Never heard it, lad. Ask the river."
   },
   {
     "id": "1fbe63de89a20b",
@@ -2313,6 +2448,16 @@
     "id": "151fa6d37c2090",
     "speaker": "narrator",
     "text": "You rest a while. Birds, the grey grass, a stone you cannot read. Nothing comes. You catch yourself watching the brambles for it, whatever it is."
+  },
+  {
+    "id": "0fafb61cce6598",
+    "speaker": "narrator",
+    "text": "The deer watches you, ears forward, and does not answer, not in words."
+  },
+  {
+    "id": "052eed951d110a",
+    "speaker": "narrator",
+    "text": "The deer lowers its head to the grass, then lifts it again to look at you."
   },
   {
     "id": "173eaeef97cb8d",
