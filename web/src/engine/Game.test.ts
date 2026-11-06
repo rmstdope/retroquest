@@ -1094,8 +1094,26 @@ describe('Game', () => {
       game.state.inventory.push(item('apple'))
       game.state.knownSpells.push(new EchoSpell('light'))
       expect(game.give('the apple to villager')).toBe('Given: apple')
-      expect(game.cast('light on the chest')).not.toContain('[failure]')
+      expect(game.cast('light on the chest')).toBe(
+        '[event]You cast [spell_name]light[/spell_name] on ' +
+          '[item_name]chest[/item_name].[/event]',
+      )
       expect(game.open('the chest')).toBe('Opened: chest')
+    })
+
+    it('reaches the name through buy, an unheld gift and a spell cast on a name', () => {
+      const merchant = character('Merchant')
+      merchant.buyItem = (_state, name) => `Sold: ${name}`
+      merchant.giveUnheld = (_state, name) =>
+        name === 'patches' ? 'Took: patches' : null
+      rooms.EliorsCottage.addCharacter(merchant)
+      const grow = new EchoSpell('grow')
+      grow.castOnName = (_state, name) =>
+        name === 'field' ? 'Grown: field' : null
+      game.state.knownSpells.push(grow)
+      expect(game.buy('the rope from merchant')).toBe('Sold: rope')
+      expect(game.give('the patches to merchant')).toBe('Took: patches')
+      expect(game.cast('grow on the field')).toBe('Grown: field')
     })
 
     it('still finds an item whose own name begins with "the"', () => {

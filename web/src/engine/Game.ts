@@ -710,13 +710,16 @@ Welcome to
     const item = this.findItem(itemName, { room: false })
     if (!item) {
       return (
-        character.giveUnheld(this.state, itemName) ??
+        this.byName(itemName, (name) =>
+          character.giveUnheld(this.state, name),
+        ) ??
         `[failure]You don't have ${indefiniteArticle(itemName)} '${itemName}' to give.[/failure]`
       )
     }
     return character.giveItem(this.state, item)
   }
 
+  /** "buy <item> from <character>"; the seller hears the item without a leading "the". */
   buy(args: string): string {
     const split = this.splitCommand(args, 'buy', 'from')
     if (typeof split === 'string') return split
@@ -725,7 +728,21 @@ Welcome to
     if (!character) {
       return `[failure]There is no character named '${capitalize(characterName)}' here.[/failure]`
     }
-    return character.buyItem(this.state, itemName)
+    return character.buyItem(this.state, withoutArticle(itemName) ?? itemName)
+  }
+
+  /**
+   * What `answer` says for the name as typed or, when that is null, for the
+   * name without a leading "the"; null when neither answers.
+   */
+  private byName(
+    name: string,
+    answer: (name: string) => string | null,
+  ): string | null {
+    const typed = answer(name)
+    if (typed !== null) return typed
+    const bare = withoutArticle(name)
+    return bare === null ? null : answer(bare)
   }
 
   /** Use an item, alone or with another item or a character. */
@@ -779,7 +796,9 @@ Welcome to
         spell.castOnCharacter(this.state, character)
       )
     }
-    const named = spell.castOnName(this.state, targetName)
+    const named = this.byName(targetName, (name) =>
+      spell.castOnName(this.state, name),
+    )
     if (named !== null) return named
     return (
       `[failure]You don't see a '${targetName}' to cast ` +
