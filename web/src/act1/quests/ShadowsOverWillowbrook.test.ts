@@ -242,6 +242,35 @@ describe('Shadows over Willowbrook log', () => {
     )
   })
 
+  it('does not say Mira wants the flower when she already has it', () => {
+    const game = new Game([new Act1()])
+    const quest = new ShadowsOverWillowbrookQuest()
+    game.state.setStoryFlag(FLAG_INVESTIGATED_WITHERED_CROPS, true)
+    game.state.setStoryFlag(FLAG_MAGIC_FULLY_UNLOCKED, true)
+    quest.checkUpdate(game.state)
+    game.state.setStoryFlag(FLAG_VILLAGER_TALKED_TO, true)
+    game.state.setStoryFlag(FLAG_WELL_EXAMINED, true)
+    game.state.setStoryFlag(FLAG_CONNECT_WITH_NATURE, true)
+    quest.checkUpdate(game.state)
+
+    const earlier = (quest.earlierStages ?? []).join('')
+    expect(earlier).toContain('one wound.')
+    expect(earlier).not.toContain('She wants a rare flower')
+  })
+
+  it('still records Mira asking for the flower when the signs come first', () => {
+    const game = new Game([new Act1()])
+    const quest = new ShadowsOverWillowbrookQuest()
+    game.state.setStoryFlag(FLAG_CONNECT_WITH_NATURE, true)
+    quest.checkUpdate(game.state)
+    game.state.setStoryFlag(FLAG_MAGIC_FULLY_UNLOCKED, true)
+    quest.checkUpdate(game.state)
+
+    expect((quest.earlierStages ?? []).join('')).toContain(
+      'She wants a rare flower',
+    )
+  })
+
   it('turns the hint toward the map once everything is done and Elior is on the road', () => {
     const game = new Game([new Act1()])
     executeCommands(game, ACT1_GOLDEN_PATH)
