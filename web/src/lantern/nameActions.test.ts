@@ -52,10 +52,15 @@ describe('nameActions', () => {
   })
 
   it('knows an item named in the plural', () => {
-    expect(nameActions('item', 'chickens', HERE)[0]).toEqual({
-      label: 'Take',
-      command: 'take chicken',
-    })
+    expect(nameActions('item', 'chickens', HERE).map((a) => a.command)).toEqual(
+      [
+        'take chicken',
+        'use chicken',
+        'open chicken',
+        'close chicken',
+        'examine chicken',
+      ],
+    )
   })
 
   it('offers giving something from the bag and casting a spell on a character', () => {
