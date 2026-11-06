@@ -102,6 +102,22 @@ describe("General Store room text after Hemlock's last rope (rq-25qz)", () => {
     )
   })
 
+  it('stops putting rope beside the trinkets once the rope is sold', () => {
+    const game = new Game([new Act1()])
+    game.state.currentRoom = game.state.allRooms.GeneralStore
+    game.state.setStoryFlag(FLAG_PATCHES_RETURNED, true)
+    expect(game.commandParser.parse('examine shelves')).toContain(
+      'Between the rope and the apples',
+    )
+    game.state.addItemToInventory(new Coin())
+    game.commandParser.parse('buy rope from shopkeeper')
+
+    const line = game.commandParser.parse('examine shelves')
+
+    expect(line).toContain('Beside the apples sit trinkets')
+    expect(line).not.toMatch(/rope/i)
+  })
+
   it('still names the rope while it is on the shelf', () => {
     expect(storeText(FLAG_PATCHES_RETURNED)).toContain(
       'Rope, apples and trinkets',

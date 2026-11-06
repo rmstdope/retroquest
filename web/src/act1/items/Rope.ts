@@ -10,6 +10,14 @@ export class Rope extends Item {
     })
   }
 
+  /**
+   * Whether `item` is Hemlock's rope on display in his store: a rope Elior
+   * may not carry, never one he bought or was given and dropped there.
+   */
+  static isOnDisplay(item: Item): boolean {
+    return item instanceof Rope && !item.canBeCarried
+  }
+
   /** Shopkeeper prevents taking the rope unless it has been purchased. */
   override preventPickup(): string {
     if (!this.canBeCarried) {

@@ -19,6 +19,7 @@ import { Key } from './Key'
 import { Lantern } from './Lantern'
 import { Matches } from './Matches'
 import { Mechanism } from './Mechanism'
+import { Rope } from './Rope'
 import { RustyHoe } from './RustyHoe'
 import { RustySaw } from './RustySaw'
 import { SharpKnife } from './SharpKnife'
@@ -71,6 +72,12 @@ function staged(
 function shedOpen(gameState: GameState): boolean {
   const shed: Room | null = gameState.getRoom('Abandoned Shed')
   return shed !== null && 'locked' in shed && shed.locked === false
+}
+
+/** Whether Hemlock's one rope is still on his shelf, read without importing the room. */
+function ropeOnShelf(gameState: GameState): boolean {
+  const store: Room | null = gameState.getRoom('General Store')
+  return store !== null && store.items.some((item) => Rope.isOnDisplay(item))
 }
 
 /** Whether the key has fallen from the coop's rafter. */
@@ -322,11 +329,15 @@ export const SCENERY_BY_ROOM: Record<string, SceneryDef[]> = {
     ),
   ],
   GeneralStore: [
-    plain(
+    staged(
       'GeneralStore.trinkets',
       'trinkets',
       ['shelves'],
-      'Between the rope and the apples sit trinkets nobody has bought in years: ' +
+      (gs) =>
+        (ropeOnShelf(gs)
+          ? 'Between the rope and the apples sit trinkets '
+          : 'Beside the apples sit trinkets ') +
+        'nobody has bought in years: ' +
         'a brass bell, a doll with one shoe, a tin of buttons.',
     ),
     plain(

@@ -100,9 +100,7 @@ export class GeneralStore extends Room {
    * named on the shelves only while Hemlock's rope is still on display there.
    */
   override descriptionFor(gameState: GameState): string {
-    const shelves = this.items.some(
-      (item) => item instanceof Rope && !item.canBeCarried,
-    )
+    const shelves = this.items.some((item) => Rope.isOnDisplay(item))
       ? SHELVES_WITH_ROPE
       : SHELVES_WITHOUT_ROPE
     const catHome = gameState.getStoryFlag(FLAG_PATCHES_RETURNED)

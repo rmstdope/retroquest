@@ -449,13 +449,10 @@ export class Shopkeeper extends Character {
 
   /**
    * Take his one rope off the shelf once it is gone, so the store no longer
-   * offers it: the rope on display is the one Elior may not carry, never one
-   * he bought or was given and dropped here.
+   * offers it (`Rope.isOnDisplay`).
    */
   private static clearShelfRope(room: Room): void {
-    room.items = room.items.filter(
-      (item) => !(item instanceof Rope && !item.canBeCarried),
-    )
+    room.items = room.items.filter((item) => !Rope.isOnDisplay(item))
   }
 
   /**
