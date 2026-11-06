@@ -2,6 +2,7 @@ import { Item, type GameState, clue } from '@/engine'
 import { DullKnife } from './DullKnife'
 import { ExtendedMagneticFishingRod } from './ExtendedMagneticFishingRod'
 import { FishingRod } from './FishingRod'
+import { Magnet } from './Magnet'
 import { MagneticFishingRod } from './MagneticFishingRod'
 import { MillstoneFragment } from './MillstoneFragment'
 import { Rope } from './Rope'
@@ -88,7 +89,8 @@ export class Mechanism extends Item {
 
   /**
    * The near misses: a rod's line is too fine for the gears and a knife only
-   * skitters off them, which points at something thicker threaded through.
+   * skitters off them, which points at something thicker threaded through;
+   * the magnet holds to the iron and the gears turn on beside it.
    * Once jammed, any of them meets the jammed gears.
    */
   override answerUseFrom(_gameState: GameState, item: Item): string {
@@ -97,7 +99,8 @@ export class Mechanism extends Item {
       item instanceof MagneticFishingRod ||
       item instanceof ExtendedMagneticFishingRod
     const knife = item instanceof DullKnife || item instanceof SharpKnife
-    if (!rod && !knife) return ''
+    const magnet = item instanceof Magnet
+    if (!rod && !knife && !magnet) return ''
     if (this.repaired) {
       return `[failure]The [item_name]${this.name}[/item_name] is jammed fast.[/failure]`
     }
@@ -105,6 +108,12 @@ export class Mechanism extends Item {
       return clue(
         'The line is too fine for those gears. They would cut it like thread ' +
           'and keep turning; whatever stops them has to be thicker than that.',
+      )
+    }
+    if (magnet) {
+      return clue(
+        'The magnet snaps to the black iron and holds, and the gears turn on ' +
+          'beside it. It would take something threaded through them, not stuck on.',
       )
     }
     return clue(

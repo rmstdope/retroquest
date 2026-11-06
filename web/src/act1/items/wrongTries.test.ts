@@ -9,6 +9,7 @@ import { ExtendedMagneticFishingRod } from './ExtendedMagneticFishingRod'
 import { FishingRod } from './FishingRod'
 import { Lantern } from './Lantern'
 import { Magnet } from './Magnet'
+import { Matches } from './Matches'
 import { MagneticFishingRod } from './MagneticFishingRod'
 import { Mechanism } from './Mechanism'
 import { MysteriousBox } from './MysteriousBox'
@@ -69,6 +70,22 @@ const LANTERN_CORNER = clue(
     'The corner keeps its dark, as if it were waiting for a light of its ' +
     'own.',
 )
+const MATCHES_CORNER = clue(
+  'A match flares at the corner and gutters out before the dark gives ' +
+    'anything back. It wants a light that stays.',
+)
+const MAGNET_MECHANISM = clue(
+  'The magnet snaps to the black iron and holds, and the gears turn on ' +
+    'beside it. It would take something threaded through them, not stuck on.',
+)
+const KNIFE_GEARS = clue(
+  'These wooden gears have not moved in years. ' +
+    'The turning is in the iron thing among them.',
+)
+const LANTERN_RAFTER = clue(
+  'Held high, the lantern shows a glint on the rafter, still well out of ' +
+    'your reach. Only the hens, startled into the air, ever get up that high.',
+)
 const KNIFE_BOX = clue(
   'The blade finds no seam to work and no keyhole to pick. ' +
     'The runes around the lid are the only way in, and they do not answer ' +
@@ -112,6 +129,38 @@ describe('wrong tries at Act I puzzles', () => {
     expect(text).toBe(KNIFE_MECHANISM)
   })
 
+  it('says the magnet holds to the mechanism without stopping it', () => {
+    const game = gameIn('OldMill', [new Magnet()])
+    const text = executeCommands(game, ['use magnet with mechanism'])
+    expect(text).toBe(MAGNET_MECHANISM)
+  })
+
+  it.each([
+    ['dull knife', new DullKnife()],
+    ['sharp knife', new SharpKnife()],
+  ])(
+    'says the mill gears are still and points at the iron thing (%s)',
+    (name, knife) => {
+      const game = gameIn('OldMill', [knife])
+      const text = executeCommands(game, [`use ${name} with gears`])
+      expect(text).toBe(KNIFE_GEARS)
+    },
+  )
+
+  it('says the gears are still once the mechanism is jammed', () => {
+    const game = gameIn('OldMill', [new SharpKnife()])
+    const mechanism = game.state.currentRoom.items.find(
+      (i) => i instanceof Mechanism,
+    )
+    if (!(mechanism instanceof Mechanism)) throw new Error('no mechanism')
+    mechanism.repaired = true
+    const text = executeCommands(game, ['use sharp knife with gears'])
+    expect(text).toBe(
+      '[failure]The gears are still, and the iron thing among them is ' +
+        'jammed fast.[/failure]',
+    )
+  })
+
   it('says the jammed mechanism is jammed fast to a late try', () => {
     const game = gameIn('OldMill', [new DullKnife()])
     const mechanism = game.state.currentRoom.items.find(
@@ -136,6 +185,33 @@ describe('wrong tries at Act I puzzles', () => {
       expect(text).toBe(TOOL_RAFTER)
     },
   )
+
+  it.each([
+    ['dull knife', new DullKnife()],
+    ['sharp knife', new SharpKnife()],
+  ])(
+    'says the %s falls short of the rafter and points at the hens',
+    (name, knife) => {
+      const game = gameIn('ChickenCoop', [knife])
+      const text = executeCommands(game, [`use ${name} with rafter`])
+      expect(text).toBe(TOOL_RAFTER)
+    },
+  )
+
+  it('says the lantern shows the rafter but cannot reach it', () => {
+    const game = gameIn('ChickenCoop', [litLantern()])
+    const text = executeCommands(game, ['use lantern with rafter'])
+    expect(text).toBe(LANTERN_RAFTER)
+  })
+
+  it('says the rafter is bare to the lantern once the key has fallen', () => {
+    const game = gameIn('ChickenCoop', [new Bread(), litLantern()])
+    executeCommands(game, ['use bread with chicken'])
+    const text = executeCommands(game, ['use lantern with rafter'])
+    expect(text).toBe(
+      '[failure]Only dust and a few feathers on the rafter now.[/failure]',
+    )
+  })
 
   it('says the rafter is bare once the key has fallen', () => {
     const game = gameIn('ChickenCoop', [new Bread(), new RustyHoe()])
@@ -163,6 +239,24 @@ describe('wrong tries at Act I puzzles', () => {
     const text = executeCommands(game, ['use lantern with dark corner'])
     expect(text).toBe(LANTERN_CORNER)
     expect(game.state.currentRoom.getItemByName('locket')).toBeNull()
+  })
+
+  it('says why a match does not light the dark corner', () => {
+    const game = gameIn('VillageChapel', [new Matches()])
+    const text = executeCommands(game, ['use matches with dark corner'])
+    expect(text).toBe(MATCHES_CORNER)
+    expect(game.state.currentRoom.getItemByName('locket')).toBeNull()
+  })
+
+  it('says the candle already lights the corner to the matches', () => {
+    const game = gameIn('VillageChapel', [new Matches()])
+    const candle = game.state.currentRoom.items.find((i) => i instanceof Candle)
+    if (!(candle instanceof Candle)) throw new Error('no candle')
+    candle.isLit = true
+    const text = executeCommands(game, ['use matches with dark corner'])
+    expect(text).toBe(
+      '[failure]The candle already lights the corner by the altar.[/failure]',
+    )
   })
 
   it('says the candle already lights the corner once it is lit', () => {
@@ -208,6 +302,10 @@ describe('wrong tries at Act I puzzles', () => {
       DULL_KNIFE_VINES,
       LANTERN_CORNER,
       KNIFE_BOX,
+      MATCHES_CORNER,
+      MAGNET_MECHANISM,
+      KNIFE_GEARS,
+      LANTERN_RAFTER,
     ]) {
       expectMarkupWellFormed(line)
     }

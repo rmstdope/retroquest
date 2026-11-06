@@ -176,5 +176,8 @@
     {"after": 89, "commands": ["use lantern with dark corner"]},
     {"after": 141, "commands": ["talk to mira", "give rune token to mira"]},
     {"after": 144, "commands": ["go south", "go west", "talk to grandmother", "go south", "go east", "go south", "go south", "examine ancient amulet", "go east", "go south", "go south", "examine ancient amulet"]},
-    {"after": 90, "commands": ["talk to shopkeeper", "take matches"], "unset": ["patches_found", "patches_returned"]}
+    {"after": 90, "commands": ["talk to shopkeeper", "take matches"], "unset": ["patches_found", "patches_returned"]},
+    {"after": 16, "commands": ["use dull knife with rafter", "use lantern with rafter"]},
+    {"after": 57, "commands": ["use magnet with mechanism", "use sharp knife with gears"]},
+    {"after": 92, "commands": ["use matches with dark corner"]}
 ]
