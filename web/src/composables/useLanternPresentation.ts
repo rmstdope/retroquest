@@ -116,8 +116,13 @@ export function useLanternPresentation(
       // News (a learned spell, then quest news) is told in the middle too, after
       // the turn's words (and its arrival). The learned lines leave the card
       // first: the narration and the story read the turn's text after this.
+      // A turn a load brought back was told when it was played.
       const news =
-        !!turn && stage.staged() && !game.showModal && newsOnPicture(turn)
+        !!turn &&
+        !turn.restored &&
+        stage.staged() &&
+        !game.showModal &&
+        newsOnPicture(turn)
       const spells = news && !!turn?.spells?.length
       if (turn && spells) game.tellSpellsInMiddle(turn.id)
       // The units the narration plays; the arrival on the picture waits to read
@@ -150,6 +155,7 @@ export function useLanternPresentation(
       // A talk that moves Elior keeps the old picture and changes scene partway.
       const sceneAt =
         !!turn &&
+        !turn.restored &&
         !changing &&
         stage.staged() &&
         !game.showModal &&

@@ -272,6 +272,15 @@ describe('the narration paper', () => {
       expect(paper().querySelector('[data-testid="chip"]')).toBeNull()
     })
 
+    it('does not fly for a turn a load brought back', async () => {
+      await mountWith([turn(1, 'First.')])
+      const flights = useFlightStore()
+      game.turns.push({ ...taking(2), restored: true })
+      await nextTick()
+      await nextTick()
+      expect(flights.current).toBeNull()
+    })
+
     it('stops flying when the next command comes', async () => {
       await mountWith([turn(1, 'First.')])
       const flights = useFlightStore()

@@ -133,6 +133,7 @@ function createMockBridge() {
     ]),
     saveToSlot: vi.fn(() => 'Game saved.'),
     loadFromSlot: vi.fn(() => 'Game loaded.'),
+    takeLoadedStory: vi.fn((): unknown => null),
     controller: {
       ...controller,
       settleQuests: vi.fn(() => ({
@@ -673,7 +674,10 @@ describe('useGameStore', () => {
 
     it('calls bridge.saveNamedGame and shows a notice', () => {
       store.saveNamedGame('before-boss')
-      expect(bridge.saveNamedGame).toHaveBeenCalledWith('before-boss')
+      expect(bridge.saveNamedGame).toHaveBeenCalledWith(
+        'before-boss',
+        store.turns,
+      )
       expect(store.notice?.text).toBe('Game saved · before-boss')
     })
   })
@@ -1242,7 +1246,7 @@ describe('useGameStore', () => {
 
     it('calls bridge.saveToSlot and shows a notice', () => {
       store.saveToSlot(3)
-      expect(bridge.saveToSlot).toHaveBeenCalledWith(3)
+      expect(bridge.saveToSlot).toHaveBeenCalledWith(3, store.turns)
       expect(store.notice?.text).toBe('Game saved · Slot 3')
     })
   })
@@ -1767,7 +1771,10 @@ describe('useGameStore', () => {
       store.submitCommand('save my-adventure')
       store.submitCommand('load my-adventure')
 
-      expect(bridge.saveNamedGame).toHaveBeenCalledWith('my-adventure')
+      expect(bridge.saveNamedGame).toHaveBeenCalledWith(
+        'my-adventure',
+        expect.any(Array),
+      )
       expect(bridge.loadNamedGame).toHaveBeenCalledWith('my-adventure')
       expect(bridge.controller.takeTurn).not.toHaveBeenCalled()
     })
@@ -1776,7 +1783,10 @@ describe('useGameStore', () => {
       store.submitCommand('save My-Adventure')
       store.submitCommand('LOAD my-ADVENTURE')
 
-      expect(bridge.saveNamedGame).toHaveBeenCalledWith('my-adventure')
+      expect(bridge.saveNamedGame).toHaveBeenCalledWith(
+        'my-adventure',
+        expect.any(Array),
+      )
       expect(bridge.loadNamedGame).toHaveBeenCalledWith('my-adventure')
     })
 

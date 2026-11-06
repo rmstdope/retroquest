@@ -9,6 +9,8 @@ type StoredNamedSave = {
   name: string
   timestamp: string
   data: string
+  /** The story so far as the UI kept it; missing in saves made before it was kept. */
+  story?: unknown
 }
 
 type StoredSaveSlot = {
@@ -19,11 +21,15 @@ type StoredSaveSlot = {
   data: string
   /** Missing in saves made before quest counts were kept. */
   quests?: SaveSlot['quests']
+  /** The story so far as the UI kept it; missing in saves made before it was kept. */
+  story?: unknown
 }
 
 /** The quick save's data and its details. */
 const QUICK_KEY = 'retroquest_save'
 const QUICK_META_KEY = 'retroquest_save_meta'
+/** The quick save's story so far (JSON), written with it. */
+const QUICK_STORY_KEY = 'retroquest_save_story'
 const SLOTS_KEY = 'retroquest_save_slots'
 const NAMED_KEY = 'retroquest_named_saves'
 const SLOT_COUNT = 8
@@ -117,6 +123,8 @@ export function useBridge(loader: () => Promise<ActClass[]> = loadActs) {
   let acts: ActClass[] = []
   let game: Game | null = null
   let controller: GameController | null = null
+  /** The story kept with the save loaded last, until `takeLoadedStory` takes it. */
+  let loadedStory: unknown = null
 
   function requireGame(): { game: Game; controller: GameController } {
     if (!game || !controller) throw new Error('Game not started')
@@ -165,11 +173,31 @@ export function useBridge(loader: () => Promise<ActClass[]> = loadActs) {
     }
   }
 
-  function quickSaveGame(): string {
+  /**
+   * Load save data into the game, keeping `story` (the story stored with it)
+   * for `takeLoadedStory` when it loads; a failed load keeps none.
+   */
+  function loadWithStory(data: string, story: unknown): string {
+    loadedStory = null
+    const result = requireGame().game.loadSaveData(data)
+    if (!result.includes('[failure]')) loadedStory = story ?? null
+    return result
+  }
+
+  /** The story kept with the save loaded last (null when it has none), once. */
+  function takeLoadedStory(): unknown {
+    const story = loadedStory
+    loadedStory = null
+    return story
+  }
+
+  /** The quick save, with `story` (the UI's story so far) stored beside it. */
+  function quickSaveGame(story: unknown = null): string {
     const { game } = requireGame()
     try {
       const data = game.toSaveData()
       const meta = JSON.stringify(saveDetails())
+      const told = story === null ? null : JSON.stringify(story)
       localStorage.setItem(QUICK_KEY, data)
       try {
         localStorage.setItem(QUICK_META_KEY, meta)
@@ -177,16 +205,33 @@ export function useBridge(loader: () => Promise<ActClass[]> = loadActs) {
         // No details rather than the previous save's.
         localStorage.removeItem(QUICK_META_KEY)
       }
+      try {
+        if (told === null) localStorage.removeItem(QUICK_STORY_KEY)
+        else localStorage.setItem(QUICK_STORY_KEY, told)
+      } catch {
+        // No story rather than the previous save's.
+        localStorage.removeItem(QUICK_STORY_KEY)
+      }
     } catch {
       return SAVE_FAILED
     }
     return SAVED
   }
 
+  /** The quick save's story, or null when it has none that can be read. */
+  function readQuickStory(): unknown {
+    try {
+      const raw = localStorage.getItem(QUICK_STORY_KEY)
+      return raw ? (JSON.parse(raw) as unknown) : null
+    } catch {
+      return null
+    }
+  }
+
   function quickLoadGame(): string {
     const data = localStorage.getItem(QUICK_KEY)
     if (!isSaveData(data)) return NO_SAVE
-    return requireGame().game.loadSaveData(data)
+    return loadWithStory(data, readQuickStory())
   }
 
   /**
@@ -226,50 +271,74 @@ export function useBridge(loader: () => Promise<ActClass[]> = loadActs) {
     })
   }
 
-  function saveToSlot(slot: number): string {
+  /**
+   * Run `write` with the story, and when the storage cannot hold it, again
+   * without: the game is kept even when its story is not. SAVED, or
+   * SAVE_FAILED when even the game cannot be stored.
+   */
+  function withStoryIfRoom(
+    story: unknown,
+    write: (story: unknown) => void,
+  ): string {
+    try {
+      write(story)
+    } catch {
+      if (story === null) return SAVE_FAILED
+      try {
+        write(null)
+      } catch {
+        return SAVE_FAILED
+      }
+    }
+    return SAVED
+  }
+
+  /** Save to slot `slot` (1–8), with `story` (the UI's story so far) beside it when there is room. */
+  function saveToSlot(slot: number, story: unknown = null): string {
     if (slot < 1 || slot > SLOT_COUNT)
       return '[failure]Invalid save slot.[/failure]'
     const { game } = requireGame()
-    try {
+    return withStoryIfRoom(story, (told) => {
       const stored = readStoredSaveSlots()
-      stored[slot - 1] = { slot, data: game.toSaveData(), ...saveDetails() }
+      stored[slot - 1] = {
+        slot,
+        data: game.toSaveData(),
+        ...saveDetails(),
+        ...(told === null ? {} : { story: told }),
+      }
       localStorage.setItem(SLOTS_KEY, JSON.stringify(stored))
-    } catch {
-      return SAVE_FAILED
-    }
-    return SAVED
+    })
   }
 
   function loadFromSlot(slot: number): string {
     if (slot < 1 || slot > SLOT_COUNT) return NO_SAVE
     const entry = readStoredSaveSlots()[slot - 1]
     if (!entry) return NO_SAVE
-    return requireGame().game.loadSaveData(entry.data)
+    return loadWithStory(entry.data, entry.story)
   }
 
-  function saveNamedGame(name: string): string {
+  /** Save under `name`, with `story` (the UI's story so far) beside it when there is room. */
+  function saveNamedGame(name: string, story: unknown = null): string {
     const { game } = requireGame()
-    try {
+    return withStoryIfRoom(story, (told) => {
       const saves = readStoredNamedSaves()
       const entry: StoredNamedSave = {
         name,
         timestamp: new Date().toISOString(),
         data: game.toSaveData(),
+        ...(told === null ? {} : { story: told }),
       }
       const existing = saves.findIndex((s) => s.name === name)
       if (existing >= 0) saves[existing] = entry
       else saves.push(entry)
       localStorage.setItem(NAMED_KEY, JSON.stringify(saves))
-    } catch {
-      return SAVE_FAILED
-    }
-    return SAVED
+    })
   }
 
   function loadNamedGame(name: string): string {
     const entry = readStoredNamedSaves().find((s) => s.name === name)
     if (!entry) return NO_SAVE
-    return requireGame().game.loadSaveData(entry.data)
+    return loadWithStory(entry.data, entry.story)
   }
 
   return {
@@ -288,5 +357,6 @@ export function useBridge(loader: () => Promise<ActClass[]> = loadActs) {
     getQuickSave,
     saveToSlot,
     loadFromSlot,
+    takeLoadedStory,
   }
 }

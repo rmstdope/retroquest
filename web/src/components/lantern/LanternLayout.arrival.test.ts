@@ -731,6 +731,27 @@ describe('LanternLayout: the arrival on the picture', () => {
       expect(game.turns.at(-1)?.fullText).toContain('You have learned')
     })
 
+    it('tells nothing in the middle and rings nothing for a turn a load brought back', async () => {
+      const w = await ready(true, false)
+      useSettingsStore(pinia).narrationOn = false
+      const game = useGameStore(pinia)
+      const audio = {
+        playNewQuest: vi.fn(),
+        playQuestComplete: vi.fn(),
+        playNewSpell: vi.fn(),
+      }
+      game.setAudioPlayer(audio)
+      pushSpellTurn()
+      const restored = game.turns.at(-1)
+      if (restored) restored.restored = true
+      await vi.advanceTimersByTimeAsync(0)
+      expect(card(w)).toBe('')
+      expect(useArrivalStore(pinia).active).toBe(false)
+      expect(audio.playNewSpell).not.toHaveBeenCalled()
+      await run('look')
+      expect(audio.playNewSpell).not.toHaveBeenCalled()
+    })
+
     /** A narrated turn that taught a spell and finished a quest, with the audio it rings. */
     async function narratedSpellTurn(): Promise<{
       playNewQuest: ReturnType<typeof vi.fn>
@@ -787,6 +808,28 @@ describe('LanternLayout: the arrival on the picture', () => {
       useGameStore(pinia).restartGame()
       await vi.advanceTimersByTimeAsync(20000)
       expect(audio.playNewSpell).not.toHaveBeenCalled()
+    })
+
+    it('rings no spell sound when a save is loaded while the news is pending', async () => {
+      const stored: Record<string, string> = {}
+      vi.stubGlobal('localStorage', {
+        getItem: (key: string): string | null => stored[key] ?? null,
+        setItem: (key: string, value: string): void => {
+          stored[key] = value
+        },
+        removeItem: (key: string): void => {
+          delete stored[key]
+        },
+      })
+      await ready(true, true)
+      const game = useGameStore(pinia)
+      expect(game.saveGame()).toBe(true)
+      const audio = await narratedSpellTurn()
+      game.loadGame()
+      await vi.advanceTimersByTimeAsync(20000)
+      expect(game.turns.every((turn) => turn.restored)).toBe(true)
+      expect(audio.playNewSpell).not.toHaveBeenCalled()
+      expect(audio.playQuestComplete).not.toHaveBeenCalled()
     })
 
     it('leaves the line on the card where nothing is told in the middle', async () => {

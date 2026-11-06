@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 import { setActivePinia, createPinia } from 'pinia'
 import { Act, Item, Quest, Room, type GameState } from '@/engine'
 import { useBridge, type ActClass } from '@/composables/useBridge'
-import { useGameStore } from './useGameStore'
+import { useGameStore, type Turn } from './useGameStore'
 
 /** The name of the item whose pick-up finishes the one-act test game. */
 const CROWN = 'Crown'
@@ -286,5 +286,121 @@ describe('useGameStore over the real engine: the room the music plays in', () =>
     store.dismissModal()
 
     expect(store.musicRoomKey).toBe('Hall')
+  })
+})
+
+describe('useGameStore over the real engine: the story so far in a save', () => {
+  /** The browser's storage, kept across the "pages" of one test. */
+  let stored: Record<string, string>
+
+  beforeEach(() => {
+    setActivePinia(createPinia())
+    stored = {}
+    vi.stubGlobal('localStorage', {
+      getItem: (key: string): string | null => stored[key] ?? null,
+      setItem: (key: string, value: string): void => {
+        stored[key] = value
+      },
+      removeItem: (key: string): void => {
+        delete stored[key]
+      },
+    })
+  })
+
+  afterEach(() => {
+    vi.unstubAllGlobals()
+  })
+
+  /** A fresh page: a new store over a new game, the storage kept. */
+  async function reloadedStore(): Promise<Store> {
+    setActivePinia(createPinia())
+    return startedStore()
+  }
+
+  /** The turns as the drawer shows them, without the ids a session numbers. */
+  function story(store: Store): unknown[] {
+    return store.turns.map(({ id: _id, ...turn }) => turn)
+  }
+
+  it.each([
+    ['the quick save', (s: Store) => s.saveGame(), (s: Store) => s.loadGame()],
+    ['a slot', (s: Store) => s.saveToSlot(2), (s: Store) => s.loadFromSlot(2)],
+    [
+      'a named save',
+      (s: Store) => s.saveNamedGame('hall'),
+      (s: Store) => s.loadNamedGame('hall'),
+    ],
+  ])(
+    'brings back the whole story so far from %s in a fresh page',
+    async (_kind, save, load) => {
+      const store = await startedStore()
+      store.submitCommand('look')
+      store.submitCommand(`examine ${CROWN}`)
+      store.submitCommand('inventory')
+      const before = story(store)
+      expect(before.length).toBeGreaterThan(2)
+      expect(save(store)).toBe(true)
+
+      const reloaded = await reloadedStore()
+      load(reloaded)
+
+      expect(story(reloaded)).toEqual(
+        // Marked as brought back; nothing of it is narrated or chimed again.
+        before.map((turn) => {
+          const { narrate: _narrate, ...rest } = turn as Turn
+          const quests = rest.quests?.map(({ chime: _chime, ...news }) => news)
+          return { ...rest, ...(quests ? { quests } : {}), restored: true }
+        }),
+      )
+    },
+  )
+
+  /** Drop the story from every save in the storage, as a save made before the fix has none. */
+  function forgetStories(): void {
+    delete stored['retroquest_save_story']
+    for (const key of ['retroquest_save_slots', 'retroquest_named_saves']) {
+      if (!stored[key]) continue
+      const entries = JSON.parse(stored[key]) as ({ story?: unknown } | null)[]
+      for (const entry of entries) if (entry) delete entry.story
+      stored[key] = JSON.stringify(entries)
+    }
+  }
+
+  it.each([
+    ['the quick save', (s: Store) => s.saveGame(), (s: Store) => s.loadGame()],
+    ['a slot', (s: Store) => s.saveToSlot(2), (s: Store) => s.loadFromSlot(2)],
+    [
+      'a named save',
+      (s: Store) => s.saveNamedGame('hall'),
+      (s: Store) => s.loadNamedGame('hall'),
+    ],
+  ])(
+    'shows only the room for %s made before the story was kept',
+    async (_kind, save, load) => {
+      const store = await startedStore()
+      store.submitCommand('look')
+      store.submitCommand(`examine ${CROWN}`)
+      expect(save(store)).toBe(true)
+      forgetStories()
+
+      const reloaded = await reloadedStore()
+      reloaded.submitCommand('look')
+      load(reloaded)
+
+      expect(reloaded.turns).toHaveLength(1)
+      expect(reloaded.turns[0].arrival?.room).toBe('Hall')
+    },
+  )
+
+  it('compares the next command with the loaded bag, not the one before the load', async () => {
+    const store = await startedStore()
+    store.submitCommand(`take ${CROWN}`)
+    expect(store.saveToSlot(1)).toBe(true)
+
+    const reloaded = await reloadedStore()
+    reloaded.loadFromSlot(1)
+    reloaded.submitCommand('look')
+
+    expect(reloaded.turns.at(-1)?.gained).toEqual([])
   })
 })

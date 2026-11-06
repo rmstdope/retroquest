@@ -928,7 +928,9 @@ watch(
     const turn = game.turns.at(-1)
     if (id === null || !turn || id === flownTurn) return
     flownTurn = id
-    if (staged.value && turn.gained.length) flights.launch(turn.gained)
+    // A turn a load brought back flew its things when it was played.
+    if (staged.value && !turn.restored && turn.gained.length)
+      flights.launch(turn.gained)
   },
 )
 
@@ -1024,8 +1026,8 @@ watch(
 
 // News cut short before its spell came up (a second Escape on the held news,
 // a new command) still rings the spell's sound as it goes, as the quest cards
-// still ring theirs (a load, which keeps the story, rings it too). A turn no
-// longer in the story (a new game) rings nothing.
+// still ring theirs. A turn no longer in the story (a new game, or a load,
+// which brings back the save's story in its place) rings nothing.
 watch(
   () => {
     const turn = game.turns.at(-1)
