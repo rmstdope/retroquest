@@ -12,8 +12,7 @@ export class Matches extends Item {
   constructor() {
     super({
       name: 'matches',
-      description:
-        'A small box of matches. Useful for lighting fires, candles, or lanterns.',
+      description: 'A small box of matches, the heads still dry.',
     })
   }
 

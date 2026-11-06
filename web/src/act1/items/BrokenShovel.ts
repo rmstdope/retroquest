@@ -6,9 +6,8 @@ export class BrokenShovel extends Item {
     super({
       name: 'broken shovel',
       description:
-        'A rusty, splintered shovel with a cracked wooden handle. It looks like it ' +
-        "hasn't been used in years, but might still be useful for digging in soft " +
-        'earth.',
+        'A shovel with a cracked wooden handle and rust on the blade. ' +
+        'It has leaned against that wall a long time.',
       shortName: 'shovel',
       canBeCarried: true,
     })

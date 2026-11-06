@@ -6,8 +6,8 @@ export class HealingHerb extends Item {
     super({
       name: 'healing herb',
       description:
-        'A bundle of fragrant green herbs, known for their restorative properties. ' +
-        'Useful for healing wounds or brewing potions.',
+        'A bundle of green herbs, tied with thread. ' +
+        "Mira's hut smells of them.",
       shortName: 'herb',
     })
   }

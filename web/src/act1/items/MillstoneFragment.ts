@@ -6,8 +6,8 @@ export class MillstoneFragment extends Item {
     super({
       name: 'millstone fragment',
       description:
-        "A chunk of stone broken from the old mill's grinding wheel. It's heavy " +
-        'and rough, but could be useful for repairs or as a tool.',
+        "A chunk of stone broken from the old mill's grinding wheel, heavy and " +
+        'rough.',
       shortName: 'fragment',
       canBeCarried: true,
     })

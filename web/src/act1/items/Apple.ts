@@ -8,8 +8,7 @@ export class Apple extends Item {
   constructor() {
     super({
       name: 'apple',
-      description:
-        'A crisp, red apple. It looks fresh and delicious, perfect for a quick snack.',
+      description: 'A red apple, firm, with an unbroken skin.',
     })
   }
 

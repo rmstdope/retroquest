@@ -24,12 +24,12 @@ describe('Hidden Glade', () => {
     const game = gameInGlade()
     const before = game.state.currentRoom.describe(game.state)
     expect(before).toContain('dim')
-    expect(before).not.toContain('golden sunlight')
+    expect(before).not.toContain('full sun')
 
     game.commandParser.parse('cast light')
 
     const after = game.state.currentRoom.describe(game.state)
-    expect(after).toContain('golden sunlight')
+    expect(after).toContain('full sun')
     expect(after).not.toContain('darkness')
   })
 
@@ -58,7 +58,7 @@ describe('Hidden Glade', () => {
     game.state.setStoryFlag('deer_can_be_observed', true)
     game.commandParser.parse('rest')
     const after = game.state.currentRoom.describe(game.state)
-    expect(after).toContain('grazes quietly')
+    expect(after).toContain('grazes at the edge')
     expect(after).not.toContain('holds its breath')
   })
 
@@ -103,7 +103,7 @@ describe('Hidden Glade', () => {
         'and a [character_name]deer[/character_name] steps out',
       )
       expect(lit).toContain(
-        'A graceful [character_name]deer[/character_name] grazes',
+        'A [character_name]deer[/character_name] grazes at the edge of the clearing',
       )
       expect(again).toContain(
         'The [character_name]deer[/character_name] continues',
@@ -137,8 +137,7 @@ describe('Hidden Glade', () => {
       'Carved beneath the runes, in a plainer hand, are words you can read:'
     const CLOSING =
       'You read them aloud. They mean nothing to you, and yet they stay with you.'
-    const STONE =
-      'In the center, a mossy stone bears a faint, magical inscription.'
+    const STONE = 'In the center, a mossy stone bears an inscription.'
 
     it('follows the grow line on the first cast', () => {
       const game = gameInGlade()
@@ -211,7 +210,7 @@ describe('the Hidden Glade room card', () => {
     const game = gameInGlade()
     const card = new GameController(game)
     game.commandParser.parse('cast light')
-    expect(card.getRoomDescription()).toContain('golden sunlight')
+    expect(card.getRoomDescription()).toContain('full sun')
     expect(card.getRoomDescription()).not.toContain('too deep in shadow')
   })
 
