@@ -163,6 +163,36 @@ describe('Fisherman', () => {
   })
 })
 
+describe('Fisherman after the fishing lesson (rq-d0vu)', () => {
+  let game: Game
+
+  beforeEach(() => {
+    game = new Game([new Act1()])
+    game.state.currentRoom = game.state.allRooms.Riverbank
+    game.state.learnSpell(new HealSpell())
+    game.state.addItemToInventory(new FishingRod())
+    executeCommands(game, ['talk to fisherman'])
+  })
+
+  it('still asks for a fresh fish while his arm is stiff', () => {
+    const response = executeCommands(game, ['talk to fisherman'])
+
+    expect(response).toContain('fresh fish')
+    expectDialogueSpeaker(response, 'fisherman')
+  })
+
+  it('still asks for a fresh fish once his arm is healed', () => {
+    executeCommands(game, ['cast heal on fisherman'])
+
+    const response = executeCommands(game, ['talk to fisherman'])
+
+    expect(response).toContain('fresh fish')
+    expect(response).toContain("Arm's mended")
+    expect(response).not.toContain('this arm')
+    expectDialogueSpeaker(response, 'fisherman')
+  })
+})
+
 describe('Fisherman teaching purify', () => {
   it('ends his speech on a full sentence, not a comma', () => {
     const game = new Game([new Act1()])

@@ -41,15 +41,24 @@ export class Fisherman extends Character {
 
   /**
    * His line for each stage (`currentDialogueKey`). Built on demand rather
-   * than kept in a field, so a save always hears the current wording.
+   * than kept in a field, so a save always hears the current wording. After
+   * the lesson he still wants the fish, with his arm stiff or mended.
    */
-  private dialogue(key: string): string {
+  private dialogue(key: string, gameState: GameState): string {
     const fisherman = characterName('fisherman')
     switch (key) {
       case 'taught_fishing':
         return (
           `The ${fisherman} smiles. ` +
-          speech('Anything biting? Reeds, lad. Always the reeds.')
+          speech('Anything biting? Reeds, lad. Always the reeds.') +
+          ' He looks at the water. ' +
+          speech(
+            gameState.getStoryFlag(FLAG_HEALED_FISHERMAN_ARM)
+              ? "Arm's mended, but the river's sulking yet. Today I'd still " +
+                  'give a good deal for a fresh fish.'
+              : "Can't land one myself with this arm. I'd still give a " +
+                  'good deal for a fresh fish.',
+          )
         )
       case 'received_fish_thanks':
         return (
@@ -129,11 +138,11 @@ export class Fisherman extends Character {
       } else if (gameState.getStoryFlag(FLAG_HEALED_FISHERMAN_ARM)) {
         return this.healedGreeting()
       } else {
-        return this.dialogue('initial')
+        return this.dialogue('initial', gameState)
       }
     }
 
-    return this.dialogue(this.currentDialogueKey)
+    return this.dialogue(this.currentDialogueKey, gameState)
   }
 
   /**
@@ -178,7 +187,7 @@ export class Fisherman extends Character {
       gameState.learnSpell(new PurifySpell())
       this.currentDialogueKey = 'taught_spells'
       return (
-        this.dialogue('received_fish_thanks') +
+        this.dialogue('received_fish_thanks', gameState) +
         '\nHe wraps it in a dock leaf and sets it by his crate. Then he is ' +
         'quiet a while. ' +
         speech(
