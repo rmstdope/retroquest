@@ -115,7 +115,8 @@ export class Villager extends Character {
       return (
         speech(
           "The water's clean! I've not had dough rise so light in a year. " +
-            `Was that you, ${characterName('Elior')}?`,
+            `Was that you, ${characterName('Elior')}? ` +
+            'Go on, love, tell me true.',
         ) + ' She looks at you, and waits.'
       )
     }
@@ -138,12 +139,22 @@ export class Villager extends Character {
 
   /**
    * Take the truth about the well. Once the well is purified and she has
-   * asked, saying "truth" tells her it was Elior: her reply and the
-   * remembered line, recorded once. Earlier she is lost; later she keeps the
-   * secret. Any other words get the usual reply.
+   * asked, saying "truth" or "yes" tells her it was Elior: her reply and the
+   * remembered line, recorded once. Earlier she is lost ("truth") or gives the
+   * usual reply (anything else); later she keeps the secret. Other words,
+   * once she has asked and has not been told, are met with a nudge toward the
+   * truth.
    */
   override sayTo(gameState: GameState, words: string): string {
-    if (words.trim().toLowerCase() !== 'truth') {
+    const asked = gameState.getStoryFlag(FLAG_TILDA_ASKED_ABOUT_WELL)
+    const truth = /\b(truth|yes)\b/i.test(words)
+    if (asked && !truth && !gameState.hasVirtue(VIRTUE_TRUTH)) {
+      return attributeSpeech(
+        this.name,
+        speech("That's not an answer, love. Just tell me the truth."),
+      )
+    }
+    if (!truth || (!asked && !/\btruth\b/i.test(words))) {
       return super.sayTo(gameState, words)
     }
     if (!gameState.getStoryFlag(FLAG_TILDA_ASKED_ABOUT_WELL)) {

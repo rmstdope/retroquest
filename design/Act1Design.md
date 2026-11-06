@@ -111,7 +111,7 @@
 - **Unusable:** old notice (start).
 - **Spells:** None.
 - **Usable Items:** (None based on Golden Path actions in this room).
-- **Characters:** Villager: Tilda, the baker's wife (answers to `villager` and `tilda`). She cycles through the village rumours, among them that King Alden is ill and the roads are no longer safe, that a cloaked stranger was seen asking after "an old amulet, from a family that left" before he took the road to the mill, and that the animals are restless ("Malakar's weather, my mother would have called it, and knocked on wood"); once the well is purified she asks, once, "The water's clean! Was that you?" (Elior may stay silent, and she decides the spring ran clear by itself; or answer `say truth to tilda`, accepted for as long as the well stays purified and she has asked, see _Optional choices_); once Elior carries Mira's amulet she knows he is leaving.
+- **Characters:** Villager: Tilda, the baker's wife (answers to `villager` and `tilda`). She cycles through the village rumours, among them that King Alden is ill and the roads are no longer safe, that a cloaked stranger was seen asking after "an old amulet, from a family that left" before he took the road to the mill, and that the animals are restless ("Malakar's weather, my mother would have called it, and knocked on wood"); once the well is purified she asks, once, "The water's clean! ... Was that you, Elior? Go on, love, tell me true." (Elior may stay silent, and she decides the spring ran clear by itself; or answer `say truth to tilda` or `say yes to tilda`, accepted for as long as the well stays purified and she has asked, see _Optional choices_); once Elior carries Mira's amulet she knows he is leaving.
 - **Exits:** Elior’s Cottage (west), Mira’s Hut (north), General Store (east)
 
 ### 5. Mira’s Hut
@@ -293,7 +293,7 @@ Optional virtue moments; none blocks the golden path, none adds a puzzle or comb
 
 | Where                       | The choice                                                                                                                               | Records      |
 | --------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | ------------ |
-| Village Square, Tilda       | When she asks "The water's clean! Was that you?", admit it was Elior's magic instead of letting the credit go to the spring (`say truth to tilda`) | **truth**    |
+| Village Square, Tilda       | When she asks "The water's clean! Was that you?", admit it was Elior's magic instead of letting the credit go to the spring (`say truth to tilda` or `say yes to tilda`) | **truth**    |
 | Road to Greendale, Merchant | Give Grandmother's `fresh bread` to the hungry Merchant and ask nothing in return (`give fresh bread to merchant`; the golden path's four food kinds are berries, apple, egg and carrot, so _Food for the road_ is unaffected)                         | **selfless** |
 | Forest Path                 | Cut a fox kit free from a poacher's snare with the sharp knife instead of walking past (`use sharp knife with snare`)                     | **mercy**    |
 
