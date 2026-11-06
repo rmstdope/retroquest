@@ -434,8 +434,8 @@ Welcome to
     const room = this.state.currentRoom
     const found = room.getCharacterByName(target)
     if (found) return found
-    const article = /^the\s+(\S.*)$/i.exec(target.trim())
-    return article ? room.getCharacterByName(article[1]) : null
+    const bare = withoutArticle(target)
+    return bare === null ? null : room.getCharacterByName(bare)
   }
 
   /**
@@ -450,18 +450,26 @@ Welcome to
 
   /**
    * The first item named by full or short name, looking in the inventory
-   * first and then in the room, or null.
+   * first and then in the room, or null. A leading "the" is dropped as
+   * `findAllItems` drops it.
    */
   findItem(
     target: string,
     { inventory = true, room = true } = {},
   ): Item | null {
-    return this.state.findItem(target, { inventory, room })
+    return this.findAllItems(target, { inventory, room })[0] ?? null
   }
 
-  /** Every item named by full or short name, inventory first, then the room. */
+  /**
+   * Every item named by full or short name, inventory first, then the room.
+   * A leading "the" is dropped when the name as typed names nothing, so
+   * "the lantern" reaches the lantern.
+   */
   findAllItems(target: string, { inventory = true, room = true } = {}): Item[] {
-    return this.state.findItems(target, { inventory, room })
+    const found = this.state.findItems(target, { inventory, room })
+    if (found.length > 0) return found
+    const bare = withoutArticle(target)
+    return bare === null ? [] : this.state.findItems(bare, { inventory, room })
   }
 
   move(direction: string): string {
@@ -702,13 +710,16 @@ Welcome to
     const item = this.findItem(itemName, { room: false })
     if (!item) {
       return (
-        character.giveUnheld(this.state, itemName) ??
+        this.byName(itemName, (name) =>
+          character.giveUnheld(this.state, name),
+        ) ??
         `[failure]You don't have ${indefiniteArticle(itemName)} '${itemName}' to give.[/failure]`
       )
     }
     return character.giveItem(this.state, item)
   }
 
+  /** "buy <item> from <character>"; the seller hears the item without a leading "the". */
   buy(args: string): string {
     const split = this.splitCommand(args, 'buy', 'from')
     if (typeof split === 'string') return split
@@ -717,7 +728,21 @@ Welcome to
     if (!character) {
       return `[failure]There is no character named '${capitalize(characterName)}' here.[/failure]`
     }
-    return character.buyItem(this.state, itemName)
+    return character.buyItem(this.state, withoutArticle(itemName) ?? itemName)
+  }
+
+  /**
+   * What `answer` says for the name as typed or, when that is null, for the
+   * name without a leading "the"; null when neither answers.
+   */
+  private byName(
+    name: string,
+    answer: (name: string) => string | null,
+  ): string | null {
+    const typed = answer(name)
+    if (typed !== null) return typed
+    const bare = withoutArticle(name)
+    return bare === null ? null : answer(bare)
   }
 
   /** Use an item, alone or with another item or a character. */
@@ -771,7 +796,9 @@ Welcome to
         spell.castOnCharacter(this.state, character)
       )
     }
-    const named = spell.castOnName(this.state, targetName)
+    const named = this.byName(targetName, (name) =>
+      spell.castOnName(this.state, name),
+    )
     if (named !== null) return named
     return (
       `[failure]You don't see a '${targetName}' to cast ` +
@@ -983,6 +1010,12 @@ export function normalizeSaveName(name: string): string | null {
 
 function message(error: unknown): string {
   return error instanceof Error ? error.message : String(error)
+}
+
+/** The name without a leading "the", or null when it has none ("the" alone stays a name). */
+function withoutArticle(name: string): string | null {
+  const article = /^the\s+(\S.*)$/i.exec(name.trim())
+  return article ? article[1] : null
 }
 
 function capitalize(text: string): string {
