@@ -7,6 +7,7 @@ import {
   FLAG_MIRA_NAMED_FOULING_SIGIL,
   FLAG_PATCHES_RETURNED,
   FLAG_PATCHES_STAYED_WITH_GRANDMOTHER,
+  FLAG_SHOWED_GRANDMOTHER_RING,
 } from '../Act1StoryFlags'
 import { Act1 } from '../Act1'
 import { AncientAmulet } from './AncientAmulet'
@@ -291,8 +292,59 @@ describe('GameMap farewell on the Road to Greendale', () => {
     expect(answer).not.toContain('you kept her ring')
   })
 
-  it('has grandmother speak of the kept ring', () => {
+  it('has grandmother learn where the ring went when she had been shown it', () => {
+    const answer = farewell([FLAG_SHOWED_GRANDMOTHER_RING])
+
+    expect(answer).toContain(
+      "So the [character_name]merchant[/character_name] has her ring now. He showed it me in the square. No, don't fret; she'd have given it for your boots in a heartbeat.",
+    )
+    expect(answer).not.toContain('The [character_name]merchant')
+    expect(findMarkupProblems(answer)).toEqual([])
+  })
+
+  it('has grandmother see the kept ring for the first time when she was never shown it', () => {
     const answer = farewell([FLAG_KEPT_MOTHERS_RING])
+
+    expect(answer).toContain(
+      'Her eyes catch on your hand, closed around something. She opens your fingers, and the ring lies in your palm.',
+    )
+    expect(answer).toContain("Your mother's.")
+    expect(answer).toContain(
+      'You tell her where you found it: at the bottom of the well. She looks at it a long moment.',
+    )
+    expect(answer).toContain('She never took it off. Not once.')
+    expect(answer).toContain('She closes your fingers over it again.')
+    expect(answer).toContain('Then keep it. Let a little of her go with you.')
+    expect(answer).not.toContain('wedding ring')
+    expect(answer).not.toContain('you kept her ring')
+    expect(answer.indexOf('Wear your mother')).toBeLessThan(
+      answer.indexOf('Her eyes catch on your hand'),
+    )
+    const withPatches = farewell([
+      FLAG_KEPT_MOTHERS_RING,
+      FLAG_PATCHES_RETURNED,
+    ])
+    expect(withPatches.indexOf('Then keep it.')).toBeLessThan(
+      withPatches.indexOf('how you found his'),
+    )
+    expect(findMarkupProblems(answer)).toEqual([])
+  })
+
+  it('keeps the plain kept-ring line when she was shown it', () => {
+    const answer = farewell([
+      FLAG_KEPT_MOTHERS_RING,
+      FLAG_SHOWED_GRANDMOTHER_RING,
+    ])
+
+    expect(answer).toContain('And you kept her ring. Good.')
+    expect(answer).not.toContain('Her eyes catch on your hand')
+  })
+
+  it('has grandmother speak of the kept ring', () => {
+    const answer = farewell([
+      FLAG_KEPT_MOTHERS_RING,
+      FLAG_SHOWED_GRANDMOTHER_RING,
+    ])
 
     expect(answer).toContain('you kept her ring')
     expect(answer).not.toContain('wedding ring')

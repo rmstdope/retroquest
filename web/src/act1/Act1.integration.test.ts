@@ -735,7 +735,7 @@ describe('Act 1 with the alternative choices', () => {
     expectCurrentRoom(state, 'Road to Greendale')
 
     const farewell = executeCommands(game, ACT1_COMPLETING_COMMANDS)
-    expect(farewell).toContain('you kept her ring')
+    expect(farewell).toContain('Then keep it. Let a little of her go with you.')
     expect(farewell).toContain('claimed your pillow')
     expect(
       game.acts[game.currentAct].isCompleted(state),
@@ -749,7 +749,7 @@ describe('Act 1 with the alternative choices', () => {
     const fresh = new Game([new Act1()])
     expect(fresh.loadSaveData(game.toSaveData())).toContain('loaded')
     const farewell = executeCommands(fresh, ACT1_COMPLETING_COMMANDS)
-    expect(farewell).toContain('you kept her ring')
+    expect(farewell).toContain('Then keep it. Let a little of her go with you.')
     expect(farewell).toContain('claimed your pillow')
   })
 })

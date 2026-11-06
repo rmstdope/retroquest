@@ -31,6 +31,7 @@ import {
   FLAG_PATCHES_RETURNED,
   FLAG_PATCHES_STAYED_WITH_GRANDMOTHER,
   FLAG_READ_PHOTO_MESSAGE,
+  FLAG_SHOWED_GRANDMOTHER_RING,
   FLAG_TALKED_TO_GRANDMOTHER_ABOUT_PHOTO,
 } from '../Act1StoryFlags'
 
@@ -487,7 +488,7 @@ export class Grandmother extends Character {
       )
     }
 
-    if (item instanceof ShinyRing) return this.ringAnswer()
+    if (item instanceof ShinyRing) return this.ringAnswer(gameState)
     if (item instanceof MothersLetter) return this.letterAnswer()
     if (item instanceof TravelCloak) return this.cloakAnswer()
     if (item instanceof AncientAmulet) return this.amuletAnswer()
@@ -503,8 +504,19 @@ export class Grandmother extends Character {
     )
   }
 
-  /** Her daughter's wedding ring: she names whose it is and gives it back. */
-  private ringAnswer(): string {
+  /**
+   * Her daughter's wedding ring: she names whose it is and gives it back. The
+   * first time she is given it, she is also told where it was found and
+   * remarks on it; the ring in the well stays a mystery, so nobody answers.
+   */
+  private ringAnswer(gameState: GameState): string {
+    const firstTime = !gameState.getStoryFlag(FLAG_SHOWED_GRANDMOTHER_RING)
+    gameState.setStoryFlag(FLAG_SHOWED_GRANDMOTHER_RING, true)
+    const wellBeat = firstTime
+      ? ' You tell her where you found it. She looks up at you, and back ' +
+        'at the ring. ' +
+        speech('She never took it off. Not once.')
+      : ''
     return (
       `Your ${characterName('grandmother')} takes the ring, and her hands ` +
       'go still on it. ' +
@@ -512,6 +524,7 @@ export class Grandmother extends Character {
         "Your mother's. Your father walked to Greendale and back in a day " +
           'to fetch that.',
       ) +
+      wellBeat +
       ' She turns it once, so the letters inside catch the light, and ' +
       'gives it back. ' +
       speech("Keep it, love. That one doesn't go on a shelf.")
