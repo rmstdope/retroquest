@@ -1,0 +1,95 @@
+<!doctype html><html><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><title>Bigger Map</title><style>
+:root{--bg:#10151a;--surface:#161d24;--raised:#1c242c;--line:#26313b;--line2:#34404b;--fg:#ece6d6;--prose:#d9d3c3;--muted:#a39d8e;--accent:#ffa914;--onAccent:#1a1408;--accentText:#ffb836;--accentSoft:#36270a;--accentLine:#a8740f}
+*{box-sizing:border-box}body{margin:0;background:#0b0f13;color:var(--fg);font-family:'DM Sans',system-ui,sans-serif}
+.cap{max-width:1200px;margin:16px auto 8px;padding:0 16px;font-size:14px;color:var(--muted)}
+.cap b{color:var(--fg);font-size:18px;display:block;margin-bottom:4px}
+.app{position:relative;max-width:1200px;height:720px;margin:0 auto 24px;border:1px solid var(--line);border-radius:12px;overflow:hidden;display:grid;grid-template-columns:1fr 360px;background:var(--bg)}
+.stage{position:relative;background:linear-gradient(160deg,#2b3a2f,#1b2620 60%,#121a16);}
+.plate{position:absolute;left:20px;bottom:20px;background:rgba(22,29,36,.9);border:1px solid var(--line2);border-radius:12px;padding:10px 16px;font-family:Georgia,serif;font-size:22px}
+.btns{position:absolute;right:16px;top:16px;display:flex;gap:8px}
+.sb{min-height:40px;padding:0 14px;border-radius:999px;border:1px solid var(--line2);background:rgba(22,29,36,.93);color:var(--fg);font-size:13px;display:flex;align-items:center}
+.sb.lit{border-color:var(--accent);background:var(--accentSoft);color:var(--accentText)}
+.story{border-left:1px solid var(--line);padding:18px;font-family:Georgia,serif;color:var(--prose);font-size:15px;line-height:1.5}
+.story .ev{font-family:'DM Sans',sans-serif;color:var(--muted);font-size:13px;margin:8px 0}
+.dim{position:absolute;inset:0;background:rgba(5,8,10,.62)}
+.dlg{position:absolute;background:var(--surface);border:1px solid var(--line2);border-radius:14px;box-shadow:0 20px 60px rgba(0,0,0,.5);display:flex;flex-direction:column}
+.dh{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--line)}
+.dh .eb{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+.dh .t{font-family:Georgia,serif;font-size:22px}
+.x{width:36px;height:36px;border-radius:50%;border:1px solid var(--line2);display:grid;place-items:center;color:var(--muted)}
+.mapbody{flex:1;overflow:auto;padding:24px;display:grid;place-items:center}
+.foot{padding:10px 18px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+.small{position:absolute;right:16px;top:62px;width:300px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.c{min-height:56px;border-radius:10px;border:1px dashed var(--line);}
+.ex{min-height:56px;border-radius:10px;border:1px solid var(--accentLine);background:var(--accentSoft);color:var(--accentText);font-size:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.ex span{color:var(--prose)}
+.hr{min-height:56px;border-radius:10px;border:1px solid var(--line);display:grid;place-items:center;font-size:11px;color:var(--muted)}
+.expand{position:absolute;top:6px;right:6px;width:30px;height:30px;border-radius:8px;border:1px solid var(--accentLine);background:var(--raised);color:var(--accentText);display:grid;place-items:center;font-size:15px}
+.note{position:absolute;font-size:12px;color:var(--accent);background:#000a;padding:4px 8px;border-radius:6px;border:1px dashed var(--accent)}
+svg text{font-family:'DM Sans',system-ui,sans-serif}
+</style></head><body><div class="cap"><b>rq-7ql3 — The bigger map (desktop)</b>Agreed drawing. Desktop only (wide window); phones keep today's map. Small map gains a full-width "⤢ Bigger map" button beneath the compass → a middle window (like Settings) titled "Act I" / "Map" with every visited place as a named box joined by paths. Places seen from a visited place but not visited yet: dashed grey box, italic name, dashed path — pressable too. Up / down / secret ways: the place sits diagonally beside, on a tagged path. Pressing a place closes the window and walks Elior there step by step; the story shows every step, and a scene that stops him adds nothing extra.</div><div class=cap><b>B — A full-width button with words beneath the compass</b>Easier to notice and says what it does, but makes the small map one row taller.</div><div class="app"><div class="stage"><div class="btns"><div class="sb">Bag · 3</div><div class="sb">Spells · 1</div><div class="sb">Quests · 2</div><div class="sb">⟲ Story so far</div><div class="sb lit">🧭 Map</div></div><div class="small"><div class="g3">
+<div class="c"></div><div class="c"></div><div class="c"></div>
+<div class="ex">← West<span>Vegetable Field</span></div><div class="hr">Here</div><div class="ex">→ East<span>Blacksmith's Forge</span></div>
+<div class="c"></div><div class="ex">↓ South<span>Abandoned Shed</span></div><div class="c"></div></div>
+<div style="margin-top:8px;min-height:40px;border-radius:10px;border:1px solid var(--line2);background:var(--raised);display:flex;align-items:center;justify-content:center;gap:8px;font-size:13px;color:var(--fg)"><span style="color:var(--accentText);font-size:16px">⤢</span> Bigger map</div></div><div class="plate">Village Well</div></div><div class="story"><div class="ev">◆ You move east to Village Well.</div>An old stone well stands at the heart of the village…</div></div><div class=cap><b>B — Seen places can be pressed too</b>Same look, but Forest Path lights up under the pointer, and pressing it walks Elior there: through the places he knows, then one step into the new one.</div><div class="app"><div class="stage"><div class="btns"><div class="sb">Bag · 3</div><div class="sb">Spells · 1</div><div class="sb">Quests · 2</div><div class="sb">⟲ Story so far</div><div class="sb lit">🧭 Map</div></div><div class="plate">Village Well</div></div><div class="story"><div class="ev">◆ You move east to Village Well.</div>An old stone well stands at the heart of the village…</div><div class="dim"></div><div class="dlg" style="left:50%;top:50%;transform:translate(-50%,-50%);width:640px;max-height:700px"><div class="dh"><div><div class="eb">Act I</div><div class="t">Map</div></div><div class="x">×</div></div><div class="mapbody" style="padding:12px"><svg width="550" height="616" viewBox="0 0 550 616">
+<line x1="105.0" y1="164.0" x2="275.0" y2="164.0" stroke="#34404b" stroke-width="3" />
+<line x1="275.0" y1="164.0" x2="275.0" y2="68.0" stroke="#34404b" stroke-width="3" />
+<line x1="275.0" y1="164.0" x2="445.0" y2="164.0" stroke="#34404b" stroke-width="3" />
+<line x1="105.0" y1="164.0" x2="105.0" y2="260.0" stroke="#34404b" stroke-width="3" />
+<line x1="445.0" y1="164.0" x2="445.0" y2="260.0" stroke="#34404b" stroke-width="3" />
+<line x1="105.0" y1="260.0" x2="275.0" y2="260.0" stroke="#34404b" stroke-width="3" />
+<line x1="275.0" y1="260.0" x2="445.0" y2="260.0" stroke="#34404b" stroke-width="3" />
+<line x1="105.0" y1="260.0" x2="105.0" y2="356.0" stroke="#34404b" stroke-width="3" />
+<line x1="275.0" y1="260.0" x2="275.0" y2="356.0" stroke="#34404b" stroke-width="3" />
+<line x1="275.0" y1="356.0" x2="275.0" y2="452.0" stroke="#34404b" stroke-width="3" />
+<line x1="275.0" y1="452.0" x2="445.0" y2="452.0" stroke="#34404b" stroke-width="3" />
+<line x1="445.0" y1="452.0" x2="445.0" y2="548.0" stroke="#6b7682" stroke-width="3" stroke-dasharray='6 6'/>
+<rect x="207.0" y="42.0" width="136" height="52" rx="10" fill="#1c242c" stroke="#a8740f" stroke-width="1.2"/>
+<text x="275.0" y="73.0" text-anchor="middle" fill="#ece6d6" font-size="13">Mira's Hut</text>
+<rect x="37.0" y="138.0" width="136" height="52" rx="10" fill="#1c242c" stroke="#a8740f" stroke-width="1.2"/>
+<text x="105.0" y="169.0" text-anchor="middle" fill="#ece6d6" font-size="13">Elior's Cottage</text>
+<rect x="207.0" y="138.0" width="136" height="52" rx="10" fill="#1c242c" stroke="#a8740f" stroke-width="1.2"/>
+<text x="275.0" y="169.0" text-anchor="middle" fill="#ece6d6" font-size="13">Village Square</text>
+<rect x="377.0" y="138.0" width="136" height="52" rx="10" fill="#1c242c" stroke="#a8740f" stroke-width="1.2"/>
+<text x="445.0" y="169.0" text-anchor="middle" fill="#ece6d6" font-size="13">General Store</text>
+<rect x="37.0" y="234.0" width="136" height="52" rx="10" fill="#1c242c" stroke="#a8740f" stroke-width="1.2"/>
+<text x="105.0" y="265.0" text-anchor="middle" fill="#ece6d6" font-size="13">Vegetable Field</text>
+<rect x="207.0" y="234.0" width="136" height="52" rx="10" fill="#36270a" stroke="#ffa914" stroke-width="2.5"/>
+<text x="275.0" y="254.0" text-anchor="middle" fill="#ffb836" font-size="11" font-weight="600">You are here</text>
+<text x="275.0" y="272.0" text-anchor="middle" fill="#ece6d6" font-size="13">Village Well</text>
+<rect x="377.0" y="234.0" width="136" height="52" rx="10" fill="#1c242c" stroke="#a8740f" stroke-width="1.2"/>
+<text x="445.0" y="265.0" text-anchor="middle" fill="#ece6d6" font-size="13">Blacksmith's Forge</text>
+<rect x="37.0" y="330.0" width="136" height="52" rx="10" fill="#1c242c" stroke="#a8740f" stroke-width="1.2"/>
+<text x="105.0" y="361.0" text-anchor="middle" fill="#ece6d6" font-size="13">Chicken Coop</text>
+<rect x="207.0" y="330.0" width="136" height="52" rx="10" fill="#1c242c" stroke="#a8740f" stroke-width="1.2"/>
+<text x="275.0" y="361.0" text-anchor="middle" fill="#ece6d6" font-size="13">Abandoned Shed</text>
+<rect x="207.0" y="426.0" width="136" height="52" rx="10" fill="#1c242c" stroke="#a8740f" stroke-width="1.2"/>
+<text x="275.0" y="457.0" text-anchor="middle" fill="#ece6d6" font-size="13">Old Mill</text>
+<rect x="377.0" y="426.0" width="136" height="52" rx="10" fill="#1c242c" stroke="#a8740f" stroke-width="1.2"/>
+<text x="445.0" y="457.0" text-anchor="middle" fill="#ece6d6" font-size="13">Riverbank</text>
+<rect x="377.0" y="522.0" width="136" height="52" rx="10" fill="#1c242c" stroke="#ffa914" stroke-width="1.2" stroke-dasharray="5 4"/>
+<text x="445.0" y="553.0" text-anchor="middle" fill="#a39d8e" font-size="13" font-style="italic">Forest Path</text>
+<text x="507.0" y="578.0" font-size="20">👆</text>
+</svg></div></div></div><div class=cap><b>A — Up, down and secret ways sit beside the place, on a labelled path</b>Act IV: the Tower of Shadows' stair leads up to the Chamber of Whispers. The chamber is drawn up and to the right of the tower, as the small map puts 'Up' in its top-right corner, with a small 'Up' tag on the path. Fortress Gates–Outer Courtyard is a longer path so no two boxes overlap. (Act II's secret passage works the same, tagged 'Secret Passage'.)</div><div class="app"><div class="stage"><div class="btns"><div class="sb">Bag · 3</div><div class="sb">Spells · 1</div><div class="sb">Quests · 2</div><div class="sb">⟲ Story so far</div><div class="sb lit">🧭 Map</div></div><div class="plate">Tower of Shadows</div></div><div class="story"><div class="ev">◆ You move east to Village Well.</div>An old stone well stands at the heart of the village…</div><div class="dim"></div><div class="dlg" style="left:50%;top:50%;transform:translate(-50%,-50%);width:640px;max-height:700px"><div class="dh"><div><div class="eb">Act IV</div><div class="t">Map</div></div><div class="x">×</div></div><div class="mapbody" style="padding:12px"><svg width="550" height="470" viewBox="0 0 550 470">
+<line x1="105.0" y1="407.0" x2="445.0" y2="407.0" stroke="#34404b" stroke-width="3" />
+<line x1="445.0" y1="407.0" x2="445.0" y2="321.0" stroke="#34404b" stroke-width="3" />
+<line x1="105.0" y1="407.0" x2="105.0" y2="321.0" stroke="#34404b" stroke-width="3" />
+<line x1="105.0" y1="321.0" x2="275.0" y2="321.0" stroke="#34404b" stroke-width="3" />
+<line x1="275.0" y1="321.0" x2="445.0" y2="200.6" stroke="#34404b" stroke-width="3" />
+<rect x="334.0" y="249.8" width="52" height="22" rx="11" fill="#161d24" stroke="#34404b"/><text x="360.0" y="264.8" text-anchor="middle" fill="#a39d8e" font-size="11">↑ Up</text>
+<line x1="445.0" y1="200.6" x2="445.0" y2="114.6" stroke="#6b7682" stroke-width="3" stroke-dasharray='6 6'/>
+<rect x="35.0" y="382.0" width="140" height="50" rx="10" fill="#1c242c" stroke="#a8740f" stroke-width="1.2"/>
+<text x="105.0" y="412.0" text-anchor="middle" fill="#ece6d6" font-size="13">Fortress Gates</text>
+<rect x="375.0" y="382.0" width="140" height="50" rx="10" fill="#1c242c" stroke="#a8740f" stroke-width="1.2"/>
+<text x="445.0" y="412.0" text-anchor="middle" fill="#ece6d6" font-size="13">Outer Courtyard</text>
+<rect x="375.0" y="296.0" width="140" height="50" rx="10" fill="#1c242c" stroke="#a8740f" stroke-width="1.2"/>
+<text x="445.0" y="326.0" text-anchor="middle" fill="#ece6d6" font-size="13">Mirror Labyrinth</text>
+<rect x="35.0" y="296.0" width="140" height="50" rx="10" fill="#1c242c" stroke="#a8740f" stroke-width="1.2"/>
+<text x="105.0" y="326.0" text-anchor="middle" fill="#ece6d6" font-size="13">Hall of Echoes</text>
+<rect x="205.0" y="296.0" width="140" height="50" rx="10" fill="#36270a" stroke="#ffa914" stroke-width="2.5"/>
+<text x="275.0" y="315.0" text-anchor="middle" fill="#ffb836" font-size="11" font-weight="600">You are here</text><text x="275.0" y="333.0" text-anchor="middle" fill="#ece6d6" font-size="13">Tower of Shadows</text>
+<rect x="375.0" y="175.6" width="140" height="50" rx="10" fill="#1c242c" stroke="#a8740f" stroke-width="1.2"/>
+<text x="445.0" y="205.6" text-anchor="middle" fill="#ece6d6" font-size="13">Chamber of Whispers</text>
+<rect x="375.0" y="89.6" width="140" height="50" rx="10" fill="#121820" stroke="#6b7682" stroke-width="1.2" stroke-dasharray="5 4"/><text x="445.0" y="119.6" text-anchor="middle" fill="#a39d8e" font-size="13" font-style="italic">Memory Vault</text>
+</svg></div></div></div><div class=cap><b>A — The story shows every step, as if each had been walked</b>Pressed Riverbank on the map from Village Well. The window closed; the story has one arrival per place passed through, exactly as walking would leave it.</div><div class="app"><div class="stage"><div class="btns"><div class="sb">Bag · 3</div><div class="sb">Spells · 1</div><div class="sb">Quests · 2</div><div class="sb">⟲ Story so far</div><div class="sb">🧭 Map</div></div><div class="plate">Riverbank</div></div><div class="story" style="overflow:auto"><div class="ev" style="opacity:.6">◆ You move east to Village Well.</div><p style="opacity:.6">An old stone well stands at the heart of the village…</p><div style="display:flex;align-items:center;gap:10px;margin:16px 0 6px;color:var(--muted);font-family:DM Sans,sans-serif;font-size:12px;text-transform:uppercase;letter-spacing:.08em"><span style="flex:1;border-top:1px solid var(--line)"></span>Abandoned Shed<span style="flex:1;border-top:1px solid var(--line)"></span></div><div class="ev">◆ You move south to Abandoned Shed.</div><div style="display:flex;align-items:center;gap:10px;margin:16px 0 6px;color:var(--muted);font-family:DM Sans,sans-serif;font-size:12px;text-transform:uppercase;letter-spacing:.08em"><span style="flex:1;border-top:1px solid var(--line)"></span>Old Mill<span style="flex:1;border-top:1px solid var(--line)"></span></div><div class="ev">◆ You move south to Old Mill.</div><div style="display:flex;align-items:center;gap:10px;margin:16px 0 6px;color:var(--muted);font-family:DM Sans,sans-serif;font-size:12px;text-transform:uppercase;letter-spacing:.08em"><span style="flex:1;border-top:1px solid var(--line)"></span>Riverbank<span style="flex:1;border-top:1px solid var(--line)"></span></div><div class="ev">◆ You move east to Riverbank.</div></div></div><div class=cap><b>A — Nothing extra: the scene is the reason</b>Pressed Riverbank. At Old Mill a scene plays, so Elior stops there. The story ends on the scene, as it would by foot; the plate says Old Mill.</div><div class="app"><div class="stage"><div class="btns"><div class="sb">Bag · 3</div><div class="sb">Spells · 1</div><div class="sb">Quests · 2</div><div class="sb">⟲ Story so far</div><div class="sb">🧭 Map</div></div><div class="plate">Old Mill</div></div><div class="story"><div class="ev" style="opacity:.6">◆ You move east to Village Well.</div><div style="display:flex;align-items:center;gap:10px;margin:16px 0 6px;color:var(--muted);font-family:DM Sans,sans-serif;font-size:12px;text-transform:uppercase;letter-spacing:.08em"><span style="flex:1;border-top:1px solid var(--line)"></span>Abandoned Shed<span style="flex:1;border-top:1px solid var(--line)"></span></div><div class="ev">◆ You move south to Abandoned Shed.</div><div style="display:flex;align-items:center;gap:10px;margin:16px 0 6px;color:var(--muted);font-family:DM Sans,sans-serif;font-size:12px;text-transform:uppercase;letter-spacing:.08em"><span style="flex:1;border-top:1px solid var(--line)"></span>Old Mill<span style="flex:1;border-top:1px solid var(--line)"></span></div><div class="ev">◆ You move south to Old Mill.</div><p>As you step inside, the mill wheel groans to a halt. A voice calls from the loft: "Who goes there?"</p></div></div></body></html>
