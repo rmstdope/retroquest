@@ -494,6 +494,13 @@ export const SCENERY_BY_ROOM: Record<string, SceneryDef[]> = {
       'A small hollow beside the path, once hidden by the vines.',
       'cut',
     ),
+    plain(
+      'ForestPath.cutVines',
+      'vines',
+      ['cut vines'],
+      'The cut vines lie in a heap at the mouth of the alcove, thorns and all.',
+      'cut',
+    ),
   ],
   HiddenGlade: [
     staged(

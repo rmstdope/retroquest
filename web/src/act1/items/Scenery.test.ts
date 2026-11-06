@@ -7,6 +7,7 @@ import { SharpKnife } from './SharpKnife'
 import { Candle } from './Candle'
 import { Mechanism } from './Mechanism'
 import { Scenery } from './Scenery'
+import { Vines } from './Vines'
 import { SCENERY_BY_ROOM } from './sceneryLines'
 import {
   FLAG_COOP_KEY_FELL,
@@ -76,6 +77,10 @@ describe('Scenery chips', () => {
   it('every scenery word resolves in its room to its own chip', () => {
     for (const [room, defs] of Object.entries(SCENERY_BY_ROOM)) {
       const game = gameIn(room)
+      // The forest path's cut chips show only once the vines item is gone.
+      game.state.currentRoom.items = game.state.currentRoom.items.filter(
+        (item) => !(item instanceof Vines),
+      )
       game.state.currentRoom.items.push(...defs.map((d) => new Scenery(d.key)))
       for (const def of defs) {
         for (const word of [def.name, ...def.aliases]) {
@@ -181,6 +186,29 @@ describe('Scenery that appears with the story', () => {
     expect(say(game, 'examine alcove')).toBe(
       'A small hollow beside the path, once hidden by the vines.',
     )
+  })
+
+  it('forest path: the cut vines can be examined once they lie cut', () => {
+    const game = gameIn('ForestPath')
+    game.state.addItemToInventory(new SharpKnife())
+    say(game, 'use knife with vines')
+    expect(game.state.currentRoom.descriptionFor(game.state)).toContain(
+      'they now lie cut',
+    )
+    expect(say(game, 'examine vines')).toContain('cut vines')
+    expect(say(game, 'examine cut vines')).toContain('cut vines')
+    expect(say(game, 'take vines')).not.toContain('pick it up')
+  })
+
+  it('forest path: an old save with the vines cut can examine them', () => {
+    const game = gameIn('ForestPath')
+    game.state.addItemToInventory(new SharpKnife())
+    say(game, 'use knife with vines')
+    const path = game.state.currentRoom
+    path.items = path.items.filter((i) => !(i instanceof Scenery))
+    const fresh = new Game([new Act1()])
+    fresh.loadSaveData(game.toSaveData())
+    expect(say(fresh, 'examine vines')).toContain('cut vines')
   })
 
   it('forest path: the alcove sits beside the path, under no bank', () => {
