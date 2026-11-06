@@ -36,7 +36,6 @@ function inRoom(room: string): { game: Game; state: GameState } {
 function firstRead(answer: string | null): string {
   const block = parseTurn(answer ?? '')[0]
   if (block.kind === 'text') return block.markup
-  if (block.kind === 'failure' && block.narrated) return block.markup
   throw new Error(`first block is not read: ${JSON.stringify(block)}`)
 }
 

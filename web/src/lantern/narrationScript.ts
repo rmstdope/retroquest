@@ -6,7 +6,7 @@
  * story view finds a recording by the same block (`findClip`).
  *
  * - `turnBlocks`: an answer, split as the story view splits it (`parseTurn`):
- *   narration, speech and clue failures are voiced; events (the echo of the
+ *   narration (clue lines included) and speech are voiced; events (the echo of the
  *   player's command), plain refusals and checklists are not.
  *   Unsigned writing has no speaker on the page, so it is keyed as `UNSIGNED`.
  * - `introBlocks`: a chapter page that opens an act: its heading
@@ -75,10 +75,10 @@ export interface ScriptLine {
 }
 
 /**
- * The voice of one block of an answer: the narrator for text, the speaker for
- * speech (`UNSIGNED` for unsigned writing) and for a failure that carries a
- * clue (`clue()`); null for events, plain failures and checklists, which are
- * not read aloud.
+ * The voice of one block of an answer: the narrator for text (a clue line,
+ * `clue()`, included), the speaker for speech (`UNSIGNED` for unsigned
+ * writing); null for events, failures and checklists, which are not read
+ * aloud.
  */
 export function blockVoice(block: TurnBlock): VoicedBlock | null {
   if (block.kind === 'text') return { speaker: NARRATOR, markup: block.markup }
@@ -87,8 +87,6 @@ export function blockVoice(block: TurnBlock): VoicedBlock | null {
       speaker: block.speaker?.toLowerCase() ?? UNSIGNED,
       markup: block.markup,
     }
-  if (block.kind === 'failure' && block.narrated)
-    return { speaker: NARRATOR, markup: block.markup }
   return null
 }
 

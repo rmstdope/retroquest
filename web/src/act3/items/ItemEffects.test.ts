@@ -34,7 +34,7 @@ function eventLines(answer: string): string[] {
   return [...answer.matchAll(/\[event\](.*?)\[\/event\]/gs)].map((m) => m[1])
 }
 
-/** Whether the answer is a red box that the narration reads. */
+/** Whether the answer is a clue line, which the narration reads. */
 function isClue(answer: string): boolean {
   return answer.includes('[failure][clue]')
 }

@@ -248,7 +248,6 @@ function chipLabel(chip: Chip): string {
           v-else-if="block.kind === 'failure'"
           class="lq-block-failure"
           :class="{
-            'lq-speaking': isSpeaking(index),
             'lq-appear': fade,
             'lq-bubble lq-bubble-failure': card,
           }"
@@ -270,7 +269,7 @@ function chipLabel(chip: Chip): string {
             <circle cx="12" cy="12" r="9" />
             <path d="M8 12h8" />
           </svg>
-          <span v-html="html(block.markup, index)"></span>
+          <span v-html="renderMarkup(block.markup)"></span>
         </p>
         <blockquote
           v-else-if="block.kind === 'dialogue'"
@@ -435,11 +434,6 @@ function chipLabel(chip: Chip): string {
     0 0 0 2px var(--lq-accent),
     0 2px 10px rgba(0, 0, 0, 0.18);
 }
-.lq-turn .lq-bubble.lq-bubble-failure.lq-speaking {
-  box-shadow:
-    0 0 0 2px var(--lq-failure),
-    0 2px 10px rgba(0, 0, 0, 0.18);
-}
 /* Older bubbles dim as older speech does: one step, then a further one (see `useBubbleAges`). */
 .lq-bubble[data-age='prev'] {
   opacity: 0.55;
@@ -597,21 +591,10 @@ function chipLabel(chip: Chip): string {
     opacity: 0;
   }
 }
-/* A clue failure being read: a red rule at the box's left edge (the shared
-   speaking rule in lantern.css, in the failure colour). */
-.lq-block-failure.lq-speaking {
-  --lq-rule-width: 3px;
-  --lq-rule-colour: var(--lq-failure);
-}
 /* The rule sits left of the words, which stay where they were. */
 .lq-block-text.lq-speaking {
   padding-left: 12px;
   margin-left: -12px;
-}
-.lq-turn :deep(.lq-block-failure .lq-w-now) {
-  background: color-mix(in srgb, var(--lq-failure) 28%, transparent);
-  color: var(--lq-failure);
-  box-shadow: 0 0 0 2px color-mix(in srgb, var(--lq-failure) 28%, transparent);
 }
 .lq-quest-card.lq-speaking {
   border-color: var(--lq-accent);

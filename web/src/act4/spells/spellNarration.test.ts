@@ -30,10 +30,10 @@ function newGame(): Game {
   return new Game([act])
 }
 
-/** The block kinds of an answer, in order, with a star on a read red box. */
+/** The block kinds of an answer, in order, with `clue` for a clue line. */
 function shape(text: string): string[] {
   return parseTurn(text).map((b: TurnBlock) =>
-    b.kind === 'failure' && b.narrated ? 'failure*' : b.kind,
+    b.kind === 'text' && b.clue ? 'clue' : b.kind,
   )
 }
 
@@ -58,14 +58,14 @@ describe('Act IV spells narrate their effect', () => {
     expect(shape(out)).not.toContain('event')
   })
 
-  it('grow on a person at home is a read red box', () => {
+  it('grow on a person at home is a clue line', () => {
     const game = newGame()
     game.state.setStoryFlag(FLAG_ACT4_HOME_REACHED, true)
     const out = new Grow().castOnCharacter(game.state, new Malakar())
     expect(parseTurn(out)).toEqual([
       {
-        kind: 'failure',
-        narrated: true,
+        kind: 'text',
+        clue: true,
         markup: 'Grow is for the field, not for people.',
       },
     ])
@@ -85,13 +85,13 @@ describe('Act IV spells narrate their effect', () => {
     )
   })
 
-  it('bless on the servants from the wrong place is a read red box', () => {
+  it('bless on the servants from the wrong place is a clue line', () => {
     const game = newGame()
     const out = new Bless().castOnCharacter(game.state, new TrappedServants())
     expect(parseTurn(out)).toEqual([
       {
-        kind: 'failure',
-        narrated: true,
+        kind: 'text',
+        clue: true,
         markup: 'The magic seems unable to reach the servants fully here.',
       },
     ])
@@ -107,11 +107,11 @@ describe('Act IV spells narrate their effect', () => {
     expect(shape(out)).toEqual(['text'])
   })
 
-  it('forgiveness on Malakar is a read red box', () => {
+  it('forgiveness on Malakar is a clue line', () => {
     const game = newGame()
     expect(
       shape(new Forgiveness().castOnCharacter(game.state, new Malakar())),
-    ).toEqual(['failure*'])
+    ).toEqual(['clue'])
   })
 
   it('truth sight results are read, not grey', () => {

@@ -7,7 +7,8 @@
  *   dialogue never count. No such name → speaker is null.
  * - Outside dialogue, each non-blank line becomes one block:
  *   a line wholly wrapped in `[event]` or `[failure]` → event / failure (a
- *   failure wholly wrapped in `[clue]` is a narrated failure, tags removed);
+ *   failure wholly wrapped in `[clue]` is narration, a text block marked
+ *   `clue` with both tags removed);
  *   bulleted (`*`) lines wholly wrapped in `[success]` / `[pending]` → items of
  *   one checklist (consecutive items are grouped); anything else → text.
  * - A tag span that runs over several lines (e.g. an `[event]` of two lines) is
@@ -35,9 +36,9 @@ export interface ChecklistItem {
 }
 
 export type TurnBlock =
-  | { kind: 'text'; markup: string }
+  | { kind: 'text'; markup: string; clue?: true }
   | { kind: 'event'; markup: string }
-  | { kind: 'failure'; markup: string; narrated?: true }
+  | { kind: 'failure'; markup: string }
   | { kind: 'dialogue'; speaker: string | null; markup: string }
   | { kind: 'checklist'; items: ChecklistItem[] }
 
@@ -143,7 +144,7 @@ export function parseTurn(raw: string): TurnBlock[] {
       blocks.push(
         clue === null
           ? { kind: 'failure', markup: failure }
-          : { kind: 'failure', markup: clue, narrated: true },
+          : { kind: 'text', markup: clue, clue: true },
       )
     } else if (CHECKLIST_BULLET.test(success ?? pending ?? '')) {
       addChecklistItem({
