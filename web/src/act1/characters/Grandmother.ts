@@ -14,6 +14,7 @@ import { FadedPhotograph } from '../items/FadedPhotograph'
 import { Key } from '../items/Key'
 import { AncientAmulet } from '../items/AncientAmulet'
 import { FreshBread } from '../items/FreshBread'
+import { Bread } from '../items/Bread'
 import { Patches } from './Patches'
 import {
   FLAG_GRANDMOTHER_BAKED_BREAD,
@@ -110,14 +111,24 @@ export class Grandmother extends Character {
         'You already have it by heart: his words, and the way she told them.'
     }
 
-    if (!dialogue) {
-      // If no other dialogue was triggered
-      dialogue = speech(
-        "Back again? There's bread on the board, if you're hungry.",
-      )
-    }
+    if (!dialogue) dialogue = this.backAgain(gameState)
 
     return dialogue
+  }
+
+  /**
+   * Her greeting when she has nothing else to say: the loaf on the board
+   * while it still lies in the cottage, and only a word on it once Elior
+   * has taken it.
+   */
+  private backAgain(gameState: GameState): string {
+    const loafOnBoard = gameState.currentRoom.items.some(
+      (item) => item instanceof Bread,
+    )
+    if (loafOnBoard) {
+      return speech("Back again? There's bread on the board, if you're hungry.")
+    }
+    return speech("Back again? You've had the loaf, I see. I'll bake another.")
   }
 
   /**
@@ -142,8 +153,8 @@ export class Grandmother extends Character {
       ) +
       '\nYou tell her the three words you caught at the very end, the ones ' +
       'you wrote down before they could go: let them rest. She goes ' +
-      'quiet. She turns to the bread on the board and does not turn back ' +
-      'for a while. ' +
+      'quiet. She turns to the hearth, where the next loaf is rising, and ' +
+      'does not turn back for a while. ' +
       speech('Some voices are older than memory.')
     )
   }
@@ -152,7 +163,7 @@ export class Grandmother extends Character {
   private journalTale(): string {
     return (
       'She wipes her hands and looks at the [item_name]journal[/item_name] ' +
-      'under your arm. ' +
+      'lying open where you left it. ' +
       speech(
         'Your father wrote in one like that every night, at this table. ' +
           'Half of it I never understood.\n' +
@@ -188,7 +199,7 @@ export class Grandmother extends Character {
         'Her eyes fall on the [item_name]amulet[/item_name] you carry, and ' +
         'she goes very still. ' +
         speech("So it's true, then.") +
-        ' She turns the loaf on the board, though it does not need turning. ' +
+        ' She brushes flour from the board, though there is none to brush. ' +
         speech('Come back to me, child.')
       )
     }

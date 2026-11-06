@@ -260,6 +260,11 @@
     "text": "You are not particularly hungry."
   },
   {
+    "id": "13a5eb33c8b578",
+    "speaker": "grandmother",
+    "text": "Back again? You've had the loaf, I see. I'll bake another."
+  },
+  {
     "id": "0f934961783f9e",
     "speaker": "narrator",
     "text": "The brass is worn smooth where hands have held it. It has lit your way home for as long as you can remember."
@@ -310,9 +315,9 @@
     "text": "That voice... did it say anything more? Anything but your name?"
   },
   {
-    "id": "1ae6444ce0a3c5",
+    "id": "04b97e124989ca",
     "speaker": "narrator",
-    "text": "You tell her the three words you caught at the very end, the ones you wrote down before they could go: let them rest. She goes quiet. She turns to the bread on the board and does not turn back for a while."
+    "text": "You tell her the three words you caught at the very end, the ones you wrote down before they could go: let them rest. She goes quiet. She turns to the hearth, where the next loaf is rising, and does not turn back for a while."
   },
   {
     "id": "1086a94f5be29d",
@@ -320,9 +325,9 @@
     "text": "Some voices are older than memory."
   },
   {
-    "id": "033d5ccbf999ee",
+    "id": "0941207b352bec",
     "speaker": "narrator",
-    "text": "She wipes her hands and looks at the journal under your arm."
+    "text": "She wipes her hands and looks at the journal lying open where you left it."
   },
   {
     "id": "1a35a4f872fc47",
@@ -3710,9 +3715,9 @@
     "text": "So it's true, then."
   },
   {
-    "id": "0cc465aa785fcf",
+    "id": "084cdb3886aeac",
     "speaker": "narrator",
-    "text": "She turns the loaf on the board, though it does not need turning."
+    "text": "She brushes flour from the board, though there is none to brush."
   },
   {
     "id": "19b2e4198a16d3",
