@@ -3750,14 +3750,9 @@
     "text": "Your road leads to Greendale, Elior. Once there, show the amulet to no one lightly. Those who know what it is will find you."
   },
   {
-    "id": "18708bfe81a990",
+    "id": "116aac75767bd3",
     "speaker": "narrator",
-    "text": "Mira doesn't look up from her herbs."
-  },
-  {
-    "id": "1bcce557e73274",
-    "speaker": "mira",
-    "text": "Still here? Go and say a proper goodbye to your grandmother. Then go."
+    "text": "A small hut hung with drying herbs: lavender, sage, and roots in bundles from the rafters. Shelves of bottles line the walls, every one labelled. Mira moves among them without looking, the way you move through your own kitchen. The stand where the amulet rested stands empty."
   },
   {
     "id": "0e4e8bf1670acc",
@@ -3785,14 +3780,9 @@
     "text": "The same hand, then. The mill stands on old power, and that thing was drinking it. You did well to stop it."
   },
   {
-    "id": "192b401a127985",
+    "id": "0d16c9949e99b1",
     "speaker": "mira",
-    "text": "The cloaked stranger the villagers whisper about."
-  },
-  {
-    "id": "0c41816e3b06a8",
-    "speaker": "narrator",
-    "text": "She stops, as if she has said more than she meant to."
+    "text": "The man in the grey cloak, who came to my door."
   },
   {
     "id": "10d7275daeafff",
@@ -3825,6 +3815,26 @@
     "text": "Mira named the token a fouling sigil: someone poisoned the well on purpose. Whoever carried it, perhaps the cloaked stranger the villagers whisper about, was searching Willowbrook for something, or for someone."
   },
   {
+    "id": "18708bfe81a990",
+    "speaker": "narrator",
+    "text": "Mira doesn't look up from her herbs."
+  },
+  {
+    "id": "1bcce557e73274",
+    "speaker": "mira",
+    "text": "Still here? Go and say a proper goodbye to your grandmother. Then go."
+  },
+  {
+    "id": "192b401a127985",
+    "speaker": "mira",
+    "text": "The cloaked stranger the villagers whisper about."
+  },
+  {
+    "id": "0c41816e3b06a8",
+    "speaker": "narrator",
+    "text": "She stops, as if she has said more than she meant to."
+  },
+  {
     "id": "0c3545ca3180ad",
     "speaker": "narrator",
     "text": "Mira closes your fingers over the rune token without taking it."
@@ -3853,11 +3863,6 @@
     "id": "18820eb4ab1c46",
     "speaker": "mira",
     "text": "And mind what she says about answering questions."
-  },
-  {
-    "id": "116aac75767bd3",
-    "speaker": "narrator",
-    "text": "A small hut hung with drying herbs: lavender, sage, and roots in bundles from the rafters. Shelves of bottles line the walls, every one labelled. Mira moves among them without looking, the way you move through your own kitchen. The stand where the amulet rested stands empty."
   },
   {
     "id": "11a0ba67289d79",
