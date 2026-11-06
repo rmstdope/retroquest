@@ -47,6 +47,9 @@ const MALAKAR = /malakar/i
 /** His cat's name, which he answers as a man who knows her. */
 const PATCHES = /\bpatches\b/i
 
+/** The healer's name, which he answers as a neighbour she once mended. */
+const MIRA = /\bmira\b/i
+
 /**
  * Old Man Hemlock, the shopkeeper of Willowbrook's General Store.
  *
@@ -655,12 +658,14 @@ export class Shopkeeper extends Character {
   /**
    * Raps the counter at the byword "Malakar", the same every time and in
    * every state of the store. Answers the name of his cat as a man who
-   * knows her (see `patchesAnswer`); any other word gets his turn-taking
+   * knows her (see `patchesAnswer`) and the healer's as a neighbour she
+   * once mended (see `miraAnswer`); any other word gets his turn-taking
    * answers.
    */
   override sayTo(gameState: GameState, words: string): string {
     if (!MALAKAR.test(words)) {
       if (PATCHES.test(words)) return this.patchesAnswer(gameState)
+      if (MIRA.test(words)) return this.miraAnswer()
       return super.sayTo(gameState, words)
     }
     return attributeSpeech(
@@ -715,6 +720,19 @@ export class Shopkeeper extends Character {
         speech(
           `${characterName('Patches')}? You've not seen her, have you, lad? ` +
             'She was last seen near the old well.',
+        ),
+    )
+  }
+
+  /** His answer to the healer's name, the same in every state of the store. */
+  private miraAnswer(): string {
+    return attributeSpeech(
+      this.name,
+      `${this.nameInSentence({ atStart: true })} rubs his wrist. ` +
+        speech(
+          `${characterName('Mira')} set my wrist the winter I went down on ` +
+            "the ice, lad, and wouldn't take a coin for it. " +
+            "There's not many would say no to a coin these days.",
         ),
     )
   }

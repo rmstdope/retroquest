@@ -1122,3 +1122,41 @@ describe('Hemlock answers the name of his cat', () => {
     expect(game.state.getStoryFlag(FLAG_PATCHES_RETURNED)).toBe(true)
   })
 })
+
+describe('Hemlock answers the healer by name', () => {
+  const STOCK = "You'd best ask someone with more time than I have"
+
+  it('speaks of Mira as a man who knows her, not with his stock reply', () => {
+    const game = gameInStore()
+    game.state.setStoryFlag(FLAG_MET_HEMLOCK, true)
+
+    const answer = game.commandParser.parse('say mira to hemlock')
+
+    expect(answer).not.toContain(STOCK)
+    expect(answer).not.toContain("I've a shop to mind")
+    expect(answer).toContain('set my wrist')
+    expectDialogueSpeaker(answer, 'Hemlock')
+    expect(findMarkupProblems(answer)).toEqual([])
+  })
+
+  it('answers her name the same while the store is shut', () => {
+    const game = gameInStore({ shopOpen: false })
+    game.state.setStoryFlag(FLAG_MET_HEMLOCK, true)
+
+    const answer = game.commandParser.parse('say mira to hemlock')
+
+    expect(answer).toContain('set my wrist')
+  })
+
+  it('answers her name before they have met, leaving the meeting to a talk', () => {
+    const game = gameInStore({ shopOpen: false })
+
+    expect(game.commandParser.parse('say mira to hemlock')).toContain(
+      'set my wrist',
+    )
+    expect(game.state.getStoryFlag(FLAG_MET_HEMLOCK)).toBe(false)
+    expect(game.commandParser.parse('talk to hemlock')).toContain(
+      'Gone for days now',
+    )
+  })
+})

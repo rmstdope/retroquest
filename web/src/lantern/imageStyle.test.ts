@@ -82,16 +82,18 @@ describe('the style in content-studio/images/edits.json', () => {
   it('gives every act its agreed mood of light and colour', () => {
     // Whatever an act's addition names is drawn in every room of the act.
     expect(style.parts).toEqual({
-      act1: 'Warm late-day light, earthy greens and straw golds, homely and lived-in',
+      act1:
+        'Warm late-day light, earthy greens and straw golds, ' +
+        'homely and lived-in, in a fantasy setting',
       act2:
         'Clear daylight and richer colour, deep greens, warm reds and creams, ' +
-        'a faint grey haze at the edges',
+        'a faint grey haze at the edges, in a fantasy setting',
       act3:
         'Cooler, wilder light, colours a little drained, ' +
-        'as if a sickness were creeping into the land',
+        'as if a sickness were creeping into the land, in a fantasy setting',
       act4:
         'Cold, dim light, violet and grey shadows, ' +
-        'colours drained almost to stone, a hush of dread',
+        'colours drained almost to stone, a hush of dread, in a fantasy setting',
     })
   })
 })
