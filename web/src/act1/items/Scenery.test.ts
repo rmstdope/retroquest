@@ -197,7 +197,9 @@ describe('Scenery that appears with the story', () => {
     )
     expect(say(game, 'examine vines')).toContain('cut vines')
     expect(say(game, 'examine cut vines')).toContain('cut vines')
-    expect(say(game, 'take vines')).not.toContain('pick it up')
+    expect(say(game, 'take vines')).toContain(
+      "You can't take the [item_name]vines[/item_name]",
+    )
   })
 
   it('forest path: an old save with the vines cut can examine them', () => {
