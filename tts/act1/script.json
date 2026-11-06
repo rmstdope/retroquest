@@ -450,6 +450,21 @@
     "text": "She hands it back, and turns to the bread."
   },
   {
+    "id": "15b327c013bbc3",
+    "speaker": "narrator",
+    "text": "Quest updated"
+  },
+  {
+    "id": "076161dbddd970",
+    "speaker": "narrator",
+    "text": "The line on the back says to seek the truth where the river bends. Your grandmother knew your mother's hand better than anyone."
+  },
+  {
+    "id": "0d05746e865a18",
+    "speaker": "narrator",
+    "text": "The faded photograph: The line on the back says to seek the truth where the river bends. Your grandmother knew your mother's hand better than anyone."
+  },
+  {
     "id": "00372589396b2b",
     "speaker": "narrator",
     "text": "Your grandmother turns the photograph over, and her thumb rests on the writing."
@@ -480,6 +495,16 @@
     "text": "Your mother loved the river. If anyone remembers what she did there, it's the old fisherman down at the Riverbank. Promise me you'll be careful."
   },
   {
+    "id": "18a53f865bf20d",
+    "speaker": "narrator",
+    "text": "Your grandmother says your mother loved the river. The old fisherman at the Riverbank will remember what she did there."
+  },
+  {
+    "id": "0c619a4831b3b0",
+    "speaker": "narrator",
+    "text": "The faded photograph: Your grandmother says your mother loved the river. The old fisherman at the Riverbank will remember what she did there."
+  },
+  {
     "id": "19ad071adb2439",
     "speaker": "narrator",
     "text": "Know your village"
@@ -488,11 +513,6 @@
     "id": "04c2164fb440fd",
     "speaker": "narrator",
     "text": "Something pulls at you to walk every lane of Willowbrook, and to look properly at the places you have passed a thousand times."
-  },
-  {
-    "id": "15b327c013bbc3",
-    "speaker": "narrator",
-    "text": "Quest updated"
   },
   {
     "id": "1158658223b1bc",
@@ -1965,6 +1985,11 @@
     "text": "The night before she went away, she pressed a little tin into the mud under that smooth stone yonder, and made me promise to watch over it. Said if her boy ever came asking, he'd know where to look. I reckon you've come asking."
   },
   {
+    "id": "0ae301ba21b698",
+    "speaker": "narrator",
+    "text": "The bend is the fisherman's spot. The night before she went away, your mother hid a tin under the smooth stone at the water's edge."
+  },
+  {
     "id": "08b1a588888393",
     "speaker": "narrator",
     "text": "The fisherman points to the water's edge."
@@ -1978,6 +2003,16 @@
     "id": "0de6915aebf8ee",
     "speaker": "narrator",
     "text": "You tip the smooth stone aside and dig into the cold mud beneath it. Your fingers close on a small tin, sealed with wax. Inside, wrapped in oilcloth, lies a mother's letter."
+  },
+  {
+    "id": "19a55d45b09906",
+    "speaker": "narrator",
+    "text": "The faded photograph: The bend is the fisherman's spot. The night before she went away, your mother hid a tin under the smooth stone at the water's edge."
+  },
+  {
+    "id": "0de87ff96c2c5c",
+    "speaker": "narrator",
+    "text": "The tin under the smooth stone held a letter in your mother's hand. You have not read it yet."
   },
   {
     "id": "1503b6977bed26",
@@ -2013,6 +2048,11 @@
     "id": "14eea3fbdae25b",
     "speaker": "narrator",
     "text": "The rest has blurred away in the water stains."
+  },
+  {
+    "id": "0f012badb372da",
+    "speaker": "narrator",
+    "text": "The faded photograph: The tin under the smooth stone held a letter in your mother's hand. You have not read it yet."
   },
   {
     "id": "107645184b309e",
