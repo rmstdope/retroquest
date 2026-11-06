@@ -32,6 +32,9 @@ function storageFull() {
   })
 }
 
+/** The bridge under test. */
+type Bridge = ReturnType<typeof useBridge>
+
 /** A bridge with the game running in Act I, woken out of the dream it opens with. */
 async function runningBridge() {
   const bridge = useBridge()
@@ -325,6 +328,56 @@ describe('useBridge', () => {
         'Starting game...',
         'Ready!',
       ])
+    })
+  })
+
+  describe('the story kept with a save', () => {
+    const STORY = [{ text: 'You look around.' }]
+
+    it.each([
+      [
+        'the quick save',
+        (b: Bridge) => b.quickSaveGame(STORY),
+        (b: Bridge) => b.quickLoadGame(),
+      ],
+      [
+        'a slot',
+        (b: Bridge) => b.saveToSlot(3, STORY),
+        (b: Bridge) => b.loadFromSlot(3),
+      ],
+      [
+        'a named save',
+        (b: Bridge) => b.saveNamedGame('story', STORY),
+        (b: Bridge) => b.loadNamedGame('story'),
+      ],
+    ])(
+      'gives back the story saved with %s once, after it loads',
+      async (_kind, save, load) => {
+        const bridge = await runningBridge()
+        save(bridge)
+        const reloaded = await runningBridge()
+        expect(reloaded.takeLoadedStory()).toBe(null)
+        expect(load(reloaded)).not.toContain('[failure]')
+        expect(reloaded.takeLoadedStory()).toEqual(STORY)
+        expect(reloaded.takeLoadedStory()).toBe(null)
+      },
+    )
+
+    it('gives back no story for a save made without one, nor for a failed load', async () => {
+      const bridge = await runningBridge()
+      bridge.quickSaveGame(STORY)
+      bridge.quickSaveGame()
+      bridge.quickLoadGame()
+      expect(bridge.takeLoadedStory()).toBe(null)
+      bridge.saveToSlot(1, STORY)
+      localStorageMock._setRaw(
+        'retroquest_save_slots',
+        localStorageMock
+          .getItem('retroquest_save_slots')
+          ?.replace(/"data":"(\\.|[^"\\])*"/, '"data":"{}"') ?? null,
+      )
+      expect(bridge.loadFromSlot(1)).toContain('[failure]')
+      expect(bridge.takeLoadedStory()).toBe(null)
     })
   })
 

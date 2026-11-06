@@ -97,6 +97,34 @@ export interface Turn {
   narrate?: true
   /** The room character a player's command was for (talk to, say … to, give … to), when it was for one. */
   addressed?: string
+  /**
+   * Set on a turn a load brought back from the save's story: the stage shows
+   * it as it stood, telling no news again and flying nothing.
+   */
+  restored?: true
+}
+
+/**
+ * Whether a save's story (unknown JSON) reads as turns: an array of entries
+ * with the fields every turn has. Anything else is treated as no story.
+ */
+function isStory(value: unknown): value is Turn[] {
+  return (
+    Array.isArray(value) &&
+    value.every(
+      (entry: unknown) =>
+        typeof entry === 'object' &&
+        entry !== null &&
+        'text' in entry &&
+        typeof entry.text === 'string' &&
+        'room' in entry &&
+        typeof entry.room === 'string' &&
+        'gained' in entry &&
+        Array.isArray(entry.gained) &&
+        'lost' in entry &&
+        Array.isArray(entry.lost),
+    )
+  )
 }
 
 /** What the player found on entering a room (engine markup / names). */
@@ -1050,7 +1078,7 @@ export const useGameStore = defineStore('game', () => {
   function saveGame(command: string | null = null): boolean {
     if (openHeldActEnd()) return false
     const b = requireBridge()
-    const result = b.quickSaveGame()
+    const result = b.quickSaveGame(turns.value)
     if (!showNotice(result, 'Game saved'))
       showOutput(command, result, { chips: false })
     return saved(result)
@@ -1069,7 +1097,7 @@ export const useGameStore = defineStore('game', () => {
   function saveNamedGame(name: string, command: string | null = null): boolean {
     if (openHeldActEnd()) return false
     const b = requireBridge()
-    const result = b.saveNamedGame(name)
+    const result = b.saveNamedGame(name, turns.value)
     if (!showNotice(result, `Game saved · ${name}`))
       showOutput(command, result, { chips: false })
     return saved(result)
@@ -1084,9 +1112,11 @@ export const useGameStore = defineStore('game', () => {
    * After a load. A failed one (no save, or a save too old to load) only
    * shows the engine's line under the command, and the game, the room and the
    * turn stay as they were. A loaded game starts afresh (hold, act, music,
-   * dots and panels): a notice, and the room in the story under the command
-   * when one was typed. It plays on in the loaded act, so an act-complete
-   * page still held for narration is dropped.
+   * dots and panels) with a notice, and the story is the save's story so far,
+   * as it stood when the game was saved (`restoreStory`). A save made before
+   * the story was kept shows only the room, under the command when one was
+   * typed. It plays on in the loaded act, so an act-complete page still held
+   * for narration is dropped.
    */
   function afterLoad(
     b: GameBridge,
@@ -1103,9 +1133,41 @@ export const useGameStore = defineStore('game', () => {
     loadNumber.value++
     clearNewDots()
     actEndPending.value = false
-    // The typed word stays on the turn (the narration card's command line).
-    showOutput(command, '', { chips: false, description: LOADED_ROOM })
+    const story = b.takeLoadedStory()
+    if (isStory(story)) restoreStory(b, story)
+    else {
+      turns.value = []
+      // The typed word stays on the turn (the narration card's command line).
+      showOutput(command, '', { chips: false, description: LOADED_ROOM })
+    }
     refreshPanels()
+  }
+
+  /**
+   * The story of a loaded save, as it stood when it was saved: each turn
+   * numbered afresh for this session and marked `restored`, and nothing
+   * owed by it (narration, a chime or fanfare) is owed again. The next
+   * command's chips compare with the loaded bag and spells.
+   */
+  function restoreStory(b: GameBridge, story: Turn[]): void {
+    turns.value = story.map((turn) => {
+      const { narrate: _narrate, ...kept } = turn
+      return {
+        ...kept,
+        id: nextTurnId++,
+        ...(turn.quests
+          ? {
+              quests: turn.quests.map(
+                ({ chime: _chime, fanfare: _fanfare, ...news }) => news,
+              ),
+            }
+          : {}),
+        restored: true as const,
+      }
+    })
+    lastTurnRoom = b.controller.getRoomName()
+    lastBag = b.controller.getInventory().map((entry) => entry.name)
+    lastSpells = b.controller.getSpells().map((entry) => entry.name)
   }
 
   /** The engine's stats or help text, for a dialog (adds nothing to the story). */
@@ -1125,7 +1187,7 @@ export const useGameStore = defineStore('game', () => {
   function saveToSlot(slot: number): boolean {
     if (openHeldActEnd()) return false
     const b = requireBridge()
-    const result = b.saveToSlot(slot)
+    const result = b.saveToSlot(slot, turns.value)
     if (!showNotice(result, `Game saved · Slot ${slot}`))
       showOutput(null, result)
     return saved(result)

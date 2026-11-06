@@ -731,6 +731,27 @@ describe('LanternLayout: the arrival on the picture', () => {
       expect(game.turns.at(-1)?.fullText).toContain('You have learned')
     })
 
+    it('tells nothing in the middle and rings nothing for a turn a load brought back', async () => {
+      const w = await ready(true, false)
+      useSettingsStore(pinia).narrationOn = false
+      const game = useGameStore(pinia)
+      const audio = {
+        playNewQuest: vi.fn(),
+        playQuestComplete: vi.fn(),
+        playNewSpell: vi.fn(),
+      }
+      game.setAudioPlayer(audio)
+      pushSpellTurn()
+      const restored = game.turns.at(-1)
+      if (restored) restored.restored = true
+      await vi.advanceTimersByTimeAsync(0)
+      expect(card(w)).toBe('')
+      expect(useArrivalStore(pinia).active).toBe(false)
+      expect(audio.playNewSpell).not.toHaveBeenCalled()
+      await run('look')
+      expect(audio.playNewSpell).not.toHaveBeenCalled()
+    })
+
     /** A narrated turn that taught a spell and finished a quest, with the audio it rings. */
     async function narratedSpellTurn(): Promise<{
       playNewQuest: ReturnType<typeof vi.fn>

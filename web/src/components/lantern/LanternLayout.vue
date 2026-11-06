@@ -928,7 +928,9 @@ watch(
     const turn = game.turns.at(-1)
     if (id === null || !turn || id === flownTurn) return
     flownTurn = id
-    if (staged.value && turn.gained.length) flights.launch(turn.gained)
+    // A turn a load brought back flew its things when it was played.
+    if (staged.value && !turn.restored && turn.gained.length)
+      flights.launch(turn.gained)
   },
 )
 
