@@ -199,7 +199,7 @@ describe('Tilda and the truth about the well', () => {
     const answer = game.commandParser.parse('say maybe to tilda')
 
     expect(answer).toContain('Come now, love. Tell me the truth.')
-    expect(answer).not.toContain("That's a new one on me")
+    expect(answer).not.toContain("Go on, love, tell me what that's about")
     expect(game.state.hasVirtue(VIRTUE_TRUTH)).toBe(false)
     expectDialogueSpeaker(answer, 'Tilda')
   })
@@ -209,7 +209,7 @@ describe('Tilda and the truth about the well', () => {
     game.commandParser.parse('talk to tilda')
 
     expect(game.commandParser.parse('say maybe to tilda')).toContain(
-      "That's a new one on me, love",
+      "Go on, love, tell me what that's about",
     )
   })
 
@@ -218,7 +218,7 @@ describe('Tilda and the truth about the well', () => {
     game.state.addItemToInventory(new AncientAmulet())
 
     expect(game.commandParser.parse('say goodbye to tilda')).toContain(
-      "That's a new one on me, love",
+      "Go on, love, tell me what that's about",
     )
   })
 
@@ -247,7 +247,7 @@ describe('Tilda and the truth about the well', () => {
 
     const answer = game.commandParser.parse('say yes to tilda')
 
-    expect(answer).toContain("That's a new one on me")
+    expect(answer).toContain("Go on, love, tell me what that's about")
     expect(game.state.hasVirtue(VIRTUE_TRUTH)).toBe(false)
   })
 
@@ -325,7 +325,7 @@ describe('Tilda and the truth about the well', () => {
     game.commandParser.parse('say truth to tilda')
 
     expect(game.commandParser.parse('say hello to tilda')).toContain(
-      "That's a new one on me, love",
+      "Go on, love, tell me what that's about",
     )
   })
 

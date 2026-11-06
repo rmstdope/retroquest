@@ -248,7 +248,8 @@ export class Merchant extends Character {
     return [
       `${this.nameInSentence({ atStart: true })} grins. ` +
         speech(
-          "Never heard that one, friend, and I've walked every road between here and Greendale.",
+          "Tell it to the road, friend. I've walked every road between here " +
+            'and Greendale, and not one of them ever answered.',
         ),
       `${this.nameInSentence({ atStart: true })} shakes his head. ` +
         speech(

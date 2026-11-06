@@ -9,29 +9,34 @@ import { Fisherman } from './Fisherman'
 import { Priest } from './Priest'
 import { Merchant } from './Merchant'
 import { Deer } from './Deer'
+import { Grandmother } from './Grandmother'
 import { FLAG_PATCHES_RETURNED } from '../Act1StoryFlags'
 
 const game = (): Game => new Game([new Act1()])
+
+/** Words by which a speaker would claim not to know a word. */
+const DENIAL =
+  /not a word I know|not that one\.|never heard|new one on me|means nothing|nobody's told me|follow you|you'll tell me what it means|not sure what you mean|don't know (that|it)/i
 
 /** The first words of each character's two answers (after the label). */
 const ANSWERS: [string, () => Character, string, string][] = [
   [
     'Tilda',
     () => new Villager(),
-    "That's a new one on me, love, and I hear everything in this square.",
-    "Whatever that means, love, nobody's told me, and that's a first.",
+    "Go on, love, tell me what that's about and I'll tell you what it means.",
+    "Keep that one to yourself, love, or it'll be round the square by supper.",
   ],
   [
     'Hemlock',
     () => new Shopkeeper(),
-    "Can't say I follow you, lad.",
-    'Means nothing to me, lad. Sorry.',
+    "You'd best ask someone with more time than I have, lad.",
+    "Keep it for later, lad. I've a shop to mind.",
   ],
   [
     'Mira',
     () => new Mira(),
-    'Not a word I know, Elior.',
-    "If it matters, you'll tell me what it means.",
+    'Some words keep, Elior. That one can keep a while.',
+    'If it matters, Elior, it will still matter tomorrow.',
   ],
   [
     'Borin',
@@ -43,18 +48,20 @@ const ANSWERS: [string, () => Character, string, string][] = [
     'fisherman',
     () => new Fisherman(),
     "Keep your voice down, lad. You'll put the fish off.",
-    'Never heard it, lad. Ask the river.',
+    "Ask the river, lad. It's been listening longer than I have.",
   ],
   [
     'priest',
     () => new Priest(),
-    'I have heard a great many words in this chapel, child. Not that one.',
+    'I have heard a great many words in this chapel, child. ' +
+      'Not all of them were meant for me.',
     'If it is a prayer, child, it is not one of ours.',
   ],
   [
     'merchant',
     () => new Merchant(),
-    "Never heard that one, friend, and I've walked every road between here and Greendale.",
+    "Tell it to the road, friend. I've walked every road between here " +
+      'and Greendale, and not one of them ever answered.',
     "You'd fetch a poor price for that word on any road I know, friend.",
   ],
 ]
@@ -90,12 +97,21 @@ describe('Act 1 unknown words', () => {
   it('keeps each character its own turn', () => {
     const g = game().state
     new Blacksmith().sayTo(g, 'x')
-    expect(new Villager().sayTo(g, 'x')).toContain('new one on me')
+    expect(new Villager().sayTo(g, 'x')).toContain('tell me what that')
+  })
+
+  it.each(ANSWERS)('%s never claims not to know the word', (_n, make) => {
+    const g = game().state
+    const c = make()
+    const said = [c.sayTo(g, 'blorp'), c.sayTo(g, 'blorp')].join('\n')
+    expect(said).not.toMatch(DENIAL)
   })
 
   it.each([
     ['Tilda', () => new Villager(), 'Hush, love. Not out loud', 0],
     ['Hemlock', () => new Shopkeeper(), 'Not under this roof, lad.', 1],
+    ['Mira', () => new Mira(), 'Leave it at the door.', 2],
+    ['priest', () => new Priest(), 'Not in the chapel, child.', 5],
   ])('%s hushes at Malakar without advancing', (_n, make, knock, row) => {
     const g = game().state
     const c = make()
@@ -103,6 +119,41 @@ describe('Act 1 unknown words', () => {
     expect(first).toContain(knock)
     expect(c.sayTo(g, 'malakar')).toBe(first)
     expect(c.sayTo(g, 'blorp')).toContain(ANSWERS[row][2])
+  })
+
+  it('has Grandmother hush at Malakar and turn to the bread', () => {
+    const g = game().state
+    const grandmother = new Grandmother()
+    const first = grandmother.sayTo(g, 'malakar')
+    expect(first).toContain("We don't say that one in this house, dear.")
+    expect(first).toContain('bread')
+    expect(first).not.toMatch(DENIAL)
+    expect(grandmother.sayTo(g, 'Malakar?')).toBe(first)
+  })
+
+  it('has Grandmother answer other words without claiming not to know them', () => {
+    const g = game().state
+    const answer = new Grandmother().sayTo(g, 'blorp')
+    expect(answer).toContain('I do like to hear you talk.')
+    expect(answer).not.toMatch(DENIAL)
+  })
+
+  it('has Grandmother answer a dream as the one Elior told her', () => {
+    const g = game().state
+    const grandmother = new Grandmother()
+    const answer = grandmother.sayTo(g, 'the dream')
+    expect(answer).toContain("Dreams pass, dear. Bread doesn't.")
+    expect(answer).not.toMatch(DENIAL)
+  })
+
+  it('has Mira answer a dream as one she knows of', () => {
+    const g = game().state
+    const mira = new Mira()
+    const first = mira.sayTo(g, 'dream')
+    expect(first).toContain('Some dreams are worth keeping, Elior.')
+    expect(first).not.toMatch(DENIAL)
+    expect(mira.sayTo(g, 'my dreams')).toBe(first)
+    expect(mira.sayTo(g, 'blorp')).toContain(ANSWERS[2][2])
   })
 
   it('has Hemlock knock while the store is shut and after it reopens', () => {
@@ -132,7 +183,7 @@ describe('Act 1 unknown words', () => {
     const fresh = game()
     fresh.loadSaveData(g.toSaveData())
     expect(fresh.commandParser.parse('say blorp to tilda')).toContain(
-      "nobody's told me",
+      'round the square by supper',
     )
   })
 })

@@ -653,9 +653,9 @@ export class Shopkeeper extends Character {
   protected override unknownWordAnswers(): readonly string[] {
     return [
       `${this.nameInSentence({ atStart: true })} scratches his chin. ` +
-        speech("Can't say I follow you, lad."),
+        speech("You'd best ask someone with more time than I have, lad."),
       `${this.nameInSentence({ atStart: true })} glances at the door, then back at you. ` +
-        speech('Means nothing to me, lad. Sorry.'),
+        speech("Keep it for later, lad. I've a shop to mind."),
     ]
   }
 }

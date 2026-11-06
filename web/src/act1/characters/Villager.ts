@@ -240,11 +240,11 @@ export class Villager extends Character {
     return [
       `${this.nameInSentence({ atStart: true })} cocks her head. ` +
         speech(
-          "That's a new one on me, love, and I hear everything in this square.",
+          "Go on, love, tell me what that's about and I'll tell you what it means.",
         ),
       `${this.nameInSentence({ atStart: true })} laughs. ` +
         speech(
-          "Whatever that means, love, nobody's told me, and that's a first.",
+          "Keep that one to yourself, love, or it'll be round the square by supper.",
         ),
     ]
   }
