@@ -5,6 +5,7 @@ import { playDebugScript } from '@/utils/debugScript'
 import { ACT1_COMPLETING_COMMANDS, ACT1_GOLDEN_PATH } from './Act1GoldenPath'
 import { MysteriousBox } from './items/MysteriousBox'
 import { FreshBread } from './items/FreshBread'
+import { Vines } from './items/Vines'
 import {
   FLAG_WOKE_FROM_DREAM,
   VIRTUE_MERCY,
@@ -315,7 +316,7 @@ describe('Act 1 golden path', () => {
     expectItemInRoom(room(), 'stick', false)
     expectItemInInventory(state, 'sharp knife')
     executeCommands(game, ['use sharp knife with vines'])
-    expectItemInRoom(room(), 'vines', false)
+    expect(room().items.some((item) => item instanceof Vines)).toBe(false)
     expectItemInInventory(state, 'sharp knife')
     expectItemInRoom(room(), 'stick')
     executeCommands(game, ['take stick'])

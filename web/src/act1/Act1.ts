@@ -111,8 +111,8 @@ export class Act1 extends Act {
    * sell, name the villager Tilda, the smith Borin and the shopkeeper
    * Hemlock, and give the cottage the hearth it lacked, and give every room the
    * examinable things it names (the shed's once its door is open, the forest
-   * alcove's once the vines are cut). Rooms and items whose saved wording changed refresh it
-   * themselves (`refreshSavedText`).
+   * path's alcove and cut vines once the vines are cut). Rooms and items
+   * whose saved wording changed refresh it themselves (`refreshSavedText`).
    */
   override afterLoad(gameState: GameState): void {
     const rooms = gameState.allRooms
