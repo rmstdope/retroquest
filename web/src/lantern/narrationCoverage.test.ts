@@ -87,6 +87,11 @@ const OPTIONAL_LINES: Record<number, { speaker: string; opening: string }[]> = {
     },
     /** Hemlock on the priest's matches while the store is shut (rq-l4ud). */
     { speaker: 'hemlock', opening: "The priest's matches? They're under" },
+    /** Act I's further near misses (rq-uvlg). */
+    { speaker: 'narrator', opening: 'A match flares at the corner' },
+    { speaker: 'narrator', opening: 'The magnet snaps to the black iron' },
+    { speaker: 'narrator', opening: 'These wooden gears have not moved' },
+    { speaker: 'narrator', opening: 'Held high, the lantern shows a glint' },
     /** Act I's stock replies (rq-bio): one fixed line per person, never naming the item. */
     {
       speaker: 'narrator',

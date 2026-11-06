@@ -14,11 +14,14 @@ import {
   FLAG_VEGETABLE_FIELD_WATERED,
 } from '../Act1StoryFlags'
 import { Candle } from './Candle'
+import { DullKnife } from './DullKnife'
 import { Key } from './Key'
 import { Lantern } from './Lantern'
+import { Matches } from './Matches'
 import { Mechanism } from './Mechanism'
 import { RustyHoe } from './RustyHoe'
 import { RustySaw } from './RustySaw'
+import { SharpKnife } from './SharpKnife'
 
 /** When a chip first shows, if not from the first visit. */
 export type SceneryAppearance = 'open' | 'cut'
@@ -81,13 +84,26 @@ function keyFell(gameState: GameState): boolean {
 }
 
 /**
- * A long tool raised at the coop's rafter falls short, and the hens it
- * scatters fly higher than Elior can reach: the bread's commotion is the way.
+ * A tool or blade raised at the coop's rafter falls short, and the hens it
+ * scatters fly higher than Elior can reach; the lantern shows the glint but
+ * reaches no further. The bread's commotion is the way.
  */
 function rafterUseFrom(gameState: GameState, item: Item): string {
-  if (!(item instanceof RustyHoe || item instanceof RustySaw)) return ''
+  const reach =
+    item instanceof RustyHoe ||
+    item instanceof RustySaw ||
+    item instanceof DullKnife ||
+    item instanceof SharpKnife
+  const lantern = item instanceof Lantern
+  if (!reach && !lantern) return ''
   if (keyFell(gameState)) {
     return '[failure]Only dust and a few feathers on the rafter now.[/failure]'
+  }
+  if (lantern) {
+    return clue(
+      'Held high, the lantern shows a glint on the rafter, still well out of ' +
+        'your reach. Only the hens, startled into the air, ever get up that high.',
+    )
   }
   return clue(
     'Even at full stretch it falls well short of the rafter. ' +
@@ -97,18 +113,43 @@ function rafterUseFrom(gameState: GameState, item: Item): string {
 }
 
 /**
- * The lantern's light does not reach the chapel's dark corner, which waits
- * for a light of its own (the altar candle).
+ * The lantern's light does not reach the chapel's dark corner, and a match
+ * gutters out before it shows anything: the corner waits for a light of its
+ * own (the altar candle).
  */
 function darkCornerUseFrom(gameState: GameState, item: Item): string {
-  if (!(item instanceof Lantern)) return ''
+  const lantern = item instanceof Lantern
+  if (!lantern && !(item instanceof Matches)) return ''
   if (candleLit(gameState)) {
     return '[failure]The candle already lights the corner by the altar.[/failure]'
+  }
+  if (!lantern) {
+    return clue(
+      'A match flares at the corner and gutters out before the dark gives ' +
+        'anything back. It wants a light that stays.',
+    )
   }
   return clue(
     "The lantern's light goes into the corner and does not come out again. " +
       'The corner keeps its dark, as if it were waiting for a light of its ' +
       'own.',
+  )
+}
+
+/**
+ * Anything tried at the mill's wooden gears meets gears that have not moved
+ * in years, which points at the iron mechanism among them.
+ */
+function gearsUseFrom(gameState: GameState, _item: Item): string {
+  if (mechanismJammed(gameState)) {
+    return (
+      '[failure]The gears are still, and the iron thing among them is ' +
+      'jammed fast.[/failure]'
+    )
+  }
+  return clue(
+    'These wooden gears have not moved in years. ' +
+      'The turning is in the iron thing among them.',
   )
 }
 
@@ -383,14 +424,19 @@ export const SCENERY_BY_ROOM: Record<string, SceneryDef[]> = {
       [],
       'The sails turn slowly. One is torn, and it slaps on every turn.',
     ),
-    staged('OldMill.gears', 'gears', ['cobwebs'], (gs) =>
-      mechanismJammed(gs)
-        ? 'Wooden gears, furred with dust. ' +
-          'The shaft from the sails turns above them and never meets them. ' +
-          'The mill is quiet now.'
-        : 'Wooden gears, furred with dust and cobwebs. ' +
-          'The shaft from the sails turns above them and never meets them, ' +
-          "and they don't move; the whirring comes from the iron thing among them.",
+    staged(
+      'OldMill.gears',
+      'gears',
+      ['cobwebs'],
+      (gs) =>
+        mechanismJammed(gs)
+          ? 'Wooden gears, furred with dust. ' +
+            'The shaft from the sails turns above them and never meets them. ' +
+            'The mill is quiet now.'
+          : 'Wooden gears, furred with dust and cobwebs. ' +
+            'The shaft from the sails turns above them and never meets them, ' +
+            "and they don't move; the whirring comes from the iron thing among them.",
+      gearsUseFrom,
     ),
     plain(
       'OldMill.millstone',
