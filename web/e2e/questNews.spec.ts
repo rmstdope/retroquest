@@ -164,6 +164,7 @@ test.describe('quest news told in the middle of the picture', () => {
         'Warm clothing, a coat of thick wool that keeps out the wind',
         'Magical protection against whatever waits on the road ahead',
         'Food for the road (any four kinds: bread, apple, egg, carrot or berries)',
+        'Sturdy footwear for the long road',
         'Magic',
       ]
       await pushNews(page, [
