@@ -293,6 +293,7 @@ describe('Borin greets Elior only once, however they first meet (rq-gxur)', () =
     const response = executeCommands(game, ['talk to borin'])
 
     expect(isFirstGreeting(response)).toBe(false)
+    expect(response).toContain('Back again, lad? Forge is hot.')
     expectDialogueSpeaker(response, 'Borin')
   })
 
@@ -316,6 +317,7 @@ describe('Borin greets Elior only once, however they first meet (rq-gxur)', () =
     const response = executeCommands(game, ['talk to borin'])
 
     expect(isFirstGreeting(response)).toBe(false)
+    expect(response).toContain('Back again, lad? Forge is hot.')
     expectDialogueSpeaker(response, 'Borin')
   })
 })
