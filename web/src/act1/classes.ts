@@ -16,6 +16,7 @@ import { Egg } from './items/Egg'
 import { EliorsJournal } from './items/EliorsJournal'
 import { ExtendedMagneticFishingRod } from './items/ExtendedMagneticFishingRod'
 import { FadedPhotograph } from './items/FadedPhotograph'
+import { FathersNote } from './items/FathersNote'
 import { Feather } from './items/Feather'
 import { Fish } from './items/Fish'
 import { FishingRod } from './items/FishingRod'
@@ -121,6 +122,7 @@ export const ACT1_CLASSES = {
   EliorsJournal,
   ExtendedMagneticFishingRod,
   FadedPhotograph,
+  FathersNote,
   Feather,
   Fish,
   FishingRod,

@@ -1,13 +1,8 @@
 import { Item, type GameState, writing, clue } from '@/engine'
 import { DullKnife } from './DullKnife'
+import { FATHERS_NOTE, FathersNote, NOTE_NAMES } from './FathersNote'
 import { GameMap } from './GameMap'
 import { SharpKnife } from './SharpKnife'
-
-/** The words Elior's father left in the box for him. */
-const FATHERS_NOTE = 'For when the light comes back to you.'
-
-/** The words a player may use for the note once the box is open. */
-const NOTE_NAMES = ['note', 'folded note', "father's note"]
 
 /**
  * Small locked container introducing multi-step acquisition and object state
@@ -29,25 +24,18 @@ export class MysteriousBox extends Item {
     })
   }
 
-  /**
-   * Once opened, the box also answers to the note left inside it, so
-   * examining the note reads the box's description and the father's line.
-   */
+  /** Once opened, the box also answers to the note left inside it. */
   override answersTo(name: string): boolean {
     if (super.answersTo(name)) return true
     return !this.containsMap && NOTE_NAMES.includes(name.toLowerCase())
   }
 
   /**
-   * Taking the note, once the box is open, answers about the note: it stays
-   * where Elior's father left it. The box itself refuses as any item does.
+   * Named by the note's words, the opened box hands back the note, so every
+   * verb tried on the note is answered by the note and never by the box.
    */
-  override preventPickup(
-    gameState: GameState,
-    name: string = this.name,
-  ): string {
-    if (super.answersTo(name)) return super.preventPickup(gameState, name)
-    return clue('The note stays in the box, where your father left it for you.')
+  override partNamed(name: string): Item {
+    return super.answersTo(name) ? this : new FathersNote()
   }
 
   /**
