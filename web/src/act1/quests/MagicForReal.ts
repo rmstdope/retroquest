@@ -3,6 +3,7 @@ import {
   FLAG_CONNECT_WITH_NATURE,
   FLAG_MAGIC_FULLY_UNLOCKED,
 } from '../Act1StoryFlags'
+import { RareFlower } from '../items/RareFlower'
 
 /** The opening, before Mira has asked for anything. */
 const NOTHING_ANSWERS =
@@ -16,9 +17,15 @@ const FLOWER_ASKED =
   `${characterName('Mira')} has sent you for a [item_name]rare flower[/item_name] from the ` +
   '[room_name]Hidden Glade[/room_name]: if it opens for you, she will know what holds your magic back.'
 
+/** The hint while Elior carries the flower that opened for him, not yet given. */
+const FLOWER_IN_HAND =
+  'The [item_name]rare flower[/item_name] opened for you. ' +
+  `${characterName('Mira')} will know what holds your magic back once she has it.`
+
 /**
  * Side quest: seek guidance to unlock the secrets of Elior's newfound magic.
- * Its log moves on to the rare flower once Mira has asked for it.
+ * Its log moves on to the rare flower once Mira has asked for it, and its
+ * hint sends the flower back to her once it is in hand.
  */
 export class MagicForRealQuest extends Quest {
   constructor() {
@@ -47,6 +54,20 @@ export class MagicForRealQuest extends Quest {
     }
     this.setJournal([NOTHING_ANSWERS], FLOWER_ASKED)
     return true
+  }
+
+  /**
+   * Sends the flower in hand back to Mira, since the log still wonders whether
+   * the glade will open; otherwise the newest log entry, as every quest does.
+   */
+  override hint(gameState: GameState): string | null {
+    if (
+      gameState.getStoryFlag(FLAG_CONNECT_WITH_NATURE) &&
+      gameState.inventory.some((item) => item instanceof RareFlower)
+    ) {
+      return FLOWER_IN_HAND
+    }
+    return super.hint(gameState)
   }
 
   override checkCompletion(gameState: GameState): boolean {

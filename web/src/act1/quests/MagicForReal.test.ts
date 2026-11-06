@@ -1,8 +1,9 @@
 import { describe, it, expect, beforeEach } from 'vitest'
-import { Game } from '@/engine'
+import { characterName, Game } from '@/engine'
 import { executeCommands } from '@/testing/gameHelpers'
 import { Act1 } from '../Act1'
 import { HealSpell } from '../spells/HealSpell'
+import { RareFlower } from '../items/RareFlower'
 import {
   FLAG_CONNECT_WITH_NATURE,
   FLAG_INVESTIGATED_WITHERED_CROPS,
@@ -78,6 +79,22 @@ describe('Magic for real', () => {
     const loaded = new Game([new Act1()])
     loaded.loadSaveData(game.toSaveData())
     expect(quest(loaded).hint).toContain('rare flower')
+  })
+
+  it('points the flower in hand back to Mira (rq-b282)', () => {
+    game.state.learnSpell(new HealSpell())
+    game.state.setStoryFlag(FLAG_CONNECT_WITH_NATURE, true)
+    turn()
+    game.state.addItemToInventory(new RareFlower())
+    turn()
+    expect(quest().hint).toBe(
+      'The [item_name]rare flower[/item_name] opened for you. ' +
+        `${characterName('Mira')} will know what holds your magic back ` +
+        'once she has it.',
+    )
+    expect(quest().hint).not.toMatch(/\b(give|hand|talk|go|take|use)\b/i)
+    game.state.removeItemFromInventory('rare flower')
+    expect(quest().hint).toContain('if it opens for you')
   })
 
   it('completes once the flower is given', () => {
