@@ -10,6 +10,7 @@ import {
 } from '../Act1StoryFlags'
 import { Act1 } from '../Act1'
 import { AncientAmulet } from './AncientAmulet'
+import { KnowYourVillageQuest } from '../quests/KnowYourVillage'
 import { FishingExpeditionQuest } from '../quests/FishingExpedition'
 import { LetThereBeLightQuest } from '../quests/LetThereBeLight'
 import { MagnetFishingExpeditionQuest } from '../quests/MagnetFishingExpedition'
@@ -77,6 +78,36 @@ function setupReadyExcept(): ReturnType<typeof setupGameAtRoad> {
 }
 
 describe('GameMap leads at the road', () => {
+  it('has a lead for every side quest that is not always begun by the road', () => {
+    const alwaysBegun = [
+      'Hint of magic',
+      'Magic for real',
+      'Know your village',
+      'Preparing for the road',
+    ]
+    const { game } = setupGameAtRoad()
+    const names = game.state.nonActivatedQuests
+      .filter((q) => !q.isMain() && !alwaysBegun.includes(q.name))
+      .map((q) => q.name)
+    game.state.nonActivatedQuests = game.state.nonActivatedQuests.filter((q) =>
+      names.includes(q.name),
+    )
+
+    expect(GameMap.unstartedLeads(game.state).map((l) => l.quest)).toEqual(
+      names,
+    )
+    expect(GameMap.hasBegunOpenTask(game.state)).toBe(false)
+  })
+
+  it('still holds the road for a never-started quest with no lead', () => {
+    const { game, map } = setupReadyExcept()
+    game.state.nonActivatedQuests.push(new KnowYourVillageQuest())
+
+    expect(map.use(game.state)).toContain(
+      'unfinished: the tasks you began in the village.',
+    )
+  })
+
   it('leads to a never-started task instead of calling it begun', () => {
     const { game, map } = setupReadyExcept()
     game.state.nonActivatedQuests.push(new MagnetFishingExpeditionQuest())
@@ -136,7 +167,7 @@ describe('GameMap act completion', () => {
     expect(response).toContain(
       'The hidden road will not show itself while something here is ' +
         'unfinished: the amulet Mira still keeps for you, your preparations ' +
-        `for the road, ${LEADS.join(', ')} and ${LAST_LEAD}.`,
+        `for the road, the tasks you began in the village, ${LEADS.join(', ')} and ${LAST_LEAD}.`,
     )
     expect(response).not.toMatch(/receive|You must|You need/)
   })

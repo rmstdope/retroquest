@@ -5,7 +5,11 @@ import { Act1 } from './Act1'
 import { ACT1_GOLDEN_PATH } from './Act1GoldenPath'
 import { MagnetFishingExpeditionQuest } from './quests/MagnetFishingExpedition'
 
-/** A game at the road with the amulet, where the well's task was never started. */
+/**
+ * A game at the road with the amulet, where the well's task was never started.
+ * Every route to the amulet in the golden path looks into the well, so this
+ * state is reached by putting the task back, as an old save could hold it.
+ */
 function gameWithTheWellTaskUnstarted(): Game {
   const game = new Game([new Act1()])
   executeCommands(game, ACT1_GOLDEN_PATH)
@@ -34,15 +38,5 @@ describe('Act 1 road with the well task never started', () => {
       )
       expect(refusal).not.toContain('began')
     }
-  })
-
-  it('starts the task on the glint, so the log is never empty at the road', () => {
-    const game = new Game([new Act1()])
-    game.state.currentRoom = game.state.allRooms.VillageWell
-    executeCommands(game, ['examine well'])
-
-    expect(game.state.activatedQuests.map((q) => q.name)).toContain(
-      'Magnet fishing expedition',
-    )
   })
 })

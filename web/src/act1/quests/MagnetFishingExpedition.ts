@@ -31,9 +31,17 @@ export class MagnetFishingExpeditionQuest extends Quest {
     return well instanceof Well && well.containsRing
   }
 
+  /** Whether the magnet is on the rod, the rod still short or already extended. */
+  private static rodMade(gameState: GameState): boolean {
+    return (
+      gameState.getItem('magnetic fishing rod') !== null ||
+      gameState.getItem('extended magnetic fishing rod') !== null
+    )
+  }
+
   /** Starts at the glint, or at the magnetic rod, whichever comes first. */
   override checkTrigger(gameState: GameState): boolean {
-    if (gameState.getItem('magnetic fishing rod') !== null) {
+    if (MagnetFishingExpeditionQuest.rodMade(gameState)) {
       this.setJournal([GLINT], MAGNET_ON_ROD)
       return true
     }
@@ -45,7 +53,7 @@ export class MagnetFishingExpeditionQuest extends Quest {
   /** Adds the second entry once the magnet is on the rod. */
   override checkUpdate(gameState: GameState): boolean {
     if (
-      gameState.getItem('magnetic fishing rod') === null ||
+      !MagnetFishingExpeditionQuest.rodMade(gameState) ||
       this.latestStage === MAGNET_ON_ROD
     ) {
       return false

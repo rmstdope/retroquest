@@ -3,6 +3,7 @@ import { Game } from '@/engine'
 import { executeCommands } from '@/testing/gameHelpers'
 import { Act1 } from '../Act1'
 import { FLAG_WELL_EXAMINED } from '../Act1StoryFlags'
+import { ExtendedMagneticFishingRod } from '../items/ExtendedMagneticFishingRod'
 import { MagneticFishingRod } from '../items/MagneticFishingRod'
 
 const GLINT = 'Something glints far down in the well, much too deep for hands.'
@@ -26,14 +27,26 @@ describe('Magnet fishing expedition', () => {
   })
 
   it('starts for an old save in which the glint was already seen', () => {
+    const old = new Game([new Act1()])
+    old.state.setStoryFlag(FLAG_WELL_EXAMINED, true)
     const game = new Game([new Act1()])
-    game.state.setStoryFlag(FLAG_WELL_EXAMINED, true)
+    game.loadSaveData(old.toSaveData())
 
-    game.state.nextActivatedQuest()
-    game.state.nextActivatedQuest()
-    const names = game.state.activatedQuests.map((quest) => quest.name)
+    executeCommands(game, ['look'])
 
-    expect(names).toContain('Magnet fishing expedition')
+    expect(questNamed(game, 'Magnet fishing expedition')?.latestStage).toBe(
+      GLINT,
+    )
+  })
+
+  it('gives both entries to an old save carrying the extended rod', () => {
+    const game = new Game([new Act1()])
+    game.state.addItemToInventory(new ExtendedMagneticFishingRod())
+    game.state.nextActivatedQuest()
+
+    const quest = questNamed(game, 'Magnet fishing expedition')
+    expect(quest?.earlierStages).toEqual([GLINT])
+    expect(quest?.latestStage).toBe(ON_ROD)
   })
 
   it('adds a second entry once the magnet is on the rod', () => {

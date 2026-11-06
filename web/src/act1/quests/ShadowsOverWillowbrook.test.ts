@@ -443,7 +443,7 @@ describe('Shadows over Willowbrook hint', () => {
     ).toBe(LINE_5)
   })
 
-  it('leads to the first never-started task once the amulet is in hand', () => {
+  it('says the village still holds Elior once the amulet is in hand', () => {
     const flags = [
       ...looked,
       FLAG_CONNECT_WITH_NATURE,
@@ -451,10 +451,7 @@ describe('Shadows over Willowbrook hint', () => {
       FLAG_FOUND_RUNE_TOKEN,
       FLAG_MIRA_NAMED_FOULING_SIGIL,
     ]
-    expect(hintWith(flags, true)).toBe(
-      'The amulet is yours, but Willowbrook still holds you: Old Man ' +
-        `${characterName('Hemlock')} is still waiting for his cat.`,
-    )
+    expect(hintWith(flags, true)).toBe(LINE_6)
   })
 
   it('sends Elior to Mira with the token before the amulet holds him (rq-7g9c)', () => {

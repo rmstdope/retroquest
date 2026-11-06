@@ -1,4 +1,11 @@
-import { Item, type GameState, characterName, speech, clue } from '@/engine'
+import {
+  Item,
+  type Quest,
+  type GameState,
+  characterName,
+  speech,
+  clue,
+} from '@/engine'
 import {
   FLAG_FOUND_RUNE_TOKEN,
   FLAG_KEPT_MOTHERS_RING,
@@ -170,11 +177,18 @@ export class GameMap extends Item {
     return missingRequirements
   }
 
-  /** True while a side quest Elior began is still open. */
+  /**
+   * True while a side quest Elior began is still open. A never-started side
+   * quest with no lead of its own counts too, so no side quest can be skipped.
+   */
   static hasBegunOpenTask(gameState: GameState): boolean {
-    return gameState.activatedQuests.some(
-      (quest) => !quest.isMain() && quest.name !== PREPARATION_QUEST,
+    const isSide = (quest: Quest): boolean =>
+      !quest.isMain() && quest.name !== PREPARATION_QUEST
+    const unknownUnstarted = gameState.nonActivatedQuests.some(
+      (quest) =>
+        isSide(quest) && !ROAD_LEADS.some((lead) => lead.quest === quest.name),
     )
+    return unknownUnstarted || gameState.activatedQuests.some(isSide)
   }
 
   /**
