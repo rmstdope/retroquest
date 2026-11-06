@@ -140,6 +140,16 @@
     "text": "You'd rather light the lantern before you carry it anywhere; it is no use to you dark."
   },
   {
+    "id": "0753534b1ec3ba",
+    "speaker": "narrator",
+    "text": "Grandmother looks up from the hearth before you reach the door."
+  },
+  {
+    "id": "1a6381572cbf6a",
+    "speaker": "grandmother",
+    "text": "Not with the bread nearly out, you don't. And that corner of yours is still dark; you've not even lit the lantern."
+  },
+  {
     "id": "0cdc6ab7134945",
     "speaker": "narrator",
     "text": "The crust gives under your thumb. It smells like morning."
@@ -290,6 +300,21 @@
     "text": "The lantern found your journal. The three words are in it, with the rest of the dream."
   },
   {
+    "id": "173fb3ffa96c66",
+    "speaker": "narrator",
+    "text": "Grandmother catches your sleeve on the way to the door."
+  },
+  {
+    "id": "191afc75332e35",
+    "speaker": "grandmother",
+    "text": "Out already? You were scribbling in that journal before your eyes were open. Read it while it's fresh."
+  },
+  {
+    "id": "06fc43cea34bbb",
+    "speaker": "narrator",
+    "text": "A modest cottage with a straw roof and a cozy hearth. The scent of fresh bread and old books fills the air. Grey morning comes through the lace curtains onto shelves lined with trinkets and memories. A sturdy wooden table sits in the center, with a small loaf cooling on it, and a gentle fire crackles in the hearth. Grandmother stands by it, humming, and keeps an eye on the bread."
+  },
+  {
     "id": "0343646184b98f",
     "speaker": "narrator",
     "text": "A leather-bound journal filled with Elior's careful handwriting. The pages are full of notes, sketches, and secrets."
@@ -303,11 +328,6 @@
     "id": "1a45db61dce4e4",
     "speaker": "grandmother",
     "text": "Back again? There's bread on the board, if you're hungry. You were scribbling in that journal before your eyes were open. Read me what it says, if you can make it out."
-  },
-  {
-    "id": "06fc43cea34bbb",
-    "speaker": "narrator",
-    "text": "A modest cottage with a straw roof and a cozy hearth. The scent of fresh bread and old books fills the air. Grey morning comes through the lace curtains onto shelves lined with trinkets and memories. A sturdy wooden table sits in the center, with a small loaf cooling on it, and a gentle fire crackles in the hearth. Grandmother stands by it, humming, and keeps an eye on the bread."
   },
   {
     "id": "1c66ff8c216536",
@@ -373,6 +393,16 @@
     "id": "0fb2fdd7cdc033",
     "speaker": "narrator",
     "text": "Grandmother is at the hearth, humming the tune from your dream. She will want to hear about it."
+  },
+  {
+    "id": "06aa0d54de4759",
+    "speaker": "narrator",
+    "text": "Grandmother looks at your face, then at the door."
+  },
+  {
+    "id": "057fa362356144",
+    "speaker": "grandmother",
+    "text": "Whatever you dreamed, it's written all over you. Come and tell me, before you go anywhere."
   },
   {
     "id": "013b58e4f830be",

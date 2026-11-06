@@ -112,3 +112,54 @@ describe("Elior's Cottage bread", () => {
     expect(loaves).toHaveLength(1)
   })
 })
+
+describe("Elior's Cottage door before the dream is told", () => {
+  const DIRECTIONS = ['north', 'south', 'east', 'west']
+
+  function cottage(): Game {
+    const game = new Game([new Act1()])
+    game.state.currentRoom = game.state.allRooms.EliorsCottage
+    return game
+  }
+
+  /** What each direction answers, the player still in the cottage after. */
+  function tryEveryDoor(game: Game): string[] {
+    return DIRECTIONS.map((direction) => {
+      const answer = game.move(direction)
+      expect(game.state.currentRoom).toBe(game.state.allRooms.EliorsCottage)
+      return answer
+    })
+  }
+
+  it('points back to the dark corner while the lantern is unlit', () => {
+    for (const answer of tryEveryDoor(cottage())) {
+      expect(answer).not.toContain("can't go that way")
+      expect(answer).toMatch(/lantern|corner/i)
+    }
+  })
+
+  it('points back to the journal once the lantern is lit', () => {
+    const game = cottage()
+    executeCommands(game, ['use lantern'])
+    for (const answer of tryEveryDoor(game)) {
+      expect(answer).not.toContain("can't go that way")
+      expect(answer).toMatch(/journal/i)
+    }
+  })
+
+  it('points back to Grandmother once the journal is read', () => {
+    const game = cottage()
+    executeCommands(game, ['use lantern', 'use journal'])
+    for (const answer of tryEveryDoor(game)) {
+      expect(answer).not.toContain("can't go that way")
+      expect(answer).toMatch(/dream/i)
+    }
+  })
+
+  it('lets Elior out once Grandmother has told the dream', () => {
+    const game = cottage()
+    executeCommands(game, ['use lantern', 'use journal', 'talk to grandmother'])
+    executeCommands(game, ['go east'])
+    expect(game.state.currentRoom).toBe(game.state.allRooms.VillageSquare)
+  })
+})

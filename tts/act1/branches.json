@@ -5,6 +5,9 @@
         "unset": ["deer_can_be_observed"]
     },
     { "after": 0, "commands": ["take lantern"] },
+    { "after": 0, "commands": ["go east"] },
+    { "after": 1, "commands": ["go east"] },
+    { "after": 5, "commands": ["go east"] },
     {
         "after": 0,
         "commands": ["take bread", "talk to grandmother", "talk to grandmother"]
