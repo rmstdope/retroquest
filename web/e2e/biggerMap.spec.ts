@@ -98,3 +98,31 @@ test('a phone has no bigger map', async ({ page }): Promise<void> => {
     page.getByRole('button', { name: 'Bigger map', exact: true }),
   ).toHaveCount(0)
 })
+
+test('every place of Act I fits across the bigger map (rq-7319)', async ({
+  page,
+}): Promise<void> => {
+  await page.setViewportSize({ width: 1512, height: 860 })
+  await start(page)
+  await enter(page, 'debug act1')
+  await expect(page.getByText("Debug script 'act1' played")).toBeVisible()
+  await page.getByRole('button', { name: /Map/ }).click()
+  await page.getByRole('button', { name: 'Bigger map', exact: true }).click()
+  const dialog = page.getByRole('dialog', { name: 'Map' })
+  await expect(dialog.locator('[data-place="Road to Greendale"]')).toHaveCount(
+    1,
+  )
+
+  // The body may scroll down, as every window's does, but never sideways:
+  // a sideways scroll hides on a laptop and cuts off the places at the edge.
+  const body = dialog.locator('.lq-dialog-content')
+  const view = await body.boundingBox()
+  const cut: string[] = []
+  for (const place of await dialog.locator('[data-place]').all()) {
+    const box = await place.boundingBox()
+    if (!view || !box) continue
+    if (box.x < view.x || box.x + box.width > view.x + view.width)
+      cut.push((await place.getAttribute('data-place')) ?? '')
+  }
+  expect(cut).toEqual([])
+})
