@@ -23,6 +23,7 @@ import {
   roomTrackId,
   type MusicTrack,
 } from './musicLists'
+import { ROOM_MUSIC_BRIEFS } from './roomMusicBriefs'
 
 const SLUG = /^[a-z0-9]+(-[a-z0-9]+)*$/
 const ACTS: Act[] = [new Act1(), new Act2(), new Act3(), new Act4()]
@@ -123,6 +124,39 @@ describe('roomLoops', () => {
     expect(square?.text).toContain('instrumental')
     expect(square?.text).not.toMatch(/\[\/?[a-z_]+\]/)
     expect(square?.file).toBeUndefined()
+  })
+
+  it('gives every room of Acts 2 and 3 its own tempo, key and music prompt', () => {
+    for (const act of [new Act2(), new Act3()]) {
+      for (const track of roomLoops(act)) {
+        expect(track.bpm, track.id).toBeGreaterThanOrEqual(40)
+        expect(track.bpm, track.id).toBeLessThanOrEqual(180)
+        expect(track.key, track.id).toMatch(/^[A-G][#b]? (major|minor)$/)
+        expect(track.text, track.id).toMatch(/, instrumental, no vocals$/)
+        expect(track.text, track.id).not.toContain('background loop for')
+      }
+    }
+  })
+
+  it('keeps the tempo and key the navigator chose in the studio', () => {
+    const tracks = roomLoops(new Act2())
+    const healer = tracks.find((t) => t.id === 'act2-healers-house')
+    const square = tracks.find((t) => t.id === 'act2-main-square')
+    expect([healer?.bpm, healer?.key]).toEqual([50, 'F minor'])
+    expect([square?.bpm, square?.key]).toEqual([80, 'A major'])
+  })
+
+  it('names a room of the game with every room brief', () => {
+    const ids = ACTS.flatMap(roomLoops).map((t) => t.id)
+    for (const id of Object.keys(ROOM_MUSIC_BRIEFS)) expect(ids).toContain(id)
+  })
+
+  it('leaves a room without a brief of its own with no tempo or key', () => {
+    const square = roomLoops(new Act1()).find(
+      (t) => t.id === 'act1-village-square',
+    )
+    expect(square?.bpm).toBeUndefined()
+    expect(square?.key).toBeUndefined()
   })
 
   it('keeps every brief short enough to read in the studio', () => {

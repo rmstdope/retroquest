@@ -13,6 +13,7 @@ import {
 } from '@/composables/questSounds'
 import type { Act } from '@/engine'
 import { narrationText } from './narrationKey'
+import { ROOM_MUSIC_BRIEFS } from './roomMusicBriefs'
 
 /** Where the game's music files live (`/audio/music/` in `useMusic`), as paths inside the project root. */
 const MUSIC_DIR = 'web/public/audio/music/'
@@ -33,9 +34,9 @@ export interface MusicTrack {
   seconds: number
   /** The music file the game plays for it now: a path inside the project root, which the studio only plays. */
   file?: string
-  /** Tempo, where known; omitted when not measured. */
+  /** Tempo, where the track's brief sets one (`ROOM_MUSIC_BRIEFS` for a room); omitted otherwise. */
   bpm?: number
-  /** Musical key such as "D major", where known; omitted when not measured. */
+  /** Musical key such as "D major", where the track's brief sets one; omitted otherwise. */
   key?: string
 }
 
@@ -149,20 +150,27 @@ function descriptionOpening(description: string): string {
 }
 
 /**
- * One loop slot for each room of the act, briefed from the room's own name and
- * description. A room plays no file of its own: until the navigator chooses a
- * take, the game plays the act's loop there.
+ * One loop slot for each room of the act: briefed with the room's own prompt,
+ * tempo and key where `ROOM_MUSIC_BRIEFS` has them, and otherwise from the
+ * room's name and description. A room plays no file of its own: until the
+ * navigator chooses a take, the game plays the act's loop there.
  */
 export function roomLoops(act: Act): MusicTrack[] {
-  return Object.entries(act.rooms).map(([key, room]) => ({
-    id: roomTrackId(act.name, key),
-    title: room.name,
-    plays: `${actLabel(act.name)}, ${room.name}`,
-    text:
-      `instrumental background loop for ${room.name}: ` +
-      `${descriptionOpening(room.description)}, no vocals`,
-    seconds: ROOM_LOOP_SECONDS,
-  }))
+  return Object.entries(act.rooms).map(([key, room]) => {
+    const id = roomTrackId(act.name, key)
+    const brief = ROOM_MUSIC_BRIEFS[id]
+    const track: MusicTrack = {
+      id,
+      title: room.name,
+      plays: `${actLabel(act.name)}, ${room.name}`,
+      text:
+        brief?.text ??
+        `instrumental background loop for ${room.name}: ` +
+          `${descriptionOpening(room.description)}, no vocals`,
+      seconds: ROOM_LOOP_SECONDS,
+    }
+    return brief ? { ...track, bpm: brief.bpm, key: brief.key } : track
+  })
 }
 
 /** The stingers: the sounds for a new quest, a completed quest and a learned spell, by the files the game plays. */
