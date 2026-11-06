@@ -40,9 +40,9 @@ describe('Mechanism', () => {
     expectMarkupWellFormed(response)
     const mechanism = game.state.currentRoom.getItemByName('mechanism')
     if (!(mechanism instanceof Mechanism)) throw new Error('no mechanism')
-    const listened = mechanism.listen(game.state)
-    expect(listened).toContain('silent')
-    expect(listened).not.toContain('whirring')
+    expect(executeCommands(game, ['listen to strange mechanism'])).toContain(
+      "I don't understand the command: 'listen to strange mechanism'",
+    )
     const examined = executeCommands(game, ['examine mechanism'])
     expect(examined).toContain('jammed')
   })

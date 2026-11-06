@@ -55,7 +55,9 @@ describe('The Dream, where Act I opens', () => {
       expect(answer).not.toContain('There is no character named')
       expect(answer).toContain('your name')
     }
-    expect(executeCommands(game, ['listen'])).toContain('three notes climbing')
+    expect(executeCommands(game, ['listen'])).toContain(
+      "I don't understand the command: 'listen'",
+    )
     expectStoryFlag(game.state, FLAG_WOKE_FROM_DREAM, false)
   })
 

@@ -400,7 +400,7 @@ Connectivity note: All cardinal exits connect only within their location. Travel
 4. Echo Chambers
 
 -   Description: Smooth caverns that amplify every footfall; faint whispers mimic speech.
--   Items: Runic Walls; examining them reveals Resonant Chant Rubbings, and searching reveals the Old Oath Scrolls. `listen` (or a second examine of the walls) plays the echo of the night Aren, Lysa and Malakar parted: three voices, never named by the game, ending with the letter's line and a door closing.
+-   Items: Runic Walls; examining them reveals Resonant Chant Rubbings, and searching reveals the Old Oath Scrolls. A second examine of the walls plays the echo of the night Aren, Lysa and Malakar parted: three voices, never named by the game, ending with the letter's line and a door closing.
 -   Characters: None
 -   Quest Relevance: Examine the Runic Walls to learn the chant, then read the Old Oath Scrolls (they stay re-readable) before answering the Dragon's question.
 -   Exits:

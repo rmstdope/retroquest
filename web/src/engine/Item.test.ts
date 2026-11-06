@@ -102,7 +102,6 @@ describe('Item', () => {
       'on [character_name]Mira[/character_name]',
     )
     expect(rock.examine(gs)).toBe('A grey rock.')
-    expect(rock.listen(gs)).toContain('is silent')
     expect(rock.pickedUp(gs)).toBe('')
     expect(rock.open(gs)).toContain("can't open")
     expect(rock.close(gs)).toContain("can't close")
@@ -148,8 +147,8 @@ describe('Item names in a sentence', () => {
   const token = new Token({ name: "nyx's token", description: 'd' })
 
   it('opens a sentence with a capital article', () => {
-    expect(rock.listen(gs)).toBe(
-      '[failure]The [item_name]rock[/item_name] is silent.[/failure]',
+    expect(rock.open(gs)).toBe(
+      "[failure]You can't open the [item_name]rock[/item_name].[/failure]",
     )
   })
 
@@ -167,9 +166,6 @@ describe('Item names in a sentence', () => {
   })
 
   it('takes no article and keeps its capitals when named after a person', () => {
-    expect(token.listen(gs)).toBe(
-      "[failure][item_name]Nyx's Token[/item_name] is silent.[/failure]",
-    )
     for (const refusal of [
       token.eat(gs),
       token.drink(gs),

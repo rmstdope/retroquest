@@ -38,12 +38,13 @@ describe('RunicWalls echo', () => {
     expect(walls.examine(game.state)).toContain(CHANT)
   })
 
-  it('gives the usual reply every time once the echo was heard by listening', () => {
+  it('gives the usual reply every time once the echo was heard', () => {
     const game = new Game([new Act3()])
     game.state.currentRoom = new EchoChambers()
     const walls = new RunicWalls()
 
-    game.listen()
+    walls.examine(game.state)
+    expect(walls.examine(game.state)).toContain(ECHO)
     expect(walls.examine(game.state)).toContain(CHANT)
     expect(walls.examine(game.state)).toContain(CHANT)
   })

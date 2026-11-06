@@ -4,7 +4,6 @@ import {
   type GameState,
   clue,
   dialogue,
-  effect,
   saysAnyOf,
   type NameOptions,
 } from '@/engine'
@@ -187,34 +186,7 @@ export class SorceressOfLies extends Character {
     )
   }
 
-  /**
-   * Listening in the chamber is understanding too: with the badge shown and
-   * all three hearts heard, standing still and listening to her redeems her
-   * as the word does. Before the badge only her laughing is heard; after it,
-   * the same refusals as the word.
-   */
-  listenedTo(gameState: GameState): string {
-    gameState.setStoryFlag(FLAG_ACT4_SORCERESS_OF_LIES_STARTED, true)
-    if (gameState.getStoryFlag(FLAG_ACT4_SORCERESS_OF_LIES_COMPLETED)) {
-      return '[dim]She has already been heard. The chamber is quiet.[/dim]'
-    }
-    if (!gameState.getStoryFlag(FLAG_ACT4_BADGE_SHOWN)) {
-      return clue(
-        'The crystals hum kind, untrue things, and under them she is ' +
-          'laughing at you. If there is anything beneath the laughing, it ' +
-          'does not let you near.',
-      )
-    }
-    return this.understandBy(
-      gameState,
-      effect('You say nothing.') +
-        ' You stand in the middle of her chamber and ' +
-        'listen, to all of it, for as long as it takes. The Sorceress ' +
-        `goes very still. ${CRYSTALS_QUIET}`,
-    )
-  }
-
-  /** The shared gates and the redemption, led in by what Elior did (ready-made lines): the word, or the listening. */
+  /** The shared gates and the redemption, led in by what Elior did (ready-made lines). */
   private understandBy(gameState: GameState, lead: string): string {
     if (!gameState.getStoryFlag(FLAG_ACT4_BADGE_SHOWN)) {
       return clue(

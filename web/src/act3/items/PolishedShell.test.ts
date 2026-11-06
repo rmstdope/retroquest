@@ -22,7 +22,7 @@ describe('PolishedShell', () => {
     for (let i = 0; i < 2; i++) {
       const out = shell.examine(game.state)
       expect(out).toContain(
-        'shines in the moonlight. Held close, it seems to hum.',
+        'shines in the moonlight. Held to your ear, it seems to hum.',
       )
       expectMarkupWellFormed(out)
     }
@@ -39,36 +39,29 @@ describe('PolishedShell', () => {
       (i) => i instanceof PolishedShell,
     )
     expect(loaded?.examine(fresh.state)).toContain(
-      'shines in the moonlight. Held close, it seems to hum.',
+      'shines in the moonlight. Held to your ear, it seems to hum.',
     )
   })
 
-  it('plays the full tune on the first listen, then one short line', () => {
+  it('plays the full tune on the first use, then one short line', () => {
     const { game, shell } = setup()
     expect(game.state.getStoryFlag(FLAG_ACT3_SHELL_HEARD)).toBeFalsy()
-    const first = shell.listen(game.state)
+    const first = shell.use(game.state)
     expect(first).toContain(FULL)
     expect(first).toContain('You hold the shell to your ear.')
     expect(game.state.getStoryFlag(FLAG_ACT3_SHELL_HEARD)).toBe(true)
-    const later = shell.listen(game.state)
+    const later = shell.use(game.state)
     expect(later).toContain(SHORT)
     expect(later).not.toContain(FULL)
     expectMarkupWellFormed(first)
     expectMarkupWellFormed(later)
   })
 
-  it('treats use like listen, sharing the first-time state', () => {
-    const { game, shell } = setup()
-    expect(shell.use(game.state)).toContain(FULL)
-    expect(shell.listen(game.state)).toContain(SHORT)
-    expect(shell.use(game.state)).toContain(SHORT)
-  })
-
   it('works through the game commands, in the room and carried', () => {
     const { game } = setup()
-    expect(game.listen('shell')).toContain(FULL)
+    expect(game.use('shell')).toContain(FULL)
     game.take('shell')
     expect(game.use('shell')).toContain(SHORT)
-    expect(game.listen('shell')).toContain(SHORT)
+    expect(game.use('shell')).toContain(SHORT)
   })
 })

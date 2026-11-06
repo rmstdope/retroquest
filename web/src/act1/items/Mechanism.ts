@@ -121,18 +121,4 @@ export class Mechanism extends Item {
         'It would take something threaded through them, not poked between.',
     )
   }
-
-  /** A draining whir while it works; silence once it is jammed. */
-  override listen(_gameState: GameState): string {
-    const nameHtml = `[item_name]${this.name}[/item_name]`
-    if (this.repaired) {
-      return 'The ' + nameHtml + ' is silent now, its gears jammed fast.'
-    }
-    return (
-      'You hear a faint whirring and clicking from within the ' +
-      nameHtml +
-      ', and beneath it a low hum, as if something were being drawn ' +
-      'up from far below.'
-    )
-  }
 }

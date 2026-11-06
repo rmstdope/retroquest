@@ -96,7 +96,6 @@ describe('MysteriousBox', () => {
     for (const noun of ['note', 'folded note', "father's note"]) {
       for (const verb of [
         'use',
-        'listen to',
         'open',
         'close',
         'eat',

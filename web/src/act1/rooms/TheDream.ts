@@ -46,16 +46,6 @@ export class TheDream extends Room {
     )
   }
 
-  /** What the storm leaves to hear: the tune, and under it the name. */
-  override getAmbientSound(_gameState: GameState): string {
-    return (
-      'The rain, and the thunder under it. Under the thunder, the tune: ' +
-      'three notes climbing, and settling home. You know it, and could ' +
-      'not say from where. Under the tune, a whisper, and the whisper is ' +
-      'your name.'
-    )
-  }
-
   /** Nothing to find; a dream has no floor. */
   override search(_gameState: GameState): string {
     return (
