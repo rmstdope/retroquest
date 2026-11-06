@@ -9599,6 +9599,108 @@
    }
   ]
  },
+ "039b782d29ebe8": {
+  "file": "039b782d29ebe8.mp3",
+  "speaker": "narrator",
+  "duration": 7.059,
+  "words": [
+   {
+    "word": "They",
+    "start": 0.0,
+    "end": 0.16
+   },
+   {
+    "word": "drift",
+    "start": 0.16,
+    "end": 0.56
+   },
+   {
+    "word": "past",
+    "start": 0.56,
+    "end": 1.06
+   },
+   {
+    "word": "like",
+    "start": 1.06,
+    "end": 1.38
+   },
+   {
+    "word": "smoke,",
+    "start": 1.38,
+    "end": 1.84
+   },
+   {
+    "word": "and",
+    "start": 1.84,
+    "end": 2.4
+   },
+   {
+    "word": "your",
+    "start": 2.4,
+    "end": 2.56
+   },
+   {
+    "word": "hand",
+    "start": 2.56,
+    "end": 2.9
+   },
+   {
+    "word": "goes",
+    "start": 2.9,
+    "end": 3.26
+   },
+   {
+    "word": "through",
+    "start": 3.26,
+    "end": 3.46
+   },
+   {
+    "word": "them.",
+    "start": 3.46,
+    "end": 3.7
+   },
+   {
+    "word": "The",
+    "start": 4.04,
+    "end": 4.68
+   },
+   {
+    "word": "tall",
+    "start": 4.68,
+    "end": 4.96
+   },
+   {
+    "word": "figure",
+    "start": 4.96,
+    "end": 5.34
+   },
+   {
+    "word": "does",
+    "start": 5.34,
+    "end": 5.6
+   },
+   {
+    "word": "not",
+    "start": 5.6,
+    "end": 5.9
+   },
+   {
+    "word": "drift",
+    "start": 5.9,
+    "end": 6.3
+   },
+   {
+    "word": "with",
+    "start": 6.3,
+    "end": 6.6
+   },
+   {
+    "word": "them.",
+    "start": 6.6,
+    "end": 6.84
+   }
+  ]
+ },
  "03b8c0d72f89d0": {
   "file": "03b8c0d72f89d0.mp3",
   "speaker": "mira",
@@ -10780,6 +10882,128 @@
     "word": "there.",
     "start": 10.5,
     "end": 10.74
+   }
+  ]
+ },
+ "046c97577f2dc9": {
+  "file": "046c97577f2dc9.mp3",
+  "speaker": "narrator",
+  "duration": 7.941,
+  "words": [
+   {
+    "word": "You",
+    "start": 0.0,
+    "end": 0.18
+   },
+   {
+    "word": "think",
+    "start": 0.18,
+    "end": 0.48
+   },
+   {
+    "word": "it",
+    "start": 0.48,
+    "end": 0.66
+   },
+   {
+    "word": "over.",
+    "start": 0.66,
+    "end": 0.94
+   },
+   {
+    "word": "The",
+    "start": 1.3,
+    "end": 1.86
+   },
+   {
+    "word": "voice",
+    "start": 1.86,
+    "end": 2.22
+   },
+   {
+    "word": "keeps",
+    "start": 2.22,
+    "end": 2.52
+   },
+   {
+    "word": "saying",
+    "start": 2.52,
+    "end": 2.98
+   },
+   {
+    "word": "your",
+    "start": 2.98,
+    "end": 3.2
+   },
+   {
+    "word": "name,",
+    "start": 3.2,
+    "end": 3.6
+   },
+   {
+    "word": "nearer",
+    "start": 3.6,
+    "end": 4.5
+   },
+   {
+    "word": "each",
+    "start": 4.5,
+    "end": 4.72
+   },
+   {
+    "word": "time,",
+    "start": 4.72,
+    "end": 5.16
+   },
+   {
+    "word": "as",
+    "start": 5.4,
+    "end": 5.9
+   },
+   {
+    "word": "if",
+    "start": 5.9,
+    "end": 6.06
+   },
+   {
+    "word": "it",
+    "start": 6.06,
+    "end": 6.18
+   },
+   {
+    "word": "is",
+    "start": 6.18,
+    "end": 6.32
+   },
+   {
+    "word": "waiting",
+    "start": 6.32,
+    "end": 6.64
+   },
+   {
+    "word": "for",
+    "start": 6.64,
+    "end": 6.9
+   },
+   {
+    "word": "you",
+    "start": 6.9,
+    "end": 7.04
+   },
+   {
+    "word": "to",
+    "start": 7.04,
+    "end": 7.18
+   },
+   {
+    "word": "answer",
+    "start": 7.18,
+    "end": 7.54
+   },
+   {
+    "word": "it.",
+    "start": 7.54,
+    "end": 7.76
    }
   ]
  },
@@ -27729,6 +27953,113 @@
    }
   ]
  },
+ "0c22f656ae3349": {
+  "file": "0c22f656ae3349.mp3",
+  "speaker": "narrator",
+  "duration": 7.338,
+  "words": [
+   {
+    "word": "Gone",
+    "start": 0.0,
+    "end": 0.34
+   },
+   {
+    "word": "with",
+    "start": 0.34,
+    "end": 0.58
+   },
+   {
+    "word": "him,",
+    "start": 0.58,
+    "end": 0.78
+   },
+   {
+    "word": "into",
+    "start": 0.78,
+    "end": 1.48
+   },
+   {
+    "word": "the",
+    "start": 1.48,
+    "end": 1.66
+   },
+   {
+    "word": "dark.",
+    "start": 1.66,
+    "end": 2.0
+   },
+   {
+    "word": "It",
+    "start": 2.44,
+    "end": 3.02
+   },
+   {
+    "word": "was",
+    "start": 3.02,
+    "end": 3.2
+   },
+   {
+    "word": "small",
+    "start": 3.2,
+    "end": 3.52
+   },
+   {
+    "word": "enough",
+    "start": 3.52,
+    "end": 3.84
+   },
+   {
+    "word": "to",
+    "start": 3.84,
+    "end": 4.04
+   },
+   {
+    "word": "hold",
+    "start": 4.04,
+    "end": 4.34
+   },
+   {
+    "word": "against",
+    "start": 4.34,
+    "end": 4.66
+   },
+   {
+    "word": "a",
+    "start": 4.66,
+    "end": 4.88
+   },
+   {
+    "word": "shoulder,",
+    "start": 4.88,
+    "end": 5.26
+   },
+   {
+    "word": "and",
+    "start": 5.5,
+    "end": 5.98
+   },
+   {
+    "word": "it",
+    "start": 5.98,
+    "end": 6.12
+   },
+   {
+    "word": "did",
+    "start": 6.12,
+    "end": 6.34
+   },
+   {
+    "word": "not",
+    "start": 6.34,
+    "end": 6.62
+   },
+   {
+    "word": "cry.",
+    "start": 6.62,
+    "end": 6.9
+   }
+  ]
+ },
  "0c24e966302117": {
   "file": "0c24e966302117.mp3",
   "speaker": "narrator",
@@ -36408,6 +36739,88 @@
     "word": "clear.",
     "start": 24.46,
     "end": 24.74
+   }
+  ]
+ },
+ "10a079820a3ec5": {
+  "file": "10a079820a3ec5.mp3",
+  "speaker": "narrator",
+  "duration": 5.991,
+  "words": [
+   {
+    "word": "He",
+    "start": 0.0,
+    "end": 0.14
+   },
+   {
+    "word": "is",
+    "start": 0.14,
+    "end": 0.36
+   },
+   {
+    "word": "gone.",
+    "start": 0.36,
+    "end": 0.76
+   },
+   {
+    "word": "You",
+    "start": 1.04,
+    "end": 1.6
+   },
+   {
+    "word": "saw",
+    "start": 1.6,
+    "end": 1.92
+   },
+   {
+    "word": "only",
+    "start": 1.92,
+    "end": 2.42
+   },
+   {
+    "word": "his",
+    "start": 2.42,
+    "end": 2.68
+   },
+   {
+    "word": "hand,",
+    "start": 2.68,
+    "end": 3.12
+   },
+   {
+    "word": "and",
+    "start": 3.12,
+    "end": 3.68
+   },
+   {
+    "word": "how",
+    "start": 3.68,
+    "end": 3.9
+   },
+   {
+    "word": "carefully",
+    "start": 3.9,
+    "end": 4.46
+   },
+   {
+    "word": "it",
+    "start": 4.46,
+    "end": 4.74
+   },
+   {
+    "word": "lifted",
+    "start": 4.74,
+    "end": 5.08
+   },
+   {
+    "word": "the",
+    "start": 5.08,
+    "end": 5.3
+   },
+   {
+    "word": "child.",
+    "start": 5.3,
+    "end": 5.54
    }
   ]
  },

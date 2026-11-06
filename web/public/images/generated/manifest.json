@@ -129,6 +129,11 @@
     "width": 1920,
     "height": 1080
   },
+  "act2-ancient-grove": {
+    "file": "act2-ancient-grove.png",
+    "width": 1920,
+    "height": 1080
+  },
   "act2-castle-approach": {
     "file": "act2-castle-approach.png",
     "width": 1920,
@@ -136,6 +141,11 @@
   },
   "act2-castle-courtyard": {
     "file": "act2-castle-courtyard.png",
+    "width": 1920,
+    "height": 1080
+  },
+  "act2-forest-entrance": {
+    "file": "act2-forest-entrance.png",
     "width": 1920,
     "height": 1080
   },
@@ -149,8 +159,43 @@
     "width": 1920,
     "height": 1080
   },
+  "act2-greendale-gates": {
+    "file": "act2-greendale-gates.png",
+    "width": 1920,
+    "height": 1080
+  },
+  "act2-healers-house": {
+    "file": "act2-healers-house.png",
+    "width": 1920,
+    "height": 1080
+  },
+  "act2-heart-of-the-forest": {
+    "file": "act2-heart-of-the-forest.png",
+    "width": 1920,
+    "height": 1080
+  },
+  "act2-hidden-library": {
+    "file": "act2-hidden-library.png",
+    "width": 1920,
+    "height": 1080
+  },
+  "act2-inn-rooms": {
+    "file": "act2-inn-rooms.png",
+    "width": 1920,
+    "height": 1080
+  },
+  "act2-main-square": {
+    "file": "act2-main-square.png",
+    "width": 1920,
+    "height": 1080
+  },
   "act2-market-district": {
     "file": "act2-market-district.png",
+    "width": 1920,
+    "height": 1080
+  },
+  "act2-merchants-warehouse": {
+    "file": "act2-merchants-warehouse.png",
     "width": 1920,
     "height": 1080
   },
@@ -258,6 +303,36 @@
     "file": "act2-portrait-squires.png",
     "width": 480,
     "height": 640
+  },
+  "act2-portrait-town-crier": {
+    "file": "act2-portrait-town-crier.png",
+    "width": 480,
+    "height": 640
+  },
+  "act2-portrait-training-master": {
+    "file": "act2-portrait-training-master.png",
+    "width": 480,
+    "height": 640
+  },
+  "act2-portrait-water-nymphs": {
+    "file": "act2-portrait-water-nymphs.png",
+    "width": 480,
+    "height": 640
+  },
+  "act2-residential-quarter": {
+    "file": "act2-residential-quarter.png",
+    "width": 1920,
+    "height": 1080
+  },
+  "act2-silver-stag-inn": {
+    "file": "act2-silver-stag-inn.png",
+    "width": 1920,
+    "height": 1080
+  },
+  "act2-whispering-glade": {
+    "file": "act2-whispering-glade.png",
+    "width": 1920,
+    "height": 1080
   },
   "portrait-elior": {
     "file": "portrait-elior.png",
