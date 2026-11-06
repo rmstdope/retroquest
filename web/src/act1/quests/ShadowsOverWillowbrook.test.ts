@@ -378,8 +378,7 @@ const JAMMED_LEAD =
   '[item_name]millstone fragment[/item_name] when it stopped.'
 const FRAGMENT_LEAD =
   ' The [item_name]millstone fragment[/item_name] is old stone. ' +
-  `${characterName('Borin')} at the forge knows stone, and the stories ` +
-  'his grandfather told about it.'
+  `${characterName('Borin')} at the forge knows old stone.`
 const LINE_4 =
   'The [item_name]rune token[/item_name] from the well is cold, and not ' +
   `from here. ${characterName('Mira')} may know what it is.`
@@ -489,7 +488,9 @@ describe('Shadows over Willowbrook hint', () => {
       game.state.addItemToInventory(new MillstoneFragment())
       hints.push(new ShadowsOverWillowbrookQuest().hint(game.state))
       for (const hint of hints) {
-        expect(hint).not.toMatch(/\b(use|give|rest|talk|take|jam)\b/i)
+        expect(hint).not.toMatch(
+          /\b(go|move|talk|speak|say|give|hand|buy|look|examine|inspect|search|take|grab|use|open|cast|rest|jam)\b/i,
+        )
       }
     })
   })

@@ -264,8 +264,7 @@ export class ShadowsOverWillowbrookQuest extends Quest {
     if (gameState.inventory.some((item) => item instanceof MillstoneFragment)) {
       return (
         ' The [item_name]millstone fragment[/item_name] is old stone. ' +
-        `${characterName('Borin')} at the forge knows stone, and the ` +
-        'stories his grandfather told about it.'
+        `${characterName('Borin')} at the forge knows old stone.`
       )
     }
     const mill = gameState.allRooms.OldMill
