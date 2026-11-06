@@ -195,7 +195,10 @@ describe('useBridge', () => {
       expect(bridge.controller.getCompletedQuests()).toEqual([])
       const settled = bridge.controller.settleQuests()
       expect(settled.activated[0].name).toBeTruthy()
-      expect(settled.updated).toEqual([])
+      // The lit lantern has already moved the opening quest's log on a step.
+      expect(settled.updated.map((quest) => quest.name)).toEqual([
+        'Hint of magic',
+      ])
       expect(settled.completed).toEqual([])
       expect(bridge.controller.getActiveQuests().length).toBeGreaterThan(0)
     })

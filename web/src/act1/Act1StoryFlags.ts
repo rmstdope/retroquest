@@ -5,6 +5,10 @@
  */
 /** Elior answered the voice in the dream the game opens with, and woke in his cottage. */
 export const FLAG_WOKE_FROM_DREAM = 'woke_from_dream'
+/** Elior lit the cottage lantern, which showed him his journal. */
+export const FLAG_LANTERN_LIT = 'lantern_lit'
+/** Elior read the dream in his journal. */
+export const FLAG_JOURNAL_READ = 'journal_read_prologue_entry'
 export const FLAG_INVESTIGATED_WITHERED_CROPS = 'investigated_withered_crops'
 export const FLAG_WITNESSED_SHADOW_EVENT = 'witnessed_shadow_event'
 export const FLAG_ACCEPTED_MIRA_APPRENTICESHIP = 'accepted_mira_apprenticeship'

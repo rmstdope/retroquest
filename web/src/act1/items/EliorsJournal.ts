@@ -5,6 +5,7 @@ import {
   characterName,
   dialogue,
 } from '@/engine'
+import { FLAG_JOURNAL_READ } from '../Act1StoryFlags'
 
 /** Elior's personal journal containing lore and story hints. */
 export class EliorsJournal extends Item {
@@ -58,7 +59,7 @@ export class EliorsJournal extends Item {
           'Someone out by the hearth was humming it.',
       ) +
       '\n'
-    gameState.setStoryFlag('journal_read_prologue_entry', true)
+    gameState.setStoryFlag(FLAG_JOURNAL_READ, true)
     return entry
   }
 

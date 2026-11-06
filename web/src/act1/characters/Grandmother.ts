@@ -20,6 +20,8 @@ import { Bread } from '../items/Bread'
 import { Patches } from './Patches'
 import {
   FLAG_GRANDMOTHER_BAKED_BREAD,
+  FLAG_JOURNAL_READ,
+  FLAG_LANTERN_LIT,
   FLAG_MAGIC_FULLY_UNLOCKED,
   FLAG_PATCHES_FOUND,
   FLAG_PATCHES_RETURNED,
@@ -61,7 +63,7 @@ export class Grandmother extends Character {
   /** What Grandmother answers when spoken to, before the speaker is labelled. */
   private talkAnswer(gameState: GameState): string {
     let dialogue = ''
-    const journalRead = gameState.getStoryFlag('journal_read_prologue_entry')
+    const journalRead = gameState.getStoryFlag(FLAG_JOURNAL_READ)
     const dreamToTell = journalRead && !gameState.hasSpell('revive')
     if (dreamToTell) dialogue = Grandmother.HUMMING_AT_THE_HEARTH
     if (this.dialogueState.initial_talk) {
@@ -121,16 +123,37 @@ export class Grandmother extends Character {
   /**
    * Her greeting when she has nothing else to say: the loaf on the board
    * while it still lies in the cottage, and only a word on it once Elior
-   * has taken it.
+   * has taken it. Before the dream is told, it ends with a nudge to the next
+   * step (`openingNudge`).
    */
   private backAgain(gameState: GameState): string {
     const loafOnBoard = gameState.currentRoom.items.some(
       (item) => item instanceof Bread,
     )
-    if (loafOnBoard) {
-      return speech("Back again? There's bread on the board, if you're hungry.")
+    const bread = loafOnBoard
+      ? "Back again? There's bread on the board, if you're hungry."
+      : "Back again? You've had the loaf, I see. I'll bake another."
+    const nudge = this.openingNudge(gameState)
+    return speech(nudge ? `${bread} ${nudge}` : bread)
+  }
+
+  /**
+   * Her nudge to the next step of the opening while the dream is still
+   * untold: light the lantern, then read the journal. Null once the journal
+   * is read.
+   */
+  private openingNudge(gameState: GameState): string | null {
+    if (gameState.getStoryFlag(FLAG_JOURNAL_READ)) return null
+    if (!gameState.getStoryFlag(FLAG_LANTERN_LIT)) {
+      return (
+        'And light that lantern before you go feeling about in your ' +
+        "corner; you'll have the shelf down."
+      )
     }
-    return speech("Back again? You've had the loaf, I see. I'll bake another.")
+    return (
+      'You were scribbling in that journal before your eyes were open. ' +
+      'Read me what it says, if you can make it out.'
+    )
   }
 
   /**

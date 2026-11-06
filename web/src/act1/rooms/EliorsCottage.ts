@@ -5,19 +5,29 @@ import { Hearth } from '../items/Hearth'
 import { Lantern } from '../items/Lantern'
 import { Grandmother } from '../characters/Grandmother'
 import { FadedPhotograph } from '../items/FadedPhotograph'
-import { FLAG_FOUND_PHOTO } from '../Act1StoryFlags'
+import { FLAG_FOUND_PHOTO, FLAG_LANTERN_LIT } from '../Act1StoryFlags'
 import { Scenery } from '../items/Scenery'
 
 /** The table clause while the loaf still cools on it. */
 const LOAF_ON_TABLE = ', with a small loaf cooling on it,'
 
-/** The cottage's room text, with the table clause given. */
-function descriptionWith(tableClause: string): string {
+/** The light sentence while the lantern is still dark. */
+const DARK_CORNER =
+  'The curtains are still drawn on a grey morning, and the corner by your ' +
+  'bed is too dark to see into. '
+
+/** The light sentence once the lantern has been lit, wherever it is now. */
+const GREY_MORNING =
+  'Grey morning comes through the lace curtains onto shelves lined with ' +
+  'trinkets and memories. '
+
+/** The cottage's room text, with the light sentence and table clause given. */
+function descriptionWith(lightSentence: string, tableClause: string): string {
   return (
     'A modest cottage with a straw roof and a cozy hearth. ' +
     'The scent of fresh bread and old books fills the air. ' +
-    'Sunlight filters through lace curtains, illuminating ' +
-    'shelves lined with trinkets and memories. A sturdy wooden ' +
+    lightSentence +
+    'A sturdy wooden ' +
     `table sits in the center${tableClause} and a gentle fire crackles in the ` +
     `hearth. ${characterName('Grandmother')} stands by it, humming, ` +
     'and keeps an eye on the bread.'
@@ -29,13 +39,14 @@ function descriptionWith(tableClause: string): string {
  *
  * Exits stay hidden until the player has learned the `revive` spell; the first
  * search spawns a FadedPhotograph and sets FLAG_FOUND_PHOTO. The room text
- * names the loaf on the table only while the bread is still in the room.
+ * names the loaf on the table only while the bread is still in the room, and
+ * the dark corner by the bed until the lantern has been lit.
  */
 export class EliorsCottage extends Room {
   constructor() {
     super({
       name: "Elior's Cottage",
-      description: descriptionWith(LOAF_ON_TABLE),
+      description: descriptionWith(DARK_CORNER, LOAF_ON_TABLE),
       items: [
         new Hearth(),
         new Lantern(),
@@ -47,10 +58,17 @@ export class EliorsCottage extends Room {
     })
   }
 
-  /** The room text, naming the loaf on the table only while it lies there. */
-  override descriptionFor(_gameState: GameState): string {
+  /**
+   * The room text: the dark corner until the lantern is lit, and the loaf on
+   * the table only while it lies there.
+   */
+  override descriptionFor(gameState: GameState): string {
     const loafOnTable = this.items.some((item) => item instanceof Bread)
-    return descriptionWith(loafOnTable ? LOAF_ON_TABLE : ',')
+    const lit = gameState.getStoryFlag(FLAG_LANTERN_LIT)
+    return descriptionWith(
+      lit ? GREY_MORNING : DARK_CORNER,
+      loafOnTable ? LOAF_ON_TABLE : ',',
+    )
   }
 
   /** Exits are unlocked once the player has learned the `revive` spell. */

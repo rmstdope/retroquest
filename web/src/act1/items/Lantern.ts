@@ -1,5 +1,6 @@
 import { Item, type GameState, clue } from '@/engine'
 import { EliorsJournal } from './EliorsJournal'
+import { FLAG_LANTERN_LIT } from '../Act1StoryFlags'
 
 /**
  * Primary early-game light source that reveals hidden items on first use.
@@ -35,11 +36,15 @@ export class Lantern extends Item {
     )
   }
 
-  /** Light the lantern and reveal the journal the first time it is used. */
+  /**
+   * Light the lantern, raise FLAG_LANTERN_LIT and reveal the journal the
+   * first time it is used.
+   */
   override use(gameState: GameState): string {
     if (!this.isLit()) {
       this.name = 'lantern (lit)'
       this.shortName = 'lantern'
+      gameState.setStoryFlag(FLAG_LANTERN_LIT, true)
       gameState.currentRoom.addItem(new EliorsJournal())
       return (
         'The flickering light reveals more of the room. A ' +
