@@ -159,6 +159,106 @@
     "width": 1920,
     "height": 1080
   },
+  "act2-portrait-ancient-tree-spirit": {
+    "file": "act2-portrait-ancient-tree-spirit.png",
+    "width": 480,
+    "height": 640
+  },
+  "act2-portrait-barmaid-elena": {
+    "file": "act2-portrait-barmaid-elena.png",
+    "width": 480,
+    "height": 640
+  },
+  "act2-portrait-brenn": {
+    "file": "act2-portrait-brenn.png",
+    "width": 480,
+    "height": 640
+  },
+  "act2-portrait-caravan-master-thorne": {
+    "file": "act2-portrait-caravan-master-thorne.png",
+    "width": 480,
+    "height": 640
+  },
+  "act2-portrait-castle-guard-captain": {
+    "file": "act2-portrait-castle-guard-captain.png",
+    "width": 480,
+    "height": 640
+  },
+  "act2-portrait-court-herald": {
+    "file": "act2-portrait-court-herald.png",
+    "width": 480,
+    "height": 640
+  },
+  "act2-portrait-families": {
+    "file": "act2-portrait-families.png",
+    "width": 480,
+    "height": 640
+  },
+  "act2-portrait-forest-hermit": {
+    "file": "act2-portrait-forest-hermit.png",
+    "width": 480,
+    "height": 640
+  },
+  "act2-portrait-forest-sprites": {
+    "file": "act2-portrait-forest-sprites.png",
+    "width": 480,
+    "height": 640
+  },
+  "act2-portrait-gate-captain": {
+    "file": "act2-portrait-gate-captain.png",
+    "width": 480,
+    "height": 640
+  },
+  "act2-portrait-herald": {
+    "file": "act2-portrait-herald.png",
+    "width": 480,
+    "height": 640
+  },
+  "act2-portrait-historians": {
+    "file": "act2-portrait-historians.png",
+    "width": 480,
+    "height": 640
+  },
+  "act2-portrait-innkeeper-marcus": {
+    "file": "act2-portrait-innkeeper-marcus.png",
+    "width": 480,
+    "height": 640
+  },
+  "act2-portrait-local-craftsmen": {
+    "file": "act2-portrait-local-craftsmen.png",
+    "width": 480,
+    "height": 640
+  },
+  "act2-portrait-lord-commander": {
+    "file": "act2-portrait-lord-commander.png",
+    "width": 480,
+    "height": 640
+  },
+  "act2-portrait-master-healer-lyria": {
+    "file": "act2-portrait-master-healer-lyria.png",
+    "width": 480,
+    "height": 640
+  },
+  "act2-portrait-master-merchant-aldric": {
+    "file": "act2-portrait-master-merchant-aldric.png",
+    "width": 480,
+    "height": 640
+  },
+  "act2-portrait-mountain-hermit": {
+    "file": "act2-portrait-mountain-hermit.png",
+    "width": 480,
+    "height": 640
+  },
+  "act2-portrait-spectral-librarian": {
+    "file": "act2-portrait-spectral-librarian.png",
+    "width": 480,
+    "height": 640
+  },
+  "act2-portrait-squires": {
+    "file": "act2-portrait-squires.png",
+    "width": 480,
+    "height": 640
+  },
   "portrait-elior": {
     "file": "portrait-elior.png",
     "width": 480,
@@ -171,6 +271,16 @@
   },
   "portrait-mira": {
     "file": "portrait-mira.png",
+    "width": 480,
+    "height": 640
+  },
+  "portrait-nyx": {
+    "file": "portrait-nyx.png",
+    "width": 480,
+    "height": 640
+  },
+  "portrait-sir-cedric": {
+    "file": "portrait-sir-cedric.png",
     "width": 480,
     "height": 640
   }
