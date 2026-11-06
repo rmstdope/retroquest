@@ -16,8 +16,8 @@ const LOGS: Array<[string, Quest, string, string]> = [
   [
     'Hint of magic',
     new HintOfMagicQuest(),
-    'You woke with three words written down and a tune still going in the house. ' +
-      'Grandmother is at the hearth, and she will want to hear about the dream.',
+    'You woke with three words written down, somewhere in the dark by your bed, ' +
+      'and a tune still going in the house. The [item_name]lantern[/item_name] would show you where.',
     "Grandmother told you of your father's journal, and his word for calling a thing back. " +
       'It came to you as she spoke, and it stayed.',
   ],

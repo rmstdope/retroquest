@@ -6,6 +6,10 @@
     },
     { "after": 0, "commands": ["take lantern"] },
     {
+        "after": 0,
+        "commands": ["take bread", "talk to grandmother", "talk to grandmother"]
+    },
+    {
         "after": 45,
         "commands": ["talk to mira", "talk to mira"],
         "unset": ["well_examined"]

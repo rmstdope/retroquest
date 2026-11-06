@@ -110,9 +110,9 @@
     "text": "Hint of magic"
   },
   {
-    "id": "017e5fe672d1d5",
+    "id": "0cbad1bef0b053",
     "speaker": "narrator",
-    "text": "You woke with three words written down and a tune still going in the house. Grandmother is at the hearth, and she will want to hear about the dream."
+    "text": "You woke with three words written down, somewhere in the dark by your bed, and a tune still going in the house. The lantern would show you where."
   },
   {
     "id": "1ce01e698ceb2f",
@@ -120,14 +120,44 @@
     "text": "Elior's Cottage"
   },
   {
-    "id": "11724b96042a0a",
+    "id": "09d9e8cdbadd81",
     "speaker": "narrator",
-    "text": "A modest cottage with a straw roof and a cozy hearth. The scent of fresh bread and old books fills the air. Sunlight filters through lace curtains, illuminating shelves lined with trinkets and memories. A sturdy wooden table sits in the center, with a small loaf cooling on it, and a gentle fire crackles in the hearth. Grandmother stands by it, humming, and keeps an eye on the bread."
+    "text": "A modest cottage with a straw roof and a cozy hearth. The scent of fresh bread and old books fills the air. The curtains are still drawn on a grey morning, and the corner by your bed is too dark to see into. A sturdy wooden table sits in the center, with a small loaf cooling on it, and a gentle fire crackles in the hearth. Grandmother stands by it, humming, and keeps an eye on the bread."
   },
   {
     "id": "1aaa7b34be5670",
     "speaker": "narrator",
     "text": "You'd rather light the lantern before you carry it anywhere; it is no use to you dark."
+  },
+  {
+    "id": "0cdc6ab7134945",
+    "speaker": "narrator",
+    "text": "The crust gives under your thumb. It smells like morning."
+  },
+  {
+    "id": "084fb5cba8e80a",
+    "speaker": "narrator",
+    "text": "A modest cottage with a straw roof and a cozy hearth. The scent of fresh bread and old books fills the air. The curtains are still drawn on a grey morning, and the corner by your bed is too dark to see into. A sturdy wooden table sits in the center, and a gentle fire crackles in the hearth. Grandmother stands by it, humming, and keeps an eye on the bread."
+  },
+  {
+    "id": "1638fe58e0bba6",
+    "speaker": "grandmother",
+    "text": "There you are. Sit down a minute, the bread's nearly done."
+  },
+  {
+    "id": "16573e0a17e838",
+    "speaker": "narrator",
+    "text": "She does not sit down herself."
+  },
+  {
+    "id": "17d4ca14565432",
+    "speaker": "grandmother",
+    "text": "The village is on edge, you'll have noticed. Folk keep their voices down in the square these days, and nobody will say why. If you're going out, look in on Mira at her hut; she was asking after you. You know she has a way with herbs, and with... other things. Hemlock will have heard whatever there is to hear at the General Store; he always does. And show your face at the forge, or Borin will think you've forgotten him. You've a good heart, Elior. Don't let anyone talk you out of it."
+  },
+  {
+    "id": "1eb7550bdce639",
+    "speaker": "grandmother",
+    "text": "Back again? You've had the loaf, I see. I'll bake another. And light that lantern before you go feeling about in your corner; you'll have the shelf down."
   },
   {
     "id": "041e30b4ecb790",
@@ -175,21 +205,6 @@
     "text": "Old books with soft, cracked spines, most of them almanacs. They have been read more than they have been dusted."
   },
   {
-    "id": "1638fe58e0bba6",
-    "speaker": "grandmother",
-    "text": "There you are. Sit down a minute, the bread's nearly done."
-  },
-  {
-    "id": "16573e0a17e838",
-    "speaker": "narrator",
-    "text": "She does not sit down herself."
-  },
-  {
-    "id": "17d4ca14565432",
-    "speaker": "grandmother",
-    "text": "The village is on edge, you'll have noticed. Folk keep their voices down in the square these days, and nobody will say why. If you're going out, look in on Mira at her hut; she was asking after you. You know she has a way with herbs, and with... other things. Hemlock will have heard whatever there is to hear at the General Store; he always does. And show your face at the forge, or Borin will think you've forgotten him. You've a good heart, Elior. Don't let anyone talk you out of it."
-  },
-  {
     "id": "177a6e95fe57b9",
     "speaker": "narrator",
     "text": "Your grandmother, flour on her apron and her sleeves pushed up. She has raised you since your parents went away, and she keeps her hands busy when she would rather not answer."
@@ -210,9 +225,9 @@
     "text": "Shadows over Willowbrook: Something is wrong in Willowbrook. The fields, the square and the well each hold a part of it."
   },
   {
-    "id": "02fc8d25bca9f7",
+    "id": "000167b4df23c1",
     "speaker": "narrator",
-    "text": "Hint of magic: You woke with three words written down and a tune still going in the house. Grandmother is at the hearth, and she will want to hear about the dream."
+    "text": "Hint of magic: You woke with three words written down, somewhere in the dark by your bed, and a tune still going in the house. The lantern would show you where."
   },
   {
     "id": "09097b529ab3e9",
@@ -220,9 +235,9 @@
     "text": "You rest for a moment, gathering your strength."
   },
   {
-    "id": "134db2673b0e04",
+    "id": "00c10270bb35ae",
     "speaker": "grandmother",
-    "text": "Back again? There's bread on the board, if you're hungry."
+    "text": "Back again? There's bread on the board, if you're hungry. And light that lantern before you go feeling about in your corner; you'll have the shelf down."
   },
   {
     "id": "138e12e1b614fb",
@@ -230,14 +245,34 @@
     "text": "The flickering light reveals more of the room. A journal appears in the light."
   },
   {
+    "id": "15b327c013bbc3",
+    "speaker": "narrator",
+    "text": "Quest updated"
+  },
+  {
+    "id": "119ed12ba872e8",
+    "speaker": "narrator",
+    "text": "The lantern found your journal. The three words are in it, with the rest of the dream."
+  },
+  {
     "id": "0343646184b98f",
     "speaker": "narrator",
     "text": "A leather-bound journal filled with Elior's careful handwriting. The pages are full of notes, sketches, and secrets."
   },
   {
-    "id": "0cdc6ab7134945",
+    "id": "14f5c990fddabf",
     "speaker": "narrator",
-    "text": "The crust gives under your thumb. It smells like morning."
+    "text": "Hint of magic: The lantern found your journal. The three words are in it, with the rest of the dream."
+  },
+  {
+    "id": "1a45db61dce4e4",
+    "speaker": "grandmother",
+    "text": "Back again? There's bread on the board, if you're hungry. You were scribbling in that journal before your eyes were open. Read me what it says, if you can make it out."
+  },
+  {
+    "id": "06fc43cea34bbb",
+    "speaker": "narrator",
+    "text": "A modest cottage with a straw roof and a cozy hearth. The scent of fresh bread and old books fills the air. Grey morning comes through the lace curtains onto shelves lined with trinkets and memories. A sturdy wooden table sits in the center, with a small loaf cooling on it, and a gentle fire crackles in the hearth. Grandmother stands by it, humming, and keeps an eye on the bread."
   },
   {
     "id": "1c66ff8c216536",
@@ -250,9 +285,9 @@
     "text": "Keep it, love. My shelves are full enough."
   },
   {
-    "id": "1c7d5a0dd93ef5",
+    "id": "0523017458f433",
     "speaker": "narrator",
-    "text": "A modest cottage with a straw roof and a cozy hearth. The scent of fresh bread and old books fills the air. Sunlight filters through lace curtains, illuminating shelves lined with trinkets and memories. A sturdy wooden table sits in the center, and a gentle fire crackles in the hearth. Grandmother stands by it, humming, and keeps an eye on the bread."
+    "text": "A modest cottage with a straw roof and a cozy hearth. The scent of fresh bread and old books fills the air. Grey morning comes through the lace curtains onto shelves lined with trinkets and memories. A sturdy wooden table sits in the center, and a gentle fire crackles in the hearth. Grandmother stands by it, humming, and keeps an eye on the bread."
   },
   {
     "id": "087d0e7421fe92",
@@ -260,9 +295,9 @@
     "text": "You are not particularly hungry."
   },
   {
-    "id": "13a5eb33c8b578",
+    "id": "1084556f727e3e",
     "speaker": "grandmother",
-    "text": "Back again? You've had the loaf, I see. I'll bake another."
+    "text": "Back again? You've had the loaf, I see. I'll bake another. You were scribbling in that journal before your eyes were open. Read me what it says, if you can make it out."
   },
   {
     "id": "0f934961783f9e",
@@ -298,6 +333,11 @@
     "id": "1a443f8363dfb5",
     "speaker": "elior",
     "text": "When I woke, the tune was still going. Someone out by the hearth was humming it."
+  },
+  {
+    "id": "0fb2fdd7cdc033",
+    "speaker": "narrator",
+    "text": "Grandmother is at the hearth, humming the tune from your dream. She will want to hear about it."
   },
   {
     "id": "013b58e4f830be",
@@ -368,6 +408,11 @@
     "id": "1cf34526961217",
     "speaker": "narrator",
     "text": "Your father's word for calling a thing back when it is nearly gone. Grandmother remembered it for you."
+  },
+  {
+    "id": "11d6b2ab7d86fe",
+    "speaker": "narrator",
+    "text": "Hint of magic: Grandmother is at the hearth, humming the tune from your dream. She will want to hear about it."
   },
   {
     "id": "057092a4b7c2fb",
@@ -448,11 +493,6 @@
     "id": "14b2e251d75238",
     "speaker": "narrator",
     "text": "She hands it back, and turns to the bread."
-  },
-  {
-    "id": "15b327c013bbc3",
-    "speaker": "narrator",
-    "text": "Quest updated"
   },
   {
     "id": "076161dbddd970",

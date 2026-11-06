@@ -32,6 +32,7 @@ import { PreparingForTheRoadQuest } from './quests/PreparingForTheRoad'
 import { FadedPhotographQuest } from './quests/FadedPhotograph'
 import { ShadowsOverWillowbrookQuest } from './quests/ShadowsOverWillowbrook'
 import {
+  FLAG_LANTERN_LIT,
   FLAG_SHADOWS_OVER_WILLOWBROOK_COMPLETED,
   FLAG_VEGETABLE_FIELD_WATERED,
 } from './Act1StoryFlags'
@@ -119,6 +120,7 @@ export class Act1 extends Act {
       rooms.EliorsCottage.addItem(new Hearth())
     }
     this.restoreCottageLoaf(gameState)
+    this.restoreLanternLit(gameState)
     for (const [roomKey, room] of Object.entries(rooms)) {
       Scenery.ensure(room, roomKey)
     }
@@ -163,6 +165,20 @@ export class Act1 extends Act {
       !cottage.getItemByName('bread')
     ) {
       cottage.addItem(new Bread())
+    }
+  }
+
+  /**
+   * Saves made before the lantern raised FLAG_LANTERN_LIT get it from the
+   * lantern itself, lit wherever it now lies or is carried.
+   */
+  private restoreLanternLit(gameState: GameState): void {
+    const items = [
+      ...gameState.inventory,
+      ...Object.values(gameState.allRooms).flatMap((room) => room.items),
+    ]
+    if (items.some((item) => item instanceof Lantern && item.isLit())) {
+      gameState.setStoryFlag(FLAG_LANTERN_LIT, true)
     }
   }
 
