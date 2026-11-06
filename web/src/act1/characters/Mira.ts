@@ -157,7 +157,9 @@ export class Mira extends Character {
   /**
    * Name the rune token from the well a fouling sigil and hand it back. The
    * first time she tells all she reads in it, tying it to the mill when Elior
-   * has jammed the mechanism there.
+   * has jammed the mechanism there. After the amulet hand-over, where she has
+   * already told him of the man in the grey cloak, she names that man rather
+   * than catching herself on the villagers' whispers.
    */
   private readRuneToken(gameState: GameState): string {
     if (gameState.getStoryFlag(FLAG_MIRA_NAMED_FOULING_SIGIL)) {
@@ -182,6 +184,11 @@ export class Mira extends Character {
             'and that thing was drinking it. You did well to stop it.',
         )
       : ''
+    // Once she has told Elior of the man at her door, she does not catch herself.
+    const stranger = this.amuletGiven
+      ? speech('The man in the grey cloak, who came to my door.') + ' '
+      : speech('The cloaked stranger the villagers whisper about.') +
+        ' She stops, as if she has said more than she meant to. '
     return (
       `${characterName(this.name)} turns the ` +
       '[item_name]rune token[/item_name] over in her fingers, ' +
@@ -195,8 +202,7 @@ export class Mira extends Character {
       speech('The well did not sicken. Someone poisoned it on purpose.') +
       mill +
       '\n' +
-      speech('The cloaked stranger the villagers whisper about.') +
-      ' She stops, as if she has said more than she meant to. ' +
+      stranger +
       speech(
         'Whoever carried this was not here to spoil a well and leave. ' +
           'They were searching Willowbrook for something.',

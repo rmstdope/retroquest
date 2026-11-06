@@ -380,6 +380,40 @@ describe('Mira and the cloaked stranger', () => {
     expect(response).toContain('A man came to my door')
     expect(response).toContain('in a grey cloak, asking after this')
   })
+
+  it('names the man at her door, without catching herself, when the token comes after the amulet', () => {
+    const game = gameInMirasHut()
+    game.state.addItemToInventory(new RareFlower())
+    executeCommands(game, ['give rare flower to mira'])
+    completeJourneyPreparations(game.state)
+    executeCommands(game, ['talk to mira'])
+    game.state.addItemToInventory(new RuneToken())
+
+    const response = executeCommands(game, ['give rune token to mira'])
+
+    expect(response).toContain('fouling sigil')
+    expect(response).toContain(
+      'The man in the grey cloak, who came to my door.',
+    )
+    expect(response).not.toContain('said more than she meant to')
+    expect(response).not.toContain('whisper about')
+    expectDialogueSpeaker(response, 'Mira')
+  })
+
+  it('catches herself on the token first, then tells him of the man at the hand-over', () => {
+    const game = gameInMirasHut()
+    game.state.addItemToInventory(new RuneToken())
+    const token = executeCommands(game, ['give rune token to mira'])
+    game.state.addItemToInventory(new RareFlower())
+    executeCommands(game, ['give rare flower to mira'])
+    completeJourneyPreparations(game.state)
+
+    const handOver = executeCommands(game, ['talk to mira'])
+
+    expect(token).toContain('said more than she meant to')
+    expect(token).not.toContain('grey cloak')
+    expect(handOver).toContain('A man came to my door')
+  })
 })
 
 describe('Mira and the blessing for the road', () => {
