@@ -686,7 +686,7 @@ describe('Game', () => {
     })
   })
 
-  describe('take and drop', () => {
+  describe('take', () => {
     it('takes an item from the room into the inventory', () => {
       const egg = item('egg')
       rooms.EliorsCottage.items.push(egg)
@@ -760,25 +760,17 @@ describe('Game', () => {
       )
     })
 
-    it('drops an inventory item into the room', () => {
+    it('does not understand drop or discard, and leaves the bag alone', () => {
       const lantern = item('lantern')
       game.state.inventory.push(lantern)
-      expect(game.drop('lantern')).toBe(
-        '[event]You drop the [item_name]lantern[/item_name].[/event]',
+      expect(game.commandParser.parse('drop lantern')).toBe(
+        "[failure]I don't understand the command: 'drop lantern'. Try 'help' for a list of valid commands.[/failure]",
       )
-      const token = item("nyx's token")
-      game.state.inventory.push(token)
-      expect(game.drop("nyx's token")).toBe(
-        "[event]You drop the [item_name]nyx's token[/item_name].[/event]",
+      expect(game.commandParser.parse('discard lantern')).toBe(
+        "[failure]I don't understand the command: 'discard lantern'. Try 'help' for a list of valid commands.[/failure]",
       )
-      expect(game.state.inventory).toEqual([])
-      expect(rooms.EliorsCottage.items).toEqual([lantern, token])
-      expect(game.drop('nonexistent')).toBe(
-        "[failure]You don't have a 'nonexistent' to drop.[/failure]",
-      )
-      expect(game.drop('enhanced echo stone')).toBe(
-        "[failure]You don't have an 'enhanced echo stone' to drop.[/failure]",
-      )
+      expect(game.state.inventory).toEqual([lantern])
+      expect(rooms.EliorsCottage.items).toEqual([])
     })
   })
 
@@ -1272,6 +1264,8 @@ describe('Game', () => {
       expect(help).toContain('cast <spell> on <object/character>')
       expect(help).toContain('sleep, rest, wait')
       expect(help.toLowerCase()).not.toContain('cheat')
+      expect(help).not.toContain('drop')
+      expect(help).not.toContain('discard')
       expect(game.getCommandCompletions()).not.toHaveProperty('cheat')
     })
 
@@ -1298,7 +1292,8 @@ describe('Game', () => {
       expect(tree.go).toEqual({ south: null })
       expect(tree.talk).toEqual({ to: { old: { mira: null } } })
       expect(tree.take).toEqual({ "elior's": { journal: null }, journal: null })
-      expect(tree.drop).toEqual({ rope: null })
+      expect(tree).not.toHaveProperty('drop')
+      expect(tree).not.toHaveProperty('discard')
       expect(tree.give).toEqual({ rope: { to: { old: { mira: null } } } })
       expect(tree.buy).toEqual({
         "elior's": { journal: { from: { old: { mira: null } } } },

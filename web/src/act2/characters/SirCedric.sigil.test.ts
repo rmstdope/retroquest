@@ -47,9 +47,12 @@ function newGame(): Game {
   return game
 }
 
-/** Drop the amulet in the current room. */
+/** Lay the amulet on the floor of the current room, as a test set-up. */
 function dropAmulet(game: Game): void {
-  executeCommands(game, ['drop amulet'])
+  const amulet = amuletOf(game)
+  game.state.inventory = game.state.inventory.filter((i) => i !== amulet)
+  if (!game.state.currentRoom.items.includes(amulet))
+    game.state.currentRoom.items.push(amulet)
 }
 
 /** The amulet, wherever it is: the bag or the current room. */

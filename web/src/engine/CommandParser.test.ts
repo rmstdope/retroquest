@@ -62,9 +62,6 @@ class RecordingGame implements CommandTarget {
   take(item: string) {
     return this.record('take', item)
   }
-  drop(item: string) {
-    return this.record('drop', item)
-  }
   use(item: string, other?: string) {
     return this.record('use', item, other ?? null)
   }
@@ -216,8 +213,6 @@ describe('CommandParser', () => {
       'pick up sword': ['take', 'sword'],
       'grab apple': ['take', 'apple'],
       'get shield': ['take', 'shield'],
-      'drop key': ['drop', 'key'],
-      'discard rock': ['drop', 'rock'],
       'use lantern': ['use', 'lantern', null],
       'use key with chest': ['use', 'key', 'chest'],
       'use key on chest': ['use', 'key', 'chest'],
@@ -269,6 +264,8 @@ describe('CommandParser', () => {
       map: ['map'],
       stats: ['stats'],
       xyzzy: ['unknown', 'xyzzy'],
+      'drop key': ['unknown', 'drop key'],
+      'discard rock': ['unknown', 'discard rock'],
       '': ['unknown', ''],
     })
   })

@@ -38,7 +38,6 @@ describe('buildCommand', () => {
     ['go', ['north'], 'go north'],
     ['examine', ['old notice'], 'examine old notice'],
     ['take', ['bucket'], 'take bucket'],
-    ['drop', ['lantern'], 'drop lantern'],
     ['use', ['lantern'], 'use lantern'],
     ['usewith', ['bucket', 'well'], 'use bucket with well'],
     ['talk', ['mira'], 'talk to mira'],
@@ -89,7 +88,7 @@ describe('targetsFor', () => {
   })
 
   it('uses plain bag names without markup or stack counts', () => {
-    const targets = targetsFor(verbById('drop').slots[0], CONTEXT)
+    const targets = targetsFor(verbById('give').slots[0], CONTEXT)
 
     expect(targets.map((t) => t.value)).toEqual(['lantern', 'apple'])
     expect(targets[1].label).toBe('Apple')

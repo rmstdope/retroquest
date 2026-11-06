@@ -46,7 +46,7 @@ The full list, with every synonym, is `design/Commands.md`. A few that the game 
 - **Movement:** `go north`, `north`, `n`
 - **Interaction:** `talk to Mira`, `say patience to shadow`, `give locket to grandmother`, `buy rope from shopkeeper`
 - **Examination:** `look`, `examine offering altar`, `search`, `listen`, `listen to shell`
-- **Inventory:** `take lantern`, `drop apple`, `use bucket with well`, `inventory`
+- **Inventory:** `take lantern`, `use bucket with well`, `inventory`
 - **Magic:** `cast light`, `cast purify on well`, `spells`
 - **When stuck:** `hint`, `wait`, `map`
 - **Game Management:** `save`, `load`, `help`

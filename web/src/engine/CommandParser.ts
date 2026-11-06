@@ -20,7 +20,6 @@ export interface CommandTarget {
   listen(target?: string): string
   hint(): string
   take(item: string): string
-  drop(item: string): string
   use(item: string, other?: string): string
   inventory(): string
   open(target: string): string
@@ -52,7 +51,6 @@ const EXAMINE_PREFIXES = ['look at ', 'inspect ', 'examine ', 'check ', 'look ']
 /** The examine verbs typed with nothing named; `look` alone is `look`. */
 const BARE_EXAMINE_VERBS = ['look at', 'inspect', 'examine', 'check']
 const TAKE_PREFIXES = ['take ', 'pick up ', 'grab ', 'get ']
-const DROP_PREFIXES = ['drop ', 'discard ']
 
 const SAY_USAGE = 'Use say <word> to <character>'
 const USE_WITH_USAGE =
@@ -125,8 +123,6 @@ export class CommandParser {
 
     const takeTarget = afterPrefix(cmd, TAKE_PREFIXES)
     if (takeTarget !== null) return this.game.take(takeTarget)
-    const dropTarget = afterPrefix(cmd, DROP_PREFIXES)
-    if (dropTarget !== null) return this.game.drop(dropTarget)
     if (cmd === 'use') return 'What do you want to use?'
     if (cmd.startsWith('use ')) return this.use(command)
     if (['inventory', 'i', 'inv'].includes(cmd)) return this.game.inventory()

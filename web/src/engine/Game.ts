@@ -402,8 +402,6 @@ Welcome to
       pick: { up: nested(roomItemNames) },
       grab: nested(roomItemNames),
       get: nested(roomItemNames),
-      drop: nested(inventoryItemNames),
-      discard: nested(inventoryItemNames),
       use: withTarget(allItemNames, 'with'),
       inventory: null,
       i: null,
@@ -512,7 +510,6 @@ Welcome to
       '\n' +
       '[bold]Inventory Management:[/bold]\n' +
       '  take <item>, pick up <item>, grab <item>, get <item>\n' +
-      '  drop <item>, discard <item>\n' +
       '  use <item>, use <item> with <item>\n' +
       '  inventory, i, inv\n' +
       '  open <container>\n' +
@@ -597,15 +594,6 @@ Welcome to
   quit(): string {
     this.isRunning = false
     return ''
-  }
-
-  drop(itemName: string): string {
-    const item = this.findItem(itemName, { room: false })
-    if (!item)
-      return `[failure]You don't have ${indefiniteArticle(itemName)} '${itemName}' to drop.[/failure]`
-    this.state.inventory.splice(this.state.inventory.indexOf(item), 1)
-    this.state.currentRoom.items.push(item)
-    return `[event]You drop ${item.nameInSentence()}.[/event]`
   }
 
   /**

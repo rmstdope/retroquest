@@ -19,11 +19,7 @@
     },
     {
         "after": 30,
-        "commands": ["drop coin", "give dull knife to blacksmith"]
-    },
-    {
-        "after": 30,
-        "commands": ["drop dull knife", "give coin to blacksmith"]
+        "commands": ["give dull knife to blacksmith"]
     },
     { "after": 36, "commands": ["open mysterious box", "give egg to patches"] },
     { "after": 39, "commands": ["use fishing rod on magnet"] },
@@ -143,24 +139,7 @@
         "after": 22,
         "commands": ["go east", "talk to shopkeeper", "talk to shopkeeper"]
     },
-    {"after": 13, "commands": ["drop coin", "take coin"]},
-    {"after": 16, "commands": ["drop feather", "take feather"]},
-    {"after": 30, "commands": ["drop horseshoe", "take horseshoe"]},
-    {"after": 32, "commands": ["drop sharp knife", "take sharp knife"]},
-    {"after": 36, "commands": ["drop broken shovel", "take broken shovel"]},
-    {"after": 53, "commands": ["drop apple", "take apple", "drop rope", "take rope"]},
-    {"after": 69, "commands": ["drop fish", "take fish"]},
-    {"after": 78, "commands": ["drop shiny pebble", "take shiny pebble"]},
-    {"after": 92, "commands": ["drop matches", "take matches"]},
-    {"after": 101, "commands": ["drop locket", "take locket"]},
-    {"after": 119, "commands": ["drop map", "take map"]},
-    {"after": 123, "commands": ["drop carrot", "take carrot"]},
-    {"after": 129, "commands": ["drop shiny ring", "take shiny ring", "drop rune token", "take rune token"]},
-    {"after": 145, "commands": ["drop travel cloak", "take travel cloak"]},
-    {"after": 155, "commands": ["drop rusty saw", "take rusty saw"]},
-    {"after": 156, "commands": ["drop wandering boots", "take wandering boots"]},
     {"after": 14, "commands": ["take carrot"]},
-    {"after": 145, "commands": ["talk to grandmother", "drop fresh bread", "take fresh bread"]},
     {"after": -1, "commands": ["say hello to voice"]},
     {"after": 37, "commands": ["go north", "go west", "go north", "say stay to grandmother"]},
     {"after": 74, "commands": ["give mother's letter to fisherman"]},

@@ -29,6 +29,24 @@ const PHOTO = 'The faded photograph'
 const CAT = 'Curiosity killed the cat'
 
 describe('Act 1 golden path', () => {
+  it('cannot put the travel cloak down before the farewell (rq-t7rj)', () => {
+    const game = new Game([new Act1()])
+    executeCommands(game, ACT1_GOLDEN_PATH)
+
+    expect(game.commandParser.parse('drop travel cloak')).toBe(
+      "[failure]I don't understand the command: 'drop travel cloak'. " +
+        "Try 'help' for a list of valid commands.[/failure]",
+    )
+    expect(game.commandParser.parse('discard wandering boots')).toContain(
+      "I don't understand the command",
+    )
+    expectItemInInventory(game.state, 'travel cloak')
+    expectItemInInventory(game.state, 'wandering boots')
+
+    const farewell = executeCommands(game, ACT1_COMPLETING_COMMANDS)
+    expect(farewell).toContain('travel cloak')
+  })
+
   it('carries only the watered field into later acts', () => {
     expect(new Act1().carriedFlags()).toEqual(['vegetable_field_watered'])
   })
