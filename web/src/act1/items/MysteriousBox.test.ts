@@ -1,7 +1,9 @@
 import { describe, it, expect } from 'vitest'
 import { Game, findMarkupProblems, writing } from '@/engine'
 import { Act1 } from '../Act1'
+import { DullKnife } from './DullKnife'
 import { MysteriousBox } from './MysteriousBox'
+import { UnlockSpell } from '../spells/UnlockSpell'
 
 const NOTE = writing('For when the light comes back to you.')
 
@@ -83,6 +85,36 @@ describe('MysteriousBox', () => {
       expect(findMarkupProblems(answer)).toEqual([])
     }
     expect(game.state.hasItem('mysterious box')).toBe(false)
+  })
+
+  it('answers about the note, not the box, to every verb tried on it (rq-r2dn)', () => {
+    const { game } = gameWithUnlockedBox()
+    game.state.knownSpells.push(new UnlockSpell())
+    game.state.addItemToInventory(new DullKnife())
+    game.commandParser.parse('open box')
+
+    for (const noun of ['note', 'folded note', "father's note"]) {
+      for (const verb of [
+        'use',
+        'listen to',
+        'open',
+        'close',
+        'eat',
+        'drink',
+        'equip',
+        'unequip',
+        'cast unlock on',
+        'use knife with',
+      ]) {
+        const answer = game.commandParser.parse(`${verb} ${noun}`)
+        expect(answer, `${verb} ${noun}`).not.toContain('mysterious box')
+        expect(findMarkupProblems(answer)).toEqual([])
+      }
+    }
+    expect(game.commandParser.parse('use note')).toContain(
+      "You can't use your [item_name]father's note[/item_name] in any " +
+        'special way.',
+    )
   })
 
   it('still refuses the box itself by its own name once open', () => {

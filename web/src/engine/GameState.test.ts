@@ -222,6 +222,26 @@ describe('GameState', () => {
       expect(gs.findItem('nope')).toBeNull()
     })
 
+    it('hands back the part an item names by the word, bag and room alike', () => {
+      const lid = item('lid')
+      /** A chest whose lid answers in its place. */
+      class Chest extends Item {
+        override answersTo(name: string): boolean {
+          return super.answersTo(name) || name.toLowerCase() === 'lid'
+        }
+        override partNamed(name: string): Item {
+          return name.toLowerCase() === 'lid' ? lid : this
+        }
+      }
+      const chest = new Chest({ name: 'chest', description: 'Oak.' })
+      room.addItem(chest)
+      expect(gs.findItem('LID')).toBe(lid)
+      expect(gs.findItem('chest')).toBe(chest)
+      room.items.length = 0
+      gs.addItemToInventory(chest)
+      expect(gs.findItems('lid')).toEqual([lid])
+    })
+
     it('removes carried items by short name as well as full name', () => {
       gs.addItemToInventory(item('Rusty Hoe', 'hoe'), 2)
       expect(gs.removeItemFromInventory('hoe')).toBe(1)

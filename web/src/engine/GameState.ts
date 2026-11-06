@@ -132,17 +132,16 @@ export class GameState {
 
   /**
    * Every item the story name refers to, in the one lookup order: the
-   * inventory first, then the current room. Matching is `isNamed`.
+   * inventory first, then the current room. Matching is `isNamed`; each
+   * match answers through its `partNamed` for the word.
    */
   findItems(itemName: string, { inventory = true, room = true } = {}): Item[] {
     return [
-      ...(inventory
-        ? this.inventory.filter((item) => isNamed(item, itemName))
-        : []),
-      ...(room
-        ? this.currentRoom.items.filter((item) => isNamed(item, itemName))
-        : []),
+      ...(inventory ? this.inventory : []),
+      ...(room ? this.currentRoom.items : []),
     ]
+      .filter((item) => isNamed(item, itemName))
+      .map((item) => item.partNamed(itemName))
   }
 
   /** The first item `findItems` returns for the name, or null. */

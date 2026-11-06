@@ -48,6 +48,16 @@ export class Item {
   }
 
   /**
+   * The item that answers when the player names this one by `name` (a word
+   * `answersTo` accepted): this item itself by default. Override for an item
+   * that answers to a part of itself, so every verb tried on the part is
+   * answered by the part (the note in Act I's opened box).
+   */
+  partNamed(_name: string): Item {
+    return this
+  }
+
+  /**
    * The item's name as it reads inside a sentence, article included (see
    * `nameInSentence` in `names.ts`): "the [item]". Override and pass
    * `bare: true` for an item named after a person ("Elior's Journal").
@@ -58,11 +68,9 @@ export class Item {
 
   /**
    * Why the item cannot be taken, or '' when it can. The game state lets an
-   * item's refusal follow the story; most items ignore it. `_name` is the
-   * word the player took it by, for an item that answers to more than one
-   * thing.
+   * item's refusal follow the story; most items ignore it.
    */
-  preventPickup(_gameState: GameState, _name: string = this.name): string {
+  preventPickup(_gameState: GameState): string {
     return this.canBeCarried
       ? ''
       : `[failure]You can't take ${this.nameInSentence()}.[/failure]`
