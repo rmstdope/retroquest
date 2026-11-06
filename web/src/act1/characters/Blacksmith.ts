@@ -145,8 +145,11 @@ export class Blacksmith extends Character {
    * Handle items offered to the blacksmith and perform exchanges. The knife
    * trade needs the coin and the dull knife both carried and reads the same
    * whichever one is handed over; a knife without a coin gets its own refusal.
+   * Handing him anything counts as meeting him, so a later talk never greets
+   * Elior as unseen since the harvest.
    */
   override giveItem(gameState: GameState, item: Item): string {
+    gameState.setStoryFlag(FLAG_BLACKSMITH_MET, true)
     if (item instanceof Coin || item instanceof DullKnife) {
       // The trade needs both items in hand, whichever one was offered.
       const coinInstance = gameState.inventory.find(

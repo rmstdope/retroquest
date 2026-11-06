@@ -268,3 +268,56 @@ describe('Borin repeat talk keeps its wording (rq-m3fy)', () => {
     )
   })
 })
+
+describe('Borin greets Elior only once, however they first meet (rq-gxur)', () => {
+  /** An Act I game with Elior at the forge, not yet having spoken to Borin. */
+  function freshAtForge(): Game {
+    const game = new Game([new Act1()])
+    game.state.currentRoom = game.state.allRooms.BlacksmithsForge
+    return game
+  }
+
+  /** Whether a response is Borin's first-meeting greeting. */
+  function isFirstGreeting(response: string): boolean {
+    return (
+      response.includes('since the harvest') ||
+      response.includes('Got anything with an edge gone soft?')
+    )
+  }
+
+  it('does not greet Elior as unseen after pricing his knife', () => {
+    const game = freshAtForge()
+    game.state.addItemToInventory(new DullKnife())
+    executeCommands(game, ['give dull knife to borin'])
+
+    const response = executeCommands(game, ['talk to borin'])
+
+    expect(isFirstGreeting(response)).toBe(false)
+    expect(response).toContain('Back again, lad? Forge is hot.')
+    expectDialogueSpeaker(response, 'Borin')
+  })
+
+  it('asks after the edge, not for one, once he has sharpened the knife', () => {
+    const game = freshAtForge()
+    game.state.addItemToInventory(new Coin())
+    game.state.addItemToInventory(new DullKnife())
+    executeCommands(game, ['give dull knife to borin'])
+
+    const response = executeCommands(game, ['talk to borin'])
+
+    expect(isFirstGreeting(response)).toBe(false)
+    expect(response).toContain('Keep that edge oiled')
+  })
+
+  it('does not greet Elior as unseen after taking the millstone fragment', () => {
+    const game = freshAtForge()
+    game.state.addItemToInventory(new MillstoneFragment())
+    executeCommands(game, ['give millstone fragment to borin'])
+
+    const response = executeCommands(game, ['talk to borin'])
+
+    expect(isFirstGreeting(response)).toBe(false)
+    expect(response).toContain('Back again, lad? Forge is hot.')
+    expectDialogueSpeaker(response, 'Borin')
+  })
+})
