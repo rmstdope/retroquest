@@ -227,7 +227,7 @@ describe('Scenery that agrees with its room', () => {
     )
     expect(say(game, 'examine gears')).toBe(
       'Wooden gears, furred with dust and cobwebs. ' +
-        'The shaft from the sails turns above them, out of their reach, ' +
+        'The shaft from the sails turns above them and never meets them, ' +
         "and they don't move; the whirring comes from the iron thing among them.",
     )
     const mech = game.state.currentRoom.items.find(
@@ -236,7 +236,7 @@ describe('Scenery that agrees with its room', () => {
     mech.repaired = true
     expect(say(game, 'examine gears')).toBe(
       'Wooden gears, furred with dust. ' +
-        'The shaft from the sails turns above them, out of their reach. ' +
+        'The shaft from the sails turns above them and never meets them. ' +
         'The mill is quiet now.',
     )
   })

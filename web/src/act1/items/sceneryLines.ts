@@ -386,10 +386,10 @@ export const SCENERY_BY_ROOM: Record<string, SceneryDef[]> = {
     staged('OldMill.gears', 'gears', ['cobwebs'], (gs) =>
       mechanismJammed(gs)
         ? 'Wooden gears, furred with dust. ' +
-          'The shaft from the sails turns above them, out of their reach. ' +
+          'The shaft from the sails turns above them and never meets them. ' +
           'The mill is quiet now.'
         : 'Wooden gears, furred with dust and cobwebs. ' +
-          'The shaft from the sails turns above them, out of their reach, ' +
+          'The shaft from the sails turns above them and never meets them, ' +
           "and they don't move; the whirring comes from the iron thing among them.",
     ),
     plain(
