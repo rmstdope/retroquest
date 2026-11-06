@@ -6,9 +6,7 @@ export class Magnet extends Item {
   constructor() {
     super({
       name: 'magnet',
-      description:
-        'A small, surprisingly strong magnet. It might be useful for retrieving ' +
-        'metallic objects from hard-to-reach places.',
+      description: 'A small magnet, stronger than it looks.',
       canBeCarried: true,
     })
   }

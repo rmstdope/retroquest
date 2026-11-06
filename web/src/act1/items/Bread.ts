@@ -9,8 +9,7 @@ export class Bread extends Item {
     super({
       name: 'bread',
       description:
-        'A small loaf of fresh, crusty bread. It smells delicious and could restore a ' +
-        'bit of energy.',
+        'A small loaf with a crisp crust, still smelling of the oven.',
       canBeCarried: true,
     })
   }

@@ -42,9 +42,9 @@ export class HiddenGlade extends Room {
 
   /** The glade once `light` has lifted the darkness. */
   private static readonly SUNLIT_DESCRIPTION =
-    'A peaceful clearing bathed in golden sunlight, hidden deep within the forest. ' +
-    'Wildflowers carpet the ground, and a gentle breeze stirs the tall grass. In the ' +
-    'center, a mossy stone bears a faint, magical inscription.'
+    'A clearing in full sun, deep in the forest. Wildflowers cover the ground, ' +
+    'and a light breeze moves the tall grass. In the center, a mossy stone ' +
+    'bears an inscription.'
 
   /** The refrain carved beneath the grow runes, word for word. */
   private static readonly REFRAIN =
@@ -84,19 +84,18 @@ export class HiddenGlade extends Room {
     const dynamicParts: string[] = []
     if (this.getCharacterByName('Deer')) {
       dynamicParts.push(
-        'A graceful ' +
+        'A ' +
           characterName('deer') +
-          ' grazes quietly, occasionally ' +
-          'lifting its head to watch you with wise, gentle eyes.',
+          ' grazes at the edge of the clearing, and lifts its head to watch you.',
       )
       if (this.items.some((item) => item instanceof RareFlower)) {
         dynamicParts.push(
-          'A beautiful [item_name]rare flower[/item_name] blooms near the mossy stone.',
+          'A [item_name]rare flower[/item_name] blooms near the mossy stone.',
         )
       } else {
         dynamicParts.push(
-          'You recall picking a beautiful [item_name]rare flower[/item_name] that once ' +
-            'bloomed near the mossy stone.',
+          'A [item_name]rare flower[/item_name] once bloomed near the mossy stone. ' +
+            'You picked it.',
         )
       }
     }

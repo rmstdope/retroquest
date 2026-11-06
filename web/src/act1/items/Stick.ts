@@ -1,14 +1,12 @@
 import { Item, type GameState } from '@/engine'
 import { MagneticFishingRod } from './MagneticFishingRod'
 
-/** A simple stick useful for poking, walking, or combining with tools. */
+/** A plain stick; with the magnet it makes a fishing rod. */
 export class Stick extends Item {
   constructor() {
     super({
       name: 'stick',
-      description:
-        'A sturdy stick, perfect for walking, poking, or perhaps as a makeshift ' +
-        'weapon.',
+      description: 'A straight stick, sound all the way through.',
       canBeCarried: true,
     })
   }
