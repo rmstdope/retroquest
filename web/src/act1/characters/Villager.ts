@@ -95,7 +95,7 @@ export class Villager extends Character {
             'There was a stranger asking after an old amulet. Keep that one ' +
               'under your shirt.',
           ) +
-          ' She knocks on the nearest wood, to be sure.',
+          ' She glances round the square, as if somebody might be listening.',
       )
     }
     if (item instanceof RuneToken) {

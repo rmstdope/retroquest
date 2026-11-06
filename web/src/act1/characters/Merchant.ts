@@ -200,9 +200,8 @@ export class Merchant extends Character {
     }
     if (item instanceof AncientAmulet) {
       return (
-        `The ${characterName(this.name)}'s hand stops halfway to it. He ` +
-        'looks at the sun and the rings, and closes your fingers over it ' +
-        'himself. ' +
+        `The ${characterName(this.name)}'s hand stops halfway to it, and ` +
+        'goes back to the strap of his pack. ' +
         speech(
           "Some things you don't put a price on, friend, and you don't show " +
             'them on the road either.',

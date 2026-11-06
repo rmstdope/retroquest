@@ -1,8 +1,8 @@
 /**
- * Act 1's story items handed to the people of Willowbrook (rq-nqk7, rq-1jyd): the
- * amulet, the cursed rune token, the rare flower, a fish and a coin each get
- * an answer of their own from the people the bead names, never the stock
- * give-back line meant for clutter. The item stays with Elior and nothing
+ * Act 1's story items handed to the people of Willowbrook (rq-nqk7,
+ * rq-1jyd): the amulet, the cursed rune token, the rare flower, a fish and a
+ * coin each get an answer of their own from the people the bead names, never
+ * the stock give-back line meant for clutter. The item stays with Elior and nothing
  * else changes.
  */
 import { describe, expect, it } from 'vitest'

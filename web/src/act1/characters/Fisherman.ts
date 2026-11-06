@@ -222,7 +222,7 @@ export class Fisherman extends Character {
           speech(
             "I've seen that before, lad. A long time back, at this bend.",
           ) +
-          ' He closes your hand over it. ' +
+          ' He nods at your pocket. ' +
           speech(
             "Keep it out of the river. Some things the water doesn't give " +
               'back.',
