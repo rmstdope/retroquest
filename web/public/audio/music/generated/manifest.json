@@ -63,8 +63,44 @@
   "file": "act1-village-well.mp3",
   "duration": 60.0
  },
+ "act2-ancient-grove": {
+  "file": "act2-ancient-grove.mp3",
+  "duration": 60.0
+ },
+ "act2-castle-approach": {
+  "file": "act2-castle-approach.mp3",
+  "duration": 60.0
+ },
+ "act2-castle-courtyard": {
+  "file": "act2-castle-courtyard.mp3",
+  "duration": 60.0
+ },
+ "act2-forest-entrance": {
+  "file": "act2-forest-entrance.mp3",
+  "duration": 60.0
+ },
+ "act2-forest-transition": {
+  "file": "act2-forest-transition.mp3",
+  "duration": 60.0
+ },
+ "act2-great-hall": {
+  "file": "act2-great-hall.mp3",
+  "duration": 60.0
+ },
  "act2-greendale-gates": {
   "file": "act2-greendale-gates.mp3",
+  "duration": 60.0
+ },
+ "act2-healers-house": {
+  "file": "act2-healers-house.mp3",
+  "duration": 60.0
+ },
+ "act2-heart-of-the-forest": {
+  "file": "act2-heart-of-the-forest.mp3",
+  "duration": 60.0
+ },
+ "act2-hidden-library": {
+  "file": "act2-hidden-library.mp3",
   "duration": 60.0
  },
  "act2-inn-rooms": {
@@ -87,8 +123,16 @@
   "file": "act2-mountain-path.mp3",
   "duration": 60.0
  },
+ "act2-residential-quarter": {
+  "file": "act2-residential-quarter.mp3",
+  "duration": 60.0
+ },
  "act2-silver-stag-inn": {
   "file": "act2-silver-stag-inn.mp3",
+  "duration": 60.0
+ },
+ "act2-whispering-glade": {
+  "file": "act2-whispering-glade.mp3",
   "duration": 60.0
  },
  "market": {
