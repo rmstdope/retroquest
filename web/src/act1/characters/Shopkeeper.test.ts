@@ -316,6 +316,32 @@ describe('Hemlock and his missing cat', () => {
     )
   })
 
+  it('speaks of his promised reward only when Elior heard of it (rq-btb2)', () => {
+    const unheard = gameInStore({ shopOpen: false })
+    unheard.state.setStoryFlag(FLAG_PATCHES_FOUND, true)
+    const firstMeeting = unheard.commandParser.parse('talk to shopkeeper')
+    expect(firstMeeting).not.toContain('promised')
+    expect(coins(unheard)).toBe(1)
+
+    const told = gameInStore({ shopOpen: false })
+    told.state.setStoryFlag(FLAG_MET_HEMLOCK, true)
+    told.state.setStoryFlag(FLAG_PATCHES_FOUND, true)
+    expect(told.commandParser.parse('talk to shopkeeper')).toContain(
+      'the reward I promised',
+    )
+  })
+
+  it('speaks of his promised reward when Elior read the notice but never met him', () => {
+    const game = gameInStore({ shopOpen: false })
+    game.state.currentRoom = game.state.allRooms.VillageSquare
+    game.commandParser.parse('examine notice')
+    game.state.currentRoom = game.state.allRooms.GeneralStore
+    game.state.setStoryFlag(FLAG_PATCHES_FOUND, true)
+    expect(game.commandParser.parse('talk to shopkeeper')).toContain(
+      'the reward I promised',
+    )
+  })
+
   it("fires the store's patches-returns sound trigger as Patches comes home, once", () => {
     const game = gameInStore({ shopOpen: false })
     game.state.setStoryFlag(FLAG_PATCHES_FOUND, true)
@@ -453,6 +479,29 @@ describe('Shopkeeper when Patches stays with grandmother', () => {
         (c) => c instanceof Patches,
       ),
     ).toBe(false)
+  })
+
+  it('speaks of the reward as news when Elior never heard of it (rq-btb2)', () => {
+    const unheard = gameAfterPatchesStayed()
+    expect(unheard.commandParser.parse('talk to shopkeeper')).not.toContain(
+      'The reward was for',
+    )
+
+    const told = gameAfterPatchesStayed()
+    told.state.setStoryFlag(FLAG_MET_HEMLOCK, true)
+    expect(told.commandParser.parse('talk to shopkeeper')).toContain(
+      'The reward was for bringing her home',
+    )
+  })
+
+  it('speaks of the reward as known when Elior read the notice but never met him', () => {
+    const game = gameAfterPatchesStayed()
+    game.state.currentRoom = game.state.allRooms.VillageSquare
+    game.commandParser.parse('examine notice')
+    game.state.currentRoom = game.state.allRooms.GeneralStore
+    expect(game.commandParser.parse('talk to shopkeeper')).toContain(
+      'The reward was for bringing her home',
+    )
   })
 
   it('gives the rope only once, then lists his wares', () => {

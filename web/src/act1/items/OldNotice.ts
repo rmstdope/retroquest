@@ -1,4 +1,5 @@
 import { Item, type GameState, characterName, writing } from '@/engine'
+import { FLAG_READ_HEMLOCK_NOTICE } from '../Act1StoryFlags'
 
 /** Faded missing-cat poster pinned to the notice board: Hemlock's plea for Patches. */
 export class OldNotice extends Item {
@@ -12,8 +13,12 @@ export class OldNotice extends Item {
     })
   }
 
-  /** Show the description, then the poster's own words as unsigned writing. */
-  override examine(_gameState: GameState): string {
+  /**
+   * Show the description, then the poster's own words as unsigned writing.
+   * Reading it is how Elior hears of Patches and the reward.
+   */
+  override examine(gameState: GameState): string {
+    gameState.setStoryFlag(FLAG_READ_HEMLOCK_NOTICE, true)
     return (
       `${this.description}\n` +
       writing(

@@ -135,13 +135,20 @@ export class Fisherman extends Character {
     return this.dialogue(this.currentDialogueKey)
   }
 
-  /** His greeting once heal has mended his arm. */
+  /**
+   * His greeting once heal has mended his arm: he will cast again tomorrow,
+   * and today still wants a fresh fish.
+   */
   private healedGreeting(): string {
     return (
       `The ${characterName('fisherman')} rolls his mended shoulder at you. ` +
       speech(
         "River's still sulking. But this arm's good as new, and I'll have " +
           'a pike out of her yet.',
+      ) +
+      ' He looks at the water. ' +
+      speech(
+        "Tomorrow, mind. Today I'd still give a good deal for a fresh fish.",
       )
     )
   }
