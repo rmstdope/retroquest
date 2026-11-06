@@ -24,12 +24,15 @@ const READ_THE_NOTICE =
   'offered. By the well, a locked shed keeps its secrets. ' +
   'What will you discover if you find a way inside?'
 
-/** The opening when the frightened mew in the shed is the first Elior hears of her. */
+/**
+ * The opening when the frightened mew in the shed is the first Elior hears of
+ * her; the door's own answer has just told of the mew, so this adds to it.
+ */
 const HEARD_IN_THE_SHED =
-  'From the shadows of the [room_name]Abandoned Shed[/room_name] came a ' +
-  'frightened mew, and a small patchwork shape bolted behind the broken ' +
-  `crates. It looked a lot like ${characterName('Patches')}, the cat who ` +
-  'sleeps on the counter of the [room_name]General Store[/room_name].'
+  'The small patchwork shape hiding in the ' +
+  '[room_name]Abandoned Shed[/room_name] looked a lot like ' +
+  `${characterName('Patches')}, the cat who sleeps on the counter of the ` +
+  '[room_name]General Store[/room_name].'
 
 /**
  * Side quest: find Patches, the Hemlock family's missing cat, hiding in the

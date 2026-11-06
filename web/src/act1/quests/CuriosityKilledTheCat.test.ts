@@ -53,11 +53,11 @@ describe('Curiosity killed the cat', () => {
       expect(game.state.isQuestActivated(QUEST)).toBe(false)
     })
 
-    it('opens with the frightened mew, not with what Hemlock said', () => {
+    it('opens with the shape hiding in the shed, not with what Hemlock said', () => {
       const game = wellGame()
       executeCommands(game, ['go south', 'use key with door'])
       const quest = game.state.activatedQuests.find((q) => q.name === QUEST)
-      expect(quest?.description).toContain('frightened mew')
+      expect(quest?.description).toContain('patchwork shape hiding in the')
       expect(quest?.description).not.toContain('has shut the')
       expect(quest?.description).not.toContain('last seen near the old well')
     })
@@ -68,8 +68,16 @@ describe('Curiosity killed the cat', () => {
     game.state.currentRoom = game.state.allRooms.VillageSquare
     executeCommands(game, ['examine notice'])
     const quest = game.state.activatedQuests.find((q) => q.name === QUEST)
-    expect(quest?.description).toContain('notice')
+    expect(quest?.description).toContain('small reward is offered')
     expect(quest?.description).not.toContain('has shut the')
+  })
+
+  it('keeps the notice opening when Elior meets Hemlock afterwards', () => {
+    const game = cottageGame()
+    game.state.currentRoom = game.state.allRooms.VillageSquare
+    executeCommands(game, ['examine notice', 'go east', 'talk to shopkeeper'])
+    const quest = game.state.activatedQuests.find((q) => q.name === QUEST)
+    expect(quest?.description).toContain('small reward is offered')
   })
 
   it('opens with what Hemlock said when Elior met him first', () => {
