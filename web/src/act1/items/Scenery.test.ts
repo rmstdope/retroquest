@@ -179,8 +179,17 @@ describe('Scenery that appears with the story', () => {
     game.state.addItemToInventory(new SharpKnife())
     say(game, 'use knife with vines')
     expect(say(game, 'examine alcove')).toBe(
-      'A small hollow under the bank, sheltered by roots.',
+      'A small hollow beside the path, once hidden by the vines.',
     )
+  })
+
+  it('forest path: the alcove sits beside the path, under no bank', () => {
+    const game = gameIn('ForestPath')
+    game.state.addItemToInventory(new SharpKnife())
+    say(game, 'use knife with vines')
+    const alcove = say(game, 'examine alcove')
+    expect(alcove).not.toContain('bank')
+    expect(alcove).toContain('beside the path')
   })
 })
 

@@ -445,7 +445,7 @@ export const SCENERY_BY_ROOM: Record<string, SceneryDef[]> = {
       'ForestPath.alcove',
       'alcove',
       [],
-      'A small hollow under the bank, sheltered by roots.',
+      'A small hollow beside the path, once hidden by the vines.',
       'cut',
     ),
   ],
