@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest'
 import { characterName, Game } from '@/engine'
 import { Act1 } from '../Act1'
 import { AncientAmulet } from '../items/AncientAmulet'
+import { RareFlower } from '../items/RareFlower'
 import {
   FLAG_CONNECT_WITH_NATURE,
   FLAG_INVESTIGATED_WITHERED_CROPS,
@@ -13,6 +14,7 @@ import {
   FLAG_VEGETABLE_FIELD_WATERED,
   FLAG_VILLAGER_TALKED_TO,
   FLAG_WELL_EXAMINED,
+  FLAG_WOKE_FROM_DREAM,
 } from '../Act1StoryFlags'
 import { ShadowsOverWillowbrookQuest } from './ShadowsOverWillowbrook'
 import { ACT1_GOLDEN_PATH } from '../Act1GoldenPath'
@@ -256,6 +258,26 @@ describe('Shadows over Willowbrook log', () => {
     const earlier = (quest.earlierStages ?? []).join('')
     expect(earlier).toContain('one wound.')
     expect(earlier).not.toContain('She wants a rare flower')
+  })
+
+  it('keeps the flower request out of the journal when Mira is given the flower before the signs', () => {
+    const game = new Game([new Act1()])
+    game.state.setStoryFlag(FLAG_WOKE_FROM_DREAM, true)
+    game.state.setStoryFlag(FLAG_INVESTIGATED_WITHERED_CROPS, true)
+    game.state.currentRoom = game.state.allRooms.MirasHut
+    game.state.addItemToInventory(new RareFlower())
+    executeCommands(game, ['look', 'give rare flower to mira'])
+    game.state.setStoryFlag(FLAG_VILLAGER_TALKED_TO, true)
+    game.state.setStoryFlag(FLAG_WELL_EXAMINED, true)
+    executeCommands(game, ['talk to mira'])
+
+    const quest = game.state.getQuest('Shadows over Willowbrook')
+    const journal = [
+      ...(quest?.earlierStages ?? []),
+      quest?.latestStage ?? '',
+    ].join('')
+    expect(journal).toContain('one wound.')
+    expect(journal).not.toContain('She wants a rare flower')
   })
 
   it('still records Mira asking for the flower when the signs come first', () => {
