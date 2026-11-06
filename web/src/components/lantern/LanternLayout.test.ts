@@ -436,6 +436,9 @@ describe('LanternLayout', () => {
       const menu = w.get('[role="menu"]')
       expect(menu.findAll('[role="menuitem"]').map((m) => m.text())).toEqual([
         'Take',
+        'Use',
+        'Open',
+        'Close',
         'Examine',
       ])
       expect(document.activeElement?.textContent?.trim()).toBe('Take')

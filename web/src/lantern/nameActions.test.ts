@@ -18,9 +18,12 @@ describe('nameActions', () => {
     ])
   })
 
-  it('offers taking and examining an item in the room', () => {
+  it('offers taking, using, opening, closing and examining an item in the room', () => {
     expect(nameActions('item', 'Lantern (lit)', HERE)).toEqual([
       { label: 'Take', command: 'take lantern (lit)' },
+      { label: 'Use', command: 'use lantern (lit)' },
+      { label: 'Open', command: 'open lantern (lit)' },
+      { label: 'Close', command: 'close lantern (lit)' },
       { label: 'Examine', command: 'examine lantern (lit)' },
     ])
   })
@@ -41,6 +44,9 @@ describe('nameActions', () => {
   it("knows an item by the story's short name", () => {
     expect(nameActions('item', 'journal', HERE)).toEqual([
       { label: 'Take', command: "take elior's journal" },
+      { label: 'Use', command: "use elior's journal" },
+      { label: 'Open', command: "open elior's journal" },
+      { label: 'Close', command: "close elior's journal" },
       { label: 'Examine', command: "examine elior's journal" },
     ])
   })

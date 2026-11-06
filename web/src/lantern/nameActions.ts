@@ -58,7 +58,8 @@ function commandName(name: string, around: Around): string {
 
 /**
  * The actions that fit a character or item named in the story, given what is
- * in the room, the bag and the spells known; none when it is not here. A
+ * in the room, the bag and the spells known; none when it is not here. An
+ * item in the room gets Take, Use, Open, Close and Examine. A
  * character also gets Give… (each thing in the bag) and Cast… (each spell).
  */
 export function nameActions(
@@ -117,6 +118,9 @@ export function nameActions(
   if (around.items.some((i) => same(i, name)))
     return actions([
       ['Take', 'take'],
+      ['Use', 'use'],
+      ['Open', 'open'],
+      ['Close', 'close'],
       ['Examine', 'examine'],
     ])
   return []
