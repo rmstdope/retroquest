@@ -460,9 +460,14 @@
     "text": "Hint of magic: Grandmother is at the hearth, humming the tune from your dream. She will want to hear about it."
   },
   {
-    "id": "057092a4b7c2fb",
+    "id": "0ee084355ae058",
     "speaker": "narrator",
-    "text": "You already have it by heart: his words, and the way she told them."
+    "text": "She glances at the journal, then back at the dough."
+  },
+  {
+    "id": "1376565c840b73",
+    "speaker": "grandmother",
+    "text": "He'd stand over my herbs and say that word, and I'd laugh at him. Go on with you. The bread won't bake any faster for you watching it."
   },
   {
     "id": "09acfbb0c60912",
@@ -583,6 +588,16 @@
     "id": "18a53f865bf20d",
     "speaker": "narrator",
     "text": "Your grandmother says your mother loved the river. The old fisherman at the Riverbank will remember what she did there."
+  },
+  {
+    "id": "0afe4c7e405ca0",
+    "speaker": "grandmother",
+    "text": "Have you been down to the river yet? He'll be at the bend; he always is."
+  },
+  {
+    "id": "1117ebc5e6c876",
+    "speaker": "narrator",
+    "text": "She turns the loaf, though it does not need turning."
   },
   {
     "id": "0c619a4831b3b0",
@@ -1895,6 +1910,11 @@
     "text": "You carried Patches home to Old Man Hemlock, and the General Store is open again. Curiosity did not kill this cat after all."
   },
   {
+    "id": "041534e9c03f15",
+    "speaker": "grandmother",
+    "text": "Hemlock was by for flour, whistling. He says you found his Patches. I've not heard him whistle in a year."
+  },
+  {
     "id": "1764529af62301",
     "speaker": "narrator",
     "text": "Hemlock pushes it back across the counter."
@@ -2413,6 +2433,21 @@
     "id": "08e4e978483387",
     "speaker": "narrator",
     "text": "At the river bend you found your mother's letter, hidden beneath the smooth stone. Its words raise more questions than they answer, but they are hers."
+  },
+  {
+    "id": "1604be25b1dead",
+    "speaker": "narrator",
+    "text": "She sees the letter at your pocket, and she knows the hand from across the room."
+  },
+  {
+    "id": "185d7f8693acec",
+    "speaker": "grandmother",
+    "text": "Keep that dry."
+  },
+  {
+    "id": "023bfae04c7a13",
+    "speaker": "narrator",
+    "text": "She does not ask what it says. She turns back to the bread."
   },
   {
     "id": "166a26242914c1",

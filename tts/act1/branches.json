@@ -112,6 +112,14 @@
         "commands": ["use sword", "use armor"]
     },
     {
+        "after": 52,
+        "commands": ["go west", "go west", "talk to grandmother"]
+    },
+    {
+        "after": 74,
+        "commands": ["go west", "go north", "go north", "go west", "go north", "talk to grandmother"]
+    },
+    {
         "after": 57,
         "commands": ["use strange mechanism", "listen to strange mechanism"]
     },

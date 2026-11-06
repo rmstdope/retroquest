@@ -63,8 +63,9 @@ export class Grandmother extends Character {
    * Dialogue varying by story flags: the greeting, then (once, after the
    * journal is read) her reaction to the dream, then the journal tale
    * (which grants the Revive spell), her lines on Elior's journey, on
-   * Patches and the shed hint while he carries its key. The journal tale is told again only
-   * when she has nothing newer to say.
+   * Patches and the shed hint while he carries its key. The journal tale is
+   * told once; when she has nothing else to say she gives the line for the
+   * newest stage of the story (`stageLine`).
    */
   override talkTo(gameState: GameState): string {
     return attributeSpeech(this.name, this.talkAnswer(gameState))
@@ -117,17 +118,52 @@ export class Grandmother extends Character {
       dialogue += (dialogue ? '\n' : '') + this.shedKeyHint()
     }
 
-    if (!dialogue && journalRead) {
-      // Nothing newer to say: she tells the journal tale again.
-      dialogue =
-        this.journalTale() +
-        '\n\n' +
-        'You already have it by heart: his words, and the way she told them.'
-    }
+    if (!dialogue && journalRead) dialogue = this.stageLine(gameState)
 
     if (!dialogue) dialogue = this.backAgain(gameState)
 
     return dialogue
+  }
+
+  /**
+   * The one short line she gives between the Revive tale and Mira's teaching
+   * when she has nothing else to say. The newest thing that has happened
+   * wins: the letter Elior carries, Patches taken home to Hemlock, the river
+   * she sent him to, else a nod to the tale. Derived from state alone, so it
+   * is the same on every talk and after a reload.
+   */
+  private stageLine(gameState: GameState): string {
+    if (gameState.inventory.some((item) => item instanceof MothersLetter)) {
+      return (
+        'She sees the letter at your pocket, and she knows the hand from ' +
+        'across the room.\n' +
+        speech('Keep that dry.') +
+        '\nShe does not ask what it says. She turns back to the bread.'
+      )
+    }
+    if (gameState.getStoryFlag(FLAG_PATCHES_RETURNED)) {
+      return speech(
+        `${characterName('Hemlock')} was by for flour, whistling. He says ` +
+          `you found his ${characterName('Patches')}. I've not heard him ` +
+          'whistle in a year.',
+      )
+    }
+    if (gameState.getStoryFlag(FLAG_TALKED_TO_GRANDMOTHER_ABOUT_PHOTO)) {
+      return (
+        speech(
+          "Have you been down to the river yet? He'll be at the bend; he " +
+            'always is.',
+        ) + '\nShe turns the loaf, though it does not need turning.'
+      )
+    }
+    return (
+      'She glances at the [item_name]journal[/item_name], then back at the ' +
+      'dough.\n' +
+      speech(
+        "He'd stand over my herbs and say that word, and I'd laugh at him. " +
+          "Go on with you. The bread won't bake any faster for you watching it.",
+      )
+    )
   }
 
   /**

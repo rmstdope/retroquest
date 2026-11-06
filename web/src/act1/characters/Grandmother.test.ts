@@ -15,6 +15,8 @@ import { Locket } from '../items/Locket'
 import { FadedPhotograph } from '../items/FadedPhotograph'
 import { Key } from '../items/Key'
 import { WildBerries } from '../items/WildBerries'
+import { MothersLetter } from '../items/MothersLetter'
+import { FLAG_TALKED_TO_GRANDMOTHER_ABOUT_PHOTO } from '../Act1StoryFlags'
 
 /** A new Act I game already woken out of the dream, standing in the cottage. */
 function cottageGame(): Game {
@@ -291,7 +293,7 @@ describe('Grandmother and the dream', () => {
     const response = executeCommands(game, ['talk to grandmother'])
 
     expect(response).not.toContain(REACTION)
-    expect(response).toContain('You already have it by heart')
+    expect(response).not.toContain('You already have it by heart')
   })
 
   it('does not react for a player who already learned revive', () => {
@@ -435,7 +437,8 @@ describe('Grandmother and what lies in the cottage', () => {
 
     expect(game.state.hasItem("elior's journal")).toBe(false)
     expect(first).toContain('Your father wrote in one like that')
-    expect(again).toContain('Your father wrote in one like that')
+    expect(again).not.toContain('Your father wrote in one like that')
+    expect(again).toContain('say that word')
     expect(first).not.toContain('under your arm')
     expect(again).not.toContain('under your arm')
     expect(again).toContain('[item_name]journal[/item_name]')
@@ -482,5 +485,109 @@ describe('Grandmother and what lies in the cottage', () => {
     expect(response).toContain('Back again?')
     expect(response).not.toContain('bread on the board')
     expectDialogueSpeaker(response, 'grandmother')
+  })
+})
+
+describe('Grandmother between the Revive tale and the flower', () => {
+  const READ = ['use lantern', 'take lantern', 'use journal']
+  const PLAIN = "He'd stand over my herbs and say that word"
+  const RIVER = 'Have you been down to the river yet?'
+  const PATCHES = "I've not heard him whistle in a year."
+  const LETTER = 'Keep that dry.'
+
+  /** A game in the cottage where the Revive tale has been heard. */
+  function afterRevive(): Game {
+    const game = cottageGame()
+    executeCommands(game, [...READ, 'talk to grandmother'])
+    return game
+  }
+
+  it('gives one short plain line on every later talk, never the tale again', () => {
+    const game = afterRevive()
+
+    const first = executeCommands(game, ['talk to grandmother'])
+    const second = executeCommands(game, ['talk to grandmother'])
+
+    expect(first).toContain(PLAIN)
+    expect(first).toContain('She glances at the [item_name]journal[/item_name]')
+    expect(first).not.toContain('Sometimes I think it worked')
+    expect(first).not.toContain('by heart')
+    expect(second).toBe(first)
+    expect(findMarkupProblems(first)).toEqual([])
+    expectDialogueSpeaker(first, 'grandmother')
+  })
+
+  it('points to the river once she has named it', () => {
+    const game = afterRevive()
+    game.state.setStoryFlag(FLAG_TALKED_TO_GRANDMOTHER_ABOUT_PHOTO, true)
+
+    const response = executeCommands(game, ['talk to grandmother'])
+
+    expect(response).toContain(RIVER)
+    expect(response).toContain(
+      'She turns the loaf, though it does not need turning.',
+    )
+    expect(response).not.toContain(PLAIN)
+  })
+
+  it('tells of Hemlock once Patches is home with him', () => {
+    const game = afterRevive()
+    game.state.setStoryFlag(FLAG_TALKED_TO_GRANDMOTHER_ABOUT_PHOTO, true)
+    game.state.setStoryFlag(FLAG_PATCHES_FOUND, true)
+    game.state.setStoryFlag(FLAG_PATCHES_RETURNED, true)
+
+    const response = executeCommands(game, ['talk to grandmother'])
+
+    expect(response).toContain(PATCHES)
+    expect(response).toContain('[character_name]Hemlock[/character_name]')
+    expect(response).not.toContain(RIVER)
+    expect(findMarkupProblems(response)).toEqual([])
+  })
+
+  it('keeps her hearth line, not the Patches line, when Patches stayed', () => {
+    const game = afterRevive()
+    game.state.setStoryFlag(FLAG_PATCHES_FOUND, true)
+    game.state.setStoryFlag(FLAG_PATCHES_STAYED_WITH_GRANDMOTHER, true)
+
+    const response = executeCommands(game, ['talk to grandmother'])
+
+    expect(response).toContain('asleep in the warm spot by the hearth')
+    expect(response).not.toContain(PATCHES)
+  })
+
+  it('knows the letter at his pocket, ahead of every older stage', () => {
+    const game = afterRevive()
+    game.state.setStoryFlag(FLAG_TALKED_TO_GRANDMOTHER_ABOUT_PHOTO, true)
+    game.state.setStoryFlag(FLAG_PATCHES_RETURNED, true)
+    game.state.addItemToInventory(new MothersLetter())
+
+    const response = executeCommands(game, ['talk to grandmother'])
+
+    expect(response).toContain('she knows the hand from across the room.')
+    expect(response).toContain(LETTER)
+    expect(response).toContain('She does not ask what it says.')
+    expect(response).not.toContain(PATCHES)
+    expect(findMarkupProblems(response)).toEqual([])
+  })
+
+  it('shows no stage line once Mira has taught him', () => {
+    const game = afterRevive()
+    game.state.addItemToInventory(new MothersLetter())
+    game.state.setStoryFlag(FLAG_MAGIC_FULLY_UNLOCKED, true)
+
+    const response = executeCommands(game, ['talk to grandmother'])
+
+    expect(response).toContain('You have her gift')
+    expect(response).not.toContain(LETTER)
+    expect(response).not.toContain(PLAIN)
+  })
+
+  it('shows the same line after a save and reload', () => {
+    const game = afterRevive()
+    game.state.setStoryFlag(FLAG_TALKED_TO_GRANDMOTHER_ABOUT_PHOTO, true)
+    const loaded = cottageGame()
+    loaded.loadSaveData(game.toSaveData())
+
+    expect(executeCommands(loaded, ['talk to grandmother'])).toContain(RIVER)
   })
 })
