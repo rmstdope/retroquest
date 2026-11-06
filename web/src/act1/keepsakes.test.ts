@@ -12,6 +12,7 @@ import { Fisherman } from './characters/Fisherman'
 import { Grandmother } from './characters/Grandmother'
 import { Mira } from './characters/Mira'
 import { AncientAmulet } from './items/AncientAmulet'
+import { Bread } from './items/Bread'
 import { FadedPhotograph } from './items/FadedPhotograph'
 import { MothersLetter } from './items/MothersLetter'
 import { Rope } from './items/Rope'
@@ -41,7 +42,7 @@ const LETTER_TO_GRANDMOTHER =
   speech("That's her, all over. Telling you what to do from wherever she is.") +
   '\nShe folds it along its creases and hands it back. ' +
   speech('Keep it dry. And do as she says.') +
-  ' She turns back to the hearth.'
+  ' She turns back to the hearth, where the next loaf is rising.'
 
 const LETTER_TO_MIRA_BEFORE =
   `${MIRA} reads it to the end, and her thumb stays on one line. ` +
@@ -168,6 +169,9 @@ describe('family keepsakes', () => {
       new Grandmother().giveItem(game.state, letter),
     )
     executeCommands(game, ['take bread'])
+    expect(
+      game.state.allRooms.EliorsCottage.items.some((i) => i instanceof Bread),
+    ).toBe(false)
     const withoutLoaf = withoutLabel(
       new Grandmother().giveItem(game.state, letter),
     )
