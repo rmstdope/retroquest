@@ -58,8 +58,9 @@ export function effect(text: string): string {
  * Wrap `text` as a failure that tells the player something about the world or
  * gives a clue: `[failure][clue]text[/clue][/failure]`. The story view shows
  * it as standard narrator text and reads it aloud, while a plain `[failure]`
- * refusal stays silent in the red failure box. It is still a `[failure]` to the game. Keep any echo
- * of the command out of it, on its own `event()` line before it.
+ * refusal stays silent in the red failure box. It is still a `[failure]` to
+ * the game. Keep any echo of the command out of it, on its own `event()` line
+ * before it.
  */
 export function clue(text: string): string {
   return `[failure][clue]${text}[/clue][/failure]`

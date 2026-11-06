@@ -6,7 +6,7 @@
  * story view finds a recording by the same block (`findClip`).
  *
  * - `turnBlocks`: an answer, split as the story view splits it (`parseTurn`):
- *   narration, speech and clue failures are voiced; events (the echo of the
+ *   narration (clue lines included) and speech are voiced; events (the echo of the
  *   player's command), plain refusals and checklists are not.
  *   Unsigned writing has no speaker on the page, so it is keyed as `UNSIGNED`.
  * - `introBlocks`: a chapter page that opens an act: its heading
