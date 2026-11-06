@@ -4,6 +4,9 @@ import { GameMap } from './GameMap'
 /** The words Elior's father left in the box for him. */
 const FATHERS_NOTE = 'For when the light comes back to you.'
 
+/** The words a player may use for the note once the box is open. */
+const NOTE_NAMES = ['note', 'folded note', "father's note"]
+
 /**
  * Small locked container introducing multi-step acquisition and object state
  * transitions. Elior's father sealed it in his workshop so that only Elior's
@@ -24,6 +27,15 @@ export class MysteriousBox extends Item {
     })
   }
 
+  /**
+   * Once opened, the box also answers to the note left inside it, so
+   * examining the note reads the box's description and the father's line.
+   */
+  override answersTo(name: string): boolean {
+    if (super.answersTo(name)) return true
+    return !this.containsMap && NOTE_NAMES.includes(name.toLowerCase())
+  }
+
   /** Unlock the box if locked, otherwise report already unlocked (called by UnlockSpell). */
   unlock(_gameState: GameState): string {
     const nameHtml = `[item_name]${this.name}[/item_name]`
@@ -39,7 +51,8 @@ export class MysteriousBox extends Item {
 
   /**
    * Open the box if unlocked, dispense the map and show the father's note,
-   * which stays in the box; otherwise report it locked or empty.
+   * which stays in the box; otherwise say it is locked, or that it lies open
+   * with only the note inside.
    */
   override open(gameState: GameState): string {
     const nameHtml = `[item_name]${this.name}[/item_name]`
@@ -67,6 +80,8 @@ export class MysteriousBox extends Item {
         'sealed so that only your magic could ever open it.'
       )
     }
-    return `The ${nameHtml} is now empty.`
+    return (
+      `The ${nameHtml} lies open. Only your father's note remains ` + 'inside.'
+    )
   }
 }

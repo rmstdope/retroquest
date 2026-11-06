@@ -43,7 +43,7 @@ const OPTIONAL_LINES: Record<number, { speaker: string; opening: string }[]> = {
     { speaker: 'narrator', opening: 'You lift the smooth stone a little' },
     { speaker: 'narrator', opening: 'The wire is pulled tight around the kit' },
     { speaker: 'narrator', opening: 'A soft glow fills the shed.' },
-    { speaker: 'narrator', opening: 'The mysterious box is now empty.' },
+    { speaker: 'narrator', opening: 'The mysterious box lies open.' },
     { speaker: 'narrator', opening: 'The spell finds nothing to turn.' },
     {
       speaker: 'fisherman',
