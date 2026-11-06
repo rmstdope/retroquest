@@ -142,19 +142,25 @@ export class Villager extends Character {
    * asked, saying "truth" or "yes" tells her it was Elior: her reply and the
    * remembered line, recorded once. Earlier she is lost ("truth") or gives the
    * usual reply (anything else); later she keeps the secret. Other words,
-   * once she has asked and has not been told, are met with a nudge toward the
+   * while she still waits for an answer, are met with a nudge toward the
    * truth.
    */
   override sayTo(gameState: GameState, words: string): string {
     const asked = gameState.getStoryFlag(FLAG_TILDA_ASKED_ABOUT_WELL)
-    const truth = /\b(truth|yes)\b/i.test(words)
-    if (asked && !truth && !gameState.hasVirtue(VIRTUE_TRUTH)) {
+    const isTruth = /\btruth\b/i.test(words)
+    const isYes = /\byes\b/i.test(words)
+    const stillWaiting =
+      asked &&
+      !gameState.getStoryFlag(FLAG_TILDA_SPRING_LINE_SAID) &&
+      !gameState.hasVirtue(VIRTUE_TRUTH) &&
+      !gameState.inventory.some((item) => item instanceof AncientAmulet)
+    if (stillWaiting && !isTruth && !isYes) {
       return attributeSpeech(
         this.name,
-        speech("That's not an answer, love. Just tell me the truth."),
+        speech('Come now, love. Tell me the truth.'),
       )
     }
-    if (!truth || (!asked && !/\btruth\b/i.test(words))) {
+    if (!isTruth && !(asked && isYes)) {
       return super.sayTo(gameState, words)
     }
     if (!gameState.getStoryFlag(FLAG_TILDA_ASKED_ABOUT_WELL)) {

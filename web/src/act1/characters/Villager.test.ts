@@ -198,12 +198,36 @@ describe('Tilda and the truth about the well', () => {
 
     const answer = game.commandParser.parse('say maybe to tilda')
 
-    expect(answer).toContain(
-      "That's not an answer, love. Just tell me the truth.",
-    )
+    expect(answer).toContain('Come now, love. Tell me the truth.')
     expect(answer).not.toContain("don't seem to understand")
     expect(game.state.hasVirtue(VIRTUE_TRUTH)).toBe(false)
     expectDialogueSpeaker(answer, 'Tilda')
+  })
+
+  it('stops nudging once she has given up and credited the spring', () => {
+    const game = gameWhereTildaHasAsked()
+    game.commandParser.parse('talk to tilda')
+
+    expect(game.commandParser.parse('say maybe to tilda')).toContain(
+      "don't seem to understand",
+    )
+  })
+
+  it('does not nudge a farewell when Elior carries the amulet', () => {
+    const game = gameWhereTildaHasAsked()
+    game.state.addItemToInventory(new AncientAmulet())
+
+    expect(game.commandParser.parse('say goodbye to tilda')).toContain(
+      "don't seem to understand",
+    )
+  })
+
+  it('has lost her when the truth comes as a phrase before she has asked', () => {
+    const game = gameInSquare()
+
+    expect(game.commandParser.parse('say the truth to tilda')).toContain(
+      "You've lost me.",
+    )
   })
 
   it('gives the stock reply to "yes" before she has asked', () => {
