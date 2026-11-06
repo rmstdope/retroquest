@@ -63,4 +63,12 @@ export class Deer extends Character {
       'patient, as if waiting for you to bring something to light.'
     )
   }
+
+  /** The deer answers a word with two wordless moments, in turn. */
+  protected override unknownWordAnswers(): readonly string[] {
+    return [
+      `${this.nameInSentence({ atStart: true })} watches you, ears forward, and does not answer, not in words.`,
+      `${this.nameInSentence({ atStart: true })} lowers its head to the grass, then lifts it again to look at you.`,
+    ]
+  }
 }

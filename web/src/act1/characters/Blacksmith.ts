@@ -221,4 +221,16 @@ export class Blacksmith extends Character {
       speech("Can't melt it, can't mend it. No use to me, lad.")
     )
   }
+
+  /** The two answers to a word with no particular reply, given in turn. */
+  protected override unknownWordAnswers(): readonly string[] {
+    return [
+      `${this.nameInSentence({ atStart: true })} doesn't stop hammering. ` +
+        speech(
+          "Can't hear a word over this, lad. If it's got an edge, bring it here.",
+        ),
+      `${this.nameInSentence({ atStart: true })} lowers the hammer for a moment. ` +
+        speech("Words aren't my trade, lad. Iron is."),
+    ]
+  }
 }

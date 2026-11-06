@@ -38,6 +38,9 @@ function coins(price: number): string {
   return price === 1 ? 'coin' : 'coins'
 }
 
+/** The byword for Malakar, said anywhere in the words. */
+const MALAKAR = /malakar/i
+
 /**
  * Old Man Hemlock, the shopkeeper of Willowbrook's General Store.
  *
@@ -588,5 +591,28 @@ export class Shopkeeper extends Character {
       `You receive a [item_name]${newItem.name}[/item_name] and an ` +
       '[item_name]apple[/item_name].'
     )
+  }
+
+  /**
+   * Raps the counter at the byword "Malakar", the same every time and in
+   * every state of the store; any other word gets his turn-taking answers.
+   */
+  override sayTo(gameState: GameState, words: string): string {
+    if (!MALAKAR.test(words)) return super.sayTo(gameState, words)
+    return attributeSpeech(
+      this.name,
+      `${this.nameInSentence({ atStart: true })} raps the counter twice with his knuckles. ` +
+        speech("Not under this roof, lad. We've had luck enough this year."),
+    )
+  }
+
+  /** The two answers to a word with no particular reply, given in turn. */
+  protected override unknownWordAnswers(): readonly string[] {
+    return [
+      `${this.nameInSentence({ atStart: true })} scratches his chin. ` +
+        speech("Can't say I follow you, lad."),
+      `${this.nameInSentence({ atStart: true })} glances at the door, then back at you. ` +
+        speech('Means nothing to me, lad. Sorry.'),
+    ]
   }
 }

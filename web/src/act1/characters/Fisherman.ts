@@ -284,4 +284,14 @@ export class Fisherman extends Character {
       )
     )
   }
+
+  /** The two answers to a word with no particular reply, given in turn. */
+  protected override unknownWordAnswers(): readonly string[] {
+    return [
+      `${this.nameInSentence({ atStart: true })} keeps his eyes on the water. ` +
+        speech("Keep your voice down, lad. You'll put the fish off."),
+      `${this.nameInSentence({ atStart: true })} shrugs. ` +
+        speech('Never heard it, lad. Ask the river.'),
+    ]
+  }
 }

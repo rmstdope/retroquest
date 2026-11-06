@@ -148,4 +148,16 @@ export class Priest extends Character {
       )
     )
   }
+
+  /** The two answers to a word with no particular reply, given in turn. */
+  protected override unknownWordAnswers(): readonly string[] {
+    return [
+      `${this.nameInSentence({ atStart: true })} folds his hands. ` +
+        speech(
+          'I have heard a great many words in this chapel, child. Not that one.',
+        ),
+      `${this.nameInSentence({ atStart: true })} smiles. ` +
+        speech('If it is a prayer, child, it is not one of ours.'),
+    ]
+  }
 }
