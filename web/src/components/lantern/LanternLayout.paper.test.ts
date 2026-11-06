@@ -285,6 +285,19 @@ describe('the narration paper', () => {
       expect(paper().querySelector('[data-testid="chip"]')).toBeNull()
     })
 
+    it('does not move a lost item under Reduce motion', async () => {
+      document.documentElement.style.setProperty('--lq-motion', '0')
+      await mountWith([turn(1, 'First.')])
+      game.turns.push({
+        ...turn(2, 'You drop it.', 'drop rope'),
+        lost: [{ kind: 'item', name: 'rope', count: 1 }],
+      })
+      await nextTick()
+      document.documentElement.style.removeProperty('--lq-motion')
+      expect(useFlightStore().phase).toBe('rest')
+      expect(useFlightStore().dipped).toBeNull()
+    })
+
     it('does not fly for a turn a load brought back', async () => {
       await mountWith([turn(1, 'First.')])
       const flights = useFlightStore()

@@ -18,8 +18,8 @@ import {
  * when it flies. Under Reduce motion it does not move: it is shown, then
  * at its button. An item the turn lost goes the other way, in warm grey with a
  * minus sign: it rises out of the Bag button (or tab) to the middle of the
- * picture, rests, then sinks and fades; the first frame is the button's if
- * none is shown, the picture's. A screen reader hears "Lost …", "Gained …" or
+ * picture, rests, then sinks and fades; it starts at the Bag button, or on the
+ * picture if no button is shown. A screen reader hears "Lost …", "Gained …" or
  * "Learned …" for every change as it is queued, whether or not it gets to fly.
  */
 const flights = useFlightStore()

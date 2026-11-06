@@ -160,6 +160,21 @@ describe('AcquiredFlight', () => {
       expect(style).toContain('top: 200px')
     })
 
+    it('is drawn on the picture when the stage comes back mid-flight', async () => {
+      target('item', 900, 700)
+      const picture = document.createElement('div')
+      picture.className = 'lq-stage-picture'
+      picture.getBoundingClientRect = (): DOMRect =>
+        ({ left: 100, top: 100, width: 400, height: 200 }) as DOMRect
+      document.body.appendChild(picture)
+      useFlightStore().launch([], [bread])
+      await vi.advanceTimersByTimeAsync(LEAVE_RISE_MS + 1)
+      w = mount(AcquiredFlight, { attachTo: document.body })
+      const style = w.get('[data-testid="flight"]').attributes('style') ?? ''
+      expect(style).toContain('left: 300px')
+      expect(style).toContain('top: 200px')
+    })
+
     it('tells a screen reader what was lost before what was gained', async () => {
       w = mount(AcquiredFlight)
       useFlightStore().launch(

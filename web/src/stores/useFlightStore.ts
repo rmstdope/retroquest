@@ -21,7 +21,7 @@ export const LEAVE_SINK_MS = 450
 /** How long the Bag button stays dipped as an item rises out of it (ms). */
 export const LEAVE_DIP_MS = 300
 
-/** One thing on its way to its button: an item to the Bag, a spell to Spells. */
+/** One thing on its way to its button (an item to the Bag, a spell to Spells) or an item leaving the Bag. */
 export interface Flight extends Chip {
   /** Unique within the session, so the view starts each flight afresh. */
   key: number
@@ -29,7 +29,7 @@ export interface Flight extends Chip {
   leaving: boolean
 }
 
-/** A gained thing's name as the story shows it, with how many when more than one. */
+/** A gained or lost thing's name as the story shows it, with how many when more than one. */
 export function flightLabel(chip: Chip): string {
   const count = chip.count > 1 ? ` ×${chip.count}` : ''
   return `${displayName(chip.name)}${count}`
@@ -59,7 +59,7 @@ export const useFlightStore = defineStore('flight', () => {
   const dipped = ref<ChipKind | null>(null)
   /** Whether motion is reduced: a leaving item does not rise and the button does not dip. */
   let still = false
-  /** What a screen reader is told of the latest gains ("Gained …", "Learned …"), all of them as they are queued. */
+  /** What a screen reader is told of the latest changes ("Lost …", "Gained …", "Learned …"), all of them as they are queued. */
   const told = ref<string[]>([])
   let queue: Flight[] = []
   let nextKey = 1

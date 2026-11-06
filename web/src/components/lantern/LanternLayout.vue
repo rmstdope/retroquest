@@ -906,7 +906,7 @@ const presentation = useLanternPresentation({
 })
 
 const flights = useFlightStore()
-/** The newest turn whose gained things have flown (or were let be): each turn's fly once. */
+/** The newest turn whose lost and gained things have flown (or were let be): each turn's fly once. */
 let flownTurn = game.turns.at(-1)?.id ?? null
 // A new command stops what is still flying (its counts are already up).
 watch(
@@ -914,10 +914,10 @@ watch(
   () => flights.clear(),
 )
 // On the picture stage, a turn's lost items leave the Bag first, then its
-// gained items and spells fly to the Bag and
-// Spells buttons once the turn lets go of them (as their counts change) and
-// the middle of the picture is clear: no news or arrival told or waiting
-// there, no change of scene, and no pop-up over it.
+// gained items and spells fly to the Bag and Spells buttons, once the turn
+// lets go of them (as their counts change) and the middle of the picture is
+// clear: no news or arrival told or waiting there, no change of scene, and no
+// pop-up over it.
 watch(
   () => {
     const turn = game.turns.at(-1)
