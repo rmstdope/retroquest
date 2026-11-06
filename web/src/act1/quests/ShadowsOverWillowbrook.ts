@@ -145,23 +145,70 @@ export class ShadowsOverWillowbrookQuest extends Quest {
   }
 
   /**
-   * Once nothing keeps the player in Willowbrook (`GameMap.unfinishedBeforeTheRoad`),
-   * the map is in the pack and the player stands on the Road to Greendale,
-   * points toward the map that ends the act; the newest journal entry otherwise.
+   * One short line saying what to do next, chosen from the furthest point of
+   * the story reached (flags, the amulet and `GameMap.unfinishedBeforeTheRoad`),
+   * never the newest journal entry. It reads only game state, so it is the same
+   * after a reload.
    */
   override hint(gameState: GameState): string | null {
-    if (
-      gameState.currentRoom instanceof RoadToGreendale &&
-      gameState.hasItem('map') &&
-      GameMap.unfinishedBeforeTheRoad(gameState).length === 0
-    ) {
+    const flag = (name: string): boolean => gameState.getStoryFlag(name)
+    const mira = characterName('Mira')
+    if (GameMap.unfinishedBeforeTheRoad(gameState).length === 0) {
+      if (
+        gameState.currentRoom instanceof RoadToGreendale &&
+        gameState.hasItem('map')
+      ) {
+        return (
+          'Nothing is left undone in Willowbrook. ' +
+          'The [item_name]map[/item_name] in your pack may know the way on ' +
+          'from here.'
+        )
+      }
       return (
         'Nothing is left undone in Willowbrook. ' +
-        'The [item_name]map[/item_name] in your pack may know the way on ' +
-        'from here.'
+        'The [room_name]Road to Greendale[/room_name] starts past the ' +
+        'chapel, and the [item_name]map[/item_name] may know the way on.'
       )
     }
-    return super.hint(gameState)
+    if (gameState.hasItem('ancient amulet')) {
+      return (
+        'The amulet is yours, but Willowbrook still holds you: something ' +
+        'you began here is unfinished.'
+      )
+    }
+    if (flag(FLAG_FOUND_RUNE_TOKEN) && !flag(FLAG_MIRA_NAMED_FOULING_SIGIL)) {
+      return (
+        'The [item_name]rune token[/item_name] from the well is cold, and ' +
+        `not from here. ${mira} may know what it is.`
+      )
+    }
+    if (flag(FLAG_MAGIC_FULLY_UNLOCKED)) {
+      return (
+        `${mira} keeps the [item_name]ancient amulet[/item_name] for you ` +
+        'until you are ready for the road.'
+      )
+    }
+    if (flag(FLAG_CONNECT_WITH_NATURE)) {
+      return (
+        `${mira} is waiting for the [item_name]rare flower[/item_name] ` +
+        'from the [room_name]Hidden Glade[/room_name], the one that opens ' +
+        'only for someone the land trusts.'
+      )
+    }
+    if (
+      flag(FLAG_INVESTIGATED_WITHERED_CROPS) &&
+      flag(FLAG_VILLAGER_TALKED_TO) &&
+      flag(FLAG_WELL_EXAMINED)
+    ) {
+      return (
+        `${mira}, in her hut north of the square, would want to hear what ` +
+        'you have seen.'
+      )
+    }
+    return (
+      'Something is wrong in Willowbrook. ' +
+      'The fields, the square and the well each hold a part of it.'
+    )
   }
 
   override checkCompletion(gameState: GameState): boolean {

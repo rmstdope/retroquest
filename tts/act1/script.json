@@ -205,9 +205,9 @@
     "text": "You stop and think over what you know."
   },
   {
-    "id": "1c8b71ac8a04a4",
+    "id": "13d48619d5c015",
     "speaker": "narrator",
-    "text": "Shadows over Willowbrook: You dreamed of a storm, a tune, and a figure in the dark that whispered your name. You woke with three words written down: …let them rest…"
+    "text": "Shadows over Willowbrook: Something is wrong in Willowbrook. The fields, the square and the well each hold a part of it."
   },
   {
     "id": "02fc8d25bca9f7",
@@ -540,11 +540,6 @@
     "text": "You search around the Vegetable Field, but find nothing of interest beyond what you can already see."
   },
   {
-    "id": "069ce261505cb9",
-    "speaker": "narrator",
-    "text": "Shadows over Willowbrook: The Vegetable Field has withered under a grey sky: brittle leaves, cracked earth, and only a few stubborn carrots left."
-  },
-  {
     "id": "062b2898c686b9",
     "speaker": "narrator",
     "text": "Know your village: Something pulls at you to walk every lane of Willowbrook, and to look properly at the places you have passed a thousand times."
@@ -860,11 +855,6 @@
     "text": "In the square, Tilda has more rumours than bread, and the people around her keep their voices down."
   },
   {
-    "id": "1ebff5a67616ba",
-    "speaker": "narrator",
-    "text": "Shadows over Willowbrook: In the square, Tilda has more rumours than bread, and the people around her keep their voices down."
-  },
-  {
     "id": "097a4dd86d48ab",
     "speaker": "narrator",
     "text": "The bucket is empty. The parched rows will need water from somewhere."
@@ -900,9 +890,9 @@
     "text": "The village well smells sour, and far down in the dark water something glints."
   },
   {
-    "id": "11146e9d37d71a",
+    "id": "0f602a94279537",
     "speaker": "narrator",
-    "text": "Shadows over Willowbrook: The village well smells sour, and far down in the dark water something glints."
+    "text": "Shadows over Willowbrook: Mira, in her hut north of the square, would want to hear what you have seen."
   },
   {
     "id": "0fc739302b683a",
@@ -1460,9 +1450,9 @@
     "text": "Mira says the sickness in the fields and the sickness of the king feel like one wound. She wants a rare flower from the Hidden Glade, one that opens only for someone the land trusts."
   },
   {
-    "id": "19d92e21fb9ffd",
+    "id": "0b0a4c73d1341c",
     "speaker": "narrator",
-    "text": "Shadows over Willowbrook: Mira says the sickness in the fields and the sickness of the king feel like one wound. She wants a rare flower from the Hidden Glade, one that opens only for someone the land trusts."
+    "text": "Shadows over Willowbrook: Mira is waiting for the rare flower from the Hidden Glade, the one that opens only for someone the land trusts."
   },
   {
     "id": "04405c2ac93375",
@@ -2745,9 +2735,9 @@
     "text": "Not yet. I'll not send you out half-dressed and half-taught. Come back when you're ready for the road, with a blessing on you for it."
   },
   {
-    "id": "11f2eaabbe7542",
+    "id": "094e8b1e0da2da",
     "speaker": "narrator",
-    "text": "Shadows over Willowbrook: The flower opened for you. Mira showed you how to mend, how to open and how to make a light, and promised you the ancient amulet once you are ready for the road."
+    "text": "Shadows over Willowbrook: Mira keeps the ancient amulet for you until you are ready for the road."
   },
   {
     "id": "094309f8faa785",
@@ -3085,9 +3075,9 @@
     "text": "A small disc of black iron, cold to the touch however long you hold it. A twisted rune, like a root strangling itself, is scored deep into its face. Nothing about it was lost by accident; someone made it, and made it to last."
   },
   {
-    "id": "1222aa2660f585",
+    "id": "0a3adde6864e71",
     "speaker": "narrator",
-    "text": "Shadows over Willowbrook: Fishing the ring from the purified well, you drew up something else: a rune token of black iron, scored with a twisted rune and colder than the water. The well did not sour by itself."
+    "text": "Shadows over Willowbrook: The rune token from the well is cold, and not from here. Mira may know what it is."
   },
   {
     "id": "1bc47d048327f6",
@@ -3103,11 +3093,6 @@
     "id": "1ea4811e078146",
     "speaker": "narrator",
     "text": "The spell finds nothing to turn. The black iron has no lock; it was never meant to be opened, only to run, and now not even that."
-  },
-  {
-    "id": "022ac3d96f83b7",
-    "speaker": "narrator",
-    "text": "Shadows over Willowbrook: At the Old Mill a man in a grey cloak stood at the far door with his back to you. He left toward the river without turning."
   },
   {
     "id": "04d65f3ff1cd0b",
@@ -3815,11 +3800,6 @@
     "text": "I have told you what I know of it. Keep it hidden, and keep your eyes open."
   },
   {
-    "id": "093ab825f5918b",
-    "speaker": "narrator",
-    "text": "Shadows over Willowbrook: Mira named the token a fouling sigil: someone poisoned the well on purpose. Whoever carried it, perhaps the cloaked stranger the villagers whisper about, was searching Willowbrook for something, or for someone."
-  },
-  {
     "id": "0cceb4fb10bbd0",
     "speaker": "narrator",
     "text": "Mira reads it, then looks at the amulet you carry."
@@ -3848,6 +3828,11 @@
     "id": "11a0ba67289d79",
     "speaker": "narrator",
     "text": "A mysterious amulet inscribed with runes. At its centre, a sun rises over three linked rings. It is faintly warm in your hand."
+  },
+  {
+    "id": "03c7eca09e94a1",
+    "speaker": "narrator",
+    "text": "Shadows over Willowbrook: Nothing is left undone in Willowbrook. The Road to Greendale starts past the chapel, and the map may know the way on."
   },
   {
     "id": "05633832d62aae",
