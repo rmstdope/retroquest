@@ -540,8 +540,8 @@ export class Shopkeeper extends Character {
         `${this.nameInSentence({ atStart: true })} will not touch it. He ` +
         'sweeps it back to you with the edge of his ledger. ' +
         speech(
-          "I'll not have that on my counter, lad. Trade's been thin enough " +
-            'since the caravans stopped, without that in the shop.',
+          "I'll not have that on my counter, lad. Trade's thin enough this " +
+            'year without that in the shop.',
         ) +
         ' He rubs the spot where it lay with his sleeve.'
       )
