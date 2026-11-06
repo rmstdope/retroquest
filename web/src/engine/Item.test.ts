@@ -107,7 +107,7 @@ describe('Item', () => {
     expect(rock.open(gs)).toContain("can't open")
     expect(rock.close(gs)).toContain("can't close")
     expect(rock.grow(gs)).toContain(
-      'does not respond to the [spell_name]grow[/spell_name]',
+      'The [spell_name]grow[/spell_name] spell finds nothing to wake in the [item_name]rock[/item_name].',
     )
     expect(rock.eat(gs)).toContain("can't eat")
     expect(rock.drink(gs)).toContain("can't drink")

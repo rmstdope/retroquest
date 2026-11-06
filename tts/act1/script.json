@@ -2885,14 +2885,14 @@
     "text": "The flower opened for you, and Mira showed you where the door is. Your spells answer now."
   },
   {
-    "id": "05a944cbb8b790",
+    "id": "1582691de67d7e",
     "speaker": "narrator",
-    "text": "A divine light surrounds Mira, and they seem strengthened and more resolute."
+    "text": "A divine light surrounds Mira and leaves strength and resolve behind."
   },
   {
-    "id": "0828e3947f6531",
+    "id": "09ac1d13cdbe6e",
     "speaker": "narrator",
-    "text": "A warm light settles over Mira. There was nothing in them that needed mending."
+    "text": "A warm light settles over Mira and finds nothing that needs mending."
   },
   {
     "id": "1c0dc9e9252c80",
@@ -2925,9 +2925,9 @@
     "text": "That has no lock or magical seal to open."
   },
   {
-    "id": "05ec706f6c0dc0",
+    "id": "10b2ab1b98d2c6",
     "speaker": "narrator",
-    "text": "The room is already well lit."
+    "text": "It is already light enough here."
   },
   {
     "id": "16327c5981dd9b",
@@ -2995,14 +2995,14 @@
     "text": "Preparing for the road: Mira has tasked you with preparing for your journey. She says you will need: Warm clothing"
   },
   {
-    "id": "0af3cb7aab67d4",
+    "id": "139c892dbded6e",
     "speaker": "narrator",
-    "text": "A divine light surrounds Tilda, and they seem strengthened and more resolute."
+    "text": "A divine light surrounds Tilda and leaves strength and resolve behind."
   },
   {
-    "id": "11b641047dca23",
+    "id": "1f425052a5c2aa",
     "speaker": "narrator",
-    "text": "A warm light settles over Tilda. There was nothing in them that needed mending."
+    "text": "A warm light settles over Tilda and finds nothing that needs mending."
   },
   {
     "id": "1b60d9f40edbbf",
@@ -3010,14 +3010,14 @@
     "text": "The cleansing runs over Tilda and finds nothing to wash away."
   },
   {
-    "id": "1dbab16f93c30a",
+    "id": "01da719beef367",
     "speaker": "narrator",
-    "text": "A divine light surrounds Patches, and they seem strengthened and more resolute."
+    "text": "A divine light surrounds Patches and leaves strength and resolve behind."
   },
   {
-    "id": "1c085fe4e78c13",
+    "id": "1936aa63d56be7",
     "speaker": "narrator",
-    "text": "A warm light settles over Patches. There was nothing in them that needed mending."
+    "text": "A warm light settles over Patches and finds nothing that needs mending."
   },
   {
     "id": "1f4278e6fce61d",
@@ -3025,14 +3025,14 @@
     "text": "The cleansing runs over Patches and finds nothing to wash away."
   },
   {
-    "id": "0310b306f599da",
+    "id": "13c330bc0272ac",
     "speaker": "narrator",
-    "text": "A divine light surrounds Hemlock, and they seem strengthened and more resolute."
+    "text": "A divine light surrounds Hemlock and leaves strength and resolve behind."
   },
   {
-    "id": "007d64959315ea",
+    "id": "13327ebef4da3d",
     "speaker": "narrator",
-    "text": "A warm light settles over Hemlock. There was nothing in them that needed mending."
+    "text": "A warm light settles over Hemlock and finds nothing that needs mending."
   },
   {
     "id": "0c2868b80583f2",
@@ -3040,14 +3040,14 @@
     "text": "The cleansing runs over Hemlock and finds nothing to wash away."
   },
   {
-    "id": "1a51b9f84fdaa3",
+    "id": "103179d2aa948f",
     "speaker": "narrator",
-    "text": "A divine light surrounds Borin, and they seem strengthened and more resolute."
+    "text": "A divine light surrounds Borin and leaves strength and resolve behind."
   },
   {
-    "id": "161b5dc256db64",
+    "id": "13686b8f833373",
     "speaker": "narrator",
-    "text": "A warm light settles over Borin. There was nothing in them that needed mending."
+    "text": "A warm light settles over Borin and finds nothing that needs mending."
   },
   {
     "id": "0fd247f44682f4",
@@ -3055,14 +3055,14 @@
     "text": "The cleansing runs over Borin and finds nothing to wash away."
   },
   {
-    "id": "0f6caabec47913",
+    "id": "0da65963b800bd",
     "speaker": "narrator",
-    "text": "A divine light surrounds grandmother, and they seem strengthened and more resolute."
+    "text": "A divine light surrounds Grandmother and leaves strength and resolve behind."
   },
   {
-    "id": "00fe52ce0497c7",
+    "id": "172f399b4454f9",
     "speaker": "narrator",
-    "text": "A warm light settles over Grandmother. There was nothing in them that needed mending."
+    "text": "A warm light settles over Grandmother and finds nothing that needs mending."
   },
   {
     "id": "096066c25ef666",
@@ -3370,9 +3370,9 @@
     "text": "The fisherman has nothing to sell you."
   },
   {
-    "id": "0235b7f8c2c5a5",
+    "id": "057a18a3d616e9",
     "speaker": "narrator",
-    "text": "A divine light surrounds fisherman, and they seem strengthened and more resolute."
+    "text": "A divine light surrounds the fisherman and leaves strength and resolve behind."
   },
   {
     "id": "1396533c8d8166",
@@ -3400,14 +3400,14 @@
     "text": "The deer has nothing to sell you."
   },
   {
-    "id": "108da87eb617ef",
+    "id": "0aef4ee95aa626",
     "speaker": "narrator",
-    "text": "A divine light surrounds deer, and they seem strengthened and more resolute."
+    "text": "A divine light surrounds the deer and leaves strength and resolve behind."
   },
   {
-    "id": "1fc483097d7ec1",
+    "id": "041db571529907",
     "speaker": "narrator",
-    "text": "A warm light settles over the deer. There was nothing in them that needed mending."
+    "text": "A warm light settles over the deer and finds nothing that needs mending."
   },
   {
     "id": "14451a9caf5ff5",
@@ -3650,14 +3650,14 @@
     "text": "The priest has nothing to sell you."
   },
   {
-    "id": "0a2ac420179890",
+    "id": "08c1faefbf61cd",
     "speaker": "narrator",
-    "text": "A divine light surrounds priest, and they seem strengthened and more resolute."
+    "text": "A divine light surrounds the priest and leaves strength and resolve behind."
   },
   {
-    "id": "149d59962663ed",
+    "id": "1e6285f4237736",
     "speaker": "narrator",
-    "text": "A warm light settles over the priest. There was nothing in them that needed mending."
+    "text": "A warm light settles over the priest and finds nothing that needs mending."
   },
   {
     "id": "0e8acd6da4493c",
@@ -3720,14 +3720,14 @@
     "text": "The merchant has nothing to sell you."
   },
   {
-    "id": "109b877bc08c22",
+    "id": "16439f5be9340b",
     "speaker": "narrator",
-    "text": "A divine light surrounds merchant, and they seem strengthened and more resolute."
+    "text": "A divine light surrounds the merchant and leaves strength and resolve behind."
   },
   {
-    "id": "059257bad9bd89",
+    "id": "162fcfd38fb7cf",
     "speaker": "narrator",
-    "text": "A warm light settles over the merchant. There was nothing in them that needed mending."
+    "text": "A warm light settles over the merchant and finds nothing that needs mending."
   },
   {
     "id": "16c9244b673666",

@@ -177,7 +177,7 @@ describe('Room', () => {
       expect(r.getAmbientSound(gs)).toBe('It is quiet here.')
       expect(r.search(gs)).toContain('find nothing of interest')
       expect(r.rest(gs)).toBe('You rest for a moment, gathering your strength.')
-      expect(r.light(gs)).toBe('The room is already well lit.')
+      expect(r.light(gs)).toBe('It is already light enough here.')
       expect(r.onEnter(gs)).toBeUndefined()
     })
 

@@ -225,7 +225,7 @@ export class Room {
   }
 
   light(_gameState: GameState): string {
-    return 'The room is already well lit.'
+    return 'It is already light enough here.'
   }
 
   /** Called when the player enters the room. */

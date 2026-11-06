@@ -37,11 +37,9 @@ export class BlessSpell extends Spell {
     _gameState: GameState,
     targetCharacter: Character,
   ): string {
-    const name = targetCharacter.name
     return (
-      'A divine light surrounds ' +
-      `${characterName(name)}, and they seem ` +
-      'strengthened and more resolute.'
+      `A divine light surrounds ${targetCharacter.nameInSentence()} ` +
+      'and leaves strength and resolve behind.'
     )
   }
 

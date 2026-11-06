@@ -10060,43 +10060,6 @@
    }
   ]
  },
- "05ec706f6c0dc0": {
-  "file": "05ec706f6c0dc0.mp3",
-  "speaker": "narrator",
-  "duration": 1.95,
-  "words": [
-   {
-    "word": "The",
-    "start": 0.0,
-    "end": 0.14
-   },
-   {
-    "word": "room",
-    "start": 0.14,
-    "end": 0.42
-   },
-   {
-    "word": "is",
-    "start": 0.42,
-    "end": 0.62
-   },
-   {
-    "word": "already",
-    "start": 0.62,
-    "end": 1.18
-   },
-   {
-    "word": "well",
-    "start": 1.18,
-    "end": 1.54
-   },
-   {
-    "word": "lit.",
-    "start": 1.54,
-    "end": 1.78
-   }
-  ]
- },
  "05f4c08ba57894": {
   "file": "05f4c08ba57894.mp3",
   "speaker": "narrator",
