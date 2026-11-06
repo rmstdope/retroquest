@@ -220,7 +220,7 @@ describe('Shadows over Willowbrook log', () => {
     expect(quest.earlierStages?.join('')).toContain('King Alden lies ill')
   })
 
-  it('keeps the village signs and Mira’s words before the flower, even when noticed after it', () => {
+  it('folds the village signs and Mira’s words in before the flower, quietly, when noticed after it', () => {
     const game = new Game([new Act1()])
     const quest = new ShadowsOverWillowbrookQuest()
     game.state.setStoryFlag(FLAG_INVESTIGATED_WITHERED_CROPS, true)
@@ -231,7 +231,7 @@ describe('Shadows over Willowbrook log', () => {
     quest.checkUpdate(game.state)
     game.state.setStoryFlag(FLAG_CONNECT_WITH_NATURE, true)
 
-    expect(quest.checkUpdate(game.state)).toBe(true)
+    expect(quest.checkUpdate(game.state)).toBe(false)
     expect(quest.latestStage).toContain('The flower opened for you.')
     const earlier = (quest.earlierStages ?? []).join('')
     expect(earlier.indexOf('rumours than bread')).toBeLessThan(

@@ -64,6 +64,8 @@ export class ShadowsOverWillowbrookQuest extends Quest {
    * insertion order, in saves too), so the newest beat is usually the latest.
    * The village's signs and Mira's words on them always come before the
    * flower, even when noticed after it, so the log never steps backwards.
+   * True only when the newest entry changed: a beat folded in among the
+   * earlier ones is not news, or the story would repeat the newest entry.
    */
   override checkUpdate(gameState: GameState): boolean {
     const dream =
@@ -150,8 +152,9 @@ export class ShadowsOverWillowbrookQuest extends Quest {
         chapter(a) - chapter(b) || noticed.indexOf(a) - noticed.indexOf(b),
     )
     const stages = [dream, ...shown.map(([, text]) => `\n${text}`)]
+    const latestBefore = this.latestStage
     this.setJournal(stages.slice(0, -1), stages[stages.length - 1])
-    return updated
+    return updated && this.latestStage !== latestBefore
   }
 
   /**

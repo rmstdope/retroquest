@@ -343,6 +343,17 @@ describe('Mira when the flower comes before the three signs', () => {
     expect(amulet).toContain('A man came to my door')
   })
 
+  it('says it even when the amulet is already Elior’s, then says goodbye', () => {
+    const game = flowerFirst()
+    game.state.addItemToInventory(new AncientAmulet())
+
+    const beat = executeCommands(game, ['talk to mira'])
+    const goodbye = executeCommands(game, ['talk to mira'])
+
+    expect(beat).toContain("I think it's one wound")
+    expect(goodbye).toContain('say a proper goodbye to your grandmother')
+  })
+
   it('keeps the journal moving forward: the signs and her words come before the flower', () => {
     const game = flowerFirst()
     executeCommands(game, ['talk to mira'])
