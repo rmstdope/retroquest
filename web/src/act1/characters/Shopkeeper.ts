@@ -673,7 +673,8 @@ export class Shopkeeper extends Character {
 
   /**
    * His answer to his cat's name: with her in Elior's arms, or news of her
-   * still to hear, the same scene as speaking to him; then where she is now,
+   * still to hear, or before Elior has met him, the same scene as speaking
+   * to him (so saying her name counts as meeting him); then where she is now,
    * by grandmother's hearth or home on his counter, or, while she is still
    * missing, his hope that Elior has seen her.
    */
@@ -685,7 +686,8 @@ export class Shopkeeper extends Character {
       !stayed
     const newsToHear =
       stayed && !gameState.getStoryFlag(FLAG_HEMLOCK_HEARD_PATCHES_STAYED)
-    if (carried || newsToHear) return this.talkTo(gameState)
+    const unmet = !gameState.getStoryFlag(FLAG_MET_HEMLOCK)
+    if (carried || newsToHear || unmet) return this.talkTo(gameState)
     if (stayed) {
       return attributeSpeech(
         this.name,

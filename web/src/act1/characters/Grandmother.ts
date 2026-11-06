@@ -41,7 +41,7 @@ const MALAKAR = /malakar/i
 /** A dream, or dreams or dreaming, said anywhere in the words. */
 const DREAM = /\bdream/i
 
-/** Elior's father, whom she speaks of at the table where he wrote. */
+/** Elior's father, whom she sees in him. */
 const FATHER = /\bfather\b/i
 
 /** The spell from his father's journal, once she has told of it. */
@@ -355,7 +355,7 @@ export class Grandmother extends Character {
    * Saying "stay" (or "yes" or "keep") while Elior carries Patches lets her
    * stay by the hearth: grandmother sends word to Hemlock, who reopens the
    * store. The byword "Malakar" gets a knock on the bread board, the same
-   * every time; his father's name brings her back to the table he wrote at,
+   * every time; his father's name, she sees in Elior's frown,
    * and, once she has told of it, his spell to her herbs; a word of a dream
    * turns her back to the bread. Other words only get a fond look.
    */
@@ -388,19 +388,17 @@ export class Grandmother extends Character {
       return (
         `Your ${characterName(this.name)}'s hands go still in the dough, ` +
         'then start again. ' +
-        speech(
-          'He sat at this table every night, writing. ' +
-            'You have his way of frowning at a page, dear.',
-        ) +
+        speech("You have his way of frowning when you're thinking, dear.") +
         ' She pushes the bread board toward you. ' +
         speech('Eat something.')
       )
     }
     if (REVIVE.test(words) && gameState.hasSpell('revive')) {
       return (
-        `Your ${characterName(this.name)} nods at the pots on the sill. ` +
+        `Your ${characterName(this.name)} smiles without looking up from ` +
+        'the dough. ' +
         speech(
-          "Your father's word. If it brings back my parsley, dear, " +
+          "Your father's word. If it brings back my herbs, dear, " +
             'you may say it as often as you like.',
         )
       )

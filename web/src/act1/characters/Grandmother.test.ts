@@ -649,9 +649,18 @@ describe("Grandmother answers Elior's father and his spell by name", () => {
     const answer = executeCommands(game, ['say father to grandmother'])
 
     expect(answer).not.toContain(STOCK)
-    expect(answer).toContain('his way of frowning at a page')
+    expect(answer).toContain('his way of frowning')
     expectDialogueSpeaker(answer, 'Grandmother')
     expect(findMarkupProblems(answer)).toEqual([])
+  })
+
+  it('keeps to the stock line for revive before she has told of it', () => {
+    const game = cottageGame()
+
+    const answer = executeCommands(game, ['say revive to grandmother'])
+
+    expect(answer).toContain(STOCK)
+    expect(answer).not.toContain("Your father's word")
   })
 
   it('speaks of revive once she has told of it', () => {

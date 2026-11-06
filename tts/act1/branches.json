@@ -264,7 +264,7 @@
     {"after": 92, "commands": ["use bell rope"]},
     {"after": 6, "commands": ["say father to grandmother", "say revive to grandmother"]},
     {"after": 24, "commands": ["say mira to tilda"]},
-    {"after": 22, "commands": ["go east", "say patches to hemlock"]},
+    {"after": 22, "commands": ["go east", "talk to hemlock", "say patches to hemlock"]},
     {"after": 52, "commands": ["say patches to hemlock"]},
     {"after": 37, "commands": ["go north", "go west", "go north", "say stay to grandmother", "go east", "go east", "talk to hemlock", "say patches to hemlock"]}
 ]
