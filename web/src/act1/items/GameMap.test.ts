@@ -2,7 +2,9 @@ import { describe, it, expect } from 'vitest'
 import { Game, findMarkupProblems } from '@/engine'
 import { expectDialogueSpeaker } from '@/testing/gameHelpers'
 import {
+  FLAG_FOUND_RUNE_TOKEN,
   FLAG_KEPT_MOTHERS_RING,
+  FLAG_MIRA_NAMED_FOULING_SIGIL,
   FLAG_PATCHES_RETURNED,
   FLAG_PATCHES_STAYED_WITH_GRANDMOTHER,
 } from '../Act1StoryFlags'
@@ -90,6 +92,22 @@ describe('GameMap act completion', () => {
 
     expect(response).toContain('[failure]')
     expect(act.isCompleted(game.state)).toBe(false)
+  })
+
+  it('requires Mira to have read the rune token from the well (rq-7g9c)', () => {
+    const { act, game, map } = setupGameAtRoad()
+    completeSideQuestsExcept(game)
+    game.state.addItemToInventory(new AncientAmulet())
+    game.state.setStoryFlag(FLAG_FOUND_RUNE_TOKEN, true)
+
+    expect(map.use(game.state)).toContain(
+      'while something here is unfinished: the rune token Mira has not yet seen.',
+    )
+    expect(act.isCompleted(game.state)).toBe(false)
+
+    game.state.setStoryFlag(FLAG_MIRA_NAMED_FOULING_SIGIL, true)
+    map.use(game.state)
+    expect(act.isCompleted(game.state)).toBe(true)
   })
 
   it('completes the act after the amulet and all side quests are secured', () => {

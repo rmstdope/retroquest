@@ -176,7 +176,8 @@ export class ShadowsOverWillowbrookQuest extends Quest {
    * One short line saying what to do next, chosen from the furthest point of
    * the story reached (flags, the amulet and `GameMap.unfinishedBeforeTheRoad`),
    * never the newest journal entry. It reads only game state, so it is the same
-   * after a reload.
+   * after a reload. An unread rune token is named before the amulet, since
+   * it alone keeps Elior here once the amulet is his.
    */
   override hint(gameState: GameState): string | null {
     const flag = (name: string): boolean => gameState.getStoryFlag(name)
@@ -198,16 +199,16 @@ export class ShadowsOverWillowbrookQuest extends Quest {
         'chapel, and the [item_name]map[/item_name] may know the way on.'
       )
     }
-    if (gameState.hasItem('ancient amulet')) {
-      return (
-        'The amulet is yours, but Willowbrook still holds you: something ' +
-        'you began here is unfinished.'
-      )
-    }
     if (flag(FLAG_FOUND_RUNE_TOKEN) && !flag(FLAG_MIRA_NAMED_FOULING_SIGIL)) {
       return (
         'The [item_name]rune token[/item_name] from the well is cold, and ' +
         `not from here. ${mira} may know what it is.`
+      )
+    }
+    if (gameState.hasItem('ancient amulet')) {
+      return (
+        'The amulet is yours, but Willowbrook still holds you: something ' +
+        'you began here is unfinished.'
       )
     }
     if (flag(FLAG_MAGIC_FULLY_UNLOCKED)) {

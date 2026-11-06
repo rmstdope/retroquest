@@ -1,6 +1,8 @@
 import { Item, type GameState, characterName, speech, clue } from '@/engine'
 import {
+  FLAG_FOUND_RUNE_TOKEN,
   FLAG_KEPT_MOTHERS_RING,
+  FLAG_MIRA_NAMED_FOULING_SIGIL,
   FLAG_PATCHES_RETURNED,
   FLAG_PATCHES_STAYED_WITH_GRANDMOTHER,
   FLAG_SHADOWS_OVER_WILLOWBROOK_COMPLETED,
@@ -87,7 +89,8 @@ export class GameMap extends Item {
   /**
    * What still keeps Elior in Willowbrook, in the words the map's refusal
    * uses; empty when the act may end. The one readiness rule of Act I's end,
-   * read by the map and by the main quest's hint.
+   * read by the map and by the main quest's hint. A rune token Mira has not
+   * read keeps Elior here, since the act's ending tells what she read in it.
    */
   static unfinishedBeforeTheRoad(gameState: GameState): string[] {
     const preparationQuestName = 'Preparing for the road'
@@ -98,6 +101,12 @@ export class GameMap extends Item {
     const missingRequirements: string[] = []
     if (!gameState.hasItem('ancient amulet')) {
       missingRequirements.push('the amulet Mira still keeps for you')
+    }
+    if (
+      gameState.getStoryFlag(FLAG_FOUND_RUNE_TOKEN) &&
+      !gameState.getStoryFlag(FLAG_MIRA_NAMED_FOULING_SIGIL)
+    ) {
+      missingRequirements.push('the rune token Mira has not yet seen')
     }
     if (!gameState.isQuestCompleted(preparationQuestName)) {
       missingRequirements.push('your preparations for the road')
