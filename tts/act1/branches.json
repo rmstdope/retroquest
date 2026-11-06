@@ -164,5 +164,6 @@
     {"after": 57, "commands": ["use fishing rod with mechanism", "use sharp knife with mechanism"]},
     {"after": 75, "commands": ["go south", "go south", "go east", "take rusty saw", "go west", "go north", "go north", "use rusty saw with vines"]},
     {"after": 82, "commands": ["use lantern with dark corner"]},
-    {"after": 167, "commands": ["talk to mira", "give rune token to mira"]}
+    {"after": 167, "commands": ["talk to mira", "give rune token to mira"]},
+    {"after": 90, "commands": ["talk to shopkeeper", "take matches"], "unset": ["patches_found", "patches_returned"]}
 ]

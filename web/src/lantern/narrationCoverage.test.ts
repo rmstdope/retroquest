@@ -85,6 +85,8 @@ const OPTIONAL_LINES: Record<number, { speaker: string; opening: string }[]> = {
       speaker: 'narrator',
       opening: "The lantern's light goes into the corner",
     },
+    /** Hemlock on the priest's matches while the store is shut (rq-l4ud). */
+    { speaker: 'hemlock', opening: "The priest's matches? They're under" },
     /** Act I's stock replies (rq-bio): one fixed line per person, never naming the item. */
     {
       speaker: 'narrator',

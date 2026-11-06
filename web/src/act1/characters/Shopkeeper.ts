@@ -22,6 +22,7 @@ import {
   FLAG_PATCHES_FOUND,
   FLAG_PATCHES_RETURNED,
   FLAG_PATCHES_STAYED_WITH_GRANDMOTHER,
+  FLAG_PRIEST_TALKED_TO,
   FLAG_RUSTY_HOE_SECOND_COIN_FOUND,
   TRIGGER_PATCHES_RETURNS,
 } from '../Act1StoryFlags'
@@ -186,8 +187,37 @@ export class Shopkeeper extends Character {
   }
 
   /**
+   * Hemlock's word on the priest's errand while the store is shut, or null
+   * when there is none to give: once the priest has sent Elior for his
+   * matches and they have not been handed over, he has not forgotten them,
+   * but sees to nothing until Patches is home.
+   */
+  priestErrandWhileShut(gameState: GameState): string | null {
+    if (
+      this.isOpen(gameState) ||
+      !gameState.getStoryFlag(FLAG_PRIEST_TALKED_TO) ||
+      this.priestMatchesGiven
+    ) {
+      return null
+    }
+    return speech(
+      `The ${characterName('priest')}'s [item_name]matches[/item_name]? ` +
+        "They're under the counter, and they'll keep. " +
+        `I'll see to him the day ${characterName('Patches')} is home; ` +
+        "I've no head for anything else till then.",
+    )
+  }
+
+  /** The errand line as a new line after what he has said, or nothing. */
+  private errandAfter(gameState: GameState): string {
+    const errand = this.priestErrandWhileShut(gameState)
+    return errand ? '\n' + errand : ''
+  }
+
+  /**
    * Why the store is shut: Hemlock frets about Patches the first time, then
-   * only asks after her.
+   * only asks after her. Either way he adds his word on the priest's errand
+   * once Elior has been sent for the matches.
    */
   private shutDialogue(gameState: GameState): string {
     if (!gameState.getStoryFlag(FLAG_MET_HEMLOCK)) {
@@ -207,6 +237,7 @@ export class Shopkeeper extends Character {
           'She was last seen near the old well. If you find her, ' +
             "there's a reward in it for you.",
         ) +
+        this.errandAfter(gameState) +
         this.byword()
       )
     }
@@ -219,7 +250,8 @@ export class Shopkeeper extends Character {
           'old well where she was last seen. ' +
           "It's always still full in the morning. The store stays shut " +
           "till she's home, lad.",
-      )
+      ) +
+      this.errandAfter(gameState)
     )
   }
 
@@ -336,7 +368,7 @@ export class Shopkeeper extends Character {
 
     // Check if priest needs matches and shopkeeper hasn't given them yet
     if (
-      gameState.getStoryFlag('priest_talked_to') &&
+      gameState.getStoryFlag(FLAG_PRIEST_TALKED_TO) &&
       !this.priestMatchesGiven
     ) {
       // Give matches to player for the priest

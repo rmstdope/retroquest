@@ -27,15 +27,15 @@ describe('Item', () => {
   })
 
   it('prevents pickup unless it can be carried', () => {
-    expect(new Item({ name: 'well', description: 'd' }).preventPickup()).toBe(
-      "[failure]You can't take the [item_name]well[/item_name].[/failure]",
-    )
+    expect(
+      new Item({ name: 'well', description: 'd' }).preventPickup(gameState()),
+    ).toBe("[failure]You can't take the [item_name]well[/item_name].[/failure]")
     expect(
       new Item({
         name: 'coin',
         description: 'd',
         canBeCarried: true,
-      }).preventPickup(),
+      }).preventPickup(gameState()),
     ).toBe('')
   })
 
@@ -49,7 +49,7 @@ describe('Item', () => {
     const diary = new Diary({ name: "ann's diary", description: 'd' })
     const rock = new Item({ name: 'rock', description: 'd' })
     expect(rock.nameInSentence()).toBe('the [item_name]rock[/item_name]')
-    expect(diary.preventPickup()).toBe(
+    expect(diary.preventPickup(gs)).toBe(
       "[failure]You can't take [item_name]Ann's Diary[/item_name].[/failure]",
     )
     expect(diary.use(gs)).toContain("can't use [item_name]Ann's Diary")
