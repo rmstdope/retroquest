@@ -31,6 +31,12 @@ export class FadedPhotographQuest extends Quest {
     })
   }
 
+  /**
+   * True once Elior asked Grandmother about the message before the fisherman
+   * told of the tin; asked later, her lead is out of date and leaves no entry.
+   */
+  heardGrandmotherFirst = false
+
   /** Give a save made with the title-case name the current name and completion. */
   override refreshSavedText(): void {
     const current = new FadedPhotographQuest()
@@ -45,10 +51,16 @@ export class FadedPhotographQuest extends Quest {
 
   /**
    * Rebuild the journal from the steps taken, in the design's order; a step
-   * skipped (the fisherman before Grandmother) leaves no entry. Reports a
-   * change only when an entry was added.
+   * skipped (the fisherman before Grandmother) leaves no entry, and neither
+   * does Grandmother asked after the fisherman. Reports a change only when an
+   * entry was added.
    */
   override checkUpdate(gameState: GameState): boolean {
+    if (
+      gameState.getStoryFlag(FLAG_TALKED_TO_GRANDMOTHER_ABOUT_PHOTO) &&
+      !gameState.getStoryFlag(FLAG_FISHERMAN_TOLD_OF_TIN)
+    )
+      this.heardGrandmotherFirst = true
     const steps: Array<[string, string]> = [
       [
         FLAG_READ_PHOTO_MESSAGE,
@@ -77,7 +89,12 @@ export class FadedPhotographQuest extends Quest {
     const stages = [
       OPENING,
       ...steps
-        .filter(([flag]) => gameState.getStoryFlag(flag))
+        .filter(
+          ([flag]) =>
+            gameState.getStoryFlag(flag) &&
+            (flag !== FLAG_TALKED_TO_GRANDMOTHER_ABOUT_PHOTO ||
+              this.heardGrandmotherFirst),
+        )
         .map(([, text]) => `\n${text}`),
     ]
     if (stages.length === (this.earlierStages?.length ?? 0) + 1) return false

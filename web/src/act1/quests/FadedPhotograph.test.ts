@@ -1,11 +1,9 @@
 import { describe, it, expect } from 'vitest'
 import { Game } from '@/engine'
-import { executeCommands } from '@/testing/gameHelpers'
+import { executeCommands, pathIndex, playPath } from '@/testing/gameHelpers'
 import { Act1 } from '../Act1'
-import {
-  FLAG_FISHERMAN_TOLD_OF_TIN,
-  FLAG_FOUND_MOTHERS_LETTER,
-} from '../Act1StoryFlags'
+import { ACT1_GOLDEN_PATH } from '../Act1GoldenPath'
+import { FLAG_TALKED_TO_GRANDMOTHER_ABOUT_PHOTO } from '../Act1StoryFlags'
 import { FadedPhotographQuest } from './FadedPhotograph'
 
 const OPENING =
@@ -47,41 +45,35 @@ describe('The faded photograph quest', () => {
 
   it('moves its log and hint on at every stage until the letter is read', () => {
     const game = new Game([new Act1()])
-    executeCommands(game, [
-      'talk to voice',
-      'use lantern',
-      'take bread',
-      'take lantern',
-      'talk to grandmother',
-      'use journal',
-      'talk to grandmother',
-      'search',
-      'take faded photograph',
-    ])
     const quest = (): FadedPhotographQuest | undefined =>
       game.state.activatedQuests.find(
         (q): q is FadedPhotographQuest => q instanceof FadedPhotographQuest,
       )
     const hint = (): string => quest()?.hint(game.state) ?? ''
+    let played = 0
+    const to = (command: string): void => {
+      const next = pathIndex(ACT1_GOLDEN_PATH, command) + 1
+      playPath(game, ACT1_GOLDEN_PATH, played, next)
+      played = next
+    }
+    to('take faded photograph')
     const hints = [hint()]
 
-    executeCommands(game, ['examine faded photograph'])
+    to('examine faded photograph')
     expect(hint()).toMatch(/where the river bends/)
     expect(hint()).toMatch(/grandmother/i)
     hints.push(hint())
 
-    executeCommands(game, ['give faded photograph to grandmother'])
+    to('give faded photograph to grandmother')
     expect(hint()).toMatch(/fisherman/)
     expect(hint()).toMatch(/Riverbank/)
     hints.push(hint())
 
-    game.state.setStoryFlag(FLAG_FISHERMAN_TOLD_OF_TIN, true)
-    executeCommands(game, ['look'])
+    to('give faded photograph to fisherman')
     expect(hint()).toMatch(/smooth stone/)
     hints.push(hint())
 
-    game.state.setStoryFlag(FLAG_FOUND_MOTHERS_LETTER, true)
-    executeCommands(game, ['look'])
+    to('take letter')
     expect(hint()).toMatch(/letter/)
     hints.push(hint())
 
@@ -95,27 +87,21 @@ describe('The faded photograph quest', () => {
     expect(game.state.isQuestCompleted('The faded photograph')).toBe(false)
   })
 
-  it('skips the grandmother stage when Elior goes straight to the fisherman', () => {
+  it('skips the grandmother stage when Elior goes straight to the fisherman, and adds nothing when he asks her later', () => {
     const game = new Game([new Act1()])
-    executeCommands(game, [
-      'talk to voice',
-      'use lantern',
-      'take bread',
-      'take lantern',
-      'talk to grandmother',
-      'use journal',
-      'talk to grandmother',
-      'search',
-      'take faded photograph',
-      'examine faded photograph',
-    ])
-    game.state.setStoryFlag(FLAG_FISHERMAN_TOLD_OF_TIN, true)
-    executeCommands(game, ['look'])
+    const path = ACT1_GOLDEN_PATH.filter(
+      (command) => command !== 'give faded photograph to grandmother',
+    )
+    playPath(game, path, 0, pathIndex(path, 'take letter') + 1)
     const quest = game.state.activatedQuests.find(
       (q) => q instanceof FadedPhotographQuest,
     )
-    expect(quest?.hint(game.state)).toMatch(/smooth stone/)
-    const details = quest?.details()
-    expect(details?.kind === 'journal' && details.earlier.length).toBe(2)
+    expect(quest?.hint(game.state)).toMatch(/letter/)
+    const before = quest?.details()
+    expect(before?.kind === 'journal' && before.earlier.length).toBe(3)
+
+    game.state.setStoryFlag(FLAG_TALKED_TO_GRANDMOTHER_ABOUT_PHOTO, true)
+    expect(quest?.checkUpdate(game.state)).toBe(false)
+    expect(quest?.details()).toEqual(before)
   })
 })
