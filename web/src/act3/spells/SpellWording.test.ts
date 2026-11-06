@@ -1,11 +1,19 @@
 import { describe, it, expect } from 'vitest'
-import { Game } from '@/engine'
+import { Game, Character, type NameOptions } from '@/engine'
 import { Act3 } from '../Act3'
 import { PurifySpell } from './PurifySpell'
 import { UnlockSpell } from './UnlockSpell'
 import { LightSpell } from './LightSpell'
 import { MendSpell } from './MendSpell'
 import { BlessSpell } from './BlessSpell'
+
+/** A character known by what it is ("the steward"), for the fallback cast lines. */
+class Steward extends Character {
+  /** Read as a common noun, with its article. */
+  override nameInSentence(options?: NameOptions): string {
+    return super.nameInSentence({ ...options, common: true })
+  }
+}
 
 /** The agreed description of each Act III spell, by spell id. */
 const EXPECTED: Record<string, string> = {
@@ -57,6 +65,18 @@ describe('Act III spell descriptions remember who taught the spell', () => {
     }
     expect(fresh.state.knownSpells.filter((s) => s.id in EXPECTED).length).toBe(
       5,
+    )
+  })
+})
+
+describe('Act III bless on someone else', () => {
+  it('names a character known by what it is with its article, and no they', () => {
+    const game = new Game([new Act3()])
+    const steward = new Steward({ name: 'steward', description: 'A steward.' })
+    const out = new BlessSpell().castOnCharacter(game.state, steward)
+    expect(out).toBe(
+      'A divine light surrounds the [character_name]steward[/character_name] ' +
+        'and leaves strength and resolve behind.',
     )
   })
 })

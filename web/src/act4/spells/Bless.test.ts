@@ -1,8 +1,17 @@
 import { describe, it, expect } from 'vitest'
-import { Game } from '@/engine'
+import { Game, Character, type NameOptions } from '@/engine'
 import { Act4 } from '../Act4'
 import { FLAG_ACT4_ELIXIR_ON_KING } from '../Act4StoryFlags'
 import { executeCommands } from '@/testing/gameHelpers'
+import { Bless } from './Bless'
+
+/** A character known by what it is ("the steward"), for the fallback cast lines. */
+class Steward extends Character {
+  /** Read as a common noun, with its article. */
+  override nameInSentence(options?: NameOptions): string {
+    return super.nameInSentence({ ...options, common: true })
+  }
+}
 
 /** An Act IV game standing in the Throne Chamber, bless known from the setup. */
 function inThrone(): Game {
@@ -25,6 +34,16 @@ describe('bless on King Alden', () => {
     game.state.setStoryFlag(FLAG_ACT4_ELIXIR_ON_KING, true)
     expect(executeCommands(game, ['cast bless on king'])).toContain(
       'It is kindly meant, and kindly taken.',
+    )
+  })
+})
+
+describe('bless on someone else', () => {
+  it('names a character known by what it is with its article', () => {
+    const steward = new Steward({ name: 'steward', description: 'A steward.' })
+    expect(new Bless().castOnCharacter(inThrone().state, steward)).toBe(
+      'Golden light gathers briefly around the ' +
+        '[character_name]steward[/character_name].',
     )
   })
 })

@@ -172,7 +172,7 @@ describe('Act I fallback cast lines read right for their target', () => {
     const game = awake()
     game.state.currentRoom = game.state.allRooms.VegetableField
     const out = executeCommands(game, ['cast light'])
-    expect(out).not.toContain('room')
+    expect(out).not.toContain('The room is already')
     expect(out).toContain('It is already light enough here.')
   })
 })

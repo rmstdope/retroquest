@@ -101,8 +101,8 @@ describe('Act IV spells narrate their effect', () => {
     const game = newGame()
     const out = new Bless().castOnCharacter(game.state, new CaptainOfTheGuard())
     expect(out).toBe(
-      '[character_name]Captain of the Guard[/character_name] glows ' +
-        'briefly with golden light.',
+      'Golden light gathers briefly around the ' +
+        '[character_name]Captain of the Guard[/character_name].',
     )
     expect(shape(out)).toEqual(['text'])
   })

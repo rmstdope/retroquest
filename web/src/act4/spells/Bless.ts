@@ -71,6 +71,6 @@ export class Bless extends Spell {
         'not wake.'
       )
     }
-    return `${characterName(targetCharacter.name)} glows briefly with golden light.`
+    return `Golden light gathers briefly around ${targetCharacter.nameInSentence()}.`
   }
 }
