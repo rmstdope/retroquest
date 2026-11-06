@@ -900,9 +900,14 @@
     "text": "A wooden bucket with a rope handle."
   },
   {
-    "id": "1f6db2925e8815",
+    "id": "19d66b026583a9",
     "speaker": "narrator",
-    "text": "A faded piece of parchment pinned to the notice board. The writing is barely legible, but it might contain a clue or warning."
+    "text": "A faded piece of parchment pinned to the notice board. The ink has run, but you can make out the words:"
+  },
+  {
+    "id": "1b4f3aad7e4c77",
+    "speaker": "narrator",
+    "text": "MISSING - Our dear cat, Patches, has vanished. Last seen near the old well. She is very friendly but easily spooked. Responds to her name. If found, please return to the Hemlock family at the General Store. A small reward is offered."
   },
   {
     "id": "14f7cc1fe01384",

@@ -1,21 +1,21 @@
 import { Item, type GameState, characterName, writing } from '@/engine'
 
-/** Faded piece of parchment pinned to the notice board, may contain a clue or warning. */
+/** Faded missing-cat poster pinned to the notice board: Hemlock's plea for Patches. */
 export class OldNotice extends Item {
   constructor() {
     super({
       name: 'old notice',
       description:
         'A faded piece of parchment pinned to the notice board. ' +
-        'The writing is barely legible, but it might contain a clue or warning.',
+        'The ink has run, but you can make out the words:',
       shortName: 'notice',
     })
   }
 
-  /** Read the notice and return its message. */
-  read(_gameState: GameState): string {
+  /** Show the description, then the poster's own words as unsigned writing. */
+  override examine(_gameState: GameState): string {
     return (
-      'The notice is weathered and old, but you can make out some of the words:\n\n' +
+      `${this.description}\n` +
       writing(
         `[bold]MISSING[/bold] - Our dear cat, ${characterName('Patches')}, has vanished. ` +
           'Last seen near the old well. ' +
@@ -25,5 +25,10 @@ export class OldNotice extends Item {
           'A small reward is offered.',
       )
     )
+  }
+
+  /** Give a save made before the poster could be read the current description. */
+  override refreshSavedText(_gameState: GameState): void {
+    this.description = new OldNotice().description
   }
 }
