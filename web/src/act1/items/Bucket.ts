@@ -98,12 +98,21 @@ export class Bucket extends Item {
     )
   }
 
-  /** In the Vegetable Field, water the crops with clear water from the well. */
+  /**
+   * In the Vegetable Field, water the crops with clear water from the well.
+   * The empty bucket points at the parched rows only while they are parched.
+   */
   override use(gameState: GameState): string {
     if (!(gameState.currentRoom instanceof VegetableField)) {
       return super.use(gameState)
     }
     if (this.name === 'bucket') {
+      if (gameState.getStoryFlag(FLAG_VEGETABLE_FIELD_WATERED)) {
+        return clue(
+          'The [item_name]bucket[/item_name] is empty, and the rows have ' +
+            'had their fill.',
+        )
+      }
       return clue(
         'The [item_name]bucket[/item_name] is empty. ' +
           'The parched rows will need water from somewhere.',
