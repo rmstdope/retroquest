@@ -80,6 +80,19 @@ describe('SmoothStone', () => {
       expect(lettersInRoom(game)).toBe(1)
     })
 
+    it('is no longer described as never moved once the tin is dug out', () => {
+      const before = executeCommands(game, ['examine smooth stone'])
+      expect(before).toContain('as if it has always been there')
+
+      const after = executeCommands(game, [
+        'take smooth stone',
+        'examine smooth stone',
+      ])
+
+      expect(after).not.toContain('as if it has always been there')
+      expect(after).toContain('dug')
+    })
+
     it('stays at the bend after the tin is found', () => {
       const response = executeCommands(game, ['search', 'take smooth stone'])
 

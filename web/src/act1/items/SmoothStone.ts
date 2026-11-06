@@ -46,6 +46,17 @@ export class SmoothStone extends Item {
     )
   }
 
+  /** Once the tin is dug out, the stone sits beside the hole instead of as if never moved. */
+  override examine(gameState: GameState): string {
+    if (!gameState.getStoryFlag(FLAG_FOUND_MOTHERS_LETTER)) {
+      return super.examine(gameState)
+    }
+    return (
+      "A broad, flat stone at the water's edge, polished smooth by the " +
+      "river's current. It sits askew now, beside the hole you dug beneath it."
+    )
+  }
+
   /**
    * The stone belongs to the bend and is never carried off, even in older
    * saves; lifting it once the fisherman has told of the tin uncovers it.
