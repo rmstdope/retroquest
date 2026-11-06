@@ -1,6 +1,9 @@
 import { Item, nameInSentence, speech, type GameState } from '@/engine'
 
-/** Basic food item; the shopkeeper blocks pickup until it has been bought. */
+/**
+ * Basic food item. The store's apple is never sold or taken: the shopkeeper
+ * hands one over with every purchase.
+ */
 export class Apple extends Item {
   constructor() {
     super({
@@ -10,16 +13,23 @@ export class Apple extends Item {
     })
   }
 
-  /** Shopkeeper prevents taking the apple unless it's been given/purchased. */
+  /** Answers to "apples" too, the word the store's shelves and Hemlock use. */
+  override answersTo(name: string): boolean {
+    return super.answersTo(name) || name.toLowerCase() === 'apples'
+  }
+
+  /**
+   * Shopkeeper prevents taking the store's apple: it is neither sold nor
+   * free, but comes with every purchase.
+   */
   override preventPickup(): string {
     if (!this.canBeCarried) {
       return (
         nameInSentence('character', 'Hemlock', { atStart: true }) +
         ' quickly steps over. ' +
         speech(
-          `Hold on there, friend! That [item_name]${this.name}[/item_name] ` +
-            "is merchandise, not a free sample. If you want it, you'll need to buy it " +
-            'proper-like.',
+          `Hold on there, friend! The [item_name]${this.name}s[/item_name] ` +
+            "aren't for the taking. There's one with everything you buy.",
         )
       )
     }

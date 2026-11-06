@@ -419,8 +419,9 @@ export class Shopkeeper extends Character {
   /**
    * Sell a ware for coins, adding the bonus apple to the inventory. Nothing
    * is sold while the store is shut (Patches in Elior's arms is welcomed home
-   * instead), the matches are kept for the priest
-   * and never sold, and his one rope is sold only once.
+   * instead), the matches are kept for the priest and never sold, his one
+   * rope is sold only once, and the apples are never sold on their own,
+   * since one comes with every sale.
    */
   override buyItem(gameState: GameState, itemName: string): string {
     return attributeSpeech(this.name, this.buyAnswer(gameState, itemName))
@@ -440,6 +441,12 @@ export class Shopkeeper extends Character {
     if (itemNameToBuy === 'rope' && this.ropeGone(gameState)) {
       return speech(
         "That was my last good rope, lad. There'll be no more till spring.",
+      )
+    }
+    if (gameState.currentRoom.getItemByName(itemNameToBuy) instanceof Apple) {
+      return speech(
+        "I don't sell the [item_name]apples[/item_name], lad. " +
+          "There's one with everything you buy.",
       )
     }
     if (!(itemNameToBuy in this.wares)) {

@@ -14,11 +14,11 @@ import {
 } from '../Act1StoryFlags'
 
 const SHUT_TEXT =
-  'A cluttered shop with the shutters half down. Rope, apples, matches and ' +
+  'A cluttered shop with the shutters half down. Rope, apples and ' +
   'trinkets crowd the shelves in the gloom. ' +
   `${characterName('Hemlock')} stands at the window, watching the lane.`
 const OPEN_TEXT =
-  'A cluttered shop. Rope, apples, matches and trinkets crowd the shelves, ' +
+  'A cluttered shop. Rope, apples and trinkets crowd the shelves, ' +
   'and the air smells of fruit, wax and old wood. ' +
   `${characterName('Hemlock')} dusts jars between customers`
 const CAT_CLAUSE =
