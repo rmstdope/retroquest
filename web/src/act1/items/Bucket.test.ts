@@ -135,4 +135,57 @@ describe('Watering the Vegetable Field', () => {
     expect(game.state.getStoryFlag(FLAG_VEGETABLE_FIELD_WATERED)).toBe(false)
     expect(bucket.name).toBe('bucket (full)')
   })
+
+  it.each(['crops', 'earth'])(
+    'waters the field when the clear water is used with the %s',
+    (target) => {
+      const { game, bucket } = gameInTheField(true)
+
+      const response = executeCommands(game, [`use bucket with ${target}`])
+
+      expectMarkupWellFormed(response)
+      expect(response).not.toContain('water?')
+      expect(game.state.getStoryFlag(FLAG_VEGETABLE_FIELD_WATERED)).toBe(true)
+      expect(bucket.name).toBe('bucket')
+    },
+  )
+
+  it.each(['crops', 'earth'])(
+    'refuses to pour the sour water on the %s',
+    (target) => {
+      const { game, bucket } = gameInTheField(false)
+
+      const response = executeCommands(game, [`use bucket with ${target}`])
+
+      expect(response).toContain('sour water')
+      expect(game.state.getStoryFlag(FLAG_VEGETABLE_FIELD_WATERED)).toBe(false)
+      expect(bucket.name).toBe('bucket (full)')
+    },
+  )
+
+  it('says the empty bucket has no water for the crops', () => {
+    const game = new Game([new Act1()])
+    game.state.addItemToInventory(new Bucket())
+    game.state.currentRoom = game.state.allRooms.VegetableField
+
+    const response = executeCommands(game, ['use bucket with crops'])
+
+    expect(response).toContain('is empty')
+    expect(game.state.getStoryFlag(FLAG_VEGETABLE_FIELD_WATERED)).toBe(false)
+  })
+})
+
+describe('A full bucket used with something else', () => {
+  it('is never told it needs water', () => {
+    const game = new Game([new Act1()])
+    const well = new Well()
+    well.isPurified = true
+    const bucket = new Bucket()
+    bucket.useWith(game.state, well)
+
+    const answer = bucket.useWith(game.state, new Bucket())
+
+    expect(answer).toContain('[failure]')
+    expect(answer).not.toContain('water?')
+  })
 })

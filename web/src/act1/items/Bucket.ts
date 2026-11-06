@@ -1,10 +1,17 @@
 import { Item, type GameState, clue } from '@/engine'
 import { FLAG_VEGETABLE_FIELD_WATERED } from '../Act1StoryFlags'
 import { VegetableField } from '../rooms/VegetableField'
+import { Scenery } from './Scenery'
 import { Well } from './Well'
 import { WitheredCarrot } from './WitheredCarrot'
 
 const EMPTY_DESCRIPTION = 'A wooden bucket with a rope handle.'
+
+/** The scenery keys of the Vegetable Field that the bucket waters. */
+const FIELD_SCENERY_KEYS: readonly string[] = [
+  'VegetableField.crops',
+  'VegetableField.earth',
+]
 
 /**
  * A bucket for drawing water from the well: murky, sour water before the
@@ -56,7 +63,8 @@ export class Bucket extends Item {
 
   /**
    * Draw water from the well. A bucket of murky water is tipped out and
-   * drawn again once the well is purified. With the carrot, water the field.
+   * drawn again once the well is purified. With the carrot, the crops or the
+   * earth, water the field. Only the empty bucket is told to look for water.
    */
   override useWith(gameState: GameState, other: Item): string {
     if (other instanceof Well) {
@@ -77,7 +85,13 @@ export class Bucket extends Item {
       }
       return '[failure]The [item_name]bucket[/item_name] is already full.[/failure]'
     }
-    if (other instanceof WitheredCarrot) return this.use(gameState)
+    if (
+      other instanceof WitheredCarrot ||
+      (other instanceof Scenery && FIELD_SCENERY_KEYS.includes(other.key))
+    ) {
+      return this.use(gameState)
+    }
+    if (this.name !== 'bucket') return super.useWith(gameState, other)
     return clue(
       'The [item_name]bucket[/item_name] is no use with that. Perhaps near ' +
         'something with water?',
