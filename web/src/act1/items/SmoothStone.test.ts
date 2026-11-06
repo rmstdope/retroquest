@@ -35,7 +35,11 @@ describe('SmoothStone', () => {
     })
 
     it('turns up nothing when the shovel is used with it', () => {
-      executeCommands(game, ['use broken shovel with smooth stone'])
+      const response = executeCommands(game, [
+        'use broken shovel with smooth stone',
+      ])
+
+      expect(response).toContain("can't use")
 
       expect(game.state.getStoryFlag(FLAG_FOUND_MOTHERS_LETTER)).toBe(false)
       expect(lettersInRoom(game)).toBe(0)
