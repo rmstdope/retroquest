@@ -156,6 +156,15 @@ describe('LanternLayout: panels wait for the narration', () => {
     expect(w.get('.lq-plate').classes()).not.toContain('lq-flash')
   })
 
+  it('opens the bigger map on the first press while the voice reads on', async () => {
+    const w = await ready()
+    await w.get('[data-button="map"]').trigger('click')
+    await goNorth()
+    await w.get('[data-bigger-map]').trigger('click')
+    expect(document.querySelector('.lq-dialog-layer')).not.toBeNull()
+    expect(useNarrationStore().isNarrating).toBe(true)
+  })
+
   it('opens Story so far on the first press while the voice reads on', async () => {
     const w = await ready()
     await goNorth()

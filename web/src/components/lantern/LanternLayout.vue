@@ -963,8 +963,9 @@ function onPanelPress(event: MouseEvent): void {
   if (!target?.closest('[data-panel] :is(button, a, [role="button"])')) return
   // A press during a change of scene (or before a talk's) brings the new room up first.
   presentation.bringSceneUp()
-  // Opening the sheet changes nothing the voice holds: it never waits for it.
-  if (target.closest('.lq-dock-open, .lq-dock-icon')) return
+  // Opening the sheet, or the bigger map, changes nothing the voice holds: it
+  // never waits for it.
+  if (target.closest('.lq-dock-open, .lq-dock-icon, [data-bigger-map]')) return
   if (!presentation.catchUpPanels()) return
   event.stopPropagation()
   event.preventDefault()
