@@ -2885,6 +2885,16 @@
     "text": "You receive a box of matches."
   },
   {
+    "id": "1bf37714e6f35d",
+    "speaker": "narrator",
+    "text": "Hemlock gave you the box of matches. The candle by the altar in the chapel is still cold."
+  },
+  {
+    "id": "0294180f35cc25",
+    "speaker": "narrator",
+    "text": "Let there be light: Hemlock gave you the box of matches. The candle by the altar in the chapel is still cold."
+  },
+  {
     "id": "09b3552c9f69f9",
     "speaker": "narrator",
     "text": "A match flares at the corner and gutters out before the dark gives anything back. It wants a light that stays."
@@ -2898,6 +2908,16 @@
     "id": "076bad59847d28",
     "speaker": "priest",
     "text": "Bless you, child. Will you light it for me? My hands shake more than the flame likes."
+  },
+  {
+    "id": "00010af0e27d3f",
+    "speaker": "narrator",
+    "text": "The priest sees the box in your hand and nods at the cold candle by the altar."
+  },
+  {
+    "id": "00a6413893c53e",
+    "speaker": "priest",
+    "text": "There it is, child. The wick has waited long enough."
   },
   {
     "id": "013aaa55350b1c",

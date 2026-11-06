@@ -47,6 +47,17 @@ describe('Priest dialogue', () => {
     expect(response).not.toContain('founders')
   })
 
+  it('turns Elior to the cold candle once the matches are in hand (rq-h94j)', () => {
+    executeCommands(game, ['talk to priest'])
+    game.state.addItemToInventory(new Matches())
+
+    const response = executeCommands(game, ['talk to priest'])
+
+    expect(response).not.toContain('Any luck with those matches')
+    expect(response).not.toContain('General Store')
+    expect(response).toContain('sees the box in your hand')
+  })
+
   it('points to what the candlelight revealed before the locket is taken', () => {
     lightCandle()
 

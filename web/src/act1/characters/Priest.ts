@@ -192,6 +192,13 @@ export class Priest extends Character {
         speech('Look there, child. The light has found something.')
       )
     }
+    if (gameState.inventory.some((item) => item instanceof Matches)) {
+      return (
+        `The ${priest} sees the box in your hand and nods at the cold ` +
+        'candle by the altar. ' +
+        speech('There it is, child. The wick has waited long enough.')
+      )
+    }
     return (
       `The ${priest} glances at the cold candle by the altar. ` +
       speech(
