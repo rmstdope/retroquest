@@ -14,6 +14,7 @@ import {
   FLAG_MIRA_NAMED_FOULING_SIGIL,
   FLAG_VILLAGER_TALKED_TO,
   FLAG_WELL_EXAMINED,
+  FLAG_WOKE_FROM_DREAM,
 } from '../Act1StoryFlags'
 import {
   executeCommands,
@@ -290,6 +291,80 @@ describe('Mira on the land and the king', () => {
     expect(response).toContain('They say the king is ill')
     expect(response).toContain("I think it's one wound")
     expectDialogueSpeaker(response, 'Mira')
+  })
+})
+
+describe('Mira when the flower comes before the three signs', () => {
+  /** A game in which the flower was given before Elior saw the square or the well. */
+  function flowerFirst(): Game {
+    const game = gameInMirasHut()
+    game.state.setStoryFlag(FLAG_WOKE_FROM_DREAM, true)
+    game.state.setStoryFlag(FLAG_INVESTIGATED_WITHERED_CROPS, true)
+    game.state.addItemToInventory(new RareFlower())
+    executeCommands(game, ['look', 'give rare flower to mira'])
+    game.state.setStoryFlag(FLAG_VILLAGER_TALKED_TO, true)
+    game.state.setStoryFlag(FLAG_WELL_EXAMINED, true)
+    executeCommands(game, ['look'])
+    return game
+  }
+
+  it('still calls the land and the king one wound, without asking for the flower again', () => {
+    const game = flowerFirst()
+
+    const response = executeCommands(game, ['talk to mira'])
+
+    expect(response).toContain('They say the king is ill')
+    expect(response).toContain("I think it's one wound")
+    expect(response).not.toContain('Bring me one')
+    expect(response).not.toContain('half-dressed')
+    expect(game.state.getStoryFlag(FLAG_CONNECT_WITH_NATURE)).toBe(true)
+    expectDialogueSpeaker(response, 'Mira')
+  })
+
+  it('goes back to the road once she has said it', () => {
+    const game = flowerFirst()
+    executeCommands(game, ['talk to mira'])
+
+    const again = executeCommands(game, ['talk to mira'])
+
+    expect(again).toContain('half-dressed')
+    expect(again).not.toContain('one wound')
+  })
+
+  it('says it before she hands over the amulet', () => {
+    const game = flowerFirst()
+    completeJourneyPreparations(game.state)
+
+    const beat = executeCommands(game, ['talk to mira'])
+    const amulet = executeCommands(game, ['talk to mira'])
+
+    expect(beat).toContain("I think it's one wound")
+    expect(beat).not.toContain('ancient amulet[/item_name] from its')
+    expect(amulet).toContain('A man came to my door')
+  })
+
+  it('says it even when the amulet is already Elior’s, then says goodbye', () => {
+    const game = flowerFirst()
+    game.state.addItemToInventory(new AncientAmulet())
+
+    const beat = executeCommands(game, ['talk to mira'])
+    const goodbye = executeCommands(game, ['talk to mira'])
+
+    expect(beat).toContain("I think it's one wound")
+    expect(goodbye).toContain('say a proper goodbye to your grandmother')
+  })
+
+  it('keeps the journal moving forward: the signs and her words come before the flower', () => {
+    const game = flowerFirst()
+    executeCommands(game, ['talk to mira'])
+
+    const quest = game.state.getQuest('Shadows over Willowbrook')
+    expect(quest).not.toBeNull()
+    expect(quest!.latestStage).toContain('The flower opened for you.')
+    const earlier = (quest!.earlierStages ?? []).join('')
+    expect(earlier.indexOf('smells sour')).toBeLessThan(
+      earlier.indexOf('one wound'),
+    )
   })
 })
 

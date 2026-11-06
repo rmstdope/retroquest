@@ -61,7 +61,11 @@ export class ShadowsOverWillowbrookQuest extends Quest {
   /**
    * Rebuild the journal: the dream first, then every beat whose flag is
    * set, in the order the flags were first noticed (`flagState` keeps its
-   * insertion order, in saves too), so the newest beat is always the latest.
+   * insertion order, in saves too), so the newest beat is usually the latest.
+   * The village's signs and Mira's words on them always come before the
+   * flower, even when noticed after it, so the log never steps backwards.
+   * True only when the newest entry changed: a beat folded in among the
+   * earlier ones is not news, or the story would repeat the newest entry.
    */
   override checkUpdate(gameState: GameState): boolean {
     const dream =
@@ -138,10 +142,19 @@ export class ShadowsOverWillowbrookQuest extends Quest {
     const shown = beats.filter(([flag]) => gameState.getStoryFlag(flag))
     for (const [flag] of shown) if (this.noteFlag(flag)) updated = true
     const noticed = Object.keys(this.flagState)
-    shown.sort(([a], [b]) => noticed.indexOf(a) - noticed.indexOf(b))
+    const flowerAt = beats.findIndex(
+      ([flag]) => flag === FLAG_MAGIC_FULLY_UNLOCKED,
+    )
+    const chapter = (flag: string): number =>
+      beats.findIndex(([beat]) => beat === flag) < flowerAt ? 0 : 1
+    shown.sort(
+      ([a], [b]) =>
+        chapter(a) - chapter(b) || noticed.indexOf(a) - noticed.indexOf(b),
+    )
     const stages = [dream, ...shown.map(([, text]) => `\n${text}`)]
+    const latestBefore = this.latestStage
     this.setJournal(stages.slice(0, -1), stages[stages.length - 1])
-    return updated
+    return updated && this.latestStage !== latestBefore
   }
 
   /**
