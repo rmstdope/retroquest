@@ -840,19 +840,22 @@ describe('StoryTurn as a narration card', () => {
     expect(w.get('.lq-bubble').classes()).toContain('lq-bubble-failure')
   })
 
-  it('leaves a gained thing off the card (it flies to its button instead), and keeps what was lost', () => {
+  it('leaves a gained thing and a lost item off the card (they fly), and keeps a lost spell', () => {
     const w = mountCard({
       command: 'trade bread for coin',
       text: 'Done.',
       gained: [{ name: 'Coin', count: 1, kind: 'item' }],
-      lost: [{ name: 'Bread', count: 1, kind: 'item' }],
+      lost: [
+        { name: 'Bread', count: 1, kind: 'item' },
+        { name: 'Revive', count: 1, kind: 'spell' },
+      ],
     })
 
     expect(
       w
         .findAll('[data-testid="chip"]')
         .map((chip) => chip.text().replace(/\s+/g, ' ')),
-    ).toEqual(['− Lost Bread'])
+    ).toEqual(['− Lost Revive'])
   })
 
   it('keeps the chips in the record and outside the stage', () => {

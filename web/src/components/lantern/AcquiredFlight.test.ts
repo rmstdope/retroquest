@@ -6,6 +6,8 @@ import AcquiredFlight from './AcquiredFlight.vue'
 import {
   FLIGHT_HOLD_MS,
   FLIGHT_SHOW_MS,
+  LEAVE_REST_MS,
+  LEAVE_RISE_MS,
   useFlightStore,
 } from '@/stores/useFlightStore'
 
@@ -108,5 +110,81 @@ describe('AcquiredFlight', () => {
     w = mount(AcquiredFlight)
     await vi.advanceTimersByTimeAsync(50)
     expect(w.get('[aria-live="polite"]').text()).toBe('')
+  })
+
+  describe('an item leaving the bag', () => {
+    const bread = { kind: 'item' as const, name: 'bread', count: 1 }
+
+    it('is grey with a minus sign before the bag, never the item green', async () => {
+      w = mount(AcquiredFlight)
+      useFlightStore().launch([], [bread])
+      await w.vm.$nextTick()
+      const flight = w.get('[data-testid="flight"]')
+      expect(flight.text()).toBe('−Bread')
+      expect(flight.classes()).toContain('lq-flight-lost')
+      expect(flight.classes()).not.toContain('lq-flight-item')
+    })
+
+    it('starts at the Bag button and rises to the middle of the picture', async () => {
+      target('item', 900, 700)
+      const picture = document.createElement('div')
+      picture.className = 'lq-stage-picture'
+      picture.getBoundingClientRect = (): DOMRect =>
+        ({ left: 100, top: 100, width: 400, height: 200 }) as DOMRect
+      document.body.appendChild(picture)
+      w = mount(AcquiredFlight, { attachTo: document.body })
+      useFlightStore().launch([], [bread])
+      await w.vm.$nextTick()
+      const flight = w.get('[data-testid="flight"]')
+      expect(flight.attributes('style')).toContain('left: 900px')
+      expect(flight.attributes('style')).toContain('top: 700px')
+      await vi.advanceTimersByTimeAsync(20)
+      expect(flight.attributes('style')).toContain('left: 300px')
+      expect(flight.attributes('style')).toContain('top: 200px')
+      await vi.advanceTimersByTimeAsync(LEAVE_RISE_MS + LEAVE_REST_MS)
+      expect(flight.attributes('style')).toContain('top: 230px')
+      expect(flight.attributes('style')).toContain('opacity: 0')
+    })
+
+    it('starts in the middle of the picture when no Bag button is shown', async () => {
+      const picture = document.createElement('div')
+      picture.className = 'lq-stage-picture'
+      picture.getBoundingClientRect = (): DOMRect =>
+        ({ left: 100, top: 100, width: 400, height: 200 }) as DOMRect
+      document.body.appendChild(picture)
+      w = mount(AcquiredFlight, { attachTo: document.body })
+      useFlightStore().launch([], [bread])
+      await w.vm.$nextTick()
+      const style = w.get('[data-testid="flight"]').attributes('style') ?? ''
+      expect(style).toContain('left: 300px')
+      expect(style).toContain('top: 200px')
+    })
+
+    it('is drawn on the picture when the stage comes back mid-flight', async () => {
+      target('item', 900, 700)
+      const picture = document.createElement('div')
+      picture.className = 'lq-stage-picture'
+      picture.getBoundingClientRect = (): DOMRect =>
+        ({ left: 100, top: 100, width: 400, height: 200 }) as DOMRect
+      document.body.appendChild(picture)
+      useFlightStore().launch([], [bread])
+      await vi.advanceTimersByTimeAsync(LEAVE_RISE_MS + 1)
+      w = mount(AcquiredFlight, { attachTo: document.body })
+      const style = w.get('[data-testid="flight"]').attributes('style') ?? ''
+      expect(style).toContain('left: 300px')
+      expect(style).toContain('top: 200px')
+    })
+
+    it('tells a screen reader what was lost before what was gained', async () => {
+      w = mount(AcquiredFlight)
+      useFlightStore().launch(
+        [{ kind: 'item', name: 'hook', count: 1 }],
+        [bread],
+      )
+      await vi.advanceTimersByTimeAsync(50)
+      expect(w.get('[aria-live="polite"]').text()).toBe(
+        'Lost Bread. Gained Hook',
+      )
+    })
   })
 })

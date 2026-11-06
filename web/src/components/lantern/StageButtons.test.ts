@@ -47,6 +47,14 @@ describe('StageButtons', () => {
     expect(w.get('[data-button="bag"]').classes()).not.toContain('lq-landed')
   })
 
+  it('dips the Bag button as an item rises out of it', async () => {
+    const w = mountButtons()
+    useFlightStore().dipped = 'item'
+    await nextTick()
+    expect(w.get('[data-button="bag"]').classes()).toContain('lq-dipped')
+    expect(w.get('[data-button="spells"]').classes()).not.toContain('lq-dipped')
+  })
+
   it('has the five buttons in order, with the counts', () => {
     const labels = mountButtons()
       .findAll('button.lq-stage-btn')

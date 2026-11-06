@@ -5,6 +5,10 @@ import {
   FLIGHT_HOLD_MS,
   FLIGHT_LAND_MS,
   FLIGHT_SHOW_MS,
+  LEAVE_DIP_MS,
+  LEAVE_REST_MS,
+  LEAVE_RISE_MS,
+  LEAVE_SINK_MS,
   useFlightStore,
 } from './useFlightStore'
 
@@ -79,5 +83,68 @@ describe('useFlightStore', () => {
     flights.launch([lantern])
     flights.clear()
     expect(flights.told).toEqual([])
+  })
+
+  describe('an item leaving the bag', () => {
+    const bread = { kind: 'item' as const, name: 'bread', count: 1 }
+    const coins = { kind: 'item' as const, name: 'coin', count: 3 }
+
+    it('rises, rests and sinks, dipping the Bag button as it rises', () => {
+      const flights = useFlightStore()
+      flights.launch([], [bread])
+      expect(flights.current?.leaving).toBe(true)
+      expect(flights.phase).toBe('rise')
+      expect(flights.dipped).toBe('item')
+      vi.advanceTimersByTime(LEAVE_DIP_MS)
+      expect(flights.dipped).toBeNull()
+      vi.advanceTimersByTime(LEAVE_RISE_MS - LEAVE_DIP_MS)
+      expect(flights.phase).toBe('rest')
+      vi.advanceTimersByTime(LEAVE_REST_MS)
+      expect(flights.phase).toBe('sink')
+      vi.advanceTimersByTime(LEAVE_SINK_MS)
+      expect(flights.current).toBeNull()
+      expect(flights.landed).toBeNull()
+    })
+
+    it('goes before the gains, one flight after another', () => {
+      const flights = useFlightStore()
+      const hook = { kind: 'item' as const, name: 'hook', count: 1 }
+      const rope = { kind: 'item' as const, name: 'rope', count: 1 }
+      flights.launch([hook], [bread, rope])
+      expect(flights.current?.name).toBe('bread')
+      vi.advanceTimersByTime(LEAVE_RISE_MS + LEAVE_REST_MS + LEAVE_SINK_MS)
+      expect(flights.current?.name).toBe('rope')
+      vi.advanceTimersByTime(LEAVE_RISE_MS + LEAVE_REST_MS + LEAVE_SINK_MS)
+      expect(flights.current?.name).toBe('hook')
+      expect(flights.current?.leaving).toBe(false)
+      expect(flights.phase).toBe('show')
+    })
+
+    it('tells losses before gains', () => {
+      const flights = useFlightStore()
+      flights.launch([lantern], [bread, coins])
+      expect(flights.told).toEqual([
+        'Lost Bread',
+        'Lost Coin ×3',
+        'Gained Lantern',
+      ])
+    })
+
+    it('does not dip, and does not rise, when motion is reduced', () => {
+      const flights = useFlightStore()
+      flights.launch([], [bread], true)
+      expect(flights.phase).toBe('rest')
+      expect(flights.dipped).toBeNull()
+    })
+
+    it('leaves no dip and no flight when cleared', () => {
+      const flights = useFlightStore()
+      flights.launch([], [bread])
+      flights.clear()
+      expect(flights.current).toBeNull()
+      expect(flights.dipped).toBeNull()
+      vi.runAllTimers()
+      expect(flights.current).toBeNull()
+    })
   })
 })

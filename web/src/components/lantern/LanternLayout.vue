@@ -906,17 +906,18 @@ const presentation = useLanternPresentation({
 })
 
 const flights = useFlightStore()
-/** The newest turn whose gained things have flown (or were let be): each turn's fly once. */
+/** The newest turn whose lost and gained things have flown (or were let be): each turn's fly once. */
 let flownTurn = game.turns.at(-1)?.id ?? null
 // A new command stops what is still flying (its counts are already up).
 watch(
   () => game.turns.at(-1)?.id,
   () => flights.clear(),
 )
-// On the picture stage, a turn's gained items and spells fly to the Bag and
-// Spells buttons once the turn lets go of them (as their counts change) and
-// the middle of the picture is clear: no news or arrival told or waiting
-// there, no change of scene, and no pop-up over it.
+// On the picture stage, a turn's lost items leave the Bag first, then its
+// gained items and spells fly to the Bag and Spells buttons, once the turn
+// lets go of them (as their counts change) and the middle of the picture is
+// clear: no news or arrival told or waiting there, no change of scene, and no
+// pop-up over it.
 watch(
   () => {
     const turn = game.turns.at(-1)
@@ -929,8 +930,13 @@ watch(
     if (id === null || !turn || id === flownTurn) return
     flownTurn = id
     // A turn a load brought back flew its things when it was played.
-    if (staged.value && !turn.restored && turn.gained.length)
-      flights.launch(turn.gained)
+    const leaving = turn.lost.filter((chip) => chip.kind === 'item')
+    if (
+      staged.value &&
+      !turn.restored &&
+      (turn.gained.length || leaving.length)
+    )
+      flights.launch(turn.gained, leaving, motionReduced())
   },
 )
 

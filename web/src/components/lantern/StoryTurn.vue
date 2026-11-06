@@ -160,7 +160,7 @@ const speakerLabels = computed(() => {
   })
 })
 
-/** The bag's changes; a narration card has only its losses (a gained thing flies to its button, `AcquiredFlight`). */
+/** The bag's changes; a narration card has only its lost spells (a gained thing flies to its button and a lost item out of the Bag, `AcquiredFlight`). */
 const chips = computed(() =>
   props.piece && !props.piece.chips
     ? []
@@ -170,7 +170,10 @@ const chips = computed(() =>
           sign: '+',
           spoken: 'Gained',
         })),
-        ...props.turn.lost.map((chip) => ({
+        ...(props.card
+          ? props.turn.lost.filter((chip) => chip.kind !== 'item')
+          : props.turn.lost
+        ).map((chip) => ({
           chip,
           sign: '−',
           spoken: 'Lost',

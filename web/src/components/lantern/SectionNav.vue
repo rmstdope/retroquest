@@ -49,7 +49,10 @@ const sections = computed(() => [
       :key="s.id"
       type="button"
       class="lq-nav-btn"
-      :class="{ 'lq-landed': !!s.flight && flights.landed === s.flight }"
+      :class="{
+        'lq-landed': !!s.flight && flights.landed === s.flight,
+        'lq-dipped': !!s.flight && flights.dipped === s.flight,
+      }"
       :data-flight-target="s.flight"
       :aria-current="current === s.id ? 'page' : undefined"
       @click="choose(s.id)"
@@ -120,7 +123,12 @@ const sections = computed(() => [
   transform: scale(1.12);
   transition: transform calc(140ms * var(--lq-motion)) ease-out;
 }
-.lq-nav-btn:not(.lq-landed) {
+/* An item is rising out of the tab (AcquiredFlight): it dips. */
+.lq-nav-btn.lq-dipped {
+  transform: scale(0.88);
+  transition: transform calc(140ms * var(--lq-motion)) ease-out;
+}
+.lq-nav-btn:not(.lq-landed, .lq-dipped) {
   transition: transform calc(300ms * var(--lq-motion)) ease-in;
 }
 </style>
