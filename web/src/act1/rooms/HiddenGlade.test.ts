@@ -91,6 +91,25 @@ describe('Hidden Glade', () => {
     })
   })
 
+  describe('the rare flower in the lit glade', () => {
+    it('blooms near the stone, then is remembered as picked', () => {
+      const game = gameInGlade()
+      game.commandParser.parse('cast light')
+      game.state.setStoryFlag('deer_can_be_observed', true)
+      game.commandParser.parse('rest')
+      expect(game.state.currentRoom.describe(game.state)).toContain(
+        'A [item_name]rare flower[/item_name] blooms near the mossy stone.',
+      )
+      game.commandParser.parse('take rare flower')
+      const after = game.state.currentRoom.describe(game.state)
+      expect(after).toContain(
+        'A [item_name]rare flower[/item_name] once bloomed near the mossy ' +
+          'stone. You picked it.',
+      )
+      expect(after).not.toContain('beautiful')
+    })
+  })
+
   describe('the deer', () => {
     it('is a lower-case deer mid-sentence when it steps out, grazes and stays', () => {
       const game = gameInGlade()

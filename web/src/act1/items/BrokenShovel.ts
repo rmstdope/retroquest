@@ -7,7 +7,7 @@ export class BrokenShovel extends Item {
       name: 'broken shovel',
       description:
         'A shovel with a cracked wooden handle and rust on the blade. ' +
-        'It has leaned against that wall a long time.',
+        'It has not been used in years.',
       shortName: 'shovel',
       canBeCarried: true,
     })

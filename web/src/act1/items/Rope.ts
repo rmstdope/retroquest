@@ -6,7 +6,7 @@ export class Rope extends Item {
   constructor() {
     super({
       name: 'rope',
-      description: 'A coil of new hemp rope, thick as a thumb.',
+      description: 'A coil of good hemp rope, thick as a thumb.',
     })
   }
 
