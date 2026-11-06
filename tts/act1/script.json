@@ -1410,6 +1410,11 @@
     "text": "Mira says the sickness in the fields and the sickness of the king feel like one wound. She wants a rare flower from the Hidden Glade, one that opens only for someone the land trusts."
   },
   {
+    "id": "1d6846df3af8da",
+    "speaker": "narrator",
+    "text": "Mira wants a rare flower from the Hidden Glade, one that opens only for someone the land trusts. If it opens for you, she will know what she needs to know."
+  },
+  {
     "id": "04405c2ac93375",
     "speaker": "narrator",
     "text": "Hemlock quickly steps over."
@@ -2795,6 +2800,11 @@
     "text": "Shadows over Willowbrook: Mira is waiting for the rare flower from the Hidden Glade, the one that opens only for someone the land trusts."
   },
   {
+    "id": "046e5b50ed58ba",
+    "speaker": "narrator",
+    "text": "Magic for real: Mira wants a rare flower from the Hidden Glade, one that opens only for someone the land trusts. If it opens for you, she will know what she needs to know."
+  },
+  {
     "id": "18a634b13c6937",
     "speaker": "hemlock",
     "text": "Hold on there, friend! That sword is merchandise, not a free sample. If you want it, you'll need to buy it proper-like."
@@ -3228,6 +3238,11 @@
     "id": "1560af900c476f",
     "speaker": "fisherman",
     "text": "I've watched that stone a long time, lad. I reckon I can stop now."
+  },
+  {
+    "id": "13c5d8a9a4a98f",
+    "speaker": "narrator",
+    "text": "A broad, flat stone at the water's edge, polished smooth by the river's current. It sits askew now, beside the hole you dug beneath it."
   },
   {
     "id": "0f012badb372da",
