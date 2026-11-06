@@ -148,6 +148,25 @@ describe('family keepsakes', () => {
     expect(examined).toBe(unexamined)
   })
 
+  it('answers the same whether or not the letter was read', () => {
+    const game = new Game([new Act1()])
+    const letter = new MothersLetter()
+    game.state.addItemToInventory(letter)
+    const unread = withoutLabel(new Grandmother().giveItem(game.state, letter))
+    letter.examine(game.state)
+    const read = withoutLabel(new Grandmother().giveItem(game.state, letter))
+    expect(read).toBe(unread)
+  })
+
+  it('labels Grandmother and the fisherman as the speakers', () => {
+    const game = new Game([new Act1()])
+    const letter = new MothersLetter()
+    game.state.addItemToInventory(letter)
+    for (const who of [new Grandmother(), new Fisherman()]) {
+      expect(who.giveItem(game.state, letter)).toContain('[character_name]')
+    }
+  })
+
   it('has Mira answer the letter differently once Elior carries the amulet', () => {
     const game = new Game([new Act1()])
     const letter = new MothersLetter()
