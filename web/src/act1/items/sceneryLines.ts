@@ -6,7 +6,7 @@
  * refresh them. The table is code, not saved state: a saved `Scenery` keeps
  * its key and chip label, and takes the rest from here.
  */
-import { writing, type GameState, type Room } from '@/engine'
+import { clue, writing, type GameState, type Item, type Room } from '@/engine'
 import {
   FLAG_COOP_KEY_FELL,
   FLAG_PATCHES_FOUND,
@@ -15,7 +15,10 @@ import {
 } from '../Act1StoryFlags'
 import { Candle } from './Candle'
 import { Key } from './Key'
+import { Lantern } from './Lantern'
 import { Mechanism } from './Mechanism'
+import { RustyHoe } from './RustyHoe'
+import { RustySaw } from './RustySaw'
 
 /** When a chip first shows, if not from the first visit. */
 export type SceneryAppearance = 'open' | 'cut'
@@ -32,6 +35,11 @@ export interface SceneryDef {
   line: (gameState: GameState) => string
   /** `open` once the shed door is unlocked, `cut` once the vines are cut. */
   appears?: SceneryAppearance
+  /**
+   * What the thing says when `item` is used with it, for the near misses at
+   * a puzzle; '' (or no function) leaves the generic refusal.
+   */
+  useFrom?: (gameState: GameState, item: Item) => string
 }
 
 /** A thing whose line never changes. */
@@ -51,8 +59,9 @@ function staged(
   name: string,
   aliases: string[],
   line: (gameState: GameState) => string,
+  useFrom?: (gameState: GameState, item: Item) => string,
 ): SceneryDef {
-  return { key, name, aliases, line }
+  return { key, name, aliases, line, useFrom }
 }
 
 /** Whether the shed's door has been unlocked, read without importing the room. */
@@ -68,6 +77,38 @@ function keyFell(gameState: GameState): boolean {
     gameState.currentRoom.items.some((item) => item instanceof Key) ||
     gameState.inventory.some((item) => item instanceof Key) ||
     shedOpen(gameState)
+  )
+}
+
+/**
+ * A long tool raised at the coop's rafter falls short, and the hens it
+ * scatters fly higher than Elior can reach: the bread's commotion is the way.
+ */
+function rafterUseFrom(gameState: GameState, item: Item): string {
+  if (!(item instanceof RustyHoe || item instanceof RustySaw)) return ''
+  if (keyFell(gameState)) {
+    return '[failure]Only dust and a few feathers on the rafter now.[/failure]'
+  }
+  return clue(
+    'Even at full stretch it falls well short of the rafter. ' +
+      'The hens scatter from the swing, and their wings go higher than ' +
+      'your arm does.',
+  )
+}
+
+/**
+ * The lantern's light does not reach the chapel's dark corner, which waits
+ * for a light of its own (the altar candle).
+ */
+function darkCornerUseFrom(gameState: GameState, item: Item): string {
+  if (!(item instanceof Lantern)) return ''
+  if (candleLit(gameState)) {
+    return '[failure]The candle already lights the corner by the altar.[/failure]'
+  }
+  return clue(
+    "The lantern's light goes into the corner and does not come out again. " +
+      'The corner keeps its dark, as if it were waiting for a light of its ' +
+      'own.',
   )
 }
 
@@ -150,11 +191,16 @@ export const SCENERY_BY_ROOM: Record<string, SceneryDef[]> = {
       'Straw nests in a row along the wall, ' +
         'each pressed into the shape of the hen that keeps it.',
     ),
-    staged('ChickenCoop.rafter', 'rafter', [], (gs) =>
-      keyFell(gs)
-        ? 'Only dust and a few feathers on the rafter now.'
-        : 'The rafter is high and dusty. ' +
-          'Something on it catches the light, out of your reach.',
+    staged(
+      'ChickenCoop.rafter',
+      'rafter',
+      [],
+      (gs) =>
+        keyFell(gs)
+          ? 'Only dust and a few feathers on the rafter now.'
+          : 'The rafter is high and dusty. ' +
+            'Something on it catches the light, out of your reach.',
+      rafterUseFrom,
     ),
   ],
   VillageSquare: [
@@ -431,10 +477,15 @@ export const SCENERY_BY_ROOM: Record<string, SceneryDef[]> = {
       'Worn wooden pews, the ends polished pale by hands. ' +
         'The front one has a cushion; the rest do not.',
     ),
-    staged('VillageChapel.darkCorner', 'dark corner', ['corner'], (gs) =>
-      candleLit(gs)
-        ? 'In the candlelight it is only a corner: old stone, and a gap low in the wall.'
-        : 'The corner by the altar is so dark that your eyes slide off it.',
+    staged(
+      'VillageChapel.darkCorner',
+      'dark corner',
+      ['corner'],
+      (gs) =>
+        candleLit(gs)
+          ? 'In the candlelight it is only a corner: old stone, and a gap low in the wall.'
+          : 'The corner by the altar is so dark that your eyes slide off it.',
+      darkCornerUseFrom,
     ),
   ],
   RoadToGreendale: [

@@ -1,5 +1,7 @@
 import { Item, type GameState, writing, clue } from '@/engine'
+import { DullKnife } from './DullKnife'
 import { GameMap } from './GameMap'
+import { SharpKnife } from './SharpKnife'
 
 /** The words Elior's father left in the box for him. */
 const FATHERS_NOTE = 'For when the light comes back to you.'
@@ -34,6 +36,25 @@ export class MysteriousBox extends Item {
   override answersTo(name: string): boolean {
     if (super.answersTo(name)) return true
     return !this.containsMap && NOTE_NAMES.includes(name.toLowerCase())
+  }
+
+  /**
+   * A knife at the lid finds no seam and no keyhole, which points back at the
+   * runes; once unlocked there is nothing for a blade to do.
+   */
+  override answerUseFrom(_gameState: GameState, item: Item): string {
+    if (!(item instanceof DullKnife || item instanceof SharpKnife)) return ''
+    if (!this.locked) {
+      return (
+        `[failure]The [item_name]${this.name}[/item_name] is already ` +
+        'unlocked; there is nothing for a blade to do.[/failure]'
+      )
+    }
+    return clue(
+      'The blade finds no seam to work and no keyhole to pick. ' +
+        'The runes around the lid are the only way in, and they do not answer ' +
+        'to steel.',
+    )
   }
 
   /** Unlock the box if locked, otherwise report already unlocked (called by UnlockSpell). */

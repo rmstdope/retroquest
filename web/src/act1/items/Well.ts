@@ -3,6 +3,7 @@ import { FLAG_WELL_EXAMINED } from '../Act1StoryFlags'
 import { Bucket } from './Bucket'
 import { ExtendedMagneticFishingRod } from './ExtendedMagneticFishingRod'
 import { FishingRod } from './FishingRod'
+import { Magnet } from './Magnet'
 import { MagneticFishingRod } from './MagneticFishingRod'
 
 const FIELD_HINT =
@@ -67,6 +68,21 @@ export class Well extends Item {
       return other.useWith(gameState, this)
     }
     return super.useWith(gameState, other)
+  }
+
+  /**
+   * The magnet on its own: it would sink and stay sunk, which says it needs
+   * something long to hang from; once the ring is up there is nothing to find.
+   */
+  override answerUseFrom(_gameState: GameState, item: Item): string {
+    if (!(item instanceof Magnet)) return ''
+    if (!this.containsRing) {
+      return '[failure]Nothing glints down there now for the magnet to find.[/failure]'
+    }
+    return clue(
+      'Your arm does not reach the water, and a magnet dropped down there ' +
+        'would not come back up. It would want something long to hang from.',
+    )
   }
 
   /** Search the well for visible items based on purity and ring presence. */
