@@ -615,10 +615,13 @@ describe('actScript hints', () => {
     expect(line?.speaker).toBe('narrator')
   })
 
-  it('reads the line for nothing open', () => {
+  it('reads the line the Dream gives before any quest is open', () => {
     expect(
       script.some(
-        (l) => l.text === 'You think it over. Nothing presses on you just now.',
+        (l) =>
+          l.text ===
+          'You think it over. The voice keeps saying your name, nearer ' +
+            'each time, as if it is waiting for you to answer it.',
       ),
     ).toBe(true)
   })

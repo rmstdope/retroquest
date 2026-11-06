@@ -803,8 +803,8 @@ Welcome to
 
   /**
    * What the player can think over: the active quests' hints, the main quest
-   * first, each under its name. In-world, never a command. Nothing pressing
-   * gets one quiet line.
+   * first, each under its name. In-world, never a command. With nothing
+   * pressing, the current room's own hint, or else one quiet line.
    */
   hint(): string {
     const quests = [...this.state.activatedQuests].sort(
@@ -817,6 +817,8 @@ Welcome to
       })
       .filter((line): line is string => line !== null)
     if (lines.length === 0) {
+      const roomHint = this.state.currentRoom.hint(this.state)
+      if (roomHint) return roomHint
       return '[dim]You think it over. Nothing presses on you just now.[/dim]'
     }
     return ['You stop and think over what you know.', ...lines].join('\n')

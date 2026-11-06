@@ -394,6 +394,29 @@ describe('Game', () => {
       )
     })
 
+    it("falls back on the current room's hint when no quest has one", () => {
+      class Hinting extends Room {
+        override hint(_gameState: GameState): string {
+          return 'The door is warm.'
+        }
+      }
+      const act = new Act({
+        name: 'Room hint',
+        rooms: { Start: new Hinting({ name: 'Start', description: 'S.' }) },
+        quests: [],
+        musicFile: 'a.mp3',
+        musicInfo: 'A',
+      })
+      const game = new Game([act])
+      expect(game.hint()).toBe('The door is warm.')
+      const quest = new Quest({ name: 'Q', description: 'Fetch the rope.' })
+      game.state.activatedQuests.push(quest)
+      expect(game.hint()).toBe(
+        'You stop and think over what you know.\n' +
+          '[bold]Q:[/bold] Fetch the rope.',
+      )
+    })
+
     it("keeps the finished act, its state and its music until the transition's page is passed", () => {
       const mk = (name: string, file: string): Act =>
         new Act({

@@ -59,6 +59,17 @@ describe('The Dream, where Act I opens', () => {
     expectStoryFlag(game.state, FLAG_WOKE_FROM_DREAM, false)
   })
 
+  it('hints at the voice before Elior has answered it, never naming a command', () => {
+    const game = newGame()
+    const hint = executeCommands(game, ['hint'])
+    expect(hint).not.toContain('Nothing presses on you')
+    expect(hint).toContain('voice')
+    expect(hint).toContain('answer')
+    expect(hint).not.toMatch(/\btalk\b|\bsay\b|\btype\b/i)
+    expect(findMarkupProblems(hint)).toEqual([])
+    expectCurrentRoom(game.state, 'The Dream')
+  })
+
   it.each(['talk to voice', 'talk to the figure', 'talk to shadow'])(
     '"%s" makes the voice say the three words and wakes him in the cottage',
     (command) => {
