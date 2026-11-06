@@ -795,3 +795,46 @@ describe('Hemlock repeat talks keep their wording (rq-m3fy)', () => {
     )
   })
 })
+
+describe('The store tells one story about its apples (rq-03s1)', () => {
+  const APPLE_RULE = "There's one with everything you buy."
+
+  it('refuses a taken apple by pointing at the free one, not at buying it', () => {
+    const answer = gameInStore().commandParser.parse('take apple')
+
+    expect(answer).toContain(APPLE_RULE)
+    expect(answer).not.toContain('buy it proper-like')
+    expect(tookApple(answer)).toBe(false)
+  })
+
+  it('does not sell an apple, and says why, instead of saying he does not carry one', () => {
+    const game = gameInStore()
+    game.state.addItemToInventory(new Coin())
+
+    const answer = game.commandParser.parse('buy apple from shopkeeper')
+
+    expect(answer).toContain(APPLE_RULE)
+    expect(answer).not.toContain('Not something I carry')
+    expect(game.state.hasItem('apple')).toBe(false)
+    expect(coins(game)).toBe(1)
+    expectDialogueSpeaker(answer, 'Hemlock')
+  })
+
+  it.each(['take apples', 'buy apples from shopkeeper'])(
+    'tells the same story when Elior asks for apples: %s',
+    (command) => {
+      const game = gameInStore()
+      game.state.addItemToInventory(new Coin())
+
+      const answer = game.commandParser.parse(command)
+
+      expect(answer).toContain(APPLE_RULE)
+      expect(game.state.hasItem('apple')).toBe(false)
+    },
+  )
+})
+
+/** Whether a take answer reports the apple as picked up. */
+function tookApple(answer: string): boolean {
+  return answer.includes('It is crisp and cold')
+}

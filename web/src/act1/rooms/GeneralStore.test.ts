@@ -10,11 +10,11 @@ import {
 import { GeneralStore } from './GeneralStore'
 
 const SHUT =
-  'A cluttered shop with the shutters half down. Rope, apples, matches and ' +
+  'A cluttered shop with the shutters half down. Rope, apples and ' +
   'trinkets crowd the shelves in the gloom. [character_name]Hemlock[/character_name] ' +
   'stands at the window, watching the lane.'
 const OPEN =
-  'A cluttered shop. Rope, apples, matches and trinkets crowd the shelves, ' +
+  'A cluttered shop. Rope, apples and trinkets crowd the shelves, ' +
   'and the air smells of fruit, wax and old wood. [character_name]Hemlock[/character_name] ' +
   'dusts jars between customers'
 const CAT = ', and every so often looks at the counter, where his cat sleeps.'
@@ -28,6 +28,11 @@ function storeText(...flags: string[]): string {
 }
 
 describe('General Store room text', () => {
+  it("never puts the priest's matches on the shelves (rq-03s1)", () => {
+    expect(storeText()).not.toContain('matches')
+    expect(storeText(FLAG_PATCHES_RETURNED)).not.toContain('matches')
+  })
+
   it('shows the shut text while Patches is missing', () => {
     expect(storeText()).toBe(SHUT)
   })
