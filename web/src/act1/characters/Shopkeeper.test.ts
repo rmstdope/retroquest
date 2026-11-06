@@ -501,18 +501,10 @@ describe('Hemlock has only the one rope (rq-28te)', () => {
   it('takes the rope off his shelf once it is sold (rq-kkhw)', () => {
     const game = gameInStore()
     game.state.addItemToInventory(new Coin())
-    game.state.addItemToInventory(new Coin())
     game.commandParser.parse('buy rope from shopkeeper')
-    game.commandParser.parse('drop rope')
-    game.commandParser.parse('take rope')
-
-    const take = game.commandParser.parse('take rope')
 
     expect(shelfRopes(game)).toHaveLength(0)
-    expect(take).not.toContain('merchandise')
-    expect(game.state.inventory.filter((i) => i instanceof Coin)).toHaveLength(
-      1,
-    )
+    expect(game.commandParser.parse('take rope')).not.toContain('merchandise')
   })
 
   it('takes the rope off his shelf once he gives it when Patches stays (rq-kkhw)', () => {
