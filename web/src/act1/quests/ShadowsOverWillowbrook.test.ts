@@ -419,8 +419,19 @@ describe('Shadows over Willowbrook hint', () => {
       FLAG_CONNECT_WITH_NATURE,
       FLAG_MAGIC_FULLY_UNLOCKED,
       FLAG_FOUND_RUNE_TOKEN,
+      FLAG_MIRA_NAMED_FOULING_SIGIL,
     ]
     expect(hintWith(flags, true)).toBe(LINE_6)
+  })
+
+  it('sends Elior to Mira with the token before the amulet holds him (rq-7g9c)', () => {
+    const flags = [
+      ...looked,
+      FLAG_CONNECT_WITH_NATURE,
+      FLAG_MAGIC_FULLY_UNLOCKED,
+      FLAG_FOUND_RUNE_TOKEN,
+    ]
+    expect(hintWith(flags, true)).toBe(LINE_4)
   })
 
   it('reads the same after a save is loaded', () => {

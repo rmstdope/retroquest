@@ -898,3 +898,44 @@ describe('debug act1', () => {
     expect(act.isCompleted(game.state)).toBe(true)
   })
 })
+
+describe('Act 1 when Elior never shows Mira the rune token (rq-7g9c)', () => {
+  /** The golden path, but the rune token never leaves Elior's pack. */
+  function pathWithoutShowingToken(): string[] {
+    const path = [...ACT1_GOLDEN_PATH]
+    path.splice(path.indexOf('give rune token to mira'), 1)
+    return path
+  }
+
+  it('cannot end until Mira has read the token, and the hint and map lead to her', () => {
+    const game = new Game([new Act1()])
+    const state = game.state
+    executeCommands(game, pathWithoutShowingToken())
+    expectCurrentRoom(state, 'Road to Greendale')
+    expectStoryFlag(state, 'found_rune_token', true)
+    expectStoryFlag(state, 'mira_named_fouling_sigil', false)
+
+    expect(game.hint()).toContain('[item_name]rune token[/item_name]')
+    expect(game.hint()).not.toContain('Nothing is left undone')
+    const refusal = executeCommands(game, ACT1_COMPLETING_COMMANDS)
+    expect(refusal).toContain('rune token')
+    expect(refusal).not.toContain('poisoned on purpose')
+    expect(game.acts[game.currentAct].isCompleted(state)).toBe(false)
+
+    executeCommands(game, [
+      'go west',
+      'go west',
+      'go west',
+      'go north',
+      'give rune token to mira',
+      'go south',
+      'go east',
+      'go east',
+      'go east',
+    ])
+    expectStoryFlag(state, 'mira_named_fouling_sigil', true)
+    expect(game.hint()).toContain('Nothing is left undone')
+    executeCommands(game, ACT1_COMPLETING_COMMANDS)
+    expect(game.acts[game.currentAct].isCompleted(state)).toBe(true)
+  })
+})
