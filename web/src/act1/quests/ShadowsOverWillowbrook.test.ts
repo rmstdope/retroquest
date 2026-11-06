@@ -211,13 +211,35 @@ describe('Shadows over Willowbrook log', () => {
     expect(quest.latestStage).toContain(characterName('merchant'))
     expect(quest.checkUpdate(game.state)).toBe(false)
 
-    game.state.setStoryFlag(FLAG_VILLAGER_TALKED_TO, true)
+    game.state.setStoryFlag(FLAG_VEGETABLE_FIELD_WATERED, true)
     quest.checkUpdate(game.state)
 
     expect(quest.latestStage).toContain(
-      `${characterName('Tilda')} has more rumours than bread`,
+      '[room_name]Vegetable Field[/room_name]',
     )
     expect(quest.earlierStages?.join('')).toContain('King Alden lies ill')
+  })
+
+  it('keeps the village signs and Mira’s words before the flower, even when noticed after it', () => {
+    const game = new Game([new Act1()])
+    const quest = new ShadowsOverWillowbrookQuest()
+    game.state.setStoryFlag(FLAG_INVESTIGATED_WITHERED_CROPS, true)
+    game.state.setStoryFlag(FLAG_MAGIC_FULLY_UNLOCKED, true)
+    quest.checkUpdate(game.state)
+    game.state.setStoryFlag(FLAG_VILLAGER_TALKED_TO, true)
+    game.state.setStoryFlag(FLAG_WELL_EXAMINED, true)
+    quest.checkUpdate(game.state)
+    game.state.setStoryFlag(FLAG_CONNECT_WITH_NATURE, true)
+
+    expect(quest.checkUpdate(game.state)).toBe(true)
+    expect(quest.latestStage).toContain('The flower opened for you.')
+    const earlier = (quest.earlierStages ?? []).join('')
+    expect(earlier.indexOf('rumours than bread')).toBeLessThan(
+      earlier.indexOf('smells sour'),
+    )
+    expect(earlier.indexOf('smells sour')).toBeLessThan(
+      earlier.indexOf('one wound'),
+    )
   })
 
   it('turns the hint toward the map once everything is done and Elior is on the road', () => {

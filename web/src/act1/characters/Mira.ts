@@ -32,6 +32,20 @@ const GOODBYE = speech(
   'Still here? Go and say a proper goodbye to your grandmother. Then go.',
 )
 
+/** Her request for the rare flower, and the well, after she names the one wound. */
+const FLOWER_REQUEST =
+  speech(
+    'There is a [item_name]rare flower[/item_name] in the ' +
+      '[room_name]Hidden Glade[/room_name]. It only opens for ' +
+      'someone the land trusts. Bring me one. If it opens for you, ' +
+      "I'll know what I need to know.",
+  ) +
+  '\n' +
+  speech(
+    "And look at that well again on your way. Water doesn't sour " +
+      'without a reason.',
+  )
+
 /** Village healer and wise woman who teaches spells and guides quests. */
 export class Mira extends Character {
   /** Flag set when the rare flower is given to Mira. */
@@ -325,11 +339,55 @@ export class Mira extends Character {
   }
 
   /**
+   * Elior tells her of the crops, the square and the well, once he has seen
+   * all three and not yet told her: sets FLAG_CONNECT_WITH_NATURE and returns
+   * true. Otherwise changes nothing and returns false.
+   */
+  private hearsThreeSignsNow(gameState: GameState): boolean {
+    if (
+      gameState.getStoryFlag(FLAG_CONNECT_WITH_NATURE) ||
+      !gameState.getStoryFlag(FLAG_INVESTIGATED_WITHERED_CROPS) ||
+      !gameState.getStoryFlag(FLAG_VILLAGER_TALKED_TO) ||
+      !gameState.getStoryFlag(FLAG_WELL_EXAMINED)
+    ) {
+      return false
+    }
+    gameState.setStoryFlag(FLAG_CONNECT_WITH_NATURE, true)
+    return true
+  }
+
+  /** Elior tells her of the three signs, and she calls the land and the king one wound. */
+  private oneWound(): string {
+    return (
+      `You tell ${characterName('Mira')} about the grey crops, the ` +
+      'hushed square and the sour smell of the well. She stops tying ' +
+      'herbs. ' +
+      speech('None of that is weather.') +
+      '\nShe sets the bundle down. ' +
+      speech(
+        'They say the king is ill, and no one can name it. The fields ' +
+          'are ill, and no one can name that either. ' +
+          `I think it's one wound, ${characterName('Elior')}, and we're ` +
+          'feeling it in two places.',
+      )
+    )
+  }
+
+  /**
    * Her dialogue for the stage Elior has reached in the act. `afterRemark` is
    * true when her forest remark, in which she glances at Elior, comes first
    * in the same turn.
    */
   private talkByProgress(gameState: GameState, afterRemark: boolean): string {
+    // The flower came before the three signs: her words on the land and the
+    // king still come, without the request, before anything else she says.
+    if (
+      gameState.getStoryFlag(FLAG_MAGIC_FULLY_UNLOCKED) &&
+      this.hearsThreeSignsNow(gameState)
+    ) {
+      return this.oneWound()
+    }
+
     // 1. Give the post_amulet message if amulet is in inventory
     if (gameState.hasItem('Ancient Amulet')) {
       return this.dialogue(
@@ -345,38 +403,8 @@ export class Mira extends Character {
         gameState.getStoryFlag(FLAG_MIRA_MET) ||
         gameState.getStoryFlag(FLAG_CONNECT_WITH_NATURE)
       gameState.setStoryFlag(FLAG_MIRA_MET, true)
-      // Check if all three story flags are set
-      if (
-        !gameState.getStoryFlag(FLAG_CONNECT_WITH_NATURE) &&
-        gameState.getStoryFlag(FLAG_INVESTIGATED_WITHERED_CROPS) &&
-        gameState.getStoryFlag(FLAG_VILLAGER_TALKED_TO) &&
-        gameState.getStoryFlag(FLAG_WELL_EXAMINED)
-      ) {
-        gameState.setStoryFlag(FLAG_CONNECT_WITH_NATURE, true)
-        const extra =
-          `\nYou tell ${characterName('Mira')} about the grey crops, the ` +
-          'hushed square and the sour smell of the well. She stops tying ' +
-          'herbs. ' +
-          speech('None of that is weather.') +
-          '\nShe sets the bundle down. ' +
-          speech(
-            'They say the king is ill, and no one can name it. The fields ' +
-              'are ill, and no one can name that either. ' +
-              `I think it's one wound, ${characterName('Elior')}, and we're ` +
-              'feeling it in two places.',
-          ) +
-          '\n' +
-          speech(
-            'There is a [item_name]rare flower[/item_name] in the ' +
-              '[room_name]Hidden Glade[/room_name]. It only opens for ' +
-              'someone the land trusts. Bring me one. If it opens for you, ' +
-              "I'll know what I need to know.",
-          ) +
-          '\n' +
-          speech(
-            "And look at that well again on your way. Water doesn't sour " +
-              'without a reason.',
-          )
+      if (this.hearsThreeSignsNow(gameState)) {
+        const extra = `\n${this.oneWound()}\n` + FLOWER_REQUEST
         // Once met, the request alone follows; the first meeting is not replayed.
         return met ? extra.trimStart() : this.dialogue('initial') + extra
       }
