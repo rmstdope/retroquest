@@ -6,8 +6,8 @@ export class SackOfFlour extends Item {
     super({
       name: 'sack of flour',
       description:
-        'A heavy burlap sack filled with fine white flour. Essential for baking, but a ' +
-        'bit unwieldy to carry.',
+        'A heavy burlap sack of fine white flour. It leaves a pale dust on your ' +
+        'sleeve.',
       shortName: 'flour',
     })
   }

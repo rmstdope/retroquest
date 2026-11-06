@@ -5,8 +5,7 @@ export class Egg extends Item {
   constructor() {
     super({
       name: 'egg',
-      description:
-        'A freshly laid egg, still warm. It could be cooked or used in a recipe.',
+      description: 'An egg, still warm from the nest.',
       canBeCarried: true,
     })
   }

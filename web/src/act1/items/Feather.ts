@@ -5,9 +5,7 @@ export class Feather extends Item {
   constructor() {
     super({
       name: 'feather',
-      description:
-        'A soft white feather, likely from one of the chickens. It could be used for ' +
-        'writing, crafting, or tickling.',
+      description: 'A white feather from one of the hens, still soft.',
       canBeCarried: true,
     })
   }

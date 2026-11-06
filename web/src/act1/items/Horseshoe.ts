@@ -8,9 +8,7 @@ export class Horseshoe extends Item {
   constructor() {
     super({
       name: 'horseshoe',
-      description:
-        'A heavy iron horseshoe, slightly bent. It might bring luck or be useful for ' +
-        'repairs.',
+      description: 'A heavy iron horseshoe, bent a little at one heel.',
       canBeCarried: true,
     })
   }

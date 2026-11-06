@@ -4,9 +4,7 @@ import { VegetableField } from '../rooms/VegetableField'
 import { Well } from './Well'
 import { WitheredCarrot } from './WitheredCarrot'
 
-const EMPTY_DESCRIPTION =
-  "A sturdy wooden bucket with a rope handle. It's perfect for drawing water " +
-  'from a well or carrying supplies.'
+const EMPTY_DESCRIPTION = 'A wooden bucket with a rope handle.'
 
 /**
  * A bucket for drawing water from the well: murky, sour water before the

@@ -5,9 +5,7 @@ export class RustySaw extends Item {
   constructor() {
     super({
       name: 'rusty saw',
-      description:
-        'An old, rusty saw with a worn wooden handle. It looks like it could still cut ' +
-        'through something soft, but might break on anything tough.',
+      description: 'An old saw with a worn wooden handle and a rusted blade.',
       shortName: 'saw',
       canBeCarried: true,
     })

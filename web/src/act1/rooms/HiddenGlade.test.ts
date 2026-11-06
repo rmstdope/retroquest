@@ -24,12 +24,12 @@ describe('Hidden Glade', () => {
     const game = gameInGlade()
     const before = game.state.currentRoom.describe(game.state)
     expect(before).toContain('dim')
-    expect(before).not.toContain('golden sunlight')
+    expect(before).not.toContain('full sun')
 
     game.commandParser.parse('cast light')
 
     const after = game.state.currentRoom.describe(game.state)
-    expect(after).toContain('golden sunlight')
+    expect(after).toContain('full sun')
     expect(after).not.toContain('darkness')
   })
 
@@ -58,7 +58,7 @@ describe('Hidden Glade', () => {
     game.state.setStoryFlag('deer_can_be_observed', true)
     game.commandParser.parse('rest')
     const after = game.state.currentRoom.describe(game.state)
-    expect(after).toContain('grazes quietly')
+    expect(after).toContain('grazes at the edge')
     expect(after).not.toContain('holds its breath')
   })
 
@@ -91,6 +91,25 @@ describe('Hidden Glade', () => {
     })
   })
 
+  describe('the rare flower in the lit glade', () => {
+    it('blooms near the stone, then is remembered as picked', () => {
+      const game = gameInGlade()
+      game.commandParser.parse('cast light')
+      game.state.setStoryFlag('deer_can_be_observed', true)
+      game.commandParser.parse('rest')
+      expect(game.state.currentRoom.describe(game.state)).toContain(
+        'A [item_name]rare flower[/item_name] blooms near the mossy stone.',
+      )
+      game.commandParser.parse('take rare flower')
+      const after = game.state.currentRoom.describe(game.state)
+      expect(after).toContain(
+        'A [item_name]rare flower[/item_name] once bloomed near the mossy ' +
+          'stone. You picked it.',
+      )
+      expect(after).not.toContain('beautiful')
+    })
+  })
+
   describe('the deer', () => {
     it('is a lower-case deer mid-sentence when it steps out, grazes and stays', () => {
       const game = gameInGlade()
@@ -103,7 +122,7 @@ describe('Hidden Glade', () => {
         'and a [character_name]deer[/character_name] steps out',
       )
       expect(lit).toContain(
-        'A graceful [character_name]deer[/character_name] grazes',
+        'A [character_name]deer[/character_name] grazes at the edge of the clearing',
       )
       expect(again).toContain(
         'The [character_name]deer[/character_name] continues',
@@ -137,8 +156,7 @@ describe('Hidden Glade', () => {
       'Carved beneath the runes, in a plainer hand, are words you can read:'
     const CLOSING =
       'You read them aloud. They mean nothing to you, and yet they stay with you.'
-    const STONE =
-      'In the center, a mossy stone bears a faint, magical inscription.'
+    const STONE = 'In the center, a mossy stone bears an inscription.'
 
     it('follows the grow line on the first cast', () => {
       const game = gameInGlade()
@@ -211,7 +229,7 @@ describe('the Hidden Glade room card', () => {
     const game = gameInGlade()
     const card = new GameController(game)
     game.commandParser.parse('cast light')
-    expect(card.getRoomDescription()).toContain('golden sunlight')
+    expect(card.getRoomDescription()).toContain('full sun')
     expect(card.getRoomDescription()).not.toContain('too deep in shadow')
   })
 

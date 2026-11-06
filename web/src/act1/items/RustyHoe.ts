@@ -2,14 +2,12 @@ import { Item, type GameState, clue } from '@/engine'
 import { Coin } from './Coin'
 import { FLAG_RUSTY_HOE_FIRST_COIN_FOUND } from '../Act1StoryFlags'
 
-/** Gardening hoe with a rusted blade and splintered handle, useful for tilling soil. */
+/** Gardening hoe with a rusted blade and splintered handle. */
 export class RustyHoe extends Item {
   constructor() {
     super({
       name: 'rusty hoe',
-      description:
-        'A gardening hoe with a rusted blade and a splintered handle. ' +
-        'It might still be useful for tilling soil.',
+      description: 'A hoe with a rusted blade and a splintered handle.',
       shortName: 'hoe',
       canBeCarried: true,
     })
