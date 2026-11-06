@@ -15,6 +15,14 @@ function gameWithVinesCut(): Game {
 }
 
 describe('Forest Path room card', () => {
+  it('says the vines block the alcove, not the path south, before they are cut', () => {
+    const game = new Game([new Act1()])
+    game.state.currentRoom = game.state.allRooms.ForestPath
+    const text = new GameController(game).getRoomDescription()
+    expect(text).toContain('thorny vines block a small alcove')
+    expect(text).not.toContain('path is blocked')
+  })
+
   it('shows the opened alcove with the caught kit once the vines are gone', () => {
     const game = gameWithVinesCut()
     const text = new GameController(game).getRoomDescription()

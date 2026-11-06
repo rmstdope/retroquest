@@ -7,8 +7,8 @@ import { Scenery } from '../items/Scenery'
 
 const BLOCKED_DESCRIPTION =
   'A winding path snakes into the heart of the woods, dappled sunlight ' +
-  'flickering through the canopy above. A section of the path is blocked by ' +
-  'thick, thorny vines. The air is alive with the scent of pine and wildflowers, ' +
+  'flickering through the canopy above. Beside the path, thick, thorny vines ' +
+  'block a small alcove. The air is alive with the scent of pine and wildflowers, ' +
   'and the ground is soft with moss and fallen leaves. Birds flit between ' +
   'branches, and the occasional snap of a twig hints at unseen creatures ' +
   'nearby.'

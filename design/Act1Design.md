@@ -187,10 +187,10 @@
 
 ### 12. Forest Path
 
-- **Description:** A winding path leading into the woods. A section of the path is blocked by thick, thorny vines.
+- **Description:** A winding path leading into the woods. Beside the path, thick, thorny vines block a small alcove.
 - **Items:** Stick (later), wild berries (later), Vines (start), Bush (start), snare (appears once the vines are cleared; optional).
 - **Spells:** None.
-- **Usable Items:** Sharp knife (on Vines to clear path; on the snare, optional), `grow` spell (on bush).
+- **Usable Items:** Sharp knife (on Vines to open the alcove; on the snare, optional), `grow` spell (on bush).
 - **Optional:** Once the vines are cleared, a fox kit is caught in a poacher's snare in the alcove. Cutting it free (`use sharp knife with snare`, see _Optional choices_) sends it bolting into the undergrowth; skipping it changes nothing, and the kit stays caught. Not needed for any quest.
 - **Characters:** None.
 - **Exits:** Riverbank (north), Hidden Glade (south)
@@ -518,7 +518,7 @@ Optional virtue moments; none blocks the golden path, none adds a puzzle or comb
     - `Key` (to access Abandoned Shed's interior where Mysterious Box is)
     - `Coin` (1st, to get `dull knife` sharpened)
     - `Dull Knife` (to become `sharp knife`)
-    - `Sharp Knife` (to cut vines on Forest Path, enabling access to the `stick` and the Hidden Glade for the `rare flower`)
+    - `Sharp Knife` (to cut vines on Forest Path, opening the alcove with the `stick`)
     - `Candle` (to find `hidden locket` in Village Chapel)
     - `Matches` (to light `candle` in Village Chapel)
     - `Hidden Locket` (picking it up teaches `bless`; giving it to Grandmother obtains the `travel cloak`)
