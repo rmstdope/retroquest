@@ -5,6 +5,9 @@ import { Act1 } from '../Act1'
 import { HealSpell } from '../spells/HealSpell'
 import {
   FLAG_CONNECT_WITH_NATURE,
+  FLAG_INVESTIGATED_WITHERED_CROPS,
+  FLAG_VILLAGER_TALKED_TO,
+  FLAG_WELL_EXAMINED,
   FLAG_MAGIC_FULLY_UNLOCKED,
 } from '../Act1StoryFlags'
 
@@ -45,6 +48,19 @@ describe('Magic for real', () => {
     turn()
     expect(quest().hint).not.toContain('a way with herbs')
     expect(quest().hint).toContain('rare flower')
+  })
+
+  it('leads to the flower after Mira asks for it in her hut', () => {
+    game.state.learnSpell(new HealSpell())
+    turn()
+    game.state.setStoryFlag(FLAG_INVESTIGATED_WITHERED_CROPS, true)
+    game.state.setStoryFlag(FLAG_VILLAGER_TALKED_TO, true)
+    game.state.setStoryFlag(FLAG_WELL_EXAMINED, true)
+    game.state.currentRoom = game.state.allRooms.MirasHut
+    executeCommands(game, ['talk to mira'])
+    expect(game.state.getStoryFlag(FLAG_CONNECT_WITH_NATURE)).toBe(true)
+    expect(quest().hint).toContain('rare flower')
+    expect(quest().hint).toContain('magic')
   })
 
   it('opens at the flower when Mira asked before the first spell', () => {

@@ -10,11 +10,11 @@ const NOTHING_ANSWERS =
   `${characterName('Grandmother')} says ${characterName('Mira')} has a way with herbs, ` +
   'and with other things.'
 
-/** The log once Mira has asked for the rare flower. */
+/** The log once Mira has asked for the rare flower: still about the spell, not her request. */
 const FLOWER_ASKED =
-  `${characterName('Mira')} wants a [item_name]rare flower[/item_name] from the ` +
-  '[room_name]Hidden Glade[/room_name], one that opens only for someone the land trusts. ' +
-  'If it opens for you, she will know what she needs to know.'
+  'Your spells do not answer yet. ' +
+  `${characterName('Mira')} has sent you for a [item_name]rare flower[/item_name] from the ` +
+  '[room_name]Hidden Glade[/room_name]: if it opens for you, she will know what holds your magic back.'
 
 /**
  * Side quest: seek guidance to unlock the secrets of Elior's newfound magic.
