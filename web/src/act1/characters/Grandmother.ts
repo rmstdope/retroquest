@@ -462,7 +462,7 @@ export class Grandmother extends Character {
       ) +
       '\nShe folds it along its creases and hands it back. ' +
       speech('Keep it dry. And do as she says.') +
-      ' She turns to the bread.'
+      ' She turns back to the hearth, where the next loaf is rising.'
     )
   }
 

@@ -6,11 +6,13 @@
  */
 import { describe, expect, it } from 'vitest'
 import { Character, Game, characterName, speech } from '@/engine'
+import { executeCommands } from '@/testing/gameHelpers'
 import { Act1 } from './Act1'
 import { Fisherman } from './characters/Fisherman'
 import { Grandmother } from './characters/Grandmother'
 import { Mira } from './characters/Mira'
 import { AncientAmulet } from './items/AncientAmulet'
+import { Bread } from './items/Bread'
 import { FadedPhotograph } from './items/FadedPhotograph'
 import { MothersLetter } from './items/MothersLetter'
 import { Rope } from './items/Rope'
@@ -40,7 +42,7 @@ const LETTER_TO_GRANDMOTHER =
   speech("That's her, all over. Telling you what to do from wherever she is.") +
   '\nShe folds it along its creases and hands it back. ' +
   speech('Keep it dry. And do as she says.') +
-  ' She turns to the bread.'
+  ' She turns back to the hearth, where the next loaf is rising.'
 
 const LETTER_TO_MIRA_BEFORE =
   `${MIRA} reads it to the end, and her thumb stays on one line. ` +
@@ -156,6 +158,25 @@ describe('family keepsakes', () => {
     letter.examine(game.state)
     const read = withoutLabel(new Grandmother().giveItem(game.state, letter))
     expect(read).toBe(unread)
+  })
+
+  it('has Grandmother turn to nothing that is gone once the loaf is taken', () => {
+    const game = new Game([new Act1()])
+    game.state.currentRoom = game.state.allRooms.EliorsCottage
+    const letter = new MothersLetter()
+    game.state.addItemToInventory(letter)
+    const withLoaf = withoutLabel(
+      new Grandmother().giveItem(game.state, letter),
+    )
+    executeCommands(game, ['take bread'])
+    expect(
+      game.state.allRooms.EliorsCottage.items.some((i) => i instanceof Bread),
+    ).toBe(false)
+    const withoutLoaf = withoutLabel(
+      new Grandmother().giveItem(game.state, letter),
+    )
+    expect(withoutLoaf).not.toContain('the bread')
+    expect(withoutLoaf).toBe(withLoaf)
   })
 
   it('labels Grandmother and the fisherman as the speakers', () => {
