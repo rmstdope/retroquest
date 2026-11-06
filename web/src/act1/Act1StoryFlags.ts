@@ -42,6 +42,8 @@ export const FLAG_FOUND_MOTHERS_LETTER = 'found_mothers_letter'
 export const FLAG_READ_MOTHERS_LETTER = 'read_mothers_letter'
 export const FLAG_HEALED_FISHERMAN_ARM = 'healed_fisherman_arm'
 export const FLAG_MET_HEMLOCK = 'met_hemlock'
+/** Set when Elior reads the missing-cat notice on the village board. */
+export const FLAG_READ_HEMLOCK_NOTICE = 'read_hemlock_notice'
 export const FLAG_PATCHES_FOUND = 'patches_found'
 export const FLAG_PATCHES_RETURNED = 'patches_returned'
 /** Set when the rune token comes up out of the purified well with the ring. */

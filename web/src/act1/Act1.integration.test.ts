@@ -146,13 +146,8 @@ describe('Act 1 golden path', () => {
 
     // Step 7: Abandoned Shed - use key, find Patches
     executeCommands(game, ['go west', 'go south'])
-    expectQuests(state, [
-      MAIN,
-      PHOTO,
-      'Magic for real',
-      'Know your village',
-      CAT,
-    ])
+    // Nothing at the locked shed tells of a cat yet: the quest waits for her mew.
+    expectQuests(state, [MAIN, PHOTO, 'Magic for real', 'Know your village'])
     expectCurrentRoom(state, 'Abandoned Shed')
     expectItemInRoom(room(), 'mysterious box', false)
 

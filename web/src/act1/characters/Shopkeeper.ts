@@ -24,6 +24,7 @@ import {
   FLAG_PATCHES_RETURNED,
   FLAG_PATCHES_STAYED_WITH_GRANDMOTHER,
   FLAG_PRIEST_TALKED_TO,
+  FLAG_READ_HEMLOCK_NOTICE,
   FLAG_RUSTY_HOE_SECOND_COIN_FOUND,
   TRIGGER_PATCHES_RETURNS,
 } from '../Act1StoryFlags'
@@ -173,6 +174,17 @@ export class Shopkeeper extends Character {
   }
 
   /**
+   * Whether Elior has heard of the reward for Patches: from Hemlock himself,
+   * or from the notice on the village board.
+   */
+  private rewardHeardOf(gameState: GameState): boolean {
+    return (
+      gameState.getStoryFlag(FLAG_MET_HEMLOCK) ||
+      gameState.getStoryFlag(FLAG_READ_HEMLOCK_NOTICE)
+    )
+  }
+
+  /**
    * Hemlock's byword over the stopped caravans, with a knock on the counter,
    * as a new line after what he has said: spoken in whichever scene Elior
    * first meets him in, so a player who walks in carrying Patches hears it
@@ -264,20 +276,25 @@ export class Shopkeeper extends Character {
   /**
    * Take Patches back from Elior, pay the notice's coin (unless the save
    * already had the hoe's second coin), reopen the store and settle her on
-   * the counter. When this is the first time Elior meets him, he adds his
+   * the counter. He calls the coin the reward he promised only when Elior
+   * heard of it. When this is the first time Elior meets him, he adds his
    * byword.
    */
   private welcomePatchesHome(gameState: GameState): string {
     const firstMeeting = !gameState.getStoryFlag(FLAG_MET_HEMLOCK)
+    const promised = this.rewardHeardOf(gameState)
     gameState.setStoryFlag(FLAG_PATCHES_RETURNED, true)
     gameState.fireSound(TRIGGER_PATCHES_RETURNS)
     gameState.setStoryFlag(FLAG_MET_HEMLOCK, true)
     gameState.currentRoom.addCharacter(new Patches())
     const paid = !gameState.getStoryFlag(FLAG_RUSTY_HOE_SECOND_COIN_FOUND)
     if (paid) gameState.addItemToInventory(new Coin())
-    const reward = paid
-      ? "Here, the reward I promised. It isn't much, but it's honestly given."
-      : "You'll always be welcome in this store, lad."
+    const reward = !paid
+      ? "You'll always be welcome in this store, lad."
+      : promised
+        ? "Here, the reward I promised. It isn't much, but it's honestly given."
+        : "Here, a little something for your trouble. It isn't much, but it's " +
+          'honestly given.'
     return (
       `${characterName('Patches')} butts her head against ` +
       `${this.nameInSentence()}'s hand, and his face lights up. ` +
@@ -296,11 +313,15 @@ export class Shopkeeper extends Character {
   /**
    * Hemlock's first word after grandmother has kept Patches: he thanks Elior
    * and, unless the save already had the hoe's second coin, gives him a rope
-   * and the apple that goes with every sale, in place of the coin. When this
-   * is the first time Elior meets him, he adds his byword.
+   * and the apple that goes with every sale, in place of the coin; the
+   * reward is news to Elior unless he heard of it. When this is the first
+   * time Elior meets him, he adds his byword.
    */
   private patchesStayedNews(gameState: GameState): string {
     const firstMeeting = !gameState.getStoryFlag(FLAG_MET_HEMLOCK)
+    const rewardWas = this.rewardHeardOf(gameState)
+      ? 'The reward was for'
+      : 'There was to be a reward for'
     gameState.setStoryFlag(FLAG_HEMLOCK_HEARD_PATCHES_STAYED, true)
     gameState.setStoryFlag(FLAG_MET_HEMLOCK, true)
     const gift = !gameState.getStoryFlag(FLAG_RUSTY_HOE_SECOND_COIN_FOUND)
@@ -324,7 +345,7 @@ export class Shopkeeper extends Character {
       '\n' +
       speech(
         (gift
-          ? 'The reward was for bringing her home, and she found a new one. ' +
+          ? `${rewardWas} bringing her home, and she found a new one. ` +
             "But you'll not leave empty-handed: take this " +
             "[item_name]rope[/item_name], on the house, and there's " +
             'always an [item_name]apple[/item_name] to go with it. '

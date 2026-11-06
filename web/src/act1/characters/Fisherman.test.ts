@@ -140,6 +140,14 @@ describe('Fisherman', () => {
       expectDialogueSpeaker(response, 'fisherman')
     })
 
+    it('still asks for a fresh fish once healed (rq-btb2)', () => {
+      executeCommands(game, ['cast heal on fisherman'])
+
+      const response = executeCommands(game, ['talk to fisherman'])
+
+      expect(response).toContain('fresh fish')
+    })
+
     it('teaches fishing out of gratitude when talked to with a rod', () => {
       executeCommands(game, ['cast heal on fisherman'])
       game.state.addItemToInventory(new FishingRod())

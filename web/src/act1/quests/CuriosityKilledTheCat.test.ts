@@ -38,6 +38,48 @@ describe('Curiosity killed the cat', () => {
     expect(game.state.isQuestActivated(QUEST)).toBe(false)
   })
 
+  describe('found shed first, before Hemlock or the notice (rq-btb2)', () => {
+    /** A game standing by the well with the shed key, Hemlock not yet met. */
+    function wellGame(): Game {
+      const game = cottageGame()
+      game.state.currentRoom = game.state.allRooms.VillageWell
+      game.state.addItemToInventory(new Key())
+      return game
+    }
+
+    it('does not start at the locked shed, where nothing tells of a cat', () => {
+      const game = wellGame()
+      executeCommands(game, ['go south'])
+      expect(game.state.isQuestActivated(QUEST)).toBe(false)
+    })
+
+    it('opens with the frightened mew, not with what Hemlock said', () => {
+      const game = wellGame()
+      executeCommands(game, ['go south', 'use key with door'])
+      const quest = game.state.activatedQuests.find((q) => q.name === QUEST)
+      expect(quest?.description).toContain('frightened mew')
+      expect(quest?.description).not.toContain('has shut the')
+      expect(quest?.description).not.toContain('last seen near the old well')
+    })
+  })
+
+  it('opens with the notice when Elior read it before meeting Hemlock', () => {
+    const game = cottageGame()
+    game.state.currentRoom = game.state.allRooms.VillageSquare
+    executeCommands(game, ['examine notice'])
+    const quest = game.state.activatedQuests.find((q) => q.name === QUEST)
+    expect(quest?.description).toContain('notice')
+    expect(quest?.description).not.toContain('has shut the')
+  })
+
+  it('opens with what Hemlock said when Elior met him first', () => {
+    const game = cottageGame()
+    game.state.currentRoom = game.state.allRooms.GeneralStore
+    executeCommands(game, ['talk to shopkeeper'])
+    const quest = game.state.activatedQuests.find((q) => q.name === QUEST)
+    expect(quest?.description).toContain('has shut the')
+  })
+
   it('also completes when Patches stays with grandmother', () => {
     const game = cottageGame()
     game.state.setStoryFlag(FLAG_PATCHES_FOUND, true)

@@ -1125,6 +1125,11 @@
     "text": "In the gloom you make out an old workbench and a few interesting things. From the shadows comes a frightened mew, and a small patchwork shape bolts behind the broken crates."
   },
   {
+    "id": "1356ed8a0ef23f",
+    "speaker": "narrator",
+    "text": "From the shadows of the Abandoned Shed came a frightened mew, and a small patchwork shape bolted behind the broken crates. It looked a lot like Patches, the cat who sleeps on the counter of the General Store."
+  },
+  {
     "id": "171f9e8202e847",
     "speaker": "narrator",
     "text": "A rickety shed leans precariously at the edge of Willowbrook, its weathered boards creaking in the wind. Rusty tools and broken crates are scattered about a long workbench, and a thick layer of dust covers everything. Little light gets past the grimy boards, and the air smells of old earth and lamp oil."
@@ -1240,11 +1245,6 @@
     "text": "The door is locked. Through a gap in the boards there is only dark, and a smell of dust."
   },
   {
-    "id": "17236651ac23a8",
-    "speaker": "narrator",
-    "text": "Curiosity killed the cat: Old Man Hemlock has shut the General Store until his cat, Patches, comes home. She was last seen near the old well, where a locked shed keeps its secrets. What will you discover if you find a way inside?"
-  },
-  {
     "id": "1e331fe69bedcf",
     "speaker": "narrator",
     "text": "The mysterious box is locked, and there is no keyhole. The runes around the lid are the only way in, and they do not answer to hands."
@@ -1333,6 +1333,11 @@
     "id": "0443cad94a38f2",
     "speaker": "narrator",
     "text": "A pair of frightened green eyes watches you from behind the crates."
+  },
+  {
+    "id": "1d95ff273f35b8",
+    "speaker": "narrator",
+    "text": "Curiosity killed the cat: From the shadows of the Abandoned Shed came a frightened mew, and a small patchwork shape bolted behind the broken crates. It looked a lot like Patches, the cat who sleeps on the counter of the General Store."
   },
   {
     "id": "1429f221f0f02b",
@@ -1445,9 +1450,9 @@
     "text": "Your grandmother sent word, lad. Patches is safe and warm by her hearth. I'll not drag her back; she always did like a fire better than a draughty old store, and I can call in and see her."
   },
   {
-    "id": "08d70c58e48563",
+    "id": "1b8f12856cd6c5",
     "speaker": "hemlock",
-    "text": "The reward was for bringing her home, and she found a new one. But you'll not leave empty-handed: take this rope, on the house, and there's always an apple to go with it. And the store's open again, so have a look around."
+    "text": "There was to be a reward for bringing her home, and she found a new one. But you'll not leave empty-handed: take this rope, on the house, and there's always an apple to go with it. And the store's open again, so have a look around."
   },
   {
     "id": "0d3a3a5f0dab52",
@@ -1765,9 +1770,9 @@
     "text": "Patches butts her head against Hemlock's hand, and his face lights up."
   },
   {
-    "id": "0871d6111622f6",
+    "id": "0127d9032dc5d5",
     "speaker": "hemlock",
-    "text": "Patches! You found her! Old Hemlock won't forget this. Here, the reward I promised. It isn't much, but it's honestly given. And the store's open again, so have a look around."
+    "text": "Patches! You found her! Old Hemlock won't forget this. Here, a little something for your trouble. It isn't much, but it's honestly given. And the store's open again, so have a look around."
   },
   {
     "id": "1495ff8228c561",
