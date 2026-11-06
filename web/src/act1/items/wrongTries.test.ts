@@ -17,10 +17,11 @@ import { Rope } from './Rope'
 import { RustyHoe } from './RustyHoe'
 import { RustySaw } from './RustySaw'
 import { SharpKnife } from './SharpKnife'
+import { Stick } from './Stick'
 import { Well } from './Well'
 
 /**
- * The natural wrong tries at Act I's puzzles (rq-8v75): each gets a refusal
+ * The natural wrong tries at Act I's puzzles (rq-8v75, rq-miya): each gets a refusal
  * that says something true in-world (Puzzle Rule 2), never the engine's bare
  * "You can't use X with Y".
  */
@@ -86,6 +87,24 @@ const STILL_GEARS = clue(
 const LANTERN_RAFTER = clue(
   'Held high, the lantern shows a glint on the rafter, still well out of ' +
     'your reach. Only the hens, startled into the air, ever get up that high.',
+)
+const LANTERN_CANDLE = clue(
+  "The flame sits behind the lantern's glass, and the candle's wick will " +
+    'not reach in through it. The candle wants a flame of its own, struck ' +
+    'for it.',
+)
+const STICK_ROD = clue(
+  'Lashed on now, the stick would cover the end of the rod, where ' +
+    'something else may want to go first. The length can come last.',
+)
+const LANTERN_STONE = clue(
+  'The lantern lights the moss and not a letter beneath it. ' +
+    'This shadow lies over the whole glade, and a flame held close does ' +
+    'not lift it.',
+)
+const ROPE_WELL = clue(
+  'A bare rope let down the well comes back up wet, and nothing more. ' +
+    'Water wants a bucket to come up in.',
 )
 const KNIFE_BOX = clue(
   'The blade finds no seam to work and no keyhole to pick. ' +
@@ -314,6 +333,70 @@ describe('wrong tries at Act I puzzles', () => {
     )
   })
 
+  it.each(['use lantern with candle', 'use candle with lantern'])(
+    'says why the lantern cannot light the candle (%s)',
+    (command) => {
+      const game = gameIn('VillageChapel', [litLantern()])
+      const text = executeCommands(game, [command])
+      expect(text).toBe(LANTERN_CANDLE)
+      expect(game.state.currentRoom.getItemByName('locket')).toBeNull()
+    },
+  )
+
+  it('says the candle is already lit to the lantern', () => {
+    const game = gameIn('VillageChapel', [litLantern()])
+    const candle = game.state.currentRoom.items.find((i) => i instanceof Candle)
+    if (!(candle instanceof Candle)) throw new Error('no candle')
+    candle.isLit = true
+    const text = executeCommands(game, ['use lantern with candle'])
+    expect(text).toBe(
+      '[failure]The [item_name]candle[/item_name] is already lit.[/failure]',
+    )
+  })
+
+  it.each(['use stick with fishing rod', 'use fishing rod with stick'])(
+    'says the stick goes on the rod last (%s)',
+    (command) => {
+      const game = gameIn('Riverbank', [new Stick(), new FishingRod()])
+      const text = executeCommands(game, [command])
+      expect(text).toBe(STICK_ROD)
+      expect(game.state.hasItem('fishing rod')).toBe(true)
+      expect(game.state.hasItem('stick')).toBe(true)
+    },
+  )
+
+  it.each(['mossy stone', 'inscription'])(
+    'says the lantern does not lift the glade shadow from the %s',
+    (target) => {
+      const game = gameIn('HiddenGlade', [litLantern()])
+      const text = executeCommands(game, [`use lantern with ${target}`])
+      expect(text).toBe(LANTERN_STONE)
+    },
+  )
+
+  it('says the lit glade needs no lantern on the stone', () => {
+    const game = gameIn('HiddenGlade', [litLantern()])
+    const glade = game.state.currentRoom
+    if (!('lightSpellCast' in glade)) throw new Error('no glade')
+    glade.lightSpellCast = true
+    const text = executeCommands(game, ['use lantern with mossy stone'])
+    expect(text).toBe(
+      '[failure]The runes stand out clear in the sunlight; the lantern ' +
+        'adds nothing to them.[/failure]',
+    )
+  })
+
+  it.each(['use rope with well', 'use well with rope'])(
+    'says a bare rope brings nothing up the well (%s)',
+    (command) => {
+      const rope = new Rope()
+      rope.canBeCarried = true
+      const game = gameIn('VillageWell', [rope])
+      const text = executeCommands(game, [command])
+      expect(text).toBe(ROPE_WELL)
+    },
+  )
+
   it('writes every refusal in well-formed markup', () => {
     for (const line of [
       MAGNET_WELL,
@@ -328,6 +411,10 @@ describe('wrong tries at Act I puzzles', () => {
       MAGNET_MECHANISM,
       STILL_GEARS,
       LANTERN_RAFTER,
+      LANTERN_CANDLE,
+      STICK_ROD,
+      LANTERN_STONE,
+      ROPE_WELL,
     ]) {
       expectMarkupWellFormed(line)
     }

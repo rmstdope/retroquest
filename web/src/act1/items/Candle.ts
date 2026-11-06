@@ -1,4 +1,5 @@
-import { Item, type GameState } from '@/engine'
+import { Item, type GameState, clue } from '@/engine'
+import { Lantern } from './Lantern'
 import { Matches } from './Matches'
 import { Locket } from './Locket'
 
@@ -28,8 +29,24 @@ export class Candle extends Item {
       : Candle.UNLIT_DESCRIPTION
   }
 
-  /** Light the candle with matches to reveal a locket, otherwise fail. */
+  /**
+   * The lantern cannot light the candle: its flame is shut behind glass.
+   * Once lit, the candle is simply lit.
+   */
+  private fromLantern(): string {
+    if (this.isLit) {
+      return `[failure]The [item_name]${this.name}[/item_name] is already lit.[/failure]`
+    }
+    return clue(
+      "The flame sits behind the lantern's glass, and the candle's wick will " +
+        'not reach in through it. The candle wants a flame of its own, ' +
+        'struck for it.',
+    )
+  }
+
+  /** Light the candle with matches to reveal a locket; say why the lantern will not; otherwise fail. */
   override useWith(gameState: GameState, other: Item): string {
+    if (other instanceof Lantern) return this.fromLantern()
     if (other instanceof Matches) {
       if (!this.isLit) {
         this.isLit = true
@@ -44,5 +61,10 @@ export class Candle extends Item {
       return `[failure]The [item_name]${this.name}[/item_name] is already lit.[/failure]`
     }
     return super.useWith(gameState, other)
+  }
+
+  /** The lantern used with the candle says why it cannot light it. */
+  override answerUseFrom(_gameState: GameState, item: Item): string {
+    return item instanceof Lantern ? this.fromLantern() : ''
   }
 }

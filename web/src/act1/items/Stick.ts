@@ -1,4 +1,5 @@
 import { Item, type GameState } from '@/engine'
+import { FishingRod } from './FishingRod'
 import { MagneticFishingRod } from './MagneticFishingRod'
 
 /** A plain stick; with the magnet it makes a fishing rod. */
@@ -11,9 +12,9 @@ export class Stick extends Item {
     })
   }
 
-  /** Delegate to MagneticFishingRod's useWith if applicable, otherwise fallback. */
+  /** Delegate to the (magnetic) fishing rod's useWith if applicable, otherwise fallback. */
   override useWith(gameState: GameState, other: Item): string {
-    if (other instanceof MagneticFishingRod) {
+    if (other instanceof MagneticFishingRod || other instanceof FishingRod) {
       return other.useWith(gameState, this)
     }
     return super.useWith(gameState, other)

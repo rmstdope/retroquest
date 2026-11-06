@@ -5,6 +5,7 @@ import {
   type Item,
   characterName,
 } from '@/engine'
+import { Bucket } from '../items/Bucket'
 import { Well } from '../items/Well'
 import { River } from '../items/River'
 import { FLAG_MAGIC_FULLY_UNLOCKED } from '../Act1StoryFlags'
@@ -40,11 +41,18 @@ export class PurifySpell extends Spell {
     return 'A cleansing energy flows from your hands.'
   }
 
+  /**
+   * Purify the well, or let the bucket say where its sour water comes from;
+   * the river needs nothing, and other items show no change.
+   */
   override castOnItem(gameState: GameState, item: Item): string {
     if (!gameState.getStoryFlag(FLAG_MAGIC_FULLY_UNLOCKED)) {
       return this.fizzle()
     }
     if (item instanceof Well) {
+      return item.purify(gameState)
+    }
+    if (item instanceof Bucket) {
       return item.purify(gameState)
     }
     if (item instanceof River) {
