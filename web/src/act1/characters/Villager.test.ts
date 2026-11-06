@@ -157,7 +157,8 @@ describe('Tilda and the truth about the well', () => {
 
     expect(answer).toContain(
       "The water's clean! I've not had dough rise so light in a year. " +
-        'Was that you, [character_name]Elior[/character_name]?',
+        'Was that you, [character_name]Elior[/character_name]? ' +
+        'Go on, love, tell me true.',
     )
     expect(answer).toContain('She looks at you, and waits.')
     expect(answer).not.toContain('that look about you')
@@ -180,6 +181,62 @@ describe('Tilda and the truth about the well', () => {
     expect(game.state.hasVirtue(VIRTUE_TRUTH)).toBe(true)
     expect(findMarkupProblems(answer)).toEqual([])
     expectDialogueSpeaker(answer, 'Tilda')
+  })
+
+  it('takes "yes" as the truth too, like her question invites', () => {
+    const game = gameWhereTildaHasAsked()
+
+    const answer = game.commandParser.parse('say yes to tilda')
+
+    expect(answer).toContain("I'll not tell a soul if you'd rather I didn't.")
+    expect(answer).toContain(REMEMBERED_TRUTH)
+    expect(game.state.hasVirtue(VIRTUE_TRUTH)).toBe(true)
+  })
+
+  it('cues the truth when a wrong word answers her, and records nothing', () => {
+    const game = gameWhereTildaHasAsked()
+
+    const answer = game.commandParser.parse('say maybe to tilda')
+
+    expect(answer).toContain('Come now, love. Tell me the truth.')
+    expect(answer).not.toContain("don't seem to understand")
+    expect(game.state.hasVirtue(VIRTUE_TRUTH)).toBe(false)
+    expectDialogueSpeaker(answer, 'Tilda')
+  })
+
+  it('stops nudging once she has given up and credited the spring', () => {
+    const game = gameWhereTildaHasAsked()
+    game.commandParser.parse('talk to tilda')
+
+    expect(game.commandParser.parse('say maybe to tilda')).toContain(
+      "don't seem to understand",
+    )
+  })
+
+  it('does not nudge a farewell when Elior carries the amulet', () => {
+    const game = gameWhereTildaHasAsked()
+    game.state.addItemToInventory(new AncientAmulet())
+
+    expect(game.commandParser.parse('say goodbye to tilda')).toContain(
+      "don't seem to understand",
+    )
+  })
+
+  it('has lost her when the truth comes as a phrase before she has asked', () => {
+    const game = gameInSquare()
+
+    expect(game.commandParser.parse('say the truth to tilda')).toContain(
+      "You've lost me.",
+    )
+  })
+
+  it('gives the stock reply to "yes" before she has asked', () => {
+    const game = gameInSquare()
+
+    const answer = game.commandParser.parse('say yes to tilda')
+
+    expect(answer).toContain("don't seem to understand")
+    expect(game.state.hasVirtue(VIRTUE_TRUTH)).toBe(false)
   })
 
   it('says "secret\'s safe" the second time, with no second remembered line', () => {
@@ -251,8 +308,9 @@ describe('Tilda and the truth about the well', () => {
     expect(answer).toContain('Have you seen the fields?')
   })
 
-  it('answers other words as before', () => {
+  it('answers other words as before once the truth is told', () => {
     const game = gameWhereTildaHasAsked()
+    game.commandParser.parse('say truth to tilda')
 
     expect(game.commandParser.parse('say hello to tilda')).toContain(
       "don't seem to understand",

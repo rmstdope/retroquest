@@ -3495,9 +3495,9 @@
     "text": "How are the boots? Give them a week and they'll know your feet better than you do. Forgive me if I'm short, friend. I've not eaten since the hill road, and there's no inn this side of Greendale."
   },
   {
-    "id": "088262cbf14bd0",
+    "id": "145eb33e4b8a92",
     "speaker": "tilda",
-    "text": "The water's clean! I've not had dough rise so light in a year. Was that you, Elior?"
+    "text": "The water's clean! I've not had dough rise so light in a year. Was that you, Elior? Go on, love, tell me true."
   },
   {
     "id": "143b15276ea453",
@@ -3518,6 +3518,16 @@
     "id": "056aeef4c3c4ca",
     "speaker": "tilda",
     "text": "I know, love. Your secret's safe with me, and so's your loaf."
+  },
+  {
+    "id": "1ae4a9985a67fb",
+    "speaker": "elior",
+    "text": "maybe"
+  },
+  {
+    "id": "1c67d822746b7e",
+    "speaker": "tilda",
+    "text": "Come now, love. Tell me the truth."
   },
   {
     "id": "02549c9fc3abc3",
