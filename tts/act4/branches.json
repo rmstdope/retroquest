@@ -171,6 +171,14 @@
         ]
     },
     {
+        "after": 17,
+        "commands": ["n"]
+    },
+    {
+        "after": 13,
+        "commands": ["s", "e", "n", "w"]
+    },
+    {
         "after": 24,
         "commands": ["say redemption to knight", "e"]
     },

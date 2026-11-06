@@ -32,6 +32,25 @@ describe('EchoStone', () => {
     expectMarkupWellFormed(first)
   })
 
+  it('leaves the niche out when picked up again from a floor (an older save)', () => {
+    const { game, act } = inMaze()
+    game.state.currentRoom = act.rooms.HallOfEchoes
+    executeCommands(game, ['take echo stone'])
+    const stone = game.state.inventory.find((i) => i instanceof EchoStone)
+    if (!stone) throw new Error('no stone')
+    game.state.inventory = game.state.inventory.filter((i) => i !== stone)
+    game.state.currentRoom = act.rooms.MirrorLabyrinth
+    game.state.currentRoom.items.push(stone)
+    expect(game.loadSaveData(game.toSaveData())).toContain(
+      'Game loaded successfully.',
+    )
+    const again = executeCommands(game, ['take echo stone'])
+    expect(again).toBe(
+      "The stone is warm, and the hall's echoes still speak inside it.",
+    )
+    expectMarkupWellFormed(again)
+  })
+
   it('is taken in its own words, without the plain pick-up before them', () => {
     const { game, act } = inMaze()
     game.state.currentRoom = act.rooms.HallOfEchoes

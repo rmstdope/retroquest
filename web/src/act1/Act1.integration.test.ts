@@ -44,7 +44,9 @@ describe('Act 1 golden path', () => {
     expectItemInInventory(game.state, 'wandering boots')
 
     const farewell = executeCommands(game, ACT1_COMPLETING_COMMANDS)
-    expect(farewell).toContain('travel cloak')
+    expect(farewell).toContain(
+      "You tuck your parents' amulet beneath your mother's cloak",
+    )
   })
 
   it('carries only the watered field into later acts', () => {
