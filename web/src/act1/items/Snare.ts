@@ -44,8 +44,8 @@ export class Snare extends Item {
   }
 
   /** While the kit is caught, taking the snare needs a blade. */
-  override preventPickup(): string {
-    return this.freed ? super.preventPickup() : NEED_BLADE
+  override preventPickup(gameState: GameState): string {
+    return this.freed ? super.preventPickup(gameState) : NEED_BLADE
   }
 
   /** While the kit is caught, using the snare by hand needs a blade. */

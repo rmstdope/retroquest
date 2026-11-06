@@ -176,6 +176,76 @@ describe('Shopkeeper and the priest matches', () => {
   })
 })
 
+describe("Hemlock and the priest's errand while the store is shut (rq-l4ud)", () => {
+  const ERRAND = "I'll see to him the day"
+
+  it('answers the errand when first met after the priest asked', () => {
+    const game = gameInStore({ shopOpen: false, priestTalkedTo: true })
+
+    const answer = game.commandParser.parse('talk to hemlock')
+
+    expect(answer).toContain(ERRAND)
+    expectQuotesInsideDialogue(answer)
+    expect(game.state.inventory.some((i) => i instanceof Matches)).toBe(false)
+  })
+
+  it('answers the errand when asked again while the store stays shut', () => {
+    const game = gameInStore({ shopOpen: false, priestTalkedTo: true })
+    game.commandParser.parse('talk to hemlock')
+
+    const answer = game.commandParser.parse('talk to hemlock')
+
+    expect(answer).toContain(ERRAND)
+    expectDialogueSpeaker(answer, 'Hemlock')
+  })
+
+  it('says nothing of the errand before the priest has asked', () => {
+    const game = gameInStore({ shopOpen: false })
+
+    expect(game.commandParser.parse('talk to hemlock')).not.toContain(ERRAND)
+    expect(game.commandParser.parse('take matches')).not.toContain(ERRAND)
+  })
+
+  it('refuses the matches with the errand, not the priest, as the reason', () => {
+    const game = gameInStore({ shopOpen: false, priestTalkedTo: true })
+
+    const answer = game.commandParser.parse('take matches')
+
+    expect(answer).toContain(ERRAND)
+    expect(answer).not.toContain('whenever he asks')
+    expectQuotesInsideDialogue(answer)
+    expect(game.state.inventory.some((i) => i instanceof Matches)).toBe(false)
+  })
+
+  it('keeps the errand out of the refusal while Elior carries Patches', () => {
+    const game = gameInStore({ shopOpen: false, priestTalkedTo: true })
+    game.state.setStoryFlag(FLAG_PATCHES_FOUND, true)
+
+    expect(game.commandParser.parse('take matches')).not.toContain(ERRAND)
+  })
+
+  it('gives the errand after his byword on the first meeting', () => {
+    const game = gameInStore({ shopOpen: false, priestTalkedTo: true })
+
+    const answer = game.commandParser.parse('talk to hemlock')
+
+    expect(answer.indexOf(ERRAND)).toBeGreaterThan(
+      answer.indexOf('raps the counter'),
+    )
+  })
+
+  it('hands the matches over once Patches is home', () => {
+    const game = gameInStore({ shopOpen: false, priestTalkedTo: true })
+    game.commandParser.parse('talk to hemlock')
+    game.state.setStoryFlag(FLAG_PATCHES_RETURNED, true)
+
+    const answer = game.commandParser.parse('talk to hemlock')
+
+    expect(answer).toContain('on the house')
+    expect(answer).not.toContain(ERRAND)
+  })
+})
+
 /** Number of coins Elior carries. */
 function coins(game: Game): number {
   return game.state.inventory.filter((item) => item instanceof Coin).length

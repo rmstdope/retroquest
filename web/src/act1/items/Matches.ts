@@ -6,6 +6,7 @@ import {
   speech,
 } from '@/engine'
 import { Candle } from './Candle'
+import { Shopkeeper } from '../characters/Shopkeeper'
 
 /** Basic ignition source enabling illumination and ritual flavor actions. */
 export class Matches extends Item {
@@ -16,17 +17,25 @@ export class Matches extends Item {
     })
   }
 
-  /** Shopkeeper prevents taking the store's matches, which are kept for the priest. */
-  override preventPickup(): string {
+  /**
+   * Hemlock prevents taking the store's matches, which are kept for the
+   * priest. While the store is shut and the priest has sent Elior for them,
+   * he gives his word on the errand instead.
+   */
+  override preventPickup(gameState: GameState): string {
     if (!this.canBeCarried) {
+      const errand = gameState.currentRoom.characters
+        .find((character) => character instanceof Shopkeeper)
+        ?.priestErrandWhileShut(gameState)
       return (
         nameInSentence('character', 'Hemlock', { atStart: true }) +
         ' quickly steps over. ' +
-        speech(
-          'Hold on there, friend! Those ' +
-            `[item_name]${this.name}[/item_name] are set aside for the ${characterName('priest')}. ` +
-            'He gets them on the house whenever he asks.',
-        )
+        (errand ??
+          speech(
+            'Hold on there, friend! Those ' +
+              `[item_name]${this.name}[/item_name] are set aside for the ${characterName('priest')}. ` +
+              'He gets them on the house whenever he asks.',
+          ))
       )
     }
     return ''

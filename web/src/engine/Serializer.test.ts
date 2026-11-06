@@ -88,7 +88,9 @@ describe('serialize / deserialize', () => {
     expect(copy).not.toBe(chest)
     expect(copy.opened).toBe(true)
     expect(copy.name).toBe('chest')
-    expect(copy.preventPickup()).toContain("can't take")
+    const room = new Room({ name: 'Start', description: '' })
+    const state = new GameState(room, { Start: room }, [])
+    expect(copy.preventPickup(state)).toContain("can't take")
   })
 
   it('keeps shared references and cycles', () => {
