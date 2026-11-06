@@ -159,7 +159,7 @@
     {"after": 48, "commands": ["say malakar to hemlock"]},
     {"after": 45, "commands": ["say malakar to mira", "say dream to mira"]},
     {"after": 89, "commands": ["say malakar to priest"]},
-    {"after": 0, "commands": ["say malakar to grandmother"]},
+    {"after": 0, "commands": ["say malakar to grandmother", "say dream to grandmother"]},
     {"after": 14, "commands": ["take carrot"]},
     {"after": -1, "commands": ["say hello to voice"]},
     {"after": 37, "commands": ["go north", "go west", "go north", "say stay to grandmother"]},

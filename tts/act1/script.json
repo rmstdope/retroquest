@@ -185,9 +185,9 @@
     "text": "Your grandmother tilts her head."
   },
   {
-    "id": "126089c08d01aa",
+    "id": "1ac969e660558c",
     "speaker": "grandmother",
-    "text": "I'm not sure what you mean, dear, but I do like to hear you talk."
+    "text": "Talk to me while I work, dear. I do like to hear you talk."
   },
   {
     "id": "1ea121b2bccd2f",
@@ -203,6 +203,21 @@
     "id": "0e59743bb5af09",
     "speaker": "grandmother",
     "text": "We don't say that one in this house, dear. Tell me what you'd like on your bread instead."
+  },
+  {
+    "id": "0f5b9c4f8e6175",
+    "speaker": "elior",
+    "text": "dream"
+  },
+  {
+    "id": "1892f28e8f5562",
+    "speaker": "narrator",
+    "text": "Your grandmother brushes the flour from her hands."
+  },
+  {
+    "id": "13e8d33fe3818d",
+    "speaker": "grandmother",
+    "text": "Dreams pass, dear. Bread doesn't. Sit and eat something."
   },
   {
     "id": "08d4c458b986f2",
@@ -935,9 +950,9 @@
     "text": "Tilda cocks her head."
   },
   {
-    "id": "12b0d566e2e5dd",
+    "id": "0d6b9898f9048e",
     "speaker": "tilda",
-    "text": "Hush, love, you'll have the whole square guessing at it."
+    "text": "Go on, love, tell me what that's about and I'll tell you what it means."
   },
   {
     "id": "186ac889011508",
@@ -1608,11 +1623,6 @@
     "id": "1c1be7f56e4f60",
     "speaker": "mira",
     "text": "That's an old word to bring into a healer's hut, Elior. Leave it at the door."
-  },
-  {
-    "id": "0f5b9c4f8e6175",
-    "speaker": "elior",
-    "text": "dream"
   },
   {
     "id": "17bee7a63cc1e9",

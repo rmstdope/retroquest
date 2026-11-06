@@ -16,14 +16,14 @@ const game = (): Game => new Game([new Act1()])
 
 /** Words by which a speaker would claim not to know a word. */
 const DENIAL =
-  /not a word I know|not that one\.|never heard|new one on me|means nothing|nobody's told me|follow you|what it means/i
+  /not a word I know|not that one\.|never heard|new one on me|means nothing|nobody's told me|follow you|you'll tell me what it means|not sure what you mean|don't know (that|it)/i
 
 /** The first words of each character's two answers (after the label). */
 const ANSWERS: [string, () => Character, string, string][] = [
   [
     'Tilda',
     () => new Villager(),
-    "Hush, love, you'll have the whole square guessing at it.",
+    "Go on, love, tell me what that's about and I'll tell you what it means.",
     "Keep that one to yourself, love, or it'll be round the square by supper.",
   ],
   [
@@ -97,7 +97,7 @@ describe('Act 1 unknown words', () => {
   it('keeps each character its own turn', () => {
     const g = game().state
     new Blacksmith().sayTo(g, 'x')
-    expect(new Villager().sayTo(g, 'x')).toContain('whole square guessing')
+    expect(new Villager().sayTo(g, 'x')).toContain('tell me what that')
   })
 
   it.each(ANSWERS)('%s never claims not to know the word', (_n, make) => {
@@ -129,6 +129,21 @@ describe('Act 1 unknown words', () => {
     expect(first).toContain('bread')
     expect(first).not.toMatch(DENIAL)
     expect(grandmother.sayTo(g, 'Malakar?')).toBe(first)
+  })
+
+  it('has Grandmother answer other words without claiming not to know them', () => {
+    const g = game().state
+    const answer = new Grandmother().sayTo(g, 'blorp')
+    expect(answer).toContain('I do like to hear you talk.')
+    expect(answer).not.toMatch(DENIAL)
+  })
+
+  it('has Grandmother answer a dream as the one Elior told her', () => {
+    const g = game().state
+    const grandmother = new Grandmother()
+    const answer = grandmother.sayTo(g, 'the dream')
+    expect(answer).toContain("Dreams pass, dear. Bread doesn't.")
+    expect(answer).not.toMatch(DENIAL)
   })
 
   it('has Mira answer a dream as one she knows of', () => {

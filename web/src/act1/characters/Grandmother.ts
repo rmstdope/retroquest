@@ -37,6 +37,9 @@ import {
 /** The byword for Malakar, said anywhere in the words. */
 const MALAKAR = /malakar/i
 
+/** A dream, or dreams or dreaming, said anywhere in the words. */
+const DREAM = /\bdream/i
+
 /** Elior's grandmother: wise elder who guides the player and grants items. */
 export class Grandmother extends Character {
   dialogueState: Record<string, boolean> = {
@@ -309,7 +312,8 @@ export class Grandmother extends Character {
    * Saying "stay" (or "yes" or "keep") while Elior carries Patches lets her
    * stay by the hearth: grandmother sends word to Hemlock, who reopens the
    * store. The byword "Malakar" gets a knock on the bread board, the same
-   * every time. Other words only get a fond look.
+   * every time; a word of a dream turns her back to the bread. Other words
+   * only get a fond look.
    */
   override sayTo(gameState: GameState, words: string): string {
     if (MALAKAR.test(words)) {
@@ -336,11 +340,15 @@ export class Grandmother extends Character {
         )
       )
     }
+    if (DREAM.test(words)) {
+      return (
+        `Your ${characterName(this.name)} brushes the flour from her hands. ` +
+        speech("Dreams pass, dear. Bread doesn't. Sit and eat something.")
+      )
+    }
     return (
       `Your ${characterName(this.name)} tilts her head. ` +
-      speech(
-        "I'm not sure what you mean, dear, but I do like to hear you talk.",
-      )
+      speech('Talk to me while I work, dear. I do like to hear you talk.')
     )
   }
 

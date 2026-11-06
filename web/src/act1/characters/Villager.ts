@@ -239,7 +239,9 @@ export class Villager extends Character {
   protected override unknownWordAnswers(): readonly string[] {
     return [
       `${this.nameInSentence({ atStart: true })} cocks her head. ` +
-        speech("Hush, love, you'll have the whole square guessing at it."),
+        speech(
+          "Go on, love, tell me what that's about and I'll tell you what it means.",
+        ),
       `${this.nameInSentence({ atStart: true })} laughs. ` +
         speech(
           "Keep that one to yourself, love, or it'll be round the square by supper.",
