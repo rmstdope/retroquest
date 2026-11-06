@@ -15,4 +15,22 @@ describe('River', () => {
     expect(result).not.toMatch(/inventory/i)
     expect(game.state.inventory.some((item) => item instanceof Fish)).toBe(true)
   })
+
+  it('says plainly it will give no second fish once the first is gone', () => {
+    const game = new Game([new Act1()])
+    game.state.setStoryFlag('learned_fishing_basics', true)
+    const river = new River()
+    river.useWith(game.state, new FishingRod())
+    game.state.removeItemFromInventory('fish')
+
+    const result = river.useWith(game.state, new FishingRod())
+
+    expect(result).not.toMatch(/right now/)
+    expect(result).toContain('will not give another')
+    expect(river.description).not.toMatch(/recently/)
+    expect(river.description).toContain('will not give another')
+    expect(game.state.inventory.some((item) => item instanceof Fish)).toBe(
+      false,
+    )
+  })
 })

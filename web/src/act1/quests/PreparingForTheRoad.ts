@@ -15,7 +15,6 @@ const FOOD_KINDS = [
   ['egg'],
   ['fresh carrot'],
   ['wild berries'],
-  ['fish'],
 ]
 const FOOD_KINDS_NEEDED = 4
 /**
@@ -24,8 +23,8 @@ const FOOD_KINDS_NEEDED = 4
  * a recording fits one wording only: change it with them.
  */
 const FOOD_NEED =
-  'Food for the road (any four kinds: bread, apple, egg, carrot, ' +
-  'berries or fish)'
+  'Food for the road (any four kinds: bread, apple, egg, carrot ' +
+  'or berries)'
 
 /** Checklist quest: done requirements are [success], unmet ones are [pending]. */
 export class PreparingForTheRoadQuest extends Quest {
@@ -75,7 +74,7 @@ export class PreparingForTheRoadQuest extends Quest {
   private refreshChecklist(gameState: GameState): boolean {
     // Items
     this.hasTravelCloak = gameState.hasItem('travel cloak')
-    // Food: any four of the six kinds
+    // Food: any four of the five kinds
     const foodKinds = FOOD_KINDS.filter((names) =>
       names.some((name) => gameState.hasItem(name)),
     )
