@@ -11,140 +11,180 @@
     "id": "act3-miras-hut",
     "title": "Mira's Hut",
     "plays": "Act III, Mira's Hut",
-    "text": "instrumental background loop for Mira's Hut: A small hut hung with drying herbs: lavender, sage, and roots in bundles from the rafters. Shelves of bottles line the walls, every one labelled, no vocals",
-    "seconds": 60
+    "text": "mysterious herbalist's hut, hammered dulcimer, low flute, soft frame drum, bundles of herbs and labelled bottles, dark and secretive yet safe, a last refuge before the storm, instrumental, no vocals",
+    "seconds": 60,
+    "bpm": 75,
+    "key": "F minor"
   },
   {
     "id": "act3-tidal-causeway",
     "title": "Tidal Causeway",
     "plays": "Act III, Tidal Causeway",
-    "text": "instrumental background loop for Tidal Causeway: Thin causeways of old stone lift from the black water like ribs. Moonlight skims the wet stones; salt and wind carry half‑heard songs, no vocals",
-    "seconds": 60
+    "text": "haunting seascape, low strings, bowed glass, a distant horn, slow swell like breaking waves, moonlight on black water and salt wind, lonely and eerie, instrumental, no vocals",
+    "seconds": 60,
+    "bpm": 70,
+    "key": "D minor"
   },
   {
     "id": "act3-shoreline-markers",
     "title": "Shoreline Markers",
     "plays": "Act III, Shoreline Markers",
-    "text": "instrumental background loop for Shoreline Markers: The shore here is quiet and cold. Weathered steles rise from the sand, their worn faces full of shallow marks, no vocals",
-    "seconds": 60
+    "text": "bleak coastal ambient, solo cello, low drone, sparse harp, cold wind over sand and weathered stones, desolate and contemplative, instrumental, no vocals",
+    "seconds": 60,
+    "bpm": 58,
+    "key": "A minor"
   },
   {
     "id": "act3-outer-wards",
     "title": "Outer Wards",
     "plays": "Act III, Outer Wards",
-    "text": "instrumental background loop for Outer Wards: The courtyard lies half-swallowed by the sea. Three ancient pillars rise from the black water, their faces scored with shallow marks, no vocals",
-    "seconds": 60
+    "text": "drowned ruins, low brass, tremolo strings, timpani swells, ancient pillars rising from black water, the sea reclaiming the stone, ominous and solemn, instrumental, no vocals",
+    "seconds": 60,
+    "bpm": 66,
+    "key": "C minor"
   },
   {
     "id": "act3-collapsed-pier",
     "title": "Collapsed Pier",
     "plays": "Act III, Collapsed Pier",
-    "text": "instrumental background loop for Collapsed Pier: The pier surrenders to the tide. Warped planks gape and blackened vaults yawn where light forgets to go. Barnacled timbers rise like buried ribs, and the water sings a low, patient counting of losses, no vocals",
-    "seconds": 60
+    "text": "dark nautical lament, creaking low strings, bass clarinet, a slow tolling bell, a patient counting rhythm, rotting timbers and black water, decay and loss, melancholy dread, instrumental, no vocals",
+    "seconds": 60,
+    "bpm": 54,
+    "key": "G minor"
   },
   {
     "id": "act3-submerged-antechamber",
     "title": "Submerged Antechamber",
     "plays": "Act III, Submerged Antechamber",
-    "text": "instrumental background loop for Submerged Antechamber: The hall lies half-swallowed by tide and time. Salt-smoothed stone arches bear weathered carvings that pulse with a cold, inner glow, no vocals",
-    "seconds": 60
+    "text": "underwater ambient, glassy pads, celesta, bowed vibraphone, deep reverb, cold glowing carvings under salt-smoothed arches, mysterious and hushed, instrumental, no vocals",
+    "seconds": 60,
+    "bpm": 62,
+    "key": "B minor"
   },
   {
     "id": "act3-sanctum-of-the-tide",
     "title": "Sanctum of the Tide",
     "plays": "Act III, Sanctum of the Tide",
-    "text": "instrumental background loop for Sanctum of the Tide: A vaulted chamber where water hangs like a dark mirror, its surface etched with sigils that breathe and shift, no vocals",
-    "seconds": 60
+    "text": "sacred and eerie ritual, pipe organ drone, deep strings, shimmering harp, slow breathing swells, still water like a dark mirror etched with sigils, awe and foreboding, instrumental, no vocals",
+    "seconds": 60,
+    "bpm": 52,
+    "key": "C# minor"
   },
   {
     "id": "act3-lower-switchbacks",
     "title": "Lower Switchbacks",
     "plays": "Act III, Lower Switchbacks",
-    "text": "instrumental background loop for Lower Switchbacks: Wind‑carved paths snake across black, glassy rock; ash skims the air and the scent of iron hangs on the wind, no vocals",
-    "seconds": 60
+    "text": "volcanic trek, low taiko, cello ostinato, rough wind drone, ash and iron on the wind across black rock, harsh and determined, a hard climb, instrumental, no vocals",
+    "seconds": 60,
+    "bpm": 92,
+    "key": "E minor"
   },
   {
     "id": "act3-obsidian-outcrops",
     "title": "Obsidian Outcrops",
     "plays": "Act III, Obsidian Outcrops",
-    "text": "instrumental background loop for Obsidian Outcrops: Needle-sharp obsidian towers rise like black teeth from the ash, their surfaces catching and fracturing the light into jagged, glassy facets, no vocals",
-    "seconds": 60
+    "text": "jagged tension, staccato strings, metallic percussion, dissonant brass hits, black glass towers like teeth, sharp and dangerous, wary and on edge, instrumental, no vocals",
+    "seconds": 60,
+    "bpm": 100,
+    "key": "F minor"
   },
   {
     "id": "act3-mirror-terraces",
     "title": "Mirror Terraces",
     "plays": "Act III, Mirror Terraces",
-    "text": "instrumental background loop for Mirror Terraces: Stepped platforms rise in concentric benches, each ring studded with sockets for polished mirrors and brass mounts, no vocals",
-    "seconds": 60
+    "text": "glinting puzzle music, celesta, harp arpeggios, plucked strings, brass bells, circling patterns like rings of mirrors, light caught and reflected, curious and focused, instrumental, no vocals",
+    "seconds": 60,
+    "bpm": 84,
+    "key": "D major"
   },
   {
     "id": "act3-fumarole-passages",
     "title": "Fumarole Passages",
     "plays": "Act III, Fumarole Passages",
-    "text": "instrumental background loop for Fumarole Passages: Narrow tunnels exhale a rhythmic, breath-like heat; stone vents chuff and sigh as if the mountain itself sleeps and dreams, no vocals",
-    "seconds": 60
+    "text": "breathing ambient, a low pulse like slow breath, hand drum, deep bass drone, hissing textures, narrow hot tunnels of a sleeping mountain, close and uneasy, instrumental, no vocals",
+    "seconds": 60,
+    "bpm": 68,
+    "key": "D minor"
   },
   {
     "id": "act3-ember-gallery",
     "title": "Ember Gallery",
     "plays": "Act III, Ember Gallery",
-    "text": "instrumental background loop for Ember Gallery: A vaulted cavern veined with cooling flows; the air smells of charcoal and iron. Streaks of glassed lava lace the walls, catching stray cinders that glow like embers in the gloom, no vocals",
-    "seconds": 60
+    "text": "smouldering orchestral, low strings, warm brass, soft timpani rolls, glowing cinders in a cavern of cooling lava, charcoal and iron, heavy and brooding, instrumental, no vocals",
+    "seconds": 60,
+    "bpm": 76,
+    "key": "A minor"
   },
   {
     "id": "act3-phoenix-crater",
     "title": "Phoenix Crater",
     "plays": "Act III, Phoenix Crater",
-    "text": "instrumental background loop for Phoenix Crater: A luminous bowl of vitrified rock where warm drafts swirl and cinders dance in spirals, no vocals",
-    "seconds": 60
+    "text": "soaring orchestral, rising strings, french horns, harp and timpani, cinders dancing in spirals in a luminous crater, radiant and triumphant, rebirth and hope, instrumental, no vocals",
+    "seconds": 60,
+    "bpm": 96,
+    "key": "Eb major"
   },
   {
     "id": "act3-cavern-mouth",
     "title": "Cavern Mouth",
     "plays": "Act III, Cavern Mouth",
-    "text": "instrumental background loop for Cavern Mouth: A broad arch opens into the hill, hung with cold mist. Lantern light dims a step inside it. Old signs are cut into the arch stone, worn too smooth to read, no vocals",
-    "seconds": 60
+    "text": "foreboding cave ambient, low drone, sparse plucked harp, distant dripping, cold mist where the lantern light fades, old worn signs, apprehensive, instrumental, no vocals",
+    "seconds": 60,
+    "bpm": 62,
+    "key": "E minor"
   },
   {
     "id": "act3-tool-cache",
     "title": "Tool Cache",
     "plays": "Act III, Tool Cache",
-    "text": "instrumental background loop for Tool Cache: A side chamber shored with old timbers and stacked with crates of braces, iron fittings and coils of hemp rope. The walls are scored with tool marks, and the air smells of iron and wet earth, no vocals",
-    "seconds": 60
+    "text": "miner's work theme, anvil and metal percussion, bowed bass, low whistle, a steady practical rhythm, timbers, rope and iron in wet earth, resourceful but tense, instrumental, no vocals",
+    "seconds": 60,
+    "bpm": 88,
+    "key": "G minor"
   },
   {
     "id": "act3-collapsed-galleries",
     "title": "Collapsed Galleries",
     "plays": "Act III, Collapsed Galleries",
-    "text": "instrumental background loop for Collapsed Galleries: A gallery choked with fallen stone, floor to roof. The timbers that held it lie snapped under the pile, and dust hangs in the still air, no vocals",
-    "seconds": 60
+    "text": "heavy ambient, deep rumbling percussion, low strings, sparse piano, dust hanging over fallen stone and snapped timbers, crushing weight, oppressive and cautious, instrumental, no vocals",
+    "seconds": 60,
+    "bpm": 58,
+    "key": "B minor"
   },
   {
     "id": "act3-echo-chambers",
     "title": "Echo Chambers",
     "plays": "Act III, Echo Chambers",
-    "text": "instrumental background loop for Echo Chambers: Smooth caverns of bare stone. Every step comes back to you from the alcoves, and so does every word, a breath late, as if someone were copying you, no vocals",
-    "seconds": 60
+    "text": "echoing minimalism, kalimba and harp with long delay, every phrase answered a breath late, bare stone reverb, uncanny and watchful, the sense of being copied, instrumental, no vocals",
+    "seconds": 60,
+    "bpm": 70,
+    "key": "F# minor"
   },
   {
     "id": "act3-stillness-vestibule",
     "title": "Stillness Vestibule",
     "plays": "Act III, Stillness Vestibule",
-    "text": "instrumental background loop for Stillness Vestibule: A hush falls over this chamber like a shroud. Dark pools mirror the ceiling, so still they look frozen in time, and the stone seems to swallow every sound, no vocals",
-    "seconds": 60
+    "text": "near-silent ambient, soft sustained strings, faint glass tones, very sparse, dark pools so still they seem frozen, hushed and suspended, a held breath, instrumental, no vocals",
+    "seconds": 60,
+    "bpm": 44,
+    "key": "C minor"
   },
   {
     "id": "act3-dragons-hall",
     "title": "Dragon's Hall",
     "plays": "Act III, Dragon's Hall",
-    "text": "instrumental background loop for Dragon's Hall: A hall of living stone opens beyond sight, its ceiling lost in shadow. Embers burn slowly along the floor, pulsing like a heartbeat, and somewhere in the dark, water drips, no vocals",
-    "seconds": 60
+    "text": "vast ancient orchestral, deep brass, low drone, slow heartbeat timpani, dripping water, cavernous reverb, embers pulsing in the dark, awe and fear before a dragon, instrumental, no vocals",
+    "seconds": 60,
+    "bpm": 60,
+    "key": "D minor"
   },
   {
     "id": "act3-fortress-entrance",
     "title": "Entrance to Malakar's Fortress",
     "plays": "Act III, Entrance to Malakar's Fortress",
-    "text": "instrumental background loop for Entrance to Malakar's Fortress: A bastion of black stone rises from a shattered ridge. Iron lattices close its gates, and sigils glow behind them, slow as breathing. The wind up here is cold and smells of metal, no vocals",
-    "seconds": 60
+    "text": "dark menacing orchestral, low brass, pounding taiko, tremolo strings, iron gates and slowly glowing sigils in a cold wind, dread and resolve before the final confrontation, instrumental, no vocals",
+    "seconds": 60,
+    "bpm": 80,
+    "key": "C minor"
   }
 ]
