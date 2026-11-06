@@ -8,6 +8,7 @@ import { Rope } from '../items/Rope'
 import { AncientAmulet } from '../items/AncientAmulet'
 import {
   FLAG_CONNECT_WITH_NATURE,
+  FLAG_FOUND_RUNE_TOKEN,
   FLAG_FOX_KIT_FREED,
   FLAG_INVESTIGATED_WITHERED_CROPS,
   FLAG_MAGIC_FULLY_UNLOCKED,
@@ -221,6 +222,51 @@ describe('Mira and the rune token from the well', () => {
     expect(response).not.toContain('on purpose')
     expectItemInInventory(game.state, 'rune token')
     expectDialogueSpeaker(response, 'Mira')
+  })
+})
+
+describe('Mira while the rune token is still unread', () => {
+  /** A game where Elior carries the amulet and the token Mira has not seen. */
+  function amuletAndUnreadToken(): Game {
+    const game = gameInMirasHut()
+    game.state.addItemToInventory(new AncientAmulet())
+    game.state.addItemToInventory(new RuneToken())
+    game.state.setStoryFlag(FLAG_FOUND_RUNE_TOKEN, true)
+    return game
+  }
+
+  it('points at the token rather than sending Elior away', () => {
+    const game = amuletAndUnreadToken()
+
+    const answer = executeCommands(game, ['talk to mira'])
+
+    expect(answer).not.toContain('Still here?')
+    expect(answer).not.toContain('Then go.')
+    expect(answer).toContain('that well')
+    expect(answer).toContain('Show me.')
+    expectDialogueSpeaker(answer, 'Mira')
+  })
+
+  it('follows on from her forest remark without looking up a second time', () => {
+    const game = amuletAndUnreadToken()
+    game.state.setStoryFlag(FLAG_FOX_KIT_FREED, true)
+
+    const answer = executeCommands(game, ['talk to mira'])
+
+    expect(answer).toContain('She glances at you.')
+    expect(answer).not.toContain('looks up from her herbs')
+    expect(answer).toContain('Show me.')
+    expect(answer).not.toContain('Still here?')
+  })
+
+  it('says goodbye again once she has read the token', () => {
+    const game = amuletAndUnreadToken()
+    executeCommands(game, ['give rune token to mira'])
+
+    const answer = executeCommands(game, ['talk to mira'])
+
+    expect(answer).toContain('Still here?')
+    expect(answer).not.toContain('Show me.')
   })
 })
 

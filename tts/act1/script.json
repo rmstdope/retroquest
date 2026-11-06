@@ -4310,14 +4310,14 @@
     "text": "Mira named the token a fouling sigil: someone poisoned the well on purpose. Whoever carried it, perhaps the cloaked stranger the villagers whisper about, was searching Willowbrook for something, or for someone."
   },
   {
-    "id": "18708bfe81a990",
+    "id": "0af945a9d2e952",
     "speaker": "narrator",
-    "text": "Mira doesn't look up from her herbs."
+    "text": "Mira looks up from her herbs, and her eyes stay on you."
   },
   {
-    "id": "1bcce557e73274",
+    "id": "18fab1e3d0f3fb",
     "speaker": "mira",
-    "text": "Still here? Go and say a proper goodbye to your grandmother. Then go."
+    "text": "You've not come to say goodbye. You've brought something up out of that well, and it's sitting heavy on you. Show me."
   },
   {
     "id": "192b401a127985",
@@ -4338,6 +4338,16 @@
     "id": "017e832c934bd2",
     "speaker": "mira",
     "text": "I have told you what I know of it. Keep it hidden, and keep your eyes open."
+  },
+  {
+    "id": "18708bfe81a990",
+    "speaker": "narrator",
+    "text": "Mira doesn't look up from her herbs."
+  },
+  {
+    "id": "1bcce557e73274",
+    "speaker": "mira",
+    "text": "Still here? Go and say a proper goodbye to your grandmother. Then go."
   },
   {
     "id": "0cceb4fb10bbd0",
