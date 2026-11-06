@@ -13319,6 +13319,128 @@
    }
   ]
  },
+ "0701c9623774db": {
+  "file": "0701c9623774db.mp3",
+  "speaker": "narrator",
+  "duration": 10.031,
+  "words": [
+   {
+    "word": "A",
+    "start": 0.0,
+    "end": 0.24
+   },
+   {
+    "word": "small,",
+    "start": 0.24,
+    "end": 0.6
+   },
+   {
+    "word": "iridescent",
+    "start": 0.6,
+    "end": 1.5
+   },
+   {
+    "word": "shell",
+    "start": 1.5,
+    "end": 1.86
+   },
+   {
+    "word": "smoothed",
+    "start": 1.86,
+    "end": 2.64
+   },
+   {
+    "word": "by",
+    "start": 2.64,
+    "end": 2.76
+   },
+   {
+    "word": "long",
+    "start": 2.76,
+    "end": 3.14
+   },
+   {
+    "word": "tides.",
+    "start": 3.14,
+    "end": 3.72
+   },
+   {
+    "word": "It's",
+    "start": 3.98,
+    "end": 4.7
+   },
+   {
+    "word": "pretty",
+    "start": 4.7,
+    "end": 5.1
+   },
+   {
+    "word": "and",
+    "start": 5.1,
+    "end": 5.62
+   },
+   {
+    "word": "shines",
+    "start": 5.62,
+    "end": 6.08
+   },
+   {
+    "word": "in",
+    "start": 6.08,
+    "end": 6.26
+   },
+   {
+    "word": "the",
+    "start": 6.26,
+    "end": 6.34
+   },
+   {
+    "word": "moonlight.",
+    "start": 6.34,
+    "end": 6.76
+   },
+   {
+    "word": "Held",
+    "start": 7.16,
+    "end": 7.82
+   },
+   {
+    "word": "to",
+    "start": 7.82,
+    "end": 7.98
+   },
+   {
+    "word": "your",
+    "start": 7.98,
+    "end": 8.16
+   },
+   {
+    "word": "ear,",
+    "start": 8.16,
+    "end": 8.52
+   },
+   {
+    "word": "it",
+    "start": 8.68,
+    "end": 8.92
+   },
+   {
+    "word": "seems",
+    "start": 8.92,
+    "end": 9.24
+   },
+   {
+    "word": "to",
+    "start": 9.24,
+    "end": 9.42
+   },
+   {
+    "word": "hum.",
+    "start": 9.42,
+    "end": 9.72
+   }
+  ]
+ },
  "0703137bfee939": {
   "file": "0703137bfee939.mp3",
   "speaker": "narrator",
