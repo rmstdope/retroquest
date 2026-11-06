@@ -315,9 +315,9 @@
     "text": "A modest cottage with a straw roof and a cozy hearth. The scent of fresh bread and old books fills the air. Grey morning comes through the lace curtains onto shelves lined with trinkets and memories. A sturdy wooden table sits in the center, with a small loaf cooling on it, and a gentle fire crackles in the hearth. Grandmother stands by it, humming, and keeps an eye on the bread."
   },
   {
-    "id": "0343646184b98f",
+    "id": "125f1d30b5a94e",
     "speaker": "narrator",
-    "text": "A leather-bound journal filled with Elior's careful handwriting. The pages are full of notes, sketches, and secrets."
+    "text": "A leather-bound journal filled with Elior's careful handwriting. The newest page is smudged."
   },
   {
     "id": "14f5c990fddabf",
@@ -770,9 +770,9 @@
     "text": "A coin's no use to me without something to put an edge on, lad. Bring the dull knife as well."
   },
   {
-    "id": "064d680bbfe540",
+    "id": "1503f8ceb0ecb8",
     "speaker": "narrator",
-    "text": "A small, circular piece of metal, likely used as currency. It has a simple stamp on one side."
+    "text": "A small, tarnished coin with a simple stamp on one side."
   },
   {
     "id": "183f821d2aac3b",
@@ -810,9 +810,9 @@
     "text": "Held high, the lantern shows a glint on the rafter, still well out of your reach. Only the hens, startled into the air, ever get up that high."
   },
   {
-    "id": "18767cb9b0671b",
+    "id": "1eb40bce231748",
     "speaker": "narrator",
-    "text": "A live, clucking chicken. It seems restless and might peck if you're not careful."
+    "text": "A live chicken. It will not keep still."
   },
   {
     "id": "06738c5a4e69dd",
@@ -1305,9 +1305,9 @@
     "text": "You receive a sharp knife."
   },
   {
-    "id": "16dbffbea6a688",
+    "id": "1193b3251fc651",
     "speaker": "narrator",
-    "text": "A well-sharpened knife. It looks like it could cut through almost anything."
+    "text": "A small kitchen knife, freshly sharpened by the blacksmith."
   },
   {
     "id": "0844b4b9abc5e8",
@@ -1475,9 +1475,9 @@
     "text": "It bends more than a rod should. It will have to do."
   },
   {
-    "id": "13c26768bcc0c8",
+    "id": "1024bdacf51e8e",
     "speaker": "narrator",
-    "text": "You could force the magnet onto the rod, but it would likely prevent you from fishing — and you are really keen on doing some fishing!"
+    "text": "With a magnet on the line, the rod would catch iron and never a fish. Not yet, then."
   },
   {
     "id": "099ef7427214cf",
@@ -1845,14 +1845,14 @@
     "text": "A small box of matches, the heads still dry."
   },
   {
-    "id": "181a1d62695253",
+    "id": "179e9d90b46b6a",
     "speaker": "narrator",
-    "text": "A well-balanced iron sword with a sharp edge. The blade gleams with a faint sheen, and the leather-wrapped handle feels comfortable in your grip."
+    "text": "A plain iron sword. The edge is sharp, and the handle is wrapped in leather."
   },
   {
-    "id": "06bcbb1ade540f",
+    "id": "0e3b27f350aa27",
     "speaker": "narrator",
-    "text": "A sturdy leather armor vest that provides protection from harm. Well-crafted and reliable."
+    "text": "A leather armor vest, stitched double at the seams."
   },
   {
     "id": "08f90b35baa77e",
@@ -3440,9 +3440,9 @@
     "text": "An open, ornate wooden box. Only a folded note remains inside, in your father's careful, slanting hand:"
   },
   {
-    "id": "1f3b5e6fc071d7",
+    "id": "06abb6c909a484",
     "speaker": "narrator",
-    "text": "A detailed map of Willowbrook and the surrounding areas. It shows various landmarks and paths, some of which are not immediately obvious."
+    "text": "A hand-drawn map of Willowbrook and the roads out of it."
   },
   {
     "id": "1159b75d1227cd",

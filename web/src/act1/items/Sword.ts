@@ -6,8 +6,8 @@ export class Sword extends Item {
     super({
       name: 'sword',
       description:
-        'A well-balanced iron sword with a sharp edge. The blade gleams with a faint ' +
-        'sheen, and the leather-wrapped handle feels comfortable in your grip.',
+        'A plain iron sword. ' +
+        'The edge is sharp, and the handle is wrapped in leather.',
       shortName: 'sword',
     })
   }

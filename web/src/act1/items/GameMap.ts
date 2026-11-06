@@ -141,9 +141,7 @@ export class GameMap extends Item {
   constructor() {
     super({
       name: 'map',
-      description:
-        'A detailed map of Willowbrook and the surrounding areas. It shows various ' +
-        'landmarks and paths, some of which are not immediately obvious.',
+      description: 'A hand-drawn map of Willowbrook and the roads out of it.',
       canBeCarried: true,
     })
   }

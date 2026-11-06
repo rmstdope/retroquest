@@ -5,9 +5,7 @@ export class Coin extends Item {
   constructor() {
     super({
       name: 'coin',
-      description:
-        'A small, circular piece of metal, likely used as currency. It has a simple ' +
-        'stamp on one side.',
+      description: 'A small, tarnished coin with a simple stamp on one side.',
       shortName: 'coin',
       canBeCarried: true,
     })

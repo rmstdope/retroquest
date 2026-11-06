@@ -5,9 +5,7 @@ export class Armor extends Item {
   constructor() {
     super({
       name: 'armor',
-      description:
-        'A sturdy leather armor vest that provides protection from harm. ' +
-        'Well-crafted and reliable.',
+      description: 'A leather armor vest, stitched double at the seams.',
       shortName: 'armor',
     })
   }

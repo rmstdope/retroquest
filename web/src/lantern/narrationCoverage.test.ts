@@ -24,7 +24,7 @@ const OPTIONAL_LINES: Record<number, { speaker: string; opening: string }[]> = {
     { speaker: 'narrator', opening: 'Young leaves, green and cool' },
     { speaker: 'narrator', opening: 'The earth is dark and gives' },
     { speaker: 'narrator', opening: 'The bucket is no use with that.' },
-    { speaker: 'narrator', opening: 'You could force the magnet onto the rod' },
+    { speaker: 'narrator', opening: 'With a magnet on the line, the rod' },
     {
       speaker: 'narrator',
       opening: 'The rod is too short to reach the water.',

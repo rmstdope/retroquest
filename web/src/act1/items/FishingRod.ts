@@ -33,9 +33,8 @@ export class FishingRod extends Item {
         )
       }
       return clue(
-        'You could force the magnet onto the rod, but it would likely ' +
-          'prevent you from fishing — and you are really keen on doing some ' +
-          'fishing!',
+        'With a magnet on the line, the rod would catch iron and never a fish. ' +
+          'Not yet, then.',
       )
     }
 
