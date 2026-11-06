@@ -2790,9 +2790,14 @@
     "text": "The flower, Elior. The Hidden Glade. I'll know the rest when I see it open."
   },
   {
-    "id": "0b0a4c73d1341c",
+    "id": "02381d5372e7a7",
     "speaker": "narrator",
-    "text": "Shadows over Willowbrook: Mira is waiting for the rare flower from the Hidden Glade, the one that opens only for someone the land trusts."
+    "text": "You rest a while. Birds, the grey grass, a stone you cannot read. Nothing comes. Even here the ground feels thin, as if something far off were drawing on it."
+  },
+  {
+    "id": "0810255060643b",
+    "speaker": "narrator",
+    "text": "Shadows over Willowbrook: Mira is waiting for the rare flower from the Hidden Glade, the one that opens only for someone the land trusts. The land has no reason to trust anyone yet: something in the Old Mill is still drawing on it."
   },
   {
     "id": "18a634b13c6937",
@@ -3043,6 +3048,21 @@
     "id": "10c5fb298c3e23",
     "speaker": "narrator",
     "text": "A chunk of stone broken from the old mill's grinding wheel, heavy and rough."
+  },
+  {
+    "id": "146f5262e69a88",
+    "speaker": "narrator",
+    "text": "Shadows over Willowbrook: Mira is waiting for the rare flower from the Hidden Glade, the one that opens only for someone the land trusts. The strange mechanism in the Old Mill is still now, and it gave up a millstone fragment when it stopped."
+  },
+  {
+    "id": "16f77bdaa1bb25",
+    "speaker": "narrator",
+    "text": "Shadows over Willowbrook: Mira is waiting for the rare flower from the Hidden Glade, the one that opens only for someone the land trusts. The millstone fragment is old stone. Borin at the forge knows old stone."
+  },
+  {
+    "id": "0b0a4c73d1341c",
+    "speaker": "narrator",
+    "text": "Shadows over Willowbrook: Mira is waiting for the rare flower from the Hidden Glade, the one that opens only for someone the land trusts."
   },
   {
     "id": "15c0cc62c361d0",
