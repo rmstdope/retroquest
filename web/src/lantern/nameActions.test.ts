@@ -28,10 +28,9 @@ describe('nameActions', () => {
     ])
   })
 
-  it('offers using, dropping and examining an item in the bag', () => {
+  it('offers using and examining an item in the bag', () => {
     expect(nameActions('item', 'bread', HERE)).toEqual([
       { label: 'Use', command: 'use bread' },
-      { label: 'Drop', command: 'drop bread' },
       { label: 'Examine', command: 'examine bread' },
     ])
   })

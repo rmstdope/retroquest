@@ -112,7 +112,6 @@ export function nameActions(
   if (around.bag.some((i) => same(i, name)))
     return actions([
       ['Use', 'use'],
-      ['Drop', 'drop'],
       ['Examine', 'examine'],
     ])
   if (around.items.some((i) => same(i, name)))

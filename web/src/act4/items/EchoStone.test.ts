@@ -24,31 +24,31 @@ describe('EchoStone', () => {
     expect(stone.pickedUp(game.state)).toContain('You lift a smooth grey stone')
   })
 
-  it('only mentions the niche beneath the banners on the first pickup', () => {
+  it('mentions the niche beneath the banners on the pickup', () => {
     const { game, act } = inMaze()
     game.state.currentRoom = act.rooms.HallOfEchoes
     const first = executeCommands(game, ['take echo stone'])
     expect(first).toContain('from a niche beneath the banners')
+    expectMarkupWellFormed(first)
+  })
+
+  it('leaves the niche out when picked up again from a floor (an older save)', () => {
+    const { game, act } = inMaze()
+    game.state.currentRoom = act.rooms.HallOfEchoes
+    executeCommands(game, ['take echo stone'])
+    const stone = game.state.inventory.find((i) => i instanceof EchoStone)
+    if (!stone) throw new Error('no stone')
+    game.state.inventory = game.state.inventory.filter((i) => i !== stone)
     game.state.currentRoom = act.rooms.MirrorLabyrinth
-    executeCommands(game, ['drop echo stone'])
+    game.state.currentRoom.items.push(stone)
+    expect(game.loadSaveData(game.toSaveData())).toContain(
+      'Game loaded successfully.',
+    )
     const again = executeCommands(game, ['take echo stone'])
     expect(again).toBe(
       "The stone is warm, and the hall's echoes still speak inside it.",
     )
-    expect(again).not.toContain('banners')
-    expect(again).not.toContain('niche')
     expectMarkupWellFormed(again)
-  })
-
-  it('remembers across a save and load that it left the niche', () => {
-    const { game, act } = inMaze()
-    game.state.currentRoom = act.rooms.HallOfEchoes
-    executeCommands(game, ['take echo stone'])
-    expect(game.loadSaveData(game.toSaveData())).toContain(
-      'Game loaded successfully.',
-    )
-    executeCommands(game, ['drop echo stone'])
-    expect(executeCommands(game, ['take echo stone'])).not.toContain('banners')
   })
 
   it('is taken in its own words, without the plain pick-up before them', () => {

@@ -82,13 +82,6 @@ export const VERBS: readonly Verb[] = [
     group: 'main',
   },
   {
-    id: 'drop',
-    label: 'Drop',
-    words: 'drop',
-    slots: [{ sources: ['inventory'] }],
-    group: 'main',
-  },
-  {
     id: 'use',
     label: 'Use',
     words: 'use',

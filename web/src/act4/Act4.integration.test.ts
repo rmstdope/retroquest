@@ -851,16 +851,6 @@ describe('Act 4 integration', () => {
       )
     }
 
-    it('loses the way when the stone is left on the maze floor', () => {
-      toMazeWithStone()
-      executeCommands(game, ['drop echo stone'])
-      expect(executeCommands(game, ['go west'])).toContain(NO_STONE)
-      executeCommands(game, ['take echo stone'])
-      expect(executeCommands(game, ['go west'])).toContain(
-        'the glass lets you through',
-      )
-    })
-
     it('keeps the after-description and the True Self through a reload', () => {
       toMazeWithStone()
       solveMaze()
@@ -975,10 +965,10 @@ describe('Act 4 integration', () => {
       )
     })
 
-    it('enhances the stone even when it was dropped elsewhere', () => {
+    it('enhances the stone away from the hall', () => {
       executeCommands(game, KNIGHT_PATH.slice(0, -6))
       executeCommands(game, ['cast truth sight on echo stone'])
-      executeCommands(game, ['s', 'drop echo stone', 'n'])
+      executeCommands(game, ['s', 'n'])
       executeCommands(game, [
         "use guardian's chain",
         'cast truth sight on knight of despair',

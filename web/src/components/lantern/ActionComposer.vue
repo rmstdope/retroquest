@@ -21,7 +21,7 @@ import {
  * command is performed as soon as the last choice is made, so there is no
  * "Do it" in Actions mode (Say sends on Enter in its words box when the person
  * was tapped first). Or switch to Type and write the command. On the stage
- * (`stage`) the verbs are one row (Look to Give, More… and ⌨ Type; Drop, Buy,
+ * (`stage`) the verbs are one row (Look to Give, More… and ⌨ Type; Buy,
  * Open, Close, Cast, Cast on and Rest behind More…) with the sentence being
  * built as one slim row above it, the choices standing where the blank is and
  * a ✕ at the end. Elsewhere the sentence is a box with its choices below and

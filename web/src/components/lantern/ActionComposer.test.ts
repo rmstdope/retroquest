@@ -114,22 +114,16 @@ describe('ActionComposer', () => {
   })
 
   describe('instant actions', () => {
-    it.each([
-      'Examine',
-      'Take',
-      'Drop',
-      'Talk',
-      'Open',
-      'Close',
-      'Use',
-      'Cast',
-    ])('has only Cancel, no Do it, for %s', async (verb) => {
-      const w = mountComposer()
-      await button(w, verb).trigger('click')
+    it.each(['Examine', 'Take', 'Talk', 'Open', 'Close', 'Use', 'Cast'])(
+      'has only Cancel, no Do it, for %s',
+      async (verb) => {
+        const w = mountComposer()
+        await button(w, verb).trigger('click')
 
-      expect(w.findAll('.lq-do')).toHaveLength(0)
-      expect(button(w, 'Cancel').exists()).toBe(true)
-    })
+        expect(w.findAll('.lq-do')).toHaveLength(0)
+        expect(button(w, 'Cancel').exists()).toBe(true)
+      },
+    )
 
     it('performs Talk and Examine at once on the last choice', async () => {
       const w = mountComposer()
@@ -328,7 +322,7 @@ describe('ActionComposer', () => {
     await button(w, 'Take').trigger('click')
 
     expect(button(w, 'Take').attributes('aria-pressed')).toBe('true')
-    expect(button(w, 'Drop').attributes('aria-pressed')).toBe('false')
+    expect(button(w, 'Examine').attributes('aria-pressed')).toBe('false')
   })
 
   it('names the part of the sentence each slot pill fills', async () => {
@@ -1043,11 +1037,10 @@ describe('ActionComposer on the stage', () => {
     w.unmount()
   })
 
-  it('keeps Drop, Buy, Open, Close, Cast, Cast on and Rest behind More…', async () => {
+  it('keeps Buy, Open, Close, Cast, Cast on and Rest behind More…', async () => {
     const w = stage()
     await click(w, '[data-more]')
     expect(labels(w).slice(labels(w).indexOf('More…') + 1, -1)).toEqual([
-      'Drop',
       'Buy',
       'Open',
       'Close',
@@ -1234,7 +1227,7 @@ describe('ActionComposer on the stage', () => {
     const castOn = w.get('[data-verb="caston"]')
     expect(castOn.classes()).toContain('lq-verb-on')
     expect(castOn.attributes('aria-pressed')).toBe('true')
-    expect(w.get('[data-verb="drop"]').attributes('aria-pressed')).toBe('false')
+    expect(w.get('[data-verb="buy"]').attributes('aria-pressed')).toBe('false')
 
     await castOn.trigger('click')
     expect(w.find('.lq-row').exists()).toBe(false)
@@ -1263,7 +1256,7 @@ describe('ActionComposer on the stage', () => {
     await click(w, '[data-verb="talk"]')
     await click(w, '[data-more]')
     await click(w, '[data-more]')
-    expect(w.find('[data-verb="drop"]').exists()).toBe(false)
+    expect(w.find('[data-verb="buy"]').exists()).toBe(false)
     expect(w.get('[data-verb="talk"]').attributes('aria-pressed')).toBe('true')
     expect(w.find('.lq-row').exists()).toBe(true)
     w.unmount()

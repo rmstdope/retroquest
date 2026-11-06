@@ -172,13 +172,6 @@ describe('The whispers in the Tower of Shadows', () => {
     expect(game.state.currentRoom.name).toBe('Chamber of Whispers')
   })
 
-  it('does not take a dropped token back after a reload of a current save', () => {
-    const game = inTower()
-    executeCommands(game, ['say mira to whispers', 'drop loyalty token'])
-    expect(game.loadSaveData(game.toSaveData())).toContain('loaded')
-    expect(game.state.hasItem('Loyalty Token')).toBe(false)
-  })
-
   it.each(['myself', 'me', 'Elior'])(
     'turn %s, the vow of the sea, into a taunt and count nothing',
     (words) => {

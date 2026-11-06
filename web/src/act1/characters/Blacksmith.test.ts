@@ -82,19 +82,6 @@ describe('Borin sharpening the knife', () => {
     )
     expect(game.state.hasItem('coin')).toBe(true)
   })
-
-  it('does not trade a coin lying on the floor', () => {
-    const game = gameAtForge()
-    game.state.addItemToInventory(new Coin())
-    game.state.addItemToInventory(new DullKnife())
-    executeCommands(game, ['drop coin'])
-
-    const response = executeCommands(game, ['give dull knife to blacksmith'])
-
-    expect(response).toContain("it'll cost a")
-    expect(game.state.hasItem('dull knife')).toBe(true)
-    expect(game.state.hasItem('sharp knife')).toBe(false)
-  })
 })
 
 describe('Borin by his own name', () => {

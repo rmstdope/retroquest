@@ -29,7 +29,15 @@ class Tome extends Item {
   }
 }
 
-/** One room and a tome. */
+/** A second tome teaching the same spell, so it can be picked up once the spell is known. */
+class SecondTome extends Tome {
+  constructor() {
+    super()
+    this.name = 'second tome'
+  }
+}
+
+/** One room and two tomes. */
 class TomeAct extends Act {
   constructor() {
     super({
@@ -38,11 +46,11 @@ class TomeAct extends Act {
         Study: new Room({
           name: 'Study',
           description: 'A study.',
-          items: [new Tome()],
+          items: [new Tome(), new SecondTome()],
         }),
       },
       quests: [],
-      classes: { Tome, ReviveTestSpell },
+      classes: { Tome, SecondTome, ReviveTestSpell },
       musicFile: '',
       musicInfo: '',
     })
@@ -81,8 +89,7 @@ describe('spell news from the real engine', () => {
 
   it('tells nothing for a spell that is already known', () => {
     store.submitCommand('take tome')
-    store.submitCommand('drop tome')
-    store.submitCommand('take tome')
+    store.submitCommand('take second tome')
 
     expect(store.turns.at(-1)?.spells).toBeUndefined()
   })

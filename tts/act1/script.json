@@ -610,9 +610,9 @@
     "text": "Rust comes off on your palm. Someone worked a field with it for years."
   },
   {
-    "id": "0d9183b0f6f76b",
+    "id": "0d5fca4e49a460",
     "speaker": "narrator",
-    "text": "The ground is tough, and you unearth a small, tarnished coin! You quickly pocket it."
+    "text": "You test the edge with your thumb. It would not cut bread."
   },
   {
     "id": "0d6adf5b5b587b",
@@ -620,9 +620,74 @@
     "text": "Rows of withered crops stretch beneath a brooding gray sky. The earth is cracked and dry, with only a few stubborn carrots hinting at better days. A faint breeze rustles the brittle leaves, carrying the scent of soil and distant rain. These rows were green a month ago."
   },
   {
-    "id": "1ebd9a997e44fa",
+    "id": "0d49024e6a4c8b",
     "speaker": "narrator",
-    "text": "It is small, and the stamp is worn. Not much, but it is something."
+    "text": "Village Square"
+  },
+  {
+    "id": "087a91050d11c4",
+    "speaker": "narrator",
+    "text": "The heart of Willowbrook: cobblestones around an old stone fountain, and a weathered notice board covered in faded announcements. Half the market stalls stand empty. The people at the others keep their voices down, and stop talking when you pass."
+  },
+  {
+    "id": "00a3f28fcf7306",
+    "speaker": "narrator",
+    "text": "Village Well"
+  },
+  {
+    "id": "01da3eb13f1793",
+    "speaker": "narrator",
+    "text": "An old stone well stands between the field and the forge, its stones worn smooth by countless hands. The water below lies dark and still, and a faint sour smell hangs in the cool, damp air. Moss creeps up the sides."
+  },
+  {
+    "id": "0c64c7e367b44a",
+    "speaker": "narrator",
+    "text": "Blacksmith's Forge"
+  },
+  {
+    "id": "07ac1fda167358",
+    "speaker": "narrator",
+    "text": "A hot, smoky forge. Coals glow in the hearth and the anvil rings. Hinges, ploughshares and horseshoes hang from the walls, waiting to be mended or fetched, and Borin wipes his brow without putting down the hammer."
+  },
+  {
+    "id": "0d4dfb9e4f90e8",
+    "speaker": "borin",
+    "text": "Mind the sparks, lad."
+  },
+  {
+    "id": "0573050eb19dc8",
+    "speaker": "narrator",
+    "text": "He doesn't stop hammering."
+  },
+  {
+    "id": "011b31566ffa85",
+    "speaker": "borin",
+    "text": "Not seen you down here since the harvest. Still the same work: I make what this village breaks, and I mend what it won't throw away. Got anything with an edge gone soft? Bring it here."
+  },
+  {
+    "id": "10adc84facab35",
+    "speaker": "narrator",
+    "text": "Borin eyes the dull knife."
+  },
+  {
+    "id": "0ea5d072a2a48b",
+    "speaker": "borin",
+    "text": "That edge has seen better days. I'll put it right for you, lad, but it'll cost a coin. Whetstones don't grow on trees."
+  },
+  {
+    "id": "0d9183b0f6f76b",
+    "speaker": "narrator",
+    "text": "The ground is tough, and you unearth a small, tarnished coin! You quickly pocket it."
+  },
+  {
+    "id": "16edfcea3ba8e5",
+    "speaker": "narrator",
+    "text": "Borin eyes the coin."
+  },
+  {
+    "id": "1bfabcc75c79cd",
+    "speaker": "borin",
+    "text": "A coin's no use to me without something to put an edge on, lad. Bring the dull knife as well."
   },
   {
     "id": "064d680bbfe540",
@@ -635,11 +700,6 @@
     "text": "The coin lands heads up. Seems like a regular coin, perhaps for trading."
   },
   {
-    "id": "0d5fca4e49a460",
-    "speaker": "narrator",
-    "text": "You test the edge with your thumb. It would not cut bread."
-  },
-  {
     "id": "066355cd593a88",
     "speaker": "narrator",
     "text": "It bends in your fingers, soft and nearly gone. It is still a carrot, just."
@@ -650,6 +710,11 @@
     "text": "You focus your will, a faint warmth spreads from your fingertips, and nothing answers it. The warmth is yours; the door it wants is not open yet."
   },
   {
+    "id": "0f50824fab0e1e",
+    "speaker": "narrator",
+    "text": "Even at full stretch it falls well short of the rafter. The hens scatter from the swing, and their wings go higher than your arm does."
+  },
+  {
     "id": "05581437584906",
     "speaker": "narrator",
     "text": "Chicken Coop"
@@ -658,16 +723,6 @@
     "id": "072bb04e4e7edc",
     "speaker": "narrator",
     "text": "A small wooden coop stands here, its planks patched and weathered. Nervous chickens cluck and flutter, their feathers ruffled as they dart between straw nests. The air is thick with the scent of hay and the occasional squawk. Sunbeams slip through the slats, casting striped shadows on the dirt floor. High on a rafter, out of reach, something glints where no hen could have put it."
-  },
-  {
-    "id": "0b9c1c18fe7ec5",
-    "speaker": "narrator",
-    "text": "It weighs nothing at all. You tuck it away before the wind can take it."
-  },
-  {
-    "id": "0f50824fab0e1e",
-    "speaker": "narrator",
-    "text": "Even at full stretch it falls well short of the rafter. The hens scatter from the swing, and their wings go higher than your arm does."
   },
   {
     "id": "18767cb9b0671b",
@@ -753,16 +808,6 @@
     "id": "1a417e323b4711",
     "speaker": "tilda",
     "text": "Don't go giving your things away, love. People will talk."
-  },
-  {
-    "id": "0d49024e6a4c8b",
-    "speaker": "narrator",
-    "text": "Village Square"
-  },
-  {
-    "id": "087a91050d11c4",
-    "speaker": "narrator",
-    "text": "The heart of Willowbrook: cobblestones around an old stone fountain, and a weathered notice board covered in faded announcements. Half the market stalls stand empty. The people at the others keep their voices down, and stop talking when you pass."
   },
   {
     "id": "06c9636081f1d2",
@@ -925,16 +970,6 @@
     "text": "The bucket is empty. The parched rows will need water from somewhere."
   },
   {
-    "id": "00a3f28fcf7306",
-    "speaker": "narrator",
-    "text": "Village Well"
-  },
-  {
-    "id": "01da3eb13f1793",
-    "speaker": "narrator",
-    "text": "An old stone well stands between the field and the forge, its stones worn smooth by countless hands. The water below lies dark and still, and a faint sour smell hangs in the cool, damp air. Moss creeps up the sides."
-  },
-  {
     "id": "0af2ce6a3c8b10",
     "speaker": "narrator",
     "text": "An old stone well, its surface worn smooth, its shaft disappearing into the depths. The water below is dark and still, and it smells sour, the way milk does when it has turned. Far down, something glints, or you think it does. It is much too deep to reach."
@@ -978,41 +1013,6 @@
     "id": "015d02c84a6444",
     "speaker": "borin",
     "text": "Can't melt it, can't mend it. No use to me, lad."
-  },
-  {
-    "id": "0c64c7e367b44a",
-    "speaker": "narrator",
-    "text": "Blacksmith's Forge"
-  },
-  {
-    "id": "07ac1fda167358",
-    "speaker": "narrator",
-    "text": "A hot, smoky forge. Coals glow in the hearth and the anvil rings. Hinges, ploughshares and horseshoes hang from the walls, waiting to be mended or fetched, and Borin wipes his brow without putting down the hammer."
-  },
-  {
-    "id": "10adc84facab35",
-    "speaker": "narrator",
-    "text": "Borin eyes the dull knife."
-  },
-  {
-    "id": "0ea5d072a2a48b",
-    "speaker": "borin",
-    "text": "That edge has seen better days. I'll put it right for you, lad, but it'll cost a coin. Whetstones don't grow on trees."
-  },
-  {
-    "id": "16edfcea3ba8e5",
-    "speaker": "narrator",
-    "text": "Borin eyes the coin."
-  },
-  {
-    "id": "1bfabcc75c79cd",
-    "speaker": "borin",
-    "text": "A coin's no use to me without something to put an edge on, lad. Bring the dull knife as well."
-  },
-  {
-    "id": "0456a9d57a4bdb",
-    "speaker": "narrator",
-    "text": "It is heavy, and bent at one heel. Iron like this does not go to waste."
   },
   {
     "id": "0b7c094082210e",
@@ -1100,21 +1100,6 @@
     "text": "Borin's hammer. The handle is dark where his hand goes."
   },
   {
-    "id": "0d4dfb9e4f90e8",
-    "speaker": "borin",
-    "text": "Mind the sparks, lad."
-  },
-  {
-    "id": "0573050eb19dc8",
-    "speaker": "narrator",
-    "text": "He doesn't stop hammering."
-  },
-  {
-    "id": "011b31566ffa85",
-    "speaker": "borin",
-    "text": "Not seen you down here since the harvest. Still the same work: I make what this village breaks, and I mend what it won't throw away. Got anything with an edge gone soft? Bring it here."
-  },
-  {
     "id": "1ae731a85479cc",
     "speaker": "narrator",
     "text": "Borin, the village smith: forearms like fence posts and an old burn on every knuckle. He talks while he works, and he doesn't stop working."
@@ -1138,11 +1123,6 @@
     "id": "111eb026e4b756",
     "speaker": "narrator",
     "text": "You receive a sharp knife."
-  },
-  {
-    "id": "153ac46a338682",
-    "speaker": "narrator",
-    "text": "The new edge catches the light. You hold it by the handle, and carefully."
   },
   {
     "id": "16dbffbea6a688",
@@ -1208,11 +1188,6 @@
     "id": "0350b91735f95b",
     "speaker": "narrator",
     "text": "Patches flicks an ear at you, but the words mean nothing to her."
-  },
-  {
-    "id": "18b79c34c55b61",
-    "speaker": "narrator",
-    "text": "The handle shifts where it is cracked. It will dig, if you are gentle with it."
   },
   {
     "id": "186f6d735b5495",
@@ -1720,16 +1695,6 @@
     "text": "He counts the coin twice and hands over the rope, and an apple with it."
   },
   {
-    "id": "1c9a1c1c3d07dd",
-    "speaker": "narrator",
-    "text": "It is crisp and cold, and nearly too red. You save it for later."
-  },
-  {
-    "id": "0f211fb3db5538",
-    "speaker": "narrator",
-    "text": "You loop it over your shoulder. It is good rope, and it was not cheap."
-  },
-  {
     "id": "1e614cd27d8a85",
     "speaker": "hemlock",
     "text": "Only store in Willowbrook, so I suppose that makes it the finest. Sword's five coins and the armor's ten. And there's an apple with everything. My mother's rule."
@@ -1968,11 +1933,6 @@
     "id": "077371b6666ab7",
     "speaker": "narrator",
     "text": "You tuck it into your pack."
-  },
-  {
-    "id": "18cb16685fcd14",
-    "speaker": "narrator",
-    "text": "It is slippery and cold. It will not keep for long."
   },
   {
     "id": "0a3736238c7386",
@@ -2300,11 +2260,6 @@
     "text": "It is straight and sound, and about the right length. A good stick is worth keeping."
   },
   {
-    "id": "1017d150140e3d",
-    "speaker": "narrator",
-    "text": "It is warm, warmer than the sun could make it. You keep it anyway."
-  },
-  {
     "id": "15140ba61d73d7",
     "speaker": "narrator",
     "text": "A small, smooth pebble that glints faintly, as if it kept a light of its own. It feels oddly warm to the touch."
@@ -2520,11 +2475,6 @@
     "text": "You receive a box of matches."
   },
   {
-    "id": "05d19eb05563fe",
-    "speaker": "narrator",
-    "text": "The box rattles, nearly full. You keep it away from anything damp."
-  },
-  {
     "id": "013aaa55350b1c",
     "speaker": "narrator",
     "text": "The candle now casts a warm glow. The flickering candlelight reveals a locket that was previously unseen!"
@@ -2593,11 +2543,6 @@
     "id": "1413c725f46207",
     "speaker": "narrator",
     "text": "The blessing the priest said over you when you found the founders' locket."
-  },
-  {
-    "id": "138271b8b561ec",
-    "speaker": "narrator",
-    "text": "The silver is cool against your palm. You keep it where you can feel it."
   },
   {
     "id": "02f19afee901ad",
@@ -3035,11 +2980,6 @@
     "text": "The mysterious box lies open. Only your father's note remains inside."
   },
   {
-    "id": "14e071982b1199",
-    "speaker": "narrator",
-    "text": "You fold it so the village is on top. Some of the paths on it you have never walked."
-  },
-  {
     "id": "03f858ec732f26",
     "speaker": "narrator",
     "text": "An open, ornate wooden box. Only a folded note remains inside, in your father's careful, slanting hand:"
@@ -3178,16 +3118,6 @@
     "id": "1864112ce187d8",
     "speaker": "narrator",
     "text": "The well gave up a silver ring, and something else besides."
-  },
-  {
-    "id": "0274d452c5f316",
-    "speaker": "narrator",
-    "text": "It is small and cold, and it fits in the hollow of your palm. You close your hand around it before you think to."
-  },
-  {
-    "id": "044350b2478cee",
-    "speaker": "narrator",
-    "text": "It is cold, and it stays cold. You put it away, and you do not like having it."
   },
   {
     "id": "0554391f98fcd8",
@@ -3455,16 +3385,6 @@
     "text": "You receive a travel cloak."
   },
   {
-    "id": "0f447a662c8d5b",
-    "speaker": "narrator",
-    "text": "It is heavy, and it smells of cedar. She must have kept it a long time."
-  },
-  {
-    "id": "074dceb06f4be1",
-    "speaker": "narrator",
-    "text": "It is warm through the cloth. It smells of home, and of her kitchen."
-  },
-  {
     "id": "068378a4163763",
     "speaker": "narrator",
     "text": "Your grandmother takes the ring, and her hands go still on it."
@@ -3703,11 +3623,6 @@
     "id": "0dc796536a7140",
     "speaker": "narrator",
     "text": "You have everything Mira asked for, and the elders have taught you all they can. The road is next."
-  },
-  {
-    "id": "064150cf1b3ad1",
-    "speaker": "narrator",
-    "text": "The leather is soft from other people's roads. They feel ready to go, even if you are not."
   },
   {
     "id": "166b8ce7d73f50",

@@ -172,11 +172,11 @@
     },
     {
         "after": 17,
-        "commands": ["n", "drop echo stone", "west"]
+        "commands": ["n"]
     },
     {
-        "after": 17,
-        "commands": ["n", "drop echo stone", "take echo stone"]
+        "after": 13,
+        "commands": ["s", "e", "n", "w"]
     },
     {
         "after": 24,

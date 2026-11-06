@@ -168,19 +168,13 @@ function newGame(): Game {
 }
 
 describe('Act I pickup lines (rq-3uug)', () => {
-  it.each(LINES)(
-    '%o tells its own line, again after a drop elsewhere',
-    (make, line) => {
-      const game = newGame()
-      const item = new make()
-      item.canBeCarried = true
-      game.state.currentRoom.items.push(item)
-      expect(game.take(item.name)).toBe(line)
-      game.state.currentRoom = game.state.allRooms['VillageSquare']
-      expect(game.drop(item.name)).toContain('You drop')
-      expect(game.take(item.name)).toBe(line)
-    },
-  )
+  it.each(LINES)('%o tells its own line', (make, line) => {
+    const game = newGame()
+    const item = new make()
+    item.canBeCarried = true
+    game.state.currentRoom.items.push(item)
+    expect(game.take(item.name)).toBe(line)
+  })
 
   it('tells the lantern line only once it is lit', () => {
     const game = newGame()
@@ -202,8 +196,9 @@ describe('Act I pickup lines (rq-3uug)', () => {
       'It bends in your fingers, soft and nearly gone. ' +
         'It is still a carrot, just.',
     )
-    game.drop('carrot')
-    carrot.revive()
+    const fresh = new WitheredCarrot()
+    fresh.revive()
+    game.state.currentRoom.items.push(fresh)
     expect(game.take('carrot')).toBe(
       'It is cool and firm, with soil still on it. ' +
         'Not long ago it was barely alive.',
@@ -214,8 +209,8 @@ describe('Act I pickup lines (rq-3uug)', () => {
     const game = newGame()
     game.state.currentRoom.items.push(new Locket())
     expect(game.take('locket')).toContain('You have learned')
-    game.drop('locket')
     expect(game.state.hasSpell(new BlessSpell().id)).toBe(true)
+    game.state.currentRoom.items.push(new Locket())
     expect(game.take('locket')).toBe(
       'The silver is cool against your palm. You keep it where you can feel it.',
     )
