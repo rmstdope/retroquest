@@ -1,5 +1,6 @@
 import { Act, characterName, type GameState, speech } from '@/engine'
 import { Brenn } from './characters/Brenn'
+import { SirCedric } from './characters/SirCedric'
 import { AncientAmulet } from './items/AncientAmulet'
 import { MountainPath } from './rooms/MountainPath'
 import { GreendaleGates } from './rooms/GreendaleGates'
@@ -31,7 +32,10 @@ import { TheForestGuardiansRiddles } from './quests/TheForestGuardiansRiddles'
 import { TheHermitsWarningQuest } from './quests/TheHermitsWarning'
 import { WhispersInTheWind } from './quests/WhispersInTheWind'
 import { CedricksLostHonorQuest } from './quests/CedricksLostHonorQuest'
-import { FLAG_GATHERING_STORM_COMPLETED } from './Act2StoryFlags'
+import {
+  FLAG_CEDRIC_PAID_FOR_SUPPLIES,
+  FLAG_GATHERING_STORM_COMPLETED,
+} from './Act2StoryFlags'
 import { ACT2_CLASSES } from './classes'
 import { ACT2_GOLDEN_PATH } from './Act2GoldenPath'
 
@@ -130,8 +134,9 @@ export class Act2 extends Act {
 
   /**
    * Bring older saves up to date: put Brenn in the warehouse of saves made
-   * before he was met there, and slot story beats an older Gathering Storm
-   * log never noted into place. Saved wording is refreshed by the rooms,
+   * before he was met there, note that Cedric paid for the supplies in saves
+   * made before that was a story flag, and slot story beats an older
+   * Gathering Storm log never noted into place. Saved wording is refreshed by the rooms,
    * items, characters, spells and quests themselves (`refreshSavedText`).
    * Safe to run on every load.
    */
@@ -139,6 +144,12 @@ export class Act2 extends Act {
     const warehouse = gameState.allRooms.MerchantsWarehouse
     if (!warehouse.characters.some((c) => c instanceof Brenn))
       warehouse.characters.push(new Brenn())
+    const paid = Object.values(gameState.allRooms).some((room) =>
+      room.characters.some(
+        (c) => c instanceof SirCedric && c.cedricTrustsElior,
+      ),
+    )
+    if (paid) gameState.setStoryFlag(FLAG_CEDRIC_PAID_FOR_SUPPLIES, true)
     for (const quest of [
       ...gameState.nonActivatedQuests,
       ...gameState.activatedQuests,

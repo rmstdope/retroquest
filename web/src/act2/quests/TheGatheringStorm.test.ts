@@ -5,6 +5,7 @@ import { Act2 } from '../Act2'
 import { TrainingSword } from '../items/TrainingSword'
 import {
   FLAG_ANCIENT_LIBRARY_COMPLETED,
+  FLAG_CEDRIC_PAID_FOR_SUPPLIES,
   FLAG_CEDRIC_RECOGNISED_SIGIL,
   FLAG_CEDRIKS_HONOR_COMPLETED,
   FLAG_DEMONSTRATED_COMBAT_SKILLS,
@@ -65,9 +66,12 @@ describe('The Gathering Storm log', () => {
     '[character_name]Sir Cedric[/character_name] watched you with the ' +
       'training sword and now trusts you. He wants you to find ' +
       '[character_name]Nyx[/character_name], deep in the Enchanted Forest, ' +
-      'because her old wisdom may show what you are truly facing. He gave you ' +
-      'a hundred and fifty coins for a survival kit, an enhanced lantern and ' +
-      'rope from the Market District.',
+      'because her old wisdom may show what you are truly facing. Before you ' +
+      'buy a survival kit, an enhanced lantern and rope in the Market ' +
+      'District, he wants to see you again.',
+    '[character_name]Sir Cedric[/character_name] gave you a hundred and ' +
+      'fifty coins for the survival kit, the lantern and the rope, all three ' +
+      'sold in the Market District.',
     'The survival kit, the lantern and the rope are packed. The merchants of ' +
       'Greendale have done what they can for you. The rest of the road leads ' +
       'to the edge of the Enchanted Forest.',
@@ -97,6 +101,7 @@ describe('The Gathering Storm log', () => {
     FLAG_SPOKEN_TO_SIR_CEDRIC,
     FLAG_CEDRIC_RECOGNISED_SIGIL,
     FLAG_DEMONSTRATED_COMBAT_SKILLS,
+    FLAG_CEDRIC_PAID_FOR_SUPPLIES,
     FLAG_SUPPLIES_QUEST_COMPLETED,
     FLAG_ANCIENT_LIBRARY_COMPLETED,
     FLAG_RESEARCHED_FAMILY_HERITAGE,
@@ -152,7 +157,7 @@ describe('The Gathering Storm log', () => {
     const details = quest.details()
     if (details.kind !== 'journal') throw new Error('expected a journal')
     expect(details.latest).toBe(ENTRIES[1])
-    expect(details.earlier).toEqual([ENTRIES[0], ENTRIES[7]])
+    expect(details.earlier).toEqual([ENTRIES[0], ENTRIES[8]])
   })
 
   it('slots the new beats in story order, so the newest is still the last one reached', () => {
@@ -176,7 +181,7 @@ describe('The Gathering Storm log', () => {
       ENTRIES[0],
       ENTRIES[1],
       ENTRIES[2],
-      ENTRIES[7],
+      ENTRIES[8],
     ])
   })
 
@@ -209,7 +214,7 @@ describe('The Gathering Storm log after Sir Cedric pays', () => {
     ].find((q) => q instanceof TheGatheringStormQuest)
     const details = quest?.details()
     if (details?.kind !== 'journal') throw new Error('expected a journal')
-    expect(details.latest).toContain('He gave you a hundred and fifty coins')
+    expect(details.latest).toContain('gave you a hundred and fifty coins')
   })
 })
 

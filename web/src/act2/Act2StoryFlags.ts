@@ -9,6 +9,8 @@ export const FLAG_VISION_SHARED = 'vision_shared'
 // Greendale Phase Quest Flags
 export const FLAG_DEMONSTRATED_COMBAT_SKILLS = 'demonstrated_combat_skills'
 export const FLAG_SUPPLIES_QUEST_COMPLETED = 'supplies_quest_completed'
+/** Set when Sir Cedric hands Elior the coins for the supplies, on the talk after the Knight's Test. */
+export const FLAG_CEDRIC_PAID_FOR_SUPPLIES = 'cedric_paid_for_supplies'
 export const FLAG_HEALERS_APPRENTICE_ACCEPTED = 'healers_apprentice_accepted'
 export const FLAG_HEALERS_APPRENTICE_COMPLETED = 'healers_apprentice_completed'
 export const FLAG_CEDRIKS_HONOR_ACCEPTED = 'cedriks_honor_accepted'

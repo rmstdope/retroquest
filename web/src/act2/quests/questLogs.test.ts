@@ -46,8 +46,9 @@ const LOGS: Log[] = [
   {
     name: 'Supplies for the Journey',
     description:
-      'Sir Cedric gave you coin for the forest: a survival kit, an ' +
-      'enhanced lantern and rope, from the Market District.',
+      'Sir Cedric wants you to buy a survival kit, an enhanced lantern and ' +
+      'rope in the Market District for the forest. He asked you to see him ' +
+      'before you go, so you are not sent with empty pockets.',
     completion: 'The kit, the lantern and the rope are in your pack.',
   },
   {
