@@ -58,7 +58,8 @@ describe('miraTopicReply', () => {
     )
     expect(miraTopicReply('grandmother', false)).toBe(
       miraSays(
-        'She loves you more than you know. Ask her yourself, when we are home.',
+        'She loves you more than you know. ' +
+          'Ask her yourself, when this is over.',
       ),
     )
   })
@@ -88,10 +89,17 @@ describe('miraTopicReply', () => {
     expect(miraTopicReply('grandmother', true)).toBe(
       miraSays(
         "She is Lysa's mother, and she kept the secret with me all these " +
-          'years. It cost her more than it cost me. Be gentle with her when ' +
-          'you are home.',
+          'years. It cost her more than it cost me. ' +
+          'Be gentle with her when this is over.',
       ),
     )
+  })
+
+  it('never places Elior away from home when he asks of his grandmother', () => {
+    // Mira answers in every room she is in, her Willowbrook hut among them,
+    // a few lanes from his grandmother's door.
+    expect(miraTopicReply('grandmother', false)).not.toMatch(/\bhome\b/)
+    expect(miraTopicReply('grandmother', true)).not.toMatch(/\bhome\b/)
   })
 
   it('gives the same fallback before and after the confession', () => {
