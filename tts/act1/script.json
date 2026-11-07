@@ -650,21 +650,6 @@
     "text": "Your grandmother says your mother loved the river. The old fisherman at the Riverbank will remember what she did there."
   },
   {
-    "id": "0afe4c7e405ca0",
-    "speaker": "grandmother",
-    "text": "Have you been down to the river yet? He'll be at the bend; he always is."
-  },
-  {
-    "id": "1117ebc5e6c876",
-    "speaker": "narrator",
-    "text": "She turns the loaf, though it does not need turning."
-  },
-  {
-    "id": "0c619a4831b3b0",
-    "speaker": "narrator",
-    "text": "The faded photograph: Your grandmother says your mother loved the river. The old fisherman at the Riverbank will remember what she did there."
-  },
-  {
     "id": "19ad071adb2439",
     "speaker": "narrator",
     "text": "Know your village"
@@ -675,14 +660,109 @@
     "text": "Something pulls at you to walk every lane of Willowbrook, and to look properly at the places you have passed a thousand times."
   },
   {
-    "id": "1158658223b1bc",
+    "id": "1c0d3c7ff1706b",
     "speaker": "narrator",
-    "text": "The Vegetable Field has withered under a grey sky: brittle leaves, cracked earth, and only a few stubborn carrots left."
+    "text": "You have yet to look properly at:"
+  },
+  {
+    "id": "0d49024e6a4c8b",
+    "speaker": "narrator",
+    "text": "Village Square"
   },
   {
     "id": "055c95cb57e560",
     "speaker": "narrator",
     "text": "Vegetable Field"
+  },
+  {
+    "id": "05581437584906",
+    "speaker": "narrator",
+    "text": "Chicken Coop"
+  },
+  {
+    "id": "1d8e270a441a9c",
+    "speaker": "narrator",
+    "text": "Mira's Hut"
+  },
+  {
+    "id": "124d5c3ce7ffcb",
+    "speaker": "narrator",
+    "text": "General Store"
+  },
+  {
+    "id": "0c64c7e367b44a",
+    "speaker": "narrator",
+    "text": "Blacksmith's Forge"
+  },
+  {
+    "id": "00a3f28fcf7306",
+    "speaker": "narrator",
+    "text": "Village Well"
+  },
+  {
+    "id": "0b7c094082210e",
+    "speaker": "narrator",
+    "text": "Abandoned Shed"
+  },
+  {
+    "id": "129314440d0b65",
+    "speaker": "narrator",
+    "text": "Old Mill"
+  },
+  {
+    "id": "1c76c403ae9607",
+    "speaker": "narrator",
+    "text": "Riverbank"
+  },
+  {
+    "id": "0d28fe08434f5e",
+    "speaker": "narrator",
+    "text": "Forest Path"
+  },
+  {
+    "id": "150ecc75a68785",
+    "speaker": "narrator",
+    "text": "Hidden Glade"
+  },
+  {
+    "id": "1174c72ff016c4",
+    "speaker": "narrator",
+    "text": "Village Chapel"
+  },
+  {
+    "id": "182c839e0a2572",
+    "speaker": "narrator",
+    "text": "Road to Greendale"
+  },
+  {
+    "id": "087a91050d11c4",
+    "speaker": "narrator",
+    "text": "The heart of Willowbrook: cobblestones around an old stone fountain, and a weathered notice board covered in faded announcements. Half the market stalls stand empty. The people at the others keep their voices down, and stop talking when you pass."
+  },
+  {
+    "id": "0c619a4831b3b0",
+    "speaker": "narrator",
+    "text": "The faded photograph: Your grandmother says your mother loved the river. The old fisherman at the Riverbank will remember what she did there."
+  },
+  {
+    "id": "0936cf1028e9e8",
+    "speaker": "narrator",
+    "text": "Know your village: You have not walked the rows of the Vegetable Field in a long while."
+  },
+  {
+    "id": "0afe4c7e405ca0",
+    "speaker": "grandmother",
+    "text": "Have you been down to the river yet? He'll be at the bend; he always is."
+  },
+  {
+    "id": "1117ebc5e6c876",
+    "speaker": "narrator",
+    "text": "She turns the loaf, though it does not need turning."
+  },
+  {
+    "id": "1158658223b1bc",
+    "speaker": "narrator",
+    "text": "The Vegetable Field has withered under a grey sky: brittle leaves, cracked earth, and only a few stubborn carrots left."
   },
   {
     "id": "02618682c4c622",
@@ -720,9 +800,9 @@
     "text": "You search around the Vegetable Field, but find nothing of interest beyond what you can already see."
   },
   {
-    "id": "062b2898c686b9",
+    "id": "036e90d38de47d",
     "speaker": "narrator",
-    "text": "Know your village: Something pulls at you to walk every lane of Willowbrook, and to look properly at the places you have passed a thousand times."
+    "text": "Know your village: You have not looked in on the hens at the Chicken Coop in a long while."
   },
   {
     "id": "10067a099782f8",
@@ -740,29 +820,9 @@
     "text": "Rows of withered crops stretch beneath a brooding gray sky. The earth is cracked and dry, with only a few stubborn carrots hinting at better days. A faint breeze rustles the brittle leaves, carrying the scent of soil and distant rain. These rows were green a month ago."
   },
   {
-    "id": "0d49024e6a4c8b",
-    "speaker": "narrator",
-    "text": "Village Square"
-  },
-  {
-    "id": "087a91050d11c4",
-    "speaker": "narrator",
-    "text": "The heart of Willowbrook: cobblestones around an old stone fountain, and a weathered notice board covered in faded announcements. Half the market stalls stand empty. The people at the others keep their voices down, and stop talking when you pass."
-  },
-  {
-    "id": "00a3f28fcf7306",
-    "speaker": "narrator",
-    "text": "Village Well"
-  },
-  {
     "id": "01da3eb13f1793",
     "speaker": "narrator",
     "text": "An old stone well stands between the field and the forge, its stones worn smooth by countless hands. The water below lies dark and still, and a faint sour smell hangs in the cool, damp air. Moss creeps up the sides."
-  },
-  {
-    "id": "0c64c7e367b44a",
-    "speaker": "narrator",
-    "text": "Blacksmith's Forge"
   },
   {
     "id": "07ac1fda167358",
@@ -835,11 +895,6 @@
     "text": "Even at full stretch it falls well short of the rafter. The hens scatter from the swing, and their wings go higher than your arm does."
   },
   {
-    "id": "05581437584906",
-    "speaker": "narrator",
-    "text": "Chicken Coop"
-  },
-  {
     "id": "072bb04e4e7edc",
     "speaker": "narrator",
     "text": "A small wooden coop stands here, its planks patched and weathered. Nervous chickens cluck and flutter, their feathers ruffled as they dart between straw nests. The air is thick with the scent of hay and the occasional squawk. Sunbeams slip through the slats, casting striped shadows on the dirt floor. High on a rafter, out of reach, something glints where no hen could have put it."
@@ -890,6 +945,11 @@
     "text": "You search around the Chicken Coop, but find nothing of interest beyond what you can already see."
   },
   {
+    "id": "0cd4165feffd21",
+    "speaker": "narrator",
+    "text": "Know your village: You have not leaned over the Village Well in a long while."
+  },
+  {
     "id": "0bc4e614e40208",
     "speaker": "narrator",
     "text": "The chickens peck at the bread excitedly, and in the flapping commotion something shiny is knocked from a high rafter. It's a small key, hidden up there long ago by someone who did not want it found!"
@@ -935,6 +995,11 @@
     "text": "So the chickens gave up my little secret. I tucked that key up in the coop rafters years ago. It opens the old shed by the mill. It was a workshop once... your father's. I never could bring myself to go in. It's dark as a cellar in there, dear; take the lantern with you."
   },
   {
+    "id": "187217cd132faa",
+    "speaker": "narrator",
+    "text": "Know your village: You have not stood in the Village Square and watched the village go by in a long while."
+  },
+  {
     "id": "09ac02c544b3da",
     "speaker": "narrator",
     "text": "Tilda looks it over with interest and gives it back."
@@ -958,11 +1023,6 @@
     "id": "1cafb496c9a807",
     "speaker": "tilda",
     "text": "The truth about what, love? You've lost me."
-  },
-  {
-    "id": "124d5c3ce7ffcb",
-    "speaker": "narrator",
-    "text": "General Store"
   },
   {
     "id": "0856770984804a",
@@ -1120,6 +1180,11 @@
     "text": "You search around the Village Square, but find nothing of interest beyond what you can already see."
   },
   {
+    "id": "19aaef03da2f3c",
+    "speaker": "narrator",
+    "text": "Know your village: You have not gone up to Mira's Hut, north of the square, in a long while."
+  },
+  {
     "id": "0b241988fa6096",
     "speaker": "tilda",
     "text": "Last night, someone spotted a cloaked stranger near the old well, asking after an old amulet, from a family that left. Nobody would tell him a thing, and he took the road to the mill."
@@ -1195,6 +1260,11 @@
     "text": "You search around the Village Well, but find nothing of interest beyond what you can already see."
   },
   {
+    "id": "1787ba9eac6d10",
+    "speaker": "narrator",
+    "text": "Know your village: You have not stood in the heat of the Blacksmith's Forge in a long while."
+  },
+  {
     "id": "0a585f21456625",
     "speaker": "narrator",
     "text": "Magnet fishing expedition"
@@ -1260,11 +1330,6 @@
     "text": "Words aren't my trade, lad. Iron is."
   },
   {
-    "id": "0b7c094082210e",
-    "speaker": "narrator",
-    "text": "Abandoned Shed"
-  },
-  {
     "id": "17af0d0fc2534a",
     "speaker": "narrator",
     "text": "A rickety shed leans precariously at the edge of Willowbrook, its weathered boards creaking in the wind. The shed door is locked, and no light gets past the grimy boards, but the air smells of old earth and lamp oil."
@@ -1290,29 +1355,14 @@
     "text": "A rickety shed leans precariously at the edge of Willowbrook, its weathered boards creaking in the wind. Rusty tools and broken crates are scattered about a long workbench, and a thick layer of dust covers everything. Little light gets past the grimy boards, and the air smells of old earth and lamp oil."
   },
   {
-    "id": "129314440d0b65",
-    "speaker": "narrator",
-    "text": "Old Mill"
-  },
-  {
     "id": "1a8eaaafa0c48b",
     "speaker": "narrator",
     "text": "A creaky windmill towers above, its sails turning slowly in the breeze. Dusty gears and cobwebs fill the interior, and the scent of flour hangs in the air. Sunlight streams through broken windows, illuminating sacks of grain and a heavy millstone. Amidst the old workings, you notice a strange mechanism of black iron, whirring to itself, that doesn't belong to the mill's original design."
   },
   {
-    "id": "1c76c403ae9607",
-    "speaker": "narrator",
-    "text": "Riverbank"
-  },
-  {
     "id": "0fc269c6b88a07",
     "speaker": "narrator",
     "text": "A gentle river flows past the village and makes a slow bend here, past the reeds and a broad, flat stone at the water's edge. Insects hum over the water. A weathered fisherman sits on an upturned crate at the bend, watching the water."
-  },
-  {
-    "id": "0d28fe08434f5e",
-    "speaker": "narrator",
-    "text": "Forest Path"
   },
   {
     "id": "04b25fea5e2fc9",
@@ -1358,6 +1408,11 @@
     "id": "14b2c088262b5a",
     "speaker": "narrator",
     "text": "You search around the Blacksmith's Forge, but find nothing of interest beyond what you can already see."
+  },
+  {
+    "id": "0c7f74ad5467e1",
+    "speaker": "narrator",
+    "text": "Know your village: You have not stepped into the General Store in a long while."
   },
   {
     "id": "0911457e9acd93",
@@ -1413,11 +1468,6 @@
     "id": "099ef7427214cf",
     "speaker": "narrator",
     "text": "It snaps to the nearest bit of iron and has to be pulled free. Small as it is, it does not let go easily."
-  },
-  {
-    "id": "1d8e270a441a9c",
-    "speaker": "narrator",
-    "text": "Mira's Hut"
   },
   {
     "id": "16e6a86be68933",
@@ -1765,11 +1815,6 @@
     "text": "It is straight and sound, and about the right length. A good stick is worth keeping."
   },
   {
-    "id": "150ecc75a68785",
-    "speaker": "narrator",
-    "text": "Hidden Glade"
-  },
-  {
     "id": "108b4faf369d64",
     "speaker": "narrator",
     "text": "A hushed clearing hidden deep within the forest, dim and overgrown. Brambles crowd its edges, and the tall grass stands grey and still beneath branches that shut out the sun. In the center, a mossy stone bears a faint inscription, too deep in shadow to read. An unnatural darkness lingers here, though the sky above the branches is clear."
@@ -1788,11 +1833,6 @@
     "id": "04214f26c5fd27",
     "speaker": "narrator",
     "text": "The petals stay open in your hand. You hold it carefully, the way you would hold something that trusted you."
-  },
-  {
-    "id": "1174c72ff016c4",
-    "speaker": "narrator",
-    "text": "Village Chapel"
   },
   {
     "id": "17b5d6f03fee46",
@@ -2275,11 +2315,6 @@
     "text": "You have walked every corner of Willowbrook. The pull has gone quiet, and the village feels like home."
   },
   {
-    "id": "182c839e0a2572",
-    "speaker": "narrator",
-    "text": "Road to Greendale"
-  },
-  {
     "id": "0a06acda3b39a7",
     "speaker": "narrator",
     "text": "The main road out of Willowbrook runs east under old oaks, their branches meeting overhead. The way is well trodden, lined with wildflowers and fallen leaves. A merchant's cart stands at the roadside, and his thin grey mare grazes beside it on three good shoes."
@@ -2525,6 +2560,11 @@
     "text": "How is that blade holding up? Keep that edge oiled, mind, or the damp will have it dull again before you know it."
   },
   {
+    "id": "11f4b58f1fb91f",
+    "speaker": "narrator",
+    "text": "Know your village: You have not been near the Abandoned Shed south of the well in years."
+  },
+  {
     "id": "0dddfa7692bc53",
     "speaker": "narrator",
     "text": "The fisherman nods at you."
@@ -2553,6 +2593,11 @@
     "id": "06f9af686e26e3",
     "speaker": "narrator",
     "text": "Grey boards, warped and grimy, and nailed so close that hardly a crack shows between them."
+  },
+  {
+    "id": "1961cc51267fb2",
+    "speaker": "narrator",
+    "text": "Know your village: You have not been down to the Old Mill in a long while."
   },
   {
     "id": "048c85835e0cb7",
@@ -3020,6 +3065,11 @@
     "text": "Old Man Hemlock, who keeps the General Store. He glances at the door every time it creaks."
   },
   {
+    "id": "06890f2cb2617c",
+    "speaker": "narrator",
+    "text": "Know your village: You have not sat in the Village Chapel in a long while."
+  },
+  {
     "id": "0a6e83930959fd",
     "speaker": "hemlock",
     "text": "Only store in Willowbrook, so I suppose that makes it the finest. Rope's a coin, the sword's five and the armor's ten. And there's an apple with everything. My mother's rule."
@@ -3170,6 +3220,11 @@
     "text": "You search around the Old Mill, but find nothing of interest beyond what you can already see."
   },
   {
+    "id": "05da32c5baed89",
+    "speaker": "narrator",
+    "text": "Know your village: You have not sat on the Riverbank in a long while."
+  },
+  {
     "id": "0bcb5f657bc789",
     "speaker": "narrator",
     "text": "The strange mechanism stands jammed with a rope, its gears locked and its whirring stilled. The floor no longer hums beneath it. A compartment hangs open."
@@ -3268,6 +3323,11 @@
     "id": "165757030a4e44",
     "speaker": "narrator",
     "text": "You search along the bank, among the reeds and the mud, but find nothing of interest."
+  },
+  {
+    "id": "0b36a8296ea5dc",
+    "speaker": "narrator",
+    "text": "Know your village: You have not walked the Forest Path past the river in a long while."
   },
   {
     "id": "0a580128f2ca54",
@@ -3458,6 +3518,11 @@
     "id": "18864a414506da",
     "speaker": "narrator",
     "text": "You search around the Forest Path, but find nothing of interest beyond what you can already see."
+  },
+  {
+    "id": "0e163935ed4de0",
+    "speaker": "narrator",
+    "text": "Know your village: South of the Forest Path lies the Hidden Glade, where you have never once stood."
   },
   {
     "id": "046068d6450dab",
@@ -3668,6 +3733,11 @@
     "id": "0f87d1fedfdc4a",
     "speaker": "narrator",
     "text": "You search around the Village Chapel, but find nothing of interest beyond what you can already see."
+  },
+  {
+    "id": "113d259c9e64a7",
+    "speaker": "narrator",
+    "text": "Know your village: You have not walked out to where the Road to Greendale leaves the village in a long while."
   },
   {
     "id": "1f1153d27ddfc1",
