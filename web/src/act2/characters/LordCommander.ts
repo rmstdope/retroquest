@@ -40,7 +40,8 @@ export class LordCommander extends Character {
           "Sir Cedric's knighthood is restored and the charge struck from the " +
             'record. As for the name in that letter, I have sent riders to ' +
             'Heavensforth for the watchman who confessed. Whoever paid in that ' +
-            'name will be found.',
+            'name will be found. The bastion is another matter. I cannot spare ' +
+            'the guard to ride for it, so it falls to Sir Cedric and to you.',
         )
       )
     }
@@ -101,6 +102,13 @@ export class LordCommander extends Character {
             'it, and on that night of all nights. Sir Cedric did not leave his ' +
             'post. He was chosen to carry the blame. I hereby restore his ' +
             'knighthood and strike the charge from the record.',
+        ) +
+        ' He looks at the letter again. ' +
+        speech(
+          'The bastion on the shattered ridge. I would ride for it tonight, ' +
+            'but I cannot. The guard is all that holds Greendale while the ' +
+            'throne stands empty, and an army on that ridge would warn whoever ' +
+            'holds him. This falls to a few. Sir Cedric and you.',
         ) +
         ' He beckons a page and speaks a few quiet words. The boy runs off ' +
         'toward the armoury, and returns carrying a long bundle wrapped in ' +

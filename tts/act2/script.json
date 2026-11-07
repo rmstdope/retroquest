@@ -2880,6 +2880,16 @@
     "text": "Malakar is a name from children's tales. Yet someone paid gold in it, and on that night of all nights. Sir Cedric did not leave his post. He was chosen to carry the blame. I hereby restore his knighthood and strike the charge from the record."
   },
   {
+    "id": "00b0ab98799bfa",
+    "speaker": "narrator",
+    "text": "He looks at the letter again."
+  },
+  {
+    "id": "192fbd11e3b68e",
+    "speaker": "lord commander",
+    "text": "The bastion on the shattered ridge. I would ride for it tonight, but I cannot. The guard is all that holds Greendale while the throne stands empty, and an army on that ridge would warn whoever holds him. This falls to a few. Sir Cedric and you."
+  },
+  {
     "id": "14b39989677fa3",
     "speaker": "narrator",
     "text": "He beckons a page and speaks a few quiet words. The boy runs off toward the armoury, and returns carrying a long bundle wrapped in oilcloth."
@@ -2905,9 +2915,9 @@
     "text": "The Lord Commander nods with satisfaction."
   },
   {
-    "id": "1f4c170ce3b222",
+    "id": "0fbd114e115874",
     "speaker": "lord commander",
-    "text": "Sir Cedric's knighthood is restored and the charge struck from the record. As for the name in that letter, I have sent riders to Heavensforth for the watchman who confessed. Whoever paid in that name will be found."
+    "text": "Sir Cedric's knighthood is restored and the charge struck from the record. As for the name in that letter, I have sent riders to Heavensforth for the watchman who confessed. Whoever paid in that name will be found. The bastion is another matter. I cannot spare the guard to ride for it, so it falls to Sir Cedric and to you."
   },
   {
     "id": "1c2358958c403b",
