@@ -101,3 +101,17 @@ describe('Collapsed Galleries', () => {
     expect(result).toContain('The straps have nothing to hold')
   })
 })
+
+describe('Collapsed Galleries — after the rescue', () => {
+  it('no longer reads as choked with stone once the miners are free', () => {
+    const room = new CollapsedGalleries()
+    const gs = dummyState(room)
+    expect(room.descriptionFor(gs)).toContain('choked with fallen stone')
+
+    gs.setStoryFlag(FLAG_ACT3_MINERS_RESCUE_COMPLETED, true)
+    const after = room.descriptionFor(gs)
+    expect(after).not.toContain('choked')
+    expect(after).toContain('miners')
+    expect(room.describe(gs)).toContain(after)
+  })
+})

@@ -20,6 +20,10 @@ const WILD_BREATH =
   'The vents gust and sputter without rhythm; there is no telling when they ' +
   'will breathe next.'
 
+const CALIBRATED_BREATH =
+  'The vents breathe together now, deep and slow, ' +
+  'but every breath comes up hot enough to blister.'
+
 /** The breath line shown for each step of the breath. */
 const BREATH_LINES: Record<VentBreath, string> = {
   out: 'The vents exhale. A scalding gust roars up out of the southern tunnel.',
@@ -156,12 +160,18 @@ export class FumarolePassages extends Room {
     )
   }
 
-  /** The breath line for the current breath, or the wild gusting before the ward. */
+  /**
+   * The breath line for the current breath; before the ward, the wild gusting,
+   * or the slow scalding breath once all three vent stones are set.
+   */
   private breathLine(gameState: GameState): string {
-    const text = this.isWarded(gameState)
-      ? BREATH_LINES[this.currentBreath()]
-      : WILD_BREATH
-    return `[breath]${text}[/breath]`
+    return `[breath]${this.breathText(gameState)}[/breath]`
+  }
+
+  /** The text of the breath line, without its markup. */
+  private breathText(gameState: GameState): string {
+    if (this.isWarded(gameState)) return BREATH_LINES[this.currentBreath()]
+    return this.ventCalibrations >= 3 ? CALIBRATED_BREATH : WILD_BREATH
   }
 
   /** Move the breath one step along out → pause → in → out. */

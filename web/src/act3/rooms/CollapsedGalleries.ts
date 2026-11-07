@@ -27,6 +27,18 @@ export class CollapsedGalleries extends Room {
     this.description = new CollapsedGalleries().description
   }
 
+  /** After the rescue the stone is cleared and the miners are beaming the gallery. */
+  override descriptionFor(gameState: GameState): string {
+    if (!gameState.getStoryFlag(FLAG_ACT3_MINERS_RESCUE_COMPLETED)) {
+      return this.description
+    }
+    return (
+      'The fallen stone is heaped along the walls now, ' +
+      'and the gallery runs open end to end. ' +
+      'The miners are setting fresh timbers where the old ones snapped.'
+    )
+  }
+
   /** Hide east exit until the miners' rescue is completed. */
   override getExits(gameState: GameState): Exits {
     const exits = { ...this.exits }
