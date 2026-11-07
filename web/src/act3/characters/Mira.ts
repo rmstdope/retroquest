@@ -9,6 +9,7 @@ import {
 } from '@/engine'
 import { KeepsakeNote } from '../items/KeepsakeNote'
 import { LifelightElixir } from '../items/LifelightElixir'
+import { SeaSealedLetter } from '../items/SeaSealedLetter'
 import {
   CEDRIC_GATE_ARRIVAL,
   CEDRIC_KING_WEAKER_1,
@@ -248,13 +249,21 @@ export class Mira extends Character {
       }
 
       // Check if Sea-Sealed Letter has been read before proceeding to Lower Switchback
+      // A letter already in the bag is pointed at, not looked for.
       if (!gameState.getStoryFlag(FLAG_ACT3_SEA_SEALED_LETTER_READ)) {
+        const carried = gameState.inventory.some(
+          (item) => item instanceof SeaSealedLetter,
+        )
         return (
           eventMsg +
           '\n' +
           speech(
-            'Not yet, Elior. There is something in these ruins that was ' +
-              'left for you. I will not take you up the mountain without it.',
+            carried
+              ? 'Not yet, Elior. That letter in your bag was left for you, ' +
+                  'and you have not read it. I will not take you up the ' +
+                  'mountain until you have.'
+              : 'Not yet, Elior. There is something in these ruins that was ' +
+                  'left for you. I will not take you up the mountain without it.',
           )
         )
       }

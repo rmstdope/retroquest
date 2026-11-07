@@ -36,6 +36,7 @@ import { CrystalOfLight } from '../items/CrystalOfLight'
 import { DragonsScale } from '../items/DragonsScale'
 import { LifelightElixir } from '../items/LifelightElixir'
 import { PhoenixFeather } from '../items/PhoenixFeather'
+import { SeaSealedLetter } from '../items/SeaSealedLetter'
 
 /** Whether a character with the given (lowercase) name is in the room. */
 function hasCharacterNamed(room: Room, name: string): boolean {
@@ -485,6 +486,22 @@ describe('Mira', () => {
     expect(out).toContain('something in these ruins that was left for you')
     expect(out).toContain('up the mountain without it')
     expect(out).not.toContain('the air smells different')
+  })
+
+  it('points at the carried, unread sea-sealed letter at the Tidal Causeway', () => {
+    const game = new Game([new Act3()])
+    game.state.setStoryFlag(FLAG_ACT3_MAIN_STARTED, true)
+    game.state.setStoryFlag(FLAG_ACT3_CRYSTAL_OF_LIGHT_ACQUIRED, true)
+    game.state.currentRoom = game.state.allRooms.TidalCauseway
+    game.state.inventory.push(new SeaSealedLetter())
+
+    const out = new Mira().talkTo(game.state)
+
+    expect(out).not.toContain('something in these ruins')
+    expect(out).toContain('That letter in your bag was left for you')
+    expect(out).toContain('you have not read it')
+    expect(out).not.toContain('the air smells different')
+    expect(game.state.currentRoom).toBe(game.state.allRooms.TidalCauseway)
   })
 
   it('points to the ember heights, not the caverns, before the sea-sealed letter is read', () => {
