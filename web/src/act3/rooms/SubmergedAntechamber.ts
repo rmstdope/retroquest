@@ -14,11 +14,10 @@ export class SubmergedAntechamber extends Room {
     super({
       name: 'Submerged Antechamber',
       description:
-        'The hall lies half-swallowed by tide and time. Salt-smoothed stone ' +
-        'arches bear weathered carvings that pulse with a cold, inner glow. ' +
-        'A hush hangs in the air as if the sea itself listens; faint, ' +
-        'distant echoes suggest something patient and watchful beyond the ' +
-        'veil of gloom. Somewhere further in, water drips, slow and patient.',
+        'A hall half under the tide. ' +
+        'Salt-smoothed arches bear worn carvings that glow cold from within. ' +
+        'It is very quiet. ' +
+        'Somewhere further in, water drips.',
       items: [],
       characters: [],
       exits: {
@@ -41,9 +40,10 @@ export class SubmergedAntechamber extends Room {
   override descriptionFor(gameState: GameState): string {
     if (gameState.getStoryFlag(FLAG_ACT3_TIDEWARD_SIGILS_COMPLETED)) {
       return (
-        'The hall, recently unmasked by a withdrawing tide, shows the bare ' +
-        'lines of its carved work. Salt crystals glitter on exposed stone; ' +
-        "the air feels colder and the rooms' echoes are clearer than before."
+        'The tide has gone out of the hall. ' +
+        'Salt crystals glitter on the bare stone, ' +
+        'and niches stand open along the carved walls. ' +
+        'The air is colder, and your steps echo.'
       )
     }
     return this.description

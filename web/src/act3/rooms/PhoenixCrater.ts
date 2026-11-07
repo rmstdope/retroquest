@@ -3,9 +3,9 @@ import type { GameState } from '@/engine'
 import { Phoenix } from '../characters/Phoenix'
 
 const BASE_DESCRIPTION =
-  'A luminous bowl of vitrified rock where warm drafts swirl and cinders dance in ' +
-  'spirals. The air smells of ozone, resin, and warm iron; the whole bowl feels like ' +
-  'a giant hearth that remembers how to forge stars.'
+  'A bowl of rock melted to glass, open to the sky. ' +
+  'Warm drafts turn in it and carry cinders round in slow spirals. ' +
+  'The air smells of hot iron.'
 
 const PHOENIX_DESCRIPTION =
   " At the crater's heart the phoenix lies on a bed of cooled slag, its " +
@@ -19,7 +19,7 @@ const DROWSY_DESCRIPTION =
 
 const SILENT_CRATER = 'The crater is silent. Nothing comes to those who call.'
 
-/** The Phoenix Crater: a luminous bowl of vitrified rock. */
+/** The Phoenix Crater: a bowl of rock melted to glass. */
 export class PhoenixCrater extends Room {
   constructor() {
     super({
@@ -29,6 +29,12 @@ export class PhoenixCrater extends Room {
       characters: [],
       exits: { north: 'FumarolePassages' },
     })
+  }
+
+  /** Give a save made with older wording the current description. */
+  override refreshSavedText(): void {
+    this.description =
+      BASE_DESCRIPTION + (this.phoenixPresent() ? PHOENIX_DESCRIPTION : '')
   }
 
   /** Whether the Phoenix has appeared. */

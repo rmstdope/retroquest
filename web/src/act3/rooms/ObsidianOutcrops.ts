@@ -11,18 +11,20 @@ export class ObsidianOutcrops extends Room {
     super({
       name: 'Obsidian Outcrops',
       description:
-        'Needle-sharp obsidian towers rise like black teeth from the ash, ' +
-        'their surfaces catching and fracturing the light into jagged, ' +
-        'glassy facets. Between the towers, thin seams and crevices hide ' +
-        'weathered mirror fragments and the faint scars of old mounts—' +
-        'brass filings, dull polish, and tiny holes that speak of a long-' +
-        'vanished craft. A dry, metallic tang rides the hot wind, and ' +
-        'every step sets off a tiny cascade of glass flakes into echoing ' +
-        'gullies below.',
+        'Sharp towers of obsidian stand up out of the ash, ' +
+        'their faces split into glassy facets. ' +
+        'In the seams between them lie weathered mirror fragments ' +
+        'and the marks of old mounts: brass filings and small bolt holes. ' +
+        'Glass flakes slide away under every step.',
       items: [],
       characters: [],
       exits: { south: 'LowerSwitchbacks', east: 'MirrorTerraces' },
     })
+  }
+
+  /** Give a save made with older wording the current description. */
+  override refreshSavedText(): void {
+    this.description = new ObsidianOutcrops().description
   }
 
   /** Search the outcrops; reveal mirror segments and resin once. */

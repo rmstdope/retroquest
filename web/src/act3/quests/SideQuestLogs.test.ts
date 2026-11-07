@@ -4,6 +4,7 @@ import { describe, it, expect } from 'vitest'
 import { BreathOfTheMountain } from './BreathOfTheMountain'
 import { TidewardSigilsQuest } from './TidewardSigils'
 import { LanternsOfTheDeepsQuest } from './LanternsOfTheDeeps'
+import { MirrorsOfEmberlightQuest } from './MirrorsOfEmberlight'
 
 describe('Act III side quest logs', () => {
   it('Breath of the Mountain tells the steps in order', () => {
@@ -62,5 +63,25 @@ describe('Act III side quest logs not yet offered in an older save', () => {
     expect(breath.completion).toBe('old')
     expect(sigils.description).toBe('old')
     expect(lanterns.completion).toBe('old')
+  })
+})
+
+describe('Mirrors of Emberlight speaks to the player', () => {
+  it('tells the mending as something you did, in plain words', () => {
+    const quest = new MirrorsOfEmberlightQuest()
+    expect(quest.completion).toMatch(/^You /)
+    expect(quest.completion).not.toMatch(/Elior|ancient|with care and skill/)
+    expect(quest.description).not.toMatch(/ancient/)
+  })
+
+  it('loads an older save with the new wording', () => {
+    const game = new Game([new Act3()])
+    const quest = new MirrorsOfEmberlightQuest()
+    quest.description = 'old'
+    quest.completion = 'old'
+    game.state.completedQuests.push(quest)
+    game.state.refreshSavedText()
+    expect(quest.description).toBe(new MirrorsOfEmberlightQuest().description)
+    expect(quest.completion).toBe(new MirrorsOfEmberlightQuest().completion)
   })
 })

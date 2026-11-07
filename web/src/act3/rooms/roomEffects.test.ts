@@ -43,7 +43,7 @@ describe('Act III rooms narrate the effect, never the echo', () => {
     const out = new OuterWards().search(dummyState())
 
     expect(out).toBe(
-      'Apart from the three ancient warding pillars rising from the black ' +
+      'Apart from the three warding pillars rising from the black ' +
         'water, the drowned courtyard holds little of interest; the pillars ' +
         'alone seem keyed to the moon and tide.',
     )

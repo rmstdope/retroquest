@@ -22,8 +22,8 @@ describe('Mirror Terraces', () => {
     const text = findMirrorTerracesRoom(game).descriptionFor(game.state)
     expect(text).not.toContain('Terrace Warden')
     expect(text).toContain(
-      'mirror segments. The place smells of warm metal, singed cloth, and ' +
-        'the mineral tang of cooling slag.',
+      'Ash has settled on the worktables, ' +
+        'over files and polish left where someone put them down.',
     )
   })
 
@@ -35,7 +35,7 @@ describe('Mirror Terraces', () => {
     fresh.loadSaveData(game.toSaveData())
     const text = findMirrorTerracesRoom(fresh).descriptionFor(fresh.state)
     expect(text).not.toContain('Terrace Warden')
-    expect(text).toContain('cooling slag.')
+    expect(text).toContain('left where someone put them down.')
   })
 
   it('sets the mirrors-started flag on enter', () => {

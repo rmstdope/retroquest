@@ -11,14 +11,12 @@ import {
 
 /** The room as it always looks; the state lines are added after it. */
 const DESCRIPTION =
-  'Stepped platforms rise in concentric benches, each ring studded with ' +
-  'sockets for polished mirrors and brass mounts. Channels are neatly ' +
-  'etched into the stone to carry and focus light up the slope; stray ' +
-  'rays catch on alignment wedges and glint like cold flame. The air ' +
-  'hums faintly with residual heat, and dusted ash settles on ' +
-  'worktables where scholars and attendants file, polish, and fit ' +
-  'mirror segments. The place smells of warm metal, singed cloth, and ' +
-  'the mineral tang of cooling slag.'
+  'Stepped platforms rise in rings up the slope, ' +
+  'each ring set with sockets for mirrors and brass mounts. ' +
+  'Channels cut in the stone carry light from ring to ring, ' +
+  'toward the mountainside. ' +
+  'Ash has settled on the worktables, ' +
+  'over files and polish left where someone put them down.'
 
 /** The sentence the room gains once the curse has shown itself here. */
 const CURSE_LINE =
@@ -53,6 +51,11 @@ export class MirrorTerraces extends Room {
         west: 'ObsidianOutcrops',
       },
     })
+  }
+
+  /** Give a save made with older wording the current description. */
+  override refreshSavedText(): void {
+    this.description = DESCRIPTION
   }
 
   /** Room hook called when the player arrives; mark mirrors quest started. */

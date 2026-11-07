@@ -25,7 +25,7 @@ describe('Phoenix Crater', () => {
     const room = new PhoenixCrater()
     expect(room.name).toBe('Phoenix Crater')
     expect(
-      room.description.includes('vitrified rock') ||
+      room.description.includes('melted to glass') ||
         room.description.includes('crater'),
     ).toBe(true)
     expect(room.exits).toHaveProperty('north')
@@ -69,7 +69,7 @@ describe('Phoenix Crater', () => {
     it('ends the description with the drowsy sentence', () => {
       const room = new PhoenixCrater()
       expect(room.descriptionFor(dummyState())).toMatch(
-        new RegExp(`forge stars\\. ${DROWSY}$`),
+        new RegExp(`hot iron\\. ${DROWSY}$`),
       )
     })
 
