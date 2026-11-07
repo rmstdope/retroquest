@@ -105,6 +105,22 @@ describe('Act I off-path lines are in the narration script', () => {
     for (const line of watered) expect(texts).toContain(line.text)
   })
 
+  it.each([
+    "River's off this season. Fish are sulking, and this arm's gone stiff " +
+      "on me, so I couldn't land one if they weren't.",
+    "I'd give a good deal for a fresh fish.",
+  ])(
+    'has the fisherman saying "%s", as he greets Elior without the rod',
+    (text) => {
+      const script = committed('1', 'script.json') as ScriptLine[]
+      expect(script).toContainEqual({
+        id: narrationKey('fisherman', text),
+        speaker: 'fisherman',
+        text,
+      })
+    },
+  )
+
   it.each(['truth', 'stay', 'hello'])(
     'has Elior saying "%s", as he says it on the picture',
     (words) => {
