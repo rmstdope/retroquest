@@ -275,6 +275,11 @@ describe('The Three Virtues hint, once the dragon has asked for the oath', () =>
   it('goes back to the log once the scrolls are read', () => {
     const game = dragonAskedScrollsUnfound()
     executeCommands(game, ['w', 'n', 'e', 'search', 'examine old oath scrolls'])
-    expect(executeCommands(game, ['hint'])).not.toContain('old oath for it')
+    const hint = executeCommands(game, ['hint'])
+    expect(hint).not.toContain('old oath for it')
+    expect(hint).toContain(
+      '[bold]The Three Virtues:[/bold] You answered the phoenix: wisdom is ' +
+        'patience, even when the world burns.',
+    )
   })
 })
