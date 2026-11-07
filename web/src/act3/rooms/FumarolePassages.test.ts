@@ -289,3 +289,19 @@ describe('Fumarole Passages — the breath of the mountain', () => {
     expect(seen(game)).toContain(breathLine(PAUSE))
   })
 })
+
+describe('Fumarole Passages — calibrated, before the ward', () => {
+  it('stops reading as wild gusting once the third vent stone is set', () => {
+    const game = gameInPassages()
+    executeCommands(game, ['use vent stone', 'use vent stone'])
+    expect(seen(game)).toContain(breathLine(WILD))
+
+    executeCommands(game, ['use vent stone'])
+    const look = seen(game)
+    expect(look).not.toContain(WILD)
+    expect(look).toContain('[breath]')
+    expect(game.state.currentRoom.getExits(game.state)).not.toHaveProperty(
+      'south',
+    )
+  })
+})

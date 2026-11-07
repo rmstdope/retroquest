@@ -124,3 +124,47 @@ describe('MirrorMount', () => {
     }
   })
 })
+
+describe('MirrorMount — the description follows the repair', () => {
+  /** A game whose mount has given up its hidden segment, so examine shows the description. */
+  function examined(): { game: Game; mount: MirrorMount } {
+    const game = new Game([new Act3()])
+    const mount = new MirrorMount()
+    mount.examine(game.state)
+    game.state.addItemToInventory(new BrassMirrorSegment(), 4)
+    game.state.addItemToInventory(new BindingResin())
+    return { game, mount }
+  }
+
+  it('reads as an empty socket before the segments are seated', () => {
+    const { game, mount } = examined()
+    expect(mount.examine(game.state)).toBe(mount.description)
+  })
+
+  it('no longer asks for segments or resin once mended, before and after the beam', () => {
+    const { game, mount } = examined()
+    mount.useWith(game.state, new BrassMirrorSegment())
+    mount.useWith(game.state, new BindingResin())
+    mount.mend(game.state)
+
+    const mended = mount.examine(game.state)
+    expect(mended).not.toContain('needs')
+    expect(mended).toContain('whole')
+
+    game.state.setStoryFlag(FLAG_ACT3_MIRRORS_OF_EMBER_LIGHT_COMPLETED, true)
+    expect(mount.examine(game.state)).toBe(mended)
+  })
+
+  it('shows the seated segments, then the set resin, on the way there', () => {
+    const { game, mount } = examined()
+    mount.useWith(game.state, new BrassMirrorSegment())
+    const seated = mount.examine(game.state)
+    expect(seated).not.toBe(mount.description)
+    expect(seated).toContain('loose')
+
+    mount.useWith(game.state, new BindingResin())
+    const bound = mount.examine(game.state)
+    expect(bound).toContain('resin')
+    expect(bound).not.toContain('loose')
+  })
+})

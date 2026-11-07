@@ -1080,9 +1080,19 @@
     "text": "With a careful, ringing press you seat the brass segments and secure their alignment. The terrace mount accepts the fittings."
   },
   {
+    "id": "1bd5cb4aac4103",
+    "speaker": "narrator",
+    "text": "Four brass segments sit in the mount, but the seams between them are loose."
+  },
+  {
     "id": "1835aff2cebce7",
     "speaker": "narrator",
     "text": "You apply the binding resin carefully around the seams; the brass segments sit firmer and the joints set."
+  },
+  {
+    "id": "136e88be155a63",
+    "speaker": "narrator",
+    "text": "Four brass segments sit in the mount, the resin set hard along their seams. The face holds together, but it is not yet whole."
   },
   {
     "id": "086c89fde197dc",
@@ -1173,6 +1183,11 @@
     "id": "1eb4d74eb628ff",
     "speaker": "narrator",
     "text": "With a final fit, the vents' rhythms align into a deep, slow breath. You sense the passages will now accept a heat ward to steady the crossing intervals."
+  },
+  {
+    "id": "1a4c58d229a7b2",
+    "speaker": "narrator",
+    "text": "The vents breathe together now, deep and slow, but every breath comes up hot enough to blister."
   },
   {
     "id": "19b66f09ae22ce",
@@ -1308,6 +1323,11 @@
     "id": "09277e9755dca7",
     "speaker": "phoenix",
     "text": "Remember him when time is short for you."
+  },
+  {
+    "id": "083bfd085cbdd1",
+    "speaker": "narrator",
+    "text": "The mirror sits whole and firm in its mount. Its seams have knit, and its face is bright."
   },
   {
     "id": "0ae65649159141",
@@ -1768,6 +1788,11 @@
     "id": "1c42993a0910c7",
     "speaker": "miners",
     "text": "Still here, Elior? Beams are going in. The way east to the Echo Chambers is sound. Go when you're ready."
+  },
+  {
+    "id": "0d679bea14c6cf",
+    "speaker": "narrator",
+    "text": "The fallen stone is heaped along the walls now, and the gallery runs open end to end. The old timbers lie snapped among it."
   },
   {
     "id": "02ef658f8e4205",

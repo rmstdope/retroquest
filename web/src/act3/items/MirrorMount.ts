@@ -125,10 +125,13 @@ export class MirrorMount extends Item {
     )
   }
 
-  /** Examine the mount and reveal a brass segment hidden in the sand (once). */
+  /**
+   * Examine the mount and reveal a brass segment hidden in the sand (once);
+   * after that it describes how far the repair has come.
+   */
   override examine(gameState: GameState): string {
     if (this.segmentRevealed) {
-      return super.examine(gameState)
+      return this.repairState(gameState)
     }
     const segment = new BrassMirrorSegment()
     gameState.currentRoom.addItem(segment)
@@ -138,5 +141,31 @@ export class MirrorMount extends Item {
       `[item_name]${segment.name.toLowerCase()}[/item_name], half-buried in ` +
       'the sand.'
     )
+  }
+
+  /** The mount as it stands: empty, seated, bound, or holding the mended mirror. */
+  private repairState(gameState: GameState): string {
+    if (
+      gameState.getStoryFlag(FLAG_ACT3_MIRRORS_MENDED) ||
+      gameState.getStoryFlag(FLAG_ACT3_MIRRORS_OF_EMBER_LIGHT_COMPLETED)
+    ) {
+      return (
+        'The mirror sits whole and firm in its mount. ' +
+        'Its seams have knit, and its face is bright.'
+      )
+    }
+    if (this.resinApplied) {
+      return (
+        'Four brass segments sit in the mount, the resin set hard along ' +
+        'their seams. The face holds together, but it is not yet whole.'
+      )
+    }
+    if (this.installed) {
+      return (
+        'Four brass segments sit in the mount, ' +
+        'but the seams between them are loose.'
+      )
+    }
+    return this.description
   }
 }
