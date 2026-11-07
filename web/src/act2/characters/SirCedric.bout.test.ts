@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest'
 import { Game } from '@/engine'
 import { Act2 } from '../Act2'
 import { MendSpell } from '../spells/MendSpell'
+import { AncientAmulet } from '../items/AncientAmulet'
 import { TrainingSword } from '../items/TrainingSword'
 import { SirCedric } from './SirCedric'
 import {
@@ -297,5 +298,70 @@ describe('Using the training sword on Sir Cedric (rq-5cau review)', () => {
     expect(answer).not.toContain("can't use")
     expect(answer).toContain('That notch by the guard.')
     expect(cedric(game).boutStarted).toBe(true)
+  })
+})
+
+describe('Starting the bout before ever greeting Sir Cedric (rq-o4lr)', () => {
+  /** A game in the courtyard with the sword and the amulet, Cedric not yet spoken to. */
+  function unmetGame(): Game {
+    const game = new Game([new Act2()])
+    game.state.currentRoom = game.state.allRooms.CastleCourtyard
+    game.state.addItemToInventory(new TrainingSword())
+    game.state.settleQuests()
+    return game
+  }
+
+  it.each([
+    'use training sword',
+    'give training sword to sir cedric',
+    'use training sword on sir cedric',
+  ])(
+    'plays his introduction and the sigil scene before the notch on "%s"',
+    (command) => {
+      const game = unmetGame()
+
+      const out = run(game, [command])
+
+      const greeting = out.indexOf('Greetings, traveler. I am Cedric.')
+      const sigil = out.indexOf('That sigil.')
+      const notch = out.indexOf('That notch by the guard.')
+      expect(greeting).toBeGreaterThanOrEqual(0)
+      expect(sigil).toBeGreaterThan(greeting)
+      expect(notch).toBeGreaterThan(sigil)
+      expect(out.trimEnd().endsWith('High cut!')).toBe(true)
+      expect(game.state.getStoryFlag(FLAG_SPOKEN_TO_SIR_CEDRIC)).toBe(true)
+    },
+  )
+
+  it('does not greet him again, or ask for a blade, once the bout is won', () => {
+    const game = unmetGame()
+    run(game, ['use training sword'])
+    run(game, [
+      'say guard to sir cedric',
+      'say turn to sir cedric',
+      'say strike to sir cedric',
+    ])
+
+    const talk = run(game, ['talk to sir cedric'])
+
+    expect(talk).not.toContain('Greetings, traveler.')
+    expect(talk).not.toContain('That sigil.')
+    expect(talk).not.toContain('with a blade')
+    expect(talk).toContain('You held your own in the yard.')
+  })
+
+  it('greets him without the sigil scene when the amulet is not carried', () => {
+    const game = unmetGame()
+    game.state.inventory = game.state.inventory.filter(
+      (i) => !(i instanceof AncientAmulet),
+    )
+
+    const out = run(game, ['use training sword'])
+
+    expect(out).toContain('Greetings, traveler. I am Cedric.')
+    expect(out).not.toContain('That sigil.')
+    expect(out.indexOf('That notch by the guard.')).toBeGreaterThan(
+      out.indexOf('Greetings, traveler.'),
+    )
   })
 })

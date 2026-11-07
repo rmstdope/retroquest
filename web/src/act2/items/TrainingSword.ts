@@ -37,9 +37,9 @@ export class TrainingSword extends Item {
       chars.some((char) => char instanceof SirCedric)
     ) {
       if (!gameState.getStoryFlag(FLAG_DEMONSTRATED_COMBAT_SKILLS)) {
-        // Cedric takes over: recognition, then the bout; the test passes in his answers
+        // Cedric takes over: his first meeting if not yet met, the recognition, then the bout
         const cedric = chars.find((char) => char instanceof SirCedric)
-        if (cedric instanceof SirCedric) return cedric.beginBout()
+        if (cedric instanceof SirCedric) return cedric.beginBout(gameState)
       } else if (gameState.getStoryFlag(FLAG_DEMONSTRATED_COMBAT_SKILLS)) {
         // Subsequent uses after mission explanation
         const prefix = characterName('Sir Cedric')

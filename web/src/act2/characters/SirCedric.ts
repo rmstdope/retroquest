@@ -280,9 +280,11 @@ export class SirCedric extends Character {
    * Start the Knight's Test bout when Elior uses the training sword here: the
    * first time with the recognition of the blade, later (after leaving
    * mid-bout) with a restart from the first attack. Using the sword again
-   * mid-bout only repeats the current attack.
+   * mid-bout only repeats the current attack. When Elior has never spoken to
+   * Cedric, the first meeting (his greeting and, with the amulet, the sigil
+   * scene) plays before the recognition, so it still leads into the bout.
    */
-  beginBout(): string {
+  beginBout(gameState: GameState): string {
     if (this.boutRunning()) {
       const call = BOUT_CALLS[this.boutCall - 1]
       return (
@@ -297,7 +299,11 @@ export class SirCedric extends Character {
     this.boutStarted = true
     this.boutCall = 1
     if (!first) return this.restartBout(characterName('Sir Cedric'))
+    const meeting = gameState.getStoryFlag(FLAG_SPOKEN_TO_SIR_CEDRIC)
+      ? ''
+      : this.replyToTalk(gameState) + '\n\n'
     return (
+      meeting +
       'You draw the [item_name]training sword[/item_name]. Before you can ' +
       'take your stance, ' +
       characterName('Sir Cedric') +
