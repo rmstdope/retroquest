@@ -30,7 +30,8 @@ const DODGES: Record<MiraTopic, string> = {
   amulet:
     'Keep it close and keep it hidden. That is all it asks of you, for now.',
   grandmother:
-    'She loves you more than you know. Ask her yourself, when we are home.',
+    'She loves you more than you know. Ask her yourself, when this is ' +
+    'over.',
 }
 
 /** Her honest answers after the confession. */
@@ -48,8 +49,8 @@ const ANSWERS: Record<MiraTopic, string> = {
     'holds. That is why his agent walked our lanes looking for it.',
   grandmother:
     "She is Lysa's mother, and she kept the secret with me all these " +
-    'years. It cost her more than it cost me. Be gentle with her when you ' +
-    'are home.',
+    'years. It cost her more than it cost me. Be gentle with her when this ' +
+    'is over.',
 }
 
 /**
