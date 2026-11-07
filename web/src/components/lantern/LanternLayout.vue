@@ -1989,13 +1989,16 @@ watch(
   border-radius: 0;
   border-width: 1px 0 0;
 }
+/* Positioned, so the composer's completion list can open above the whole
+   sheet (rq-k8p5); the phone's sheet over the stage is absolute instead. */
 .lq-sheet {
+  position: relative;
   flex: 0 0 auto;
   max-height: 62dvh;
   overflow-y: auto;
 }
 /* Type mode is too short to need the scroll, and a scrolling sheet would clip
-   the completion list that opens above the command box (rq-mvd). */
+   the completion list that opens above it (rq-mvd). */
 .lq-sheet.lq-typing {
   overflow-y: visible;
 }
