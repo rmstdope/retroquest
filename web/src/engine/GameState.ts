@@ -255,26 +255,34 @@ export class GameState {
 
   /**
    * Settle every pending quest event: activate each quest whose trigger is
-   * met, collect each log change, then complete each quest whose completion
-   * is met. Callers use this instead of looping over the next* methods.
-   * Each quest's `checkUpdate` must report a log change only once, or this
-   * never returns.
+   * met, or that was completed before it was offered, collect each log
+   * change, then complete each quest whose completion is met. A quest
+   * completed before it was offered is reported only as completed: its
+   * opening log would tell of a task already done. Callers use this instead
+   * of looping over the next* methods. Each quest's `checkUpdate` must report
+   * a log change only once, or this never returns.
    */
   settleQuests(): QuestChanges {
     const changes: QuestChanges = { activated: [], updated: [], completed: [] }
+    const unoffered = this.nonActivatedQuests.filter((quest) => quest.completed)
+    const reported = (quest: Quest): boolean => !unoffered.includes(quest)
     for (let q: Quest | null; (q = this.nextActivatedQuest()); )
-      changes.activated.push(q)
+      if (reported(q)) changes.activated.push(q)
     for (let q: Quest | null; (q = this.nextUpdatedQuest()); )
-      changes.updated.push(q)
+      if (reported(q)) changes.updated.push(q)
     for (let q: Quest | null; (q = this.nextCompletedQuest()); )
       changes.completed.push(q)
     return changes
   }
 
-  /** Activate the first quest whose trigger is met and return it, or null. */
+  /**
+   * Activate the first quest whose trigger is met, or that was completed
+   * before it was ever offered (its offer skipped), and return it, or null.
+   * A completed quest then settles as completed in the same pass.
+   */
   nextActivatedQuest(): Quest | null {
-    const index = this.nonActivatedQuests.findIndex((quest) =>
-      quest.checkTrigger(this),
+    const index = this.nonActivatedQuests.findIndex(
+      (quest) => quest.completed || quest.checkTrigger(this),
     )
     if (index < 0) return null
     const [quest] = this.nonActivatedQuests.splice(index, 1)
@@ -315,6 +323,26 @@ export class GameState {
    */
   refreshQuestLogs(): void {
     for (const quest of this.activatedQuests) quest.checkUpdate(this)
+  }
+
+  /**
+   * Move every quest already completed but still waiting to be offered or
+   * active to the completed quests, reporting nothing. A save made while a
+   * quest finished before its offer stayed there is brought level on load.
+   */
+  settleFinishedQuests(): void {
+    const finished = [
+      ...this.nonActivatedQuests,
+      ...this.activatedQuests,
+    ].filter((quest) => quest.completed)
+    if (!finished.length) return
+    this.nonActivatedQuests = this.nonActivatedQuests.filter(
+      (quest) => !quest.completed,
+    )
+    this.activatedQuests = this.activatedQuests.filter(
+      (quest) => !quest.completed,
+    )
+    this.completedQuests.push(...finished)
   }
 
   /**

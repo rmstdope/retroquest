@@ -104,6 +104,48 @@ describe('GameState', () => {
       expect(gs.nextActivatedQuest()).toBeNull()
     })
 
+    it('settles a quest completed before it was offered as completed, reporting only that', () => {
+      class Early extends Quest {
+        override checkUpdate(): boolean {
+          if (this.latestStage) return false
+          this.latestStage = 'news'
+          return true
+        }
+      }
+      const early = new Early({ name: 'Early', description: 'Early.' })
+      gs = new GameState(room, { TestRoom: room }, [early])
+      early.complete(gs)
+
+      const changes = gs.settleQuests()
+
+      expect(changes.activated).toEqual([])
+      expect(changes.updated).toEqual([])
+      expect(changes.completed).toEqual([early])
+      expect(gs.isQuestCompleted('Early')).toBe(true)
+    })
+
+    it('moves quests already completed but not yet settled to completed, reporting nothing', () => {
+      const waiting = new DummyQuest('Waiting')
+      const active = new DummyQuest('Active')
+      const open = new DummyQuest('Open')
+      const later = new DummyQuest('Later')
+      waiting.completed = true
+      active.completed = true
+      gs.nonActivatedQuests = [waiting, later]
+      gs.activatedQuests = [active, open]
+
+      gs.settleFinishedQuests()
+
+      expect(gs.nonActivatedQuests).toEqual([later])
+      expect(gs.activatedQuests).toEqual([open])
+      expect(gs.completedQuests).toEqual([waiting, active])
+      expect(gs.settleQuests()).toEqual({
+        activated: [],
+        updated: [],
+        completed: [],
+      })
+    })
+
     it('returns the first activated quest reporting an update', () => {
       const q1 = new DummyQuest('Q1')
       const q2 = new DummyQuest('Q2')
