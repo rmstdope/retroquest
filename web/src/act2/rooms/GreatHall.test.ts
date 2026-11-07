@@ -69,7 +69,7 @@ describe('Great Hall archive search', () => {
 
     expect(findMarkupProblems(text)).toEqual([])
     expect(text).toContain('You have already been through the archive.')
-    expect(text).toContain('Said he came on the business of Malakar.')
+    expect(text).toContain('Said he came on the business of Malakar. Refused.')
     expect(text).not.toContain('Wardens of the Dawn')
   })
 
