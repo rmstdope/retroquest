@@ -218,7 +218,8 @@ export class GameMap extends Item {
   }
 
   /**
-   * True while a side quest Elior began is still open. A never-started side
+   * True while a side quest Elior began is still open; the side quest named
+   * by `except`, if any, is not counted. A never-started side
    * quest with no lead of its own counts too, so no side quest can be skipped.
    */
   static hasBegunOpenTask(gameState: GameState, except?: string): boolean {
@@ -248,8 +249,9 @@ export class GameMap extends Item {
   /** The map's clause for the unvisited place nearest to Elior. */
   private static nearestUnvisitedClause(gameState: GameState): string {
     const place = KnowYourVillageQuest.nearestUnvisited(gameState)
+    if (place === null) return 'the tasks you began in the village'
     return (
-      `the [room_name]${place?.name}[/room_name], ` +
+      `the [room_name]${place.name}[/room_name], ` +
       'where you have not been in a long while'
     )
   }

@@ -105,14 +105,10 @@ describe('Know your village', () => {
     })
 
     it('breaks a tie by walking order', () => {
-      const game = setup(
-        ["Blacksmith's Forge", 'General Store'],
-        'Village Square',
-      )
-      const first = ORDER.indexOf('General Store')
-      expect(first).toBeLessThan(ORDER.indexOf("Blacksmith's Forge"))
+      // From the square the cottage and Mira's Hut are both one step away.
+      const game = setup(["Mira's Hut", "Elior's Cottage"], 'Village Square')
       expect(KnowYourVillageQuest.nearestUnvisited(game.state)?.name).toBe(
-        'General Store',
+        "Elior's Cottage",
       )
     })
 

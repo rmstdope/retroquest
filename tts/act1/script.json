@@ -650,21 +650,6 @@
     "text": "Your grandmother says your mother loved the river. The old fisherman at the Riverbank will remember what she did there."
   },
   {
-    "id": "0afe4c7e405ca0",
-    "speaker": "grandmother",
-    "text": "Have you been down to the river yet? He'll be at the bend; he always is."
-  },
-  {
-    "id": "1117ebc5e6c876",
-    "speaker": "narrator",
-    "text": "She turns the loaf, though it does not need turning."
-  },
-  {
-    "id": "0c619a4831b3b0",
-    "speaker": "narrator",
-    "text": "The faded photograph: Your grandmother says your mother loved the river. The old fisherman at the Riverbank will remember what she did there."
-  },
-  {
     "id": "19ad071adb2439",
     "speaker": "narrator",
     "text": "Know your village"
@@ -750,6 +735,31 @@
     "text": "Road to Greendale"
   },
   {
+    "id": "087a91050d11c4",
+    "speaker": "narrator",
+    "text": "The heart of Willowbrook: cobblestones around an old stone fountain, and a weathered notice board covered in faded announcements. Half the market stalls stand empty. The people at the others keep their voices down, and stop talking when you pass."
+  },
+  {
+    "id": "0c619a4831b3b0",
+    "speaker": "narrator",
+    "text": "The faded photograph: Your grandmother says your mother loved the river. The old fisherman at the Riverbank will remember what she did there."
+  },
+  {
+    "id": "0936cf1028e9e8",
+    "speaker": "narrator",
+    "text": "Know your village: You have not walked the rows of the Vegetable Field in a long while."
+  },
+  {
+    "id": "0afe4c7e405ca0",
+    "speaker": "grandmother",
+    "text": "Have you been down to the river yet? He'll be at the bend; he always is."
+  },
+  {
+    "id": "1117ebc5e6c876",
+    "speaker": "narrator",
+    "text": "She turns the loaf, though it does not need turning."
+  },
+  {
     "id": "1158658223b1bc",
     "speaker": "narrator",
     "text": "The Vegetable Field has withered under a grey sky: brittle leaves, cracked earth, and only a few stubborn carrots left."
@@ -808,11 +818,6 @@
     "id": "0d6adf5b5b587b",
     "speaker": "narrator",
     "text": "Rows of withered crops stretch beneath a brooding gray sky. The earth is cracked and dry, with only a few stubborn carrots hinting at better days. A faint breeze rustles the brittle leaves, carrying the scent of soil and distant rain. These rows were green a month ago."
-  },
-  {
-    "id": "087a91050d11c4",
-    "speaker": "narrator",
-    "text": "The heart of Willowbrook: cobblestones around an old stone fountain, and a weathered notice board covered in faded announcements. Half the market stalls stand empty. The people at the others keep their voices down, and stop talking when you pass."
   },
   {
     "id": "01da3eb13f1793",

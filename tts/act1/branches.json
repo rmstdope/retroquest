@@ -1,5 +1,9 @@
 [
     {
+        "after": 10,
+        "commands": ["go east", "go west", "hint"]
+    },
+    {
         "after": 46,
         "commands": ["go south", "go east", "go south", "go west", "go south", "go south", "go east", "go south", "use sharp knife with vines", "go south", "rest"]
     },
