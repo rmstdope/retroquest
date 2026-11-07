@@ -1,0 +1,51 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Agreed — one press for a hint</title><style>:root{--bg:#f4ede4;--ink:#2b2420;--soft:#7a6e64;--line:#ddd2c4;--amber:#f0a020;--chip:#ece4d8;--card:#fbf8f3;--new:#2f7d4a}
+*{box-sizing:border-box}body{margin:0;background:#e9e3da;font-family:"DM Sans",system-ui,sans-serif;color:var(--ink);padding:24px}
+h1{font:600 22px Georgia,serif;margin:0 0 4px}p.lead{margin:0 0 20px;color:var(--soft);max-width:900px}
+.row{display:flex;gap:28px;flex-wrap:wrap;align-items:flex-start;margin-bottom:28px}
+.cap{font:600 12px system-ui;letter-spacing:.06em;text-transform:uppercase;color:var(--soft);margin:0 0 6px}
+.desk{width:900px;height:520px;border:1px solid #bbb;border-radius:8px;overflow:hidden;background:var(--bg);display:flex;flex-direction:column}
+.phone{width:300px;height:620px;border:8px solid #222;border-radius:30px;overflow:hidden;background:var(--bg);display:flex;flex-direction:column}
+.hdr{display:flex;align-items:center;gap:14px;padding:10px 14px;font-size:12px;border-bottom:1px solid var(--line)}
+.hdr b{font:700 16px Georgia,serif}.hdr .sp{flex:1}.bar{width:60px;height:4px;background:#ddd;border-radius:3px;position:relative}.bar:after{content:"";position:absolute;left:0;top:0;width:8px;height:4px;background:var(--amber);border-radius:3px}
+.pic{flex:1;position:relative;background:linear-gradient(160deg,#c9d8b0,#9fb48a 40%,#8a7558 70%,#c9b48e)}
+.plate{position:absolute;left:12px;top:12px;background:var(--card);border-radius:8px;padding:8px 10px;font-size:11px;width:200px}
+.plate h4{margin:2px 0 6px;font:600 16px Georgia,serif}.plate .c{display:inline-block;border:1px solid #9ccaa5;background:#e6f2e6;border-radius:10px;padding:1px 7px;margin:2px;font-size:10px}
+.pills{position:absolute;right:12px;top:12px;display:flex;gap:6px}.pill{background:var(--card);border-radius:14px;padding:5px 10px;font-size:11px}
+.story{position:absolute;left:12px;bottom:34px;width:330px;background:var(--card);border-radius:8px;padding:10px 12px;font:12px/1.5 Georgia,serif}
+.story .you{color:var(--soft);font-family:ui-monospace,monospace;font-size:11px;margin-bottom:4px}
+.hide{position:absolute;left:50%;bottom:6px;transform:translateX(-50%);background:var(--card);border-radius:10px;padding:2px 8px;font-size:10px}
+.verbs{display:flex;gap:6px;padding:8px 10px;background:#f7f2ea;border-top:1px solid var(--line);align-items:center}
+.v{background:var(--chip);border-radius:7px;padding:7px 10px;font-size:12px;white-space:nowrap}
+.v.ghost{background:transparent;border:1px solid var(--line)}
+.inp{flex:1;border:1.5px solid #3d6fd0;border-radius:7px;padding:7px 10px;font:12px ui-monospace,monospace;color:#999;background:#f3eee6}
+.do{background:var(--amber);border-radius:7px;padding:7px 12px;font-size:12px;font-weight:600}
+.hint{background:#fff6dd;border:1.5px solid var(--amber);border-radius:7px;padding:6px 10px;font-size:12px;font-weight:600;white-space:nowrap;outline:3px dashed var(--new);outline-offset:2px}
+.pill.hint{border-radius:14px;padding:4px 10px;font-size:11px}
+.note{font-size:12px;color:var(--soft);max-width:900px;margin:4px 0 0}
+.ph-hdr{display:flex;align-items:center;gap:8px;padding:8px 10px;font-size:11px;border-bottom:1px solid var(--line)}
+.ph-hdr b{font:600 13px Georgia,serif}.ph-hdr .sp{flex:1}
+.ph-pic{height:170px;background:linear-gradient(160deg,#c9d8b0,#9fb48a 40%,#8a7558 70%,#c9b48e);position:relative}
+.ph-story{flex:1;padding:10px 12px;font:12px/1.5 Georgia,serif;overflow:hidden}
+.ph-story .you{color:var(--soft);font-family:ui-monospace,monospace;font-size:11px;margin:8px 0 2px}
+.dock{display:flex;gap:6px;padding:8px;border-top:1px solid var(--line);background:#f7f2ea;align-items:center}
+.arr{background:var(--chip);border-radius:7px;width:30px;height:30px;display:flex;align-items:center;justify-content:center;font-size:14px}
+.sheet{border-top:1px solid var(--line);background:#f7f2ea;padding:8px;display:flex;flex-direction:column;gap:6px}
+.sheet .r{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.legend{font-size:12px;color:var(--soft);margin-bottom:16px}.legend span{outline:3px dashed var(--new);outline-offset:2px;padding:0 4px;margin:0 4px}
+</style><style>.hint.off{opacity:.45}</style></head><body>
+<h1>Agreed: one press for a hint</h1><p class="lead">The Hint button sits where you act: at the right end of the row of actions, and beside “Do it” when you type. On a phone it is on the folded action bar and in the open sheet. It moves with the action bar, so it is never on the picture.</p><div class="legend">The new button is marked with a <span>dashed green outline</span> — the outline is only for this drawing.</div>
+<div class="row"><div><p class="cap">Laptop · choosing actions</p><div class="desk"><div class="hdr"><b>RetroQuest</b> Act I<span class="sp"></span>Quests <span class="bar"></span> 1/11 &nbsp; Save &nbsp; Load &nbsp; Stats &nbsp; Settings &nbsp; Help</div>
+<div class="pic"><div class="plate">YOU ARE IN<h4>Abandoned Shed</h4><span class="c">Patches</span><span class="c">Shed Door</span><span class="c">Workbench</span></div>
+<div class="pills"><span class="pill">Bag · 7</span><span class="pill">Spells · 1</span><span class="pill">Quests · 5</span><span class="pill">Story so far</span><span class="pill">Map</span></div>
+<div class="story"><div class="you">&gt; hint</div><i>(the same hint typing “hint” gives today, as a new turn in the story)</i></div><span class="hide">▾ Hide</span></div><div class="verbs"><span class="v">Look</span><span class="v">Examine</span><span class="v">Search</span><span class="v">Take</span><span class="v">Use</span><span class="v">Use with</span><span class="v">Talk</span><span class="v">Say</span><span class="v">Give</span><span class="v">More…</span><span class="v">⌨ Type</span><span style="flex:1"></span><span class="hint">💡 Hint</span></div></div></div></div>
+<div class="row"><div><p class="cap">Laptop · typing</p><div class="desk"><div class="hdr"><b>RetroQuest</b> Act I<span class="sp"></span>Quests <span class="bar"></span> 1/11 &nbsp; Save &nbsp; Load &nbsp; Stats &nbsp; Settings &nbsp; Help</div>
+<div class="pic"><div class="plate">YOU ARE IN<h4>Abandoned Shed</h4><span class="c">Patches</span><span class="c">Shed Door</span><span class="c">Workbench</span></div>
+<div class="pills"><span class="pill">Bag · 7</span><span class="pill">Spells · 1</span><span class="pill">Quests · 5</span><span class="pill">Story so far</span><span class="pill">Map</span></div>
+<div class="story"><div class="you">&gt; hint</div><i>(the same hint typing “hint” gives today, as a new turn in the story)</i></div><span class="hide">▾ Hide</span></div><div class="verbs"><span class="v">Actions <small>Esc</small></span><span class="inp">What do you do?</span><span class="do">Do it ▸</span><span class="hint">💡 Hint</span></div></div></div></div>
+<div class="row"><div><p class="cap">Phone · action bar folded</p><div class="phone"><div class="ph-hdr"><b>Abandoned Shed</b><span class="sp"></span>Act I · 1/11<span class="v ghost">☰</span></div>
+<div class="ph-pic"></div><div class="ph-story">A rickety shed leans precariously at the edge of Willowbrook…<div class="you">&gt; hint</div><i>(the same hint typing “hint” gives today, as a new turn in the story)</i></div><div class="dock"><span class="arr">↑</span><span class="arr">→</span><span style="flex:1"></span><span class="v">Actions ▴</span><span class="v">⌨</span><span class="hint">💡 Hint</span></div></div></div></div>
+<h2 style="font:600 16px Georgia">Phone: the open action sheet. Hint on the top row, beside “▾ Hide”, in both modes</h2><div class="row"><div><p class="cap">X · Actions open</p><div class="phone"><div class="ph-hdr"><b>Abandoned Shed</b><span class="sp"></span>Act I · 1/11<span class="v ghost">☰</span></div>
+<div class="ph-pic"></div><div class="ph-story">A rickety shed leans precariously at the edge of Willowbrook…</div><div class="sheet"><div class="r"><span class="v">Actions</span><span style="flex:1"></span><span class="hint">💡 Hint</span><span class="v">▾ Hide</span></div><div class="r"><span class="v">Look</span><span class="v">Examine</span><span class="v">Search</span><span class="v">Take</span><span class="v">Use</span><span class="v">Use with</span><span class="v">Talk</span><span class="v">Say</span><span class="v">Give</span><span class="v">More…</span><span class="v">⌨ Type</span></div></div></div></div><div><p class="cap">X · Typing open</p><div class="phone"><div class="ph-hdr"><b>Abandoned Shed</b><span class="sp"></span>Act I · 1/11<span class="v ghost">☰</span></div>
+<div class="ph-pic"></div><div class="ph-story">A rickety shed leans precariously at the edge of Willowbrook…</div><div class="sheet"><div class="r"><span class="v">Actions</span><span style="flex:1"></span><span class="hint">💡 Hint</span><span class="v">▾ Hide</span></div><div class="r"><span class="inp">What do you do?</span><span class="do">Do it ▸</span></div></div></div></div></div>
+<h2 style="font:600 16px Georgia">Dimmed state</h2><div class="row"><div><p class="cap">While the game can't take a move (a turn being read aloud, a window open)</p><div class="desk" style="height:auto"><div class="verbs"><span class="v">Look</span><span class="v">Examine</span><span class="v">Search</span><span class="v">Take</span><span class="v">Use</span><span class="v">Use with</span><span class="v">Talk</span><span class="v">Say</span><span class="v">Give</span><span class="v">More…</span><span class="v">⌨ Type</span><span style="flex:1"></span><span class="hint off">💡 Hint</span></div></div>
+<p class="note">Dimmed, like the exit arrows already are at such moments. It can't be pressed, and it comes back as soon as a move can be made.</p></div></div><p class="note">Pressing Hint gives the same turn as typing “hint”: the player's line “&gt; hint” and then the hint. Anything half-built or typed but not sent stays as it was.</p></body></html>
