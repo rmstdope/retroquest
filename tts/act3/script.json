@@ -175,19 +175,19 @@
     "text": "Your parents made the three relics, long before you were born. Mira says they left words behind them: by the sea, on the mountain and under the hills."
   },
   {
-    "id": "1c66f2d11b1ce0",
+    "id": "10f079a8d2ae98",
     "speaker": "narrator",
-    "text": "○ By the sea: something they left in the Sunken Ruins."
+    "text": "By the sea: something they left in the Sunken Ruins."
   },
   {
-    "id": "0436e715812a98",
+    "id": "14b594512b1be7",
     "speaker": "narrator",
-    "text": "○ On the mountain: something they left on Mount Ember."
+    "text": "On the mountain: something they left on Mount Ember."
   },
   {
-    "id": "12feaaf1bf66d1",
+    "id": "0952d1fb39bc42",
     "speaker": "narrator",
-    "text": "○ Under the hills: something they left in the Caverns of Shadow."
+    "text": "Under the hills: something they left in the Caverns of Shadow."
   },
   {
     "id": "1f04c193733cfe",
@@ -320,9 +320,9 @@
     "text": "Quest updated"
   },
   {
-    "id": "0a5458dd21a823",
+    "id": "09b7fe62beb840",
     "speaker": "narrator",
-    "text": "✓ In the Sunken Ruins: a letter from Aren and Lysa to their friend Malakar, begging him not to reach for time. He wrote back: You would have me wait while you die."
+    "text": "In the Sunken Ruins: a letter from Aren and Lysa to their friend Malakar, begging him not to reach for time. He wrote back: You would have me wait while you die."
   },
   {
     "id": "18f9ba6292bf12",
@@ -1035,9 +1035,9 @@
     "text": "Mirrors of Emberlight: The terraces are lined with ancient, cracked mirrors. Find a way to repair the mirrors and restore the channel of light to the high altar."
   },
   {
-    "id": "0e472f873a6621",
+    "id": "052400c6e180c9",
     "speaker": "narrator",
-    "text": "✓ On Mount Ember: the promise the three of them burned into stone, one virtue each, and Malakar's name struck deeper than the others."
+    "text": "On Mount Ember: the promise the three of them burned into stone, one virtue each, and Malakar's name struck deeper than the others."
   },
   {
     "id": "11f0ce82c22d53",
@@ -2213,6 +2213,16 @@
     "id": "0f13d21bb3d9fe",
     "speaker": "narrator",
     "text": "You search around the Dragon's Hall, but find nothing of interest beyond what you can already see."
+  },
+  {
+    "id": "0a5458dd21a823",
+    "speaker": "narrator",
+    "text": "✓ In the Sunken Ruins: a letter from Aren and Lysa to their friend Malakar, begging him not to reach for time. He wrote back: You would have me wait while you die."
+  },
+  {
+    "id": "0e472f873a6621",
+    "speaker": "narrator",
+    "text": "✓ On Mount Ember: the promise the three of them burned into stone, one virtue each, and Malakar's name struck deeper than the others."
   },
   {
     "id": "19264ee82e4e82",
