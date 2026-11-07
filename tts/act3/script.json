@@ -315,6 +315,11 @@
     "text": "You carefully fold the letter — a plea to a friend, kept by the sea."
   },
   {
+    "id": "03f47d282497dc",
+    "speaker": "narrator",
+    "text": "Echoes of the Hidden Bond: Your parents made the three relics, long before you were born. Mira says they left words behind them: by the sea, on the mountain and under the hills. By the sea: the letter you found in the Sunken Ruins. You have not read it yet."
+  },
+  {
     "id": "15b327c013bbc3",
     "speaker": "narrator",
     "text": "Quest updated"
@@ -808,6 +813,16 @@
     "id": "16698df29287fc",
     "speaker": "narrator",
     "text": "The Three Virtues: You walked into the black water and named what you did not abandon: yourself. The guardian gave you the crystal of light. Sir Cedric has said little since it asked him the same question."
+  },
+  {
+    "id": "0c8383e862b038",
+    "speaker": "mira",
+    "text": "Not yet, Elior. That letter in your bag was left for you, and you have not read it. I will not take you up the mountain until you have."
+  },
+  {
+    "id": "12bfb88f13c5c1",
+    "speaker": "mira",
+    "text": "Not yet, Elior. There is something in these ruins that was left for you. I will not take you up the mountain without it."
   },
   {
     "id": "19a04f0f5847e7",

@@ -3,6 +3,7 @@ import { Game, GameController } from '@/engine'
 import { Act3 } from '../Act3'
 import { questTextHtml } from '@/lantern/questTextHtml'
 import { EchoesOfTheHiddenBondQuest } from './EchoesOfTheHiddenBond'
+import { SeaSealedLetter } from '../items/SeaSealedLetter'
 import {
   FLAG_ACT3_ECHOES_QUEST_STARTED,
   FLAG_ACT3_MAIN_STARTED,
@@ -91,6 +92,24 @@ describe('Echoes of the Hidden Bond quest', () => {
         'they became the ward that hides you. The dragon says they are ' +
         'warded away, not dead.',
     )
+  })
+
+  it('hints at reading the sea-sealed letter once it is carried', () => {
+    expect(quest.hint(game.state)).toContain(
+      'By the sea: something they left in the Sunken Ruins.',
+    )
+    game.state.inventory.push(new SeaSealedLetter())
+
+    const hint = quest.hint(game.state)
+
+    expect(hint).not.toContain('something they left in the Sunken Ruins')
+    expect(hint).toContain(
+      'By the sea: the letter you found in the Sunken Ruins. ' +
+        'You have not read it yet.',
+    )
+    game.state.setStoryFlag(FLAG_ACT3_SEA_SEALED_LETTER_READ, true)
+    quest.checkUpdate(game.state)
+    expect(quest.hint(game.state)).toContain('On the mountain')
   })
 
   it('reports its clues as checklist data', () => {

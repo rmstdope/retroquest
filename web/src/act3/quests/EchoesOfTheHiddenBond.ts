@@ -6,6 +6,7 @@ import {
   FLAG_ACT3_DRAGONS_MEMORY_RECEIVED,
   FLAG_ACT3_ECHOES_QUEST_COMPLETED,
 } from '../Act3StoryFlags'
+import { SeaSealedLetter } from '../items/SeaSealedLetter'
 
 /** The lead-in of the clue list. */
 const INTRO =
@@ -19,6 +20,11 @@ const OPEN_CLUES = [
   'On the mountain: something they left on Mount Ember.',
   'Under the hills: something they left in the Caverns of Shadow.',
 ]
+
+/** The sea clue's hint once the letter is carried but not yet read. */
+const LETTER_UNREAD =
+  'By the sea: the letter you found in the Sunken Ruins. ' +
+  'You have not read it yet.'
 
 /** What the quest says when all three clues are found. */
 const COMPLETION =
@@ -68,6 +74,18 @@ export class EchoesOfTheHiddenBondQuest extends Quest {
   override refreshSavedText(gameState: GameState): void {
     this.completion = COMPLETION
     this.rebuildLog(gameState)
+  }
+
+  /**
+   * Point at the sea-sealed letter once it is in the bag but unread, rather
+   * than at finding something in the ruins; otherwise the checklist's hint.
+   */
+  override hint(gameState: GameState): string | null {
+    const letterCarriedUnread =
+      !gameState.getStoryFlag(FLAG_ACT3_SEA_SEALED_LETTER_READ) &&
+      gameState.inventory.some((item) => item instanceof SeaSealedLetter)
+    if (letterCarriedUnread) return `${INTRO} ${LETTER_UNREAD}`
+    return super.hint(gameState)
   }
 
   /** Return false as this is a storytelling side quest. */
