@@ -1,15 +1,10 @@
-import {
-  Character,
-  type GameState,
-  characterName,
-  dialogue,
-  normaliseSpokenWord,
-} from '@/engine'
+import { Character, type GameState, characterName, dialogue } from '@/engine'
 import {
   CEDRIC_DESCRIPTION,
   CEDRIC_GATE_TALK,
   CEDRIC_NAME,
   CEDRIC_NOT_NOW,
+  CEDRIC_WAITS_FOR_REST,
   cedricDoes,
   cedricSays,
 } from '../CedricLines'
@@ -28,8 +23,24 @@ import {
 /** The refrain as Elior speaks it at the gate. */
 const REFRAIN = 'Power follows purpose; purpose follows truth.'
 
-/** The words of the carved refrain, lower-cased, as Elior may answer him. */
-const REFRAIN_LINE = REFRAIN.slice(0, -1).toLowerCase()
+/** The words of the carved refrain, as Elior may answer him. */
+const REFRAIN_WORDS = wordsOf(REFRAIN)
+
+/** The words of its first half, which he waits to hear the rest of. */
+const FIRST_HALF_WORDS = wordsOf(REFRAIN.split(';')[0])
+
+/**
+ * The lower-case words of an utterance, one space apart, with every mark of
+ * punctuation and run of spaces between them dropped: a phone keyboard
+ * rarely offers a semicolon, so the refrain counts however it is punctuated.
+ */
+function wordsOf(text: string): string {
+  return text
+    .toLowerCase()
+    .split(/[^a-z]+/)
+    .filter((word) => word !== '')
+    .join(' ')
+}
 
 /** Rooms of the Sunken Ruins other than the Sanctum, by room key. */
 const RUINS_ROOMS = [
@@ -213,17 +224,19 @@ export class SirCedric extends Character {
 
   /**
    * At the fortress gates Elior may answer him with the refrain, by its name
-   * or in full. Any other words, or the refrain anywhere else, get a gentle
-   * "Later, when there is time for it."; once answered he only says he is
-   * ready.
+   * or in full, however it is punctuated; its first half alone makes him
+   * wait for the rest. Any other words, or the refrain anywhere else, get a
+   * gentle "Later, when there is time for it."; once answered he only says
+   * he is ready.
    */
   override sayTo(gameState: GameState, words: string): string {
-    const said = normaliseSpokenWord(words)
-    const isRefrain = said === 'refrain' || said === REFRAIN_LINE
+    const said = wordsOf(words)
+    const isRefrain = said === 'refrain' || said === REFRAIN_WORDS
     const atGate = this.roomKey(gameState) === 'FortressEntrance'
     if (atGate && gameState.getStoryFlag(FLAG_ACT3_CEDRIC_GATE_ANSWERED)) {
       return this.line(gameState)
     }
+    if (atGate && said === FIRST_HALF_WORDS) return CEDRIC_WAITS_FOR_REST
     if (!isRefrain || !atGate) return CEDRIC_NOT_NOW
     gameState.setStoryFlag(FLAG_ACT3_CEDRIC_GATE_ANSWERED, true)
     return (

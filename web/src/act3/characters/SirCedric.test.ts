@@ -134,6 +134,10 @@ describe('SirCedric', () => {
       REFRAIN,
       '"Refrain."',
       'Power follows purpose; purpose follows truth',
+      'power follows purpose, purpose follows truth',
+      'power follows purpose purpose follows truth',
+      '  Power   follows purpose ,  purpose follows truth.  ',
+      'Power follows purpose. Purpose follows truth!',
     ])('is answered by the refrain as %s', (words) => {
       const game = startedAt('FortressEntrance')
       const out = new SirCedric().sayTo(game.state, words)
@@ -169,6 +173,33 @@ describe('SirCedric', () => {
       )
       expect(cedric.sayTo(game.state, 'refrain')).toContain('Truth, then.')
     })
+
+    it.each([
+      'power follows purpose',
+      'Power follows purpose;',
+      '"Power follows purpose,"',
+    ])(
+      'waits for the rest when only the first half is said, as %s',
+      (words) => {
+        const game = startedAt('FortressEntrance')
+        const cedric = new SirCedric()
+        const out = cedric.sayTo(game.state, words)
+        expectMarkupWellFormed(out)
+        expect(out).toBe(
+          '[character_name]Sir Cedric[/character_name] waits for the rest ' +
+            'of it. [dialogue]Go on.[/dialogue]',
+        )
+        expect(game.state.getStoryFlag(FLAG_ACT3_CEDRIC_GATE_ANSWERED)).toBe(
+          false,
+        )
+        expect(
+          cedric.sayTo(
+            game.state,
+            'power follows purpose, purpose follows truth',
+          ),
+        ).toContain('Truth, then.')
+      },
+    )
 
     it('does not take the refrain away from the gate', () => {
       const game = startedAt('TidalCauseway')

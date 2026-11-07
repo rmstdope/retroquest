@@ -114,6 +114,10 @@ export const CEDRIC_GATE_TALK =
   '\n' +
   'Words carved beneath the runes of a sunlit glade come back to you.'
 
+/** What he says to the first half of the refrain alone, at the gate. */
+export const CEDRIC_WAITS_FOR_REST =
+  cedricDoes('waits for the rest of it.') + ' ' + speech('Go on.')
+
 /** What he says to words that are not the refrain. */
 export const CEDRIC_NOT_NOW =
   cedricDoes('keeps his eyes on the way ahead.') +
