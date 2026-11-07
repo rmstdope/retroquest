@@ -1525,6 +1525,16 @@
     "text": "Elena still? Strengthen her, wash her in untouched water, then unbind it. In that order, or not at all."
   },
   {
+    "id": "0ef1e05b795a7d",
+    "speaker": "narrator",
+    "text": "Lyria told you how a curse like Elena's is lifted, in this order or not at all: first a deeper healing to make her strong, then the mark washed in untouched water, from a spring no bucket has ever gone down, and last an unbinding of the old kind."
+  },
+  {
+    "id": "0a21e3ef6c6d36",
+    "speaker": "narrator",
+    "text": "The Innkeeper's Daughter: First Elena must be made strong, by a deeper healing than Lyria's own."
+  },
+  {
     "id": "0ec8caeb6b29ae",
     "speaker": "narrator",
     "text": "Lyria unties the bundle and breathes it in."
@@ -2435,6 +2445,11 @@
     "text": "You tie the rope to a sturdy tree and climb down into the ravine. The wagon lies on its side at the bottom, and round it are Thorne's people: hurt, hungry, and alive. One by one you get them up the rope, and they bring what goods they can carry."
   },
   {
+    "id": "0c5c5485e8df86",
+    "speaker": "narrator",
+    "text": "You got Thorne's people up out of the ravine on your rope. Thorne is still in the Market District, waiting for word of them."
+  },
+  {
     "id": "006919dc30a7cf",
     "speaker": "narrator",
     "text": "Golden light settles on split lips and wrenched ankles, and one by one the merchants stop wincing."
@@ -2473,6 +2488,11 @@
     "id": "08308c03d5c9ae",
     "speaker": "narrator",
     "text": "The merchant caravan is in rough shape but the people are safe. The wagon's wheels are cracked and the canvas cover is torn, but the structure is sound. Several merchants tend to minor injuries while sorting through their goods. You see spice containers, bolts of fine cloth, and various trade items. The merchants look at you with deep gratitude—you clearly saved their lives."
+  },
+  {
+    "id": "0e5629b0097b6b",
+    "speaker": "narrator",
+    "text": "The Merchant's Lost Caravan: You got Thorne's people up out of the ravine on your rope. Thorne is still in the Market District, waiting for word of them."
   },
   {
     "id": "0f85dffe7dcf62",
@@ -2535,6 +2555,11 @@
     "text": "As the golden light fades, something surfaces on the inside of Elena's wrist: a small silver mark in the shape of a mask, smooth and smiling, with no eyes behind it. The curse is wearing a face. You have never seen its like, and you cannot say whose it is."
   },
   {
+    "id": "1bf0f404bb24ec",
+    "speaker": "narrator",
+    "text": "Greater heal made Elena stronger, and a small silver mask surfaced on the inside of her wrist, smooth and smiling, with no eyes behind it. The curse still holds her."
+  },
+  {
     "id": "0ccf6d2b2783e9",
     "speaker": "innkeeper marcus",
     "text": "There's colour in her face again. First time in three weeks. … But she's still cold to the touch. Whatever you did, it isn't finished."
@@ -2570,6 +2595,11 @@
     "text": "A young woman with a little colour back in her face. She still moves carefully, like someone waiting for the cold to come back. On the inside of her wrist, a small silver mask shows through her skin."
   },
   {
+    "id": "085f037e895a90",
+    "speaker": "narrator",
+    "text": "The Innkeeper's Daughter: Elena is strong enough now. Next in the order the mark is washed in untouched water, from a spring no bucket has ever gone down."
+  },
+  {
     "id": "100021e2ce50e9",
     "speaker": "narrator",
     "text": "The water runs over Elena's wrist and down her fingers, and where it runs the grey goes out of her skin. She gasps, then breathes easier than she has in weeks."
@@ -2578,6 +2608,11 @@
     "id": "0ccdc8acf65015",
     "speaker": "narrator",
     "text": "Elena stands straighter. The curse's hold on her has been greatly weakened by the purification."
+  },
+  {
+    "id": "02487ab96a75d2",
+    "speaker": "narrator",
+    "text": "The water from the nymphs' spring washed the grey out of her skin, but the silver mask on her wrist is untouched."
   },
   {
     "id": "1bdbcc8edada89",
@@ -2593,6 +2628,11 @@
     "id": "112e39c2e9f304",
     "speaker": "narrator",
     "text": "A young woman, steadier now, with the grey gone from her skin. She keeps rubbing the inside of her wrist. The silver mask on her wrist is untouched by the water."
+  },
+  {
+    "id": "0e2d74a35578d6",
+    "speaker": "narrator",
+    "text": "The Innkeeper's Daughter: The water has done what water can. Last, the curse must be unbound, with the old kind of unbinding."
   },
   {
     "id": "1cd4d278c744f1",
