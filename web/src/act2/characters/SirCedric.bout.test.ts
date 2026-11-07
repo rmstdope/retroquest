@@ -287,3 +287,15 @@ describe('Giving Sir Cedric his training sword (rq-5cau)', () => {
     expect(cedric(game).boutStarted).toBe(true)
   })
 })
+
+describe('Using the training sword on Sir Cedric (rq-5cau review)', () => {
+  it('opens the recognition and the bout, as using the sword does', () => {
+    const game = courtyardGame()
+
+    const answer = run(game, ['use training sword on sir cedric'])
+
+    expect(answer).not.toContain("can't use")
+    expect(answer).toContain('That notch by the guard.')
+    expect(cedric(game).boutStarted).toBe(true)
+  })
+})
