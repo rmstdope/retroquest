@@ -246,12 +246,17 @@ export function linesOfTurn(
  * first, for scenes that colour their lines by the virtues the player earned;
  * `unset` story flags are cleared on the copy, for a scene the path only
  * reaches after its flag is set (a room's reply before it has woken).
+ * `without` items are taken out of the pack and `unlearn` spells forgotten on
+ * the copy, for a reply the path never hears because it has everything by then
+ * (what a character says of the one thing still missing).
  */
 export interface ScriptBranch {
   after: number
   commands: string[]
   virtues?: string[]
   unset?: string[]
+  without?: string[]
+  unlearn?: string[]
 }
 
 /** How many times in a row each character at hand is talked to, so what they say in turn (rumours, news) is read. */
@@ -345,6 +350,11 @@ export function actScript(
       for (const virtue of branch.virtues ?? []) probe.state.addVirtue(virtue)
       for (const flag of branch.unset ?? [])
         probe.state.setStoryFlag(flag, false)
+      for (const item of branch.without ?? [])
+        probe.state.removeItemFromInventory(item)
+      probe.state.knownSpells = probe.state.knownSpells.filter(
+        (spell) => !(branch.unlearn ?? []).includes(spell.id.toLowerCase()),
+      )
       for (const step of branch.commands) {
         addTurn(tryOut, step)
         settle(tryOut)

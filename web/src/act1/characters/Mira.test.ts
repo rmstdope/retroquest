@@ -1,3 +1,4 @@
+import { readFileSync } from 'node:fs'
 import { describe, it, expect, vi } from 'vitest'
 import { Game, GameController, type GameState } from '@/engine'
 import { Act1 } from '../Act1'
@@ -492,6 +493,19 @@ describe('Mira saying what is still missing', () => {
     expect(first).toContain(NOT_YET_LINES.boots)
     expect(second).toContain(NOT_YET_LINES.boots)
     expect(third).toContain(NOT_YET_LINES.map)
+  })
+
+  it('has every one of her lines in the narration script, so each can be recorded', () => {
+    const script = JSON.parse(
+      readFileSync(
+        new URL('../../../../tts/act1/script.json', import.meta.url),
+        'utf8',
+      ),
+    ) as { text: string }[]
+    const texts = new Set(script.map((line) => line.text))
+
+    for (const line of Object.values(NOT_YET_LINES))
+      expect(texts.has(line), line).toBe(true)
   })
 
   it('hands over the amulet when nothing is missing', () => {
