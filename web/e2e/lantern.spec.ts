@@ -413,6 +413,63 @@ test.describe('Lantern UI (the default)', () => {
     await expect(list).toHaveCount(0)
   })
 
+  // On the phone's sheet the list once opened over the sheet's top row, so a
+  // tap aimed at Hint (or the Actions/Type switch) picked a word (rq-k8p5).
+  test('keeps the sheet top row pressable while the word list shows', async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 500, height: 800 })
+    await page.goto('/')
+    await injectMockState(page)
+    await page.evaluate(() => {
+      /* eslint-disable @typescript-eslint/no-explicit-any */
+      const app = (document.querySelector('#app') as any).__vue_app__
+      const store = app.config.globalProperties.$pinia.state.value.game
+      store.completionTree = { take: { bucket: null, bread: null }, look: null }
+      /* eslint-enable @typescript-eslint/no-explicit-any */
+    })
+    await page.getByRole('button', { name: 'Actions ▴' }).click()
+    const actions = page.getByRole('region', { name: 'Actions' })
+    await actions.getByRole('button', { name: 'Type', exact: true }).click()
+    const input = page.getByLabel('Command')
+
+    await input.fill('take b')
+    const list = page.getByRole('listbox', { name: 'Matching words' })
+    await expect(list.getByRole('option')).toHaveText(['bucket', 'bread'])
+    // The list's words, and the top row's buttons, are each what a tap at
+    // their centre hits.
+    const onTop = [
+      ...(await list.getByRole('option').all()),
+      actions.getByRole('button', { name: 'Actions', exact: true }),
+      actions.getByRole('button', { name: 'Type', exact: true }),
+      actions.getByRole('button', { name: 'Hint' }),
+    ]
+    for (const target of onTop) {
+      const hit = await target.evaluate((el) => {
+        const box = el.getBoundingClientRect()
+        const top = document.elementFromPoint(
+          box.left + box.width / 2,
+          box.top + box.height / 2,
+        )
+        return top !== null && el.contains(top)
+      })
+      expect(hit, `${await target.textContent()} is on top`).toBe(true)
+    }
+
+    // A tap on Hint gives one hint turn and leaves the typed words alone.
+    const turnCount = (): Promise<number> =>
+      page.evaluate(() => {
+        /* eslint-disable @typescript-eslint/no-explicit-any */
+        const app = (document.querySelector('#app') as any).__vue_app__
+        return app.config.globalProperties.$pinia.state.value.game.turns.length
+        /* eslint-enable @typescript-eslint/no-explicit-any */
+      })
+    const before = await turnCount()
+    await actions.getByRole('button', { name: 'Hint' }).click()
+    await expect.poll(turnCount).toBe(before + 1)
+    await expect(input).toHaveValue('take b')
+  })
+
   // The Esc mark on Actions shows only while the command box has focus; a
   // press on the switch once blurred the box, the mark went and the switch
   // narrowed under the pointer, so the click missed (rq-nq8t).

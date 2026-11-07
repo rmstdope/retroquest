@@ -29,7 +29,8 @@ import {
  * receive. Focus follows the sentence: verb → choices → back to the verb. On phones it is a sheet that can fold away
  * (`foldable` shows a hide button that emits `fold`). In Type mode its root
  * carries `lq-typing`, so the sheet can let the completion list (which opens
- * above the command box) show outside it.
+ * above the command box on the stage, above the whole sheet on phones) show
+ * outside it.
  */
 const props = defineProps<{
   foldable?: boolean
@@ -1130,6 +1131,17 @@ function onTypedEnter(): void {
   border: 1px solid var(--lq-line2);
   background: var(--lq-raised);
   box-shadow: 0 10px 24px rgb(0 0 0 / 0.3);
+}
+/* On the phone's sheet the list opens above the whole sheet, not just the
+   command box, so it never covers the sheet's top row (Hint and the
+   Actions/Type switch, rq-k8p5): the field stops being its anchor and the
+   sheet (positioned by the layout) is. */
+.lq-composer:not(.lq-on-stage) .lq-type-field {
+  position: static;
+}
+.lq-composer:not(.lq-on-stage) .lq-completions {
+  left: 12px;
+  right: 12px;
 }
 .lq-completion {
   min-height: 40px;
