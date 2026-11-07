@@ -255,17 +255,21 @@ export class GameState {
 
   /**
    * Settle every pending quest event: activate each quest whose trigger is
-   * met, collect each log change, then complete each quest whose completion
-   * is met. Callers use this instead of looping over the next* methods.
-   * Each quest's `checkUpdate` must report a log change only once, or this
-   * never returns.
+   * met, or that was completed before it was offered, collect each log
+   * change, then complete each quest whose completion is met. A quest
+   * completed before it was offered is reported only as completed: its
+   * opening log would tell of a task already done. Callers use this instead
+   * of looping over the next* methods. Each quest's `checkUpdate` must report
+   * a log change only once, or this never returns.
    */
   settleQuests(): QuestChanges {
     const changes: QuestChanges = { activated: [], updated: [], completed: [] }
+    const unoffered = this.nonActivatedQuests.filter((quest) => quest.completed)
+    const reported = (quest: Quest): boolean => !unoffered.includes(quest)
     for (let q: Quest | null; (q = this.nextActivatedQuest()); )
-      changes.activated.push(q)
+      if (reported(q)) changes.activated.push(q)
     for (let q: Quest | null; (q = this.nextUpdatedQuest()); )
-      changes.updated.push(q)
+      if (reported(q)) changes.updated.push(q)
     for (let q: Quest | null; (q = this.nextCompletedQuest()); )
       changes.completed.push(q)
     return changes
