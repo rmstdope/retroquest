@@ -26,7 +26,7 @@ describe('Sigils', () => {
 
     const text = new Sigils().examine(gs)
 
-    expect(text).toContain('hairline crack runs through the nearest ring')
+    expect(text).toContain('The crack splits the nearest ring')
     expect(text).toContain('prison')
   })
 
@@ -37,7 +37,7 @@ describe('Sigils', () => {
 
     const text = new Sigils().examine(gs)
 
-    expect(text).toContain('steady and whole')
+    expect(text).toContain('The nearest ring is whole again')
     expect(text).not.toContain('crack')
   })
 })

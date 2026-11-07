@@ -8,18 +8,18 @@ import {
 
 /** The sigils as they stand before the scale is taken. */
 const WHOLE_TEXT =
-  'Rings of old sigils spiral across the black tiles around the dragon. ' +
-  'They are the walls of its prison, and every ring holds.'
+  'The sigils are cut deep, ring inside ring, and each ring glows faintly. ' +
+  "They are the walls of the dragon's prison, and every ring holds."
 
 /** The sigils once the scale is taken: the prison has weakened. */
 const CRACKED_TEXT =
-  'Where the scale lay, the sigils have dimmed, and a hairline crack runs ' +
-  'through the nearest ring. The prison is weaker than it was.'
+  'The crack splits the nearest ring clean through, and the sigils on ' +
+  'either side of it have gone dull. The prison is weaker than it was.'
 
 /** The sigils once blessing has mended them. */
 const MENDED_TEXT =
-  'The sigils around the dragon burn steady and whole again. The prison ' +
-  'holds.'
+  'The nearest ring is whole again, its sigils glowing like the rest. ' +
+  'The prison holds.'
 
 /**
  * The sigils that bind the ancient dragon in its hall. Once the scale has
