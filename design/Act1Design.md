@@ -180,7 +180,7 @@ Act I has one main quest (_Shadows over Willowbrook_), one checklist quest (_Pre
   - A map to find your way: the `map` is carried.
   - All basic magic learned: all seven spells are known.
 - **Mentioned by:**
-  - _Mira_: when she takes the flower: "You'll need warmth, protection, food, boots and a map ... go with a blessing on you." Before everything is ready: "Not yet. I'll not send you out half-dressed and half-taught." When it is ready, she gives the amulet (see below).
+  - _Mira_: when she takes the flower: "You'll need warmth, protection, food, boots and a map ... go with a blessing on you." Before everything is ready she says "Not yet." and names only the first need still missing (boots, cloak, food, map, spells, blessing, in that order), e.g. "Not yet. I'll not send you out half-dressed. The road is cold at night." When it is ready, she gives the amulet (see below).
   - _Grandmother_: the first talk after Mira's teaching gives a `fresh bread` for the road, which counts as bread; after that, "Packed yet?"
   - _Merchant_: food is refused ("you'll want every bite of that where you're going"), except the fresh bread (the optional _selfless_ choice).
   - _Shadows over Willowbrook_'s hint: Mira keeps the amulet until Elior is ready for the road. The map refuses with "your preparations for the road".

@@ -1,3 +1,4 @@
+import { readFileSync } from 'node:fs'
 import { describe, it, expect, vi } from 'vitest'
 import { Game, GameController, type GameState } from '@/engine'
 import { Act1 } from '../Act1'
@@ -6,11 +7,19 @@ import { RuneToken } from '../items/RuneToken'
 import { Mechanism } from '../items/Mechanism'
 import { Rope } from '../items/Rope'
 import { AncientAmulet } from '../items/AncientAmulet'
+import { Apple } from '../items/Apple'
+import { Egg } from '../items/Egg'
+import { FreshBread } from '../items/FreshBread'
+import { GameMap } from '../items/GameMap'
+import { TravelCloak } from '../items/TravelCloak'
+import { WanderingBoots } from '../items/WanderingBoots'
+import { WildBerries } from '../items/WildBerries'
 import {
   FLAG_CONNECT_WITH_NATURE,
   FLAG_FOUND_RUNE_TOKEN,
   FLAG_FOX_KIT_FREED,
   FLAG_INVESTIGATED_WITHERED_CROPS,
+  FLAG_JOURNEY_BLESS_COMPLETED,
   FLAG_MAGIC_FULLY_UNLOCKED,
   FLAG_MIRA_NAMED_FOULING_SIGIL,
   FLAG_VILLAGER_TALKED_TO,
@@ -362,7 +371,7 @@ describe('Mira when the flower comes before the three signs', () => {
     expect(response).toContain('They say the king is ill')
     expect(response).toContain("I think it's one wound")
     expect(response).not.toContain('Bring me one')
-    expect(response).not.toContain('half-dressed')
+    expect(response).not.toContain('Not yet.')
     expect(game.state.getStoryFlag(FLAG_CONNECT_WITH_NATURE)).toBe(true)
     expectDialogueSpeaker(response, 'Mira')
   })
@@ -373,7 +382,7 @@ describe('Mira when the flower comes before the three signs', () => {
 
     const again = executeCommands(game, ['talk to mira'])
 
-    expect(again).toContain('half-dressed')
+    expect(again).toContain('Not yet.')
     expect(again).not.toContain('one wound')
   })
 
@@ -411,6 +420,101 @@ describe('Mira when the flower comes before the three signs', () => {
     expect(earlier.indexOf('smells sour')).toBeLessThan(
       earlier.indexOf('one wound'),
     )
+  })
+})
+
+/** The needs Mira can name, in the order she checks them, with her line for each. */
+const NOT_YET_LINES: Record<string, string> = {
+  boots:
+    "Not yet. Those shoes won't last the first mile. Find boots that will.",
+  cloak:
+    "Not yet. I'll not send you out half-dressed. The road is cold at night.",
+  food: "Not yet. You'd be hungry by the second day. Pack food, four kinds at least.",
+  map: "Not yet. You'd be lost at the first fork. Find a map.",
+  spells: "Not yet. You're half-taught. The elders aren't done with you.",
+  blessing:
+    "Not yet. There's no blessing on you, and I'll not send you out without one.",
+}
+
+/** A game after the flower in which every need is met except those named. */
+function readyExcept(...missing: string[]): Game {
+  const game = gameInMirasHut()
+  game.state.addItemToInventory(new RareFlower())
+  executeCommands(game, ['give rare flower to mira'])
+  const has = (need: string): boolean => !missing.includes(need)
+  if (has('boots')) game.state.addItemToInventory(new WanderingBoots())
+  if (has('cloak')) game.state.addItemToInventory(new TravelCloak())
+  if (has('food'))
+    for (const food of [
+      new Apple(),
+      new Egg(),
+      new FreshBread(),
+      new WildBerries(),
+    ])
+      game.state.addItemToInventory(food)
+  if (has('map')) game.state.addItemToInventory(new GameMap())
+  vi.spyOn(game.state, 'hasSpell').mockReturnValue(has('spells'))
+  game.state.setStoryFlag(FLAG_JOURNEY_BLESS_COMPLETED, has('blessing'))
+  return game
+}
+
+describe('Mira saying what is still missing', () => {
+  for (const [need, line] of Object.entries(NOT_YET_LINES)) {
+    it(`names only the ${need} when it is the one thing missing`, () => {
+      const response = executeCommands(readyExcept(need), ['talk to mira'])
+
+      expect(response).toContain('looks you over, from your boots up.')
+      expect(response).toContain(line)
+      for (const other of Object.values(NOT_YET_LINES))
+        if (other !== line) expect(response).not.toContain(other)
+      expect(response).not.toContain('half-taught. Come back')
+      expectDialogueSpeaker(response, 'Mira')
+    })
+  }
+
+  it('names the first need in her order when several are missing', () => {
+    const response = executeCommands(readyExcept('cloak', 'map', 'blessing'), [
+      'talk to mira',
+    ])
+
+    expect(response).toContain(NOT_YET_LINES.cloak)
+    expect(response).not.toContain(NOT_YET_LINES.map)
+    expect(response).not.toContain(NOT_YET_LINES.blessing)
+  })
+
+  it('says the same line again when nothing has changed, and the next one once it has', () => {
+    const game = readyExcept('boots', 'map')
+
+    const first = executeCommands(game, ['talk to mira'])
+    const second = executeCommands(game, ['talk to mira'])
+    game.state.addItemToInventory(new WanderingBoots())
+    const third = executeCommands(game, ['talk to mira'])
+
+    expect(first).toContain(NOT_YET_LINES.boots)
+    expect(second).toContain(NOT_YET_LINES.boots)
+    expect(third).toContain(NOT_YET_LINES.map)
+  })
+
+  it('has every one of her lines in the narration script, so each can be recorded', () => {
+    const script = JSON.parse(
+      readFileSync(
+        new URL('../../../../tts/act1/script.json', import.meta.url),
+        'utf8',
+      ),
+    ) as { text: string }[]
+    const texts = new Set(script.map((line) => line.text))
+
+    for (const line of Object.values(NOT_YET_LINES))
+      expect(texts.has(line), line).toBe(true)
+  })
+
+  it('hands over the amulet when nothing is missing', () => {
+    const game = readyExcept()
+
+    const response = executeCommands(game, ['talk to mira'])
+
+    expectItemInInventory(game.state, 'Ancient Amulet')
+    expect(response).not.toContain('Not yet.')
   })
 })
 
@@ -463,17 +567,16 @@ describe('Mira and the cloaked stranger', () => {
 })
 
 describe('Mira and the blessing for the road', () => {
-  it('asks for a blessing on Elior without sending him to the priest for it', () => {
+  it('asks for a blessing on Elior, and only names it last, without sending him to the priest for it', () => {
     const game = gameInMirasHut()
     game.state.addItemToInventory(new RareFlower())
 
     const taught = executeCommands(game, ['give rare flower to mira'])
     const notYet = executeCommands(game, ['talk to mira'])
 
-    for (const answer of [taught, notYet]) {
-      expect(answer).toContain('a blessing on you')
+    expect(taught).toContain('a blessing on you')
+    for (const answer of [taught, notYet])
       expect(answer).not.toContain('[character_name]priest[/character_name]')
-    }
   })
 })
 
