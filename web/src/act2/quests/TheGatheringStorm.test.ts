@@ -70,7 +70,8 @@ describe('The Gathering Storm log', () => {
       'buy a survival kit, an enhanced lantern and rope in the Market ' +
       'District, he wants to see you again.',
     '[character_name]Sir Cedric[/character_name] gave you a hundred and ' +
-      'fifty coins for the survival kit, the lantern and the rope.',
+      'fifty coins for the survival kit, the lantern and the rope, all three ' +
+      'sold in the Market District.',
     'The survival kit, the lantern and the rope are packed. The merchants of ' +
       'Greendale have done what they can for you. The rest of the road leads ' +
       'to the edge of the Enchanted Forest.',

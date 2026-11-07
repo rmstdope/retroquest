@@ -82,6 +82,17 @@ describe('Supplies for the Journey before and after Sir Cedric pays', () => {
     expect(storm.latest).toContain('gave you a hundred and fifty coins')
   })
 
+  it('points to the Market District once Cedric has paid', () => {
+    const game = justAfterTheBout()
+    executeCommands(game, ['talk to sir cedric'])
+
+    const supplies = questOf(game, SuppliesForTheJourneyQuest)
+    expect(supplies.hint(game.state)).toContain('Market District')
+    expect(supplies.hint(game.state)).toContain('survival kit')
+    const storm = questOf(game, TheGatheringStormQuest)
+    expect(storm.hint(game.state)).toContain('Market District')
+  })
+
   it('says Cedric paid in a save made before that was a story flag', () => {
     const game = justAfterTheBout()
     executeCommands(game, ['talk to sir cedric'])

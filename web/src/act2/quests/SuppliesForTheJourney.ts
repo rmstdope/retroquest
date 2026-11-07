@@ -16,7 +16,9 @@ const DESCRIPTION =
   'before you go, so you are not sent with empty pockets.'
 
 /** The entry added once Sir Cedric has handed over the coins. */
-const PAID = 'Sir Cedric gave you a hundred and fifty coins for them.'
+const PAID =
+  'Sir Cedric gave you a hundred and fifty coins for the survival kit, the ' +
+  'lantern and the rope. The Market District sells all three.'
 
 /** The line shown when the quest is done. */
 const COMPLETION = 'The kit, the lantern and the rope are in your pack.'

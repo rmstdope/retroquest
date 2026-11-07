@@ -132,7 +132,7 @@ export class TheGatheringStormQuest extends Quest {
         FLAG_CEDRIC_PAID_FOR_SUPPLIES,
         SIR_CEDRIC +
           ' gave you a hundred and fifty coins for the survival kit, the ' +
-          'lantern and the rope.',
+          'lantern and the rope, all three sold in the Market District.',
       ],
       [
         FLAG_SUPPLIES_QUEST_COMPLETED,
