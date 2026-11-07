@@ -966,6 +966,9 @@ function onPanelPress(event: MouseEvent): void {
   // Opening the sheet, or the bigger map, changes nothing the voice holds: it
   // never waits for it.
   if (target.closest('.lq-dock-open, .lq-dock-icon, [data-bigger-map]')) return
+  // Hint on the folded bar acts on the first press during an arrival, as it
+  // does on the action row: it cuts the arrival short and gives the hint.
+  if (arrival.active && target.closest('.lq-dock-hint')) return
   if (!presentation.catchUpPanels()) return
   event.stopPropagation()
   event.preventDefault()

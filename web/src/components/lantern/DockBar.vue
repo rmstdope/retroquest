@@ -2,6 +2,7 @@
 import { computed, ref } from 'vue'
 import { useGameStore } from '@/stores/useGameStore'
 import { useNarrationStore } from '@/stores/useNarrationStore'
+import { useArrivalStore } from '@/stores/useArrivalStore'
 import { displayName } from '@/lantern/displayName'
 import { exitArrow } from '@/lantern/exitArrow'
 
@@ -13,6 +14,7 @@ import { exitArrow } from '@/lantern/exitArrow'
 const emit = defineEmits<{ open: [mode: 'actions' | 'type'] }>()
 const game = useGameStore()
 const narration = useNarrationStore()
+const arrival = useArrivalStore()
 const openButton = ref<HTMLButtonElement | null>(null)
 
 const COMPASS = new Set(['north', 'south', 'east', 'west', 'up', 'down'])
@@ -30,14 +32,19 @@ function go(direction: string): void {
   if (game.acceptInput) game.submitCommand(`go ${direction}`)
 }
 
-/** Hint is dimmed (aria-disabled, so it keeps focus) while the game takes no move or a turn is being read aloud. */
+/**
+ * Hint is dimmed (aria-disabled, so it keeps focus) while the game takes no move or a turn is being read aloud.
+ * An arrival on the picture does not dim it: a press cuts the arrival short and gives the hint, as on the action row.
+ */
 const hintBusy = computed<boolean>(
-  () => !game.acceptInput || narration.isNarrating,
+  () => !game.acceptInput || (narration.isNarrating && !arrival.active),
 )
 
-/** Press Hint: send the existing `hint` command. */
+/** Press Hint: end an arrival that is up (and its voice), then send the existing `hint` command. */
 function hint(): void {
-  if (!hintBusy.value) game.submitCommand('hint')
+  if (hintBusy.value) return
+  if (arrival.active) arrival.clear()
+  game.submitCommand('hint')
 }
 
 /** Put keyboard focus on the Actions button (after the panel folds). */

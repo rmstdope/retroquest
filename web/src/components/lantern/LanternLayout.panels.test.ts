@@ -200,6 +200,31 @@ describe('LanternLayout: panels wait for the narration', () => {
     },
   )
 
+  it.each([
+    ['the action row', true, false, '.lq-composer button.lq-hint'],
+    ['the open phone sheet', false, true, '.lq-composer button.lq-hint'],
+    ['the folded phone bar', false, false, 'button.lq-dock-hint'],
+  ])(
+    'offers Hint on %s during an arrival, and a press cuts it short with one hint',
+    async (_surface, wide, openSheet, selector) => {
+      const w = await ready(wide)
+      const game = useGameStore()
+      await goNorth()
+      if (openSheet) await w.get('button.lq-dock-open').trigger('click')
+      expect(useArrivalStore().active).toBe(true)
+      expect(useNarrationStore().isNarrating).toBe(true)
+      const hint = w.get(selector)
+      expect(hint.attributes('aria-disabled')).toBe('false')
+      expect(hint.classes()).not.toContain('lq-busy')
+      const turns = game.turns.length
+      await hint.trigger('click')
+      expect(useArrivalStore().active).toBe(false)
+      expect(useNarrationStore().isNarrating).toBe(false)
+      expect(game.turns).toHaveLength(turns + 1)
+      expect(game.turns.at(-1)?.command).toBe('hint')
+    },
+  )
+
   it('opens the map on the first press while the voice reads on', async () => {
     const w = await ready()
     await goNorth()
