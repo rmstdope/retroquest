@@ -816,10 +816,10 @@ function onTypedEnter(): void {
   white-space: nowrap;
   cursor: pointer;
 }
-/* The far right of a stage row; the phone sheet's top row puts it just left
-   of the fold button. */
-.lq-verbs .lq-hint,
-.lq-type-row .lq-hint {
+/* The far right of the stage's verb row (the typing row's field already
+   fills the space before it); the phone sheet's top row puts it just left of
+   the fold button. */
+.lq-verbs .lq-hint {
   margin-left: auto;
 }
 .lq-composer-top .lq-hint {
@@ -827,9 +827,6 @@ function onTypedEnter(): void {
   margin-left: auto;
 }
 .lq-composer-top .lq-hint + .lq-fold {
-  margin-left: 0;
-}
-.lq-on-stage .lq-type-row .lq-hint {
   margin-left: 0;
 }
 .lq-fold {
