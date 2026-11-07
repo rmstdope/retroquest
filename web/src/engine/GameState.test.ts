@@ -104,6 +104,34 @@ describe('GameState', () => {
       expect(gs.nextActivatedQuest()).toBeNull()
     })
 
+    it('activates a quest completed before it was offered, and settles it as completed', () => {
+      const early = new Quest({ name: 'Early', description: 'Early.' })
+      gs = new GameState(room, { TestRoom: room }, [early])
+      early.complete(gs)
+
+      const changes = gs.settleQuests()
+
+      expect(changes.activated).toEqual([early])
+      expect(changes.completed).toEqual([early])
+      expect(gs.isQuestCompleted('Early')).toBe(true)
+    })
+
+    it('moves quests already completed but not yet settled to completed, reporting nothing', () => {
+      const waiting = new DummyQuest('Waiting')
+      const active = new DummyQuest('Active')
+      const open = new DummyQuest('Open')
+      waiting.completed = true
+      active.completed = true
+      gs.nonActivatedQuests = [waiting, quest1]
+      gs.activatedQuests = [active, open]
+
+      gs.settleFinishedQuests()
+
+      expect(gs.nonActivatedQuests).toEqual([quest1])
+      expect(gs.activatedQuests).toEqual([open])
+      expect(gs.completedQuests).toEqual([waiting, active])
+    })
+
     it('returns the first activated quest reporting an update', () => {
       const q1 = new DummyQuest('Q1')
       const q2 = new DummyQuest('Q2')

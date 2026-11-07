@@ -960,6 +960,7 @@ Welcome to
       if (!(state instanceof GameState))
         throw new Error('no game state in the save')
       this.acts[payload.actIndex].afterLoad(state)
+      state.settleFinishedQuests()
       state.refreshSavedText()
       state.refreshQuestLogs()
       // A saved queue of sound triggers is stale: they sounded when they were fired.
