@@ -1,12 +1,8 @@
 import { characterName, Quest, type GameState } from '@/engine'
 import { Candle } from '../items/Candle'
 import { Matches } from '../items/Matches'
-import {
-  FLAG_PATCHES_RETURNED,
-  FLAG_PATCHES_STAYED_WITH_GRANDMOTHER,
-  FLAG_PRIEST_TALKED_TO,
-  FLAG_RUSTY_HOE_SECOND_COIN_FOUND,
-} from '../Act1StoryFlags'
+import { Shopkeeper } from '../characters/Shopkeeper'
+import { FLAG_PRIEST_TALKED_TO } from '../Act1StoryFlags'
 
 /** The opening while the priest's matches are still at the store. */
 const OUT_OF_MATCHES =
@@ -57,15 +53,11 @@ export class LetThereBeLightQuest extends Quest {
   /**
    * While the General Store is shut and the matches are still there, says
    * that Hemlock sees to them only once Patches is home; otherwise the
-   * newest log entry, as every quest does. The store is open on the same
-   * flags as Hemlock's own `isOpen`.
+   * newest log entry, as every quest does.
    */
   override hint(gameState: GameState): string | null {
-    const storeOpen =
-      gameState.getStoryFlag(FLAG_PATCHES_RETURNED) ||
-      gameState.getStoryFlag(FLAG_PATCHES_STAYED_WITH_GRANDMOTHER) ||
-      gameState.getStoryFlag(FLAG_RUSTY_HOE_SECOND_COIN_FOUND)
-    if (!storeOpen && !this.latestStage) return MATCHES_WAIT_ON_PATCHES
+    if (!Shopkeeper.isStoreOpen(gameState) && !this.latestStage)
+      return MATCHES_WAIT_ON_PATCHES
     return super.hint(gameState)
   }
 

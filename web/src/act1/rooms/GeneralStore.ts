@@ -8,8 +8,6 @@ import { Scenery } from '../items/Scenery'
 import { Shopkeeper } from '../characters/Shopkeeper'
 import {
   FLAG_PATCHES_RETURNED,
-  FLAG_PATCHES_STAYED_WITH_GRANDMOTHER,
-  FLAG_RUSTY_HOE_SECOND_COIN_FOUND,
   TRIGGER_PATCHES_RETURNS,
 } from '../Act1StoryFlags'
 
@@ -42,8 +40,8 @@ const CAT_CLAUSE =
 /**
  * General Store room: early merchant hub with multi-category items.
  *
- * The description follows whether Hemlock has the store shut or open (the
- * same story flags as the Shopkeeper), and names rope on the shelves only
+ * The description follows whether Hemlock has the store shut or open (asked of
+ * `Shopkeeper.isStoreOpen`), and names rope on the shelves only
  * while his one rope is still on display; `descriptionFor` computes it each
  * time the room is shown.
  */
@@ -104,11 +102,7 @@ export class GeneralStore extends Room {
       ? SHELVES_WITH_ROPE
       : SHELVES_WITHOUT_ROPE
     const catHome = gameState.getStoryFlag(FLAG_PATCHES_RETURNED)
-    const open =
-      catHome ||
-      gameState.getStoryFlag(FLAG_PATCHES_STAYED_WITH_GRANDMOTHER) ||
-      gameState.getStoryFlag(FLAG_RUSTY_HOE_SECOND_COIN_FOUND)
-    if (!open) return shutText(shelves)
+    if (!Shopkeeper.isStoreOpen(gameState)) return shutText(shelves)
     return openText(shelves) + (catHome ? CAT_CLAUSE : '') + '.'
   }
 }

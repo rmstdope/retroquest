@@ -171,9 +171,10 @@ export class Shopkeeper extends Character {
   /**
    * Whether the store is open: once Patches is home, or staying with
    * grandmother, or in a save made when the hoe's second coin, not Patches,
-   * paid for the rope.
+   * paid for the rope. Shared by the store's description and the priest's
+   * quest, so every part of the act agrees on when the store trades.
    */
-  private isOpen(gameState: GameState): boolean {
+  static isStoreOpen(gameState: GameState): boolean {
     return (
       gameState.getStoryFlag(FLAG_PATCHES_RETURNED) ||
       gameState.getStoryFlag(FLAG_PATCHES_STAYED_WITH_GRANDMOTHER) ||
@@ -219,7 +220,7 @@ export class Shopkeeper extends Character {
    */
   priestErrandWhileShut(gameState: GameState): string | null {
     if (
-      this.isOpen(gameState) ||
+      Shopkeeper.isStoreOpen(gameState) ||
       gameState.getStoryFlag(FLAG_PATCHES_FOUND) ||
       !gameState.getStoryFlag(FLAG_PRIEST_TALKED_TO) ||
       this.priestMatchesGiven
@@ -386,7 +387,9 @@ export class Shopkeeper extends Character {
     if (stayed && !gameState.getStoryFlag(FLAG_HEMLOCK_HEARD_PATCHES_STAYED)) {
       return this.patchesStayedNews(gameState)
     }
-    return this.isOpen(gameState) ? null : this.shutDialogue(gameState)
+    return Shopkeeper.isStoreOpen(gameState)
+      ? null
+      : this.shutDialogue(gameState)
   }
 
   /**

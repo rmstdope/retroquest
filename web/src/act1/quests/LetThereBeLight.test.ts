@@ -6,6 +6,7 @@ import { Matches } from '../items/Matches'
 import {
   FLAG_PATCHES_RETURNED,
   FLAG_PATCHES_STAYED_WITH_GRANDMOTHER,
+  FLAG_RUSTY_HOE_SECOND_COIN_FOUND,
 } from '../Act1StoryFlags'
 
 const QUEST = 'Let there be light'
@@ -31,16 +32,17 @@ describe('Let there be light', () => {
     expect(quest().hint).toContain('is home')
   })
 
-  it.each([FLAG_PATCHES_RETURNED, FLAG_PATCHES_STAYED_WITH_GRANDMOTHER])(
-    'sends Elior to Hemlock once the store is open (%s)',
-    (flag) => {
-      executeCommands(game, ['talk to priest'])
-      game.state.setStoryFlag(flag, true)
-      expect(quest().hint).toBe(quest().description)
-      expect(quest().hint).toContain('General Store')
-      expect(quest().hint).not.toContain('Patches')
-    },
-  )
+  it.each([
+    FLAG_PATCHES_RETURNED,
+    FLAG_PATCHES_STAYED_WITH_GRANDMOTHER,
+    FLAG_RUSTY_HOE_SECOND_COIN_FOUND,
+  ])('sends Elior to Hemlock once the store is open (%s)', (flag) => {
+    executeCommands(game, ['talk to priest'])
+    game.state.setStoryFlag(flag, true)
+    expect(quest().hint).toBe(quest().description)
+    expect(quest().hint).toContain('General Store')
+    expect(quest().hint).not.toContain('Patches')
+  })
 
   it('leads to the cold candle, not to Hemlock, once the matches are in hand', () => {
     executeCommands(game, ['talk to priest'])
