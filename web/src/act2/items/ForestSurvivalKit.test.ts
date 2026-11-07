@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest'
+import { GREENDALE_QUESTS } from '../greendaleWork'
 import { Game } from '@/engine'
 import { Act2 } from '../Act2'
 import { FLAG_HERMITS_WARNING_COMPLETED } from '../Act2StoryFlags'
@@ -20,13 +21,7 @@ function createGameAtStones(): Game {
 
 /** Mark Greendale's quests before the forest done, as the golden path has them by the stones. */
 function finishGreendale(game: Game): void {
-  for (const name of [
-    "The Knight's Test",
-    'Supplies for the Journey',
-    'Echoes of the Past',
-    "The Healer's Apprentice",
-    'The Ancient Library',
-  ]) {
+  for (const name of GREENDALE_QUESTS) {
     const quest = game.state.getQuest(name)
     if (quest === null) throw new Error(`Missing quest: ${name}`)
     game.state.completedQuests.push(quest)

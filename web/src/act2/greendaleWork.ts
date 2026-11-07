@@ -10,7 +10,9 @@ import {
  * east waits on, and the check the room, the hermit and the camp share so the
  * gate and the lines about it never disagree.
  */
-const GREENDALE_QUESTS = [
+
+/** The quests Greendale holds the player to before the forest opens. */
+export const GREENDALE_QUESTS = [
   "The Knight's Test",
   QUEST_SUPPLIES_FOR_THE_JOURNEY,
   'Echoes of the Past',

@@ -3,6 +3,7 @@ import { Game } from '@/engine'
 import { Act2 } from '../Act2'
 import { FLAG_HERMITS_WARNING_COMPLETED } from '../Act2StoryFlags'
 import { ForestSurvivalKit } from '../items/ForestSurvivalKit'
+import { GREENDALE_QUESTS } from '../greendaleWork'
 import {
   executeCommands,
   expectCurrentRoom,
@@ -83,6 +84,18 @@ function createCampedGameWithCityQuestsOpen(): Game {
 }
 
 describe('Forest Transition while Greendale still has work', () => {
+  it('keeps the plain refusal once Greendale is done but before the camp', () => {
+    const game = new Game([new Act2()])
+    game.state.currentRoom = game.state.allRooms.ForestTransition
+    for (const name of GREENDALE_QUESTS) {
+      const quest = game.state.getQuest(name)
+      if (quest === null) throw new Error(`Missing quest: ${name}`)
+      game.state.completedQuests.push(quest)
+    }
+
+    expect(executeCommands(game, ['e'])).toContain("You can't go that way.")
+  })
+
   it('has the hermit turn the player back to Greendale at the way east', () => {
     const game = createCampedGameWithCityQuestsOpen()
 
