@@ -54,8 +54,8 @@ export class Candle extends Item {
         gameState.currentRoom.addItem(new Locket())
         return (
           `The [item_name]${this.name}[/item_name] now casts a warm glow. ` +
-          'The flickering candlelight reveals a ' +
-          '[item_name]locket[/item_name] that was previously unseen!'
+          'Its light reaches the dark corner by the altar, ' +
+          'and there lies a [item_name]locket[/item_name] that was previously unseen!'
         )
       }
       return `[failure]The [item_name]${this.name}[/item_name] is already lit.[/failure]`
