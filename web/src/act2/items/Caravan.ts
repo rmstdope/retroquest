@@ -8,8 +8,8 @@ export class Caravan extends Item {
       name: 'caravan',
       shortName: 'caravan',
       description:
-        'The rescued merchant caravan, battered but intact. Several merchants ' +
-        'huddle around their damaged wagon, grateful to be alive. Their ' +
+        'The rescued merchants, battered and footsore. Several of them ' +
+        'huddle beside the goods they carried up, grateful to be alive. Their ' +
         'faces show relief mixed with exhaustion from their ordeal in the ' +
         'ravine. Crates of goods are scattered around, some damaged but ' +
         'most salvageable.',
@@ -49,14 +49,15 @@ export class Caravan extends Item {
     )
   }
 
-  /** Describe the state of the caravan and the grateful merchants. */
+  /** Describe the rescued merchants and the goods they carried up; the wagon stayed in the ravine. */
   override examine(_gameState: GameState): string {
     return (
-      "The merchant caravan is in rough shape but the people are safe. The wagon's " +
-      'wheels are cracked and the canvas cover is torn, but the structure is ' +
-      'sound. Several merchants tend to minor injuries while sorting through ' +
-      'their goods. You see spice containers, bolts of fine cloth, and various ' +
-      'trade items. The merchants look at you with deep gratitude—you clearly ' +
+      'The merchant caravan is in rough shape but the people are safe. The ' +
+      'wagon is still at the bottom of the ravine, on its side; what they own ' +
+      'now is what they carried up the rope. Several merchants tend to minor ' +
+      'injuries while sorting through those goods. You see spice containers, ' +
+      'bolts of fine cloth, and various trade items. ' +
+      'The merchants look at you with deep gratitude—you clearly ' +
       'saved their lives.'
     )
   }
