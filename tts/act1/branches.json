@@ -1,5 +1,9 @@
 [
     {
+        "after": 10,
+        "commands": ["go east", "go west", "hint"]
+    },
+    {
         "after": 46,
         "commands": ["go south", "go east", "go south", "go west", "go south", "go south", "go east", "go south", "use sharp knife with vines", "go south", "rest"]
     },
@@ -126,6 +130,15 @@
     },
     { "after": 141, "commands": ["cast grow on healing herb"] },
     { "after": 142, "commands": ["give rune token to mira"] },
+    { "after": 142, "without": ["travel cloak"], "commands": ["talk to mira"] },
+    {
+      "after": 142,
+      "without": ["bread", "fresh bread", "apple", "egg", "fresh carrot", "wild berries"],
+      "commands": ["talk to mira"]
+    },
+    { "after": 142, "without": ["map"], "commands": ["talk to mira"] },
+    { "after": 142, "unlearn": ["grow"], "commands": ["talk to mira"] },
+    { "after": 142, "unset": ["journey_bless_completed"], "commands": ["talk to mira"] },
     {"after": 0, "commands": ["examine dragon"]},
     {"after": 4, "commands": ["give lantern to grandmother", "buy rope from grandmother"]},
     {"after": 22, "commands": ["give lantern to tilda", "buy rope from tilda"]},

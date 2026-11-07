@@ -130,6 +130,32 @@ describe('GameMap leads at the road', () => {
     )
   })
 
+  it('names the unvisited place nearest the road when only places are left', () => {
+    const { game, map } = setupReadyExcept()
+    game.state.activatedQuests.push(new KnowYourVillageQuest())
+    for (const room of Object.values(game.state.allRooms)) {
+      if (room.name !== 'Chicken Coop' && room.name !== 'Village Chapel')
+        game.state.markVisited(room)
+    }
+
+    expect(map.use(game.state)).toContain(
+      'unfinished: the [room_name]Village Chapel[/room_name], ' +
+        'where you have not been in a long while.',
+    )
+  })
+
+  it('keeps the old clause when another begun task is open beside the places', () => {
+    const { game, map } = setupReadyExcept()
+    game.state.activatedQuests.push(
+      new KnowYourVillageQuest(),
+      new LetThereBeLightQuest(),
+    )
+
+    expect(map.use(game.state)).toContain(
+      'unfinished: the tasks you began in the village.',
+    )
+  })
+
   it('reads as before when only begun tasks are open', () => {
     const { game, map } = setupReadyExcept()
     game.state.activatedQuests.push(new LetThereBeLightQuest())

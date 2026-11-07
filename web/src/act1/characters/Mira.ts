@@ -12,6 +12,7 @@ import { MothersLetter } from '../items/MothersLetter'
 import { FadedPhotograph } from '../items/FadedPhotograph'
 import { Mechanism } from '../items/Mechanism'
 import { RuneToken } from '../items/RuneToken'
+import { PreparingForTheRoadQuest } from '../quests/PreparingForTheRoad'
 import { HealSpell } from '../spells/HealSpell'
 import { UnlockSpell } from '../spells/UnlockSpell'
 import { LightSpell } from '../spells/LightSpell'
@@ -27,6 +28,15 @@ import {
   FLAG_MIRA_FOREST_REMARK_SAID,
   FLAG_MIRA_MET,
 } from '../Act1StoryFlags'
+
+/** Mira's refusal stages, one per need she can name before the amulet. */
+type NotYetStage =
+  | 'not_yet_boots'
+  | 'not_yet_cloak'
+  | 'not_yet_food'
+  | 'not_yet_map'
+  | 'not_yet_spells'
+  | 'not_yet_blessing'
 
 /** The byword for Malakar, said anywhere in the words. */
 const MALAKAR = /malakar/i
@@ -79,6 +89,27 @@ export class Mira extends Character {
     })
   }
 
+  /** Mira's glance over Elior and her "not yet" with the one need she names. */
+  private notYet(need: string): string {
+    return (
+      `${characterName(this.name)} looks you over, from your boots up. ` +
+      speech(`Not yet. ${need}`)
+    )
+  }
+
+  /**
+   * Which stage names the first need still unmet, in the order she looks:
+   * boots up, the blessing last. The quest has just refreshed its fields.
+   */
+  private notYetStage(quest: PreparingForTheRoadQuest): NotYetStage {
+    if (!quest.hasWanderingBoots) return 'not_yet_boots'
+    if (!quest.hasTravelCloak) return 'not_yet_cloak'
+    if (!quest.allFoodCollected) return 'not_yet_food'
+    if (!quest.hasMap) return 'not_yet_map'
+    if (!quest.knowsAllSpells) return 'not_yet_spells'
+    return 'not_yet_blessing'
+  }
+
   /**
    * Mira's lines for each stage of the act. Built on demand rather than kept
    * in a field, so a save always shows the current wording.
@@ -89,7 +120,7 @@ export class Mira extends Character {
       | 'reminder_before_request'
       | 'reminder_before_request_after_remark'
       | 'reminder_flower'
-      | 'quest_conditions_not_met'
+      | NotYetStage
       | 'quest_complete_amulet_given'
       | 'post_amulet'
       | 'post_amulet_after_remark'
@@ -128,14 +159,29 @@ export class Mira extends Character {
               "I'll know the rest when I see it open.",
           )
         )
-      case 'quest_conditions_not_met':
-        return (
-          `${characterName(this.name)} looks you over, from your boots up. ` +
-          speech(
-            "Not yet. I'll not send you out half-dressed and half-taught. " +
-              "Come back when you're ready for the road, with a blessing " +
-              'on you for it.',
-          )
+      case 'not_yet_boots':
+        return this.notYet(
+          "Those shoes won't last the first mile. " + 'Find boots that will.',
+        )
+      case 'not_yet_cloak':
+        return this.notYet(
+          "I'll not send you out half-dressed. " + 'The road is cold at night.',
+        )
+      case 'not_yet_food':
+        return this.notYet(
+          "You'd be hungry by the second day. " +
+            'Pack food, four kinds at least.',
+        )
+      case 'not_yet_map':
+        return this.notYet("You'd be lost at the first fork. Find a map.")
+      case 'not_yet_spells':
+        return this.notYet(
+          "You're half-taught. The elders aren't done with you.",
+        )
+      case 'not_yet_blessing':
+        return this.notYet(
+          "There's no blessing on you, " +
+            "and I'll not send you out without one.",
         )
       case 'quest_complete_amulet_given':
         return (
@@ -477,8 +523,12 @@ export class Mira extends Character {
       this.amuletGiven = true
       return this.dialogue('quest_complete_amulet_given')
     }
-    // Conditions not fulfilled: give quest_conditions_not_met message
-    return this.dialogue('quest_conditions_not_met')
+    // Conditions not fulfilled: she names the first need still missing.
+    return this.dialogue(
+      quest instanceof PreparingForTheRoadQuest
+        ? this.notYetStage(quest)
+        : 'not_yet_blessing',
+    )
   }
 
   /**
