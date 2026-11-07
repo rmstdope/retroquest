@@ -3,15 +3,22 @@ import {
   QUEST_SUPPLIES_FOR_THE_JOURNEY,
   FLAG_DEMONSTRATED_COMBAT_SKILLS,
   FLAG_SUPPLIES_QUEST_COMPLETED,
+  FLAG_CEDRIC_PAID_FOR_SUPPLIES,
 } from '../Act2StoryFlags'
 import { ForestSurvivalKit } from '../items/ForestSurvivalKit'
 import { EnhancedLantern } from '../items/EnhancedLantern'
 import { QualityRope } from '../items/QualityRope'
 
-/** The journal entry, which is also the quest description. */
+/** The opening journal entry, which is also the quest description. */
 const DESCRIPTION =
-  'Sir Cedric gave you coin for the forest: a survival kit, an ' +
-  'enhanced lantern and rope, from the Market District.'
+  'Sir Cedric wants you to buy a survival kit, an enhanced lantern and ' +
+  'rope in the Market District for the forest. He asked you to see him ' +
+  'before you go, so you are not sent with empty pockets.'
+
+/** The entry added once Sir Cedric has handed over the coins. */
+const PAID =
+  'Sir Cedric gave you a hundred and fifty coins for the survival kit, the ' +
+  'lantern and the rope. The Market District sells all three.'
 
 /** The line shown when the quest is done. */
 const COMPLETION = 'The kit, the lantern and the rope are in your pack.'
@@ -26,10 +33,24 @@ export class SuppliesForTheJourneyQuest extends Quest {
     })
   }
 
-  /** Bring the log up to date in a save made with the older wording. */
-  override refreshSavedText(): void {
+  /**
+   * Bring the log up to date in a save made with the older wording: the
+   * opening entry, and the coins entry if Cedric has already paid.
+   */
+  override refreshSavedText(gameState: GameState): void {
     this.description = DESCRIPTION
+    this.earlierStages = undefined
+    this.latestStage = undefined
     this.completion = COMPLETION
+    this.checkUpdate(gameState)
+  }
+
+  /** Add the coins entry the first time Cedric is seen to have paid. */
+  override checkUpdate(gameState: GameState): boolean {
+    if (this.latestStage === PAID) return false
+    if (!gameState.getStoryFlag(FLAG_CEDRIC_PAID_FOR_SUPPLIES)) return false
+    this.setJournal([DESCRIPTION], PAID)
+    return true
   }
 
   override checkTrigger(gameState: GameState): boolean {

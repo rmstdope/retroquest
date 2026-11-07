@@ -103,6 +103,35 @@ describe('Lord Commander', () => {
     expect(game.state.getStoryFlag(FLAG_CEDRIKS_HONOR_COMPLETED)).toBe(true)
   })
 
+  it('speaks of the bastion when he reads the documents', () => {
+    const game = createGameInGreatHall()
+    game.state.inventory.push(new SecretDocuments())
+    game.state.setStoryFlag(FLAG_EXAMINED_SECRET_DOCUMENTS, true)
+
+    const answer = game.commandParser.parse(
+      'give secret documents to lord commander',
+    )
+
+    expect(answer).toContain('the shattered ridge')
+    expect(answer).toContain('The guard is all that holds Greendale')
+    expect(answer).toContain('an army on that ridge would warn')
+    expect(answer).toContain('Sir Cedric and you')
+    expectAttributedDialogue(answer)
+  })
+
+  it('still speaks of the bastion once the honor is restored', () => {
+    const game = createGameInGreatHall()
+    game.state.setStoryFlag(FLAG_EXAMINED_SECRET_DOCUMENTS, true)
+    game.state.setStoryFlag(FLAG_CEDRIKS_HONOR_COMPLETED, true)
+
+    const answer = game.commandParser.parse('talk to lord commander')
+
+    expect(answer).toContain('The bastion is another matter')
+    expect(answer).toContain('I cannot spare the guard to ride for it')
+    expect(answer).toContain('Sir Cedric and to you')
+    expectAttributedDialogue(answer)
+  })
+
   it('declines any other item', () => {
     const game = createGameInGreatHall()
     const stick = new WalkingStick()
