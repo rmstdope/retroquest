@@ -47617,6 +47617,168 @@
    }
   ]
  },
+ "0f227b0eed9e8d": {
+  "file": "0f227b0eed9e8d.mp3",
+  "speaker": "hemlock",
+  "duration": 8.824,
+  "words": [
+   {
+    "word": "Mira",
+    "start": 0.0,
+    "end": 0.34
+   },
+   {
+    "word": "set",
+    "start": 0.34,
+    "end": 0.66
+   },
+   {
+    "word": "my",
+    "start": 0.66,
+    "end": 0.86
+   },
+   {
+    "word": "wrist",
+    "start": 0.86,
+    "end": 1.18
+   },
+   {
+    "word": "the",
+    "start": 1.18,
+    "end": 1.38
+   },
+   {
+    "word": "winter",
+    "start": 1.38,
+    "end": 1.68
+   },
+   {
+    "word": "I",
+    "start": 1.68,
+    "end": 1.9
+   },
+   {
+    "word": "went",
+    "start": 1.9,
+    "end": 2.16
+   },
+   {
+    "word": "down",
+    "start": 2.16,
+    "end": 2.4
+   },
+   {
+    "word": "on",
+    "start": 2.4,
+    "end": 2.58
+   },
+   {
+    "word": "the",
+    "start": 2.58,
+    "end": 2.68
+   },
+   {
+    "word": "ice,",
+    "start": 2.68,
+    "end": 2.98
+   },
+   {
+    "word": "lad,",
+    "start": 3.12,
+    "end": 3.3
+   },
+   {
+    "word": "and",
+    "start": 3.54,
+    "end": 3.76
+   },
+   {
+    "word": "wouldn't",
+    "start": 3.76,
+    "end": 4.14
+   },
+   {
+    "word": "take",
+    "start": 4.14,
+    "end": 4.3
+   },
+   {
+    "word": "a",
+    "start": 4.3,
+    "end": 4.46
+   },
+   {
+    "word": "coin",
+    "start": 4.46,
+    "end": 4.82
+   },
+   {
+    "word": "for",
+    "start": 4.82,
+    "end": 5.12
+   },
+   {
+    "word": "it.",
+    "start": 5.12,
+    "end": 5.34
+   },
+   {
+    "word": "There's",
+    "start": 5.6,
+    "end": 6.08
+   },
+   {
+    "word": "not",
+    "start": 6.08,
+    "end": 6.3
+   },
+   {
+    "word": "many",
+    "start": 6.3,
+    "end": 6.56
+   },
+   {
+    "word": "would",
+    "start": 6.56,
+    "end": 6.76
+   },
+   {
+    "word": "say",
+    "start": 6.76,
+    "end": 7.02
+   },
+   {
+    "word": "no",
+    "start": 7.02,
+    "end": 7.24
+   },
+   {
+    "word": "to",
+    "start": 7.24,
+    "end": 7.4
+   },
+   {
+    "word": "a",
+    "start": 7.4,
+    "end": 7.52
+   },
+   {
+    "word": "coin",
+    "start": 7.52,
+    "end": 7.86
+   },
+   {
+    "word": "these",
+    "start": 7.86,
+    "end": 8.08
+   },
+   {
+    "word": "days.",
+    "start": 8.08,
+    "end": 8.42
+   }
+  ]
+ },
  "0f234d560949a9": {
   "file": "0f234d560949a9.mp3",
   "speaker": "narrator",
@@ -51263,6 +51425,138 @@
     "word": "child.",
     "start": 8.6,
     "end": 8.9
+   }
+  ]
+ },
+ "1057d8bed19e69": {
+  "file": "1057d8bed19e69.mp3",
+  "speaker": "narrator",
+  "duration": 9.52,
+  "words": [
+   {
+    "word": "The",
+    "start": 0.0,
+    "end": 0.16
+   },
+   {
+    "word": "candle",
+    "start": 0.16,
+    "end": 0.52
+   },
+   {
+    "word": "now",
+    "start": 0.52,
+    "end": 0.84
+   },
+   {
+    "word": "casts",
+    "start": 0.84,
+    "end": 1.3
+   },
+   {
+    "word": "a",
+    "start": 1.3,
+    "end": 1.52
+   },
+   {
+    "word": "warm",
+    "start": 1.52,
+    "end": 1.88
+   },
+   {
+    "word": "glow.",
+    "start": 1.88,
+    "end": 2.28
+   },
+   {
+    "word": "Its",
+    "start": 2.6,
+    "end": 3.2
+   },
+   {
+    "word": "light",
+    "start": 3.2,
+    "end": 3.52
+   },
+   {
+    "word": "reaches",
+    "start": 3.52,
+    "end": 3.94
+   },
+   {
+    "word": "the",
+    "start": 3.94,
+    "end": 4.2
+   },
+   {
+    "word": "dark",
+    "start": 4.2,
+    "end": 4.52
+   },
+   {
+    "word": "corner",
+    "start": 4.52,
+    "end": 4.88
+   },
+   {
+    "word": "by",
+    "start": 4.88,
+    "end": 5.14
+   },
+   {
+    "word": "the",
+    "start": 5.14,
+    "end": 5.32
+   },
+   {
+    "word": "altar,",
+    "start": 5.32,
+    "end": 5.66
+   },
+   {
+    "word": "and",
+    "start": 5.66,
+    "end": 6.42
+   },
+   {
+    "word": "there",
+    "start": 6.42,
+    "end": 6.62
+   },
+   {
+    "word": "lies",
+    "start": 6.62,
+    "end": 6.94
+   },
+   {
+    "word": "a",
+    "start": 6.94,
+    "end": 7.18
+   },
+   {
+    "word": "locket",
+    "start": 7.18,
+    "end": 7.56
+   },
+   {
+    "word": "that",
+    "start": 7.56,
+    "end": 7.7
+   },
+   {
+    "word": "was",
+    "start": 7.7,
+    "end": 7.88
+   },
+   {
+    "word": "previously",
+    "start": 7.88,
+    "end": 8.48
+   },
+   {
+    "word": "unseen!",
+    "start": 8.48,
+    "end": 9.0
    }
   ]
  },
@@ -88574,6 +88868,33 @@
     "word": "remembering.",
     "start": 12.68,
     "end": 13.28
+   }
+  ]
+ },
+ "1ccc2068e7f6f1": {
+  "file": "1ccc2068e7f6f1.mp3",
+  "speaker": "narrator",
+  "duration": 1.672,
+  "words": [
+   {
+    "word": "Hemlock",
+    "start": 0.0,
+    "end": 0.5
+   },
+   {
+    "word": "rubs",
+    "start": 0.5,
+    "end": 0.92
+   },
+   {
+    "word": "his",
+    "start": 0.92,
+    "end": 1.14
+   },
+   {
+    "word": "wrist.",
+    "start": 1.14,
+    "end": 1.48
    }
   ]
  },
