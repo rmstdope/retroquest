@@ -1,6 +1,7 @@
 import {
   Character,
   type GameState,
+  type Item,
   characterName,
   clue,
   dialogue,
@@ -12,6 +13,7 @@ import {
   FLAG_MARCUS_TOLD_TRUTH,
   QUEST_INNKEEPERS_DAUGHTER,
 } from '../Act2StoryFlags'
+import { CrystalClearWater } from '../items/CrystalClearWater'
 
 /**
  * Afflicted NPC central to the Innkeeper's Daughter quest and multi-step cure.
@@ -22,6 +24,9 @@ import {
  *
  * From the greater heal until the dispel the Sorceress of Lies' silver mask
  * shows on her wrist: it is in her description, and she remarks on it once.
+ *
+ * Giving her the crystal-clear water washes her with it, exactly as using it
+ * on her does.
  *
  * Once she is cured and Elior has told Marcus the truth, her next talk opens
  * with one remark about her father; it never repeats.
@@ -48,6 +53,17 @@ export class BarmaidElena extends Character {
   /** She answers to her name, Elena, as well as to barmaid elena. */
   override answersTo(name: string): boolean {
     return super.answersTo(name) || name.toLowerCase() === 'elena'
+  }
+
+  /**
+   * Giving her the crystal-clear water washes her with it, the same as using
+   * it on her; anything else is refused as usual.
+   */
+  override giveItem(gameState: GameState, item: Item): string {
+    if (item instanceof CrystalClearWater) {
+      return this.receiveCrystalWaterPurification(gameState)
+    }
+    return super.giveItem(gameState, item)
   }
 
   /** Dialogue for the current stage of her recovery, with one-off remarks first. */

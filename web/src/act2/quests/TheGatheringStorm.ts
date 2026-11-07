@@ -11,7 +11,9 @@ import {
   FLAG_ANCIENT_LIBRARY_COMPLETED,
   FLAG_HERMITS_WARNING_COMPLETED,
   FLAG_NYX_TRIALS_PASSED,
+  QUEST_CEDRIKS_LOST_HONOR,
 } from '../Act2StoryFlags'
+import { SecretDocuments } from '../items/SecretDocuments'
 
 const SIR_CEDRIC = characterName('Sir Cedric')
 const NYX = characterName('Nyx')
@@ -38,6 +40,12 @@ const OPENING_ENTRY =
   'the walls, and say that if anyone at the castle understands it, it is ' +
   SIR_CEDRIC +
   '.'
+
+/** The lead the hint adds while Thorne's papers wait on a quest not yet begun. */
+const PAPERS_LEAD =
+  "Thorne's papers are still in your pack, meant for a knight's hands. " +
+  'A gate and a night watch are castle business; someone in the castle ' +
+  'courtyard would know.'
 
 /**
  * Act II main quest tracking the narrative arc. `checkUpdate` composes layered
@@ -182,5 +190,20 @@ export class TheGatheringStormQuest extends Quest {
   /** The story flag completing this quest raises. */
   override completedFlag(): string {
     return FLAG_GATHERING_STORM_COMPLETED
+  }
+
+  /**
+   * The newest beat, as usual, but while Thorne's papers are held and
+   * Cedric's Lost Honor has not begun (so no quest of its own points at
+   * them), also the lead back to the castle courtyard.
+   */
+  override hint(gameState: GameState): string | null {
+    const latest = super.hint(gameState)
+    const papersWaiting =
+      gameState.inventory.some((item) => item instanceof SecretDocuments) &&
+      !gameState.isQuestActivated(QUEST_CEDRIKS_LOST_HONOR) &&
+      !gameState.isQuestCompleted(QUEST_CEDRIKS_LOST_HONOR)
+    if (!papersWaiting) return latest
+    return latest ? `${latest} ${PAPERS_LEAD}` : PAPERS_LEAD
   }
 }

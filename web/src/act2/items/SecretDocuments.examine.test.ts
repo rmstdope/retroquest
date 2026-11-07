@@ -27,4 +27,12 @@ describe('the secret documents name where the king was carried', () => {
       'shattered ridge',
     )
   })
+
+  it('point to the castle courtyard before the diary', () => {
+    const game = new Game([new Act2()])
+
+    expect(new SecretDocuments().examine(game.state)).toContain(
+      'castle courtyard',
+    )
+  })
 })
