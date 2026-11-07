@@ -258,7 +258,7 @@ watch(
   },
 )
 
-/** Hint is dimmed while the game takes no move or a turn is being read aloud. */
+/** Hint is dimmed (aria-disabled, so it keeps focus) while the game takes no move or a turn is being read aloud. */
 const hintBusy = computed<boolean>(
   () => !game.acceptInput || narration.isNarrating,
 )
@@ -493,7 +493,8 @@ function onTypedEnter(): void {
         type="button"
         class="lq-hint"
         aria-label="Hint"
-        :disabled="hintBusy"
+        :aria-disabled="hintBusy"
+        :class="{ 'lq-busy': hintBusy }"
         @click="pressHint"
       >
         💡 Hint
@@ -700,7 +701,8 @@ function onTypedEnter(): void {
           type="button"
           class="lq-hint"
           aria-label="Hint"
-          :disabled="hintBusy"
+          :aria-disabled="hintBusy"
+          :class="{ 'lq-busy': hintBusy }"
           @click="pressHint"
         >
           💡 Hint
@@ -788,7 +790,8 @@ function onTypedEnter(): void {
         type="button"
         class="lq-hint"
         aria-label="Hint"
-        :disabled="hintBusy"
+        :aria-disabled="hintBusy"
+        :class="{ 'lq-busy': hintBusy }"
         @click="pressHint"
       >
         💡 Hint
@@ -824,6 +827,10 @@ function onTypedEnter(): void {
 /* The far right of the stage's verb row (the typing row's field already
    fills the space before it); the phone sheet's top row puts it just left of
    the fold button. */
+.lq-hint.lq-busy {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
 .lq-verbs .lq-hint {
   margin-left: auto;
 }

@@ -81,7 +81,9 @@ describe('DockBar', () => {
     useGameStore().acceptInput = false
     const w = mount(DockBar)
 
-    expect(w.get('button.lq-dock-hint').attributes()).toHaveProperty('disabled')
+    expect(w.get('button.lq-dock-hint').attributes('aria-disabled')).toBe(
+      'true',
+    )
     await w.get('button.lq-dock-hint').trigger('click')
     expect(submit).not.toHaveBeenCalled()
   })
@@ -121,12 +123,12 @@ describe('DockBar', () => {
     await w.vm.$nextTick()
     const hint = w.get('button.lq-dock-hint')
 
-    expect(hint.attributes()).toHaveProperty('disabled')
+    expect(hint.attributes('aria-disabled')).toBe('true')
     await hint.trigger('click')
     expect(submit).not.toHaveBeenCalled()
 
     narration.skipAll()
     await w.vm.$nextTick()
-    expect(hint.attributes()).not.toHaveProperty('disabled')
+    expect(hint.attributes('aria-disabled')).toBe('false')
   })
 })

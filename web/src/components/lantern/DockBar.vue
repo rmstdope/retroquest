@@ -30,7 +30,7 @@ function go(direction: string): void {
   if (game.acceptInput) game.submitCommand(`go ${direction}`)
 }
 
-/** Hint is dimmed while the game takes no move or a turn is being read aloud. */
+/** Hint is dimmed (aria-disabled, so it keeps focus) while the game takes no move or a turn is being read aloud. */
 const hintBusy = computed<boolean>(
   () => !game.acceptInput || narration.isNarrating,
 )
@@ -96,7 +96,8 @@ defineExpose({ focus })
       type="button"
       class="lq-dock-hint"
       aria-label="Hint"
-      :disabled="hintBusy"
+      :aria-disabled="hintBusy"
+      :class="{ 'lq-busy': hintBusy }"
       @click="hint"
     >
       💡 Hint
@@ -162,7 +163,7 @@ defineExpose({ focus })
   font-size: 14px;
   cursor: pointer;
 }
-.lq-dock-hint:disabled {
+.lq-dock-hint.lq-busy {
   opacity: 0.5;
   cursor: not-allowed;
 }

@@ -1659,13 +1659,13 @@ describe('ActionComposer on the stage', () => {
       await w.vm.$nextTick()
       expect(narration.isNarrating).toBe(true)
 
-      expect(hint(w).attributes()).toHaveProperty('disabled')
+      expect(hint(w).attributes('aria-disabled')).toBe('true')
       await hint(w).trigger('click')
       expect(submit).not.toHaveBeenCalled()
 
       narration.skipAll()
       await w.vm.$nextTick()
-      expect(hint(w).attributes()).not.toHaveProperty('disabled')
+      expect(hint(w).attributes('aria-disabled')).toBe('false')
     })
 
     it('is dimmed and cannot be pressed while the game is busy', async () => {
@@ -1673,13 +1673,13 @@ describe('ActionComposer on the stage', () => {
       useGameStore().acceptInput = false
       await w.vm.$nextTick()
 
-      expect(hint(w).attributes()).toHaveProperty('disabled')
+      expect(hint(w).attributes('aria-disabled')).toBe('true')
       await hint(w).trigger('click')
       expect(submit).not.toHaveBeenCalled()
 
       useGameStore().acceptInput = true
       await w.vm.$nextTick()
-      expect(hint(w).attributes()).not.toHaveProperty('disabled')
+      expect(hint(w).attributes('aria-disabled')).toBe('false')
     })
 
     it('keeps focus on Hint after the press', async () => {
