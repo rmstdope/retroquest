@@ -80,7 +80,7 @@ const ACT_NUMERALS = ['I', 'II', 'III', 'IV', 'V', 'VI']
 const CARDINAL_DIRECTIONS = ['north', 'south', 'east', 'west'] as const
 
 /** Words that join a name's parts and so never name a character alone. */
-const NAME_JOINING_WORDS = ['of', 'the', 'and']
+const NAME_JOINING_WORDS: readonly string[] = ['of', 'the', 'and']
 
 const ENGINE_CLASSES = { GameState, Item, Character, Spell, Quest, Room }
 

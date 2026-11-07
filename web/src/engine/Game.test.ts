@@ -1098,6 +1098,18 @@ describe('Game', () => {
       )
     })
 
+    it('names the addressee and reaches the character through use and buy', () => {
+      const warden = new Talker('Pier Warden')
+      warden.buyItem = (_state, name) => `Sold: ${name}`
+      rooms.EliorsCottage.addCharacter(warden)
+      const apple = item('apple')
+      apple.useOnCharacter = (_state, target) => `Used on ${target.name}`
+      game.state.inventory.push(apple)
+      expect(game.addresseeOf('talk to warden')).toBe('Pier Warden')
+      expect(game.use('apple', 'warden')).toBe('Used on Pier Warden')
+      expect(game.buy('rope from warden')).toBe('Sold: rope')
+    })
+
     it('finds no one by a word two characters here share', () => {
       rooms.EliorsCottage.addCharacter(new Talker('Pier Warden'))
       rooms.EliorsCottage.addCharacter(new Talker('Gate Warden'))

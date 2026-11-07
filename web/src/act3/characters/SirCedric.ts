@@ -74,7 +74,11 @@ export class SirCedric extends Character {
     this.description = CEDRIC_DESCRIPTION
   }
 
-  /** He answers to "sir cedric" and to "cedric", however it is cased. */
+  /**
+   * He answers to "sir cedric" and to "cedric", however it is cased. The
+   * engine also lets a single word of his name reach him while no one else
+   * here shares it (see `Game.findCharacter`).
+   */
   override answersTo(name: string): boolean {
     const wanted = name.trim().toLowerCase()
     return wanted === 'sir cedric' || wanted === 'cedric'
