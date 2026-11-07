@@ -15,6 +15,10 @@ import {
   FLAG_SHADOWS_OVER_WILLOWBROOK_COMPLETED,
   FLAG_SHOWED_GRANDMOTHER_RING,
 } from '../Act1StoryFlags'
+import {
+  KNOW_YOUR_VILLAGE,
+  KnowYourVillageQuest,
+} from '../quests/KnowYourVillage'
 
 /** The name of the quest that is counted apart from the side quests. */
 const PREPARATION_QUEST = 'Preparing for the road'
@@ -201,7 +205,11 @@ export class GameMap extends Item {
       missingRequirements.push('your preparations for the road')
     }
     if (GameMap.hasBegunOpenTask(gameState)) {
-      missingRequirements.push('the tasks you began in the village')
+      missingRequirements.push(
+        GameMap.onlyUnvisitedPlacesRemain(gameState)
+          ? GameMap.nearestUnvisitedClause(gameState)
+          : 'the tasks you began in the village',
+      )
     }
     missingRequirements.push(
       ...GameMap.unstartedLeads(gameState).map((lead) => lead.map),
@@ -213,14 +221,37 @@ export class GameMap extends Item {
    * True while a side quest Elior began is still open. A never-started side
    * quest with no lead of its own counts too, so no side quest can be skipped.
    */
-  static hasBegunOpenTask(gameState: GameState): boolean {
+  static hasBegunOpenTask(gameState: GameState, except?: string): boolean {
     const isSide = (quest: Quest): boolean =>
-      !quest.isMain() && quest.name !== PREPARATION_QUEST
+      !quest.isMain() &&
+      quest.name !== PREPARATION_QUEST &&
+      quest.name !== except
     const unknownUnstarted = gameState.nonActivatedQuests.some(
       (quest) =>
         isSide(quest) && !ROAD_LEADS.some((lead) => lead.quest === quest.name),
     )
     return unknownUnstarted || gameState.activatedQuests.some(isSide)
+  }
+
+  /**
+   * True when the only begun task still open is *Know your village*, begun
+   * and with a place left to visit: then the map names that place.
+   */
+  static onlyUnvisitedPlacesRemain(gameState: GameState): boolean {
+    return (
+      gameState.activatedQuests.some((q) => q.name === KNOW_YOUR_VILLAGE) &&
+      !GameMap.hasBegunOpenTask(gameState, KNOW_YOUR_VILLAGE) &&
+      KnowYourVillageQuest.nearestUnvisited(gameState) !== null
+    )
+  }
+
+  /** The map's clause for the unvisited place nearest to Elior. */
+  private static nearestUnvisitedClause(gameState: GameState): string {
+    const place = KnowYourVillageQuest.nearestUnvisited(gameState)
+    return (
+      `the [room_name]${place?.name}[/room_name], ` +
+      'where you have not been in a long while'
+    )
   }
 
   /**
