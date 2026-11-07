@@ -657,6 +657,21 @@ describe('Act 1 golden path', () => {
     )
     expect(fresh.state.storyFlags).toEqual(game.state.storyFlags)
   })
+
+  it('loads a save that still carries story flags the game no longer defines', () => {
+    const game = new Game([new Act1()])
+    const legacyFlags = [
+      'witnessed_shadow_event',
+      'accepted_mira_apprenticeship',
+      'learned_first_spell',
+    ]
+    for (const flag of legacyFlags) game.state.setStoryFlag(flag, true)
+    const fresh = new Game([new Act1()])
+    expect(fresh.loadSaveData(game.toSaveData())).toContain(
+      'Game loaded successfully',
+    )
+    for (const flag of legacyFlags) expectStoryFlag(fresh.state, flag)
+  })
 })
 
 describe("Act 1 byword: Hemlock's 'Malakar's luck' (rq-12mz)", () => {
