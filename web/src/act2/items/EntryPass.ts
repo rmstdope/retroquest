@@ -1,4 +1,5 @@
-import { Item, type GameState } from '@/engine'
+import { Item, type Character, type GameState } from '@/engine'
+import { GateCaptain } from '../characters/GateCaptain'
 
 /**
  * What the pass looks like; shown on every `examine`, so older saves read it
@@ -37,5 +38,14 @@ export class EntryPass extends Item {
       'carefully. The seal looks authentic, and it should allow you passage ' +
       'into Greendale without question.'
     )
+  }
+
+  /**
+   * Using the pass with the Gate Captain shows it to him, as giving it does;
+   * on anyone else it is refused as usual.
+   */
+  override useOnCharacter(gameState: GameState, target: Character): string {
+    if (target instanceof GateCaptain) return target.giveItem(gameState, this)
+    return super.useOnCharacter(gameState, target)
   }
 }
