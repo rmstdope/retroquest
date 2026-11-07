@@ -259,9 +259,12 @@ watch(
   },
 )
 
-/** Hint is dimmed (aria-disabled, so it keeps focus) while the game takes no move or a turn is being read aloud. */
+/**
+ * Hint is dimmed (aria-disabled, so it keeps focus) while the game takes no move or a turn is being read aloud.
+ * An arrival on the picture does not dim it: a press cuts the arrival short (the layout clears it as the click goes down) and gives the hint, as Look does.
+ */
 const hintBusy = computed<boolean>(
-  () => !game.acceptInput || narration.isNarrating,
+  () => !game.acceptInput || (narration.isNarrating && !arrival.active),
 )
 
 /**
