@@ -218,6 +218,33 @@ describe("The Knight's Test bout", () => {
     expect(cedric(game).boutCall).toBe(1)
   })
 
+  it('picks the broken-off bout back up from the first attack when talked to on return', () => {
+    const game = courtyardGame()
+    begin(game)
+    run(game, ['say guard to sir cedric'])
+    run(game, ['go north', 'go south'])
+    const out = run(game, ['talk to sir cedric'])
+    expect(out).toContain('You walked off in the middle of a bout.')
+    expect(out).toContain('He takes up his practice blade again.')
+    expect(out).toContain('From the top, then. Strike, guard or turn.')
+    expect(out).toContain(HIGH_CUT)
+    expect(out).not.toContain('Not yet.')
+    expect(out.trimEnd().endsWith(REMINDER)).toBe(true)
+    expect(cedric(game).boutCall).toBe(1)
+  })
+
+  it('picks the broken-off bout back up when a form is said on return', () => {
+    const game = courtyardGame()
+    begin(game)
+    run(game, ['go north', 'go south'])
+    const out = run(game, ['say guard to sir cedric'])
+    expect(out).not.toContain("don't seem to understand")
+    expect(out).toContain('You walked off in the middle of a bout.')
+    expect(out).toContain(HIGH_CUT)
+    expect(cedric(game).boutCall).toBe(1)
+    expect(run(game, ['say guard to sir cedric'])).toContain('Lunge!')
+  })
+
   it('repeats the current attack when the sword is used again mid-bout', () => {
     const game = courtyardGame()
     begin(game)

@@ -131,7 +131,10 @@ const BOUT_NEXT_ATTACKS: string[] = [
 export class SirCedric extends Character {
   receivedNaturesCharm = false
   cedricTrustsElior = false
-  /** Whether the Knight's Test bout has begun at least once, so the recognition scene plays only then. */
+  /**
+   * Whether the Knight's Test bout has begun at least once, so the recognition
+   * scene plays only then and a bout broken off by leaving is picked back up.
+   */
   boutStarted = false
   /** The attack the running bout is on, 1 to 3; 0 when no bout is running. */
   boutCall = 0
@@ -184,9 +187,11 @@ export class SirCedric extends Character {
    * first talk while Elior carries the Ancient Amulet also holds the one-time
    * recognition of the Wardens' sigil, which changes the amulet's description.
    * While he waits after the vision, any talk ends Act II with the closing lines.
+   * After Elior broke off the bout by leaving, a talk picks it back up.
    */
   override talkTo(gameState: GameState): string {
     if (this.boutRunning()) return this.talkDuringBout()
+    if (this.boutBrokenOff(gameState)) return this.resumeBout()
     if (this.waitingForElior(gameState)) return this.endAct(gameState)
     const charmDue =
       gameState.getStoryFlag(FLAG_CEDRIKS_HONOR_COMPLETED) &&
@@ -223,6 +228,30 @@ export class SirCedric extends Character {
     return this.boutCall > 0
   }
 
+  /** Whether Elior left the courtyard mid-bout and the Knight's Test is still to pass. */
+  private boutBrokenOff(gameState: GameState): boolean {
+    return (
+      this.boutStarted &&
+      !this.boutRunning() &&
+      !gameState.getStoryFlag(FLAG_DEMONSTRATED_COMBAT_SKILLS)
+    )
+  }
+
+  /** Pick a broken-off bout back up: Cedric names the walk-off and starts over from the first attack. */
+  private resumeBout(): string {
+    return (
+      dialogue('Sir Cedric', 'You walked off in the middle of a bout.') +
+      ' ' +
+      this.startBrokenOffBout()
+    )
+  }
+
+  /** Mark the broken-off bout as running again from the first attack and describe the restart. */
+  private startBrokenOffBout(): string {
+    this.boutCall = 1
+    return this.restartBout('He')
+  }
+
   /** The current attack as it is repeated: narration then the cry. */
   private currentAttack(): string {
     const call = BOUT_CALLS[this.boutCall - 1]
@@ -249,17 +278,7 @@ export class SirCedric extends Character {
     const first = !this.boutStarted
     this.boutStarted = true
     this.boutCall = 1
-    if (!first) {
-      return (
-        characterName('Sir Cedric') +
-        ' takes up his practice blade again.\n' +
-        speech('From the top, then. Strike, guard or turn.') +
-        ' ' +
-        this.currentAttack() +
-        '\n' +
-        BOUT_REMINDER
-      )
-    }
+    if (!first) return this.restartBout(characterName('Sir Cedric'))
     return (
       'You draw the [item_name]training sword[/item_name]. Before you can ' +
       'take your stance, ' +
@@ -293,7 +312,23 @@ export class SirCedric extends Character {
     )
   }
 
-  /** Abandon a running bout, as when Elior leaves the courtyard; the next use of the sword restarts it. */
+  /** The bout taken up again from the first attack; `who` names Cedric or, after his own line, says "He". */
+  private restartBout(who: string): string {
+    return (
+      who +
+      ' takes up his practice blade again.\n' +
+      speech('From the top, then. Strike, guard or turn.') +
+      ' ' +
+      this.currentAttack() +
+      '\n' +
+      BOUT_REMINDER
+    )
+  }
+
+  /**
+   * Abandon a running bout, as when Elior leaves the courtyard; the next use
+   * of the sword, talk or anything said to Cedric restarts it.
+   */
   abandonBout(): void {
     this.boutCall = 0
   }
@@ -302,8 +337,11 @@ export class SirCedric extends Character {
    * Answer an attack with a form; the wrong ones cost nothing and repeat the
    * attack. While Cedric waits after the vision, saying "truth" tells him the
    * voice did not sound like a hunter and ends the act; no virtue is recorded.
+   * After Elior broke off the bout by leaving, anything said picks it back up
+   * from the first attack rather than answering it.
    */
   override sayTo(gameState: GameState, words: string): string {
+    if (this.boutBrokenOff(gameState)) return this.resumeBout()
     if (!this.boutRunning()) {
       const spoken = words
         .trim()
