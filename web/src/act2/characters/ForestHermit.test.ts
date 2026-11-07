@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest'
+import { GREENDALE_QUESTS } from '../greendaleWork'
 import { Game } from '@/engine'
 import { Act2 } from '../Act2'
 import { ForestHermit } from './ForestHermit'
@@ -8,6 +9,15 @@ import { expectMarkupWellFormed } from '@/testing/gameHelpers'
 /** A game running Act II. */
 function createGame(): Game {
   return new Game([new Act2()])
+}
+
+/** Mark Greendale's quests before the forest done, as the golden path has them by the stones. */
+function finishGreendale(game: Game): void {
+  for (const name of GREENDALE_QUESTS) {
+    const quest = game.state.getQuest(name)
+    if (quest === null) throw new Error(`Missing quest: ${name}`)
+    game.state.completedQuests.push(quest)
+  }
 }
 
 describe('Forest hermit', () => {
@@ -47,8 +57,26 @@ describe('Forest hermit', () => {
     expectMarkupWellFormed(answer)
   })
 
+  it('sends the player back to Greendale after the camp while its quests remain', () => {
+    const game = createGame()
+    const hermit = new ForestHermit()
+    hermit.talkTo(game.state)
+    game.state.setStoryFlag(FLAG_HERMITS_WARNING_COMPLETED, true)
+
+    const answer = hermit.talkTo(game.state)
+
+    expect(answer).toContain('tilts their head toward the trees.')
+    expect(answer).toContain(
+      "She knows you now. But you've left things half done in Greendale. " +
+        "Finish them first; she'll keep.",
+    )
+    expect(answer).not.toContain('Go on')
+    expectMarkupWellFormed(answer)
+  })
+
   it('gives one narration line and one speech on later talks after the camp', () => {
     const game = createGame()
+    finishGreendale(game)
     const hermit = new ForestHermit()
     hermit.talkTo(game.state)
     game.state.setStoryFlag(FLAG_HERMITS_WARNING_COMPLETED, true)

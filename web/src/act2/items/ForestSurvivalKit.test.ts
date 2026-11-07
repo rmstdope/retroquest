@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest'
+import { GREENDALE_QUESTS } from '../greendaleWork'
 import { Game } from '@/engine'
 import { Act2 } from '../Act2'
 import { FLAG_HERMITS_WARNING_COMPLETED } from '../Act2StoryFlags'
@@ -16,6 +17,15 @@ function createGameAtStones(): Game {
   game.state.currentRoom = game.state.allRooms.ForestTransition
   game.state.inventory.push(new ForestSurvivalKit())
   return game
+}
+
+/** Mark Greendale's quests before the forest done, as the golden path has them by the stones. */
+function finishGreendale(game: Game): void {
+  for (const name of GREENDALE_QUESTS) {
+    const quest = game.state.getQuest(name)
+    if (quest === null) throw new Error(`Missing quest: ${name}`)
+    game.state.completedQuests.push(quest)
+  }
 }
 
 describe('Forest survival kit', () => {
@@ -42,6 +52,7 @@ describe('Forest survival kit', () => {
 
   it('plays the whole camp scene after the first talk and is used up', () => {
     const game = createGameAtStones()
+    finishGreendale(game)
     executeCommands(game, ['talk to forest hermit'])
 
     const answer = executeCommands(game, ['use forest survival kit'])

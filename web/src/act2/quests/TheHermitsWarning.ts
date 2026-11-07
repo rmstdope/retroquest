@@ -14,8 +14,7 @@ const DESCRIPTION =
 
 /** The line shown when the quest is done. */
 const COMPLETION =
-  "You spent a night on the forest's doorstep, and she let you. " +
-  'The way east is open.'
+  "You spent a night on the forest's doorstep, and she let you."
 
 /** Quest to heed the hermit's warning and prepare for the Enchanted Forest. */
 export class TheHermitsWarningQuest extends Quest {

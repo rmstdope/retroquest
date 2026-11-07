@@ -10,12 +10,14 @@ import {
   FLAG_HERMITS_WARNING_ACCEPTED,
   FLAG_HERMITS_WARNING_COMPLETED,
 } from '../Act2StoryFlags'
+import { greendaleWorkDone } from '../greendaleWork'
 
 /**
  * Wilderness mentor who grants a protective charm and warns of deeper trials.
  *
  * The first interaction grants a ProtectiveCharm and sets the acceptance flag;
  * later talks repeat the camp clue until the player has camped here, then
+ * send the player back to Greendale while its quests remain, and only then
  * tell the player the forest is ready for them.
  */
 export class ForestHermit extends Character {
@@ -38,7 +40,7 @@ export class ForestHermit extends Character {
     })
   }
 
-  /** Warn the player and give the charm once, then send the player to camp, then on. */
+  /** Warn the player and give the charm once, then send the player to camp, then back to Greendale or on. */
   override talkTo(gameState: GameState): string {
     if (!this.hasWarned) {
       this.hasWarned = true
@@ -80,6 +82,16 @@ export class ForestHermit extends Character {
         characterName(this.name) +
         ' looks at the treeline, then at your pack. ' +
         speech('Not tonight. Make camp first; let her get a look at you.')
+      )
+    } else if (!greendaleWorkDone(gameState)) {
+      return (
+        'The ' +
+        characterName(this.name) +
+        ' tilts their head toward the trees. ' +
+        speech(
+          "She knows you now. But you've left things half done in " +
+            "Greendale. Finish them first; she'll keep.",
+        )
       )
     } else {
       return (
