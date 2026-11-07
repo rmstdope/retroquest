@@ -254,6 +254,24 @@ describe('useGameStore over the real engine: look', () => {
   })
 })
 
+describe('useGameStore over the real engine: a bare direction letter', () => {
+  beforeEach(() => {
+    setActivePinia(createPinia())
+  })
+
+  it('can be sent as typed, even with no exit that way and longer words to offer', async () => {
+    // The hall has no exits; `e` still starts `examine` and `exit`.
+    const store = await startedStore()
+    const state = store.completionState('e')
+    expect(state.candidates).toContain('examine')
+    // Sendable, so Enter sends `e` rather than taking `examine`.
+    expect(state.sendable).toBe(true)
+    for (const letter of ['n', 's', 'w']) {
+      expect(store.completionState(letter).sendable).toBe(true)
+    }
+  })
+})
+
 describe('useGameStore over the real engine: the room the music plays in', () => {
   beforeEach(() => {
     setActivePinia(createPinia())
