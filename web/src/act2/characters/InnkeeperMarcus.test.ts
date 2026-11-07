@@ -4,6 +4,7 @@ import { parseTurn } from '@/lantern/parseTurn'
 import { Act2 } from '../Act2'
 import { Coins } from '../items/Coins'
 import { InnkeeperMarcus } from './InnkeeperMarcus'
+import { BarmaidElena } from './BarmaidElena'
 import {
   FLAG_INNKEEPERS_DAUGHTER_COMPLETED,
   FLAG_KNOWS_ELENA_CURSE,
@@ -225,16 +226,34 @@ describe('Innkeeper Marcus and the week the king went', () => {
     return game
   }
 
-  it('follows the plea with the line, on every talk', () => {
+  it('follows the plea with the line, on the first talk only (rq-7ci2)', () => {
     const game = gameAfterElena()
 
+    const first = game.commandParser.parse('talk to innkeeper marcus')
+    expect(first).toContain(WEEK_LINE)
+    expect(first.indexOf(WEEK_LINE)).toBeGreaterThan(first.indexOf(PLEA))
+    expectMarkupWellFormed(first)
+    expectDialogueSpeaker(first, 'innkeeper marcus')
+
     for (let i = 0; i < 2; i++) {
-      const text = game.commandParser.parse('talk to innkeeper marcus')
-      expect(text).toContain(WEEK_LINE)
-      expect(text.indexOf(WEEK_LINE)).toBeGreaterThan(text.indexOf(PLEA))
-      expectMarkupWellFormed(text)
-      expectDialogueSpeaker(text, 'innkeeper marcus')
+      const later = game.commandParser.parse('talk to innkeeper marcus')
+      expect(later).not.toContain(PLEA)
+      expect(later).not.toContain(WEEK_LINE)
+      expect(later).toContain('innkeeper marcus')
+      expectMarkupWellFormed(later)
     }
+  })
+
+  it('keeps the plea said once across a save and load (rq-7ci2)', () => {
+    const game = gameAfterElena()
+    game.commandParser.parse('talk to innkeeper marcus')
+
+    const loaded = new Game([new Act2()])
+    loaded.loadSaveData(game.toSaveData())
+
+    expect(
+      loaded.commandParser.parse('talk to innkeeper marcus'),
+    ).not.toContain(PLEA)
   })
 
   it('says nothing before meeting Elena', () => {
@@ -410,5 +429,97 @@ describe('Innkeeper Marcus price sentence', () => {
         `${PRICES}[/dialogue]`,
       )
     }
+  })
+})
+
+describe('Innkeeper Marcus after the room key is bought (rq-7ci2)', () => {
+  const PRICE = "room key[/item_name]'s ten"
+
+  /** A game at the inn with the room key bought from Marcus. */
+  function gameWithKeyBought(knowsCurse: boolean): Game {
+    const game = new Game([new Act2()])
+    game.state.currentRoom = game.state.allRooms.SilverStagInn
+    game.state.setStoryFlag(FLAG_KNOWS_ELENA_CURSE, knowsCurse)
+    for (let i = 0; i < 20; i++) game.state.addItemToInventory(new Coins())
+    expect(
+      game.commandParser.parse('buy room key from innkeeper marcus'),
+    ).toContain(LODGER_LINE)
+    return game
+  }
+
+  it.each([false, true])(
+    'no longer names the price of the key, curse known: %s',
+    (knowsCurse) => {
+      const game = gameWithKeyBought(knowsCurse)
+
+      for (let i = 0; i < 3; i++) {
+        const answer = game.commandParser.parse('talk to innkeeper marcus')
+        expect(answer).not.toContain(PRICE)
+        expect(answer).not.toContain('not offering')
+        expectMarkupWellFormed(answer)
+      }
+    },
+  )
+
+  it('no longer lists the key among the wares', () => {
+    const game = gameWithKeyBought(false)
+    const marcus = game.state.currentRoom.getCharacterByName('innkeeper marcus')
+    if (!(marcus instanceof InnkeeperMarcus)) throw new Error('no marcus')
+
+    expect(Object.keys(marcus.wares)).toEqual([])
+  })
+
+  it('refuses a second key once the first has opened the door', () => {
+    const game = gameWithKeyBought(false)
+    game.commandParser.parse('use room key with door')
+    expect(game.state.hasItem('room key')).toBe(false)
+
+    const answer = game.commandParser.parse(
+      'buy room key from innkeeper marcus',
+    )
+    expect(answer).toContain('The room upstairs is yours already.')
+    expect(answer).not.toContain('nothing else for sale')
+    expectDialogueSpeaker(answer, 'innkeeper marcus')
+    expect(game.state.getItemCount('coins')).toBe(10)
+  })
+})
+
+describe('Innkeeper Marcus after greater heal (rq-7ci2)', () => {
+  const WORSE = "she's getting worse"
+  const COLOUR = "There's colour in her face again."
+
+  /** A game at the inn with Elena met and given greater heal, not yet cured. */
+  function gameAfterHeal(): Game {
+    const game = new Game([new Act2()])
+    game.state.currentRoom = game.state.allRooms.SilverStagInn
+    game.state.setStoryFlag(FLAG_KNOWS_ELENA_CURSE, true)
+    const elena = game.state.currentRoom.getCharacterByName('barmaid elena')
+    if (!(elena instanceof BarmaidElena)) throw new Error('no elena')
+    elena.receiveGreaterHeal(game.state)
+    return game
+  }
+
+  it('does not say she is getting worse when told the truth', () => {
+    const game = gameAfterHeal()
+
+    const answer = game.commandParser.parse('say truth to marcus')
+    expect(answer).not.toContain(WORSE)
+    expect(answer).toContain(COLOUR)
+    expectDialogueSpeaker(answer, 'innkeeper marcus')
+    expect(game.state.getStoryFlag(FLAG_MARCUS_TOLD_TRUTH)).toBe(false)
+  })
+
+  it('remarks on her colour once in talk, instead of the plea', () => {
+    const game = gameAfterHeal()
+
+    const first = game.commandParser.parse('talk to innkeeper marcus')
+    expect(first).toContain(COLOUR)
+    expect(first).not.toContain("She says she's only tired.")
+    expectMarkupWellFormed(first)
+    expectDialogueSpeaker(first, 'innkeeper marcus')
+
+    const later = game.commandParser.parse('talk to innkeeper marcus')
+    expect(later).not.toContain(COLOUR)
+    expect(later).not.toContain("She says she's only tired.")
   })
 })

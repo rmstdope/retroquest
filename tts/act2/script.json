@@ -1045,6 +1045,21 @@
     "text": "You count your coins. You have 50 gold pieces to spend on supplies and equipment."
   },
   {
+    "id": "00360a4098c7be",
+    "speaker": "innkeeper marcus",
+    "text": "Hard times or not, this house changes its sheets every week."
+  },
+  {
+    "id": "09eca315767268",
+    "speaker": "innkeeper marcus",
+    "text": "A night in a room of your own does more for a body than any healer."
+  },
+  {
+    "id": "1530790330ee29",
+    "speaker": "innkeeper marcus",
+    "text": "Welcome to The Silver Stag. Hot stew, clean sheets, and a door that locks."
+  },
+  {
     "id": "07aeaf8c4ae99b",
     "speaker": "narrator",
     "text": "The key turns with a soft click, and the door to the stairs swings open."
@@ -2513,6 +2528,11 @@
     "id": "0168bdd5af3037",
     "speaker": "narrator",
     "text": "As the golden light fades, something surfaces on the inside of Elena's wrist: a small silver mark in the shape of a mask, smooth and smiling, with no eyes behind it. The curse is wearing a face. You have never seen its like, and you cannot say whose it is."
+  },
+  {
+    "id": "0ccf6d2b2783e9",
+    "speaker": "innkeeper marcus",
+    "text": "There's colour in her face again. First time in three weeks. … But she's still cold to the touch. Whatever you did, it isn't finished."
   },
   {
     "id": "005e2863176858",
