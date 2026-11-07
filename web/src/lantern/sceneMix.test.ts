@@ -263,4 +263,13 @@ describe('the committed mixes', () => {
     )
     for (const clip of GAME_EFFECTS) expect(played).toContain(clip.id)
   })
+
+  it('give every scene of Act II between one and five effects', () => {
+    const act2 = readJson('tts/act2/scenes.json') as SceneDeclaration[]
+    for (const { id } of act2) {
+      const count = sceneMixOf(id)?.effects.length ?? 0
+      expect(count, id).toBeGreaterThanOrEqual(1)
+      expect(count, id).toBeLessThanOrEqual(5)
+    }
+  })
 })

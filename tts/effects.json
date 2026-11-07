@@ -148,5 +148,108 @@
     "text": "an unnatural, heavy stillness in a dark forest clearing, a faint low hum, no birds, no wind",
     "seconds": 20,
     "loops": true
+  },
+  {
+    "id": "mountain-wind",
+    "text": "a cool wind blowing steadily over a high mountain trail, sighing through pine needles and around bare rock",
+    "seconds": 20,
+    "loops": true
+  },
+  {
+    "id": "hawk-cry",
+    "text": "a hawk crying once, high overhead, echoing faintly off the mountainside",
+    "seconds": 3
+  },
+  {
+    "id": "banner-flap",
+    "text": "heavy cloth banners flapping and snapping in a steady breeze on tall poles, ropes knocking softly",
+    "seconds": 20,
+    "loops": true
+  },
+  {
+    "id": "armour-clink",
+    "text": "a guard in chain mail walking past on stone, the soft jingle of mail and a few measured footsteps",
+    "seconds": 3
+  },
+  {
+    "id": "market-bustle",
+    "text": "a crowded medieval market street, many voices haggling at once, footsteps and handcarts on cobbles, no words can be made out",
+    "seconds": 20,
+    "loops": true
+  },
+  {
+    "id": "cart-wheels",
+    "text": "a laden wooden wagon rolling slowly over cobblestones, iron-rimmed wheels rumbling and creaking past",
+    "seconds": 4
+  },
+  {
+    "id": "tavern-din",
+    "text": "the warm din of a busy tavern taproom, many voices talking and laughing, benches scraping, no words can be made out",
+    "seconds": 20,
+    "loops": true
+  },
+  {
+    "id": "tankards",
+    "text": "two pewter tankards knocking together in a toast, then set down on a wooden table",
+    "seconds": 2
+  },
+  {
+    "id": "tavern-below",
+    "text": "the muffled murmur of a tavern heard through the floorboards of a quiet room upstairs, faint and indistinct",
+    "seconds": 20,
+    "loops": true
+  },
+  {
+    "id": "rat-scurry",
+    "text": "a rat scurrying quickly behind wooden crates, tiny claws on stone, then silence",
+    "seconds": 2
+  },
+  {
+    "id": "sword-practice",
+    "text": "two knights sparring with steel swords in a stone courtyard, a few ringing clashes of blades and a grunt",
+    "seconds": 4
+  },
+  {
+    "id": "stone-footsteps",
+    "text": "slow footsteps of leather boots crossing a vast stone hall, echoing off high ceilings",
+    "seconds": 4
+  },
+  {
+    "id": "woodwork",
+    "text": "a craftsman working at a wooden bench in an open doorway, a few strokes of a hand plane and light chisel taps",
+    "seconds": 4
+  },
+  {
+    "id": "crystal-hum",
+    "text": "a soft, shimmering hum of glowing magic crystals in an underground stone library, faint chiming overtones, calm and steady",
+    "seconds": 20,
+    "loops": true
+  },
+  {
+    "id": "page-turn",
+    "text": "an old, heavy parchment page turning slowly in a large book",
+    "seconds": 2
+  },
+  {
+    "id": "sprite-chimes",
+    "text": "tiny, delicate magical chimes and a faint giggle drifting past among trees, like small sprites flitting by",
+    "seconds": 3
+  },
+  {
+    "id": "brook",
+    "text": "a small clear stream babbling quickly over smooth stones in a meadow",
+    "seconds": 20,
+    "loops": true
+  },
+  {
+    "id": "whispers",
+    "text": "faint, airy whispers that are almost voices, rising briefly under running water and fading away, no words can be made out",
+    "seconds": 4
+  },
+  {
+    "id": "heart-hum",
+    "text": "a deep, warm, resonant hum of ancient living magic beneath a vast tree, slow and peaceful, faint golden shimmer",
+    "seconds": 20,
+    "loops": true
   }
 ]
