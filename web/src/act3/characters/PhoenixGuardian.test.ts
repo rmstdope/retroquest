@@ -4,6 +4,7 @@ import { Act3 } from '../Act3'
 import {
   FLAG_ACT3_BREATH_OF_THE_MOUNTAIN_COMPLETED,
   FLAG_ACT3_FUMAROLE_WARD_APPLIED,
+  FLAG_ACT3_PHOENIX_FEATHER_ACQUIRED,
 } from '../Act3StoryFlags'
 import { PhoenixGuardian } from './PhoenixGuardian'
 import { FumarolePassages } from '../rooms/FumarolePassages'
@@ -141,5 +142,18 @@ describe('PhoenixGuardian', () => {
     const state = makeGameState(false)
     state.currentRoom.addCharacter(new SirCedric())
     expect(new PhoenixGuardian().talkTo(state)).not.toContain('Sir Cedric')
+  })
+})
+
+describe('PhoenixGuardian after the feather', () => {
+  it('no longer tells the player to sit in the crater', () => {
+    const state = makeGameState(true)
+    state.setStoryFlag(FLAG_ACT3_PHOENIX_FEATHER_ACQUIRED, true)
+    const answer = new PhoenixGuardian().talkTo(state)
+    expectMarkupWellFormed(answer)
+    expect(answer).not.toContain('Sit in the crater a while')
+    expect(answer).toContain(
+      'It came to you, then. Few wait long enough for that.',
+    )
   })
 })

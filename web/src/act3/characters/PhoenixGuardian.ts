@@ -9,6 +9,7 @@ import { CEDRIC_PATIENCE, cedricAdds } from '../CedricLines'
 import {
   FLAG_ACT3_BREATH_OF_THE_MOUNTAIN_COMPLETED,
   FLAG_ACT3_FUMAROLE_WARD_APPLIED,
+  FLAG_ACT3_PHOENIX_FEATHER_ACQUIRED,
 } from '../Act3StoryFlags'
 
 /** The vent stones that bring the vents into harmony. */
@@ -42,9 +43,18 @@ export class PhoenixGuardian extends Character {
 
   /**
    * Give hints before the vents are in harmony, once they are but the ward is
-   * not set, while the breath must be counted, and after the first crossing.
+   * not set, while the breath must be counted, after the first crossing,
+   * and once the Phoenix has given the feather.
    */
   override talkTo(gameState: GameState): string {
+    if (gameState.getStoryFlag(FLAG_ACT3_PHOENIX_FEATHER_ACQUIRED)) {
+      return (
+        'The ' +
+        characterName('Phoenix Guardian') +
+        ' lowers his staff. ' +
+        speech('It came to you, then. Few wait long enough for that. Go well.')
+      )
+    }
     const crossed = gameState.getStoryFlag(
       FLAG_ACT3_BREATH_OF_THE_MOUNTAIN_COMPLETED,
     )

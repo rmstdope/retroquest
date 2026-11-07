@@ -4,6 +4,10 @@ import { Act3 } from '../Act3'
 import { AshScholar } from './AshScholar'
 import { BrassMirrorSegment } from '../items/BrassMirrorSegment'
 import {
+  FLAG_ACT3_MIRRORS_MENDED,
+  FLAG_ACT3_PHOENIX_FEATHER_ACQUIRED,
+} from '../Act3StoryFlags'
+import {
   expectDialogueSpeaker,
   expectMarkupWellFormed,
 } from '@/testing/gameHelpers'
@@ -110,5 +114,39 @@ describe('AshScholar notebook', () => {
     expect(later).not.toContain('alignment')
     expect(later).not.toContain('Notebook')
     expect(g.getItemCount('Charred Notebook')).toBe(1)
+  })
+})
+
+describe('AshScholar after the mirrors', () => {
+  /** A state where the scholar has given his gifts already. */
+  function afterGifts(): { g: GameState; scholar: AshScholar } {
+    const g = makeGameState()
+    const scholar = new AshScholar()
+    scholar.talkTo(g)
+    return { g, scholar }
+  }
+
+  it('stops counting segments once the mirrors are mended', () => {
+    const { g, scholar } = afterGifts()
+    g.setStoryFlag(FLAG_ACT3_MIRRORS_MENDED, true)
+    const answer = scholar.talkTo(g)
+    expectMarkupWellFormed(answer)
+    expect(answer).not.toContain('takes four segments')
+    expect(answer).toContain(
+      'The mirror on the terraces is burning again; I saw it catch from here.',
+    )
+  })
+
+  it('speaks of the feather once it is won', () => {
+    const { g, scholar } = afterGifts()
+    g.setStoryFlag(FLAG_ACT3_MIRRORS_MENDED, true)
+    g.setStoryFlag(FLAG_ACT3_PHOENIX_FEATHER_ACQUIRED, true)
+    const answer = scholar.talkTo(g)
+    expectMarkupWellFormed(answer)
+    expect(answer).not.toContain('takes four segments')
+    expect(answer).toContain(
+      'We have catalogued everything on this mountain that glints, and ' +
+        'never that.',
+    )
   })
 })

@@ -7,6 +7,7 @@ import {
   effect,
   speech,
 } from '@/engine'
+import { AshScholar } from './AshScholar'
 import { KeepsakeNote } from '../items/KeepsakeNote'
 import { LifelightElixir } from '../items/LifelightElixir'
 import { SeaSealedLetter } from '../items/SeaSealedLetter'
@@ -32,6 +33,7 @@ import {
   FLAG_ACT3_MIRA_FORGIVEN,
   FLAG_ACT3_MIRA_GATE_TALKED,
   FLAG_ACT3_MIRA_REPROACHED,
+  FLAG_ACT3_MIRRORS_MENDED,
   FLAG_ACT3_RUINS_LEFT,
   FLAG_ACT3_MIRA_RUINS_SLIP_PLAYED,
   FLAG_ACT3_MIRA_EMBER_SLIP_PLAYED,
@@ -94,6 +96,37 @@ export class Mira extends Character {
     return quote === 0 || answer[quote - 1] === '\n'
       ? answer.slice(0, quote) + label + answer.slice(quote)
       : label + answer
+  }
+
+  /**
+   * Her lore at the Lower Switchbacks before the feather: the phoenix and the
+   * scholar first, then the slopes once he has given his notes, then the
+   * heat above once the mirrors are mended.
+   */
+  private onTheMountain(gameState: GameState): string {
+    const hurried = 'And Elior: this mountain will not be hurried.'
+    if (gameState.getStoryFlag(FLAG_ACT3_MIRRORS_MENDED)) {
+      return speech(
+        'The mirror on the terraces is lit; I saw it from here. The phoenix ' +
+          `is higher still, past the heat. ${hurried}`,
+      )
+    }
+    const scholar = gameState.currentRoom.characters.find(
+      (character) => character instanceof AshScholar,
+    )
+    if (scholar instanceof AshScholar && scholar.hasGivenGifts) {
+      return speech(
+        'You have his notes now; the slopes above are yours to read. ' +
+          hurried,
+      )
+    }
+    return speech(
+      'A phoenix nests at the top of this mountain, where the rock is ' +
+        'hottest. Only it can give the feather, and it asks for ' +
+        'wisdom. The scholar camped on this path has read these slopes ' +
+        'for years; start with him. ' +
+        hurried,
+    )
   }
 
   /** What Mira says and does when talked to, before the speaker is labelled. */
@@ -189,17 +222,7 @@ export class Mira extends Character {
         cedricAdds(gameState, CEDRIC_KING_WEAKER_3)
     } else if (gameState.currentRoom.name === 'Lower Switchbacks') {
       if (!gameState.getStoryFlag(FLAG_ACT3_PHOENIX_FEATHER_ACQUIRED)) {
-        return (
-          eventMsg +
-          '\n' +
-          speech(
-            'A phoenix nests at the top of this mountain, where the rock is ' +
-              'hottest. Only it can give the feather, and it asks for ' +
-              'wisdom. The scholar camped on this path has read these slopes ' +
-              'for years; start with him. And Elior: this mountain will not ' +
-              'be hurried.',
-          )
-        )
+        return eventMsg + '\n' + this.onTheMountain(gameState)
       }
 
       // Check if Charred Inscription has been read before proceeding to Cavern Mouth

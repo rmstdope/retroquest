@@ -18,9 +18,12 @@ import {
   FLAG_ACT3_WARDEN_ASKED,
   FLAG_ACT3_WARDEN_COIN_PRESSED_BACK,
   FLAG_ACT3_WARDEN_BAD_SEASON_SAID,
+  FLAG_ACT3_WARDEN_LIE_TOLD,
   FLAG_ACT3_WARDEN_TRUTH_TOLD,
   VIRTUE_TRUTH,
 } from '../Act3StoryFlags'
+import { Locker } from '../items/Locker'
+import { RustedLockerKey } from '../items/RustedLockerKey'
 import { WeatheredCoin } from '../items/WeatheredCoin'
 
 /** His question, asked once the curse has shown at the ruins. */
@@ -47,9 +50,15 @@ function tellsTruth(words: string): boolean {
 /** Words that give him the comforting lie he asked for. */
 const LIE_WORDS = ['yes', 'it will mend', 'it will pass', 'a bad season']
 
-/** What he says, once, when Elior talks to him again without the truth. */
+/** What he says, once, when Elior talks to him again without an answer. */
 const BAD_SEASON =
   "Nothing to say? Then it's a bad season, and it'll pass. It always has."
+
+/** What he says on every later talk once Elior has told him the lie. */
+const LIE_KEPT = "A bad season, you said. That's what I've told the boats."
+
+/** What he says on every later talk once Elior has told him the truth. */
+const TRUTH_KEPT = "I've sent word up the coast. The boats are staying in."
 
 /**
  * A watchful warden of the pier who comments on local happenings.
@@ -77,22 +86,28 @@ export class PierWarden extends Character {
 
   /**
    * Return context-sensitive dialogue about the pier and nearby ruins. The
-   * first talk after the curse has shown ends with his question, the next
-   * with his "bad season" line (once); the moment is gone when the ruins are
-   * left.
+   * first talk after the curse has shown ends with his question; after that
+   * every talk ends with what Elior answered (the truth, or the lie), or, if
+   * he answered nothing, once with his "bad season" line. The moment is gone
+   * when the ruins are left.
    */
   override talkTo(gameState: GameState): string {
     return this.usualLine(gameState) + this.momentLine(gameState)
   }
 
-  /** The question or the "bad season" line that follows the usual line, or ''. */
+  /** The question, or what follows it, after the usual line; or ''. */
   private momentLine(gameState: GameState): string {
     if (
       !gameState.getStoryFlag(FLAG_ACT3_SEA_SEALED_LETTER_READ) ||
-      gameState.getStoryFlag(FLAG_ACT3_RUINS_LEFT) ||
-      gameState.getStoryFlag(FLAG_ACT3_WARDEN_TRUTH_TOLD)
+      gameState.getStoryFlag(FLAG_ACT3_RUINS_LEFT)
     ) {
       return ''
+    }
+    if (gameState.getStoryFlag(FLAG_ACT3_WARDEN_TRUTH_TOLD)) {
+      return '\n' + speech(TRUTH_KEPT)
+    }
+    if (gameState.getStoryFlag(FLAG_ACT3_WARDEN_LIE_TOLD)) {
+      return '\n' + speech(LIE_KEPT)
     }
     if (!gameState.getStoryFlag(FLAG_ACT3_WARDEN_ASKED)) {
       gameState.setStoryFlag(FLAG_ACT3_WARDEN_ASKED, true)
@@ -109,9 +124,10 @@ export class PierWarden extends Character {
    * Answer his question. After he has asked, the truth ("truth", or a plain
    * "no", "it won't") tells him the curse is no season: his reply and the
    * remembered line, recorded once; afterwards he keeps it. The comforting lie
-   * ("yes", "it will mend") gets a quiet reply and records nothing, so the
-   * truth can still be told. Before he has asked, "truth" leaves him lost.
-   * Other words, and anything once the ruins are left, get the usual reply.
+   * ("yes", "it will mend") gets a quiet reply and is remembered for his next
+   * talks, but records no virtue, so the truth can still be told. Before he
+   * has asked, "truth" leaves him lost. Other words, and anything once the
+   * ruins are left, get the usual reply.
    */
   override sayTo(gameState: GameState, words: string): string {
     if (gameState.getStoryFlag(FLAG_ACT3_RUINS_LEFT)) {
@@ -127,6 +143,7 @@ export class PierWarden extends Character {
         saysAnyOf(words, LIE_WORDS) &&
         !gameState.getStoryFlag(FLAG_ACT3_WARDEN_TRUTH_TOLD)
       ) {
+        gameState.setStoryFlag(FLAG_ACT3_WARDEN_LIE_TOLD, true)
         return (
           dialogue(this.name, "Aye. That's what I'll tell the boats, then.") +
           ' He goes back to watching the water.'
@@ -187,7 +204,11 @@ export class PierWarden extends Character {
     )
   }
 
-  /** The usual line for the quest stage. */
+  /**
+   * The usual line for the quest stage. Between the sigils and the lanterns
+   * it follows his old key: lost by the mural, in Elior's hands, stuck in
+   * the locker, the locker unlocked, and the locker open.
+   */
   private usualLine(gameState: GameState): string {
     const sigils = gameState.getStoryFlag(FLAG_ACT3_TIDEWARD_SIGILS_COMPLETED)
     const lanterns = gameState.getStoryFlag(FLAG_ACT3_LANTERNS_OF_THE_DEEPS_LIT)
@@ -206,18 +227,7 @@ export class PierWarden extends Character {
     }
 
     if (sigils && !lanterns) {
-      return (
-        'The ' +
-        characterName(name) +
-        ' nods slowly. ' +
-        speech(
-          "You've done right by the pillars. There's a fused locker " +
-            "down in the vaults; I tried a key once but it stuck. Key's no " +
-            "good alone, and magic's no good alone. It wants both. Lost " +
-            'that key after, in some dark hole by the mural on the ' +
-            "causeway. You'd want a light to find it.",
-        )
-      )
+      return this.lockerLine(gameState)
     }
 
     return (
@@ -230,6 +240,70 @@ export class PierWarden extends Character {
         'My da walked that water once, when the old wardens still asked it ' +
           'of folk. Said the trick was not to leave yourself behind in the ' +
           'dark. I never did understand him.',
+      )
+    )
+  }
+
+  /** Between the sigils and the lanterns: what he says of his old key. */
+  private lockerLine(gameState: GameState): string {
+    const name = this.name
+    const locker = gameState.allRooms.CollapsedPier?.items.find(
+      (item) => item instanceof Locker,
+    )
+    const keyFound = gameState.inventory.some(
+      (item) => item instanceof RustedLockerKey,
+    )
+    if (locker instanceof Locker && locker.opened) {
+      return (
+        'The ' +
+        characterName(name) +
+        ' looks at the open locker. ' +
+        speech(
+          'Forty years that locker was shut. Those lanterns hung in the ' +
+            'deeps once, my da said, where the light never gets.',
+        )
+      )
+    }
+    if (locker instanceof Locker && !locker.locked) {
+      return (
+        'The ' +
+        characterName(name) +
+        ' cocks his head toward the vaults. ' +
+        speech("That's the click I never got. Go on, then; it's yours.")
+      )
+    }
+    if (locker instanceof Locker && locker.rustedKeyStuck) {
+      return (
+        'The ' +
+        characterName(name) +
+        ' laughs, short. ' +
+        speech(
+          "Stuck fast, is it? Same as mine was. Key's no good alone, and " +
+            "magic's no good alone.",
+        )
+      )
+    }
+    if (keyFound) {
+      return (
+        'The ' +
+        characterName(name) +
+        ' squints at the key. ' +
+        speech(
+          "Found my old key, did you? It'll stick in that lock, same as it " +
+            "did for me. Key's no good alone, and magic's no good alone.",
+        )
+      )
+    }
+    return (
+      'The ' +
+      characterName(name) +
+      ' nods slowly. ' +
+      speech(
+        "You've done right by the pillars. There's a fused locker " +
+          "down in the vaults; I tried a key once but it stuck. Key's no " +
+          "good alone, and magic's no good alone. It wants both. Lost " +
+          'that key after, in some dark hole by the mural on the ' +
+          "causeway. You'd want a light to find it.",
       )
     )
   }

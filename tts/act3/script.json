@@ -330,6 +330,91 @@
     "text": "In the Sunken Ruins: a letter from Aren and Lysa to their friend Malakar, begging him not to reach for time. He wrote back: You would have me wait while you die."
   },
   {
+    "id": "1398b1cfcbca26",
+    "speaker": "narrator",
+    "text": "Shoreline Markers"
+  },
+  {
+    "id": "0a8f43d6573e38",
+    "speaker": "narrator",
+    "text": "Weathered steles stand in the cold sand, their faces full of shallow marks. Salt has smudged most of the lines, but moon sigils still show when the tide drops. Pale flakes sit loose in the grooves and catch the light."
+  },
+  {
+    "id": "0b3f51c82c4c90",
+    "speaker": "narrator",
+    "text": "You brush aside kelp and barnacle crusts. A cluster of pale moon shards comes free—etched with curved lines that seem to hum when the moon leans toward the sea. They feel keyed to the tide, as if the lunar pull listens to these marks."
+  },
+  {
+    "id": "003c7755180e7a",
+    "speaker": "narrator",
+    "text": "Tideward Sigils"
+  },
+  {
+    "id": "1f18752d0c4c37",
+    "speaker": "narrator",
+    "text": "Three warding pillars stand in the drowned courtyard of the Outer Wards. Cleaned and set with moon sigils, they could draw the sea back from the hall beyond."
+  },
+  {
+    "id": "0f3116cf0cbafa",
+    "speaker": "narrator",
+    "text": "The shards whisper with tide-salt; they leave a faint dust on your fingers."
+  },
+  {
+    "id": "0a14e4083902eb",
+    "speaker": "narrator",
+    "text": "Outer Wards"
+  },
+  {
+    "id": "0971d20b954b63",
+    "speaker": "narrator",
+    "text": "The courtyard lies half under the sea. Three old pillars rise from the black water, their faces scored with shallow marks. Brine beads along the carved lines and catches the moon in small rings of light."
+  },
+  {
+    "id": "18898c6897c0a2",
+    "speaker": "narrator",
+    "text": "You rinse salt and scrape coral from the carved channels. Glyph-lines breathe again, ready to take the Tideward Sigil."
+  },
+  {
+    "id": "1a44c0e637ba8b",
+    "speaker": "narrator",
+    "text": "You press the pale shards into the cleansed grooves. Pale runes flare and sink into the stone like stored moonlight. The air leans in; a pull runs through the courtyard as the tide answers the sigils, and the sea draws back from the drowned hall to the south."
+  },
+  {
+    "id": "1f5c71c8ba496d",
+    "speaker": "narrator",
+    "text": "Side quest complete"
+  },
+  {
+    "id": "14f4ed6ca12624",
+    "speaker": "narrator",
+    "text": "You cleansed the pillars and set the Moon Rune shards—the Moon Sigil resonates and the flood wards steady, granting safe passage toward the sanctum."
+  },
+  {
+    "id": "033cc29645073c",
+    "speaker": "narrator",
+    "text": "Collapsed Pier"
+  },
+  {
+    "id": "125a0de8b8bb4f",
+    "speaker": "narrator",
+    "text": "The pier has fallen into the tide. Warped planks gape over dark vaults, and barnacled timbers stand up out of the water. The sea knocks against them, slow and steady."
+  },
+  {
+    "id": "1ea2e4c09febb6",
+    "speaker": "narrator",
+    "text": "The Pier Warden nods slowly."
+  },
+  {
+    "id": "1509dd0f09163c",
+    "speaker": "pier warden",
+    "text": "You've done right by the pillars. There's a fused locker down in the vaults; I tried a key once but it stuck. Key's no good alone, and magic's no good alone. It wants both. Lost that key after, in some dark hole by the mural on the causeway. You'd want a light to find it."
+  },
+  {
+    "id": "1111e4b770f030",
+    "speaker": "pier warden",
+    "text": "You'll have seen the causeway. Birds by the hundred, and the surf gone grey. I've known bad seasons on this coast, forty years of them. It's only a bad season, isn't it? Tell me the sea will mend on its own."
+  },
+  {
     "id": "18f9ba6292bf12",
     "speaker": "narrator",
     "text": "A mysterious amulet inscribed with runes. At its centre is the sigil of the Wardens of the Dawn: the sun rising over three linked rings. In its depths two faces linger: a man and a woman, laughing beside a third figure who has turned away."
@@ -360,16 +445,6 @@
     "text": "The key's teeth are ragged with corrosion; it might fit, but the lock has long since fused."
   },
   {
-    "id": "1398b1cfcbca26",
-    "speaker": "narrator",
-    "text": "Shoreline Markers"
-  },
-  {
-    "id": "0a8f43d6573e38",
-    "speaker": "narrator",
-    "text": "Weathered steles stand in the cold sand, their faces full of shallow marks. Salt has smudged most of the lines, but moon sigils still show when the tide drops. Pale flakes sit loose in the grooves and catch the light."
-  },
-  {
     "id": "168515f0f92648",
     "speaker": "narrator",
     "text": "The steles bear shallow moon-marks, pores packed with salt. Loose pale fragments glint in crevices—likely usable in sigil work."
@@ -380,21 +455,6 @@
     "text": "A small, iridescent shell smoothed by long tides. It's pretty and shines in the moonlight. Held to your ear, it seems to hum."
   },
   {
-    "id": "0b3f51c82c4c90",
-    "speaker": "narrator",
-    "text": "You brush aside kelp and barnacle crusts. A cluster of pale moon shards comes free—etched with curved lines that seem to hum when the moon leans toward the sea. They feel keyed to the tide, as if the lunar pull listens to these marks."
-  },
-  {
-    "id": "003c7755180e7a",
-    "speaker": "narrator",
-    "text": "Tideward Sigils"
-  },
-  {
-    "id": "1f18752d0c4c37",
-    "speaker": "narrator",
-    "text": "Three warding pillars stand in the drowned courtyard of the Outer Wards. Cleaned and set with moon sigils, they could draw the sea back from the hall beyond."
-  },
-  {
     "id": "0aca31f1240070",
     "speaker": "narrator",
     "text": "Thin, chalky shards veined with pale luster. Each shard holds a faint lunar marking, as if carved in moonlight and salt."
@@ -403,21 +463,6 @@
     "id": "056a5a0c5ec9a4",
     "speaker": "narrator",
     "text": "Tideward Sigils: Three warding pillars stand in the drowned courtyard of the Outer Wards. Cleaned and set with moon sigils, they could draw the sea back from the hall beyond."
-  },
-  {
-    "id": "0f3116cf0cbafa",
-    "speaker": "narrator",
-    "text": "The shards whisper with tide-salt; they leave a faint dust on your fingers."
-  },
-  {
-    "id": "0a14e4083902eb",
-    "speaker": "narrator",
-    "text": "Outer Wards"
-  },
-  {
-    "id": "0971d20b954b63",
-    "speaker": "narrator",
-    "text": "The courtyard lies half under the sea. Three old pillars rise from the black water, their faces scored with shallow marks. Brine beads along the carved lines and catches the moon in small rings of light."
   },
   {
     "id": "001803172a2dc8",
@@ -435,54 +480,19 @@
     "text": "Apart from the three warding pillars rising from the black water, the drowned courtyard holds little of interest; the pillars alone seem keyed to the moon and tide."
   },
   {
-    "id": "18898c6897c0a2",
-    "speaker": "narrator",
-    "text": "You rinse salt and scrape coral from the carved channels. Glyph-lines breathe again, ready to take the Tideward Sigil."
-  },
-  {
     "id": "17b1cf32f3ccde",
     "speaker": "narrator",
     "text": "The pillars pulse with a quiet, radiant rhythm. Light seems to gather in the carved channels, a steady heartbeat that draws the tide toward the stone. The air tastes of moonwater; the ward answers, ready to pull the sea back when the sigil is set."
   },
   {
-    "id": "1a44c0e637ba8b",
+    "id": "1cadbc616d3622",
     "speaker": "narrator",
-    "text": "You press the pale shards into the cleansed grooves. Pale runes flare and sink into the stone like stored moonlight. The air leans in; a pull runs through the courtyard as the tide answers the sigils, and the sea draws back from the drowned hall to the south."
+    "text": "The Pier Warden squints at the key."
   },
   {
-    "id": "1f5c71c8ba496d",
-    "speaker": "narrator",
-    "text": "Side quest complete"
-  },
-  {
-    "id": "14f4ed6ca12624",
-    "speaker": "narrator",
-    "text": "You cleansed the pillars and set the Moon Rune shards—the Moon Sigil resonates and the flood wards steady, granting safe passage toward the sanctum."
-  },
-  {
-    "id": "1ea2e4c09febb6",
-    "speaker": "narrator",
-    "text": "The Pier Warden nods slowly."
-  },
-  {
-    "id": "1509dd0f09163c",
+    "id": "075939ae9aa651",
     "speaker": "pier warden",
-    "text": "You've done right by the pillars. There's a fused locker down in the vaults; I tried a key once but it stuck. Key's no good alone, and magic's no good alone. It wants both. Lost that key after, in some dark hole by the mural on the causeway. You'd want a light to find it."
-  },
-  {
-    "id": "1111e4b770f030",
-    "speaker": "pier warden",
-    "text": "You'll have seen the causeway. Birds by the hundred, and the surf gone grey. I've known bad seasons on this coast, forty years of them. It's only a bad season, isn't it? Tell me the sea will mend on its own."
-  },
-  {
-    "id": "033cc29645073c",
-    "speaker": "narrator",
-    "text": "Collapsed Pier"
-  },
-  {
-    "id": "125a0de8b8bb4f",
-    "speaker": "narrator",
-    "text": "The pier has fallen into the tide. Warped planks gape over dark vaults, and barnacled timbers stand up out of the water. The sea knocks against them, slow and steady."
+    "text": "Found my old key, did you? It'll stick in that lock, same as it did for me. Key's no good alone, and magic's no good alone."
   },
   {
     "id": "1056cb8900cebc",
@@ -498,6 +508,11 @@
     "id": "17f97a0dfa49d8",
     "speaker": "pier warden",
     "text": "… Aye. I think I knew it. I only wanted someone to tell me otherwise. I'll send word up the coast to keep the boats in."
+  },
+  {
+    "id": "1f1668086bebb1",
+    "speaker": "pier warden",
+    "text": "I've sent word up the coast. The boats are staying in."
   },
   {
     "id": "0cf8dcdb267d33",
@@ -523,6 +538,26 @@
     "id": "0018d31862a669",
     "speaker": "pier warden",
     "text": "I said keep it, lad."
+  },
+  {
+    "id": "1e1e8c4f733e9c",
+    "speaker": "elior",
+    "text": "yes"
+  },
+  {
+    "id": "1210f0fca7877d",
+    "speaker": "pier warden",
+    "text": "Aye. That's what I'll tell the boats, then."
+  },
+  {
+    "id": "0db33e45a6f6bb",
+    "speaker": "narrator",
+    "text": "He goes back to watching the water."
+  },
+  {
+    "id": "0798c1701450ca",
+    "speaker": "pier warden",
+    "text": "A bad season, you said. That's what I've told the boats."
   },
   {
     "id": "0335233ece7341",
@@ -555,6 +590,16 @@
     "text": "The lock is too corroded for the key to turn. As you tug, the corroded key jams in the mechanism and will not come free."
   },
   {
+    "id": "120eb5c11935a5",
+    "speaker": "narrator",
+    "text": "The Pier Warden laughs, short."
+  },
+  {
+    "id": "1fc25b62b3b5de",
+    "speaker": "pier warden",
+    "text": "Stuck fast, is it? Same as mine was. Key's no good alone, and magic's no good alone."
+  },
+  {
     "id": "168530307915bb",
     "speaker": "narrator",
     "text": "A subtle click echoes under the pier as fused pins release. The locker can now be opened."
@@ -563,6 +608,16 @@
     "id": "17d430e5173bf0",
     "speaker": "narrator",
     "text": "The mechanism is freed; the door can be opened."
+  },
+  {
+    "id": "0915a6b1c11a33",
+    "speaker": "narrator",
+    "text": "The Pier Warden cocks his head toward the vaults."
+  },
+  {
+    "id": "10ede8939cac1a",
+    "speaker": "pier warden",
+    "text": "That's the click I never got. Go on, then; it's yours."
   },
   {
     "id": "0e910153e655ba",
@@ -578,6 +633,16 @@
     "id": "05266f8899781e",
     "speaker": "narrator",
     "text": "A faceted lantern of glass ribs and brass, made to scatter light into clear paths."
+  },
+  {
+    "id": "1d64c0bafaa25b",
+    "speaker": "narrator",
+    "text": "The Pier Warden looks at the open locker."
+  },
+  {
+    "id": "0402926a9f54ad",
+    "speaker": "pier warden",
+    "text": "Forty years that locker was shut. Those lanterns hung in the deeps once, my da said, where the light never gets."
   },
   {
     "id": "1775296787cbf7",
@@ -943,6 +1008,11 @@
     "id": "18dbc36ed50d0e",
     "speaker": "narrator",
     "text": "The second entry is pressed so hard into the page that the pen has torn it. The names in it are your parents'."
+  },
+  {
+    "id": "1cb2ef441639f3",
+    "speaker": "mira",
+    "text": "You have his notes now; the slopes above are yours to read. And Elior: this mountain will not be hurried."
   },
   {
     "id": "163954f189406a",
@@ -1325,6 +1395,21 @@
     "text": "Remember him when time is short for you."
   },
   {
+    "id": "02035831f845ff",
+    "speaker": "narrator",
+    "text": "The Ash Scholar looks up toward the terraces."
+  },
+  {
+    "id": "0717bb8cb023b8",
+    "speaker": "ash scholar",
+    "text": "The mirror on the terraces is burning again; I saw it catch from here. Four segments, as my notes said."
+  },
+  {
+    "id": "0c4e4e72ce108f",
+    "speaker": "mira",
+    "text": "The mirror on the terraces is lit; I saw it from here. The phoenix is higher still, past the heat. And Elior: this mountain will not be hurried."
+  },
+  {
     "id": "083bfd085cbdd1",
     "speaker": "narrator",
     "text": "The mirror sits whole and firm in its mount. Its seams have knit, and its face is bright."
@@ -1415,6 +1500,26 @@
     "text": "The ward holds, but the mountain still breathes. Count its breath. Walk when it draws in."
   },
   {
+    "id": "0eacd243ef2027",
+    "speaker": "narrator",
+    "text": "The Phoenix Guardian nods:"
+  },
+  {
+    "id": "057dcc7ce48f1d",
+    "speaker": "phoenix guardian",
+    "text": "The way is open, but patience is your ally. The Phoenix will not appear for those who rush. Sit in the crater a while, and let it come to you."
+  },
+  {
+    "id": "00f58ddc22aa92",
+    "speaker": "sir cedric",
+    "text": "Patience. The king has had nothing from us but patience."
+  },
+  {
+    "id": "17bcf86e827869",
+    "speaker": "sir cedric",
+    "text": "Through the heat, and he is no stronger for it. The crater is yours. I will keep my hand off my sword."
+  },
+  {
     "id": "037c838a76b61d",
     "speaker": "narrator",
     "text": "You search around the Phoenix Crater, but find nothing of interest beyond what you can already see."
@@ -1450,19 +1555,24 @@
     "text": "The Three Virtues: You answered the phoenix: wisdom is patience, even when the world burns. It gave you a feather, and told you of a Warden who had none."
   },
   {
-    "id": "0eacd243ef2027",
+    "id": "1a001efc6330ee",
     "speaker": "narrator",
-    "text": "The Phoenix Guardian nods:"
+    "text": "The Phoenix Guardian lowers his staff."
   },
   {
-    "id": "057dcc7ce48f1d",
+    "id": "0adacc7c64de02",
     "speaker": "phoenix guardian",
-    "text": "The way is open, but patience is your ally. The Phoenix will not appear for those who rush. Sit in the crater a while, and let it come to you."
+    "text": "It came to you, then. Few wait long enough for that. Go well."
   },
   {
-    "id": "00f58ddc22aa92",
-    "speaker": "sir cedric",
-    "text": "Patience. The king has had nothing from us but patience."
+    "id": "01d060347551d3",
+    "speaker": "narrator",
+    "text": "The Ash Scholar stares at the feather in your hand."
+  },
+  {
+    "id": "018a6e0ba892d8",
+    "speaker": "ash scholar",
+    "text": "We have catalogued everything on this mountain that glints, and never that. Keep it close. It is not for my notes."
   },
   {
     "id": "13db8169ed11d5",

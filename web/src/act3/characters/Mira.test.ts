@@ -19,6 +19,7 @@ import {
   FLAG_ACT3_MIRA_FORGIVEN,
   FLAG_ACT3_MIRA_GATE_TALKED,
   FLAG_ACT3_MIRA_REPROACHED,
+  FLAG_ACT3_MIRRORS_MENDED,
   FLAG_ACT3_PHOENIX_FEATHER_ACQUIRED,
   FLAG_ACT3_SEA_SEALED_LETTER_READ,
 } from '../Act3StoryFlags'
@@ -991,6 +992,48 @@ describe('Mira restored from a save made before the rewrite', () => {
     const restored = fresh.state.allRooms.MirasHut.getCharacterByName('mira')
     expect(restored?.description).toBe(
       "The village healer — and, you know now, the Wardens' pupil.",
+    )
+  })
+})
+
+describe('Mira at the Lower Switchbacks, further along', () => {
+  /** A started game at the switchbacks with Mira there. */
+  function atSwitchbacks(): { game: Game; mira: Mira } {
+    const game = new Game([new Act3()])
+    game.state.setStoryFlag(FLAG_ACT3_MAIN_STARTED, true)
+    game.state.currentRoom = game.state.allRooms.LowerSwitchbacks
+    const mira = new Mira()
+    game.state.currentRoom.characters.push(mira)
+    return { game, mira }
+  }
+
+  /** Talk to the scholar at the switchbacks, so he has given his gifts. */
+  function talkToScholar(game: Game): void {
+    const scholar = game.state.currentRoom.getCharacterByName('ash scholar')
+    if (!scholar) throw new Error('no scholar')
+    scholar.talkTo(game.state)
+  }
+
+  it('stops sending the player to the scholar once he has been talked to', () => {
+    const { game, mira } = atSwitchbacks()
+    talkToScholar(game)
+    const out = mira.talkTo(game.state)
+    expect(out).not.toContain('start with him')
+    expect(out).toContain(
+      'You have his notes now; the slopes above are yours to read.',
+    )
+    expect(out).toContain('this mountain will not be hurried')
+  })
+
+  it('speaks of the lit mirror once the mirrors are mended', () => {
+    const { game, mira } = atSwitchbacks()
+    talkToScholar(game)
+    game.state.setStoryFlag(FLAG_ACT3_MIRRORS_MENDED, true)
+    const out = mira.talkTo(game.state)
+    expect(out).not.toContain('start with him')
+    expect(out).toContain(
+      'The mirror on the terraces is lit; I saw it from here. The phoenix ' +
+        'is higher still, past the heat.',
     )
   })
 })

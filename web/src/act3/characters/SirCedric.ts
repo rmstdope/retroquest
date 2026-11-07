@@ -14,6 +14,7 @@ import {
   cedricSays,
 } from '../CedricLines'
 import {
+  FLAG_ACT3_BREATH_OF_THE_MOUNTAIN_COMPLETED,
   FLAG_ACT3_CEDRIC_GATE_ANSWERED,
   FLAG_ACT3_CRYSTAL_OF_LIGHT_ACQUIRED,
   FLAG_ACT3_DRAGONS_SCALE_ACQUIRED,
@@ -123,15 +124,7 @@ export class SirCedric extends Character {
           )
     }
     if (EMBER_ROOMS.includes(key)) {
-      return gameState.getStoryFlag(FLAG_ACT3_PHOENIX_FEATHER_ACQUIRED)
-        ? cedricSays(
-            'A bird told us to wait, and we waited. I hope it was worth ' +
-              'what it cost the king.',
-          )
-        : cedricSays(
-            'We stand about reading vents while he fades. Let me go through ' +
-              'that heat first and see what it does.',
-          )
+      return this.onTheMountain(gameState)
     }
     if (CAVERN_ROOMS.includes(key)) {
       return gameState.getStoryFlag(FLAG_ACT3_MINERS_RESCUE_COMPLETED)
@@ -144,6 +137,29 @@ export class SirCedric extends Character {
           )
     }
     return this.atTheHut(gameState)
+  }
+
+  /**
+   * On Mount Ember: before the vents are crossed; after, leaving the crater
+   * to Elior without naming a step; with the feather.
+   */
+  private onTheMountain(gameState: GameState): string {
+    if (gameState.getStoryFlag(FLAG_ACT3_PHOENIX_FEATHER_ACQUIRED)) {
+      return cedricSays(
+        'A bird told us to wait, and we waited. I hope it was worth ' +
+          'what it cost the king.',
+      )
+    }
+    if (gameState.getStoryFlag(FLAG_ACT3_BREATH_OF_THE_MOUNTAIN_COMPLETED)) {
+      return cedricSays(
+        'Through the heat, and he is no stronger for it. The crater is ' +
+          'yours. I will keep my hand off my sword.',
+      )
+    }
+    return cedricSays(
+      'We stand about reading vents while he fades. Let me go through ' +
+        'that heat first and see what it does.',
+    )
   }
 
   /** The Sanctum before the vow. */
