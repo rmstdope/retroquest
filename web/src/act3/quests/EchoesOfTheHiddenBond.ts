@@ -27,11 +27,17 @@ const COMPLETION =
   'became the ward that hides you. The dragon says they are warded away, ' +
   'not dead.'
 
+/** A clue as a line of the shared checklist form: found is done, open is pending. */
+function clueLine(done: boolean, text: string): string {
+  const tag = done ? 'success' : 'pending'
+  return `[${tag}] * ${text}[/${tag}]`
+}
+
 /** The opening log: the lead-in and the three open clues. */
 function openingLog(): string {
   return (
     `[dim]${INTRO}[/dim]\n\n` +
-    OPEN_CLUES.map((clue) => `[dim]○ ${clue}[/dim]`).join('\n')
+    OPEN_CLUES.map((clue) => clueLine(false, clue)).join('\n')
   )
 }
 
@@ -123,7 +129,7 @@ export class EchoesOfTheHiddenBondQuest extends Quest {
       }
       const open = OPEN_CLUES[index]
       items.push({ done, text: done ? text : open })
-      lines.push(done ? `✓ ${text}` : `[dim]○ ${open}[/dim]`)
+      lines.push(clueLine(done, done ? text : open))
     })
 
     this.setChecklist(

@@ -8045,63 +8045,6 @@
    }
   ]
  },
- "0436e715812a98": {
-  "file": "0436e715812a98.mp3",
-  "speaker": "narrator",
-  "duration": 3.576,
-  "words": [
-   {
-    "word": "\u25cb",
-    "start": 0.0,
-    "end": 0.0
-   },
-   {
-    "word": "On",
-    "start": 0.0,
-    "end": 0.3
-   },
-   {
-    "word": "the",
-    "start": 0.3,
-    "end": 0.46
-   },
-   {
-    "word": "mountain:",
-    "start": 0.46,
-    "end": 0.86
-   },
-   {
-    "word": "something",
-    "start": 1.4,
-    "end": 1.88
-   },
-   {
-    "word": "they",
-    "start": 1.88,
-    "end": 2.06
-   },
-   {
-    "word": "left",
-    "start": 2.06,
-    "end": 2.44
-   },
-   {
-    "word": "on",
-    "start": 2.44,
-    "end": 2.72
-   },
-   {
-    "word": "Mount",
-    "start": 2.72,
-    "end": 2.96
-   },
-   {
-    "word": "Ember.",
-    "start": 2.96,
-    "end": 3.38
-   }
-  ]
- },
  "045479dc985349": {
   "file": "045479dc985349.mp3",
   "speaker": "narrator",
@@ -35347,73 +35290,6 @@
    }
   ]
  },
- "12feaaf1bf66d1": {
-  "file": "12feaaf1bf66d1.mp3",
-  "speaker": "narrator",
-  "duration": 4.226,
-  "words": [
-   {
-    "word": "\u25cb",
-    "start": 0.0,
-    "end": 0.0
-   },
-   {
-    "word": "Under",
-    "start": 0.0,
-    "end": 0.42
-   },
-   {
-    "word": "the",
-    "start": 0.42,
-    "end": 0.58
-   },
-   {
-    "word": "hills:",
-    "start": 0.58,
-    "end": 1.02
-   },
-   {
-    "word": "something",
-    "start": 1.38,
-    "end": 2.0
-   },
-   {
-    "word": "they",
-    "start": 2.0,
-    "end": 2.2
-   },
-   {
-    "word": "left",
-    "start": 2.2,
-    "end": 2.58
-   },
-   {
-    "word": "in",
-    "start": 2.58,
-    "end": 2.78
-   },
-   {
-    "word": "the",
-    "start": 2.78,
-    "end": 2.88
-   },
-   {
-    "word": "Caverns",
-    "start": 2.88,
-    "end": 3.44
-   },
-   {
-    "word": "of",
-    "start": 3.44,
-    "end": 3.56
-   },
-   {
-    "word": "Shadow.",
-    "start": 3.56,
-    "end": 3.9
-   }
-  ]
- },
  "13003f52165b0a": {
   "file": "13003f52165b0a.mp3",
   "speaker": "narrator",
@@ -55527,68 +55403,6 @@
     "word": "his.",
     "start": 11.64,
     "end": 11.84
-   }
-  ]
- },
- "1c66f2d11b1ce0": {
-  "file": "1c66f2d11b1ce0.mp3",
-  "speaker": "narrator",
-  "duration": 3.947,
-  "words": [
-   {
-    "word": "\u25cb",
-    "start": 0.0,
-    "end": 0.0
-   },
-   {
-    "word": "By",
-    "start": 0.0,
-    "end": 0.26
-   },
-   {
-    "word": "the",
-    "start": 0.26,
-    "end": 0.46
-   },
-   {
-    "word": "sea:",
-    "start": 0.46,
-    "end": 0.82
-   },
-   {
-    "word": "something",
-    "start": 1.3,
-    "end": 1.92
-   },
-   {
-    "word": "they",
-    "start": 1.92,
-    "end": 2.12
-   },
-   {
-    "word": "left",
-    "start": 2.12,
-    "end": 2.48
-   },
-   {
-    "word": "in",
-    "start": 2.48,
-    "end": 2.68
-   },
-   {
-    "word": "the",
-    "start": 2.68,
-    "end": 2.78
-   },
-   {
-    "word": "Sunken",
-    "start": 2.78,
-    "end": 3.18
-   },
-   {
-    "word": "Ruins.",
-    "start": 3.18,
-    "end": 3.54
    }
   ]
  },
