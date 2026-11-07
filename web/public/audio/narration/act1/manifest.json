@@ -12088,6 +12088,123 @@
    }
   ]
  },
+ "03668510b9789c": {
+  "file": "03668510b9789c.mp3",
+  "speaker": "fisherman",
+  "duration": 5.666,
+  "words": [
+   {
+    "word": "River's",
+    "start": 0.0,
+    "end": 0.38
+   },
+   {
+    "word": "off",
+    "start": 0.38,
+    "end": 0.58
+   },
+   {
+    "word": "this",
+    "start": 0.58,
+    "end": 0.8
+   },
+   {
+    "word": "season.",
+    "start": 0.8,
+    "end": 1.14
+   },
+   {
+    "word": "Fish",
+    "start": 1.36,
+    "end": 1.64
+   },
+   {
+    "word": "are",
+    "start": 1.64,
+    "end": 1.8
+   },
+   {
+    "word": "sulking,",
+    "start": 1.8,
+    "end": 2.22
+   },
+   {
+    "word": "and",
+    "start": 2.38,
+    "end": 2.62
+   },
+   {
+    "word": "this",
+    "start": 2.62,
+    "end": 2.78
+   },
+   {
+    "word": "arm's",
+    "start": 2.78,
+    "end": 3.06
+   },
+   {
+    "word": "gone",
+    "start": 3.06,
+    "end": 3.26
+   },
+   {
+    "word": "stiff",
+    "start": 3.26,
+    "end": 3.58
+   },
+   {
+    "word": "on",
+    "start": 3.58,
+    "end": 3.8
+   },
+   {
+    "word": "me,",
+    "start": 3.8,
+    "end": 3.98
+   },
+   {
+    "word": "so",
+    "start": 4.1,
+    "end": 4.26
+   },
+   {
+    "word": "I",
+    "start": 4.26,
+    "end": 4.36
+   },
+   {
+    "word": "couldn't",
+    "start": 4.36,
+    "end": 4.66
+   },
+   {
+    "word": "land",
+    "start": 4.66,
+    "end": 4.9
+   },
+   {
+    "word": "one",
+    "start": 4.9,
+    "end": 5.08
+   },
+   {
+    "word": "if",
+    "start": 5.08,
+    "end": 5.22
+   },
+   {
+    "word": "they",
+    "start": 5.22,
+    "end": 5.32
+   },
+   {
+    "word": "weren't.",
+    "start": 5.32,
+    "end": 5.64
+   }
+  ]
+ },
  "036f6c36044cda": {
   "file": "036f6c36044cda.mp3",
   "speaker": "mira",
@@ -45055,6 +45172,38 @@
     "word": "alive!",
     "start": 2.4,
     "end": 2.68
+   }
+  ]
+ },
+ "0dddfa7692bc53": {
+  "file": "0dddfa7692bc53.mp3",
+  "speaker": "narrator",
+  "duration": 1.904,
+  "words": [
+   {
+    "word": "The",
+    "start": 0.0,
+    "end": 0.24
+   },
+   {
+    "word": "fisherman",
+    "start": 0.24,
+    "end": 0.64
+   },
+   {
+    "word": "nods",
+    "start": 0.64,
+    "end": 1.26
+   },
+   {
+    "word": "at",
+    "start": 1.26,
+    "end": 1.38
+   },
+   {
+    "word": "you.",
+    "start": 1.38,
+    "end": 1.62
    }
   ]
  },
@@ -91863,6 +92012,58 @@
     "word": "it.",
     "start": 4.12,
     "end": 4.34
+   }
+  ]
+ },
+ "1dfb46971f2f1c": {
+  "file": "1dfb46971f2f1c.mp3",
+  "speaker": "fisherman",
+  "duration": 2.136,
+  "words": [
+   {
+    "word": "I'd",
+    "start": 0.0,
+    "end": 0.26
+   },
+   {
+    "word": "give",
+    "start": 0.26,
+    "end": 0.42
+   },
+   {
+    "word": "a",
+    "start": 0.42,
+    "end": 0.54
+   },
+   {
+    "word": "good",
+    "start": 0.54,
+    "end": 0.76
+   },
+   {
+    "word": "deal",
+    "start": 0.76,
+    "end": 1.02
+   },
+   {
+    "word": "for",
+    "start": 1.02,
+    "end": 1.26
+   },
+   {
+    "word": "a",
+    "start": 1.26,
+    "end": 1.4
+   },
+   {
+    "word": "fresh",
+    "start": 1.4,
+    "end": 1.64
+   },
+   {
+    "word": "fish.",
+    "start": 1.64,
+    "end": 1.96
    }
   ]
  },

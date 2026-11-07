@@ -51,6 +51,10 @@
   "file": "glass-clink.mp3",
   "duration": 1.524
  },
+ "hawk-cry": {
+  "file": "hawk-cry.mp3",
+  "duration": 2.956
+ },
  "hearth-fire": {
   "file": "hearth-fire.mp3",
   "duration": 20.0
@@ -73,6 +77,10 @@
  },
  "mechanism-whir": {
   "file": "mechanism-whir.mp3",
+  "duration": 20.0
+ },
+ "mountain-wind": {
+  "file": "mountain-wind.mp3",
   "duration": 20.0
  },
  "rain": {
