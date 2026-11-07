@@ -5,6 +5,7 @@ import { Key } from './Key'
 import { Bread } from './Bread'
 import { SharpKnife } from './SharpKnife'
 import { Candle } from './Candle'
+import { Matches } from './Matches'
 import { Mechanism } from './Mechanism'
 import { Scenery } from './Scenery'
 import { Vines } from './Vines'
@@ -160,6 +161,17 @@ describe('Scenery that follows the story', () => {
     ) as Candle
     candle.isLit = true
     expect(say(game, 'examine corner')).toContain('In the candlelight')
+  })
+
+  it('dark corner: lit, names the locket while it lies there, then not once taken', () => {
+    const game = gameIn('VillageChapel')
+    game.state.addItemToInventory(new Matches())
+    say(game, 'use candle with matches')
+    expect(say(game, 'examine dark corner')).toMatch(/locket/)
+    say(game, 'take locket')
+    expect(say(game, 'examine dark corner')).toBe(
+      'In the candlelight it is only a corner: old stone, and a gap low in the wall.',
+    )
   })
 })
 

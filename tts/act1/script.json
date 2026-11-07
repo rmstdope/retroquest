@@ -3770,9 +3770,9 @@
     "text": "The candle is lit, casting a warm, steady light."
   },
   {
-    "id": "0ea6f5198de3ab",
+    "id": "1d8764994a93be",
     "speaker": "narrator",
-    "text": "In the candlelight it is only a corner: old stone, and a gap low in the wall."
+    "text": "In the candlelight it is only a corner: old stone, a gap low in the wall, and a small silver locket lying on the floor."
   },
   {
     "id": "11a958a310bf0b",
@@ -3788,6 +3788,11 @@
     "id": "025ee993cf1408",
     "speaker": "priest",
     "text": "Look there, child. The light has found something."
+  },
+  {
+    "id": "0ea6f5198de3ab",
+    "speaker": "narrator",
+    "text": "In the candlelight it is only a corner: old stone, and a gap low in the wall."
   },
   {
     "id": "02f19afee901ad",

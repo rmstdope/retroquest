@@ -18,6 +18,7 @@ import { DullKnife } from './DullKnife'
 import { FishingRod } from './FishingRod'
 import { Key } from './Key'
 import { Lantern } from './Lantern'
+import { Locket } from './Locket'
 import { Matches } from './Matches'
 import { Mechanism } from './Mechanism'
 import { Rope } from './Rope'
@@ -171,6 +172,11 @@ function candleLit(gameState: GameState): boolean {
   return gameState.currentRoom.items.some(
     (item) => item instanceof Candle && item.isLit,
   )
+}
+
+/** Whether the room the player is in still holds the locket. */
+function locketHere(gameState: GameState): boolean {
+  return gameState.currentRoom.items.some((item) => item instanceof Locket)
 }
 
 /** Whether the stranger's mechanism in this room is jammed. */
@@ -625,10 +631,15 @@ export const SCENERY_BY_ROOM: Record<string, SceneryDef[]> = {
       'VillageChapel.darkCorner',
       'dark corner',
       ['corner'],
-      (gs) =>
-        candleLit(gs)
-          ? 'In the candlelight it is only a corner: old stone, and a gap low in the wall.'
-          : 'The corner by the altar is so dark that your eyes slide off it.',
+      (gs) => {
+        if (!candleLit(gs)) {
+          return 'The corner by the altar is so dark that your eyes slide off it.'
+        }
+        return locketHere(gs)
+          ? 'In the candlelight it is only a corner: old stone, a gap low in the ' +
+              'wall, and a small silver locket lying on the floor.'
+          : 'In the candlelight it is only a corner: old stone, and a gap low in the wall.'
+      },
       darkCornerUseFrom,
     ),
   ],
