@@ -14,16 +14,20 @@ export class ShorelineMarkers extends Room {
     super({
       name: 'Shoreline Markers',
       description:
-        'The shore here is quiet and cold. Weathered steles rise from the sand, ' +
-        'their worn faces full of shallow marks. Salt and time have smudged ' +
-        'many lines, but faint moon sigils still show when the tide drops. ' +
-        'Loose pale flakes sit in the grooves; they shimmer like old stars. ' +
-        'When the moon is high, the stones seem to hum with a slow, patient ' +
-        'voice—an old magic tied to the sea.',
+        'Weathered steles stand in the cold sand, ' +
+        'their faces full of shallow marks. ' +
+        'Salt has smudged most of the lines, ' +
+        'but moon sigils still show when the tide drops. ' +
+        'Pale flakes sit loose in the grooves and catch the light.',
       items: [new Steles(), new PolishedShell()],
       characters: [],
       exits: { south: 'TidalCauseway', east: 'OuterWards' },
     })
+  }
+
+  /** Give a save made with older wording the current description. */
+  override refreshSavedText(): void {
+    this.description = new ShorelineMarkers().description
   }
 
   /** Search the steles to find Moon Rune shards for ward construction. */

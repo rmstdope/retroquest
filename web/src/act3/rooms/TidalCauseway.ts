@@ -16,14 +16,19 @@ export class TidalCauseway extends Room {
     super({
       name: 'Tidal Causeway',
       description:
-        'Thin causeways of old stone lift from the black water like ribs. ' +
-        'Moonlight skims the wet stones; salt and wind carry half‑heard ' +
-        'songs. Broken arches stand like quiet mouths, guarding what the ' +
-        'sea keeps.',
+        'Thin causeways of old stone run out across the black water. ' +
+        'The wet stones shine under the moon. ' +
+        'Broken arches stand along the way, ' +
+        'and their shadows lie deep over a faded mural.',
       items: [new Mural(), new BarnacledBeamFragment()],
       characters: [],
       exits: { north: 'ShorelineMarkers', east: 'SubmergedAntechamber' },
     })
+  }
+
+  /** Give a save made with older wording the current description. */
+  override refreshSavedText(): void {
+    this.description = new TidalCauseway().description
   }
 
   /**

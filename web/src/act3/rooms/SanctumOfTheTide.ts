@@ -21,15 +21,20 @@ export class SanctumOfTheTide extends Room {
     super({
       name: 'Sanctum of the Tide',
       description:
-        'A vaulted chamber where water hangs like a dark mirror, its surface ' +
-        'etched with sigils that breathe and shift. Pale motes of light drift ' +
-        'along the ripples, arranging themselves into slow, impatient runes. ' +
-        "At the room's heart a shallow basin holds a cold, humming brightness; " +
+        'A vaulted chamber floored with still, dark water. ' +
+        'Sigils show on its surface and shift as you look at them, ' +
+        'and pale motes of light drift on the ripples. ' +
+        "At the room's heart a shallow basin holds a cold brightness; " +
         'the air tastes of brine and vows left unsaid.',
       items: [],
       characters: [new TideBornGuardian()],
       exits: { west: 'SubmergedAntechamber' },
     })
+  }
+
+  /** Give a save made with older wording the current description. */
+  override refreshSavedText(): void {
+    this.description = new SanctumOfTheTide().description
   }
 
   /** The Tide-Born Guardian that keeps the trial, or null if it is gone. */

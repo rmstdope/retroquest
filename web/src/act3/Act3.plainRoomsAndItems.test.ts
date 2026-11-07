@@ -16,7 +16,10 @@ import { BrassMirrorSegment } from './items/BrassMirrorSegment'
 import { HeatWardMix } from './items/HeatWardMix'
 import { SupplyCrate } from './items/SupplyCrate'
 import { CrystalOfLight } from './items/CrystalOfLight'
-import { FLAG_ACT3_VOW_OF_COURAGE_MADE } from './Act3StoryFlags'
+import {
+  FLAG_ACT3_TIDEWARD_SIGILS_COMPLETED,
+  FLAG_ACT3_VOW_OF_COURAGE_MADE,
+} from './Act3StoryFlags'
 
 /** A bare game state. */
 function dummyState(): GameState {
@@ -61,20 +64,17 @@ describe('Act III cavern rooms say one true thing', () => {
 describe('Act III coast rooms taste of vows only in the sanctum', () => {
   it('cuts the tasting line from the outer wards and the antechamber', () => {
     expect(new OuterWards().description).toBe(
-      'The courtyard lies half-swallowed by the sea. ' +
-        'Three ancient pillars rise from the black water, ' +
+      'The courtyard lies half under the sea. ' +
+        'Three old pillars rise from the black water, ' +
         'their faces scored with shallow marks. ' +
-        'Brine beads along the carved lines and they catch the moon in small ' +
+        'Brine beads along the carved lines and catches the moon in small ' +
         'rings of light.',
     )
     expect(new SubmergedAntechamber().description).toBe(
-      'The hall lies half-swallowed by tide and time. ' +
-        'Salt-smoothed stone arches bear weathered carvings that pulse with a ' +
-        'cold, inner glow. ' +
-        'A hush hangs in the air as if the sea itself listens; ' +
-        'faint, distant echoes suggest something patient and watchful beyond ' +
-        'the veil of gloom. ' +
-        'Somewhere further in, water drips, slow and patient.',
+      'A hall half under the tide. ' +
+        'Salt-smoothed arches bear worn carvings that glow cold from within. ' +
+        'It is very quiet. ' +
+        'Somewhere further in, water drips.',
     )
     expect(new SanctumOfTheTide().description).toContain(
       'the air tastes of brine and vows left unsaid.',
@@ -195,5 +195,77 @@ describe('Act III saves from before the plain rooms and items', () => {
     )
     expect(crystal2?.description).toBe(new CrystalOfLight().description)
     expect(mix2?.description).toBe(new HeatWardMix().description)
+  })
+})
+
+describe('Act III Sunken Ruins and Mount Ember rooms speak as the caverns do', () => {
+  /** Every Sunken Ruins and Mount Ember room, by its key in the act. */
+  const ROOMS = [
+    'TidalCauseway',
+    'ShorelineMarkers',
+    'OuterWards',
+    'CollapsedPier',
+    'SubmergedAntechamber',
+    'SanctumOfTheTide',
+    'LowerSwitchbacks',
+    'ObsidianOutcrops',
+    'MirrorTerraces',
+    'FumarolePassages',
+    'EmberGallery',
+    'PhoenixCrater',
+  ]
+
+  /** Words and phrases that only set a mood (design/Voice.md rules 1–2). */
+  const MOOD = [
+    /\bancient\b/i,
+    /forge stars/,
+    /patient voice/,
+    /old magic/,
+    /black teeth/,
+    /sleeps and dreams/,
+    /quiet mouths/,
+    /surrenders/,
+    /light forgets/,
+    /counting of losses/,
+    /tide and time/,
+    /veil of gloom/,
+    /trapped fireflies/,
+    /atelier/,
+    /long-\s?vanished/,
+  ]
+
+  /** Room text that describes people at work who are not there. */
+  const ABSENT_WORKERS = /attendants|scholars and|where [a-z ]+ (hammer|file)/
+
+  it('describe each room plainly, with nobody at work who is not there', () => {
+    const game = new Game([new Act3()])
+    const later = new Game([new Act3()])
+    later.state.setStoryFlag(FLAG_ACT3_TIDEWARD_SIGILS_COMPLETED, true)
+    later.state.allRooms.PhoenixCrater.rest(later.state)
+    for (const state of [game.state, later.state])
+      for (const key of ROOMS) expectPlain(key, state)
+  })
+
+  /** Expect the room's description in this state to set no mood and show no absent worker. */
+  function expectPlain(key: string, state: GameState): void {
+    const text = state.allRooms[key].descriptionFor(state)
+    for (const word of MOOD) {
+      expect(text, `${key} sets a mood with ${word}`).not.toMatch(word)
+    }
+    expect(text, `${key} describes absent workers`).not.toMatch(ABSENT_WORKERS)
+  }
+
+  it('give old descriptions of these rooms their new wording on load', () => {
+    const game = new Game([new Act3()])
+    for (const key of ROOMS) game.state.allRooms[key].description = 'Old text.'
+    const fresh = new Game([new Act3()])
+    expect(fresh.loadSaveData(game.toSaveData())).toContain('loaded')
+    const act = new Act3()
+    for (const key of ROOMS) {
+      expect(
+        fresh.state.allRooms[key].description,
+        `${key} keeps its old saved wording`,
+      ).toBe(act.rooms[key].description)
+    }
   })
 })

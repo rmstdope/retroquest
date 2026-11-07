@@ -150,7 +150,7 @@ describe('the Submerged Antechamber room card', () => {
     game.state.currentRoom = game.state.allRooms.SubmergedAntechamber
     game.state.setStoryFlag(FLAG_ACT3_TIDEWARD_SIGILS_COMPLETED, true)
     expect(new GameController(game).getRoomDescription()).toContain(
-      'recently unmasked by a withdrawing tide',
+      'The tide has drawn back, and the water in the hall is low and cold.',
     )
   })
 })

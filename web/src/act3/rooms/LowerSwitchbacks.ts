@@ -8,19 +8,23 @@ export class LowerSwitchbacks extends Room {
     super({
       name: 'Lower Switchbacks',
       description:
-        'Wind‑carved paths snake across black, glassy rock; ash skims the ' +
-        "air and the scent of iron hangs on the wind. A small scholars' " +
-        'camp clings to a lee: canvas shelters patched with soot, low ' +
-        'braziers for warmth, and drying racks where scorched notes and ' +
-        'map fragments flutter. Workbenches hold polishing stones and ' +
-        'brass fittings—evidence of a diligent, makeshift atelier repairing ' +
-        'mirror segments found among the outcrops. Beyond the camp, the ' +
-        'slope falls into jagged obsidian ribs and steaming vents where ' +
-        'fumaroles hiss; sparks drift like trapped fireflies when the wind ' +
-        'turns.',
+        'Paths wind back and forth across black, glassy rock, ' +
+        'and ash blows on the wind. ' +
+        "In the lee of the slope stands a scholar's camp: " +
+        'soot-patched canvas, low braziers, ' +
+        'and racks where scorched notes and scraps of map flap. ' +
+        'A workbench holds polishing stones and brass fittings ' +
+        'for mending mirror segments, the kind found among the outcrops. ' +
+        'Above the camp the slope climbs into obsidian, ' +
+        'and vents hiss farther off.',
       items: [new EmberwaterCanteen()],
       characters: [new AshScholar()],
       exits: { north: 'ObsidianOutcrops', east: 'EmberGallery' },
     })
+  }
+
+  /** Give a save made with older wording the current description. */
+  override refreshSavedText(): void {
+    this.description = new LowerSwitchbacks().description
   }
 }

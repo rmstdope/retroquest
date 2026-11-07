@@ -12,19 +12,20 @@ export class EmberGallery extends Room {
     super({
       name: 'Ember Gallery',
       description:
-        'A vaulted cavern veined with cooling flows; the air smells of ' +
-        'charcoal and iron. Streaks of glassed lava lace the walls, ' +
-        'catching stray cinders that glow like embers in the gloom. ' +
-        'Steam sighs from fissures and pools of blackened water mirror ' +
-        'faint, dancing light. Worktables gather scattered fragments of ' +
-        'fireglass and ash‑tumbled tools where attendants hammer and ' +
-        'sort cooled slag for wards. The heat here is a steady, low ' +
-        'thrum — a reminder that the mountain breathes beneath your ' +
-        'feet.',
+        'A vaulted cavern veined with cooling lava; ' +
+        'the air smells of charcoal and iron. ' +
+        'Steam rises from cracks in the floor. ' +
+        'On the worktables, fireglass and cooled slag lie sorted into heaps ' +
+        'for wards, as if whoever sorted them meant to come back.',
       items: [],
       characters: [],
       exits: { north: 'MirrorTerraces', west: 'LowerSwitchbacks' },
     })
+  }
+
+  /** Give a save made with older wording the current description. */
+  override refreshSavedText(): void {
+    this.description = new EmberGallery().description
   }
 
   /** Reveal ash-fern and cooled slag deposits when searched the first time. */

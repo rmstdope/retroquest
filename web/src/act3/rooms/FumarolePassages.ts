@@ -63,20 +63,23 @@ export class FumarolePassages extends Room {
     super({
       name: 'Fumarole Passages',
       description:
-        'Narrow tunnels exhale a rhythmic, breath-like heat; stone vents chuff ' +
-        'and sigh as if the mountain itself sleeps and dreams. Curtains of ' +
-        'steam veil the low passages, and the air tastes faintly of sulfur ' +
-        'and warm metal. Here and there a vent hisses sparks that glass the ' +
-        'rock into smoky, translucent streaks, while the floor bears the ' +
-        'pale scars of old fittings—tiny holes and rubbed brass where mounts ' +
-        'were once bolted. Each step sends a warm gust that carries a distant ' +
-        'clink of metal and the steady, low sigh of fumaroles farther below.',
+        'Narrow tunnels breathe heat in and out through vents in the stone, ' +
+        'the way a sleeper breathes. ' +
+        'Steam hangs in the low passages, ' +
+        'and the air smells of sulfur and warm metal. ' +
+        'Small holes and rubbed brass in the floor show where mounts were ' +
+        'once bolted.',
       // Multiple vent stones so players can perform the three required
       // calibrations during the Breath of the Mountain side quest.
       items: [new VentStone(), new VentStone(), new VentStone()],
       characters: [new PhoenixGuardian()],
       exits: { south: 'PhoenixCrater', west: 'MirrorTerraces' },
     })
+  }
+
+  /** Give a save made with older wording the current description. */
+  override refreshSavedText(): void {
+    this.description = new FumarolePassages().description
   }
 
   /**

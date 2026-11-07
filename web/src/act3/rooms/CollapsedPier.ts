@@ -9,12 +9,18 @@ export class CollapsedPier extends Room {
     super({
       name: 'Collapsed Pier',
       description:
-        'The pier surrenders to the tide. Warped planks gape and blackened ' +
-        'vaults yawn where light forgets to go. Barnacled timbers rise like ' +
-        'buried ribs, and the water sings a low, patient counting of losses.',
+        'The pier has fallen into the tide. ' +
+        'Warped planks gape over dark vaults, ' +
+        'and barnacled timbers stand up out of the water. ' +
+        'The sea knocks against them, slow and steady.',
       items: [new Locker(), new WeatheredCoin()],
       characters: [new PierWarden()],
       exits: { west: 'OuterWards' },
     })
+  }
+
+  /** Give a save made with older wording the current description. */
+  override refreshSavedText(): void {
+    this.description = new CollapsedPier().description
   }
 }

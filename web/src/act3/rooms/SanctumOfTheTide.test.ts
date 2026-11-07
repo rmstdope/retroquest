@@ -75,7 +75,7 @@ describe('Sanctum of the Tide trial', () => {
     expect(look).toContain('east')
     expect(look).toContain('west')
     expect(look).not.toContain('Crystal of Light')
-    expect(look).not.toContain('sigils that breathe')
+    expect(look).not.toContain('shift as you look')
   })
 
   it('walks three steps east and reveals the crystal on the third', () => {
@@ -129,7 +129,7 @@ describe('Sanctum of the Tide trial', () => {
     executeCommands(game, ['take crystal of light'])
     expectItemInInventory(game.state, 'crystal of light', true)
     const look = describeRoom(game)
-    expect(look).toContain('sigils that breathe')
+    expect(look).toContain('shift as you look')
     expect(look).not.toContain('east')
     executeCommands(game, ['east'])
     expect(game.state.currentRoom.name).toBe('Sanctum of the Tide')
