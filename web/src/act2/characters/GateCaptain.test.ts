@@ -163,3 +163,18 @@ describe('Gate Captain declining an item', () => {
     )
   })
 })
+
+describe('Using the entry pass with the Gate Captain (rq-5cau)', () => {
+  it('shows him the pass, as giving it does', () => {
+    const game = createGameAtGates()
+    game.state.addItemToInventory(new EntryPass())
+
+    const answer = game.commandParser.parse('use entry pass with gate captain')
+
+    expect(answer).not.toContain("can't use")
+    expect(answer).toContain('Welcome to Greendale.')
+    expect(
+      game.state.currentRoom.characters.some((c) => c instanceof GateCaptain),
+    ).toBe(false)
+  })
+})

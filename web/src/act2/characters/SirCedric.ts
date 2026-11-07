@@ -1,6 +1,7 @@
 import {
   Character,
   type GameState,
+  type Item,
   type Spell,
   characterName,
   dialogue,
@@ -12,6 +13,7 @@ import {
 } from '../items/AncientAmulet'
 import { Coins } from '../items/Coins'
 import { NaturesCharm } from '../items/NaturesCharm'
+import { TrainingSword } from '../items/TrainingSword'
 import {
   FLAG_CEDRIC_RECOGNISED_SIGIL,
   FLAG_DEMONSTRATED_COMBAT_SKILLS,
@@ -154,6 +156,16 @@ export class SirCedric extends Character {
   /** Give an older save the description that matches whether his name has been cleared. */
   override refreshSavedText(gameState: GameState): void {
     this.refreshDescription(gameState)
+  }
+
+  /**
+   * Handing him the training sword is answered as using it before him is:
+   * he knows the blade, and the bout begins (see `TrainingSword.use`);
+   * anything else is refused as usual.
+   */
+  override giveItem(gameState: GameState, item: Item): string {
+    if (item instanceof TrainingSword) return item.use(gameState)
+    return super.giveItem(gameState, item)
   }
 
   /** Also answers to his short name, which the `say truth to cedric` command uses. */

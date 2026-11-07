@@ -1,4 +1,10 @@
-import { Item, type GameState, characterName, speech } from '@/engine'
+import {
+  Item,
+  type Character,
+  type GameState,
+  characterName,
+  speech,
+} from '@/engine'
 import { FLAG_DEMONSTRATED_COMBAT_SKILLS } from '../Act2StoryFlags'
 import { SirCedric } from '../characters/SirCedric'
 import { CastleCourtyard } from '../rooms/CastleCourtyard'
@@ -61,5 +67,14 @@ export class TrainingSword extends Item {
       'You practice a few sword forms with the training sword. ' +
       'The balance is good. Somebody swung this a great deal, a long time ago.'
     )
+  }
+
+  /**
+   * Using the sword on Sir Cedric is the same as using it before him: he
+   * knows the blade and the bout begins; on anyone else it is refused as usual.
+   */
+  override useOnCharacter(gameState: GameState, target: Character): string {
+    if (target instanceof SirCedric) return this.use(gameState)
+    return super.useOnCharacter(gameState, target)
   }
 }
