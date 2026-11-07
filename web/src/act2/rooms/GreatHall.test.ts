@@ -51,6 +51,17 @@ describe('Great Hall archive search', () => {
     expect(kinds.filter((k) => k === 'dialogue:null')).toHaveLength(2)
   })
 
+  it('shows the stranger refused each time, so only the copying is new (rq-m0al)', () => {
+    const text = new GreatHall().search(readyGame().state)
+
+    expect(text).toContain('Said he came on the business of Malakar. Refused.')
+    expect(text).toContain('and each one ends the same way:')
+    expect(text).toContain(
+      'He was turned away every time, and still the rolls in your journal ' +
+        'were copied line for line.',
+    )
+  })
+
   it('shows only the register entry when searched again', () => {
     const game = readyGame()
     new GreatHall().search(game.state)
@@ -58,7 +69,7 @@ describe('Great Hall archive search', () => {
 
     expect(findMarkupProblems(text)).toEqual([])
     expect(text).toContain('You have already been through the archive.')
-    expect(text).toContain('Said he came on the business of Malakar.')
+    expect(text).toContain('Said he came on the business of Malakar. Refused.')
     expect(text).not.toContain('Wardens of the Dawn')
   })
 
