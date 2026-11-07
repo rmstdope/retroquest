@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest'
 import { Game, GameController } from '@/engine'
 import { Act3 } from '../Act3'
+import { questTextHtml } from '@/lantern/questTextHtml'
 import { EchoesOfTheHiddenBondQuest } from './EchoesOfTheHiddenBond'
 import {
   FLAG_ACT3_ECHOES_QUEST_STARTED,
@@ -43,7 +44,7 @@ describe('Echoes of the Hidden Bond quest', () => {
     game.state.setStoryFlag(FLAG_ACT3_SEA_SEALED_LETTER_READ, true)
     let updated = quest.checkUpdate(game.state)
     expect(updated).toBe(true)
-    expect(quest.description).toContain('✓ In the Sunken Ruins')
+    expect(quest.description).toContain('[success] * In the Sunken Ruins')
     expect(quest.description).toContain('a letter from Aren and Lysa')
     expect(quest.description).not.toContain('apprentices')
 
@@ -51,14 +52,14 @@ describe('Echoes of the Hidden Bond quest', () => {
     game.state.setStoryFlag(FLAG_ACT3_CHARRED_INSCRIPTION_READ, true)
     updated = quest.checkUpdate(game.state)
     expect(updated).toBe(true)
-    expect(quest.description).toContain('✓ On Mount Ember')
+    expect(quest.description).toContain('[success] * On Mount Ember')
     expect(quest.description).toContain('one virtue each')
 
     // Hear Dragon's Memory
     game.state.setStoryFlag(FLAG_ACT3_DRAGONS_MEMORY_RECEIVED, true)
     updated = quest.checkUpdate(game.state)
     expect(updated).toBe(true)
-    expect(quest.description).toContain('✓ In the Caverns of Shadow')
+    expect(quest.description).toContain('[success] * In the Caverns of Shadow')
     expect(quest.description).toContain('They are warded away, not dead')
   })
 
@@ -115,7 +116,9 @@ describe('Echoes of the Hidden Bond quest', () => {
   it('words the third open clue the same in the opening log and the checklist', () => {
     const opening = quest.description
     quest.checkUpdate(game.state)
-    expect(opening).toContain('○ Under the hills: something they left')
+    expect(opening).toContain(
+      '[pending] * Under the hills: something they left',
+    )
     expect(quest.description).toContain('Under the hills: something they left')
   })
 
@@ -207,5 +210,40 @@ describe('Echoes of the Hidden Bond quest', () => {
       expect(items.every((item) => item.done)).toBe(true)
       expect(items[2].text).toBe(caverns)
     }
+  })
+  it('shows its text as a checklist: found clues done, open clues pending', () => {
+    game.state.setStoryFlag(FLAG_ACT3_CHARRED_INSCRIPTION_READ, true)
+    quest.checkUpdate(game.state)
+    const html = questTextHtml(quest.description)
+
+    const done = [...html.matchAll(/<li class="lq-check-done">([^<]*)/g)]
+    const pending = [...html.matchAll(/<li class="lq-check-pending">([^<]*)/g)]
+    expect(done.map((m) => m[1])).toEqual([
+      expect.stringMatching(/^On Mount Ember: the promise/),
+    ])
+    expect(pending.map((m) => m[1])).toEqual([
+      'By the sea: something they left in the Sunken Ruins.',
+      'Under the hills: something they left in the Caverns of Shadow.',
+    ])
+  })
+
+  it('shows its opening text with all three clues pending', () => {
+    const html = questTextHtml(quest.description)
+    expect(html.match(/<li class="lq-check-pending">/g)).toHaveLength(3)
+    expect(html).not.toContain('lq-check-done')
+  })
+  it('redraws the clue text of an older save as a checklist', () => {
+    game.state.setStoryFlag(FLAG_ACT3_SEA_SEALED_LETTER_READ, true)
+    quest.description =
+      '[dim]Your parents made the three relics.[/dim]\n\n' +
+      '✓ In the Sunken Ruins: a letter.\n' +
+      '[dim]○ On the mountain: something they left on Mount Ember.[/dim]'
+
+    quest.refreshSavedText(game.state)
+
+    const html = questTextHtml(quest.description)
+    expect(html.match(/<li class="lq-check-done">/g)).toHaveLength(1)
+    expect(html.match(/<li class="lq-check-pending">/g)).toHaveLength(2)
+    expect(quest.description).not.toContain('○')
   })
 })

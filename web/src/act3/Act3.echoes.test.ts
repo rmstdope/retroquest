@@ -56,15 +56,17 @@ describe('Echoes of the Hidden Bond integration', () => {
     // Test discovery progression
     state.setStoryFlag(FLAG_ACT3_SEA_SEALED_LETTER_READ, true)
     echoesQuest.checkUpdate(state)
-    expect(echoesQuest.description).toContain('✓ In the Sunken Ruins')
+    expect(echoesQuest.description).toContain('[success] * In the Sunken Ruins')
 
     state.setStoryFlag(FLAG_ACT3_CHARRED_INSCRIPTION_READ, true)
     echoesQuest.checkUpdate(state)
-    expect(echoesQuest.description).toContain('✓ On Mount Ember')
+    expect(echoesQuest.description).toContain('[success] * On Mount Ember')
 
     state.setStoryFlag(FLAG_ACT3_DRAGONS_MEMORY_RECEIVED, true)
     echoesQuest.checkUpdate(state)
-    expect(echoesQuest.description).toContain('✓ In the Caverns of Shadow')
+    expect(echoesQuest.description).toContain(
+      '[success] * In the Caverns of Shadow',
+    )
 
     // Test completion
     expect(echoesQuest.checkCompletion(state)).toBe(true)
