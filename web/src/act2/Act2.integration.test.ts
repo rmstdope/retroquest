@@ -735,7 +735,18 @@ describe('Golden path step 15: Forest Transition', () => {
     // Navigate to Forest Transition
     state.currentRoom = state.allRooms.ForestTransition
 
-    // Set up prerequisites: player should have forest survival kit
+    // Set up prerequisites: Greendale's quests done and the forest survival kit
+    for (const name of [
+      "The Knight's Test",
+      'Supplies for the Journey',
+      'Echoes of the Past',
+      "The Healer's Apprentice",
+      'The Ancient Library',
+    ]) {
+      const quest = state.getQuest(name)
+      if (quest === null) throw new Error(`Missing quest: ${name}`)
+      state.completedQuests.push(quest)
+    }
     state.inventory.push(new ForestSurvivalKit())
 
     // Verify initial state

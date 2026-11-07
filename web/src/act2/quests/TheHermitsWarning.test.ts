@@ -8,8 +8,7 @@ describe("The Hermit's Warning quest", () => {
     expect(quest.description).toContain('make camp by the stones first')
     expect(quest.description).not.toContain('prepare yourself')
     expect(quest.completion).toBe(
-      "You spent a night on the forest's doorstep, and she let you. " +
-        'The way east is open.',
+      "You spent a night on the forest's doorstep, and she let you.",
     )
   })
 })

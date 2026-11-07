@@ -4,6 +4,7 @@ import {
   QUEST_HERMITS_WARNING,
 } from '../Act2StoryFlags'
 import { ForestTransition } from '../rooms/ForestTransition'
+import { greendaleWorkDone } from '../greendaleWork'
 
 /** The item's description; `refreshSavedText` restores it in older saves. */
 export const FOREST_SURVIVAL_KIT_DESCRIPTION =
@@ -53,7 +54,10 @@ export class ForestSurvivalKit extends Item {
         'is sitting by the embers, feeding them twigs.' +
         '\n\n' +
         speech(
-          "You slept on her doorstep and she let you. That's a start. Go on, then.",
+          greendaleWorkDone(gameState)
+            ? "You slept on her doorstep and she let you. That's a start. Go on, then."
+            : "You slept on her doorstep and she let you. That's a start. " +
+                "Now finish what you left half done in Greendale. She'll keep.",
         )
       )
     }

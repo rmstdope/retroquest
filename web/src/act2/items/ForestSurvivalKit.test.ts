@@ -18,6 +18,21 @@ function createGameAtStones(): Game {
   return game
 }
 
+/** Mark Greendale's quests before the forest done, as the golden path has them by the stones. */
+function finishGreendale(game: Game): void {
+  for (const name of [
+    "The Knight's Test",
+    'Supplies for the Journey',
+    'Echoes of the Past',
+    "The Healer's Apprentice",
+    'The Ancient Library',
+  ]) {
+    const quest = game.state.getQuest(name)
+    if (quest === null) throw new Error(`Missing quest: ${name}`)
+    game.state.completedQuests.push(quest)
+  }
+}
+
 describe('Forest survival kit', () => {
   it('is refused at the stones before the first talk with the hermit', () => {
     const game = createGameAtStones()
@@ -42,6 +57,7 @@ describe('Forest survival kit', () => {
 
   it('plays the whole camp scene after the first talk and is used up', () => {
     const game = createGameAtStones()
+    finishGreendale(game)
     executeCommands(game, ['talk to forest hermit'])
 
     const answer = executeCommands(game, ['use forest survival kit'])
