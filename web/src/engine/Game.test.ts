@@ -805,6 +805,18 @@ describe('Game', () => {
         '[bold]You are carrying:[/bold]\n- [item_name]apple[/item_name]\n- [item_name]stick[/item_name]',
       )
     })
+
+    it('lists identical items once with a count, as the Bag panel does', () => {
+      game.state.inventory.push(
+        item('coins'),
+        item('apple'),
+        item('coins'),
+        item('coins'),
+      )
+      expect(game.inventory()).toBe(
+        '[bold]You are carrying:[/bold]\n- [item_name]coins[/item_name] ×3\n- [item_name]apple[/item_name]',
+      )
+    })
   })
 
   describe('spells', () => {
