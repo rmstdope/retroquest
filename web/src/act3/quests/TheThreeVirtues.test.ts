@@ -8,7 +8,15 @@ import {
   FLAG_ACT3_CRYSTAL_OF_LIGHT_ACQUIRED,
   FLAG_ACT3_PHOENIX_FEATHER_ACQUIRED,
   FLAG_ACT3_DRAGONS_SCALE_ACQUIRED,
+  FLAG_ACT3_DRAGONS_MEMORY_RECEIVED,
 } from '../Act3StoryFlags'
+import { ACT3_GOLDEN_PATH } from '../Act3GoldenPath'
+import {
+  executeCommands,
+  expectStoryFlag,
+  pathIndex,
+  playPath,
+} from '@/testing/gameHelpers'
 
 function createGame(): Game {
   return new Game([new Act3()])
@@ -203,5 +211,70 @@ describe('The Three Virtues quest', () => {
       'You answered the phoenix: wisdom is patience, even when the world ' +
         'burns. It gave you a feather, and told you of a Warden who had none.',
     )
+  })
+})
+
+describe('The Three Virtues hint, once the dragon has asked for the oath', () => {
+  /**
+   * A game played along the golden path to the Echo Chambers, then on to the
+   * dragon without looking for the scrolls: the rubbings taken, the vestibule
+   * quieted and the dragon talked to.
+   */
+  function dragonAskedScrollsUnfound(): Game {
+    const game = createGame()
+    const search = pathIndex(ACT3_GOLDEN_PATH, 'search', 6)
+    playPath(game, ACT3_GOLDEN_PATH, 0, search)
+    executeCommands(game, [
+      'examine runic walls',
+      'take resonant chant rubbings',
+      'w',
+      's',
+      'cast bless on echo stones',
+      'take phial',
+      'use stillwater phial with pool',
+      'use resonant chant rubbings with echo stones',
+      'e',
+      'talk to ancient dragon',
+    ])
+    return game
+  }
+
+  it('points at the Echo Chambers and the alcove when the scrolls are not found', () => {
+    const game = dragonAskedScrollsUnfound()
+    expectStoryFlag(game.state, FLAG_ACT3_DRAGONS_MEMORY_RECEIVED, true)
+    const hint = executeCommands(game, ['hint'])
+    expect(hint).toContain(
+      '[bold]The Three Virtues:[/bold] The dragon will not give its scale ' +
+        'for the asking. There is an old oath for it, and its words are ' +
+        'kept in the Echo Chambers, tucked out of sight at the back of an ' +
+        'alcove.',
+    )
+    expect(hint).not.toMatch(/\bsearch\b/)
+  })
+
+  it('names the scrolls once they are found but still unread', () => {
+    const game = dragonAskedScrollsUnfound()
+    executeCommands(game, ['w', 'n', 'e', 'search', 'take old oath scrolls'])
+    expect(executeCommands(game, ['hint'])).toContain(
+      '[bold]The Three Virtues:[/bold] The dragon will not give its scale ' +
+        'for the asking. There is an old oath for it, and its words are on ' +
+        'the old scrolls you found in the Echo Chambers. You have not read ' +
+        'them yet.',
+    )
+  })
+
+  it('keeps pointing at the alcove after a save and load', () => {
+    const game = dragonAskedScrollsUnfound()
+    const loaded = createGame()
+    loaded.loadSaveData(game.toSaveData())
+    expect(executeCommands(loaded, ['hint'])).toContain(
+      'tucked out of sight at the back of an alcove.',
+    )
+  })
+
+  it('goes back to the log once the scrolls are read', () => {
+    const game = dragonAskedScrollsUnfound()
+    executeCommands(game, ['w', 'n', 'e', 'search', 'examine old oath scrolls'])
+    expect(executeCommands(game, ['hint'])).not.toContain('old oath for it')
   })
 })

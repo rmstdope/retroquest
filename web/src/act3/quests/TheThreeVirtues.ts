@@ -5,13 +5,31 @@ import {
   FLAG_ACT3_MAIN_STARTED,
   FLAG_ACT3_DRAGONS_SCALE_ACQUIRED,
   FLAG_ACT3_PHOENIX_FEATHER_ACQUIRED,
+  FLAG_ACT3_DRAGONS_MEMORY_RECEIVED,
+  FLAG_ACT3_DRAGON_OATH_SPOKEN,
+  FLAG_ACT3_OATH_SCROLLS_EXAMINED,
 } from '../Act3StoryFlags'
+import { EchoChambers } from '../rooms/EchoChambers'
 
 /** What Mira told Elior about Malakar and the three relics that can stand against him. */
 const OPENING_ENTRY =
   'Mira says Malakar is draining the life out of King Alden. ' +
   'Three relics can stand against him: the crystal of light, ' +
   "the phoenix feather and the dragon's scale."
+
+/** The hint's opening once the dragon has asked for the oath. */
+const OATH_ASKED =
+  'The dragon will not give its scale for the asking. There is an old ' +
+  'oath for it, and its words are '
+
+/** Where the oath's words are while the scrolls are still hidden. */
+const SCROLLS_HIDDEN =
+  'kept in the Echo Chambers, tucked out of sight at the back of an alcove.'
+
+/** Where the oath's words are once the scrolls are found but unread. */
+const SCROLLS_UNREAD =
+  'on the old scrolls you found in the Echo Chambers. ' +
+  'You have not read them yet.'
 
 /** Quest to prove Courage, Wisdom, and Selflessness to unlock the final ritual. */
 export class TheThreeVirtuesQuest extends Quest {
@@ -27,6 +45,22 @@ export class TheThreeVirtuesQuest extends Quest {
   /** Return true as this is the main quest for Act III. */
   override isMain(): boolean {
     return true
+  }
+
+  /**
+   * Once the dragon has asked for the oath and the scrolls are unread, point
+   * at where its words are: the alcove while the scrolls are hidden, the
+   * scrolls once found. Otherwise the newest journal entry.
+   */
+  override hint(gameState: GameState): string | null {
+    const oathAsked =
+      gameState.getStoryFlag(FLAG_ACT3_DRAGONS_MEMORY_RECEIVED) &&
+      !gameState.getStoryFlag(FLAG_ACT3_OATH_SCROLLS_EXAMINED) &&
+      !gameState.getStoryFlag(FLAG_ACT3_DRAGON_OATH_SPOKEN)
+    if (!oathAsked) return super.hint(gameState)
+    const chambers = gameState.allRooms.EchoChambers
+    const found = chambers instanceof EchoChambers && chambers.scrollsDiscovered
+    return OATH_ASKED + (found ? SCROLLS_UNREAD : SCROLLS_HIDDEN)
   }
 
   /** Check if quest should trigger when Mira starts the main plan. */

@@ -1935,6 +1935,11 @@
     "text": "Tobin does not look up. His thumb traces the crack in the lamp's glass, back and forth."
   },
   {
+    "id": "0db4df2b9063c3",
+    "speaker": "narrator",
+    "text": "The runes describe a chant to quiet the phantoms: 'Let stillness echo, let silence bind.' You notice you could make rubbings of these ancient symbols."
+  },
+  {
     "id": "143283441007a0",
     "speaker": "narrator",
     "text": "Echo Chambers"
@@ -1945,14 +1950,209 @@
     "text": "Smooth caverns of bare stone. Every step comes back to you from the alcoves, and so does every word, a breath late, as if someone were copying you. Runes cover the walls, cut by three hands, the same words over and over."
   },
   {
-    "id": "0db4df2b9063c3",
+    "id": "0e8d73eea987bd",
     "speaker": "narrator",
-    "text": "The runes describe a chant to quiet the phantoms: 'Let stillness echo, let silence bind.' You notice you could make rubbings of these ancient symbols."
+    "text": "Stillness Vestibule"
+  },
+  {
+    "id": "1362c286d221ea",
+    "speaker": "narrator",
+    "text": "A hush falls over this chamber like a shroud. Dark pools mirror the ceiling, so still they look frozen in time, and the stone seems to swallow every sound. At the centre, three weathered echo stones stand in a triangle. Their carved channels look made to catch whispered words and hold them."
+  },
+  {
+    "id": "1dce594469d8e4",
+    "speaker": "narrator",
+    "text": "As the blessing leaves your lips, the echo stones hum, and you feel it in your bones. Silver light runs along their carved channels like water finding its course. Then the light settles into a slow, steady glow."
+  },
+  {
+    "id": "1ded1c9d402656",
+    "speaker": "narrator",
+    "text": "The stones are warm now, and waiting for words."
+  },
+  {
+    "id": "0f09ca0f3dc93a",
+    "speaker": "narrator",
+    "text": "Oath of Stillness"
+  },
+  {
+    "id": "04fa55c66a5f2b",
+    "speaker": "narrator",
+    "text": "Grey figures drift among the pools of the Stillness Vestibule, saying the same thing over, as they have for years. The way to the dragon's hall stays shut until the echo stones there are blessed and given the old chant. Its words are cut into the walls of the Echo Chambers."
+  },
+  {
+    "id": "171403adb2ff8a",
+    "speaker": "narrator",
+    "text": "You unstopper the phial and let a single drop fall into the nearest pool. The ripple does not spread; it sinks, and the stillness goes down after it until the black water lies flat as glass, holding the stones and the dark above in perfect reflection."
+  },
+  {
+    "id": "133bd8516a5de3",
+    "speaker": "narrator",
+    "text": "The pools are mirror-still. Now the chant will carry."
+  },
+  {
+    "id": "19df34d39fbdb7",
+    "speaker": "narrator",
+    "text": "You recite the resonant chant at each stone."
+  },
+  {
+    "id": "03a70734a5f9d2",
+    "speaker": "narrator",
+    "text": "The words echo and re-echo, building into a silence that settles over the chamber. The phantoms stop where they stand, and fade into it. The path to the dragon's hall now lies open."
+  },
+  {
+    "id": "0c04efe4b79d5a",
+    "speaker": "narrator",
+    "text": "The chant ran through the echo stones and out across the still water, and the hush of the Stillness Vestibule closed over it. Nothing there is saying the same thing over any more, and the way to the dragon's hall lies open."
+  },
+  {
+    "id": "0239b7119a174b",
+    "speaker": "narrator",
+    "text": "Dragon's Hall"
+  },
+  {
+    "id": "05385df00c3ecd",
+    "speaker": "narrator",
+    "text": "A hall of living stone opens beyond sight, its ceiling lost in shadow. Embers burn slowly along the floor, pulsing like a heartbeat, and somewhere in the dark, water drips. Rings of old sigils spiral across the black tiles around the Ancient Dragon. It lies coiled at the centre, scales like polished obsidian, and each slow breath hums in your bones."
+  },
+  {
+    "id": "109b2f9c008bda",
+    "speaker": "narrator",
+    "text": "The ancient dragon opens one golden eye. Its voice is slow, and very low:"
+  },
+  {
+    "id": "14c73f713c4372",
+    "speaker": "ancient dragon",
+    "text": "Young one, I remember your parents. Aren and Lysa, Wardens of the Dawn. They came down here with their friend Malakar for a scale, the three of them laughing. They were making the relics together, as equals."
+  },
+  {
+    "id": "15e62f9ca2e8ca",
+    "speaker": "ancient dragon",
+    "text": "When Malakar tore a wound in time, it was they who stood against him. They poured themselves into a ward. It hides you from his sight, and it holds his wound shut. It is anchored in the amulet you carry, and in the bindings of your king, who was their friend and gave his crown's oath to hold it. That is why Malakar drains him."
+  },
+  {
+    "id": "1d946e221b4a2f",
+    "speaker": "narrator",
+    "text": "The ancient dragon is quiet for a long breath."
+  },
+  {
+    "id": "14377aa358175a",
+    "speaker": "ancient dragon",
+    "text": "They are warded away, not dead, child."
+  },
+  {
+    "id": "11deccdc7998d2",
+    "speaker": "ancient dragon",
+    "text": "They had a saying, the three of them, carved wherever they worked: Power follows purpose; purpose follows truth. When he offers you what you want most, say it to him. It was his before it was yours."
+  },
+  {
+    "id": "16650f742b9978",
+    "speaker": "narrator",
+    "text": "The ancient amulet blazes in your hand a third time. Aren stands beside Lysa now, hand in hand. Behind them, the third figure still has his back turned."
+  },
+  {
+    "id": "148003d059fdb8",
+    "speaker": "narrator",
+    "text": "Far off in the mines the ring of picks stops, and does not start again. Then the cavern's old dripping stops too, and the silence is complete. The curse has reached even here, beneath the oldest hills."
+  },
+  {
+    "id": "0ea3a0d7bb5dbb",
+    "speaker": "narrator",
+    "text": "Then, beneath the dragon's breathing, another voice: the whisper from your dream, at the very edge of hearing."
+  },
+  {
+    "id": "104969dc642e29",
+    "speaker": "voice",
+    "text": "Elior… little one. Help me. I cannot hold it shut alone."
+  },
+  {
+    "id": "1e818c65e8eeee",
+    "speaker": "narrator",
+    "text": "And after it, almost lost in the dragon's breathing:"
+  },
+  {
+    "id": "1c3e9a41502fcd",
+    "speaker": "voice",
+    "text": "…be patient where I was not…"
+  },
+  {
+    "id": "00105eaa4a101d",
+    "speaker": "narrator",
+    "text": "You know it the way you know a song someone sang to you before you had words for it. Then it is gone."
+  },
+  {
+    "id": "091f1b893a7c2d",
+    "speaker": "narrator",
+    "text": "You look up at the ancient dragon. Its golden eyes are half closed."
+  },
+  {
+    "id": "00e53c76fdd6ab",
+    "speaker": "ancient dragon",
+    "text": "The friend who stayed behind."
+  },
+  {
+    "id": "1a639cd80b089a",
+    "speaker": "narrator",
+    "text": "It says no more."
+  },
+  {
+    "id": "1625940dd81549",
+    "speaker": "narrator",
+    "text": "As you turn to go, the great head lowers."
+  },
+  {
+    "id": "1c205dafa60226",
+    "speaker": "ancient dragon",
+    "text": "And the healer who waits at the cavern mouth. Little Mira. Tell her she has grown old."
+  },
+  {
+    "id": "1e02754b79c8f0",
+    "speaker": "narrator",
+    "text": "The ancient dragon rumbles softly:"
+  },
+  {
+    "id": "1d42a51a684bf9",
+    "speaker": "ancient dragon",
+    "text": "The memory has been shared. The scale awaits, but it is not given for the asking. There is an old oath for it. The words are kept in the Echo Chambers."
+  },
+  {
+    "id": "0a5458dd21a823",
+    "speaker": "narrator",
+    "text": "✓ In the Sunken Ruins: a letter from Aren and Lysa to their friend Malakar, begging him not to reach for time. He wrote back: You would have me wait while you die."
+  },
+  {
+    "id": "0e472f873a6621",
+    "speaker": "narrator",
+    "text": "✓ On Mount Ember: the promise the three of them burned into stone, one virtue each, and Malakar's name struck deeper than the others."
+  },
+  {
+    "id": "19264ee82e4e82",
+    "speaker": "narrator",
+    "text": "✓ In the Caverns of Shadow: the dragon remembered them. They poured themselves into a ward that hides you and holds Malakar's wound shut. They are warded away, not dead."
+  },
+  {
+    "id": "1604c5ca1d08e9",
+    "speaker": "narrator",
+    "text": "Your parents were not Malakar's victims. They were his closest friends, Wardens of the Dawn like him, and when he tore at time they became the ward that hides you. The dragon says they are warded away, not dead."
+  },
+  {
+    "id": "17befb3297eb48",
+    "speaker": "narrator",
+    "text": "A hall of living stone opens beyond sight, its ceiling lost in shadow. Embers burn slowly along the floor, pulsing like a heartbeat, and somewhere in the dark, water drips. Rings of old sigils spiral across the black tiles around the Ancient Dragon. It lies coiled at the centre, scales like polished obsidian, and each slow breath hums in your bones. The old dripping has stopped; from the mines beyond comes no sound of picks at all."
+  },
+  {
+    "id": "1045d95b44e267",
+    "speaker": "narrator",
+    "text": "The Three Virtues: The dragon will not give its scale for the asking. There is an old oath for it, and its words are kept in the Echo Chambers, tucked out of sight at the back of an alcove."
   },
   {
     "id": "0638c4c9909177",
     "speaker": "narrator",
     "text": "In a stone niche at the back of an alcove lies a bundle of old scrolls, tied with faded golden thread."
+  },
+  {
+    "id": "08bada36740397",
+    "speaker": "narrator",
+    "text": "The Three Virtues: The dragon will not give its scale for the asking. There is an old oath for it, and its words are on the old scrolls you found in the Echo Chambers. You have not read them yet."
   },
   {
     "id": "021295fcab54d8",
@@ -2008,16 +2208,6 @@
     "id": "17534fbcaad569",
     "speaker": "narrator",
     "text": "Carefully made rubbings of ancient runes containing the Resonant Chant: 'Let stillness echo, let silence bind.'"
-  },
-  {
-    "id": "0e8d73eea987bd",
-    "speaker": "narrator",
-    "text": "Stillness Vestibule"
-  },
-  {
-    "id": "1362c286d221ea",
-    "speaker": "narrator",
-    "text": "A hush falls over this chamber like a shroud. Dark pools mirror the ceiling, so still they look frozen in time, and the stone seems to swallow every sound. At the centre, three weathered echo stones stand in a triangle. Their carved channels look made to catch whispered words and hold them."
   },
   {
     "id": "0f3b197d21ce42",
@@ -2160,26 +2350,6 @@
     "text": "Forty years I have listened to those stones. They are cold. Bless the stones; give them the chant. But a chant will not carry over troubled water, and these pools are not as still as they seem."
   },
   {
-    "id": "1dce594469d8e4",
-    "speaker": "narrator",
-    "text": "As the blessing leaves your lips, the echo stones hum, and you feel it in your bones. Silver light runs along their carved channels like water finding its course. Then the light settles into a slow, steady glow."
-  },
-  {
-    "id": "1ded1c9d402656",
-    "speaker": "narrator",
-    "text": "The stones are warm now, and waiting for words."
-  },
-  {
-    "id": "0f09ca0f3dc93a",
-    "speaker": "narrator",
-    "text": "Oath of Stillness"
-  },
-  {
-    "id": "04fa55c66a5f2b",
-    "speaker": "narrator",
-    "text": "Grey figures drift among the pools of the Stillness Vestibule, saying the same thing over, as they have for years. The way to the dragon's hall stays shut until the echo stones there are blessed and given the old chant. Its words are cut into the walls of the Echo Chambers."
-  },
-  {
     "id": "0253246883ed99",
     "speaker": "narrator",
     "text": "Oath of Stillness: Grey figures drift among the pools of the Stillness Vestibule, saying the same thing over, as they have for years. The way to the dragon's hall stays shut until the echo stones there are blessed and given the old chant. Its words are cut into the walls of the Echo Chambers."
@@ -2188,16 +2358,6 @@
     "id": "001d8f20f5945a",
     "speaker": "silence keeper",
     "text": "Forty years I have listened to those stones. They are warm again. Give them the chant. But a chant will not carry over troubled water, and these pools are not as still as they seem."
-  },
-  {
-    "id": "171403adb2ff8a",
-    "speaker": "narrator",
-    "text": "You unstopper the phial and let a single drop fall into the nearest pool. The ripple does not spread; it sinks, and the stillness goes down after it until the black water lies flat as glass, holding the stones and the dark above in perfect reflection."
-  },
-  {
-    "id": "133bd8516a5de3",
-    "speaker": "narrator",
-    "text": "The pools are mirror-still. Now the chant will carry."
   },
   {
     "id": "02ca5f6cac1450",
@@ -2215,21 +2375,6 @@
     "text": "Forty years I have listened to those stones. They are warm again. Give them the chant. The water lies true now; it will hold your words."
   },
   {
-    "id": "19df34d39fbdb7",
-    "speaker": "narrator",
-    "text": "You recite the resonant chant at each stone."
-  },
-  {
-    "id": "03a70734a5f9d2",
-    "speaker": "narrator",
-    "text": "The words echo and re-echo, building into a silence that settles over the chamber. The phantoms stop where they stand, and fade into it. The path to the dragon's hall now lies open."
-  },
-  {
-    "id": "0c04efe4b79d5a",
-    "speaker": "narrator",
-    "text": "The chant ran through the echo stones and out across the still water, and the hush of the Stillness Vestibule closed over it. Nothing there is saying the same thing over any more, and the way to the dragon's hall lies open."
-  },
-  {
     "id": "13958fc0363708",
     "speaker": "narrator",
     "text": "The Silence Keeper bows their hooded head:"
@@ -2240,114 +2385,9 @@
     "text": "The stones held. The way is open, and the sleeper knows you are coming. Go quietly."
   },
   {
-    "id": "0239b7119a174b",
-    "speaker": "narrator",
-    "text": "Dragon's Hall"
-  },
-  {
-    "id": "05385df00c3ecd",
-    "speaker": "narrator",
-    "text": "A hall of living stone opens beyond sight, its ceiling lost in shadow. Embers burn slowly along the floor, pulsing like a heartbeat, and somewhere in the dark, water drips. Rings of old sigils spiral across the black tiles around the Ancient Dragon. It lies coiled at the centre, scales like polished obsidian, and each slow breath hums in your bones."
-  },
-  {
     "id": "0a14a3c967fcd1",
     "speaker": "narrator",
     "text": "Arcane sigils of forgotten civilizations spiral across the obsidian tiles in rings around the dragon."
-  },
-  {
-    "id": "109b2f9c008bda",
-    "speaker": "narrator",
-    "text": "The ancient dragon opens one golden eye. Its voice is slow, and very low:"
-  },
-  {
-    "id": "14c73f713c4372",
-    "speaker": "ancient dragon",
-    "text": "Young one, I remember your parents. Aren and Lysa, Wardens of the Dawn. They came down here with their friend Malakar for a scale, the three of them laughing. They were making the relics together, as equals."
-  },
-  {
-    "id": "15e62f9ca2e8ca",
-    "speaker": "ancient dragon",
-    "text": "When Malakar tore a wound in time, it was they who stood against him. They poured themselves into a ward. It hides you from his sight, and it holds his wound shut. It is anchored in the amulet you carry, and in the bindings of your king, who was their friend and gave his crown's oath to hold it. That is why Malakar drains him."
-  },
-  {
-    "id": "1d946e221b4a2f",
-    "speaker": "narrator",
-    "text": "The ancient dragon is quiet for a long breath."
-  },
-  {
-    "id": "14377aa358175a",
-    "speaker": "ancient dragon",
-    "text": "They are warded away, not dead, child."
-  },
-  {
-    "id": "11deccdc7998d2",
-    "speaker": "ancient dragon",
-    "text": "They had a saying, the three of them, carved wherever they worked: Power follows purpose; purpose follows truth. When he offers you what you want most, say it to him. It was his before it was yours."
-  },
-  {
-    "id": "16650f742b9978",
-    "speaker": "narrator",
-    "text": "The ancient amulet blazes in your hand a third time. Aren stands beside Lysa now, hand in hand. Behind them, the third figure still has his back turned."
-  },
-  {
-    "id": "148003d059fdb8",
-    "speaker": "narrator",
-    "text": "Far off in the mines the ring of picks stops, and does not start again. Then the cavern's old dripping stops too, and the silence is complete. The curse has reached even here, beneath the oldest hills."
-  },
-  {
-    "id": "0ea3a0d7bb5dbb",
-    "speaker": "narrator",
-    "text": "Then, beneath the dragon's breathing, another voice: the whisper from your dream, at the very edge of hearing."
-  },
-  {
-    "id": "104969dc642e29",
-    "speaker": "voice",
-    "text": "Elior… little one. Help me. I cannot hold it shut alone."
-  },
-  {
-    "id": "1e818c65e8eeee",
-    "speaker": "narrator",
-    "text": "And after it, almost lost in the dragon's breathing:"
-  },
-  {
-    "id": "1c3e9a41502fcd",
-    "speaker": "voice",
-    "text": "…be patient where I was not…"
-  },
-  {
-    "id": "00105eaa4a101d",
-    "speaker": "narrator",
-    "text": "You know it the way you know a song someone sang to you before you had words for it. Then it is gone."
-  },
-  {
-    "id": "091f1b893a7c2d",
-    "speaker": "narrator",
-    "text": "You look up at the ancient dragon. Its golden eyes are half closed."
-  },
-  {
-    "id": "00e53c76fdd6ab",
-    "speaker": "ancient dragon",
-    "text": "The friend who stayed behind."
-  },
-  {
-    "id": "1a639cd80b089a",
-    "speaker": "narrator",
-    "text": "It says no more."
-  },
-  {
-    "id": "1625940dd81549",
-    "speaker": "narrator",
-    "text": "As you turn to go, the great head lowers."
-  },
-  {
-    "id": "1c205dafa60226",
-    "speaker": "ancient dragon",
-    "text": "And the healer who waits at the cavern mouth. Little Mira. Tell her she has grown old."
-  },
-  {
-    "id": "1e02754b79c8f0",
-    "speaker": "narrator",
-    "text": "The ancient dragon rumbles softly:"
   },
   {
     "id": "19a60b7b4d1813",
@@ -2363,26 +2403,6 @@
     "id": "0f13d21bb3d9fe",
     "speaker": "narrator",
     "text": "You search around the Dragon's Hall, but find nothing of interest beyond what you can already see."
-  },
-  {
-    "id": "0a5458dd21a823",
-    "speaker": "narrator",
-    "text": "✓ In the Sunken Ruins: a letter from Aren and Lysa to their friend Malakar, begging him not to reach for time. He wrote back: You would have me wait while you die."
-  },
-  {
-    "id": "0e472f873a6621",
-    "speaker": "narrator",
-    "text": "✓ On Mount Ember: the promise the three of them burned into stone, one virtue each, and Malakar's name struck deeper than the others."
-  },
-  {
-    "id": "19264ee82e4e82",
-    "speaker": "narrator",
-    "text": "✓ In the Caverns of Shadow: the dragon remembered them. They poured themselves into a ward that hides you and holds Malakar's wound shut. They are warded away, not dead."
-  },
-  {
-    "id": "1604c5ca1d08e9",
-    "speaker": "narrator",
-    "text": "Your parents were not Malakar's victims. They were his closest friends, Wardens of the Dawn like him, and when he tore at time they became the ward that hides you. The dragon says they are warded away, not dead."
   },
   {
     "id": "01fcb0a92b3baa",
@@ -2403,11 +2423,6 @@
     "id": "10244a89175338",
     "speaker": "ancient dragon",
     "text": "Your words ring true, young one. It is heavier than it looks."
-  },
-  {
-    "id": "17befb3297eb48",
-    "speaker": "narrator",
-    "text": "A hall of living stone opens beyond sight, its ceiling lost in shadow. Embers burn slowly along the floor, pulsing like a heartbeat, and somewhere in the dark, water drips. Rings of old sigils spiral across the black tiles around the Ancient Dragon. It lies coiled at the centre, scales like polished obsidian, and each slow breath hums in your bones. The old dripping has stopped; from the mines beyond comes no sound of picks at all."
   },
   {
     "id": "1a4a72b4e4b659",
