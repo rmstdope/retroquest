@@ -433,3 +433,41 @@ describe('Elena answers to her own name (rq-aum)', () => {
     )
   })
 })
+
+describe('Giving Elena the water washes the mark (rq-ghwn)', () => {
+  /** A game with Elena healed and the water in hand, in her room. */
+  function healedWithWater(): { game: Game; elena: BarmaidElena } {
+    const { game, elena } = setup()
+    game.state.currentRoom = game.state.allRooms.SilverStagInn
+    elena.receiveGreaterHeal(game.state)
+    game.state.inventory.push(new CrystalClearWater())
+    return { game, elena }
+  }
+
+  it('give answers exactly as use, and purifies her', () => {
+    const used = healedWithWater()
+    const useAnswer = used.game.commandParser.parse(
+      'use crystal-clear water with barmaid elena',
+    )
+    const given = healedWithWater()
+    const giveAnswer = given.game.commandParser.parse(
+      'give crystal-clear water to barmaid elena',
+    )
+    expect(giveAnswer).toBe(useAnswer)
+    expect(giveAnswer).not.toContain('seem interested')
+    expect(given.elena.elenaPurified).toBe(true)
+    expect(given.game.state.hasItem('crystal-clear water')).toBe(true)
+  })
+
+  it('give before the heal answers as use does', () => {
+    const { game } = setup()
+    game.state.currentRoom = game.state.allRooms.SilverStagInn
+    game.state.inventory.push(new CrystalClearWater())
+    const useAnswer = game.commandParser.parse(
+      'use crystal-clear water with barmaid elena',
+    )
+    expect(
+      game.commandParser.parse('give crystal-clear water to barmaid elena'),
+    ).toBe(useAnswer)
+  })
+})
