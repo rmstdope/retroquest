@@ -13,7 +13,7 @@ import {
 const VISITOR_ENTRY =
   "'A man in a grey cloak. Asked for the birth rolls of Willowbrook and the " +
   'families who came there. Would not give his name. Said he came on the ' +
-  "business of Malakar.'"
+  "business of Malakar. Refused.'"
 
 /** The Great Hall description; `refreshSavedText` restores it in older saves. */
 export const GREAT_HALL_DESCRIPTION =
@@ -86,13 +86,16 @@ export class GreatHall extends Room {
       ) +
       '\n' +
       "The second is the archive's own register of visitors. The same entry " +
-      'appears again and again over the past year, in different hands:' +
+      'appears again and again over the past year, in different hands, and ' +
+      'each one ends the same way:' +
       '\n' +
       writing(VISITOR_ENTRY) +
       '\n' +
       'Malakar. You had always thought him a name from old books, a tale to ' +
       'frighten children. Yet someone walks into this archive in his name, ' +
-      'asking after the families of Willowbrook. The last entry is dated ' +
+      'asking after the families of Willowbrook. He was turned away every ' +
+      'time, and still the rolls in your journal were copied line for line. ' +
+      'The last entry is dated ' +
       'the week King Alden vanished.'
     )
   }
