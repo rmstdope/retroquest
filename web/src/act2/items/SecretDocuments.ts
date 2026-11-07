@@ -26,13 +26,15 @@ export class SecretDocuments extends Item {
     this.description = SECRET_DOCUMENTS_DESCRIPTION
   }
 
-  /** Make no sense before the diary is read; afterwards reveal the confession and letter. */
+  /** Make no sense before the diary is read, pointing to the castle courtyard;
+   * afterwards reveal the confession and letter. */
   override examine(gameState: GameState): string {
     if (!gameState.getStoryFlag(FLAG_READ_SQUIRES_DIARY)) {
       return (
         'A sworn confession and a letter closed with black wax. They speak of ' +
         'gold, a gate and a night, but without knowing whose night, you cannot ' +
-        'make sense of them.'
+        'make sense of them. A gate and a night watch are castle business; ' +
+        'the old hands in the castle courtyard would know whose night it was.'
       )
     }
 
