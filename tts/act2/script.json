@@ -380,6 +380,21 @@
     "text": "An expansive courtyard within the castle walls, featuring training grounds where knights practice their swordwork. Ancient oak trees provide shade for stone benches, and a stable houses magnificent warhorses, though half its stalls stand empty since the king's own guard rode out to search for him. The castle's main hall rises before you, its great doors carved with the symbols of Greendale's noble houses."
   },
   {
+    "id": "0e0f1a54037beb",
+    "speaker": "sir cedric",
+    "text": "Greetings, traveler. I am Cedric. Some here still call me Sir; you need not. The Lord Commander's notice asks for able hands; I ask for mine here in the yard, where I can see what they can do. There is a storm gathering over this—"
+  },
+  {
+    "id": "0449ca4fe85857",
+    "speaker": "narrator",
+    "text": "Sir Cedric stops mid-sentence. Under your shirt, the ancient amulet has grown warm, and a faint light shows through the cloth. His eyes have fallen on it."
+  },
+  {
+    "id": "1d69cb002c235a",
+    "speaker": "sir cedric",
+    "text": "That sigil. The sun rising over three linked rings. I have seen it only in the old histories in the castle archive: it is the mark of the Wardens of the Dawn. They guarded this kingdom long ago, and most have forgotten them. The oldest histories draw the mark another way: a tree under two moons, from before there were three things to guard. Whoever wore that amulet before you was a Warden, and your family is bound to them. I know no more than that. But I know enough to listen to you. There is a storm gathering over this kingdom, and I do not yet know its name. The sigil tells me where you come from; it does not tell me what you can do. Show me, with a blade, here in the yard."
+  },
+  {
     "id": "050747ab7e1ba7",
     "speaker": "narrator",
     "text": "You draw the training sword. Before you can take your stance, Sir Cedric catches your wrist and turns the blade to the light."
@@ -438,21 +453,6 @@
     "id": "1e3e7a7b9bee86",
     "speaker": "sir cedric",
     "text": "High cut!"
-  },
-  {
-    "id": "0e0f1a54037beb",
-    "speaker": "sir cedric",
-    "text": "Greetings, traveler. I am Cedric. Some here still call me Sir; you need not. The Lord Commander's notice asks for able hands; I ask for mine here in the yard, where I can see what they can do. There is a storm gathering over this—"
-  },
-  {
-    "id": "0449ca4fe85857",
-    "speaker": "narrator",
-    "text": "Sir Cedric stops mid-sentence. Under your shirt, the ancient amulet has grown warm, and a faint light shows through the cloth. His eyes have fallen on it."
-  },
-  {
-    "id": "1d69cb002c235a",
-    "speaker": "sir cedric",
-    "text": "That sigil. The sun rising over three linked rings. I have seen it only in the old histories in the castle archive: it is the mark of the Wardens of the Dawn. They guarded this kingdom long ago, and most have forgotten them. The oldest histories draw the mark another way: a tree under two moons, from before there were three things to guard. Whoever wore that amulet before you was a Warden, and your family is bound to them. I know no more than that. But I know enough to listen to you. There is a storm gathering over this kingdom, and I do not yet know its name. The sigil tells me where you come from; it does not tell me what you can do. Show me, with a blade, here in the yard."
   },
   {
     "id": "0c4792526ef6a7",
