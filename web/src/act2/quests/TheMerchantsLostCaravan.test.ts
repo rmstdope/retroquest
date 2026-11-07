@@ -42,12 +42,17 @@ describe("The Merchant's Lost Caravan log", () => {
     expect(details?.kind).toBe('journal')
     if (details?.kind !== 'journal') return
     expect(details.earlier.join('')).toContain('Find out what happened')
+    const prose = game.state.getQuest(QUEST_LOST_CARAVAN)?.description
+    expect(prose).toContain('goods.[/dim]\n\nYou got')
   })
 
   it('keeps the rescue in the log through a save and load', () => {
     const game = playedTo('talk to caravan master thorne', 2)
     const loaded = new Game([new Act2()])
     loaded.loadSaveData(game.toSaveData())
-    expect(hint(loaded)).toBe(hint(game))
+    expect(hint(loaded)).toContain('Market District')
+    expect(loaded.state.getQuest(QUEST_LOST_CARAVAN)?.details()).toEqual(
+      game.state.getQuest(QUEST_LOST_CARAVAN)?.details(),
+    )
   })
 })

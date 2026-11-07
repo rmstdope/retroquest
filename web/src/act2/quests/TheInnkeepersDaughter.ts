@@ -33,6 +33,11 @@ const PURIFIED =
   "\n\nThe water from the nymphs' spring washed the grey out of her skin, " +
   'but the silver mask on her wrist is untouched.'
 
+/** The hint once she is healed, while Lyria has not yet explained the rest. */
+const ASK_LYRIA =
+  'Elena says that if anyone knows what comes next, it is Master ' +
+  `${LYRIA}, who sat with her when it began.`
+
 /** The hint while Elena is still too weak for the rest of the cure. */
 const NEXT_STRENGTH =
   'First Elena must be made strong, by a deeper healing than ' +
@@ -57,12 +62,12 @@ export const INNKEEPERS_DAUGHTER_COMPLETION =
 /**
  * Quest to save Elena, the innkeeper's daughter, from a curse nobody can
  * trace. Its journal records Lyria's cure order and each step of the cure as
- * it is done; once she has explained it, its hint names the next step of
- * that order.
+ * it is done, in the order the player got there; its hint names the next
+ * step of that order, or Lyria while she has not explained it.
  */
 export class TheInnkeepersDaughterQuest extends Quest {
-  /** How many entries after the opening the log has reported as news. */
-  stagesNoted = 0
+  /** The entries after the opening, by key, in the order they were first noted. */
+  noted: string[] = []
 
   constructor() {
     super({
@@ -91,28 +96,42 @@ export class TheInnkeepersDaughterQuest extends Quest {
   }
 
   /**
-   * Rebuild the journal from the cure's progress, the steps in Lyria's
-   * order; true once for each entry not reported before.
+   * Rebuild the journal from the cure's progress: the opening, then each
+   * entry reached, in the order it was first noted, so the newest is always
+   * the latest; true when an entry was noted for the first time.
    */
   override checkUpdate(gameState: GameState): boolean {
-    const entries: string[] = []
-    if (gameState.getStoryFlag(FLAG_LYRIA_DIAGNOSED)) entries.push(DIAGNOSED)
-    if (gameState.getStoryFlag(FLAG_ELENA_HEALED)) entries.push(HEALED)
-    if (this.elena(gameState)?.elenaPurified) entries.push(PURIFIED)
-    const stages = [INNKEEPERS_DAUGHTER_DESCRIPTION, ...entries]
+    const reached: [string, string][] = []
+    if (gameState.getStoryFlag(FLAG_LYRIA_DIAGNOSED))
+      reached.push(['diagnosed', DIAGNOSED])
+    if (gameState.getStoryFlag(FLAG_ELENA_HEALED))
+      reached.push(['healed', HEALED])
+    if (this.elena(gameState)?.elenaPurified)
+      reached.push(['purified', PURIFIED])
+    let updated = false
+    for (const [key] of reached) {
+      if (this.noted.includes(key)) continue
+      this.noted.push(key)
+      updated = true
+    }
+    reached.sort(([a], [b]) => this.noted.indexOf(a) - this.noted.indexOf(b))
+    const stages = [
+      INNKEEPERS_DAUGHTER_DESCRIPTION,
+      ...reached.map(([, text]) => text),
+    ]
     this.setJournal(stages.slice(0, -1), stages[stages.length - 1])
-    if (entries.length <= this.stagesNoted) return false
-    this.stagesNoted = entries.length
-    return true
+    return updated
   }
 
   /**
    * The next step of the cure in Lyria's order, in-world; before she has
-   * explained it, the log's newest entry, as for any quest.
+   * explained it, the log's opening, or once Elena is healed, Lyria to ask.
    */
   override hint(gameState: GameState): string | null {
-    if (!gameState.getStoryFlag(FLAG_LYRIA_DIAGNOSED))
+    if (!gameState.getStoryFlag(FLAG_LYRIA_DIAGNOSED)) {
+      if (gameState.getStoryFlag(FLAG_ELENA_HEALED)) return ASK_LYRIA
       return super.hint(gameState)
+    }
     if (!gameState.getStoryFlag(FLAG_ELENA_HEALED)) return NEXT_STRENGTH
     if (!this.elena(gameState)?.elenaPurified) return NEXT_WATER
     return NEXT_UNBINDING

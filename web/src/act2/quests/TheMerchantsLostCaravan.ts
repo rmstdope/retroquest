@@ -13,7 +13,7 @@ const OPENING =
 
 /** The entry once the merchants are up out of the ravine. */
 const RESCUED =
-  "You got Thorne's people up out of the ravine on your rope. " +
+  "\n\nYou got Thorne's people up out of the ravine on your rope. " +
   characterName('Thorne') +
   ' is still in the Market District, waiting for word of them.'
 

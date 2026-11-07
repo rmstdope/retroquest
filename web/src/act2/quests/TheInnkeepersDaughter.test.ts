@@ -2,7 +2,12 @@ import { describe, it, expect } from 'vitest'
 import { Game } from '@/engine'
 import { Act2 } from '../Act2'
 import { ACT2_GOLDEN_PATH } from '../Act2GoldenPath'
-import { QUEST_INNKEEPERS_DAUGHTER } from '../Act2StoryFlags'
+import {
+  QUEST_INNKEEPERS_DAUGHTER,
+  FLAG_KNOWS_ELENA_CURSE,
+  FLAG_ELENA_HEALED,
+  FLAG_LYRIA_DIAGNOSED,
+} from '../Act2StoryFlags'
 import { pathIndex, playPath } from '../../testing/gameHelpers'
 
 /** A word of the command line, which a hint never names. */
@@ -54,7 +59,28 @@ describe("The Innkeeper's Daughter log", () => {
     const loaded = new Game([new Act2()])
     loaded.loadSaveData(game.toSaveData())
     const quest = loaded.state.getQuest(QUEST_INNKEEPERS_DAUGHTER)
-    expect(quest?.hint(loaded.state)).toBe(hint(game))
+    expect(quest?.details()).toEqual(
+      game.state.getQuest(QUEST_INNKEEPERS_DAUGHTER)?.details(),
+    )
     expect(quest?.description).toContain('silver mask')
+    expect(quest?.hint(loaded.state)).toContain('unbound')
+  })
+
+  it('files the steps in the order they happened, off the golden path', () => {
+    const game = new Game([new Act2()])
+    const state = game.state
+    const quest = state.getQuest(QUEST_INNKEEPERS_DAUGHTER)
+    state.setStoryFlag(FLAG_KNOWS_ELENA_CURSE, true)
+    state.settleQuests()
+    state.setStoryFlag(FLAG_ELENA_HEALED, true)
+    expect(state.settleQuests().updated).toContain(quest)
+    expect(hint(game)).toContain('Lyria')
+    state.setStoryFlag(FLAG_LYRIA_DIAGNOSED, true)
+    expect(state.settleQuests().updated).toContain(quest)
+    const details = quest?.details()
+    if (details?.kind !== 'journal') throw new Error('no journal')
+    expect(details.latest).toContain('in this order')
+    expect(details.earlier.join('')).toContain('silver mask')
+    expect(hint(game)).toContain('untouched water')
   })
 })
