@@ -50,6 +50,11 @@ export const VISION_CLOSING =
   ' ' +
   '[bold]Act II is complete.[/bold] The storm has a name now.'
 
+/** How Cedric comes to see the hidden amulet: it glows through Elior's shirt near a Warden. */
+const AMULET_GLOW =
+  'Under your shirt, the [item_name]ancient amulet[/item_name] has grown ' +
+  'warm, and a faint light shows through the cloth.'
+
 /** Elior's telling, when he says the voice did not sound like a hunter. */
 const VISION_TELLING =
   `You tell ${characterName('Sir Cedric')} the part you would rather keep ` +
@@ -446,10 +451,10 @@ export class SirCedric extends Character {
         return this.interruptedGreeting()
       }
       return (
+        AMULET_GLOW +
+        ' ' +
         characterName('Sir Cedric') +
-        "'s eyes fall on the " +
-        '[item_name]ancient amulet[/item_name]' +
-        ' at your chest, and he goes very still.' +
+        "'s eyes fall on it, and he goes very still." +
         '\n\n' +
         dialogue('Sir Cedric', this.recognitionWords()) +
         '\n\n' +
@@ -484,8 +489,9 @@ export class SirCedric extends Character {
       ) +
       '\n\n' +
       characterName('Sir Cedric') +
-      ' stops mid-sentence. His eyes have fallen on the ' +
-      '[item_name]ancient amulet[/item_name] at your chest.' +
+      ' stops mid-sentence. ' +
+      AMULET_GLOW +
+      ' His eyes have fallen on it.' +
       '\n\n' +
       dialogue(
         'Sir Cedric',
