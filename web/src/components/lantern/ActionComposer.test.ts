@@ -1624,6 +1624,50 @@ describe('ActionComposer on the stage', () => {
       },
     )
 
+    it('is dimmed and cannot be pressed while a turn is read aloud', async () => {
+      useSettingsStore().narrationOn = true
+      const narration = useNarrationStore()
+      narration.setAudioFactory(() => ({
+        volume: 1,
+        currentTime: 0,
+        onended: null,
+        onerror: null,
+        play: () => Promise.resolve(),
+        pause: () => {},
+      }))
+      const w = mount(ActionComposer, { props: { stage: true } })
+      narration.begin(
+        1,
+        [
+          {
+            kind: 'block',
+            parts: [
+              {
+                markup: 'a b',
+                clip: {
+                  file: 'x.mp3',
+                  speaker: 'narrator',
+                  duration: 2,
+                  words: [],
+                },
+              },
+            ],
+          },
+        ],
+        'act1',
+      )
+      await w.vm.$nextTick()
+      expect(narration.isNarrating).toBe(true)
+
+      expect(hint(w).attributes()).toHaveProperty('disabled')
+      await hint(w).trigger('click')
+      expect(submit).not.toHaveBeenCalled()
+
+      narration.skipAll()
+      await w.vm.$nextTick()
+      expect(hint(w).attributes()).not.toHaveProperty('disabled')
+    })
+
     it('is dimmed and cannot be pressed while the game is busy', async () => {
       const w = mount(ActionComposer, { props: { stage: true } })
       useGameStore().acceptInput = false

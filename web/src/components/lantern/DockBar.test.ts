@@ -4,6 +4,8 @@ import { mount } from '@vue/test-utils'
 import { createPinia, setActivePinia } from 'pinia'
 import DockBar from './DockBar.vue'
 import { useGameStore } from '@/stores/useGameStore'
+import { useNarrationStore } from '@/stores/useNarrationStore'
+import { useSettingsStore } from '@/stores/useSettingsStore'
 
 describe('DockBar', () => {
   let submit: ReturnType<typeof vi.fn<(command: string) => void>>
@@ -82,5 +84,49 @@ describe('DockBar', () => {
     expect(w.get('button.lq-dock-hint').attributes()).toHaveProperty('disabled')
     await w.get('button.lq-dock-hint').trigger('click')
     expect(submit).not.toHaveBeenCalled()
+  })
+
+  it('dims Hint while a turn is read aloud', async () => {
+    useSettingsStore().narrationOn = true
+    const narration = useNarrationStore()
+    narration.setAudioFactory(() => ({
+      volume: 1,
+      currentTime: 0,
+      onended: null,
+      onerror: null,
+      play: () => Promise.resolve(),
+      pause: () => {},
+    }))
+    const w = mount(DockBar)
+    narration.begin(
+      1,
+      [
+        {
+          kind: 'block',
+          parts: [
+            {
+              markup: 'a b',
+              clip: {
+                file: 'x.mp3',
+                speaker: 'narrator',
+                duration: 2,
+                words: [],
+              },
+            },
+          ],
+        },
+      ],
+      'act1',
+    )
+    await w.vm.$nextTick()
+    const hint = w.get('button.lq-dock-hint')
+
+    expect(hint.attributes()).toHaveProperty('disabled')
+    await hint.trigger('click')
+    expect(submit).not.toHaveBeenCalled()
+
+    narration.skipAll()
+    await w.vm.$nextTick()
+    expect(hint.attributes()).not.toHaveProperty('disabled')
   })
 })

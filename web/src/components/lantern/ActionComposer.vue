@@ -258,12 +258,17 @@ watch(
   },
 )
 
+/** Hint is dimmed while the game takes no move or a turn is being read aloud. */
+const hintBusy = computed<boolean>(
+  () => !game.acceptInput || narration.isNarrating,
+)
+
 /**
  * Press Hint: send the existing `hint` command as a typed one would go. It
  * leaves a half-built action and typed text alone, and adds no message.
  */
 function pressHint(): void {
-  if (game.acceptInput) game.submitCommand('hint')
+  if (!hintBusy.value) game.submitCommand('hint')
 }
 
 function run(text: string): void {
@@ -488,7 +493,7 @@ function onTypedEnter(): void {
         type="button"
         class="lq-hint"
         aria-label="Hint"
-        :disabled="!game.acceptInput"
+        :disabled="hintBusy"
         @click="pressHint"
       >
         💡 Hint
@@ -695,7 +700,7 @@ function onTypedEnter(): void {
           type="button"
           class="lq-hint"
           aria-label="Hint"
-          :disabled="!game.acceptInput"
+          :disabled="hintBusy"
           @click="pressHint"
         >
           💡 Hint
@@ -783,7 +788,7 @@ function onTypedEnter(): void {
         type="button"
         class="lq-hint"
         aria-label="Hint"
-        :disabled="!game.acceptInput"
+        :disabled="hintBusy"
         @click="pressHint"
       >
         💡 Hint
