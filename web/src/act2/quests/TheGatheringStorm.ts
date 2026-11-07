@@ -44,8 +44,8 @@ const OPENING_ENTRY =
 /** The lead the hint adds while Thorne's papers wait on a quest not yet begun. */
 const PAPERS_LEAD =
   "Thorne's papers are still in your pack, meant for a knight's hands. " +
-  'A gate and a night watch are castle business; the old hands in the ' +
-  'castle courtyard would know whose night they mean.'
+  'A gate and a night watch are castle business; someone in the castle ' +
+  'courtyard would know.'
 
 /**
  * Act II main quest tracking the narrative arc. `checkUpdate` composes layered

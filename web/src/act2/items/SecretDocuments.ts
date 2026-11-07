@@ -34,7 +34,7 @@ export class SecretDocuments extends Item {
         'A sworn confession and a letter closed with black wax. They speak of ' +
         'gold, a gate and a night, but without knowing whose night, you cannot ' +
         'make sense of them. A gate and a night watch are castle business; ' +
-        'the old hands in the castle courtyard would know whose night it was.'
+        'someone in the castle courtyard would know.'
       )
     }
 
