@@ -667,7 +667,9 @@ describe('Act 1 golden path', () => {
     ]
     for (const flag of legacyFlags) game.state.setStoryFlag(flag, true)
     const fresh = new Game([new Act1()])
-    expect(fresh.loadSaveData(game.toSaveData())).toContain('loaded')
+    expect(fresh.loadSaveData(game.toSaveData())).toContain(
+      'Game loaded successfully',
+    )
     for (const flag of legacyFlags) expectStoryFlag(fresh.state, flag)
   })
 })
