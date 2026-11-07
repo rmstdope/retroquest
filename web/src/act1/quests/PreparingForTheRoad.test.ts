@@ -64,6 +64,21 @@ describe('Preparing for the road checklist', () => {
     }
   })
 
+  it('names every need exactly once as first shown, before any check', () => {
+    const quest = new PreparingForTheRoadQuest()
+    for (const need of [
+      'Warm clothing',
+      'Magical protection',
+      'Food for the road',
+      'Sturdy footwear',
+      'A map to find your way',
+      'basic magic',
+    ]) {
+      expect(quest.description.split(need).length - 1, need).toBe(1)
+    }
+    expect(quest.description).toContain(' - A map to find your way -\n')
+  })
+
   it('reports its requirements as checklist data', () => {
     const game = new Game([new Act1()])
     game.state.addItemToInventory(new TravelCloak())

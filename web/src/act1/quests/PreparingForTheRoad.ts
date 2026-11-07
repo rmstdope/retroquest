@@ -45,8 +45,7 @@ export class PreparingForTheRoadQuest extends Quest {
         ' - Magical protection -\n' +
         ` - ${FOOD_NEED} -\n` +
         ' - Sturdy footwear -\n' +
-        ' - A map to find your way, and to have learned all the basic magic ' +
-        'the village elders can teach you -\n' +
+        ' - A map to find your way -\n' +
         ' - To have learned all the basic magic the village elders can teach you -\n',
       completion:
         `You have everything ${characterName('Mira')} asked for, and the ` +
