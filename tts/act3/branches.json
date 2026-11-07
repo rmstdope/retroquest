@@ -160,5 +160,27 @@
       "n",
       "talk to phoenix guardian"
     ]
+  },
+  {
+    "after": 86,
+    "commands": [
+      "examine runic walls",
+      "take resonant chant rubbings",
+      "w",
+      "s",
+      "cast bless on echo stones",
+      "take phial",
+      "use stillwater phial with pool",
+      "use resonant chant rubbings with echo stones",
+      "e",
+      "talk to ancient dragon",
+      "hint",
+      "w",
+      "n",
+      "e",
+      "search",
+      "take old oath scrolls",
+      "hint"
+    ]
   }
 ]
