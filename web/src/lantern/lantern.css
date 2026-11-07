@@ -378,8 +378,8 @@ body {
    item each, a filled tick for what is done and a dashed ring for what is
    still open. What is done fades, by opacity since the list is also told on
    the picture, where the text has its own ink; what is still open keeps the
-   text's full strength. The marks are drawn here, not written in the text, so the
-   read-along numbers only the spoken words; browsers without alt text in
+   text's full strength. The marks are drawn here, not written in the text, so
+   the read-along numbers only the spoken words; browsers without alt text in
    `content` keep the plain mark. */
 .lq-quest-para {
   margin: 0;
