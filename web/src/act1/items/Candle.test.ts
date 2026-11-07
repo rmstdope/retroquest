@@ -20,6 +20,14 @@ describe('Candle', () => {
     expect(text).toContain('cold')
   })
 
+  it('says, when lit, that its light reaches the dark corner where the locket lies', () => {
+    const game = gameInChapel()
+    game.state.addItemToInventory(new Matches())
+    const text = executeCommands(game, ['use candle with matches'])
+    expect(text).toContain('dark corner by the altar')
+    expect(text).toMatch(/dark corner[^.]*locket/)
+  })
+
   it('reads as lit once it is lit', () => {
     const game = gameInChapel()
     game.state.addItemToInventory(new Matches())
