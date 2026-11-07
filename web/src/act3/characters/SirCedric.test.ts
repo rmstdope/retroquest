@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest'
 import { Game, type GameState } from '@/engine'
 import { Act3 } from '../Act3'
 import {
+  FLAG_ACT3_BREATH_OF_THE_MOUNTAIN_COMPLETED,
   FLAG_ACT3_CEDRIC_GATE_ANSWERED,
   FLAG_ACT3_CRYSTAL_OF_LIGHT_ACQUIRED,
   FLAG_ACT3_DRAGONS_SCALE_ACQUIRED,
@@ -223,5 +224,19 @@ describe('SirCedric', () => {
         ),
       )
     })
+  })
+})
+
+describe('SirCedric on Mount Ember past the vents', () => {
+  it('no longer offers to go through the heat once it is crossed', () => {
+    const game = startedAt('PhoenixCrater')
+    game.state.setStoryFlag(FLAG_ACT3_BREATH_OF_THE_MOUNTAIN_COMPLETED, true)
+    const answer = talk(game)
+    expect(answer).not.toContain('Let me go through that heat first')
+    expect(answer).not.toMatch(/\bwait\b|\brest\b|\btalk\b/)
+    expect(answer).toContain(
+      'Through the heat, and he is no stronger for it. The crater is ' +
+        'yours. I will keep my hand off my sword.',
+    )
   })
 })

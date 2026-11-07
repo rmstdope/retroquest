@@ -5,6 +5,10 @@ import {
   speech,
   type NameOptions,
 } from '@/engine'
+import {
+  FLAG_ACT3_MIRRORS_MENDED,
+  FLAG_ACT3_PHOENIX_FEATHER_ACQUIRED,
+} from '../Act3StoryFlags'
 import { BrassMirrorSegment } from '../items/BrassMirrorSegment'
 import { CharredNotebook } from '../items/CharredNotebook'
 
@@ -27,7 +31,16 @@ export class AshScholar extends Character {
     })
   }
 
-  /** Speak to the scholar; the first talk gives the segment and the notebook. */
+  /** Whether the scholar has already given his segment and notebook. */
+  get hasGivenGifts(): boolean {
+    return this.gaveSegment
+  }
+
+  /**
+   * Speak to the scholar; the first talk gives the segment and the notebook.
+   * After that he counts the segments the mount takes until the mirrors are
+   * mended, then speaks of the lit mirror, and of the feather once it is won.
+   */
   override talkTo(gameState: GameState): string {
     // If the scholar hasn't yet given his gifts, give the segment and the notebook now.
     // Do NOT check the player's inventory; the scholar's gift is tracked
@@ -63,6 +76,28 @@ export class AshScholar extends Character {
         ) +
         '\n' +
         `You receive a [item_name]${notebook.name.toLowerCase()}[/item_name].`
+      )
+    }
+    if (gameState.getStoryFlag(FLAG_ACT3_PHOENIX_FEATHER_ACQUIRED)) {
+      return (
+        'The ' +
+        characterName(this.name) +
+        ' stares at the feather in your hand. ' +
+        speech(
+          'We have catalogued everything on this mountain that glints, and ' +
+            'never that. Keep it close. It is not for my notes.',
+        )
+      )
+    }
+    if (gameState.getStoryFlag(FLAG_ACT3_MIRRORS_MENDED)) {
+      return (
+        'The ' +
+        characterName(this.name) +
+        ' looks up toward the terraces. ' +
+        speech(
+          'The mirror on the terraces is burning again; I saw it catch from ' +
+            'here. Four segments, as my notes said.',
+        )
       )
     }
     return (

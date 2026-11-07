@@ -6,7 +6,11 @@ import {
   FLAG_ACT3_WARDEN_TRUTH_TOLD,
   FLAG_ACT3_LANTERNS_OF_THE_DEEPS_LIT,
   FLAG_ACT3_TIDEWARD_SIGILS_COMPLETED,
+  FLAG_ACT3_SEA_SEALED_LETTER_READ,
 } from '../Act3StoryFlags'
+import { Locker } from '../items/Locker'
+import { RustedLockerKey } from '../items/RustedLockerKey'
+import { TidalCauseway } from '../rooms/TidalCauseway'
 import { PierWarden } from './PierWarden'
 import { WeatheredCoin } from '../items/WeatheredCoin'
 import {
@@ -277,6 +281,128 @@ describe('PierWarden hears the word as the engine does', () => {
 
     expect(new PierWarden().sayTo(game.state, 'yes')).not.toContain(
       "That's what I'll tell the boats",
+    )
+  })
+})
+
+describe('PierWarden after the key', () => {
+  /** A game at the pier with the sigils mended. */
+  function atPier(): Game {
+    const game = new Game([new Act3()])
+    game.state.setStoryFlag(FLAG_ACT3_TIDEWARD_SIGILS_COMPLETED, true)
+    game.state.currentRoom = game.state.allRooms.CollapsedPier
+    return game
+  }
+
+  /** The locker under the pier. */
+  function locker(game: Game): Locker {
+    const found = game.state.allRooms.CollapsedPier.items.find(
+      (item) => item instanceof Locker,
+    )
+    if (!(found instanceof Locker)) throw new Error('no locker')
+    return found
+  }
+
+  /** The Tidal Causeway, where the key is found. */
+  function causeway(game: Game): TidalCauseway {
+    const room = game.state.allRooms.TidalCauseway
+    if (!(room instanceof TidalCauseway)) throw new Error('no causeway')
+    return room
+  }
+
+  const LOST_KEY = 'Lost that key after, in some dark hole'
+
+  it('does not thank the player for a key left lying on the causeway', () => {
+    const game = atPier()
+    causeway(game).lightCast = true
+    const out = new PierWarden().talkTo(game.state)
+    expect(out).not.toContain('Found my old key')
+    expect(out).toContain(LOST_KEY)
+  })
+
+  it('stops sending the player to look for the key once it is found', () => {
+    const game = atPier()
+    causeway(game).lightCast = true
+    game.state.addItemToInventory(new RustedLockerKey())
+    const out = new PierWarden().talkTo(game.state)
+    expectMarkupWellFormed(out)
+    expect(out).not.toContain(LOST_KEY)
+    expect(out).toContain(
+      "Found my old key, did you? It'll stick in that lock, same as it did " +
+        'for me.',
+    )
+  })
+
+  it('speaks of the stuck key once it is jammed in the locker', () => {
+    const game = atPier()
+    causeway(game).lightCast = true
+    locker(game).rustedKeyStuck = true
+    const out = new PierWarden().talkTo(game.state)
+    expectMarkupWellFormed(out)
+    expect(out).not.toContain(LOST_KEY)
+    expect(out).toContain('Stuck fast, is it? Same as mine was.')
+  })
+
+  it('does not speak of an open locker while it is only unlocked', () => {
+    const game = atPier()
+    causeway(game).lightCast = true
+    locker(game).rustedKeyStuck = true
+    locker(game).locked = false
+    const out = new PierWarden().talkTo(game.state)
+    expectMarkupWellFormed(out)
+    expect(out).not.toContain('open locker')
+    expect(out).not.toContain('Stuck fast')
+    expect(out).toContain("That's the click I never got.")
+  })
+
+  it('speaks of the lanterns once the locker is open', () => {
+    const game = atPier()
+    causeway(game).lightCast = true
+    locker(game).rustedKeyStuck = true
+    locker(game).locked = false
+    locker(game).opened = true
+    const out = new PierWarden().talkTo(game.state)
+    expectMarkupWellFormed(out)
+    expect(out).not.toContain(LOST_KEY)
+    expect(out).not.toContain('Stuck fast')
+    expect(out).toContain('Forty years that locker was shut.')
+  })
+})
+
+describe('PierWarden after his question is answered', () => {
+  /** A game in the ruins, the curse shown and his question asked. */
+  function asked(): Game {
+    const game = new Game([new Act3()])
+    game.state.setStoryFlag(FLAG_ACT3_SEA_SEALED_LETTER_READ, true)
+    game.state.currentRoom = game.state.allRooms.CollapsedPier
+    return game
+  }
+
+  it('remembers the comforting lie on the next talk', () => {
+    const game = asked()
+    const warden = new PierWarden()
+    warden.talkTo(game.state)
+    warden.sayTo(game.state, 'yes')
+    const out = warden.talkTo(game.state)
+    expectMarkupWellFormed(out)
+    expect(out).not.toContain('Nothing to say?')
+    expect(out).toContain(
+      "A bad season, you said. That's what I've told the boats.",
+    )
+  })
+
+  it('remembers the truth on the next talk, even after the lie', () => {
+    const game = asked()
+    const warden = new PierWarden()
+    warden.talkTo(game.state)
+    warden.sayTo(game.state, 'yes')
+    warden.sayTo(game.state, 'truth')
+    const out = warden.talkTo(game.state)
+    expectMarkupWellFormed(out)
+    expect(out).not.toContain('Nothing to say?')
+    expect(out).not.toContain('A bad season, you said')
+    expect(out).toContain(
+      "I've sent word up the coast. The boats are staying in.",
     )
   })
 })

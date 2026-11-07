@@ -121,5 +121,44 @@
     "unset": ["act3_sea_sealed_letter_read"],
     "without": ["sea-sealed letter"],
     "commands": ["talk to mira"]
+  },
+  {
+    "after": 5,
+    "commands": [
+      "n",
+      "search",
+      "take moon rune shards",
+      "e",
+      "cast purify on pillars",
+      "use moon rune shards with pillars",
+      "e",
+      "talk to pier warden"
+    ]
+  },
+  {
+    "after": 14,
+    "commands": [
+      "talk to pier warden",
+      "say yes to pier warden",
+      "talk to pier warden",
+      "say truth to pier warden",
+      "talk to pier warden"
+    ]
+  },
+  {
+    "after": 48,
+    "commands": [
+      "w",
+      "s",
+      "talk to ash scholar",
+      "talk to mira"
+    ]
+  },
+  {
+    "after": 63,
+    "commands": [
+      "n",
+      "talk to phoenix guardian"
+    ]
   }
 ]
