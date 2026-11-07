@@ -225,6 +225,7 @@ describe("The Knight's Test bout", () => {
     run(game, ['go north', 'go south'])
     const out = run(game, ['talk to sir cedric'])
     expect(out).toContain('You walked off in the middle of a bout.')
+    expect(out).toContain('He takes up his practice blade again.')
     expect(out).toContain('From the top, then. Strike, guard or turn.')
     expect(out).toContain(HIGH_CUT)
     expect(out).not.toContain('Not yet.')

@@ -131,7 +131,10 @@ const BOUT_NEXT_ATTACKS: string[] = [
 export class SirCedric extends Character {
   receivedNaturesCharm = false
   cedricTrustsElior = false
-  /** Whether the Knight's Test bout has begun at least once, so the recognition scene plays only then. */
+  /**
+   * Whether the Knight's Test bout has begun at least once, so the recognition
+   * scene plays only then and a bout broken off by leaving is picked back up.
+   */
   boutStarted = false
   /** The attack the running bout is on, 1 to 3; 0 when no bout is running. */
   boutCall = 0
@@ -239,8 +242,14 @@ export class SirCedric extends Character {
     return (
       dialogue('Sir Cedric', 'You walked off in the middle of a bout.') +
       ' ' +
-      this.beginBout()
+      this.startBrokenOffBout()
     )
+  }
+
+  /** Mark the broken-off bout as running again from the first attack and describe the restart. */
+  private startBrokenOffBout(): string {
+    this.boutCall = 1
+    return this.restartBout('He')
   }
 
   /** The current attack as it is repeated: narration then the cry. */
@@ -269,17 +278,7 @@ export class SirCedric extends Character {
     const first = !this.boutStarted
     this.boutStarted = true
     this.boutCall = 1
-    if (!first) {
-      return (
-        characterName('Sir Cedric') +
-        ' takes up his practice blade again.\n' +
-        speech('From the top, then. Strike, guard or turn.') +
-        ' ' +
-        this.currentAttack() +
-        '\n' +
-        BOUT_REMINDER
-      )
-    }
+    if (!first) return this.restartBout(characterName('Sir Cedric'))
     return (
       'You draw the [item_name]training sword[/item_name]. Before you can ' +
       'take your stance, ' +
@@ -313,7 +312,23 @@ export class SirCedric extends Character {
     )
   }
 
-  /** Abandon a running bout, as when Elior leaves the courtyard; the next use of the sword restarts it. */
+  /** The bout taken up again from the first attack; `who` names Cedric or, after his own line, says "He". */
+  private restartBout(who: string): string {
+    return (
+      who +
+      ' takes up his practice blade again.\n' +
+      speech('From the top, then. Strike, guard or turn.') +
+      ' ' +
+      this.currentAttack() +
+      '\n' +
+      BOUT_REMINDER
+    )
+  }
+
+  /**
+   * Abandon a running bout, as when Elior leaves the courtyard; the next use
+   * of the sword, talk or anything said to Cedric restarts it.
+   */
   abandonBout(): void {
     this.boutCall = 0
   }
