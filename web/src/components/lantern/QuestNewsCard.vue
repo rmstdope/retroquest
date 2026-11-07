@@ -204,10 +204,6 @@ const doneCount = computed(() => {
   line-height: var(--lq-story-line-height);
   color: var(--lq-prose);
 }
-/* An open need is dimmed on the card (the list itself is in lantern.css). */
-.lq-quest-body :deep(.lq-quest-checklist .lq-check-pending) {
-  color: var(--lq-muted);
-}
 .lq-open-journal {
   align-self: flex-start;
   min-height: 44px;

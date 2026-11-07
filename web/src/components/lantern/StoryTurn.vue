@@ -547,7 +547,7 @@ function chipLabel(chip: Chip): string {
   font-weight: 700;
 }
 .lq-check-done {
-  color: var(--lq-fg);
+  color: var(--lq-muted);
 }
 .lq-check-done .lq-check-mark {
   background: var(--lq-item-soft);
@@ -555,7 +555,7 @@ function chipLabel(chip: Chip): string {
   border: 1px solid var(--lq-item-line);
 }
 .lq-check-pending {
-  color: var(--lq-muted);
+  color: var(--lq-fg);
 }
 .lq-check-pending .lq-check-mark {
   border: 1.5px dashed var(--lq-muted);

@@ -256,10 +256,10 @@ const checks = computed(() => {
   gap: 10px;
   align-items: baseline;
   font-size: 15px;
-  color: var(--lq-muted);
+  color: var(--lq-fg);
 }
 .lq-check-done {
-  color: var(--lq-fg);
+  color: var(--lq-muted);
 }
 .lq-check-mark {
   flex: 0 0 auto;
