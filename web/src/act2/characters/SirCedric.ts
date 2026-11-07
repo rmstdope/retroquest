@@ -184,9 +184,11 @@ export class SirCedric extends Character {
    * first talk while Elior carries the Ancient Amulet also holds the one-time
    * recognition of the Wardens' sigil, which changes the amulet's description.
    * While he waits after the vision, any talk ends Act II with the closing lines.
+   * After Elior broke off the bout by leaving, a talk picks it back up.
    */
   override talkTo(gameState: GameState): string {
     if (this.boutRunning()) return this.talkDuringBout()
+    if (this.boutBrokenOff(gameState)) return this.resumeBout()
     if (this.waitingForElior(gameState)) return this.endAct(gameState)
     const charmDue =
       gameState.getStoryFlag(FLAG_CEDRIKS_HONOR_COMPLETED) &&
@@ -221,6 +223,24 @@ export class SirCedric extends Character {
   /** Whether a bout is running; older saves lack the field, so compare rather than negate. */
   private boutRunning(): boolean {
     return this.boutCall > 0
+  }
+
+  /** Whether Elior left the courtyard mid-bout and the Knight's Test is still to pass. */
+  private boutBrokenOff(gameState: GameState): boolean {
+    return (
+      this.boutStarted &&
+      !this.boutRunning() &&
+      !gameState.getStoryFlag(FLAG_DEMONSTRATED_COMBAT_SKILLS)
+    )
+  }
+
+  /** Pick a broken-off bout back up: Cedric names the walk-off and starts over from the first attack. */
+  private resumeBout(): string {
+    return (
+      dialogue('Sir Cedric', 'You walked off in the middle of a bout.') +
+      ' ' +
+      this.beginBout()
+    )
   }
 
   /** The current attack as it is repeated: narration then the cry. */
@@ -302,8 +322,11 @@ export class SirCedric extends Character {
    * Answer an attack with a form; the wrong ones cost nothing and repeat the
    * attack. While Cedric waits after the vision, saying "truth" tells him the
    * voice did not sound like a hunter and ends the act; no virtue is recorded.
+   * After Elior broke off the bout by leaving, anything said picks it back up
+   * from the first attack rather than answering it.
    */
   override sayTo(gameState: GameState, words: string): string {
+    if (this.boutBrokenOff(gameState)) return this.resumeBout()
     if (!this.boutRunning()) {
       const spoken = words
         .trim()
