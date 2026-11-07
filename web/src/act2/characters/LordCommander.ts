@@ -108,7 +108,7 @@ export class LordCommander extends Character {
           'The bastion on the shattered ridge. I would ride for it tonight, ' +
             'but I cannot. The guard is all that holds Greendale while the ' +
             'throne stands empty, and an army on that ridge would warn whoever ' +
-            'holds him. This falls to a few. Sir Cedric and you.',
+            'holds His Majesty. This falls to a few. Sir Cedric and you.',
         ) +
         ' He beckons a page and speaks a few quiet words. The boy runs off ' +
         'toward the armoury, and returns carrying a long bundle wrapped in ' +
