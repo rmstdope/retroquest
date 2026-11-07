@@ -58,8 +58,8 @@ describe('miraTopicReply', () => {
     )
     expect(miraTopicReply('grandmother', false)).toBe(
       miraSays(
-        'She loves you more than you know. Ask her yourself, when this is ' +
-          'over.',
+        'She loves you more than you know. ' +
+          'Ask her yourself, when this is over.',
       ),
     )
   })
@@ -89,8 +89,8 @@ describe('miraTopicReply', () => {
     expect(miraTopicReply('grandmother', true)).toBe(
       miraSays(
         "She is Lysa's mother, and she kept the secret with me all these " +
-          'years. It cost her more than it cost me. Be gentle with her when ' +
-          'this is over.',
+          'years. It cost her more than it cost me. ' +
+          'Be gentle with her when this is over.',
       ),
     )
   })
