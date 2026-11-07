@@ -1079,6 +1079,39 @@ describe('Game', () => {
     })
   })
 
+  describe('a character found by a word of its name', () => {
+    it('reaches the character through talk, say, give, examine and cast', () => {
+      const guardian = new Talker('Tide-Born Guardian')
+      guardian.giveItem = (_state, given) => `Given: ${given.name}`
+      guardian.examine = () => 'Examined'
+      rooms.EliorsCottage.addCharacter(guardian)
+      rooms.EliorsCottage.addCharacter(new Talker('Pier Warden'))
+      game.state.inventory.push(item('apple'))
+      game.state.knownSpells.push(new EchoSpell('light'))
+      expect(game.talk('guardian')).toContain('has nothing to say')
+      expect(game.talk('the warden')).toContain('has nothing to say')
+      expect(game.say('hello', 'Warden')).toContain("responds: 'Hello there!'")
+      expect(game.give('apple to guardian')).toBe('Given: apple')
+      expect(game.examine('guardian')).toBe('Examined')
+      expect(game.cast('light on guardian')).toContain(
+        '[character_name]Tide-Born Guardian[/character_name]',
+      )
+    })
+
+    it('finds no one by a word two characters here share', () => {
+      rooms.EliorsCottage.addCharacter(new Talker('Pier Warden'))
+      rooms.EliorsCottage.addCharacter(new Talker('Gate Warden'))
+      expect(game.talk('warden')).toContain('There is no character')
+      expect(game.talk('pier warden')).toContain('has nothing to say')
+    })
+
+    it('does not take "of" alone for a name', () => {
+      rooms.EliorsCottage.addCharacter(new Talker('Captain of the Guard'))
+      expect(game.talk('of')).toContain('There is no character')
+      expect(game.talk('captain')).toContain('has nothing to say')
+    })
+  })
+
   describe('a leading "the" in an item target', () => {
     it('reaches the item through take, use, use with and examine', () => {
       const bread = new TakeItem('bread', true, 'Taken: bread')
