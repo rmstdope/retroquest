@@ -138,8 +138,12 @@ describe('Spectral Librarian dialogue markup', () => {
   })
 })
 
+const GLOW =
+  'Under your shirt, the [item_name]ancient amulet[/item_name] has grown warm, and a faint light shows through the cloth.'
 const GLANCE_NARRATION =
-  'The [character_name]Spectral Librarian[/character_name] turns toward you, and stops. Their eyes have found the [item_name]ancient amulet[/item_name] at your throat.'
+  'The [character_name]Spectral Librarian[/character_name] turns toward you, and stops. ' +
+  GLOW +
+  ' Their eyes have found it.'
 const GLANCE_LINE =
   'I have not seen that worn since the last hand wrote in that chronicle.'
 const CONFESSION =
@@ -186,6 +190,22 @@ describe('Spectral Librarian notices the amulet', () => {
     expectMarkupWellFormed(first)
   })
 
+  it('sees the amulet only by its glow through the shirt (rq-s7x5)', () => {
+    const before = setup({ amulet: true })
+    const mended = setup({ amulet: true, mended: true })
+    const later = setup({ amulet: false, mended: true })
+    later.librarian.talkTo(later.game.state)
+    later.game.state.inventory.push(new AncientAmulet())
+    for (const answer of [
+      before.librarian.talkTo(before.game.state),
+      mended.librarian.talkTo(mended.game.state),
+      later.librarian.talkTo(later.game.state),
+    ]) {
+      expect(answer).toContain(GLOW)
+      expect(answer).not.toContain('at your throat')
+    }
+  })
+
   it('greets without a glance when the amulet is not carried', () => {
     const { game, librarian } = setup({ amulet: false })
 
@@ -227,7 +247,7 @@ describe('Spectral Librarian notices the amulet', () => {
 
     expectInOrder(answer, [
       THANKS,
-      ' Their eyes find the [item_name]ancient amulet[/item_name] at your throat, and stay there. ',
+      ` ${GLOW} Their eyes find it, and stay there. `,
       `${GLANCE_LINE} ${CONFESSION}`,
       KEEPER_STAGE,
     ])
@@ -274,7 +294,7 @@ describe('Spectral Librarian notices the amulet', () => {
     const again = librarian.talkTo(game.state)
 
     expectInOrder(delayed, [
-      "The [character_name]Spectral Librarian[/character_name]'s eyes go to the [item_name]ancient amulet[/item_name].",
+      `${GLOW} The [character_name]Spectral Librarian[/character_name]'s eyes go to it.`,
       `${GLANCE_LINE} ${CONFESSION}`,
       'The chronicle is waiting on its stand. It was written for whoever would read it; I cannot read it for you.',
     ])

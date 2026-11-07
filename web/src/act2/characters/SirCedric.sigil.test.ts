@@ -26,9 +26,11 @@ const OLD_GREETING =
   'they can do. There is a storm gathering over this kingdom, and I do not ' +
   'yet know its name. I need people at my back I can trust, and trust ' +
   'starts here. Show me what you can do with a blade.'
+const GLOW_LINE =
+  'Under your shirt, the ancient amulet has grown warm, and a faint light ' +
+  'shows through the cloth.'
 const STAGE_LINE =
-  "Sir Cedric's eyes fall on the ancient amulet at your chest, and he goes " +
-  'very still.'
+  GLOW_LINE + " Sir Cedric's eyes fall on it, and he goes very still."
 const SIGIL_WORDS =
   'That sigil. The sun rising over three linked rings. I have seen it only ' +
   'in the old histories in the castle archive: it is the mark of the ' +
@@ -75,8 +77,9 @@ describe('Sir Cedric and the sigil', () => {
     const text = plain(out)
     expect(text).toContain('There is a storm gathering over this—')
     expect(text).toContain(
-      'Sir Cedric stops mid-sentence. His eyes have fallen on the ancient ' +
-        'amulet at your chest.',
+      'Sir Cedric stops mid-sentence. ' +
+        GLOW_LINE +
+        ' His eyes have fallen on it.',
     )
     expect(text).toContain(SIGIL_WORDS + '\n\n' + BOUND_WORDS)
     expect(text).toContain(
@@ -106,6 +109,17 @@ describe('Sir Cedric and the sigil', () => {
     expect(out).toContain('[item_name]ancient amulet[/item_name]')
     expect(game.state.getStoryFlag(FLAG_SPOKEN_TO_SIR_CEDRIC)).toBe(true)
     expect(game.state.getStoryFlag(FLAG_CEDRIC_RECOGNISED_SIGIL)).toBe(true)
+  })
+
+  it('sees the amulet only by its glow through the shirt (rq-s7x5)', () => {
+    const first = plain(executeCommands(newGame(), ['talk to sir cedric']))
+    const spoken = newGame()
+    spoken.state.setStoryFlag(FLAG_SPOKEN_TO_SIR_CEDRIC, true)
+    const later = plain(executeCommands(spoken, ['talk to sir cedric']))
+    for (const text of [first, later]) {
+      expect(text).toContain(GLOW_LINE)
+      expect(text).not.toContain('amulet at your chest')
+    }
   })
 
   it('keeps Wardens of the Dawn plain text and the speech in one quote', () => {

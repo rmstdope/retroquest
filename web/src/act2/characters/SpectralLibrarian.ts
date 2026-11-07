@@ -20,6 +20,11 @@ import {
 /** The Ancient Amulet's name as the librarian's lines mark it. */
 const AMULET_NAME = 'ancient amulet'
 
+/** How the librarian comes to see the hidden amulet: it glows through Elior's shirt. */
+const AMULET_GLOW =
+  `Under your shirt, the ${itemName(AMULET_NAME)} has grown warm, ` +
+  'and a faint light shows through the cloth.'
+
 /** What the librarian says on first seeing the amulet. */
 const GLANCE_WORDS =
   'I have not seen that worn since the last hand wrote in that chronicle.'
@@ -100,9 +105,9 @@ export class SpectralLibrarian extends Character {
     return (
       'The ' +
       characterName(this.name) +
-      ' turns toward you, and stops. Their eyes have found the ' +
-      itemName(AMULET_NAME) +
-      ' at your throat.\n\n' +
+      ' turns toward you, and stops. ' +
+      AMULET_GLOW +
+      ' Their eyes have found it.\n\n' +
       dialogue(this.name, `${GLANCE_WORDS}`) +
       '\n\n' +
       greeting
@@ -125,9 +130,9 @@ export class SpectralLibrarian extends Character {
           itemName(AMULET_NAME) +
           '. ' +
           speech(`${CONFESSION_WORDS}`)
-        : ' Their eyes find the ' +
-          itemName(AMULET_NAME) +
-          ' at your throat, and stay there. ' +
+        : ' ' +
+          AMULET_GLOW +
+          ' Their eyes find it, and stay there. ' +
           speech(`${GLANCE_WORDS} ${CONFESSION_WORDS}`)
     }
     return (
@@ -170,11 +175,10 @@ export class SpectralLibrarian extends Character {
     gameState.setStoryFlag(FLAG_LIBRARIAN_NOTICED_AMULET, true)
     gameState.setStoryFlag(FLAG_LIBRARIAN_CONFESSED, true)
     return (
-      'The ' +
+      AMULET_GLOW +
+      ' The ' +
       characterName(this.name) +
-      "'s eyes go to the " +
-      itemName(AMULET_NAME) +
-      '.\n\n' +
+      "'s eyes go to it.\n\n" +
       dialogue(this.name, `${GLANCE_WORDS} ${CONFESSION_WORDS}`) +
       '\n\n' +
       line
