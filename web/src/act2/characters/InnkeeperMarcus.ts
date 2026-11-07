@@ -2,6 +2,7 @@ import {
   Character,
   type GameState,
   type Item,
+  type Room,
   characterName,
   clue,
   remembered,
@@ -12,10 +13,14 @@ import { RoomKey } from '../items/RoomKey'
 import { DruidicCharm } from '../items/DruidicCharm'
 import {
   FLAG_KNOWS_ELENA_CURSE,
+  FLAG_ELENA_HEALED,
   FLAG_INNKEEPERS_DAUGHTER_COMPLETED,
   FLAG_MARCUS_TOLD_TRUTH,
   VIRTUE_TRUTH,
 } from '../Act2StoryFlags'
+
+/** The one ware he sells, by its name in his wares. */
+const ROOM_KEY = 'room key'
 
 /**
  * The prices as one spoken sentence: "A [kit]'s fifty [gold coins], the
@@ -39,13 +44,18 @@ function priceSentence(
 
 /**
  * Innkeeper NPC who sells wares and rewards the player after Elena's cure.
+ * Once the room key is sold it leaves his wares and his talk. His plea for
+ * Elena is said once, and after greater heal he speaks of her colour instead.
  * After the cure every talk ends with his "ill wind" line until Elior tells
  * him the truth about the silver mask: the optional truth moment.
  */
 export class InnkeeperMarcus extends Character {
   wares: Record<string, { item: Item; price: number }> = {
-    'room key': { item: new RoomKey(), price: 10 },
+    [ROOM_KEY]: { item: new RoomKey(), price: 10 },
   }
+  /** How he sees Elena once greater heal has taken hold. */
+  private static readonly COLOUR_LINE =
+    "There's colour in her face again. First time in three weeks."
   /** The talk lines he cycles through; static, so old saves get the current wording. */
   private static readonly IDLE_LINES: readonly string[] = [
     'Welcome to The Silver Stag. Hot stew, clean sheets, and a door that locks.',
@@ -54,6 +64,10 @@ export class InnkeeperMarcus extends Character {
   ]
   dialogueIndex = 0
   hasGivenCharm = false
+  /** True once he has made his plea for Elena (or it was overtaken by the heal). */
+  pleaSpoken = false
+  /** True once he has remarked on Elena's colour after greater heal. */
+  healRemarkSpoken = false
 
   constructor() {
     super({
@@ -72,7 +86,8 @@ export class InnkeeperMarcus extends Character {
   /**
    * Take the truth about the curse. After the cure, saying "truth" tells him
    * the silver mask was set on Elena on purpose: his reply and the remembered
-   * line, recorded once. Before the cure he points at her; afterwards he
+   * line, recorded once. Before the cure he points at her, getting worse
+   * or, after greater heal, with colour back but still cold; afterwards he
    * has heard it. Any other words get the usual reply.
    */
   override sayTo(gameState: GameState, words: string): string {
@@ -80,6 +95,13 @@ export class InnkeeperMarcus extends Character {
       return super.sayTo(gameState, words)
     }
     if (!gameState.getStoryFlag(FLAG_INNKEEPERS_DAUGHTER_COMPLETED)) {
+      if (gameState.getStoryFlag(FLAG_ELENA_HEALED)) {
+        return dialogue(
+          this.name,
+          'The truth? The only truth I care about is over there. ' +
+            `${InnkeeperMarcus.COLOUR_LINE} And still she's cold to the touch.`,
+        )
+      }
       return dialogue(
         this.name,
         'The truth? The only truth I care about is over there, and ' +
@@ -112,9 +134,10 @@ export class InnkeeperMarcus extends Character {
   }
 
   /**
-   * Reward the cure with the Druidic Charm, or list the wares and plead for
-   * help. Every line he speaks is a quote opening with his name and a colon,
-   * which the story view shows as the speaker's label.
+   * Reward the cure with the Druidic Charm, or name what he still sells and,
+   * once, plead for help or remark on Elena's colour. Every line he speaks
+   * is a quote opening with his name and a colon, which the story view shows
+   * as the speaker's label.
    */
   override talkTo(gameState: GameState): string {
     if (gameState.getStoryFlag(FLAG_INNKEEPERS_DAUGHTER_COMPLETED)) {
@@ -157,8 +180,8 @@ export class InnkeeperMarcus extends Character {
     }
 
     // His prices, spoken in the same bubble as his opening line
-    const waresInfo =
-      priceSentence(this.wares) || "I'm currently not offering any services."
+    this.forgetSoldKey(gameState)
+    const waresInfo = priceSentence(this.wares)
 
     // Cycle through dialogue options
     const option = InnkeeperMarcus.IDLE_LINES[this.dialogueIndex]
@@ -166,8 +189,29 @@ export class InnkeeperMarcus extends Character {
       (this.dialogueIndex + 1) % InnkeeperMarcus.IDLE_LINES.length
     const name = this.name
 
+    const opening = dialogue(
+      name,
+      waresInfo ? `${option} ${waresInfo}` : option,
+    )
+
+    if (gameState.getStoryFlag(FLAG_ELENA_HEALED)) {
+      this.pleaSpoken = true
+      if (this.healRemarkSpoken) return opening
+      this.healRemarkSpoken = true
+      return (
+        opening +
+        '\n\n' +
+        dialogue(
+          name,
+          `${InnkeeperMarcus.COLOUR_LINE} … But she's still cold to the ` +
+            "touch. Whatever you did, it isn't finished.",
+        )
+      )
+    }
+
     if (gameState.getStoryFlag(FLAG_KNOWS_ELENA_CURSE)) {
-      const dialogueBlock = dialogue(name, `${option} ${waresInfo}`) + '\n\n'
+      if (this.pleaSpoken) return opening
+      this.pleaSpoken = true
       const plea = dialogue(
         name,
         "You've spoken with " +
@@ -182,22 +226,61 @@ export class InnkeeperMarcus extends Character {
           'It came on her the week the king went. The whole town was out in ' +
             'the streets asking after him, and I was upstairs with a cold cloth.',
         )
-      return dialogueBlock + plea + weekTheKingWent
+      return opening + '\n\n' + plea + weekTheKingWent
     } else {
-      const dialogueBlock = dialogue(name, `${option} ${waresInfo}`) + '\n\n'
       const closing = dialogue(
         name,
         "My girl, Elena. She's been poorly three weeks. … Talk to her, if " +
           "you've a kind word to spare. She'll tell it better than I can.",
       )
-      return dialogueBlock + closing
+      return opening + '\n\n' + closing
     }
   }
 
-  /** Handle buying items from Innkeeper Marcus. */
+  /**
+   * Drop the room key from his wares once it is sold: held by the guest, or
+   * used on the inn's door. A save made before the sale took the key off his
+   * wares still has it there, and this tidies it on the next talk or buy.
+   */
+  private forgetSoldKey(gameState: GameState): void {
+    if (!(ROOM_KEY in this.wares)) return
+    const held = gameState.inventory.some(
+      (item) => item instanceof RoomKey && item.canBeCarried,
+    )
+    const inn: Room | undefined = gameState.allRooms.SilverStagInn
+    const doorOpened = inn !== undefined && 'east' in inn.exits
+    if (held || doorOpened) delete this.wares[ROOM_KEY]
+  }
+
+  /**
+   * His answer to a second room key: the key is still in hand, or the room
+   * it opened is the guest's already.
+   */
+  private secondKeyRefusal(gameState: GameState): string {
+    const held = gameState.inventory.some(
+      (item) => item instanceof RoomKey && item.canBeCarried,
+    )
+    return dialogue(
+      this.name,
+      (held
+        ? `You've a [item_name]${ROOM_KEY}[/item_name] already. `
+        : 'The room upstairs is yours already. ') +
+        "One room's plenty for one guest.",
+    )
+  }
+
+  /**
+   * Handle buying items from Innkeeper Marcus. A sold room key leaves his
+   * wares, so a second one is refused whether or not the first is still held.
+   */
   override buyItem(gameState: GameState, itemName: string): string {
+    this.forgetSoldKey(gameState)
     const itemNameToBuy = itemName.toLowerCase()
     const seller = this.name
+
+    if (itemNameToBuy === ROOM_KEY && !(ROOM_KEY in this.wares)) {
+      return this.secondKeyRefusal(gameState)
+    }
 
     // Check if item is available
     if (!(itemNameToBuy in this.wares)) {
@@ -216,21 +299,6 @@ export class InnkeeperMarcus extends Character {
     // Check if player has enough coins
     if (totalCoins < price) {
       return clue("You don't have enough coins for that.")
-    }
-
-    // Check if already have the item in inventory (not counting display items in room)
-    const inventory = gameState.inventory
-    if (
-      inventory.some(
-        (item) =>
-          item.name.toLowerCase() === itemNameToBuy && item.canBeCarried,
-      )
-    ) {
-      return dialogue(
-        this.name,
-        `You've a [item_name]${itemNameToBuy}[/item_name] already. ` +
-          "One room's plenty for one guest.",
-      )
     }
 
     // Purchase the item - spend coins using the batching system
@@ -257,6 +325,7 @@ export class InnkeeperMarcus extends Character {
     if (newItem) {
       newItem.canBeCarried = true // Ensure the purchased item is carriable
       gameState.addItemToInventory(newItem)
+      delete this.wares[itemNameToBuy]
       const purchaseMsg =
         `[success]The [item_name]${itemNameToBuy}[/item_name] is yours for ` +
         `${price} [item_name]gold coins[/item_name]. ` +
