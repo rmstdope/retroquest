@@ -2,71 +2,221 @@
 
 ## Quests in Act I
 
-- **Name:** Hint of magic
+The source code is the single point of truth for this section (`web/src/act1/quests/`, the characters and items that set the flags the quests read, and `GameMap.unfinishedBeforeTheRoad`). Each quest is described by:
 
-  - **Trigger:** Starting of the game.
-  - **Completion:** Learn the 'revive' spell from Grandmother.
+- **Trigger:** what starts it.
+- **Log:** the journal entries (or checklist) the quest log shows, which the `hint` command reads.
+- **Mentioned by:** the characters and items that speak of the quest without advancing it, including the lead the map and the main quest's hint give while the quest is not started yet.
+- **Needed to complete:** every interaction that advances it, in order, with the commands that do it.
+- **Completion:** the condition that completes it.
 
-- **Name:** Know your village
+Act I has one main quest (_Shadows over Willowbrook_), one checklist quest (_Preparing for the road_) and nine side quests. The act ends only when the map is used on the Road to Greendale, which refuses while any side quest is unstarted or open (see _Shadows over Willowbrook_).
 
-  - **Trigger:** Leave Elior's Cottage and begin exploring Willowbrook.
-  - **Completion:** Visit all areas in the village.
+### How the quests depend on each other
 
-- **Name:** Curiosity killed the cat
+- _Hint of magic_ opens the cottage, and its spell (`revive`) starts _Magic for real_.
+- _Curiosity killed the cat_ opens the General Store. Its rope jams the mill, whose fragment starts _Oh deer, oh deer_, whose rare flower completes _Magic for real_. Its matches (handed over only once the store is open) complete _Let there be light_.
+- _Fishing expedition_ teaches `purify`. The magnet goes on the rod only once `purify` is known, so _Magnet fishing expedition_ waits on it, and on Mira's teaching for `purify` to work on the well.
+- _Magic for real_ starts _Preparing for the road_. The locket from _Let there be light_ gives `bless` and the travel cloak, the ring from _Magnet fishing expedition_ buys the boots (or the horseshoe does), and `unlock` and `light` give the map and `grow`.
+- _The faded photograph_ and _Know your village_ depend on nothing but the cottage's exits.
+- _Shadows over Willowbrook_ ends only once all the others are complete.
 
-  - **Trigger:** Meet Hemlock at the General Store, or enter the Abandoned Shed for the first time.
-  - **Steps:** Hemlock (the Shopkeeper) has shut his store until his missing cat, Patches, comes home; the old notice in the Village Square asks after her too. Unlock the shed door: Patches bolts behind the crates. Call her by name (`talk to patches`, or `say patches to patches`) or tempt her with the egg or the fish (Elior keeps them) to coax her out, then carry her home.
-  - **Completion:** Return Patches to Hemlock. He pays the notice's reward of a coin, reopens the store, and Patches settles on the counter. Alternatively (a choice, see _Elior's choices_), let her stay with Grandmother: the store still reopens and the quest completes.
+---
 
-- **Name:** Fishing expedition
+### Hint of magic
 
-  - **Trigger:** Talk to the fisherman for the first time.
-  - **Completion:** Give a fish to the fisherman.
+- **Trigger:** Elior wakes from the dream (`woke_from_dream`): `talk to voice`, or saying anything to the voice, in The Dream.
+- **Log:** a journal of three entries, added one per step: Elior woke with three words written down and a tune still going, and the `lantern` would show him where → the lantern found his `journal`, with the three words and the rest of the dream in it → Grandmother is at the hearth humming the tune from the dream, and will want to hear about it.
+- **Mentioned by:**
+  - _Grandmother_, while there is nothing else to say: "light that lantern before you go feeling about in your corner" until the lantern is lit, then "Read me what it says" until the journal is read.
+  - _Elior's Cottage_: the exits stay closed until `revive` is learned. Trying to leave, Grandmother stops Elior with what is still undone: the unlit lantern, then the unread journal, then the dream still to tell.
+- **Needed to complete:**
+  1. `use lantern`: lights it (`lantern_lit`) and reveals Elior's journal. The lit lantern can then be taken.
+  2. `use journal`: reads the dream entry (`journal_read_prologue_entry`).
+  3. `talk to grandmother`: once the journal is read, she is found humming the cradle tune and stops; Elior tells her the dream and the three words ("Some voices are older than memory"), she tells of his father's journal, and Elior learns `revive`. Talking to her earlier gives only her greeting (the first time) or the nudge above.
+- **Completion:** Elior knows `revive`. The cottage's exits (south, east) open. As `revive` is Elior's first spell, _Magic for real_ starts on the same turn.
 
-- **Name:** Oh, deer, oh deer
+### Know your village
 
-  - **Trigger:** Learn about the magical deer from the Blacksmith.
-  - **Completion:** Observe the deer in the Hidden Glade.
+- **Trigger:** Elior visits a second room after the cottage, which in practice is his first step out of it. The dream is not counted as a room he has visited.
+- **Log:** one entry: something pulls at him to walk every lane of Willowbrook.
+- **Mentioned by:** no character or item. While it is open, the map refuses with "the tasks you began in the village", and the main quest's hint says something begun is unfinished.
+- **Needed to complete:** visiting each of the fifteen rooms of the act once: Elior's Cottage, Vegetable Field, Chicken Coop, Village Square, Mira's Hut, Blacksmith's Forge, General Store, Village Well, Abandoned Shed, Old Mill, Riverbank, Forest Path, Hidden Glade, Village Chapel and Road to Greendale.
+- **Completion:** every room but The Dream has been visited.
 
-- **Name:** Magnet fishing expedition
+### Curiosity killed the cat
 
-  - **Trigger:** Assemble the magnetic fishing rod.
-  - **Completion:** Retrieve the shiny ring from the well.
+- **Trigger:** the first of four ways Elior hears of Patches, and the opening entry tells it the way he heard it:
+  - talking to Hemlock while the store is shut (`met_hemlock`): "Old Man Hemlock has shut the General Store until his cat, Patches, comes home";
+  - examining the `old notice` in the Village Square (`read_hemlock_notice`): the notice's words, the reward and the shed by the well;
+  - unlocking the shed door, where her mew is heard, or finding her: the patchwork shape in the shed looked a lot like the cat on the store's counter.
+- **Log:** the opening, then, once Patches is in Elior's arms (`patches_found`): "Carry her home to Old Man Hemlock at the General Store."
+- **Mentioned by:**
+  - _Old notice_ (Village Square): MISSING, last seen near the old well, responds to her name, a small reward.
+  - _Hemlock_, while the store is shut: the first talk (she is gone, the store stays shut, last seen near the well, a reward), then "No sign of Patches, then. I put a saucer out every night". Buying is refused the same way. `say patches to hemlock` gives the same scenes, and once she is home, where she is now.
+  - _Grandmother_: while Elior carries the shed key, she admits she hid it in the coop rafters, says the shed was his father's workshop and tells him to take the lantern. While he carries Patches, she offers to keep her. Once Patches stays, she is asleep by the hearth. Once Patches is home with Hemlock, "He says you found his Patches. I've not heard him whistle in a year."
+  - _Abandoned Shed_: the door's mew, and on a search, "a pair of frightened green eyes watches you from behind the crates" (dark or not).
+  - _Patches_ herself: a gift other than the egg or the fish only gets a sniff, "as if she's waiting to be called"; other words to her mean nothing.
+  - _The farewell_: Grandmother says Patches has claimed Elior's pillow, or that Hemlock is telling the whole square how Elior found her.
+  - Lead while unstarted: "Old Man Hemlock is still waiting for his cat."
+- **Needed to complete:**
+  1. `use bread with chicken` in the Chicken Coop: the shed key is knocked from the rafter. `take key`.
+  2. `use key with door` at the Abandoned Shed: the key is used up, the shed opens and Patches bolts behind the crates. No light is needed for the rest.
+  3. Coax her out with `talk to patches`, `say patches to patches`, or `give egg to patches` / `give fish to patches` (Elior keeps the egg or fish). She lets Elior carry her (`patches_found`).
+  4. Then one of two endings:
+     - **Home to Hemlock** (golden path): `talk to hemlock`, `give patches to hemlock`, `say patches to hemlock` or any `buy` at the General Store. He pays a `coin` (the notice's reward, or "a little something for your trouble" if Elior never heard of it), reopens the store, and Patches curls up by the till (`patches_returned`).
+     - **She stays with Grandmother:** in the cottage, while carrying her, `say stay to grandmother` (also `yes` or `keep`). Patches settles by the hearth (`patches_stayed_with_grandmother`). The next time Elior talks to Hemlock, he has heard the news, reopens the store and gives a `rope` and an `apple` instead of the coin (`hemlock_heard_patches_stayed`).
+- **Completion:** `patches_returned` or `patches_stayed_with_grandmother`. The second ending completes the quest at once, before Elior visits the store.
+- **Saves:** a save made when the hoe still gave a second coin keeps the store open from the start and pays no reward for Patches.
 
-- **Name:** Let there be light
+### Fishing expedition
 
-  - **Trigger:** Talk to the Priest for the first time.
-  - **Completion:** Light the candle.
+- **Trigger:** the first talk to the fisherman (`talked_to_fisherman`).
+- **Log:** "The fisherman at the bend can't fish with his stiff arm, and he would give a good deal for a fresh fish." Once `heal` has mended his arm, a second entry says the arm is mended but he won't cast his own line till tomorrow and would still give a good deal for a fish. If he was healed before the first talk, the log starts at the second entry.
+- **Mentioned by:**
+  - _Fisherman_: every talk ends on the fresh fish. A second fish is refused ("Two's showing off"), and other gifts get "Won't catch anything with that, lad."
+  - _River_: without his lesson, the rod catches nothing: "Perhaps someone could teach you."
+  - Lead while unstarted: "the fisherman at the river bend still sits with an empty line".
+- **Needed to complete:**
+  1. The `fishing rod`, found by searching the Abandoned Shed by light (see _Curiosity killed the cat_).
+  2. `talk to fisherman` while carrying the rod: he knows it for Elior's father's and teaches him the basics (`learned_fishing_basics`). Talked to without the rod, he only greets Elior, and a later talk with the rod gives the lesson.
+  3. `use fishing rod with river` (or `use fishing rod` at the Riverbank): the river gives one `fish`, and never another.
+  4. `give fish to fisherman`: he teaches `purify`, the thing Elior's mother taught him at the bend.
+- **Optional:** `cast heal on fisherman` (after Mira's teaching) mends his arm (`healed_fisherman_arm`); if the lesson has not yet been given, he gives it out of gratitude.
+- **Completion:** Elior knows `purify`.
 
-- **Name:** Magic for real
+### The faded photograph
 
-  - **Trigger:** Learn your first spell.
-  - **Completion:** Be taught magic by Mira.
+- **Trigger:** the first `search` in Elior's Cottage finds the `faded photograph` in a drawer (`found_photo`).
+- **Log:** a journal that gains one entry per step taken, so the hint names the next one: the photograph and the line on its back in the mother's hand → (examined) seek the truth where the river bends, and Grandmother knew her hand best → (Grandmother asked) the old fisherman at the Riverbank will remember → (fisherman asked) the tin under the `smooth stone` → (dug up) a letter in the mother's hand, not yet read. A step skipped leaves no entry: if Elior goes to the fisherman before Grandmother, her entry never appears, even when he asks her later.
+- **Mentioned by:**
+  - _Grandmother_: given the photograph before its back is read, she talks of the three of them and Elior's mother half a blur. After she has been asked, her line between other news is "Have you been down to the river yet?" While Elior carries the letter, "Keep that dry." Given the letter, she reads it twice.
+  - _Fisherman_: shown the photograph before its back is read: "Turn it over sometime, lad." After he has told of the tin, he points to the stone. Once the letter is found, "I reckon I can stop now." Given the letter, he will not read it.
+  - _Mira_: given the photograph, "You were a loud baby." Given the letter, she reads it to the end (and, once Elior carries the amulet, "I kept it. Now you keep it."). Carried into her hut, the letter makes the amulet on its stand glow brighter.
+  - Lead while unstarted: "a drawer at home still holds something you have not seen".
+- **Needed to complete:**
+  1. `search` in Elior's Cottage, then `take faded photograph`.
+  2. `examine faded photograph`: reads _Seek the truth where the river bends._ (`read_photo_message`).
+  3. _Optional in the code, on the golden path:_ `give faded photograph to grandmother`: her daughter's hand, "They went toward something", and the fisherman at the Riverbank (`talked_to_grandmother_about_photo`).
+  4. `give faded photograph to fisherman`: this spot is the bend, and his promise to watch the tin under the smooth stone (`fisherman_told_of_tin`). The photograph stays with Elior.
+  5. `search` at the Riverbank (or `take smooth stone`, or `use broken shovel with smooth stone`): the tin, and the `mother's letter` in it (`found_mothers_letter`). Before the fisherman has told of the tin, none of these finds anything.
+  6. `take letter`, then `examine letter` (or `use letter`) (`read_mothers_letter`).
+- **Completion:** the mother's letter has been read.
+- **Reward:** the letter (see _Story Beats_): it names Malakar once, as a friend gone wrong, and says Mira keeps the amulet for Elior.
 
-- **Name:** Preparing for the road
+### Oh deer, oh deer
 
-  - **Trigger:** Learn magic from Mira.
-  - **Completion:** Obtain all items needed for the journey.
+- **Trigger:** `give millstone fragment to blacksmith` (`deer_can_be_observed`): Borin says the mill's ground is older than the village and tells his grandfather's story of the deer in the Hidden Glade that comes to folk who sit down, rest a while and stop looking for it.
+- **Log:** one entry: Borin's grandfather swore by a deer that comes to folk who keep still. Not to hunters. Not to talkers.
+- **Mentioned by:**
+  - _Hidden Glade_: resting before Borin's story, nothing comes; while the mill's mechanism still runs, "the ground feels thin, as if something far off were drawing on it."
+  - _Blacksmith_: once the deer is in the glade, "Saw it, did you? ... My grandfather swore by that deer."
+  - _Shadows over Willowbrook_'s hint, while Mira waits for the flower: the mill still drawing on the land → the fragment it gave up → "Borin at the forge knows old stone."
+  - _Deer_: `talk to deer` or `examine deer` gives a wordless moment, its gaze on the mossy stone until the glade is lit, then a bow.
+  - Lead while unstarted: "Borin at the forge still has a story about the Hidden Glade to tell".
+- **Needed to complete:**
+  1. The `rope` from Hemlock: bought with the reward coin, or his gift when Patches stays (see _Curiosity killed the cat_).
+  2. `use rope with mechanism` in the Old Mill: the gears jam and a compartment opens. `take millstone fragment`.
+  3. `give millstone fragment to blacksmith` (the trigger).
+  4. `rest` in the Hidden Glade: the deer steps out of the brambles and a `rare flower` opens near the mossy stone.
+- **Completion:** a rare flower exists (in the glade or carried), which happens on that rest. Talking to or examining the deer is optional.
 
-- **Name:** The faded photograph
+### Magnet fishing expedition
 
-  - **Trigger:** Search Elior's Cottage and discover the photograph.
-  - **Steps:** Examine the photograph to read its message (_Seek the truth where the river bends_), then show it to Grandmother. She reveals that Elior's family is connected to the darkness threatening Eldoria, and that his mother loved the river: the old fisherman at the Riverbank will remember her. The Riverbank is the bend. Show the photograph to the fisherman: he was the mother's friend, and tells of a tin she hid in the mud under the smooth stone the night before she went away. Search the Riverbank to find the tin and the mother's letter inside it.
-  - **Completion:** Read the mother's letter.
-  - **Reward:** A fragment of a letter from Elior's mother. It names Malakar once, as a friend gone wrong ("If Malakar comes asking about our line, do not answer him. He is not the friend we knew."), and says Mira keeps the amulet for him and that "when you are ready, it will know you". Carried into Mira's hut, it makes the amulet glow brighter (see _Story Beats_). It is the one voice in Act I that names Malakar as a man; the village knows him only as a byword (see _Story Beats_).
+- **Trigger:** whichever comes first: `examine well` while the ring still lies in it (`well_examined`, step 5 of the golden path), or assembling the `magnetic fishing rod`.
+- **Log:** "Something glints far down in the well, much too deep for hands." → once the magnet is on the rod, "The magnet might reach it, on a long enough rod."
+- **Mentioned by:**
+  - _Well_: examined or searched, the glint (murky) or the shiny ring at the bottom (purified). The magnet alone would sink and stay sunk; a bare rope comes up wet.
+  - _Fishing rod_: with the magnet before `purify` is known, "the rod would catch iron and never a fish. Not yet, then."; with the stick first, the length can come last. The short rods are too short to reach the water.
+  - _Extended magnetic fishing rod_: while the well is murky, "You can't see anything to retrieve."
+  - Lead while unstarted: "far down in the well, something still glints".
+- **Needed to complete:**
+  1. The `fishing rod` and `magnet` from the shed, and the `stick` from the Forest Path alcove (`use sharp knife with vines`, which needs the knife Borin sharpened for the hoe's coin).
+  2. `use fishing rod with magnet`, which works only once `purify` is known (_Fishing expedition_), then `use magnetic fishing rod with stick`.
+  3. `cast purify on well`, which needs the well examined first and Mira's teaching for the spell to work.
+  4. `use extended magnetic fishing rod with well`: the rod is used up, and the `shiny ring` and the `rune token` come up (`found_rune_token`).
+- **Completion:** the shiny ring exists (carried, or given on), which happens on that catch.
 
-- **Name:** Shadows over Willowbrook (Main Quest)
-  - **Trigger:** At the start of the act; Elior's dream introduces the mystery.
-  - **Update:** Investigate the withered crops in the Vegetable Field.
-  - **Update:** Speak with a villager about the disturbances in Willowbrook.
-  - **Update:** Examine the Village Well.
-  - **Update:** Discuss the crops, villagers' fears and well with Mira; she urges Elior to connect with nature.
-  - **Update:** Give the Rare Flower to Mira to unlock Elior's magic; she promises him the Ancient Amulet once he is ready for the road.
-  - **Update:** Fish the ring out of the purified well; a black-iron rune token comes up with it. The well did not sour by itself.
-  - **Update (optional):** Water the Vegetable Field with purified well water; the whole field recovers. The flag travels to Act IV (`Act1.carriedFlags`), where the epilogue remembers whether the field was watered.
-  - **Update:** Give the rune token to Mira. She names it a _fouling sigil_: someone poisoned the well on purpose. She says the cloaked stranger of the villagers' rumours came to her door asking for the amulet, and that whoever carried the token was searching Willowbrook for something, "or for someone". Malakar is not named.
-  - **Update:** Mira adds that the sickness in the land and the sickness of King Alden feel like one wound (see _Story Beats_).
-  - **Completion:** When act 1 is completed
+### Let there be light
+
+- **Trigger:** the first talk to the priest (`priest_talked_to`): the founders, their relic, the bell, and he is out of matches; Hemlock keeps a box for him under the counter.
+- **Log:** the priest is out of matches and Hemlock keeps a box → once Elior holds the matches, "The candle by the altar in the chapel is still cold."
+- **Mentioned by:**
+  - _Priest_: "Any luck with those matches?" → with the matches, "The wick has waited long enough." → candle lit, "Look there, child. The light has found something." Given the matches, he hands them back and asks Elior to light it.
+  - _Hemlock_: while the store is shut, "They're under the counter, and they'll keep. I'll see to him the day Patches is home." Taking or buying the matches is refused: they are the priest's.
+  - _Candle_: the lantern cannot light it (its flame is behind glass). The `light` spell does not reach the dark corner.
+  - Lead while unstarted: "the priest in the chapel has not had his say".
+- **Needed to complete:**
+  1. The store open (_Curiosity killed the cat_, either ending).
+  2. `talk to hemlock` after the priest has asked: the `matches`, on the house.
+  3. `use candle with matches` in the chapel (or `use candle` holding the matches): the candle lights and the `locket` shows in the dark corner.
+- **Completion:** the candle is lit.
+- **Follow-on (not part of this quest):** `take locket` teaches `bless` in the priest's scene, and `give locket to grandmother` gives the `travel cloak` (_Preparing for the road_).
+
+### Magic for real
+
+- **Trigger:** Elior knows any spell, which is `revive`, the turn _Hint of magic_ completes. If Mira has already asked for the flower, the log opens at its second entry.
+- **Log:** "You know a spell now, but when you reach for it the warmth comes and nothing answers. Grandmother says Mira has a way with herbs, and with other things." → once Mira has asked for the flower (`connect_with_nature`), "Your spells do not answer yet. Mira has sent you for a rare flower from the Hidden Glade." While the flower is carried, the hint says instead that it opened for Elior and Mira will know once she has it.
+- **Mentioned by:**
+  - _Grandmother_: her first talk sends Elior to Mira.
+  - Spells cast before Mira's teaching fail with a hint of the magic to come (for example `cast revive` in the Vegetable Field).
+  - _Mira_: before the three signs, "Tell me what you've seen."; after her request, "The flower, Elior. The Hidden Glade."
+  - _Grandmother_: given the flower, "Take it where it is wanted, love."
+- **Needed to complete:**
+  1. The three signs of the main quest: enter the Vegetable Field, `talk to tilda`, `examine well`.
+  2. `talk to mira`: Elior tells her of the three signs, she calls the land and the king one wound and asks for the rare flower (`connect_with_nature`).
+  3. The `rare flower` (_Oh deer, oh deer_).
+  4. `give rare flower to mira`: she teaches `heal`, `unlock` and `light`, and names what the road needs (`magic_fully_unlocked`). The flower can be given before step 2; she then tells of the one wound on the next talk, without the request.
+- **Completion:** `magic_fully_unlocked`. From here on spells work.
+
+### Preparing for the road
+
+- **Trigger:** `magic_fully_unlocked` (the rare flower given to Mira).
+- **Log:** a checklist, each line ticked while it holds:
+  - Warm clothing: the `travel cloak` is carried.
+  - Magical protection: Elior has blessed himself (`journey_bless_completed`).
+  - Food for the road: any four of the five kinds are carried: bread (`bread` or `fresh bread`), `apple`, `egg`, `fresh carrot`, `wild berries`. The fish does not count.
+  - Sturdy footwear: the `wandering boots` are carried.
+  - A map to find your way: the `map` is carried.
+  - All basic magic learned: all seven spells are known.
+- **Mentioned by:**
+  - _Mira_: when she takes the flower: "You'll need warmth, protection, food, boots and a map ... go with a blessing on you." Before everything is ready: "Not yet. I'll not send you out half-dressed and half-taught." When it is ready, she gives the amulet (see below).
+  - _Grandmother_: the first talk after Mira's teaching gives a `fresh bread` for the road, which counts as bread; after that, "Packed yet?"
+  - _Merchant_: food is refused ("you'll want every bite of that where you're going"), except the fresh bread (the optional _selfless_ choice).
+  - _Shadows over Willowbrook_'s hint: Mira keeps the amulet until Elior is ready for the road. The map refuses with "your preparations for the road".
+- **Needed to complete:**
+  - Travel cloak: `give locket to grandmother` (_Let there be light_).
+  - Protection: `cast bless`, or `cast bless on me` (`myself`, `elior`). Blessing someone else does not count.
+  - Food: `take egg` (Coop), `take apple` (with Hemlock's rope, either way), `cast revive on withered carrot` then `take carrot` (Field), `cast grow on bush` then `take wild berries` (Forest Path), or Grandmother's fresh bread. Grandmother takes berries she is given into a pie, but the bush grows more.
+  - Boots: `give shiny ring to merchant` (golden path), or `give horseshoe to merchant` (the horseshoe from the forge), which keeps the ring (`kept_mothers_ring`).
+  - Map: `cast unlock on mysterious box`, then `open mysterious box` (Abandoned Shed).
+  - Spells: `revive` (Grandmother), `purify` (Fisherman), `bless` (taking the locket), `heal`, `unlock`, `light` (Mira), `grow` (`cast light` in the Hidden Glade).
+- **Completion:** all six lines hold at once. The items must be carried at the moment the quest is checked. Then `talk to mira` hands over the Ancient Amulet; the amulet is not part of the checklist.
+
+### Shadows over Willowbrook (Main Quest)
+
+- **Trigger:** Elior wakes from the dream (`woke_from_dream`).
+- **Log:** a journal that opens with the dream ("You woke with three words written down: …let them rest…") and gains one entry per beat, in the order the beats are noticed. The beats before the flower always come before it, so the log never steps backwards:
+  1. The Vegetable Field has withered (`investigated_withered_crops`, set on entering the field).
+  2. In the square, Tilda has more rumours than bread (`villager_talked_to`, any talk to Tilda).
+  3. The village well smells sour, and something glints (`well_examined`).
+  4. Mira says the sickness in the fields and the king's feel like one wound (`connect_with_nature`), with her request for the rare flower if she did not have it yet.
+  5. The flower opened, Mira taught Elior, and promised the amulet once he is ready (`magic_fully_unlocked`).
+  6. The rune token came up from the purified well with the ring: "The well did not sour by itself." (`found_rune_token`).
+  7. _Optional:_ a man in a grey cloak at the Old Mill, his back turned (`stranger_seen_at_mill`, the first move into the mill after the token).
+  8. _Optional:_ clean water brought the Vegetable Field back to life (`vegetable_field_watered`, `use bucket` in the field with purified well water).
+  9. Mira named the token a fouling sigil: someone poisoned the well on purpose, searching Willowbrook for something, or for someone (`mira_named_fouling_sigil`).
+  10. _Optional:_ the merchant's news from the capital: King Alden lies ill, the roads are dangerous, crops fail in every valley (`merchant_news_heard`, the first `talk to merchant`).
+- **Hint:** the main quest's hint does not read the log. It names the furthest point reached: the fields, the square and the well → Mira, north of the square → the flower (with the mill → fragment → Borin lead while the deer is unknown) → the amulet Mira keeps → the unread rune token → the amulet is Elior's, but a quest is unfinished or a lead untaken → nothing left undone, use the map on the Road to Greendale.
+- **Mentioned by:** Tilda (her rumours of the king, the cloaked stranger and the amulet; asking about the well once it runs clean), Hemlock (the stopped caravans), Grandmother, Borin, the priest, the fisherman, the merchant and Mira, who all react to the rune token and the amulet given to them (see the rooms).
+- **Needed to complete:**
+  1. The three signs and Mira's request (as in _Magic for real_).
+  2. The rare flower given to Mira (_Magic for real_).
+  3. The ring and rune token fished out of the purified well (_Magnet fishing expedition_).
+  4. `give rune token to mira`: the fouling sigil, tied to the mill if the mechanism is jammed. She hands it back.
+  5. `talk to mira` once _Preparing for the road_ is complete: the Ancient Amulet, her hint of a secret and the man in the grey cloak who came to her door. If the token is still unread when Elior already carries the amulet, she asks to see it.
+  6. `use map` on the Road to Greendale. The map refuses, naming what is left, while any of these holds: the amulet is not carried; the rune token was found but Mira has not read it; _Preparing for the road_ is not complete; any side quest is open; any side quest is unstarted (named by its lead, see each quest). Otherwise the farewell plays (see _Action that completes the act_) and `shadows_over_willowbrook_completed` is set.
+- **Completion:** `shadows_over_willowbrook_completed`, which also completes the act. Whether the field was watered travels to Act IV (`Act1.carriedFlags`).
 
 ## Rooms
 ### 0. The Dream
@@ -504,7 +654,7 @@ Optional virtue moments; none blocks the golden path, none adds a puzzle or comb
     - Give rune token to Mira. _Mira turns it over and the color drains from her face: it is a fouling sigil, and the well was poisoned on purpose. If the mill mechanism is jammed she recognises the same hand there, drinking the old power. Whoever carried it, perhaps the cloaked stranger, was searching Willowbrook "for something. Or for someone." She hands the token back: keep it close, and keep it hidden._
     - Speak to Mira. _Seeing Elior has fulfilled all the tasks and is fully prepared, Mira looks him over and puts the `ancient amulet` in his hand. "You're ready. Or as ready as anyone gets." Then, more quietly: "I knew your parents better than I have said. Once you are truly ready, I will tell you." She sends him toward Greendale: "Once there, show the amulet to no one lightly. Those who know what it is will find you." This sets up Sir Cedric recognising the amulet in Act II._
       - Item obtained: `ancient amulet` (ESSENTIAL)
-      - (Implicitly, all spells learned completes: Learn basic magic; `map` obtained completes: Map; `wild berries` obtained from Forest Path, `apple` from General Store, `egg` from Chicken Coop, and `carrot` from Vegetable Field are four of the six kinds and complete: Food)
+      - (Implicitly, all spells learned completes: Learn basic magic; `map` obtained completes: Map; `wild berries` obtained from Forest Path, `apple` from General Store, `egg` from Chicken Coop, and `carrot` from Vegetable Field are four of the five kinds and complete: Food)
 
 28. **Road to Greendale (Departure):**
 
