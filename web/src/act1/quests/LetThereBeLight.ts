@@ -1,12 +1,19 @@
 import { characterName, Quest, type GameState } from '@/engine'
 import { Candle } from '../items/Candle'
 import { Matches } from '../items/Matches'
+import { Shopkeeper } from '../characters/Shopkeeper'
 import { FLAG_PRIEST_TALKED_TO } from '../Act1StoryFlags'
 
 /** The opening while the priest's matches are still at the store. */
 const OUT_OF_MATCHES =
   `The ${characterName('priest')} is out of matches and his candle is cold. ` +
   `${characterName('Hemlock')} at the General Store keeps a box for him.`
+
+/** The hint while the store is shut: the matches wait on Hemlock's cat. */
+const MATCHES_WAIT_ON_PATCHES =
+  `${characterName('Hemlock')} keeps the box under his counter, ` +
+  `but he will see to the ${characterName('priest')} only once ` +
+  `${characterName('Patches')} is home.`
 
 /** The log once Elior has the matches in hand. */
 const MATCHES_IN_HAND =
@@ -41,6 +48,17 @@ export class LetThereBeLightQuest extends Quest {
     }
     this.setJournal([OUT_OF_MATCHES], MATCHES_IN_HAND)
     return true
+  }
+
+  /**
+   * While the General Store is shut and the matches are still there, says
+   * that Hemlock sees to them only once Patches is home; otherwise the
+   * newest log entry, as every quest does.
+   */
+  override hint(gameState: GameState): string | null {
+    if (!Shopkeeper.isStoreOpen(gameState) && !this.latestStage)
+      return MATCHES_WAIT_ON_PATCHES
+    return super.hint(gameState)
   }
 
   override checkCompletion(gameState: GameState): boolean {
