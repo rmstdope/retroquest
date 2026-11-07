@@ -2,6 +2,7 @@ import { Spell, type Character, type GameState, characterName } from '@/engine'
 import { Priest } from '../characters/Priest'
 import {
   FLAG_JOURNEY_BLESS_COMPLETED,
+  FLAG_MAGIC_FULLY_UNLOCKED,
   FLAG_PRIEST_BLESSED,
 } from '../Act1StoryFlags'
 
@@ -25,8 +26,20 @@ export class BlessSpell extends Spell {
     this.description = new BlessSpell().description
   }
 
-  /** Bless Elior himself, readying him for the journey. */
+  /** The reply while Mira has not yet taught Elior magic for real. */
+  private outOfReach(): string {
+    return (
+      'You focus your will, a faint warmth spreads from your fingertips, ' +
+      'and nothing answers it. The warmth is yours; the door it wants is ' +
+      'not open yet.'
+    )
+  }
+
+  /** Bless Elior himself, readying him for the journey, once magic is learned. */
   override castSpell(gameState: GameState): string {
+    if (!gameState.getStoryFlag(FLAG_MAGIC_FULLY_UNLOCKED)) {
+      return this.outOfReach()
+    }
     gameState.setStoryFlag(FLAG_JOURNEY_BLESS_COMPLETED, true)
     return (
       'A quiet warmth settles on your shoulders and stays, the way the ' +
@@ -39,8 +52,11 @@ export class BlessSpell extends Spell {
     return SELF_WORDS.includes(target) ? this.castSpell(gameState) : null
   }
 
-  /** Bless another character; the priest remembers being blessed. */
+  /** Bless another character once magic is learned; the priest remembers being blessed. */
   override castOnCharacter(gameState: GameState, character: Character): string {
+    if (!gameState.getStoryFlag(FLAG_MAGIC_FULLY_UNLOCKED)) {
+      return this.outOfReach()
+    }
     if (character instanceof Priest)
       gameState.setStoryFlag(FLAG_PRIEST_BLESSED, true)
     return (

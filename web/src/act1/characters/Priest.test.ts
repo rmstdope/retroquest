@@ -5,7 +5,11 @@ import { Act1 } from '../Act1'
 import { Candle } from '../items/Candle'
 import { Matches } from '../items/Matches'
 import { Stick } from '../items/Stick'
-import { FLAG_PRIEST_BLESSED, FLAG_PRIEST_TALKED_TO } from '../Act1StoryFlags'
+import {
+  FLAG_MAGIC_FULLY_UNLOCKED,
+  FLAG_PRIEST_BLESSED,
+  FLAG_PRIEST_TALKED_TO,
+} from '../Act1StoryFlags'
 
 describe('Priest dialogue', () => {
   let game: Game
@@ -88,6 +92,7 @@ describe('Priest dialogue', () => {
 
   it('sees the blessing on Elior after he casts bless on himself', () => {
     lightCandle()
+    game.state.setStoryFlag(FLAG_MAGIC_FULLY_UNLOCKED, true)
     executeCommands(game, ['take locket', 'cast bless'])
 
     const response = executeCommands(game, ['talk to priest'])
@@ -97,6 +102,7 @@ describe('Priest dialogue', () => {
 
   it('remembers being blessed by Elior', () => {
     lightCandle()
+    game.state.setStoryFlag(FLAG_MAGIC_FULLY_UNLOCKED, true)
     executeCommands(game, ['take locket', 'cast bless', 'cast bless on priest'])
 
     expect(game.state.getStoryFlag(FLAG_PRIEST_BLESSED)).toBe(true)
