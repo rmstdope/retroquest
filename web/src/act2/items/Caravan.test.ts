@@ -22,6 +22,7 @@ describe('examining the rescued caravan', () => {
       (i) => i.name === 'caravan',
     )
 
+    expect(caravan).toBeDefined()
     expect(caravan?.description).not.toContain('around their damaged wagon')
   })
 })

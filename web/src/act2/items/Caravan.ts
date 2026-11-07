@@ -8,7 +8,7 @@ export class Caravan extends Item {
       name: 'caravan',
       shortName: 'caravan',
       description:
-        'The rescued merchant caravan, battered but alive. Several merchants ' +
+        'The rescued merchants, battered and footsore. Several of them ' +
         'huddle beside the goods they carried up, grateful to be alive. Their ' +
         'faces show relief mixed with exhaustion from their ordeal in the ' +
         'ravine. Crates of goods are scattered around, some damaged but ' +
@@ -56,8 +56,8 @@ export class Caravan extends Item {
       'wagon is still at the bottom of the ravine, on its side; what they own ' +
       'now is what they carried up the rope. Several merchants tend to minor ' +
       'injuries while sorting through those goods. You see spice containers, ' +
-      'bolts of fine cloth, and various ' +
-      'trade items. The merchants look at you with deep gratitude—you clearly ' +
+      'bolts of fine cloth, and various trade items. ' +
+      'The merchants look at you with deep gratitude—you clearly ' +
       'saved their lives.'
     )
   }
