@@ -232,4 +232,18 @@ describe('Echoes of the Hidden Bond quest', () => {
     expect(html.match(/<li class="lq-check-pending">/g)).toHaveLength(3)
     expect(html).not.toContain('lq-check-done')
   })
+  it('redraws the clue text of an older save as a checklist', () => {
+    game.state.setStoryFlag(FLAG_ACT3_SEA_SEALED_LETTER_READ, true)
+    quest.description =
+      '[dim]Your parents made the three relics.[/dim]\n\n' +
+      '✓ In the Sunken Ruins: a letter.\n' +
+      '[dim]○ On the mountain: something they left on Mount Ember.[/dim]'
+
+    quest.refreshSavedText(game.state)
+
+    const html = questTextHtml(quest.description)
+    expect(html.match(/<li class="lq-check-done">/g)).toHaveLength(1)
+    expect(html.match(/<li class="lq-check-pending">/g)).toHaveLength(2)
+    expect(quest.description).not.toContain('○')
+  })
 })
