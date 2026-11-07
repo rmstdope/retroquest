@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import { useGameStore } from '@/stores/useGameStore'
+import { useNarrationStore } from '@/stores/useNarrationStore'
 import { displayName } from '@/lantern/displayName'
 import { exitArrow } from '@/lantern/exitArrow'
 
@@ -11,6 +12,7 @@ import { exitArrow } from '@/lantern/exitArrow'
  */
 const emit = defineEmits<{ open: [mode: 'actions' | 'type'] }>()
 const game = useGameStore()
+const narration = useNarrationStore()
 const openButton = ref<HTMLButtonElement | null>(null)
 
 const COMPASS = new Set(['north', 'south', 'east', 'west', 'up', 'down'])
@@ -28,9 +30,14 @@ function go(direction: string): void {
   if (game.acceptInput) game.submitCommand(`go ${direction}`)
 }
 
+/** Hint is dimmed (aria-disabled, so it keeps focus) while the game takes no move or a turn is being read aloud. */
+const hintBusy = computed<boolean>(
+  () => !game.acceptInput || narration.isNarrating,
+)
+
 /** Press Hint: send the existing `hint` command. */
 function hint(): void {
-  if (game.acceptInput) game.submitCommand('hint')
+  if (!hintBusy.value) game.submitCommand('hint')
 }
 
 /** Put keyboard focus on the Actions button (after the panel folds). */
@@ -89,7 +96,8 @@ defineExpose({ focus })
       type="button"
       class="lq-dock-hint"
       aria-label="Hint"
-      :disabled="!game.acceptInput"
+      :aria-disabled="hintBusy"
+      :class="{ 'lq-busy': hintBusy }"
       @click="hint"
     >
       💡 Hint
@@ -155,7 +163,7 @@ defineExpose({ focus })
   font-size: 14px;
   cursor: pointer;
 }
-.lq-dock-hint:disabled {
+.lq-dock-hint.lq-busy {
   opacity: 0.5;
   cursor: not-allowed;
 }
