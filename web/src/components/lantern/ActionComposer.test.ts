@@ -1557,4 +1557,99 @@ describe('ActionComposer on the stage', () => {
     expect(w.find('.lq-seg').exists()).toBe(true)
     expect(w.find('[data-type]').exists()).toBe(false)
   })
+
+  describe('Hint button', () => {
+    function hint(w: VueWrapper) {
+      return w.get('button.lq-hint')
+    }
+
+    it('is the last control of the stage action row, after ⌨ Type', () => {
+      const w = mount(ActionComposer, { props: { stage: true } })
+      const last = w.findAll('.lq-verbs > button').at(-1)
+
+      expect(last?.classes()).toContain('lq-hint')
+      expect(hint(w).text()).toBe('💡 Hint')
+      expect(hint(w).attributes('aria-label')).toBe('Hint')
+      expect(hint(w).attributes('type')).toBe('button')
+    })
+
+    it('sends the existing hint command, once per press', async () => {
+      const w = mount(ActionComposer, { props: { stage: true } })
+
+      await hint(w).trigger('click')
+      await hint(w).trigger('click')
+
+      expect(submit.mock.calls).toEqual([['hint'], ['hint']])
+    })
+
+    it('leaves a half-built action as it was', async () => {
+      const w = mount(ActionComposer, { props: { stage: true } })
+      await w.get('[data-verb="take"]').trigger('click')
+
+      await hint(w).trigger('click')
+
+      expect(w.get('[data-verb="take"]').classes()).toContain('lq-verb-on')
+      expect(submit).toHaveBeenCalledTimes(1)
+      expect(submit).toHaveBeenCalledWith('hint')
+    })
+
+    it('is the last control of the stage typing row, after Do it, and keeps typed text', async () => {
+      useSettingsStore().startMode = 'type'
+      const w = mount(ActionComposer, { props: { stage: true } })
+      await w.get('input[aria-label="Command"]').setValue('look at bu')
+
+      await hint(w).trigger('click')
+
+      expect(w.findAll('.lq-type-row > button').at(-1)?.classes()).toContain(
+        'lq-hint',
+      )
+      expect(
+        (w.get('input[aria-label="Command"]').element as HTMLInputElement)
+          .value,
+      ).toBe('look at bu')
+      expect(submit.mock.calls).toEqual([['hint']])
+    })
+
+    it.each(['actions', 'type'] as const)(
+      'sits just before the fold button on the phone sheet in %s mode',
+      (mode) => {
+        useSettingsStore().startMode = mode
+        const w = mount(ActionComposer, { props: { foldable: true } })
+        const top = w.get('.lq-composer-top')
+
+        expect(
+          hint(top as unknown as VueWrapper).element.nextElementSibling,
+        ).toBe(top.get('.lq-fold').element)
+        expect(w.findAll('button.lq-hint')).toHaveLength(1)
+      },
+    )
+
+    it('is dimmed and cannot be pressed while the game is busy', async () => {
+      const w = mount(ActionComposer, { props: { stage: true } })
+      useGameStore().acceptInput = false
+      await w.vm.$nextTick()
+
+      expect(hint(w).attributes()).toHaveProperty('disabled')
+      await hint(w).trigger('click')
+      expect(submit).not.toHaveBeenCalled()
+
+      useGameStore().acceptInput = true
+      await w.vm.$nextTick()
+      expect(hint(w).attributes()).not.toHaveProperty('disabled')
+    })
+
+    it('keeps focus on Hint after the press', async () => {
+      const w = mount(ActionComposer, {
+        props: { stage: true },
+        attachTo: document.body,
+      })
+      ;(hint(w).element as HTMLButtonElement).focus()
+
+      await hint(w).trigger('click')
+      await w.vm.$nextTick()
+
+      expect(document.activeElement).toBe(hint(w).element)
+      w.unmount()
+    })
+  })
 })

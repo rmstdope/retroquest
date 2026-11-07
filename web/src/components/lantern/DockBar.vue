@@ -28,6 +28,11 @@ function go(direction: string): void {
   if (game.acceptInput) game.submitCommand(`go ${direction}`)
 }
 
+/** Press Hint: send the existing `hint` command. */
+function hint(): void {
+  if (game.acceptInput) game.submitCommand('hint')
+}
+
 /** Put keyboard focus on the Actions button (after the panel folds). */
 function focus(): void {
   openButton.value?.focus()
@@ -80,6 +85,15 @@ defineExpose({ focus })
         <path d="M6 10h.01M10 10h.01M14 10h.01M18 10h.01M7 14h10" />
       </svg>
     </button>
+    <button
+      type="button"
+      class="lq-dock-hint"
+      aria-label="Hint"
+      :disabled="!game.acceptInput"
+      @click="hint"
+    >
+      💡 Hint
+    </button>
   </section>
 </template>
 
@@ -127,6 +141,23 @@ defineExpose({ focus })
   border: 1px solid var(--lq-line2);
   background: transparent;
   color: var(--lq-fg);
+}
+.lq-dock-hint {
+  flex: 0 0 auto;
+  height: 44px;
+  padding: 0 12px;
+  white-space: nowrap;
+  border: 1px solid var(--lq-line2);
+  border-radius: 10px;
+  background: transparent;
+  color: var(--lq-fg);
+  font: inherit;
+  font-size: 14px;
+  cursor: pointer;
+}
+.lq-dock-hint:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 .lq-dock-open {
   /* Never squeezed: the exits scroll sideways instead. */
