@@ -3,6 +3,7 @@ import { Game, findMarkupProblems } from '@/engine'
 import { parseTurn } from '@/lantern/parseTurn'
 import { Act2 } from '../Act2'
 import { Coins } from '../items/Coins'
+import { RoomKey } from '../items/RoomKey'
 import { InnkeeperMarcus } from './InnkeeperMarcus'
 import { BarmaidElena } from './BarmaidElena'
 import {
@@ -521,5 +522,76 @@ describe('Innkeeper Marcus after greater heal (rq-7ci2)', () => {
     const later = game.commandParser.parse('talk to innkeeper marcus')
     expect(later).not.toContain(COLOUR)
     expect(later).not.toContain("She says she's only tired.")
+  })
+})
+
+describe('Innkeeper Marcus restored from a save made before rq-7ci2', () => {
+  /** Marcus in `game`'s inn. */
+  function marcusOf(game: Game): InnkeeperMarcus {
+    const marcus =
+      game.state.allRooms.SilverStagInn.getCharacterByName('innkeeper marcus')
+    if (!(marcus instanceof InnkeeperMarcus)) throw new Error('no marcus')
+    return marcus
+  }
+
+  /**
+   * A save of a game where the key was bought before the fix: the key is
+   * back in his wares, as the old code left it, and his one-off fields are
+   * missing. `openDoor` uses the key on the door first.
+   */
+  function oldSaveWithKeyBought(openDoor: boolean): Game {
+    const game = new Game([new Act2()])
+    game.state.currentRoom = game.state.allRooms.SilverStagInn
+    game.state.setStoryFlag(FLAG_KNOWS_ELENA_CURSE, true)
+    for (let i = 0; i < 20; i++) game.state.addItemToInventory(new Coins())
+    game.commandParser.parse('buy room key from innkeeper marcus')
+    if (openDoor) game.commandParser.parse('use room key with door')
+    const marcus = marcusOf(game)
+    marcus.wares['room key'] = { item: new RoomKey(), price: 10 }
+    Reflect.deleteProperty(marcus, 'pleaSpoken')
+    Reflect.deleteProperty(marcus, 'healRemarkSpoken')
+    const loaded = new Game([new Act2()])
+    expect(loaded.loadSaveData(game.toSaveData())).toContain('loaded')
+    return loaded
+  }
+
+  it.each([false, true])(
+    'no longer names the price of the key, door opened: %s',
+    (openDoor) => {
+      const game = oldSaveWithKeyBought(openDoor)
+
+      const answer = game.commandParser.parse('talk to innkeeper marcus')
+      expect(answer).not.toContain("room key[/item_name]'s ten")
+      expect(Object.keys(marcusOf(game).wares)).toEqual([])
+    },
+  )
+
+  it('refuses a second key once the first has opened the door', () => {
+    const game = oldSaveWithKeyBought(true)
+
+    expect(
+      game.commandParser.parse('buy room key from innkeeper marcus'),
+    ).toContain('The room upstairs is yours already.')
+    expect(game.state.getItemCount('coins')).toBe(10)
+  })
+
+  it('refuses a second key while the first is held, whatever the purse', () => {
+    const game = oldSaveWithKeyBought(false)
+    game.state.removeItemFromInventory('coins', 10)
+
+    expect(
+      game.commandParser.parse('buy room key from innkeeper marcus'),
+    ).toContain("You've a [item_name]room key[/item_name] already.")
+  })
+
+  it('makes the plea once although the save has no record of it', () => {
+    const game = oldSaveWithKeyBought(false)
+
+    expect(game.commandParser.parse('talk to innkeeper marcus')).toContain(
+      "You've spoken with",
+    )
+    expect(game.commandParser.parse('talk to innkeeper marcus')).not.toContain(
+      "You've spoken with",
+    )
   })
 })

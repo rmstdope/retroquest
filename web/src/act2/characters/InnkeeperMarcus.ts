@@ -2,6 +2,7 @@ import {
   Character,
   type GameState,
   type Item,
+  type Room,
   characterName,
   clue,
   remembered,
@@ -179,6 +180,7 @@ export class InnkeeperMarcus extends Character {
     }
 
     // His prices, spoken in the same bubble as his opening line
+    this.forgetSoldKey(gameState)
     const waresInfo = priceSentence(this.wares)
 
     // Cycle through dialogue options
@@ -236,6 +238,21 @@ export class InnkeeperMarcus extends Character {
   }
 
   /**
+   * Drop the room key from his wares once it is sold: held by the guest, or
+   * used on the inn's door. A save made before the sale took the key off his
+   * wares still has it there, and this tidies it on the next talk or buy.
+   */
+  private forgetSoldKey(gameState: GameState): void {
+    if (!(ROOM_KEY in this.wares)) return
+    const held = gameState.inventory.some(
+      (item) => item instanceof RoomKey && item.canBeCarried,
+    )
+    const inn: Room | undefined = gameState.allRooms.SilverStagInn
+    const doorOpened = inn !== undefined && 'east' in inn.exits
+    if (held || doorOpened) delete this.wares[ROOM_KEY]
+  }
+
+  /**
    * His answer to a second room key: the key is still in hand, or the room
    * it opened is the guest's already.
    */
@@ -257,6 +274,7 @@ export class InnkeeperMarcus extends Character {
    * wares, so a second one is refused whether or not the first is still held.
    */
   override buyItem(gameState: GameState, itemName: string): string {
+    this.forgetSoldKey(gameState)
     const itemNameToBuy = itemName.toLowerCase()
     const seller = this.name
 
@@ -281,17 +299,6 @@ export class InnkeeperMarcus extends Character {
     // Check if player has enough coins
     if (totalCoins < price) {
       return clue("You don't have enough coins for that.")
-    }
-
-    // Check if already have the item in inventory (not counting display items in room)
-    const inventory = gameState.inventory
-    if (
-      inventory.some(
-        (item) =>
-          item.name.toLowerCase() === itemNameToBuy && item.canBeCarried,
-      )
-    ) {
-      return this.secondKeyRefusal(gameState)
     }
 
     // Purchase the item - spend coins using the batching system
