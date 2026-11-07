@@ -6,6 +6,7 @@ import DockBar from './DockBar.vue'
 import { useGameStore } from '@/stores/useGameStore'
 import { useNarrationStore } from '@/stores/useNarrationStore'
 import { useSettingsStore } from '@/stores/useSettingsStore'
+import { useArrivalStore } from '@/stores/useArrivalStore'
 
 describe('DockBar', () => {
   let submit: ReturnType<typeof vi.fn<(command: string) => void>>
@@ -130,5 +131,61 @@ describe('DockBar', () => {
     narration.skipAll()
     await w.vm.$nextTick()
     expect(hint.attributes('aria-disabled')).toBe('false')
+  })
+
+  it('offers Hint during a narrated arrival, and a press ends it and sends hint', async () => {
+    useSettingsStore().narrationOn = true
+    const narration = useNarrationStore()
+    narration.setAudioFactory(() => ({
+      volume: 1,
+      currentTime: 0,
+      onended: null,
+      onerror: null,
+      play: () => Promise.resolve(),
+      pause: () => {},
+    }))
+    const w = mount(DockBar)
+    narration.begin(
+      1,
+      [
+        {
+          kind: 'block',
+          parts: [
+            {
+              markup: 'a b',
+              clip: {
+                file: 'x.mp3',
+                speaker: 'narrator',
+                duration: 2,
+                words: [],
+              },
+            },
+          ],
+        },
+      ],
+      'act1',
+    )
+    const arrival = useArrivalStore()
+    arrival.show(
+      1,
+      [
+        {
+          kind: 'description',
+          lines: [{ unit: 0, markup: 'a b' }],
+          voiced: true,
+        },
+      ],
+      true,
+    )
+    await w.vm.$nextTick()
+    expect(narration.isNarrating).toBe(true)
+    expect(arrival.active).toBe(true)
+    const hint = w.get('button.lq-dock-hint')
+
+    expect(hint.attributes('aria-disabled')).toBe('false')
+    await hint.trigger('click')
+    expect(arrival.active).toBe(false)
+    expect(narration.isNarrating).toBe(false)
+    expect(submit).toHaveBeenCalledWith('hint')
   })
 })
