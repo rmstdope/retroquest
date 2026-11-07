@@ -175,11 +175,10 @@ export class SpectralLibrarian extends Character {
     gameState.setStoryFlag(FLAG_LIBRARIAN_NOTICED_AMULET, true)
     gameState.setStoryFlag(FLAG_LIBRARIAN_CONFESSED, true)
     return (
-      'The ' +
+      AMULET_GLOW +
+      ' The ' +
       characterName(this.name) +
-      "'s eyes go to the " +
-      itemName(AMULET_NAME) +
-      '.\n\n' +
+      "'s eyes go to it.\n\n" +
       dialogue(this.name, `${GLANCE_WORDS} ${CONFESSION_WORDS}`) +
       '\n\n' +
       line
