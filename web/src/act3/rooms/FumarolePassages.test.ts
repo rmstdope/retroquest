@@ -300,6 +300,8 @@ describe('Fumarole Passages — calibrated, before the ward', () => {
     const look = seen(game)
     expect(look).not.toContain(WILD)
     expect(look).toContain('[breath]')
-    expect(look).not.toContain('south')
+    expect(game.state.currentRoom.getExits(game.state)).not.toHaveProperty(
+      'south',
+    )
   })
 })

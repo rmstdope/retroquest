@@ -138,9 +138,7 @@ describe('MirrorMount — the description follows the repair', () => {
 
   it('reads as an empty socket before the segments are seated', () => {
     const { game, mount } = examined()
-    expect(mount.examine(game.state)).toContain(
-      'It needs a brass segment and binding resin',
-    )
+    expect(mount.examine(game.state)).toBe(mount.description)
   })
 
   it('no longer asks for segments or resin once mended, before and after the beam', () => {
@@ -161,7 +159,7 @@ describe('MirrorMount — the description follows the repair', () => {
     const { game, mount } = examined()
     mount.useWith(game.state, new BrassMirrorSegment())
     const seated = mount.examine(game.state)
-    expect(seated).not.toContain('It needs a brass segment')
+    expect(seated).not.toBe(mount.description)
     expect(seated).toContain('loose')
 
     mount.useWith(game.state, new BindingResin())

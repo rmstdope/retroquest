@@ -103,15 +103,32 @@ describe('Collapsed Galleries', () => {
 })
 
 describe('Collapsed Galleries — after the rescue', () => {
-  it('no longer reads as choked with stone once the miners are free', () => {
+  it('reads as cleared once the wedge brings the pile down, before and after the talk', () => {
     const room = new CollapsedGalleries()
-    const gs = dummyState(room)
+    const gs = new GameState(room, { room }, [])
+    const rock = room.items[0]
     expect(room.descriptionFor(gs)).toContain('choked with fallen stone')
 
+    gs.addItemToInventory(new ReinforcedBraces())
+    gs.addItemToInventory(new SupportStraps())
+    gs.addItemToInventory(new WedgeBlocks())
+    rock.examine(gs)
+    rock.useWith(gs, new ReinforcedBraces())
+    rock.useWith(gs, new SupportStraps())
+    rock.useWith(gs, new WedgeBlocks())
+    const cleared = room.descriptionFor(gs)
+    expect(cleared).not.toContain('choked')
+    expect(cleared).toContain('open end to end')
+    expect(room.describe(gs)).toContain(cleared)
+
+    room.characters.find((c) => c instanceof Miners)!.talkTo(gs)
+    expect(room.descriptionFor(gs)).toBe(cleared)
+  })
+
+  it('reads as cleared for a save whose rescue is done though the rock is still listed', () => {
+    const room = new CollapsedGalleries()
+    const gs = dummyState(room)
     gs.setStoryFlag(FLAG_ACT3_MINERS_RESCUE_COMPLETED, true)
-    const after = room.descriptionFor(gs)
-    expect(after).not.toContain('choked')
-    expect(after).toContain('miners')
-    expect(room.describe(gs)).toContain(after)
+    expect(room.descriptionFor(gs)).not.toContain('choked')
   })
 })

@@ -1775,6 +1775,11 @@
     "text": "Still here, Elior? Beams are going in. The way east to the Echo Chambers is sound. Go when you're ready."
   },
   {
+    "id": "0d679bea14c6cf",
+    "speaker": "narrator",
+    "text": "The fallen stone is heaped along the walls now, and the gallery runs open end to end. The old timbers lie snapped among it."
+  },
+  {
     "id": "02ef658f8e4205",
     "speaker": "narrator",
     "text": "You stabilized the collapse and led the miners to safety. The route to the inner caverns is now open."
@@ -1803,11 +1808,6 @@
     "id": "0afbe6c86735d6",
     "speaker": "narrator",
     "text": "Tobin does not look up. His thumb traces the crack in the lamp's glass, back and forth."
-  },
-  {
-    "id": "1e7b31061250aa",
-    "speaker": "narrator",
-    "text": "The fallen stone is heaped along the walls now, and the gallery runs open end to end. The miners are setting fresh timbers where the old ones snapped."
   },
   {
     "id": "143283441007a0",
