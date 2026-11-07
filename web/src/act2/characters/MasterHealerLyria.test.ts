@@ -294,7 +294,7 @@ const DIAGNOSIS_STAGE =
 const DIAGNOSIS_START = "You've been to the Silver Stag. Marcus's girl, Elena."
 const DIAGNOSIS_MIDDLE =
   'First she must be made strong, or what comes after will kill her; that ' +
-  'wants a deeper healing than I can give alone. Then the mark must be ' +
+  'wants a deeper healing than I can give alone. Then the curse must be ' +
   'washed in untouched water, from a spring no bucket has ever gone down. ' +
   'You will find none in this city; every well here has the grey in it. ' +
   'And last, the thing must be ' +
@@ -302,7 +302,7 @@ const DIAGNOSIS_MIDDLE =
 const DIAGNOSIS_END =
   'the kind the scholars wrote down before any of us were born.'
 const DIAGNOSIS_LETTER =
-  'I wrote to the healer at Willowbrook about that mark, weeks ago. Mira. ' +
+  'I wrote to the healer at Willowbrook about her curse, weeks ago. Mira. ' +
   'The best hand with a curse this side of the hills, they say. She never ' +
   'came, and she never answered.'
 const REMINDER =
@@ -338,6 +338,16 @@ describe("Lyria explains how Elena's curse is lifted (rq-nun)", () => {
     )
     expect(answer.indexOf(DIAGNOSIS_LETTER)).toBeLessThan(answer.indexOf(USUAL))
     expectLyriaSpeaks(answer)
+  })
+
+  it('never speaks of a mark, which lies hidden under the curse until the greater heal (rq-lgwt)', () => {
+    const game = createGame()
+    game.state.setStoryFlag(FLAG_KNOWS_ELENA_CURSE, true)
+    const lyria = new MasterHealerLyria()
+    const diagnosis = lyria.talkTo(game.state)
+    const reminder = lyria.talkTo(game.state)
+    expect(diagnosis).not.toMatch(/\bmark\b/)
+    expect(reminder).not.toMatch(/\bmark\b/)
   })
 
   it('names Mira and her unanswered letter only in the diagnosis, never in the reminder', () => {

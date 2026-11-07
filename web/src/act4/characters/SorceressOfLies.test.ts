@@ -259,7 +259,7 @@ describe('The Sorceress of Lies', () => {
     expect(said).not.toContain('gone hunting')
     expect(said).not.toContain('!')
     expect(said).toContain(
-      'And I watched the inn door, to see who would come for a mark like that. The healer from Willowbrook never did. I should have known then what that meant.',
+      "So I cursed her, and hid my mask under the curse, where only a healer's light would find it. And I watched the inn door, to see whose light would come for it. The healer from Willowbrook never did. I should have known then what that meant.",
     )
     expect(said.indexOf('The healer from Willowbrook never did.')).toBeLessThan(
       second,

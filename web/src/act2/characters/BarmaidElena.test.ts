@@ -26,7 +26,8 @@ const STAGE_LINE =
   '[character_name]Elena[/character_name] sees you looking at her wrist and ' +
   'tugs her sleeve down over the silver mark.'
 const ELENA_SPEECH =
-  'It came the same night as the curse. Since then I dream of a smiling ' +
+  'I felt it come, the same night as the curse, though nothing showed ' +
+  'until now. Since then I dream of a smiling ' +
   'face with no eyes, and it never says a true word.'
 const HEALED_STAGE =
   '[character_name]Elena[/character_name] turns her hand over and looks at it as if it belonged to someone else.'

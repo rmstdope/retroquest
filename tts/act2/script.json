@@ -1505,9 +1505,9 @@
     "text": "Lyria looks up from her mortar, and something in your face makes her set the pestle down."
   },
   {
-    "id": "16c4d40dbaa8bf",
+    "id": "0f36e81af9ac01",
     "speaker": "master healer lyria",
-    "text": "You've been to the Silver Stag. Marcus's girl, Elena. I have sat by her bed myself, and I could do nothing for her. Listen, then, because this is how a curse like hers is lifted, if it can be lifted at all. First she must be made strong, or what comes after will kill her; that wants a deeper healing than I can give alone. Then the mark must be washed in untouched water, from a spring no bucket has ever gone down. You will find none in this city; every well here has the grey in it. And last, the thing must be unbound. Not broken: unbound, with the old kind of unbinding, the kind the scholars wrote down before any of us were born."
+    "text": "You've been to the Silver Stag. Marcus's girl, Elena. I have sat by her bed myself, and I could do nothing for her. Listen, then, because this is how a curse like hers is lifted, if it can be lifted at all. First she must be made strong, or what comes after will kill her; that wants a deeper healing than I can give alone. Then the curse must be washed in untouched water, from a spring no bucket has ever gone down. You will find none in this city; every well here has the grey in it. And last, the thing must be unbound. Not broken: unbound, with the old kind of unbinding, the kind the scholars wrote down before any of us were born."
   },
   {
     "id": "1eca6f4ba9ff79",
@@ -1515,9 +1515,9 @@
     "text": "She picks the pestle up again and sets it down."
   },
   {
-    "id": "12698c7dcfdc1f",
+    "id": "1ddbf3f5640224",
     "speaker": "master healer lyria",
-    "text": "I wrote to the healer at Willowbrook about that mark, weeks ago. Mira. The best hand with a curse this side of the hills, they say. She never came, and she never answered."
+    "text": "I wrote to the healer at Willowbrook about her curse, weeks ago. Mira. The best hand with a curse this side of the hills, they say. She never came, and she never answered."
   },
   {
     "id": "12fe89b02fa334",
@@ -2595,9 +2595,9 @@
     "text": "Elena sees you looking at her wrist and tugs her sleeve down over the silver mark."
   },
   {
-    "id": "06084cc20f14d1",
+    "id": "0b3f71c7adea8d",
     "speaker": "barmaid elena",
-    "text": "It came the same night as the curse. Since then I dream of a smiling face with no eyes, and it never says a true word."
+    "text": "I felt it come, the same night as the curse, though nothing showed until now. Since then I dream of a smiling face with no eyes, and it never says a true word."
   },
   {
     "id": "1b642c0c3e476f",
@@ -2620,9 +2620,9 @@
     "text": "A young woman with a little colour back in her face. She still moves carefully, like someone waiting for the cold to come back. On the inside of her wrist, a small silver mask shows through her skin."
   },
   {
-    "id": "085f037e895a90",
+    "id": "04941bac734a26",
     "speaker": "narrator",
-    "text": "The Innkeeper's Daughter: Elena is strong enough now. Next in the order the mark is washed in untouched water, from a spring no bucket has ever gone down."
+    "text": "The Innkeeper's Daughter: Elena is strong enough now. Next in the order the curse is washed in untouched water, from a spring no bucket has ever gone down."
   },
   {
     "id": "100021e2ce50e9",
@@ -2670,9 +2670,9 @@
     "text": "On her wrist the silver mask goes on smiling a moment longer, then fades like breath on a cold window, and is gone."
   },
   {
-    "id": "082a1defa8d323",
+    "id": "1e1b6fea61d74f",
     "speaker": "narrator",
-    "text": "You made Elena strong with greater heal, washed the mark in water from the nymphs' spring, and unbound the curse with the Wardens' dispel. The silver mask on her wrist faded, and she is warm again."
+    "text": "You made Elena strong with greater heal, washed her in water from the nymphs' spring, and unbound the curse with the Wardens' dispel. The silver mask on her wrist faded, and she is warm again."
   },
   {
     "id": "0771845e9ccac6",

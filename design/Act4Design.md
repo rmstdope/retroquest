@@ -150,9 +150,9 @@ rule that all side quests must be completed before the main quest can be finishe
     -   **Rewards:** Sorceress's Truth, the secret passage to the Memory
         Vault
     -   **Who she is:** **The mark on Elena's curse in Greendale (Act II)** was the silver mask
-        she set on Elena's wrist. The same smiling mask crowns the Sorceress's staff. She cursed
+        she hid on Elena's wrist, under the curse, where only a healer's light would find it. The same smiling mask crowns the Sorceress's staff. She cursed
         Elena on Malakar's orders to draw healers away from the king, and as bait: she watched the
-        inn door to see which healer would come for a mark like that, and the healer from Willowbrook
+        inn door to see whose light would come for it, and the healer from Willowbrook
         never did ("I should have known then what that meant"). She is lonely because
         no one has ever spoken to her without a lie. Her own lie to Elior, that his parents sold
         him to save themselves, is her story, not his: `hearts_truth` hears the girl sold for a

@@ -46,7 +46,16 @@ describe("The Innkeeper's Daughter log", () => {
     const game = playedTo('use crystal-clear water with barmaid elena')
     const quest = game.state.getQuest(QUEST_INNKEEPERS_DAUGHTER)
     expect(quest?.description).toContain('silver mask')
-    expect(hint(game)).toContain('untouched water')
+    expect(hint(game)).toContain('the curse is washed in untouched water')
+  })
+
+  it('speaks of washing Elena and her curse as Lyria does, not the mark (rq-lgwt)', () => {
+    const game = new Game([new Act2()])
+    const quest = game.state.getQuest(QUEST_INNKEEPERS_DAUGHTER)
+    expect(quest?.completion).toContain(
+      "washed her in water from the nymphs' spring",
+    )
+    expect(quest?.completion).not.toContain('washed the mark')
   })
 
   it('moves on to the unbinding after the water', () => {

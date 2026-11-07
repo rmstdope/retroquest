@@ -82,7 +82,8 @@ export class BarmaidElena extends Character {
         '\n\n' +
         dialogue(
           this.name,
-          'It came the same night as the curse. Since then I dream of a ' +
+          'I felt it come, the same night as the curse, though nothing ' +
+            'showed until now. Since then I dream of a ' +
             'smiling face with no eyes, and it never says a true word.',
         ) +
         '\n\n' +

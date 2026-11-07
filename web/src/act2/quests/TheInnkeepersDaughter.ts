@@ -45,7 +45,7 @@ const NEXT_STRENGTH =
 
 /** The hint once she is strong, before the water. */
 const NEXT_WATER =
-  'Elena is strong enough now. Next in the order the mark is washed in ' +
+  'Elena is strong enough now. Next in the order the curse is washed in ' +
   'untouched water, from a spring no bucket has ever gone down.'
 
 /** The hint once she is washed, before the unbinding. */
@@ -55,7 +55,7 @@ const NEXT_UNBINDING =
 
 /** What the log says once the curse is unbound. */
 export const INNKEEPERS_DAUGHTER_COMPLETION =
-  'You made Elena strong with greater heal, washed the mark in water from ' +
+  'You made Elena strong with greater heal, washed her in water from ' +
   "the nymphs' spring, and unbound the curse with the Wardens' dispel. The " +
   'silver mask on her wrist faded, and she is warm again.'
 

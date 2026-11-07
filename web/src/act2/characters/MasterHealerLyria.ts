@@ -79,7 +79,7 @@ export class MasterHealerLyria extends Character {
             'because this is how a curse like hers is lifted, if it can be ' +
             'lifted at all. First she must be made strong, or what comes ' +
             'after will kill her; that wants a deeper healing than I can ' +
-            'give alone. Then the mark must be washed in untouched water, ' +
+            'give alone. Then the curse must be washed in untouched water, ' +
             'from a spring no bucket has ever gone down. You will find none ' +
             'in this city; every well here has the grey in it. And last, the ' +
             'thing must be unbound. Not ' +
@@ -91,7 +91,7 @@ export class MasterHealerLyria extends Character {
         '\n\n' +
         dialogue(
           this.name,
-          'I wrote to the healer at Willowbrook about that mark, weeks ago. ' +
+          'I wrote to the healer at Willowbrook about her curse, weeks ago. ' +
             'Mira. The best hand with a curse this side of the hills, they ' +
             'say. She never came, and she never answered.',
         ) +
