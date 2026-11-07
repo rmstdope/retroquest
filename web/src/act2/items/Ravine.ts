@@ -1,4 +1,5 @@
 import { Item, type GameState } from '@/engine'
+import { FLAG_FOUND_LOST_CARAVAN } from '../Act2StoryFlags'
 import { QualityRope } from './QualityRope'
 
 /** A steep ravine discovered through nature sense or forest speech. This geographic feature cannot be carried. */
@@ -13,7 +14,19 @@ export class Ravine extends Item {
     })
   }
 
-  override examine(_gameState: GameState): string {
+  /**
+   * Before the rescue the caravan's people are heard calling from the bottom;
+   * once the rope has brought them up, the ravine is quiet and only the
+   * wagon is left down there.
+   */
+  override examine(gameState: GameState): string {
+    if (gameState.getStoryFlag(FLAG_FOUND_LOST_CARAVAN)) {
+      return (
+        'The ravine is quiet now. At the bottom the wagon lies on its side ' +
+        'among the rocks, cracked and empty, and your rope still hangs down ' +
+        'the wall beside it.'
+      )
+    }
     return (
       'Looking down into the ravine, you can see the remnants of a merchant caravan ' +
       'trapped at the bottom. The wooden wagon wheels are visible among the rocks, ' +

@@ -2470,9 +2470,14 @@
     "text": "You found Thorne's caravan at the bottom of a ravine and brought his people out on a rope. In thanks he gave you papers sent from Heavensforth, meant for a knight's hands."
   },
   {
-    "id": "08308c03d5c9ae",
+    "id": "1b0ea17e4d8536",
     "speaker": "narrator",
-    "text": "The merchant caravan is in rough shape but the people are safe. The wagon's wheels are cracked and the canvas cover is torn, but the structure is sound. Several merchants tend to minor injuries while sorting through their goods. You see spice containers, bolts of fine cloth, and various trade items. The merchants look at you with deep gratitude—you clearly saved their lives."
+    "text": "The ravine is quiet now. At the bottom the wagon lies on its side among the rocks, cracked and empty, and your rope still hangs down the wall beside it."
+  },
+  {
+    "id": "18212769e0a840",
+    "speaker": "narrator",
+    "text": "The merchant caravan is in rough shape but the people are safe. The wagon is still at the bottom of the ravine, on its side; what they own now is what they carried up the rope. Several merchants tend to minor injuries while sorting through those goods. You see spice containers, bolts of fine cloth, and various trade items. The merchants look at you with deep gratitude—you clearly saved their lives."
   },
   {
     "id": "0f85dffe7dcf62",
