@@ -49,7 +49,11 @@ export class SubmergedAntechamber extends Room {
     return this.description
   }
 
-  /** Search the antechamber for subtle traces and hidden marks. */
+  /**
+   * Search the antechamber: flooded before the sigils, the brackets revealed
+   * on the first search, then how many of them hold a lantern, and the
+   * burning lanterns once they are lit.
+   */
   override search(gameState: GameState): string {
     if (!gameState.getStoryFlag(FLAG_ACT3_TIDEWARD_SIGILS_COMPLETED)) {
       return (
@@ -77,6 +81,29 @@ export class SubmergedAntechamber extends Room {
         'You wade through chilled water. As you peer into the niches, ' +
         'three carved brackets become apparent; their grooves catch the ' +
         'faint tide-light.'
+      )
+    }
+    const mounted = this.items.filter(
+      (b) => b instanceof LanternBracket && b.hasLantern,
+    ).length
+    if (mounted === 1) {
+      return (
+        'You wade through chilled water. A prism lantern sits in one ' +
+        'bracket; the other two stand empty, their grooves catching the ' +
+        'faint tide-light.'
+      )
+    }
+    if (mounted === 2) {
+      return (
+        'You wade through chilled water. Prism lanterns sit in two of the ' +
+        'brackets; the third stands empty, its grooves catching the faint ' +
+        'tide-light.'
+      )
+    }
+    if (mounted >= 3) {
+      return (
+        'You wade through chilled water. All three brackets hold prism ' +
+        'lanterns, still unlit.'
       )
     }
     return (
