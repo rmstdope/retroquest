@@ -110,5 +110,16 @@
     "commands": [
       "say refrain to cedric"
     ]
+  },
+  {
+    "after": 33,
+    "unset": ["act3_sea_sealed_letter_read"],
+    "commands": ["talk to mira"]
+  },
+  {
+    "after": 33,
+    "unset": ["act3_sea_sealed_letter_read"],
+    "without": ["sea-sealed letter"],
+    "commands": ["talk to mira"]
   }
 ]
