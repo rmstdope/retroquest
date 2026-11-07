@@ -340,7 +340,10 @@ Welcome to
     return `Act ${this.currentAct + 1}`
   }
 
-  /** Completion tokens for the commands possible right now. */
+  /**
+   * Completion tokens for the commands possible right now: the open exits by
+   * name, and the four direction letters always.
+   */
   getCommandCompletions(): CompletionTree {
     const room = this.state.currentRoom
     const names = (items: Item[]): string[] => [
@@ -357,9 +360,11 @@ Welcome to
     const exits = room.getExits(this.state)
     const exitNames = leaves(Object.keys(exits))
 
+    // A direction letter can always be sent, so Enter never trades it for a
+    // longer word (`e` for `examine`); a shut or missing way still answers.
     const directional: CompletionTree = {}
     for (const direction of CARDINAL_DIRECTIONS) {
-      if (direction in exits) directional[direction[0]] = null
+      directional[direction[0]] = null
     }
     for (const direction of CARDINAL_DIRECTIONS) {
       if (direction in exits) directional[direction] = null

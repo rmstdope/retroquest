@@ -1421,7 +1421,9 @@ describe('Game', () => {
       const tree = game.getCommandCompletions()
       expect(tree.s).toBeNull()
       expect(tree.south).toBeNull()
-      expect(tree).not.toHaveProperty('n')
+      expect(tree).not.toHaveProperty('north')
+      // The letters can always be sent, open way or not.
+      expect(tree.n).toBeNull()
       expect(tree.go).toEqual({ south: null })
       expect(tree.talk).toEqual({ to: { old: { mira: null } } })
       expect(tree.take).toEqual({ "elior's": { journal: null }, journal: null })
