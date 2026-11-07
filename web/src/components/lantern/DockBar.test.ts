@@ -64,4 +64,23 @@ describe('DockBar', () => {
     expect(document.activeElement).toBe(w.get('button.lq-dock-open').element)
     w.unmount()
   })
+
+  it('ends with a Hint button that sends hint', async () => {
+    const w = mount(DockBar)
+    const hint = w.findAll('button').at(-1)
+
+    expect(hint?.text()).toBe('💡 Hint')
+    expect(hint?.attributes('aria-label')).toBe('Hint')
+    await hint?.trigger('click')
+    expect(submit).toHaveBeenCalledWith('hint')
+  })
+
+  it('dims Hint while the game is not accepting input', async () => {
+    useGameStore().acceptInput = false
+    const w = mount(DockBar)
+
+    expect(w.get('button.lq-dock-hint').attributes()).toHaveProperty('disabled')
+    await w.get('button.lq-dock-hint').trigger('click')
+    expect(submit).not.toHaveBeenCalled()
+  })
 })

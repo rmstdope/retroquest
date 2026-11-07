@@ -258,6 +258,14 @@ watch(
   },
 )
 
+/**
+ * Press Hint: send the existing `hint` command as a typed one would go. It
+ * leaves a half-built action and typed text alone, and adds no message.
+ */
+function pressHint(): void {
+  if (game.acceptInput) game.submitCommand('hint')
+}
+
 function run(text: string): void {
   if (!game.acceptInput) return
   sentHere = true
@@ -477,6 +485,15 @@ function onTypedEnter(): void {
         </button>
       </div>
       <button
+        type="button"
+        class="lq-hint"
+        aria-label="Hint"
+        :disabled="!game.acceptInput"
+        @click="pressHint"
+      >
+        💡 Hint
+      </button>
+      <button
         v-if="foldable"
         type="button"
         class="lq-fold"
@@ -673,6 +690,16 @@ function onTypedEnter(): void {
         >
           ⌨ Type
         </button>
+        <button
+          v-if="stage"
+          type="button"
+          class="lq-hint"
+          aria-label="Hint"
+          :disabled="!game.acceptInput"
+          @click="pressHint"
+        >
+          💡 Hint
+        </button>
       </div>
     </template>
 
@@ -751,6 +778,16 @@ function onTypedEnter(): void {
       >
         {{ stage ? 'Do it ▸' : 'Do it' }}
       </button>
+      <button
+        v-if="stage"
+        type="button"
+        class="lq-hint"
+        aria-label="Hint"
+        :disabled="!game.acceptInput"
+        @click="pressHint"
+      >
+        💡 Hint
+      </button>
     </form>
   </section>
 </template>
@@ -765,6 +802,35 @@ function onTypedEnter(): void {
   border: 1px solid var(--lq-line);
   background: var(--lq-surface);
   font-family: var(--lq-font-ui);
+}
+.lq-hint {
+  flex: 0 0 auto;
+  min-height: 44px;
+  padding: 0 14px;
+  border-radius: 10px;
+  border: 1px solid var(--lq-line);
+  background: var(--lq-raised);
+  color: var(--lq-fg);
+  font: inherit;
+  font-size: 14px;
+  white-space: nowrap;
+  cursor: pointer;
+}
+/* The far right of a stage row; the phone sheet's top row puts it just left
+   of the fold button. */
+.lq-verbs .lq-hint,
+.lq-type-row .lq-hint {
+  margin-left: auto;
+}
+.lq-composer-top .lq-hint {
+  order: 1;
+  margin-left: auto;
+}
+.lq-composer-top .lq-hint + .lq-fold {
+  margin-left: 0;
+}
+.lq-on-stage .lq-type-row .lq-hint {
+  margin-left: 0;
 }
 .lq-fold {
   order: 1;
