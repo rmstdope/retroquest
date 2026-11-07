@@ -14,6 +14,7 @@ import { Coins } from '../items/Coins'
 import { NaturesCharm } from '../items/NaturesCharm'
 import {
   FLAG_CEDRIC_RECOGNISED_SIGIL,
+  FLAG_CEDRIC_PAID_FOR_SUPPLIES,
   FLAG_DEMONSTRATED_COMBAT_SKILLS,
   FLAG_SPOKEN_TO_SIR_CEDRIC,
   FLAG_CEDRIKS_HONOR_ACCEPTED,
@@ -641,6 +642,7 @@ export class SirCedric extends Character {
       // Give Elior 150 coins, one item each
       const coin = new Coins()
       gameState.addItemToInventory(coin, 150) // Add 150 of them
+      gameState.setStoryFlag(FLAG_CEDRIC_PAID_FOR_SUPPLIES, true)
 
       return (
         dialogue(

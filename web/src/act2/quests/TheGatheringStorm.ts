@@ -8,6 +8,7 @@ import {
   FLAG_CEDRIKS_HONOR_COMPLETED,
   FLAG_DEMONSTRATED_COMBAT_SKILLS,
   FLAG_SUPPLIES_QUEST_COMPLETED,
+  FLAG_CEDRIC_PAID_FOR_SUPPLIES,
   FLAG_ANCIENT_LIBRARY_COMPLETED,
   FLAG_HERMITS_WARNING_COMPLETED,
   FLAG_NYX_TRIALS_PASSED,
@@ -25,6 +26,7 @@ const STORY_ORDER = [
   FLAG_SPOKEN_TO_SIR_CEDRIC,
   FLAG_CEDRIC_RECOGNISED_SIGIL,
   FLAG_DEMONSTRATED_COMBAT_SKILLS,
+  FLAG_CEDRIC_PAID_FOR_SUPPLIES,
   FLAG_SUPPLIES_QUEST_COMPLETED,
   FLAG_ANCIENT_LIBRARY_COMPLETED,
   FLAG_RESEARCHED_FAMILY_HERITAGE,
@@ -122,9 +124,15 @@ export class TheGatheringStormQuest extends Quest {
           'you to find ' +
           NYX +
           ', deep in the Enchanted Forest, because her old wisdom may show ' +
-          'what you are truly facing. He gave you a hundred and fifty coins ' +
-          'for a survival kit, an enhanced lantern and rope from the Market ' +
-          'District.',
+          'what you are truly facing. Before you buy a survival kit, an ' +
+          'enhanced lantern and rope in the Market District, he wants to see ' +
+          'you again.',
+      ],
+      [
+        FLAG_CEDRIC_PAID_FOR_SUPPLIES,
+        SIR_CEDRIC +
+          ' gave you a hundred and fifty coins for the survival kit, the ' +
+          'lantern and the rope.',
       ],
       [
         FLAG_SUPPLIES_QUEST_COMPLETED,
