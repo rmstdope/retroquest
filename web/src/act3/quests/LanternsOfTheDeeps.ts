@@ -15,20 +15,20 @@ export class LanternsOfTheDeepsQuest extends Quest {
     super({
       name: 'Lanterns of the Deeps',
       description:
-        'Find something that will fit the carved brackets and will bear or ' +
-        'produce light when placed there. Once the mounts hold a living ' +
-        'glow, the hall may answer — the stones could yield secrets folded ' +
-        'into their seams.',
+        'Three carved brackets line the flooded antechamber, cut to hold a lantern. ' +
+        'With a light burning in each, the hall might show the way through.',
       completion:
         'The prism lanterns burn in their brackets, and their light lays a ' +
         'clear path through the flooded hall to the sanctum.',
     })
   }
 
-  /** Give an offered or finished quest from an older save the current completion text. */
+  /** Give an offered or finished quest from an older save the current log. */
   override refreshSavedText(gameState: GameState): void {
     if (gameState.nonActivatedQuests.includes(this)) return
-    this.completion = new LanternsOfTheDeepsQuest().completion
+    const fresh = new LanternsOfTheDeepsQuest()
+    this.description = fresh.description
+    this.completion = fresh.completion
   }
 
   /**

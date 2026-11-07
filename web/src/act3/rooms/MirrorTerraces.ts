@@ -31,10 +31,9 @@ const WAITING_LINE =
 const NOON_BEAM_TEXT =
   '[success]You settle on the warm stone and let the hours pass. The sun ' +
   'climbs until it stands squarely over the terraces. ' +
-  "When the sun's beams strike the great mirror they are coaxed and " +
-  'folded together until they pour from the terraces as a single, ' +
-  'piercing ray. The light lances into the mountainside, strikes a ' +
-  'hidden trigger, and a narrow passage grinds open to the east.[/success]'
+  'The great mirror catches it and throws one beam into the mountainside. ' +
+  'Something gives inside the rock, ' +
+  'and a narrow passage grinds open to the east.[/success]'
 
 /** The Mirror Terraces: stepped platforms with sockets for polished mirrors. */
 export class MirrorTerraces extends Room {

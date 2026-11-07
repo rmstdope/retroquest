@@ -21,6 +21,13 @@ describe('Act III side quest logs', () => {
     )
   })
 
+  it('Lanterns of the Deeps names the brackets and what a light in them could do', () => {
+    expect(new LanternsOfTheDeepsQuest().description).toBe(
+      'Three carved brackets line the flooded antechamber, cut to hold a lantern. ' +
+        'With a light burning in each, the hall might show the way through.',
+    )
+  })
+
   it('Lanterns of the Deeps ends on the path to the sanctum', () => {
     expect(new LanternsOfTheDeepsQuest().completion).toBe(
       'The prism lanterns burn in their brackets, and their light lays a ' +
@@ -37,6 +44,7 @@ describe('Act III side quest logs in older saves', () => {
     const lanterns = new LanternsOfTheDeepsQuest()
     breath.completion = 'old'
     sigils.description = 'old'
+    lanterns.description = 'old'
     lanterns.completion = 'old'
     game.state.activatedQuests.push(sigils)
     game.state.completedQuests.push(breath, lanterns)
@@ -44,6 +52,7 @@ describe('Act III side quest logs in older saves', () => {
     game.state.refreshSavedText()
     expect(breath.completion).toBe(new BreathOfTheMountain().completion)
     expect(sigils.description).toBe(new TidewardSigilsQuest().description)
+    expect(lanterns.description).toBe(new LanternsOfTheDeepsQuest().description)
     expect(lanterns.completion).toBe(new LanternsOfTheDeepsQuest().completion)
   })
 })
@@ -56,6 +65,7 @@ describe('Act III side quest logs not yet offered in an older save', () => {
     const lanterns = new LanternsOfTheDeepsQuest()
     breath.completion = 'old'
     sigils.description = 'old'
+    lanterns.description = 'old'
     lanterns.completion = 'old'
     const mirrors = new MirrorsOfEmberlightQuest()
     mirrors.completion = 'old'
@@ -65,6 +75,7 @@ describe('Act III side quest logs not yet offered in an older save', () => {
     expect(mirrors.completion).toBe('old')
     expect(breath.completion).toBe('old')
     expect(sigils.description).toBe('old')
+    expect(lanterns.description).toBe('old')
     expect(lanterns.completion).toBe('old')
   })
 })
