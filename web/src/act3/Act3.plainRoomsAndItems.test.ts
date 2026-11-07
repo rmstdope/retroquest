@@ -16,7 +16,10 @@ import { BrassMirrorSegment } from './items/BrassMirrorSegment'
 import { HeatWardMix } from './items/HeatWardMix'
 import { SupplyCrate } from './items/SupplyCrate'
 import { CrystalOfLight } from './items/CrystalOfLight'
-import { FLAG_ACT3_VOW_OF_COURAGE_MADE } from './Act3StoryFlags'
+import {
+  FLAG_ACT3_TIDEWARD_SIGILS_COMPLETED,
+  FLAG_ACT3_VOW_OF_COURAGE_MADE,
+} from './Act3StoryFlags'
 
 /** A bare game state. */
 function dummyState(): GameState {
@@ -236,17 +239,21 @@ describe('Act III Sunken Ruins and Mount Ember rooms speak as the caverns do', (
 
   it('describe each room plainly, with nobody at work who is not there', () => {
     const game = new Game([new Act3()])
-    for (const key of ROOMS) {
-      const room = game.state.allRooms[key]
-      const text = room.descriptionFor(game.state)
-      for (const word of MOOD) {
-        expect(text, `${key} sets a mood with ${word}`).not.toMatch(word)
-      }
-      expect(text, `${key} describes absent workers`).not.toMatch(
-        ABSENT_WORKERS,
-      )
-    }
+    const later = new Game([new Act3()])
+    later.state.setStoryFlag(FLAG_ACT3_TIDEWARD_SIGILS_COMPLETED, true)
+    later.state.allRooms.PhoenixCrater.rest(later.state)
+    for (const state of [game.state, later.state])
+      for (const key of ROOMS) expectPlain(key, state)
   })
+
+  /** Expect the room's description in this state to set no mood and show no absent worker. */
+  function expectPlain(key: string, state: GameState): void {
+    const text = state.allRooms[key].descriptionFor(state)
+    for (const word of MOOD) {
+      expect(text, `${key} sets a mood with ${word}`).not.toMatch(word)
+    }
+    expect(text, `${key} describes absent workers`).not.toMatch(ABSENT_WORKERS)
+  }
 
   it('give old descriptions of these rooms their new wording on load', () => {
     const game = new Game([new Act3()])

@@ -57,9 +57,12 @@ describe('Act III side quest logs not yet offered in an older save', () => {
     breath.completion = 'old'
     sigils.description = 'old'
     lanterns.completion = 'old'
-    game.state.nonActivatedQuests = [breath, sigils, lanterns]
+    const mirrors = new MirrorsOfEmberlightQuest()
+    mirrors.completion = 'old'
+    game.state.nonActivatedQuests = [breath, sigils, lanterns, mirrors]
     new Act3().afterLoad(game.state)
     game.state.refreshSavedText()
+    expect(mirrors.completion).toBe('old')
     expect(breath.completion).toBe('old')
     expect(sigils.description).toBe('old')
     expect(lanterns.completion).toBe('old')

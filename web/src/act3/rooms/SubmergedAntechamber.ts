@@ -40,8 +40,8 @@ export class SubmergedAntechamber extends Room {
   override descriptionFor(gameState: GameState): string {
     if (gameState.getStoryFlag(FLAG_ACT3_TIDEWARD_SIGILS_COMPLETED)) {
       return (
-        'The tide has gone out of the hall. ' +
-        'Salt crystals glitter on the bare stone, ' +
+        'The tide has drawn back, and the water in the hall is low and cold. ' +
+        'Salt crystals glitter on the stone it left bare, ' +
         'and niches stand open along the carved walls. ' +
         'The air is colder, and your steps echo.'
       )
