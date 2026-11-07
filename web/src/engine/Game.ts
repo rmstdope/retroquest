@@ -79,6 +79,9 @@ const ACT_NUMERALS = ['I', 'II', 'III', 'IV', 'V', 'VI']
 
 const CARDINAL_DIRECTIONS = ['north', 'south', 'east', 'west'] as const
 
+/** Words that join a name's parts and so never name a character alone. */
+const NAME_JOINING_WORDS: readonly string[] = ['of', 'the', 'and']
+
 const ENGINE_CLASSES = { GameState, Item, Character, Spell, Quest, Room }
 
 export class Game implements CommandTarget {
@@ -428,14 +431,34 @@ Welcome to
   /**
    * The character with the name in the current room, or null. A leading
    * "the" is dropped when the name as typed answers to nobody, so
-   * "the families" reaches the families.
+   * "the families" reaches the families. When no character answers to the
+   * whole name, a single word of a name reaches its character ("guardian"
+   * for the Tide-Born Guardian), as long as only one character here has
+   * that word in its name.
    */
   findCharacter(target: string): Character | null {
     const room = this.state.currentRoom
     const found = room.getCharacterByName(target)
     if (found) return found
     const bare = withoutArticle(target)
-    return bare === null ? null : room.getCharacterByName(bare)
+    const byBare = bare === null ? null : room.getCharacterByName(bare)
+    if (byBare) return byBare
+    return this.characterByWord(bare ?? target)
+  }
+
+  /**
+   * The one character in the current room whose name holds the word, or
+   * null when none does or several do. Joining words such as "of" never
+   * name anyone.
+   */
+  private characterByWord(target: string): Character | null {
+    const word = target.trim().toLowerCase()
+    if (word === '' || /\s/.test(word) || NAME_JOINING_WORDS.includes(word))
+      return null
+    const matches = this.state.currentRoom.characters.filter((character) =>
+      character.name.toLowerCase().split(/\s+/).includes(word),
+    )
+    return matches.length === 1 ? matches[0] : null
   }
 
   /**
