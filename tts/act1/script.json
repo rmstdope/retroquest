@@ -2525,6 +2525,26 @@
     "text": "How is that blade holding up? Keep that edge oiled, mind, or the damp will have it dull again before you know it."
   },
   {
+    "id": "0dddfa7692bc53",
+    "speaker": "narrator",
+    "text": "The fisherman nods at you."
+  },
+  {
+    "id": "03668510b9789c",
+    "speaker": "fisherman",
+    "text": "River's off this season. Fish are sulking, and this arm's gone stiff on me, so I couldn't land one if they weren't."
+  },
+  {
+    "id": "1d8e3b58a12d32",
+    "speaker": "narrator",
+    "text": "He looks at the water."
+  },
+  {
+    "id": "1dfb46971f2f1c",
+    "speaker": "fisherman",
+    "text": "I'd give a good deal for a fresh fish."
+  },
+  {
     "id": "17ced776faa8d7",
     "speaker": "narrator",
     "text": "It's a sturdy wooden door, locked tight. There's a keyhole visible."
@@ -3258,11 +3278,6 @@
     "id": "121938ab3d1673",
     "speaker": "fisherman",
     "text": "Anything biting? Reeds, lad. Always the reeds."
-  },
-  {
-    "id": "1d8e3b58a12d32",
-    "speaker": "narrator",
-    "text": "He looks at the water."
   },
   {
     "id": "0399ebbd64a539",
