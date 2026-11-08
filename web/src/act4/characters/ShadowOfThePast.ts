@@ -198,8 +198,8 @@ export class ShadowOfThePast extends Character {
 
   /**
    * The shared gates and the answer, led in by what Elior did (ready-made
-   * lines): the word, or the waiting. A player who never talked to him hears
-   * who he is before the answer, so no one completes the quest without it.
+   * lines): the word, or the waiting. A player who never talked to him first
+   * hears who he is, so no one completes the quest without it.
    */
   private answerWithPatience(gameState: GameState, lead: string): string {
     if (!gameState.getStoryFlag(FLAG_ACT4_MEMORY_ORBS_MENDED)) {
@@ -219,8 +219,8 @@ export class ShadowOfThePast extends Character {
     const unheard = !gameState.getStoryFlag(FLAG_ACT4_SHADOW_REVEAL_HEARD)
     gameState.setStoryFlag(FLAG_ACT4_SHADOW_OF_THE_PAST_COMPLETED, true)
     return [
-      lead,
       ...(unheard ? [this.reveal(gameState)] : []),
+      lead,
       dialogue(
         FULL_NAME,
         'Patience. The one thing I never had. Then I will wait, a little ' +

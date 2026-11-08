@@ -355,21 +355,35 @@ function count(text: string, line: string): number {
 }
 
 describe('The Shadow of the Past says who he is to everyone who answers him', () => {
-  it.each(['rest', 'say patience to shadow'])(
-    'plays the reveal and the sentence once on %s without a talk',
-    (command) => {
+  it.each([
+    ['rest', 'You sit down among the orbs and wait'],
+    ['say patience to shadow', 'You could not wait for them.'],
+  ])(
+    'plays the reveal and the sentence once, first, on %s without a talk',
+    (command, lead) => {
       const game = masked()
       const text = executeCommands(game, [command])
       expectQuestCompleted(game.state, 'The Shadow of the Past')
       expect(count(text, REVEAL)).toBe(1)
       expect(count(text, SENTENCE)).toBe(1)
       expect(text.indexOf(REVEAL)).toBeLessThan(text.indexOf(SENTENCE))
-      expect(text.indexOf(SENTENCE)).toBeLessThan(
+      expect(text.indexOf(SENTENCE)).toBeLessThan(text.indexOf(lead))
+      expect(text.indexOf(lead)).toBeLessThan(
         text.indexOf('Patience. The one thing I never had.'),
       )
       expectMarkupWellFormed(text)
-      const after = executeCommands(game, ['talk to shadow', command])
-      expect(after).not.toContain(REVEAL)
+    },
+  )
+
+  it.each(['rest', 'say patience to shadow'])(
+    'does not repeat the reveal on %s after a talk after the mask',
+    (command) => {
+      const game = masked()
+      executeCommands(game, ['talk to shadow'])
+      const text = executeCommands(game, [command])
+      expectQuestCompleted(game.state, 'The Shadow of the Past')
+      expect(text).not.toContain(REVEAL)
+      expect(text).not.toContain(SENTENCE)
     },
   )
 
