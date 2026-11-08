@@ -6,6 +6,7 @@ import {
   FLAG_ACT4_MEMORY_ORBS_MENDED,
   FLAG_ACT4_REDEMPTION_ENDING,
   FLAG_ACT4_JUSTICE_ENDING,
+  FLAG_ACT4_SACRIFICE_ENDING,
   FLAG_ACT4_THRONE_REFRAIN_SAID,
 } from '../Act4StoryFlags'
 
@@ -60,27 +61,21 @@ describe('AncientAmulet', () => {
       )
     })
 
-    it('stays at the refrain stage after Justice', () => {
-      expect(
-        examineWith(
-          FLAG_ACT4_MEMORY_ORBS_MENDED,
-          FLAG_ACT4_THRONE_REFRAIN_SAID,
-          FLAG_ACT4_JUSTICE_ENDING,
-        ),
-      ).toContain('his head is up, as if someone has said his name')
-    })
-
-    it('shows the three at the workbench after Redemption', () => {
-      expect(
-        examineWith(
-          FLAG_ACT4_MEMORY_ORBS_MENDED,
-          FLAG_ACT4_THRONE_REFRAIN_SAID,
-          FLAG_ACT4_REDEMPTION_ENDING,
-        ),
-      ).toContain(
-        HEAD +
-          'The third figure has turned around. The three of them stand together at a workbench, heads bent over something you cannot quite see.',
+    it.each([
+      ['Redemption', FLAG_ACT4_REDEMPTION_ENDING],
+      ['Justice', FLAG_ACT4_JUSTICE_ENDING],
+      ['Sacrifice', FLAG_ACT4_SACRIFICE_ENDING],
+    ])('is dark and empty after %s', (_name, endingFlag) => {
+      const text = examineWith(
+        FLAG_ACT4_MEMORY_ORBS_MENDED,
+        FLAG_ACT4_THRONE_REFRAIN_SAID,
+        endingFlag,
       )
+      expect(text).toContain(
+        'the sun rising over three linked rings. Its depths are empty now. It is dark, and still warm.',
+      )
+      expect(text).not.toContain('Aren and Lysa')
+      expect(text).not.toContain('third figure')
     })
   })
 })

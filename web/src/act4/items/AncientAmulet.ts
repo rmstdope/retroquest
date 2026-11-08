@@ -12,14 +12,21 @@ import { Wound } from './Wound'
 export const AMULET_DARK = '[dim]The amulet is dark now, and still warm.[/dim]'
 
 /** The first two sentences of the amulet's look, which never change. */
-const PICTURE_HEAD =
+const LOOK_HEAD =
   'A mysterious amulet inscribed with runes. At its centre is the sigil of ' +
-  'the Wardens of the Dawn: the sun rising over three linked rings. In its ' +
-  'depths Aren and Lysa stand hand in hand. '
+  'the Wardens of the Dawn: the sun rising over three linked rings. '
+
+/** The look until an ending is played: the picture in the amulet's depths. */
+const PICTURE_HEAD =
+  LOOK_HEAD + 'In its depths Aren and Lysa stand hand in hand. '
+
+/** The look once an ending is played: the parents are at rest. */
+const LOOK_AFTER_ENDING =
+  LOOK_HEAD + 'Its depths are empty now. It is dark, and still warm.'
 
 /**
- * The last sentence of the look, in the order of the stages the story
- * reaches. Canon: he keeps his back turned until the Redemption ending.
+ * The last sentence of the picture, in the order of the stages the story
+ * reaches. Canon: he keeps his back turned.
  */
 const THIRD_FIGURE_STAGES = [
   'The third figure keeps his back turned.',
@@ -27,8 +34,6 @@ const THIRD_FIGURE_STAGES = [
     'the set of his shoulders.',
   'The third figure keeps his back turned, but his head is up, as if ' +
     'someone has said his name.',
-  'The third figure has turned around. The three of them stand together at ' +
-    'a workbench, heads bent over something you cannot quite see.',
 ]
 
 /**
@@ -53,13 +58,13 @@ export class AncientAmulet extends Item {
 
   /**
    * The amulet's look: the picture of the third figure follows the story
-   * (orbs mended, refrain said, Redemption). Justice and Sacrifice stay at
-   * the Throne Chamber stage.
+   * (orbs mended, refrain said), and every ending leaves the amulet dark,
+   * with the picture gone.
    */
   override examine(gameState: GameState): string {
+    if (endingPlayed(gameState)) return LOOK_AFTER_ENDING
     let stage = 0
-    if (endingPlayed(gameState) === 'redemption') stage = 3
-    else if (gameState.getStoryFlag(FLAG_ACT4_THRONE_REFRAIN_SAID)) stage = 2
+    if (gameState.getStoryFlag(FLAG_ACT4_THRONE_REFRAIN_SAID)) stage = 2
     else if (gameState.getStoryFlag(FLAG_ACT4_MEMORY_ORBS_MENDED)) stage = 1
     return PICTURE_HEAD + THIRD_FIGURE_STAGES[stage]
   }
