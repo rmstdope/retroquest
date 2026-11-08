@@ -3,7 +3,7 @@ import { Game } from '@/engine'
 import { Act4 } from '../Act4'
 import { EchoStone } from './EchoStone'
 import { ServantsPendant } from './ServantsPendant'
-import { Mirrors } from './Mirrors'
+import { Banners } from './Banners'
 import { FLAG_ACT4_MAZE_OF_MIRRORS_COMPLETED } from '../Act4StoryFlags'
 import { executeCommands, expectMarkupWellFormed } from '@/testing/gameHelpers'
 
@@ -104,7 +104,7 @@ describe('EchoStone', () => {
 
   it('refuses other items as the base class does', () => {
     const { game } = inMaze()
-    expect(new EchoStone().useWith(game.state, new Mirrors())).toContain(
+    expect(new EchoStone().useWith(game.state, new Banners())).toContain(
       "can't use",
     )
   })
