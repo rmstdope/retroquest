@@ -886,4 +886,4 @@ the Throne Chamber (Step 11) as the anchor of the ward.
 -   **Knight's Redemption:** proves mercy's power to the Sorceress (Step 8)
 -   **Sorceress's Truth:** proves to the Shadow that redemption is possible (Step 9)
 
-**All items have a use.** Every item in this act has a use in quest progress or conversations. The decorative items of the earlier design are cut.
+**All carried items have a use.** Every item the player can carry in this act has a use in quest progress or conversations. The decorative items of the earlier design are cut or stay as scenery, like the Ward Stone Fragment.
