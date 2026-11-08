@@ -10,7 +10,8 @@ import type {
   QuestSummary,
   RoomWare,
 } from '@/types/bridge'
-import type { useBridge } from '@/composables/useBridge'
+import type { AreaThing } from '@/lantern/areaThings'
+import type { PictureState, useBridge } from '@/composables/useBridge'
 import {
   LOADED_ROOM,
   normalizeSaveName,
@@ -40,6 +41,7 @@ import {
   appliedMotion,
   declaredMotion,
   madeAreaBoxes,
+  type AreaBox,
   type MotionSpec,
 } from '@/lantern/roomMotion'
 import { ELIOR } from '@/lantern/stageSpeech'
@@ -211,7 +213,7 @@ interface PanelSnapshot {
     spells: NamedItem[]
   }
   /** The room the picture is of, and the ids of its patches that apply. */
-  picture: { roomKey: string; variant: string; patchIds: string[] }
+  picture: PictureState
 }
 
 export const useGameStore = defineStore('game', () => {
@@ -282,24 +284,18 @@ export const useGameStore = defineStore('game', () => {
     picture: 0,
   })
   /** The room the picture shows and the patches that apply there, as the held `picture` group lets them be seen. */
-  const shownPicture = ref<{
-    roomKey: string
-    variant: string
-    patchIds: string[]
-  }>({
+  const shownPicture = ref<PictureState>({
     roomKey: '',
     variant: '',
     patchIds: [],
+    things: [],
   })
   /** The same as the engine says now, which `shownPicture` takes on release. */
-  const latestPicture = ref<{
-    roomKey: string
-    variant: string
-    patchIds: string[]
-  }>({
+  const latestPicture = ref<PictureState>({
     roomKey: '',
     variant: '',
     patchIds: [],
+    things: [],
   })
   /** What the engine showed at the last refresh; held groups apply it on release. */
   let latest: PanelSnapshot | null = null
@@ -507,6 +503,26 @@ export const useGameStore = defineStore('game', () => {
     if (effects.length === 0) return []
     const boxes = madeAreaBoxes(imageManifest.value, id)
     return appliedMotion(effects, shown.patchIds, boxes)
+  })
+
+  /**
+   * What the room's picture can name right now: the things and ways out in
+   * the room (as the held `picture` group lets them be seen) that the studio
+   * has placed on the picture, with their boxes. Empty while there is no
+   * picture, no manifest or nothing placed, so there is nothing to show.
+   */
+  const roomAreas = computed<{
+    things: AreaThing[]
+    boxes: Record<string, AreaBox>
+  }>(() => {
+    const shown = roomPictureState.value
+    const id = shownPictureId.value
+    if (!shown || id === null) return { things: [], boxes: {} }
+    const boxes = madeAreaBoxes(imageManifest.value, id)
+    return {
+      things: shown.things.filter((thing) => thing.areaId in boxes),
+      boxes,
+    }
   })
 
   /** The size of the room's picture as the manifest lists it, for the boxes laid on it; absent while it is not known. */
@@ -746,6 +762,7 @@ export const useGameStore = defineStore('game', () => {
       return JSON.stringify([
         shownPicture.value.variant,
         shownPicture.value.patchIds,
+        shownPicture.value.things.map((thing) => [thing.areaId, thing.label]),
       ])
     return JSON.stringify([
       rawInventory.value,
@@ -1839,6 +1856,7 @@ export const useGameStore = defineStore('game', () => {
     roomPicture,
     roomPatchUrls,
     roomMotion,
+    roomAreas,
     roomPictureSize,
     imageManifest,
     loadImageManifest,

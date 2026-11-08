@@ -4,6 +4,7 @@
  */
 import { Game, GameController, isOutdatedSave, type Act } from '@/engine'
 import type { SaveSlot } from '@/types/bridge'
+import { areaThingsOf, type AreaThing } from '@/lantern/areaThings'
 import { appliedPatchIds } from '@/lantern/roomPatchState'
 
 type StoredNamedSave = {
@@ -108,6 +109,14 @@ function readStoredSaveSlots(): (StoredSaveSlot | null)[] {
 /** An act the bridge can play. */
 export type ActClass = new () => Act
 
+/** The room the picture is of, the ids of its patches that apply, and what is in the room that its areas can mark. */
+export interface PictureState {
+  roomKey: string
+  variant: string
+  patchIds: string[]
+  things: AreaThing[]
+}
+
 /** The acts, loaded on demand so each is its own chunk of the build. */
 async function loadActs(): Promise<ActClass[]> {
   const [{ Act1 }, { Act2 }, { Act3 }, { Act4 }] = await Promise.all([
@@ -199,21 +208,24 @@ export function useBridge(loader: () => Promise<ActClass[]> = loadActs) {
   }
 
   /**
-   * The room the player is in and the ids of the patches of its picture that
-   * apply to the story now; empty while no room is known. Read from the game
+   * The room the player is in, the ids of the patches of its picture that
+   * apply to the story now and the things and ways out in it that its
+   * picture's areas can mark; empty while no room is known. Read from the game
    * each time, so a loaded game answers as the played one did.
    */
-  function pictureState(): {
-    roomKey: string
-    variant: string
-    patchIds: string[]
-  } {
+  function pictureState(): PictureState {
     const { game } = requireGame()
     const { roomKey, pictureVariant } = game.currentMusicPlace()
-    if (!roomKey) return { roomKey: '', variant: '', patchIds: [] }
+    if (!roomKey) return { roomKey: '', variant: '', patchIds: [], things: [] }
     return {
       roomKey,
       variant: pictureVariant,
+      things: areaThingsOf(
+        game.acts[game.currentAct],
+        roomKey,
+        game.state,
+        pictureVariant,
+      ),
       patchIds: appliedPatchIds(
         game.acts[game.currentAct],
         roomKey,

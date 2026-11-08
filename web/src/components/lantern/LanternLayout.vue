@@ -7,6 +7,7 @@ import { useNarrationStore } from '@/stores/useNarrationStore'
 import { useStageSpeechStore } from '@/stores/useStageSpeechStore'
 import { useArrivalStore } from '@/stores/useArrivalStore'
 import { useSceneStore } from '@/stores/useSceneStore'
+import { useAreaNamesStore } from '@/stores/useAreaNamesStore'
 import { useFlightStore } from '@/stores/useFlightStore'
 import { firstQuestUnit } from '@/lantern/narrationUnits'
 import { sceneBlock } from '@/lantern/stageArrival'
@@ -37,6 +38,7 @@ import {
 } from '@/composables/useMediaQuery'
 import ActionComposer from './ActionComposer.vue'
 import ArrivalOnPicture from './ArrivalOnPicture.vue'
+import AreaNames from './AreaNames.vue'
 import AcquiredFlight from './AcquiredFlight.vue'
 import ChapterPage from './ChapterPage.vue'
 import CompassPanel from './CompassPanel.vue'
@@ -146,6 +148,7 @@ const narration = useNarrationStore()
 const speech = useStageSpeechStore()
 const arrival = useArrivalStore()
 const scene = useSceneStore()
+const names = useAreaNamesStore()
 /** A laptop screen (≥1024 × 560): the stage with its action row along the bottom. */
 const laptop = useMediaQuery(WIDE_QUERY)
 const short = useMediaQuery(SHORT_QUERY)
@@ -444,6 +447,114 @@ function onPaperKey(event: KeyboardEvent): void {
   event.preventDefault()
   setWordsHidden(!paper.hidden.value)
 }
+/** The picture's size when the manifest does not say (the studio's default). */
+const DEFAULT_PICTURE_SIZE = { width: 1920, height: 1080 }
+
+/** The "◎ Show what's here": a placed thing in the room and no change of scene under way. */
+const showNamesButton = computed(
+  () =>
+    staged.value &&
+    game.roomAreas.things.length > 0 &&
+    scene.phase === 'idle' &&
+    !game.ending,
+)
+/** Whether the marks and names are up (and the picture is steady enough to hold them). */
+const namesUp = computed(() => names.showing && scene.phase === 'idle')
+/** The arrival words were folded away by showing the names, and come back when the names go. */
+const arrivalFolded = ref(false)
+/** The words were folded away by showing the names, and come back when the names go. */
+const foldedForNames = ref(false)
+/** Changes when what the names keep clear of moves: the words, a drawer, the names' own count. */
+const namesRelayout = computed(() =>
+  [
+    paper.visible.value,
+    paper.hidden.value,
+    arrival.active,
+    speech.visible.length,
+    drawerTab.value,
+    sideways.value,
+    laptop.value,
+    game.roomAreas.things.length,
+    settings.textSize,
+  ].join('|'),
+)
+
+/** Show the marks and names, or take them away. Showing them folds the words away (not under the Always setting), and the words come back with taking them away. */
+function toggleNames(): void {
+  if (names.showing) {
+    names.turnOff()
+    return
+  }
+  names.toggle()
+  // Arrival words on the picture are words over it: they fold away as to Hide, still read aloud, and come back.
+  if (!settings.alwaysShowNames && arrival.active) arrivalFolded.value = true
+  if (!settings.alwaysShowNames && showHide.value) {
+    paper.hide()
+    foldedForNames.value = true
+  }
+}
+
+// The words come back when the names go, by whatever way they went.
+watch(
+  () => names.showing,
+  (up) => {
+    if (up) return
+    arrivalFolded.value = false
+    if (!foldedForNames.value) return
+    foldedForNames.value = false
+    if (paper.hidden.value) paper.show()
+  },
+)
+// An arrival that ended has nothing left to fold.
+watch(
+  () => arrival.active,
+  (active) => {
+    if (!active) arrivalFolded.value = false
+  },
+)
+// Bringing the words back oneself ends the fold.
+watch(
+  () => paper.hidden.value,
+  (hidden) => {
+    if (!hidden) foldedForNames.value = false
+  },
+)
+
+/** S shows or hides the names (the laptop only, where there is a button, never while typing or with a dialog up). */
+function onNamesKey(event: KeyboardEvent): void {
+  if (event.key !== 's' && event.key !== 'S') return
+  if (event.defaultPrevented || event.repeat) return
+  if (event.ctrlKey || event.metaKey || event.altKey) return
+  if (!laptop.value || !showNamesButton.value || dialogOpen()) return
+  const target = event.target instanceof Element ? event.target : null
+  if (target?.closest('input, textarea, select, [contenteditable]')) return
+  event.preventDefault()
+  toggleNames()
+}
+
+/** Escape takes the names away before it does anything else, but for a dialog that is up, which shuts first. */
+function onNamesEscape(event: KeyboardEvent): void {
+  if (event.key !== 'Escape' || !names.showing || !showNamesButton.value) return
+  if (dialogOpen()) return
+  event.preventDefault()
+  event.stopImmediatePropagation()
+  names.turnOff()
+}
+
+/** The pointer moves over the stage: with a mouse over the bare picture, the name of the thing under it follows. */
+function onStagePointer(event: PointerEvent): void {
+  const target = event.target instanceof Element ? event.target : null
+  if (
+    !laptop.value ||
+    event.pointerType === 'touch' ||
+    !target?.closest('.lq-stage-picture')
+  ) {
+    names.pointer = null
+    return
+  }
+  names.pointer = { x: event.clientX, y: event.clientY }
+}
+
 /** The story is held still and follows the word while an answer is read. */
 const { held: storyHeld, moveTo: moveStory, refollow } = useStoryFollow(storyEl)
 /** Unread story below the visible part (a long turn opens at its start). */
@@ -742,6 +853,8 @@ onMounted(() => {
   document.addEventListener('keydown', noteEmptyBoxEnter, true)
   document.addEventListener('keydown', onNarrationKey)
   document.addEventListener('keydown', onPaperKey)
+  document.addEventListener('keydown', onNamesKey)
+  document.addEventListener('keydown', onNamesEscape, true)
   document.addEventListener('keyup', onSpaceUp)
   document.addEventListener('focusin', onFocusChange)
   document.addEventListener('focusout', onFocusChange)
@@ -894,6 +1007,8 @@ onUnmounted(() => {
   document.removeEventListener('keydown', noteEmptyBoxEnter, true)
   document.removeEventListener('keydown', onNarrationKey)
   document.removeEventListener('keydown', onPaperKey)
+  document.removeEventListener('keydown', onNamesKey)
+  document.removeEventListener('keydown', onNamesEscape, true)
   document.removeEventListener('keyup', onSpaceUp)
   document.removeEventListener('focusin', onFocusChange)
   document.removeEventListener('focusout', onFocusChange)
@@ -1176,6 +1291,9 @@ const NARRATION_HELP =
 /** Help's line for the key that hides the narration paper (laptop only). */
 const NARRATION_KEY_HELP = '\nN — hide or show the words\n'
 
+/** Help's line for the key that shows or hides the names on the picture (laptop only). */
+const NAMES_KEY_HELP = "\nS — show or hide what's here\n"
+
 /** Stats or Help as HTML (Help ends with the music credits). */
 const infoHtml = computed(() => {
   const kind = gameDialog.value
@@ -1184,7 +1302,9 @@ const infoHtml = computed(() => {
   return kind === 'help'
     ? html +
         renderMarkup(NARRATION_HELP) +
-        (laptop.value ? renderMarkup(NARRATION_KEY_HELP) : '') +
+        (laptop.value
+          ? renderMarkup(NARRATION_KEY_HELP) + renderMarkup(NAMES_KEY_HELP)
+          : '') +
         music.buildAttributionHtml()
     : html
 })
@@ -1449,6 +1569,8 @@ watch(
             class="lq-stage"
             :style="{ '--lq-actions-h': `${actionsHeight}px` }"
             @click="onPicturePress"
+            @pointermove="onStagePointer"
+            @pointerleave="names.pointer = null"
           >
             <StagePicture
               :src="game.roomPicture"
@@ -1456,8 +1578,21 @@ watch(
               :motion="game.roomMotion"
               :picture-size="game.roomPictureSize"
               @pictured="pictured = $event"
+            >
+              <AreaNames
+                :things="game.roomAreas.things"
+                :boxes="game.roomAreas.boxes"
+                :picture-size="game.roomPictureSize ?? DEFAULT_PICTURE_SIZE"
+                :showing="namesUp"
+                :pointer="scene.phase === 'idle' ? names.pointer : null"
+                :relayout="namesRelayout"
+              />
+            </StagePicture>
+            <ArrivalOnPicture
+              :pictured="pictured"
+              :phone="phoneStage"
+              :away="arrivalFolded"
             />
-            <ArrivalOnPicture :pictured="pictured" :phone="phoneStage" />
             <button
               v-if="sideways"
               type="button"
@@ -1617,6 +1752,18 @@ watch(
               @click="showPaper"
             >
               ▴ Show
+            </button>
+            <button
+              v-if="showNamesButton"
+              type="button"
+              class="lq-show-names"
+              :class="{ 'lq-show-names-on': namesUp }"
+              :aria-pressed="namesUp ? 'true' : 'false'"
+              :title="laptop ? 'Show what\'s here (S)' : undefined"
+              :aria-keyshortcuts="laptop ? 'S' : undefined"
+              @click="toggleNames"
+            >
+              {{ namesUp ? '◎ Showing' : "◎ Show what's here" }}
             </button>
           </div>
 
@@ -1975,6 +2122,34 @@ watch(
   font-size: 13px;
   cursor: pointer;
   box-shadow: 0 1px 6px rgba(0, 0, 0, 0.2);
+}
+/* The show button: the same line as Hide, in the foot-right corner on every screen. */
+.lq-show-names {
+  position: absolute;
+  right: 8px;
+  bottom: 6px;
+  height: 28px;
+  padding: 0 14px;
+  border: 1px solid var(--lq-line);
+  border-radius: 14px;
+  background: var(--lq-raised);
+  color: var(--lq-muted);
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.2);
+}
+.lq-show-names:hover {
+  color: var(--lq-fg);
+}
+.lq-show-names-on {
+  border-color: var(--lq-accent-line);
+  background: var(--lq-accent-soft);
+  color: var(--lq-accent-text);
+}
+.lq-show-names:focus-visible {
+  outline: 2px solid var(--lq-accent);
+  outline-offset: 2px;
 }
 .lq-words-hide:hover {
   color: var(--lq-fg);

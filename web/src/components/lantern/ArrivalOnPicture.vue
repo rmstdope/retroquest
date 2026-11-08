@@ -47,7 +47,12 @@ import { useSettingsStore } from '@/stores/useSettingsStore'
  * the heading, the quest's or spell's name in large type and then its text, which is the
  * part that is paged or scrolls; the head above it stays on every page.
  */
-const props = defineProps<{ pictured: boolean; phone?: boolean }>()
+const props = defineProps<{
+  pictured: boolean
+  phone?: boolean
+  /** The words are folded away (to show the names on the picture): out of sight and reach, still being read and clicked on in no way, and back when it is false. */
+  away?: boolean
+}>()
 const arrival = useArrivalStore()
 const root = ref<HTMLElement | null>(null)
 const { html, mark } = useReadAlong(() => arrival.turnId ?? 0, root)
@@ -280,6 +285,7 @@ onBeforeUnmount(() => {
       'lq-bare': !pictured,
       'lq-on': arrival.active,
       'lq-phone-arrival': phone,
+      'lq-arrival-away': away,
     }"
     aria-live="polite"
     data-testid="arrival-on-picture"
@@ -450,6 +456,14 @@ onBeforeUnmount(() => {
 .lq-arrival-stage.lq-bare {
   --lq-arrival-ink: var(--lq-arrival-bare-ink);
   --lq-arrival-glow: var(--lq-arrival-bare-glow);
+}
+.lq-arrival-away {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition:
+    opacity calc(0.2s * var(--lq-motion)) ease,
+    visibility 0s linear calc(0.2s * var(--lq-motion));
 }
 .lq-arrival-card {
   width: min(760px, 100%);
