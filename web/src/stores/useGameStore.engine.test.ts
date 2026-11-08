@@ -10,9 +10,12 @@ import { Act3 } from '@/act3/Act3'
 import { SirCedric } from '@/act3/characters/SirCedric'
 import { AncientAmulet } from '@/act3/items/AncientAmulet'
 import { Act4 } from '@/act4/Act4'
+import { Field } from '@/act4/items/Field'
 import { SorceressOfLies } from '@/act4/characters/SorceressOfLies'
 import { GuardiansChain } from '@/act4/items/GuardiansChain'
 import { GuardiansEssence } from '@/act4/items/GuardiansEssence'
+import { KnightsRedemption } from '@/act4/items/KnightsRedemption'
+import { NyxToken } from '@/act4/items/NyxToken'
 import { SorceressTruth } from '@/act4/items/SorceressTruth'
 import { TruthSight } from '@/act4/spells/TruthSight'
 import { useGameStore, type Turn } from './useGameStore'
@@ -426,6 +429,83 @@ describe('useGameStore over the real engine: the no-match line and a name that w
     const store = await storeIn(Act2, 'CastleCourtyard')
 
     expect(saysNoMatch(store, 'say truth to bob')).toBe(false)
+  })
+
+  describe("an item's extra names", () => {
+    /** The real store, holding Nyx's Token, in the room of the Sorceress. */
+    function storeHoldingToken(): Promise<Store> {
+      return storeIn(Act4, 'ChamberOfWhispers', (state) => {
+        state.inventory.push(new NyxToken())
+      })
+    }
+
+    it('does not say no match for what the token answers to', async () => {
+      const store = await storeHoldingToken()
+
+      expect(saysNoMatch(store, 'examine crystalline pendant')).toBe(false)
+      expect(saysNoMatch(store, 'examine pendant')).toBe(false)
+      expect(saysNoMatch(store, 'examine the pendant')).toBe(false)
+      expect(saysNoMatch(store, 'use crystalline pendant')).toBe(false)
+    })
+
+    it('does not say no match for an extra name before the rest of the command', async () => {
+      const store = await storeHoldingToken()
+
+      expect(saysNoMatch(store, 'give pendant to sorceress')).toBe(false)
+      expect(saysNoMatch(store, 'use crystalline pendant with')).toBe(false)
+    })
+
+    it('offers what can follow an extra name', async () => {
+      const store = await storeHoldingToken()
+
+      expect(
+        store.completionState('use crystalline pendant ').candidates,
+      ).toEqual(['with'])
+      expect(store.completionState('give pendant ').candidates).toEqual(['to'])
+    })
+
+    it('does not say no match for an extra name of a thing in the room', async () => {
+      const store = await storeIn(Act4, 'ChamberOfWhispers', (state) => {
+        state.currentRoom.items.push(new Field())
+      })
+
+      expect(saysNoMatch(store, 'take crops')).toBe(false)
+      expect(saysNoMatch(store, 'use crops')).toBe(false)
+    })
+
+    it('does not say no match for an extra name sharing its first word with the full name', async () => {
+      const store = await storeIn(Act4, 'ChamberOfWhispers', (state) => {
+        state.inventory.push(new KnightsRedemption())
+      })
+
+      expect(saysNoMatch(store, "examine knight's badge")).toBe(false)
+      expect(store.completionState("use knight's badge ").candidates).toEqual([
+        'with',
+      ])
+    })
+
+    it('can send an extra name only where the command needs no more', async () => {
+      const store = await storeHoldingToken()
+
+      expect(store.completionState('use pendant').sendable).toBe(true)
+      expect(store.completionState('give pendant').sendable).toBe(false)
+    })
+
+    it('still says no match where the item is not to be had', async () => {
+      const store = await storeHoldingToken()
+
+      expect(saysNoMatch(store, 'take pendant')).toBe(true)
+      expect(saysNoMatch(store, 'examine bob')).toBe(true)
+    })
+
+    it('still says no match for an extra name with words the command cannot take', async () => {
+      const store = await storeHoldingToken()
+
+      expect(saysNoMatch(store, 'examine pendant bob')).toBe(true)
+      expect(saysNoMatch(store, 'use pendant bob')).toBe(true)
+      expect(saysNoMatch(store, 'give pendant to bob')).toBe(true)
+      expect(saysNoMatch(store, 'go pendant')).toBe(true)
+    })
   })
 
   it('says no match for a name still being typed', async () => {

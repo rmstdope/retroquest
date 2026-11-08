@@ -63,6 +63,12 @@ export interface CompletionState {
   word: string
 }
 
+/** A point the walk of the completion tree reached, and the typed word it stood at. */
+interface TreePoint {
+  start: number
+  node: CompletionTree
+}
+
 /** One entry in the story: what the player did and what the game answered. */
 export interface Turn {
   /** Increasing id, unique for the session (stable key for rendering). */
@@ -1415,7 +1421,8 @@ export const useGameStore = defineStore('game', () => {
    * matches nothing) or `complete` (the command needs no more words). Text
    * the tree cannot follow is `complete` when, from where the tree offers a
    * character, it names one here: the tree holds only full names and a
-   * character answers to more.
+   * character answers to more. An item answers to more as well: its other
+   * name is read as its full name (`readItemName`).
    * Matching ignores case; `word` is the last word as typed.
    */
   function completionState(input: string): CompletionState {
@@ -1432,11 +1439,12 @@ export const useGameStore = defineStore('game', () => {
       word: typedWords[typedWords.length - 1],
     }
     let nameStart = -1
+    const walked: TreePoint[] = []
     const unmatched = (sendable: boolean): CompletionState =>
       nameStart >= 0 &&
       bridge?.controller.namesCharacter(typedWords.slice(nameStart).join(' '))
         ? { ...none, kind: 'complete', sendable: true }
-        : { ...none, sendable }
+        : (readItemName(walked, typed, typedWords) ?? { ...none, sendable })
 
     let node: CompletionTree | null = completionTree.value
     for (const [index, token] of tokens.slice(0, -1).entries()) {
@@ -1444,12 +1452,14 @@ export const useGameStore = defineStore('game', () => {
         // Words after a finished command: nothing to offer.
         return { ...none, kind: 'complete', sendable: true }
       }
+      walked.push({ start: index, node })
       if (offersCharacter(node)) nameStart = index
       if (token === SENDABLE_MARKER || !Object.hasOwn(node, token))
         return unmatched(false)
       node = node[token]
     }
     if (node === null) return { ...none, kind: 'complete', sendable: true }
+    walked.push({ start: tokens.length - 1, node })
     if (offersCharacter(node)) nameStart = tokens.length - 1
 
     const candidates = Object.keys(node).filter(
@@ -1472,16 +1482,69 @@ export const useGameStore = defineStore('game', () => {
     return { kind: 'matches', candidates, sendable, word }
   }
 
+  /**
+   * The list for text the tree cannot follow, when an item's other name is
+   * what stopped it: a name ending the text closes the list (`complete`, and
+   * sendable only if the command needs no more), and anything else
+   * reads on as the same text with the item's full name, which the tree
+   * follows. Null when no item here is named from a point of the tree that
+   * offers it, or words follow a name that takes none.
+   */
+  function readItemName(
+    walked: TreePoint[],
+    typed: string,
+    typedWords: string[],
+  ): CompletionState | null {
+    const trailing = typed.endsWith(' ') ? ' ' : ''
+    for (const { start, node } of [...walked].reverse()) {
+      for (let end = typedWords.length; end > start; end--) {
+        const fullName = bridge?.controller.itemNamed(
+          typedWords.slice(start, end).join(' '),
+          (name) => nodeAfter(node, name) !== undefined,
+        )
+        if (!fullName) continue
+        const last = end === typedWords.length
+        if (last && !trailing)
+          return {
+            kind: 'complete',
+            candidates: [],
+            sendable: sendableAfter(nodeAfter(node, fullName)),
+            word: typedWords[end - 1],
+          }
+        if (!last && nodeAfter(node, fullName) === null) continue
+        const reread =
+          [
+            ...typedWords.slice(0, start),
+            fullName,
+            ...typedWords.slice(end),
+          ].join(' ') + trailing
+        if (reread.toLowerCase() !== typed) return completionState(reread)
+      }
+    }
+    return null
+  }
+
+  /** Whether a command that has reached this point of the tree can be sent. */
+  function sendableAfter(node: CompletionTree | null | undefined): boolean {
+    return node === null || (node !== undefined && SENDABLE_MARKER in node)
+  }
+
+  /** Where a whole name leads from this point of the tree; undefined when it cannot be followed. */
+  function nodeAfter(
+    node: CompletionTree,
+    name: string,
+  ): CompletionTree | null | undefined {
+    let at: CompletionTree | null = node
+    for (const word of name.toLowerCase().split(/\s+/)) {
+      if (at === null || !Object.hasOwn(at, word)) return undefined
+      at = at[word]
+    }
+    return at
+  }
+
   /** Whether a character's whole name can be followed from this point of the tree. */
   function offersCharacter(node: CompletionTree): boolean {
-    return characters.value.some((name) => {
-      let at: CompletionTree | null = node
-      for (const word of name.toLowerCase().split(/\s+/)) {
-        if (at === null || !Object.hasOwn(at, word)) return false
-        at = at[word]
-      }
-      return true
-    })
+    return characters.value.some((name) => nodeAfter(node, name) !== undefined)
   }
 
   return {
