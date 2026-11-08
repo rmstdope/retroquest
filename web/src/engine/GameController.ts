@@ -317,6 +317,11 @@ export class GameController {
     return this.game.getCommandCompletions()
   }
 
+  /** Whether a character in the room answers to the words, as a command would find them. */
+  namesCharacter(words: string): boolean {
+    return this.game.findCharacter(words) !== null
+  }
+
   /** The active quests with their logs as data. */
   getActiveQuests(): QuestSummary[] {
     return this.game.state.activatedQuests.map((quest) =>

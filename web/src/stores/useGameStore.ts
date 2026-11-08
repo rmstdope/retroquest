@@ -1412,8 +1412,10 @@ export const useGameStore = defineStore('game', () => {
    * come next for the word being typed, whether the text can already be sent
    * as a command, and which of three states the list is in — `matches` (some
    * words to offer), `none` (an earlier word is unknown, or the last word
-   * matches nothing) or `complete` (the command needs no more words). Matching
-   * ignores case; `word` is the last word as typed.
+   * matches nothing) or `complete` (the command needs no more words). Text
+   * the tree does not know but that ends in a character's name is `complete`,
+   * as the tree holds only full names and a character answers to more.
+   * Matching ignores case; `word` is the last word as typed.
    */
   function completionState(input: string): CompletionState {
     const typed = input.trimStart().toLowerCase()
@@ -1428,6 +1430,10 @@ export const useGameStore = defineStore('game', () => {
       sendable: false,
       word: typedWords[typedWords.length - 1],
     }
+    const unmatched = (sendable: boolean): CompletionState =>
+      endsInCharacterName(typedWords)
+        ? { ...none, kind: 'complete', sendable: true }
+        : { ...none, sendable }
 
     let node: CompletionTree | null = completionTree.value
     for (const token of tokens.slice(0, -1)) {
@@ -1435,7 +1441,8 @@ export const useGameStore = defineStore('game', () => {
         // Words after a finished command: nothing to offer.
         return { ...none, kind: 'complete', sendable: true }
       }
-      if (token === SENDABLE_MARKER || !Object.hasOwn(node, token)) return none
+      if (token === SENDABLE_MARKER || !Object.hasOwn(node, token))
+        return unmatched(false)
       node = node[token]
     }
     if (node === null) return { ...none, kind: 'complete', sendable: true }
@@ -1456,8 +1463,20 @@ export const useGameStore = defineStore('game', () => {
         : candidates.length === 1 && candidates[0] === last && endNode === null
     if (finished)
       return { kind: 'complete', candidates: [], sendable: true, word }
-    if (candidates.length === 0) return { ...none, sendable }
+    if (candidates.length === 0) return unmatched(sendable)
     return { kind: 'matches', candidates, sendable, word }
+  }
+
+  /** Whether words after a known first word end in the name of a character here. */
+  function endsInCharacterName(words: string[]): boolean {
+    if (!bridge || !Object.hasOwn(completionTree.value, words[0].toLowerCase()))
+      return false
+    const { controller } = bridge
+    return words
+      .slice(1)
+      .some((_, index) =>
+        controller.namesCharacter(words.slice(index + 1).join(' ')),
+      )
   }
 
   return {
