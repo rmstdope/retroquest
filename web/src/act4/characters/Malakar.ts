@@ -379,6 +379,38 @@ export class Malakar extends Character {
     )
   }
 
+  /**
+   * Redemption's Light cast on him: the light that reminds a fallen soul of
+   * who it was. Before the refrain he turns from it, after it he lets it
+   * rest and leaves the choice to Elior, and once healed it points at the
+   * forgiveness he waits for. It sets nothing and opens no ending.
+   */
+  receiveRedemptionsLight(gameState: GameState): string {
+    const ending = endingPlayed(gameState)
+    if (ending === 'justice') return GONE_INTO_SEAL
+    if (ending) {
+      return '[dim]The light rests on Malakar and fades. It has nothing left to do.[/dim]'
+    }
+    const name = characterName(this.name)
+    if (gameState.getStoryFlag(FLAG_ACT4_ELIXIR_ON_MALAKAR)) {
+      return (
+        `The light settles on ${name}. He is himself already, or nearly.\n` +
+        this.otherWords(gameState)
+      )
+    }
+    if (gameState.getStoryFlag(FLAG_ACT4_THRONE_REFRAIN_SAID)) {
+      return (
+        `The light settles on ${name}, and he does not turn from it.\n` +
+        dialogue(this.name, 'I remember. What happens now is yours, not mine.')
+      )
+    }
+    return (
+      `Soft light gathers around ${name}, and for a breath his robe is a ` +
+      "Warden's blue again. He shuts his eyes and turns back to the wound.\n" +
+      dialogue(this.name, 'I know who I was. It changes nothing.')
+    )
+  }
+
   /** Whether the elixir has been used, on anyone. */
   private choiceMade(gameState: GameState): boolean {
     return (
