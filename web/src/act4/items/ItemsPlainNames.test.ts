@@ -32,7 +32,7 @@ describe('Act IV key items answer to the nouns the story calls them by', () => {
   it.each(cases)('examine %s reads as the full name does', (noun, make) => {
     const full = make().name
     const expected = executeCommands(gameCarrying(make()), [`examine ${full}`])
-    expect(expected).not.toContain("You don't have")
+    expect(expected).not.toContain("You don't see")
     expect(executeCommands(gameCarrying(make()), [`examine ${noun}`])).toBe(
       expected,
     )
