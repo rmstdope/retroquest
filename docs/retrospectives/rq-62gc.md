@@ -10,4 +10,4 @@
 **Why.** Not established. The failing `main` runs do not contain this bead's change.
 **Cost.** One CI cycle of about 10 minutes, plus reading four runs' logs to tell it apart from a regression.
 **Prevent by.** `web/e2e/redLine.spec.ts`, helper `type`: pass a failure message to `expect.poll` that names the command, and the turn it saw instead, so a CI failure says which command was lost without needing the trace.
-**Seen before.** docs/retrospectives/rq-msx8.md and docs/retrospectives/rq-6lgv.md mention the red line; see them for whether it is this same failure.
+**Seen before.** None found.
