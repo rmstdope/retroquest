@@ -22,9 +22,6 @@ import { Guardians } from '../items/Guardians'
 import { FortressGates } from '../rooms/FortressGates'
 import { TowerOfShadows } from '../rooms/TowerOfShadows'
 
-/** What the Tower's shadows answer to, though they are nothing to hold. */
-const SHADOW_NAMES = ['shadows', 'shadow']
-
 /** The light on the Tower's shadows while the whispers hold the stair. */
 const SHADOWS_LIT =
   'The shadows draw back from the light, a moment late, and come again as ' +
@@ -126,14 +123,12 @@ export class Light extends Spell {
     return super.castOnCharacter(gameState, target)
   }
 
-  /** In the Tower the shadows on the stair answer, though they are no item; elsewhere nothing does. */
+  /** In the Tower the stair and its shadows answer, though they are no items; elsewhere nothing does. */
   override castOnName(gameState: GameState, target: string): string | null {
-    if (
-      !(gameState.currentRoom instanceof TowerOfShadows) ||
-      !SHADOW_NAMES.includes(target)
-    ) {
-      return null
-    }
+    const room = gameState.currentRoom
+    if (!(room instanceof TowerOfShadows)) return null
+    if (room.namesStair(target)) return room.light(gameState)
+    if (!room.namesShadows(target)) return null
     return gameState.getStoryFlag(FLAG_ACT4_TOWER_STAIR_OPEN)
       ? SHADOWS_LIT_STILL
       : SHADOWS_LIT

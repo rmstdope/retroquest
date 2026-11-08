@@ -84,9 +84,6 @@ const WHISPERS_SEEN =
   'Your sight sharpens, and there is nothing in the crystals to see. The ' +
   'lie is in what they hum, and it goes on, as sweet as before.'
 
-/** What the Tower's shadows answer to, though they are nothing to hold. */
-const SHADOW_NAMES = ['shadows', 'shadow']
-
 /** What the stair shows while the whispers hold it. */
 const STAIR_SEEN =
   'Your sight sharpens. The stair is as it looks, and the shadows are only ' +
@@ -165,14 +162,12 @@ export class TruthSight extends Spell {
     return NOTHING_HIDDEN
   }
 
-  /** In the Tower the shadows on the stair answer, though they are no item; elsewhere nothing does. */
+  /** In the Tower the stair and its shadows answer, though they are no items; elsewhere nothing does. */
   override castOnName(gameState: GameState, target: string): string | null {
-    if (
-      !(gameState.currentRoom instanceof TowerOfShadows) ||
-      !SHADOW_NAMES.includes(target)
-    ) {
-      return null
-    }
+    const room = gameState.currentRoom
+    if (!(room instanceof TowerOfShadows)) return null
+    if (room.namesStair(target)) return this.castSpell(gameState)
+    if (!room.namesShadows(target)) return null
     return this.stairHeld(gameState) ? SHADOWS_SEEN : NOTHING_HIDDEN
   }
 

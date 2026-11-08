@@ -42,9 +42,15 @@ describe('Light and Truth Sight in the Tower of Shadows', () => {
     ['cast light', 'The shadows draw back'],
     ['cast light on shadows', 'a moment late'],
     ['cast light on the shadows', 'a moment late'],
+    ['cast light on shadow', 'a moment late'],
+    ['cast light on stair', 'The shadows draw back'],
+    ['cast light on stairs', 'The shadows draw back'],
     ['cast light on whispers', 'there is no one on it'],
     ['cast truth sight', 'only shadows'],
     ['cast truth sight on shadows', 'only shadows'],
+    ['cast truth sight on shadow', 'only shadows'],
+    ['cast truth sight on stair', 'only shadows'],
+    ['cast truth sight on stairs', 'only shadows'],
     ['cast truth sight on whispers', 'the eye cannot answer'],
   ])('%s answers from the stair while the whispers hold it', (cmd, words) => {
     const game = standingIn('TowerOfShadows')
@@ -55,6 +61,9 @@ describe('Light and Truth Sight in the Tower of Shadows', () => {
     const game = standingIn('TowerOfShadows')
     game.state.setStoryFlag(FLAG_ACT4_TOWER_STAIR_OPEN, true)
     expect(answersInWorld(game, 'cast light')).toContain('only a stair')
+    expect(answersInWorld(game, 'cast light on stair')).toContain(
+      'only a stair',
+    )
     expect(answersInWorld(game, 'cast light on shadows')).toContain(
       'They keep still now.',
     )
@@ -66,6 +75,9 @@ describe('Light and Truth Sight in the Tower of Shadows', () => {
     const nothingHidden = executeCommands(game, ['cast truth sight'])
     expect(nothingHidden).toContain('no illusion here to see through')
     expect(executeCommands(game, ['cast truth sight on shadows'])).toBe(
+      nothingHidden,
+    )
+    expect(executeCommands(game, ['cast truth sight on stair'])).toBe(
       nothingHidden,
     )
   })
