@@ -1,5 +1,9 @@
 [
     {
+        "after": 32,
+        "commands": ["w", "s", "talk to mira"]
+    },
+    {
         "after": 50,
         "commands": [
             "use lifelight elixir on prison",

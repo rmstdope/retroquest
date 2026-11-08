@@ -12,6 +12,8 @@ import { Nyx } from './Nyx'
 import { ShadowOfThePast } from './ShadowOfThePast'
 import { SirCedric } from './SirCedric'
 import { SirCedricInTheHall } from './SirCedricInTheHall'
+import { MiraAtTheGate } from './MiraAtTheGate'
+import { SirCedricAtTheGate } from './SirCedricAtTheGate'
 import { SorceressOfLies } from './SorceressOfLies'
 import { TrappedServants } from './TrappedServants'
 import { TrueSelf } from './TrueSelf'
@@ -54,6 +56,8 @@ describe.each([
   ['Nyx', (): Character => new Nyx()],
   ['Sir Cedric', (): Character => new SirCedric()],
   ['Sir Cedric', (): Character => new SirCedricInTheHall()],
+  ['Mira', (): Character => new MiraAtTheGate()],
+  ['Sir Cedric', (): Character => new SirCedricAtTheGate()],
 ] as const)('%s, a proper name', (name, make) => {
   it('reads without an article', () => {
     expect(make().nameInSentence()).toBe(

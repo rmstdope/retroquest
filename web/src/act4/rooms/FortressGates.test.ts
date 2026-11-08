@@ -8,7 +8,6 @@ import {
   FLAG_ACT4_WHISPERS_MIRA_NAMED,
 } from '../Act4StoryFlags'
 import { FortressGates } from './FortressGates'
-import { SirCedricAtTheGate } from '../characters/SirCedricAtTheGate'
 import {
   executeCommands,
   expectDialogueSpeaker,
@@ -355,10 +354,16 @@ describe('FortressGates', () => {
       expect(executeCommands(game, ['talk to cedric'])).toContain(
         'Shadow does not tire',
       )
+      expect(executeCommands(game, ['talk to mira'])).toContain(
+        "I'm fine. My hands will stop in a while.",
+      )
       executeCommands(game, ['cast light on right ward stone'])
-      game.state.currentRoom.addCharacter(new SirCedricAtTheGate())
+      game.state.currentRoom.characters.length = 0
       game.loadSaveData(game.toSaveData())
       expect(executeCommands(game, ['talk to cedric'])).toContain(NOBODY)
+      expect(executeCommands(game, ['talk to mira'])).toContain(
+        'The way out stays open.',
+      )
     })
   })
 })
