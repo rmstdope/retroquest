@@ -103,12 +103,14 @@ function floatCount(base: number, area: number): number {
   return Math.max(1, Math.round((base * area) / (BASE_WIDTH * BASE_HEIGHT)))
 }
 
-/** The chance a new leaf starts to fall on a tick: scaled to the area, so a small picture has no more leaves for its size. */
+/**
+ * The chance a new leaf starts to fall on a tick. One leaf is a bigger share of
+ * a small picture than of a large one, so the chance falls faster than the area
+ * does, and a small picture has no more leaves for its size.
+ */
 function leafChance(rect: Rect): number {
-  return Math.max(
-    0.0005,
-    (0.005 * rect.w * rect.h) / (BASE_WIDTH * BASE_HEIGHT),
-  )
+  const share = (rect.w * rect.h) / (BASE_WIDTH * BASE_HEIGHT)
+  return 0.005 * Math.min(1, share * share)
 }
 
 /** A random number in [0, 1). */
@@ -269,8 +271,7 @@ export function createMotionScene(): MotionScene {
         if (
           n %
             Math.round(
-              24 /
-                Math.max(0.4, (rect.w * rect.h) / (BASE_WIDTH * BASE_HEIGHT)),
+              24 / ((rect.w * rect.h) / (BASE_WIDTH * BASE_HEIGHT)),
             ) ===
           0
         )

@@ -148,19 +148,19 @@ describe('a scene', () => {
 
   it('is no more crowded with embers or leaves on a small picture than on a large one', () => {
     for (const kind of ['embers', 'leaves'] as const) {
-      const mean = (w: number, h: number): number => {
+      /** Specks live at a time for each full 1280 × 720 of picture. */
+      const density = (w: number, h: number): number => {
         const scene = sceneOf(w, h)
         scene.setEffects([{ kind }], true)
+        const ticks = 40000
         let sum = 0
-        for (let i = 0; i < 6000; i++) {
+        for (let i = 0; i < ticks; i++) {
           scene.step(16.7)
           sum += scene.count(kind)
         }
-        return sum / 6000
+        return sum / ticks / ((w * h) / (1280 * 720))
       }
-      const large = mean(1280, 720)
-      const small = mean(390, 219)
-      expect(small, kind).toBeLessThan(large * 0.5 + 0.5)
+      expect(density(390, 219), kind).toBeLessThan(density(1280, 720) * 1.5)
     }
   })
 
