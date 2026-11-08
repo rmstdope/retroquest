@@ -11,17 +11,17 @@ export const MEMORY_VAULT_BEFORE =
   'shadow in the shape of a man. In the east wall is a round door of pale ' +
   'stone.'
 
-/** The whole Memory Vault description once the orbs are mended. */
-export const MEMORY_VAULT_AFTER =
+/** The mended Memory Vault up to the door the Shadow watches. */
+const MENDED_HEAD =
   'The orbs hang whole and still now, each holding its scene like a held ' +
   'breath. The Shadow of the Past stands among them, almost solid, its eyes ' +
-  'on the sealed door to the east.'
+  'on the'
+
+/** The whole Memory Vault description once the orbs are mended. */
+export const MEMORY_VAULT_AFTER = `${MENDED_HEAD} sealed door to the east.`
 
 /** The whole Memory Vault description once the door to the east is open. */
-export const MEMORY_VAULT_DOOR_OPEN =
-  'The orbs hang whole and still now, each holding its scene like a held ' +
-  'breath. The Shadow of the Past stands among them, almost solid, its eyes ' +
-  'on the open door to the east.'
+export const MEMORY_VAULT_DOOR_OPEN = `${MENDED_HEAD} open door to the east.`
 
 /** The Parents' Vault until the memories are seen. */
 export const PARENTS_VAULT_BEFORE =

@@ -466,17 +466,20 @@ describe('Throne Chamber, commands out of order', () => {
 describe('Throne Chamber after the elixir', () => {
   it('shows Malakar healed, not failing, once he has drunk it', () => {
     const game = healed()
-    for (const g of [game, (reload(game), game)]) {
-      const malakar = executeCommands(g, ['examine malakar'])
+    const expectHealed = (): void => {
+      const malakar = executeCommands(game, ['examine malakar'])
       expect(malakar).not.toContain('the only thing holding him up')
       expect(malakar).toContain('The grey is gone from his face')
-      const wound = executeCommands(g, ['examine wound'])
+      const wound = executeCommands(game, ['examine wound'])
       expect(wound).not.toContain('and from Malakar too')
       expect(wound).toContain('It drinks the light from the king, still.')
-      const sight = executeCommands(g, ['cast truth sight on malakar'])
+      const sight = executeCommands(game, ['cast truth sight on malakar'])
       expect(sight).not.toContain('Then the shadows close again.')
       expect(sight).toContain('This time the shadows do not close.')
     }
+    expectHealed()
+    reload(game)
+    expectHealed()
   })
 
   it('shows the wound off the king once the elixir has freed him', () => {

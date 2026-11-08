@@ -300,8 +300,11 @@ describe('Justice', () => {
     expect(game.state.currentRoom.describe(game.state)).not.toContain(
       '[character_name]Malakar[/character_name]',
     )
-    expect(executeCommands(game, ['talk to malakar'])).not.toContain(
-      dialogue('Malakar', ''),
+    expect(executeCommands(game, ['talk to malakar'])).toContain(
+      "There is no character named '[character_name]malakar[/character_name]' here",
+    )
+    expect(executeCommands(game, ['use ancient amulet'])).toContain(
+      'The amulet is dark now, and still warm.',
     )
     expect(executeCommands(game, ['talk to king alden'])).toContain(
       'The kingdom will remember what you did here, farmer. I will see that it does.',
@@ -443,6 +446,9 @@ describe('after the endings and around them', () => {
     )
     expect(executeCommands(game, ['examine malakar'])).toContain(
       "You don't see a 'malakar'",
+    )
+    expect(executeCommands(game, ['give ancient amulet to malakar'])).toContain(
+      "There is no character named 'Malakar' here.",
     )
   })
 
