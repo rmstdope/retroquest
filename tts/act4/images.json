@@ -58,6 +58,38 @@
         "id": "exit-east",
         "title": "Way east"
       }
+    ],
+    "patches": [
+      {
+        "id": "guardians-chain-taken",
+        "title": "Guardian's Chain taken",
+        "text": "Remove the guardian's chain from the picture.",
+        "area": "guardians-chain"
+      },
+      {
+        "id": "guardians-essence-taken",
+        "title": "Guardian's Essence taken",
+        "text": "Remove the guardian's essence from the picture.",
+        "area": "guardians-essence"
+      },
+      {
+        "id": "exit-north-open",
+        "title": "Way north open",
+        "text": "Show the way north open and passable.",
+        "area": "exit-north"
+      },
+      {
+        "id": "exit-east-open",
+        "title": "Way east open",
+        "text": "Show the way east open and passable.",
+        "area": "exit-east"
+      },
+      {
+        "id": "ward-stone-fragment-appears",
+        "title": "Ward Stone Fragment appears",
+        "text": "Add the ward stone fragment to the picture.",
+        "area": "ward-stone-fragment"
+      }
     ]
   },
   {
@@ -86,6 +118,26 @@
       {
         "id": "exit-north",
         "title": "Way north"
+      }
+    ],
+    "patches": [
+      {
+        "id": "servants-pendant-taken",
+        "title": "Servant's Pendant taken",
+        "text": "Remove the servant's pendant from the picture.",
+        "area": "servants-pendant"
+      },
+      {
+        "id": "exit-north-open",
+        "title": "Way north open",
+        "text": "Show the way north open and passable.",
+        "area": "exit-north"
+      },
+      {
+        "id": "trapped-servants-freed",
+        "title": "Servants freed",
+        "text": "Show the servants freed from their trap and standing free.",
+        "area": "trapped-servants"
       }
     ]
   },
@@ -119,6 +171,26 @@
       {
         "id": "true-self",
         "title": "True Self"
+      }
+    ],
+    "patches": [
+      {
+        "id": "exit-north-closed",
+        "title": "Way north closed",
+        "text": "Show the way north closed off.",
+        "area": "exit-north"
+      },
+      {
+        "id": "exit-east-closed",
+        "title": "Way east closed",
+        "text": "Show the way east closed off.",
+        "area": "exit-east"
+      },
+      {
+        "id": "exit-west-closed",
+        "title": "Way west closed",
+        "text": "Show the way west closed off.",
+        "area": "exit-west"
       }
     ]
   },
@@ -161,6 +233,26 @@
         "id": "exit-east",
         "title": "Way east"
       }
+    ],
+    "patches": [
+      {
+        "id": "echo-stone-taken",
+        "title": "Echo Stone taken",
+        "text": "Remove the echo stone from the picture.",
+        "area": "echo-stone"
+      },
+      {
+        "id": "exit-east-open",
+        "title": "Way east open",
+        "text": "Show the way east open and passable.",
+        "area": "exit-east"
+      },
+      {
+        "id": "knight-of-despair-redeemed",
+        "title": "Knight redeemed",
+        "text": "Show the knight redeemed, his dark bearing lifted.",
+        "area": "knight-of-despair"
+      }
     ]
   },
   {
@@ -185,6 +277,20 @@
       {
         "id": "exit-in",
         "title": "Way in"
+      }
+    ],
+    "patches": [
+      {
+        "id": "whispers-gone",
+        "title": "Whispers gone",
+        "text": "Remove Whispers from the picture.",
+        "area": "whispers"
+      },
+      {
+        "id": "exit-up-open",
+        "title": "Way up open",
+        "text": "Show the way up open and passable.",
+        "area": "exit-up"
       }
     ]
   },
@@ -215,6 +321,20 @@
         "id": "exit-north",
         "title": "Way north"
       }
+    ],
+    "patches": [
+      {
+        "id": "exit-north-open",
+        "title": "Way north open",
+        "text": "Show the way north open and passable.",
+        "area": "exit-north"
+      },
+      {
+        "id": "sorceress-of-lies-unmasked",
+        "title": "Sorceress unmasked",
+        "text": "Show the sorceress unmasked, her false face gone.",
+        "area": "sorceress-of-lies"
+      }
     ]
   },
   {
@@ -244,6 +364,20 @@
         "id": "exit-east",
         "title": "Way east"
       }
+    ],
+    "patches": [
+      {
+        "id": "exit-east-open",
+        "title": "Way east open",
+        "text": "Show the way east open and passable.",
+        "area": "exit-east"
+      },
+      {
+        "id": "shadow-of-the-past-revealed",
+        "title": "Shadow revealed",
+        "text": "Show the shadow of the past in its full shape.",
+        "area": "shadow-of-the-past"
+      }
     ]
   },
   {
@@ -268,6 +402,14 @@
       {
         "id": "exit-north",
         "title": "Way north"
+      }
+    ],
+    "patches": [
+      {
+        "id": "exit-north-open",
+        "title": "Way north open",
+        "text": "Show the way north open and passable.",
+        "area": "exit-north"
       }
     ]
   },
@@ -305,6 +447,14 @@
       {
         "id": "exit-north",
         "title": "Way north"
+      }
+    ],
+    "patches": [
+      {
+        "id": "exit-north-open",
+        "title": "Way north open",
+        "text": "Show the way north open and passable.",
+        "area": "exit-north"
       }
     ]
   },

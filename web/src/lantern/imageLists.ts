@@ -6,7 +6,7 @@
  * description with the markup removed, or the character's hand-written face
  * portrait prompt, the studio's starting prompt; the shared style is the
  * studio's, in `content-studio/images/edits.json`. A room image also lists its
- * named areas (`roomAreas.ts`). The tts script
+ * named areas (`roomAreas.ts`) and its patches (`roomPatches.ts`). The tts script
  * `extract-act.ts` writes the lists.
  */
 import { Character, type Act } from '@/engine'
@@ -15,6 +15,7 @@ import { narrationText } from './narrationKey'
 import { ELIOR_PORTRAIT_PROMPT, PORTRAIT_PROMPTS } from './portraitPrompts'
 import { roomTrackId } from './musicLists'
 import { declaredAreas, type ImageArea } from './roomAreas'
+import { declaredPatches, type ImagePatch } from './roomPatches'
 
 /** Width in pixels of every room image. */
 export const IMAGE_WIDTH = 1920
@@ -66,18 +67,24 @@ export interface GameImage {
   text: string
   /** A room image's named areas: one for each item, character, scenery piece and exit that can ever be in the room, which the navigator places on the image in the studio. Absent for a portrait. */
   areas?: ImageArea[]
+  /** A room image's patches: the small changes the picture needs, each linked to the area of the thing it is about. Absent for a portrait and for a room with no small change. */
+  patches?: ImagePatch[]
 }
 
 /** One image for each room of the act, described by the room's own description. */
 export function roomImages(act: Act): GameImage[] {
-  return Object.entries(act.rooms).map(([key, room]) => ({
-    id: roomTrackId(act.name, key),
-    title: room.name,
-    width: IMAGE_WIDTH,
-    height: IMAGE_HEIGHT,
-    text: narrationText(room.description),
-    areas: [...declaredAreas(act.name, key)],
-  }))
+  return Object.entries(act.rooms).map(([key, room]) => {
+    const patches = declaredPatches(act.name, key)
+    return {
+      id: roomTrackId(act.name, key),
+      title: room.name,
+      width: IMAGE_WIDTH,
+      height: IMAGE_HEIGHT,
+      text: narrationText(room.description),
+      areas: [...declaredAreas(act.name, key)],
+      ...(patches.length > 0 ? { patches: [...patches] } : {}),
+    }
+  })
 }
 
 /** The hand-written portrait prompt of character class `classKey`; a character without one is a mistake. */

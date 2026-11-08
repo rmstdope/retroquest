@@ -26,6 +26,26 @@
         "id": "lifelight-elixir",
         "title": "Lifelight Elixir"
       }
+    ],
+    "patches": [
+      {
+        "id": "healing-herbs-gone",
+        "title": "Healing Herbs gone",
+        "text": "Remove the healing herbs from the picture.",
+        "area": "healing-herbs"
+      },
+      {
+        "id": "mira-gone",
+        "title": "Mira gone",
+        "text": "Remove Mira from the picture.",
+        "area": "mira"
+      },
+      {
+        "id": "lifelight-elixir-taken",
+        "title": "Lifelight Elixir taken",
+        "text": "Remove the lifelight elixir from the picture.",
+        "area": "lifelight-elixir"
+      }
     ]
   },
   {
@@ -67,6 +87,26 @@
         "id": "rusted-locker-key",
         "title": "Rusted Locker Key"
       }
+    ],
+    "patches": [
+      {
+        "id": "mira-gone",
+        "title": "Mira gone",
+        "text": "Remove Mira from the picture.",
+        "area": "mira"
+      },
+      {
+        "id": "sea-sealed-letter-taken",
+        "title": "Sea-Sealed Letter taken",
+        "text": "Remove the sea-sealed letter from the picture.",
+        "area": "sea-sealed-letter"
+      },
+      {
+        "id": "rusted-locker-key-taken",
+        "title": "Rusted Locker Key taken",
+        "text": "Remove the rusted locker key from the picture.",
+        "area": "rusted-locker-key"
+      }
     ]
   },
   {
@@ -99,6 +139,20 @@
       {
         "id": "moon-rune-shards",
         "title": "Moon Rune Shards"
+      }
+    ],
+    "patches": [
+      {
+        "id": "polished-shell-taken",
+        "title": "Polished Shell taken",
+        "text": "Remove the polished shell from the picture.",
+        "area": "polished-shell"
+      },
+      {
+        "id": "moon-rune-shards-taken",
+        "title": "Moon Rune Shards taken",
+        "text": "Remove the moon rune shards from the picture.",
+        "area": "moon-rune-shards"
       }
     ]
   },
@@ -133,6 +187,14 @@
         "id": "sir-cedric",
         "title": "Sir Cedric"
       }
+    ],
+    "patches": [
+      {
+        "id": "warding-pillars-purified",
+        "title": "Pillars purified",
+        "text": "Show the warding pillars cleansed, their glow clear and steady.",
+        "area": "warding-pillars"
+      }
     ]
   },
   {
@@ -166,6 +228,20 @@
         "id": "prism-lantern",
         "title": "Prism Lantern"
       }
+    ],
+    "patches": [
+      {
+        "id": "weathered-coin-taken",
+        "title": "Weathered Coin taken",
+        "text": "Remove the weathered coin from the picture.",
+        "area": "weathered-coin"
+      },
+      {
+        "id": "prism-lantern-taken",
+        "title": "Prism Lantern taken",
+        "text": "Remove the prism lantern from the picture.",
+        "area": "prism-lantern"
+      }
     ]
   },
   {
@@ -195,6 +271,20 @@
         "id": "exit-east",
         "title": "Way east"
       }
+    ],
+    "patches": [
+      {
+        "id": "exit-east-open",
+        "title": "Way east open",
+        "text": "Show the way east open and passable.",
+        "area": "exit-east"
+      },
+      {
+        "id": "lantern-bracket-mounted",
+        "title": "Lantern mounted",
+        "text": "Show a lit lantern mounted in the bracket on the wall.",
+        "area": "lantern-bracket"
+      }
     ]
   },
   {
@@ -223,6 +313,20 @@
       {
         "id": "crystal-of-light",
         "title": "Crystal of Light"
+      }
+    ],
+    "patches": [
+      {
+        "id": "exit-east-closed",
+        "title": "Way east closed",
+        "text": "Show the way east closed off.",
+        "area": "exit-east"
+      },
+      {
+        "id": "crystal-of-light-taken",
+        "title": "Crystal of Light taken",
+        "text": "Remove the crystal of light from the picture.",
+        "area": "crystal-of-light"
       }
     ]
   },
@@ -261,6 +365,26 @@
         "id": "brass-mirror-segment",
         "title": "Brass Mirror Segment"
       }
+    ],
+    "patches": [
+      {
+        "id": "emberwater-canteen-taken",
+        "title": "Emberwater Canteen taken",
+        "text": "Remove the emberwater canteen from the picture.",
+        "area": "emberwater-canteen"
+      },
+      {
+        "id": "mira-gone",
+        "title": "Mira gone",
+        "text": "Remove Mira from the picture.",
+        "area": "mira"
+      },
+      {
+        "id": "brass-mirror-segment-taken",
+        "title": "Brass Mirror Segment taken",
+        "text": "Remove the brass mirror segment from the picture.",
+        "area": "brass-mirror-segment"
+      }
     ]
   },
   {
@@ -289,6 +413,20 @@
       {
         "id": "binding-resin",
         "title": "Binding Resin"
+      }
+    ],
+    "patches": [
+      {
+        "id": "brass-mirror-segment-taken",
+        "title": "Brass Mirror Segment taken",
+        "text": "Remove the brass mirror segment from the picture.",
+        "area": "brass-mirror-segment"
+      },
+      {
+        "id": "binding-resin-taken",
+        "title": "Binding Resin taken",
+        "text": "Remove the binding resin from the picture.",
+        "area": "binding-resin"
       }
     ]
   },
@@ -327,6 +465,20 @@
         "id": "exit-east",
         "title": "Way east"
       }
+    ],
+    "patches": [
+      {
+        "id": "brass-mirror-segment-taken",
+        "title": "Brass Mirror Segment taken",
+        "text": "Remove the brass mirror segment from the picture.",
+        "area": "brass-mirror-segment"
+      },
+      {
+        "id": "exit-east-open",
+        "title": "Way east open",
+        "text": "Show the way east open and passable.",
+        "area": "exit-east"
+      }
     ]
   },
   {
@@ -364,6 +516,20 @@
         "id": "exit-in",
         "title": "Way in"
       }
+    ],
+    "patches": [
+      {
+        "id": "vent-stone-taken",
+        "title": "Vent Stone taken",
+        "text": "Remove the vent stone from the picture.",
+        "area": "vent-stone"
+      },
+      {
+        "id": "exit-south-open",
+        "title": "Way south open",
+        "text": "Show the way south open and passable.",
+        "area": "exit-south"
+      }
     ]
   },
   {
@@ -392,6 +558,20 @@
       {
         "id": "cooled-slag",
         "title": "Cooled Slag"
+      }
+    ],
+    "patches": [
+      {
+        "id": "ash-fern-taken",
+        "title": "Ash-Fern taken",
+        "text": "Remove the ash-fern from the picture.",
+        "area": "ash-fern"
+      },
+      {
+        "id": "cooled-slag-taken",
+        "title": "Cooled Slag taken",
+        "text": "Remove the cooled slag from the picture.",
+        "area": "cooled-slag"
       }
     ]
   },
@@ -443,6 +623,14 @@
         "id": "sir-cedric",
         "title": "Sir Cedric"
       }
+    ],
+    "patches": [
+      {
+        "id": "mira-gone",
+        "title": "Mira gone",
+        "text": "Remove Mira from the picture.",
+        "area": "mira"
+      }
     ]
   },
   {
@@ -479,6 +667,32 @@
       {
         "id": "wedge-blocks",
         "title": "Wedge Blocks"
+      }
+    ],
+    "patches": [
+      {
+        "id": "reinforced-braces-taken",
+        "title": "Reinforced Braces taken",
+        "text": "Remove the reinforced braces from the picture.",
+        "area": "reinforced-braces"
+      },
+      {
+        "id": "support-straps-taken",
+        "title": "Support Straps taken",
+        "text": "Remove the support straps from the picture.",
+        "area": "support-straps"
+      },
+      {
+        "id": "wedge-blocks-taken",
+        "title": "Wedge Blocks taken",
+        "text": "Remove the wedge blocks from the picture.",
+        "area": "wedge-blocks"
+      },
+      {
+        "id": "supply-crate-appears",
+        "title": "Supply Crate appears",
+        "text": "Add the supply crate to the picture.",
+        "area": "supply-crate"
       }
     ]
   },
@@ -517,6 +731,20 @@
         "id": "exit-east",
         "title": "Way east"
       }
+    ],
+    "patches": [
+      {
+        "id": "fallen-rock-gone",
+        "title": "Fallen Rock gone",
+        "text": "Remove the fallen rock from the picture.",
+        "area": "fallen-rock"
+      },
+      {
+        "id": "exit-east-open",
+        "title": "Way east open",
+        "text": "Show the way east open and passable.",
+        "area": "exit-east"
+      }
     ]
   },
   {
@@ -545,6 +773,20 @@
       {
         "id": "resonant-chant-rubbings",
         "title": "Resonant Chant Rubbings"
+      }
+    ],
+    "patches": [
+      {
+        "id": "old-oath-scrolls-taken",
+        "title": "Old Oath Scrolls taken",
+        "text": "Remove the old oath scrolls from the picture.",
+        "area": "old-oath-scrolls"
+      },
+      {
+        "id": "resonant-chant-rubbings-taken",
+        "title": "Resonant Chant Rubbings taken",
+        "text": "Remove the resonant chant rubbings from the picture.",
+        "area": "resonant-chant-rubbings"
       }
     ]
   },
@@ -595,6 +837,32 @@
         "id": "exit-east",
         "title": "Way east"
       }
+    ],
+    "patches": [
+      {
+        "id": "stillwater-phial-taken",
+        "title": "Stillwater Phial taken",
+        "text": "Remove the stillwater phial from the picture.",
+        "area": "stillwater-phial"
+      },
+      {
+        "id": "quiet-charm-taken",
+        "title": "Quiet Charm taken",
+        "text": "Remove the quiet charm from the picture.",
+        "area": "quiet-charm"
+      },
+      {
+        "id": "wandering-phantoms-gone",
+        "title": "Wandering Phantoms gone",
+        "text": "Remove Wandering Phantoms from the picture.",
+        "area": "wandering-phantoms"
+      },
+      {
+        "id": "exit-east-open",
+        "title": "Way east open",
+        "text": "Show the way east open and passable.",
+        "area": "exit-east"
+      }
     ]
   },
   {
@@ -623,6 +891,14 @@
       {
         "id": "dragons-scale",
         "title": "Dragon's Scale"
+      }
+    ],
+    "patches": [
+      {
+        "id": "dragons-scale-taken",
+        "title": "Dragon's Scale taken",
+        "text": "Remove the dragon's scale from the picture.",
+        "area": "dragons-scale"
       }
     ]
   },
