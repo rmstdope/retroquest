@@ -810,6 +810,11 @@
     "text": "You step toward a corridor of light and walk straight into cold glass. Somewhere behind you, a reflection laughs. You are back at the entrance."
   },
   {
+    "id": "1e3aebbdd3efc2",
+    "speaker": "narrator",
+    "text": "Every mirror gives your light back. In every corridor another Elior holds up the same light, and the light does not say which of them is true."
+  },
+  {
     "id": "1b4c95f929516e",
     "speaker": "narrator",
     "text": "You hold the echo stone to your ear. One voice repeats, patient as a heartbeat:"
@@ -845,6 +850,11 @@
     "text": "Remember what you told me, when you stand before him."
   },
   {
+    "id": "088a74c20a518a",
+    "speaker": "narrator",
+    "text": "The false mirrors stay dark, and your light dies in the glass."
+  },
+  {
     "id": "03bc080972c9d9",
     "speaker": "narrator",
     "text": "The true path is already clear. The false mirrors stay dark."
@@ -870,6 +880,11 @@
     "text": "The word catches in your throat. You have seen something of him, but you do not yet know what he has done. There is more in this hall to see through."
   },
   {
+    "id": "0f7b522dfffba2",
+    "speaker": "narrator",
+    "text": "The light climbs the banners and stops at the grime. Whatever is stitched beneath the dirt stays there."
+  },
+  {
     "id": "17c73ec19febeb",
     "speaker": "knight of despair",
     "text": "So you see something of me. That is not the same as knowing me. Look around you, if you must know."
@@ -888,6 +903,11 @@
     "id": "0b837bfd3596d0",
     "speaker": "narrator",
     "text": "The Knight of Despair: You have seen something of the knight, but not all of him. There is more in this hall to see through."
+  },
+  {
+    "id": "0a0d93a2f176c3",
+    "speaker": "narrator",
+    "text": "The light climbs the banners and shows the grime. You know now what is stitched beneath it."
   },
   {
     "id": "0fa78831a2c19d",
@@ -1115,6 +1135,36 @@
     "text": "You came back down those stairs. Then there is still hope. I had not thought to see it."
   },
   {
+    "id": "1632b6fb009886",
+    "speaker": "narrator",
+    "text": "The light runs up the stair as far as the first turn. The shadows draw back from it, a moment late. The whispers go on, no quieter."
+  },
+  {
+    "id": "0aa774c90f9636",
+    "speaker": "narrator",
+    "text": "The shadows draw back from the light, a moment late, and come again as soon as it passes. They only ever follow you."
+  },
+  {
+    "id": "05de0ba44f83e3",
+    "speaker": "narrator",
+    "text": "The light falls on the stair, and there is no one on it. The whispers go on from the empty air."
+  },
+  {
+    "id": "01e53e4bd0bfdf",
+    "speaker": "narrator",
+    "text": "Your sight sharpens. The stair is as it looks, and the shadows are only shadows, a moment late. The whispers go on."
+  },
+  {
+    "id": "0beec10305b5b6",
+    "speaker": "narrator",
+    "text": "Your sight sharpens. They are only shadows, a moment late. Nothing is standing in them."
+  },
+  {
+    "id": "1b9c3290ff322f",
+    "speaker": "narrator",
+    "text": "Your sight sharpens, and still there is no one on the stair. The voices have no mouths to find. What they say, the eye cannot answer."
+  },
+  {
     "id": "0deae389ec4adb",
     "speaker": "narrator",
     "text": "You hold the token up, and it grows warm. Under the whispers, very faint, you think you hear your name, in Mira's voice, and what she said at the gate: say our names."
@@ -1200,14 +1250,24 @@
     "text": "The whispers have nothing left to say. They thin like smoke, and the stair above lies open."
   },
   {
-    "id": "1309fe5aca036a",
+    "id": "1f9a37d4dce634",
     "speaker": "narrator",
-    "text": "The token is quiet and warm. The whispers are gone."
+    "text": "The light runs up the stair as far as the first turn. It is only a stair."
   },
   {
     "id": "1ad1cc3d05e941",
     "speaker": "narrator",
     "text": "A stair winds up inside the black stone, narrow and dark. The walls are cold, and there are no windows. The whispers are gone. The stair winds up into the dark, and it is only a stair."
+  },
+  {
+    "id": "0962b6eec637fc",
+    "speaker": "narrator",
+    "text": "The light shows the steps and the shadows under them. They keep still now."
+  },
+  {
+    "id": "1309fe5aca036a",
+    "speaker": "narrator",
+    "text": "The token is quiet and warm. The whispers are gone."
   },
   {
     "id": "1e113540f7ca91",
@@ -1495,6 +1555,11 @@
     "text": "The sealed door will not move. Its runes are dark."
   },
   {
+    "id": "1302b080300b1c",
+    "speaker": "narrator",
+    "text": "The light goes into the cracked glass and comes out clouded. The scenes inside stay broken."
+  },
+  {
     "id": "16e911cd88bb09",
     "speaker": "narrator",
     "text": "The orbs are cracked and clouded. In one you glimpse three young people laughing over a workbench; in another, a cradle by a fire. Each scene breaks apart before you can hold it. From the cracked one by the cradle a voice sings, low:"
@@ -1563,6 +1628,11 @@
     "id": "0909452c12ea1a",
     "speaker": "narrator",
     "text": "The orbs hang whole and still now, each holding its scene like a held breath. The Shadow of the Past stands among them, almost solid, its eyes on the sealed door to the east."
+  },
+  {
+    "id": "0b90079ab2d085",
+    "speaker": "narrator",
+    "text": "The light passes through the mended glass. The scenes inside hold well enough without it."
   },
   {
     "id": "0cfbfce54fe08a",

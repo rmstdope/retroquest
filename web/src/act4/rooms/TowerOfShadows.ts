@@ -18,6 +18,21 @@ const STAIR_OPEN =
   ' The whispers are gone. The stair winds up into the dark, and it is only ' +
   'a stair.'
 
+/** What the stair answers to, though it is no item in the room. */
+const STAIR_NAMES = ['stair', 'stairs']
+
+/** What the shadows on the stair answer to, though they are no item either. */
+const SHADOW_NAMES = ['shadows', 'shadow']
+
+/** The light on the stair while the whispers hold it. */
+const STAIR_LIT =
+  'The light runs up the stair as far as the first turn. The shadows draw ' +
+  'back from it, a moment late. The whispers go on, no quieter.'
+
+/** The light on the stair once the whispers are gone. */
+const STAIR_LIT_OPEN =
+  'The light runs up the stair as far as the first turn. It is only a stair.'
+
 /** What presses on Elior on the stair before any friend is named. */
 const NO_NAME_HINT =
   'The whispers on the stair say that no one stayed with you. ' +
@@ -76,6 +91,23 @@ export class TowerOfShadows extends Room {
         'your friends have left you, no one is coming, you were always alone. ' +
         'You stumble back down.',
     )
+  }
+
+  /** There is no window on the stair, so the light does show it; the whispers do not care. */
+  override light(gameState: GameState): string {
+    return gameState.getStoryFlag(FLAG_ACT4_TOWER_STAIR_OPEN)
+      ? STAIR_LIT_OPEN
+      : STAIR_LIT
+  }
+
+  /** Whether a name typed as a spell's target means the stair. */
+  namesStair(name: string): boolean {
+    return STAIR_NAMES.includes(name)
+  }
+
+  /** Whether a name typed as a spell's target means the shadows on the stair. */
+  namesShadows(name: string): boolean {
+    return SHADOW_NAMES.includes(name)
   }
 
   /**

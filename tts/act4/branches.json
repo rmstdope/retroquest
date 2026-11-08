@@ -369,5 +369,59 @@
             "say truth to true self",
             "talk to true self"
         ]
+    },
+    {
+        "after": 17,
+        "commands": [
+            "cast light on mirrors"
+        ]
+    },
+    {
+        "after": 21,
+        "commands": [
+            "cast light on mirrors"
+        ]
+    },
+    {
+        "after": 25,
+        "commands": [
+            "cast light on banners"
+        ]
+    },
+    {
+        "after": 26,
+        "commands": [
+            "cast light on banners"
+        ]
+    },
+    {
+        "after": 30,
+        "commands": [
+            "cast light",
+            "cast light on shadows",
+            "cast light on whispers",
+            "cast truth sight",
+            "cast truth sight on shadows",
+            "cast truth sight on whispers"
+        ]
+    },
+    {
+        "after": 33,
+        "commands": [
+            "cast light",
+            "cast light on shadows"
+        ]
+    },
+    {
+        "after": 40,
+        "commands": [
+            "cast light on memory orbs"
+        ]
+    },
+    {
+        "after": 41,
+        "commands": [
+            "cast light on memory orbs"
+        ]
     }
 ]
