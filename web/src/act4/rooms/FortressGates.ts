@@ -1,4 +1,6 @@
 import { Room, type Exits, type GameState, characterName, clue } from '@/engine'
+import { MiraAtTheGate } from '../characters/MiraAtTheGate'
+import { SirCedricAtTheGate } from '../characters/SirCedricAtTheGate'
 import { WardStoneFragment } from '../items/WardStoneFragment'
 import { GuardiansChain } from '../items/GuardiansChain'
 import { GuardiansEssence } from '../items/GuardiansEssence'
@@ -21,6 +23,14 @@ const MIRA_SENTENCE =
   ` Just inside the threshold ${characterName('Mira')} keeps the way out, ` +
   'her back to the gatepost.'
 
+/** Sir Cedric beside Mira while the wall stands. */
+const CEDRIC_BESIDE_SENTENCE =
+  ` ${characterName('Sir Cedric')} stands beside her, his eyes on the ` +
+  'guardians.'
+
+/** Sir Cedric gone once the wall has fallen. */
+const CEDRIC_GONE_SENTENCE = ` ${characterName('Sir Cedric')} has gone on ahead, into the hall.`
+
 /** The gates while the barrier stands and the guardians drift between the stones. */
 const GATES_BEFORE_DESCRIPTION =
   'You stand just inside the fortress gates. The ways on, north and east, ' +
@@ -28,14 +38,16 @@ const GATES_BEFORE_DESCRIPTION =
   'middle and right, swell and fade with it. Guardians made of shadow ' +
   'drift between the stones, watching you.' +
   SIGIL_SENTENCE +
-  MIRA_SENTENCE
+  MIRA_SENTENCE +
+  CEDRIC_BESIDE_SENTENCE
 
 /** The gates once the stones are dark and the guardians gone. */
 const GATES_AFTER_DESCRIPTION =
   'You stand just inside the fortress gates. The ward stones are dark, and ' +
   'the violet wall is gone; the ways north and east lie open.' +
   SIGIL_SENTENCE +
-  MIRA_SENTENCE
+  MIRA_SENTENCE +
+  CEDRIC_GONE_SENTENCE
 
 /**
  * The dark entrance to Malakar's fortress, protected by shadow guardians.
@@ -56,7 +68,7 @@ export class FortressGates extends Room {
         new WardStones(),
         new Barriers(),
       ],
-      characters: [],
+      characters: [new MiraAtTheGate(), new SirCedricAtTheGate()],
       exits: { north: 'HallOfEchoes', east: 'OuterCourtyard' },
     })
   }
@@ -74,6 +86,28 @@ export class FortressGates extends Room {
     return this.isSolved(gameState)
       ? GATES_AFTER_DESCRIPTION
       : GATES_BEFORE_DESCRIPTION
+  }
+
+  /**
+   * Keeps the companions in step with the story on a load: older saves had
+   * nobody here, and Sir Cedric is gone once the wall has fallen.
+   */
+  override refreshSavedText(gameState: GameState): void {
+    if (!this.characters.some((c) => c instanceof MiraAtTheGate)) {
+      this.addCharacter(new MiraAtTheGate())
+    }
+    const cedricHere = this.characters.some(
+      (c) => c instanceof SirCedricAtTheGate,
+    )
+    if (this.isSolved(gameState)) this.sendCedricOn()
+    else if (!cedricHere) this.addCharacter(new SirCedricAtTheGate())
+  }
+
+  /** Sir Cedric leaves for the hall: out of the room's characters. */
+  private sendCedricOn(): void {
+    this.characters = this.characters.filter(
+      (c) => !(c instanceof SirCedricAtTheGate),
+    )
   }
 
   /** The ways north and east open once the barrier is down. */
@@ -136,6 +170,7 @@ export class FortressGates extends Room {
     gameState.setStoryFlag(FLAG_ACT4_SHATTERED_WARD_GUARDIANS_STARTED, true)
     gameState.setStoryFlag(FLAG_ACT4_BARRIERS_DISABLED, true)
     gameState.setStoryFlag(FLAG_ACT4_SHATTERED_WARD_GUARDIANS_COMPLETED, true)
+    this.sendCedricOn()
     this.addItem(new WardStoneFragment())
     this.addItem(new GuardiansChain())
     this.addItem(new GuardiansEssence())

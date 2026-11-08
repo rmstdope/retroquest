@@ -51,6 +51,8 @@ import { KingAlden } from './characters/KingAlden'
 import { Grandmother } from './characters/Grandmother'
 import { SirCedricInTheHall } from './characters/SirCedricInTheHall'
 import { Mira } from './characters/Mira'
+import { MiraAtTheGate } from './characters/MiraAtTheGate'
+import { SirCedricAtTheGate } from './characters/SirCedricAtTheGate'
 import { SirCedric } from './characters/SirCedric'
 import { Nyx } from './characters/Nyx'
 import { Whispers } from './characters/Whispers'
@@ -99,7 +101,9 @@ export const ACT4_CLASSES = {
   KingAlden,
   Grandmother,
   Mira,
+  MiraAtTheGate,
   SirCedric,
+  SirCedricAtTheGate,
   SirCedricInTheHall,
   Nyx,
   Whispers,
