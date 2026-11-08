@@ -322,6 +322,14 @@ export class GameController {
     return this.game.findCharacter(words) !== null
   }
 
+  /** The full name of the item here the words name, among those `offered` accepts, or null. */
+  itemNamed(
+    words: string,
+    offered: (fullName: string) => boolean,
+  ): string | null {
+    return this.game.itemNamed(words, offered)
+  }
+
   /** The active quests with their logs as data. */
   getActiveQuests(): QuestSummary[] {
     return this.game.state.activatedQuests.map((quest) =>

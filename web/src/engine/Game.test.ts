@@ -1865,6 +1865,39 @@ describe('Game', () => {
   })
 })
 
+describe('Game.itemNamed', () => {
+  /** An item that also answers to one word its name does not hold. */
+  class Pendant extends Item {
+    constructor() {
+      super({ name: 'Token', description: 'A test item', canBeCarried: true })
+    }
+
+    /** Also answers to "pendant". */
+    override answersTo(name: string): boolean {
+      return super.answersTo(name) || name === 'pendant'
+    }
+  }
+
+  const everything = (): boolean => true
+
+  it('gives the full name of an item by a name only it knows', () => {
+    const game = makeGame()
+    game.state.inventory.push(new Pendant())
+
+    expect(game.itemNamed('pendant', everything)).toBe('Token')
+    expect(game.itemNamed('the pendant', everything)).toBe('Token')
+    expect(game.itemNamed('bob', everything)).toBeNull()
+  })
+
+  it('looks only among the items offered', () => {
+    const game = makeGame()
+    game.state.currentRoom.items.push(new Pendant())
+
+    expect(game.itemNamed('pendant', (name) => name === 'Other')).toBeNull()
+    expect(game.itemNamed('pendant', (name) => name === 'Token')).toBe('Token')
+  })
+})
+
 describe('normalizeSaveName', () => {
   it('trims and lowercases a valid name', () => {
     expect(normalizeSaveName('  My-Save_1 ')).toBe('my-save_1')
