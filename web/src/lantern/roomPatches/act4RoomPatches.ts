@@ -212,5 +212,17 @@ export const ACT4_ROOM_PATCHES: Record<string, ImagePatch[]> = {
       text: 'Show Malakar sitting, the grey gone from his face.',
       area: 'malakar',
     },
+    {
+      id: 'wound-sealed',
+      title: 'Wound sealed',
+      text: 'Replace the wound with a seal of gold and pale light hanging in the air, Malakar held inside it.',
+      area: 'wound',
+    },
+    {
+      id: 'malakar-kneeling',
+      title: 'Malakar kneeling',
+      text: 'Show Malakar kneeling before the king, grey and powerless.',
+      area: 'malakar',
+    },
   ],
 }
