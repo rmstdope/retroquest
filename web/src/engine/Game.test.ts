@@ -1446,14 +1446,16 @@ describe('Game', () => {
         },
       })
       expect(tree.use).toHaveProperty('rope')
+      const useTargets = {
+        "elior's": { journal: null },
+        journal: null,
+        rope: null,
+        old: { mira: null },
+      }
       expect((tree.use as Record<string, unknown>).rope).toEqual({
         '@': null,
-        with: {
-          "elior's": { journal: null },
-          journal: null,
-          rope: null,
-          old: { mira: null },
-        },
+        with: useTargets,
+        on: useTargets,
       })
       expect(tree.look).toHaveProperty('at')
       expect(tree.look).toHaveProperty('@', null)
@@ -1493,7 +1495,11 @@ describe('Game', () => {
       expect(tree.use).toEqual({
         silver: {
           '@': null,
-          mask: { '@': null, with: { silver, herald } },
+          mask: {
+            '@': null,
+            with: { silver, herald },
+            on: { silver, herald },
+          },
         },
       })
       // A word that is only the start of a name still needs the rest.
