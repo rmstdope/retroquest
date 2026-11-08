@@ -1412,8 +1412,11 @@ export const useGameStore = defineStore('game', () => {
    * come next for the word being typed, whether the text can already be sent
    * as a command, and which of three states the list is in — `matches` (some
    * words to offer), `none` (an earlier word is unknown, or the last word
-   * matches nothing) or `complete` (the command needs no more words). Matching
-   * ignores case; `word` is the last word as typed.
+   * matches nothing) or `complete` (the command needs no more words). Text
+   * the tree cannot follow is `complete` when, from where the tree offers a
+   * character, it names one here: the tree holds only full names and a
+   * character answers to more.
+   * Matching ignores case; `word` is the last word as typed.
    */
   function completionState(input: string): CompletionState {
     const typed = input.trimStart().toLowerCase()
@@ -1428,17 +1431,26 @@ export const useGameStore = defineStore('game', () => {
       sendable: false,
       word: typedWords[typedWords.length - 1],
     }
+    let nameStart = -1
+    const unmatched = (sendable: boolean): CompletionState =>
+      nameStart >= 0 &&
+      bridge?.controller.namesCharacter(typedWords.slice(nameStart).join(' '))
+        ? { ...none, kind: 'complete', sendable: true }
+        : { ...none, sendable }
 
     let node: CompletionTree | null = completionTree.value
-    for (const token of tokens.slice(0, -1)) {
+    for (const [index, token] of tokens.slice(0, -1).entries()) {
       if (node === null) {
         // Words after a finished command: nothing to offer.
         return { ...none, kind: 'complete', sendable: true }
       }
-      if (token === SENDABLE_MARKER || !Object.hasOwn(node, token)) return none
+      if (offersCharacter(node)) nameStart = index
+      if (token === SENDABLE_MARKER || !Object.hasOwn(node, token))
+        return unmatched(false)
       node = node[token]
     }
     if (node === null) return { ...none, kind: 'complete', sendable: true }
+    if (offersCharacter(node)) nameStart = tokens.length - 1
 
     const candidates = Object.keys(node).filter(
       (k) => k !== SENDABLE_MARKER && k.startsWith(last),
@@ -1456,8 +1468,20 @@ export const useGameStore = defineStore('game', () => {
         : candidates.length === 1 && candidates[0] === last && endNode === null
     if (finished)
       return { kind: 'complete', candidates: [], sendable: true, word }
-    if (candidates.length === 0) return { ...none, sendable }
+    if (candidates.length === 0) return unmatched(sendable)
     return { kind: 'matches', candidates, sendable, word }
+  }
+
+  /** Whether a character's whole name can be followed from this point of the tree. */
+  function offersCharacter(node: CompletionTree): boolean {
+    return characters.value.some((name) => {
+      let at: CompletionTree | null = node
+      for (const word of name.toLowerCase().split(/\s+/)) {
+        if (at === null || !Object.hasOwn(at, word)) return false
+        at = at[word]
+      }
+      return true
+    })
   }
 
   return {

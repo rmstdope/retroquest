@@ -4,6 +4,8 @@ import { setActivePinia, createPinia } from 'pinia'
 import { Act, Item, Quest, Room, type GameState } from '@/engine'
 import { useBridge, type ActClass } from '@/composables/useBridge'
 import { useCommandCompletion } from '@/composables/useCommandCompletion'
+import { Act1 } from '@/act1/Act1'
+import { Act2 } from '@/act2/Act2'
 import { Act4 } from '@/act4/Act4'
 import { SorceressOfLies } from '@/act4/characters/SorceressOfLies'
 import { GuardiansChain } from '@/act4/items/GuardiansChain'
@@ -316,6 +318,105 @@ describe('useGameStore over the real engine: a name typed in full', () => {
     expect(store.turns.at(-1)?.text).toContain(
       new TruthSight().castOnCharacter(state, sorceress),
     )
+  })
+})
+
+describe('useGameStore over the real engine: the no-match line and a name that works', () => {
+  beforeEach(() => {
+    setActivePinia(createPinia())
+  })
+
+  /** The real store, in the given room of the act. */
+  async function storeIn(
+    act: ActClass,
+    room: string,
+    prepare?: (state: GameState) => void,
+  ): Promise<Store> {
+    const bridge = useBridge(async (): Promise<ActClass[]> => [act])
+    const store = useGameStore()
+    store.setBridge(bridge)
+    await store.initGame()
+    store.dismissModal()
+    const { state } = bridge.controller.game
+    state.currentRoom = state.allRooms[room]
+    prepare?.(state)
+    store.refreshPanels()
+    return store
+  }
+
+  /** Whether the list under the box says nothing matches, for the text. */
+  function saysNoMatch(store: Store, typed: string): boolean {
+    return useCommandCompletion(
+      ref(typed),
+      (input) => store.completionState(input),
+      (input) => store.tabComplete(input).newInput,
+      () => true,
+    ).noMatch.value
+  }
+
+  it('does not say no match for Sir Cedric by his short name', async () => {
+    const store = await storeIn(Act2, 'CastleCourtyard')
+
+    expect(saysNoMatch(store, 'say truth to cedric')).toBe(false)
+    expect(saysNoMatch(store, 'talk to cedric')).toBe(false)
+    expect(saysNoMatch(store, 'examine cedric')).toBe(false)
+  })
+
+  it('does not say no match for the Unmasked Sorceress by the one word', async () => {
+    const store = await storeIn(Act4, 'ChamberOfWhispers', (state) => {
+      state.currentRoom.characters[0].name = 'Unmasked Sorceress'
+    })
+
+    expect(saysNoMatch(store, 'talk to sorceress')).toBe(false)
+  })
+
+  it('does not say no match for a name that is no word of the full name', async () => {
+    const store = await storeIn(Act1, 'BlacksmithsForge')
+
+    expect(saysNoMatch(store, 'talk to blacksmith')).toBe(false)
+  })
+
+  it('still says no match for a name nobody here answers to', async () => {
+    const store = await storeIn(Act2, 'CastleCourtyard')
+
+    expect(saysNoMatch(store, 'talk to bob')).toBe(true)
+    expect(saysNoMatch(store, 'fly cedric')).toBe(true)
+    expect(saysNoMatch(store, 'cedric')).toBe(true)
+  })
+
+  it('still says no match where a name would not work', async () => {
+    const store = await storeIn(Act2, 'CastleCourtyard')
+
+    expect(saysNoMatch(store, 'talk cedric')).toBe(true)
+    expect(saysNoMatch(store, 'go cedric')).toBe(true)
+    expect(saysNoMatch(store, 'give cedric')).toBe(true)
+    expect(saysNoMatch(store, 'talk to bob cedric')).toBe(true)
+  })
+
+  it('still says no match where only an item shares the first word of a name', async () => {
+    const store = await storeIn(Act2, 'MountainPath')
+
+    expect(saysNoMatch(store, 'take hermit')).toBe(true)
+    expect(saysNoMatch(store, 'talk to hermit')).toBe(false)
+  })
+
+  it('takes a name with its article and from the words after the verb', async () => {
+    const store = await storeIn(Act2, 'CastleCourtyard')
+
+    expect(saysNoMatch(store, 'talk to the cedric')).toBe(false)
+    expect(saysNoMatch(store, 'look at cedric')).toBe(false)
+  })
+
+  it('says nothing about who is addressed in the free words of say', async () => {
+    const store = await storeIn(Act2, 'CastleCourtyard')
+
+    expect(saysNoMatch(store, 'say truth to bob')).toBe(false)
+  })
+
+  it('says no match for a name still being typed', async () => {
+    const store = await storeIn(Act2, 'CastleCourtyard')
+
+    expect(saysNoMatch(store, 'talk to ced')).toBe(true)
   })
 })
 
