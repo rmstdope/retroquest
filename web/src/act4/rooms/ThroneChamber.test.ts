@@ -513,3 +513,29 @@ describe('Throne Chamber after the elixir', () => {
     expect(wound).toContain('It drinks the light from Malakar now.')
   })
 })
+
+describe('the rift and the throne the chamber describes (rq-xrtb)', () => {
+  const THRONE =
+    'Black stone, twisted like a root, as if it grew up through the floor. Nobody sits in it.'
+
+  it('answers examine rift with the wound', () => {
+    const game = inThrone()
+    expect(executeCommands(game, ['examine rift'])).toBe(
+      executeCommands(game, ['examine wound']),
+    )
+    expect(executeCommands(healed(), ['examine rift'])).toContain(
+      'It drinks the light from the king, still.',
+    )
+  })
+
+  it('answers examine throne in-world', () => {
+    expect(executeCommands(inThrone(), ['examine throne'])).toBe(THRONE)
+  })
+
+  it('gives a save made before the throne could be looked at its throne back', () => {
+    const game = inThrone()
+    game.state.currentRoom.removeItem('throne')
+    reload(game)
+    expect(executeCommands(game, ['examine throne'])).toBe(THRONE)
+  })
+})

@@ -9,6 +9,7 @@ import {
 } from '../Act4StoryFlags'
 import { endingPlayed } from '../endings'
 import { Grow } from '../spells/Grow'
+import { Field } from '../items/Field'
 
 /** The walk home, shown after the move line. */
 const WALK_HOME =
@@ -60,8 +61,16 @@ export class WillowbrookField extends Room {
         'the gate. Mira stands beside her, and Sir Cedric leans on the ' +
         'fence. In the hedge a small light flickers: Nyx, keeping close. ' +
         'The air is quiet.',
+      items: [new Field()],
       characters: [new Grandmother(), new Mira(), new SirCedric(), new Nyx()],
     })
+  }
+
+  /** Saves from before the field could be looked at get it back. */
+  override refreshSavedText(_gameState: GameState): void {
+    if (!this.items.some((item) => item instanceof Field)) {
+      this.addItem(new Field())
+    }
   }
 
   /** Marks Elior as home and gives back grow if the ending took it. */

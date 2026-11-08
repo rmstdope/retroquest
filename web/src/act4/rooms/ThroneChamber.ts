@@ -3,6 +3,7 @@ import { KingAlden } from '../characters/KingAlden'
 import { Malakar } from '../characters/Malakar'
 import { CrystalPrison } from '../items/CrystalPrison'
 import { Wound } from '../items/Wound'
+import { Throne } from '../items/Throne'
 import { endingPlayed } from '../endings'
 import { THRONE_CHAMBER_FIRST } from './throneDescriptions'
 
@@ -20,10 +21,17 @@ export class ThroneChamber extends Room {
     super({
       name: 'Throne Chamber',
       description: THRONE_CHAMBER_FIRST,
-      items: [new CrystalPrison(), new Wound()],
+      items: [new CrystalPrison(), new Wound(), new Throne()],
       characters: [new Malakar(), new KingAlden()],
       exits: { south: 'ParentsVault' },
     })
+  }
+
+  /** Saves from before the throne could be looked at get it back. */
+  override refreshSavedText(_gameState: GameState): void {
+    if (!this.items.some((item) => item instanceof Throne)) {
+      this.addItem(new Throne())
+    }
   }
 
   /** South always; north, the way home, once an ending has been played. */
