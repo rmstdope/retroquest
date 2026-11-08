@@ -18,6 +18,11 @@ export class GuardiansChain extends Item {
     })
   }
 
+  /** Also answers to "chain", what the story calls it. */
+  override answersTo(name: string): boolean {
+    return super.answersTo(name) || name.toLowerCase() === 'chain'
+  }
+
   /** The chain's look, from the constant, so an old save shows its crystals too. */
   override examine(_gameState: GameState): string {
     return CHAIN_DESCRIPTION

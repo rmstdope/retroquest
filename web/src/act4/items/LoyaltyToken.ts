@@ -28,6 +28,11 @@ export class LoyaltyToken extends Item {
     })
   }
 
+  /** Also answers to "medallion", what the story calls it. */
+  override answersTo(name: string): boolean {
+    return super.answersTo(name) || name.toLowerCase() === 'medallion'
+  }
+
   /** In the hall it can be raised against the knight's despair; in the tower it hints at the names (or is quiet once the stair is open); elsewhere it only warms. */
   override use(gameState: GameState): string {
     if (

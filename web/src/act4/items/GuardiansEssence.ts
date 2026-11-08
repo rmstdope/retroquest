@@ -17,6 +17,11 @@ export class GuardiansEssence extends Item {
     })
   }
 
+  /** Also answers to "essence", what the story calls it. */
+  override answersTo(name: string): boolean {
+    return super.answersTo(name) || name.toLowerCase() === 'essence'
+  }
+
   /** Use Guardian's Essence on servants to prove worthiness. */
   override useOnCharacter(
     gameState: GameState,
