@@ -1,7 +1,15 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
+import { ref } from 'vue'
 import { setActivePinia, createPinia } from 'pinia'
 import { Act, Item, Quest, Room, type GameState } from '@/engine'
 import { useBridge, type ActClass } from '@/composables/useBridge'
+import { useCommandCompletion } from '@/composables/useCommandCompletion'
+import { Act4 } from '@/act4/Act4'
+import { SorceressOfLies } from '@/act4/characters/SorceressOfLies'
+import { GuardiansChain } from '@/act4/items/GuardiansChain'
+import { GuardiansEssence } from '@/act4/items/GuardiansEssence'
+import { SorceressTruth } from '@/act4/items/SorceressTruth'
+import { TruthSight } from '@/act4/spells/TruthSight'
 import { useGameStore, type Turn } from './useGameStore'
 
 /** The name of the item whose pick-up finishes the one-act test game. */
@@ -269,6 +277,105 @@ describe('useGameStore over the real engine: a bare direction letter', () => {
     for (const letter of ['n', 's', 'w']) {
       expect(store.completionState(letter).sendable).toBe(true)
     }
+  })
+})
+
+describe('useGameStore over the real engine: a name typed in full', () => {
+  beforeEach(() => {
+    setActivePinia(createPinia())
+  })
+
+  it('casts on the Sorceress when Enter follows her name, with her Truth carried', async () => {
+    const bridge = useBridge(async (): Promise<ActClass[]> => [Act4])
+    const store = useGameStore()
+    store.setBridge(bridge)
+    await store.initGame()
+    store.dismissModal()
+    const { state } = bridge.controller.game
+    state.currentRoom = state.allRooms.ChamberOfWhispers
+    state.inventory.push(new SorceressTruth())
+    state.learnSpell(new TruthSight())
+    store.refreshPanels()
+
+    const text = ref('cast truth sight on sorceress')
+    const completion = useCommandCompletion(
+      text,
+      (input) => store.completionState(input),
+      (input) => store.tabComplete(input).newInput,
+      () => true,
+    )
+
+    // Enter sends what was typed: the highlight stays off her Truth.
+    expect(completion.suggestions.value).toContain("sorceress's")
+    expect(completion.activeIndex.value).toBe(-1)
+    expect(completion.applyActive()).toBe(false)
+    expect(text.value).toBe('cast truth sight on sorceress')
+    store.submitCommand(text.value)
+    const sorceress = state.currentRoom.characters[0]
+    expect(sorceress).toBeInstanceOf(SorceressOfLies)
+    expect(store.turns.at(-1)?.text).toContain(
+      new TruthSight().castOnCharacter(state, sorceress),
+    )
+  })
+})
+
+describe('useGameStore over the real engine: Enter on a word a name starts with', () => {
+  beforeEach(() => {
+    setActivePinia(createPinia())
+  })
+
+  /** The real store with Act IV at the Fortress Gates, after the ward fell. */
+  async function atTheGates(): Promise<Store> {
+    const bridge = useBridge(async (): Promise<ActClass[]> => [Act4])
+    const store = useGameStore()
+    store.setBridge(bridge)
+    await store.initGame()
+    store.dismissModal()
+    const { state } = bridge.controller.game
+    state.currentRoom = state.allRooms.FortressGates
+    state.currentRoom.addItem(new GuardiansChain())
+    state.currentRoom.addItem(new GuardiansEssence())
+    store.refreshPanels()
+    return store
+  }
+
+  it('sends "guardian" rather than taking the highlighted "guardian\'s"', async () => {
+    const store = await atTheGates()
+    const text = ref('examine guardian')
+    const completion = useCommandCompletion(
+      text,
+      (input) => store.completionState(input),
+      (input) => store.tabComplete(input).newInput,
+      () => true,
+    )
+
+    expect(completion.suggestions.value).toContain("guardian's")
+    expect(completion.applyActive()).toBe(false)
+    expect(text.value).toBe('examine guardian')
+  })
+})
+
+describe('useGameStore over the real engine: expanding towards a name', () => {
+  beforeEach(() => {
+    setActivePinia(createPinia())
+  })
+
+  it('stops at the first word the thing answers to', async () => {
+    const bridge = useBridge(async (): Promise<ActClass[]> => [Act4])
+    const store = useGameStore()
+    store.setBridge(bridge)
+    await store.initGame()
+    store.dismissModal()
+    const { state } = bridge.controller.game
+    state.currentRoom = state.allRooms.ChamberOfWhispers
+    store.refreshPanels()
+
+    expect(store.tabComplete('talk to sorc').newInput).toBe(
+      'talk to sorceress ',
+    )
+    const stopped = store.completionState('talk to sorceress ')
+    expect(stopped.sendable).toBe(true)
+    expect(stopped.candidates).toEqual(['of'])
   })
 })
 
