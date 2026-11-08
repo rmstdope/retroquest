@@ -127,6 +127,21 @@ for (const size of [
   })
 }
 
+test('a name too long for the plate gives way so the chips keep a share', async ({
+  page,
+}): Promise<void> => {
+  await page.setViewportSize({ width: 568, height: 320 })
+  await start(page)
+  await lightDots(page, 'Submerged Antechamber')
+  await expect
+    .poll(() =>
+      page
+        .locator('.lq-stage-plate .lq-here')
+        .evaluate((el) => el.getBoundingClientRect().width),
+    )
+    .toBeGreaterThanOrEqual(48)
+})
+
 test('a tablet held upright keeps the tall stage, with no turn page', async ({
   page,
 }): Promise<void> => {
