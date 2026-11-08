@@ -64,7 +64,8 @@ export interface LanternPresentation {
  * `Turn.pictureChanged`) is told the same way: its first paragraph over the old
  * picture, the change of scene where the narrator stops (unnarrated, once that
  * paragraph is read), then the rest over the new picture; with no new picture
- * painted, or under Reduce motion, the words go straight through. The
+ * painted, or under Reduce motion (where the picture changes with no fade
+ * after the first paragraph), the words go straight through. The
  * panels follow the voice (`usePanelHold`), the room's name changes at the
  * dark, and the voice stops when narration is switched off or the layout
  * goes.
@@ -164,8 +165,7 @@ export function useLanternPresentation(
         !changing &&
         stage.staged() &&
         !game.showModal &&
-        scene.shown !== null &&
-        !(turn.pictureChanged && stage.motionReduced())
+        scene.shown !== null
           ? sceneBlock(turn, parseTurn(turn.text))
           : -1
       if (turn?.narrate && folder && manifest && !game.showModal)
@@ -210,7 +210,11 @@ export function useLanternPresentation(
     },
   )
 
-  /** The latest talk that moves Elior and where its room changes, until it has. */
+  /**
+   * The latest talk that moves Elior and where its room changes, until it has.
+   * A command that only changes its own room's picture is noted here too, but
+   * the music's room never changes on it, so nothing is ever cut for it.
+   */
   let talkCut: { turn: number; at: number } | null = null
   watch(
     () => game.turns.at(-1),

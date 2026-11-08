@@ -109,6 +109,7 @@ function createMockBridge() {
       pictureVariant: '',
     })),
     getActCharacters: vi.fn((): { key: string; name: string }[] => []),
+    getPictureVariants: vi.fn((): { roomKey: string; variant: string }[] => []),
     takeSoundFirings: vi.fn((): SoundFiring[] => []),
     lastTurnAddressee: vi.fn((): string | null => null),
     lastTurnHadArrivalScene: vi.fn((): boolean => false),

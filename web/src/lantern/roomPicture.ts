@@ -47,7 +47,8 @@ export function setPictureProbe(replacement: PictureProbe | null): void {
 /**
  * Whether the picture at `url` exists and loads, asked once per file. A room's
  * other picture is shown only once this says yes, so a picture not made yet
- * never blanks the stage.
+ * never blanks the stage. A "no" is kept for the page's lifetime: pictures
+ * are painted outside the game, and a reload asks again.
  */
 export function pictureExists(url: string): Promise<boolean> {
   answers[url] ??= probe(url)

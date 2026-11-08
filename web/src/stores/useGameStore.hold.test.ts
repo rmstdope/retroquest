@@ -253,13 +253,40 @@ describe('useGameStore: panels held while a turn is narrated', () => {
     })
 
     it('shows the other picture only once it is known to exist', async () => {
-      const store = await stagedStore(true)
+      let answer: (exists: boolean) => void = () => {}
+      setPictureProbe(
+        () =>
+          new Promise<boolean>((resolve) => {
+            answer = resolve
+          }),
+      )
+      const store = await startedStore()
+      store.setScenePicture(true)
       store.submitCommand(`take ${GEM.toLowerCase()}`)
-      const turn = store.turns.at(-1)!
-      store.releasePicture(turn.id)
+      store.releasePicture(store.turns.at(-1)!.id)
       expect(store.roomPicture).toBe(hallPicture())
+      answer(true)
       await new Promise((resolve) => setTimeout(resolve))
       expect(store.roomPicture).toBe(hallPicture(HALL_LIT))
+    })
+
+    it('knows which pictures are painted before the player gets there', async () => {
+      const store = await stagedStore(true)
+      store.submitCommand('look')
+      await new Promise((resolve) => setTimeout(resolve))
+      store.submitCommand(`take ${GEM.toLowerCase()}`)
+      store.releasePicture(store.turns.at(-1)!.id)
+      // The other picture is there the moment the story reaches it, not the room's own first.
+      expect(store.roomPicture).toBe(hallPicture(HALL_LIT))
+    })
+
+    it('is not held when the layout does not hold panels', async () => {
+      setPictureProbe(() => Promise.resolve(true))
+      const store = await startedStore()
+      store.setPanelHold(false)
+      store.submitCommand(`take ${GEM.toLowerCase()}`)
+      expect(store.turns.at(-1)?.pictureChanged).toBeUndefined()
+      expect(store.musicPicture).toBe(HALL_LIT)
     })
 
     it('keeps the room picture when the other one is not painted', async () => {

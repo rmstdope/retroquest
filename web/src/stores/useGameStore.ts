@@ -462,6 +462,7 @@ export const useGameStore = defineStore('game', () => {
     const place = b.controller.getMusicPlace()
     const pictureChanged =
       hold &&
+      panelHoldEnabled &&
       description?.moved !== true &&
       place.roomKey === musicRoomKey.value &&
       place.pictureVariant !== musicPicture.value
@@ -1166,8 +1167,10 @@ export const useGameStore = defineStore('game', () => {
     latestRoomKey = isIntroShowing() ? '' : place.roomKey
     latestSoundState = isIntroShowing() ? '' : place.soundState
     latestPicture = isIntroShowing() ? '' : place.pictureVariant
-    if (latestPicture)
-      checkPicture(roomPictureUrl(place.actName, place.roomKey, latestPicture))
+    // Every other picture of the act's rooms is asked about as the act runs, so
+    // each is known by the time a move or a command brings it up.
+    for (const other of b.controller.getPictureVariants())
+      checkPicture(roomPictureUrl(place.actName, other.roomKey, other.variant))
     latestSoundFirings = [
       ...latestSoundFirings,
       ...b.controller.takeSoundFirings(),

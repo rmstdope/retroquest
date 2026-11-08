@@ -6,6 +6,8 @@ import { Lantern } from '../items/Lantern'
 import { LightSpell } from '../spells/LightSpell'
 import { expectItemInRoom } from '@/testing/gameHelpers'
 import { AbandonedShed } from './AbandonedShed'
+import { parseTurn } from '@/lantern/parseTurn'
+import { sceneBlock } from '@/lantern/stageArrival'
 
 /** An Act I game with Elior inside the unlocked shed, holding nothing else. */
 function gameInUnlockedShed(): Game {
@@ -164,5 +166,23 @@ describe('The Abandoned Shed picture', () => {
     const after = new Game([new Act1()])
     after.loadSaveData(open.toSaveData())
     expect(after.currentMusicPlace().pictureVariant).toBe('inside')
+  })
+
+  it('answers the key in two paragraphs, the picture changing before the second', () => {
+    const game = new Game([new Act1()])
+    game.state.currentRoom = game.state.allRooms.AbandonedShed
+    game.state.addItemToInventory(new Key())
+    const answer = game.commandParser.parse('use key with door')
+    const blocks = parseTurn(answer)
+    expect(blocks).toHaveLength(2)
+    expect(
+      sceneBlock({ description: null, pictureChanged: true }, blocks),
+    ).toBe(1)
+    expect(blocks[0]).toMatchObject({
+      markup: expect.stringContaining('creaks open.'),
+    })
+    expect(blocks[1]).toMatchObject({
+      markup: expect.stringMatching(/^In the gloom you make out/),
+    })
   })
 })

@@ -22,13 +22,14 @@ describe('LanternLayout: a room changes its own picture', () => {
   /** Mount the started hall on the stage with its picture up; the other picture is `painted` or not. */
   async function stage(
     painted: boolean,
+    phone = false,
   ): Promise<ReturnType<typeof useGameStore>> {
     setActivePinia(createPinia())
     setPictureProbe(() => Promise.resolve(painted))
     vi.stubGlobal(
       'matchMedia',
       vi.fn((query: string) => ({
-        matches: query.includes('min-width'),
+        matches: !phone && query.includes('min-width'),
         addEventListener: vi.fn(),
         removeEventListener: vi.fn(),
       })),
@@ -121,14 +122,34 @@ describe('LanternLayout: a room changes its own picture', () => {
     expect(game.roomPicture).toBe(scene.shown)
   })
 
-  it('does not change scene under Reduce motion', async () => {
+  it('on a phone goes through the dark the same way', async () => {
+    const game = await stage(true, true)
+    const scene = useSceneStore()
+    game.submitCommand('take gem')
+    await settle()
+    const turn = game.turns.at(-1)!
+    expect(scene.holds(turn.id, 1)).toBe(true)
+    await vi.advanceTimersByTimeAsync(readingPauseMs(FIRST))
+    await settle()
+    expect(scene.turn).toBe(turn.id)
+    expect(game.roomName).toBe('Hall')
+  })
+
+  it('under Reduce motion changes the picture with no dark, after the first paragraph', async () => {
     const game = await stage(true)
     const scene = useSceneStore()
     document.documentElement.style.setProperty('--lq-motion', '0')
     game.submitCommand('take gem')
     await settle()
     const turn = game.turns.at(-1)!
+    // Sentence one is still told over the old picture.
+    expect(scene.turn).toBeNull()
+    expect(scene.holds(turn.id, 1)).toBe(true)
+    expect(game.roomPicture).not.toContain('lit')
+    await vi.advanceTimersByTimeAsync(readingPauseMs(FIRST))
+    await settle()
     expect(scene.turn).toBeNull()
     expect(scene.holds(turn.id, 1)).toBe(false)
+    expect(game.roomPicture).toContain('hall-lit')
   })
 })

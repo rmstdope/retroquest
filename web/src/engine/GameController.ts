@@ -253,6 +253,18 @@ export class GameController {
   }
 
   /**
+   * Every other picture the running act's rooms have (`Room.pictureVariants`),
+   * by room key, so the view can find out which of them are painted.
+   */
+  getPictureVariants(): { roomKey: string; variant: string }[] {
+    const act = this.game.acts[this.game.currentAct]
+    if (!act) return []
+    return Object.entries(act.rooms).flatMap(([roomKey, room]) =>
+      room.pictureVariants().map((variant) => ({ roomKey, variant })),
+    )
+  }
+
+  /**
    * The characters the running act registers, as class key and name, a name
    * listed once by the first class that has it (the same cast as the act's
    * portrait list). The key names the character's portrait file.
