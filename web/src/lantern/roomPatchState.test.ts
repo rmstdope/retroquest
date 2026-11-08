@@ -99,10 +99,16 @@ describe('appliedPatchIds', () => {
       expect(seen.size).toBeGreaterThan(0)
       // The golden path skips optional pickups and ways, so those patches may never apply;
       // every other patch (a thing gone, arriving, changed) is judged true at some step.
+      // The Justice and Sacrifice endings are not on the golden path (Redemption), so their patches never apply there.
+      const otherEndings = new Set(['wound-sealed', 'malakar-kneeling'])
       const never: string[] = []
       for (const room of Object.keys(act.rooms))
         for (const patch of declaredPatches(act.name, room))
-          if (!seen.has(patch.id) && !/-(taken|open)$/.test(patch.id))
+          if (
+            !seen.has(patch.id) &&
+            !otherEndings.has(patch.id) &&
+            !/-(taken|open)$/.test(patch.id)
+          )
             never.push(`${room} ${patch.id}`)
       expect(never).toEqual([])
     },
