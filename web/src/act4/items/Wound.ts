@@ -33,6 +33,7 @@ import {
 } from '../rooms/throneDescriptions'
 import { Grow } from '../spells/Grow'
 import { Malakar } from '../characters/Malakar'
+import { AncientAmulet } from './AncientAmulet'
 
 /** What the amulet says before the elixir has been used. */
 const NOT_YET = clue(
@@ -223,8 +224,9 @@ export class Wound extends Item {
   }
 
   /**
-   * Records the ending, completes the quest and sets the room's description;
-   * after Justice, Malakar is gone from the room into the seal.
+   * Records the ending, completes the quest, darkens the carried amulet and
+   * sets the room's description; after Justice, Malakar is gone from the
+   * room into the seal.
    */
   private finish(gameState: GameState, ending: Ending): void {
     const flag = {
@@ -235,6 +237,9 @@ export class Wound extends Item {
     gameState.setStoryFlag(flag, true)
     gameState.setStoryFlag(FLAG_ACT4_FINAL_STAND_COMPLETED, true)
     const room = gameState.currentRoom
+    for (const item of gameState.inventory) {
+      if (item instanceof AncientAmulet) item.settleAfterEnding(gameState)
+    }
     if (ending === 'justice') {
       room.characters = room.characters.filter(
         (character) => !(character instanceof Malakar),
