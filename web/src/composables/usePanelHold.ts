@@ -12,7 +12,9 @@ import { blockVoice } from '@/lantern/narrationScript'
  * (`useGameStore.releasePanels`); this decides when each group is released as
  * the narration reaches it: the place (room card, Here, map, header room and
  * act, and what the command box and target chips offer) when the turn's arrival is revealed, the quest count when its last
- * quest card is, and Bag and Spells when the turn is over. The room's music
+ * quest card is, the patches of the room's picture when the narrator reaches the
+ * turn's last spoken block (so nobody leaves the picture while the story still
+ * has them there), and Bag and Spells when the turn is over. The room's music
  * moves with the new scene: at the answer's last spoken block when the turn
  * arrives somewhere (the dream's "You wake…"), else at the arrival itself;
  * never later than the place. A turn that ends
@@ -20,18 +22,26 @@ import { blockVoice } from '@/lantern/narrationScript'
  */
 export function usePanelHold(): {
   track(turn: Turn): void
-  settle(turn: Turn): void
+  settle(turn: Turn, keepPicture?: boolean): void
   catchUp(): boolean
 } {
   const game = useGameStore()
   const narration = useNarrationStore()
   let stop: WatchStopHandle | null = null
 
-  /** Release every panel of `turn` at once, without a flash (nothing narrates it). */
-  function settle(turn: Turn): void {
+  /**
+   * Release every panel of `turn` at once, without a flash (nothing narrates it).
+   * With `keepPicture` the room picture's patches stay as they were: the
+   * stage releases them when it shows the turn's last line.
+   */
+  function settle(turn: Turn, keepPicture = false): void {
     stop?.()
     stop = null
-    game.releasePanels(turn.id, [...PANEL_GROUPS], false)
+    game.releasePanels(
+      turn.id,
+      PANEL_GROUPS.filter((g) => !keepPicture || g !== 'picture'),
+      false,
+    )
   }
 
   /** Follow the narration of `turn`, releasing its panels as the voice reaches them. */
@@ -44,6 +54,8 @@ export function usePanelHold(): {
       -1,
     )
     const scene = arrival >= 0 && lastSpoken >= 0 ? lastSpoken : arrival
+    // A turn with nothing spoken changes the picture as soon as it begins.
+    const lastLine = lastSpoken >= 0 ? lastSpoken : 0
     const quests = turn.quests?.length
       ? firstQuestUnit(turn) + turn.quests.length - 1
       : -1
@@ -55,6 +67,7 @@ export function usePanelHold(): {
         place: arrival >= 0 && narration.revealed(turn.id, arrival),
         scene: scene >= 0 && narration.revealed(turn.id, scene),
         quests: quests >= 0 && narration.revealed(turn.id, quests),
+        picture: narration.revealed(turn.id, lastLine),
       }),
       (now) => {
         if (!now.live) {
@@ -70,6 +83,7 @@ export function usePanelHold(): {
         if (now.scene) game.releaseMusic(turn.id)
         if (now.place) game.releasePanels(turn.id, ['place'], true)
         if (now.quests) game.releasePanels(turn.id, ['quests'], true)
+        if (now.picture) game.releasePanels(turn.id, ['picture'], true)
       },
       { immediate: true, flush: 'sync' },
     )

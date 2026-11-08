@@ -35,6 +35,7 @@ function requestFullscreenOnFirstInteraction() {
 onMounted(() => {
   store.setBridge(bridge)
   store.initGame()
+  void store.loadImageManifest()
   requestFullscreenOnFirstInteraction()
 })
 </script>
