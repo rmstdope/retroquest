@@ -25,7 +25,7 @@ import {
   VIRTUE_MERCY,
 } from '../Act4StoryFlags'
 import { endingPlayed } from '../endings'
-import { AncientAmulet } from '../items/AncientAmulet'
+import { AMULET_DARK, AncientAmulet } from '../items/AncientAmulet'
 import { LifelightElixir } from '../items/LifelightElixir'
 import { Forgiveness } from '../spells/Forgiveness'
 import {
@@ -51,7 +51,7 @@ const REFRAIN_WORDS = ['refrain', 'power follows purpose']
 /** What he says to anything once the wound is closed, and he is still there. */
 const NOTHING_LEFT = '[dim]There is nothing left to say. It is over.[/dim]'
 
-/** What he is (not) when Justice has sealed him away. */
+/** What he is (not) when Justice has sealed him away, in saves from before he left the room. */
 const GONE_INTO_SEAL = '[dim]Malakar is gone into the seal.[/dim]'
 
 /** What he says when forgiveness is said but the king is already free. */
@@ -132,7 +132,18 @@ export class Malakar extends Character {
     'have been. He leans on the throne as if it is the only thing ' +
     'holding him up, and he does not look away from you.'
 
-  /** His look. */
+  /** The look once the elixir has taken the grey from him. */
+  private static readonly DESCRIPTION_HEALED =
+    "A tall man in a grey robe that was once a Warden's blue. His hair " +
+    'is white, though he cannot be much older than your father would ' +
+    'have been. The grey is gone from his face, and he sits by the wound, ' +
+    'watching it.'
+
+  /**
+   * His look: himself again or judged after an ending, healed, turned, or
+   * failing. The sealed line is for saves made after Justice before he
+   * left the room with it.
+   */
   override examine(gameState: GameState): string {
     const ending = endingPlayed(gameState)
     if (ending === 'justice') return 'Malakar is gone into the seal.'
@@ -140,6 +151,9 @@ export class Malakar extends Character {
       return ending === 'redemption'
         ? 'Malakar sits by the shards, himself again.'
         : 'Malakar kneels before the king, grey and powerless.'
+    }
+    if (gameState.getStoryFlag(FLAG_ACT4_ELIXIR_ON_MALAKAR)) {
+      return Malakar.DESCRIPTION_HEALED
     }
     return gameState.getStoryFlag(FLAG_ACT4_THRONE_REFRAIN_SAID)
       ? Malakar.DESCRIPTION_TURNED
@@ -442,7 +456,7 @@ export class Malakar extends Character {
    */
   openAmulet(gameState: GameState): string {
     if (endingPlayed(gameState)) {
-      return '[dim]The amulet is dark now, and still warm.[/dim]'
+      return AMULET_DARK
     }
     if (gameState.getStoryFlag(FLAG_ACT4_THRONE_AMULET_OPENED)) {
       return '[dim]The amulet is already open, its light filling the chamber.[/dim]'

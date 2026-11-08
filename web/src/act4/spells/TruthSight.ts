@@ -8,6 +8,7 @@ import {
 import {
   FLAG_ACT4_BANNERS_SEEN,
   FLAG_ACT4_ECHO_STONE_HEARD,
+  FLAG_ACT4_ELIXIR_ON_MALAKAR,
   FLAG_ACT4_MEMORY_ORBS_MENDED,
 } from '../Act4StoryFlags'
 import { KnightOfDespair } from '../characters/KnightOfDespair'
@@ -47,6 +48,12 @@ const MALAKAR_SEEN =
   'For a breath the sorcerer is gone, and a young man sits at a workbench, ' +
   'ink on his fingers, mending a toy for a child who is not there. Then the ' +
   'shadows close again.'
+
+/** What Malakar shows once the elixir has healed him. */
+const MALAKAR_HEALED_SEEN =
+  'For a breath the sorcerer is gone, and a young man sits at a workbench, ' +
+  'ink on his fingers, mending a toy for a child who is not there. This ' +
+  'time the shadows do not close.'
 
 /**
  * Learned in the Mirror Labyrinth: sees through illusion to what is really
@@ -99,7 +106,9 @@ export class TruthSight extends Spell {
   override castOnCharacter(gameState: GameState, target: Character): string {
     if (target instanceof KnightOfDespair) return target.seeThrough(gameState)
     if (target instanceof Malakar && !endingPlayed(gameState)) {
-      return MALAKAR_SEEN
+      return gameState.getStoryFlag(FLAG_ACT4_ELIXIR_ON_MALAKAR)
+        ? MALAKAR_HEALED_SEEN
+        : MALAKAR_SEEN
     }
     return NOTHING_HIDDEN
   }

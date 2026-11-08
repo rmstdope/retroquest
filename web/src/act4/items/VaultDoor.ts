@@ -19,6 +19,13 @@ const DOOR_GLOWING =
   "away, a tree under two moons: the crest on your mother's locket. The " +
   'runes glow faintly now, as if they are waiting.'
 
+/** The door's look once the amulet has opened it. */
+const DOOR_OPEN =
+  'A round door of pale stone, carved with the same runes as your amulet ' +
+  'around the sigil of the Wardens of the Dawn, and beneath it, worn almost ' +
+  "away, a tree under two moons: the crest on your mother's locket. The " +
+  'door stands open.'
+
 /**
  * The sealed door on the Memory Vault's east wall. It answers to the Ancient
  * Amulet once the Shadow has been answered, and then stays open for good.
@@ -37,8 +44,9 @@ export class VaultDoor extends Item {
     return super.answersTo(name) || name.toLowerCase() === 'sealed door'
   }
 
-  /** The door's look, which changes once the Shadow is answered. */
+  /** The door's look, which changes once the Shadow is answered and once it is open. */
   override examine(gameState: GameState): string {
+    if (gameState.getStoryFlag(FLAG_ACT4_VAULT_DOOR_OPENED)) return DOOR_OPEN
     if (gameState.getStoryFlag(FLAG_ACT4_SHADOW_OF_THE_PAST_COMPLETED)) {
       return DOOR_GLOWING
     }
