@@ -8,6 +8,24 @@ import {
   FLAG_ACT4_SHADOW_OF_THE_PAST_COMPLETED,
 } from '../Act4StoryFlags'
 import { TheFinalStand } from './TheFinalStand'
+import { ACT4_GOLDEN_PATH } from '../Act4GoldenPath'
+import { executeCommands } from '@/testing/gameHelpers'
+
+/** The golden path up to the step into the Throne Chamber. */
+const INTO_THRONE = ACT4_GOLDEN_PATH.slice(
+  0,
+  ACT4_GOLDEN_PATH.indexOf('talk to malakar'),
+)
+
+/** The Final Stand's line of the `hint` answer. */
+function finalStandHint(game: Game): string {
+  const line = game
+    .hint()
+    .split('\n')
+    .find((text) => text.startsWith('[bold]The Final Stand:[/bold]'))
+  if (!line) throw new Error('expected a Final Stand hint')
+  return line.replace('[bold]The Final Stand:[/bold] ', '')
+}
 
 /** A fresh Act IV game, with the quest under test and no flags set. */
 function setup(): { game: Game; quest: TheFinalStand } {
@@ -106,5 +124,78 @@ describe('TheFinalStand', () => {
     expect(quest.complete(game.state)).toBe(
       'The wound is closed and the king is free. Your parents are at rest.',
     )
+  })
+
+  describe('in the Throne Chamber', () => {
+    /** A game standing in the Throne Chamber, before Malakar has spoken. */
+    function inThrone(): Game {
+      const game = new Game([new Act4()])
+      executeCommands(game, INTO_THRONE)
+      expect(game.state.currentRoom.name).toBe('Throne Chamber')
+      return game
+    }
+
+    it('follows the scene to the Redemption, never past the north door', () => {
+      const game = inThrone()
+      const hints = [finalStandHint(game)]
+      for (const command of [
+        'talk to malakar',
+        'say refrain to malakar',
+        'use ancient amulet',
+        'use lifelight elixir on malakar',
+        'say forgiveness to malakar',
+      ]) {
+        executeCommands(game, [command])
+        hints.push(finalStandHint(game))
+      }
+      for (const hint of hints) expect(hint).not.toContain('north door')
+      expect(hints).toEqual([
+        'Malakar stands by the wound, waiting for you. He has not said ' +
+          'his piece yet.',
+        'Malakar has made his offer, and he waits for your answer. The ' +
+          "stone in Willowbrook, Nyx and the Dragon's hall all gave you " +
+          'the same words.',
+        'Malakar has turned from the wound to look at you. Your parents ' +
+          'left their ward in the [item_name]ancient amulet[/item_name], ' +
+          'still shut.',
+        'The amulet is open and the ward is unsealed. The ' +
+          '[item_name]lifelight elixir[/item_name] can be given once: to ' +
+          "heal Malakar's wound, or to break the king's prison.",
+        'Malakar is healed, and he looks up at you like a man waiting to ' +
+          'be forgiven.',
+        'You forgave him, and [spell_name]forgiveness[/spell_name] is yours ' +
+          'now. The wound is still open.',
+      ])
+    })
+
+    it('follows the scene on the roads of Justice and Sacrifice', () => {
+      for (const word of ['justice', 'sacrifice']) {
+        const game = inThrone()
+        executeCommands(game, [
+          'talk to malakar',
+          'say refrain to malakar',
+          'use ancient amulet',
+          'use lifelight elixir on prison',
+        ])
+        expect(finalStandHint(game)).toBe(
+          'The king is free, and the wound still stands open beside ' +
+            'Malakar. You could name his crimes and seal him away, in ' +
+            'justice. Or you could give up your magic to close it, in ' +
+            'sacrifice.',
+        )
+        executeCommands(game, [`say ${word} to malakar`])
+        expect(finalStandHint(game)).toBe(
+          'You have chosen. The open amulet is ready for the wound.',
+        )
+      }
+    })
+
+    it('still points north from the vault, before the Throne Chamber', () => {
+      const game = new Game([new Act4()])
+      executeCommands(game, INTO_THRONE.slice(0, -1))
+      expect(finalStandHint(game)).toContain(
+        'Malakar waits past the north door.',
+      )
+    })
   })
 })
