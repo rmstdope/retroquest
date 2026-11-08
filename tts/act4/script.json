@@ -1580,11 +1580,6 @@
     "text": "The Shadow has seen the mask. It is enough."
   },
   {
-    "id": "0e4a57b9bad68f",
-    "speaker": "shadow of the past",
-    "text": "The Phoenix asked me once what wisdom is when time is short. I gave it the right answer. Then the fever came, and I did not keep it."
-  },
-  {
     "id": "0ce71c462bf852",
     "speaker": "narrator",
     "text": "The Shadow of the Past: The Shadow turned the mask over and gave it back. If she could choose the truth, perhaps he can too. Its words are still waiting for an answer: Be patient where I was not."
@@ -1598,6 +1593,11 @@
     "id": "138b4f1c6117b3",
     "speaker": "shadow of the past",
     "text": "Patience. The one thing I never had. Then I will wait, a little longer. Take the amulet east, Elior. It will open for you."
+  },
+  {
+    "id": "0e4a57b9bad68f",
+    "speaker": "shadow of the past",
+    "text": "The Phoenix asked me once what wisdom is when time is short. I gave it the right answer. Then the fever came, and I did not keep it."
   },
   {
     "id": "0325174da55eb2",
