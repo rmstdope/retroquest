@@ -1,4 +1,4 @@
-import { Item, type GameState } from '@/engine'
+import { Item, type GameState, clue } from '@/engine'
 import { FLAG_ACT4_SHATTERED_WARD_GUARDIANS_COMPLETED } from '../Act4StoryFlags'
 
 /** The guardians while the barrier stands: their look follows the stones. */
@@ -42,5 +42,15 @@ export class Guardians extends Item {
     return gameState.getStoryFlag(FLAG_ACT4_SHATTERED_WARD_GUARDIANS_COMPLETED)
       ? GUARDIANS_AFTER
       : GUARDIANS_BEFORE
+  }
+
+  /** Taking a guardian: the hand goes through them, and once they are gone there is nothing to take. */
+  override preventPickup(gameState: GameState): string {
+    if (gameState.getStoryFlag(FLAG_ACT4_SHATTERED_WARD_GUARDIANS_COMPLETED)) {
+      return 'Nothing of the guardians is left to take.'
+    }
+    return clue(
+      'Your hand passes through the nearest guardian, cold as a cellar.',
+    )
   }
 }

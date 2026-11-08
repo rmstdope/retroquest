@@ -239,6 +239,9 @@ describe('FortressGates', () => {
         'The blessing slides off the guardians as the light does. ' +
           'What holds them here is not in them.',
       )
+      expect(executeCommands(game, ['take guardians'])).toContain(
+        'Your hand passes through the nearest guardian, cold as a cellar.',
+      )
       expect(game.state.getStoryFlag(FLAG_ACT4_BARRIERS_DISABLED)).toBe(false)
     })
 
@@ -265,6 +268,9 @@ describe('FortressGates', () => {
       expect(executeCommands(game, ['cast bless on guardians'])).toContain(
         'The guardians are gone. There is nothing here for the blessing to reach.',
       )
+      expect(executeCommands(game, ['take guardians'])).toContain(
+        'Nothing of the guardians is left to take.',
+      )
       const barrier = executeCommands(game, ['cast light on barriers'])
       expect(barrier).toContain(
         'The violet wall is gone. Your light falls on an open way.',
@@ -275,6 +281,7 @@ describe('FortressGates', () => {
     it('gives a save made before the guardians existed its guardians back', () => {
       const game = createGame()
       game.state.currentRoom.removeItem('guardians')
+      expect(roomItems(game)).not.toContain('Shadow Guardians')
       const reloaded = new Game([new Act4()])
       reloaded.loadSaveData(game.toSaveData())
       expect(executeCommands(reloaded, ['examine guardians'])).toBe(

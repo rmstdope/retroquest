@@ -161,7 +161,10 @@ export class FortressGates extends Room {
   /** A blessing on the guardians: what holds them is in the stones. */
   blessGuardians(gameState: GameState): string {
     if (this.isSolved(gameState)) {
-      return 'The guardians are gone. There is nothing here for the blessing to reach.'
+      return (
+        'The guardians are gone. There is nothing here for the ' +
+        'blessing to reach.'
+      )
     }
     return clue(
       'The blessing slides off the guardians as the light does. ' +
