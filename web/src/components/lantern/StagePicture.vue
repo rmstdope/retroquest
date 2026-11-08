@@ -54,6 +54,8 @@ interface PatchLayer {
   src: string
   on: boolean
   still: boolean
+  /** Laid at nothing, and about to start its fade in (its start timer is running). */
+  starting?: boolean
 }
 const layers = ref<PatchLayer[]>([])
 /** The patches that have loaded, and those that cannot be fetched. */
@@ -183,15 +185,17 @@ function fadePatches(): void {
   for (const src of wanted) {
     const layer = layers.value.find((l) => l.src === src)
     if (layer) {
-      layer.on = true
+      // A patch laid a moment ago keeps its start: turning it on now would skip its fade.
+      if (!layer.starting) layer.on = true
       continue
     }
-    layers.value.push({ src, on: false, still: false })
+    layers.value.push({ src, on: false, still: false, starting: true })
     // The reactive layer, so the change shows.
     const added = layers.value[layers.value.length - 1]
     patchTimers.push(
       setTimeout(() => {
-        added.on = true
+        added.starting = false
+        added.on = readyPatches.value.includes(added.src)
       }, PATCH_START_MS),
     )
   }

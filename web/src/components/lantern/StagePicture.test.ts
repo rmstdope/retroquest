@@ -211,6 +211,9 @@ describe('StagePicture patches', () => {
     await w.setProps({ patches: [BUCKET, ROPE] })
     await patchLoader(w, BUCKET).trigger('load')
     await patchLoader(w, ROPE).trigger('load')
+    // Both are laid at nothing first: neither jumps in at full strength.
+    expect(w.findAll('img.lq-patch')).toHaveLength(2)
+    expect(w.findAll('img.lq-patch.lq-patch-on')).toHaveLength(0)
     vi.advanceTimersByTime(50)
     await nextTick()
     expect(w.findAll('img.lq-patch.lq-patch-on')).toHaveLength(2)
