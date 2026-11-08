@@ -11,10 +11,12 @@ import {
   FLAG_ACT4_ELIXIR_ON_MALAKAR,
   FLAG_ACT4_MEMORY_ORBS_MENDED,
   FLAG_ACT4_SORCERESS_OF_LIES_COMPLETED,
+  FLAG_ACT4_TOWER_STAIR_OPEN,
 } from '../Act4StoryFlags'
 import { KnightOfDespair } from '../characters/KnightOfDespair'
 import { Malakar } from '../characters/Malakar'
 import { SorceressOfLies } from '../characters/SorceressOfLies'
+import { Whispers } from '../characters/Whispers'
 import { endingPlayed } from '../endings'
 import { Banners } from '../items/Banners'
 import { CrystalWhispers } from '../items/CrystalWhispers'
@@ -22,6 +24,7 @@ import { EchoStone } from '../items/EchoStone'
 import { MemoryOrbs } from '../items/MemoryOrbs'
 import { SorceressStaff } from '../items/SorceressStaff'
 import { ChamberOfWhispers } from '../rooms/ChamberOfWhispers'
+import { TowerOfShadows } from '../rooms/TowerOfShadows'
 
 /** What the spell shows where nothing is hidden. */
 const NOTHING_HIDDEN =
@@ -81,6 +84,24 @@ const WHISPERS_SEEN =
   'Your sight sharpens, and there is nothing in the crystals to see. The ' +
   'lie is in what they hum, and it goes on, as sweet as before.'
 
+/** What the Tower's shadows answer to, though they are nothing to hold. */
+const SHADOW_NAMES = ['shadows', 'shadow']
+
+/** What the stair shows while the whispers hold it. */
+const STAIR_SEEN =
+  'Your sight sharpens. The stair is as it looks, and the shadows are only ' +
+  'shadows, a moment late. The whispers go on.'
+
+/** What the Tower's shadows show while the whispers hold the stair. */
+const SHADOWS_SEEN =
+  'Your sight sharpens. They are only shadows, a moment late. Nothing is ' +
+  'standing in them.'
+
+/** What the whispers on the stair show. */
+const STAIR_WHISPERS_SEEN =
+  'Your sight sharpens, and still there is no one on the stair. The voices ' +
+  'have no mouths to find. What they say, the eye cannot answer.'
+
 /**
  * Learned in the Mirror Labyrinth: sees through illusion to what is really
  * there. In the Hall of Echoes the knight, the banners and the Echo Stone each
@@ -88,7 +109,9 @@ const WHISPERS_SEEN =
  * the Memory Orbs (until mended) and Malakar show a glimpse of their own. In
  * the Chamber of Whispers, until the Sorceress is redeemed, the sight strips
  * the room's shine and finds that the lie is in what is said, not in what is
- * seen.
+ * seen. On the Tower's stair, while the whispers hold it, the sight finds no
+ * one there: the shadows are only shadows, and what the whispers say is not
+ * for the eye to answer.
  */
 export class TruthSight extends Spell {
   constructor() {
@@ -99,7 +122,7 @@ export class TruthSight extends Spell {
     })
   }
 
-  /** Only the Chamber of Whispers, until she is redeemed, has anything to see through. */
+  /** The Chamber of Whispers, until she is redeemed, and the whispered stair have something to see. */
   override castSpell(gameState: GameState): string {
     if (
       gameState.currentRoom instanceof ChamberOfWhispers &&
@@ -107,6 +130,7 @@ export class TruthSight extends Spell {
     ) {
       return CHAMBER_SEEN
     }
+    if (this.stairHeld(gameState)) return STAIR_SEEN
     return NOTHING_HIDDEN
   }
 
@@ -141,7 +165,18 @@ export class TruthSight extends Spell {
     return NOTHING_HIDDEN
   }
 
-  /** The knight is shown as he is, Malakar for a breath, the unredeemed Sorceress as she looks; nothing is hidden in anyone else. */
+  /** In the Tower the shadows on the stair answer, though they are no item; elsewhere nothing does. */
+  override castOnName(gameState: GameState, target: string): string | null {
+    if (
+      !(gameState.currentRoom instanceof TowerOfShadows) ||
+      !SHADOW_NAMES.includes(target)
+    ) {
+      return null
+    }
+    return this.stairHeld(gameState) ? SHADOWS_SEEN : NOTHING_HIDDEN
+  }
+
+  /** The knight is shown as he is, Malakar for a breath, the unredeemed Sorceress as she looks, the whispers as no one at all; nothing is hidden in anyone else. */
   override castOnCharacter(gameState: GameState, target: Character): string {
     if (target instanceof KnightOfDespair) return target.seeThrough(gameState)
     if (target instanceof Malakar && !endingPlayed(gameState)) {
@@ -152,12 +187,21 @@ export class TruthSight extends Spell {
     if (target instanceof SorceressOfLies && this.chamberHolds(gameState)) {
       return SORCERESS_SEEN
     }
+    if (target instanceof Whispers) return STAIR_WHISPERS_SEEN
     return NOTHING_HIDDEN
   }
 
   /** Whether the Sorceress still holds the chamber, and its glamour with it. */
   private chamberHolds(gameState: GameState): boolean {
     return !gameState.getStoryFlag(FLAG_ACT4_SORCERESS_OF_LIES_COMPLETED)
+  }
+
+  /** Whether Elior stands on the Tower's stair while the whispers still hold it. */
+  private stairHeld(gameState: GameState): boolean {
+    return (
+      gameState.currentRoom instanceof TowerOfShadows &&
+      !gameState.getStoryFlag(FLAG_ACT4_TOWER_STAIR_OPEN)
+    )
   }
 
   /** One of the hall's three sights: the line the first time, the dim line after. */

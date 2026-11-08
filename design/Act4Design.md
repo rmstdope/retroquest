@@ -621,7 +621,10 @@ Other optional moments gate nothing. The sights and hearts repeat their line eac
 -   **Truth Sight** on the unmended memory orbs (the cradle by the fire, a Willowbrook cottage and
     its well), on Malakar (for a breath, a young man mending a toy at a workbench), and, until the
     Sorceress is redeemed, in the Chamber of Whispers on her, her staff, the whispers and the room
-    (the shine comes off, and the lie is in what is said).
+    (the shine comes off, and the lie is in what is said), and, while the whispers hold the Tower's
+    stair, on the stair, its shadows and the whispers (no one is there; what they say is not for the eye to answer).
+-   **Light** on the Tower's stair, its shadows and the whispers, the Hall's banners, the Vault's orbs and the
+    Labyrinth's mirrors shows what it can and solves nothing.
 -   **Heart's Truth** on the freed servants (they are afraid to go home and find no one waiting)
     and on Malakar before the refrain (the Shadow's voice speaks through his).
 -   **In the Throne Chamber, before the refrain:** raising the Ancient Amulet burns Malakar's hand
