@@ -23,9 +23,16 @@ export class NyxToken extends Item {
     })
   }
 
-  /** Also answers to "pendant", what its own description calls it. */
+  /**
+   * Also answers to "pendant" and "crystalline pendant", what its own
+   * description calls it.
+   */
   override answersTo(name: string): boolean {
-    return super.answersTo(name) || isPendant(name)
+    return (
+      super.answersTo(name) ||
+      isPendant(name) ||
+      name.toLowerCase() === 'crystalline pendant'
+    )
   }
 
   /** The Servant's Pendant is the one "pendant" means when it is at hand. */
