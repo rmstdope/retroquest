@@ -108,9 +108,8 @@ function crossesBox(
  * south or west (up and down diagonally to the right). When that cell is
  * taken, the map opens an empty column or row between the place and it,
  * moving the place and everything level with it or behind it one step back,
- * so the path stays short and never runs through another box. Places seen
- * but not visited are placed from the visited places only, so they are
- * leaves. Two places joined by a
+ * so the path stays one step long. Places seen but not visited are placed
+ * from the visited places only, so they are leaves. Two places joined by a
  * way get one path, solid unless one end is unvisited; a path that could only
  * be drawn through another box is left out. Visited places the current place
  * cannot walk to are laid out beneath, from the first of them.

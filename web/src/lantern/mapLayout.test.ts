@@ -135,7 +135,10 @@ describe('layoutMap', () => {
     expect(new Set(cells).size).toBe(cells.length)
     const [nCol, nRow] = at(layout, 'n')
     expect(at(layout, 'x')).toEqual([nCol + 1, nRow])
-    expect(layout.paths.map((p) => [p.from, p.to])).toContainEqual(['n', 'x'])
+    expect(at(layout, 'c')).toEqual([nCol, nRow + 1])
+    const drawn = layout.paths.map((p) => [p.from, p.to])
+    expect(drawn).toContainEqual(['n', 'x'])
+    expect(drawn).toContainEqual(['c', 'n'])
   })
 
   it('marks the current place', () => {
@@ -175,9 +178,9 @@ describe('layoutMap: places the current place cannot walk to', () => {
 })
 
 describe('layoutMap: paths and boxes', () => {
-  it('keeps a lengthened path from running through a box', () => {
-    // East of a is taken by b; going up from a needs (1,-1), free; but
-    // north-then-east of c collides: x must not hide behind u.
+  it('keeps a path from running through a box', () => {
+    // b lies east of a, and x east of n, just above b: no drawn path may
+    // run along a row through another box.
     const layout = layoutMap([
       place('a', true, { east: 'b', north: 'n' }, true),
       place('b', true),
