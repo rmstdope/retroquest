@@ -4,126 +4,506 @@
     "title": "Mountain Path",
     "width": 1920,
     "height": 1080,
-    "text": "A trail climbs through rock and pine between Willowbrook and Greendale. From the overlooks you can see both: Greendale ahead, and Willowbrook small and far behind you. Just off the trail is a camp site where travellers stop for the night."
+    "text": "A trail climbs through rock and pine between Willowbrook and Greendale. From the overlooks you can see both: Greendale ahead, and Willowbrook small and far behind you. Just off the trail is a camp site where travellers stop for the night.",
+    "areas": [
+      {
+        "id": "mountain-flower",
+        "title": "Mountain Flower"
+      },
+      {
+        "id": "walking-stick",
+        "title": "Walking Stick"
+      },
+      {
+        "id": "camp-site",
+        "title": "Camp Site"
+      },
+      {
+        "id": "mountain-hermit",
+        "title": "Mountain Hermit"
+      },
+      {
+        "id": "exit-north",
+        "title": "Way north"
+      },
+      {
+        "id": "entry-pass",
+        "title": "Entry Pass"
+      },
+      {
+        "id": "exit-east",
+        "title": "Way east"
+      }
+    ]
   },
   {
     "id": "act2-greendale-gates",
     "title": "Greendale Gates",
     "width": 1920,
     "height": 1080,
-    "text": "A magnificent stone archway marks the entrance to Greendale, the largest settlement you have encountered. Guards in polished mail stand watch, banners fluttering in the mountain breeze. Beyond, cobblestone streets wind between stone houses and bustling shops. The air carries the sounds of commerce—a stark contrast to Willowbrook's quiet charm."
+    "text": "A magnificent stone archway marks the entrance to Greendale, the largest settlement you have encountered. Guards in polished mail stand watch, banners fluttering in the mountain breeze. Beyond, cobblestone streets wind between stone houses and bustling shops. The air carries the sounds of commerce—a stark contrast to Willowbrook's quiet charm.",
+    "areas": [
+      {
+        "id": "gate-captain",
+        "title": "Gate Captain"
+      },
+      {
+        "id": "exit-south",
+        "title": "Way south"
+      },
+      {
+        "id": "exit-north",
+        "title": "Way north"
+      },
+      {
+        "id": "city-map",
+        "title": "City Map"
+      }
+    ]
   },
   {
     "id": "act2-main-square",
     "title": "Main Square",
     "width": 1920,
     "height": 1080,
-    "text": "The heart of Greendale: a great fountain of old heroes fighting beasts, stalls under bright awnings, red roofs all round. The square is crowded, but the talk is low, and it stops when a guard walks past. Castle towers rise to the north."
+    "text": "The heart of Greendale: a great fountain of old heroes fighting beasts, stalls under bright awnings, red roofs all round. The square is crowded, but the talk is low, and it stops when a guard walks past. Castle towers rise to the north.",
+    "areas": [
+      {
+        "id": "city-notice-board",
+        "title": "City Notice Board"
+      },
+      {
+        "id": "merchants-flyer",
+        "title": "Merchant's Flyer"
+      },
+      {
+        "id": "town-crier",
+        "title": "Town Crier"
+      },
+      {
+        "id": "exit-south",
+        "title": "Way south"
+      },
+      {
+        "id": "exit-north",
+        "title": "Way north"
+      },
+      {
+        "id": "exit-east",
+        "title": "Way east"
+      }
+    ]
   },
   {
     "id": "act2-market-district",
     "title": "Market District",
     "width": 1920,
     "height": 1080,
-    "text": "Narrow streets crammed with shops and trading posts weave a maze of commerce. Spices, leather, and fresh bread scent the air. Merchant wagons clog passageways while deals are argued in several languages. Serious business gets done here."
+    "text": "Narrow streets crammed with shops and trading posts weave a maze of commerce. Spices, leather, and fresh bread scent the air. Merchant wagons clog passageways while deals are argued in several languages. Serious business gets done here.",
+    "areas": [
+      {
+        "id": "master-merchant-aldric",
+        "title": "Master Merchant Aldric"
+      },
+      {
+        "id": "caravan-master-thorne",
+        "title": "Caravan Master Thorne"
+      },
+      {
+        "id": "exit-west",
+        "title": "Way west"
+      },
+      {
+        "id": "exit-north",
+        "title": "Way north"
+      },
+      {
+        "id": "exit-south",
+        "title": "Way south"
+      },
+      {
+        "id": "forest-survival-kit",
+        "title": "Forest Survival Kit"
+      },
+      {
+        "id": "enhanced-lantern",
+        "title": "Enhanced Lantern"
+      },
+      {
+        "id": "quality-rope",
+        "title": "Quality Rope"
+      }
+    ]
   },
   {
     "id": "act2-silver-stag-inn",
     "title": "The Silver Stag Inn",
     "width": 1920,
     "height": 1080,
-    "text": "A three-story inn glows with warm yellow light. Conversations from travelers and locals merge into a comforting din while tales are traded over bread and ale. Stag mounts and adventuring trophies line the walls. The place feels welcoming; information flows here as freely as the drink."
+    "text": "A three-story inn glows with warm yellow light. Conversations from travelers and locals merge into a comforting din while tales are traded over bread and ale. Stag mounts and adventuring trophies line the walls. The place feels welcoming; information flows here as freely as the drink.",
+    "areas": [
+      {
+        "id": "room-key",
+        "title": "Room Key"
+      },
+      {
+        "id": "door",
+        "title": "Door"
+      },
+      {
+        "id": "innkeeper-marcus",
+        "title": "Innkeeper Marcus"
+      },
+      {
+        "id": "barmaid-elena",
+        "title": "Barmaid Elena"
+      },
+      {
+        "id": "exit-south",
+        "title": "Way south"
+      },
+      {
+        "id": "exit-east",
+        "title": "Way east"
+      }
+    ]
   },
   {
     "id": "act2-inn-rooms",
     "title": "Inn Rooms",
     "width": 1920,
     "height": 1080,
-    "text": "Comfortable guest rooms on the upper floor of The Silver Stag Inn. Each room has a cozy bed, a writing desk, and a window overlooking the Market District. The rooms are clean and well-maintained, offering a peaceful retreat for travelers. Faint conversation drifts up from the common room below."
+    "text": "Comfortable guest rooms on the upper floor of The Silver Stag Inn. Each room has a cozy bed, a writing desk, and a window overlooking the Market District. The rooms are clean and well-maintained, offering a peaceful retreat for travelers. Faint conversation drifts up from the common room below.",
+    "areas": [
+      {
+        "id": "coins",
+        "title": "Coins"
+      },
+      {
+        "id": "exit-west",
+        "title": "Way west"
+      },
+      {
+        "id": "travelers-journal",
+        "title": "Traveler's Journal"
+      }
+    ]
   },
   {
     "id": "act2-merchants-warehouse",
     "title": "Merchant's Warehouse",
     "width": 1920,
     "height": 1080,
-    "text": "A large stone building packed with goods from distant lands. Crates and barrels form narrow corridors between tall shelving. Exotic spice and lacquer aromas mingle in the cool still air. This is where the most valuable inventory rests under quiet watch."
+    "text": "A large stone building packed with goods from distant lands. Crates and barrels form narrow corridors between tall shelving. Exotic spice and lacquer aromas mingle in the cool still air. This is where the most valuable inventory rests under quiet watch.",
+    "areas": [
+      {
+        "id": "brenn",
+        "title": "Brenn"
+      },
+      {
+        "id": "exit-north",
+        "title": "Way north"
+      }
+    ]
   },
   {
     "id": "act2-castle-approach",
     "title": "Castle Approach",
     "width": 1920,
     "height": 1080,
-    "text": "A wide avenue lined with statues of Greendale's heroes leads to an impressive castle of white stone. Tall spires reach toward the sky, and colorful banners snap in the wind. Fewer guards than the posts were built for patrol the approach, and those who remain keep their voices low. The royal standard is gone from the highest spire."
+    "text": "A wide avenue lined with statues of Greendale's heroes leads to an impressive castle of white stone. Tall spires reach toward the sky, and colorful banners snap in the wind. Fewer guards than the posts were built for patrol the approach, and those who remain keep their voices low. The royal standard is gone from the highest spire.",
+    "areas": [
+      {
+        "id": "herald",
+        "title": "Herald"
+      },
+      {
+        "id": "castle-guard-captain",
+        "title": "Castle Guard Captain"
+      },
+      {
+        "id": "exit-south",
+        "title": "Way south"
+      },
+      {
+        "id": "exit-west",
+        "title": "Way west"
+      }
+    ]
   },
   {
     "id": "act2-castle-courtyard",
     "title": "Castle Courtyard",
     "width": 1920,
     "height": 1080,
-    "text": "An expansive courtyard within the castle walls, featuring training grounds where knights practice their swordwork. Ancient oak trees provide shade for stone benches, and a stable houses magnificent warhorses, though half its stalls stand empty since the king's own guard rode out to search for him. The castle's main hall rises before you, its great doors carved with the symbols of Greendale's noble houses."
+    "text": "An expansive courtyard within the castle walls, featuring training grounds where knights practice their swordwork. Ancient oak trees provide shade for stone benches, and a stable houses magnificent warhorses, though half its stalls stand empty since the king's own guard rode out to search for him. The castle's main hall rises before you, its great doors carved with the symbols of Greendale's noble houses.",
+    "areas": [
+      {
+        "id": "sir-cedric",
+        "title": "Sir Cedric"
+      },
+      {
+        "id": "training-master",
+        "title": "Training Master"
+      },
+      {
+        "id": "squires",
+        "title": "Squires"
+      },
+      {
+        "id": "exit-east",
+        "title": "Way east"
+      },
+      {
+        "id": "exit-north",
+        "title": "Way north"
+      },
+      {
+        "id": "exit-west",
+        "title": "Way west"
+      },
+      {
+        "id": "squires-diary",
+        "title": "Squire's Diary"
+      }
+    ]
   },
   {
     "id": "act2-great-hall",
     "title": "Great Hall",
     "width": 1920,
     "height": 1080,
-    "text": "A magnificent hall with soaring ceilings supported by massive stone columns. Tapestries depicting legendary battles cover the walls, and the king's throne stands empty on a raised dais at the far end, a dark cloth laid across its arms. Behind it, the doors to the throne room are barred. Sunlight streams through tall stained-glass windows, casting colorful patterns on the stone floor. This is where the lords of Greendale hold court; for now, the Lord Commander holds it alone."
+    "text": "A magnificent hall with soaring ceilings supported by massive stone columns. Tapestries depicting legendary battles cover the walls, and the king's throne stands empty on a raised dais at the far end, a dark cloth laid across its arms. Behind it, the doors to the throne room are barred. Sunlight streams through tall stained-glass windows, casting colorful patterns on the stone floor. This is where the lords of Greendale hold court; for now, the Lord Commander holds it alone.",
+    "areas": [
+      {
+        "id": "court-herald",
+        "title": "Court Herald"
+      },
+      {
+        "id": "historians",
+        "title": "Historians"
+      },
+      {
+        "id": "lord-commander",
+        "title": "Lord Commander"
+      },
+      {
+        "id": "exit-east",
+        "title": "Way east"
+      }
+    ]
   },
   {
     "id": "act2-residential-quarter",
     "title": "Residential Quarter",
     "width": 1920,
     "height": 1080,
-    "text": "Quiet lanes of two-storey houses, each with a small garden and a workshop. Craftsmen work at benches in the open doorways, and neighbours sit on their steps. Half the garden plots have gone grey."
+    "text": "Quiet lanes of two-storey houses, each with a small garden and a workshop. Craftsmen work at benches in the open doorways, and neighbours sit on their steps. Half the garden plots have gone grey.",
+    "areas": [
+      {
+        "id": "local-craftsmen",
+        "title": "Local Craftsmen"
+      },
+      {
+        "id": "families",
+        "title": "Families"
+      },
+      {
+        "id": "exit-south",
+        "title": "Way south"
+      },
+      {
+        "id": "exit-north",
+        "title": "Way north"
+      },
+      {
+        "id": "exit-secret-passage",
+        "title": "Way secret_passage"
+      }
+    ]
   },
   {
     "id": "act2-healers-house",
     "title": "Healer's House",
     "width": 1920,
     "height": 1080,
-    "text": "A small stone house that smells of crushed herbs. A few bundles of dried plants still hang from the rafters, but the shelves below them are nearly bare: rows of empty bottles, rinsed and waiting. A fire burns in the hearth, and a door at the back stands half shut."
+    "text": "A small stone house that smells of crushed herbs. A few bundles of dried plants still hang from the rafters, but the shelves below them are nearly bare: rows of empty bottles, rinsed and waiting. A fire burns in the hearth, and a door at the back stands half shut.",
+    "areas": [
+      {
+        "id": "master-healer-lyria",
+        "title": "Master Healer Lyria"
+      },
+      {
+        "id": "exit-south",
+        "title": "Way south"
+      }
+    ]
   },
   {
     "id": "act2-hidden-library",
     "title": "Hidden Library",
     "width": 1920,
     "height": 1080,
-    "text": "Discovered beneath Greendale through a secret passage, this ancient library holds countless volumes of magical lore. Glowing crystals provide soft illumination and the air hums with residual energy. Protective enchantments shimmer around the most valuable texts. Somewhere on these shelves may be an answer about the mark you carry."
+    "text": "Discovered beneath Greendale through a secret passage, this ancient library holds countless volumes of magical lore. Glowing crystals provide soft illumination and the air hums with residual energy. Protective enchantments shimmer around the most valuable texts. Somewhere on these shelves may be an answer about the mark you carry.",
+    "areas": [
+      {
+        "id": "ancient-chronicle",
+        "title": "Ancient Chronicle"
+      },
+      {
+        "id": "protective-enchantments",
+        "title": "Protective Enchantments"
+      },
+      {
+        "id": "spectral-librarian",
+        "title": "Spectral Librarian"
+      },
+      {
+        "id": "exit-secret-passage",
+        "title": "Way secret_passage"
+      },
+      {
+        "id": "crystal-focus",
+        "title": "Crystal Focus"
+      }
+    ]
   },
   {
     "id": "act2-forest-transition",
     "title": "Forest Transition",
     "width": 1920,
     "height": 1080,
-    "text": "The mountain path ends at a ring of standing stones, grey and mossed, with runes cut deep in them. Past the stones the trees begin all at once, close and dark."
+    "text": "The mountain path ends at a ring of standing stones, grey and mossed, with runes cut deep in them. Past the stones the trees begin all at once, close and dark.",
+    "areas": [
+      {
+        "id": "standing-stones",
+        "title": "Standing Stones"
+      },
+      {
+        "id": "forest-hermit",
+        "title": "Forest Hermit"
+      },
+      {
+        "id": "exit-west",
+        "title": "Way west"
+      },
+      {
+        "id": "exit-east",
+        "title": "Way east"
+      }
+    ]
   },
   {
     "id": "act2-forest-entrance",
     "title": "Forest Entrance",
     "width": 1920,
     "height": 1080,
-    "text": "Massive trees create a natural cathedral as you enter the Enchanted Forest. Dappled sunlight filters through the dense canopy, and the path ahead disappears into green shadows. The air is alive with birds and rustling leaves, but beneath it lies an expectant silence, as if the forest itself is watching."
+    "text": "Massive trees create a natural cathedral as you enter the Enchanted Forest. Dappled sunlight filters through the dense canopy, and the path ahead disappears into green shadows. The air is alive with birds and rustling leaves, but beneath it lies an expectant silence, as if the forest itself is watching.",
+    "areas": [
+      {
+        "id": "enchanted-acorn",
+        "title": "Enchanted Acorn"
+      },
+      {
+        "id": "forest-sprites",
+        "title": "Forest Sprites"
+      },
+      {
+        "id": "exit-west",
+        "title": "Way west"
+      },
+      {
+        "id": "exit-south",
+        "title": "Way south"
+      },
+      {
+        "id": "exit-east",
+        "title": "Way east"
+      },
+      {
+        "id": "ravine",
+        "title": "Ravine"
+      },
+      {
+        "id": "caravan",
+        "title": "Caravan"
+      }
+    ]
   },
   {
     "id": "act2-ancient-grove",
     "title": "Ancient Grove",
     "width": 1920,
     "height": 1080,
-    "text": "A ring of trees so old their trunks are wider than a cottage. Signs are carved in their bark, older than any letters you know. In the middle stands one tree taller than the rest, with bark the colour of tarnished silver."
+    "text": "A ring of trees so old their trunks are wider than a cottage. Signs are carved in their bark, older than any letters you know. In the middle stands one tree taller than the rest, with bark the colour of tarnished silver.",
+    "areas": [
+      {
+        "id": "silver-tree",
+        "title": "Silver-Barked Tree"
+      },
+      {
+        "id": "exit-north",
+        "title": "Way north"
+      },
+      {
+        "id": "ancient-tree-spirit",
+        "title": "Ancient Tree Spirit"
+      },
+      {
+        "id": "silver-leaves",
+        "title": "Silver Leaves"
+      },
+      {
+        "id": "exit-south",
+        "title": "Way south"
+      }
+    ]
   },
   {
     "id": "act2-whispering-glade",
     "title": "Whispering Glade",
     "width": 1920,
     "height": 1080,
-    "text": "A meadow opens round a small stream that runs over smooth stones. Wildflowers grow thick to the water's edge. Under the sound of the water there are other sounds, almost voices, and they stop when you listen for them."
+    "text": "A meadow opens round a small stream that runs over smooth stones. Wildflowers grow thick to the water's edge. Under the sound of the water there are other sounds, almost voices, and they stop when you listen for them.",
+    "areas": [
+      {
+        "id": "exit-west",
+        "title": "Way west"
+      },
+      {
+        "id": "water-nymphs",
+        "title": "Water Nymphs"
+      },
+      {
+        "id": "crystal-clear-water",
+        "title": "Crystal-Clear Water"
+      },
+      {
+        "id": "moonflowers",
+        "title": "Moonflowers"
+      }
+    ]
   },
   {
     "id": "act2-heart-of-the-forest",
     "title": "Heart of the Forest",
     "width": 1920,
     "height": 1080,
-    "text": "The deepest part of the forest. The light here is green and gold and does not seem to come from the sky. A tree vaster than any other holds up the branches overhead, and before it stands an altar of starstone. The only way out is back north, to the grove."
+    "text": "The deepest part of the forest. The light here is green and gold and does not seem to come from the sky. A tree vaster than any other holds up the branches overhead, and before it stands an altar of starstone. The only way out is back north, to the grove.",
+    "areas": [
+      {
+        "id": "offering-altar",
+        "title": "Offering Altar"
+      },
+      {
+        "id": "exit-north",
+        "title": "Way north"
+      },
+      {
+        "id": "nyx",
+        "title": "Nyx"
+      }
+    ]
   },
   {
     "id": "act2-portrait-ancient-tree-spirit",

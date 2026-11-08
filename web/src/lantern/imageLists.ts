@@ -5,7 +5,8 @@
  * who appears in several). An image's words (`text`) are the room's base
  * description with the markup removed, or the character's hand-written face
  * portrait prompt, the studio's starting prompt; the shared style is the
- * studio's, in `content-studio/images/edits.json`. The tts script
+ * studio's, in `content-studio/images/edits.json`. A room image also lists its
+ * named areas (`roomAreas.ts`). The tts script
  * `extract-act.ts` writes the lists.
  */
 import { Character, type Act } from '@/engine'
@@ -13,6 +14,7 @@ import { displayName } from './displayName'
 import { narrationText } from './narrationKey'
 import { ELIOR_PORTRAIT_PROMPT, PORTRAIT_PROMPTS } from './portraitPrompts'
 import { roomTrackId } from './musicLists'
+import { declaredAreas, type ImageArea } from './roomAreas'
 
 /** Width in pixels of every room image. */
 export const IMAGE_WIDTH = 1920
@@ -62,6 +64,8 @@ export interface GameImage {
   height: number
   /** The room's description, markup removed, or the character's face portrait prompt, which the studio starts its prompt from. */
   text: string
+  /** A room image's named areas: one for each item, character, scenery piece and exit that can ever be in the room, which the navigator places on the image in the studio. Absent for a portrait. */
+  areas?: ImageArea[]
 }
 
 /** One image for each room of the act, described by the room's own description. */
@@ -72,6 +76,7 @@ export function roomImages(act: Act): GameImage[] {
     width: IMAGE_WIDTH,
     height: IMAGE_HEIGHT,
     text: narrationText(room.description),
+    areas: [...declaredAreas(act.name, key)],
   }))
 }
 
