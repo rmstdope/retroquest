@@ -12,6 +12,8 @@ import {
   FLAG_ACT4_ECHO_STONE_HEARD,
   FLAG_ACT4_KNIGHT_SEEN_THROUGH,
   FLAG_ACT4_CHAIN_GIVEN,
+  FLAG_ACT4_GUARDIANS_CHAIN_RAISED,
+  FLAG_ACT4_LOYALTY_TOKEN_RAISED_IN_HALL,
 } from '../Act4StoryFlags'
 import { KnightOfDespair } from './KnightOfDespair'
 import {
@@ -331,6 +333,58 @@ describe('KnightOfDespair', () => {
       expect(answer).toContain(NO_CHAIN)
       expect(answer).not.toContain('The chain is gone')
     })
+  })
+})
+
+describe('KnightOfDespair offered the shield', () => {
+  /** A game in the hall that also carries the Loyalty Token. */
+  function gameWithToken(): Game {
+    const game = createGameInHall()
+    game.state.addItemToInventory(new LoyaltyToken())
+    return game
+  }
+
+  it("raises the Guardian's Chain when it is given to him", () => {
+    const game = gameWithToken()
+
+    const out = executeCommands(game, ["give guardian's chain to knight"])
+
+    expect(out).toContain('You hold the chain up between you and the knight.')
+    expect(out).not.toContain('interested')
+    expectStoryFlag(game.state, FLAG_ACT4_GUARDIANS_CHAIN_RAISED)
+    expectItemInInventory(game.state, "Guardian's Chain", true)
+  })
+
+  it('raises the Loyalty Token when it is given to him', () => {
+    const game = gameWithToken()
+
+    const out = executeCommands(game, [
+      'give loyalty token to knight of despair',
+    ])
+
+    expect(out).toContain('You hold the loyalty token close to your heart.')
+    expect(out).not.toContain('interested')
+    expectStoryFlag(game.state, FLAG_ACT4_LOYALTY_TOKEN_RAISED_IN_HALL)
+    expectItemInInventory(game.state, 'Loyalty Token', true)
+  })
+
+  it('still refuses anything else', () => {
+    const game = createGameInHall()
+
+    expect(executeCommands(game, ['give echo stone to knight'])).toContain(
+      "doesn't seem interested",
+    )
+  })
+
+  it('has no use for the shield once he is redeemed', () => {
+    const game = gameWithToken()
+    executeCommands(game, [...THREE_SIGHTS, 'use loyalty token'])
+    executeCommands(game, ['say redemption to knight'])
+
+    const out = executeCommands(game, ["give guardian's chain to knight"])
+
+    expect(out).toContain("doesn't seem interested")
+    expectStoryFlag(game.state, FLAG_ACT4_GUARDIANS_CHAIN_RAISED, false)
   })
 })
 
