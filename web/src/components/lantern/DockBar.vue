@@ -11,6 +11,10 @@ import { exitArrow } from '@/lantern/exitArrow'
  * buttons, "Actions ▴" to open the panel and a keyboard button to open it
  * straight into typing.
  */
+const props = defineProps<{
+  /** A sideways phone: floats at the foot left of the picture, without exit arrows (the Map has the ways out). */
+  floating?: boolean
+}>()
 const emit = defineEmits<{ open: [mode: 'actions' | 'type'] }>()
 const game = useGameStore()
 const narration = useNarrationStore()
@@ -56,8 +60,12 @@ defineExpose({ focus })
 </script>
 
 <template>
-  <section class="lq-dock" aria-label="Action bar">
-    <div v-if="exits.length" class="lq-dock-exits">
+  <section
+    class="lq-dock"
+    :class="{ 'lq-floating': props.floating }"
+    aria-label="Action bar"
+  >
+    <div v-if="exits.length && !props.floating" class="lq-dock-exits">
       <button
         v-for="{ dir, room, name } in exits"
         :key="dir"
@@ -107,7 +115,7 @@ defineExpose({ focus })
       :class="{ 'lq-busy': hintBusy }"
       @click="hint"
     >
-      💡 Hint
+      💡<span class="lq-hint-word"> Hint</span>
     </button>
   </section>
 </template>
@@ -173,6 +181,31 @@ defineExpose({ focus })
 .lq-dock-hint.lq-busy {
   opacity: 0.5;
   cursor: not-allowed;
+}
+/* Sideways: on the picture at the foot left, compact; the smallest screens show the lamp alone. */
+.lq-dock.lq-floating {
+  position: absolute;
+  left: 8px;
+  bottom: 8px;
+  z-index: 3;
+  padding: 4px;
+  gap: 4px;
+}
+.lq-floating .lq-dock-open {
+  flex: 0 0 auto;
+  height: 40px;
+}
+.lq-floating .lq-dock-icon {
+  width: 40px;
+  height: 40px;
+}
+.lq-floating .lq-dock-hint {
+  height: 40px;
+}
+@media (max-height: 340px) {
+  .lq-floating .lq-hint-word {
+    display: none;
+  }
 }
 .lq-dock-open {
   /* Never squeezed: the exits scroll sideways instead. */

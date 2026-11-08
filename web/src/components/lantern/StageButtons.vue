@@ -21,7 +21,11 @@ import CompassPanel from './CompassPanel.vue'
  */
 type Tab = 'bag' | 'spells' | 'quests'
 
-const props = defineProps<{ drawer: Tab | 'story' | 'map' | null }>()
+const props = defineProps<{
+  drawer: Tab | 'story' | 'map' | null
+  /** A sideways phone: Story so far and Map are their symbols alone. */
+  compact?: boolean
+}>()
 const emit = defineEmits<{
   journal: [tab: Tab]
   story: []
@@ -37,19 +41,22 @@ const mapOpen = computed(() => props.drawer === 'map')
 const journalButtons = computed(() => [
   {
     tab: 'bag' as const,
-    label: `Bag · ${game.rawInventory.length}`,
+    name: 'Bag',
+    count: game.rawInventory.length,
     dot: game.bagHasNew,
     flight: 'item' as const,
   },
   {
     tab: 'spells' as const,
-    label: `Spells · ${game.rawSpells.length}`,
+    name: 'Spells',
+    count: game.rawSpells.length,
     dot: game.spellsHaveNew,
     flight: 'spell' as const,
   },
   {
     tab: 'quests' as const,
-    label: `Quests · ${game.activeQuests.length}`,
+    name: 'Quests',
+    count: game.activeQuests.length,
     dot: game.questsHaveNew,
     flight: undefined,
   },
@@ -87,7 +94,7 @@ defineExpose({ focusButton })
 </script>
 
 <template>
-  <div ref="root" class="lq-buttons">
+  <div ref="root" class="lq-buttons" :class="{ 'lq-compact': compact }">
     <div class="lq-button-row">
       <button
         v-for="button in journalButtons"
@@ -104,7 +111,8 @@ defineExpose({ focusButton })
         :aria-pressed="props.drawer === button.tab ? 'true' : 'false'"
         @click="emit('journal', button.tab)"
       >
-        {{ button.label }}
+        {{ button.name }}<span class="lq-count-sep"> ·</span>
+        {{ button.count }}
         <span v-if="button.dot" class="lq-dot" aria-label="new"></span>
       </button>
       <button
@@ -112,10 +120,11 @@ defineExpose({ focusButton })
         class="lq-stage-btn"
         :class="{ 'lq-lit': props.drawer === 'story' }"
         data-button="story"
+        :aria-label="compact ? 'Story so far' : undefined"
         :aria-pressed="props.drawer === 'story' ? 'true' : 'false'"
         @click="emit('story')"
       >
-        ⟲ Story so far
+        ⟲<template v-if="!compact"> Story so far</template>
       </button>
       <div class="lq-map-wrap">
         <button
@@ -123,11 +132,12 @@ defineExpose({ focusButton })
           class="lq-stage-btn"
           :class="{ 'lq-lit': mapOpen }"
           data-button="map"
+          :aria-label="compact ? 'Map' : undefined"
           aria-haspopup="true"
           :aria-expanded="mapOpen ? 'true' : 'false'"
           @click="emit('map')"
         >
-          🧭 Map
+          🧭<template v-if="!compact"> Map</template>
         </button>
         <div v-if="mapOpen" class="lq-map-pop" data-panel>
           <CompassPanel stage />
@@ -166,6 +176,20 @@ defineExpose({ focusButton })
   border-color: var(--lq-accent);
   background: var(--lq-accent-soft);
   color: var(--lq-accent-text);
+}
+/* A sideways phone: smaller buttons; on the smallest screens "Bag 2", no dot between. */
+.lq-compact .lq-button-row {
+  gap: 4px;
+}
+.lq-compact .lq-stage-btn {
+  min-height: 40px;
+  padding: 0 10px;
+  font-size: 12px;
+}
+@media (max-height: 340px) {
+  .lq-compact .lq-count-sep {
+    display: none;
+  }
 }
 .lq-dot {
   display: inline-block;

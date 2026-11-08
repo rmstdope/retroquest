@@ -1,7 +1,13 @@
 // @vitest-environment jsdom
 import { describe, it, expect, afterEach, vi } from 'vitest'
 import { effectScope } from 'vue'
-import { useMediaQuery, WIDE_QUERY, SHORT_QUERY } from './useMediaQuery'
+import {
+  useMediaQuery,
+  WIDE_QUERY,
+  SHORT_QUERY,
+  PHONE_QUERY,
+  PORTRAIT_QUERY,
+} from './useMediaQuery'
 
 function fakeMatchMedia(initial: boolean) {
   const listeners: Array<(e: { matches: boolean }) => void> = []
@@ -32,6 +38,16 @@ describe('useMediaQuery', () => {
 
   it('treats a screen under 520px tall as short (phone landscape)', () => {
     expect(SHORT_QUERY).toBe('(max-height: 519px)')
+  })
+
+  it('calls a touch screen with a shorter side under 600px a phone', () => {
+    expect(PHONE_QUERY).toBe(
+      '(hover: none) and (pointer: coarse) and ((max-width: 599px) or (max-height: 599px))',
+    )
+  })
+
+  it('knows a screen held upright', () => {
+    expect(PORTRAIT_QUERY).toBe('(orientation: portrait)')
   })
 
   it('follows the query until its scope ends', () => {

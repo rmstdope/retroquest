@@ -65,13 +65,15 @@ describe('where the story lands after the window crosses 1100 px', () => {
     vi.stubGlobal(
       'matchMedia',
       vi.fn((query: string) => ({
-        matches: query.includes('1100px')
-          ? sides
-          : query.includes('max-height')
-            ? short
-            : query.includes('min-height')
-              ? wide
-              : true,
+        matches: query.includes('hover: none')
+          ? false
+          : query.includes('1100px')
+            ? sides
+            : query.includes('519px')
+              ? short
+              : query.includes('min-height')
+                ? wide
+                : true,
         addEventListener: (
           _: string,
           fn: (e: { matches: boolean }) => void,
@@ -460,7 +462,7 @@ describe('where the story lands after the window crosses 1100 px', () => {
     wide = width >= 1024 && height >= 560
     short = height < 520
     for (const [query, fn] of Object.entries(listeners)) {
-      if (query.includes('max-height')) fn({ matches: short })
+      if (query.includes('519px')) fn({ matches: short })
       else if (query.includes('min-height')) fn({ matches: wide })
     }
     await nextTick()

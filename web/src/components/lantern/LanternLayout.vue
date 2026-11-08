@@ -28,6 +28,8 @@ import { STAGE_BUBBLES, useBubbleAges } from '@/composables/useBubbleAges'
 import { useNarrationPaper } from '@/composables/useNarrationPaper'
 import {
   SHORT_QUERY,
+  PHONE_QUERY,
+  PORTRAIT_QUERY,
   useMediaQuery,
   KEYBOARD_QUERY,
   WIDE_QUERY,
@@ -62,6 +64,7 @@ import StoryNameMenu from './StoryNameMenu.vue'
 import { NAME_SELECTOR, useNameStops } from '@/composables/useNameStops'
 import StoryTurn from './StoryTurn.vue'
 import TitlePage from './TitlePage.vue'
+import TurnPage from './TurnPage.vue'
 import { newestLoadable } from '@/lantern/saveCard'
 import type { SaveSlot } from '@/types/bridge'
 
@@ -95,12 +98,19 @@ import type { SaveSlot } from '@/types/bridge'
  * words are clear (no Hide or Show) and the bubbles come back when the
  * arrival clears (the room itself having been told in the middle). Enter or Space goes on, a click on the
  * picture too; Escape, the tab, an action or typing clear it at once.
- * Smaller screens that are not short (a phone upright) play the same stage
- * arranged for a tall screen: the plate across the top with "⟲ Story so far"
- * (the whole story over the stage), the one column over the picture
- * and the folded bar above the section tabs (Story, Bag, Spells, Quests, Map);
- * the actions are a sheet (at most 62% of the height) over the picture that
- * folds after every turn. A short screen (a phone on its side) keeps the text
+ * A phone (a touch screen whose shorter side is under 600 px) is played
+ * sideways: held upright it shows only the turn page (`TurnPage`) over the
+ * game, which waits behind it, inert and unchanged (the layout does not
+ * depend on how the phone is held); on its side it is the laptop stage made
+ * small: no header, ☰ and the plate top left, the buttons top right, the folded
+ * bar (Actions, keyboard, Hint) at the foot left, the words up the left side,
+ * and the actions a sheet over the picture that folds after every turn.
+ * Other smaller screens that are not short (a tablet upright, a narrow window)
+ * play the same stage arranged for a tall screen: the plate across the top
+ * with "⟲ Story so far" (the whole story over the stage), the one column over
+ * the picture and the folded bar above the section tabs (Story, Bag, Spells,
+ * Quests, Map); the actions are a sheet (at most 62% of the height) over the
+ * picture that folds after every turn. A short mouse window keeps the text
  * page, with the tabs in the header and the same sheet folded into the bar,
  * which also folds when an answer does not fit beside it.
  * A new turn opens at its start, with a "More below" pill while the story
@@ -136,10 +146,24 @@ const narration = useNarrationStore()
 const speech = useStageSpeechStore()
 const arrival = useArrivalStore()
 const scene = useSceneStore()
-const wide = useMediaQuery(WIDE_QUERY)
+/** A laptop screen (≥1024 × 560): the stage with its action row along the bottom. */
+const laptop = useMediaQuery(WIDE_QUERY)
 const short = useMediaQuery(SHORT_QUERY)
-/** A phone (or any screen under the laptop stage) that is not short: the picture stage, arranged for a tall screen. */
-const phoneStage = computed(() => !wide.value && !short.value)
+/** A phone: a touch screen whose shorter side is under 600 pixels. Phones are played sideways. */
+const phone = useMediaQuery(PHONE_QUERY)
+const portrait = useMediaQuery(PORTRAIT_QUERY)
+/** A phone held upright: the turn page covers the game, which waits behind it (the layout is the sideways one either way, so nothing behind changes). */
+const turnPage = computed(() => phone.value && portrait.value)
+/** A phone: the laptop stage made small, everything floating on the picture (played on its side; upright the turn page covers it). */
+const sideways = computed(() => phone.value)
+/** The stage with a plate and buttons floating on the picture: a laptop, or a phone on its side. */
+const wide = computed(() => laptop.value || sideways.value)
+/** A short screen that is not a phone (a mouse window dragged low): the text page. */
+const textPage = computed(() => short.value && !phone.value)
+/** Any other screen (a tablet, a narrow window) that is not short: the picture stage, arranged for a tall screen. */
+const phoneStage = computed(() => !wide.value && !textPage.value)
+/** The actions are a sheet over the picture, opened from a folded bar. */
+const sheeted = computed(() => phoneStage.value || sideways.value)
 /** The room is played on its picture: the laptop stage or the phone's. */
 const staged = computed(() => wide.value || phoneStage.value)
 /** The laptop window is wide enough for the narrator on one side and speech on the other. */
@@ -178,13 +202,13 @@ const plate = ref<InstanceType<typeof RoomPlate> | null>(null)
 const pictured = ref(false)
 /** The actions sheet: every screen starts with it folded into the bar. */
 const dockOpen = ref(false)
-// A phone turned on its side shows the text page with the sheet folded.
-watch(short, (isShort) => {
-  if (isShort) dockOpen.value = false
+// A window turned into the text page (a short mouse window) shows the sheet folded.
+watch(textPage, (isText) => {
+  if (isText) dockOpen.value = false
 })
 /** The phone's sheet is up over the picture. */
 const sheetOpen = computed(
-  () => phoneStage.value && section.value === 'story' && dockOpen.value,
+  () => sheeted.value && section.value === 'story' && dockOpen.value,
 )
 
 // "Open in journal": the Quests drawer on the stage, the Quests section on a phone.
@@ -469,7 +493,7 @@ const dock = ref<InstanceType<typeof DockBar> | null>(null)
 
 /** Focus the actions: the open composer, or the folded bar's Actions button. */
 function focusActions(): void {
-  if (!wide.value && !dockOpen.value) dock.value?.focus()
+  if (!laptop.value && !dockOpen.value) dock.value?.focus()
   else composer.value?.focus()
 }
 
@@ -787,6 +811,8 @@ const widePlate = ref<InstanceType<typeof RoomPlate> | null>(null)
 const cardsTop = ref(140)
 /** The stage's top margin the plate stands at, and the gap kept under it (px). */
 const PLATE_TOP = 16
+/** A sideways phone's plate stands closer to the edge. */
+const PLATE_TOP_SIDEWAYS = 8
 const PLATE_GAP = 12
 let widePlateResize: ResizeObserver | undefined
 /** The frame that applies the plate's new height, while one is waiting. */
@@ -804,7 +830,10 @@ watch(
     widePlateResize = new ResizeObserver(() => {
       cancelAnimationFrame(widePlateFrame)
       widePlateFrame = requestAnimationFrame(() => {
-        cardsTop.value = PLATE_TOP + el.offsetHeight + PLATE_GAP
+        cardsTop.value =
+          (sideways.value ? PLATE_TOP_SIDEWAYS : PLATE_TOP) +
+          el.offsetHeight +
+          PLATE_GAP
       })
     })
     widePlateResize.observe(el)
@@ -1077,16 +1106,18 @@ watch(
     else latest?.scrollIntoView?.({ block: 'start' })
     // Every answer is read on the picture: the phone's sheet folds after each turn.
     const folds =
-      !wide.value &&
+      !laptop.value &&
       dockOpen.value &&
-      (phoneStage.value || short.value || answerTooLong())
+      (sheeted.value || textPage.value || answerTooLong())
     if (folds) {
       dockOpen.value = false
       await nextTick()
     }
     updateMoreBelow()
     const lost =
-      !wide.value && !dockOpen.value && document.activeElement === document.body
+      !laptop.value &&
+      !dockOpen.value &&
+      document.activeElement === document.body
     if ((away || folds || lost) && !game.showModal) focusActions()
   },
   { flush: 'post' },
@@ -1153,7 +1184,7 @@ const infoHtml = computed(() => {
   return kind === 'help'
     ? html +
         renderMarkup(NARRATION_HELP) +
-        (wide.value ? renderMarkup(NARRATION_KEY_HELP) : '') +
+        (laptop.value ? renderMarkup(NARRATION_KEY_HELP) : '') +
         music.buildAttributionHtml()
     : html
 })
@@ -1379,347 +1410,368 @@ watch(
 
 <template>
   <div class="lq-root">
-    <!-- The game has ended: nothing but the end screen. -->
-    <EndScreen
-      v-if="game.ending"
-      :text="game.ending.text"
-      :saved="game.ending.saved"
-    />
-    <template v-else>
-      <LanternHeader
-        :compact="!wide"
-        :hide-room="phoneStage"
-        @menu="openGameDialog('menu')"
-        @open="openGameDialog"
-      >
-        <template v-if="!wide && short" #nav>
-          <SectionNav v-model="section" class="lq-nav-top" />
-        </template>
-      </LanternHeader>
-
-      <main
-        ref="mainEl"
-        class="lq-main"
-        :class="{
-          'lq-wide': wide,
-          'lq-staged': staged,
-          'lq-phone': phoneStage,
-        }"
-        :style="phoneStage ? { '--lq-plate-h': `${plateHeight}px` } : {}"
-        @click.capture="onPanelPress"
-      >
-        <div
-          v-if="staged"
-          v-show="section === 'story'"
-          class="lq-stage"
-          :style="{ '--lq-actions-h': `${actionsHeight}px` }"
-          @click="onPicturePress"
+    <!-- The game, out of reach (and untouched) while a phone is held upright. -->
+    <div class="lq-game" :inert="turnPage || undefined">
+      <!-- The game has ended: nothing but the end screen. -->
+      <EndScreen
+        v-if="game.ending"
+        :text="game.ending.text"
+        :saved="game.ending.saved"
+      />
+      <template v-else>
+        <LanternHeader
+          v-if="!sideways"
+          :compact="!wide"
+          :hide-room="phoneStage"
+          @menu="openGameDialog('menu')"
+          @open="openGameDialog"
         >
-          <StagePicture
-            :src="game.roomPicture"
-            :patches="game.roomPatchUrls"
-            @pictured="pictured = $event"
-          />
-          <ArrivalOnPicture :pictured="pictured" :phone="phoneStage" />
-          <RoomPlate
-            v-if="wide"
-            ref="widePlate"
-            class="lq-stage-plate"
-            data-panel
-            @click="onNameClick"
-          />
-          <StageButtons
-            v-if="wide"
-            :key="`buttons-${stageKey}`"
-            ref="stageButtons"
-            class="lq-stage-buttons"
-            :drawer="drawerTab"
-            @journal="toggleDrawer"
-            @story="toggleDrawer('story')"
-            @map="toggleDrawer('map')"
-            @close="closeDrawer"
-          />
-          <JournalDrawer
-            v-if="drawerTab && drawerTab !== 'story' && drawerTab !== 'map'"
-            :key="`drawer-${stageKey}`"
-            :tab="drawerTab"
-            @select="drawerTab = $event"
-            @close="closeDrawer"
-          />
-          <StoryDrawer
-            v-else-if="drawerTab === 'story'"
-            :key="`story-${stageKey}`"
-            :phone="phoneStage"
-            @click="onNameClick"
-            @keydown="onNameKeydown"
-            @close="closeDrawer"
-          />
-        </div>
-        <RoomPlate
-          v-if="phoneStage"
-          v-show="section === 'story'"
-          ref="plate"
-          class="lq-phone-plate"
-          data-panel
-          story-button
-          :folded="plateFolded"
-          @click="onNameClick"
-          @story="drawerTab = 'story'"
-        />
-        <StageSpeech
-          v-if="twoSides"
-          v-show="section === 'story'"
-          class="lq-above-hide"
-          :class="{ 'lq-covered': sheetOpen }"
-          :away="paper.hidden.value || arrival.active"
-        />
-        <div
-          v-show="
-            staged
-              ? paper.visible.value && section === 'story'
-              : section === 'story'
-          "
-          ref="paperEl"
-          class="lq-story-wrap"
+          <template v-if="!wide && textPage" #nav>
+            <SectionNav v-model="section" class="lq-nav-top" />
+          </template>
+        </LanternHeader>
+
+        <main
+          ref="mainEl"
+          class="lq-main"
           :class="{
-            'lq-cards': staged,
-            'lq-one-column': column,
-            'lq-hint-room': storyHeld,
-            'lq-paper-away': paperAway,
-            'lq-covered': sheetOpen,
+            'lq-wide': wide,
+            'lq-staged': staged,
+            'lq-phone': phoneStage,
+            'lq-sideways': sideways,
           }"
-          :style="
-            wide
-              ? {
-                  top: `${cardsTop}px`,
-                  bottom: `calc(${actionsHeight}px + var(--lq-hide-line) + 12px)`,
-                }
-              : {}
-          "
-          :inert="paperAway || undefined"
+          :style="phoneStage ? { '--lq-plate-h': `${plateHeight}px` } : {}"
+          @click.capture="onPanelPress"
         >
-          <section
-            ref="storyEl"
-            class="lq-story"
-            tabindex="-1"
-            aria-label="Story"
-            @click="onStoryClick"
-            @keydown="onStoryKeydown"
-            @scroll.passive="updateMoreBelow"
-            @wheel.passive="endLanding"
-            @touchstart.passive="endLanding"
-            @pointerdown.passive="endLanding"
+          <div
+            v-if="staged"
+            v-show="section === 'story'"
+            class="lq-stage"
+            :style="{ '--lq-actions-h': `${actionsHeight}px` }"
+            @click="onPicturePress"
           >
-            <h2 class="lq-sr-only">Story</h2>
-            <div ref="contentEl" class="lq-paper-content">
-              <template v-for="turn in storyTurns" :key="turn.id">
-                <ColumnTurn v-if="column" :turn="turn" :data-turn="turn.id" />
-                <StoryTurn
-                  v-else
-                  :turn="turn"
-                  :card="staged"
-                  :data-turn="turn.id"
-                />
-              </template>
-            </div>
-          </section>
-          <p
-            v-if="narration.hintVisible"
-            class="lq-narration-hint"
-            :class="{ 'lq-hint-raised': moreBelow && !storyHeld }"
+            <StagePicture
+              :src="game.roomPicture"
+              :patches="game.roomPatchUrls"
+              @pictured="pictured = $event"
+            />
+            <ArrivalOnPicture :pictured="pictured" :phone="phoneStage" />
+            <button
+              v-if="sideways"
+              type="button"
+              class="lq-float-menu"
+              aria-label="Game menu"
+              @click="openGameDialog('menu')"
+            >
+              ☰
+            </button>
+            <RoomPlate
+              v-if="wide"
+              ref="widePlate"
+              class="lq-stage-plate"
+              data-panel
+              @click="onNameClick"
+            />
+            <StageButtons
+              v-if="wide"
+              :key="`buttons-${stageKey}`"
+              ref="stageButtons"
+              :compact="sideways"
+              class="lq-stage-buttons"
+              :drawer="drawerTab"
+              @journal="toggleDrawer"
+              @story="toggleDrawer('story')"
+              @map="toggleDrawer('map')"
+              @close="closeDrawer"
+            />
+            <JournalDrawer
+              v-if="drawerTab && drawerTab !== 'story' && drawerTab !== 'map'"
+              :key="`drawer-${stageKey}`"
+              :tab="drawerTab"
+              @select="drawerTab = $event"
+              @close="closeDrawer"
+            />
+            <StoryDrawer
+              v-else-if="drawerTab === 'story'"
+              :key="`story-${stageKey}`"
+              :phone="phoneStage"
+              @click="onNameClick"
+              @keydown="onNameKeydown"
+              @close="closeDrawer"
+            />
+          </div>
+          <RoomPlate
+            v-if="phoneStage"
+            v-show="section === 'story'"
+            ref="plate"
+            class="lq-phone-plate"
+            data-panel
+            story-button
+            :folded="plateFolded"
+            @click="onNameClick"
+            @story="drawerTab = 'story'"
+          />
+          <StageSpeech
+            v-if="twoSides"
+            v-show="section === 'story'"
+            class="lq-above-hide"
+            :class="{ 'lq-covered': sheetOpen }"
+            :away="paper.hidden.value || arrival.active"
+          />
+          <div
+            v-show="
+              staged
+                ? paper.visible.value && section === 'story'
+                : section === 'story'
+            "
+            ref="paperEl"
+            class="lq-story-wrap"
+            :class="{
+              'lq-cards': staged,
+              'lq-one-column': column,
+              'lq-hint-room': storyHeld,
+              'lq-paper-away': paperAway,
+              'lq-covered': sheetOpen,
+            }"
+            :style="
+              wide
+                ? {
+                    top: `${cardsTop}px`,
+                    bottom: sideways
+                      ? 'calc(var(--lq-hide-line) + 60px)'
+                      : `calc(${actionsHeight}px + var(--lq-hide-line) + 12px)`,
+                  }
+                : {}
+            "
+            :inert="paperAway || undefined"
           >
-            {{ hintText }}
-          </p>
-          <button
-            v-if="moreBelow && !storyHeld"
-            ref="moreBelowButton"
-            type="button"
-            class="lq-more-below"
-            @click="readOn"
+            <section
+              ref="storyEl"
+              class="lq-story"
+              tabindex="-1"
+              aria-label="Story"
+              @click="onStoryClick"
+              @keydown="onStoryKeydown"
+              @scroll.passive="updateMoreBelow"
+              @wheel.passive="endLanding"
+              @touchstart.passive="endLanding"
+              @pointerdown.passive="endLanding"
+            >
+              <h2 class="lq-sr-only">Story</h2>
+              <div ref="contentEl" class="lq-paper-content">
+                <template v-for="turn in storyTurns" :key="turn.id">
+                  <ColumnTurn v-if="column" :turn="turn" :data-turn="turn.id" />
+                  <StoryTurn
+                    v-else
+                    :turn="turn"
+                    :card="staged"
+                    :data-turn="turn.id"
+                  />
+                </template>
+              </div>
+            </section>
+            <p
+              v-if="narration.hintVisible"
+              class="lq-narration-hint"
+              :class="{ 'lq-hint-raised': moreBelow && !storyHeld }"
+            >
+              {{ hintText }}
+            </p>
+            <button
+              v-if="moreBelow && !storyHeld"
+              ref="moreBelowButton"
+              type="button"
+              class="lq-more-below"
+              @click="readOn"
+            >
+              More below <span aria-hidden="true">↓</span>
+            </button>
+          </div>
+          <div
+            v-if="staged"
+            v-show="section === 'story'"
+            class="lq-paper-tabrow"
+            :class="{ 'lq-covered': sheetOpen }"
           >
-            More below <span aria-hidden="true">↓</span>
-          </button>
-        </div>
-        <div
-          v-if="staged"
-          v-show="section === 'story'"
-          class="lq-paper-tabrow"
-          :class="{ 'lq-covered': sheetOpen }"
-        >
-          <button
-            v-if="showHide"
-            ref="hideEl"
-            type="button"
-            class="lq-words-hide"
-            :title="wide ? 'Hide the words (N)' : undefined"
-            :aria-keyshortcuts="wide ? 'N' : undefined"
-            @click="hidePaper"
-          >
-            ▾ Hide
-          </button>
-          <button
-            v-if="showTab"
-            ref="tabEl"
-            type="button"
-            class="lq-paper-tab"
-            :title="wide ? 'Show the words (N)' : undefined"
-            :aria-keyshortcuts="wide ? 'N' : undefined"
-            @click="showPaper"
-          >
-            ▴ Show
-          </button>
-        </div>
+            <button
+              v-if="showHide"
+              ref="hideEl"
+              type="button"
+              class="lq-words-hide"
+              :title="laptop ? 'Hide the words (N)' : undefined"
+              :aria-keyshortcuts="laptop ? 'N' : undefined"
+              @click="hidePaper"
+            >
+              ▾ Hide
+            </button>
+            <button
+              v-if="showTab"
+              ref="tabEl"
+              type="button"
+              class="lq-paper-tab"
+              :title="laptop ? 'Show the words (N)' : undefined"
+              :aria-keyshortcuts="laptop ? 'N' : undefined"
+              @click="showPaper"
+            >
+              ▴ Show
+            </button>
+          </div>
 
-        <!-- Choosing an action or typing clears an arrival on the picture. Typing
+          <!-- Choosing an action or typing clears an arrival on the picture. Typing
              listens bubbling, not capture: a render before the command box's own
              v-model has read the text would give the first typed character back.
              A click is captured, so a turn the click plays keeps the arrival it starts. -->
-        <div v-if="sheetOpen" class="lq-scrim" aria-hidden="true"></div>
-        <ActionComposer
-          v-show="wide || (section === 'story' && dockOpen)"
-          :key="`composer-${game.gameNumber}`"
-          ref="composer"
-          class="lq-composer"
-          :class="{ 'lq-sheet': !wide, 'lq-sheet-over': phoneStage }"
-          :foldable="!wide"
-          :stage="wide"
-          :words-showing="showHide"
-          @click.capture="clearShownArrival"
-          @input="clearShownArrival"
-          @fold="fold"
-        />
-        <DockBar
-          v-if="!wide && section === 'story' && !dockOpen"
-          ref="dock"
-          data-panel
-          @open="openDock"
-        />
+          <div v-if="sheetOpen" class="lq-scrim" aria-hidden="true"></div>
+          <ActionComposer
+            v-show="laptop || (section === 'story' && dockOpen)"
+            :key="`composer-${game.gameNumber}`"
+            ref="composer"
+            class="lq-composer"
+            :class="{ 'lq-sheet': !laptop, 'lq-sheet-over': sheeted }"
+            :foldable="!laptop"
+            :stage="laptop"
+            :words-showing="showHide"
+            @click.capture="clearShownArrival"
+            @input="clearShownArrival"
+            @fold="fold"
+          />
+          <DockBar
+            v-if="!laptop && section === 'story' && !dockOpen"
+            ref="dock"
+            data-panel
+            :floating="sideways"
+            @open="openDock"
+          />
 
-        <template v-if="!wide">
-          <div
-            v-if="phoneStage && section !== 'story'"
-            class="lq-phone-section"
-          >
-            <CompassPanel v-if="section === 'map'" heading data-panel />
-            <JournalPanel
-              v-else
-              :key="`journal-${game.gameNumber}`"
-              :tab="section"
-              class="lq-section-view"
-              data-panel
-            />
-          </div>
-          <template v-else>
-            <CompassPanel v-if="section === 'map'" heading data-panel />
-            <JournalPanel
-              v-else-if="section !== 'story'"
-              :key="`journal-${game.gameNumber}`"
-              :tab="section"
-              class="lq-section-view"
-              data-panel
-            />
+          <template v-if="!wide">
+            <div
+              v-if="phoneStage && section !== 'story'"
+              class="lq-phone-section"
+            >
+              <CompassPanel v-if="section === 'map'" heading data-panel />
+              <JournalPanel
+                v-else
+                :key="`journal-${game.gameNumber}`"
+                :tab="section"
+                class="lq-section-view"
+                data-panel
+              />
+            </div>
+            <template v-else>
+              <CompassPanel v-if="section === 'map'" heading data-panel />
+              <JournalPanel
+                v-else-if="section !== 'story'"
+                :key="`journal-${game.gameNumber}`"
+                :tab="section"
+                class="lq-section-view"
+                data-panel
+              />
+            </template>
           </template>
-        </template>
-      </main>
+        </main>
 
-      <SectionNav
-        v-if="phoneStage"
-        v-model="section"
-        class="lq-nav-bottom"
-        @press="onSectionPress"
-      />
-      <AcquiredFlight v-if="staged" />
-
-      <SaveToast />
-
-      <StoryNameMenu
-        v-if="nameMenu"
-        :actions="nameMenu.actions"
-        :x="nameMenu.x"
-        :top="nameMenu.top"
-        :bottom="nameMenu.bottom"
-        @pick="runNameAction"
-        @close="closeNameMenu"
-      />
-
-      <!-- The game's title page, over the first act's chapter page. -->
-      <TitlePage
-        v-if="game.showTitle"
-        ref="titlePage"
-        :text="game.titleText"
-        :music-info="music.musicInfo.value"
-        :saves="titleSaves"
-        :error="game.titleLoadError"
-        @start="startGame"
-        @continue="continueFromTitle"
-        @load="openTitleLoad"
-      />
-      <!-- Load game from the title page: above it, and a pick loads at once. -->
-      <div v-if="game.showTitle && titleLoad" class="lq-over-title">
-        <SaveLoadDialog mode="load" from-title @close="closeTitleLoad" />
-      </div>
-
-      <!-- Dialogs the player opens (a game pop-up takes precedence). -->
-      <template v-if="!game.showModal">
-        <QuitDialog v-if="game.quitAsked" />
-        <QuestDialog
-          v-else-if="shownQuestView"
-          :key="shownQuestView.name"
-          :quest="shownQuestView"
-          @close="game.shownQuest = null"
+        <SectionNav
+          v-if="phoneStage"
+          v-model="section"
+          class="lq-nav-bottom"
+          @press="onSectionPress"
         />
-        <GameMenu
-          v-else-if="gameDialog === 'menu'"
-          @close="closeGameDialog"
-          @open="openGameDialog"
+        <AcquiredFlight v-if="staged" />
+
+        <SaveToast />
+
+        <StoryNameMenu
+          v-if="nameMenu"
+          :actions="nameMenu.actions"
+          :x="nameMenu.x"
+          :top="nameMenu.top"
+          :bottom="nameMenu.bottom"
+          @pick="runNameAction"
+          @close="closeNameMenu"
         />
-        <SettingsDialog
-          v-else-if="gameDialog === 'settings'"
+
+        <!-- The game's title page, over the first act's chapter page. -->
+        <TitlePage
+          v-if="game.showTitle"
+          ref="titlePage"
+          :text="game.titleText"
           :music-info="music.musicInfo.value"
-          @close="closeGameDialog"
+          :saves="titleSaves"
+          :error="game.titleLoadError"
+          @start="startGame"
+          @continue="continueFromTitle"
+          @load="openTitleLoad"
         />
-        <SaveLoadDialog
-          v-else-if="gameDialog === 'save' || gameDialog === 'load'"
-          :mode="gameDialog"
-          @close="closeGameDialog"
-        />
-        <LanternDialog
-          v-else-if="gameDialog"
-          :key="gameDialog"
-          :title="INFO_TITLES[gameDialog]"
-          eyebrow="RetroQuest"
-          @close="closeGameDialog"
-        >
-          <!-- eslint-disable vue/no-v-html -->
-          <div class="lq-info" v-html="infoHtml"></div>
-          <!-- eslint-enable vue/no-v-html -->
-        </LanternDialog>
-      </template>
+        <!-- Load game from the title page: above it, and a pick loads at once. -->
+        <div v-if="game.showTitle && titleLoad" class="lq-over-title">
+          <SaveLoadDialog mode="load" from-title @close="closeTitleLoad" />
+        </div>
 
-      <!-- Act intro / act complete: a full-screen chapter page. Each chapter
+        <!-- Dialogs the player opens (a game pop-up takes precedence). -->
+        <template v-if="!game.showModal">
+          <QuitDialog v-if="game.quitAsked" />
+          <QuestDialog
+            v-else-if="shownQuestView"
+            :key="shownQuestView.name"
+            :quest="shownQuestView"
+            @close="game.shownQuest = null"
+          />
+          <GameMenu
+            v-else-if="gameDialog === 'menu'"
+            :sideways="sideways"
+            @close="closeGameDialog"
+            @open="openGameDialog"
+          />
+          <SettingsDialog
+            v-else-if="gameDialog === 'settings'"
+            :music-info="music.musicInfo.value"
+            @close="closeGameDialog"
+          />
+          <SaveLoadDialog
+            v-else-if="gameDialog === 'save' || gameDialog === 'load'"
+            :mode="gameDialog"
+            @close="closeGameDialog"
+          />
+          <LanternDialog
+            v-else-if="gameDialog"
+            :key="gameDialog"
+            :title="INFO_TITLES[gameDialog]"
+            eyebrow="RetroQuest"
+            @close="closeGameDialog"
+          >
+            <!-- eslint-disable vue/no-v-html -->
+            <div class="lq-info" v-html="infoHtml"></div>
+            <!-- eslint-enable vue/no-v-html -->
+          </LanternDialog>
+        </template>
+
+        <!-- Act intro / act complete: a full-screen chapter page. Each chapter
          is a new page, so it opens at its top. -->
-      <section
-        v-if="game.showModal && game.modalChapter"
-        ref="chapterDialog"
-        class="lq-chapter-dialog"
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="lq-dialog-title"
-        tabindex="-1"
-        @keydown="onChapterKeydown"
-      >
-        <ChapterPage
-          :key="`${game.modalChapter.kind} ${game.modalChapter.act}`"
-          ref="chapterPage"
-          :chapter="game.modalChapter"
-          title-id="lq-dialog-title"
-          @continue="presentation.continueChapter()"
-        />
-      </section>
+        <section
+          v-if="game.showModal && game.modalChapter"
+          ref="chapterDialog"
+          class="lq-chapter-dialog"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="lq-dialog-title"
+          tabindex="-1"
+          @keydown="onChapterKeydown"
+        >
+          <ChapterPage
+            :key="`${game.modalChapter.kind} ${game.modalChapter.act}`"
+            ref="chapterPage"
+            :chapter="game.modalChapter"
+            title-id="lq-dialog-title"
+            @continue="presentation.continueChapter()"
+          />
+        </section>
 
-      <!-- Save before finishing, over the last act's chapter page. -->
-      <FinishDialog v-if="game.showModal && game.finishAsked" />
-    </template>
+        <!-- Save before finishing, over the last act's chapter page. -->
+        <FinishDialog v-if="game.showModal && game.finishAsked" />
+      </template>
+    </div>
+    <!-- A phone held upright: the game waits behind this page. -->
+    <TurnPage v-if="turnPage" />
   </div>
 </template>
 
@@ -1736,6 +1788,9 @@ watch(
   background: var(--lq-bg);
   color: var(--lq-fg);
   font-family: var(--lq-font-ui);
+}
+.lq-game {
+  display: contents;
 }
 .lq-main {
   flex: 1;
@@ -1931,13 +1986,65 @@ watch(
   z-index: 3;
   margin: 8px;
 }
-.lq-phone .lq-sheet-over {
+.lq-phone .lq-sheet-over,
+.lq-sideways .lq-sheet-over {
   position: absolute;
   left: 0;
   right: 0;
   bottom: 0;
   z-index: 5;
   border-radius: 14px 14px 0 0;
+}
+.lq-sideways .lq-sheet {
+  max-height: 85dvh;
+}
+/* A sideways phone: the menu button floats beside the plate, which moves over; the words
+   come up over the left side, the Hide sits at the foot in the middle. */
+.lq-float-menu {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  z-index: 2;
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  border: 1px solid var(--lq-line2);
+  background: color-mix(in srgb, var(--lq-surface) 93%, transparent);
+  color: var(--lq-fg);
+  font: inherit;
+  font-size: 18px;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgb(0 0 0 / 0.2);
+}
+.lq-sideways .lq-stage-plate {
+  top: 8px;
+  left: 56px;
+  max-width: min(300px, 38%);
+}
+/* The plate is compact on a phone: smaller name and chips, so the words keep their room. */
+.lq-sideways .lq-stage-plate {
+  padding: 6px 10px;
+  gap: 3px;
+}
+.lq-sideways .lq-stage-plate :deep(.lq-room-name) {
+  font-size: calc(18px * var(--lq-display-scale));
+}
+.lq-sideways .lq-stage-plate :deep(.lq-here) {
+  gap: 4px;
+}
+.lq-sideways .lq-stage-plate :deep(.lq-here-chip) {
+  height: 24px;
+  padding: 0 9px;
+  font-size: 12px;
+}
+.lq-sideways .lq-stage-buttons {
+  top: 8px;
+  right: 8px;
+  max-width: 60%;
+}
+.lq-sideways.lq-staged .lq-story-wrap.lq-cards.lq-one-column {
+  left: 8px;
+  width: min(46%, 420px);
 }
 .lq-scrim {
   position: absolute;
@@ -1989,7 +2096,7 @@ watch(
   font-size: 13px;
   cursor: pointer;
 }
-.lq-wide .lq-composer {
+.lq-wide:not(.lq-sideways) .lq-composer {
   position: relative;
   z-index: 3;
   flex: 0 0 auto;

@@ -6,12 +6,19 @@ import LanternLayout from './LanternLayout.vue'
 import { startedHoldStore } from '@/testing/holdGame'
 import { useGameStore } from '@/stores/useGameStore'
 
-/** Which screen the test pretends to be: a tall phone, or a phone on its side. */
-function screen(kind: 'upright' | 'sideways'): void {
+/**
+ * Which screen the test pretends to be: `upright` is a tablet (or a narrow mouse
+ * window), which keeps the tall stage; `turn` a phone held upright; `sideways` a
+ * phone on its side.
+ */
+function screen(kind: 'upright' | 'turn' | 'sideways'): void {
   vi.stubGlobal(
     'matchMedia',
     vi.fn((query: string) => ({
-      matches: kind === 'sideways' && query.includes('max-height'),
+      matches:
+        kind !== 'upright' &&
+        (query.includes('hover: none') ||
+          (kind === 'turn' && query.includes('orientation: portrait'))),
       addEventListener: vi.fn(),
       removeEventListener: vi.fn(),
     })),
@@ -22,7 +29,7 @@ function screen(kind: 'upright' | 'sideways'): void {
 describe('LanternLayout: the stage on a phone', () => {
   let w: VueWrapper
 
-  async function mountOn(kind: 'upright' | 'sideways'): Promise<void> {
+  async function mountOn(kind: 'upright' | 'turn' | 'sideways'): Promise<void> {
     setActivePinia(createPinia())
     screen(kind)
     await startedHoldStore()
@@ -229,24 +236,92 @@ describe('LanternLayout: the stage on a phone', () => {
     })
   })
 
-  describe('on its side', () => {
-    beforeEach(() => mountOn('sideways'))
+  describe('a phone held upright', () => {
+    beforeEach(() => mountOn('turn'))
 
-    it('keeps the text page, with no picture', () => {
-      expect(w.find('.lq-stage-picture').exists()).toBe(false)
-      expect(w.find('.lq-story-so-far').exists()).toBe(false)
+    it('shows the turn page and nothing of the game can be reached behind it', () => {
+      expect(w.find('.lq-turn-page').exists()).toBe(true)
+      expect(w.get('.lq-game').attributes('inert')).toBeDefined()
+    })
+
+    it('has no tablet layout: a tablet held upright gets no turn page', async () => {
+      w.unmount()
+      await mountOn('upright')
+      expect(w.find('.lq-turn-page').exists()).toBe(false)
+      expect(w.get('.lq-game').attributes('inert')).toBeUndefined()
     })
   })
 
-  it('folds an open sheet when the phone is turned on its side', async () => {
+  describe('a phone on its side', () => {
+    beforeEach(() => mountOn('sideways'))
+
+    it('fills the screen with the picture, with no header, tabs or room box', () => {
+      expect(w.find('.lq-turn-page').exists()).toBe(false)
+      expect(w.find('.lq-stage-picture').exists()).toBe(true)
+      expect(w.find('.lq-header').exists()).toBe(false)
+      expect(w.find('.lq-nav-bottom').exists()).toBe(false)
+      expect(w.find('.lq-phone-plate').exists()).toBe(false)
+    })
+
+    it('floats ☰ and one plate top left, the five buttons top right', () => {
+      expect(w.get('.lq-float-menu').attributes('aria-label')).toBe('Game menu')
+      expect(w.get('.lq-stage-plate').text()).toContain('You are in')
+      const labels = w
+        .findAll('.lq-stage-buttons .lq-stage-btn')
+        .map((b) => b.text().replace(/\s+/g, ' '))
+      expect(labels).toEqual([
+        expect.stringMatching(/^Bag · \d+$/),
+        expect.stringMatching(/^Spells · \d+$/),
+        expect.stringMatching(/^Quests · \d+$/),
+        '⟲',
+        '🧭',
+      ])
+    })
+
+    it('has the folded bar at the foot left: Actions, the keyboard and the hint', () => {
+      const dock = w.get('.lq-dock')
+      expect(dock.classes()).toContain('lq-floating')
+      expect(dock.find('.lq-dock-exits').exists()).toBe(false)
+      expect(dock.get('.lq-dock-open').text()).toBe('Actions ▴')
+      expect(dock.get('.lq-dock-icon').attributes('aria-label')).toBe(
+        'Type a command',
+      )
+      expect(dock.get('.lq-dock-hint').text()).toBe('💡 Hint')
+    })
+
+    it('opens the menu from ☰ as the sideways list', async () => {
+      vi.spyOn(useGameStore(), 'getQuickSave').mockReturnValue(null)
+      await w.get('.lq-float-menu').trigger('click')
+      await flushPromises()
+      expect(document.body.querySelector('.lq-side-list')).not.toBeNull()
+    })
+
+    it('opens the sheet over the picture and folds it after a turn', async () => {
+      await w.get('.lq-dock-open').trigger('click')
+      expect(w.get('.lq-sheet').isVisible()).toBe(true)
+      useGameStore().submitCommand('look')
+      await flushPromises()
+      await flushPromises()
+      expect(w.find('.lq-scrim').exists()).toBe(false)
+      expect(w.find('.lq-dock').exists()).toBe(true)
+    })
+  })
+
+  it('keeps the game as it was when a phone is turned upright and back', async () => {
     setActivePinia(createPinia())
+    const state = { portrait: false }
     const listeners: ((event: { matches: boolean }) => void)[] = []
     vi.stubGlobal(
       'matchMedia',
       vi.fn((query: string) => ({
-        matches: false,
+        get matches() {
+          return (
+            query.includes('hover: none') ||
+            (state.portrait && query.includes('orientation: portrait'))
+          )
+        },
         addEventListener: vi.fn((_type: string, listener: never) => {
-          if (query.includes('max-height')) listeners.push(listener)
+          if (query.includes('orientation')) listeners.push(listener)
         }),
         removeEventListener: vi.fn(),
       })),
@@ -254,12 +329,23 @@ describe('LanternLayout: the stage on a phone', () => {
     await startedHoldStore()
     w = mount(LanternLayout, { attachTo: document.body })
     await w.get('.lq-dock-open').trigger('click')
-    expect(w.find('.lq-scrim').exists()).toBe(true)
+    const sheetBefore = w.find('.lq-sheet').exists()
+    await w.get('[data-button="story"]').trigger('click')
+    expect(w.find('.lq-story-drawer').exists()).toBe(true)
 
+    state.portrait = true
     listeners.forEach((change) => change({ matches: true }))
     await flushPromises()
+    expect(w.find('.lq-turn-page').exists()).toBe(true)
+    expect(w.find('.lq-story-drawer').exists()).toBe(true)
 
-    expect(w.find('.lq-stage-picture').exists()).toBe(false)
-    expect(w.get('.lq-sheet').isVisible()).toBe(false)
+    state.portrait = false
+    listeners.forEach((change) => change({ matches: false }))
+    await flushPromises()
+    expect(w.find('.lq-turn-page').exists()).toBe(false)
+    expect(w.find('.lq-sheet').exists()).toBe(sheetBefore)
+    expect(w.find('.lq-story-drawer').exists()).toBe(true)
+    expect(w.find('.lq-header').exists()).toBe(false)
+    expect(w.find('.lq-stage-picture').exists()).toBe(true)
   })
 })
