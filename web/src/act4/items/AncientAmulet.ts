@@ -8,6 +8,9 @@ import { endingPlayed } from '../endings'
 import { VaultDoor } from './VaultDoor'
 import { Wound } from './Wound'
 
+/** The amulet in the Throne Chamber once an ending is played. */
+export const AMULET_DARK = '[dim]The amulet is dark now, and still warm.[/dim]'
+
 /** The first two sentences of the amulet's look, which never change. */
 const PICTURE_HEAD =
   'A mysterious amulet inscribed with runes. At its centre is the sigil of ' +
@@ -71,12 +74,19 @@ export class AncientAmulet extends Item {
     return super.useWith(gameState, other)
   }
 
-  /** Used alone in the Throne Chamber, it plays the third step of the scene. */
+  /**
+   * Used alone in the Throne Chamber, it plays the third step of the scene;
+   * once an ending is played (Justice takes Malakar away) it is dark there.
+   */
   override use(gameState: GameState): string {
-    const malakar = gameState.currentRoom.characters.find(
+    const room = gameState.currentRoom
+    const malakar = room.characters.find(
       (character) => character instanceof Malakar,
     )
     if (malakar instanceof Malakar) return malakar.openAmulet(gameState)
+    if (endingPlayed(gameState) && room.items.some((i) => i instanceof Wound)) {
+      return AMULET_DARK
+    }
     return super.use(gameState)
   }
 
