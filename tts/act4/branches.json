@@ -346,5 +346,28 @@
             "cast forgiveness on grandmother",
             "cast forgiveness on sir cedric"
         ]
+    },
+    {
+        "after": 30,
+        "commands": ["w", "talk to knight"]
+    },
+    {
+        "after": 53,
+        "commands": [
+            "s",
+            "w",
+            "s",
+            "down",
+            "w",
+            "talk to knight",
+            "talk to cedric",
+            "cast redemption's light on ghostly warriors",
+            "talk to cedric",
+            "s",
+            "e",
+            "n",
+            "say truth to true self",
+            "talk to true self"
+        ]
     }
 ]

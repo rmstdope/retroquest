@@ -14,6 +14,9 @@ import {
   FLAG_ACT4_CHAIN_GIVEN,
   FLAG_ACT4_GUARDIANS_CHAIN_RAISED,
   FLAG_ACT4_LOYALTY_TOKEN_RAISED_IN_HALL,
+  FLAG_ACT4_JUSTICE_ENDING,
+  FLAG_ACT4_REDEMPTION_ENDING,
+  FLAG_ACT4_SACRIFICE_ENDING,
 } from '../Act4StoryFlags'
 import { KnightOfDespair } from './KnightOfDespair'
 import {
@@ -491,5 +494,69 @@ describe('KnightOfDespair after the dialogue review', () => {
 
     expect(look).toContain('When he speaks, his voice is hollow.')
     expect(look).not.toContain("'Return.'")
+  })
+})
+
+describe('the Redeemed Knight once Elior has gone up the stair', () => {
+  const WAITING =
+    'I will wait here. If you come back down those stairs, I will know there is still hope.'
+  const CAME_BACK =
+    'You came back down those stairs. Then there is still hope. I had not thought to see it.'
+  const AFTER_ENDING =
+    'You came back down those stairs, and it is over. I do not know what a man like me does now. Stay here a while, I think.'
+
+  /** A game in the hall with the knight truly redeemed. */
+  function redeemed(): Game {
+    const act = new Act4()
+    act.musicFile = ''
+    const game = new Game([act])
+    game.state.currentRoom = game.state.allRooms.HallOfEchoes
+    game.state.learnSpell(new TruthSight())
+    game.state.addItemToInventory(new GuardiansChain())
+    game.state.addItemToInventory(new EchoStone())
+    executeCommands(game, [
+      "use guardian's chain",
+      'cast truth sight on knight of despair',
+      'cast truth sight on banners',
+      'cast truth sight on echo stone',
+      'say redemption to knight',
+    ])
+    return game
+  }
+
+  it('still waits while Elior has not gone up', () => {
+    expect(executeCommands(redeemed(), ['talk to knight'])).toContain(WAITING)
+  })
+
+  it('pays off the promise when Elior comes back down', () => {
+    const game = redeemed()
+    executeCommands(game, ['e', 'w'])
+    const talk = executeCommands(game, ['talk to knight'])
+    expect(talk).toContain(CAME_BACK)
+    expect(talk).not.toContain(WAITING)
+    expectDialogueSpeaker(talk, 'Redeemed Knight')
+    expectMarkupWellFormed(talk)
+  })
+
+  it('remembers Elior came back down across a save', () => {
+    const game = redeemed()
+    executeCommands(game, ['e', 'w'])
+    game.loadSaveData(game.toSaveData())
+    expect(executeCommands(game, ['talk to knight'])).toContain(CAME_BACK)
+  })
+
+  it.each([
+    FLAG_ACT4_REDEMPTION_ENDING,
+    FLAG_ACT4_JUSTICE_ENDING,
+    FLAG_ACT4_SACRIFICE_ENDING,
+  ])('says it is over after %s', (ending) => {
+    const game = redeemed()
+    executeCommands(game, ['e', 'w'])
+    game.state.setStoryFlag(ending, true)
+    const talk = executeCommands(game, ['talk to knight'])
+    expect(talk).toContain(AFTER_ENDING)
+    expect(talk).not.toContain(WAITING)
+    expect(talk).not.toContain(CAME_BACK)
+    expectDialogueSpeaker(talk, 'Redeemed Knight')
   })
 })

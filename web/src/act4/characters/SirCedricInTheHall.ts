@@ -4,13 +4,14 @@ import {
   FLAG_ACT4_KNIGHT_OF_DESPAIR_COMPLETED,
   FLAG_ACT4_KNIGHT_SEEN_THROUGH,
 } from '../Act4StoryFlags'
+import { endingPlayed } from '../endings'
 import { KnightsRedemption } from '../items/KnightsRedemption'
 import { CEDRIC_ON_STAIR } from '../rooms/hallDescriptions'
 
 /**
  * Sir Cedric in the Hall of Echoes, by the south door. He has followed Elior
  * in and faces the knight who framed him. Everything he says or shows follows
- * the story flags (the knight seen through, redeemed, forgiven), so his state
+ * the story flags (the knight seen through, redeemed, forgiven, the ending), so his state
  * needs no fields and survives a save by itself.
  */
 export class SirCedricInTheHall extends Character {
@@ -32,8 +33,18 @@ export class SirCedricInTheHall extends Character {
     return this.description
   }
 
-  /** What he says follows what he knows of the knight and what he chose. */
+  /** What he says follows what he knows of the knight, what he chose, and whether it is over. */
   override talkTo(gameState: GameState): string {
+    if (endingPlayed(gameState)) {
+      return dialogue(
+        this.name,
+        gameState.getStoryFlag(FLAG_ACT4_CEDRIC_FORGAVE)
+          ? 'It is done, then. I can see it on you. We will sit a while yet, ' +
+              'he and I. Then I will see him out of here. You have my word.'
+          : 'It is done, then. I can see it on you. I will keep an eye on ' +
+              'him until the king sends for him. You have my word.',
+      )
+    }
     if (gameState.getStoryFlag(FLAG_ACT4_CEDRIC_FORGAVE)) {
       return dialogue(
         this.name,
