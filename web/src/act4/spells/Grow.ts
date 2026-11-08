@@ -52,7 +52,11 @@ export class Grow extends Spell {
     return item.grow(gameState)
   }
 
-  /** At home, "field" and "crops" are the field; elsewhere nothing answers. */
+  /**
+   * At home, "field" and "crops" are the field even without the field item
+   * (a fallback: the room normally holds one, and `castOnItem` takes it);
+   * elsewhere nothing answers.
+   */
   override castOnName(gameState: GameState, target: string): string | null {
     if (
       gameState.getStoryFlag(FLAG_ACT4_HOME_REACHED) &&

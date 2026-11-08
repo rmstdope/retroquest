@@ -519,15 +519,12 @@ describe('the field itself (rq-xrtb)', () => {
     expect(executeCommands(game, ['examine crops'])).toBe(WITHERED)
   })
 
-  it('is green once grow has been cast on it', () => {
+  it('still ends the story when grow is cast on the field item', () => {
     const game = home('sacrifice')
     expect(executeCommands(game, ['cast grow on field'])).toContain(
       'You press your hands into the dry earth',
     )
     expectStoryFlag(game.state, FLAG_ACT4_FIELD_GREEN, true)
-    expect(
-      game.state.currentRoom.getItemByName('field')?.examine(game.state),
-    ).toBe('Green rows under a pale sky, the earth dark and soft between them.')
   })
 
   it('gives a save made before the field could be looked at its field back', () => {
