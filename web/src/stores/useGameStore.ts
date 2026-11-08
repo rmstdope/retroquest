@@ -726,15 +726,21 @@ export const useGameStore = defineStore('game', () => {
   /**
    * Load a save from the title page (`0` is the quick save). No game is in
    * play, so the title page and the opening chapter page give way at once and
-   * the player lands in the saved room. A failed load changes nothing but
+   * the player lands in the saved room. A save made under a name is loaded by
+   * its `name`. A failed load changes nothing but
    * `titleLoadError`; true when the game was loaded.
    */
-  function loadFromTitle(slot: number): boolean {
+  function loadFromTitle(slot: number, name?: string): boolean {
     const b = requireBridge()
     titleLoadError.value = ''
     let result: string
     try {
-      result = slot === 0 ? b.quickLoadGame() : b.loadFromSlot(slot)
+      result =
+        name !== undefined
+          ? b.loadNamedGame(name)
+          : slot === 0
+            ? b.quickLoadGame()
+            : b.loadFromSlot(slot)
     } catch {
       titleLoadError.value =
         "Your saves could not be read: this browser's storage is blocked."
@@ -752,7 +758,11 @@ export const useGameStore = defineStore('game', () => {
       b,
       null,
       result,
-      slot === 0 ? 'Game loaded' : `Game loaded · Slot ${slot}`,
+      name !== undefined
+        ? `Game loaded · ${name}`
+        : slot === 0
+          ? 'Game loaded'
+          : `Game loaded · Slot ${slot}`,
     )
     acceptInput.value = b.controller.isAcceptingInput()
     dismissTitle()
@@ -1221,6 +1231,11 @@ export const useGameStore = defineStore('game', () => {
     return requireBridge().getQuickSave()
   }
 
+  /** The saves made under a name, as cards, newest first. */
+  function getNamedSaves(): SaveSlot[] {
+    return requireBridge().getNamedSaves()
+  }
+
   function getSaveSlots(): SaveSlot[] {
     const b = requireBridge()
     return b.getSaveSlots()
@@ -1532,6 +1547,7 @@ export const useGameStore = defineStore('game', () => {
     saveNamedGame,
     loadNamedGame,
     getSaveSlots,
+    getNamedSaves,
     saveToSlot,
     loadFromSlot,
     pollQuestEvents,

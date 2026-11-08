@@ -17,8 +17,10 @@ export type {
 
 /** One entry in the 8-slot save system. */
 export interface SaveSlot {
-  /** 1–8, or 0 for the quick save. */
+  /** 1–8, 0 for the quick save, or -1 for a save made under a name. */
   slot: number
+  /** The name a named save was made under (`save <name>`); unset for the quick save and the slots. */
+  name?: string
   act: string | null
   room: string | null
   timestamp: string | null

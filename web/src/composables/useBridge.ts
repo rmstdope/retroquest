@@ -9,6 +9,10 @@ type StoredNamedSave = {
   name: string
   timestamp: string
   data: string
+  /** Where the player was; missing in saves made before the details were kept. */
+  act?: string
+  room?: string
+  quests?: SaveSlot['quests']
   /** The story so far as the UI kept it; missing in saves made before it was kept. */
   story?: unknown
 }
@@ -33,6 +37,8 @@ const QUICK_STORY_KEY = 'retroquest_save_story'
 const SLOTS_KEY = 'retroquest_save_slots'
 const NAMED_KEY = 'retroquest_named_saves'
 const SLOT_COUNT = 8
+/** The `slot` of a card for a save made under a name. */
+const NAMED_SLOT = -1
 
 /** A save the browser could not keep (storage full or blocked). */
 const SAVE_FAILED =
@@ -272,6 +278,35 @@ export function useBridge(loader: () => Promise<ActClass[]> = loadActs) {
   }
 
   /**
+   * The named saves as cards (slot -1), newest first; one from an older
+   * version is marked `outdated`, and one made before the details were kept
+   * has only its name and time.
+   */
+  function getNamedSaves(): SaveSlot[] {
+    return readStoredNamedSaves()
+      .map((entry, index) => ({
+        entry,
+        index,
+        at: Date.parse(entry.timestamp),
+      }))
+      .sort((a, b) => {
+        const byTime =
+          (Number.isNaN(b.at) ? -Infinity : b.at) -
+          (Number.isNaN(a.at) ? -Infinity : a.at)
+        return byTime === 0 || Number.isNaN(byTime) ? a.index - b.index : byTime
+      })
+      .map(({ entry }) => ({
+        slot: NAMED_SLOT,
+        name: entry.name,
+        act: entry.act ?? null,
+        room: entry.room ?? null,
+        timestamp: entry.timestamp ?? null,
+        quests: entry.quests ?? null,
+        outdated: isOutdatedSave(entry.data),
+      }))
+  }
+
+  /**
    * Run `write` with the story, and when the storage cannot hold it, again
    * without: the game is kept even when its story is not. SAVED, or
    * SAVE_FAILED when even the game cannot be stored.
@@ -324,8 +359,8 @@ export function useBridge(loader: () => Promise<ActClass[]> = loadActs) {
       const saves = readStoredNamedSaves()
       const entry: StoredNamedSave = {
         name,
-        timestamp: new Date().toISOString(),
         data: game.toSaveData(),
+        ...saveDetails(),
         ...(told === null ? {} : { story: told }),
       }
       const existing = saves.findIndex((s) => s.name === name)
@@ -354,6 +389,7 @@ export function useBridge(loader: () => Promise<ActClass[]> = loadActs) {
     saveNamedGame,
     loadNamedGame,
     getSaveSlots,
+    getNamedSaves,
     getQuickSave,
     saveToSlot,
     loadFromSlot,

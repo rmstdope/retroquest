@@ -1,6 +1,13 @@
 import { describe, it, expect } from 'vitest'
 import type { SaveSlot } from '@/types/bridge'
-import { actLabel, continueLine, newestLoadable, savedWhen } from './saveCard'
+import {
+  actLabel,
+  cardKey,
+  continueLine,
+  filled,
+  newestLoadable,
+  savedWhen,
+} from './saveCard'
 
 describe('actLabel', () => {
   it('writes the act number as a Roman numeral', () => {
@@ -91,5 +98,55 @@ describe('continueLine', () => {
     expect(continueLine(card(0, { room: null }), now)).toBe(
       'Act II · Quick save · Yesterday · 21:14',
     )
+  })
+})
+
+describe('named saves', () => {
+  const NOW = new Date(2026, 9, 19, 15, 0)
+  const at = new Date(2026, 9, 19, 14, 51).toISOString()
+  const named = (over: Partial<SaveSlot> = {}): SaveSlot => ({
+    slot: -1,
+    name: 'before-the-mirrors',
+    act: 'Act 3',
+    room: 'Mount Ember',
+    timestamp: at,
+    quests: { completed: 5, total: 7 },
+    ...over,
+  })
+
+  it('counts a named card as filled', () => {
+    expect(filled(named({ act: null, room: null }))).toBe(true)
+  })
+
+  it('starts the Continue line with the name', () => {
+    expect(continueLine(named(), NOW)).toBe(
+      'before-the-mirrors · Act III · Mount Ember · Today · 14:51',
+    )
+  })
+
+  it('gives the name and the time when the save has no act or room', () => {
+    expect(continueLine(named({ act: null, room: null }), NOW)).toBe(
+      'before-the-mirrors · Today · 14:51',
+    )
+  })
+
+  it('lets the newest named save win over older slots', () => {
+    const slot: SaveSlot = {
+      slot: 1,
+      act: 'Act 1',
+      room: 'The Dream',
+      timestamp: new Date(2026, 9, 1).toISOString(),
+      quests: null,
+    }
+    expect(newestLoadable([slot, named()])?.name).toBe('before-the-mirrors')
+  })
+
+  it('never picks an outdated named save', () => {
+    expect(newestLoadable([named({ outdated: true })])).toBeNull()
+  })
+
+  it('keys a named card by its name and others by slot', () => {
+    expect(cardKey(named())).toBe('name:before-the-mirrors')
+    expect(cardKey({ ...named(), slot: 3, name: undefined })).toBe(3)
   })
 })

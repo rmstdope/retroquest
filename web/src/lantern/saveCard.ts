@@ -44,14 +44,19 @@ export function savedWhen(timestamp: string | null, now = new Date()): string {
   return `${time.getDate()} ${MONTHS[time.getMonth()]} · ${clock}`
 }
 
-/** A slot that holds a save (the quick save is only listed when there is one). */
+/** A card that holds a save (the quick save and the named saves are only listed when there is one). */
 export function filled(card: SaveSlot): boolean {
-  return card.slot === 0 || card.room !== null
+  return card.slot === 0 || card.name !== undefined || card.room !== null
+}
+
+/** What identifies a card in the list: its name for a named save, else its slot number. */
+export function cardKey(card: SaveSlot): string | number {
+  return card.name === undefined ? card.slot : `name:${card.name}`
 }
 
 /**
  * The newest save that can be loaded (not empty, not from an older version),
- * the quick save or a slot. The first listed wins a tie; null when none.
+ * the quick save, a slot or a named save. The first listed wins a tie; null when none.
  */
 export function newestLoadable(saves: SaveSlot[]): SaveSlot | null {
   let best: SaveSlot | null = null
@@ -68,11 +73,16 @@ export function newestLoadable(saves: SaveSlot[]): SaveSlot | null {
   return best
 }
 
-/** The line under Continue: "Act II · The Old Mill · Yesterday · 21:14", as the save card reads. */
+/**
+ * The line under Continue: "Act II · The Old Mill · Yesterday · 21:14", as the
+ * save card reads; a named save starts with its name, and has no "Quick save"
+ * stand-in for a missing room.
+ */
 export function continueLine(card: SaveSlot, now = new Date()): string {
   return [
+    card.name,
     actLabel(card.act),
-    card.room ?? 'Quick save',
+    card.room ?? (card.name === undefined ? 'Quick save' : null),
     savedWhen(card.timestamp, now),
   ]
     .filter(Boolean)
