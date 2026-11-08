@@ -460,6 +460,8 @@ const showNamesButton = computed(
 )
 /** Whether the marks and names are up (and the picture is steady enough to hold them). */
 const namesUp = computed(() => names.showing && scene.phase === 'idle')
+/** The arrival words were folded away by showing the names, and come back when the names go. */
+const arrivalFolded = ref(false)
 /** The words were folded away by showing the names, and come back when the names go. */
 const foldedForNames = ref(false)
 /** Changes when what the names keep clear of moves: the words, a drawer, the names' own count. */
@@ -484,8 +486,8 @@ function toggleNames(): void {
     return
   }
   names.toggle()
-  // Arrival words on the picture are words over it: they give way, as to Hide.
-  if (!settings.alwaysShowNames && arrival.active) clearArrival()
+  // Arrival words on the picture are words over it: they fold away as to Hide, still read aloud, and come back.
+  if (!settings.alwaysShowNames && arrival.active) arrivalFolded.value = true
   if (!settings.alwaysShowNames && showHide.value) {
     paper.hide()
     foldedForNames.value = true
@@ -496,9 +498,18 @@ function toggleNames(): void {
 watch(
   () => names.showing,
   (up) => {
-    if (up || !foldedForNames.value) return
+    if (up) return
+    arrivalFolded.value = false
+    if (!foldedForNames.value) return
     foldedForNames.value = false
     if (paper.hidden.value) paper.show()
+  },
+)
+// An arrival that ended has nothing left to fold.
+watch(
+  () => arrival.active,
+  (active) => {
+    if (!active) arrivalFolded.value = false
   },
 )
 // Bringing the words back oneself ends the fold.
@@ -521,10 +532,10 @@ function onNamesKey(event: KeyboardEvent): void {
   toggleNames()
 }
 
-/** Escape takes the names away before it does anything else, but for a dialog or a drawer that is up, which are shut first (they sit over the picture). */
+/** Escape takes the names away before it does anything else, but for a dialog that is up, which shuts first. */
 function onNamesEscape(event: KeyboardEvent): void {
   if (event.key !== 'Escape' || !names.showing || !showNamesButton.value) return
-  if (dialogOpen() || drawerTab.value) return
+  if (dialogOpen()) return
   event.preventDefault()
   event.stopImmediatePropagation()
   names.turnOff()
@@ -1577,7 +1588,11 @@ watch(
                 :relayout="namesRelayout"
               />
             </StagePicture>
-            <ArrivalOnPicture :pictured="pictured" :phone="phoneStage" />
+            <ArrivalOnPicture
+              :pictured="pictured"
+              :phone="phoneStage"
+              :away="arrivalFolded"
+            />
             <button
               v-if="sideways"
               type="button"

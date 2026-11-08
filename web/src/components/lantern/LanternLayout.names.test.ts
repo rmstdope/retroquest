@@ -7,6 +7,7 @@ import { useBridge, type ActClass } from '@/composables/useBridge'
 import { Act1 } from '@/act1/Act1'
 import { PANEL_GROUPS, useGameStore } from '@/stores/useGameStore'
 import { useAreaNamesStore } from '@/stores/useAreaNamesStore'
+import { useArrivalStore } from '@/stores/useArrivalStore'
 import { useSceneStore } from '@/stores/useSceneStore'
 import { useSettingsStore } from '@/stores/useSettingsStore'
 import { setPictureProbe } from '@/lantern/roomPicture'
@@ -191,6 +192,68 @@ describe('LanternLayout: what is here, named on the picture', () => {
     await button().trigger('click')
     store.roomName = 'Somewhere else'
     await w.vm.$nextTick()
+    expect(useAreaNamesStore().showing).toBe(false)
+  })
+
+  it('folds an arrival away for the names without ending it, and brings it back', async () => {
+    await cottage()
+    const arrival = useArrivalStore()
+    arrival.show(
+      99,
+      [
+        {
+          kind: 'description',
+          lines: [{ unit: 0, markup: 'A fire crackles.' }],
+          voiced: true,
+        },
+      ],
+      true,
+    )
+    await w.vm.$nextTick()
+    const card = (): ReturnType<VueWrapper['get']> =>
+      w.get('[data-testid="arrival-on-picture"]')
+    expect(card().classes()).not.toContain('lq-arrival-away')
+    await button().trigger('click')
+    expect(card().classes()).toContain('lq-arrival-away')
+    expect(arrival.active).toBe(true)
+    await button().trigger('click')
+    expect(card().classes()).not.toContain('lq-arrival-away')
+    expect(arrival.active).toBe(true)
+  })
+
+  it('leaves an arrival where it is under the Always setting', async () => {
+    await cottage(true, true, true)
+    useArrivalStore().show(
+      99,
+      [
+        {
+          kind: 'description',
+          lines: [{ unit: 0, markup: 'A fire crackles.' }],
+          voiced: false,
+        },
+      ],
+      false,
+    )
+    await w.vm.$nextTick()
+    await button().trigger('click')
+    await button().trigger('click')
+    expect(w.get('[data-testid="arrival-on-picture"]').classes()).not.toContain(
+      'lq-arrival-away',
+    )
+  })
+
+  it('takes the names away on Escape even with a drawer open', async () => {
+    await cottage()
+    await key('s')
+    await w.get('.lq-stage-buttons button').trigger('click')
+    expect(useAreaNamesStore().showing).toBe(true)
+    document.dispatchEvent(
+      new KeyboardEvent('keydown', {
+        key: 'Escape',
+        bubbles: true,
+        cancelable: true,
+      }),
+    )
     expect(useAreaNamesStore().showing).toBe(false)
   })
 })
