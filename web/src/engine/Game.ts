@@ -433,6 +433,8 @@ Welcome to
       open: allItemsTree,
       close: allItemsTree,
       cast: withTarget(spellNames, 'on'),
+      // What is said is the player's own words: the tree cannot list them.
+      say: null,
       spells: null,
       save: null,
       load: null,
