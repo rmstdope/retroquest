@@ -7,6 +7,7 @@ import { GuardiansEssence } from '../items/GuardiansEssence'
 import { WardStone } from '../items/WardStone'
 import { WardStones } from '../items/WardStones'
 import { Barriers } from '../items/Barriers'
+import { Guardians } from '../items/Guardians'
 import {
   FLAG_ACT4_BARRIERS_DISABLED,
   FLAG_ACT4_SHATTERED_WARD_GUARDIANS_COMPLETED,
@@ -67,6 +68,7 @@ export class FortressGates extends Room {
         new WardStone('right'),
         new WardStones(),
         new Barriers(),
+        new Guardians(),
       ],
       characters: [new MiraAtTheGate(), new SirCedricAtTheGate()],
       exits: { north: 'HallOfEchoes', east: 'OuterCourtyard' },
@@ -90,9 +92,13 @@ export class FortressGates extends Room {
 
   /**
    * Keeps the companions in step with the story on a load: older saves had
-   * nobody here, and Sir Cedric is gone once the wall has fallen.
+   * nobody here, and Sir Cedric is gone once the wall has fallen. Saves
+   * from before the guardians could be looked at get them back.
    */
   override refreshSavedText(gameState: GameState): void {
+    if (!this.items.some((item) => item instanceof Guardians)) {
+      this.addItem(new Guardians())
+    }
     if (!this.characters.some((c) => c instanceof MiraAtTheGate)) {
       this.addCharacter(new MiraAtTheGate())
     }
@@ -138,6 +144,28 @@ export class FortressGates extends Room {
     return clue(
       'Your light falls on the guardians and slides off them. They ' +
         'stand on the barrier, and the barrier stands on the stones.',
+    )
+  }
+
+  /** Light on the barrier: the wall drinks it and keeps the stones' time. */
+  lightBarrier(gameState: GameState): string {
+    if (this.isSolved(gameState)) {
+      return 'The violet wall is gone. Your light falls on an open way.'
+    }
+    return clue(
+      'Your light sinks into the violet wall and is gone. The wall swells ' +
+        'and fades as before, in time with the stones.',
+    )
+  }
+
+  /** A blessing on the guardians: what holds them is in the stones. */
+  blessGuardians(gameState: GameState): string {
+    if (this.isSolved(gameState)) {
+      return 'The guardians are gone. There is nothing here for the blessing to reach.'
+    }
+    return clue(
+      'The blessing slides off the guardians as the light does. ' +
+        'What holds them here is not in them.',
     )
   }
 

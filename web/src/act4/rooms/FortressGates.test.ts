@@ -217,6 +217,72 @@ describe('FortressGates', () => {
     })
   })
 
+  describe('the guardians and the barrier answer light (rq-4hdc)', () => {
+    /** The guardians' look while the barrier stands: it follows the stones. */
+    const GUARDIANS_BEFORE =
+      'They drift between the stones and never cross the violet wall. ' +
+      'When the stones swell, the guardians thicken; when the stones fade, ' +
+      'they thin with them.'
+
+    it('answers examine, light and bless on the guardians before the gates fall', () => {
+      const game = createGame()
+      for (const name of ['guardians', 'shadow guardians', 'guardian']) {
+        expect(executeCommands(game, [`examine ${name}`])).toBe(
+          GUARDIANS_BEFORE,
+        )
+      }
+      expect(executeCommands(game, ['cast light on guardians'])).toContain(
+        'Your light falls on the guardians and slides off them. They ' +
+          'stand on the barrier, and the barrier stands on the stones.',
+      )
+      expect(executeCommands(game, ['cast bless on guardians'])).toContain(
+        'The blessing slides off the guardians as the light does. ' +
+          'What holds them here is not in them.',
+      )
+      expect(game.state.getStoryFlag(FLAG_ACT4_BARRIERS_DISABLED)).toBe(false)
+    })
+
+    it('answers light on the barrier in-world before the gates fall', () => {
+      const game = createGame()
+      const answer = executeCommands(game, ['cast light on barriers'])
+      expect(answer).toContain(
+        'Your light sinks into the violet wall and is gone. The wall swells ' +
+          'and fades as before, in time with the stones.',
+      )
+      expect(answer).not.toContain('no special effect')
+      expect(game.state.getStoryFlag(FLAG_ACT4_BARRIERS_DISABLED)).toBe(false)
+    })
+
+    it('says the guardians and the wall are gone once the gates fall', () => {
+      const game = createGame()
+      executeCommands(game, ['cast light on right stone'])
+      expect(executeCommands(game, ['examine guardians'])).toBe(
+        'The guardians are gone. Nothing drifts between the dark stones now.',
+      )
+      expect(executeCommands(game, ['cast light on guardians'])).toContain(
+        'The shadow guardians have already been banished. The way forward is clear.',
+      )
+      expect(executeCommands(game, ['cast bless on guardians'])).toContain(
+        'The guardians are gone. There is nothing here for the blessing to reach.',
+      )
+      const barrier = executeCommands(game, ['cast light on barriers'])
+      expect(barrier).toContain(
+        'The violet wall is gone. Your light falls on an open way.',
+      )
+      expect(barrier).not.toContain('no special effect')
+    })
+
+    it('gives a save made before the guardians existed its guardians back', () => {
+      const game = createGame()
+      game.state.currentRoom.removeItem('guardians')
+      const reloaded = new Game([new Act4()])
+      reloaded.loadSaveData(game.toSaveData())
+      expect(executeCommands(reloaded, ['examine guardians'])).toBe(
+        GUARDIANS_BEFORE,
+      )
+    })
+  })
+
   describe('a save made before the stones existed', () => {
     it('gets its three stones back on load and can still be solved', () => {
       const game = createGame()
