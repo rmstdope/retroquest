@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest'
+import { EchoStone } from '../items/EchoStone'
 import { Game, type Character } from '@/engine'
 import { Act4 } from '../Act4'
 import { CaptainOfTheGuard } from './CaptainOfTheGuard'
@@ -83,15 +84,16 @@ describe('a group character in a default reply', () => {
     )
   })
 
-  it('reads "the ghostly warriors" when spoken to once they fill the hall', () => {
+  it('reads "the ghostly warriors" when offered something once they fill the hall', () => {
     const act = new Act4()
     act.musicFile = ''
     const game = new Game([act])
     game.state.currentRoom = game.state.allRooms.HallOfEchoes
     game.state.currentRoom.addCharacter(new GhostlyWarriors())
+    game.state.inventory.push(new EchoStone())
 
-    expect(game.commandParser.parse('say hello to warriors')).toContain(
-      'to the [character_name]ghostly warriors[/character_name]',
+    expect(game.commandParser.parse('give echo stone to warriors')).toContain(
+      'The [character_name]ghostly warriors[/character_name] don',
     )
   })
 

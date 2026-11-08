@@ -50,4 +50,9 @@ export class GhostlyWarriors extends Character {
   override talkTo(_gameState: GameState): string {
     return '[dim]The warriors do not hear you. They are still fighting.[/dim]'
   }
+
+  /** Words do not reach them, whatever the words are. */
+  override sayTo(_gameState: GameState, _words: string): string {
+    return 'The word goes through them the way their blades go through each other.'
+  }
 }

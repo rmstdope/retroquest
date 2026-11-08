@@ -124,7 +124,7 @@ describe('ThroneChamber', () => {
   it('accepts the full refrain and answers the amulet given to Malakar', () => {
     const game = inThrone()
     expect(executeCommands(game, ['give ancient amulet to malakar'])).toContain(
-      'Your mother and father told him no once, in a letter. It did not stop him.',
+      'You have not heard what I am offering.',
     )
     executeCommands(game, ['talk to malakar'])
     const text = executeCommands(game, [

@@ -9,8 +9,10 @@ import {
   executeCommands,
   expectCharacterInRoom,
   expectMarkupWellFormed,
+  expectNoStockReply,
   expectStoryFlag,
 } from '@/testing/gameHelpers'
+import { KnightsRedemption } from '../items/KnightsRedemption'
 
 const BY_DOOR = 'Sir Cedric, by the south door, his eyes on the knight.'
 const CEDRIC = '[character_name]Sir Cedric[/character_name]'
@@ -154,5 +156,15 @@ describe('Sir Cedric in the Hall of Echoes', () => {
     reload(game)
     expect(executeCommands(game, ['talk to cedric'])).toContain(WAIT_HERE)
     expect(game.state.currentRoom.describe(game.state)).toContain(ON_STAIR)
+  })
+  it("gives the knight's badge back", () => {
+    const game = new Game([new Act4()])
+    game.state.currentRoom = game.state.allRooms.HallOfEchoes
+    game.state.inventory.push(new KnightsRedemption())
+    const answer = executeCommands(game, [
+      "give knight's redemption to sir cedric",
+    ])
+    expect(answer).toContain('What he owed me he said to my face.')
+    expectNoStockReply(answer)
   })
 })

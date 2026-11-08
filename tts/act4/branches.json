@@ -279,5 +279,72 @@
             "cast bless on nyx",
             "cast grow on nyx"
         ]
+    },
+    {
+        "after": 29,
+        "commands": [
+            "say redemption to ghostly warriors",
+            "give knight's redemption to sir cedric"
+        ]
+    },
+    {
+        "after": 39,
+        "commands": [
+            "down",
+            "w",
+            "s",
+            "give sorceress's truth to mira"
+        ]
+    },
+    {
+        "after": 47,
+        "commands": [
+            "give ancient amulet to malakar",
+            "say aren to malakar",
+            "say lysa to malakar",
+            "say mira to malakar",
+            "say patience to malakar",
+            "give ancient amulet to king alden"
+        ]
+    },
+    {
+        "after": 52,
+        "commands": [
+            "cast forgiveness on king alden"
+        ]
+    },
+    {
+        "after": 53,
+        "commands": [
+            "cast forgiveness on king alden",
+            "give ancient amulet to king alden"
+        ]
+    },
+    {
+        "after": 54,
+        "commands": [
+            "say you knew to grandmother",
+            "say i love you to grandmother",
+            "say welcome home to grandmother",
+            "say i forgive you to grandmother",
+            "say you should have told me to grandmother",
+            "say thank you to grandmother",
+            "say thank you to grandmother",
+            "give ancient amulet to grandmother",
+            "give nyx's token to grandmother",
+            "say i forgive you to mira",
+            "say you should have told me to mira",
+            "say parents to mira",
+            "say malakar to mira",
+            "say amulet to mira",
+            "say grandmother to mira",
+            "say thank you to mira",
+            "say thank you to mira",
+            "give sorceress's truth to mira",
+            "give knight's redemption to sir cedric",
+            "cast forgiveness on mira",
+            "cast forgiveness on grandmother",
+            "cast forgiveness on sir cedric"
+        ]
     }
 ]

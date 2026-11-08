@@ -1,6 +1,8 @@
-import { Character, type GameState, dialogue } from '@/engine'
+import { Character, type GameState, type Item, dialogue } from '@/engine'
 import { FLAG_ACT4_ELIXIR_ON_KING } from '../Act4StoryFlags'
 import { endingPlayed, type Ending } from '../endings'
+import { AncientAmulet } from '../items/AncientAmulet'
+import { LifelightElixir } from '../items/LifelightElixir'
 
 /** What he says once the wound is closed, by ending. */
 const ENDING_LINES: Record<Ending, string> = {
@@ -66,5 +68,28 @@ export class KingAlden extends Character {
       )
     }
     return '[dim]King Alden sleeps in the crystal and does not hear you.[/dim]'
+  }
+
+  /**
+   * The elixir offered to him is the elixir used on him, as it is for Malakar;
+   * the amulet stops at the crystal, and awake he will not take it.
+   */
+  override giveItem(gameState: GameState, item: Item): string {
+    if (item instanceof LifelightElixir) {
+      return item.useOnCharacter(gameState, this)
+    }
+    if (!(item instanceof AncientAmulet)) {
+      return super.giveItem(gameState, item)
+    }
+    if (
+      !endingPlayed(gameState) &&
+      !gameState.getStoryFlag(FLAG_ACT4_ELIXIR_ON_KING)
+    ) {
+      return (
+        'The amulet clicks against the crystal. Inside, the king does not ' +
+        'stir, and his crown stays dark.'
+      )
+    }
+    return dialogue('King Alden', 'Keep it. My half of it has cost me enough.')
   }
 }
