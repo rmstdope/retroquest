@@ -1,7 +1,7 @@
 import type { MapPlace } from '@/engine'
 import { displayName } from './displayName'
 
-/** A place on the drawn map, at a grid cell (the current place is at 0, 0; rows grow southwards). */
+/** A place on the drawn map, at a grid cell (the layout starts from the current place at 0, 0; rows grow southwards). */
 export interface MapBox {
   key: string
   name: string
@@ -68,8 +68,6 @@ function tagOf(direction: string): string | null {
 /** How far (in columns and rows) a box reaches from its cell's centre: the box is 136 × 52 px in a 170 × 96 px cell. */
 const HALF_WIDTH = 0.4
 const HALF_HEIGHT = 0.27
-/** The longest a path is lengthened before the layout gives up keeping it clear of other boxes. */
-const MAX_LENGTH = 12
 
 /** True when the line from one box to another runs the way `direction` says (a compass way keeps its heading; other ways may go anywhere). */
 function alignedWith(direction: string, from: MapBox, to: MapBox): boolean {
@@ -107,9 +105,10 @@ function crossesBox(
 /**
  * Lay the act's places out on a grid, the way the small map does: from the
  * current place outwards, each way putting its place one step north, east,
- * south or west (up and down diagonally to the right). A path grows longer,
- * in the same direction, until its place has a cell of its own and the path
- * does not run through another box. Places seen but not visited are placed
+ * south or west (up and down diagonally to the right). When that cell is
+ * taken, the map opens an empty column or row between the place and it,
+ * moving the place and everything level with it or behind it one step back,
+ * so the path stays one step long. Places seen but not visited are placed
  * from the visited places only, so they are leaves. Two places joined by a
  * way get one path, solid unless one end is unvisited; a path that could only
  * be drawn through another box is left out. Visited places the current place
@@ -138,6 +137,21 @@ export function layoutMap(places: MapPlace[]): MapLayout {
   const joined = new Set<string>()
   const freeAt = (col: number, row: number): boolean =>
     !taken.has(`${col},${row}`)
+  /**
+   * Make the cell one step (dc, dr) from a box free by opening an empty
+   * column and/or row between the box and that cell: every box level with
+   * the box, or behind it, moves one step back. Paths that cross the new gap
+   * only grow longer and keep their heading.
+   */
+  const openBeside = (here: MapBox, dc: number, dr: number): void => {
+    const origin = { col: here.col, row: here.row }
+    for (const box of cells.values()) {
+      if (dc !== 0 && (box.col - origin.col) * dc <= 0) box.col -= dc
+      if (dr !== 0 && (box.row - origin.row) * dr <= 0) box.row -= dr
+    }
+    taken.clear()
+    for (const box of cells.values()) taken.add(`${box.col},${box.row}`)
+  }
 
   /** Lay out everything reachable from a placed box. */
   const spread = (first: MapPlace): void => {
@@ -150,22 +164,13 @@ export function layoutMap(places: MapPlace[]): MapLayout {
         if (!there) continue
         let target = cells.get(there.key)
         if (!target) {
-          let placed: [number, number] | null = null
-          for (const [dc, dr] of stepsOf(direction)) {
-            for (let length = 1; length <= MAX_LENGTH && !placed; length++) {
-              let clear = true
-              for (let k = 1; k <= length; k++)
-                if (!freeAt(here.col + dc * k, here.row + dr * k)) clear = false
-              if (clear) placed = [dc * length, dr * length]
-            }
-            if (placed) break
-          }
+          const steps = stepsOf(direction)
+          let placed = steps.find(([dc, dr]) =>
+            freeAt(here.col + dc, here.row + dr),
+          )
           if (!placed) {
-            const [dc, dr] = stepsOf(direction)[0]
-            let length = 1
-            while (!freeAt(here.col + dc * length, here.row + dr * length))
-              length++
-            placed = [dc * length, dr * length]
+            placed = steps[0]
+            openBeside(here, placed[0], placed[1])
           }
           target = put(there, here.col + placed[0], here.row + placed[1])
           if (there.visited) queue.push(there)
