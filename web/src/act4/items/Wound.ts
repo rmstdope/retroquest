@@ -224,9 +224,9 @@ export class Wound extends Item {
   }
 
   /**
-   * Records the ending, completes the quest, darkens the amulet (carried or
-   * set down here) and sets the room's description; after Justice, Malakar
-   * is gone from the room into the seal.
+   * Records the ending, completes the quest, darkens the carried amulet and
+   * sets the room's description; after Justice, Malakar is gone from the
+   * room into the seal.
    */
   private finish(gameState: GameState, ending: Ending): void {
     const flag = {
@@ -237,7 +237,7 @@ export class Wound extends Item {
     gameState.setStoryFlag(flag, true)
     gameState.setStoryFlag(FLAG_ACT4_FINAL_STAND_COMPLETED, true)
     const room = gameState.currentRoom
-    for (const item of [...gameState.inventory, ...room.items]) {
+    for (const item of gameState.inventory) {
       if (item instanceof AncientAmulet) item.settleAfterEnding(gameState)
     }
     if (ending === 'justice') {
