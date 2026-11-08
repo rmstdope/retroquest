@@ -280,10 +280,7 @@ export function useLanternPresentation(
     }
     if (game.roomPicture !== scene.shown && !stage.motionReduced())
       scene.begin(turn.id, game.roomPicture, up, at)
-    else {
-      game.releasePanels(turn.id, ['place'], true)
-      up()
-    }
+    else up()
   }
 
   // The room's name (the place panels) changes at the darkest moment of a change of scene.

@@ -466,6 +466,24 @@ describe('LanternLayout: change of scene', () => {
     await vi.runAllTimersAsync()
   })
 
+  it("narrated, Enter during a moving talk's fade shows the new room and its name together", async () => {
+    const game = await dream()
+    const scene = useSceneStore()
+    const narration = useNarrationStore()
+    const voices = recordEverything()
+    await answerVoice(game)
+    for (let i = 0; i < 10 && scene.turn === null; i++) {
+      voices.at(-1)?.onended?.()
+      await vi.advanceTimersByTimeAsync(400)
+    }
+    expect(scene.phase).toBe('out')
+    expect(game.roomName).toBe('The Dream')
+    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }))
+    expect(game.roomName).toBe("Elior's Cottage")
+    narration.skipAll()
+    await vi.runAllTimersAsync()
+  })
+
   /** Act I at the locked shed with the key in the bag, on the stage, its picture up and the inside painted. */
   async function lockedShed(): Promise<ReturnType<typeof useGameStore>> {
     const saved = new Game([new Act1()])
