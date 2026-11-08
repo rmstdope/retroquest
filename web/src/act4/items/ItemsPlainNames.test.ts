@@ -66,6 +66,20 @@ describe('"pendant" while Nyx\'s Token is the crystalline pendant in the pack', 
     expect(executeCommands(game, ['examine pendant'])).toContain(tokenLook)
   })
 
+  it('answers to "crystalline pendant", the words its description opens with', () => {
+    const game = gameHolding(new NyxToken())
+    expect(executeCommands(game, ['examine crystalline pendant'])).toContain(
+      tokenLook,
+    )
+  })
+
+  it('keeps "crystalline pendant" for the token when the Servant\'s Pendant is held too', () => {
+    const game = gameHolding(new ServantsPendant(), new NyxToken())
+    expect(executeCommands(game, ['examine crystalline pendant'])).toContain(
+      tokenLook,
+    )
+  })
+
   it("still answers with the Servant's Pendant once both are held", () => {
     const game = gameHolding(new NyxToken(), new ServantsPendant())
     expect(executeCommands(game, ['examine pendant'])).toContain(pendantLook)
