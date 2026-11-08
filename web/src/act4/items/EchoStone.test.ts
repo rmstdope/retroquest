@@ -142,4 +142,24 @@ describe('EchoStone enhanced', () => {
         'with the [item_name]banners[/item_name].[/failure]',
     )
   })
+
+  it('no longer waits for the place where memories sleep once the orbs are mended', () => {
+    const { game, act } = inMaze()
+    const stone = new EchoStone()
+    stone.enhance()
+    game.state.inventory.push(stone, new ServantsPendant())
+    game.state.currentRoom = act.rooms.MemoryVault
+    executeCommands(game, ['use enhanced echo stone'])
+    game.state.currentRoom = act.rooms.ThroneChamber
+
+    const alone = executeCommands(game, ['use enhanced echo stone'])
+    const withPendant = executeCommands(game, [
+      "use servant's pendant with enhanced echo stone",
+    ])
+
+    for (const after of [alone, withPendant]) {
+      expect(after).toContain('The orbs have heard what they came to say.')
+      expect(after).not.toContain('waiting')
+    }
+  })
 })

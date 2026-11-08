@@ -41,7 +41,8 @@ export class GuardiansEssence extends Item {
 
   /**
    * Held up in the courtyard it is shown to the servants, the only ones there
-   * who will look; elsewhere the light only answers the place.
+   * who will look; elsewhere the light only answers the place, and once they
+   * have seen it, it no longer waits to be shown.
    */
   override use(gameState: GameState): string {
     if (gameState.currentRoom instanceof OuterCourtyard) {
@@ -49,6 +50,9 @@ export class GuardiansEssence extends Item {
     }
     if (gameState.currentRoom instanceof HallOfEchoes) {
       return 'The light steadies in the old hall, as if it has been here before.'
+    }
+    if (gameState.getStoryFlag(FLAG_ACT4_SERVANTS_TRUST_EARNED)) {
+      return 'The light sits warm in your hand. The ones who needed to see it have seen it.'
     }
     return 'The light sits warm in your hand, waiting for someone to show it to.'
   }

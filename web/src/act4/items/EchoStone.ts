@@ -1,4 +1,5 @@
 import { Item, type Character, type GameState } from '@/engine'
+import { FLAG_ACT4_MEMORY_ORBS_MENDED } from '../Act4StoryFlags'
 import { ShadowOfThePast } from '../characters/ShadowOfThePast'
 import { MemoryVault } from '../rooms/MemoryVault'
 import { MemoryOrbs } from './MemoryOrbs'
@@ -22,10 +23,15 @@ const ENHANCED_DESCRIPTION =
   "The echo stone hums more strongly now. Among the hall's voices one speaks " +
   "clearly and without fear: the knight's, telling the truth."
 
-/** What the enhanced stone does for now, anywhere. */
+/** What the enhanced stone does anywhere else, before the orbs are mended. */
 const ENHANCED_USE =
   'You hold the stone to your ear. The voices inside it are clearer now, ' +
   'waiting for a place where memories sleep.'
+
+/** What the enhanced stone does anywhere else, once the orbs are mended. */
+const ENHANCED_USE_AFTER_MENDING =
+  'You hold the stone to your ear. The voices inside it are quiet now. ' +
+  'The orbs have heard what they came to say.'
 
 /**
  * Carry the hall's echoes into the Mirror Labyrinth: the maze can only be
@@ -82,7 +88,9 @@ export class EchoStone extends Item {
       const room = gameState.currentRoom
       if (room instanceof MirrorLabyrinth) return room.useStone(gameState)
       if (room instanceof MemoryVault) return room.mendOrbs(gameState)
-      return ENHANCED_USE
+      return gameState.getStoryFlag(FLAG_ACT4_MEMORY_ORBS_MENDED)
+        ? ENHANCED_USE_AFTER_MENDING
+        : ENHANCED_USE
     }
     return EchoStone.useInRoom(gameState)
   }
