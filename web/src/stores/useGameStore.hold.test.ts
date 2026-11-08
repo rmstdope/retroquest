@@ -1,3 +1,4 @@
+import { roomTrackId } from '@/lantern/musicLists'
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 import { setActivePinia, createPinia } from 'pinia'
 import {
@@ -289,6 +290,20 @@ describe('useGameStore: panels held while a turn is narrated', () => {
       store.releasePicture(store.turns.at(-1)!.id)
       // The other picture is there the moment the story reaches it, not the room's own first.
       expect(store.roomPicture).toBe(hallPicture(HALL_LIT))
+    })
+
+    it("reads the size and the marked spots from the picture that is up, not the room's own", async () => {
+      const store = await stagedStore(true)
+      const own = roomTrackId('Hold Act', 'Hall')
+      store.imageManifest = {
+        [own]: { width: 1920, height: 1080 },
+        [`${own}-${HALL_LIT}`]: { width: 640, height: 360 },
+      }
+      expect(store.roomPictureSize).toEqual({ width: 1920, height: 1080 })
+      store.submitCommand(`take ${GEM.toLowerCase()}`)
+      store.releasePanels(store.turns.at(-1)!.id, [...PANEL_GROUPS], false)
+      await new Promise((resolve) => setTimeout(resolve))
+      expect(store.roomPictureSize).toEqual({ width: 640, height: 360 })
     })
 
     it('is not held when the layout does not hold panels', async () => {

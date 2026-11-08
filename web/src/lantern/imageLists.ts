@@ -80,7 +80,6 @@ export interface GameImage {
  * the areas those declared for that picture.
  */
 export function roomImages(act: Act): GameImage[] {
-<<<<<<< HEAD
   const rooms = Object.entries(act.rooms)
   /** One room image: the room's own picture, or another of its pictures. */
   const image = (
@@ -97,26 +96,13 @@ export function roomImages(act: Act): GameImage[] {
     text,
     areas: [...areas],
     ...(patches.length > 0 ? { patches: [...patches] } : {}),
-=======
-  return Object.entries(act.rooms).map(([key, room]) => {
-    const patches = declaredPatches(act.name, key)
-    return {
-      id: roomTrackId(act.name, key),
-      title: room.name,
-      width: IMAGE_WIDTH,
-      height: IMAGE_HEIGHT,
-      text: narrationText(room.description),
-      areas: [...declaredAreas(act.name, key), ...spotAreas(act.name, key)],
-      ...(patches.length > 0 ? { patches: [...patches] } : {}),
-    }
->>>>>>> 0e9d0b90 (feat(rq-ezpg.9): room pictures drift and gentle movement lies over them)
   })
   const own = rooms.map(([key, room]) =>
     image(
       roomTrackId(act.name, key),
       room.name,
       narrationText(room.description),
-      declaredAreas(act.name, key),
+      [...declaredAreas(act.name, key), ...spotAreas(act.name, key)],
       declaredPatches(act.name, key),
     ),
   )
@@ -128,7 +114,10 @@ export function roomImages(act: Act): GameImage[] {
           `${roomTrackId(act.name, key)}-${variant}`,
           `${room.name}, ${variant}`,
           narrationText(room.description),
-          declaredAreas(act.name, key, variant),
+          [
+            ...declaredAreas(act.name, key, variant),
+            ...spotAreas(act.name, key),
+          ],
           declaredPatches(act.name, key, variant),
         ),
       ),

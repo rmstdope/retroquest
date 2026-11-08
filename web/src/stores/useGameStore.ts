@@ -466,11 +466,6 @@ export const useGameStore = defineStore('game', () => {
     }
   }
 
-  /**
-   * The URLs of the patches laid over the room's picture: the ones that apply
-   * to the story (what the held `picture` group shows; after a move to
-   * another room, that room's at once) and that the manifest lists as made.
-   */
   /** The picture state of the room the player is in: what the held group shows, or, after a move to another room, that room's at once; null when no room's state is there. */
   const roomPictureState = computed(() => {
     const room = musicRoomKey.value
@@ -479,19 +474,24 @@ export const useGameStore = defineStore('game', () => {
       shownPicture.value.roomKey === room
         ? shownPicture.value
         : latestPicture.value
-<<<<<<< HEAD
-    if (shown.roomKey !== room) return []
-    // The patches belong to one picture: they show only over that picture.
+    return shown.roomKey === room ? shown : null
+  })
+
+  /** The manifest id of the picture the player sees: the room's own, or `<room>-<variant>`; null while the held picture and the room's picture are not the same one. */
+  const shownPictureId = computed<string | null>(() => {
+    const room = musicRoomKey.value
+    const shown = roomPictureState.value
+    if (!room || !shown) return null
+    // The patches and the movement belong to one picture: they show only over that picture.
     const variant = shown.variant
-    if (variant !== musicPicture.value) return []
+    if (variant !== musicPicture.value) return null
     if (
       variant &&
       roomPicture.value !== roomPictureUrl(musicActName.value, room, variant)
     )
-      return []
+      return null
     const id = roomTrackId(musicActName.value, room)
-=======
-    return shown.roomKey === room ? shown : null
+    return variant ? `${id}-${variant}` : id
   })
 
   /**
@@ -501,25 +501,21 @@ export const useGameStore = defineStore('game', () => {
    */
   const roomMotion = computed<MotionSpec[]>(() => {
     const shown = roomPictureState.value
-    if (!shown) return []
+    const id = shownPictureId.value
+    if (!shown || id === null) return []
     const effects = declaredMotion(musicActName.value, shown.roomKey)
     if (effects.length === 0) return []
-    const boxes = madeAreaBoxes(
-      imageManifest.value,
-      roomTrackId(musicActName.value, shown.roomKey),
-    )
+    const boxes = madeAreaBoxes(imageManifest.value, id)
     return appliedMotion(effects, shown.patchIds, boxes)
   })
 
   /** The size of the room's picture as the manifest lists it, for the boxes laid on it; absent while it is not known. */
   const roomPictureSize = computed(() => {
-    const room = roomPictureState.value?.roomKey
+    const id = shownPictureId.value
     const manifest = imageManifest.value
-    if (!room || typeof manifest !== 'object' || manifest === null)
+    if (id === null || typeof manifest !== 'object' || manifest === null)
       return undefined
-    const image: unknown = (manifest as Record<string, unknown>)[
-      roomTrackId(musicActName.value, room)
-    ]
+    const image: unknown = (manifest as Record<string, unknown>)[id]
     if (typeof image !== 'object' || image === null) return undefined
     const { width, height } = image as Record<string, unknown>
     return typeof width === 'number' &&
@@ -530,18 +526,21 @@ export const useGameStore = defineStore('game', () => {
       : undefined
   })
 
+  /**
+   * The URLs of the patches laid over the room's picture: the ones that apply
+   * to the story (what the held `picture` group shows; after a move to
+   * another room, that room's at once) and that the manifest lists as made.
+   */
   const roomPatchUrls = computed<string[]>(() => {
     const room = musicRoomKey.value
     const shown = roomPictureState.value
-    if (!room || !shown) return []
->>>>>>> 0e9d0b90 (feat(rq-ezpg.9): room pictures drift and gentle movement lies over them)
-    const made = madePatches(
-      imageManifest.value,
-      variant ? `${id}-${variant}` : id,
-    )
+    const id = shownPictureId.value
+    if (!room || !shown || id === null) return []
+    const variant = shown.variant
+    const made = madePatches(imageManifest.value, id)
     return shown.patchIds
-      .filter((id) => made.includes(id))
-      .map((id) => roomPatchUrl(musicActName.value, room, id, variant))
+      .filter((patch) => made.includes(patch))
+      .map((patch) => roomPatchUrl(musicActName.value, room, patch, variant))
   })
 
   /** The running act's characters by class key and name, for their portraits. */
