@@ -5,10 +5,12 @@ import {
   FLAG_ACT4_BARRIERS_DISABLED,
   FLAG_ACT4_SHATTERED_WARD_GUARDIANS_COMPLETED,
   FLAG_ACT4_SHATTERED_WARD_GUARDIANS_STARTED,
+  FLAG_ACT4_WHISPERS_MIRA_NAMED,
 } from '../Act4StoryFlags'
 import { FortressGates } from './FortressGates'
 import {
   executeCommands,
+  expectDialogueSpeaker,
   expectItemInInventory,
   expectQuestCompleted,
 } from '@/testing/gameHelpers'
@@ -264,6 +266,103 @@ describe('FortressGates', () => {
     it('answers a bare light with the banished line', () => {
       expect(executeCommands(solved(), ['cast light'])).toContain(
         'The shadow guardians have already been banished. The way forward is clear.',
+      )
+    })
+  })
+
+  describe('Mira and Sir Cedric at the gate', () => {
+    const MIRA_DOWN =
+      "The way out stays open. I'll be right here when you come back through it."
+    const MIRA_TOWER =
+      "I heard you. Up there, in the dark. I said we'd hear, and I did."
+    const NOBODY = 'There is no character named'
+
+    it('names both beside the wall, and only Mira once it has fallen', () => {
+      const game = createGame()
+      const up = game.state.currentRoom.descriptionFor(game.state)
+      expect(up).toContain(
+        'her back to the gatepost. [character_name]Sir Cedric[/character_name] stands beside her, his eyes on the guardians.',
+      )
+      executeCommands(game, ['cast light on right ward stone'])
+      const down = game.state.currentRoom.descriptionFor(game.state)
+      expect(down).toContain(
+        'her back to the gatepost. [character_name]Sir Cedric[/character_name] has gone on ahead, into the hall.',
+      )
+      expect(down).not.toContain('stands beside her')
+    })
+
+    it('examines both while the wall stands', () => {
+      const game = createGame()
+      expect(executeCommands(game, ['examine mira'])).toContain(
+        'Mira, her back to the gatepost. Her hands are still unsteady from the circle.',
+      )
+      expect(executeCommands(game, ['examine cedric'])).toContain(
+        'Sir Cedric, his sword drawn and his eyes on the guardians.',
+      )
+    })
+
+    it('has Mira say the same wall-up line every time', () => {
+      const game = createGame()
+      for (let i = 0; i < 2; i++) {
+        const out = executeCommands(game, ['talk to mira'])
+        expect(out).toContain(
+          "I'm fine. My hands will stop in a while. Go on. I'm not going anywhere.",
+        )
+        expectDialogueSpeaker(out, 'Mira')
+      }
+    })
+
+    it('has Sir Cedric answer to both names, with one line', () => {
+      const game = createGame()
+      for (const name of ['cedric', 'sir cedric']) {
+        const out = executeCommands(game, [`talk to ${name}`])
+        expect(out).toContain(
+          'Shadow does not tire, and neither do I. When that wall comes down, I will be a step behind you.',
+        )
+        expectDialogueSpeaker(out, 'Sir Cedric')
+      }
+    })
+
+    it('sends Cedric on ahead when the wall falls; Mira stays', () => {
+      const game = createGame()
+      executeCommands(game, ['cast light on right ward stone'])
+      expect(executeCommands(game, ['talk to cedric'])).toContain(NOBODY)
+      expect(executeCommands(game, ['talk to mira'])).toContain(MIRA_DOWN)
+    })
+
+    it('gives the tower line once, only after naming Mira, and keeps that over a save', () => {
+      const plain = createGame()
+      executeCommands(plain, ['cast light on right ward stone'])
+      expect(executeCommands(plain, ['talk to mira'])).not.toContain(MIRA_TOWER)
+
+      const game = createGame()
+      game.state.setStoryFlag(FLAG_ACT4_WHISPERS_MIRA_NAMED, true)
+      expect(executeCommands(game, ['talk to mira'])).not.toContain(MIRA_TOWER)
+      executeCommands(game, ['cast light on right ward stone'])
+      expect(executeCommands(game, ['talk to mira'])).toContain(MIRA_TOWER)
+      game.loadSaveData(game.toSaveData())
+      const after = executeCommands(game, ['talk to mira'])
+      expect(after).not.toContain(MIRA_TOWER)
+      expect(after).toContain(MIRA_DOWN)
+    })
+
+    it('restores a solved gate without Cedric and an old one with both', () => {
+      const game = createGame()
+      const gates = game.state.currentRoom
+      gates.characters.length = 0
+      game.loadSaveData(game.toSaveData())
+      expect(executeCommands(game, ['talk to cedric'])).toContain(
+        'Shadow does not tire',
+      )
+      expect(executeCommands(game, ['talk to mira'])).toContain(
+        "I'm fine. My hands will stop in a while.",
+      )
+      executeCommands(game, ['cast light on right ward stone'])
+      game.state.currentRoom.characters.length = 0
+      game.loadSaveData(game.toSaveData())
+      expect(executeCommands(game, ['talk to cedric'])).toContain(NOBODY)
+      expect(executeCommands(game, ['talk to mira'])).toContain(
+        'The way out stays open.',
       )
     })
   })

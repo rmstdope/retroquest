@@ -50,9 +50,9 @@
     "text": "Fortress Gates"
   },
   {
-    "id": "1c8d6ea6dc034e",
+    "id": "0056210734aabc",
     "speaker": "narrator",
-    "text": "You stand just inside the fortress gates. The ways on, north and east, are barred by a thin wall of violet light, and three ward stones, left, middle and right, swell and fade with it. Guardians made of shadow drift between the stones, watching you. On the arch behind you, under the black, an older carving shows through: a sun rising over three linked rings. Just inside the threshold Mira keeps the way out, her back to the gatepost."
+    "text": "You stand just inside the fortress gates. The ways on, north and east, are barred by a thin wall of violet light, and three ward stones, left, middle and right, swell and fade with it. Guardians made of shadow drift between the stones, watching you. On the arch behind you, under the black, an older carving shows through: a sun rising over three linked rings. Just inside the threshold Mira keeps the way out, her back to the gatepost. Sir Cedric stands beside her, his eyes on the guardians."
   },
   {
     "id": "1e8eb0bec69c4a",
@@ -108,6 +108,26 @@
     "id": "1668105665b087",
     "speaker": "narrator",
     "text": "The token is warm in your hand. Someone, somewhere, is glad you came."
+  },
+  {
+    "id": "1d2e77e0862147",
+    "speaker": "mira",
+    "text": "I'm fine. My hands will stop in a while. Go on. I'm not going anywhere."
+  },
+  {
+    "id": "07f4f4145cc0ec",
+    "speaker": "sir cedric",
+    "text": "Shadow does not tire, and neither do I. When that wall comes down, I will be a step behind you."
+  },
+  {
+    "id": "1cbae1cff893f0",
+    "speaker": "narrator",
+    "text": "Mira, her back to the gatepost. Her hands are still unsteady from the circle."
+  },
+  {
+    "id": "065f9abb04be3a",
+    "speaker": "narrator",
+    "text": "Sir Cedric, his sword drawn and his eyes on the guardians."
   },
   {
     "id": "1ecd1a8a61edf8",
@@ -220,9 +240,9 @@
     "text": "The stone is dark. Your light shows only its runes."
   },
   {
-    "id": "0a8202e796647e",
+    "id": "1cfdcfb029aaac",
     "speaker": "narrator",
-    "text": "You stand just inside the fortress gates. The ward stones are dark, and the violet wall is gone; the ways north and east lie open. On the arch behind you, under the black, an older carving shows through: a sun rising over three linked rings. Just inside the threshold Mira keeps the way out, her back to the gatepost."
+    "text": "You stand just inside the fortress gates. The ward stones are dark, and the violet wall is gone; the ways north and east lie open. On the arch behind you, under the black, an older carving shows through: a sun rising over three linked rings. Just inside the threshold Mira keeps the way out, her back to the gatepost. Sir Cedric has gone on ahead, into the hall."
   },
   {
     "id": "1c87c3e79d433c",
@@ -273,6 +293,11 @@
     "id": "08993777469ac1",
     "speaker": "narrator",
     "text": "A small, steady light the colour of a candle flame, left where the last guardian stood. Whoever the guardians were made from was brave once. The light remembers it."
+  },
+  {
+    "id": "1e2531fec7f79c",
+    "speaker": "mira",
+    "text": "The way out stays open. I'll be right here when you come back through it."
   },
   {
     "id": "02253af9fd4ed6",
@@ -1073,6 +1098,11 @@
     "id": "1f6d4ed81f1703",
     "speaker": "sir cedric",
     "text": "I am in the hall behind you, Elior. I have not left. Go on up."
+  },
+  {
+    "id": "1db37a9130bbde",
+    "speaker": "mira",
+    "text": "I heard you. Up there, in the dark. I said we'd hear, and I did."
   },
   {
     "id": "0d9b0077d256bf",
