@@ -7,6 +7,7 @@ import {
   FLAG_ACT4_SHATTERED_WARD_GUARDIANS_STARTED,
   FLAG_ACT4_WHISPERS_MIRA_NAMED,
 } from '../Act4StoryFlags'
+import { WardStoneFragment } from '../items/WardStoneFragment'
 import { FortressGates } from './FortressGates'
 import {
   executeCommands,
@@ -14,6 +15,10 @@ import {
   expectItemInInventory,
   expectQuestCompleted,
 } from '@/testing/gameHelpers'
+
+/** The fragment's answer to being picked up: it stays by the stone. */
+const FRAGMENT_REFUSAL =
+  'The cold of the fragment bites at your fingers, and you let it lie by the stone.'
 
 /** Create an Act IV game standing at the Fortress Gates. */
 function createGame(): Game {
@@ -167,7 +172,7 @@ describe('FortressGates', () => {
       )
     })
 
-    it('lets the player take the chain and essence, and leave the fragment', () => {
+    it('lets the player take the chain and essence, and leaves the fragment by the stone', () => {
       const game = createGame()
       executeCommands(game, ['cast light on right stone'])
       executeCommands(game, [
@@ -176,16 +181,60 @@ describe('FortressGates', () => {
       ])
       expectItemInInventory(game.state, "Guardian's Chain", true)
       expectItemInInventory(game.state, "Guardian's Essence", true)
-      expectItemInInventory(game.state, 'Ward Stone Fragment', false)
       expect(executeCommands(game, ['take ward stone fragment'])).toContain(
-        'The fragment is lighter than it looks, and cold.',
+        FRAGMENT_REFUSAL,
+      )
+      expectItemInInventory(game.state, 'Ward Stone Fragment', false)
+      expect(roomItems(game)).toContain('Ward Stone Fragment')
+    })
+
+    it('can still examine the fragment by the stone', () => {
+      const game = createGame()
+      executeCommands(game, ['cast light on right stone'])
+      expect(executeCommands(game, ['examine ward stone fragment'])).toContain(
+        'A jagged piece of the right ward stone, carved with half a rune.',
+      )
+    })
+
+    it('leaves the fragment by the stone in a save from when it could be taken', () => {
+      const game = createGame()
+      executeCommands(game, ['cast light on right stone'])
+      const lying = game.state.currentRoom.items.find(
+        (item) => item instanceof WardStoneFragment,
+      )
+      if (!lying) throw new Error('The fragment did not fall')
+      lying.canBeCarried = true
+      const reloaded = new Game([new Act4()])
+      reloaded.loadSaveData(game.toSaveData())
+      expect(executeCommands(reloaded, ['take ward stone fragment'])).toContain(
+        FRAGMENT_REFUSAL,
+      )
+      expectItemInInventory(reloaded.state, 'Ward Stone Fragment', false)
+    })
+
+    it('loads a save that already carries the fragment', () => {
+      const game = createGame()
+      executeCommands(game, ['cast light on right stone'])
+      const room = game.state.currentRoom
+      const carried = room.items.find(
+        (item) => item instanceof WardStoneFragment,
+      )
+      if (!carried) throw new Error('The fragment did not fall')
+      room.items = room.items.filter((item) => item !== carried)
+      game.state.inventory.push(carried)
+      const reloaded = new Game([new Act4()])
+      reloaded.loadSaveData(game.toSaveData())
+      expectItemInInventory(reloaded.state, 'Ward Stone Fragment', true)
+      expect(
+        executeCommands(reloaded, ['examine ward stone fragment']),
+      ).toContain(
+        'A jagged piece of the right ward stone, carved with half a rune.',
       )
     })
 
     it('cannot use the fragment on the barrier any more', () => {
       const game = createGame()
       executeCommands(game, ['cast light on right stone'])
-      executeCommands(game, ['take ward stone fragment'])
       const answer = executeCommands(game, [
         'use ward stone fragment with barriers',
       ])
