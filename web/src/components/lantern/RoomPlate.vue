@@ -14,9 +14,15 @@ import { displayName } from '@/lantern/displayName'
  * Folded (a short screen with a conversation on the picture), the plate is one
  * row: the name, the chips in a single row that fades at its right edge and
  * slides sideways, then "⟲ Story so far"; "You are in" is hidden. The same
- * elements stay in the same order, so folding never moves focus.
+ * elements stay in the same order, so folding never moves focus. Compact (a
+ * phone on its side) is that one row always, with no story button: the name
+ * beside the chips, which slide sideways, so the plate never covers the words.
  */
-const props = defineProps<{ storyButton?: boolean; folded?: boolean }>()
+const props = defineProps<{
+  storyButton?: boolean
+  folded?: boolean
+  compact?: boolean
+}>()
 const emit = defineEmits<{ story: [] }>()
 const game = useGameStore()
 const storyEl = ref<HTMLButtonElement | null>(null)
@@ -69,12 +75,16 @@ defineExpose({ focusStoryButton })
     :class="{
       'lq-flash': flashing,
       'lq-plate-folded': props.folded,
+      'lq-plate-compact': props.compact,
       'lq-plate-opening': opening,
     }"
     aria-label="Current location"
     @animationend.self="onAnimationEnd"
   >
-    <span class="lq-label" :aria-hidden="props.folded ? true : undefined">
+    <span
+      class="lq-label"
+      :aria-hidden="props.folded || props.compact ? true : undefined"
+    >
       You are in
     </span>
     <h2 class="lq-room-name" :class="{ 'lq-room-name-pad': props.storyButton }">
@@ -174,7 +184,8 @@ defineExpose({ focusStoryButton })
   cursor: pointer;
 }
 /* Folded: one row; the names slide sideways under a fade at the right edge. */
-.lq-plate-folded {
+.lq-plate-folded,
+.lq-plate-compact {
   flex-direction: row;
   align-items: center;
   gap: 10px;
@@ -184,16 +195,19 @@ defineExpose({ focusStoryButton })
 .lq-plate-opening {
   animation: lq-plate-fold calc(0.2s * var(--lq-motion)) ease-out;
 }
-.lq-plate-folded .lq-label {
+.lq-plate-folded .lq-label,
+.lq-plate-compact .lq-label {
   display: none;
 }
-.lq-plate-folded .lq-room-name {
+.lq-plate-folded .lq-room-name,
+.lq-plate-compact .lq-room-name {
   flex: 0 0 auto;
   padding-top: 0;
   font-size: calc(20px * var(--lq-display-scale));
   white-space: nowrap;
 }
-.lq-plate-folded .lq-here {
+.lq-plate-folded .lq-here,
+.lq-plate-compact .lq-here {
   flex: 1 1 0;
   min-width: 0;
   flex-wrap: nowrap;
@@ -203,13 +217,16 @@ defineExpose({ focusStoryButton })
   padding-inline-end: 28px;
   mask-image: linear-gradient(to right, #000 calc(100% - 28px), transparent);
 }
-.lq-plate-folded .lq-here::-webkit-scrollbar {
+.lq-plate-folded .lq-here::-webkit-scrollbar,
+.lq-plate-compact .lq-here::-webkit-scrollbar {
   display: none;
 }
-.lq-plate-folded .lq-here-chip {
+.lq-plate-folded .lq-here-chip,
+.lq-plate-compact .lq-here-chip {
   flex: 0 0 auto;
 }
-.lq-plate-folded .lq-story-so-far {
+.lq-plate-folded .lq-story-so-far,
+.lq-plate-compact .lq-story-so-far {
   position: static;
   flex: 0 0 auto;
 }
