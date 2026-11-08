@@ -40,6 +40,14 @@ for (const size of [
     await expect(page.locator('.lq-nav-bottom')).toHaveCount(0)
     await expect(page.getByRole('button', { name: 'Actions ▴' })).toBeVisible()
     await expect(page.getByRole('button', { name: 'Hint' })).toBeVisible()
+    // One compact row, however many chips: it never covers the words.
+    const plate = await page.locator('.lq-stage-plate').boundingBox()
+    expect(plate?.height ?? 999).toBeLessThan(60)
+    // And it ends before the first button on the right.
+    const bag = await page.locator('.lq-stage-buttons').boundingBox()
+    expect((plate?.x ?? 0) + (plate?.width ?? 999)).toBeLessThanOrEqual(
+      bag?.x ?? 0,
+    )
     const noScroll = await page.evaluate(
       () =>
         document.documentElement.scrollWidth <=

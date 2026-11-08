@@ -1471,6 +1471,7 @@ watch(
               v-if="wide"
               ref="widePlate"
               class="lq-stage-plate"
+              :compact="sideways"
               data-panel
               @click="onNameClick"
             />
@@ -2021,12 +2022,12 @@ watch(
 .lq-sideways .lq-stage-plate {
   top: 8px;
   left: 56px;
-  max-width: min(300px, 38%);
+  max-width: min(360px, 38%);
 }
-/* The plate is compact on a phone: smaller name and chips, so the words keep their room. */
+/* The plate is one compact row on a phone: smaller name and chips, so the words keep their room. */
 .lq-sideways .lq-stage-plate {
-  padding: 6px 10px;
-  gap: 3px;
+  padding: 4px 10px;
+  gap: 8px;
 }
 .lq-sideways .lq-stage-plate :deep(.lq-room-name) {
   font-size: calc(18px * var(--lq-display-scale));

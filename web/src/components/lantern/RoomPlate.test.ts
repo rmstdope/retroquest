@@ -91,4 +91,17 @@ describe('RoomPlate', () => {
       expect(folded.get('.lq-label').attributes('aria-hidden')).toBe('true')
     })
   })
+
+  describe('compact', () => {
+    it('is one row: the label hidden, the name beside the chips in the open order', () => {
+      const open = mount(RoomPlate)
+      const compact = mount(RoomPlate, { props: { compact: true } })
+      expect(compact.classes()).toContain('lq-plate-compact')
+      expect(open.classes()).not.toContain('lq-plate-compact')
+      expect(compact.get('.lq-label').attributes('aria-hidden')).toBe('true')
+      const order = (w: typeof open): string[] =>
+        w.findAll('h2, .lq-here-chip').map((e) => e.text())
+      expect(order(compact)).toEqual(order(open))
+    })
+  })
 })

@@ -265,7 +265,7 @@ describe('LanternLayout: the stage on a phone', () => {
 
     it('floats ☰ and one plate top left, the five buttons top right', () => {
       expect(w.get('.lq-float-menu').attributes('aria-label')).toBe('Game menu')
-      expect(w.get('.lq-stage-plate').text()).toContain('You are in')
+      expect(w.get('.lq-stage-plate').classes()).toContain('lq-plate-compact')
       const labels = w
         .findAll('.lq-stage-buttons .lq-stage-btn')
         .map((b) => b.text().replace(/\s+/g, ' '))
