@@ -503,7 +503,7 @@ describe('the Redeemed Knight once Elior has gone up the stair', () => {
   const CAME_BACK =
     'You came back down those stairs. Then there is still hope. I had not thought to see it.'
   const AFTER_ENDING =
-    'You came back down those stairs, and it is over. I do not know what a man like me does now. Stay here a while, I think.'
+    'You came back down those stairs, and it is over. I do not know what a man like me does now. I will stay here a while, I think.'
 
   /** A game in the hall with the knight truly redeemed. */
   function redeemed(): Game {

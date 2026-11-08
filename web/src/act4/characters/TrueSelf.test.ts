@@ -127,9 +127,19 @@ describe('TrueSelf after an ending', () => {
     game.state.setStoryFlag(ending, true)
     const talk = self.talkTo(game.state)
     expect(talk).toContain(
-      'You told me the truth, and then you stood before him. You are still you.',
+      'You told me the truth. It is over now, and you are still you.',
     )
     expect(talk).not.toContain('when you stand before him')
     expectDialogueSpeaker(talk, 'True Self')
+  })
+
+  it('says the same when the truth is told only after the ending', () => {
+    const game = new Game([new Act4()])
+    const self = new TrueSelf()
+    game.state.setStoryFlag(FLAG_ACT4_JUSTICE_ENDING, true)
+    self.sayTo(game.state, 'truth')
+    expect(self.talkTo(game.state)).toContain(
+      'You told me the truth. It is over now, and you are still you.',
+    )
   })
 })

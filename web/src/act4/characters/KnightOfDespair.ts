@@ -180,7 +180,7 @@ export class KnightOfDespair extends Character {
         return dialogue(
           this.name,
           'You came back down those stairs, and it is over. I do not know ' +
-            'what a man like me does now. Stay here a while, I think.',
+            'what a man like me does now. I will stay here a while, I think.',
         )
       }
       if (gameState.visitedRooms.includes(ROOM_UP_THE_STAIR)) {

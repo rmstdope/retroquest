@@ -56,8 +56,7 @@ export class TrueSelf extends Character {
       if (endingPlayed(gameState)) {
         return dialogue(
           this.name,
-          'You told me the truth, and then you stood before him. You are ' +
-            'still you.',
+          'You told me the truth. It is over now, and you are still you.',
         )
       }
       return dialogue(
