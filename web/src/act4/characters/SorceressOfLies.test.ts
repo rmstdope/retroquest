@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest'
 import { Game, dialogue } from '@/engine'
 import { Act4 } from '../Act4'
 import { ACT4_GOLDEN_PATH } from '../Act4GoldenPath'
+import { KnightsRedemption } from '../items/KnightsRedemption'
 import {
   FLAG_ACT4_ELENA_MESSAGE_HEARD,
   FLAG_ACT4_SORCERESS_OF_LIES_COMPLETED,
@@ -421,5 +422,27 @@ describe('The Sorceress of Lies', () => {
       expect(out).toContain('Truth? I have hundreds. Which one would you like?')
       expectDialogueSpeaker(out, 'Sorceress of Lies')
     })
+  })
+
+  it("offered the knight's badge, is shown it as when it is used", () => {
+    /** A game in the Chamber of Whispers with the badge in the pack. */
+    function inChamber(): Game {
+      const act = new Act4()
+      act.musicFile = ''
+      const game = new Game([act])
+      game.state.currentRoom = game.state.allRooms.ChamberOfWhispers
+      game.state.addItemToInventory(new KnightsRedemption())
+      return game
+    }
+    const plain = inChamber()
+    const given = inChamber()
+    const expected = executeCommands(plain, ["use knight's redemption"])
+    const answer = executeCommands(given, [
+      "give knight's redemption to sorceress of lies",
+    ])
+    expect(answer).toBe(expected)
+    expect(answer).not.toContain('interested')
+    expect(given.state.storyFlags).toEqual(plain.state.storyFlags)
+    expectItemInInventory(given.state, "Knight's Redemption")
   })
 })

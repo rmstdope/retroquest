@@ -8,7 +8,7 @@ import {
   FLAG_ACT4_LOYALTY_TOKEN_RAISED_IN_HALL,
   FLAG_ACT4_TOWER_STAIR_OPEN,
 } from '../Act4StoryFlags'
-import { expectMarkupWellFormed } from '@/testing/gameHelpers'
+import { executeCommands, expectMarkupWellFormed } from '@/testing/gameHelpers'
 
 describe('LoyaltyToken', () => {
   /** A game with the token in the pack and Elior in the tower. */
@@ -105,5 +105,24 @@ describe('LoyaltyToken', () => {
         game.state.getStoryFlag(FLAG_ACT4_LOYALTY_TOKEN_RAISED_IN_HALL),
       ).toBe(false)
     })
+  })
+
+  it('raised at the Knight of Despair by name, does what raising it in the hall does', () => {
+    /** A game in the Hall of Echoes; the token is carried from the start. */
+    function inHall(): Game {
+      const act = new Act4()
+      act.musicFile = ''
+      const game = new Game([act])
+      game.state.currentRoom = game.state.allRooms.HallOfEchoes
+      return game
+    }
+    const plain = inHall()
+    const targeted = inHall()
+    const expected = executeCommands(plain, ['use loyalty token'])
+    const answer = executeCommands(targeted, [
+      'use loyalty token on knight of despair',
+    ])
+    expect(answer).toBe(expected)
+    expect(targeted.state.storyFlags).toEqual(plain.state.storyFlags)
   })
 })

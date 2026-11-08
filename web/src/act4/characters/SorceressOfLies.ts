@@ -2,6 +2,7 @@ import {
   affirms,
   Character,
   type GameState,
+  type Item,
   clue,
   dialogue,
   saysAnyOf,
@@ -17,6 +18,7 @@ import {
   FLAG_ACT4_SORCERESS_OF_LIES_STARTED,
   FLAG_ACT4_SORCERESS_TRUTH_ACQUIRED,
 } from '../Act4StoryFlags'
+import { KnightsRedemption } from '../items/KnightsRedemption'
 import { SorceressTruth } from '../items/SorceressTruth'
 import { CHAMBER_AFTER_REDEMPTION } from '../rooms/chamberDescriptions'
 
@@ -127,6 +129,12 @@ export class SorceressOfLies extends Character {
       )
     }
     return this.description
+  }
+
+  /** The knight's badge offered to her is shown to her, as using it is. */
+  override giveItem(gameState: GameState, item: Item): string {
+    if (item instanceof KnightsRedemption) return item.use(gameState)
+    return super.giveItem(gameState, item)
   }
 
   /** What she says changes as the badge is shown and she is redeemed. */

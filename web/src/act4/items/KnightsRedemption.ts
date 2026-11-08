@@ -1,8 +1,9 @@
-import { Item, type GameState } from '@/engine'
+import { Item, type Character, type GameState } from '@/engine'
 import {
   FLAG_ACT4_BADGE_SHOWN,
   FLAG_ACT4_SORCERESS_OF_LIES_STARTED,
 } from '../Act4StoryFlags'
+import { SorceressOfLies } from '../characters/SorceressOfLies'
 import { ChamberOfWhispers } from '../rooms/ChamberOfWhispers'
 import { HeartsTruth } from '../spells/HeartsTruth'
 
@@ -45,5 +46,11 @@ export class KnightsRedemption extends Item {
       `You have learned [spell_name]${spell.name}[/spell_name]. ` +
         spell.description,
     ].join('\n')
+  }
+
+  /** Shown to the Sorceress, the badge does what it does in the chamber. */
+  override useOnCharacter(gameState: GameState, target: Character): string {
+    if (target instanceof SorceressOfLies) return this.use(gameState)
+    return super.useOnCharacter(gameState, target)
   }
 }
