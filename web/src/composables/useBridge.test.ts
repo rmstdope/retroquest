@@ -496,6 +496,30 @@ describe('useBridge', () => {
       ])
     })
 
+    it('keeps storage order for ties and unusable timestamps', async () => {
+      const bridge = await runningBridge()
+      const entry = (name: string, timestamp: string) => ({
+        name,
+        timestamp,
+        data: '{"version":99}',
+      })
+      localStorageMock._setRaw(
+        'retroquest_named_saves',
+        JSON.stringify([
+          entry('a', 'garbage'),
+          entry('b', '2026-01-01T10:00:00.000Z'),
+          entry('c', '2026-01-01T10:00:00.000Z'),
+          entry('d', 'garbage'),
+        ]),
+      )
+      expect(bridge.getNamedSaves().map((c) => c.name)).toEqual([
+        'b',
+        'c',
+        'a',
+        'd',
+      ])
+    })
+
     it('marks a named save from an older version as outdated', async () => {
       const bridge = await runningBridge()
       localStorageMock._setRaw(

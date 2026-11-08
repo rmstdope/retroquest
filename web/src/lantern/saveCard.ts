@@ -56,7 +56,7 @@ export function cardKey(card: SaveSlot): string | number {
 
 /**
  * The newest save that can be loaded (not empty, not from an older version),
- * the quick save or a slot. The first listed wins a tie; null when none.
+ * the quick save, a slot or a named save. The first listed wins a tie; null when none.
  */
 export function newestLoadable(saves: SaveSlot[]): SaveSlot | null {
   let best: SaveSlot | null = null

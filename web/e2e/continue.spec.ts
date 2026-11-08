@@ -6,7 +6,7 @@
 import { test, expect, type Page } from '@playwright/test'
 
 /** Start a game, close the opening chapter page and save (a quick save, or under a name with `save <name>`). */
-async function makeQuickSave(page: Page, command = 'save'): Promise<void> {
+async function makeSave(page: Page, command = 'save'): Promise<void> {
   await page.addInitScript(() => {
     if (!localStorage.getItem('retroquest_settings'))
       localStorage.setItem('retroquest_settings', '{"narrationOn":false}')
@@ -35,7 +35,7 @@ test('with no saves the title page offers Start only', async ({ page }) => {
 test('Continue opens the newest save with no chapter page', async ({
   page,
 }) => {
-  await makeQuickSave(page)
+  await makeSave(page)
   await page.reload()
 
   const cont = page.getByRole('button', { name: /^Continue/ })
@@ -52,7 +52,7 @@ test('Continue opens the newest save with no chapter page', async ({
 test('Load game from the title page loads a card with no question', async ({
   page,
 }) => {
-  await makeQuickSave(page)
+  await makeSave(page)
   await page.reload()
 
   await page.getByRole('button', { name: 'Load game' }).click()
@@ -71,7 +71,7 @@ test('Load game from the title page loads a card with no question', async ({
 test('New game starts at the chapter page and keeps the saves', async ({
   page,
 }) => {
-  await makeQuickSave(page)
+  await makeSave(page)
   await page.reload()
 
   await page.getByRole('button', { name: 'New game' }).click()
@@ -85,7 +85,7 @@ test('New game starts at the chapter page and keeps the saves', async ({
 test('a save made under a name is listed on the title page after a reload and loads', async ({
   page,
 }) => {
-  await makeQuickSave(page, 'save mysave')
+  await makeSave(page, 'save mysave')
   await page.reload()
 
   const cont = page.getByRole('button', { name: /^Continue/ })

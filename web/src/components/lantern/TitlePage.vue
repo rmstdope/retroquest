@@ -12,8 +12,7 @@ import { useFocusTrap } from '@/composables/useFocusTrap'
  * music credits and Start. Enter on Start or Escape goes on.
  *
  * A returning player has `saves` (the quick save, the slots in use and the saves
- * made under a name): the
- * page then offers Continue (the newest save that can be loaded, named under
+ * made under a name): the page then offers Continue (the newest save that can be loaded, named under
  * the word), New game and Load game, and Escape does nothing. When every
  * save is from an older version there is no Continue and New game is the
  * main button. `error` is why the last load from here failed.

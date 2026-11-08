@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
-import { mount, type VueWrapper } from '@vue/test-utils'
+import { flushPromises, mount, type VueWrapper } from '@vue/test-utils'
 import { createPinia, setActivePinia } from 'pinia'
 import SaveLoadDialog from './SaveLoadDialog.vue'
 import { useGameStore } from '@/stores/useGameStore'
@@ -429,6 +429,25 @@ describe('SaveLoadDialog', () => {
       expect(
         namedCard(w, 'oldrun').get('button').attributes('aria-label'),
       ).toMatch(/^Load oldrun: 3 Nov · 20:05$/)
+    })
+
+    it('shows the name and the time only for a save made before details were kept', () => {
+      named = [oldrun]
+      const w = mountDialog('load')
+      const c = namedCard(w, 'oldrun')
+      expect(c.findAll('.lq-slot-meta')).toHaveLength(1)
+      expect(c.get('.lq-slot-meta').text()).toBe('3 Nov · 20:05')
+      expect(c.find('.lq-track').exists()).toBe(false)
+    })
+
+    it('puts focus back on the card when its question is cancelled', async () => {
+      named = [mirrors]
+      const w = mountDialog('load')
+      const c = namedCard(w, 'before-the-mirrors')
+      await c.get('button').trigger('click')
+      await c.get('.lq-ask-cancel').trigger('click')
+      await flushPromises()
+      expect(document.activeElement).toBe(c.get('.lq-slot-btn').element)
     })
 
     it('is not listed when saving', () => {
