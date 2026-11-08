@@ -118,8 +118,8 @@ export class MirrorMount extends Item {
 
     gameState.setStoryFlag(FLAG_ACT3_MIRRORS_MENDED, true)
     return (
-      '[success]A whispered mend gathers in your hands and the mirrors ' +
-      'answer — seams knit, polish brightens, and the whole face hums.[/success]\n' +
+      '[success]The seams close under your hands, ' +
+      'and the face comes up bright.[/success]\n' +
       'The mirrors are whole. The sun is not where it needs to be. Perhaps ' +
       'rest a while, and let it climb.'
     )
