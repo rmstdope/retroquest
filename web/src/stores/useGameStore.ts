@@ -27,10 +27,13 @@ import {
 } from '@/lantern/spellNews'
 import { parseActIntro, type ActIntro } from '@/lantern/parseActIntro'
 import { actFolder } from '@/lantern/narrationManifest'
+import { roomTrackId } from '@/lantern/musicLists'
 import {
   eliorPortraitUrl,
   portraitUrl,
   pictureExists,
+  madePatches,
+  roomPatchUrl,
   roomPictureUrl,
 } from '@/lantern/roomPicture'
 import { ELIOR } from '@/lantern/stageSpeech'
@@ -164,12 +167,18 @@ export type JournalTab = 'bag' | 'spells' | 'quests'
 /**
  * The side panels that wait for a narrated turn, in groups that switch
  * together: `place` (room card, Here, map, header room and act), `quests`
- * (the quest count, progress and dot) and `stock` (Bag and Spells with their dots).
+ * (the quest count, progress and dot), `stock` (Bag and Spells with their dots)
+ * and `picture` (the patches laid over the room's picture).
  */
-export type PanelGroup = 'place' | 'quests' | 'stock'
+export type PanelGroup = 'place' | 'quests' | 'stock' | 'picture'
 
 /** Every panel group. */
-export const PANEL_GROUPS: readonly PanelGroup[] = ['place', 'quests', 'stock']
+export const PANEL_GROUPS: readonly PanelGroup[] = [
+  'place',
+  'quests',
+  'stock',
+  'picture',
+]
 
 /** What the engine says the panels of each group show right now. */
 interface PanelSnapshot {
@@ -195,6 +204,8 @@ interface PanelSnapshot {
     bag: NamedItem[]
     spells: NamedItem[]
   }
+  /** The room the picture is of, and the ids of its patches that apply. */
+  picture: { roomKey: string; variant: string; patchIds: string[] }
 }
 
 export const useGameStore = defineStore('game', () => {
@@ -255,12 +266,34 @@ export const useGameStore = defineStore('game', () => {
     place: false,
     quests: false,
     stock: false,
+    picture: false,
   })
   /** Counts each group's switches that should light up (a new value lights again). */
   const panelFlash = ref<Record<PanelGroup, number>>({
     place: 0,
     quests: 0,
     stock: 0,
+    picture: 0,
+  })
+  /** The room the picture shows and the patches that apply there, as the held `picture` group lets them be seen. */
+  const shownPicture = ref<{
+    roomKey: string
+    variant: string
+    patchIds: string[]
+  }>({
+    roomKey: '',
+    variant: '',
+    patchIds: [],
+  })
+  /** The same as the engine says now, which `shownPicture` takes on release. */
+  const latestPicture = ref<{
+    roomKey: string
+    variant: string
+    patchIds: string[]
+  }>({
+    roomKey: '',
+    variant: '',
+    patchIds: [],
   })
   /** What the engine showed at the last refresh; held groups apply it on release. */
   let latest: PanelSnapshot | null = null
@@ -270,8 +303,14 @@ export const useGameStore = defineStore('game', () => {
     spells: false,
     quests: false,
   }
-  /** True while a narrated turn holds some panel. */
-  const panelsHeld = computed(() => PANEL_GROUPS.some((g) => held.value[g]))
+  /**
+   * True while a narrated turn holds some panel a player can press in. The
+   * room picture's patches wait too, but they are not a panel: a press never
+   * has to bring them up first.
+   */
+  const panelsHeld = computed(() =>
+    PANEL_GROUPS.some((g) => g !== 'picture' && held.value[g]),
+  )
   /** A quest the story asked the journal to open ("Open in journal"). */
   const questToOpen = ref<string | null>(null)
   /** The quest whose details dialog is open, by name. */
@@ -343,7 +382,7 @@ export const useGameStore = defineStore('game', () => {
   /** Which of the music room's pictures shows (`Room.pictureVariant`), '' for its one picture. */
   const musicPicture = ref('')
   /** The picture variant the engine shows now, which `musicPicture` takes on release. */
-  let latestPicture = ''
+  let latestVariant = ''
   /**
    * Whether a command that changes its own room's picture keeps the old
    * picture until the answer reaches the change (`releasePicture`).
@@ -376,7 +415,7 @@ export const useGameStore = defineStore('game', () => {
   function moveMusic(): void {
     musicRoomKey.value = latestRoomKey
     musicSoundState.value = latestSoundState
-    if (!pictureHeld) musicPicture.value = latestPicture
+    if (!pictureHeld) musicPicture.value = latestVariant
     if (latestSoundFirings.length > 0) {
       musicSoundFirings.value = latestSoundFirings
       latestSoundFirings = []
@@ -405,6 +444,52 @@ export const useGameStore = defineStore('game', () => {
       paintedPictures.value[url] = exists
     })
   }
+
+  /** The images manifest as fetched (null until it is, or when it cannot be). */
+  const imageManifest = ref<unknown>(null)
+
+  /** Fetch the images manifest, which lists the patches that have been made; a failure leaves none, silently. */
+  async function loadImageManifest(): Promise<void> {
+    try {
+      const response = await fetch(
+        `${import.meta.env.BASE_URL}images/generated/manifest.json`,
+      )
+      if (response.ok) imageManifest.value = await response.json()
+    } catch {
+      imageManifest.value = null
+    }
+  }
+
+  /**
+   * The URLs of the patches laid over the room's picture: the ones that apply
+   * to the story (what the held `picture` group shows; after a move to
+   * another room, that room's at once) and that the manifest lists as made.
+   */
+  const roomPatchUrls = computed<string[]>(() => {
+    const room = musicRoomKey.value
+    if (!room) return []
+    const shown =
+      shownPicture.value.roomKey === room
+        ? shownPicture.value
+        : latestPicture.value
+    if (shown.roomKey !== room) return []
+    // The patches belong to one picture: they show only over that picture.
+    const variant = shown.variant
+    if (variant !== musicPicture.value) return []
+    if (
+      variant &&
+      roomPicture.value !== roomPictureUrl(musicActName.value, room, variant)
+    )
+      return []
+    const id = roomTrackId(musicActName.value, room)
+    const made = madePatches(
+      imageManifest.value,
+      variant ? `${id}-${variant}` : id,
+    )
+    return shown.patchIds
+      .filter((id) => made.includes(id))
+      .map((id) => roomPatchUrl(musicActName.value, room, id, variant))
+  })
 
   /** The running act's characters by class key and name, for their portraits. */
   const actCast = ref<{ key: string; name: string }[]>([])
@@ -564,7 +649,7 @@ export const useGameStore = defineStore('game', () => {
     // A newer command brings the older one's picture up at once.
     releasePicture()
     heldTurn.value = turnId
-    held.value = { place: true, quests: true, stock: true }
+    held.value = { place: true, quests: true, stock: true, picture: true }
     musicHeld = !scenePicture.value || movingTalk
   }
 
@@ -605,6 +690,11 @@ export const useGameStore = defineStore('game', () => {
         questProgress.value?.total,
         questsHaveNew.value,
       ])
+    if (group === 'picture')
+      return JSON.stringify([
+        shownPicture.value.variant,
+        shownPicture.value.patchIds,
+      ])
     return JSON.stringify([
       rawInventory.value,
       rawSpells.value,
@@ -639,6 +729,8 @@ export const useGameStore = defineStore('game', () => {
         ...quests.progress,
         actNumber: questProgress.value?.actNumber ?? quests.progress.actNumber,
       }
+    } else if (group === 'picture') {
+      shownPicture.value = latest.picture
     } else {
       const stock = latest.stock
       rawInventory.value = stock.bag
@@ -677,7 +769,7 @@ export const useGameStore = defineStore('game', () => {
       // Only a panel that changed lights up.
       if (flash && shownState(group) !== before) panelFlash.value[group]++
     }
-    if (!panelsHeld.value) heldTurn.value = null
+    if (!PANEL_GROUPS.some((g) => held.value[g])) heldTurn.value = null
   }
 
   /** Whether the panels of `group` still show the state from before the narrated turn. */
@@ -688,7 +780,12 @@ export const useGameStore = defineStore('game', () => {
   /** Forget a hold without applying it (a load or a new game refreshes the panels itself). */
   function dropHold(): void {
     heldTurn.value = null
-    held.value = { place: false, quests: false, stock: false }
+    held.value = {
+      place: false,
+      quests: false,
+      stock: false,
+      picture: false,
+    }
     pendingDots = { bag: false, spells: false, quests: false }
     musicHeld = false
     pictureHeld = false
@@ -718,7 +815,7 @@ export const useGameStore = defineStore('game', () => {
     if (!pictureHeld) return
     if (turnId !== undefined && turnId !== heldTurn.value) return
     pictureHeld = false
-    musicPicture.value = latestPicture
+    musicPicture.value = latestVariant
   }
 
   /**
@@ -1141,7 +1238,9 @@ export const useGameStore = defineStore('game', () => {
         progress,
       },
       stock: { bag, spells: spellList },
+      picture: b.pictureState(),
     }
+    latestPicture.value = latest.picture
     for (const group of PANEL_GROUPS) if (!held.value[group]) applyGroup(group)
     syncMusic(b)
     acceptInput.value = b.controller.isAcceptingInput()
@@ -1166,7 +1265,7 @@ export const useGameStore = defineStore('game', () => {
     actCast.value = b.controller.getActCharacters()
     latestRoomKey = isIntroShowing() ? '' : place.roomKey
     latestSoundState = isIntroShowing() ? '' : place.soundState
-    latestPicture = isIntroShowing() ? '' : place.pictureVariant
+    latestVariant = isIntroShowing() ? '' : place.pictureVariant
     // Every other picture of the act's rooms is asked about as the act runs, so
     // each is known by the time a move or a command brings it up.
     for (const other of b.controller.getPictureVariants())
@@ -1686,6 +1785,9 @@ export const useGameStore = defineStore('game', () => {
     musicPicture,
     musicSoundFirings,
     roomPicture,
+    roomPatchUrls,
+    imageManifest,
+    loadImageManifest,
     portraitFor,
     heldTurn,
     panelsHeld,

@@ -200,12 +200,21 @@ export function useLanternPresentation(
           sceneAt >= 0 && !narration.narrates(turn.id)
             ? { unit: sceneAt, reached: () => changeScene(turn, sceneAt) }
             : null
-        if (stage.staged()) speech.observe(turn, unnarratedScene)
+        // An unnarrated telling changes the room picture's patches as its last
+        // line appears (at once for a single line); its other panels change now.
+        const unnarratedPatches =
+          stage.staged() && !unnarratedScene && !narration.narrates(turn.id)
+        if (stage.staged())
+          speech.observe(
+            turn,
+            unnarratedScene,
+            unnarratedPatches ? () => panelHold.settle(turn) : null,
+          )
         if (parts.length)
           arrival.show(turn.id, parts, narration.narrates(turn.id))
         // Its panels wait for the voice, or, with none to wait for, change now.
         if (narration.narrates(turn.id)) panelHold.track(turn)
-        else if (!unnarratedScene) panelHold.settle(turn)
+        else if (!unnarratedScene) panelHold.settle(turn, unnarratedPatches)
       }
     },
   )

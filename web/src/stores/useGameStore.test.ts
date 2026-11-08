@@ -146,6 +146,11 @@ function createMockBridge() {
     saveToSlot: vi.fn(() => 'Game saved.'),
     loadFromSlot: vi.fn(() => 'Game loaded.'),
     takeLoadedStory: vi.fn((): unknown => null),
+    pictureState: vi.fn(() => ({
+      roomKey: '',
+      variant: '',
+      patchIds: [] as string[],
+    })),
     controller: {
       ...controller,
       settleQuests: vi.fn(() => ({

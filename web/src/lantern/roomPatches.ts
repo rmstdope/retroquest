@@ -7,8 +7,11 @@
  * The declared lists live in `roomPatches/act<N>RoomPatches.ts`; a patch not
  * made yet is not a defect. The base picture shows the room as the game
  * starts: a thing there at the start has a taken or gone patch, a thing or a
- * way that only turns up later an appears or open patch. Sir Cedric, who follows the player through a
- * whole act, has none.
+ * way that only turns up later an appears or open patch. A thing that changes
+ * state (a candle lit, a well purified) has a patch of its own;
+ * `roomStateChanges.test.ts` holds the golden-path changes against the
+ * patches, or the reason one needs none. Sir Cedric, who follows the player
+ * through a whole act, has none.
  */
 import {
   ACT1_ROOM_PATCHES,

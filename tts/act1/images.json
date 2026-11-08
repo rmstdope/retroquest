@@ -502,6 +502,14 @@
         "id": "exit-south",
         "title": "Way south"
       }
+    ],
+    "patches": [
+      {
+        "id": "well-purified",
+        "title": "Well purified",
+        "text": "Make the water in the well clear and bright instead of dark and still.",
+        "area": "well"
+      }
     ]
   },
   {
@@ -575,6 +583,12 @@
         "title": "Millstone Fragment appears",
         "text": "Add the millstone fragment to the picture.",
         "area": "millstone-fragment"
+      },
+      {
+        "id": "mechanism-jammed",
+        "title": "Mechanism jammed",
+        "text": "Jam a rope through the black-iron mechanism, which hangs still.",
+        "area": "mechanism"
       }
     ]
   },
@@ -829,6 +843,12 @@
         "title": "Locket appears",
         "text": "Add the locket to the picture.",
         "area": "locket"
+      },
+      {
+        "id": "candle-lit",
+        "title": "Candle lit",
+        "text": "Light the candle on the altar: a small steady flame, and the dark corner beside it lit.",
+        "area": "candle"
       }
     ]
   },

@@ -4,6 +4,7 @@
  */
 import { Game, GameController, isOutdatedSave, type Act } from '@/engine'
 import type { SaveSlot } from '@/types/bridge'
+import { appliedPatchIds } from '@/lantern/roomPatchState'
 
 type StoredNamedSave = {
   name: string
@@ -197,6 +198,31 @@ export function useBridge(loader: () => Promise<ActClass[]> = loadActs) {
     return story
   }
 
+  /**
+   * The room the player is in and the ids of the patches of its picture that
+   * apply to the story now; empty while no room is known. Read from the game
+   * each time, so a loaded game answers as the played one did.
+   */
+  function pictureState(): {
+    roomKey: string
+    variant: string
+    patchIds: string[]
+  } {
+    const { game } = requireGame()
+    const { roomKey, pictureVariant } = game.currentMusicPlace()
+    if (!roomKey) return { roomKey: '', variant: '', patchIds: [] }
+    return {
+      roomKey,
+      variant: pictureVariant,
+      patchIds: appliedPatchIds(
+        game.acts[game.currentAct],
+        roomKey,
+        game.state,
+        pictureVariant,
+      ),
+    }
+  }
+
   /** The quick save, with `story` (the UI's story so far) stored beside it. */
   function quickSaveGame(story: unknown = null): string {
     const { game } = requireGame()
@@ -384,6 +410,7 @@ export function useBridge(loader: () => Promise<ActClass[]> = loadActs) {
     get controller(): GameController {
       return requireGame().controller
     },
+    pictureState,
     quickSaveGame,
     quickLoadGame,
     saveNamedGame,
