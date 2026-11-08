@@ -12,9 +12,9 @@
  * answers as the played one did.
  */
 import type { Act, Character, GameState, Item } from '@/engine'
-import { FLAG_ACT4_SERVANTS_FREED } from '@/act4/Act4StoryFlags'
 import {
   FLAG_ACT4_KNIGHT_OF_DESPAIR_COMPLETED,
+  FLAG_ACT4_SERVANTS_FREED,
   FLAG_ACT4_SHADOW_REVEAL_HEARD,
   FLAG_ACT4_SORCERESS_OF_LIES_COMPLETED,
 } from '@/act4/Act4StoryFlags'

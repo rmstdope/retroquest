@@ -198,6 +198,8 @@ describe('StagePicture patches', () => {
     const w = await picture([BUCKET])
     await w.setProps({ patches: [] })
     expect(w.get('img.lq-patch').classes()).not.toContain('lq-patch-on')
+    // It came with the picture, yet it leaves with the slow fade, not at once.
+    expect(w.get('img.lq-patch').classes()).not.toContain('lq-patch-still')
     vi.advanceTimersByTime(1300)
     await nextTick()
     expect(layers(w)).toEqual([])
@@ -287,5 +289,16 @@ describe('StagePicture patches', () => {
     expect(layers(w)).toEqual([])
     await patchLoader(w, ROPE).trigger('load')
     expect(w.get('img.lq-patch').classes()).not.toContain('lq-patch-still')
+  })
+
+  it('keeps a patch laid just before an earlier clean-up fires', async () => {
+    const w = await picture([BUCKET])
+    await w.setProps({ patches: [] })
+    vi.advanceTimersByTime(1290)
+    await w.setProps({ patches: [ROPE] })
+    await patchLoader(w, ROPE).trigger('load')
+    vi.advanceTimersByTime(15)
+    await nextTick()
+    expect(layers(w)).toContain(ROPE)
   })
 })

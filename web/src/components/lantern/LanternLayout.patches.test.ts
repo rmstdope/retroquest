@@ -4,6 +4,7 @@ import { mount, type VueWrapper } from '@vue/test-utils'
 import { createPinia, setActivePinia } from 'pinia'
 import LanternLayout from './LanternLayout.vue'
 import { useGameStore } from '@/stores/useGameStore'
+import { useStageSpeechStore } from '@/stores/useStageSpeechStore'
 import { useBridge, type ActClass } from '@/composables/useBridge'
 import { Act1 } from '@/act1/Act1'
 
@@ -74,5 +75,24 @@ describe('LanternLayout: patches of the room picture', () => {
     await w.vm.$nextTick()
     expect(w.find('img.lq-patch-loading').exists()).toBe(false)
     expect(patches()).toEqual([])
+  })
+
+  it('keeps the old patches while an unnarrated telling goes on, and changes them as its last line appears', async () => {
+    // The stage's telling is stood in for: the turn's last line has not appeared until we say so.
+    let lastLineAppears: (() => void) | null = null
+    vi.spyOn(useStageSpeechStore(), 'observe').mockImplementation(
+      (_turn, _change, lastLine) => {
+        lastLineAppears = lastLine ?? null
+      },
+    )
+    game.submitCommand('take bread')
+    await w.vm.$nextTick()
+    expect(lastLineAppears).toBeTypeOf('function')
+    expect(w.find('img.lq-patch-loading').exists()).toBe(false)
+    lastLineAppears!()
+    await w.vm.$nextTick()
+    expect(w.get('img.lq-patch-loading').attributes('src')).toContain(
+      'bread-taken',
+    )
   })
 })

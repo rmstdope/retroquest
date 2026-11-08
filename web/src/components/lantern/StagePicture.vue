@@ -121,8 +121,11 @@ function layPatchesStill(): void {
 function fadePatches(): void {
   if (!shown.value || shown.value !== props.src) return
   const wanted = readyPatches.value
-  for (const layer of layers.value)
+  for (const layer of layers.value) {
+    // A patch that came with the picture leaves with the slow fade too.
+    layer.still = false
     if (!wanted.includes(layer.src)) layer.on = false
+  }
   for (const src of wanted) {
     const layer = layers.value.find((l) => l.src === src)
     if (layer) {
@@ -140,7 +143,9 @@ function fadePatches(): void {
   }
   patchTimers.push(
     setTimeout(() => {
-      layers.value = layers.value.filter((l) => l.on)
+      layers.value = layers.value.filter(
+        (l) => l.on || readyPatches.value.includes(l.src),
+      )
     }, PATCH_FADE_MS),
   )
 }

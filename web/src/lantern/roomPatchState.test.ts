@@ -79,6 +79,12 @@ describe('appliedPatchIds', () => {
       const act = make()
       const game = new Game([act])
       const seen = new Set<string>()
+      const atStart = new Game([make()])
+      for (const room of Object.keys(act.rooms)) {
+        const early = appliedPatchIds(act, room, atStart.state)
+        // A patch about the start of the story is a fault: only a thing taken or gone later may show.
+        expect(early.filter((id) => /-appears$|-open$/.test(id))).toEqual([])
+      }
       for (const command of act.goldenPath) {
         game.commandParser.parse(command)
         game.state.settleQuests()
@@ -91,6 +97,14 @@ describe('appliedPatchIds', () => {
         }
       }
       expect(seen.size).toBeGreaterThan(0)
+      // The golden path skips optional pickups and ways, so those patches may never apply;
+      // every other patch (a thing gone, arriving, changed) is judged true at some step.
+      const never: string[] = []
+      for (const room of Object.keys(act.rooms))
+        for (const patch of declaredPatches(act.name, room))
+          if (!seen.has(patch.id) && !/-(taken|open)$/.test(patch.id))
+            never.push(`${room} ${patch.id}`)
+      expect(never).toEqual([])
     },
   )
 })

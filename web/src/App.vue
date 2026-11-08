@@ -32,10 +32,12 @@ function requestFullscreenOnFirstInteraction() {
   window.addEventListener('click', onFirstInteraction, { once: true })
 }
 
-onMounted(() => {
+onMounted(async () => {
   store.setBridge(bridge)
+  // The patches that have been made are known before the first picture comes up,
+  // so none of them fades in on arrival (a failed fetch just leaves none).
+  await store.loadImageManifest()
   store.initGame()
-  void store.loadImageManifest()
   requestFullscreenOnFirstInteraction()
 })
 </script>
