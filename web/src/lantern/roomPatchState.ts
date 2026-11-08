@@ -12,10 +12,25 @@
  * answers as the played one did.
  */
 import type { Act, Character, GameState, Item } from '@/engine'
+import { FLAG_PROTECTIVE_CHARM_USED_FOREST_ENTRANCE } from '@/act2/Act2StoryFlags'
+import {
+  FLAG_ACT3_DRAGONS_SCALE_ACQUIRED,
+  FLAG_ACT3_MIRRORS_MENDED,
+} from '@/act3/Act3StoryFlags'
+import {
+  THRONE_CHAMBER_HEALED,
+  THRONE_CHAMBER_JUSTICE,
+  THRONE_CHAMBER_REDEMPTION,
+  THRONE_CHAMBER_SACRIFICE,
+  THRONE_CHAMBER_SHATTERED,
+} from '@/act4/rooms/throneDescriptions'
+import { PARENTS_VAULT_AFTER } from '@/act4/rooms/vaultDescriptions'
 import {
   FLAG_ACT4_KNIGHT_OF_DESPAIR_COMPLETED,
+  FLAG_ACT4_MEMORY_ORBS_MENDED,
   FLAG_ACT4_SERVANTS_FREED,
   FLAG_ACT4_SHADOW_REVEAL_HEARD,
+  FLAG_ACT4_SHATTERED_WARD_GUARDIANS_COMPLETED,
   FLAG_ACT4_SORCERESS_OF_LIES_COMPLETED,
 } from '@/act4/Act4StoryFlags'
 import { exitAreaId, thingAreaId } from './roomAreas'
@@ -37,6 +52,15 @@ function flagOf(thing: unknown, field: string): boolean {
   )
 }
 
+/** Whether the room `roomKey` now carries one of the `texts` as its description (a text the story sets and a save keeps). */
+function roomSays(
+  c: PatchContext,
+  roomKey: string,
+  texts: readonly string[],
+): boolean {
+  return texts.includes(c.state.allRooms[roomKey]?.description ?? '')
+}
+
 /** The rules of the patches whose change is not a thing coming or going, by `<Act>.<patch id>`. */
 const STATE_RULES: Readonly<Record<string, (c: PatchContext) => boolean>> = {
   'Act1.lantern-lit': (c) => {
@@ -50,6 +74,50 @@ const STATE_RULES: Readonly<Record<string, (c: PatchContext) => boolean>> = {
   },
   'Act1.withered-carrot-fresh': (c) =>
     c.things.get('withered-carrot')?.name === 'fresh carrot',
+  'Act1.candle-lit': (c) => flagOf(c.things.get('candle'), 'isLit'),
+  'Act1.well-purified': (c) => flagOf(c.things.get('well'), 'isPurified'),
+  'Act1.mechanism-jammed': (c) => flagOf(c.things.get('mechanism'), 'repaired'),
+  'Act1.shed-door-unlocked': (c) => {
+    const door = c.things.get('shed-door')
+    return (
+      typeof door === 'object' &&
+      'locked' in door &&
+      (door as Record<string, unknown>).locked === false
+    )
+  },
+  'Act2.forest-sprites-aside': (c) =>
+    c.state.getStoryFlag(FLAG_PROTECTIVE_CHARM_USED_FOREST_ENTRANCE),
+  'Act3.mirror-mount-mended': (c) =>
+    c.state.getStoryFlag(FLAG_ACT3_MIRRORS_MENDED),
+  'Act3.sigils-dimmed': (c) =>
+    c.state.getStoryFlag(FLAG_ACT3_DRAGONS_SCALE_ACQUIRED),
+  'Act4.ward-stones-dark': (c) =>
+    c.state.getStoryFlag(FLAG_ACT4_SHATTERED_WARD_GUARDIANS_COMPLETED),
+  'Act4.memory-orbs-whole': (c) =>
+    c.state.getStoryFlag(FLAG_ACT4_MEMORY_ORBS_MENDED),
+  'Act4.memories-dimmed': (c) =>
+    roomSays(c, 'ParentsVault', [PARENTS_VAULT_AFTER]),
+  'Act4.crystal-prison-shattered': (c) =>
+    roomSays(c, 'ThroneChamber', [
+      THRONE_CHAMBER_SHATTERED,
+      THRONE_CHAMBER_REDEMPTION,
+      THRONE_CHAMBER_JUSTICE,
+      THRONE_CHAMBER_SACRIFICE,
+    ]),
+  'Act4.wound-closed': (c) =>
+    roomSays(c, 'ThroneChamber', [
+      THRONE_CHAMBER_REDEMPTION,
+      THRONE_CHAMBER_SACRIFICE,
+    ]),
+  'Act4.wound-sealed': (c) =>
+    roomSays(c, 'ThroneChamber', [THRONE_CHAMBER_JUSTICE]),
+  'Act4.malakar-healed': (c) =>
+    roomSays(c, 'ThroneChamber', [
+      THRONE_CHAMBER_HEALED,
+      THRONE_CHAMBER_REDEMPTION,
+    ]),
+  'Act4.malakar-kneeling': (c) =>
+    roomSays(c, 'ThroneChamber', [THRONE_CHAMBER_SACRIFICE]),
   'Act3.warding-pillars-purified': (c) =>
     flagOf(c.things.get('warding-pillars'), 'purified'),
   'Act3.lantern-bracket-mounted': (c) =>

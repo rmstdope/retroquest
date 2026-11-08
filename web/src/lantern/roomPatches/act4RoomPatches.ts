@@ -40,6 +40,12 @@ export const ACT4_ROOM_PATCHES: Record<string, ImagePatch[]> = {
       text: "Add the guardian's essence to the picture.",
       area: 'guardians-essence',
     },
+    {
+      id: 'ward-stones-dark',
+      title: 'Ward stones dark',
+      text: 'Darken the three ward stones: no violet glow.',
+      area: 'ward-stones',
+    },
   ],
   OuterCourtyard: [
     {
@@ -160,6 +166,12 @@ export const ACT4_ROOM_PATCHES: Record<string, ImagePatch[]> = {
       text: 'Show the shadow of the past in its full shape.',
       area: 'shadow-of-the-past',
     },
+    {
+      id: 'memory-orbs-whole',
+      title: 'Memory orbs whole',
+      text: 'Show the glass orbs whole and still, not cracked.',
+      area: 'memory-orbs',
+    },
   ],
   ParentsVault: [
     {
@@ -168,6 +180,12 @@ export const ACT4_ROOM_PATCHES: Record<string, ImagePatch[]> = {
       text: 'Show the way north open and passable.',
       area: 'exit-north',
     },
+    {
+      id: 'memories-dimmed',
+      title: 'Memories dimmed',
+      text: 'Dim the memory lanterns hanging in the air.',
+      area: 'memories',
+    },
   ],
   ThroneChamber: [
     {
@@ -175,6 +193,36 @@ export const ACT4_ROOM_PATCHES: Record<string, ImagePatch[]> = {
       title: 'Way north open',
       text: 'Show the way north open and passable.',
       area: 'exit-north',
+    },
+    {
+      id: 'wound-closed',
+      title: 'Wound closed',
+      text: 'Close the wound in the air: only clear air where it was.',
+      area: 'wound',
+    },
+    {
+      id: 'crystal-prison-shattered',
+      title: 'Crystal prison shattered',
+      text: 'Show the crystal prison broken into shards around King Alden.',
+      area: 'crystal-prison',
+    },
+    {
+      id: 'malakar-healed',
+      title: 'Malakar healed',
+      text: 'Show Malakar sitting, the grey gone from his face.',
+      area: 'malakar',
+    },
+    {
+      id: 'wound-sealed',
+      title: 'Wound sealed',
+      text: 'Replace the wound with a seal of gold and pale light hanging in the air, Malakar held inside it.',
+      area: 'wound',
+    },
+    {
+      id: 'malakar-kneeling',
+      title: 'Malakar kneeling',
+      text: 'Show Malakar kneeling before the king, grey and powerless.',
+      area: 'malakar',
     },
   ],
 }
