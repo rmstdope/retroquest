@@ -80,6 +80,8 @@ export const FLAG_ACT4_SHADOW_OF_THE_PAST_COMPLETED =
 export const FLAG_ACT4_MEMORY_ORBS_MENDED = 'act4_memory_orbs_mended'
 /** The Sorceress's mask has been shown to the Shadow. */
 export const FLAG_ACT4_SHADOW_MASK_SHOWN = 'act4_shadow_mask_shown'
+/** The Shadow has said who he is and his whole sentence (by talk or on being answered). */
+export const FLAG_ACT4_SHADOW_REVEAL_HEARD = 'act4_shadow_reveal_heard'
 /** The Ancient Amulet has opened the sealed door to the Parents' Vault. */
 export const FLAG_ACT4_VAULT_DOOR_OPENED = 'act4_vault_door_opened'
 
