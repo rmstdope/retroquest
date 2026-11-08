@@ -89,7 +89,7 @@ describe('Act 4 integration', () => {
     expectItemInInventory(game.state, "Guardian's Essence", true)
   })
 
-  it('leaves the fragment, chain and essence only once the gates fall', () => {
+  it('leaves the chain only once the gates fall, and the fragment for good', () => {
     expectCurrentRoom(game.state, 'Fortress Gates')
     executeCommands(game, ['take ward stone fragment', "take guardian's chain"])
     expectItemInInventory(game.state, 'Ward Stone Fragment', false)
@@ -100,7 +100,7 @@ describe('Act 4 integration', () => {
       'take ward stone fragment',
       "take guardian's chain",
     ])
-    expectItemInInventory(game.state, 'Ward Stone Fragment', true)
+    expectItemInInventory(game.state, 'Ward Stone Fragment', false)
     expectItemInInventory(game.state, "Guardian's Chain", true)
   })
 

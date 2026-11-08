@@ -266,7 +266,7 @@ pulses from ward stones in the gate frame, and spectral guardians materialise fr
 #### Items
 
 -   Left, middle and right ward stones (the right one keeps the barrier's time a breath late)
--   After the guardians fall: Ward Stone Fragment (optional, nothing needs it), Guardian's Chain
+-   After the guardians fall: Ward Stone Fragment (scenery by the stone: examined, never carried), Guardian's Chain
     (protection against the Knight of Despair) and Guardian's Essence
 
 #### Characters
