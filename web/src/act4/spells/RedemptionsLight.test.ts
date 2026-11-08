@@ -14,7 +14,10 @@ import { RedemptionsLight } from './RedemptionsLight'
 import { GhostlyWarriors } from '../characters/GhostlyWarriors'
 import { KnightOfDespair } from '../characters/KnightOfDespair'
 import { TrueSelf } from '../characters/TrueSelf'
-import { FLAG_ACT4_WARRIORS_AT_PEACE } from '../Act4StoryFlags'
+import {
+  FLAG_ACT4_CEDRIC_FORGAVE,
+  FLAG_ACT4_WARRIORS_AT_PEACE,
+} from '../Act4StoryFlags'
 import { executeCommands, expectMarkupWellFormed } from '@/testing/gameHelpers'
 
 const NOTHING =
@@ -143,8 +146,8 @@ describe("Redemption's Light in the Throne Chamber", () => {
     'The light settles on [character_name]Malakar[/character_name]. He is ' +
     'himself already, or nearly.\n'
   const WOUND_LINE =
-    "The light runs into the wound with the king's, and is gone. There is " +
-    'no one in it to remember.'
+    'The light runs into the wound and is gone. There is no one in it to ' +
+    'remember.'
 
   /** Every stage of the scene, from the door to each ending, by commands. */
   const STAGES: { stage: string; commands: string[]; malakar: string }[] = [
@@ -190,7 +193,7 @@ describe("Redemption's Light in the Throne Chamber", () => {
     },
   ]
 
-  /** A game played through the commands, its flags kept to compare. */
+  /** A fresh Act 4 game played through the commands. */
   function playedTo(commands: string[]): Game {
     const act = new Act4()
     act.musicFile = ''
@@ -266,5 +269,19 @@ describe("Redemption's Light in the Throne Chamber", () => {
     expect(
       executeCommands(game, ["cast redemption's light on malakar"]),
     ).toContain('That magic is gone from you now.')
+  })
+
+  it('points at what Sir Cedric did, healed, when Elior saw him forgive', () => {
+    const game = playedTo(ACT4_GOLDEN_PATH.slice(0, HEALED + 1))
+    game.state.setStoryFlag(FLAG_ACT4_CEDRIC_FORGAVE, true)
+    expect(
+      executeCommands(game, ["cast redemption's light on malakar"]),
+    ).toContain(
+      HEALED_LINE +
+        '[character_name]Malakar[/character_name] looks at you the way the ' +
+        'knight looked at [character_name]Sir Cedric[/character_name] in the ' +
+        'hall, before [character_name]Sir Cedric[/character_name] gave him ' +
+        'his hand.',
+    )
   })
 })

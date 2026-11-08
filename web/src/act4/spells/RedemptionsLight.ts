@@ -37,8 +37,8 @@ const SHADOW_LINE =
 
 /** What the light does to the wound in time: it is no soul, and drinks it. */
 const WOUND_LINE =
-  "The light runs into the wound with the king's, and is gone. There is " +
-  'no one in it to remember.'
+  'The light runs into the wound and is gone. There is no one in it to ' +
+  'remember.'
 
 /** What the light does to the redeemed Sorceress. */
 const SORCERESS_LINE =
