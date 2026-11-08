@@ -36,6 +36,12 @@ import {
   roomPatchUrl,
   roomPictureUrl,
 } from '@/lantern/roomPicture'
+import {
+  appliedMotion,
+  declaredMotion,
+  madeAreaBoxes,
+  type MotionSpec,
+} from '@/lantern/roomMotion'
 import { ELIOR } from '@/lantern/stageSpeech'
 import type { Chapter } from '@/lantern/chapter'
 
@@ -465,13 +471,15 @@ export const useGameStore = defineStore('game', () => {
    * to the story (what the held `picture` group shows; after a move to
    * another room, that room's at once) and that the manifest lists as made.
    */
-  const roomPatchUrls = computed<string[]>(() => {
+  /** The picture state of the room the player is in: what the held group shows, or, after a move to another room, that room's at once; null when no room's state is there. */
+  const roomPictureState = computed(() => {
     const room = musicRoomKey.value
-    if (!room) return []
+    if (!room) return null
     const shown =
       shownPicture.value.roomKey === room
         ? shownPicture.value
         : latestPicture.value
+<<<<<<< HEAD
     if (shown.roomKey !== room) return []
     // The patches belong to one picture: they show only over that picture.
     const variant = shown.variant
@@ -482,6 +490,51 @@ export const useGameStore = defineStore('game', () => {
     )
       return []
     const id = roomTrackId(musicActName.value, room)
+=======
+    return shown.roomKey === room ? shown : null
+  })
+
+  /**
+   * The movement over the room's painting that applies to the story as it
+   * stands (the declared effects whose patch condition holds, the spots with
+   * the box the studio placed for them; a spot not placed is left out).
+   */
+  const roomMotion = computed<MotionSpec[]>(() => {
+    const shown = roomPictureState.value
+    if (!shown) return []
+    const effects = declaredMotion(musicActName.value, shown.roomKey)
+    if (effects.length === 0) return []
+    const boxes = madeAreaBoxes(
+      imageManifest.value,
+      roomTrackId(musicActName.value, shown.roomKey),
+    )
+    return appliedMotion(effects, shown.patchIds, boxes)
+  })
+
+  /** The size of the room's picture as the manifest lists it, for the boxes laid on it; absent while it is not known. */
+  const roomPictureSize = computed(() => {
+    const room = musicRoomKey.value
+    const manifest = imageManifest.value
+    if (!room || typeof manifest !== 'object' || manifest === null)
+      return undefined
+    const image: unknown = (manifest as Record<string, unknown>)[
+      roomTrackId(musicActName.value, room)
+    ]
+    if (typeof image !== 'object' || image === null) return undefined
+    const { width, height } = image as Record<string, unknown>
+    return typeof width === 'number' &&
+      typeof height === 'number' &&
+      width > 0 &&
+      height > 0
+      ? { width, height }
+      : undefined
+  })
+
+  const roomPatchUrls = computed<string[]>(() => {
+    const room = musicRoomKey.value
+    const shown = roomPictureState.value
+    if (!room || !shown) return []
+>>>>>>> 0e9d0b90 (feat(rq-ezpg.9): room pictures drift and gentle movement lies over them)
     const made = madePatches(
       imageManifest.value,
       variant ? `${id}-${variant}` : id,
@@ -1786,6 +1839,8 @@ export const useGameStore = defineStore('game', () => {
     musicSoundFirings,
     roomPicture,
     roomPatchUrls,
+    roomMotion,
+    roomPictureSize,
     imageManifest,
     loadImageManifest,
     portraitFor,

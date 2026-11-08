@@ -1453,6 +1453,8 @@ watch(
             <StagePicture
               :src="game.roomPicture"
               :patches="game.roomPatchUrls"
+              :motion="game.roomMotion"
+              :picture-size="game.roomPictureSize"
               @pictured="pictured = $event"
             />
             <ArrivalOnPicture :pictured="pictured" :phone="phoneStage" />

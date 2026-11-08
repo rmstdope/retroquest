@@ -382,6 +382,31 @@ describe('useGameStore: panels held while a turn is narrated', () => {
       expect(store.roomPatchUrls).toHaveLength(1)
     })
 
+    it('lists the movement of the room with the spots the studio has marked', async () => {
+      const store = await cottage()
+      expect(store.roomMotion).toEqual([{ kind: 'dust' }])
+      const fire = { x: 0.1, y: 0.4, width: 0.2, height: 0.3 }
+      store.imageManifest = {
+        'act1-eliors-cottage': {
+          width: 1920,
+          height: 1080,
+          areas: { 'motion-fire': fire },
+        },
+      }
+      expect(store.roomMotion).toEqual([
+        { kind: 'dust' },
+        { kind: 'fire', box: fire },
+      ])
+      expect(store.roomPictureSize).toEqual({ width: 1920, height: 1080 })
+    })
+
+    it('has no picture size while the manifest does not say', async () => {
+      const store = await cottage()
+      expect(store.roomPictureSize).toBeUndefined()
+      store.imageManifest = { 'act1-eliors-cottage': { width: 'x' } }
+      expect(store.roomPictureSize).toBeUndefined()
+    })
+
     it('shows a patch that is not made yet as nothing', async () => {
       const store = await cottage()
       made(store, [])

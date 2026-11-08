@@ -5,7 +5,7 @@ import {
   type StartMode,
   type ThemeSetting,
 } from '@/stores/useSettingsStore'
-import { useMediaQuery } from '@/composables/useMediaQuery'
+import { useReducedMotion } from '@/composables/useReducedMotion'
 import { LANTERN_TEXT_SIZES } from '@/lantern/tokens'
 import LanternDialog from './LanternDialog.vue'
 
@@ -22,7 +22,6 @@ const props = withDefaults(defineProps<{ musicInfo?: string }>(), {
 })
 const emit = defineEmits<{ close: [] }>()
 const settings = useSettingsStore()
-const deviceReducesMotion = useMediaQuery('(prefers-reduced-motion: reduce)')
 
 const THEMES: Array<{ value: ThemeSetting; label: string }> = [
   { value: 'device', label: 'Device' },
@@ -34,11 +33,7 @@ const STARTS: Array<{ value: StartMode; label: string }> = [
   { value: 'type', label: 'Type' },
 ]
 
-const motionReduced = computed(() =>
-  settings.reduceMotion === 'device'
-    ? deviceReducesMotion.value
-    : settings.reduceMotion === 'on',
-)
+const motionReduced = useReducedMotion()
 function toggleMotion(): void {
   settings.reduceMotion = motionReduced.value ? 'off' : 'on'
 }
@@ -216,7 +211,7 @@ function volume(event: Event): number {
         <span class="lq-row-text"
           ><span class="lq-row-label">Reduce motion</span
           ><span class="lq-note"
-            >No shake or slide-in<template
+            >No shake, slide-in or moving pictures<template
               v-if="settings.reduceMotion === 'device'"
               >. Follows your device</template
             ></span

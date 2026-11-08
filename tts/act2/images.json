@@ -137,6 +137,10 @@
       {
         "id": "exit-east",
         "title": "Way east"
+      },
+      {
+        "id": "motion-water",
+        "title": "Running water"
       }
     ],
     "patches": [
@@ -462,6 +466,10 @@
       {
         "id": "exit-south",
         "title": "Way south"
+      },
+      {
+        "id": "motion-fire",
+        "title": "Fire"
       }
     ]
   },
@@ -681,6 +689,10 @@
       {
         "id": "moonflowers",
         "title": "Moonflowers"
+      },
+      {
+        "id": "motion-water",
+        "title": "Running water"
       }
     ],
     "patches": [

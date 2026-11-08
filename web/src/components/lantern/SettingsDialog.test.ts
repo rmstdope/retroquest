@@ -164,6 +164,18 @@ describe('SettingsDialog', () => {
     )
   })
 
+  it('says moving pictures stop with Reduce motion, and when it follows the device', async () => {
+    const w = mountSettings()
+    expect(w.text()).toContain(
+      'No shake, slide-in or moving pictures. Follows your device',
+    )
+    useSettingsStore().reduceMotion = 'on'
+    await w.vm.$nextTick()
+    expect(w.text()).toContain('No shake, slide-in or moving pictures')
+    expect(w.text()).not.toContain('Follows your device')
+    expect(w.text()).not.toContain('No shake or slide-in')
+  })
+
   it('follows the device for reduce motion until changed', async () => {
     deviceReducesMotion(true)
     const w = mountSettings()
