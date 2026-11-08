@@ -148,4 +148,21 @@ describe('The Abandoned Shed picture', () => {
     fresh.state.currentRoom = fresh.state.allRooms.AbandonedShed
     expect(fresh.currentMusicPlace().pictureVariant).toBe('')
   })
+
+  it('comes back from a save as it was: outside before the door opened, inside after', () => {
+    const locked = new Game([new Act1()])
+    locked.state.currentRoom = locked.state.allRooms.AbandonedShed
+    locked.newTurn()
+    locked.newTurn()
+    const before = new Game([new Act1()])
+    before.loadSaveData(locked.toSaveData())
+    expect(before.currentMusicPlace().pictureVariant).toBe('')
+
+    const open = gameInUnlockedShed()
+    open.newTurn()
+    open.newTurn()
+    const after = new Game([new Act1()])
+    after.loadSaveData(open.toSaveData())
+    expect(after.currentMusicPlace().pictureVariant).toBe('inside')
+  })
 })

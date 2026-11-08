@@ -1,7 +1,7 @@
 /**
  * A small real-engine game for tests of the held panels: two rooms, a gem
  * whose pick-up changes the bag, starts a second quest and changes the
- * hall's sound state.
+ * hall's sound state and picture.
  */
 import { Act, Item, Quest, Room, type GameState } from '@/engine'
 import type { Pinia } from 'pinia'
@@ -51,16 +51,19 @@ export const HALL_GEM_TAKEN = 'gem-taken'
 /** The sound trigger the hall fires when its gem is picked up. */
 export const HALL_CHIME = 'chime'
 
+/** The picture variant of the hall once its gem has been taken. */
+export const HALL_LIT = 'lit'
+
 /** A gem that chimes in the hall when it is picked up. */
 class ChimingGem extends Item {
   constructor() {
     super({ name: GEM, description: 'Shiny.', canBeCarried: true })
   }
 
-  /** Fires the hall's chime. */
+  /** Fires the hall's chime; the hall brightens in a paragraph of its own. */
   override pickedUp(gameState: GameState): string {
     gameState.fireSound(HALL_CHIME)
-    return ''
+    return 'You pocket the gem.\nThe hall brightens.'
   }
 }
 
@@ -69,6 +72,16 @@ class Hall extends Room {
   /** The hall's one sound trigger. */
   override soundTriggers(): readonly string[] {
     return [HALL_CHIME]
+  }
+
+  /** The hall has a second picture, shown once the gem has been taken. */
+  override pictureVariants(): readonly string[] {
+    return [HALL_LIT]
+  }
+
+  /** `HALL_LIT` once the gem is gone from the hall; '' (its one picture) before. */
+  override pictureVariant(_gameState: GameState): string {
+    return this.getItemByName(GEM) ? '' : HALL_LIT
   }
 
   /** `HALL_GEM_TAKEN` once the gem is gone from the hall; '' before. */

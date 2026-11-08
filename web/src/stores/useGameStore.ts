@@ -30,6 +30,7 @@ import { actFolder } from '@/lantern/narrationManifest'
 import {
   eliorPortraitUrl,
   portraitUrl,
+  pictureExists,
   roomPictureUrl,
 } from '@/lantern/roomPicture'
 import { ELIOR } from '@/lantern/stageSpeech'
@@ -105,6 +106,12 @@ export interface Turn {
   narrate?: true
   /** The room character a player's command was for (talk to, say … to, give … to), when it was for one. */
   addressed?: string
+  /**
+   * Set on a player's command that changed which picture its own room shows
+   * (the shed's door opening): the picture follows where the answer says it
+   * changes (`sceneBlock`), not at the press.
+   */
+  pictureChanged?: true
   /**
    * Set on a turn a load brought back from the save's story: the stage shows
    * it as it stood, telling no news again and flying nothing.
@@ -333,6 +340,17 @@ export const useGameStore = defineStore('game', () => {
   const musicRoomKey = ref('')
   /** The sound state of the music's room (see `getMusicPlace`), held and released with it. */
   const musicSoundState = ref('')
+  /** Which of the music room's pictures shows (`Room.pictureVariant`), '' for its one picture. */
+  const musicPicture = ref('')
+  /** The picture variant the engine shows now, which `musicPicture` takes on release. */
+  let latestPicture = ''
+  /**
+   * Whether a command that changes its own room's picture keeps the old
+   * picture until the answer reaches the change (`releasePicture`).
+   */
+  let pictureHeld = false
+  /** Which pictures are known to exist, by URL; one not asked about yet is absent (`pictureExists`). */
+  const paintedPictures = ref<Record<string, boolean>>({})
   /**
    * Whether a narrated command keeps the room's music at the room it started
    * in, until the narration reaches the new scene (`releaseMusic`).
@@ -358,6 +376,7 @@ export const useGameStore = defineStore('game', () => {
   function moveMusic(): void {
     musicRoomKey.value = latestRoomKey
     musicSoundState.value = latestSoundState
+    if (!pictureHeld) musicPicture.value = latestPicture
     if (latestSoundFirings.length > 0) {
       musicSoundFirings.value = latestSoundFirings
       latestSoundFirings = []
@@ -365,9 +384,27 @@ export const useGameStore = defineStore('game', () => {
   }
 
   /** The picture of the room the player is in (follows the held music room, so it changes as the narration reaches the new scene). */
-  const roomPicture = computed(() =>
-    roomPictureUrl(musicActName.value, musicRoomKey.value),
-  )
+  const roomPicture = computed(() => {
+    const own = roomPictureUrl(musicActName.value, musicRoomKey.value)
+    if (!musicPicture.value) return own
+    // Another picture of the room shows once it is known to exist, so one not
+    // painted yet never blanks the stage.
+    const other = roomPictureUrl(
+      musicActName.value,
+      musicRoomKey.value,
+      musicPicture.value,
+    )
+    return paintedPictures.value[other] ? other : own
+  })
+
+  /** Ask once whether the picture at `url` exists; `roomPicture` takes it up when it does. */
+  function checkPicture(url: string): void {
+    if (!url || url in paintedPictures.value) return
+    paintedPictures.value[url] = false
+    void pictureExists(url).then((exists) => {
+      paintedPictures.value[url] = exists
+    })
+  }
 
   /** The running act's characters by class key and name, for their portraits. */
   const actCast = ref<{ key: string; name: string }[]>([])
@@ -420,6 +457,15 @@ export const useGameStore = defineStore('game', () => {
     // until the narration reaches them (see `releasePanels`).
     if (hold)
       startHold(turnId, addressed !== null && description?.moved === true)
+    // A command that changes the picture of the room it stays in holds the
+    // old picture until the answer reaches the change.
+    const place = b.controller.getMusicPlace()
+    const pictureChanged =
+      hold &&
+      description?.moved !== true &&
+      place.roomKey === musicRoomKey.value &&
+      place.pictureVariant !== musicPicture.value
+    if (pictureChanged) pictureHeld = true
     // The command that ends the game keeps its room and chips.
     const actRunning = b.controller.isActRunning() || b.controller.isGameOver()
     const room = actRunning ? b.controller.getRoomName() : lastTurnRoom
@@ -456,6 +502,7 @@ export const useGameStore = defineStore('game', () => {
       ...(spells.length ? { spells } : {}),
       ...(narrate ? { narrate: true as const } : {}),
       ...(addressed ? { addressed } : {}),
+      ...(pictureChanged ? { pictureChanged: true as const } : {}),
       // A look shows the room again without having moved.
       arrival: shown
         ? {
@@ -513,6 +560,8 @@ export const useGameStore = defineStore('game', () => {
     if (!panelHoldEnabled) return
     if (heldTurn.value !== null)
       releasePanels(heldTurn.value, [...PANEL_GROUPS], false)
+    // A newer command brings the older one's picture up at once.
+    releasePicture()
     heldTurn.value = turnId
     held.value = { place: true, quests: true, stock: true }
     musicHeld = !scenePicture.value || movingTalk
@@ -610,7 +659,10 @@ export const useGameStore = defineStore('game', () => {
   ): void {
     if (turnId !== heldTurn.value) return
     // The room's music is never later than the room card.
-    if (groups.includes('place')) releaseMusic(turnId)
+    if (groups.includes('place')) {
+      releaseMusic(turnId)
+      releasePicture(turnId)
+    }
     for (const group of groups) {
       if (!held.value[group]) continue
       held.value[group] = false
@@ -638,6 +690,7 @@ export const useGameStore = defineStore('game', () => {
     held.value = { place: false, quests: false, stock: false }
     pendingDots = { bag: false, spells: false, quests: false }
     musicHeld = false
+    pictureHeld = false
     // The firings of an abandoned turn never sound.
     latestSoundFirings = []
     moveMusic()
@@ -652,6 +705,19 @@ export const useGameStore = defineStore('game', () => {
     if (turnId !== heldTurn.value || !musicHeld) return
     musicHeld = false
     moveMusic()
+  }
+
+  /**
+   * The answer of turn `turnId` has reached the change of its room's picture
+   * (or it is brought up at once): the picture follows the room's state now.
+   * Without a turn it lets go whatever is held. Does nothing for another turn
+   * than the one held, or when nothing is held.
+   */
+  function releasePicture(turnId?: number): void {
+    if (!pictureHeld) return
+    if (turnId !== undefined && turnId !== heldTurn.value) return
+    pictureHeld = false
+    musicPicture.value = latestPicture
   }
 
   /**
@@ -1099,6 +1165,9 @@ export const useGameStore = defineStore('game', () => {
     actCast.value = b.controller.getActCharacters()
     latestRoomKey = isIntroShowing() ? '' : place.roomKey
     latestSoundState = isIntroShowing() ? '' : place.soundState
+    latestPicture = isIntroShowing() ? '' : place.pictureVariant
+    if (latestPicture)
+      checkPicture(roomPictureUrl(place.actName, place.roomKey, latestPicture))
     latestSoundFirings = [
       ...latestSoundFirings,
       ...b.controller.takeSoundFirings(),
@@ -1611,6 +1680,7 @@ export const useGameStore = defineStore('game', () => {
     musicActName,
     musicRoomKey,
     musicSoundState,
+    musicPicture,
     musicSoundFirings,
     roomPicture,
     portraitFor,
@@ -1624,6 +1694,7 @@ export const useGameStore = defineStore('game', () => {
     setScenePicture,
     releasePanels,
     releaseMusic,
+    releasePicture,
     setBridge,
     setAudioPlayer,
     initGame,

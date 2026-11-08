@@ -3,9 +3,11 @@ import { setActivePinia, createPinia } from 'pinia'
 import {
   GEM,
   HALL_CHIME,
+  HALL_LIT,
   HALL_GEM_TAKEN,
   startedHoldStore as startedStore,
 } from '@/testing/holdGame'
+import { roomPictureUrl, setPictureProbe } from '@/lantern/roomPicture'
 import { useBridge, type ActClass } from '@/composables/useBridge'
 import { Act1 } from '@/act1/Act1'
 import { useGameStore } from './useGameStore'
@@ -220,5 +222,82 @@ describe('useGameStore: panels held while a turn is narrated', () => {
     store.loadGame()
     expect(store.heldTurn).toBe(null)
     expect(store.roomName).toBe('Hall')
+  })
+
+  describe("a room's other picture", () => {
+    const hallPicture = (variant = ''): string =>
+      roomPictureUrl('Hold Act', 'Hall', variant)
+
+    afterEach(() => setPictureProbe(null))
+
+    /** A staged store whose picture check says `painted`, with the first turn's flush done. */
+    async function stagedStore(
+      painted: boolean,
+    ): Promise<ReturnType<typeof useGameStore>> {
+      setPictureProbe(() => Promise.resolve(painted))
+      const store = await startedStore()
+      store.setScenePicture(true)
+      return store
+    }
+
+    it('holds the old picture for a command that changes it, and marks the turn', async () => {
+      const store = await stagedStore(true)
+      store.submitCommand(`take ${GEM.toLowerCase()}`)
+      await Promise.resolve()
+      const turn = store.turns.at(-1)!
+      expect(turn.pictureChanged).toBe(true)
+      expect(store.musicPicture).toBe('')
+      expect(store.roomPicture).toBe(hallPicture())
+      store.releasePicture(turn.id)
+      expect(store.musicPicture).toBe(HALL_LIT)
+    })
+
+    it('shows the other picture only once it is known to exist', async () => {
+      const store = await stagedStore(true)
+      store.submitCommand(`take ${GEM.toLowerCase()}`)
+      const turn = store.turns.at(-1)!
+      store.releasePicture(turn.id)
+      expect(store.roomPicture).toBe(hallPicture())
+      await new Promise((resolve) => setTimeout(resolve))
+      expect(store.roomPicture).toBe(hallPicture(HALL_LIT))
+    })
+
+    it('keeps the room picture when the other one is not painted', async () => {
+      const store = await stagedStore(false)
+      store.submitCommand(`take ${GEM.toLowerCase()}`)
+      store.releasePicture(store.turns.at(-1)!.id)
+      await new Promise((resolve) => setTimeout(resolve))
+      expect(store.musicPicture).toBe(HALL_LIT)
+      expect(store.roomPicture).toBe(hallPicture())
+    })
+
+    it('lets the picture go with the place panels, and music stays put', async () => {
+      const store = await stagedStore(true)
+      const key = store.musicRoomKey
+      store.submitCommand(`take ${GEM.toLowerCase()}`)
+      expect(store.musicRoomKey).toBe(key)
+      store.releasePanels(store.turns.at(-1)!.id, ['place'], true)
+      expect(store.musicPicture).toBe(HALL_LIT)
+      expect(store.musicRoomKey).toBe(key)
+    })
+
+    it('brings it up when a newer command comes, and ignores another turn', async () => {
+      const store = await stagedStore(true)
+      store.submitCommand(`take ${GEM.toLowerCase()}`)
+      const turn = store.turns.at(-1)!
+      store.releasePicture(turn.id + 1)
+      expect(store.musicPicture).toBe('')
+      store.submitCommand('look')
+      expect(store.musicPicture).toBe(HALL_LIT)
+      expect(store.turns.at(-1)?.pictureChanged).toBeUndefined()
+    })
+
+    it('is dropped by a restart', async () => {
+      const store = await stagedStore(true)
+      store.submitCommand(`take ${GEM.toLowerCase()}`)
+      store.restartGame()
+      expect(store.musicPicture).toBe('')
+      expect(store.turns.some((turn) => turn.pictureChanged)).toBe(false)
+    })
   })
 })

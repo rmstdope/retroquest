@@ -593,4 +593,38 @@ describe('useStageSpeechStore: a talk that changes the scene partway', () => {
     expect(speech.ageOf(again.id)).toBe('new')
     expect(speech.ageOf(talk.id)).toBe('old')
   })
+
+  it("changes a room's own picture after the first paragraph is read, with no one quoted", () => {
+    const speech = useStageSpeechStore()
+    const scene = useSceneStore()
+    const first = 'The key turns in the lock! The shed door creaks open.'
+    const door = {
+      ...turn(`${first}\nIn the gloom, a workbench.`, null, 'use key'),
+      pictureChanged: true as const,
+    }
+    const reached = vi.fn()
+    speech.observe(door, { unit: 1, reached })
+    expect(reached).not.toHaveBeenCalled()
+    expect(scene.holds(door.id, 1)).toBe(true)
+    expect(scene.holds(door.id, 0)).toBe(false)
+    vi.advanceTimersByTime(readingPauseMs(first) - 1)
+    expect(reached).not.toHaveBeenCalled()
+    vi.advanceTimersByTime(1)
+    expect(reached).toHaveBeenCalledTimes(1)
+    expect(scene.holds(door.id, 1)).toBe(false)
+  })
+
+  it('changes it at once when a newer turn comes before the pause is over', () => {
+    const speech = useStageSpeechStore()
+    const door = {
+      ...turn('One.\nTwo.', null, 'use key'),
+      pictureChanged: true as const,
+    }
+    const reached = vi.fn()
+    speech.observe(door, { unit: 1, reached })
+    speech.changeSceneNow()
+    expect(reached).toHaveBeenCalledTimes(1)
+    vi.advanceTimersByTime(10000)
+    expect(reached).toHaveBeenCalledTimes(1)
+  })
 })

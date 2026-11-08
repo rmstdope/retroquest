@@ -24,7 +24,9 @@ import {
  * narrated, and otherwise one at a time by a reading pause (`readingPauseMs`);
  * `revealAll` shows the rest of the turn at once. An unnarrated talk that
  * moves Elior says when its scene may change (`SceneChange`): once the lines
- * before it are read, or at once when the turn is shown whole. Lines a new
+ * before it are read, or at once when the turn is shown whole; so does a
+ * command that changes the picture of its own room (`Turn.pictureChanged`),
+ * with no quoted line, once its first paragraph is read. Lines a new
  * command cut off before they appeared (`noteSeen` remembers the rest) are not
  * cleared by it: they stay, dimmed as the turn before, unless it leaves the room.
  */
@@ -278,6 +280,17 @@ export const useStageSpeechStore = defineStore('stageSpeech', () => {
     const said = toldAsSpeech(turn) ? speechLines(parseTurn(turn.text)) : []
     // Leaving the room ends the conversation; a talk that moved Elior starts a new one.
     if (!addressed && (moved || !said.length)) {
+      if (turn.pictureChanged && change) {
+        // A room's own picture changes after its first paragraph is read.
+        restart(cut, null)
+        holdScene(turn, change)
+        const before = parseTurn(turn.text)
+          .slice(0, change.unit)
+          .map((block) => ('markup' in block ? block.markup : ''))
+          .join(' ')
+        timer = setTimeout(changeSceneNow, readingPauseMs(before))
+        return
+      }
       // Nothing is said on the picture: a scene to change changes at once.
       holdScene(turn, change)
       return restart(cut, null)

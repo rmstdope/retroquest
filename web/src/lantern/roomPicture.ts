@@ -28,6 +28,7 @@ type PictureProbe = (url: string) => Promise<boolean>
 /** The browser's check: the file loads as an image. */
 const loadsAsImage: PictureProbe = (url) =>
   new Promise((resolve) => {
+    if (typeof Image === 'undefined') return resolve(false)
     const image = new Image()
     image.onload = () => resolve(true)
     image.onerror = () => resolve(false)
