@@ -89,6 +89,8 @@ export interface MusicPlace {
   roomKey: string
   /** The room's `soundState`, which its sound effects follow. */
   soundState: string
+  /** The room's `pictureVariant`: which of its pictures shows ('' for its one picture). */
+  pictureVariant: string
 }
 
 /** One way out of a place on the map: the room it leads to and what the way is called. */

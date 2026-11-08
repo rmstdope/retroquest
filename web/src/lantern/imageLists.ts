@@ -71,20 +71,54 @@ export interface GameImage {
   patches?: ImagePatch[]
 }
 
-/** One image for each room of the act, described by the room's own description. */
+/**
+ * One image for each room of the act, described by the room's own
+ * description, then one for each other picture a room has
+ * (`Room.pictureVariants`): the id adds `-<variant>`, the title is
+ * "<room>, <variant>", the words are the room's description to start from and
+ * the areas those declared for that picture.
+ */
 export function roomImages(act: Act): GameImage[] {
-  return Object.entries(act.rooms).map(([key, room]) => {
-    const patches = declaredPatches(act.name, key)
-    return {
-      id: roomTrackId(act.name, key),
-      title: room.name,
-      width: IMAGE_WIDTH,
-      height: IMAGE_HEIGHT,
-      text: narrationText(room.description),
-      areas: [...declaredAreas(act.name, key)],
-      ...(patches.length > 0 ? { patches: [...patches] } : {}),
-    }
+  const rooms = Object.entries(act.rooms)
+  /** One room image: the room's own picture, or another of its pictures. */
+  const image = (
+    id: string,
+    title: string,
+    text: string,
+    areas: readonly ImageArea[],
+    patches: readonly ImagePatch[],
+  ): GameImage => ({
+    id,
+    title,
+    width: IMAGE_WIDTH,
+    height: IMAGE_HEIGHT,
+    text,
+    areas: [...areas],
+    ...(patches.length > 0 ? { patches: [...patches] } : {}),
   })
+  const own = rooms.map(([key, room]) =>
+    image(
+      roomTrackId(act.name, key),
+      room.name,
+      narrationText(room.description),
+      declaredAreas(act.name, key),
+      declaredPatches(act.name, key),
+    ),
+  )
+  const others = rooms.flatMap(([key, room]) =>
+    room
+      .pictureVariants()
+      .map((variant) =>
+        image(
+          `${roomTrackId(act.name, key)}-${variant}`,
+          `${room.name}, ${variant}`,
+          narrationText(room.description),
+          declaredAreas(act.name, key, variant),
+          declaredPatches(act.name, key, variant),
+        ),
+      ),
+  )
+  return [...own, ...others]
 }
 
 /** The hand-written portrait prompt of character class `classKey`; a character without one is a mistake. */

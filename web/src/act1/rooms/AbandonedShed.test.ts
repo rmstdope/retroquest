@@ -125,3 +125,27 @@ describe('The Abandoned Shed seen from outside', () => {
     expect(game.state.currentRoom.describe(game.state)).toContain('workbench')
   })
 })
+
+describe('The Abandoned Shed picture', () => {
+  it('shows the outside while the door is locked and the inside once it is open', () => {
+    const game = new Game([new Act1()])
+    const shed = game.state.allRooms.AbandonedShed
+    expect(shed.pictureVariant(game.state)).toBe('')
+    expect(shed.pictureVariants()).toEqual(['inside'])
+    const open = gameInUnlockedShed()
+    const opened = open.state.allRooms.AbandonedShed
+    expect(opened.pictureVariant(open.state)).toBe('inside')
+  })
+
+  it('tells the music place which picture the room shows', () => {
+    const game = gameInUnlockedShed()
+    game.newTurn()
+    game.newTurn()
+    expect(game.currentMusicPlace().pictureVariant).toBe('inside')
+    const fresh = new Game([new Act1()])
+    fresh.newTurn()
+    fresh.newTurn()
+    fresh.state.currentRoom = fresh.state.allRooms.AbandonedShed
+    expect(fresh.currentMusicPlace().pictureVariant).toBe('')
+  })
+})

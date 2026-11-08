@@ -222,13 +222,14 @@ export class Game implements CommandTarget {
    */
   currentMusicPlace(): MusicPlace {
     if (!this.isMusicPlaying())
-      return { actName: '', roomKey: '', soundState: '' }
+      return { actName: '', roomKey: '', soundState: '', pictureVariant: '' }
     const rooms = Object.entries(this.state.allRooms)
     const here = rooms.find(([, room]) => room === this.state.currentRoom)
     return {
       actName: this.acts[this.currentAct].name,
       roomKey: here?.[0] ?? '',
       soundState: this.state.currentRoom.soundState(this.state),
+      pictureVariant: this.state.currentRoom.pictureVariant(this.state),
     }
   }
 

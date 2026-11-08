@@ -10,7 +10,10 @@
  * way that only turns up later an appears or open patch. Sir Cedric, who follows the player through a
  * whole act, has none.
  */
-import { ACT1_ROOM_PATCHES } from './roomPatches/act1RoomPatches'
+import {
+  ACT1_ROOM_PATCHES,
+  ACT1_VARIANT_PATCHES,
+} from './roomPatches/act1RoomPatches'
 import { ACT2_ROOM_PATCHES } from './roomPatches/act2RoomPatches'
 import { ACT3_ROOM_PATCHES } from './roomPatches/act3RoomPatches'
 import { ACT4_ROOM_PATCHES } from './roomPatches/act4RoomPatches'
@@ -37,10 +40,28 @@ const ROOM_PATCHES: Readonly<
   Act4: ACT4_ROOM_PATCHES,
 }
 
-/** The patches declared for room `roomKey` of act `actName`; none for a room without a declaration. */
+/**
+ * The patches of each other picture a room has (`Room.pictureVariants`), by act
+ * name, room key, then variant. Each picture has its own patches, as it has
+ * its own areas.
+ */
+const VARIANT_PATCHES: Readonly<
+  Record<
+    string,
+    Readonly<Record<string, Readonly<Record<string, readonly ImagePatch[]>>>>
+  >
+> = { Act1: ACT1_VARIANT_PATCHES }
+
+/**
+ * The patches declared for room `roomKey` of act `actName`; none for a room
+ * without a declaration. With a `variant` (a room's other picture), the
+ * patches of that picture instead.
+ */
 export function declaredPatches(
   actName: string,
   roomKey: string,
+  variant = '',
 ): readonly ImagePatch[] {
+  if (variant) return VARIANT_PATCHES[actName]?.[roomKey]?.[variant] ?? []
   return ROOM_PATCHES[actName]?.[roomKey] ?? []
 }

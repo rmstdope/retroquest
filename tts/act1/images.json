@@ -526,42 +526,6 @@
       {
         "id": "exit-south",
         "title": "Way south"
-      },
-      {
-        "id": "mysterious-box",
-        "title": "Mysterious Box"
-      },
-      {
-        "id": "broken-shovel",
-        "title": "Broken Shovel"
-      },
-      {
-        "id": "scenery-abandoned-shed-workbench",
-        "title": "Workbench"
-      },
-      {
-        "id": "scenery-abandoned-shed-crates",
-        "title": "Crates"
-      },
-      {
-        "id": "scenery-abandoned-shed-tools",
-        "title": "Tools"
-      },
-      {
-        "id": "scenery-abandoned-shed-shelves",
-        "title": "Shelves"
-      },
-      {
-        "id": "patches",
-        "title": "Patches"
-      },
-      {
-        "id": "fishing-rod",
-        "title": "Fishing Rod"
-      },
-      {
-        "id": "magnet",
-        "title": "Magnet"
       }
     ],
     "patches": [
@@ -938,6 +902,67 @@
         "title": "Rusty Saw taken",
         "text": "Remove the rusty saw from the picture.",
         "area": "rusty-saw"
+      }
+    ]
+  },
+  {
+    "id": "act1-abandoned-shed-inside",
+    "title": "Abandoned Shed, inside",
+    "width": 1920,
+    "height": 1080,
+    "text": "A rickety shed leans precariously at the edge of Willowbrook, its weathered boards creaking in the wind. Rusty tools and broken crates are scattered about a long workbench, and a thick layer of dust covers everything. Little light gets past the grimy boards, and the air smells of old earth and lamp oil.",
+    "areas": [
+      {
+        "id": "shed-door",
+        "title": "Shed Door"
+      },
+      {
+        "id": "scenery-abandoned-shed-boards",
+        "title": "Boards"
+      },
+      {
+        "id": "exit-north",
+        "title": "Way north"
+      },
+      {
+        "id": "exit-south",
+        "title": "Way south"
+      },
+      {
+        "id": "mysterious-box",
+        "title": "Mysterious Box"
+      },
+      {
+        "id": "broken-shovel",
+        "title": "Broken Shovel"
+      },
+      {
+        "id": "scenery-abandoned-shed-workbench",
+        "title": "Workbench"
+      },
+      {
+        "id": "scenery-abandoned-shed-crates",
+        "title": "Crates"
+      },
+      {
+        "id": "scenery-abandoned-shed-tools",
+        "title": "Tools"
+      },
+      {
+        "id": "scenery-abandoned-shed-shelves",
+        "title": "Shelves"
+      },
+      {
+        "id": "patches",
+        "title": "Patches"
+      },
+      {
+        "id": "fishing-rod",
+        "title": "Fishing Rod"
+      },
+      {
+        "id": "magnet",
+        "title": "Magnet"
       }
     ]
   },

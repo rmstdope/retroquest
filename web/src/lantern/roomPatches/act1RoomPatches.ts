@@ -137,38 +137,6 @@ export const ACT1_ROOM_PATCHES: Record<string, ImagePatch[]> = {
       area: 'patches',
     },
   ],
-  AbandonedShed: [
-    {
-      id: 'mysterious-box-appears',
-      title: 'Mysterious Box appears',
-      text: 'Add the mysterious box to the picture.',
-      area: 'mysterious-box',
-    },
-    {
-      id: 'broken-shovel-appears',
-      title: 'Broken Shovel appears',
-      text: 'Add the broken shovel to the picture.',
-      area: 'broken-shovel',
-    },
-    {
-      id: 'patches-appears',
-      title: 'Patches appears',
-      text: 'Add Patches to the picture.',
-      area: 'patches',
-    },
-    {
-      id: 'fishing-rod-appears',
-      title: 'Fishing Rod appears',
-      text: 'Add the fishing rod to the picture.',
-      area: 'fishing-rod',
-    },
-    {
-      id: 'magnet-appears',
-      title: 'Magnet appears',
-      text: 'Add the magnet to the picture.',
-      area: 'magnet',
-    },
-  ],
   OldMill: [
     {
       id: 'millstone-fragment-appears',
@@ -247,4 +215,37 @@ export const ACT1_ROOM_PATCHES: Record<string, ImagePatch[]> = {
       area: 'rusty-saw',
     },
   ],
+}
+
+/**
+ * The patches of the rooms' other pictures, by room key then picture variant.
+ * The shed seen from inside shows the box, the shovel and Patches when the
+ * door opens; the rod and the magnet turn up on a search, and Patches goes
+ * once coaxed out.
+ */
+export const ACT1_VARIANT_PATCHES: Readonly<
+  Record<string, Readonly<Record<string, readonly ImagePatch[]>>>
+> = {
+  AbandonedShed: {
+    inside: [
+      {
+        id: 'patches-gone',
+        title: 'Patches gone',
+        text: 'Take Patches out of the picture.',
+        area: 'patches',
+      },
+      {
+        id: 'fishing-rod-appears',
+        title: 'Fishing Rod appears',
+        text: 'Add the fishing rod to the picture.',
+        area: 'fishing-rod',
+      },
+      {
+        id: 'magnet-appears',
+        title: 'Magnet appears',
+        text: 'Add the magnet to the picture.',
+        area: 'magnet',
+      },
+    ],
+  },
 }

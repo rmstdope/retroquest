@@ -6,13 +6,51 @@ import { roomTrackId } from './musicLists'
 import { ELIOR_PORTRAIT_ID, portraitId } from './imageLists'
 
 /**
- * The URL of the picture of a room, or '' while no room is known. The file may
- * not exist yet (pictures are made by hand after the room is listed); the
- * stage then shows its paper backdrop.
+ * The URL of the picture of a room, or '' while no room is known. `variant`
+ * names another picture the room has (`Room.pictureVariant`), whose id adds
+ * `-<variant>`; '' is the room's one picture. The file may not exist yet
+ * (pictures are made by hand after the room is listed); the stage then shows
+ * its paper backdrop, or the room's own picture where a variant is not made.
  */
-export function roomPictureUrl(actName: string, roomKey: string): string {
+export function roomPictureUrl(
+  actName: string,
+  roomKey: string,
+  variant = '',
+): string {
   if (!actName || !roomKey) return ''
-  return `${import.meta.env.BASE_URL}images/generated/${roomTrackId(actName, roomKey)}.png`
+  const id = roomTrackId(actName, roomKey)
+  return `${import.meta.env.BASE_URL}images/generated/${variant ? `${id}-${variant}` : id}.png`
+}
+
+/** Whether the file at a URL is a picture that loads. */
+type PictureProbe = (url: string) => Promise<boolean>
+
+/** The browser's check: the file loads as an image. */
+const loadsAsImage: PictureProbe = (url) =>
+  new Promise((resolve) => {
+    const image = new Image()
+    image.onload = () => resolve(true)
+    image.onerror = () => resolve(false)
+    image.src = url
+  })
+
+let probe: PictureProbe = loadsAsImage
+const answers: Record<string, Promise<boolean>> = {}
+
+/** Replace the picture check (tests); null restores the browser's and forgets the answers. */
+export function setPictureProbe(replacement: PictureProbe | null): void {
+  probe = replacement ?? loadsAsImage
+  for (const url of Object.keys(answers)) delete answers[url]
+}
+
+/**
+ * Whether the picture at `url` exists and loads, asked once per file. A room's
+ * other picture is shown only once this says yes, so a picture not made yet
+ * never blanks the stage.
+ */
+export function pictureExists(url: string): Promise<boolean> {
+  answers[url] ??= probe(url)
+  return answers[url]
 }
 
 /**

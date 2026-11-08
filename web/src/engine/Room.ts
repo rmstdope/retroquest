@@ -116,6 +116,24 @@ export class Room {
   }
 
   /**
+   * Which of the room's pictures shows now: '' is the room's one picture (the
+   * default); a name picks another picture the room has, so the view changes
+   * with the story (a shed seen from outside while locked, from inside once
+   * open). Derive it from game state; it is never saved on its own.
+   */
+  pictureVariant(_gameState: GameState): string {
+    return ''
+  }
+
+  /**
+   * Every non-default picture `pictureVariant` can answer; none for a room
+   * with one picture. Content Studio's image list gives each its own entry.
+   */
+  pictureVariants(): readonly string[] {
+    return []
+  }
+
+  /**
    * The names of the sound triggers the game can fire in the room
    * (`GameState.fireSound`); none by default. Content Studio's scene
    * declarations list them, and its mix binds effects to them.

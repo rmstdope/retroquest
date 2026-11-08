@@ -1,5 +1,11 @@
-import { describe, it, expect } from 'vitest'
-import { eliorPortraitUrl, portraitUrl, roomPictureUrl } from './roomPicture'
+import { describe, it, expect, vi } from 'vitest'
+import {
+  eliorPortraitUrl,
+  pictureExists,
+  portraitUrl,
+  roomPictureUrl,
+  setPictureProbe,
+} from './roomPicture'
 import { roomTrackId } from './musicLists'
 import { ELIOR_PORTRAIT_ID, characterImages, portraitId } from './imageLists'
 import { Act1 } from '@/act1/Act1'
@@ -8,6 +14,15 @@ describe('roomPictureUrl', () => {
   it("is the generated picture named by the room's image id", () => {
     expect(roomPictureUrl('Act1', 'ElioCottage')).toBe(
       `${import.meta.env.BASE_URL}images/generated/${roomTrackId('Act1', 'ElioCottage')}.png`,
+    )
+  })
+
+  it("names another picture of the room by the room's id and its variant", () => {
+    expect(roomPictureUrl('Act1', 'AbandonedShed', 'inside')).toBe(
+      `${import.meta.env.BASE_URL}images/generated/${roomTrackId('Act1', 'AbandonedShed')}-inside.png`,
+    )
+    expect(roomPictureUrl('Act1', 'AbandonedShed', '')).toBe(
+      roomPictureUrl('Act1', 'AbandonedShed'),
     )
   })
 
@@ -64,5 +79,17 @@ describe('eliorPortraitUrl', () => {
     expect(eliorPortraitUrl()).toMatch(
       /images\/generated\/portrait-elior\.png$/,
     )
+  })
+})
+
+describe('pictureExists', () => {
+  it('asks the probe once per file and remembers the answer', async () => {
+    const probe = vi.fn((url: string) => Promise.resolve(url.endsWith('a.png')))
+    setPictureProbe(probe)
+    expect(await pictureExists('/x/a.png')).toBe(true)
+    expect(await pictureExists('/x/a.png')).toBe(true)
+    expect(await pictureExists('/x/b.png')).toBe(false)
+    expect(probe).toHaveBeenCalledTimes(2)
+    setPictureProbe(null)
   })
 })

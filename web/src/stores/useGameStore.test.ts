@@ -102,7 +102,12 @@ function createMockBridge() {
       musicFile: 'track.mp3',
       musicInfo: 'Track info',
     })),
-    getMusicPlace: vi.fn(() => ({ actName: '', roomKey: '', soundState: '' })),
+    getMusicPlace: vi.fn(() => ({
+      actName: '',
+      roomKey: '',
+      soundState: '',
+      pictureVariant: '',
+    })),
     getActCharacters: vi.fn((): { key: string; name: string }[] => []),
     takeSoundFirings: vi.fn((): SoundFiring[] => []),
     lastTurnAddressee: vi.fn((): string | null => null),
@@ -903,6 +908,7 @@ describe('useGameStore', () => {
         actName: 'Act1',
         roomKey: 'VillageSquare',
         soundState: 'busy',
+        pictureVariant: '',
       })
       store.refreshPanels()
       expect(store.musicActName).toBe('Act1')
@@ -1328,6 +1334,7 @@ describe('useGameStore', () => {
         actName: 'Act1',
         roomKey: 'ElioCottage',
         soundState: '',
+        pictureVariant: '',
       })
       bridge.controller.getActCharacters.mockReturnValue([
         { key: 'Mira', name: 'Mira' },
