@@ -955,6 +955,12 @@
     ],
     "patches": [
       {
+        "id": "broken-shovel-taken",
+        "title": "Broken Shovel taken",
+        "text": "Take the broken shovel out of the picture.",
+        "area": "broken-shovel"
+      },
+      {
         "id": "patches-gone",
         "title": "Patches gone",
         "text": "Take Patches out of the picture.",

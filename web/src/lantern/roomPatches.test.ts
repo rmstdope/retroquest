@@ -4,6 +4,7 @@
  */
 import { describe, expect, it } from 'vitest'
 import { Act1 } from '@/act1/Act1'
+import { Key } from '@/act1/items/Key'
 import { Act2 } from '@/act2/Act2'
 import { Act3 } from '@/act3/Act3'
 import { Act4 } from '@/act4/Act4'
@@ -128,6 +129,30 @@ describe('room image patches', () => {
       }
     },
   )
+})
+
+describe("a room's other pictures", () => {
+  it('have a taken patch for every thing that can be carried and is in the room once the picture shows', () => {
+    const act = new Act1()
+    const game = new Game([act])
+    game.state.currentRoom = game.state.allRooms.AbandonedShed
+    game.state.addItemToInventory(new Key())
+    game.commandParser.parse('use key with door')
+    const shed = game.state.allRooms.AbandonedShed
+    expect(shed.pictureVariant(game.state)).toBe('inside')
+    const missing: string[] = []
+    for (const item of shed.items) {
+      if (!(item instanceof Item) || !item.canBeCarried) continue
+      const id = thingAreaId(act, item)
+      if (
+        !declaredPatches(act.name, 'AbandonedShed', 'inside').some(
+          (p) => p.area === id,
+        )
+      )
+        missing.push(id)
+    }
+    expect(missing).toEqual([])
+  })
 })
 
 describe.each(ACTS.map((make) => [make().name, make] as const))(

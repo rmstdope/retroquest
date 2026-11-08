@@ -4,6 +4,8 @@
  */
 import { describe, expect, it } from 'vitest'
 import { Act1 } from '@/act1/Act1'
+import { Key } from '@/act1/items/Key'
+import { Lantern } from '@/act1/items/Lantern'
 import { Act2 } from '@/act2/Act2'
 import { Act3 } from '@/act3/Act3'
 import { Act4 } from '@/act4/Act4'
@@ -40,6 +42,40 @@ describe('appliedPatchIds', () => {
     expect(appliedPatchIds(act, 'AbandonedShed', game.state)).not.toContain(
       'fishing-rod-appears',
     )
+  })
+
+  describe("the shed's inside picture", () => {
+    /** Act I with Elior in the shed, its door just opened with the key. */
+    function openedShed(): { act: Act1; game: Game } {
+      const act = new Act1()
+      const game = new Game([act])
+      game.state.currentRoom = game.state.allRooms.AbandonedShed
+      game.state.addItemToInventory(new Key())
+      executeCommands(game, ['use key with door'])
+      return { act, game }
+    }
+    const inside = (act: Act1, game: Game): string[] =>
+      appliedPatchIds(act, 'AbandonedShed', game.state, 'inside')
+
+    it('has no patch while the box, the shovel and Patches are all as painted', () => {
+      const { act, game } = openedShed()
+      expect(inside(act, game)).toEqual([])
+    })
+
+    it('takes the shovel off the picture once it is carried', () => {
+      const { act, game } = openedShed()
+      executeCommands(game, ['take broken shovel'])
+      expect(inside(act, game)).toContain('broken-shovel-taken')
+    })
+
+    it('adds the rod and the magnet once searched by a light', () => {
+      const { act, game } = openedShed()
+      game.state.addItemToInventory(new Lantern())
+      executeCommands(game, ['use lantern', 'search', 'search'])
+      expect(inside(act, game)).toEqual(
+        expect.arrayContaining(['fishing-rod-appears', 'magnet-appears']),
+      )
+    })
   })
 
   it('shows a lit lantern only once it is lit', () => {

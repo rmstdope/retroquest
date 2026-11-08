@@ -240,7 +240,7 @@ export const ACT1_ROOM_PATCHES: Record<string, ImagePatch[]> = {
 /**
  * The patches of the rooms' other pictures, by room key then picture variant.
  * The shed seen from inside shows the box, the shovel and Patches when the
- * door opens; the rod and the magnet turn up on a search, and Patches goes
+ * door opens (the shovel goes once taken); the rod and the magnet turn up on a search, and Patches goes
  * once coaxed out.
  */
 export const ACT1_VARIANT_PATCHES: Readonly<
@@ -248,6 +248,12 @@ export const ACT1_VARIANT_PATCHES: Readonly<
 > = {
   AbandonedShed: {
     inside: [
+      {
+        id: 'broken-shovel-taken',
+        title: 'Broken Shovel taken',
+        text: 'Take the broken shovel out of the picture.',
+        area: 'broken-shovel',
+      },
       {
         id: 'patches-gone',
         title: 'Patches gone',

@@ -10,6 +10,8 @@ import {
 import { roomPictureUrl, setPictureProbe } from '@/lantern/roomPicture'
 import { useBridge, type ActClass } from '@/composables/useBridge'
 import { Act1 } from '@/act1/Act1'
+import { Key } from '@/act1/items/Key'
+import { Game } from '@/engine'
 import { PANEL_GROUPS, useGameStore } from './useGameStore'
 
 describe('useGameStore: panels held while a turn is narrated', () => {
@@ -385,6 +387,51 @@ describe('useGameStore: panels held while a turn is narrated', () => {
       made(store, [])
       store.submitCommand('take bread')
       store.releasePanels(store.turns.at(-1)!.id, [...PANEL_GROUPS], false)
+      expect(store.roomPatchUrls).toEqual([])
+    })
+  })
+
+  describe("the patches of a room's other picture", () => {
+    /** A saved Act I game with the shed door opened, loaded into the store; the inside is `painted` or not. */
+    async function openShedStore(
+      painted: boolean,
+    ): Promise<ReturnType<typeof useGameStore>> {
+      setPictureProbe(() => Promise.resolve(painted))
+      const act = new Act1()
+      const game = new Game([act])
+      game.state.currentRoom = game.state.allRooms.AbandonedShed
+      game.state.addItemToInventory(new Key())
+      game.commandParser.parse('use key with door')
+      game.commandParser.parse('take broken shovel')
+      localStorage.setItem('retroquest_save', game.toSaveData())
+      const store = useGameStore()
+      store.setBridge(useBridge(async (): Promise<ActClass[]> => [Act1]))
+      await store.initGame()
+      store.dismissModal()
+      store.loadGame()
+      await new Promise((resolve) => setTimeout(resolve))
+      const patches = { 'broken-shovel-taken': { file: 'x' } }
+      store.imageManifest = { 'act1-abandoned-shed-inside': { patches } }
+      return store
+    }
+
+    afterEach(() => setPictureProbe(null))
+
+    it('show over the picture they belong to', async () => {
+      const store = await openShedStore(true)
+      expect(store.roomPicture).toBe(
+        roomPictureUrl('Act1', 'AbandonedShed', 'inside'),
+      )
+      expect(store.roomPatchUrls).toEqual([
+        expect.stringContaining(
+          'act1-abandoned-shed-inside.broken-shovel-taken',
+        ),
+      ])
+    })
+
+    it('stay hidden while the inside is not painted and the outside shows', async () => {
+      const store = await openShedStore(false)
+      expect(store.roomPicture).toBe(roomPictureUrl('Act1', 'AbandonedShed'))
       expect(store.roomPatchUrls).toEqual([])
     })
   })

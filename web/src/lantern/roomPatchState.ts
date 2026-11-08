@@ -77,14 +77,6 @@ const STATE_RULES: Readonly<Record<string, (c: PatchContext) => boolean>> = {
   'Act1.candle-lit': (c) => flagOf(c.things.get('candle'), 'isLit'),
   'Act1.well-purified': (c) => flagOf(c.things.get('well'), 'isPurified'),
   'Act1.mechanism-jammed': (c) => flagOf(c.things.get('mechanism'), 'repaired'),
-  'Act1.shed-door-unlocked': (c) => {
-    const door = c.things.get('shed-door')
-    return (
-      typeof door === 'object' &&
-      'locked' in door &&
-      (door as Record<string, unknown>).locked === false
-    )
-  },
   'Act2.forest-sprites-aside': (c) =>
     c.state.getStoryFlag(FLAG_PROTECTIVE_CHARM_USED_FOREST_ENTRANCE),
   'Act3.mirror-mount-mended': (c) =>
