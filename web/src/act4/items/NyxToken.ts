@@ -1,5 +1,10 @@
 import { Item, type NameOptions } from '@/engine'
 
+/** Whether the player's word is the plain noun "pendant". */
+function isPendant(name: string): boolean {
+  return name.toLowerCase() === 'pendant'
+}
+
 /**
  * Nyx's Token, the crystalline pendant she gave Elior in the Heart of the
  * Forest, carried through Act IV (Act II's token, made again for this act).
@@ -16,6 +21,16 @@ export class NyxToken extends Item {
         'warm, the way a held hand is warm.',
       canBeCarried: true,
     })
+  }
+
+  /** Also answers to "pendant", what its own description calls it. */
+  override answersTo(name: string): boolean {
+    return super.answersTo(name) || isPendant(name)
+  }
+
+  /** The Servant's Pendant is the one "pendant" means when it is at hand. */
+  override givesWayOn(name: string): boolean {
+    return isPendant(name)
   }
 
   /** Named after a person, so it takes no "the" and keeps its capitals. */

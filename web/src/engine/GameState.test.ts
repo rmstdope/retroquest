@@ -284,6 +284,25 @@ describe('GameState', () => {
       expect(gs.findItems('lid')).toEqual([lid])
     })
 
+    it('puts an item that gives way on a word after those that do not', () => {
+      /** A brooch that answers to "key" but leaves the word to a real key. */
+      class KeyShapedBrooch extends Item {
+        override answersTo(name: string): boolean {
+          return super.answersTo(name) || name.toLowerCase() === 'key'
+        }
+        override givesWayOn(name: string): boolean {
+          return name.toLowerCase() === 'key'
+        }
+      }
+      const brooch = new KeyShapedBrooch({ name: 'brooch', description: '' })
+      const roomKey = item('Rusted Locker Key', 'key')
+      gs.addItemToInventory(brooch)
+      expect(gs.findItem('key')).toBe(brooch)
+      room.addItem(roomKey)
+      expect(gs.findItems('KEY')).toEqual([roomKey, brooch])
+      expect(gs.findItem('brooch')).toBe(brooch)
+    })
+
     it('removes carried items by short name as well as full name', () => {
       gs.addItemToInventory(item('Rusty Hoe', 'hoe'), 2)
       expect(gs.removeItemFromInventory('hoe')).toBe(1)

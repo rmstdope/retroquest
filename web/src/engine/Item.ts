@@ -48,6 +48,16 @@ export class Item {
   }
 
   /**
+   * Whether another item answering to `name` (a word `answersTo` accepted)
+   * goes first, wherever the two lie: for a plain noun this item only borrows
+   * from what describes it, while the other is called that outright. False by
+   * default, so the lookup order alone decides.
+   */
+  givesWayOn(_name: string): boolean {
+    return false
+  }
+
+  /**
    * The item that answers when the player names this one by `name` (a word
    * `answersTo` accepted): this item itself by default. Override for an item
    * that answers to a part of itself, so every verb tried on the part is

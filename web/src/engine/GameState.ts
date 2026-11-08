@@ -132,16 +132,19 @@ export class GameState {
 
   /**
    * Every item the story name refers to, in the one lookup order: the
-   * inventory first, then the current room. Matching is `isNamed`; each
-   * match answers through its `partNamed` for the word.
+   * inventory first, then the current room, and an item that gives way on
+   * the word after those that do not. Matching is `isNamed`; each match
+   * answers through its `partNamed` for the word.
    */
   findItems(itemName: string, { inventory = true, room = true } = {}): Item[] {
-    return [
+    const named = [
       ...(inventory ? this.inventory : []),
       ...(room ? this.currentRoom.items : []),
-    ]
-      .filter((item) => isNamed(item, itemName))
-      .map((item) => item.partNamed(itemName))
+    ].filter((item) => isNamed(item, itemName))
+    return [
+      ...named.filter((item) => !item.givesWayOn(itemName)),
+      ...named.filter((item) => item.givesWayOn(itemName)),
+    ].map((item) => item.partNamed(itemName))
   }
 
   /** The first item `findItems` returns for the name, or null. */
