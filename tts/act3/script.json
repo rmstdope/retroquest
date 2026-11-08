@@ -695,6 +695,21 @@
     "text": "A prism lantern rests here, ready to be lit."
   },
   {
+    "id": "12756ea8d9f35a",
+    "speaker": "narrator",
+    "text": "You wade through chilled water. A prism lantern sits in one bracket; the other two stand empty, their grooves catching the faint tide-light."
+  },
+  {
+    "id": "1242c72afccd1e",
+    "speaker": "narrator",
+    "text": "You wade through chilled water. Prism lanterns sit in two of the brackets; the third stands empty, its grooves catching the faint tide-light."
+  },
+  {
+    "id": "165e23454a08d1",
+    "speaker": "narrator",
+    "text": "You wade through chilled water. All three brackets hold prism lanterns, still unlit."
+  },
+  {
     "id": "0dc20072165bf7",
     "speaker": "narrator",
     "text": "Light pours from the prisms, weaving a clear path through the flooded hall. The way to the sanctum stands revealed."

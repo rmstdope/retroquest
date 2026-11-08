@@ -110,6 +110,32 @@ describe('Submerged Antechamber', () => {
   })
 })
 
+describe('searching the Submerged Antechamber with lanterns mounted', () => {
+  it.each([
+    [1, 'A prism lantern sits in one bracket'],
+    [2, 'Prism lanterns sit in two of the brackets'],
+    [3, 'All three brackets hold prism lanterns'],
+  ])(
+    'no longer calls the brackets empty with %i lantern(s) mounted',
+    (mounted, expected) => {
+      const game = new Game([new Act3()])
+      game.state.currentRoom = game.state.allRooms.SubmergedAntechamber
+      game.state.setStoryFlag(FLAG_ACT3_TIDEWARD_SIGILS_COMPLETED, true)
+      game.state.addItemToInventory(new PrismLantern(), mounted)
+      executeCommands(game, ['search'])
+      for (let i = 0; i < mounted; i++) {
+        executeCommands(game, ['use prism lantern with lantern bracket'])
+      }
+
+      const answer = executeCommands(game, ['search'])
+
+      expect(answer).not.toContain('Three empty brackets')
+      expect(answer).toContain(expected)
+      expectMarkupWellFormed(answer)
+    },
+  )
+})
+
 describe('Submerged Antechamber markup', () => {
   it('uses known tags in the search, mount and light messages of every state', () => {
     const game = createMarkupGame()
