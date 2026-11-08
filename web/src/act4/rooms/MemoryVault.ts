@@ -9,7 +9,11 @@ import {
 import { ShadowOfThePast } from '../characters/ShadowOfThePast'
 import { MemoryOrbs } from '../items/MemoryOrbs'
 import { VaultDoor } from '../items/VaultDoor'
-import { MEMORY_VAULT_AFTER, MEMORY_VAULT_BEFORE } from './vaultDescriptions'
+import {
+  MEMORY_VAULT_AFTER,
+  MEMORY_VAULT_BEFORE,
+  MEMORY_VAULT_DOOR_OPEN,
+} from './vaultDescriptions'
 
 /** The Shadow's speaker label, once it has a face. */
 const SHADOW_LABEL = 'Shadow of the Past'
@@ -40,6 +44,14 @@ export class MemoryVault extends Room {
     )
     if (shadow instanceof ShadowOfThePast) return shadow.waitWith(gameState)
     return super.rest(gameState)
+  }
+
+  /** Once the amulet has opened the door, the Shadow watches an open door. */
+  override descriptionFor(gameState: GameState): string {
+    if (gameState.getStoryFlag(FLAG_ACT4_VAULT_DOOR_OPENED)) {
+      return MEMORY_VAULT_DOOR_OPEN
+    }
+    return super.descriptionFor(gameState)
   }
 
   /** Entering the vault starts the Shadow's side quest. */

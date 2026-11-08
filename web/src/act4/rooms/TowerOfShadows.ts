@@ -7,8 +7,14 @@ import {
   FLAG_ACT4_WHISPERS_NYX_NAMED,
 } from '../Act4StoryFlags'
 
-/** What the room description ends with once the whispers are gone. */
-const STAIR_OPEN_SUFFIX =
+/** The stair itself, which the whispers do not change. */
+const STAIR =
+  'A stair winds up inside the black stone, narrow and dark. The walls ' +
+  'are cold, and there are no windows.'
+
+/** The whole description once the whispers are gone. */
+const STAIR_OPEN =
+  STAIR +
   ' The whispers are gone. The stair winds up into the dark, and it is only ' +
   'a stair.'
 
@@ -34,21 +40,22 @@ export class TowerOfShadows extends Room {
     super({
       name: 'Tower of Shadows',
       description:
-        'A stair winds up inside the black stone, narrow and dark. The walls ' +
-        'are cold, and there are no windows. The shadows on the stair move a ' +
-        'moment after you do. With every step, something quiet at your ear ' +
-        'tells you why you should not have come.',
+        STAIR +
+        ' The shadows on the stair move a moment after you do. With every ' +
+        'step, something quiet at your ear tells you why you should not have ' +
+        'come.',
       items: [],
       characters: [new Whispers()],
       exits: { west: 'HallOfEchoes', up: 'ChamberOfWhispers' },
     })
   }
 
-  /** Once the stair is open the description says the whispers are gone. */
+  /**
+   * Once the stair is open the description says the whispers are gone, in
+   * place of the lines about them.
+   */
   override descriptionFor(gameState: GameState): string {
-    if (gameState.getStoryFlag(FLAG_ACT4_TOWER_STAIR_OPEN)) {
-      return this.description + STAIR_OPEN_SUFFIX
-    }
+    if (gameState.getStoryFlag(FLAG_ACT4_TOWER_STAIR_OPEN)) return STAIR_OPEN
     return this.description
   }
 

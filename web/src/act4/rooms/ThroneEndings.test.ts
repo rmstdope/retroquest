@@ -297,8 +297,11 @@ describe('Justice', () => {
     expectStoryFlag(game.state, FLAG_ACT4_JUSTICE_ENDING, true)
     expectQuestCompleted(game.state, 'The Final Stand')
     expect(game.state.currentRoom.description).toContain('a seal of gold')
-    expect(executeCommands(game, ['talk to malakar'])).toContain(
-      'Malakar is gone into the seal.',
+    expect(game.state.currentRoom.describe(game.state)).not.toContain(
+      '[character_name]Malakar[/character_name]',
+    )
+    expect(executeCommands(game, ['talk to malakar'])).not.toContain(
+      dialogue('Malakar', ''),
     )
     expect(executeCommands(game, ['talk to king alden'])).toContain(
       'The kingdom will remember what you did here, farmer. I will see that it does.',
@@ -307,8 +310,8 @@ describe('Justice', () => {
     expect(spellNames(game)).toContain('bless')
     reload(game)
     expect(game.state.currentRoom.description).toContain('a seal of gold')
-    expect(executeCommands(game, ['say hello to malakar'])).toContain(
-      'Malakar is gone into the seal.',
+    expect(game.state.currentRoom.describe(game.state)).not.toContain(
+      '[character_name]Malakar[/character_name]',
     )
     expect(executeCommands(game, ['use ancient amulet on wound'])).toContain(
       'The wound is gone.',
@@ -439,10 +442,7 @@ describe('after the endings and around them', () => {
       'crown bright again',
     )
     expect(executeCommands(game, ['examine malakar'])).toContain(
-      'gone into the seal',
-    )
-    expect(executeCommands(game, ['give ancient amulet to malakar'])).toContain(
-      'Malakar is gone into the seal.',
+      "You don't see a 'malakar'",
     )
   })
 

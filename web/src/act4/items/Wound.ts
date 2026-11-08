@@ -32,6 +32,7 @@ import {
   THRONE_CHAMBER_SACRIFICE,
 } from '../rooms/throneDescriptions'
 import { Grow } from '../spells/Grow'
+import { Malakar } from '../characters/Malakar'
 
 /** What the amulet says before the elixir has been used. */
 const NOT_YET = clue(
@@ -61,6 +62,17 @@ const GENTLER =
   'The wound waits for something gentler than the amulet. Malakar looks up ' +
   'at you like a man waiting to be forgiven.'
 
+/** The wound's look, before the elixir is used. */
+const WOUND_HEAD =
+  'A tear in the air, no wider than a door, its edges flickering ' +
+  'with days that never happened.'
+
+/** The wound's look once the elixir has healed Malakar. */
+const WOUND_ON_KING = `${WOUND_HEAD} It drinks the light from the king, still.`
+
+/** The wound's look once the elixir has freed the king. */
+const WOUND_ON_MALAKAR = `${WOUND_HEAD} It drinks the light from Malakar now.`
+
 /** The hint: both roads are always open. */
 const HINT =
   "The wound will not close for nothing. You could name Malakar's crimes " +
@@ -77,8 +89,7 @@ export class Wound extends Item {
     super({
       name: 'Wound',
       description:
-        'A tear in the air, no wider than a door, its edges flickering ' +
-        'with days that never happened. It drinks the light from the king, ' +
+        `${WOUND_HEAD} It drinks the light from the king, ` +
         'and from Malakar too.',
       canBeCarried: false,
     })
@@ -89,10 +100,16 @@ export class Wound extends Item {
     return super.answersTo(name) || name.toLowerCase() === 'wound in time'
   }
 
-  /** The wound's look. */
+  /** The wound's look: gone, or drinking from whoever the elixir did not reach. */
   override examine(gameState: GameState): string {
     if (endingPlayed(gameState)) {
       return 'The air where the wound was is still and empty.'
+    }
+    if (gameState.getStoryFlag(FLAG_ACT4_ELIXIR_ON_MALAKAR)) {
+      return WOUND_ON_KING
+    }
+    if (gameState.getStoryFlag(FLAG_ACT4_ELIXIR_ON_KING)) {
+      return WOUND_ON_MALAKAR
     }
     return this.description
   }
@@ -202,7 +219,10 @@ export class Wound extends Item {
     ].join('\n')
   }
 
-  /** Records the ending, completes the quest and sets the room's description. */
+  /**
+   * Records the ending, completes the quest and sets the room's description;
+   * after Justice, Malakar is gone from the room into the seal.
+   */
   private finish(gameState: GameState, ending: Ending): void {
     const flag = {
       redemption: FLAG_ACT4_REDEMPTION_ENDING,
@@ -211,7 +231,13 @@ export class Wound extends Item {
     }[ending]
     gameState.setStoryFlag(flag, true)
     gameState.setStoryFlag(FLAG_ACT4_FINAL_STAND_COMPLETED, true)
-    gameState.currentRoom.description = {
+    const room = gameState.currentRoom
+    if (ending === 'justice') {
+      room.characters = room.characters.filter(
+        (character) => !(character instanceof Malakar),
+      )
+    }
+    room.description = {
       redemption: THRONE_CHAMBER_REDEMPTION,
       justice: THRONE_CHAMBER_JUSTICE,
       sacrifice: THRONE_CHAMBER_SACRIFICE,

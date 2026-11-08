@@ -132,7 +132,14 @@ export class Malakar extends Character {
     'have been. He leans on the throne as if it is the only thing ' +
     'holding him up, and he does not look away from you.'
 
-  /** His look. */
+  /** The look once the elixir has taken the grey from him. */
+  private static readonly DESCRIPTION_HEALED =
+    "A tall man in a grey robe that was once a Warden's blue. His hair " +
+    'is white, though he cannot be much older than your father would ' +
+    'have been. The grey is gone from his face, and he sits by the wound, ' +
+    'watching it.'
+
+  /** His look: sealed, judged or himself again, healed, turned, or failing. */
   override examine(gameState: GameState): string {
     const ending = endingPlayed(gameState)
     if (ending === 'justice') return 'Malakar is gone into the seal.'
@@ -140,6 +147,9 @@ export class Malakar extends Character {
       return ending === 'redemption'
         ? 'Malakar sits by the shards, himself again.'
         : 'Malakar kneels before the king, grey and powerless.'
+    }
+    if (gameState.getStoryFlag(FLAG_ACT4_ELIXIR_ON_MALAKAR)) {
+      return Malakar.DESCRIPTION_HEALED
     }
     return gameState.getStoryFlag(FLAG_ACT4_THRONE_REFRAIN_SAID)
       ? Malakar.DESCRIPTION_TURNED
