@@ -394,9 +394,20 @@ Welcome to
       Object.fromEntries(
         keys.map((k) => [k, { [preposition]: charactersTree }]),
       )
-    const withTarget = (keys: string[], preposition: string): CompletionTree =>
+    const withTarget = (
+      keys: string[],
+      ...prepositions: string[]
+    ): CompletionTree =>
       Object.fromEntries(
-        keys.map((k) => [k, { '@': null, [preposition]: itemsAndCharacters }]),
+        keys.map((k) => [
+          k,
+          {
+            '@': null,
+            ...Object.fromEntries(
+              prepositions.map((word) => [word, itemsAndCharacters]),
+            ),
+          },
+        ]),
       )
 
     const completions: CompletionTree = {
@@ -424,7 +435,7 @@ Welcome to
       grab: roomItemsTree,
       get: roomItemsTree,
       use: sendableNames(
-        splitMultiwordKeys(withTarget(allItemNames, 'with')),
+        splitMultiwordKeys(withTarget(allItemNames, 'with', 'on')),
         allItems,
       ),
       inventory: null,

@@ -6,6 +6,9 @@ import { useBridge, type ActClass } from '@/composables/useBridge'
 import { useCommandCompletion } from '@/composables/useCommandCompletion'
 import { Act1 } from '@/act1/Act1'
 import { Act2 } from '@/act2/Act2'
+import { Act3 } from '@/act3/Act3'
+import { SirCedric } from '@/act3/characters/SirCedric'
+import { AncientAmulet } from '@/act3/items/AncientAmulet'
 import { Act4 } from '@/act4/Act4'
 import { SorceressOfLies } from '@/act4/characters/SorceressOfLies'
 import { GuardiansChain } from '@/act4/items/GuardiansChain'
@@ -360,6 +363,18 @@ describe('useGameStore over the real engine: the no-match line and a name that w
     expect(saysNoMatch(store, 'say truth to cedric')).toBe(false)
     expect(saysNoMatch(store, 'talk to cedric')).toBe(false)
     expect(saysNoMatch(store, 'examine cedric')).toBe(false)
+  })
+
+  it('does not say no match for using an item on someone here', async () => {
+    const store = await storeIn(Act3, 'DragonsHall', (state) => {
+      state.currentRoom.addCharacter(new SirCedric())
+      state.inventory.push(new AncientAmulet())
+    })
+
+    expect(saysNoMatch(store, 'use ancient amulet on cedric')).toBe(false)
+    expect(saysNoMatch(store, 'use ancient amulet on sir cedric')).toBe(false)
+    expect(saysNoMatch(store, 'use ancient amulet with cedric')).toBe(false)
+    expect(saysNoMatch(store, 'use ancient amulet on bob')).toBe(true)
   })
 
   it('does not say no match for the Unmasked Sorceress by the one word', async () => {
