@@ -85,7 +85,7 @@ describe('TrappedServants', () => {
     expectMarkupWellFormed(answer)
   })
 
-  it('thanks the player once freed', () => {
+  it('once freed, says who they were and points to the echoes', () => {
     const game = createGameInCourtyard()
     game.state.setStoryFlag(FLAG_ACT4_SERVANTS_TRUST_EARNED, true)
     game.state.setStoryFlag(FLAG_ACT4_SERVANTS_FREED, true)
@@ -98,9 +98,10 @@ describe('TrappedServants', () => {
       'One of them, an old woman with flour still in the creases of her hands, looks up.',
     )
     expect(answer).toContain(
-      "[dialogue]I was the king's cook. I do not know how long ago.[/dialogue]",
+      "[dialogue]I was the king's cook. I do not know how long ago. " +
+        'The mirrors show truth, but only echoes from the halls can reveal ' +
+        'the full path.[/dialogue]',
     )
-    expect(answer).not.toContain('mirrors')
     expect(servants.talkTo(game.state)).toBe(answer)
     expectDialogueSpeaker(answer, 'Freed Servants')
     expectMarkupWellFormed(answer)
