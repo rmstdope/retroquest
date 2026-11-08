@@ -15,6 +15,7 @@ describe('StagePicture movement', () => {
   let w: VueWrapper | undefined
 
   beforeEach(() => {
+    globalThis.localStorage?.clear()
     setActivePinia(createPinia())
     vi.stubGlobal('matchMedia', () => ({
       matches: false,

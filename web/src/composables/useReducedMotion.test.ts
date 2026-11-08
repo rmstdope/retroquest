@@ -26,7 +26,10 @@ function device(matches: boolean): { change(next: boolean): void } {
 }
 
 describe('useReducedMotion', () => {
-  beforeEach(() => setActivePinia(createPinia()))
+  beforeEach(() => {
+    globalThis.localStorage?.clear()
+    setActivePinia(createPinia())
+  })
   afterEach(() => vi.unstubAllGlobals())
 
   it('follows the device while the setting follows the device', () => {

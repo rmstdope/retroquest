@@ -20,6 +20,7 @@ describe('SettingsDialog', () => {
   }
 
   beforeEach(() => {
+    globalThis.localStorage?.clear()
     setActivePinia(createPinia())
     deviceReducesMotion(false)
   })
