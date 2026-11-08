@@ -3,6 +3,8 @@ import { Game, GameController, type MapPlace } from '@/engine'
 import { executeCommands } from '@/testing/gameHelpers'
 import { Act1 } from '../act1/Act1'
 import { ACT1_GOLDEN_PATH } from '../act1/Act1GoldenPath'
+import { Act4 } from '../act4/Act4'
+import { ACT4_GOLDEN_PATH } from '../act4/Act4GoldenPath'
 import { layoutMap } from './mapLayout'
 
 function place(
@@ -44,6 +46,24 @@ describe('layoutMap of the village lane (rq-un37)', () => {
       (path) => path.from === 'HiddenGlade' || path.to === 'HiddenGlade',
     )
     expect(gladePaths).toHaveLength(1)
+  })
+})
+
+describe('layoutMap of the Act IV fortress (rq-pxuj)', () => {
+  it("lays the Mirror Labyrinth north of the Outer Courtyard and joins them, seen from the Parents' Vault", () => {
+    const game = new Game([new Act4()])
+    const intoParentsVault = ACT4_GOLDEN_PATH.indexOf('examine memories')
+    executeCommands(game, ACT4_GOLDEN_PATH.slice(0, intoParentsVault))
+    const layout = layoutMap(new GameController(game).getMapPlaces())
+    const [yardCol, yardRow] = at(layout, 'OuterCourtyard')
+    expect(at(layout, 'MirrorLabyrinth')).toEqual([yardCol, yardRow - 1])
+    expect(
+      layout.paths.some(
+        (path) =>
+          [path.from, path.to].sort().join() ===
+          'MirrorLabyrinth,OuterCourtyard',
+      ),
+    ).toBe(true)
   })
 })
 
@@ -103,7 +123,7 @@ describe('layoutMap', () => {
     expect(layout.paths[0].dashed).toBe(false)
   })
 
-  it('lengthens a path so that no two boxes overlap', () => {
+  it('opens a column so that no two boxes overlap and the way is still drawn', () => {
     // Up from c lands on (1,-1), where east of n would also land.
     const layout = layoutMap([
       place('c', true, { north: 'n', up: 'u' }, true),
@@ -113,9 +133,9 @@ describe('layoutMap', () => {
     ])
     const cells = layout.boxes.map((b) => `${b.col},${b.row}`)
     expect(new Set(cells).size).toBe(cells.length)
-    const [col, row] = at(layout, 'x')
-    expect(row).toBe(-1)
-    expect(col).toBeGreaterThan(1)
+    const [nCol, nRow] = at(layout, 'n')
+    expect(at(layout, 'x')).toEqual([nCol + 1, nRow])
+    expect(layout.paths.map((p) => [p.from, p.to])).toContainEqual(['n', 'x'])
   })
 
   it('marks the current place', () => {
