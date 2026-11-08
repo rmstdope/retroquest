@@ -12,7 +12,10 @@ import { useStageSpeechStore } from '@/stores/useStageSpeechStore'
 import { useBridge, type ActClass } from '@/composables/useBridge'
 import { readingPauseMs } from '@/lantern/stageSpeech'
 import { parseTurn } from '@/lantern/parseTurn'
+import { setPictureProbe } from '@/lantern/roomPicture'
 import { Act1 } from '@/act1/Act1'
+import { Key } from '@/act1/items/Key'
+import { Game } from '@/engine'
 
 /**
  * The change of scene on the picture stage over the real engine: a move to a
@@ -50,6 +53,7 @@ describe('LanternLayout: change of scene', () => {
   beforeEach(() => vi.useFakeTimers())
   afterEach(() => {
     w.unmount()
+    setPictureProbe(null)
     vi.unstubAllGlobals()
     vi.restoreAllMocks()
     vi.useRealTimers()
@@ -458,6 +462,51 @@ describe('LanternLayout: change of scene', () => {
     expect(narration.revealed(turn.id, turn.waking)).toBe(true)
     expect(voices.length).toBe(spoken + 1)
     // The rest of the turn (its quest news rings) is not left to run after the test.
+    narration.skipAll()
+    await vi.runAllTimersAsync()
+  })
+
+  /** Act I at the locked shed with the key in the bag, on the stage, its picture up and the inside painted. */
+  async function lockedShed(): Promise<ReturnType<typeof useGameStore>> {
+    const saved = new Game([new Act1()])
+    saved.state.currentRoom = saved.state.allRooms.AbandonedShed
+    saved.state.addItemToInventory(new Key())
+    const save = saved.toSaveData()
+    vi.stubGlobal('localStorage', {
+      getItem: (key: string): string | null =>
+        key === 'retroquest_save' ? save : null,
+      setItem: (): void => {},
+      removeItem: (): void => {},
+    })
+    setPictureProbe(() => Promise.resolve(true))
+    const game = await dream()
+    game.loadGame()
+    await w.vm.$nextTick()
+    await w.vm.$nextTick()
+    await w.get('img.lq-loading').trigger('load')
+    await vi.advanceTimersByTimeAsync(0)
+    return game
+  }
+
+  it("narrated, Enter during the door's fade shows the inside and its names together", async () => {
+    const game = await lockedShed()
+    const scene = useSceneStore()
+    const narration = useNarrationStore()
+    const voices = recordEverything()
+    game.submitCommand('use key with door')
+    await w.vm.$nextTick()
+    const turn = game.turns.at(-1)!
+    expect(turn.pictureChanged).toBe(true)
+    expect(narration.narrates(turn.id)).toBe(true)
+    for (let i = 0; i < 10 && scene.turn === null; i++) {
+      voices.at(-1)?.onended?.()
+      await vi.advanceTimersByTimeAsync(400)
+    }
+    expect(scene.phase).toBe('out')
+    expect(game.items.join()).toBe('shed door,boards')
+    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }))
+    expect(scene.shown).toContain('inside')
+    expect(game.items.join()).toContain('mysterious box')
     narration.skipAll()
     await vi.runAllTimersAsync()
   })

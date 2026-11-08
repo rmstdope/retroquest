@@ -260,9 +260,10 @@ export function useLanternPresentation(
    * The scene of talk `turn` changes now, before its block `at`: what it told
    * in the old room leaves the screen, the music and the picture move to the
    * new room through the dark, and the rest of the talk waits until the
-   * picture is up. Under Reduce motion, or with the same picture,
-   * they (and the room's name) move at once with no fade. Nothing happens once a
-   * newer turn has come.
+   * picture is up. The room's name changes at the dark, or with the picture
+   * when the change is skipped before it. Under Reduce motion, or with the same
+   * picture, they (and the room's name) move at once with no fade. Nothing
+   * happens once a newer turn has come.
    */
   function changeScene(turn: Turn, at: number): void {
     if (game.turns.at(-1)?.id !== turn.id) return
@@ -272,6 +273,8 @@ export function useLanternPresentation(
     const up = (): void => {
       // A newer turn brings this one up only to cut in on it: no voice starts.
       if (game.turns.at(-1)?.id !== turn.id) return
+      // Skipped before the dark, the room's name has not changed yet: it goes with the picture.
+      game.releasePanels(turn.id, ['place'], true)
       if (narrated) narration.passSceneChange(turn.id)
       else panelHold.settle(turn)
     }
