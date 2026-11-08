@@ -336,6 +336,22 @@ describe('StagePicture patches', () => {
     expect(w.get('img.lq-patch').classes()).not.toContain('lq-patch-still')
   })
 
+  it('does not let a skipped change of scene wait for the patches of the next one', async () => {
+    const scene = useSceneStore()
+    const w = await picture([])
+    scene.begin(1, '/b.png', () => {})
+    await w.setProps({ src: '/b.png', patches: [ROPE] })
+    await w.get('img.lq-loading').trigger('load')
+    scene.skip()
+    await nextTick()
+    scene.begin(2, '/c.png', () => {})
+    await w.setProps({ src: '/c.png', patches: [] })
+    vi.advanceTimersByTime(SCENE_HALF_MS + 500)
+    await nextTick()
+    // The picture of /c.png has not loaded: its wait in the dark is its own.
+    expect(scene.ready).toBeNull()
+  })
+
   it('rises without a patch that is more than a second late, which fades in when it comes', async () => {
     const scene = useSceneStore()
     const w = await picture([BUCKET])

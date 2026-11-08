@@ -19,7 +19,7 @@ export type ScenePhase = 'idle' | 'out' | 'dark' | 'in'
  * picture draws the phases; this keeps the clock and runs `onUp` once when
  * the picture is up, by time or by `skip`.
  * A picture slow to load keeps the stage dark for at most one more
- * `SCENE_HALF_MS`; after that, or when it is missing, the paper backdrop
+ * `SCENE_HALF_MS` (two, when its patches are still loading: `awaitMore`); after that, or when it is missing, the paper backdrop
  * ('') rises instead. Nothing here is saved.
  */
 export const useSceneStore = defineStore('scene', () => {

@@ -19,8 +19,8 @@ import { useSceneStore } from '@/stores/useSceneStore'
  * Those there when the picture comes up are there without a fade, and the
  * picture waits (up to a second, counted from the dark of a change of scene,
  * never during the fade-out) for the ones still loading. A load (the scene
- * store is reset) lays the saved story's patches the same way, in the room
- * Elior already stands in too. When the story changes the room Elior stands in, a patch
+ * store is reset) lays the saved story's patches the same way, in the
+ * room Elior already stands in too. When the story changes the room Elior stands in, a patch
  * fades in or out slowly (a little over a second, at once under Reduce motion);
  * a patch that cannot be fetched is left out, and one that is slow fades in
  * when it comes. Nothing of the next room's patches shows over the old picture.
@@ -95,10 +95,13 @@ function whenPatchesSettled(
   patchWait = null
   if (patchesSettled()) return then()
   onWait?.()
+  const turn = scene.turn
   const run = (): void => {
     clearTimeout(patchTimer)
     patchTimer = undefined
     patchWait = null
+    // A change of scene that ended (skipped) or gave way to another is not this wait's.
+    if (inTheDark && scene.turn !== turn) return
     then()
   }
   patchWait = run
@@ -153,6 +156,7 @@ watch(
   (reset) => {
     if (!reset) return
     restoring = true
+    // The load is over after a second at the latest, or once its patches are laid.
     clearTimeout(restoreTimer)
     restoreTimer = setTimeout(() => {
       restoring = false
@@ -161,19 +165,15 @@ watch(
   { flush: 'sync' },
 )
 
-// The stage has been told its picture again, after the patches of the load have been laid: the load is over, unless a patch is still on its way.
-watch(
-  () => scene.shown,
-  (src) => {
-    if (src !== null && patchesSettled()) restoring = false
-  },
-  { flush: 'post' },
-)
-
 /** The story changed the room Elior stands in: patches fade in and out. */
 function fadePatches(): void {
   if (!shown.value || shown.value !== props.src) return
-  if (restoring) return layPatchesStill()
+  if (restoring) {
+    layPatchesStill()
+    // The load's patches are laid: the next change is the story's.
+    if (patchesSettled()) restoring = false
+    return
+  }
   const wanted = readyPatches.value
   for (const layer of layers.value) {
     // A patch that came with the picture leaves with the slow fade too.
