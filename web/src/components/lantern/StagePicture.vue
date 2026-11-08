@@ -1,5 +1,12 @@
 <script setup lang="ts">
 import { computed, onUnmounted, ref, watch } from 'vue'
+import { useReducedMotion } from '@/composables/useReducedMotion'
+import type { MotionSpec } from '@/lantern/roomMotion'
+import {
+  createMotionScene,
+  type MotionScene,
+  type PictureSize,
+} from '@/lantern/roomMotionScene'
 import { useSceneStore } from '@/stores/useSceneStore'
 
 /**
@@ -24,12 +31,34 @@ import { useSceneStore } from '@/stores/useSceneStore'
  * fades in or out slowly (a little over a second, at once under Reduce motion);
  * a patch that cannot be fetched is left out, and one that is slow fades in
  * when it comes. Nothing of the next room's patches shows over the old picture.
+ * The picture, its patches and the movement over it drift together: they
+ * ease slowly in and back (about 26 seconds each way, to about 3% larger),
+ * afresh with each room, and whatever is put in the default slot (the
+ * clickable things) drifts with them and stays exactly on what it marks. The
+ * movement (`motion`, see `roomMotion.ts`) is drawn on a canvas over the
+ * picture and its patches, under the dimming and the dark of a change of
+ * scene, so it goes into the dark with the picture; a room entered is run
+ * ahead, so it is already under way as the dark lifts, and what the story
+ * changes in the room Elior stands in fades out and in (about a second). A
+ * movement whose spot has no placed box is simply not in `motion`. Under
+ * Reduce motion there is neither drift nor canvas, as the room looked before.
  * It says (`pictured`) whether a picture is up or only the backdrop, for the
- * text told over it. Purely decorative: hidden from assistive technology.
+ * text told over it. Purely decorative: hidden from assistive technology, and
+ * nothing in it takes a click or the keyboard.
  */
-const props = withDefaults(defineProps<{ src: string; patches?: string[] }>(), {
-  patches: () => [],
-})
+const props = withDefaults(
+  defineProps<{
+    src: string
+    patches?: string[]
+    motion?: MotionSpec[]
+    pictureSize?: PictureSize
+  }>(),
+  {
+    patches: () => [],
+    motion: () => [],
+    pictureSize: () => ({ width: 1920, height: 1080 }),
+  },
+)
 const emit = defineEmits<{ pictured: [shown: boolean] }>()
 
 /** How long the old picture stays under the fading new one. */
@@ -297,7 +326,110 @@ function onMissing(): void {
   leaving.value = ''
 }
 
+const reduced = useReducedMotion()
+const root = ref<HTMLElement | null>(null)
+const canvasEl = ref<HTMLCanvasElement | null>(null)
+/** Whether the canvas is on the page: movement applies (or is still fading out), a picture is up and motion is not reduced. */
+const canvasUp = ref(false)
+let motionScene: MotionScene = createMotionScene()
+let frame = 0
+let lastFrame = 0
+let observer: ResizeObserver | undefined
+
+/** Tell the scene how big the canvas is, and the canvas how many pixels to have. */
+function sizeCanvas(): void {
+  const el = canvasEl.value
+  if (!el || el.clientWidth === 0 || el.clientHeight === 0) return
+  const ratio = Math.min(2, globalThis.devicePixelRatio || 1)
+  el.width = Math.round(el.clientWidth * ratio)
+  el.height = Math.round(el.clientHeight * ratio)
+  motionScene.resize(el.clientWidth, el.clientHeight, props.pictureSize)
+}
+
+/** One frame: move the scene on and draw it; the loop ends when there is nothing left to show. */
+function drawFrame(now: number): void {
+  frame = 0
+  const el = canvasEl.value
+  if (!el || reduced.value) return
+  const ms = lastFrame ? Math.min(100, now - lastFrame) : 1000 / 60
+  lastFrame = now
+  motionScene.step(ms)
+  const ctx = el.getContext('2d')
+  if (ctx) {
+    const ratio = el.width / Math.max(1, el.clientWidth)
+    ctx.setTransform(ratio, 0, 0, ratio, 0, 0)
+    motionScene.draw(ctx)
+  }
+  if (props.motion.length === 0 && motionScene.isEmpty()) {
+    canvasUp.value = false
+    return
+  }
+  frame = requestAnimationFrame(drawFrame)
+}
+
+/** Start the frames if there is a canvas and none are running. */
+function startFrames(): void {
+  if (frame || !canvasEl.value || typeof requestAnimationFrame !== 'function')
+    return
+  lastFrame = 0
+  frame = requestAnimationFrame(drawFrame)
+}
+
+/**
+ * Bring the scene in step with the room and the story. Only the picture that
+ * is up is moved over: the old room keeps its own movement until the dark. A
+ * new picture (or Reduce motion turned off) starts a scene afresh, run ahead.
+ */
+function syncMotion(fresh: boolean): void {
+  if (reduced.value || !shown.value || shown.value !== props.src) {
+    if (reduced.value || !shown.value) stopMotion()
+    return
+  }
+  if (fresh) {
+    motionScene = createMotionScene()
+    sizeCanvas()
+  }
+  motionScene.setEffects(props.motion, fresh)
+  canvasUp.value = props.motion.length > 0 || !motionScene.isEmpty()
+  startFrames()
+}
+
+/** Take the movement off the page at once. */
+function stopMotion(): void {
+  cancelAnimationFrame(frame)
+  frame = 0
+  canvasUp.value = false
+  motionScene = createMotionScene()
+}
+
+watch(shown, () => syncMotion(true), { flush: 'post' })
+watch(
+  () => props.motion,
+  () => syncMotion(false),
+  { flush: 'post' },
+)
+watch(reduced, (now) => (now ? stopMotion() : syncMotion(true)), {
+  flush: 'post',
+})
+watch(
+  canvasEl,
+  (el) => {
+    observer?.disconnect()
+    if (!el) return
+    sizeCanvas()
+    if (typeof ResizeObserver === 'function' && root.value) {
+      observer = new ResizeObserver(sizeCanvas)
+      observer.observe(root.value)
+    }
+    startFrames()
+  },
+  { flush: 'post' },
+)
+watch(() => props.pictureSize, sizeCanvas, { flush: 'post' })
+
 onUnmounted(() => {
+  cancelAnimationFrame(frame)
+  observer?.disconnect()
   clearTimeout(leaveTimer)
   clearTimeout(patchTimer)
   clearTimeout(restoreTimer)
@@ -307,6 +439,7 @@ onUnmounted(() => {
 
 <template>
   <div
+    ref="root"
     class="lq-stage-picture"
     :class="`lq-scene-${scene.phase}`"
     aria-hidden="true"
@@ -319,13 +452,34 @@ onUnmounted(() => {
       :src="leaving"
       alt=""
     />
-    <img
-      v-if="shown"
-      :key="`in-${shown}`"
-      class="lq-pic lq-pic-in"
-      :src="shown"
-      alt=""
-    />
+    <div
+      :key="`drift-${shown}`"
+      class="lq-drift"
+      :class="{ 'lq-drift-on': shown && !reduced }"
+    >
+      <img
+        v-if="shown"
+        :key="`in-${shown}`"
+        class="lq-pic lq-pic-in"
+        :src="shown"
+        alt=""
+      />
+      <img
+        v-for="layer in layers"
+        :key="layer.src"
+        class="lq-pic lq-patch"
+        :class="{ 'lq-patch-on': layer.on, 'lq-patch-still': layer.still }"
+        :src="layer.src"
+        alt=""
+      />
+      <canvas
+        v-if="canvasUp"
+        ref="canvasEl"
+        class="lq-motion"
+        aria-hidden="true"
+      ></canvas>
+      <slot></slot>
+    </div>
     <img
       v-if="loading"
       :key="`load-${loading}`"
@@ -334,14 +488,6 @@ onUnmounted(() => {
       alt=""
       @load="onLoaded"
       @error="onMissing"
-    />
-    <img
-      v-for="layer in layers"
-      :key="layer.src"
-      class="lq-pic lq-patch"
-      :class="{ 'lq-patch-on': layer.on, 'lq-patch-still': layer.still }"
-      :src="layer.src"
-      alt=""
     />
     <img
       v-for="url in patchLoaders"
@@ -372,6 +518,20 @@ onUnmounted(() => {
     var(--lq-surface),
     var(--lq-raised)
   );
+}
+.lq-drift {
+  position: absolute;
+  inset: 0;
+}
+.lq-drift-on {
+  animation: lq-drift 26s ease-in-out infinite alternate;
+}
+.lq-motion {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
 }
 .lq-pic {
   position: absolute;
@@ -427,6 +587,14 @@ onUnmounted(() => {
 .lq-scene-in .lq-veil {
   opacity: 0;
   transition: opacity calc(1s * var(--lq-motion)) linear;
+}
+@keyframes lq-drift {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.03) translate(-0.5%, -0.3%);
+  }
 }
 @keyframes lq-picture-in {
   from {

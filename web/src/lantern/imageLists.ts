@@ -15,6 +15,7 @@ import { narrationText } from './narrationKey'
 import { ELIOR_PORTRAIT_PROMPT, PORTRAIT_PROMPTS } from './portraitPrompts'
 import { roomTrackId } from './musicLists'
 import { declaredAreas, type ImageArea } from './roomAreas'
+import { spotAreas } from './roomMotion'
 import { declaredPatches, type ImagePatch } from './roomPatches'
 
 /** Width in pixels of every room image. */
@@ -101,7 +102,7 @@ export function roomImages(act: Act): GameImage[] {
       roomTrackId(act.name, key),
       room.name,
       narrationText(room.description),
-      declaredAreas(act.name, key),
+      [...declaredAreas(act.name, key), ...spotAreas(act.name, key)],
       declaredPatches(act.name, key),
     ),
   )
@@ -113,7 +114,10 @@ export function roomImages(act: Act): GameImage[] {
           `${roomTrackId(act.name, key)}-${variant}`,
           `${room.name}, ${variant}`,
           narrationText(room.description),
-          declaredAreas(act.name, key, variant),
+          [
+            ...declaredAreas(act.name, key, variant),
+            ...spotAreas(act.name, key),
+          ],
           declaredPatches(act.name, key, variant),
         ),
       ),

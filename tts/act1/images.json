@@ -78,6 +78,10 @@
       {
         "id": "faded-photograph",
         "title": "Faded Photograph"
+      },
+      {
+        "id": "motion-fire",
+        "title": "Fire"
       }
     ],
     "patches": [
@@ -293,6 +297,10 @@
       {
         "id": "exit-east",
         "title": "Way east"
+      },
+      {
+        "id": "motion-water",
+        "title": "Running water"
       }
     ],
     "patches": [
@@ -383,6 +391,14 @@
       {
         "id": "exit-north",
         "title": "Way north"
+      },
+      {
+        "id": "motion-fire",
+        "title": "Fire"
+      },
+      {
+        "id": "motion-smoke",
+        "title": "Smoke"
       }
     ],
     "patches": [
@@ -835,6 +851,10 @@
       {
         "id": "locket",
         "title": "Locket"
+      },
+      {
+        "id": "motion-fire",
+        "title": "Fire"
       }
     ],
     "patches": [

@@ -1,3 +1,4 @@
+import { roomTrackId } from '@/lantern/musicLists'
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 import { setActivePinia, createPinia } from 'pinia'
 import {
@@ -291,6 +292,20 @@ describe('useGameStore: panels held while a turn is narrated', () => {
       expect(store.roomPicture).toBe(hallPicture(HALL_LIT))
     })
 
+    it("reads the size and the marked spots from the picture that is up, not the room's own", async () => {
+      const store = await stagedStore(true)
+      const own = roomTrackId('Hold Act', 'Hall')
+      store.imageManifest = {
+        [own]: { width: 1920, height: 1080 },
+        [`${own}-${HALL_LIT}`]: { width: 640, height: 360 },
+      }
+      expect(store.roomPictureSize).toEqual({ width: 1920, height: 1080 })
+      store.submitCommand(`take ${GEM.toLowerCase()}`)
+      store.releasePanels(store.turns.at(-1)!.id, [...PANEL_GROUPS], false)
+      await new Promise((resolve) => setTimeout(resolve))
+      expect(store.roomPictureSize).toEqual({ width: 640, height: 360 })
+    })
+
     it('is not held when the layout does not hold panels', async () => {
       setPictureProbe(() => Promise.resolve(true))
       const store = await startedStore()
@@ -380,6 +395,40 @@ describe('useGameStore: panels held while a turn is narrated', () => {
       expect(store.roomPatchUrls).toEqual([])
       store.releasePanels(id, ['picture'], true)
       expect(store.roomPatchUrls).toHaveLength(1)
+    })
+
+    it('lists the movement of the room with the spots the studio has marked', async () => {
+      const store = await cottage()
+      expect(store.roomMotion).toEqual([{ kind: 'dust' }])
+      const fire = { x: 0.1, y: 0.4, width: 0.2, height: 0.3 }
+      store.imageManifest = {
+        'act1-eliors-cottage': {
+          width: 1920,
+          height: 1080,
+          areas: { 'motion-fire': fire },
+        },
+      }
+      expect(store.roomMotion).toEqual([
+        { kind: 'dust' },
+        { kind: 'fire', box: fire },
+      ])
+      expect(store.roomPictureSize).toEqual({ width: 1920, height: 1080 })
+    })
+
+    it('moves only what floats when the manifest cannot be fetched', async () => {
+      const store = await cottage()
+      vi.stubGlobal('fetch', () => Promise.reject(new Error('offline')))
+      await store.loadImageManifest()
+      vi.unstubAllGlobals()
+      expect(store.imageManifest).toBeNull()
+      expect(store.roomMotion).toEqual([{ kind: 'dust' }])
+    })
+
+    it('has no picture size while the manifest does not say', async () => {
+      const store = await cottage()
+      expect(store.roomPictureSize).toBeUndefined()
+      store.imageManifest = { 'act1-eliors-cottage': { width: 'x' } }
+      expect(store.roomPictureSize).toBeUndefined()
     })
 
     it('shows a patch that is not made yet as nothing', async () => {
