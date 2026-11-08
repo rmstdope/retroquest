@@ -3,6 +3,7 @@ import { computed } from 'vue'
 import { useGameStore } from '@/stores/useGameStore'
 import { useSettingsStore } from '@/stores/useSettingsStore'
 import { useFullscreen } from '@/composables/useFullscreen'
+import { useMediaQuery } from '@/composables/useMediaQuery'
 import { LANTERN_TEXT_SIZES } from '@/lantern/tokens'
 import LanternDialog from './LanternDialog.vue'
 
@@ -33,11 +34,9 @@ const act = computed(() => {
   }
 })
 /** Whether the screen is light now, the player's choice or else the device's. */
+const deviceLight = useMediaQuery('(prefers-color-scheme: light)')
 const light = computed(() =>
-  settings.theme === 'device'
-    ? typeof globalThis.matchMedia === 'function' &&
-      globalThis.matchMedia('(prefers-color-scheme: light)').matches
-    : settings.theme === 'light',
+  settings.theme === 'device' ? deviceLight.value : settings.theme === 'light',
 )
 /** Switch to the other theme. */
 function toggleTheme(): void {
@@ -111,6 +110,9 @@ const ROWS: Array<{
         @click="quickLoad"
       >
         <span class="lq-side-label">Quick load</span>
+        <span v-if="quickSaveOld" class="lq-note"
+          >The quick save is from an older version</span
+        >
       </button>
       <button
         v-for="row in ROWS"

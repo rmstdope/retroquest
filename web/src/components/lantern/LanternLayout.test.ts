@@ -830,8 +830,9 @@ describe('LanternLayout', () => {
     beforeEach(() => {
       vi.stubGlobal(
         'matchMedia',
-        vi.fn(() => ({
-          matches: true,
+        vi.fn((query: string) => ({
+          // A laptop is not a phone (a touch screen).
+          matches: !query.includes('hover: none'),
           addEventListener: vi.fn(),
           removeEventListener: vi.fn(),
         })),

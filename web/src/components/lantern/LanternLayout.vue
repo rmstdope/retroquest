@@ -98,12 +98,19 @@ import type { SaveSlot } from '@/types/bridge'
  * words are clear (no Hide or Show) and the bubbles come back when the
  * arrival clears (the room itself having been told in the middle). Enter or Space goes on, a click on the
  * picture too; Escape, the tab, an action or typing clear it at once.
- * Smaller screens that are not short (a phone upright) play the same stage
- * arranged for a tall screen: the plate across the top with "⟲ Story so far"
- * (the whole story over the stage), the one column over the picture
- * and the folded bar above the section tabs (Story, Bag, Spells, Quests, Map);
- * the actions are a sheet (at most 62% of the height) over the picture that
- * folds after every turn. A short screen (a phone on its side) keeps the text
+ * A phone (a touch screen whose shorter side is under 600 px) is played
+ * sideways: held upright it shows only the turn page (`TurnPage`) over the
+ * game, which waits behind it, inert and unchanged (the layout does not
+ * depend on how the phone is held); on its side it is the laptop stage made
+ * small: no header, ☰ and the plate top left, the buttons top right, the folded
+ * bar (Actions, keyboard, Hint) at the foot left, the words up the left side,
+ * and the actions a sheet over the picture that folds after every turn.
+ * Other smaller screens that are not short (a tablet upright, a narrow window)
+ * play the same stage arranged for a tall screen: the plate across the top
+ * with "⟲ Story so far" (the whole story over the stage), the one column over
+ * the picture and the folded bar above the section tabs (Story, Bag, Spells,
+ * Quests, Map); the actions are a sheet (at most 62% of the height) over the
+ * picture that folds after every turn. A short mouse window keeps the text
  * page, with the tabs in the header and the same sheet folded into the bar,
  * which also folds when an answer does not fit beside it.
  * A new turn opens at its start, with a "More below" pill while the story
@@ -145,10 +152,10 @@ const short = useMediaQuery(SHORT_QUERY)
 /** A phone: a touch screen whose shorter side is under 600 pixels. Phones are played sideways. */
 const phone = useMediaQuery(PHONE_QUERY)
 const portrait = useMediaQuery(PORTRAIT_QUERY)
-/** A phone held upright: only the turn page shows, and the game waits behind it. */
+/** A phone held upright: the turn page covers the game, which waits behind it (the layout is the sideways one either way, so nothing behind changes). */
 const turnPage = computed(() => phone.value && portrait.value)
-/** A phone on its side: the laptop stage made small, everything floating on the picture. */
-const sideways = computed(() => phone.value && !portrait.value)
+/** A phone: the laptop stage made small, everything floating on the picture (played on its side; upright the turn page covers it). */
+const sideways = computed(() => phone.value)
 /** The stage with a plate and buttons floating on the picture: a laptop, or a phone on its side. */
 const wide = computed(() => laptop.value || sideways.value)
 /** A short screen that is not a phone (a mouse window dragged low): the text page. */
@@ -195,7 +202,7 @@ const plate = ref<InstanceType<typeof RoomPlate> | null>(null)
 const pictured = ref(false)
 /** The actions sheet: every screen starts with it folded into the bar. */
 const dockOpen = ref(false)
-// A phone turned on its side shows the text page with the sheet folded.
+// A window turned into the text page (a short mouse window) shows the sheet folded.
 watch(textPage, (isText) => {
   if (isText) dockOpen.value = false
 })
@@ -2014,6 +2021,22 @@ watch(
   left: 56px;
   max-width: min(300px, 38%);
 }
+/* The plate is compact on a phone: smaller name and chips, so the words keep their room. */
+.lq-sideways .lq-stage-plate {
+  padding: 6px 10px;
+  gap: 3px;
+}
+.lq-sideways .lq-stage-plate :deep(.lq-room-name) {
+  font-size: calc(18px * var(--lq-display-scale));
+}
+.lq-sideways .lq-stage-plate :deep(.lq-here) {
+  gap: 4px;
+}
+.lq-sideways .lq-stage-plate :deep(.lq-here-chip) {
+  height: 24px;
+  padding: 0 9px;
+  font-size: 12px;
+}
 .lq-sideways .lq-stage-buttons {
   top: 8px;
   right: 8px;
@@ -2073,7 +2096,7 @@ watch(
   font-size: 13px;
   cursor: pointer;
 }
-.lq-wide .lq-composer {
+.lq-wide:not(.lq-sideways) .lq-composer {
   position: relative;
   z-index: 3;
   flex: 0 0 auto;

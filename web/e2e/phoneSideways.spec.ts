@@ -49,6 +49,21 @@ for (const size of [
     await page.screenshot({
       path: `test-results/sideways-${size.width}x${size.height}.png`,
     })
+    // The sheet is above the scrim: a press on its first verb lands.
+    await page.getByRole('button', { name: 'Actions ▴' }).click()
+    await page
+      .getByRole('button', { name: 'Look', exact: true })
+      .first()
+      .click()
+    await page.getByRole('button', { name: 'Actions ▴' }).waitFor()
+    if (size.height <= 340) {
+      await expect(
+        page.getByRole('button', { name: /^Bag \d+$/ }),
+      ).toBeVisible()
+      await expect(page.locator('.lq-hint-word')).toBeHidden()
+    } else {
+      await expect(page.locator('.lq-hint-word')).toBeVisible()
+    }
     await page.locator('.lq-float-menu').click()
     await expect(page.getByText('Quick save')).toBeVisible()
     await expect(page.getByText('Text size')).toBeVisible()

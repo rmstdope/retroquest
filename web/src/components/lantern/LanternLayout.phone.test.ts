@@ -330,17 +330,22 @@ describe('LanternLayout: the stage on a phone', () => {
     w = mount(LanternLayout, { attachTo: document.body })
     await w.get('.lq-dock-open').trigger('click')
     const sheetBefore = w.find('.lq-sheet').exists()
+    await w.get('[data-button="story"]').trigger('click')
+    expect(w.find('.lq-story-drawer').exists()).toBe(true)
 
     state.portrait = true
     listeners.forEach((change) => change({ matches: true }))
     await flushPromises()
     expect(w.find('.lq-turn-page').exists()).toBe(true)
+    expect(w.find('.lq-story-drawer').exists()).toBe(true)
 
     state.portrait = false
     listeners.forEach((change) => change({ matches: false }))
     await flushPromises()
     expect(w.find('.lq-turn-page').exists()).toBe(false)
     expect(w.find('.lq-sheet').exists()).toBe(sheetBefore)
+    expect(w.find('.lq-story-drawer').exists()).toBe(true)
+    expect(w.find('.lq-header').exists()).toBe(false)
     expect(w.find('.lq-stage-picture').exists()).toBe(true)
   })
 })
