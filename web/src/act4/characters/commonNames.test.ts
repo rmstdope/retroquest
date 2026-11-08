@@ -84,7 +84,7 @@ describe('a group character in a default reply', () => {
     )
   })
 
-  it('reads "the ghostly warriors" when offered something once they fill the hall', () => {
+  it('opens with "The ghostly warriors" when offered something once they fill the hall', () => {
     const act = new Act4()
     act.musicFile = ''
     const game = new Game([act])

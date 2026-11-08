@@ -82,5 +82,8 @@ describe('King Alden', () => {
     const awake = executeCommands(game, ['give ancient amulet to king alden'])
     expect(awake).toContain('My half of it has cost me enough.')
     expectNoStockReply(awake)
+    expect(game.state.inventory.some((i) => i instanceof AncientAmulet)).toBe(
+      true,
+    )
   })
 })

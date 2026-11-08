@@ -26,7 +26,8 @@ const IN_THE_CRYSTAL =
 
 /**
  * King Alden in the Throne Chamber: asleep in his crystal prison until the
- * Lifelight Elixir breaks it, then alive and weak, with one line to say.
+ * Lifelight Elixir breaks it, then alive and weak. He answers talk by that
+ * stage, and the elixir and the amulet when they are offered.
  */
 export class KingAlden extends Character {
   constructor() {

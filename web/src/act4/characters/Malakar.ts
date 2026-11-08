@@ -272,9 +272,10 @@ export class Malakar extends Character {
 
   /**
    * The refrain is the refusal; the words of the endings are heard once the
-   * elixir is used; any other word only gets a dim answer. Each is heard in
-   * a sentence too, unless it is denied ("I will never forgive you",
-   * "Justice? No.").
+   * elixir is used; the names he carries get his answer until the amulet
+   * opens; any other word gets what the stage allows (see `otherWords`). Each
+   * is heard in a sentence too, unless it is denied ("I will never forgive
+   * you", "Justice? No.").
    */
   override sayTo(gameState: GameState, words: string): string {
     const ending = endingPlayed(gameState)
@@ -500,10 +501,9 @@ export class Malakar extends Character {
         dialogue(this.name, 'Not yet. You have not heard what I am offering.'),
       ].join('\n')
     }
-    const open =
-      gameState.getStoryFlag(FLAG_ACT4_THRONE_OFFER_HEARD) &&
-      !gameState.getStoryFlag(FLAG_ACT4_THRONE_REFRAIN_SAID)
-    if (!open) return this.otherWords(gameState)
+    if (gameState.getStoryFlag(FLAG_ACT4_THRONE_REFRAIN_SAID)) {
+      return this.otherWords(gameState)
+    }
     if (gameState.getStoryFlag(FLAG_ACT4_THRONE_BARGAIN_SEEN)) {
       return '[dim]Malakar does not reach for it. He has seen what it will not do.[/dim]'
     }

@@ -166,5 +166,8 @@ describe('Sir Cedric in the Hall of Echoes', () => {
     ])
     expect(answer).toContain('What he owed me he said to my face.')
     expectNoStockReply(answer)
+    expect(
+      game.state.inventory.some((i) => i instanceof KnightsRedemption),
+    ).toBe(true)
   })
 })

@@ -35,6 +35,16 @@ describe('Mira in Willowbrook Field', () => {
     expectNoStockReply(answer)
   })
 
+  it('takes turns with her deflections', () => {
+    const game = inField()
+    expect(executeCommands(game, ['say thank you to mira'])).toContain(
+      'Some words keep, Elior.',
+    )
+    expect(executeCommands(game, ['say thank you to mira'])).toContain(
+      'Tell me tomorrow.',
+    )
+  })
+
   it("hands the Sorceress's mask back with Elena in mind", () => {
     const game = inField()
     game.state.inventory.push(new SorceressTruth())

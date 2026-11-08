@@ -2,8 +2,11 @@ import { describe, it, expect } from 'vitest'
 import { Game } from '@/engine'
 import { Act4 } from '../Act4'
 import { GhostlyWarriors } from './GhostlyWarriors'
-import { expectMarkupWellFormed } from '@/testing/gameHelpers'
-import { executeCommands, expectNoStockReply } from '@/testing/gameHelpers'
+import {
+  executeCommands,
+  expectMarkupWellFormed,
+  expectNoStockReply,
+} from '@/testing/gameHelpers'
 
 describe('GhostlyWarriors', () => {
   it('answers to ghostly warriors and warriors, and cannot hear Elior', () => {

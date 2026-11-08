@@ -68,7 +68,7 @@ export class Forgiveness extends Spell {
     return super.castOnItem(gameState, target)
   }
 
-  /** Malakar is already forgiven; those Elior loves each answer it their own way. */
+  /** Malakar is already forgiven; Mira, Sir Cedric, Grandmother and the king each answer it their own way. */
   override castOnCharacter(gameState: GameState, target: Character): string {
     if (target instanceof Malakar) return ALREADY_FORGIVEN
     if (target instanceof Mira || target instanceof MiraAtTheGate) {

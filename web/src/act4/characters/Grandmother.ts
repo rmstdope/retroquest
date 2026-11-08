@@ -109,8 +109,7 @@ export class Grandmother extends Character {
     if (item instanceof AncientAmulet) {
       return dialogue(
         'Grandmother',
-        'No, dear. That went from her hands to yours. It does not come back ' +
-          'to mine.',
+        'No, dear. That was never mine to hold, and it is not now.',
       )
     }
     if (item instanceof NyxToken) {

@@ -20,7 +20,7 @@ function inRoom(room: string, ended: boolean): Game {
   return game
 }
 
-describe('Forgiveness on the people Elior loves', () => {
+describe('Forgiveness on the people who have no need of it', () => {
   it.each([
     ['WillowbrookField', true, 'mira', 'Mira', 'Me you can just tell.'],
     ['FortressGates', false, 'mira', 'Mira', 'Me you can just tell.'],

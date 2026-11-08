@@ -29,5 +29,8 @@ describe('Sir Cedric in Willowbrook Field', () => {
     expect(answer).toContain('I know whose that was.')
     expectDialogueSpeaker(answer, 'Sir Cedric')
     expectNoStockReply(answer)
+    expect(
+      game.state.inventory.some((i) => i instanceof KnightsRedemption),
+    ).toBe(true)
   })
 })
