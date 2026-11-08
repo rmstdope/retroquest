@@ -1,4 +1,9 @@
 import { Item, type Character, type GameState, clue } from '@/engine'
+import {
+  FLAG_ACT4_THRONE_AMULET_OPENED,
+  FLAG_ACT4_THRONE_REFRAIN_SAID,
+} from '../Act4StoryFlags'
+import { KingAlden } from '../characters/KingAlden'
 import { Malakar } from '../characters/Malakar'
 import { CrystalPrison } from './CrystalPrison'
 import { Wound } from './Wound'
@@ -6,6 +11,15 @@ import { Wound } from './Wound'
 /** What the elixir says when it is aimed at anything but the two targets. */
 const WRONG_TARGET = clue(
   "The elixir is for the king's prison, or for Malakar's wound.",
+)
+
+/**
+ * What the elixir says when it is aimed at the king's prison before Malakar
+ * has been answered: the answer is about the prison, not Malakar's reach.
+ */
+const PRISON_NOT_YET = clue(
+  'You hold the vial to the crystal. It is cold, and the king inside ' +
+    'does not stir. Not yet.',
 )
 
 /**
@@ -43,6 +57,26 @@ export class LifelightElixir extends Item {
     )
   }
 
+  /**
+   * Why the elixir cannot be used on its target yet, or null. Aimed at the
+   * prison or the king before the refrain, it answers about the prison;
+   * otherwise Malakar's refusal stands.
+   */
+  private static refusal(
+    malakar: Malakar,
+    gameState: GameState,
+    atPrison: boolean,
+  ): string | null {
+    if (
+      atPrison &&
+      !gameState.getStoryFlag(FLAG_ACT4_THRONE_REFRAIN_SAID) &&
+      !gameState.getStoryFlag(FLAG_ACT4_THRONE_AMULET_OPENED)
+    ) {
+      return PRISON_NOT_YET
+    }
+    return malakar.elixirRefusal(gameState)
+  }
+
   /** Used alone in the Throne Chamber it is held to the choice's rules. */
   override use(gameState: GameState): string {
     const malakar = LifelightElixir.malakarHere(gameState)
@@ -54,7 +88,11 @@ export class LifelightElixir extends Item {
   override useWith(gameState: GameState, other: Item): string {
     const malakar = LifelightElixir.malakarHere(gameState)
     if (!malakar) return super.useWith(gameState, other)
-    const refusal = malakar.elixirRefusal(gameState)
+    const refusal = LifelightElixir.refusal(
+      malakar,
+      gameState,
+      other instanceof CrystalPrison,
+    )
     if (refusal) return refusal
     if (other instanceof CrystalPrison) {
       return other.breakWith(gameState)
@@ -67,7 +105,11 @@ export class LifelightElixir extends Item {
   override useOnCharacter(gameState: GameState, target: Character): string {
     const malakar = LifelightElixir.malakarHere(gameState)
     if (!malakar) return super.useOnCharacter(gameState, target)
-    const refusal = malakar.elixirRefusal(gameState)
+    const refusal = LifelightElixir.refusal(
+      malakar,
+      gameState,
+      target instanceof KingAlden,
+    )
     if (refusal) return refusal
     if (target instanceof Malakar) return target.receiveElixir(gameState)
     return WRONG_TARGET
