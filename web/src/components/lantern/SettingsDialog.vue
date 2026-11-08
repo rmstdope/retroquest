@@ -228,6 +228,24 @@ function volume(event: Event): number {
           <span class="lq-knob"></span>
         </button>
       </div>
+      <div class="lq-row">
+        <span class="lq-row-text"
+          ><span class="lq-row-label">Always show what's here</span
+          ><span class="lq-note"
+            >Marks and names stay on the picture in every room.</span
+          ></span
+        >
+        <button
+          type="button"
+          role="switch"
+          class="lq-switch"
+          aria-label="Always show what's here"
+          :aria-checked="settings.alwaysShowNames ? 'true' : 'false'"
+          @click="settings.alwaysShowNames = !settings.alwaysShowNames"
+        >
+          <span class="lq-knob"></span>
+        </button>
+      </div>
     </section>
   </LanternDialog>
 </template>

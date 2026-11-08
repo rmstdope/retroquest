@@ -29,6 +29,8 @@ export interface Settings {
   narrationVolume: number
   startMode: StartMode
   reduceMotion: ReduceMotionSetting
+  /** Whether the marks and names of what is in a room's picture stay on in every room. */
+  alwaysShowNames: boolean
 }
 
 export const SETTINGS_STORAGE_KEY = 'retroquest_settings'
@@ -52,6 +54,7 @@ export const DEFAULT_SETTINGS: Readonly<Settings> = {
   narrationVolume: 100,
   startMode: 'actions',
   reduceMotion: 'device',
+  alwaysShowNames: false,
 }
 
 const THEMES: readonly ThemeSetting[] = ['device', 'light', 'dark']
@@ -113,6 +116,7 @@ function loadSettings(): Settings {
       REDUCE_MOTION,
       defaults.reduceMotion,
     ),
+    alwaysShowNames: bool(stored.alwaysShowNames, defaults.alwaysShowNames),
   }
 }
 
@@ -128,6 +132,7 @@ export const useSettingsStore = defineStore('settings', () => {
   const narrationVolume = ref(initial.narrationVolume)
   const startMode = ref(initial.startMode)
   const reduceMotion = ref(initial.reduceMotion)
+  const alwaysShowNames = ref(initial.alwaysShowNames)
 
   function snapshot(): Settings {
     return {
@@ -141,6 +146,7 @@ export const useSettingsStore = defineStore('settings', () => {
       narrationVolume: narrationVolume.value,
       startMode: startMode.value,
       reduceMotion: reduceMotion.value,
+      alwaysShowNames: alwaysShowNames.value,
     }
   }
 
@@ -163,6 +169,7 @@ export const useSettingsStore = defineStore('settings', () => {
     narrationVolume.value = DEFAULT_SETTINGS.narrationVolume
     startMode.value = DEFAULT_SETTINGS.startMode
     reduceMotion.value = DEFAULT_SETTINGS.reduceMotion
+    alwaysShowNames.value = DEFAULT_SETTINGS.alwaysShowNames
   }
 
   return {
@@ -176,6 +183,7 @@ export const useSettingsStore = defineStore('settings', () => {
     narrationVolume,
     startMode,
     reduceMotion,
+    alwaysShowNames,
     resetToDefaults,
   }
 })

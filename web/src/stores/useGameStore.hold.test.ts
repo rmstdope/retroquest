@@ -415,6 +415,24 @@ describe('useGameStore: panels held while a turn is narrated', () => {
       expect(store.roomPictureSize).toEqual({ width: 1920, height: 1080 })
     })
 
+    it('lists the things of the room that the studio has placed', async () => {
+      const store = await cottage()
+      expect(store.roomAreas.things).toEqual([])
+      const bread = { x: 0.4, y: 0.5, width: 0.1, height: 0.1 }
+      store.imageManifest = {
+        'act1-eliors-cottage': {
+          width: 1920,
+          height: 1080,
+          areas: { bread, 'no-such-thing-here': bread },
+        },
+      }
+      expect(store.roomAreas.things.map((t) => t.areaId)).toEqual(['bread'])
+      expect(store.roomAreas.boxes.bread).toEqual(bread)
+      store.submitCommand('take bread')
+      store.releasePanels(store.turns.at(-1)!.id, [...PANEL_GROUPS], false)
+      expect(store.roomAreas.things).toEqual([])
+    })
+
     it('moves only what floats when the manifest cannot be fetched', async () => {
       const store = await cottage()
       vi.stubGlobal('fetch', () => Promise.reject(new Error('offline')))

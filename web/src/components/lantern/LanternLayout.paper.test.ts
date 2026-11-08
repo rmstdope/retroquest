@@ -626,11 +626,18 @@ describe('the narration paper', () => {
   }
 
   it('has the Help line for N on a laptop, and not on a phone', async () => {
-    expect(await helpText()).toContain('N — hide or show the words')
+    const laptopHelp = await helpText()
+    expect(laptopHelp).toContain('N — hide or show the words')
+    expect(laptopHelp).toContain("S — show or hide what's here")
+    expect(laptopHelp.indexOf('S — show')).toBeGreaterThan(
+      laptopHelp.indexOf('N — hide'),
+    )
     w?.unmount()
     document.body.innerHTML = ''
     stubScreen(false)
-    expect(await helpText()).not.toContain('hide or show the')
+    const phoneHelp = await helpText()
+    expect(phoneHelp).not.toContain('hide or show the')
+    expect(phoneHelp).not.toContain("show or hide what's here")
   })
 
   it('tells a phone everything in one column with the one Hide, which N works too', async () => {

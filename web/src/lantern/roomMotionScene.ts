@@ -22,7 +22,7 @@ const WARM_TICKS = 600
 const FADE_MS = 1000
 
 /** A rectangle in canvas pixels. */
-interface Rect {
+export interface Rect {
   x: number
   y: number
   w: number

@@ -736,7 +736,18 @@ describe('useBridge', () => {
         roomKey: '',
         variant: '',
         patchIds: [],
+        things: [],
       })
+    })
+
+    it('lists what is in the room that its picture can mark, and follows a pick-up', async () => {
+      const bridge = await runningBridge()
+      const ids = (): string[] =>
+        bridge.pictureState().things.map((thing) => thing.areaId)
+      expect(ids()).toContain('bread')
+      expect(ids()).toContain('grandmother')
+      bridge.controller.takeTurn('take bread')
+      expect(ids()).not.toContain('bread')
     })
   })
 })

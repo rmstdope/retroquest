@@ -57,6 +57,7 @@ describe('useSettingsStore', () => {
       narrationVolume: 100,
       startMode: 'actions',
       reduceMotion: 'device',
+      alwaysShowNames: false,
     })
   })
 
@@ -83,6 +84,7 @@ describe('useSettingsStore', () => {
         effectsVolume: 0,
         startMode: 'type',
         reduceMotion: 'on',
+        alwaysShowNames: true,
       }),
     })
     const settings = useSettingsStore()
@@ -95,6 +97,7 @@ describe('useSettingsStore', () => {
     expect(settings.effectsVolume).toBe(0)
     expect(settings.startMode).toBe('type')
     expect(settings.reduceMotion).toBe('on')
+    expect(settings.alwaysShowNames).toBe(true)
   })
 
   it('replaces each invalid stored value with its default', () => {
@@ -107,6 +110,7 @@ describe('useSettingsStore', () => {
         effectsVolume: -5,
         startMode: 'voice',
         reduceMotion: true,
+        alwaysShowNames: 'yes',
       }),
     })
     const settings = useSettingsStore()
@@ -118,6 +122,7 @@ describe('useSettingsStore', () => {
     expect(settings.effectsVolume).toBe(0)
     expect(settings.startMode).toBe('actions')
     expect(settings.reduceMotion).toBe('device')
+    expect(settings.alwaysShowNames).toBe(false)
   })
 
   it('falls back to defaults when the stored JSON is corrupt', () => {

@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 import { setActivePinia, createPinia } from 'pinia'
 import { useGameStore, MAX_TURNS } from './useGameStore'
+import type { AreaThing } from '@/lantern/areaThings'
 import type { RoomDescription, SoundFiring } from '@/engine'
 import type {
   CompletionTree,
@@ -150,6 +151,7 @@ function createMockBridge() {
       roomKey: '',
       variant: '',
       patchIds: [] as string[],
+      things: [] as AreaThing[],
     })),
     controller: {
       ...controller,
