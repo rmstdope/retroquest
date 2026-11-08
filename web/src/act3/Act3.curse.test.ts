@@ -116,10 +116,15 @@ describe('Act III curse grows worse at each relic site', () => {
   })
 
   it.each([
-    ['TidalCauseway', FLAG_ACT3_SEA_SEALED_LETTER_READ, LINE_1],
-    ['MirrorTerraces', FLAG_ACT3_CHARRED_INSCRIPTION_READ, LINE_2],
-    ['DragonsHall', FLAG_ACT3_DRAGONS_MEMORY_RECEIVED, LINE_3],
-  ])('%s keeps one closing line after its clue', (key, flag, line) => {
+    ['TidalCauseway', FLAG_ACT3_SEA_SEALED_LETTER_READ, LINE_1, ''],
+    ['MirrorTerraces', FLAG_ACT3_CHARRED_INSCRIPTION_READ, LINE_2, ''],
+    [
+      'DragonsHall',
+      FLAG_ACT3_DRAGONS_MEMORY_RECEIVED,
+      LINE_3,
+      ', and somewhere in the dark, water drips',
+    ],
+  ])('%s keeps one closing line after its clue', (key, flag, line, gone) => {
     const game = gameIn(key)
     const room = game.state.currentRoom
     const before = room.describe(game.state)
@@ -129,7 +134,10 @@ describe('Act III curse grows worse at each relic site', () => {
     const after = room.describe(game.state)
 
     expect(after).toBe(
-      before.replace(`${room.description}\n`, `${room.description} ${line}\n`),
+      before.replace(
+        `${room.description}\n`,
+        `${room.description.replace(gone, '')} ${line}\n`,
+      ),
     )
     expect(count(after, line)).toBe(1)
     expect(game.state.currentRoom.description).not.toContain(line)

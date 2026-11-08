@@ -23,14 +23,26 @@ describe("Dragon's Hall", () => {
     )
   })
 
-  it('first mentions the dripping, so the later curse line refers back to it', () => {
+  it('says water drips before the curse has shown itself', () => {
+    const room = new DragonsHall()
+    const gs = new GameState(room, {}, [])
+    const text = room.descriptionFor(gs)
+    expect(text).toContain('water drips')
+    expect(text).not.toContain('The old dripping has stopped')
+  })
+
+  it('no longer says water drips once the dripping has stopped', () => {
     const room = new DragonsHall()
     const gs = new GameState(room, {}, [])
     gs.setStoryFlag(FLAG_ACT3_DRAGONS_MEMORY_RECEIVED, true)
-    const text = room.descriptionFor(gs)
-    expect(text.indexOf('water drips')).toBeGreaterThan(-1)
-    expect(text.indexOf('water drips')).toBeLessThan(
-      text.indexOf('The old dripping has stopped'),
+    expect(room.descriptionFor(gs)).toBe(
+      'A hall of living stone opens beyond sight, its ceiling lost in ' +
+        'shadow. Embers burn slowly along the floor, pulsing like a ' +
+        'heartbeat. Rings of old sigils spiral across the black tiles around ' +
+        'the Ancient Dragon. It lies coiled at the centre, scales like ' +
+        'polished obsidian, and each slow breath hums in your bones. ' +
+        'The old dripping has stopped; from the mines beyond comes no sound ' +
+        'of picks at all.',
     )
   })
 
