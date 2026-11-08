@@ -2,7 +2,12 @@ import { describe, it, expect } from 'vitest'
 import { Game } from '@/engine'
 import { Act4 } from '../Act4'
 import { TrueSelf } from './TrueSelf'
-import { FLAG_ACT4_TRUTH_TOLD } from '../Act4StoryFlags'
+import {
+  FLAG_ACT4_JUSTICE_ENDING,
+  FLAG_ACT4_REDEMPTION_ENDING,
+  FLAG_ACT4_SACRIFICE_ENDING,
+  FLAG_ACT4_TRUTH_TOLD,
+} from '../Act4StoryFlags'
 import {
   expectDialogueSpeaker,
   expectMarkupWellFormed,
@@ -106,5 +111,35 @@ describe('TrueSelf markup', () => {
     self.sayTo(game.state, 'truth')
     answers.push(self.talkTo(game.state), self.sayTo(game.state, 'truth'))
     for (const answer of answers) expectMarkupWellFormed(answer)
+  })
+})
+
+describe('TrueSelf after an ending', () => {
+  it.each([
+    FLAG_ACT4_REDEMPTION_ENDING,
+    FLAG_ACT4_JUSTICE_ENDING,
+    FLAG_ACT4_SACRIFICE_ENDING,
+  ])('looks back on what Elior told it after %s', (ending) => {
+    const game = new Game([new Act4()])
+    const self = new TrueSelf()
+    game.state.setStoryFlag(FLAG_ACT4_TRUTH_TOLD, true)
+    expect(self.talkTo(game.state)).toContain('when you stand before him')
+    game.state.setStoryFlag(ending, true)
+    const talk = self.talkTo(game.state)
+    expect(talk).toContain(
+      'You told me the truth. It is over now, and you are still you.',
+    )
+    expect(talk).not.toContain('when you stand before him')
+    expectDialogueSpeaker(talk, 'True Self')
+  })
+
+  it('says the same when the truth is told only after the ending', () => {
+    const game = new Game([new Act4()])
+    const self = new TrueSelf()
+    game.state.setStoryFlag(FLAG_ACT4_JUSTICE_ENDING, true)
+    self.sayTo(game.state, 'truth')
+    expect(self.talkTo(game.state)).toContain(
+      'You told me the truth. It is over now, and you are still you.',
+    )
   })
 })

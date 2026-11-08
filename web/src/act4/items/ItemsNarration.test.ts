@@ -31,7 +31,6 @@ import { SorceressStaff } from './SorceressStaff'
 import { SorceressTruth } from './SorceressTruth'
 import { VaultDoor } from './VaultDoor'
 import { WardStone } from './WardStone'
-import { WardStoneFragment } from './WardStoneFragment'
 import { WardStones } from './WardStones'
 import { Wound } from './Wound'
 
@@ -83,15 +82,9 @@ describe('Act IV items narrate their effect', () => {
     }
   })
 
-  it('reads the pick-up lines of the fragment and the chain without repeating the pick-up', () => {
+  it('reads the pick-up line of the chain without repeating the pick-up', () => {
     const state = inRoom('HallOfEchoes')
 
-    expect(parseTurn(new WardStoneFragment().pickedUp(state))).toEqual([
-      {
-        kind: 'text',
-        markup: 'The fragment is lighter than it looks, and cold.',
-      },
-    ])
     expect(parseTurn(new GuardiansChain().pickedUp(state))).toEqual([
       {
         kind: 'text',

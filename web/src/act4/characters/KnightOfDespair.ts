@@ -22,6 +22,7 @@ import {
   FLAG_ACT4_KNIGHTS_REDEMPTION_ACQUIRED,
   FLAG_ACT4_LOYALTY_TOKEN_RAISED_IN_HALL,
 } from '../Act4StoryFlags'
+import { endingPlayed } from '../endings'
 import { EchoStone } from '../items/EchoStone'
 import { GuardiansChain } from '../items/GuardiansChain'
 import { KnightsRedemption } from '../items/KnightsRedemption'
@@ -31,6 +32,9 @@ import { GhostlyWarriors } from './GhostlyWarriors'
 
 /** What the knight is called once he is redeemed. */
 const REDEEMED_NAME = 'Redeemed Knight'
+
+/** The room at the top of the stair he guards; Elior having seen it means he went up. */
+const ROOM_UP_THE_STAIR = 'Tower of Shadows'
 
 /** The sights (the knight, the banners, the Echo Stone) needed before the word works. */
 const SIGHTS_NEEDED = 3
@@ -165,10 +169,27 @@ export class KnightOfDespair extends Character {
     return super.giveItem(gameState, item)
   }
 
-  /** What he says changes as he is seen through and redeemed. */
+  /**
+   * What he says changes as he is seen through and redeemed, and once he is
+   * redeemed, as Elior comes back down the stair and as the ending is played.
+   */
   override talkTo(gameState: GameState): string {
     gameState.setStoryFlag(FLAG_ACT4_KNIGHT_OF_DESPAIR_STARTED, true)
     if (gameState.getStoryFlag(FLAG_ACT4_KNIGHT_OF_DESPAIR_COMPLETED)) {
+      if (endingPlayed(gameState)) {
+        return dialogue(
+          this.name,
+          'You came back down those stairs, and it is over. I do not know ' +
+            'what a man like me does now. I will stay here a while, I think.',
+        )
+      }
+      if (gameState.visitedRooms.includes(ROOM_UP_THE_STAIR)) {
+        return dialogue(
+          this.name,
+          'You came back down those stairs. Then there is still hope. I had ' +
+            'not thought to see it.',
+        )
+      }
       return dialogue(
         this.name,
         'I will wait here. If you come back down those stairs, I will know ' +

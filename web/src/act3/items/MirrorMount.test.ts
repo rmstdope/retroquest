@@ -49,9 +49,10 @@ describe('MirrorMount', () => {
     expect(out2.toLowerCase()).toContain('success')
 
     const out3 = mend.castOnItem(state, mount)
-    expect(out3).toContain('the whole face hums.')
-    expect(out3).toContain(
-      'The mirrors are whole. The sun is not where it needs to be. ' +
+    expect(out3).toBe(
+      '[success]The seams close under your hands, ' +
+        'and the face comes up bright.[/success]\n' +
+        'The mirrors are whole. The sun is not where it needs to be. ' +
         'Perhaps rest a while, and let it climb.',
     )
     expect(out3).not.toContain('piercing ray')

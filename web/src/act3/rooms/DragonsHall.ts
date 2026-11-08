@@ -10,7 +10,7 @@ import {
 /** What the room gains once the scale is taken: the prison weakens. */
 const CRACKED_LINE =
   'Where the scale lay, the sigils around the dragon have dimmed, and a ' +
-  'hairline crack runs through the nearest ring.'
+  'crack splits the nearest ring clean through.'
 
 /** What the room gains instead once the sigils are mended. */
 const MENDED_LINE = 'The sigils around the dragon burn steady and whole again.'

@@ -29101,58 +29101,6 @@
    }
   ]
  },
- "127cf75c7219c2": {
-  "file": "127cf75c7219c2.mp3",
-  "speaker": "narrator",
-  "duration": 3.576,
-  "words": [
-   {
-    "word": "The",
-    "start": 0.0,
-    "end": 0.26
-   },
-   {
-    "word": "fragment",
-    "start": 0.26,
-    "end": 0.72
-   },
-   {
-    "word": "is",
-    "start": 0.72,
-    "end": 0.98
-   },
-   {
-    "word": "lighter",
-    "start": 0.98,
-    "end": 1.4
-   },
-   {
-    "word": "than",
-    "start": 1.4,
-    "end": 1.6
-   },
-   {
-    "word": "it",
-    "start": 1.6,
-    "end": 1.76
-   },
-   {
-    "word": "looks,",
-    "start": 1.76,
-    "end": 2.16
-   },
-   {
-    "word": "and",
-    "start": 2.16,
-    "end": 2.74
-   },
-   {
-    "word": "cold.",
-    "start": 2.74,
-    "end": 3.24
-   }
-  ]
- },
  "128c691bac6979": {
   "file": "128c691bac6979.mp3",
   "speaker": "nyx",

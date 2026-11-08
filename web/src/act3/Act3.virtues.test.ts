@@ -233,18 +233,28 @@ describe("Dragon's prison: selflessness", () => {
     const answer = run(game, 'cast bless on sigils')
     expect(answer).toContain('They need nothing from you yet.')
     expect(game.state.hasVirtue(VIRTUE_SELFLESS)).toBe(false)
-    expect(run(game, 'look')).not.toContain('hairline crack')
+    expect(game.state.currentRoom.descriptionFor(game.state)).not.toContain(
+      'crack',
+    )
   })
 
   it('shows the cracked sigils and the price once the scale is taken', () => {
     const game = hall()
     takeScale(game)
     expect(game.state.currentRoom.descriptionFor(game.state)).toMatch(
-      /Where the scale lay, the sigils around the dragon have dimmed, and a hairline crack runs through the nearest ring\.$/,
+      /Where the scale lay, the sigils around the dragon have dimmed, and a crack splits the nearest ring clean through\.$/,
     )
     const talk = run(game, 'talk to ancient dragon')
     expect(talk).toContain('That is the price, and it is mine to pay')
     expect(talk).not.toContain('The scale awaits')
+  })
+
+  it('describes the same crack in the room and on the sigils', () => {
+    const game = hall()
+    takeScale(game)
+    const crack = 'splits the nearest ring clean through'
+    expect(run(game, 'examine sigils')).toContain(crack)
+    expect(game.state.currentRoom.descriptionFor(game.state)).toContain(crack)
   })
 
   it('mending records selflessness once and steadies room and dragon', () => {

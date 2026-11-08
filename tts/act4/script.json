@@ -255,9 +255,9 @@
     "text": "The ward stones are dark. Your light shows only their runes."
   },
   {
-    "id": "127cf75c7219c2",
+    "id": "18fccf7e858ed4",
     "speaker": "narrator",
-    "text": "The fragment is lighter than it looks, and cold."
+    "text": "The cold of the fragment bites at your fingers, and you let it lie by the stone."
   },
   {
     "id": "165439bb214d32",
@@ -1108,6 +1108,11 @@
     "id": "1f1b0530bc96c2",
     "speaker": "narrator",
     "text": "A stair winds up inside the black stone, narrow and dark. The walls are cold, and there are no windows. The shadows on the stair move a moment after you do. With every step, something quiet at your ear tells you why you should not have come."
+  },
+  {
+    "id": "0f8b0182fa7a90",
+    "speaker": "redeemed knight",
+    "text": "You came back down those stairs. Then there is still hope. I had not thought to see it."
   },
   {
     "id": "0deae389ec4adb",
@@ -2568,6 +2573,26 @@
     "id": "08f0c85a74b6f0",
     "speaker": "king alden",
     "text": "Keep it. My half of it has cost me enough."
+  },
+  {
+    "id": "1452c5614cb72f",
+    "speaker": "redeemed knight",
+    "text": "You came back down those stairs, and it is over. I do not know what a man like me does now. I will stay here a while, I think."
+  },
+  {
+    "id": "07c651a922f890",
+    "speaker": "sir cedric",
+    "text": "It is done, then. I can see it on you. I will keep an eye on him until the king sends for him. You have my word."
+  },
+  {
+    "id": "119ac1563e8f21",
+    "speaker": "sir cedric",
+    "text": "It is done, then. I can see it on you. We will sit a while yet, he and I. Then I will see him out of here. You have my word."
+  },
+  {
+    "id": "1d5ec79ba8374b",
+    "speaker": "true self",
+    "text": "You told me the truth. It is over now, and you are still you."
   },
   {
     "id": "144b56bd00c67b",
