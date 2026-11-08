@@ -10,6 +10,7 @@ import {
   FLAG_ACT4_FIELD_GREEN,
   FLAG_ACT4_HOME_REACHED,
 } from '../Act4StoryFlags'
+import { Field } from '../items/Field'
 
 /**
  * The smallest spell, and the one Elior did not inherit: read from a stone
@@ -45,12 +46,17 @@ export class Grow extends Spell {
     )
   }
 
-  /** Cast on an item, the item decides what growing does to it. */
+  /** Cast on the field it greens it; on any other item, the item decides. */
   override castOnItem(gameState: GameState, item: Item): string {
+    if (item instanceof Field) return this.greenTheField(gameState)
     return item.grow(gameState)
   }
 
-  /** At home, "field" and "crops" are the field; elsewhere nothing answers. */
+  /**
+   * At home, "field" and "crops" are the field even without the field item
+   * (a fallback: the room normally holds one, and `castOnItem` takes it);
+   * elsewhere nothing answers.
+   */
   override castOnName(gameState: GameState, target: string): string | null {
     if (
       gameState.getStoryFlag(FLAG_ACT4_HOME_REACHED) &&

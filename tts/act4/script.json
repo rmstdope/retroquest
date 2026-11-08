@@ -1665,9 +1665,9 @@
     "text": "A round door of pale stone, carved with the same runes as your amulet around the sigil of the Wardens of the Dawn, and beneath it, worn almost away, a tree under two moons: the crest on your mother's locket. The door stands open."
   },
   {
-    "id": "16cb7e1f883291",
+    "id": "0db723f0b89263",
     "speaker": "narrator",
-    "text": "The Parent's Legacy"
+    "text": "The Parents' Legacy"
   },
   {
     "id": "1df19729085ae4",
@@ -1755,9 +1755,9 @@
     "text": "You search around the Parents' Vault, but find nothing of interest beyond what you can already see."
   },
   {
-    "id": "00ffbef7b6b88f",
+    "id": "0dc18205fcba2a",
     "speaker": "narrator",
-    "text": "The Parent's Legacy: Behind the sealed door, Aren and Lysa's last memories wait. Look into them, and learn the whole truth before the throne room."
+    "text": "The Parents' Legacy: Behind the sealed door, Aren and Lysa's last memories wait. Look into them, and learn the whole truth before the throne room."
   },
   {
     "id": "0676cf0d9beac4",
@@ -1803,6 +1803,11 @@
     "id": "1f143e2fbb8e07",
     "speaker": "narrator",
     "text": "A tear in the air, no wider than a door, its edges flickering with days that never happened. It drinks the light from the king, and from Malakar too."
+  },
+  {
+    "id": "178bf166a8a109",
+    "speaker": "narrator",
+    "text": "Black stone, twisted like a root, as if it grew up through the floor. Nobody sits in it."
   },
   {
     "id": "1bd20c99311439",
@@ -1878,6 +1883,11 @@
     "id": "00917c43819a98",
     "speaker": "malakar",
     "text": "They would wake, Elior. Your mother would laugh at something your father said. Is one boy and one tired king too much to pay for that? Give me the amulet."
+  },
+  {
+    "id": "00300b1fc42a07",
+    "speaker": "narrator",
+    "text": "The crystal is cold under the vial, and the king inside does not stir. Not yet."
   },
   {
     "id": "096334c2f1e66f",
@@ -2478,6 +2488,11 @@
     "id": "0a8e1f8fdbdc52",
     "speaker": "narrator",
     "text": "The king of Eldoria, alive, his crown bright again."
+  },
+  {
+    "id": "1a1a07987c60a5",
+    "speaker": "narrator",
+    "text": "Row after row of withered crops, the earth between them cracked and grey. You have worked these rows since you could walk."
   },
   {
     "id": "07097f5f9018ce",

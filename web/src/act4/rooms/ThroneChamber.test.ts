@@ -219,11 +219,14 @@ describe('ThroneChamber', () => {
     expect(executeCommands(game, ['use ancient amulet'])).toContain(
       'it burns white',
     )
-    for (const target of ['malakar', 'wound', 'prison']) {
+    for (const target of ['malakar', 'wound']) {
       expect(
         executeCommands(game, [`use lifelight elixir on ${target}`]),
       ).toMatch(/stops a finger|twitches toward the glass/)
     }
+    expect(executeCommands(game, ['use lifelight elixir on prison'])).toContain(
+      'the king inside does not stir',
+    )
     expectItemInInventory(game.state, 'Lifelight Elixir')
   })
 
@@ -394,12 +397,34 @@ describe('Throne Chamber, commands out of order', () => {
     const first = executeCommands(game, ['use lifelight elixir on malakar'])
     expect(first).toContain('stops a finger')
     expect(first).toContain('Give me the amulet, Elior, and your mother wakes')
-    const later = executeCommands(game, ['use lifelight elixir on prison'])
+    const later = executeCommands(game, ['use lifelight elixir on malakar'])
     expect(later).toContain(
       "Malakar's hand twitches toward the glass, and stays where it is.",
     )
     expect(later).not.toContain('stops a finger')
   })
+
+  for (const [label, before] of [
+    ['before talk', []],
+    ['after the offer', ['talk to malakar']],
+  ] as const) {
+    for (const target of ['prison', 'king alden']) {
+      it(`answers the elixir on the ${target} ${label} about the prison, and keeps it`, () => {
+        const game = inThrone()
+        executeCommands(game, [...before])
+        const out = executeCommands(game, [`use lifelight elixir on ${target}`])
+        expect(out).toContain(
+          'The crystal is cold under the vial, and the king inside does not stir. Not yet.',
+        )
+        expect(out).not.toContain('waste it on me')
+        expect(out).not.toContain('stops a finger')
+        expectItemInInventory(game.state, 'Lifelight Elixir', true)
+        expectStoryFlag(game.state, FLAG_ACT4_ELIXIR_ON_KING, false)
+        const reach = executeCommands(game, ['use lifelight elixir on malakar'])
+        expect(reach).toContain('stops a finger')
+      })
+    }
+  }
 
   it('has him say he has not spoken when the elixir comes first', () => {
     const game = inThrone()
@@ -486,5 +511,31 @@ describe('Throne Chamber after the elixir', () => {
     const wound = executeCommands(shattered(), ['examine wound'])
     expect(wound).not.toContain('It drinks the light from the king')
     expect(wound).toContain('It drinks the light from Malakar now.')
+  })
+})
+
+describe('the rift and the throne the chamber describes (rq-xrtb)', () => {
+  const THRONE =
+    'Black stone, twisted like a root, as if it grew up through the floor. Nobody sits in it.'
+
+  it('answers examine rift with the wound', () => {
+    const game = inThrone()
+    expect(executeCommands(game, ['examine rift'])).toBe(
+      executeCommands(game, ['examine wound']),
+    )
+    expect(executeCommands(healed(), ['examine rift'])).toContain(
+      'It drinks the light from the king, still.',
+    )
+  })
+
+  it('answers examine throne in-world', () => {
+    expect(executeCommands(inThrone(), ['examine throne'])).toBe(THRONE)
+  })
+
+  it('gives a save made before the throne could be looked at its throne back', () => {
+    const game = inThrone()
+    game.state.currentRoom.removeItem('throne')
+    reload(game)
+    expect(executeCommands(game, ['examine throne'])).toBe(THRONE)
   })
 })

@@ -508,3 +508,29 @@ describe('more of the field', () => {
     }
   })
 })
+
+describe('the field itself (rq-xrtb)', () => {
+  const WITHERED =
+    'Row after row of withered crops, the earth between them cracked and grey. You have worked these rows since you could walk.'
+
+  it('answers examine field and examine crops in-world', () => {
+    const game = home('redemption')
+    expect(executeCommands(game, ['examine field'])).toBe(WITHERED)
+    expect(executeCommands(game, ['examine crops'])).toBe(WITHERED)
+  })
+
+  it('still ends the story when grow is cast on the field item', () => {
+    const game = home('sacrifice')
+    expect(executeCommands(game, ['cast grow on field'])).toContain(
+      'You press your hands into the dry earth',
+    )
+    expectStoryFlag(game.state, FLAG_ACT4_FIELD_GREEN, true)
+  })
+
+  it('gives a save made before the field could be looked at its field back', () => {
+    const game = home('justice')
+    game.state.currentRoom.removeItem('field')
+    reload(game)
+    expect(executeCommands(game, ['examine field'])).toBe(WITHERED)
+  })
+})
