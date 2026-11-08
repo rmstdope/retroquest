@@ -460,7 +460,7 @@ describe('useGameStore over the real engine: the no-match line and a name that w
 
       expect(
         store.completionState('use crystalline pendant ').candidates,
-      ).toEqual(['with'])
+      ).toEqual(['with', 'on'])
       expect(store.completionState('give pendant ').candidates).toEqual(['to'])
     })
 
@@ -481,6 +481,7 @@ describe('useGameStore over the real engine: the no-match line and a name that w
       expect(saysNoMatch(store, "examine knight's badge")).toBe(false)
       expect(store.completionState("use knight's badge ").candidates).toEqual([
         'with',
+        'on',
       ])
     })
 

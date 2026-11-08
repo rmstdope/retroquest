@@ -126,4 +126,24 @@ describe('useSceneStore', () => {
     vi.advanceTimersByTime(5000)
     expect(onUp).not.toHaveBeenCalled()
   })
+
+  describe('awaitMore', () => {
+    it('gives a loaded picture more time in the dark before it is given up', () => {
+      const scene = useSceneStore()
+      scene.begin(1, '/b.png', () => {})
+      vi.advanceTimersByTime(SCENE_HALF_MS + 500)
+      expect(scene.phase).toBe('dark')
+      scene.awaitMore(SCENE_HALF_MS * 2)
+      vi.advanceTimersByTime(SCENE_HALF_MS + 600)
+      expect(scene.ready).toBeNull()
+      scene.targetReady(true)
+      expect(scene.phase).toBe('in')
+    })
+
+    it('does nothing outside the dark', () => {
+      const scene = useSceneStore()
+      scene.awaitMore(10)
+      expect(scene.phase).toBe('idle')
+    })
+  })
 })

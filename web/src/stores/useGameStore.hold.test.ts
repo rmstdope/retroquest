@@ -8,7 +8,7 @@ import {
 } from '@/testing/holdGame'
 import { useBridge, type ActClass } from '@/composables/useBridge'
 import { Act1 } from '@/act1/Act1'
-import { useGameStore } from './useGameStore'
+import { PANEL_GROUPS, useGameStore } from './useGameStore'
 
 describe('useGameStore: panels held while a turn is narrated', () => {
   beforeEach(() => {
@@ -164,8 +164,11 @@ describe('useGameStore: panels held while a turn is narrated', () => {
     expect(store.bagHasNew).toBe(true)
     expect(store.panelsHeld).toBe(true)
     store.releasePanels(id, ['place'], true)
-    expect(store.heldTurn).toBe(null)
     expect(store.panelsHeld).toBe(false)
+    // The room picture's patches are not a panel: they wait without holding a press.
+    expect(store.heldTurn).toBe(id)
+    store.releasePanels(id, ['picture'], true)
+    expect(store.heldTurn).toBe(null)
   })
 
   it('releases without a flash when asked, and ignores another turn', async () => {
@@ -174,7 +177,7 @@ describe('useGameStore: panels held while a turn is narrated', () => {
     const id = store.turns.at(-1)!.id
     store.releasePanels(id + 1, ['place'], true)
     expect(store.roomName).toBe('Hall')
-    store.releasePanels(id, ['place', 'quests', 'stock'], false)
+    store.releasePanels(id, [...PANEL_GROUPS], false)
     expect(store.roomName).toBe('Garden')
     expect(store.panelFlash.place).toBe(0)
   })
@@ -182,19 +185,25 @@ describe('useGameStore: panels held while a turn is narrated', () => {
   it('flashes only the groups whose values changed (the gem leaves the room, so Here changes)', async () => {
     const store = await startedStore()
     store.submitCommand('look')
-    store.releasePanels(
-      store.turns.at(-1)!.id,
-      ['place', 'quests', 'stock'],
-      true,
-    )
-    expect(store.panelFlash).toEqual({ place: 0, quests: 0, stock: 0 })
+    store.releasePanels(store.turns.at(-1)!.id, [...PANEL_GROUPS], true)
+    expect(store.panelFlash).toEqual({
+      place: 0,
+      quests: 0,
+      stock: 0,
+      picture: 0,
+    })
     store.submitCommand(`take ${GEM}`)
     store.releasePanels(
       store.turns.at(-1)!.id,
       ['place', 'quests', 'stock'],
       true,
     )
-    expect(store.panelFlash).toEqual({ place: 1, quests: 1, stock: 1 })
+    expect(store.panelFlash).toEqual({
+      place: 1,
+      quests: 1,
+      stock: 1,
+      picture: 0,
+    })
   })
 
   it('shows a command at once when holding is off', async () => {
@@ -220,5 +229,57 @@ describe('useGameStore: panels held while a turn is narrated', () => {
     store.loadGame()
     expect(store.heldTurn).toBe(null)
     expect(store.roomName).toBe('Hall')
+  })
+
+  describe('the patches of the room picture', () => {
+    /** Act 1 in the cottage with every patch of the cottage "made", narration holding the panels. */
+    async function cottage(): Promise<ReturnType<typeof useGameStore>> {
+      const store = useGameStore()
+      store.setBridge(useBridge(async (): Promise<ActClass[]> => [Act1]))
+      await store.initGame()
+      store.dismissModal()
+      store.setPanelHold(true)
+      store.setScenePicture(true)
+      store.submitCommand('talk to voice')
+      store.releasePanels(store.turns.at(-1)!.id, [...PANEL_GROUPS], false)
+      return store
+    }
+
+    /** Pretend the studio has made these patches of the cottage. */
+    function made(store: ReturnType<typeof useGameStore>, ids: string[]): void {
+      const patches = Object.fromEntries(ids.map((id) => [id, { file: id }]))
+      store.imageManifest = { 'act1-eliors-cottage': { patches } }
+    }
+
+    it('lists only the patches that apply and have been made', async () => {
+      const store = await cottage()
+      made(store, ['bread-taken', 'lantern-lit'])
+      expect(store.roomPatchUrls).toEqual([])
+      store.submitCommand('take bread')
+      store.releasePanels(store.turns.at(-1)!.id, [...PANEL_GROUPS], false)
+      expect(store.roomPatchUrls).toEqual([
+        expect.stringContaining('act1-eliors-cottage.bread-taken.png'),
+      ])
+    })
+
+    it('keeps the old patches until the narration reaches the picture group', async () => {
+      const store = await cottage()
+      made(store, ['bread-taken'])
+      store.submitCommand('take bread')
+      const id = store.turns.at(-1)!.id
+      expect(store.roomPatchUrls).toEqual([])
+      store.releasePanels(id, ['place'], true)
+      expect(store.roomPatchUrls).toEqual([])
+      store.releasePanels(id, ['picture'], true)
+      expect(store.roomPatchUrls).toHaveLength(1)
+    })
+
+    it('shows a patch that is not made yet as nothing', async () => {
+      const store = await cottage()
+      made(store, [])
+      store.submitCommand('take bread')
+      store.releasePanels(store.turns.at(-1)!.id, [...PANEL_GROUPS], false)
+      expect(store.roomPatchUrls).toEqual([])
+    })
   })
 })
