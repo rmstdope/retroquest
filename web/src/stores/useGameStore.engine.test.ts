@@ -383,6 +383,34 @@ describe('useGameStore over the real engine: the no-match line and a name that w
     expect(saysNoMatch(store, 'fly cedric')).toBe(true)
     expect(saysNoMatch(store, 'cedric')).toBe(true)
   })
+
+  it('still says no match where a name would not work', async () => {
+    const store = await storeIn(Act2, 'CastleCourtyard')
+
+    expect(saysNoMatch(store, 'talk cedric')).toBe(true)
+    expect(saysNoMatch(store, 'go cedric')).toBe(true)
+    expect(saysNoMatch(store, 'give cedric')).toBe(true)
+    expect(saysNoMatch(store, 'talk to bob cedric')).toBe(true)
+  })
+
+  it('takes a name with its article and from the words after the verb', async () => {
+    const store = await storeIn(Act2, 'CastleCourtyard')
+
+    expect(saysNoMatch(store, 'talk to the cedric')).toBe(false)
+    expect(saysNoMatch(store, 'look at cedric')).toBe(false)
+  })
+
+  it('says nothing about who is addressed in the free words of say', async () => {
+    const store = await storeIn(Act2, 'CastleCourtyard')
+
+    expect(saysNoMatch(store, 'say truth to bob')).toBe(false)
+  })
+
+  it('says no match for a name still being typed', async () => {
+    const store = await storeIn(Act2, 'CastleCourtyard')
+
+    expect(saysNoMatch(store, 'talk to ced')).toBe(true)
+  })
 })
 
 describe('useGameStore over the real engine: Enter on a word a name starts with', () => {

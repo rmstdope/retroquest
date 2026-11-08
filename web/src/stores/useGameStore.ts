@@ -1413,8 +1413,9 @@ export const useGameStore = defineStore('game', () => {
    * as a command, and which of three states the list is in — `matches` (some
    * words to offer), `none` (an earlier word is unknown, or the last word
    * matches nothing) or `complete` (the command needs no more words). Text
-   * the tree does not know but that ends in a character's name is `complete`,
-   * as the tree holds only full names and a character answers to more.
+   * the tree cannot follow is `complete` when, from where the tree offers a
+   * character, it names one here: the tree holds only full names and a
+   * character answers to more.
    * Matching ignores case; `word` is the last word as typed.
    */
   function completionState(input: string): CompletionState {
@@ -1430,22 +1431,26 @@ export const useGameStore = defineStore('game', () => {
       sendable: false,
       word: typedWords[typedWords.length - 1],
     }
+    let nameStart = -1
     const unmatched = (sendable: boolean): CompletionState =>
-      endsInCharacterName(typedWords)
+      nameStart >= 0 &&
+      bridge?.controller.namesCharacter(typedWords.slice(nameStart).join(' '))
         ? { ...none, kind: 'complete', sendable: true }
         : { ...none, sendable }
 
     let node: CompletionTree | null = completionTree.value
-    for (const token of tokens.slice(0, -1)) {
+    for (const [index, token] of tokens.slice(0, -1).entries()) {
       if (node === null) {
         // Words after a finished command: nothing to offer.
         return { ...none, kind: 'complete', sendable: true }
       }
+      if (offersCharacter(node)) nameStart = index
       if (token === SENDABLE_MARKER || !Object.hasOwn(node, token))
         return unmatched(false)
       node = node[token]
     }
     if (node === null) return { ...none, kind: 'complete', sendable: true }
+    if (offersCharacter(node)) nameStart = tokens.length - 1
 
     const candidates = Object.keys(node).filter(
       (k) => k !== SENDABLE_MARKER && k.startsWith(last),
@@ -1467,16 +1472,11 @@ export const useGameStore = defineStore('game', () => {
     return { kind: 'matches', candidates, sendable, word }
   }
 
-  /** Whether words after a known first word end in the name of a character here. */
-  function endsInCharacterName(words: string[]): boolean {
-    if (!bridge || !Object.hasOwn(completionTree.value, words[0].toLowerCase()))
-      return false
-    const { controller } = bridge
-    return words
-      .slice(1)
-      .some((_, index) =>
-        controller.namesCharacter(words.slice(index + 1).join(' ')),
-      )
+  /** Whether this point of the tree offers the name of a character here. */
+  function offersCharacter(node: CompletionTree): boolean {
+    return characters.value.some((name) =>
+      Object.hasOwn(node, name.toLowerCase().split(/\s+/)[0]),
+    )
   }
 
   return {
