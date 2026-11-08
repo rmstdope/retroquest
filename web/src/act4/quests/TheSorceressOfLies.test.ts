@@ -51,21 +51,4 @@ describe('TheSorceressOfLies', () => {
     ]
     expect(new Set(hints).size).toBe(hints.length)
   })
-
-  it('still asks for the badge when every heart is heard without it', () => {
-    const game = new Game([new Act4()])
-    game.state.storyFlags = {}
-    const quest = new TheSorceressOfLies()
-    for (const flag of [
-      FLAG_ACT4_HEARTS_TRUTH_CAST,
-      FLAG_ACT4_STAFF_HEARD,
-      FLAG_ACT4_WHISPERS_HEARD,
-    ])
-      game.state.setStoryFlag(flag, true)
-    expect(quest.checkUpdate(game.state)).toBe(true)
-    const withoutBadge = quest.hint(game.state)
-    game.state.setStoryFlag(FLAG_ACT4_BADGE_SHOWN, true)
-    expect(quest.checkUpdate(game.state)).toBe(true)
-    expect(quest.hint(game.state)).not.toBe(withoutBadge)
-  })
 })

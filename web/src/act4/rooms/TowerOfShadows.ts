@@ -15,7 +15,7 @@ const STAIR_OPEN_SUFFIX =
 /** What presses on Elior on the stair before any friend is named. */
 const NO_NAME_HINT =
   'The whispers on the stair say that no one stayed with you. ' +
-  'You know better, and so did Mira at the gate.'
+  'You know better, and so does Mira at the gate.'
 
 /** What presses on Elior once a friend is named, before the third. */
 const SOME_NAMED_HINT =

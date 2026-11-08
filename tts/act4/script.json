@@ -1100,9 +1100,9 @@
     "text": "You search around the Tower of Shadows, but find nothing of interest beyond what you can already see."
   },
   {
-    "id": "04d34c31df2d2a",
+    "id": "00f03c2c0bb384",
     "speaker": "narrator",
-    "text": "The Final Stand: The whispers on the stair say that no one stayed with you. You know better, and so did Mira at the gate."
+    "text": "The Final Stand: The whispers on the stair say that no one stayed with you. You know better, and so does Mira at the gate."
   },
   {
     "id": "1d0adb6b8b53f2",
@@ -1265,9 +1265,9 @@
     "text": "The Sorceress of Lies: At the top of the tower the Sorceress of Lies holds court, and the mask on her staff is the mark from Elena's wrist. Listen past her lies, to what is under them."
   },
   {
-    "id": "04ffe295911b03",
+    "id": "0c3ee43a156133",
     "speaker": "narrator",
-    "text": "She laughed at the knight's badge, but it reached her. No one has ever understood a word she said, she says."
+    "text": "Her smile slipped at the knight's badge. Under the whispers a small voice is not lying, too quietly for ears alone."
   },
   {
     "id": "10c09aa84a67a4",
@@ -1285,9 +1285,9 @@
     "text": "He turned? Then he is a fool. Everyone lies, little Elior. No one has ever understood a word I said. Why would you be the first?"
   },
   {
-    "id": "0afe6c32f37880",
+    "id": "1a924fc027c31a",
     "speaker": "narrator",
-    "text": "The Sorceress of Lies: She laughed at the knight's badge, but it reached her. No one has ever understood a word she said, she says."
+    "text": "The Sorceress of Lies: Her smile slipped at the knight's badge. Under the whispers a small voice is not lying, too quietly for ears alone."
   },
   {
     "id": "10ef4a1741c54a",
@@ -1320,14 +1320,14 @@
     "text": "You listen to the crystals, and the whispers are not many voices. They are one: hers, repeating every lie she has ever told so that she never has to hear the silence."
   },
   {
-    "id": "0b695fedb50036",
+    "id": "166c92520f3ab8",
     "speaker": "narrator",
-    "text": "She told you no one has ever understood a word she said. You could be the first."
+    "text": "You have heard all of her. In all her years no one has understood a word she said. You could be the first."
   },
   {
-    "id": "0f6ca86e849d7f",
+    "id": "0fdae3ac00562c",
     "speaker": "narrator",
-    "text": "The Sorceress of Lies: She told you no one has ever understood a word she said. You could be the first."
+    "text": "The Sorceress of Lies: You have heard all of her. In all her years no one has understood a word she said. You could be the first."
   },
   {
     "id": "05fbde77bcb93f",
@@ -1505,9 +1505,9 @@
     "text": "The Shadow of the Past: Among the broken memories a shadow reaches for scenes it cannot hold. Mend what it has lost, and learn whose voice it is."
   },
   {
-    "id": "071eaadfae25bf",
+    "id": "031b9ae30f4911",
     "speaker": "narrator",
-    "text": "The orbs are whole, and the Shadow has a face. It was Malakar once, the part of him that remembered why he began. It says it has no hope left."
+    "text": "The orbs are whole, and the Shadow has a face. It looks at the mended memories the way a man looks at a door he does not expect to open again."
   },
   {
     "id": "02c40d0b8db956",
@@ -1565,9 +1565,9 @@
     "text": "A man made of shadow, almost solid now. His face is kind and very tired. You have never seen it before, and you know it all the same."
   },
   {
-    "id": "11c02927873fc9",
+    "id": "0106786cbf6e32",
     "speaker": "narrator",
-    "text": "The Shadow of the Past: The orbs are whole, and the Shadow has a face. It was Malakar once, the part of him that remembered why he began. It says it has no hope left."
+    "text": "The Shadow of the Past: The orbs are whole, and the Shadow has a face. It looks at the mended memories the way a man looks at a door he does not expect to open again."
   },
   {
     "id": "1176e73e4e700e",

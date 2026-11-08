@@ -52,6 +52,7 @@ describe('TheKnightOfDespair', () => {
       hintAfter([FLAG_ACT4_LOYALTY_TOKEN_RAISED_IN_HALL]),
     ]
     expect(new Set(hints).size).toBe(hints.length)
+    expect(quest.description).toContain('[/dim]\n\n')
   })
 
   it('counts the chain as a shield only while it is still carried', () => {

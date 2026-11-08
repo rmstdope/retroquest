@@ -13,13 +13,13 @@ const OPENING_ENTRY =
 
 /** The log once the orbs are mended and the Shadow has a face. */
 const MENDED_ENTRY =
-  'The orbs are whole, and the Shadow has a face. ' +
-  'It was Malakar once, the part of him that remembered why he began. ' +
-  'It says it has no hope left.'
+  '\n\nThe orbs are whole, and the Shadow has a face. ' +
+  'It looks at the mended memories the way a man looks at a door ' +
+  'he does not expect to open again.'
 
 /** The log once the Sorceress's mask is shown to it. */
 const MASK_ENTRY =
-  'The Shadow turned the mask over and gave it back. ' +
+  '\n\nThe Shadow turned the mask over and gave it back. ' +
   'If she could choose the truth, perhaps he can too. ' +
   'Its words are still waiting for an answer: Be patient where I was not.'
 

@@ -18,23 +18,24 @@ const OPENING_ENTRY =
 
 /** The log once some, but not all, of the hall's three sights are seen. */
 const SOME_SEEN_ENTRY =
-  'You have seen something of the knight, but not all of him. ' +
+  '\n\nYou have seen something of the knight, but not all of him. ' +
   'There is more in this hall to see through.'
 
 /** The log once all three sights are seen. */
 const ALL_SEEN_ENTRY =
-  'He served King Alden before he ever served Malakar. ' +
+  '\n\nHe served King Alden before he ever served Malakar. ' +
   'The voice in the stone that keeps saying redemption is his, ' +
   'and behind the visor he is weeping.'
 
 /** The newest entry while nothing stands between Elior and the knight's despair. */
 const UNSHIELDED_ENTRY =
+  '\n\n' +
   "When you face him, the knight's despair rolls over you like cold water, " +
   'and nothing stands between you and it.'
 
 /** The newest entry once the despair cannot reach Elior. */
 const SHIELDED_ENTRY =
-  'His despair cannot reach you now. ' +
+  '\n\nHis despair cannot reach you now. ' +
   'He is still waiting for the word the stone keeps saying.'
 
 /** What the log says once the knight is redeemed. */
