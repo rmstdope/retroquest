@@ -73,7 +73,7 @@ describe('Act IV spells narrate their effect', () => {
 
   it('light on an ordinary thing is one read sentence', () => {
     const game = newGame()
-    const out = new Light().castOnItem(game.state, new Banners())
+    const out = new Light().castOnItem(game.state, new CrystalWhispers())
     expect(out).toBe('The light shows it clearly, but has no special effect.')
   })
 
