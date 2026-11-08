@@ -168,6 +168,12 @@ export const ACT1_ROOM_PATCHES: Record<string, ImagePatch[]> = {
       text: 'Add the magnet to the picture.',
       area: 'magnet',
     },
+    {
+      id: 'shed-door-unlocked',
+      title: 'Shed door unlocked',
+      text: 'Show the shed door unlocked and ajar.',
+      area: 'shed-door',
+    },
   ],
   OldMill: [
     {
@@ -175,6 +181,12 @@ export const ACT1_ROOM_PATCHES: Record<string, ImagePatch[]> = {
       title: 'Millstone Fragment appears',
       text: 'Add the millstone fragment to the picture.',
       area: 'millstone-fragment',
+    },
+    {
+      id: 'mechanism-jammed',
+      title: 'Mechanism jammed',
+      text: 'Jam a rope through the black-iron mechanism, which hangs still.',
+      area: 'mechanism',
     },
   ],
   Riverbank: [
@@ -238,6 +250,12 @@ export const ACT1_ROOM_PATCHES: Record<string, ImagePatch[]> = {
       text: 'Add the locket to the picture.',
       area: 'locket',
     },
+    {
+      id: 'candle-lit',
+      title: 'Candle lit',
+      text: 'Light the candle on the altar: a small steady flame, and the dark corner beside it lit.',
+      area: 'candle',
+    },
   ],
   RoadToGreendale: [
     {
@@ -245,6 +263,14 @@ export const ACT1_ROOM_PATCHES: Record<string, ImagePatch[]> = {
       title: 'Rusty Saw taken',
       text: 'Remove the rusty saw from the picture.',
       area: 'rusty-saw',
+    },
+  ],
+  VillageWell: [
+    {
+      id: 'well-purified',
+      title: 'Well purified',
+      text: 'Make the water in the well clear and bright instead of dark and still.',
+      area: 'well',
     },
   ],
 }

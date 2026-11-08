@@ -104,6 +104,15 @@ describe('usePanelHold', () => {
     expect(game.panelFlash.place).toBe(1)
   })
 
+  it("releases the room picture's patches when the narrator reaches the turn's last line, before the turn is over", async () => {
+    const release = vi.spyOn(game, 'releasePanels')
+    narrate(`take ${GEM}`)
+    await vi.advanceTimersByTimeAsync(0)
+    const groups = release.mock.calls.map(([, groups]) => groups)
+    expect(groups).toContainEqual(['picture'])
+    expect(game.panelsHeld).toBe(true)
+  })
+
   it('releases the quest count at the last quest card and the bag when the turn ends', async () => {
     const turn = narrate(`take ${GEM}`)
     expect(firstQuestUnit(turn)).toBe(parseTurn(turn.text).length)

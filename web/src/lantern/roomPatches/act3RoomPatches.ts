@@ -166,6 +166,12 @@ export const ACT3_ROOM_PATCHES: Record<string, ImagePatch[]> = {
       text: 'Add the brass mirror segment to the picture.',
       area: 'brass-mirror-segment',
     },
+    {
+      id: 'mirror-mount-mended',
+      title: 'Mirror mount mended',
+      text: 'Show the mirror mount whole, holding its mirrors upright.',
+      area: 'mirror-mount',
+    },
   ],
   FumarolePassages: [
     {
@@ -321,6 +327,12 @@ export const ACT3_ROOM_PATCHES: Record<string, ImagePatch[]> = {
       title: "Dragon's Scale appears",
       text: "Add the dragon's scale to the picture.",
       area: 'dragons-scale',
+    },
+    {
+      id: 'sigils-dimmed',
+      title: 'Sigils dimmed',
+      text: 'Dim the sigils around the dragon and split the nearest ring with a crack.',
+      area: 'sigils',
     },
   ],
   FortressEntrance: [

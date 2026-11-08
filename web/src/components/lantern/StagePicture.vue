@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onUnmounted, ref, watch } from 'vue'
+import { computed, onUnmounted, ref, watch } from 'vue'
 import { useSceneStore } from '@/stores/useSceneStore'
 
 /**
@@ -14,14 +14,32 @@ import { useSceneStore } from '@/stores/useSceneStore'
  * starting) the new picture fades in over the old one (about a third of a
  * second, at once under Reduce motion) and the old picture goes once the fade
  * is over. In dark mode the picture is dimmed.
+ * Patches (`patches`, the URLs of the transparent pictures the story's changes
+ * to the room call for) are laid over the picture, trimmed and dimmed with it.
+ * Those there when the picture comes up are there without a fade, and the
+ * picture waits (up to a second, counted from the dark of a change of scene,
+ * never during the fade-out) for the ones still loading. A load (the scene
+ * store is reset) lays the saved story's patches the same way, in the
+ * room Elior already stands in too. When the story changes the room Elior stands in, a patch
+ * fades in or out slowly (a little over a second, at once under Reduce motion);
+ * a patch that cannot be fetched is left out, and one that is slow fades in
+ * when it comes. Nothing of the next room's patches shows over the old picture.
  * It says (`pictured`) whether a picture is up or only the backdrop, for the
  * text told over it. Purely decorative: hidden from assistive technology.
  */
-const props = defineProps<{ src: string }>()
+const props = withDefaults(defineProps<{ src: string; patches?: string[] }>(), {
+  patches: () => [],
+})
 const emit = defineEmits<{ pictured: [shown: boolean] }>()
 
 /** How long the old picture stays under the fading new one. */
 const FADE_MS = 350
+/** How long a patch takes to fade in or out (the stylesheet's, with a margin before it is let go). */
+const PATCH_FADE_MS = 1300
+/** How long the picture waits for its patches to load before it comes up without them. */
+const PATCH_WAIT_MS = 1000
+/** How long a patch just laid waits before it starts to fade in. */
+const PATCH_START_MS = 20
 
 const scene = useSceneStore()
 const shown = ref('')
@@ -30,6 +48,164 @@ const loading = ref(props.src)
 /** The picture that has loaded during a change of scene and waits for the dark. */
 const waiting = ref<string | null>(null)
 let leaveTimer: ReturnType<typeof setTimeout> | undefined
+
+/** One patch laid over the picture: `on` is its full strength, `still` that it came with the picture. */
+interface PatchLayer {
+  src: string
+  on: boolean
+  still: boolean
+}
+const layers = ref<PatchLayer[]>([])
+/** The patches that have loaded, and those that cannot be fetched. */
+const loadedPatches = ref<string[]>([])
+const failedPatches = ref<string[]>([])
+/** The asked-for patches that are there to lay. */
+const readyPatches = computed(() =>
+  props.patches.filter((url) => loadedPatches.value.includes(url)),
+)
+/** The asked-for patches that can still be fetched, for the hidden loaders. */
+const patchLoaders = computed(() =>
+  props.patches.filter((url) => !failedPatches.value.includes(url)),
+)
+/** What waits for the patches to load: it runs when they have, or after `PATCH_WAIT_MS`. */
+let patchWait: (() => void) | null = null
+let patchTimer: ReturnType<typeof setTimeout> | undefined
+const patchTimers: ReturnType<typeof setTimeout>[] = []
+
+/** Whether every asked-for patch has loaded or failed. */
+function patchesSettled(): boolean {
+  return props.patches.every(
+    (url) =>
+      loadedPatches.value.includes(url) || failedPatches.value.includes(url),
+  )
+}
+
+/**
+ * Run `then` once the patches have loaded (now, if they have), or after
+ * `PATCH_WAIT_MS` without them. With `inTheDark`, that second is counted from
+ * the moment the stage is dark (the change of scene), not from now.
+ */
+function whenPatchesSettled(
+  then: () => void,
+  onWait?: () => void,
+  inTheDark = false,
+): void {
+  clearTimeout(patchTimer)
+  patchTimer = undefined
+  patchWait = null
+  if (patchesSettled()) return then()
+  onWait?.()
+  const turn = scene.turn
+  const run = (): void => {
+    clearTimeout(patchTimer)
+    patchTimer = undefined
+    patchWait = null
+    // A change of scene that ended (skipped) or gave way to another is not this wait's.
+    if (inTheDark && scene.turn !== turn) return
+    then()
+  }
+  patchWait = run
+  if (!inTheDark || scene.phase === 'dark') startPatchTimer()
+}
+
+/** Start counting the second the picture waits for its patches. */
+function startPatchTimer(): void {
+  if (patchWait && patchTimer === undefined)
+    patchTimer = setTimeout(patchWait, PATCH_WAIT_MS)
+}
+
+// The second a room waits for its patches in a change of scene is spent in the dark.
+watch(
+  () => scene.phase,
+  (phase) => {
+    if (phase === 'dark') startPatchTimer()
+  },
+)
+
+watch([loadedPatches, failedPatches, () => props.patches], () => {
+  if (patchWait && patchesSettled()) patchWait()
+})
+
+/** The patch at `url` has loaded. */
+function onPatchLoaded(url: string): void {
+  if (!loadedPatches.value.includes(url))
+    loadedPatches.value = [...loadedPatches.value, url]
+}
+
+/** The patch at `url` cannot be fetched: it is left out, with no message. */
+function onPatchMissing(url: string): void {
+  if (!failedPatches.value.includes(url))
+    failedPatches.value = [...failedPatches.value, url]
+}
+
+/** The patches come up with the picture, without a fade. */
+function layPatchesStill(): void {
+  for (const timer of patchTimers.splice(0)) clearTimeout(timer)
+  layers.value = shown.value
+    ? readyPatches.value.map((src) => ({ src, on: true, still: true }))
+    : []
+}
+
+/** Whether the stage has just been started afresh (a load): the room's patches are laid, not faded. */
+let restoring = false
+let restoreTimer: ReturnType<typeof setTimeout> | undefined
+
+// A load (the scene store is reset): what the saved story has changed is already there.
+watch(
+  () => scene.shown === null,
+  (reset) => {
+    if (!reset) return
+    restoring = true
+    // The load is over after a second at the latest, or once its patches are laid.
+    clearTimeout(restoreTimer)
+    restoreTimer = setTimeout(() => {
+      restoring = false
+    }, PATCH_WAIT_MS)
+  },
+  { flush: 'sync' },
+)
+
+/** The story changed the room Elior stands in: patches fade in and out. */
+function fadePatches(): void {
+  if (!shown.value || shown.value !== props.src) return
+  if (restoring) {
+    layPatchesStill()
+    // The load's patches are laid: the next change is the story's.
+    if (patchesSettled()) restoring = false
+    return
+  }
+  const wanted = readyPatches.value
+  for (const layer of layers.value) {
+    // A patch that came with the picture leaves with the slow fade too.
+    layer.still = false
+    if (!wanted.includes(layer.src)) layer.on = false
+  }
+  for (const src of wanted) {
+    const layer = layers.value.find((l) => l.src === src)
+    if (layer) {
+      layer.on = true
+      continue
+    }
+    layers.value.push({ src, on: false, still: false })
+    // The reactive layer, so the change shows.
+    const added = layers.value[layers.value.length - 1]
+    patchTimers.push(
+      setTimeout(() => {
+        added.on = true
+      }, PATCH_START_MS),
+    )
+  }
+  patchTimers.push(
+    setTimeout(() => {
+      layers.value = layers.value.filter(
+        (l) => l.on || readyPatches.value.includes(l.src),
+      )
+    }, PATCH_FADE_MS),
+  )
+}
+
+watch(() => shown.value, layPatchesStill)
+watch(readyPatches, fadePatches)
 
 watch(
   () => !!shown.value,
@@ -82,18 +258,28 @@ function putInPlace(target: string): void {
 
 /** The picture being loaded is ready: it fades in over the shown one, or waits for the dark. */
 function onLoaded(): void {
+  const next = loading.value
   if (scene.turn !== null) {
-    waiting.value = loading.value
-    scene.targetReady(true)
+    waiting.value = next
+    // The dark waits a little for the room's patches, so they are there as it rises.
+    whenPatchesSettled(
+      () => scene.targetReady(true),
+      () => scene.awaitMore(PATCH_WAIT_MS * 2),
+      true,
+    )
     return
   }
-  clearTimeout(leaveTimer)
-  leaving.value = shown.value
-  shown.value = loading.value
-  loading.value = ''
-  leaveTimer = setTimeout(() => {
-    leaving.value = ''
-  }, FADE_MS)
+  // The picture comes up with its patches, or without those that are slow.
+  whenPatchesSettled(() => {
+    if (loading.value !== next) return
+    clearTimeout(leaveTimer)
+    leaving.value = shown.value
+    shown.value = loading.value
+    loading.value = ''
+    leaveTimer = setTimeout(() => {
+      leaving.value = ''
+    }, FADE_MS)
+  })
 }
 
 /** The picture is not there (yet): the backdrop stays. */
@@ -107,7 +293,12 @@ function onMissing(): void {
   leaving.value = ''
 }
 
-onUnmounted(() => clearTimeout(leaveTimer))
+onUnmounted(() => {
+  clearTimeout(leaveTimer)
+  clearTimeout(patchTimer)
+  clearTimeout(restoreTimer)
+  for (const timer of patchTimers) clearTimeout(timer)
+})
 </script>
 
 <template>
@@ -140,6 +331,23 @@ onUnmounted(() => clearTimeout(leaveTimer))
       @load="onLoaded"
       @error="onMissing"
     />
+    <img
+      v-for="layer in layers"
+      :key="layer.src"
+      class="lq-pic lq-patch"
+      :class="{ 'lq-patch-on': layer.on, 'lq-patch-still': layer.still }"
+      :src="layer.src"
+      alt=""
+    />
+    <img
+      v-for="url in patchLoaders"
+      :key="`patch-${url}`"
+      class="lq-patch-loading"
+      :src="url"
+      alt=""
+      @load="onPatchLoaded(url)"
+      @error="onPatchMissing(url)"
+    />
     <div class="lq-dim"></div>
     <div class="lq-veil"></div>
   </div>
@@ -171,7 +379,19 @@ onUnmounted(() => clearTimeout(leaveTimer))
 .lq-pic-in {
   animation: lq-picture-in calc(0.33s * var(--lq-motion)) ease;
 }
-.lq-loading {
+.lq-patch {
+  opacity: 0;
+  transition: opacity calc(1.2s * var(--lq-motion)) ease;
+  pointer-events: none;
+}
+.lq-patch-on {
+  opacity: 1;
+}
+.lq-patch-still {
+  transition: none;
+}
+.lq-loading,
+.lq-patch-loading {
   position: absolute;
   width: 1px;
   height: 1px;

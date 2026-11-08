@@ -126,4 +126,46 @@ describe('useSceneStore', () => {
     vi.advanceTimersByTime(5000)
     expect(onUp).not.toHaveBeenCalled()
   })
+
+  describe('awaitMore', () => {
+    it('gives a loaded picture more time in the dark before it is given up', () => {
+      const scene = useSceneStore()
+      scene.begin(1, '/b.png', () => {})
+      vi.advanceTimersByTime(SCENE_HALF_MS + 500)
+      expect(scene.phase).toBe('dark')
+      scene.awaitMore(SCENE_HALF_MS * 2)
+      vi.advanceTimersByTime(SCENE_HALF_MS + 600)
+      expect(scene.ready).toBeNull()
+      scene.targetReady(true)
+      expect(scene.phase).toBe('in')
+    })
+
+    it('does nothing when no change of scene is under way', () => {
+      const scene = useSceneStore()
+      scene.awaitMore(10)
+      expect(scene.phase).toBe('idle')
+    })
+
+    it('asked while the old picture is still fading out, the extra time is spent in the dark', () => {
+      const scene = useSceneStore()
+      scene.begin(1, '/b.png', () => {})
+      vi.advanceTimersByTime(200)
+      scene.awaitMore(SCENE_HALF_MS * 2)
+      vi.advanceTimersByTime(SCENE_HALF_MS - 200)
+      expect(scene.phase).toBe('dark')
+      vi.advanceTimersByTime(SCENE_HALF_MS + 600)
+      expect(scene.phase).toBe('dark')
+      expect(scene.ready).toBeNull()
+    })
+
+    it('is forgotten by the next change of scene', () => {
+      const scene = useSceneStore()
+      scene.begin(1, '/b.png', () => {})
+      scene.awaitMore(SCENE_HALF_MS * 5)
+      scene.skip()
+      scene.begin(2, '/c.png', () => {})
+      vi.advanceTimersByTime(SCENE_HALF_MS * 3)
+      expect(scene.ready).toBe(false)
+    })
+  })
 })

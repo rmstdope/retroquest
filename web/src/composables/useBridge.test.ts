@@ -709,4 +709,30 @@ describe('useBridge', () => {
       expect(bridge.getQuickSave()!.outdated).toBe(false)
     })
   })
+
+  describe('pictureState', () => {
+    it('names the room and the patches of its picture that apply', async () => {
+      const bridge = await runningBridge()
+      expect(bridge.pictureState().roomKey).toBe('EliorsCottage')
+      expect(bridge.pictureState().patchIds).not.toContain('bread-taken')
+      bridge.controller.takeTurn('take bread')
+      expect(bridge.pictureState().patchIds).toContain('bread-taken')
+    })
+
+    it('is the same after a save is loaded', async () => {
+      const bridge = await runningBridge()
+      bridge.controller.takeTurn('take bread')
+      const before = bridge.pictureState()
+      bridge.quickSaveGame()
+      bridge.newGame()
+      bridge.quickLoadGame()
+      expect(bridge.pictureState()).toEqual(before)
+    })
+
+    it('is empty before any room is known', async () => {
+      const bridge = useBridge()
+      await bridge.init()
+      expect(bridge.pictureState()).toEqual({ roomKey: '', patchIds: [] })
+    })
+  })
 })

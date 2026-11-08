@@ -1415,7 +1415,11 @@ watch(
           :style="{ '--lq-actions-h': `${actionsHeight}px` }"
           @click="onPicturePress"
         >
-          <StagePicture :src="game.roomPicture" @pictured="pictured = $event" />
+          <StagePicture
+            :src="game.roomPicture"
+            :patches="game.roomPatchUrls"
+            @pictured="pictured = $event"
+          />
           <ArrivalOnPicture :pictured="pictured" :phone="phoneStage" />
           <RoomPlate
             v-if="wide"

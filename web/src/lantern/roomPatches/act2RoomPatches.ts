@@ -182,6 +182,12 @@ export const ACT2_ROOM_PATCHES: Record<string, ImagePatch[]> = {
       text: 'Add the caravan to the picture.',
       area: 'caravan',
     },
+    {
+      id: 'forest-sprites-aside',
+      title: 'Forest sprites drawn aside',
+      text: 'Move the forest sprites away from the southern path, among the trees.',
+      area: 'forest-sprites',
+    },
   ],
   AncientGrove: [
     {

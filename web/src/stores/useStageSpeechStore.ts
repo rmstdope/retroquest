@@ -65,6 +65,8 @@ export const useStageSpeechStore = defineStore('stageSpeech', () => {
   const recentTurns = ref<number[]>([])
   let nextKey = 1
   let timer: ReturnType<typeof setTimeout> | undefined
+  /** What to do once the unnarrated turn being read has shown its last line (once), if anything waits for it. */
+  let lastLineShown: (() => void) | null = null
   /** The scene change the unnarrated turn being read waits to reach, and that turn, if any. */
   const sceneChange = shallowRef<(SceneChange & { turnId: number }) | null>(
     null,
@@ -163,6 +165,13 @@ export const useStageSpeechStore = defineStore('stageSpeech', () => {
     return !!line && isSpeaking(line)
   }
 
+  /** The last line of the unnarrated turn is up (or the turn is cut short): tell whoever waited for it, once. */
+  function finishLastLine(): void {
+    const done = lastLineShown
+    lastLineShown = null
+    done?.()
+  }
+
   /** Wait with turn `turn`'s words from `change`'s unit on until its scene changes (none: nothing waits). */
   function holdScene(turn: Turn, change: SceneChange | null): void {
     if (!change) return
@@ -197,6 +206,10 @@ export const useStageSpeechStore = defineStore('stageSpeech', () => {
       if (atScene) changeSceneNow()
       if (!next) return
       next.shown = true
+      if (
+        !conversation.value?.lines.some((line) => !line.narrated && !line.shown)
+      )
+        finishLastLine()
       release(next)
     }
     if (wait === 0) show()
@@ -238,6 +251,7 @@ export const useStageSpeechStore = defineStore('stageSpeech', () => {
     clearTimeout(timer)
     for (const line of conversation.value?.lines ?? []) line.shown = true
     changeSceneNow()
+    finishLastLine()
   }
 
   /** Clear the picture; the story keeps everything said, and a scene still to change changes now. */
@@ -245,6 +259,7 @@ export const useStageSpeechStore = defineStore('stageSpeech', () => {
     clearTimeout(timer)
     conversation.value = null
     changeSceneNow()
+    finishLastLine()
   }
 
   /**
@@ -255,11 +270,18 @@ export const useStageSpeechStore = defineStore('stageSpeech', () => {
    * (`toldAsSpeech`); one that addresses someone else starts a new one; one
    * that addresses the same character adds to it. `change` is where the
    * scene of an unnarrated talk that moves Elior changes (see `SceneChange`).
+   * `lastLine` is called once when the turn's last unnarrated line has
+   * appeared (at once when there is none to wait for, or when the rest is
+   * shown whole or cleared).
    * Whatever it clears, it keeps the lines of a turn it cut off before they
    * all appeared, unless it moved Elior; the next turn lets them go once
    * they have been seen.
    */
-  function observe(turn: Turn, change: SceneChange | null = null): void {
+  function observe(
+    turn: Turn,
+    change: SceneChange | null = null,
+    lastLine: (() => void) | null = null,
+  ): void {
     recentTurns.value = [...recentTurns.value, turn.id].slice(-3)
     // An unnarrated line's showing is its own (no skip of the narrator touches
     // it), so it is noted here too; a narrated one only by the earlier `noteSeen`.
@@ -280,7 +302,9 @@ export const useStageSpeechStore = defineStore('stageSpeech', () => {
     if (!addressed && (moved || !said.length)) {
       // Nothing is said on the picture: a scene to change changes at once.
       holdScene(turn, change)
-      return restart(cut, null)
+      restart(cut, null)
+      lastLineShown = lastLine
+      return finishLastLine()
     }
     // A turn that addresses no one shows its own words, on their own.
     const partner = addressed ?? ELIOR
@@ -315,6 +339,9 @@ export const useStageSpeechStore = defineStore('stageSpeech', () => {
       })),
     ].map((line) => ({ ...line, turnId: turn.id, key: nextKey++ }))
     conversation.value?.lines.push(...lines)
+    lastLineShown = lastLine
+    // Nothing to wait for when the turn has no unnarrated line still to show.
+    if (!lines.some((line) => !line.narrated && !line.shown)) finishLastLine()
     release(
       conversation.value?.lines.find(
         (line) => line.shown && line.turnId === turn.id,

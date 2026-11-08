@@ -19,7 +19,7 @@ export type ScenePhase = 'idle' | 'out' | 'dark' | 'in'
  * picture draws the phases; this keeps the clock and runs `onUp` once when
  * the picture is up, by time or by `skip`.
  * A picture slow to load keeps the stage dark for at most one more
- * `SCENE_HALF_MS`; after that, or when it is missing, the paper backdrop
+ * `SCENE_HALF_MS` (two, when its patches are still loading: `awaitMore`); after that, or when it is missing, the paper backdrop
  * ('') rises instead. Nothing here is saved.
  */
 export const useSceneStore = defineStore('scene', () => {
@@ -43,6 +43,8 @@ export const useSceneStore = defineStore('scene', () => {
   )
   let timer: ReturnType<typeof setTimeout> | undefined
   let onUp: (() => void) | null = null
+  /** How long the dark waits for the target before giving it up, when something asked for more (`awaitMore`). */
+  let extra: number | null = null
 
   /** Forget the pending step. */
   function stopTimer(): void {
@@ -97,6 +99,7 @@ export const useSceneStore = defineStore('scene', () => {
     target.value = src
     ready.value = src ? null : true
     onUp = up
+    extra = null
     phase.value = 'out'
     timer = setTimeout(arrive, SCENE_HALF_MS)
   }
@@ -105,7 +108,7 @@ export const useSceneStore = defineStore('scene', () => {
   function arrive(): void {
     if (ready.value === null) {
       phase.value = 'dark'
-      timer = setTimeout(() => targetReady(false), SCENE_HALF_MS)
+      timer = setTimeout(() => targetReady(false), extra ?? SCENE_HALF_MS)
     } else rise()
   }
 
@@ -125,11 +128,27 @@ export const useSceneStore = defineStore('scene', () => {
     if (phase.value === 'dark') rise()
   }
 
+  /**
+   * The new picture has loaded but something that belongs with it has not
+   * (the patches laid over it): the dark waits `ms` before the picture is
+   * given up as missing. Asked while the old picture is still fading out, the
+   * time is spent once the dark is reached, never during the fade. Does
+   * nothing when no change of scene is under way or the target is settled.
+   */
+  function awaitMore(ms: number): void {
+    if (turn.value === null || ready.value !== null) return
+    extra = ms
+    if (phase.value !== 'dark') return
+    stopTimer()
+    timer = setTimeout(() => targetReady(false), ms)
+  }
+
   /** The picture is up: the words may come. */
   function finish(): void {
     stopTimer()
     const up = onUp
     onUp = null
+    extra = null
     shown.value = target.value
     phase.value = 'idle'
     turn.value = null
@@ -150,6 +169,7 @@ export const useSceneStore = defineStore('scene', () => {
     pending.value = null
     fresh.value = null
     onUp = null
+    extra = null
     shown.value = null
     phase.value = 'idle'
     turn.value = null
@@ -170,6 +190,7 @@ export const useSceneStore = defineStore('scene', () => {
     firstUnit,
     begin,
     targetReady,
+    awaitMore,
     skip,
     reset,
   }
