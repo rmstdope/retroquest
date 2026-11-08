@@ -2400,9 +2400,9 @@
     "text": "The stones held. The way is open, and the sleeper knows you are coming. Go quietly."
   },
   {
-    "id": "0a14a3c967fcd1",
+    "id": "0650cd01bbfb2e",
     "speaker": "narrator",
-    "text": "Arcane sigils of forgotten civilizations spiral across the obsidian tiles in rings around the dragon."
+    "text": "The sigils are cut deep, ring inside ring, and each ring glows faintly. They are the walls of the dragon's prison, and every ring holds."
   },
   {
     "id": "19a60b7b4d1813",
@@ -2510,9 +2510,19 @@
     "text": "A hall of living stone opens beyond sight, its ceiling lost in shadow. Embers burn slowly along the floor, pulsing like a heartbeat, and somewhere in the dark, water drips. Rings of old sigils spiral across the black tiles around the Ancient Dragon. It lies coiled at the centre, scales like polished obsidian, and each slow breath hums in your bones. The old dripping has stopped; from the mines beyond comes no sound of picks at all. The sigils around the dragon burn steady and whole again."
   },
   {
+    "id": "1126628ae7963d",
+    "speaker": "narrator",
+    "text": "The nearest ring is whole again, its sigils glowing like the rest. The prison holds."
+  },
+  {
     "id": "1f875adda26fc7",
     "speaker": "ancient dragon",
     "text": "Go with my blessing, young one. The prison holds."
+  },
+  {
+    "id": "0de32129487465",
+    "speaker": "narrator",
+    "text": "The crack splits the nearest ring clean through, and the sigils on either side of it have gone dull. The prison is weaker than it was."
   },
   {
     "id": "0ea6d71e45791d",

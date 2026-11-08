@@ -6,6 +6,21 @@ import {
   VIRTUE_SELFLESS,
 } from '../Act3StoryFlags'
 
+/** The sigils as they stand before the scale is taken. */
+const WHOLE_TEXT =
+  'The sigils are cut deep, ring inside ring, and each ring glows faintly. ' +
+  "They are the walls of the dragon's prison, and every ring holds."
+
+/** The sigils once the scale is taken: the prison has weakened. */
+const CRACKED_TEXT =
+  'The crack splits the nearest ring clean through, and the sigils on ' +
+  'either side of it have gone dull. The prison is weaker than it was.'
+
+/** The sigils once blessing has mended them. */
+const MENDED_TEXT =
+  'The nearest ring is whole again, its sigils glowing like the rest. ' +
+  'The prison holds.'
+
 /**
  * The sigils that bind the ancient dragon in its hall. Once the scale has
  * been taken they crack; blessing them mends the prison, an optional
@@ -15,11 +30,23 @@ export class Sigils extends Item {
   constructor() {
     super({
       name: 'sigils',
-      description:
-        'Arcane sigils of forgotten civilizations spiral across the obsidian ' +
-        'tiles in rings around the dragon.',
+      description: WHOLE_TEXT,
       canBeCarried: false,
     })
+  }
+
+  /**
+   * Describes the prison as it stands: whole, cracked once the scale is
+   * taken, or mended once blessed, so the crack can be found by looking.
+   */
+  override examine(gameState: GameState): string {
+    if (gameState.getStoryFlag(FLAG_ACT3_SIGILS_MENDED)) {
+      return MENDED_TEXT
+    }
+    if (gameState.getStoryFlag(FLAG_ACT3_DRAGONS_SCALE_ACQUIRED)) {
+      return CRACKED_TEXT
+    }
+    return this.description
   }
 
   /** Handle a spell cast on the sigils: only `bless` does anything. */

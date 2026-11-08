@@ -35,6 +35,7 @@
     "after": 100,
     "commands": [
       "cast bless on sigils",
+      "examine sigils",
       "talk to ancient dragon"
     ]
   },
