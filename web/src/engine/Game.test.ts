@@ -1503,6 +1503,27 @@ describe('Game', () => {
       })
     })
 
+    it('offers a word a thing answers to when a name only starts with it', () => {
+      class Guardians extends Character {
+        /** Also answers to "guardian". */
+        override answersTo(name: string): boolean {
+          return super.answersTo(name) || name.toLowerCase() === 'guardian'
+        }
+      }
+      rooms.EliorsCottage.addCharacter(
+        new Guardians({ name: 'Guardians', description: 'Still.' }),
+      )
+      game.state.inventory.push(item("Guardian's Chain"))
+      const tree = game.getCommandCompletions()
+
+      expect(tree.examine).toEqual({
+        "guardian's": { chain: null },
+        guardians: null,
+        guardian: null,
+      })
+      expect(tree.take).toEqual({})
+    })
+
     it('treats item names that match object properties as plain tokens', () => {
       rooms.EliorsCottage.addItem(item('constructor'))
       const tree = game.getCommandCompletions()

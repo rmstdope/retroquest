@@ -383,7 +383,10 @@ Welcome to
       nested(characterNames),
       room.characters,
     )
-    const itemsAndCharacters = { ...allItemsTree, ...charactersTree }
+    const itemsAndCharacters = sendableNames(
+      { ...allItemsTree, ...charactersTree },
+      [...allItems, ...room.characters],
+    )
     const withCharacters = (
       keys: string[],
       preposition: string,
@@ -1094,19 +1097,29 @@ function nested(names: string[]): CompletionTree {
 }
 
 /**
- * Marks with `@` every word path in `tree` that one of `things` answers to, so
- * a name typed in full can be sent where longer names go on from it.
+ * Makes every word in `tree` that one of `things` answers to sendable, so a
+ * name typed in full is not traded for a longer one: a word path gets `@`, and
+ * a word that a listed word only starts with ("guardian" before "guardians")
+ * is added as a leaf.
  */
 function sendableNames(
   tree: CompletionTree,
   things: { answersTo(name: string): boolean }[],
   path: string[] = [],
 ): CompletionTree {
+  const named = (words: string[]): boolean =>
+    things.some((thing) => thing.answersTo(words.join(' ')))
   for (const [word, child] of Object.entries(tree)) {
+    if (word === '@') continue
+    for (let end = 1; end < word.length; end++) {
+      const start = word.slice(0, end)
+      if (!Object.hasOwn(tree, start) && named([...path, start])) {
+        tree[start] = null
+      }
+    }
     if (child === null) continue
     const words = [...path, word]
-    const phrase = words.join(' ')
-    if (things.some((thing) => thing.answersTo(phrase))) child['@'] = null
+    if (named(words)) child['@'] = null
     sendableNames(child, things, words)
   }
   return tree
