@@ -2455,6 +2455,11 @@
     "text": "You came for me. Whoever you are, you came."
   },
   {
+    "id": "036f171e7781d5",
+    "speaker": "narrator",
+    "text": "A mysterious amulet inscribed with runes. At its centre is the sigil of the Wardens of the Dawn: the sun rising over three linked rings. Its depths are empty now. It is dark, and still warm."
+  },
+  {
     "id": "1bef07a990bfd6",
     "speaker": "king alden",
     "text": "You named every crime and did not add one. Few men in my court could do that."
@@ -2575,9 +2580,9 @@
     "text": "The air where the wound was is still and empty."
   },
   {
-    "id": "036f171e7781d5",
+    "id": "0c394149a0254a",
     "speaker": "narrator",
-    "text": "A mysterious amulet inscribed with runes. At its centre is the sigil of the Wardens of the Dawn: the sun rising over three linked rings. Its depths are empty now. It is dark, and still warm."
+    "text": "A mysterious amulet inscribed with runes. At its centre is the sigil of the Wardens of the Dawn: the sun rising over three linked rings. It is dark now, and still warm. Only the third figure is left in its depths, and he has turned around."
   },
   {
     "id": "0e6beb808a8fca",
