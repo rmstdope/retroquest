@@ -123,6 +123,20 @@ describe('Act IV spells narrate their effect', () => {
     ])
   })
 
+  it('truth sight in the chamber is read, not grey', () => {
+    const game = newGame()
+    const spell = new TruthSight()
+    expect(
+      shape(spell.castOnCharacter(game.state, new SorceressOfLies())),
+    ).toEqual(['text'])
+    expect(shape(spell.castOnItem(game.state, new SorceressStaff()))).toEqual([
+      'text',
+    ])
+    expect(shape(spell.castOnItem(game.state, new CrystalWhispers()))).toEqual([
+      'text',
+    ])
+  })
+
   it("heart's truth results are read, not grey", () => {
     const game = newGame()
     const spell = new HeartsTruth()

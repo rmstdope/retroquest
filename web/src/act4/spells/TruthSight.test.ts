@@ -4,6 +4,7 @@ import { Malakar } from '../characters/Malakar'
 import {
   FLAG_ACT4_MEMORY_ORBS_MENDED,
   FLAG_ACT4_REDEMPTION_ENDING,
+  FLAG_ACT4_SORCERESS_OF_LIES_COMPLETED,
 } from '../Act4StoryFlags'
 import { Game } from '@/engine'
 import { Act4 } from '../Act4'
@@ -11,6 +12,10 @@ import { TruthSight } from './TruthSight'
 import { Mirrors } from '../items/Mirrors'
 import { KnightOfDespair } from '../characters/KnightOfDespair'
 import { TrueSelf } from '../characters/TrueSelf'
+import { SorceressOfLies } from '../characters/SorceressOfLies'
+import { SorceressStaff } from '../items/SorceressStaff'
+import { CrystalWhispers } from '../items/CrystalWhispers'
+import { ChamberOfWhispers } from '../rooms/ChamberOfWhispers'
 import { expectMarkupWellFormed } from '@/testing/gameHelpers'
 
 describe('TruthSight', () => {
@@ -81,5 +86,57 @@ describe('TruthSight optional targets', () => {
     expect(JSON.stringify(game.toSaveData())).toBe(flags)
     game.state.setStoryFlag(FLAG_ACT4_REDEMPTION_ENDING, true)
     expect(spell.castOnCharacter(game.state, malakar)).toBe(ORDINARY)
+  })
+})
+
+describe('TruthSight in the Chamber of Whispers', () => {
+  const ORDINARY =
+    '[dim]Your sight sharpens, but there is no illusion here to see through.[/dim]'
+
+  /** Every answer the spell gives in the chamber: the three targets and no target. */
+  function chamberAnswers(game: Game): string[] {
+    const spell = new TruthSight()
+    game.state.currentRoom = new ChamberOfWhispers()
+    return [
+      spell.castOnCharacter(game.state, new SorceressOfLies()),
+      spell.castOnItem(game.state, new SorceressStaff()),
+      spell.castOnItem(game.state, new CrystalWhispers()),
+      spell.castSpell(game.state),
+    ]
+  }
+
+  it('answers in-world on the Sorceress, her staff, the whispers and the room', () => {
+    const answers = chamberAnswers(new Game([new Act4()]))
+    for (const answer of answers) {
+      expect(answer).not.toBe(ORDINARY)
+      expect(answer).toContain('Your sight sharpens')
+      expectMarkupWellFormed(answer)
+    }
+    expect(new Set(answers).size).toBe(answers.length)
+  })
+
+  it('points away from the eyes: the lie is in what she says', () => {
+    const [sorceress] = chamberAnswers(new Game([new Act4()]))
+    expect(sorceress).toContain('They are in what she says')
+  })
+
+  it('sets nothing, so it changes nothing about the solution', () => {
+    const game = new Game([new Act4()])
+    const flags = JSON.stringify(game.state.storyFlags)
+    chamberAnswers(game)
+    expect(JSON.stringify(game.state.storyFlags)).toBe(flags)
+  })
+
+  it('finds nothing left to see through once she is redeemed', () => {
+    const game = new Game([new Act4()])
+    game.state.setStoryFlag(FLAG_ACT4_SORCERESS_OF_LIES_COMPLETED, true)
+    for (const answer of chamberAnswers(game)) {
+      expect(answer).toBe(ORDINARY)
+    }
+  })
+
+  it('still finds no illusion in a room without one', () => {
+    const game = new Game([new Act4()])
+    expect(new TruthSight().castSpell(game.state)).toBe(ORDINARY)
   })
 })
