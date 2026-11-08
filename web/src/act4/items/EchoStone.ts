@@ -29,9 +29,9 @@ const ENHANCED_USE =
 
 /**
  * Carry the hall's echoes into the Mirror Labyrinth: the maze can only be
- * walked with the stone in the pack, and used there (alone or with the
- * pendant) it repeats the route. Once enhanced, it mends the orbs of the
- * Memory Vault.
+ * walked with the stone in the pack, and used there (alone, with the pendant
+ * or with the mirrors) it repeats the route. Once enhanced, it mends the orbs
+ * of the Memory Vault.
  */
 export class EchoStone extends Item {
   /** Set once the knight's voice has joined the stone. */
