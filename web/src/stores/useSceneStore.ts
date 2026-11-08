@@ -125,6 +125,18 @@ export const useSceneStore = defineStore('scene', () => {
     if (phase.value === 'dark') rise()
   }
 
+  /**
+   * The new picture has loaded but something that belongs with it has not
+   * (the patches laid over it): while the stage waits in the dark, give it
+   * `ms` more before the picture is given up as missing. Does nothing at any
+   * other time.
+   */
+  function awaitMore(ms: number): void {
+    if (phase.value !== 'dark' || ready.value !== null) return
+    stopTimer()
+    timer = setTimeout(() => targetReady(false), ms)
+  }
+
   /** The picture is up: the words may come. */
   function finish(): void {
     stopTimer()
@@ -170,6 +182,7 @@ export const useSceneStore = defineStore('scene', () => {
     firstUnit,
     begin,
     targetReady,
+    awaitMore,
     skip,
     reset,
   }
