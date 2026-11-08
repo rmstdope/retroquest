@@ -1170,9 +1170,9 @@
     "text": "The token is quiet and warm. The whispers are gone."
   },
   {
-    "id": "0db5559265e4b8",
+    "id": "1ad1cc3d05e941",
     "speaker": "narrator",
-    "text": "A stair winds up inside the black stone, narrow and dark. The walls are cold, and there are no windows. The shadows on the stair move a moment after you do. With every step, something quiet at your ear tells you why you should not have come. The whispers are gone. The stair winds up into the dark, and it is only a stair."
+    "text": "A stair winds up inside the black stone, narrow and dark. The walls are cold, and there are no windows. The whispers are gone. The stair winds up into the dark, and it is only a stair."
   },
   {
     "id": "1e113540f7ca91",
@@ -1630,6 +1630,11 @@
     "text": "The runes on the door wake to the runes on the amulet, and the stone rolls aside without a sound."
   },
   {
+    "id": "0d10e274e4395e",
+    "speaker": "narrator",
+    "text": "The orbs hang whole and still now, each holding its scene like a held breath. The Shadow of the Past stands among them, almost solid, its eyes on the open door to the east."
+  },
+  {
     "id": "191b0cb0759820",
     "speaker": "shadow of the past",
     "text": "Go east, Elior. I have seen those memories every day for years. You never have."
@@ -1643,6 +1648,11 @@
     "id": "14bc73b445f17d",
     "speaker": "narrator",
     "text": "The Shadow has its answer. It nods towards the door to the east."
+  },
+  {
+    "id": "1a134044e1ea57",
+    "speaker": "narrator",
+    "text": "A round door of pale stone, carved with the same runes as your amulet around the sigil of the Wardens of the Dawn, and beneath it, worn almost away, a tree under two moons: the crest on your mother's locket. The door stands open."
   },
   {
     "id": "16cb7e1f883291",
@@ -2385,6 +2395,11 @@
     "text": "Malakar has drunk the elixir. That road is closed now."
   },
   {
+    "id": "0a3b4d7ef3a7b6",
+    "speaker": "narrator",
+    "text": "A tear in the air, no wider than a door, its edges flickering with days that never happened. It drinks the light from the king, still."
+  },
+  {
     "id": "1931fac992f597",
     "speaker": "malakar",
     "text": "It does not hurt. For the first time in years, it does not hurt."
@@ -2393,6 +2408,11 @@
     "id": "1c5cce29587eef",
     "speaker": "narrator",
     "text": "Malakar looks up at you like a man waiting to be forgiven."
+  },
+  {
+    "id": "1a7308137dc297",
+    "speaker": "narrator",
+    "text": "A tall man in a grey robe that was once a Warden's blue. His hair is white, though he cannot be much older than your father would have been. The grey is gone from his face, and he sits by the wound, watching it."
   },
   {
     "id": "0d16deae052bb5",
