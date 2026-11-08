@@ -2,6 +2,7 @@ import {
   affirms,
   Character,
   type GameState,
+  type Item,
   characterName,
   clue,
   dialogue,
@@ -22,7 +23,9 @@ import {
   FLAG_ACT4_LOYALTY_TOKEN_RAISED_IN_HALL,
 } from '../Act4StoryFlags'
 import { EchoStone } from '../items/EchoStone'
+import { GuardiansChain } from '../items/GuardiansChain'
 import { KnightsRedemption } from '../items/KnightsRedemption'
+import { LoyaltyToken } from '../items/LoyaltyToken'
 import { RedemptionsLight } from '../spells/RedemptionsLight'
 import { GhostlyWarriors } from './GhostlyWarriors'
 
@@ -147,6 +150,19 @@ export class KnightOfDespair extends Character {
       )
     }
     return KNIGHT_DESCRIPTION
+  }
+
+  /** The chain or the token offered to him before he is redeemed is raised, as using it is. */
+  override giveItem(gameState: GameState, item: Item): string {
+    const isShield =
+      item instanceof GuardiansChain || item instanceof LoyaltyToken
+    if (
+      isShield &&
+      !gameState.getStoryFlag(FLAG_ACT4_KNIGHT_OF_DESPAIR_COMPLETED)
+    ) {
+      return item.use(gameState)
+    }
+    return super.giveItem(gameState, item)
   }
 
   /** What he says changes as he is seen through and redeemed. */
