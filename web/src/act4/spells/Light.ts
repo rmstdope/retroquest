@@ -1,6 +1,8 @@
 import { Spell, type GameState, type Item, characterName } from '@/engine'
 import { WardStone } from '../items/WardStone'
 import { WardStones } from '../items/WardStones'
+import { Barriers } from '../items/Barriers'
+import { Guardians } from '../items/Guardians'
 import { FortressGates } from '../rooms/FortressGates'
 
 /** A spell that creates brilliant light to dispel darkness and shadow magic. */
@@ -24,7 +26,7 @@ export class Light extends Spell {
     return gameState.currentRoom.light(gameState)
   }
 
-  /** Cast light spell on a specific item. */
+  /** Cast light on an item: at the gates the stones, the guardians and the barrier each answer. */
   override castOnItem(gameState: GameState, targetItem: Item): string {
     const room = gameState.currentRoom
     if (room instanceof FortressGates) {
@@ -34,6 +36,8 @@ export class Light extends Spell {
       if (targetItem instanceof WardStones) {
         return room.lightAllStones(gameState)
       }
+      if (targetItem instanceof Guardians) return room.light(gameState)
+      if (targetItem instanceof Barriers) return room.lightBarrier(gameState)
     }
     return 'The light shows it clearly, but has no special effect.'
   }
