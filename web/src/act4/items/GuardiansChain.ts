@@ -1,5 +1,6 @@
-import { Item, type GameState } from '@/engine'
+import { Item, type Character, type GameState } from '@/engine'
 import { FLAG_ACT4_GUARDIANS_CHAIN_RAISED } from '../Act4StoryFlags'
+import { KnightOfDespair } from '../characters/KnightOfDespair'
 import { HallOfEchoes } from '../rooms/HallOfEchoes'
 
 /** How the chain looks: silver, with the crystals the hall and the captain see. */
@@ -44,5 +45,11 @@ export class GuardiansChain extends Item {
       'The crystals stay quiet. Whatever the chain was made to stand ' +
       'against, it is not here.'
     )
+  }
+
+  /** Raised at the Knight of Despair, the chain does what it does in the hall. */
+  override useOnCharacter(gameState: GameState, target: Character): string {
+    if (target instanceof KnightOfDespair) return this.use(gameState)
+    return super.useOnCharacter(gameState, target)
   }
 }
