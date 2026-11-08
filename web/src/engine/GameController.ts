@@ -89,6 +89,8 @@ export interface MusicPlace {
   roomKey: string
   /** The room's `soundState`, which its sound effects follow. */
   soundState: string
+  /** The room's `pictureVariant`: which of its pictures shows ('' for its one picture). */
+  pictureVariant: string
 }
 
 /** One way out of a place on the map: the room it leads to and what the way is called. */
@@ -248,6 +250,18 @@ export class GameController {
    */
   lastTurnAddressee(): string | null {
     return this.addressee
+  }
+
+  /**
+   * Every other picture the running act's rooms have (`Room.pictureVariants`),
+   * by room key, so the view can find out which of them are painted.
+   */
+  getPictureVariants(): { roomKey: string; variant: string }[] {
+    const act = this.game.acts[this.game.currentAct]
+    if (!act) return []
+    return Object.entries(act.rooms).flatMap(([roomKey, room]) =>
+      room.pictureVariants().map((variant) => ({ roomKey, variant })),
+    )
   }
 
   /**

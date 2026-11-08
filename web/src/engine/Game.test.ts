@@ -485,6 +485,7 @@ describe('Game', () => {
         actName: '',
         roomKey: '',
         soundState: '',
+        pictureVariant: '',
       })
       game.newTurn()
       game.newTurn()
@@ -492,6 +493,7 @@ describe('Game', () => {
         actName: 'Only',
         roomKey: 'EliorsCottage',
         soundState: '',
+        pictureVariant: '',
       })
       game.handleInput('go south')
       expect(game.currentMusicPlace().roomKey).toBe('VegetableField')

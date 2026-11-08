@@ -3,11 +3,15 @@ import { setActivePinia, createPinia } from 'pinia'
 import {
   GEM,
   HALL_CHIME,
+  HALL_LIT,
   HALL_GEM_TAKEN,
   startedHoldStore as startedStore,
 } from '@/testing/holdGame'
+import { roomPictureUrl, setPictureProbe } from '@/lantern/roomPicture'
 import { useBridge, type ActClass } from '@/composables/useBridge'
 import { Act1 } from '@/act1/Act1'
+import { Key } from '@/act1/items/Key'
+import { Game } from '@/engine'
 import { PANEL_GROUPS, useGameStore } from './useGameStore'
 
 describe('useGameStore: panels held while a turn is narrated', () => {
@@ -231,6 +235,110 @@ describe('useGameStore: panels held while a turn is narrated', () => {
     expect(store.roomName).toBe('Hall')
   })
 
+  describe("a room's other picture", () => {
+    const hallPicture = (variant = ''): string =>
+      roomPictureUrl('Hold Act', 'Hall', variant)
+
+    afterEach(() => setPictureProbe(null))
+
+    /** A staged store whose picture check says `painted`, with the first turn's flush done. */
+    async function stagedStore(
+      painted: boolean,
+    ): Promise<ReturnType<typeof useGameStore>> {
+      setPictureProbe(() => Promise.resolve(painted))
+      const store = await startedStore()
+      store.setScenePicture(true)
+      return store
+    }
+
+    it('holds the old picture for a command that changes it, and marks the turn', async () => {
+      const store = await stagedStore(true)
+      store.submitCommand(`take ${GEM.toLowerCase()}`)
+      await Promise.resolve()
+      const turn = store.turns.at(-1)!
+      expect(turn.pictureChanged).toBe(true)
+      expect(store.musicPicture).toBe('')
+      expect(store.roomPicture).toBe(hallPicture())
+      store.releasePicture(turn.id)
+      expect(store.musicPicture).toBe(HALL_LIT)
+    })
+
+    it('shows the other picture only once it is known to exist', async () => {
+      let answer: (exists: boolean) => void = () => {}
+      setPictureProbe(
+        () =>
+          new Promise<boolean>((resolve) => {
+            answer = resolve
+          }),
+      )
+      const store = await startedStore()
+      store.setScenePicture(true)
+      store.submitCommand(`take ${GEM.toLowerCase()}`)
+      store.releasePicture(store.turns.at(-1)!.id)
+      expect(store.roomPicture).toBe(hallPicture())
+      answer(true)
+      await new Promise((resolve) => setTimeout(resolve))
+      expect(store.roomPicture).toBe(hallPicture(HALL_LIT))
+    })
+
+    it('knows which pictures are painted before the player gets there', async () => {
+      const store = await stagedStore(true)
+      store.submitCommand('look')
+      await new Promise((resolve) => setTimeout(resolve))
+      store.submitCommand(`take ${GEM.toLowerCase()}`)
+      store.releasePicture(store.turns.at(-1)!.id)
+      // The other picture is there the moment the story reaches it, not the room's own first.
+      expect(store.roomPicture).toBe(hallPicture(HALL_LIT))
+    })
+
+    it('is not held when the layout does not hold panels', async () => {
+      setPictureProbe(() => Promise.resolve(true))
+      const store = await startedStore()
+      store.setPanelHold(false)
+      store.submitCommand(`take ${GEM.toLowerCase()}`)
+      expect(store.turns.at(-1)?.pictureChanged).toBeUndefined()
+      expect(store.musicPicture).toBe(HALL_LIT)
+    })
+
+    it('keeps the room picture when the other one is not painted', async () => {
+      const store = await stagedStore(false)
+      store.submitCommand(`take ${GEM.toLowerCase()}`)
+      store.releasePicture(store.turns.at(-1)!.id)
+      await new Promise((resolve) => setTimeout(resolve))
+      expect(store.musicPicture).toBe(HALL_LIT)
+      expect(store.roomPicture).toBe(hallPicture())
+    })
+
+    it('lets the picture go with the place panels, and music stays put', async () => {
+      const store = await stagedStore(true)
+      const key = store.musicRoomKey
+      store.submitCommand(`take ${GEM.toLowerCase()}`)
+      expect(store.musicRoomKey).toBe(key)
+      store.releasePanels(store.turns.at(-1)!.id, ['place'], true)
+      expect(store.musicPicture).toBe(HALL_LIT)
+      expect(store.musicRoomKey).toBe(key)
+    })
+
+    it('brings it up when a newer command comes, and ignores another turn', async () => {
+      const store = await stagedStore(true)
+      store.submitCommand(`take ${GEM.toLowerCase()}`)
+      const turn = store.turns.at(-1)!
+      store.releasePicture(turn.id + 1)
+      expect(store.musicPicture).toBe('')
+      store.submitCommand('look')
+      expect(store.musicPicture).toBe(HALL_LIT)
+      expect(store.turns.at(-1)?.pictureChanged).toBeUndefined()
+    })
+
+    it('is dropped by a restart', async () => {
+      const store = await stagedStore(true)
+      store.submitCommand(`take ${GEM.toLowerCase()}`)
+      store.restartGame()
+      expect(store.musicPicture).toBe('')
+      expect(store.turns.some((turn) => turn.pictureChanged)).toBe(false)
+    })
+  })
+
   describe('the patches of the room picture', () => {
     /** Act 1 in the cottage with every patch of the cottage "made", narration holding the panels. */
     async function cottage(): Promise<ReturnType<typeof useGameStore>> {
@@ -279,6 +387,51 @@ describe('useGameStore: panels held while a turn is narrated', () => {
       made(store, [])
       store.submitCommand('take bread')
       store.releasePanels(store.turns.at(-1)!.id, [...PANEL_GROUPS], false)
+      expect(store.roomPatchUrls).toEqual([])
+    })
+  })
+
+  describe("the patches of a room's other picture", () => {
+    /** A saved Act I game with the shed door opened, loaded into the store; the inside is `painted` or not. */
+    async function openShedStore(
+      painted: boolean,
+    ): Promise<ReturnType<typeof useGameStore>> {
+      setPictureProbe(() => Promise.resolve(painted))
+      const act = new Act1()
+      const game = new Game([act])
+      game.state.currentRoom = game.state.allRooms.AbandonedShed
+      game.state.addItemToInventory(new Key())
+      game.commandParser.parse('use key with door')
+      game.commandParser.parse('take broken shovel')
+      localStorage.setItem('retroquest_save', game.toSaveData())
+      const store = useGameStore()
+      store.setBridge(useBridge(async (): Promise<ActClass[]> => [Act1]))
+      await store.initGame()
+      store.dismissModal()
+      store.loadGame()
+      await new Promise((resolve) => setTimeout(resolve))
+      const patches = { 'broken-shovel-taken': { file: 'x' } }
+      store.imageManifest = { 'act1-abandoned-shed-inside': { patches } }
+      return store
+    }
+
+    afterEach(() => setPictureProbe(null))
+
+    it('show over the picture they belong to', async () => {
+      const store = await openShedStore(true)
+      expect(store.roomPicture).toBe(
+        roomPictureUrl('Act1', 'AbandonedShed', 'inside'),
+      )
+      expect(store.roomPatchUrls).toEqual([
+        expect.stringContaining(
+          'act1-abandoned-shed-inside.broken-shovel-taken',
+        ),
+      ])
+    })
+
+    it('stay hidden while the inside is not painted and the outside shows', async () => {
+      const store = await openShedStore(false)
+      expect(store.roomPicture).toBe(roomPictureUrl('Act1', 'AbandonedShed'))
       expect(store.roomPatchUrls).toEqual([])
     })
   })

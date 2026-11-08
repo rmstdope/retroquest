@@ -77,14 +77,6 @@ const STATE_RULES: Readonly<Record<string, (c: PatchContext) => boolean>> = {
   'Act1.candle-lit': (c) => flagOf(c.things.get('candle'), 'isLit'),
   'Act1.well-purified': (c) => flagOf(c.things.get('well'), 'isPurified'),
   'Act1.mechanism-jammed': (c) => flagOf(c.things.get('mechanism'), 'repaired'),
-  'Act1.shed-door-unlocked': (c) => {
-    const door = c.things.get('shed-door')
-    return (
-      typeof door === 'object' &&
-      'locked' in door &&
-      (door as Record<string, unknown>).locked === false
-    )
-  },
   'Act2.forest-sprites-aside': (c) =>
     c.state.getStoryFlag(FLAG_PROTECTIVE_CHARM_USED_FOREST_ENTRANCE),
   'Act3.mirror-mount-mended': (c) =>
@@ -158,15 +150,17 @@ export function patchIsKnown(
 /**
  * The ids of the patches of room `roomKey` of `act` that apply now, in the
  * order they are declared; none for a room that is unknown or has none.
+ * With a `variant` (the room's other picture), those of that picture.
  */
 export function appliedPatchIds(
   act: Act,
   roomKey: string,
   state: GameState,
+  variant = '',
 ): string[] {
   // The state's own rooms: after a load they are not the act's first instances.
   const room = state.allRooms[roomKey]
-  const patches = declaredPatches(act.name, roomKey)
+  const patches = declaredPatches(act.name, roomKey, variant)
   if (!room || patches.length === 0) return []
   const things = new Map<string, Item | Character>()
   for (const thing of [...room.items, ...room.characters])

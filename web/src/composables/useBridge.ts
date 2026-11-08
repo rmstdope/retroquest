@@ -203,16 +203,22 @@ export function useBridge(loader: () => Promise<ActClass[]> = loadActs) {
    * apply to the story now; empty while no room is known. Read from the game
    * each time, so a loaded game answers as the played one did.
    */
-  function pictureState(): { roomKey: string; patchIds: string[] } {
+  function pictureState(): {
+    roomKey: string
+    variant: string
+    patchIds: string[]
+  } {
     const { game } = requireGame()
-    const { roomKey } = game.currentMusicPlace()
-    if (!roomKey) return { roomKey: '', patchIds: [] }
+    const { roomKey, pictureVariant } = game.currentMusicPlace()
+    if (!roomKey) return { roomKey: '', variant: '', patchIds: [] }
     return {
       roomKey,
+      variant: pictureVariant,
       patchIds: appliedPatchIds(
         game.acts[game.currentAct],
         roomKey,
         game.state,
+        pictureVariant,
       ),
     }
   }

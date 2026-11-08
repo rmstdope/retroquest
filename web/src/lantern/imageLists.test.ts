@@ -32,11 +32,29 @@ const SLUG = /^[a-z0-9]+(-[a-z0-9]+)*$/
 const ACTS: Act[] = [new Act1(), new Act2(), new Act3(), new Act4()]
 
 describe('roomImages', () => {
+  it("lists the shed's second picture after the rooms, with the inside's own areas", () => {
+    const act = new Act1()
+    const images = roomImages(act)
+    const outside = images.find((i) => i.id === 'act1-abandoned-shed')
+    const inside = images.find((i) => i.id === 'act1-abandoned-shed-inside')
+    expect(inside?.title).toBe('Abandoned Shed, inside')
+    expect(inside?.text).toBe(outside?.text)
+    expect(inside?.text).toContain('workbench')
+    expect(inside?.areas?.map((a) => a.id)).toContain('patches')
+    expect(outside?.areas?.map((a) => a.id)).not.toContain('patches')
+    expect(images.indexOf(inside!)).toBe(Object.keys(act.rooms).length)
+  })
+
   it.each(ACTS.map((act) => [act.name, act] as const))(
     'lists every room of %s once, with slug ids',
     (_name, act) => {
       const images = roomImages(act)
-      expect(images).toHaveLength(Object.keys(act.rooms).length)
+      const variants = Object.values(act.rooms).flatMap((room) =>
+        room.pictureVariants(),
+      )
+      expect(images).toHaveLength(
+        Object.keys(act.rooms).length + variants.length,
+      )
       expect(new Set(images.map((i) => i.id)).size).toBe(images.length)
       for (const image of images) expect(image.id).toMatch(SLUG)
     },
@@ -45,12 +63,14 @@ describe('roomImages', () => {
   it('gives each image the shared dimensions and the room name as title', () => {
     for (const act of ACTS) {
       const rooms = Object.values(act.rooms)
-      roomImages(act).forEach((image, i) => {
-        expect(image.width).toBe(IMAGE_WIDTH)
-        expect(image.height).toBe(IMAGE_HEIGHT)
-        expect([image.width, image.height]).toEqual([1920, 1080])
-        expect(image.title).toBe(rooms[i].name)
-      })
+      roomImages(act)
+        .slice(0, rooms.length)
+        .forEach((image, i) => {
+          expect(image.width).toBe(IMAGE_WIDTH)
+          expect(image.height).toBe(IMAGE_HEIGHT)
+          expect([image.width, image.height]).toEqual([1920, 1080])
+          expect(image.title).toBe(rooms[i].name)
+        })
     }
   })
 

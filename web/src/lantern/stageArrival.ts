@@ -97,11 +97,20 @@ export function sideBlocks(
  * after it (Sir Cedric at the fortress gate) comes in the new room. Everything
  * before it is told over the old picture. -1 for any other turn, or a moving
  * talk with no narrator's paragraph on the sides.
+ *
+ * A command that changes the picture of the room Elior stays in
+ * (`pictureChanged`: the shed's door opening) changes it before the paragraph
+ * after the answer's first: the first is told over the old picture.
  */
 export function sceneBlock(
-  turn: { addressed?: string; description: { moved: boolean } | null },
+  turn: {
+    addressed?: string
+    description: { moved: boolean } | null
+    pictureChanged?: true
+  },
   blocks: TurnBlock[],
 ): number {
+  if (turn.pictureChanged) return Math.min(1, blocks.length - 1)
   if (!turn.description?.moved) return -1
   for (let i = sideBlocks(turn, blocks) - 1; i >= 0; i--)
     if (blockVoice(blocks[i])?.speaker === NARRATOR) return i

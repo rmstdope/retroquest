@@ -6,13 +6,53 @@ import { roomTrackId } from './musicLists'
 import { ELIOR_PORTRAIT_ID, portraitId } from './imageLists'
 
 /**
- * The URL of the picture of a room, or '' while no room is known. The file may
- * not exist yet (pictures are made by hand after the room is listed); the
- * stage then shows its paper backdrop.
+ * The URL of the picture of a room, or '' while no room is known. `variant`
+ * names another picture the room has (`Room.pictureVariant`), whose id adds
+ * `-<variant>`; '' is the room's one picture. The file may not exist yet
+ * (pictures are made by hand after the room is listed); the stage then shows
+ * its paper backdrop, or the room's own picture where a variant is not made.
  */
-export function roomPictureUrl(actName: string, roomKey: string): string {
+export function roomPictureUrl(
+  actName: string,
+  roomKey: string,
+  variant = '',
+): string {
   if (!actName || !roomKey) return ''
-  return `${import.meta.env.BASE_URL}images/generated/${roomTrackId(actName, roomKey)}.png`
+  const id = roomTrackId(actName, roomKey)
+  return `${import.meta.env.BASE_URL}images/generated/${variant ? `${id}-${variant}` : id}.png`
+}
+
+/** Whether the file at a URL is a picture that loads. */
+type PictureProbe = (url: string) => Promise<boolean>
+
+/** The browser's check: the file loads as an image. */
+const loadsAsImage: PictureProbe = (url) =>
+  new Promise((resolve) => {
+    if (typeof Image === 'undefined') return resolve(false)
+    const image = new Image()
+    image.onload = () => resolve(true)
+    image.onerror = () => resolve(false)
+    image.src = url
+  })
+
+let probe: PictureProbe = loadsAsImage
+const answers: Record<string, Promise<boolean>> = {}
+
+/** Replace the picture check (tests); null restores the browser's and forgets the answers. */
+export function setPictureProbe(replacement: PictureProbe | null): void {
+  probe = replacement ?? loadsAsImage
+  for (const url of Object.keys(answers)) delete answers[url]
+}
+
+/**
+ * Whether the picture at `url` exists and loads, asked once per file. A room's
+ * other picture is shown only once this says yes, so a picture not made yet
+ * never blanks the stage. A "no" is kept for the page's lifetime: pictures
+ * are painted outside the game, and a reload asks again.
+ */
+export function pictureExists(url: string): Promise<boolean> {
+  answers[url] ??= probe(url)
+  return answers[url]
 }
 
 /**
@@ -37,16 +77,18 @@ export function eliorPortraitUrl(): string {
 /**
  * The URL of a patch of a room's picture: the transparent picture Content
  * Studio makes for it, named `<image id>.<patch id>.png` beside the room's
- * picture. The file may not exist (a patch is made by hand when the story
+ * picture (or of its other picture, `variant`). The file may not exist (a patch is made by hand when the story
  * calls for it); `madePatches` says which the images manifest lists.
  */
 export function roomPatchUrl(
   actName: string,
   roomKey: string,
   patchId: string,
+  variant = '',
 ): string {
   if (!actName || !roomKey) return ''
-  return `${import.meta.env.BASE_URL}images/generated/${roomTrackId(actName, roomKey)}.${patchId}.png`
+  const id = roomTrackId(actName, roomKey)
+  return `${import.meta.env.BASE_URL}images/generated/${variant ? `${id}-${variant}` : id}.${patchId}.png`
 }
 
 /**

@@ -28,6 +28,9 @@ const LOCKED_DESCRIPTION =
  * `light` spell.
  */
 export class AbandonedShed extends Room {
+  /** The picture variant of the open shed, seen from inside. */
+  static readonly PICTURE_INSIDE = 'inside'
+
   locked = true
   roomSearched = false
   /** Set by the `light` spell; absent in saves made before the shed was dark. */
@@ -59,6 +62,16 @@ export class AbandonedShed extends Room {
    */
   override descriptionFor(_gameState: GameState): string {
     return this.locked ? LOCKED_DESCRIPTION : this.description
+  }
+
+  /** The outside while the door is locked, the inside once it is open. */
+  override pictureVariant(_gameState: GameState): string {
+    return this.locked ? '' : AbandonedShed.PICTURE_INSIDE
+  }
+
+  /** The inside is the shed's second picture. */
+  override pictureVariants(): readonly string[] {
+    return [AbandonedShed.PICTURE_INSIDE]
   }
 
   /** Unlock the shed, add the unlock items, and return a descriptive message. */

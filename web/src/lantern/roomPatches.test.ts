@@ -4,13 +4,14 @@
  */
 import { describe, expect, it } from 'vitest'
 import { Act1 } from '@/act1/Act1'
+import { Key } from '@/act1/items/Key'
 import { Act2 } from '@/act2/Act2'
 import { Act3 } from '@/act3/Act3'
 import { Act4 } from '@/act4/Act4'
 import { Game, Item, type Act } from '@/engine'
-import { allImages } from './imageLists'
+import { allImages, characterImages } from './imageLists'
 import { declaredAreas, exitAreaId, thingAreaId } from './roomAreas'
-import { declaredPatches } from './roomPatches'
+import { declaredPatches, type ImagePatch } from './roomPatches'
 import { ACT1_ROOM_PATCHES } from './roomPatches/act1RoomPatches'
 import { ACT2_ROOM_PATCHES } from './roomPatches/act2RoomPatches'
 import { ACT3_ROOM_PATCHES } from './roomPatches/act3RoomPatches'
@@ -32,16 +33,39 @@ const ACT_TABLES: Record<string, Record<string, unknown>> = {
   Act4: ACT4_ROOM_PATCHES,
 }
 
+/** The picture variant room `key` shows now. */
+function pictureOf(act: Act, game: Game, key: string): string {
+  return act.rooms[key].pictureVariant(game.state)
+}
+
+/** The patches of every picture of room `key`. */
+function patchesOfRoom(act: Act, key: string): readonly ImagePatch[] {
+  return [
+    ...declaredPatches(act.name, key),
+    ...act.rooms[key]
+      .pictureVariants()
+      .flatMap((variant) => declaredPatches(act.name, key, variant)),
+  ]
+}
+
 describe('room image patches', () => {
   it('carry the declared patches of the room, a portrait none', () => {
     const act = new Act1()
     const images = allImages(act)
-    const shed = images.find((i) => i.id === 'act1-abandoned-shed')
-    expect(shed?.patches?.map((p) => p.id)).toEqual(
-      expect.arrayContaining(['fishing-rod-appears', 'patches-appears']),
+    // The shed has its own patches on each picture: none on the outside.
+    expect(
+      images.find((i) => i.id === 'act1-abandoned-shed')?.patches,
+    ).toBeUndefined()
+    const inside = images.find((i) => i.id === 'act1-abandoned-shed-inside')
+    expect(inside?.patches?.map((p) => p.id)).toEqual(
+      expect.arrayContaining(['fishing-rod-appears', 'patches-gone']),
     )
-    const rooms = Object.keys(act.rooms).length
-    for (const image of images.slice(rooms))
+    const insideAreas = declaredAreas('Act1', 'AbandonedShed', 'inside').map(
+      (a) => a.id,
+    )
+    for (const patch of inside?.patches ?? [])
+      expect(insideAreas).toContain(patch.area)
+    for (const image of characterImages(act))
       expect(image.patches, image.id).toBeUndefined()
   })
 
@@ -107,6 +131,30 @@ describe('room image patches', () => {
   )
 })
 
+describe("a room's other pictures", () => {
+  it('have a taken patch for every thing that can be carried and is in the room once the picture shows', () => {
+    const act = new Act1()
+    const game = new Game([act])
+    game.state.currentRoom = game.state.allRooms.AbandonedShed
+    game.state.addItemToInventory(new Key())
+    game.commandParser.parse('use key with door')
+    const shed = game.state.allRooms.AbandonedShed
+    expect(shed.pictureVariant(game.state)).toBe('inside')
+    const missing: string[] = []
+    for (const item of shed.items) {
+      if (!(item instanceof Item) || !item.canBeCarried) continue
+      const id = thingAreaId(act, item)
+      if (
+        !declaredPatches(act.name, 'AbandonedShed', 'inside').some(
+          (p) => p.area === id,
+        )
+      )
+        missing.push(id)
+    }
+    expect(missing).toEqual([])
+  })
+})
+
 describe.each(ACTS.map((make) => [make().name, make] as const))(
   '%s golden path',
   (_name, make) => {
@@ -126,6 +174,9 @@ describe.each(ACTS.map((make) => [make().name, make] as const))(
         return seen
       }
       const missing: string[] = []
+      const pictures = new Map<string, string>()
+      for (const key of Object.keys(act.rooms))
+        pictures.set(key, pictureOf(act, game, key))
       let before = snapshot()
       for (const command of act.goldenPath) {
         game.commandParser.parse(command)
@@ -139,10 +190,14 @@ describe.each(ACTS.map((make) => [make().name, make] as const))(
               id.startsWith('scenery-')
             )
               continue
-            const linked = declaredPatches(act.name, room).some(
-              (p) => p.area === id,
-            )
-            if (!linked)
+            const linked = patchesOfRoom(act, room).some((p) => p.area === id)
+            // A thing that arrives with the room's other picture is in that picture.
+            const withPicture =
+              pictureOf(act, game, room) !== pictures.get(room) &&
+              declaredAreas(act.name, room, pictureOf(act, game, room)).some(
+                (a) => a.id === id,
+              )
+            if (!linked && !withPicture)
               missing.push(`${act.name} ${room} after "${command}": ${id}`)
           }
         }
@@ -150,14 +205,14 @@ describe.each(ACTS.map((make) => [make().name, make] as const))(
           for (const id of ids) {
             if (after.get(room)?.has(id)) continue
             if (id.startsWith('sir-cedric')) continue
-            const linked = declaredPatches(act.name, room).some(
-              (p) => p.area === id,
-            )
+            const linked = patchesOfRoom(act, room).some((p) => p.area === id)
             if (!linked)
               missing.push(`${act.name} ${room} after "${command}": ${id}`)
           }
         }
         before = after
+        for (const key of Object.keys(act.rooms))
+          pictures.set(key, pictureOf(act, game, key))
       }
       expect([...new Set(missing)]).toEqual([])
     })

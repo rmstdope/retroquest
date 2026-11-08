@@ -1,10 +1,12 @@
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, vi } from 'vitest'
 import {
   eliorPortraitUrl,
   madePatches,
+  pictureExists,
   portraitUrl,
   roomPatchUrl,
   roomPictureUrl,
+  setPictureProbe,
 } from './roomPicture'
 import { roomTrackId } from './musicLists'
 import { ELIOR_PORTRAIT_ID, characterImages, portraitId } from './imageLists'
@@ -14,6 +16,15 @@ describe('roomPictureUrl', () => {
   it("is the generated picture named by the room's image id", () => {
     expect(roomPictureUrl('Act1', 'ElioCottage')).toBe(
       `${import.meta.env.BASE_URL}images/generated/${roomTrackId('Act1', 'ElioCottage')}.png`,
+    )
+  })
+
+  it("names another picture of the room by the room's id and its variant", () => {
+    expect(roomPictureUrl('Act1', 'AbandonedShed', 'inside')).toBe(
+      `${import.meta.env.BASE_URL}images/generated/${roomTrackId('Act1', 'AbandonedShed')}-inside.png`,
+    )
+    expect(roomPictureUrl('Act1', 'AbandonedShed', '')).toBe(
+      roomPictureUrl('Act1', 'AbandonedShed'),
     )
   })
 
@@ -73,10 +84,30 @@ describe('eliorPortraitUrl', () => {
   })
 })
 
+describe('pictureExists', () => {
+  it('asks the probe once per file and remembers the answer', async () => {
+    const probe = vi.fn((url: string) => Promise.resolve(url.endsWith('a.png')))
+    setPictureProbe(probe)
+    expect(await pictureExists('/x/a.png')).toBe(true)
+    expect(await pictureExists('/x/a.png')).toBe(true)
+    expect(await pictureExists('/x/b.png')).toBe(false)
+    expect(probe).toHaveBeenCalledTimes(2)
+    setPictureProbe(null)
+  })
+})
+
 describe('room picture patches', () => {
   it('are served beside the room picture, named by image and patch', () => {
     expect(roomPatchUrl('Act1', 'VillageSquare', 'bucket-taken')).toBe(
       `${roomPictureUrl('Act1', 'VillageSquare').replace(/\.png$/, '')}.bucket-taken.png`,
+    )
+  })
+
+  it("of a room's other picture are named after that picture", () => {
+    expect(
+      roomPatchUrl('Act1', 'AbandonedShed', 'magnet-appears', 'inside'),
+    ).toBe(
+      `${roomPictureUrl('Act1', 'AbandonedShed', 'inside').replace(/\.png$/, '')}.magnet-appears.png`,
     )
   })
 

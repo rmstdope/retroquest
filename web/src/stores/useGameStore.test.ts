@@ -102,8 +102,14 @@ function createMockBridge() {
       musicFile: 'track.mp3',
       musicInfo: 'Track info',
     })),
-    getMusicPlace: vi.fn(() => ({ actName: '', roomKey: '', soundState: '' })),
+    getMusicPlace: vi.fn(() => ({
+      actName: '',
+      roomKey: '',
+      soundState: '',
+      pictureVariant: '',
+    })),
     getActCharacters: vi.fn((): { key: string; name: string }[] => []),
+    getPictureVariants: vi.fn((): { roomKey: string; variant: string }[] => []),
     takeSoundFirings: vi.fn((): SoundFiring[] => []),
     lastTurnAddressee: vi.fn((): string | null => null),
     lastTurnHadArrivalScene: vi.fn((): boolean => false),
@@ -140,7 +146,11 @@ function createMockBridge() {
     saveToSlot: vi.fn(() => 'Game saved.'),
     loadFromSlot: vi.fn(() => 'Game loaded.'),
     takeLoadedStory: vi.fn((): unknown => null),
-    pictureState: vi.fn(() => ({ roomKey: '', patchIds: [] as string[] })),
+    pictureState: vi.fn(() => ({
+      roomKey: '',
+      variant: '',
+      patchIds: [] as string[],
+    })),
     controller: {
       ...controller,
       settleQuests: vi.fn(() => ({
@@ -904,6 +914,7 @@ describe('useGameStore', () => {
         actName: 'Act1',
         roomKey: 'VillageSquare',
         soundState: 'busy',
+        pictureVariant: '',
       })
       store.refreshPanels()
       expect(store.musicActName).toBe('Act1')
@@ -1329,6 +1340,7 @@ describe('useGameStore', () => {
         actName: 'Act1',
         roomKey: 'ElioCottage',
         soundState: '',
+        pictureVariant: '',
       })
       bridge.controller.getActCharacters.mockReturnValue([
         { key: 'Mira', name: 'Mira' },

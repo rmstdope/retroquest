@@ -103,15 +103,6 @@ export const ACT1_ROOM_AREAS: Record<string, ImageArea[]> = {
     { id: 'scenery-abandoned-shed-boards', title: 'Boards' },
     { id: 'exit-north', title: 'Way north' },
     { id: 'exit-south', title: 'Way south' },
-    { id: 'mysterious-box', title: 'Mysterious Box' },
-    { id: 'broken-shovel', title: 'Broken Shovel' },
-    { id: 'scenery-abandoned-shed-workbench', title: 'Workbench' },
-    { id: 'scenery-abandoned-shed-crates', title: 'Crates' },
-    { id: 'scenery-abandoned-shed-tools', title: 'Tools' },
-    { id: 'scenery-abandoned-shed-shelves', title: 'Shelves' },
-    { id: 'patches', title: 'Patches' },
-    { id: 'fishing-rod', title: 'Fishing Rod' },
-    { id: 'magnet', title: 'Magnet' },
   ],
   OldMill: [
     { id: 'sack-of-flour', title: 'Sack of Flour' },
@@ -178,4 +169,31 @@ export const ACT1_ROOM_AREAS: Record<string, ImageArea[]> = {
     { id: 'merchant', title: 'Merchant' },
     { id: 'exit-west', title: 'Way west' },
   ],
+}
+
+/**
+ * The areas of the rooms' other pictures, by room key then picture variant.
+ * The shed seen from inside (`AbandonedShed.pictureVariant`) holds what turns
+ * up once its door is open.
+ */
+export const ACT1_VARIANT_AREAS: Readonly<
+  Record<string, Readonly<Record<string, readonly ImageArea[]>>>
+> = {
+  AbandonedShed: {
+    inside: [
+      { id: 'shed-door', title: 'Shed Door' },
+      { id: 'scenery-abandoned-shed-boards', title: 'Boards' },
+      { id: 'exit-north', title: 'Way north' },
+      { id: 'exit-south', title: 'Way south' },
+      { id: 'mysterious-box', title: 'Mysterious Box' },
+      { id: 'broken-shovel', title: 'Broken Shovel' },
+      { id: 'scenery-abandoned-shed-workbench', title: 'Workbench' },
+      { id: 'scenery-abandoned-shed-crates', title: 'Crates' },
+      { id: 'scenery-abandoned-shed-tools', title: 'Tools' },
+      { id: 'scenery-abandoned-shed-shelves', title: 'Shelves' },
+      { id: 'patches', title: 'Patches' },
+      { id: 'fishing-rod', title: 'Fishing Rod' },
+      { id: 'magnet', title: 'Magnet' },
+    ],
+  },
 }

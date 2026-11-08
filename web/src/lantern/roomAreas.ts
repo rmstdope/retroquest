@@ -16,7 +16,7 @@
  * dropped, a candle's locket) is not counted as the room's own.
  */
 import type { Act, Character, Item } from '@/engine'
-import { ACT1_ROOM_AREAS } from './roomAreas/act1RoomAreas'
+import { ACT1_ROOM_AREAS, ACT1_VARIANT_AREAS } from './roomAreas/act1RoomAreas'
 import { ACT2_ROOM_AREAS } from './roomAreas/act2RoomAreas'
 import { ACT3_ROOM_AREAS } from './roomAreas/act3RoomAreas'
 import { ACT4_ROOM_AREAS } from './roomAreas/act4RoomAreas'
@@ -38,6 +38,18 @@ const ROOM_AREAS: Readonly<
   Act3: ACT3_ROOM_AREAS,
   Act4: ACT4_ROOM_AREAS,
 }
+
+/**
+ * The declared areas of each other picture a room has (`Room.pictureVariants`),
+ * by act name, room key, then variant: the things that can be found on that
+ * picture. The room's own list is `ROOM_AREAS`, for the picture without a variant.
+ */
+const VARIANT_AREAS: Readonly<
+  Record<
+    string,
+    Readonly<Record<string, Readonly<Record<string, readonly ImageArea[]>>>>
+  >
+> = { Act1: ACT1_VARIANT_AREAS }
 
 /** "MysteriousBox" as "mysterious-box", "abandoned-shed.boards" as "abandoned-shed-boards". */
 function kebab(key: string): string {
@@ -69,10 +81,16 @@ export function exitAreaId(direction: string): string {
   return `exit-${kebab(direction)}`
 }
 
-/** The areas declared for room `roomKey` of act `actName`; none for a room without a declaration. */
+/**
+ * The areas declared for room `roomKey` of act `actName`; none for a room
+ * without a declaration. With a `variant` (a room's other picture), the areas
+ * of that picture instead.
+ */
 export function declaredAreas(
   actName: string,
   roomKey: string,
+  variant = '',
 ): readonly ImageArea[] {
+  if (variant) return VARIANT_AREAS[actName]?.[roomKey]?.[variant] ?? []
   return ROOM_AREAS[actName]?.[roomKey] ?? []
 }

@@ -26,7 +26,7 @@ const STATE_CHANGES: Record<string, Record<string, StateChange>> = {
     'VegetableField after "take rusty hoe"': { patches: ['rusty-hoe-taken'] },
     'ChickenCoop after "use bread with chicken"': { patches: ['key-appears'] },
     'AbandonedShed after "use key with door"': {
-      patches: ['shed-door-unlocked'],
+      none: 'the room shows its other picture, the inside, once the door is open (Room.pictureVariant)',
     },
     'GeneralStore after "talk to shopkeeper"': {
       none: "the shutters and the shopkeeper's stance are mood, not a thing in the picture",

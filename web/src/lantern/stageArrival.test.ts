@@ -191,6 +191,19 @@ describe('arrivalParts', () => {
     )
   })
 
+  it("changes a room's own picture before the paragraph after the first", () => {
+    const blocks = parseTurn('The door opens.\nIn the gloom, a bench.')
+    const turn = {
+      description: { moved: false },
+      pictureChanged: true as const,
+    }
+    expect(sceneBlock(turn, blocks)).toBe(1)
+    expect(sceneBlock({ ...turn, description: null }, blocks)).toBe(1)
+    expect(sceneBlock(turn, parseTurn('The door opens.'))).toBe(0)
+    expect(sceneBlock(turn, [])).toBe(-1)
+    expect(sceneBlock({ description: { moved: false } }, blocks)).toBe(-1)
+  })
+
   it('waits for the talk with the description alone when a moving talk ends on no arrival line', () => {
     const text = 'She traces a prism.\n' + dialogue('Mira', 'Breathe.')
     const parts = arrivalParts({ text, arrival: room, addressed: 'Mira' }, [])

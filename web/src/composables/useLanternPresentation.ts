@@ -59,7 +59,13 @@ export interface LanternPresentation {
  * arrival and news at once or, when it moves to another picture, once that
  * picture is up. A narrated talk that moves Elior changes scene where the
  * narrator stops for it, unnarrated once the lines before it are read; a
- * change that completes after a newer turn has come starts nothing. The
+ * change that completes after a newer turn has come starts nothing. A command
+ * that changes the picture of the room Elior stays in (the shed's door opening,
+ * `Turn.pictureChanged`) is told the same way: its first paragraph over the old
+ * picture, the change of scene where the narrator stops (unnarrated, once that
+ * paragraph is read), then the rest over the new picture; with no new picture
+ * painted, or under Reduce motion (where the picture changes with no fade
+ * after the first paragraph), the words go straight through. The
  * panels follow the voice (`usePanelHold`), the room's name changes at the
  * dark, and the voice stops when narration is switched off or the layout
  * goes.
@@ -213,7 +219,11 @@ export function useLanternPresentation(
     },
   )
 
-  /** The latest talk that moves Elior and where its room changes, until it has. */
+  /**
+   * The latest talk that moves Elior and where its room changes, until it has.
+   * A command that only changes its own room's picture is noted here too, but
+   * the music's room never changes on it, so nothing is ever cut for it.
+   */
   let talkCut: { turn: number; at: number } | null = null
   watch(
     () => game.turns.at(-1),
@@ -257,6 +267,7 @@ export function useLanternPresentation(
   function changeScene(turn: Turn, at: number): void {
     if (game.turns.at(-1)?.id !== turn.id) return
     game.releaseMusic(turn.id)
+    game.releasePicture(turn.id)
     const narrated = narration.narrates(turn.id)
     const up = (): void => {
       // A newer turn brings this one up only to cut in on it: no voice starts.

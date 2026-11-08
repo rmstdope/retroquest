@@ -732,7 +732,11 @@ describe('useBridge', () => {
     it('is empty before any room is known', async () => {
       const bridge = useBridge()
       await bridge.init()
-      expect(bridge.pictureState()).toEqual({ roomKey: '', patchIds: [] })
+      expect(bridge.pictureState()).toEqual({
+        roomKey: '',
+        variant: '',
+        patchIds: [],
+      })
     })
   })
 })

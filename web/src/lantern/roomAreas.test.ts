@@ -18,7 +18,7 @@ import {
   thingAreaId,
   type ImageArea,
 } from './roomAreas'
-import { allImages } from './imageLists'
+import { allImages, characterImages } from './imageLists'
 
 const SLUG = /^[a-z0-9]+(-[a-z0-9]+)*$/
 const ACTS: Array<() => Act> = [
@@ -123,14 +123,22 @@ describe('declared room areas', () => {
   it('give a portrait no areas', () => {
     for (const make of ACTS) {
       const act = make()
-      const rooms = Object.keys(act.rooms).length
-      for (const image of allImages(act).slice(rooms))
+      for (const image of characterImages(act))
         expect(image.areas, image.id).toBeUndefined()
     }
   })
 
   it('list the shed contents that only turn up once it is unlocked', () => {
-    const ids = declaredAreas('Act1', 'AbandonedShed').map((a) => a.id)
+    const outside = declaredAreas('Act1', 'AbandonedShed').map((a) => a.id)
+    expect(outside).toEqual([
+      'shed-door',
+      'scenery-abandoned-shed-boards',
+      'exit-north',
+      'exit-south',
+    ])
+    const ids = declaredAreas('Act1', 'AbandonedShed', 'inside').map(
+      (a) => a.id,
+    )
     expect(ids).toEqual(
       expect.arrayContaining([
         'mysterious-box',
@@ -183,7 +191,9 @@ describe.each(ACTS.map((make) => [make().name, make] as const))(
       const check = (step: string): void => {
         for (const [key, room] of Object.entries(act.rooms)) {
           const declared = new Set(
-            declaredAreas(act.name, key).map((a) => a.id),
+            declaredAreas(act.name, key, room.pictureVariant(game.state)).map(
+              (a) => a.id,
+            ),
           )
           for (const want of wantedAreas(act, game, room)) {
             if (!declared.has(want.id)) {

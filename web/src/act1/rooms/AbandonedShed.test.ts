@@ -6,6 +6,8 @@ import { Lantern } from '../items/Lantern'
 import { LightSpell } from '../spells/LightSpell'
 import { expectItemInRoom } from '@/testing/gameHelpers'
 import { AbandonedShed } from './AbandonedShed'
+import { parseTurn } from '@/lantern/parseTurn'
+import { sceneBlock } from '@/lantern/stageArrival'
 
 /** An Act I game with Elior inside the unlocked shed, holding nothing else. */
 function gameInUnlockedShed(): Game {
@@ -123,5 +125,64 @@ describe('The Abandoned Shed seen from outside', () => {
   it('describes the inside once the key opens the door', () => {
     const game = gameInUnlockedShed()
     expect(game.state.currentRoom.describe(game.state)).toContain('workbench')
+  })
+})
+
+describe('The Abandoned Shed picture', () => {
+  it('shows the outside while the door is locked and the inside once it is open', () => {
+    const game = new Game([new Act1()])
+    const shed = game.state.allRooms.AbandonedShed
+    expect(shed.pictureVariant(game.state)).toBe('')
+    expect(shed.pictureVariants()).toEqual(['inside'])
+    const open = gameInUnlockedShed()
+    const opened = open.state.allRooms.AbandonedShed
+    expect(opened.pictureVariant(open.state)).toBe('inside')
+  })
+
+  it('tells the music place which picture the room shows', () => {
+    const game = gameInUnlockedShed()
+    game.newTurn()
+    game.newTurn()
+    expect(game.currentMusicPlace().pictureVariant).toBe('inside')
+    const fresh = new Game([new Act1()])
+    fresh.newTurn()
+    fresh.newTurn()
+    fresh.state.currentRoom = fresh.state.allRooms.AbandonedShed
+    expect(fresh.currentMusicPlace().pictureVariant).toBe('')
+  })
+
+  it('comes back from a save as it was: outside before the door opened, inside after', () => {
+    const locked = new Game([new Act1()])
+    locked.state.currentRoom = locked.state.allRooms.AbandonedShed
+    locked.newTurn()
+    locked.newTurn()
+    const before = new Game([new Act1()])
+    before.loadSaveData(locked.toSaveData())
+    expect(before.currentMusicPlace().pictureVariant).toBe('')
+
+    const open = gameInUnlockedShed()
+    open.newTurn()
+    open.newTurn()
+    const after = new Game([new Act1()])
+    after.loadSaveData(open.toSaveData())
+    expect(after.currentMusicPlace().pictureVariant).toBe('inside')
+  })
+
+  it('answers the key in two paragraphs, the picture changing before the second', () => {
+    const game = new Game([new Act1()])
+    game.state.currentRoom = game.state.allRooms.AbandonedShed
+    game.state.addItemToInventory(new Key())
+    const answer = game.commandParser.parse('use key with door')
+    const blocks = parseTurn(answer)
+    expect(blocks).toHaveLength(2)
+    expect(
+      sceneBlock({ description: null, pictureChanged: true }, blocks),
+    ).toBe(1)
+    expect(blocks[0]).toMatchObject({
+      markup: expect.stringContaining('creaks open.'),
+    })
+    expect(blocks[1]).toMatchObject({
+      markup: expect.stringMatching(/^In the gloom you make out/),
+    })
   })
 })
