@@ -30,7 +30,7 @@ function stubScreen(wide: boolean | 'short'): void {
   vi.stubGlobal(
     'matchMedia',
     vi.fn((query: string) => ({
-      matches: wide === 'short' ? query.includes('max-height') : wide,
+      matches: wide === 'short' ? query.includes('519px') : wide,
       addEventListener: vi.fn(),
       removeEventListener: vi.fn(),
     })),

@@ -55,7 +55,7 @@ describe('LanternLayout', () => {
     vi.stubGlobal(
       'matchMedia',
       vi.fn((query: string) => ({
-        matches: query.includes('max-height'),
+        matches: query.includes('519px'),
         addEventListener: vi.fn(),
         removeEventListener: vi.fn(),
       })),
@@ -1197,7 +1197,7 @@ describe('LanternLayout', () => {
       vi.stubGlobal(
         'matchMedia',
         vi.fn((query: string) => ({
-          matches: query.includes('max-height') ? short : false,
+          matches: query.includes('519px') ? short : false,
           addEventListener: vi.fn(),
           removeEventListener: vi.fn(),
         })),
@@ -1368,7 +1368,7 @@ describe('LanternLayout', () => {
       vi.stubGlobal(
         'matchMedia',
         vi.fn((query: string) => ({
-          matches: query.includes('max-height') ? short : false,
+          matches: query.includes('519px') ? short : false,
           addEventListener: vi.fn(),
           removeEventListener: vi.fn(),
         })),

@@ -44,7 +44,7 @@ describe('LanternLayout: the arrival on the picture', () => {
       vi.fn((query: string) => ({
         matches:
           wide === 'short'
-            ? query.includes('max-height')
+            ? query.includes('519px')
             : wide && query.includes('min-width'),
         addEventListener: vi.fn((_type: string, listener: never) => {
           if (query.includes('min-width')) wideChanges.push(listener)
