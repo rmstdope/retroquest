@@ -29,10 +29,7 @@ describe('ParentsVault: Aren and Lysa', () => {
 
   it.each(NAMES)('"%s" does not answer before the memories', (name) => {
     const game = inTheVault()
-    expect(game.talk(name)).toBe(
-      'They do not turn. A memory cannot hear you. It only waits to be ' +
-        'looked at.',
-    )
+    expect(game.talk(name)).toBe('They do not turn. A memory cannot hear you.')
     expect(game.examine(name)).toBe(
       'Two small figures in every lantern, your father and your mother. ' +
         'They do not know you are here.',
@@ -43,12 +40,12 @@ describe('ParentsVault: Aren and Lysa', () => {
     const game = inTheVault()
     game.examine('memories')
     expect(game.talk(name)).toBe(
-      'The lanterns stay dim. They said what they stayed to say.',
+      'The lanterns stay dim. Nothing in them answers.',
     )
     expect(game.examine(name)).toBe(
-      'The lanterns are dim and the figures in them are gone. You can ' +
-        'still see them: your father over a workbench, your mother making ' +
-        'a friend laugh.',
+      'The lanterns are dim and the figures in them hardly show. You know ' +
+        'them now all the same: your father over a workbench, your mother ' +
+        'making a friend laugh.',
     )
   })
 

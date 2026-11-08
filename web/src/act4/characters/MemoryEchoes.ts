@@ -1,6 +1,7 @@
 import {
   Character,
   type GameState,
+  type Item,
   type NameOptions,
   nameInSentence as nameReading,
 } from '@/engine'
@@ -13,18 +14,21 @@ const LOOK_BEFORE =
 
 /** Looking at the figures once the memories have played. */
 const LOOK_AFTER =
-  'The lanterns are dim and the figures in them are gone. You can still ' +
-  'see them: your father over a workbench, your mother making a friend laugh.'
+  'The lanterns are dim and the figures in them hardly show. You know them ' +
+  'now all the same: your father over a workbench, your mother making a ' +
+  'friend laugh.'
+
+/** Offering them anything: there are no hands here to take it. */
+const OFFERED = 'Nothing in the lanterns can take it from you.'
 
 /** Speaking to them while the memories are still unseen. */
-const TALK_BEFORE =
-  'They do not turn. A memory cannot hear you. It only waits to be looked at.'
+const TALK_BEFORE = 'They do not turn. A memory cannot hear you.'
 
 /** Speaking to them once the memories have played. */
-const TALK_AFTER = 'The lanterns stay dim. They said what they stayed to say.'
+const TALK_AFTER = 'The lanterns stay dim. Nothing in them answers.'
 
 /** What the player may call them besides a word of their name. */
-const OTHER_NAMES = ['parents', 'father', 'mother']
+const OTHER_NAMES = ['parents', 'father', 'mother', 'memories']
 
 /**
  * Aren and Lysa as the Parents' Vault holds them: memories, seen and never
@@ -69,5 +73,15 @@ export class MemoryEchoes extends Character {
     return gameState.getStoryFlag(FLAG_ACT4_PARENTS_LEGACY_COMPLETED)
       ? TALK_AFTER
       : TALK_BEFORE
+  }
+
+  /** Whatever is said to a memory gets the same silence as speaking to it. */
+  override sayTo(gameState: GameState, _words: string): string {
+    return this.talkTo(gameState)
+  }
+
+  /** A memory cannot take anything; the item stays with the player. */
+  override giveItem(_gameState: GameState, _item: Item): string {
+    return OFFERED
   }
 }
