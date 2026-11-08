@@ -1472,11 +1472,16 @@ export const useGameStore = defineStore('game', () => {
     return { kind: 'matches', candidates, sendable, word }
   }
 
-  /** Whether this point of the tree offers the name of a character here. */
+  /** Whether a character's whole name can be followed from this point of the tree. */
   function offersCharacter(node: CompletionTree): boolean {
-    return characters.value.some((name) =>
-      Object.hasOwn(node, name.toLowerCase().split(/\s+/)[0]),
-    )
+    return characters.value.some((name) => {
+      let at: CompletionTree | null = node
+      for (const word of name.toLowerCase().split(/\s+/)) {
+        if (at === null || !Object.hasOwn(at, word)) return false
+        at = at[word]
+      }
+      return true
+    })
   }
 
   return {

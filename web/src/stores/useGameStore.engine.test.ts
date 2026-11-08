@@ -393,6 +393,13 @@ describe('useGameStore over the real engine: the no-match line and a name that w
     expect(saysNoMatch(store, 'talk to bob cedric')).toBe(true)
   })
 
+  it('still says no match where only an item shares the first word of a name', async () => {
+    const store = await storeIn(Act2, 'MountainPath')
+
+    expect(saysNoMatch(store, 'take hermit')).toBe(true)
+    expect(saysNoMatch(store, 'talk to hermit')).toBe(false)
+  })
+
   it('takes a name with its article and from the words after the verb', async () => {
     const store = await storeIn(Act2, 'CastleCourtyard')
 
