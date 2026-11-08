@@ -20,6 +20,9 @@ const CURSE_LINE =
   'The old dripping has stopped; from the mines beyond comes no sound of ' +
   'picks at all.'
 
+/** The clause of the description that goes quiet once the curse has shown itself. */
+const DRIPPING_CLAUSE = ', and somewhere in the dark, water drips'
+
 /** A vast chamber lit by slow-breathing embers beneath scaled coils. */
 export class DragonsHall extends Room {
   constructor() {
@@ -27,9 +30,10 @@ export class DragonsHall extends Room {
       name: "Dragon's Hall",
       description:
         'A hall of living stone opens beyond sight, its ceiling lost in ' +
-        'shadow. Embers burn slowly along the floor, pulsing like a heartbeat, ' +
-        'and somewhere in the dark, water drips. Rings of old sigils spiral ' +
-        'across the black tiles around the Ancient Dragon. It lies coiled at ' +
+        'shadow. Embers burn slowly along the floor, pulsing like a heartbeat' +
+        DRIPPING_CLAUSE +
+        '. Rings of old sigils spiral across the black tiles around the ' +
+        'Ancient Dragon. It lies coiled at ' +
         'the centre, scales like polished obsidian, and each slow breath hums ' +
         'in your bones.',
       items: [new Sigils()],
@@ -39,13 +43,14 @@ export class DragonsHall extends Room {
   }
 
   /**
-   * The description, ending with the curse's mark once the clue is found,
-   * then the cracked sigils once the scale is taken (or the mended ones).
+   * The description. Once the clue is found the water no longer drips and the
+   * curse's mark ends it, then the cracked sigils once the scale is taken (or
+   * the mended ones).
    */
   override descriptionFor(gameState: GameState): string {
     let text = this.description
     if (gameState.getStoryFlag(FLAG_ACT3_DRAGONS_MEMORY_RECEIVED)) {
-      text = `${text} ${CURSE_LINE}`
+      text = `${text.replace(DRIPPING_CLAUSE, '')} ${CURSE_LINE}`
     }
     if (gameState.getStoryFlag(FLAG_ACT3_SIGILS_MENDED)) {
       text = `${text} ${MENDED_LINE}`
