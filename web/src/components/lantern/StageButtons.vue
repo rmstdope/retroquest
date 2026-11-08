@@ -177,7 +177,7 @@ defineExpose({ focusButton })
   background: var(--lq-accent-soft);
   color: var(--lq-accent-text);
 }
-/* A sideways phone: smaller buttons; on the smallest screens "Bag 2", no dot between. */
+/* A sideways phone: smaller buttons; on the smallest screens "Bag 2", no dot between, and the amber dot sits in the button's corner, taking no width from the room's name. */
 .lq-compact .lq-button-row {
   gap: 4px;
 }
@@ -198,6 +198,14 @@ defineExpose({ focusButton })
   margin-left: 6px;
   border-radius: 50%;
   background: var(--lq-accent);
+}
+@media (max-height: 340px) {
+  .lq-compact .lq-dot {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    margin-left: 0;
+  }
 }
 .lq-map-wrap {
   position: relative;

@@ -15,8 +15,8 @@ import { displayName } from '@/lantern/displayName'
  * row: the name, the chips in a single row that fades at its right edge and
  * slides sideways, then "⟲ Story so far"; "You are in" is hidden. The same
  * elements stay in the same order, so folding never moves focus. Compact (a
- * phone on its side) is that one row always: the name beside the chips, which
- * slide sideways, so the plate never covers the words.
+ * phone on its side) is that one row always: the whole name beside the chips,
+ * which slide sideways in what is left, so the plate never covers the words.
  */
 const props = defineProps<{
   storyButton?: boolean
@@ -230,15 +230,12 @@ defineExpose({ focusStoryButton })
   position: static;
   flex: 0 0 auto;
 }
-/* Compact: a long name gives way (an ellipsis) so the chips keep a share. */
+/* Compact: the name comes first and the chips slide in what is left; only a name too long for the whole plate gives way (an ellipsis). */
 .lq-plate-compact .lq-room-name {
   flex: 0 1 auto;
   min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
-}
-.lq-plate-compact .lq-here {
-  flex: 1 0 84px;
 }
 @keyframes lq-plate-fold {
   from {

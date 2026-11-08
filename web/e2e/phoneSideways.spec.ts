@@ -78,6 +78,55 @@ for (const size of [
   })
 }
 
+/** Light the new-item dots on all three buttons and name the room, as the store records them. */
+async function lightDots(page: Page, roomName: string): Promise<void> {
+  await page.evaluate((name) => {
+    const app = (
+      document.querySelector('#app') as unknown as {
+        __vue_app__: {
+          config: {
+            globalProperties: {
+              $pinia: { state: { value: { game: Record<string, unknown> } } }
+            }
+          }
+        }
+      }
+    ).__vue_app__
+    const game = app.config.globalProperties.$pinia.state.value.game
+    game.bagHasNew = true
+    game.spellsHaveNew = true
+    game.questsHaveNew = true
+    game.roomName = name
+  }, roomName)
+}
+
+for (const size of [
+  { width: 568, height: 320 },
+  { width: 640, height: 360 },
+]) {
+  test(`with every dot lit at ${size.width}×${size.height} the plate stays clear of Bag and the name is whole`, async ({
+    page,
+  }): Promise<void> => {
+    await page.setViewportSize(size)
+    await start(page)
+    await lightDots(page, 'Abandoned Shed')
+    await expect(page.locator('.lq-dot')).toHaveCount(3)
+    // The plate follows the buttons' width a frame after the dots light.
+    await expect
+      .poll(async (): Promise<number> => {
+        const plate = await page.locator('.lq-stage-plate').boundingBox()
+        const bag = await page.locator('[data-button="bag"]').boundingBox()
+        return (bag?.x ?? 0) - ((plate?.x ?? 0) + (plate?.width ?? 999))
+      })
+      .toBeGreaterThanOrEqual(0)
+    const name = page.locator('.lq-stage-plate .lq-room-name')
+    await expect(name).toHaveText('Abandoned Shed')
+    await expect
+      .poll(() => name.evaluate((el) => el.scrollWidth - el.clientWidth))
+      .toBeLessThanOrEqual(0)
+  })
+}
+
 test('a tablet held upright keeps the tall stage, with no turn page', async ({
   page,
 }): Promise<void> => {
