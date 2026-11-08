@@ -5,7 +5,9 @@
  * thing's named area (`roomAreas.ts`), so the navigator need not mark the spot
  * twice. A change that alters the whole view is another picture, not a patch.
  * The declared lists live in `roomPatches/act<N>RoomPatches.ts`; a patch not
- * made yet is not a defect. Sir Cedric, who follows the player through a
+ * made yet is not a defect. The base picture shows the room as the game
+ * starts: a thing there at the start has a taken or gone patch, a thing or a
+ * way that only turns up later an appears or open patch. Sir Cedric, who follows the player through a
  * whole act, has none.
  */
 import { ACT1_ROOM_PATCHES } from './roomPatches/act1RoomPatches'

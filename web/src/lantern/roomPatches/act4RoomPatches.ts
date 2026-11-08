@@ -3,23 +3,13 @@ import type { ImagePatch } from '../roomPatches'
 /**
  * The declared patches of each room of Act 4, by room key: the small changes
  * the room's picture needs (a thing taken or gone, a thing changed, a way
- * opened), each linked to the named area of the thing it is about. A room
- * with no small change has no entry.
+ * opened), each linked to the named area of the thing it is about. The base
+ * picture shows the room as the game starts, so a thing there at the start
+ * has a taken or gone patch and a thing that turns up later an appears patch.
+ * A room with no small change has no entry.
  */
 export const ACT4_ROOM_PATCHES: Record<string, ImagePatch[]> = {
   FortressGates: [
-    {
-      id: 'guardians-chain-taken',
-      title: "Guardian's Chain taken",
-      text: "Remove the guardian's chain from the picture.",
-      area: 'guardians-chain',
-    },
-    {
-      id: 'guardians-essence-taken',
-      title: "Guardian's Essence taken",
-      text: "Remove the guardian's essence from the picture.",
-      area: 'guardians-essence',
-    },
     {
       id: 'exit-north-open',
       title: 'Way north open',
@@ -38,14 +28,20 @@ export const ACT4_ROOM_PATCHES: Record<string, ImagePatch[]> = {
       text: 'Add the ward stone fragment to the picture.',
       area: 'ward-stone-fragment',
     },
+    {
+      id: 'guardians-chain-appears',
+      title: "Guardian's Chain appears",
+      text: "Add the guardian's chain to the picture.",
+      area: 'guardians-chain',
+    },
+    {
+      id: 'guardians-essence-appears',
+      title: "Guardian's Essence appears",
+      text: "Add the guardian's essence to the picture.",
+      area: 'guardians-essence',
+    },
   ],
   OuterCourtyard: [
-    {
-      id: 'servants-pendant-taken',
-      title: "Servant's Pendant taken",
-      text: "Remove the servant's pendant from the picture.",
-      area: 'servants-pendant',
-    },
     {
       id: 'exit-north-open',
       title: 'Way north open',
@@ -57,6 +53,12 @@ export const ACT4_ROOM_PATCHES: Record<string, ImagePatch[]> = {
       title: 'Servants freed',
       text: 'Show the servants freed from their trap and standing free.',
       area: 'trapped-servants',
+    },
+    {
+      id: 'servants-pendant-appears',
+      title: "Servant's Pendant appears",
+      text: "Add the servant's pendant to the picture.",
+      area: 'servants-pendant',
     },
   ],
   MirrorLabyrinth: [
@@ -78,6 +80,12 @@ export const ACT4_ROOM_PATCHES: Record<string, ImagePatch[]> = {
       text: 'Show the way west closed off.',
       area: 'exit-west',
     },
+    {
+      id: 'true-self-appears',
+      title: 'True Self appears',
+      text: 'Add True Self to the picture.',
+      area: 'true-self',
+    },
   ],
   HallOfEchoes: [
     {
@@ -98,6 +106,12 @@ export const ACT4_ROOM_PATCHES: Record<string, ImagePatch[]> = {
       text: 'Show the knight redeemed, his dark bearing lifted.',
       area: 'knight-of-despair',
     },
+    {
+      id: 'ghostly-warriors-appears',
+      title: 'Ghostly Warriors appears',
+      text: 'Add Ghostly Warriors to the picture.',
+      area: 'ghostly-warriors',
+    },
   ],
   TowerOfShadows: [
     {
@@ -111,6 +125,12 @@ export const ACT4_ROOM_PATCHES: Record<string, ImagePatch[]> = {
       title: 'Way up open',
       text: 'Show the way up open and passable.',
       area: 'exit-up',
+    },
+    {
+      id: 'exit-in-open',
+      title: 'Way in open',
+      text: 'Show the way in open and passable.',
+      area: 'exit-in',
     },
   ],
   ChamberOfWhispers: [

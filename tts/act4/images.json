@@ -61,18 +61,6 @@
     ],
     "patches": [
       {
-        "id": "guardians-chain-taken",
-        "title": "Guardian's Chain taken",
-        "text": "Remove the guardian's chain from the picture.",
-        "area": "guardians-chain"
-      },
-      {
-        "id": "guardians-essence-taken",
-        "title": "Guardian's Essence taken",
-        "text": "Remove the guardian's essence from the picture.",
-        "area": "guardians-essence"
-      },
-      {
         "id": "exit-north-open",
         "title": "Way north open",
         "text": "Show the way north open and passable.",
@@ -89,6 +77,18 @@
         "title": "Ward Stone Fragment appears",
         "text": "Add the ward stone fragment to the picture.",
         "area": "ward-stone-fragment"
+      },
+      {
+        "id": "guardians-chain-appears",
+        "title": "Guardian's Chain appears",
+        "text": "Add the guardian's chain to the picture.",
+        "area": "guardians-chain"
+      },
+      {
+        "id": "guardians-essence-appears",
+        "title": "Guardian's Essence appears",
+        "text": "Add the guardian's essence to the picture.",
+        "area": "guardians-essence"
       }
     ]
   },
@@ -122,12 +122,6 @@
     ],
     "patches": [
       {
-        "id": "servants-pendant-taken",
-        "title": "Servant's Pendant taken",
-        "text": "Remove the servant's pendant from the picture.",
-        "area": "servants-pendant"
-      },
-      {
         "id": "exit-north-open",
         "title": "Way north open",
         "text": "Show the way north open and passable.",
@@ -138,6 +132,12 @@
         "title": "Servants freed",
         "text": "Show the servants freed from their trap and standing free.",
         "area": "trapped-servants"
+      },
+      {
+        "id": "servants-pendant-appears",
+        "title": "Servant's Pendant appears",
+        "text": "Add the servant's pendant to the picture.",
+        "area": "servants-pendant"
       }
     ]
   },
@@ -191,6 +191,12 @@
         "title": "Way west closed",
         "text": "Show the way west closed off.",
         "area": "exit-west"
+      },
+      {
+        "id": "true-self-appears",
+        "title": "True Self appears",
+        "text": "Add True Self to the picture.",
+        "area": "true-self"
       }
     ]
   },
@@ -252,6 +258,12 @@
         "title": "Knight redeemed",
         "text": "Show the knight redeemed, his dark bearing lifted.",
         "area": "knight-of-despair"
+      },
+      {
+        "id": "ghostly-warriors-appears",
+        "title": "Ghostly Warriors appears",
+        "text": "Add Ghostly Warriors to the picture.",
+        "area": "ghostly-warriors"
       }
     ]
   },
@@ -291,6 +303,12 @@
         "title": "Way up open",
         "text": "Show the way up open and passable.",
         "area": "exit-up"
+      },
+      {
+        "id": "exit-in-open",
+        "title": "Way in open",
+        "text": "Show the way in open and passable.",
+        "area": "exit-in"
       }
     ]
   },

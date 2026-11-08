@@ -3,8 +3,10 @@ import type { ImagePatch } from '../roomPatches'
 /**
  * The declared patches of each room of Act 1, by room key: the small changes
  * the room's picture needs (a thing taken or gone, a thing changed, a way
- * opened), each linked to the named area of the thing it is about. A room
- * with no small change has no entry.
+ * opened), each linked to the named area of the thing it is about. The base
+ * picture shows the room as the game starts, so a thing there at the start
+ * has a taken or gone patch and a thing that turns up later an appears patch.
+ * A room with no small change has no entry.
  */
 export const ACT1_ROOM_PATCHES: Record<string, ImagePatch[]> = {
   EliorsCottage: [
@@ -27,22 +29,28 @@ export const ACT1_ROOM_PATCHES: Record<string, ImagePatch[]> = {
       area: 'exit-east',
     },
     {
-      id: 'faded-photograph-taken',
-      title: 'Faded Photograph taken',
-      text: 'Remove the faded photograph from the picture.',
-      area: 'faded-photograph',
-    },
-    {
       id: 'lantern-lit',
       title: 'Lantern lit',
       text: 'Light the lantern on the table: a small warm flame in the glass.',
       area: 'lantern',
     },
     {
+      id: 'patches-appears',
+      title: 'Patches appears',
+      text: 'Add Patches to the picture.',
+      area: 'patches',
+    },
+    {
       id: 'eliors-journal-appears',
       title: "Elior's Journal appears",
       text: "Add Elior's journal to the picture.",
       area: 'eliors-journal',
+    },
+    {
+      id: 'faded-photograph-appears',
+      title: 'Faded Photograph appears',
+      text: 'Add the faded photograph to the picture.',
+      area: 'faded-photograph',
     },
   ],
   VegetableField: [
@@ -79,9 +87,9 @@ export const ACT1_ROOM_PATCHES: Record<string, ImagePatch[]> = {
       area: 'feather',
     },
     {
-      id: 'key-taken',
-      title: 'Key taken',
-      text: 'Remove the key from the picture.',
+      id: 'key-appears',
+      title: 'Key appears',
+      text: 'Add the key to the picture.',
       area: 'key',
     },
   ],
@@ -122,68 +130,62 @@ export const ACT1_ROOM_PATCHES: Record<string, ImagePatch[]> = {
       text: 'Remove the matches from the picture.',
       area: 'matches',
     },
-  ],
-  AbandonedShed: [
     {
-      id: 'broken-shovel-taken',
-      title: 'Broken Shovel taken',
-      text: 'Remove the broken shovel from the picture.',
-      area: 'broken-shovel',
-    },
-    {
-      id: 'patches-gone',
-      title: 'Patches gone',
-      text: 'Remove Patches from the picture.',
+      id: 'patches-appears',
+      title: 'Patches appears',
+      text: 'Add Patches to the picture.',
       area: 'patches',
     },
-    {
-      id: 'fishing-rod-taken',
-      title: 'Fishing Rod taken',
-      text: 'Remove the fishing rod from the picture.',
-      area: 'fishing-rod',
-    },
-    {
-      id: 'magnet-taken',
-      title: 'Magnet taken',
-      text: 'Remove the magnet from the picture.',
-      area: 'magnet',
-    },
+  ],
+  AbandonedShed: [
     {
       id: 'mysterious-box-appears',
       title: 'Mysterious Box appears',
       text: 'Add the mysterious box to the picture.',
       area: 'mysterious-box',
     },
+    {
+      id: 'broken-shovel-appears',
+      title: 'Broken Shovel appears',
+      text: 'Add the broken shovel to the picture.',
+      area: 'broken-shovel',
+    },
+    {
+      id: 'patches-appears',
+      title: 'Patches appears',
+      text: 'Add Patches to the picture.',
+      area: 'patches',
+    },
+    {
+      id: 'fishing-rod-appears',
+      title: 'Fishing Rod appears',
+      text: 'Add the fishing rod to the picture.',
+      area: 'fishing-rod',
+    },
+    {
+      id: 'magnet-appears',
+      title: 'Magnet appears',
+      text: 'Add the magnet to the picture.',
+      area: 'magnet',
+    },
   ],
   OldMill: [
     {
-      id: 'millstone-fragment-taken',
-      title: 'Millstone Fragment taken',
-      text: 'Remove the millstone fragment from the picture.',
+      id: 'millstone-fragment-appears',
+      title: 'Millstone Fragment appears',
+      text: 'Add the millstone fragment to the picture.',
       area: 'millstone-fragment',
     },
   ],
   Riverbank: [
     {
-      id: 'mothers-letter-taken',
-      title: "Mother's Letter taken",
-      text: "Remove the mother's letter from the picture.",
+      id: 'mothers-letter-appears',
+      title: "Mother's Letter appears",
+      text: "Add the mother's letter to the picture.",
       area: 'mothers-letter',
     },
   ],
   ForestPath: [
-    {
-      id: 'stick-taken',
-      title: 'Stick taken',
-      text: 'Remove the stick from the picture.',
-      area: 'stick',
-    },
-    {
-      id: 'wild-berries-taken',
-      title: 'Wild Berries taken',
-      text: 'Remove the wild berries from the picture.',
-      area: 'wild-berries',
-    },
     {
       id: 'vines-cut',
       title: 'Vines cut',
@@ -191,10 +193,22 @@ export const ACT1_ROOM_PATCHES: Record<string, ImagePatch[]> = {
       area: 'vines',
     },
     {
+      id: 'stick-appears',
+      title: 'Stick appears',
+      text: 'Add the stick to the picture.',
+      area: 'stick',
+    },
+    {
       id: 'snare-appears',
       title: 'Snare appears',
       text: 'Add the snare to the picture.',
       area: 'snare',
+    },
+    {
+      id: 'wild-berries-appears',
+      title: 'Wild Berries appears',
+      text: 'Add the wild berries to the picture.',
+      area: 'wild-berries',
     },
   ],
   HiddenGlade: [
@@ -205,17 +219,23 @@ export const ACT1_ROOM_PATCHES: Record<string, ImagePatch[]> = {
       area: 'shiny-pebble',
     },
     {
-      id: 'rare-flower-taken',
-      title: 'Rare Flower taken',
-      text: 'Remove the rare flower from the picture.',
+      id: 'rare-flower-appears',
+      title: 'Rare Flower appears',
+      text: 'Add the rare flower to the picture.',
       area: 'rare-flower',
+    },
+    {
+      id: 'deer-appears',
+      title: 'Deer appears',
+      text: 'Add Deer to the picture.',
+      area: 'deer',
     },
   ],
   VillageChapel: [
     {
-      id: 'locket-taken',
-      title: 'Locket taken',
-      text: 'Remove the locket from the picture.',
+      id: 'locket-appears',
+      title: 'Locket appears',
+      text: 'Add the locket to the picture.',
       area: 'locket',
     },
   ],

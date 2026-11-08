@@ -3,8 +3,10 @@ import type { ImagePatch } from '../roomPatches'
 /**
  * The declared patches of each room of Act 3, by room key: the small changes
  * the room's picture needs (a thing taken or gone, a thing changed, a way
- * opened), each linked to the named area of the thing it is about. A room
- * with no small change has no entry.
+ * opened), each linked to the named area of the thing it is about. The base
+ * picture shows the room as the game starts, so a thing there at the start
+ * has a taken or gone patch and a thing that turns up later an appears patch.
+ * A room with no small change has no entry.
  */
 export const ACT3_ROOM_PATCHES: Record<string, ImagePatch[]> = {
   MirasHut: [
@@ -21,29 +23,29 @@ export const ACT3_ROOM_PATCHES: Record<string, ImagePatch[]> = {
       area: 'mira',
     },
     {
-      id: 'lifelight-elixir-taken',
-      title: 'Lifelight Elixir taken',
-      text: 'Remove the lifelight elixir from the picture.',
+      id: 'lifelight-elixir-appears',
+      title: 'Lifelight Elixir appears',
+      text: 'Add the lifelight elixir to the picture.',
       area: 'lifelight-elixir',
     },
   ],
   TidalCauseway: [
     {
-      id: 'mira-gone',
-      title: 'Mira gone',
-      text: 'Remove Mira from the picture.',
+      id: 'mira-appears',
+      title: 'Mira appears',
+      text: 'Add Mira to the picture.',
       area: 'mira',
     },
     {
-      id: 'sea-sealed-letter-taken',
-      title: 'Sea-Sealed Letter taken',
-      text: 'Remove the sea-sealed letter from the picture.',
+      id: 'sea-sealed-letter-appears',
+      title: 'Sea-Sealed Letter appears',
+      text: 'Add the sea-sealed letter to the picture.',
       area: 'sea-sealed-letter',
     },
     {
-      id: 'rusted-locker-key-taken',
-      title: 'Rusted Locker Key taken',
-      text: 'Remove the rusted locker key from the picture.',
+      id: 'rusted-locker-key-appears',
+      title: 'Rusted Locker Key appears',
+      text: 'Add the rusted locker key to the picture.',
       area: 'rusted-locker-key',
     },
   ],
@@ -55,9 +57,9 @@ export const ACT3_ROOM_PATCHES: Record<string, ImagePatch[]> = {
       area: 'polished-shell',
     },
     {
-      id: 'moon-rune-shards-taken',
-      title: 'Moon Rune Shards taken',
-      text: 'Remove the moon rune shards from the picture.',
+      id: 'moon-rune-shards-appears',
+      title: 'Moon Rune Shards appears',
+      text: 'Add the moon rune shards to the picture.',
       area: 'moon-rune-shards',
     },
   ],
@@ -77,9 +79,9 @@ export const ACT3_ROOM_PATCHES: Record<string, ImagePatch[]> = {
       area: 'weathered-coin',
     },
     {
-      id: 'prism-lantern-taken',
-      title: 'Prism Lantern taken',
-      text: 'Remove the prism lantern from the picture.',
+      id: 'prism-lantern-appears',
+      title: 'Prism Lantern appears',
+      text: 'Add the prism lantern to the picture.',
       area: 'prism-lantern',
     },
   ],
@@ -96,6 +98,12 @@ export const ACT3_ROOM_PATCHES: Record<string, ImagePatch[]> = {
       text: 'Show a lit lantern mounted in the bracket on the wall.',
       area: 'lantern-bracket',
     },
+    {
+      id: 'lantern-bracket-appears',
+      title: 'Lantern Bracket appears',
+      text: 'Add the lantern bracket to the picture.',
+      area: 'lantern-bracket',
+    },
   ],
   SanctumOfTheTide: [
     {
@@ -105,9 +113,9 @@ export const ACT3_ROOM_PATCHES: Record<string, ImagePatch[]> = {
       area: 'exit-east',
     },
     {
-      id: 'crystal-of-light-taken',
-      title: 'Crystal of Light taken',
-      text: 'Remove the crystal of light from the picture.',
+      id: 'crystal-of-light-appears',
+      title: 'Crystal of Light appears',
+      text: 'Add the crystal of light to the picture.',
       area: 'crystal-of-light',
     },
   ],
@@ -119,44 +127,44 @@ export const ACT3_ROOM_PATCHES: Record<string, ImagePatch[]> = {
       area: 'emberwater-canteen',
     },
     {
-      id: 'mira-gone',
-      title: 'Mira gone',
-      text: 'Remove Mira from the picture.',
+      id: 'mira-appears',
+      title: 'Mira appears',
+      text: 'Add Mira to the picture.',
       area: 'mira',
     },
     {
-      id: 'brass-mirror-segment-taken',
-      title: 'Brass Mirror Segment taken',
-      text: 'Remove the brass mirror segment from the picture.',
+      id: 'brass-mirror-segment-appears',
+      title: 'Brass Mirror Segment appears',
+      text: 'Add the brass mirror segment to the picture.',
       area: 'brass-mirror-segment',
     },
   ],
   ObsidianOutcrops: [
     {
-      id: 'brass-mirror-segment-taken',
-      title: 'Brass Mirror Segment taken',
-      text: 'Remove the brass mirror segment from the picture.',
+      id: 'brass-mirror-segment-appears',
+      title: 'Brass Mirror Segment appears',
+      text: 'Add the brass mirror segment to the picture.',
       area: 'brass-mirror-segment',
     },
     {
-      id: 'binding-resin-taken',
-      title: 'Binding Resin taken',
-      text: 'Remove the binding resin from the picture.',
+      id: 'binding-resin-appears',
+      title: 'Binding Resin appears',
+      text: 'Add the binding resin to the picture.',
       area: 'binding-resin',
     },
   ],
   MirrorTerraces: [
     {
-      id: 'brass-mirror-segment-taken',
-      title: 'Brass Mirror Segment taken',
-      text: 'Remove the brass mirror segment from the picture.',
-      area: 'brass-mirror-segment',
-    },
-    {
       id: 'exit-east-open',
       title: 'Way east open',
       text: 'Show the way east open and passable.',
       area: 'exit-east',
+    },
+    {
+      id: 'brass-mirror-segment-appears',
+      title: 'Brass Mirror Segment appears',
+      text: 'Add the brass mirror segment to the picture.',
+      area: 'brass-mirror-segment',
     },
   ],
   FumarolePassages: [
@@ -172,53 +180,73 @@ export const ACT3_ROOM_PATCHES: Record<string, ImagePatch[]> = {
       text: 'Show the way south open and passable.',
       area: 'exit-south',
     },
+    {
+      id: 'exit-out-open',
+      title: 'Way out open',
+      text: 'Show the way out open and passable.',
+      area: 'exit-out',
+    },
+    {
+      id: 'exit-in-open',
+      title: 'Way in open',
+      text: 'Show the way in open and passable.',
+      area: 'exit-in',
+    },
   ],
   EmberGallery: [
     {
-      id: 'ash-fern-taken',
-      title: 'Ash-Fern taken',
-      text: 'Remove the ash-fern from the picture.',
+      id: 'ash-fern-appears',
+      title: 'Ash-Fern appears',
+      text: 'Add the ash-fern to the picture.',
       area: 'ash-fern',
     },
     {
-      id: 'cooled-slag-taken',
-      title: 'Cooled Slag taken',
-      text: 'Remove the cooled slag from the picture.',
+      id: 'cooled-slag-appears',
+      title: 'Cooled Slag appears',
+      text: 'Add the cooled slag to the picture.',
       area: 'cooled-slag',
+    },
+  ],
+  PhoenixCrater: [
+    {
+      id: 'phoenix-appears',
+      title: 'Phoenix appears',
+      text: 'Add Phoenix to the picture.',
+      area: 'phoenix',
     },
   ],
   CavernMouth: [
     {
-      id: 'mira-gone',
-      title: 'Mira gone',
-      text: 'Remove Mira from the picture.',
+      id: 'mira-appears',
+      title: 'Mira appears',
+      text: 'Add Mira to the picture.',
       area: 'mira',
     },
   ],
   ToolCache: [
     {
-      id: 'reinforced-braces-taken',
-      title: 'Reinforced Braces taken',
-      text: 'Remove the reinforced braces from the picture.',
-      area: 'reinforced-braces',
-    },
-    {
-      id: 'support-straps-taken',
-      title: 'Support Straps taken',
-      text: 'Remove the support straps from the picture.',
-      area: 'support-straps',
-    },
-    {
-      id: 'wedge-blocks-taken',
-      title: 'Wedge Blocks taken',
-      text: 'Remove the wedge blocks from the picture.',
-      area: 'wedge-blocks',
-    },
-    {
       id: 'supply-crate-appears',
       title: 'Supply Crate appears',
       text: 'Add the supply crate to the picture.',
       area: 'supply-crate',
+    },
+    {
+      id: 'reinforced-braces-appears',
+      title: 'Reinforced Braces appears',
+      text: 'Add the reinforced braces to the picture.',
+      area: 'reinforced-braces',
+    },
+    {
+      id: 'support-straps-appears',
+      title: 'Support Straps appears',
+      text: 'Add the support straps to the picture.',
+      area: 'support-straps',
+    },
+    {
+      id: 'wedge-blocks-appears',
+      title: 'Wedge Blocks appears',
+      text: 'Add the wedge blocks to the picture.',
+      area: 'wedge-blocks',
     },
   ],
   CollapsedGalleries: [
@@ -234,18 +262,30 @@ export const ACT3_ROOM_PATCHES: Record<string, ImagePatch[]> = {
       text: 'Show the way east open and passable.',
       area: 'exit-east',
     },
+    {
+      id: 'miners-appears',
+      title: 'Miners appears',
+      text: 'Add Miners to the picture.',
+      area: 'miners',
+    },
+    {
+      id: 'tobin-appears',
+      title: 'Tobin appears',
+      text: 'Add Tobin to the picture.',
+      area: 'tobin',
+    },
   ],
   EchoChambers: [
     {
-      id: 'old-oath-scrolls-taken',
-      title: 'Old Oath Scrolls taken',
-      text: 'Remove the old oath scrolls from the picture.',
+      id: 'old-oath-scrolls-appears',
+      title: 'Old Oath Scrolls appears',
+      text: 'Add the old oath scrolls to the picture.',
       area: 'old-oath-scrolls',
     },
     {
-      id: 'resonant-chant-rubbings-taken',
-      title: 'Resonant Chant Rubbings taken',
-      text: 'Remove the resonant chant rubbings from the picture.',
+      id: 'resonant-chant-rubbings-appears',
+      title: 'Resonant Chant Rubbings appears',
+      text: 'Add the resonant chant rubbings to the picture.',
       area: 'resonant-chant-rubbings',
     },
   ],
@@ -277,10 +317,18 @@ export const ACT3_ROOM_PATCHES: Record<string, ImagePatch[]> = {
   ],
   DragonsHall: [
     {
-      id: 'dragons-scale-taken',
-      title: "Dragon's Scale taken",
-      text: "Remove the dragon's scale from the picture.",
+      id: 'dragons-scale-appears',
+      title: "Dragon's Scale appears",
+      text: "Add the dragon's scale to the picture.",
       area: 'dragons-scale',
+    },
+  ],
+  FortressEntrance: [
+    {
+      id: 'mira-appears',
+      title: 'Mira appears',
+      text: 'Add Mira to the picture.',
+      area: 'mira',
     },
   ],
 }

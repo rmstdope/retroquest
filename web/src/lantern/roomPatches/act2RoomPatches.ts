@@ -3,8 +3,10 @@ import type { ImagePatch } from '../roomPatches'
 /**
  * The declared patches of each room of Act 2, by room key: the small changes
  * the room's picture needs (a thing taken or gone, a thing changed, a way
- * opened), each linked to the named area of the thing it is about. A room
- * with no small change has no entry.
+ * opened), each linked to the named area of the thing it is about. The base
+ * picture shows the room as the game starts, so a thing there at the start
+ * has a taken or gone patch and a thing that turns up later an appears patch.
+ * A room with no small change has no entry.
  */
 export const ACT2_ROOM_PATCHES: Record<string, ImagePatch[]> = {
   MountainPath: [
@@ -21,16 +23,16 @@ export const ACT2_ROOM_PATCHES: Record<string, ImagePatch[]> = {
       area: 'walking-stick',
     },
     {
-      id: 'entry-pass-taken',
-      title: 'Entry Pass taken',
-      text: 'Remove the entry pass from the picture.',
-      area: 'entry-pass',
-    },
-    {
       id: 'exit-east-open',
       title: 'Way east open',
       text: 'Show the way east open and passable.',
       area: 'exit-east',
+    },
+    {
+      id: 'entry-pass-appears',
+      title: 'Entry Pass appears',
+      text: 'Add the entry pass to the picture.',
+      area: 'entry-pass',
     },
   ],
   GreendaleGates: [
@@ -47,9 +49,9 @@ export const ACT2_ROOM_PATCHES: Record<string, ImagePatch[]> = {
       area: 'exit-north',
     },
     {
-      id: 'city-map-taken',
-      title: 'City Map taken',
-      text: 'Remove the city map from the picture.',
+      id: 'city-map-appears',
+      title: 'City Map appears',
+      text: 'Add the city map to the picture.',
       area: 'city-map',
     },
   ],
@@ -62,24 +64,6 @@ export const ACT2_ROOM_PATCHES: Record<string, ImagePatch[]> = {
     },
   ],
   MarketDistrict: [
-    {
-      id: 'forest-survival-kit-gone',
-      title: 'Forest Survival Kit gone',
-      text: 'Remove the forest survival kit from the picture.',
-      area: 'forest-survival-kit',
-    },
-    {
-      id: 'enhanced-lantern-gone',
-      title: 'Enhanced Lantern gone',
-      text: 'Remove the enhanced lantern from the picture.',
-      area: 'enhanced-lantern',
-    },
-    {
-      id: 'quality-rope-gone',
-      title: 'Quality Rope gone',
-      text: 'Remove the quality rope from the picture.',
-      area: 'quality-rope',
-    },
     {
       id: 'forest-survival-kit-appears',
       title: 'Forest Survival Kit appears',
@@ -121,9 +105,9 @@ export const ACT2_ROOM_PATCHES: Record<string, ImagePatch[]> = {
       area: 'coins',
     },
     {
-      id: 'travelers-journal-taken',
-      title: "Traveler's Journal taken",
-      text: "Remove the traveler's journal from the picture.",
+      id: 'travelers-journal-appears',
+      title: "Traveler's Journal appears",
+      text: "Add the traveler's journal to the picture.",
       area: 'travelers-journal',
     },
   ],
@@ -137,9 +121,9 @@ export const ACT2_ROOM_PATCHES: Record<string, ImagePatch[]> = {
   ],
   CastleCourtyard: [
     {
-      id: 'squires-diary-taken',
-      title: "Squire's Diary taken",
-      text: "Remove the squire's diary from the picture.",
+      id: 'squires-diary-appears',
+      title: "Squire's Diary appears",
+      text: "Add the squire's diary to the picture.",
       area: 'squires-diary',
     },
   ],
@@ -153,9 +137,9 @@ export const ACT2_ROOM_PATCHES: Record<string, ImagePatch[]> = {
   ],
   HiddenLibrary: [
     {
-      id: 'crystal-focus-taken',
-      title: 'Crystal Focus taken',
-      text: 'Remove the crystal focus from the picture.',
+      id: 'crystal-focus-appears',
+      title: 'Crystal Focus appears',
+      text: 'Add the crystal focus to the picture.',
       area: 'crystal-focus',
     },
   ],
@@ -201,30 +185,50 @@ export const ACT2_ROOM_PATCHES: Record<string, ImagePatch[]> = {
   ],
   AncientGrove: [
     {
-      id: 'silver-leaves-taken',
-      title: 'Silver Leaves taken',
-      text: 'Remove the silver leaves from the picture.',
-      area: 'silver-leaves',
-    },
-    {
       id: 'exit-south-open',
       title: 'Way south open',
       text: 'Show the way south open and passable.',
       area: 'exit-south',
     },
+    {
+      id: 'ancient-tree-spirit-appears',
+      title: 'Ancient Tree Spirit appears',
+      text: 'Add Ancient Tree Spirit to the picture.',
+      area: 'ancient-tree-spirit',
+    },
+    {
+      id: 'silver-leaves-appears',
+      title: 'Silver Leaves appears',
+      text: 'Add the silver leaves to the picture.',
+      area: 'silver-leaves',
+    },
   ],
   WhisperingGlade: [
     {
-      id: 'crystal-clear-water-taken',
-      title: 'Crystal-Clear Water taken',
-      text: 'Remove the crystal-clear water from the picture.',
+      id: 'water-nymphs-appears',
+      title: 'Water Nymphs appears',
+      text: 'Add Water Nymphs to the picture.',
+      area: 'water-nymphs',
+    },
+    {
+      id: 'crystal-clear-water-appears',
+      title: 'Crystal-Clear Water appears',
+      text: 'Add the crystal-clear water to the picture.',
       area: 'crystal-clear-water',
     },
     {
-      id: 'moonflowers-taken',
-      title: 'Moonflowers taken',
-      text: 'Remove the moonflowers from the picture.',
+      id: 'moonflowers-appears',
+      title: 'Moonflowers appears',
+      text: 'Add the moonflowers to the picture.',
       area: 'moonflowers',
+    },
+  ],
+  HeartOfTheForest: [
+    {
+      id: 'nyx-appears',
+      title: 'Nyx appears',
+      text: 'Add Nyx to the picture.',
+      area: 'nyx',
     },
   ],
 }
