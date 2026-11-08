@@ -17,7 +17,7 @@ export const useAreaNamesStore = defineStore('areaNames', () => {
 
   /** Whether the marks and names are showing in this room. */
   const showing = ref(settings.alwaysShowNames)
-  /** The pointer over the picture, in the stage's pixels; null when it is not over it. */
+  /** The pointer over the picture, in the screen's pixels (client coordinates); null when it is not over it. */
   const pointer = ref<{ x: number; y: number } | null>(null)
 
   /** Show them, or take them away, for this room. */
@@ -32,7 +32,7 @@ export const useAreaNamesStore = defineStore('areaNames', () => {
 
   // Each room arrives as a clean painting (with the Always setting, a named one).
   watch(
-    () => [game.gameNumber, game.roomName] as const,
+    () => [game.gameNumber, game.loadNumber, game.roomName] as const,
     () => {
       showing.value = settings.alwaysShowNames
       pointer.value = null

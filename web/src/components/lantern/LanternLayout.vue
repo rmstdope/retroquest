@@ -468,6 +468,7 @@ const namesRelayout = computed(() =>
     paper.visible.value,
     paper.hidden.value,
     arrival.active,
+    speech.visible.length,
     drawerTab.value,
     sideways.value,
     laptop.value,
@@ -483,6 +484,8 @@ function toggleNames(): void {
     return
   }
   names.toggle()
+  // Arrival words on the picture are words over it: they give way, as to Hide.
+  if (!settings.alwaysShowNames && arrival.active) clearArrival()
   if (!settings.alwaysShowNames && showHide.value) {
     paper.hide()
     foldedForNames.value = true
@@ -518,7 +521,7 @@ function onNamesKey(event: KeyboardEvent): void {
   toggleNames()
 }
 
-/** Escape takes the names away before it does anything else (not with a dialog or a drawer up, which take it first). */
+/** Escape takes the names away before it does anything else, but for a dialog or a drawer that is up, which are shut first (they sit over the picture). */
 function onNamesEscape(event: KeyboardEvent): void {
   if (event.key !== 'Escape' || !names.showing || !showNamesButton.value) return
   if (dialogOpen() || drawerTab.value) return
@@ -530,19 +533,15 @@ function onNamesEscape(event: KeyboardEvent): void {
 /** The pointer moves over the stage: with a mouse over the bare picture, the name of the thing under it follows. */
 function onStagePointer(event: PointerEvent): void {
   const target = event.target instanceof Element ? event.target : null
-  const stage =
-    event.currentTarget instanceof Element ? event.currentTarget : null
   if (
     !laptop.value ||
     event.pointerType === 'touch' ||
-    !stage ||
     !target?.closest('.lq-stage-picture')
   ) {
     names.pointer = null
     return
   }
-  const box = stage.getBoundingClientRect()
-  names.pointer = { x: event.clientX - box.left, y: event.clientY - box.top }
+  names.pointer = { x: event.clientX, y: event.clientY }
 }
 
 /** The story is held still and follows the word while an answer is read. */

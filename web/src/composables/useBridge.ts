@@ -220,7 +220,12 @@ export function useBridge(loader: () => Promise<ActClass[]> = loadActs) {
     return {
       roomKey,
       variant: pictureVariant,
-      things: areaThingsOf(game.acts[game.currentAct], roomKey, game.state),
+      things: areaThingsOf(
+        game.acts[game.currentAct],
+        roomKey,
+        game.state,
+        pictureVariant,
+      ),
       patchIds: appliedPatchIds(
         game.acts[game.currentAct],
         roomKey,

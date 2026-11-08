@@ -51,4 +51,25 @@ describe('areaThingsOf', () => {
     const { act, game } = inTheSquare()
     expect(areaThingsOf(act, 'NoSuchRoom', game.state)).toEqual([])
   })
+
+  it('titles scenery by the list of the picture that is shown', () => {
+    const act = new Act1()
+    const game = new Game([act])
+    game.state.currentRoom = game.state.allRooms.AbandonedShed
+    const titles = new Map(
+      declaredAreas('Act1', 'AbandonedShed', 'inside').map((a) => [
+        a.id,
+        a.title,
+      ]),
+    )
+    const scenery = areaThingsOf(
+      act,
+      'AbandonedShed',
+      game.state,
+      'inside',
+    ).filter((thing) => thing.kind === 'scenery')
+    expect(scenery.length).toBeGreaterThan(0)
+    for (const thing of scenery)
+      expect(thing.label).toBe(titles.get(thing.areaId))
+  })
 })

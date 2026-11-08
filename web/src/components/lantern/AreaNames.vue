@@ -32,6 +32,7 @@ const props = defineProps<{
   boxes: Record<string, AreaBox>
   pictureSize: PictureSize
   showing: boolean
+  /** The pointer over the picture, in the screen's pixels (client coordinates). */
   pointer: { x: number; y: number } | null
   relayout?: unknown
 }>()
@@ -48,9 +49,9 @@ const FOOT = 60
 /** The things in the stage that a name keeps clear of. */
 const KEEP_CLEAR =
   '.lq-stage-plate, .lq-phone-plate, .lq-stage-buttons button, .lq-float-menu, .lq-words-hide, ' +
-  '.lq-paper-tab, .lq-show-names, .lq-composer, .lq-story-wrap'
+  '.lq-paper-tab, .lq-show-names, .lq-composer, .lq-story-wrap, .lq-arrival-card, .lq-ln'
 /** The words over the picture, under which a thing's mark and name wait. */
-const WORDS = '.lq-story-wrap'
+const WORDS = '.lq-story-wrap, .lq-arrival-card, .lq-ln'
 
 const root = ref<HTMLElement | null>(null)
 const view = ref<PictureSize>({ width: 0, height: 0 })
@@ -63,12 +64,23 @@ function stage(): HTMLElement | null {
   return root.value?.closest<HTMLElement>('.lq-stage') ?? null
 }
 
-/** The rectangles of the elements of `scope` matching `selector` that are on show, in the pixels of the stage whose corner is `origin`. */
-function rectsOf(
-  scope: HTMLElement,
-  selector: string,
-  origin: DOMRect,
-): Rect[] {
+/**
+ * Where the names' own pixels start: the corner of the layer they are drawn in
+ * (which drifts and is a little larger than the stage at the drift's peak) and
+ * how much larger a screen pixel is than one of theirs' (1 when not scaled).
+ */
+function frameOf(): { left: number; top: number; ratio: number } {
+  const el = root.value
+  if (!el) return { left: 0, top: 0, ratio: 1 }
+  const box = el.getBoundingClientRect()
+  const ratio =
+    box.width > 0 && el.clientWidth > 0 ? box.width / el.clientWidth : 1
+  return { left: box.left, top: box.top, ratio }
+}
+
+/** The rectangles of the elements of `scope` matching `selector` that are on show, in the names' pixels. */
+function rectsOf(scope: HTMLElement, selector: string): Rect[] {
+  const frame = frameOf()
   const rects: Rect[] = []
   for (const el of scope.querySelectorAll<HTMLElement>(selector)) {
     const box = el.getBoundingClientRect()
@@ -76,24 +88,26 @@ function rectsOf(
     // Words folded away fade out first: they no longer cover anything.
     if (getComputedStyle(el).visibility === 'hidden') continue
     rects.push({
-      x: box.left - origin.left,
-      y: box.top - origin.top,
-      w: box.width,
-      h: box.height,
+      x: (box.left - frame.left) / frame.ratio,
+      y: (box.top - frame.top) / frame.ratio,
+      w: box.width / frame.ratio,
+      h: box.height / frame.ratio,
     })
   }
   return rects
 }
 
-/** Measure the stage and what the names keep clear of. */
+/** Measure the layer and what the names keep clear of. */
 function measure(): void {
   const el = stage()
-  if (!el) return
-  view.value = { width: el.clientWidth, height: el.clientHeight }
+  if (!el || !root.value) return
+  view.value = {
+    width: root.value.clientWidth,
+    height: root.value.clientHeight,
+  }
   const scope = el.closest<HTMLElement>('.lq-main') ?? el
-  const origin = el.getBoundingClientRect()
-  obstacles.value = rectsOf(scope, KEEP_CLEAR, origin)
-  covers.value = rectsOf(scope, WORDS, origin)
+  obstacles.value = rectsOf(scope, KEEP_CLEAR)
+  covers.value = rectsOf(scope, WORDS)
 }
 
 onMounted(() => {
@@ -102,6 +116,8 @@ onMounted(() => {
   if (el && typeof ResizeObserver === 'function') {
     observer = new ResizeObserver(measure)
     observer.observe(el)
+    // The layer itself: it may have no size yet when it is put on the page.
+    if (root.value) observer.observe(root.value)
   }
 })
 onUnmounted(() => {
@@ -131,16 +147,16 @@ function underWords(entry: PlacedName): boolean {
   )
 }
 
-/** The placed things in view and not under the words. */
-const placed = computed<PlacedName[]>(() => {
+/** The placed things in view of the picture. */
+const inView = computed<PlacedName[]>(() => {
   if (view.value.width < 1 || view.value.height < 1) return []
-  return placeNames(
-    props.things,
-    props.boxes,
-    view.value,
-    props.pictureSize,
-  ).filter((entry) => !underWords(entry))
+  return placeNames(props.things, props.boxes, view.value, props.pictureSize)
 })
+
+/** The placed things in view whose mark is not under the words. */
+const placed = computed<PlacedName[]>(() =>
+  inView.value.filter((entry) => !underWords(entry)),
+)
 
 /** The size a name is laid out at (one line, never wider than the picture). */
 function sizeOf(label: string): { w: number; h: number } {
@@ -168,8 +184,10 @@ const pointed = computed<{
   top: number
 } | null>(() => {
   if (props.showing || !props.pointer) return null
-  const { x, y } = props.pointer
-  const entry = nameAt(placed.value, x, y)
+  const frame = frameOf()
+  const x = (props.pointer.x - frame.left) / frame.ratio
+  const y = (props.pointer.y - frame.top) / frame.ratio
+  const entry = nameAt(inView.value, x, y)
   if (!entry) return null
   const { w, h } = sizeOf(entry.label)
   const above = y > view.value.height - FOOT

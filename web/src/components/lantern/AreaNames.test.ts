@@ -1,5 +1,7 @@
 // @vitest-environment jsdom
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { readFileSync } from 'node:fs'
+import { resolve } from 'node:path'
 import { mount, type VueWrapper } from '@vue/test-utils'
 import { nextTick } from 'vue'
 import { createPinia, setActivePinia } from 'pinia'
@@ -146,5 +148,72 @@ describe('AreaNames', () => {
   it('never takes a click or focus', () => {
     const w = mountNames({ showing: true })
     expect(w.find('button, a, [tabindex]').exists()).toBe(false)
+  })
+
+  describe('under the words', () => {
+    /** Words covering the left third of the stage (the picture's own pixels), as the rectangle the browser would report. */
+    function wordsOver(selector: string): HTMLElement {
+      const words = document.createElement('div')
+      words.className = selector
+      document.querySelector('.lq-stage')!.append(words)
+      vi.spyOn(words, 'getBoundingClientRect').mockReturnValue({
+        left: 0,
+        top: 0,
+        width: 320,
+        height: 540,
+        right: 320,
+        bottom: 540,
+        x: 0,
+        y: 0,
+        toJSON: () => ({}),
+      })
+      return words
+    }
+
+    it.each(['lq-story-wrap', 'lq-arrival-card', 'lq-ln'])(
+      'has neither mark nor name for a thing under %s, until it goes',
+      async (selector) => {
+        const w = mountNames({ showing: true })
+        const words = wordsOver(selector)
+        await w.setProps({ relayout: 'words' })
+        await new Promise((resolve) => setTimeout(resolve, 400))
+        await nextTick()
+        expect(w.find('[data-area-mark="villager"]').exists()).toBe(false)
+        expect(w.find('[data-area-mark="bucket"]').exists()).toBe(true)
+        words.remove()
+        await w.setProps({ relayout: 'gone' })
+        await new Promise((resolve) => setTimeout(resolve, 400))
+        await nextTick()
+        expect(w.find('[data-area-mark="villager"]').exists()).toBe(true)
+      },
+    )
+  })
+
+  it('reads the pointer against the drifted picture, not the bare stage', async () => {
+    const w = mountNames({ pointer: null })
+    // At the drift's peak the layer is 3% larger and shifted.
+    vi.spyOn(w.element, 'getBoundingClientRect').mockReturnValue({
+      left: -14.4,
+      top: -8,
+      width: 988.8,
+      height: 556.2,
+      right: 974.4,
+      bottom: 548.2,
+      x: -14.4,
+      y: -8,
+      toJSON: () => ({}),
+    })
+    // The villager's box ends at 192 in the layer's pixels; 195 is just right of it.
+    await w.setProps({ pointer: { x: -14.4 + 195 * 1.03, y: -8 + 250 * 1.03 } })
+    expect(w.find('[data-area-pointer]').exists()).toBe(false)
+    await w.setProps({ pointer: { x: -14.4 + 150 * 1.03, y: -8 + 250 * 1.03 } })
+    expect(w.get('[data-area-pointer]').text()).toBe('Tilda')
+  })
+
+  it('fades under the stylesheet’s motion setting, which Reduce motion sets to nothing', () => {
+    const source = readFileSync(resolve(__dirname, 'AreaNames.vue'), 'utf8')
+    expect(source).toMatch(
+      /\.lq-area-enter-active[^}]*transition: opacity calc\(0\.2s \* var\(--lq-motion\)\)/s,
+    )
   })
 })

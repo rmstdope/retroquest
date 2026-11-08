@@ -124,7 +124,7 @@ export function layoutNames(
       let best: { rect: Rect; cost: number } | null = null
       search: for (let ring = 1; ring <= RINGS; ring++) {
         const d = ring * STEP
-        for (const [dx, dy] of ringOffsets(d, w, h)) {
+        for (const [dx, dy] of ringOffsets(d, w)) {
           const rect = inside(
             { x: entry.x - w / 2 + dx, y: entry.y - GAP - h + dy, w, h },
             bounds,
@@ -153,11 +153,7 @@ export function layoutNames(
 }
 
 /** The offsets to try at distance `d` from the wanted spot: below, either side, above, then the corners. */
-function ringOffsets(
-  d: number,
-  w: number,
-  _h: number,
-): Array<[number, number]> {
+function ringOffsets(d: number, w: number): Array<[number, number]> {
   const side = d + w / 2
   return [
     [0, d],

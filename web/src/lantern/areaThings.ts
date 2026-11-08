@@ -29,16 +29,20 @@ function areaIdOrNull(act: Act, thing: Item | Character): string | null {
   }
 }
 
-/** The things and ways out in room `roomKey` now, for the picture of the room; none for a room the state does not hold. */
+/** The things and ways out in room `roomKey` now, for the picture of the room (with a `variant`, that other picture's titles); none for a room the state does not hold. */
 export function areaThingsOf(
   act: Act,
   roomKey: string,
   state: GameState,
+  variant = '',
 ): AreaThing[] {
   const room = state.allRooms[roomKey]
   if (!room) return []
   const titles = new Map(
-    declaredAreas(act.name, roomKey).map((area) => [area.id, area.title]),
+    declaredAreas(act.name, roomKey, variant).map((area) => [
+      area.id,
+      area.title,
+    ]),
   )
   const things: AreaThing[] = []
   for (const character of room.characters) {

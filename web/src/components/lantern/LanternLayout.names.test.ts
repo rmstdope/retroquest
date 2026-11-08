@@ -7,6 +7,7 @@ import { useBridge, type ActClass } from '@/composables/useBridge'
 import { Act1 } from '@/act1/Act1'
 import { PANEL_GROUPS, useGameStore } from '@/stores/useGameStore'
 import { useAreaNamesStore } from '@/stores/useAreaNamesStore'
+import { useSceneStore } from '@/stores/useSceneStore'
 import { useSettingsStore } from '@/stores/useSettingsStore'
 import { setPictureProbe } from '@/lantern/roomPicture'
 
@@ -164,5 +165,32 @@ describe('LanternLayout: what is here, named on the picture', () => {
     await button().trigger('click')
     expect(useAreaNamesStore().showing).toBe(false)
     expect(w.find('.lq-words-hide').exists()).toBe(true)
+  })
+
+  it('takes the button and the names away during a change of scene, and brings them back after', async () => {
+    await cottage()
+    await button().trigger('click')
+    expect(w.findAll('[data-area-mark]')).toHaveLength(2)
+    const scene = useSceneStore()
+    scene.phase = 'dark'
+    await w.vm.$nextTick()
+    expect(button().exists()).toBe(false)
+    expect(w.find('[data-area-mark]').exists()).toBe(false)
+    scene.phase = 'idle'
+    await w.vm.$nextTick()
+    expect(button().exists()).toBe(true)
+    expect(w.findAll('[data-area-mark]')).toHaveLength(2)
+  })
+
+  it('starts the next room clean, and a load too', async () => {
+    const store = await cottage()
+    await button().trigger('click')
+    store.loadNumber++
+    await w.vm.$nextTick()
+    expect(w.find('[data-area-mark]').exists()).toBe(false)
+    await button().trigger('click')
+    store.roomName = 'Somewhere else'
+    await w.vm.$nextTick()
+    expect(useAreaNamesStore().showing).toBe(false)
   })
 })

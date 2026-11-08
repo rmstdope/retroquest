@@ -36,7 +36,16 @@ describe('useAreaNamesStore', () => {
     expect(names.showing).toBe(true)
   })
 
-  it('starts afresh after a load or a new act', async () => {
+  it('starts afresh after a load, even in the same room', async () => {
+    const game = useGameStore()
+    const names = useAreaNamesStore()
+    names.toggle()
+    game.loadNumber++
+    await nextTick()
+    expect(names.showing).toBe(false)
+  })
+
+  it('starts afresh after a new act', async () => {
     const game = useGameStore()
     const names = useAreaNamesStore()
     names.toggle()
