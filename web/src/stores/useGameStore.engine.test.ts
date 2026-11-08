@@ -11,6 +11,7 @@ import { Field } from '@/act4/items/Field'
 import { SorceressOfLies } from '@/act4/characters/SorceressOfLies'
 import { GuardiansChain } from '@/act4/items/GuardiansChain'
 import { GuardiansEssence } from '@/act4/items/GuardiansEssence'
+import { KnightsRedemption } from '@/act4/items/KnightsRedemption'
 import { NyxToken } from '@/act4/items/NyxToken'
 import { SorceressTruth } from '@/act4/items/SorceressTruth'
 import { TruthSight } from '@/act4/spells/TruthSight'
@@ -455,6 +456,24 @@ describe('useGameStore over the real engine: the no-match line and a name that w
 
       expect(saysNoMatch(store, 'take crops')).toBe(false)
       expect(saysNoMatch(store, 'use crops')).toBe(false)
+    })
+
+    it('does not say no match for an extra name sharing its first word with the full name', async () => {
+      const store = await storeIn(Act4, 'ChamberOfWhispers', (state) => {
+        state.inventory.push(new KnightsRedemption())
+      })
+
+      expect(saysNoMatch(store, "examine knight's badge")).toBe(false)
+      expect(store.completionState("use knight's badge ").candidates).toEqual([
+        'with',
+      ])
+    })
+
+    it('can send an extra name only where the command needs no more', async () => {
+      const store = await storeHoldingToken()
+
+      expect(store.completionState('use pendant').sendable).toBe(true)
+      expect(store.completionState('give pendant').sendable).toBe(false)
     })
 
     it('still says no match where the item is not to be had', async () => {

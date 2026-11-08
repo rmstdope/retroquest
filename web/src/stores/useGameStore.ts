@@ -1484,7 +1484,8 @@ export const useGameStore = defineStore('game', () => {
 
   /**
    * The list for text the tree cannot follow, when an item's other name is
-   * what stopped it: a name ending the text is `complete`, and anything else
+   * what stopped it: a name ending the text closes the list (`complete`, and
+   * sendable only if the command needs no more), and anything else
    * reads on as the same text with the item's full name, which the tree
    * follows. Null when no item here is named from a point of the tree that
    * offers it, or words follow a name that takes none.
@@ -1507,7 +1508,7 @@ export const useGameStore = defineStore('game', () => {
           return {
             kind: 'complete',
             candidates: [],
-            sendable: true,
+            sendable: sendableAfter(nodeAfter(node, fullName)),
             word: typedWords[end - 1],
           }
         if (!last && nodeAfter(node, fullName) === null) continue
@@ -1521,6 +1522,11 @@ export const useGameStore = defineStore('game', () => {
       }
     }
     return null
+  }
+
+  /** Whether a command that has reached this point of the tree can be sent. */
+  function sendableAfter(node: CompletionTree | null | undefined): boolean {
+    return node === null || (node !== undefined && SENDABLE_MARKER in node)
   }
 
   /** Where a whole name leads from this point of the tree; undefined when it cannot be followed. */
