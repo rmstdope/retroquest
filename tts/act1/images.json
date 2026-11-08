@@ -527,38 +527,6 @@
         "id": "exit-south",
         "title": "Way south"
       }
-    ],
-    "patches": [
-      {
-        "id": "mysterious-box-appears",
-        "title": "Mysterious Box appears",
-        "text": "Add the mysterious box to the picture.",
-        "area": "mysterious-box"
-      },
-      {
-        "id": "broken-shovel-appears",
-        "title": "Broken Shovel appears",
-        "text": "Add the broken shovel to the picture.",
-        "area": "broken-shovel"
-      },
-      {
-        "id": "patches-appears",
-        "title": "Patches appears",
-        "text": "Add Patches to the picture.",
-        "area": "patches"
-      },
-      {
-        "id": "fishing-rod-appears",
-        "title": "Fishing Rod appears",
-        "text": "Add the fishing rod to the picture.",
-        "area": "fishing-rod"
-      },
-      {
-        "id": "magnet-appears",
-        "title": "Magnet appears",
-        "text": "Add the magnet to the picture.",
-        "area": "magnet"
-      }
     ]
   },
   {
@@ -963,6 +931,26 @@
       {
         "id": "magnet",
         "title": "Magnet"
+      }
+    ],
+    "patches": [
+      {
+        "id": "patches-gone",
+        "title": "Patches gone",
+        "text": "Take Patches out of the picture.",
+        "area": "patches"
+      },
+      {
+        "id": "fishing-rod-appears",
+        "title": "Fishing Rod appears",
+        "text": "Add the fishing rod to the picture.",
+        "area": "fishing-rod"
+      },
+      {
+        "id": "magnet-appears",
+        "title": "Magnet appears",
+        "text": "Add the magnet to the picture.",
+        "area": "magnet"
       }
     ]
   },
