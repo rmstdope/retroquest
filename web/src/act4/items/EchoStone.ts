@@ -30,8 +30,8 @@ const ENHANCED_USE =
 
 /** What the enhanced stone does anywhere else, once the orbs are mended. */
 const ENHANCED_USE_AFTER_MENDING =
-  'You hold the stone to your ear. The voices inside it are quiet now. ' +
-  'The orbs have heard what they came to say.'
+  'You hold the stone to your ear. The voices are clear, and they ask for ' +
+  'nothing now. The orbs are whole.'
 
 /**
  * Carry the hall's echoes into the Mirror Labyrinth: the maze can only be

@@ -52,7 +52,10 @@ export class GuardiansEssence extends Item {
       return 'The light steadies in the old hall, as if it has been here before.'
     }
     if (gameState.getStoryFlag(FLAG_ACT4_SERVANTS_TRUST_EARNED)) {
-      return 'The light sits warm in your hand. The ones who needed to see it have seen it.'
+      return (
+        'The light sits warm in your hand. ' +
+        'The ones who needed to see it have seen it.'
+      )
     }
     return 'The light sits warm in your hand, waiting for someone to show it to.'
   }

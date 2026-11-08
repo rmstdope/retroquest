@@ -158,7 +158,7 @@ describe('EchoStone enhanced', () => {
     ])
 
     for (const after of [alone, withPendant]) {
-      expect(after).toContain('The orbs have heard what they came to say.')
+      expect(after).toContain('The orbs are whole.')
       expect(after).not.toContain('waiting')
     }
   })
