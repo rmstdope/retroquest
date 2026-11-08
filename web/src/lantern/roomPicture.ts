@@ -33,3 +33,33 @@ export function portraitUrl(actName: string, classKey: string): string {
 export function eliorPortraitUrl(): string {
   return `${import.meta.env.BASE_URL}images/generated/${ELIOR_PORTRAIT_ID}.png`
 }
+
+/**
+ * The URL of a patch of a room's picture: the transparent picture Content
+ * Studio makes for it, named `<image id>.<patch id>.png` beside the room's
+ * picture. The file may not exist (a patch is made by hand when the story
+ * calls for it); `madePatches` says which the images manifest lists.
+ */
+export function roomPatchUrl(
+  actName: string,
+  roomKey: string,
+  patchId: string,
+): string {
+  if (!actName || !roomKey) return ''
+  return `${import.meta.env.BASE_URL}images/generated/${roomTrackId(actName, roomKey)}.${patchId}.png`
+}
+
+/**
+ * The ids of the patches the images manifest lists under image `imageId`.
+ * Tolerant of anything: a manifest that is not an object, an image with no
+ * `patches` key (a game that has none made) or an entry that is not an
+ * object all give none.
+ */
+export function madePatches(manifest: unknown, imageId: string): string[] {
+  if (typeof manifest !== 'object' || manifest === null) return []
+  const image: unknown = (manifest as Record<string, unknown>)[imageId]
+  if (typeof image !== 'object' || image === null) return []
+  const patches: unknown = (image as Record<string, unknown>).patches
+  if (typeof patches !== 'object' || patches === null) return []
+  return Object.keys(patches)
+}

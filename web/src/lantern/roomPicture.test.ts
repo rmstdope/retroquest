@@ -1,5 +1,11 @@
 import { describe, it, expect } from 'vitest'
-import { eliorPortraitUrl, portraitUrl, roomPictureUrl } from './roomPicture'
+import {
+  eliorPortraitUrl,
+  madePatches,
+  portraitUrl,
+  roomPatchUrl,
+  roomPictureUrl,
+} from './roomPicture'
 import { roomTrackId } from './musicLists'
 import { ELIOR_PORTRAIT_ID, characterImages, portraitId } from './imageLists'
 import { Act1 } from '@/act1/Act1'
@@ -65,4 +71,38 @@ describe('eliorPortraitUrl', () => {
       /images\/generated\/portrait-elior\.png$/,
     )
   })
+})
+
+describe('room picture patches', () => {
+  it('are served beside the room picture, named by image and patch', () => {
+    expect(roomPatchUrl('Act1', 'VillageSquare', 'bucket-taken')).toBe(
+      `${roomPictureUrl('Act1', 'VillageSquare').replace(/\.png$/, '')}.bucket-taken.png`,
+    )
+  })
+
+  it('are the ones the manifest lists under the image, and nothing else', () => {
+    const manifest = {
+      'act1-village-square': {
+        file: 'act1-village-square.png',
+        patches: {
+          'bucket-taken': { file: 'x.png' },
+          'rope-gone': { file: 'y.png' },
+        },
+      },
+      'act1-eliors-cottage': { file: 'c.png' },
+    }
+    expect(madePatches(manifest, 'act1-village-square')).toEqual([
+      'bucket-taken',
+      'rope-gone',
+    ])
+    expect(madePatches(manifest, 'act1-eliors-cottage')).toEqual([])
+    expect(madePatches(manifest, 'act1-missing')).toEqual([])
+  })
+
+  it.each([null, 7, 'x', [], { a: 1 }, { 'act1-village-square': null }])(
+    'are none for a manifest that is not one (%j)',
+    (junk) => {
+      expect(madePatches(junk, 'act1-village-square')).toEqual([])
+    },
+  )
 })
