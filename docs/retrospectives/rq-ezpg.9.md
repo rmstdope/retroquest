@@ -10,4 +10,4 @@
 **Why.** The settings store saves to `localStorage`. Locally Node prints "localStorage is not available because --localstorage-file was not provided", so nothing persisted between tests; in CI it does, so the next test's fresh Pinia read 'on' back. Established from the CI log; reproduced only partly (a shared `--localstorage-file` makes unrelated tests fail too).
 **Cost.** One red CI cycle (about 10 minutes) and one fix commit.
 **Prevent by.** A test that changes a persisted setting clears `localStorage` in its `beforeEach` (`globalThis.localStorage?.clear()`); worth one line in `CLAUDE.md` under Testing. Running the suite locally cannot show it.
-**Seen before.** rq-mh4.2, rq-zhks (localStorage in tests; not read in full).
+**Seen before.** rq-zhks (the same leak, a start-mode setting).
