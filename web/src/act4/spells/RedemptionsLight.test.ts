@@ -247,7 +247,7 @@ describe("Redemption's Light in the Throne Chamber", () => {
       ])
       expect(onMalakar).toContain(
         ending === 'justice'
-          ? '[dim]Malakar is gone into the seal.[/dim]'
+          ? "You don't see a 'malakar'"
           : '[dim]The light rests on Malakar and fades. It has nothing left ' +
               'to do.[/dim]',
       )
