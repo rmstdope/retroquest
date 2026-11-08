@@ -103,6 +103,14 @@ function floatCount(base: number, area: number): number {
   return Math.max(1, Math.round((base * area) / (BASE_WIDTH * BASE_HEIGHT)))
 }
 
+/** The chance a new leaf starts to fall on a tick: scaled to the area, so a small picture has no more leaves for its size. */
+function leafChance(rect: Rect): number {
+  return Math.max(
+    0.0005,
+    (0.005 * rect.w * rect.h) / (BASE_WIDTH * BASE_HEIGHT),
+  )
+}
+
 /** A random number in [0, 1). */
 function rnd(): number {
   return Math.random()
@@ -164,11 +172,12 @@ export function createMotionScene(): MotionScene {
             ph: rnd() * 6,
           })
         break
-      case 'mist':
-        for (let i = 0; i < floatCount(6, area); i++)
+      case 'mist': {
+        const count = floatCount(6, area)
+        for (let i = 0; i < count; i++)
           layer.parts.push({
             x: rect.x + rnd() * rect.w,
-            y: rect.y + rect.h * (0.6 + 0.06 * i),
+            y: rect.y + rect.h * (0.6 + (0.3 * i) / count),
             vx: (0.12 + rnd() * 0.14) * u,
             vy: 0,
             r: (260 + rnd() * 200) * u,
@@ -177,6 +186,7 @@ export function createMotionScene(): MotionScene {
             ph: 0,
           })
         break
+      }
       default:
     }
   }
@@ -235,7 +245,7 @@ export function createMotionScene(): MotionScene {
         break
       case 'leaves': {
         const cap = rect.w * rect.h < 0.5 * BASE_WIDTH * BASE_HEIGHT ? 1 : 2
-        if (parts.length < cap && rnd() < 0.005)
+        if (parts.length < cap && rnd() < leafChance(rect))
           parts.push({
             x: rect.x + rnd() * rect.w,
             y: rect.y,

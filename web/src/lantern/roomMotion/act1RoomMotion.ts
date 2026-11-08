@@ -40,7 +40,8 @@ export const ACT1_ROOM_MOTION: Record<string, RoomEffect[]> = {
   // a glade among trees
   HiddenGlade: [{ kind: 'dust' }, { kind: 'leaves' }],
   // light through the coloured windows
-  VillageChapel: [{ kind: 'dust' }],
+  // and the altar candle once it is lit
+  VillageChapel: [{ kind: 'dust' }, { kind: 'fire', whilePatch: 'candle-lit' }],
   // a road under trees
   RoadToGreendale: [{ kind: 'dust' }, { kind: 'leaves' }],
 }

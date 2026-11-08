@@ -13,10 +13,13 @@ function sceneOf(w: number, h: number) {
 }
 
 /** A 2D context that records nothing and accepts everything. */
-function fakeContext(): CanvasRenderingContext2D {
+function fakeContext(
+  extra: Record<string, unknown> = {},
+): CanvasRenderingContext2D {
   const gradient = { addColorStop: vi.fn() }
   const target = {
     createRadialGradient: () => gradient,
+    ...extra,
   } as Record<string, unknown>
   return new Proxy(target, {
     get: (t, key: string) => t[key] ?? vi.fn(),
@@ -141,5 +144,32 @@ describe('a scene', () => {
     scene.resize(360, 640, PICTURE)
     for (let i = 0; i < 200; i++) scene.step(16.7)
     expect(scene.count('water')).toBeGreaterThan(0)
+  })
+
+  it('is no more crowded with embers or leaves on a small picture than on a large one', () => {
+    for (const kind of ['embers', 'leaves'] as const) {
+      const mean = (w: number, h: number): number => {
+        const scene = sceneOf(w, h)
+        scene.setEffects([{ kind }], true)
+        let sum = 0
+        for (let i = 0; i < 6000; i++) {
+          scene.step(16.7)
+          sum += scene.count(kind)
+        }
+        return sum / 6000
+      }
+      const large = mean(1280, 720)
+      const small = mean(390, 219)
+      expect(small, kind).toBeLessThan(large * 0.5 + 0.5)
+    }
+  })
+
+  it('starts every mist blob inside the canvas, on a large one too', () => {
+    const scene = sceneOf(2560, 1440)
+    scene.setEffects([{ kind: 'mist' }], true)
+    const arc = vi.fn()
+    scene.draw(fakeContext({ arc }))
+    expect(arc.mock.calls.length).toBeGreaterThan(6)
+    for (const call of arc.mock.calls) expect(call[1]).toBeLessThanOrEqual(1440)
   })
 })

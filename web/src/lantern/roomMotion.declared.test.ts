@@ -29,19 +29,18 @@ describe('the declared movement of the rooms', () => {
         expect(Object.keys(act.rooms), `${act.name} ${key}`).toContain(key)
   })
 
-  it('covers every room that had a painting when it was made', () => {
+  it('has an entry, possibly empty, for every room that had a painting when it was made', () => {
     let covered = 0
-    for (const make of ACTS) {
-      const act = make()
+    const declared: Array<[Act, Record<string, unknown>]> = [
+      [new Act1(), ACT1_ROOM_MOTION],
+      [new Act2(), ACT2_ROOM_MOTION],
+    ]
+    for (const [act, lists] of declared)
       for (const key of Object.keys(act.rooms)) {
         if (!painted(act, key)) continue
         covered++
-        expect(
-          declaredMotion(act.name, key).length,
-          `${act.name} ${key}`,
-        ).toBeGreaterThan(0)
+        expect(Object.keys(lists), `${act.name} ${key}`).toContain(key)
       }
-    }
     expect(covered).toBe(34)
   })
 

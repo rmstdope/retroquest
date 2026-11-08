@@ -400,6 +400,15 @@ describe('useGameStore: panels held while a turn is narrated', () => {
       expect(store.roomPictureSize).toEqual({ width: 1920, height: 1080 })
     })
 
+    it('moves only what floats when the manifest cannot be fetched', async () => {
+      const store = await cottage()
+      vi.stubGlobal('fetch', () => Promise.reject(new Error('offline')))
+      await store.loadImageManifest()
+      vi.unstubAllGlobals()
+      expect(store.imageManifest).toBeNull()
+      expect(store.roomMotion).toEqual([{ kind: 'dust' }])
+    })
+
     it('has no picture size while the manifest does not say', async () => {
       const store = await cottage()
       expect(store.roomPictureSize).toBeUndefined()

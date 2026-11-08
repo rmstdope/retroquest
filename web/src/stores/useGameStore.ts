@@ -513,7 +513,7 @@ export const useGameStore = defineStore('game', () => {
 
   /** The size of the room's picture as the manifest lists it, for the boxes laid on it; absent while it is not known. */
   const roomPictureSize = computed(() => {
-    const room = musicRoomKey.value
+    const room = roomPictureState.value?.roomKey
     const manifest = imageManifest.value
     if (!room || typeof manifest !== 'object' || manifest === null)
       return undefined

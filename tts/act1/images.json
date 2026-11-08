@@ -851,6 +851,10 @@
       {
         "id": "locket",
         "title": "Locket"
+      },
+      {
+        "id": "motion-fire",
+        "title": "Fire"
       }
     ],
     "patches": [
