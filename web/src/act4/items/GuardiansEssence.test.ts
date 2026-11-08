@@ -60,5 +60,18 @@ describe('GuardiansEssence', () => {
 
       expect(again).toContain('The servants already know you')
     })
+
+    it('asks nothing of the servants once they are free', () => {
+      const game = gameInCourtyardWithEssence()
+      executeCommands(game, [
+        "use guardian's essence",
+        'cast bless on servants',
+      ])
+
+      const after = executeCommands(game, ["use guardian's essence"])
+
+      expect(after).toContain('where the chains were')
+      expect(after).not.toContain('wait')
+    })
   })
 })

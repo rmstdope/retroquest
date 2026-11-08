@@ -1,5 +1,8 @@
 import { Item, type Character, type GameState } from '@/engine'
-import { FLAG_ACT4_SERVANTS_TRUST_EARNED } from '../Act4StoryFlags'
+import {
+  FLAG_ACT4_SERVANTS_FREED,
+  FLAG_ACT4_SERVANTS_TRUST_EARNED,
+} from '../Act4StoryFlags'
 import { TrappedServants } from '../characters/TrappedServants'
 import { HallOfEchoes } from '../rooms/HallOfEchoes'
 import { OuterCourtyard } from '../rooms/OuterCourtyard'
@@ -33,7 +36,7 @@ export class GuardiansEssence extends Item {
 
   /**
    * Held up in the courtyard it is shown to the servants, the only ones there
-   * to see it; elsewhere the light only answers the place.
+   * who will look; elsewhere the light only answers the place.
    */
   override use(gameState: GameState): string {
     if (gameState.currentRoom instanceof OuterCourtyard) {
@@ -45,8 +48,11 @@ export class GuardiansEssence extends Item {
     return 'The light sits warm in your hand, waiting for someone to show it to.'
   }
 
-  /** Showing the essence earns the servants' trust, once. */
+  /** Showing the essence earns the servants' trust, once; freed, they need no proof. */
   private showToServants(gameState: GameState): string {
+    if (gameState.getStoryFlag(FLAG_ACT4_SERVANTS_FREED)) {
+      return '[dim]The servants look at the light, and then at their ankles, where the chains were.[/dim]'
+    }
     if (!gameState.getStoryFlag(FLAG_ACT4_SERVANTS_TRUST_EARNED)) {
       gameState.setStoryFlag(FLAG_ACT4_SERVANTS_TRUST_EARNED, true)
       return (
