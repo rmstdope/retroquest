@@ -31,7 +31,9 @@
         "after": 50,
         "commands": [
             "use lifelight elixir on prison",
+            "hint",
             "say sacrifice to malakar",
+            "hint",
             "use ancient amulet on wound",
             "talk to king alden",
             "n",

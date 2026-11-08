@@ -193,6 +193,7 @@ describe('TheFinalStand', () => {
     it('still points north from the vault, before the Throne Chamber', () => {
       const game = new Game([new Act4()])
       executeCommands(game, INTO_THRONE.slice(0, -1))
+      expect(game.state.currentRoom.name).toBe("Parents' Vault")
       expect(finalStandHint(game)).toContain(
         'Malakar waits past the north door.',
       )
