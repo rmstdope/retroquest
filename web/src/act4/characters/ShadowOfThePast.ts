@@ -15,6 +15,7 @@ import {
   FLAG_ACT4_SHADOW_MASK_SHOWN,
   FLAG_ACT4_SHADOW_OF_THE_PAST_COMPLETED,
   FLAG_ACT4_SHADOW_OF_THE_PAST_STARTED,
+  FLAG_ACT4_SHADOW_REVEAL_HEARD,
 } from '../Act4StoryFlags'
 
 /** What it is called once the orbs are mended and it has a face. */
@@ -93,7 +94,10 @@ export class ShadowOfThePast extends Character {
     return this.description
   }
 
-  /** What it says follows the orbs, the mask and the answer. */
+  /**
+   * What it says follows the orbs, the mask and the answer. Once the orbs are
+   * mended he says who he is, until the mask is shown and he has said it once.
+   */
   override talkTo(gameState: GameState): string {
     gameState.setStoryFlag(FLAG_ACT4_SHADOW_OF_THE_PAST_STARTED, true)
     if (gameState.getStoryFlag(FLAG_ACT4_PARENTS_LEGACY_COMPLETED)) {
@@ -110,7 +114,10 @@ export class ShadowOfThePast extends Character {
           'You never have.',
       )
     }
-    if (gameState.getStoryFlag(FLAG_ACT4_SHADOW_MASK_SHOWN)) {
+    if (
+      gameState.getStoryFlag(FLAG_ACT4_SHADOW_MASK_SHOWN) &&
+      gameState.getStoryFlag(FLAG_ACT4_SHADOW_REVEAL_HEARD)
+    ) {
       return dialogue(
         FULL_NAME,
         'The Phoenix asked me once what wisdom is when time is short. I ' +
@@ -119,23 +126,29 @@ export class ShadowOfThePast extends Character {
       )
     }
     if (gameState.getStoryFlag(FLAG_ACT4_MEMORY_ORBS_MENDED)) {
-      return (
-        dialogue(
-          FULL_NAME,
-          'I was Malakar, once. Not the one in the throne room. The part of ' +
-            'him that remembered why he began. When he tore the wound, he left ' +
-            'me behind. I have called to you since you were small.',
-        ) +
-        '\n' +
-        dialogue(
-          FULL_NAME,
-          'The same words, every time. You caught pieces. Hear them whole. ' +
-            'Be patient where I was not. Close what I opened, and let them ' +
-            'rest.',
-        )
-      )
+      return this.reveal(gameState)
     }
     return "[dim]The shadow's lips move, but the vault swallows the sound.[/dim]"
+  }
+
+  /** Who he is, and the whole sentence from Elior's dreams; marks them heard. */
+  private reveal(gameState: GameState): string {
+    gameState.setStoryFlag(FLAG_ACT4_SHADOW_REVEAL_HEARD, true)
+    return (
+      dialogue(
+        FULL_NAME,
+        'I was Malakar, once. Not the one in the throne room. The part of ' +
+          'him that remembered why he began. When he tore the wound, he left ' +
+          'me behind. I have called to you since you were small.',
+      ) +
+      '\n' +
+      dialogue(
+        FULL_NAME,
+        'The same words, every time. You caught pieces. Hear them whole. ' +
+          'Be patient where I was not. Close what I opened, and let them ' +
+          'rest.',
+      )
+    )
   }
 
   /**
@@ -183,7 +196,11 @@ export class ShadowOfThePast extends Character {
     )
   }
 
-  /** The shared gates and the answer, led in by what Elior did (ready-made lines): the word, or the waiting. */
+  /**
+   * The shared gates and the answer, led in by what Elior did (ready-made
+   * lines): the word, or the waiting. A player who never talked to him first
+   * hears who he is, so no one completes the quest without it.
+   */
   private answerWithPatience(gameState: GameState, lead: string): string {
     if (!gameState.getStoryFlag(FLAG_ACT4_MEMORY_ORBS_MENDED)) {
       return clue(
@@ -199,8 +216,10 @@ export class ShadowOfThePast extends Character {
           ),
       )
     }
+    const unheard = !gameState.getStoryFlag(FLAG_ACT4_SHADOW_REVEAL_HEARD)
     gameState.setStoryFlag(FLAG_ACT4_SHADOW_OF_THE_PAST_COMPLETED, true)
     return [
+      ...(unheard ? [this.reveal(gameState)] : []),
       lead,
       dialogue(
         FULL_NAME,

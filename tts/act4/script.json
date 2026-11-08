@@ -80,6 +80,11 @@
     "text": "A thin wall of violet light hangs across the ways on, north and east, humming in time with the ward stones. It is the only thing between you and the fortress."
   },
   {
+    "id": "110750468246a1",
+    "speaker": "narrator",
+    "text": "They drift between the stones and never cross the violet wall. When the stones swell, the guardians thicken; when the stones fade, they thin with them."
+  },
+  {
     "id": "05a3ca979b02f0",
     "speaker": "narrator",
     "text": "A mysterious amulet inscribed with runes. At its centre is the sigil of the Wardens of the Dawn: the sun rising over three linked rings. In its depths Aren and Lysa stand hand in hand. The third figure keeps his back turned."
@@ -278,6 +283,11 @@
     "id": "00a5158814aa0b",
     "speaker": "narrator",
     "text": "The violet wall is gone. The way on is only a way now."
+  },
+  {
+    "id": "13c8572164e9f3",
+    "speaker": "narrator",
+    "text": "The guardians are gone. Nothing drifts between the dark stones now."
   },
   {
     "id": "175219ea14d8a0",
@@ -1580,11 +1590,6 @@
     "text": "The Shadow has seen the mask. It is enough."
   },
   {
-    "id": "0e4a57b9bad68f",
-    "speaker": "shadow of the past",
-    "text": "The Phoenix asked me once what wisdom is when time is short. I gave it the right answer. Then the fever came, and I did not keep it."
-  },
-  {
     "id": "0ce71c462bf852",
     "speaker": "narrator",
     "text": "The Shadow of the Past: The Shadow turned the mask over and gave it back. If she could choose the truth, perhaps he can too. Its words are still waiting for an answer: Be patient where I was not."
@@ -1598,6 +1603,11 @@
     "id": "138b4f1c6117b3",
     "speaker": "shadow of the past",
     "text": "Patience. The one thing I never had. Then I will wait, a little longer. Take the amulet east, Elior. It will open for you."
+  },
+  {
+    "id": "0e4a57b9bad68f",
+    "speaker": "shadow of the past",
+    "text": "The Phoenix asked me once what wisdom is when time is short. I gave it the right answer. Then the fever came, and I did not keep it."
   },
   {
     "id": "0325174da55eb2",

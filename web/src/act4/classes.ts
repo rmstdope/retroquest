@@ -28,6 +28,7 @@ import { TheShadowOfThePast } from './quests/TheShadowOfThePast'
 import { TheParentsLegacy } from './quests/TheParentsLegacy'
 import { ParentsVault } from './rooms/ParentsVault'
 import { Barriers } from './items/Barriers'
+import { Guardians } from './items/Guardians'
 import { GuardiansChain } from './items/GuardiansChain'
 import { GuardiansEssence } from './items/GuardiansEssence'
 import { LoyaltyToken } from './items/LoyaltyToken'
@@ -78,6 +79,7 @@ export const ACT4_CLASSES = {
   EchoStone,
   Mirrors,
   KnightsRedemption,
+  Guardians,
   GuardiansChain,
   GuardiansEssence,
   LoyaltyToken,
