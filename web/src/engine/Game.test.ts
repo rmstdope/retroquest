@@ -1460,6 +1460,70 @@ describe('Game', () => {
       expect(tree.help).toBeNull()
     })
 
+    it('marks the words a thing answers to, short of its full name, as sendable', () => {
+      class Herald extends Character {
+        /** Also answers to "herald" alone. */
+        override answersTo(name: string): boolean {
+          return super.answersTo(name) || name.toLowerCase() === 'herald'
+        }
+      }
+      class SilverMask extends Item {
+        /** Also answers to "silver" alone. */
+        override answersTo(name: string): boolean {
+          return super.answersTo(name) || name.toLowerCase() === 'silver'
+        }
+      }
+      rooms.EliorsCottage.addCharacter(
+        new Herald({ name: 'Herald of Dawn', description: 'A herald.' }),
+      )
+      rooms.EliorsCottage.addItem(
+        new SilverMask({ name: 'Silver Mask', description: 'A mask.' }),
+      )
+      game.state.knownSpells = [new EchoSpell('light')]
+      const tree = game.getCommandCompletions()
+      const herald = { '@': null, of: { dawn: null } }
+      const silver = { '@': null, mask: null }
+
+      expect(tree.talk).toEqual({ to: { herald } })
+      expect(tree.take).toEqual({ silver })
+      expect(tree.examine).toEqual({ silver, herald })
+      expect(tree.cast).toEqual({
+        light: { '@': null, on: { silver, herald } },
+      })
+      expect(tree.use).toEqual({
+        silver: {
+          '@': null,
+          mask: { '@': null, with: { silver, herald } },
+        },
+      })
+      // A word that is only the start of a name still needs the rest.
+      rooms.EliorsCottage.addCharacter(character('Old Mira'))
+      expect(game.getCommandCompletions().talk).toEqual({
+        to: { herald, old: { mira: null } },
+      })
+    })
+
+    it('offers a word a thing answers to when a name only starts with it', () => {
+      class Guardians extends Character {
+        /** Also answers to "guardian". */
+        override answersTo(name: string): boolean {
+          return super.answersTo(name) || name.toLowerCase() === 'guardian'
+        }
+      }
+      rooms.EliorsCottage.addCharacter(
+        new Guardians({ name: 'Guardians', description: 'Still.' }),
+      )
+      game.state.inventory.push(item("Guardian's Chain"))
+      const tree = game.getCommandCompletions()
+
+      expect(tree.examine).toEqual({
+        "guardian's": { chain: null },
+        guardians: null,
+        guardian: null,
+      })
+      expect(tree.take).toEqual({})
+    })
+
     it('treats item names that match object properties as plain tokens', () => {
       rooms.EliorsCottage.addItem(item('constructor'))
       const tree = game.getCommandCompletions()

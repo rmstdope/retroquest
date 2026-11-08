@@ -342,7 +342,9 @@ Welcome to
 
   /**
    * Completion tokens for the commands possible right now: the open exits by
-   * name, and the four direction letters always.
+   * name, and the four direction letters always. A word that already names
+   * something (the Sorceress of Lies answers to "sorceress") can be sent as it
+   * stands, even where longer names go on from it.
    */
   getCommandCompletions(): CompletionTree {
     const room = this.state.currentRoom
@@ -370,16 +372,27 @@ Welcome to
       if (direction in exits) directional[direction] = null
     }
 
-    const itemsAndCharacters = {
-      ...nested(allItemNames),
-      ...nested(characterNames),
-    }
+    const allItems = [...room.items, ...this.state.inventory]
+    const allItemsTree = sendableNames(nested(allItemNames), allItems)
+    const roomItemsTree = sendableNames(nested(roomItemNames), room.items)
+    const inventoryTree = sendableNames(
+      nested(inventoryItemNames),
+      this.state.inventory,
+    )
+    const charactersTree = sendableNames(
+      nested(characterNames),
+      room.characters,
+    )
+    const itemsAndCharacters = sendableNames(
+      { ...allItemsTree, ...charactersTree },
+      [...allItems, ...room.characters],
+    )
     const withCharacters = (
       keys: string[],
       preposition: string,
     ): CompletionTree =>
       Object.fromEntries(
-        keys.map((k) => [k, { [preposition]: nested(characterNames) }]),
+        keys.map((k) => [k, { [preposition]: charactersTree }]),
       )
     const withTarget = (keys: string[], preposition: string): CompletionTree =>
       Object.fromEntries(
@@ -390,11 +403,11 @@ Welcome to
       go: exitNames,
       move: exitNames,
       ...directional,
-      talk: { to: nested(characterNames) },
-      speak: { to: nested(characterNames) },
-      converse: { with: nested(characterNames) },
+      talk: { to: charactersTree },
+      speak: { to: charactersTree },
+      converse: { with: charactersTree },
       give: withCharacters(inventoryItemNames, 'to'),
-      hand: nested(inventoryItemNames),
+      hand: inventoryTree,
       buy: withCharacters(roomItemNames, 'from'),
       look: { '@': null, at: itemsAndCharacters, ...itemsAndCharacters },
       l: null,
@@ -403,19 +416,22 @@ Welcome to
       inspect: itemsAndCharacters,
       examine: itemsAndCharacters,
       check: itemsAndCharacters,
-      read: nested(allItemNames),
+      read: allItemsTree,
       search: null,
       investigate: null,
-      take: nested(roomItemNames),
-      pick: { up: nested(roomItemNames) },
-      grab: nested(roomItemNames),
-      get: nested(roomItemNames),
-      use: withTarget(allItemNames, 'with'),
+      take: roomItemsTree,
+      pick: { up: roomItemsTree },
+      grab: roomItemsTree,
+      get: roomItemsTree,
+      use: sendableNames(
+        splitMultiwordKeys(withTarget(allItemNames, 'with')),
+        allItems,
+      ),
       inventory: null,
       i: null,
       inv: null,
-      open: nested(allItemNames),
-      close: nested(allItemNames),
+      open: allItemsTree,
+      close: allItemsTree,
       cast: withTarget(spellNames, 'on'),
       spells: null,
       save: null,
@@ -1076,6 +1092,35 @@ function nested(names: string[]): CompletionTree {
       }
       node = next
     })
+  }
+  return tree
+}
+
+/**
+ * Makes every word in `tree` that one of `things` answers to sendable, so a
+ * name typed in full is not traded for a longer one: a word path gets `@`, and
+ * a word that a listed word only starts with ("guardian" before "guardians")
+ * is added as a leaf.
+ */
+function sendableNames(
+  tree: CompletionTree,
+  things: { answersTo(name: string): boolean }[],
+  path: string[] = [],
+): CompletionTree {
+  const named = (words: string[]): boolean =>
+    things.some((thing) => thing.answersTo(words.join(' ')))
+  for (const [word, child] of Object.entries(tree)) {
+    if (word === '@') continue
+    for (let end = 1; end < word.length; end++) {
+      const start = word.slice(0, end)
+      if (!Object.hasOwn(tree, start) && named([...path, start])) {
+        tree[start] = null
+      }
+    }
+    if (child === null) continue
+    const words = [...path, word]
+    if (named(words)) child['@'] = null
+    sendableNames(child, things, words)
   }
   return tree
 }

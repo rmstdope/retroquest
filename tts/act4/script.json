@@ -720,6 +720,11 @@
     "text": "Each mirror shows a different Elior — older, younger, crowned, broken — with a different corridor stretching away behind him. Every path looks real. Most of them are lies."
   },
   {
+    "id": "0fb41cd109f2a1",
+    "speaker": "narrator",
+    "text": "The light sits warm in your hand. The ones who needed to see it have seen it."
+  },
+  {
     "id": "116ad8a51cadc3",
     "speaker": "narrator",
     "text": "You search around the Mirror Labyrinth, but find nothing of interest beyond what you can already see."
@@ -1768,6 +1773,16 @@
     "id": "1ee5f7c821a660",
     "speaker": "narrator",
     "text": "Your parents sold you to save themselves. It was the opposite. They gave themselves away to save you. You are sure now."
+  },
+  {
+    "id": "171dd0c2ac305e",
+    "speaker": "narrator",
+    "text": "You hold the stone to your ear. The voices are clear, and they ask for nothing now. The orbs are whole."
+  },
+  {
+    "id": "01950640a483fd",
+    "speaker": "narrator",
+    "text": "You turn the mask over in your hands. The Shadow has seen it and given it back. It has nothing left to prove."
   },
   {
     "id": "1f2806aa182933",

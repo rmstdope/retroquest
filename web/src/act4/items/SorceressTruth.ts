@@ -1,4 +1,5 @@
 import { Item, type Character, type GameState } from '@/engine'
+import { FLAG_ACT4_SHADOW_MASK_SHOWN } from '../Act4StoryFlags'
 import { ShadowOfThePast } from '../characters/ShadowOfThePast'
 import { MemoryVault } from '../rooms/MemoryVault'
 
@@ -32,10 +33,16 @@ export class SorceressTruth extends Item {
     return this.description
   }
 
-  /** In the Memory Vault the mask is shown to the Shadow; elsewhere it only waits. */
+  /** In the Memory Vault the mask is shown to the Shadow; elsewhere it waits until it has been. */
   override use(gameState: GameState): string {
     const room = gameState.currentRoom
     if (room instanceof MemoryVault) return room.showMask(gameState)
+    if (gameState.getStoryFlag(FLAG_ACT4_SHADOW_MASK_SHOWN)) {
+      return (
+        'You turn the mask over in your hands. The Shadow has seen it and ' +
+        'given it back. It has nothing left to prove.'
+      )
+    }
     return (
       'You turn the mask over in your hands. Somewhere ahead is someone who ' +
       'needs to see that a liar can choose the truth.'

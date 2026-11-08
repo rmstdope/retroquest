@@ -74,4 +74,38 @@ describe('GuardiansEssence', () => {
       expect(after).not.toContain('wait')
     })
   })
+
+  describe('used away from the courtyard, once the servants have seen it', () => {
+    /** An Act IV game in the Outer Courtyard, the essence just shown. */
+    function gameAfterShowing(): Game {
+      const act = new Act4()
+      act.musicFile = ''
+      const game = new Game([act])
+      game.state.currentRoom = game.state.allRooms.OuterCourtyard
+      game.state.inventory.push(new GuardiansEssence())
+      executeCommands(game, ["use guardian's essence"])
+      return game
+    }
+
+    it('no longer waits for someone to show it to', () => {
+      const game = gameAfterShowing()
+      game.state.currentRoom = game.state.allRooms.FortressGates
+
+      const after = executeCommands(game, ["use guardian's essence"])
+
+      expect(after).toContain('The ones who needed to see it have seen it.')
+      expect(after).not.toContain('waiting')
+    })
+
+    it('no longer waits once the servants are free either', () => {
+      const game = gameAfterShowing()
+      executeCommands(game, ['cast bless on servants'])
+      game.state.currentRoom = game.state.allRooms.ThroneChamber
+
+      const after = executeCommands(game, ["use guardian's essence"])
+
+      expect(after).toContain('The ones who needed to see it have seen it.')
+      expect(after).not.toContain('waiting')
+    })
+  })
 })
