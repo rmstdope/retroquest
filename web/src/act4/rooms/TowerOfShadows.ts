@@ -1,11 +1,26 @@
 import { Room, type Exits, type GameState, clue } from '@/engine'
 import { Whispers } from '../characters/Whispers'
-import { FLAG_ACT4_TOWER_STAIR_OPEN } from '../Act4StoryFlags'
+import {
+  FLAG_ACT4_TOWER_STAIR_OPEN,
+  FLAG_ACT4_WHISPERS_CEDRIC_NAMED,
+  FLAG_ACT4_WHISPERS_MIRA_NAMED,
+  FLAG_ACT4_WHISPERS_NYX_NAMED,
+} from '../Act4StoryFlags'
 
 /** What the room description ends with once the whispers are gone. */
 const STAIR_OPEN_SUFFIX =
   ' The whispers are gone. The stair winds up into the dark, and it is only ' +
   'a stair.'
+
+/** What presses on Elior on the stair before any friend is named. */
+const NO_NAME_HINT =
+  'The whispers on the stair say that no one stayed with you. ' +
+  'You know better, and so does Mira at the gate.'
+
+/** What presses on Elior once a friend is named, before the third. */
+const SOME_NAMED_HINT =
+  'The whispers falter at the name of every friend who stayed. ' +
+  'They are thinner now, but they still hold the stair.'
 
 /**
  * A twisted tower where shadows take corporeal form and doubt runs rampant.
@@ -54,5 +69,20 @@ export class TowerOfShadows extends Room {
         'your friends have left you, no one is coming, you were always alone. ' +
         'You stumble back down.',
     )
+  }
+
+  /**
+   * The stair is no quest of its own, so the room says what presses on
+   * Elior while the whispers hold it: before any name, and between the
+   * first and the third. Nothing once the stair is open.
+   */
+  override hint(gameState: GameState): string | null {
+    if (gameState.getStoryFlag(FLAG_ACT4_TOWER_STAIR_OPEN)) return null
+    const named = [
+      FLAG_ACT4_WHISPERS_MIRA_NAMED,
+      FLAG_ACT4_WHISPERS_CEDRIC_NAMED,
+      FLAG_ACT4_WHISPERS_NYX_NAMED,
+    ].some((flag) => gameState.getStoryFlag(flag))
+    return named ? SOME_NAMED_HINT : NO_NAME_HINT
   }
 }

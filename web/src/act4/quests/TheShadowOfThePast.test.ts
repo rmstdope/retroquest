@@ -3,6 +3,8 @@ import { Game } from '@/engine'
 import { Act4 } from '../Act4'
 import { TheShadowOfThePast } from './TheShadowOfThePast'
 import {
+  FLAG_ACT4_MEMORY_ORBS_MENDED,
+  FLAG_ACT4_SHADOW_MASK_SHOWN,
   FLAG_ACT4_SHADOW_OF_THE_PAST_COMPLETED,
   FLAG_ACT4_SHADOW_OF_THE_PAST_STARTED,
 } from '../Act4StoryFlags'
@@ -28,5 +30,22 @@ describe('TheShadowOfThePast', () => {
     expect(quest.checkCompletion(game.state)).toBe(false)
     game.state.setStoryFlag(FLAG_ACT4_SHADOW_OF_THE_PAST_COMPLETED, true)
     expect(quest.checkCompletion(game.state)).toBe(true)
+  })
+
+  it('moves its hint on at each stage: the orbs mended, the mask shown', () => {
+    const game = new Game([new Act4()])
+    game.state.storyFlags = {}
+    const quest = new TheShadowOfThePast()
+    const hintAfter = (flags: string[]): string | null => {
+      for (const flag of flags) game.state.setStoryFlag(flag, true)
+      quest.checkUpdate(game.state)
+      return quest.hint(game.state)
+    }
+    const hints = [
+      hintAfter([]),
+      hintAfter([FLAG_ACT4_MEMORY_ORBS_MENDED]),
+      hintAfter([FLAG_ACT4_SHADOW_MASK_SHOWN]),
+    ]
+    expect(new Set(hints).size).toBe(hints.length)
   })
 })

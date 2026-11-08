@@ -15,6 +15,7 @@ import {
   FLAG_ACT4_THRONE_REFRAIN_SAID,
 } from '../Act4StoryFlags'
 import { ThroneChamber } from '../rooms/ThroneChamber'
+import { TowerOfShadows } from '../rooms/TowerOfShadows'
 
 /** The log when the act opens: the king held, and the vow to make Malakar pay. */
 const OPENING_ENTRY =
@@ -144,14 +145,19 @@ export class TheFinalStand extends Quest {
   /**
    * In the Throne Chamber, the stage of the scene the player has reached,
    * since the log's last entry sends them through the north door they have
-   * already passed. Elsewhere the newest journal entry.
+   * already passed. On the stair of the Tower of Shadows, while the whispers
+   * hold it, the room's own hint, since the stair is no quest's. Elsewhere
+   * the newest journal entry.
    */
   override hint(gameState: GameState): string | null {
-    if (!(gameState.currentRoom instanceof ThroneChamber)) {
-      return super.hint(gameState)
+    const room = gameState.currentRoom
+    if (room instanceof ThroneChamber) {
+      const stage = THRONE_HINTS.find(([flag]) => gameState.getStoryFlag(flag))
+      return stage ? stage[1] : THRONE_FIRST_HINT
     }
-    const stage = THRONE_HINTS.find(([flag]) => gameState.getStoryFlag(flag))
-    return stage ? stage[1] : THRONE_FIRST_HINT
+    const stairHint =
+      room instanceof TowerOfShadows ? room.hint(gameState) : null
+    return stairHint ?? super.hint(gameState)
   }
 
   /** Complete when the wound is closed in one of the three endings. */
