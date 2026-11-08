@@ -1770,6 +1770,16 @@
     "text": "Your parents sold you to save themselves. It was the opposite. They gave themselves away to save you. You are sure now."
   },
   {
+    "id": "1f2806aa182933",
+    "speaker": "narrator",
+    "text": "They do not turn. A memory cannot hear you."
+  },
+  {
+    "id": "1b1a4a00c7aa69",
+    "speaker": "narrator",
+    "text": "Two small figures in every lantern, your father and your mother. They do not know you are here."
+  },
+  {
     "id": "14243d0dad2726",
     "speaker": "narrator",
     "text": "You search around the Parents' Vault, but find nothing of interest beyond what you can already see."
@@ -1793,6 +1803,16 @@
     "id": "091491218bb345",
     "speaker": "narrator",
     "text": "The lanterns are dim now. You do not need to look again; you will not forget."
+  },
+  {
+    "id": "0090fe9e031659",
+    "speaker": "narrator",
+    "text": "The lanterns stay dim. Nothing in them answers."
+  },
+  {
+    "id": "1b6c1527ab83c8",
+    "speaker": "narrator",
+    "text": "The lanterns are dim and the figures in them hardly show. You know them now all the same: your father over a workbench, your mother making a friend laugh."
   },
   {
     "id": "09c23857c0b12d",

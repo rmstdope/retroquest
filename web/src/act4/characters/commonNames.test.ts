@@ -8,6 +8,7 @@ import { Grandmother } from './Grandmother'
 import { KingAlden } from './KingAlden'
 import { KnightOfDespair } from './KnightOfDespair'
 import { Malakar } from './Malakar'
+import { MemoryEchoes } from './MemoryEchoes'
 import { Mira } from './Mira'
 import { Nyx } from './Nyx'
 import { ShadowOfThePast } from './ShadowOfThePast'
@@ -30,6 +31,7 @@ describe.each([
   ['Captain of the Guard', false, (): Character => new CaptainOfTheGuard()],
   ['ghostly warriors', true, (): Character => new GhostlyWarriors()],
   ['Knight of Despair', false, (): Character => new KnightOfDespair()],
+  ['memory echoes of Aren and Lysa', true, (): Character => new MemoryEchoes()],
   ['Shadow', false, (): Character => new ShadowOfThePast()],
   ['Sorceress of Lies', false, (): Character => new SorceressOfLies()],
   ['trapped servants', true, (): Character => new TrappedServants()],
