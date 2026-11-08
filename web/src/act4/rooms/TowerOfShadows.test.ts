@@ -6,8 +6,6 @@ import {
   FLAG_ACT4_WHISPERS_MIRA_NAMED,
 } from '../Act4StoryFlags'
 import { TowerOfShadows } from './TowerOfShadows'
-import { Game } from '@/engine'
-import { Act4 } from '../Act4'
 import { ACT4_GOLDEN_PATH } from '../Act4GoldenPath'
 import { executeCommands } from '@/testing/gameHelpers'
 
