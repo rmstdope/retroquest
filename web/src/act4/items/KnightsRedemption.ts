@@ -22,6 +22,11 @@ export class KnightsRedemption extends Item {
     })
   }
 
+  /** Also answers to "badge", what the story calls it. */
+  override answersTo(name: string): boolean {
+    return super.answersTo(name) || name.toLowerCase() === 'badge'
+  }
+
   /** The badge's look. */
   override examine(_gameState: GameState): string {
     return this.description

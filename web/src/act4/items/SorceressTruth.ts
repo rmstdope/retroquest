@@ -19,6 +19,14 @@ export class SorceressTruth extends Item {
     })
   }
 
+  /** Also answers to "mask" and "silver mask", what the story calls it. */
+  override answersTo(name: string): boolean {
+    return (
+      super.answersTo(name) ||
+      ['mask', 'silver mask'].includes(name.toLowerCase())
+    )
+  }
+
   /** The mask's look. */
   override examine(_gameState: GameState): string {
     return this.description
