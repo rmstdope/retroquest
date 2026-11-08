@@ -25,7 +25,7 @@ describe('Act4', () => {
       'The Knight of Despair',
       'The Sorceress of Lies',
       'The Shadow of the Past',
-      "The Parent's Legacy",
+      "The Parents' Legacy",
     ])
   })
 

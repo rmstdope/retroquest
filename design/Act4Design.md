@@ -57,7 +57,7 @@ rule that all side quests must be completed before the main quest can be finishe
 -   The Knight of Despair, the Sorceress of Lies and the Shadow of the Past. Each is redeemed or
     understood, not slain.
 
-**Phase 3: The Parent's Legacy**
+**Phase 3: The Parents' Legacy**
 
 -   The vault of the parents' memories, opened with the Ancient Amulet, before the throne room.
 
@@ -179,7 +179,7 @@ rule that all side quests must be completed before the main quest can be finishe
 
 #### The Parents' Vault
 
--   **Name:** The Parent's Legacy
+-   **Name:** The Parents' Legacy
 
     -   **Type:** Side Quest (Required; comes before the throne room)
     -   **Trigger:** Find the sealed door east of the Memory Vault
@@ -654,7 +654,7 @@ designs). The endings read the counters across the whole game, as described abov
 
 #### Phase 3: The Vault (Required)
 
--   **The Parent's Legacy**
+-   **The Parents' Legacy**
 
 #### Final Confrontation
 
@@ -798,7 +798,7 @@ where they would occur. The `examine` and `talk to` steps below that `ACT4_GOLDE
     - (arrive from the Memory Vault, `east`)
     - `examine memories` → Aren, Lysa and Malakar making the relics; the catastrophe; the wound; the
       parents pouring themselves into the ward; baby Elior in Malakar's arms
-        - Quest completed: "The Parent's Legacy"
+        - Quest completed: "The Parents' Legacy"
     - The Throne Chamber door opens.
 
 ### Phase 4: The Final Stand (Redemption)
@@ -838,7 +838,7 @@ where they would occur. The `examine` and `talk to` steps below that `ACT4_GOLDE
     Mirrors** (Steps 3-5)
 -   ✅ **The Knight of Despair** (Steps 4, 6), **The Sorceress of Lies** (Step 8), **The Shadow of
     the Past** (Step 9)
--   ✅ **The Parent's Legacy** (Step 10)
+-   ✅ **The Parents' Legacy** (Step 10)
 -   ✅ **The Final Stand** (Step 11), only after all seven side quests
 
 Spells: `truth_sight` (5), `redemptions_light` (6), `hearts_truth` (8), `forgiveness` (11), `grow` (12).

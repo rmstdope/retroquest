@@ -8,7 +8,7 @@ import { PARENTS_VAULT_BEFORE } from './vaultDescriptions'
 
 /**
  * The quiet room behind the sealed door, where Aren and Lysa's last memories
- * wait. Seeing them completes The Parent's Legacy and opens the way north to
+ * wait. Seeing them completes The Parents' Legacy and opens the way north to
  * the Throne Chamber.
  */
 export class ParentsVault extends Room {
@@ -22,7 +22,7 @@ export class ParentsVault extends Room {
     })
   }
 
-  /** Entering the vault starts The Parent's Legacy. */
+  /** Entering the vault starts The Parents' Legacy. */
   override onEnter(gameState: GameState): void {
     gameState.setStoryFlag(FLAG_ACT4_PARENTS_LEGACY_STARTED, true)
   }

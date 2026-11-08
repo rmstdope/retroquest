@@ -485,7 +485,7 @@ describe('Act 4 integration', () => {
       expectItemInInventory(game.state, "Sorceress's Truth", true)
       expectSpellKnown(game.state, 'hearts_truth')
       expectQuestCompleted(game.state, 'The Shadow of the Past')
-      expectQuestCompleted(game.state, "The Parent's Legacy")
+      expectQuestCompleted(game.state, "The Parents' Legacy")
       expectCurrentRoom(game.state, 'Willowbrook Field')
       expectStoryFlag(game.state, FLAG_ACT4_THRONE_AMULET_OPENED, true)
       expectStoryFlag(game.state, FLAG_ACT4_FIELD_GREEN, true)

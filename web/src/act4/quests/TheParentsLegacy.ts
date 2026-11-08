@@ -8,7 +8,7 @@ import {
 export class TheParentsLegacy extends Quest {
   constructor() {
     super({
-      name: "The Parent's Legacy",
+      name: "The Parents' Legacy",
       description:
         "Behind the sealed door, Aren and Lysa's last memories wait. Look " +
         'into them, and learn the whole truth before the throne room.',
@@ -17,6 +17,11 @@ export class TheParentsLegacy extends Quest {
         'the wound, and the ward they became. The way north to the Throne ' +
         'Chamber opens.',
     })
+  }
+
+  /** Give a save made with the singular "The Parent's Legacy" the current name. */
+  override refreshSavedText(): void {
+    this.name = new TheParentsLegacy().name
   }
 
   /** Start on first entering the Parents' Vault. */
