@@ -1,8 +1,5 @@
 import { Item, type Character, type GameState, clue } from '@/engine'
-import {
-  FLAG_ACT4_THRONE_AMULET_OPENED,
-  FLAG_ACT4_THRONE_REFRAIN_SAID,
-} from '../Act4StoryFlags'
+import { FLAG_ACT4_THRONE_REFRAIN_SAID } from '../Act4StoryFlags'
 import { KingAlden } from '../characters/KingAlden'
 import { Malakar } from '../characters/Malakar'
 import { CrystalPrison } from './CrystalPrison'
@@ -18,8 +15,8 @@ const WRONG_TARGET = clue(
  * has been answered: the answer is about the prison, not Malakar's reach.
  */
 const PRISON_NOT_YET = clue(
-  'You hold the vial to the crystal. It is cold, and the king inside ' +
-    'does not stir. Not yet.',
+  'The crystal is cold under the vial, and the king inside does not ' +
+    'stir. Not yet.',
 )
 
 /**
@@ -67,11 +64,7 @@ export class LifelightElixir extends Item {
     gameState: GameState,
     atPrison: boolean,
   ): string | null {
-    if (
-      atPrison &&
-      !gameState.getStoryFlag(FLAG_ACT4_THRONE_REFRAIN_SAID) &&
-      !gameState.getStoryFlag(FLAG_ACT4_THRONE_AMULET_OPENED)
-    ) {
+    if (atPrison && !gameState.getStoryFlag(FLAG_ACT4_THRONE_REFRAIN_SAID)) {
       return PRISON_NOT_YET
     }
     return malakar.elixirRefusal(gameState)

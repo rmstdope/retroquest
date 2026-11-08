@@ -414,7 +414,7 @@ describe('Throne Chamber, commands out of order', () => {
         executeCommands(game, [...before])
         const out = executeCommands(game, [`use lifelight elixir on ${target}`])
         expect(out).toContain(
-          'You hold the vial to the crystal. It is cold, and the king inside does not stir.',
+          'The crystal is cold under the vial, and the king inside does not stir. Not yet.',
         )
         expect(out).not.toContain('waste it on me')
         expect(out).not.toContain('stops a finger')
