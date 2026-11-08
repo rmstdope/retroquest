@@ -1,0 +1,88 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>A way out that is closed right now — agreed</title><link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600&family=Fraunces:wght@600&family=Source+Serif+4&display=swap" rel="stylesheet"><style>
+:root{--bg:#f5f0e6;--surface:#fffcf5;--raised:#efe8da;--line:#e2d9c6;--line2:#cfc4ad;--fg:#22201b;--prose:#36322a;--muted:#6b6455;--accent:#f29e00;--accentText:#7a4300;--accentSoft:#ffe0a0;--accentLine:#eba526;--ch:#2a5d9f;--chS:#e3edf9;--chL:#a9c3e6;--it:#2e6e27;--itS:#e4f2df;--itL:#a9d29e}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#d9d2c3;font-family:'DM Sans',system-ui,sans-serif;color:#22201b;padding:24px;line-height:1.4}
+h1{font-family:Fraunces,serif;font-size:26px;margin-bottom:6px}
+.lede{max-width:900px;font-size:15px;color:#3d382f;margin-bottom:8px}
+.cost{max-width:900px;color:#5a4a2a;background:#fff3d6;border-left:3px solid #f29e00;padding:8px 12px;margin:0 0 14px;font-size:14px}
+.tools{margin:0 0 12px;display:flex;gap:8px;flex-wrap:wrap}.tools button{font:inherit;font-size:14px;padding:6px 12px;border-radius:8px;border:1px solid #b9ae98;background:#fffcf5;cursor:pointer}
+.wrap{overflow:hidden;border-radius:10px;width:fit-content}
+.frame{position:relative;overflow:hidden;background:var(--bg);transform-origin:top left;border:1px solid #b9ae98;border-radius:10px}
+.hdr{position:absolute;top:0;left:0;right:0;height:60px;background:var(--bg);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:18px;padding:0 16px;z-index:3;font-size:14px}
+.brand{font-family:Fraunces,serif;font-weight:600;font-size:20px}.sp{flex:1}.dim{color:var(--muted);font-size:13px}
+.acts{position:absolute;left:0;right:0;bottom:0;height:69px;background:var(--bg);display:flex;gap:6px;align-items:center;padding:0 12px;z-index:3}
+.vb{height:42px;padding:0 15px;display:flex;align-items:center;border:1px solid var(--line2);border-radius:10px;background:var(--raised);font-size:14px}
+.st{position:absolute;left:0;right:0;background-repeat:no-repeat;overflow:hidden}
+.laptop .st{top:61px;height:670px}.phone .st{top:0;height:100%}
+.pb{position:absolute;inset:0}
+.area{position:absolute;border-radius:12px}
+.ring{outline:2px dashed #ffc45c;outline-offset:-2px;background:rgb(255 169 20/.10)}
+.plate{position:absolute;left:16px;top:16px;background:rgb(255 252 245/.92);border:1px solid var(--line);border-radius:10px;box-shadow:0 4px 16px rgb(0 0 0/.2);padding:10px 16px;z-index:2;width:290px}
+.phone .plate{left:52px;top:8px;width:auto;padding:5px 12px}.phone .rn{font-size:15px;margin:0}.phone .eb{display:none}
+.eb{font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
+.rn{font-family:Fraunces,serif;font-weight:600;font-size:23px;margin:6px 0 2px}
+.btns{position:absolute;display:flex;gap:8px;z-index:2}
+.pill{height:44px;display:flex;align-items:center;gap:6px;padding:0 14px;border-radius:999px;border:1px solid var(--line2);background:rgb(255 252 245/.93);box-shadow:0 4px 16px rgb(0 0 0/.2);font-size:13px;white-space:nowrap;font-family:inherit;color:inherit}
+button.pill{cursor:pointer}.pill.on{border-color:var(--accent);background:var(--accentSoft);color:var(--accentText);font-weight:600}
+.phone .pill{height:36px;padding:0 11px}
+.tag{position:absolute;font-size:13px;line-height:1;font-weight:600;padding:5px 9px;border-radius:999px;white-space:nowrap;border:1px solid;box-shadow:0 2px 8px rgb(0 0 0/.35);z-index:4;pointer-events:none}
+.tag.anch{transform:translate(-50%,-100%)}
+.tag.s{background:#fffcf5;color:#22201b;border-color:#cfc4ad}.tag.i{background:var(--itS);color:var(--it);border-color:var(--itL)}.tag.c{background:var(--chS);color:var(--ch);border-color:var(--chL)}.tag.e{background:var(--accentSoft);color:var(--accentText);border-color:var(--accentLine)}
+.tag.x{background:#ece6d8;color:#5f584a;border-color:#b9ae98}
+.mark{position:absolute;width:12px;height:12px;margin:-6px 0 0 -6px;border-radius:50%;background:#ffc14d;border:2px solid #fff6e0;box-shadow:0 0 0 3px rgb(242 158 0/.45),0 0 14px 4px rgb(255 190 80/.8);z-index:3;pointer-events:none}
+.mark.x{background:#b5ad9c;box-shadow:0 0 0 3px rgb(90 84 70/.45)}
+.paper{position:absolute;left:24px;bottom:58px;width:520px;background:#fffcf5;border:2px solid var(--accent);border-radius:10px;padding:14px 16px;font-family:'Source Serif 4',serif;font-size:18px;line-height:1.45;color:var(--prose);z-index:2}
+.phone .paper{left:12px;bottom:52px;width:380px;font-size:15px;padding:9px 12px}
+.hide{position:absolute;left:50%;transform:translateX(-50%);bottom:12px;height:28px;display:flex;align-items:center;padding:0 14px;border:1px solid var(--line);border-radius:14px;background:var(--raised);color:var(--muted);font-size:13px;z-index:2}
+.dark{position:absolute;inset:0;background:#000;opacity:0;pointer-events:none;transition:opacity 1s linear;z-index:5}
+.note{max-width:900px;margin-top:10px;font-size:14px;color:#4a443a}.note b{color:#22201b}
+.states{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px;max-width:940px;margin-top:14px}.states div{background:#fffcf5;border:1px solid #cfc4ad;border-radius:8px;padding:9px 12px;font-size:13.5px}.states b{display:block;margin-bottom:3px}
+.bag{position:absolute;top:76px;right:0;bottom:0;width:340px;background:var(--surface);border-left:1px solid var(--line);padding:16px;z-index:3;font-size:15px;box-shadow:-6px 0 18px rgb(0 0 0/.25)}.bag b{font-family:Fraunces,serif;font-size:20px;display:block;margin-bottom:10px}.bag .row{padding:8px 0;border-bottom:1px solid var(--line)}
+.mapb{display:block;width:100%;margin-bottom:8px;min-height:48px;border-radius:10px;border:1px solid var(--accentLine);background:var(--accentSoft);color:var(--accentText);font:inherit;font-weight:600;cursor:pointer}.mapb:focus-visible{outline:3px solid #2a5d9f;outline-offset:2px}
+.foc{outline:3px solid #fff !important;box-shadow:0 0 0 3px #2a5d9f inset}
+.help{max-width:640px;background:#fffcf5;border:1px solid #cfc4ad;border-radius:12px;padding:20px 24px;font-size:15.5px;line-height:1.55}.help b{font-weight:700}.help .new{background:var(--accentSoft);padding:2px 4px;border-radius:4px}
+</style></head><body><h1>A way out that is closed right now — agreed</h1><p class="lede">The pictures are the real ones. Where each way out sits is a stand-in; the real places are marked in the studio. This cottage picture has no door painted yet; the dashed ring appears only in this drawing, to show where a way out would be placed. Press inside it.</p><p class="cost">Agreed: no mark, no name and no change of pointer; pressing it gives the same answer as typing the direction, and Elior stays.</p><div class="tools"><button id="reset">↺ Start again</button></div><div class="wrap" style="width:921.5999999999999px;height:576.0px"><div style="transform:scale(0.72);transform-origin:top left;width:1280px"><div class="frame laptop" style="width:1280px;height:800px"><div class="hdr"><span class="brand">RetroQuest</span><span class="dim">Act I</span><span class="sp"></span><span class="dim">Quests ▬▬▬ 0/11</span>Save Load Stats Settings Help</div><div class="st"><div class="pb"></div><div class="plate"><div class="eb">You are in</div><div class="rn"></div></div><div class="btns" style="top:16px;right:16px"><span class="pill">Bag · 2</span><span class="pill">Spells · 0</span><span class="pill">Quests · 3</span><span class="pill">⟲ Story so far</span><span class="pill">🧭 Map</span></div><div class="btns" style="right:16px;bottom:10px"><button id="show" class="pill"></button></div><div class="dark"></div></div><div class="acts"><span class="vb">Look</span><span class="vb">Examine</span><span class="vb">Search</span><span class="vb">Take</span><span class="vb">Use</span><span class="vb">Use with</span><span class="vb">Talk</span><span class="vb">Say</span><span class="vb">Give</span><span class="vb">More…</span><span class="vb">⌨ Type</span><span class="sp"></span><span class="vb">💡 Hint</span></div></div></div></div><p class="note hint"></p><div class="states"><div><b>When it opens</b>It gets its mark, name and pointer at once, like any way out.</div><div><b>Pressing it during words</b>The telling stops and the answer is told, as typing it would.</div></div><script>window.CFG={"rooms": {"cot": {"name": "Elior's Cottage", "pic": "act1-eliors-cottage.png", "areas": [{"kind": "e", "dir": "e", "closed": true, "name": "→ Closed", "answer": "Grandmother looks up from the hearth before you reach the door. <i>“Not with the bread nearly out, you don't. And that corner of yours is still dark; you've not even lit the lantern.”</i>", "x": 0.83, "y": 0.28, "w": 0.14, "h": 0.5, "ring": true}, {"kind": "c", "name": "Grandmother", "x": 0.63, "y": 0.33, "w": 0.13, "h": 0.6, "ring": false}, {"kind": "i", "name": "Elior's Journal", "x": 0.09, "y": 0.83, "w": 0.09, "h": 0.15, "ring": false}]}}, "start": "cot", "closed": "answer", "pointer": "arrow", "device": "laptop", "telling": "go", "phone": "once", "img": "../../web/public/images/generated/", "hint": "", "w": 1280, "h": 800, "scale": 0.72};
+const C=window.CFG;const f=document.querySelector('.frame'),st=document.querySelector('.st'),pb=document.querySelector('.pb'),dark=document.querySelector('.dark');
+const R=C.rooms;let room=C.start,show=false,tagEl=null,armed=null,tellT=null,telling=false,busy=false;
+const scale=C.scale,W=C.w,H=C.device==='phone'?C.h:670;
+const svg=(p)=>"url(\"data:image/svg+xml,"+encodeURIComponent("<svg xmlns='http://www.w3.org/2000/svg' width='34' height='34' viewBox='0 0 34 34'><g transform='rotate("+p+" 17 17)'><path d='M17 3 L29 17 H21.5 V30 H12.5 V17 H5 Z' fill='#ffc14d' stroke='#3a2a08' stroke-width='2' stroke-linejoin='round'/></g></svg>")+"\") 17 17, pointer";
+const rot={n:0,e:90,s:180,w:270};
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;')}
+var draw=function(){const r=R[room];st.style.backgroundImage=`url(${C.img}${r.pic})`;st.style.backgroundSize=`${W}px ${W*9/16}px`;st.style.backgroundPosition=`0 ${-(W*9/16-H)/2}px`;
+ document.querySelector('.rn').textContent=r.name;pb.innerHTML='';
+ r.areas.forEach(a=>{const d=document.createElement('div');d.className='area'+(a.ring?' ring':'');d.style.cssText=`left:${a.x*W}px;top:${a.y*H}px;width:${a.w*W}px;height:${a.h*H}px`;
+  const isWay=a.kind==='e';
+  if(C.device==='laptop'){ if(isWay&&!a.closed)d.style.cursor=C.pointer==='arrow'?svg(rot[a.dir]):'pointer';
+   else if(a.closed&&C.closed==='marked')d.style.cursor=C.pointer==='arrow'?svg(rot[a.dir]):'pointer';
+   d.onmousemove=e=>{if(a.closed&&C.closed!=='marked')return;if(show)return;follow(a,e)};d.onmouseleave=()=>{if(tagEl){tagEl.remove();tagEl=null}}}
+  d.onclick=e=>{e.stopPropagation();press(a)};pb.append(d);
+  if(show&&!(a.closed&&C.closed!=='marked')){const m=document.createElement('i');m.className='mark'+(a.closed?' x':'');const cx=(a.x+a.w/2)*W,cy=(a.y+a.h/2)*H;m.style.left=cx+'px';m.style.top=cy+'px';pb.append(m);
+   const t=document.createElement('span');t.className='tag anch '+(a.closed?'x':a.kind);t.textContent=a.name;t.style.left=Math.min(Math.max(cx,70),W-80)+'px';t.style.top=(cy-10)+'px';if(C.namePress&&a.kind==='e'&&!a.closed){t.style.pointerEvents='auto';t.style.cursor=C.pointer==='arrow'?svg(rot[a.dir]):'pointer';t.onclick=e=>{e.stopPropagation();press(a)}}pb.append(t)}
+ });
+ document.querySelector('#show').className='pill'+(show?' on':'');document.querySelector('#show').textContent=show?'◎ Showing':"◎ Show what's here";};
+function follow(a,e){const rr=st.getBoundingClientRect();if(!tagEl){tagEl=document.createElement('span');pb.append(tagEl)}tagEl.className='tag '+(a.closed?'x':a.kind);tagEl.textContent=a.name;tagEl.style.left=Math.min((e.clientX-rr.left)/scale-10,W-180)+'px';tagEl.style.top=((e.clientY-rr.top)/scale+24)+'px'}
+function say(t){let p=document.querySelector('.paper');if(!t){if(p)p.remove();document.querySelector('.hide')?.remove();return}if(!p){p=document.createElement('div');p.className='paper';st.append(p);const h=document.createElement('button');h.className='hide';h.textContent='Hide';h.onclick=e=>{e.stopPropagation();say('')};st.append(h)}p.innerHTML=t}
+function stopTell(){clearInterval(tellT);telling=false}
+function tell(text){stopTell();const w=text.split(' ');let n=0;telling=true;tellT=setInterval(()=>{n++;say(w.slice(0,n).join(' '));if(n>=w.length){stopTell()}},C.tellMs||260);window.__full=text}
+function go(a){if(busy)return;busy=true;stopTell();say('');if(tagEl){tagEl.remove();tagEl=null}dark.style.opacity=1;setTimeout(()=>{room=a.to;show=false;armed=null;draw();dark.style.opacity=0;setTimeout(()=>busy=false,1000)},1000)}
+function closeDrawer(){const d=document.querySelector('.bag');if(d)d.remove()}
+function press(a){if(busy){return}
+ if(document.querySelector('.bag')){closeDrawer();if(C.drawer==='close'){note('The first press only closed the Bag. Press the way again to go.');return}}
+ if(a.kind!=='e'){note('That thing is for a later piece of work: here the picture only names it.');return}
+ if(C.device==='phone'&&C.phone==='twice'&&!a.closed){if(armed!==a){armed=a;draw();const t=document.createElement('span');t.className='tag anch e';t.textContent=a.name;t.style.left=Math.min(Math.max((a.x+a.w/2)*W,70),W-80)+'px';t.style.top=(a.y*H+22)+'px';pb.append(t);return}}
+ if(telling&&C.telling==='hurry'&&!a.closed){stopTell();say(window.__full);note('First press only finished the words. Press the way again to go.');return}
+ if(a.closed){stopTell();if(C.device==='phone'&&C.phone==='twice'&&armed!==a&&C.closed==='marked'){}say(a.answer);return}
+ go(a)}
+function note(t){const n=document.querySelector('.hint');if(n)n.textContent=t}
+st.addEventListener('click',()=>{if(busy)return;if(document.querySelector('.bag')){closeDrawer();return}if(telling){stopTell();say(window.__full);note('Pressing the picture away from a way out only hurries the words, as today.');return}if(armed){armed=null;draw()}});
+document.querySelector('#show').onclick=e=>{e.stopPropagation();show=!show;armed=null;draw()};
+document.querySelector('#reset').onclick=()=>{stopTell();say('');room=C.start;show=false;armed=null;busy=false;dark.style.opacity=0;note(C.hint||'');draw();if(C.autoTell)tell(C.autoTell)};
+if(document.querySelector('#again'))document.querySelector('#again').onclick=()=>{tell(C.tellText||C.autoTell)};
+function bag(){closeDrawer();if(!C.bag)return;const d=document.createElement('aside');d.className='bag';d.innerHTML='<b>Bag</b><div class="row">Bread</div><div class="row">Lantern</div>';d.onclick=e=>e.stopPropagation();st.append(d)}
+function kb(){if(C.kb==='tab'){pb.querySelectorAll('.area').forEach((el,i)=>{const a=R[room].areas[i];if(a.kind!=='e'||a.closed)return;el.tabIndex=0;el.setAttribute('role','button');el.style.outline='none';el.onfocus=()=>{el.classList.add('foc');const r=el.getBoundingClientRect(),o=st.getBoundingClientRect();if(tagEl)tagEl.remove();tagEl=document.createElement('span');tagEl.className='tag anch e';tagEl.textContent=a.name;tagEl.style.left=Math.min(Math.max((a.x+a.w/2)*W,70),W-80)+'px';tagEl.style.top=(a.y*H+22)+'px';pb.append(tagEl)};el.onblur=()=>{el.classList.remove('foc');if(tagEl){tagEl.remove();tagEl=null}};el.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();press(a)}}})}
+ if(C.kb==='map'){let m=document.querySelector('.mapp');if(m)m.remove();const ex=R[room].areas.filter(a=>a.kind==='e'&&!a.closed);if(!ex.length)return;m=document.createElement('aside');m.className='bag mapp';m.innerHTML='<b>Map</b>';ex.forEach(a=>{const b=document.createElement('button');b.className='mapb';b.textContent=a.name;b.onclick=e=>{e.stopPropagation();go(a)};m.append(b)});m.onclick=e=>e.stopPropagation();st.append(m)}}
+if(document.querySelector('#openbag'))document.querySelector('#openbag').onclick=()=>{C.bag=true;bag();C.bag=false};
+const _d=draw;draw=function(){_d();kb()};
+bag();draw();if(C.autoTell)tell(C.autoTell);
+const _r=document.querySelector('#reset').onclick;document.querySelector('#reset').onclick=()=>{_r();bag()};
+</script></body></html>
