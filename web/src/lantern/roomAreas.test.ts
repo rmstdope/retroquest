@@ -11,6 +11,7 @@ import { Game, type Act, type Room } from '@/engine'
 import { Bucket } from '@/act1/items/Bucket'
 import { Scenery } from '@/act1/items/Scenery'
 import { MysteriousBox } from '@/act1/items/MysteriousBox'
+import { WardStone } from '@/act4/items/WardStone'
 import {
   declaredAreas,
   exitAreaId,
@@ -68,6 +69,66 @@ describe('area ids', () => {
 })
 
 describe('declared room areas', () => {
+  it('give each of the three ward stones its own area', () => {
+    const ids = declaredAreas('Act4', 'FortressGates').map((a) => a.id)
+    expect(ids).toEqual(
+      expect.arrayContaining([
+        'ward-stone-left',
+        'ward-stone-middle',
+        'ward-stone-right',
+      ]),
+    )
+    expect(thingAreaId(new Act4(), new WardStone('right'))).toBe(
+      'ward-stone-right',
+    )
+  })
+
+  it("give Elior's cottage the Patches Grandmother can bring in", () => {
+    const ids = declaredAreas('Act1', 'EliorsCottage').map((a) => a.id)
+    expect(ids).toContain('patches')
+  })
+
+  it.each(ACTS.map((make) => [make().name, make] as const))(
+    'of %s name a class of the act, a scenery piece or an exit',
+    (_name, make) => {
+      const act = make()
+      const classIds = Object.keys(act.classes).map((k) =>
+        k
+          .replace(/([a-z0-9])([A-Z])/g, '$1-$2')
+          .replace(/([A-Z]+)([A-Z][a-z])/g, '$1-$2')
+          .toLowerCase(),
+      )
+      for (const room of Object.keys(act.rooms))
+        for (const { id } of declaredAreas(act.name, room)) {
+          if (id.startsWith('exit-') || id.startsWith('scenery-')) continue
+          expect(
+            classIds.some((c) => id === c || id.startsWith(`${c}-`)),
+            `${act.name} ${room}: ${id}`,
+          ).toBe(true)
+        }
+    },
+  )
+
+  it('give every room at least the exits it has', () => {
+    for (const make of ACTS) {
+      const act = make()
+      for (const [key, room] of Object.entries(act.rooms)) {
+        const ids = declaredAreas(act.name, key).map((a) => a.id)
+        for (const d of Object.keys(room.exits))
+          expect(ids, `${act.name} ${key}`).toContain(exitAreaId(d))
+      }
+    }
+  })
+
+  it('give a portrait no areas', () => {
+    for (const make of ACTS) {
+      const act = make()
+      const rooms = Object.keys(act.rooms).length
+      for (const image of allImages(act).slice(rooms))
+        expect(image.areas, image.id).toBeUndefined()
+    }
+  })
+
   it('list the shed contents that only turn up once it is unlocked', () => {
     const ids = declaredAreas('Act1', 'AbandonedShed').map((a) => a.id)
     expect(ids).toEqual(

@@ -7,8 +7,16 @@
     "text": "You stand just inside the fortress gates. The ways on, north and east, are barred by a thin wall of violet light, and three ward stones, left, middle and right, swell and fade with it. Guardians made of shadow drift between the stones, watching you. On the arch behind you, under the black, an older carving shows through: a sun rising over three linked rings. Just inside the threshold Mira keeps the way out, her back to the gatepost. Sir Cedric stands beside her, his eyes on the guardians.",
     "areas": [
       {
-        "id": "ward-stone",
+        "id": "ward-stone-left",
         "title": "Left Stone"
+      },
+      {
+        "id": "ward-stone-middle",
+        "title": "Middle Stone"
+      },
+      {
+        "id": "ward-stone-right",
+        "title": "Right Stone"
       },
       {
         "id": "ward-stones",

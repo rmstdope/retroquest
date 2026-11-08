@@ -20,6 +20,7 @@ export const ACT1_ROOM_AREAS: Record<string, ImageArea[]> = {
     { id: 'scenery-eliors-cottage-shelves', title: 'Shelves' },
     { id: 'scenery-eliors-cottage-books', title: 'Books' },
     { id: 'grandmother', title: 'Grandmother' },
+    { id: 'patches', title: 'Patches' },
     { id: 'eliors-journal', title: "Elior's Journal" },
     { id: 'exit-south', title: 'Way south' },
     { id: 'exit-east', title: 'Way east' },

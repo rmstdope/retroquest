@@ -7,10 +7,13 @@
  * An id comes from the game object and never from its displayed name, which
  * changes ("bucket" becomes "bucket (full)"): a scenery piece is
  * `scenery-<key>`, any other thing the kebab-case of the key its class has in
- * the act's registry (so a bundler renaming classes changes nothing), an exit
+ * the act's registry (so a bundler renaming classes changes nothing; a thing
+ * that comes in sides, the three ward stones, adds its side), an exit
  * `exit-<direction>`. The declared lists live in `roomAreas/act<N>RoomAreas.ts`
  * and cover what turns up later in the story too, so they cannot be read from a
  * room's starting contents; the golden-path tests check them against play.
+ * A thing a carried item puts in whatever room the player stands in (an item
+ * dropped, a candle's locket) is not counted as the room's own.
  */
 import type { Act, Character, Item } from '@/engine'
 import { ACT1_ROOM_AREAS } from './roomAreas/act1RoomAreas'
@@ -57,7 +60,8 @@ export function thingAreaId(act: Act, thing: Item | Character): string {
   if (key === 'Scenery' && typeof sceneryKey === 'string') {
     return `scenery-${kebab(sceneryKey)}`
   }
-  return kebab(key)
+  const side = (thing as { side?: unknown }).side
+  return typeof side === 'string' ? `${kebab(key)}-${kebab(side)}` : kebab(key)
 }
 
 /** The stable area id of the exit in `direction`: `exit-secret_passage` is `exit-secret-passage`. */

@@ -7,7 +7,9 @@ import type { ImageArea } from '../roomAreas'
  */
 export const ACT4_ROOM_AREAS: Record<string, ImageArea[]> = {
   FortressGates: [
-    { id: 'ward-stone', title: 'Left Stone' },
+    { id: 'ward-stone-left', title: 'Left Stone' },
+    { id: 'ward-stone-middle', title: 'Middle Stone' },
+    { id: 'ward-stone-right', title: 'Right Stone' },
     { id: 'ward-stones', title: 'Ward Stones' },
     { id: 'barriers', title: 'Barriers' },
     { id: 'guardians', title: 'Shadow Guardians' },
