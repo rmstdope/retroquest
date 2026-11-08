@@ -12,6 +12,7 @@ import { RedemptionsLight } from './spells/RedemptionsLight'
 import { TheKnightOfDespair } from './quests/TheKnightOfDespair'
 import { KnightOfDespair } from './characters/KnightOfDespair'
 import { TrueSelf } from './characters/TrueSelf'
+import { MemoryEchoes } from './characters/MemoryEchoes'
 import { TruthSight } from './spells/TruthSight'
 import { TheMazeOfMirrors } from './quests/TheMazeOfMirrors'
 import { HeartsTruth } from './spells/HeartsTruth'
@@ -120,6 +121,7 @@ export const ACT4_CLASSES = {
   GhostlyWarriors,
   TrueSelf,
   TrappedServants,
+  MemoryEchoes,
   // Quests
   ShatteredWardGuardians,
   TheFinalStand,

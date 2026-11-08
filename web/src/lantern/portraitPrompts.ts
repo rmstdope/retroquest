@@ -210,6 +210,9 @@ export const PORTRAIT_PROMPTS: Readonly<Record<string, string>> = {
   TrueSelf:
     'A face portrait of your own reflection in a plain mirror, ' +
     'a watchful face that seems to know what you will say.',
+  MemoryEchoes:
+    'A face portrait of a young man and a young woman side by side, ' +
+    'small and warm inside the glow of a lantern, seen as a memory.',
   TrappedServants:
     'A face portrait of a grey, shadowed servant, with downcast ' +
     'eyes, a kitchen cap, and a grey, shadowed look.',
