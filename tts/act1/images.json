@@ -4,112 +4,700 @@
     "title": "The Dream",
     "width": 1920,
     "height": 1080,
-    "text": "It is dark, and it is raining hard. You hear it beating on shutters, though you cannot see any. Thunder breaks so close that the dark shakes with it. Shadows drift past like smoke. A man’s hand reaches out of the dark, lifts a child and holds it against his shoulder, and then both of them are gone. Somewhere a slow tune climbs three notes and settles home again. A tall figure stands among the shadows. It has no face you can find. It is too far away to reach, and too close to be only a dream. It is whispering, at the very edge of hearing, and what it whispers is your name."
+    "text": "It is dark, and it is raining hard. You hear it beating on shutters, though you cannot see any. Thunder breaks so close that the dark shakes with it. Shadows drift past like smoke. A man’s hand reaches out of the dark, lifts a child and holds it against his shoulder, and then both of them are gone. Somewhere a slow tune climbs three notes and settles home again. A tall figure stands among the shadows. It has no face you can find. It is too far away to reach, and too close to be only a dream. It is whispering, at the very edge of hearing, and what it whispers is your name.",
+    "areas": [
+      {
+        "id": "scenery-the-dream-shadows",
+        "title": "Shadows"
+      },
+      {
+        "id": "scenery-the-dream-man",
+        "title": "Man"
+      },
+      {
+        "id": "scenery-the-dream-child",
+        "title": "Child"
+      },
+      {
+        "id": "dream-voice",
+        "title": "Voice"
+      }
+    ]
   },
   {
     "id": "act1-eliors-cottage",
     "title": "Elior's Cottage",
     "width": 1920,
     "height": 1080,
-    "text": "A modest cottage with a straw roof and a cozy hearth. The scent of fresh bread and old books fills the air. The curtains are still drawn on a grey morning, and the corner by your bed is too dark to see into. A sturdy wooden table sits in the center, with a small loaf cooling on it, and a gentle fire crackles in the hearth. Grandmother stands by it, humming, and keeps an eye on the bread."
+    "text": "A modest cottage with a straw roof and a cozy hearth. The scent of fresh bread and old books fills the air. The curtains are still drawn on a grey morning, and the corner by your bed is too dark to see into. A sturdy wooden table sits in the center, with a small loaf cooling on it, and a gentle fire crackles in the hearth. Grandmother stands by it, humming, and keeps an eye on the bread.",
+    "areas": [
+      {
+        "id": "hearth",
+        "title": "Hearth"
+      },
+      {
+        "id": "lantern",
+        "title": "Lantern"
+      },
+      {
+        "id": "bread",
+        "title": "Bread"
+      },
+      {
+        "id": "scenery-eliors-cottage-table",
+        "title": "Table"
+      },
+      {
+        "id": "scenery-eliors-cottage-shelves",
+        "title": "Shelves"
+      },
+      {
+        "id": "scenery-eliors-cottage-books",
+        "title": "Books"
+      },
+      {
+        "id": "grandmother",
+        "title": "Grandmother"
+      },
+      {
+        "id": "eliors-journal",
+        "title": "Elior's Journal"
+      },
+      {
+        "id": "exit-south",
+        "title": "Way south"
+      },
+      {
+        "id": "exit-east",
+        "title": "Way east"
+      },
+      {
+        "id": "faded-photograph",
+        "title": "Faded Photograph"
+      }
+    ]
   },
   {
     "id": "act1-vegetable-field",
     "title": "Vegetable Field",
     "width": 1920,
     "height": 1080,
-    "text": "Rows of withered crops stretch beneath a brooding gray sky. The earth is cracked and dry, with only a few stubborn carrots and a rusty hoe hinting at better days. A faint breeze rustles the brittle leaves, carrying the scent of soil and distant rain. These rows were green a month ago."
+    "text": "Rows of withered crops stretch beneath a brooding gray sky. The earth is cracked and dry, with only a few stubborn carrots and a rusty hoe hinting at better days. A faint breeze rustles the brittle leaves, carrying the scent of soil and distant rain. These rows were green a month ago.",
+    "areas": [
+      {
+        "id": "withered-carrot",
+        "title": "Withered Carrot"
+      },
+      {
+        "id": "rusty-hoe",
+        "title": "Rusty Hoe"
+      },
+      {
+        "id": "dull-knife",
+        "title": "Dull Knife"
+      },
+      {
+        "id": "scenery-vegetable-field-crops",
+        "title": "Crops"
+      },
+      {
+        "id": "scenery-vegetable-field-earth",
+        "title": "Earth"
+      },
+      {
+        "id": "exit-north",
+        "title": "Way north"
+      },
+      {
+        "id": "exit-east",
+        "title": "Way east"
+      },
+      {
+        "id": "exit-south",
+        "title": "Way south"
+      }
+    ]
   },
   {
     "id": "act1-chicken-coop",
     "title": "Chicken Coop",
     "width": 1920,
     "height": 1080,
-    "text": "A small wooden coop stands here, its planks patched and weathered. Nervous chickens cluck and flutter, their feathers ruffled as they dart between straw nests. The air is thick with the scent of hay and the occasional squawk. Sunbeams slip through the slats, casting striped shadows on the dirt floor. High on a rafter, out of reach, something glints where no hen could have put it."
+    "text": "A small wooden coop stands here, its planks patched and weathered. Nervous chickens cluck and flutter, their feathers ruffled as they dart between straw nests. The air is thick with the scent of hay and the occasional squawk. Sunbeams slip through the slats, casting striped shadows on the dirt floor. High on a rafter, out of reach, something glints where no hen could have put it.",
+    "areas": [
+      {
+        "id": "chicken",
+        "title": "Chicken"
+      },
+      {
+        "id": "egg",
+        "title": "Egg"
+      },
+      {
+        "id": "feather",
+        "title": "Feather"
+      },
+      {
+        "id": "scenery-chicken-coop-coop",
+        "title": "Coop"
+      },
+      {
+        "id": "scenery-chicken-coop-nests",
+        "title": "Nests"
+      },
+      {
+        "id": "scenery-chicken-coop-rafter",
+        "title": "Rafter"
+      },
+      {
+        "id": "exit-north",
+        "title": "Way north"
+      },
+      {
+        "id": "key",
+        "title": "Key"
+      }
+    ]
   },
   {
     "id": "act1-village-square",
     "title": "Village Square",
     "width": 1920,
     "height": 1080,
-    "text": "The heart of Willowbrook: cobblestones around an old stone fountain, and a weathered notice board covered in faded announcements. Half the market stalls stand empty. The people at the others keep their voices down, and stop talking when you pass."
+    "text": "The heart of Willowbrook: cobblestones around an old stone fountain, and a weathered notice board covered in faded announcements. Half the market stalls stand empty. The people at the others keep their voices down, and stop talking when you pass.",
+    "areas": [
+      {
+        "id": "bucket",
+        "title": "Bucket"
+      },
+      {
+        "id": "old-notice",
+        "title": "Old Notice"
+      },
+      {
+        "id": "scenery-village-square-fountain",
+        "title": "Fountain"
+      },
+      {
+        "id": "scenery-village-square-cobblestones",
+        "title": "Cobblestones"
+      },
+      {
+        "id": "scenery-village-square-notice-board",
+        "title": "Notice Board"
+      },
+      {
+        "id": "scenery-village-square-market-stalls",
+        "title": "Market Stalls"
+      },
+      {
+        "id": "villager",
+        "title": "Tilda"
+      },
+      {
+        "id": "exit-west",
+        "title": "Way west"
+      },
+      {
+        "id": "exit-north",
+        "title": "Way north"
+      },
+      {
+        "id": "exit-east",
+        "title": "Way east"
+      }
+    ]
   },
   {
     "id": "act1-miras-hut",
     "title": "Mira's Hut",
     "width": 1920,
     "height": 1080,
-    "text": "A small hut hung with drying herbs: lavender, sage, and roots in bundles from the rafters. Shelves of bottles line the walls, every one labelled. Mira moves among them without looking, the way you move through your own kitchen."
+    "text": "A small hut hung with drying herbs: lavender, sage, and roots in bundles from the rafters. Shelves of bottles line the walls, every one labelled. Mira moves among them without looking, the way you move through your own kitchen.",
+    "areas": [
+      {
+        "id": "healing-herb",
+        "title": "Healing Herb"
+      },
+      {
+        "id": "ancient-amulet",
+        "title": "Ancient Amulet"
+      },
+      {
+        "id": "scenery-miras-hut-bundles",
+        "title": "Bundles"
+      },
+      {
+        "id": "scenery-miras-hut-bottles",
+        "title": "Bottles"
+      },
+      {
+        "id": "mira",
+        "title": "Mira"
+      },
+      {
+        "id": "exit-south",
+        "title": "Way south"
+      }
+    ]
   },
   {
     "id": "act1-blacksmiths-forge",
     "title": "Blacksmith's Forge",
     "width": 1920,
     "height": 1080,
-    "text": "A hot, smoky forge. Coals glow in the hearth and the anvil rings. Hinges, ploughshares and horseshoes hang from the walls, waiting to be mended or fetched, and Borin wipes his brow without putting down the hammer."
+    "text": "A hot, smoky forge. Coals glow in the hearth and the anvil rings. Hinges, ploughshares and horseshoes hang from the walls, waiting to be mended or fetched, and Borin wipes his brow without putting down the hammer.",
+    "areas": [
+      {
+        "id": "horseshoe",
+        "title": "Horseshoe"
+      },
+      {
+        "id": "scenery-blacksmiths-forge-coals",
+        "title": "Coals"
+      },
+      {
+        "id": "scenery-blacksmiths-forge-anvil",
+        "title": "Anvil"
+      },
+      {
+        "id": "scenery-blacksmiths-forge-hinges",
+        "title": "Hinges"
+      },
+      {
+        "id": "scenery-blacksmiths-forge-hammer",
+        "title": "Hammer"
+      },
+      {
+        "id": "blacksmith",
+        "title": "Borin"
+      },
+      {
+        "id": "exit-west",
+        "title": "Way west"
+      },
+      {
+        "id": "exit-north",
+        "title": "Way north"
+      }
+    ]
   },
   {
     "id": "act1-general-store",
     "title": "General Store",
     "width": 1920,
     "height": 1080,
-    "text": "A cluttered shop with the shutters half down. Rope, apples and trinkets crowd the shelves in the gloom. Hemlock stands at the window, watching the lane to the chapel."
+    "text": "A cluttered shop with the shutters half down. Rope, apples and trinkets crowd the shelves in the gloom. Hemlock stands at the window, watching the lane to the chapel.",
+    "areas": [
+      {
+        "id": "rope",
+        "title": "Rope"
+      },
+      {
+        "id": "apple",
+        "title": "Apple"
+      },
+      {
+        "id": "matches",
+        "title": "Matches"
+      },
+      {
+        "id": "sword",
+        "title": "Sword"
+      },
+      {
+        "id": "armor",
+        "title": "Armor"
+      },
+      {
+        "id": "scenery-general-store-trinkets",
+        "title": "Trinkets"
+      },
+      {
+        "id": "scenery-general-store-jars",
+        "title": "Jars"
+      },
+      {
+        "id": "scenery-general-store-counter",
+        "title": "Counter"
+      },
+      {
+        "id": "shopkeeper",
+        "title": "Hemlock"
+      },
+      {
+        "id": "exit-west",
+        "title": "Way west"
+      },
+      {
+        "id": "exit-east",
+        "title": "Way east"
+      },
+      {
+        "id": "exit-south",
+        "title": "Way south"
+      },
+      {
+        "id": "patches",
+        "title": "Patches"
+      }
+    ]
   },
   {
     "id": "act1-village-well",
     "title": "Village Well",
     "width": 1920,
     "height": 1080,
-    "text": "An old stone well stands between the field and the forge, its stones worn smooth by countless hands. The water below lies dark and still, and a faint sour smell hangs in the cool, damp air. Moss creeps up the sides."
+    "text": "An old stone well stands between the field and the forge, its stones worn smooth by countless hands. The water below lies dark and still, and a faint sour smell hangs in the cool, damp air. Moss creeps up the sides.",
+    "areas": [
+      {
+        "id": "well",
+        "title": "Well"
+      },
+      {
+        "id": "scenery-village-well-moss",
+        "title": "Moss"
+      },
+      {
+        "id": "exit-west",
+        "title": "Way west"
+      },
+      {
+        "id": "exit-east",
+        "title": "Way east"
+      },
+      {
+        "id": "exit-south",
+        "title": "Way south"
+      }
+    ]
   },
   {
     "id": "act1-abandoned-shed",
     "title": "Abandoned Shed",
     "width": 1920,
     "height": 1080,
-    "text": "A rickety shed leans precariously at the edge of Willowbrook, its weathered boards creaking in the wind. Rusty tools and broken crates are scattered about a long workbench, and a thick layer of dust covers everything. Little light gets past the grimy boards, and the air smells of old earth and lamp oil."
+    "text": "A rickety shed leans precariously at the edge of Willowbrook, its weathered boards creaking in the wind. Rusty tools and broken crates are scattered about a long workbench, and a thick layer of dust covers everything. Little light gets past the grimy boards, and the air smells of old earth and lamp oil.",
+    "areas": [
+      {
+        "id": "shed-door",
+        "title": "Shed Door"
+      },
+      {
+        "id": "scenery-abandoned-shed-boards",
+        "title": "Boards"
+      },
+      {
+        "id": "exit-north",
+        "title": "Way north"
+      },
+      {
+        "id": "exit-south",
+        "title": "Way south"
+      },
+      {
+        "id": "mysterious-box",
+        "title": "Mysterious Box"
+      },
+      {
+        "id": "broken-shovel",
+        "title": "Broken Shovel"
+      },
+      {
+        "id": "scenery-abandoned-shed-workbench",
+        "title": "Workbench"
+      },
+      {
+        "id": "scenery-abandoned-shed-crates",
+        "title": "Crates"
+      },
+      {
+        "id": "scenery-abandoned-shed-tools",
+        "title": "Tools"
+      },
+      {
+        "id": "scenery-abandoned-shed-shelves",
+        "title": "Shelves"
+      },
+      {
+        "id": "patches",
+        "title": "Patches"
+      },
+      {
+        "id": "fishing-rod",
+        "title": "Fishing Rod"
+      },
+      {
+        "id": "magnet",
+        "title": "Magnet"
+      }
+    ]
   },
   {
     "id": "act1-old-mill",
     "title": "Old Mill",
     "width": 1920,
     "height": 1080,
-    "text": "A creaky windmill towers above, its sails turning slowly in the breeze. Dusty gears and cobwebs fill the interior, and the scent of flour hangs in the air. Sunlight streams through broken windows, illuminating sacks of grain and a heavy millstone. Amidst the old workings, you notice a strange mechanism of black iron, whirring to itself, that doesn't belong to the mill's original design."
+    "text": "A creaky windmill towers above, its sails turning slowly in the breeze. Dusty gears and cobwebs fill the interior, and the scent of flour hangs in the air. Sunlight streams through broken windows, illuminating sacks of grain and a heavy millstone. Amidst the old workings, you notice a strange mechanism of black iron, whirring to itself, that doesn't belong to the mill's original design.",
+    "areas": [
+      {
+        "id": "sack-of-flour",
+        "title": "Sack of Flour"
+      },
+      {
+        "id": "mechanism",
+        "title": "Strange Mechanism"
+      },
+      {
+        "id": "scenery-old-mill-sails",
+        "title": "Sails"
+      },
+      {
+        "id": "scenery-old-mill-gears",
+        "title": "Gears"
+      },
+      {
+        "id": "scenery-old-mill-millstone",
+        "title": "Millstone"
+      },
+      {
+        "id": "exit-north",
+        "title": "Way north"
+      },
+      {
+        "id": "exit-east",
+        "title": "Way east"
+      },
+      {
+        "id": "millstone-fragment",
+        "title": "Millstone Fragment"
+      }
+    ]
   },
   {
     "id": "act1-riverbank",
     "title": "Riverbank",
     "width": 1920,
     "height": 1080,
-    "text": "A gentle river flows past the village and makes a slow bend here, past the reeds and a broad, flat stone at the water's edge. Insects hum over the water. A weathered fisherman sits on an upturned crate at the bend, watching the water."
+    "text": "A gentle river flows past the village and makes a slow bend here, past the reeds and a broad, flat stone at the water's edge. Insects hum over the water. A weathered fisherman sits on an upturned crate at the bend, watching the water.",
+    "areas": [
+      {
+        "id": "smooth-stone",
+        "title": "Smooth Stone"
+      },
+      {
+        "id": "river",
+        "title": "River"
+      },
+      {
+        "id": "scenery-riverbank-reeds",
+        "title": "Reeds"
+      },
+      {
+        "id": "scenery-riverbank-crate",
+        "title": "Crate"
+      },
+      {
+        "id": "scenery-riverbank-bend",
+        "title": "Bend"
+      },
+      {
+        "id": "fisherman",
+        "title": "Fisherman"
+      },
+      {
+        "id": "exit-west",
+        "title": "Way west"
+      },
+      {
+        "id": "exit-south",
+        "title": "Way south"
+      },
+      {
+        "id": "mothers-letter",
+        "title": "Mother's Letter"
+      }
+    ]
   },
   {
     "id": "act1-forest-path",
     "title": "Forest Path",
     "width": 1920,
     "height": 1080,
-    "text": "A winding path snakes into the heart of the woods, dappled sunlight flickering through the canopy above. Beside the path, thick, thorny vines block a small alcove. The air is alive with the scent of pine and wildflowers, and the ground is soft with moss and fallen leaves. Birds flit between branches, and the occasional snap of a twig hints at unseen creatures nearby."
+    "text": "A winding path snakes into the heart of the woods, dappled sunlight flickering through the canopy above. Beside the path, thick, thorny vines block a small alcove. The air is alive with the scent of pine and wildflowers, and the ground is soft with moss and fallen leaves. Birds flit between branches, and the occasional snap of a twig hints at unseen creatures nearby.",
+    "areas": [
+      {
+        "id": "vines",
+        "title": "Vines"
+      },
+      {
+        "id": "bush",
+        "title": "Bush"
+      },
+      {
+        "id": "scenery-forest-path-trees",
+        "title": "Trees"
+      },
+      {
+        "id": "scenery-forest-path-moss",
+        "title": "Moss"
+      },
+      {
+        "id": "scenery-forest-path-birds",
+        "title": "Birds"
+      },
+      {
+        "id": "exit-north",
+        "title": "Way north"
+      },
+      {
+        "id": "exit-south",
+        "title": "Way south"
+      },
+      {
+        "id": "stick",
+        "title": "Stick"
+      },
+      {
+        "id": "snare",
+        "title": "Snare"
+      },
+      {
+        "id": "scenery-forest-path-alcove",
+        "title": "Alcove"
+      },
+      {
+        "id": "scenery-forest-path-cut-vines",
+        "title": "Vines"
+      },
+      {
+        "id": "wild-berries",
+        "title": "Wild Berries"
+      }
+    ]
   },
   {
     "id": "act1-hidden-glade",
     "title": "Hidden Glade",
     "width": 1920,
     "height": 1080,
-    "text": "A hushed clearing hidden deep within the forest, dim and overgrown. Brambles crowd its edges, and the tall grass stands grey and still beneath branches that shut out the sun. In the center, a mossy stone bears a faint inscription, too deep in shadow to read. An unnatural darkness lingers here, though the sky above the branches is clear."
+    "text": "A hushed clearing hidden deep within the forest, dim and overgrown. Brambles crowd its edges, and the tall grass stands grey and still beneath branches that shut out the sun. In the center, a mossy stone bears a faint inscription, too deep in shadow to read. An unnatural darkness lingers here, though the sky above the branches is clear.",
+    "areas": [
+      {
+        "id": "shiny-pebble",
+        "title": "Shiny Pebble"
+      },
+      {
+        "id": "scenery-hidden-glade-mossy-stone",
+        "title": "Mossy Stone"
+      },
+      {
+        "id": "scenery-hidden-glade-brambles",
+        "title": "Brambles"
+      },
+      {
+        "id": "scenery-hidden-glade-grass",
+        "title": "Grass"
+      },
+      {
+        "id": "exit-north",
+        "title": "Way north"
+      },
+      {
+        "id": "rare-flower",
+        "title": "Rare Flower"
+      },
+      {
+        "id": "deer",
+        "title": "Deer"
+      }
+    ]
   },
   {
     "id": "act1-village-chapel",
     "title": "Village Chapel",
     "width": 1920,
     "height": 1080,
-    "text": "A small stone chapel at the end of the village lane. Its stained glass windows cast colours across the worn pews, and the air is cool and smells of candle wax. A kindly priest tends the altar. By the door the bell rope hangs straight and still. Over the door a shape is cut into the stone, worn almost smooth. A dark corner by the altar swallows the light."
+    "text": "A small stone chapel at the end of the village lane. Its stained glass windows cast colours across the worn pews, and the air is cool and smells of candle wax. A kindly priest tends the altar. By the door the bell rope hangs straight and still. Over the door a shape is cut into the stone, worn almost smooth. A dark corner by the altar swallows the light.",
+    "areas": [
+      {
+        "id": "candle",
+        "title": "Candle"
+      },
+      {
+        "id": "prayer-book",
+        "title": "Prayer Book"
+      },
+      {
+        "id": "scenery-village-chapel-altar",
+        "title": "Altar"
+      },
+      {
+        "id": "scenery-village-chapel-bell-rope",
+        "title": "Bell Rope"
+      },
+      {
+        "id": "scenery-village-chapel-mark",
+        "title": "Mark Over the Door"
+      },
+      {
+        "id": "scenery-village-chapel-pews",
+        "title": "Pews"
+      },
+      {
+        "id": "scenery-village-chapel-dark-corner",
+        "title": "Dark Corner"
+      },
+      {
+        "id": "priest",
+        "title": "Priest"
+      },
+      {
+        "id": "exit-west",
+        "title": "Way west"
+      },
+      {
+        "id": "exit-east",
+        "title": "Way east"
+      },
+      {
+        "id": "locket",
+        "title": "Locket"
+      }
+    ]
   },
   {
     "id": "act1-road-to-greendale",
     "title": "Road to Greendale",
     "width": 1920,
     "height": 1080,
-    "text": "The main road out of Willowbrook runs east under old oaks, their branches meeting overhead. The way is well trodden, lined with wildflowers and fallen leaves. A merchant's cart stands at the roadside, and his thin grey mare grazes beside it on three good shoes."
+    "text": "The main road out of Willowbrook runs east under old oaks, their branches meeting overhead. The way is well trodden, lined with wildflowers and fallen leaves. A merchant's cart stands at the roadside, and his thin grey mare grazes beside it on three good shoes.",
+    "areas": [
+      {
+        "id": "rusty-saw",
+        "title": "Rusty Saw"
+      },
+      {
+        "id": "scenery-road-to-greendale-oaks",
+        "title": "Oaks"
+      },
+      {
+        "id": "scenery-road-to-greendale-cart",
+        "title": "Cart"
+      },
+      {
+        "id": "scenery-road-to-greendale-mare",
+        "title": "Mare"
+      },
+      {
+        "id": "merchant",
+        "title": "Merchant"
+      },
+      {
+        "id": "exit-west",
+        "title": "Way west"
+      }
+    ]
   },
   {
     "id": "act1-portrait-blacksmith",

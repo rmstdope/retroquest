@@ -4,70 +4,330 @@
     "title": "Fortress Gates",
     "width": 1920,
     "height": 1080,
-    "text": "You stand just inside the fortress gates. The ways on, north and east, are barred by a thin wall of violet light, and three ward stones, left, middle and right, swell and fade with it. Guardians made of shadow drift between the stones, watching you. On the arch behind you, under the black, an older carving shows through: a sun rising over three linked rings. Just inside the threshold Mira keeps the way out, her back to the gatepost. Sir Cedric stands beside her, his eyes on the guardians."
+    "text": "You stand just inside the fortress gates. The ways on, north and east, are barred by a thin wall of violet light, and three ward stones, left, middle and right, swell and fade with it. Guardians made of shadow drift between the stones, watching you. On the arch behind you, under the black, an older carving shows through: a sun rising over three linked rings. Just inside the threshold Mira keeps the way out, her back to the gatepost. Sir Cedric stands beside her, his eyes on the guardians.",
+    "areas": [
+      {
+        "id": "ward-stone",
+        "title": "Left Stone"
+      },
+      {
+        "id": "ward-stones",
+        "title": "Ward Stones"
+      },
+      {
+        "id": "barriers",
+        "title": "Barriers"
+      },
+      {
+        "id": "guardians",
+        "title": "Shadow Guardians"
+      },
+      {
+        "id": "mira-at-the-gate",
+        "title": "Mira"
+      },
+      {
+        "id": "sir-cedric-at-the-gate",
+        "title": "Sir Cedric"
+      },
+      {
+        "id": "ward-stone-fragment",
+        "title": "Ward Stone Fragment"
+      },
+      {
+        "id": "guardians-chain",
+        "title": "Guardian's Chain"
+      },
+      {
+        "id": "guardians-essence",
+        "title": "Guardian's Essence"
+      },
+      {
+        "id": "exit-north",
+        "title": "Way north"
+      },
+      {
+        "id": "exit-east",
+        "title": "Way east"
+      }
+    ]
   },
   {
     "id": "act4-outer-courtyard",
     "title": "Outer Courtyard",
     "width": 1920,
     "height": 1080,
-    "text": "This was a garden once. The fountains still stand under a sky that never quite rains, but what runs down them is black and slow, and the statues have all turned their faces away. Grey figures walk the paths in circles, chains of shadow at their ankles, never looking up. By the dry fountain a soldier in a soot-black royal tabard stands rigid, staring at nothing."
+    "text": "This was a garden once. The fountains still stand under a sky that never quite rains, but what runs down them is black and slow, and the statues have all turned their faces away. Grey figures walk the paths in circles, chains of shadow at their ankles, never looking up. By the dry fountain a soldier in a soot-black royal tabard stands rigid, staring at nothing.",
+    "areas": [
+      {
+        "id": "trapped-servants",
+        "title": "Trapped Servants"
+      },
+      {
+        "id": "captain-of-the-guard",
+        "title": "Captain of the Guard"
+      },
+      {
+        "id": "exit-west",
+        "title": "Way west"
+      },
+      {
+        "id": "servants-pendant",
+        "title": "Servant's Pendant"
+      },
+      {
+        "id": "exit-north",
+        "title": "Way north"
+      }
+    ]
   },
   {
     "id": "act4-mirror-labyrinth",
     "title": "Mirror Labyrinth",
     "width": 1920,
     "height": 1080,
-    "text": "Corridors of mirror run away from you in every direction, and in each of them a different Elior looks back. You stand at the mouth of the maze, facing north."
+    "text": "Corridors of mirror run away from you in every direction, and in each of them a different Elior looks back. You stand at the mouth of the maze, facing north.",
+    "areas": [
+      {
+        "id": "mirrors",
+        "title": "Mirrors"
+      },
+      {
+        "id": "exit-north",
+        "title": "Way north"
+      },
+      {
+        "id": "exit-east",
+        "title": "Way east"
+      },
+      {
+        "id": "exit-west",
+        "title": "Way west"
+      },
+      {
+        "id": "exit-south",
+        "title": "Way south"
+      },
+      {
+        "id": "true-self",
+        "title": "True Self"
+      }
+    ]
   },
   {
     "id": "act4-hall-of-echoes",
     "title": "Hall of Echoes",
     "width": 1920,
     "height": 1080,
-    "text": "A long hall, so high the ceiling is lost. Everything that was ever said here is still being said, very quietly: orders, jokes, names, someone counting. Tattered banners hang high along the walls, grimed past reading. At the far end, before the stair, a knight in tarnished armour stands without moving, the way a man stands at a grave."
+    "text": "A long hall, so high the ceiling is lost. Everything that was ever said here is still being said, very quietly: orders, jokes, names, someone counting. Tattered banners hang high along the walls, grimed past reading. At the far end, before the stair, a knight in tarnished armour stands without moving, the way a man stands at a grave.",
+    "areas": [
+      {
+        "id": "echoes",
+        "title": "Echoes"
+      },
+      {
+        "id": "echo-stone",
+        "title": "Echo Stone"
+      },
+      {
+        "id": "banners",
+        "title": "Banners"
+      },
+      {
+        "id": "knight-of-despair",
+        "title": "Knight of Despair"
+      },
+      {
+        "id": "sir-cedric-in-the-hall",
+        "title": "Sir Cedric"
+      },
+      {
+        "id": "exit-south",
+        "title": "Way south"
+      },
+      {
+        "id": "ghostly-warriors",
+        "title": "Ghostly Warriors"
+      },
+      {
+        "id": "exit-east",
+        "title": "Way east"
+      }
+    ]
   },
   {
     "id": "act4-tower-of-shadows",
     "title": "Tower of Shadows",
     "width": 1920,
     "height": 1080,
-    "text": "A stair winds up inside the black stone, narrow and dark. The walls are cold, and there are no windows. The shadows on the stair move a moment after you do. With every step, something quiet at your ear tells you why you should not have come."
+    "text": "A stair winds up inside the black stone, narrow and dark. The walls are cold, and there are no windows. The shadows on the stair move a moment after you do. With every step, something quiet at your ear tells you why you should not have come.",
+    "areas": [
+      {
+        "id": "whispers",
+        "title": "Whispers"
+      },
+      {
+        "id": "exit-west",
+        "title": "Way west"
+      },
+      {
+        "id": "exit-up",
+        "title": "Way up"
+      },
+      {
+        "id": "exit-in",
+        "title": "Way in"
+      }
+    ]
   },
   {
     "id": "act4-chamber-of-whispers",
     "title": "Chamber of Whispers",
     "width": 1920,
     "height": 1080,
-    "text": "A round room at the top of the tower, and the only beautiful room in the fortress. That is what is wrong with it. Crystals grow from the walls, each humming something kind and untrue, and the floor gives a little under your feet, like ice that might hold. At the chamber's heart the Sorceress of Lies waits, her staff crowned with a small silver mask. Your breath catches: it is the mask from Elena's wrist."
+    "text": "A round room at the top of the tower, and the only beautiful room in the fortress. That is what is wrong with it. Crystals grow from the walls, each humming something kind and untrue, and the floor gives a little under your feet, like ice that might hold. At the chamber's heart the Sorceress of Lies waits, her staff crowned with a small silver mask. Your breath catches: it is the mask from Elena's wrist.",
+    "areas": [
+      {
+        "id": "sorceress-staff",
+        "title": "Staff"
+      },
+      {
+        "id": "crystal-whispers",
+        "title": "Whispers"
+      },
+      {
+        "id": "sorceress-of-lies",
+        "title": "Sorceress of Lies"
+      },
+      {
+        "id": "exit-down",
+        "title": "Way down"
+      },
+      {
+        "id": "exit-north",
+        "title": "Way north"
+      }
+    ]
   },
   {
     "id": "act4-memory-vault",
     "title": "Memory Vault",
     "width": 1920,
     "height": 1080,
-    "text": "Glass orbs hang in the air at every height, each one cracked, each one holding a scene that breaks apart before it settles. Among them stands a shadow in the shape of a man. In the east wall is a round door of pale stone."
+    "text": "Glass orbs hang in the air at every height, each one cracked, each one holding a scene that breaks apart before it settles. Among them stands a shadow in the shape of a man. In the east wall is a round door of pale stone.",
+    "areas": [
+      {
+        "id": "memory-orbs",
+        "title": "Memory Orbs"
+      },
+      {
+        "id": "vault-door",
+        "title": "Door"
+      },
+      {
+        "id": "shadow-of-the-past",
+        "title": "Shadow"
+      },
+      {
+        "id": "exit-south",
+        "title": "Way south"
+      },
+      {
+        "id": "exit-east",
+        "title": "Way east"
+      }
+    ]
   },
   {
     "id": "act4-parents-vault",
     "title": "Parents' Vault",
     "width": 1920,
     "height": 1080,
-    "text": "A small, quiet room. Nothing here is threatening. Memories hang in the air like lanterns, warm and still, and every one of them has your parents in it. It is the saddest and warmest room in the fortress."
+    "text": "A small, quiet room. Nothing here is threatening. Memories hang in the air like lanterns, warm and still, and every one of them has your parents in it. It is the saddest and warmest room in the fortress.",
+    "areas": [
+      {
+        "id": "memories",
+        "title": "Memories"
+      },
+      {
+        "id": "memory-echoes",
+        "title": "Memory Echoes of Aren and Lysa"
+      },
+      {
+        "id": "exit-west",
+        "title": "Way west"
+      },
+      {
+        "id": "exit-north",
+        "title": "Way north"
+      }
+    ]
   },
   {
     "id": "act4-throne-chamber",
     "title": "Throne Chamber",
     "width": 1920,
     "height": 1080,
-    "text": "A vast chamber under a broken dome. A throne of black stone, twisted like a root, stands at its head. Above a ritual circle King Alden hangs in a prison of crystal, and from his crown a thin thread of light bleeds into a rift in the air: the wound in time. Malakar stands beside it, grey and failing. The wound is killing him too."
+    "text": "A vast chamber under a broken dome. A throne of black stone, twisted like a root, stands at its head. Above a ritual circle King Alden hangs in a prison of crystal, and from his crown a thin thread of light bleeds into a rift in the air: the wound in time. Malakar stands beside it, grey and failing. The wound is killing him too.",
+    "areas": [
+      {
+        "id": "crystal-prison",
+        "title": "Prison"
+      },
+      {
+        "id": "wound",
+        "title": "Wound"
+      },
+      {
+        "id": "throne",
+        "title": "Throne"
+      },
+      {
+        "id": "malakar",
+        "title": "Malakar"
+      },
+      {
+        "id": "king-alden",
+        "title": "King Alden"
+      },
+      {
+        "id": "exit-south",
+        "title": "Way south"
+      },
+      {
+        "id": "exit-north",
+        "title": "Way north"
+      }
+    ]
   },
   {
     "id": "act4-willowbrook-field",
     "title": "Willowbrook Field",
     "width": 1920,
     "height": 1080,
-    "text": "The field behind your home: rows of withered crops under a pale sky, the earth cracked and grey. Grandmother waits at the gate. Mira stands beside her, and Sir Cedric leans on the fence. In the hedge a small light flickers: Nyx, keeping close. The air is quiet."
+    "text": "The field behind your home: rows of withered crops under a pale sky, the earth cracked and grey. Grandmother waits at the gate. Mira stands beside her, and Sir Cedric leans on the fence. In the hedge a small light flickers: Nyx, keeping close. The air is quiet.",
+    "areas": [
+      {
+        "id": "field",
+        "title": "Field"
+      },
+      {
+        "id": "grandmother",
+        "title": "Grandmother"
+      },
+      {
+        "id": "mira",
+        "title": "Mira"
+      },
+      {
+        "id": "sir-cedric",
+        "title": "Sir Cedric"
+      },
+      {
+        "id": "nyx",
+        "title": "Nyx"
+      }
+    ]
   },
   {
     "id": "act4-portrait-malakar",
