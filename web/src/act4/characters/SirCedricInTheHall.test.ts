@@ -4,7 +4,12 @@ import { Act4 } from '../Act4'
 import { TruthSight } from '../spells/TruthSight'
 import { GuardiansChain } from '../items/GuardiansChain'
 import { EchoStone } from '../items/EchoStone'
-import { FLAG_ACT4_CEDRIC_FORGAVE } from '../Act4StoryFlags'
+import {
+  FLAG_ACT4_CEDRIC_FORGAVE,
+  FLAG_ACT4_JUSTICE_ENDING,
+  FLAG_ACT4_REDEMPTION_ENDING,
+  FLAG_ACT4_SACRIFICE_ENDING,
+} from '../Act4StoryFlags'
 import {
   executeCommands,
   expectCharacterInRoom,
@@ -24,6 +29,10 @@ const KNOWS =
   'Grey cloak, twisted rune. I know him now. Do what you came to do. I will hear what he has to say.'
 const KEEP_EYE = 'Go on up. I will keep an eye on him.'
 const WAIT_HERE = 'Go on up. I will wait here with him. Someone should.'
+const AFTER_ENDING =
+  'It is done, then. I can see it on you. I will keep an eye on him until the king sends for him. You have my word.'
+const AFTER_ENDING_FORGAVE =
+  'It is done, then. I can see it on you. We will sit a while yet, he and I. Then I will see him out of here. You have my word.'
 const HOLD_BACK = `${CEDRIC} does not move from the door.`
 const FORGIVE_EVENT = `${CEDRIC} watches the last of them go. Then he crosses the hall and offers the knight his hand.`
 const FORGIVE_LINE =
@@ -157,6 +166,32 @@ describe('Sir Cedric in the Hall of Echoes', () => {
     expect(executeCommands(game, ['talk to cedric'])).toContain(WAIT_HERE)
     expect(game.state.currentRoom.describe(game.state)).toContain(ON_STAIR)
   })
+
+  describe.each([
+    FLAG_ACT4_REDEMPTION_ENDING,
+    FLAG_ACT4_JUSTICE_ENDING,
+    FLAG_ACT4_SACRIFICE_ENDING,
+  ])('after %s', (ending) => {
+    it('keeps his watch and no longer sends Elior up', () => {
+      const game = redeemed()
+      game.state.setStoryFlag(ending, true)
+      const talk = executeCommands(game, ['talk to cedric'])
+      expect(talk).toContain(AFTER_ENDING)
+      expect(talk).not.toContain('Go on up')
+      expectMarkupWellFormed(talk)
+    })
+
+    it('sits on with the man he forgave and no longer sends Elior up', () => {
+      const game = redeemed()
+      executeCommands(game, ["cast redemption's light on ghostly warriors"])
+      game.state.setStoryFlag(ending, true)
+      const talk = executeCommands(game, ['talk to cedric'])
+      expect(talk).toContain(AFTER_ENDING_FORGAVE)
+      expect(talk).not.toContain('Go on up')
+      expectMarkupWellFormed(talk)
+    })
+  })
+
   it("gives the knight's badge back", () => {
     const game = new Game([new Act4()])
     game.state.currentRoom = game.state.allRooms.HallOfEchoes

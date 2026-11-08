@@ -9,6 +9,7 @@ import {
   type NameOptions,
 } from '@/engine'
 import { FLAG_ACT4_TRUTH_TOLD, VIRTUE_TRUTH } from '../Act4StoryFlags'
+import { endingPlayed } from '../endings'
 
 /** The motive the reflection waits for; the king without it is only part of the truth. */
 const MOTIVE_WORDS = ['revenge', 'vengeance']
@@ -49,9 +50,15 @@ export class TrueSelf extends Character {
     return this.description
   }
 
-  /** It asks why Elior came, and afterwards reminds him of the answer. */
+  /** It asks why Elior came, afterwards reminds him of the answer, and after the ending looks back on it. */
   override talkTo(gameState: GameState): string {
     if (gameState.getStoryFlag(FLAG_ACT4_TRUTH_TOLD)) {
+      if (endingPlayed(gameState)) {
+        return dialogue(
+          this.name,
+          'You told me the truth. It is over now, and you are still you.',
+        )
+      }
       return dialogue(
         this.name,
         'Remember what you told me, when you stand before him.',
