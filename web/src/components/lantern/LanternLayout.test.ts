@@ -51,6 +51,7 @@ describe('LanternLayout', () => {
     setActivePinia(createPinia())
     // The game menu reads the quick save; these tests run with no game.
     vi.spyOn(useGameStore(), 'getQuickSave').mockReturnValue(null)
+    vi.spyOn(useGameStore(), 'getNamedSaves').mockReturnValue([])
     vi.stubGlobal(
       'matchMedia',
       vi.fn((query: string) => ({
@@ -606,6 +607,7 @@ describe('LanternLayout', () => {
     wrapper = mount(LanternLayout, { attachTo: document.body })
     const game = useGameStore()
     vi.spyOn(game, 'getQuickSave').mockReturnValue(null)
+    vi.spyOn(game, 'getNamedSaves').mockReturnValue([])
     vi.spyOn(game, 'getSaveSlots').mockReturnValue([
       {
         slot: 1,
@@ -646,6 +648,45 @@ describe('LanternLayout', () => {
     expect(load).toHaveBeenCalledWith(2)
     expect(wrapper.find('.lq-title-page').exists()).toBe(false)
     expect(wrapper.find('.lq-chapter-button').exists()).toBe(false)
+  })
+
+  it('Continue loads the newest save by name when that is a named one', async () => {
+    wrapper = mount(LanternLayout, { attachTo: document.body })
+    const game = useGameStore()
+    vi.spyOn(game, 'getQuickSave').mockReturnValue(null)
+    vi.spyOn(game, 'getSaveSlots').mockReturnValue(
+      Array.from({ length: 8 }, (_, i) => ({
+        slot: i + 1,
+        act: null,
+        room: null,
+        timestamp: null,
+        quests: null,
+      })),
+    )
+    vi.spyOn(game, 'getNamedSaves').mockReturnValue([
+      {
+        slot: -1,
+        name: 'before-the-mirrors',
+        act: 'Act 3',
+        room: 'Mount Ember',
+        timestamp: '2026-11-03T21:14:00',
+        quests: null,
+      },
+    ])
+    const load = vi.spyOn(game, 'loadFromTitle').mockReturnValue(true)
+    game.showTitle = true
+    await flushPromises()
+
+    const labels = wrapper
+      .findAll('.lq-title-inner button')
+      .map((b) => b.text())
+    expect(labels[0]).toMatch(
+      /^Continue\s*before-the-mirrors · Act III · Mount Ember · /,
+    )
+    expect(labels.slice(1)).toEqual(['New game', 'Load game'])
+    await wrapper.get('.lq-title-start').trigger('click')
+
+    expect(load).toHaveBeenCalledWith(-1, 'before-the-mirrors')
   })
 
   it('shows the title page over the first chapter, then the chapter', async () => {
@@ -1700,6 +1741,7 @@ describe('LanternLayout', () => {
       const game = useGameStore()
       vi.spyOn(game, 'getSaveSlots').mockReturnValue([])
       vi.spyOn(game, 'getQuickSave').mockReturnValue(null)
+      vi.spyOn(game, 'getNamedSaves').mockReturnValue([])
       const w = mountLayout()
 
       await w.get('button[aria-label="Game menu"]').trigger('click')
@@ -1962,6 +2004,7 @@ describe('LanternLayout', () => {
       }
       setActivePinia(createPinia())
       vi.spyOn(useGameStore(), 'getQuickSave').mockReturnValue(null)
+      vi.spyOn(useGameStore(), 'getNamedSaves').mockReturnValue([])
       useSettingsStore().narrationOn = true
     })
     afterEach(() => {

@@ -5,8 +5,8 @@
  */
 import { test, expect, type Page } from '@playwright/test'
 
-/** Start a game, close the opening chapter page and make a quick save. */
-async function makeQuickSave(page: Page): Promise<void> {
+/** Start a game, close the opening chapter page and save (a quick save, or under a name with `save <name>`). */
+async function makeQuickSave(page: Page, command = 'save'): Promise<void> {
   await page.addInitScript(() => {
     if (!localStorage.getItem('retroquest_settings'))
       localStorage.setItem('retroquest_settings', '{"narrationOn":false}')
@@ -19,7 +19,7 @@ async function makeQuickSave(page: Page): Promise<void> {
     .first()
     .click()
   const input = page.getByLabel('Command')
-  await input.fill('save')
+  await input.fill(command)
   await input.press('Enter')
   await expect(page.getByText('Game saved').first()).toBeVisible()
 }
@@ -80,4 +80,21 @@ test('New game starts at the chapter page and keeps the saves', async ({
     localStorage.getItem('retroquest_save'),
   )
   expect(saved).not.toBeNull()
+})
+
+test('a save made under a name is listed on the title page after a reload and loads', async ({
+  page,
+}) => {
+  await makeQuickSave(page, 'save mysave')
+  await page.reload()
+
+  const cont = page.getByRole('button', { name: /^Continue/ })
+  await expect(cont).toContainText('mysave · Act I · The Dream')
+
+  await page.getByRole('button', { name: 'Load game' }).click()
+  const dialog = page.getByRole('dialog', { name: 'Load game' })
+  await expect(dialog.getByText('Saves you named')).toBeVisible()
+  await dialog.getByRole('button', { name: /^Load mysave:/ }).click()
+  await expect(page.locator('.lq-title-page')).toHaveCount(0)
+  await expect(page.getByTestId('act')).toBeVisible()
 })

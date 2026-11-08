@@ -451,6 +451,66 @@ describe('useBridge', () => {
       )
     })
 
+    it('lists named saves as cards, newest first, with their details', async () => {
+      const bridge = await runningBridge()
+      expect(bridge.getNamedSaves()).toEqual([])
+      bridge.saveNamedGame('first')
+      bridge.saveNamedGame('second')
+      const stored = JSON.parse(
+        localStorageMock.getItem('retroquest_named_saves')!,
+      ) as { name: string; timestamp: string }[]
+      stored[0].timestamp = '2026-01-01T10:00:00.000Z'
+      stored[1].timestamp = '2026-02-01T10:00:00.000Z'
+      localStorageMock._setRaw('retroquest_named_saves', JSON.stringify(stored))
+      const cards = bridge.getNamedSaves()
+      expect(cards.map((c) => c.name)).toEqual(['second', 'first'])
+      expect(cards[0]).toMatchObject({
+        slot: -1,
+        act: 'Act 1',
+        outdated: false,
+      })
+      expect(cards[0].room).toBeTruthy()
+      expect(cards[0].quests).not.toBeNull()
+    })
+
+    it('lists a named save made before details were kept with the name and time only', async () => {
+      const bridge = await runningBridge()
+      bridge.saveNamedGame('oldrun')
+      const stored = JSON.parse(
+        localStorageMock.getItem('retroquest_named_saves')!,
+      ) as Record<string, unknown>[]
+      delete stored[0].act
+      delete stored[0].room
+      delete stored[0].quests
+      localStorageMock._setRaw('retroquest_named_saves', JSON.stringify(stored))
+      expect(bridge.getNamedSaves()).toEqual([
+        {
+          slot: -1,
+          name: 'oldrun',
+          act: null,
+          room: null,
+          timestamp: stored[0].timestamp,
+          quests: null,
+          outdated: false,
+        },
+      ])
+    })
+
+    it('marks a named save from an older version as outdated', async () => {
+      const bridge = await runningBridge()
+      localStorageMock._setRaw(
+        'retroquest_named_saves',
+        JSON.stringify([
+          {
+            name: 'python',
+            timestamp: '2026-01-01T10:00:00.000Z',
+            data: '{"version":0}',
+          },
+        ]),
+      )
+      expect(bridge.getNamedSaves()[0].outdated).toBe(true)
+    })
+
     it('is a failure when storage is full', async () => {
       const bridge = await runningBridge()
       storageFull()

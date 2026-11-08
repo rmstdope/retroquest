@@ -125,6 +125,7 @@ function createMockBridge() {
     loadNamedGame: vi.fn(() => 'Game loaded.'),
     newGame: vi.fn(),
     getQuickSave: vi.fn((): SaveSlot | null => null),
+    getNamedSaves: vi.fn((): SaveSlot[] => []),
     getSaveSlots: vi.fn((): SaveSlot[] => [
       ...Array.from({ length: 8 }, (_, i) => ({
         slot: i + 1,
@@ -658,6 +659,35 @@ describe('useGameStore', () => {
       expect(store.loadFromTitle(2)).toBe(false)
       expect(store.titleLoadError).toContain('could not be read')
       expect(store.showTitle).toBe(true)
+    })
+
+    it('loads a named save by its name', () => {
+      expect(store.loadFromTitle(-1, 'before-boss')).toBe(true)
+      expect(bridge.loadNamedGame).toHaveBeenCalledWith('before-boss')
+      expect(store.showTitle).toBe(false)
+      expect(store.notice?.text).toBe('Game loaded · before-boss')
+    })
+
+    it('stays on the title page with the engine line when a named load fails', () => {
+      bridge.loadNamedGame.mockReturnValue(
+        '[failure]No save file found.[/failure]',
+      )
+      expect(store.loadFromTitle(-1, 'gone')).toBe(false)
+      expect(store.showTitle).toBe(true)
+      expect(store.titleLoadError).toBe('No save file found.')
+    })
+
+    it('lists the named saves from the bridge', () => {
+      const card: SaveSlot = {
+        slot: -1,
+        name: 'x',
+        act: null,
+        room: null,
+        timestamp: null,
+        quests: null,
+      }
+      bridge.getNamedSaves.mockReturnValue([card])
+      expect(store.getNamedSaves()).toEqual([card])
     })
 
     it('forgets an earlier failure on the next attempt', () => {

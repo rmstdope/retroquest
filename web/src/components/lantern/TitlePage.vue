@@ -11,7 +11,8 @@ import { useFocusTrap } from '@/composables/useFocusTrap'
  * a plain wordmark under 400px wide, where the art gets too small), the
  * music credits and Start. Enter on Start or Escape goes on.
  *
- * A returning player has `saves` (the quick save and the slots in use): the
+ * A returning player has `saves` (the quick save, the slots in use and the saves
+ * made under a name): the
  * page then offers Continue (the newest save that can be loaded, named under
  * the word), New game and Load game, and Escape does nothing. When every
  * save is from an older version there is no Continue and New game is the

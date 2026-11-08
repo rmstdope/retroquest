@@ -109,6 +109,14 @@ describe('TitlePage', () => {
       expect(document.activeElement).toBe(w.findAll('button')[0].element)
     })
 
+    it('treats a player with only named saves as returning, and names the save under Continue', () => {
+      const w = mountTitle('', [
+        save(-1, { name: 'oldrun', act: null, room: null }),
+      ])
+      expect(labels(w)[0]).toMatch(/^Continue\s*oldrun · 3 Nov · 21:14$/)
+      expect(labels(w).slice(1)).toEqual(['New game', 'Load game'])
+    })
+
     it('keeps Escape inert while saves exist', async () => {
       const w = mountTitle('', [save(2)])
       await w.get('section').trigger('keydown', { key: 'Escape' })

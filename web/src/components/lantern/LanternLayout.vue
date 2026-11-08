@@ -1296,7 +1296,7 @@ async function startGame(): Promise<void> {
 const titlePage = ref<InstanceType<typeof TitlePage> | null>(null)
 /** The Load game window is open over the title page. */
 const titleLoad = ref(false)
-/** The saves the title page offers, read each time it opens. */
+/** The saves the title page offers (quick save, slots, named saves), read each time it opens. */
 const titleSaves = ref<SaveSlot[]>([])
 watch(
   () => game.showTitle,
@@ -1305,9 +1305,8 @@ watch(
     if (!shown) return
     try {
       const quick = game.getQuickSave()
-      titleSaves.value = quick
-        ? [quick, ...game.getSaveSlots()]
-        : game.getSaveSlots()
+      const slots = [...game.getSaveSlots(), ...game.getNamedSaves()]
+      titleSaves.value = quick ? [quick, ...slots] : slots
     } catch {
       // Saves that cannot be read count as none: the title page offers Start.
       titleSaves.value = []
@@ -1316,10 +1315,11 @@ watch(
   { immediate: true, flush: 'sync' },
 )
 
-/** Continue: load the newest save that can be loaded. */
+/** Continue: load the newest save that can be loaded, a named one by its name. */
 function continueFromTitle(): void {
   const newest = newestLoadable(titleSaves.value)
-  if (newest) game.loadFromTitle(newest.slot)
+  if (newest?.name !== undefined) game.loadFromTitle(newest.slot, newest.name)
+  else if (newest) game.loadFromTitle(newest.slot)
 }
 
 /** Open the Load game window over the title page, with no old failure showing. */
