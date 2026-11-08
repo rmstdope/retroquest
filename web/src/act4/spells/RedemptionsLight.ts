@@ -6,11 +6,15 @@ import {
   speech,
   type Character,
   type GameState,
+  type Item,
 } from '@/engine'
+import { endingPlayed } from '../endings'
 import { GhostlyWarriors } from '../characters/GhostlyWarriors'
 import { KnightOfDespair } from '../characters/KnightOfDespair'
+import { Malakar } from '../characters/Malakar'
 import { ShadowOfThePast } from '../characters/ShadowOfThePast'
 import { SorceressOfLies } from '../characters/SorceressOfLies'
+import { Wound } from '../items/Wound'
 import {
   FLAG_ACT4_CEDRIC_FORGAVE,
   FLAG_ACT4_SORCERESS_OF_LIES_COMPLETED,
@@ -31,6 +35,11 @@ const SHADOW_LINE =
     'I have done nothing but remember. Keep it for him.',
   )
 
+/** What the light does to the wound in time: it is no soul, and drinks it. */
+const WOUND_LINE =
+  'The light runs into the wound and is gone. There is no one in it to ' +
+  'remember.'
+
 /** What the light does to the redeemed Sorceress. */
 const SORCERESS_LINE =
   `Soft light touches the ${characterName('Unmasked Sorceress')}. She does ` +
@@ -43,9 +52,8 @@ const SORCERESS_LINE =
 /**
  * Learned from the Knight of Despair: reminds a fallen soul of who it was.
  * Cast on the Ghostly Warriors it puts them at peace (mercy), and Sir Cedric
- * forgives the knight.
- * Cast on the Ghostly Warriors it puts them at peace (mercy); on the Shadow
- * and the redeemed Sorceress it only shows a line.
+ * forgives the knight. On the Shadow, the redeemed Sorceress, Malakar and
+ * the wound in time it only shows a line.
  */
 export class RedemptionsLight extends Spell {
   constructor() {
@@ -61,9 +69,20 @@ export class RedemptionsLight extends Spell {
     return NOTHING_TO_REDEEM
   }
 
-  /** The warriors are put at peace (mercy, once) and Sir Cedric forgives the knight; the knight needs no more. */
+  /** The wound is no soul: the light runs into it, until it is gone. */
+  override castOnItem(gameState: GameState, target: Item): string {
+    if (!(target instanceof Wound)) return super.castOnItem(gameState, target)
+    return endingPlayed(gameState)
+      ? '[dim]The wound is gone.[/dim]'
+      : WOUND_LINE
+  }
+
+  /** The warriors are put at peace (mercy, once) and Sir Cedric forgives the knight; the knight needs no more; Malakar answers by the scene's stage. */
   override castOnCharacter(gameState: GameState, target: Character): string {
     if (target instanceof ShadowOfThePast) return SHADOW_LINE
+    if (target instanceof Malakar) {
+      return target.receiveRedemptionsLight(gameState)
+    }
     if (
       target instanceof SorceressOfLies &&
       gameState.getStoryFlag(FLAG_ACT4_SORCERESS_OF_LIES_COMPLETED)
