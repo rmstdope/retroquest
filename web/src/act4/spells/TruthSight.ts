@@ -68,13 +68,13 @@ const CHAMBER_SEEN =
 /** What the Sorceress shows, before she is redeemed. */
 const SORCERESS_SEEN =
   "Your sight sharpens, and the chamber's shine slides off her. Under it is " +
-  'a tired woman, and nothing more to see. The lies are not in how she ' +
-  'looks. They are in what she says, and eyes are no use against that.'
+  'a tired woman, and nothing more to see. The lies were never in her ' +
+  'face. They are in what she says.'
 
 /** What the staff and its mask show, before she is redeemed. */
 const STAFF_SEEN =
-  'Your sight sharpens. The staff is wood and the mask is silver, both as ' +
-  'they look. Whatever the mask hides, it does not hide from the eye.'
+  'Your sight sharpens. The staff and its mask are just as they look. ' +
+  'Whatever the mask hides, the eye will not find it.'
 
 /** What the crystals show, before she is redeemed. */
 const WHISPERS_SEEN =

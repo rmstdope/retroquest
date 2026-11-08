@@ -109,6 +109,7 @@ describe('TruthSight in the Chamber of Whispers', () => {
     const answers = chamberAnswers(new Game([new Act4()]))
     for (const answer of answers) {
       expect(answer).not.toBe(ORDINARY)
+      expect(answer).not.toContain('[dim]')
       expect(answer).toContain('Your sight sharpens')
       expectMarkupWellFormed(answer)
     }

@@ -619,7 +619,9 @@ and changes a few lines of dialogue.
 Other optional moments gate nothing. The sights and hearts repeat their line each time; the early amulet, the early elixir and the Bargain play once, then a dim line. The Bargain is the only one that changes anything later (Lysa's farewell line):
 
 -   **Truth Sight** on the unmended memory orbs (the cradle by the fire, a Willowbrook cottage and
-    its well) and on Malakar (for a breath, a young man mending a toy at a workbench).
+    its well), on Malakar (for a breath, a young man mending a toy at a workbench), and, until the
+    Sorceress is redeemed, in the Chamber of Whispers on her, her staff, the whispers and the room
+    (the shine comes off, and the lie is in what is said).
 -   **Heart's Truth** on the freed servants (they are afraid to go home and find no one waiting)
     and on Malakar before the refrain (the Shadow's voice speaks through his).
 -   **In the Throne Chamber, before the refrain:** raising the Ancient Amulet burns Malakar's hand
