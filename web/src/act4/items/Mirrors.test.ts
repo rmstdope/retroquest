@@ -46,4 +46,14 @@ describe('Mirrors', () => {
     expect(answer).toContain('Left, then left, then the way your reflection')
     expectMarkupWellFormed(answer)
   })
+
+  it.each([
+    ["servant's pendant", 'In the east corridor the glass stays empty.'],
+    ['echo stone', 'Left, then left, then the way your reflection'],
+  ])('answers the same when named first, with the %s', (item, expected) => {
+    const game = atTheFork()
+    const answer = executeCommands(game, [`use mirrors with ${item}`])
+    expect(answer).toContain(expected)
+    expectMarkupWellFormed(answer)
+  })
 })

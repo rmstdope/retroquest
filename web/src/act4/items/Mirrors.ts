@@ -30,4 +30,11 @@ export class Mirrors extends Item {
     }
     return ''
   }
+
+  /** The mirrors named first: the same answer as naming the item first. */
+  override useWith(gameState: GameState, other: Item): string {
+    return (
+      this.answerUseFrom(gameState, other) || super.useWith(gameState, other)
+    )
+  }
 }
