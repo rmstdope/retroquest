@@ -95,7 +95,11 @@ export class TrappedServants extends Character {
     return (
       `The ${name} bow. One of them, an old woman with flour still in the ` +
       'creases of her hands, looks up. ' +
-      speech("I was the king's cook. I do not know how long ago.")
+      speech(
+        "I was the king's cook. I do not know how long ago. " +
+          'The mirrors show truth, but only echoes from the halls can reveal ' +
+          'the full path.',
+      )
     )
   }
 }
