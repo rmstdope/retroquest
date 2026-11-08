@@ -506,6 +506,27 @@ Welcome to
   }
 
   /**
+   * The full name of the carried or room item the words name, among those
+   * whose full name `offered` accepts, or null. Asks each item's `answersTo`,
+   * so it reaches the names no list holds, and drops a leading "the" as
+   * `findAllItems` does.
+   */
+  itemNamed(
+    words: string,
+    offered: (fullName: string) => boolean,
+  ): string | null {
+    const items = [...this.state.inventory, ...this.state.currentRoom.items]
+    const among = items.filter((item) => offered(item.name))
+    const bare = withoutArticle(words)
+    const item =
+      among.find((candidate) => candidate.answersTo(words)) ??
+      (bare === null
+        ? undefined
+        : among.find((candidate) => candidate.answersTo(bare)))
+    return item?.name ?? null
+  }
+
+  /**
    * The first item named by full or short name, looking in the inventory
    * first and then in the room, or null. A leading "the" is dropped as
    * `findAllItems` drops it.

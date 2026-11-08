@@ -245,6 +245,47 @@ describe('useStageSpeechStore', () => {
     expect(speech.visible).toHaveLength(3)
   })
 
+  describe('the last line of an unnarrated turn', () => {
+    it('is reported when it appears, and not before', () => {
+      const speech = useStageSpeechStore()
+      const done = vi.fn()
+      speech.observe(
+        turn(say('Mira', 'First.\n\nSecond.\n\nThird.'), 'Mira'),
+        null,
+        done,
+      )
+      expect(done).not.toHaveBeenCalled()
+      vi.advanceTimersByTime(readingPauseMs('First.'))
+      expect(done).not.toHaveBeenCalled()
+      vi.advanceTimersByTime(readingPauseMs('Second.'))
+      expect(done).toHaveBeenCalledTimes(1)
+      vi.runAllTimers()
+      expect(done).toHaveBeenCalledTimes(1)
+    })
+
+    it('is reported at once for a turn of one line, or of none', () => {
+      const speech = useStageSpeechStore()
+      const one = vi.fn()
+      speech.observe(turn(say('Mira', 'Only.'), 'Mira'), null, one)
+      expect(one).toHaveBeenCalledTimes(1)
+      const none = vi.fn()
+      speech.observe(turn('The wind blows.', null), null, none)
+      expect(none).toHaveBeenCalledTimes(1)
+    })
+
+    it('is reported when the rest is shown at once, or the next turn cuts in', () => {
+      const speech = useStageSpeechStore()
+      const first = vi.fn()
+      speech.observe(turn(say('Mira', 'A.\n\nB.\n\nC.'), 'Mira'), null, first)
+      speech.revealAll()
+      expect(first).toHaveBeenCalledTimes(1)
+      const second = vi.fn()
+      speech.observe(turn(say('Mira', 'D.\n\nE.'), 'Mira'), null, second)
+      speech.observe(turn(say('Mira', 'F.'), 'Mira'))
+      expect(second).toHaveBeenCalledTimes(1)
+    })
+  })
+
   it('shows the rest of the turn at once on revealAll, and when the next turn comes', () => {
     const speech = useStageSpeechStore()
     speech.observe(turn(say('Mira', 'A.\n\nB.\n\nC.'), 'Mira'))

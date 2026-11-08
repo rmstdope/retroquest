@@ -109,6 +109,7 @@ function createMockBridge() {
     lastTurnHadArrivalScene: vi.fn((): boolean => false),
     getCommandCompletions: vi.fn((): CompletionTree => ({})),
     namesCharacter: vi.fn((): boolean => false),
+    itemNamed: vi.fn((): string | null => null),
   }
   // The tests script each kind of quest event with the three mocks above, one
   // payload per call, until null; settleQuests drains them like the engine.
@@ -139,6 +140,7 @@ function createMockBridge() {
     saveToSlot: vi.fn(() => 'Game saved.'),
     loadFromSlot: vi.fn(() => 'Game loaded.'),
     takeLoadedStory: vi.fn((): unknown => null),
+    pictureState: vi.fn(() => ({ roomKey: '', patchIds: [] as string[] })),
     controller: {
       ...controller,
       settleQuests: vi.fn(() => ({
