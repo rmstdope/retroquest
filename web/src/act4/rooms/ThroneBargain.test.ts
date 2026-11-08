@@ -51,7 +51,7 @@ describe('the Bargain', () => {
   it('is not offered before Malakar has been talked to', () => {
     const game = inThrone()
     expect(executeCommands(game, ['give amulet to malakar'])).toContain(
-      'Your mother and father told him no once, in a letter. It did not stop him.',
+      'You have not heard what I am offering.',
     )
     expect(game.state.getStoryFlag(FLAG_ACT4_THRONE_BARGAIN_SEEN)).toBe(false)
   })

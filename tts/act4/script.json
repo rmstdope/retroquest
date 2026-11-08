@@ -1030,6 +1030,21 @@
     "text": "Go on up. I will wait here with him. Someone should."
   },
   {
+    "id": "1330f4dffd94f6",
+    "speaker": "narrator",
+    "text": "The word goes through them the way their blades go through each other."
+  },
+  {
+    "id": "0508b1cf89cdf8",
+    "speaker": "narrator",
+    "text": "A long hall, so high the ceiling is lost. The echoes have softened to a murmur. By the stair to the east the knight kneels with his helm beside him, his grey cloak folded on the stone. Among the tattered banners, ghostly warriors still fight a battle that ended long ago. Sir Cedric stands by the south door, the way out at his back, his eyes on the knight."
+  },
+  {
+    "id": "0724162cd9d492",
+    "speaker": "sir cedric",
+    "text": "He gave that to you, not to me. Keep it. What he owed me he said to my face."
+  },
+  {
     "id": "060bd846ddb6e3",
     "speaker": "narrator",
     "text": "The echo stone hums more strongly now. Among the hall's voices one speaks clearly and without fear: the knight's, telling the truth."
@@ -1073,11 +1088,6 @@
     "id": "1212238ccabfa3",
     "speaker": "narrator",
     "text": "The Final Stand: The Knight of Despair was the stranger from Willowbrook. He fouled the well, framed Sir Cedric and let the king be taken, and he confessed it to Sir Cedric's face."
-  },
-  {
-    "id": "0508b1cf89cdf8",
-    "speaker": "narrator",
-    "text": "A long hall, so high the ceiling is lost. The echoes have softened to a murmur. By the stair to the east the knight kneels with his helm beside him, his grey cloak folded on the stone. Among the tattered banners, ghostly warriors still fight a battle that ended long ago. Sir Cedric stands by the south door, the way out at his back, his eyes on the knight."
   },
   {
     "id": "1fede627b89ee9",
@@ -1393,6 +1403,11 @@
     "id": "1234289ac6702e",
     "speaker": "narrator",
     "text": "The chamber is still now. The crystals have stopped whispering, and the floor lies flat and plain beneath your feet. The Sorceress sits by the open north arch; her staff lies across her knees, bare where the mask once sat."
+  },
+  {
+    "id": "18c1ed1ae8b20a",
+    "speaker": "mira",
+    "text": "Not with these hands. That was on Elena, and I burned the letter that asked me to come. Put it away."
   },
   {
     "id": "0ab8df02b81236",
@@ -1790,6 +1805,16 @@
     "text": "The lanterns hang dim and still now, their memories told. The room is quiet, the way a house is quiet after everyone has gone to sleep. To the north, the door to the throne room stands open."
   },
   {
+    "id": "00c73b4c50c196",
+    "speaker": "narrator",
+    "text": "Malakar's eyes go to the amulet, and stay on it a while."
+  },
+  {
+    "id": "0bade5fd75cacf",
+    "speaker": "malakar",
+    "text": "Not yet. You have not heard what I am offering."
+  },
+  {
     "id": "16aed33be01696",
     "speaker": "narrator",
     "text": "Throne Chamber"
@@ -1798,6 +1823,41 @@
     "id": "068215b2c648d4",
     "speaker": "narrator",
     "text": "A vast chamber under a broken dome. A throne of black stone, twisted like a root, stands at its head. Above a ritual circle King Alden hangs in a prison of crystal, and from his crown a thin thread of light bleeds into a rift in the air: the wound in time. Malakar stands beside it, grey and failing. The wound is killing him too."
+  },
+  {
+    "id": "0a4b6375bbb9f4",
+    "speaker": "elior",
+    "text": "aren"
+  },
+  {
+    "id": "08a5cb19e6422c",
+    "speaker": "malakar",
+    "text": "Aren told me no, and he was kind about it. That was the worst of it."
+  },
+  {
+    "id": "1130bee83a5dbc",
+    "speaker": "elior",
+    "text": "lysa"
+  },
+  {
+    "id": "13297ae2dbce0e",
+    "speaker": "malakar",
+    "text": "Lysa told me no, and she was not kind about it. I would give anything to hear it again."
+  },
+  {
+    "id": "1dbe3e1400bc90",
+    "speaker": "malakar",
+    "text": "I taught her her first spell. She will not thank me for it now."
+  },
+  {
+    "id": "10d343b34c4e1b",
+    "speaker": "malakar",
+    "text": "Patience is a thing you tell someone else to have."
+  },
+  {
+    "id": "0f43b271ae97a6",
+    "speaker": "narrator",
+    "text": "The amulet clicks against the crystal. Inside, the king does not stir, and his crown stays dark."
   },
   {
     "id": "0a0eadb15c1806",
@@ -2445,6 +2505,11 @@
     "text": "The Final Stand: Malakar is healed, and he looks up at you like a man waiting to be forgiven."
   },
   {
+    "id": "1d9e882a03550e",
+    "speaker": "narrator",
+    "text": "The light settles on the crystal and slides away. The king does not stir."
+  },
+  {
     "id": "1cffb979ea928d",
     "speaker": "narrator",
     "text": "The Final Stand: You forgave him, and forgiveness is yours now. The wound is still open."
@@ -2453,6 +2518,16 @@
     "id": "0cedbc37093123",
     "speaker": "narrator",
     "text": "Malakar is already forgiven. It is the wound that needs it."
+  },
+  {
+    "id": "1890802f972c92",
+    "speaker": "king alden",
+    "text": "Keep it, farmer. A king is forgiven by his kingdom, or not at all."
+  },
+  {
+    "id": "08f0c85a74b6f0",
+    "speaker": "king alden",
+    "text": "Keep it. My half of it has cost me enough."
   },
   {
     "id": "144b56bd00c67b",
@@ -2493,6 +2568,191 @@
     "id": "0a8e1f8fdbdc52",
     "speaker": "narrator",
     "text": "The king of Eldoria, alive, his crown bright again."
+  },
+  {
+    "id": "159311d1f4f401",
+    "speaker": "elior",
+    "text": "you knew"
+  },
+  {
+    "id": "0468d59091ed79",
+    "speaker": "grandmother",
+    "text": "I did. Every day of it. The bread will keep, and so will that."
+  },
+  {
+    "id": "0f4b153c2e756f",
+    "speaker": "elior",
+    "text": "i love you"
+  },
+  {
+    "id": "0992701d476dd5",
+    "speaker": "narrator",
+    "text": "She puts a floury hand against your cheek."
+  },
+  {
+    "id": "18c6291043882e",
+    "speaker": "grandmother",
+    "text": "Hush. I know you do."
+  },
+  {
+    "id": "0f2953c84de527",
+    "speaker": "elior",
+    "text": "welcome home"
+  },
+  {
+    "id": "18fa2a7277ceb5",
+    "speaker": "grandmother",
+    "text": "That is my line, dear. Welcome home."
+  },
+  {
+    "id": "0cedf43ffaef1e",
+    "speaker": "elior",
+    "text": "i forgive you"
+  },
+  {
+    "id": "1c80e603f98af3",
+    "speaker": "grandmother",
+    "text": "I did not ask it of you. I am glad of it, all the same."
+  },
+  {
+    "id": "006780e0a013e4",
+    "speaker": "elior",
+    "text": "you should have told me"
+  },
+  {
+    "id": "07f0babc49a9e3",
+    "speaker": "grandmother",
+    "text": "I should have. I promised her, and I should have told you anyway."
+  },
+  {
+    "id": "0689eae99168cf",
+    "speaker": "elior",
+    "text": "thank you"
+  },
+  {
+    "id": "0fd75b36c12cdb",
+    "speaker": "grandmother",
+    "text": "Tell me at the table, dear. The bread will keep."
+  },
+  {
+    "id": "0e74978a1f218f",
+    "speaker": "grandmother",
+    "text": "Later, dear. The field first."
+  },
+  {
+    "id": "1749132569b34f",
+    "speaker": "grandmother",
+    "text": "No, dear. That was never mine to hold, and it is not now."
+  },
+  {
+    "id": "12762d425f1e88",
+    "speaker": "grandmother",
+    "text": "Not mine, dear. Someone in that hedge has been looking at your pocket all morning."
+  },
+  {
+    "id": "182faf1fa35ee5",
+    "speaker": "mira",
+    "text": "I know what that costs. Thank you."
+  },
+  {
+    "id": "00ce761f125d5b",
+    "speaker": "mira",
+    "text": "I should have. I will not argue it with you, today or any other day."
+  },
+  {
+    "id": "0118dbe6a59af8",
+    "speaker": "elior",
+    "text": "parents"
+  },
+  {
+    "id": "1c3c2680d8e387",
+    "speaker": "mira",
+    "text": "Your father would have made a joke of this, and your mother would have laughed. I keep listening for it."
+  },
+  {
+    "id": "1ea121b2bccd2f",
+    "speaker": "elior",
+    "text": "malakar"
+  },
+  {
+    "id": "1d3ff076d4ec95",
+    "speaker": "mira",
+    "text": "Not at this gate, Elior. Ask me on a long walk."
+  },
+  {
+    "id": "0b7a40fff533ad",
+    "speaker": "elior",
+    "text": "amulet"
+  },
+  {
+    "id": "1a2c2997b90ac0",
+    "speaker": "mira",
+    "text": "It has done what they made it for. You can stop holding it like that."
+  },
+  {
+    "id": "072e396474f89e",
+    "speaker": "elior",
+    "text": "grandmother"
+  },
+  {
+    "id": "08cfb149e20ac8",
+    "speaker": "mira",
+    "text": "She has not sat down since you left. See if you can do better than I did."
+  },
+  {
+    "id": "109a5bd4116439",
+    "speaker": "mira",
+    "text": "Some words keep, Elior. Today, let them."
+  },
+  {
+    "id": "1e16542ca692bc",
+    "speaker": "mira",
+    "text": "Tell me tomorrow. There is time for that now."
+  },
+  {
+    "id": "19245661b4b43c",
+    "speaker": "mira",
+    "text": "That was on Elena. I burned the letter that asked me to come. Keep it, Elior. I do not need to hold it to remember."
+  },
+  {
+    "id": "153d636716a72c",
+    "speaker": "narrator",
+    "text": "He turns the badge to the light, and puts it back in your palm."
+  },
+  {
+    "id": "1d27b4d45781ae",
+    "speaker": "sir cedric",
+    "text": "I know whose that was. Keep it. I will not wear it, and I will not throw it in the ditch either."
+  },
+  {
+    "id": "067dd3307abf44",
+    "speaker": "narrator",
+    "text": "She closes your hand over the light before it reaches her."
+  },
+  {
+    "id": "16189a9d2135ee",
+    "speaker": "mira",
+    "text": "Not with a spell, Elior. Me you can just tell."
+  },
+  {
+    "id": "194ade1f1df208",
+    "speaker": "narrator",
+    "text": "The light settles on her apron and goes out."
+  },
+  {
+    "id": "025e02728dd8d2",
+    "speaker": "grandmother",
+    "text": "Oh, put that away, dear. I made my own bed."
+  },
+  {
+    "id": "03798c1314a5a5",
+    "speaker": "narrator",
+    "text": "The light stops short of him."
+  },
+  {
+    "id": "0b04ccff8fa8e9",
+    "speaker": "sir cedric",
+    "text": "I did not ask for that. What I forgive, I forgive on my own feet."
   },
   {
     "id": "1a1a07987c60a5",

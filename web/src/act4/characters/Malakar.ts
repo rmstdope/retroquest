@@ -87,6 +87,29 @@ function endingWordIn(words: string): EndingWord | null {
   return ENDING_WORDS.find((e) => affirms(words, e.words))?.ending ?? null
 }
 
+/** What he answers to the names and the word he carries, until the amulet opens. */
+const REMEMBERED: readonly { words: readonly string[]; answer: string }[] = [
+  {
+    words: ['aren'],
+    answer:
+      'Aren told me no, and he was kind about it. That was the worst of it.',
+  },
+  {
+    words: ['lysa'],
+    answer:
+      'Lysa told me no, and she was not kind about it. I would give anything ' +
+      'to hear it again.',
+  },
+  {
+    words: ['mira'],
+    answer: 'I taught her her first spell. She will not thank me for it now.',
+  },
+  {
+    words: ['patience'],
+    answer: 'Patience is a thing you tell someone else to have.',
+  },
+]
+
 /** What he answers once Elior has forgiven him and the wound is left. */
 const FORGIVEN = clue(
   'You have forgiven him. It is the wound that is waiting now.',
@@ -249,9 +272,10 @@ export class Malakar extends Character {
 
   /**
    * The refrain is the refusal; the words of the endings are heard once the
-   * elixir is used; any other word only gets a dim answer. Each is heard in
-   * a sentence too, unless it is denied ("I will never forgive you",
-   * "Justice? No.").
+   * elixir is used; the names he carries get his answer until the amulet
+   * opens; any other word gets what the stage allows (see `otherWords`). Each
+   * is heard in a sentence too, unless it is denied ("I will never forgive
+   * you", "Justice? No.").
    */
   override sayTo(gameState: GameState, words: string): string {
     const ending = endingPlayed(gameState)
@@ -262,7 +286,7 @@ export class Malakar extends Character {
       return this.endingWord(gameState, word)
     }
     if (!affirms(words, REFRAIN_WORDS)) {
-      return this.otherWords(gameState)
+      return this.rememberedName(gameState, words) ?? this.otherWords(gameState)
     }
     if (gameState.getStoryFlag(FLAG_ACT4_THRONE_REFRAIN_SAID)) {
       return '[dim]You have said it. Malakar heard.[/dim]'
@@ -374,6 +398,18 @@ export class Malakar extends Character {
     ].join('\n')
   }
 
+  /** His answer to a name he carries, until the amulet opens; else null. */
+  private rememberedName(gameState: GameState, words: string): string | null {
+    if (
+      gameState.getStoryFlag(FLAG_ACT4_THRONE_AMULET_OPENED) ||
+      this.choiceMade(gameState)
+    ) {
+      return null
+    }
+    const answer = REMEMBERED.find((e) => affirms(words, e.words))?.answer
+    return answer ? dialogue(this.name, answer) : null
+  }
+
   /** What he answers to words that are not the refrain. */
   private otherWords(gameState: GameState): string {
     if (gameState.getStoryFlag(FLAG_ACT4_ELIXIR_ON_MALAKAR)) {
@@ -386,6 +422,9 @@ export class Malakar extends Character {
     }
     if (gameState.getStoryFlag(FLAG_ACT4_THRONE_AMULET_OPENED)) {
       return '[dim]Malakar does not answer. He is staring at the open amulet.[/dim]'
+    }
+    if (gameState.getStoryFlag(FLAG_ACT4_THRONE_REFRAIN_SAID)) {
+      return dialogue(this.name, 'Then show me what they left you.')
     }
     return (
       `${characterName(this.name)} waits. Your mother and father told him ` +
@@ -450,15 +489,21 @@ export class Malakar extends Character {
   }
 
   /**
-   * The amulet given to him by hand. After the offer and before the refrain
-   * it accepts the offer and plays the Bargain once (then a dim line);
-   * otherwise he only waits, as for any other words.
+   * The amulet given to him by hand. Before his offer he holds it off; after
+   * the offer and before the refrain it accepts the offer and plays the
+   * Bargain once (then a dim line); otherwise he answers as for any other
+   * words.
    */
   private amuletGiven(gameState: GameState): string {
-    const open =
-      gameState.getStoryFlag(FLAG_ACT4_THRONE_OFFER_HEARD) &&
-      !gameState.getStoryFlag(FLAG_ACT4_THRONE_REFRAIN_SAID)
-    if (!open) return this.otherWords(gameState)
+    if (!gameState.getStoryFlag(FLAG_ACT4_THRONE_OFFER_HEARD)) {
+      return [
+        "Malakar's eyes go to the amulet, and stay on it a while.",
+        dialogue(this.name, 'Not yet. You have not heard what I am offering.'),
+      ].join('\n')
+    }
+    if (gameState.getStoryFlag(FLAG_ACT4_THRONE_REFRAIN_SAID)) {
+      return this.otherWords(gameState)
+    }
     if (gameState.getStoryFlag(FLAG_ACT4_THRONE_BARGAIN_SEEN)) {
       return '[dim]Malakar does not reach for it. He has seen what it will not do.[/dim]'
     }

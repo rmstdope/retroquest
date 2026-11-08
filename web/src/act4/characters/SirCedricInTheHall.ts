@@ -1,9 +1,10 @@
-import { Character, type GameState, dialogue } from '@/engine'
+import { Character, type GameState, type Item, dialogue } from '@/engine'
 import {
   FLAG_ACT4_CEDRIC_FORGAVE,
   FLAG_ACT4_KNIGHT_OF_DESPAIR_COMPLETED,
   FLAG_ACT4_KNIGHT_SEEN_THROUGH,
 } from '../Act4StoryFlags'
+import { KnightsRedemption } from '../items/KnightsRedemption'
 import { CEDRIC_ON_STAIR } from '../rooms/hallDescriptions'
 
 /**
@@ -53,6 +54,18 @@ export class SirCedricInTheHall extends Character {
       this.name,
       "That voice. I have heard it before, Elior, on the king's walls. I " +
         'would swear to it. I cannot see the face that goes with it.',
+    )
+  }
+
+  /** The knight's badge went to Elior, and he leaves it there. */
+  override giveItem(gameState: GameState, item: Item): string {
+    if (!(item instanceof KnightsRedemption)) {
+      return super.giveItem(gameState, item)
+    }
+    return dialogue(
+      this.name,
+      'He gave that to you, not to me. Keep it. What he owed me he said to ' +
+        'my face.',
     )
   }
 }

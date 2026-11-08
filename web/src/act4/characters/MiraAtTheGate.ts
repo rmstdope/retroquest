@@ -1,8 +1,9 @@
-import { Character, type GameState, dialogue } from '@/engine'
+import { Character, type GameState, type Item, dialogue } from '@/engine'
 import {
   FLAG_ACT4_SHATTERED_WARD_GUARDIANS_COMPLETED,
   FLAG_ACT4_WHISPERS_MIRA_NAMED,
 } from '../Act4StoryFlags'
+import { SorceressTruth } from '../items/SorceressTruth'
 
 /** What Mira says while the violet wall stands. */
 const WALL_UP_LINE =
@@ -50,5 +51,17 @@ export class MiraAtTheGate extends Character {
       return dialogue(this.name, TOWER_LINE)
     }
     return dialogue(this.name, WALL_DOWN_LINE)
+  }
+
+  /** Her hands are too unsteady for the Sorceress's mask, and she knows whose it was. */
+  override giveItem(gameState: GameState, item: Item): string {
+    if (!(item instanceof SorceressTruth)) {
+      return super.giveItem(gameState, item)
+    }
+    return dialogue(
+      this.name,
+      'Not with these hands. That was on Elena, and I burned the letter ' +
+        'that asked me to come. Put it away.',
+    )
   }
 }

@@ -1,9 +1,18 @@
-import { Character, type GameState, characterName, dialogue } from '@/engine'
+import {
+  Character,
+  type GameState,
+  type Item,
+  affirms,
+  characterName,
+  dialogue,
+  speech,
+} from '@/engine'
 import {
   FLAG_ACT4_ELENA_MESSAGE_HEARD,
   FLAG_ACT4_MALAKAR_MESSAGE_HEARD,
 } from '../Act4StoryFlags'
 import { endingPlayed, type Ending } from '../endings'
+import { SorceressTruth } from '../items/SorceressTruth'
 
 /** What Elior tells Mira and what she answers, by ending. */
 const LINES: Record<Ending, [string, string]> = {
@@ -36,6 +45,40 @@ const ELENA_TOLD =
 const ELENA_ANSWER =
   'Elena. I am going back through Greendale; I owe Lyria an answer to a ' +
   'letter. I will tell her.'
+
+/** What she answers to what Act III taught Elior to say to her. */
+const ANSWERS: readonly { words: readonly string[]; answer: string }[] = [
+  {
+    words: ['forgive', 'forgiven', 'forgave'],
+    answer: 'I know what that costs. Thank you.',
+  },
+  {
+    words: ['should have told', 'should have said'],
+    answer:
+      'I should have. I will not argue it with you, today or any other day.',
+  },
+  {
+    words: ['parents', 'mother', 'father', 'aren', 'lysa'],
+    answer:
+      'Your father would have made a joke of this, and your mother would ' +
+      'have laughed. I keep listening for it.',
+  },
+  {
+    words: ['malakar'],
+    answer: 'Not at this gate, Elior. Ask me on a long walk.',
+  },
+  {
+    words: ['amulet'],
+    answer:
+      'It has done what they made it for. You can stop holding it like that.',
+  },
+  {
+    words: ['grandmother'],
+    answer:
+      'She has not sat down since you left. See if you can do better than ' +
+      'I did.',
+  },
+]
 
 /**
  * Mira in Willowbrook Field: her line follows the ending, and the first talk
@@ -70,5 +113,31 @@ export class Mira extends Character {
       lines.push(ELENA_TOLD, dialogue('Mira', ELENA_ANSWER))
     }
     return lines.join('\n')
+  }
+
+  /** What Act III taught him to say gets her answer; the rest keeps. */
+  override sayTo(gameState: GameState, words: string): string {
+    const answer = ANSWERS.find((entry) => affirms(words, entry.words))?.answer
+    return answer ? dialogue('Mira', answer) : super.sayTo(gameState, words)
+  }
+
+  /** Anything else said to her can wait until tomorrow. */
+  protected override unknownWordAnswers(): readonly string[] {
+    return [
+      speech('Some words keep, Elior. Today, let them.'),
+      speech('Tell me tomorrow. There is time for that now.'),
+    ]
+  }
+
+  /** She looks at the Sorceress's mask, and gives it back. */
+  override giveItem(gameState: GameState, item: Item): string {
+    if (!(item instanceof SorceressTruth)) {
+      return super.giveItem(gameState, item)
+    }
+    return dialogue(
+      'Mira',
+      'That was on Elena. I burned the letter that asked me to come. Keep ' +
+        'it, Elior. I do not need to hold it to remember.',
+    )
   }
 }

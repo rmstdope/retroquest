@@ -2,11 +2,15 @@ import { describe, it, expect } from 'vitest'
 import { Game } from '@/engine'
 import { Act4 } from '../Act4'
 import {
+  FLAG_ACT4_ELIXIR_ON_KING,
   FLAG_ACT4_JUSTICE_ENDING,
   FLAG_ACT4_REDEMPTION_ENDING,
   FLAG_ACT4_SACRIFICE_ENDING,
 } from '../Act4StoryFlags'
 import { KingAlden } from './KingAlden'
+import { AncientAmulet } from '../items/AncientAmulet'
+import { LifelightElixir } from '../items/LifelightElixir'
+import { executeCommands, expectNoStockReply } from '@/testing/gameHelpers'
 
 /** How he looks in the crystal: weeks there, not years (the Settled Timeline). */
 const IN_THE_CRYSTAL =
@@ -46,5 +50,40 @@ describe('King Alden', () => {
     const restored =
       loaded.state.allRooms.ThroneChamber.getCharacterByName('King Alden')
     expect(restored?.examine(loaded.state)).toBe(IN_THE_CRYSTAL)
+  })
+  /** A game in the Throne Chamber with the amulet and the elixir in hand. */
+  function inThrone(): Game {
+    const act = new Act4()
+    act.musicFile = ''
+    const game = new Game([act])
+    game.state.currentRoom = game.state.allRooms.ThroneChamber
+    game.state.inventory.push(new AncientAmulet(), new LifelightElixir())
+    return game
+  }
+
+  it('cannot take the elixir while he hangs in the crystal', () => {
+    const game = inThrone()
+    const answer = executeCommands(game, [
+      'give lifelight elixir to king alden',
+    ])
+    expect(answer).toContain('the king inside does not stir')
+    expectNoStockReply(answer)
+    expect(game.state.getStoryFlag(FLAG_ACT4_ELIXIR_ON_KING)).toBe(false)
+  })
+
+  it('cannot take the amulet in the crystal, and refuses it awake', () => {
+    const asleep = executeCommands(inThrone(), [
+      'give ancient amulet to king alden',
+    ])
+    expect(asleep).toContain('The amulet clicks against the crystal.')
+    expectNoStockReply(asleep)
+    const game = inThrone()
+    game.state.setStoryFlag(FLAG_ACT4_ELIXIR_ON_KING, true)
+    const awake = executeCommands(game, ['give ancient amulet to king alden'])
+    expect(awake).toContain('My half of it has cost me enough.')
+    expectNoStockReply(awake)
+    expect(game.state.inventory.some((i) => i instanceof AncientAmulet)).toBe(
+      true,
+    )
   })
 })
