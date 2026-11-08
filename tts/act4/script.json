@@ -605,6 +605,16 @@
     "text": "Your sight sharpens, and the gloom peels away from the knight. His grey cloak is a traveller's, hooded and road-worn, and its clasp bears a twisted rune you know: the rune on the token that fouled Willowbrook's well, and the seal on the secret documents that cleared Sir Cedric's name. This is the cloaked stranger the villagers whispered about. Behind the visor, the knight is weeping."
   },
   {
+    "id": "15b327c013bbc3",
+    "speaker": "narrator",
+    "text": "Quest updated"
+  },
+  {
+    "id": "0294961bad1c86",
+    "speaker": "narrator",
+    "text": "You have seen something of the knight, but not all of him. There is more in this hall to see through."
+  },
+  {
     "id": "08565965780620",
     "speaker": "narrator",
     "text": "Your sight sharpens, and the grime slides from the banners. Beneath it is the sigil of the gate company of King Alden's guard, and the same sigil shows through the tarnish on the knight's breastplate. He served the king before he ever served Malakar."
@@ -623,6 +633,11 @@
     "id": "14fa8ae321409c",
     "speaker": "narrator",
     "text": "It is the knight's voice."
+  },
+  {
+    "id": "0114fc2c33311e",
+    "speaker": "narrator",
+    "text": "When you face him, the knight's despair rolls over you like cold water, and nothing stands between you and it."
   },
   {
     "id": "12d42e42f3fd34",
@@ -850,6 +865,11 @@
     "text": "The grey cloak, the twisted rune at its clasp, the tears behind the visor. The cloaked stranger from Willowbrook stands before you, and he knows you have seen him."
   },
   {
+    "id": "0b837bfd3596d0",
+    "speaker": "narrator",
+    "text": "The Knight of Despair: You have seen something of the knight, but not all of him. There is more in this hall to see through."
+  },
+  {
     "id": "0fa78831a2c19d",
     "speaker": "narrator",
     "text": "You open your mouth, and the knight's despair rolls over you like cold water. The word dies in your throat. You could not say it with nothing between you and his sorrow."
@@ -860,9 +880,24 @@
     "text": "So you see me. Then you know what I am, and what I have done. There is no redemption for a man like me. Do not waste the word."
   },
   {
+    "id": "143723eccd416b",
+    "speaker": "narrator",
+    "text": "The Knight of Despair: When you face him, the knight's despair rolls over you like cold water, and nothing stands between you and it."
+  },
+  {
+    "id": "14f5c7813989d5",
+    "speaker": "narrator",
+    "text": "His despair cannot reach you now. He is still waiting for the word the stone keeps saying."
+  },
+  {
     "id": "08ca98bf759edb",
     "speaker": "narrator",
     "text": "The chain is already lit. His sorrow does not reach you."
+  },
+  {
+    "id": "10acd824b7f251",
+    "speaker": "narrator",
+    "text": "The Knight of Despair: His despair cannot reach you now. He is still waiting for the word the stone keeps saying."
   },
   {
     "id": "07c7c25420e109",
@@ -943,11 +978,6 @@
     "id": "13f8af4a65ac54",
     "speaker": "narrator",
     "text": "Light that reminds a fallen soul of who it was."
-  },
-  {
-    "id": "15b327c013bbc3",
-    "speaker": "narrator",
-    "text": "Quest updated"
   },
   {
     "id": "1f6342040d8adc",
@@ -1070,6 +1100,11 @@
     "text": "You search around the Tower of Shadows, but find nothing of interest beyond what you can already see."
   },
   {
+    "id": "04d34c31df2d2a",
+    "speaker": "narrator",
+    "text": "The Final Stand: The whispers on the stair say that no one stayed with you. You know better, and so did Mira at the gate."
+  },
+  {
     "id": "1d0adb6b8b53f2",
     "speaker": "elior",
     "text": "mira"
@@ -1083,6 +1118,11 @@
     "id": "06815a213b6118",
     "speaker": "mira",
     "text": "I'm at the gate, Elior. I said I'd hold it, and I'm holding it."
+  },
+  {
+    "id": "08e838a7259369",
+    "speaker": "narrator",
+    "text": "The Final Stand: The whispers falter at the name of every friend who stayed. They are thinner now, but they still hold the stair."
   },
   {
     "id": "175bfe7b94cfea",
@@ -1225,6 +1265,11 @@
     "text": "The Sorceress of Lies: At the top of the tower the Sorceress of Lies holds court, and the mask on her staff is the mark from Elena's wrist. Listen past her lies, to what is under them."
   },
   {
+    "id": "04ffe295911b03",
+    "speaker": "narrator",
+    "text": "She laughed at the knight's badge, but it reached her. No one has ever understood a word she said, she says."
+  },
+  {
     "id": "10c09aa84a67a4",
     "speaker": "narrator",
     "text": "You cannot answer a pain you cannot hear. Beneath the whispers her heart is saying something, too quietly for ears alone."
@@ -1238,6 +1283,11 @@
     "id": "106fa50b4aa78f",
     "speaker": "sorceress of lies",
     "text": "He turned? Then he is a fool. Everyone lies, little Elior. No one has ever understood a word I said. Why would you be the first?"
+  },
+  {
+    "id": "0afe6c32f37880",
+    "speaker": "narrator",
+    "text": "The Sorceress of Lies: She laughed at the knight's badge, but it reached her. No one has ever understood a word she said, she says."
   },
   {
     "id": "10ef4a1741c54a",
@@ -1255,6 +1305,11 @@
     "text": "You have heard some of her, but not all. There is more in this chamber that is hers to listen to."
   },
   {
+    "id": "089e77fbedf0fa",
+    "speaker": "narrator",
+    "text": "The Sorceress of Lies: You have heard some of her, but not all. There is more in this chamber that is hers to listen to."
+  },
+  {
     "id": "15eecc55d73dff",
     "speaker": "narrator",
     "text": "You listen, and beneath the mask's smile there is something small and lonely. It was made to be looked at, and no one ever looked at it. Only away."
@@ -1263,6 +1318,16 @@
     "id": "04ac5d16815912",
     "speaker": "narrator",
     "text": "You listen to the crystals, and the whispers are not many voices. They are one: hers, repeating every lie she has ever told so that she never has to hear the silence."
+  },
+  {
+    "id": "0b695fedb50036",
+    "speaker": "narrator",
+    "text": "She told you no one has ever understood a word she said. You could be the first."
+  },
+  {
+    "id": "0f6ca86e849d7f",
+    "speaker": "narrator",
+    "text": "The Sorceress of Lies: She told you no one has ever understood a word she said. You could be the first."
   },
   {
     "id": "05fbde77bcb93f",
@@ -1440,6 +1505,11 @@
     "text": "The Shadow of the Past: Among the broken memories a shadow reaches for scenes it cannot hold. Mend what it has lost, and learn whose voice it is."
   },
   {
+    "id": "071eaadfae25bf",
+    "speaker": "narrator",
+    "text": "The orbs are whole, and the Shadow has a face. It was Malakar once, the part of him that remembered why he began. It says it has no hope left."
+  },
+  {
     "id": "02c40d0b8db956",
     "speaker": "narrator",
     "text": "The Shadow of the Past shakes its head."
@@ -1495,6 +1565,16 @@
     "text": "A man made of shadow, almost solid now. His face is kind and very tired. You have never seen it before, and you know it all the same."
   },
   {
+    "id": "11c02927873fc9",
+    "speaker": "narrator",
+    "text": "The Shadow of the Past: The orbs are whole, and the Shadow has a face. It was Malakar once, the part of him that remembered why he began. It says it has no hope left."
+  },
+  {
+    "id": "1176e73e4e700e",
+    "speaker": "narrator",
+    "text": "The Shadow turned the mask over and gave it back. If she could choose the truth, perhaps he can too. Its words are still waiting for an answer: Be patient where I was not."
+  },
+  {
     "id": "0fdb269ac2ad82",
     "speaker": "narrator",
     "text": "The Shadow has seen the mask. It is enough."
@@ -1503,6 +1583,11 @@
     "id": "0e4a57b9bad68f",
     "speaker": "shadow of the past",
     "text": "The Phoenix asked me once what wisdom is when time is short. I gave it the right answer. Then the fever came, and I did not keep it."
+  },
+  {
+    "id": "0ce71c462bf852",
+    "speaker": "narrator",
+    "text": "The Shadow of the Past: The Shadow turned the mask over and gave it back. If she could choose the truth, perhaps he can too. Its words are still waiting for an answer: Be patient where I was not."
   },
   {
     "id": "0831696dffba1a",
