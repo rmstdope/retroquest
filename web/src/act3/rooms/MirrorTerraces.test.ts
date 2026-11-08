@@ -93,12 +93,11 @@ describe('Mirror Terraces', () => {
       game.state.setStoryFlag(FLAG_ACT3_MIRRORS_MENDED, true)
 
       expect(room.rest(game.state)).toBe(
-        '[success]You settle on the warm stone and let the hours pass. The ' +
-          'sun climbs until it stands squarely over the terraces. When the ' +
-          "sun's beams strike the great mirror they are coaxed and folded " +
-          'together until they pour from the terraces as a single, piercing ' +
-          'ray. The light lances into the mountainside, strikes a hidden ' +
-          'trigger, and a narrow passage grinds open to the east.[/success]',
+        '[success]You settle on the warm stone and let the hours pass. ' +
+          'The sun climbs until it stands squarely over the terraces. ' +
+          'The great mirror catches it and throws one beam into the mountainside. ' +
+          'Something gives inside the rock, ' +
+          'and a narrow passage grinds open to the east.[/success]',
       )
       expect(
         game.state.getStoryFlag(FLAG_ACT3_MIRRORS_OF_EMBER_LIGHT_COMPLETED),
