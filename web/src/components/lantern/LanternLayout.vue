@@ -2022,7 +2022,7 @@ watch(
 .lq-sideways .lq-stage-plate {
   top: 8px;
   left: 56px;
-  max-width: min(360px, 46%);
+  max-width: min(360px, 38%);
 }
 /* The plate is one compact row on a phone: smaller name and chips, so the words keep their room. */
 .lq-sideways .lq-stage-plate {

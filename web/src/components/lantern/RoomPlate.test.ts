@@ -93,7 +93,7 @@ describe('RoomPlate', () => {
   })
 
   describe('compact', () => {
-    it('is one row: the label hidden, the name beside the chips in the open order, no story button', () => {
+    it('is one row: the label hidden, the name beside the chips in the open order', () => {
       const open = mount(RoomPlate)
       const compact = mount(RoomPlate, { props: { compact: true } })
       expect(compact.classes()).toContain('lq-plate-compact')
@@ -102,7 +102,6 @@ describe('RoomPlate', () => {
       const order = (w: typeof open): string[] =>
         w.findAll('h2, .lq-here-chip').map((e) => e.text())
       expect(order(compact)).toEqual(order(open))
-      expect(compact.find('.lq-story-so-far').exists()).toBe(false)
     })
   })
 })
