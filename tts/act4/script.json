@@ -380,9 +380,9 @@
     "text": "The captain stares through you. His hands do not close on it, and you keep it."
   },
   {
-    "id": "0554374320630e",
+    "id": "15a20562d058a1",
     "speaker": "narrator",
-    "text": "The light warms your hands. Across the courtyard, one of the servants stops walking and turns towards it."
+    "text": "The servants stop their circling and gather to look at the guardian's essence. One reaches out, but does not touch. They know what it is, and what it cost. For the first time, they look at you instead of through you."
   },
   {
     "id": "13105e814facd1",
@@ -425,9 +425,9 @@
     "text": "The Trapped Servants: The king's servants walk the courtyard in chains of shadow. Win their trust, and break the chains."
   },
   {
-    "id": "15a20562d058a1",
+    "id": "1e5acbb7f2261f",
     "speaker": "narrator",
-    "text": "The servants stop their circling and gather to look at the guardian's essence. One reaches out, but does not touch. They know what it is, and what it cost. For the first time, they look at you instead of through you."
+    "text": "The servants already know you. They watch you, and wait."
   },
   {
     "id": "19ae551fa5f73e",
@@ -663,6 +663,11 @@
     "id": "0fceec43484c31",
     "speaker": "narrator",
     "text": "A small blue crystal on a fine chain, from the freed servants. When you hold it, it feels as if someone is standing just behind you, ready to point the way."
+  },
+  {
+    "id": "1920b2057e5a9b",
+    "speaker": "narrator",
+    "text": "The servants look at the light, and then at their ankles, where the chains were."
   },
   {
     "id": "060072baa59d6e",

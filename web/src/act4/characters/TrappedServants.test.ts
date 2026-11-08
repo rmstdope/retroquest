@@ -5,6 +5,8 @@ import {
   FLAG_ACT4_SERVANTS_FREED,
   FLAG_ACT4_SERVANTS_TRUST_EARNED,
 } from '../Act4StoryFlags'
+import { GuardiansEssence } from '../items/GuardiansEssence'
+import { ServantsPendant } from '../items/ServantsPendant'
 import { TrappedServants } from './TrappedServants'
 import {
   expectDialogueSpeaker,
@@ -42,6 +44,32 @@ describe('TrappedServants', () => {
     expect(answer).not.toContain('Prove your courage')
     expectDialogueSpeaker(answer, SPEAKER)
     expectMarkupWellFormed(answer)
+  })
+
+  it("trust the player who offers them the guardian's essence, and leave it in hand", () => {
+    const game = createGameInCourtyard()
+    game.state.inventory.push(new GuardiansEssence())
+
+    const answer = game.commandParser.parse(
+      "give guardian's essence to servants",
+    )
+
+    expect(answer).toContain('For the first time, they look at you')
+    expect(game.state.getStoryFlag(FLAG_ACT4_SERVANTS_TRUST_EARNED)).toBe(true)
+    expect(game.state.hasItem("Guardian's Essence")).toBe(true)
+    expectMarkupWellFormed(answer)
+  })
+
+  it('are not interested in anything else they are offered', () => {
+    const game = createGameInCourtyard()
+    game.state.inventory.push(new ServantsPendant())
+
+    const answer = game.commandParser.parse(
+      "give servant's pendant to servants",
+    )
+
+    expect(answer).toContain("don't seem interested")
+    expect(game.state.getStoryFlag(FLAG_ACT4_SERVANTS_TRUST_EARNED)).toBe(false)
   })
 
   it('asks for compassion once trust is earned', () => {

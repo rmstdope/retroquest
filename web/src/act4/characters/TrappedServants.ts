@@ -1,6 +1,7 @@
 import {
   Character,
   type GameState,
+  type Item,
   characterName,
   speech,
   type NameOptions,
@@ -10,6 +11,7 @@ import {
   FLAG_ACT4_SERVANTS_TRUST_EARNED,
   FLAG_ACT4_SERVANTS_FREED,
 } from '../Act4StoryFlags'
+import { GuardiansEssence } from '../items/GuardiansEssence'
 
 /** What the servants are called once their chains are broken. */
 const FREED_SERVANTS_NAME = 'Freed Servants'
@@ -55,6 +57,14 @@ export class TrappedServants extends Character {
   /** The servants are freed: they stay in the courtyard under a new name. */
   free(): void {
     this.name = FREED_SERVANTS_NAME
+  }
+
+  /** Offered the guardian's essence, they look at it; they will not take it. */
+  override giveItem(gameState: GameState, item: Item): string {
+    if (item instanceof GuardiansEssence) {
+      return item.useOnCharacter(gameState, this)
+    }
+    return super.giveItem(gameState, item)
   }
 
   /** In chains while trapped; once freed, at rest by the fountains. */
