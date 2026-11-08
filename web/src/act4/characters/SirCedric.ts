@@ -1,8 +1,15 @@
-import { Character, type GameState, dialogue, effect } from '@/engine'
+import {
+  Character,
+  type GameState,
+  type Item,
+  dialogue,
+  effect,
+} from '@/engine'
 import {
   FLAG_ACT4_CAPTAIN_APOLOGY_HEARD,
   FLAG_ACT4_CEDRIC_FORGAVE,
 } from '../Act4StoryFlags'
+import { KnightsRedemption } from '../items/KnightsRedemption'
 
 const OLD_LINE =
   'I have walked a long way beside you. This is a good place to stop.'
@@ -71,5 +78,20 @@ export class SirCedric extends Character {
       dialogue('Sir Cedric', OLD_LINE),
     )
     return lines.join('\n')
+  }
+
+  /** He knows the knight's badge, and hands it back. */
+  override giveItem(gameState: GameState, item: Item): string {
+    if (!(item instanceof KnightsRedemption)) {
+      return super.giveItem(gameState, item)
+    }
+    return [
+      'He turns the badge to the light, and puts it back in your palm.',
+      dialogue(
+        'Sir Cedric',
+        'I know whose that was. Keep it. I will not wear it, and I will not ' +
+          'throw it in the ditch either.',
+      ),
+    ].join('\n')
   }
 }

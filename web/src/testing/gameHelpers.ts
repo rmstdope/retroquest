@@ -222,3 +222,14 @@ export function expectNoSpeechOutsideDialogue(text: string): void {
     `speech outside dialogue in: ${text}`,
   ).toBe(false)
 }
+
+/** The answer is not one of the engine's stock replies to words, gifts or spells. */
+export function expectNoStockReply(answer: string): void {
+  for (const stock of [
+    "don't seem to understand",
+    'seem interested in',
+    'answers the spell',
+  ]) {
+    expect(answer, `stock reply in: ${answer}`).not.toContain(stock)
+  }
+}

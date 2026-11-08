@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest'
+import { EchoStone } from '../items/EchoStone'
 import { Game, type Character } from '@/engine'
 import { Act4 } from '../Act4'
 import { CaptainOfTheGuard } from './CaptainOfTheGuard'
@@ -7,6 +8,7 @@ import { Grandmother } from './Grandmother'
 import { KingAlden } from './KingAlden'
 import { KnightOfDespair } from './KnightOfDespair'
 import { Malakar } from './Malakar'
+import { MemoryEchoes } from './MemoryEchoes'
 import { Mira } from './Mira'
 import { Nyx } from './Nyx'
 import { ShadowOfThePast } from './ShadowOfThePast'
@@ -29,6 +31,7 @@ describe.each([
   ['Captain of the Guard', false, (): Character => new CaptainOfTheGuard()],
   ['ghostly warriors', true, (): Character => new GhostlyWarriors()],
   ['Knight of Despair', false, (): Character => new KnightOfDespair()],
+  ['memory echoes of Aren and Lysa', true, (): Character => new MemoryEchoes()],
   ['Shadow', false, (): Character => new ShadowOfThePast()],
   ['Sorceress of Lies', false, (): Character => new SorceressOfLies()],
   ['trapped servants', true, (): Character => new TrappedServants()],
@@ -83,15 +86,16 @@ describe('a group character in a default reply', () => {
     )
   })
 
-  it('reads "the ghostly warriors" when spoken to once they fill the hall', () => {
+  it('opens with "The ghostly warriors" when offered something once they fill the hall', () => {
     const act = new Act4()
     act.musicFile = ''
     const game = new Game([act])
     game.state.currentRoom = game.state.allRooms.HallOfEchoes
     game.state.currentRoom.addCharacter(new GhostlyWarriors())
+    game.state.inventory.push(new EchoStone())
 
-    expect(game.commandParser.parse('say hello to warriors')).toContain(
-      'to the [character_name]ghostly warriors[/character_name]',
+    expect(game.commandParser.parse('give echo stone to warriors')).toContain(
+      'The [character_name]ghostly warriors[/character_name] don',
     )
   })
 

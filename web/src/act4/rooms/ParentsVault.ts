@@ -3,6 +3,7 @@ import {
   FLAG_ACT4_PARENTS_LEGACY_COMPLETED,
   FLAG_ACT4_PARENTS_LEGACY_STARTED,
 } from '../Act4StoryFlags'
+import { MemoryEchoes } from '../characters/MemoryEchoes'
 import { Memories } from '../items/Memories'
 import { PARENTS_VAULT_BEFORE } from './vaultDescriptions'
 
@@ -17,9 +18,16 @@ export class ParentsVault extends Room {
       name: "Parents' Vault",
       description: PARENTS_VAULT_BEFORE,
       items: [new Memories()],
-      characters: [],
+      characters: [new MemoryEchoes()],
       exits: { west: 'MemoryVault', north: 'ThroneChamber' },
     })
+  }
+
+  /** Saves from before Aren and Lysa could be addressed get them back. */
+  override refreshSavedText(_gameState: GameState): void {
+    if (!this.characters.some((c) => c instanceof MemoryEchoes)) {
+      this.addCharacter(new MemoryEchoes())
+    }
   }
 
   /** Entering the vault starts The Parents' Legacy. */
