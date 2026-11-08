@@ -290,13 +290,13 @@ describe('The Shadow of the Past', () => {
     reload(game)
     expectStoryFlag(game.state, FLAG_ACT4_PARENTS_LEGACY_STARTED, true)
     expect(game.state.activatedQuests.map((q) => q.name)).toContain(
-      "The Parent's Legacy",
+      "The Parents' Legacy",
     )
     expect(executeCommands(game, ['go north'])).toContain(NORTH_SHUT)
   })
 })
 
-describe("The Parent's Legacy", () => {
+describe("The Parents' Legacy", () => {
   /** A game with the door open and Elior inside the Parents' Vault. */
   function inParentsVault(): Game {
     const game = answered()
@@ -308,7 +308,7 @@ describe("The Parent's Legacy", () => {
     const game = inParentsVault()
     expectStoryFlag(game.state, FLAG_ACT4_PARENTS_LEGACY_STARTED, true)
     expect(game.state.activatedQuests.map((q) => q.name)).toContain(
-      "The Parent's Legacy",
+      "The Parents' Legacy",
     )
     expect(game.state.currentRoom.description).toContain(
       'the saddest and warmest room in the fortress.',
@@ -331,7 +331,7 @@ describe("The Parent's Legacy", () => {
       expect(next, line).toBeGreaterThan(at)
       at = next
     }
-    expectQuestCompleted(game.state, "The Parent's Legacy")
+    expectQuestCompleted(game.state, "The Parents' Legacy")
     expectStoryFlag(game.state, FLAG_ACT4_PARENTS_LEGACY_COMPLETED, true)
     expect(game.state.currentRoom.description).toContain(
       'The lanterns hang dim and still now',
