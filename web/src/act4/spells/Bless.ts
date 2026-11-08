@@ -2,11 +2,14 @@ import {
   Spell,
   type Character,
   type GameState,
+  type Item,
   characterName,
   clue,
 } from '@/engine'
 import { TrappedServants } from '../characters/TrappedServants'
 import { KingAlden } from '../characters/KingAlden'
+import { Guardians } from '../items/Guardians'
+import { FortressGates } from '../rooms/FortressGates'
 import { FLAG_ACT4_ELIXIR_ON_KING } from '../Act4StoryFlags'
 import { endingPlayed } from '../endings'
 
@@ -39,6 +42,15 @@ export class Bless extends Spell {
       'You channel divine energy, filling the area with warm, golden ' +
       'light, but there is nothing here that responds to the blessing.'
     )
+  }
+
+  /** Bless on the guardians at the gates answers in-world; any other item keeps the engine's refusal. */
+  override castOnItem(gameState: GameState, targetItem: Item): string {
+    const room = gameState.currentRoom
+    if (targetItem instanceof Guardians && room instanceof FortressGates) {
+      return room.blessGuardians(gameState)
+    }
+    return super.castOnItem(gameState, targetItem)
   }
 
   /** Cast bless on a character: the servants through the courtyard, the king in or out of his crystal, anyone else a brief glow. */

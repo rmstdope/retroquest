@@ -40,6 +40,13 @@ const SCENE = [
   'It was the opposite. They gave themselves away to save you. You are sure now.',
 ]
 
+const REVEAL =
+  'I was Malakar, once. Not the one in the throne room. The part of him that remembered why he began. When he tore the wound, he left me behind. I have called to you since you were small.'
+const SENTENCE =
+  'The same words, every time. You caught pieces. Hear them whole. Be patient where I was not. Close what I opened, and let them rest.'
+const PHOENIX =
+  'The Phoenix asked me once what wisdom is when time is short. I gave it the right answer. Then the fever came, and I did not keep it.'
+
 const MUTE = "The shadow's lips move, but the vault swallows the sound."
 const WAITS = 'The Shadow waits, as it has waited for years.'
 const NOT_MENDED_PATIENCE =
@@ -176,6 +183,7 @@ describe('The Shadow of the Past', () => {
     expect(executeCommands(game, ["use sorceress's truth"])).toContain(
       'The Shadow has seen the mask. It is enough.',
     )
+    expect(executeCommands(game, ['talk to shadow'])).toContain(REVEAL)
     expect(executeCommands(game, ['talk to shadow'])).toContain(
       'The Phoenix asked me once what wisdom is when time is short. I gave it the right answer. Then the fever came, and I did not keep it.',
     )
@@ -338,6 +346,67 @@ describe("The Parent's Legacy", () => {
     expect(game.state.currentRoom.description).toContain('hang dim and still')
     executeCommands(game, ['go north'])
     expect(game.state.currentRoom.name).toBe('Throne Chamber')
+  })
+})
+
+/** How many times `line` appears in `text`. */
+function count(text: string, line: string): number {
+  return text.split(line).length - 1
+}
+
+describe('The Shadow of the Past says who he is to everyone who answers him', () => {
+  it.each([
+    ['rest', 'You sit down among the orbs and wait'],
+    ['say patience to shadow', 'You could not wait for them.'],
+  ])(
+    'plays the reveal and the sentence once, first, on %s without a talk',
+    (command, lead) => {
+      const game = masked()
+      const text = executeCommands(game, [command])
+      expectQuestCompleted(game.state, 'The Shadow of the Past')
+      expect(count(text, REVEAL)).toBe(1)
+      expect(count(text, SENTENCE)).toBe(1)
+      expect(text.indexOf(REVEAL)).toBeLessThan(text.indexOf(SENTENCE))
+      expect(text.indexOf(SENTENCE)).toBeLessThan(text.indexOf(lead))
+      expect(text.indexOf(lead)).toBeLessThan(
+        text.indexOf('Patience. The one thing I never had.'),
+      )
+      expectMarkupWellFormed(text)
+    },
+  )
+
+  it.each(['rest', 'say patience to shadow'])(
+    'does not repeat the reveal on %s after a talk after the mask',
+    (command) => {
+      const game = masked()
+      executeCommands(game, ['talk to shadow'])
+      const text = executeCommands(game, [command])
+      expectQuestCompleted(game.state, 'The Shadow of the Past')
+      expect(text).not.toContain(REVEAL)
+      expect(text).not.toContain(SENTENCE)
+    },
+  )
+
+  it.each(['rest', 'say patience to shadow'])(
+    'does not repeat the reveal on %s once it was heard',
+    (command) => {
+      const game = mended()
+      executeCommands(game, ['talk to shadow', "use sorceress's truth"])
+      const text = executeCommands(game, [command])
+      expectQuestCompleted(game.state, 'The Shadow of the Past')
+      expect(text).not.toContain(REVEAL)
+      expect(text).not.toContain(SENTENCE)
+    },
+  )
+
+  it('says who he is when first talked to after the mask, then the Phoenix', () => {
+    const game = masked()
+    const first = executeCommands(game, ['talk to shadow'])
+    expect(first).toContain(REVEAL)
+    expect(first).toContain(SENTENCE)
+    expect(first).not.toContain(PHOENIX)
+    reload(game)
+    expect(executeCommands(game, ['talk to shadow'])).toContain(PHOENIX)
   })
 })
 
