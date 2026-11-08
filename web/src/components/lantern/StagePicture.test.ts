@@ -147,6 +147,7 @@ describe('StagePicture during a change of scene', () => {
 describe('StagePicture patches', () => {
   const BUCKET = '/a.bucket-taken.png'
   const ROPE = '/a.rope-gone.png'
+  const PATCH_WAIT = 1000
 
   beforeEach(() => {
     setActivePinia(createPinia())
@@ -276,13 +277,90 @@ describe('StagePicture patches', () => {
     expect(w.get('img.lq-patch').classes()).toContain('lq-patch-still')
   })
 
+  it('spends the wait for a slow patch in the dark even when the picture is already cached', async () => {
+    const scene = useSceneStore()
+    const w = await picture([BUCKET])
+    scene.begin(1, '/b.png', () => {})
+    await w.setProps({ src: '/b.png', patches: [ROPE] })
+    // The picture loads at once, while the old one is still fading out.
+    await w.get('img.lq-loading').trigger('load')
+    vi.advanceTimersByTime(SCENE_HALF_MS + 900)
+    await nextTick()
+    expect(scene.phase).toBe('dark')
+    expect(scene.ready).toBeNull()
+    await patchLoader(w, ROPE).trigger('load')
+    expect(scene.ready).toBe(true)
+    expect(scene.phase).toBe('in')
+  })
+
+  it('gives up on a slow patch a second into the dark, not before', async () => {
+    const scene = useSceneStore()
+    const w = await picture([BUCKET])
+    scene.begin(1, '/b.png', () => {})
+    await w.setProps({ src: '/b.png', patches: [ROPE] })
+    await w.get('img.lq-loading').trigger('load')
+    vi.advanceTimersByTime(SCENE_HALF_MS)
+    await nextTick()
+    vi.advanceTimersByTime(1100)
+    expect(scene.ready).toBe(true)
+    expect(scene.phase).toBe('in')
+  })
+
+  it('lays the changes of a loaded save still, in the room Elior already stands in', async () => {
+    const scene = useSceneStore()
+    const w = await picture([])
+    scene.reset()
+    await w.setProps({ patches: [BUCKET] })
+    await patchLoader(w, BUCKET).trigger('load')
+    expect(layers(w)).toEqual([BUCKET])
+    expect(w.get('img.lq-patch').classes()).toContain('lq-patch-still')
+    expect(w.get('img.lq-patch').classes()).toContain('lq-patch-on')
+  })
+
+  it('takes away at once the changes a loaded save no longer has', async () => {
+    const scene = useSceneStore()
+    const w = await picture([BUCKET])
+    scene.reset()
+    await w.setProps({ patches: [] })
+    expect(layers(w)).toEqual([])
+  })
+
+  it('fades a change that comes well after a load', async () => {
+    const scene = useSceneStore()
+    const w = await picture([])
+    scene.reset()
+    await w.setProps({ patches: [] })
+    vi.advanceTimersByTime(PATCH_WAIT + 100)
+    await w.setProps({ patches: [BUCKET] })
+    await patchLoader(w, BUCKET).trigger('load')
+    expect(w.get('img.lq-patch').classes()).not.toContain('lq-patch-still')
+  })
+
+  it('does not let a skipped change of scene wait for the patches of the next one', async () => {
+    const scene = useSceneStore()
+    const w = await picture([])
+    scene.begin(1, '/b.png', () => {})
+    await w.setProps({ src: '/b.png', patches: [ROPE] })
+    await w.get('img.lq-loading').trigger('load')
+    scene.skip()
+    await nextTick()
+    scene.begin(2, '/c.png', () => {})
+    await w.setProps({ src: '/c.png', patches: [] })
+    vi.advanceTimersByTime(SCENE_HALF_MS + 500)
+    await nextTick()
+    // The picture of /c.png has not loaded: its wait in the dark is its own.
+    expect(scene.ready).toBeNull()
+  })
+
   it('rises without a patch that is more than a second late, which fades in when it comes', async () => {
     const scene = useSceneStore()
     const w = await picture([BUCKET])
     scene.begin(1, '/b.png', () => {})
     await w.setProps({ src: '/b.png', patches: [ROPE] })
     await w.get('img.lq-loading').trigger('load')
-    vi.advanceTimersByTime(SCENE_HALF_MS * 2)
+    vi.advanceTimersByTime(SCENE_HALF_MS)
+    await nextTick()
+    vi.advanceTimersByTime(SCENE_HALF_MS)
     await nextTick()
     expect(scene.ready).toBe(true)
     expect(scene.target).toBe('/b.png')

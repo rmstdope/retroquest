@@ -95,4 +95,56 @@ describe('LanternLayout: patches of the room picture', () => {
       'bread-taken',
     )
   })
+
+  it('lays the changes of a loaded save in the same room without a fade, and takes away those it no longer has', async () => {
+    const kept: Record<string, string> = {}
+    vi.stubGlobal('localStorage', {
+      getItem: (k: string): string | null => kept[k] ?? null,
+      setItem: (k: string, v: string): void => {
+        kept[k] = v
+      },
+      removeItem: (k: string): void => {
+        delete kept[k]
+      },
+    })
+    game.submitCommand('save')
+    await w.vm.$nextTick()
+    game.submitCommand('take bread')
+    await w.vm.$nextTick()
+    await w.get('img.lq-patch-loading').trigger('load')
+    expect(patches()).toHaveLength(1)
+    // Loading the earlier save in this room takes the bread's patch away at once.
+    game.submitCommand('load')
+    await w.vm.$nextTick()
+    await w.vm.$nextTick()
+    expect(patches()).toEqual([])
+  })
+
+  it('lays the changes of a loaded save already there in a fresh room', async () => {
+    const kept: Record<string, string> = {}
+    vi.stubGlobal('localStorage', {
+      getItem: (k: string): string | null => kept[k] ?? null,
+      setItem: (k: string, v: string): void => {
+        kept[k] = v
+      },
+      removeItem: (k: string): void => {
+        delete kept[k]
+      },
+    })
+    game.submitCommand('take bread')
+    await w.vm.$nextTick()
+    await w.get('img.lq-patch-loading').trigger('load')
+    game.submitCommand('save')
+    await w.vm.$nextTick()
+    game.submitCommand('drop bread')
+    await w.vm.$nextTick()
+    await w.vm.$nextTick()
+    game.submitCommand('load')
+    await w.vm.$nextTick()
+    await w.vm.$nextTick()
+    const loader = w.find('img.lq-patch-loading')
+    if (loader.exists()) await loader.trigger('load')
+    expect(patches()).toHaveLength(1)
+    expect(w.get('img.lq-patch').classes()).toContain('lq-patch-still')
+  })
 })
