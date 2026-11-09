@@ -35,7 +35,7 @@ import type { PictureSize, Rect } from '@/lantern/roomMotionScene'
  * the Tab stops). A mark or name of something that can be pressed takes a
  * press as a press on its thing (`press`); one of a way out goes the way out (below). The
  * thing with keyboard focus (`focused`) has its mark and name showing even
- * when not all are.
+ * when not all are, and the pointer on that same thing adds no second name.
  * `relayout` is any value that changes when something it keeps clear of
  * moves (the words coming or going).
  *
@@ -259,7 +259,7 @@ function press(spot: NamedSpot, event: MouseEvent): void {
   )
 }
 
-/** The one name that follows the pointer: the thing it is over, when not everything is shown and no ring is open. */
+/** The one name that follows the pointer: the thing it is over, when not everything is shown, no ring is open and that thing is not already named for having focus. */
 const pointed = computed<{
   label: string
   kind: string
@@ -271,7 +271,7 @@ const pointed = computed<{
   const x = (props.pointer.x - frame.left) / frame.ratio
   const y = (props.pointer.y - frame.top) / frame.ratio
   const entry = nameAt(inView.value, x, y)
-  if (!entry) return null
+  if (!entry || entry.areaId === props.focused) return null
   const { w, h } = sizeOf(entry.label)
   const { x: left, y: top, w: across, h: down } = visible.value
   const above = y > top + down - FOOT

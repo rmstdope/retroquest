@@ -287,6 +287,26 @@ describe('AreaNames', () => {
     expect(w.find('[data-area-name]').exists()).toBe(false)
   })
 
+  it('names a thing once when it has keyboard focus and the pointer is on it', async () => {
+    const w = mountNames({ focused: 'villager', pointer: { x: 140, y: 250 } })
+    await nextTick()
+    expect(w.findAll('.lq-area-name').map((name) => name.text())).toEqual([
+      'Tilda',
+    ])
+    expect(w.find('[data-area-pointer]').exists()).toBe(false)
+  })
+
+  it('still names what the pointer is on when focus is on something else, and once focus has left', async () => {
+    const w = mountNames({ focused: 'bucket', pointer: { x: 140, y: 250 } })
+    await nextTick()
+    expect(w.get('[data-area-pointer]').text()).toBe('Tilda')
+    expect(w.get('[data-area-name="bucket"]').text()).toBe('Bucket')
+    await w.setProps({ focused: 'villager' })
+    expect(w.find('[data-area-pointer]').exists()).toBe(false)
+    await w.setProps({ focused: null })
+    expect(w.get('[data-area-pointer]').text()).toBe('Tilda')
+  })
+
   it('takes a press on a mark or a name as a press on its thing, and not on a way out', async () => {
     const w = mountNames({ showing: true })
     await nextTick()
