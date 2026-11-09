@@ -313,7 +313,9 @@ export interface Box {
  * the `covers` (the command bar, the dock, the phone's panel) that lie over
  * its foot or its head. A cover whose middle is in the lower half cuts the
  * foot, one in the upper half cuts the head; a cover outside the stage, or
- * not across it, or as tall as the stage itself, cuts nothing.
+ * not across it, or as tall as the stage itself, cuts nothing. A cover cuts the
+ * stage's whole width, even a small chip at one corner: simple, and it only
+ * ever keeps the ring further inside.
  */
 export function visibleBox(stage: Box, covers: Box[]): Box {
   let top = stage.top

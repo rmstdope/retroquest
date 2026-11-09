@@ -12,7 +12,7 @@ const PIXEL = Buffer.from(
 )
 
 /** Open the game in the cottage with its picture up and a few things placed on it. */
-async function toTheCottage(page: Page): Promise<void> {
+async function toTheCottage(page: Page, breadY = 0.6): Promise<void> {
   await page.route('**/images/generated/manifest.json', (route) =>
     route.fulfill({
       json: {
@@ -22,7 +22,7 @@ async function toTheCottage(page: Page): Promise<void> {
           height: 1080,
           areas: {
             hearth: { x: 0.1, y: 0.4, width: 0.15, height: 0.3 },
-            bread: { x: 0.5, y: 0.6, width: 0.1, height: 0.1 },
+            bread: { x: 0.5, y: breadY, width: 0.1, height: 0.1 },
             grandmother: { x: 0.8, y: 0.3, width: 0.1, height: 0.3 },
           },
         },
@@ -82,9 +82,10 @@ test('every button of the ring can be pressed: none lies under the command bar o
   page,
 }): Promise<void> => {
   await page.setViewportSize({ width: 1280, height: 800 })
-  await toTheCottage(page)
-  await pressThing(page, 'grandmother')
-  await expect(page.getByRole('menu', { name: 'Grandmother' })).toBeVisible()
+  // The bread lies near the foot of the picture: its ring reaches the command bar.
+  await toTheCottage(page, 0.84)
+  await pressThing(page, 'bread')
+  await expect(page.getByRole('menu', { name: 'Bread' })).toBeVisible()
   const covered = await page.evaluate(
     () =>
       [...document.querySelectorAll<HTMLElement>('.lq-ring-coin')].filter(

@@ -1669,6 +1669,7 @@ watch(
       gameDialog.value,
       drawerTab.value,
       sheetOpen.value,
+      section.value,
       game.roomName,
       staged.value,
     ] as const,
