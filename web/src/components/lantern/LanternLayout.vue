@@ -946,7 +946,7 @@ function isEmptyBoxEnter(event: KeyboardEvent): boolean {
 
 /** The buttons of the actions panel that send a command or build one. */
 const COMMAND_BUTTONS =
-  '.lq-composer :is(.lq-verb, .lq-target, .lq-exit-btn, .lq-hint)'
+  '.lq-composer :is([data-verb], [data-exit], .lq-target, .lq-hint)'
 
 /** When a key last went on an arrival, hurried the narration, or was swallowed just after (`performance.now()`). */
 let goOnKeyAt = Number.NEGATIVE_INFINITY
