@@ -558,8 +558,9 @@ defineExpose({ focusBelt, focusPicture, has, root })
   overflow: hidden;
   max-width: 100%;
   overflow-wrap: anywhere;
-  padding: 1px 6px;
-  border-radius: 999px;
+  /* Narrow sides: a word as long as Photograph fits the 72px tile whole. */
+  padding: 1px 2px;
+  border-radius: 8px;
   background: color-mix(in srgb, var(--lq-surface) 88%, transparent);
 }
 .lq-belt-count {

@@ -132,6 +132,62 @@ test('B goes to the belt, the belt can be put away and is remembered across a re
   expect(JSON.parse(kept ?? '{}').away).toBe(true)
 })
 
+/**
+ * What a name under a picture looks like laid out: the tile's width, the lines
+ * it takes, whether any word is broken across lines and whether any is cut.
+ */
+async function nameLayout(
+  page: Page,
+  name: string,
+): Promise<{
+  tileWidth: number
+  lines: number
+  brokenWords: string[]
+  cut: boolean
+}> {
+  return page.locator('[data-belt-pic="item:bread"]').evaluate((tile, text) => {
+    const label = tile.querySelector('.lq-belt-name')!
+    label.textContent = text
+    const node = label.firstChild!
+    const tops = new Set<number>()
+    const brokenWords: string[] = []
+    let at = 0
+    for (const word of text.split(' ')) {
+      const range = document.createRange()
+      range.setStart(node, at)
+      range.setEnd(node, at + word.length)
+      const rects = [...range.getClientRects()]
+      if (rects.length !== 1) brokenWords.push(word)
+      for (const rect of rects) tops.add(Math.round(rect.top))
+      at += word.length + 1
+    }
+    return {
+      tileWidth: tile.getBoundingClientRect().width,
+      lines: tops.size,
+      brokenWords,
+      cut:
+        label.scrollHeight > label.clientHeight ||
+        label.scrollWidth > label.clientWidth,
+    }
+  }, name)
+}
+
+for (const name of ['Wandering Boots', 'Faded Photograph']) {
+  test(`${name} shows whole on two lines at the belt's usual width`, async ({
+    page,
+  }): Promise<void> => {
+    await page.setViewportSize({ width: 1280, height: 800 })
+    await toTheCottage(page)
+    await page.evaluate(() => document.fonts.ready.then(() => undefined))
+    expect(await nameLayout(page, name)).toEqual({
+      tileWidth: 72,
+      lines: 2,
+      brokenWords: [],
+      cut: false,
+    })
+  })
+}
+
 test.describe('on a phone held sideways', () => {
   test.use({ hasTouch: true, isMobile: true })
   test('the belt shares the foot row with the actions, with no names beneath', async ({
