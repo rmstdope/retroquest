@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { mount, type VueWrapper } from '@vue/test-utils'
-import { createPinia, setActivePinia } from 'pinia'
+import { createPinia, getActivePinia, setActivePinia } from 'pinia'
 import LanternLayout from './LanternLayout.vue'
 import { useGameStore } from '@/stores/useGameStore'
 import { useFlightStore } from '@/stores/useFlightStore'
@@ -15,6 +15,7 @@ import { narrationKey } from '@/lantern/narrationKey'
 import { narrationWords } from '@/lantern/narrationManifest'
 import { arrivalBlocks } from '@/lantern/narrationScript'
 import { SCENE_PAUSE_MS } from '@/lantern/narrationUnits'
+import { ARRIVAL_CLEAR_AFTER_MS } from '@/lantern/stageArrival'
 import { GEM, startedHoldStore } from '@/testing/holdGame'
 
 /** The recorded lines of the garden's arrival: its name, then its description. */
@@ -288,6 +289,20 @@ describe('LanternLayout: panels wait for the narration', () => {
     expect(w.get('.lq-here-room').text()).toBe('Hall')
     await vi.advanceTimersByTimeAsync(SCENE_PAUSE_MS)
     expect(w.get('.lq-here-room').text()).toBe('Garden')
+  })
+
+  it('takes the arrival along when the layout goes, so no store acts later', async () => {
+    const w = await ready()
+    await goNorth()
+    expect(useArrivalStore().active).toBe(true)
+    w.unmount()
+    wrapper = undefined
+    // The next test's pinia: a late action of this test's stores would replace it.
+    const next = createPinia()
+    setActivePinia(next)
+    await vi.advanceTimersByTimeAsync(0)
+    await vi.advanceTimersByTimeAsync(ARRIVAL_CLEAR_AFTER_MS)
+    expect(getActivePinia() === next).toBe(true)
   })
 
   it('still narrates a command run from the phone Map section', async () => {
