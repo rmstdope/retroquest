@@ -1550,7 +1550,7 @@ describe('Game', () => {
       const tree = game.getCommandCompletions()
 
       expect(asked.filter((phrase) => / (with|on)\b/.test(phrase))).toEqual([])
-      // Linear in the phrases of the names: not one question per name, target and thing.
+      // Phrases of the names times things; asking about targets too is far more.
       expect(asked.length).toBeLessThan(20_000)
       expect(tree.use).toHaveProperty('old.relic.0.with.old.relic.1', null)
     })

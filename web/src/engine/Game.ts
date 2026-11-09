@@ -1138,7 +1138,9 @@ function nested(names: string[]): CompletionTree {
  * a word that a listed word only starts with ("guardian" before "guardians")
  * is added as a leaf. A word of `targetWords` after a whole name opens the
  * name's targets, a tree already marked: the walk stops there, since going on
- * would ask every thing about every name and target, on every turn.
+ * would ask every thing about every name and target, on every turn. (So a
+ * name that goes on past a word of `targetWords`, "ring on a chain" beside
+ * "ring", gets no marks after that word.)
  */
 function sendableNames(
   tree: CompletionTree,
