@@ -2136,6 +2136,7 @@ watch(
               ref="beltEl"
               :key="`belt-${stageKey}`"
               :compact="sideways"
+              :lift-caption="showHide"
               :caption-for="
                 ring?.from === 'belt' ? ring.thing.areaId.slice(5) : null
               "

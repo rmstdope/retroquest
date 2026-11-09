@@ -30,6 +30,8 @@ const props = defineProps<{
   compact?: boolean
   /** The key of the picture whose ring is open, whose caption shows. */
   captionFor?: string | null
+  /** The ▾ Hide button shows on the line above the belt: the caption rises above it. */
+  liftCaption?: boolean
 }>()
 const emit = defineEmits<{
   press: [picture: BeltPicture, at: { x: number; y: number }]
@@ -240,7 +242,11 @@ defineExpose({ focusBelt, focusPicture, has, root })
     :class="{ 'lq-belt-compact': compact, 'lq-belt-away': belt.away }"
     aria-label="Bag and spells"
   >
-    <div v-if="caption && !belt.away" class="lq-belt-caption">
+    <div
+      v-if="caption && !belt.away"
+      class="lq-belt-caption"
+      :class="{ 'lq-belt-caption-high': liftCaption }"
+    >
       <b :class="`lq-belt-cap-${caption.kind}`">{{ caption.label }}</b>
       <!-- eslint-disable vue/no-v-html -->
       <span v-html="renderMarkup(caption.note)"></span>
@@ -611,6 +617,10 @@ defineExpose({ focusBelt, focusPicture, has, root })
   font-size: 13px;
   box-shadow: 0 4px 16px rgb(0 0 0 / 0.25);
   pointer-events: none;
+}
+.lq-belt-caption-high {
+  /* One Hide line higher, so the ▾ Hide pill does not cover it. */
+  margin-bottom: calc(6px + var(--lq-hide-line, 40px));
 }
 .lq-belt-caption b {
   margin-right: 8px;

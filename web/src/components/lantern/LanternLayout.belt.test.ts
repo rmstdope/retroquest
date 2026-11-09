@@ -149,6 +149,16 @@ describe('LanternLayout: the belt of pictures', () => {
     expect(w.get('.lq-belt-caption').text()).toContain('Bread')
   })
 
+  it('lifts the caption above the ▾ Hide while the words show it', async () => {
+    await cottage()
+    await tile('item:bread').trigger('focus')
+    const hideShows = w.find('.lq-words-hide').exists()
+    expect(hideShows).toBe(true)
+    expect(w.get('.lq-belt-caption').classes()).toContain(
+      'lq-belt-caption-high',
+    )
+  })
+
   it('sends Use at once, as if typed', async () => {
     const store = await cottage()
     await click(tile('item:bread').element)

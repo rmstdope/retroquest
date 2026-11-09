@@ -123,6 +123,13 @@ test('B goes to the belt, the belt can be put away and is remembered across a re
   await page.keyboard.press('b')
   await expect(page.locator('[data-belt-pic="item:bread"]')).toBeFocused()
   await expect(page.locator('.lq-belt-caption')).toContainText('Bread')
+  // The caption lies above the ▾ Hide, never under it.
+  const hide = page.locator('.lq-words-hide')
+  if (await hide.isVisible()) {
+    const cap = await page.locator('.lq-belt-caption').boundingBox()
+    const pill = await hide.boundingBox()
+    expect(cap!.y + cap!.height).toBeLessThanOrEqual(pill!.y)
+  }
   await page.getByRole('button', { name: 'Put the belt away' }).click()
   await expect(page.locator('[data-belt-pic="item:bread"]')).toHaveCount(0)
   await expect(page.getByRole('button', { name: 'Bag' })).toBeVisible()

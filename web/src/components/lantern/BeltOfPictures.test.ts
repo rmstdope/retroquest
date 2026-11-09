@@ -10,7 +10,9 @@ import { useFlightStore } from '@/stores/useFlightStore'
 
 describe('BeltOfPictures', () => {
   let w: VueWrapper | undefined
-  const mountBelt = (props: { compact?: boolean } = {}): VueWrapper =>
+  const mountBelt = (
+    props: { compact?: boolean; liftCaption?: boolean } = {},
+  ): VueWrapper =>
     (w = mount(BeltOfPictures, { props, attachTo: document.body }))
   const tiles = (): string[] =>
     w!.findAll('[data-belt-pic]').map((t) => t.attributes('data-belt-pic')!)
@@ -153,6 +155,20 @@ describe('BeltOfPictures', () => {
     expect(w!.get('.lq-belt-caption').text()).toContain('A loaf.')
     await w!.get('[data-belt-pic="item:bread"]').trigger('blur')
     expect(w!.find('.lq-belt-caption').exists()).toBe(false)
+  })
+
+  it('lifts the caption above the ▾ Hide only while that button shows', async () => {
+    mountBelt({ liftCaption: true })
+    await w!.get('[data-belt-pic="item:bread"]').trigger('focus')
+    expect(w!.get('.lq-belt-caption').classes()).toContain(
+      'lq-belt-caption-high',
+    )
+    w!.unmount()
+    mountBelt()
+    await w!.get('[data-belt-pic="item:bread"]').trigger('focus')
+    expect(w!.get('.lq-belt-caption').classes()).not.toContain(
+      'lq-belt-caption-high',
+    )
   })
 
   it('reads a picture as its name, count and description', () => {
