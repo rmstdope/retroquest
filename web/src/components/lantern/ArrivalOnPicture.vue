@@ -43,6 +43,10 @@ import { useSettingsStore } from '@/stores/useSettingsStore'
  * while the narrator speaks, glides to keep the lit word in view (the
  * `lq-follow` event of the read-along); with reduced motion it jumps.
  *
+ * A phone held sideways (`sideways`) tells the card in the free height between
+ * the top buttons and the bottom row, in smaller type on the smallest phones,
+ * with the seal small and beside the heading, and says "Tap to continue".
+ *
  * News (`news` parts: a learned spell, quest news) is told the same way: a round seal (a violet ✦ for a spell, a tick for a completion),
  * the heading, the quest's or spell's name in large type and then its text, which is the
  * part that is paged or scrolls; the head above it stays on every page.
@@ -50,6 +54,8 @@ import { useSettingsStore } from '@/stores/useSettingsStore'
 const props = defineProps<{
   pictured: boolean
   phone?: boolean
+  /** A phone held sideways: the card uses the free height between the top and bottom rows, takes smaller type on the smallest phones and keeps the seal beside the heading. */
+  sideways?: boolean
   /** The words are folded away (to show the names on the picture): out of sight and reach, still being read and clicked on in no way, and back when it is false. */
   away?: boolean
   /** The height the belt of pictures takes at the foot (px): the words end above it (the stage's `--lq-belt-h`). */
@@ -206,6 +212,7 @@ watch(
     arrival.part?.kind,
     arrival.part?.lines[0]?.unit,
     props.phone,
+    props.sideways,
   ],
   async () => {
     pages.value = []
@@ -295,6 +302,7 @@ onBeforeUnmount(() => {
       'lq-bare': !pictured,
       'lq-on': arrival.active,
       'lq-phone-arrival': phone,
+      'lq-sideways-arrival': sideways,
       'lq-arrival-away': away,
     }"
     aria-live="polite"
@@ -311,39 +319,44 @@ onBeforeUnmount(() => {
         class="lq-arrival-card"
       >
         <div v-if="piece" ref="head" class="lq-news-head">
-          <span
-            v-if="spell"
-            class="lq-news-seal lq-news-spark"
-            aria-hidden="true"
-            data-testid="spell-seal"
-            >✦</span
-          >
-          <span
-            v-else-if="news?.kind === 'completed'"
-            class="lq-news-seal"
-            aria-hidden="true"
-            data-testid="news-seal"
-          >
-            <svg
-              width="26"
-              height="26"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2.6"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <path d="M5 12.5l4.5 4.5L19 7.5" />
-            </svg>
-          </span>
-          <!-- eslint-disable vue/no-v-html -->
-          <p class="lq-news-kicker" :class="{ 'lq-news-kicker-spell': spell }">
+          <div class="lq-news-top">
             <span
-              v-html="html(piece.heading, arrival.part.lines[0].unit, 0, 1)"
-            ></span
-            >{{ newsCount }}
-          </p>
+              v-if="spell"
+              class="lq-news-seal lq-news-spark"
+              aria-hidden="true"
+              data-testid="spell-seal"
+              >✦</span
+            >
+            <span
+              v-else-if="news?.kind === 'completed'"
+              class="lq-news-seal"
+              aria-hidden="true"
+              data-testid="news-seal"
+            >
+              <svg
+                width="26"
+                height="26"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.6"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M5 12.5l4.5 4.5L19 7.5" />
+              </svg>
+            </span>
+            <!-- eslint-disable vue/no-v-html -->
+            <p
+              class="lq-news-kicker"
+              :class="{ 'lq-news-kicker-spell': spell }"
+            >
+              <span
+                v-html="html(piece.heading, arrival.part.lines[0].unit, 0, 1)"
+              ></span
+              >{{ newsCount }}
+            </p>
+          </div>
           <p
             class="lq-news-name"
             v-html="html(piece.name, arrival.part.lines[0].unit, 1, 2)"
@@ -401,7 +414,11 @@ onBeforeUnmount(() => {
         <!-- eslint-enable vue/no-v-html -->
         <div ref="pill" class="lq-arrival-pill">
           <p class="lq-arrival-hint">
-            {{ phone ? 'Tap to continue' : 'Click or press Enter to continue' }}
+            {{
+              phone || sideways
+                ? 'Tap to continue'
+                : 'Click or press Enter to continue'
+            }}
           </p>
           <div
             v-if="arrival.barMs"
@@ -458,6 +475,40 @@ onBeforeUnmount(() => {
 .lq-phone-arrival .lq-arrival-line,
 .lq-phone-arrival .lq-arrival-twin :deep(.lq-arrival-line) {
   font-size: calc(17px * var(--lq-text-scale, 1));
+}
+/*
+ * A phone held sideways: the card uses the free height between the top row of
+ * buttons and the bottom row (56 px clear above, 61 px below, or above the belt
+ * of pictures when it stands taller) instead of the laptop's margins. The
+ * smallest phones take smaller type, and the seal stands beside the heading,
+ * small, so the words keep their room. The twin the pages are measured in has
+ * the card's own side margins, so the cut is made for the width shown.
+ */
+.lq-sideways-arrival {
+  padding: 56px 20px max(61px, calc(var(--lq-belt-h, 0px) + 16px));
+}
+.lq-sideways-arrival .lq-arrival-measure {
+  padding: 0 20px;
+}
+.lq-sideways-arrival .lq-news-seal {
+  width: 22px;
+  height: 22px;
+}
+.lq-sideways-arrival .lq-news-seal svg {
+  width: 14px;
+  height: 14px;
+}
+.lq-sideways-arrival .lq-news-spark {
+  font-size: 13px;
+}
+@media (max-height: 340px) {
+  .lq-sideways-arrival .lq-arrival-line,
+  .lq-sideways-arrival .lq-arrival-twin :deep(.lq-arrival-line) {
+    font-size: calc(17px * var(--lq-text-scale, 1));
+  }
+  .lq-sideways-arrival .lq-news-name {
+    font-size: calc(30px * var(--lq-display-scale, 1));
+  }
 }
 .lq-arrival-stage.lq-on {
   pointer-events: auto;
@@ -588,6 +639,16 @@ onBeforeUnmount(() => {
   flex-direction: column;
   align-items: center;
   gap: 6px;
+}
+/* The seal and the heading: part of the head's column, except on a sideways phone, where they share a row. */
+.lq-news-top {
+  display: contents;
+}
+.lq-sideways-arrival .lq-news-top {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 }
 .lq-news-seal {
   display: inline-flex;

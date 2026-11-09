@@ -34,7 +34,7 @@ describe('LanternLayout: the arrival on the picture', () => {
 
   /** Mount the layout on a wide screen (or a phone); `recorded` gives the garden's lines a voice. */
   async function ready(
-    wide: boolean | 'short' = true,
+    wide: boolean | 'short' | 'sideways' = true,
     recorded = true,
   ): Promise<VueWrapper> {
     vi.useFakeTimers()
@@ -45,7 +45,10 @@ describe('LanternLayout: the arrival on the picture', () => {
         matches:
           wide === 'short'
             ? query.includes('519px')
-            : wide && query.includes('min-width'),
+            : wide === 'sideways'
+              ? query.includes('hover: none') ||
+                query.includes('orientation: landscape')
+              : wide && query.includes('min-width'),
         addEventListener: vi.fn((_type: string, listener: never) => {
           if (query.includes('min-width')) wideChanges.push(listener)
         }),
@@ -344,6 +347,16 @@ describe('LanternLayout: the arrival on the picture', () => {
     expect(w.get('[data-testid="arrival-on-picture"]').classes()).toContain(
       'lq-phone-arrival',
     )
+  })
+
+  it('tells the arrival on a sideways phone with the sideways card (rq-dpom)', async () => {
+    const w = await ready('sideways')
+    useSettingsStore(pinia).narrationOn = false
+    await run('go north')
+    expect(card(w)).toContain('Tap to continue')
+    const classes = w.get('[data-testid="arrival-on-picture"]').classes()
+    expect(classes).toContain('lq-sideways-arrival')
+    expect(classes).not.toContain('lq-phone-arrival')
   })
 
   it('leaves a short screen as it was', async () => {
