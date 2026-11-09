@@ -154,7 +154,7 @@ const names = useAreaNamesStore()
 const areaNamesEl = ref<InstanceType<typeof AreaNames> | null>(null)
 /** The direction of the open way out under the pointer, or null: the stage shows its arrow. */
 const pointingWay = ref<string | null>(null)
-/** The direction of the open way whose mark or name the pointer is over, or null; a new room clears it. */
+/** The direction of the open way whose mark or name the pointer is over, or null; a new room or the names going clears it. */
 const nameWay = ref<string | null>(null)
 /** The arrow over an open way: only while a press would go (the game takes actions, no scene is changing or waiting). */
 const wayArrow = computed<string | null>(() =>
@@ -579,13 +579,10 @@ function onStageLeave(): void {
   nameWay.value = null
 }
 
-// A new room takes the way's name from under a pointer that has not moved: its arrow goes too.
-watch(
-  () => game.musicRoomKey,
-  () => {
-    nameWay.value = null
-  },
-)
+// A new room, or the names going, takes the way's name from under a pointer that has not moved: its arrow goes too.
+watch([() => game.musicRoomKey, namesUp], () => {
+  nameWay.value = null
+})
 
 /** The pointer moves over the stage: with a mouse over the bare picture, the name of the thing under it follows. */
 function onStagePointer(event: PointerEvent): void {
