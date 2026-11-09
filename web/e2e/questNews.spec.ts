@@ -153,8 +153,8 @@ test.describe('quest news told in the middle of the picture', () => {
   }
 
   for (const [width, height] of [
-    [850, 757],
-    [390, 600],
+    [850, 840],
+    [390, 720],
   ]) {
     test(`keeps one left edge for a checklist split over pages at ${width} wide`, async ({
       page,
