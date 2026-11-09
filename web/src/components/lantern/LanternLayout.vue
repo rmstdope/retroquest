@@ -980,6 +980,34 @@ watch(
 )
 onUnmounted(() => plateResize?.disconnect())
 
+/** How wide the stage's top-right buttons stand: a sideways phone's plate ends before them. */
+const stageButtonsWidth = ref(0)
+let stageButtonsResize: ResizeObserver | undefined
+let stageButtonsFrame = 0
+watch(
+  stageButtons,
+  (current) => {
+    stageButtonsResize?.disconnect()
+    cancelAnimationFrame(stageButtonsFrame)
+    const el = current?.$el
+    if (typeof ResizeObserver === 'undefined' || !(el instanceof HTMLElement))
+      return
+    // On the next frame, as the plate's: the plate is observed too.
+    stageButtonsResize = new ResizeObserver(() => {
+      cancelAnimationFrame(stageButtonsFrame)
+      stageButtonsFrame = requestAnimationFrame(() => {
+        stageButtonsWidth.value = el.offsetWidth
+      })
+    })
+    stageButtonsResize.observe(el)
+  },
+  { flush: 'post' },
+)
+onUnmounted(() => {
+  stageButtonsResize?.disconnect()
+  cancelAnimationFrame(stageButtonsFrame)
+})
+
 // The action row is a new element after a new game: follow the current one.
 watch(
   composer,
@@ -1567,7 +1595,10 @@ watch(
             v-if="staged"
             v-show="section === 'story'"
             class="lq-stage"
-            :style="{ '--lq-actions-h': `${actionsHeight}px` }"
+            :style="{
+              '--lq-actions-h': `${actionsHeight}px`,
+              '--lq-stage-buttons-w': `${stageButtonsWidth}px`,
+            }"
             @click="onPicturePress"
             @pointermove="onStagePointer"
             @pointerleave="names.pointer = null"
@@ -2197,7 +2228,12 @@ watch(
 .lq-sideways .lq-stage-plate {
   top: 8px;
   left: 56px;
-  max-width: min(360px, 38%);
+  /* Ends 8px before the buttons, however wide their counts and dots make them. */
+  max-width: min(
+    360px,
+    38%,
+    calc(100% - 56px - var(--lq-stage-buttons-w) - 16px)
+  );
 }
 /* The plate is one compact row on a phone: smaller name and chips, so the words keep their room. */
 .lq-sideways .lq-stage-plate {

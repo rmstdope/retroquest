@@ -230,7 +230,7 @@ defineExpose({ focusStoryButton })
   position: static;
   flex: 0 0 auto;
 }
-/* Compact: a long name gives way (an ellipsis) so the chips keep a share. */
+/* Compact: a long name gives way (an ellipsis) so the chips keep a share, small enough that a short name reads whole on the smallest phone. */
 .lq-plate-compact .lq-room-name {
   flex: 0 1 auto;
   min-width: 0;
@@ -238,7 +238,7 @@ defineExpose({ focusStoryButton })
   text-overflow: ellipsis;
 }
 .lq-plate-compact .lq-here {
-  flex: 1 0 84px;
+  flex: 1 0 48px;
 }
 @keyframes lq-plate-fold {
   from {
