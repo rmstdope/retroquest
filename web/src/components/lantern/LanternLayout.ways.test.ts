@@ -7,6 +7,9 @@ import { useBridge, type ActClass } from '@/composables/useBridge'
 import { Act1 } from '@/act1/Act1'
 import { PANEL_GROUPS, useGameStore } from '@/stores/useGameStore'
 import { useAreaNamesStore } from '@/stores/useAreaNamesStore'
+import { useNarrationStore } from '@/stores/useNarrationStore'
+import { useSceneStore } from '@/stores/useSceneStore'
+import { useStageSpeechStore } from '@/stores/useStageSpeechStore'
 import { useSettingsStore } from '@/stores/useSettingsStore'
 import { setPictureProbe } from '@/lantern/roomPicture'
 
@@ -147,6 +150,77 @@ describe('LanternLayout: leaving by pressing a way out in the picture', () => {
     w.get('[data-area-name="exit-east"]').element.dispatchEvent(
       new MouseEvent('click', { bubbles: true }),
     )
+    expect(submit).toHaveBeenCalledWith('go east')
+  })
+
+  /** Open the way east: the lantern lit, the journal read, Revive learned. */
+  async function openTheWays(
+    store: ReturnType<typeof useGameStore>,
+  ): Promise<void> {
+    for (const command of [
+      'use lantern',
+      'take bread',
+      'take lantern',
+      'talk to grandmother',
+      'use journal',
+      'talk to grandmother',
+    ])
+      store.submitCommand(command)
+    store.releasePanels(store.turns.at(-1)!.id, [...PANEL_GROUPS], false)
+    await w.vm.$nextTick()
+  }
+
+  it('stops the telling when an open way is pressed', async () => {
+    const store = await cottage()
+    await openTheWays(store)
+    const skip = vi.spyOn(useNarrationStore(), 'skipAll')
+    await press(600, 100)
+    expect(skip).toHaveBeenCalled()
+  })
+
+  it('shows the arrow of that way only while a press would go', async () => {
+    const store = await cottage()
+    await openTheWays(store)
+    await point(600, 100)
+    const east = w.get('.lq-stage').attributes('style')
+    expect(east).toContain(encodeURIComponent('rotate(90 16 16)'))
+    store.acceptInput = false
+    await w.vm.$nextTick()
+    expect(w.get('.lq-stage').attributes('style') ?? '').not.toContain('cursor')
+  })
+
+  it('only brings the new room up when a press comes during a change of scene, or before a talk moved Elior is shown', async () => {
+    const store = await cottage()
+    await openTheWays(store)
+    const submit = vi.spyOn(store, 'submitCommand')
+    const reached = vi.fn()
+    useStageSpeechStore().sceneChange = { turnId: 1, unit: 1, reached }
+    await press(600, 100)
+    expect(reached).toHaveBeenCalled()
+    expect(submit).not.toHaveBeenCalled()
+    useSceneStore().turn = 5
+    await press(600, 100)
+    expect(submit).not.toHaveBeenCalled()
+  })
+
+  it('closes an open panel and goes on the same press', async () => {
+    const store = await cottage()
+    await openTheWays(store)
+    const bag = w
+      .findAll('.lq-buttons button')
+      .find((b) => /Bag/.test(b.text()))
+    await bag!.trigger('click')
+    const submit = vi.spyOn(store, 'submitCommand')
+    const picture = w.get('.lq-stage-picture').element
+    picture.dispatchEvent(
+      new PointerEvent('pointerdown', {
+        bubbles: true,
+        clientX: 600,
+        clientY: 100,
+      }),
+    )
+    await press(600, 100)
+    expect(w.find('.lq-drawer').exists()).toBe(false)
     expect(submit).toHaveBeenCalledWith('go east')
   })
 })

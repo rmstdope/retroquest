@@ -382,6 +382,7 @@ export const useStageSpeechStore = defineStore('stageSpeech', () => {
     lineShown,
     lineSpeaking,
     revealAll,
+    sceneChange,
     changeSceneNow,
     noteSeen,
     clear,

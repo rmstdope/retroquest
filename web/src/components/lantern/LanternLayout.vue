@@ -154,6 +154,14 @@ const names = useAreaNamesStore()
 const areaNamesEl = ref<InstanceType<typeof AreaNames> | null>(null)
 /** The direction of the open way out under the pointer, or null: the stage shows its arrow. */
 const pointingWay = ref<string | null>(null)
+/** The direction of the open way whose mark or name the pointer is over, or null. */
+const nameWay = ref<string | null>(null)
+/** The arrow over an open way: only while a press would go (the game takes actions, no scene is changing or waiting). */
+const wayArrow = computed<string | null>(() =>
+  game.acceptInput && scene.turn === null && !speech.sceneChange
+    ? (nameWay.value ?? pointingWay.value)
+    : null,
+)
 /** A laptop screen (≥1024 × 560): the stage with its action row along the bottom. */
 const laptop = useMediaQuery(WIDE_QUERY)
 const short = useMediaQuery(SHORT_QUERY)
@@ -325,6 +333,8 @@ function onPicturePress(event: MouseEvent): void {
   if (!event.target.closest('.lq-stage-picture')) return
   // During a change of scene a click brings the new room up at once.
   if (scene.turn !== null) return scene.skip()
+  // A talk that has moved Elior still shows the old room: a press brings the new one up first, and never walks from it.
+  if (speech.sceneChange) return speech.changeSceneNow()
   // A way out goes at once, as on the Map; a closed one gets the game's own answer.
   const way = wayPressed(event)
   if (way !== null && game.acceptInput) {
@@ -563,9 +573,17 @@ function onNamesEscape(event: KeyboardEvent): void {
   names.turnOff()
 }
 
+/** The pointer leaves the stage: no name follows it, no way's arrow shows. */
+function onStageLeave(): void {
+  names.pointer = null
+  nameWay.value = null
+}
+
 /** The pointer moves over the stage: with a mouse over the bare picture, the name of the thing under it follows. */
 function onStagePointer(event: PointerEvent): void {
   const target = event.target instanceof Element ? event.target : null
+  nameWay.value =
+    target?.closest<HTMLElement>('[data-way]')?.dataset.way ?? null
   if (
     !laptop.value ||
     event.pointerType === 'touch' ||
@@ -1620,11 +1638,11 @@ watch(
             :style="{
               '--lq-actions-h': `${actionsHeight}px`,
               '--lq-stage-buttons-w': `${stageButtonsWidth}px`,
-              ...(pointingWay ? { cursor: wayCursor(pointingWay) } : {}),
+              ...(wayArrow ? { cursor: wayCursor(wayArrow) } : {}),
             }"
             @click="onPicturePress"
             @pointermove="onStagePointer"
-            @pointerleave="names.pointer = null"
+            @pointerleave="onStageLeave"
           >
             <StagePicture
               :src="game.roomPicture"
