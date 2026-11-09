@@ -13,6 +13,7 @@ import { firstQuestUnit } from '@/lantern/narrationUnits'
 import { sceneBlock } from '@/lantern/stageArrival'
 import { parseTurn } from '@/lantern/parseTurn'
 import { decideHurryKey } from '@/lantern/hurryKeys'
+import { wayCursor } from '@/lantern/wayCursor'
 import {
   END_SLACK,
   ResizeLanding,
@@ -149,6 +150,10 @@ const speech = useStageSpeechStore()
 const arrival = useArrivalStore()
 const scene = useSceneStore()
 const names = useAreaNamesStore()
+/** The marks and names layer, which knows where the ways out are. */
+const areaNamesEl = ref<InstanceType<typeof AreaNames> | null>(null)
+/** The direction of the open way out under the pointer, or null: the stage shows its arrow. */
+const pointingWay = ref<string | null>(null)
 /** A laptop screen (≥1024 × 560): the stage with its action row along the bottom. */
 const laptop = useMediaQuery(WIDE_QUERY)
 const short = useMediaQuery(SHORT_QUERY)
@@ -300,6 +305,16 @@ function onOutsidePress(event: Event): void {
   drawerTab.value = null
 }
 
+/** The direction of the way out a press on the picture is on (its painted place, mark or name), or null. */
+function wayPressed(event: MouseEvent): string | null {
+  const target = event.target instanceof Element ? event.target : null
+  const marked = target?.closest<HTMLElement>('[data-way]')?.dataset.way
+  if (marked) return marked
+  return (
+    areaNamesEl.value?.wayAt(event.clientX, event.clientY)?.direction ?? null
+  )
+}
+
 /**
  * A press on the picture itself shows the rest of an unnarrated turn's speech
  * at once; while there is speech, a narrated turn is tapped on like the story
@@ -310,6 +325,13 @@ function onPicturePress(event: MouseEvent): void {
   if (!event.target.closest('.lq-stage-picture')) return
   // During a change of scene a click brings the new room up at once.
   if (scene.turn !== null) return scene.skip()
+  // A way out goes at once, as on the Map; a closed one gets the game's own answer.
+  const way = wayPressed(event)
+  if (way !== null && game.acceptInput) {
+    narration.skipAll()
+    game.submitCommand(`go ${way}`)
+    return
+  }
   speech.revealAll()
   if (speech.conversation) narration.tap()
 }
@@ -1598,6 +1620,7 @@ watch(
             :style="{
               '--lq-actions-h': `${actionsHeight}px`,
               '--lq-stage-buttons-w': `${stageButtonsWidth}px`,
+              ...(pointingWay ? { cursor: wayCursor(pointingWay) } : {}),
             }"
             @click="onPicturePress"
             @pointermove="onStagePointer"
@@ -1611,12 +1634,15 @@ watch(
               @pictured="pictured = $event"
             >
               <AreaNames
+                ref="areaNamesEl"
+                :closed-ways="game.roomAreas.closedWays"
                 :things="game.roomAreas.things"
                 :boxes="game.roomAreas.boxes"
                 :picture-size="game.roomPictureSize ?? DEFAULT_PICTURE_SIZE"
                 :showing="namesUp"
                 :pointer="scene.phase === 'idle' ? names.pointer : null"
                 :relayout="namesRelayout"
+                @pointing="pointingWay = $event"
               />
             </StagePicture>
             <ArrivalOnPicture

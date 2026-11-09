@@ -4,8 +4,10 @@ import {
   layoutNames,
   nameAt,
   placeNames,
+  pressAt,
   type NamedSpot,
   type PlacedName,
+  type WayPress,
 } from '@/lantern/areaNames'
 import type { AreaThing } from '@/lantern/areaThings'
 import type { AreaBox } from '@/lantern/roomMotion'
@@ -26,6 +28,14 @@ import type { PictureSize, Rect } from '@/lantern/roomMotionScene'
  * from assistive technology: the room's corner names list what is here.
  * `relayout` is any value that changes when something it keeps clear of
  * moves (the words coming or going).
+ *
+ * Ways out can be pressed. `wayAt` says which way a screen point presses (the
+ * smallest named thing or open way under it; a closed way, one of
+ * `closedWays` that the studio placed, only where nothing named is), and the
+ * marks and names of open ways take the press themselves (`data-way`, the one
+ * place this layer takes a click). `pointing` says the direction of the open
+ * way under the `pointer`, or null, for the pointer's arrow; a closed way is
+ * plain painting and never points. Nothing else here is pressable.
  */
 const props = defineProps<{
   things: AreaThing[]
@@ -34,8 +44,11 @@ const props = defineProps<{
   showing: boolean
   /** The pointer over the picture, in the screen's pixels (client coordinates). */
   pointer: { x: number; y: number } | null
+  /** Placed ways out that are closed right now: no mark, no name, they only answer a press. */
+  closedWays?: AreaThing[]
   relayout?: unknown
 }>()
+const emit = defineEmits<{ pointing: [direction: string | null] }>()
 
 /** What a name is made of beyond its words: the padding and the border, and about the width of one letter. */
 const NAME_PADDING = 22
@@ -158,6 +171,37 @@ const placed = computed<PlacedName[]>(() =>
   inView.value.filter((entry) => !underWords(entry)),
 )
 
+/** The closed ways that are placed and in view. */
+const closedInView = computed<PlacedName[]>(() => {
+  if (view.value.width < 1 || view.value.height < 1) return []
+  return placeNames(
+    props.closedWays ?? [],
+    props.boxes,
+    view.value,
+    props.pictureSize,
+  )
+})
+
+/** The way a press at the screen point (`clientX`, `clientY`) goes, or null. */
+function wayAt(clientX: number, clientY: number): WayPress | null {
+  const frame = frameOf()
+  return pressAt(
+    inView.value,
+    closedInView.value,
+    (clientX - frame.left) / frame.ratio,
+    (clientY - frame.top) / frame.ratio,
+  )
+}
+defineExpose({ wayAt })
+
+/** The direction of the open way under the pointer, for its arrow. */
+const pointing = computed<string | null>(() => {
+  if (!props.pointer) return null
+  const way = wayAt(props.pointer.x, props.pointer.y)
+  return way?.open ? way.direction : null
+})
+watch(pointing, (direction) => emit('pointing', direction))
+
 /** The size a name is laid out at (one line, never wider than the picture). */
 function sizeOf(label: string): { w: number; h: number } {
   return {
@@ -213,6 +257,8 @@ const pointed = computed<{
         <i
           class="lq-area-mark"
           :data-area-mark="spot.areaId"
+          :data-way="spot.direction"
+          :class="{ 'lq-area-way': spot.direction }"
           :style="{ left: `${spot.x}px`, top: `${spot.y}px` }"
         ></i>
       </template>
@@ -238,8 +284,9 @@ const pointed = computed<{
         v-for="spot in spots"
         :key="spot.areaId"
         class="lq-area-name"
-        :class="`lq-area-${spot.kind}`"
+        :class="[`lq-area-${spot.kind}`, { 'lq-area-way': spot.direction }]"
         :data-area-name="spot.areaId"
+        :data-way="spot.direction"
         :style="{ left: `${spot.left}px`, top: `${spot.top}px` }"
         >{{ spot.label }}</span
       >
@@ -273,6 +320,9 @@ const pointed = computed<{
   box-shadow:
     0 0 0 3px rgb(242 158 0 / 0.45),
     0 0 14px 4px rgb(255 190 80 / 0.8);
+}
+.lq-area-way {
+  pointer-events: auto;
 }
 .lq-area-lines {
   position: absolute;

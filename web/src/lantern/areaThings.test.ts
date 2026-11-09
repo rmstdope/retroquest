@@ -26,6 +26,8 @@ describe('areaThingsOf', () => {
       label: 'Fountain',
     })
     expect(byId['exit-north'].kind).toBe('exit')
+    expect(byId['exit-north'].direction).toBe('north')
+    expect(byId['exit-west'].direction).toBe('west')
     expect(byId['exit-north'].label).toMatch(/^↑ /)
     expect(byId['exit-west'].label).toMatch(/^← /)
     expect(byId['exit-east'].label).toMatch(/^→ /)

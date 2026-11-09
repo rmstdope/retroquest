@@ -76,6 +76,55 @@ export function nameAt(
   return found
 }
 
+/** What a press on the picture goes to: the direction of a way out, and whether the way is open right now. */
+export interface WayPress {
+  direction: string
+  open: boolean
+}
+
+/**
+ * The placed exit areas that are not open now (`declared` ids against the
+ * `open` things), as things with no name, each with the direction the game is
+ * asked for (`exit-secret-passage` goes `secret_passage`). They are drawn as
+ * plain painting and only answer a press.
+ */
+export function closedWayThings(
+  declared: readonly string[],
+  open: readonly AreaThing[],
+  boxes: Readonly<Record<string, AreaBox>>,
+): AreaThing[] {
+  const isOpen = new Set(open.map((thing) => thing.areaId))
+  return declared
+    .filter((id) => id.startsWith('exit-') && id in boxes && !isOpen.has(id))
+    .map((id) => ({
+      areaId: id,
+      label: '',
+      kind: 'exit' as const,
+      direction: id.slice('exit-'.length).replaceAll('-', '_'),
+    }))
+}
+
+/**
+ * The way a press at (`x`, `y`) goes: the smallest named thing or open way
+ * there wins (a thing that is not a way means no way); only over nothing
+ * named does a closed way answer, so one never answers from beneath a thing.
+ */
+export function pressAt(
+  placed: readonly PlacedName[],
+  closed: readonly PlacedName[],
+  x: number,
+  y: number,
+): WayPress | null {
+  const hit = nameAt(placed, x, y)
+  if (hit) {
+    return hit.kind === 'exit' && hit.direction
+      ? { direction: hit.direction, open: true }
+      : null
+  }
+  const shut = nameAt(closed, x, y)
+  return shut?.direction ? { direction: shut.direction, open: false } : null
+}
+
 /** Whether two rectangles overlap, with `MARGIN` kept between them. */
 function overlaps(a: Rect, b: Rect): boolean {
   return (

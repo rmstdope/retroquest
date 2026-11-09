@@ -12,7 +12,12 @@ const things: AreaThing[] = [
   { areaId: 'villager', label: 'Tilda', kind: 'character' },
   { areaId: 'bucket', label: 'Bucket', kind: 'item' },
   { areaId: 'scenery-x-fountain', label: 'Fountain', kind: 'scenery' },
-  { areaId: 'exit-north', label: '↑ Mira’s Hut', kind: 'exit' },
+  {
+    areaId: 'exit-north',
+    label: '↑ Mira’s Hut',
+    kind: 'exit',
+    direction: 'north',
+  },
   { areaId: 'unplaced', label: 'Nowhere', kind: 'item' },
 ]
 /** Boxes on a 1920×1080 picture shown on a 960×540 stage (half size). */
@@ -215,5 +220,56 @@ describe('AreaNames', () => {
     expect(source).toMatch(
       /\.lq-area-enter-active[^}]*transition: opacity calc\(0\.2s \* var\(--lq-motion\)\)/s,
     )
+  })
+})
+
+describe('AreaNames ways out', () => {
+  const closedWays: AreaThing[] = [
+    { areaId: 'exit-west', label: '', kind: 'exit', direction: 'west' },
+  ]
+  const wayBoxes = {
+    ...boxes,
+    'exit-west': { x: 0.0, y: 0.45, width: 0.1, height: 0.1 },
+  }
+
+  it('says which way a screen point presses: an open way, a closed way, or none', async () => {
+    const w = mountNames({ closedWays, boxes: wayBoxes })
+    await nextTick()
+    const way = (x: number, y: number) =>
+      (w.vm as unknown as { wayAt(x: number, y: number): unknown }).wayAt(x, y)
+    // The north way at (0.45..0.55, 0.05..0.15) of 960×540.
+    expect(way(480, 54)).toEqual({ direction: 'north', open: true })
+    expect(way(20, 270)).toEqual({ direction: 'west', open: false })
+    // A thing, and bare painting, are no way.
+    expect(way(480, 270)).toBeNull()
+    expect(way(700, 100)).toBeNull()
+  })
+
+  it('makes only the marks and names of ways out pressable, naming their direction', async () => {
+    const w = mountNames({ showing: true })
+    await nextTick()
+    expect(w.get('[data-area-name="exit-north"]').attributes('data-way')).toBe(
+      'north',
+    )
+    expect(w.get('[data-area-mark="exit-north"]').attributes('data-way')).toBe(
+      'north',
+    )
+    expect(w.get('[data-area-name="bucket"]').attributes('data-way')).toBe(
+      undefined,
+    )
+    expect(w.get('[data-area-mark="villager"]').attributes('data-way')).toBe(
+      undefined,
+    )
+  })
+
+  it('says when the pointer is over an open way, and not over a closed one', async () => {
+    const w = mountNames({ closedWays, boxes: wayBoxes })
+    await w.setProps({ pointer: { x: 480, y: 54 } })
+    expect(w.emitted('pointing')?.at(-1)).toEqual(['north'])
+    await w.setProps({ pointer: { x: 20, y: 270 } })
+    expect(w.emitted('pointing')?.at(-1)).toEqual([null])
+    await w.setProps({ pointer: { x: 480, y: 54 } })
+    await w.setProps({ pointer: null })
+    expect(w.emitted('pointing')?.at(-1)).toEqual([null])
   })
 })
