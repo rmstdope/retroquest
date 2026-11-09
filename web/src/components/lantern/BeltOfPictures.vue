@@ -192,12 +192,17 @@ watch(
 watch(pictures, () => void nextTick(measureScroll))
 
 let observer: ResizeObserver | undefined
+/** The frame that applies a new size: on the next frame, so the layout it moves is not measured in the same one (no observer loop). */
+let frame = 0
 onMounted(() => {
   measureScroll()
   if (root.value && typeof ResizeObserver === 'function') {
     observer = new ResizeObserver(() => {
-      measureScroll()
-      emit('measure', belt.away ? 0 : (root.value?.offsetHeight ?? 0))
+      cancelAnimationFrame(frame)
+      frame = requestAnimationFrame(() => {
+        measureScroll()
+        emit('measure', belt.away ? 0 : (root.value?.offsetHeight ?? 0))
+      })
     })
     observer.observe(root.value)
   }
@@ -205,6 +210,7 @@ onMounted(() => {
 })
 onUnmounted(() => {
   observer?.disconnect()
+  cancelAnimationFrame(frame)
   emit('measure', 0)
 })
 watch(

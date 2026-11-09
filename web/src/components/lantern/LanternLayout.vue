@@ -726,6 +726,7 @@ function readOn(): void {
 const composer = ref<InstanceType<typeof ActionComposer> | null>(null)
 const dock = ref<InstanceType<typeof DockBar> | null>(null)
 let dockResize: ResizeObserver | undefined
+let dockFrame = 0
 watch(
   dock,
   (current) => {
@@ -733,15 +734,22 @@ watch(
     const el = current?.$el
     if (typeof ResizeObserver === 'undefined' || !(el instanceof HTMLElement))
       return
+    // On the next frame, as the action row's: what moves with it is not measured in the same one.
     dockResize = new ResizeObserver(() => {
-      dockSize.value = { w: el.offsetWidth, h: el.offsetHeight }
+      cancelAnimationFrame(dockFrame)
+      dockFrame = requestAnimationFrame(() => {
+        dockSize.value = { w: el.offsetWidth, h: el.offsetHeight }
+      })
     })
     dockResize.observe(el)
     dockSize.value = { w: el.offsetWidth, h: el.offsetHeight }
   },
   { flush: 'post' },
 )
-onUnmounted(() => dockResize?.disconnect())
+onUnmounted(() => {
+  dockResize?.disconnect()
+  cancelAnimationFrame(dockFrame)
+})
 
 /** Focus the actions: the open composer, or the folded bar's Actions button. */
 function focusActions(): void {
@@ -2018,6 +2026,7 @@ watch(
               :pictured="pictured"
               :phone="phoneStage"
               :away="arrivalFolded"
+              :lift="beltHeight"
             />
             <button
               v-if="sideways"
@@ -2589,7 +2598,7 @@ watch(
   transform: translateX(-50%);
 }
 .lq-above-hide {
-  margin-bottom: var(--lq-hide-line);
+  margin-bottom: calc(var(--lq-hide-line) + var(--lq-belt-h, 0px));
 }
 /* The belt stands at the foot of the picture, and the words and the buttons over them rise above it (nothing rises while it is put away). */
 .lq-staged .lq-paper-tabrow {
