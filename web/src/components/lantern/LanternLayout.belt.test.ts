@@ -282,6 +282,24 @@ describe('LanternLayout: the belt of pictures', () => {
     expect(document.activeElement).toBe(before)
   })
 
+  it('goes to the first picture with B even after another picture was used', async () => {
+    const store = await cottage()
+    store.rawInventory = [
+      ...store.rawInventory,
+      { name: '[item_name]Egg[/item_name]', description: 'An egg.' },
+    ]
+    await flushPromises()
+    const pictures = w.findAll('[data-belt-pic]')
+    expect(pictures.length).toBeGreaterThan(1)
+    const first = pictures[0].element as HTMLElement
+    const last = pictures[pictures.length - 1].element as HTMLElement
+    last.focus()
+    expect(document.activeElement).toBe(last)
+    ;(hit('grandmother').element as HTMLElement).focus()
+    await key('b')
+    expect(document.activeElement).toBe(first)
+  })
+
   it('brings the belt back with B when it was put away', async () => {
     await cottage()
     await w.get('[data-belt-away]').trigger('click')
