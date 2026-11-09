@@ -19,3 +19,25 @@ In `skills/produce-bead/SKILL.md`, *Building* (or the `fix-bug` contract's step 
 ## Seen before
 
 Nothing like it in `docs/retrospectives/` yet.
+
+# rq-6koz: two e2e fixtures relied on a stray Enter pressing a verb
+
+## What happened
+
+`e2e/belt.spec.ts` and `e2e/pressRing.spec.ts` press Enter in a loop while `.lq-arrival-hint:visible` counts above zero. On narrow screens all eight presses ran during the card's 0.15 s fade. The extra ones opened the folded sheet and then pressed Look, which folded it again. Once the pause swallowed those presses, the sheet stayed open and four tests timed out in CI. Locally I had run only the arrival, scene and narration specs.
+
+## Why
+
+The fixtures' loop condition counted a card that was already leaving, and the outcome depended on how many stray presses happened to land.
+
+## Cost
+
+One red CI run of about 15 minutes and a fix attempt.
+
+## Prevent by
+
+For a change to `web/src/lantern/hurryKeys.ts`, run the whole of `npx playwright test` before the pull request, not only the specs that name the keys (`fix-bug` contract, step 5).
+
+## Seen before
+
+Above, in this file: the same loop shape of asserting on what is on the page rather than on what the game did.
