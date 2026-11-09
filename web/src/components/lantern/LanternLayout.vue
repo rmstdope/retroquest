@@ -2092,6 +2092,7 @@ watch(
             <ArrivalOnPicture
               :pictured="pictured"
               :phone="phoneStage"
+              :sideways="sideways"
               :away="arrivalFolded"
               :lift="beltHeight"
             />
