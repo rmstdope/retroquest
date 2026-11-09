@@ -17,9 +17,14 @@ const PICTURE = { width: 1920, height: 1080 }
 const VIEW = { width: 960, height: 540 }
 
 const things: AreaThing[] = [
-  { areaId: 'bucket', label: 'Bucket', kind: 'item' },
-  { areaId: 'villager', label: 'Tilda', kind: 'character' },
-  { areaId: 'exit-north', label: '↑ Mira’s Hut', kind: 'exit' },
+  { areaId: 'bucket', name: 'bucket', label: 'Bucket', kind: 'item' },
+  { areaId: 'villager', name: 'villager', label: 'Tilda', kind: 'character' },
+  {
+    areaId: 'exit-north',
+    name: 'exit-north',
+    label: '↑ Mira’s Hut',
+    kind: 'exit',
+  },
 ]
 
 describe('placeNames', () => {
@@ -90,6 +95,7 @@ describe('layoutNames', () => {
   const bounds = { x: 0, y: 0, w: 960, h: 540 }
   const mark = (areaId: string, label: string, x: number, y: number) => ({
     areaId,
+    name: areaId,
     label,
     kind: 'item' as const,
     x,
@@ -215,6 +221,7 @@ describe('markInside', () => {
   const visible = { x: 20, y: 10, w: 900, h: 450 }
   const entry = (x: number, y: number, w: number, h: number) => ({
     areaId: 'a',
+    name: 'mill',
     label: 'Old Mill',
     kind: 'scenery' as const,
     x: x + w / 2,
@@ -249,6 +256,7 @@ describe('closedWayThings', () => {
     const open: AreaThing[] = [
       {
         areaId: 'exit-north',
+        name: 'exit-north',
         label: '↑ Hut',
         kind: 'exit',
         direction: 'north',
@@ -291,17 +299,24 @@ describe('pressAt', () => {
   ) => placeNames(list, boxes, VIEW, PICTURE)
   const north: AreaThing = {
     areaId: 'exit-north',
+    name: 'exit-north',
     label: '↑ Hut',
     kind: 'exit',
     direction: 'north',
   }
   const closedWest: AreaThing = {
     areaId: 'exit-west',
+    name: 'exit-west',
     label: '',
     kind: 'exit',
     direction: 'west',
   }
-  const bucket: AreaThing = { areaId: 'bucket', label: 'Bucket', kind: 'item' }
+  const bucket: AreaThing = {
+    areaId: 'bucket',
+    name: 'bucket',
+    label: 'Bucket',
+    kind: 'item',
+  }
 
   it('finds an open way under the point', () => {
     const placed = place([north], { 'exit-north': box(0, 0, 0.5, 0.5) })

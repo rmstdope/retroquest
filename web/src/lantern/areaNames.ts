@@ -163,12 +163,16 @@ export function closedWayThings(
   const isOpen = new Set(open.map((thing) => thing.areaId))
   return declared
     .filter((id) => id.startsWith('exit-') && id in boxes && !isOpen.has(id))
-    .map((id) => ({
-      areaId: id,
-      label: '',
-      kind: 'exit' as const,
-      direction: id.slice('exit-'.length).replaceAll('-', '_'),
-    }))
+    .map((id) => {
+      const direction = id.slice('exit-'.length).replaceAll('-', '_')
+      return {
+        areaId: id,
+        name: direction,
+        label: '',
+        kind: 'exit' as const,
+        direction,
+      }
+    })
 }
 
 /**

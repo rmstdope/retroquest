@@ -179,11 +179,16 @@ async function newestCommand(page: Page): Promise<string | null> {
   })
 }
 
-/** Type one command into the command box and wait until it is the game's newest turn. */
-async function type(page: Page, command: string): Promise<void> {
+/** Type one command into the command box and press Enter. */
+async function enter(page: Page, command: string): Promise<void> {
   const input = page.getByLabel('Command')
   await input.fill(command)
   await input.press('Enter')
+}
+
+/** Type one command into the command box and wait until it is the game's newest turn. */
+async function type(page: Page, command: string): Promise<void> {
+  await enter(page, command)
   await expect.poll(() => newestCommand(page)).toBe(command)
 }
 
@@ -209,7 +214,9 @@ test('plays the red line from Act I to the Willowbrook epilogue', async ({
         .click()
     }
 
-    await type(page, `debug act${index + 1}`)
+    // A debug script plays its own turns and the act change clears them, so on a
+    // slow machine the command is never seen as the newest turn: its report is the proof.
+    await enter(page, `debug act${index + 1}`)
     await expect(page.getByText(act.played)).toBeVisible({ timeout: 60_000 })
     for (const command of act.completing) await type(page, command)
 

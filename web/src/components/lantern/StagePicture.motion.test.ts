@@ -72,9 +72,7 @@ describe('StagePicture movement', () => {
     )
     expect(canvas.attributes('aria-hidden')).toBe('true')
     expect(canvas.attributes('tabindex')).toBeUndefined()
-    expect(stagePic.get('.lq-stage-picture').attributes('aria-hidden')).toBe(
-      'true',
-    )
+    expect(stagePic.get('.lq-backdrop').attributes('aria-hidden')).toBe('true')
     expect(stagePic.findAll('button, a, input, [tabindex]')).toHaveLength(0)
   })
 
