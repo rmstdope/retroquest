@@ -16,6 +16,7 @@ function press(over: Partial<HurryKeyPress>): HurryKeyPress {
     onActionButton: false,
     onPaperTab: false,
     inOpenList: false,
+    settling: false,
     scene: false,
     arrival: false,
     narrating: false,
@@ -160,6 +161,42 @@ describe('decideHurryKey with nothing narrated', () => {
   })
 })
 
+describe('decideHurryKey just after a telling', () => {
+  const settling = { settling: true }
+  const verb = { ...settling, onControl: true, onActionButton: true }
+
+  it('swallows Enter and Space on a button in the actions panel', () => {
+    expect(decideHurryKey(press(verb))).toEqual({
+      action: 'swallow',
+      consume: true,
+      swallowSpaceUp: false,
+    })
+    expect(decideHurryKey(press({ ...verb, key: SPACE }))).toEqual({
+      action: 'swallow',
+      consume: true,
+      swallowSpaceUp: true,
+    })
+  })
+
+  it('leaves everything else alone', () => {
+    expect(decideHurryKey(press(settling))).toBeNull()
+    expect(decideHurryKey(press({ ...settling, onControl: true }))).toBeNull()
+    expect(decideHurryKey(press({ ...verb, key: 'a' }))).toBeNull()
+    expect(decideHurryKey(press({ ...verb, modified: true }))).toBeNull()
+    expect(decideHurryKey(press({ ...verb, dialogOpen: true }))).toBeNull()
+    expect(decideHurryKey(press({ ...verb, handled: true }))).toBeNull()
+  })
+
+  it('leaves the key to a new arrival or change of scene', () => {
+    expect(decideHurryKey(press({ ...verb, arrival: true }))).toMatchObject({
+      action: 'arrival-next',
+    })
+    expect(decideHurryKey(press({ ...verb, scene: true }))).toMatchObject({
+      action: 'skip-scene',
+    })
+  })
+})
+
 describe('decideHurryKey during an arrival', () => {
   const arrival = { arrival: true, narrating: true, canHide: true }
 
@@ -189,6 +226,9 @@ describe('decideHurryKey during an arrival', () => {
   it('lets the paper tab press itself, and goes on once for a held key', () => {
     expect(decideHurryKey(press({ ...arrival, onPaperTab: true }))).toBeNull()
     expect(decideHurryKey(press({ ...arrival, repeat: true }))).toBeNull()
+    expect(
+      decideHurryKey(press({ ...arrival, repeat: true, onControl: true })),
+    ).toEqual({ action: 'swallow', consume: true, swallowSpaceUp: false })
   })
 
   it('clears on Escape', () => {

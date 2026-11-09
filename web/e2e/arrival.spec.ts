@@ -1,4 +1,5 @@
 import { test, expect, type Page } from '@playwright/test'
+import { AFTER_TELLING_PAUSE_MS } from '../src/lantern/hurryKeys'
 
 /** Open the game on a laptop and close the opening chapter page: the first room arrives. */
 async function startAct1(page: Page): Promise<void> {
@@ -49,6 +50,27 @@ async function pushArrival(
   )
 }
 
+/** How many turns the game has told, read from the game itself: on a laptop the story is hidden, so its commands cannot be counted on the page. */
+async function turnCount(page: Page): Promise<number> {
+  return page.evaluate(() => {
+    const app = (
+      document.querySelector('#app') as unknown as {
+        __vue_app__: {
+          config: {
+            globalProperties: {
+              $pinia: { state: { value: { game: { turns: unknown[] } } } }
+            }
+          }
+        }
+      }
+    ).__vue_app__
+    return app.config.globalProperties.$pinia.state.value.game.turns.length
+  })
+}
+
+/** Long enough for a press, had there been one, to reach the game. */
+const PRESS_SETTLES_MS = 300
+
 const arrival = (page: Page) => page.getByTestId('arrival-on-picture')
 const story = (page: Page) => page.getByRole('region', { name: 'Story' })
 
@@ -80,19 +102,18 @@ test.describe('the arrival told on the picture', () => {
   test('goes on with Enter', async ({ page }) => {
     await startAct1(page)
     await expect(arrival(page).locator('.lq-arrival-line')).toBeVisible()
-    const commands = page.getByTestId('command')
-    const before = await commands.count()
+    const before = await turnCount(page)
     await page.keyboard.press('Enter')
     await expect(arrival(page).locator('.lq-arrival-line')).toHaveCount(0)
     // Enter went on; it did not press the focused verb.
-    await expect(commands).toHaveCount(before)
+    await page.waitForTimeout(PRESS_SETTLES_MS)
+    expect(await turnCount(page)).toBe(before)
   })
 
   test('Enter while the opening is told never presses the focused Look (rq-6koz)', async ({
     page,
   }) => {
     await startAct1(page)
-    const commands = page.getByTestId('command')
     const look = page
       .getByRole('region', { name: 'Actions' })
       .getByRole('button', { name: 'Look', exact: true })
@@ -102,16 +123,53 @@ test.describe('the arrival told on the picture', () => {
     await expect(card).toHaveCount(0)
     await page.keyboard.press('Enter')
     await expect(card).toHaveCount(1)
-    await expect(commands).toHaveCount(0)
-    // The rest go on through the telling, down to the last page.
     for (let i = 0; i < 12 && (await card.count()); i++) {
       await page.keyboard.press('Enter')
       await page.waitForTimeout(50)
-      await expect(commands).toHaveCount(0)
     }
     await expect(card).toHaveCount(0)
-    await expect(look).toBeFocused()
-    await expect(commands).toHaveCount(0)
+    await page.waitForTimeout(PRESS_SETTLES_MS)
+    expect(await turnCount(page)).toBe(1)
+  })
+
+  test('a held Enter does not press the focused Look (rq-6koz)', async ({
+    page,
+  }) => {
+    await startAct1(page)
+    await page.keyboard.down('Enter')
+    await expect(arrival(page).locator('.lq-arrival-card')).toHaveCount(1)
+    for (let i = 0; i < 5; i++) await page.keyboard.down('Enter')
+    await page.keyboard.up('Enter')
+    await page.waitForTimeout(PRESS_SETTLES_MS)
+    expect(await turnCount(page)).toBe(1)
+  })
+
+  test('four paced Enters from Begin tell the dream once (rq-6koz)', async ({
+    page,
+  }) => {
+    await startAct1(page)
+    for (let i = 0; i < 4; i++) {
+      await page.keyboard.press('Enter')
+      await page.waitForTimeout(PRESS_SETTLES_MS)
+    }
+    expect(await turnCount(page)).toBe(1)
+  })
+
+  test('Enter presses Look again once the pause after a telling is over (rq-6koz)', async ({
+    page,
+  }) => {
+    await startAct1(page)
+    const card = arrival(page).locator('.lq-arrival-card')
+    await page.keyboard.press('Enter')
+    await expect(card).toHaveCount(1)
+    for (let i = 0; i < 12 && (await card.count()); i++) {
+      await page.keyboard.press('Enter')
+      await page.waitForTimeout(50)
+    }
+    await expect(card).toHaveCount(0)
+    await page.waitForTimeout(AFTER_TELLING_PAUSE_MS + PRESS_SETTLES_MS)
+    await page.keyboard.press('Enter')
+    await expect.poll(() => turnCount(page)).toBe(2)
   })
 
   test('goes on with Enter in the empty command box', async ({ page }) => {
@@ -123,12 +181,12 @@ test.describe('the arrival told on the picture', () => {
     await pushArrival(page)
     const line = arrival(page).locator('.lq-arrival-line')
     await expect(line).toHaveText('Some place.')
-    const commands = page.getByTestId('command')
-    const before = await commands.count()
+    const before = await turnCount(page)
     await page.getByLabel('Command').focus()
     await page.keyboard.press('Enter')
     await expect(line).toHaveCount(0)
-    await expect(commands).toHaveCount(before)
+    await page.waitForTimeout(PRESS_SETTLES_MS)
+    expect(await turnCount(page)).toBe(before)
   })
 
   test('clears when an action is chosen', async ({ page }) => {
