@@ -52,7 +52,7 @@ export interface HurryKeyPress {
   onPaperTab: boolean
   /** The target is in an open word list (`[aria-expanded="true"]`). */
   inOpenList: boolean
-  /** Keys went on an arrival within the last `AFTER_TELLING_PAUSE_MS`. */
+  /** A key went on an arrival, or was swallowed just after one, within the last `AFTER_TELLING_PAUSE_MS`. */
   settling: boolean
   /** A change of scene is under way. */
   scene: boolean

@@ -997,6 +997,7 @@ function onNarrationKey(event: KeyboardEvent): void {
       arrivalKeyAt = performance.now()
       break
     case 'arrival-clear':
+      arrivalKeyAt = performance.now()
       arrival.clear()
       narration.skipAll()
       break
@@ -1011,7 +1012,8 @@ function onNarrationKey(event: KeyboardEvent): void {
 
 /**
  * A Space went on an arrival, a change of scene or (from the folded bar's
- * Actions or an action button) a narration: its key-up must not press the focused button.
+ * Actions or an action button) a narration, or was swallowed in the pause after
+ * an arrival: its key-up must not press the focused button.
  */
 let spaceTaken = false
 

@@ -155,6 +155,19 @@ test.describe('the arrival told on the picture', () => {
     expect(await turnCount(page)).toBe(1)
   })
 
+  test('Enter just after Escape ended the telling does not press Look (rq-6koz)', async ({
+    page,
+  }) => {
+    await startAct1(page)
+    const card = arrival(page).locator('.lq-arrival-card')
+    await page.keyboard.press('Enter')
+    await expect(card).toHaveCount(1)
+    await page.keyboard.press('Escape')
+    await page.keyboard.press('Enter')
+    await page.waitForTimeout(PRESS_SETTLES_MS)
+    expect(await turnCount(page)).toBe(1)
+  })
+
   test('Enter presses Look again once the pause after a telling is over (rq-6koz)', async ({
     page,
   }) => {
