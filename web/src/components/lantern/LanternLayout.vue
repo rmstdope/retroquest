@@ -151,7 +151,9 @@ import type { SaveSlot } from '@/types/bridge'
  * While a command is narrated the panels (plate, buttons, map, drawer, the
  * header's room and counts) keep the state from before it and switch as the
  * voice reaches them (`usePanelHold`), and so do the command box's word list
- * and the target chips; only pressing in one of those panels first shows the
+ * and the target chips, unless the command moved the player: nothing in the
+ * room just left can be addressed, so those offer the room the player is in
+ * (`game.commandPlace`). Only pressing in one of those panels first shows the
  * rest of the turn at once. Opening another section or a name's menu does not.
  * On the picture stage a move to a room with another picture is a change of
  * scene (`useSceneStore`, `StagePicture`): the old picture goes dark, the new

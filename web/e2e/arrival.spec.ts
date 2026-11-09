@@ -284,6 +284,29 @@ test.describe('the arrival told on the picture', () => {
       await expect(page.getByText(/no character named/)).toHaveCount(0)
     })
 
+    test('Talk while the waking lines are read offers no one from the dream (rq-l4l8)', async ({
+      page,
+    }) => {
+      await startAct1(page)
+      await arrival(page).click({ position: { x: 600, y: 300 } })
+      await expect(arrival(page).locator('.lq-arrival-line')).toHaveCount(0)
+      const actions = page.getByRole('region', { name: 'Actions' })
+      const talk = actions.getByRole('button', { name: 'Talk', exact: true })
+      const voice = actions.getByRole('button', { name: 'Voice', exact: true })
+      await talk.click()
+      await voice.click()
+      await expect.poll(() => turnCount(page)).toBe(2)
+      await talk.click()
+      const targets = actions.locator('.lq-target')
+      await expect(targets).not.toHaveCount(0)
+      expect(await targets.allTextContents()).toContain('Grandmother')
+      expect(await targets.allTextContents()).not.toContain('Voice')
+      // Choosing who to talk to is not a command yet: the reading goes on.
+      await expect(page.locator('.lq-speaking')).not.toHaveCount(0)
+      expect(await turnCount(page)).toBe(2)
+      await expect(page.getByText(/no character named/)).toHaveCount(0)
+    })
+
     test('Enter just after the last line was hurried does not press the verb again (rq-kfur)', async ({
       page,
     }) => {

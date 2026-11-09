@@ -11,7 +11,7 @@ import { blockVoice } from '@/lantern/narrationScript'
  * The game store holds the panels of a narrated command at their old state
  * (`useGameStore.releasePanels`); this decides when each group is released as
  * the narration reaches it: the place (room card, Here, map, header room and
- * act, and what the command box and target chips offer) when the turn's arrival is revealed, the quest count when its last
+ * act, and, for a turn that stays in its room, what the command box and target chips offer) when the turn's arrival is revealed, the quest count when its last
  * quest card is, the patches of the room's picture when the narrator reaches the
  * turn's last spoken block (so nobody leaves the picture while the story still
  * has them there), and Bag and Spells when the turn is over. The room's music

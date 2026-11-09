@@ -8,6 +8,7 @@ import { useSettingsStore } from '@/stores/useSettingsStore'
 import { useArrivalStore } from '@/stores/useArrivalStore'
 import { useNarrationStore } from '@/stores/useNarrationStore'
 import { useStageSpeechStore } from '@/stores/useStageSpeechStore'
+import { startedHoldStore } from '@/testing/holdGame'
 
 describe('ActionComposer', () => {
   let wrapper: VueWrapper | undefined
@@ -484,6 +485,33 @@ describe('ActionComposer', () => {
     ;(wrapper.vm as unknown as { focus: () => void }).focus()
 
     expect(document.activeElement?.textContent?.trim()).toBe('Talk')
+  })
+
+  describe('while a turn that moved the player is still read (rq-l4l8)', () => {
+    async function movedPlayer(): Promise<ReturnType<typeof useGameStore>> {
+      setActivePinia(createPinia())
+      const store = await startedHoldStore()
+      store.submitCommand('go north')
+      expect(store.roomName).toBe('Hall')
+      return store
+    }
+
+    it('offers nothing from the room just left', async () => {
+      await movedPlayer()
+      const w = mountComposer()
+      await button(w, 'Take').trigger('click')
+      expect(w.findAll('.lq-target').map((t) => t.text())).not.toContain('Gem')
+    })
+
+    it('keeps a half-built command when the place catches up with the move', async () => {
+      const store = await movedPlayer()
+      const w = mountComposer()
+      await button(w, 'Talk').trigger('click')
+      expect(w.find('.lq-verb-on').exists()).toBe(true)
+      store.releasePanels(store.heldTurn!, ['place'], false)
+      await w.vm.$nextTick()
+      expect(w.find('.lq-verb-on').exists()).toBe(true)
+    })
   })
 
   it('puts a half-built command away when the player changes room', async () => {

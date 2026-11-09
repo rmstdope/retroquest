@@ -45,6 +45,25 @@ describe('useGameStore: panels held while a turn is narrated', () => {
     expect(store.panelFlash.place).toBe(1)
   })
 
+  it('lets commands address the room the player has moved to while the panels still show the last (rq-l4l8)', async () => {
+    const store = await startedStore()
+    store.submitCommand('go north')
+    expect(store.roomName).toBe('Hall')
+    expect(store.items).toEqual([GEM])
+    expect(store.commandPlace.roomName).toBe('Garden')
+    expect(store.commandPlace.items).toEqual([])
+    expect(store.commandPlace.exits).toEqual({})
+    expect(store.completionState('take g').candidates).toEqual([])
+  })
+
+  it('keeps a turn that stays in its room offering what the panels show', async () => {
+    const store = await startedStore()
+    store.submitCommand(`take ${GEM}`)
+    const turn = store.turns.at(-1)!
+    expect(store.heldTurn).toBe(turn.id)
+    expect(store.commandPlace.items).toEqual([GEM])
+  })
+
   it('holds the music room for the narrator, but not on a picture stage', async () => {
     const held = await startedStore()
     held.submitCommand('go north')

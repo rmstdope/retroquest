@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { computed, ref } from 'vue'
+import { computed, ref, shallowRef } from 'vue'
 import type {
   NamedItem,
   RoomExits,
@@ -202,7 +202,7 @@ interface PanelSnapshot {
     mapPlaces: MapPlace[]
     roomWares: RoomWare[]
     actNumber: number | null
-    /** What the command box offers: words of the place the panels show. */
+    /** What the command box offers: words of this place. */
     completions: CompletionTree
   }
   quests: {
@@ -217,6 +217,12 @@ interface PanelSnapshot {
   /** The room the picture is of, and the ids of its patches that apply. */
   picture: PictureState
 }
+
+/** The parts of a place that a command can be built from. */
+type CommandPlace = Pick<
+  PanelSnapshot['place'],
+  'roomName' | 'characters' | 'items' | 'exits' | 'roomWares' | 'completions'
+>
 
 export const useGameStore = defineStore('game', () => {
   // --- Bridge reference ---
@@ -315,6 +321,27 @@ export const useGameStore = defineStore('game', () => {
   const panelsHeld = computed(() =>
     PANEL_GROUPS.some((g) => g !== 'picture' && held.value[g]),
   )
+  /** The place as the engine last said it is, whatever the panels show. */
+  const latestPlace = shallowRef<PanelSnapshot['place'] | null>(null)
+  /**
+   * The place commands are built from. It is what the panels show, except
+   * while a turn that moved the player is read: then the room on the panels is
+   * the one just left, and nothing there can be addressed any more, so this is
+   * the room the player is in.
+   */
+  const commandPlace = computed<CommandPlace>(() => {
+    const engine = latestPlace.value
+    if (held.value.place && engine && engine.roomName !== roomName.value)
+      return engine
+    return {
+      roomName: roomName.value,
+      characters: characters.value,
+      items: items.value,
+      exits: exits.value,
+      roomWares: roomWares.value,
+      completions: completionTree.value,
+    }
+  })
   /** A quest the story asked the journal to open ("Open in journal"). */
   const questToOpen = ref<string | null>(null)
   /** The quest whose details dialog is open, by name. */
@@ -1320,6 +1347,7 @@ export const useGameStore = defineStore('game', () => {
       picture: b.pictureState(),
     }
     latestPicture.value = latest.picture
+    latestPlace.value = latest.place
     for (const group of PANEL_GROUPS) if (!held.value[group]) applyGroup(group)
     syncMusic(b)
     acceptInput.value = b.controller.isAcceptingInput()
@@ -1625,7 +1653,7 @@ export const useGameStore = defineStore('game', () => {
     const lastToken = tokens[tokens.length - 1]
     const prevTokens = tokens.slice(0, -1)
 
-    let node: CompletionTree | null = completionTree.value
+    let node: CompletionTree | null = commandPlace.value.completions
     for (const token of prevTokens) {
       if (node && token !== SENDABLE_MARKER && Object.hasOwn(node, token)) {
         node = node[token]
@@ -1696,7 +1724,7 @@ export const useGameStore = defineStore('game', () => {
         ? { ...none, kind: 'complete', sendable: true }
         : (readItemName(walked, typed, typedWords) ?? { ...none, sendable })
 
-    let node: CompletionTree | null = completionTree.value
+    let node: CompletionTree | null = commandPlace.value.completions
     for (const [index, token] of tokens.slice(0, -1).entries()) {
       if (node === null) {
         // Words after a finished command: nothing to offer.
@@ -1809,6 +1837,7 @@ export const useGameStore = defineStore('game', () => {
     bagEntries,
     spellEntries,
     completionTree,
+    commandPlace,
     shortNames,
     readInfo,
     quitAsked,
