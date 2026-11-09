@@ -108,7 +108,8 @@ export const useFlightStore = defineStore('flight', () => {
     landed.value = kind
     landedName.value = name
     after(FLIGHT_LAND_MS, () => {
-      if (landed.value !== kind) return
+      // Only this landing's own bump: a later one of the same kind has its own timer.
+      if (landed.value !== kind || landedName.value !== name) return
       landed.value = null
       landedName.value = null
     })

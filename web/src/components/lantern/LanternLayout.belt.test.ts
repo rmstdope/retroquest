@@ -6,7 +6,11 @@ import LanternLayout from './LanternLayout.vue'
 import { useBridge, type ActClass } from '@/composables/useBridge'
 import { Act1 } from '@/act1/Act1'
 import { PANEL_GROUPS, useGameStore } from '@/stores/useGameStore'
-import { useStageSpeechStore } from '@/stores/useStageSpeechStore'
+import {
+  useStageSpeechStore,
+  type StageLine,
+} from '@/stores/useStageSpeechStore'
+import { useSceneStore } from '@/stores/useSceneStore'
 import { useNarrationStore } from '@/stores/useNarrationStore'
 import { useBeltStore } from '@/stores/useBeltStore'
 import { useSettingsStore } from '@/stores/useSettingsStore'
@@ -138,7 +142,7 @@ describe('LanternLayout: the belt of pictures', () => {
     expect(w.get('.lq-belt-caption').text()).toContain('Bread')
   })
 
-  it('sends Use at once, as if typed, and puts focus back on the picture', async () => {
+  it('sends Use at once, as if typed', async () => {
     const store = await cottage()
     await click(tile('item:bread').element)
     await coin('use').trigger('click')
@@ -293,5 +297,163 @@ describe('LanternLayout: the belt of pictures', () => {
     store.bagEntries = []
     await flushPromises()
     expect(ring().exists()).toBe(false)
+  })
+
+  /** Carry a lantern as well as the bread, and know the Light spell. */
+  function carryMore(store: Awaited<ReturnType<typeof cottage>>): void {
+    store.rawInventory = [
+      ...store.rawInventory,
+      { name: '[item_name]lantern[/item_name]', description: 'A lamp.' },
+    ]
+    store.bagEntries = store.rawInventory.map((entry) => entry.name)
+    store.rawSpells = [
+      { name: '[spell_name]light[/spell_name]', description: 'Glow.' },
+    ]
+    store.spellEntries = store.rawSpells.map((entry) => entry.name)
+  }
+  const takeBreadIn = async (id: string): Promise<void> => {
+    await click(tile('item:bread').element)
+    await coin(id).trigger('click')
+    await flushPromises()
+  }
+
+  it('puts focus back on the picture in hand after sending, not on what was pressed', async () => {
+    await cottage()
+    await takeBreadIn('usewith')
+    await click(hit('grandmother').element)
+    await flushPromises()
+    expect(w.get('.lq-belt').element.contains(document.activeElement)).toBe(
+      true,
+    )
+  })
+
+  it('sends one carried thing on another from the belt', async () => {
+    const store = await cottage()
+    carryMore(store)
+    await flushPromises()
+    await takeBreadIn('usewith')
+    await click(tile('item:lantern').element)
+    expect(store.turns.at(-1)?.command).toBe('use bread with lantern')
+    expect(useBeltStore().hand).toBeNull()
+  })
+
+  it('does nothing when a spell on the belt is pressed with something in hand', async () => {
+    const store = await cottage()
+    carryMore(store)
+    await flushPromises()
+    await takeBreadIn('usewith')
+    const before = store.turns.length
+    await w.get('[data-belt-switch="spells"]').trigger('click')
+    await click(tile('spell:light').element)
+    expect(store.turns.length).toBe(before)
+    expect(useBeltStore().hand).not.toBeNull()
+    expect(ring().exists()).toBe(false)
+  })
+
+  it('casts a spell on a thing: Cast on… takes it in hand and the next press sends cast <spell> on <thing>', async () => {
+    const store = await cottage()
+    carryMore(store)
+    await flushPromises()
+    await w.get('[data-belt-switch="spells"]').trigger('click')
+    await click(tile('spell:light').element)
+    expect(
+      w
+        .findAll('.lq-press-ring .lq-ring-coin')
+        .map((c) => c.attributes('data-ring-action')),
+    ).toEqual(['cast', 'caston'])
+    await coin('caston').trigger('click')
+    await flushPromises()
+    expect(strip()).toBe('Cast Light on…')
+    await click(hit('grandmother').element)
+    expect(store.turns.at(-1)?.command).toBe('cast light on grandmother')
+  })
+
+  it('fans the spells known for Cast on… on a carried thing', async () => {
+    const store = await cottage()
+    carryMore(store)
+    await flushPromises()
+    await click(tile('item:bread').element)
+    await coin('caston').trigger('click')
+    await w.get('.lq-ring-fan [role="menuitem"]').trigger('click')
+    await flushPromises()
+    expect(store.turns.at(-1)?.command).toBe('cast light on bread')
+  })
+
+  it('keeps the thing in hand when the bare picture is pressed', async () => {
+    const store = await cottage()
+    await takeBreadIn('give')
+    const before = store.turns.length
+    await click(w.get('.lq-stage-picture').element, { x: 5, y: 5 })
+    expect(useBeltStore().hand).not.toBeNull()
+    expect(store.turns.length).toBe(before)
+  })
+
+  it('walks through a way out and empties the hand', async () => {
+    const store = await cottage()
+    await takeBreadIn('give')
+    const submit = vi.spyOn(store, 'submitCommand')
+    const picture = w.get('.lq-stage-picture').element
+    picture.setAttribute('data-way', 'east')
+    await click(picture)
+    expect(submit).toHaveBeenCalledWith('go east')
+    expect(useBeltStore().hand).toBeNull()
+  })
+
+  it('only hurries the words while they are told when a picture on the belt is pressed', async () => {
+    await cottage()
+    const speech = useStageSpeechStore()
+    const line = {
+      shown: false,
+      turnId: 1,
+      key: 1,
+      narrated: false,
+      seen: false,
+      carried: false,
+    } as unknown as StageLine
+    speech.conversation = { with: 'grandmother', lines: [line] }
+    await w.vm.$nextTick()
+    await click(tile('item:bread').element)
+    expect(ring().exists()).toBe(false)
+    expect(line.shown).toBe(true)
+    await click(tile('item:bread').element)
+    expect(ring().exists()).toBe(true)
+  })
+
+  it.each([
+    ['a change of scene', () => (useSceneStore().phase = 'out')],
+    ['a pop-up', () => (useGameStore().showModal = true)],
+    ['a new act', () => (useGameStore().musicActName = 'Act2')],
+  ])('puts the hand down for %s', async (_name, change) => {
+    await cottage()
+    await takeBreadIn('give')
+    expect(useBeltStore().hand).not.toBeNull()
+    change()
+    await flushPromises()
+    expect(useBeltStore().hand).toBeNull()
+  })
+
+  it('goes back to the first thing in the room when Escape leaves a belt that had no focus before', async () => {
+    await cottage()
+    ;(document.activeElement as HTMLElement | null)?.blur()
+    await key('b')
+    expect(document.activeElement).toBe(tile('item:bread').element)
+    await key('Escape')
+    expect(document.activeElement).toBe(hit('grandmother').element)
+  })
+
+  it('gives Escape on a belt reached by Tab the same way out, and forgets a stale place', async () => {
+    await cottage()
+    ;(hit('grandmother').element as HTMLElement).focus()
+    await key('b')
+    // Focus goes elsewhere, then back to the belt by Tab: the old place is forgotten.
+    ;(
+      w.get('.lq-composer input, .lq-composer button').element as HTMLElement
+    ).focus()
+    ;(tile('item:bread').element as HTMLElement).focus()
+    await key('Escape')
+    expect(document.activeElement).toBe(hit('grandmother').element)
+    expect(w.get('.lq-belt').element.contains(document.activeElement)).toBe(
+      false,
+    )
   })
 })

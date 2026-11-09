@@ -595,6 +595,11 @@ watch(
 /** Where focus was before B took it to the belt, for Escape to give it back. */
 let beltReturn: HTMLElement | null = null
 
+/** Focus left the belt: where it came from is forgotten, so a later Escape does not jump back to a stale place. */
+function onFocusIn(event: FocusEvent): void {
+  if (!beltEl.value?.root?.contains(event.target as Node)) beltReturn = null
+}
+
 /**
  * B goes to the belt (bringing it up if it was put away), focus on the first
  * picture; B again, with focus on the belt, switches between Bag and Spells.
@@ -612,7 +617,8 @@ function onBeltKey(event: KeyboardEvent): void {
   if (onBelt) belt.show(belt.list === 'bag' ? 'spells' : 'bag')
   else {
     beltReturn =
-      document.activeElement instanceof HTMLElement
+      document.activeElement instanceof HTMLElement &&
+      document.activeElement !== document.body
         ? document.activeElement
         : null
     if (belt.away) belt.bringBack()
@@ -644,11 +650,17 @@ function onNamesEscape(event: KeyboardEvent): void {
     return
   }
   const onBelt = beltEl.value?.root?.contains(document.activeElement)
-  if (onBelt && beltReturn?.isConnected) {
+  if (onBelt) {
+    // Back to where focus was before the belt; with nothing there, the first thing in the room, else the show button.
     event.preventDefault()
     event.stopImmediatePropagation()
-    beltReturn.focus({ preventScroll: true })
+    const back =
+      beltReturn?.isConnected && beltReturn !== document.body
+        ? beltReturn
+        : (stageEl.value?.querySelector<HTMLElement>('[data-area-press]') ??
+          mainEl.value?.querySelector<HTMLElement>('.lq-show-names'))
     beltReturn = null
+    back?.focus({ preventScroll: true })
     return
   }
   if (!names.showing || !showNamesButton.value) return
@@ -1004,6 +1016,7 @@ onMounted(() => {
   document.addEventListener('keydown', onPaperKey)
   document.addEventListener('keydown', onNamesKey)
   document.addEventListener('keydown', onBeltKey)
+  document.addEventListener('focusin', onFocusIn)
   document.addEventListener('keydown', onNamesEscape, true)
   document.addEventListener('keyup', onSpaceUp)
   document.addEventListener('focusin', onFocusChange)
@@ -1187,6 +1200,7 @@ onUnmounted(() => {
   document.removeEventListener('keydown', onPaperKey)
   document.removeEventListener('keydown', onNamesKey)
   document.removeEventListener('keydown', onBeltKey)
+  document.removeEventListener('focusin', onFocusIn)
   document.removeEventListener('keydown', onNamesEscape, true)
   document.removeEventListener('keyup', onSpaceUp)
   document.removeEventListener('focusin', onFocusChange)
@@ -1485,7 +1499,7 @@ function onAreaPress(thing: AreaThing, at: { x: number; y: number }): void {
   if (areaNamesEl.value?.wayAt(at.x, at.y)) return
   if (!pressTakesMove()) return
   if (belt.hand) {
-    sendHand(handCommand(belt.hand, thing), thing.areaId)
+    sendHand(handCommand(belt.hand, thing))
     return
   }
   ring.value = {
@@ -1510,7 +1524,7 @@ function onBeltPress(picture: BeltPicture, at: { x: number; y: number }): void {
   if (!pressTakesMove()) return
   if (belt.hand) {
     const command = pressedOnBelt(belt.hand, picture)
-    if (command) sendHand(command, subjectOf(picture).areaId)
+    if (command) sendHand(command)
     return
   }
   ring.value = {
@@ -1562,9 +1576,9 @@ function runRing(command: string): void {
   sendFrom(command, ring.value?.thing.areaId)
 }
 
-/** Send what the hand was holding to the thing or picture pressed. */
-function sendHand(command: string, pressedId: string): void {
-  sendFrom(command, pressedId)
+/** Send what the hand was holding; focus goes back to its picture on the belt, or the belt's first picture if it has gone. */
+function sendHand(command: string): void {
+  sendFrom(command, handFrom ?? undefined)
 }
 
 /** The ring's Use with…, Give… or Cast on…: close it and put the thing or spell in hand; focus goes to the first thing in the room, or ✕ Cancel when there is none. */
