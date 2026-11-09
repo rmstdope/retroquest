@@ -1659,6 +1659,7 @@ watch(
                 :picture-size="game.roomPictureSize ?? DEFAULT_PICTURE_SIZE"
                 :showing="namesUp"
                 :pointer="scene.phase === 'idle' ? names.pointer : null"
+                :foot-cover="laptop ? actionsHeight : 0"
                 :relayout="namesRelayout"
                 @pointing="pointingWay = $event"
               />

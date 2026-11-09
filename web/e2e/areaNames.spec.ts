@@ -6,14 +6,32 @@
  */
 import { test, expect, type Page } from '@playwright/test'
 
+/** A placed area, in fractions of the picture. */
+interface AreaFractions {
+  x: number
+  y: number
+  width: number
+  height: number
+}
+
 /** A one-pixel transparent PNG, standing for a picture the studio made. */
 const PIXEL = Buffer.from(
   'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==',
   'base64',
 )
 
+/** Where the things of the cottage are placed on its picture, by default. */
+const COTTAGE_AREAS: Record<string, AreaFractions> = {
+  hearth: { x: 0.1, y: 0.4, width: 0.15, height: 0.3 },
+  bread: { x: 0.5, y: 0.6, width: 0.1, height: 0.1 },
+  grandmother: { x: 0.8, y: 0.3, width: 0.1, height: 0.3 },
+}
+
 /** Open the game in the cottage with its picture up and a few things placed on it. */
-async function toTheCottage(page: Page): Promise<void> {
+async function toTheCottage(
+  page: Page,
+  areas: Record<string, AreaFractions> = COTTAGE_AREAS,
+): Promise<void> {
   await page.route('**/images/generated/manifest.json', (route) =>
     route.fulfill({
       json: {
@@ -21,11 +39,7 @@ async function toTheCottage(page: Page): Promise<void> {
           file: 'act1-eliors-cottage.png',
           width: 1920,
           height: 1080,
-          areas: {
-            hearth: { x: 0.1, y: 0.4, width: 0.15, height: 0.3 },
-            bread: { x: 0.5, y: 0.6, width: 0.1, height: 0.1 },
-            grandmother: { x: 0.8, y: 0.3, width: 0.1, height: 0.3 },
-          },
+          areas,
         },
       },
     }),
@@ -87,6 +101,80 @@ test('the name follows the mouse over a thing, and no name shows over nothing', 
   await expect(page.locator('[data-area-pointer]')).toHaveText('Bread')
   await page.mouse.move(stage!.x + 5, stage!.y + stage!.height / 2 + 100)
   await expect(page.locator('[data-area-pointer]')).toHaveCount(0)
+})
+
+test.describe('at the edges of a laptop picture (rq-5hs1)', () => {
+  /**
+   * On a 1428×650 laptop the 16:9 picture is trimmed to the stage under the
+   * header and the action bar lies over the stage's foot: the bread runs under
+   * the bar, the grandmother's middle is behind it and her name has to move
+   * away from the bread's, and the hearth hugs the left edge.
+   */
+  const AT_THE_EDGES: Record<string, AreaFractions> = {
+    hearth: { x: 0, y: 0.4, width: 0.03, height: 0.2 },
+    bread: { x: 0.1, y: 0.72, width: 0.1, height: 0.1 },
+    grandmother: { x: 0.13, y: 0.7, width: 0.06, height: 0.2 },
+  }
+  /** What the browser may round a position by. */
+  const ROUNDING = 0.5
+
+  /** Hold the drift at its peak, where the picture is largest and furthest over. */
+  async function holdDriftAtPeak(page: Page): Promise<void> {
+    await page.addStyleTag({
+      content:
+        // !important: the picture's own scoped animation shorthand outranks this.
+        '.lq-drift-on { animation-delay: -26s !important; animation-play-state: paused !important; }',
+    })
+  }
+
+  test('the name of what the pointer is over, just above the bar, goes above the pointer', async ({
+    page,
+  }): Promise<void> => {
+    await page.setViewportSize({ width: 1428, height: 650 })
+    await toTheCottage(page, AT_THE_EDGES)
+    const bar = await page.locator('.lq-composer').boundingBox()
+    const stage = await page.locator('.lq-stage').boundingBox()
+    await page.mouse.move(stage!.x + 0.115 * stage!.width, bar!.y - 15)
+    const name = page.locator('[data-area-pointer]')
+    await expect(name).toHaveText('Bread')
+    const box = await name.boundingBox()
+    expect(box!.y + box!.height).toBeLessThanOrEqual(bar!.y)
+  })
+
+  test('every mark and name stays on the visible picture with the drift at its peak', async ({
+    page,
+  }): Promise<void> => {
+    await page.setViewportSize({ width: 1428, height: 650 })
+    await toTheCottage(page, AT_THE_EDGES)
+    await holdDriftAtPeak(page)
+    await page.getByRole('button', { name: /Show what's here/ }).click()
+    const marks = page.locator('[data-area-mark]')
+    await expect(marks).toHaveCount(3)
+    const bar = await page.locator('.lq-composer').boundingBox()
+    const stage = await page.locator('.lq-stage').boundingBox()
+    const spots = [
+      ...(await marks.all()),
+      ...(await page.locator('[data-area-name]').all()),
+    ]
+    expect(spots).toHaveLength(6)
+    for (const spot of spots) {
+      const box = await spot.boundingBox()
+      expect.soft(box!.x).toBeGreaterThanOrEqual(stage!.x - ROUNDING)
+      expect
+        .soft(box!.x + box!.width)
+        .toBeLessThanOrEqual(stage!.x + stage!.width + ROUNDING)
+      expect.soft(box!.y).toBeGreaterThanOrEqual(stage!.y - ROUNDING)
+      expect.soft(box!.y + box!.height).toBeLessThanOrEqual(bar!.y + ROUNDING)
+    }
+    const lines = page.locator('.lq-area-lines line')
+    await expect(lines).not.toHaveCount(0)
+    for (const line of await lines.all()) {
+      const bottom = await line.evaluate(
+        (el) => el.getBoundingClientRect().bottom,
+      )
+      expect.soft(bottom).toBeLessThanOrEqual(bar!.y + ROUNDING)
+    }
+  })
 })
 
 test.describe('on the smallest sideways phone', () => {

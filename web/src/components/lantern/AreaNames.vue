@@ -2,9 +2,11 @@
 import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
 import {
   layoutNames,
+  markInside,
   nameAt,
   placeNames,
   pressAt,
+  visiblePart,
   type NamedSpot,
   type PlacedName,
   type WayPress,
@@ -22,7 +24,10 @@ import type { PictureSize, Rect } from '@/lantern/roomMotionScene'
  * would cover another name or a button, a plate or the words moves to a free
  * spot with a thin line back to its mark, and a thing under the words has
  * neither until the words are gone. Otherwise the one thing under the
- * `pointer` has its name just under the pointer, above it near the foot. The
+ * `pointer` has its name just under the pointer, above it near the foot of
+ * what can be seen. Marks and names stay on the part of the picture that can
+ * be seen at every moment of its drift, above the `footCover` pixels the
+ * action bar lies over; a thing wholly outside that part has neither. The
  * marks and names fade in and out (not under Reduce motion, which the
  * stylesheet's `--lq-motion` carries), never take a click and are hidden
  * from assistive technology: the room's corner names list what is here.
@@ -46,6 +51,8 @@ const props = defineProps<{
   pointer: { x: number; y: number } | null
   /** Placed ways out that are closed right now: no mark, no name, they only answer a press. */
   closedWays?: AreaThing[]
+  /** How many pixels at the stage's foot lie over the picture (the action bar). */
+  footCover?: number
   relayout?: unknown
 }>()
 const emit = defineEmits<{ pointing: [direction: string | null] }>()
@@ -56,7 +63,7 @@ const LETTER = 7.4
 const NAME_HEIGHT = 25
 /** How long the words take to fade away (a little over), before what they covered is clear. */
 const SETTLE_MS = 350
-/** How far under the pointer its name hangs, and the foot of the picture where it hangs above instead. */
+/** How far under the pointer its name hangs, and how near the foot of what can be seen it hangs above instead. */
 const POINTER_GAP = 18
 const FOOT = 60
 /** The things in the stage that a name keeps clear of. */
@@ -166,9 +173,14 @@ const inView = computed<PlacedName[]>(() => {
   return placeNames(props.things, props.boxes, view.value, props.pictureSize)
 })
 
-/** The placed things in view whose mark is not under the words. */
+/** The part of the layer that can be seen: where every mark and name goes. */
+const visible = computed<Rect>(() =>
+  visiblePart(view.value, props.footCover ?? 0),
+)
+
+/** The placed things with a part that can be seen, whose mark is not under the words. */
 const placed = computed<PlacedName[]>(() =>
-  inView.value.filter((entry) => !underWords(entry)),
+  markInside(inView.value, visible.value).filter((entry) => !underWords(entry)),
 )
 
 /** The closed ways that are placed and in view. */
@@ -202,10 +214,10 @@ const pointing = computed<string | null>(() => {
 })
 watch(pointing, (direction) => emit('pointing', direction))
 
-/** The size a name is laid out at (one line, never wider than the picture). */
+/** The size a name is laid out at (one line, never wider than what can be seen). */
 function sizeOf(label: string): { w: number; h: number } {
   return {
-    w: Math.min(view.value.width - 8, label.length * LETTER + NAME_PADDING),
+    w: Math.min(visible.value.w, label.length * LETTER + NAME_PADDING),
     h: NAME_HEIGHT,
   }
 }
@@ -213,10 +225,7 @@ function sizeOf(label: string): { w: number; h: number } {
 /** Every mark and name, when they are all showing. */
 const spots = computed<NamedSpot[]>(() =>
   props.showing
-    ? layoutNames(placed.value, sizeOf, obstacles.value, {
-        w: view.value.width,
-        h: view.value.height,
-      })
+    ? layoutNames(placed.value, sizeOf, obstacles.value, visible.value)
     : [],
 )
 
@@ -234,17 +243,15 @@ const pointed = computed<{
   const entry = nameAt(inView.value, x, y)
   if (!entry) return null
   const { w, h } = sizeOf(entry.label)
-  const above = y > view.value.height - FOOT
+  const { x: left, y: top, w: across, h: down } = visible.value
+  const above = y > top + down - FOOT
   return {
     label: entry.label,
     kind: entry.kind,
-    left: Math.max(0, Math.min(view.value.width - w, x - w / 2)),
+    left: Math.max(left, Math.min(left + across - w, x - w / 2)),
     top: Math.max(
-      0,
-      Math.min(
-        view.value.height - h,
-        above ? y - POINTER_GAP - h : y + POINTER_GAP,
-      ),
+      top,
+      Math.min(top + down - h, above ? y - POINTER_GAP - h : y + POINTER_GAP),
     ),
   }
 })
@@ -287,7 +294,11 @@ const pointed = computed<{
         :class="[`lq-area-${spot.kind}`, { 'lq-area-way': spot.direction }]"
         :data-area-name="spot.areaId"
         :data-way="spot.direction"
-        :style="{ left: `${spot.left}px`, top: `${spot.top}px` }"
+        :style="{
+          left: `${spot.left}px`,
+          top: `${spot.top}px`,
+          maxWidth: `${visible.w}px`,
+        }"
         >{{ spot.label }}</span
       >
     </TransitionGroup>
@@ -296,7 +307,11 @@ const pointed = computed<{
       class="lq-area-name lq-area-pointer"
       :class="`lq-area-${pointed.kind}`"
       data-area-pointer
-      :style="{ left: `${pointed.left}px`, top: `${pointed.top}px` }"
+      :style="{
+        left: `${pointed.left}px`,
+        top: `${pointed.top}px`,
+        maxWidth: `${visible.w}px`,
+      }"
       >{{ pointed.label }}</span
     >
   </div>
@@ -337,7 +352,6 @@ const pointed = computed<{
 .lq-area-name {
   position: absolute;
   box-sizing: border-box;
-  max-width: calc(100% - 8px);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
