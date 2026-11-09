@@ -433,6 +433,19 @@ defineExpose({ focusBelt, focusPicture, has, root })
   gap: 4px;
   pointer-events: auto;
 }
+.lq-belt-compact:not(.lq-belt-away) .lq-belt-bar {
+  /* The slim row of a sideways phone: only as tall as its 48px pictures (52px), so its top lies 60px above the foot and a card's 61px holds. */
+  padding: 2px 8px;
+}
+.lq-belt-compact:not(.lq-belt-away) .lq-belt-strip {
+  /* An empty row ("Your bag is empty.") keeps the height of a row of pictures. */
+  min-height: 48px;
+}
+.lq-belt-compact:not(.lq-belt-away) .lq-belt-switch {
+  /* Pouch and star side by side while the row is up; folded away they stack, clear of Hide / Show. */
+  flex-direction: row;
+  align-items: center;
+}
 .lq-belt-tiny,
 .lq-belt-more,
 .lq-belt-put-away {
