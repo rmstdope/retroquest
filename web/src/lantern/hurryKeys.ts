@@ -96,7 +96,8 @@ function take(
 /**
  * During a change of scene, Enter, Space or Escape brings the new room up at
  * once. Fields and controls keep their own Enter and Space, except an empty
- * command box and the folded bar's Actions (which stays folded).
+ * command box, the folded bar's Actions (which stays folded) and a button in
+ * the actions panel, where focus sits on its own (after Begin, it is on Look).
  */
 function sceneKey(press: HurryKeyPress): HurryKeyDecision | null {
   if (
@@ -111,6 +112,7 @@ function sceneKey(press: HurryKeyPress): HurryKeyDecision | null {
     press.key === 'Escape' ||
     press.emptyBoxEnter ||
     press.onFoldedActions ||
+    press.onActionButton ||
     !(press.inField || press.onControl)
   )
     return take('skip-scene', press.key === ' ')

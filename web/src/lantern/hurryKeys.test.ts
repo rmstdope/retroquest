@@ -80,6 +80,20 @@ describe('decideHurryKey during a change of scene', () => {
     ).toMatchObject({ action: 'skip-scene' })
   })
 
+  it('takes Enter and Space from a button in the actions panel, swallowing only the Space release', () => {
+    const verb = { ...scene, onControl: true, onActionButton: true }
+    expect(decideHurryKey(press({ ...verb, key: 'Enter' }))).toEqual({
+      action: 'skip-scene',
+      consume: true,
+      swallowSpaceUp: false,
+    })
+    expect(decideHurryKey(press({ ...verb, key: SPACE }))).toEqual({
+      action: 'skip-scene',
+      consume: true,
+      swallowSpaceUp: true,
+    })
+  })
+
   it('leaves the key alone under a dialog, a modifier or a handled press', () => {
     expect(decideHurryKey(press({ ...scene, dialogOpen: true }))).toBeNull()
     expect(decideHurryKey(press({ ...scene, modified: true }))).toBeNull()

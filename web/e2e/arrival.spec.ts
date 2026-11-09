@@ -88,6 +88,32 @@ test.describe('the arrival told on the picture', () => {
     await expect(commands).toHaveCount(before)
   })
 
+  test('Enter while the opening is told never presses the focused Look (rq-6koz)', async ({
+    page,
+  }) => {
+    await startAct1(page)
+    const commands = page.getByTestId('command')
+    const look = page
+      .getByRole('region', { name: 'Actions' })
+      .getByRole('button', { name: 'Look', exact: true })
+    await expect(look).toBeFocused()
+    const card = arrival(page).locator('.lq-arrival-card')
+    // The Dream's picture is still rising: the first Enter brings it up.
+    await expect(card).toHaveCount(0)
+    await page.keyboard.press('Enter')
+    await expect(card).toHaveCount(1)
+    await expect(commands).toHaveCount(0)
+    // The rest go on through the telling, down to the last page.
+    for (let i = 0; i < 12 && (await card.count()); i++) {
+      await page.keyboard.press('Enter')
+      await page.waitForTimeout(50)
+      await expect(commands).toHaveCount(0)
+    }
+    await expect(card).toHaveCount(0)
+    await expect(look).toBeFocused()
+    await expect(commands).toHaveCount(0)
+  })
+
   test('goes on with Enter in the empty command box', async ({ page }) => {
     await startAct1(page)
     await page
