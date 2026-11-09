@@ -371,4 +371,11 @@ describe('AreaNames ways out', () => {
     await w.setProps({ pointer: null })
     expect(w.emitted('pointing')?.at(-1)).toEqual([null])
   })
+
+  it('has no pointer name while a ring is open, and still says the way under the pointer', async () => {
+    const w = mountNames({ ringOpen: true })
+    await w.setProps({ pointer: { x: 480, y: 54 } })
+    expect(w.find('[data-area-pointer]').exists()).toBe(false)
+    expect(w.emitted('pointing')?.at(-1)).toEqual(['north'])
+  })
 })

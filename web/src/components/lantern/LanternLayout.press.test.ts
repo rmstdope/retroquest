@@ -173,6 +173,16 @@ describe('LanternLayout: pressing a thing on the picture', () => {
     expect(useAreaNamesStore().showing).toBe(false)
   })
 
+  it('names the thing once, on the ring, with the pointer resting on it', async () => {
+    await cottage()
+    useAreaNamesStore().pointer = { x: 620, y: 350 }
+    await flushPromises()
+    expect(w.find('[data-area-pointer]').text()).toBe('Bread')
+    await press('bread')
+    expect(w.find('.lq-ring-name').text()).toBe('Bread')
+    expect(w.find('[data-area-pointer]').exists()).toBe(false)
+  })
+
   it('closes when the game stops taking a move', async () => {
     const store = await cottage()
     await press('bread')

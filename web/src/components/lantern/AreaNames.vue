@@ -25,7 +25,8 @@ import type { PictureSize, Rect } from '@/lantern/roomMotionScene'
  * spot with a thin line back to its mark, and a thing under the words has
  * neither until the words are gone. Otherwise the one thing under the
  * `pointer` has its name just under the pointer, above it near the foot of
- * what can be seen. Marks and names stay on the part of the picture that can
+ * what can be seen, and has none while a ring is open (`ringOpen`): the ring
+ * has the name. Marks and names stay on the part of the picture that can
  * be seen at every moment of its drift, above the `footCover` pixels the
  * action bar lies over; a thing wholly outside that part has neither. The
  * marks and names fade in and out (not under Reduce motion, which the
@@ -59,6 +60,8 @@ const props = defineProps<{
   footCover?: number
   /** The thing that has keyboard focus: its mark and name show whether or not all are. */
   focused?: string | null
+  /** A ring is open, with the name of its thing in the middle: the pointer has no name of its own. */
+  ringOpen?: boolean
   relayout?: unknown
 }>()
 const emit = defineEmits<{
@@ -256,14 +259,14 @@ function press(spot: NamedSpot, event: MouseEvent): void {
   )
 }
 
-/** The one name that follows the pointer: the thing it is over, when not everything is shown. */
+/** The one name that follows the pointer: the thing it is over, when not everything is shown and no ring is open. */
 const pointed = computed<{
   label: string
   kind: string
   left: number
   top: number
 } | null>(() => {
-  if (props.showing || !props.pointer) return null
+  if (props.showing || props.ringOpen || !props.pointer) return null
   const frame = frameOf()
   const x = (props.pointer.x - frame.left) / frame.ratio
   const y = (props.pointer.y - frame.top) / frame.ratio

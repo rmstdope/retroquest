@@ -2094,6 +2094,7 @@ watch(
                 :pointer="scene.phase === 'idle' ? names.pointer : null"
                 :foot-cover="footCover"
                 :focused="scene.phase === 'idle' ? focusedArea : null"
+                :ring-open="ring !== null"
                 :relayout="namesRelayout"
                 @pointing="pointingWay = $event"
                 @press="onAreaPress"
