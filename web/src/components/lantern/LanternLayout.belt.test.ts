@@ -373,7 +373,15 @@ describe('LanternLayout: the belt of pictures', () => {
     carryMore(store)
     await flushPromises()
     await w.get('[data-belt-switch="spells"]').trigger('click')
-    await click(tile('spell:light').element)
+    useNarrationStore().skipAll()
+    useStageSpeechStore().revealAll()
+    await flushPromises()
+    // The belt may be drawn again while the picture settles, which drops a press on the old one: press until the ring is up.
+    await vi.waitFor(async () => {
+      if (!ring().exists()) await click(tile('spell:light').element)
+      expect(ring().exists()).toBe(true)
+    })
+
     expect(
       w
         .findAll('.lq-press-ring .lq-ring-coin')

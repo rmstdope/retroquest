@@ -1522,17 +1522,26 @@ function ringPlacement(
   }
 }
 
+/** Bumped when the window is resized, so the caption is placed again. */
+const windowTick = ref(0)
+/** The window changed size: the caption follows the belt. */
+function onWindowResize(): void {
+  windowTick.value++
+}
+onMounted(() => window.addEventListener('resize', onWindowResize))
+onUnmounted(() => window.removeEventListener('resize', onWindowResize))
 /** The belt picture whose caption shows, as the belt says. */
 const beltCaption = ref<BeltPicture | null>(null)
 /** Where the caption lies: centred over the belt, one line higher while a Hide or Show button stands above the belt (over the words, like the ring). */
 function captionStyle(): Record<string, string> {
+  void windowTick.value
   const parent = stageEl.value?.parentElement?.getBoundingClientRect()
   const belt = beltEl.value?.root?.getBoundingClientRect()
   if (!parent || !belt) return { visibility: 'hidden' }
-  const lift = showHide.value || showTab.value ? 40 : 0
+  const lift = showHide.value || showTab.value ? ' + var(--lq-hide-line)' : ''
   return {
     left: `${belt.left + belt.width / 2 - parent.left}px`,
-    bottom: `${parent.bottom - belt.top + 6 + lift}px`,
+    bottom: `calc(${parent.bottom - belt.top + 6}px${lift})`,
   }
 }
 
@@ -2178,6 +2187,19 @@ watch(
               @close="closeDrawer"
             />
           </div>
+          <!-- The caption of the picture pointed at: over the words, above the belt and the Hide or Show button. -->
+          <div
+            v-if="beltCaption"
+            class="lq-belt-caption"
+            :style="captionStyle()"
+          >
+            <b :class="`lq-belt-cap-${beltCaption.kind}`">{{
+              beltCaption.label
+            }}</b>
+            <!-- eslint-disable vue/no-v-html -->
+            <span v-html="renderMarkup(beltCaption.note)"></span>
+            <!-- eslint-enable vue/no-v-html -->
+          </div>
           <!-- Over the words and the bars, drawn only in the part of the picture they leave. -->
           <div
             v-if="ring"
@@ -2199,19 +2221,6 @@ watch(
               @hand="takeInHand"
               @close="closeRing"
             />
-          </div>
-          <!-- The caption of the picture pointed at: over the words, above the belt and the Hide or Show button. -->
-          <div
-            v-if="beltCaption"
-            class="lq-belt-caption"
-            :style="captionStyle()"
-          >
-            <b :class="`lq-belt-cap-${beltCaption.kind}`">{{
-              beltCaption.label
-            }}</b>
-            <!-- eslint-disable vue/no-v-html -->
-            <span v-html="renderMarkup(beltCaption.note)"></span>
-            <!-- eslint-enable vue/no-v-html -->
           </div>
           <RoomPlate
             v-if="phoneStage"

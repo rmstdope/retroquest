@@ -119,11 +119,18 @@ test('Cancel and Escape put the thing down and send nothing', async ({
 async function expectCaptionClear(page: Page): Promise<void> {
   const caption = page.locator('.lq-belt-caption')
   await expect(caption).toBeVisible()
+  // The caption is the topmost thing at its centre (hit-testable only for this check).
   expect(
-    await caption.evaluate(
-      (el) =>
-        Number(getComputedStyle(el).zIndex) > 2 && !el.closest('.lq-stage'),
-    ),
+    await caption.evaluate((el) => {
+      el.style.pointerEvents = 'auto'
+      const r = el.getBoundingClientRect()
+      const top = document.elementFromPoint(
+        r.left + r.width / 2,
+        r.top + r.height / 2,
+      )
+      el.style.pointerEvents = ''
+      return !!top && el.contains(top)
+    }),
   ).toBe(true)
   const cap = (await caption.boundingBox())!
   const hide = page.locator('.lq-words-hide, .lq-paper-tab')
@@ -149,6 +156,33 @@ for (const size of [
     await expectCaptionClear(page)
   })
 }
+
+test('the caption does not lie over the buttons of a ring opened from the belt', async ({
+  page,
+}): Promise<void> => {
+  await page.setViewportSize({ width: 500, height: 757 })
+  await toTheCottage(page)
+  await page.locator('[data-belt-pic="item:bread"]').click()
+  await expect(page.getByRole('menu', { name: 'Bread' })).toBeVisible()
+  const covered = await page.evaluate(() => {
+    const caption = document.querySelector<HTMLElement>('.lq-belt-caption')
+    if (!caption) return -1
+    caption.style.pointerEvents = 'auto'
+    const count = [...document.querySelectorAll('.lq-ring-coin')].filter(
+      (coin) => {
+        const r = coin.getBoundingClientRect()
+        const hit = document.elementFromPoint(
+          r.left + r.width / 2,
+          r.top + r.height / 2,
+        )
+        return !hit || !coin.contains(hit)
+      },
+    ).length
+    caption.style.pointerEvents = ''
+    return count
+  })
+  expect(covered).toBe(0)
+})
 
 test('B goes to the belt, the belt can be put away and is remembered across a reload', async ({
   page,
