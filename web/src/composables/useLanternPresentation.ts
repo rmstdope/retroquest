@@ -293,6 +293,8 @@ export function useLanternPresentation(
 
   // The panels of a narrated command are held for this layout; leaving lets go.
   game.setPanelHold(true)
+  // The arrival ends with the layout: a skip alone would arm its clearing timer.
+  onUnmounted(() => arrival.clear())
   // The voice stops when the layout goes (before the panels are let go).
   onUnmounted(() => narration.skipAll())
   onUnmounted(() => game.setPanelHold(false))
