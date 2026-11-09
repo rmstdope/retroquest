@@ -4,7 +4,6 @@ import { useGameStore } from '@/stores/useGameStore'
 import { useBeltStore } from '@/stores/useBeltStore'
 import { useFlightStore } from '@/stores/useFlightStore'
 import { beltPictures, type BeltList, type BeltPicture } from '@/lantern/belt'
-import { renderMarkup } from '@/utils/theme'
 
 /**
  * The belt of pictures across the foot of the room's picture: the things
@@ -18,7 +17,7 @@ import { renderMarkup } from '@/utils/theme'
  * the strip also scrolls by wheel, swipe and arrow keys. The pictures are one
  * Tab stop (arrows walk, Home and End jump); Enter or Space presses. A press
  * says which picture and where (a key: its middle); what it does is the
- * layout's. The picture in hand stays lit. A caption above the belt gives the
+ * layout's. The picture in hand stays lit. A caption for the picture pointed at is told to the layout, which draws it above the belt and the words. It gives the
  * name and short description of the picture pointed at or focused, or of
  * `captionFor` (the one whose ring is open). The list showing counts as seen,
  * so the amber dot only sits on the tiny button of the list not showing, and
@@ -30,13 +29,13 @@ const props = defineProps<{
   compact?: boolean
   /** The key of the picture whose ring is open, whose caption shows. */
   captionFor?: string | null
-  /** The ▾ Hide button shows on the line above the belt: the caption rises above it. */
-  liftCaption?: boolean
 }>()
 const emit = defineEmits<{
   press: [picture: BeltPicture, at: { x: number; y: number }]
   /** The height the belt takes at the foot of the picture (0 while away). */
   measure: [height: number]
+  /** The picture whose caption shows (null: none). The layout draws it, over the words. */
+  caption: [picture: BeltPicture | null]
 }>()
 const game = useGameStore()
 const belt = useBeltStore()
@@ -59,9 +58,12 @@ const focused = ref<string | null>(null)
 const captionKey = computed(
   () => pointed.value ?? focused.value ?? props.captionFor ?? null,
 )
-const caption = computed(
-  () => pictures.value.find((p) => p.key === captionKey.value) ?? null,
+const caption = computed(() =>
+  belt.away
+    ? null
+    : (pictures.value.find((p) => p.key === captionKey.value) ?? null),
 )
+watch(caption, (picture) => emit('caption', picture), { immediate: true })
 /** More pictures lie out of sight to the left or to the right. */
 const more = ref({ prev: false, next: false })
 
@@ -211,6 +213,7 @@ onMounted(() => {
   emit('measure', belt.away ? 0 : (root.value?.offsetHeight ?? 0))
 })
 onUnmounted(() => {
+  emit('caption', null)
   observer?.disconnect()
   cancelAnimationFrame(frame)
   emit('measure', 0)
@@ -242,16 +245,6 @@ defineExpose({ focusBelt, focusPicture, has, root })
     :class="{ 'lq-belt-compact': compact, 'lq-belt-away': belt.away }"
     aria-label="Bag and spells"
   >
-    <div
-      v-if="caption && !belt.away"
-      class="lq-belt-caption"
-      :class="{ 'lq-belt-caption-high': liftCaption }"
-    >
-      <b :class="`lq-belt-cap-${caption.kind}`">{{ caption.label }}</b>
-      <!-- eslint-disable vue/no-v-html -->
-      <span v-html="renderMarkup(caption.note)"></span>
-      <!-- eslint-enable vue/no-v-html -->
-    </div>
     <div class="lq-belt-bar">
       <div class="lq-belt-switch">
         <button
@@ -601,35 +594,6 @@ defineExpose({ focusBelt, focusPicture, has, root })
 .lq-belt-put-away:focus-visible {
   outline: 3px solid var(--lq-accent);
   outline-offset: 2px;
-}
-.lq-belt-caption {
-  position: absolute;
-  left: 50%;
-  bottom: 100%;
-  transform: translateX(-50%);
-  margin-bottom: 6px;
-  max-width: min(520px, 92%);
-  padding: 8px 14px;
-  border-radius: 10px;
-  border: 1px solid var(--lq-line);
-  background: var(--lq-surface);
-  color: var(--lq-fg);
-  font-size: 13px;
-  box-shadow: 0 4px 16px rgb(0 0 0 / 0.25);
-  pointer-events: none;
-}
-.lq-belt-caption-high {
-  /* One Hide line higher, so the ▾ Hide pill does not cover it. */
-  margin-bottom: calc(6px + var(--lq-hide-line, 40px));
-}
-.lq-belt-caption b {
-  margin-right: 8px;
-}
-.lq-belt-cap-item {
-  color: var(--lq-item);
-}
-.lq-belt-cap-spell {
-  color: var(--lq-spell);
 }
 .lq-sr-only {
   position: absolute;

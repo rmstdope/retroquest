@@ -115,6 +115,41 @@ test('Cancel and Escape put the thing down and send nothing', async ({
   expect((await story.innerText()).length).toBe(before)
 })
 
+/** The caption of the picture reached lies clear of the ▾ Hide, and the ▴ Show tab; its layer stands over the story words. */
+async function expectCaptionClear(page: Page): Promise<void> {
+  const caption = page.locator('.lq-belt-caption')
+  await expect(caption).toBeVisible()
+  expect(
+    await caption.evaluate(
+      (el) =>
+        Number(getComputedStyle(el).zIndex) > 2 && !el.closest('.lq-stage'),
+    ),
+  ).toBe(true)
+  const cap = (await caption.boundingBox())!
+  const hide = page.locator('.lq-words-hide, .lq-paper-tab')
+  await expect(hide).toHaveCount(1)
+  const pill = (await hide.boundingBox())!
+  expect(cap.y + cap.height).toBeLessThanOrEqual(pill.y + 1)
+}
+
+for (const size of [
+  { width: 1280, height: 800 },
+  { width: 500, height: 757 },
+]) {
+  test(`the caption clears the Hide and the Show tab at ${size.width}x${size.height}`, async ({
+    page,
+  }): Promise<void> => {
+    await page.setViewportSize(size)
+    await toTheCottage(page)
+    await page.keyboard.press('b')
+    await expectCaptionClear(page)
+    await page.keyboard.press('Escape')
+    await page.locator('.lq-words-hide').click()
+    await page.keyboard.press('b')
+    await expectCaptionClear(page)
+  })
+}
+
 test('B goes to the belt, the belt can be put away and is remembered across a reload', async ({
   page,
 }): Promise<void> => {
@@ -123,13 +158,7 @@ test('B goes to the belt, the belt can be put away and is remembered across a re
   await page.keyboard.press('b')
   await expect(page.locator('[data-belt-pic="item:bread"]')).toBeFocused()
   await expect(page.locator('.lq-belt-caption')).toContainText('Bread')
-  // The caption lies above the ▾ Hide, never under it.
-  const hide = page.locator('.lq-words-hide')
-  if (await hide.isVisible()) {
-    const cap = await page.locator('.lq-belt-caption').boundingBox()
-    const pill = await hide.boundingBox()
-    expect(cap!.y + cap!.height).toBeLessThanOrEqual(pill!.y)
-  }
+  await expectCaptionClear(page)
   await page.getByRole('button', { name: 'Put the belt away' }).click()
   await expect(page.locator('[data-belt-pic="item:bread"]')).toHaveCount(0)
   await expect(page.getByRole('button', { name: 'Bag' })).toBeVisible()

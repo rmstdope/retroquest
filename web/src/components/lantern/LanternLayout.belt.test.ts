@@ -149,14 +149,15 @@ describe('LanternLayout: the belt of pictures', () => {
     expect(w.get('.lq-belt-caption').text()).toContain('Bread')
   })
 
-  it('lifts the caption above the ▾ Hide while the words show it', async () => {
+  it('draws the caption over the words, outside the picture that lies beneath them, and drops it when focus leaves', async () => {
     await cottage()
+    expect(w.find('.lq-belt-caption').exists()).toBe(false)
     await tile('item:bread').trigger('focus')
-    const hideShows = w.find('.lq-words-hide').exists()
-    expect(hideShows).toBe(true)
-    expect(w.get('.lq-belt-caption').classes()).toContain(
-      'lq-belt-caption-high',
-    )
+    const caption = w.get('.lq-belt-caption')
+    expect(caption.text()).toContain('Bread')
+    expect(caption.element.closest('.lq-stage')).toBeNull()
+    await tile('item:bread').trigger('blur')
+    expect(w.find('.lq-belt-caption').exists()).toBe(false)
   })
 
   it('sends Use at once, as if typed', async () => {
