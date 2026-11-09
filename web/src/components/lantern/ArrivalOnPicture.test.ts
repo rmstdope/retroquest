@@ -389,6 +389,29 @@ describe('ArrivalOnPicture', () => {
     const lines = (w: VueWrapper): string[] =>
       w.findAll('.lq-arrival-text .lq-arrival-line').map((l) => l.text())
 
+    it('cuts a sideways card with a head for the 2 px it gains (rq-z0hc)', async () => {
+      const news: ArrivalPart = {
+        kind: 'news',
+        news: { kind: 'new', name: 'Q', main: false, text: 'x' },
+        lines: [
+          { unit: 0, markup: 'Aaaaaaaaaaa', wordBase: 0 },
+          { unit: 1, markup: 'Bbbbbbbbbbb', wordBase: 1 },
+        ],
+        voiced: false,
+      }
+      const cut = async (sideways: boolean): Promise<number> => {
+        const w = mount(ArrivalOnPicture, {
+          props: { pictured: true, sideways },
+        })
+        useArrivalStore().show(1, [news], false)
+        for (let i = 0; i < 4; i++) await w.vm.$nextTick()
+        return w.findAll('.lq-arrival-text .lq-arrival-line').length
+      }
+      // 48 tall, less two gaps of 14: 20 px of room, 22 sideways.
+      expect(await cut(false)).toBe(1)
+      expect(await cut(true)).toBe(2)
+    })
+
     it('shows the first page only, then the next on a click, with the same hint', async () => {
       const w = await told(long)
       expect(lines(w)).toEqual(['Aaaaaaaaaa bbbb.', 'Cccccccccc dddd.'])
