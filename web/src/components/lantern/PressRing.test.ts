@@ -7,7 +7,8 @@ import { mount, type VueWrapper } from '@vue/test-utils'
 import PressRing from './PressRing.vue'
 import type { ActionContext } from '@/lantern/actions'
 import type { AreaThing } from '@/lantern/areaThings'
-import { ringActions } from '@/lantern/pressRing'
+import { ringActions, type RingSubject } from '@/lantern/pressRing'
+import { carriedRing } from '@/lantern/belt'
 
 const ctx: ActionContext = {
   roomItems: [],
@@ -181,5 +182,30 @@ describe('PressRing', () => {
     expect(source).toMatch(/\.lq-ring-pill \{[^}]*max-width: 100%/s)
     expect(source).toMatch(/\.lq-ring-fan-right \{[^}]*padding-right: 12px/s)
     expect(source).toMatch(/\.lq-ring-fan-left \{[^}]*padding-left: 12px/s)
+  })
+
+  it('opens round a carried spell in its purple, and takes a thing in hand without sending', async () => {
+    const light: RingSubject = {
+      areaId: 'belt:spell:light',
+      name: 'light',
+      label: 'Light',
+      kind: 'spell',
+    }
+    const w = mount(PressRing, {
+      attachTo: document.body,
+      props: {
+        thing: light,
+        actions: carriedRing(light, ctx, 1),
+        at: { x: 300, y: 160 },
+        bounds: { w: 568, h: 320 },
+      },
+    })
+    wrappers.push(w)
+    await nextTick()
+    expect(w.get('.lq-ring-name').classes()).toContain('lq-ring-spell')
+    await coin(w, 'caston').trigger('click')
+    expect(w.emitted('hand')).toEqual([['caston']])
+    expect(w.emitted('pick')).toBeUndefined()
+    expect(w.find('.lq-ring-fan').exists()).toBe(false)
   })
 })

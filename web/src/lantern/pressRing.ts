@@ -17,6 +17,20 @@ import {
 import type { AreaThing } from './areaThings'
 import { parseCountedName } from './inventoryChanges'
 
+/** What a ring button takes in hand, to be used on the next thing pressed. */
+export type HandVerb = 'usewith' | 'give' | 'caston'
+
+/** What a ring is drawn round: a thing of the picture, or a carried thing or spell on the belt. */
+export interface RingSubject {
+  areaId: string
+  /** The engine's name, as a command puts it. */
+  name: string
+  /** The name shown in the middle of the ring. */
+  label: string
+  /** Decides the colour of the name. */
+  kind: AreaThing['kind'] | 'spell'
+}
+
 /** A second choice in a fan: its words and the command it sends. */
 export interface RingChoice {
   label: string
@@ -35,6 +49,8 @@ export interface RingAction {
   choices?: RingChoice[]
   /** It opens a words box (Say…). */
   say?: boolean
+  /** It closes the ring and takes the subject in hand for the next press. */
+  hand?: HandVerb
 }
 
 /** A point, in the picture's pixels. */
@@ -44,7 +60,7 @@ export interface Point {
 }
 
 /** The glyph on each action's button. */
-const ICONS: Record<string, string> = {
+export const ICONS: Record<string, string> = {
   take: '✋',
   use: '⚙',
   usewith: '⚯',
@@ -59,17 +75,17 @@ const ICONS: Record<string, string> = {
 }
 
 /** A button with a command that is sent at once. */
-function plain(id: string, label: string, command: string): RingAction {
+export function plain(id: string, label: string, command: string): RingAction {
   return { id, label, icon: ICONS[id] ?? '•', command }
 }
 
 /** The command of `verbId` with `args`; every ring verb is complete with them. */
-function commandOf(verbId: string, args: string[]): string {
+export function commandOf(verbId: string, args: string[]): string {
   return buildCommand(verbById(verbId), args) ?? ''
 }
 
 /** A button that fans out the choices of the verb's slot, or null when there are none. */
-function fanned(
+export function fanned(
   verbId: string,
   label: string,
   slot: Slot,
@@ -169,7 +185,10 @@ export function ringActions(
 }
 
 /** The command that says `words` to `person`; null while the box is empty. */
-export function sayCommand(words: string, person: AreaThing): string | null {
+export function sayCommand(
+  words: string,
+  person: { name: string },
+): string | null {
   return buildCommand(verbById('say'), [words, person.name])
 }
 
