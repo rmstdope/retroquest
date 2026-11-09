@@ -111,9 +111,7 @@ function tiles(): HTMLElement[] {
 async function focusPicture(key?: string): Promise<void> {
   await nextTick()
   const all = tiles()
-  const el = key
-    ? all.find((t) => t.dataset.beltPic === key)
-    : (all.find((t) => t.dataset.beltPic === rovingKey.value) ?? all[0])
+  const el = key ? all.find((t) => t.dataset.beltPic === key) : all[0]
   el?.focus()
   el?.scrollIntoView?.({ block: 'nearest', inline: 'nearest' })
 }
