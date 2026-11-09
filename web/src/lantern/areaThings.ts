@@ -18,6 +18,8 @@ export interface AreaThing {
   label: string
   /** Decides the colour: people blue, things that can be picked up green, ways out amber, scenery plain. */
   kind: 'character' | 'item' | 'scenery' | 'exit'
+  /** For a way out, the direction that goes there (what pressing it types after `go`). */
+  direction?: string
 }
 
 /** The area id of a thing, or null for one its act does not register (it has no area to mark). */
@@ -73,6 +75,7 @@ export function areaThingsOf(
       areaId: exitAreaId(direction),
       label: `${exitArrow(direction)} ${place}`,
       kind: 'exit',
+      direction,
     })
   }
   return things

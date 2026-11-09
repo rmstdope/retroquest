@@ -433,6 +433,22 @@ describe('useGameStore: panels held while a turn is narrated', () => {
       expect(store.roomAreas.things).toEqual([])
     })
 
+    it('lists the placed ways out that are closed right now, with the direction to ask for', async () => {
+      const store = await cottage()
+      const box = { x: 0.4, y: 0.5, width: 0.1, height: 0.1 }
+      store.imageManifest = {
+        'act1-eliors-cottage': {
+          width: 1920,
+          height: 1080,
+          areas: { 'exit-south': box, bread: box },
+        },
+      }
+      expect(store.roomAreas.things.map((t) => t.areaId)).toEqual(['bread'])
+      expect(store.roomAreas.closedWays.map((t) => t.direction)).toEqual([
+        'south',
+      ])
+    })
+
     it('moves only what floats when the manifest cannot be fetched', async () => {
       const store = await cottage()
       vi.stubGlobal('fetch', () => Promise.reject(new Error('offline')))

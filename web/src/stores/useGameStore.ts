@@ -10,7 +10,9 @@ import type {
   QuestSummary,
   RoomWare,
 } from '@/types/bridge'
+import { closedWayThings } from '@/lantern/areaNames'
 import type { AreaThing } from '@/lantern/areaThings'
+import { declaredAreas } from '@/lantern/roomAreas'
 import type { PictureState, useBridge } from '@/composables/useBridge'
 import {
   LOADED_ROOM,
@@ -508,20 +510,28 @@ export const useGameStore = defineStore('game', () => {
   /**
    * What the room's picture can name right now: the things and ways out in
    * the room (as the held `picture` group lets them be seen) that the studio
-   * has placed on the picture, with their boxes. Empty while there is no
+   * has placed on the picture, with their boxes, and the placed ways out that
+   * are closed right now (plain painting, they only answer a press). Empty while there is no
    * picture, no manifest or nothing placed, so there is nothing to show.
    */
   const roomAreas = computed<{
     things: AreaThing[]
     boxes: Record<string, AreaBox>
+    closedWays: AreaThing[]
   }>(() => {
     const shown = roomPictureState.value
     const id = shownPictureId.value
-    if (!shown || id === null) return { things: [], boxes: {} }
+    if (!shown || id === null) return { things: [], boxes: {}, closedWays: [] }
     const boxes = madeAreaBoxes(imageManifest.value, id)
+    const declared = declaredAreas(
+      musicActName.value,
+      shown.roomKey,
+      shown.variant,
+    ).map((area) => area.id)
     return {
       things: shown.things.filter((thing) => thing.areaId in boxes),
       boxes,
+      closedWays: closedWayThings(declared, shown.things, boxes),
     }
   })
 
