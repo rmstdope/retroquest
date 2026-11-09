@@ -7,7 +7,7 @@ import { useGameStore } from '@/stores/useGameStore'
 import { startedHoldStore } from '@/testing/holdGame'
 
 /**
- * The stage buttons over the real engine: Bag, Spells, Quests, Story so far and
+ * The stage buttons over the real engine: Quests, Story so far and
  * Map are press-only and one at a time; a press outside closes what is open.
  */
 describe('LanternLayout: one thing open on the stage', () => {
@@ -57,7 +57,7 @@ describe('LanternLayout: one thing open on the stage', () => {
   })
 
   it('closes the drawer when the map opens, and the map when a drawer opens', async () => {
-    await press('bag')
+    await press('quests')
     expect(w.find('.lq-drawer').exists()).toBe(true)
     await press('map')
     expect(w.find('.lq-drawer').exists()).toBe(false)
@@ -73,21 +73,18 @@ describe('LanternLayout: one thing open on the stage', () => {
     expect(lit()).toEqual(['story'])
   })
 
-  it('lights the button of the tab chosen inside the drawer, which then closes it', async () => {
-    await press('bag')
-    await w.get('.lq-drawer #lq-tab-spells').trigger('click')
-    expect(w.get('.lq-drawer [aria-selected="true"]').text()).toContain(
-      'Spells',
-    )
-    expect(lit()).toEqual(['spells'])
-    await press('spells')
+  it('shows the Quests alone in the drawer, and a second press closes it', async () => {
+    await press('quests')
+    expect(w.find('.lq-drawer [role="tab"]').exists()).toBe(false)
+    expect(w.get('.lq-drawer').text()).toContain('Quests')
+    expect(lit()).toEqual(['quests'])
+    await press('quests')
     expect(w.find('.lq-drawer').exists()).toBe(false)
     expect(lit()).toEqual([])
   })
 
-  it('hands focus to the lit button when the drawer closes after a tab change', async () => {
-    await press('bag')
-    await w.get('.lq-drawer #lq-tab-quests').trigger('click')
+  it('hands focus to the lit button when the drawer closes', async () => {
+    await press('quests')
     await w.get('.lq-drawer-close').trigger('click')
     await w.vm.$nextTick()
     expect(w.find('.lq-drawer').exists()).toBe(false)
@@ -95,7 +92,7 @@ describe('LanternLayout: one thing open on the stage', () => {
   })
 
   it('closes what is open on a press outside, but not on a press inside', async () => {
-    await press('bag')
+    await press('quests')
     w.get('.lq-drawer').element.dispatchEvent(
       new Event('pointerdown', { bubbles: true }),
     )

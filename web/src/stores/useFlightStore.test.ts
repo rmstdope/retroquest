@@ -35,8 +35,10 @@ describe('useFlightStore', () => {
     vi.advanceTimersByTime(FLIGHT_FLY_MS)
     expect(flights.current).toBeNull()
     expect(flights.landed).toBe('item')
+    expect(flights.landedName).toBe('lantern')
     vi.advanceTimersByTime(FLIGHT_LAND_MS)
     expect(flights.landed).toBeNull()
+    expect(flights.landedName).toBeNull()
   })
 
   it('flies several things one after another', () => {

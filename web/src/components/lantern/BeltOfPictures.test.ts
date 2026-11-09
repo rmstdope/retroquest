@@ -1,11 +1,12 @@
 // @vitest-environment jsdom
-import { afterEach, beforeEach, describe, expect, it } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { mount, type VueWrapper } from '@vue/test-utils'
 import { nextTick } from 'vue'
 import { createPinia, setActivePinia } from 'pinia'
 import BeltOfPictures from './BeltOfPictures.vue'
 import { useGameStore } from '@/stores/useGameStore'
 import { useBeltStore } from '@/stores/useBeltStore'
+import { useFlightStore } from '@/stores/useFlightStore'
 
 describe('BeltOfPictures', () => {
   let w: VueWrapper | undefined
@@ -183,5 +184,42 @@ describe('BeltOfPictures', () => {
     await w!.get('.lq-belt-strip').trigger('scroll')
     expect(w!.find('[data-belt-more="next"]').exists()).toBe(true)
     expect(w!.find('[data-belt-more="prev"]').exists()).toBe(false)
+  })
+
+  it('bumps the picture that a gained thing has flown to, and the tiny button of its kind', async () => {
+    mountBelt()
+    const flights = useFlightStore()
+    flights.landed = 'item'
+    flights.landedName = 'bread'
+    await nextTick()
+    expect(w!.get('[data-belt-pic="item:bread"]').classes()).toContain(
+      'lq-landed',
+    )
+    expect(
+      w!.get('[data-belt-pic="item:Elior\'s Journal"]').classes(),
+    ).not.toContain('lq-landed')
+    expect(w!.get('[data-belt-switch="bag"]').classes()).toContain('lq-landed')
+  })
+
+  it('dips the Bag tiny button as a lost item rises out of it', async () => {
+    mountBelt()
+    useFlightStore().dipped = 'item'
+    await nextTick()
+    expect(w!.get('[data-belt-switch="bag"]').classes()).toContain('lq-dipped')
+    expect(w!.get('[data-belt-switch="spells"]').classes()).not.toContain(
+      'lq-dipped',
+    )
+  })
+
+  it('scrolls the picture a gained thing will land on into view as the flight begins', async () => {
+    mountBelt()
+    const el = w!.get('[data-belt-pic="item:bread"]').element
+    const scrolled = vi.fn()
+    el.scrollIntoView = scrolled
+    useFlightStore().launch([{ kind: 'item', name: 'bread', count: 2 }])
+    await nextTick()
+    await nextTick()
+    expect(scrolled).toHaveBeenCalled()
+    useFlightStore().clear()
   })
 })

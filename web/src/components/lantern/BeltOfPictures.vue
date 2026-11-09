@@ -2,6 +2,7 @@
 import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useGameStore } from '@/stores/useGameStore'
 import { useBeltStore } from '@/stores/useBeltStore'
+import { useFlightStore } from '@/stores/useFlightStore'
 import { beltPictures, type BeltList, type BeltPicture } from '@/lantern/belt'
 import { renderMarkup } from '@/utils/theme'
 
@@ -37,6 +38,7 @@ const emit = defineEmits<{
 }>()
 const game = useGameStore()
 const belt = useBeltStore()
+const flights = useFlightStore()
 
 const root = ref<HTMLElement | null>(null)
 const strip = ref<HTMLElement | null>(null)
@@ -155,6 +157,22 @@ function onPress(picture: BeltPicture, event: MouseEvent): void {
   emit('press', picture, at)
 }
 
+// A gained thing's flight begins: scroll the picture it will land on into view, on the list that shows it.
+watch(
+  () => [flights.current?.key, flights.phase] as const,
+  async ([key, phase]) => {
+    const flight = flights.current
+    if (key === undefined || !flight || flight.leaving || phase !== 'show')
+      return
+    if (belt.away || pictures.value.every((p) => p.kind !== flight.kind)) return
+    await nextTick()
+    const el = tiles().find(
+      (t) => t.dataset.beltPic === `${flight.kind}:${flight.name}`,
+    )
+    el?.scrollIntoView?.({ block: 'nearest', inline: 'nearest' })
+  },
+)
+
 // The list showing counts as seen, news that comes while it shows too.
 watch(
   [
@@ -227,7 +245,11 @@ defineExpose({ focusBelt, focusPicture, has, root })
         <button
           type="button"
           class="lq-belt-tiny"
-          :class="{ 'lq-lit': !belt.away && belt.list === 'bag' }"
+          :class="{
+            'lq-lit': !belt.away && belt.list === 'bag',
+            'lq-landed': flights.landed === 'item',
+            'lq-dipped': flights.dipped === 'item',
+          }"
           data-belt-switch="bag"
           data-flight-target="item"
           aria-label="Bag"
@@ -257,7 +279,11 @@ defineExpose({ focusBelt, focusPicture, has, root })
         <button
           type="button"
           class="lq-belt-tiny"
-          :class="{ 'lq-lit': !belt.away && belt.list === 'spells' }"
+          :class="{
+            'lq-lit': !belt.away && belt.list === 'spells',
+            'lq-landed': flights.landed === 'spell',
+            'lq-dipped': flights.dipped === 'spell',
+          }"
           data-belt-switch="spells"
           data-flight-target="spell"
           aria-label="Spells"
@@ -317,6 +343,9 @@ defineExpose({ focusBelt, focusPicture, has, root })
                 'lq-lit':
                   belt.hand?.kind === picture.kind &&
                   belt.hand?.name === picture.name,
+                'lq-landed':
+                  flights.landed === picture.kind &&
+                  flights.landedName === picture.name,
               },
             ]"
             :data-belt-pic="picture.key"
@@ -535,6 +564,19 @@ defineExpose({ focusBelt, focusPicture, has, root })
   background: rgb(34 32 27 / 0.82);
   color: #fff;
   font: 600 11px var(--lq-font-ui);
+}
+/* A gained thing has just flown in: its picture and the tiny button of its kind bump; a lost item rises out of the Bag's button, which dips. */
+.lq-belt-pic.lq-landed .lq-belt-square,
+.lq-belt-tiny.lq-landed {
+  transform: scale(1.12);
+  transition: transform calc(140ms * var(--lq-motion)) ease-out;
+}
+.lq-belt-tiny.lq-dipped {
+  transform: scale(0.88);
+  transition: transform calc(140ms * var(--lq-motion)) ease-out;
+}
+.lq-belt-tiny:not(.lq-landed, .lq-dipped) {
+  transition: transform calc(300ms * var(--lq-motion)) ease-in;
 }
 .lq-belt-pic.lq-lit .lq-belt-square {
   outline: 3px solid var(--lq-accent);

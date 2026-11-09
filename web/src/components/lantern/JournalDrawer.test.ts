@@ -8,37 +8,16 @@ import JournalDrawer from './JournalDrawer.vue'
 describe('JournalDrawer', () => {
   beforeEach(() => setActivePinia(createPinia()))
 
-  it('opens the journal on the tab asked for, with the tab row', () => {
-    const w = mount(JournalDrawer, { props: { tab: 'spells' } })
-    const selected = w.get('[role="tab"][aria-selected="true"]')
-    expect(selected.text()).toContain('Spells')
-    expect(w.findAll('[role="tab"]')).toHaveLength(3)
-  })
-
-  it('shows the empty line of a tab', () => {
-    const w = mount(JournalDrawer, { props: { tab: 'bag' } })
-    expect(w.text()).toContain('Your bag is empty.')
-  })
-
-  it('follows a different tab pressed while open', async () => {
-    const w = mount(JournalDrawer, { props: { tab: 'bag' } })
-    await w.setProps({ tab: 'quests' })
-    expect(w.get('[role="tab"][aria-selected="true"]').text()).toContain(
-      'Quests',
-    )
-  })
-
-  it('passes on a tab chosen inside it', async () => {
-    const w = mount(JournalDrawer, { props: { tab: 'bag' } })
-    await w.get('#lq-tab-quests').trigger('click')
-    expect(w.emitted('select')).toEqual([['quests']])
+  it('shows the Quests alone, with no tab row', () => {
+    const w = mount(JournalDrawer)
+    expect(w.findAll('[role="tab"]')).toHaveLength(0)
+    expect(w.get('.lq-journal-title').text()).toBe('Quests')
+    expect(w.text()).toContain('No quests yet.')
+    expect(w.text()).not.toContain('Your bag is empty.')
   })
 
   it('moves focus into itself when it opens', async () => {
-    const w = mount(JournalDrawer, {
-      props: { tab: 'bag' },
-      attachTo: document.body,
-    })
+    const w = mount(JournalDrawer, { attachTo: document.body })
     await nextTick()
     await nextTick()
     expect(w.element.contains(document.activeElement)).toBe(true)
@@ -46,7 +25,7 @@ describe('JournalDrawer', () => {
   })
 
   it('asks to close on ✕ and on Escape, and keeps Escape to itself', async () => {
-    const w = mount(JournalDrawer, { props: { tab: 'bag' } })
+    const w = mount(JournalDrawer)
     await w.get('.lq-drawer-close').trigger('click')
     const escape = new KeyboardEvent('keydown', {
       key: 'Escape',
