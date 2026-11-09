@@ -35,8 +35,10 @@ describe('useFlightStore', () => {
     vi.advanceTimersByTime(FLIGHT_FLY_MS)
     expect(flights.current).toBeNull()
     expect(flights.landed).toBe('item')
+    expect(flights.landedName).toBe('lantern')
     vi.advanceTimersByTime(FLIGHT_LAND_MS)
     expect(flights.landed).toBeNull()
+    expect(flights.landedName).toBeNull()
   })
 
   it('flies several things one after another', () => {
@@ -146,5 +148,16 @@ describe('useFlightStore', () => {
       vi.runAllTimers()
       expect(flights.current).toBeNull()
     })
+  })
+
+  it('keeps the bump of a later landing of the same kind when an earlier one times out', () => {
+    const flights = useFlightStore()
+    flights.launch([lantern, { kind: 'item', name: 'rope', count: 1 }])
+    vi.advanceTimersByTime(FLIGHT_SHOW_MS + FLIGHT_HOLD_MS + FLIGHT_FLY_MS)
+    expect(flights.landedName).toBe('lantern')
+    vi.advanceTimersByTime(FLIGHT_SHOW_MS + FLIGHT_HOLD_MS + FLIGHT_FLY_MS)
+    expect(flights.landedName).toBe('rope')
+    vi.advanceTimersByTime(FLIGHT_LAND_MS - 1)
+    expect(flights.landedName).toBe('rope')
   })
 })

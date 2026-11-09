@@ -564,8 +564,11 @@ test.describe('Lantern UI (the default)', () => {
     const plate = page.getByRole('region', { name: 'Current location' })
     await expect(plate).toContainText('You are in')
     await expect(plate).toContainText('Village Square')
-    for (const name of [/Bag · 1/, /Spells · 0/, /Quests · 0/, /Story so far/])
+    for (const name of [/Quests · 0/, /Story so far/])
       await expect(page.getByRole('button', { name })).toBeVisible()
+    // The Bag and Spells are the belt of pictures at the foot of the picture.
+    await expect(page.getByRole('button', { name: /^Bag · / })).toHaveCount(0)
+    await expect(page.locator('[data-belt-pic="item:bread"]')).toBeVisible()
     await expect(page.getByRole('complementary')).toHaveCount(0)
 
     const exit = page.getByRole('button', { name: "Go north to Mira's Hut" })
@@ -575,8 +578,8 @@ test.describe('Lantern UI (the default)', () => {
     await page.getByRole('button', { name: /Map/ }).click()
     await expect(exit).toBeVisible()
 
-    // The bug's own direction: with Bag open, Map replaces it and is pressable.
-    await page.getByRole('button', { name: /Bag · 1/ }).click()
+    // The bug's own direction: with Quests open, Map replaces it and is pressable.
+    await page.getByRole('button', { name: /Quests · 0/ }).click()
     await page.getByRole('button', { name: /Map/ }).click()
     await expect(
       page.getByRole('complementary', { name: 'Journal drawer' }),
@@ -584,9 +587,10 @@ test.describe('Lantern UI (the default)', () => {
     await expect(exit).toBeVisible()
     await expect(exit).toBeEnabled()
 
-    await page.getByRole('button', { name: /Bag · 1/ }).click()
+    await page.getByRole('button', { name: /Quests · 0/ }).click()
     const drawer = page.getByRole('complementary', { name: 'Journal drawer' })
-    await expect(drawer.getByRole('tab', { name: /Bag · 1/ })).toBeVisible()
+    await expect(drawer.getByRole('heading', { name: 'Quests' })).toBeVisible()
+    await expect(drawer.getByRole('tab')).toHaveCount(0)
     // It stops above the actions, so every action stays in reach.
     const drawerBox = await drawer.boundingBox()
     const actionVerbs = await page.locator('.lq-verbs').boundingBox()
@@ -597,7 +601,7 @@ test.describe('Lantern UI (the default)', () => {
     // press on More… is outside the drawer, so it closes it; open it again.
     await page.getByRole('button', { name: 'More…' }).click()
     await expect(drawer).toHaveCount(0)
-    await page.getByRole('button', { name: /Bag · 1/ }).click()
+    await page.getByRole('button', { name: /Quests · 0/ }).click()
     await expect
       .poll(async () => {
         const composer = await page.locator('.lq-composer').boundingBox()
@@ -613,7 +617,7 @@ test.describe('Lantern UI (the default)', () => {
     await page.getByRole('button', { name: /Quests · 0/ }).click()
     await expect(drawer).toHaveCount(0)
     await expect(page.getByRole('button', { name: /Quests · 0/ })).toBeFocused()
-    await page.getByRole('button', { name: /Bag · 1/ }).click()
+    await page.getByRole('button', { name: /Quests · 0/ }).click()
     await expect(drawer).toBeVisible()
     await page.keyboard.press('Escape')
     await expect(drawer).toHaveCount(0)
@@ -654,9 +658,9 @@ test.describe('Lantern UI (the default)', () => {
     await expect(drawer).toHaveCount(0)
     await expect(button).toBeFocused()
 
-    // Bag swaps it, and pressing the picture closes it.
+    // Quests swaps it, and pressing the picture closes it.
     await button.click()
-    await page.getByRole('button', { name: /Bag · / }).click()
+    await page.getByRole('button', { name: /Quests · / }).click()
     await expect(drawer).toHaveCount(0)
     await expect(
       page.getByRole('complementary', { name: 'Journal drawer' }),

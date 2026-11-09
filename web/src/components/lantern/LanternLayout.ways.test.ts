@@ -245,10 +245,10 @@ describe('LanternLayout: leaving by pressing a way out in the picture', () => {
   it('closes an open panel and goes on the same press', async () => {
     const store = await cottage()
     await openTheWays(store)
-    const bag = w
+    const quests = w
       .findAll('.lq-buttons button')
-      .find((b) => /Bag/.test(b.text()))
-    await bag!.trigger('click')
+      .find((b) => /Quests/.test(b.text()))
+    await quests!.trigger('click')
     const submit = vi.spyOn(store, 'submitCommand')
     const picture = w.get('.lq-stage-picture').element
     picture.dispatchEvent(

@@ -17,6 +17,20 @@ import {
 import type { AreaThing } from './areaThings'
 import { parseCountedName } from './inventoryChanges'
 
+/** What a ring button takes in hand, to be used on the next thing pressed. */
+export type HandVerb = 'usewith' | 'give' | 'caston'
+
+/** What a ring is drawn round: a thing of the picture, or a carried thing or spell on the belt. */
+export interface RingSubject {
+  areaId: string
+  /** The engine's name, as a command puts it. */
+  name: string
+  /** The name shown in the middle of the ring. */
+  label: string
+  /** Decides the colour of the name. */
+  kind: AreaThing['kind'] | 'spell'
+}
+
 /** A second choice in a fan: its words and the command it sends. */
 export interface RingChoice {
   label: string
@@ -35,6 +49,8 @@ export interface RingAction {
   choices?: RingChoice[]
   /** It opens a words box (Say…). */
   say?: boolean
+  /** It closes the ring and takes the subject in hand for the next press. */
+  hand?: HandVerb
 }
 
 /** A point, in the picture's pixels. */
@@ -44,7 +60,7 @@ export interface Point {
 }
 
 /** The glyph on each action's button. */
-const ICONS: Record<string, string> = {
+export const ICONS: Record<string, string> = {
   take: '✋',
   use: '⚙',
   usewith: '⚯',
@@ -59,17 +75,17 @@ const ICONS: Record<string, string> = {
 }
 
 /** A button with a command that is sent at once. */
-function plain(id: string, label: string, command: string): RingAction {
+export function plain(id: string, label: string, command: string): RingAction {
   return { id, label, icon: ICONS[id] ?? '•', command }
 }
 
 /** The command of `verbId` with `args`; every ring verb is complete with them. */
-function commandOf(verbId: string, args: string[]): string {
+export function commandOf(verbId: string, args: string[]): string {
   return buildCommand(verbById(verbId), args) ?? ''
 }
 
 /** A button that fans out the choices of the verb's slot, or null when there are none. */
-function fanned(
+export function fanned(
   verbId: string,
   label: string,
   slot: Slot,
@@ -169,7 +185,10 @@ export function ringActions(
 }
 
 /** The command that says `words` to `person`; null while the box is empty. */
-export function sayCommand(words: string, person: AreaThing): string | null {
+export function sayCommand(
+  words: string,
+  person: { name: string },
+): string | null {
   return buildCommand(verbById('say'), [words, person.name])
 }
 
@@ -278,5 +297,46 @@ export function fanLayout(
     height,
     visible,
     scrolls: count > visible,
+  }
+}
+
+/** A rectangle, in the window's pixels. */
+export interface Box {
+  left: number
+  top: number
+  width: number
+  height: number
+}
+
+/**
+ * The part of the `stage` a person can see and press: the stage less any of
+ * the `covers` (the command bar, the dock, the phone's panel) that lie over
+ * its foot or its head. A cover whose middle is in the lower half cuts the
+ * foot, one in the upper half cuts the head; a cover outside the stage, or
+ * not across it, or as tall as the stage itself, cuts nothing. A cover cuts the
+ * stage's whole width, even a small chip at one corner: simple, and it only
+ * ever keeps the ring further inside.
+ */
+export function visibleBox(stage: Box, covers: Box[]): Box {
+  let top = stage.top
+  let bottom = stage.top + stage.height
+  const middle = stage.top + stage.height / 2
+  for (const cover of covers) {
+    const coverBottom = cover.top + cover.height
+    const across =
+      cover.left < stage.left + stage.width &&
+      cover.left + cover.width > stage.left
+    if (!across || cover.height >= stage.height) continue
+    if (coverBottom <= top || cover.top >= bottom) continue
+    if (cover.top + cover.height / 2 >= middle)
+      bottom = Math.min(bottom, cover.top)
+    else top = Math.max(top, coverBottom)
+  }
+  // Named, not spread: a DOMRect keeps its sides on the prototype.
+  return {
+    left: stage.left,
+    top,
+    width: stage.width,
+    height: Math.max(0, bottom - top),
   }
 }

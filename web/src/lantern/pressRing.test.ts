@@ -8,6 +8,7 @@ import {
   ringActions,
   ringLayout,
   sayCommand,
+  visibleBox,
 } from './pressRing'
 
 const EMPTY: ActionContext = {
@@ -235,5 +236,54 @@ describe('fanLayout', () => {
     expect(many.scrolls).toBe(true)
     expect(many.top).toBeGreaterThanOrEqual(0)
     expect(many.top + many.height).toBeLessThanOrEqual(bounds.h)
+  })
+})
+
+describe('visibleBox', () => {
+  const stage = { left: 0, top: 0, width: 800, height: 600 }
+  it('is the stage when nothing covers it', () => {
+    expect(visibleBox(stage, [])).toEqual(stage)
+  })
+  it('stops above a bar lying over the foot of the stage', () => {
+    const bar = { left: 0, top: 500, width: 800, height: 100 }
+    expect(visibleBox(stage, [bar])).toEqual({ ...stage, height: 500 })
+  })
+  it('starts below a panel lying over the head of the stage', () => {
+    const panel = { left: 0, top: 0, width: 800, height: 60 }
+    expect(visibleBox(stage, [panel])).toEqual({
+      left: 0,
+      top: 60,
+      width: 800,
+      height: 540,
+    })
+  })
+  it('ignores what lies outside the stage', () => {
+    const below = { left: 0, top: 600, width: 800, height: 80 }
+    expect(visibleBox(stage, [below])).toEqual(stage)
+  })
+  it('ignores a cover as tall as the stage', () => {
+    expect(visibleBox(stage, [stage])).toEqual(stage)
+  })
+  it('reads a stage whose sides are getters, as a DOMRect keeps them', () => {
+    class Rect {
+      get left(): number {
+        return 10
+      }
+      get top(): number {
+        return 20
+      }
+      get width(): number {
+        return 300
+      }
+      get height(): number {
+        return 200
+      }
+    }
+    expect(visibleBox(new Rect(), [])).toEqual({
+      left: 10,
+      top: 20,
+      width: 300,
+      height: 200,
+    })
   })
 })

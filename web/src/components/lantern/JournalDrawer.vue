@@ -3,23 +3,18 @@ import { nextTick, onMounted, ref } from 'vue'
 import JournalPanel from './JournalPanel.vue'
 
 /**
- * The stage's drawer from the right: today's journal panel (Bag, Spells and
- * Quests tabs) opened on the tab of the button pressed. On opening, focus
- * moves into it (the open tab). A tab chosen inside it is passed on
- * (`select`), so the layout lights that tab's button. ✕ and Escape ask the
- * layout to close it (which also hands focus back to the lit button). Escape
- * closes only the drawer, so it does not also skip the narration.
+ * The stage's drawer from the right: the journal panel with the Quests alone
+ * (the Bag and Spells are the belt of pictures). On opening, focus moves into
+ * it (the ✕). ✕ and Escape ask the layout to close it (which also hands focus
+ * back to the lit button). Escape closes only the drawer, so it does not also
+ * skip the narration.
  */
-defineProps<{ tab: 'bag' | 'spells' | 'quests' }>()
-const emit = defineEmits<{
-  close: []
-  select: [tab: 'bag' | 'spells' | 'quests']
-}>()
+const emit = defineEmits<{ close: [] }>()
 const root = ref<HTMLElement | null>(null)
 
 onMounted(async () => {
   await nextTick()
-  root.value?.querySelector<HTMLElement>('[role="tab"][tabindex="0"]')?.focus()
+  root.value?.querySelector<HTMLElement>('.lq-drawer-close')?.focus()
 })
 
 /** Escape closes the drawer and goes no further. */
@@ -47,11 +42,7 @@ function onKeydown(event: KeyboardEvent): void {
     >
       ✕
     </button>
-    <JournalPanel
-      :start="tab"
-      class="lq-drawer-journal"
-      @select="emit('select', $event)"
-    />
+    <JournalPanel tab="quests" class="lq-drawer-journal" />
   </aside>
 </template>
 

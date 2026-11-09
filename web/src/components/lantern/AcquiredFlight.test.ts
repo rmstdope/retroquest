@@ -76,6 +76,58 @@ describe('AcquiredFlight', () => {
     )
   })
 
+  /** A picture of the belt at (x, y), inside a strip that shows from `from` to `to` across the screen. */
+  function picture(
+    key: string,
+    x: number,
+    strip: { from: number; to: number } = { from: 0, to: 2000 },
+  ): HTMLElement {
+    const bar = document.createElement('div')
+    bar.className = 'lq-belt-strip'
+    bar.getBoundingClientRect = (): DOMRect =>
+      ({
+        left: strip.from,
+        right: strip.to,
+        top: 700,
+        bottom: 800,
+        width: strip.to - strip.from,
+        height: 100,
+      }) as DOMRect
+    const tile = document.createElement('button')
+    tile.dataset.beltPic = key
+    tile.getBoundingClientRect = (): DOMRect =>
+      ({ left: x - 36, top: 710, width: 72, height: 72 }) as DOMRect
+    bar.appendChild(tile)
+    document.body.appendChild(bar)
+    return tile
+  }
+
+  it("flies to the gained thing's own picture on the belt when it is in view", async () => {
+    target('item', 20, 790)
+    picture('item:key', 500)
+    w = mount(AcquiredFlight, { attachTo: document.body })
+    useFlightStore().launch([{ kind: 'item', name: 'key', count: 1 }])
+    await w.vm.$nextTick()
+    vi.advanceTimersByTime(FLIGHT_SHOW_MS + FLIGHT_HOLD_MS)
+    await w.vm.$nextTick()
+    const style = w.get('[data-testid="flight"]').attributes('style') ?? ''
+    expect(style).toContain('left: 500px')
+    expect(style).toContain('top: 746px')
+  })
+
+  it('flies to the tiny button of its kind when its picture is out of sight', async () => {
+    target('item', 20, 790)
+    picture('item:key', 3000, { from: 100, to: 600 })
+    w = mount(AcquiredFlight, { attachTo: document.body })
+    useFlightStore().launch([{ kind: 'item', name: 'key', count: 1 }])
+    await w.vm.$nextTick()
+    vi.advanceTimersByTime(FLIGHT_SHOW_MS + FLIGHT_HOLD_MS)
+    await w.vm.$nextTick()
+    expect(w.get('[data-testid="flight"]').attributes('style')).toContain(
+      'left: 20px',
+    )
+  })
+
   it('tells a screen reader of each gain, the same one again too', async () => {
     w = mount(AcquiredFlight)
     const flights = useFlightStore()

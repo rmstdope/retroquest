@@ -123,6 +123,34 @@ describe('LanternLayout: pressing a thing on the picture', () => {
     ).toEqual(['take', 'use', 'open', 'close', 'examine'])
   })
 
+  it('keeps the ring in the part of the picture the command bar leaves, over the words', async () => {
+    await cottage()
+    const box = (top: number, height: number): DOMRect =>
+      ({
+        left: 0,
+        top,
+        width: 960,
+        height,
+        right: 960,
+        bottom: top + height,
+        x: 0,
+        y: top,
+        toJSON: () => ({}),
+      }) as DOMRect
+    vi.spyOn(HTMLElement.prototype, 'getBoundingClientRect').mockImplementation(
+      function (this: HTMLElement) {
+        return this.classList.contains('lq-composer')
+          ? box(440, 100)
+          : box(0, 540)
+      },
+    )
+    await press('bread')
+    const layer = w.get('.lq-ring-layer')
+    expect(layer.element.closest('.lq-stage')).toBeNull()
+    expect(layer.attributes('style')).toContain('height: 440px')
+    expect(ring().exists()).toBe(true)
+  })
+
   it('sends the command as if typed, closes the ring and the thing goes when taken', async () => {
     const store = await cottage()
     await press('bread')
@@ -171,6 +199,19 @@ describe('LanternLayout: pressing a thing on the picture', () => {
     await cottage()
     await press('bread')
     expect(useAreaNamesStore().showing).toBe(false)
+  })
+
+  it('names the thing once, on the ring, with the pointer resting on it', async () => {
+    await cottage()
+    useAreaNamesStore().pointer = { x: 620, y: 350 }
+    await flushPromises()
+    expect(w.find('[data-area-pointer]').text()).toBe('Bread')
+    await press('bread')
+    expect(w.find('.lq-ring-name').text()).toBe('Bread')
+    expect(w.find('[data-area-pointer]').exists()).toBe(false)
+    await key('Escape')
+    expect(ring().exists()).toBe(false)
+    expect(w.find('[data-area-pointer]').text()).toBe('Bread')
   })
 
   it('closes when the game stops taking a move', async () => {
