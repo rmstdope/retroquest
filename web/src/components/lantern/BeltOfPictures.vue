@@ -407,7 +407,7 @@ defineExpose({ focusBelt, focusPicture, has, root })
 <style scoped>
 .lq-belt {
   position: absolute;
-  left: 0;
+  left: var(--lq-belt-left, 0px);
   right: 0;
   bottom: var(--lq-belt-bottom, 0px);
   z-index: 7;
@@ -422,11 +422,6 @@ defineExpose({ focusBelt, focusPicture, has, root })
   align-items: stretch;
   gap: 6px;
   padding: 6px 8px;
-}
-.lq-belt:not(.lq-belt-away) .lq-belt-bar {
-  background: color-mix(in srgb, var(--lq-surface) 90%, transparent);
-  border-top: 1px solid var(--lq-line);
-  pointer-events: auto;
 }
 .lq-belt-switch {
   display: flex;
@@ -478,12 +473,15 @@ defineExpose({ focusBelt, focusPicture, has, root })
 }
 .lq-belt-more,
 .lq-belt-put-away {
+  pointer-events: auto;
   align-self: center;
   width: 32px;
   height: 44px;
   border-radius: 10px;
 }
 .lq-belt-strip {
+  /* Floats on the picture: only the pictures themselves take a press. */
+  pointer-events: none;
   flex: 1;
   display: flex;
   gap: 10px;
@@ -502,6 +500,7 @@ defineExpose({ focusBelt, focusPicture, has, root })
   font-size: 14px;
 }
 .lq-belt-pic {
+  pointer-events: auto;
   flex: none;
   display: flex;
   flex-direction: column;
@@ -553,7 +552,9 @@ defineExpose({ focusBelt, focusPicture, has, root })
   overflow: hidden;
   max-width: 100%;
   overflow-wrap: anywhere;
-  text-shadow: 0 0 6px var(--lq-surface);
+  padding: 1px 6px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--lq-surface) 88%, transparent);
 }
 .lq-belt-count {
   position: absolute;
