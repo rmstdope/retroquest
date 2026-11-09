@@ -160,7 +160,7 @@ test('opens a journal drawer at once while the voice reads, and a press inside i
   expect(await turnCount(page)).toBe(commands)
 })
 
-test('Enter presses a focused verb as the voice reads, and Space hurries without pressing it', async ({
+test('Enter and Space on a focused verb hurry as the voice reads, without pressing it (rq-kfur)', async ({
   page,
 }): Promise<void> => {
   // A short screen: the text page, where the sheet is the composer (a taller
@@ -178,16 +178,13 @@ test('Enter presses a focused verb as the voice reads, and Space hurries without
   const verb = actions.getByRole('button', { name: 'Talk', exact: true })
   const cancel = actions.getByRole('button', { name: 'Cancel' })
 
-  // Enter presses the verb (its builder's ✕, read as Cancel, shows) and the
-  // voice reads on; Enter on the focused Cancel presses it too.
+  // Enter on the focused verb is the hurry too: no builder, no turn.
+  const sent = await turnCount(page)
   await verb.focus()
   await page.keyboard.press('Enter')
-  await expect(cancel).toBeVisible()
-  await expect(page.locator('.lq-speaking')).not.toHaveCount(0)
-  await cancel.focus()
-  await page.keyboard.press('Enter')
-  await expect(cancel).toHaveCount(0)
-  await expect(page.locator('.lq-speaking')).not.toHaveCount(0)
+  await page.waitForTimeout(300)
+  expect(await cancel.count()).toBe(0)
+  expect(await turnCount(page)).toBe(sent)
 
   // Space on the focused verb is the hurry the hint invites: the verb is not
   // pressed, and no turn is sent.

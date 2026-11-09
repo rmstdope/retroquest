@@ -246,6 +246,72 @@ test.describe('the arrival told on the picture', () => {
     })
   })
 
+  test.describe('with the narrator reading slowly', () => {
+    // Narration on, as for a new player (the config turns it off elsewhere).
+    test.use({ storageState: { cookies: [], origins: [] } })
+
+    test('Enter while the waking lines are read sends no second talk to voice (rq-kfur)', async ({
+      page,
+    }) => {
+      // Clips last long enough for the Enters to land while the voice reads.
+      await page.addInitScript(() => {
+        HTMLMediaElement.prototype.play = function (this: HTMLMediaElement) {
+          if (this.src.includes('/audio/narration/'))
+            setTimeout(() => this.dispatchEvent(new Event('ended')), 3000)
+          return Promise.resolve()
+        }
+      })
+      await startAct1(page)
+      await arrival(page).click({ position: { x: 600, y: 300 } })
+      await expect(arrival(page).locator('.lq-arrival-line')).toHaveCount(0)
+      const actions = page.getByRole('region', { name: 'Actions' })
+      await actions.getByRole('button', { name: 'Talk', exact: true }).click()
+      await actions.getByRole('button', { name: 'Voice', exact: true }).click()
+      await expect.poll(() => turnCount(page)).toBe(2)
+      for (let i = 0; i < 4; i++) {
+        await page.keyboard.press('Enter')
+        await page.waitForTimeout(PRESS_SETTLES_MS)
+      }
+      expect(await turnCount(page)).toBe(2)
+      await expect(page.getByText(/no character named/)).toHaveCount(0)
+    })
+
+    test('Enter just after the last line was hurried does not press the verb again (rq-kfur)', async ({
+      page,
+    }) => {
+      await page.addInitScript(() => {
+        HTMLMediaElement.prototype.play = function (this: HTMLMediaElement) {
+          if (this.src.includes('/audio/narration/'))
+            setTimeout(() => this.dispatchEvent(new Event('ended')), 3000)
+          return Promise.resolve()
+        }
+      })
+      await startAct1(page)
+      await arrival(page).click({ position: { x: 600, y: 300 } })
+      await expect(arrival(page).locator('.lq-arrival-line')).toHaveCount(0)
+      const look = page
+        .getByRole('region', { name: 'Actions' })
+        .getByRole('button', { name: 'Look', exact: true })
+      await look.click()
+      await expect.poll(() => turnCount(page)).toBe(2)
+      await expect(look).toBeFocused()
+      const speaking = page.locator('.lq-speaking')
+      await expect(speaking).not.toHaveCount(0)
+      for (let i = 0; i < 30 && (await speaking.count()); i++) {
+        await page.keyboard.press('Enter')
+        await page.waitForTimeout(50)
+      }
+      await expect(speaking).toHaveCount(0)
+      await page.keyboard.press('Enter')
+      await page.waitForTimeout(PRESS_SETTLES_MS)
+      expect(await turnCount(page)).toBe(2)
+      // The verb was only paused: past the pause, Enter presses it.
+      await page.waitForTimeout(AFTER_TELLING_PAUSE_MS + PRESS_SETTLES_MS)
+      await page.keyboard.press('Enter')
+      await expect.poll(() => turnCount(page)).toBe(3)
+    })
+  })
+
   test('clears when the player types, and keeps what was typed', async ({
     page,
   }) => {

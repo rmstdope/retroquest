@@ -944,8 +944,8 @@ function isEmptyBoxEnter(event: KeyboardEvent): boolean {
   return emptyBoxEnters.has(event)
 }
 
-/** When a key last went on an arrival, or was swallowed just after one (`performance.now()`). */
-let arrivalKeyAt = Number.NEGATIVE_INFINITY
+/** When a key last went on an arrival, hurried the narration, or was swallowed just after (`performance.now()`). */
+let goOnKeyAt = Number.NEGATIVE_INFINITY
 
 /**
  * Keys that steer the narration: describe the press and let `decideHurryKey`
@@ -966,7 +966,7 @@ function onNarrationKey(event: KeyboardEvent): void {
     onActionButton: !!target?.closest('.lq-composer button'),
     onPaperTab: !!target?.closest('.lq-paper-tab'),
     inOpenList: !!target?.closest('[aria-expanded="true"]'),
-    settling: performance.now() - arrivalKeyAt < AFTER_TELLING_PAUSE_MS,
+    settling: performance.now() - goOnKeyAt < AFTER_TELLING_PAUSE_MS,
     scene: scene.turn !== null,
     // News held while the lines before it are read takes the keys as if it were up.
     arrival: arrival.active || arrival.holding,
@@ -990,18 +990,19 @@ function onNarrationKey(event: KeyboardEvent): void {
       setWordsHidden(false)
       break
     case 'arrival-next':
-      arrivalKeyAt = performance.now()
+      goOnKeyAt = performance.now()
       arrival.next()
       break
     case 'swallow':
-      arrivalKeyAt = performance.now()
+      goOnKeyAt = performance.now()
       break
     case 'arrival-clear':
-      arrivalKeyAt = performance.now()
+      goOnKeyAt = performance.now()
       arrival.clear()
       narration.skipAll()
       break
     case 'hurry':
+      goOnKeyAt = performance.now()
       narration.hurry()
       break
     case 'skip-all':

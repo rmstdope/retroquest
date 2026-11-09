@@ -14,16 +14,18 @@
  * a command is sent and focus lands on the folded bar's Actions: a change of
  * scene takes both Enter and Space from that button, but ordinary narration
  * takes only Space (the hurry the hint invites) and leaves Enter as the
- * button's own press. The same holds for a button in the actions panel, where
- * focus stays after a verb is sent on a laptop.
+ * button's own press. A button in the actions panel, where focus stays after
+ * a verb is sent on a laptop, gives up both, so a player hurrying the answer
+ * does not send the verb again.
  *
- * Focus stays on a verb through an arrival too, so a player still going on
- * when one ends would press that verb. For `AFTER_TELLING_PAUSE_MS` after keys
- * went on an arrival, Enter and Space on a button in the actions panel do
- * nothing, and each further press starts the pause again.
+ * Focus stays on a verb through an arrival too, and when the last line has
+ * been hurried, so a player still going on when either ends would press that
+ * verb. For `AFTER_TELLING_PAUSE_MS` after keys went on an arrival or hurried
+ * the narration, Enter and Space on a button in the actions panel do nothing,
+ * and each further press starts the pause again.
  */
 
-/** How long after a key went on an arrival a button in the actions panel ignores Enter and Space. */
+/** How long after a key went on an arrival or hurried the narration a button in the actions panel ignores Enter and Space. */
 export const AFTER_TELLING_PAUSE_MS = 1000
 
 /** A key press as the layout hears it: what it is, where it lands, and what is going on. */
@@ -52,7 +54,7 @@ export interface HurryKeyPress {
   onPaperTab: boolean
   /** The target is in an open word list (`[aria-expanded="true"]`). */
   inOpenList: boolean
-  /** A key went on an arrival, or was swallowed just after one, within the last `AFTER_TELLING_PAUSE_MS`. */
+  /** A key went on an arrival, hurried the narration, or was swallowed just after, within the last `AFTER_TELLING_PAUSE_MS`. */
   settling: boolean
   /** A change of scene is under way. */
   scene: boolean
@@ -174,31 +176,33 @@ function arrivalKey(press: HurryKeyPress): HurryKeyDecision | null {
  * While the narrator reads (and for Escape on an arrival): a field keeps
  * Space and Enter, and an open word list takes Escape to close itself; any
  * other Escape skips, text kept. A button, link or summary presses on Space
- * or Enter, so building a command goes on while the voice reads, except Space
- * on the folded bar's Actions or on a button in the actions panel: that is
- * the hurry the hint invites, so the sheet stays folded, the verb is not sent
- * again and the release is swallowed. Enter there stays the button's own
- * press.
+ * or Enter, except Space on the folded bar's Actions and Space or Enter on a
+ * button in the actions panel: that is the hurry the hint invites, so the
+ * sheet stays folded, the verb is not sent again and a Space's release is
+ * swallowed. Enter on the folded bar's Actions stays the button's own press.
  */
 function narrationKey(press: HurryKeyPress): HurryKeyDecision | null {
   const hurries = goesOn(press.key)
   if (press.inField && (hurries || press.inOpenList)) return null
-  const actionsSpace =
-    press.key === ' ' && (press.onFoldedActions || press.onActionButton)
-  if (hurries && !actionsSpace && press.onControl) return null
-  if (press.arrival) return take('arrival-clear', actionsSpace)
-  return take(hurries ? 'hurry' : 'skip-all', actionsSpace)
+  const takenFromButton =
+    press.onActionButton || (press.key === ' ' && press.onFoldedActions)
+  if (hurries && !takenFromButton && press.onControl) return null
+  const swallowSpaceUp = press.key === ' ' && takenFromButton
+  if (press.arrival) return take('arrival-clear', swallowSpaceUp)
+  return take(hurries ? 'hurry' : 'skip-all', swallowSpaceUp)
 }
 
 /**
- * Just after keys went on an arrival, Enter and Space on a button in the
- * actions panel do nothing, so a player still going on does not press the
- * verb that kept focus.
+ * Just after keys went on an arrival or hurried the last line, Enter and
+ * Space on a button in the actions panel do nothing, so a player still going
+ * on does not press the verb that kept focus. While the narrator still reads
+ * they go on hurrying instead.
  */
 function pauseKey(press: HurryKeyPress): HurryKeyDecision | null {
   if (
     !press.settling ||
     press.arrival ||
+    press.narrating ||
     !goesOn(press.key) ||
     !press.onActionButton ||
     press.handled ||
