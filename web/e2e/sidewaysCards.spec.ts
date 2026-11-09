@@ -178,3 +178,29 @@ test('folded away the pouch and star stack again', async ({ page }) => {
   expect(bag.x).toBeCloseTo(spells.x, 0)
   expect(spells.y).toBeGreaterThan(bag.y + bag.height)
 })
+
+/** The real finished Fishing expedition card: one sentence of three lines at 640x360 (rq-z0hc). */
+const FISHING = {
+  kind: 'completed',
+  name: 'Fishing expedition',
+  main: false,
+  text:
+    'You brought the fisherman a fish, and he gave you back something of ' +
+    'your mother’s: the spell she taught him at the bend.',
+  progress: { completed: 3, total: 11 },
+}
+
+test('a finished quest of three lines reads whole at 640x360', async ({
+  page,
+}) => {
+  await start(page, 640, 360)
+  await pushNews(page, [FISHING])
+  const text = stage(page)
+    .locator('.lq-arrival-card', { has: page.locator('.lq-news-head') })
+    .locator('.lq-arrival-text')
+  await expect(text).toBeVisible()
+  await expect(text).not.toHaveClass(/lq-fade/)
+  expect(await text.evaluate((el) => el.scrollHeight <= el.clientHeight)).toBe(
+    true,
+  )
+})

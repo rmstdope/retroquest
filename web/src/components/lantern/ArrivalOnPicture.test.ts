@@ -850,6 +850,13 @@ describe('ArrivalOnPicture', () => {
       expect(stage).toContain('padding: 56px 20px 61px')
     })
 
+    it('sits the words 12 px under the title instead of 14 (rq-z0hc)', () => {
+      expect(rule('.lq-sideways-arrival .lq-news-head')).toContain(
+        'margin-bottom: -2px',
+      )
+      expect(source).toContain('const SIDEWAYS_TITLE_TRIM = 2')
+    })
+
     it('makes the seal small and flows it beside the heading', () => {
       expect(rule('.lq-sideways-arrival .lq-news-seal')).toContain(
         'width: 22px',
