@@ -2,8 +2,8 @@
  * Where the room picture's marks and names go, as pure geometry: which placed
  * things are in view of a picture trimmed to fill its stage, where the mark of
  * each sits, which thing the pointer is over, and where each name goes so no
- * two names, and no name and button, overlap and every name stays inside the
- * picture. Knows nothing of Vue or the game.
+ * two names, and no name and button, overlap and every name stays on the part
+ * of the picture that can be seen. Knows nothing of Vue or the game.
  */
 import type { AreaThing } from './areaThings'
 import type { AreaBox } from './roomMotion'
@@ -24,6 +24,13 @@ export interface NamedSpot extends PlacedName {
   height: number
   leader: { x1: number; y1: number; x2: number; y2: number } | null
 }
+
+/** The peak of the picture's drift (`lq-drift` in `StagePicture.vue`): how much larger, and how far over as a share of its size. */
+const DRIFT_SCALE = 1.03
+const DRIFT_SHIFT_X = -0.005
+const DRIFT_SHIFT_Y = -0.003
+/** Half the size of a mark with its border, kept on the visible part. */
+const MARK_RADIUS = 8
 
 /** The gap between a mark and its name. */
 const GAP = 10
@@ -58,6 +65,66 @@ export function placeNames(
     })
   }
   return placed
+}
+
+/**
+ * The part of the layer the marks and names may use, in the layer's pixels: on
+ * the stage at every moment of the picture's drift, and above the `footCover`
+ * pixels at the stage's foot that lie over the picture (the action bar). The
+ * layer has the stage's own size; the drift only ever pulls its edges out of
+ * sight, furthest at its peak.
+ */
+export function visiblePart(view: PictureSize, footCover: number): Rect {
+  const atPeak = (at: number, size: number, shift: number): number =>
+    size / 2 + (at - size / 2) / DRIFT_SCALE - shift * size
+  const x = Math.max(0, atPeak(0, view.width, DRIFT_SHIFT_X))
+  const y = Math.max(0, atPeak(0, view.height, DRIFT_SHIFT_Y))
+  const right = Math.min(
+    view.width,
+    atPeak(view.width, view.width, DRIFT_SHIFT_X),
+  )
+  const foot = view.height - footCover
+  const bottom = Math.min(foot, atPeak(foot, view.height, DRIFT_SHIFT_Y))
+  return { x, y, w: Math.max(0, right - x), h: Math.max(0, bottom - y) }
+}
+
+/** `value` held between `low` and `high` (`low` when they cross). */
+function clamp(value: number, low: number, high: number): number {
+  return Math.max(low, Math.min(high, value))
+}
+
+/**
+ * The things with some part on the `visible` part of the picture, each with its
+ * mark moved to the middle of that part and wholly on it. A thing with no part
+ * there is left out. `rect`, what the pointer can be over, stays whole.
+ */
+export function markInside(
+  placed: readonly PlacedName[],
+  visible: Rect,
+): PlacedName[] {
+  const marked: PlacedName[] = []
+  for (const entry of placed) {
+    const { rect } = entry
+    const x0 = Math.max(rect.x, visible.x)
+    const y0 = Math.max(rect.y, visible.y)
+    const x1 = Math.min(rect.x + rect.w, visible.x + visible.w)
+    const y1 = Math.min(rect.y + rect.h, visible.y + visible.h)
+    if (x1 - x0 < 1 || y1 - y0 < 1) continue
+    marked.push({
+      ...entry,
+      x: clamp(
+        (x0 + x1) / 2,
+        visible.x + MARK_RADIUS,
+        visible.x + visible.w - MARK_RADIUS,
+      ),
+      y: clamp(
+        (y0 + y1) / 2,
+        visible.y + MARK_RADIUS,
+        visible.y + visible.h - MARK_RADIUS,
+      ),
+    })
+  }
+  return marked
 }
 
 /** The placed thing under (`x`, `y`): the smallest when several overlap, null over nothing. */
@@ -136,11 +203,11 @@ function overlaps(a: Rect, b: Rect): boolean {
 }
 
 /** `rect` moved to lie wholly inside the `bounds`. */
-function inside(rect: Rect, bounds: { w: number; h: number }): Rect {
+function inside(rect: Rect, bounds: Rect): Rect {
   return {
     ...rect,
-    x: Math.max(0, Math.min(bounds.w - rect.w, rect.x)),
-    y: Math.max(0, Math.min(bounds.h - rect.h, rect.y)),
+    x: clamp(rect.x, bounds.x, bounds.x + bounds.w - rect.w),
+    y: clamp(rect.y, bounds.y, bounds.y + bounds.h - rect.h),
   }
 }
 
@@ -156,7 +223,7 @@ export function layoutNames(
   placed: readonly PlacedName[],
   measure: (label: string) => { w: number; h: number },
   obstacles: readonly Rect[],
-  bounds: { w: number; h: number },
+  bounds: Rect,
 ): NamedSpot[] {
   const taken: Rect[] = [...obstacles]
   const spots: NamedSpot[] = []

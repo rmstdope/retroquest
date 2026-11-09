@@ -128,6 +128,62 @@ describe('AreaNames', () => {
     expect(top()).toBeLessThan(520)
   })
 
+  describe('with an action bar over the foot', () => {
+    const atTheFoot = {
+      ...boxes,
+      bucket: { x: 0.4, y: 0.8, width: 0.2, height: 0.2 },
+    }
+    /** The pixels of a style's `left` or `top`. */
+    const px = (style: string | undefined, side: string): number =>
+      parseFloat(new RegExp(`${side}: ([\\d.]+)px`).exec(style ?? '')![1])
+
+    it('hangs the pointer name above the pointer just over the bar, clear of it', async () => {
+      const w = mountNames({
+        footCover: 73,
+        boxes: atTheFoot,
+        pointer: { x: 480, y: 452 },
+      })
+      await nextTick()
+      const top = px(w.get('[data-area-pointer]').attributes('style'), 'top')
+      expect(top).toBeLessThan(452)
+      expect(top + 25).toBeLessThanOrEqual(540 - 73)
+    })
+
+    it('puts the mark of a thing partly behind the bar on the part in view', async () => {
+      const w = mountNames({ showing: true, footCover: 73, boxes: atTheFoot })
+      await nextTick()
+      const y = px(
+        w.get('[data-area-mark="bucket"]').attributes('style'),
+        'top',
+      )
+      expect(y).toBeLessThan(540 - 73)
+    })
+
+    it('has no mark or name for a thing wholly behind the bar', async () => {
+      const w = mountNames({
+        showing: true,
+        footCover: 73,
+        boxes: {
+          ...boxes,
+          bucket: { x: 0.4, y: 0.9, width: 0.2, height: 0.1 },
+        },
+      })
+      await nextTick()
+      expect(w.find('[data-area-mark="bucket"]').exists()).toBe(false)
+      expect(w.find('[data-area-name="bucket"]').exists()).toBe(false)
+    })
+  })
+
+  it('keeps a name clear of the edge the drift pulls past the picture', async () => {
+    const w = mountNames({
+      pointer: { x: 3, y: 270 },
+      boxes: { ...boxes, villager: { x: 0, y: 0.4, width: 0.1, height: 0.2 } },
+    })
+    await nextTick()
+    const style = w.get('[data-area-pointer]').attributes('style') ?? ''
+    expect(parseFloat(/left: ([\d.]+)px/.exec(style)![1])).toBeGreaterThan(18)
+  })
+
   it('adds no second name under the pointer while everything is shown', async () => {
     const w = mountNames({ showing: true, pointer: { x: 140, y: 250 } })
     await nextTick()
