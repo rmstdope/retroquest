@@ -181,6 +181,9 @@ describe('LanternLayout: pressing a thing on the picture', () => {
     await press('bread')
     expect(w.find('.lq-ring-name').text()).toBe('Bread')
     expect(w.find('[data-area-pointer]').exists()).toBe(false)
+    await key('Escape')
+    expect(ring().exists()).toBe(false)
+    expect(w.find('[data-area-pointer]').text()).toBe('Bread')
   })
 
   it('closes when the game stops taking a move', async () => {
