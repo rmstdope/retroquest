@@ -181,13 +181,15 @@ describe('BeltOfPictures', () => {
   })
 
   describe('the slim row on a sideways phone', () => {
-    const source = readFileSync(
-      'src/components/lantern/BeltOfPictures.vue',
-      'utf8',
-    )
+    // The path goes through a variable: Vite rewrites a literal `new URL()`.
+    const path = './BeltOfPictures.vue'
+    const source = readFileSync(new URL(path, import.meta.url), 'utf8')
     const rule = (selector: string): string =>
       source.match(
-        new RegExp(`${selector.replace(/[.():-]/g, '\\$&')} \\{([^}]*)\\}`),
+        new RegExp(
+          `^${selector.replace(/[.():-]/g, '\\$&')} \\{([^}]*)\\}`,
+          'm',
+        ),
       )?.[1] ?? ''
 
     it('puts the pouch and star side by side while the row is up', () => {

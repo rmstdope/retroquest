@@ -18,6 +18,13 @@ const NEW_QUEST = {
     'Mira would like to know what it finds there. ' +
     'Look around the shed and see what draws it in.',
 }
+/** The real one-sentence line of Curiosity killed the cat: it cannot be cut between sentences. */
+const CURIOSITY = {
+  ...NEW_QUEST,
+  text:
+    'The small patchwork shape hiding in the Abandoned Shed looked a lot ' +
+    'like Patches, the cat who sleeps on the counter of the General Store.',
+}
 const DONE_QUEST = {
   kind: 'completed',
   name: 'Hint of magic',
@@ -146,7 +153,7 @@ for (const [width, height] of [
     page,
   }) => {
     await start(page, width, height)
-    await pushNews(page, [NEW_QUEST])
+    await pushNews(page, [CURIOSITY])
     await expect(stage(page).locator('.lq-arrival-card')).toHaveCount(1)
     const { foot, belt, bag, spells } = await beltGeometry(page)
     // Only as tall as its pictures; its top lies 60 px above the foot.
