@@ -78,6 +78,29 @@ test('pressing Grandmother opens a ring, and Examine sends what was typed', asyn
   )
 })
 
+test('every button of the ring can be pressed: none lies under the command bar or the words', async ({
+  page,
+}): Promise<void> => {
+  await page.setViewportSize({ width: 1280, height: 800 })
+  await toTheCottage(page)
+  await pressThing(page, 'grandmother')
+  await expect(page.getByRole('menu', { name: 'Grandmother' })).toBeVisible()
+  const covered = await page.evaluate(
+    () =>
+      [...document.querySelectorAll<HTMLElement>('.lq-ring-coin')].filter(
+        (coin) => {
+          const r = coin.getBoundingClientRect()
+          const hit = document.elementFromPoint(
+            r.left + r.width / 2,
+            r.top + r.height / 2,
+          )
+          return !hit || !coin.contains(hit)
+        },
+      ).length,
+  )
+  expect(covered).toBe(0)
+})
+
 test('Escape closes the ring and focus goes back to the thing', async ({
   page,
 }): Promise<void> => {

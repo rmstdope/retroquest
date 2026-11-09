@@ -45,6 +45,7 @@ import AreaPress from './AreaPress.vue'
 import PressRing from './PressRing.vue'
 import {
   ringActions,
+  visibleBox,
   type HandVerb,
   type RingSubject,
 } from '@/lantern/pressRing'
@@ -1450,6 +1451,8 @@ const ring = ref<{
   from: 'room' | 'belt'
   at: { x: number; y: number }
   bounds: { w: number; h: number }
+  /** The part of the picture that can be seen, in the stage's pixels: the layer the ring is drawn in. */
+  layer: { left: number; top: number; width: number; height: number }
 } | null>(null)
 const stageEl = ref<HTMLElement | null>(null)
 /** The belt of pictures, for focus. */
@@ -1496,6 +1499,29 @@ function pressTakesMove(): boolean {
   )
 }
 
+/** Where a ring pressed at `at` (in the window) is drawn: in the part of the picture the command bar, dock and phone panel leave, so no button or name hides under them. */
+function ringPlacement(
+  stage: DOMRect,
+  at: { x: number; y: number },
+): Pick<NonNullable<typeof ring.value>, 'at' | 'bounds' | 'layer'> {
+  const covers = [
+    ...(stageEl.value?.parentElement?.querySelectorAll<HTMLElement>(
+      '.lq-composer, .lq-dock, .lq-phone-plate',
+    ) ?? []),
+  ].map((el) => el.getBoundingClientRect())
+  const seen = visibleBox(stage, covers)
+  return {
+    at: { x: at.x - seen.left, y: at.y - seen.top },
+    bounds: { w: seen.width, h: seen.height },
+    layer: {
+      left: seen.left - stage.left,
+      top: seen.top - stage.top,
+      width: seen.width,
+      height: seen.height,
+    },
+  }
+}
+
 /** A thing of the picture is pressed, at `at` in the window: send what is in hand to it, or open its ring, if the game takes a move and the words have settled. */
 function onAreaPress(thing: AreaThing, at: { x: number; y: number }): void {
   const box = stageEl.value?.getBoundingClientRect()
@@ -1510,8 +1536,7 @@ function onAreaPress(thing: AreaThing, at: { x: number; y: number }): void {
   ring.value = {
     thing,
     from: 'room',
-    at: { x: at.x - box.left, y: at.y - box.top },
-    bounds: { w: box.width, h: box.height },
+    ...ringPlacement(box, at),
   }
 }
 
@@ -1535,8 +1560,7 @@ function onBeltPress(picture: BeltPicture, at: { x: number; y: number }): void {
   ring.value = {
     thing: subjectOf(picture),
     from: 'belt',
-    at: { x: at.x - box.left, y: at.y - box.top },
-    bounds: { w: box.width, h: box.height },
+    ...ringPlacement(box, at),
   }
 }
 
@@ -2136,8 +2160,19 @@ watch(
               @keydown="onNameKeydown"
               @close="closeDrawer"
             />
+          </div>
+          <!-- Over the words and the bars, drawn only in the part of the picture they leave. -->
+          <div
+            v-if="ring"
+            class="lq-ring-layer"
+            :style="{
+              left: `${ring.layer.left}px`,
+              top: `${ring.layer.top}px`,
+              width: `${ring.layer.width}px`,
+              height: `${ring.layer.height}px`,
+            }"
+          >
             <PressRing
-              v-if="ring"
               :key="ring.thing.areaId"
               :thing="ring.thing"
               :actions="ringItems"
@@ -2477,6 +2512,11 @@ watch(
   inset: 0;
   /* The picture is drawn last in the markup (for the Tab order) and lies beneath the rest. */
   isolation: isolate;
+}
+.lq-ring-layer {
+  position: absolute;
+  z-index: 5;
+  pointer-events: none;
 }
 .lq-stage-plate {
   position: absolute;

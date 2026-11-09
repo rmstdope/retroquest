@@ -299,3 +299,42 @@ export function fanLayout(
     scrolls: count > visible,
   }
 }
+
+/** A rectangle, in the window's pixels. */
+export interface Box {
+  left: number
+  top: number
+  width: number
+  height: number
+}
+
+/**
+ * The part of the `stage` a person can see and press: the stage less any of
+ * the `covers` (the command bar, the dock, the phone's panel) that lie over
+ * its foot or its head. A cover whose middle is in the lower half cuts the
+ * foot, one in the upper half cuts the head; a cover outside the stage, or
+ * not across it, or as tall as the stage itself, cuts nothing.
+ */
+export function visibleBox(stage: Box, covers: Box[]): Box {
+  let top = stage.top
+  let bottom = stage.top + stage.height
+  const middle = stage.top + stage.height / 2
+  for (const cover of covers) {
+    const coverBottom = cover.top + cover.height
+    const across =
+      cover.left < stage.left + stage.width &&
+      cover.left + cover.width > stage.left
+    if (!across || cover.height >= stage.height) continue
+    if (coverBottom <= top || cover.top >= bottom) continue
+    if (cover.top + cover.height / 2 >= middle)
+      bottom = Math.min(bottom, cover.top)
+    else top = Math.max(top, coverBottom)
+  }
+  // Named, not spread: a DOMRect keeps its sides on the prototype.
+  return {
+    left: stage.left,
+    top,
+    width: stage.width,
+    height: Math.max(0, bottom - top),
+  }
+}
