@@ -13,4 +13,4 @@ One red CI run (about 12 minutes) and one fix push. Running the whole suite with
 A test of a store or component that persists to `localStorage` stubs its own in-memory `localStorage` in `beforeEach` (`useBeltStore.test.ts`, `useSettingsStore.test.ts` and now `BeltOfPictures.test.ts` do) and unstubs it afterwards.
 
 ## Seen before
-Not found in `docs/retrospectives/`.
+`rq-zhks.md`, `rq-mh4.2.md` and `rq-ezpg.9.md`: the same cause (a persisted value leaking between tests only where `localStorage` exists), each time with the settings store. This is the fourth.
