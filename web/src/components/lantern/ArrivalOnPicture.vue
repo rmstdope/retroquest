@@ -479,11 +479,16 @@ onBeforeUnmount(() => {
 /*
  * A phone held sideways: the card uses the free height between the top row of
  * buttons and the bottom row (56 px clear above, 61 px below, or above the belt
- * of pictures when it stands taller) instead of the laptop's margins. The smallest phones take smaller type, and the seal stands
- * beside the heading, small, so the words keep their room.
+ * of pictures when it stands taller) instead of the laptop's margins. The
+ * smallest phones take smaller type, and the seal stands beside the heading,
+ * small, so the words keep their room. The twin the pages are measured in has
+ * the card's own side margins, so the cut is made for the width shown.
  */
 .lq-sideways-arrival {
   padding: 56px 20px max(61px, calc(var(--lq-belt-h, 0px) + 16px));
+}
+.lq-sideways-arrival .lq-arrival-measure {
+  padding: 0 20px;
 }
 .lq-sideways-arrival .lq-news-seal {
   width: 22px;

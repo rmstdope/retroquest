@@ -830,6 +830,21 @@ describe('ArrivalOnPicture', () => {
       }
     })
 
+    it('measures the words at the width they are shown: 20 px a side', () => {
+      expect(rule('.lq-sideways-arrival .lq-arrival-measure')).toContain(
+        'padding: 0 20px',
+      )
+    })
+
+    it('gives a new quest no seal in the heading row', async () => {
+      const w = mount(ArrivalOnPicture, {
+        props: { pictured: true, sideways: true },
+      })
+      useArrivalStore().show(1, [newsPart(fresh)], false)
+      await w.vm.$nextTick()
+      expect(w.get('.lq-news-top').find('.lq-news-seal').exists()).toBe(false)
+    })
+
     it('uses the free height: 56 px at the top, 61 px at the foot', () => {
       const stage = rule('.lq-sideways-arrival')
       expect(stage).toContain(
