@@ -149,6 +149,17 @@ describe('LanternLayout: the belt of pictures', () => {
     expect(w.get('.lq-belt-caption').text()).toContain('Bread')
   })
 
+  it('draws the caption over the words, outside the picture that lies beneath them, and drops it when focus leaves', async () => {
+    await cottage()
+    expect(w.find('.lq-belt-caption').exists()).toBe(false)
+    await tile('item:bread').trigger('focus')
+    const caption = w.get('.lq-belt-caption')
+    expect(caption.text()).toContain('Bread')
+    expect(caption.element.closest('.lq-stage')).toBeNull()
+    await tile('item:bread').trigger('blur')
+    expect(w.find('.lq-belt-caption').exists()).toBe(false)
+  })
+
   it('sends Use at once, as if typed', async () => {
     const store = await cottage()
     await click(tile('item:bread').element)
@@ -362,7 +373,15 @@ describe('LanternLayout: the belt of pictures', () => {
     carryMore(store)
     await flushPromises()
     await w.get('[data-belt-switch="spells"]').trigger('click')
-    await click(tile('spell:light').element)
+    useNarrationStore().skipAll()
+    useStageSpeechStore().revealAll()
+    await flushPromises()
+    // The belt may be drawn again while the picture settles, which drops a press on the old one: press until the ring is up.
+    await vi.waitFor(async () => {
+      if (!ring().exists()) await click(tile('spell:light').element)
+      expect(ring().exists()).toBe(true)
+    })
+
     expect(
       w
         .findAll('.lq-press-ring .lq-ring-coin')

@@ -145,14 +145,18 @@ describe('BeltOfPictures', () => {
     expect(document.activeElement).toBe(first.element)
   })
 
-  it('shows the name and description as a caption while a picture has focus', async () => {
+  it('tells the layout the caption of the picture that has focus, and none once it is gone', async () => {
     mountBelt()
-    expect(w!.find('.lq-belt-caption').exists()).toBe(false)
+    const told = (): unknown[] =>
+      (w!.emitted('caption') ?? []).map((e) => (e as unknown[])[0])
+    expect(told().at(-1)).toBeNull()
     await w!.get('[data-belt-pic="item:bread"]').trigger('focus')
-    expect(w!.get('.lq-belt-caption').text()).toContain('Bread')
-    expect(w!.get('.lq-belt-caption').text()).toContain('A loaf.')
+    expect(told().at(-1)).toMatchObject({
+      label: 'Bread',
+      note: 'A [bold]loaf[/bold].',
+    })
     await w!.get('[data-belt-pic="item:bread"]').trigger('blur')
-    expect(w!.find('.lq-belt-caption').exists()).toBe(false)
+    expect(told().at(-1)).toBeNull()
   })
 
   it('reads a picture as its name, count and description', () => {

@@ -115,6 +115,75 @@ test('Cancel and Escape put the thing down and send nothing', async ({
   expect((await story.innerText()).length).toBe(before)
 })
 
+/** The caption of the picture reached lies clear of the ▾ Hide, and the ▴ Show tab; its layer stands over the story words. */
+async function expectCaptionClear(page: Page): Promise<void> {
+  const caption = page.locator('.lq-belt-caption')
+  await expect(caption).toBeVisible()
+  // The caption is the topmost thing at its centre (hit-testable only for this check).
+  expect(
+    await caption.evaluate((el) => {
+      el.style.pointerEvents = 'auto'
+      const r = el.getBoundingClientRect()
+      const top = document.elementFromPoint(
+        r.left + r.width / 2,
+        r.top + r.height / 2,
+      )
+      el.style.pointerEvents = ''
+      return !!top && el.contains(top)
+    }),
+  ).toBe(true)
+  const cap = (await caption.boundingBox())!
+  const hide = page.locator('.lq-words-hide, .lq-paper-tab')
+  await expect(hide).toHaveCount(1)
+  const pill = (await hide.boundingBox())!
+  expect(cap.y + cap.height).toBeLessThanOrEqual(pill.y + 1)
+}
+
+for (const size of [
+  { width: 1280, height: 800 },
+  { width: 500, height: 757 },
+]) {
+  test(`the caption clears the Hide and the Show tab at ${size.width}x${size.height}`, async ({
+    page,
+  }): Promise<void> => {
+    await page.setViewportSize(size)
+    await toTheCottage(page)
+    await page.keyboard.press('b')
+    await expectCaptionClear(page)
+    await page.keyboard.press('Escape')
+    await page.locator('.lq-words-hide').click()
+    await page.keyboard.press('b')
+    await expectCaptionClear(page)
+  })
+}
+
+test('the caption does not lie over the buttons of a ring opened from the belt', async ({
+  page,
+}): Promise<void> => {
+  await page.setViewportSize({ width: 500, height: 757 })
+  await toTheCottage(page)
+  await page.locator('[data-belt-pic="item:bread"]').click()
+  await expect(page.getByRole('menu', { name: 'Bread' })).toBeVisible()
+  const covered = await page.evaluate(() => {
+    const caption = document.querySelector<HTMLElement>('.lq-belt-caption')
+    if (!caption) return -1
+    caption.style.pointerEvents = 'auto'
+    const count = [...document.querySelectorAll('.lq-ring-coin')].filter(
+      (coin) => {
+        const r = coin.getBoundingClientRect()
+        const hit = document.elementFromPoint(
+          r.left + r.width / 2,
+          r.top + r.height / 2,
+        )
+        return !hit || !coin.contains(hit)
+      },
+    ).length
+    caption.style.pointerEvents = ''
+    return count
+  })
+  expect(covered).toBe(0)
+})
+
 test('B goes to the belt, the belt can be put away and is remembered across a reload', async ({
   page,
 }): Promise<void> => {
@@ -123,6 +192,7 @@ test('B goes to the belt, the belt can be put away and is remembered across a re
   await page.keyboard.press('b')
   await expect(page.locator('[data-belt-pic="item:bread"]')).toBeFocused()
   await expect(page.locator('.lq-belt-caption')).toContainText('Bread')
+  await expectCaptionClear(page)
   await page.getByRole('button', { name: 'Put the belt away' }).click()
   await expect(page.locator('[data-belt-pic="item:bread"]')).toHaveCount(0)
   await expect(page.getByRole('button', { name: 'Bag' })).toBeVisible()
