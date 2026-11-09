@@ -98,6 +98,8 @@ const pages = ref<ArrivalPage[]>([])
 const checklistWidth = ref(0)
 /** The gap between the text and the pill (px), as in the card's rule. */
 const CARD_GAP = 14
+/** How much closer (px) the words sit under the title on a sideways phone: 12 px, not 14. */
+const SIDEWAYS_TITLE_TRIM = 2
 
 /** What the page up shows: its lines, or all of the part's before it is cut. */
 const shown = computed((): PageLine[] => {
@@ -116,7 +118,8 @@ function room(): number {
   const style = getComputedStyle(stage)
   const padding =
     (parseFloat(style.paddingTop) || 0) + (parseFloat(style.paddingBottom) || 0)
-  const gaps = head.value ? 2 * CARD_GAP : CARD_GAP
+  const trim = head.value && props.sideways ? SIDEWAYS_TITLE_TRIM : 0
+  const gaps = (head.value ? 2 * CARD_GAP : CARD_GAP) - trim
   return (
     stage.clientHeight -
     padding -
@@ -489,6 +492,10 @@ onBeforeUnmount(() => {
 }
 .lq-sideways-arrival .lq-arrival-measure {
   padding: 0 20px;
+}
+/* The words sit 12 px under the title instead of 14 (the card's gap less 2). */
+.lq-sideways-arrival .lq-news-head {
+  margin-bottom: -2px;
 }
 .lq-sideways-arrival .lq-news-seal {
   width: 22px;
