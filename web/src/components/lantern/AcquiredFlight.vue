@@ -14,7 +14,9 @@ import {
  * green or the spell's purple with a bag or a sparkle, comes up in the middle
  * of the picture, rests, then shrinks and flies into the Bag or Spells button
  * (or tab on a phone) that carries `data-flight-target` of its kind and is
- * shown. Where the flight starts and lands is measured when it starts and
+ * shown. On the belt of pictures it lands on its own picture
+ * (`data-belt-pic`) when that is in view along the belt, else on the tiny
+ * button of its kind. Where the flight starts and lands is measured when it starts and
  * when it flies. Under Reduce motion it does not move: it is shown, then
  * at its button. An item the turn lost goes the other way, in warm grey with a
  * minus sign: it rises out of the Bag button (or tab) to the middle of the
@@ -102,13 +104,25 @@ watch(
   ([key, phase]) => {
     const flight = flights.current
     if (key === undefined || !flight || phase !== 'fly') return
+    // To its own picture on the belt when that is in view, else to the tiny button of its kind.
+    const own = Array.from(document.querySelectorAll('[data-belt-pic]')).find(
+      (el) =>
+        el instanceof HTMLElement &&
+        el.dataset.beltPic === `${flight.kind}:${flight.name}`,
+    )
+    const strip = own?.closest('.lq-belt-strip')?.getBoundingClientRect()
+    const spot = centre(own ?? null)
+    const inView =
+      spot && strip ? spot.x >= strip.left && spot.x <= strip.right : false
     const targets = document.querySelectorAll(
       `[data-flight-target="${flight.kind}"]`,
     )
     end.value =
+      (inView ? spot : null) ??
       Array.from(targets)
         .map(centre)
-        .find((point): point is Point => point !== null) ?? start.value
+        .find((point): point is Point => point !== null) ??
+      start.value
   },
   // Drawn again mid-flight (the stage came back): it measures its button at once.
   { immediate: true },

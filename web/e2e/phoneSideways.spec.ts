@@ -65,9 +65,7 @@ for (const size of [
       .click()
     await page.getByRole('button', { name: 'Actions ▴' }).waitFor()
     if (size.height <= 340) {
-      await expect(
-        page.getByRole('button', { name: /^Bag \d+$/ }),
-      ).toBeVisible()
+      await expect(page.getByRole('button', { name: 'Bag' })).toBeVisible()
       await expect(page.locator('.lq-hint-word')).toBeHidden()
     } else {
       await expect(page.locator('.lq-hint-word')).toBeVisible()
@@ -78,7 +76,7 @@ for (const size of [
   })
 }
 
-/** Light the new-item dots on all three buttons and name the room, as the store records them. */
+/** Light the new dots (Quests on the top row; Bag and Spells on the belt's tiny buttons) and name the room, as the store records them. */
 async function lightDots(page: Page, roomName: string): Promise<void> {
   await page.evaluate((name) => {
     const app = (
@@ -104,19 +102,20 @@ for (const size of [
   { width: 568, height: 320 },
   { width: 640, height: 360 },
 ]) {
-  test(`with every dot lit at ${size.width}×${size.height} the plate stays clear of Bag and the name is whole`, async ({
+  test(`with every dot lit at ${size.width}×${size.height} the plate stays clear of the buttons and the name is whole`, async ({
     page,
   }): Promise<void> => {
     await page.setViewportSize(size)
     await start(page)
     await lightDots(page, 'Abandoned Shed')
-    await expect(page.locator('.lq-dot')).toHaveCount(3)
+    // The belt shows the Bag, which counts as seen: Quests and the Spells button keep their dots.
+    await expect(page.locator('.lq-dot')).toHaveCount(2)
     // The plate follows the buttons' width a frame after the dots light.
     await expect
       .poll(async (): Promise<number> => {
         const plate = await page.locator('.lq-stage-plate').boundingBox()
-        const bag = await page.locator('[data-button="bag"]').boundingBox()
-        return (bag?.x ?? 0) - ((plate?.x ?? 0) + (plate?.width ?? 999))
+        const quests = await page.locator('.lq-stage-buttons').boundingBox()
+        return (quests?.x ?? 0) - ((plate?.x ?? 0) + (plate?.width ?? 999))
       })
       .toBeGreaterThanOrEqual(0)
     const name = page.locator('.lq-stage-plate .lq-room-name')

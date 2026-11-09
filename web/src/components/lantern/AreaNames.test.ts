@@ -9,11 +9,22 @@ import AreaNames from './AreaNames.vue'
 import type { AreaThing } from '@/lantern/areaThings'
 
 const things: AreaThing[] = [
-  { areaId: 'villager', label: 'Tilda', kind: 'character' },
-  { areaId: 'bucket', label: 'Bucket', kind: 'item' },
-  { areaId: 'scenery-x-fountain', label: 'Fountain', kind: 'scenery' },
-  { areaId: 'exit-north', label: '↑ Mira’s Hut', kind: 'exit' },
-  { areaId: 'unplaced', label: 'Nowhere', kind: 'item' },
+  { areaId: 'villager', name: 'villager', label: 'Tilda', kind: 'character' },
+  { areaId: 'bucket', name: 'bucket', label: 'Bucket', kind: 'item' },
+  {
+    areaId: 'scenery-x-fountain',
+    name: 'scenery-x-fountain',
+    label: 'Fountain',
+    kind: 'scenery',
+  },
+  {
+    areaId: 'exit-north',
+    name: 'north',
+    label: '↑ Mira’s Hut',
+    kind: 'exit',
+    direction: 'north',
+  },
+  { areaId: 'unplaced', name: 'unplaced', label: 'Nowhere', kind: 'item' },
 ]
 /** Boxes on a 1920×1080 picture shown on a 960×540 stage (half size). */
 const boxes = {
@@ -123,6 +134,62 @@ describe('AreaNames', () => {
     expect(top()).toBeLessThan(520)
   })
 
+  describe('with an action bar over the foot', () => {
+    const atTheFoot = {
+      ...boxes,
+      bucket: { x: 0.4, y: 0.8, width: 0.2, height: 0.2 },
+    }
+    /** The pixels of a style's `left` or `top`. */
+    const px = (style: string | undefined, side: string): number =>
+      parseFloat(new RegExp(`${side}: ([\\d.]+)px`).exec(style ?? '')![1])
+
+    it('hangs the pointer name above the pointer just over the bar, clear of it', async () => {
+      const w = mountNames({
+        footCover: 73,
+        boxes: atTheFoot,
+        pointer: { x: 480, y: 452 },
+      })
+      await nextTick()
+      const top = px(w.get('[data-area-pointer]').attributes('style'), 'top')
+      expect(top).toBeLessThan(452)
+      expect(top + 25).toBeLessThanOrEqual(540 - 73)
+    })
+
+    it('puts the mark of a thing partly behind the bar on the part in view', async () => {
+      const w = mountNames({ showing: true, footCover: 73, boxes: atTheFoot })
+      await nextTick()
+      const y = px(
+        w.get('[data-area-mark="bucket"]').attributes('style'),
+        'top',
+      )
+      expect(y).toBeLessThan(540 - 73)
+    })
+
+    it('has no mark or name for a thing wholly behind the bar', async () => {
+      const w = mountNames({
+        showing: true,
+        footCover: 73,
+        boxes: {
+          ...boxes,
+          bucket: { x: 0.4, y: 0.9, width: 0.2, height: 0.1 },
+        },
+      })
+      await nextTick()
+      expect(w.find('[data-area-mark="bucket"]').exists()).toBe(false)
+      expect(w.find('[data-area-name="bucket"]').exists()).toBe(false)
+    })
+  })
+
+  it('keeps a name clear of the edge the drift pulls past the picture', async () => {
+    const w = mountNames({
+      pointer: { x: 3, y: 270 },
+      boxes: { ...boxes, villager: { x: 0, y: 0.4, width: 0.1, height: 0.2 } },
+    })
+    await nextTick()
+    const style = w.get('[data-area-pointer]').attributes('style') ?? ''
+    expect(parseFloat(/left: ([\d.]+)px/.exec(style)![1])).toBeGreaterThan(18)
+  })
+
   it('adds no second name under the pointer while everything is shown', async () => {
     const w = mountNames({ showing: true, pointer: { x: 140, y: 250 } })
     await nextTick()
@@ -133,8 +200,8 @@ describe('AreaNames', () => {
     const w = mountNames({
       showing: true,
       things: [
-        { areaId: 'a', label: 'Notice Board', kind: 'scenery' },
-        { areaId: 'b', label: 'Old Notice', kind: 'item' },
+        { areaId: 'a', name: 'a', label: 'Notice Board', kind: 'scenery' },
+        { areaId: 'b', name: 'b', label: 'Old Notice', kind: 'item' },
       ],
       boxes: {
         a: { x: 0.5, y: 0.5, width: 0.02, height: 0.02 },
@@ -210,10 +277,125 @@ describe('AreaNames', () => {
     expect(w.get('[data-area-pointer]').text()).toBe('Tilda')
   })
 
+  it('shows the mark and name of the thing that has keyboard focus, names or not', async () => {
+    const w = mountNames({ focused: 'bucket' })
+    await nextTick()
+    expect(w.findAll('[data-area-mark]')).toHaveLength(1)
+    expect(w.get('[data-area-name="bucket"]').text()).toBe('Bucket')
+    await w.setProps({ focused: null })
+    await nextTick()
+    expect(w.find('[data-area-name]').exists()).toBe(false)
+  })
+
+  it('names a thing once when it has keyboard focus and the pointer is on it', async () => {
+    const w = mountNames({ focused: 'villager', pointer: { x: 140, y: 250 } })
+    await nextTick()
+    expect(w.findAll('.lq-area-name').map((name) => name.text())).toEqual([
+      'Tilda',
+    ])
+    expect(w.find('[data-area-pointer]').exists()).toBe(false)
+  })
+
+  it('still names what the pointer is on when focus is on something else, and once focus has left', async () => {
+    const w = mountNames({ focused: 'bucket', pointer: { x: 140, y: 250 } })
+    await nextTick()
+    expect(w.get('[data-area-pointer]').text()).toBe('Tilda')
+    expect(w.get('[data-area-name="bucket"]').text()).toBe('Bucket')
+    await w.setProps({ focused: 'villager' })
+    expect(w.find('[data-area-pointer]').exists()).toBe(false)
+    await w.setProps({ focused: null })
+    expect(w.get('[data-area-pointer]').text()).toBe('Tilda')
+  })
+
+  it('takes a press on a mark or a name as a press on its thing, and not on a way out', async () => {
+    const w = mountNames({ showing: true })
+    await nextTick()
+    await w
+      .get('[data-area-name="bucket"]')
+      .trigger('click', { clientX: 5, clientY: 6 })
+    await w
+      .get('[data-area-mark="villager"]')
+      .trigger('click', { clientX: 7, clientY: 8 })
+    await w.get('[data-area-name="exit-north"]').trigger('click')
+    expect(w.emitted('press')).toEqual([
+      [things[1], { x: 5, y: 6 }],
+      [things[0], { x: 7, y: 8 }],
+    ])
+  })
+
+  it('lets a mark or a name be pressed, a hand over them', () => {
+    const source = readFileSync(resolve(__dirname, 'AreaNames.vue'), 'utf8')
+    expect(source).toMatch(/\.lq-area-live[^}]*pointer-events: auto/s)
+  })
+
   it('fades under the stylesheet’s motion setting, which Reduce motion sets to nothing', () => {
     const source = readFileSync(resolve(__dirname, 'AreaNames.vue'), 'utf8')
     expect(source).toMatch(
       /\.lq-area-enter-active[^}]*transition: opacity calc\(0\.2s \* var\(--lq-motion\)\)/s,
     )
+  })
+})
+
+describe('AreaNames ways out', () => {
+  const closedWays: AreaThing[] = [
+    {
+      areaId: 'exit-west',
+      name: 'exit-west',
+      label: '',
+      kind: 'exit',
+      direction: 'west',
+    },
+  ]
+  const wayBoxes = {
+    ...boxes,
+    'exit-west': { x: 0.0, y: 0.45, width: 0.1, height: 0.1 },
+  }
+
+  it('says which way a screen point presses: an open way, a closed way, or none', async () => {
+    const w = mountNames({ closedWays, boxes: wayBoxes })
+    await nextTick()
+    const way = (x: number, y: number) =>
+      (w.vm as unknown as { wayAt(x: number, y: number): unknown }).wayAt(x, y)
+    // The north way at (0.45..0.55, 0.05..0.15) of 960×540.
+    expect(way(480, 54)).toEqual({ direction: 'north', open: true })
+    expect(way(20, 270)).toEqual({ direction: 'west', open: false })
+    // A thing, and bare painting, are no way.
+    expect(way(480, 270)).toBeNull()
+    expect(way(700, 100)).toBeNull()
+  })
+
+  it('makes only the marks and names of ways out pressable, naming their direction', async () => {
+    const w = mountNames({ showing: true })
+    await nextTick()
+    expect(w.get('[data-area-name="exit-north"]').attributes('data-way')).toBe(
+      'north',
+    )
+    expect(w.get('[data-area-mark="exit-north"]').attributes('data-way')).toBe(
+      'north',
+    )
+    expect(w.get('[data-area-name="bucket"]').attributes('data-way')).toBe(
+      undefined,
+    )
+    expect(w.get('[data-area-mark="villager"]').attributes('data-way')).toBe(
+      undefined,
+    )
+  })
+
+  it('says when the pointer is over an open way, and not over a closed one', async () => {
+    const w = mountNames({ closedWays, boxes: wayBoxes })
+    await w.setProps({ pointer: { x: 480, y: 54 } })
+    expect(w.emitted('pointing')?.at(-1)).toEqual(['north'])
+    await w.setProps({ pointer: { x: 20, y: 270 } })
+    expect(w.emitted('pointing')?.at(-1)).toEqual([null])
+    await w.setProps({ pointer: { x: 480, y: 54 } })
+    await w.setProps({ pointer: null })
+    expect(w.emitted('pointing')?.at(-1)).toEqual([null])
+  })
+
+  it('has no pointer name while a ring is open, and still says the way under the pointer', async () => {
+    const w = mountNames({ ringOpen: true })
+    await w.setProps({ pointer: { x: 480, y: 54 } })
+    expect(w.find('[data-area-pointer]').exists()).toBe(false)
+    expect(w.emitted('pointing')?.at(-1)).toEqual(['north'])
   })
 })

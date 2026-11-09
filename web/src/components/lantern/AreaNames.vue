@@ -2,10 +2,14 @@
 import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
 import {
   layoutNames,
+  markInside,
   nameAt,
   placeNames,
+  pressAt,
+  visiblePart,
   type NamedSpot,
   type PlacedName,
+  type WayPress,
 } from '@/lantern/areaNames'
 import type { AreaThing } from '@/lantern/areaThings'
 import type { AreaBox } from '@/lantern/roomMotion'
@@ -20,12 +24,28 @@ import type { PictureSize, Rect } from '@/lantern/roomMotionScene'
  * would cover another name or a button, a plate or the words moves to a free
  * spot with a thin line back to its mark, and a thing under the words has
  * neither until the words are gone. Otherwise the one thing under the
- * `pointer` has its name just under the pointer, above it near the foot. The
+ * `pointer` has its name just under the pointer, above it near the foot of
+ * what can be seen, and has none while a ring is open (`ringOpen`): the ring
+ * has the name. Marks and names stay on the part of the picture that can
+ * be seen at every moment of its drift, above the `footCover` pixels the
+ * action bar lies over; a thing wholly outside that part has neither. The
  * marks and names fade in and out (not under Reduce motion, which the
- * stylesheet's `--lq-motion` carries), never take a click and are hidden
- * from assistive technology: the room's corner names list what is here.
+ * stylesheet's `--lq-motion` carries) and are hidden from assistive
+ * technology (the room's corner names list what is here, and `AreaPress` has
+ * the Tab stops). A mark or name of something that can be pressed takes a
+ * press as a press on its thing (`press`); one of a way out goes the way out (below). The
+ * thing with keyboard focus (`focused`) has its mark and name showing even
+ * when not all are, and the pointer on that same thing adds no second name.
  * `relayout` is any value that changes when something it keeps clear of
  * moves (the words coming or going).
+ *
+ * Ways out can be pressed. `wayAt` says which way a screen point presses (the
+ * smallest named thing or open way under it; a closed way, one of
+ * `closedWays` that the studio placed, only where nothing named is), and the
+ * marks and names of open ways take the press themselves (`data-way`, the one
+ * place this layer takes a click). `pointing` says the direction of the open
+ * way under the `pointer`, or null, for the pointer's arrow; a closed way is
+ * plain painting and never points. Nothing else here is pressable.
  */
 const props = defineProps<{
   things: AreaThing[]
@@ -34,7 +54,19 @@ const props = defineProps<{
   showing: boolean
   /** The pointer over the picture, in the screen's pixels (client coordinates). */
   pointer: { x: number; y: number } | null
+  /** Placed ways out that are closed right now: no mark, no name, they only answer a press. */
+  closedWays?: AreaThing[]
+  /** How many pixels at the stage's foot lie over the picture (the action bar). */
+  footCover?: number
+  /** The thing that has keyboard focus: its mark and name show whether or not all are. */
+  focused?: string | null
+  /** A ring is open, with the name of its thing in the middle: the pointer has no name of its own. */
+  ringOpen?: boolean
   relayout?: unknown
+}>()
+const emit = defineEmits<{
+  pointing: [direction: string | null]
+  press: [thing: AreaThing, at: { x: number; y: number }]
 }>()
 
 /** What a name is made of beyond its words: the padding and the border, and about the width of one letter. */
@@ -43,7 +75,7 @@ const LETTER = 7.4
 const NAME_HEIGHT = 25
 /** How long the words take to fade away (a little over), before what they covered is clear. */
 const SETTLE_MS = 350
-/** How far under the pointer its name hangs, and the foot of the picture where it hangs above instead. */
+/** How far under the pointer its name hangs, and how near the foot of what can be seen it hangs above instead. */
 const POINTER_GAP = 18
 const FOOT = 60
 /** The things in the stage that a name keeps clear of. */
@@ -153,54 +185,103 @@ const inView = computed<PlacedName[]>(() => {
   return placeNames(props.things, props.boxes, view.value, props.pictureSize)
 })
 
-/** The placed things in view whose mark is not under the words. */
-const placed = computed<PlacedName[]>(() =>
-  inView.value.filter((entry) => !underWords(entry)),
+/** The part of the layer that can be seen: where every mark and name goes. */
+const visible = computed<Rect>(() =>
+  visiblePart(view.value, props.footCover ?? 0),
 )
 
-/** The size a name is laid out at (one line, never wider than the picture). */
+/** The placed things with a part that can be seen, whose mark is not under the words. */
+const placed = computed<PlacedName[]>(() =>
+  markInside(inView.value, visible.value).filter((entry) => !underWords(entry)),
+)
+
+/** The closed ways that are placed and in view. */
+const closedInView = computed<PlacedName[]>(() => {
+  if (view.value.width < 1 || view.value.height < 1) return []
+  return placeNames(
+    props.closedWays ?? [],
+    props.boxes,
+    view.value,
+    props.pictureSize,
+  )
+})
+
+/** The way a press at the screen point (`clientX`, `clientY`) goes, or null. */
+function wayAt(clientX: number, clientY: number): WayPress | null {
+  const frame = frameOf()
+  return pressAt(
+    inView.value,
+    closedInView.value,
+    (clientX - frame.left) / frame.ratio,
+    (clientY - frame.top) / frame.ratio,
+  )
+}
+defineExpose({ wayAt })
+
+/** The direction of the open way under the pointer, for its arrow. */
+const pointing = computed<string | null>(() => {
+  if (!props.pointer) return null
+  const way = wayAt(props.pointer.x, props.pointer.y)
+  return way?.open ? way.direction : null
+})
+watch(pointing, (direction) => emit('pointing', direction))
+
+/** The size a name is laid out at (one line, never wider than what can be seen). */
 function sizeOf(label: string): { w: number; h: number } {
   return {
-    w: Math.min(view.value.width - 8, label.length * LETTER + NAME_PADDING),
+    w: Math.min(visible.value.w, label.length * LETTER + NAME_PADDING),
     h: NAME_HEIGHT,
   }
 }
 
-/** Every mark and name, when they are all showing. */
-const spots = computed<NamedSpot[]>(() =>
-  props.showing
-    ? layoutNames(placed.value, sizeOf, obstacles.value, {
-        w: view.value.width,
-        h: view.value.height,
-      })
-    : [],
-)
+/** Every mark and name when they are all showing, else those of the thing with focus. */
+const spots = computed<NamedSpot[]>(() => {
+  if (props.showing)
+    return layoutNames(placed.value, sizeOf, obstacles.value, visible.value)
+  const focus = inView.value.find((entry) => entry.areaId === props.focused)
+  return focus
+    ? layoutNames([focus], sizeOf, obstacles.value, visible.value)
+    : []
+})
 
-/** The one name that follows the pointer: the thing it is over, when not everything is shown. */
+/** A press on a mark or name is a press on its thing; a way out's press is the stage's (`wayAt`), so it is let through. */
+function press(spot: NamedSpot, event: MouseEvent): void {
+  if (spot.kind === 'exit') return
+  emit(
+    'press',
+    {
+      areaId: spot.areaId,
+      name: spot.name,
+      label: spot.label,
+      kind: spot.kind,
+    },
+    { x: event.clientX, y: event.clientY },
+  )
+}
+
+/** The one name that follows the pointer: the thing it is over, when not everything is shown, no ring is open and that thing is not already named for having focus. */
 const pointed = computed<{
   label: string
   kind: string
   left: number
   top: number
 } | null>(() => {
-  if (props.showing || !props.pointer) return null
+  if (props.showing || props.ringOpen || !props.pointer) return null
   const frame = frameOf()
   const x = (props.pointer.x - frame.left) / frame.ratio
   const y = (props.pointer.y - frame.top) / frame.ratio
   const entry = nameAt(inView.value, x, y)
-  if (!entry) return null
+  if (!entry || entry.areaId === props.focused) return null
   const { w, h } = sizeOf(entry.label)
-  const above = y > view.value.height - FOOT
+  const { x: left, y: top, w: across, h: down } = visible.value
+  const above = y > top + down - FOOT
   return {
     label: entry.label,
     kind: entry.kind,
-    left: Math.max(0, Math.min(view.value.width - w, x - w / 2)),
+    left: Math.max(left, Math.min(left + across - w, x - w / 2)),
     top: Math.max(
-      0,
-      Math.min(
-        view.value.height - h,
-        above ? y - POINTER_GAP - h : y + POINTER_GAP,
-      ),
+      top,
+      Math.min(top + down - h, above ? y - POINTER_GAP - h : y + POINTER_GAP),
     ),
   }
 })
@@ -213,7 +294,13 @@ const pointed = computed<{
         <i
           class="lq-area-mark"
           :data-area-mark="spot.areaId"
+          :data-way="spot.direction"
+          :class="{
+            'lq-area-way': spot.direction,
+            'lq-area-live': showing && !spot.direction,
+          }"
           :style="{ left: `${spot.x}px`, top: `${spot.y}px` }"
+          @click="press(spot, $event)"
         ></i>
       </template>
     </TransitionGroup>
@@ -238,9 +325,21 @@ const pointed = computed<{
         v-for="spot in spots"
         :key="spot.areaId"
         class="lq-area-name"
-        :class="`lq-area-${spot.kind}`"
+        :class="[
+          `lq-area-${spot.kind}`,
+          {
+            'lq-area-way': spot.direction,
+            'lq-area-live': showing && !spot.direction,
+          },
+        ]"
         :data-area-name="spot.areaId"
-        :style="{ left: `${spot.left}px`, top: `${spot.top}px` }"
+        :data-way="spot.direction"
+        :style="{
+          left: `${spot.left}px`,
+          top: `${spot.top}px`,
+          maxWidth: `${visible.w}px`,
+        }"
+        @click="press(spot, $event)"
         >{{ spot.label }}</span
       >
     </TransitionGroup>
@@ -249,7 +348,11 @@ const pointed = computed<{
       class="lq-area-name lq-area-pointer"
       :class="`lq-area-${pointed.kind}`"
       data-area-pointer
-      :style="{ left: `${pointed.left}px`, top: `${pointed.top}px` }"
+      :style="{
+        left: `${pointed.left}px`,
+        top: `${pointed.top}px`,
+        maxWidth: `${visible.w}px`,
+      }"
       >{{ pointed.label }}</span
     >
   </div>
@@ -259,6 +362,7 @@ const pointed = computed<{
 .lq-area-names {
   position: absolute;
   inset: 0;
+  z-index: 2;
   overflow: hidden;
   pointer-events: none;
 }
@@ -274,6 +378,13 @@ const pointed = computed<{
     0 0 0 3px rgb(242 158 0 / 0.45),
     0 0 14px 4px rgb(255 190 80 / 0.8);
 }
+.lq-area-way {
+  pointer-events: auto;
+}
+.lq-area-live {
+  pointer-events: auto;
+  cursor: pointer;
+}
 .lq-area-lines {
   position: absolute;
   left: 0;
@@ -287,7 +398,6 @@ const pointed = computed<{
 .lq-area-name {
   position: absolute;
   box-sizing: border-box;
-  max-width: calc(100% - 8px);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;

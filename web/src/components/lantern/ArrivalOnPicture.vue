@@ -52,6 +52,8 @@ const props = defineProps<{
   phone?: boolean
   /** The words are folded away (to show the names on the picture): out of sight and reach, still being read and clicked on in no way, and back when it is false. */
   away?: boolean
+  /** The height the belt of pictures takes at the foot (px): the words end above it (the stage's `--lq-belt-h`). */
+  lift?: number
 }>()
 const arrival = useArrivalStore()
 const root = ref<HTMLElement | null>(null)
@@ -178,6 +180,14 @@ function recut(): void {
 // Larger or smaller type changes the lines, not the stage: cut afresh.
 watch(
   () => useSettingsStore().textSize,
+  async () => {
+    await nextTick()
+    recut()
+  },
+)
+// The belt came up, went away or changed height: the room for the words changed with it.
+watch(
+  () => props.lift,
   async () => {
     await nextTick()
     recut()
@@ -415,7 +425,7 @@ onBeforeUnmount(() => {
   align-items: center;
   justify-content: center;
   /* Above the middle of the picture, clear of the story's tab and the actions. */
-  padding: 72px 24px 140px;
+  padding: 72px 24px calc(140px + var(--lq-belt-h, 0px));
   pointer-events: none;
   --lq-arrival-ink: #fbf6ea;
   --lq-arrival-glow:
@@ -438,7 +448,8 @@ onBeforeUnmount(() => {
 /* The phone: a narrower block of smaller type, above the paper's tab and the bar. */
 .lq-phone-arrival {
   /* Clear of the plate across the top, and of the bar and the paper's tab. */
-  padding: calc(var(--lq-plate-h, 108px) + 24px) 20px 110px;
+  padding: calc(var(--lq-plate-h, 108px) + 24px) 20px
+    calc(110px + var(--lq-belt-h, 0px));
 }
 .lq-phone-arrival .lq-arrival-card,
 .lq-phone-arrival .lq-arrival-twin {

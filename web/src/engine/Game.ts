@@ -438,6 +438,7 @@ Welcome to
       use: sendableNames(
         splitMultiwordKeys(withTarget(allItemNames, 'with', 'on')),
         allItems,
+        ['with', 'on'],
       ),
       inventory: null,
       i: null,
@@ -1135,17 +1136,23 @@ function nested(names: string[]): CompletionTree {
  * Makes every word in `tree` that one of `things` answers to sendable, so a
  * name typed in full is not traded for a longer one: a word path gets `@`, and
  * a word that a listed word only starts with ("guardian" before "guardians")
- * is added as a leaf.
+ * is added as a leaf. A word of `targetWords` after a whole name opens the
+ * name's targets, a tree already marked: the walk stops there, since going on
+ * would ask every thing about every name and target, on every turn. (So a
+ * name that goes on past a word of `targetWords`, "ring on a chain" beside
+ * "ring", gets no marks after that word.)
  */
 function sendableNames(
   tree: CompletionTree,
   things: { answersTo(name: string): boolean }[],
+  targetWords: string[] = [],
   path: string[] = [],
 ): CompletionTree {
   const named = (words: string[]): boolean =>
     things.some((thing) => thing.answersTo(words.join(' ')))
   for (const [word, child] of Object.entries(tree)) {
     if (word === '@') continue
+    if (targetWords.includes(word) && path.length > 0 && named(path)) continue
     for (let end = 1; end < word.length; end++) {
       const start = word.slice(0, end)
       if (!Object.hasOwn(tree, start) && named([...path, start])) {
@@ -1155,7 +1162,7 @@ function sendableNames(
     if (child === null) continue
     const words = [...path, word]
     if (named(words)) child['@'] = null
-    sendableNames(child, things, words)
+    sendableNames(child, things, targetWords, words)
   }
   return tree
 }

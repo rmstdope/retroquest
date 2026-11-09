@@ -58,7 +58,7 @@ test('a laptop walks to a visited place from the bigger map', async ({
   await wake(page)
   const home = await placeName(page)
 
-  await page.getByRole('button', { name: /Map/ }).click()
+  await page.getByRole('button', { name: '🧭 Map' }).click()
   await page.locator('.lq-map-pop .lq-exit').first().click()
   await expect.poll(() => placeName(page)).not.toBe(home)
 
@@ -79,7 +79,7 @@ test('Escape closes the bigger map and leaves the small map open', async ({
   await page.setViewportSize({ width: 1440, height: 800 })
   await start(page)
   await wake(page)
-  await page.getByRole('button', { name: /Map/ }).click()
+  await page.getByRole('button', { name: '🧭 Map' }).click()
   await page.getByRole('button', { name: 'Bigger map', exact: true }).click()
   await expect(page.getByRole('dialog', { name: 'Map' })).toBeVisible()
   await page.keyboard.press('Escape')
@@ -106,7 +106,7 @@ test('every place of Act I fits across the bigger map (rq-7319)', async ({
   await start(page)
   await enter(page, 'debug act1')
   await expect(page.getByText("Debug script 'act1' played")).toBeVisible()
-  await page.getByRole('button', { name: /Map/ }).click()
+  await page.getByRole('button', { name: '🧭 Map' }).click()
   await page.getByRole('button', { name: 'Bigger map', exact: true }).click()
   const dialog = page.getByRole('dialog', { name: 'Map' })
   await expect(dialog.locator('[data-place="Road to Greendale"]')).toHaveCount(

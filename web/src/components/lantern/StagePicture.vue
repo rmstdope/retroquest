@@ -438,13 +438,8 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div
-    ref="root"
-    class="lq-stage-picture"
-    :class="`lq-scene-${scene.phase}`"
-    aria-hidden="true"
-  >
-    <div class="lq-backdrop"></div>
+  <div ref="root" class="lq-stage-picture" :class="`lq-scene-${scene.phase}`">
+    <div class="lq-backdrop" aria-hidden="true"></div>
     <img
       v-if="leaving && leaving !== shown"
       :key="`out-${leaving}`"
@@ -498,8 +493,8 @@ onUnmounted(() => {
       @load="onPatchLoaded(url)"
       @error="onPatchMissing(url)"
     />
-    <div class="lq-dim"></div>
-    <div class="lq-veil"></div>
+    <div class="lq-dim" aria-hidden="true"></div>
+    <div class="lq-veil" aria-hidden="true"></div>
   </div>
 </template>
 
@@ -507,6 +502,7 @@ onUnmounted(() => {
 .lq-stage-picture {
   position: absolute;
   inset: 0;
+  z-index: -1;
   overflow: hidden;
   background: var(--lq-bg);
 }
@@ -520,6 +516,8 @@ onUnmounted(() => {
   );
 }
 .lq-drift {
+  /* What is put in the slot stays under the dim and the veil. */
+  isolation: isolate;
   position: absolute;
   inset: 0;
 }

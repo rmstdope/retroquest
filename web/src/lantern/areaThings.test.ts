@@ -26,9 +26,24 @@ describe('areaThingsOf', () => {
       label: 'Fountain',
     })
     expect(byId['exit-north'].kind).toBe('exit')
+    expect(byId['exit-north'].direction).toBe('north')
+    expect(byId['exit-west'].direction).toBe('west')
     expect(byId['exit-north'].label).toMatch(/^↑ /)
     expect(byId['exit-west'].label).toMatch(/^← /)
     expect(byId['exit-east'].label).toMatch(/^→ /)
+  })
+
+  it("carries the engine's name of each thing, for the command it is pressed for", () => {
+    const { act, game } = inTheSquare()
+    const byId = Object.fromEntries(
+      areaThingsOf(act, 'VillageSquare', game.state).map((t) => [t.areaId, t]),
+    )
+    const room = game.state.allRooms.VillageSquare
+    expect(byId['bucket'].name).toBe(
+      room.items.find((i) => i.name.toLowerCase().includes('bucket'))?.name,
+    )
+    expect(byId['villager'].name).toBe(room.characters[0].name)
+    expect(byId['exit-north'].name).toBe('north')
   })
 
   it('only offers areas the room declares', () => {
