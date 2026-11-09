@@ -170,6 +170,29 @@ describe('LanternLayout: leaving by pressing a way out in the picture', () => {
     await w.vm.$nextTick()
   }
 
+  it.each([
+    ['name', '[data-area-name="exit-east"]'],
+    ['mark', '.lq-area-mark[data-way="east"]'],
+  ])(
+    'leaves no arrow in the next room after the %s of a way is pressed with the pointer unmoved',
+    async (_what, selector) => {
+      const store = await cottage()
+      await openTheWays(store)
+      useAreaNamesStore().showing = true
+      await w.vm.$nextTick()
+      const place = w.get(selector).element
+      place.dispatchEvent(new MouseEvent('pointermove', { bubbles: true }))
+      await w.vm.$nextTick()
+      expect(w.get('.lq-stage').attributes('style')).toContain('cursor')
+      place.dispatchEvent(new MouseEvent('click', { bubbles: true }))
+      await w.vm.$nextTick()
+      expect(store.roomName).not.toBe("Elior's Cottage")
+      expect(w.get('.lq-stage').attributes('style') ?? '').not.toContain(
+        'cursor',
+      )
+    },
+  )
+
   it('stops the telling when an open way is pressed', async () => {
     const store = await cottage()
     await openTheWays(store)
