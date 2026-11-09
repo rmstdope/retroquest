@@ -40,6 +40,11 @@ import {
 import ActionComposer from './ActionComposer.vue'
 import ArrivalOnPicture from './ArrivalOnPicture.vue'
 import AreaNames from './AreaNames.vue'
+import AreaPress from './AreaPress.vue'
+import PressRing from './PressRing.vue'
+import { ringActions } from '@/lantern/pressRing'
+import type { ActionContext } from '@/lantern/actions'
+import type { AreaThing } from '@/lantern/areaThings'
 import AcquiredFlight from './AcquiredFlight.vue'
 import ChapterPage from './ChapterPage.vue'
 import CompassPanel from './CompassPanel.vue'
@@ -567,7 +572,7 @@ function onNamesKey(event: KeyboardEvent): void {
 /** Escape takes the names away before it does anything else, but for a dialog that is up, which shuts first. */
 function onNamesEscape(event: KeyboardEvent): void {
   if (event.key !== 'Escape' || !names.showing || !showNamesButton.value) return
-  if (dialogOpen()) return
+  if (dialogOpen() || ring.value) return
   event.preventDefault()
   event.stopImmediatePropagation()
   names.turnOff()
@@ -1317,6 +1322,132 @@ const music = useActMusic()
 
 // --- Game menu, Stats and Help (dialogs the player opens) ---
 const gameDialog = ref<'menu' | MenuKind | null>(null)
+
+// --- Pressing a thing on the picture: a ring of what can be done with it ---
+/** The ring that is open: the thing, the spot pressed and the picture's size, in the stage's pixels. */
+const ring = ref<{
+  thing: AreaThing
+  at: { x: number; y: number }
+  bounds: { w: number; h: number }
+} | null>(null)
+const stageEl = ref<HTMLElement | null>(null)
+/** The thing that has keyboard focus on the picture, whose mark and name show. */
+const focusedArea = ref<string | null>(null)
+/** What the Actions row would offer now: the ring reads the same lists. */
+const ringContext = computed<ActionContext>(() => ({
+  roomItems: game.items,
+  characters: game.characters,
+  inventory: game.bagEntries,
+  spells: game.spellEntries,
+  exits: game.exits,
+  wares: game.roomWares,
+}))
+/** The actions on the open ring, read live so what is gone leaves it. */
+const ringItems = computed(() =>
+  ring.value ? ringActions(ring.value.thing, ringContext.value) : [],
+)
+/** The words are still being told: a press hurries them and opens no ring. */
+const telling = computed(
+  () =>
+    narration.isNarrating ||
+    (speech.conversation?.lines.some((line) => !line.shown) ?? false),
+)
+
+/** A thing of the picture is pressed, at `at` in the window: open its ring if the game takes a move and the words have settled. */
+function onAreaPress(thing: AreaThing, at: { x: number; y: number }): void {
+  const box = stageEl.value?.getBoundingClientRect()
+  if (!box || !staged.value) return
+  // A way out smaller than the thing it lies on is the press's: the stage takes it (`onPicturePress`).
+  if (areaNamesEl.value?.wayAt(at.x, at.y)) return
+  if (
+    !game.acceptInput ||
+    scene.phase !== 'idle' ||
+    scene.turn !== null ||
+    telling.value ||
+    dialogOpen() ||
+    drawerTab.value !== null ||
+    sheetOpen.value
+  )
+    return
+  ring.value = {
+    thing,
+    at: { x: at.x - box.left, y: at.y - box.top },
+    bounds: { w: box.width, h: box.height },
+  }
+}
+
+/** Where focus returns to when the ring is gone: the thing, or if it has gone the show button. */
+function focusAfterRing(areaId: string): void {
+  const thing = stageEl.value?.querySelector<HTMLElement>(
+    `[data-area-press="${areaId}"]`,
+  )
+  const target =
+    thing ?? mainEl.value?.querySelector<HTMLElement>('.lq-show-names')
+  target?.focus({ preventScroll: true })
+}
+
+/** Close the ring; Escape (or Tab) puts focus back on the thing. */
+function closeRing(byKey: boolean): void {
+  const id = ring.value?.thing.areaId
+  ring.value = null
+  if (byKey && id) void nextTick(() => nextTick(() => focusAfterRing(id)))
+}
+
+/** Send the ring's command as a typed one, and put focus back on the thing (or the show button once it has gone). */
+function runRing(command: string): void {
+  const id = ring.value?.thing.areaId
+  ring.value = null
+  game.submitCommand(command)
+  if (!id) return
+  void nextTick(() => nextTick(() => focusAfterRing(id)))
+  // The thing may go with the answer (taken): focus then moves to the show button.
+  pendingFocus = id
+  clearTimeout(pendingTimer)
+  pendingTimer = setTimeout(() => (pendingFocus = null), 600)
+}
+
+/** The thing a command was run from, while focus may still need to find it or the show button. */
+let pendingFocus: string | null = null
+let pendingTimer: ReturnType<typeof setTimeout> | undefined
+watch(
+  () => [game.turns.length, game.roomAreas.things] as const,
+  () => {
+    if (pendingFocus === null) return
+    const active = document.activeElement
+    if (!active || active === document.body || !active.isConnected)
+      focusAfterRing(pendingFocus)
+  },
+  { flush: 'post' },
+)
+onUnmounted(() => clearTimeout(pendingTimer))
+
+// The ring closes when the move is no longer the game's to take, the room or scene changes, a pop-up or panel comes over, or its thing leaves.
+watch(
+  () =>
+    [
+      game.acceptInput,
+      scene.phase,
+      game.showModal,
+      game.showTitle,
+      gameDialog.value,
+      drawerTab.value,
+      sheetOpen.value,
+      game.roomName,
+      staged.value,
+    ] as const,
+  () => {
+    ring.value = null
+  },
+)
+watch(
+  () => game.roomAreas.things,
+  (things) => {
+    const open = ring.value
+    if (open && !things.some((t) => t.areaId === open.thing.areaId))
+      ring.value = null
+  },
+)
+
 const INFO_TITLES: Record<InfoKind, string> = { stats: 'Stats', help: 'Help' }
 let dialogOpener: HTMLElement | null = null
 
@@ -1639,6 +1770,7 @@ watch(
           <div
             v-if="staged"
             v-show="section === 'story'"
+            ref="stageEl"
             class="lq-stage"
             :style="{
               '--lq-actions-h': `${actionsHeight}px`,
@@ -1649,26 +1781,6 @@ watch(
             @pointermove="onStagePointer"
             @pointerleave="onStageLeave"
           >
-            <StagePicture
-              :src="game.roomPicture"
-              :patches="game.roomPatchUrls"
-              :motion="game.roomMotion"
-              :picture-size="game.roomPictureSize"
-              @pictured="pictured = $event"
-            >
-              <AreaNames
-                ref="areaNamesEl"
-                :closed-ways="game.roomAreas.closedWays"
-                :things="game.roomAreas.things"
-                :boxes="game.roomAreas.boxes"
-                :picture-size="game.roomPictureSize ?? DEFAULT_PICTURE_SIZE"
-                :showing="namesUp"
-                :pointer="scene.phase === 'idle' ? names.pointer : null"
-                :foot-cover="laptop ? actionsHeight : 0"
-                :relayout="namesRelayout"
-                @pointing="pointingWay = $event"
-              />
-            </StagePicture>
             <ArrivalOnPicture
               :pictured="pictured"
               :phone="phoneStage"
@@ -1703,6 +1815,36 @@ watch(
               @map="toggleDrawer('map')"
               @close="closeDrawer"
             />
+            <!-- After the plate and the buttons, so the things on the picture are Tab stops right after them; the picture itself lies beneath everything (z-index). -->
+            <StagePicture
+              :src="game.roomPicture"
+              :patches="game.roomPatchUrls"
+              :motion="game.roomMotion"
+              :picture-size="game.roomPictureSize"
+              @pictured="pictured = $event"
+            >
+              <AreaNames
+                ref="areaNamesEl"
+                :closed-ways="game.roomAreas.closedWays"
+                :things="game.roomAreas.things"
+                :boxes="game.roomAreas.boxes"
+                :picture-size="game.roomPictureSize ?? DEFAULT_PICTURE_SIZE"
+                :showing="namesUp"
+                :pointer="scene.phase === 'idle' ? names.pointer : null"
+                :foot-cover="laptop ? actionsHeight : 0"
+                :focused="scene.phase === 'idle' ? focusedArea : null"
+                :relayout="namesRelayout"
+                @pointing="pointingWay = $event"
+                @press="onAreaPress"
+              />
+              <AreaPress
+                :things="game.roomAreas.things"
+                :boxes="game.roomAreas.boxes"
+                :picture-size="game.roomPictureSize ?? DEFAULT_PICTURE_SIZE"
+                @press="onAreaPress"
+                @focused="focusedArea = $event"
+              />
+            </StagePicture>
             <JournalDrawer
               v-if="drawerTab && drawerTab !== 'story' && drawerTab !== 'map'"
               :key="`drawer-${stageKey}`"
@@ -1717,6 +1859,16 @@ watch(
               @click="onNameClick"
               @keydown="onNameKeydown"
               @close="closeDrawer"
+            />
+            <PressRing
+              v-if="ring"
+              :key="ring.thing.areaId"
+              :thing="ring.thing"
+              :actions="ringItems"
+              :at="ring.at"
+              :bounds="ring.bounds"
+              @pick="runRing"
+              @close="closeRing"
             />
           </div>
           <RoomPlate
@@ -2046,6 +2198,8 @@ watch(
 .lq-stage {
   position: absolute;
   inset: 0;
+  /* The picture is drawn last in the markup (for the Tab order) and lies beneath the rest. */
+  isolation: isolate;
 }
 .lq-stage-plate {
   position: absolute;

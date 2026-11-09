@@ -16,6 +16,8 @@ export interface AreaThing {
   areaId: string
   /** The name the picture shows: as the room's corner names it, a piece of scenery by its area's title, a way out by its arrow and the place it leads to. */
   label: string
+  /** The engine's name for the thing, as the Actions row puts it in a command. */
+  name: string
   /** Decides the colour: people blue, things that can be picked up green, ways out amber, scenery plain. */
   kind: 'character' | 'item' | 'scenery' | 'exit'
   /** For a way out, the direction that goes there (what pressing it types after `go`). */
@@ -52,6 +54,7 @@ export function areaThingsOf(
     if (areaId === null) continue
     things.push({
       areaId,
+      name: character.name,
       label: displayName(character.name),
       kind: 'character',
     })
@@ -62,6 +65,7 @@ export function areaThingsOf(
     const scenery = areaId.startsWith('scenery-')
     things.push({
       areaId,
+      name: item.name,
       label: scenery
         ? (titles.get(areaId) ?? displayName(item.name))
         : displayName(item.name),
@@ -73,6 +77,7 @@ export function areaThingsOf(
       room.exitLabel(state, direction) ?? state.allRooms[key]?.name ?? key
     things.push({
       areaId: exitAreaId(direction),
+      name: direction,
       label: `${exitArrow(direction)} ${place}`,
       kind: 'exit',
       direction,

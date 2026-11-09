@@ -68,9 +68,10 @@ describe('StagePicture', () => {
     expect(w.emitted('pictured')?.at(-1)).toEqual([false])
   })
 
-  it('is decorative', () => {
+  it('is decorative, but not what is put over it (the things that can be pressed)', () => {
     const w = mount(StagePicture, { props: { src: '' } })
-    expect(w.attributes('aria-hidden')).toBe('true')
+    expect(w.attributes('aria-hidden')).toBeUndefined()
+    expect(w.get('.lq-backdrop').attributes('aria-hidden')).toBe('true')
   })
 })
 
