@@ -29,8 +29,12 @@ import type { PictureSize, Rect } from '@/lantern/roomMotionScene'
  * be seen at every moment of its drift, above the `footCover` pixels the
  * action bar lies over; a thing wholly outside that part has neither. The
  * marks and names fade in and out (not under Reduce motion, which the
- * stylesheet's `--lq-motion` carries), never take a click and are hidden
- * from assistive technology: the room's corner names list what is here.
+ * stylesheet's `--lq-motion` carries) and are hidden from assistive
+ * technology (the room's corner names list what is here, and `AreaPress` has
+ * the Tab stops). A mark or name of something that can be pressed takes a
+ * press as a press on its thing (`press`); one of a way out goes the way out (below). The
+ * thing with keyboard focus (`focused`) has its mark and name showing even
+ * when not all are.
  * `relayout` is any value that changes when something it keeps clear of
  * moves (the words coming or going).
  *
@@ -53,9 +57,14 @@ const props = defineProps<{
   closedWays?: AreaThing[]
   /** How many pixels at the stage's foot lie over the picture (the action bar). */
   footCover?: number
+  /** The thing that has keyboard focus: its mark and name show whether or not all are. */
+  focused?: string | null
   relayout?: unknown
 }>()
-const emit = defineEmits<{ pointing: [direction: string | null] }>()
+const emit = defineEmits<{
+  pointing: [direction: string | null]
+  press: [thing: AreaThing, at: { x: number; y: number }]
+}>()
 
 /** What a name is made of beyond its words: the padding and the border, and about the width of one letter. */
 const NAME_PADDING = 22
@@ -222,12 +231,30 @@ function sizeOf(label: string): { w: number; h: number } {
   }
 }
 
-/** Every mark and name, when they are all showing. */
-const spots = computed<NamedSpot[]>(() =>
-  props.showing
-    ? layoutNames(placed.value, sizeOf, obstacles.value, visible.value)
-    : [],
-)
+/** Every mark and name when they are all showing, else those of the thing with focus. */
+const spots = computed<NamedSpot[]>(() => {
+  if (props.showing)
+    return layoutNames(placed.value, sizeOf, obstacles.value, visible.value)
+  const focus = inView.value.find((entry) => entry.areaId === props.focused)
+  return focus
+    ? layoutNames([focus], sizeOf, obstacles.value, visible.value)
+    : []
+})
+
+/** A press on a mark or name is a press on its thing; a way out's press is the stage's (`wayAt`), so it is let through. */
+function press(spot: NamedSpot, event: MouseEvent): void {
+  if (spot.kind === 'exit') return
+  emit(
+    'press',
+    {
+      areaId: spot.areaId,
+      name: spot.name,
+      label: spot.label,
+      kind: spot.kind,
+    },
+    { x: event.clientX, y: event.clientY },
+  )
+}
 
 /** The one name that follows the pointer: the thing it is over, when not everything is shown. */
 const pointed = computed<{
@@ -265,8 +292,12 @@ const pointed = computed<{
           class="lq-area-mark"
           :data-area-mark="spot.areaId"
           :data-way="spot.direction"
-          :class="{ 'lq-area-way': spot.direction }"
+          :class="{
+            'lq-area-way': spot.direction,
+            'lq-area-live': showing && !spot.direction,
+          }"
           :style="{ left: `${spot.x}px`, top: `${spot.y}px` }"
+          @click="press(spot, $event)"
         ></i>
       </template>
     </TransitionGroup>
@@ -291,7 +322,13 @@ const pointed = computed<{
         v-for="spot in spots"
         :key="spot.areaId"
         class="lq-area-name"
-        :class="[`lq-area-${spot.kind}`, { 'lq-area-way': spot.direction }]"
+        :class="[
+          `lq-area-${spot.kind}`,
+          {
+            'lq-area-way': spot.direction,
+            'lq-area-live': showing && !spot.direction,
+          },
+        ]"
         :data-area-name="spot.areaId"
         :data-way="spot.direction"
         :style="{
@@ -299,6 +336,7 @@ const pointed = computed<{
           top: `${spot.top}px`,
           maxWidth: `${visible.w}px`,
         }"
+        @click="press(spot, $event)"
         >{{ spot.label }}</span
       >
     </TransitionGroup>
@@ -321,6 +359,7 @@ const pointed = computed<{
 .lq-area-names {
   position: absolute;
   inset: 0;
+  z-index: 2;
   overflow: hidden;
   pointer-events: none;
 }
@@ -338,6 +377,10 @@ const pointed = computed<{
 }
 .lq-area-way {
   pointer-events: auto;
+}
+.lq-area-live {
+  pointer-events: auto;
+  cursor: pointer;
 }
 .lq-area-lines {
   position: absolute;

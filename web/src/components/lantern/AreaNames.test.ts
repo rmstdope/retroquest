@@ -9,16 +9,22 @@ import AreaNames from './AreaNames.vue'
 import type { AreaThing } from '@/lantern/areaThings'
 
 const things: AreaThing[] = [
-  { areaId: 'villager', label: 'Tilda', kind: 'character' },
-  { areaId: 'bucket', label: 'Bucket', kind: 'item' },
-  { areaId: 'scenery-x-fountain', label: 'Fountain', kind: 'scenery' },
+  { areaId: 'villager', name: 'villager', label: 'Tilda', kind: 'character' },
+  { areaId: 'bucket', name: 'bucket', label: 'Bucket', kind: 'item' },
+  {
+    areaId: 'scenery-x-fountain',
+    name: 'scenery-x-fountain',
+    label: 'Fountain',
+    kind: 'scenery',
+  },
   {
     areaId: 'exit-north',
+    name: 'north',
     label: '↑ Mira’s Hut',
     kind: 'exit',
     direction: 'north',
   },
-  { areaId: 'unplaced', label: 'Nowhere', kind: 'item' },
+  { areaId: 'unplaced', name: 'unplaced', label: 'Nowhere', kind: 'item' },
 ]
 /** Boxes on a 1920×1080 picture shown on a 960×540 stage (half size). */
 const boxes = {
@@ -194,8 +200,8 @@ describe('AreaNames', () => {
     const w = mountNames({
       showing: true,
       things: [
-        { areaId: 'a', label: 'Notice Board', kind: 'scenery' },
-        { areaId: 'b', label: 'Old Notice', kind: 'item' },
+        { areaId: 'a', name: 'a', label: 'Notice Board', kind: 'scenery' },
+        { areaId: 'b', name: 'b', label: 'Old Notice', kind: 'item' },
       ],
       boxes: {
         a: { x: 0.5, y: 0.5, width: 0.02, height: 0.02 },
@@ -271,6 +277,37 @@ describe('AreaNames', () => {
     expect(w.get('[data-area-pointer]').text()).toBe('Tilda')
   })
 
+  it('shows the mark and name of the thing that has keyboard focus, names or not', async () => {
+    const w = mountNames({ focused: 'bucket' })
+    await nextTick()
+    expect(w.findAll('[data-area-mark]')).toHaveLength(1)
+    expect(w.get('[data-area-name="bucket"]').text()).toBe('Bucket')
+    await w.setProps({ focused: null })
+    await nextTick()
+    expect(w.find('[data-area-name]').exists()).toBe(false)
+  })
+
+  it('takes a press on a mark or a name as a press on its thing, and not on a way out', async () => {
+    const w = mountNames({ showing: true })
+    await nextTick()
+    await w
+      .get('[data-area-name="bucket"]')
+      .trigger('click', { clientX: 5, clientY: 6 })
+    await w
+      .get('[data-area-mark="villager"]')
+      .trigger('click', { clientX: 7, clientY: 8 })
+    await w.get('[data-area-name="exit-north"]').trigger('click')
+    expect(w.emitted('press')).toEqual([
+      [things[1], { x: 5, y: 6 }],
+      [things[0], { x: 7, y: 8 }],
+    ])
+  })
+
+  it('lets a mark or a name be pressed, a hand over them', () => {
+    const source = readFileSync(resolve(__dirname, 'AreaNames.vue'), 'utf8')
+    expect(source).toMatch(/\.lq-area-live[^}]*pointer-events: auto/s)
+  })
+
   it('fades under the stylesheet’s motion setting, which Reduce motion sets to nothing', () => {
     const source = readFileSync(resolve(__dirname, 'AreaNames.vue'), 'utf8')
     expect(source).toMatch(
@@ -281,7 +318,13 @@ describe('AreaNames', () => {
 
 describe('AreaNames ways out', () => {
   const closedWays: AreaThing[] = [
-    { areaId: 'exit-west', label: '', kind: 'exit', direction: 'west' },
+    {
+      areaId: 'exit-west',
+      name: 'exit-west',
+      label: '',
+      kind: 'exit',
+      direction: 'west',
+    },
   ]
   const wayBoxes = {
     ...boxes,
