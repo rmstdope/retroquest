@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { computed, nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
-import type { AreaThing } from '@/lantern/areaThings'
 import {
   fanLayout,
   FAN_PILL,
@@ -8,7 +7,9 @@ import {
   ringLayout,
   sayCommand,
   type Point,
+  type HandVerb,
   type RingAction,
+  type RingSubject,
 } from '@/lantern/pressRing'
 
 /**
@@ -22,15 +23,22 @@ import {
  * back (fan or box to the ring, ring closed, with `close(true)`); Tab closes;
  * a press anywhere outside closes and nothing else happens with it. Arrow
  * keys go round the ring and up and down a fan; focus lands on the first
- * action when it opens. Reduce motion is carried by `--lq-motion`.
+ * action when it opens. The ring may be round a carried thing or spell on
+ * the belt (`RingSubject`, a spell in purple); an action that takes it in hand
+ * (Use with…, Give…, Cast on…) says `hand` with its verb and sends nothing.
+ * Reduce motion is carried by `--lq-motion`.
  */
 const props = defineProps<{
-  thing: AreaThing
+  thing: RingSubject
   actions: RingAction[]
   at: Point
   bounds: { w: number; h: number }
 }>()
-const emit = defineEmits<{ pick: [command: string]; close: [byKey: boolean] }>()
+const emit = defineEmits<{
+  pick: [command: string]
+  hand: [verb: HandVerb]
+  close: [byKey: boolean]
+}>()
 
 const root = ref<HTMLElement | null>(null)
 /** The action whose choices or words box are shown. */
@@ -80,10 +88,14 @@ function stops(): HTMLElement[] {
   ]
 }
 
-/** Run an action: a command goes out at once, others open their fan or box. */
+/** Run an action: a command goes out at once, one that takes the subject in hand says so, others open their fan or box. */
 function press(action: RingAction): void {
   if (action.command) {
     emit('pick', action.command)
+    return
+  }
+  if (action.hand) {
+    emit('hand', action.hand)
     return
   }
   openedId.value = action.id
@@ -283,6 +295,11 @@ onBeforeUnmount(() =>
   background: var(--lq-item-soft);
   color: var(--lq-item);
   border-color: var(--lq-item-line);
+}
+.lq-ring-spell {
+  background: var(--lq-spell-soft);
+  color: var(--lq-spell);
+  border-color: var(--lq-spell-line);
 }
 .lq-ring-character {
   background: var(--lq-character-soft);

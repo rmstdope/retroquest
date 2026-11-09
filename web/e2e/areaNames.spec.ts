@@ -146,6 +146,8 @@ test.describe('at the edges of a laptop picture (rq-5hs1)', () => {
   }): Promise<void> => {
     await page.setViewportSize({ width: 1428, height: 650 })
     await toTheCottage(page, AT_THE_EDGES)
+    // The belt covers the very foot of the picture while it is up (belt.spec.ts); put away, the action row is the floor.
+    await page.getByRole('button', { name: 'Put the belt away' }).click()
     await holdDriftAtPeak(page)
     await page.getByRole('button', { name: /Show what's here/ }).click()
     const marks = page.locator('[data-area-mark]')

@@ -253,7 +253,7 @@ test.describe('the arrival told on the picture', () => {
     /** Whether every shown line sits between the top buttons and the actions. */
     async function clearOfTheChrome(page: Page): Promise<void> {
       const buttons = await page
-        .getByRole('button', { name: /^Bag/ })
+        .getByRole('button', { name: /^Quests/ })
         .boundingBox()
       // No tab is left on the laptop during an arrival: the actions are the floor.
       const tab = await page

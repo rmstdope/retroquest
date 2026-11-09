@@ -9,6 +9,7 @@ import { useArrivalStore } from '@/stores/useArrivalStore'
 import { useSceneStore } from '@/stores/useSceneStore'
 import { useAreaNamesStore } from '@/stores/useAreaNamesStore'
 import { useFlightStore } from '@/stores/useFlightStore'
+import { useBeltStore } from '@/stores/useBeltStore'
 import { firstQuestUnit } from '@/lantern/narrationUnits'
 import { sceneBlock } from '@/lantern/stageArrival'
 import { parseTurn } from '@/lantern/parseTurn'
@@ -42,7 +43,20 @@ import ArrivalOnPicture from './ArrivalOnPicture.vue'
 import AreaNames from './AreaNames.vue'
 import AreaPress from './AreaPress.vue'
 import PressRing from './PressRing.vue'
-import { ringActions } from '@/lantern/pressRing'
+import {
+  ringActions,
+  type HandVerb,
+  type RingSubject,
+} from '@/lantern/pressRing'
+import BeltOfPictures from './BeltOfPictures.vue'
+import HandStrip from './HandStrip.vue'
+import {
+  carriedRing,
+  pressedOnBelt,
+  subjectOf,
+  handCommand,
+  type BeltPicture,
+} from '@/lantern/belt'
 import type { ActionContext } from '@/lantern/actions'
 import type { AreaThing } from '@/lantern/areaThings'
 import AcquiredFlight from './AcquiredFlight.vue'
@@ -155,6 +169,7 @@ const speech = useStageSpeechStore()
 const arrival = useArrivalStore()
 const scene = useSceneStore()
 const names = useAreaNamesStore()
+const belt = useBeltStore()
 /** The marks and names layer, which knows where the ways out are. */
 const areaNamesEl = ref<InstanceType<typeof AreaNames> | null>(null)
 /** The direction of the open way out under the pointer, or null: the stage shows its arrow. */
@@ -214,9 +229,7 @@ function onFocusChange(event: FocusEvent): void {
 }
 const section = ref<Section>('story')
 /** What is open on the stage (a journal tab, the story or the map), or null. */
-const drawerTab = ref<'bag' | 'spells' | 'quests' | 'story' | 'map' | null>(
-  null,
-)
+const drawerTab = ref<'quests' | 'story' | 'map' | null>(null)
 const stageButtons = ref<InstanceType<typeof StageButtons> | null>(null)
 const plate = ref<InstanceType<typeof RoomPlate> | null>(null)
 /** Whether the room's picture is up (otherwise the paper backdrop), for the arrival's ink. */
@@ -280,9 +293,7 @@ function clearShownArrival(): void {
 }
 
 /** A stage button: opens its drawer or the map (closing what was open), or closes it if lit. */
-function toggleDrawer(
-  tab: 'bag' | 'spells' | 'quests' | 'story' | 'map',
-): void {
+function toggleDrawer(tab: 'quests' | 'story' | 'map'): void {
   if (drawerTab.value === tab) closeDrawer()
   else drawerTab.value = tab
 }
@@ -344,6 +355,7 @@ function onPicturePress(event: MouseEvent): void {
   const way = wayPressed(event)
   if (way !== null && game.acceptInput) {
     narration.skipAll()
+    belt.emptyHand()
     game.submitCommand(`go ${way}`)
     return
   }
@@ -359,6 +371,29 @@ watch(
   },
 )
 onUnmounted(() => document.removeEventListener('pointerdown', onOutsidePress))
+
+/** The height the belt of pictures takes at the foot of the picture (0 while it is put away). */
+const beltHeight = ref(0)
+/** The row at the foot of a phone (the folded Actions bar), which the belt stands above or beside. */
+const dockSize = ref({ w: 0, h: 0 })
+/** How far above the foot of the picture the belt stands: above the laptop's action row, on a sideways phone in its foot row, above the folded bar of the upright stage. */
+const beltBottom = computed(() =>
+  laptop.value
+    ? actionsHeight.value
+    : sideways.value
+      ? 8
+      : dockSize.value.h + 16,
+)
+/** On a sideways phone the belt starts after the Actions, keyboard and hint buttons, which share its foot row. */
+const beltLeft = computed(() => (sideways.value ? dockSize.value.w + 16 : 0))
+/** How far up from the foot of the picture the belt's top lies: what the names and press areas must keep clear of (0 while the belt is away, then the action row alone on a laptop). */
+const footCover = computed(() =>
+  beltHeight.value > 0
+    ? beltBottom.value + beltHeight.value
+    : laptop.value
+      ? actionsHeight.value
+      : 0,
+)
 
 /** The height of the action row, which the story drawer stops above. */
 const actionsHeight = ref(0)
@@ -557,6 +592,40 @@ watch(
   },
 )
 
+/** Where focus was before B took it to the belt, for Escape to give it back. */
+let beltReturn: HTMLElement | null = null
+
+/** Focus left the belt: where it came from is forgotten, so a later Escape does not jump back to a stale place. */
+function onFocusIn(event: FocusEvent): void {
+  if (!beltEl.value?.root?.contains(event.target as Node)) beltReturn = null
+}
+
+/**
+ * B goes to the belt (bringing it up if it was put away), focus on the first
+ * picture; B again, with focus on the belt, switches between Bag and Spells.
+ * Not while typing, with a dialog or ring up, or where there is no picture.
+ */
+function onBeltKey(event: KeyboardEvent): void {
+  if (event.key !== 'b' && event.key !== 'B') return
+  if (event.defaultPrevented || event.repeat) return
+  if (event.ctrlKey || event.metaKey || event.altKey) return
+  if (!staged.value || dialogOpen() || ring.value || game.ending) return
+  const target = event.target instanceof Element ? event.target : null
+  if (target?.closest('input, textarea, select, [contenteditable]')) return
+  event.preventDefault()
+  const onBelt = !!beltEl.value?.root?.contains(document.activeElement)
+  if (onBelt) belt.show(belt.list === 'bag' ? 'spells' : 'bag')
+  else {
+    beltReturn =
+      document.activeElement instanceof HTMLElement &&
+      document.activeElement !== document.body
+        ? document.activeElement
+        : null
+    if (belt.away) belt.bringBack()
+  }
+  void beltEl.value?.focusBelt()
+}
+
 /** S shows or hides the names (the laptop only, where there is a button, never while typing or with a dialog up). */
 function onNamesKey(event: KeyboardEvent): void {
   if (event.key !== 's' && event.key !== 'S') return
@@ -571,8 +640,30 @@ function onNamesKey(event: KeyboardEvent): void {
 
 /** Escape takes the names away before it does anything else, but for a dialog that is up, which shuts first. */
 function onNamesEscape(event: KeyboardEvent): void {
-  if (event.key !== 'Escape' || !names.showing || !showNamesButton.value) return
+  if (event.key !== 'Escape') return
   if (dialogOpen() || ring.value) return
+  // What is in hand goes down first (focus back on its picture on the belt); then, on the belt, focus goes back to where it was.
+  if (belt.hand) {
+    event.preventDefault()
+    event.stopImmediatePropagation()
+    cancelHand()
+    return
+  }
+  const onBelt = beltEl.value?.root?.contains(document.activeElement)
+  if (onBelt) {
+    // Back to where focus was before the belt; with nothing there, the first thing in the room, else the show button.
+    event.preventDefault()
+    event.stopImmediatePropagation()
+    const back =
+      beltReturn?.isConnected && beltReturn !== document.body
+        ? beltReturn
+        : (stageEl.value?.querySelector<HTMLElement>('[data-area-press]') ??
+          mainEl.value?.querySelector<HTMLElement>('.lq-show-names'))
+    beltReturn = null
+    back?.focus({ preventScroll: true })
+    return
+  }
+  if (!names.showing || !showNamesButton.value) return
   event.preventDefault()
   event.stopImmediatePropagation()
   names.turnOff()
@@ -651,6 +742,31 @@ function readOn(): void {
 }
 const composer = ref<InstanceType<typeof ActionComposer> | null>(null)
 const dock = ref<InstanceType<typeof DockBar> | null>(null)
+let dockResize: ResizeObserver | undefined
+let dockFrame = 0
+watch(
+  dock,
+  (current) => {
+    dockResize?.disconnect()
+    const el = current?.$el
+    if (typeof ResizeObserver === 'undefined' || !(el instanceof HTMLElement))
+      return
+    // On the next frame, as the action row's: what moves with it is not measured in the same one.
+    dockResize = new ResizeObserver(() => {
+      cancelAnimationFrame(dockFrame)
+      dockFrame = requestAnimationFrame(() => {
+        dockSize.value = { w: el.offsetWidth, h: el.offsetHeight }
+      })
+    })
+    dockResize.observe(el)
+    dockSize.value = { w: el.offsetWidth, h: el.offsetHeight }
+  },
+  { flush: 'post' },
+)
+onUnmounted(() => {
+  dockResize?.disconnect()
+  cancelAnimationFrame(dockFrame)
+})
 
 /** Focus the actions: the open composer, or the folded bar's Actions button. */
 function focusActions(): void {
@@ -904,6 +1020,8 @@ onMounted(() => {
   document.addEventListener('keydown', onNarrationKey)
   document.addEventListener('keydown', onPaperKey)
   document.addEventListener('keydown', onNamesKey)
+  document.addEventListener('keydown', onBeltKey)
+  document.addEventListener('focusin', onFocusIn)
   document.addEventListener('keydown', onNamesEscape, true)
   document.addEventListener('keyup', onSpaceUp)
   document.addEventListener('focusin', onFocusChange)
@@ -1086,6 +1204,8 @@ onUnmounted(() => {
   document.removeEventListener('keydown', onNarrationKey)
   document.removeEventListener('keydown', onPaperKey)
   document.removeEventListener('keydown', onNamesKey)
+  document.removeEventListener('keydown', onBeltKey)
+  document.removeEventListener('focusin', onFocusIn)
   document.removeEventListener('keydown', onNamesEscape, true)
   document.removeEventListener('keyup', onSpaceUp)
   document.removeEventListener('focusin', onFocusChange)
@@ -1323,14 +1443,17 @@ const music = useActMusic()
 // --- Game menu, Stats and Help (dialogs the player opens) ---
 const gameDialog = ref<'menu' | MenuKind | null>(null)
 
-// --- Pressing a thing on the picture: a ring of what can be done with it ---
-/** The ring that is open: the thing, the spot pressed and the picture's size, in the stage's pixels. */
+// --- Pressing a thing on the picture, or a picture on the belt: a ring of what can be done with it ---
+/** The ring that is open: what it is round (a thing of the room, or a picture on the belt), the spot pressed and the picture's size, in the stage's pixels. */
 const ring = ref<{
-  thing: AreaThing
+  thing: RingSubject
+  from: 'room' | 'belt'
   at: { x: number; y: number }
   bounds: { w: number; h: number }
 } | null>(null)
 const stageEl = ref<HTMLElement | null>(null)
+/** The belt of pictures, for focus. */
+const beltEl = ref<InstanceType<typeof BeltOfPictures> | null>(null)
 /** The thing that has keyboard focus on the picture, whose mark and name show. */
 const focusedArea = ref<string | null>(null)
 /** What the Actions row would offer now: the ring reads the same lists. */
@@ -1343,41 +1466,88 @@ const ringContext = computed<ActionContext>(() => ({
   wares: game.roomWares,
 }))
 /** The actions on the open ring, read live so what is gone leaves it. */
-const ringItems = computed(() =>
-  ring.value ? ringActions(ring.value.thing, ringContext.value) : [],
-)
+const ringItems = computed(() => {
+  const open = ring.value
+  if (!open) return []
+  if (open.from === 'belt') {
+    const placed = game.roomAreas.things.filter(
+      (thing) => thing.kind !== 'exit',
+    ).length
+    return carriedRing(open.thing, ringContext.value, placed)
+  }
+  return ringActions(open.thing as AreaThing, ringContext.value)
+})
 /** The words are still being told: a press hurries them and opens no ring. */
 const telling = computed(
   () =>
     narration.isNarrating ||
     (speech.conversation?.lines.some((line) => !line.shown) ?? false),
 )
+/** The game takes a move from a press on the picture or the belt now (no scene change, words, dialog, drawer or sheet in the way). */
+function pressTakesMove(): boolean {
+  return (
+    game.acceptInput &&
+    scene.phase === 'idle' &&
+    scene.turn === null &&
+    !telling.value &&
+    !dialogOpen() &&
+    drawerTab.value === null &&
+    !sheetOpen.value
+  )
+}
 
-/** A thing of the picture is pressed, at `at` in the window: open its ring if the game takes a move and the words have settled. */
+/** A thing of the picture is pressed, at `at` in the window: send what is in hand to it, or open its ring, if the game takes a move and the words have settled. */
 function onAreaPress(thing: AreaThing, at: { x: number; y: number }): void {
   const box = stageEl.value?.getBoundingClientRect()
   if (!box || !staged.value) return
   // A way out smaller than the thing it lies on is the press's: the stage takes it (`onPicturePress`).
   if (areaNamesEl.value?.wayAt(at.x, at.y)) return
-  if (
-    !game.acceptInput ||
-    scene.phase !== 'idle' ||
-    scene.turn !== null ||
-    telling.value ||
-    dialogOpen() ||
-    drawerTab.value !== null ||
-    sheetOpen.value
-  )
+  if (!pressTakesMove()) return
+  if (belt.hand) {
+    sendHand(handCommand(belt.hand, thing))
     return
+  }
   ring.value = {
     thing,
+    from: 'room',
     at: { x: at.x - box.left, y: at.y - box.top },
     bounds: { w: box.width, h: box.height },
   }
 }
 
-/** Where focus returns to when the ring is gone: the thing, or if it has gone the show button. */
+/** A picture of the belt is pressed, at `at` in the window: another thing for what is in hand, or its own ring. While the words are told it hurries them instead. */
+function onBeltPress(picture: BeltPicture, at: { x: number; y: number }): void {
+  const box = stageEl.value?.getBoundingClientRect()
+  if (!box || !staged.value) return
+  if (scene.turn !== null) return scene.skip()
+  if (speech.sceneChange) return speech.changeSceneNow()
+  if (telling.value) {
+    speech.revealAll()
+    if (speech.conversation) narration.tap()
+    return
+  }
+  if (!pressTakesMove()) return
+  if (belt.hand) {
+    const command = pressedOnBelt(belt.hand, picture)
+    if (command) sendHand(command)
+    return
+  }
+  ring.value = {
+    thing: subjectOf(picture),
+    from: 'belt',
+    at: { x: at.x - box.left, y: at.y - box.top },
+    bounds: { w: box.width, h: box.height },
+  }
+}
+
+/** Where focus returns to when the ring or the hand is gone: the thing or picture, or if it has gone the show button (for the belt, its first picture). */
 function focusAfterRing(areaId: string): void {
+  if (areaId.startsWith('belt:')) {
+    const key = areaId.slice('belt:'.length)
+    if (beltEl.value?.has(key)) void beltEl.value.focusPicture(key)
+    else void beltEl.value?.focusBelt()
+    return
+  }
   const thing = stageEl.value?.querySelector<HTMLElement>(
     `[data-area-press="${areaId}"]`,
   )
@@ -1393,17 +1563,60 @@ function closeRing(byKey: boolean): void {
   if (byKey && id) void nextTick(() => nextTick(() => focusAfterRing(id)))
 }
 
-/** Send the ring's command as a typed one, and put focus back on the thing (or the show button once it has gone). */
-function runRing(command: string): void {
-  const id = ring.value?.thing.areaId
+/** Send a command as a typed one, with the ring and the hand put away, and put focus back on `id`'s thing (or the show button, or the belt's first picture, once it has gone). */
+function sendFrom(command: string, id: string | undefined): void {
   ring.value = null
+  belt.emptyHand()
   game.submitCommand(command)
   if (!id) return
   void nextTick(() => nextTick(() => focusAfterRing(id)))
-  // The thing may go with the answer (taken): focus then moves to the show button.
+  // The thing may go with the answer (taken, used up): focus then moves on.
   pendingFocus = id
   clearTimeout(pendingTimer)
   pendingTimer = setTimeout(() => (pendingFocus = null), 600)
+}
+
+/** Send the ring's command. */
+function runRing(command: string): void {
+  sendFrom(command, ring.value?.thing.areaId)
+}
+
+/** Send what the hand was holding; focus goes back to its picture on the belt, or the belt's first picture if it has gone. */
+function sendHand(command: string): void {
+  sendFrom(command, handFrom ?? undefined)
+}
+
+/** The ring's Use with…, Give… or Cast on…: close it and put the thing or spell in hand; focus goes to the first thing in the room, or ✕ Cancel when there is none. */
+function takeInHand(verb: HandVerb): void {
+  const open = ring.value
+  ring.value = null
+  if (!open) return
+  belt.takeInHand({
+    kind: open.thing.kind === 'spell' ? 'spell' : 'item',
+    name: open.thing.name,
+    label: open.thing.label,
+    verb,
+  })
+  handFrom = open.thing.areaId
+  void nextTick(() =>
+    nextTick(() => {
+      const first =
+        stageEl.value?.querySelector<HTMLElement>('[data-area-press]')
+      const target =
+        first ?? stageEl.value?.querySelector<HTMLElement>('[data-hand-cancel]')
+      target?.focus({ preventScroll: true })
+    }),
+  )
+}
+
+/** The belt picture the hand was taken from, where focus returns to when the hand is put down. */
+let handFrom: string | null = null
+
+/** Put the hand down without sending anything; focus goes back to the picture it was taken from. */
+function cancelHand(): void {
+  const id = handFrom
+  belt.emptyHand()
+  if (id) void nextTick(() => nextTick(() => focusAfterRing(id)))
 }
 
 /** The thing a command was run from, while focus may still need to find it or the show button. */
@@ -1443,8 +1656,49 @@ watch(
   () => game.roomAreas.things,
   (things) => {
     const open = ring.value
-    if (open && !things.some((t) => t.areaId === open.thing.areaId))
+    if (
+      open &&
+      open.from === 'room' &&
+      !things.some((t) => t.areaId === open.thing.areaId)
+    )
       ring.value = null
+  },
+)
+// A ring on the belt closes when its picture leaves the belt.
+watch(
+  () => [game.bagEntries, game.spellEntries] as const,
+  () => {
+    const open = ring.value
+    if (open?.from === 'belt' && !beltEl.value?.has(open.thing.areaId.slice(5)))
+      ring.value = null
+  },
+  { flush: 'post' },
+)
+
+// The hand is put down, nothing sent, when the game moves on: any command (ours included), a way out, a change of scene, a pop-up or dialog, a new game, load or act, or the thing or spell in hand being lost.
+watch(
+  () =>
+    [
+      stageKey.value,
+      scene.phase,
+      game.showModal,
+      game.showTitle,
+      gameDialog.value,
+      game.roomName,
+      game.turns.at(-1)?.id,
+      staged.value,
+    ] as const,
+  () => belt.emptyHand(),
+)
+watch(
+  () => [game.bagEntries, game.spellEntries] as const,
+  ([bag, spells]) => {
+    const held = belt.hand
+    if (!held) return
+    const carried = (held.kind === 'item' ? bag : spells).map(
+      (entry) => parseCountedName(entry).name,
+    )
+    if (!carried.includes(held.name)) belt.emptyHand()
   },
 )
 
@@ -1764,7 +2018,10 @@ watch(
             'lq-phone': phoneStage,
             'lq-sideways': sideways,
           }"
-          :style="phoneStage ? { '--lq-plate-h': `${plateHeight}px` } : {}"
+          :style="{
+            ...(phoneStage ? { '--lq-plate-h': `${plateHeight}px` } : {}),
+            '--lq-belt-h': `${beltHeight}px`,
+          }"
           @click.capture="onPanelPress"
         >
           <div
@@ -1775,6 +2032,9 @@ watch(
             :style="{
               '--lq-actions-h': `${actionsHeight}px`,
               '--lq-stage-buttons-w': `${stageButtonsWidth}px`,
+              '--lq-belt-bottom': `${beltBottom}px`,
+              '--lq-belt-left': `${beltLeft}px`,
+              ...(belt.hand ? { cursor: 'crosshair' } : {}),
               ...(wayArrow ? { cursor: wayCursor(wayArrow) } : {}),
             }"
             @click="onPicturePress"
@@ -1785,6 +2045,7 @@ watch(
               :pictured="pictured"
               :phone="phoneStage"
               :away="arrivalFolded"
+              :lift="beltHeight"
             />
             <button
               v-if="sideways"
@@ -1831,7 +2092,7 @@ watch(
                 :picture-size="game.roomPictureSize ?? DEFAULT_PICTURE_SIZE"
                 :showing="namesUp"
                 :pointer="scene.phase === 'idle' ? names.pointer : null"
-                :foot-cover="laptop ? actionsHeight : 0"
+                :foot-cover="footCover"
                 :focused="scene.phase === 'idle' ? focusedArea : null"
                 :relayout="namesRelayout"
                 @pointing="pointingWay = $event"
@@ -1845,11 +2106,26 @@ watch(
                 @focused="focusedArea = $event"
               />
             </StagePicture>
+            <BeltOfPictures
+              ref="beltEl"
+              :key="`belt-${stageKey}`"
+              :compact="sideways"
+              :caption-for="
+                ring?.from === 'belt' ? ring.thing.areaId.slice(5) : null
+              "
+              @press="onBeltPress"
+              @measure="beltHeight = $event"
+            />
+            <HandStrip
+              v-if="belt.hand"
+              :hand="belt.hand"
+              :ghost="laptop"
+              class="lq-hand-strip"
+              @cancel="cancelHand"
+            />
             <JournalDrawer
-              v-if="drawerTab && drawerTab !== 'story' && drawerTab !== 'map'"
+              v-if="drawerTab === 'quests'"
               :key="`drawer-${stageKey}`"
-              :tab="drawerTab"
-              @select="drawerTab = $event"
               @close="closeDrawer"
             />
             <StoryDrawer
@@ -1868,6 +2144,7 @@ watch(
               :at="ring.at"
               :bounds="ring.bounds"
               @pick="runRing"
+              @hand="takeInHand"
               @close="closeRing"
             />
           </div>
@@ -1909,8 +2186,8 @@ watch(
                 ? {
                     top: `${cardsTop}px`,
                     bottom: sideways
-                      ? 'calc(var(--lq-hide-line) + 60px)'
-                      : `calc(${actionsHeight}px + var(--lq-hide-line) + 12px)`,
+                      ? 'calc(var(--lq-hide-line) + 60px + var(--lq-belt-h))'
+                      : `calc(${actionsHeight}px + var(--lq-belt-h) + var(--lq-hide-line) + 12px)`,
                   }
                 : {}
             "
@@ -2340,7 +2617,24 @@ watch(
   transform: translateX(-50%);
 }
 .lq-above-hide {
-  margin-bottom: var(--lq-hide-line);
+  margin-bottom: calc(var(--lq-hide-line) + var(--lq-belt-h, 0px));
+}
+/* The belt stands at the foot of the picture, and the words and the buttons over them rise above it (nothing rises while it is put away). */
+.lq-staged .lq-paper-tabrow {
+  transform: translateY(calc(-1 * var(--lq-belt-h, 0px)));
+}
+.lq-phone .lq-story-wrap.lq-cards.lq-one-column {
+  margin-bottom: calc(var(--lq-hide-line) + var(--lq-belt-h, 0px));
+}
+/* The strip saying what the next press does: under the top row, in the middle of the picture. */
+.lq-stage .lq-hand-strip {
+  top: 76px;
+}
+.lq-sideways .lq-stage .lq-hand-strip {
+  top: 56px;
+}
+.lq-phone .lq-stage .lq-hand-strip {
+  top: calc(var(--lq-plate-h, 108px) + 16px);
 }
 .lq-words-hide {
   position: absolute;

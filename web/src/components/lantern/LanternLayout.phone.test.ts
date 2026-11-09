@@ -263,15 +263,13 @@ describe('LanternLayout: the stage on a phone', () => {
       expect(w.find('.lq-phone-plate').exists()).toBe(false)
     })
 
-    it('floats ☰ and one plate top left, the five buttons top right', () => {
+    it('floats ☰ and one plate top left, the three buttons top right', () => {
       expect(w.get('.lq-float-menu').attributes('aria-label')).toBe('Game menu')
       expect(w.get('.lq-stage-plate').classes()).toContain('lq-plate-compact')
       const labels = w
         .findAll('.lq-stage-buttons .lq-stage-btn')
         .map((b) => b.text().replace(/\s+/g, ' '))
       expect(labels).toEqual([
-        expect.stringMatching(/^Bag · \d+$/),
-        expect.stringMatching(/^Spells · \d+$/),
         expect.stringMatching(/^Quests · \d+$/),
         '⟲',
         '🧭',

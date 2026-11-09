@@ -5,7 +5,6 @@ import { nextTick } from 'vue'
 import { createPinia, setActivePinia } from 'pinia'
 import StageButtons from './StageButtons.vue'
 import { useGameStore } from '@/stores/useGameStore'
-import { useFlightStore } from '@/stores/useFlightStore'
 
 function pointer(type: string, pointerType = 'mouse'): Event {
   const event = new Event(type, { bubbles: true })
@@ -15,9 +14,7 @@ function pointer(type: string, pointerType = 'mouse'): Event {
 
 describe('StageButtons', () => {
   let w: VueWrapper | undefined
-  const mountButtons = (
-    drawer: 'bag' | 'spells' | 'quests' | 'story' | 'map' | null = null,
-  ) =>
+  const mountButtons = (drawer: 'quests' | 'story' | 'map' | null = null) =>
     (w = mount(StageButtons, {
       props: { drawer },
       attachTo: document.body,
@@ -33,57 +30,37 @@ describe('StageButtons', () => {
     w?.unmount()
   })
 
-  it('is where gained items and spells fly to, and bumps the one they land in', async () => {
-    const w = mountButtons()
-    expect(w.get('[data-button="bag"]').attributes('data-flight-target')).toBe(
-      'item',
-    )
-    expect(
-      w.get('[data-button="spells"]').attributes('data-flight-target'),
-    ).toBe('spell')
-    useFlightStore().landed = 'spell'
-    await nextTick()
-    expect(w.get('[data-button="spells"]').classes()).toContain('lq-landed')
-    expect(w.get('[data-button="bag"]').classes()).not.toContain('lq-landed')
-  })
-
-  it('dips the Bag button as an item rises out of it', async () => {
-    const w = mountButtons()
-    useFlightStore().dipped = 'item'
-    await nextTick()
-    expect(w.get('[data-button="bag"]').classes()).toContain('lq-dipped')
-    expect(w.get('[data-button="spells"]').classes()).not.toContain('lq-dipped')
-  })
-
-  it('has the five buttons in order, with the counts', () => {
+  it('has the three buttons in order, the Bag and Spells being the belt of pictures', () => {
     const labels = mountButtons()
       .findAll('button.lq-stage-btn')
       .map((b) => b.text())
-    expect(labels).toEqual([
-      'Bag · 0',
-      'Spells · 0',
-      'Quests · 0',
-      '⟲ Story so far',
-      '🧭 Map',
-    ])
+    expect(labels).toEqual(['Quests · 0', '⟲ Story so far', '🧭 Map'])
+  })
+
+  it('has no Bag or Spells button, and nothing to fly to', () => {
+    const w = mountButtons()
+    expect(w.find('[data-button="bag"]').exists()).toBe(false)
+    expect(w.find('[data-button="spells"]').exists()).toBe(false)
+    expect(w.find('[data-flight-target]').exists()).toBe(false)
   })
 
   it('shows the amber dot on a button with something new', () => {
-    useGameStore().bagHasNew = true
+    useGameStore().questsHaveNew = true
     const w = mountButtons()
-    expect(w.find('[data-button="bag"] .lq-dot').exists()).toBe(true)
-    expect(w.find('[data-button="spells"] .lq-dot').exists()).toBe(false)
+    expect(w.find('[data-button="quests"] .lq-dot').exists()).toBe(true)
+    expect(w.find('[data-button="story"] .lq-dot').exists()).toBe(false)
   })
 
-  it('asks for the journal on the pressed tab and keeps its button lit', async () => {
-    const w = mountButtons('spells')
-    await w.get('[data-button="quests"]').trigger('click')
-    expect(w.emitted('journal')).toEqual([['quests']])
-    expect(w.get('[data-button="spells"]').classes()).toContain('lq-lit')
-    expect(w.get('[data-button="spells"]').attributes('aria-pressed')).toBe(
+  it('asks for the journal and keeps its button lit', async () => {
+    const w = mountButtons('quests')
+    await w.get('[data-button="story"]').trigger('click')
+    expect(w.emitted('story')).toHaveLength(1)
+    expect(w.get('[data-button="quests"]').classes()).toContain('lq-lit')
+    expect(w.get('[data-button="quests"]').attributes('aria-pressed')).toBe(
       'true',
     )
-    expect(w.get('[data-button="bag"]').classes()).not.toContain('lq-lit')
+    await w.get('[data-button="quests"]').trigger('click')
+    expect(w.emitted('journal')).toEqual([['quests']])
   })
 
   it('asks for the story from its start', async () => {
@@ -120,7 +97,7 @@ describe('StageButtons', () => {
   })
 
   it('shows no map while a drawer is the open one', () => {
-    const w = mountButtons('bag')
+    const w = mountButtons('quests')
     expect(w.find('.lq-compass').exists()).toBe(false)
     expect(w.get('[data-button="map"]').classes()).not.toContain('lq-lit')
   })
@@ -177,7 +154,9 @@ describe('StageButtons', () => {
     const story = buttons.get('[data-button="story"]')
     expect(story.classes()).toContain('lq-lit')
     expect(story.attributes('aria-pressed')).toBe('true')
-    expect(buttons.get('[data-button="bag"]').classes()).not.toContain('lq-lit')
+    expect(buttons.get('[data-button="quests"]').classes()).not.toContain(
+      'lq-lit',
+    )
   })
 
   it('asks for the story drawer when Story so far is pressed', async () => {

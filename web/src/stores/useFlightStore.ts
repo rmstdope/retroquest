@@ -55,6 +55,8 @@ export const useFlightStore = defineStore('flight', () => {
   const phase = ref<FlightPhase>('show')
   /** The kind of the thing that has just landed, whose button is bumped; null otherwise. */
   const landed = ref<ChipKind | null>(null)
+  /** The name of the thing that has just landed, whose picture on the belt is bumped; null otherwise. */
+  const landedName = ref<string | null>(null)
   /** The kind of the button an item is rising out of, which is dipped; null otherwise. */
   const dipped = ref<ChipKind | null>(null)
   /** Whether motion is reduced: a leaving item does not rise and the button does not dip. */
@@ -79,7 +81,7 @@ export const useFlightStore = defineStore('flight', () => {
     phase.value = 'show'
     after(FLIGHT_SHOW_MS + FLIGHT_HOLD_MS, () => {
       phase.value = 'fly'
-      after(FLIGHT_FLY_MS, () => land(flight.kind))
+      after(FLIGHT_FLY_MS, () => land(flight.kind, flight.name))
     })
   }
 
@@ -101,11 +103,15 @@ export const useFlightStore = defineStore('flight', () => {
     after(LEAVE_RISE_MS, rest)
   }
 
-  /** The thing in hand reached its button: bump it, and go on. */
-  function land(kind: ChipKind): void {
+  /** The thing in hand reached its picture or button: bump them, and go on. */
+  function land(kind: ChipKind, name: string): void {
     landed.value = kind
+    landedName.value = name
     after(FLIGHT_LAND_MS, () => {
-      if (landed.value === kind) landed.value = null
+      // Only this landing's own bump: a later one of the same kind has its own timer.
+      if (landed.value !== kind || landedName.value !== name) return
+      landed.value = null
+      landedName.value = null
     })
     next()
   }
@@ -139,9 +145,10 @@ export const useFlightStore = defineStore('flight', () => {
     queue = []
     current.value = null
     landed.value = null
+    landedName.value = null
     dipped.value = null
     told.value = []
   }
 
-  return { current, phase, landed, dipped, told, launch, clear }
+  return { current, phase, landed, landedName, dipped, told, launch, clear }
 })

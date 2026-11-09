@@ -189,7 +189,7 @@ describe('LanternLayout: panels wait for the narration', () => {
     expect(cardName(w)).toBe('Hall')
   })
 
-  it.each(['bag', 'spells', 'quests'])(
+  it.each(['quests'])(
     'opens the %s drawer on the first press while the voice reads on',
     async (tab) => {
       const w = await ready()

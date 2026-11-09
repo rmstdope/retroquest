@@ -1,0 +1,152 @@
+/**
+ * The belt of pictures (rq-ezpg.8): the carried things lie along the foot of
+ * the room's picture, a press on one opens its ring, Use with… and Give… take
+ * it in hand with a strip saying so, and the next press on a thing sends the
+ * command typed. Cancel and Escape put it down; B goes to the belt.
+ */
+import { test, expect, type Page } from '@playwright/test'
+
+/** A one-pixel transparent PNG, standing for a picture the studio made. */
+const PIXEL = Buffer.from(
+  'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==',
+  'base64',
+)
+
+/** Open the game in the cottage with its picture up and a few things placed on it, the bread taken. */
+async function toTheCottage(page: Page): Promise<void> {
+  await page.route('**/images/generated/manifest.json', (route) =>
+    route.fulfill({
+      json: {
+        'act1-eliors-cottage': {
+          file: 'act1-eliors-cottage.png',
+          width: 1920,
+          height: 1080,
+          areas: {
+            hearth: { x: 0.1, y: 0.2, width: 0.15, height: 0.3 },
+            bread: { x: 0.5, y: 0.3, width: 0.1, height: 0.1 },
+            grandmother: { x: 0.8, y: 0.2, width: 0.1, height: 0.3 },
+          },
+        },
+      },
+    }),
+  )
+  await page.route('**/images/generated/*.png', (route) =>
+    route.fulfill({ contentType: 'image/png', body: PIXEL }),
+  )
+  await page.goto('/')
+  await page.getByRole('button', { name: 'Start', exact: true }).click()
+  await page.locator('.lq-chapter-button').click()
+  const arrival = page.getByTestId('arrival-on-picture')
+  for (let turn = 0; turn < 8 && (await arrival.isVisible()); turn++)
+    await page.keyboard.press('Enter')
+  await page
+    .getByRole('region', { name: /^Action/ })
+    .getByRole('button', { name: /^(Type|Type a command)$/ })
+    .click()
+  const input = page.getByLabel('Command', { exact: true })
+  await input.fill('say hello to voice')
+  await input.press('Enter')
+  await page.keyboard.press('Escape')
+  await expect(page.locator('.lq-room-name')).toHaveText("Elior's Cottage")
+  await expect(page.locator('.lq-stage-picture.lq-scene-idle')).toHaveCount(1)
+  const goOn = page.locator('.lq-arrival-hint:visible')
+  for (let turn = 0; turn < 8 && (await goOn.count()) > 0; turn++)
+    await page.keyboard.press('Enter')
+  await expect(goOn).toHaveCount(0)
+  // Take the bread by its ring, then let the answer be told.
+  await page.locator('[data-area-press="bread"]').focus()
+  await page.keyboard.press('Enter')
+  await page
+    .getByRole('menu', { name: 'Bread' })
+    .getByRole('menuitem', { name: /Take/ })
+    .click()
+  await expect(page.locator('[data-belt-pic="item:bread"]')).toBeVisible()
+  for (let turn = 0; turn < 8 && (await goOn.count()) > 0; turn++)
+    await page.keyboard.press('Enter')
+}
+
+test('a carried thing is used on a person from the belt: ring, hand, press', async ({
+  page,
+}): Promise<void> => {
+  await page.setViewportSize({ width: 1280, height: 800 })
+  await toTheCottage(page)
+  const story = page.locator('.lq-story')
+  await page.locator('[data-belt-pic="item:bread"]').click()
+  const ring = page.getByRole('menu', { name: 'Bread' })
+  await expect(ring).toBeVisible()
+  await ring.getByRole('menuitem', { name: /Give/ }).click()
+  await expect(ring).toHaveCount(0)
+  const strip = page.getByRole('status').filter({ hasText: 'Give Bread to…' })
+  await expect(strip).toBeVisible()
+  await expect(strip.getByRole('button', { name: '✕ Cancel' })).toBeVisible()
+  await page.screenshot({ path: 'test-results/belt-laptop-in-hand.png' })
+  const before = (await story.innerText()).length
+  await page.locator('[data-area-press="grandmother"]').click({ force: true })
+  await expect(strip).toHaveCount(0)
+  await expect
+    .poll(async () => (await story.innerText()).length)
+    .toBeGreaterThan(before)
+  // The game's own answer, as typing `give bread to grandmother` gives it.
+  await expect(story).toContainText('Grandmother turns it over in her hands')
+})
+
+test('Cancel and Escape put the thing down and send nothing', async ({
+  page,
+}): Promise<void> => {
+  await page.setViewportSize({ width: 1280, height: 800 })
+  await toTheCottage(page)
+  const story = page.locator('.lq-story')
+  const before = (await story.innerText()).length
+  for (const putDown of ['cancel', 'escape']) {
+    await page.locator('[data-belt-pic="item:bread"]').click()
+    await page
+      .getByRole('menu', { name: 'Bread' })
+      .getByRole('menuitem', { name: /Use with/ })
+      .click()
+    const strip = page
+      .getByRole('status')
+      .filter({ hasText: 'Use Bread with…' })
+    await expect(strip).toBeVisible()
+    if (putDown === 'cancel')
+      await strip.getByRole('button', { name: '✕ Cancel' }).click()
+    else await page.keyboard.press('Escape')
+    await expect(strip).toHaveCount(0)
+  }
+  expect((await story.innerText()).length).toBe(before)
+})
+
+test('B goes to the belt, the belt can be put away and is remembered across a reload', async ({
+  page,
+}): Promise<void> => {
+  await page.setViewportSize({ width: 1280, height: 800 })
+  await toTheCottage(page)
+  await page.keyboard.press('b')
+  await expect(page.locator('[data-belt-pic="item:bread"]')).toBeFocused()
+  await expect(page.locator('.lq-belt-caption')).toContainText('Bread')
+  await page.getByRole('button', { name: 'Put the belt away' }).click()
+  await expect(page.locator('[data-belt-pic="item:bread"]')).toHaveCount(0)
+  await expect(page.getByRole('button', { name: 'Bag' })).toBeVisible()
+  const kept = await page.evaluate(() =>
+    localStorage.getItem('retroquest_belt'),
+  )
+  expect(JSON.parse(kept ?? '{}').away).toBe(true)
+})
+
+test.describe('on a phone held sideways', () => {
+  test.use({ hasTouch: true, isMobile: true })
+  test('the belt shares the foot row with the actions, with no names beneath', async ({
+    page,
+  }): Promise<void> => {
+    await page.setViewportSize({ width: 568, height: 320 })
+    await toTheCottage(page)
+    const pic = page.locator('[data-belt-pic="item:bread"]')
+    await expect(pic).toBeVisible()
+    await expect(page.locator('.lq-belt-name')).toHaveCount(0)
+    await page.screenshot({ path: 'test-results/belt-sideways.png' })
+    const dock = (await page.locator('.lq-dock').boundingBox())!
+    const box = (await pic.boundingBox())!
+    expect(box.x).toBeGreaterThanOrEqual(dock.x + dock.width)
+    const stage = (await page.locator('.lq-stage').boundingBox())!
+    expect(box.y + box.height).toBeLessThanOrEqual(stage.y + stage.height + 1)
+  })
+})

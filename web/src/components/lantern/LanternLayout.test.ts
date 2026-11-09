@@ -344,9 +344,7 @@ describe('LanternLayout', () => {
     )
     const w = mountLayout()
     await w.get('[data-button="quests"]').trigger('click')
-    expect(w.get('[role="tab"][aria-selected="true"]').text()).toMatch(
-      /^Quests/,
-    )
+    expect(w.get('[aria-label="Journal drawer"]').text()).toContain('Quests')
     await w.get('[data-button="map"]').trigger('click')
     expect(w.find('.lq-compass').exists()).toBe(true)
 
@@ -850,8 +848,6 @@ describe('LanternLayout', () => {
         'Village Square',
       )
       expect(w.findAll('.lq-stage-btn').map((b) => b.text())).toEqual([
-        'Bag · 0',
-        'Spells · 0',
         'Quests · 0',
         '⟲ Story so far',
         '🧭 Map',
@@ -867,23 +863,23 @@ describe('LanternLayout', () => {
       expect(w.find('.lq-compass').exists()).toBe(false)
     })
 
-    it('opens the journal as a drawer on the pressed tab and closes it with ✕, a second press and Escape', async () => {
+    it('opens the Quests as a drawer and closes it with ✕, a second press and Escape', async () => {
       const w = mountLayout()
 
-      await w.get('[data-button="spells"]').trigger('click')
+      await w.get('[data-button="quests"]').trigger('click')
       expect(w.find('[aria-label="Journal drawer"]').exists()).toBe(true)
-      expect(w.get('[role="tab"][aria-selected="true"]').text()).toMatch(
-        /^Spells/,
-      )
-      expect(w.get('[data-button="spells"]').attributes('aria-pressed')).toBe(
+      expect(
+        w.find('[aria-label="Journal drawer"] [role="tab"]').exists(),
+      ).toBe(false)
+      expect(w.get('[data-button="quests"]').attributes('aria-pressed')).toBe(
         'true',
       )
 
       await w.get('.lq-drawer-close').trigger('click')
       expect(w.find('[aria-label="Journal drawer"]').exists()).toBe(false)
 
-      await w.get('[data-button="bag"]').trigger('click')
-      await w.get('[data-button="bag"]').trigger('click')
+      await w.get('[data-button="quests"]').trigger('click')
+      await w.get('[data-button="quests"]').trigger('click')
       expect(w.find('[aria-label="Journal drawer"]').exists()).toBe(false)
 
       await w.get('[data-button="quests"]').trigger('click')
@@ -897,14 +893,14 @@ describe('LanternLayout', () => {
       const w = mountLayout()
       const game = useGameStore()
 
-      await w.get('[data-button="bag"]').trigger('click')
+      await w.get('[data-button="quests"]').trigger('click')
       await w.get('[data-button="map"]').trigger('click')
       game.loadNumber++
       await w.vm.$nextTick()
       expect(w.find('[aria-label="Journal drawer"]').exists()).toBe(false)
       expect(w.find('.lq-compass').exists()).toBe(false)
 
-      await w.get('[data-button="spells"]').trigger('click')
+      await w.get('[data-button="quests"]').trigger('click')
       game.musicActName = 'Act2'
       await w.vm.$nextTick()
       expect(w.find('[aria-label="Journal drawer"]').exists()).toBe(false)
@@ -945,10 +941,10 @@ describe('LanternLayout', () => {
         expect(w.find(STORY).exists()).toBe(false)
       })
 
-      it('swaps with the Bag, Spells and Quests drawer, both ways', async () => {
+      it('swaps with the Quests drawer, both ways', async () => {
         const w = mountLayout()
         await w.get('[data-button="story"]').trigger('click')
-        await w.get('[data-button="bag"]').trigger('click')
+        await w.get('[data-button="quests"]').trigger('click')
         expect(w.find(STORY).exists()).toBe(false)
         expect(w.find('[aria-label="Journal drawer"]').exists()).toBe(true)
 
@@ -1006,8 +1002,8 @@ describe('LanternLayout', () => {
         useGameStore().questToOpen = 'Whispers'
         await w.vm.$nextTick()
         expect(w.find(STORY).exists()).toBe(false)
-        expect(w.get('[role="tab"][aria-selected="true"]').text()).toMatch(
-          /^Quests/,
+        expect(w.get('[aria-label="Journal drawer"]').text()).toContain(
+          'Quests',
         )
       })
 
@@ -1154,7 +1150,7 @@ describe('LanternLayout', () => {
     it('lets Escape close an open drawer first and hide the words next', async () => {
       const w = mountLayout()
       await say(w, WORDS, 'Grandmother')
-      await w.get('[data-button="bag"]').trigger('click')
+      await w.get('[data-button="quests"]').trigger('click')
       await w
         .get('[aria-label="Journal drawer"]')
         .trigger('keydown', { key: 'Escape' })
