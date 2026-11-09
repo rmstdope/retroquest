@@ -29,7 +29,7 @@ export interface NamedSpot extends PlacedName {
 const DRIFT_SCALE = 1.03
 const DRIFT_SHIFT_X = -0.005
 const DRIFT_SHIFT_Y = -0.003
-/** Half the size of a mark with its border, kept on the visible part. */
+/** How far a mark's middle is kept in from the edge of the visible part: half the 12 px mark and a little of its glow. */
 const MARK_RADIUS = 8
 
 /** The gap between a mark and its name. */

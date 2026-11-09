@@ -107,20 +107,23 @@ test.describe('at the edges of a laptop picture (rq-5hs1)', () => {
   /**
    * On a 1428×650 laptop the 16:9 picture is trimmed to the stage under the
    * header and the action bar lies over the stage's foot: the bread runs under
-   * the bar, the grandmother's middle is behind it, and the hearth hugs the
-   * left edge.
+   * the bar, the grandmother's middle is behind it and her name has to move
+   * away from the bread's, and the hearth hugs the left edge.
    */
   const AT_THE_EDGES: Record<string, AreaFractions> = {
     hearth: { x: 0, y: 0.4, width: 0.03, height: 0.2 },
     bread: { x: 0.1, y: 0.72, width: 0.1, height: 0.1 },
-    grandmother: { x: 0.8, y: 0.7, width: 0.1, height: 0.2 },
+    grandmother: { x: 0.13, y: 0.7, width: 0.06, height: 0.2 },
   }
+  /** What the browser may round a position by. */
+  const ROUNDING = 0.5
 
   /** Hold the drift at its peak, where the picture is largest and furthest over. */
   async function holdDriftAtPeak(page: Page): Promise<void> {
     await page.addStyleTag({
       content:
-        '.lq-drift-on { animation-delay: -26s; animation-play-state: paused; }',
+        // !important: the picture's own scoped animation shorthand outranks this.
+        '.lq-drift-on { animation-delay: -26s !important; animation-play-state: paused !important; }',
     })
   }
 
@@ -131,7 +134,7 @@ test.describe('at the edges of a laptop picture (rq-5hs1)', () => {
     await toTheCottage(page, AT_THE_EDGES)
     const bar = await page.locator('.lq-composer').boundingBox()
     const stage = await page.locator('.lq-stage').boundingBox()
-    await page.mouse.move(stage!.x + 0.15 * stage!.width, bar!.y - 15)
+    await page.mouse.move(stage!.x + 0.115 * stage!.width, bar!.y - 15)
     const name = page.locator('[data-area-pointer]')
     await expect(name).toHaveText('Bread')
     const box = await name.boundingBox()
@@ -156,14 +159,20 @@ test.describe('at the edges of a laptop picture (rq-5hs1)', () => {
     expect(spots).toHaveLength(6)
     for (const spot of spots) {
       const box = await spot.boundingBox()
-      expect(box!.x).toBeGreaterThanOrEqual(stage!.x)
-      expect(box!.x + box!.width).toBeLessThanOrEqual(stage!.x + stage!.width)
-      expect(box!.y).toBeGreaterThanOrEqual(stage!.y)
-      expect(box!.y + box!.height).toBeLessThanOrEqual(bar!.y)
+      expect.soft(box!.x).toBeGreaterThanOrEqual(stage!.x - ROUNDING)
+      expect
+        .soft(box!.x + box!.width)
+        .toBeLessThanOrEqual(stage!.x + stage!.width + ROUNDING)
+      expect.soft(box!.y).toBeGreaterThanOrEqual(stage!.y - ROUNDING)
+      expect.soft(box!.y + box!.height).toBeLessThanOrEqual(bar!.y + ROUNDING)
     }
-    for (const line of await page.locator('.lq-area-lines line').all()) {
-      const box = await line.boundingBox()
-      expect(box!.y + box!.height).toBeLessThanOrEqual(bar!.y)
+    const lines = page.locator('.lq-area-lines line')
+    await expect(lines).not.toHaveCount(0)
+    for (const line of await lines.all()) {
+      const bottom = await line.evaluate(
+        (el) => el.getBoundingClientRect().bottom,
+      )
+      expect.soft(bottom).toBeLessThanOrEqual(bar!.y + ROUNDING)
     }
   })
 })
