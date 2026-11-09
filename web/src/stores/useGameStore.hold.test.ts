@@ -54,6 +54,9 @@ describe('useGameStore: panels held while a turn is narrated', () => {
     expect(store.commandPlace.items).toEqual([])
     expect(store.commandPlace.exits).toEqual({})
     expect(store.completionState('take g').candidates).toEqual([])
+    expect(store.tabComplete('take g').candidates).toEqual([])
+    // A shorter name of someone in the new room is not an unknown word.
+    expect(store.completionState('talk to gardener').sendable).toBe(true)
   })
 
   it('keeps a turn that stays in its room offering what the panels show', async () => {

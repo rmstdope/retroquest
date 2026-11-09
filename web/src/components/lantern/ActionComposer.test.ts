@@ -503,6 +503,12 @@ describe('ActionComposer', () => {
       expect(w.findAll('.lq-target').map((t) => t.text())).not.toContain('Gem')
     })
 
+    it('offers no way out of the room just left', async () => {
+      await movedPlayer()
+      const w = mountComposer()
+      expect(w.findAll('[data-exit]')).toHaveLength(0)
+    })
+
     it('keeps a half-built command when the place catches up with the move', async () => {
       const store = await movedPlayer()
       const w = mountComposer()

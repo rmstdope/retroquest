@@ -1822,7 +1822,9 @@ export const useGameStore = defineStore('game', () => {
 
   /** Whether a character's whole name can be followed from this point of the tree. */
   function offersCharacter(node: CompletionTree): boolean {
-    return characters.value.some((name) => nodeAfter(node, name) !== undefined)
+    return commandPlace.value.characters.some(
+      (name) => nodeAfter(node, name) !== undefined,
+    )
   }
 
   return {
