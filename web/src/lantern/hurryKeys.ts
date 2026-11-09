@@ -16,7 +16,15 @@
  * takes only Space (the hurry the hint invites) and leaves Enter as the
  * button's own press. The same holds for a button in the actions panel, where
  * focus stays after a verb is sent on a laptop.
+ *
+ * Focus stays on a verb through an arrival too, so a player still going on
+ * when one ends would press that verb. For `AFTER_TELLING_PAUSE_MS` after keys
+ * went on an arrival, Enter and Space on a button in the actions panel do
+ * nothing, and each further press starts the pause again.
  */
+
+/** How long after a key went on an arrival a button in the actions panel ignores Enter and Space. */
+export const AFTER_TELLING_PAUSE_MS = 1000
 
 /** A key press as the layout hears it: what it is, where it lands, and what is going on. */
 export interface HurryKeyPress {
@@ -44,6 +52,8 @@ export interface HurryKeyPress {
   onPaperTab: boolean
   /** The target is in an open word list (`[aria-expanded="true"]`). */
   inOpenList: boolean
+  /** A key went on an arrival, or was swallowed just after one, within the last `AFTER_TELLING_PAUSE_MS`. */
+  settling: boolean
   /** A change of scene is under way. */
   scene: boolean
   /** An arrival is shown on the picture, or its news is held for the lines before it to be read. */
@@ -65,6 +75,7 @@ export type HurryKeyAction =
   | 'arrival-clear'
   | 'hurry'
   | 'skip-all'
+  | 'swallow'
 
 /** The answer for a key the story takes. */
 export interface HurryKeyDecision {
@@ -96,7 +107,8 @@ function take(
 /**
  * During a change of scene, Enter, Space or Escape brings the new room up at
  * once. Fields and controls keep their own Enter and Space, except an empty
- * command box and the folded bar's Actions (which stays folded).
+ * command box, the folded bar's Actions (which stays folded) and a button in
+ * the actions panel, where focus sits on its own (after Begin, it is on Look).
  */
 function sceneKey(press: HurryKeyPress): HurryKeyDecision | null {
   if (
@@ -111,6 +123,7 @@ function sceneKey(press: HurryKeyPress): HurryKeyDecision | null {
     press.key === 'Escape' ||
     press.emptyBoxEnter ||
     press.onFoldedActions ||
+    press.onActionButton ||
     !(press.inField || press.onControl)
   )
     return take('skip-scene', press.key === ' ')
@@ -147,11 +160,13 @@ function hideKey(press: HurryKeyPress): HurryKeyDecision | null {
  * (focus stays where it was, the button is not pressed). A field keeps them,
  * but an empty command box goes on; the paper's tab is pressed as a button
  * (it ends the arrival and takes focus on); a held key goes on once, not
- * through the parts.
+ * through the parts and does not press a focused button.
  */
 function arrivalKey(press: HurryKeyPress): HurryKeyDecision | null {
-  if (press.onPaperTab || press.repeat) return null
+  if (press.onPaperTab) return null
   if (press.inField && !press.emptyBoxEnter) return null
+  if (press.repeat)
+    return press.onControl ? take('swallow', press.key === ' ') : null
   return take('arrival-next', press.key === ' ')
 }
 
@@ -176,6 +191,25 @@ function narrationKey(press: HurryKeyPress): HurryKeyDecision | null {
 }
 
 /**
+ * Just after keys went on an arrival, Enter and Space on a button in the
+ * actions panel do nothing, so a player still going on does not press the
+ * verb that kept focus.
+ */
+function pauseKey(press: HurryKeyPress): HurryKeyDecision | null {
+  if (
+    !press.settling ||
+    press.arrival ||
+    !goesOn(press.key) ||
+    !press.onActionButton ||
+    press.handled ||
+    press.modified ||
+    press.dialogOpen
+  )
+    return null
+  return take('swallow', press.key === ' ')
+}
+
+/**
  * Decide who owns a key that may hurry the story: the decision when the
  * story takes it, or `null` when it is left to whatever it is aimed at.
  */
@@ -184,6 +218,8 @@ export function decideHurryKey(press: HurryKeyPress): HurryKeyDecision | null {
   if (scene) return scene
   const hide = hideKey(press)
   if (hide) return hide
+  const pause = pauseKey(press)
+  if (pause) return pause
   if (!(press.narrating || press.arrival)) return null
   // The command box handles its own Enter (and marks it handled); on an
   // arrival an empty box still lets that Enter go on.

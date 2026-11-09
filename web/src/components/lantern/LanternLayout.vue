@@ -13,7 +13,7 @@ import { useBeltStore } from '@/stores/useBeltStore'
 import { firstQuestUnit } from '@/lantern/narrationUnits'
 import { sceneBlock } from '@/lantern/stageArrival'
 import { parseTurn } from '@/lantern/parseTurn'
-import { decideHurryKey } from '@/lantern/hurryKeys'
+import { AFTER_TELLING_PAUSE_MS, decideHurryKey } from '@/lantern/hurryKeys'
 import { wayCursor } from '@/lantern/wayCursor'
 import {
   END_SLACK,
@@ -944,6 +944,9 @@ function isEmptyBoxEnter(event: KeyboardEvent): boolean {
   return emptyBoxEnters.has(event)
 }
 
+/** When a key last went on an arrival, or was swallowed just after one (`performance.now()`). */
+let arrivalKeyAt = Number.NEGATIVE_INFINITY
+
 /**
  * Keys that steer the narration: describe the press and let `decideHurryKey`
  * say who owns it, then carry out its answer.
@@ -963,6 +966,7 @@ function onNarrationKey(event: KeyboardEvent): void {
     onActionButton: !!target?.closest('.lq-composer button'),
     onPaperTab: !!target?.closest('.lq-paper-tab'),
     inOpenList: !!target?.closest('[aria-expanded="true"]'),
+    settling: performance.now() - arrivalKeyAt < AFTER_TELLING_PAUSE_MS,
     scene: scene.turn !== null,
     // News held while the lines before it are read takes the keys as if it were up.
     arrival: arrival.active || arrival.holding,
@@ -986,9 +990,14 @@ function onNarrationKey(event: KeyboardEvent): void {
       setWordsHidden(false)
       break
     case 'arrival-next':
+      arrivalKeyAt = performance.now()
       arrival.next()
       break
+    case 'swallow':
+      arrivalKeyAt = performance.now()
+      break
     case 'arrival-clear':
+      arrivalKeyAt = performance.now()
       arrival.clear()
       narration.skipAll()
       break
@@ -1003,7 +1012,8 @@ function onNarrationKey(event: KeyboardEvent): void {
 
 /**
  * A Space went on an arrival, a change of scene or (from the folded bar's
- * Actions or an action button) a narration: its key-up must not press the focused button.
+ * Actions or an action button) a narration, or was swallowed in the pause after
+ * an arrival: its key-up must not press the focused button.
  */
 let spaceTaken = false
 

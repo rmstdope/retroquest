@@ -49,7 +49,11 @@ async function toTheCottage(page: Page): Promise<void> {
   await page.keyboard.press('Escape')
   await expect(page.locator('.lq-room-name')).toHaveText("Elior's Cottage")
   await expect(page.locator('.lq-stage-picture.lq-scene-idle')).toHaveCount(1)
-  const goOn = page.locator('.lq-arrival-hint:visible')
+  // Only while a card is really up: one fading out takes no key, and a press
+  // too many would open the folded actions.
+  const goOn = page.locator(
+    '.lq-arrival-card:not(.lq-arrival-fade-leave-active) .lq-arrival-hint:visible',
+  )
   for (let turn = 0; turn < 8 && (await goOn.count()) > 0; turn++)
     await page.keyboard.press('Enter')
   await expect(goOn).toHaveCount(0)
