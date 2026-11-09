@@ -1,25 +1,22 @@
 <script setup lang="ts">
 import { computed, nextTick, onUnmounted, ref, watch } from 'vue'
 import { useGameStore } from '@/stores/useGameStore'
-import { useFlightStore } from '@/stores/useFlightStore'
 import CompassPanel from './CompassPanel.vue'
 
 /**
- * The buttons in the stage's top-right corner: Bag, Spells and Quests (with
- * their counts and today's amber dot while something is new) open the journal
- * drawer, "⟲ Story so far" opens the story drawer, and "🧭 Map" opens the map
- * of the ways out beneath it. They are controlled by the layout, which lets
- * only one of the five be open (`drawer`), and press-only: nothing opens on
+ * The buttons in the stage's top-right corner: Quests (with its count and
+ * today's amber dot while something is new) opens the journal drawer,
+ * "⟲ Story so far" opens the story drawer, and "🧭 Map" opens the map of the
+ * ways out beneath it. (The Bag and Spells are the belt of pictures at the
+ * picture's foot.) They are controlled by the layout, which lets only one of
+ * the three be open (`drawer`), and press-only: nothing opens on
  * hover. The button of the open one stays lit. Walking from the map keeps it
  * open. Escape closes the map (asking the layout to, which returns focus to
  * the button) and nothing else hears it. The buttons open their drawers at
  * once, even while a turn is read aloud; only the map's ways out are a held
- * panel (`data-panel`), where a first press catches up. Bag and Spells are
- * where a gained item or spell flies to (`data-flight-target`,
- * `AcquiredFlight`), and the one it lands in bumps; the Bag dips as a lost
- * item rises out of it.
+ * panel (`data-panel`), where a first press catches up.
  */
-type Tab = 'bag' | 'spells' | 'quests'
+type Tab = 'quests'
 
 const props = defineProps<{
   drawer: Tab | 'story' | 'map' | null
@@ -33,32 +30,16 @@ const emit = defineEmits<{
   close: []
 }>()
 const game = useGameStore()
-const flights = useFlightStore()
 
 const root = ref<HTMLElement | null>(null)
 const mapOpen = computed(() => props.drawer === 'map')
 
 const journalButtons = computed(() => [
   {
-    tab: 'bag' as const,
-    name: 'Bag',
-    count: game.rawInventory.length,
-    dot: game.bagHasNew,
-    flight: 'item' as const,
-  },
-  {
-    tab: 'spells' as const,
-    name: 'Spells',
-    count: game.rawSpells.length,
-    dot: game.spellsHaveNew,
-    flight: 'spell' as const,
-  },
-  {
     tab: 'quests' as const,
     name: 'Quests',
     count: game.activeQuests.length,
     dot: game.questsHaveNew,
-    flight: undefined,
   },
 ])
 
@@ -103,11 +84,8 @@ defineExpose({ focusButton })
         class="lq-stage-btn"
         :class="{
           'lq-lit': props.drawer === button.tab,
-          'lq-landed': !!button.flight && flights.landed === button.flight,
-          'lq-dipped': !!button.flight && flights.dipped === button.flight,
         }"
         :data-button="button.tab"
-        :data-flight-target="button.flight"
         :aria-pressed="props.drawer === button.tab ? 'true' : 'false'"
         @click="emit('journal', button.tab)"
       >
@@ -218,18 +196,5 @@ defineExpose({ focusButton })
   z-index: 5;
   width: 300px;
   padding-top: 6px;
-}
-/* A gained item or spell has just flown in: the button bumps (AcquiredFlight). */
-.lq-stage-btn.lq-landed {
-  transform: scale(1.12);
-  transition: transform calc(140ms * var(--lq-motion)) ease-out;
-}
-/* An item is rising out of the button (AcquiredFlight): it dips. */
-.lq-stage-btn.lq-dipped {
-  transform: scale(0.88);
-  transition: transform calc(140ms * var(--lq-motion)) ease-out;
-}
-.lq-stage-btn:not(.lq-landed, .lq-dipped) {
-  transition: transform calc(300ms * var(--lq-motion)) ease-in;
 }
 </style>

@@ -42,23 +42,26 @@ defineExpose({ cancelButton })
     >
       ✕ Cancel
     </button>
+    <span
+      v-if="ghost && at"
+      class="lq-hand-ghost"
+      :class="`lq-hand-ghost-${hand.kind}`"
+      :style="{ left: `${at.x + 12}px`, top: `${at.y + 12}px` }"
+      aria-hidden="true"
+      >{{ hand.label.charAt(0).toUpperCase() }}</span
+    >
   </div>
-  <span
-    v-if="ghost && at"
-    class="lq-hand-ghost"
-    :class="`lq-hand-ghost-${hand.kind}`"
-    :style="{ left: `${at.x + 12}px`, top: `${at.y + 12}px` }"
-    aria-hidden="true"
-    >{{ hand.label.charAt(0).toUpperCase() }}</span
-  >
 </template>
 
 <style scoped>
 .lq-hand {
   position: absolute;
   top: 8px;
-  left: 50%;
-  transform: translateX(-50%);
+  /* Centred without a transform, which would hold the pointer's copy (fixed) inside the strip. */
+  left: 0;
+  right: 0;
+  width: max-content;
+  margin: 0 auto;
   z-index: 8;
   display: flex;
   align-items: center;

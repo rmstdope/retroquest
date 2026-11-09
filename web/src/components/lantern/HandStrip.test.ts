@@ -29,7 +29,7 @@ describe('HandStrip', () => {
 
   it('is announced to a screen reader', () => {
     w = mount(HandStrip, { props: { hand: hand('give') } })
-    expect(w.get('.lq-hand').attributes('role')).toBe('status')
+    expect(w.attributes('role')).toBe('status')
   })
 
   it('asks to cancel', async () => {
