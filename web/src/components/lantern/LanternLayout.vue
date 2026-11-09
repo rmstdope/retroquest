@@ -944,8 +944,12 @@ function isEmptyBoxEnter(event: KeyboardEvent): boolean {
   return emptyBoxEnters.has(event)
 }
 
-/** When a key last went on an arrival, or was swallowed just after one (`performance.now()`). */
-let arrivalKeyAt = Number.NEGATIVE_INFINITY
+/** The buttons of the actions panel that send a command or build one. */
+const COMMAND_BUTTONS =
+  '.lq-composer :is([data-verb], [data-exit], .lq-target, .lq-hint)'
+
+/** When a key last went on an arrival, hurried the narration, or was swallowed just after (`performance.now()`). */
+let goOnKeyAt = Number.NEGATIVE_INFINITY
 
 /**
  * Keys that steer the narration: describe the press and let `decideHurryKey`
@@ -964,9 +968,10 @@ function onNarrationKey(event: KeyboardEvent): void {
     onControl: !!target?.closest('button, a, [role="button"], summary'),
     onFoldedActions: !!target?.closest('.lq-dock-open'),
     onActionButton: !!target?.closest('.lq-composer button'),
+    onCommandButton: !!target?.closest(COMMAND_BUTTONS),
     onPaperTab: !!target?.closest('.lq-paper-tab'),
     inOpenList: !!target?.closest('[aria-expanded="true"]'),
-    settling: performance.now() - arrivalKeyAt < AFTER_TELLING_PAUSE_MS,
+    settling: performance.now() - goOnKeyAt < AFTER_TELLING_PAUSE_MS,
     scene: scene.turn !== null,
     // News held while the lines before it are read takes the keys as if it were up.
     arrival: arrival.active || arrival.holding,
@@ -990,18 +995,19 @@ function onNarrationKey(event: KeyboardEvent): void {
       setWordsHidden(false)
       break
     case 'arrival-next':
-      arrivalKeyAt = performance.now()
+      goOnKeyAt = performance.now()
       arrival.next()
       break
     case 'swallow':
-      arrivalKeyAt = performance.now()
+      goOnKeyAt = performance.now()
       break
     case 'arrival-clear':
-      arrivalKeyAt = performance.now()
+      goOnKeyAt = performance.now()
       arrival.clear()
       narration.skipAll()
       break
     case 'hurry':
+      goOnKeyAt = performance.now()
       narration.hurry()
       break
     case 'skip-all':
@@ -1013,7 +1019,7 @@ function onNarrationKey(event: KeyboardEvent): void {
 /**
  * A Space went on an arrival, a change of scene or (from the folded bar's
  * Actions or an action button) a narration, or was swallowed in the pause after
- * an arrival: its key-up must not press the focused button.
+ * an arrival or a hurry: its key-up must not press the focused button.
  */
 let spaceTaken = false
 

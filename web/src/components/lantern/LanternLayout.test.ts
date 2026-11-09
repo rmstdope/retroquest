@@ -2254,7 +2254,7 @@ describe('LanternLayout', () => {
       actions.remove()
     })
 
-    it('hurries on a Space on a focused action button, which is not pressed again', async () => {
+    it('hurries on a Space or Enter on a focused action button, which is not pressed again', async () => {
       const w = await ready()
       await say(narratedTurn(1))
       const hurry = vi.spyOn(useNarrationStore(), 'hurry')
@@ -2277,16 +2277,48 @@ describe('LanternLayout', () => {
       look.dispatchEvent(up)
       expect(up.defaultPrevented).toBe(true)
 
-      // Enter stays the button's own press.
+      // Enter hurries too, so the verb is not sent again (rq-kfur).
       const enter = new KeyboardEvent('keydown', {
         key: 'Enter',
         bubbles: true,
         cancelable: true,
       })
       look.dispatchEvent(enter)
-      expect(enter.defaultPrevented).toBe(false)
-      expect(hurry).toHaveBeenCalledOnce()
+      expect(enter.defaultPrevented).toBe(true)
+      expect(hurry).toHaveBeenCalledTimes(2)
     })
+
+    it.each([
+      ['a verb', 'data-verb', true],
+      ['an exit', 'data-exit', true],
+      ['a target', 'class:lq-target', true],
+      ['the hint', 'class:lq-hint', true],
+      ['the Type switch', 'data-type', false],
+      ['the Actions switch', 'data-actions', false],
+      ['More', 'data-more', false],
+      ['Cancel', 'class:lq-cancel', false],
+    ])(
+      'Enter on %s as the voice reads: hurried only if it sends a command (rq-kfur)',
+      async (_name, mark, taken) => {
+        const w = await ready()
+        await say(narratedTurn(1))
+        const button = document.createElement('button')
+        if (mark.startsWith('class:')) button.className = mark.slice(6)
+        else {
+          // On a laptop the switches and More are styled as verbs.
+          button.className = 'lq-verb'
+          button.setAttribute(mark, 'x')
+        }
+        w.get('.lq-composer').element.appendChild(button)
+        const enter = new KeyboardEvent('keydown', {
+          key: 'Enter',
+          bubbles: true,
+          cancelable: true,
+        })
+        button.dispatchEvent(enter)
+        expect(enter.defaultPrevented).toBe(taken)
+      },
+    )
 
     it('leaves Enter to the folded Actions: it opens and the voice goes on', async () => {
       await ready()

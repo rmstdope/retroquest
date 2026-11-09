@@ -71,6 +71,9 @@ async function turnCount(page: Page): Promise<number> {
 /** Long enough for a press, had there been one, to reach the game. */
 const PRESS_SETTLES_MS = 300
 
+/** Longer than the silence between two hurried blocks of narration. */
+const BLOCKS_GAP_MS = 200
+
 const arrival = (page: Page) => page.getByTestId('arrival-on-picture')
 const story = (page: Page) => page.getByRole('region', { name: 'Story' })
 
@@ -243,6 +246,75 @@ test.describe('the arrival told on the picture', () => {
       await expect(arrival(page)).toContainText('Shadows over Willowbrook', {
         timeout: 20_000,
       })
+    })
+  })
+
+  test.describe('with the narrator reading slowly', () => {
+    // Narration on, as for a new player (the config turns it off elsewhere).
+    test.use({ storageState: { cookies: [], origins: [] } })
+
+    // Clips last long enough for the Enters to land while the voice reads.
+    test.beforeEach(async ({ page }) => {
+      await page.addInitScript(() => {
+        HTMLMediaElement.prototype.play = function (this: HTMLMediaElement) {
+          if (this.src.includes('/audio/narration/'))
+            setTimeout(() => this.dispatchEvent(new Event('ended')), 3000)
+          return Promise.resolve()
+        }
+      })
+    })
+
+    test('Enter while the waking lines are read sends no second talk to voice (rq-kfur)', async ({
+      page,
+    }) => {
+      await startAct1(page)
+      await arrival(page).click({ position: { x: 600, y: 300 } })
+      await expect(arrival(page).locator('.lq-arrival-line')).toHaveCount(0)
+      const actions = page.getByRole('region', { name: 'Actions' })
+      const talk = actions.getByRole('button', { name: 'Talk', exact: true })
+      await talk.click()
+      await actions.getByRole('button', { name: 'Voice', exact: true }).click()
+      await expect.poll(() => turnCount(page)).toBe(2)
+      await expect(talk).toBeFocused()
+      for (let i = 0; i < 4; i++) {
+        await page.keyboard.press('Enter')
+        await page.waitForTimeout(PRESS_SETTLES_MS)
+      }
+      expect(await turnCount(page)).toBe(2)
+      await expect(page.getByText(/no character named/)).toHaveCount(0)
+    })
+
+    test('Enter just after the last line was hurried does not press the verb again (rq-kfur)', async ({
+      page,
+    }) => {
+      await startAct1(page)
+      await arrival(page).click({ position: { x: 600, y: 300 } })
+      await expect(arrival(page).locator('.lq-arrival-line')).toHaveCount(0)
+      const look = page
+        .getByRole('region', { name: 'Actions' })
+        .getByRole('button', { name: 'Look', exact: true })
+      await look.click()
+      await expect.poll(() => turnCount(page)).toBe(2)
+      await expect(look).toBeFocused()
+      const speaking = page.locator('.lq-speaking')
+      await expect(speaking).not.toHaveCount(0)
+      for (let i = 0; i < 30; i++) {
+        // Between two hurried blocks the voice is briefly silent: only a longer silence is the end.
+        if (!(await speaking.count())) {
+          await page.waitForTimeout(BLOCKS_GAP_MS)
+          if (!(await speaking.count())) break
+        }
+        await page.keyboard.press('Enter')
+        await page.waitForTimeout(50)
+      }
+      await expect(speaking).toHaveCount(0)
+      await page.keyboard.press('Enter')
+      await page.waitForTimeout(PRESS_SETTLES_MS)
+      expect(await turnCount(page)).toBe(2)
+      // The verb was only paused: past the pause, Enter presses it.
+      await page.waitForTimeout(AFTER_TELLING_PAUSE_MS + PRESS_SETTLES_MS)
+      await page.keyboard.press('Enter')
+      await expect.poll(() => turnCount(page)).toBe(3)
     })
   })
 

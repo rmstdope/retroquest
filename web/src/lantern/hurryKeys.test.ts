@@ -14,6 +14,7 @@ function press(over: Partial<HurryKeyPress>): HurryKeyPress {
     onControl: false,
     onFoldedActions: false,
     onActionButton: false,
+    onCommandButton: false,
     onPaperTab: false,
     inOpenList: false,
     settling: false,
@@ -269,14 +270,46 @@ describe('decideHurryKey while the story is narrated', () => {
     ).toEqual({ action: 'hurry', consume: true, swallowSpaceUp: true })
   })
 
-  it('hurries on Space from an action button and swallows its release, leaving Enter to it', () => {
+  it('hurries on Space from an action button and swallows its release', () => {
     const verb = { ...narrating, onControl: true, onActionButton: true }
     expect(decideHurryKey(press({ ...verb, key: SPACE }))).toEqual({
       action: 'hurry',
       consume: true,
       swallowSpaceUp: true,
     })
-    expect(decideHurryKey(press(verb))).toBeNull()
+  })
+
+  it('hurries on Enter from a button that sends a command, so it is not sent again (rq-kfur)', () => {
+    const verb = {
+      ...narrating,
+      onControl: true,
+      onActionButton: true,
+      onCommandButton: true,
+    }
+    expect(decideHurryKey(press(verb))).toEqual({
+      action: 'hurry',
+      consume: true,
+      swallowSpaceUp: false,
+    })
+  })
+
+  it('leaves Enter to a panel button that sends no command (rq-kfur)', () => {
+    expect(
+      decideHurryKey(
+        press({ ...narrating, onControl: true, onActionButton: true }),
+      ),
+    ).toBeNull()
+  })
+
+  it('still hurries on Enter from an action button just after another hurry (rq-kfur)', () => {
+    const verb = {
+      ...narrating,
+      onControl: true,
+      onActionButton: true,
+      onCommandButton: true,
+      settling: true,
+    }
+    expect(decideHurryKey(press(verb))?.action).toBe('hurry')
   })
 
   it('leaves Enter on the folded Actions to the button, unlike a scene', () => {
