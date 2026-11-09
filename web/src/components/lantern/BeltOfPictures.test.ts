@@ -16,6 +16,14 @@ describe('BeltOfPictures', () => {
     w!.findAll('[data-belt-pic]').map((t) => t.attributes('data-belt-pic')!)
 
   beforeEach(() => {
+    const memory: Record<string, string> = {}
+    vi.stubGlobal('localStorage', {
+      getItem: (key: string) => memory[key] ?? null,
+      setItem: (key: string, value: string) => {
+        memory[key] = value
+      },
+      clear: () => undefined,
+    })
     setActivePinia(createPinia())
     const game = useGameStore()
     game.rawInventory = [
@@ -29,7 +37,10 @@ describe('BeltOfPictures', () => {
       { name: '[spell_name]light[/spell_name]', description: 'Glow.' },
     ]
   })
-  afterEach(() => w?.unmount())
+  afterEach(() => {
+    w?.unmount()
+    vi.unstubAllGlobals()
+  })
 
   it('shows a picture for each carried thing, with its name and count beneath', () => {
     mountBelt()

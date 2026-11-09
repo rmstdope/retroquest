@@ -110,7 +110,14 @@ describe('LanternLayout: the belt of pictures', () => {
     w.find('.lq-hand-text').exists() ? w.get('.lq-hand-text').text() : ''
 
   beforeEach(() => {
-    localStorage?.clear?.()
+    const memory: Record<string, string> = {}
+    vi.stubGlobal('localStorage', {
+      getItem: (key: string) => memory[key] ?? null,
+      setItem: (key: string, value: string) => {
+        memory[key] = value
+      },
+      clear: () => undefined,
+    })
     vi.spyOn(HTMLMediaElement.prototype, 'play').mockResolvedValue()
   })
   afterEach(() => {
