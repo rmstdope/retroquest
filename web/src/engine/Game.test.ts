@@ -1532,6 +1532,29 @@ describe('Game', () => {
       expect(tree.take).toEqual({})
     })
 
+    it('never asks a thing about a use target, so a full bag stays cheap each turn', () => {
+      const asked: string[] = []
+      class Listening extends Item {
+        /** Records every phrase it is asked about. */
+        override answersTo(name: string): boolean {
+          asked.push(name)
+          return super.answersTo(name)
+        }
+      }
+      for (let i = 0; i < 20; i++) {
+        game.state.inventory.push(
+          new Listening({ name: `old relic ${i}`, description: 'Old.' }),
+        )
+      }
+
+      const tree = game.getCommandCompletions()
+
+      expect(asked.filter((phrase) => / (with|on)\b/.test(phrase))).toEqual([])
+      // Linear in the phrases of the names: not one question per name, target and thing.
+      expect(asked.length).toBeLessThan(20_000)
+      expect(tree.use).toHaveProperty('old.relic.0.with.old.relic.1', null)
+    })
+
     it('treats item names that match object properties as plain tokens', () => {
       rooms.EliorsCottage.addItem(item('constructor'))
       const tree = game.getCommandCompletions()
