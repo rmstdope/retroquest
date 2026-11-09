@@ -845,11 +845,9 @@ describe('ArrivalOnPicture', () => {
       expect(w.get('.lq-news-top').find('.lq-news-seal').exists()).toBe(false)
     })
 
-    it('uses the free height: 56 px at the top, 61 px at the foot', () => {
+    it('uses the free height: 56 px at the top, 61 px at the foot, belt up or away', () => {
       const stage = rule('.lq-sideways-arrival')
-      expect(stage).toContain(
-        'padding: 56px 20px max(61px, calc(var(--lq-belt-h, 0px) + 16px))',
-      )
+      expect(stage).toContain('padding: 56px 20px 61px')
     })
 
     it('makes the seal small and flows it beside the heading', () => {

@@ -18,6 +18,13 @@ const NEW_QUEST = {
     'Mira would like to know what it finds there. ' +
     'Look around the shed and see what draws it in.',
 }
+/** The real one-sentence line of Curiosity killed the cat: it cannot be cut between sentences. */
+const CURIOSITY = {
+  ...NEW_QUEST,
+  text:
+    'The small patchwork shape hiding in the Abandoned Shed looked a lot ' +
+    'like Patches, the cat who sleeps on the counter of the General Store.',
+}
 const DONE_QUEST = {
   kind: 'completed',
   name: 'Hint of magic',
@@ -121,4 +128,53 @@ test('a finished quest has a small tick beside its heading', async ({
   const sealMid = sealBox!.y + sealBox!.height / 2
   const kickerMid = kicker!.y + kicker!.height / 2
   expect(Math.abs(sealMid - kickerMid)).toBeLessThanOrEqual(2)
+})
+
+/** The picture's bottom edge (the foot) and the belt of pictures' box. */
+async function beltGeometry(page: Page) {
+  const foot = await stage(page).boundingBox()
+  const belt = await page.locator('section.lq-belt').boundingBox()
+  const bag = await page.locator('[data-belt-switch="bag"]').boundingBox()
+  const spells = await page.locator('[data-belt-switch="spells"]').boundingBox()
+  return {
+    foot: foot!.y + foot!.height,
+    belt: belt!,
+    bag: bag!,
+    spells: spells!,
+  }
+}
+
+for (const [width, height] of [
+  [568, 320],
+  [640, 360],
+  [667, 375],
+]) {
+  test(`${width}x${height}: the slim row lets a three-line card stay whole`, async ({
+    page,
+  }) => {
+    await start(page, width, height)
+    await pushNews(page, [CURIOSITY])
+    await expect(stage(page).locator('.lq-arrival-card')).toHaveCount(1)
+    const { foot, belt, bag, spells } = await beltGeometry(page)
+    // Only as tall as its pictures; its top lies 60 px above the foot.
+    expect(belt.height).toBe(52)
+    expect(Math.round(foot - belt.y)).toBe(60)
+    // Pouch and star side by side, level.
+    expect(bag.y).toBeCloseTo(spells.y, 0)
+    expect(spells.x).toBeGreaterThan(bag.x + bag.width)
+    const text = stage(page).locator('.lq-arrival-text')
+    expect(
+      await text.evaluate((el) => el.scrollHeight <= el.clientHeight + 1),
+    ).toBe(true)
+    const pill = await stage(page).locator('.lq-arrival-pill').boundingBox()
+    expect(pill!.y + pill!.height).toBeLessThanOrEqual(foot - 61)
+  })
+}
+
+test('folded away the pouch and star stack again', async ({ page }) => {
+  await start(page, 568, 320)
+  await page.getByRole('button', { name: 'Put the belt away' }).click()
+  const { bag, spells } = await beltGeometry(page)
+  expect(bag.x).toBeCloseTo(spells.x, 0)
+  expect(spells.y).toBeGreaterThan(bag.y + bag.height)
 })
