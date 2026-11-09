@@ -221,6 +221,7 @@ describe('markInside', () => {
   const visible = { x: 20, y: 10, w: 900, h: 450 }
   const entry = (x: number, y: number, w: number, h: number) => ({
     areaId: 'a',
+    name: 'mill',
     label: 'Old Mill',
     kind: 'scenery' as const,
     x: x + w / 2,
