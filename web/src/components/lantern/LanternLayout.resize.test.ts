@@ -187,6 +187,24 @@ describe('where the story lands after the window crosses 1100 px', () => {
     expect(wrap.style.bottom).toContain('61px')
   })
 
+  it('tells the stage how wide its buttons stand, a frame after they change width', async () => {
+    const frames: FrameRequestCallback[] = []
+    vi.stubGlobal('requestAnimationFrame', (run: FrameRequestCallback) =>
+      frames.push(run),
+    )
+    await mountWith(1)
+    const buttons = document.querySelector('.lq-stage-buttons') as HTMLElement
+    Object.defineProperty(buttons, 'offsetWidth', {
+      configurable: true,
+      value: 327,
+    })
+    observers.forEach((notify) => notify())
+    frames.splice(0).forEach((run) => run(0))
+    await nextTick()
+    const stage = document.querySelector('.lq-stage') as HTMLElement
+    expect(stage.style.getPropertyValue('--lq-stage-buttons-w')).toBe('327px')
+  })
+
   it('opens the column on a short newest turn, whole at the bottom', async () => {
     sides = true
     await mountWith(5)
