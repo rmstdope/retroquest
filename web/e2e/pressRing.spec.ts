@@ -116,6 +116,21 @@ test('Escape closes the ring and focus goes back to the thing', async ({
   await expect(page.locator('[data-area-press="bread"]')).toBeFocused()
 })
 
+test('a thing pressed and stepped back from, the mouse still on it, is named once', async ({
+  page,
+}): Promise<void> => {
+  await page.setViewportSize({ width: 1280, height: 800 })
+  await toTheCottage(page)
+  await pressThing(page, 'bread')
+  const ring = page.getByRole('menu', { name: 'Bread' })
+  await expect(ring).toBeVisible()
+  await page.keyboard.press('Escape')
+  await expect(ring).toHaveCount(0)
+  await expect(page.locator('[data-area-press="bread"]')).toBeFocused()
+  await expect(page.locator('.lq-area-name')).toHaveText(['Bread'])
+  await expect(page.locator('[data-area-pointer]')).toHaveCount(0)
+})
+
 test('Take on scenery is answered as typing it would, and a person fans out the carried things under Use with…', async ({
   page,
 }): Promise<void> => {
