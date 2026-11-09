@@ -15,8 +15,8 @@
  * scene takes both Enter and Space from that button, but ordinary narration
  * takes only Space (the hurry the hint invites) and leaves Enter as the
  * button's own press. A button in the actions panel, where focus stays after
- * a verb is sent on a laptop, gives up both, so a player hurrying the answer
- * does not send the verb again.
+ * a verb is sent on a laptop, gives up Space, and one that sends a command
+ * gives up Enter too, so a player hurrying the answer does not send it again.
  *
  * Focus stays on a verb through an arrival too, and when the last line has
  * been hurried, so a player still going on when either ends would press that
@@ -48,8 +48,10 @@ export interface HurryKeyPress {
   onControl: boolean
   /** The target is in the folded bar's Actions button. */
   onFoldedActions: boolean
-  /** The target is a button in the actions panel (a verb, an exit, a target). */
+  /** The target is a button in the actions panel. */
   onActionButton: boolean
+  /** The target is a button in the actions panel that sends a command or builds one (a verb, an exit, a target, the hint). */
+  onCommandButton: boolean
   /** The target is in the paper's tab. */
   onPaperTab: boolean
   /** The target is in an open word list (`[aria-expanded="true"]`). */
@@ -176,16 +178,19 @@ function arrivalKey(press: HurryKeyPress): HurryKeyDecision | null {
  * While the narrator reads (and for Escape on an arrival): a field keeps
  * Space and Enter, and an open word list takes Escape to close itself; any
  * other Escape skips, text kept. A button, link or summary presses on Space
- * or Enter, except Space on the folded bar's Actions and Space or Enter on a
- * button in the actions panel: that is the hurry the hint invites, so the
- * sheet stays folded, the verb is not sent again and a Space's release is
- * swallowed. Enter on the folded bar's Actions stays the button's own press.
+ * or Enter, except Space on the folded bar's Actions or a button in the
+ * actions panel, and Enter on a button there that sends a command: that is
+ * the hurry the hint invites, so the sheet stays folded, the verb is not sent
+ * again and a Space's release is swallowed. Enter on any other button stays
+ * its own press.
  */
 function narrationKey(press: HurryKeyPress): HurryKeyDecision | null {
   const hurries = goesOn(press.key)
   if (press.inField && (hurries || press.inOpenList)) return null
   const takenFromButton =
-    press.onActionButton || (press.key === ' ' && press.onFoldedActions)
+    press.key === ' '
+      ? press.onActionButton || press.onFoldedActions
+      : press.onCommandButton
   if (hurries && !takenFromButton && press.onControl) return null
   const swallowSpaceUp = press.key === ' ' && takenFromButton
   if (press.arrival) return take('arrival-clear', swallowSpaceUp)

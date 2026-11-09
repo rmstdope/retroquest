@@ -186,6 +186,13 @@ test('Enter and Space on a focused verb hurry as the voice reads, without pressi
   expect(await cancel.count()).toBe(0)
   expect(await turnCount(page)).toBe(sent)
 
+  // A button that sends nothing keeps its Enter: Cancel still cancels.
+  await verb.click()
+  await expect(cancel).toBeVisible()
+  await cancel.focus()
+  await page.keyboard.press('Enter')
+  await expect(cancel).toHaveCount(0)
+
   // Space on the focused verb is the hurry the hint invites: the verb is not
   // pressed, and no turn is sent.
   const commands = await turnCount(page)

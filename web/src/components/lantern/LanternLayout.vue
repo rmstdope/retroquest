@@ -944,6 +944,10 @@ function isEmptyBoxEnter(event: KeyboardEvent): boolean {
   return emptyBoxEnters.has(event)
 }
 
+/** The buttons of the actions panel that send a command or build one. */
+const COMMAND_BUTTONS =
+  '.lq-composer :is(.lq-verb, .lq-target, .lq-exit-btn, .lq-hint)'
+
 /** When a key last went on an arrival, hurried the narration, or was swallowed just after (`performance.now()`). */
 let goOnKeyAt = Number.NEGATIVE_INFINITY
 
@@ -964,6 +968,7 @@ function onNarrationKey(event: KeyboardEvent): void {
     onControl: !!target?.closest('button, a, [role="button"], summary'),
     onFoldedActions: !!target?.closest('.lq-dock-open'),
     onActionButton: !!target?.closest('.lq-composer button'),
+    onCommandButton: !!target?.closest(COMMAND_BUTTONS),
     onPaperTab: !!target?.closest('.lq-paper-tab'),
     inOpenList: !!target?.closest('[aria-expanded="true"]'),
     settling: performance.now() - goOnKeyAt < AFTER_TELLING_PAUSE_MS,
@@ -1014,7 +1019,7 @@ function onNarrationKey(event: KeyboardEvent): void {
 /**
  * A Space went on an arrival, a change of scene or (from the folded bar's
  * Actions or an action button) a narration, or was swallowed in the pause after
- * an arrival: its key-up must not press the focused button.
+ * an arrival or a hurry: its key-up must not press the focused button.
  */
 let spaceTaken = false
 

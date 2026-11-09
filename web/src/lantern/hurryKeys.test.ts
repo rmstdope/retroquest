@@ -14,6 +14,7 @@ function press(over: Partial<HurryKeyPress>): HurryKeyPress {
     onControl: false,
     onFoldedActions: false,
     onActionButton: false,
+    onCommandButton: false,
     onPaperTab: false,
     inOpenList: false,
     settling: false,
@@ -278,8 +279,13 @@ describe('decideHurryKey while the story is narrated', () => {
     })
   })
 
-  it('hurries on Enter from an action button, so the verb is not sent again (rq-kfur)', () => {
-    const verb = { ...narrating, onControl: true, onActionButton: true }
+  it('hurries on Enter from a button that sends a command, so it is not sent again (rq-kfur)', () => {
+    const verb = {
+      ...narrating,
+      onControl: true,
+      onActionButton: true,
+      onCommandButton: true,
+    }
     expect(decideHurryKey(press(verb))).toEqual({
       action: 'hurry',
       consume: true,
@@ -287,11 +293,20 @@ describe('decideHurryKey while the story is narrated', () => {
     })
   })
 
+  it('leaves Enter to a panel button that sends no command (rq-kfur)', () => {
+    expect(
+      decideHurryKey(
+        press({ ...narrating, onControl: true, onActionButton: true }),
+      ),
+    ).toBeNull()
+  })
+
   it('still hurries on Enter from an action button just after another hurry (rq-kfur)', () => {
     const verb = {
       ...narrating,
       onControl: true,
       onActionButton: true,
+      onCommandButton: true,
       settling: true,
     }
     expect(decideHurryKey(press(verb))?.action).toBe('hurry')
