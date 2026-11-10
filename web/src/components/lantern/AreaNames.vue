@@ -223,6 +223,7 @@ function settled(): PlacedName[] {
     ),
     panels.value,
     visible.value,
+    covers.value,
   )
 }
 

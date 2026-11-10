@@ -136,9 +136,12 @@ export function markInside(
       visible.y + MARK_RADIUS,
       visible.y + visible.h - MARK_RADIUS,
     )
-    const wantedX = entry.point?.x ?? rect.x + rect.w / 2
-    const wantedY = entry.point?.y ?? rect.y + rect.h / 2
-    const moved = Math.abs(x - wantedX) > 0.5 || Math.abs(y - wantedY) > 0.5
+    // Moved only when pushed more than a mark's radius off its point (or, with
+    // none, off the middle of what is in view): merely trimmed by the drift's
+    // edge, a mark still stands on its thing.
+    const wantedX = entry.point?.x ?? (x0 + x1) / 2
+    const wantedY = entry.point?.y ?? (y0 + y1) / 2
+    const moved = Math.hypot(x - wantedX, y - wantedY) > MARK_RADIUS
     marked.push({
       ...entry,
       x,
@@ -243,16 +246,17 @@ const MARK_APART = 24
  * stays exactly where it is, and a moved one gives way to it. Moved marks are
  * placed from left to right by where their things lie; one that would stand
  * within `MARK_APART` of a mark already placed slides sideways along its line
- * (down it, for a mark moved to the side of a panel) to the nearest free spot
- * on the near side, then to the other side of where it landed when the line
- * runs out, and only when the whole line is full onto a row one `MARK_APART`
- * further from where it came from. A spot must be on the `visible` part and
- * under none of the `panels`; a mark with no such spot keeps where it is.
+ * (down it, for a mark moved to the side of a panel), onward in steps of
+ * `MARK_APART` to the first free spot, then to the other side of where it
+ * landed when the line runs out, and only when the whole line is full onto a row one `MARK_APART`
+ * further from where it came from. A spot must be on the `visible` part,
+ * under none of the `panels` and not under the `words` (which hide a mark); a mark with no such spot keeps where it is.
  */
 export function keepMarksApart(
   marks: readonly PlacedName[],
   panels: readonly Rect[],
   visible: Rect,
+  words: readonly Rect[] = [],
 ): PlacedName[] {
   const left = visible.x + MARK_RADIUS
   const right = visible.x + visible.w - MARK_RADIUS
@@ -275,6 +279,9 @@ export function keepMarksApart(
     y >= top - 0.5 &&
     y <= bottom + 0.5 &&
     !panels.some((panel) => underPanel(x, y, panel)) &&
+    !words.some(
+      (r) => x >= r.x && x <= r.x + r.w && y >= r.y && y <= r.y + r.h,
+    ) &&
     placedAt.every(([px, py]) => Math.hypot(px - x, py - y) >= MARK_APART - 0.5)
   for (const { entry, index } of order) {
     const from = entry.from ?? entry

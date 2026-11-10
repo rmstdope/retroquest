@@ -711,6 +711,31 @@ describe('keepMarksApart', () => {
     }
   })
 
+  it('slides marks stepped off the side of a corner panel down the line, clear of it', () => {
+    const corner = { x: 16, y: 16, w: 300, h: 80 }
+    const tight = { x: 0, y: 0, w: 1000, h: 100 }
+    const out = keepMarksApart(
+      clearOfPanels([mark('a', 300, 50), mark('b', 304, 52)], [corner], tight),
+      [corner],
+      tight,
+    )
+    expect(out[0].x).toBe(out[1].x)
+    expect(Math.abs(out[1].y - out[0].y)).toBeGreaterThanOrEqual(24)
+    for (const m of out) expect(m.x).toBeGreaterThanOrEqual(316 + 8)
+  })
+
+  it('does not put a slid mark under the words', () => {
+    const words = { x: 110, y: 100, w: 200, h: 80 }
+    const out = keepMarksApart(
+      clearOfPanels([mark('a', 96, 50), mark('b', 104, 50)], [plate], visible),
+      [plate],
+      visible,
+      [words],
+    )
+    const b = out[1]
+    expect(b.x >= 110 && b.x <= 310 && b.y >= 100 && b.y <= 180).toBe(false)
+  })
+
   it('keeps marks moved in off the foot apart too', () => {
     const [a, b] = keepMarksApart(
       [
@@ -722,6 +747,27 @@ describe('keepMarksApart', () => {
     )
     expect(b.x - a.x).toBeGreaterThanOrEqual(24)
     expect(a.y).toBe(b.y)
+  })
+})
+
+describe('markInside leaves a mark trimmed only by the edge unmoved', () => {
+  it('has no from for an edge-cropped thing with no point', () => {
+    const visible = { x: 2, y: 2, w: 386, h: 690 }
+    const [floor] = markInside(
+      [
+        {
+          areaId: 'floor',
+          name: 'floor',
+          label: 'Floor',
+          kind: 'scenery' as const,
+          x: 30,
+          y: 550,
+          rect: { x: 0, y: 500, w: 60, h: 100 },
+        },
+      ],
+      visible,
+    )
+    expect(floor.from).toBeUndefined()
   })
 })
 
