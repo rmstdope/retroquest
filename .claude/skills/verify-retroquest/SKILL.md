@@ -103,7 +103,7 @@ Neither is a question for the navigator. Work round both, and say so in the repo
 
 ## Protect the navigator's saves
 
-The browser is the navigator's own Chrome, and `localhost:5173` shares its `localStorage` with
+The browser is the navigator's own Chrome (its window is theirs: see *Desktop and phone*), and `localhost:5173` shares its `localStorage` with
 every game they have played there. On a fallback port (see above) the origin is new and may hold none
 of their saves, but snapshot and restore anyway, on that origin. Before the first save, load or settings change in a batch,
 snapshot RetroQuest's keys through the Chrome integration's JavaScript tool:
@@ -131,11 +131,18 @@ On top of verify-bead's *Look*, check what the acceptance touches:
 
 - **The mockup.** A bead agreed with a mockup names it in its acceptance. It is committed under
   `web/public/` and served by the dev server at `http://localhost:<port>/<file>.html`, `<port>` being the one you
-  launched on (5173 unless it was taken). Open it in a
-  second tab and compare it with the game side by side, and screenshot both.
+  launched on (5173 unless it was taken). Open it in
+  a second tab of the same window you verify in and compare it with the game side by side, and
+  screenshot both. When the look is at a particular screen size, that window is the verifier's own
+  (see *Desktop and phone*), never a tab in the navigator's.
 - **Desktop and phone.** "Working" includes reading well on a phone. Look at desktop width, then
-  resize the window to phone width (about 390×844) and look again. A bead that changes layout,
-  dialogs, the input row or long text always gets both.
+  at phone width (about 390×844), and look again. A bead that changes layout,
+  dialogs, the input row or long text always gets both. **Never resize the navigator's Chrome
+  window, and never open a verification tab in it while sizes are checked**, because they are
+  using it at the same time. Simulate each size with Chrome's device emulation (the developer
+  tools' device mode, set to the width and height you need). Where emulation is not possible,
+  open a Chrome window of your own, size that, and work only there. A look that needs no
+  particular screen size may still use a tab in the navigator's window.
 - **Light and dark.** The theme follows the device. Where the bead changes colour, contrast or
   imagery, say which theme you saw. If only one theme is reachable, the other is a human check.
 - **Saves.** When the bead adds or changes state a player carries (items, flags, quest progress,
