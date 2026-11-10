@@ -220,7 +220,7 @@ export const ACT1_ROOM_PATCHES: Record<string, ImagePatch[]> = {
 }
 
 /**
- * The areas of Act 1 whose coming or going needs no patch of its own, by room
+ * The areas of Act 1 whose arrival needs no patch of its own, by room
  * key then area id, each with the reason.
  */
 export const ACT1_UNPATCHED_AREAS: Record<string, Record<string, string>> = {

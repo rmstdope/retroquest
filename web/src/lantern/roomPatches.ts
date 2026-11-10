@@ -71,13 +71,13 @@ export function declaredPatches(
   return ROOM_PATCHES[actName]?.[roomKey] ?? []
 }
 
-/** The areas whose coming or going needs no patch of its own, by act name, room key, then area id, with the reason. */
+/** The areas whose arrival needs no patch of its own, by act name, room key, then area id, with the reason. */
 const UNPATCHED_AREAS: Readonly<
   Record<string, Readonly<Record<string, Readonly<Record<string, string>>>>>
 > = { Act1: ACT1_UNPATCHED_AREAS }
 
 /**
- * The area ids of room `roomKey` of act `actName` whose coming or going needs
+ * The area ids of room `roomKey` of act `actName` whose arrival needs
  * no patch of its own (a way painted open from the start, a thing another
  * patch shows); none for most rooms.
  */
