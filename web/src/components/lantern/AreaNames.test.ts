@@ -122,6 +122,36 @@ describe('AreaNames', () => {
       ).toContain('left: 144px')
     })
 
+    it('starts a moved name’s line at the moved mark', async () => {
+      const w = mountNames({
+        showing: true,
+        things: [
+          { areaId: 'a', name: 'a', label: 'Notice Board', kind: 'scenery' },
+          { areaId: 'b', name: 'b', label: 'Old Notice', kind: 'item' },
+        ],
+        boxes: {
+          a: {
+            x: 0.4,
+            y: 0.4,
+            width: 0.2,
+            height: 0.2,
+            mark: { x: 0.5, y: 0.5 },
+          },
+          b: {
+            x: 0.4,
+            y: 0.4,
+            width: 0.2,
+            height: 0.2,
+            mark: { x: 0.5, y: 0.5 },
+          },
+        },
+      })
+      await nextTick()
+      const line = w.get('line')
+      expect(Number(line.attributes('x1'))).toBeCloseTo(480, 3)
+      expect(Number(line.attributes('y1'))).toBeCloseTo(270, 3)
+    })
+
     it('shows a focused thing at the same spot as when all are shown', async () => {
       const all = mountNames({ showing: true, boxes: marked })
       const one = mountNames({ focused: 'bucket', boxes: marked })
@@ -248,6 +278,37 @@ describe('AreaNames', () => {
   })
 
   describe('under the words', () => {
+    it('judges a thing by its mark, not the middle of its rectangle', async () => {
+      const w = mountNames({
+        showing: true,
+        boxes: {
+          ...boxes,
+          // Middle under the words, point clear of them: shown.
+          villager: {
+            x: 0.1,
+            y: 0.4,
+            width: 0.4,
+            height: 0.2,
+            mark: { x: 0.45, y: 0.5 },
+          },
+          // Middle clear of the words, point under them: waits.
+          bucket: {
+            x: 0.1,
+            y: 0.7,
+            width: 0.5,
+            height: 0.1,
+            mark: { x: 0.15, y: 0.75 },
+          },
+        },
+      })
+      wordsOver('lq-story-wrap')
+      await w.setProps({ relayout: 'words' })
+      await new Promise((resolve) => setTimeout(resolve, 400))
+      await nextTick()
+      expect(w.find('[data-area-mark="villager"]').exists()).toBe(true)
+      expect(w.find('[data-area-mark="bucket"]').exists()).toBe(false)
+    })
+
     /** Words covering the left third of the stage (the picture's own pixels), as the rectangle the browser would report. */
     function wordsOver(selector: string): HTMLElement {
       const words = document.createElement('div')
