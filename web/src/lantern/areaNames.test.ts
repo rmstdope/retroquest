@@ -6,6 +6,7 @@ import type { AreaThing } from './areaThings'
 import type { Rect } from './roomMotionScene'
 import {
   clearOfPanels,
+  keepMarksApart,
   closedWayThings,
   layoutNames,
   markInside,
@@ -600,5 +601,156 @@ describe('clearOfPanels', () => {
   it('steps a mark that stands closer to the panel than a stepped one would', () => {
     const [m] = clearOfPanels([mark(120, 108)], [plate], visible)
     expect(m.y).toBeGreaterThanOrEqual(112)
+  })
+})
+
+describe('keepMarksApart', () => {
+  const visible = { x: 0, y: 0, w: 390, h: 700 }
+  const plate = { x: 0, y: 0, w: 390, h: 100 }
+  const mark = (
+    id: string,
+    x: number,
+    y: number,
+    from?: { x: number; y: number },
+  ) => ({
+    areaId: id,
+    name: id,
+    label: id,
+    kind: 'scenery' as const,
+    x,
+    y,
+    rect: { x: x - 20, y: y - 20, w: 40, h: 40 },
+    ...(from ? { from } : {}),
+  })
+  /** Marks under the plate, stepped by the real code, then kept apart. */
+  const stepped = (xs: number[]) =>
+    keepMarksApart(
+      clearOfPanels(
+        xs.map((x, i) => mark(`m${i}`, x, 50)),
+        [plate],
+        visible,
+      ),
+      [plate],
+      visible,
+    )
+
+  it('puts two marks that would land on each other side by side, order kept, left one unmoved', () => {
+    const [a, b] = stepped([96, 104])
+    expect(a.x).toBe(96)
+    expect(b.y).toBe(a.y)
+    expect(b.x - a.x).toBeGreaterThanOrEqual(24)
+  })
+
+  it('keeps the order of the things even when the input is the other way round', () => {
+    const [b, a] = stepped([104, 96])
+    expect(a.x).toBe(96)
+    expect(b.x - a.x).toBeGreaterThanOrEqual(24)
+  })
+
+  it('changes nothing when moved marks do not collide', () => {
+    const [a, b] = stepped([50, 200])
+    expect([a.x, b.x]).toEqual([50, 200])
+  })
+
+  it('never moves a mark that stands on its thing; the moved mark gives way', () => {
+    const standing = mark('hook', 110, 120)
+    const [moved, fixed] = keepMarksApart(
+      [mark('books', 104, 120, { x: 104, y: 50 }), standing],
+      [plate],
+      visible,
+    )
+    expect([fixed.x, fixed.y]).toEqual([110, 120])
+    expect(Math.hypot(moved.x - 110, moved.y - 120)).toBeGreaterThanOrEqual(24)
+    expect(moved.y).toBe(120)
+  })
+
+  it('carries a crowded row on to the left of the first mark, on the same line', () => {
+    const row = stepped([330, 345, 360, 372])
+    const line = row[0].y
+    expect(row.every((m) => m.y === line)).toBe(true)
+    const xs = row.map((m) => m.x).sort((p, q) => p - q)
+    for (let i = 1; i < xs.length; i++)
+      expect(xs[i] - xs[i - 1]).toBeGreaterThanOrEqual(24)
+    expect(xs[xs.length - 1]).toBeLessThanOrEqual(390 - 8)
+    expect(Math.min(...xs)).toBeLessThan(330)
+  })
+
+  it('uses a second row further from the panel only when the whole width is full', () => {
+    const narrow = { x: 0, y: 0, w: 60, h: 700 }
+    const wide = { x: 0, y: 0, w: 60, h: 100 }
+    const out = keepMarksApart(
+      clearOfPanels(
+        [10, 20, 30, 40].map((x, i) => mark(`m${i}`, x, 50)),
+        [wide],
+        narrow,
+      ),
+      [wide],
+      narrow,
+    )
+    const ys = new Set(out.map((m) => m.y))
+    expect(ys.size).toBeGreaterThan(1)
+    for (const m of out) expect(m.x).toBeGreaterThanOrEqual(8)
+    for (const m of out) expect(m.x).toBeLessThanOrEqual(52)
+    const first = Math.min(...ys)
+    expect(out.filter((m) => m.y === first).length).toBe(2)
+  })
+
+  it('never slides a mark under a panel', () => {
+    const button = { x: 120, y: 100, w: 40, h: 40 }
+    const out = keepMarksApart(
+      clearOfPanels(
+        [mark('a', 96, 50), mark('b', 104, 50)],
+        [plate, button],
+        visible,
+      ),
+      [plate, button],
+      visible,
+    )
+    for (const m of out) {
+      expect(m.x > 112 && m.x < 168 && m.y > 92 && m.y < 148).toBe(false)
+    }
+  })
+
+  it('keeps marks moved in off the foot apart too', () => {
+    const [a, b] = keepMarksApart(
+      [
+        mark('a', 100, 690, { x: 100, y: 720 }),
+        mark('b', 106, 690, { x: 106, y: 730 }),
+      ],
+      [],
+      { x: 0, y: 0, w: 390, h: 700 },
+    )
+    expect(b.x - a.x).toBeGreaterThanOrEqual(24)
+    expect(a.y).toBe(b.y)
+  })
+})
+
+describe('markInside records where a moved mark would have stood', () => {
+  const visible = { x: 0, y: 0, w: 390, h: 700 }
+  it('has no from when the mark was not moved, and one when it was clamped in', () => {
+    const base = {
+      areaId: 'a',
+      name: 'a',
+      label: 'A',
+      kind: 'scenery' as const,
+    }
+    const [plain] = markInside(
+      [{ ...base, x: 100, y: 100, rect: { x: 80, y: 80, w: 40, h: 40 } }],
+      visible,
+    )
+    expect(plain.from).toBeUndefined()
+    const [low] = markInside(
+      [
+        {
+          ...base,
+          x: 100,
+          y: 705,
+          rect: { x: 80, y: 690, w: 40, h: 40 },
+          point: { x: 100, y: 725 },
+        },
+      ],
+      visible,
+    )
+    expect(low.from).toEqual({ x: 100, y: 725 })
   })
 })

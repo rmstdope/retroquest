@@ -497,6 +497,66 @@ describe('AreaNames', () => {
       )
     })
 
+    describe('two things under the plate', () => {
+      const pair: AreaThing[] = [
+        {
+          areaId: 'shelves',
+          name: 'shelves',
+          label: 'Shelves',
+          kind: 'scenery',
+        },
+        { areaId: 'books', name: 'books', label: 'Books', kind: 'scenery' },
+      ]
+      const pairBoxes = {
+        shelves: { x: 0.1, y: 0.45, width: 0.02, height: 0.02 },
+        books: { x: 0.112, y: 0.45, width: 0.02, height: 0.02 },
+      }
+      const left = (w: VueWrapper, id: string): number =>
+        parseFloat(
+          /left: ([\d.]+)px/.exec(
+            w.get(`[data-area-mark="${id}"]`).attributes('style') ?? '',
+          )![1],
+        )
+
+      it('stand side by side, a mark’s width of space apart, the left thing’s mark first', async () => {
+        const w = mountNames({ showing: true, things: pair, boxes: pairBoxes })
+        plateOver('lq-phone-plate')
+        await w.setProps({ relayout: 'plate' })
+        await new Promise((resolve) => setTimeout(resolve, 400))
+        await nextTick()
+        expect(top(w, '[data-area-mark="books"]')).toBe(
+          top(w, '[data-area-mark="shelves"]'),
+        )
+        expect(left(w, 'books') - left(w, 'shelves')).toBeGreaterThanOrEqual(24)
+      })
+
+      it('show the focused one alone at the same spot as with everything showing', async () => {
+        const all = mountNames({
+          showing: true,
+          things: pair,
+          boxes: pairBoxes,
+        })
+        plateOver('lq-phone-plate')
+        await all.setProps({ relayout: 'plate' })
+        await new Promise((resolve) => setTimeout(resolve, 400))
+        await nextTick()
+        const spot = left(all, 'books')
+        all.unmount()
+        document.body.innerHTML = ''
+        const one = mountNames({
+          showing: false,
+          focused: 'books',
+          things: pair,
+          boxes: pairBoxes,
+        })
+        plateOver('lq-phone-plate')
+        await one.setProps({ relayout: 'plate' })
+        await new Promise((resolve) => setTimeout(resolve, 400))
+        await nextTick()
+        expect(left(one, 'books')).toBe(spot)
+      })
+    })
+
     it('marks the thing with keyboard focus clear of the plate as well', async () => {
       const w = mountNames({ showing: false, focused: 'villager' })
       plateOver('lq-phone-plate')

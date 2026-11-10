@@ -2,6 +2,7 @@
 import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
 import {
   clearOfPanels,
+  keepMarksApart,
   layoutNames,
   markInside,
   nameAt,
@@ -212,13 +213,22 @@ const visible = computed<Rect>(() =>
   visiblePart(view.value, props.footCover ?? 0),
 )
 
-/** The placed things with a part that can be seen, their marks stepped clear of the panels, whose mark is not under the words. */
-const placed = computed<PlacedName[]>(() =>
-  clearOfPanels(
-    markInside(inView.value, visible.value),
+/** The things in view with their marks stepped clear of the panels and kept apart from each other. */
+function settled(): PlacedName[] {
+  return keepMarksApart(
+    clearOfPanels(
+      markInside(inView.value, visible.value),
+      panels.value,
+      visible.value,
+    ),
     panels.value,
     visible.value,
-  ).filter((entry) => !underWords(entry)),
+  )
+}
+
+/** The placed things with a part that can be seen, their marks stepped clear of the panels, whose mark is not under the words. */
+const placed = computed<PlacedName[]>(() =>
+  settled().filter((entry) => !underWords(entry)),
 )
 
 /** The closed ways that are placed and in view. */
@@ -268,11 +278,7 @@ const spots = computed<NamedSpot[]>(() => {
   const own = all.filter((spot) => spot.areaId === props.focused)
   if (own.length > 0) return own
   // A focused thing whose mark is under the words is not in `placed`; it is still shown.
-  const focus = clearOfPanels(
-    markInside(inView.value, visible.value),
-    panels.value,
-    visible.value,
-  ).find((entry) => entry.areaId === props.focused)
+  const focus = settled().find((entry) => entry.areaId === props.focused)
   return focus
     ? layoutNames(
         [...placed.value, focus],
