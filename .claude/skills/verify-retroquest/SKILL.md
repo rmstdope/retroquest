@@ -103,7 +103,7 @@ Neither is a question for the navigator. Work round both, and say so in the repo
 
 ## Protect the navigator's saves
 
-The browser is the navigator's own Chrome (its window is theirs: see *Desktop and phone*), and `localhost:5173` shares its `localStorage` with
+The browser is the navigator's own Chrome (its window is theirs, see *Desktop and phone*), and `localhost:5173` shares its `localStorage` with
 every game they have played there. On a fallback port (see above) the origin is new and may hold none
 of their saves, but snapshot and restore anyway, on that origin. Before the first save, load or settings change in a batch,
 snapshot RetroQuest's keys through the Chrome integration's JavaScript tool:
@@ -132,17 +132,20 @@ On top of verify-bead's *Look*, check what the acceptance touches:
 - **The mockup.** A bead agreed with a mockup names it in its acceptance. It is committed under
   `web/public/` and served by the dev server at `http://localhost:<port>/<file>.html`, `<port>` being the one you
   launched on (5173 unless it was taken). Open it in
-  a second tab of the same window you verify in and compare it with the game side by side, and
+  a second tab of the window you verify in and compare it with the game side by side, and
   screenshot both. When the look is at a particular screen size, that window is the verifier's own
   (see *Desktop and phone*), never a tab in the navigator's.
 - **Desktop and phone.** "Working" includes reading well on a phone. Look at desktop width, then
   at phone width (about 390×844), and look again. A bead that changes layout,
   dialogs, the input row or long text always gets both. **Never resize the navigator's Chrome
   window, and never open a verification tab in it while sizes are checked**, because they are
-  using it at the same time. Simulate each size with Chrome's device emulation (the developer
-  tools' device mode, set to the width and height you need). Where emulation is not possible,
-  open a Chrome window of your own, size that, and work only there. A look that needs no
-  particular screen size may still use a tab in the navigator's window.
+  using it at the same time. Do every sized look in a Chrome window of your own, and there set
+  each size with Chrome's device emulation (the developer tools' device mode, at the width and
+  height you need). If your tools cannot drive device mode, resize your own window instead,
+  never theirs. Open that window as a new window (the integration's new-window facility, or
+  Chrome's own "New Window"); a new tab is not one. If no new window can be opened, that is a
+  blocker to report, not a reason to use theirs. A look that needs no particular screen size
+  may still use a tab in the navigator's window.
 - **Light and dark.** The theme follows the device. Where the bead changes colour, contrast or
   imagery, say which theme you saw. If only one theme is reachable, the other is a human check.
 - **Saves.** When the bead adds or changes state a player carries (items, flags, quest progress,
@@ -170,7 +173,7 @@ everything first so their part takes a minute:
 
 The hand-off, once per batch, after your own checks and before the verdict:
 
-1. Leave the server running and the game **in the exact state** to judge, in a tab you name.
+1. Leave the server running and the game **in the exact state** to judge, in a tab you name (and say which window it is in, when the state is at phone size).
    Settings such as Narration on and volume up should already be set. Restore their saves only
    after they answer.
 2. Write `asking`, then ask in **one** call of the question tool, one question per human check
@@ -236,5 +239,5 @@ where they do not. Record only what they answered, by the recipes in `agents/ver
 
 ## When the look is over
 
-Restore the storage snapshot, delete any scratch debug script, close the tabs you opened, and stop every
+Restore the storage snapshot, delete any scratch debug script, close the tabs and any window you opened, switch off device emulation, and stop every
 server you started (the dev server, and any `http.server` for local files), and only those.
