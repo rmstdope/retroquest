@@ -174,6 +174,23 @@ describe('AreaNames', () => {
     })
   })
 
+  it('shows a focused thing where its neighbours put it, not alone', async () => {
+    const pair: AreaThing[] = [
+      { areaId: 'a', name: 'a', label: 'Notice Board', kind: 'scenery' },
+      { areaId: 'b', name: 'b', label: 'Old Notice', kind: 'item' },
+    ]
+    const boxes = {
+      a: { x: 0.5, y: 0.5, width: 0.02, height: 0.02 },
+      b: { x: 0.505, y: 0.505, width: 0.02, height: 0.02 },
+    }
+    const all = mountNames({ showing: true, things: pair, boxes })
+    const one = mountNames({ focused: 'b', things: pair, boxes })
+    await nextTick()
+    expect(one.get('[data-area-name="b"]').attributes('style')).toBe(
+      all.get('[data-area-name="b"]').attributes('style'),
+    )
+  })
+
   it('names the one thing under the pointer, and nothing over nothing', async () => {
     const w = mountNames({ pointer: { x: 140, y: 250 } })
     await nextTick()

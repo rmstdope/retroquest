@@ -254,6 +254,23 @@ describe('layoutNames', () => {
     expect(coversOwn).toBe(false)
   })
 
+  it('goes beside its dot with a line when above is taken and below does not fit', () => {
+    const plate = { x: 340, y: 480, w: 120, h: 30 }
+    const [spot] = layoutNames(
+      [mark('a', 'Bucket', 400, 525)],
+      measure,
+      [plate],
+      bounds,
+    )
+    expect(spot.leader).not.toBeNull()
+    const coversOwn =
+      spot.left < 406 &&
+      394 < spot.left + spot.width &&
+      spot.top < 531 &&
+      519 < spot.top + spot.height
+    expect(coversOwn).toBe(false)
+  })
+
   it('keeps a name inside bounds that do not start at the corner', () => {
     const visible = { x: 28, y: 12, w: 900, h: 450 }
     const [left] = layoutNames(

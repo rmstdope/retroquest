@@ -262,6 +262,7 @@ function sizeOf(label: string): { w: number; h: number } {
 
 /** Every mark and name when they are all showing, else those of the thing with focus. */
 const spots = computed<NamedSpot[]>(() => {
+  if (!props.showing && !props.focused) return []
   const all = layoutNames(placed.value, sizeOf, obstacles.value, visible.value)
   if (props.showing) return all
   const own = all.filter((spot) => spot.areaId === props.focused)
