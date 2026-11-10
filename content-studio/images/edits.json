@@ -18,6 +18,72 @@
       "text": "A hot, smoky forge. Coals glow in the hearth and the anvil rings. Hinges, ploughshares and horseshoes hang from the walls, waiting to be mended or fetched, and the blacksmith is working on a sword in the forge with a hammer.",
       "gameWas": "A hot, smoky forge. Coals glow in the hearth and the anvil rings. Hinges, ploughshares and horseshoes hang from the walls, waiting to be mended or fetched, and Borin wipes his brow without putting down the hammer."
     },
+    "act1-chicken-coop": {
+      "text": "A small wooden coop stands here, its planks patched and weathered. Nervous chickens cluck and flutter, their feathers ruffled as they dart between straw nests. Sunbeams slip through the slats, casting striped shadows on the dirt floor. Inside the coop, there is a rafter and on top of that, something glints.\nThere is an egg and a feather lying on the ground.",
+      "gameWas": "A small wooden coop stands here, its planks patched and weathered. Nervous chickens cluck and flutter, their feathers ruffled as they dart between straw nests. The air is thick with the scent of hay and the occasional squawk. Sunbeams slip through the slats, casting striped shadows on the dirt floor. High on a rafter, out of reach, something glints where no hen could have put it.",
+      "patches": {
+        "key-appears": {
+          "text": "Add a key on the rafter.",
+          "gameWas": "Add the key to the picture."
+        }
+      },
+      "takeAreas": {
+        "13": {
+          "chicken": {
+            "x": 254,
+            "y": 601,
+            "width": 716,
+            "height": 342
+          },
+          "egg": {
+            "x": 929,
+            "y": 906,
+            "width": 109,
+            "height": 120
+          },
+          "exit-north": {
+            "x": 190,
+            "y": 309,
+            "width": 258,
+            "height": 276
+          },
+          "feather": {
+            "x": 1021,
+            "y": 939,
+            "width": 169,
+            "height": 94,
+            "point": {
+              "x": 1144,
+              "y": 980
+            }
+          },
+          "key": {
+            "x": 966,
+            "y": 214,
+            "width": 62,
+            "height": 61
+          },
+          "scenery-chicken-coop-coop": {
+            "x": 444,
+            "y": 75,
+            "width": 1337,
+            "height": 578
+          },
+          "scenery-chicken-coop-nests": {
+            "x": 1140,
+            "y": 611,
+            "width": 348,
+            "height": 327
+          },
+          "scenery-chicken-coop-rafter": {
+            "x": 717,
+            "y": 230,
+            "width": 765,
+            "height": 77
+          }
+        }
+      }
+    },
     "act1-eliors-cottage": {
       "text": "The inside of a modest cottage with a cozy hearth and a book shelf with books.\nThere are no windows.\nThe room is dark and the corner by your bed is pitch black.  A sturdy wooden table sits in the center, with a small loaf cooling on it, and a gentle fire crackles in the hearth. Grandmother stands by it, humming, and keeps an eye on the bread.",
       "gameWas": "A modest cottage with a straw roof and a cozy hearth. The scent of fresh bread and old books fills the air. The curtains are still drawn on a grey morning, and the corner by your bed is too dark to see into. A sturdy wooden table sits in the center, with a small loaf cooling on it, and a gentle fire crackles in the hearth. Grandmother stands by it, humming, and keeps an eye on the bread.",
@@ -79,19 +145,31 @@
             "x": 1198,
             "y": 195,
             "width": 340,
-            "height": 754
+            "height": 754,
+            "point": {
+              "x": 1300,
+              "y": 315
+            }
           },
           "hearth": {
-            "x": 408,
-            "y": 424,
-            "width": 237,
-            "height": 440
+            "x": 406,
+            "y": 420,
+            "width": 280,
+            "height": 407,
+            "point": {
+              "x": 498,
+              "y": 511
+            }
           },
           "lantern": {
             "x": 1584,
             "y": 508,
             "width": 90,
-            "height": 116
+            "height": 116,
+            "point": {
+              "x": 1622,
+              "y": 544
+            }
           },
           "motion-fire": {
             "x": 470,
@@ -115,7 +193,11 @@
             "x": 740,
             "y": 110,
             "width": 269,
-            "height": 485
+            "height": 485,
+            "point": {
+              "x": 874,
+              "y": 439
+            }
           },
           "scenery-eliors-cottage-table": {
             "x": 568,
@@ -175,19 +257,31 @@
             "x": 7,
             "y": 0,
             "width": 1913,
-            "height": 1080
+            "height": 1080,
+            "point": {
+              "x": 420,
+              "y": 236
+            }
           },
           "scenery-the-dream-child": {
             "x": 859,
             "y": 531,
             "width": 66,
-            "height": 272
+            "height": 272,
+            "point": {
+              "x": 894,
+              "y": 598
+            }
           },
           "scenery-the-dream-man": {
             "x": 924,
             "y": 452,
             "width": 207,
-            "height": 590
+            "height": 590,
+            "point": {
+              "x": 1028,
+              "y": 733
+            }
           },
           "scenery-the-dream-shadows": {
             "x": 879,
@@ -256,7 +350,89 @@
     },
     "act1-village-square": {
       "text": "The heart of Willowbrook, a medieval village: cobblestones around an old stone fountain, and a weathered notice board covered in faded announcements. The text is unreadable. Half the market stalls stand empty. The people at the others keep their voices down, and stop talking when you pass. All the people are dressed in medieval clothes. No one is wearing a hat.",
-      "gameWas": "The heart of Willowbrook: cobblestones around an old stone fountain, and a weathered notice board covered in faded announcements. Half the market stalls stand empty. The people at the others keep their voices down, and stop talking when you pass."
+      "gameWas": "The heart of Willowbrook: cobblestones around an old stone fountain, and a weathered notice board covered in faded announcements. Half the market stalls stand empty. The people at the others keep their voices down, and stop talking when you pass.",
+      "takeAreas": {
+        "25": {
+          "bucket": {
+            "x": 1781,
+            "y": 871,
+            "width": 139,
+            "height": 169
+          },
+          "exit-east": {
+            "x": 1847,
+            "y": 387,
+            "width": 64,
+            "height": 518
+          },
+          "exit-north": {
+            "x": 799,
+            "y": 270,
+            "width": 299,
+            "height": 185
+          },
+          "exit-west": {
+            "x": 0,
+            "y": 301,
+            "width": 78,
+            "height": 564
+          },
+          "motion-water": {
+            "x": 793,
+            "y": 457,
+            "width": 300,
+            "height": 378
+          },
+          "old-notice": {
+            "x": 1261,
+            "y": 562,
+            "width": 65,
+            "height": 56
+          },
+          "scenery-village-square-cobblestones": {
+            "x": 343,
+            "y": 844,
+            "width": 1358,
+            "height": 206
+          },
+          "scenery-village-square-fountain": {
+            "x": 674,
+            "y": 457,
+            "width": 552,
+            "height": 509
+          },
+          "scenery-village-square-market-stalls": {
+            "x": 1554,
+            "y": 376,
+            "width": 297,
+            "height": 607,
+            "point": {
+              "x": 1650,
+              "y": 511
+            }
+          },
+          "scenery-village-square-notice-board": {
+            "x": 1226,
+            "y": 531,
+            "width": 183,
+            "height": 154,
+            "point": {
+              "x": 1360,
+              "y": 642
+            }
+          },
+          "villager": {
+            "x": 239,
+            "y": 537,
+            "width": 146,
+            "height": 366,
+            "point": {
+              "x": 304,
+              "y": 629
+            }
+          }
+        }
+      }
     },
     "act1-village-well": {
       "text": "An old stone well stands between the field and the forge, its stones worn smooth by countless hands. The water below lies dark and still. Moss creeps up the sides.",

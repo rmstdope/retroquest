@@ -12,7 +12,74 @@
   "act1-chicken-coop": {
     "file": "act1-chicken-coop.png",
     "width": 1920,
-    "height": 1080
+    "height": 1080,
+    "patches": {
+      "egg-taken": {
+        "file": "act1-chicken-coop.egg-taken.png",
+        "width": 1920,
+        "height": 1080
+      },
+      "feather-taken": {
+        "file": "act1-chicken-coop.feather-taken.png",
+        "width": 1920,
+        "height": 1080
+      },
+      "key-appears": {
+        "file": "act1-chicken-coop.key-appears.png",
+        "width": 1920,
+        "height": 1080
+      }
+    },
+    "areas": {
+      "chicken": {
+        "x": 0.132292,
+        "y": 0.556481,
+        "width": 0.372917,
+        "height": 0.316667
+      },
+      "egg": {
+        "x": 0.483854,
+        "y": 0.838889,
+        "width": 0.056771,
+        "height": 0.111111
+      },
+      "feather": {
+        "x": 0.531771,
+        "y": 0.869444,
+        "width": 0.088021,
+        "height": 0.087037
+      },
+      "scenery-chicken-coop-coop": {
+        "x": 0.23125,
+        "y": 0.069444,
+        "width": 0.696354,
+        "height": 0.535185
+      },
+      "scenery-chicken-coop-nests": {
+        "x": 0.59375,
+        "y": 0.565741,
+        "width": 0.18125,
+        "height": 0.302778
+      },
+      "scenery-chicken-coop-rafter": {
+        "x": 0.373438,
+        "y": 0.212963,
+        "width": 0.398438,
+        "height": 0.071296
+      },
+      "exit-north": {
+        "x": 0.098958,
+        "y": 0.286111,
+        "width": 0.134375,
+        "height": 0.255556
+      },
+      "key": {
+        "x": 0.503125,
+        "y": 0.198148,
+        "width": 0.032292,
+        "height": 0.056481
+      }
+    }
   },
   "act1-eliors-cottage": {
     "file": "act1-eliors-cottage.png",
@@ -42,10 +109,10 @@
     },
     "areas": {
       "hearth": {
-        "x": 0.2125,
-        "y": 0.392593,
-        "width": 0.123438,
-        "height": 0.407407
+        "x": 0.211458,
+        "y": 0.388889,
+        "width": 0.145833,
+        "height": 0.376852
       },
       "lantern": {
         "x": 0.825,
@@ -317,7 +384,82 @@
   "act1-village-square": {
     "file": "act1-village-square.png",
     "width": 1920,
-    "height": 1080
+    "height": 1080,
+    "patches": {
+      "bucket-taken": {
+        "file": "act1-village-square.bucket-taken.png",
+        "width": 1920,
+        "height": 1080
+      }
+    },
+    "areas": {
+      "bucket": {
+        "x": 0.927604,
+        "y": 0.806481,
+        "width": 0.072396,
+        "height": 0.156481
+      },
+      "old-notice": {
+        "x": 0.656771,
+        "y": 0.52037,
+        "width": 0.033854,
+        "height": 0.051852
+      },
+      "scenery-village-square-fountain": {
+        "x": 0.351042,
+        "y": 0.423148,
+        "width": 0.2875,
+        "height": 0.471296
+      },
+      "scenery-village-square-cobblestones": {
+        "x": 0.178646,
+        "y": 0.781481,
+        "width": 0.707292,
+        "height": 0.190741
+      },
+      "scenery-village-square-notice-board": {
+        "x": 0.638542,
+        "y": 0.491667,
+        "width": 0.095313,
+        "height": 0.142593
+      },
+      "scenery-village-square-market-stalls": {
+        "x": 0.809375,
+        "y": 0.348148,
+        "width": 0.154688,
+        "height": 0.562037
+      },
+      "villager": {
+        "x": 0.124479,
+        "y": 0.497222,
+        "width": 0.076042,
+        "height": 0.338889
+      },
+      "exit-west": {
+        "x": 0,
+        "y": 0.278704,
+        "width": 0.040625,
+        "height": 0.522222
+      },
+      "exit-north": {
+        "x": 0.416146,
+        "y": 0.25,
+        "width": 0.155729,
+        "height": 0.171296
+      },
+      "exit-east": {
+        "x": 0.961979,
+        "y": 0.358333,
+        "width": 0.033333,
+        "height": 0.47963
+      },
+      "motion-water": {
+        "x": 0.413021,
+        "y": 0.423148,
+        "width": 0.15625,
+        "height": 0.35
+      }
+    }
   },
   "act1-village-well": {
     "file": "act1-village-well.png",
