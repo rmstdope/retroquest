@@ -11,7 +11,7 @@ import { Act4 } from '@/act4/Act4'
 import { Game, Item, type Act } from '@/engine'
 import { allImages, characterImages } from './imageLists'
 import { declaredAreas, exitAreaId, thingAreaId } from './roomAreas'
-import { declaredPatches, type ImagePatch } from './roomPatches'
+import { declaredPatches, unpatchedAreas, type ImagePatch } from './roomPatches'
 import { ACT1_ROOM_PATCHES } from './roomPatches/act1RoomPatches'
 import { ACT2_ROOM_PATCHES } from './roomPatches/act2RoomPatches'
 import { ACT3_ROOM_PATCHES } from './roomPatches/act3RoomPatches'
@@ -68,6 +68,34 @@ describe('room image patches', () => {
     for (const image of characterImages(act))
       expect(image.patches, image.id).toBeUndefined()
   })
+
+  it("leave Elior's cottage unchanged when its ways open, and show the journal with the lantern's light", () => {
+    const ids = declaredPatches('Act1', 'EliorsCottage').map((p) => p.id)
+    expect(ids).not.toContain('exit-south-open')
+    expect(ids).not.toContain('exit-east-open')
+    expect(ids).not.toContain('eliors-journal-appears')
+    expect(ids).toContain('lantern-lit')
+    expect(unpatchedAreas('Act1', 'EliorsCottage')).toEqual([
+      'exit-south',
+      'exit-east',
+      'eliors-journal',
+    ])
+  })
+
+  it.each(ACTS.map((make) => [make().name, make] as const))(
+    'of %s have no patch for an area that needs none, which is an area of its room',
+    (_name, make) => {
+      const act = make()
+      for (const room of Object.keys(act.rooms)) {
+        const areas = declaredAreas(act.name, room).map((a) => a.id)
+        const patched = declaredPatches(act.name, room).map((p) => p.area)
+        for (const area of unpatchedAreas(act.name, room)) {
+          expect(areas, `${act.name} ${room} ${area}`).toContain(area)
+          expect(patched, `${act.name} ${room} ${area}`).not.toContain(area)
+        }
+      }
+    },
+  )
 
   it('leave out the patches of a room that has none', () => {
     const images = allImages(new Act1())
@@ -190,7 +218,9 @@ describe.each(ACTS.map((make) => [make().name, make] as const))(
               id.startsWith('scenery-')
             )
               continue
-            const linked = patchesOfRoom(act, room).some((p) => p.area === id)
+            const linked =
+              patchesOfRoom(act, room).some((p) => p.area === id) ||
+              unpatchedAreas(act.name, room).includes(id)
             // A thing that arrives with the room's other picture is in that picture.
             const withPicture =
               pictureOf(act, game, room) !== pictures.get(room) &&

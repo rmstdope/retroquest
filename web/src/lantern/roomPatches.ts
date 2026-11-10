@@ -7,7 +7,8 @@
  * The declared lists live in `roomPatches/act<N>RoomPatches.ts`; a patch not
  * made yet is not a defect. The base picture shows the room as the game
  * starts: a thing there at the start has a taken or gone patch, a thing or a
- * way that only turns up later an appears or open patch. A thing that changes
+ * way that only turns up later an appears or open patch, unless the change
+ * needs no patch of its own (`unpatchedAreas`). A thing that changes
  * state (a candle lit, a well purified) has a patch of its own;
  * `roomStateChanges.test.ts` holds the golden-path changes against the
  * patches, or the reason one needs none. Sir Cedric, who follows the player
@@ -16,6 +17,7 @@
 import {
   ACT1_ROOM_PATCHES,
   ACT1_VARIANT_PATCHES,
+  ACT1_UNPATCHED_AREAS,
 } from './roomPatches/act1RoomPatches'
 import { ACT2_ROOM_PATCHES } from './roomPatches/act2RoomPatches'
 import { ACT3_ROOM_PATCHES } from './roomPatches/act3RoomPatches'
@@ -67,4 +69,21 @@ export function declaredPatches(
 ): readonly ImagePatch[] {
   if (variant) return VARIANT_PATCHES[actName]?.[roomKey]?.[variant] ?? []
   return ROOM_PATCHES[actName]?.[roomKey] ?? []
+}
+
+/** The areas whose arrival needs no patch of its own, by act name, room key, then area id, with the reason. */
+const UNPATCHED_AREAS: Readonly<
+  Record<string, Readonly<Record<string, Readonly<Record<string, string>>>>>
+> = { Act1: ACT1_UNPATCHED_AREAS }
+
+/**
+ * The area ids of room `roomKey` of act `actName` whose arrival needs
+ * no patch of its own (a way painted open from the start, a thing another
+ * patch shows); none for most rooms.
+ */
+export function unpatchedAreas(
+  actName: string,
+  roomKey: string,
+): readonly string[] {
+  return Object.keys(UNPATCHED_AREAS[actName]?.[roomKey] ?? {})
 }

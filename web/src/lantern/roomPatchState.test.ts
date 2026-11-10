@@ -78,7 +78,7 @@ describe('appliedPatchIds', () => {
     })
   })
 
-  it('shows a lit lantern only once it is lit', () => {
+  it('shows a lit lantern only once it is lit, and the dark corner again once it is taken', () => {
     const act = new Act1()
     const game = new Game([act])
     expect(appliedPatchIds(act, 'EliorsCottage', game.state)).not.toContain(
@@ -86,6 +86,10 @@ describe('appliedPatchIds', () => {
     )
     executeCommands(game, ['talk to voice', 'use lantern'])
     expect(appliedPatchIds(act, 'EliorsCottage', game.state)).toContain(
+      'lantern-lit',
+    )
+    executeCommands(game, ['take lantern'])
+    expect(appliedPatchIds(act, 'EliorsCottage', game.state)).not.toContain(
       'lantern-lit',
     )
   })
