@@ -206,7 +206,52 @@
   "act1-miras-hut": {
     "file": "act1-miras-hut.png",
     "width": 1920,
-    "height": 1080
+    "height": 1080,
+    "patches": {
+      "ancient-amulet-gone": {
+        "file": "act1-miras-hut.ancient-amulet-gone.png",
+        "width": 1920,
+        "height": 1080
+      }
+    },
+    "areas": {
+      "healing-herb": {
+        "x": 0.761979,
+        "y": 0.316667,
+        "width": 0.044792,
+        "height": 0.122222
+      },
+      "ancient-amulet": {
+        "x": 0.642708,
+        "y": 0.331481,
+        "width": 0.045833,
+        "height": 0.155556
+      },
+      "scenery-miras-hut-bundles": {
+        "x": 0.030208,
+        "y": 0.018519,
+        "width": 0.955729,
+        "height": 0.290741
+      },
+      "scenery-miras-hut-bottles": {
+        "x": 0.004167,
+        "y": 0.463889,
+        "width": 0.258854,
+        "height": 0.316667
+      },
+      "mira": {
+        "x": 0.327083,
+        "y": 0.312963,
+        "width": 0.15625,
+        "height": 0.591667
+      },
+      "exit-south": {
+        "x": 0.344792,
+        "y": 0.907407,
+        "width": 0.336458,
+        "height": 0.092593
+      }
+    }
   },
   "act1-old-mill": {
     "file": "act1-old-mill.png",
@@ -288,19 +333,31 @@
         "x": 0.48125,
         "y": 0.418519,
         "width": 0.107813,
-        "height": 0.546296
+        "height": 0.546296,
+        "mark": {
+          "x": 0.535417,
+          "y": 0.678704
+        }
       },
       "scenery-the-dream-child": {
         "x": 0.447396,
         "y": 0.491667,
         "width": 0.034375,
-        "height": 0.251852
+        "height": 0.251852,
+        "mark": {
+          "x": 0.465625,
+          "y": 0.553704
+        }
       },
       "dream-voice": {
         "x": 0.003646,
         "y": 0,
         "width": 0.996354,
-        "height": 1
+        "height": 1,
+        "mark": {
+          "x": 0.236979,
+          "y": 0.275
+        }
       }
     }
   },

@@ -221,8 +221,48 @@
       "gameWas": "A hushed clearing hidden deep within the forest, dim and overgrown. Brambles crowd its edges, and the tall grass stands grey and still beneath branches that shut out the sun. In the center, a mossy stone bears a faint inscription, too deep in shadow to read. An unnatural darkness lingers here, though the sky above the branches is clear."
     },
     "act1-miras-hut": {
-      "text": "The inside of a small hut hung with drying herbs: lavender, sage, and roots in bundles from the rafters. Shelves of bottles line the walls, every one labelled. Mira, the mysterious healer, a middle aged woman, moves among them without looking, the way you move through your own kitchen.",
-      "gameWas": "A small hut hung with drying herbs: lavender, sage, and roots in bundles from the rafters. Shelves of bottles line the walls, every one labelled. Mira moves among them without looking, the way you move through your own kitchen."
+      "text": "The inside of a small hut hung with drying herbs: lavender, sage, and roots in bundles from the rafters. Shelves of bottles line the walls, every one labelled. Mira, the mysterious healer, a middle aged woman dressed in a hooded cloak, her face turned away, moves among them without looking, the way you move through your own kitchen.\nThere is a bookshelf against the farther wall. On one of its shelves stands a small, ancient amulet on a string.",
+      "gameWas": "A small hut hung with drying herbs: lavender, sage, and roots in bundles from the rafters. Shelves of bottles line the walls, every one labelled. Mira moves among them without looking, the way you move through your own kitchen.",
+      "takeAreas": {
+        "28": {
+          "ancient-amulet": {
+            "x": 1234,
+            "y": 358,
+            "width": 88,
+            "height": 168
+          },
+          "exit-south": {
+            "x": 662,
+            "y": 980,
+            "width": 646,
+            "height": 100
+          },
+          "healing-herb": {
+            "x": 1463,
+            "y": 342,
+            "width": 86,
+            "height": 132
+          },
+          "mira": {
+            "x": 628,
+            "y": 338,
+            "width": 300,
+            "height": 639
+          },
+          "scenery-miras-hut-bottles": {
+            "x": 8,
+            "y": 501,
+            "width": 497,
+            "height": 342
+          },
+          "scenery-miras-hut-bundles": {
+            "x": 58,
+            "y": 20,
+            "width": 1835,
+            "height": 314
+          }
+        }
+      }
     },
     "act1-old-mill": {
       "text": "A creaky windmill towers above, its sails turning slowly in the breeze. The scent of flour hangs in the air. Sunlight illuminates sacks of grain and a heavy millstone. The door to the mill is ajar and nside the mill, you notice a strange mechanism of black iron, whirring to itself, that doesn't belong to the mill's original design.",
@@ -259,8 +299,8 @@
             "width": 1913,
             "height": 1080,
             "point": {
-              "x": 420,
-              "y": 236
+              "x": 455,
+              "y": 297
             }
           },
           "scenery-the-dream-child": {
