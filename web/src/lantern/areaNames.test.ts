@@ -156,19 +156,24 @@ describe('layoutNames', () => {
 
   it('moves a crowded name to a free spot with a line back to its mark', () => {
     const spots = layoutNames(
-      [mark('a', 'Notice Board', 400, 300), mark('b', 'Old Notice', 404, 302)],
+      [
+        mark('a', 'Notice Board', 400, 300),
+        mark('b', 'Old Notice', 404, 302),
+        mark('c', 'Third Notice', 402, 301),
+      ],
       measure,
       [],
       bounds,
     )
-    const [a, b] = spots
+    const [a, b, c] = spots
     const overlap =
       a.left < b.left + b.width &&
       b.left < a.left + a.width &&
       a.top < b.top + b.height &&
       b.top < a.top + a.height
     expect(overlap).toBe(false)
-    expect(b.leader).not.toBeNull()
+    expect(c.leader).not.toBeNull()
+    expect(b.leader).toBeNull()
   })
 
   it('keeps a name off a button', () => {
@@ -195,6 +200,75 @@ describe('layoutNames', () => {
       bounds,
     )
     expect(spot.top + spot.height).toBeLessThanOrEqual(540)
+  })
+
+  it('sets a name just below its mark, centred, with no line, when above is taken', () => {
+    const plate = { x: 340, y: 250, w: 120, h: 30 }
+    const [spot] = layoutNames(
+      [mark('a', 'Bucket', 400, 300)],
+      measure,
+      [plate],
+      bounds,
+    )
+    expect(spot.leader).toBeNull()
+    expect(spot.top).toBe(310)
+    expect(spot.left + 24).toBeCloseTo(400, 0)
+  })
+
+  it('never lets a name cover a neighbour’s dot', () => {
+    const spots = layoutNames(
+      [mark('a', 'Bucket', 400, 300), mark('b', 'Well', 400, 322)],
+      measure,
+      [],
+      bounds,
+    )
+    for (const spot of spots)
+      for (const other of [
+        { x: 400, y: 300 },
+        { x: 400, y: 322 },
+      ]) {
+        const covers =
+          spot.left < other.x + 6 &&
+          other.x - 6 < spot.left + spot.width &&
+          spot.top < other.y + 6 &&
+          other.y - 6 < spot.top + spot.height
+        expect(covers).toBe(false)
+      }
+  })
+
+  it('goes further off with a line when above and below are both taken', () => {
+    const plate = { x: 300, y: 250, w: 200, h: 30 }
+    const below = { x: 300, y: 312, w: 200, h: 30 }
+    const [spot] = layoutNames(
+      [mark('a', 'Bucket', 400, 300)],
+      measure,
+      [plate, below],
+      bounds,
+    )
+    expect(spot.leader).not.toBeNull()
+    const coversOwn =
+      spot.left < 406 &&
+      394 < spot.left + spot.width &&
+      spot.top < 306 &&
+      294 < spot.top + spot.height
+    expect(coversOwn).toBe(false)
+  })
+
+  it('goes beside its dot with a line when above is taken and below does not fit', () => {
+    const plate = { x: 340, y: 480, w: 120, h: 30 }
+    const [spot] = layoutNames(
+      [mark('a', 'Bucket', 400, 525)],
+      measure,
+      [plate],
+      bounds,
+    )
+    expect(spot.leader).not.toBeNull()
+    const coversOwn =
+      spot.left < 406 &&
+      394 < spot.left + spot.width &&
+      spot.top < 531 &&
+      519 < spot.top + spot.height
+    expect(coversOwn).toBe(false)
   })
 
   it('keeps a name inside bounds that do not start at the corner', () => {

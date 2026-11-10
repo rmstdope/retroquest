@@ -307,13 +307,30 @@ function inside(rect: Rect, bounds: Rect): Rect {
   }
 }
 
+/** The radius of a mark's dot as drawn (half the 12 px mark); no name may lie over it. */
+const DOT_RADIUS = 6
+/** What covering a thing costs a name that finds no free spot: its own dot worst, another's next, anything else least. */
+const OWN_DOT_COST = 10000
+const OTHER_DOT_COST = 1000
+
+/** The square a mark's dot takes up. */
+function dotOf(entry: PlacedName): Rect {
+  return {
+    x: entry.x - DOT_RADIUS,
+    y: entry.y - DOT_RADIUS,
+    w: DOT_RADIUS * 2,
+    h: DOT_RADIUS * 2,
+  }
+}
+
 /**
  * Give every placed name its spot, in order. A name sits just above its mark,
- * centred (nearer the foot it is above the mark all the same, kept inside the
- * edge); one that would overlap an earlier name or an obstacle (a button, a
- * plate, the words) goes to the nearest free spot around its mark, with a thin
- * line back to the mark. If no spot is free the one with least overlap is
- * kept, also with its line.
+ * centred (kept inside the edge); if that overlaps an earlier name, an obstacle
+ * (a button, a plate, the words) or any mark's dot, it sits just below, centred
+ * and with no line; if that is taken too it goes to the nearest free spot
+ * around its mark, with a thin line back to the mark. If no spot is free the
+ * one with least overlap is kept, also with its line, where covering a dot
+ * counts for more than covering anything else and covering its own dot for most.
  */
 export function layoutNames(
   placed: readonly PlacedName[],
@@ -322,34 +339,49 @@ export function layoutNames(
   bounds: Rect,
 ): NamedSpot[] {
   const taken: Rect[] = [...obstacles]
+  const dots = placed.map(dotOf)
   const spots: NamedSpot[] = []
-  for (const entry of placed) {
+  placed.forEach((entry, index) => {
     const { w, h } = measure(entry.label)
-    const wanted = inside(
+    const cost = (rect: Rect): number =>
+      taken.filter((t) => overlaps(rect, t)).length +
+      dots.reduce(
+        (sum, dot, i) =>
+          overlaps(rect, dot)
+            ? sum + (i === index ? OWN_DOT_COST : OTHER_DOT_COST)
+            : sum,
+        0,
+      )
+    const above = inside(
       { x: entry.x - w / 2, y: entry.y - GAP - h, w, h },
       bounds,
     )
-    let chosen = wanted
+    const below = inside({ x: entry.x - w / 2, y: entry.y + GAP, w, h }, bounds)
+    let chosen = above
     let moved = false
-    if (taken.some((t) => overlaps(wanted, t))) {
-      moved = true
-      let best: { rect: Rect; cost: number } | null = null
-      search: for (let ring = 1; ring <= RINGS; ring++) {
-        const d = ring * STEP
-        for (const [dx, dy] of ringOffsets(d, w)) {
-          const rect = inside(
-            { x: entry.x - w / 2 + dx, y: entry.y - GAP - h + dy, w, h },
-            bounds,
-          )
-          const cost = taken.filter((t) => overlaps(rect, t)).length
-          if (cost === 0) {
-            best = { rect, cost }
-            break search
+    if (cost(above) > 0) {
+      if (cost(below) === 0) {
+        chosen = below
+      } else {
+        moved = true
+        let best: { rect: Rect; cost: number } | null = null
+        search: for (let ring = 1; ring <= RINGS; ring++) {
+          const d = ring * STEP
+          for (const [dx, dy] of ringOffsets(d, w)) {
+            const rect = inside(
+              { x: above.x + dx, y: above.y + dy, w, h },
+              bounds,
+            )
+            const c = cost(rect)
+            if (c === 0) {
+              best = { rect, cost: c }
+              break search
+            }
+            if (!best || c < best.cost) best = { rect, cost: c }
           }
-          if (!best || cost < best.cost) best = { rect, cost }
         }
+        chosen = best?.rect ?? above
       }
-      chosen = best?.rect ?? wanted
     }
     taken.push(chosen)
     spots.push({
@@ -360,7 +392,7 @@ export function layoutNames(
       height: chosen.h,
       leader: moved ? leaderFor(entry, chosen) : null,
     })
-  }
+  })
   return spots
 }
 
