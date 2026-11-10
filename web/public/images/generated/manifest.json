@@ -17,7 +17,109 @@
   "act1-eliors-cottage": {
     "file": "act1-eliors-cottage.png",
     "width": 1920,
-    "height": 1080
+    "height": 1080,
+    "patches": {
+      "bread-taken": {
+        "file": "act1-eliors-cottage.bread-taken.png",
+        "width": 1920,
+        "height": 1080
+      },
+      "faded-photograph-appears": {
+        "file": "act1-eliors-cottage.faded-photograph-appears.png",
+        "width": 1920,
+        "height": 1080
+      },
+      "lantern-lit": {
+        "file": "act1-eliors-cottage.lantern-lit.png",
+        "width": 1920,
+        "height": 1080
+      },
+      "patches-appears": {
+        "file": "act1-eliors-cottage.patches-appears.png",
+        "width": 1920,
+        "height": 1080
+      }
+    },
+    "areas": {
+      "hearth": {
+        "x": 0.2125,
+        "y": 0.392593,
+        "width": 0.123438,
+        "height": 0.407407
+      },
+      "lantern": {
+        "x": 0.825,
+        "y": 0.47037,
+        "width": 0.046875,
+        "height": 0.107407
+      },
+      "bread": {
+        "x": 0.452083,
+        "y": 0.585185,
+        "width": 0.099479,
+        "height": 0.112037
+      },
+      "scenery-eliors-cottage-table": {
+        "x": 0.295833,
+        "y": 0.594444,
+        "width": 0.38125,
+        "height": 0.27963
+      },
+      "scenery-eliors-cottage-shelves": {
+        "x": 0.385417,
+        "y": 0.101852,
+        "width": 0.140104,
+        "height": 0.449074
+      },
+      "scenery-eliors-cottage-books": {
+        "x": 0.414583,
+        "y": 0.165741,
+        "width": 0.092708,
+        "height": 0.115741
+      },
+      "grandmother": {
+        "x": 0.623958,
+        "y": 0.180556,
+        "width": 0.177083,
+        "height": 0.698148
+      },
+      "patches": {
+        "x": 0.167708,
+        "y": 0.796296,
+        "width": 0.085417,
+        "height": 0.203704
+      },
+      "eliors-journal": {
+        "x": 0.860417,
+        "y": 0.521296,
+        "width": 0.040104,
+        "height": 0.065741
+      },
+      "exit-south": {
+        "x": 0.266667,
+        "y": 0.883333,
+        "width": 0.458854,
+        "height": 0.116667
+      },
+      "exit-east": {
+        "x": 0.915104,
+        "y": 0.184259,
+        "width": 0.082292,
+        "height": 0.609259
+      },
+      "faded-photograph": {
+        "x": 0.242708,
+        "y": 0.065741,
+        "width": 0.094792,
+        "height": 0.188889
+      },
+      "motion-fire": {
+        "x": 0.244792,
+        "y": 0.572222,
+        "width": 0.067188,
+        "height": 0.198148
+      }
+    }
   },
   "act1-forest-path": {
     "file": "act1-forest-path.png",
@@ -107,12 +209,105 @@
   "act1-the-dream": {
     "file": "act1-the-dream.png",
     "width": 1920,
-    "height": 1080
+    "height": 1080,
+    "areas": {
+      "scenery-the-dream-shadows": {
+        "x": 0.457813,
+        "y": 0.259259,
+        "width": 0.08125,
+        "height": 0.163889
+      },
+      "scenery-the-dream-man": {
+        "x": 0.48125,
+        "y": 0.418519,
+        "width": 0.107813,
+        "height": 0.546296
+      },
+      "scenery-the-dream-child": {
+        "x": 0.447396,
+        "y": 0.491667,
+        "width": 0.034375,
+        "height": 0.251852
+      },
+      "dream-voice": {
+        "x": 0.003646,
+        "y": 0,
+        "width": 0.996354,
+        "height": 1
+      }
+    }
   },
   "act1-vegetable-field": {
     "file": "act1-vegetable-field.png",
     "width": 1920,
-    "height": 1080
+    "height": 1080,
+    "patches": {
+      "dull-knife-taken": {
+        "file": "act1-vegetable-field.dull-knife-taken.png",
+        "width": 1920,
+        "height": 1080
+      },
+      "rusty-hoe-taken": {
+        "file": "act1-vegetable-field.rusty-hoe-taken.png",
+        "width": 1920,
+        "height": 1080
+      },
+      "withered-carrot-fresh": {
+        "file": "act1-vegetable-field.withered-carrot-fresh.png",
+        "width": 1920,
+        "height": 1080
+      }
+    },
+    "areas": {
+      "withered-carrot": {
+        "x": 0.452604,
+        "y": 0.731481,
+        "width": 0.115104,
+        "height": 0.092593
+      },
+      "rusty-hoe": {
+        "x": 0.023438,
+        "y": 0.199074,
+        "width": 0.283333,
+        "height": 0.625
+      },
+      "dull-knife": {
+        "x": 0.697396,
+        "y": 0.747222,
+        "width": 0.261458,
+        "height": 0.180556
+      },
+      "scenery-vegetable-field-crops": {
+        "x": 0,
+        "y": 0.277778,
+        "width": 0.995833,
+        "height": 0.483333
+      },
+      "scenery-vegetable-field-earth": {
+        "x": 0.227604,
+        "y": 0.784259,
+        "width": 0.584375,
+        "height": 0.158333
+      },
+      "exit-north": {
+        "x": 0.45625,
+        "y": 0.4,
+        "width": 0.125521,
+        "height": 0.193519
+      },
+      "exit-east": {
+        "x": 0.916146,
+        "y": 0.22037,
+        "width": 0.080729,
+        "height": 0.583333
+      },
+      "exit-south": {
+        "x": 0.263021,
+        "y": 0.912037,
+        "width": 0.467188,
+        "height": 0.087037
+      }
+    }
   },
   "act1-village-chapel": {
     "file": "act1-village-chapel.png",

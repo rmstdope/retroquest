@@ -18,6 +18,114 @@
       "text": "A hot, smoky forge. Coals glow in the hearth and the anvil rings. Hinges, ploughshares and horseshoes hang from the walls, waiting to be mended or fetched, and the blacksmith is working on a sword in the forge with a hammer.",
       "gameWas": "A hot, smoky forge. Coals glow in the hearth and the anvil rings. Hinges, ploughshares and horseshoes hang from the walls, waiting to be mended or fetched, and Borin wipes his brow without putting down the hammer."
     },
+    "act1-eliors-cottage": {
+      "text": "The inside of a modest cottage with a cozy hearth and a book shelf with books.\nThere are no windows.\nThe room is dark and the corner by your bed is pitch black.  A sturdy wooden table sits in the center, with a small loaf cooling on it, and a gentle fire crackles in the hearth. Grandmother stands by it, humming, and keeps an eye on the bread.",
+      "gameWas": "A modest cottage with a straw roof and a cozy hearth. The scent of fresh bread and old books fills the air. The curtains are still drawn on a grey morning, and the corner by your bed is too dark to see into. A sturdy wooden table sits in the center, with a small loaf cooling on it, and a gentle fire crackles in the hearth. Grandmother stands by it, humming, and keeps an eye on the bread.",
+      "patches": {
+        "faded-photograph-appears": {
+          "text": "Add a small framed photograph depicting two adults standing. The photograph  should be painted like warm late-day light, earthy greens and straw golds, homely and lived-in, in a fantasy setting",
+          "gameWas": "Add the faded photograph to the picture."
+        },
+        "lantern-lit": {
+          "text": "In this black area there is a second room where you can see a small table with a lantern and a book.",
+          "gameWas": "Light the lantern on the table: a small warm flame in the glass."
+        },
+        "patches-appears": {
+          "text": "Add a black cat to the picture.",
+          "gameWas": "Add Patches to the picture."
+        }
+      },
+      "takeAreas": {
+        "7": {
+          "hearth": {
+            "x": 427,
+            "y": 512,
+            "width": 301,
+            "height": 355
+          }
+        },
+        "35": {
+          "bread": {
+            "x": 868,
+            "y": 632,
+            "width": 191,
+            "height": 121
+          },
+          "eliors-journal": {
+            "x": 1652,
+            "y": 563,
+            "width": 77,
+            "height": 71
+          },
+          "exit-east": {
+            "x": 1757,
+            "y": 199,
+            "width": 158,
+            "height": 658
+          },
+          "exit-south": {
+            "x": 512,
+            "y": 954,
+            "width": 881,
+            "height": 126
+          },
+          "faded-photograph": {
+            "x": 466,
+            "y": 71,
+            "width": 182,
+            "height": 204
+          },
+          "grandmother": {
+            "x": 1198,
+            "y": 195,
+            "width": 340,
+            "height": 754
+          },
+          "hearth": {
+            "x": 408,
+            "y": 424,
+            "width": 237,
+            "height": 440
+          },
+          "lantern": {
+            "x": 1584,
+            "y": 508,
+            "width": 90,
+            "height": 116
+          },
+          "motion-fire": {
+            "x": 470,
+            "y": 618,
+            "width": 129,
+            "height": 214
+          },
+          "patches": {
+            "x": 322,
+            "y": 860,
+            "width": 164,
+            "height": 220
+          },
+          "scenery-eliors-cottage-books": {
+            "x": 796,
+            "y": 179,
+            "width": 178,
+            "height": 125
+          },
+          "scenery-eliors-cottage-shelves": {
+            "x": 740,
+            "y": 110,
+            "width": 269,
+            "height": 485
+          },
+          "scenery-eliors-cottage-table": {
+            "x": 568,
+            "y": 642,
+            "width": 732,
+            "height": 302
+          }
+        }
+      }
+    },
     "act1-forest-path": {
       "text": "A winding path snakes into the heart of the woods, dappled sunlight flickering through the canopy above. A section of the path is blocked by thick, thorny vines. The air is alive with the scent of pine and wildflowers, and the ground is soft with moss and fallen leaves. A bird flit between branches, and the occasional snap of a twig hints at unseen creatures nearby.",
       "gameWas": "A winding path snakes into the heart of the woods, dappled sunlight flickering through the canopy above. Beside the path, thick, thorny vines block a small alcove. The air is alive with the scent of pine and wildflowers, and the ground is soft with moss and fallen leaves. Birds flit between branches, and the occasional snap of a twig hints at unseen creatures nearby."
@@ -60,11 +168,91 @@
     },
     "act1-the-dream": {
       "text": "It is dark, and it is raining hard. In the clouds, you can see the outlines of a cloaked man. You hear it beating on shutters, though you cannot see any. Thunder breaks so close that the dark shakes with it. Shadows drift past like smoke. A man’s hand reaches out of the dark, lifts a child and holds it against his shoulder, and then both of them are gone. Somewhere a slow tune climbs three notes and settles home again. A tall figure stands among the shadows. It has no face you can find. It is too far away to reach, and too close to be only a dream. It is whispering, at the very edge of hearing, and what it whispers is your name.",
-      "gameWas": "It is dark, and it is raining hard. You hear it beating on shutters, though you cannot see any. Thunder breaks so close that the dark shakes with it. Shadows drift past like smoke. A man’s hand reaches out of the dark, lifts a child and holds it against his shoulder, and then both of them are gone. Somewhere a slow tune climbs three notes and settles home again. A tall figure stands among the shadows. It has no face you can find. It is too far away to reach, and too close to be only a dream. It is whispering, at the very edge of hearing, and what it whispers is your name."
+      "gameWas": "It is dark, and it is raining hard. You hear it beating on shutters, though you cannot see any. Thunder breaks so close that the dark shakes with it. Shadows drift past like smoke. A man’s hand reaches out of the dark, lifts a child and holds it against his shoulder, and then both of them are gone. Somewhere a slow tune climbs three notes and settles home again. A tall figure stands among the shadows. It has no face you can find. It is too far away to reach, and too close to be only a dream. It is whispering, at the very edge of hearing, and what it whispers is your name.",
+      "takeAreas": {
+        "13": {
+          "dream-voice": {
+            "x": 7,
+            "y": 0,
+            "width": 1913,
+            "height": 1080
+          },
+          "scenery-the-dream-child": {
+            "x": 859,
+            "y": 531,
+            "width": 66,
+            "height": 272
+          },
+          "scenery-the-dream-man": {
+            "x": 924,
+            "y": 452,
+            "width": 207,
+            "height": 590
+          },
+          "scenery-the-dream-shadows": {
+            "x": 879,
+            "y": 280,
+            "width": 156,
+            "height": 177
+          }
+        }
+      }
     },
     "act1-vegetable-field": {
-      "text": "Rows of withered wheat plants stretch beneath a brooding gray sky. The earth is cracked and dry. A  couple of rotten carrots and a rusty hoe Is laying on he ground. A faint breeze rustles the brittle leaves, carrying the scent of soil and distant rain. These rows were green a month ago.",
-      "gameWas": "Rows of withered crops stretch beneath a brooding gray sky. The earth is cracked and dry, with only a few stubborn carrots and a rusty hoe hinting at better days. A faint breeze rustles the brittle leaves, carrying the scent of soil and distant rain. These rows were green a month ago."
+      "text": "Rows of withered, rotten plants, nearly lying down, beneath a brooding gray sky. The earth is cracked and dry. A  single small, withered, black carrot is laying on he ground in the middle of the image.  A hoe is leaned against one of the plantas on the left hand side of the image. a rusty knife is on the ground on the right hand side of the image.",
+      "gameWas": "Rows of withered crops stretch beneath a brooding gray sky. The earth is cracked and dry, with only a few stubborn carrots and a rusty hoe hinting at better days. A faint breeze rustles the brittle leaves, carrying the scent of soil and distant rain. These rows were green a month ago.",
+      "takeAreas": {
+        "44": {
+          "dull-knife": {
+            "x": 1339,
+            "y": 807,
+            "width": 502,
+            "height": 195
+          },
+          "exit-east": {
+            "x": 1759,
+            "y": 238,
+            "width": 155,
+            "height": 630
+          },
+          "exit-north": {
+            "x": 876,
+            "y": 432,
+            "width": 241,
+            "height": 209
+          },
+          "exit-south": {
+            "x": 505,
+            "y": 985,
+            "width": 897,
+            "height": 94
+          },
+          "rusty-hoe": {
+            "x": 45,
+            "y": 215,
+            "width": 544,
+            "height": 675
+          },
+          "scenery-vegetable-field-crops": {
+            "x": 0,
+            "y": 300,
+            "width": 1912,
+            "height": 522
+          },
+          "scenery-vegetable-field-earth": {
+            "x": 437,
+            "y": 847,
+            "width": 1122,
+            "height": 171
+          },
+          "withered-carrot": {
+            "x": 869,
+            "y": 790,
+            "width": 221,
+            "height": 100
+          }
+        }
+      }
     },
     "act1-village-square": {
       "text": "The heart of Willowbrook, a medieval village: cobblestones around an old stone fountain, and a weathered notice board covered in faded announcements. The text is unreadable. Half the market stalls stand empty. The people at the others keep their voices down, and stop talking when you pass. All the people are dressed in medieval clothes. No one is wearing a hat.",
