@@ -105,6 +105,36 @@ describe('AreaNames', () => {
     expect(style).toContain('top: 405px')
   })
 
+  describe('with a mark point chosen in the studio', () => {
+    const marked = {
+      ...boxes,
+      bucket: { ...boxes.bucket, mark: { x: 0.85, y: 0.72 } },
+    }
+
+    it('puts the mark on the point, the rest at their middles', async () => {
+      const w = mountNames({ showing: true, boxes: marked })
+      await nextTick()
+      const style = w.get('[data-area-mark="bucket"]').attributes('style')
+      expect(style).toContain('left: 816px')
+      expect(style).toContain('top: 388.8px')
+      expect(
+        w.get('[data-area-mark="villager"]').attributes('style'),
+      ).toContain('left: 144px')
+    })
+
+    it('shows a focused thing at the same spot as when all are shown', async () => {
+      const all = mountNames({ showing: true, boxes: marked })
+      const one = mountNames({ focused: 'bucket', boxes: marked })
+      await nextTick()
+      expect(one.get('[data-area-mark="bucket"]').attributes('style')).toBe(
+        all.get('[data-area-mark="bucket"]').attributes('style'),
+      )
+      expect(one.get('[data-area-name="bucket"]').attributes('style')).toBe(
+        all.get('[data-area-name="bucket"]').attributes('style'),
+      )
+    })
+  })
+
   it('names the one thing under the pointer, and nothing over nothing', async () => {
     const w = mountNames({ pointer: { x: 140, y: 250 } })
     await nextTick()

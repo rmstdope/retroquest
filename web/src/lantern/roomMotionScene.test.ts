@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest'
-import { boxRect, createMotionScene } from './roomMotionScene'
+import { boxRect, createMotionScene, pointPosition } from './roomMotionScene'
 import type { AreaBox } from './roomMotion'
 
 const PICTURE = { width: 1920, height: 1080 }
@@ -26,6 +26,26 @@ function fakeContext(
     set: () => true,
   }) as unknown as CanvasRenderingContext2D
 }
+
+describe('pointPosition', () => {
+  it('maps a picture fraction onto a canvas that shows the whole picture', () => {
+    expect(
+      pointPosition({ x: 0.5, y: 0.25 }, { width: 960, height: 540 }, PICTURE),
+    ).toEqual({ x: 480, y: 135 })
+  })
+
+  it('maps through the trim, and may land outside the canvas', () => {
+    const at = pointPosition(
+      { x: 0.9, y: 0.5 },
+      { width: 300, height: 400 },
+      PICTURE,
+    )
+    // Drawn 711.1 wide, 205.6 cut off at the left.
+    expect(at.x).toBeCloseTo(-205.5556 + 0.9 * 711.1111, 3)
+    expect(at.x).toBeGreaterThan(300)
+    expect(at.y).toBe(200)
+  })
+})
 
 describe('boxRect', () => {
   it('is the box in canvas pixels when the picture fits the canvas', () => {
