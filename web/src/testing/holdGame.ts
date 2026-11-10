@@ -3,7 +3,7 @@
  * whose pick-up changes the bag, starts a second quest and changes the
  * hall's sound state and picture.
  */
-import { Act, Item, Quest, Room, type GameState } from '@/engine'
+import { Act, Character, Item, Quest, Room, type GameState } from '@/engine'
 import type { Pinia } from 'pinia'
 import { useBridge, type ActClass } from '@/composables/useBridge'
 import { useGameStore } from '@/stores/useGameStore'
@@ -90,6 +90,18 @@ class Hall extends Room {
   }
 }
 
+/** The one who tends the garden, who also answers to a shorter name. */
+class OldGardener extends Character {
+  constructor() {
+    super({ name: 'Old Gardener', description: 'Earth to the elbows.' })
+  }
+
+  /** Answers to the trade as well as to the whole name. */
+  override answersTo(name: string): boolean {
+    return super.answersTo(name) || name.toLowerCase() === 'gardener'
+  }
+}
+
 /** Two rooms, a gem and two quests. */
 class HoldAct extends Act {
   constructor() {
@@ -102,10 +114,14 @@ class HoldAct extends Act {
           exits: { north: 'Garden' },
           items: [new ChimingGem()],
         }),
-        Garden: new Room({ name: 'Garden', description: 'A green garden.' }),
+        Garden: new Room({
+          name: 'Garden',
+          description: 'A green garden.',
+          characters: [new OldGardener()],
+        }),
       },
       quests: [new FirstQuest(), new GemQuest()],
-      classes: { FirstQuest, GemQuest, Hall, ChimingGem },
+      classes: { FirstQuest, GemQuest, Hall, ChimingGem, OldGardener },
       musicFile: '',
       musicInfo: '',
     })

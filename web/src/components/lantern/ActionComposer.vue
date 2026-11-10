@@ -56,12 +56,12 @@ const root = ref<HTMLElement | null>(null)
 const inBox = ref(false)
 
 const context = computed<ActionContext>(() => ({
-  roomItems: game.items,
-  characters: game.characters,
+  roomItems: game.commandPlace.items,
+  characters: game.commandPlace.characters,
   inventory: game.bagEntries,
   spells: game.spellEntries,
-  exits: game.exits,
-  wares: game.roomWares,
+  exits: game.commandPlace.exits,
+  wares: game.commandPlace.roomWares,
 }))
 
 /** The verbs on the stage's one row; the other action verbs wait behind More…. */
@@ -91,7 +91,7 @@ const moreVerbs = computed(() =>
 const lastIsMore = computed(() =>
   moreVerbs.value.some((v) => v.id === lastVerbId.value),
 )
-const exits = computed(() => Object.entries(game.exits))
+const exits = computed(() => Object.entries(game.commandPlace.exits))
 
 /** Drop chosen targets that are no longer available (e.g. after another command). */
 watch(context, () => {
@@ -107,9 +107,13 @@ watch(context, () => {
   })
 })
 
-/** Moving to another room puts a half-built command away (user decision). */
+/**
+ * Moving to another room puts a half-built command away (user decision), when
+ * the move is made: the panels catching up later must not fold a command
+ * already being built for the new room.
+ */
 watch(
-  () => game.roomName,
+  () => game.commandPlace.roomName,
   () => clear(),
 )
 
