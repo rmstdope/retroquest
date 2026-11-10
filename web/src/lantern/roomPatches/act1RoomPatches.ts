@@ -17,18 +17,6 @@ export const ACT1_ROOM_PATCHES: Record<string, ImagePatch[]> = {
       area: 'bread',
     },
     {
-      id: 'exit-south-open',
-      title: 'Way south open',
-      text: 'Show the way south open and passable.',
-      area: 'exit-south',
-    },
-    {
-      id: 'exit-east-open',
-      title: 'Way east open',
-      text: 'Show the way east open and passable.',
-      area: 'exit-east',
-    },
-    {
       id: 'lantern-lit',
       title: 'Lantern lit',
       text: 'Light the lantern on the table: a small warm flame in the glass.',
@@ -39,12 +27,6 @@ export const ACT1_ROOM_PATCHES: Record<string, ImagePatch[]> = {
       title: 'Patches appears',
       text: 'Add Patches to the picture.',
       area: 'patches',
-    },
-    {
-      id: 'eliors-journal-appears',
-      title: "Elior's Journal appears",
-      text: "Add Elior's journal to the picture.",
-      area: 'eliors-journal',
     },
     {
       id: 'faded-photograph-appears',
@@ -235,6 +217,20 @@ export const ACT1_ROOM_PATCHES: Record<string, ImagePatch[]> = {
       area: 'well',
     },
   ],
+}
+
+/**
+ * The areas of Act 1 whose coming or going needs no patch of its own, by room
+ * key then area id, each with the reason.
+ */
+export const ACT1_UNPATCHED_AREAS: Record<string, Record<string, string>> = {
+  EliorsCottage: {
+    'exit-south':
+      "the way is painted from the start; only Grandmother's leave opens it",
+    'exit-east':
+      "the way is painted from the start; only Grandmother's leave opens it",
+    'eliors-journal': 'the lantern-lit patch shows the journal with the light',
+  },
 }
 
 /**
