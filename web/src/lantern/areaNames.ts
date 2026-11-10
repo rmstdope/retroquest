@@ -38,6 +38,11 @@ const DRIFT_SHIFT_Y = -0.003
 /** How far a mark's middle is kept in from the edge of the visible part: half the 12 px mark and a little of its glow. */
 const MARK_RADIUS = 8
 
+/** How far outside a panel a stepped mark's middle stands, beyond the mark's own radius. */
+const PANEL_GAP = 4
+/** How close to a panel a mark's middle may stand: a stepped mark stands exactly this far from it. */
+const REACH = MARK_RADIUS + PANEL_GAP
+
 /** The gap between a mark and its name. */
 const GAP = 10
 /** The gap kept between names, and between a name and a button. */
@@ -134,6 +139,84 @@ export function markInside(
     })
   }
   return marked
+}
+
+/** Whether (`x`, `y`) lies under `panel`, grown by `REACH` so a mark's glow never touches it. */
+function underPanel(x: number, y: number, panel: Rect): boolean {
+  return (
+    x > panel.x - REACH &&
+    x < panel.x + panel.w + REACH &&
+    y > panel.y - REACH &&
+    y < panel.y + panel.h + REACH
+  )
+}
+
+/**
+ * The marks of `marks` moved clear of the `panels` (the room plate and the
+ * buttons in the picture's corner, in the layer's pixels). A mark under a
+ * panel steps to the nearest spot just outside it, straight below, above or
+ * to either side, that is on the `visible` part (a spot that lands under another
+ * panel goes on past it); a
+ * panel that spans the width leaves only below or above. A mark under no panel
+ * stays; one with no such spot is left where it is. `rect`, what can be
+ * pressed, stays whole, so a thing wholly under a panel is still marked.
+ */
+export function clearOfPanels(
+  marks: readonly PlacedName[],
+  panels: readonly Rect[],
+  visible: Rect,
+): PlacedName[] {
+  const left = visible.x + MARK_RADIUS
+  const right = visible.x + visible.w - MARK_RADIUS
+  const top = visible.y + MARK_RADIUS
+  const bottom = visible.y + visible.h - MARK_RADIUS
+  const reach = REACH
+  /** The spot just outside `panel` in the direction (`dx`, `dy`), moved on past any panel it lands under. */
+  const outside = (
+    x: number,
+    y: number,
+    panel: Rect,
+    dx: number,
+    dy: number,
+  ): [number, number] => {
+    let edge = panel
+    let spot: [number, number] = [x, y]
+    for (let hop = 0; hop <= panels.length; hop++) {
+      spot = [
+        dx === 0 ? x : dx > 0 ? edge.x + edge.w + reach : edge.x - reach,
+        dy === 0 ? y : dy > 0 ? edge.y + edge.h + reach : edge.y - reach,
+      ]
+      const next = panels.find((p) => underPanel(spot[0], spot[1], p))
+      if (!next) break
+      edge = next
+    }
+    return spot
+  }
+  return marks.map((entry) => {
+    const { x, y } = entry
+    const under = panels.find((panel) => underPanel(x, y, panel))
+    if (!under) return entry
+    let best: [number, number] | null = null
+    for (const [dx, dy] of [
+      [0, 1],
+      [1, 0],
+      [-1, 0],
+      [0, -1],
+    ]) {
+      const [cx, cy] = outside(x, y, under, dx, dy)
+      if (cx < left - reach || cx > right + reach) continue
+      if (cy < top - reach || cy > bottom + reach) continue
+      const kx = clamp(cx, left, right)
+      const ky = clamp(cy, top, bottom)
+      if (panels.some((panel) => underPanel(kx, ky, panel))) continue
+      if (
+        !best ||
+        Math.hypot(kx - x, ky - y) < Math.hypot(best[0] - x, best[1] - y)
+      )
+        best = [kx, ky]
+    }
+    return best ? { ...entry, x: best[0], y: best[1] } : entry
+  })
 }
 
 /** The placed thing under (`x`, `y`): the smallest when several overlap, null over nothing. */

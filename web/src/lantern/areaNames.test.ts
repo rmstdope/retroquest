@@ -3,7 +3,9 @@ import { describe, expect, it } from 'vitest'
 import { readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import type { AreaThing } from './areaThings'
+import type { Rect } from './roomMotionScene'
 import {
+  clearOfPanels,
   closedWayThings,
   layoutNames,
   markInside,
@@ -444,5 +446,85 @@ describe('pressAt', () => {
       direction: 'north',
       open: true,
     })
+  })
+})
+
+describe('clearOfPanels', () => {
+  const visible = { x: 0, y: 0, w: 390, h: 700 }
+  const mark = (x: number, y: number, rect?: Rect) => ({
+    areaId: 'a',
+    name: 'storm',
+    label: 'Storm',
+    kind: 'scenery' as const,
+    x,
+    y,
+    rect: rect ?? { x: x - 20, y: y - 20, w: 40, h: 40 },
+  })
+  /** A phone's plate across the width. */
+  const plate = { x: 0, y: 0, w: 390, h: 100 }
+
+  it('leaves a mark no panel covers where it is', () => {
+    const [m] = clearOfPanels([mark(200, 300)], [plate], visible)
+    expect([m.x, m.y]).toEqual([200, 300])
+  })
+
+  it('steps a mark under a full-width plate straight below it', () => {
+    const [m] = clearOfPanels([mark(120, 40)], [plate], visible)
+    expect(m.x).toBe(120)
+    expect(m.y).toBeGreaterThanOrEqual(100 + 8)
+    expect(m.y).toBeLessThan(100 + 20)
+  })
+
+  it('goes to the nearest edge of a plate in the corner: below or to the right', () => {
+    const corner = { x: 16, y: 16, w: 300, h: 80 }
+    const wide = { x: 0, y: 0, w: 1000, h: 600 }
+    const [low] = clearOfPanels([mark(150, 80)], [corner], wide)
+    expect(low.y).toBeGreaterThanOrEqual(96 + 8)
+    expect(low.x).toBe(150)
+    const [right] = clearOfPanels([mark(300, 50)], [corner], wide)
+    expect(right.x).toBeGreaterThanOrEqual(316 + 8)
+    expect(right.y).toBe(50)
+  })
+
+  it('moves a mark under a corner button just outside it', () => {
+    const button = { x: 900, y: 16, w: 40, h: 40 }
+    const wide = { x: 0, y: 0, w: 960, h: 600 }
+    const [m] = clearOfPanels([mark(920, 30)], [button], wide)
+    const inside = m.x > 900 && m.x < 940 && m.y > 16 && m.y < 56
+    expect(inside).toBe(false)
+  })
+
+  it('keeps the whole pressable rectangle of a thing wholly under the plate', () => {
+    const rect = { x: 100, y: 10, w: 50, h: 50 }
+    const [m] = clearOfPanels([mark(125, 35, rect)], [plate], visible)
+    expect(m.rect).toEqual(rect)
+    expect(m.y).toBeGreaterThan(100)
+  })
+
+  it('stays clear of a second panel the first step would land in', () => {
+    const under = { x: 0, y: 100, w: 390, h: 60 }
+    const [m] = clearOfPanels([mark(120, 40)], [plate, under], visible)
+    expect(m.y).toBeGreaterThanOrEqual(160 + 8)
+  })
+
+  it('goes to the side when the spot below lies past the foot of what can be seen', () => {
+    const corner = { x: 16, y: 16, w: 300, h: 80 }
+    const short = { x: 0, y: 0, w: 1000, h: 100 }
+    const [m] = clearOfPanels([mark(150, 80)], [corner], short)
+    expect(m.y).toBe(80)
+    expect(m.x).toBeGreaterThanOrEqual(316 + 8)
+  })
+
+  it('prefers below to the right when both are as near', () => {
+    const square = { x: 100, y: 100, w: 100, h: 100 }
+    const wide = { x: 0, y: 0, w: 1000, h: 600 }
+    const [m] = clearOfPanels([mark(150, 150)], [square], wide)
+    expect(m.x).toBe(150)
+    expect(m.y).toBeGreaterThan(200)
+  })
+
+  it('steps a mark that stands closer to the panel than a stepped one would', () => {
+    const [m] = clearOfPanels([mark(120, 108)], [plate], visible)
+    expect(m.y).toBeGreaterThanOrEqual(112)
   })
 })

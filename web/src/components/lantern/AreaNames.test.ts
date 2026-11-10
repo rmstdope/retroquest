@@ -68,6 +68,7 @@ afterEach(() => {
   wrappers = []
   document.body.innerHTML = ''
   vi.restoreAllMocks()
+  vi.unstubAllGlobals()
 })
 
 describe('AreaNames', () => {
@@ -347,6 +348,140 @@ describe('AreaNames', () => {
     )
   })
 
+  describe('under the room plate', () => {
+    /** A plate over (0..300, 200..340) of the stage, the villager's mark (144, 216) at its top. */
+    function plateOver(selector: string, top = 200, height = 140): HTMLElement {
+      const el = document.createElement('div')
+      el.className = selector
+      document.querySelector('.lq-stage')!.append(el)
+      setRect(el, top, height)
+      return el
+    }
+    function setRect(el: HTMLElement, top: number, height: number): void {
+      vi.spyOn(el, 'getBoundingClientRect').mockReturnValue({
+        left: 0,
+        top,
+        width: 300,
+        height,
+        right: 300,
+        bottom: top + height,
+        x: 0,
+        y: top,
+        toJSON: () => ({}),
+      })
+    }
+    const top = (w: VueWrapper, selector: string): number =>
+      parseFloat(
+        /top: ([\d.]+)px/.exec(w.get(selector).attributes('style') ?? '')![1],
+      )
+
+    it('steps the mark just below the plate, its name beside it, the line ending at the mark', async () => {
+      const w = mountNames({ showing: true })
+      plateOver('lq-phone-plate')
+      await w.setProps({ relayout: 'plate' })
+      await new Promise((resolve) => setTimeout(resolve, 400))
+      await nextTick()
+      expect(top(w, '[data-area-mark="villager"]')).toBeGreaterThanOrEqual(
+        340 + 8,
+      )
+      expect(
+        w.get('[data-area-name="villager"]').attributes('style'),
+      ).toContain('left:')
+    })
+
+    it('draws the line of a moved name to the moved mark, and a press on that mark is a press on its thing', async () => {
+      const w = mountNames({ showing: true })
+      plateOver('lq-phone-plate')
+      await w.setProps({ relayout: 'plate' })
+      await new Promise((resolve) => setTimeout(resolve, 400))
+      await nextTick()
+      const markY = top(w, '[data-area-mark="villager"]')
+      const lines = w.findAll('.lq-area-lines line')
+      for (const line of lines) {
+        const y1 = parseFloat(line.attributes('y1')!)
+        expect(y1).toBeGreaterThanOrEqual(340)
+      }
+      await w
+        .get('[data-area-mark="villager"]')
+        .trigger('click', { clientX: 1, clientY: markY })
+      expect(w.emitted('press')?.[0][0]).toEqual(things[0])
+    })
+
+    it('steps a mark under a corner button clear of it too', async () => {
+      const w = mountNames({ showing: true })
+      const stage = document.querySelector('.lq-stage')!
+      const group = document.createElement('div')
+      group.className = 'lq-stage-buttons'
+      const button = document.createElement('button')
+      group.append(button)
+      stage.append(group)
+      setRect(button, 200, 140)
+      await w.setProps({ relayout: 'button' })
+      await new Promise((resolve) => setTimeout(resolve, 400))
+      await nextTick()
+      expect(top(w, '[data-area-mark="villager"]')).toBeGreaterThanOrEqual(
+        340 + 8,
+      )
+    })
+
+    it('puts the mark back when the plate no longer covers it, and moves it when the plate grows', async () => {
+      const w = mountNames({ showing: true })
+      const plate = plateOver('lq-stage-plate', 200, 40)
+      await w.setProps({ relayout: 'a' })
+      await new Promise((resolve) => setTimeout(resolve, 400))
+      await nextTick()
+      expect(top(w, '[data-area-mark="villager"]')).toBeGreaterThanOrEqual(
+        240 + 8,
+      )
+      setRect(plate, 0, 20)
+      await w.setProps({ relayout: 'b' })
+      await new Promise((resolve) => setTimeout(resolve, 400))
+      await nextTick()
+      expect(top(w, '[data-area-mark="villager"]')).toBe(270)
+    })
+
+    it('watches the plate itself, so a plate that grows moves the marks at once', async () => {
+      const observed: Element[] = []
+      let notify: () => void = () => {}
+      vi.stubGlobal(
+        'ResizeObserver',
+        class {
+          constructor(callback: () => void) {
+            notify = callback
+          }
+          observe(el: Element): void {
+            observed.push(el)
+          }
+          unobserve(): void {}
+          disconnect(): void {}
+        },
+      )
+      const w = mountNames({ showing: true })
+      const plate = plateOver('lq-phone-plate', 0, 20)
+      await w.setProps({ relayout: 'plate' })
+      await nextTick()
+      expect(observed).toContain(plate)
+      expect(top(w, '[data-area-mark="villager"]')).toBe(270)
+      setRect(plate, 200, 140)
+      notify()
+      await nextTick()
+      expect(top(w, '[data-area-mark="villager"]')).toBeGreaterThanOrEqual(
+        340 + 8,
+      )
+    })
+
+    it('marks the thing with keyboard focus clear of the plate as well', async () => {
+      const w = mountNames({ showing: false, focused: 'villager' })
+      plateOver('lq-phone-plate')
+      await w.setProps({ relayout: 'plate' })
+      await new Promise((resolve) => setTimeout(resolve, 400))
+      await nextTick()
+      expect(top(w, '[data-area-mark="villager"]')).toBeGreaterThanOrEqual(
+        340 + 8,
+      )
+    })
+  })
+
   it('reads the pointer against the drifted picture, not the bare stage', async () => {
     const w = mountNames({ pointer: null })
     // At the drift's peak the layer is 3% larger and shifted.
@@ -409,8 +544,8 @@ describe('AreaNames', () => {
       .trigger('click', { clientX: 7, clientY: 8 })
     await w.get('[data-area-name="exit-north"]').trigger('click')
     expect(w.emitted('press')).toEqual([
-      [things[1], { x: 5, y: 6 }],
-      [things[0], { x: 7, y: 8 }],
+      [things[1], { x: 5, y: 6 }, true],
+      [things[0], { x: 7, y: 8 }, true],
     ])
   })
 
