@@ -507,10 +507,24 @@ describe('clearOfPanels', () => {
     expect(m.y).toBeGreaterThanOrEqual(160 + 8)
   })
 
-  it('keeps the mark in view when the nearest spot is beyond the visible part', () => {
-    const short = { x: 0, y: 0, w: 390, h: 130 }
-    const [m] = clearOfPanels([mark(120, 90)], [plate], short)
-    expect(m.y).toBeLessThanOrEqual(130 - 8)
-    expect(m.y).toBeGreaterThanOrEqual(100)
+  it('goes to the side when the spot below lies past the foot of what can be seen', () => {
+    const corner = { x: 16, y: 16, w: 300, h: 80 }
+    const short = { x: 0, y: 0, w: 1000, h: 100 }
+    const [m] = clearOfPanels([mark(150, 80)], [corner], short)
+    expect(m.y).toBe(80)
+    expect(m.x).toBeGreaterThanOrEqual(316 + 8)
+  })
+
+  it('prefers below to the right when both are as near', () => {
+    const square = { x: 100, y: 100, w: 100, h: 100 }
+    const wide = { x: 0, y: 0, w: 1000, h: 600 }
+    const [m] = clearOfPanels([mark(150, 150)], [square], wide)
+    expect(m.x).toBe(150)
+    expect(m.y).toBeGreaterThan(200)
+  })
+
+  it('steps a mark that stands closer to the panel than a stepped one would', () => {
+    const [m] = clearOfPanels([mark(120, 108)], [plate], visible)
+    expect(m.y).toBeGreaterThanOrEqual(112)
   })
 })

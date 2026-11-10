@@ -68,6 +68,7 @@ afterEach(() => {
   wrappers = []
   document.body.innerHTML = ''
   vi.restoreAllMocks()
+  vi.unstubAllGlobals()
 })
 
 describe('AreaNames', () => {
@@ -388,6 +389,24 @@ describe('AreaNames', () => {
       ).toContain('left:')
     })
 
+    it('draws the line of a moved name to the moved mark, and a press on that mark is a press on its thing', async () => {
+      const w = mountNames({ showing: true })
+      plateOver('lq-phone-plate')
+      await w.setProps({ relayout: 'plate' })
+      await new Promise((resolve) => setTimeout(resolve, 400))
+      await nextTick()
+      const markY = top(w, '[data-area-mark="villager"]')
+      const lines = w.findAll('.lq-area-lines line')
+      for (const line of lines) {
+        const y1 = parseFloat(line.attributes('y1')!)
+        expect(y1).toBeGreaterThanOrEqual(340)
+      }
+      await w
+        .get('[data-area-mark="villager"]')
+        .trigger('click', { clientX: 1, clientY: markY })
+      expect(w.emitted('press')?.[0][0]).toEqual(things[0])
+    })
+
     it('steps a mark under a corner button clear of it too', async () => {
       const w = mountNames({ showing: true })
       const stage = document.querySelector('.lq-stage')!
@@ -449,7 +468,6 @@ describe('AreaNames', () => {
       expect(top(w, '[data-area-mark="villager"]')).toBeGreaterThanOrEqual(
         340 + 8,
       )
-      vi.unstubAllGlobals()
     })
 
     it('marks the thing with keyboard focus clear of the plate as well', async () => {
@@ -526,8 +544,8 @@ describe('AreaNames', () => {
       .trigger('click', { clientX: 7, clientY: 8 })
     await w.get('[data-area-name="exit-north"]').trigger('click')
     expect(w.emitted('press')).toEqual([
-      [things[1], { x: 5, y: 6 }],
-      [things[0], { x: 7, y: 8 }],
+      [things[1], { x: 5, y: 6 }, true],
+      [things[0], { x: 7, y: 8 }, true],
     ])
   })
 

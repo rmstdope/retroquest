@@ -337,6 +337,8 @@ function wayPressed(event: MouseEvent): string | null {
   const target = event.target instanceof Element ? event.target : null
   const marked = target?.closest<HTMLElement>('[data-way]')?.dataset.way
   if (marked) return marked
+  // A mark or name of a thing (stepped clear of a panel it may stand over another thing's way) is a press on its thing.
+  if (target?.closest('[data-area-mark], [data-area-name]')) return null
   return (
     areaNamesEl.value?.wayAt(event.clientX, event.clientY)?.direction ?? null
   )
@@ -1563,12 +1565,17 @@ function captionStyle(): Record<string, string> {
   }
 }
 
-/** A thing of the picture is pressed, at `at` in the window: send what is in hand to it, or open its ring, if the game takes a move and the words have settled. */
-function onAreaPress(thing: AreaThing, at: { x: number; y: number }): void {
+/** A thing of the picture is pressed, at `at` in the window: send what is in hand to it, or open its ring, if the game takes a move and the words have settled. `onMark` says the press is on the thing's own mark or name, which may stand over another way. */
+function onAreaPress(
+  thing: AreaThing,
+  at: { x: number; y: number },
+  onMark = false,
+): void {
   const box = stageEl.value?.getBoundingClientRect()
   if (!box || !staged.value) return
   // A way out smaller than the thing it lies on is the press's: the stage takes it (`onPicturePress`).
-  if (areaNamesEl.value?.wayAt(at.x, at.y)) return
+  // A press on a thing's own mark or name is its thing's, wherever the mark stands.
+  if (!onMark && areaNamesEl.value?.wayAt(at.x, at.y)) return
   if (!pressTakesMove()) return
   if (belt.hand) {
     sendHand(handCommand(belt.hand, thing))

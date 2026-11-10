@@ -153,6 +153,28 @@ describe('LanternLayout: leaving by pressing a way out in the picture', () => {
     expect(submit).toHaveBeenCalledWith('go east')
   })
 
+  it('does not go through an open way that lies under a mark pressed for its thing', async () => {
+    const store = await cottage()
+    for (const command of [
+      'use lantern',
+      'take lantern',
+      'talk to grandmother',
+      'use journal',
+      'talk to grandmother',
+    ])
+      store.submitCommand(command)
+    store.releasePanels(store.turns.at(-1)!.id, [...PANEL_GROUPS], false)
+    useAreaNamesStore().showing = true
+    await w.vm.$nextTick()
+    const submit = vi.spyOn(store, 'submitCommand')
+    // A mark stepped off the plate can stand over another thing's way: the press is still the mark's thing.
+    w.get('[data-area-mark="bread"]').element.dispatchEvent(
+      new MouseEvent('click', { bubbles: true, clientX: 600, clientY: 100 }),
+    )
+    await w.vm.$nextTick()
+    expect(submit).not.toHaveBeenCalledWith('go east')
+  })
+
   /** Open the way east: the lantern lit, the journal read, Revive learned. */
   async function openTheWays(
     store: ReturnType<typeof useGameStore>,

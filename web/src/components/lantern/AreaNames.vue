@@ -27,7 +27,8 @@ import type { PictureSize, Rect } from '@/lantern/roomMotionScene'
  * neither until the words are gone. A mark whose spot lies under the room plate
  * or a button in the picture's corner steps to the nearest spot just outside
  * that panel (its name and line follow it, and a press on it is a press on its
- * thing), so no mark is ever hidden; the plate growing or folding moves it at once. Otherwise the one thing under the
+ * thing), so no mark is ever hidden; the plate growing or folding moves it
+ * at once. Otherwise the one thing under the
  * `pointer` has its name just under the pointer, above it near the foot of
  * what can be seen, and has none while a ring is open (`ringOpen`): the ring
  * has the name. Marks and names stay on the part of the picture that can
@@ -70,7 +71,7 @@ const props = defineProps<{
 }>()
 const emit = defineEmits<{
   pointing: [direction: string | null]
-  press: [thing: AreaThing, at: { x: number; y: number }]
+  press: [thing: AreaThing, at: { x: number; y: number }, onMark: true]
 }>()
 
 /** What a name is made of beyond its words: the padding and the border, and about the width of one letter. */
@@ -285,6 +286,7 @@ function press(spot: NamedSpot, event: MouseEvent): void {
       kind: spot.kind,
     },
     { x: event.clientX, y: event.clientY },
+    true,
   )
 }
 

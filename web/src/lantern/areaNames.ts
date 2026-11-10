@@ -40,6 +40,8 @@ const MARK_RADIUS = 8
 
 /** How far outside a panel a stepped mark's middle stands, beyond the mark's own radius. */
 const PANEL_GAP = 4
+/** How close to a panel a mark's middle may stand: a stepped mark stands exactly this far from it. */
+const REACH = MARK_RADIUS + PANEL_GAP
 
 /** The gap between a mark and its name. */
 const GAP = 10
@@ -139,13 +141,13 @@ export function markInside(
   return marked
 }
 
-/** Whether (`x`, `y`) lies under `panel`, grown by the mark's radius so a mark's glow never touches it. */
+/** Whether (`x`, `y`) lies under `panel`, grown by `REACH` so a mark's glow never touches it. */
 function underPanel(x: number, y: number, panel: Rect): boolean {
   return (
-    x > panel.x - MARK_RADIUS &&
-    x < panel.x + panel.w + MARK_RADIUS &&
-    y > panel.y - MARK_RADIUS &&
-    y < panel.y + panel.h + MARK_RADIUS
+    x > panel.x - REACH &&
+    x < panel.x + panel.w + REACH &&
+    y > panel.y - REACH &&
+    y < panel.y + panel.h + REACH
   )
 }
 
@@ -154,7 +156,7 @@ function underPanel(x: number, y: number, panel: Rect): boolean {
  * buttons in the picture's corner, in the layer's pixels). A mark under a
  * panel steps to the nearest spot just outside it, straight below, above or
  * to either side, that is on the `visible` part (a spot that lands under another
- * panel steps again, out of that one); a
+ * panel goes on past it); a
  * panel that spans the width leaves only below or above. A mark under no panel
  * stays; one with no such spot is left where it is. `rect`, what can be
  * pressed, stays whole, so a thing wholly under a panel is still marked.
@@ -168,7 +170,7 @@ export function clearOfPanels(
   const right = visible.x + visible.w - MARK_RADIUS
   const top = visible.y + MARK_RADIUS
   const bottom = visible.y + visible.h - MARK_RADIUS
-  const reach = MARK_RADIUS + PANEL_GAP
+  const reach = REACH
   /** The spot just outside `panel` in the direction (`dx`, `dy`), moved on past any panel it lands under. */
   const outside = (
     x: number,
@@ -202,13 +204,16 @@ export function clearOfPanels(
       [0, -1],
     ]) {
       const [cx, cy] = outside(x, y, under, dx, dy)
-      const clear = !panels.some((panel) => underPanel(cx, cy, panel))
-      if (!clear || cx < left || cx > right || cy < top || cy > bottom) continue
+      if (cx < left - reach || cx > right + reach) continue
+      if (cy < top - reach || cy > bottom + reach) continue
+      const kx = clamp(cx, left, right)
+      const ky = clamp(cy, top, bottom)
+      if (panels.some((panel) => underPanel(kx, ky, panel))) continue
       if (
         !best ||
-        Math.hypot(cx - x, cy - y) < Math.hypot(best[0] - x, best[1] - y)
+        Math.hypot(kx - x, ky - y) < Math.hypot(best[0] - x, best[1] - y)
       )
-        best = [cx, cy]
+        best = [kx, ky]
     }
     return best ? { ...entry, x: best[0], y: best[1] } : entry
   })
