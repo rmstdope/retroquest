@@ -129,8 +129,16 @@ describe('AreaNames', () => {
         things: [
           { areaId: 'a', name: 'a', label: 'Notice Board', kind: 'scenery' },
           { areaId: 'b', name: 'b', label: 'Old Notice', kind: 'item' },
+          { areaId: 'c', name: 'c', label: 'Third Notice', kind: 'item' },
         ],
         boxes: {
+          c: {
+            x: 0.4,
+            y: 0.4,
+            width: 0.2,
+            height: 0.2,
+            mark: { x: 0.5, y: 0.5 },
+          },
           a: {
             x: 0.4,
             y: 0.4,
@@ -263,8 +271,10 @@ describe('AreaNames', () => {
       things: [
         { areaId: 'a', name: 'a', label: 'Notice Board', kind: 'scenery' },
         { areaId: 'b', name: 'b', label: 'Old Notice', kind: 'item' },
+        { areaId: 'c', name: 'c', label: 'Third Notice', kind: 'item' },
       ],
       boxes: {
+        c: { x: 0.503, y: 0.503, width: 0.02, height: 0.02 },
         a: { x: 0.5, y: 0.5, width: 0.02, height: 0.02 },
         b: { x: 0.505, y: 0.505, width: 0.02, height: 0.02 },
       },

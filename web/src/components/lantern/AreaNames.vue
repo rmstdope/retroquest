@@ -262,15 +262,23 @@ function sizeOf(label: string): { w: number; h: number } {
 
 /** Every mark and name when they are all showing, else those of the thing with focus. */
 const spots = computed<NamedSpot[]>(() => {
-  if (props.showing)
-    return layoutNames(placed.value, sizeOf, obstacles.value, visible.value)
+  const all = layoutNames(placed.value, sizeOf, obstacles.value, visible.value)
+  if (props.showing) return all
+  const own = all.filter((spot) => spot.areaId === props.focused)
+  if (own.length > 0) return own
+  // A focused thing whose mark is under the words is not in `placed`; it is still shown.
   const focus = clearOfPanels(
     markInside(inView.value, visible.value),
     panels.value,
     visible.value,
   ).find((entry) => entry.areaId === props.focused)
   return focus
-    ? layoutNames([focus], sizeOf, obstacles.value, visible.value)
+    ? layoutNames(
+        [...placed.value, focus],
+        sizeOf,
+        obstacles.value,
+        visible.value,
+      ).filter((spot) => spot.areaId === props.focused)
     : []
 })
 
