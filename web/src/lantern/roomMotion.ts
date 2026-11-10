@@ -33,6 +33,8 @@ export interface AreaBox {
   y: number
   width: number
   height: number
+  /** Where the studio put the thing's mark, as fractions of the picture; absent means the middle of the box. */
+  mark?: { x: number; y: number }
 }
 
 /** One declared movement of a room. */
@@ -117,6 +119,15 @@ function isBox(value: unknown): value is AreaBox {
   )
 }
 
+/** The mark point of `value` (a fraction pair inside the picture), or undefined when it is missing or broken. */
+function madeMark(value: unknown): AreaBox['mark'] {
+  if (typeof value !== 'object' || value === null) return undefined
+  const { x, y } = value as Record<string, unknown>
+  if (typeof x !== 'number' || typeof y !== 'number') return undefined
+  if (!(x >= 0 && x <= 1 && y >= 0 && y <= 1)) return undefined
+  return { x, y }
+}
+
 /**
  * The boxes the images manifest lists under image `imageId`, by area id.
  * Tolerant of anything: a manifest that is not an object, an image with no
@@ -134,7 +145,10 @@ export function madeAreaBoxes(
   if (typeof areas !== 'object' || areas === null) return {}
   const boxes: Record<string, AreaBox> = {}
   for (const [id, box] of Object.entries(areas)) {
-    if (isBox(box)) boxes[id] = box
+    if (!isBox(box)) continue
+    const { x, y, width, height } = box
+    const mark = madeMark((box as { mark?: unknown }).mark)
+    boxes[id] = mark ? { x, y, width, height, mark } : { x, y, width, height }
   }
   return boxes
 }

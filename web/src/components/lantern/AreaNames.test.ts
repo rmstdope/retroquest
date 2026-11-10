@@ -105,6 +105,66 @@ describe('AreaNames', () => {
     expect(style).toContain('top: 405px')
   })
 
+  describe('with a mark point chosen in the studio', () => {
+    const marked = {
+      ...boxes,
+      bucket: { ...boxes.bucket, mark: { x: 0.85, y: 0.72 } },
+    }
+
+    it('puts the mark on the point, the rest at their middles', async () => {
+      const w = mountNames({ showing: true, boxes: marked })
+      await nextTick()
+      const style = w.get('[data-area-mark="bucket"]').attributes('style')
+      expect(style).toContain('left: 816px')
+      expect(style).toContain('top: 388.8px')
+      expect(
+        w.get('[data-area-mark="villager"]').attributes('style'),
+      ).toContain('left: 144px')
+    })
+
+    it('starts a moved name’s line at the moved mark', async () => {
+      const w = mountNames({
+        showing: true,
+        things: [
+          { areaId: 'a', name: 'a', label: 'Notice Board', kind: 'scenery' },
+          { areaId: 'b', name: 'b', label: 'Old Notice', kind: 'item' },
+        ],
+        boxes: {
+          a: {
+            x: 0.4,
+            y: 0.4,
+            width: 0.2,
+            height: 0.2,
+            mark: { x: 0.5, y: 0.5 },
+          },
+          b: {
+            x: 0.4,
+            y: 0.4,
+            width: 0.2,
+            height: 0.2,
+            mark: { x: 0.5, y: 0.5 },
+          },
+        },
+      })
+      await nextTick()
+      const line = w.get('line')
+      expect(Number(line.attributes('x1'))).toBeCloseTo(480, 3)
+      expect(Number(line.attributes('y1'))).toBeCloseTo(270, 3)
+    })
+
+    it('shows a focused thing at the same spot as when all are shown', async () => {
+      const all = mountNames({ showing: true, boxes: marked })
+      const one = mountNames({ focused: 'bucket', boxes: marked })
+      await nextTick()
+      expect(one.get('[data-area-mark="bucket"]').attributes('style')).toBe(
+        all.get('[data-area-mark="bucket"]').attributes('style'),
+      )
+      expect(one.get('[data-area-name="bucket"]').attributes('style')).toBe(
+        all.get('[data-area-name="bucket"]').attributes('style'),
+      )
+    })
+  })
+
   it('names the one thing under the pointer, and nothing over nothing', async () => {
     const w = mountNames({ pointer: { x: 140, y: 250 } })
     await nextTick()
@@ -218,6 +278,37 @@ describe('AreaNames', () => {
   })
 
   describe('under the words', () => {
+    it('judges a thing by its mark, not the middle of its rectangle', async () => {
+      const w = mountNames({
+        showing: true,
+        boxes: {
+          ...boxes,
+          // Middle under the words, point clear of them: shown.
+          villager: {
+            x: 0.1,
+            y: 0.4,
+            width: 0.4,
+            height: 0.2,
+            mark: { x: 0.45, y: 0.5 },
+          },
+          // Middle clear of the words, point under them: waits.
+          bucket: {
+            x: 0.1,
+            y: 0.7,
+            width: 0.5,
+            height: 0.1,
+            mark: { x: 0.15, y: 0.75 },
+          },
+        },
+      })
+      wordsOver('lq-story-wrap')
+      await w.setProps({ relayout: 'words' })
+      await new Promise((resolve) => setTimeout(resolve, 400))
+      await nextTick()
+      expect(w.find('[data-area-mark="villager"]').exists()).toBe(true)
+      expect(w.find('[data-area-mark="bucket"]').exists()).toBe(false)
+    })
+
     /** Words covering the left third of the stage (the picture's own pixels), as the rectangle the browser would report. */
     function wordsOver(selector: string): HTMLElement {
       const words = document.createElement('div')

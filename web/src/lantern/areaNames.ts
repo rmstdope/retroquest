@@ -7,13 +7,19 @@
  */
 import type { AreaThing } from './areaThings'
 import type { AreaBox } from './roomMotion'
-import { boxRect, type PictureSize, type Rect } from './roomMotionScene'
+import {
+  boxRect,
+  pointPosition,
+  type PictureSize,
+  type Rect,
+} from './roomMotionScene'
 
-/** A thing with its mark: `x`, `y` the mark's place and `rect` the part of the thing in view, in stage pixels. */
+/** A thing with its mark: `x`, `y` the mark's place, `rect` the part of the thing in view and `point` the mark point chosen in the studio (absent: the middle), in stage pixels. */
 export interface PlacedName extends AreaThing {
   x: number
   y: number
   rect: Rect
+  point?: { x: number; y: number }
 }
 
 /** A name's place: its top-left corner and size, and the thin line back to its mark when it had to move (null when it sits by its mark). */
@@ -43,7 +49,7 @@ const RINGS = 40
 /**
  * The things that have a placed box and are in view of `view` (the stage, which
  * shows the `picture` trimmed to fill it), each with the middle of the part in
- * view as its mark. A thing with no box, or wholly out of view, is left out.
+ * view as its mark, and the studio's mark point beside it when one was chosen. A thing with no box, or wholly out of view, is left out.
  */
 export function placeNames(
   things: readonly AreaThing[],
@@ -62,6 +68,7 @@ export function placeNames(
       x: rect.x + rect.w / 2,
       y: rect.y + rect.h / 2,
       rect,
+      ...(box.mark ? { point: pointPosition(box.mark, view, picture) } : {}),
     })
   }
   return placed
@@ -95,7 +102,9 @@ function clamp(value: number, low: number, high: number): number {
 
 /**
  * The things with some part on the `visible` part of the picture, each with its
- * mark moved to the middle of that part and wholly on it. A thing with no part
+ * mark on its chosen point, or at the middle of that part when it has none; a
+ * point out of sight moves to the nearest spot of the part that is, and the
+ * mark is wholly on the visible part. A thing with no part
  * there is left out. `rect`, what the pointer can be over, stays whole.
  */
 export function markInside(
@@ -113,12 +122,12 @@ export function markInside(
     marked.push({
       ...entry,
       x: clamp(
-        (x0 + x1) / 2,
+        clamp(entry.point?.x ?? (x0 + x1) / 2, x0, x1),
         visible.x + MARK_RADIUS,
         visible.x + visible.w - MARK_RADIUS,
       ),
       y: clamp(
-        (y0 + y1) / 2,
+        clamp(entry.point?.y ?? (y0 + y1) / 2, y0, y1),
         visible.y + MARK_RADIUS,
         visible.y + visible.h - MARK_RADIUS,
       ),

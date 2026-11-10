@@ -41,6 +41,29 @@ describe('madeAreaBoxes', () => {
   })
 })
 
+describe('madeAreaBoxes mark points', () => {
+  it('reads the mark point the studio set, in picture fractions', () => {
+    const box = { ...BOX, mark: { x: 0.3, y: 0.6 } }
+    expect(madeAreaBoxes({ a: { areas: { t: box } } }, 'a')).toEqual({ t: box })
+  })
+
+  it('keeps the box but drops a mark that is broken or outside the picture', () => {
+    const manifest = {
+      a: {
+        areas: {
+          text: { ...BOX, mark: { x: '0.3', y: 0.5 } },
+          over: { ...BOX, mark: { x: 1.2, y: 0.5 } },
+          half: { ...BOX, mark: { x: 0.3 } },
+          nothing: { ...BOX, mark: null },
+        },
+      },
+    }
+    const boxes = madeAreaBoxes(manifest, 'a')
+    expect(Object.keys(boxes)).toEqual(['text', 'over', 'half', 'nothing'])
+    for (const box of Object.values(boxes)) expect(box).toEqual(BOX)
+  })
+})
+
 describe('appliedMotion', () => {
   const effects: RoomEffect[] = [
     { kind: 'dust' },

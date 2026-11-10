@@ -76,6 +76,24 @@ export interface MotionScene {
   count(kind: MotionKind): number
 }
 
+/** The place on a canvas that shows the picture trimmed to fill it where the picture-fraction `point` lies; it may lie outside the canvas, where the trim cuts the picture off. */
+export function pointPosition(
+  point: { x: number; y: number },
+  canvas: PictureSize,
+  picture: PictureSize,
+): { x: number; y: number } {
+  const scale = Math.max(
+    canvas.width / picture.width,
+    canvas.height / picture.height,
+  )
+  const drawnW = picture.width * scale
+  const drawnH = picture.height * scale
+  return {
+    x: (canvas.width - drawnW) / 2 + point.x * drawnW,
+    y: (canvas.height - drawnH) / 2 + point.y * drawnH,
+  }
+}
+
 /** The rectangle the picture-fraction `box` covers on a canvas that shows the picture trimmed to fill it; null when none of it is in view. */
 export function boxRect(
   box: AreaBox,

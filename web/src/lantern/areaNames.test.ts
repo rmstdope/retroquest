@@ -68,6 +68,33 @@ describe('placeNames', () => {
   })
 })
 
+describe('placeNames with a mark point', () => {
+  const box = {
+    x: 0.5,
+    y: 0.5,
+    width: 0.2,
+    height: 0.2,
+    mark: { x: 0.52, y: 0.55 },
+  }
+
+  it('carries the point, in stage pixels, beside the whole rectangle', () => {
+    const [placed] = placeNames(things, { bucket: box }, VIEW, PICTURE)
+    expect(placed.point?.x).toBeCloseTo(0.52 * 960, 6)
+    expect(placed.point?.y).toBeCloseTo(0.55 * 540, 6)
+    expect(placed.rect).toEqual({ x: 480, y: 270, w: 192, h: 108 })
+  })
+
+  it('has no point for a box with none', () => {
+    const [placed] = placeNames(
+      things,
+      { bucket: { ...box, mark: undefined } },
+      VIEW,
+      PICTURE,
+    )
+    expect(placed.point).toBeUndefined()
+  })
+})
+
 describe('nameAt', () => {
   const placed = placeNames(
     things,
@@ -248,6 +275,60 @@ describe('markInside', () => {
 
   it('has no mark for a thing wholly behind the bar', () => {
     expect(markInside([entry(100, 470, 40, 40)], visible)).toEqual([])
+  })
+})
+
+describe('markInside with a mark point', () => {
+  const visible = { x: 20, y: 10, w: 900, h: 450 }
+  const base = {
+    areaId: 'a',
+    name: 'storm',
+    label: 'Storm',
+    kind: 'scenery' as const,
+  }
+  const whole = { x: 20, y: 10, w: 900, h: 450 }
+
+  it('puts the mark on the point when it is in view', () => {
+    const [placed] = markInside(
+      [{ ...base, x: 500, y: 230, rect: whole, point: { x: 600, y: 60 } }],
+      visible,
+    )
+    expect(placed).toMatchObject({ x: 600, y: 60 })
+  })
+
+  it('moves a point cut off at the right to the edge, at the point’s height', () => {
+    const [placed] = markInside(
+      [{ ...base, x: 500, y: 230, rect: whole, point: { x: 1100, y: 100 } }],
+      visible,
+    )
+    expect(placed.x).toBe(920 - 8)
+    expect(placed.y).toBe(100)
+  })
+
+  it('moves a point under the action bar up to the foot of what can be seen', () => {
+    const [placed] = markInside(
+      [
+        {
+          ...base,
+          x: 100,
+          y: 300,
+          rect: { x: 80, y: 200, w: 40, h: 300 },
+          point: { x: 100, y: 480 },
+        },
+      ],
+      visible,
+    )
+    expect(placed.x).toBe(100)
+    expect(placed.y).toBe(460 - 8)
+  })
+
+  it('keeps the whole rectangle to press', () => {
+    const rect = { x: 80, y: 200, w: 40, h: 300 }
+    const [placed] = markInside(
+      [{ ...base, x: 100, y: 300, rect, point: { x: 100, y: 480 } }],
+      visible,
+    )
+    expect(placed.rect).toEqual(rect)
   })
 })
 

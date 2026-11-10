@@ -238,7 +238,9 @@ function sizeOf(label: string): { w: number; h: number } {
 const spots = computed<NamedSpot[]>(() => {
   if (props.showing)
     return layoutNames(placed.value, sizeOf, obstacles.value, visible.value)
-  const focus = inView.value.find((entry) => entry.areaId === props.focused)
+  const focus = markInside(inView.value, visible.value).find(
+    (entry) => entry.areaId === props.focused,
+  )
   return focus
     ? layoutNames([focus], sizeOf, obstacles.value, visible.value)
     : []
