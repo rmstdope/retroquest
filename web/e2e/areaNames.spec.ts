@@ -205,3 +205,19 @@ test.describe('on the smallest sideways phone', () => {
     }
   })
 })
+
+test('the marks and names come back with the picture after a layout without one (rq-fy44)', async ({
+  page,
+}): Promise<void> => {
+  await page.setViewportSize({ width: 1000, height: 700 })
+  await toTheCottage(page)
+  await page.getByRole('button', { name: /Show what's here/ }).click()
+  await expect(page.locator('[data-area-mark]')).toHaveCount(3)
+  // A short window has no picture: the text page.
+  await page.setViewportSize({ width: 568, height: 320 })
+  await expect(page.locator('.lq-stage')).toHaveCount(0)
+  await page.setViewportSize({ width: 1000, height: 700 })
+  await expect(page.getByRole('button', { name: '◎ Showing' })).toBeVisible()
+  await expect(page.locator('[data-area-mark]')).toHaveCount(3)
+  await expect(page.locator('[data-area-name]')).toHaveCount(3)
+})

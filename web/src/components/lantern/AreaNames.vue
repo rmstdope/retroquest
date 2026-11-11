@@ -167,6 +167,9 @@ function watchPanels(scope: HTMLElement): void {
 
 onMounted(() => {
   measure()
+  // Words folded away while the stage was gone (the picture coming back) are
+  // still fading out now: once they have faded they no longer cover anything.
+  settleTimer = setTimeout(measure, SETTLE_MS)
   const el = stage()
   if (el && typeof ResizeObserver === 'function') {
     observer = new ResizeObserver(measure)
