@@ -162,20 +162,33 @@ function underPanel(x: number, y: number, panel: Rect): boolean {
   )
 }
 
+/** Whether (`x`, `y`) lies under the words' rectangle `words`, where a mark waits unseen. */
+function inWords(x: number, y: number, words: Rect): boolean {
+  return (
+    x >= words.x &&
+    x <= words.x + words.w &&
+    y >= words.y &&
+    y <= words.y + words.h
+  )
+}
+
 /**
  * The marks of `marks` moved clear of the `panels` (the room plate and the
  * buttons in the picture's corner, in the layer's pixels). A mark under a
  * panel steps to the nearest spot just outside it, straight below, above or
  * to either side, that is on the `visible` part (a spot that lands under another
  * panel goes on past it); a
- * panel that spans the width leaves only below or above. A mark under no panel
- * stays; one with no such spot is left where it is. `rect`, what can be
- * pressed, stays whole, so a thing wholly under a panel is still marked.
+ * panel that spans the width leaves only below or above. A spot under the
+ * `words` (where the mark would wait unseen) is taken only when no other is
+ * clear. A mark under no panel stays; one with no such spot is left where it
+ * is. `rect`, what can be pressed, stays whole, so a thing wholly under a
+ * panel is still marked.
  */
 export function clearOfPanels(
   marks: readonly PlacedName[],
   panels: readonly Rect[],
   visible: Rect,
+  words: readonly Rect[] = [],
 ): PlacedName[] {
   const left = visible.x + MARK_RADIUS
   const right = visible.x + visible.w - MARK_RADIUS
@@ -208,6 +221,7 @@ export function clearOfPanels(
     const under = panels.find((panel) => underPanel(x, y, panel))
     if (!under) return entry
     let best: [number, number] | null = null
+    let bestHidden = true
     for (const [dx, dy] of [
       [0, 1],
       [1, 0],
@@ -220,11 +234,16 @@ export function clearOfPanels(
       const kx = clamp(cx, left, right)
       const ky = clamp(cy, top, bottom)
       if (panels.some((panel) => underPanel(kx, ky, panel))) continue
+      const hidden = words.some((r) => inWords(kx, ky, r))
       if (
         !best ||
-        Math.hypot(kx - x, ky - y) < Math.hypot(best[0] - x, best[1] - y)
-      )
+        (bestHidden && !hidden) ||
+        (hidden === bestHidden &&
+          Math.hypot(kx - x, ky - y) < Math.hypot(best[0] - x, best[1] - y))
+      ) {
         best = [kx, ky]
+        bestHidden = hidden
+      }
     }
     return best
       ? {
@@ -279,9 +298,7 @@ export function keepMarksApart(
     y >= top - 0.5 &&
     y <= bottom + 0.5 &&
     !panels.some((panel) => underPanel(x, y, panel)) &&
-    !words.some(
-      (r) => x >= r.x && x <= r.x + r.w && y >= r.y && y <= r.y + r.h,
-    ) &&
+    !words.some((r) => inWords(x, y, r)) &&
     placedAt.every(([px, py]) => Math.hypot(px - x, py - y) >= MARK_APART - 0.5)
   for (const { entry, index } of order) {
     const from = entry.from ?? entry

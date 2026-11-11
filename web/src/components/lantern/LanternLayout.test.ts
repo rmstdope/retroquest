@@ -1036,6 +1036,7 @@ describe('LanternLayout', () => {
             observe(el: Element): void {
               observed.push(el)
             }
+            unobserve(): void {}
             disconnect(): void {}
           },
         )
@@ -1629,6 +1630,7 @@ describe('LanternLayout', () => {
             observed.push(cb)
           }
           observe() {}
+          unobserve() {}
           disconnect() {}
         },
       )
@@ -2547,6 +2549,7 @@ describe('LanternLayout', () => {
               observed.push(cb)
             }
             observe() {}
+            unobserve() {}
             disconnect() {}
           },
         )

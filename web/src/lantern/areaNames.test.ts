@@ -602,6 +602,24 @@ describe('clearOfPanels', () => {
     const [m] = clearOfPanels([mark(120, 108)], [plate], visible)
     expect(m.y).toBeGreaterThanOrEqual(112)
   })
+
+  it('steps a mark under the Hide tab to its side, not up under the words just above it', () => {
+    /** A phone: the words end 6 px above the tab, which sits at the foot of what can be seen. */
+    const phone = { x: 0, y: 0, w: 390, h: 680 }
+    const tab = { x: 160, y: 640, w: 70, h: 28 }
+    const words = { x: 8, y: 200, w: 374, h: 434 }
+    const [m] = clearOfPanels([mark(195, 654)], [tab], phone, [words])
+    expect(m.y).toBe(654)
+    expect(m.x < tab.x - 8 || m.x > tab.x + tab.w + 8).toBe(true)
+  })
+
+  it('still steps under the words when nowhere else is clear', () => {
+    const phone = { x: 0, y: 0, w: 390, h: 680 }
+    const words = { x: 0, y: 200, w: 390, h: 434 }
+    const tab = { x: 0, y: 640, w: 390, h: 28 }
+    const [m] = clearOfPanels([mark(195, 654)], [tab], phone, [words])
+    expect(m.y).toBeLessThan(640)
+  })
 })
 
 describe('keepMarksApart', () => {
