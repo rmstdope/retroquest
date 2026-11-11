@@ -72,13 +72,17 @@ function cardsOver(
   line = false,
   head?: [number, number],
 ): void {
-  const at = (el: HTMLElement, [top, bottom]: [number, number]): void => {
+  const at = (
+    el: HTMLElement,
+    [top, bottom]: [number, number],
+    right = 960,
+  ): void => {
     vi.spyOn(el, 'getBoundingClientRect').mockReturnValue({
       left: 0,
       top,
-      width: 960,
+      width: right,
       height: bottom - top,
-      right: 960,
+      right,
       bottom,
       x: 0,
       y: top,
@@ -100,12 +104,12 @@ function cardsOver(
       const name = document.createElement('b')
       name.className = 'lq-line-name'
       col.append(name)
-      at(name, head)
+      at(name, head, 120)
     }
     col.append(cardEl)
     row.append(col)
-    // The column holds the name row (if any) and the bubble.
-    at(col, [head ? head[0] : card[0], card[1]])
+    // The row holds the name row (if any) and the bubble; the name is only as wide as its words.
+    at(row, [head ? head[0] : card[0], card[1]])
     storyEl.append(row)
   } else storyEl.append(cardEl)
   wrapEl.append(storyEl)
@@ -508,9 +512,9 @@ describe('AreaNames', () => {
       expect(markAt(w, 'villager')).toEqual({ x: 144, y: 270 })
     })
 
-    it('counts the speaker name row above a spoken line as words, so no dot stands under it (rq-qz71)', async () => {
+    it('counts the whole row of a spoken line, speaker name row included, as words, so no dot stands under it (rq-qz71)', async () => {
       const w = mountNames({ showing: true })
-      // The name row (30..66) over the bubble (70..240): the way north's mark (480, 54) is under the name row.
+      // A narrow name (x 0..120, y 30..66) over the bubble (70..240): the way north's mark (480, 54) is beside the name, above the bubble, still in the row.
       cardsOver([0, 320], [0, 320], [70, 240], true, [30, 66])
       await settle(w, 'words')
       const north = markAt(w, 'exit-north')!
