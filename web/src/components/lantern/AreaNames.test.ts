@@ -156,9 +156,22 @@ describe('AreaNames', () => {
         },
       })
       await nextTick()
-      const line = w.get('line')
-      expect(Number(line.attributes('x1'))).toBeCloseTo(480, 3)
-      expect(Number(line.attributes('y1'))).toBeCloseTo(270, 3)
+      // The three marks share a point, so they now stand a mark's width apart
+      // (480, 504, 528); a line starts at the mark whose name had to move.
+      const marksX = ['a', 'b', 'c'].map((id) =>
+        parseFloat(
+          /left: ([\d.]+)px/.exec(
+            w.get(`[data-area-mark="${id}"]`).attributes('style') ?? '',
+          )![1],
+        ),
+      )
+      expect([...marksX].sort((p, q) => p - q)).toEqual([480, 504, 528])
+      const starts = w
+        .findAll('line')
+        .map((line) => Number(line.attributes('x1')))
+      expect(starts.length).toBeGreaterThan(0)
+      for (const x of starts) expect(marksX).toContain(x)
+      expect(Number(w.get('line').attributes('y1'))).toBeCloseTo(270, 3)
     })
 
     it('shows a focused thing at the same spot as when all are shown', async () => {
@@ -475,6 +488,42 @@ describe('AreaNames', () => {
       expect(top(w, '[data-area-mark="villager"]')).toBeGreaterThanOrEqual(
         340 + 8,
       )
+    })
+
+    it('puts two unmoved marks a mark’s width apart, and two dots above the Show tab side by side, Table on the left', async () => {
+      const pairT: AreaThing[] = [
+        { areaId: 'table', name: 'table', label: 'Table', kind: 'scenery' },
+        { areaId: 'bread', name: 'bread', label: 'Bread', kind: 'item' },
+      ]
+      const pairBoxes = {
+        table: { x: 0.14, y: 0.5, width: 0.02, height: 0.02 },
+        bread: { x: 0.145, y: 0.5, width: 0.02, height: 0.02 },
+      }
+      const w = mountNames({ showing: true, things: pairT, boxes: pairBoxes })
+      await nextTick()
+      const at = (id: string): [number, number] => {
+        const style =
+          w.get(`[data-area-mark="${id}"]`).attributes('style') ?? ''
+        return [
+          parseFloat(/left: ([\d.]+)px/.exec(style)![1]),
+          parseFloat(/top: ([\d.]+)px/.exec(style)![1]),
+        ]
+      }
+      const [tx, ty] = at('table')
+      const [bx, by] = at('bread')
+      expect(Math.hypot(bx - tx, by - ty)).toBeGreaterThanOrEqual(23.5)
+      expect(tx).toBeLessThan(bx)
+      // Over the Show tab as well: both step out from under it, still apart.
+      plateOver('lq-paper-tab', 240, 80)
+      await w.setProps({ relayout: 'tab' })
+      await new Promise((resolve) => setTimeout(resolve, 400))
+      await nextTick()
+      const [tx2, ty2] = at('table')
+      const [bx2, by2] = at('bread')
+      // The tab spans 240..320; a mark stands at least 12 px outside it.
+      expect(ty2 <= 240 - 12 || ty2 >= 320 + 12).toBe(true)
+      expect(Math.hypot(bx2 - tx2, by2 - ty2)).toBeGreaterThanOrEqual(23.5)
+      expect(tx2).toBeLessThan(bx2)
     })
 
     it.each(['lq-words-hide', 'lq-paper-tab'])(
