@@ -25,8 +25,8 @@ import type { PictureSize, Rect } from '@/lantern/roomMotionScene'
  * that can be picked up green, ways out amber, scenery plain); a name that
  * would cover another name or a button, a plate or the words moves to a free
  * spot with a thin line back to its mark, and a thing under the words has
- * neither until the words are gone. A mark whose spot lies under the room plate
- * or a button in the picture's corner steps to the nearest spot just outside
+ * neither until the words are gone. A mark whose spot lies under the room plate,
+ * a button in the picture's corner or the story's Hide/Show tab steps to the nearest spot just outside
  * that panel (its name and line follow it, and a press on it is a press on its
  * thing), so no mark is ever hidden; the plate growing or folding moves it
  * at once. Otherwise the one thing under the
@@ -88,8 +88,9 @@ const FOOT = 60
 const KEEP_CLEAR =
   '.lq-stage-plate, .lq-phone-plate, .lq-stage-buttons button, .lq-float-menu, .lq-words-hide, ' +
   '.lq-paper-tab, .lq-show-names, .lq-composer, .lq-story-wrap, .lq-arrival-card, .lq-ln'
-/** The panels no mark may lie under: the room plate and the buttons in the picture's top-right corner. */
-const PANELS = '.lq-stage-plate, .lq-phone-plate, .lq-stage-buttons button'
+/** The panels no mark may lie under: the room plate, the buttons in the picture's top-right corner and the story's Hide/Show tab. */
+const PANELS =
+  '.lq-stage-plate, .lq-phone-plate, .lq-stage-buttons button, .lq-words-hide, .lq-paper-tab'
 /** The words over the picture, under which a thing's mark and name wait. */
 const WORDS = '.lq-story-wrap, .lq-arrival-card, .lq-ln'
 
@@ -97,7 +98,7 @@ const root = ref<HTMLElement | null>(null)
 const view = ref<PictureSize>({ width: 0, height: 0 })
 const obstacles = ref<Rect[]>([])
 const covers = ref<Rect[]>([])
-/** The panels (plate and corner buttons) the marks keep clear of. */
+/** The panels (plate, corner buttons and the story's Hide/Show tab) the marks keep clear of. */
 const panels = ref<Rect[]>([])
 /** The panel elements the observer is watching, so a plate that grows or folds moves the marks at once. */
 let watched: HTMLElement[] = []
