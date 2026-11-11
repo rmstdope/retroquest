@@ -104,6 +104,8 @@ function cardsOver(
     }
     col.append(cardEl)
     row.append(col)
+    // The column holds the name row (if any) and the bubble.
+    at(col, [head ? head[0] : card[0], card[1]])
     storyEl.append(row)
   } else storyEl.append(cardEl)
   wrapEl.append(storyEl)
@@ -514,6 +516,33 @@ describe('AreaNames', () => {
       const north = markAt(w, 'exit-north')!
       expect(north.x).toBe(480)
       expect(north.y).toBeLessThan(30)
+    })
+
+    it('counts the speaker name above a two-sides spoken line as words (rq-qz71)', async () => {
+      const w = mountNames({ showing: true })
+      const rect = (top: number, bottom: number): DOMRect =>
+        ({
+          left: 0,
+          top,
+          width: 960,
+          height: bottom - top,
+          right: 960,
+          bottom,
+          x: 0,
+          y: top,
+          toJSON: () => ({}),
+        }) as DOMRect
+      const line = document.createElement('div')
+      line.className = 'lq-ln'
+      const name = document.createElement('b')
+      name.className = 'lq-line-name'
+      line.append(name)
+      document.querySelector('.lq-stage')!.append(line)
+      vi.spyOn(line, 'getBoundingClientRect').mockReturnValue(rect(70, 240))
+      // The name hangs above the line's own box, over the way north's mark (480, 54).
+      vi.spyOn(name, 'getBoundingClientRect').mockReturnValue(rect(30, 66))
+      await settle(w, 'words')
+      expect(markAt(w, 'exit-north')!.y).toBeLessThan(30)
     })
 
     it('shows a thing above the story where a card has scrolled out of it (rq-a6o6)', async () => {
