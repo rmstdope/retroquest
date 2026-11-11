@@ -540,6 +540,17 @@ describe('AreaNames', () => {
       },
     )
 
+    it('steps a mark under the Show what’s here / Showing button clear of it too', async () => {
+      const w = mountNames({ showing: true })
+      plateOver('lq-show-names')
+      await w.setProps({ relayout: 'show-names' })
+      await new Promise((resolve) => setTimeout(resolve, 400))
+      await nextTick()
+      expect(top(w, '[data-area-mark="villager"]')).toBeGreaterThanOrEqual(
+        340 + 8,
+      )
+    })
+
     it('steps a mark under the Hide tab beside it, not up under the open words', async () => {
       // What can be seen ends at 300; the tab (250..290) sits at its foot, the words end just above it, edge to edge.
       const w = mountNames({ showing: true, footCover: 240 })
