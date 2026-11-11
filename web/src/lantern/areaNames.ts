@@ -362,10 +362,11 @@ const MARK_APART = 24
  * from (below the line, for a mark that stands on its thing). A spot must be on
  * the `visible` part, under none of the `panels` and not under the `words`
  * (which would cover it); a spot the mark slides to keeps its whole dot
- * (`MARK_RADIUS` from its middle) off the words, so no part of it is covered
- * and a press anywhere on it reaches it. A mark with no such spot keeps where it is. A mark
- * stepped out vertically gives way level with the nearest mark it gives way
- * to when it can, first to the side its thing lies on (left when its thing
+ * (`MARK_RADIUS` from its middle) off the words, so a press anywhere on it
+ * reaches it. The words end a slide: a mark whose slide reaches them goes
+ * on to the next row rather than across them or to the other side. A mark
+ * with no such spot keeps where it is. A mark stepped out vertically gives
+ * way level with the nearest mark it gives way to when it can, first to the side its thing lies on (left when its thing
  * lies left of that mark's thing, else right). A mark standing on the edge of
  * the words (`onWords`) slides only along that edge, in the words' own band.
  */
@@ -470,6 +471,9 @@ export function keepMarksApart(
         // At each step the level spot first, then the mark's own line.
         for (const lift of row === 0 && level !== 0 ? [level, 0] : [0]) {
           const cy = by + lift + along[1] * k * MARK_APART
+          // The words end a slide: the mark gives way a row further out
+          // instead of across them or to the other side of its neighbour.
+          if (k !== 0 && !entry.onWords && touchesWords(cx, cy)) continue search
           if (free(cx, cy, entry)) {
             spot = [cx, cy]
             break search

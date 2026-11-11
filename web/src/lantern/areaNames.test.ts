@@ -901,7 +901,7 @@ describe('keepMarksApart', () => {
 
   it('never slides a stepped mark so its dot lies half under the words beside it', () => {
     // Books, kept apart from Shelves, slides right along its row: its middle
-    // lands a hair left of the spoken line, its right half under it.
+    // would land a hair left of the spoken line, its right half under it.
     const words = { x: 180, y: 100, w: 150, h: 40 }
     const out = keepMarksApart(
       [
@@ -915,11 +915,27 @@ describe('keepMarksApart', () => {
     const books = out[1]
     const nearestX = Math.max(words.x, Math.min(books.x, words.x + words.w))
     const nearestY = Math.max(words.y, Math.min(books.y, words.y + words.h))
-    // The 12 px dot reaches 6 px from its middle.
+    // The whole dot, its glow included, keeps off the words.
     expect(
       Math.hypot(books.x - nearestX, books.y - nearestY),
-    ).toBeGreaterThanOrEqual(6)
+    ).toBeGreaterThanOrEqual(8)
     expect(Math.hypot(books.x - 150, books.y - 110)).toBeGreaterThanOrEqual(24)
+  })
+
+  it('gives way one row further out, beside its neighbour, when the words end its slide', () => {
+    const words = { x: 180, y: 100, w: 150, h: 40 }
+    const [shelves, books] = keepMarksApart(
+      [
+        mark('shelves', 150, 110, { x: 150, y: 60 }),
+        mark('books', 155, 110, { x: 156, y: 60 }),
+      ],
+      [],
+      visible,
+      [words],
+    )
+    // Not across the line, and not to the other side of Shelves.
+    expect(books).toMatchObject({ x: 155, y: 134 })
+    expect(books.x).toBeGreaterThanOrEqual(shelves.x)
   })
 
   it('keeps marks moved in off the foot apart too', () => {
