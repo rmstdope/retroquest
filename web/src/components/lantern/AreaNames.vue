@@ -25,8 +25,8 @@ import type { PictureSize, Rect } from '@/lantern/roomMotionScene'
  * that can be picked up green, ways out amber, scenery plain); a name that
  * would cover another name or a button, a plate or the words moves to a free
  * spot with a thin line back to its mark, and a thing under the words (the
- * narrator's cards where they are seen, not the empty rest of their column)
- * has neither until the words are gone. A mark whose spot lies under the room
+ * narrator's cards and spoken lines where they are seen, not the empty rest of
+ * their column) has neither until the words are gone. A mark whose spot lies under the room
  * plate, a button in the picture's corner, the story's Hide/Show tab or the
  * Show what's here button steps to the nearest spot just outside that panel
  * (out from under the words when it can; its name and line follow it, and a
@@ -95,8 +95,8 @@ const PANELS =
   '.lq-show-names'
 /** The words over the picture beside the narrator's cards, under which a thing's mark and name wait. */
 const WORDS = '.lq-arrival-card, .lq-ln, .lq-more-below, .lq-narration-hint'
-/** The narrator's cards, each seen only where its scrolling story shows it. */
-const CARDS = '.lq-story-wrap .lq-card'
+/** The narrator's cards and the one column's spoken lines, each seen only where its scrolling story shows it. */
+const CARDS = '.lq-story-wrap .lq-card, .lq-story-wrap .lq-line'
 
 const root = ref<HTMLElement | null>(null)
 const view = ref<PictureSize>({ width: 0, height: 0 })

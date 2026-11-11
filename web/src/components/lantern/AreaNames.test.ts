@@ -58,11 +58,17 @@ function mountNames(
   return wrapper
 }
 
-/** The narrator's cards as the layout draws them: the wrap, its scrolling story, and one card, each at its own rectangle (top, bottom) across the stage. */
+/**
+ * The words column as the layout draws it: the wrap, its scrolling story, and
+ * in it one narrator's card or, with `line`, one row of the one column's
+ * spoken lines (`.lq-cl > .lq-col > .lq-line`, the bubble at `card`), each at
+ * its own rectangle (top, bottom) across the stage.
+ */
 function cardsOver(
   wrap: [number, number],
   story: [number, number],
   card: [number, number],
+  line = false,
 ): void {
   const at = (el: HTMLElement, [top, bottom]: [number, number]): void => {
     vi.spyOn(el, 'getBoundingClientRect').mockReturnValue({
@@ -81,9 +87,17 @@ function cardsOver(
   wrapEl.className = 'lq-story-wrap lq-cards'
   const storyEl = document.createElement('section')
   storyEl.className = 'lq-story'
-  const cardEl = document.createElement('article')
-  cardEl.className = 'lq-turn lq-card'
-  storyEl.append(cardEl)
+  const cardEl = document.createElement(line ? 'div' : 'article')
+  cardEl.className = line ? 'lq-line' : 'lq-turn lq-card'
+  if (line) {
+    const row = document.createElement('div')
+    row.className = 'lq-cl lq-cl-left'
+    const col = document.createElement('div')
+    col.className = 'lq-col'
+    col.append(cardEl)
+    row.append(col)
+    storyEl.append(row)
+  } else storyEl.append(cardEl)
   wrapEl.append(storyEl)
   document.querySelector('.lq-stage')!.append(wrapEl)
   at(wrapEl, wrap)
@@ -445,6 +459,17 @@ describe('AreaNames', () => {
       expect(w.find('[data-area-mark="villager"]').exists()).toBe(true)
       // The way north's mark (480, 54) is under the card.
       expect(w.find('[data-area-mark="exit-north"]').exists()).toBe(false)
+    })
+
+    it('has neither mark nor name for a thing under a spoken line of the one column (rq-a6o6)', async () => {
+      const w = mountNames({ showing: true })
+      // A spoken line's bubble (20..240) in a column running to 320; the villager's mark (144, 270) is below it.
+      cardsOver([0, 320], [0, 320], [20, 240], true)
+      await w.setProps({ relayout: 'words' })
+      await new Promise((resolve) => setTimeout(resolve, 400))
+      await nextTick()
+      expect(w.find('[data-area-mark="exit-north"]').exists()).toBe(false)
+      expect(w.find('[data-area-mark="villager"]').exists()).toBe(true)
     })
 
     it('shows a thing above the story where a card has scrolled out of it (rq-a6o6)', async () => {
