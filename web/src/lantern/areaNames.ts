@@ -361,7 +361,9 @@ const MARK_APART = 24
  * whole line is full onto a row one `MARK_APART` further from where it came
  * from (below the line, for a mark that stands on its thing). A spot must be on
  * the `visible` part, under none of the `panels` and not under the `words`
- * (which would cover it); a mark with no such spot keeps where it is. A mark
+ * (which would cover it); a spot the mark slides to keeps its whole dot
+ * (`MARK_RADIUS` from its middle) off the words, so no part of it is covered
+ * and a press anywhere on it reaches it. A mark with no such spot keeps where it is. A mark
  * stepped out vertically gives way level with the nearest mark it gives way
  * to when it can, first to the side its thing lies on (left when its thing
  * lies left of that mark's thing, else right). A mark standing on the edge of
@@ -390,6 +392,15 @@ export function keepMarksApart(
   const result = [...marks]
   const underWords = (x: number, y: number): boolean =>
     words.some((r) => inWords(x, y, r))
+  /** Whether a dot with its middle at (`x`, `y`) would lie even partly under the words. */
+  const touchesWords = (x: number, y: number): boolean =>
+    words.some(
+      (r) =>
+        x > r.x - MARK_RADIUS &&
+        x < r.x + r.w + MARK_RADIUS &&
+        y > r.y - MARK_RADIUS &&
+        y < r.y + r.h + MARK_RADIUS,
+    )
   // A mark standing on its thing, clear of every other such mark, holds its
   // own spot: no mark that slides lands on it, so it never has to move.
   const holding = marks.filter(
@@ -415,7 +426,9 @@ export function keepMarksApart(
     (self.onWords
       ? Math.abs(y - self.y) < 0.5 &&
         words.some((r) => x >= r.x && x <= r.x + r.w)
-      : !underWords(x, y)) &&
+      : Math.hypot(x - self.x, y - self.y) < 0.5
+        ? !underWords(x, y)
+        : !touchesWords(x, y)) &&
     placedAt.every(([px, py]) => Math.hypot(px - x, py - y) >= MARK_APART - 0.5)
   for (const { entry, index } of order) {
     // A mark standing on its thing under the words (none, once `clearOfWords` has run) is covered with them: it
