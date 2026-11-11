@@ -3,8 +3,10 @@
  * story moves on (a thing taken, a character gone, a way opened), each with an
  * id, a title and the words for the edit. A patch about one thing links to that
  * thing's named area (`roomAreas.ts`), so the navigator need not mark the spot
- * twice. A change that alters the whole view is another picture, not a patch.
- * The declared lists live in `roomPatches/act<N>RoomPatches.ts`; a patch not
+ * twice. A change that alters the whole view is another picture, not a patch;
+ * the Village Chapel's candle-lit, whose light covers almost the whole picture,
+ * is the agreed exception. Patches that are on together are laid in their
+ * declared order, a later one over an earlier one. The declared lists live in `roomPatches/act<N>RoomPatches.ts`; a patch not
  * made yet is not a defect. The base picture shows the room as the game
  * starts: a thing there at the start has a taken or gone patch, a thing or a
  * way that only turns up later an appears or open patch, unless the change

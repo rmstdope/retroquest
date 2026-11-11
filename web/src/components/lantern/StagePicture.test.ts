@@ -383,4 +383,46 @@ describe('StagePicture patches', () => {
     await nextTick()
     expect(layers(w)).toContain(ROPE)
   })
+
+  it('stacks patches fading in together in their declared order, the later-declared loading first', async () => {
+    const w = await picture([])
+    await w.setProps({ patches: [BUCKET, ROPE] })
+    await patchLoader(w, ROPE).trigger('load')
+    await patchLoader(w, BUCKET).trigger('load')
+    expect(layers(w)).toEqual([BUCKET, ROPE])
+  })
+
+  it('stacks patches fading in together in their declared order, the earlier-declared loading first', async () => {
+    const w = await picture([])
+    await w.setProps({ patches: [BUCKET, ROPE] })
+    await patchLoader(w, BUCKET).trigger('load')
+    await patchLoader(w, ROPE).trigger('load')
+    expect(layers(w)).toEqual([BUCKET, ROPE])
+  })
+
+  it('lays a patch declared earlier under one already there', async () => {
+    const w = await picture([ROPE])
+    await w.setProps({ patches: [BUCKET, ROPE] })
+    await patchLoader(w, BUCKET).trigger('load')
+    expect(layers(w)).toEqual([BUCKET, ROPE])
+  })
+
+  it('takes away only the patch that no longer applies, the other staying on', async () => {
+    const w = await picture([BUCKET, ROPE])
+    await w.setProps({ patches: [BUCKET] })
+    vi.advanceTimersByTime(1300)
+    await nextTick()
+    expect(layers(w)).toEqual([BUCKET])
+    expect(w.get('img.lq-patch').classes()).toContain('lq-patch-on')
+  })
+
+  it('lays the patches of a loaded save in their declared order, the later-declared loading first', async () => {
+    const scene = useSceneStore()
+    const w = await picture([])
+    scene.reset()
+    await w.setProps({ patches: [BUCKET, ROPE] })
+    await patchLoader(w, ROPE).trigger('load')
+    await patchLoader(w, BUCKET).trigger('load')
+    expect(layers(w)).toEqual([BUCKET, ROPE])
+  })
 })

@@ -22,7 +22,8 @@ import { useSceneStore } from '@/stores/useSceneStore'
  * second, at once under Reduce motion) and the old picture goes once the fade
  * is over. In dark mode the picture is dimmed.
  * Patches (`patches`, the URLs of the transparent pictures the story's changes
- * to the room call for) are laid over the picture, trimmed and dimmed with it.
+ * to the room call for) are laid over the picture, trimmed and dimmed with it,
+ * each over those before it in `patches`, however they load.
  * Those there when the picture comes up are there without a fade, and the
  * picture waits (up to a second, counted from the dark of a change of scene,
  * never during the fade-out) for the ones still loading. A load (the scene
@@ -196,6 +197,23 @@ watch(
   { flush: 'sync' },
 )
 
+/**
+ * Stack the layers in the order `patches` asks for them (the room's declared
+ * order), however they loaded. A layer fading out keeps its place just above
+ * the layer that was under it.
+ */
+function stackInDeclaredOrder(): void {
+  let rank = -1
+  const ranked = layers.value.map((layer) => {
+    const at = props.patches.indexOf(layer.src)
+    if (at >= 0) rank = at
+    return { layer, rank }
+  })
+  // A stable sort: a leaving layer stays after the one it shares its rank with.
+  ranked.sort((a, b) => a.rank - b.rank)
+  layers.value = ranked.map(({ layer }) => layer)
+}
+
 /** The story changed the room Elior stands in: patches fade in and out. */
 function fadePatches(): void {
   if (!shown.value || shown.value !== props.src) return
@@ -228,6 +246,7 @@ function fadePatches(): void {
       }, PATCH_START_MS),
     )
   }
+  stackInDeclaredOrder()
   patchTimers.push(
     setTimeout(() => {
       layers.value = layers.value.filter(

@@ -97,6 +97,13 @@ describe('room image patches', () => {
     },
   )
 
+  it("lay the chapel's locket over its candle's light, which covers almost the whole picture", () => {
+    const ids = declaredPatches('Act1', 'VillageChapel').map((p) => p.id)
+    expect(ids.indexOf('candle-lit')).toBeLessThan(
+      ids.indexOf('locket-appears'),
+    )
+  })
+
   it('leave out the patches of a room that has none', () => {
     const images = allImages(new Act1())
     const dream = images.find((i) => i.id === 'act1-the-dream')

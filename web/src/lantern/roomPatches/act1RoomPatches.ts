@@ -188,17 +188,18 @@ export const ACT1_ROOM_PATCHES: Record<string, ImagePatch[]> = {
     },
   ],
   VillageChapel: [
-    {
-      id: 'locket-appears',
-      title: 'Locket appears',
-      text: 'Add the locket to the picture.',
-      area: 'locket',
-    },
+    // The candle's light covers almost the whole picture: the locket lies on it.
     {
       id: 'candle-lit',
       title: 'Candle lit',
       text: 'Light the candle on the altar: a small steady flame, and the dark corner beside it lit.',
       area: 'candle',
+    },
+    {
+      id: 'locket-appears',
+      title: 'Locket appears',
+      text: 'Add the locket to the picture.',
+      area: 'locket',
     },
   ],
   RoadToGreendale: [
