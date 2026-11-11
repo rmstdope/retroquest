@@ -142,8 +142,9 @@ On top of verify-bead's *Look*, check what the acceptance touches:
   using it at the same time. Do every sized look in a Chrome window of your own, and there set
   each size with Chrome's device emulation (the developer tools' device mode, at the width and
   height you need). If your tools cannot drive device mode, resize your own window instead,
-  never theirs. Open that window as a new window (the integration's new-window facility, or
-  Chrome's own "New Window"); a new tab is not one. If no new window can be opened, that is a
+  never theirs, and only after checking that it holds no tab you did not open (verify-bead's
+  *The navigator's window*). Open that window as a new window (the integration's new-window
+  facility, or Chrome's own "New Window"); a new tab is not one. If no new window can be opened, that is a
   blocker to report, not a reason to use theirs. A look that needs no particular screen size
   may still use a tab in the navigator's window.
 - **Light and dark.** The theme follows the device. Where the bead changes colour, contrast or
