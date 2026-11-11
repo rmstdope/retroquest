@@ -1,0 +1,40 @@
+<!doctype html><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>Dots kept apart</title><style>
+:root{--bg:#f4efe4;--fg:#2b2620;--muted:#6d655a;--card:#fffaf0;--line:#d9cfbd}
+@media (prefers-color-scheme:dark){:root{--bg:#1b1916;--fg:#ece5d8;--muted:#a59c8e;--card:#25221d;--line:#3a352d}}
+body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.5 Georgia,serif;padding:20px 16px}
+h1{font-size:20px;margin:0 0 4px}p.lede{color:var(--muted);margin:0 0 18px;max-width:760px}
+figure{margin:0 0 18px;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:10px;display:inline-block;max-width:100%;box-sizing:border-box}
+figcaption{font-size:13px;color:var(--muted);margin-top:8px;max-width:606px}figcaption b{color:var(--fg)}
+.wrap{overflow-x:auto}
+.pic{position:relative;overflow:hidden;border-radius:4px;background:#000;width:606px;height:455px}
+.pic img{position:absolute;display:block;width:816px;height:459px;left:-106.5px;top:0}
+.mark{position:absolute;width:12px;height:12px;margin:-6px 0 0 -6px;border-radius:50%;background:#ffd27a;box-shadow:0 0 8px 3px rgba(255,190,80,.85);z-index:3}
+.mark.two{width:20px;height:20px;margin:-10px 0 0 -10px;font:700 12px/20px system-ui;text-align:center;color:#2a1c05}
+.name{position:absolute;transform:translateY(-50%);white-space:nowrap;font:600 13px/1 system-ui,sans-serif;padding:5px 8px;border-radius:6px;background:rgba(20,18,14,.8);color:#f3ece0;z-index:3}
+.name.g{color:#9fd59f}
+.lead{position:absolute;height:1.5px;background:rgba(255,230,180,.8);transform-origin:0 50%;z-index:2}
+.plate{position:absolute;left:8px;right:8px;top:8px;height:129px;box-sizing:border-box;background:rgba(27,30,38,.92);color:#ece5d8;border:1px solid #3a3f4b;border-radius:10px;padding:12px 16px;z-index:4}
+.plate small{display:block;color:#a59c8e;font:11px system-ui;letter-spacing:.1em}.plate b{font:600 22px Georgia,serif;display:block;margin:6px 0 10px}
+.chip{display:inline-block;font:13px system-ui;padding:5px 11px;border-radius:14px;margin:0 3px 3px 0;border:1px solid #3f6a3f;color:#9fd59f;background:rgba(40,70,40,.35)}
+.chip.p{border-color:#3f5f8a;color:#8fb6ea;background:rgba(40,60,90,.35)}
+.showbtn{position:absolute;left:267px;top:266px;width:72px;height:32px;box-sizing:border-box;border-radius:8px;background:rgba(27,30,38,.92);color:#ece5d8;font:13px/32px system-ui;text-align:center;z-index:4}
+.showing{position:absolute;left:501px;top:264px;padding:0 12px;height:28px;border-radius:14px;background:rgba(60,45,15,.9);border:1px solid #c9952d;color:#f3ece0;font:13px/28px system-ui;z-index:4}
+.bag{position:absolute;left:44px;top:325px;color:rgba(240,230,210,.6);font:14px system-ui;z-index:4}
+.bar{position:absolute;left:0;right:0;top:390px;height:65px;background:rgba(20,22,28,.9);z-index:4}
+.bar i{position:absolute;left:20px;top:6px;width:434px;height:44px;border-radius:8px;background:#f7a823;font:600 15px/44px system-ui;color:#2a1c05;text-align:center;font-style:normal}
+.list{position:absolute;z-index:5;background:#fffaf0;color:#2b2620;border-radius:8px;box-shadow:0 4px 14px rgba(0,0,0,.5);font:600 14px system-ui;padding:4px 0;min-width:120px}
+.list div{padding:9px 14px}.list div+div{border-top:1px solid #e6dccb}
+.ring{position:absolute;width:30px;height:30px;margin:-15px 0 0 -15px;border-radius:50%;border:2px solid #fff;z-index:2;opacity:.0}
+</style><h1 style='font-size:24px'>rq-zumc — Two dots never lie on each other</h1><p class=lede>Agreed: side by side (A), and dots stay clear of the ▴ Show / ▾ Hide button as they do of the plate and corner buttons.</p><hr style='margin:28px 0;border:0;border-top:1px solid var(--line)'><h1>Today — Bread and Table on one spot</h1><p class=lede>At this width (and the narrower ones checked) the Bread and Table dots stand 12 px apart: their glows run into one blob, two names point at it, and the ▴ Show button sits on top of both. Shelves and Books are already apart since the last change.</p><figure><div class=wrap><div class=pic><img src="../../web/public/images/generated/act1-eliors-cottage.png"><div class=plate><small>YOU ARE IN</small><b>Elior's Cottage</b><span class="chip p">Grandmother</span><span class=chip>Lantern</span><span class=chip>Hearth</span><span class=chip>Bread</span><span class=chip>Table</span><span class=chip>Shelves</span><span class=chip>Books</span></div>
+<div class=mark style="left:263px;top:149px"></div><div class=mark style="left:293px;top:148px"></div><div class=lead style="left:293px;top:148px;width:36px"></div><div class=name style="left:330px;top:164px">Books</div><div class=name style="left:230px;top:172px">Shelves</div>
+<div class=mark style="left:122px;top:238px"></div><div class=name class=g style="left:88px;top:214px;color:#9fd59f">Hearth</div>
+<div class=mark style="left:475px;top:190px"></div><div class=name style="left:422px;top:166px;color:#8fb6ea">Grandmother</div>
+<div class=mark style="left:587px;top:240px"></div><div class=name style="left:528px;top:217px;color:#9fd59f">Lantern</div>
+<div class=showing>◎ Showing</div><div class=bag>Your bag is empty.</div><div class=bar><i>Actions ▴</i></div>
+<div class=showbtn>▴ Show</div><div class=mark style="left:290px;top:285px"></div><div class=mark style="left:302px;top:283px"></div><div class=name style="left:276px;top:247px;color:#9fd59f">Bread</div><div class=name style="left:208px;top:238px">Table</div><div class=lead style="left:246px;top:246px;width:50px;transform:rotate(48deg)"></div></div></div><figcaption><b>Today.</b> One blob, two names, partly hidden under the button: a player can't tell which dot is the bread and which the table, nor press either reliably.</figcaption></figure><hr style='margin:28px 0;border:0;border-top:1px solid var(--line)'><h1>Option A — side by side, clear of the ▴ Show button</h1><p class=lede>The two dots stand side by side, a dot's width of clear space between them, just above the ▴ Show button. The one further left in the picture (Table) stays on the left; each name sits beside its own dot. Same rule as the one we agreed for Shelves and Books — now for any two dots, not only the ones moved off the panel.</p><figure><div class=wrap><div class=pic><img src="../../web/public/images/generated/act1-eliors-cottage.png"><div class=plate><small>YOU ARE IN</small><b>Elior's Cottage</b><span class="chip p">Grandmother</span><span class=chip>Lantern</span><span class=chip>Hearth</span><span class=chip>Bread</span><span class=chip>Table</span><span class=chip>Shelves</span><span class=chip>Books</span></div>
+<div class=mark style="left:263px;top:149px"></div><div class=mark style="left:293px;top:148px"></div><div class=lead style="left:293px;top:148px;width:36px"></div><div class=name style="left:330px;top:164px">Books</div><div class=name style="left:230px;top:172px">Shelves</div>
+<div class=mark style="left:122px;top:238px"></div><div class=name class=g style="left:88px;top:214px;color:#9fd59f">Hearth</div>
+<div class=mark style="left:475px;top:190px"></div><div class=name style="left:422px;top:166px;color:#8fb6ea">Grandmother</div>
+<div class=mark style="left:587px;top:240px"></div><div class=name style="left:528px;top:217px;color:#9fd59f">Lantern</div>
+<div class=showing>◎ Showing</div><div class=bag>Your bag is empty.</div><div class=bar><i>Actions ▴</i></div>
+<div class=showbtn>▴ Show</div><div class=mark style="left:290px;top:252px"></div><div class=mark style="left:314px;top:252px"></div><div class=name style="left:326px;top:252px;color:#9fd59f">Bread</div><div class=name style="left:228px;top:252px">Table</div></div></div><figcaption><b>Option A (recommended).</b> Two clear dots, each with its own name. Pressing either does exactly what pressing it does today.</figcaption></figure>
