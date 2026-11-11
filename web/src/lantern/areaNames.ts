@@ -166,7 +166,7 @@ function underPanel(x: number, y: number, panel: Rect): boolean {
   )
 }
 
-/** Whether (`x`, `y`) lies under the words' rectangle `words`, where a mark waits unseen. */
+/** Whether (`x`, `y`) lies under the words' rectangle `words`, where a mark would be covered. */
 function inWords(x: number, y: number, words: Rect): boolean {
   return (
     x >= words.x &&
@@ -183,7 +183,7 @@ function inWords(x: number, y: number, words: Rect): boolean {
  * to either side, that is on the `visible` part (a spot that lands under another
  * panel goes on past it); a
  * panel that spans the width leaves only below or above. A spot under the
- * `words` (where the mark would wait unseen) is taken only when no other is
+ * `words` (where the mark would be covered; `clearOfWords` moves it on) is taken only when no other is
  * clear. A mark under no panel stays; one with no such spot is left where it
  * is. `rect`, what can be pressed, stays whole, so a thing wholly under a
  * panel is still marked.
@@ -303,7 +303,8 @@ export function clearOfWords(
     if (!words.some((r) => inWords(x, y, r))) return entry
     const kx = clamp(x, left, right)
     let best: number | null = null
-    let nearest: number | null = null
+    /** The edges to stand on: how far the dot would lie inside the words there, and whether a panel covers it. */
+    const stands: Array<{ y: number; depth: number; panel: boolean }> = []
     for (const dir of [1, -1] as const) {
       const edge = edgeOf(x, y, dir)
       const ky = clamp(edge + dir * REACH, top, bottom)
@@ -314,12 +315,33 @@ export function clearOfWords(
       if (clear && (best === null || Math.abs(ky - y) < Math.abs(best - y)))
         best = ky
       const stand = clamp(edge, top, bottom)
-      if (nearest === null || Math.abs(stand - y) < Math.abs(nearest - y))
-        nearest = stand
+      stands.push({
+        y: stand,
+        depth: Math.max(0, dir > 0 ? edge - stand : stand - edge),
+        panel: panels.some((p) => underPanel(kx, stand, p)),
+      })
     }
     const from = entry.from ?? { x, y }
     if (best !== null) return { ...entry, x: kx, y: best, from }
-    return { ...entry, x: kx, y: nearest ?? y, from, onWords: true as const }
+    // No free picture: the edge that is half over the words at most and under no panel, nearest first.
+    const rank = (e: {
+      y: number
+      depth: number
+      panel: boolean
+    }): number[] => [
+      Number(e.panel),
+      Number(e.depth > MARK_RADIUS / 2),
+      e.depth,
+      Math.abs(e.y - y),
+    ]
+    const stand = stands.reduce((a, b) => {
+      const ra = rank(a)
+      const rb = rank(b)
+      for (let i = 0; i < ra.length; i++)
+        if (ra[i] !== rb[i]) return ra[i] < rb[i] ? a : b
+      return a
+    })
+    return { ...entry, x: kx, y: stand.y, from, onWords: true as const }
   })
 }
 
@@ -339,7 +361,7 @@ const MARK_APART = 24
  * whole line is full onto a row one `MARK_APART` further from where it came
  * from (below the line, for a mark that stands on its thing). A spot must be on
  * the `visible` part, under none of the `panels` and not under the `words`
- * (which hide a mark); a mark with no such spot keeps where it is. A mark
+ * (which would cover it); a mark with no such spot keeps where it is. A mark
  * stepped out vertically gives way level with the nearest mark it gives way
  * to when it can, first to the side its thing lies on (left when its thing
  * lies left of that mark's thing, else right). A mark standing on the edge of
@@ -390,10 +412,13 @@ export function keepMarksApart(
     y >= top - 0.5 &&
     y <= bottom + 0.5 &&
     !panels.some((panel) => underPanel(x, y, panel)) &&
-    (self.onWords ? Math.abs(y - self.y) < 0.5 : !underWords(x, y)) &&
+    (self.onWords
+      ? Math.abs(y - self.y) < 0.5 &&
+        words.some((r) => x >= r.x && x <= r.x + r.w)
+      : !underWords(x, y)) &&
     placedAt.every(([px, py]) => Math.hypot(px - x, py - y) >= MARK_APART - 0.5)
   for (const { entry, index } of order) {
-    // A mark standing on its thing under the words is hidden with them: it
+    // A mark standing on its thing under the words (none, once `clearOfWords` has run) is covered with them: it
     // stays, and neither moves nor pushes another.
     if (!entry.from && underWords(entry.x, entry.y)) continue
     const from = entry.from ?? entry

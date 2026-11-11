@@ -1148,14 +1148,51 @@ describe('clearOfWords', () => {
   })
 
   it('stands on the nearest edge of the words, half over them, when no free picture lies above or below', () => {
-    const wall = { x: 0, y: 0, w: 1000, h: 700 }
-    const [low] = clearOfWords([mark(500, 600)], [wall], [], visible)
-    expect([low.x, low.y]).toEqual([500, 700 - 8])
+    // Words from 150 to 650 across the width, with a panel above and one below too close to step into.
+    const band = { x: 0, y: 150, w: 1000, h: 500 }
+    const above = { x: 0, y: 100, w: 1000, h: 40 }
+    const below = { x: 0, y: 660, w: 1000, h: 40 }
+    const [low] = clearOfWords(
+      [mark(500, 600)],
+      [band],
+      [above, below],
+      visible,
+    )
+    expect([low.x, low.y]).toEqual([500, 650])
     expect(low.onWords).toBe(true)
-    const [high] = clearOfWords([mark(500, 100)], [wall], [], visible)
-    expect(high.x).toBe(500)
-    expect(high.y).toBe(8)
+    const [high] = clearOfWords(
+      [mark(500, 200)],
+      [band],
+      [above, below],
+      visible,
+    )
+    expect([high.x, high.y]).toEqual([500, 150])
     expect(high.onWords).toBe(true)
+  })
+
+  it('steps out the clear side, even when the other edge is nearer', () => {
+    const band = { x: 0, y: 150, w: 1000, h: 500 }
+    const plate = { x: 0, y: 100, w: 1000, h: 45 }
+    const below = { x: 0, y: 660, w: 1000, h: 40 }
+    const [m] = clearOfWords([mark(500, 200)], [band], [plate, below], visible)
+    // The plate bars the top and the other panel the foot: the dot stands on an edge.
+    expect(m.onWords).toBe(true)
+    const [n] = clearOfWords(
+      [mark(500, 200)],
+      [band],
+      [plate, { x: 0, y: 900, w: 1, h: 1 }],
+      visible,
+    )
+    expect(n.y).toBe(662)
+    expect(n.onWords).toBeUndefined()
+  })
+
+  it('stands at the nearest edge that is not wholly inside the words, never 8px inside a card that reaches the foot', () => {
+    // The words reach the foot of the visible part: the other edge is the one that is half over them.
+    const column = { x: 0, y: 8, w: 300, h: 692 }
+    const [m] = clearOfWords([mark(150, 600)], [column], [], visible)
+    expect(m.y).toBe(8)
+    expect(m.onWords).toBe(true)
   })
 
   it('stands on the edge line of a card that fills the picture but for a sliver', () => {
@@ -1190,5 +1227,16 @@ describe('keepMarksApart with marks on the words', () => {
     expect(
       Math.hypot(out[0].x - out[1].x, out[0].y - out[1].y),
     ).toBeGreaterThanOrEqual(23.5)
+  })
+
+  it('never slides a mark on the edge past the end of its words', () => {
+    const narrow = { x: 0, y: 0, w: 40, h: 700 }
+    const out = keepMarksApart(
+      [on(10, 'a'), on(14, 'b'), on(18, 'c')],
+      [],
+      visible,
+      [narrow],
+    )
+    for (const m of out) expect(m.x).toBeLessThanOrEqual(40)
   })
 })

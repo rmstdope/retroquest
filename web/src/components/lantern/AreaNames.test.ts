@@ -116,6 +116,11 @@ function markAt(w: VueWrapper, id: string): { x: number; y: number } | null {
   }
 }
 
+/** Whether `y` is at the top or the foot of a 540px picture, where words that fill it end. */
+function onAnEdge(y: number): boolean {
+  return y <= 20 || y >= 520
+}
+
 /** Let the words' measuring and fading settle. */
 async function settle(w: VueWrapper, relayout: string): Promise<void> {
   await w.setProps({ relayout })
@@ -414,7 +419,7 @@ describe('AreaNames', () => {
       expect(markAt(w, 'villager')).toEqual({ x: 432, y: 270 })
       // The bucket's point is under the words, which fill the height: its dot stands on their edge at its own x.
       expect(markAt(w, 'bucket')?.x).toBe(144)
-      expect(markAt(w, 'bucket')?.y).not.toBe(405)
+      expect(markAt(w, 'bucket')!.y).toBeGreaterThan(520)
     })
 
     /**
@@ -460,7 +465,7 @@ describe('AreaNames', () => {
         await new Promise((resolve) => setTimeout(resolve, 400))
         await nextTick()
         expect(markAt(w, 'villager')?.x).toBe(144)
-        expect(markAt(w, 'villager')?.y).not.toBe(270)
+        expect(onAnEdge(markAt(w, 'villager')!.y)).toBe(true)
         expect(markAt(w, 'bucket')).toEqual({ x: 816, y: 405 })
         words.remove()
         await settle(w, 'gone')
@@ -522,7 +527,7 @@ describe('AreaNames', () => {
       })
       wrappers.push(w)
       await nextTick()
-      expect(markAt(w, 'villager')?.y).not.toBe(270)
+      expect(onAnEdge(markAt(w, 'villager')!.y)).toBe(true)
       // Faded, with nothing else changing.
       words.style.visibility = 'hidden'
       await new Promise((resolve) => setTimeout(resolve, 400))
@@ -580,6 +585,30 @@ describe('AreaNames', () => {
       document.querySelector('.lq-story-wrap')!.remove()
       await settle(w, 'gone')
       expect(markAt(w, 'villager')).toEqual({ x: 144, y: 270 })
+    })
+
+    it('steps a dot under the plate up into the gap between the plate and the cards (the Shelves case)', async () => {
+      const w = mountNames({ showing: true })
+      const plate = document.createElement('div')
+      plate.className = 'lq-stage-plate'
+      document.querySelector('.lq-stage')!.append(plate)
+      vi.spyOn(plate, 'getBoundingClientRect').mockReturnValue({
+        left: 0,
+        top: 0,
+        width: 300,
+        height: 60,
+        right: 300,
+        bottom: 60,
+        x: 0,
+        y: 0,
+        toJSON: () => ({}),
+      })
+      // The exit's dot (480, 54) is clear of the plate in x; put the villager's (144, 270) under both: the gap 60..120 is above the card.
+      cardsOver([120, 540], [120, 540], [120, 400])
+      await settle(w, 'words')
+      const dot = markAt(w, 'villager')!
+      expect(dot.x).toBe(144)
+      expect(dot.y).toBeGreaterThan(400)
     })
 
     it('keeps two covered dots apart', async () => {
