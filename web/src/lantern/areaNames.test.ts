@@ -670,7 +670,7 @@ describe('keepMarksApart', () => {
     expect([a.x, b.x]).toEqual([50, 200])
   })
 
-  it('never moves a mark that stands on its thing; the moved mark gives way', () => {
+  it('a mark that stands on its thing keeps its place against a moved mark, which gives way', () => {
     const standing = mark('hook', 110, 120)
     const [moved, fixed] = keepMarksApart(
       [mark('books', 104, 120, { x: 104, y: 50 }), standing],
@@ -810,7 +810,7 @@ describe('keepMarksApart with marks that all stand on their things', () => {
     ])
   })
 
-  it('carries on to the left, then a second row, when the line is full', () => {
+  it('carries on to the left of the first mark when the right is out of room', () => {
     const out = keepMarksApart(
       [mark('a', 20, 300), mark('b', 20, 300), mark('c', 20, 300)],
       [],
@@ -821,6 +821,65 @@ describe('keepMarksApart with marks that all stand on their things', () => {
         expect(
           Math.hypot(out[i].x - out[j].x, out[i].y - out[j].y),
         ).toBeGreaterThanOrEqual(23.5)
+  })
+
+  it('slides to the left when the line to the right runs out', () => {
+    const out = keepMarksApart(
+      [mark('a', 100, 300), mark('b', 100, 300), mark('c', 100, 300)],
+      [],
+      { x: 0, y: 0, w: 140, h: 700 },
+    )
+    expect(out.map((m) => [m.x, m.y])).toEqual([
+      [100, 300],
+      [124, 300],
+      [76, 300],
+    ])
+  })
+
+  it('uses a second row below only when the whole line is full', () => {
+    const out = keepMarksApart(
+      [mark('a', 20, 300), mark('b', 20, 300), mark('c', 20, 300)],
+      [],
+      { x: 0, y: 0, w: 60, h: 700 },
+    )
+    expect(out.map((m) => [m.x, m.y])).toEqual([
+      [20, 300],
+      [44, 300],
+      [20, 324],
+    ])
+  })
+
+  it('never pushes a mark that was already clear of every other', () => {
+    const [a, b, c] = keepMarksApart(
+      [mark('a', 200, 300), mark('b', 205, 300), mark('c', 229, 315)],
+      [],
+      visible,
+    )
+    expect([a.x, a.y]).toEqual([200, 300])
+    expect([c.x, c.y]).toEqual([229, 315])
+    expect(Math.hypot(b.x - c.x, b.y - c.y)).toBeGreaterThanOrEqual(23.5)
+    expect(Math.hypot(b.x - a.x, b.y - a.y)).toBeGreaterThanOrEqual(23.5)
+  })
+
+  it('leaves a mark under the words where it is, hidden with them, and lets it push none', () => {
+    const words = [{ x: 190, y: 290, w: 30, h: 20 }]
+    const [hidden, other] = keepMarksApart(
+      [mark('a', 200, 300), mark('b', 205, 300)],
+      [],
+      visible,
+      words,
+    )
+    expect([hidden.x, hidden.y]).toEqual([200, 300])
+    expect([other.x, other.y]).toEqual([205, 300])
+  })
+
+  it('keeps the plain spot of a mark when no spot is free', () => {
+    const tiny = { x: 0, y: 0, w: 16, h: 16 }
+    const out = keepMarksApart([mark('a', 8, 8), mark('b', 8, 8)], [], tiny)
+    expect(out.map((m) => [m.x, m.y])).toEqual([
+      [8, 8],
+      [8, 8],
+    ])
   })
 
   it('never slides a mark under a panel', () => {

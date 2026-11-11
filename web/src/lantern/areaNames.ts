@@ -296,7 +296,23 @@ export function keepMarksApart(
   const result = [...marks]
   const underWords = (x: number, y: number): boolean =>
     words.some((r) => inWords(x, y, r))
-  const free = (x: number, y: number): boolean =>
+  // A mark standing on its thing, clear of every other such mark, holds its
+  // own spot: no mark that slides lands on it, so it never has to move.
+  const holding = marks.filter(
+    (entry, i) =>
+      !entry.from &&
+      !underWords(entry.x, entry.y) &&
+      marks.every(
+        (other, j) =>
+          i === j ||
+          !!other.from ||
+          Math.hypot(other.x - entry.x, other.y - entry.y) >= MARK_APART - 0.5,
+      ),
+  )
+  const free = (x: number, y: number, self: PlacedName): boolean =>
+    holding.every(
+      (h) => h === self || Math.hypot(h.x - x, h.y - y) >= MARK_APART - 0.5,
+    ) &&
     x >= left - 0.5 &&
     x <= right + 0.5 &&
     y >= top - 0.5 &&
@@ -325,7 +341,7 @@ export function keepMarksApart(
         const k = n <= reach ? n : -(n - reach)
         const cx = bx + along[0] * k * MARK_APART
         const cy = by + along[1] * k * MARK_APART
-        if (free(cx, cy)) {
+        if (free(cx, cy, entry)) {
           spot = [cx, cy]
           break search
         }
