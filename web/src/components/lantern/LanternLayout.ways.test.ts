@@ -27,14 +27,17 @@ describe('LanternLayout: leaving by pressing a way out in the picture', () => {
     },
   }
 
-  async function cottage(): Promise<ReturnType<typeof useGameStore>> {
+  async function cottage(
+    laptop = true,
+  ): Promise<ReturnType<typeof useGameStore>> {
     setActivePinia(createPinia())
     useSettingsStore().alwaysShowNames = false
     setPictureProbe(() => Promise.resolve(true))
     vi.stubGlobal(
       'matchMedia',
       vi.fn((query: string) => ({
-        matches: query.includes('min-width'),
+        matches:
+          query.includes('min-width') && (laptop || !query.includes('1024px')),
         addEventListener: vi.fn(),
         removeEventListener: vi.fn(),
       })),
@@ -89,6 +92,12 @@ describe('LanternLayout: leaving by pressing a way out in the picture', () => {
     await press(100, 100)
     expect(submit).toHaveBeenCalledWith('go south')
     expect(store.roomName).toBe("Elior's Cottage")
+  })
+
+  it('lets the pointer name a thing on a window just under laptop width (1000px)', async () => {
+    await cottage(false)
+    await point(700, 400)
+    expect(useAreaNamesStore().pointer).toEqual({ x: 700, y: 400 })
   })
 
   it('does nothing over bare painting but hurry the words', async () => {

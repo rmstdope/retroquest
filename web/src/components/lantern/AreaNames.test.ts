@@ -580,6 +580,23 @@ describe('AreaNames', () => {
       expect(w.get('[data-area-pointer]').text()).toBe('Tilda')
     })
 
+    /** The pointer name's bottom edge (its height is NAME_HEIGHT, 25) lies above the card at 285. */
+    const clearOfCard = (w: VueWrapper): void => {
+      const style = w.get('[data-area-pointer]').attributes('style')!
+      const top = parseFloat(/top: ([\d.]+)px/.exec(style)![1])
+      expect(top + 25).toBeLessThanOrEqual(285)
+    }
+
+    it('hangs the name of a pointed left-off dot clear of the card, never behind it', async () => {
+      const w = await boxedIn()
+      await w.setProps({ pointer: { x: 144, y: 270 } })
+      clearOfCard(w)
+    })
+
+    it('hangs the name of a focused left-off dot clear of the card, never behind it', async () => {
+      clearOfCard(await boxedIn({ focused: 'villager' }))
+    })
+
     it('names a left-off thing that has keyboard focus', async () => {
       const w = await boxedIn({ focused: 'villager' })
       expect(w.find('[data-area-name="villager"]').exists()).toBe(false)

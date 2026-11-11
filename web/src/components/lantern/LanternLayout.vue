@@ -685,16 +685,12 @@ watch([() => game.musicRoomKey, namesUp], () => {
   nameWay.value = null
 })
 
-/** The pointer moves over the stage: with a mouse over the bare picture, the name of the thing under it follows. */
+/** The pointer moves over the stage: with a mouse (on any width, 1000px included) over the bare picture, the name of the thing under it follows. */
 function onStagePointer(event: PointerEvent): void {
   const target = event.target instanceof Element ? event.target : null
   nameWay.value =
     target?.closest<HTMLElement>('[data-way]')?.dataset.way ?? null
-  if (
-    !laptop.value ||
-    event.pointerType === 'touch' ||
-    !target?.closest('.lq-stage-picture')
-  ) {
+  if (event.pointerType === 'touch' || !target?.closest('.lq-stage-picture')) {
     names.pointer = null
     return
   }
