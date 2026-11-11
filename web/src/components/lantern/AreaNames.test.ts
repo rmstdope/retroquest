@@ -540,6 +540,50 @@ describe('AreaNames', () => {
       },
     )
 
+    it('steps a mark under the Show what’s here / Showing button clear of it too', async () => {
+      const w = mountNames({ showing: true })
+      plateOver('lq-show-names')
+      await w.setProps({ relayout: 'show-names' })
+      await new Promise((resolve) => setTimeout(resolve, 400))
+      await nextTick()
+      expect(top(w, '[data-area-mark="villager"]')).toBeGreaterThanOrEqual(
+        340 + 8,
+      )
+    })
+
+    it('steps a mark under the Showing button in the picture’s foot corner up or aside, never off the picture', async () => {
+      // The button sits at the foot's right (780..950, 506..534); the villager's mark lies under it.
+      const w = mountNames({
+        showing: true,
+        boxes: {
+          ...boxes,
+          villager: { x: 0.88, y: 0.9, width: 0.04, height: 0.08 },
+        },
+      })
+      const button = document.createElement('button')
+      button.className = 'lq-show-names'
+      document.querySelector('.lq-stage')!.append(button)
+      vi.spyOn(button, 'getBoundingClientRect').mockReturnValue({
+        left: 780,
+        top: 506,
+        width: 170,
+        height: 28,
+        right: 950,
+        bottom: 534,
+        x: 780,
+        y: 506,
+        toJSON: () => ({}),
+      })
+      await w.setProps({ relayout: 'show-names' })
+      await new Promise((resolve) => setTimeout(resolve, 400))
+      await nextTick()
+      const style = w.get('[data-area-mark="villager"]').attributes('style')
+      const x = parseFloat(/left: ([\d.]+)px/.exec(style ?? '')![1])
+      const y = parseFloat(/top: ([\d.]+)px/.exec(style ?? '')![1])
+      expect(y <= 506 - 8 || x <= 780 - 8 || x >= 950 + 8).toBe(true)
+      expect(y).toBeLessThanOrEqual(540)
+    })
+
     it('steps a mark under the Hide tab beside it, not up under the open words', async () => {
       // What can be seen ends at 300; the tab (250..290) sits at its foot, the words end just above it, edge to edge.
       const w = mountNames({ showing: true, footCover: 240 })
