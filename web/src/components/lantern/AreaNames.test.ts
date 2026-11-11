@@ -373,6 +373,32 @@ describe('AreaNames', () => {
         expect(w.find('[data-area-mark="villager"]').exists()).toBe(true)
       },
     )
+
+    it('shows a thing again once the words over it at mount have faded (rq-fy44)', async () => {
+      // The stage coming back: the words folded away for the names are still fading out when the layer is put on the page.
+      const stage = document.createElement('div')
+      stage.className = 'lq-stage'
+      document.body.append(stage)
+      const words = wordsOver('lq-story-wrap')
+      const w = mount(AreaNames, {
+        attachTo: stage,
+        props: {
+          things,
+          boxes,
+          pictureSize: { width: 1920, height: 1080 },
+          showing: true,
+          pointer: null,
+        },
+      })
+      wrappers.push(w)
+      await nextTick()
+      expect(w.find('[data-area-mark="villager"]').exists()).toBe(false)
+      // Faded, with nothing else changing.
+      words.style.visibility = 'hidden'
+      await new Promise((resolve) => setTimeout(resolve, 400))
+      await nextTick()
+      expect(w.find('[data-area-mark="villager"]').exists()).toBe(true)
+    })
   })
 
   describe('under the room plate', () => {
