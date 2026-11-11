@@ -30,8 +30,8 @@ import type { PictureSize, Rect } from '@/lantern/roomMotionScene'
  * to the nearest spot just outside that panel (out from under the words when
  * it can; its name and line follow it, and a press on it is a press on its
  * thing), so no mark is ever hidden; the plate growing or folding moves it at
- * once. Otherwise the one thing under the `pointer` has its name just under the pointer, above it near the foot of
- * what can be seen, and has none while a ring is open (`ringOpen`): the ring
+ * once. Otherwise the one thing under the `pointer` has its name just under
+ * the pointer, above it near the foot of what can be seen, and has none while a ring is open (`ringOpen`): the ring
  * has the name. Marks and names stay on the part of the picture that can
  * be seen at every moment of its drift, above the `footCover` pixels the
  * action bar lies over; a thing wholly outside that part has neither. The

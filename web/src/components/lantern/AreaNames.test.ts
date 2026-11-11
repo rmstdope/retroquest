@@ -465,6 +465,32 @@ describe('AreaNames', () => {
       },
     )
 
+    it('steps a mark under the Hide tab beside it, not up under the open words', async () => {
+      // What can be seen ends at 300; the tab (250..290) sits at its foot, the words end just above it, edge to edge.
+      const w = mountNames({ showing: true, footCover: 240 })
+      plateOver('lq-words-hide', 250, 40)
+      const words = document.createElement('div')
+      words.className = 'lq-story-wrap'
+      document.querySelector('.lq-stage')!.append(words)
+      vi.spyOn(words, 'getBoundingClientRect').mockReturnValue({
+        left: 0,
+        top: 0,
+        width: 960,
+        height: 244,
+        right: 960,
+        bottom: 244,
+        x: 0,
+        y: 0,
+        toJSON: () => ({}),
+      })
+      await w.setProps({ relayout: 'words' })
+      await new Promise((resolve) => setTimeout(resolve, 400))
+      await nextTick()
+      const style = w.get('[data-area-mark="villager"]').attributes('style')
+      const left = parseFloat(/left: ([\d.]+)px/.exec(style ?? '')![1])
+      expect(left).toBeGreaterThanOrEqual(300 + 8)
+    })
+
     it('puts the mark back when the plate no longer covers it, and moves it when the plate grows', async () => {
       const w = mountNames({ showing: true })
       const plate = plateOver('lq-stage-plate', 200, 40)
