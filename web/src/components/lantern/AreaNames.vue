@@ -104,9 +104,10 @@ const PANELS =
   '.lq-stage-plate, .lq-phone-plate, .lq-stage-buttons button, .lq-words-hide, .lq-paper-tab, ' +
   '.lq-show-names'
 /** The words over the picture beside the narrator's cards, under which a thing's mark and name wait. */
-const WORDS = '.lq-arrival-card, .lq-ln, .lq-more-below, .lq-narration-hint'
-/** The narrator's cards and the one column's spoken lines, each seen only where its scrolling story shows it. */
-const CARDS = '.lq-story-wrap .lq-card, .lq-story-wrap .lq-line'
+const WORDS =
+  '.lq-arrival-card, .lq-ln, .lq-ln .lq-line-name, .lq-more-below, .lq-narration-hint'
+/** The narrator's cards and the one column's spoken lines (the whole `.lq-cl` row: the speaker's portrait, name row and bubble, all of which take a press), each seen only where its scrolling story shows it. */
+const CARDS = '.lq-story-wrap .lq-card, .lq-story-wrap .lq-cl'
 
 const root = ref<HTMLElement | null>(null)
 const view = ref<PictureSize>({ width: 0, height: 0 })
