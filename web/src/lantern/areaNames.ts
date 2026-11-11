@@ -20,6 +20,8 @@ export interface PlacedName extends AreaThing {
   y: number
   rect: Rect
   point?: { x: number; y: number }
+  /** Where the mark would have stood had it not been moved (off a panel, or in off the edge of what can be seen); absent when it was never moved. */
+  from?: { x: number; y: number }
 }
 
 /** A name's place: its top-left corner and size, and the thin line back to its mark when it had to move (null when it sits by its mark). */
@@ -124,18 +126,27 @@ export function markInside(
     const x1 = Math.min(rect.x + rect.w, visible.x + visible.w)
     const y1 = Math.min(rect.y + rect.h, visible.y + visible.h)
     if (x1 - x0 < 1 || y1 - y0 < 1) continue
+    const x = clamp(
+      clamp(entry.point?.x ?? (x0 + x1) / 2, x0, x1),
+      visible.x + MARK_RADIUS,
+      visible.x + visible.w - MARK_RADIUS,
+    )
+    const y = clamp(
+      clamp(entry.point?.y ?? (y0 + y1) / 2, y0, y1),
+      visible.y + MARK_RADIUS,
+      visible.y + visible.h - MARK_RADIUS,
+    )
+    // Moved only when pushed more than a mark's radius off its point (or, with
+    // none, off the middle of what is in view): merely trimmed by the drift's
+    // edge, a mark still stands on its thing.
+    const wantedX = entry.point?.x ?? (x0 + x1) / 2
+    const wantedY = entry.point?.y ?? (y0 + y1) / 2
+    const moved = Math.hypot(x - wantedX, y - wantedY) > MARK_RADIUS
     marked.push({
       ...entry,
-      x: clamp(
-        clamp(entry.point?.x ?? (x0 + x1) / 2, x0, x1),
-        visible.x + MARK_RADIUS,
-        visible.x + visible.w - MARK_RADIUS,
-      ),
-      y: clamp(
-        clamp(entry.point?.y ?? (y0 + y1) / 2, y0, y1),
-        visible.y + MARK_RADIUS,
-        visible.y + visible.h - MARK_RADIUS,
-      ),
+      x,
+      y,
+      ...(moved ? { from: { x: wantedX, y: wantedY } } : {}),
     })
   }
   return marked
@@ -215,8 +226,92 @@ export function clearOfPanels(
       )
         best = [kx, ky]
     }
-    return best ? { ...entry, x: best[0], y: best[1] } : entry
+    return best
+      ? {
+          ...entry,
+          x: best[0],
+          y: best[1],
+          from: entry.from ?? { x, y },
+        }
+      : entry
   })
+}
+
+/** How far apart two moved marks' middles stand: a mark's 12 px and as much again of clear space. */
+const MARK_APART = 24
+
+/**
+ * The marks of `marks` that were moved (they have a `from`) kept off every
+ * other mark, so two never land on each other. A mark that was never moved
+ * stays exactly where it is, and a moved one gives way to it. Moved marks are
+ * placed from left to right by where their things lie; one that would stand
+ * within `MARK_APART` of a mark already placed slides sideways along its line
+ * (down it, for a mark moved to the side of a panel), onward in steps of
+ * `MARK_APART` to the first free spot, then to the other side of where it
+ * landed when the line runs out, and only when the whole line is full onto a row one `MARK_APART`
+ * further from where it came from. A spot must be on the `visible` part,
+ * under none of the `panels` and not under the `words` (which hide a mark); a mark with no such spot keeps where it is.
+ */
+export function keepMarksApart(
+  marks: readonly PlacedName[],
+  panels: readonly Rect[],
+  visible: Rect,
+  words: readonly Rect[] = [],
+): PlacedName[] {
+  const left = visible.x + MARK_RADIUS
+  const right = visible.x + visible.w - MARK_RADIUS
+  const top = visible.y + MARK_RADIUS
+  const bottom = visible.y + visible.h - MARK_RADIUS
+  const placedAt: Array<[number, number]> = marks
+    .filter((entry) => !entry.from)
+    .map((entry) => [entry.x, entry.y])
+  const order = marks
+    .map((entry, index) => ({ entry, index }))
+    .filter(({ entry }) => entry.from)
+    .sort(
+      (a, b) =>
+        (a.entry.from?.x ?? 0) - (b.entry.from?.x ?? 0) || a.index - b.index,
+    )
+  const result = [...marks]
+  const free = (x: number, y: number): boolean =>
+    x >= left - 0.5 &&
+    x <= right + 0.5 &&
+    y >= top - 0.5 &&
+    y <= bottom + 0.5 &&
+    !panels.some((panel) => underPanel(x, y, panel)) &&
+    !words.some(
+      (r) => x >= r.x && x <= r.x + r.w && y >= r.y && y <= r.y + r.h,
+    ) &&
+    placedAt.every(([px, py]) => Math.hypot(px - x, py - y) >= MARK_APART - 0.5)
+  for (const { entry, index } of order) {
+    const from = entry.from ?? entry
+    const sideways = Math.abs(entry.x - from.x) > Math.abs(entry.y - from.y)
+    // The line the mark slid along, and which way a further row lies.
+    const along: [number, number] = sideways ? [0, 1] : [1, 0]
+    const away: [number, number] = sideways
+      ? [Math.sign(entry.x - from.x) || 1, 0]
+      : [0, Math.sign(entry.y - from.y) || 1]
+    const reach = Math.ceil(Math.max(visible.w, visible.h) / MARK_APART)
+    let spot: [number, number] | null = null
+    search: for (let row = 0; row <= reach; row++) {
+      const bx = entry.x + away[0] * row * MARK_APART
+      const by = entry.y + away[1] * row * MARK_APART
+      for (let n = 0; n <= reach * 2; n++) {
+        // 0, then onward along the line, then the other side of where it landed.
+        const k = n <= reach ? n : -(n - reach)
+        const cx = bx + along[0] * k * MARK_APART
+        const cy = by + along[1] * k * MARK_APART
+        if (free(cx, cy)) {
+          spot = [cx, cy]
+          break search
+        }
+      }
+    }
+    const [x, y] = spot ?? [entry.x, entry.y]
+    placedAt.push([x, y])
+    result[index] = { ...entry, x, y }
+  }
+  return result
 }
 
 /** The placed thing under (`x`, `y`): the smallest when several overlap, null over nothing. */
