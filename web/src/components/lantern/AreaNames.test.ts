@@ -510,6 +510,67 @@ describe('AreaNames', () => {
     })
   })
 
+  describe('names near their dots (rq-h6gg)', () => {
+    /** The plate over (0..300, 0..250) and one card from 285 down: the villager's dot (144, 270) is boxed in between. */
+    async function boxedIn(props = {}): Promise<VueWrapper> {
+      const w = mountNames({ showing: true, ...props })
+      const plate = document.createElement('div')
+      plate.className = 'lq-stage-plate'
+      document.querySelector('.lq-stage')!.append(plate)
+      vi.spyOn(plate, 'getBoundingClientRect').mockReturnValue({
+        left: 0,
+        top: 0,
+        width: 300,
+        height: 250,
+        right: 300,
+        bottom: 250,
+        x: 0,
+        y: 0,
+        toJSON: () => ({}),
+      })
+      cardsOver([285, 540], [285, 540], [285, 540])
+      await w.setProps({ relayout: 'words' })
+      await new Promise((resolve) => setTimeout(resolve, 400))
+      await nextTick()
+      return w
+    }
+
+    it('puts a name in the free strip under the last card, beside its dot with no line', async () => {
+      const w = mountNames({ showing: true })
+      cardsOver([0, 320], [0, 320], [20, 240])
+      await w.setProps({ relayout: 'words' })
+      await new Promise((resolve) => setTimeout(resolve, 400))
+      await nextTick()
+      const style = w.get('[data-area-name="villager"]').attributes('style')!
+      expect(parseFloat(/top: ([\d.]+)px/.exec(style)![1])).toBeGreaterThan(240)
+      expect(w.find('.lq-area-lines').exists()).toBe(false)
+    })
+
+    it('leaves off a boxed-in name but keeps its dot, and names it on pointer-over', async () => {
+      const w = await boxedIn()
+      expect(w.find('[data-area-mark="villager"]').exists()).toBe(true)
+      expect(w.find('[data-area-name="villager"]').exists()).toBe(false)
+      expect(w.find('.lq-area-lines').exists()).toBe(false)
+      await w.setProps({ pointer: { x: 144, y: 270 } })
+      expect(w.get('[data-area-pointer]').text()).toBe('Tilda')
+    })
+
+    it('names a left-off thing that has keyboard focus', async () => {
+      const w = await boxedIn({ focused: 'villager' })
+      expect(w.find('[data-area-name="villager"]').exists()).toBe(false)
+      expect(w.get('[data-area-pointer]').text()).toBe('Tilda')
+    })
+
+    it('brings every left-off name back beside its dot when the words go', async () => {
+      const w = await boxedIn()
+      document.querySelector('.lq-story-wrap')!.remove()
+      await w.setProps({ relayout: 'gone' })
+      await new Promise((resolve) => setTimeout(resolve, 400))
+      await nextTick()
+      expect(w.find('[data-area-name="villager"]').exists()).toBe(true)
+    })
+  })
+
   describe('under the room plate', () => {
     /** A plate over (0..300, 200..340) of the stage, the villager's mark (144, 216) at its top. */
     function plateOver(selector: string, top = 200, height = 140): HTMLElement {
