@@ -88,6 +88,8 @@ const SETTLE_MS = 350
 /** How far under the pointer its name hangs, and how near the foot of what can be seen it hangs above instead. */
 const POINTER_GAP = 18
 const FOOT = 60
+/** The room a hung name keeps round it from a card or panel when it can. */
+const HANG_ROOM = 3
 /** How near a dot the pointer must be to point at it. */
 const DOT_HIT = 14
 /** The things in the stage that a name keeps clear of. */
@@ -397,15 +399,21 @@ function hangAt(
     ...slides.map((d) => pin(x + POINTER_GAP, beside + d)),
     ...slides.map((d) => pin(x - POINTER_GAP - w, beside + d)),
   ]
-  // How much of the name lies on a card or panel, edge to edge (no margin: a narrow gap must still fit the name).
-  const covered = (at: { left: number; top: number }): number =>
+  // How much of the name, grown by `pad` on every side, lies on a card or panel.
+  const covered = (at: { left: number; top: number }, pad: number): number =>
     obstacles.value.reduce((sum, o) => {
-      const across = Math.min(at.left + w, o.x + o.w) - Math.max(at.left, o.x)
-      const down = Math.min(at.top + h, o.y + o.h) - Math.max(at.top, o.y)
+      const across =
+        Math.min(at.left + w + pad, o.x + o.w) - Math.max(at.left - pad, o.x)
+      const down =
+        Math.min(at.top + h + pad, o.y + o.h) - Math.max(at.top - pad, o.y)
       return across > 0 && down > 0 ? sum + across * down : sum
     }, 0)
-  // The first clear spot; with none, the one that lies least on cards and panels.
-  const best = tries.reduce((a, b) => (covered(b) < covered(a) ? b : a))
+  // The first spot clear with a little room round it; else the first clear edge to edge (a narrow gap must still
+  // fit the name); else the one that lies least on cards and panels.
+  const best =
+    tries.find((t) => covered(t, HANG_ROOM) === 0) ??
+    tries.find((t) => covered(t, 0) === 0) ??
+    tries.reduce((a, b) => (covered(b, 0) < covered(a, 0) ? b : a))
   return { label: entry.label, kind: entry.kind, ...best }
 }
 
