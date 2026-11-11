@@ -105,8 +105,9 @@ const PANELS =
   '.lq-show-names'
 /** The words over the picture beside the narrator's cards, under which a thing's mark and name wait. */
 const WORDS = '.lq-arrival-card, .lq-ln, .lq-more-below, .lq-narration-hint'
-/** The narrator's cards and the one column's spoken lines, each seen only where its scrolling story shows it. */
-const CARDS = '.lq-story-wrap .lq-card, .lq-story-wrap .lq-line'
+/** The narrator's cards and the one column's spoken lines with their speaker name rows, each seen only where its scrolling story shows it. */
+const CARDS =
+  '.lq-story-wrap .lq-card, .lq-story-wrap .lq-line, .lq-story-wrap .lq-line-name'
 
 const root = ref<HTMLElement | null>(null)
 const view = ref<PictureSize>({ width: 0, height: 0 })
