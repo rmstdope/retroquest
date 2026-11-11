@@ -31,6 +31,8 @@ export interface NamedSpot extends PlacedName {
   width: number
   height: number
   leader: { x1: number; y1: number; x2: number; y2: number } | null
+  /** True when the words are open and no free spot lies near the mark: the mark stays, the name and its line are left off. */
+  leftOff?: true
 }
 
 /** The peak of the picture's drift (`lq-drift` in `StagePicture.vue`): how much larger, and how far over as a share of its size. */
@@ -465,6 +467,43 @@ function inside(rect: Rect, bounds: Rect): Rect {
   }
 }
 
+/** How far from its mark a name may be while the words are open (the nearest edge of the name to the mark), in pixels. */
+export const NAME_REACH = 150
+
+/** Whether the straight line from (`x1`, `y1`) to (`x2`, `y2`) passes through `rect` (touching its edge does not count). */
+function crosses(
+  line: { x1: number; y1: number; x2: number; y2: number },
+  rect: Rect,
+): boolean {
+  const dx = line.x2 - line.x1
+  const dy = line.y2 - line.y1
+  const edges: Array<[number, number]> = [
+    [-dx, line.x1 - rect.x],
+    [dx, rect.x + rect.w - line.x1],
+    [-dy, line.y1 - rect.y],
+    [dy, rect.y + rect.h - line.y1],
+  ]
+  let enter = 0
+  let leave = 1
+  for (const [p, q] of edges) {
+    if (p === 0) {
+      if (q <= 0) return false
+    } else if (p < 0) {
+      enter = Math.max(enter, q / p)
+    } else {
+      leave = Math.min(leave, q / p)
+    }
+  }
+  return enter < leave || (enter === leave && enter > 0 && enter < 1)
+}
+
+/** The distance from a mark to the nearest edge of `rect`. */
+function distanceTo(entry: PlacedName, rect: Rect): number {
+  const dx = Math.max(rect.x - entry.x, 0, entry.x - (rect.x + rect.w))
+  const dy = Math.max(rect.y - entry.y, 0, entry.y - (rect.y + rect.h))
+  return Math.hypot(dx, dy)
+}
+
 /** The radius of a mark's dot as drawn (half the 12 px mark); no name may lie over it. */
 const DOT_RADIUS = 6
 /** What covering a thing costs a name that finds no free spot: its own dot worst, another's next, anything else least. */
@@ -489,12 +528,18 @@ function dotOf(entry: PlacedName): Rect {
  * around its mark, with a thin line back to the mark. If no spot is free the
  * one with least overlap is kept, also with its line, where covering a dot
  * counts for more than covering anything else and covering its own dot for most.
+ *
+ * With `words` (the cards and spoken lines in view, which `obstacles` also
+ * holds) a moved name must lie within `NAME_REACH` of its mark with its line
+ * crossing none of them, and only a wholly free spot is taken: a name that has
+ * none is `leftOff` (its mark stays, it has no name or line).
  */
 export function layoutNames(
   placed: readonly PlacedName[],
   measure: (label: string) => { w: number; h: number },
   obstacles: readonly Rect[],
   bounds: Rect,
+  words?: readonly Rect[],
 ): NamedSpot[] {
   const taken: Rect[] = [...obstacles]
   const dots = placed.map(dotOf)
@@ -517,6 +562,7 @@ export function layoutNames(
     const below = inside({ x: entry.x - w / 2, y: entry.y + GAP, w, h }, bounds)
     let chosen = above
     let moved = false
+    let leftOff = false
     if (cost(above) > 0) {
       if (cost(below) === 0) {
         chosen = below
@@ -525,12 +571,21 @@ export function layoutNames(
         let best: { rect: Rect; cost: number } | null = null
         search: for (let ring = 1; ring <= RINGS; ring++) {
           const d = ring * STEP
+          // Past the reach every spot is too far: the search is over.
+          if (words && d > NAME_REACH + w + h) break
           for (const [dx, dy] of ringOffsets(d, w)) {
             const rect = inside(
               { x: above.x + dx, y: above.y + dy, w, h },
               bounds,
             )
             const c = cost(rect)
+            if (
+              words &&
+              (c > 0 ||
+                distanceTo(entry, rect) > NAME_REACH ||
+                words.some((r) => crosses(leaderFor(entry, rect), r)))
+            )
+              continue
             if (c === 0) {
               best = { rect, cost: c }
               break search
@@ -538,8 +593,21 @@ export function layoutNames(
             if (!best || c < best.cost) best = { rect, cost: c }
           }
         }
+        if (words && !best) leftOff = true
         chosen = best?.rect ?? above
       }
+    }
+    if (leftOff) {
+      spots.push({
+        ...entry,
+        left: chosen.x,
+        top: chosen.y,
+        width: chosen.w,
+        height: chosen.h,
+        leader: null,
+        leftOff: true,
+      })
+      return
     }
     taken.push(chosen)
     spots.push({

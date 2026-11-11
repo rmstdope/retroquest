@@ -9,6 +9,7 @@ import {
   keepMarksApart,
   closedWayThings,
   layoutNames,
+  NAME_REACH,
   markInside,
   nameAt,
   placeNames,
@@ -175,6 +176,102 @@ describe('layoutNames', () => {
     expect(overlap).toBe(false)
     expect(c.leader).not.toBeNull()
     expect(b.leader).toBeNull()
+  })
+
+  describe('with the words open', () => {
+    const plate = { x: 0, y: 0, w: 960, h: 96 }
+    const card = { x: 0, y: 110, w: 960, h: 300 }
+
+    it('leaves off a name that has no free room within reach, keeping its dot', () => {
+      const [spot] = layoutNames(
+        [mark('a', 'Books', 400, 103)],
+        measure,
+        [plate, card],
+        bounds,
+        [card],
+      )
+      expect(spot.leftOff).toBe(true)
+      expect(spot.leader).toBeNull()
+      expect(spot.x).toBe(400)
+    })
+
+    it('still sends that name far away when the words are hidden', () => {
+      const [spot] = layoutNames(
+        [mark('a', 'Books', 400, 103)],
+        measure,
+        [plate, card],
+        bounds,
+      )
+      expect(spot.leftOff).toBeUndefined()
+      expect(spot.leader).not.toBeNull()
+    })
+
+    it('puts a name in the free strip under the last card', () => {
+      const [spot] = layoutNames(
+        [mark('a', 'Hearth', 400, 440)],
+        measure,
+        [card],
+        bounds,
+        [card],
+      )
+      expect(spot.leftOff).toBeUndefined()
+      expect(spot.top).toBeGreaterThanOrEqual(card.y + card.h)
+    })
+
+    it('never draws a line across a card', () => {
+      const thin = { x: 0, y: 310, w: 960, h: 6 }
+      const [spot] = layoutNames(
+        [mark('a', 'Books', 500, 300)],
+        measure,
+        [{ x: 0, y: 0, w: 960, h: 299 }, thin],
+        bounds,
+        [thin],
+      )
+      expect(spot.leftOff).toBe(true)
+    })
+
+    it('leaves off a name whose only free spot lies beyond reach, even with no line over the words', () => {
+      const wall = { x: 0, y: 410, w: 300, h: 130 }
+      const [spot] = layoutNames(
+        [mark('a', 'Books', 100, 440)],
+        measure,
+        [card, wall],
+        bounds,
+        [card],
+      )
+      expect(spot.leftOff).toBe(true)
+    })
+
+    it('does not let a line slip through a thin card between samples', () => {
+      const thin = { x: 0, y: 303, w: 960, h: 2 }
+      const [spot] = layoutNames(
+        [mark('a', 'Books', 500, 300)],
+        measure,
+        [{ x: 0, y: 0, w: 960, h: 299 }, thin, { x: 0, y: 306, w: 960, h: 14 }],
+        bounds,
+        [thin],
+      )
+      expect(spot.leftOff).toBe(true)
+    })
+
+    it('keeps a moved name within reach of its dot', () => {
+      const spots = layoutNames(
+        [
+          mark('a', 'Notice Board', 400, 440),
+          mark('b', 'Old Notice', 404, 442),
+          mark('c', 'Third Notice', 402, 441),
+        ],
+        measure,
+        [card],
+        bounds,
+        [card],
+      )
+      for (const s of spots.filter((x) => !x.leftOff)) {
+        const dx = Math.max(s.left - s.x, 0, s.x - (s.left + s.width))
+        const dy = Math.max(s.top - s.y, 0, s.y - (s.top + s.height))
+        expect(Math.hypot(dx, dy)).toBeLessThanOrEqual(NAME_REACH)
+      }
+    })
   })
 
   it('keeps a name off a button', () => {

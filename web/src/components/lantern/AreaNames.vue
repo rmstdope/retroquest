@@ -43,6 +43,9 @@ import type { PictureSize, Rect } from '@/lantern/roomMotionScene'
  * press as a press on its thing (`press`); one of a way out goes the way out (below). The
  * thing with keyboard focus (`focused`) has its mark and name showing even
  * when not all are, and the pointer on that same thing adds no second name.
+ * While the words are open a name keeps within about 150px of its dot with its
+ * line off the words; one with no free spot there is left off (its dot stays
+ * and is named like a pointed or focused thing).
  * `relayout` is any value that changes when something it keeps clear of
  * moves (the words coming or going).
  *
@@ -85,10 +88,12 @@ const SETTLE_MS = 350
 /** How far under the pointer its name hangs, and how near the foot of what can be seen it hangs above instead. */
 const POINTER_GAP = 18
 const FOOT = 60
+/** How near a dot the pointer must be to point at it. */
+const DOT_HIT = 14
 /** The things in the stage that a name keeps clear of. */
 const KEEP_CLEAR =
   '.lq-stage-plate, .lq-phone-plate, .lq-stage-buttons button, .lq-float-menu, .lq-words-hide, ' +
-  '.lq-paper-tab, .lq-show-names, .lq-composer, .lq-story-wrap, .lq-arrival-card, .lq-ln'
+  '.lq-paper-tab, .lq-show-names, .lq-composer, .lq-arrival-card, .lq-ln'
 /** The panels no mark may lie under: the room plate, the buttons in the picture's top-right corner, the story's Hide/Show tab and the Show what's here button. */
 const PANELS =
   '.lq-stage-plate, .lq-phone-plate, .lq-stage-buttons button, .lq-words-hide, .lq-paper-tab, ' +
@@ -176,11 +181,12 @@ function measure(): void {
     height: root.value.clientHeight,
   }
   const scope = el.closest<HTMLElement>('.lq-main') ?? el
-  obstacles.value = rectsOf(scope, KEEP_CLEAR)
   covers.value = [
     ...rectsOf(scope, CARDS, '.lq-story'),
     ...rectsOf(scope, WORDS),
   ]
+  // The cards and spoken lines where they are seen, not the empty rest of their column.
+  obstacles.value = [...rectsOf(scope, KEEP_CLEAR), ...covers.value]
   panels.value = rectsOf(scope, PANELS)
   watchPanels(scope)
 }
@@ -304,10 +310,26 @@ function sizeOf(label: string): { w: number; h: number } {
   }
 }
 
+/** The words in view while they are open (a name keeps near its dot and its line off them), else nothing. */
+const wordsOpen = computed<Rect[] | undefined>(() =>
+  covers.value.length > 0 ? covers.value : undefined,
+)
+
+/** Every placed mark with its name, or left off when the words are open and no free spot lies near it. */
+const allSpots = computed<NamedSpot[]>(() =>
+  layoutNames(
+    placed.value,
+    sizeOf,
+    obstacles.value,
+    visible.value,
+    wordsOpen.value,
+  ),
+)
+
 /** Every mark and name when they are all showing, else those of the thing with focus. */
 const spots = computed<NamedSpot[]>(() => {
   if (!props.showing && !props.focused) return []
-  const all = layoutNames(placed.value, sizeOf, obstacles.value, visible.value)
+  const all = allSpots.value
   if (props.showing) return all
   const own = all.filter((spot) => spot.areaId === props.focused)
   if (own.length > 0) return own
@@ -319,9 +341,15 @@ const spots = computed<NamedSpot[]>(() => {
         sizeOf,
         obstacles.value,
         visible.value,
+        wordsOpen.value,
       ).filter((spot) => spot.areaId === props.focused)
     : []
 })
+
+/** The spots that have a name drawn (those not left off). */
+const named = computed<NamedSpot[]>(() =>
+  spots.value.filter((spot) => !spot.leftOff),
+)
 
 /** A press on a mark or name is a press on its thing; a way out's press is the stage's (`wayAt`), so it is let through. */
 function press(spot: NamedSpot, event: MouseEvent): void {
@@ -339,19 +367,12 @@ function press(spot: NamedSpot, event: MouseEvent): void {
   )
 }
 
-/** The one name that follows the pointer: the thing it is over, when not everything is shown, no ring is open and that thing is not already named for having focus. */
-const pointed = computed<{
-  label: string
-  kind: string
-  left: number
-  top: number
-} | null>(() => {
-  if (props.showing || props.ringOpen || !props.pointer) return null
-  const frame = frameOf()
-  const x = (props.pointer.x - frame.left) / frame.ratio
-  const y = (props.pointer.y - frame.top) / frame.ratio
-  const entry = nameAt(inView.value, x, y)
-  if (!entry || entry.areaId === props.focused) return null
+/** A name hung at (`x`, `y`): under it, or above it near the foot of what can be seen. */
+function hangAt(
+  entry: { label: string; kind: string },
+  x: number,
+  y: number,
+): { label: string; kind: string; left: number; top: number } {
   const { w, h } = sizeOf(entry.label)
   const { x: left, y: top, w: across, h: down } = visible.value
   const above = y > top + down - FOOT
@@ -364,6 +385,42 @@ const pointed = computed<{
       Math.min(top + down - h, above ? y - POINTER_GAP - h : y + POINTER_GAP),
     ),
   }
+}
+
+/**
+ * The one name that hangs by the pointer: the thing it is over, when not
+ * everything is shown (or, while everything is shown, when that thing's name is
+ * left off for want of room near it), no ring is open and that thing is not
+ * already named for having focus. A focused thing whose name is left off is
+ * named the same way, under its dot, and while it is the focused thing's name
+ * that is shown the pointer adds none (one name hangs at a time).
+ */
+const pointed = computed<{
+  label: string
+  kind: string
+  left: number
+  top: number
+} | null>(() => {
+  const focus = props.focused
+    ? spots.value.find((s) => s.areaId === props.focused && s.leftOff)
+    : undefined
+  if (focus && !props.ringOpen) return hangAt(focus, focus.x, focus.y)
+  if (props.ringOpen || !props.pointer) return null
+  const frame = frameOf()
+  const x = (props.pointer.x - frame.left) / frame.ratio
+  const y = (props.pointer.y - frame.top) / frame.ratio
+  if (props.showing) {
+    // Every name is up: only a left-off one is wanted, found by its dot (which may have stepped out of its thing's box).
+    const dot = allSpots.value.find(
+      (s) => s.leftOff && Math.hypot(s.x - x, s.y - y) <= DOT_HIT,
+    )
+    return dot && dot.areaId !== props.focused
+      ? hangAt(dot, dot.x, dot.y)
+      : null
+  }
+  const entry = nameAt(inView.value, x, y)
+  if (!entry || entry.areaId === props.focused) return null
+  return hangAt(entry, x, y)
 })
 </script>
 
@@ -402,7 +459,7 @@ const pointed = computed<{
     </svg>
     <TransitionGroup name="lq-area">
       <span
-        v-for="spot in spots"
+        v-for="spot in named"
         :key="spot.areaId"
         class="lq-area-name"
         :class="[
