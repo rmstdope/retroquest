@@ -361,10 +361,15 @@ const MARK_APART = 24
  * whole line is full onto a row one `MARK_APART` further from where it came
  * from (below the line, for a mark that stands on its thing). A spot must be on
  * the `visible` part, under none of the `panels` and not under the `words`
- * (which would cover it); a mark with no such spot keeps where it is. A mark
- * stepped out vertically gives way level with the nearest mark it gives way
- * to when it can, first to the side its thing lies on (left when its thing
- * lies left of that mark's thing, else right). A mark standing on the edge of
+ * (which would cover it); a spot the mark slides to keeps its whole dot
+ * (`MARK_RADIUS` from its middle) off the words, so a press anywhere on it
+ * reaches it. The words end a slide, which never goes across them: a mark
+ * whose slide reaches them goes on to the next row further out rather than
+ * to the other side, and tries the other side only when no row has a spot.
+ * A mark with no such spot keeps where it is. A mark stepped out vertically
+ * gives way level with the nearest mark it gives way to when it can, first
+ * to the side its thing lies on (left when its thing lies left of that
+ * mark's thing, else right). A mark standing on the edge of
  * the words (`onWords`) slides only along that edge, in the words' own band.
  */
 export function keepMarksApart(
@@ -390,6 +395,15 @@ export function keepMarksApart(
   const result = [...marks]
   const underWords = (x: number, y: number): boolean =>
     words.some((r) => inWords(x, y, r))
+  /** Whether a dot with its middle at (`x`, `y`) would lie even partly under the words. */
+  const touchesWords = (x: number, y: number): boolean =>
+    words.some(
+      (r) =>
+        x > r.x - MARK_RADIUS &&
+        x < r.x + r.w + MARK_RADIUS &&
+        y > r.y - MARK_RADIUS &&
+        y < r.y + r.h + MARK_RADIUS,
+    )
   // A mark standing on its thing, clear of every other such mark, holds its
   // own spot: no mark that slides lands on it, so it never has to move.
   const holding = marks.filter(
@@ -415,7 +429,9 @@ export function keepMarksApart(
     (self.onWords
       ? Math.abs(y - self.y) < 0.5 &&
         words.some((r) => x >= r.x && x <= r.x + r.w)
-      : !underWords(x, y)) &&
+      : Math.hypot(x - self.x, y - self.y) < 0.5
+        ? !underWords(x, y)
+        : !touchesWords(x, y)) &&
     placedAt.every(([px, py]) => Math.hypot(px - x, py - y) >= MARK_APART - 0.5)
   for (const { entry, index } of order) {
     // A mark standing on its thing under the words (none, once `clearOfWords` has run) is covered with them: it
@@ -447,19 +463,35 @@ export function keepMarksApart(
     const first = stepped && blocker && from.x < blocker[2] ? -1 : 1
     const level = stepped && blocker ? blocker[1] - entry.y : 0
     let spot: [number, number] | null = null
-    search: for (let row = 0; row <= reach; row++) {
-      const bx = entry.x + away[0] * row * MARK_APART
-      const by = entry.y + away[1] * row * MARK_APART
-      for (let n = 0; n <= reach * 2; n++) {
-        // 0, then onward along the line, then the other side of where it landed.
-        const k = (n <= reach ? n : -(n - reach)) * first
-        const cx = bx + along[0] * k * MARK_APART
-        // At each step the level spot first, then the mark's own line.
-        for (const lift of row === 0 && level !== 0 ? [level, 0] : [0]) {
-          const cy = by + lift + along[1] * k * MARK_APART
-          if (free(cx, cy, entry)) {
-            spot = [cx, cy]
-            break search
+    // The words end a slide: first the mark gives way a row further out
+    // rather than to the other side of its neighbour; only when no row has a
+    // spot does it try the other side as well. It never slides across them.
+    find: for (const otherSide of [false, true]) {
+      search: for (let row = 0; row <= reach; row++) {
+        const bx = entry.x + away[0] * row * MARK_APART
+        const by = entry.y + away[1] * row * MARK_APART
+        slide: for (let n = 0; n <= reach * 2; n++) {
+          // 0, then onward along the line, then the other side of where it landed.
+          const back = n > reach
+          const k = (back ? -(n - reach) : n) * first
+          const cx = bx + along[0] * k * MARK_APART
+          // At each step the level spot first, then the mark's own line.
+          for (const lift of row === 0 && level !== 0 ? [level, 0] : [0]) {
+            const cy = by + lift + along[1] * k * MARK_APART
+            if (
+              k !== 0 &&
+              lift === 0 &&
+              !entry.onWords &&
+              touchesWords(cx, cy)
+            ) {
+              if (back || !otherSide) continue search
+              n = reach
+              continue slide
+            }
+            if (free(cx, cy, entry)) {
+              spot = [cx, cy]
+              break find
+            }
           }
         }
       }

@@ -899,6 +899,66 @@ describe('keepMarksApart', () => {
     expect(b.x >= 110 && b.x <= 310 && b.y >= 100 && b.y <= 180).toBe(false)
   })
 
+  it('never slides a stepped mark so its dot lies half under the words beside it', () => {
+    // Books, kept apart from Shelves, slides right along its row: its middle
+    // would land a hair left of the spoken line, its right half under it.
+    const words = { x: 180, y: 100, w: 150, h: 40 }
+    const out = keepMarksApart(
+      [
+        mark('shelves', 150, 110, { x: 150, y: 60 }),
+        mark('books', 155, 110, { x: 156, y: 60 }),
+      ],
+      [],
+      visible,
+      [words],
+    )
+    const books = out[1]
+    const nearestX = Math.max(words.x, Math.min(books.x, words.x + words.w))
+    const nearestY = Math.max(words.y, Math.min(books.y, words.y + words.h))
+    // The whole dot, its glow included, keeps off the words.
+    expect(
+      Math.hypot(books.x - nearestX, books.y - nearestY),
+    ).toBeGreaterThanOrEqual(8)
+    expect(Math.hypot(books.x - 150, books.y - 110)).toBeGreaterThanOrEqual(24)
+  })
+
+  it('gives way a row further up, beside its neighbour, when the words end its slide', () => {
+    // As in the cottage: both stepped up off their things below, the spoken
+    // line in their band to the right.
+    const words = { x: 180, y: 100, w: 150, h: 40 }
+    const [shelves, books] = keepMarksApart(
+      [
+        mark('shelves', 150, 110, { x: 150, y: 160 }),
+        mark('books', 155, 110, { x: 156, y: 160 }),
+      ],
+      [],
+      visible,
+      [words],
+    )
+    // Not across the line, and not to the other side of Shelves.
+    expect(books).toMatchObject({ x: 155, y: 86 })
+    expect(books.x).toBeGreaterThanOrEqual(shelves.x)
+  })
+
+  it('gives way to the other side of its neighbour when the words end its slide and no row lies further out', () => {
+    const words = { x: 180, y: 560, w: 150, h: 140 }
+    const [shelves, books] = keepMarksApart(
+      [
+        mark('shelves', 150, 690, { x: 150, y: 600 }),
+        mark('books', 155, 690, { x: 156, y: 600 }),
+      ],
+      [],
+      visible,
+      [words],
+    )
+    expect(
+      Math.hypot(books.x - shelves.x, books.y - shelves.y),
+    ).toBeGreaterThanOrEqual(24)
+    // Never across the words.
+    expect(books.x).toBeLessThan(words.x)
+    expect(books.y).toBe(690)
+  })
+
   it('keeps marks moved in off the foot apart too', () => {
     const [a, b] = keepMarksApart(
       [
