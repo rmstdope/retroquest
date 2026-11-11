@@ -512,7 +512,7 @@ describe('AreaNames', () => {
 
   describe('names near their dots (rq-h6gg)', () => {
     /** The plate over (0..300, 0..250) and one card from 285 down: the villager's dot (144, 270) is boxed in between. */
-    async function boxedIn(props = {}): Promise<VueWrapper> {
+    async function boxedIn(props = {}, plateBottom = 250): Promise<VueWrapper> {
       const w = mountNames({ showing: true, ...props })
       const plate = document.createElement('div')
       plate.className = 'lq-stage-plate'
@@ -521,9 +521,9 @@ describe('AreaNames', () => {
         left: 0,
         top: 0,
         width: 300,
-        height: 250,
+        height: plateBottom,
         right: 300,
-        bottom: 250,
+        bottom: plateBottom,
         x: 0,
         y: 0,
         toJSON: () => ({}),
@@ -603,6 +603,16 @@ describe('AreaNames', () => {
       expect(left).toBeGreaterThanOrEqual(0)
       // Not centred over the dot: it stands to one side of it.
       expect(Math.abs(left + 20 - 144)).toBeGreaterThan(10)
+    })
+
+    it('hangs a left-off name in a gap barely taller than itself, clear of the plate and the card', async () => {
+      // 30px between the plate (255) and the card (285) for a 25px name: only a spot without the 3px margin fits.
+      const w = await boxedIn({}, 255)
+      await w.setProps({ pointer: { x: 144, y: 270 } })
+      const style = w.get('[data-area-pointer]').attributes('style')!
+      const top = parseFloat(/top: ([\d.]+)px/.exec(style)![1])
+      expect(top).toBeGreaterThanOrEqual(255)
+      expect(top + 25).toBeLessThanOrEqual(285)
     })
 
     it('hangs the name of a focused left-off dot clear of the card, never behind it', async () => {
