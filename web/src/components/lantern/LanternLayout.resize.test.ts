@@ -52,6 +52,7 @@ describe('where the story lands after the window crosses 1100 px', () => {
           observers.push(callback)
         }
         observe(): void {}
+        unobserve(): void {}
         disconnect(): void {}
       },
     )

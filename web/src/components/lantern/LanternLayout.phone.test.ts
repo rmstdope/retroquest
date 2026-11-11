@@ -147,6 +147,7 @@ describe('LanternLayout: the stage on a phone', () => {
             observers.push(callback)
           }
           observe(): void {}
+          unobserve(): void {}
           disconnect(): void {}
         },
       )
