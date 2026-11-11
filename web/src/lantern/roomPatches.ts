@@ -6,8 +6,8 @@
  * twice. A change that alters the whole view is another picture, not a patch;
  * the Village Chapel's candle-lit, whose light covers almost the whole picture,
  * is the agreed exception. Patches that are on together are laid in their
- * declared order, a later one over an earlier one. The declared lists live in `roomPatches/act<N>RoomPatches.ts`; a patch not
- * made yet is not a defect. The base picture shows the room as the game
+ * declared order, a later one over an earlier one. The declared lists live
+ * in `roomPatches/act<N>RoomPatches.ts`; a patch not made yet is not a defect. The base picture shows the room as the game
  * starts: a thing there at the start has a taken or gone patch, a thing or a
  * way that only turns up later an appears or open patch, unless the change
  * needs no patch of its own (`unpatchedAreas`). A thing that changes
