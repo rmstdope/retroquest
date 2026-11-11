@@ -230,6 +230,30 @@ describe('layoutNames', () => {
       expect(spot.leftOff).toBe(true)
     })
 
+    it('leaves off a name whose only free spot lies beyond reach, even with no line over the words', () => {
+      const wall = { x: 0, y: 410, w: 300, h: 130 }
+      const [spot] = layoutNames(
+        [mark('a', 'Books', 100, 440)],
+        measure,
+        [card, wall],
+        bounds,
+        [card],
+      )
+      expect(spot.leftOff).toBe(true)
+    })
+
+    it('does not let a line slip through a thin card between samples', () => {
+      const thin = { x: 0, y: 303, w: 960, h: 2 }
+      const [spot] = layoutNames(
+        [mark('a', 'Books', 500, 300)],
+        measure,
+        [{ x: 0, y: 0, w: 960, h: 299 }, thin, { x: 0, y: 306, w: 960, h: 14 }],
+        bounds,
+        [thin],
+      )
+      expect(spot.leftOff).toBe(true)
+    })
+
     it('keeps a moved name within reach of its dot', () => {
       const spots = layoutNames(
         [

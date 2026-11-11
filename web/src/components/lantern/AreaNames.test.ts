@@ -555,6 +555,31 @@ describe('AreaNames', () => {
       expect(w.get('[data-area-pointer]').text()).toBe('Tilda')
     })
 
+    it('names a left-off thing by its dot even when the dot has stepped out of the thing’s box', async () => {
+      const w = await boxedIn()
+      const plate = document.querySelector('.lq-stage-plate')!
+      vi.spyOn(plate, 'getBoundingClientRect').mockReturnValue({
+        left: 0,
+        top: 0,
+        width: 300,
+        height: 262,
+        right: 300,
+        bottom: 262,
+        x: 0,
+        y: 0,
+        toJSON: () => ({}),
+      })
+      await w.setProps({ relayout: 'plate' })
+      await new Promise((resolve) => setTimeout(resolve, 400))
+      await nextTick()
+      const mark = w.get('[data-area-mark="villager"]').attributes('style')!
+      const at = (n: string): number =>
+        parseFloat(new RegExp(`${n}: ([\\d.]+)px`).exec(mark)![1])
+      expect(w.find('[data-area-name="villager"]').exists()).toBe(false)
+      await w.setProps({ pointer: { x: at('left'), y: at('top') } })
+      expect(w.get('[data-area-pointer]').text()).toBe('Tilda')
+    })
+
     it('names a left-off thing that has keyboard focus', async () => {
       const w = await boxedIn({ focused: 'villager' })
       expect(w.find('[data-area-name="villager"]').exists()).toBe(false)

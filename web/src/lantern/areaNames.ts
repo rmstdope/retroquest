@@ -470,20 +470,31 @@ function inside(rect: Rect, bounds: Rect): Rect {
 /** How far from its mark a name may be while the words are open (the nearest edge of the name to the mark), in pixels. */
 export const NAME_REACH = 150
 
-/** Whether the straight line from (`x1`, `y1`) to (`x2`, `y2`) passes through `rect`. */
+/** Whether the straight line from (`x1`, `y1`) to (`x2`, `y2`) passes through `rect` (touching its edge does not count). */
 function crosses(
   line: { x1: number; y1: number; x2: number; y2: number },
   rect: Rect,
 ): boolean {
-  const steps = 24
-  for (let i = 0; i <= steps; i++) {
-    const t = i / steps
-    const x = line.x1 + (line.x2 - line.x1) * t
-    const y = line.y1 + (line.y2 - line.y1) * t
-    if (x > rect.x && x < rect.x + rect.w && y > rect.y && y < rect.y + rect.h)
-      return true
+  const dx = line.x2 - line.x1
+  const dy = line.y2 - line.y1
+  const edges: Array<[number, number]> = [
+    [-dx, line.x1 - rect.x],
+    [dx, rect.x + rect.w - line.x1],
+    [-dy, line.y1 - rect.y],
+    [dy, rect.y + rect.h - line.y1],
+  ]
+  let enter = 0
+  let leave = 1
+  for (const [p, q] of edges) {
+    if (p === 0) {
+      if (q <= 0) return false
+    } else if (p < 0) {
+      enter = Math.max(enter, q / p)
+    } else {
+      leave = Math.min(leave, q / p)
+    }
   }
-  return false
+  return enter < leave || (enter === leave && enter > 0 && enter < 1)
 }
 
 /** The distance from a mark to the nearest edge of `rect`. */
@@ -560,6 +571,8 @@ export function layoutNames(
         let best: { rect: Rect; cost: number } | null = null
         search: for (let ring = 1; ring <= RINGS; ring++) {
           const d = ring * STEP
+          // Past the reach every spot is too far: the search is over.
+          if (words && d > NAME_REACH + w + h) break
           for (const [dx, dy] of ringOffsets(d, w)) {
             const rect = inside(
               { x: above.x + dx, y: above.y + dy, w, h },

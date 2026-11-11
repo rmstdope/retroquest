@@ -88,6 +88,8 @@ const SETTLE_MS = 350
 /** How far under the pointer its name hangs, and how near the foot of what can be seen it hangs above instead. */
 const POINTER_GAP = 18
 const FOOT = 60
+/** How near a dot the pointer must be to point at it. */
+const DOT_HIT = 14
 /** The things in the stage that a name keeps clear of. */
 const KEEP_CLEAR =
   '.lq-stage-plate, .lq-phone-plate, .lq-stage-buttons button, .lq-float-menu, .lq-words-hide, ' +
@@ -390,7 +392,8 @@ function hangAt(
  * everything is shown (or, while everything is shown, when that thing's name is
  * left off for want of room near it), no ring is open and that thing is not
  * already named for having focus. A focused thing whose name is left off is
- * named the same way, under its dot.
+ * named the same way, under its dot, and while it is the focused thing's name
+ * that is shown the pointer adds none (one name hangs at a time).
  */
 const pointed = computed<{
   label: string
@@ -406,13 +409,17 @@ const pointed = computed<{
   const frame = frameOf()
   const x = (props.pointer.x - frame.left) / frame.ratio
   const y = (props.pointer.y - frame.top) / frame.ratio
+  if (props.showing) {
+    // Every name is up: only a left-off one is wanted, found by its dot (which may have stepped out of its thing's box).
+    const dot = allSpots.value.find(
+      (s) => s.leftOff && Math.hypot(s.x - x, s.y - y) <= DOT_HIT,
+    )
+    return dot && dot.areaId !== props.focused
+      ? hangAt(dot, dot.x, dot.y)
+      : null
+  }
   const entry = nameAt(inView.value, x, y)
   if (!entry || entry.areaId === props.focused) return null
-  if (
-    props.showing &&
-    !allSpots.value.some((s) => s.areaId === entry.areaId && s.leftOff)
-  )
-    return null
   return hangAt(entry, x, y)
 })
 </script>
