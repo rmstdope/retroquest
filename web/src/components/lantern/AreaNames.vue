@@ -24,8 +24,9 @@ import type { PictureSize, Rect } from '@/lantern/roomMotionScene'
  * the middle of what is in view and its name beside it (people blue, things
  * that can be picked up green, ways out amber, scenery plain); a name that
  * would cover another name or a button, a plate or the words moves to a free
- * spot with a thin line back to its mark, and a thing under the words has
- * neither until the words are gone. A mark whose spot lies under the room
+ * spot with a thin line back to its mark, and a thing under the words (the
+ * narrator's cards and spoken lines where they are seen, not the empty rest of
+ * their column) has neither until the words are gone. A mark whose spot lies under the room
  * plate, a button in the picture's corner, the story's Hide/Show tab or the
  * Show what's here button steps to the nearest spot just outside that panel
  * (out from under the words when it can; its name and line follow it, and a
@@ -92,8 +93,10 @@ const KEEP_CLEAR =
 const PANELS =
   '.lq-stage-plate, .lq-phone-plate, .lq-stage-buttons button, .lq-words-hide, .lq-paper-tab, ' +
   '.lq-show-names'
-/** The words over the picture, under which a thing's mark and name wait. */
-const WORDS = '.lq-story-wrap, .lq-arrival-card, .lq-ln'
+/** The words over the picture beside the narrator's cards, under which a thing's mark and name wait. */
+const WORDS = '.lq-arrival-card, .lq-ln, .lq-more-below, .lq-narration-hint'
+/** The narrator's cards and the one column's spoken lines, each seen only where its scrolling story shows it. */
+const CARDS = '.lq-story-wrap .lq-card, .lq-story-wrap .lq-line'
 
 const root = ref<HTMLElement | null>(null)
 const view = ref<PictureSize>({ width: 0, height: 0 })
@@ -124,20 +127,41 @@ function frameOf(): { left: number; top: number; ratio: number } {
   return { left: box.left, top: box.top, ratio }
 }
 
-/** The rectangles of the elements of `scope` matching `selector` that are on show, in the names' pixels. */
-function rectsOf(scope: HTMLElement, selector: string): Rect[] {
+/**
+ * The rectangles of the elements of `scope` matching `selector` that are on
+ * show, in the names' pixels; with `clipTo`, each only where its nearest
+ * ancestor matching `clipTo` shows it (a card scrolled partly out of its story).
+ */
+function rectsOf(
+  scope: HTMLElement,
+  selector: string,
+  clipTo?: string,
+): Rect[] {
   const frame = frameOf()
   const rects: Rect[] = []
   for (const el of scope.querySelectorAll<HTMLElement>(selector)) {
-    const box = el.getBoundingClientRect()
-    if (box.width < 1 || box.height < 1) continue
+    let box: { left: number; top: number; right: number; bottom: number } =
+      el.getBoundingClientRect()
+    const clip = clipTo ? el.closest<HTMLElement>(clipTo) : null
+    if (clip) {
+      const by = clip.getBoundingClientRect()
+      box = {
+        left: Math.max(box.left, by.left),
+        top: Math.max(box.top, by.top),
+        right: Math.min(box.right, by.right),
+        bottom: Math.min(box.bottom, by.bottom),
+      }
+    }
+    const width = box.right - box.left
+    const height = box.bottom - box.top
+    if (width < 1 || height < 1) continue
     // Words folded away fade out first: they no longer cover anything.
     if (getComputedStyle(el).visibility === 'hidden') continue
     rects.push({
       x: (box.left - frame.left) / frame.ratio,
       y: (box.top - frame.top) / frame.ratio,
-      w: box.width / frame.ratio,
-      h: box.height / frame.ratio,
+      w: width / frame.ratio,
+      h: height / frame.ratio,
     })
   }
   return rects
@@ -153,7 +177,10 @@ function measure(): void {
   }
   const scope = el.closest<HTMLElement>('.lq-main') ?? el
   obstacles.value = rectsOf(scope, KEEP_CLEAR)
-  covers.value = rectsOf(scope, WORDS)
+  covers.value = [
+    ...rectsOf(scope, CARDS, '.lq-story'),
+    ...rectsOf(scope, WORDS),
+  ]
   panels.value = rectsOf(scope, PANELS)
   watchPanels(scope)
 }

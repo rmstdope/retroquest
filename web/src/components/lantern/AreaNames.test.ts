@@ -58,6 +58,53 @@ function mountNames(
   return wrapper
 }
 
+/**
+ * The words column as the layout draws it: the wrap, its scrolling story, and
+ * in it one narrator's card or, with `line`, one row of the one column's
+ * spoken lines (`.lq-cl > .lq-col > .lq-line`, the bubble at `card`), each at
+ * its own rectangle (top, bottom) across the stage.
+ */
+function cardsOver(
+  wrap: [number, number],
+  story: [number, number],
+  card: [number, number],
+  line = false,
+): void {
+  const at = (el: HTMLElement, [top, bottom]: [number, number]): void => {
+    vi.spyOn(el, 'getBoundingClientRect').mockReturnValue({
+      left: 0,
+      top,
+      width: 960,
+      height: bottom - top,
+      right: 960,
+      bottom,
+      x: 0,
+      y: top,
+      toJSON: () => ({}),
+    })
+  }
+  const wrapEl = document.createElement('div')
+  wrapEl.className = 'lq-story-wrap lq-cards'
+  const storyEl = document.createElement('section')
+  storyEl.className = 'lq-story'
+  const cardEl = document.createElement(line ? 'div' : 'article')
+  cardEl.className = line ? 'lq-line' : 'lq-turn lq-card'
+  if (line) {
+    const row = document.createElement('div')
+    row.className = 'lq-cl lq-cl-left'
+    const col = document.createElement('div')
+    col.className = 'lq-col'
+    col.append(cardEl)
+    row.append(col)
+    storyEl.append(row)
+  } else storyEl.append(cardEl)
+  wrapEl.append(storyEl)
+  document.querySelector('.lq-stage')!.append(wrapEl)
+  at(wrapEl, wrap)
+  at(storyEl, story)
+  at(cardEl, card)
+}
+
 beforeEach(() => {
   setActivePinia(createPinia())
   vi.spyOn(HTMLElement.prototype, 'clientWidth', 'get').mockReturnValue(960)
@@ -350,22 +397,37 @@ describe('AreaNames', () => {
       expect(w.find('[data-area-mark="bucket"]').exists()).toBe(false)
     })
 
-    /** Words covering the left third of the stage (the picture's own pixels), as the rectangle the browser would report. */
+    /**
+     * Words covering the left third of the stage (the picture's own pixels), as
+     * the rectangle the browser would report; for the narrator's cards
+     * (`lq-story-wrap`) the wrap, its story and one card all fill it.
+     */
     function wordsOver(selector: string): HTMLElement {
       const words = document.createElement('div')
       words.className = selector
       document.querySelector('.lq-stage')!.append(words)
-      vi.spyOn(words, 'getBoundingClientRect').mockReturnValue({
-        left: 0,
-        top: 0,
-        width: 320,
-        height: 540,
-        right: 320,
-        bottom: 540,
-        x: 0,
-        y: 0,
-        toJSON: () => ({}),
-      })
+      const filled: HTMLElement[] = [words]
+      if (selector === 'lq-story-wrap') {
+        const story = document.createElement('section')
+        story.className = 'lq-story'
+        const card = document.createElement('article')
+        card.className = 'lq-turn lq-card'
+        story.append(card)
+        words.append(story)
+        filled.push(story, card)
+      }
+      for (const el of filled)
+        vi.spyOn(el, 'getBoundingClientRect').mockReturnValue({
+          left: 0,
+          top: 0,
+          width: 320,
+          height: 540,
+          right: 320,
+          bottom: 540,
+          x: 0,
+          y: 0,
+          toJSON: () => ({}),
+        })
       return words
     }
 
@@ -386,6 +448,40 @@ describe('AreaNames', () => {
         expect(w.find('[data-area-mark="villager"]').exists()).toBe(true)
       },
     )
+
+    it('shows a thing on the picture below the last card, where the wrap runs on to the Hide line (rq-a6o6)', async () => {
+      const w = mountNames({ showing: true })
+      // The wrap runs to 320; the one card ends at 240. The villager's mark (144, 270) is on visible picture.
+      cardsOver([0, 320], [0, 320], [20, 240])
+      await w.setProps({ relayout: 'words' })
+      await new Promise((resolve) => setTimeout(resolve, 400))
+      await nextTick()
+      expect(w.find('[data-area-mark="villager"]').exists()).toBe(true)
+      // The way north's mark (480, 54) is under the card.
+      expect(w.find('[data-area-mark="exit-north"]').exists()).toBe(false)
+    })
+
+    it('has neither mark nor name for a thing under a spoken line of the one column (rq-a6o6)', async () => {
+      const w = mountNames({ showing: true })
+      // A spoken line's bubble (20..240) in a column running to 320; the villager's mark (144, 270) is below it.
+      cardsOver([0, 320], [0, 320], [20, 240], true)
+      await w.setProps({ relayout: 'words' })
+      await new Promise((resolve) => setTimeout(resolve, 400))
+      await nextTick()
+      expect(w.find('[data-area-mark="exit-north"]').exists()).toBe(false)
+      expect(w.find('[data-area-mark="villager"]').exists()).toBe(true)
+    })
+
+    it('shows a thing above the story where a card has scrolled out of it (rq-a6o6)', async () => {
+      const w = mountNames({ showing: true })
+      // The story starts at 100; the card above it (20..180) is only seen from 100 down. The way north's mark is at y 54.
+      cardsOver([100, 320], [100, 320], [20, 180])
+      await w.setProps({ relayout: 'words' })
+      await new Promise((resolve) => setTimeout(resolve, 400))
+      await nextTick()
+      expect(w.find('[data-area-mark="exit-north"]').exists()).toBe(true)
+      expect(w.find('[data-area-mark="villager"]').exists()).toBe(true)
+    })
 
     it('shows a thing again once the words over it at mount have faded (rq-fy44)', async () => {
       // The stage coming back: the words folded away for the names are still fading out when the layer is put on the page.
@@ -622,20 +718,7 @@ describe('AreaNames', () => {
       // What can be seen ends at 300; the tab (250..290) sits at its foot, the words end just above it, edge to edge.
       const w = mountNames({ showing: true, footCover: 240 })
       plateOver('lq-words-hide', 250, 40)
-      const words = document.createElement('div')
-      words.className = 'lq-story-wrap'
-      document.querySelector('.lq-stage')!.append(words)
-      vi.spyOn(words, 'getBoundingClientRect').mockReturnValue({
-        left: 0,
-        top: 0,
-        width: 960,
-        height: 244,
-        right: 960,
-        bottom: 244,
-        x: 0,
-        y: 0,
-        toJSON: () => ({}),
-      })
+      cardsOver([0, 244], [0, 244], [0, 244])
       await w.setProps({ relayout: 'words' })
       await new Promise((resolve) => setTimeout(resolve, 400))
       await nextTick()
