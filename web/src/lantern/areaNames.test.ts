@@ -682,6 +682,25 @@ describe('keepMarksApart', () => {
     expect(moved.y).toBe(120)
   })
 
+  it('a mark stepped out above a tab gives way on the side its thing lies, so the order of the pictures is kept', () => {
+    // Table (moved up from under a tab) lies left of Bread (standing); Table slides left.
+    const [table, bread] = keepMarksApart(
+      [mark('table', 100, 200, { x: 100, y: 260 }), mark('bread', 110, 205)],
+      [],
+      visible,
+    )
+    expect([bread.x, bread.y]).toEqual([110, 205])
+    expect(table.x).toBeLessThanOrEqual(110 - 24)
+    // And a moved mark whose thing lies right of the standing one slides right.
+    const [t2, b2] = keepMarksApart(
+      [mark('table', 120, 200, { x: 120, y: 260 }), mark('bread', 110, 205)],
+      [],
+      visible,
+    )
+    expect(b2.x).toBe(110)
+    expect(t2.x).toBeGreaterThanOrEqual(110 + 24)
+  })
+
   it('carries a crowded row on to the left of the first mark, on the same line', () => {
     const row = stepped([330, 345, 360, 372])
     const line = row[0].y

@@ -272,7 +272,9 @@ const MARK_APART = 24
  * whole line is full onto a row one `MARK_APART` further from where it came
  * from (below the line, for a mark that stands on its thing). A spot must be on
  * the `visible` part, under none of the `panels` and not under the `words`
- * (which hide a mark); a mark with no such spot keeps where it is.
+ * (which hide a mark); a mark with no such spot keeps where it is. A mark
+ * stepped out vertically slides first to the side its thing lies on, left of
+ * the mark it gives way to when its thing lies left of it, else right.
  */
 export function keepMarksApart(
   marks: readonly PlacedName[],
@@ -332,13 +334,21 @@ export function keepMarksApart(
       ? [Math.sign(entry.x - from.x) || 1, 0]
       : [0, Math.sign(entry.y - from.y) || 1]
     const reach = Math.ceil(Math.max(visible.w, visible.h) / MARK_APART)
+    // A mark stepped out vertically (from under a panel) slides first to the
+    // side its thing lies on, so it keeps its order against the mark it gives
+    // way to; every other mark slides right first.
+    const blocker = placedAt.find(
+      ([px, py]) => Math.hypot(px - entry.x, py - entry.y) < MARK_APART - 0.5,
+    )
+    const first =
+      !sideways && entry.from && blocker && from.x < blocker[0] ? -1 : 1
     let spot: [number, number] | null = null
     search: for (let row = 0; row <= reach; row++) {
       const bx = entry.x + away[0] * row * MARK_APART
       const by = entry.y + away[1] * row * MARK_APART
       for (let n = 0; n <= reach * 2; n++) {
         // 0, then onward along the line, then the other side of where it landed.
-        const k = n <= reach ? n : -(n - reach)
+        const k = (n <= reach ? n : -(n - reach)) * first
         const cx = bx + along[0] * k * MARK_APART
         const cy = by + along[1] * k * MARK_APART
         if (free(cx, cy, entry)) {
