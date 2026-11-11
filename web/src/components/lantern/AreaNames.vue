@@ -6,7 +6,6 @@ import {
   layoutNames,
   markInside,
   nameAt,
-  overlaps,
   placeNames,
   pressAt,
   visiblePart,
@@ -372,7 +371,7 @@ function press(spot: NamedSpot, event: MouseEvent): void {
  * A name hung at (`x`, `y`): under it, or above it near the foot of what can be seen. Where that spot lies on a
  * card or a panel (a dot boxed in between the room plate and the cards), the other side of the dot is tried, then
  * beside it (nudged up or down to fit a narrow gap), so the name is not hung behind the words. With no clear
- * spot it hangs where it lies on the fewest cards and panels.
+ * spot it hangs where it lies least on cards and panels.
  */
 function hangAt(
   entry: { label: string; kind: string },
@@ -390,17 +389,22 @@ function hangAt(
   const aboveTop = y - POINTER_GAP - h
   const belowTop = y + POINTER_GAP
   const beside = y - h / 2
-  const slides = [0, -4, 4, -8, 8, -12, 12]
+  // Slid in steps of 2px so a gap only a little taller than the name is still found.
+  const slides = [0, 2, -2, 4, -4, 6, -6, 8, -8, 10, -10, 12, -12]
   const tries = [
     pin(centred, above ? aboveTop : belowTop),
     pin(centred, above ? belowTop : aboveTop),
     ...slides.map((d) => pin(x + POINTER_GAP, beside + d)),
     ...slides.map((d) => pin(x - POINTER_GAP - w, beside + d)),
   ]
+  // How much of the name lies on a card or panel, edge to edge (no margin: a narrow gap must still fit the name).
   const covered = (at: { left: number; top: number }): number =>
-    obstacles.value.filter((o) => overlaps({ x: at.left, y: at.top, w, h }, o))
-      .length
-  // The first clear spot; with none, the one that lies on the fewest cards and panels.
+    obstacles.value.reduce((sum, o) => {
+      const across = Math.min(at.left + w, o.x + o.w) - Math.max(at.left, o.x)
+      const down = Math.min(at.top + h, o.y + o.h) - Math.max(at.top, o.y)
+      return across > 0 && down > 0 ? sum + across * down : sum
+    }, 0)
+  // The first clear spot; with none, the one that lies least on cards and panels.
   const best = tries.reduce((a, b) => (covered(b) < covered(a) ? b : a))
   return { label: entry.label, kind: entry.kind, ...best }
 }
