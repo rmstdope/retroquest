@@ -105,6 +105,29 @@ function cardsOver(
   at(cardEl, card)
 }
 
+/** The place of a thing's dot (the layer's pixels), or null when it has none. */
+function markAt(w: VueWrapper, id: string): { x: number; y: number } | null {
+  const el = w.find(`[data-area-mark="${id}"]`)
+  if (!el.exists()) return null
+  const style = el.attributes('style') ?? ''
+  return {
+    x: parseFloat(/left: ([\d.-]+)px/.exec(style)![1]),
+    y: parseFloat(/top: ([\d.-]+)px/.exec(style)![1]),
+  }
+}
+
+/** Whether `y` is at the top or the foot of a 540px picture, where words that fill it end. */
+function onAnEdge(y: number): boolean {
+  return y <= 20 || y >= 520
+}
+
+/** Let the words' measuring and fading settle. */
+async function settle(w: VueWrapper, relayout: string): Promise<void> {
+  await w.setProps({ relayout })
+  await new Promise((resolve) => setTimeout(resolve, 400))
+  await nextTick()
+}
+
 beforeEach(() => {
   setActivePinia(createPinia())
   vi.spyOn(HTMLElement.prototype, 'clientWidth', 'get').mockReturnValue(960)
@@ -393,8 +416,10 @@ describe('AreaNames', () => {
       await w.setProps({ relayout: 'words' })
       await new Promise((resolve) => setTimeout(resolve, 400))
       await nextTick()
-      expect(w.find('[data-area-mark="villager"]').exists()).toBe(true)
-      expect(w.find('[data-area-mark="bucket"]').exists()).toBe(false)
+      expect(markAt(w, 'villager')).toEqual({ x: 432, y: 270 })
+      // The bucket's point is under the words, which fill the height: its dot stands on their edge at its own x.
+      expect(markAt(w, 'bucket')?.x).toBe(144)
+      expect(markAt(w, 'bucket')!.y).toBeGreaterThan(520)
     })
 
     /**
@@ -432,20 +457,19 @@ describe('AreaNames', () => {
     }
 
     it.each(['lq-story-wrap', 'lq-arrival-card', 'lq-ln'])(
-      'has neither mark nor name for a thing under %s, until it goes',
+      'keeps a dot for a thing under %s, on the words’ edge at its own x, until they go',
       async (selector) => {
         const w = mountNames({ showing: true })
         const words = wordsOver(selector)
         await w.setProps({ relayout: 'words' })
         await new Promise((resolve) => setTimeout(resolve, 400))
         await nextTick()
-        expect(w.find('[data-area-mark="villager"]').exists()).toBe(false)
-        expect(w.find('[data-area-mark="bucket"]').exists()).toBe(true)
+        expect(markAt(w, 'villager')?.x).toBe(144)
+        expect(onAnEdge(markAt(w, 'villager')!.y)).toBe(true)
+        expect(markAt(w, 'bucket')).toEqual({ x: 816, y: 405 })
         words.remove()
-        await w.setProps({ relayout: 'gone' })
-        await new Promise((resolve) => setTimeout(resolve, 400))
-        await nextTick()
-        expect(w.find('[data-area-mark="villager"]').exists()).toBe(true)
+        await settle(w, 'gone')
+        expect(markAt(w, 'villager')).toEqual({ x: 144, y: 270 })
       },
     )
 
@@ -457,19 +481,21 @@ describe('AreaNames', () => {
       await new Promise((resolve) => setTimeout(resolve, 400))
       await nextTick()
       expect(w.find('[data-area-mark="villager"]').exists()).toBe(true)
-      // The way north's mark (480, 54) is under the card.
-      expect(w.find('[data-area-mark="exit-north"]').exists()).toBe(false)
+      // The way north's mark (480, 54) is under the card: it steps just above it.
+      const north = markAt(w, 'exit-north')!
+      expect(north.x).toBe(480)
+      expect(north.y).toBeLessThan(20)
     })
 
-    it('has neither mark nor name for a thing under a spoken line of the one column (rq-a6o6)', async () => {
+    it('steps the dot of a thing under a spoken line of the one column out from under it (rq-a6o6, rq-qz71)', async () => {
       const w = mountNames({ showing: true })
       // A spoken line's bubble (20..240) in a column running to 320; the villager's mark (144, 270) is below it.
       cardsOver([0, 320], [0, 320], [20, 240], true)
       await w.setProps({ relayout: 'words' })
       await new Promise((resolve) => setTimeout(resolve, 400))
       await nextTick()
-      expect(w.find('[data-area-mark="exit-north"]').exists()).toBe(false)
-      expect(w.find('[data-area-mark="villager"]').exists()).toBe(true)
+      expect(markAt(w, 'exit-north')?.y).toBeLessThan(20)
+      expect(markAt(w, 'villager')).toEqual({ x: 144, y: 270 })
     })
 
     it('shows a thing above the story where a card has scrolled out of it (rq-a6o6)', async () => {
@@ -501,12 +527,103 @@ describe('AreaNames', () => {
       })
       wrappers.push(w)
       await nextTick()
-      expect(w.find('[data-area-mark="villager"]').exists()).toBe(false)
+      expect(onAnEdge(markAt(w, 'villager')!.y)).toBe(true)
       // Faded, with nothing else changing.
       words.style.visibility = 'hidden'
       await new Promise((resolve) => setTimeout(resolve, 400))
       await nextTick()
-      expect(w.find('[data-area-mark="villager"]').exists()).toBe(true)
+      expect(markAt(w, 'villager')).toEqual({ x: 144, y: 270 })
+    })
+  })
+
+  describe('covered things (rq-qz71)', () => {
+    it('stands the dot of a thing under a card just below it, and a press on it is a press on its thing', async () => {
+      const w = mountNames({ showing: true })
+      // One card 20..300 across the width; the villager's dot (144, 270) is under it.
+      cardsOver([0, 540], [0, 540], [20, 300])
+      await settle(w, 'words')
+      const dot = markAt(w, 'villager')!
+      expect(dot.x).toBe(144)
+      expect(dot.y).toBeGreaterThan(300)
+      expect(dot.y).toBeLessThan(330)
+      await w.get('[data-area-mark="villager"]').trigger('click')
+      expect(w.emitted('press')?.[0][0]).toEqual(things[0])
+    })
+
+    it('names a stepped dot beside it when there is room', async () => {
+      const w = mountNames({ showing: true })
+      cardsOver([0, 540], [0, 540], [20, 300])
+      await settle(w, 'words')
+      expect(w.find('[data-area-name="villager"]').exists()).toBe(true)
+    })
+
+    it('keeps a stepped dot unnamed when the words leave no room, and names it on the pointer', async () => {
+      // The words fill all of the picture: no name fits near, the dot stands on their edge.
+      const w2 = mountNames({ showing: true })
+      cardsOver([0, 540], [0, 540], [0, 540])
+      await settle(w2, 'words')
+      expect(w2.find('[data-area-mark="villager"]').exists()).toBe(true)
+      expect(w2.find('[data-area-name="villager"]').exists()).toBe(false)
+      const dot = markAt(w2, 'villager')!
+      await w2.setProps({ pointer: { x: dot.x, y: dot.y } })
+      expect(w2.get('[data-area-pointer]').text()).toBe('Tilda')
+    })
+
+    it('shows a focused covered thing’s dot and name at the stepped spot while not showing', async () => {
+      const w = mountNames({ showing: false, focused: 'villager' })
+      cardsOver([0, 540], [0, 540], [20, 300])
+      await settle(w, 'words')
+      expect(markAt(w, 'villager')!.y).toBeGreaterThan(300)
+      expect(w.find('[data-area-name="villager"]').exists()).toBe(true)
+    })
+
+    it('moves the dots back onto their things when the words go, and again when they come', async () => {
+      const w = mountNames({ showing: true })
+      cardsOver([0, 540], [0, 540], [20, 300])
+      await settle(w, 'words')
+      expect(markAt(w, 'villager')!.y).toBeGreaterThan(300)
+      document.querySelector('.lq-story-wrap')!.remove()
+      await settle(w, 'gone')
+      expect(markAt(w, 'villager')).toEqual({ x: 144, y: 270 })
+    })
+
+    it('steps a dot under the plate up into the gap between the plate and the cards (the Shelves case)', async () => {
+      const w = mountNames({ showing: true })
+      const plate = document.createElement('div')
+      plate.className = 'lq-stage-plate'
+      document.querySelector('.lq-stage')!.append(plate)
+      vi.spyOn(plate, 'getBoundingClientRect').mockReturnValue({
+        left: 0,
+        top: 0,
+        width: 300,
+        height: 60,
+        right: 300,
+        bottom: 60,
+        x: 0,
+        y: 0,
+        toJSON: () => ({}),
+      })
+      // The exit's dot (480, 54) is clear of the plate in x; put the villager's (144, 270) under both: the gap 60..120 is above the card.
+      cardsOver([120, 540], [120, 540], [120, 400])
+      await settle(w, 'words')
+      const dot = markAt(w, 'villager')!
+      expect(dot.x).toBe(144)
+      expect(dot.y).toBeGreaterThan(400)
+    })
+
+    it('keeps two covered dots apart', async () => {
+      const w = mountNames({
+        showing: true,
+        boxes: {
+          ...boxes,
+          bucket: { x: 0.1, y: 0.4, width: 0.1, height: 0.2 },
+        },
+      })
+      cardsOver([0, 540], [0, 540], [20, 300])
+      await settle(w, 'words')
+      const a = markAt(w, 'villager')!
+      const b = markAt(w, 'bucket')!
+      expect(Math.hypot(a.x - b.x, a.y - b.y)).toBeGreaterThanOrEqual(23.5)
     })
   })
 
