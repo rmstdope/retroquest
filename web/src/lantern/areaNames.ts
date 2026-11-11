@@ -356,11 +356,12 @@ export function keepMarksApart(
     search: for (let row = 0; row <= reach; row++) {
       const bx = entry.x + away[0] * row * MARK_APART
       const by = entry.y + away[1] * row * MARK_APART
-      for (const lift of row === 0 && level !== 0 ? [level, 0] : [0]) {
-        for (let n = 0; n <= reach * 2; n++) {
-          // 0, then onward along the line, then the other side of where it landed.
-          const k = (n <= reach ? n : -(n - reach)) * first
-          const cx = bx + along[0] * k * MARK_APART
+      for (let n = 0; n <= reach * 2; n++) {
+        // 0, then onward along the line, then the other side of where it landed.
+        const k = (n <= reach ? n : -(n - reach)) * first
+        const cx = bx + along[0] * k * MARK_APART
+        // At each step the level spot first, then the mark's own line.
+        for (const lift of row === 0 && level !== 0 ? [level, 0] : [0]) {
           const cy = by + lift + along[1] * k * MARK_APART
           if (free(cx, cy, entry)) {
             spot = [cx, cy]

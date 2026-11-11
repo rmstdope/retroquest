@@ -716,6 +716,19 @@ describe('keepMarksApart', () => {
     expect(b.x).toBeGreaterThan(a.x)
   })
 
+  it('tries the level spot and then its own line at each step, never running far along the level row first', () => {
+    const [, , table] = keepMarksApart(
+      [
+        mark('cup', 60, 170),
+        mark('bread', 110, 185),
+        mark('table', 100, 200, { x: 100, y: 260 }),
+      ],
+      [],
+      { x: 0, y: 0, w: 400, h: 400 },
+    )
+    expect([table.x, table.y]).toEqual([76, 200])
+  })
+
   it('carries a crowded row on to the left of the first mark, on the same line', () => {
     const row = stepped([330, 345, 360, 372])
     const line = row[0].y
