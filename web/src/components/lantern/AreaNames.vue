@@ -371,7 +371,8 @@ function press(spot: NamedSpot, event: MouseEvent): void {
 /**
  * A name hung at (`x`, `y`): under it, or above it near the foot of what can be seen. Where that spot lies on a
  * card or a panel (a dot boxed in between the room plate and the cards), the other side of the dot is tried, then
- * beside it, (nudged up or down to fit a narrow gap), so the name is never hung behind the words; with no clear spot it hangs in the first place.
+ * beside it (nudged up or down to fit a narrow gap), so the name is not hung behind the words. With no clear
+ * spot it hangs where it lies on the fewest cards and panels.
  */
 function hangAt(
   entry: { label: string; kind: string },
@@ -396,11 +397,12 @@ function hangAt(
     ...slides.map((d) => pin(x + POINTER_GAP, beside + d)),
     ...slides.map((d) => pin(x - POINTER_GAP - w, beside + d)),
   ]
-  const free = tries.find((at) => {
-    const box = { x: at.left, y: at.top, w, h }
-    return !obstacles.value.some((o) => overlaps(box, o))
-  })
-  return { label: entry.label, kind: entry.kind, ...(free ?? tries[0]) }
+  const covered = (at: { left: number; top: number }): number =>
+    obstacles.value.filter((o) => overlaps({ x: at.left, y: at.top, w, h }, o))
+      .length
+  // The first clear spot; with none, the one that lies on the fewest cards and panels.
+  const best = tries.reduce((a, b) => (covered(b) < covered(a) ? b : a))
+  return { label: entry.label, kind: entry.kind, ...best }
 }
 
 /**
