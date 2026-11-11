@@ -6,6 +6,7 @@ import type { AreaThing } from './areaThings'
 import type { Rect } from './roomMotionScene'
 import {
   clearOfPanels,
+  clearOfWords,
   keepMarksApart,
   closedWayThings,
   layoutNames,
@@ -1089,5 +1090,105 @@ describe('markInside records where a moved mark would have stood', () => {
       visible,
     )
     expect(low.from).toEqual({ x: 100, y: 725 })
+  })
+})
+
+describe('clearOfWords', () => {
+  const visible = { x: 0, y: 0, w: 1000, h: 700 }
+  const mark = (x: number, y: number, areaId = 'a') => ({
+    areaId,
+    name: areaId,
+    label: areaId,
+    kind: 'scenery' as const,
+    x,
+    y,
+    rect: { x: x - 20, y: y - 20, w: 40, h: 40 },
+  })
+  /** The words: a column of cards on the left, 300 wide. */
+  const card = { x: 0, y: 100, w: 300, h: 200 }
+
+  it('leaves a mark no words cover where it is', () => {
+    const [m] = clearOfWords([mark(500, 200)], [card], [], visible)
+    expect([m.x, m.y]).toEqual([500, 200])
+    expect(m.from).toBeUndefined()
+  })
+
+  it('steps a mark under the words straight below them when that is nearer', () => {
+    const [m] = clearOfWords([mark(150, 250)], [card], [], visible)
+    expect(m.x).toBe(150)
+    expect(m.y).toBeGreaterThan(300)
+    expect(m.y).toBeLessThan(300 + 20)
+    expect(m.from).toEqual({ x: 150, y: 250 })
+    expect(m.onWords).toBeUndefined()
+  })
+
+  it('steps a mark straight above them when that is nearer', () => {
+    const [m] = clearOfWords([mark(150, 130)], [card], [], visible)
+    expect(m.x).toBe(150)
+    expect(m.y).toBeLessThan(100)
+    expect(m.y).toBeGreaterThan(100 - 20)
+  })
+
+  it('goes on past a second card the first step would land under', () => {
+    const second = { x: 0, y: 300, w: 300, h: 100 }
+    const [m] = clearOfWords([mark(150, 250)], [card, second], [], visible)
+    expect(m.y).toBeGreaterThan(400)
+  })
+
+  it('does not land under a panel', () => {
+    const plate = { x: 0, y: 300, w: 300, h: 60 }
+    // Below is taken by the plate, so the mark goes above the card instead.
+    const [m] = clearOfWords([mark(150, 250)], [card], [plate], visible)
+    expect(m.y).toBeLessThan(100)
+  })
+
+  it('keeps the whole pressable rectangle', () => {
+    const [m] = clearOfWords([mark(150, 250)], [card], [], visible)
+    expect(m.rect).toEqual({ x: 130, y: 230, w: 40, h: 40 })
+  })
+
+  it('stands on the nearest edge of the words, half over them, when no free picture lies above or below', () => {
+    const wall = { x: 0, y: 0, w: 1000, h: 700 }
+    const [low] = clearOfWords([mark(500, 600)], [wall], [], visible)
+    expect([low.x, low.y]).toEqual([500, 700 - 8])
+    expect(low.onWords).toBe(true)
+    const [high] = clearOfWords([mark(500, 100)], [wall], [], visible)
+    expect(high.x).toBe(500)
+    expect(high.y).toBe(8)
+    expect(high.onWords).toBe(true)
+  })
+
+  it('stands on the edge line of a card that fills the picture but for a sliver', () => {
+    const tall = { x: 0, y: 8, w: 1000, h: 692 }
+    const [m] = clearOfWords([mark(400, 300)], [tall], [], visible)
+    expect(m.onWords).toBe(true)
+    expect(m.y).toBe(8)
+  })
+})
+
+describe('keepMarksApart with marks on the words', () => {
+  const visible = { x: 0, y: 0, w: 1000, h: 700 }
+  const wall = { x: 0, y: 0, w: 1000, h: 700 }
+  const on = (x: number, id: string) => ({
+    areaId: id,
+    name: id,
+    label: id,
+    kind: 'scenery' as const,
+    x,
+    y: 692,
+    rect: { x: x - 20, y: 500, w: 40, h: 40 },
+    from: { x, y: 600 },
+    onWords: true as const,
+  })
+
+  it('keeps two marks standing on the edge apart, along the edge', () => {
+    const out = keepMarksApart([on(500, 'a'), on(505, 'b')], [], visible, [
+      wall,
+    ])
+    expect(out[0].y).toBe(692)
+    expect(out[1].y).toBe(692)
+    expect(
+      Math.hypot(out[0].x - out[1].x, out[0].y - out[1].y),
+    ).toBeGreaterThanOrEqual(23.5)
   })
 })

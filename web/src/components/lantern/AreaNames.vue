@@ -2,6 +2,7 @@
 import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
 import {
   clearOfPanels,
+  clearOfWords,
   keepMarksApart,
   layoutNames,
   markInside,
@@ -27,7 +28,9 @@ import type { PictureSize, Rect } from '@/lantern/roomMotionScene'
  * would cover another name or a button, a plate or the words moves to a free
  * spot with a thin line back to its mark, and a thing under the words (the
  * narrator's cards and spoken lines where they are seen, not the empty rest of
- * their column) has neither until the words are gone. A mark whose spot lies under the room
+ * their column) has its mark stepped just outside them, straight above or
+ * below (on their nearest edge, half over them, where no free picture lies
+ * near), and hiding the words puts it back on its thing. A mark whose spot lies under the room
  * plate, a button in the picture's corner, the story's Hide/Show tab or the
  * Show what's here button steps to the nearest spot just outside that panel
  * (out from under the words when it can; its name and line follow it, and a
@@ -230,17 +233,6 @@ watch(
   { flush: 'post' },
 )
 
-/** Whether the mark of `entry` lies under the words. */
-function underWords(entry: PlacedName): boolean {
-  return covers.value.some(
-    (r) =>
-      entry.x >= r.x &&
-      entry.x <= r.x + r.w &&
-      entry.y >= r.y &&
-      entry.y <= r.y + r.h,
-  )
-}
-
 /** The placed things in view of the picture. */
 const inView = computed<PlacedName[]>(() => {
   if (view.value.width < 1 || view.value.height < 1) return []
@@ -252,24 +244,28 @@ const visible = computed<Rect>(() =>
   visiblePart(view.value, props.footCover ?? 0),
 )
 
-/** The things in view with their marks stepped clear of the panels and kept apart from each other. */
-function settled(): PlacedName[] {
-  return keepMarksApart(
-    clearOfPanels(
-      markInside(inView.value, visible.value),
+/**
+ * The placed things with a part that can be seen, their marks stepped clear of
+ * the panels and of the words (just outside them, or on their nearest edge
+ * where no free picture lies near) and kept apart from each other.
+ */
+const placed = computed<PlacedName[]>(() =>
+  keepMarksApart(
+    clearOfWords(
+      clearOfPanels(
+        markInside(inView.value, visible.value),
+        panels.value,
+        visible.value,
+        covers.value,
+      ),
+      covers.value,
       panels.value,
       visible.value,
-      covers.value,
     ),
     panels.value,
     visible.value,
     covers.value,
-  )
-}
-
-/** The placed things with a part that can be seen, their marks stepped clear of the panels, whose mark is not under the words. */
-const placed = computed<PlacedName[]>(() =>
-  settled().filter((entry) => !underWords(entry)),
+  ),
 )
 
 /** The closed ways that are placed and in view. */
@@ -332,19 +328,7 @@ const spots = computed<NamedSpot[]>(() => {
   if (!props.showing && !props.focused) return []
   const all = allSpots.value
   if (props.showing) return all
-  const own = all.filter((spot) => spot.areaId === props.focused)
-  if (own.length > 0) return own
-  // A focused thing whose mark is under the words is not in `placed`; it is still shown.
-  const focus = settled().find((entry) => entry.areaId === props.focused)
-  return focus
-    ? layoutNames(
-        [...placed.value, focus],
-        sizeOf,
-        obstacles.value,
-        visible.value,
-        wordsOpen.value,
-      ).filter((spot) => spot.areaId === props.focused)
-    : []
+  return all.filter((spot) => spot.areaId === props.focused)
 })
 
 /** The spots that have a name drawn (those not left off). */
