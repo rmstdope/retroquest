@@ -273,8 +273,9 @@ const MARK_APART = 24
  * from (below the line, for a mark that stands on its thing). A spot must be on
  * the `visible` part, under none of the `panels` and not under the `words`
  * (which hide a mark); a mark with no such spot keeps where it is. A mark
- * stepped out vertically slides first to the side its thing lies on, left of
- * the mark it gives way to when its thing lies left of it, else right.
+ * stepped out vertically gives way level with the nearest mark it gives way
+ * to when it can, first to the side its thing lies on (left when its thing
+ * lies left of that mark's thing, else right).
  */
 export function keepMarksApart(
   marks: readonly PlacedName[],
@@ -286,7 +287,8 @@ export function keepMarksApart(
   const right = visible.x + visible.w - MARK_RADIUS
   const top = visible.y + MARK_RADIUS
   const bottom = visible.y + visible.h - MARK_RADIUS
-  const placedAt: Array<[number, number]> = []
+  /** Where each mark was placed, and the x of the thing it stands for. */
+  const placedAt: Array<[number, number, number]> = []
   const order = marks
     .map((entry, index) => ({ entry, index }))
     .sort(
@@ -334,31 +336,41 @@ export function keepMarksApart(
       ? [Math.sign(entry.x - from.x) || 1, 0]
       : [0, Math.sign(entry.y - from.y) || 1]
     const reach = Math.ceil(Math.max(visible.w, visible.h) / MARK_APART)
-    // A mark stepped out vertically (from under a panel) slides first to the
-    // side its thing lies on, so it keeps its order against the mark it gives
-    // way to; every other mark slides right first.
-    const blocker = placedAt.find(
-      ([px, py]) => Math.hypot(px - entry.x, py - entry.y) < MARK_APART - 0.5,
-    )
-    const first =
-      !sideways && entry.from && blocker && from.x < blocker[0] ? -1 : 1
+    // A mark stepped out vertically (from under a panel) gives way level with
+    // the nearest mark it gives way to, first on the side its thing lies on
+    // (compared with that mark's thing), so the order of the things is kept;
+    // every other mark slides right first, along its own line.
+    const stepped = !sideways && !!entry.from
+    const blocker = placedAt
+      .filter(
+        ([px, py]) => Math.hypot(px - entry.x, py - entry.y) < MARK_APART - 0.5,
+      )
+      .sort(
+        (a, b) =>
+          Math.hypot(a[0] - entry.x, a[1] - entry.y) -
+          Math.hypot(b[0] - entry.x, b[1] - entry.y),
+      )[0]
+    const first = stepped && blocker && from.x < blocker[2] ? -1 : 1
+    const level = stepped && blocker ? blocker[1] - entry.y : 0
     let spot: [number, number] | null = null
     search: for (let row = 0; row <= reach; row++) {
       const bx = entry.x + away[0] * row * MARK_APART
       const by = entry.y + away[1] * row * MARK_APART
-      for (let n = 0; n <= reach * 2; n++) {
-        // 0, then onward along the line, then the other side of where it landed.
-        const k = (n <= reach ? n : -(n - reach)) * first
-        const cx = bx + along[0] * k * MARK_APART
-        const cy = by + along[1] * k * MARK_APART
-        if (free(cx, cy, entry)) {
-          spot = [cx, cy]
-          break search
+      for (const lift of row === 0 && level !== 0 ? [level, 0] : [0]) {
+        for (let n = 0; n <= reach * 2; n++) {
+          // 0, then onward along the line, then the other side of where it landed.
+          const k = (n <= reach ? n : -(n - reach)) * first
+          const cx = bx + along[0] * k * MARK_APART
+          const cy = by + lift + along[1] * k * MARK_APART
+          if (free(cx, cy, entry)) {
+            spot = [cx, cy]
+            break search
+          }
         }
       }
     }
     const [x, y] = spot ?? [entry.x, entry.y]
-    placedAt.push([x, y])
+    placedAt.push([x, y, from.x])
     result[index] = { ...entry, x, y }
   }
   return result

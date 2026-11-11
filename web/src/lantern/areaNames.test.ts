@@ -690,7 +690,7 @@ describe('keepMarksApart', () => {
       visible,
     )
     expect([bread.x, bread.y]).toEqual([110, 205])
-    expect(table.x).toBeLessThanOrEqual(110 - 24)
+    expect([table.x, table.y]).toEqual([76, 205])
     // And a moved mark whose thing lies right of the standing one slides right.
     const [t2, b2] = keepMarksApart(
       [mark('table', 120, 200, { x: 120, y: 260 }), mark('bread', 110, 205)],
@@ -698,7 +698,22 @@ describe('keepMarksApart', () => {
       visible,
     )
     expect(b2.x).toBe(110)
-    expect(t2.x).toBeGreaterThanOrEqual(110 + 24)
+    expect([t2.x, t2.y]).toEqual([144, 205])
+  })
+
+  it('keeps the order of three things when two step out beside a standing one', () => {
+    const [c, a, b] = keepMarksApart(
+      [
+        mark('c', 80, 200),
+        mark('a', 100, 200, { x: 100, y: 260 }),
+        mark('b', 105, 200, { x: 105, y: 260 }),
+      ],
+      [],
+      visible,
+    )
+    expect(c.x).toBe(80)
+    expect(a.x).toBeGreaterThan(c.x)
+    expect(b.x).toBeGreaterThan(a.x)
   })
 
   it('carries a crowded row on to the left of the first mark, on the same line', () => {

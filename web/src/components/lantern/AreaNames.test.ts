@@ -526,6 +526,40 @@ describe('AreaNames', () => {
       expect(tx2).toBeLessThan(bx2)
     })
 
+    it('steps only Table out from under a Show tab, and keeps it left of Bread, level with it', async () => {
+      const pairT: AreaThing[] = [
+        { areaId: 'table', name: 'table', label: 'Table', kind: 'scenery' },
+        { areaId: 'bread', name: 'bread', label: 'Bread', kind: 'item' },
+      ]
+      const pairBoxes = {
+        table: { x: 0.14, y: 0.6, width: 0.02, height: 0.02 },
+        bread: { x: 0.16, y: 0.5, width: 0.02, height: 0.02 },
+      }
+      const w = mountNames({ showing: true, things: pairT, boxes: pairBoxes })
+      await nextTick()
+      const at = (id: string): [number, number] => {
+        const style =
+          w.get(`[data-area-mark="${id}"]`).attributes('style') ?? ''
+        return [
+          parseFloat(/left: ([\d.]+)px/.exec(style)![1]),
+          parseFloat(/top: ([\d.]+)px/.exec(style)![1]),
+        ]
+      }
+      const [, y0] = at('table')
+      const [, byStart] = at('bread')
+      const tab = plateOver('lq-paper-tab', y0 - 20, 40)
+      await w.setProps({ relayout: 'tab' })
+      await new Promise((resolve) => setTimeout(resolve, 400))
+      await nextTick()
+      expect(tab).toBeTruthy()
+      const [tx, ty] = at('table')
+      const [bx, by] = at('bread')
+      expect(by).toBe(byStart)
+      expect(ty).not.toBe(y0)
+      expect(Math.hypot(bx - tx, by - ty)).toBeGreaterThanOrEqual(23.5)
+      expect(tx).toBeLessThan(bx)
+    })
+
     it.each(['lq-words-hide', 'lq-paper-tab'])(
       'steps a mark under the story’s Hide/Show tab (%s) clear of it too',
       async (tab) => {
