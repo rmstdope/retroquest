@@ -2,12 +2,119 @@
   "act1-abandoned-shed": {
     "file": "act1-abandoned-shed.png",
     "width": 1920,
-    "height": 1080
+    "height": 1080,
+    "areas": {
+      "shed-door": {
+        "x": 0.407813,
+        "y": 0.387963,
+        "width": 0.157292,
+        "height": 0.406481
+      },
+      "scenery-abandoned-shed-boards": {
+        "x": 0.594271,
+        "y": 0.347222,
+        "width": 0.240625,
+        "height": 0.440741
+      },
+      "exit-north": {
+        "x": 0.279688,
+        "y": 0,
+        "width": 0.459896,
+        "height": 0.138889
+      },
+      "exit-south": {
+        "x": 0.241667,
+        "y": 0.855556,
+        "width": 0.453125,
+        "height": 0.144444
+      }
+    }
   },
   "act1-blacksmiths-forge": {
     "file": "act1-blacksmiths-forge.png",
     "width": 1920,
-    "height": 1080
+    "height": 1080,
+    "patches": {
+      "horseshoe-taken": {
+        "file": "act1-blacksmiths-forge.horseshoe-taken.png",
+        "width": 1920,
+        "height": 1080
+      }
+    },
+    "areas": {
+      "horseshoe": {
+        "x": 0.726563,
+        "y": 0.193519,
+        "width": 0.082292,
+        "height": 0.166667
+      },
+      "scenery-blacksmiths-forge-coals": {
+        "x": 0.283854,
+        "y": 0.760185,
+        "width": 0.13125,
+        "height": 0.118519
+      },
+      "scenery-blacksmiths-forge-anvil": {
+        "x": 0.718229,
+        "y": 0.587963,
+        "width": 0.207813,
+        "height": 0.141667
+      },
+      "scenery-blacksmiths-forge-hinges": {
+        "x": 0.460938,
+        "y": 0.337963,
+        "width": 0.051042,
+        "height": 0.126852
+      },
+      "scenery-blacksmiths-forge-hammer": {
+        "x": 0.520312,
+        "y": 0.4,
+        "width": 0.082292,
+        "height": 0.172222,
+        "mark": {
+          "x": 0.545833,
+          "y": 0.44537
+        }
+      },
+      "blacksmith": {
+        "x": 0.576042,
+        "y": 0.166667,
+        "width": 0.151042,
+        "height": 0.815741,
+        "mark": {
+          "x": 0.621875,
+          "y": 0.251852
+        }
+      },
+      "exit-west": {
+        "x": 0.001042,
+        "y": 0.201852,
+        "width": 0.104167,
+        "height": 0.601852
+      },
+      "exit-north": {
+        "x": 0.349479,
+        "y": 0.005556,
+        "width": 0.291667,
+        "height": 0.151852
+      },
+      "motion-fire": {
+        "x": 0.281771,
+        "y": 0.660185,
+        "width": 0.138021,
+        "height": 0.101852,
+        "mark": {
+          "x": 0.321354,
+          "y": 0.719444
+        }
+      },
+      "motion-smoke": {
+        "x": 0.259375,
+        "y": 0.006481,
+        "width": 0.132813,
+        "height": 0.65463
+      }
+    }
   },
   "act1-chicken-coop": {
     "file": "act1-chicken-coop.png",
@@ -191,12 +298,200 @@
   "act1-forest-path": {
     "file": "act1-forest-path.png",
     "width": 1920,
-    "height": 1080
+    "height": 1080,
+    "patches": {
+      "snare-appears": {
+        "file": "act1-forest-path.snare-appears.png",
+        "width": 1920,
+        "height": 1080
+      },
+      "vines-cut": {
+        "file": "act1-forest-path.vines-cut.png",
+        "width": 1920,
+        "height": 1080
+      },
+      "wild-berries-appears": {
+        "file": "act1-forest-path.wild-berries-appears.png",
+        "width": 1920,
+        "height": 1080
+      }
+    },
+    "areas": {
+      "vines": {
+        "x": 0.150521,
+        "y": 0.569444,
+        "width": 0.332292,
+        "height": 0.219444
+      },
+      "bush": {
+        "x": 0.827083,
+        "y": 0.399074,
+        "width": 0.105729,
+        "height": 0.239815
+      },
+      "scenery-forest-path-trees": {
+        "x": 0.021354,
+        "y": 0.005556,
+        "width": 0.448958,
+        "height": 0.562963
+      },
+      "scenery-forest-path-moss": {
+        "x": 0.898438,
+        "y": 0.571296,
+        "width": 0.077604,
+        "height": 0.164815
+      },
+      "scenery-forest-path-birds": {
+        "x": 0.676042,
+        "y": 0.166667,
+        "width": 0.071875,
+        "height": 0.121296
+      },
+      "exit-north": {
+        "x": 0.478646,
+        "y": 0.400926,
+        "width": 0.155729,
+        "height": 0.177778
+      },
+      "exit-south": {
+        "x": 0.24375,
+        "y": 0.847222,
+        "width": 0.523958,
+        "height": 0.152778
+      },
+      "stick": {
+        "x": 0.696875,
+        "y": 0.672222,
+        "width": 0.077083,
+        "height": 0.124074
+      },
+      "snare": {
+        "x": 0.792708,
+        "y": 0.674074,
+        "width": 0.097396,
+        "height": 0.163889
+      },
+      "scenery-forest-path-alcove": {
+        "x": 0.25625,
+        "y": 0.603704,
+        "width": 0.081771,
+        "height": 0.105556
+      },
+      "scenery-forest-path-cut-vines": {
+        "x": 0.340625,
+        "y": 0.600926,
+        "width": 0.065104,
+        "height": 0.112963
+      },
+      "wild-berries": {
+        "x": 0.03125,
+        "y": 0.690741,
+        "width": 0.147917,
+        "height": 0.309259
+      }
+    }
   },
   "act1-general-store": {
     "file": "act1-general-store.png",
     "width": 1920,
-    "height": 1080
+    "height": 1080,
+    "patches": {
+      "matches-gone": {
+        "file": "act1-general-store.matches-gone.png",
+        "width": 1920,
+        "height": 1080
+      },
+      "patches-appears": {
+        "file": "act1-general-store.patches-appears.png",
+        "width": 1920,
+        "height": 1080
+      },
+      "rope-gone": {
+        "file": "act1-general-store.rope-gone.png",
+        "width": 1920,
+        "height": 1080
+      }
+    },
+    "areas": {
+      "rope": {
+        "x": 0.163021,
+        "y": 0.067593,
+        "width": 0.079167,
+        "height": 0.238889
+      },
+      "apple": {
+        "x": 0.172396,
+        "y": 0.331481,
+        "width": 0.23125,
+        "height": 0.396296
+      },
+      "matches": {
+        "x": 0.867188,
+        "y": 0.730556,
+        "width": 0.071875,
+        "height": 0.081481
+      },
+      "sword": {
+        "x": 0.897396,
+        "y": 0.291667,
+        "width": 0.040104,
+        "height": 0.412037
+      },
+      "armor": {
+        "x": 0.728646,
+        "y": 0.52037,
+        "width": 0.134375,
+        "height": 0.164815
+      },
+      "scenery-general-store-trinkets": {
+        "x": 0.194792,
+        "y": 0.784259,
+        "width": 0.081771,
+        "height": 0.15
+      },
+      "scenery-general-store-jars": {
+        "x": 0.508333,
+        "y": 0.339815,
+        "width": 0.077083,
+        "height": 0.081481
+      },
+      "scenery-general-store-counter": {
+        "x": 0.725,
+        "y": 0.646296,
+        "width": 0.275,
+        "height": 0.346296
+      },
+      "shopkeeper": {
+        "x": 0.615625,
+        "y": 0.331481,
+        "width": 0.114583,
+        "height": 0.660185
+      },
+      "exit-west": {
+        "x": 0,
+        "y": 0.163889,
+        "width": 0.070833,
+        "height": 0.607407
+      },
+      "exit-east": {
+        "x": 0.951042,
+        "y": 0.218519,
+        "width": 0.048958,
+        "height": 0.42037
+      },
+      "exit-south": {
+        "x": 0.280208,
+        "y": 0.911111,
+        "width": 0.332813,
+        "height": 0.088889
+      },
+      "patches": {
+        "x": 0.359896,
+        "y": 0.844444,
+        "width": 0.099479,
+        "height": 0.110185
+      }
+    }
   },
   "act1-hidden-glade": {
     "file": "act1-hidden-glade.png",
@@ -256,7 +551,69 @@
   "act1-old-mill": {
     "file": "act1-old-mill.png",
     "width": 1920,
-    "height": 1080
+    "height": 1080,
+    "patches": {
+      "mechanism-jammed": {
+        "file": "act1-old-mill.mechanism-jammed.png",
+        "width": 1920,
+        "height": 1080
+      },
+      "millstone-fragment-appears": {
+        "file": "act1-old-mill.millstone-fragment-appears.png",
+        "width": 1920,
+        "height": 1080
+      }
+    },
+    "areas": {
+      "sack-of-flour": {
+        "x": 0.1625,
+        "y": 0.67963,
+        "width": 0.105208,
+        "height": 0.241667
+      },
+      "mechanism": {
+        "x": 0.689063,
+        "y": 0.519444,
+        "width": 0.1875,
+        "height": 0.30463
+      },
+      "scenery-old-mill-sails": {
+        "x": 0.275,
+        "y": 0.668519,
+        "width": 0.074479,
+        "height": 0.060185
+      },
+      "scenery-old-mill-gears": {
+        "x": 0.575521,
+        "y": 0.867593,
+        "width": 0.054167,
+        "height": 0.049074
+      },
+      "scenery-old-mill-millstone": {
+        "x": 0.492708,
+        "y": 0.676852,
+        "width": 0.098958,
+        "height": 0.105556
+      },
+      "exit-north": {
+        "x": 0.202083,
+        "y": 0,
+        "width": 0.502604,
+        "height": 0.198148
+      },
+      "exit-east": {
+        "x": 0.886979,
+        "y": 0.182407,
+        "width": 0.113021,
+        "height": 0.640741
+      },
+      "millstone-fragment": {
+        "x": 0.665625,
+        "y": 0.916667,
+        "width": 0.045313,
+        "height": 0.068519
+      }
+    }
   },
   "act1-portrait-blacksmith": {
     "file": "act1-portrait-blacksmith.png",
@@ -311,7 +668,82 @@
   "act1-riverbank": {
     "file": "act1-riverbank.png",
     "width": 1920,
-    "height": 1080
+    "height": 1080,
+    "patches": {
+      "mothers-letter-appears": {
+        "file": "act1-riverbank.mothers-letter-appears.png",
+        "width": 1920,
+        "height": 1080
+      }
+    },
+    "areas": {
+      "smooth-stone": {
+        "x": 0.410938,
+        "y": 0.663889,
+        "width": 0.295833,
+        "height": 0.191667
+      },
+      "river": {
+        "x": 0.145833,
+        "y": 0.432407,
+        "width": 0.560417,
+        "height": 0.567593,
+        "mark": {
+          "x": 0.361979,
+          "y": 0.550926
+        }
+      },
+      "scenery-riverbank-reeds": {
+        "x": 0,
+        "y": 0.575926,
+        "width": 0.300521,
+        "height": 0.424074,
+        "mark": {
+          "x": 0.067708,
+          "y": 0.781481
+        }
+      },
+      "scenery-riverbank-crate": {
+        "x": 0.792708,
+        "y": 0.592593,
+        "width": 0.1125,
+        "height": 0.162963
+      },
+      "scenery-riverbank-bend": {
+        "x": 0.542188,
+        "y": 0.374074,
+        "width": 0.188021,
+        "height": 0.150926
+      },
+      "fisherman": {
+        "x": 0.740104,
+        "y": 0.349074,
+        "width": 0.115104,
+        "height": 0.397222,
+        "mark": {
+          "x": 0.795833,
+          "y": 0.437963
+        }
+      },
+      "exit-west": {
+        "x": 0,
+        "y": 0.124074,
+        "width": 0.094792,
+        "height": 0.440741
+      },
+      "exit-south": {
+        "x": 0.723958,
+        "y": 0.837963,
+        "width": 0.276042,
+        "height": 0.162037
+      },
+      "mothers-letter": {
+        "x": 0.753646,
+        "y": 0.75463,
+        "width": 0.082813,
+        "height": 0.086111
+      }
+    }
   },
   "act1-road-to-greendale": {
     "file": "act1-road-to-greendale.png",
@@ -521,7 +953,50 @@
   "act1-village-well": {
     "file": "act1-village-well.png",
     "width": 1920,
-    "height": 1080
+    "height": 1080,
+    "patches": {
+      "well-purified": {
+        "file": "act1-village-well.well-purified.png",
+        "width": 1920,
+        "height": 1080
+      }
+    },
+    "areas": {
+      "well": {
+        "x": 0.08125,
+        "y": 0.37963,
+        "width": 0.823958,
+        "height": 0.502778,
+        "mark": {
+          "x": 0.486979,
+          "y": 0.771296
+        }
+      },
+      "scenery-village-well-moss": {
+        "x": 0.467708,
+        "y": 0.397222,
+        "width": 0.234375,
+        "height": 0.268519
+      },
+      "exit-west": {
+        "x": 0,
+        "y": 0.212963,
+        "width": 0.067708,
+        "height": 0.611111
+      },
+      "exit-east": {
+        "x": 0.927083,
+        "y": 0.215741,
+        "width": 0.072917,
+        "height": 0.611111
+      },
+      "exit-south": {
+        "x": 0.178646,
+        "y": 0.885185,
+        "width": 0.644271,
+        "height": 0.114815
+      }
+    }
   },
   "act2-ancient-grove": {
     "file": "act2-ancient-grove.png",

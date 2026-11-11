@@ -12,11 +12,115 @@
   "images": {
     "act1-abandoned-shed": {
       "text": "A rickety shed stands precariously at the edge of Willowbrook, its weathered boards creaking in the wind. Rusty tools and broken crates are scattered outside, and a thick layer of dust covers everything. Little light gets past the grimy boards, and the air smells of old earth and lamp oil. the door is bolted shut. there are cat tracks outside.",
-      "gameWas": "A rickety shed leans precariously at the edge of Willowbrook, its weathered boards creaking in the wind. Rusty tools and broken crates are scattered about a long workbench, and a thick layer of dust covers everything. Little light gets past the grimy boards, and the air smells of old earth and lamp oil."
+      "gameWas": "A rickety shed leans precariously at the edge of Willowbrook, its weathered boards creaking in the wind. Rusty tools and broken crates are scattered about a long workbench, and a thick layer of dust covers everything. Little light gets past the grimy boards, and the air smells of old earth and lamp oil.",
+      "takeAreas": {
+        "23": {
+          "exit-north": {
+            "x": 537,
+            "y": 0,
+            "width": 883,
+            "height": 150
+          },
+          "exit-south": {
+            "x": 464,
+            "y": 924,
+            "width": 870,
+            "height": 156
+          },
+          "scenery-abandoned-shed-boards": {
+            "x": 1141,
+            "y": 375,
+            "width": 462,
+            "height": 476
+          },
+          "shed-door": {
+            "x": 783,
+            "y": 419,
+            "width": 302,
+            "height": 439
+          }
+        }
+      }
     },
     "act1-blacksmiths-forge": {
-      "text": "A hot, smoky forge. Coals glow in the hearth and the anvil rings. Hinges, ploughshares and horseshoes hang from the walls, waiting to be mended or fetched, and the blacksmith is working on a sword in the forge with a hammer.",
-      "gameWas": "A hot, smoky forge. Coals glow in the hearth and the anvil rings. Hinges, ploughshares and horseshoes hang from the walls, waiting to be mended or fetched, and Borin wipes his brow without putting down the hammer."
+      "text": "A smoky forge. Coals glow in the hearth. The blacksmith stands next to an anvil with a hammer in his hand. There is a small horseshoe on the wall.",
+      "gameWas": "A hot, smoky forge. Coals glow in the hearth and the anvil rings. Hinges, ploughshares and horseshoes hang from the walls, waiting to be mended or fetched, and Borin wipes his brow without putting down the hammer.",
+      "takeAreas": {
+        "95": {
+          "blacksmith": {
+            "x": 1106,
+            "y": 180,
+            "width": 290,
+            "height": 881,
+            "point": {
+              "x": 1194,
+              "y": 272
+            }
+          },
+          "exit-north": {
+            "x": 671,
+            "y": 6,
+            "width": 560,
+            "height": 164
+          },
+          "exit-west": {
+            "x": 2,
+            "y": 218,
+            "width": 200,
+            "height": 650
+          },
+          "horseshoe": {
+            "x": 1395,
+            "y": 209,
+            "width": 158,
+            "height": 180
+          },
+          "motion-fire": {
+            "x": 541,
+            "y": 713,
+            "width": 265,
+            "height": 110,
+            "point": {
+              "x": 617,
+              "y": 777
+            }
+          },
+          "motion-smoke": {
+            "x": 498,
+            "y": 7,
+            "width": 255,
+            "height": 707
+          },
+          "scenery-blacksmiths-forge-anvil": {
+            "x": 1379,
+            "y": 635,
+            "width": 399,
+            "height": 153
+          },
+          "scenery-blacksmiths-forge-coals": {
+            "x": 545,
+            "y": 821,
+            "width": 252,
+            "height": 128
+          },
+          "scenery-blacksmiths-forge-hammer": {
+            "x": 999,
+            "y": 432,
+            "width": 158,
+            "height": 186,
+            "point": {
+              "x": 1048,
+              "y": 481
+            }
+          },
+          "scenery-blacksmiths-forge-hinges": {
+            "x": 885,
+            "y": 365,
+            "width": 98,
+            "height": 137
+          }
+        }
+      }
     },
     "act1-chicken-coop": {
       "text": "A small wooden coop stands here, its planks patched and weathered. Nervous chickens cluck and flutter, their feathers ruffled as they dart between straw nests. Sunbeams slip through the slats, casting striped shadows on the dirt floor. Inside the coop, there is a rafter and on top of that, something glints.\nThere is an egg and a feather lying on the ground.",
@@ -210,11 +314,185 @@
     },
     "act1-forest-path": {
       "text": "A winding path snakes into the heart of the woods, dappled sunlight flickering through the canopy above. A section of the path is blocked by thick, thorny vines. The air is alive with the scent of pine and wildflowers, and the ground is soft with moss and fallen leaves. A bird flit between branches, and the occasional snap of a twig hints at unseen creatures nearby.",
-      "gameWas": "A winding path snakes into the heart of the woods, dappled sunlight flickering through the canopy above. Beside the path, thick, thorny vines block a small alcove. The air is alive with the scent of pine and wildflowers, and the ground is soft with moss and fallen leaves. Birds flit between branches, and the occasional snap of a twig hints at unseen creatures nearby."
+      "gameWas": "A winding path snakes into the heart of the woods, dappled sunlight flickering through the canopy above. Beside the path, thick, thorny vines block a small alcove. The air is alive with the scent of pine and wildflowers, and the ground is soft with moss and fallen leaves. Birds flit between branches, and the occasional snap of a twig hints at unseen creatures nearby.",
+      "patches": {
+        "snare-appears": {
+          "text": "Add the snare trap to the picture.",
+          "gameWas": "Add the snare to the picture."
+        }
+      },
+      "takeAreas": {
+        "10": {
+          "bush": {
+            "x": 1588,
+            "y": 431,
+            "width": 203,
+            "height": 259
+          },
+          "exit-north": {
+            "x": 919,
+            "y": 433,
+            "width": 299,
+            "height": 192
+          },
+          "exit-south": {
+            "x": 468,
+            "y": 915,
+            "width": 1006,
+            "height": 165
+          },
+          "scenery-forest-path-alcove": {
+            "x": 492,
+            "y": 652,
+            "width": 157,
+            "height": 114
+          },
+          "scenery-forest-path-birds": {
+            "x": 1298,
+            "y": 180,
+            "width": 138,
+            "height": 131
+          },
+          "scenery-forest-path-cut-vines": {
+            "x": 654,
+            "y": 649,
+            "width": 125,
+            "height": 122
+          },
+          "scenery-forest-path-moss": {
+            "x": 1725,
+            "y": 617,
+            "width": 149,
+            "height": 178
+          },
+          "scenery-forest-path-trees": {
+            "x": 41,
+            "y": 6,
+            "width": 862,
+            "height": 608
+          },
+          "snare": {
+            "x": 1522,
+            "y": 728,
+            "width": 187,
+            "height": 177
+          },
+          "stick": {
+            "x": 1338,
+            "y": 726,
+            "width": 148,
+            "height": 134
+          },
+          "vines": {
+            "x": 289,
+            "y": 615,
+            "width": 638,
+            "height": 237
+          },
+          "wild-berries": {
+            "x": 60,
+            "y": 746,
+            "width": 284,
+            "height": 334
+          }
+        }
+      }
     },
     "act1-general-store": {
-      "text": "A well stocked shop with the shutters half down. Rope, apples, matches and weapons are lined up neatly in the shelves in the gloom. There are price tags on everything. The shopkeeper stands by the shelves, stacking apples.",
-      "gameWas": "A cluttered shop with the shutters half down. Rope, apples and trinkets crowd the shelves in the gloom. Hemlock stands at the window, watching the lane to the chapel."
+      "text": "A well stocked shop with the shutters half down. Rope, apples, armors and weapons are lined up neatly in the shelves in the gloom. There are price tags on everything. The shopkeeper stands by the shelves, stacking apples.\nThere is a box of matches on the bench.",
+      "gameWas": "A cluttered shop with the shutters half down. Rope, apples and trinkets crowd the shelves in the gloom. Hemlock stands at the window, watching the lane to the chapel.",
+      "patches": {
+        "matches-gone": {
+          "text": "Remove the box of matches from the picture.",
+          "gameWas": "Remove the matches from the picture."
+        },
+        "patches-appears": {
+          "text": "Add a sleeping black cat to the picture.",
+          "gameWas": "Add Patches to the picture."
+        }
+      },
+      "takeAreas": {
+        "25": {
+          "apple": {
+            "x": 331,
+            "y": 358,
+            "width": 444,
+            "height": 428
+          },
+          "armor": {
+            "x": 1399,
+            "y": 562,
+            "width": 258,
+            "height": 178
+          },
+          "exit-east": {
+            "x": 1826,
+            "y": 236,
+            "width": 94,
+            "height": 454
+          },
+          "exit-south": {
+            "x": 538,
+            "y": 984,
+            "width": 639,
+            "height": 96
+          },
+          "exit-west": {
+            "x": 0,
+            "y": 177,
+            "width": 136,
+            "height": 656
+          },
+          "matches": {
+            "x": 1665,
+            "y": 789,
+            "width": 138,
+            "height": 88
+          },
+          "patches": {
+            "x": 691,
+            "y": 912,
+            "width": 191,
+            "height": 119
+          },
+          "rope": {
+            "x": 313,
+            "y": 73,
+            "width": 152,
+            "height": 258
+          },
+          "scenery-general-store-counter": {
+            "x": 1392,
+            "y": 698,
+            "width": 528,
+            "height": 374
+          },
+          "scenery-general-store-jars": {
+            "x": 976,
+            "y": 367,
+            "width": 148,
+            "height": 88
+          },
+          "scenery-general-store-trinkets": {
+            "x": 374,
+            "y": 847,
+            "width": 157,
+            "height": 162
+          },
+          "shopkeeper": {
+            "x": 1182,
+            "y": 358,
+            "width": 220,
+            "height": 713
+          },
+          "sword": {
+            "x": 1723,
+            "y": 315,
+            "width": 77,
+            "height": 445
+          }
+        }
+      }
     },
     "act1-hidden-glade": {
       "text": "A hushed clearing hidden deep within the forest, dim and overgrown. Brambles crowd its edges, and the tall grass stands grey and still beneath branches that shut out the sun. In the center, a mossy boulder stands. An unnatural darkness lingers here, though the sky above the branches is clear.",
@@ -266,7 +544,59 @@
     },
     "act1-old-mill": {
       "text": "A creaky windmill towers above, its sails turning slowly in the breeze. The scent of flour hangs in the air. Sunlight illuminates sacks of grain and a heavy millstone. The door to the mill is ajar and nside the mill, you notice a strange mechanism of black iron, whirring to itself, that doesn't belong to the mill's original design.",
-      "gameWas": "A creaky windmill towers above, its sails turning slowly in the breeze. Dusty gears and cobwebs fill the interior, and the scent of flour hangs in the air. Sunlight streams through broken windows, illuminating sacks of grain and a heavy millstone. Amidst the old workings, you notice a strange mechanism of black iron, whirring to itself, that doesn't belong to the mill's original design."
+      "gameWas": "A creaky windmill towers above, its sails turning slowly in the breeze. Dusty gears and cobwebs fill the interior, and the scent of flour hangs in the air. Sunlight streams through broken windows, illuminating sacks of grain and a heavy millstone. Amidst the old workings, you notice a strange mechanism of black iron, whirring to itself, that doesn't belong to the mill's original design.",
+      "takeAreas": {
+        "11": {
+          "exit-east": {
+            "x": 1703,
+            "y": 197,
+            "width": 217,
+            "height": 692
+          },
+          "exit-north": {
+            "x": 388,
+            "y": 0,
+            "width": 965,
+            "height": 214
+          },
+          "mechanism": {
+            "x": 1323,
+            "y": 561,
+            "width": 360,
+            "height": 329
+          },
+          "millstone-fragment": {
+            "x": 1278,
+            "y": 990,
+            "width": 87,
+            "height": 74
+          },
+          "sack-of-flour": {
+            "x": 312,
+            "y": 734,
+            "width": 202,
+            "height": 261
+          },
+          "scenery-old-mill-gears": {
+            "x": 1105,
+            "y": 937,
+            "width": 104,
+            "height": 53
+          },
+          "scenery-old-mill-millstone": {
+            "x": 946,
+            "y": 731,
+            "width": 190,
+            "height": 114
+          },
+          "scenery-old-mill-sails": {
+            "x": 528,
+            "y": 722,
+            "width": 143,
+            "height": 65
+          }
+        }
+      }
     },
     "act1-portrait-deer": {
       "text": "A face portrait of a red-brown deer, its dark eyes calm and unafraid and its ears turned toward you. The deer is standing in the middle of a forest.",
@@ -282,7 +612,77 @@
     },
     "act1-riverbank": {
       "text": "A gentle river flows past the village and makes a slow bend here, past the reeds and a broad, flat stone at the water's edge. A couple of insects hum over the water. A weathered fisherman sits on an upturned crate at the bend, watching the water.",
-      "gameWas": "A gentle river flows past the village and makes a slow bend here, past the reeds and a broad, flat stone at the water's edge. Insects hum over the water. A weathered fisherman sits on an upturned crate at the bend, watching the water."
+      "gameWas": "A gentle river flows past the village and makes a slow bend here, past the reeds and a broad, flat stone at the water's edge. Insects hum over the water. A weathered fisherman sits on an upturned crate at the bend, watching the water.",
+      "takeAreas": {
+        "13": {
+          "exit-south": {
+            "x": 1390,
+            "y": 905,
+            "width": 530,
+            "height": 175
+          },
+          "exit-west": {
+            "x": 0,
+            "y": 134,
+            "width": 182,
+            "height": 476
+          },
+          "fisherman": {
+            "x": 1421,
+            "y": 377,
+            "width": 221,
+            "height": 429,
+            "point": {
+              "x": 1528,
+              "y": 473
+            }
+          },
+          "mothers-letter": {
+            "x": 1447,
+            "y": 815,
+            "width": 159,
+            "height": 93
+          },
+          "river": {
+            "x": 280,
+            "y": 467,
+            "width": 1076,
+            "height": 613,
+            "point": {
+              "x": 695,
+              "y": 595
+            }
+          },
+          "scenery-riverbank-bend": {
+            "x": 1041,
+            "y": 404,
+            "width": 361,
+            "height": 163
+          },
+          "scenery-riverbank-crate": {
+            "x": 1522,
+            "y": 640,
+            "width": 216,
+            "height": 176
+          },
+          "scenery-riverbank-reeds": {
+            "x": 0,
+            "y": 622,
+            "width": 577,
+            "height": 458,
+            "point": {
+              "x": 130,
+              "y": 844
+            }
+          },
+          "smooth-stone": {
+            "x": 789,
+            "y": 717,
+            "width": 568,
+            "height": 207
+          }
+        }
+      }
     },
     "act1-road-to-greendale": {
       "text": "The main road out of Willowbrook runs east under old oaks, their branches meeting overhead. The way is well trodden, lined with wildflowers and fallen leaves. A merchant's cart stands beside the road.",
@@ -475,8 +875,52 @@
       }
     },
     "act1-village-well": {
-      "text": "An old stone well stands between the field and the forge, its stones worn smooth by countless hands. The water below lies dark and still. Moss creeps up the sides.",
-      "gameWas": "An old stone well stands between the field and the forge, its stones worn smooth by countless hands. The water below lies dark and still, and a faint sour smell hangs in the cool, damp air. Moss creeps up the sides."
+      "text": "An old stone well stands between the field and the forge, its stones worn smooth by countless hands. The water below lies foul, dark and still and have a greenish light over it. Moss creeps up the sides.",
+      "gameWas": "An old stone well stands between the field and the forge, its stones worn smooth by countless hands. The water below lies dark and still, and a faint sour smell hangs in the cool, damp air. Moss creeps up the sides.",
+      "patches": {
+        "well-purified": {
+          "text": "Change the greenish color of the water to dark blue",
+          "gameWas": "Make the water in the well clear and bright instead of dark and still."
+        }
+      },
+      "takeAreas": {
+        "16": {
+          "exit-east": {
+            "x": 1780,
+            "y": 233,
+            "width": 140,
+            "height": 660
+          },
+          "exit-south": {
+            "x": 343,
+            "y": 956,
+            "width": 1237,
+            "height": 124
+          },
+          "exit-west": {
+            "x": 0,
+            "y": 230,
+            "width": 130,
+            "height": 660
+          },
+          "scenery-village-well-moss": {
+            "x": 898,
+            "y": 429,
+            "width": 450,
+            "height": 290
+          },
+          "well": {
+            "x": 156,
+            "y": 410,
+            "width": 1582,
+            "height": 543,
+            "point": {
+              "x": 935,
+              "y": 833
+            }
+          }
+        }
+      }
     },
     "act2-ancient-grove": {
       "text": "A ring of trees so old their trunks are wider than a cottage. Text is carved in their bark, older than any letters you know. In the middle stands one tree taller than the rest, with bark the colour of tarnished silver. There are no houses here.",
