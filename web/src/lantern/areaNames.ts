@@ -256,20 +256,23 @@ export function clearOfPanels(
   })
 }
 
-/** How far apart two moved marks' middles stand: a mark's 12 px and as much again of clear space. */
+/** How far apart two marks' middles stand: a mark's 12 px and as much again of clear space. */
 const MARK_APART = 24
 
 /**
- * The marks of `marks` that were moved (they have a `from`) kept off every
- * other mark, so two never land on each other. A mark that was never moved
- * stays exactly where it is, and a moved one gives way to it. Moved marks are
- * placed from left to right by where their things lie; one that would stand
- * within `MARK_APART` of a mark already placed slides sideways along its line
- * (down it, for a mark moved to the side of a panel), onward in steps of
- * `MARK_APART` to the first free spot, then to the other side of where it
- * landed when the line runs out, and only when the whole line is full onto a row one `MARK_APART`
- * further from where it came from. A spot must be on the `visible` part,
- * under none of the `panels` and not under the `words` (which hide a mark); a mark with no such spot keeps where it is.
+ * The marks of `marks` kept off every other mark, so two never land on each
+ * other. Marks that stand on their things (no `from`) are placed first, from
+ * left to right by where they stand (a tie keeps the input order); the further
+ * left one keeps its place. Moved marks (they have a `from`) are placed after
+ * them, from left to right by where their things lie, and give way to any mark
+ * already placed. A mark that would stand within `MARK_APART` of one already
+ * placed slides sideways along its line (down it, for a mark moved to the side
+ * of a panel), onward in steps of `MARK_APART` to the first free spot, then to
+ * the other side of where it landed when the line runs out, and only when the
+ * whole line is full onto a row one `MARK_APART` further from where it came
+ * from (below the line, for a mark that stands on its thing). A spot must be on
+ * the `visible` part, under none of the `panels` and not under the `words`
+ * (which hide a mark); a mark with no such spot keeps where it is.
  */
 export function keepMarksApart(
   marks: readonly PlacedName[],
@@ -281,26 +284,30 @@ export function keepMarksApart(
   const right = visible.x + visible.w - MARK_RADIUS
   const top = visible.y + MARK_RADIUS
   const bottom = visible.y + visible.h - MARK_RADIUS
-  const placedAt: Array<[number, number]> = marks
-    .filter((entry) => !entry.from)
-    .map((entry) => [entry.x, entry.y])
+  const placedAt: Array<[number, number]> = []
   const order = marks
     .map((entry, index) => ({ entry, index }))
-    .filter(({ entry }) => entry.from)
     .sort(
       (a, b) =>
-        (a.entry.from?.x ?? 0) - (b.entry.from?.x ?? 0) || a.index - b.index,
+        Number(!!a.entry.from) - Number(!!b.entry.from) ||
+        (a.entry.from?.x ?? a.entry.x) - (b.entry.from?.x ?? b.entry.x) ||
+        a.index - b.index,
     )
   const result = [...marks]
+  const underWords = (x: number, y: number): boolean =>
+    words.some((r) => inWords(x, y, r))
   const free = (x: number, y: number): boolean =>
     x >= left - 0.5 &&
     x <= right + 0.5 &&
     y >= top - 0.5 &&
     y <= bottom + 0.5 &&
     !panels.some((panel) => underPanel(x, y, panel)) &&
-    !words.some((r) => inWords(x, y, r)) &&
+    !underWords(x, y) &&
     placedAt.every(([px, py]) => Math.hypot(px - x, py - y) >= MARK_APART - 0.5)
   for (const { entry, index } of order) {
+    // A mark standing on its thing under the words is hidden with them: it
+    // stays, and neither moves nor pushes another.
+    if (!entry.from && underWords(entry.x, entry.y)) continue
     const from = entry.from ?? entry
     const sideways = Math.abs(entry.x - from.x) > Math.abs(entry.y - from.y)
     // The line the mark slid along, and which way a further row lies.

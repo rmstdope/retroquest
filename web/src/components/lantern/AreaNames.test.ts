@@ -156,9 +156,14 @@ describe('AreaNames', () => {
         },
       })
       await nextTick()
-      const line = w.get('line')
-      expect(Number(line.attributes('x1'))).toBeCloseTo(480, 3)
-      expect(Number(line.attributes('y1'))).toBeCloseTo(270, 3)
+      // The three marks share a point, so they now stand a mark's width apart
+      // (480, 504, 528); a line starts at the mark whose name had to move.
+      const starts = w
+        .findAll('line')
+        .map((line) => Number(line.attributes('x1')))
+      expect(starts.length).toBeGreaterThan(0)
+      for (const x of starts) expect([480, 504, 528]).toContain(x)
+      expect(Number(w.get('line').attributes('y1'))).toBeCloseTo(270, 3)
     })
 
     it('shows a focused thing at the same spot as when all are shown', async () => {

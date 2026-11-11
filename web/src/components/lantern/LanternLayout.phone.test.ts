@@ -149,6 +149,7 @@ describe('LanternLayout: the stage on a phone', () => {
           observe(): void {}
           unobserve(): void {}
           disconnect(): void {}
+          unobserve(): void {}
         },
       )
       await mountOn('upright')

@@ -768,6 +768,76 @@ describe('keepMarksApart', () => {
   })
 })
 
+describe('keepMarksApart with marks that all stand on their things', () => {
+  const visible = { x: 0, y: 0, w: 390, h: 700 }
+  const mark = (id: string, x: number, y: number) => ({
+    areaId: id,
+    name: id,
+    label: id,
+    kind: 'scenery' as const,
+    x,
+    y,
+    rect: { x: x - 20, y: y - 20, w: 40, h: 40 },
+  })
+
+  it('puts two marks on the same spot side by side, the left one in input order keeping it', () => {
+    const [a, b] = keepMarksApart(
+      [mark('a', 200, 300), mark('b', 200, 300)],
+      [],
+      visible,
+    )
+    expect([a.x, a.y]).toEqual([200, 300])
+    expect(b.y).toBe(300)
+    expect(b.x - a.x).toBeGreaterThanOrEqual(24)
+  })
+
+  it('keeps the further-left mark in place and slides the other right, whatever the input order', () => {
+    const [right, left] = keepMarksApart(
+      [mark('r', 210, 300), mark('l', 200, 300)],
+      [],
+      visible,
+    )
+    expect([left.x, left.y]).toEqual([200, 300])
+    expect(right.x - left.x).toBeGreaterThanOrEqual(24)
+  })
+
+  it('moves nothing when the marks are already 24 apart', () => {
+    const marks = [mark('a', 200, 300), mark('b', 224, 300)]
+    const out = keepMarksApart(marks, [], visible)
+    expect(out.map((m) => [m.x, m.y])).toEqual([
+      [200, 300],
+      [224, 300],
+    ])
+  })
+
+  it('carries on to the left, then a second row, when the line is full', () => {
+    const out = keepMarksApart(
+      [mark('a', 20, 300), mark('b', 20, 300), mark('c', 20, 300)],
+      [],
+      { x: 0, y: 0, w: 60, h: 700 },
+    )
+    for (let i = 0; i < out.length; i++)
+      for (let j = i + 1; j < out.length; j++)
+        expect(
+          Math.hypot(out[i].x - out[j].x, out[i].y - out[j].y),
+        ).toBeGreaterThanOrEqual(23.5)
+  })
+
+  it('never slides a mark under a panel', () => {
+    const panel = { x: 230, y: 280, w: 100, h: 40 }
+    const out = keepMarksApart(
+      [mark('a', 200, 300), mark('b', 205, 300)],
+      [panel],
+      visible,
+    )
+    expect(
+      Math.hypot(out[1].x - out[0].x, out[1].y - out[0].y),
+    ).toBeGreaterThanOrEqual(23.5)
+    const clear = out[1].x < 230 - 12 || out[1].x > 330 + 12
+    expect(clear).toBe(true)
+  })
+})
+
 describe('markInside leaves a mark trimmed only by the edge unmoved', () => {
   it('has no from for an edge-cropped thing with no point', () => {
     const visible = { x: 2, y: 2, w: 386, h: 690 }
