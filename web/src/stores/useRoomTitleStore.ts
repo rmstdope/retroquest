@@ -3,6 +3,7 @@ import { ref, watch } from 'vue'
 import { arrivesOnPicture, newsOnPicture } from '@/lantern/stageArrival'
 import { useGameStore } from './useGameStore'
 import { useSceneStore } from './useSceneStore'
+import { useArrivalStore } from './useArrivalStore'
 
 /** How long the room's title stays over the picture before it settles into the corner (ms): about 0.6 s to fade in, then 3 s. */
 export const ROOM_TITLE_MS = 3600
@@ -24,6 +25,7 @@ export const ROOM_TITLE_MS = 3600
 export const useRoomTitleStore = defineStore('roomTitle', () => {
   const game = useGameStore()
   const scene = useSceneStore()
+  const arrival = useArrivalStore()
 
   /** The name the title shows while it is up; null when settled. */
   const name = ref<string | null>(null)
@@ -82,15 +84,19 @@ export const useRoomTitleStore = defineStore('roomTitle', () => {
   /**
    * Greet the room waiting for it, or let it pass: on the text page, on a
    * first visit, whose arrival is headed by the name, or on a turn that tells
-   * news in the middle (a played turn: a load's turns tell none again).
+   * news in the middle (a played turn: a load's turns tell none again). A
+   * first visit waits until its arrival is up (when the picture has risen),
+   * so the corner never names the room before it is told; a newer turn ends
+   * that wait.
    */
   function consider(): void {
     if (!waiting.value || !ready()) return
-    waiting.value = false
     const latest = game.turns.at(-1)
+    const firstVisit = !!latest && arrivesOnPicture(latest)
+    if (staged.value && firstVisit && !arrival.tellsRoom) return
+    waiting.value = false
     const middleTaken =
-      !!latest &&
-      (arrivesOnPicture(latest) || (!!latest.narrate && newsOnPicture(latest)))
+      firstVisit || (!!latest && !!latest.narrate && newsOnPicture(latest))
     if (!staged.value || middleTaken) settle()
     else greet(game.roomName)
   }
@@ -111,6 +117,8 @@ export const useRoomTitleStore = defineStore('roomTitle', () => {
         scene.shown,
         game.roomPicture,
         staged.value,
+        arrival.tellsRoom,
+        game.turns.length,
       ] as const,
     consider,
   )

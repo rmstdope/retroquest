@@ -4,6 +4,7 @@ import { createPinia, setActivePinia } from 'pinia'
 import { ROOM_TITLE_MS, useRoomTitleStore } from './useRoomTitleStore'
 import { useGameStore, type Turn } from './useGameStore'
 import { useSceneStore } from './useSceneStore'
+import { useArrivalStore } from './useArrivalStore'
 
 /** A turn that moved the player; `firstVisit` and `narrate` make it an arrival told on the picture. */
 function moveTurn(id: number, firstVisit: boolean): Turn {
@@ -85,6 +86,36 @@ describe('useRoomTitleStore', () => {
       spells: [{ name: 'Lumina', text: '' }],
     } as unknown as Turn)
     expect(title.name).toBe('Village Well')
+  })
+
+  it('keeps a first visit waiting until its arrival tells the room, however soon the stage is idle', async () => {
+    await enter('Village Square', moveTurn(2, true))
+    expect(title.name).toBeNull()
+    expect(title.waiting).toBe(true)
+    const arrival = useArrivalStore()
+    arrival.show(
+      2,
+      [
+        {
+          kind: 'description',
+          lines: [{ unit: 0, markup: 'Cobbles.' }],
+          voiced: false,
+        },
+      ],
+      false,
+    )
+    await nextTick()
+    expect(title.waiting).toBe(false)
+    expect(title.name).toBeNull()
+  })
+
+  it('stops waiting for an arrival a newer turn has replaced, and greets the room', async () => {
+    await enter('Village Square', moveTurn(2, true))
+    expect(title.waiting).toBe(true)
+    game.turns = [...game.turns, moveTurn(3, false)]
+    await nextTick()
+    expect(title.waiting).toBe(false)
+    expect(title.name).toBe('Village Square')
   })
 
   it('settles after its time', async () => {

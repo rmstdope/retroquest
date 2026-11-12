@@ -269,11 +269,11 @@ export class GameState {
     const changes: QuestChanges = { activated: [], updated: [], completed: [] }
     const unoffered = this.nonActivatedQuests.filter((quest) => quest.completed)
     const reported = (quest: Quest): boolean => !unoffered.includes(quest)
-    for (let q: Quest | null; (q = this.nextActivatedQuest()); )
+    for (let q: Quest | null; (q = this.nextActivatedQuest());)
       if (reported(q)) changes.activated.push(q)
-    for (let q: Quest | null; (q = this.nextUpdatedQuest()); )
+    for (let q: Quest | null; (q = this.nextUpdatedQuest());)
       if (reported(q)) changes.updated.push(q)
-    for (let q: Quest | null; (q = this.nextCompletedQuest()); )
+    for (let q: Quest | null; (q = this.nextCompletedQuest());)
       changes.completed.push(q)
     return changes
   }
@@ -409,7 +409,7 @@ export class GameState {
     count: number,
   ): number {
     let removed = 0
-    for (let i = 0; i < items.length && removed < count; ) {
+    for (let i = 0; i < items.length && removed < count;) {
       if (matches(items[i])) {
         items.splice(i, 1)
         removed++

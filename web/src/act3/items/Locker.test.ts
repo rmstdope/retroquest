@@ -11,8 +11,7 @@ function setup(): { game: Game; room: Room; locker: Locker } {
   const game = new Game([new Act3()])
   const room = game.state.allRooms.CollapsedPier
   const locker = room.items.find((i) => i instanceof Locker) as
-    | Locker
-    | undefined
+    Locker | undefined
   expect(locker).toBeDefined()
   return { game, room, locker: locker as Locker }
 }

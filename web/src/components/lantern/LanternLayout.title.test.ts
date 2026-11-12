@@ -38,6 +38,22 @@ describe('LanternLayout: the room title', () => {
     await w.vm.$nextTick()
     await w.vm.$nextTick()
     if (wide) await w.get('img.lq-loading').trigger('load')
+    // The opening turn came before the stage was mounted: tell its arrival as
+    // the stage would have, so the hall is no longer waiting to be told.
+    const arrival = useArrivalStore()
+    arrival.show(
+      game.turns.at(-1)!.id,
+      [
+        {
+          kind: 'description',
+          lines: [{ unit: 0, markup: 'A hall.' }],
+          voiced: false,
+        },
+      ],
+      false,
+    )
+    await w.vm.$nextTick()
+    arrival.clear()
     useRoomTitleStore().settle()
     await w.vm.$nextTick()
   }

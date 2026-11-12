@@ -780,8 +780,9 @@ function onTypedEnter(): void {
             :aria-selected="index === completion.activeIndex.value"
             @mousedown.prevent="completion.apply(word)"
           >
-            <b>{{ word.slice(0, completion.word.value.length) }}</b
-            >{{ word.slice(completion.word.value.length) }}
+            <b>{{ word.slice(0, completion.word.value.length) }}</b>{{
+              word.slice(completion.word.value.length)
+            }}
           </li>
         </ul>
       </div>
