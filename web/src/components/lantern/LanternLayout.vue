@@ -297,8 +297,14 @@ watch(
   },
   { immediate: true },
 )
-/** Whether the room's name in the corner steps away: its title, or a first visit's arrival, is told over the picture (news alone leaves it). */
-const plateAway = computed(() => roomTitle.name !== null || arrival.tellsRoom)
+/**
+ * Whether the room's name in the corner steps away: a room just walked into
+ * waits to be told (its picture still rising), or its title, or a first
+ * visit's arrival, is told over the picture (news alone leaves it).
+ */
+const plateAway = computed(
+  () => roomTitle.waiting || roomTitle.name !== null || arrival.tellsRoom,
+)
 /** Any key or press settles the room's title into the corner at once; the key or press still does what it does. */
 function settleRoomTitle(): void {
   if (roomTitle.name !== null) roomTitle.settle()

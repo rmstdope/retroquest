@@ -6,6 +6,7 @@ import LanternLayout from './LanternLayout.vue'
 import { useGameStore } from '@/stores/useGameStore'
 import { useRoomTitleStore } from '@/stores/useRoomTitleStore'
 import { useArrivalStore } from '@/stores/useArrivalStore'
+import { SCENE_HALF_MS } from '@/stores/useSceneStore'
 import { startedHoldStore } from '@/testing/holdGame'
 import { setPictureProbe } from '@/lantern/roomPicture'
 import { SHORT_QUERY } from '@/composables/useMediaQuery'
@@ -119,6 +120,20 @@ describe('LanternLayout: the room title', () => {
     await w.vm.$nextTick()
     expect(useArrivalStore().active).toBe(true)
     expect(plate().classes()).not.toContain('lq-plate-away')
+  })
+
+  it('keeps the corner name away while a change of scene brings the next room up, before it is told', async () => {
+    await stage()
+    const game = useGameStore()
+    game.submitCommand('go north')
+    await w.vm.$nextTick()
+    await w.vm.$nextTick()
+    await w.get('img.lq-loading').trigger('load')
+    // The room's name changes at the darkest moment; the picture is not up yet.
+    vi.advanceTimersByTime(SCENE_HALF_MS)
+    await w.vm.$nextTick()
+    expect(game.roomName).toBe('Garden')
+    expect(plate().classes()).toContain('lq-plate-away')
   })
 
   it('has no title on the text page', async () => {

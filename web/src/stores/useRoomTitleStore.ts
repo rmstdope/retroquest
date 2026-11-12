@@ -30,7 +30,7 @@ export const useRoomTitleStore = defineStore('roomTitle', () => {
   /** Whether the room is played on its picture (the layout says): no title on the text page. */
   const staged = ref(false)
   /** The room changed (or a game was started or loaded) and has not been greeted or let pass yet. */
-  let pending = false
+  const waiting = ref(false)
   let timer: ReturnType<typeof setTimeout> | undefined
 
   /** Put the title up for `room`, settling after `ROOM_TITLE_MS`. */
@@ -58,7 +58,7 @@ export const useRoomTitleStore = defineStore('roomTitle', () => {
   /** The stage starts afresh (a new game, a load, a new act): settle, and greet the room once its own picture is up. */
   function reset(): void {
     settle()
-    pending = true
+    waiting.value = true
     // The paper backdrop is never stale: it is what a room without a painted
     // picture settles on again, and it shows no other room.
     stale = scene.shown || null
@@ -85,8 +85,8 @@ export const useRoomTitleStore = defineStore('roomTitle', () => {
    * news in the middle (a played turn: a load's turns tell none again).
    */
   function consider(): void {
-    if (!pending || !ready()) return
-    pending = false
+    if (!waiting.value || !ready()) return
+    waiting.value = false
     const latest = game.turns.at(-1)
     const middleTaken =
       !!latest &&
@@ -98,7 +98,7 @@ export const useRoomTitleStore = defineStore('roomTitle', () => {
   watch(
     () => [game.gameNumber, game.loadNumber, game.roomName] as const,
     () => {
-      pending = true
+      waiting.value = true
       consider()
     },
     { immediate: true },
@@ -115,5 +115,5 @@ export const useRoomTitleStore = defineStore('roomTitle', () => {
     consider,
   )
 
-  return { name, staged, greet, settle, reset }
+  return { name, waiting, staged, greet, settle, reset }
 })
