@@ -662,6 +662,32 @@ describe('AreaNames', () => {
       expect(dot.y).toBeGreaterThan(400)
     })
 
+    it('steps a dot clear of the words again when the story scrolls them over it (rq-kgtp)', async () => {
+      const w = mountNames({ showing: true })
+      cardsOver([0, 540], [0, 540], [20, 300])
+      await settle(w, 'words')
+      const before = markAt(w, 'villager')!
+      expect(before.y).toBeGreaterThan(300)
+      // The story scrolls its card 40px down, over the stepped dot; nothing else changes.
+      const card = document.querySelector<HTMLElement>('.lq-card')!
+      vi.spyOn(card, 'getBoundingClientRect').mockReturnValue({
+        left: 0,
+        top: 60,
+        width: 960,
+        height: 280,
+        right: 960,
+        bottom: 340,
+        x: 0,
+        y: 60,
+        toJSON: () => ({}),
+      })
+      document.querySelector('.lq-story')!.dispatchEvent(new Event('scroll'))
+      await new Promise((resolve) => setTimeout(resolve, 50))
+      await nextTick()
+      const dot = markAt(w, 'villager')!
+      expect(dot.y < 60 || dot.y > 340).toBe(true)
+    })
+
     it('keeps two covered dots apart', async () => {
       const w = mountNames({
         showing: true,
