@@ -370,13 +370,13 @@ onBeforeUnmount(() => {
         <div
           v-else-if="arrival.part.kind === 'description' && arrival.part.room"
           ref="head"
-          class="lq-news-head lq-room-head"
+          class="lq-room-head"
           data-testid="arrival-room"
         >
-          <p class="lq-news-kicker lq-room-kicker">You are in</p>
+          <p class="lq-room-kicker">You are in</p>
           <!-- eslint-disable vue/no-v-html -->
           <p
-            class="lq-news-name lq-room-head-name"
+            class="lq-room-head-name"
             v-html="html(arrival.part.room, arrival.part.lines[0].unit, 0, 1)"
           ></p>
           <!-- eslint-enable vue/no-v-html -->
@@ -705,11 +705,30 @@ onBeforeUnmount(() => {
   color: var(--lq-spell);
 }
 /* A first visit's heading: "You are in" and the room, as the room's title has them. */
-.lq-arrival-stage .lq-news-kicker.lq-room-kicker {
-  color: inherit;
+.lq-room-head {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+.lq-room-kicker {
+  margin: 0;
+  font-family: var(--lq-font-ui);
   font-size: 12px;
-  font-weight: 400;
   letter-spacing: 0.3em;
+  text-transform: uppercase;
+}
+.lq-room-head-name {
+  margin: 0;
+  font-family: var(--lq-font-display);
+  font-size: calc(44px * var(--lq-display-scale, 1));
+  font-weight: 500;
+  line-height: 1.1;
+}
+.lq-phone-arrival .lq-room-head-name,
+.lq-sideways-arrival .lq-room-head-name {
+  font-size: calc(30px * var(--lq-display-scale, 1));
 }
 .lq-room-head-rule {
   width: 120px;

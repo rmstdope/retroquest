@@ -562,8 +562,8 @@ test.describe('Lantern UI (the default)', () => {
     })
 
     const plate = page.getByRole('region', { name: 'Current location' })
-    await expect(plate).toContainText('You are in')
     await expect(plate).toContainText('Village Square')
+    await expect(plate).not.toContainText('You are in')
     for (const name of [/Quests · 0/, /Story so far/])
       await expect(page.getByRole('button', { name })).toBeVisible()
     // The Bag and Spells are the belt of pictures at the foot of the picture.

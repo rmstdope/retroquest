@@ -12,7 +12,8 @@ import { usePanelFlash } from '@/composables/usePanelFlash'
  * it fades back in when that settles. The plate is never read aloud: the
  * room's name and description are read in the story. On the tall-screen stage
  * (`storyButton`) "⟲ Story so far" stands to the right of the name, and stays
- * while the name is away. Compact (a phone on its side) is smaller.
+ * while the name is away. The name is not a button: presses go through it to
+ * what is beneath. Compact (a phone on its side) is smaller.
  */
 const props = defineProps<{
   storyButton?: boolean
@@ -64,6 +65,8 @@ defineExpose({ focusStoryButton })
   align-items: center;
   gap: 10px;
   min-width: 0;
+  /* The name is not a button: a press goes through it to the picture or the words beneath. */
+  pointer-events: none;
 }
 .lq-room-name {
   flex: 0 1 auto;
@@ -93,6 +96,7 @@ defineExpose({ focusStoryButton })
   font-size: calc(16px * var(--lq-display-scale));
 }
 .lq-story-so-far {
+  pointer-events: auto;
   flex: 0 0 auto;
   margin-left: auto;
   height: 32px;

@@ -41,7 +41,8 @@ const title = useRoomTitleStore()
   /* Its middle at 38% of the picture's height. */
   top: 38%;
   transform: translateY(-50%);
-  z-index: 2;
+  /* Above the words over the picture (z-index 2). */
+  z-index: 3;
   display: flex;
   flex-direction: column;
   align-items: center;

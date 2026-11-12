@@ -40,7 +40,7 @@ for (const size of [
     await expect(page.locator('.lq-nav-bottom')).toHaveCount(0)
     await expect(page.getByRole('button', { name: 'Actions ▴' })).toBeVisible()
     await expect(page.getByRole('button', { name: 'Hint' })).toBeVisible()
-    // One compact row, however many chips: it never covers the words.
+    // One compact row: it never covers the words.
     const plate = await page.locator('.lq-stage-plate').boundingBox()
     expect(plate?.height ?? 999).toBeLessThan(60)
     // And it ends before the first button on the right.
@@ -126,19 +126,23 @@ for (const size of [
   })
 }
 
-test('a name too long for the plate gives way so the chips keep a share', async ({
+test('a name too long for the corner stays one row and ends before the buttons', async ({
   page,
 }): Promise<void> => {
   await page.setViewportSize({ width: 568, height: 320 })
   await start(page)
   await lightDots(page, 'Submerged Antechamber')
+  const name = page.locator('.lq-stage-plate .lq-room-name')
+  await expect(name).toHaveText('Submerged Antechamber')
   await expect
-    .poll(() =>
-      page
-        .locator('.lq-stage-plate .lq-here')
-        .evaluate((el) => el.getBoundingClientRect().width),
-    )
-    .toBeGreaterThanOrEqual(48)
+    .poll(async (): Promise<number> => {
+      const plate = await page.locator('.lq-stage-plate').boundingBox()
+      const buttons = await page.locator('.lq-stage-buttons').boundingBox()
+      return (buttons?.x ?? 0) - ((plate?.x ?? 0) + (plate?.width ?? 999))
+    })
+    .toBeGreaterThanOrEqual(0)
+  const row = await name.boundingBox()
+  expect(row?.height ?? 999).toBeLessThan(30)
 })
 
 test('a tablet held upright keeps the tall stage, with no turn page', async ({

@@ -2103,7 +2103,6 @@ watch(
               :away="arrivalFolded"
               :lift="beltHeight"
             />
-            <RoomTitle :bare="!pictured" :small="!laptop" />
             <button
               v-if="sideways"
               type="button"
@@ -2232,6 +2231,13 @@ watch(
               @close="closeRing"
             />
           </div>
+          <!-- Over the picture, and over the words beside it (the stage isolates its own layers). -->
+          <RoomTitle
+            v-if="staged"
+            v-show="section === 'story'"
+            :bare="!pictured"
+            :small="!laptop"
+          />
           <RoomPlate
             v-if="phoneStage"
             v-show="section === 'story'"
