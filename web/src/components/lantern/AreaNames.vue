@@ -202,7 +202,11 @@ function measure(): void {
   watchPanels(scope)
 }
 
-/** The words (or anything else in the scope) scrolled: measure again at the next frame. */
+/**
+ * The words (or anything else in the scope) scrolled: measure again at the next
+ * frame. This holds while not showing too, since the focused thing's dot is
+ * stepped clear of the words then as well.
+ */
 function onScroll(): void {
   if (scrollFrame !== undefined) return
   scrollFrame = requestAnimationFrame(() => {
