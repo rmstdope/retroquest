@@ -800,13 +800,13 @@ describe('AreaNames', () => {
       const hit = (a: number[], b: number[]): boolean =>
         a[0] < b[2] && b[0] < a[2] && a[1] < b[3] && b[1] < a[3]
 
-      async function crowded(): Promise<VueWrapper> {
+      async function crowded(
+        label = 'Grandmother Tilda the Elder',
+      ): Promise<VueWrapper> {
         const w = await boxedIn({
           things: [
             ...things.map((t) =>
-              t.areaId === 'villager'
-                ? { ...t, label: 'Grandmother Tilda the Elder' }
-                : t,
+              t.areaId === 'villager' ? { ...t, label } : t,
             ),
             shelf,
           ],
@@ -841,6 +841,18 @@ describe('AreaNames', () => {
         await w.setProps({ pointer: null })
         expect(w.find('.lq-area-faded').exists()).toBe(false)
         expect(w.find('[data-area-pointer]').exists()).toBe(false)
+      })
+
+      it('fades the names it must cover, with their lines, while it shows, and brings them back after', async () => {
+        // A name as wide as the strip between the plate and the card: nothing near is clear, so it lies over Shelves.
+        const w = await crowded('Tilda '.repeat(25).trim())
+        await w.setProps({ pointer: { x: 144, y: 270 } })
+        const shelves = w.get('[data-area-name="shelf"]')
+        expect(shelves.classes()).toContain('lq-area-faded')
+        expect(w.find('[data-area-mark="shelf"]').exists()).toBe(true)
+        expect(w.find('.lq-area-lines line.lq-area-faded').exists()).toBe(true)
+        await w.setProps({ pointer: null })
+        expect(w.find('.lq-area-faded').exists()).toBe(false)
       })
     })
 

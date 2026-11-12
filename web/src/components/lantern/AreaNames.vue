@@ -590,6 +590,7 @@ const pointed = computed<Hung | null>(() => {
 }
 .lq-area-faded {
   opacity: 0;
+  pointer-events: none;
 }
 .lq-area-name,
 .lq-area-lines line {

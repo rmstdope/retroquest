@@ -763,7 +763,7 @@ function ringOffsets(d: number, w: number): Array<[number, number]> {
 
 /** The line from the mark to the nearest point of its name's rectangle. */
 function leaderFor(
-  entry: PlacedName,
+  entry: { x: number; y: number },
   rect: Rect,
 ): { x1: number; y1: number; x2: number; y2: number } {
   return {
@@ -823,7 +823,11 @@ export function hangName(
     ...slides.map((d) => pin(dot.x + HANG_GAP, beside + d)),
     ...slides.map((d) => pin(dot.x - HANG_GAP - w, beside + d)),
   ]
-  const lie = (at: { left: number; top: number }, pad: number, rs: Rect[]) =>
+  const lie = (
+    at: { left: number; top: number },
+    pad: number,
+    rs: readonly Rect[],
+  ): number =>
     rs.reduce((sum, o) => {
       const x =
         Math.min(at.left + w + pad, o.x + o.w) - Math.max(at.left - pad, o.x)
@@ -839,19 +843,29 @@ export function hangName(
   if (near) return { ...near, leader: null, covers: [] }
   const wanted = pin(centred, above ? aboveTop : belowTop)
   for (let ring = 1; ring <= RINGS; ring++) {
-    for (const [dx, dy] of ringOffsets(ring * STEP, w)) {
+    const side = ring * STEP + w / 2
+    // The ring's own spots, then either side level with the dot (where a line runs straight to it).
+    const offsets: Array<[number, number]> = [
+      ...ringOffsets(ring * STEP, w),
+      [side, beside - wanted.top],
+      [-side, beside - wanted.top],
+    ]
+    for (const [dx, dy] of offsets) {
       const at = pin(wanted.left + dx, wanted.top + dy)
       if (!clear(at, HANG_ROOM)) continue
       const rect = { x: at.left, y: at.top, w, h }
-      return {
-        ...at,
-        leader: leaderFor({ x: dot.x, y: dot.y } as PlacedName, rect),
-        covers: [],
-      }
+      const leader = leaderFor(dot, rect)
+      // Near the dot, with a line that crosses no card, panel or name.
+      if (
+        Math.hypot(leader.x2 - dot.x, leader.y2 - dot.y) > NAME_REACH ||
+        boxes.some((b) => crosses(leader, b))
+      )
+        continue
+      return { ...at, leader, covers: [] }
     }
   }
   const best = tries.reduce((a, b) =>
-    lie(b, 0, [...obstacles]) < lie(a, 0, [...obstacles]) ? b : a,
+    lie(b, 0, obstacles) < lie(a, 0, obstacles) ? b : a,
   )
   const covers = names
     .filter((n) => overlaps({ x: best.left, y: best.top, w, h }, n.rect))

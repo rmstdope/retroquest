@@ -1329,13 +1329,18 @@ describe('hangName', () => {
     const hung = hangName(size, { x: 200, y: 100 }, [], shown, visible)
     expect(hits(box(hung), shown[0].rect)).toBe(false)
     expect(hung.covers).toEqual([])
+    expect(hung.leader === null || hung.leader.x1 === 200).toBe(true)
   })
 
   it('draws a line when it strays from the dot to find the spot', () => {
-    const wall: Rect[] = [{ x: 100, y: 60, w: 200, h: 80 }]
+    const wall: Rect[] = [
+      { x: 100, y: 50, w: 200, h: 40 },
+      { x: 100, y: 108, w: 200, h: 40 },
+    ]
     const shown = [{ areaId: 'a', rect: at({ x: 0, y: 0, w: 1, h: 1 }) }]
     const hung = hangName(size, { x: 200, y: 100 }, wall, shown, visible)
     expect(hits(box(hung), wall[0])).toBe(false)
+    expect(hits(box(hung), wall[1])).toBe(false)
     expect(hung.leader).not.toBeNull()
   })
 
@@ -1353,5 +1358,23 @@ describe('hangName', () => {
       visible,
     )
     expect(hung.covers).toEqual(['shelves'])
+  })
+
+  it('never strays past the reach or draws its line across a card', () => {
+    const plate: Rect = { x: 0, y: 0, w: 600, h: 250 }
+    const card: Rect = { x: 0, y: 285, w: 600, h: 215 }
+    const strip = [
+      { areaId: 'l', rect: at({ x: 0, y: 250, w: 190, h: 35 }) },
+      { areaId: 'r', rect: at({ x: 210, y: 250, w: 390, h: 35 }) },
+    ]
+    const hung = hangName(
+      size,
+      { x: 200, y: 270 },
+      [plate, card],
+      strip,
+      visible,
+    )
+    expect(hung.top + size.h).toBeLessThanOrEqual(285 + 1)
+    expect(hung.leader).toBeNull()
   })
 })
