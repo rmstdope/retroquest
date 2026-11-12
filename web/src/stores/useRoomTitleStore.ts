@@ -63,5 +63,5 @@ export const useRoomTitleStore = defineStore('roomTitle', () => {
     { immediate: true },
   )
 
-  return { name, staged, settle }
+  return { name, staged, greet, settle }
 })

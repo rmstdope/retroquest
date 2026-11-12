@@ -6,6 +6,7 @@ import { useSettingsStore } from '@/stores/useSettingsStore'
 import { useNarrationStore } from '@/stores/useNarrationStore'
 import { useStageSpeechStore } from '@/stores/useStageSpeechStore'
 import { useArrivalStore } from '@/stores/useArrivalStore'
+import { useRoomTitleStore } from '@/stores/useRoomTitleStore'
 import { useSceneStore } from '@/stores/useSceneStore'
 import { useAreaNamesStore } from '@/stores/useAreaNamesStore'
 import { useFlightStore } from '@/stores/useFlightStore'
@@ -76,6 +77,7 @@ import SaveLoadDialog from './SaveLoadDialog.vue'
 import SettingsDialog from './SettingsDialog.vue'
 import LanternHeader from './LanternHeader.vue'
 import RoomPlate from './RoomPlate.vue'
+import RoomTitle from './RoomTitle.vue'
 import SaveToast from './SaveToast.vue'
 import SectionNav, { type Section } from './SectionNav.vue'
 import StageButtons from './StageButtons.vue'
@@ -171,6 +173,7 @@ const narration = useNarrationStore()
 const speech = useStageSpeechStore()
 const arrival = useArrivalStore()
 const scene = useSceneStore()
+const roomTitle = useRoomTitleStore()
 const names = useAreaNamesStore()
 const belt = useBeltStore()
 /** The marks and names layer, which knows where the ways out are. */
@@ -276,10 +279,35 @@ const stageKey = computed(
   () => `${game.gameNumber}-${game.loadNumber}-${game.musicActName}`,
 )
 watch(stageKey, () => {
+  roomTitle.settle()
   drawerTab.value = null
   speech.clear()
   scene.reset()
   clearArrival()
+})
+
+/** The room's title is told only where the room is played on its picture. */
+watch(
+  () => staged.value,
+  (onStage) => {
+    roomTitle.staged = onStage
+  },
+  { immediate: true },
+)
+/** Whether the room's name in the corner steps away: its title, or an arrival, is told over the picture. */
+const plateAway = computed(() => roomTitle.name !== null || arrival.active)
+/** Any key or press settles the room's title into the corner at once; the key or press still does what it does. */
+function settleRoomTitle(): void {
+  if (roomTitle.name !== null) roomTitle.settle()
+}
+onMounted(() => {
+  window.addEventListener('keydown', settleRoomTitle, true)
+  window.addEventListener('pointerdown', settleRoomTitle, true)
+})
+onUnmounted(() => {
+  window.removeEventListener('keydown', settleRoomTitle, true)
+  window.removeEventListener('pointerdown', settleRoomTitle, true)
+  roomTitle.settle()
 })
 
 /** End the arrival on the picture at once (a narrator still telling it stops, see `useArrivalStore.clear`). */
@@ -2043,6 +2071,7 @@ watch(
             'lq-staged': staged,
             'lq-phone': phoneStage,
             'lq-sideways': sideways,
+            'lq-titled': roomTitle.name !== null,
           }"
           :style="{
             ...(phoneStage ? { '--lq-plate-h': `${plateHeight}px` } : {}),
@@ -2074,6 +2103,7 @@ watch(
               :away="arrivalFolded"
               :lift="beltHeight"
             />
+            <RoomTitle :bare="!pictured" :small="!laptop" />
             <button
               v-if="sideways"
               type="button"
@@ -2089,6 +2119,7 @@ watch(
               class="lq-stage-plate"
               :compact="sideways"
               :bare="!pictured"
+              :away="plateAway"
               data-panel
             />
             <StageButtons
@@ -2209,6 +2240,7 @@ watch(
             data-panel
             story-button
             :bare="!pictured"
+            :away="plateAway"
             @story="drawerTab = 'story'"
           />
           <StageSpeech
@@ -2557,6 +2589,9 @@ watch(
 }
 .lq-belt-cap-spell {
   color: var(--lq-spell);
+}
+.lq-titled :deep(.lq-area-names) {
+  opacity: 0.25;
 }
 .lq-stage-plate {
   position: absolute;
