@@ -36,13 +36,13 @@ const boxes = {
 
 let wrappers: VueWrapper[] = []
 
-/** Mount over a 960×540 stage; `words` is an optional rectangle of words over the picture. */
+/** Mount over a 960×540 stage (in the `.lq-main` already on the page, if there is one). */
 function mountNames(
   props: Partial<InstanceType<typeof AreaNames>['$props']> = {},
 ): VueWrapper {
   const stage = document.createElement('div')
   stage.className = 'lq-stage'
-  document.body.append(stage)
+  ;(document.querySelector('.lq-main') ?? document.body).append(stage)
   const wrapper = mount(AreaNames, {
     attachTo: stage,
     props: {
@@ -660,6 +660,40 @@ describe('AreaNames', () => {
       const dot = markAt(w, 'villager')!
       expect(dot.x).toBe(144)
       expect(dot.y).toBeGreaterThan(400)
+    })
+
+    it('steps a dot clear of the words again when the story scrolls them over it (rq-kgtp)', async () => {
+      // As the layout has it: the stage and the words side by side in the main area.
+      const main = document.createElement('main')
+      main.className = 'lq-main'
+      document.body.append(main)
+      vi.stubGlobal('requestAnimationFrame', (run: FrameRequestCallback) => {
+        run(0)
+        return 1
+      })
+      const w = mountNames({ showing: true })
+      cardsOver([0, 540], [0, 540], [20, 300])
+      main.append(document.querySelector('.lq-story-wrap')!)
+      await settle(w, 'words')
+      const before = markAt(w, 'villager')!
+      expect(before.y).toBeGreaterThan(300)
+      // The story scrolls its card 40px down, over the stepped dot; nothing else changes.
+      const card = document.querySelector<HTMLElement>('.lq-card')!
+      vi.spyOn(card, 'getBoundingClientRect').mockReturnValue({
+        left: 0,
+        top: 60,
+        width: 960,
+        height: 280,
+        right: 960,
+        bottom: 340,
+        x: 0,
+        y: 60,
+        toJSON: () => ({}),
+      })
+      document.querySelector('.lq-story')!.dispatchEvent(new Event('scroll'))
+      await nextTick()
+      const dot = markAt(w, 'villager')!
+      expect(dot.y < 60 || dot.y > 340).toBe(true)
     })
 
     it('keeps two covered dots apart', async () => {

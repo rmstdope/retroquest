@@ -50,7 +50,8 @@ import type { PictureSize, Rect } from '@/lantern/roomMotionScene'
  * line off the words; one with no free spot there is left off (its dot stays
  * and is named like a pointed or focused thing).
  * `relayout` is any value that changes when something it keeps clear of
- * moves (the words coming or going).
+ * moves (the words coming or going); the story scrolling its words lays the
+ * marks out again too, so a dot kept clear of a card stays clear as it scrolls.
  *
  * Ways out can be pressed. `wayAt` says which way a screen point presses (the
  * smallest named thing or open way under it; a closed way, one of
@@ -118,6 +119,10 @@ const panels = ref<Rect[]>([])
 /** The panel elements the observer is watching, so a plate that grows or folds moves the marks at once. */
 let watched: HTMLElement[] = []
 let observer: ResizeObserver | undefined
+/** Where scrolling is listened for (the scope `measure` reads), once on the page. */
+let scrolled: HTMLElement | null = null
+/** The frame a scroll's measure waits for, so a scroll measures once a frame. */
+let scrollFrame: number | undefined
 
 /** The stage this is laid over, or null before it is on the page. */
 function stage(): HTMLElement | null {
@@ -197,6 +202,19 @@ function measure(): void {
   watchPanels(scope)
 }
 
+/**
+ * The words (or anything else in the scope) scrolled: measure again at the next
+ * frame. This holds while not showing too, since the focused thing's dot is
+ * stepped clear of the words then as well.
+ */
+function onScroll(): void {
+  if (scrollFrame !== undefined) return
+  scrollFrame = requestAnimationFrame(() => {
+    scrollFrame = undefined
+    measure()
+  })
+}
+
 /** Watch the panels' own size, which `ResizeObserver` on the stage does not see. */
 function watchPanels(scope: HTMLElement): void {
   if (!observer) return
@@ -212,6 +230,12 @@ onMounted(() => {
   // still fading out now: once they have faded they no longer cover anything.
   settleTimer = setTimeout(measure, SETTLE_MS)
   const el = stage()
+  // Scroll events do not bubble: listen in the capture phase for the story's own.
+  scrolled = el?.closest<HTMLElement>('.lq-main') ?? el
+  scrolled?.addEventListener('scroll', onScroll, {
+    capture: true,
+    passive: true,
+  })
   if (el && typeof ResizeObserver === 'function') {
     observer = new ResizeObserver(measure)
     observer.observe(el)
@@ -222,6 +246,8 @@ onMounted(() => {
 onUnmounted(() => {
   observer?.disconnect()
   clearTimeout(settleTimer)
+  scrolled?.removeEventListener('scroll', onScroll, { capture: true })
+  if (scrollFrame !== undefined) cancelAnimationFrame(scrollFrame)
 })
 let settleTimer: ReturnType<typeof setTimeout> | undefined
 // What the names keep clear of moved: measure again, and once more when what fades has faded.
