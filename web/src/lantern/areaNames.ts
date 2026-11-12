@@ -763,7 +763,7 @@ function ringOffsets(d: number, w: number): Array<[number, number]> {
 
 /** The line from the mark to the nearest point of its name's rectangle. */
 function leaderFor(
-  entry: PlacedName,
+  entry: { x: number; y: number },
   rect: Rect,
 ): { x1: number; y1: number; x2: number; y2: number } {
   return {
@@ -772,4 +772,103 @@ function leaderFor(
     x2: Math.max(rect.x, Math.min(rect.x + rect.w, entry.x)),
     y2: Math.max(rect.y, Math.min(rect.y + rect.h, entry.y)),
   }
+}
+
+/** How far under the dot a revealed name hangs, and how near the foot of what can be seen it hangs above instead. */
+const HANG_GAP = 18
+const HANG_FOOT = 60
+/** The room a revealed name keeps round it from a card, panel or name when it can. */
+const HANG_ROOM = 3
+
+/** Where a revealed name goes: its corner, the line back to its dot when it strays from it, and the shown names it lies over. */
+export interface HungName {
+  left: number
+  top: number
+  leader: { x1: number; y1: number; x2: number; y2: number } | null
+  /** The `areaId`s of the shown `names` this name lies over (they fade back while it shows); empty when it is clear. */
+  covers: string[]
+}
+
+/**
+ * Where a name of `size` revealed at (`dot`) hangs. It takes the first spot
+ * beside the dot (under it, or above it near the foot of the `visible` part,
+ * then either side) that is clear of the `obstacles` (cards and panels) and of
+ * every shown name in `names`; failing that the nearest clear spot round the
+ * dot, with a line back to it; failing that the spot beside the dot that lies
+ * least on the obstacles, and the names it lies over are listed in `covers`.
+ */
+export function hangName(
+  size: { w: number; h: number },
+  dot: { x: number; y: number },
+  obstacles: readonly Rect[],
+  names: ReadonlyArray<{ areaId: string; rect: Rect }>,
+  visible: Rect,
+): HungName {
+  const { w, h } = size
+  const { x: left, y: top, w: across, h: down } = visible
+  const pin = (l: number, t: number): { left: number; top: number } => ({
+    left: clamp(l, left, left + across - w),
+    top: clamp(t, top, top + down - h),
+  })
+  const above = dot.y > top + down - HANG_FOOT
+  const centred = dot.x - w / 2
+  const aboveTop = dot.y - HANG_GAP - h
+  const belowTop = dot.y + HANG_GAP
+  const beside = dot.y - h / 2
+  // Slid in steps of 2px so a gap only a little taller than the name is still found.
+  const slides = [0, 2, -2, 4, -4, 6, -6, 8, -8, 10, -10, 12, -12]
+  const tries = [
+    pin(centred, above ? aboveTop : belowTop),
+    pin(centred, above ? belowTop : aboveTop),
+    ...slides.map((d) => pin(dot.x + HANG_GAP, beside + d)),
+    ...slides.map((d) => pin(dot.x - HANG_GAP - w, beside + d)),
+  ]
+  const lie = (
+    at: { left: number; top: number },
+    pad: number,
+    rs: readonly Rect[],
+  ): number =>
+    rs.reduce((sum, o) => {
+      const x =
+        Math.min(at.left + w + pad, o.x + o.w) - Math.max(at.left - pad, o.x)
+      const y =
+        Math.min(at.top + h + pad, o.y + o.h) - Math.max(at.top - pad, o.y)
+      return x > 0 && y > 0 ? sum + x * y : sum
+    }, 0)
+  const boxes = [...obstacles, ...names.map((n) => n.rect)]
+  const clear = (at: { left: number; top: number }, pad: number): boolean =>
+    lie(at, pad, boxes) === 0
+  const near =
+    tries.find((t) => clear(t, HANG_ROOM)) ?? tries.find((t) => clear(t, 0))
+  if (near) return { ...near, leader: null, covers: [] }
+  const wanted = pin(centred, above ? aboveTop : belowTop)
+  for (let ring = 1; ring <= RINGS; ring++) {
+    const side = ring * STEP + w / 2
+    // The ring's own spots, then either side level with the dot (where a line runs straight to it).
+    const offsets: Array<[number, number]> = [
+      ...ringOffsets(ring * STEP, w),
+      [side, beside - wanted.top],
+      [-side, beside - wanted.top],
+    ]
+    for (const [dx, dy] of offsets) {
+      const at = pin(wanted.left + dx, wanted.top + dy)
+      if (!clear(at, HANG_ROOM)) continue
+      const rect = { x: at.left, y: at.top, w, h }
+      const leader = leaderFor(dot, rect)
+      // Near the dot, with a line that crosses no card, panel or name.
+      if (
+        Math.hypot(leader.x2 - dot.x, leader.y2 - dot.y) > NAME_REACH ||
+        boxes.some((b) => crosses(leader, b))
+      )
+        continue
+      return { ...at, leader, covers: [] }
+    }
+  }
+  const best = tries.reduce((a, b) =>
+    lie(b, 0, obstacles) < lie(a, 0, obstacles) ? b : a,
+  )
+  const covers = names
+    .filter((n) => overlaps({ x: best.left, y: best.top, w, h }, n.rect))
+    .map((n) => n.areaId)
+  return { ...best, leader: null, covers }
 }

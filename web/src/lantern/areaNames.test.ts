@@ -7,6 +7,7 @@ import type { Rect } from './roomMotionScene'
 import {
   clearOfPanels,
   clearOfWords,
+  hangName,
   keepMarksApart,
   closedWayThings,
   layoutNames,
@@ -1298,5 +1299,82 @@ describe('keepMarksApart with marks on the words', () => {
       [narrow],
     )
     for (const m of out) expect(m.x).toBeLessThanOrEqual(40)
+  })
+})
+
+describe('hangName', () => {
+  const visible: Rect = { x: 0, y: 0, w: 600, h: 400 }
+  const size = { w: 60, h: 25 }
+  const at = (r: Rect): Rect => r
+  const hits = (a: Rect, b: Rect): boolean =>
+    a.x < b.x + b.w && b.x < a.x + a.w && a.y < b.y + b.h && b.y < a.y + a.h
+  const box = (h: { left: number; top: number }): Rect => ({
+    x: h.left,
+    y: h.top,
+    w: size.w,
+    h: size.h,
+  })
+
+  it('hangs just below the dot, with no line, when nothing is in the way', () => {
+    const hung = hangName(size, { x: 200, y: 100 }, [], [], visible)
+    expect(hung.leader).toBeNull()
+    expect(hung.covers).toEqual([])
+    expect(hung.top).toBeGreaterThan(100)
+  })
+
+  it('takes a spot clear of a name already showing, with a line back to its dot', () => {
+    const shown = [
+      { areaId: 'shelves', rect: at({ x: 160, y: 110, w: 100, h: 25 }) },
+    ]
+    const hung = hangName(size, { x: 200, y: 100 }, [], shown, visible)
+    expect(hits(box(hung), shown[0].rect)).toBe(false)
+    expect(hung.covers).toEqual([])
+    expect(hung.leader === null || hung.leader.x1 === 200).toBe(true)
+  })
+
+  it('draws a line when it strays from the dot to find the spot', () => {
+    const wall: Rect[] = [
+      { x: 100, y: 50, w: 200, h: 40 },
+      { x: 100, y: 108, w: 200, h: 40 },
+    ]
+    const shown = [{ areaId: 'a', rect: at({ x: 0, y: 0, w: 1, h: 1 }) }]
+    const hung = hangName(size, { x: 200, y: 100 }, wall, shown, visible)
+    expect(hits(box(hung), wall[0])).toBe(false)
+    expect(hits(box(hung), wall[1])).toBe(false)
+    expect(hung.leader).not.toBeNull()
+  })
+
+  it('beside the dot, and names the shown names it covers, when no spot is clear', () => {
+    const everything: Rect = { x: 0, y: 0, w: 600, h: 400 }
+    const shown = [
+      { areaId: 'shelves', rect: at({ x: 150, y: 105, w: 100, h: 25 }) },
+      { areaId: 'far', rect: at({ x: 500, y: 300, w: 60, h: 25 }) },
+    ]
+    const hung = hangName(
+      size,
+      { x: 200, y: 100 },
+      [everything],
+      shown,
+      visible,
+    )
+    expect(hung.covers).toEqual(['shelves'])
+  })
+
+  it('never strays past the reach or draws its line across a card', () => {
+    const plate: Rect = { x: 0, y: 0, w: 600, h: 250 }
+    const card: Rect = { x: 0, y: 285, w: 600, h: 215 }
+    const strip = [
+      { areaId: 'l', rect: at({ x: 0, y: 250, w: 190, h: 35 }) },
+      { areaId: 'r', rect: at({ x: 210, y: 250, w: 390, h: 35 }) },
+    ]
+    const hung = hangName(
+      size,
+      { x: 200, y: 270 },
+      [plate, card],
+      strip,
+      visible,
+    )
+    expect(hung.top + size.h).toBeLessThanOrEqual(285 + 1)
+    expect(hung.leader).toBeNull()
   })
 })
