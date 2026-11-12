@@ -380,7 +380,7 @@ function press(spot: NamedSpot, event: MouseEvent): void {
 /**
  * A name hung at (`x`, `y`): under it, or above it near the foot of what can be seen, in the first spot clear of
  * the cards, panels and every name already showing (`hangName`); with none beside it, the nearest clear spot with a
- * line back to the dot; with none at all it hangs beside the dot and the names it lies over fade back (`covers`).
+ * line back to the dot; with none at all it hangs beside the dot, off the panels where it can, and the names it lies over fade back (`covers`).
  */
 function hangAt(
   entry: { label: string; kind: string },
@@ -396,6 +396,7 @@ function hangAt(
       rect: { x: s.left, y: s.top, w: s.width, h: s.height },
     })),
     visible.value,
+    panels.value,
   )
   return { label: entry.label, kind: entry.kind, ...hung }
 }
