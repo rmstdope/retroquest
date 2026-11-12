@@ -73,6 +73,12 @@ export const useArrivalStore = defineStore('arrival', () => {
 
   /** Whether an arrival is on the picture. */
   const active = computed(() => !!current.value?.shown)
+  /** Whether the arrival on the picture tells a room (it has a description), not news alone. */
+  const tellsRoom = computed(
+    () =>
+      active.value &&
+      !!current.value?.parts.some((p) => p.kind === 'description'),
+  )
   /** The turn whose arrival is up, or null. */
   const turnId = computed(() => current.value?.turnId ?? null)
   /** The part up now. */
@@ -412,6 +418,7 @@ export const useArrivalStore = defineStore('arrival', () => {
 
   return {
     active,
+    tellsRoom,
     turnId,
     part,
     page,

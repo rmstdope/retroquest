@@ -119,7 +119,9 @@ function room(): number {
   const style = getComputedStyle(stage)
   const padding =
     (parseFloat(style.paddingTop) || 0) + (parseFloat(style.paddingBottom) || 0)
-  const trim = head.value && props.sideways ? SIDEWAYS_TITLE_TRIM : 0
+  // Only a news head gives the 2 px back on a sideways phone; the room's heading does not.
+  const trim =
+    head.value && piece.value && props.sideways ? SIDEWAYS_TITLE_TRIM : 0
   const gaps = (head.value ? 2 * CARD_GAP : CARD_GAP) - trim
   return (
     stage.clientHeight -

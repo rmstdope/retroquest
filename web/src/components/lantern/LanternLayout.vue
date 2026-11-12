@@ -279,7 +279,7 @@ const stageKey = computed(
   () => `${game.gameNumber}-${game.loadNumber}-${game.musicActName}`,
 )
 watch(stageKey, () => {
-  roomTitle.settle()
+  roomTitle.reset()
   drawerTab.value = null
   speech.clear()
   scene.reset()
@@ -294,8 +294,8 @@ watch(
   },
   { immediate: true },
 )
-/** Whether the room's name in the corner steps away: its title, or an arrival, is told over the picture. */
-const plateAway = computed(() => roomTitle.name !== null || arrival.active)
+/** Whether the room's name in the corner steps away: its title, or a first visit's arrival, is told over the picture (news alone leaves it). */
+const plateAway = computed(() => roomTitle.name !== null || arrival.tellsRoom)
 /** Any key or press settles the room's title into the corner at once; the key or press still does what it does. */
 function settleRoomTitle(): void {
   if (roomTitle.name !== null) roomTitle.settle()

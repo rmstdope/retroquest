@@ -116,6 +116,39 @@ describe('LanternLayout: the room title', () => {
     expect(plate().classes()).not.toContain('lq-plate-away')
   })
 
+  it('greets the room when a game is loaded in it, once its picture is up', async () => {
+    await stage()
+    const game = useGameStore()
+    // A loaded story is not narrated again (as restoreStory leaves it).
+    game.turns = game.turns.map((turn) => ({ ...turn, narrate: undefined }))
+    game.loadNumber++
+    await w.vm.$nextTick()
+    await w.vm.$nextTick()
+    const loading = w.find('img.lq-loading')
+    if (loading.exists()) await loading.trigger('load')
+    await w.vm.$nextTick()
+    expect(useRoomTitleStore().name).toBe('Hall')
+    expect(title().text()).toContain('Hall')
+  })
+
+  it('keeps the corner name while the picture tells no room (news, what happens)', async () => {
+    await stage()
+    useArrivalStore().show(
+      useGameStore().turns.at(-1)!.id,
+      [
+        {
+          kind: 'events',
+          lines: [{ unit: 0, markup: 'A bell.' }],
+          voiced: false,
+        },
+      ],
+      false,
+    )
+    await w.vm.$nextTick()
+    expect(useArrivalStore().active).toBe(true)
+    expect(plate().classes()).not.toContain('lq-plate-away')
+  })
+
   it('has no title on the text page', async () => {
     await stage(false)
     expect(useRoomTitleStore().staged).toBe(false)

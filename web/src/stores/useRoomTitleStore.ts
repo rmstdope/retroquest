@@ -15,7 +15,8 @@ export const ROOM_TITLE_MS = 3600
  * covers it and its picture is up (after a change of scene). A first visit is
  * not greeted here: its arrival is told on the picture with the name as its
  * heading. The name switches as the narrator reaches the room (the game
- * store's held `roomName`), so the title follows the voice. Nothing is saved.
+ * store's held `roomName`), so the title follows the voice; walking on before
+ * a change of scene is up greets only the room the player ends in. Nothing is saved.
  */
 export const useRoomTitleStore = defineStore('roomTitle', () => {
   const game = useGameStore()
@@ -25,8 +26,8 @@ export const useRoomTitleStore = defineStore('roomTitle', () => {
   const name = ref<string | null>(null)
   /** Whether the room is played on its picture (the layout says): no title on the text page. */
   const staged = ref(false)
-  /** The arrival last greeted (or let pass): the game, the load and the room. */
-  let greeted = ''
+  /** The room changed (or a game was started or loaded) and has not been greeted or let pass yet. */
+  let pending = false
   let timer: ReturnType<typeof setTimeout> | undefined
 
   /** Put the title up for `room`, settling after `ROOM_TITLE_MS`. */
@@ -43,25 +44,49 @@ export const useRoomTitleStore = defineStore('roomTitle', () => {
     name.value = null
   }
 
+  /** The stage starts afresh (a new game, a load, a new act): settle, and greet the room once its picture is up again. */
+  function reset(): void {
+    settle()
+    pending = true
+  }
+
+  /** Whether a greeting can be shown now: a room, no chapter page, and its picture up after any change of scene. */
+  function ready(): boolean {
+    return (
+      game.roomName !== '' &&
+      !game.showModal &&
+      scene.phase === 'idle' &&
+      scene.shown !== null
+    )
+  }
+
+  /** Greet the room waiting for it, or let it pass: on the text page, or on a first visit, whose arrival is headed by the name. */
+  function consider(): void {
+    if (!pending || !ready()) return
+    pending = false
+    const latest = game.turns.at(-1)
+    if (!staged.value || (latest && arrivesOnPicture(latest))) settle()
+    else greet(game.roomName)
+  }
+
   watch(
-    () =>
-      [
-        `${game.gameNumber}-${game.loadNumber}-${game.roomName}`,
-        game.roomName !== '' &&
-          !game.showModal &&
-          scene.phase === 'idle' &&
-          scene.shown !== null,
-        staged.value,
-      ] as const,
-    ([key, ready, onStage]) => {
-      if (!ready || key === greeted) return
-      greeted = key
-      const latest = game.turns.at(-1)
-      if (!onStage || (latest && arrivesOnPicture(latest))) settle()
-      else greet(game.roomName)
+    () => [game.gameNumber, game.loadNumber, game.roomName] as const,
+    () => {
+      pending = true
+      consider()
     },
     { immediate: true },
   )
+  watch(
+    () =>
+      [
+        game.showModal,
+        scene.phase,
+        scene.shown !== null,
+        staged.value,
+      ] as const,
+    consider,
+  )
 
-  return { name, staged, greet, settle }
+  return { name, staged, greet, settle, reset }
 })

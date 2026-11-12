@@ -197,7 +197,11 @@ test.describe('quest news told in the middle of the picture', () => {
           (document.activeElement as HTMLElement | null)?.blur(),
         )
         await page.keyboard.press('Enter')
-        await page.waitForTimeout(300)
+        await expect
+          .poll(async () =>
+            (await list.count()) === 0 ? '' : list.first().innerText(),
+          )
+          .not.toBe(first)
       }
       expect(Object.keys(lefts).length).toBeGreaterThan(1)
       // A page holds the short need alone: the case that shrank the line.

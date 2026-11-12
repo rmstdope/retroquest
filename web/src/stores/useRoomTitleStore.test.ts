@@ -84,6 +84,29 @@ describe('useRoomTitleStore', () => {
     expect(title.name).toBe('Village Square')
   })
 
+  it('greets a room walked back into before the change of scene to another was up', async () => {
+    await enter('Village Square', moveTurn(2, false))
+    title.settle()
+    scene.phase = 'in'
+    await enter('Village Well', moveTurn(3, false))
+    await enter('Village Square', moveTurn(4, false))
+    scene.phase = 'idle'
+    await nextTick()
+    expect(title.name).toBe('Village Square')
+  })
+
+  it('greets the room again once a fresh stage is up (a load), not over the old picture', async () => {
+    await enter('Village Square', moveTurn(2, false))
+    title.settle()
+    title.reset()
+    scene.reset()
+    await nextTick()
+    expect(title.name).toBeNull()
+    scene.settled('square.png')
+    await nextTick()
+    expect(title.name).toBe('Village Square')
+  })
+
   it('waits for a change of scene to bring the picture up', async () => {
     scene.phase = 'in'
     await enter('Village Square', moveTurn(2, false))

@@ -1,8 +1,8 @@
 /**
  * The room's title (rq-b9zi): walking back into a room tells "You are in" and
  * its name over the middle of the picture, which then settles as the room's
- * name alone in the corner; any key settles it at once. The room card lists
- * no one and nothing.
+ * name alone in the corner; any key settles it at once, and a press on a
+ * thing in the picture goes through it. The room card lists no one and nothing.
  */
 import { test, expect, type Page } from '@playwright/test'
 
@@ -76,6 +76,38 @@ test('walking back into a room tells its name over the picture, then in the corn
   await expect(
     page.getByRole('region', { name: 'Current location' }),
   ).not.toContainText('You are in')
+})
+
+test('a press on someone in the picture goes through the title, opens their ring and settles it', async ({
+  page,
+}): Promise<void> => {
+  // The studio has placed the priest on the chapel's picture.
+  await page.route('**/images/generated/manifest.json', async (route) => {
+    const response = await route.fetch()
+    const manifest = (await response.json()) as Record<
+      string,
+      Record<string, unknown>
+    >
+    manifest['act1-village-chapel'] = {
+      ...manifest['act1-village-chapel'],
+      areas: { priest: { x: 0.36, y: 0.5, width: 0.1, height: 0.3 } },
+    }
+    await route.fulfill({ json: manifest })
+  })
+  await playedAct(page)
+  await walkBack(page)
+  const title = page.getByTestId('room-title')
+  await expect(title).toHaveText(/Village Chapel/)
+  // The press lands where the priest is; the picture drifts, so the mouse
+  // goes there rather than waiting for the button to stand still.
+  const priest = await page.locator('[data-area-press="priest"]').boundingBox()
+  if (!priest) throw new Error('the priest is not placed')
+  await page.mouse.click(
+    priest.x + priest.width / 2,
+    priest.y + priest.height / 2,
+  )
+  await expect(page.getByRole('menu')).toBeVisible()
+  await expect(title).toHaveCount(0, { timeout: 2500 })
 })
 
 test('any key settles the title at once', async ({ page }): Promise<void> => {
