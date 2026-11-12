@@ -1399,5 +1399,10 @@ describe('hangName', () => {
     const rect = { x: hung.left, y: hung.top, ...books }
     expect(hits(rect, showing)).toBe(false)
     expect(hits(rect, hideTab)).toBe(false)
+    // Fully visible: inside the part of the picture that can be seen.
+    expect(rect.x).toBeGreaterThanOrEqual(phone.x)
+    expect(rect.y).toBeGreaterThanOrEqual(phone.y)
+    expect(rect.x + rect.w).toBeLessThanOrEqual(phone.x + phone.w)
+    expect(rect.y + rect.h).toBeLessThanOrEqual(phone.y + phone.h)
   })
 })
