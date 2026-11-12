@@ -43,6 +43,8 @@ export interface ArrivalPart {
   lines: ArrivalLine[]
   /** Whether the narrator speaks any of it (it has a recording). */
   voiced: boolean
+  /** For `description`: the room's name (the first part of its narration unit), its heading on the picture. */
+  room?: string
   /** The first part of an arrival whose talk is told on the sides first (`sideBlocks`): it waits until those words are told. */
   afterWords?: true
 }
@@ -177,8 +179,13 @@ export function arrivalParts(
         wordBase: narrationWords(name).length,
       },
     ]
-    // The unit's first part is the room's name, which the plate shows.
-    parts.push({ kind: 'description', lines, voiced: spoken(lines, 1) })
+    // The unit's first part is the room's name: the description's heading, not its voice.
+    parts.push({
+      kind: 'description',
+      lines,
+      voiced: spoken(lines, 1),
+      room: name,
+    })
   }
   if (aside > 0 && parts.length) parts[0].afterWords = true
   return parts

@@ -90,6 +90,7 @@ describe('arrivalParts', () => {
         kind: 'description',
         lines: [{ unit: 0, markup: room.description, wordBase: 1 }],
         voiced: true,
+        room: 'x',
       },
     ])
   })

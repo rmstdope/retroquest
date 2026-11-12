@@ -82,6 +82,30 @@ describe('ArrivalOnPicture', () => {
     expect(w.classes()).toContain('lq-on')
   })
 
+  it('heads the description with "You are in" and the room, as the room\'s title would', async () => {
+    const w = mount(ArrivalOnPicture, { props: { pictured: true } })
+    useArrivalStore().show(
+      1,
+      [{ ...description, room: 'Village Square' }],
+      false,
+    )
+    await w.vm.$nextTick()
+    const head = w.get('[data-testid="arrival-room"]')
+    expect(head.get('.lq-room-kicker').text()).toBe('You are in')
+    expect(head.get('.lq-room-head-name').text()).toBe('Village Square')
+  })
+
+  it('heads what happens on arrival with nothing', async () => {
+    const w = mount(ArrivalOnPicture, { props: { pictured: true } })
+    useArrivalStore().show(
+      1,
+      [events, { ...description, room: 'Square' }],
+      false,
+    )
+    await w.vm.$nextTick()
+    expect(w.find('[data-testid="arrival-room"]').exists()).toBe(false)
+  })
+
   it('tells what happens in italics, and goes on to the description on a click', async () => {
     const w = mount(ArrivalOnPicture, { props: { pictured: true } })
     useArrivalStore().show(1, [events, description], false)
