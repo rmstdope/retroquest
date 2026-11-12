@@ -3,6 +3,7 @@ import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
 import {
   clearOfPanels,
   clearOfWords,
+  hangName,
   keepMarksApart,
   layoutNames,
   markInside,
@@ -10,6 +11,7 @@ import {
   placeNames,
   pressAt,
   visiblePart,
+  type HungName,
   type NamedSpot,
   type PlacedName,
   type WayPress,
@@ -89,11 +91,6 @@ const LETTER = 7.4
 const NAME_HEIGHT = 25
 /** How long the words take to fade away (a little over), before what they covered is clear. */
 const SETTLE_MS = 350
-/** How far under the pointer its name hangs, and how near the foot of what can be seen it hangs above instead. */
-const POINTER_GAP = 18
-const FOOT = 60
-/** The room a hung name keeps round it from a card or panel when it can. */
-const HANG_ROOM = 3
 /** How near a dot the pointer must be to point at it. */
 const DOT_HIT = 14
 /** The things in the stage that a name keeps clear of. */
@@ -381,52 +378,30 @@ function press(spot: NamedSpot, event: MouseEvent): void {
 }
 
 /**
- * A name hung at (`x`, `y`): under it, or above it near the foot of what can be seen. Where that spot lies on a
- * card or a panel (a dot boxed in between the room plate and the cards), the other side of the dot is tried, then
- * beside it (nudged up or down to fit a narrow gap), so the name is not hung behind the words. With no clear
- * spot it hangs where it lies least on cards and panels.
+ * A name hung at (`x`, `y`): under it, or above it near the foot of what can be seen, in the first spot clear of
+ * the cards, panels and every name already showing (`hangName`); with none beside it, the nearest clear spot with a
+ * line back to the dot; with none at all it hangs beside the dot and the names it lies over fade back (`covers`).
  */
 function hangAt(
   entry: { label: string; kind: string },
   x: number,
   y: number,
-): { label: string; kind: string; left: number; top: number } {
-  const { w, h } = sizeOf(entry.label)
-  const { x: left, y: top, w: across, h: down } = visible.value
-  const above = y > top + down - FOOT
-  const pin = (l: number, t: number): { left: number; top: number } => ({
-    left: Math.max(left, Math.min(left + across - w, l)),
-    top: Math.max(top, Math.min(top + down - h, t)),
-  })
-  const centred = x - w / 2
-  const aboveTop = y - POINTER_GAP - h
-  const belowTop = y + POINTER_GAP
-  const beside = y - h / 2
-  // Slid in steps of 2px so a gap only a little taller than the name is still found.
-  const slides = [0, 2, -2, 4, -4, 6, -6, 8, -8, 10, -10, 12, -12]
-  const tries = [
-    pin(centred, above ? aboveTop : belowTop),
-    pin(centred, above ? belowTop : aboveTop),
-    ...slides.map((d) => pin(x + POINTER_GAP, beside + d)),
-    ...slides.map((d) => pin(x - POINTER_GAP - w, beside + d)),
-  ]
-  // How much of the name, grown by `pad` on every side, lies on a card or panel.
-  const covered = (at: { left: number; top: number }, pad: number): number =>
-    obstacles.value.reduce((sum, o) => {
-      const across =
-        Math.min(at.left + w + pad, o.x + o.w) - Math.max(at.left - pad, o.x)
-      const down =
-        Math.min(at.top + h + pad, o.y + o.h) - Math.max(at.top - pad, o.y)
-      return across > 0 && down > 0 ? sum + across * down : sum
-    }, 0)
-  // The first spot clear with a little room round it; else the first clear edge to edge (a narrow gap must still
-  // fit the name); else the one that lies least on cards and panels.
-  const best =
-    tries.find((t) => covered(t, HANG_ROOM) === 0) ??
-    tries.find((t) => covered(t, 0) === 0) ??
-    tries.reduce((a, b) => (covered(b, 0) < covered(a, 0) ? b : a))
-  return { label: entry.label, kind: entry.kind, ...best }
+): Hung {
+  const hung = hangName(
+    sizeOf(entry.label),
+    { x, y },
+    obstacles.value,
+    named.value.map((s) => ({
+      areaId: s.areaId,
+      rect: { x: s.left, y: s.top, w: s.width, h: s.height },
+    })),
+    visible.value,
+  )
+  return { label: entry.label, kind: entry.kind, ...hung }
 }
+
+/** A revealed name with its place, the line back to its dot and the shown names it lies over. */
+type Hung = { label: string; kind: string } & HungName
 
 /**
  * The one name that hangs by the pointer: the thing it is over, when not
@@ -436,12 +411,7 @@ function hangAt(
  * named the same way, under its dot, and while it is the focused thing's name
  * that is shown the pointer adds none (one name hangs at a time).
  */
-const pointed = computed<{
-  label: string
-  kind: string
-  left: number
-  top: number
-} | null>(() => {
+const pointed = computed<Hung | null>(() => {
   const focus = props.focused
     ? spots.value.find((s) => s.areaId === props.focused && s.leftOff)
     : undefined
@@ -483,7 +453,7 @@ const pointed = computed<{
       </template>
     </TransitionGroup>
     <svg
-      v-if="spots.some((spot) => spot.leader)"
+      v-if="spots.some((spot) => spot.leader) || pointed?.leader"
       class="lq-area-lines"
       :width="view.width"
       :height="view.height"
@@ -495,8 +465,17 @@ const pointed = computed<{
           :y1="spot.leader.y1"
           :x2="spot.leader.x2"
           :y2="spot.leader.y2"
+          :class="{ 'lq-area-faded': pointed?.covers.includes(spot.areaId) }"
         />
       </template>
+      <line
+        v-if="pointed?.leader"
+        :x1="pointed.leader.x1"
+        :y1="pointed.leader.y1"
+        :x2="pointed.leader.x2"
+        :y2="pointed.leader.y2"
+        data-area-pointer-line
+      />
     </svg>
     <TransitionGroup name="lq-area">
       <span
@@ -508,6 +487,7 @@ const pointed = computed<{
           {
             'lq-area-way': spot.direction,
             'lq-area-live': showing && !spot.direction,
+            'lq-area-faded': pointed?.covers.includes(spot.areaId),
           },
         ]"
         :data-area-name="spot.areaId"
@@ -607,6 +587,13 @@ const pointed = computed<{
   background: var(--lq-accent-soft);
   color: var(--lq-accent-text);
   border-color: var(--lq-accent-line);
+}
+.lq-area-faded {
+  opacity: 0;
+}
+.lq-area-name,
+.lq-area-lines line {
+  transition: opacity calc(0.2s * var(--lq-motion)) ease;
 }
 .lq-area-enter-active,
 .lq-area-leave-active {

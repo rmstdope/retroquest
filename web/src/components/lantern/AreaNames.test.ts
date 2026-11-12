@@ -782,6 +782,68 @@ describe('AreaNames', () => {
       expect(w.get('[data-area-pointer]').text()).toBe('Tilda')
     })
 
+    describe('a revealed name never covers a shown name (rq-eyan)', () => {
+      const shelf = {
+        areaId: 'shelf',
+        name: 'shelf',
+        label: 'Shelves',
+        kind: 'scenery' as const,
+      }
+      /** The rectangle of a drawn name element. */
+      const rectOf = (el: Element): [number, number, number, number] => {
+        const style = el.getAttribute('style')!
+        const n = (k: string): number =>
+          parseFloat(new RegExp(`${k}: ([\\d.]+)px`).exec(style)![1])
+        const label = el.textContent!.length * 7.4 + 22
+        return [n('left'), n('top'), n('left') + label, n('top') + 25]
+      }
+      const hit = (a: number[], b: number[]): boolean =>
+        a[0] < b[2] && b[0] < a[2] && a[1] < b[3] && b[1] < a[3]
+
+      async function crowded(): Promise<VueWrapper> {
+        const w = await boxedIn({
+          things: [
+            ...things.map((t) =>
+              t.areaId === 'villager'
+                ? { ...t, label: 'Grandmother Tilda the Elder' }
+                : t,
+            ),
+            shelf,
+          ],
+          boxes: {
+            ...boxes,
+            shelf: { x: 0.2, y: 0.52, width: 0.06, height: 0.06 },
+          },
+        })
+        return w
+      }
+
+      it('leaves every laid-out name unmoved and unobscured when a left-off name is revealed', async () => {
+        const w = await crowded()
+        const before = w
+          .findAll('.lq-area-name')
+          .map((e) => e.attributes('style'))
+        await w.setProps({ pointer: { x: 144, y: 270 } })
+        const pointer = rectOf(w.get('[data-area-pointer]').element)
+        for (const el of w.findAll('[data-area-name]')) {
+          const faded = el.classes().includes('lq-area-faded')
+          expect(faded || !hit(pointer, rectOf(el.element))).toBe(true)
+        }
+        expect(
+          w.findAll('[data-area-name]').map((e) => e.attributes('style')),
+        ).toEqual(before.filter((st) => !st?.includes('pointer')))
+      })
+
+      it('keeps the dots of faded names lit and brings the names back when the pointer leaves', async () => {
+        const w = await crowded()
+        await w.setProps({ pointer: { x: 144, y: 270 } })
+        expect(w.findAll('[data-area-mark]').length).toBeGreaterThan(1)
+        await w.setProps({ pointer: null })
+        expect(w.find('.lq-area-faded').exists()).toBe(false)
+        expect(w.find('[data-area-pointer]').exists()).toBe(false)
+      })
+    })
+
     /** The pointer name's bottom edge (its height is NAME_HEIGHT, 25) lies above the card at 285. */
     const clearOfCard = (w: VueWrapper): void => {
       const style = w.get('[data-area-pointer]').attributes('style')!
