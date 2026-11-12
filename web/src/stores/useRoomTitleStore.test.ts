@@ -122,6 +122,36 @@ describe('useRoomTitleStore', () => {
     expect(title.name).toBe('Village Well')
   })
 
+  it('greets a load in a room with no painted picture, the backdrop up before and after', async () => {
+    // The room has a picture's address, but nothing is painted there.
+    game.musicActName = 'Act1'
+    game.musicRoomKey = 'VillageSquare'
+    scene.reset()
+    scene.settled('')
+    await enter('Village Square', moveTurn(2, false))
+    title.settle()
+    title.reset()
+    scene.reset()
+    scene.settled('')
+    await nextTick()
+    expect(title.name).toBe('Village Square')
+  })
+
+  it('greets a load from one unpainted room into another', async () => {
+    game.musicActName = 'Act1'
+    game.musicRoomKey = 'VillageSquare'
+    scene.reset()
+    scene.settled('')
+    await enter('Village Square', moveTurn(2, false))
+    title.settle()
+    game.musicRoomKey = 'VillageWell'
+    title.reset()
+    scene.reset()
+    scene.settled('')
+    await enter('Village Well', moveTurn(3, false))
+    expect(title.name).toBe('Village Well')
+  })
+
   it('waits for a change of scene to bring the picture up', async () => {
     scene.phase = 'in'
     await enter('Village Square', moveTurn(2, false))

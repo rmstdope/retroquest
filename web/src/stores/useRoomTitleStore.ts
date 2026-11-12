@@ -47,7 +47,8 @@ export const useRoomTitleStore = defineStore('roomTitle', () => {
   /**
    * The picture that was up when the stage last started afresh, while it may
    * still be the one settled: the stage settles it again at once, before the
-   * new room's picture has begun to load. Null once another has settled.
+   * new room's picture has begun to load. Null once another has settled, and
+   * never the backdrop ('').
    */
   let stale: string | null = null
 
@@ -55,7 +56,9 @@ export const useRoomTitleStore = defineStore('roomTitle', () => {
   function reset(): void {
     settle()
     pending = true
-    stale = scene.shown
+    // The paper backdrop is never stale: it is what a room without a painted
+    // picture settles on again, and it shows no other room.
+    stale = scene.shown || null
   }
 
   /** Whether a greeting can be shown now: a room, no chapter page, and its picture up after any change of scene. */
