@@ -795,7 +795,9 @@ export interface HungName {
  * then either side) that is clear of the `obstacles` (cards and panels) and of
  * every shown name in `names`; failing that the nearest clear spot round the
  * dot, with a line back to it; failing that the spot beside the dot that lies
- * least on the obstacles, and the names it lies over are listed in `covers`.
+ * least on the `panels` (the buttons and plates among the obstacles, which a
+ * name never lies on while a spot on the words will do) and then least on the
+ * obstacles, and the names it lies over are listed in `covers`.
  */
 export function hangName(
   size: { w: number; h: number },
@@ -803,6 +805,7 @@ export function hangName(
   obstacles: readonly Rect[],
   names: ReadonlyArray<{ areaId: string; rect: Rect }>,
   visible: Rect,
+  panels: readonly Rect[] = [],
 ): HungName {
   const { w, h } = size
   const { x: left, y: top, w: across, h: down } = visible
@@ -864,9 +867,15 @@ export function hangName(
       return { ...at, leader, covers: [] }
     }
   }
-  const best = tries.reduce((a, b) =>
-    lie(b, 0, obstacles) < lie(a, 0, obstacles) ? b : a,
-  )
+  const cost = (at: { left: number; top: number }): [number, number] => [
+    lie(at, 0, panels),
+    lie(at, 0, obstacles),
+  ]
+  const best = tries.reduce((a, b) => {
+    const [panelB, allB] = cost(b)
+    const [panelA, allA] = cost(a)
+    return panelB < panelA || (panelB === panelA && allB < allA) ? b : a
+  })
   const covers = names
     .filter((n) => overlaps({ x: best.left, y: best.top, w, h }, n.rect))
     .map((n) => n.areaId)

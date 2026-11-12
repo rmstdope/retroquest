@@ -1377,4 +1377,27 @@ describe('hangName', () => {
     expect(hung.top + size.h).toBeLessThanOrEqual(285 + 1)
     expect(hung.leader).toBeNull()
   })
+
+  it('lies on the words rather than on a panel when no spot is clear (rq-1eao)', () => {
+    // Elior's Cottage on a 390x844 phone, Showing on and the words open: the
+    // Books dot stepped onto the words' foot, just left of the Showing button.
+    const phone: Rect = { x: 0, y: 0, w: 390, h: 740 }
+    const books = { w: 58, h: 25 }
+    const words: Rect = { x: 98, y: 380, w: 272, h: 191 }
+    const moreBelow: Rect = { x: 20, y: 497, w: 118, h: 36 }
+    const hideTab: Rect = { x: 161, y: 547, w: 67, h: 28 }
+    const showing: Rect = { x: 285, y: 547, w: 97, h: 28 }
+    const panels = [hideTab, showing]
+    const hung = hangName(
+      books,
+      { x: 263, y: 553 },
+      [...panels, words, moreBelow],
+      [],
+      phone,
+      panels,
+    )
+    const rect = { x: hung.left, y: hung.top, ...books }
+    expect(hits(rect, showing)).toBe(false)
+    expect(hits(rect, hideTab)).toBe(false)
+  })
 })
