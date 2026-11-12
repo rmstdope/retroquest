@@ -68,6 +68,15 @@ describe('useRoomTitleStore', () => {
     expect(title.name).toBeNull()
   })
 
+  it('leaves a revisit whose turn tells a learned spell on the picture to the news, settled', async () => {
+    title.settle()
+    await enter('Village Well', {
+      ...moveTurn(2, false),
+      spells: [{ name: 'Lumina', text: '' }],
+    } as unknown as Turn)
+    expect(title.name).toBeNull()
+  })
+
   it('greets a load whose restored turn had news, which is not told again', async () => {
     await enter('Village Well', {
       ...moveTurn(2, false),

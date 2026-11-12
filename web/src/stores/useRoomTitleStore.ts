@@ -16,9 +16,10 @@ export const ROOM_TITLE_MS = 3600
  * not greeted here: its arrival is told on the picture with the name as its
  * heading. Nor is a turn whose news (a learned spell, quest news) is told in
  * the middle of the picture: the title would show through the news card, so
- * the name goes straight to the corner. The name switches as the narrator reaches the room (the game
- * store's held `roomName`), so the title follows the voice; walking on before
- * a change of scene is up greets only the room the player ends in. Nothing is saved.
+ * the name goes straight to the corner. The name switches as the narrator
+ * reaches the room (the game store's held `roomName`), so the title follows
+ * the voice; walking on before a change of scene is up greets only the room
+ * the player ends in. Nothing is saved.
  */
 export const useRoomTitleStore = defineStore('roomTitle', () => {
   const game = useGameStore()
