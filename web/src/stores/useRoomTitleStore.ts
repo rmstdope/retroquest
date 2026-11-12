@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref, watch } from 'vue'
-import { arrivesOnPicture } from '@/lantern/stageArrival'
+import { arrivesOnPicture, newsOnPicture } from '@/lantern/stageArrival'
 import { useGameStore } from './useGameStore'
 import { useSceneStore } from './useSceneStore'
 
@@ -14,7 +14,9 @@ export const ROOM_TITLE_MS = 3600
  * greeted once per arrival, when the stage shows (`staged`), no chapter page
  * covers it and its picture is up (after a change of scene). A first visit is
  * not greeted here: its arrival is told on the picture with the name as its
- * heading. The name switches as the narrator reaches the room (the game
+ * heading. Nor is a turn whose news (a learned spell, quest news) is told in
+ * the middle of the picture: the title would show through the news card, so
+ * the name goes straight to the corner. The name switches as the narrator reaches the room (the game
  * store's held `roomName`), so the title follows the voice; walking on before
  * a change of scene is up greets only the room the player ends in. Nothing is saved.
  */
@@ -76,12 +78,19 @@ export const useRoomTitleStore = defineStore('roomTitle', () => {
     )
   }
 
-  /** Greet the room waiting for it, or let it pass: on the text page, or on a first visit, whose arrival is headed by the name. */
+  /**
+   * Greet the room waiting for it, or let it pass: on the text page, on a
+   * first visit, whose arrival is headed by the name, or on a turn that tells
+   * news in the middle (a load's restored turn tells none).
+   */
   function consider(): void {
     if (!pending || !ready()) return
     pending = false
     const latest = game.turns.at(-1)
-    if (!staged.value || (latest && arrivesOnPicture(latest))) settle()
+    const middleTaken =
+      !!latest &&
+      (arrivesOnPicture(latest) || (!latest.restored && newsOnPicture(latest)))
+    if (!staged.value || middleTaken) settle()
     else greet(game.roomName)
   }
 
