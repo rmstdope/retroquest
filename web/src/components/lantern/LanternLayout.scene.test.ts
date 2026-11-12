@@ -287,6 +287,21 @@ describe('LanternLayout: change of scene', () => {
     expect(useArrivalStore().active).toBe(true)
   })
 
+  /**
+   * Press a button in a held panel (since the room card lists nothing, the
+   * stage has no such button until the map opens): one stands in the stage.
+   */
+  async function pressHeldPanel(): Promise<void> {
+    const panel = document.createElement('div')
+    panel.setAttribute('data-panel', '')
+    const button = document.createElement('button')
+    panel.append(button)
+    w.get('.lq-stage').element.append(panel)
+    button.click()
+    panel.remove()
+    await w.vm.$nextTick()
+  }
+
   /** Submit `talk to voice` and return the turn and the index of its waking paragraph. */
   async function answerVoice(
     game: ReturnType<typeof useGameStore>,
@@ -313,7 +328,7 @@ describe('LanternLayout: change of scene', () => {
     await answerVoice(game)
     // Over the dream, the look is still on the left.
     expect(looked()).toBe(true)
-    await w.get('[data-panel] button').trigger('click')
+    await pressHeldPanel()
     await w.vm.$nextTick()
     expect(looked()).toBe(false)
   })
@@ -342,7 +357,7 @@ describe('LanternLayout: change of scene', () => {
     const narration = useNarrationStore()
     const turn = await answerVoice(game)
     expect(game.panelsHeld).toBe(true)
-    await w.get('[data-panel] button').trigger('click')
+    await pressHeldPanel()
     expect(scene.turn).toBeNull()
     expect(game.musicRoomKey).toBe('EliorsCottage')
     expect(game.roomName).toBe("Elior's Cottage")
@@ -387,7 +402,7 @@ describe('LanternLayout: change of scene', () => {
       expect(story()).not.toContain('You answer it')
       noEmptyCard()
       // A press brings the cottage up at once.
-      await w.get('[data-panel] button').trigger('click')
+      await pressHeldPanel()
       await w.vm.$nextTick()
       expect(scene.turn).toBeNull()
       noEmptyCard()

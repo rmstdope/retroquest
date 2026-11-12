@@ -46,7 +46,8 @@ describe('LanternLayout: the stage on a phone', () => {
 
     it('plays the room on its picture, with the plate and a folded bar', () => {
       expect(w.find('.lq-stage-picture').exists()).toBe(true)
-      expect(w.get('.lq-plate').text()).toContain('You are in')
+      expect(w.get('.lq-plate h2').text()).toBe(useGameStore().roomName)
+      expect(w.get('.lq-plate').text()).not.toContain('You are in')
       expect(w.find('.lq-dock').exists()).toBe(true)
       expect(w.get('.lq-sheet').isVisible()).toBe(false)
     })
@@ -115,12 +116,9 @@ describe('LanternLayout: the stage on a phone', () => {
       expect(w.find('.lq-story-drawer').exists()).toBe(false)
     })
 
-    it('reaches the chips before "⟲ Story so far" with Tab', () => {
-      const plate = w.get('.lq-plate').element
-      const order = [...plate.querySelectorAll('button')].map((b) =>
-        b.classList.contains('lq-story-so-far') ? 'story' : 'chip',
-      )
-      expect(order.at(-1)).toBe('story')
+    it('has "⟲ Story so far" as the only button on the plate: no one and nothing is listed', () => {
+      const buttons = w.get('.lq-plate').findAll('button')
+      expect(buttons.map((b) => b.text())).toEqual(['⟲ Story so far'])
     })
 
     it('keeps the stage as it was left when another tab is visited', async () => {
@@ -128,112 +126,6 @@ describe('LanternLayout: the stage on a phone', () => {
       expect(w.get('.lq-stage').isVisible()).toBe(false)
       await w.findAll('.lq-nav-bottom .lq-nav-btn')[0]!.trigger('click')
       expect(w.get('.lq-stage').isVisible()).toBe(true)
-    })
-  })
-
-  describe('upright, with little room for a conversation', () => {
-    const WORDS =
-      '[character_name]Grandmother[/character_name]\n[dialogue]There you are.[/dialogue]'
-
-    /** The column's height changes: the observers the layout set are told. */
-    const observers: (() => void)[] = []
-
-    beforeEach(async () => {
-      observers.length = 0
-      vi.stubGlobal(
-        'ResizeObserver',
-        class {
-          constructor(callback: () => void) {
-            observers.push(callback)
-          }
-          observe(): void {}
-          unobserve(): void {}
-          disconnect(): void {}
-        },
-      )
-      await mountOn('upright')
-    })
-
-    /** A turn answered with Grandmother's words, addressed to her. */
-    async function grandmotherSpeaks(): Promise<void> {
-      const game = useGameStore()
-      game.turns.push({
-        id: (game.turns.at(-1)?.id ?? 0) + 1,
-        command: 'talk to grandmother',
-        text: WORDS,
-        room: 'Cottage',
-        description: null,
-        gained: [],
-        lost: [],
-        arrival: null,
-        addressed: 'Grandmother',
-      })
-      await flushPromises()
-    }
-
-    /** The column has `height` px of room between the plate and the Hide. */
-    async function roomIs(height: number): Promise<void> {
-      Object.defineProperty(w.get('.lq-story-wrap').element, 'clientHeight', {
-        configurable: true,
-        value: height,
-      })
-      observers.forEach((notify) => notify())
-      await flushPromises()
-    }
-
-    const plate = () => w.get('.lq-phone-plate')
-
-    it('stays open when the conversation has room', async () => {
-      await grandmotherSpeaks()
-      await roomIs(226)
-      expect(plate().classes()).not.toContain('lq-plate-folded')
-    })
-
-    it('folds when the room is too small, and stays folded as the room grows and lines come', async () => {
-      await grandmotherSpeaks()
-      await roomIs(58)
-      expect(plate().classes()).toContain('lq-plate-folded')
-      await roomIs(140)
-      await grandmotherSpeaks()
-      await roomIs(58)
-      expect(plate().classes()).toContain('lq-plate-folded')
-    })
-
-    it('does not fold without a conversation on the picture', async () => {
-      await roomIs(58)
-      expect(plate().classes()).not.toContain('lq-plate-folded')
-    })
-
-    it('opens again on Escape, which hides the words', async () => {
-      await grandmotherSpeaks()
-      await roomIs(58)
-      useGameStore().dismissTitle()
-      useGameStore().showModal = false
-      document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }))
-      await flushPromises()
-      expect(plate().classes()).not.toContain('lq-plate-folded')
-    })
-
-    it('opens again when the narration is hidden, and does not fold again while hidden', async () => {
-      await grandmotherSpeaks()
-      await roomIs(58)
-      await w.get('.lq-words-hide').trigger('click')
-      await flushPromises()
-      expect(plate().classes()).not.toContain('lq-plate-folded')
-      await roomIs(58)
-      expect(plate().classes()).not.toContain('lq-plate-folded')
-    })
-
-    it('keeps the names in the same tab order when folded', async () => {
-      await grandmotherSpeaks()
-      const before = plate()
-        .findAll('button')
-        .map((b) => b.text())
-      await roomIs(58)
-      const after = plate()
-        .findAll('button')
-        .map((b) => b.text())
-      expect(after).toEqual(before)
     })
   })
 

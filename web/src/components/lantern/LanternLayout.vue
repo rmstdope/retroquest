@@ -94,8 +94,8 @@ import type { SaveSlot } from '@/types/bridge'
 /**
  * Shell of the Lantern UI (the only UI; old `?ui=` links open it too): header, story (one
  * StoryTurn per turn) and the action composer. On laptops (≥1024 × 560) the
- * room is played on its picture, which fills the play area: a plate (room
- * and who and what is here) top-left, the buttons Bag, Spells, Quests, Story
+ * room is played on its picture, which fills the play area: the room's name
+ * top-left (`RoomPlate`; who and what is here are marked on the picture), the buttons Bag, Spells, Quests, Story
  * so far and Map top-right (the journal and the story open as a drawer from
  * the right, the map beneath its button), the narrator's words up the left
  * side and the actions as one row along the bottom.
@@ -1059,49 +1059,6 @@ onMounted(() => {
     }
   }
 })
-
-/** The least height (px) the column needs to show the newest line's speaker and first line whole. */
-const MIN_SPEECH_ROOM = 120
-/**
- * The phone's room plate is folded to one row. It folds when a conversation is
- * on the picture under an open column of words and the column's room
- * (its height) is under `MIN_SPEECH_ROOM`; then it stays
- * folded, so it does not fold and open line by line, until the conversation
- * is cleared or the narration is hidden. Nothing is saved.
- */
-const plateFolded = ref(false)
-
-/** The column's room as last measured (px). */
-const speechRoom = ref(Number.POSITIVE_INFINITY)
-let columnResize: ResizeObserver | undefined
-watch(
-  paperEl,
-  (el) => {
-    columnResize?.disconnect()
-    if (!el || typeof ResizeObserver === 'undefined') return
-    columnResize = new ResizeObserver(() => {
-      speechRoom.value = el.clientHeight
-    })
-    columnResize.observe(el)
-  },
-  { flush: 'post' },
-)
-onUnmounted(() => columnResize?.disconnect())
-
-watch(
-  () =>
-    [
-      speech.visible.length > 0,
-      paper.visible.value && !paperAway.value,
-      phoneStage.value && section.value === 'story',
-      speechRoom.value < MIN_SPEECH_ROOM,
-    ] as const,
-  ([talking, paperOpen, onPicture, cramped]) => {
-    if (!talking || !paperOpen || !onPicture) plateFolded.value = false
-    else if (cramped) plateFolded.value = true
-  },
-  { flush: 'post' },
-)
 
 /** The laptop's room plate, under which the narration cards stop. */
 const widePlate = ref<InstanceType<typeof RoomPlate> | null>(null)
@@ -2131,8 +2088,8 @@ watch(
               ref="widePlate"
               class="lq-stage-plate"
               :compact="sideways"
+              :bare="!pictured"
               data-panel
-              @click="onNameClick"
             />
             <StageButtons
               v-if="wide"
@@ -2251,8 +2208,7 @@ watch(
             class="lq-phone-plate"
             data-panel
             story-button
-            :folded="plateFolded"
-            @click="onNameClick"
+            :bare="!pictured"
             @story="drawerTab = 'story'"
           />
           <StageSpeech
@@ -2856,22 +2812,6 @@ watch(
     38%,
     calc(100% - 56px - var(--lq-stage-buttons-w) - 16px)
   );
-}
-/* The plate is one compact row on a phone: smaller name and chips, so the words keep their room. */
-.lq-sideways .lq-stage-plate {
-  padding: 4px 10px;
-  gap: 8px;
-}
-.lq-sideways .lq-stage-plate :deep(.lq-room-name) {
-  font-size: calc(18px * var(--lq-display-scale));
-}
-.lq-sideways .lq-stage-plate :deep(.lq-here) {
-  gap: 4px;
-}
-.lq-sideways .lq-stage-plate :deep(.lq-here-chip) {
-  height: 24px;
-  padding: 0 9px;
-  font-size: 12px;
 }
 .lq-sideways .lq-stage-buttons {
   top: 8px;
