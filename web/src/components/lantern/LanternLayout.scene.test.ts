@@ -566,6 +566,13 @@ describe('LanternLayout: change of scene', () => {
     await w.vm.$nextTick()
     expect(scene.interlude).toBeNull()
     expect(narration.revealed(turn.id, turn.waking + 1)).toBe(false)
+    // Its words fade out in the dark: neither the cottage nor its room shows yet.
+    expect(scene.phase).toBe('dark')
+    expect(useArrivalStore().active).toBe(false)
+    await vi.advanceTimersByTimeAsync(INTERLUDE_FADE_MS / 2)
+    await w.vm.$nextTick()
+    expect(scene.phase).toBe('dark')
+    expect(useArrivalStore().active).toBe(false)
     await vi.advanceTimersByTimeAsync(INTERLUDE_FADE_MS + SCENE_HALF_MS)
     await w.vm.$nextTick()
     expect(scene.turn).toBeNull()
