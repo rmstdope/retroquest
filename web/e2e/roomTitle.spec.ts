@@ -162,6 +162,7 @@ test('starting the game names no room in the corner before the first room is tol
 test('waking into a new room does not name it in the corner before its arrival tells it', async ({
   page,
 }): Promise<void> => {
+  test.setTimeout(60_000)
   await page.setViewportSize({ width: 1280, height: 800 })
   await page.goto('/')
   await page.getByRole('button', { name: 'Start', exact: true }).click()
@@ -176,7 +177,8 @@ test('waking into a new room does not name it in the corner before its arrival t
     .click()
   await watchCorner(page, ARRIVAL_UP)
   await command(page, 'say hello to voice')
-  await expect(arrival).toContainText("Elior's Cottage", { timeout: 20000 })
+  // The waking is read in the dark first (about fifteen seconds unnarrated).
+  await expect(arrival).toContainText("Elior's Cottage", { timeout: 40_000 })
   expect(await cornerSeen(page)).not.toContain("Elior's Cottage")
 })
 

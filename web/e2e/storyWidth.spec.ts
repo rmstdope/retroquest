@@ -62,6 +62,9 @@ for (const width of [1280, 360]) {
       // The voice's answer is a story paragraph, and it wakes the player in
       // Elior's Cottage, whose description follows it.
       await type(page, 'talk to voice')
+      // The waking is told in the middle of the dark first; Enter brings the cottage up.
+      await page.getByTestId('scene-interlude').waitFor()
+      await page.keyboard.press('Enter')
       // On the laptop the paper holds the last turn only: open the whole story.
       const storyButton = page.getByRole('button', { name: /Story so far/ })
       if (await storyButton.isVisible()) await storyButton.click()

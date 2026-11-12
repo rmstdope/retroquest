@@ -50,6 +50,9 @@ async function toTheCottage(page: Page, breadY = 0.6): Promise<void> {
   await input.fill('say hello to voice')
   await input.press('Enter')
   await page.keyboard.press('Escape')
+  // The waking is told in the middle of the dark first; Enter brings the cottage up.
+  await page.getByTestId('scene-interlude').waitFor()
+  await page.keyboard.press('Enter')
   await expect(page.locator('.lq-room-name')).toHaveText("Elior's Cottage")
   await expect(page.locator('.lq-stage-picture.lq-scene-idle')).toHaveCount(1)
   // The words are told first; a press while they are told only hurries them.

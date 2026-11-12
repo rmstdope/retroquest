@@ -152,12 +152,16 @@ test('opens a journal drawer at once while the voice reads, and a press inside i
   await page.getByRole('button', { name: /^Quests/ }).click()
   const drawer = page.getByRole('complementary', { name: 'Journal drawer' })
   await expect(drawer).toHaveCount(1)
-  await expect(page.locator('.lq-speaking')).toHaveCount(1)
+  // The voice reads on: on the sides, or the waking in the middle of the dark.
+  const reading = page.locator(
+    '.lq-speaking, [data-testid="scene-interlude"]:not(.lq-interlude-leave-active)',
+  )
+  await expect(reading).toHaveCount(1)
 
   // The drawer is a held panel: a press in it only brings everything up to date.
   // Within one clip, so the voice ending by itself cannot pass it.
   await drawer.getByRole('button', { name: 'Close' }).click()
-  await expect(page.locator('.lq-speaking')).toHaveCount(0, { timeout: 1_000 })
+  await expect(reading).toHaveCount(0, { timeout: 1_000 })
   // That press did nothing but catch up: the drawer is still open.
   await expect(drawer).toHaveCount(1)
   expect(await turnCount(page)).toBe(commands)

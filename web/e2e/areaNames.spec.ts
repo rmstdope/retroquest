@@ -65,7 +65,15 @@ async function toTheCottage(
   await input.fill('say hello to voice')
   await input.press('Enter')
   await page.keyboard.press('Escape')
+  // The waking is told in the middle of the dark first; Enter brings the cottage up.
+  await page.getByTestId('scene-interlude').waitFor()
+  await page.keyboard.press('Enter')
   await expect(page.locator('.lq-stage-picture.lq-scene-idle')).toHaveCount(1)
+  // Then the cottage's name and description are told in the middle; Escape sends them away.
+  const told = page.locator('[data-testid="arrival-on-picture"].lq-on')
+  await told.waitFor()
+  await page.keyboard.press('Escape')
+  await expect(told).toHaveCount(0)
   await expect(page.locator('.lq-room-name')).toHaveText("Elior's Cottage")
 }
 
