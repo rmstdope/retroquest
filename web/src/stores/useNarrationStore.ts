@@ -573,11 +573,15 @@ export const useNarrationStore = defineStore('narration', () => {
     return now?.turnId === turnId && now.atScene
   }
 
-  /** Let the narration of turn `turnId` go on past where its scene changes (the new picture is up). */
-  function passSceneChange(turnId: number): void {
+  /**
+   * Let the narration of turn `turnId` go on past where its scene changes
+   * (the new picture is up), or only as far as unit `until`, where it stops
+   * again (an interlude told in the dark before the new picture rises).
+   */
+  function passSceneChange(turnId: number, until = -1): void {
     const now = active.value
     if (now?.turnId !== turnId || now.sceneAt < 0) return
-    now.sceneAt = -1
+    now.sceneAt = until
     now.atScene = false
     step()
   }

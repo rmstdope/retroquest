@@ -714,6 +714,26 @@ describe('a narrated move whose picture is still changing', () => {
     expect(FakeAudio.all).toHaveLength(2)
   })
 
+  it('goes on past where the scene changes to a further stop, and stops there again', async () => {
+    const narration = useNarrationStore()
+    narration.begin(1, [voiced(), voiced(), voiced()], 'act1', false, 1)
+    last().onended?.()
+    await vi.advanceTimersByTimeAsync(400)
+    expect(narration.atSceneChange(1)).toBe(true)
+    // The interlude (unit 1) is told in the dark; the room (unit 2) waits.
+    narration.passSceneChange(1, 2)
+    expect(narration.atSceneChange(1)).toBe(false)
+    expect(narration.revealed(1, 1)).toBe(true)
+    expect(FakeAudio.all).toHaveLength(2)
+    last().onended?.()
+    await vi.advanceTimersByTimeAsync(400)
+    expect(narration.atSceneChange(1)).toBe(true)
+    expect(narration.revealed(1, 2)).toBe(false)
+    narration.passSceneChange(1)
+    expect(narration.revealed(1, 2)).toBe(true)
+    expect(FakeAudio.all).toHaveLength(3)
+  })
+
   it('waits for the scene to come up before going on past where it changed', async () => {
     const narration = useNarrationStore()
     const scene = useSceneStore()

@@ -4,18 +4,29 @@ import { mount, type VueWrapper } from '@vue/test-utils'
 import { createPinia, setActivePinia } from 'pinia'
 import LanternLayout from './LanternLayout.vue'
 import { useGameStore } from '@/stores/useGameStore'
-import { useSceneStore, SCENE_HALF_MS } from '@/stores/useSceneStore'
+import {
+  useSceneStore,
+  SCENE_HALF_MS,
+  INTERLUDE_FADE_MS,
+} from '@/stores/useSceneStore'
 import { useNarrationStore } from '@/stores/useNarrationStore'
 import { useArrivalStore } from '@/stores/useArrivalStore'
 import { startedHoldStore } from '@/testing/holdGame'
 import { useStageSpeechStore } from '@/stores/useStageSpeechStore'
 import { useBridge, type ActClass } from '@/composables/useBridge'
 import { readingPauseMs } from '@/lantern/stageSpeech'
-import { parseTurn } from '@/lantern/parseTurn'
+import { readingTimeMs } from '@/lantern/stageArrival'
+import { useSettingsStore } from '@/stores/useSettingsStore'
+import { parseTurn, type TurnBlock } from '@/lantern/parseTurn'
 import { setPictureProbe } from '@/lantern/roomPicture'
 import { Act1 } from '@/act1/Act1'
 import { Key } from '@/act1/items/Key'
 import { Game } from '@/engine'
+
+/** The words of a block of a turn ('' for a checklist). */
+function markupOf(block: TurnBlock): string {
+  return block.kind === 'checklist' ? '' : block.markup
+}
 
 /**
  * The change of scene on the picture stage over the real engine: a move to a
@@ -279,10 +290,18 @@ describe('LanternLayout: change of scene', () => {
     expect(game.musicRoomKey).toBe('EliorsCottage')
     expect(narration.revealed(turn.id, waking - 1)).toBe(true)
     expect(narration.revealed(turn.id, waking)).toBe(false)
+    // In the dark the waking is told in the middle; the cottage waits.
     vi.advanceTimersByTime(3 * SCENE_HALF_MS)
     await w.vm.$nextTick()
-    expect(scene.turn).toBeNull()
+    expect(scene.turn).toBe(turn.id)
+    expect(scene.interlude?.unit).toBe(waking)
     expect(narration.revealed(turn.id, waking)).toBe(true)
+    expect(useArrivalStore().active).toBe(false)
+    // Once it is read, the cottage rises and its room is told.
+    vi.advanceTimersByTime(readingTimeMs(markupOf(blocks[waking])))
+    vi.advanceTimersByTime(INTERLUDE_FADE_MS + SCENE_HALF_MS)
+    await w.vm.$nextTick()
+    expect(scene.turn).toBeNull()
     expect(game.roomName).toBe("Elior's Cottage")
     expect(useArrivalStore().active).toBe(true)
   })
@@ -316,6 +335,69 @@ describe('LanternLayout: change of scene', () => {
     )
     return { id: turn.id, waking }
   }
+
+  it('tells the waking in the middle of the dark, then raises the cottage with its name and description', async () => {
+    const game = await dream()
+    useSettingsStore().narrationOn = false
+    const scene = useSceneStore()
+    const turn = await answerVoice(game)
+    const waking = markupOf(parseTurn(game.turns.at(-1)!.text)[turn.waking])
+    const interlude = () => w.find('[data-testid="scene-interlude"]')
+    const story = (): string => w.get('.lq-story').text()
+    // The voice's line is read: the dream fades out.
+    const voice = useStageSpeechStore().visible.at(-1)!
+    vi.advanceTimersByTime(readingPauseMs(voice.markup))
+    await w.vm.$nextTick()
+    expect(scene.phase).toBe('out')
+    await w.get('img.lq-loading').trigger('load')
+    vi.advanceTimersByTime(SCENE_HALF_MS)
+    await w.vm.$nextTick()
+    // In the dark: the waking, in the middle, and nothing else.
+    expect(scene.phase).toBe('dark')
+    expect(interlude().text()).toContain('The dark lets go of you')
+    expect(story()).not.toContain('The dark lets go of you')
+    expect(useArrivalStore().active).toBe(false)
+    // It is read; then the cottage rises, and its room is told in the middle.
+    vi.advanceTimersByTime(readingTimeMs(waking) - 1)
+    await w.vm.$nextTick()
+    expect(scene.phase).toBe('dark')
+    vi.advanceTimersByTime(1)
+    await w.vm.$nextTick()
+    // Its words fade out in the dark; then the cottage rises.
+    expect(scene.interlude).toBeNull()
+    expect(scene.phase).toBe('dark')
+    vi.advanceTimersByTime(INTERLUDE_FADE_MS)
+    await w.vm.$nextTick()
+    expect(scene.phase).toBe('in')
+    vi.advanceTimersByTime(SCENE_HALF_MS)
+    await w.vm.$nextTick()
+    expect(scene.phase).toBe('idle')
+    expect(game.roomName).toBe("Elior's Cottage")
+    expect(useArrivalStore().active).toBe(true)
+    expect(w.get('[data-testid="arrival-on-picture"]').text()).toContain(
+      "Elior's Cottage",
+    )
+    expect(story()).not.toContain('The dark lets go of you')
+  })
+
+  it('brings the cottage up at once on Enter during the waking', async () => {
+    const game = await dream()
+    useSettingsStore().narrationOn = false
+    const scene = useSceneStore()
+    await answerVoice(game)
+    const voice = useStageSpeechStore().visible.at(-1)!
+    vi.advanceTimersByTime(readingPauseMs(voice.markup))
+    await w.vm.$nextTick()
+    await w.get('img.lq-loading').trigger('load')
+    vi.advanceTimersByTime(SCENE_HALF_MS)
+    await w.vm.$nextTick()
+    expect(scene.interlude).not.toBeNull()
+    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }))
+    await w.vm.$nextTick()
+    expect(scene.phase).toBe('idle')
+    expect(scene.interlude).toBeNull()
+    expect(game.roomName).toBe("Elior's Cottage")
+  })
 
   it('keeps what was told in the dream before the talk until the room changes', async () => {
     const game = await dream()
@@ -406,7 +488,8 @@ describe('LanternLayout: change of scene', () => {
       await w.vm.$nextTick()
       expect(scene.turn).toBeNull()
       noEmptyCard()
-      expect(story()).toContain('The dark lets go of you')
+      // The waking is told only in the middle of the dark, which the press skipped.
+      expect(story()).not.toContain('The dark lets go of you')
       expect(story()).not.toContain('talk to voice')
       expect(story()).not.toContain('You answer it')
       expect(story()).not.toContain('The whisper comes once more')
@@ -470,12 +553,24 @@ describe('LanternLayout: change of scene', () => {
     expect(scene.turn).toBe(turn.id)
     expect(game.musicRoomKey).toBe('EliorsCottage')
     const spoken = voices.length
+    // In the dark the narrator reads the waking, in the middle; the cottage waits.
     await vi.advanceTimersByTimeAsync(3 * SCENE_HALF_MS)
+    await w.vm.$nextTick()
+    expect(scene.interlude?.unit).toBe(turn.waking)
+    expect(narration.revealed(turn.id, turn.waking)).toBe(true)
+    expect(voices.length).toBe(spoken + 1)
+    expect(scene.turn).toBe(turn.id)
+    // The waking is read: the narrator stops before the room, the cottage rises.
+    voices.at(-1)?.onended?.()
+    await vi.advanceTimersByTimeAsync(400)
+    await w.vm.$nextTick()
+    expect(scene.interlude).toBeNull()
+    expect(narration.revealed(turn.id, turn.waking + 1)).toBe(false)
+    await vi.advanceTimersByTimeAsync(INTERLUDE_FADE_MS + SCENE_HALF_MS)
     await w.vm.$nextTick()
     expect(scene.turn).toBeNull()
     expect(game.roomName).toBe("Elior's Cottage")
-    expect(narration.revealed(turn.id, turn.waking)).toBe(true)
-    expect(voices.length).toBe(spoken + 1)
+    expect(voices.length).toBe(spoken + 2)
     // The rest of the turn (its quest news rings) is not left to run after the test.
     narration.skipAll()
     await vi.runAllTimersAsync()

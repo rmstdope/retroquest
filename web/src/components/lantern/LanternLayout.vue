@@ -79,6 +79,7 @@ import SettingsDialog from './SettingsDialog.vue'
 import LanternHeader from './LanternHeader.vue'
 import RoomPlate from './RoomPlate.vue'
 import RoomTitle from './RoomTitle.vue'
+import SceneInterlude from './SceneInterlude.vue'
 import SaveToast from './SaveToast.vue'
 import SectionNav, { type Section } from './SectionNav.vue'
 import StageButtons from './StageButtons.vue'
@@ -2293,6 +2294,11 @@ watch(
             />
           </div>
           <!-- Over the picture, and over the words beside it (the stage isolates its own layers). -->
+          <SceneInterlude
+            v-if="staged"
+            v-show="section === 'story'"
+            :phone="phoneStage"
+          />
           <RoomTitle
             v-if="staged"
             v-show="section === 'story'"

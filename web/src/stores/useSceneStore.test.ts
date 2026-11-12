@@ -1,6 +1,10 @@
 import { beforeEach, afterEach, describe, expect, it, vi } from 'vitest'
 import { createPinia, setActivePinia } from 'pinia'
-import { useSceneStore, SCENE_HALF_MS } from './useSceneStore'
+import {
+  useSceneStore,
+  SCENE_HALF_MS,
+  INTERLUDE_FADE_MS,
+} from './useSceneStore'
 
 describe('useSceneStore', () => {
   beforeEach(() => {
@@ -25,6 +29,76 @@ describe('useSceneStore', () => {
     expect(scene.holds(4, 0)).toBe(false)
     expect(scene.shown).toBe('b.png')
     expect(onUp).toHaveBeenCalledTimes(1)
+  })
+
+  describe('with an interlude', () => {
+    const waking = { unit: 3, markup: 'The dark lets go of you.' }
+
+    it('holds the dark, telling the interlude, until it is let go; then rises and runs onUp', () => {
+      const scene = useSceneStore()
+      scene.settled('a.png')
+      const onUp = vi.fn()
+      scene.begin(4, 'b.png', onUp, 3, waking)
+      expect(scene.interlude).toBeNull()
+      scene.targetReady(true)
+      vi.advanceTimersByTime(SCENE_HALF_MS)
+      expect(scene.phase).toBe('dark')
+      expect(scene.interlude).toEqual({ turn: 4, ...waking })
+      // The interlude's own words are let through; what comes after waits.
+      expect(scene.holds(4, 3)).toBe(false)
+      expect(scene.holds(4, 4)).toBe(true)
+      vi.advanceTimersByTime(SCENE_HALF_MS * 5)
+      expect(scene.phase).toBe('dark')
+      scene.endInterlude()
+      expect(scene.interlude).toBeNull()
+      // The words fade out in the dark before the new picture rises.
+      expect(scene.phase).toBe('dark')
+      vi.advanceTimersByTime(INTERLUDE_FADE_MS - 1)
+      expect(scene.phase).toBe('dark')
+      vi.advanceTimersByTime(1)
+      expect(scene.phase).toBe('in')
+      vi.advanceTimersByTime(SCENE_HALF_MS)
+      expect(scene.phase).toBe('idle')
+      expect(onUp).toHaveBeenCalledTimes(1)
+    })
+
+    it('rises when the picture loads after the interlude was let go', () => {
+      const scene = useSceneStore()
+      scene.settled('a.png')
+      scene.begin(4, 'b.png', () => {}, 3, waking)
+      vi.advanceTimersByTime(SCENE_HALF_MS)
+      // The picture is slow (its patches are still loading).
+      scene.awaitMore(5 * SCENE_HALF_MS)
+      scene.endInterlude()
+      vi.advanceTimersByTime(INTERLUDE_FADE_MS)
+      expect(scene.phase).toBe('dark')
+      scene.targetReady(true)
+      expect(scene.phase).toBe('in')
+    })
+
+    it('does not rise while the words fade, even when the picture loads then', () => {
+      const scene = useSceneStore()
+      scene.settled('a.png')
+      scene.begin(4, 'b.png', () => {}, 3, waking)
+      vi.advanceTimersByTime(SCENE_HALF_MS)
+      scene.endInterlude()
+      scene.targetReady(true)
+      expect(scene.phase).toBe('dark')
+      vi.advanceTimersByTime(INTERLUDE_FADE_MS)
+      expect(scene.phase).toBe('in')
+    })
+
+    it('ends with the change when the room is brought up at once', () => {
+      const scene = useSceneStore()
+      scene.settled('a.png')
+      const onUp = vi.fn()
+      scene.begin(4, 'b.png', onUp, 3, waking)
+      vi.advanceTimersByTime(SCENE_HALF_MS)
+      scene.skip()
+      expect(scene.interlude).toBeNull()
+      expect(scene.phase).toBe('idle')
+      expect(onUp).toHaveBeenCalledTimes(1)
+    })
   })
 
   it('holds only the words from unit `from` on when the change starts partway through a turn', () => {

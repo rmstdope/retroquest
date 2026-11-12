@@ -243,16 +243,52 @@ export function useLanternPresentation(
     { flush: 'sync' },
   )
 
-  // A narrated talk that moves Elior changes scene where the narrator stops for it.
+  // A narrated talk that moves Elior changes scene where the narrator stops for
+  // it; stopped again after its interlude, the new picture rises.
   watch(
     () => {
       const turn = game.turns.at(-1)
       return turn && narration.atSceneChange(turn.id) ? turn : null
     },
     (turn) => {
-      if (turn) changeScene(turn, sceneBlock(turn, parseTurn(turn.text)))
+      if (!turn) return
+      if (scene.interlude?.turn === turn.id) scene.endInterlude()
+      else changeScene(turn, sceneBlock(turn, parseTurn(turn.text)))
     },
   )
+
+  /** The interlude's reading time, while nobody narrates it. */
+  let interludeTimer: ReturnType<typeof setTimeout> | undefined
+  /** Whether the narrator is reading the interlude in the dark. */
+  let interludeNarrated = false
+  // The dark tells the interlude: the narrator reads it and stops before what
+  // comes after, or, unnarrated, it stays for its reading time.
+  watch(
+    () => scene.interlude,
+    (told) => {
+      clearTimeout(interludeTimer)
+      interludeNarrated = !!told && narration.narrates(told.turn)
+      if (!told) return
+      if (interludeNarrated) narration.passSceneChange(told.turn, told.unit + 1)
+      else
+        interludeTimer = setTimeout(
+          () => scene.endInterlude(),
+          readingTimeMs(told.markup),
+        )
+    },
+  )
+  // A narrator that ends inside the interlude (nothing after it), or is
+  // stopped there, lets the picture rise.
+  watch(
+    () => {
+      const told = scene.interlude
+      return !!told && interludeNarrated && !narration.narrates(told.turn)
+    },
+    (ended) => {
+      if (ended) scene.endInterlude()
+    },
+  )
+  onUnmounted(() => clearTimeout(interludeTimer))
 
   /**
    * The scene of talk `turn` changes now, before its block `at`: what it told
@@ -261,10 +297,26 @@ export function useLanternPresentation(
    * picture is up. The room's name changes at the dark, or with the picture
    * when the change is skipped before it. Under Reduce motion, or with the same
    * picture, they (and the room's name) move at once with no fade. Nothing
-   * happens once a newer turn has come.
+   * happens once a newer turn has come. A talk that moved Elior tells its
+   * paragraph `at` (the move) in the middle of the dark, as an interlude
+   * between the pictures; the sides never tell it.
    */
   function changeScene(turn: Turn, at: number): void {
     if (game.turns.at(-1)?.id !== turn.id) return
+    const blocks = parseTurn(turn.text)
+    const fades = !stage.motionReduced()
+    const block = blocks[at]
+    const interlude =
+      fades &&
+      turn.addressed &&
+      turn.description?.moved &&
+      block &&
+      block.kind !== 'checklist'
+        ? { unit: at, markup: block.markup }
+        : null
+    // What the talk told before the move leaves the screen with the old room,
+    // and the interlude with it: it is told in the middle.
+    if (interlude && talkCut?.turn === turn.id) talkCut.at = at + 1
     game.releaseMusic(turn.id)
     game.releasePicture(turn.id)
     const narrated = narration.narrates(turn.id)
@@ -273,11 +325,14 @@ export function useLanternPresentation(
       if (game.turns.at(-1)?.id !== turn.id) return
       // Skipped before the dark, the room's name has not changed yet: it goes with the picture.
       game.releasePanels(turn.id, ['place'], true)
-      if (narrated) narration.passSceneChange(turn.id)
-      else panelHold.settle(turn)
+      if (narrated) {
+        // Brought up while the narrator still reads the interlude: it goes on after it.
+        if (interlude) narration.skipTo(at + 1)
+        narration.passSceneChange(turn.id)
+      } else panelHold.settle(turn)
     }
-    if (game.roomPicture !== scene.shown && !stage.motionReduced())
-      scene.begin(turn.id, game.roomPicture, up, at)
+    if (game.roomPicture !== scene.shown && fades)
+      scene.begin(turn.id, game.roomPicture, up, at, interlude)
     else up()
   }
 
