@@ -107,6 +107,21 @@ describe('useRoomTitleStore', () => {
     expect(title.name).toBe('Village Square')
   })
 
+  it('after a load into another room, waits out the old picture and greets over the new one, or the backdrop when it has none', async () => {
+    await enter('Village Square', moveTurn(2, false))
+    title.settle()
+    game.musicRoomKey = 'VillageWell'
+    title.reset()
+    scene.reset()
+    scene.settled('cottage.png')
+    await enter('Village Well', moveTurn(3, false))
+    expect(title.name).toBeNull()
+    scene.reset()
+    scene.settled('')
+    await nextTick()
+    expect(title.name).toBe('Village Well')
+  })
+
   it('waits for a change of scene to bring the picture up', async () => {
     scene.phase = 'in'
     await enter('Village Square', moveTurn(2, false))

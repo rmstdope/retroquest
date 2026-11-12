@@ -131,6 +131,21 @@ describe('LanternLayout: the room title', () => {
     expect(title().text()).toContain('Hall')
   })
 
+  it('greets a room loaded from another only once its own picture is up, never over the old one', async () => {
+    await stage()
+    const game = useGameStore()
+    game.turns = game.turns.map((turn) => ({ ...turn, narrate: undefined }))
+    game.musicRoomKey = 'Garden'
+    game.roomName = 'Garden'
+    game.loadNumber++
+    await w.vm.$nextTick()
+    await w.vm.$nextTick()
+    expect(useRoomTitleStore().name).toBeNull()
+    await w.get('img.lq-loading').trigger('load')
+    await w.vm.$nextTick()
+    expect(useRoomTitleStore().name).toBe('Garden')
+  })
+
   it('keeps the corner name while the picture tells no room (news, what happens)', async () => {
     await stage()
     useArrivalStore().show(

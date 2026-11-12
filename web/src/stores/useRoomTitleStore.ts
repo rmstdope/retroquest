@@ -44,14 +44,27 @@ export const useRoomTitleStore = defineStore('roomTitle', () => {
     name.value = null
   }
 
-  /** The stage starts afresh (a new game, a load, a new act): settle, and greet the room once its picture is up again. */
+  /**
+   * The picture that was up when the stage last started afresh, while it may
+   * still be the one settled: the stage settles it again at once, before the
+   * new room's picture has begun to load. Null once another has settled.
+   */
+  let stale: string | null = null
+
+  /** The stage starts afresh (a new game, a load, a new act): settle, and greet the room once its own picture is up. */
   function reset(): void {
     settle()
     pending = true
+    stale = scene.shown
   }
 
   /** Whether a greeting can be shown now: a room, no chapter page, and its picture up after any change of scene. */
   function ready(): boolean {
+    if (stale !== null && scene.shown !== null && scene.shown !== stale)
+      stale = null
+    // The old picture settled again after a load into a room with another one.
+    if (stale !== null && scene.shown === stale && game.roomPicture !== stale)
+      return false
     return (
       game.roomName !== '' &&
       !game.showModal &&
@@ -82,7 +95,8 @@ export const useRoomTitleStore = defineStore('roomTitle', () => {
       [
         game.showModal,
         scene.phase,
-        scene.shown !== null,
+        scene.shown,
+        game.roomPicture,
         staged.value,
       ] as const,
     consider,
