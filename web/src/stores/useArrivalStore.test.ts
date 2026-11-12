@@ -94,6 +94,20 @@ describe('useArrivalStore', () => {
   })
   afterEach(() => vi.useRealTimers())
 
+  it('tells a room while an arrival with a description is up, from its first part on', () => {
+    expect(arrival.tellsRoom).toBe(false)
+    arrival.show(1, parts(true, false), false)
+    expect(arrival.tellsRoom).toBe(true)
+    arrival.clear()
+    expect(arrival.tellsRoom).toBe(false)
+  })
+
+  it('tells no room for what happens alone', () => {
+    arrival.show(1, parts(true, false).slice(0, 1), false)
+    expect(arrival.active).toBe(true)
+    expect(arrival.tellsRoom).toBe(false)
+  })
+
   describe('when nobody narrates it', () => {
     it('stays for its reading time, shown by the bar, then clears', () => {
       arrival.show(1, parts(false, false), false)

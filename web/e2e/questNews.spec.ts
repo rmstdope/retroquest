@@ -152,9 +152,11 @@ test.describe('quest news told in the middle of the picture', () => {
     })
   }
 
+  // Heights at which a page holds the short need alone, under the one-row
+  // room plate (about 94 px lower than under the old room card).
   for (const [width, height] of [
-    [850, 840],
-    [390, 720],
+    [850, 740],
+    [390, 620],
   ]) {
     test(`keeps one left edge for a checklist split over pages at ${width} wide`, async ({
       page,
@@ -189,10 +191,17 @@ test.describe('quest news told in the middle of the picture', () => {
         if ((await list.first().locator('li').count()) === 1) alone = first
         const bounds = await list.first().boundingBox({ timeout: 1500 })
         lefts[first] = Math.round(bounds?.x ?? -1)
-        // The last click ends the news and takes the card away.
-        await middle(page)
-          .click({ position: { x: 20, y: 20 }, timeout: 1500 })
-          .catch(() => undefined)
+        // Enter, with no control focused, goes on a page; the last ends the
+        // news and takes the card away.
+        await page.evaluate(() =>
+          (document.activeElement as HTMLElement | null)?.blur(),
+        )
+        await page.keyboard.press('Enter')
+        await expect
+          .poll(async () =>
+            (await list.count()) === 0 ? '' : list.first().innerText(),
+          )
+          .not.toBe(first)
       }
       expect(Object.keys(lefts).length).toBeGreaterThan(1)
       // A page holds the short need alone: the case that shrank the line.

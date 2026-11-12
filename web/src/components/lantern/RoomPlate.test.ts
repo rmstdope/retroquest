@@ -14,94 +14,42 @@ describe('RoomPlate', () => {
     game.items = ['old notice', 'bucket']
   })
 
-  it('says "You are in" over the room name', () => {
+  it('names the room alone, as the current location', () => {
     const w = mount(RoomPlate)
-    expect(w.text()).toContain('You are in')
     expect(w.get('h2').text()).toBe('Village Square')
+    expect(w.attributes('aria-label')).toBe('Current location')
+    expect(w.text()).not.toContain('You are in')
   })
 
-  it('lists who and what is here, characters blue and items green', () => {
-    const chips = mount(RoomPlate).findAll('.lq-here-chip')
-    expect(chips.map((c) => c.text())).toEqual([
-      'Villager',
-      'Old Notice',
-      'Bucket',
-    ])
-    expect(chips[0].classes()).toContain('lq-here-character')
-    expect(chips[1].classes()).toContain('lq-here-item')
-  })
-
-  it('carries what the name menu needs on each chip', () => {
-    const chip = mount(RoomPlate).get('.lq-here-chip')
-    expect(chip.attributes('data-name-kind')).toBe('character')
-    expect(chip.attributes('data-name')).toBe('villager')
-    expect(chip.attributes('aria-haspopup')).toBe('menu')
-  })
-
-  it('keeps chips of one name apart', () => {
-    useGameStore().items = ['lantern', 'lantern', 'lantern']
-    useGameStore().characters = []
-    expect(mount(RoomPlate).findAll('.lq-here-chip')).toHaveLength(3)
-  })
-
-  it('shows only the name when nothing is here', () => {
-    const game = useGameStore()
-    game.characters = []
-    game.items = []
+  it('lists no one and nothing that is here: the picture marks them', () => {
     const w = mount(RoomPlate)
     expect(w.find('.lq-here').exists()).toBe(false)
-    expect(w.get('h2').text()).toBe('Village Square')
+    expect(w.find('[data-name-kind]').exists()).toBe(false)
+    expect(w.text()).not.toContain('Villager')
+  })
+
+  it('shows while nothing is over the picture, and steps away while something is', async () => {
+    const w = mount(RoomPlate)
+    expect(w.classes()).not.toContain('lq-plate-away')
+    await w.setProps({ away: true })
+    expect(w.classes()).toContain('lq-plate-away')
   })
 
   it('has no Story so far button unless the phone stage asks for it', () => {
     expect(mount(RoomPlate).find('.lq-story-so-far').exists()).toBe(false)
   })
 
-  it('shows "⟲ Story so far" in the corner on the phone stage, and says when it is pressed', async () => {
+  it('shows "⟲ Story so far" beside the name on the phone stage, and says when it is pressed', async () => {
     const w = mount(RoomPlate, { props: { storyButton: true } })
     expect(w.get('.lq-story-so-far').text()).toBe('⟲ Story so far')
     await w.get('.lq-story-so-far').trigger('click')
     expect(w.emitted('story')).toHaveLength(1)
   })
 
-  describe('folded', () => {
-    it('eases in once when it opens again from folded', async () => {
-      const w = mount(RoomPlate, { props: { folded: true } })
-      expect(w.classes()).not.toContain('lq-plate-opening')
-      await w.setProps({ folded: false })
-      expect(w.classes()).toContain('lq-plate-opening')
-      await w.trigger('animationend', { animationName: 'lq-plate-fold' })
-      expect(w.classes()).not.toContain('lq-plate-opening')
-    })
-
-    it('is open (with its label) unless folded', () => {
-      const w = mount(RoomPlate, { props: { storyButton: true } })
-      expect(w.classes()).not.toContain('lq-plate-folded')
-    })
-
-    it('folds to one row, keeping every name and the button in the open order', () => {
-      const open = mount(RoomPlate, { props: { storyButton: true } })
-      const folded = mount(RoomPlate, {
-        props: { storyButton: true, folded: true },
-      })
-      expect(folded.classes()).toContain('lq-plate-folded')
-      const order = (w: typeof open): string[] =>
-        w.findAll('h2, .lq-here-chip, .lq-story-so-far').map((e) => e.text())
-      expect(order(folded)).toEqual(order(open))
-      expect(folded.get('.lq-label').attributes('aria-hidden')).toBe('true')
-    })
-  })
-
-  describe('compact', () => {
-    it('is one row: the label hidden, the name beside the chips in the open order', () => {
-      const open = mount(RoomPlate)
-      const compact = mount(RoomPlate, { props: { compact: true } })
-      expect(compact.classes()).toContain('lq-plate-compact')
-      expect(open.classes()).not.toContain('lq-plate-compact')
-      expect(compact.get('.lq-label').attributes('aria-hidden')).toBe('true')
-      const order = (w: typeof open): string[] =>
-        w.findAll('h2, .lq-here-chip').map((e) => e.text())
-      expect(order(compact)).toEqual(order(open))
-    })
+  it('is smaller on a phone held sideways (compact)', () => {
+    expect(mount(RoomPlate, { props: { compact: true } }).classes()).toContain(
+      'lq-plate-compact',
+    )
+    expect(mount(RoomPlate).classes()).not.toContain('lq-plate-compact')
   })
 })

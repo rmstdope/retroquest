@@ -6,6 +6,7 @@ import { useSettingsStore } from '@/stores/useSettingsStore'
 import { useNarrationStore } from '@/stores/useNarrationStore'
 import { useStageSpeechStore } from '@/stores/useStageSpeechStore'
 import { useArrivalStore } from '@/stores/useArrivalStore'
+import { useRoomTitleStore } from '@/stores/useRoomTitleStore'
 import { useSceneStore } from '@/stores/useSceneStore'
 import { useAreaNamesStore } from '@/stores/useAreaNamesStore'
 import { useFlightStore } from '@/stores/useFlightStore'
@@ -76,6 +77,7 @@ import SaveLoadDialog from './SaveLoadDialog.vue'
 import SettingsDialog from './SettingsDialog.vue'
 import LanternHeader from './LanternHeader.vue'
 import RoomPlate from './RoomPlate.vue'
+import RoomTitle from './RoomTitle.vue'
 import SaveToast from './SaveToast.vue'
 import SectionNav, { type Section } from './SectionNav.vue'
 import StageButtons from './StageButtons.vue'
@@ -94,8 +96,8 @@ import type { SaveSlot } from '@/types/bridge'
 /**
  * Shell of the Lantern UI (the only UI; old `?ui=` links open it too): header, story (one
  * StoryTurn per turn) and the action composer. On laptops (≥1024 × 560) the
- * room is played on its picture, which fills the play area: a plate (room
- * and who and what is here) top-left, the buttons Bag, Spells, Quests, Story
+ * room is played on its picture, which fills the play area: the room's name
+ * top-left (`RoomPlate`; who and what is here are marked on the picture), the buttons Bag, Spells, Quests, Story
  * so far and Map top-right (the journal and the story open as a drawer from
  * the right, the map beneath its button), the narrator's words up the left
  * side and the actions as one row along the bottom.
@@ -171,6 +173,7 @@ const narration = useNarrationStore()
 const speech = useStageSpeechStore()
 const arrival = useArrivalStore()
 const scene = useSceneStore()
+const roomTitle = useRoomTitleStore()
 const names = useAreaNamesStore()
 const belt = useBeltStore()
 /** The marks and names layer, which knows where the ways out are. */
@@ -276,10 +279,35 @@ const stageKey = computed(
   () => `${game.gameNumber}-${game.loadNumber}-${game.musicActName}`,
 )
 watch(stageKey, () => {
+  roomTitle.reset()
   drawerTab.value = null
   speech.clear()
   scene.reset()
   clearArrival()
+})
+
+/** The room's title is told only where the room is played on its picture. */
+watch(
+  () => staged.value,
+  (onStage) => {
+    roomTitle.staged = onStage
+  },
+  { immediate: true },
+)
+/** Whether the room's name in the corner steps away: its title, or a first visit's arrival, is told over the picture (news alone leaves it). */
+const plateAway = computed(() => roomTitle.name !== null || arrival.tellsRoom)
+/** Any key or press settles the room's title into the corner at once; the key or press still does what it does. */
+function settleRoomTitle(): void {
+  if (roomTitle.name !== null) roomTitle.settle()
+}
+onMounted(() => {
+  window.addEventListener('keydown', settleRoomTitle, true)
+  window.addEventListener('pointerdown', settleRoomTitle, true)
+})
+onUnmounted(() => {
+  window.removeEventListener('keydown', settleRoomTitle, true)
+  window.removeEventListener('pointerdown', settleRoomTitle, true)
+  roomTitle.settle()
 })
 
 /** End the arrival on the picture at once (a narrator still telling it stops, see `useArrivalStore.clear`). */
@@ -1059,49 +1087,6 @@ onMounted(() => {
     }
   }
 })
-
-/** The least height (px) the column needs to show the newest line's speaker and first line whole. */
-const MIN_SPEECH_ROOM = 120
-/**
- * The phone's room plate is folded to one row. It folds when a conversation is
- * on the picture under an open column of words and the column's room
- * (its height) is under `MIN_SPEECH_ROOM`; then it stays
- * folded, so it does not fold and open line by line, until the conversation
- * is cleared or the narration is hidden. Nothing is saved.
- */
-const plateFolded = ref(false)
-
-/** The column's room as last measured (px). */
-const speechRoom = ref(Number.POSITIVE_INFINITY)
-let columnResize: ResizeObserver | undefined
-watch(
-  paperEl,
-  (el) => {
-    columnResize?.disconnect()
-    if (!el || typeof ResizeObserver === 'undefined') return
-    columnResize = new ResizeObserver(() => {
-      speechRoom.value = el.clientHeight
-    })
-    columnResize.observe(el)
-  },
-  { flush: 'post' },
-)
-onUnmounted(() => columnResize?.disconnect())
-
-watch(
-  () =>
-    [
-      speech.visible.length > 0,
-      paper.visible.value && !paperAway.value,
-      phoneStage.value && section.value === 'story',
-      speechRoom.value < MIN_SPEECH_ROOM,
-    ] as const,
-  ([talking, paperOpen, onPicture, cramped]) => {
-    if (!talking || !paperOpen || !onPicture) plateFolded.value = false
-    else if (cramped) plateFolded.value = true
-  },
-  { flush: 'post' },
-)
 
 /** The laptop's room plate, under which the narration cards stop. */
 const widePlate = ref<InstanceType<typeof RoomPlate> | null>(null)
@@ -2086,6 +2071,7 @@ watch(
             'lq-staged': staged,
             'lq-phone': phoneStage,
             'lq-sideways': sideways,
+            'lq-titled': roomTitle.name !== null,
           }"
           :style="{
             ...(phoneStage ? { '--lq-plate-h': `${plateHeight}px` } : {}),
@@ -2131,8 +2117,9 @@ watch(
               ref="widePlate"
               class="lq-stage-plate"
               :compact="sideways"
+              :bare="!pictured"
+              :away="plateAway"
               data-panel
-              @click="onNameClick"
             />
             <StageButtons
               v-if="wide"
@@ -2244,6 +2231,13 @@ watch(
               @close="closeRing"
             />
           </div>
+          <!-- Over the picture, and over the words beside it (the stage isolates its own layers). -->
+          <RoomTitle
+            v-if="staged"
+            v-show="section === 'story'"
+            :bare="!pictured"
+            :small="!laptop"
+          />
           <RoomPlate
             v-if="phoneStage"
             v-show="section === 'story'"
@@ -2251,8 +2245,8 @@ watch(
             class="lq-phone-plate"
             data-panel
             story-button
-            :folded="plateFolded"
-            @click="onNameClick"
+            :bare="!pictured"
+            :away="plateAway"
             @story="drawerTab = 'story'"
           />
           <StageSpeech
@@ -2602,6 +2596,9 @@ watch(
 .lq-belt-cap-spell {
   color: var(--lq-spell);
 }
+.lq-titled :deep(.lq-area-names) {
+  opacity: 0.25;
+}
 .lq-stage-plate {
   position: absolute;
   top: 16px;
@@ -2856,22 +2853,6 @@ watch(
     38%,
     calc(100% - 56px - var(--lq-stage-buttons-w) - 16px)
   );
-}
-/* The plate is one compact row on a phone: smaller name and chips, so the words keep their room. */
-.lq-sideways .lq-stage-plate {
-  padding: 4px 10px;
-  gap: 8px;
-}
-.lq-sideways .lq-stage-plate :deep(.lq-room-name) {
-  font-size: calc(18px * var(--lq-display-scale));
-}
-.lq-sideways .lq-stage-plate :deep(.lq-here) {
-  gap: 4px;
-}
-.lq-sideways .lq-stage-plate :deep(.lq-here-chip) {
-  height: 24px;
-  padding: 0 9px;
-  font-size: 12px;
 }
 .lq-sideways .lq-stage-buttons {
   top: 8px;

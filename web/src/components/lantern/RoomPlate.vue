@@ -1,65 +1,30 @@
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
+import { ref } from 'vue'
 import { useGameStore } from '@/stores/useGameStore'
 import { usePanelFlash } from '@/composables/usePanelFlash'
-import { displayName } from '@/lantern/displayName'
 
 /**
- * The plate in the stage's top-left corner: "You are in", the room's name and
- * under it who and what is here as chips (characters blue, items green). A
- * chip is a button the layout opens the name menu for (it carries the engine's
- * name). Many chips wrap onto more lines and the plate grows downward; a long
- * name wraps; with nothing here the plate shows only the name. The plate is
- * never read aloud: the room's name and description are read in the story.
- * Folded (a short screen with a conversation on the picture), the plate is one
- * row: the name, the chips in a single row that fades at its right edge and
- * slides sideways, then "⟲ Story so far"; "You are in" is hidden. The same
- * elements stay in the same order, so folding never moves focus. Compact (a
- * phone on its side) is that one row always: the name beside the chips, which
- * slide sideways, so the plate never covers the words.
+ * The room's name in the stage's top-left corner, written on the picture: no
+ * card, light serif with a soft dark glow (dark ink on the paper backdrop,
+ * `bare`). Who and what is here is not listed: the picture marks them. The
+ * name stays for as long as the player is in the room; `away` fades it out
+ * while something is told over the picture (the room's title, an arrival) and
+ * it fades back in when that settles. The plate is never read aloud: the
+ * room's name and description are read in the story. On the tall-screen stage
+ * (`storyButton`) "⟲ Story so far" stands to the right of the name, and stays
+ * while the name is away. The name is not a button: presses go through it to
+ * what is beneath. Compact (a phone on its side) is smaller.
  */
 const props = defineProps<{
   storyButton?: boolean
-  folded?: boolean
   compact?: boolean
+  away?: boolean
+  bare?: boolean
 }>()
 const emit = defineEmits<{ story: [] }>()
 const game = useGameStore()
 const storyEl = ref<HTMLButtonElement | null>(null)
 const { flashing, endFlash } = usePanelFlash(['place'])
-
-/**
- * Who and what is here, each with a key unique within the list: a room can
- * hold several things of one name (three Mounted Lanterns), so the key adds
- * how many of that name came before.
- */
-const here = computed(() => {
-  const seen: Record<string, number> = {}
-  return [
-    ...game.characters.map((name) => ({ name, kind: 'character' })),
-    ...game.items.map((name) => ({ name, kind: 'item' })),
-  ].map((entry) => {
-    const base = `${entry.kind}:${entry.name}`
-    const count = seen[base] ?? 0
-    seen[base] = count + 1
-    return { ...entry, key: `${base}:${count}` }
-  })
-})
-
-/** The plate has just opened again from folded: it eases in once. */
-const opening = ref(false)
-watch(
-  () => props.folded,
-  (folded, wasFolded) => {
-    if (wasFolded && !folded) opening.value = true
-  },
-)
-
-/** An animation ended: the flash, or the ease of opening. */
-function onAnimationEnd(event: AnimationEvent): void {
-  if (event.animationName === 'lq-plate-fold') opening.value = false
-  else endFlash()
-}
 
 /** Put focus on "⟲ Story so far" (the story so far has just been closed). */
 function focusStoryButton(): void {
@@ -74,37 +39,14 @@ defineExpose({ focusStoryButton })
     class="lq-plate"
     :class="{
       'lq-flash': flashing,
-      'lq-plate-folded': props.folded,
       'lq-plate-compact': props.compact,
-      'lq-plate-opening': opening,
+      'lq-plate-away': props.away,
+      'lq-plate-bare': props.bare,
     }"
     aria-label="Current location"
-    @animationend.self="onAnimationEnd"
+    @animationend.self="endFlash"
   >
-    <span
-      class="lq-label"
-      :aria-hidden="props.folded || props.compact ? true : undefined"
-    >
-      You are in
-    </span>
-    <h2 class="lq-room-name" :class="{ 'lq-room-name-pad': props.storyButton }">
-      {{ game.roomName }}
-    </h2>
-    <div v-if="here.length" class="lq-here">
-      <button
-        v-for="entry in here"
-        :key="entry.key"
-        type="button"
-        class="lq-here-chip"
-        :class="`lq-here-${entry.kind}`"
-        :data-name-kind="entry.kind"
-        :data-name="entry.name"
-        aria-haspopup="menu"
-      >
-        {{ displayName(entry.name) }}
-      </button>
-    </div>
-    <!-- After the chips in the Tab order; drawn in the plate's top-right corner. -->
+    <h2 class="lq-room-name">{{ game.roomName }}</h2>
     <button
       v-if="props.storyButton"
       ref="storyEl"
@@ -120,37 +62,43 @@ defineExpose({ focusStoryButton })
 <style scoped>
 .lq-plate {
   display: flex;
-  flex-direction: column;
-  gap: 6px;
-  padding: 12px 16px;
-  border-radius: var(--lq-radius);
-  border: 1px solid var(--lq-line);
-  background: color-mix(in srgb, var(--lq-surface) 93%, transparent);
-  box-shadow: 0 6px 24px rgb(0 0 0 / 0.25);
-}
-.lq-label {
-  font-family: var(--lq-font-ui);
-  font-size: 11px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--lq-muted);
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  /* The name is not a button: a press goes through it to the picture or the words beneath. */
+  pointer-events: none;
 }
 .lq-room-name {
+  flex: 0 1 auto;
+  min-width: 0;
   margin: 0;
-  overflow-wrap: anywhere;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
   font-family: var(--lq-font-display);
-  font-size: calc(24px * var(--lq-display-scale));
+  font-size: calc(20px * var(--lq-display-scale));
   font-weight: 500;
-  color: var(--lq-fg);
+  color: var(--lq-picture-ink);
+  text-shadow: var(--lq-picture-glow);
+  /* Fades back in as the room's title settles. */
+  transition: opacity calc(1.5s * var(--lq-motion)) ease;
 }
-/* On the phone stage "⟲ Story so far" sits in the plate's top-right corner. */
-.lq-plate {
-  position: relative;
+/* Gone at once when something is told over the picture. */
+.lq-plate-away .lq-room-name {
+  opacity: 0;
+  transition: none;
+}
+.lq-plate-bare .lq-room-name {
+  color: var(--lq-fg);
+  text-shadow: none;
+}
+.lq-plate-compact .lq-room-name {
+  font-size: calc(16px * var(--lq-display-scale));
 }
 .lq-story-so-far {
-  position: absolute;
-  top: 8px;
-  right: 8px;
+  pointer-events: auto;
+  flex: 0 0 auto;
+  margin-left: auto;
   height: 32px;
   padding: 0 12px;
   border: 1px solid var(--lq-line);
@@ -161,98 +109,5 @@ defineExpose({ focusStoryButton })
   font-family: var(--lq-font-ui);
   font-size: 13px;
   cursor: pointer;
-}
-/* A long name wraps before the button, not under it. */
-.lq-room-name-pad {
-  padding-top: 8px;
-}
-.lq-here {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 6px;
-}
-.lq-here-chip {
-  height: 30px;
-  padding: 0 12px;
-  display: inline-flex;
-  align-items: center;
-  border-radius: 999px;
-  font: inherit;
-  font-family: var(--lq-font-ui);
-  font-size: 13px;
-  cursor: pointer;
-}
-/* Folded: one row; the names slide sideways under a fade at the right edge. */
-.lq-plate-folded,
-.lq-plate-compact {
-  flex-direction: row;
-  align-items: center;
-  gap: 10px;
-  padding: 6px 8px 6px 16px;
-}
-.lq-plate-folded,
-.lq-plate-opening {
-  animation: lq-plate-fold calc(0.2s * var(--lq-motion)) ease-out;
-}
-.lq-plate-folded .lq-label,
-.lq-plate-compact .lq-label {
-  display: none;
-}
-.lq-plate-folded .lq-room-name,
-.lq-plate-compact .lq-room-name {
-  flex: 0 0 auto;
-  padding-top: 0;
-  font-size: calc(20px * var(--lq-display-scale));
-  white-space: nowrap;
-}
-.lq-plate-folded .lq-here,
-.lq-plate-compact .lq-here {
-  flex: 1 1 0;
-  min-width: 0;
-  flex-wrap: nowrap;
-  overflow-x: auto;
-  scrollbar-width: none;
-  /* Room after the last name, so scrolled to the end it is clear of the fade. */
-  padding-inline-end: 28px;
-  mask-image: linear-gradient(to right, #000 calc(100% - 28px), transparent);
-}
-.lq-plate-folded .lq-here::-webkit-scrollbar,
-.lq-plate-compact .lq-here::-webkit-scrollbar {
-  display: none;
-}
-.lq-plate-folded .lq-here-chip,
-.lq-plate-compact .lq-here-chip {
-  flex: 0 0 auto;
-}
-.lq-plate-folded .lq-story-so-far,
-.lq-plate-compact .lq-story-so-far {
-  position: static;
-  flex: 0 0 auto;
-}
-/* Compact: a long name gives way (an ellipsis) so the chips keep a share, small enough that a short name reads whole on the smallest phone. */
-.lq-plate-compact .lq-room-name {
-  flex: 0 1 auto;
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.lq-plate-compact .lq-here {
-  flex: 1 0 48px;
-}
-@keyframes lq-plate-fold {
-  from {
-    opacity: 0.4;
-  }
-}
-.lq-here-character {
-  border: 1px solid var(--lq-character-line);
-  background: var(--lq-character-soft);
-  color: var(--lq-character);
-}
-.lq-here-item {
-  border: 1px solid var(--lq-item-line);
-  background: var(--lq-item-soft);
-  color: var(--lq-item);
 }
 </style>

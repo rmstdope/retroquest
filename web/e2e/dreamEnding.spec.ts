@@ -50,7 +50,9 @@ for (const command of ['talk to voice', 'say who are you to voice']) {
 
     const middle = page.getByTestId('arrival-on-picture')
     await expect(middle).toContainText('A modest cottage')
-    await expect(middle).not.toContainText('You are in')
+    await expect(middle.locator('.lq-arrival-text')).not.toContainText(
+      'You are in',
+    )
     await expect(middle).not.toContainText('The whisper comes once more')
     await expect(middle).not.toContainText('let them rest')
 

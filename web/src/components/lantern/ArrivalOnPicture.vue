@@ -20,7 +20,8 @@ import { useSettingsStore } from '@/stores/useSettingsStore'
  * The arrival told on the middle of the room's picture, like a film title:
  * light serif text with a soft dark glow, no paper, at most 760 px wide. First
  * what happens as the player arrives (in italics), then the room's
- * description, the spoken word lit while the narrator tells it. Under it a
+ * description under a heading ("You are in" and the room's name, lit as
+ * the narrator says it), the spoken word lit while the narrator tells it. Under it a
  * small dark pill holds the hint and, while nobody speaks the part, a thin bar
  * that empties over its reading time. A click anywhere on the picture goes on
  * (`useArrivalStore`).
@@ -69,7 +70,7 @@ const { html, mark } = useReadAlong(() => arrival.turnId ?? 0, root)
 const twin = ref<HTMLElement | null>(null)
 /** The pill under the text. */
 const pill = ref<HTMLElement | null>(null)
-/** The head of a piece of quest news (seal, heading, name), above the text. */
+/** The head above the text: a piece of quest news (seal, heading, name), or a first visit's "You are in" and the room. */
 const head = ref<HTMLElement | null>(null)
 /** The quest news of the part up, or null. */
 const news = computed(() => arrival.part?.news ?? null)
@@ -118,7 +119,9 @@ function room(): number {
   const style = getComputedStyle(stage)
   const padding =
     (parseFloat(style.paddingTop) || 0) + (parseFloat(style.paddingBottom) || 0)
-  const trim = head.value && props.sideways ? SIDEWAYS_TITLE_TRIM : 0
+  // Only a news head gives the 2 px back on a sideways phone; the room's heading does not.
+  const trim =
+    head.value && piece.value && props.sideways ? SIDEWAYS_TITLE_TRIM : 0
   const gaps = (head.value ? 2 * CARD_GAP : CARD_GAP) - trim
   return (
     stage.clientHeight -
@@ -365,6 +368,21 @@ onBeforeUnmount(() => {
             v-html="html(piece.name, arrival.part.lines[0].unit, 1, 2)"
           ></p>
           <!-- eslint-enable vue/no-v-html -->
+        </div>
+        <div
+          v-else-if="arrival.part.kind === 'description' && arrival.part.room"
+          ref="head"
+          class="lq-room-head"
+          data-testid="arrival-room"
+        >
+          <p class="lq-room-kicker">You are in</p>
+          <!-- eslint-disable vue/no-v-html -->
+          <p
+            class="lq-room-head-name"
+            v-html="html(arrival.part.room, arrival.part.lines[0].unit, 0, 1)"
+          ></p>
+          <!-- eslint-enable vue/no-v-html -->
+          <span class="lq-room-head-rule"></span>
         </div>
         <!-- eslint-disable vue/no-v-html -->
         <div
@@ -687,6 +705,42 @@ onBeforeUnmount(() => {
 /* A spell's heading is violet, on the picture and on the paper (after the quest rules, which it outweighs). */
 .lq-arrival-stage .lq-news-kicker.lq-news-kicker-spell {
   color: var(--lq-spell);
+}
+/* A first visit's heading: "You are in" and the room, as the room's title has them. */
+.lq-room-head {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+.lq-room-kicker {
+  margin: 0;
+  font-family: var(--lq-font-ui);
+  font-size: 12px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+}
+.lq-room-head-name {
+  margin: 0;
+  font-family: var(--lq-font-display);
+  font-size: calc(44px * var(--lq-display-scale, 1));
+  font-weight: 500;
+  line-height: 1.1;
+}
+.lq-phone-arrival .lq-room-head-name,
+.lq-sideways-arrival .lq-room-head-name {
+  font-size: calc(30px * var(--lq-display-scale, 1));
+}
+.lq-room-head-rule {
+  width: 120px;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgb(255 230 180 / 0.8),
+    transparent
+  );
 }
 .lq-news-name {
   margin: 0;

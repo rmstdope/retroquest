@@ -568,7 +568,7 @@ describe('LanternLayout', () => {
     })
   })
 
-  it('opens the menu from a Here chip in the laptop room card', async () => {
+  it('lists no one and nothing in the laptop room card', async () => {
     vi.stubGlobal(
       'matchMedia',
       vi.fn(() => ({
@@ -579,25 +579,12 @@ describe('LanternLayout', () => {
     )
     wrapper = mount(LanternLayout, { attachTo: document.body })
     const game = useGameStore()
-    game.acceptInput = true
     game.items = ["Elior's Journal"]
+    game.characters = ['grandmother']
     await flushPromises()
-    const submit = vi.spyOn(game, 'submitCommand').mockImplementation(() => {})
-
-    await wrapper
-      .get('[aria-label="Current location"] button.lq-here-item')
-      .trigger('click')
-    const items = wrapper.findAll('[role="menuitem"]')
-    expect(items.map((m) => m.text())).toEqual([
-      'Take',
-      'Use',
-      'Open',
-      'Close',
-      'Examine',
-    ])
-    await items[2].trigger('click')
-
-    expect(submit).toHaveBeenCalledWith("open elior's journal")
+    const plate = wrapper.get('[aria-label="Current location"]')
+    expect(plate.findAll('button')).toHaveLength(0)
+    expect(plate.text()).not.toContain('Journal')
     vi.unstubAllGlobals()
   })
 
