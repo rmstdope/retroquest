@@ -52,6 +52,41 @@ describe('useRoomTitleStore', () => {
     expect(title.name).toBeNull()
   })
 
+  it('leaves a revisit whose turn tells quest news on the picture to the news, settled', async () => {
+    title.settle()
+    await enter('Village Well', {
+      ...moveTurn(2, false),
+      quests: [
+        {
+          kind: 'new',
+          main: false,
+          name: 'Magnet fishing expedition',
+          text: '',
+        },
+      ],
+    } as unknown as Turn)
+    expect(title.name).toBeNull()
+  })
+
+  it('leaves a revisit whose turn tells a learned spell on the picture to the news, settled', async () => {
+    title.settle()
+    await enter('Village Well', {
+      ...moveTurn(2, false),
+      spells: [{ name: 'Lumina', text: '' }],
+    } as unknown as Turn)
+    expect(title.name).toBeNull()
+  })
+
+  it('greets a load whose restored turn had news, which is not told again', async () => {
+    await enter('Village Well', {
+      ...moveTurn(2, false),
+      narrate: undefined,
+      restored: true,
+      spells: [{ name: 'Lumina', text: '' }],
+    } as unknown as Turn)
+    expect(title.name).toBe('Village Well')
+  })
+
   it('settles after its time', async () => {
     await enter('Village Square', moveTurn(2, false))
     vi.advanceTimersByTime(ROOM_TITLE_MS - 1)
