@@ -81,7 +81,7 @@ export const useRoomTitleStore = defineStore('roomTitle', () => {
   /**
    * Greet the room waiting for it, or let it pass: on the text page, on a
    * first visit, whose arrival is headed by the name, or on a turn that tells
-   * news in the middle (a load's restored turn tells none).
+   * news in the middle (a played turn: a load's turns tell none again).
    */
   function consider(): void {
     if (!pending || !ready()) return
@@ -89,7 +89,7 @@ export const useRoomTitleStore = defineStore('roomTitle', () => {
     const latest = game.turns.at(-1)
     const middleTaken =
       !!latest &&
-      (arrivesOnPicture(latest) || (!latest.restored && newsOnPicture(latest)))
+      (arrivesOnPicture(latest) || (!!latest.narrate && newsOnPicture(latest)))
     if (!staged.value || middleTaken) settle()
     else greet(game.roomName)
   }

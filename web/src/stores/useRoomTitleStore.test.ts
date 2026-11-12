@@ -71,6 +71,7 @@ describe('useRoomTitleStore', () => {
   it('greets a load whose restored turn had news, which is not told again', async () => {
     await enter('Village Well', {
       ...moveTurn(2, false),
+      narrate: undefined,
       restored: true,
       spells: [{ name: 'Lumina', text: '' }],
     } as unknown as Turn)
