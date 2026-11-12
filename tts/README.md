@@ -6,7 +6,7 @@ everything else here is tooling and stays outside the build.
 
 ## Setup
 
-- [Content Studio](https://github.com/rmstdope/audio-studio), installed once with `bun link`, records
+- [Content Studio](https://github.com/rmstdope/content-studio), installed once with `bun link`, records
   the narration (see *Recording an act*).
 - `FISH_AUDIO_API_KEY=…` in the repository's `.env` (gitignored), or in the environment.
 - `ffmpeg` (for Content Studio, `level.py` and `check.py`), [uv](https://docs.astral.sh/uv/) (Content
@@ -14,7 +14,7 @@ everything else here is tooling and stays outside the build.
 
 ## Recording an act
 
-An act's narration is recorded with [Content Studio](https://github.com/rmstdope/audio-studio),
+An act's narration is recorded with [Content Studio](https://github.com/rmstdope/content-studio),
 from a script of every line the story reads aloud. Run `content-studio` in the repository root: it
 reads `content-studio.json` and opens in the browser. There a character is cast by audition (Fish's
 library searched by keywords, rounds of takes of a phrase), and an act is generated: missing lines

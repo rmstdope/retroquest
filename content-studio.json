@@ -1,5 +1,5 @@
 {
-  "$schema": "https://raw.githubusercontent.com/rmstdope/audio-studio/main/schema/content-studio.schema.json",
+  "$schema": "https://raw.githubusercontent.com/rmstdope/content-studio/main/schema/content-studio.schema.json",
   "version": 2,
   "name": "RetroQuest",
   "description": "A retro-style text adventure played in the browser. A warm storyteller narrates; the characters are the people Elior meets on his journey.",
