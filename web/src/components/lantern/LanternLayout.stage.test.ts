@@ -24,6 +24,7 @@ describe('LanternLayout: one thing open on the stage', () => {
       })),
     )
     await startedHoldStore()
+    useGameStore().showTitle = false
     w = mount(LanternLayout, { attachTo: document.body })
     await w.vm.$nextTick()
   })
