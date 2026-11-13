@@ -323,6 +323,7 @@ onBeforeUnmount(() => {
         v-if="arrival.part"
         :key="`${arrival.part.kind}-${arrival.part.lines[0]?.unit}`"
         class="lq-arrival-card"
+        :class="{ 'lq-arrival-rise': arrival.part.kind === 'description' }"
       >
         <div v-if="piece" ref="head" class="lq-news-head">
           <div class="lq-news-top">
@@ -811,6 +812,10 @@ onBeforeUnmount(() => {
 .lq-arrival-fade-enter-active,
 .lq-arrival-fade-leave-active {
   transition: opacity calc(0.15s * var(--lq-motion));
+}
+/* A first visit's description rises slowly over the picture that just came up. */
+.lq-arrival-fade-enter-active.lq-arrival-rise {
+  transition: opacity calc(1.6s * var(--lq-motion)) ease;
 }
 .lq-arrival-fade-enter-from,
 .lq-arrival-fade-leave-to {

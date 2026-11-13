@@ -8,6 +8,7 @@ import {
   useSceneStore,
   SCENE_HALF_MS,
   INTERLUDE_FADE_MS,
+  INTERLUDE_RISE_MS,
 } from '@/stores/useSceneStore'
 import { useNarrationStore } from '@/stores/useNarrationStore'
 import { useArrivalStore } from '@/stores/useArrivalStore'
@@ -299,7 +300,7 @@ describe('LanternLayout: change of scene', () => {
     expect(useArrivalStore().active).toBe(false)
     // Once it is read, the cottage rises and its room is told.
     vi.advanceTimersByTime(readingTimeMs(markupOf(blocks[waking])))
-    vi.advanceTimersByTime(INTERLUDE_FADE_MS + SCENE_HALF_MS)
+    vi.advanceTimersByTime(INTERLUDE_FADE_MS + INTERLUDE_RISE_MS)
     await w.vm.$nextTick()
     expect(scene.turn).toBeNull()
     expect(game.roomName).toBe("Elior's Cottage")
@@ -369,7 +370,7 @@ describe('LanternLayout: change of scene', () => {
     vi.advanceTimersByTime(INTERLUDE_FADE_MS)
     await w.vm.$nextTick()
     expect(scene.phase).toBe('in')
-    vi.advanceTimersByTime(SCENE_HALF_MS)
+    vi.advanceTimersByTime(INTERLUDE_RISE_MS)
     await w.vm.$nextTick()
     expect(scene.phase).toBe('idle')
     expect(game.roomName).toBe("Elior's Cottage")
@@ -573,7 +574,7 @@ describe('LanternLayout: change of scene', () => {
     await w.vm.$nextTick()
     expect(scene.phase).toBe('dark')
     expect(useArrivalStore().active).toBe(false)
-    await vi.advanceTimersByTimeAsync(INTERLUDE_FADE_MS + SCENE_HALF_MS)
+    await vi.advanceTimersByTimeAsync(INTERLUDE_FADE_MS + INTERLUDE_RISE_MS)
     await w.vm.$nextTick()
     expect(scene.turn).toBeNull()
     expect(game.roomName).toBe("Elior's Cottage")

@@ -7,6 +7,9 @@ export const SCENE_HALF_MS = 1000
 /** How long the dark waits for an interlude's words to fade out before the new picture rises, in ms. */
 export const INTERLUDE_FADE_MS = 1200
 
+/** How long the new picture takes to rise out of a dark that told an interlude, in ms: slower than an ordinary change. */
+export const INTERLUDE_RISE_MS = 2600
+
 /** The narrator's paragraph that tells a move, told in the middle of the dark between the two pictures. */
 export interface SceneInterlude {
   /** Its unit in the turn. */
@@ -33,7 +36,8 @@ export type ScenePhase = 'idle' | 'out' | 'dark' | 'in'
  * `SCENE_HALF_MS` (two, when its patches are still loading: `awaitMore`); after that, or when it is missing, the paper backdrop
  * ('') rises instead. A change may carry an interlude (`begin`): the dark
  * then holds, telling it, until `endInterlude` and the fade of its words
- * (`INTERLUDE_FADE_MS`); its words are let through
+ * (`INTERLUDE_FADE_MS`), and the new picture then rises slowly
+ * (`INTERLUDE_RISE_MS`); its words are let through
  * while what comes after it still waits. Nothing here is saved.
  */
 export const useSceneStore = defineStore('scene', () => {
@@ -55,6 +59,8 @@ export const useSceneStore = defineStore('scene', () => {
   let planned: SceneInterlude | null = null
   /** The told interlude's words fading out in the dark; the picture rises after. */
   let fading: ReturnType<typeof setTimeout> | undefined
+  /** How long the rise under way (or the next one) takes, in ms: `INTERLUDE_RISE_MS` after an interlude, else `SCENE_HALF_MS`. */
+  const riseMs = ref(SCENE_HALF_MS)
   /** Whether the target has loaded (true), is missing (false), or is not known yet (null). */
   const ready = ref<boolean | null>(null)
   /** The turn whose change has just reached its darkest moment (the room's name changes), until it is up. */
@@ -124,6 +130,7 @@ export const useSceneStore = defineStore('scene', () => {
   ): void {
     skip()
     planned = told
+    riseMs.value = SCENE_HALF_MS
     turn.value = id
     from.value = start
     target.value = src
@@ -139,6 +146,7 @@ export const useSceneStore = defineStore('scene', () => {
     if (planned && turn.value !== null) {
       phase.value = 'dark'
       interlude.value = { turn: turn.value, ...planned }
+      riseMs.value = INTERLUDE_RISE_MS
       // The interlude's own words come now; what is after it waits for the picture.
       from.value = planned.unit + 1
       planned = null
@@ -152,12 +160,12 @@ export const useSceneStore = defineStore('scene', () => {
     } else rise()
   }
 
-  /** The new picture rises out of the dark. */
+  /** The new picture rises out of the dark (`riseMs`). */
   function rise(): void {
     if (!ready.value) target.value = ''
     phase.value = 'in'
     stopTimer()
-    timer = setTimeout(finish, SCENE_HALF_MS)
+    timer = setTimeout(finish, riseMs.value)
   }
 
   /** The target picture has loaded (true) or cannot be (false). */
@@ -243,6 +251,7 @@ export const useSceneStore = defineStore('scene', () => {
     target,
     turn,
     ready,
+    riseMs,
     darkTurn,
     interlude,
     settled,

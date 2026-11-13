@@ -4,6 +4,7 @@ import {
   useSceneStore,
   SCENE_HALF_MS,
   INTERLUDE_FADE_MS,
+  INTERLUDE_RISE_MS,
 } from './useSceneStore'
 
 describe('useSceneStore', () => {
@@ -57,9 +58,30 @@ describe('useSceneStore', () => {
       expect(scene.phase).toBe('dark')
       vi.advanceTimersByTime(1)
       expect(scene.phase).toBe('in')
-      vi.advanceTimersByTime(SCENE_HALF_MS)
+      // Out of the told dark, the new picture rises slowly.
+      expect(scene.riseMs).toBe(INTERLUDE_RISE_MS)
+      vi.advanceTimersByTime(INTERLUDE_RISE_MS - 1)
+      expect(scene.phase).toBe('in')
+      expect(onUp).not.toHaveBeenCalled()
+      vi.advanceTimersByTime(1)
       expect(scene.phase).toBe('idle')
       expect(onUp).toHaveBeenCalledTimes(1)
+    })
+
+    it('rises at the usual pace again on the next change, without an interlude', () => {
+      const scene = useSceneStore()
+      scene.settled('a.png')
+      scene.begin(4, 'b.png', () => {}, 3, waking)
+      scene.targetReady(true)
+      vi.advanceTimersByTime(SCENE_HALF_MS)
+      scene.endInterlude()
+      vi.advanceTimersByTime(INTERLUDE_FADE_MS + INTERLUDE_RISE_MS)
+      expect(scene.phase).toBe('idle')
+      scene.begin(5, 'c.png', () => {})
+      scene.targetReady(true)
+      vi.advanceTimersByTime(SCENE_HALF_MS)
+      expect(scene.phase).toBe('in')
+      expect(scene.riseMs).toBe(SCENE_HALF_MS)
     })
 
     it('rises when the picture loads after the interlude was let go', () => {

@@ -731,6 +731,24 @@ describe('ArrivalOnPicture', () => {
     })
   })
 
+  describe('a first visit', () => {
+    it("marks the room's description as the card that rises slowly", async () => {
+      const w = mount(ArrivalOnPicture, { props: { pictured: true } })
+      useArrivalStore().show(1, [description, events], false)
+      await w.vm.$nextTick()
+      expect(w.get('.lq-arrival-card').classes()).toContain('lq-arrival-rise')
+    })
+
+    it('keeps the quick change for the messages after it', async () => {
+      const w = mount(ArrivalOnPicture, { props: { pictured: true } })
+      useArrivalStore().show(1, [events], false)
+      await w.vm.$nextTick()
+      expect(w.get('.lq-arrival-card').classes()).not.toContain(
+        'lq-arrival-rise',
+      )
+    })
+  })
+
   describe('on a sideways phone (rq-dpom)', () => {
     const done: QuestNews = {
       kind: 'completed',
