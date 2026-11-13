@@ -22,6 +22,7 @@ function gameInUnlockedShed(): Game {
 function lantern(game: Game, lit: boolean): Lantern {
   const lamp = new Lantern()
   if (lit) {
+    lamp.lit = true
     lamp.name = 'lantern (lit)'
     lamp.shortName = 'lantern'
   }

@@ -1,5 +1,6 @@
 import { Item, type GameState, clue } from '@/engine'
 import { Coin } from './Coin'
+import { VegetableField } from '../rooms/VegetableField'
 import { FLAG_RUSTY_HOE_FIRST_COIN_FOUND } from '../Act1StoryFlags'
 
 /** Gardening hoe with a rusted blade and splintered handle. */
@@ -15,7 +16,7 @@ export class RustyHoe extends Item {
 
   /** Till the field to find its one coin, otherwise fail. */
   override use(gameState: GameState): string {
-    if (gameState.currentRoom.name === 'Vegetable Field') {
+    if (gameState.currentRoom instanceof VegetableField) {
       if (!gameState.getStoryFlag(FLAG_RUSTY_HOE_FIRST_COIN_FOUND)) {
         gameState.setStoryFlag(FLAG_RUSTY_HOE_FIRST_COIN_FOUND, true)
         gameState.addItemToInventory(new Coin())

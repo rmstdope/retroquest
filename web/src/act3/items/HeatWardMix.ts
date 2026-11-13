@@ -1,4 +1,5 @@
 import { Item, type GameState } from '@/engine'
+import { FumarolePassages } from '../rooms/FumarolePassages'
 
 /** Something that can have the heat-ward mix applied to it (an item or the room). */
 type HeatWardTarget = {
@@ -41,7 +42,7 @@ export class HeatWardMix extends Item {
   /** Use the mix in the current room if applicable (Fumarole Passages). */
   override use(gameState: GameState): string {
     const room = gameState.currentRoom
-    if (room.name !== 'Fumarole Passages') {
+    if (!(room instanceof FumarolePassages)) {
       return (
         `[failure]You can't use ${this.nameInSentence()} ` +
         'usefully here.[/failure]'

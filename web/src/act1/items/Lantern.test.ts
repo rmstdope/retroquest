@@ -56,4 +56,34 @@ describe('Lantern', () => {
 
     expect(loaded.state.inventory.some((i) => i instanceof Lantern)).toBe(true)
   })
+
+  it('knows it is lit from a field, whatever it is called', () => {
+    const game = cottageGame()
+    const lantern = new Lantern()
+    lantern.use(game.state)
+    lantern.name = 'brass lamp'
+
+    expect(lantern.isLit()).toBe(true)
+    expect(lantern.use(game.state)).toContain('already lit')
+  })
+
+  it('reads a lit lantern from a save made before the field as lit', () => {
+    const game = cottageGame()
+    const lantern = new Lantern()
+    lantern.use(game.state)
+    Reflect.deleteProperty(lantern, 'lit')
+
+    lantern.migrateLegacyState()
+
+    expect(lantern.isLit()).toBe(true)
+  })
+
+  it('reads an unlit lantern from a save made before the field as dark', () => {
+    const lantern = new Lantern()
+    Reflect.deleteProperty(lantern, 'lit')
+
+    lantern.migrateLegacyState()
+
+    expect(lantern.isLit()).toBe(false)
+  })
 })

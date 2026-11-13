@@ -1,3 +1,4 @@
+import { RoadToGreendale } from '../rooms/RoadToGreendale'
 import {
   Item,
   type Quest,
@@ -271,7 +272,7 @@ export class GameMap extends Item {
    * and completes the act; elsewhere, or when not ready, only describes the map.
    */
   override use(gameState: GameState): string {
-    if (gameState.currentRoom.name.toLowerCase() === 'road to greendale') {
+    if (gameState.currentRoom instanceof RoadToGreendale) {
       const missingRequirements = GameMap.unfinishedBeforeTheRoad(gameState)
       if (missingRequirements.length > 0) {
         const last = missingRequirements.pop()

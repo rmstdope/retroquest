@@ -1,5 +1,6 @@
 import { Game } from '@/engine'
 import { Act2 } from './Act2'
+import { Ravine } from './items/Ravine'
 import { QualityRope } from './items/QualityRope'
 import { ForestSpeechSpell } from './spells/ForestSpeechSpell'
 import { NatureSenseSpell } from './spells/NatureSenseSpell'
@@ -16,7 +17,7 @@ export function setupForestEntrance(): Game {
 
 /** Whether the ravine is among the things in the player's current room. */
 export function ravineHere(game: Game): boolean {
-  return game.state.currentRoom.items.some((i) => i.name === 'ravine')
+  return game.state.currentRoom.items.some((i) => i instanceof Ravine)
 }
 
 /** Save and load into a fresh game, as a player reloading would. */

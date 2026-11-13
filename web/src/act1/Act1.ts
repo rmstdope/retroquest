@@ -17,6 +17,8 @@ import { VillageChapel } from './rooms/VillageChapel'
 import { RoadToGreendale } from './rooms/RoadToGreendale'
 import { Hearth } from './items/Hearth'
 import { Lantern } from './items/Lantern'
+import { Bucket } from './items/Bucket'
+import { WitheredCarrot } from './items/WitheredCarrot'
 import { Bread } from './items/Bread'
 import { Scenery } from './items/Scenery'
 import { Vines } from './items/Vines'
@@ -119,6 +121,7 @@ export class Act1 extends Act {
     if (!rooms.EliorsCottage.getItemByName('hearth')) {
       rooms.EliorsCottage.addItem(new Hearth())
     }
+    this.migrateLegacyItemState(gameState)
     this.restoreCottageLoaf(gameState)
     this.restoreLanternLit(gameState)
     for (const [roomKey, room] of Object.entries(rooms)) {
@@ -141,6 +144,27 @@ export class Act1 extends Act {
         }
         if (character instanceof Villager) character.migrateLegacyName()
         if (character instanceof Blacksmith) character.migrateLegacyName()
+      }
+    }
+  }
+
+  /**
+   * Give the bucket, the carrot and the lantern of an older save the state
+   * field they now keep, read from how they were then told apart. Runs
+   * before anything that asks whether the lantern is lit.
+   */
+  private migrateLegacyItemState(gameState: GameState): void {
+    const items = [
+      ...gameState.inventory,
+      ...Object.values(gameState.allRooms).flatMap((room) => room.items),
+    ]
+    for (const item of items) {
+      if (
+        item instanceof Bucket ||
+        item instanceof WitheredCarrot ||
+        item instanceof Lantern
+      ) {
+        item.migrateLegacyState()
       }
     }
   }

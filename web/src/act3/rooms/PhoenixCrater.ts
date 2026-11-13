@@ -39,7 +39,7 @@ export class PhoenixCrater extends Room {
 
   /** Whether the Phoenix has appeared. */
   private phoenixPresent(): boolean {
-    return this.characters.some((c) => c.name.toLowerCase() === 'phoenix')
+    return this.characters.some((c) => c instanceof Phoenix)
   }
 
   /**

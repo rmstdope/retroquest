@@ -43,3 +43,12 @@ describe('RustyHoe coin discovery', () => {
     expect(restoredGame.state.getItemCount('coin')).toBe(0)
   })
 })
+
+describe('RustyHoe room check', () => {
+  it('tills the field by what the room is, not by what it is called', () => {
+    const { game, hoe } = gameInField()
+    game.state.currentRoom.name = 'The Parched Plot'
+
+    expect(hoe.use(game.state)).toContain('unearth')
+  })
+})
