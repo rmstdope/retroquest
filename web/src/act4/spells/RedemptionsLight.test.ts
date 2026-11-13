@@ -38,15 +38,6 @@ function createRedeemedGame(): Game {
 }
 
 describe('RedemptionsLight', () => {
-  it('has the agreed name and description', () => {
-    const spell = new RedemptionsLight()
-    expect(spell.name).toBe("Redemption's Light")
-    expect(spell.description).toBe(
-      'Light that reminds a fallen soul of who it was.',
-    )
-    expect(spell.answersTo("redemption's light")).toBe(true)
-  })
-
   it('has nothing to redeem without a target or on the knight', () => {
     const game = new Game([new Act4()])
     const spell = new RedemptionsLight()

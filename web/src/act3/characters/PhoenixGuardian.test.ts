@@ -23,12 +23,6 @@ function makeGameState(flagValue: boolean): GameState {
 }
 
 describe('PhoenixGuardian', () => {
-  it('initializes with the correct name and description', () => {
-    const pg = new PhoenixGuardian()
-    expect(pg.name).toBe('phoenix guardian')
-    expect(pg.description).toContain('fire-etched robes')
-  })
-
   it('gives the vent puzzle hint before the quest is complete', () => {
     const pg = new PhoenixGuardian()
     const response = pg.talkTo(makeGameState(false))

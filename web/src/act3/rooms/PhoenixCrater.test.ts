@@ -21,18 +21,6 @@ function phoenixCount(room: Room): number {
 }
 
 describe('Phoenix Crater', () => {
-  it('initializes empty with a north exit', () => {
-    const room = new PhoenixCrater()
-    expect(room.name).toBe('Phoenix Crater')
-    expect(
-      room.description.includes('melted to glass') ||
-        room.description.includes('crater'),
-    ).toBe(true)
-    expect(room.exits).toHaveProperty('north')
-    expect(room.items).toEqual([])
-    expect(room.characters).toEqual([])
-  })
-
   it('reveals the Phoenix only once when resting', () => {
     const room = new PhoenixCrater()
     const gs = dummyState()

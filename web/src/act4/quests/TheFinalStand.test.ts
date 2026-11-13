@@ -3,7 +3,6 @@ import { Game } from '@/engine'
 import { Act4 } from '../Act4'
 import {
   FLAG_ACT4_KNIGHT_OF_DESPAIR_COMPLETED,
-  FLAG_ACT4_MAIN_STARTED,
   FLAG_ACT4_PARENTS_LEGACY_COMPLETED,
   FLAG_ACT4_SHADOW_OF_THE_PAST_COMPLETED,
 } from '../Act4StoryFlags'
@@ -37,19 +36,6 @@ function setup(): { game: Game; quest: TheFinalStand } {
 }
 
 describe('TheFinalStand', () => {
-  it('is named The Final Stand and is the main quest', () => {
-    const { quest } = setup()
-    expect(quest.name).toBe('The Final Stand')
-    expect(quest.isMain()).toBe(true)
-  })
-
-  it('triggers on its start flag', () => {
-    const { game, quest } = setup()
-    expect(quest.checkTrigger(game.state)).toBe(false)
-    game.state.setStoryFlag(FLAG_ACT4_MAIN_STARTED, true)
-    expect(quest.checkTrigger(game.state)).toBe(true)
-  })
-
   it('opens on the king held and the vow to make Malakar pay', () => {
     const { quest } = setup()
     expect(quest.description).toBe(

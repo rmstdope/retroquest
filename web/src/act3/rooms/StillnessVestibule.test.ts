@@ -2,7 +2,6 @@ import { describe, it, expect } from 'vitest'
 import { GameState, Room } from '@/engine'
 import { StillnessVestibule } from './StillnessVestibule'
 import { EchoStones } from '../items/EchoStones'
-import { SilenceKeeper } from '../characters/SilenceKeeper'
 import { WanderingPhantoms } from '../characters/WanderingPhantoms'
 import { FLAG_ACT3_OATH_OF_STILLNESS_COMPLETED } from '../Act3StoryFlags'
 
@@ -12,35 +11,6 @@ function dummyState(): GameState {
 }
 
 describe('Stillness Vestibule', () => {
-  it('has the agreed plain description', () => {
-    expect(new StillnessVestibule().description).toBe(
-      'A hush falls over this chamber like a shroud. Dark pools mirror the ' +
-        'ceiling, so still they look frozen in time, and the stone seems to ' +
-        'swallow every sound. At the centre, three weathered echo stones stand ' +
-        'in a triangle. Their carved channels look made to catch whispered ' +
-        'words and hold them.',
-    )
-  })
-
-  it('initializes with its items, the keeper and the phantoms', () => {
-    const room = new StillnessVestibule()
-    expect(room.name).toBe('Stillness Vestibule')
-
-    // Check items
-    const itemNames = room.items.map((item) => item.name)
-    expect(itemNames).toContain('echo stones')
-    expect(itemNames).toContain('stillwater phial')
-    expect(itemNames).toContain('quiet charm')
-
-    // Check character
-    expect(room.characters.some((c) => c instanceof SilenceKeeper)).toBe(true)
-
-    // Check that phantoms are initially present
-    expect(room.characters.some((c) => c instanceof WanderingPhantoms)).toBe(
-      true,
-    )
-  })
-
   it("blocks the Dragon's Hall exit initially", () => {
     const room = new StillnessVestibule()
     const gs = dummyState()

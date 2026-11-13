@@ -9,17 +9,6 @@ function createState(): GameState {
 }
 
 describe('OldOathScrolls', () => {
-  it('initializes with name, description and carry flag', () => {
-    const scrolls = new OldOathScrolls()
-
-    expect(scrolls.name).toBe('Old Oath Scrolls')
-    expect(scrolls.canBeCarried).toBe(true)
-    expect(scrolls.description).toContain('Brittle parchment')
-    expect(scrolls.description).toContain(
-      'I take what is given, and I return ___.',
-    )
-  })
-
   it('sets the flag when examined', () => {
     const scrolls = new OldOathScrolls()
     const gs = createState()

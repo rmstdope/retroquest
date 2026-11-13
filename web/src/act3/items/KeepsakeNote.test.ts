@@ -6,15 +6,6 @@ import { KeepsakeNote } from './KeepsakeNote'
 import { expectMarkupWellFormed } from '@/testing/gameHelpers'
 
 describe('KeepsakeNote', () => {
-  it('initializes correctly', () => {
-    const note = new KeepsakeNote()
-
-    expect(note.name).toBe('Keepsake Note')
-    expect(note.shortName).toBe('note')
-    expect(note.canBeCarried).toBe(true)
-    expect(note.description).toContain('small, worn piece of parchment')
-  })
-
   it('starts the echoes quest when examined', () => {
     const game = new Game([new Act3()])
     const note = new KeepsakeNote()

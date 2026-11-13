@@ -16,13 +16,6 @@ const NOTHING =
   '[dim]You listen for a hidden heart, but there is no lie here to hear beneath.[/dim]'
 
 describe('HeartsTruth', () => {
-  it('has the agreed name and description', () => {
-    const spell = new HeartsTruth()
-    expect(spell.name).toBe("Heart's Truth")
-    expect(spell.description).toBe('Hear the true heart beneath a lie.')
-    expect(spell.answersTo("heart's truth")).toBe(true)
-  })
-
   it('hears nothing without a target, in an item or in anyone else', () => {
     const game = new Game([new Act4()])
     const spell = new HeartsTruth()

@@ -711,13 +711,16 @@ describe('Shopkeeper named as Hemlock, a proper name', () => {
     ).toBe(true)
   })
 
-  it.each(['rope', 'apple', 'matches', 'sword', 'armor'])(
-    'stops an unpaid %s as "Hemlock"',
-    (ware) => {
-      const answer = gameInStore().commandParser.parse(`take ${ware}`)
-      expect(answer).toContain(`${HEMLOCK} quickly steps over.`)
-    },
-  )
+  it('stops every unpaid ware as "Hemlock"', () => {
+    const wares = ['rope', 'apple', 'matches', 'sword', 'armor']
+    const failures = wares.filter(
+      (ware) =>
+        !gameInStore()
+          .commandParser.parse(`take ${ware}`)
+          .includes(`${HEMLOCK} quickly steps over.`),
+    )
+    expect(failures).toEqual([])
+  })
 
   it.each([
     ['talks while the store is shut', { shopOpen: false }],

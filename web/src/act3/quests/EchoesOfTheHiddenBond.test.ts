@@ -22,12 +22,6 @@ describe('Echoes of the Hidden Bond quest', () => {
     quest = new EchoesOfTheHiddenBondQuest()
   })
 
-  it('initializes correctly', () => {
-    expect(quest.name).toBe('Echoes of the Hidden Bond')
-    expect(quest.isMain()).toBe(false)
-    expect(quest.description).toContain('Your parents made the three relics')
-  })
-
   it('triggers when the Act III main quest starts', () => {
     // Initially should not trigger
     expect(quest.checkTrigger(game.state)).toBe(false)

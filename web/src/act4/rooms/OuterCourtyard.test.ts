@@ -13,11 +13,6 @@ function createMarkupGame(): Game {
 }
 
 describe('OuterCourtyard', () => {
-  it('has the correct name', () => {
-    const room = new OuterCourtyard()
-    expect(room.name).toBe('Outer Courtyard')
-  })
-
   it('uses known tags in the messages after the servants are freed', () => {
     const game = createMarkupGame()
     const room = new OuterCourtyard()

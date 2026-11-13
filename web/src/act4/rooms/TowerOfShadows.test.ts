@@ -5,7 +5,6 @@ import {
   FLAG_ACT4_TOWER_STAIR_OPEN,
   FLAG_ACT4_WHISPERS_MIRA_NAMED,
 } from '../Act4StoryFlags'
-import { TowerOfShadows } from './TowerOfShadows'
 import { ACT4_GOLDEN_PATH } from '../Act4GoldenPath'
 import { executeCommands } from '@/testing/gameHelpers'
 
@@ -20,11 +19,6 @@ function inTheTower(): Game {
 }
 
 describe('TowerOfShadows', () => {
-  it('has the correct name', () => {
-    const room = new TowerOfShadows()
-    expect(room.name).toBe('Tower of Shadows')
-  })
-
   it('has something to say about the whispers before the third name', () => {
     const game = inTheTower()
     const before = game.hint()

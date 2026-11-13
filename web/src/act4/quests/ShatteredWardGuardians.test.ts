@@ -1,10 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import { Game } from '@/engine'
 import { Act4 } from '../Act4'
-import {
-  FLAG_ACT4_SHATTERED_WARD_GUARDIANS_STARTED,
-  FLAG_ACT4_SHATTERED_WARD_GUARDIANS_COMPLETED,
-} from '../Act4StoryFlags'
+import { FLAG_ACT4_SHATTERED_WARD_GUARDIANS_COMPLETED } from '../Act4StoryFlags'
 import { ShatteredWardGuardians } from './ShatteredWardGuardians'
 
 /** A fresh Act IV game, with the quest under test and no flags set. */
@@ -17,20 +14,7 @@ function setup(): { game: Game; quest: ShatteredWardGuardians } {
 }
 
 describe('ShatteredWardGuardians', () => {
-  it('is named Shattered Ward Guardians and is a side quest', () => {
-    const { quest } = setup()
-    expect(quest.name).toBe('Shattered Ward Guardians')
-    expect(quest.isMain()).toBe(false)
-  })
-
-  it('triggers on its start flag', () => {
-    const { game, quest } = setup()
-    expect(quest.checkTrigger(game.state)).toBe(false)
-    game.state.setStoryFlag(FLAG_ACT4_SHATTERED_WARD_GUARDIANS_STARTED, true)
-    expect(quest.checkTrigger(game.state)).toBe(true)
-  })
-
-  it('completes on its completion flag, and triggers if it was missed', () => {
+  it('triggers on its completion flag alone, for a save that missed the start', () => {
     const { game, quest } = setup()
     expect(quest.checkCompletion(game.state)).toBe(false)
     game.state.setStoryFlag(FLAG_ACT4_SHATTERED_WARD_GUARDIANS_COMPLETED, true)

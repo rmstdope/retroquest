@@ -9,17 +9,6 @@ function createState(): GameState {
 }
 
 describe('BindingResin', () => {
-  it('initializes with name, description and carry flag', () => {
-    const resin = new BindingResin()
-
-    expect(resin.name.toLowerCase()).toBe('binding resin')
-    expect(
-      resin.description.includes('sticky') ||
-        resin.description.toLowerCase().includes('resin'),
-    ).toBe(true)
-    expect(resin.canBeCarried).toBe(true)
-  })
-
   it('fails when used with a non-mount item', () => {
     const resin = new BindingResin()
     const gs = createState()

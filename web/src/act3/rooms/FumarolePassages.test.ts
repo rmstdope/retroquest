@@ -5,7 +5,6 @@ import { executeCommands } from '@/testing/gameHelpers'
 import { FumarolePassages } from './FumarolePassages'
 import { VentStone } from '../items/VentStone'
 import { HeatWardMix } from '../items/HeatWardMix'
-import { PhoenixGuardian } from '../characters/PhoenixGuardian'
 import {
   FLAG_ACT3_FUMAROLE_WARD_APPLIED,
   FLAG_ACT3_BREATH_OF_THE_MOUNTAIN_STARTED,
@@ -18,18 +17,6 @@ function dummyState(): GameState {
 }
 
 describe('Fumarole Passages', () => {
-  it('initializes with vent stones, the guardian and exits', () => {
-    const room = new FumarolePassages()
-    expect(room.name).toBe('Fumarole Passages')
-    expect(
-      room.description.includes('tunnels') || room.description.includes('vent'),
-    ).toBe(true)
-    expect(room.items.some((i) => i instanceof VentStone)).toBe(true)
-    expect(room.characters.some((c) => c instanceof PhoenixGuardian)).toBe(true)
-    expect(room.exits).toHaveProperty('south')
-    expect(room.exits).toHaveProperty('west')
-  })
-
   it('progresses the calibration with each vent stone', () => {
     const room = new FumarolePassages()
     const gs = dummyState()

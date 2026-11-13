@@ -10,6 +10,10 @@ function createState(): GameState {
 }
 
 describe('TeleportationFocus', () => {
+  it('cannot be carried', () => {
+    expect(new TeleportationFocus().canBeCarried).toBe(false)
+  })
+
   it('exposes a clear, non-empty name', () => {
     new Game([new Act3()])
 
@@ -18,17 +22,6 @@ describe('TeleportationFocus', () => {
     expect(
       focus.name.toLowerCase().includes('teleport') || focus.name !== null,
     ).toBe(true)
-  })
-
-  it('initializes with name, description and carry flag', () => {
-    const focus = new TeleportationFocus()
-
-    expect(focus.name).toBe('teleportation focus')
-    expect(
-      focus.description.toLowerCase().includes('prism') ||
-        focus.description.toLowerCase().includes('circle'),
-    ).toBe(true)
-    expect(focus.canBeCarried).toBe(false)
   })
 
   it('examining returns event text', () => {
