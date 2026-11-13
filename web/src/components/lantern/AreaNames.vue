@@ -103,7 +103,7 @@ const obstacles = ref<Rect[]>([])
 const covers = ref<Rect[]>([])
 /** The panels (plate, corner buttons, the story's Hide/Show tab and the Show what's here button) the marks keep clear of. */
 const panels = ref<Rect[]>([])
-/** The panel elements the observer is watching, so a plate that grows or folds moves the marks at once. */
+/** The panel and keep-clear elements the observer is watching, so a plate that grows or folds moves the marks at once. */
 let watched: HTMLElement[] = []
 let observer: ResizeObserver | undefined
 /** Where scrolling is listened for (the scope `measure` reads), once on the page. */
@@ -160,10 +160,11 @@ function onScroll(): void {
   })
 }
 
-/** Watch the size of every element marked as lying over the picture, which `ResizeObserver` on the stage does not see. */
+/** Watch the size of the marked panels and keep-clear elements, which `ResizeObserver` on the stage does not see. */
 function watchPanels(scope: HTMLElement): void {
   if (!observer) return
-  const now = obstacleElements(scope)
+  // Only what is fixed in the layout: cards and words come and go with the story, and a scroll or relayout measures for them.
+  const now = obstacleElements(scope, ['panel', 'keep-clear'])
   for (const el of watched) if (!now.includes(el)) observer.unobserve(el)
   for (const el of now) if (!watched.includes(el)) observer.observe(el)
   watched = now

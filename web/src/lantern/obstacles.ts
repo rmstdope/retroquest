@@ -39,9 +39,27 @@ export interface LayerFrame {
   ratio: number
 }
 
-/** The marked elements of `scope`, in document order. */
-export function obstacleElements(scope: HTMLElement): HTMLElement[] {
-  return [...scope.querySelectorAll<HTMLElement>(`[${OBSTACLE_ATTR}]`)]
+/** Whether `value` names a kind of obstacle. */
+function isKind(value: string | null): value is ObstacleKind {
+  return (
+    value === 'panel' ||
+    value === 'keep-clear' ||
+    value === 'words' ||
+    value === 'card'
+  )
+}
+
+/** The elements of `scope` marked as one of `kinds` (every kind when none is given), in document order; an unknown kind is never counted. */
+export function obstacleElements(
+  scope: HTMLElement,
+  kinds: readonly ObstacleKind[] = ['panel', 'keep-clear', 'words', 'card'],
+): HTMLElement[] {
+  return [...scope.querySelectorAll<HTMLElement>(`[${OBSTACLE_ATTR}]`)].filter(
+    (el) => {
+      const kind = el.getAttribute(OBSTACLE_ATTR)
+      return isKind(kind) && kinds.includes(kind)
+    },
+  )
 }
 
 /**
@@ -56,7 +74,7 @@ export function readObstacles(
 ): Obstacles {
   const read: Obstacles = { panels: [], words: [], all: [] }
   for (const el of obstacleElements(scope)) {
-    const kind = el.getAttribute(OBSTACLE_ATTR) as ObstacleKind
+    const kind = el.getAttribute(OBSTACLE_ATTR) as ObstacleKind // `obstacleElements` has let only known kinds through
     let box: { left: number; top: number; right: number; bottom: number } =
       el.getBoundingClientRect()
     if (kind === 'card') {

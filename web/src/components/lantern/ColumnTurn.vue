@@ -177,12 +177,9 @@ function heads(index: number): boolean {
         />
         <span v-else-if="piece.line.side === 'left'" class="lq-gap"></span>
         <div class="lq-col">
-          <b
-            v-if="heads(index)"
-            class="lq-line-name"
-            data-lq-obstacle="words"
-            >{{ piece.line.speaker }}</b
-          >
+          <b v-if="heads(index)" class="lq-line-name">{{
+            piece.line.speaker
+          }}</b>
           <!-- eslint-disable vue/no-v-html -->
           <div
             class="lq-line"

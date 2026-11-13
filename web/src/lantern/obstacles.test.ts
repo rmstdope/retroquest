@@ -99,6 +99,13 @@ describe('readObstacles', () => {
       { x: 0, y: 0, w: 1, h: 1 },
     )
     boxed(s, { class: 'plain' }, { x: 0, y: 0, w: 1, h: 1 })
-    expect(obstacleElements(s)).toEqual([a])
+    boxed(s, { 'data-lq-obstacle': 'panels' }, { x: 0, y: 0, w: 1, h: 1 })
+    const w = boxed(
+      s,
+      { 'data-lq-obstacle': 'words' },
+      { x: 0, y: 0, w: 1, h: 1 },
+    )
+    expect(obstacleElements(s)).toEqual([a, w])
+    expect(obstacleElements(s, ['panel'])).toEqual([a])
   })
 })

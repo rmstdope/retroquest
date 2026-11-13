@@ -109,7 +109,6 @@ function cardsOver(
     if (head) {
       const name = document.createElement('b')
       name.className = 'lq-line-name'
-      mark(name, 'words')
       col.append(name)
       at(name, head, 120)
     }
