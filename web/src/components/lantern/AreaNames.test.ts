@@ -373,6 +373,21 @@ describe('AreaNames', () => {
     expect(parseFloat(/left: ([\d.]+)px/.exec(style)![1])).toBeGreaterThan(18)
   })
 
+  it('says a screen point rests on a mark while all are showing, so one under a card can be pointed at (rq-riv9)', async () => {
+    const markAtPoint = (w: VueWrapper, x: number, y: number): boolean =>
+      (w.vm as unknown as { markAt(x: number, y: number): boolean }).markAt(
+        x,
+        y,
+      )
+    const w = mountNames({ showing: true })
+    await nextTick()
+    // The bucket's mark is at (816, 405).
+    expect(markAtPoint(w, 820, 400)).toBe(true)
+    expect(markAtPoint(w, 816, 435)).toBe(false)
+    await w.setProps({ showing: false })
+    expect(markAtPoint(w, 816, 405)).toBe(false)
+  })
+
   it('adds no second name under the pointer while everything is shown', async () => {
     const w = mountNames({ showing: true, pointer: { x: 140, y: 250 } })
     await nextTick()

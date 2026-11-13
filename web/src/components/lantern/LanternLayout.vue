@@ -725,6 +725,19 @@ function onStagePointer(event: PointerEvent): void {
   names.pointer = { x: event.clientX, y: event.clientY }
 }
 
+/**
+ * The pointer moves over the words, which lie outside the stage: resting on a
+ * mark that shows through a card's faded edge points at it as over the
+ * picture (rq-riv9); anywhere else on the words nothing is pointed at.
+ */
+function onWordsPointer(event: PointerEvent): void {
+  names.pointer =
+    event.pointerType !== 'touch' &&
+    areaNamesEl.value?.markAt(event.clientX, event.clientY)
+      ? { x: event.clientX, y: event.clientY }
+      : null
+}
+
 /** The story is held still and follows the word while an answer is read. */
 const { held: storyHeld, moveTo: moveStory, refollow } = useStoryFollow(storyEl)
 /** Unread story below the visible part (a long turn opens at its start). */
@@ -2282,6 +2295,8 @@ watch(
                 : {}
             "
             :inert="paperAway || undefined"
+            @pointermove="onWordsPointer"
+            @pointerleave="onStageLeave"
           >
             <section
               ref="storyEl"

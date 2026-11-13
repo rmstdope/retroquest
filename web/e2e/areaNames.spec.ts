@@ -221,3 +221,103 @@ test('the marks and names come back with the picture after a layout without one 
   await expect(page.locator('[data-area-mark]')).toHaveCount(3)
   await expect(page.locator('[data-area-name]')).toHaveCount(3)
 })
+
+test.describe('a dot under the faded edge of a card (rq-riv9)', () => {
+  /** Where the studio placed the cottage's things when the bug was found. */
+  const PLACED: Record<string, AreaFractions> = {
+    hearth: { x: 0.211458, y: 0.388889, width: 0.145833, height: 0.376852 },
+    lantern: { x: 0.825, y: 0.47037, width: 0.046875, height: 0.107407 },
+    bread: { x: 0.452083, y: 0.585185, width: 0.099479, height: 0.112037 },
+    'scenery-eliors-cottage-table': {
+      x: 0.295833,
+      y: 0.594444,
+      width: 0.38125,
+      height: 0.27963,
+    },
+    'scenery-eliors-cottage-shelves': {
+      x: 0.385417,
+      y: 0.101852,
+      width: 0.140104,
+      height: 0.449074,
+    },
+    'scenery-eliors-cottage-books': {
+      x: 0.414583,
+      y: 0.165741,
+      width: 0.092708,
+      height: 0.115741,
+    },
+    grandmother: {
+      x: 0.623958,
+      y: 0.180556,
+      width: 0.177083,
+      height: 0.698148,
+    },
+    'exit-east': {
+      x: 0.915104,
+      y: 0.184259,
+      width: 0.082292,
+      height: 0.609259,
+    },
+  }
+  const TABLE = 'scenery-eliors-cottage-table'
+
+  /** Type one command into the action bar. */
+  async function command(page: Page, text: string): Promise<void> {
+    const type = page
+      .getByRole('region', { name: /^Action/ })
+      .getByRole('button', { name: /^(Type|Type a command)$/ })
+    if (await type.isVisible()) await type.click()
+    const input = page.getByLabel('Command', { exact: true })
+    await input.fill(text)
+    await input.press('Enter')
+  }
+
+  test('resting on the dot names it', async ({ page }): Promise<void> => {
+    await page.setViewportSize({ width: 1000, height: 700 })
+    await toTheCottage(page, PLACED)
+    await command(page, 'talk to grandmother')
+    await command(page, 'talk to grandmother')
+    await page.getByRole('button', { name: /Show what's here/ }).click()
+    await page.getByRole('button', { name: /Show$/ }).click()
+    await expect(page.locator('.lq-story-wrap .lq-cl')).not.toHaveCount(0)
+    await expect(page.locator(`[data-area-mark="${TABLE}"]`)).toHaveCount(1)
+    const story = page.locator('.lq-story-wrap .lq-story')
+    /** Scroll the words to `top` and let the marks be laid out again; where the table's left-off dot is then, or null. */
+    const scrollTo = (
+      top: number,
+    ): Promise<{ x: number; y: number; covered: boolean } | null> =>
+      story.evaluate(
+        async (el, [top, table]) => {
+          el.scrollTop = top
+          for (let i = 0; i < 3; i++)
+            await new Promise((done) => requestAnimationFrame(done))
+          const mark = document.querySelector(`[data-area-mark="${table}"]`)
+          if (!mark || document.querySelector(`[data-area-name="${table}"]`))
+            return null
+          const box = mark.getBoundingClientRect()
+          const x = Math.round(box.x + box.width / 2)
+          const y = Math.round(box.y + box.height / 2)
+          const at = document.elementFromPoint(x, y)
+          return { x, y, covered: !!at?.closest('.lq-card, .lq-cl') }
+        },
+        [top, TABLE] as const,
+      )
+    // Scroll the words up, a few pixels at a time: wherever the table's dot, its name left off, lies where a card takes the pointer, resting on it names it.
+    const bottom = await story.evaluate(
+      (el) => el.scrollHeight - el.clientHeight,
+    )
+    let covered = 0
+    for (let top = bottom; top >= 0; top -= 3) {
+      await page.mouse.move(5, 300)
+      const dot = await scrollTo(top)
+      if (!dot?.covered) continue
+      covered++
+      await page.mouse.move(dot.x, dot.y, { steps: 5 })
+      await expect(
+        page.locator('[data-area-pointer]'),
+        `scrolled to ${top}`,
+      ).toHaveText('Table')
+    }
+    expect(covered).toBeGreaterThan(0)
+  })
+})

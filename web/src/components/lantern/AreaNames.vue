@@ -55,6 +55,9 @@ import type { PictureSize, Rect } from '@/lantern/roomMotionScene'
  * moves (the words coming or going); the story scrolling its words lays the
  * marks out again too, so a dot kept clear of a card stays clear as it scrolls.
  *
+ * `markAt` says whether a screen point rests on a showing mark, so a mark
+ * under a card's faded edge (which takes the pointer) can still be pointed at.
+ *
  * Ways out can be pressed. `wayAt` says which way a screen point presses (the
  * smallest named thing or open way under it; a closed way, one of
  * `closedWays` that the studio placed, only where nothing named is), and the
@@ -314,7 +317,21 @@ function wayAt(clientX: number, clientY: number): WayPress | null {
     (clientY - frame.top) / frame.ratio,
   )
 }
-defineExpose({ wayAt })
+
+/**
+ * Whether the screen point (`clientX`, `clientY`) rests on a mark while every
+ * mark is showing. A mark stepped onto the edge of the words can lie under a
+ * card's faded edge, where it shows through but the card takes the pointer:
+ * the stage asks this to point at it all the same.
+ */
+function markAt(clientX: number, clientY: number): boolean {
+  if (!props.showing) return false
+  const frame = frameOf()
+  const x = (clientX - frame.left) / frame.ratio
+  const y = (clientY - frame.top) / frame.ratio
+  return spots.value.some((s) => Math.hypot(s.x - x, s.y - y) <= DOT_HIT)
+}
+defineExpose({ wayAt, markAt })
 
 /** The direction of the open way under the pointer, for its arrow. */
 const pointing = computed<string | null>(() => {
