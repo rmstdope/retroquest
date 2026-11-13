@@ -372,7 +372,7 @@ export class GameController {
           count > 1
             ? `[item_name]${count} ${item.name}[/item_name]`
             : `[item_name]${item.name}[/item_name]`,
-        description: item.description,
+        description: item.descriptionFor(this.game.state),
       })
     }
     return entries
