@@ -122,6 +122,17 @@ export class Character {
   }
 
   /**
+   * The one answer to "this item is offered to this character", shared by
+   * `give <item> to <character>` and `use <item> on <character>`. Return the
+   * story text when the character takes the offer, or null (the default) to
+   * leave it to the verb's own hook (`giveItem`, `Item.useOnCharacter`) and so
+   * to the default refusal.
+   */
+  acceptOffer(_gameState: GameState, _item: Item): string | null {
+    return null
+  }
+
+  /**
    * The player offers an item. By default the character refuses it, the
    * sentence opening with the name (see `nameInSentence`) and the verb agreeing
    * with it (see `isPlural`).

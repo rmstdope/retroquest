@@ -389,6 +389,17 @@ describe('KnightOfDespair offered the shield', () => {
     expect(out).toContain("doesn't seem interested")
     expectStoryFlag(game.state, FLAG_ACT4_GUARDIANS_CHAIN_RAISED, false)
   })
+
+  it('has no use for the shield used on him once he is redeemed either', () => {
+    const game = gameWithToken()
+    executeCommands(game, [...THREE_SIGHTS, 'use loyalty token'])
+    executeCommands(game, ['say redemption to knight'])
+
+    const out = executeCommands(game, ["use guardian's chain on knight"])
+
+    expect(out).toContain("You can't use")
+    expectStoryFlag(game.state, FLAG_ACT4_GUARDIANS_CHAIN_RAISED, false)
+  })
 })
 
 describe('KnightOfDespair after the dialogue review', () => {

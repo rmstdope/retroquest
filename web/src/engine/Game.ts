@@ -798,7 +798,23 @@ Welcome to
         `[failure]You don't have ${indefiniteArticle(itemName)} '${itemName}' to give.[/failure]`
       )
     }
-    return character.giveItem(this.state, item)
+    return this.offer(item, character, () =>
+      character.giveItem(this.state, item),
+    )
+  }
+
+  /**
+   * An item offered to a character, by `give` or by `use … on`: the
+   * character's `acceptOffer` answers first, so a pair answered there is
+   * answered by both verbs alike; otherwise `verbHook` is the verb's own
+   * hook, which carries the default refusal.
+   */
+  private offer(
+    item: Item,
+    character: Character,
+    verbHook: () => string,
+  ): string {
+    return character.acceptOffer(this.state, item) ?? verbHook()
   }
 
   /** "buy <item> from <character>"; the seller hears the item without a leading "the". */
@@ -840,7 +856,11 @@ Welcome to
     const other = this.findItem(targetName)
     if (!other) {
       const character = this.findCharacter(targetName)
-      if (character) return item.useOnCharacter(this.state, character)
+      if (character) {
+        return this.offer(item, character, () =>
+          item.useOnCharacter(this.state, character),
+        )
+      }
       return (
         `[failure]You don't see a '${targetName}' to use with ` +
         `${item.nameInSentence()}.[/failure]`

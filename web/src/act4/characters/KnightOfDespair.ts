@@ -156,8 +156,11 @@ export class KnightOfDespair extends Character {
     return KNIGHT_DESCRIPTION
   }
 
-  /** The chain or the token offered to him before he is redeemed is raised, as using it is. */
-  override giveItem(gameState: GameState, item: Item): string {
+  /**
+   * The chain or the token offered to him before he is redeemed is raised, as
+   * using it is, whether it is given or used on him.
+   */
+  override acceptOffer(gameState: GameState, item: Item): string | null {
     const isShield =
       item instanceof GuardiansChain || item instanceof LoyaltyToken
     if (
@@ -166,7 +169,7 @@ export class KnightOfDespair extends Character {
     ) {
       return item.use(gameState)
     }
-    return super.giveItem(gameState, item)
+    return super.acceptOffer(gameState, item)
   }
 
   /**

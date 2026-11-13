@@ -1038,6 +1038,28 @@ describe('Game', () => {
     })
   })
 
+  describe('an item offered to a character', () => {
+    it('reaches one answer through give and use on', () => {
+      const families = new Talker('Families')
+      families.acceptOffer = (_state, offered) => `Accepted: ${offered.name}`
+      rooms.EliorsCottage.addCharacter(families)
+      game.state.inventory.push(item('apple'))
+      expect(game.give('apple to families')).toBe('Accepted: apple')
+      expect(game.use('apple', 'families')).toBe('Accepted: apple')
+    })
+
+    it('falls back to each verb’s own hook when acceptOffer has no answer', () => {
+      const families = new Talker('Families')
+      families.giveItem = (_state, given) => `Given: ${given.name}`
+      rooms.EliorsCottage.addCharacter(families)
+      const apple = item('apple')
+      apple.useOnCharacter = (_state, target) => `Used on ${target.name}`
+      game.state.inventory.push(apple)
+      expect(game.give('apple to families')).toBe('Given: apple')
+      expect(game.use('apple', 'families')).toBe('Used on Families')
+    })
+  })
+
   describe('a leading "the" in a character target', () => {
     it('reaches the character through talk, say, give and buy', () => {
       const families = new Talker('Families')
