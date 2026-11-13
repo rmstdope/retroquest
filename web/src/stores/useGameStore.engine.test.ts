@@ -469,6 +469,28 @@ describe('useGameStore over the real engine: the no-match line and a name that w
     })
 
     it.each([
+      ['go north bob', 'bob'],
+      ['examine sorceress bob', 'bob'],
+      ['talk to sorceress bob', 'bob'],
+    ])(
+      'says no match for “%s” too: words after any finished name',
+      async (typed, word) => {
+        const store = await storeHoldingToken()
+
+        expect(listFor(store, typed)).toMatchObject({ noMatch: true, word })
+      },
+    )
+
+    it.each(['inventory foo', 'inventory foo bar', 'spells foo bar'])(
+      'keeps the list closed for “%s”: a verb that takes nothing',
+      async (typed) => {
+        const store = await storeHoldingToken()
+
+        expect(listFor(store, typed).open).toBe(false)
+      },
+    )
+
+    it.each([
       'examine pendant',
       'examine pendant ',
       'examine crystalline pendant ',

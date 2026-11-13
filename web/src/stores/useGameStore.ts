@@ -1720,8 +1720,8 @@ export const useGameStore = defineStore('game', () => {
    * as a command, and which of three states the list is in — `matches` (some
    * words to offer), `none` (an earlier word is unknown, or the last word
    * matches nothing) or `complete` (the command needs no more words: a name
-   * typed in full, or any words after a verb that takes free text, which are
-   * the player's own; a word after a finished name is `none`). Text
+   * typed in full, or any words after a verb that takes free text or nothing,
+   * which are the player's own; a word after a finished name is `none`). Text
    * the tree cannot follow is `complete` when, from where the tree offers a
    * character, it names one here: the tree holds only full names and a
    * character answers to more. An item answers to more as well: its other
@@ -1752,8 +1752,9 @@ export const useGameStore = defineStore('game', () => {
     let node: CompletionTree | null = commandPlace.value.completions
     for (const [index, token] of tokens.slice(0, -1).entries()) {
       if (node === null) {
-        // Words after a verb that takes free text are the player's own; words
-        // after a finished name are not, and match nothing.
+        // Same rule as after the loop: a dead end right after the verb (index
+        // 1) is free text or no argument; deeper it is a finished name, and a
+        // word after it matches nothing.
         return index === 1
           ? { ...none, kind: 'complete', sendable: true }
           : none
