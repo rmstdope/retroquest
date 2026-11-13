@@ -478,7 +478,9 @@ export class Shopkeeper extends Character {
    * load: a save that still lists the rope among his wares but has it sold
    * (a saved `ropeSold`, the story's gift, or, in the oldest saves, a rope
    * Elior holds) gets it taken from the wares and the shelf. Safe to run more
-   * than once.
+   * than once. The oldest-save check runs on every load of a save with no
+   * `ropeSold` and the rope still listed, and assumes that a rope comes only
+   * from Hemlock.
    */
   migrateLegacyRope(gameState: GameState): void {
     const saved: unknown = Reflect.get(this, 'ropeSold')

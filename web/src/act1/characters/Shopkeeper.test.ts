@@ -744,7 +744,9 @@ describe('no text offers the rope once it is gone (rq-8xc9)', () => {
     const shopkeeper = game.state.currentRoom.getCharacterByName('shopkeeper')
     if (!(shopkeeper instanceof Shopkeeper)) throw new Error('no shopkeeper')
     expect(shopkeeper.ropeGone()).toBe(false)
-    expect(ropeTexts(game).join('\n')).toMatch(/rope/i)
+    const texts = ropeTexts(game)
+    expect(texts[4]).toMatch(/rope/i)
+    expect(texts[5]).toMatch(/rope/i)
   })
 
   it('is mentioned by none of them once it is sold, before and after a save', () => {
