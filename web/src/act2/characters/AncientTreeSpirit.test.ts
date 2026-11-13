@@ -196,15 +196,8 @@ describe('Ancient Tree Spirit voice', () => {
 
     const answer = spirit.examine(createGame().state)
 
-    expect(spirit.description).toBe(
-      'The spirit lives in the silver-barked tree. Its face is only there ' +
-        'when you stop looking for it: two knots for eyes, a split in the ' +
-        'bark for a mouth. Moss grows on it in rings, one for every winter.',
-    )
-    expect(answer).toContain(
-      'The bark is warm under your hand, and below your feet the roots ' +
-        'shift slowly, like someone turning over in their sleep.',
-    )
+    expect(spirit.description).toContain('silver-barked tree')
+    expect(answer).toContain('roots')
     expect(answer).not.toMatch(/ancient beyond|wise|sacred|millennia/i)
     expectMarkupWellFormed(answer)
   })

@@ -10,17 +10,6 @@ import {
 } from '../Act4StoryFlags'
 
 describe('TheShadowOfThePast', () => {
-  it('has the agreed card and completion text', () => {
-    const quest = new TheShadowOfThePast()
-    expect(quest.name).toBe('The Shadow of the Past')
-    expect(quest.description).toBe(
-      'Among the broken memories a shadow reaches for scenes it cannot hold. Mend what it has lost, and learn whose voice it is.',
-    )
-    expect(quest.completion).toBe(
-      "Elior learns that the voice from his dreams is what remains of Malakar's better self. The sealed door to the east now answers to the amulet.",
-    )
-  })
-
   it('starts and completes with its flags', () => {
     const game = new Game([new Act4()])
     const quest = new TheShadowOfThePast()

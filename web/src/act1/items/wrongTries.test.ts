@@ -334,15 +334,20 @@ describe('wrong tries at Act I puzzles', () => {
     )
   })
 
-  it.each(['use lantern with candle', 'use candle with lantern'])(
-    'says why the lantern cannot light the candle (%s)',
-    (command) => {
+  it('says why the lantern cannot light the candle, in either word order', () => {
+    const wrong: string[] = []
+    for (const command of [
+      'use lantern with candle',
+      'use candle with lantern',
+    ]) {
       const game = gameIn('VillageChapel', [litLantern()])
       const text = executeCommands(game, [command])
-      expect(text).toBe(LANTERN_CANDLE)
-      expect(game.state.currentRoom.getItemByName('locket')).toBeNull()
-    },
-  )
+      if (text !== LANTERN_CANDLE) wrong.push(`${command}: ${text}`)
+      if (game.state.currentRoom.getItemByName('locket') !== null)
+        wrong.push(`${command}: locket appeared`)
+    }
+    expect(wrong).toEqual([])
+  })
 
   it('says the candle is already lit to the lantern', () => {
     const game = gameIn('VillageChapel', [litLantern()])
@@ -355,16 +360,20 @@ describe('wrong tries at Act I puzzles', () => {
     )
   })
 
-  it.each(['use stick with fishing rod', 'use fishing rod with stick'])(
-    'says the stick goes on the rod last (%s)',
-    (command) => {
+  it('says the stick goes on the rod last, in either word order', () => {
+    const wrong: string[] = []
+    for (const command of [
+      'use stick with fishing rod',
+      'use fishing rod with stick',
+    ]) {
       const game = gameIn('Riverbank', [new Stick(), new FishingRod()])
       const text = executeCommands(game, [command])
-      expect(text).toBe(STICK_ROD)
-      expect(game.state.hasItem('fishing rod')).toBe(true)
-      expect(game.state.hasItem('stick')).toBe(true)
-    },
-  )
+      if (text !== STICK_ROD) wrong.push(`${command}: ${text}`)
+      if (!game.state.hasItem('fishing rod') || !game.state.hasItem('stick'))
+        wrong.push(`${command}: an item was lost`)
+    }
+    expect(wrong).toEqual([])
+  })
 
   it.each(['mossy stone', 'inscription'])(
     'says the lantern does not lift the glade shadow from the %s',
@@ -387,16 +396,17 @@ describe('wrong tries at Act I puzzles', () => {
     )
   })
 
-  it.each(['use rope with well', 'use well with rope'])(
-    'says a bare rope brings nothing up the well (%s)',
-    (command) => {
+  it('says a bare rope brings nothing up the well, in either word order', () => {
+    const wrong: string[] = []
+    for (const command of ['use rope with well', 'use well with rope']) {
       const rope = new Rope()
       rope.canBeCarried = true
       const game = gameIn('VillageWell', [rope])
       const text = executeCommands(game, [command])
-      expect(text).toBe(ROPE_WELL)
-    },
-  )
+      if (text !== ROPE_WELL) wrong.push(`${command}: ${text}`)
+    }
+    expect(wrong).toEqual([])
+  })
 
   it('writes every refusal in well-formed markup', () => {
     for (const line of [
@@ -435,15 +445,17 @@ describe('more natural tries at Act I puzzles', () => {
       "The bell is the priest's to ring.",
   )
 
-  it.each(['earth', 'soil', 'ground', 'crops', 'rows'])(
-    'digs the field when the hoe is used with the %s',
-    (target) => {
+  it('digs the field when the hoe is used with any name for the ground', () => {
+    const wrong: string[] = []
+    for (const target of ['earth', 'soil', 'ground', 'crops', 'rows']) {
       const game = gameIn('VegetableField', [new RustyHoe()])
       const text = executeCommands(game, [`use rusty hoe with ${target}`])
-      expect(text).toContain('you unearth a small, tarnished')
-      expect(game.state.hasItem('coin')).toBe(true)
-    },
-  )
+      if (!text.includes('you unearth a small, tarnished'))
+        wrong.push(`${target}: ${text}`)
+      if (!game.state.hasItem('coin')) wrong.push(`${target}: no coin`)
+    }
+    expect(wrong).toEqual([])
+  })
 
   it('tills the field again with the hoe and the earth like use hoe', () => {
     const game = gameIn('VegetableField', [new RustyHoe()])
