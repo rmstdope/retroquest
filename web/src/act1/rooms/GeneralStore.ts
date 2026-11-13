@@ -42,7 +42,7 @@ const CAT_CLAUSE =
  *
  * The description follows whether Hemlock has the store shut or open (asked of
  * `Shopkeeper.isStoreOpen`), and names rope on the shelves only
- * while his one rope is still on display; `descriptionFor` computes it each
+ * while Hemlock still has his one rope; `descriptionFor` computes it each
  * time the room is shown.
  */
 export class GeneralStore extends Room {
@@ -95,10 +95,12 @@ export class GeneralStore extends Room {
   /**
    * The shut shop while Patches is missing; once the store is open, the busy
    * shop, with the sleeping cat only when Patches was carried home. Rope is
-   * named on the shelves only while Hemlock's rope is still on display there.
+   * named on the shelves only while Hemlock still has his rope.
    */
   override descriptionFor(gameState: GameState): string {
-    const shelves = this.items.some((item) => Rope.isOnDisplay(item))
+    const shelves = this.characters.some(
+      (character) => character instanceof Shopkeeper && !character.ropeGone(),
+    )
       ? SHELVES_WITH_ROPE
       : SHELVES_WITHOUT_ROPE
     const catHome = gameState.getStoryFlag(FLAG_PATCHES_RETURNED)
