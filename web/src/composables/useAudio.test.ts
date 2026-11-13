@@ -32,7 +32,11 @@ Object.defineProperty(globalThis, 'localStorage', {
 
 function createMockFactory() {
   const playFn = vi.fn(() => Promise.resolve())
-  const created: Array<{ play: typeof playFn; volume: number }> = []
+  const created: Array<{
+    play: typeof playFn
+    volume: number
+    muted?: boolean
+  }> = []
   const factory = vi.fn(() => {
     const element = { play: playFn, volume: 1 }
     created.push(element)
@@ -142,11 +146,12 @@ describe('useAudio', () => {
       expect(created[0].volume).toBe(0.3)
     })
 
-    it('plays silently when the effects volume is 0', () => {
+    it('plays silently when the effects volume is 0, muted too (a phone ignores the volume)', () => {
       const { factory, created } = createMockFactory()
       useSettingsStore().effectsVolume = 0
       useAudio(factory).playNewQuest()
       expect(created[0].volume).toBe(0)
+      expect(created[0].muted).toBe(true)
     })
   })
 

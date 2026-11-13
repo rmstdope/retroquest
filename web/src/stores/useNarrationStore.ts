@@ -69,6 +69,8 @@ export interface NarrationAudio {
   pause(): void
   /** 0–1 */
   volume: number
+  /** Muted at volume 0, since a phone ignores `volume`. */
+  muted?: boolean
   /** Seconds into the clip. */
   currentTime: number
   /** Called when the clip has played to its end. */
@@ -158,7 +160,9 @@ export const useNarrationStore = defineStore('narration', () => {
   watch(
     () => settings.narrationVolume,
     (volume) => {
-      if (audio) audio.volume = volume / 100
+      if (!audio) return
+      audio.volume = volume / 100
+      audio.muted = volume === 0
     },
   )
 
@@ -444,6 +448,7 @@ export const useNarrationStore = defineStore('narration', () => {
     now.word = -1
     const element = audioFactory(`${NARRATION_PATH}${now.folder}/${clip.file}`)
     element.volume = settings.narrationVolume / 100
+    element.muted = settings.narrationVolume === 0
     audio = element
     const end = (): void => {
       if (mine === generation) completePart(false)

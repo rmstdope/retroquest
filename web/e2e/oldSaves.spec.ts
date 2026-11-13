@@ -128,3 +128,30 @@ test('typing load for an old save says so and leaves the game as it was', async 
     'Failed to load game',
   )
 })
+
+test('settings saved with a sound switched off load it at volume 0', async ({
+  page,
+}) => {
+  await page.addInitScript(() =>
+    localStorage.setItem(
+      'retroquest_settings',
+      JSON.stringify({
+        musicOn: false,
+        musicVolume: 60,
+        effectsOn: true,
+        effectsVolume: 40,
+        narrationOn: false,
+        narrationVolume: 70,
+      }),
+    ),
+  )
+  await page.goto('/')
+  await page.getByRole('button', { name: 'Start', exact: true }).click()
+  await page.locator('.lq-chapter-button').click()
+  await page.getByRole('button', { name: 'Settings', exact: true }).click()
+
+  await expect(page.getByLabel('Music volume')).toHaveValue('0')
+  await expect(page.getByLabel('Sound effects volume')).toHaveValue('40')
+  await expect(page.getByLabel('Narration volume')).toHaveValue('0')
+  await expect(page.getByRole('switch', { name: 'Music' })).toHaveCount(0)
+})

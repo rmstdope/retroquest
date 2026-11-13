@@ -101,6 +101,22 @@ describe('useSettingsStore', () => {
     })
   })
 
+  it('lets the saved settings win over the old mute key, and ignores the key once volumes are saved', () => {
+    installLocalStorage({
+      [LEGACY_MUTED_KEY]: 'true',
+      [LEGACY_SFX_MUTED_KEY]: 'true',
+      [SETTINGS_STORAGE_KEY]: JSON.stringify({
+        musicOn: true,
+        musicVolume: 40,
+        effectsVolume: 50,
+      }),
+    })
+    const settings = useSettingsStore()
+
+    expect(settings.musicVolume).toBe(40)
+    expect(settings.effectsVolume).toBe(50)
+  })
+
   it('loads valid stored settings', () => {
     installLocalStorage({
       [SETTINGS_STORAGE_KEY]: JSON.stringify({

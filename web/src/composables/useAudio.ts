@@ -19,6 +19,8 @@ export interface AudioElement {
   play(): Promise<void>
   /** 0–1 */
   volume: number
+  /** Muted at volume 0, since a phone ignores `volume`. */
+  muted?: boolean
 }
 
 /** Factory type that creates an AudioElement for a given URL. */
@@ -50,6 +52,7 @@ export function useAudio(
   function playUrl(url: string): void {
     const audio = audioFactory(url)
     audio.volume = settings.effectsVolume / 100
+    audio.muted = settings.effectsVolume === 0
     audio.play().catch(() => {})
   }
 

@@ -83,6 +83,14 @@ function silencedIf(wasSwitchedOff: boolean, level: number): number {
   return wasSwitchedOff ? 0 : level
 }
 
+/**
+ * Whether an old mute key says so. It counts only until the settings carry
+ * their own value for that sound; the key itself is never removed.
+ */
+function legacyMuted(key: string): boolean {
+  return readStorage(key) === 'true'
+}
+
 /** Read saved settings, validating each field against its default. */
 function loadSettings(): Settings {
   const defaults: Settings = { ...DEFAULT_SETTINGS }
@@ -102,12 +110,17 @@ function loadSettings(): Settings {
     theme: oneOf(stored.theme, THEMES, defaults.theme),
     textSize: oneOf(stored.textSize, sizes, defaults.textSize),
     musicVolume: silencedIf(
-      readStorage(LEGACY_MUTED_KEY) === 'true' || stored.musicOn === false,
+      stored.musicOn === false ||
+        (legacyMuted(LEGACY_MUTED_KEY) &&
+          stored.musicOn === undefined &&
+          stored.musicVolume === undefined),
       volume(stored.musicVolume, defaults.musicVolume),
     ),
     effectsVolume: silencedIf(
-      readStorage(LEGACY_SFX_MUTED_KEY) === 'true' ||
-        stored.effectsOn === false,
+      stored.effectsOn === false ||
+        (legacyMuted(LEGACY_SFX_MUTED_KEY) &&
+          stored.effectsOn === undefined &&
+          stored.effectsVolume === undefined),
       volume(stored.effectsVolume, defaults.effectsVolume),
     ),
     narrationVolume: silencedIf(

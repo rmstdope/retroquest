@@ -38,6 +38,7 @@ const silent: NarrationUnit = { kind: 'block', parts: [] }
 class FakeAudio implements NarrationAudio {
   static all: FakeAudio[] = []
   volume = 1
+  muted = false
   currentTime = 0
   paused = false
   onended: (() => void) | null = null
@@ -114,6 +115,18 @@ describe('useNarrationStore', () => {
     narration.begin(1, [voiced()], 'act1')
     expect(narration.isNarrating).toBe(true)
     expect(last().volume).toBe(0)
+  })
+
+  it('mutes the clip at volume 0 (a phone ignores the volume) and unmutes it when raised', async () => {
+    useSettingsStore().narrationVolume = 0
+    narration.begin(1, [voiced()], 'act1')
+    expect(last().muted).toBe(true)
+    useSettingsStore().narrationVolume = 50
+    await nextTick()
+    expect(last().muted).toBe(false)
+    useSettingsStore().narrationVolume = 0
+    await nextTick()
+    expect(last().muted).toBe(true)
   })
 
   it('plays at the narration volume', () => {
