@@ -1,4 +1,4 @@
-import { test, expect, type Page } from '@playwright/test'
+import { test, expect, type Page } from './fixtures'
 
 /**
  * A narrator's card on the laptop stays whole in the left column once the
@@ -7,7 +7,10 @@ import { test, expect, type Page } from '@playwright/test'
  */
 
 // Narration on, as for a new player (the config turns it off for the other specs).
-test.use({ storageState: { cookies: [], origins: [] } })
+test.use({
+  storageState: { cookies: [], origins: [] },
+  narrationRecordings: true,
+})
 
 /**
  * Narrated clips end shortly after they start and their time never moves (the

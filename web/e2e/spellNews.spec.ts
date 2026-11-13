@@ -1,4 +1,4 @@
-import { test, expect, type Page } from '@playwright/test'
+import { test, expect, type Page } from './fixtures'
 
 /** Open the game and close the opening chapter page and the first arrival. */
 async function startAct1(

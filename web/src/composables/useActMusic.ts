@@ -86,8 +86,7 @@ export function useActMusic(): ReturnType<typeof useMusic> {
   })
   const chosenEffects = loadChosenEffects()
   const settings = useSettingsStore()
-  const effectsLevel = (): number =>
-    settings.effectsOn ? settings.effectsVolume / 100 : 0
+  const effectsLevel = (): number => settings.effectsVolume / 100
   /** Where every effect plays into, at the effects volume; made with the first. */
   let effectsBus: GainNode | null = null
   /** Set when the scope ends, so an ambience still being prepared makes no bus. */

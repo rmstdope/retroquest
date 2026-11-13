@@ -32,7 +32,11 @@ Object.defineProperty(globalThis, 'localStorage', {
 
 function createMockFactory() {
   const playFn = vi.fn(() => Promise.resolve())
-  const created: Array<{ play: typeof playFn; volume: number }> = []
+  const created: Array<{
+    play: typeof playFn
+    volume: number
+    muted?: boolean
+  }> = []
   const factory = vi.fn(() => {
     const element = { play: playFn, volume: 1 }
     created.push(element)
@@ -55,17 +59,17 @@ describe('useAudio', () => {
   // --- Initial state ---
 
   describe('initial state', () => {
-    it('starts unmuted by default', () => {
-      const { factory } = createMockFactory()
-      const { soundMuted } = useAudio(factory)
-      expect(soundMuted.value).toBe(false)
+    it('plays at full volume by default', () => {
+      const { factory, created } = createMockFactory()
+      useAudio(factory).playNewQuest()
+      expect(created[0].volume).toBe(1)
     })
 
-    it('restores muted state from localStorage', () => {
+    it('plays at volume 0 for a mute choice from the old setting', () => {
       localStorage.setItem('retroquest_sfx_muted', 'true')
-      const { factory } = createMockFactory()
-      const { soundMuted } = useAudio(factory)
-      expect(soundMuted.value).toBe(true)
+      const { factory, created } = createMockFactory()
+      useAudio(factory).playNewQuest()
+      expect(created[0].volume).toBe(0)
     })
   })
 
@@ -87,15 +91,6 @@ describe('useAudio', () => {
       const src = (factory as ReturnType<typeof vi.fn>).mock
         .calls[0][0] as string
       expect(src).toContain('Voicy_New%20Quest.mp3')
-    })
-
-    it('does not play when muted', () => {
-      localStorage.setItem('retroquest_sfx_muted', 'true')
-      const { factory, playFn } = createMockFactory()
-      const { playNewQuest } = useAudio(factory)
-      playNewQuest()
-      expect(factory).not.toHaveBeenCalled()
-      expect(playFn).not.toHaveBeenCalled()
     })
 
     it('silently catches autoplay rejection', async () => {
@@ -130,15 +125,6 @@ describe('useAudio', () => {
       expect(src).toContain('Voicy_Quest%20Completed.mp3')
     })
 
-    it('does not play when muted', () => {
-      localStorage.setItem('retroquest_sfx_muted', 'true')
-      const { factory, playFn } = createMockFactory()
-      const { playQuestComplete } = useAudio(factory)
-      playQuestComplete()
-      expect(factory).not.toHaveBeenCalled()
-      expect(playFn).not.toHaveBeenCalled()
-    })
-
     it('silently catches autoplay rejection', async () => {
       const { factory, playFn } = createMockFactory()
       playFn.mockRejectedValue(new Error('NotAllowedError'))
@@ -147,47 +133,6 @@ describe('useAudio', () => {
       await vi.waitFor(() => {
         expect(playFn).toHaveBeenCalled()
       })
-    })
-  })
-
-  // --- toggleMute ---
-
-  describe('toggleMute', () => {
-    it('toggles from unmuted to muted', () => {
-      const { factory } = createMockFactory()
-      const { toggleMute, soundMuted } = useAudio(factory)
-      toggleMute()
-      expect(soundMuted.value).toBe(true)
-    })
-
-    it('toggles from muted to unmuted', () => {
-      localStorage.setItem('retroquest_sfx_muted', 'true')
-      const { factory } = createMockFactory()
-      const { toggleMute, soundMuted } = useAudio(factory)
-      toggleMute()
-      expect(soundMuted.value).toBe(false)
-    })
-
-    it('stores the mute choice in the settings, not the old key', () => {
-      const { factory } = createMockFactory()
-      const { toggleMute } = useAudio(factory)
-      toggleMute()
-      expect(useSettingsStore().effectsOn).toBe(false)
-      toggleMute()
-      expect(useSettingsStore().effectsOn).toBe(true)
-      expect(localStorageMock.setItem).not.toHaveBeenCalledWith(
-        'retroquest_sfx_muted',
-        expect.anything(),
-      )
-    })
-
-    it('silences sounds after being muted', () => {
-      const { factory, playFn } = createMockFactory()
-      const { toggleMute, playNewQuest } = useAudio(factory)
-      toggleMute() // now muted
-      playNewQuest()
-      expect(factory).not.toHaveBeenCalled()
-      expect(playFn).not.toHaveBeenCalled()
     })
   })
 
@@ -201,13 +146,12 @@ describe('useAudio', () => {
       expect(created[0].volume).toBe(0.3)
     })
 
-    it('stays silent when effects are turned off in the settings', () => {
-      const { factory } = createMockFactory()
-      const { playNewQuest, soundMuted } = useAudio(factory)
-      useSettingsStore().effectsOn = false
-      playNewQuest()
-      expect(soundMuted.value).toBe(true)
-      expect(factory).not.toHaveBeenCalled()
+    it('plays silently when the effects volume is 0, muted too (a phone ignores the volume)', () => {
+      const { factory, created } = createMockFactory()
+      useSettingsStore().effectsVolume = 0
+      useAudio(factory).playNewQuest()
+      expect(created[0].volume).toBe(0)
+      expect(created[0].muted).toBe(true)
     })
   })
 
@@ -258,21 +202,10 @@ describe('useAudio', () => {
       expect(factory).not.toHaveBeenCalled()
     })
 
-    it('is silent with sound effects off, and does not replay when they return', async () => {
-      const { factory } = createMockFactory()
-      const settings = useSettingsStore()
-      settings.effectsOn = false
-      const audio = useAudio(factory, loaded(TAKE))
-      await flush()
-      audio.playNewSpell()
-      settings.effectsOn = true
-      expect(factory).not.toHaveBeenCalled()
-    })
-
-    it('still plays with the music off', async () => {
+    it('still plays with the music volume at 0', async () => {
       const { factory, playFn } = createMockFactory()
       const settings = useSettingsStore()
-      settings.musicOn = false
+      settings.musicVolume = 0
       const audio = useAudio(factory, loaded(TAKE))
       await flush()
       audio.playNewSpell()

@@ -3,13 +3,13 @@
  * newest save at once, Load game opens the save window without a question,
  * New game starts afresh, and with no saves the page offers Start only.
  */
-import { test, expect, type Page } from '@playwright/test'
+import { test, expect, type Page } from './fixtures'
 
 /** Start a game, close the opening chapter page and save (a quick save, or under a name with `save <name>`). */
 async function makeSave(page: Page, command = 'save'): Promise<void> {
   await page.addInitScript(() => {
     if (!localStorage.getItem('retroquest_settings'))
-      localStorage.setItem('retroquest_settings', '{"narrationOn":false}')
+      localStorage.setItem('retroquest_settings', '{"narrationVolume":0}')
   })
   await page.goto('/')
   await page.getByRole('button', { name: 'Start', exact: true }).click()

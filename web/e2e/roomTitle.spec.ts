@@ -4,7 +4,7 @@
  * name alone in the corner; any key settles it at once, and a press on a
  * thing in the picture goes through it. The room card lists no one and nothing.
  */
-import { test, expect, type Page } from '@playwright/test'
+import { test, expect, type Page } from './fixtures'
 
 interface VueHost {
   __vue_app__: {

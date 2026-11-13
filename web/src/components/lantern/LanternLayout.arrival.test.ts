@@ -134,7 +134,6 @@ describe('LanternLayout: the arrival on the picture', () => {
     } catch {
       // No storage in this environment.
     }
-    useSettingsStore(pinia).narrationOn = true
   })
   afterEach(() => {
     wrapper?.unmount()
@@ -173,9 +172,8 @@ describe('LanternLayout: the arrival on the picture', () => {
     expect(w.get('.lq-story').text()).not.toContain('A green garden.')
   })
 
-  it('reads it for its reading time with a bar when narration is off', async () => {
-    const w = await ready()
-    useSettingsStore(pinia).narrationOn = false
+  it('reads it for its reading time with a bar when the room has no recording yet', async () => {
+    const w = await ready(true, false)
     await run('go north')
     expect(card(w)).toContain('A green garden.')
     expect(w.find('[data-testid="arrival-bar"]').exists()).toBe(true)
@@ -186,15 +184,9 @@ describe('LanternLayout: the arrival on the picture', () => {
     expect(slidAside(w)).toBe(false)
   })
 
-  it('does the same when the room has no recording yet', async () => {
-    const w = await ready(true, false)
-    await run('go north')
-    expect(w.find('[data-testid="arrival-bar"]').exists()).toBe(true)
-  })
-
   it('goes on with a click on the picture', async () => {
     const w = await ready()
-    useSettingsStore(pinia).narrationOn = false
+    useSettingsStore(pinia).narrationVolume = 0
     await run('go north')
     await w.get('[data-testid="arrival-on-picture"]').trigger('click')
     expect(card(w)).toBe('')
@@ -252,7 +244,7 @@ describe('LanternLayout: the arrival on the picture', () => {
 
   it('shows neither Hide nor Show while the arrival is told on a phone', async () => {
     const w = await ready(false)
-    useSettingsStore(pinia).narrationOn = false
+    useSettingsStore(pinia).narrationVolume = 0
     await run('go north')
     expect(w.find('.lq-words-hide').exists()).toBe(false)
     expect(w.find('.lq-paper-tab').exists()).toBe(false)
@@ -261,7 +253,7 @@ describe('LanternLayout: the arrival on the picture', () => {
   it('clears when the player types, and the command still goes through', async () => {
     useSettingsStore(pinia).startMode = 'type'
     const w = await ready()
-    useSettingsStore(pinia).narrationOn = false
+    useSettingsStore(pinia).narrationVolume = 0
     await run('go north')
     expect(card(w)).not.toBe('')
     const input = w.get('.lq-type-input')
@@ -273,7 +265,7 @@ describe('LanternLayout: the arrival on the picture', () => {
 
   it('keeps to its own stores when a store of an earlier test acts late', async () => {
     const w = await ready()
-    useSettingsStore(pinia).narrationOn = false
+    useSettingsStore(pinia).narrationVolume = 0
     // A leftover callback of an earlier test's store sets its pinia active.
     useGameStore(createPinia())
     await run('go north')
@@ -282,7 +274,7 @@ describe('LanternLayout: the arrival on the picture', () => {
 
   it('clears for the next command', async () => {
     const w = await ready()
-    useSettingsStore(pinia).narrationOn = false
+    useSettingsStore(pinia).narrationVolume = 0
     await run('go north')
     await run('inventory')
     expect(card(w)).toBe('')
@@ -291,7 +283,7 @@ describe('LanternLayout: the arrival on the picture', () => {
 
   it('does not tell a room already visited, nor a look', async () => {
     const w = await ready()
-    useSettingsStore(pinia).narrationOn = false
+    useSettingsStore(pinia).narrationVolume = 0
     await run('look')
     expect(card(w)).toBe('')
     expect(slidAside(w)).toBe(false)
@@ -304,7 +296,7 @@ describe('LanternLayout: the arrival on the picture', () => {
 
   it('tells the arrival on a sideways phone with the sideways card (rq-dpom)', async () => {
     const w = await ready('sideways')
-    useSettingsStore(pinia).narrationOn = false
+    useSettingsStore(pinia).narrationVolume = 0
     await run('go north')
     expect(card(w)).toContain('Tap to continue')
     const classes = w.get('[data-testid="arrival-on-picture"]').classes()
@@ -314,7 +306,7 @@ describe('LanternLayout: the arrival on the picture', () => {
 
   it('clears when the window turns into a phone', async () => {
     const w = await ready()
-    useSettingsStore(pinia).narrationOn = false
+    useSettingsStore(pinia).narrationVolume = 0
     await run('go north')
     expect(card(w)).not.toBe('')
     wideChanges.forEach((change) => change({ matches: false }))
@@ -324,7 +316,7 @@ describe('LanternLayout: the arrival on the picture', () => {
 
   it('tells what happens on arrival first, in italics, then the description, and then the quest news', async () => {
     const w = await ready()
-    useSettingsStore(pinia).narrationOn = false
+    useSettingsStore(pinia).narrationVolume = 0
     useGameStore(pinia).turns.push({
       id: 99,
       command: 'south',
@@ -401,7 +393,7 @@ describe('LanternLayout: the arrival on the picture', () => {
 
     it('is told in the middle, one piece after the other, and leaves no line on the left', async () => {
       const w = await ready(true, false)
-      useSettingsStore(pinia).narrationOn = false
+      useSettingsStore(pinia).narrationVolume = 0
       const audio = {
         playNewQuest: vi.fn(),
         playQuestComplete: vi.fn(),
@@ -464,7 +456,7 @@ describe('LanternLayout: the arrival on the picture', () => {
 
     it('goes on with Space, and Enter after the last piece clears it', async () => {
       const w = await ready(true, false)
-      useSettingsStore(pinia).narrationOn = false
+      useSettingsStore(pinia).narrationVolume = 0
       useGameStore(pinia).setAudioPlayer({
         playNewQuest: vi.fn(),
         playQuestComplete: vi.fn(),
@@ -510,7 +502,7 @@ describe('LanternLayout: the arrival on the picture', () => {
 
     it('ends all the news of the turn with Escape', async () => {
       const w = await ready(true, false)
-      useSettingsStore(pinia).narrationOn = false
+      useSettingsStore(pinia).narrationVolume = 0
       useGameStore(pinia).setAudioPlayer({
         playNewQuest: vi.fn(),
         playQuestComplete: vi.fn(),
@@ -541,7 +533,7 @@ describe('LanternLayout: the arrival on the picture', () => {
 
   it('keeps the paper away only while the arrival is told', async () => {
     const w = await ready()
-    useSettingsStore(pinia).narrationOn = false
+    useSettingsStore(pinia).narrationVolume = 0
     await run('go north')
     expect(storyAside(w)).toBe(true)
     await key('Escape')
@@ -559,19 +551,18 @@ describe('LanternLayout: the arrival on the picture', () => {
     expect(storyAside(w)).toBe(true)
   })
 
-  it('clears when narration is switched off while it is told', async () => {
+  it('goes on when the narration volume is turned to 0 while it is told', async () => {
     const w = await ready()
     await run('go north')
     expect(card(w)).not.toBe('')
-    useSettingsStore(pinia).narrationOn = false
+    useSettingsStore(pinia).narrationVolume = 0
     await vi.advanceTimersByTimeAsync(0)
-    expect(card(w)).toBe('')
-    expect(slidAside(w)).toBe(false)
+    expect(card(w)).not.toBe('')
   })
 
   it('does not let a held key run through the parts', async () => {
     const w = await ready()
-    useSettingsStore(pinia).narrationOn = false
+    useSettingsStore(pinia).narrationVolume = 0
     await run('go north')
     document.body.dispatchEvent(
       new KeyboardEvent('keydown', {
@@ -586,7 +577,7 @@ describe('LanternLayout: the arrival on the picture', () => {
 
   it('clears for a new game and a new act', async () => {
     const w = await ready()
-    useSettingsStore(pinia).narrationOn = false
+    useSettingsStore(pinia).narrationVolume = 0
     await run('go north')
     useGameStore(pinia).gameNumber++
     await vi.advanceTimersByTimeAsync(0)
@@ -625,7 +616,7 @@ describe('LanternLayout: the arrival on the picture', () => {
 
   it('shows the room clear after a load', async () => {
     const w = await ready()
-    useSettingsStore(pinia).narrationOn = false
+    useSettingsStore(pinia).narrationVolume = 0
     await run('go north')
     useGameStore(pinia).loadNumber++
     await nextTick()
@@ -664,7 +655,7 @@ describe('LanternLayout: the arrival on the picture', () => {
 
     it('is told before the quest news, with its sound, and the card never carries the learned line', async () => {
       const w = await ready(true, false)
-      useSettingsStore(pinia).narrationOn = false
+      useSettingsStore(pinia).narrationVolume = 0
       const game = useGameStore(pinia)
       const audio = {
         playNewQuest: vi.fn(),
@@ -691,7 +682,7 @@ describe('LanternLayout: the arrival on the picture', () => {
 
     it('tells nothing in the middle and rings nothing for a turn a load brought back', async () => {
       const w = await ready(true, false)
-      useSettingsStore(pinia).narrationOn = false
+      useSettingsStore(pinia).narrationVolume = 0
       const game = useGameStore(pinia)
       const audio = {
         playNewQuest: vi.fn(),
@@ -792,7 +783,7 @@ describe('LanternLayout: the arrival on the picture', () => {
 
     it('leaves the line on the card where nothing is told in the middle', async () => {
       const w = await ready('short', false)
-      useSettingsStore(pinia).narrationOn = false
+      useSettingsStore(pinia).narrationVolume = 0
       useGameStore(pinia).setAudioPlayer({
         playNewQuest: vi.fn(),
         playQuestComplete: vi.fn(),

@@ -4,7 +4,7 @@
  * smaller type, the seal stands beside the heading and the pill says "Tap to
  * continue".
  */
-import { test, expect, type Page } from '@playwright/test'
+import { test, expect, type Page } from './fixtures'
 
 /** A touch screen, as a phone reports itself. */
 test.use({ hasTouch: true, isMobile: true })

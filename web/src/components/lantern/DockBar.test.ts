@@ -5,7 +5,6 @@ import { createPinia, setActivePinia } from 'pinia'
 import DockBar from './DockBar.vue'
 import { useGameStore } from '@/stores/useGameStore'
 import { useNarrationStore } from '@/stores/useNarrationStore'
-import { useSettingsStore } from '@/stores/useSettingsStore'
 import { useArrivalStore } from '@/stores/useArrivalStore'
 
 describe('DockBar', () => {
@@ -90,7 +89,6 @@ describe('DockBar', () => {
   })
 
   it('dims Hint while a turn is read aloud', async () => {
-    useSettingsStore().narrationOn = true
     const narration = useNarrationStore()
     narration.setAudioFactory(() => ({
       volume: 1,
@@ -134,7 +132,6 @@ describe('DockBar', () => {
   })
 
   it('offers Hint during a narrated arrival, and a press ends it and sends hint', async () => {
-    useSettingsStore().narrationOn = true
     const narration = useNarrationStore()
     narration.setAudioFactory(() => ({
       volume: 1,

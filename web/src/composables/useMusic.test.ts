@@ -72,17 +72,10 @@ describe('useMusic', () => {
   // --- Initial state ---
 
   describe('initial state', () => {
-    it('starts unmuted with empty track info', () => {
-      const { musicMuted, currentMusicFile, musicInfo } = useMusic(audio)
-      expect(musicMuted.value).toBe(false)
+    it('starts with empty track info', () => {
+      const { currentMusicFile, musicInfo } = useMusic(audio)
       expect(currentMusicFile.value).toBe('')
       expect(musicInfo.value).toBe('')
-    })
-
-    it('restores muted state from localStorage', () => {
-      localStorage.setItem('retroquest_music_muted', 'true')
-      const { musicMuted } = useMusic(audio)
-      expect(musicMuted.value).toBe(true)
     })
   })
 
@@ -107,14 +100,6 @@ describe('useMusic', () => {
       loadTrack('forest.mp3', 'Forest ambience')
       expect(currentMusicFile.value).toBe('forest.mp3')
       expect(musicInfo.value).toBe('Forest ambience')
-    })
-
-    it('does not play when muted', () => {
-      localStorage.setItem('retroquest_music_muted', 'true')
-      const { loadTrack } = useMusic(audio)
-      loadTrack('tavern.mp3', 'Tavern theme')
-      expect(audio.src).toBe('/audio/music/tavern.mp3')
-      expect(audio.play).not.toHaveBeenCalled()
     })
 
     it('skips reload if same file', () => {
@@ -183,15 +168,6 @@ describe('useMusic', () => {
       expect(audio.volume).toBe(1)
     })
 
-    it('does not ramp while muted', async () => {
-      localStorage.setItem('retroquest_music_muted', 'true')
-      const { loadTrack } = useMusic(audio)
-      loadTrack('a.mp3', 'A', MUSIC_FADE_IN_MS)
-      await vi.advanceTimersByTimeAsync(MUSIC_FADE_IN_MS)
-      expect(audio.play).not.toHaveBeenCalled()
-      expect(audio.volume).toBe(1)
-    })
-
     it('ramps after the first input when autoplay was blocked', async () => {
       const play = audio.play as ReturnType<typeof vi.fn>
       play.mockRejectedValueOnce(new Error('Autoplay blocked'))
@@ -232,46 +208,6 @@ describe('useMusic', () => {
       start()
       await vi.advanceTimersByTimeAsync(MUSIC_FADE_IN_MS)
       expect(audio.volume).toBeCloseTo(1)
-    })
-  })
-
-  // --- toggleMute ---
-
-  describe('toggleMute', () => {
-    it('toggles from unmuted to muted', () => {
-      const { toggleMute, musicMuted } = useMusic(audio)
-      toggleMute()
-      expect(musicMuted.value).toBe(true)
-      expect(audio.pause).toHaveBeenCalled()
-    })
-
-    it('toggles from muted to unmuted and plays', () => {
-      localStorage.setItem('retroquest_music_muted', 'true')
-      const { toggleMute, loadTrack, musicMuted } = useMusic(audio)
-      loadTrack('tavern.mp3', 'Theme')
-      ;(audio.play as ReturnType<typeof vi.fn>).mockClear()
-      toggleMute()
-      expect(musicMuted.value).toBe(false)
-      expect(audio.play).toHaveBeenCalled()
-    })
-
-    it('stores the mute choice in the settings, not the old key', () => {
-      const { toggleMute } = useMusic(audio)
-      toggleMute()
-      expect(useSettingsStore().musicOn).toBe(false)
-      toggleMute()
-      expect(useSettingsStore().musicOn).toBe(true)
-      expect(localStorageMock.setItem).not.toHaveBeenCalledWith(
-        'retroquest_music_muted',
-        expect.anything(),
-      )
-    })
-
-    it('does not play when unmuting with no track', () => {
-      localStorage.setItem('retroquest_music_muted', 'true')
-      const { toggleMute } = useMusic(audio)
-      toggleMute()
-      expect(audio.play).not.toHaveBeenCalled()
     })
   })
 
@@ -508,18 +444,6 @@ describe('useMusic', () => {
       expect(el.volume).toBe(0.5)
     })
 
-    it('silences both loops at once when the music is muted mid-fade', () => {
-      const el = playing()
-      const { loadTrack } = useMusic(el as unknown as HTMLAudioElement)
-      loadTrack('a.mp3', '')
-      el.paused = false
-      loadTrack('b.mp3', '')
-      vi.advanceTimersByTime(MUSIC_CROSSFADE_MS / 3)
-      useSettingsStore().musicOn = false
-      expect(el.paused).toBe(true)
-      expect(FadeAudio.made[0].paused).toBe(true)
-    })
-
     it('silences the fading loop when stopped', () => {
       const el = playing()
       const music = useMusic(el as unknown as HTMLAudioElement)
@@ -582,11 +506,6 @@ describe('useMusic', () => {
       await nextTick()
       vi.advanceTimersByTime(MUSIC_DUCK_FADE_MS * 2)
       expect(next.volume).toBeCloseTo(0.4 * MUSIC_DUCK)
-
-      useSettingsStore().musicOn = false
-      expect(next.paused).toBe(true)
-      useSettingsStore().musicOn = true
-      expect(next.paused).toBe(false)
     })
 
     it('ends with the newest loop alone when the room changes twice quickly', () => {
@@ -614,16 +533,6 @@ describe('useMusic', () => {
       expect(FadeAudio.made).toHaveLength(0)
       expect(el.volume).toBe(0.5)
     })
-
-    it('cuts straight over when the music is muted', () => {
-      const el = playing()
-      const { loadTrack } = useMusic(el as unknown as HTMLAudioElement)
-      loadTrack('a.mp3', '')
-      el.paused = false
-      useSettingsStore().musicOn = false
-      loadTrack('b.mp3', '')
-      expect(FadeAudio.made).toHaveLength(0)
-    })
   })
 
   // --- Settings ---
@@ -642,22 +551,13 @@ describe('useMusic', () => {
       expect(audio.volume).toBe(0.4)
     })
 
-    it('pauses when music is turned off in the settings', () => {
-      const { loadTrack, musicMuted } = useMusic(audio)
-      loadTrack('tavern.mp3', 'Theme')
-      useSettingsStore().musicOn = false
-      expect(musicMuted.value).toBe(true)
-      expect(audio.pause).toHaveBeenCalled()
-    })
-
-    it('resumes the track when music is turned on in the settings', () => {
-      const settings = useSettingsStore()
-      settings.musicOn = false
+    it('keeps playing, silently, at volume 0', async () => {
       const { loadTrack } = useMusic(audio)
       loadTrack('tavern.mp3', 'Theme')
-      expect(audio.play).not.toHaveBeenCalled()
-      settings.musicOn = true
-      expect(audio.play).toHaveBeenCalledTimes(1)
+      useSettingsStore().musicVolume = 0
+      await nextTick()
+      expect(audio.volume).toBe(0)
+      expect(audio.pause).not.toHaveBeenCalled()
     })
   })
 })
@@ -802,25 +702,10 @@ describe('useMusic on Web Audio', () => {
     expect(audio.play).toHaveBeenCalled()
   })
 
-  it('stays silent while muted and starts the loop when switched on', async () => {
-    const settings = useSettingsStore()
-    settings.musicOn = false
+  it('stops the loop when the track is cleared', async () => {
     const music = useMusic(audio)
     music.loadTrack('a.mp3', 'A')
     await ready()
-    expect(ctx.sources).toHaveLength(0)
-    settings.musicOn = true
-    expect(ctx.sources).toHaveLength(1)
-  })
-
-  it('stops the loop when muted, and when the track is cleared', async () => {
-    const settings = useSettingsStore()
-    const music = useMusic(audio)
-    music.loadTrack('a.mp3', 'A')
-    await ready()
-    settings.musicOn = false
-    expect(ctx.sources[0].stop).toHaveBeenCalled()
-    settings.musicOn = true
     music.loadTrack('', '')
     expect(ctx.sources.at(-1)?.stop).toHaveBeenCalled()
   })
@@ -974,17 +859,6 @@ describe('useMusic on Web Audio', () => {
       await vi.advanceTimersByTimeAsync(MUSIC_CROSSFADE_MS / 2)
       expect(rainGain()).toBe(0)
       expect(rainSources()[0].stop).toHaveBeenCalled()
-    })
-
-    it('stops the effects when the music is turned off, and starts them again with it', async () => {
-      const settings = useSettingsStore()
-      const music = useMusic(audio, ref(false), rainOnA)
-      music.loadTrack('a.mp3', 'A', 0, false, inA)
-      await ready()
-      settings.musicOn = false
-      expect(rainSources()[0].stop).toHaveBeenCalled()
-      settings.musicOn = true
-      expect(rainSources()).toHaveLength(2)
     })
 
     it('dips the effects with the music under a voice', async () => {

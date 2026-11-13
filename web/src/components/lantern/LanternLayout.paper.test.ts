@@ -7,7 +7,6 @@ import LanternLayout from './LanternLayout.vue'
 import { useGameStore, type Turn } from '@/stores/useGameStore'
 import { useStageSpeechStore } from '@/stores/useStageSpeechStore'
 import { useNarrationStore } from '@/stores/useNarrationStore'
-import { useSettingsStore } from '@/stores/useSettingsStore'
 import { useFlightStore } from '@/stores/useFlightStore'
 import { useArrivalStore } from '@/stores/useArrivalStore'
 import { useSceneStore } from '@/stores/useSceneStore'
@@ -541,7 +540,6 @@ describe('the narration paper', () => {
 
   it('only skips on Escape while the narrator speaks, hiding nothing', async () => {
     await mountTalking()
-    useSettingsStore().narrationOn = true
     const narration = useNarrationStore()
     narration.setAudioFactory(() => ({
       volume: 1,

@@ -3,7 +3,7 @@
  * laptop (rq-c15r.1): the story pane is gone, the cards stop under the room
  * plate and never overlap the speech, also in a window about 1060 px wide.
  */
-import { test, expect, type Page } from '@playwright/test'
+import { test, expect, type Page } from './fixtures'
 
 /** Open the game, close the opening chapter page and switch the actions to typing. */
 async function start(page: Page): Promise<void> {
@@ -89,7 +89,10 @@ test('at 1060px the cards and the lines share one column in the middle, under th
 
 test.describe('with the narrator reading', () => {
   // Narration on, as for a new player (the config turns it off for the other specs).
-  test.use({ storageState: { cookies: [], origins: [] } })
+  test.use({
+    storageState: { cookies: [], origins: [] },
+    narrationRecordings: true,
+  })
 
   test('after Escape skips an answer the newest turn is in view at its start', async ({
     page,

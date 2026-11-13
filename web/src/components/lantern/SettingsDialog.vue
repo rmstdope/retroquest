@@ -100,18 +100,8 @@ function volume(event: Event): number {
           ><span class="lq-row-label">Music</span
           ><span class="lq-note">A different track for each act</span></span
         >
-        <button
-          type="button"
-          role="switch"
-          class="lq-switch"
-          aria-label="Music"
-          :aria-checked="settings.musicOn ? 'true' : 'false'"
-          @click="settings.musicOn = !settings.musicOn"
-        >
-          <span class="lq-knob"></span>
-        </button>
       </div>
-      <label v-if="settings.musicOn" class="lq-volume">
+      <label class="lq-volume">
         <span class="lq-note">Volume</span>
         <input
           type="range"
@@ -128,18 +118,8 @@ function volume(event: Event): number {
           ><span class="lq-row-label">Sound effects</span
           ><span class="lq-note">Quest chime and fanfare</span></span
         >
-        <button
-          type="button"
-          role="switch"
-          class="lq-switch"
-          aria-label="Sound effects"
-          :aria-checked="settings.effectsOn ? 'true' : 'false'"
-          @click="settings.effectsOn = !settings.effectsOn"
-        >
-          <span class="lq-knob"></span>
-        </button>
       </div>
-      <label v-if="settings.effectsOn" class="lq-volume">
+      <label class="lq-volume">
         <span class="lq-note">Volume</span>
         <input
           type="range"
@@ -158,18 +138,8 @@ function volume(event: Event): number {
             >The story and every character read aloud</span
           ></span
         >
-        <button
-          type="button"
-          role="switch"
-          class="lq-switch"
-          aria-label="Narration"
-          :aria-checked="settings.narrationOn ? 'true' : 'false'"
-          @click="settings.narrationOn = !settings.narrationOn"
-        >
-          <span class="lq-knob"></span>
-        </button>
       </div>
-      <label v-if="settings.narrationOn" class="lq-volume">
+      <label class="lq-volume">
         <span class="lq-note">Volume</span>
         <input
           type="range"

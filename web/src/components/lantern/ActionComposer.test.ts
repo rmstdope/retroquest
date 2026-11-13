@@ -1424,7 +1424,6 @@ describe('ActionComposer on the stage', () => {
     })
 
     it('leaves the Escape to the narrator while it reads', async () => {
-      useSettingsStore().narrationOn = true
       const narration = useNarrationStore()
       narration.setAudioFactory(() => ({
         volume: 1,
@@ -1644,7 +1643,6 @@ describe('ActionComposer on the stage', () => {
     )
 
     it('is dimmed and cannot be pressed while a turn is read aloud', async () => {
-      useSettingsStore().narrationOn = true
       const narration = useNarrationStore()
       narration.setAudioFactory(() => ({
         volume: 1,

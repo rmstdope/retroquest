@@ -6,7 +6,7 @@
  * green again. Each act is played with the dev server's `debug act<N>` command
  * (the act's golden path), then finished with the act's completing commands.
  */
-import { test, expect, type Page } from '@playwright/test'
+import { test, expect, type Page } from './fixtures'
 import { ACT1_COMPLETING_COMMANDS } from '../src/act1/Act1GoldenPath'
 import { ACT2_COMPLETING_COMMANDS } from '../src/act2/Act2GoldenPath'
 import { ACT3_COMPLETING_COMMANDS } from '../src/act3/Act3GoldenPath'

@@ -3,7 +3,7 @@
  * other story text does, so it reads as part of the same story. Checked in
  * the first room (The Dream) and in Elior's Cottage, on desktop and on a phone.
  */
-import { test, expect, type Locator, type Page } from '@playwright/test'
+import { test, expect, type Locator, type Page } from './fixtures'
 
 /** The right edge of a block, where its lines can reach. */
 async function rightEdge(block: Locator): Promise<number> {

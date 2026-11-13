@@ -3,7 +3,7 @@
  * button; its window shows the visited places, and pressing one walks Elior
  * there, step by step, leaving an arrival per step. A phone has no button.
  */
-import { test, expect, type Page } from '@playwright/test'
+import { test, expect, type Page } from './fixtures'
 
 /** Open the game and close the opening chapter page. */
 async function start(page: Page): Promise<void> {

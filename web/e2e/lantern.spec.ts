@@ -1,4 +1,4 @@
-import { test, expect, type Page } from '@playwright/test'
+import { test, expect, type Page } from './fixtures'
 
 /** Wait for the game to start (the act chunks load after the page's load event). */
 async function waitForGame(page: Page) {

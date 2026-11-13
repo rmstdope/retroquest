@@ -3,7 +3,7 @@
  * of the picture, on its own line, with the narrator's cards and the speech
  * ending above it at every width; it clears both sides and leaves "▴ Show".
  */
-import { test, expect, type Page } from '@playwright/test'
+import { test, expect, type Page } from './fixtures'
 
 /** Open the game and close the opening chapter page. */
 async function start(page: Page): Promise<void> {

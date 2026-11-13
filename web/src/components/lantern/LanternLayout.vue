@@ -1853,7 +1853,7 @@ const shownQuestView = computed<QuestView | null>(() => {
 const NARRATION_HELP =
   '\n[bold]Narration:[/bold] tap the story or press Space to hurry the current line; ' +
   'double-tap or press Esc to show the rest at once. Any action cuts in. ' +
-  'Turn narration off in Settings.\n'
+  'Set its volume, down to silent, in Settings.\n'
 
 /** Help's line for the key that hides the narration paper (laptop only). */
 const NARRATION_KEY_HELP = '\nN — hide or show the words\n'

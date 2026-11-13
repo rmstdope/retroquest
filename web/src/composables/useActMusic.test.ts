@@ -778,9 +778,9 @@ describe('useActMusic with the effects of a room', () => {
       scope.stop()
     })
 
-    it('plays nothing while effects are off', async () => {
+    it('plays nothing while the effects volume is 0', async () => {
       bindRainToDing()
-      useSettingsStore().effectsOn = false
+      useSettingsStore().effectsVolume = 0
       const scope = await startIn('EliorsCottage')
       ctx = FakeAudioContext.last
       useGameStore().musicSoundFirings = [
@@ -792,8 +792,8 @@ describe('useActMusic with the effects of a room', () => {
     })
   })
 
-  it('fetches and plays no effects at all while effects are off', async () => {
-    useSettingsStore().effectsOn = false
+  it('fetches and plays no effects at all while the effects volume is 0', async () => {
+    useSettingsStore().effectsVolume = 0
     const scope = await startInTheDream()
     ctx = FakeAudioContext.last
     const fetched = vi.mocked(fetch).mock.calls.map(([url]) => String(url))
@@ -815,10 +815,9 @@ describe('useActMusic with the effects of a room', () => {
     // The effects join the music as they are decoded.
     await vi.waitFor(() => expect(effectsBus()).toBeDefined())
     expect(effectsBus()?.gain.value).toBeCloseTo(0.4)
-    settings.effectsOn = false
+    settings.effectsVolume = 0
     await nextTick()
     expect(effectsBus()?.gain.value).toBe(0)
-    settings.effectsOn = true
     settings.effectsVolume = 80
     await nextTick()
     expect(effectsBus()?.gain.value).toBeCloseTo(0.8)

@@ -3,7 +3,6 @@ import { nextTick } from 'vue'
 import { createPinia, setActivePinia } from 'pinia'
 import { useArrivalStore } from './useArrivalStore'
 import { useNarrationStore, type NarrationAudio } from './useNarrationStore'
-import { useSettingsStore } from './useSettingsStore'
 import { useStageSpeechStore } from './useStageSpeechStore'
 import { useSceneStore } from './useSceneStore'
 import type { NarrationUnit } from '@/lantern/narrationUnits'
@@ -87,7 +86,6 @@ describe('useArrivalStore', () => {
     vi.useFakeTimers()
     FakeAudio.all = []
     setActivePinia(createPinia())
-    useSettingsStore().narrationOn = true
     narration = useNarrationStore()
     narration.setAudioFactory((src) => new FakeAudio(src))
     arrival = useArrivalStore()
