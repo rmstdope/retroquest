@@ -16,7 +16,12 @@ import { ELIOR_PORTRAIT_PROMPT, PORTRAIT_PROMPTS } from './portraitPrompts'
 import { roomTrackId } from './musicLists'
 import { declaredAreas, type ImageArea } from './roomAreas'
 import { spotAreas } from './roomMotion'
-import { declaredPatches, type ImagePatch } from './roomPatches'
+import {
+  declaredPatches,
+  listedPatch,
+  type ImagePatch,
+  type ListedPatch,
+} from './roomPatches'
 
 /** Width in pixels of every room image. */
 export const IMAGE_WIDTH = 1920
@@ -69,7 +74,7 @@ export interface GameImage {
   /** A room image's named areas: one for each item, character, scenery piece and exit that can ever be in the room, which the navigator places on the image in the studio. Absent for a portrait. */
   areas?: ImageArea[]
   /** A room image's patches: the small changes the picture needs, each linked to the area of the thing it is about. Absent for a portrait and for a room with no small change. */
-  patches?: ImagePatch[]
+  patches?: ListedPatch[]
 }
 
 /**
@@ -94,8 +99,8 @@ export function roomImages(act: Act): GameImage[] {
     width: IMAGE_WIDTH,
     height: IMAGE_HEIGHT,
     text,
-    areas: [...areas],
-    ...(patches.length > 0 ? { patches: [...patches] } : {}),
+    areas: areas.map(({ id, title }) => ({ id, title })),
+    ...(patches.length > 0 ? { patches: patches.map(listedPatch) } : {}),
   })
   const own = rooms.map(([key, room]) =>
     image(

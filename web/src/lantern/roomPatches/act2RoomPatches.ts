@@ -1,4 +1,5 @@
 import type { ImagePatch } from '../roomPatches'
+import { FLAG_PROTECTIVE_CHARM_USED_FOREST_ENTRANCE } from '@/act2/Act2StoryFlags'
 
 /**
  * The declared patches of each room of Act 2, by room key: the small changes
@@ -15,24 +16,28 @@ export const ACT2_ROOM_PATCHES: Record<string, ImagePatch[]> = {
       title: 'Mountain Flower taken',
       text: 'Remove the mountain flower from the picture.',
       area: 'mountain-flower',
+      when: 'absent',
     },
     {
       id: 'walking-stick-taken',
       title: 'Walking Stick taken',
       text: 'Remove the walking stick from the picture.',
       area: 'walking-stick',
+      when: 'absent',
     },
     {
       id: 'exit-east-open',
       title: 'Way east open',
       text: 'Show the way east open and passable.',
       area: 'exit-east',
+      when: 'present',
     },
     {
       id: 'entry-pass-appears',
       title: 'Entry Pass appears',
       text: 'Add the entry pass to the picture.',
       area: 'entry-pass',
+      when: 'present',
     },
   ],
   GreendaleGates: [
@@ -41,18 +46,21 @@ export const ACT2_ROOM_PATCHES: Record<string, ImagePatch[]> = {
       title: 'Gate Captain gone',
       text: 'Remove Gate Captain from the picture.',
       area: 'gate-captain',
+      when: 'absent',
     },
     {
       id: 'exit-north-open',
       title: 'Way north open',
       text: 'Show the way north open and passable.',
       area: 'exit-north',
+      when: 'present',
     },
     {
       id: 'city-map-appears',
       title: 'City Map appears',
       text: 'Add the city map to the picture.',
       area: 'city-map',
+      when: 'present',
     },
   ],
   MainSquare: [
@@ -61,6 +69,7 @@ export const ACT2_ROOM_PATCHES: Record<string, ImagePatch[]> = {
       title: "Merchant's Flyer taken",
       text: "Remove the merchant's flyer from the picture.",
       area: 'merchants-flyer',
+      when: 'absent',
     },
   ],
   MarketDistrict: [
@@ -69,18 +78,21 @@ export const ACT2_ROOM_PATCHES: Record<string, ImagePatch[]> = {
       title: 'Forest Survival Kit appears',
       text: 'Add the forest survival kit to the picture.',
       area: 'forest-survival-kit',
+      when: 'present',
     },
     {
       id: 'enhanced-lantern-appears',
       title: 'Enhanced Lantern appears',
       text: 'Add the enhanced lantern to the picture.',
       area: 'enhanced-lantern',
+      when: 'present',
     },
     {
       id: 'quality-rope-appears',
       title: 'Quality Rope appears',
       text: 'Add the quality rope to the picture.',
       area: 'quality-rope',
+      when: 'present',
     },
   ],
   SilverStagInn: [
@@ -89,12 +101,14 @@ export const ACT2_ROOM_PATCHES: Record<string, ImagePatch[]> = {
       title: 'Room Key gone',
       text: 'Remove the room key from the picture.',
       area: 'room-key',
+      when: 'absent',
     },
     {
       id: 'exit-east-open',
       title: 'Way east open',
       text: 'Show the way east open and passable.',
       area: 'exit-east',
+      when: 'present',
     },
   ],
   InnRooms: [
@@ -103,12 +117,14 @@ export const ACT2_ROOM_PATCHES: Record<string, ImagePatch[]> = {
       title: 'Coins taken',
       text: 'Remove the coins from the picture.',
       area: 'coins',
+      when: 'absent',
     },
     {
       id: 'travelers-journal-appears',
       title: "Traveler's Journal appears",
       text: "Add the traveler's journal to the picture.",
       area: 'travelers-journal',
+      when: 'present',
     },
   ],
   CastleApproach: [
@@ -117,6 +133,7 @@ export const ACT2_ROOM_PATCHES: Record<string, ImagePatch[]> = {
       title: 'Way west open',
       text: 'Show the way west open and passable.',
       area: 'exit-west',
+      when: 'present',
     },
   ],
   CastleCourtyard: [
@@ -125,6 +142,7 @@ export const ACT2_ROOM_PATCHES: Record<string, ImagePatch[]> = {
       title: "Squire's Diary appears",
       text: "Add the squire's diary to the picture.",
       area: 'squires-diary',
+      when: 'present',
     },
   ],
   ResidentialQuarter: [
@@ -133,6 +151,7 @@ export const ACT2_ROOM_PATCHES: Record<string, ImagePatch[]> = {
       title: 'Way secret_passage open',
       text: 'Show the way secret_passage open and passable.',
       area: 'exit-secret-passage',
+      when: 'present',
     },
   ],
   HiddenLibrary: [
@@ -141,6 +160,7 @@ export const ACT2_ROOM_PATCHES: Record<string, ImagePatch[]> = {
       title: 'Crystal Focus appears',
       text: 'Add the crystal focus to the picture.',
       area: 'crystal-focus',
+      when: 'present',
     },
   ],
   ForestTransition: [
@@ -149,6 +169,7 @@ export const ACT2_ROOM_PATCHES: Record<string, ImagePatch[]> = {
       title: 'Way east open',
       text: 'Show the way east open and passable.',
       area: 'exit-east',
+      when: 'present',
     },
   ],
   ForestEntrance: [
@@ -157,36 +178,43 @@ export const ACT2_ROOM_PATCHES: Record<string, ImagePatch[]> = {
       title: 'Enchanted Acorn taken',
       text: 'Remove the enchanted acorn from the picture.',
       area: 'enchanted-acorn',
+      when: 'absent',
     },
     {
       id: 'exit-south-open',
       title: 'Way south open',
       text: 'Show the way south open and passable.',
       area: 'exit-south',
+      when: 'present',
     },
     {
       id: 'exit-east-open',
       title: 'Way east open',
       text: 'Show the way east open and passable.',
       area: 'exit-east',
+      when: 'present',
     },
     {
       id: 'ravine-appears',
       title: 'Ravine appears',
       text: 'Add the ravine to the picture.',
       area: 'ravine',
+      when: 'present',
     },
     {
       id: 'caravan-appears',
       title: 'Caravan appears',
       text: 'Add the caravan to the picture.',
       area: 'caravan',
+      when: 'present',
     },
     {
       id: 'forest-sprites-aside',
       title: 'Forest sprites drawn aside',
       text: 'Move the forest sprites away from the southern path, among the trees.',
       area: 'forest-sprites',
+      when: (c) =>
+        c.state.getStoryFlag(FLAG_PROTECTIVE_CHARM_USED_FOREST_ENTRANCE),
     },
   ],
   AncientGrove: [
@@ -195,18 +223,21 @@ export const ACT2_ROOM_PATCHES: Record<string, ImagePatch[]> = {
       title: 'Way south open',
       text: 'Show the way south open and passable.',
       area: 'exit-south',
+      when: 'present',
     },
     {
       id: 'ancient-tree-spirit-appears',
       title: 'Ancient Tree Spirit appears',
       text: 'Add Ancient Tree Spirit to the picture.',
       area: 'ancient-tree-spirit',
+      when: 'present',
     },
     {
       id: 'silver-leaves-appears',
       title: 'Silver Leaves appears',
       text: 'Add the silver leaves to the picture.',
       area: 'silver-leaves',
+      when: 'present',
     },
   ],
   WhisperingGlade: [
@@ -215,18 +246,21 @@ export const ACT2_ROOM_PATCHES: Record<string, ImagePatch[]> = {
       title: 'Water Nymphs appears',
       text: 'Add Water Nymphs to the picture.',
       area: 'water-nymphs',
+      when: 'present',
     },
     {
       id: 'crystal-clear-water-appears',
       title: 'Crystal-Clear Water appears',
       text: 'Add the crystal-clear water to the picture.',
       area: 'crystal-clear-water',
+      when: 'present',
     },
     {
       id: 'moonflowers-appears',
       title: 'Moonflowers appears',
       text: 'Add the moonflowers to the picture.',
       area: 'moonflowers',
+      when: 'present',
     },
   ],
   HeartOfTheForest: [
@@ -235,6 +269,7 @@ export const ACT2_ROOM_PATCHES: Record<string, ImagePatch[]> = {
       title: 'Nyx appears',
       text: 'Add Nyx to the picture.',
       area: 'nyx',
+      when: 'present',
     },
   ],
 }

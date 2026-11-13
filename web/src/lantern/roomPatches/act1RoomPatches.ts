@@ -1,4 +1,5 @@
 import type { ImagePatch } from '../roomPatches'
+import { flagOf } from '../patchRules'
 
 /**
  * The declared patches of each room of Act 1, by room key: the small changes
@@ -15,24 +16,36 @@ export const ACT1_ROOM_PATCHES: Record<string, ImagePatch[]> = {
       title: 'Bread taken',
       text: 'Remove the bread from the picture.',
       area: 'bread',
+      when: 'absent',
     },
     {
       id: 'lantern-lit',
       title: 'Lantern lit',
       text: 'Light the lantern on the table: a small warm flame in the glass.',
       area: 'lantern',
+      when: (c) => {
+        const lantern = c.things.get('lantern')
+        return (
+          !!lantern &&
+          'isLit' in lantern &&
+          typeof lantern.isLit === 'function' &&
+          lantern.isLit() === true
+        )
+      },
     },
     {
       id: 'patches-appears',
       title: 'Patches appears',
       text: 'Add Patches to the picture.',
       area: 'patches',
+      when: 'present',
     },
     {
       id: 'faded-photograph-appears',
       title: 'Faded Photograph appears',
       text: 'Add the faded photograph to the picture.',
       area: 'faded-photograph',
+      when: 'present',
     },
   ],
   VegetableField: [
@@ -41,18 +54,21 @@ export const ACT1_ROOM_PATCHES: Record<string, ImagePatch[]> = {
       title: 'Rusty Hoe taken',
       text: 'Remove the rusty hoe from the picture.',
       area: 'rusty-hoe',
+      when: 'absent',
     },
     {
       id: 'dull-knife-taken',
       title: 'Dull Knife taken',
       text: 'Remove the dull knife from the picture.',
       area: 'dull-knife',
+      when: 'absent',
     },
     {
       id: 'withered-carrot-fresh',
       title: 'Carrot freshened',
       text: 'Make the carrot in the field green and fresh instead of withered.',
       area: 'withered-carrot',
+      when: (c) => c.things.get('withered-carrot')?.name === 'fresh carrot',
     },
   ],
   ChickenCoop: [
@@ -61,18 +77,21 @@ export const ACT1_ROOM_PATCHES: Record<string, ImagePatch[]> = {
       title: 'Egg taken',
       text: 'Remove the egg from the picture.',
       area: 'egg',
+      when: 'absent',
     },
     {
       id: 'feather-taken',
       title: 'Feather taken',
       text: 'Remove the feather from the picture.',
       area: 'feather',
+      when: 'absent',
     },
     {
       id: 'key-appears',
       title: 'Key appears',
       text: 'Add the key to the picture.',
       area: 'key',
+      when: 'present',
     },
   ],
   VillageSquare: [
@@ -81,6 +100,7 @@ export const ACT1_ROOM_PATCHES: Record<string, ImagePatch[]> = {
       title: 'Bucket taken',
       text: 'Remove the bucket from the picture.',
       area: 'bucket',
+      when: 'absent',
     },
   ],
   MirasHut: [
@@ -89,6 +109,7 @@ export const ACT1_ROOM_PATCHES: Record<string, ImagePatch[]> = {
       title: 'Ancient Amulet gone',
       text: 'Remove the ancient amulet from the picture.',
       area: 'ancient-amulet',
+      when: 'absent',
     },
   ],
   BlacksmithsForge: [
@@ -97,6 +118,7 @@ export const ACT1_ROOM_PATCHES: Record<string, ImagePatch[]> = {
       title: 'Horseshoe taken',
       text: 'Remove the horseshoe from the picture.',
       area: 'horseshoe',
+      when: 'absent',
     },
   ],
   GeneralStore: [
@@ -105,18 +127,21 @@ export const ACT1_ROOM_PATCHES: Record<string, ImagePatch[]> = {
       title: 'Rope gone',
       text: 'Remove the rope from the picture.',
       area: 'rope',
+      when: 'absent',
     },
     {
       id: 'matches-gone',
       title: 'Matches gone',
       text: 'Remove the matches from the picture.',
       area: 'matches',
+      when: 'absent',
     },
     {
       id: 'patches-appears',
       title: 'Patches appears',
       text: 'Add Patches to the picture.',
       area: 'patches',
+      when: 'present',
     },
   ],
   OldMill: [
@@ -125,12 +150,14 @@ export const ACT1_ROOM_PATCHES: Record<string, ImagePatch[]> = {
       title: 'Millstone Fragment appears',
       text: 'Add the millstone fragment to the picture.',
       area: 'millstone-fragment',
+      when: 'present',
     },
     {
       id: 'mechanism-jammed',
       title: 'Mechanism jammed',
       text: 'Jam a rope through the black-iron mechanism, which hangs still.',
       area: 'mechanism',
+      when: (c) => flagOf(c.things.get('mechanism'), 'repaired'),
     },
   ],
   Riverbank: [
@@ -139,6 +166,7 @@ export const ACT1_ROOM_PATCHES: Record<string, ImagePatch[]> = {
       title: "Mother's Letter appears",
       text: "Add the mother's letter to the picture.",
       area: 'mothers-letter',
+      when: 'present',
     },
   ],
   ForestPath: [
@@ -147,24 +175,28 @@ export const ACT1_ROOM_PATCHES: Record<string, ImagePatch[]> = {
       title: 'Vines cut',
       text: 'Show the vines cut away from the alcove behind them.',
       area: 'vines',
+      when: 'absent',
     },
     {
       id: 'stick-appears',
       title: 'Stick appears',
       text: 'Add the stick to the picture.',
       area: 'stick',
+      when: 'present',
     },
     {
       id: 'snare-appears',
       title: 'Snare appears',
       text: 'Add the snare to the picture.',
       area: 'snare',
+      when: 'present',
     },
     {
       id: 'wild-berries-appears',
       title: 'Wild Berries appears',
       text: 'Add the wild berries to the picture.',
       area: 'wild-berries',
+      when: 'present',
     },
   ],
   HiddenGlade: [
@@ -173,33 +205,39 @@ export const ACT1_ROOM_PATCHES: Record<string, ImagePatch[]> = {
       title: 'Shiny Pebble taken',
       text: 'Remove the shiny pebble from the picture.',
       area: 'shiny-pebble',
+      when: 'absent',
     },
     {
       id: 'rare-flower-appears',
       title: 'Rare Flower appears',
       text: 'Add the rare flower to the picture.',
       area: 'rare-flower',
+      when: 'present',
     },
     {
       id: 'deer-appears',
       title: 'Deer appears',
       text: 'Add Deer to the picture.',
       area: 'deer',
+      when: 'present',
     },
   ],
   VillageChapel: [
-    // The candle's light covers almost the whole picture: the locket lies on it.
+    // The candle's light covers almost the whole picture: the locket (layer 1) lies on it.
     {
       id: 'candle-lit',
       title: 'Candle lit',
       text: 'Light the candle on the altar: a small steady flame, and the dark corner beside it lit.',
       area: 'candle',
+      when: (c) => flagOf(c.things.get('candle'), 'isLit'),
     },
     {
       id: 'locket-appears',
       title: 'Locket appears',
       text: 'Add the locket to the picture.',
       area: 'locket',
+      when: 'present',
+      layer: 1,
     },
   ],
   RoadToGreendale: [
@@ -208,6 +246,7 @@ export const ACT1_ROOM_PATCHES: Record<string, ImagePatch[]> = {
       title: 'Rusty Saw taken',
       text: 'Remove the rusty saw from the picture.',
       area: 'rusty-saw',
+      when: 'absent',
     },
   ],
   VillageWell: [
@@ -216,22 +255,9 @@ export const ACT1_ROOM_PATCHES: Record<string, ImagePatch[]> = {
       title: 'Well purified',
       text: 'Make the water in the well clear and bright instead of dark and still.',
       area: 'well',
+      when: (c) => flagOf(c.things.get('well'), 'isPurified'),
     },
   ],
-}
-
-/**
- * The areas of Act 1 whose arrival needs no patch of its own, by room
- * key then area id, each with the reason.
- */
-export const ACT1_UNPATCHED_AREAS: Record<string, Record<string, string>> = {
-  EliorsCottage: {
-    'exit-south':
-      "the way is painted from the start; only Grandmother's leave opens it",
-    'exit-east':
-      "the way is painted from the start; only Grandmother's leave opens it",
-    'eliors-journal': 'the lantern-lit patch shows the journal with the light',
-  },
 }
 
 /**
@@ -250,24 +276,28 @@ export const ACT1_VARIANT_PATCHES: Readonly<
         title: 'Broken Shovel taken',
         text: 'Take the broken shovel out of the picture.',
         area: 'broken-shovel',
+        when: 'absent',
       },
       {
         id: 'patches-gone',
         title: 'Patches gone',
         text: 'Take Patches out of the picture.',
         area: 'patches',
+        when: 'absent',
       },
       {
         id: 'fishing-rod-appears',
         title: 'Fishing Rod appears',
         text: 'Add the fishing rod to the picture.',
         area: 'fishing-rod',
+        when: 'present',
       },
       {
         id: 'magnet-appears',
         title: 'Magnet appears',
         text: 'Add the magnet to the picture.',
         area: 'magnet',
+        when: 'present',
       },
     ],
   },

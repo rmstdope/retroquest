@@ -27,6 +27,8 @@ export interface ImageArea {
   id: string
   /** Shown in the studio: the thing's name as the story first meets it. */
   title: string
+  /** Why the thing's arrival needs no patch of its own (a way painted open from the start, a thing another patch shows); absent for most areas. */
+  unpatched?: string
 }
 
 /** The declared areas of each room of each act, by act name then room key. */
@@ -93,4 +95,17 @@ export function declaredAreas(
 ): readonly ImageArea[] {
   if (variant) return VARIANT_AREAS[actName]?.[roomKey]?.[variant] ?? []
   return ROOM_AREAS[actName]?.[roomKey] ?? []
+}
+
+/**
+ * The area ids of room `roomKey` of act `actName` whose arrival needs no patch
+ * of its own, each declared with its `unpatched` reason; none for most rooms.
+ */
+export function unpatchedAreas(
+  actName: string,
+  roomKey: string,
+): readonly string[] {
+  return (ROOM_AREAS[actName]?.[roomKey] ?? [])
+    .filter((area) => area.unpatched !== undefined)
+    .map((area) => area.id)
 }

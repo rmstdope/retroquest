@@ -21,9 +21,23 @@ export const ACT1_ROOM_AREAS: Record<string, ImageArea[]> = {
     { id: 'scenery-eliors-cottage-books', title: 'Books' },
     { id: 'grandmother', title: 'Grandmother' },
     { id: 'patches', title: 'Patches' },
-    { id: 'eliors-journal', title: "Elior's Journal" },
-    { id: 'exit-south', title: 'Way south' },
-    { id: 'exit-east', title: 'Way east' },
+    {
+      id: 'eliors-journal',
+      title: "Elior's Journal",
+      unpatched: 'the lantern-lit patch shows the journal with the light',
+    },
+    {
+      id: 'exit-south',
+      title: 'Way south',
+      unpatched:
+        "the way is painted from the start; only Grandmother's leave opens it",
+    },
+    {
+      id: 'exit-east',
+      title: 'Way east',
+      unpatched:
+        "the way is painted from the start; only Grandmother's leave opens it",
+    },
     { id: 'faded-photograph', title: 'Faded Photograph' },
   ],
   VegetableField: [

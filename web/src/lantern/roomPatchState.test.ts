@@ -11,8 +11,8 @@ import { Act3 } from '@/act3/Act3'
 import { Act4 } from '@/act4/Act4'
 import { Game, type Act } from '@/engine'
 import { executeCommands } from '@/testing/gameHelpers'
-import { declaredPatches } from './roomPatches'
-import { appliedPatchIds, patchIsKnown } from './roomPatchState'
+import { declaredPatches, type ImagePatch } from './roomPatches'
+import { appliedPatchIds, layeredIds } from './roomPatchState'
 
 const ACTS: Array<() => Act> = [
   () => new Act1(),
@@ -101,17 +101,53 @@ describe('appliedPatchIds', () => {
   })
 
   it.each(ACTS.map((make) => [make().name, make] as const))(
-    'can judge every declared patch of %s',
+    'of %s: every patch carries its rule, a thing patch its area, and the id ending agrees with the rule',
     (_name, make) => {
       const act = make()
-      const unknown: string[] = []
-      for (const room of Object.keys(act.rooms))
-        for (const patch of declaredPatches(act.name, room))
-          if (!patchIsKnown(act.name, room, patch))
-            unknown.push(`${room} ${patch.id}`)
-      expect(unknown).toEqual([])
+      const faults: string[] = []
+      for (const room of Object.keys(act.rooms)) {
+        const variants = ['', ...act.rooms[room].pictureVariants()]
+        for (const variant of variants)
+          for (const patch of declaredPatches(act.name, room, variant)) {
+            const at = `${room} ${patch.id}`
+            if (patch.when === undefined) faults.push(`${at}: no rule`)
+            else if (typeof patch.when === 'string') {
+              if (patch.area === undefined) faults.push(`${at}: no area`)
+              const wantsPresent = /-(appears|open)$/.test(patch.id)
+              const wantsAbsent = /-(taken|gone|cut|closed)$/.test(patch.id)
+              if (patch.when === 'present' && !wantsPresent)
+                faults.push(`${at}: 'present' but the id does not say so`)
+              if (patch.when === 'absent' && !wantsAbsent)
+                faults.push(`${at}: 'absent' but the id does not say so`)
+            }
+          }
+      }
+      expect(faults).toEqual([])
     },
   )
+
+  it('lays patches by layer then id, whatever the order of declaration', () => {
+    const patch = (id: string, layer?: number): ImagePatch => ({
+      id,
+      title: id,
+      text: id,
+      when: 'present',
+      ...(layer !== undefined ? { layer } : {}),
+    })
+    // The id order (a, b) and the layer order (b, a) disagree.
+    const declared = [patch('a', 1), patch('b', 0), patch('c', 0)]
+    expect(layeredIds(declared)).toEqual(['b', 'c', 'a'])
+    expect(layeredIds([...declared].reverse())).toEqual(['b', 'c', 'a'])
+  })
+
+  it('lays the chapel locket over the candle light', () => {
+    const patches = declaredPatches('Act1', 'VillageChapel')
+    expect(layeredIds([...patches].reverse())).toEqual([
+      'candle-lit',
+      'locket-appears',
+    ])
+    expect(patches.find((p) => p.id === 'locket-appears')?.layer).toBe(1)
+  })
 
   it.each(ACTS.map((make) => [make().name, make] as const))(
     'of %s changes during the golden path and only names declared patches',

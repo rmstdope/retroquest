@@ -10,8 +10,13 @@ import { Act3 } from '@/act3/Act3'
 import { Act4 } from '@/act4/Act4'
 import { Game, Item, type Act } from '@/engine'
 import { allImages, characterImages } from './imageLists'
-import { declaredAreas, exitAreaId, thingAreaId } from './roomAreas'
-import { declaredPatches, unpatchedAreas, type ImagePatch } from './roomPatches'
+import {
+  declaredAreas,
+  exitAreaId,
+  thingAreaId,
+  unpatchedAreas,
+} from './roomAreas'
+import { declaredPatches, type ImagePatch } from './roomPatches'
 import { ACT1_ROOM_PATCHES } from './roomPatches/act1RoomPatches'
 import { ACT2_ROOM_PATCHES } from './roomPatches/act2RoomPatches'
 import { ACT3_ROOM_PATCHES } from './roomPatches/act3RoomPatches'
@@ -75,10 +80,10 @@ describe('room image patches', () => {
     expect(ids).not.toContain('exit-east-open')
     expect(ids).not.toContain('eliors-journal-appears')
     expect(ids).toContain('lantern-lit')
-    expect(unpatchedAreas('Act1', 'EliorsCottage')).toEqual([
-      'exit-south',
-      'exit-east',
+    expect([...unpatchedAreas('Act1', 'EliorsCottage')].sort()).toEqual([
       'eliors-journal',
+      'exit-east',
+      'exit-south',
     ])
   })
 
