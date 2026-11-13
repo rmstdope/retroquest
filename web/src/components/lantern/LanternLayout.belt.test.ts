@@ -458,6 +458,44 @@ describe('LanternLayout: the belt of pictures', () => {
     expect(ring().exists()).toBe(true)
   })
 
+  it('hurries a narrated look with no conversation when a picture on the belt is pressed', async () => {
+    await cottage()
+    expect(useStageSpeechStore().conversation).toBeNull()
+    useSettingsStore().narrationOn = true
+    const narration = useNarrationStore()
+    // A voice that plays until it is stopped.
+    narration.setAudioFactory(() => ({
+      volume: 1,
+      currentTime: 0,
+      onended: null,
+      onerror: null,
+      play: () => Promise.resolve(),
+      pause: () => {},
+    }))
+    const voiced = (markup: string) => ({
+      kind: 'block' as const,
+      parts: [
+        {
+          markup,
+          clip: {
+            file: 'x.mp3',
+            speaker: 'narrator',
+            duration: 5,
+            words: [],
+          },
+        },
+      ],
+    })
+    narration.begin(77, [voiced('A table.'), voiced('A bed.')], 'act1')
+    await w.vm.$nextTick()
+    expect(narration.speaking(77)?.unit).toBe(0)
+    await click(tile('item:bread').element)
+    // The next block is read after the hurried one's short pause.
+    await new Promise((r) => setTimeout(r, 100))
+    expect(narration.speaking(77)?.unit).toBe(1)
+    expect(ring().exists()).toBe(false)
+  })
+
   it.each([
     ['a change of scene', () => (useSceneStore().phase = 'out')],
     ['a pop-up', () => (useGameStore().showModal = true)],
