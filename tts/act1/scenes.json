@@ -1,7 +1,19 @@
 [
   {
-    "id": "act1-the-dream",
-    "title": "The Dream",
+    "id": "act1-abandoned-shed",
+    "title": "Abandoned Shed",
+    "states": [],
+    "triggers": []
+  },
+  {
+    "id": "act1-blacksmiths-forge",
+    "title": "Blacksmith's Forge",
+    "states": [],
+    "triggers": []
+  },
+  {
+    "id": "act1-chicken-coop",
+    "title": "Chicken Coop",
     "states": [],
     "triggers": []
   },
@@ -12,36 +24,12 @@
     "triggers": []
   },
   {
-    "id": "act1-vegetable-field",
-    "title": "Vegetable Field",
+    "id": "act1-forest-path",
+    "title": "Forest Path",
     "states": [
-      "withered",
-      "green"
+      "plain",
+      "kit-trapped"
     ],
-    "triggers": []
-  },
-  {
-    "id": "act1-chicken-coop",
-    "title": "Chicken Coop",
-    "states": [],
-    "triggers": []
-  },
-  {
-    "id": "act1-village-square",
-    "title": "Village Square",
-    "states": [],
-    "triggers": []
-  },
-  {
-    "id": "act1-miras-hut",
-    "title": "Mira's Hut",
-    "states": [],
-    "triggers": []
-  },
-  {
-    "id": "act1-blacksmiths-forge",
-    "title": "Blacksmith's Forge",
-    "states": [],
     "triggers": []
   },
   {
@@ -56,14 +44,17 @@
     ]
   },
   {
-    "id": "act1-village-well",
-    "title": "Village Well",
-    "states": [],
+    "id": "act1-hidden-glade",
+    "title": "Hidden Glade",
+    "states": [
+      "dim",
+      "lit"
+    ],
     "triggers": []
   },
   {
-    "id": "act1-abandoned-shed",
-    "title": "Abandoned Shed",
+    "id": "act1-miras-hut",
+    "title": "Mira's Hut",
     "states": [],
     "triggers": []
   },
@@ -83,20 +74,23 @@
     "triggers": []
   },
   {
-    "id": "act1-forest-path",
-    "title": "Forest Path",
-    "states": [
-      "plain",
-      "kit-trapped"
-    ],
+    "id": "act1-road-to-greendale",
+    "title": "Road to Greendale",
+    "states": [],
     "triggers": []
   },
   {
-    "id": "act1-hidden-glade",
-    "title": "Hidden Glade",
+    "id": "act1-the-dream",
+    "title": "The Dream",
+    "states": [],
+    "triggers": []
+  },
+  {
+    "id": "act1-vegetable-field",
+    "title": "Vegetable Field",
     "states": [
-      "dim",
-      "lit"
+      "withered",
+      "green"
     ],
     "triggers": []
   },
@@ -107,8 +101,14 @@
     "triggers": []
   },
   {
-    "id": "act1-road-to-greendale",
-    "title": "Road to Greendale",
+    "id": "act1-village-square",
+    "title": "Village Square",
+    "states": [],
+    "triggers": []
+  },
+  {
+    "id": "act1-village-well",
+    "title": "Village Well",
     "states": [],
     "triggers": []
   }

@@ -1,47 +1,21 @@
 [
   {
-    "id": "feel-the-storm",
-    "title": "Act 3 Opening",
-    "file": "web/public/audio/music/Orchestronika - Feel The Storm (freetouse.com).mp3",
-    "plays": "Act III, throughout",
-    "text": "dramatic orchestral, rolling strings and drums, stormy and tense, instrumental, no vocals",
-    "seconds": 98
-  },
-  {
-    "id": "act3-miras-hut",
-    "title": "Mira's Hut",
-    "plays": "Act III, Mira's Hut",
-    "text": "mysterious herbalist's hut, hammered dulcimer, low flute, soft frame drum, bundles of herbs and labelled bottles, dark and secretive yet safe, a last refuge before the storm, instrumental, no vocals",
+    "id": "act3-cavern-mouth",
+    "title": "Cavern Mouth",
+    "plays": "Act III, Cavern Mouth",
+    "text": "foreboding cave ambient, low drone, sparse plucked harp, distant dripping, cold mist where the lantern light fades, old worn signs, apprehensive, instrumental, no vocals",
     "seconds": 60,
-    "bpm": 75,
-    "key": "F minor"
+    "bpm": 62,
+    "key": "E minor"
   },
   {
-    "id": "act3-tidal-causeway",
-    "title": "Tidal Causeway",
-    "plays": "Act III, Tidal Causeway",
-    "text": "haunting seascape, low strings, bowed glass, a distant horn, slow swell like breaking waves, moonlight on black water and salt wind, lonely and eerie, instrumental, no vocals",
-    "seconds": 60,
-    "bpm": 70,
-    "key": "D minor"
-  },
-  {
-    "id": "act3-shoreline-markers",
-    "title": "Shoreline Markers",
-    "plays": "Act III, Shoreline Markers",
-    "text": "bleak coastal ambient, solo cello, low drone, sparse harp, cold wind over sand and weathered stones, desolate and contemplative, instrumental, no vocals",
+    "id": "act3-collapsed-galleries",
+    "title": "Collapsed Galleries",
+    "plays": "Act III, Collapsed Galleries",
+    "text": "heavy ambient, deep rumbling percussion, low strings, sparse piano, dust hanging over fallen stone and snapped timbers, crushing weight, oppressive and cautious, instrumental, no vocals",
     "seconds": 60,
     "bpm": 58,
-    "key": "A minor"
-  },
-  {
-    "id": "act3-outer-wards",
-    "title": "Outer Wards",
-    "plays": "Act III, Outer Wards",
-    "text": "drowned ruins, low brass, tremolo strings, timpani swells, ancient pillars rising from black water, the sea reclaiming the stone, ominous and solemn, instrumental, no vocals",
-    "seconds": 60,
-    "bpm": 66,
-    "key": "C minor"
+    "key": "B minor"
   },
   {
     "id": "act3-collapsed-pier",
@@ -53,22 +27,49 @@
     "key": "G minor"
   },
   {
-    "id": "act3-submerged-antechamber",
-    "title": "Submerged Antechamber",
-    "plays": "Act III, Submerged Antechamber",
-    "text": "underwater ambient, glassy pads, celesta, bowed vibraphone, deep reverb, cold glowing carvings under salt-smoothed arches, mysterious and hushed, instrumental, no vocals",
+    "id": "act3-dragons-hall",
+    "title": "Dragon's Hall",
+    "plays": "Act III, Dragon's Hall",
+    "text": "vast ancient orchestral, deep brass, low drone, slow heartbeat timpani, dripping water, cavernous reverb, embers pulsing in the dark, awe and fear before a dragon, instrumental, no vocals",
     "seconds": 60,
-    "bpm": 62,
-    "key": "B minor"
+    "bpm": 60,
+    "key": "D minor"
   },
   {
-    "id": "act3-sanctum-of-the-tide",
-    "title": "Sanctum of the Tide",
-    "plays": "Act III, Sanctum of the Tide",
-    "text": "sacred and eerie ritual, pipe organ drone, deep strings, shimmering harp, slow breathing swells, still water like a dark mirror etched with sigils, awe and foreboding, instrumental, no vocals",
+    "id": "act3-echo-chambers",
+    "title": "Echo Chambers",
+    "plays": "Act III, Echo Chambers",
+    "text": "echoing minimalism, kalimba and harp with long delay, every phrase answered a breath late, bare stone reverb, uncanny and watchful, the sense of being copied, instrumental, no vocals",
     "seconds": 60,
-    "bpm": 52,
-    "key": "C# minor"
+    "bpm": 70,
+    "key": "F# minor"
+  },
+  {
+    "id": "act3-ember-gallery",
+    "title": "Ember Gallery",
+    "plays": "Act III, Ember Gallery",
+    "text": "smouldering orchestral, low strings, warm brass, soft timpani rolls, glowing cinders in a cavern of cooling lava, charcoal and iron, heavy and brooding, instrumental, no vocals",
+    "seconds": 60,
+    "bpm": 76,
+    "key": "A minor"
+  },
+  {
+    "id": "act3-fortress-entrance",
+    "title": "Entrance to Malakar's Fortress",
+    "plays": "Act III, Entrance to Malakar's Fortress",
+    "text": "dark menacing orchestral, low brass, pounding taiko, tremolo strings, iron gates and slowly glowing sigils in a cold wind, dread and resolve before the final confrontation, instrumental, no vocals",
+    "seconds": 60,
+    "bpm": 80,
+    "key": "C minor"
+  },
+  {
+    "id": "act3-fumarole-passages",
+    "title": "Fumarole Passages",
+    "plays": "Act III, Fumarole Passages",
+    "text": "breathing ambient, a low pulse like slow breath, hand drum, deep bass drone, hissing textures, narrow hot tunnels of a sleeping mountain, close and uneasy, instrumental, no vocals",
+    "seconds": 60,
+    "bpm": 68,
+    "key": "D minor"
   },
   {
     "id": "act3-lower-switchbacks",
@@ -80,12 +81,12 @@
     "key": "E minor"
   },
   {
-    "id": "act3-obsidian-outcrops",
-    "title": "Obsidian Outcrops",
-    "plays": "Act III, Obsidian Outcrops",
-    "text": "jagged tension, staccato strings, metallic percussion, dissonant brass hits, black glass towers like teeth, sharp and dangerous, wary and on edge, instrumental, no vocals",
+    "id": "act3-miras-hut",
+    "title": "Mira's Hut",
+    "plays": "Act III, Mira's Hut",
+    "text": "mysterious herbalist's hut, hammered dulcimer, low flute, soft frame drum, bundles of herbs and labelled bottles, dark and secretive yet safe, a last refuge before the storm, instrumental, no vocals",
     "seconds": 60,
-    "bpm": 100,
+    "bpm": 75,
     "key": "F minor"
   },
   {
@@ -98,22 +99,22 @@
     "key": "D major"
   },
   {
-    "id": "act3-fumarole-passages",
-    "title": "Fumarole Passages",
-    "plays": "Act III, Fumarole Passages",
-    "text": "breathing ambient, a low pulse like slow breath, hand drum, deep bass drone, hissing textures, narrow hot tunnels of a sleeping mountain, close and uneasy, instrumental, no vocals",
+    "id": "act3-obsidian-outcrops",
+    "title": "Obsidian Outcrops",
+    "plays": "Act III, Obsidian Outcrops",
+    "text": "jagged tension, staccato strings, metallic percussion, dissonant brass hits, black glass towers like teeth, sharp and dangerous, wary and on edge, instrumental, no vocals",
     "seconds": 60,
-    "bpm": 68,
-    "key": "D minor"
+    "bpm": 100,
+    "key": "F minor"
   },
   {
-    "id": "act3-ember-gallery",
-    "title": "Ember Gallery",
-    "plays": "Act III, Ember Gallery",
-    "text": "smouldering orchestral, low strings, warm brass, soft timpani rolls, glowing cinders in a cavern of cooling lava, charcoal and iron, heavy and brooding, instrumental, no vocals",
+    "id": "act3-outer-wards",
+    "title": "Outer Wards",
+    "plays": "Act III, Outer Wards",
+    "text": "drowned ruins, low brass, tremolo strings, timpani swells, ancient pillars rising from black water, the sea reclaiming the stone, ominous and solemn, instrumental, no vocals",
     "seconds": 60,
-    "bpm": 76,
-    "key": "A minor"
+    "bpm": 66,
+    "key": "C minor"
   },
   {
     "id": "act3-phoenix-crater",
@@ -125,40 +126,22 @@
     "key": "Eb major"
   },
   {
-    "id": "act3-cavern-mouth",
-    "title": "Cavern Mouth",
-    "plays": "Act III, Cavern Mouth",
-    "text": "foreboding cave ambient, low drone, sparse plucked harp, distant dripping, cold mist where the lantern light fades, old worn signs, apprehensive, instrumental, no vocals",
+    "id": "act3-sanctum-of-the-tide",
+    "title": "Sanctum of the Tide",
+    "plays": "Act III, Sanctum of the Tide",
+    "text": "sacred and eerie ritual, pipe organ drone, deep strings, shimmering harp, slow breathing swells, still water like a dark mirror etched with sigils, awe and foreboding, instrumental, no vocals",
     "seconds": 60,
-    "bpm": 62,
-    "key": "E minor"
+    "bpm": 52,
+    "key": "C# minor"
   },
   {
-    "id": "act3-tool-cache",
-    "title": "Tool Cache",
-    "plays": "Act III, Tool Cache",
-    "text": "miner's work theme, anvil and metal percussion, bowed bass, low whistle, a steady practical rhythm, timbers, rope and iron in wet earth, resourceful but tense, instrumental, no vocals",
-    "seconds": 60,
-    "bpm": 88,
-    "key": "G minor"
-  },
-  {
-    "id": "act3-collapsed-galleries",
-    "title": "Collapsed Galleries",
-    "plays": "Act III, Collapsed Galleries",
-    "text": "heavy ambient, deep rumbling percussion, low strings, sparse piano, dust hanging over fallen stone and snapped timbers, crushing weight, oppressive and cautious, instrumental, no vocals",
+    "id": "act3-shoreline-markers",
+    "title": "Shoreline Markers",
+    "plays": "Act III, Shoreline Markers",
+    "text": "bleak coastal ambient, solo cello, low drone, sparse harp, cold wind over sand and weathered stones, desolate and contemplative, instrumental, no vocals",
     "seconds": 60,
     "bpm": 58,
-    "key": "B minor"
-  },
-  {
-    "id": "act3-echo-chambers",
-    "title": "Echo Chambers",
-    "plays": "Act III, Echo Chambers",
-    "text": "echoing minimalism, kalimba and harp with long delay, every phrase answered a breath late, bare stone reverb, uncanny and watchful, the sense of being copied, instrumental, no vocals",
-    "seconds": 60,
-    "bpm": 70,
-    "key": "F# minor"
+    "key": "A minor"
   },
   {
     "id": "act3-stillness-vestibule",
@@ -170,21 +153,38 @@
     "key": "C minor"
   },
   {
-    "id": "act3-dragons-hall",
-    "title": "Dragon's Hall",
-    "plays": "Act III, Dragon's Hall",
-    "text": "vast ancient orchestral, deep brass, low drone, slow heartbeat timpani, dripping water, cavernous reverb, embers pulsing in the dark, awe and fear before a dragon, instrumental, no vocals",
+    "id": "act3-submerged-antechamber",
+    "title": "Submerged Antechamber",
+    "plays": "Act III, Submerged Antechamber",
+    "text": "underwater ambient, glassy pads, celesta, bowed vibraphone, deep reverb, cold glowing carvings under salt-smoothed arches, mysterious and hushed, instrumental, no vocals",
     "seconds": 60,
-    "bpm": 60,
+    "bpm": 62,
+    "key": "B minor"
+  },
+  {
+    "id": "act3-tidal-causeway",
+    "title": "Tidal Causeway",
+    "plays": "Act III, Tidal Causeway",
+    "text": "haunting seascape, low strings, bowed glass, a distant horn, slow swell like breaking waves, moonlight on black water and salt wind, lonely and eerie, instrumental, no vocals",
+    "seconds": 60,
+    "bpm": 70,
     "key": "D minor"
   },
   {
-    "id": "act3-fortress-entrance",
-    "title": "Entrance to Malakar's Fortress",
-    "plays": "Act III, Entrance to Malakar's Fortress",
-    "text": "dark menacing orchestral, low brass, pounding taiko, tremolo strings, iron gates and slowly glowing sigils in a cold wind, dread and resolve before the final confrontation, instrumental, no vocals",
+    "id": "act3-tool-cache",
+    "title": "Tool Cache",
+    "plays": "Act III, Tool Cache",
+    "text": "miner's work theme, anvil and metal percussion, bowed bass, low whistle, a steady practical rhythm, timbers, rope and iron in wet earth, resourceful but tense, instrumental, no vocals",
     "seconds": 60,
-    "bpm": 80,
-    "key": "C minor"
+    "bpm": 88,
+    "key": "G minor"
+  },
+  {
+    "id": "feel-the-storm",
+    "title": "Act 3 Opening",
+    "file": "web/public/audio/music/Orchestronika - Feel The Storm (freetouse.com).mp3",
+    "plays": "Act III, throughout",
+    "text": "dramatic orchestral, rolling strings and drums, stormy and tense, instrumental, no vocals",
+    "seconds": 98
   }
 ]

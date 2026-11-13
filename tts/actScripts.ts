@@ -2,7 +2,7 @@
  * What `tts/extract-act.ts` writes, as functions: the per-act source table
  * (`ACT_SOURCES`), the act's narration script (`extractActScript`), its music
  * loops (`extractActMusic`), images (`extractActImages`) and scenes
- * (`extractActScenes`). Nothing here reads `process.argv` or writes a file,
+ * (`extractActScenes`), each in id order (`byId`). Nothing here reads `process.argv` or writes a file,
  * so a vitest test can compare the result with the committed
  * `tts/act<N>/script.json` and `music.json`. Unsigned writing is given to its
  * writer by `act<N>/writers.json`; lines opening as in `act<N>/silent.json` stay
@@ -86,6 +86,15 @@ function sourceOf(number: string): ActSource {
   return source
 }
 
+/**
+ * Returns `records` in ascending order of their `id` (plain code-unit order, equal ids
+ * keeping their order). The committed lists are written this way so that two branches
+ * changing different records touch different places of the file and git merges them.
+ */
+export function byId<T extends { id: string }>(records: T[]): T[] {
+  return [...records].sort((a, b) => (a.id < b.id ? -1 : a.id > b.id ? 1 : 0))
+}
+
 /** Reads and parses `tts/act<N>/<file>`, or returns `fallback` when it does not exist. */
 function readJson<T>(number: string, file: string, fallback?: T): T {
   const url = new URL(`./act${number}/${file}`, import.meta.url)
@@ -130,13 +139,13 @@ export function extractActScript(number: string): ScriptLine[] {
   } finally {
     Math.random = random
   }
-  return [...lines.values()]
+  return byId([...lines.values()])
 }
 
 /** Returns the act's loop and a loop for each of its rooms, as `music.json` holds them. */
 export function extractActMusic(number: string): MusicTrack[] {
   const act = sourceOf(number).make()
-  return [...actLoops(act), ...roomLoops(act)]
+  return byId([...actLoops(act), ...roomLoops(act)])
 }
 
 /**
@@ -148,10 +157,12 @@ export function extractActImages(number: string): GameImage[] {
     sourceOf(number).make(),
     ACT_NUMBERS.map((n) => sourceOf(n).make()),
   )
-  return number === ACT_NUMBERS[0] ? [...images, titleImage()] : images
+  return byId(
+    number === ACT_NUMBERS[0] ? [...images, titleImage()] : images,
+  )
 }
 
 /** Returns a scene for each room of the act, as `scenes.json` holds them. */
 export function extractActScenes(number: string): SceneDeclaration[] {
-  return actScenes(sourceOf(number).make())
+  return byId(actScenes(sourceOf(number).make()))
 }

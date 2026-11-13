@@ -1,7 +1,7 @@
 /**
  * Writes `tts/act<N>/script.json`, `music.json`, `images.json` and
  * `scenes.json` from `extractActScript`, `extractActMusic`, `extractActImages`
- * and `extractActScenes` (see `actScripts.ts`, where the work is and which a
+ * and `extractActScenes`, each in id order so git merges independent changes (see `actScripts.ts`, where the work is and which a
  * vitest test checks against the committed files).
  * Run from `web/`: `npx -y tsx@4.23.15 --tsconfig tsconfig.json ../tts/extract-act.ts 2`.
  */

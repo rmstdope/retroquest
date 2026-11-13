@@ -1,5 +1,48 @@
 [
   {
+    "id": "act4-chamber-of-whispers",
+    "title": "Chamber of Whispers",
+    "width": 1920,
+    "height": 1080,
+    "text": "A round room at the top of the tower, and the only beautiful room in the fortress. That is what is wrong with it. Crystals grow from the walls, each humming something kind and untrue, and the floor gives a little under your feet, like ice that might hold. At the chamber's heart the Sorceress of Lies waits, her staff crowned with a small silver mask. Your breath catches: it is the mask from Elena's wrist.",
+    "areas": [
+      {
+        "id": "sorceress-staff",
+        "title": "Staff"
+      },
+      {
+        "id": "crystal-whispers",
+        "title": "Whispers"
+      },
+      {
+        "id": "sorceress-of-lies",
+        "title": "Sorceress of Lies"
+      },
+      {
+        "id": "exit-down",
+        "title": "Way down"
+      },
+      {
+        "id": "exit-north",
+        "title": "Way north"
+      }
+    ],
+    "patches": [
+      {
+        "id": "exit-north-open",
+        "title": "Way north open",
+        "text": "Show the way north open and passable.",
+        "area": "exit-north"
+      },
+      {
+        "id": "sorceress-of-lies-unmasked",
+        "title": "Sorceress unmasked",
+        "text": "Show the sorceress unmasked, her false face gone.",
+        "area": "sorceress-of-lies"
+      }
+    ]
+  },
+  {
     "id": "act4-fortress-gates",
     "title": "Fortress Gates",
     "width": 1920,
@@ -99,114 +142,6 @@
     ]
   },
   {
-    "id": "act4-outer-courtyard",
-    "title": "Outer Courtyard",
-    "width": 1920,
-    "height": 1080,
-    "text": "This was a garden once. The fountains still stand under a sky that never quite rains, but what runs down them is black and slow, and the statues have all turned their faces away. Grey figures walk the paths in circles, chains of shadow at their ankles, never looking up. By the dry fountain a soldier in a soot-black royal tabard stands rigid, staring at nothing.",
-    "areas": [
-      {
-        "id": "trapped-servants",
-        "title": "Trapped Servants"
-      },
-      {
-        "id": "captain-of-the-guard",
-        "title": "Captain of the Guard"
-      },
-      {
-        "id": "exit-west",
-        "title": "Way west"
-      },
-      {
-        "id": "servants-pendant",
-        "title": "Servant's Pendant"
-      },
-      {
-        "id": "exit-north",
-        "title": "Way north"
-      }
-    ],
-    "patches": [
-      {
-        "id": "exit-north-open",
-        "title": "Way north open",
-        "text": "Show the way north open and passable.",
-        "area": "exit-north"
-      },
-      {
-        "id": "trapped-servants-freed",
-        "title": "Servants freed",
-        "text": "Show the servants freed from their trap and standing free.",
-        "area": "trapped-servants"
-      },
-      {
-        "id": "servants-pendant-appears",
-        "title": "Servant's Pendant appears",
-        "text": "Add the servant's pendant to the picture.",
-        "area": "servants-pendant"
-      }
-    ]
-  },
-  {
-    "id": "act4-mirror-labyrinth",
-    "title": "Mirror Labyrinth",
-    "width": 1920,
-    "height": 1080,
-    "text": "Corridors of mirror run away from you in every direction, and in each of them a different Elior looks back. You stand at the mouth of the maze, facing north.",
-    "areas": [
-      {
-        "id": "mirrors",
-        "title": "Mirrors"
-      },
-      {
-        "id": "exit-north",
-        "title": "Way north"
-      },
-      {
-        "id": "exit-east",
-        "title": "Way east"
-      },
-      {
-        "id": "exit-west",
-        "title": "Way west"
-      },
-      {
-        "id": "exit-south",
-        "title": "Way south"
-      },
-      {
-        "id": "true-self",
-        "title": "True Self"
-      }
-    ],
-    "patches": [
-      {
-        "id": "exit-north-closed",
-        "title": "Way north closed",
-        "text": "Show the way north closed off.",
-        "area": "exit-north"
-      },
-      {
-        "id": "exit-east-closed",
-        "title": "Way east closed",
-        "text": "Show the way east closed off.",
-        "area": "exit-east"
-      },
-      {
-        "id": "exit-west-closed",
-        "title": "Way west closed",
-        "text": "Show the way west closed off.",
-        "area": "exit-west"
-      },
-      {
-        "id": "true-self-appears",
-        "title": "True Self appears",
-        "text": "Add True Self to the picture.",
-        "area": "true-self"
-      }
-    ]
-  },
-  {
     "id": "act4-hall-of-echoes",
     "title": "Hall of Echoes",
     "width": 1920,
@@ -274,94 +209,6 @@
     ]
   },
   {
-    "id": "act4-tower-of-shadows",
-    "title": "Tower of Shadows",
-    "width": 1920,
-    "height": 1080,
-    "text": "A stair winds up inside the black stone, narrow and dark. The walls are cold, and there are no windows. The shadows on the stair move a moment after you do. With every step, something quiet at your ear tells you why you should not have come.",
-    "areas": [
-      {
-        "id": "whispers",
-        "title": "Whispers"
-      },
-      {
-        "id": "exit-west",
-        "title": "Way west"
-      },
-      {
-        "id": "exit-up",
-        "title": "Way up"
-      },
-      {
-        "id": "exit-in",
-        "title": "Way in"
-      }
-    ],
-    "patches": [
-      {
-        "id": "whispers-gone",
-        "title": "Whispers gone",
-        "text": "Remove Whispers from the picture.",
-        "area": "whispers"
-      },
-      {
-        "id": "exit-up-open",
-        "title": "Way up open",
-        "text": "Show the way up open and passable.",
-        "area": "exit-up"
-      },
-      {
-        "id": "exit-in-open",
-        "title": "Way in open",
-        "text": "Show the way in open and passable.",
-        "area": "exit-in"
-      }
-    ]
-  },
-  {
-    "id": "act4-chamber-of-whispers",
-    "title": "Chamber of Whispers",
-    "width": 1920,
-    "height": 1080,
-    "text": "A round room at the top of the tower, and the only beautiful room in the fortress. That is what is wrong with it. Crystals grow from the walls, each humming something kind and untrue, and the floor gives a little under your feet, like ice that might hold. At the chamber's heart the Sorceress of Lies waits, her staff crowned with a small silver mask. Your breath catches: it is the mask from Elena's wrist.",
-    "areas": [
-      {
-        "id": "sorceress-staff",
-        "title": "Staff"
-      },
-      {
-        "id": "crystal-whispers",
-        "title": "Whispers"
-      },
-      {
-        "id": "sorceress-of-lies",
-        "title": "Sorceress of Lies"
-      },
-      {
-        "id": "exit-down",
-        "title": "Way down"
-      },
-      {
-        "id": "exit-north",
-        "title": "Way north"
-      }
-    ],
-    "patches": [
-      {
-        "id": "exit-north-open",
-        "title": "Way north open",
-        "text": "Show the way north open and passable.",
-        "area": "exit-north"
-      },
-      {
-        "id": "sorceress-of-lies-unmasked",
-        "title": "Sorceress unmasked",
-        "text": "Show the sorceress unmasked, her false face gone.",
-        "area": "sorceress-of-lies"
-      }
-    ]
-  },
-  {
     "id": "act4-memory-vault",
     "title": "Memory Vault",
     "width": 1920,
@@ -411,6 +258,114 @@
     ]
   },
   {
+    "id": "act4-mirror-labyrinth",
+    "title": "Mirror Labyrinth",
+    "width": 1920,
+    "height": 1080,
+    "text": "Corridors of mirror run away from you in every direction, and in each of them a different Elior looks back. You stand at the mouth of the maze, facing north.",
+    "areas": [
+      {
+        "id": "mirrors",
+        "title": "Mirrors"
+      },
+      {
+        "id": "exit-north",
+        "title": "Way north"
+      },
+      {
+        "id": "exit-east",
+        "title": "Way east"
+      },
+      {
+        "id": "exit-west",
+        "title": "Way west"
+      },
+      {
+        "id": "exit-south",
+        "title": "Way south"
+      },
+      {
+        "id": "true-self",
+        "title": "True Self"
+      }
+    ],
+    "patches": [
+      {
+        "id": "exit-north-closed",
+        "title": "Way north closed",
+        "text": "Show the way north closed off.",
+        "area": "exit-north"
+      },
+      {
+        "id": "exit-east-closed",
+        "title": "Way east closed",
+        "text": "Show the way east closed off.",
+        "area": "exit-east"
+      },
+      {
+        "id": "exit-west-closed",
+        "title": "Way west closed",
+        "text": "Show the way west closed off.",
+        "area": "exit-west"
+      },
+      {
+        "id": "true-self-appears",
+        "title": "True Self appears",
+        "text": "Add True Self to the picture.",
+        "area": "true-self"
+      }
+    ]
+  },
+  {
+    "id": "act4-outer-courtyard",
+    "title": "Outer Courtyard",
+    "width": 1920,
+    "height": 1080,
+    "text": "This was a garden once. The fountains still stand under a sky that never quite rains, but what runs down them is black and slow, and the statues have all turned their faces away. Grey figures walk the paths in circles, chains of shadow at their ankles, never looking up. By the dry fountain a soldier in a soot-black royal tabard stands rigid, staring at nothing.",
+    "areas": [
+      {
+        "id": "trapped-servants",
+        "title": "Trapped Servants"
+      },
+      {
+        "id": "captain-of-the-guard",
+        "title": "Captain of the Guard"
+      },
+      {
+        "id": "exit-west",
+        "title": "Way west"
+      },
+      {
+        "id": "servants-pendant",
+        "title": "Servant's Pendant"
+      },
+      {
+        "id": "exit-north",
+        "title": "Way north"
+      }
+    ],
+    "patches": [
+      {
+        "id": "exit-north-open",
+        "title": "Way north open",
+        "text": "Show the way north open and passable.",
+        "area": "exit-north"
+      },
+      {
+        "id": "trapped-servants-freed",
+        "title": "Servants freed",
+        "text": "Show the servants freed from their trap and standing free.",
+        "area": "trapped-servants"
+      },
+      {
+        "id": "servants-pendant-appears",
+        "title": "Servant's Pendant appears",
+        "text": "Add the servant's pendant to the picture.",
+        "area": "servants-pendant"
+      }
+    ]
+  },
+  {
     "id": "act4-parents-vault",
     "title": "Parents' Vault",
     "width": 1920,
@@ -448,6 +403,83 @@
         "area": "memories"
       }
     ]
+  },
+  {
+    "id": "act4-portrait-captain-of-the-guard",
+    "title": "Captain of the Guard",
+    "width": 480,
+    "height": 640,
+    "text": "A face portrait of a royal guard captain with a soot-black tabard collar, open eyes that see nothing, and a slack face."
+  },
+  {
+    "id": "act4-portrait-ghostly-warriors",
+    "title": "Ghostly Warriors",
+    "width": 480,
+    "height": 640,
+    "text": "A face portrait of a pale ghostly soldier, translucent and grim, with an old battered helm and hollow eyes."
+  },
+  {
+    "id": "act4-portrait-king-alden",
+    "title": "King Alden",
+    "width": 480,
+    "height": 640,
+    "text": "A face portrait of a grey, thin king, aged by captivity, with sunken eyes and a dark, dull crown."
+  },
+  {
+    "id": "act4-portrait-knight-of-despair",
+    "title": "Knight of Despair",
+    "width": 480,
+    "height": 640,
+    "text": "A face portrait of a knight in tarnished armour, his visor down, a shredded grey cloak hood around his helm."
+  },
+  {
+    "id": "act4-portrait-malakar",
+    "title": "Malakar",
+    "width": 480,
+    "height": 640,
+    "text": "A face portrait of a gaunt man in a grey robe, with white hair though not old, hollow cheeks and exhausted, sorrowful eyes."
+  },
+  {
+    "id": "act4-portrait-memory-echoes",
+    "title": "Memory Echoes of Aren and Lysa",
+    "width": 480,
+    "height": 640,
+    "text": "A face portrait of a young man and a young woman side by side, small and warm inside the glow of a lantern, seen as a memory."
+  },
+  {
+    "id": "act4-portrait-shadow-of-the-past",
+    "title": "Shadow",
+    "width": 480,
+    "height": 640,
+    "text": "A face portrait of the shadow of a man, thin as smoke, with a blurred face and sorrowful empty eyes."
+  },
+  {
+    "id": "act4-portrait-sorceress-of-lies",
+    "title": "Sorceress of Lies",
+    "width": 480,
+    "height": 640,
+    "text": "A face portrait of a beautiful woman, a little too perfect, with a smile that never reaches her cold eyes."
+  },
+  {
+    "id": "act4-portrait-trapped-servants",
+    "title": "Trapped Servants",
+    "width": 480,
+    "height": 640,
+    "text": "A face portrait of a grey, shadowed servant, with downcast eyes, a kitchen cap, and a grey, shadowed look."
+  },
+  {
+    "id": "act4-portrait-true-self",
+    "title": "True Self",
+    "width": 480,
+    "height": 640,
+    "text": "A face portrait of your own reflection in a plain mirror, a watchful face that seems to know what you will say."
+  },
+  {
+    "id": "act4-portrait-whispers",
+    "title": "Whispers",
+    "width": 480,
+    "height": 640,
+    "text": "A face portrait of a whisper made visible: pale mouthless faces in dark mist, features barely forming."
   },
   {
     "id": "act4-throne-chamber",
@@ -525,6 +557,51 @@
     ]
   },
   {
+    "id": "act4-tower-of-shadows",
+    "title": "Tower of Shadows",
+    "width": 1920,
+    "height": 1080,
+    "text": "A stair winds up inside the black stone, narrow and dark. The walls are cold, and there are no windows. The shadows on the stair move a moment after you do. With every step, something quiet at your ear tells you why you should not have come.",
+    "areas": [
+      {
+        "id": "whispers",
+        "title": "Whispers"
+      },
+      {
+        "id": "exit-west",
+        "title": "Way west"
+      },
+      {
+        "id": "exit-up",
+        "title": "Way up"
+      },
+      {
+        "id": "exit-in",
+        "title": "Way in"
+      }
+    ],
+    "patches": [
+      {
+        "id": "whispers-gone",
+        "title": "Whispers gone",
+        "text": "Remove Whispers from the picture.",
+        "area": "whispers"
+      },
+      {
+        "id": "exit-up-open",
+        "title": "Way up open",
+        "text": "Show the way up open and passable.",
+        "area": "exit-up"
+      },
+      {
+        "id": "exit-in-open",
+        "title": "Way in open",
+        "text": "Show the way in open and passable.",
+        "area": "exit-in"
+      }
+    ]
+  },
+  {
     "id": "act4-willowbrook-field",
     "title": "Willowbrook Field",
     "width": 1920,
@@ -554,18 +631,11 @@
     ]
   },
   {
-    "id": "act4-portrait-malakar",
-    "title": "Malakar",
+    "id": "portrait-elior",
+    "title": "Elior",
     "width": 480,
     "height": 640,
-    "text": "A face portrait of a gaunt man in a grey robe, with white hair though not old, hollow cheeks and exhausted, sorrowful eyes."
-  },
-  {
-    "id": "act4-portrait-king-alden",
-    "title": "King Alden",
-    "width": 480,
-    "height": 640,
-    "text": "A face portrait of a grey, thin king, aged by captivity, with sunken eyes and a dark, dull crown."
+    "text": "A face portrait of a farm boy of about nineteen, sun-browned and freckled, with untidy brown hair, an earnest, searching look, and the frayed collar of a homespun shirt."
   },
   {
     "id": "portrait-grandmother",
@@ -582,13 +652,6 @@
     "text": "A face portrait of a village healer in middle age, with a calm, steady gaze that rests on you a moment longer than is comfortable, and a sprig of dried sage tucked behind one ear."
   },
   {
-    "id": "portrait-sir-cedric",
-    "title": "Sir Cedric",
-    "width": 480,
-    "height": 640,
-    "text": "A face portrait of a tall knight in his fifties with a weathered, tired face and a steady, watchful stare, a steel mail coif and a dented gorget around his neck."
-  },
-  {
     "id": "portrait-nyx",
     "title": "Nyx",
     "width": 480,
@@ -596,73 +659,10 @@
     "text": "A face portrait of a young woman with wild hair and green leaves caught in it, a pale, watchful face and bright, curious eyes."
   },
   {
-    "id": "act4-portrait-whispers",
-    "title": "Whispers",
+    "id": "portrait-sir-cedric",
+    "title": "Sir Cedric",
     "width": 480,
     "height": 640,
-    "text": "A face portrait of a whisper made visible: pale mouthless faces in dark mist, features barely forming."
-  },
-  {
-    "id": "act4-portrait-shadow-of-the-past",
-    "title": "Shadow",
-    "width": 480,
-    "height": 640,
-    "text": "A face portrait of the shadow of a man, thin as smoke, with a blurred face and sorrowful empty eyes."
-  },
-  {
-    "id": "act4-portrait-sorceress-of-lies",
-    "title": "Sorceress of Lies",
-    "width": 480,
-    "height": 640,
-    "text": "A face portrait of a beautiful woman, a little too perfect, with a smile that never reaches her cold eyes."
-  },
-  {
-    "id": "act4-portrait-captain-of-the-guard",
-    "title": "Captain of the Guard",
-    "width": 480,
-    "height": 640,
-    "text": "A face portrait of a royal guard captain with a soot-black tabard collar, open eyes that see nothing, and a slack face."
-  },
-  {
-    "id": "act4-portrait-knight-of-despair",
-    "title": "Knight of Despair",
-    "width": 480,
-    "height": 640,
-    "text": "A face portrait of a knight in tarnished armour, his visor down, a shredded grey cloak hood around his helm."
-  },
-  {
-    "id": "act4-portrait-ghostly-warriors",
-    "title": "Ghostly Warriors",
-    "width": 480,
-    "height": 640,
-    "text": "A face portrait of a pale ghostly soldier, translucent and grim, with an old battered helm and hollow eyes."
-  },
-  {
-    "id": "act4-portrait-true-self",
-    "title": "True Self",
-    "width": 480,
-    "height": 640,
-    "text": "A face portrait of your own reflection in a plain mirror, a watchful face that seems to know what you will say."
-  },
-  {
-    "id": "act4-portrait-trapped-servants",
-    "title": "Trapped Servants",
-    "width": 480,
-    "height": 640,
-    "text": "A face portrait of a grey, shadowed servant, with downcast eyes, a kitchen cap, and a grey, shadowed look."
-  },
-  {
-    "id": "act4-portrait-memory-echoes",
-    "title": "Memory Echoes of Aren and Lysa",
-    "width": 480,
-    "height": 640,
-    "text": "A face portrait of a young man and a young woman side by side, small and warm inside the glow of a lantern, seen as a memory."
-  },
-  {
-    "id": "portrait-elior",
-    "title": "Elior",
-    "width": 480,
-    "height": 640,
-    "text": "A face portrait of a farm boy of about nineteen, sun-browned and freckled, with untidy brown hair, an earnest, searching look, and the frayed collar of a homespun shirt."
+    "text": "A face portrait of a tall knight in his fifties with a weathered, tired face and a steady, watchful stare, a steel mail coif and a dented gorget around his neck."
   }
 ]

@@ -1,91 +1,7 @@
 [
   {
-    "id": "act3-miras-hut",
-    "title": "Mira's Hut",
-    "states": [],
-    "triggers": []
-  },
-  {
-    "id": "act3-tidal-causeway",
-    "title": "Tidal Causeway",
-    "states": [],
-    "triggers": []
-  },
-  {
-    "id": "act3-shoreline-markers",
-    "title": "Shoreline Markers",
-    "states": [],
-    "triggers": []
-  },
-  {
-    "id": "act3-outer-wards",
-    "title": "Outer Wards",
-    "states": [],
-    "triggers": []
-  },
-  {
-    "id": "act3-collapsed-pier",
-    "title": "Collapsed Pier",
-    "states": [],
-    "triggers": []
-  },
-  {
-    "id": "act3-submerged-antechamber",
-    "title": "Submerged Antechamber",
-    "states": [],
-    "triggers": []
-  },
-  {
-    "id": "act3-sanctum-of-the-tide",
-    "title": "Sanctum of the Tide",
-    "states": [],
-    "triggers": []
-  },
-  {
-    "id": "act3-lower-switchbacks",
-    "title": "Lower Switchbacks",
-    "states": [],
-    "triggers": []
-  },
-  {
-    "id": "act3-obsidian-outcrops",
-    "title": "Obsidian Outcrops",
-    "states": [],
-    "triggers": []
-  },
-  {
-    "id": "act3-mirror-terraces",
-    "title": "Mirror Terraces",
-    "states": [],
-    "triggers": []
-  },
-  {
-    "id": "act3-fumarole-passages",
-    "title": "Fumarole Passages",
-    "states": [],
-    "triggers": []
-  },
-  {
-    "id": "act3-ember-gallery",
-    "title": "Ember Gallery",
-    "states": [],
-    "triggers": []
-  },
-  {
-    "id": "act3-phoenix-crater",
-    "title": "Phoenix Crater",
-    "states": [],
-    "triggers": []
-  },
-  {
     "id": "act3-cavern-mouth",
     "title": "Cavern Mouth",
-    "states": [],
-    "triggers": []
-  },
-  {
-    "id": "act3-tool-cache",
-    "title": "Tool Cache",
     "states": [],
     "triggers": []
   },
@@ -96,14 +12,8 @@
     "triggers": []
   },
   {
-    "id": "act3-echo-chambers",
-    "title": "Echo Chambers",
-    "states": [],
-    "triggers": []
-  },
-  {
-    "id": "act3-stillness-vestibule",
-    "title": "Stillness Vestibule",
+    "id": "act3-collapsed-pier",
+    "title": "Collapsed Pier",
     "states": [],
     "triggers": []
   },
@@ -114,8 +24,98 @@
     "triggers": []
   },
   {
+    "id": "act3-echo-chambers",
+    "title": "Echo Chambers",
+    "states": [],
+    "triggers": []
+  },
+  {
+    "id": "act3-ember-gallery",
+    "title": "Ember Gallery",
+    "states": [],
+    "triggers": []
+  },
+  {
     "id": "act3-fortress-entrance",
     "title": "Entrance to Malakar's Fortress",
+    "states": [],
+    "triggers": []
+  },
+  {
+    "id": "act3-fumarole-passages",
+    "title": "Fumarole Passages",
+    "states": [],
+    "triggers": []
+  },
+  {
+    "id": "act3-lower-switchbacks",
+    "title": "Lower Switchbacks",
+    "states": [],
+    "triggers": []
+  },
+  {
+    "id": "act3-miras-hut",
+    "title": "Mira's Hut",
+    "states": [],
+    "triggers": []
+  },
+  {
+    "id": "act3-mirror-terraces",
+    "title": "Mirror Terraces",
+    "states": [],
+    "triggers": []
+  },
+  {
+    "id": "act3-obsidian-outcrops",
+    "title": "Obsidian Outcrops",
+    "states": [],
+    "triggers": []
+  },
+  {
+    "id": "act3-outer-wards",
+    "title": "Outer Wards",
+    "states": [],
+    "triggers": []
+  },
+  {
+    "id": "act3-phoenix-crater",
+    "title": "Phoenix Crater",
+    "states": [],
+    "triggers": []
+  },
+  {
+    "id": "act3-sanctum-of-the-tide",
+    "title": "Sanctum of the Tide",
+    "states": [],
+    "triggers": []
+  },
+  {
+    "id": "act3-shoreline-markers",
+    "title": "Shoreline Markers",
+    "states": [],
+    "triggers": []
+  },
+  {
+    "id": "act3-stillness-vestibule",
+    "title": "Stillness Vestibule",
+    "states": [],
+    "triggers": []
+  },
+  {
+    "id": "act3-submerged-antechamber",
+    "title": "Submerged Antechamber",
+    "states": [],
+    "triggers": []
+  },
+  {
+    "id": "act3-tidal-causeway",
+    "title": "Tidal Causeway",
+    "states": [],
+    "triggers": []
+  },
+  {
+    "id": "act3-tool-cache",
+    "title": "Tool Cache",
     "states": [],
     "triggers": []
   }

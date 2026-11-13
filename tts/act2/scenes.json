@@ -1,43 +1,7 @@
 [
   {
-    "id": "act2-mountain-path",
-    "title": "Mountain Path",
-    "states": [],
-    "triggers": []
-  },
-  {
-    "id": "act2-greendale-gates",
-    "title": "Greendale Gates",
-    "states": [],
-    "triggers": []
-  },
-  {
-    "id": "act2-main-square",
-    "title": "Main Square",
-    "states": [],
-    "triggers": []
-  },
-  {
-    "id": "act2-market-district",
-    "title": "Market District",
-    "states": [],
-    "triggers": []
-  },
-  {
-    "id": "act2-silver-stag-inn",
-    "title": "The Silver Stag Inn",
-    "states": [],
-    "triggers": []
-  },
-  {
-    "id": "act2-inn-rooms",
-    "title": "Inn Rooms",
-    "states": [],
-    "triggers": []
-  },
-  {
-    "id": "act2-merchants-warehouse",
-    "title": "Merchant's Warehouse",
+    "id": "act2-ancient-grove",
+    "title": "Ancient Grove",
     "states": [],
     "triggers": []
   },
@@ -54,26 +18,8 @@
     "triggers": []
   },
   {
-    "id": "act2-great-hall",
-    "title": "Great Hall",
-    "states": [],
-    "triggers": []
-  },
-  {
-    "id": "act2-residential-quarter",
-    "title": "Residential Quarter",
-    "states": [],
-    "triggers": []
-  },
-  {
-    "id": "act2-healers-house",
-    "title": "Healer's House",
-    "states": [],
-    "triggers": []
-  },
-  {
-    "id": "act2-hidden-library",
-    "title": "Hidden Library",
+    "id": "act2-forest-entrance",
+    "title": "Forest Entrance",
     "states": [],
     "triggers": []
   },
@@ -84,26 +30,80 @@
     "triggers": []
   },
   {
-    "id": "act2-forest-entrance",
-    "title": "Forest Entrance",
+    "id": "act2-great-hall",
+    "title": "Great Hall",
     "states": [],
     "triggers": []
   },
   {
-    "id": "act2-ancient-grove",
-    "title": "Ancient Grove",
+    "id": "act2-greendale-gates",
+    "title": "Greendale Gates",
     "states": [],
     "triggers": []
   },
   {
-    "id": "act2-whispering-glade",
-    "title": "Whispering Glade",
+    "id": "act2-healers-house",
+    "title": "Healer's House",
     "states": [],
     "triggers": []
   },
   {
     "id": "act2-heart-of-the-forest",
     "title": "Heart of the Forest",
+    "states": [],
+    "triggers": []
+  },
+  {
+    "id": "act2-hidden-library",
+    "title": "Hidden Library",
+    "states": [],
+    "triggers": []
+  },
+  {
+    "id": "act2-inn-rooms",
+    "title": "Inn Rooms",
+    "states": [],
+    "triggers": []
+  },
+  {
+    "id": "act2-main-square",
+    "title": "Main Square",
+    "states": [],
+    "triggers": []
+  },
+  {
+    "id": "act2-market-district",
+    "title": "Market District",
+    "states": [],
+    "triggers": []
+  },
+  {
+    "id": "act2-merchants-warehouse",
+    "title": "Merchant's Warehouse",
+    "states": [],
+    "triggers": []
+  },
+  {
+    "id": "act2-mountain-path",
+    "title": "Mountain Path",
+    "states": [],
+    "triggers": []
+  },
+  {
+    "id": "act2-residential-quarter",
+    "title": "Residential Quarter",
+    "states": [],
+    "triggers": []
+  },
+  {
+    "id": "act2-silver-stag-inn",
+    "title": "The Silver Stag Inn",
+    "states": [],
+    "triggers": []
+  },
+  {
+    "id": "act2-whispering-glade",
+    "title": "Whispering Glade",
     "states": [],
     "triggers": []
   }

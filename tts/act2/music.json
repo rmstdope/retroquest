@@ -1,74 +1,12 @@
 [
   {
-    "id": "medieval-village",
-    "title": "Act 2 Opening",
-    "file": "web/public/audio/music/Walen - Medieval Village (freetouse.com).mp3",
-    "plays": "Act II, throughout",
-    "text": "gentle medieval village, lute and recorder, warm and unhurried, instrumental, no vocals",
-    "seconds": 132
-  },
-  {
-    "id": "act2-mountain-path",
-    "title": "Mountain Path",
-    "plays": "Act II, Mountain Path",
-    "text": "medieval folk travelling tune, wooden flute, fingerpicked lute, soft frame drum, open mountain air and pine, bright and spacious, a journey begun with quiet hope, instrumental, no vocals",
+    "id": "act2-ancient-grove",
+    "title": "Ancient Grove",
+    "plays": "Act II, Ancient Grove",
+    "text": "ancient sacred grove, wooden flute, deep drone, bowed strings, slow hand drum, trees older than any letters, timeless and still, reverent mystery, instrumental, no vocals",
     "seconds": 60,
-    "bpm": 92,
-    "key": "D major"
-  },
-  {
-    "id": "act2-greendale-gates",
-    "title": "Greendale Gates",
-    "plays": "Act II, Greendale Gates",
-    "text": "medieval processional march, brass horns, snare and timpani, steady stately pulse, a great stone archway with banners in the breeze, proud and welcoming, the first sight of a great city, instrumental, no vocals",
-    "seconds": 60,
-    "bpm": 100,
-    "key": "D major"
-  },
-  {
-    "id": "act2-main-square",
-    "title": "Main Square",
-    "plays": "Act II, Main Square",
-    "text": "bustling medieval town square, lute, fiddle, hand drums and tambourine, a splashing fountain and bright awnings, busy and sunny, cheerful civic pride, instrumental, no vocals",
-    "seconds": 60,
-    "bpm": 80,
-    "key": "A major"
-  },
-  {
-    "id": "act2-market-district",
-    "title": "Market District",
-    "plays": "Act II, Market District",
-    "text": "lively medieval bazaar, hammered dulcimer, oud, darbuka and shaker, a winding melody through crowded narrow streets, spice and leather, energetic and curious, a little mischievous, instrumental, no vocals",
-    "seconds": 60,
-    "bpm": 112,
-    "key": "E minor"
-  },
-  {
-    "id": "act2-silver-stag-inn",
-    "title": "The Silver Stag Inn",
-    "plays": "Act II, The Silver Stag Inn",
-    "text": "warm tavern jig, flute and acoustic guitar, fiddle and bodhrán, firelight and the warm bustle of a busy taproom, lively but easy, friendly and welcoming, instrumental, no vocals",
-    "seconds": 60,
-    "bpm": 108,
-    "key": "G major"
-  },
-  {
-    "id": "act2-inn-rooms",
-    "title": "Inn Rooms",
-    "plays": "Act II, Inn Rooms",
-    "text": "quiet medieval lullaby, solo classical guitar, soft harp, gentle sustained strings, candlelight in a small private room, restful and safe, calm after a long day, instrumental, no vocals",
-    "seconds": 60,
-    "bpm": 66,
-    "key": "F major"
-  },
-  {
-    "id": "act2-merchants-warehouse",
-    "title": "Merchant's Warehouse",
-    "plays": "Act II, Merchant's Warehouse",
-    "text": "hushed medieval mystery, pizzicato strings, low clarinet, soft bodhrán, sparse and creeping, cool still air between tall crates, curious and watchful, instrumental, no vocals",
-    "seconds": 60,
-    "bpm": 84,
-    "key": "D minor"
+    "bpm": 56,
+    "key": "A minor"
   },
   {
     "id": "act2-castle-approach",
@@ -89,40 +27,13 @@
     "key": "D minor"
   },
   {
-    "id": "act2-great-hall",
-    "title": "Great Hall",
-    "plays": "Act II, Great Hall",
-    "text": "regal medieval court music, harpsichord, recorder consort, warm strings, a vast hall of stone columns, stately and ceremonial, dignified grandeur, instrumental, no vocals",
+    "id": "act2-forest-entrance",
+    "title": "Forest Entrance",
+    "plays": "Act II, Forest Entrance",
+    "text": "enchanted forest, harp, flute, soft strings and wind chimes, dappled sunlight under a cathedral of trees, magical and green, gentle awe, instrumental, no vocals",
     "seconds": 60,
-    "bpm": 76,
-    "key": "Bb major"
-  },
-  {
-    "id": "act2-residential-quarter",
-    "title": "Residential Quarter",
-    "plays": "Act II, Residential Quarter",
-    "text": "gentle medieval folk, lute, recorder, soft cello, quiet lanes and craftsmen at their benches, gardens gone grey, homely but wistful, warmth with a trace of sorrow, instrumental, no vocals",
-    "seconds": 60,
-    "bpm": 78,
-    "key": "A minor"
-  },
-  {
-    "id": "act2-healers-house",
-    "title": "Healer's House",
-    "plays": "Act II, Healer's House",
-    "text": "slow tender medieval lament, solo cello, harp, faint chimes, sparse and hushed, dried herbs and empty bottles, worry and quiet care, instrumental, no vocals",
-    "seconds": 60,
-    "bpm": 50,
-    "key": "F minor"
-  },
-  {
-    "id": "act2-hidden-library",
-    "title": "Hidden Library",
-    "plays": "Act II, Hidden Library",
-    "text": "mystical ambient, celesta, glass harmonica, soft strings over a humming drone, long reverb, glowing crystals in an ancient vault, wonder and secret knowledge, instrumental, no vocals",
-    "seconds": 60,
-    "bpm": 60,
-    "key": "E minor"
+    "bpm": 72,
+    "key": "G major"
   },
   {
     "id": "act2-forest-transition",
@@ -134,22 +45,112 @@
     "key": "D minor"
   },
   {
-    "id": "act2-forest-entrance",
-    "title": "Forest Entrance",
-    "plays": "Act II, Forest Entrance",
-    "text": "enchanted forest, harp, flute, soft strings and wind chimes, dappled sunlight under a cathedral of trees, magical and green, gentle awe, instrumental, no vocals",
+    "id": "act2-great-hall",
+    "title": "Great Hall",
+    "plays": "Act II, Great Hall",
+    "text": "regal medieval court music, harpsichord, recorder consort, warm strings, a vast hall of stone columns, stately and ceremonial, dignified grandeur, instrumental, no vocals",
     "seconds": 60,
-    "bpm": 72,
-    "key": "G major"
+    "bpm": 76,
+    "key": "Bb major"
   },
   {
-    "id": "act2-ancient-grove",
-    "title": "Ancient Grove",
-    "plays": "Act II, Ancient Grove",
-    "text": "ancient sacred grove, wooden flute, deep drone, bowed strings, slow hand drum, trees older than any letters, timeless and still, reverent mystery, instrumental, no vocals",
+    "id": "act2-greendale-gates",
+    "title": "Greendale Gates",
+    "plays": "Act II, Greendale Gates",
+    "text": "medieval processional march, brass horns, snare and timpani, steady stately pulse, a great stone archway with banners in the breeze, proud and welcoming, the first sight of a great city, instrumental, no vocals",
     "seconds": 60,
-    "bpm": 56,
+    "bpm": 100,
+    "key": "D major"
+  },
+  {
+    "id": "act2-healers-house",
+    "title": "Healer's House",
+    "plays": "Act II, Healer's House",
+    "text": "slow tender medieval lament, solo cello, harp, faint chimes, sparse and hushed, dried herbs and empty bottles, worry and quiet care, instrumental, no vocals",
+    "seconds": 60,
+    "bpm": 50,
+    "key": "F minor"
+  },
+  {
+    "id": "act2-heart-of-the-forest",
+    "title": "Heart of the Forest",
+    "plays": "Act II, Heart of the Forest",
+    "text": "ethereal fantasy, shimmering strings, harp glissandi, celesta, a warm french horn, green and gold light from nowhere, magical and sacred, quiet awe and hope, instrumental, no vocals",
+    "seconds": 60,
+    "bpm": 60,
+    "key": "E major"
+  },
+  {
+    "id": "act2-hidden-library",
+    "title": "Hidden Library",
+    "plays": "Act II, Hidden Library",
+    "text": "mystical ambient, celesta, glass harmonica, soft strings over a humming drone, long reverb, glowing crystals in an ancient vault, wonder and secret knowledge, instrumental, no vocals",
+    "seconds": 60,
+    "bpm": 60,
+    "key": "E minor"
+  },
+  {
+    "id": "act2-inn-rooms",
+    "title": "Inn Rooms",
+    "plays": "Act II, Inn Rooms",
+    "text": "quiet medieval lullaby, solo classical guitar, soft harp, gentle sustained strings, candlelight in a small private room, restful and safe, calm after a long day, instrumental, no vocals",
+    "seconds": 60,
+    "bpm": 66,
+    "key": "F major"
+  },
+  {
+    "id": "act2-main-square",
+    "title": "Main Square",
+    "plays": "Act II, Main Square",
+    "text": "bustling medieval town square, lute, fiddle, hand drums and tambourine, a splashing fountain and bright awnings, busy and sunny, cheerful civic pride, instrumental, no vocals",
+    "seconds": 60,
+    "bpm": 80,
+    "key": "A major"
+  },
+  {
+    "id": "act2-market-district",
+    "title": "Market District",
+    "plays": "Act II, Market District",
+    "text": "lively medieval bazaar, hammered dulcimer, oud, darbuka and shaker, a winding melody through crowded narrow streets, spice and leather, energetic and curious, a little mischievous, instrumental, no vocals",
+    "seconds": 60,
+    "bpm": 112,
+    "key": "E minor"
+  },
+  {
+    "id": "act2-merchants-warehouse",
+    "title": "Merchant's Warehouse",
+    "plays": "Act II, Merchant's Warehouse",
+    "text": "hushed medieval mystery, pizzicato strings, low clarinet, soft bodhrán, sparse and creeping, cool still air between tall crates, curious and watchful, instrumental, no vocals",
+    "seconds": 60,
+    "bpm": 84,
+    "key": "D minor"
+  },
+  {
+    "id": "act2-mountain-path",
+    "title": "Mountain Path",
+    "plays": "Act II, Mountain Path",
+    "text": "medieval folk travelling tune, wooden flute, fingerpicked lute, soft frame drum, open mountain air and pine, bright and spacious, a journey begun with quiet hope, instrumental, no vocals",
+    "seconds": 60,
+    "bpm": 92,
+    "key": "D major"
+  },
+  {
+    "id": "act2-residential-quarter",
+    "title": "Residential Quarter",
+    "plays": "Act II, Residential Quarter",
+    "text": "gentle medieval folk, lute, recorder, soft cello, quiet lanes and craftsmen at their benches, gardens gone grey, homely but wistful, warmth with a trace of sorrow, instrumental, no vocals",
+    "seconds": 60,
+    "bpm": 78,
     "key": "A minor"
+  },
+  {
+    "id": "act2-silver-stag-inn",
+    "title": "The Silver Stag Inn",
+    "plays": "Act II, The Silver Stag Inn",
+    "text": "warm tavern jig, flute and acoustic guitar, fiddle and bodhrán, firelight and the warm bustle of a busy taproom, lively but easy, friendly and welcoming, instrumental, no vocals",
+    "seconds": 60,
+    "bpm": 108,
+    "key": "G major"
   },
   {
     "id": "act2-whispering-glade",
@@ -161,12 +162,11 @@
     "key": "F major"
   },
   {
-    "id": "act2-heart-of-the-forest",
-    "title": "Heart of the Forest",
-    "plays": "Act II, Heart of the Forest",
-    "text": "ethereal fantasy, shimmering strings, harp glissandi, celesta, a warm french horn, green and gold light from nowhere, magical and sacred, quiet awe and hope, instrumental, no vocals",
-    "seconds": 60,
-    "bpm": 60,
-    "key": "E major"
+    "id": "medieval-village",
+    "title": "Act 2 Opening",
+    "file": "web/public/audio/music/Walen - Medieval Village (freetouse.com).mp3",
+    "plays": "Act II, throughout",
+    "text": "gentle medieval village, lute and recorder, warm and unhurried, instrumental, no vocals",
+    "seconds": 132
   }
 ]

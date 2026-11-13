@@ -23,6 +23,7 @@ import {
   roomTrackId,
   type MusicTrack,
 } from './musicLists'
+import { byId } from '../../../tts/actScripts'
 import { ROOM_MUSIC_BRIEFS } from './roomMusicBriefs'
 
 const SLUG = /^[a-z0-9]+(-[a-z0-9]+)*$/
@@ -228,10 +229,9 @@ describe('questStingers', () => {
 
 describe('the committed lists', () => {
   it.each([1, 2, 3, 4])('tts/act%i/music.json is what the game lists', (n) => {
-    expect(readJson<MusicTrack[]>(`tts/act${n}/music.json`)).toEqual([
-      ...actLoops(ACTS[n - 1] as Act),
-      ...roomLoops(ACTS[n - 1] as Act),
-    ])
+    expect(readJson<MusicTrack[]>(`tts/act${n}/music.json`)).toEqual(
+      byId([...actLoops(ACTS[n - 1] as Act), ...roomLoops(ACTS[n - 1] as Act)]),
+    )
   })
 
   it('tts/stingers.json is what the game lists', () => {

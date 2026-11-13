@@ -91,6 +91,29 @@ export function authoredLines(files: SourceFile[]): AuthoredLine[] {
   return lines
 }
 
+/**
+ * Whether `text` is made up of whole script lines, in any order, with at most
+ * the end of a line before them and the start of a line after them: the script is
+ * kept in id order, so a literal the game says as several lines is no longer
+ * found by reading the script from top to bottom. `pieces` are the script's lines,
+ * longest first.
+ */
+function isSpokenInPieces(text: string, pieces: string[]): boolean {
+  const gap = '\u0000'
+  let rest = text
+  for (const piece of pieces)
+    if (rest.includes(piece)) rest = rest.split(piece).join(gap)
+  const parts = rest.split(gap).map((part) => part.trim())
+  if (parts.length === 1) return false
+  const first = parts[0]
+  const last = parts[parts.length - 1]
+  return (
+    parts.slice(1, -1).every((part) => part === '') &&
+    (first === '' || pieces.some((piece) => piece.endsWith(first))) &&
+    (last === '' || pieces.some((piece) => piece.startsWith(last)))
+  )
+}
+
 /** The authored lines found in no script line and not acknowledged by their key. */
 export function unreachedLines(
   authored: AuthoredLine[],
@@ -98,9 +121,14 @@ export function unreachedLines(
   acknowledged: string[],
 ): AuthoredLine[] {
   const spoken = plain(script.map((line) => line.text).join('\n'))
+  const pieces = script
+    .map((line) => plain(line.text))
+    .filter((text) => text.length > 0)
+    .sort((a, b) => b.length - a.length)
   return authored.filter(
     (line) =>
       !spoken.includes(line.text) &&
+      !isSpokenInPieces(line.text, pieces) &&
       !acknowledged.includes(acknowledgedKey(line.text)),
   )
 }

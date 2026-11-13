@@ -27,6 +27,10 @@ with Whisper. **Refresh dialog** runs the extractor for an act:
 
 A script.json or music.json that differs from what the extractor writes now fails vitest (`narrationScriptFresh.test.ts`), so rerun it after any change to what the game says.
 
+The four lists of each act (`script`, `music`, `images`, `scenes`) are written in order of `id`, not
+in play order, so two branches that change different records touch different places of the file
+and git merges them without a regeneration.
+
 - **The script** (`act<N>/script.json`, committed) is gathered by playing the act's golden path
   through the real engine, trying examine/use/talk/look at every step on a copy of the game. Each
   line has its speaker and an `id` made from the speaker and the words (`narrationKey` in
