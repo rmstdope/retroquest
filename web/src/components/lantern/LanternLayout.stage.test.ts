@@ -71,6 +71,10 @@ describe('LanternLayout: one thing open on the stage', () => {
     expect(w.find('.lq-drawer').exists()).toBe(false)
     expect(w.find('.lq-story-drawer').exists()).toBe(true)
     expect(lit()).toEqual(['story'])
+    await press('quests')
+    expect(w.find('.lq-story-drawer').exists()).toBe(false)
+    expect(w.find('.lq-drawer').exists()).toBe(true)
+    expect(lit()).toEqual(['quests'])
   })
 
   it('shows the Quests alone in the drawer, and a second press closes it', async () => {
@@ -81,6 +85,9 @@ describe('LanternLayout: one thing open on the stage', () => {
     await press('quests')
     expect(w.find('.lq-drawer').exists()).toBe(false)
     expect(lit()).toEqual([])
+    await press('quests')
+    await w.get('.lq-drawer').trigger('keydown', { key: 'Escape' })
+    expect(w.find('.lq-drawer').exists()).toBe(false)
   })
 
   it('hands focus to the lit button when the drawer closes', async () => {
@@ -89,6 +96,16 @@ describe('LanternLayout: one thing open on the stage', () => {
     await w.vm.$nextTick()
     expect(w.find('.lq-drawer').exists()).toBe(false)
     expect(document.activeElement).toBe(w.get('[data-button="quests"]').element)
+
+    const story = w.get('[data-button="story"]').element
+    await press('story')
+    await w.get('.lq-story-drawer .lq-drawer-close').trigger('click')
+    await w.vm.$nextTick()
+    expect(document.activeElement).toBe(story)
+    await press('story')
+    await press('story')
+    await w.vm.$nextTick()
+    expect(document.activeElement).toBe(story)
   })
 
   it('closes what is open on a press outside, but not on a press inside', async () => {
@@ -111,6 +128,15 @@ describe('LanternLayout: one thing open on the stage', () => {
     document.body.dispatchEvent(new Event('pointerdown', { bubbles: true }))
     await w.vm.$nextTick()
     expect(w.find('.lq-compass').exists()).toBe(false)
+
+    await press('story')
+    w.get('.lq-story-drawer h2').element.dispatchEvent(
+      new Event('pointerdown', { bubbles: true }),
+    )
+    await w.vm.$nextTick()
+    expect(w.find('.lq-story-drawer').exists()).toBe(true)
+    await w.get('.lq-stage-picture').trigger('pointerdown')
+    expect(w.find('.lq-story-drawer').exists()).toBe(false)
   })
 
   it('keeps the map open after walking from it', async () => {

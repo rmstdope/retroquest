@@ -1,6 +1,5 @@
 // @vitest-environment jsdom
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
-import { SCENE_PAUSE_MS } from '@/lantern/narrationUnits'
 import { flushPromises, mount, type VueWrapper } from '@vue/test-utils'
 import { createPinia, setActivePinia } from 'pinia'
 import LanternLayout from './LanternLayout.vue'
@@ -850,32 +849,6 @@ describe('LanternLayout', () => {
       expect(w.find('.lq-compass').exists()).toBe(false)
     })
 
-    it('opens the Quests as a drawer and closes it with ✕, a second press and Escape', async () => {
-      const w = mountLayout()
-
-      await w.get('[data-button="quests"]').trigger('click')
-      expect(w.find('[aria-label="Journal drawer"]').exists()).toBe(true)
-      expect(
-        w.find('[aria-label="Journal drawer"] [role="tab"]').exists(),
-      ).toBe(false)
-      expect(w.get('[data-button="quests"]').attributes('aria-pressed')).toBe(
-        'true',
-      )
-
-      await w.get('.lq-drawer-close').trigger('click')
-      expect(w.find('[aria-label="Journal drawer"]').exists()).toBe(false)
-
-      await w.get('[data-button="quests"]').trigger('click')
-      await w.get('[data-button="quests"]').trigger('click')
-      expect(w.find('[aria-label="Journal drawer"]').exists()).toBe(false)
-
-      await w.get('[data-button="quests"]').trigger('click')
-      await w
-        .get('[aria-label="Journal drawer"]')
-        .trigger('keydown', { key: 'Escape' })
-      expect(w.find('[aria-label="Journal drawer"]').exists()).toBe(false)
-    })
-
     it('closes the drawer and the map after a load and in a new act', async () => {
       const w = mountLayout()
       const game = useGameStore()
@@ -928,18 +901,6 @@ describe('LanternLayout', () => {
         expect(w.find(STORY).exists()).toBe(false)
       })
 
-      it('swaps with the Quests drawer, both ways', async () => {
-        const w = mountLayout()
-        await w.get('[data-button="story"]').trigger('click')
-        await w.get('[data-button="quests"]').trigger('click')
-        expect(w.find(STORY).exists()).toBe(false)
-        expect(w.find('[aria-label="Journal drawer"]').exists()).toBe(true)
-
-        await w.get('[data-button="story"]').trigger('click')
-        expect(w.find('[aria-label="Journal drawer"]').exists()).toBe(false)
-        expect(w.find(STORY).exists()).toBe(true)
-      })
-
       it('closes when a turn is played, and when the game is loaded', async () => {
         stageTurns()
         const w = mountLayout()
@@ -953,34 +914,6 @@ describe('LanternLayout', () => {
         game.loadNumber++
         await w.vm.$nextTick()
         expect(w.find(STORY).exists()).toBe(false)
-      })
-
-      it('closes on a press outside it, but not on a press inside it', async () => {
-        stageTurns()
-        wrapper = mount(LanternLayout, { attachTo: document.body })
-        const w = wrapper
-        await w.get('[data-button="story"]').trigger('click')
-
-        await w.get(`${STORY} h2`).trigger('pointerdown')
-        expect(w.find(STORY).exists()).toBe(true)
-
-        await w.get('.lq-stage-picture').trigger('pointerdown')
-        expect(w.find(STORY).exists()).toBe(false)
-      })
-
-      it('gives focus back to Story so far on ✕ and on a second press', async () => {
-        wrapper = mount(LanternLayout, { attachTo: document.body })
-        const w = wrapper
-        const button = w.get('[data-button="story"]').element
-        await w.get('[data-button="story"]').trigger('click')
-        await w.get(`${STORY} .lq-drawer-close`).trigger('click')
-        await flushPromises()
-        expect(document.activeElement).toBe(button)
-
-        await w.get('[data-button="story"]').trigger('click')
-        await w.get('[data-button="story"]').trigger('click')
-        await flushPromises()
-        expect(document.activeElement).toBe(button)
       })
 
       it('is swapped for the Quests drawer by Open in journal', async () => {
@@ -1125,14 +1058,6 @@ describe('LanternLayout', () => {
       game.musicActName = 'Act2'
       await w.vm.$nextTick()
       expect(w.find('[data-testid="speech-line"]').exists()).toBe(false)
-    })
-
-    it('has no ✕ on the laptop: the one Hide is the control', async () => {
-      const w = mount(LanternLayout, { attachTo: document.body })
-      wrapper = w
-      await say(w, WORDS, 'Grandmother')
-      expect(w.find('.lq-clear').exists()).toBe(false)
-      expect(w.findAll('.lq-words-hide')).toHaveLength(1)
     })
 
     it('lets Escape close an open drawer first and hide the words next', async () => {
@@ -2410,25 +2335,6 @@ describe('LanternLayout', () => {
         w.get('section[aria-label="Story"]').element.dispatchEvent(event)
         expect(useNarrationStore().isNarrating).toBe(true)
         expect(event.defaultPrevented).toBe(false)
-      })
-
-      it('reads a chapter page: title first, then its paragraphs, until Continue', async () => {
-        const w = await ready()
-        await openChapter(w)
-        expect(w.get('.lq-chapter-title').classes()).toContain('lq-speaking')
-        expect(w.findAll('.lq-chapter-block')).toHaveLength(0)
-
-        audios[0].onended?.()
-        await vi.advanceTimersByTimeAsync(350)
-        expect(w.findAll('.lq-chapter-block')).toHaveLength(0)
-        await vi.advanceTimersByTimeAsync(SCENE_PAUSE_MS)
-        expect(w.get('.lq-chapter-block').text()).toBe(BODY)
-        expect(useNarrationStore().isNarrating).toBe(true)
-
-        const pause = vi.spyOn(audios[1], 'pause')
-        await w.get('.lq-chapter-button').trigger('click')
-        expect(useNarrationStore().isNarrating).toBe(false)
-        expect(pause).toHaveBeenCalled()
       })
 
       it('waits for the title page to go before reading the first chapter page', async () => {

@@ -4,16 +4,16 @@ import { mount, type VueWrapper } from '@vue/test-utils'
 import { createPinia, setActivePinia } from 'pinia'
 import LanternLayout from './LanternLayout.vue'
 import { useGameStore } from '@/stores/useGameStore'
-import { ROOM_TITLE_MS, useRoomTitleStore } from '@/stores/useRoomTitleStore'
+import { useRoomTitleStore } from '@/stores/useRoomTitleStore'
 import { useArrivalStore } from '@/stores/useArrivalStore'
 import { startedHoldStore } from '@/testing/holdGame'
 import { setPictureProbe } from '@/lantern/roomPicture'
 import { SHORT_QUERY } from '@/composables/useMediaQuery'
 
 /**
- * The room's title on the picture stage: "You are in" and the name over the
- * middle of the picture while it is up, the corner's name away meanwhile, and
- * any key or press settling it into the corner.
+ * The room's title on the picture stage: the corner's name away while an
+ * arrival is told, the greeting after a load, and the text page without one.
+ * The happy path (greeting, settling on a key or press) is `e2e/roomTitle.spec.ts`.
  */
 describe('LanternLayout: the room title', () => {
   let w: VueWrapper
@@ -41,12 +41,6 @@ describe('LanternLayout: the room title', () => {
     await w.vm.$nextTick()
   }
 
-  /** Put the title up for the room the player is in. */
-  async function greet(): Promise<void> {
-    useRoomTitleStore().greet(useGameStore().roomName)
-    await w.vm.$nextTick()
-  }
-
   const title = () => w.find('[data-testid="room-title"]')
   const plate = () => w.get('.lq-stage-plate')
 
@@ -57,48 +51,6 @@ describe('LanternLayout: the room title', () => {
     vi.unstubAllGlobals()
     vi.restoreAllMocks()
     vi.useRealTimers()
-  })
-
-  it('tells "You are in" and the room over the picture, the corner name away meanwhile', async () => {
-    await stage()
-    expect(title().exists()).toBe(false)
-    expect(plate().classes()).not.toContain('lq-plate-away')
-    await greet()
-    expect(title().text()).toContain('You are in')
-    expect(title().get('.lq-room-title-name').text()).toBe('Hall')
-    expect(title().attributes('aria-hidden')).toBe('true')
-    expect(plate().classes()).toContain('lq-plate-away')
-    expect(w.get('.lq-main').classes()).toContain('lq-titled')
-  })
-
-  it('settles into the corner after its time', async () => {
-    await stage()
-    await greet()
-    vi.advanceTimersByTime(ROOM_TITLE_MS)
-    await w.vm.$nextTick()
-    expect(useRoomTitleStore().name).toBeNull()
-    expect(plate().classes()).not.toContain('lq-plate-away')
-    expect(w.get('.lq-main').classes()).not.toContain('lq-titled')
-  })
-
-  it('settles at once on any key', async () => {
-    await stage()
-    await greet()
-    window.dispatchEvent(new KeyboardEvent('keydown', { key: 'a' }))
-    await w.vm.$nextTick()
-    expect(useRoomTitleStore().name).toBeNull()
-  })
-
-  it('settles at once on a press anywhere, which still does what it does', async () => {
-    await stage()
-    await greet()
-    const press = vi.fn()
-    const button = w.get('.lq-stage-buttons button').element
-    button.addEventListener('pointerdown', press)
-    button.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true }))
-    await w.vm.$nextTick()
-    expect(useRoomTitleStore().name).toBeNull()
-    expect(press).toHaveBeenCalled()
   })
 
   it('keeps the corner name away while an arrival is told on the picture', async () => {
@@ -129,6 +81,11 @@ describe('LanternLayout: the room title', () => {
     await w.vm.$nextTick()
     expect(useRoomTitleStore().name).toBe('Hall')
     expect(title().text()).toContain('Hall')
+    expect(title().attributes('aria-hidden')).toBe('true')
+    expect(w.get('.lq-main').classes()).toContain('lq-titled')
+    useRoomTitleStore().settle()
+    await w.vm.$nextTick()
+    expect(w.get('.lq-main').classes()).not.toContain('lq-titled')
   })
 
   it('greets a room loaded from another only once its own picture is up, never over the old one', async () => {

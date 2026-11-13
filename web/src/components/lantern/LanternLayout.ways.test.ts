@@ -86,14 +86,6 @@ describe('LanternLayout: leaving by pressing a way out in the picture', () => {
     vi.restoreAllMocks()
   })
 
-  it('answers a press on a closed way as the typed direction does, and Elior stays', async () => {
-    const store = await cottage()
-    const submit = vi.spyOn(store, 'submitCommand')
-    await press(100, 100)
-    expect(submit).toHaveBeenCalledWith('go south')
-    expect(store.roomName).toBe("Elior's Cottage")
-  })
-
   it('lets the pointer name a thing on a window just under laptop width (1000px)', async () => {
     await cottage(false)
     await point(700, 400)

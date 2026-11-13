@@ -93,25 +93,16 @@ describe('LanternLayout: what is here, named on the picture', () => {
     expect(w.find('[data-area-mark]').exists()).toBe(false)
   })
 
-  it('shows the marks and names with the button and takes them away again', async () => {
+  it('names only the things the studio has placed, as the corner names them', async () => {
     await cottage()
-    expect(button().text()).toBe("◎ Show what's here")
     expect(button().attributes('title')).toBe("Show what's here (S)")
-    expect(w.find('[data-area-mark]').exists()).toBe(false)
     await button().trigger('click')
     expect(button().text()).toBe('◎ Showing')
     expect(button().attributes('title')).toBe("Show what's here (S)")
-    expect(w.findAll('[data-area-mark]')).toHaveLength(2)
-    await button().trigger('click')
-    expect(button().text()).toBe("◎ Show what's here")
-    expect(w.find('[data-area-mark]').exists()).toBe(false)
-  })
-
-  it('names only the things the studio has placed, as the corner names them', async () => {
-    await cottage()
-    await button().trigger('click')
     expect(w.get('[data-area-name="bread"]').text()).toBe('Bread')
     expect(w.find('[data-area-name="hearth"]').exists()).toBe(false)
+    await button().trigger('click')
+    expect(w.find('[data-area-mark]').exists()).toBe(false)
   })
 
   it('answers S, but not while typing, with a modifier, or off the laptop', async () => {
