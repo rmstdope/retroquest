@@ -5,7 +5,9 @@ export type { QuestChanges, SoundFiring } from './GameState'
 export { Item, type ItemOptions } from './Item'
 export {
   Quest,
+  flagStage,
   type QuestOptions,
+  type QuestStage,
   type QuestDetails,
   type QuestChecklist,
   type QuestChecklistItem,

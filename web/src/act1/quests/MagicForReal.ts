@@ -1,4 +1,10 @@
-import { characterName, Quest, type GameState } from '@/engine'
+import {
+  characterName,
+  flagStage,
+  Quest,
+  type GameState,
+  type QuestStage,
+} from '@/engine'
 import {
   FLAG_CONNECT_WITH_NATURE,
   FLAG_MAGIC_FULLY_UNLOCKED,
@@ -41,19 +47,18 @@ export class MagicForRealQuest extends Quest {
   /** Starts with the first spell; opens at the flower when Mira already asked for it. */
   override checkTrigger(gameState: GameState): boolean {
     if (gameState.knownSpells.length === 0) return false
-    if (gameState.getStoryFlag(FLAG_CONNECT_WITH_NATURE)) {
-      this.setJournal([], FLOWER_ASKED)
-    }
+    this.checkUpdate(gameState)
     return true
   }
 
+  /** The opening, before Mira has asked for anything. */
+  protected override opening(): string {
+    return NOTHING_ANSWERS
+  }
+
   /** Once Mira has asked for the flower, the log moves on to it, once. */
-  override checkUpdate(gameState: GameState): boolean {
-    if (!gameState.getStoryFlag(FLAG_CONNECT_WITH_NATURE) || this.latestStage) {
-      return false
-    }
-    this.setJournal([NOTHING_ANSWERS], FLOWER_ASKED)
-    return true
+  protected override stages(): QuestStage[] {
+    return [flagStage(FLAG_CONNECT_WITH_NATURE, FLOWER_ASKED)]
   }
 
   /**
