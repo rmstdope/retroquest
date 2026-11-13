@@ -14,7 +14,7 @@ export {
 } from './Quest'
 export { Room, type RoomOptions, type Exits } from './Room'
 export { numberInWords } from './numberInWords'
-export { affirms, normaliseSpokenWord, saysAnyOf } from './spokenWord'
+export { affirms, heardAs, normaliseSpokenWord, saysAnyOf } from './spokenWord'
 export { Spell, type SpellOptions } from './Spell'
 export { ClassRegistry, type SerializableClass } from './ClassRegistry'
 export { serialize, deserialize, type SerializedGraph } from './Serializer'

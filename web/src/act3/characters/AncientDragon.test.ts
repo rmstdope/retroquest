@@ -146,6 +146,7 @@ describe('AncientDragon', () => {
       ['i take what is given and i return myself', 'myself'],
       ['I take what is given, and I return everything.', 'everything'],
       ['i  take what is  given,  and i return it!', 'it'],
+      ['I take what is given; and I return it.', 'it'],
     ]
     const failures: string[] = []
     for (const [words, word] of cases) {

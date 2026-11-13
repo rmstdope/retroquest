@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { affirms, normaliseSpokenWord, saysAnyOf } from './spokenWord'
+import { affirms, heardAs, normaliseSpokenWord, saysAnyOf } from './spokenWord'
 
 describe('normaliseSpokenWord', () => {
   it('trims and lower-cases', () => {
@@ -121,5 +121,25 @@ describe('affirms', () => {
     expect(
       affirms('Power... follows… purpose', ['power follows purpose']),
     ).toBe(true)
+  })
+})
+
+describe('heardAs', () => {
+  it('hears the words whatever the case and punctuation between them', () => {
+    expect(heardAs('Power follows purpose; purpose follows truth.')).toBe(
+      'power follows purpose purpose follows truth',
+    )
+    expect(heardAs('I take what is given, and — I return it!')).toBe(
+      'i take what is given and i return it',
+    )
+  })
+
+  it('drops quote marks and runs of spaces', () => {
+    expect(heardAs('  “Everything”  ')).toBe('everything')
+    expect(heardAs('what   i\ttake')).toBe('what i take')
+  })
+
+  it('hears nothing in an utterance without letters', () => {
+    expect(heardAs('...')).toBe('')
   })
 })

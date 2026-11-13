@@ -4,7 +4,7 @@ import {
   characterName,
   dialogue,
   speech,
-  normaliseSpokenWord,
+  heardAs,
   type NameOptions,
 } from '@/engine'
 import { AncientAmulet } from '../items/AncientAmulet'
@@ -218,7 +218,7 @@ export class AncientDragon extends Character {
     if (gameState.getStoryFlag(FLAG_ACT3_DRAGON_OATH_SPOKEN)) {
       return `The ${name} rumbles: ` + speech(OATH_ACCEPTED_LINE)
     }
-    const answer = normaliseAnswer(words)
+    const answer = heardAs(words)
     const word = GIVING_WORDS.get(oathBlank(answer))
     if (word !== undefined) {
       gameState.setStoryFlag(FLAG_ACT3_DRAGON_OATH_SPOKEN, true)
@@ -267,13 +267,6 @@ const TAKING_ANSWERS: readonly string[] = [
   'thanks',
   'thank you',
 ]
-
-/**
- * Hear an answer as the engine does, after dropping its commas.
- */
-function normaliseAnswer(words: string): string {
-  return normaliseSpokenWord(words.replace(/,/g, ''))
-}
 
 /**
  * The part of a normalised answer that fills the blank: the whole answer, or
