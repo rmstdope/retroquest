@@ -38,12 +38,10 @@ describe('music clips', () => {
       .map((f) => [MUSIC_DIR, f] as const),
   ].filter(([, f]) => f.endsWith('.mp3'))
 
-  it.each(clips)(
-    '%s/%s carries gapless info, so the decoder trims delay and padding',
-    (dir, clip) => {
-      const info = gaplessInfo(dir, clip)
-      expect(info).not.toBeNull()
-      expect(info?.delay).toBeGreaterThan(0)
-    },
-  )
+  it('every clip carries gapless info, so the decoder trims delay and padding', () => {
+    const lacking = clips
+      .filter(([dir, clip]) => !((gaplessInfo(dir, clip)?.delay ?? 0) > 0))
+      .map(([dir, clip]) => `${dir}/${clip}`)
+    expect(lacking).toEqual([])
+  })
 })
