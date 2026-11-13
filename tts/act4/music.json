@@ -1,31 +1,16 @@
 [
   {
-    "id": "the-silver-grail",
-    "title": "Act 4 Opening",
-    "file": "web/public/audio/music/Conquest - The Silver Grail (freetouse.com).mp3",
-    "plays": "Act IV, throughout",
-    "text": "epic and solemn orchestral, brass and strings, heroic and resolute, instrumental, no vocals",
-    "seconds": 90
+    "id": "act4-chamber-of-whispers",
+    "title": "Chamber of Whispers",
+    "plays": "Act IV, Chamber of Whispers",
+    "text": "instrumental background loop for Chamber of Whispers: A round room at the top of the tower, and the only beautiful room in the fortress. That is what is wrong with it, no vocals",
+    "seconds": 60
   },
   {
     "id": "act4-fortress-gates",
     "title": "Fortress Gates",
     "plays": "Act IV, Fortress Gates",
     "text": "instrumental background loop for Fortress Gates: You stand just inside the fortress gates. The ways on, north and east, are barred by a thin wall of violet light, and three ward stones, left, middle and right, swell and fade with it, no vocals",
-    "seconds": 60
-  },
-  {
-    "id": "act4-outer-courtyard",
-    "title": "Outer Courtyard",
-    "plays": "Act IV, Outer Courtyard",
-    "text": "instrumental background loop for Outer Courtyard: This was a garden once. The fountains still stand under a sky that never quite rains, but what runs down them is black and slow, and the statues have all turned their faces away, no vocals",
-    "seconds": 60
-  },
-  {
-    "id": "act4-mirror-labyrinth",
-    "title": "Mirror Labyrinth",
-    "plays": "Act IV, Mirror Labyrinth",
-    "text": "instrumental background loop for Mirror Labyrinth: Corridors of mirror run away from you in every direction, and in each of them a different Elior looks back. You stand at the mouth of the maze, facing north, no vocals",
     "seconds": 60
   },
   {
@@ -36,24 +21,24 @@
     "seconds": 60
   },
   {
-    "id": "act4-tower-of-shadows",
-    "title": "Tower of Shadows",
-    "plays": "Act IV, Tower of Shadows",
-    "text": "instrumental background loop for Tower of Shadows: A stair winds up inside the black stone, narrow and dark. The walls are cold, and there are no windows. The shadows on the stair move a moment after you do, no vocals",
-    "seconds": 60
-  },
-  {
-    "id": "act4-chamber-of-whispers",
-    "title": "Chamber of Whispers",
-    "plays": "Act IV, Chamber of Whispers",
-    "text": "instrumental background loop for Chamber of Whispers: A round room at the top of the tower, and the only beautiful room in the fortress. That is what is wrong with it, no vocals",
-    "seconds": 60
-  },
-  {
     "id": "act4-memory-vault",
     "title": "Memory Vault",
     "plays": "Act IV, Memory Vault",
     "text": "instrumental background loop for Memory Vault: Glass orbs hang in the air at every height, each one cracked, each one holding a scene that breaks apart before it settles. Among them stands a shadow in the shape of a man, no vocals",
+    "seconds": 60
+  },
+  {
+    "id": "act4-mirror-labyrinth",
+    "title": "Mirror Labyrinth",
+    "plays": "Act IV, Mirror Labyrinth",
+    "text": "instrumental background loop for Mirror Labyrinth: Corridors of mirror run away from you in every direction, and in each of them a different Elior looks back. You stand at the mouth of the maze, facing north, no vocals",
+    "seconds": 60
+  },
+  {
+    "id": "act4-outer-courtyard",
+    "title": "Outer Courtyard",
+    "plays": "Act IV, Outer Courtyard",
+    "text": "instrumental background loop for Outer Courtyard: This was a garden once. The fountains still stand under a sky that never quite rains, but what runs down them is black and slow, and the statues have all turned their faces away, no vocals",
     "seconds": 60
   },
   {
@@ -71,10 +56,25 @@
     "seconds": 60
   },
   {
+    "id": "act4-tower-of-shadows",
+    "title": "Tower of Shadows",
+    "plays": "Act IV, Tower of Shadows",
+    "text": "instrumental background loop for Tower of Shadows: A stair winds up inside the black stone, narrow and dark. The walls are cold, and there are no windows. The shadows on the stair move a moment after you do, no vocals",
+    "seconds": 60
+  },
+  {
     "id": "act4-willowbrook-field",
     "title": "Willowbrook Field",
     "plays": "Act IV, Willowbrook Field",
     "text": "instrumental background loop for Willowbrook Field: The field behind your home: rows of withered crops under a pale sky, the earth cracked and grey. Grandmother waits at the gate. Mira stands beside her, and Sir Cedric leans on the fence, no vocals",
     "seconds": 60
+  },
+  {
+    "id": "the-silver-grail",
+    "title": "Act 4 Opening",
+    "file": "web/public/audio/music/Conquest - The Silver Grail (freetouse.com).mp3",
+    "plays": "Act IV, throughout",
+    "text": "epic and solemn orchestral, brass and strings, heroic and resolute, instrumental, no vocals",
+    "seconds": 90
   }
 ]

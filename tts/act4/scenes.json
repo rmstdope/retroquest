@@ -1,19 +1,13 @@
 [
   {
+    "id": "act4-chamber-of-whispers",
+    "title": "Chamber of Whispers",
+    "states": [],
+    "triggers": []
+  },
+  {
     "id": "act4-fortress-gates",
     "title": "Fortress Gates",
-    "states": [],
-    "triggers": []
-  },
-  {
-    "id": "act4-outer-courtyard",
-    "title": "Outer Courtyard",
-    "states": [],
-    "triggers": []
-  },
-  {
-    "id": "act4-mirror-labyrinth",
-    "title": "Mirror Labyrinth",
     "states": [],
     "triggers": []
   },
@@ -24,20 +18,20 @@
     "triggers": []
   },
   {
-    "id": "act4-tower-of-shadows",
-    "title": "Tower of Shadows",
-    "states": [],
-    "triggers": []
-  },
-  {
-    "id": "act4-chamber-of-whispers",
-    "title": "Chamber of Whispers",
-    "states": [],
-    "triggers": []
-  },
-  {
     "id": "act4-memory-vault",
     "title": "Memory Vault",
+    "states": [],
+    "triggers": []
+  },
+  {
+    "id": "act4-mirror-labyrinth",
+    "title": "Mirror Labyrinth",
+    "states": [],
+    "triggers": []
+  },
+  {
+    "id": "act4-outer-courtyard",
+    "title": "Outer Courtyard",
     "states": [],
     "triggers": []
   },
@@ -50,6 +44,12 @@
   {
     "id": "act4-throne-chamber",
     "title": "Throne Chamber",
+    "states": [],
+    "triggers": []
+  },
+  {
+    "id": "act4-tower-of-shadows",
+    "title": "Tower of Shadows",
     "states": [],
     "triggers": []
   },

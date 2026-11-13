@@ -63,6 +63,35 @@ describe('unreachedLines', () => {
   })
 })
 
+describe('unreachedLines with the script in any order', () => {
+  const line = (id: string, text: string): ScriptLine => ({
+    id,
+    speaker: 'narrator',
+    text,
+  })
+  const authored = [
+    {
+      file: 'a.ts',
+      text: 'The gates loom. Beyond them lies the dark. You wait.',
+    },
+  ]
+  it('finds a literal the script says as several lines, whatever their order', () => {
+    const script = [
+      line('b', 'Beyond them lies the dark.'),
+      line('a', 'The gates loom.'),
+      line('c', 'You wait. Then you go in.'),
+    ]
+    expect(unreachedLines(authored, script, [])).toEqual([])
+  })
+  it('does not take sentences from unrelated lines for one literal', () => {
+    const script = [
+      line('a', 'The gates loom.'),
+      line('b', 'Beyond them lies the dark.'),
+    ]
+    expect(unreachedLines(authored, script, [])).toEqual(authored)
+  })
+})
+
 describe.each([1, 2, 3, 4])('the lines of Act %i content', (act) => {
   it('are all in the script, or acknowledged in unreached.json', () => {
     const script = JSON.parse(

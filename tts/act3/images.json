@@ -1,634 +1,5 @@
 [
   {
-    "id": "act3-miras-hut",
-    "title": "Mira's Hut",
-    "width": 1920,
-    "height": 1080,
-    "text": "A small hut hung with drying herbs: lavender, sage, and roots in bundles from the rafters. Shelves of bottles line the walls, every one labelled. Mira moves among them without looking, the way you cross your own kitchen in the dark.",
-    "areas": [
-      {
-        "id": "healing-herbs",
-        "title": "Healing Herbs"
-      },
-      {
-        "id": "teleportation-focus",
-        "title": "Teleportation Focus"
-      },
-      {
-        "id": "mira",
-        "title": "Mira"
-      },
-      {
-        "id": "sir-cedric",
-        "title": "Sir Cedric"
-      },
-      {
-        "id": "lifelight-elixir",
-        "title": "Lifelight Elixir"
-      }
-    ],
-    "patches": [
-      {
-        "id": "healing-herbs-gone",
-        "title": "Healing Herbs gone",
-        "text": "Remove the healing herbs from the picture.",
-        "area": "healing-herbs"
-      },
-      {
-        "id": "mira-gone",
-        "title": "Mira gone",
-        "text": "Remove Mira from the picture.",
-        "area": "mira"
-      },
-      {
-        "id": "lifelight-elixir-appears",
-        "title": "Lifelight Elixir appears",
-        "text": "Add the lifelight elixir to the picture.",
-        "area": "lifelight-elixir"
-      }
-    ]
-  },
-  {
-    "id": "act3-tidal-causeway",
-    "title": "Tidal Causeway",
-    "width": 1920,
-    "height": 1080,
-    "text": "Thin causeways of old stone run out across the black water. The wet stones shine under the moon. Broken arches stand along the way, and their shadows lie deep over a faded mural.",
-    "areas": [
-      {
-        "id": "mural",
-        "title": "Mural"
-      },
-      {
-        "id": "barnacled-beam-fragment",
-        "title": "Barnacled Beam Fragment"
-      },
-      {
-        "id": "exit-north",
-        "title": "Way north"
-      },
-      {
-        "id": "exit-east",
-        "title": "Way east"
-      },
-      {
-        "id": "mira",
-        "title": "Mira"
-      },
-      {
-        "id": "sir-cedric",
-        "title": "Sir Cedric"
-      },
-      {
-        "id": "sea-sealed-letter",
-        "title": "Sea-Sealed Letter"
-      },
-      {
-        "id": "rusted-locker-key",
-        "title": "Rusted Locker Key"
-      }
-    ],
-    "patches": [
-      {
-        "id": "mira-appears",
-        "title": "Mira appears",
-        "text": "Add Mira to the picture.",
-        "area": "mira"
-      },
-      {
-        "id": "sea-sealed-letter-appears",
-        "title": "Sea-Sealed Letter appears",
-        "text": "Add the sea-sealed letter to the picture.",
-        "area": "sea-sealed-letter"
-      },
-      {
-        "id": "rusted-locker-key-appears",
-        "title": "Rusted Locker Key appears",
-        "text": "Add the rusted locker key to the picture.",
-        "area": "rusted-locker-key"
-      }
-    ]
-  },
-  {
-    "id": "act3-shoreline-markers",
-    "title": "Shoreline Markers",
-    "width": 1920,
-    "height": 1080,
-    "text": "Weathered steles stand in the cold sand, their faces full of shallow marks. Salt has smudged most of the lines, but moon sigils still show when the tide drops. Pale flakes sit loose in the grooves and catch the light.",
-    "areas": [
-      {
-        "id": "steles",
-        "title": "Steles"
-      },
-      {
-        "id": "polished-shell",
-        "title": "Polished Shell"
-      },
-      {
-        "id": "exit-south",
-        "title": "Way south"
-      },
-      {
-        "id": "exit-east",
-        "title": "Way east"
-      },
-      {
-        "id": "sir-cedric",
-        "title": "Sir Cedric"
-      },
-      {
-        "id": "moon-rune-shards",
-        "title": "Moon Rune Shards"
-      }
-    ],
-    "patches": [
-      {
-        "id": "polished-shell-taken",
-        "title": "Polished Shell taken",
-        "text": "Remove the polished shell from the picture.",
-        "area": "polished-shell"
-      },
-      {
-        "id": "moon-rune-shards-appears",
-        "title": "Moon Rune Shards appears",
-        "text": "Add the moon rune shards to the picture.",
-        "area": "moon-rune-shards"
-      }
-    ]
-  },
-  {
-    "id": "act3-outer-wards",
-    "title": "Outer Wards",
-    "width": 1920,
-    "height": 1080,
-    "text": "The courtyard lies half under the sea. Three old pillars rise from the black water, their faces scored with shallow marks. Brine beads along the carved lines and catches the moon in small rings of light.",
-    "areas": [
-      {
-        "id": "warding-pillars",
-        "title": "Warding Pillars"
-      },
-      {
-        "id": "seaweed-tangle",
-        "title": "Seaweed Tangle"
-      },
-      {
-        "id": "exit-south",
-        "title": "Way south"
-      },
-      {
-        "id": "exit-east",
-        "title": "Way east"
-      },
-      {
-        "id": "exit-west",
-        "title": "Way west"
-      },
-      {
-        "id": "sir-cedric",
-        "title": "Sir Cedric"
-      }
-    ],
-    "patches": [
-      {
-        "id": "warding-pillars-purified",
-        "title": "Pillars purified",
-        "text": "Show the warding pillars cleansed, their glow clear and steady.",
-        "area": "warding-pillars"
-      }
-    ]
-  },
-  {
-    "id": "act3-collapsed-pier",
-    "title": "Collapsed Pier",
-    "width": 1920,
-    "height": 1080,
-    "text": "The pier has fallen into the tide. Warped planks gape over dark vaults, and barnacled timbers stand up out of the water. The sea knocks against them, slow and steady.",
-    "areas": [
-      {
-        "id": "locker",
-        "title": "Locker"
-      },
-      {
-        "id": "weathered-coin",
-        "title": "Weathered Coin"
-      },
-      {
-        "id": "pier-warden",
-        "title": "Pier Warden"
-      },
-      {
-        "id": "exit-west",
-        "title": "Way west"
-      },
-      {
-        "id": "sir-cedric",
-        "title": "Sir Cedric"
-      },
-      {
-        "id": "prism-lantern",
-        "title": "Prism Lantern"
-      }
-    ],
-    "patches": [
-      {
-        "id": "weathered-coin-taken",
-        "title": "Weathered Coin taken",
-        "text": "Remove the weathered coin from the picture.",
-        "area": "weathered-coin"
-      },
-      {
-        "id": "prism-lantern-appears",
-        "title": "Prism Lantern appears",
-        "text": "Add the prism lantern to the picture.",
-        "area": "prism-lantern"
-      }
-    ]
-  },
-  {
-    "id": "act3-submerged-antechamber",
-    "title": "Submerged Antechamber",
-    "width": 1920,
-    "height": 1080,
-    "text": "A hall half under the tide. Salt-smoothed arches bear worn carvings that glow cold from within. It is very quiet. Somewhere further in, water drips.",
-    "areas": [
-      {
-        "id": "exit-north",
-        "title": "Way north"
-      },
-      {
-        "id": "exit-west",
-        "title": "Way west"
-      },
-      {
-        "id": "sir-cedric",
-        "title": "Sir Cedric"
-      },
-      {
-        "id": "lantern-bracket",
-        "title": "Lantern Bracket"
-      },
-      {
-        "id": "exit-east",
-        "title": "Way east"
-      }
-    ],
-    "patches": [
-      {
-        "id": "exit-east-open",
-        "title": "Way east open",
-        "text": "Show the way east open and passable.",
-        "area": "exit-east"
-      },
-      {
-        "id": "lantern-bracket-mounted",
-        "title": "Lantern mounted",
-        "text": "Show a lit lantern mounted in the bracket on the wall.",
-        "area": "lantern-bracket"
-      },
-      {
-        "id": "lantern-bracket-appears",
-        "title": "Lantern Bracket appears",
-        "text": "Add the lantern bracket to the picture.",
-        "area": "lantern-bracket"
-      }
-    ]
-  },
-  {
-    "id": "act3-sanctum-of-the-tide",
-    "title": "Sanctum of the Tide",
-    "width": 1920,
-    "height": 1080,
-    "text": "A vaulted chamber floored with still, dark water. Sigils show on its surface and shift as you look at them, and pale motes of light drift on the ripples. At the room's heart a shallow basin holds a cold brightness; the air tastes of brine and vows left unsaid.",
-    "areas": [
-      {
-        "id": "tide-born-guardian",
-        "title": "Tide-Born Guardian"
-      },
-      {
-        "id": "exit-west",
-        "title": "Way west"
-      },
-      {
-        "id": "exit-east",
-        "title": "Way east"
-      },
-      {
-        "id": "sir-cedric",
-        "title": "Sir Cedric"
-      },
-      {
-        "id": "crystal-of-light",
-        "title": "Crystal of Light"
-      }
-    ],
-    "patches": [
-      {
-        "id": "exit-east-closed",
-        "title": "Way east closed",
-        "text": "Show the way east closed off.",
-        "area": "exit-east"
-      },
-      {
-        "id": "crystal-of-light-appears",
-        "title": "Crystal of Light appears",
-        "text": "Add the crystal of light to the picture.",
-        "area": "crystal-of-light"
-      }
-    ]
-  },
-  {
-    "id": "act3-lower-switchbacks",
-    "title": "Lower Switchbacks",
-    "width": 1920,
-    "height": 1080,
-    "text": "Paths wind back and forth across black, glassy rock, and ash blows on the wind. In the lee of the slope stands a scholar's camp: soot-patched canvas, low braziers, and racks where scorched notes and scraps of map flap. A workbench holds polishing stones and brass fittings for mending mirror segments, the kind found among the outcrops. Above the camp the slope climbs into obsidian, and vents hiss farther off.",
-    "areas": [
-      {
-        "id": "emberwater-canteen",
-        "title": "Emberwater Canteen"
-      },
-      {
-        "id": "ash-scholar",
-        "title": "Ash Scholar"
-      },
-      {
-        "id": "exit-north",
-        "title": "Way north"
-      },
-      {
-        "id": "exit-east",
-        "title": "Way east"
-      },
-      {
-        "id": "mira",
-        "title": "Mira"
-      },
-      {
-        "id": "sir-cedric",
-        "title": "Sir Cedric"
-      },
-      {
-        "id": "brass-mirror-segment",
-        "title": "Brass Mirror Segment"
-      }
-    ],
-    "patches": [
-      {
-        "id": "emberwater-canteen-taken",
-        "title": "Emberwater Canteen taken",
-        "text": "Remove the emberwater canteen from the picture.",
-        "area": "emberwater-canteen"
-      },
-      {
-        "id": "mira-appears",
-        "title": "Mira appears",
-        "text": "Add Mira to the picture.",
-        "area": "mira"
-      },
-      {
-        "id": "brass-mirror-segment-appears",
-        "title": "Brass Mirror Segment appears",
-        "text": "Add the brass mirror segment to the picture.",
-        "area": "brass-mirror-segment"
-      }
-    ]
-  },
-  {
-    "id": "act3-obsidian-outcrops",
-    "title": "Obsidian Outcrops",
-    "width": 1920,
-    "height": 1080,
-    "text": "Sharp towers of obsidian stand up out of the ash, their faces split into glassy facets. In the seams between them lie weathered mirror fragments and the marks of old mounts: brass filings and small bolt holes. Glass flakes slide away under every step.",
-    "areas": [
-      {
-        "id": "exit-south",
-        "title": "Way south"
-      },
-      {
-        "id": "exit-east",
-        "title": "Way east"
-      },
-      {
-        "id": "sir-cedric",
-        "title": "Sir Cedric"
-      },
-      {
-        "id": "brass-mirror-segment",
-        "title": "Brass Mirror Segment"
-      },
-      {
-        "id": "binding-resin",
-        "title": "Binding Resin"
-      }
-    ],
-    "patches": [
-      {
-        "id": "brass-mirror-segment-appears",
-        "title": "Brass Mirror Segment appears",
-        "text": "Add the brass mirror segment to the picture.",
-        "area": "brass-mirror-segment"
-      },
-      {
-        "id": "binding-resin-appears",
-        "title": "Binding Resin appears",
-        "text": "Add the binding resin to the picture.",
-        "area": "binding-resin"
-      }
-    ]
-  },
-  {
-    "id": "act3-mirror-terraces",
-    "title": "Mirror Terraces",
-    "width": 1920,
-    "height": 1080,
-    "text": "Stepped platforms rise in rings up the slope, each ring set with sockets for mirrors and brass mounts. Channels cut in the stone carry light from ring to ring, toward the mountainside. Ash has settled on the worktables, over files and polish left where someone put them down.",
-    "areas": [
-      {
-        "id": "mirror-mount",
-        "title": "Mirror Mount"
-      },
-      {
-        "id": "charred-inscription",
-        "title": "Charred Inscription"
-      },
-      {
-        "id": "exit-south",
-        "title": "Way south"
-      },
-      {
-        "id": "exit-west",
-        "title": "Way west"
-      },
-      {
-        "id": "sir-cedric",
-        "title": "Sir Cedric"
-      },
-      {
-        "id": "brass-mirror-segment",
-        "title": "Brass Mirror Segment"
-      },
-      {
-        "id": "exit-east",
-        "title": "Way east"
-      }
-    ],
-    "patches": [
-      {
-        "id": "exit-east-open",
-        "title": "Way east open",
-        "text": "Show the way east open and passable.",
-        "area": "exit-east"
-      },
-      {
-        "id": "brass-mirror-segment-appears",
-        "title": "Brass Mirror Segment appears",
-        "text": "Add the brass mirror segment to the picture.",
-        "area": "brass-mirror-segment"
-      },
-      {
-        "id": "mirror-mount-mended",
-        "title": "Mirror mount mended",
-        "text": "Show the mirror mount whole, holding its mirrors upright.",
-        "area": "mirror-mount"
-      }
-    ]
-  },
-  {
-    "id": "act3-fumarole-passages",
-    "title": "Fumarole Passages",
-    "width": 1920,
-    "height": 1080,
-    "text": "Narrow tunnels breathe heat in and out through vents in the stone, the way a sleeper breathes. Steam hangs in the low passages, and the air smells of sulfur and warm metal. Small holes and rubbed brass in the floor show where mounts were once bolted.",
-    "areas": [
-      {
-        "id": "vent-stone",
-        "title": "Vent Stone"
-      },
-      {
-        "id": "phoenix-guardian",
-        "title": "Phoenix Guardian"
-      },
-      {
-        "id": "exit-west",
-        "title": "Way west"
-      },
-      {
-        "id": "sir-cedric",
-        "title": "Sir Cedric"
-      },
-      {
-        "id": "exit-south",
-        "title": "Way south"
-      },
-      {
-        "id": "exit-out",
-        "title": "Way out"
-      },
-      {
-        "id": "exit-in",
-        "title": "Way in"
-      }
-    ],
-    "patches": [
-      {
-        "id": "vent-stone-taken",
-        "title": "Vent Stone taken",
-        "text": "Remove the vent stone from the picture.",
-        "area": "vent-stone"
-      },
-      {
-        "id": "exit-south-open",
-        "title": "Way south open",
-        "text": "Show the way south open and passable.",
-        "area": "exit-south"
-      },
-      {
-        "id": "exit-out-open",
-        "title": "Way out open",
-        "text": "Show the way out open and passable.",
-        "area": "exit-out"
-      },
-      {
-        "id": "exit-in-open",
-        "title": "Way in open",
-        "text": "Show the way in open and passable.",
-        "area": "exit-in"
-      }
-    ]
-  },
-  {
-    "id": "act3-ember-gallery",
-    "title": "Ember Gallery",
-    "width": 1920,
-    "height": 1080,
-    "text": "A vaulted cavern veined with cooling lava; the air smells of charcoal and iron. Steam rises from cracks in the floor. On the worktables, fireglass and cooled slag lie sorted into heaps for wards, as if whoever sorted them meant to come back.",
-    "areas": [
-      {
-        "id": "exit-north",
-        "title": "Way north"
-      },
-      {
-        "id": "exit-west",
-        "title": "Way west"
-      },
-      {
-        "id": "sir-cedric",
-        "title": "Sir Cedric"
-      },
-      {
-        "id": "ash-fern",
-        "title": "Ash-Fern"
-      },
-      {
-        "id": "cooled-slag",
-        "title": "Cooled Slag"
-      }
-    ],
-    "patches": [
-      {
-        "id": "ash-fern-appears",
-        "title": "Ash-Fern appears",
-        "text": "Add the ash-fern to the picture.",
-        "area": "ash-fern"
-      },
-      {
-        "id": "cooled-slag-appears",
-        "title": "Cooled Slag appears",
-        "text": "Add the cooled slag to the picture.",
-        "area": "cooled-slag"
-      }
-    ]
-  },
-  {
-    "id": "act3-phoenix-crater",
-    "title": "Phoenix Crater",
-    "width": 1920,
-    "height": 1080,
-    "text": "A bowl of rock melted to glass, open to the sky. Warm drafts turn in it and carry cinders round in slow spirals. The air smells of hot iron.",
-    "areas": [
-      {
-        "id": "exit-north",
-        "title": "Way north"
-      },
-      {
-        "id": "sir-cedric",
-        "title": "Sir Cedric"
-      },
-      {
-        "id": "phoenix",
-        "title": "Phoenix"
-      }
-    ],
-    "patches": [
-      {
-        "id": "phoenix-appears",
-        "title": "Phoenix appears",
-        "text": "Add Phoenix to the picture.",
-        "area": "phoenix"
-      }
-    ]
-  },
-  {
     "id": "act3-cavern-mouth",
     "title": "Cavern Mouth",
     "width": 1920,
@@ -662,69 +33,6 @@
         "title": "Mira appears",
         "text": "Add Mira to the picture.",
         "area": "mira"
-      }
-    ]
-  },
-  {
-    "id": "act3-tool-cache",
-    "title": "Tool Cache",
-    "width": 1920,
-    "height": 1080,
-    "text": "A side chamber shored with old timbers and stacked with crates of braces, iron fittings and coils of hemp rope. The walls are scored with tool marks, and the air smells of iron and wet earth.",
-    "areas": [
-      {
-        "id": "exit-south",
-        "title": "Way south"
-      },
-      {
-        "id": "exit-east",
-        "title": "Way east"
-      },
-      {
-        "id": "sir-cedric",
-        "title": "Sir Cedric"
-      },
-      {
-        "id": "supply-crate",
-        "title": "Supply Crate"
-      },
-      {
-        "id": "reinforced-braces",
-        "title": "Reinforced Braces"
-      },
-      {
-        "id": "support-straps",
-        "title": "Support Straps"
-      },
-      {
-        "id": "wedge-blocks",
-        "title": "Wedge Blocks"
-      }
-    ],
-    "patches": [
-      {
-        "id": "supply-crate-appears",
-        "title": "Supply Crate appears",
-        "text": "Add the supply crate to the picture.",
-        "area": "supply-crate"
-      },
-      {
-        "id": "reinforced-braces-appears",
-        "title": "Reinforced Braces appears",
-        "text": "Add the reinforced braces to the picture.",
-        "area": "reinforced-braces"
-      },
-      {
-        "id": "support-straps-appears",
-        "title": "Support Straps appears",
-        "text": "Add the support straps to the picture.",
-        "area": "support-straps"
-      },
-      {
-        "id": "wedge-blocks-appears",
-        "title": "Wedge Blocks appears",
-        "text": "Add the wedge blocks to the picture.",
-        "area": "wedge-blocks"
       }
     ]
   },
@@ -792,6 +100,96 @@
     ]
   },
   {
+    "id": "act3-collapsed-pier",
+    "title": "Collapsed Pier",
+    "width": 1920,
+    "height": 1080,
+    "text": "The pier has fallen into the tide. Warped planks gape over dark vaults, and barnacled timbers stand up out of the water. The sea knocks against them, slow and steady.",
+    "areas": [
+      {
+        "id": "locker",
+        "title": "Locker"
+      },
+      {
+        "id": "weathered-coin",
+        "title": "Weathered Coin"
+      },
+      {
+        "id": "pier-warden",
+        "title": "Pier Warden"
+      },
+      {
+        "id": "exit-west",
+        "title": "Way west"
+      },
+      {
+        "id": "sir-cedric",
+        "title": "Sir Cedric"
+      },
+      {
+        "id": "prism-lantern",
+        "title": "Prism Lantern"
+      }
+    ],
+    "patches": [
+      {
+        "id": "weathered-coin-taken",
+        "title": "Weathered Coin taken",
+        "text": "Remove the weathered coin from the picture.",
+        "area": "weathered-coin"
+      },
+      {
+        "id": "prism-lantern-appears",
+        "title": "Prism Lantern appears",
+        "text": "Add the prism lantern to the picture.",
+        "area": "prism-lantern"
+      }
+    ]
+  },
+  {
+    "id": "act3-dragons-hall",
+    "title": "Dragon's Hall",
+    "width": 1920,
+    "height": 1080,
+    "text": "A hall of living stone opens beyond sight, its ceiling lost in shadow. Embers burn slowly along the floor, pulsing like a heartbeat, and somewhere in the dark, water drips. Rings of old sigils spiral across the black tiles around the Ancient Dragon. It lies coiled at the centre, scales like polished obsidian, and each slow breath hums in your bones.",
+    "areas": [
+      {
+        "id": "sigils",
+        "title": "Sigils"
+      },
+      {
+        "id": "ancient-dragon",
+        "title": "Ancient Dragon"
+      },
+      {
+        "id": "exit-west",
+        "title": "Way west"
+      },
+      {
+        "id": "sir-cedric",
+        "title": "Sir Cedric"
+      },
+      {
+        "id": "dragons-scale",
+        "title": "Dragon's Scale"
+      }
+    ],
+    "patches": [
+      {
+        "id": "dragons-scale-appears",
+        "title": "Dragon's Scale appears",
+        "text": "Add the dragon's scale to the picture.",
+        "area": "dragons-scale"
+      },
+      {
+        "id": "sigils-dimmed",
+        "title": "Sigils dimmed",
+        "text": "Dim the sigils around the dragon and split the nearest ring with a crack.",
+        "area": "sigils"
+      }
+    ]
+  },
+  {
     "id": "act3-echo-chambers",
     "title": "Echo Chambers",
     "width": 1920,
@@ -831,6 +229,584 @@
         "title": "Resonant Chant Rubbings appears",
         "text": "Add the resonant chant rubbings to the picture.",
         "area": "resonant-chant-rubbings"
+      }
+    ]
+  },
+  {
+    "id": "act3-ember-gallery",
+    "title": "Ember Gallery",
+    "width": 1920,
+    "height": 1080,
+    "text": "A vaulted cavern veined with cooling lava; the air smells of charcoal and iron. Steam rises from cracks in the floor. On the worktables, fireglass and cooled slag lie sorted into heaps for wards, as if whoever sorted them meant to come back.",
+    "areas": [
+      {
+        "id": "exit-north",
+        "title": "Way north"
+      },
+      {
+        "id": "exit-west",
+        "title": "Way west"
+      },
+      {
+        "id": "sir-cedric",
+        "title": "Sir Cedric"
+      },
+      {
+        "id": "ash-fern",
+        "title": "Ash-Fern"
+      },
+      {
+        "id": "cooled-slag",
+        "title": "Cooled Slag"
+      }
+    ],
+    "patches": [
+      {
+        "id": "ash-fern-appears",
+        "title": "Ash-Fern appears",
+        "text": "Add the ash-fern to the picture.",
+        "area": "ash-fern"
+      },
+      {
+        "id": "cooled-slag-appears",
+        "title": "Cooled Slag appears",
+        "text": "Add the cooled slag to the picture.",
+        "area": "cooled-slag"
+      }
+    ]
+  },
+  {
+    "id": "act3-fortress-entrance",
+    "title": "Entrance to Malakar's Fortress",
+    "width": 1920,
+    "height": 1080,
+    "text": "A bastion of black stone rises from a shattered ridge. Iron lattices close its gates, and sigils glow behind them, slow as breathing. The wind up here is cold and smells of metal. Where the gate arch meets the wall an older carving shows through the black: a sun rising over three linked rings.",
+    "areas": [
+      {
+        "id": "fortress-gates",
+        "title": "Fortress Gates"
+      },
+      {
+        "id": "mira",
+        "title": "Mira"
+      },
+      {
+        "id": "sir-cedric",
+        "title": "Sir Cedric"
+      }
+    ],
+    "patches": [
+      {
+        "id": "mira-appears",
+        "title": "Mira appears",
+        "text": "Add Mira to the picture.",
+        "area": "mira"
+      }
+    ]
+  },
+  {
+    "id": "act3-fumarole-passages",
+    "title": "Fumarole Passages",
+    "width": 1920,
+    "height": 1080,
+    "text": "Narrow tunnels breathe heat in and out through vents in the stone, the way a sleeper breathes. Steam hangs in the low passages, and the air smells of sulfur and warm metal. Small holes and rubbed brass in the floor show where mounts were once bolted.",
+    "areas": [
+      {
+        "id": "vent-stone",
+        "title": "Vent Stone"
+      },
+      {
+        "id": "phoenix-guardian",
+        "title": "Phoenix Guardian"
+      },
+      {
+        "id": "exit-west",
+        "title": "Way west"
+      },
+      {
+        "id": "sir-cedric",
+        "title": "Sir Cedric"
+      },
+      {
+        "id": "exit-south",
+        "title": "Way south"
+      },
+      {
+        "id": "exit-out",
+        "title": "Way out"
+      },
+      {
+        "id": "exit-in",
+        "title": "Way in"
+      }
+    ],
+    "patches": [
+      {
+        "id": "vent-stone-taken",
+        "title": "Vent Stone taken",
+        "text": "Remove the vent stone from the picture.",
+        "area": "vent-stone"
+      },
+      {
+        "id": "exit-south-open",
+        "title": "Way south open",
+        "text": "Show the way south open and passable.",
+        "area": "exit-south"
+      },
+      {
+        "id": "exit-out-open",
+        "title": "Way out open",
+        "text": "Show the way out open and passable.",
+        "area": "exit-out"
+      },
+      {
+        "id": "exit-in-open",
+        "title": "Way in open",
+        "text": "Show the way in open and passable.",
+        "area": "exit-in"
+      }
+    ]
+  },
+  {
+    "id": "act3-lower-switchbacks",
+    "title": "Lower Switchbacks",
+    "width": 1920,
+    "height": 1080,
+    "text": "Paths wind back and forth across black, glassy rock, and ash blows on the wind. In the lee of the slope stands a scholar's camp: soot-patched canvas, low braziers, and racks where scorched notes and scraps of map flap. A workbench holds polishing stones and brass fittings for mending mirror segments, the kind found among the outcrops. Above the camp the slope climbs into obsidian, and vents hiss farther off.",
+    "areas": [
+      {
+        "id": "emberwater-canteen",
+        "title": "Emberwater Canteen"
+      },
+      {
+        "id": "ash-scholar",
+        "title": "Ash Scholar"
+      },
+      {
+        "id": "exit-north",
+        "title": "Way north"
+      },
+      {
+        "id": "exit-east",
+        "title": "Way east"
+      },
+      {
+        "id": "mira",
+        "title": "Mira"
+      },
+      {
+        "id": "sir-cedric",
+        "title": "Sir Cedric"
+      },
+      {
+        "id": "brass-mirror-segment",
+        "title": "Brass Mirror Segment"
+      }
+    ],
+    "patches": [
+      {
+        "id": "emberwater-canteen-taken",
+        "title": "Emberwater Canteen taken",
+        "text": "Remove the emberwater canteen from the picture.",
+        "area": "emberwater-canteen"
+      },
+      {
+        "id": "mira-appears",
+        "title": "Mira appears",
+        "text": "Add Mira to the picture.",
+        "area": "mira"
+      },
+      {
+        "id": "brass-mirror-segment-appears",
+        "title": "Brass Mirror Segment appears",
+        "text": "Add the brass mirror segment to the picture.",
+        "area": "brass-mirror-segment"
+      }
+    ]
+  },
+  {
+    "id": "act3-miras-hut",
+    "title": "Mira's Hut",
+    "width": 1920,
+    "height": 1080,
+    "text": "A small hut hung with drying herbs: lavender, sage, and roots in bundles from the rafters. Shelves of bottles line the walls, every one labelled. Mira moves among them without looking, the way you cross your own kitchen in the dark.",
+    "areas": [
+      {
+        "id": "healing-herbs",
+        "title": "Healing Herbs"
+      },
+      {
+        "id": "teleportation-focus",
+        "title": "Teleportation Focus"
+      },
+      {
+        "id": "mira",
+        "title": "Mira"
+      },
+      {
+        "id": "sir-cedric",
+        "title": "Sir Cedric"
+      },
+      {
+        "id": "lifelight-elixir",
+        "title": "Lifelight Elixir"
+      }
+    ],
+    "patches": [
+      {
+        "id": "healing-herbs-gone",
+        "title": "Healing Herbs gone",
+        "text": "Remove the healing herbs from the picture.",
+        "area": "healing-herbs"
+      },
+      {
+        "id": "mira-gone",
+        "title": "Mira gone",
+        "text": "Remove Mira from the picture.",
+        "area": "mira"
+      },
+      {
+        "id": "lifelight-elixir-appears",
+        "title": "Lifelight Elixir appears",
+        "text": "Add the lifelight elixir to the picture.",
+        "area": "lifelight-elixir"
+      }
+    ]
+  },
+  {
+    "id": "act3-mirror-terraces",
+    "title": "Mirror Terraces",
+    "width": 1920,
+    "height": 1080,
+    "text": "Stepped platforms rise in rings up the slope, each ring set with sockets for mirrors and brass mounts. Channels cut in the stone carry light from ring to ring, toward the mountainside. Ash has settled on the worktables, over files and polish left where someone put them down.",
+    "areas": [
+      {
+        "id": "mirror-mount",
+        "title": "Mirror Mount"
+      },
+      {
+        "id": "charred-inscription",
+        "title": "Charred Inscription"
+      },
+      {
+        "id": "exit-south",
+        "title": "Way south"
+      },
+      {
+        "id": "exit-west",
+        "title": "Way west"
+      },
+      {
+        "id": "sir-cedric",
+        "title": "Sir Cedric"
+      },
+      {
+        "id": "brass-mirror-segment",
+        "title": "Brass Mirror Segment"
+      },
+      {
+        "id": "exit-east",
+        "title": "Way east"
+      }
+    ],
+    "patches": [
+      {
+        "id": "exit-east-open",
+        "title": "Way east open",
+        "text": "Show the way east open and passable.",
+        "area": "exit-east"
+      },
+      {
+        "id": "brass-mirror-segment-appears",
+        "title": "Brass Mirror Segment appears",
+        "text": "Add the brass mirror segment to the picture.",
+        "area": "brass-mirror-segment"
+      },
+      {
+        "id": "mirror-mount-mended",
+        "title": "Mirror mount mended",
+        "text": "Show the mirror mount whole, holding its mirrors upright.",
+        "area": "mirror-mount"
+      }
+    ]
+  },
+  {
+    "id": "act3-obsidian-outcrops",
+    "title": "Obsidian Outcrops",
+    "width": 1920,
+    "height": 1080,
+    "text": "Sharp towers of obsidian stand up out of the ash, their faces split into glassy facets. In the seams between them lie weathered mirror fragments and the marks of old mounts: brass filings and small bolt holes. Glass flakes slide away under every step.",
+    "areas": [
+      {
+        "id": "exit-south",
+        "title": "Way south"
+      },
+      {
+        "id": "exit-east",
+        "title": "Way east"
+      },
+      {
+        "id": "sir-cedric",
+        "title": "Sir Cedric"
+      },
+      {
+        "id": "brass-mirror-segment",
+        "title": "Brass Mirror Segment"
+      },
+      {
+        "id": "binding-resin",
+        "title": "Binding Resin"
+      }
+    ],
+    "patches": [
+      {
+        "id": "brass-mirror-segment-appears",
+        "title": "Brass Mirror Segment appears",
+        "text": "Add the brass mirror segment to the picture.",
+        "area": "brass-mirror-segment"
+      },
+      {
+        "id": "binding-resin-appears",
+        "title": "Binding Resin appears",
+        "text": "Add the binding resin to the picture.",
+        "area": "binding-resin"
+      }
+    ]
+  },
+  {
+    "id": "act3-outer-wards",
+    "title": "Outer Wards",
+    "width": 1920,
+    "height": 1080,
+    "text": "The courtyard lies half under the sea. Three old pillars rise from the black water, their faces scored with shallow marks. Brine beads along the carved lines and catches the moon in small rings of light.",
+    "areas": [
+      {
+        "id": "warding-pillars",
+        "title": "Warding Pillars"
+      },
+      {
+        "id": "seaweed-tangle",
+        "title": "Seaweed Tangle"
+      },
+      {
+        "id": "exit-south",
+        "title": "Way south"
+      },
+      {
+        "id": "exit-east",
+        "title": "Way east"
+      },
+      {
+        "id": "exit-west",
+        "title": "Way west"
+      },
+      {
+        "id": "sir-cedric",
+        "title": "Sir Cedric"
+      }
+    ],
+    "patches": [
+      {
+        "id": "warding-pillars-purified",
+        "title": "Pillars purified",
+        "text": "Show the warding pillars cleansed, their glow clear and steady.",
+        "area": "warding-pillars"
+      }
+    ]
+  },
+  {
+    "id": "act3-phoenix-crater",
+    "title": "Phoenix Crater",
+    "width": 1920,
+    "height": 1080,
+    "text": "A bowl of rock melted to glass, open to the sky. Warm drafts turn in it and carry cinders round in slow spirals. The air smells of hot iron.",
+    "areas": [
+      {
+        "id": "exit-north",
+        "title": "Way north"
+      },
+      {
+        "id": "sir-cedric",
+        "title": "Sir Cedric"
+      },
+      {
+        "id": "phoenix",
+        "title": "Phoenix"
+      }
+    ],
+    "patches": [
+      {
+        "id": "phoenix-appears",
+        "title": "Phoenix appears",
+        "text": "Add Phoenix to the picture.",
+        "area": "phoenix"
+      }
+    ]
+  },
+  {
+    "id": "act3-portrait-ancient-dragon",
+    "title": "Ancient Dragon",
+    "width": 480,
+    "height": 640,
+    "text": "A face portrait of an ancient dragon, its head heavy with dull worn scales, with golden eyes half open and unhurried."
+  },
+  {
+    "id": "act3-portrait-ash-scholar",
+    "title": "Ash Scholar",
+    "width": 480,
+    "height": 640,
+    "text": "A face portrait of a scholar with soot-streaked cheeks, singed eyebrows, tired intelligent eyes and wind-tousled hair."
+  },
+  {
+    "id": "act3-portrait-mine-overseer",
+    "title": "Mine Overseer",
+    "width": 480,
+    "height": 640,
+    "text": "A face portrait of a mine overseer with a face grey with rock dust, a heavy brow and uneasy eyes looking past you."
+  },
+  {
+    "id": "act3-portrait-miners",
+    "title": "Miners",
+    "width": 480,
+    "height": 640,
+    "text": "A face portrait of a grizzled old miner, his face grey with rock dust, with a deep frown and a lamp-lit stare."
+  },
+  {
+    "id": "act3-portrait-phoenix",
+    "title": "Phoenix",
+    "width": 480,
+    "height": 640,
+    "text": "A face portrait of a phoenix, its head feathers shading from gold to red, with a sharp beak and calm, unhurried amber eyes."
+  },
+  {
+    "id": "act3-portrait-phoenix-guardian",
+    "title": "Phoenix Guardian",
+    "width": 480,
+    "height": 640,
+    "text": "A face portrait of a masked guardian in a fire-etched mask and hood, only the eyes and lips showing."
+  },
+  {
+    "id": "act3-portrait-pier-warden",
+    "title": "Pier Warden",
+    "width": 480,
+    "height": 640,
+    "text": "A face portrait of an old man with a salt-stiff collar, a seamed, sea-beaten face and pale eyes fixed on the water."
+  },
+  {
+    "id": "act3-portrait-silence-keeper",
+    "title": "Silence Keeper",
+    "width": 480,
+    "height": 640,
+    "text": "A face portrait of a figure in a deep hood, the face in shadow, with a pale chin and calm, still features."
+  },
+  {
+    "id": "act3-portrait-tide-born-guardian",
+    "title": "Tide-Born Guardian",
+    "width": 480,
+    "height": 640,
+    "text": "A face portrait of a guardian shaped of standing water, a face of clear liquid with ward-sigils drifting in it like weed."
+  },
+  {
+    "id": "act3-portrait-tobin",
+    "title": "Tobin",
+    "width": 480,
+    "height": 640,
+    "text": "A face portrait of a boy of about fifteen, thin and pale, with his throat wrapped in a strip of torn shirt and his eyes turned upward and away."
+  },
+  {
+    "id": "act3-portrait-wandering-phantoms",
+    "title": "Wandering Phantoms",
+    "width": 480,
+    "height": 640,
+    "text": "A face portrait of a grey phantom, thin as breath on glass, a faint hollow face with open, whispering lips."
+  },
+  {
+    "id": "act3-sanctum-of-the-tide",
+    "title": "Sanctum of the Tide",
+    "width": 1920,
+    "height": 1080,
+    "text": "A vaulted chamber floored with still, dark water. Sigils show on its surface and shift as you look at them, and pale motes of light drift on the ripples. At the room's heart a shallow basin holds a cold brightness; the air tastes of brine and vows left unsaid.",
+    "areas": [
+      {
+        "id": "tide-born-guardian",
+        "title": "Tide-Born Guardian"
+      },
+      {
+        "id": "exit-west",
+        "title": "Way west"
+      },
+      {
+        "id": "exit-east",
+        "title": "Way east"
+      },
+      {
+        "id": "sir-cedric",
+        "title": "Sir Cedric"
+      },
+      {
+        "id": "crystal-of-light",
+        "title": "Crystal of Light"
+      }
+    ],
+    "patches": [
+      {
+        "id": "exit-east-closed",
+        "title": "Way east closed",
+        "text": "Show the way east closed off.",
+        "area": "exit-east"
+      },
+      {
+        "id": "crystal-of-light-appears",
+        "title": "Crystal of Light appears",
+        "text": "Add the crystal of light to the picture.",
+        "area": "crystal-of-light"
+      }
+    ]
+  },
+  {
+    "id": "act3-shoreline-markers",
+    "title": "Shoreline Markers",
+    "width": 1920,
+    "height": 1080,
+    "text": "Weathered steles stand in the cold sand, their faces full of shallow marks. Salt has smudged most of the lines, but moon sigils still show when the tide drops. Pale flakes sit loose in the grooves and catch the light.",
+    "areas": [
+      {
+        "id": "steles",
+        "title": "Steles"
+      },
+      {
+        "id": "polished-shell",
+        "title": "Polished Shell"
+      },
+      {
+        "id": "exit-south",
+        "title": "Way south"
+      },
+      {
+        "id": "exit-east",
+        "title": "Way east"
+      },
+      {
+        "id": "sir-cedric",
+        "title": "Sir Cedric"
+      },
+      {
+        "id": "moon-rune-shards",
+        "title": "Moon Rune Shards"
+      }
+    ],
+    "patches": [
+      {
+        "id": "polished-shell-taken",
+        "title": "Polished Shell taken",
+        "text": "Remove the polished shell from the picture.",
+        "area": "polished-shell"
+      },
+      {
+        "id": "moon-rune-shards-appears",
+        "title": "Moon Rune Shards appears",
+        "text": "Add the moon rune shards to the picture.",
+        "area": "moon-rune-shards"
       }
     ]
   },
@@ -910,19 +886,15 @@
     ]
   },
   {
-    "id": "act3-dragons-hall",
-    "title": "Dragon's Hall",
+    "id": "act3-submerged-antechamber",
+    "title": "Submerged Antechamber",
     "width": 1920,
     "height": 1080,
-    "text": "A hall of living stone opens beyond sight, its ceiling lost in shadow. Embers burn slowly along the floor, pulsing like a heartbeat, and somewhere in the dark, water drips. Rings of old sigils spiral across the black tiles around the Ancient Dragon. It lies coiled at the centre, scales like polished obsidian, and each slow breath hums in your bones.",
+    "text": "A hall half under the tide. Salt-smoothed arches bear worn carvings that glow cold from within. It is very quiet. Somewhere further in, water drips.",
     "areas": [
       {
-        "id": "sigils",
-        "title": "Sigils"
-      },
-      {
-        "id": "ancient-dragon",
-        "title": "Ancient Dragon"
+        "id": "exit-north",
+        "title": "Way north"
       },
       {
         "id": "exit-west",
@@ -933,35 +905,57 @@
         "title": "Sir Cedric"
       },
       {
-        "id": "dragons-scale",
-        "title": "Dragon's Scale"
+        "id": "lantern-bracket",
+        "title": "Lantern Bracket"
+      },
+      {
+        "id": "exit-east",
+        "title": "Way east"
       }
     ],
     "patches": [
       {
-        "id": "dragons-scale-appears",
-        "title": "Dragon's Scale appears",
-        "text": "Add the dragon's scale to the picture.",
-        "area": "dragons-scale"
+        "id": "exit-east-open",
+        "title": "Way east open",
+        "text": "Show the way east open and passable.",
+        "area": "exit-east"
       },
       {
-        "id": "sigils-dimmed",
-        "title": "Sigils dimmed",
-        "text": "Dim the sigils around the dragon and split the nearest ring with a crack.",
-        "area": "sigils"
+        "id": "lantern-bracket-mounted",
+        "title": "Lantern mounted",
+        "text": "Show a lit lantern mounted in the bracket on the wall.",
+        "area": "lantern-bracket"
+      },
+      {
+        "id": "lantern-bracket-appears",
+        "title": "Lantern Bracket appears",
+        "text": "Add the lantern bracket to the picture.",
+        "area": "lantern-bracket"
       }
     ]
   },
   {
-    "id": "act3-fortress-entrance",
-    "title": "Entrance to Malakar's Fortress",
+    "id": "act3-tidal-causeway",
+    "title": "Tidal Causeway",
     "width": 1920,
     "height": 1080,
-    "text": "A bastion of black stone rises from a shattered ridge. Iron lattices close its gates, and sigils glow behind them, slow as breathing. The wind up here is cold and smells of metal. Where the gate arch meets the wall an older carving shows through the black: a sun rising over three linked rings.",
+    "text": "Thin causeways of old stone run out across the black water. The wet stones shine under the moon. Broken arches stand along the way, and their shadows lie deep over a faded mural.",
     "areas": [
       {
-        "id": "fortress-gates",
-        "title": "Fortress Gates"
+        "id": "mural",
+        "title": "Mural"
+      },
+      {
+        "id": "barnacled-beam-fragment",
+        "title": "Barnacled Beam Fragment"
+      },
+      {
+        "id": "exit-north",
+        "title": "Way north"
+      },
+      {
+        "id": "exit-east",
+        "title": "Way east"
       },
       {
         "id": "mira",
@@ -970,6 +964,14 @@
       {
         "id": "sir-cedric",
         "title": "Sir Cedric"
+      },
+      {
+        "id": "sea-sealed-letter",
+        "title": "Sea-Sealed Letter"
+      },
+      {
+        "id": "rusted-locker-key",
+        "title": "Rusted Locker Key"
       }
     ],
     "patches": [
@@ -978,36 +980,90 @@
         "title": "Mira appears",
         "text": "Add Mira to the picture.",
         "area": "mira"
+      },
+      {
+        "id": "sea-sealed-letter-appears",
+        "title": "Sea-Sealed Letter appears",
+        "text": "Add the sea-sealed letter to the picture.",
+        "area": "sea-sealed-letter"
+      },
+      {
+        "id": "rusted-locker-key-appears",
+        "title": "Rusted Locker Key appears",
+        "text": "Add the rusted locker key to the picture.",
+        "area": "rusted-locker-key"
       }
     ]
   },
   {
-    "id": "act3-portrait-ancient-dragon",
-    "title": "Ancient Dragon",
-    "width": 480,
-    "height": 640,
-    "text": "A face portrait of an ancient dragon, its head heavy with dull worn scales, with golden eyes half open and unhurried."
+    "id": "act3-tool-cache",
+    "title": "Tool Cache",
+    "width": 1920,
+    "height": 1080,
+    "text": "A side chamber shored with old timbers and stacked with crates of braces, iron fittings and coils of hemp rope. The walls are scored with tool marks, and the air smells of iron and wet earth.",
+    "areas": [
+      {
+        "id": "exit-south",
+        "title": "Way south"
+      },
+      {
+        "id": "exit-east",
+        "title": "Way east"
+      },
+      {
+        "id": "sir-cedric",
+        "title": "Sir Cedric"
+      },
+      {
+        "id": "supply-crate",
+        "title": "Supply Crate"
+      },
+      {
+        "id": "reinforced-braces",
+        "title": "Reinforced Braces"
+      },
+      {
+        "id": "support-straps",
+        "title": "Support Straps"
+      },
+      {
+        "id": "wedge-blocks",
+        "title": "Wedge Blocks"
+      }
+    ],
+    "patches": [
+      {
+        "id": "supply-crate-appears",
+        "title": "Supply Crate appears",
+        "text": "Add the supply crate to the picture.",
+        "area": "supply-crate"
+      },
+      {
+        "id": "reinforced-braces-appears",
+        "title": "Reinforced Braces appears",
+        "text": "Add the reinforced braces to the picture.",
+        "area": "reinforced-braces"
+      },
+      {
+        "id": "support-straps-appears",
+        "title": "Support Straps appears",
+        "text": "Add the support straps to the picture.",
+        "area": "support-straps"
+      },
+      {
+        "id": "wedge-blocks-appears",
+        "title": "Wedge Blocks appears",
+        "text": "Add the wedge blocks to the picture.",
+        "area": "wedge-blocks"
+      }
+    ]
   },
   {
-    "id": "act3-portrait-ash-scholar",
-    "title": "Ash Scholar",
+    "id": "portrait-elior",
+    "title": "Elior",
     "width": 480,
     "height": 640,
-    "text": "A face portrait of a scholar with soot-streaked cheeks, singed eyebrows, tired intelligent eyes and wind-tousled hair."
-  },
-  {
-    "id": "act3-portrait-mine-overseer",
-    "title": "Mine Overseer",
-    "width": 480,
-    "height": 640,
-    "text": "A face portrait of a mine overseer with a face grey with rock dust, a heavy brow and uneasy eyes looking past you."
-  },
-  {
-    "id": "act3-portrait-miners",
-    "title": "Miners",
-    "width": 480,
-    "height": 640,
-    "text": "A face portrait of a grizzled old miner, his face grey with rock dust, with a deep frown and a lamp-lit stare."
+    "text": "A face portrait of a farm boy of about nineteen, sun-browned and freckled, with untidy brown hair, an earnest, searching look, and the frayed collar of a homespun shirt."
   },
   {
     "id": "portrait-mira",
@@ -1017,66 +1073,10 @@
     "text": "A face portrait of a village healer in middle age, with a calm, steady gaze that rests on you a moment longer than is comfortable, and a sprig of dried sage tucked behind one ear."
   },
   {
-    "id": "act3-portrait-phoenix",
-    "title": "Phoenix",
-    "width": 480,
-    "height": 640,
-    "text": "A face portrait of a phoenix, its head feathers shading from gold to red, with a sharp beak and calm, unhurried amber eyes."
-  },
-  {
-    "id": "act3-portrait-phoenix-guardian",
-    "title": "Phoenix Guardian",
-    "width": 480,
-    "height": 640,
-    "text": "A face portrait of a masked guardian in a fire-etched mask and hood, only the eyes and lips showing."
-  },
-  {
-    "id": "act3-portrait-pier-warden",
-    "title": "Pier Warden",
-    "width": 480,
-    "height": 640,
-    "text": "A face portrait of an old man with a salt-stiff collar, a seamed, sea-beaten face and pale eyes fixed on the water."
-  },
-  {
-    "id": "act3-portrait-silence-keeper",
-    "title": "Silence Keeper",
-    "width": 480,
-    "height": 640,
-    "text": "A face portrait of a figure in a deep hood, the face in shadow, with a pale chin and calm, still features."
-  },
-  {
     "id": "portrait-sir-cedric",
     "title": "Sir Cedric",
     "width": 480,
     "height": 640,
     "text": "A face portrait of a tall knight in his fifties with a weathered, tired face and a steady, watchful stare, a steel mail coif and a dented gorget around his neck."
-  },
-  {
-    "id": "act3-portrait-tide-born-guardian",
-    "title": "Tide-Born Guardian",
-    "width": 480,
-    "height": 640,
-    "text": "A face portrait of a guardian shaped of standing water, a face of clear liquid with ward-sigils drifting in it like weed."
-  },
-  {
-    "id": "act3-portrait-tobin",
-    "title": "Tobin",
-    "width": 480,
-    "height": 640,
-    "text": "A face portrait of a boy of about fifteen, thin and pale, with his throat wrapped in a strip of torn shirt and his eyes turned upward and away."
-  },
-  {
-    "id": "act3-portrait-wandering-phantoms",
-    "title": "Wandering Phantoms",
-    "width": 480,
-    "height": 640,
-    "text": "A face portrait of a grey phantom, thin as breath on glass, a faint hollow face with open, whispering lips."
-  },
-  {
-    "id": "portrait-elior",
-    "title": "Elior",
-    "width": 480,
-    "height": 640,
-    "text": "A face portrait of a farm boy of about nineteen, sun-browned and freckled, with untidy brown hair, an earnest, searching look, and the frayed collar of a homespun shirt."
   }
 ]

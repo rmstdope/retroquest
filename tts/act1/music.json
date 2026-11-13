@@ -1,52 +1,9 @@
 [
   {
-    "id": "market",
-    "title": "Act 1 Opening",
-    "file": "web/public/audio/music/Conquest - Market (freetouse.com).mp3",
-    "plays": "Act I, throughout",
-    "text": "lively medieval market, plucked strings and light percussion, bustling and cheerful, instrumental, no vocals",
-    "seconds": 126
-  },
-  {
-    "id": "act1-the-dream",
-    "title": "The Dream",
-    "plays": "Act I, The Dream",
-    "text": "instrumental background loop for The Dream: It is dark, and it is raining hard. You hear it beating on shutters, though you cannot see any. Thunder breaks so close that the dark shakes with it. Shadows drift past like smoke, no vocals",
-    "seconds": 60
-  },
-  {
-    "id": "act1-eliors-cottage",
-    "title": "Elior's Cottage",
-    "plays": "Act I, Elior's Cottage",
-    "text": "instrumental background loop for Elior's Cottage: A modest cottage with a straw roof and a cozy hearth. The scent of fresh bread and old books fills the air, no vocals",
-    "seconds": 60
-  },
-  {
-    "id": "act1-vegetable-field",
-    "title": "Vegetable Field",
-    "plays": "Act I, Vegetable Field",
-    "text": "instrumental background loop for Vegetable Field: Rows of withered crops stretch beneath a brooding gray sky. The earth is cracked and dry, with only a few stubborn carrots and a rusty hoe hinting at better days, no vocals",
-    "seconds": 60
-  },
-  {
-    "id": "act1-chicken-coop",
-    "title": "Chicken Coop",
-    "plays": "Act I, Chicken Coop",
-    "text": "instrumental background loop for Chicken Coop: A small wooden coop stands here, its planks patched and weathered. Nervous chickens cluck and flutter, their feathers ruffled as they dart between straw nests, no vocals",
-    "seconds": 60
-  },
-  {
-    "id": "act1-village-square",
-    "title": "Village Square",
-    "plays": "Act I, Village Square",
-    "text": "instrumental background loop for Village Square: The heart of Willowbrook: cobblestones around an old stone fountain, and a weathered notice board covered in faded announcements. Half the market stalls stand empty, no vocals",
-    "seconds": 60
-  },
-  {
-    "id": "act1-miras-hut",
-    "title": "Mira's Hut",
-    "plays": "Act I, Mira's Hut",
-    "text": "instrumental background loop for Mira's Hut: A small hut hung with drying herbs: lavender, sage, and roots in bundles from the rafters. Shelves of bottles line the walls, every one labelled, no vocals",
+    "id": "act1-abandoned-shed",
+    "title": "Abandoned Shed",
+    "plays": "Act I, Abandoned Shed",
+    "text": "instrumental background loop for Abandoned Shed: A rickety shed leans precariously at the edge of Willowbrook, its weathered boards creaking in the wind, no vocals",
     "seconds": 60
   },
   {
@@ -57,6 +14,27 @@
     "seconds": 60
   },
   {
+    "id": "act1-chicken-coop",
+    "title": "Chicken Coop",
+    "plays": "Act I, Chicken Coop",
+    "text": "instrumental background loop for Chicken Coop: A small wooden coop stands here, its planks patched and weathered. Nervous chickens cluck and flutter, their feathers ruffled as they dart between straw nests, no vocals",
+    "seconds": 60
+  },
+  {
+    "id": "act1-eliors-cottage",
+    "title": "Elior's Cottage",
+    "plays": "Act I, Elior's Cottage",
+    "text": "instrumental background loop for Elior's Cottage: A modest cottage with a straw roof and a cozy hearth. The scent of fresh bread and old books fills the air, no vocals",
+    "seconds": 60
+  },
+  {
+    "id": "act1-forest-path",
+    "title": "Forest Path",
+    "plays": "Act I, Forest Path",
+    "text": "instrumental background loop for Forest Path: A winding path snakes into the heart of the woods, dappled sunlight flickering through the canopy above. Beside the path, thick, thorny vines block a small alcove, no vocals",
+    "seconds": 60
+  },
+  {
     "id": "act1-general-store",
     "title": "General Store",
     "plays": "Act I, General Store",
@@ -64,17 +42,17 @@
     "seconds": 60
   },
   {
-    "id": "act1-village-well",
-    "title": "Village Well",
-    "plays": "Act I, Village Well",
-    "text": "instrumental background loop for Village Well: An old stone well stands between the field and the forge, its stones worn smooth by countless hands. The water below lies dark and still, and a faint sour smell hangs in the cool, damp air, no vocals",
+    "id": "act1-hidden-glade",
+    "title": "Hidden Glade",
+    "plays": "Act I, Hidden Glade",
+    "text": "instrumental background loop for Hidden Glade: A hushed clearing hidden deep within the forest, dim and overgrown. Brambles crowd its edges, and the tall grass stands grey and still beneath branches that shut out the sun, no vocals",
     "seconds": 60
   },
   {
-    "id": "act1-abandoned-shed",
-    "title": "Abandoned Shed",
-    "plays": "Act I, Abandoned Shed",
-    "text": "instrumental background loop for Abandoned Shed: A rickety shed leans precariously at the edge of Willowbrook, its weathered boards creaking in the wind, no vocals",
+    "id": "act1-miras-hut",
+    "title": "Mira's Hut",
+    "plays": "Act I, Mira's Hut",
+    "text": "instrumental background loop for Mira's Hut: A small hut hung with drying herbs: lavender, sage, and roots in bundles from the rafters. Shelves of bottles line the walls, every one labelled, no vocals",
     "seconds": 60
   },
   {
@@ -92,17 +70,24 @@
     "seconds": 60
   },
   {
-    "id": "act1-forest-path",
-    "title": "Forest Path",
-    "plays": "Act I, Forest Path",
-    "text": "instrumental background loop for Forest Path: A winding path snakes into the heart of the woods, dappled sunlight flickering through the canopy above. Beside the path, thick, thorny vines block a small alcove, no vocals",
+    "id": "act1-road-to-greendale",
+    "title": "Road to Greendale",
+    "plays": "Act I, Road to Greendale",
+    "text": "instrumental background loop for Road to Greendale: The main road out of Willowbrook runs east under old oaks, their branches meeting overhead. The way is well trodden, lined with wildflowers and fallen leaves, no vocals",
     "seconds": 60
   },
   {
-    "id": "act1-hidden-glade",
-    "title": "Hidden Glade",
-    "plays": "Act I, Hidden Glade",
-    "text": "instrumental background loop for Hidden Glade: A hushed clearing hidden deep within the forest, dim and overgrown. Brambles crowd its edges, and the tall grass stands grey and still beneath branches that shut out the sun, no vocals",
+    "id": "act1-the-dream",
+    "title": "The Dream",
+    "plays": "Act I, The Dream",
+    "text": "instrumental background loop for The Dream: It is dark, and it is raining hard. You hear it beating on shutters, though you cannot see any. Thunder breaks so close that the dark shakes with it. Shadows drift past like smoke, no vocals",
+    "seconds": 60
+  },
+  {
+    "id": "act1-vegetable-field",
+    "title": "Vegetable Field",
+    "plays": "Act I, Vegetable Field",
+    "text": "instrumental background loop for Vegetable Field: Rows of withered crops stretch beneath a brooding gray sky. The earth is cracked and dry, with only a few stubborn carrots and a rusty hoe hinting at better days, no vocals",
     "seconds": 60
   },
   {
@@ -113,10 +98,25 @@
     "seconds": 60
   },
   {
-    "id": "act1-road-to-greendale",
-    "title": "Road to Greendale",
-    "plays": "Act I, Road to Greendale",
-    "text": "instrumental background loop for Road to Greendale: The main road out of Willowbrook runs east under old oaks, their branches meeting overhead. The way is well trodden, lined with wildflowers and fallen leaves, no vocals",
+    "id": "act1-village-square",
+    "title": "Village Square",
+    "plays": "Act I, Village Square",
+    "text": "instrumental background loop for Village Square: The heart of Willowbrook: cobblestones around an old stone fountain, and a weathered notice board covered in faded announcements. Half the market stalls stand empty, no vocals",
     "seconds": 60
+  },
+  {
+    "id": "act1-village-well",
+    "title": "Village Well",
+    "plays": "Act I, Village Well",
+    "text": "instrumental background loop for Village Well: An old stone well stands between the field and the forge, its stones worn smooth by countless hands. The water below lies dark and still, and a faint sour smell hangs in the cool, damp air, no vocals",
+    "seconds": 60
+  },
+  {
+    "id": "market",
+    "title": "Act 1 Opening",
+    "file": "web/public/audio/music/Conquest - Market (freetouse.com).mp3",
+    "plays": "Act I, throughout",
+    "text": "lively medieval market, plucked strings and light percussion, bustling and cheerful, instrumental, no vocals",
+    "seconds": 126
   }
 ]

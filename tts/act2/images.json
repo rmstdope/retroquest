@@ -1,52 +1,179 @@
 [
   {
-    "id": "act2-mountain-path",
-    "title": "Mountain Path",
+    "id": "act2-ancient-grove",
+    "title": "Ancient Grove",
     "width": 1920,
     "height": 1080,
-    "text": "A trail climbs through rock and pine between Willowbrook and Greendale. From the overlooks you can see both: Greendale ahead, and Willowbrook small and far behind you. Just off the trail is a camp site where travellers stop for the night.",
+    "text": "A ring of trees so old their trunks are wider than a cottage. Signs are carved in their bark, older than any letters you know. In the middle stands one tree taller than the rest, with bark the colour of tarnished silver.",
     "areas": [
       {
-        "id": "mountain-flower",
-        "title": "Mountain Flower"
-      },
-      {
-        "id": "walking-stick",
-        "title": "Walking Stick"
-      },
-      {
-        "id": "camp-site",
-        "title": "Camp Site"
-      },
-      {
-        "id": "mountain-hermit",
-        "title": "Mountain Hermit"
+        "id": "silver-tree",
+        "title": "Silver-Barked Tree"
       },
       {
         "id": "exit-north",
         "title": "Way north"
       },
       {
-        "id": "entry-pass",
-        "title": "Entry Pass"
+        "id": "ancient-tree-spirit",
+        "title": "Ancient Tree Spirit"
       },
       {
-        "id": "exit-east",
-        "title": "Way east"
+        "id": "silver-leaves",
+        "title": "Silver Leaves"
+      },
+      {
+        "id": "exit-south",
+        "title": "Way south"
       }
     ],
     "patches": [
       {
-        "id": "mountain-flower-taken",
-        "title": "Mountain Flower taken",
-        "text": "Remove the mountain flower from the picture.",
-        "area": "mountain-flower"
+        "id": "exit-south-open",
+        "title": "Way south open",
+        "text": "Show the way south open and passable.",
+        "area": "exit-south"
       },
       {
-        "id": "walking-stick-taken",
-        "title": "Walking Stick taken",
-        "text": "Remove the walking stick from the picture.",
-        "area": "walking-stick"
+        "id": "ancient-tree-spirit-appears",
+        "title": "Ancient Tree Spirit appears",
+        "text": "Add Ancient Tree Spirit to the picture.",
+        "area": "ancient-tree-spirit"
+      },
+      {
+        "id": "silver-leaves-appears",
+        "title": "Silver Leaves appears",
+        "text": "Add the silver leaves to the picture.",
+        "area": "silver-leaves"
+      }
+    ]
+  },
+  {
+    "id": "act2-castle-approach",
+    "title": "Castle Approach",
+    "width": 1920,
+    "height": 1080,
+    "text": "A wide avenue lined with statues of Greendale's heroes leads to an impressive castle of white stone. Tall spires reach toward the sky, and colorful banners snap in the wind. Fewer guards than the posts were built for patrol the approach, and those who remain keep their voices low. The royal standard is gone from the highest spire.",
+    "areas": [
+      {
+        "id": "herald",
+        "title": "Herald"
+      },
+      {
+        "id": "castle-guard-captain",
+        "title": "Castle Guard Captain"
+      },
+      {
+        "id": "exit-south",
+        "title": "Way south"
+      },
+      {
+        "id": "exit-west",
+        "title": "Way west"
+      }
+    ],
+    "patches": [
+      {
+        "id": "exit-west-open",
+        "title": "Way west open",
+        "text": "Show the way west open and passable.",
+        "area": "exit-west"
+      }
+    ]
+  },
+  {
+    "id": "act2-castle-courtyard",
+    "title": "Castle Courtyard",
+    "width": 1920,
+    "height": 1080,
+    "text": "An expansive courtyard within the castle walls, featuring training grounds where knights practice their swordwork. Ancient oak trees provide shade for stone benches, and a stable houses magnificent warhorses, though half its stalls stand empty since the king's own guard rode out to search for him. The castle's main hall rises before you, its great doors carved with the symbols of Greendale's noble houses.",
+    "areas": [
+      {
+        "id": "sir-cedric",
+        "title": "Sir Cedric"
+      },
+      {
+        "id": "training-master",
+        "title": "Training Master"
+      },
+      {
+        "id": "squires",
+        "title": "Squires"
+      },
+      {
+        "id": "exit-east",
+        "title": "Way east"
+      },
+      {
+        "id": "exit-north",
+        "title": "Way north"
+      },
+      {
+        "id": "exit-west",
+        "title": "Way west"
+      },
+      {
+        "id": "squires-diary",
+        "title": "Squire's Diary"
+      }
+    ],
+    "patches": [
+      {
+        "id": "squires-diary-appears",
+        "title": "Squire's Diary appears",
+        "text": "Add the squire's diary to the picture.",
+        "area": "squires-diary"
+      }
+    ]
+  },
+  {
+    "id": "act2-forest-entrance",
+    "title": "Forest Entrance",
+    "width": 1920,
+    "height": 1080,
+    "text": "Massive trees create a natural cathedral as you enter the Enchanted Forest. Dappled sunlight filters through the dense canopy, and the path ahead disappears into green shadows. The air is alive with birds and rustling leaves, but beneath it lies an expectant silence, as if the forest itself is watching.",
+    "areas": [
+      {
+        "id": "enchanted-acorn",
+        "title": "Enchanted Acorn"
+      },
+      {
+        "id": "forest-sprites",
+        "title": "Forest Sprites"
+      },
+      {
+        "id": "exit-west",
+        "title": "Way west"
+      },
+      {
+        "id": "exit-south",
+        "title": "Way south"
+      },
+      {
+        "id": "exit-east",
+        "title": "Way east"
+      },
+      {
+        "id": "ravine",
+        "title": "Ravine"
+      },
+      {
+        "id": "caravan",
+        "title": "Caravan"
+      }
+    ],
+    "patches": [
+      {
+        "id": "enchanted-acorn-taken",
+        "title": "Enchanted Acorn taken",
+        "text": "Remove the enchanted acorn from the picture.",
+        "area": "enchanted-acorn"
+      },
+      {
+        "id": "exit-south-open",
+        "title": "Way south open",
+        "text": "Show the way south open and passable.",
+        "area": "exit-south"
       },
       {
         "id": "exit-east-open",
@@ -55,10 +182,80 @@
         "area": "exit-east"
       },
       {
-        "id": "entry-pass-appears",
-        "title": "Entry Pass appears",
-        "text": "Add the entry pass to the picture.",
-        "area": "entry-pass"
+        "id": "ravine-appears",
+        "title": "Ravine appears",
+        "text": "Add the ravine to the picture.",
+        "area": "ravine"
+      },
+      {
+        "id": "caravan-appears",
+        "title": "Caravan appears",
+        "text": "Add the caravan to the picture.",
+        "area": "caravan"
+      },
+      {
+        "id": "forest-sprites-aside",
+        "title": "Forest sprites drawn aside",
+        "text": "Move the forest sprites away from the southern path, among the trees.",
+        "area": "forest-sprites"
+      }
+    ]
+  },
+  {
+    "id": "act2-forest-transition",
+    "title": "Forest Transition",
+    "width": 1920,
+    "height": 1080,
+    "text": "The mountain path ends at a ring of standing stones, grey and mossed, with runes cut deep in them. Past the stones the trees begin all at once, close and dark.",
+    "areas": [
+      {
+        "id": "standing-stones",
+        "title": "Standing Stones"
+      },
+      {
+        "id": "forest-hermit",
+        "title": "Forest Hermit"
+      },
+      {
+        "id": "exit-west",
+        "title": "Way west"
+      },
+      {
+        "id": "exit-east",
+        "title": "Way east"
+      }
+    ],
+    "patches": [
+      {
+        "id": "exit-east-open",
+        "title": "Way east open",
+        "text": "Show the way east open and passable.",
+        "area": "exit-east"
+      }
+    ]
+  },
+  {
+    "id": "act2-great-hall",
+    "title": "Great Hall",
+    "width": 1920,
+    "height": 1080,
+    "text": "A magnificent hall with soaring ceilings supported by massive stone columns. Tapestries depicting legendary battles cover the walls, and the king's throne stands empty on a raised dais at the far end, a dark cloth laid across its arms. Behind it, the doors to the throne room are barred. Sunlight streams through tall stained-glass windows, casting colorful patterns on the stone floor. This is where the lords of Greendale hold court; for now, the Lord Commander holds it alone.",
+    "areas": [
+      {
+        "id": "court-herald",
+        "title": "Court Herald"
+      },
+      {
+        "id": "historians",
+        "title": "Historians"
+      },
+      {
+        "id": "lord-commander",
+        "title": "Lord Commander"
+      },
+      {
+        "id": "exit-east",
+        "title": "Way east"
       }
     ]
   },
@@ -104,6 +301,128 @@
         "title": "City Map appears",
         "text": "Add the city map to the picture.",
         "area": "city-map"
+      }
+    ]
+  },
+  {
+    "id": "act2-healers-house",
+    "title": "Healer's House",
+    "width": 1920,
+    "height": 1080,
+    "text": "A small stone house that smells of crushed herbs. A few bundles of dried plants still hang from the rafters, but the shelves below them are nearly bare: rows of empty bottles, rinsed and waiting. A fire burns in the hearth, and a door at the back stands half shut.",
+    "areas": [
+      {
+        "id": "master-healer-lyria",
+        "title": "Master Healer Lyria"
+      },
+      {
+        "id": "exit-south",
+        "title": "Way south"
+      },
+      {
+        "id": "motion-fire",
+        "title": "Fire"
+      }
+    ]
+  },
+  {
+    "id": "act2-heart-of-the-forest",
+    "title": "Heart of the Forest",
+    "width": 1920,
+    "height": 1080,
+    "text": "The deepest part of the forest. The light here is green and gold and does not seem to come from the sky. A tree vaster than any other holds up the branches overhead, and before it stands an altar of starstone. The only way out is back north, to the grove.",
+    "areas": [
+      {
+        "id": "offering-altar",
+        "title": "Offering Altar"
+      },
+      {
+        "id": "exit-north",
+        "title": "Way north"
+      },
+      {
+        "id": "nyx",
+        "title": "Nyx"
+      }
+    ],
+    "patches": [
+      {
+        "id": "nyx-appears",
+        "title": "Nyx appears",
+        "text": "Add Nyx to the picture.",
+        "area": "nyx"
+      }
+    ]
+  },
+  {
+    "id": "act2-hidden-library",
+    "title": "Hidden Library",
+    "width": 1920,
+    "height": 1080,
+    "text": "Discovered beneath Greendale through a secret passage, this ancient library holds countless volumes of magical lore. Glowing crystals provide soft illumination and the air hums with residual energy. Protective enchantments shimmer around the most valuable texts. Somewhere on these shelves may be an answer about the mark you carry.",
+    "areas": [
+      {
+        "id": "ancient-chronicle",
+        "title": "Ancient Chronicle"
+      },
+      {
+        "id": "protective-enchantments",
+        "title": "Protective Enchantments"
+      },
+      {
+        "id": "spectral-librarian",
+        "title": "Spectral Librarian"
+      },
+      {
+        "id": "exit-secret-passage",
+        "title": "Way secret_passage"
+      },
+      {
+        "id": "crystal-focus",
+        "title": "Crystal Focus"
+      }
+    ],
+    "patches": [
+      {
+        "id": "crystal-focus-appears",
+        "title": "Crystal Focus appears",
+        "text": "Add the crystal focus to the picture.",
+        "area": "crystal-focus"
+      }
+    ]
+  },
+  {
+    "id": "act2-inn-rooms",
+    "title": "Inn Rooms",
+    "width": 1920,
+    "height": 1080,
+    "text": "Comfortable guest rooms on the upper floor of The Silver Stag Inn. Each room has a cozy bed, a writing desk, and a window overlooking the Market District. The rooms are clean and well-maintained, offering a peaceful retreat for travelers. Faint conversation drifts up from the common room below.",
+    "areas": [
+      {
+        "id": "coins",
+        "title": "Coins"
+      },
+      {
+        "id": "exit-west",
+        "title": "Way west"
+      },
+      {
+        "id": "travelers-journal",
+        "title": "Traveler's Journal"
+      }
+    ],
+    "patches": [
+      {
+        "id": "coins-taken",
+        "title": "Coins taken",
+        "text": "Remove the coins from the picture.",
+        "area": "coins"
+      },
+      {
+        "id": "travelers-journal-appears",
+        "title": "Traveler's Journal appears",
+        "text": "Add the traveler's journal to the picture.",
+        "area": "travelers-journal"
       }
     ]
   },
@@ -214,88 +533,6 @@
     ]
   },
   {
-    "id": "act2-silver-stag-inn",
-    "title": "The Silver Stag Inn",
-    "width": 1920,
-    "height": 1080,
-    "text": "A three-story inn glows with warm yellow light. Conversations from travelers and locals merge into a comforting din while tales are traded over bread and ale. Stag mounts and adventuring trophies line the walls. The place feels welcoming; information flows here as freely as the drink.",
-    "areas": [
-      {
-        "id": "room-key",
-        "title": "Room Key"
-      },
-      {
-        "id": "door",
-        "title": "Door"
-      },
-      {
-        "id": "innkeeper-marcus",
-        "title": "Innkeeper Marcus"
-      },
-      {
-        "id": "barmaid-elena",
-        "title": "Barmaid Elena"
-      },
-      {
-        "id": "exit-south",
-        "title": "Way south"
-      },
-      {
-        "id": "exit-east",
-        "title": "Way east"
-      }
-    ],
-    "patches": [
-      {
-        "id": "room-key-gone",
-        "title": "Room Key gone",
-        "text": "Remove the room key from the picture.",
-        "area": "room-key"
-      },
-      {
-        "id": "exit-east-open",
-        "title": "Way east open",
-        "text": "Show the way east open and passable.",
-        "area": "exit-east"
-      }
-    ]
-  },
-  {
-    "id": "act2-inn-rooms",
-    "title": "Inn Rooms",
-    "width": 1920,
-    "height": 1080,
-    "text": "Comfortable guest rooms on the upper floor of The Silver Stag Inn. Each room has a cozy bed, a writing desk, and a window overlooking the Market District. The rooms are clean and well-maintained, offering a peaceful retreat for travelers. Faint conversation drifts up from the common room below.",
-    "areas": [
-      {
-        "id": "coins",
-        "title": "Coins"
-      },
-      {
-        "id": "exit-west",
-        "title": "Way west"
-      },
-      {
-        "id": "travelers-journal",
-        "title": "Traveler's Journal"
-      }
-    ],
-    "patches": [
-      {
-        "id": "coins-taken",
-        "title": "Coins taken",
-        "text": "Remove the coins from the picture.",
-        "area": "coins"
-      },
-      {
-        "id": "travelers-journal-appears",
-        "title": "Traveler's Journal appears",
-        "text": "Add the traveler's journal to the picture.",
-        "area": "travelers-journal"
-      }
-    ]
-  },
-  {
     "id": "act2-merchants-warehouse",
     "title": "Merchant's Warehouse",
     "width": 1920,
@@ -313,221 +550,35 @@
     ]
   },
   {
-    "id": "act2-castle-approach",
-    "title": "Castle Approach",
+    "id": "act2-mountain-path",
+    "title": "Mountain Path",
     "width": 1920,
     "height": 1080,
-    "text": "A wide avenue lined with statues of Greendale's heroes leads to an impressive castle of white stone. Tall spires reach toward the sky, and colorful banners snap in the wind. Fewer guards than the posts were built for patrol the approach, and those who remain keep their voices low. The royal standard is gone from the highest spire.",
+    "text": "A trail climbs through rock and pine between Willowbrook and Greendale. From the overlooks you can see both: Greendale ahead, and Willowbrook small and far behind you. Just off the trail is a camp site where travellers stop for the night.",
     "areas": [
       {
-        "id": "herald",
-        "title": "Herald"
+        "id": "mountain-flower",
+        "title": "Mountain Flower"
       },
       {
-        "id": "castle-guard-captain",
-        "title": "Castle Guard Captain"
+        "id": "walking-stick",
+        "title": "Walking Stick"
       },
       {
-        "id": "exit-south",
-        "title": "Way south"
+        "id": "camp-site",
+        "title": "Camp Site"
       },
       {
-        "id": "exit-west",
-        "title": "Way west"
-      }
-    ],
-    "patches": [
-      {
-        "id": "exit-west-open",
-        "title": "Way west open",
-        "text": "Show the way west open and passable.",
-        "area": "exit-west"
-      }
-    ]
-  },
-  {
-    "id": "act2-castle-courtyard",
-    "title": "Castle Courtyard",
-    "width": 1920,
-    "height": 1080,
-    "text": "An expansive courtyard within the castle walls, featuring training grounds where knights practice their swordwork. Ancient oak trees provide shade for stone benches, and a stable houses magnificent warhorses, though half its stalls stand empty since the king's own guard rode out to search for him. The castle's main hall rises before you, its great doors carved with the symbols of Greendale's noble houses.",
-    "areas": [
-      {
-        "id": "sir-cedric",
-        "title": "Sir Cedric"
-      },
-      {
-        "id": "training-master",
-        "title": "Training Master"
-      },
-      {
-        "id": "squires",
-        "title": "Squires"
-      },
-      {
-        "id": "exit-east",
-        "title": "Way east"
+        "id": "mountain-hermit",
+        "title": "Mountain Hermit"
       },
       {
         "id": "exit-north",
         "title": "Way north"
       },
       {
-        "id": "exit-west",
-        "title": "Way west"
-      },
-      {
-        "id": "squires-diary",
-        "title": "Squire's Diary"
-      }
-    ],
-    "patches": [
-      {
-        "id": "squires-diary-appears",
-        "title": "Squire's Diary appears",
-        "text": "Add the squire's diary to the picture.",
-        "area": "squires-diary"
-      }
-    ]
-  },
-  {
-    "id": "act2-great-hall",
-    "title": "Great Hall",
-    "width": 1920,
-    "height": 1080,
-    "text": "A magnificent hall with soaring ceilings supported by massive stone columns. Tapestries depicting legendary battles cover the walls, and the king's throne stands empty on a raised dais at the far end, a dark cloth laid across its arms. Behind it, the doors to the throne room are barred. Sunlight streams through tall stained-glass windows, casting colorful patterns on the stone floor. This is where the lords of Greendale hold court; for now, the Lord Commander holds it alone.",
-    "areas": [
-      {
-        "id": "court-herald",
-        "title": "Court Herald"
-      },
-      {
-        "id": "historians",
-        "title": "Historians"
-      },
-      {
-        "id": "lord-commander",
-        "title": "Lord Commander"
-      },
-      {
-        "id": "exit-east",
-        "title": "Way east"
-      }
-    ]
-  },
-  {
-    "id": "act2-residential-quarter",
-    "title": "Residential Quarter",
-    "width": 1920,
-    "height": 1080,
-    "text": "Quiet lanes of two-storey houses, each with a small garden and a workshop. Craftsmen work at benches in the open doorways, and neighbours sit on their steps. Half the garden plots have gone grey.",
-    "areas": [
-      {
-        "id": "local-craftsmen",
-        "title": "Local Craftsmen"
-      },
-      {
-        "id": "families",
-        "title": "Families"
-      },
-      {
-        "id": "exit-south",
-        "title": "Way south"
-      },
-      {
-        "id": "exit-north",
-        "title": "Way north"
-      },
-      {
-        "id": "exit-secret-passage",
-        "title": "Way secret_passage"
-      }
-    ],
-    "patches": [
-      {
-        "id": "exit-secret-passage-open",
-        "title": "Way secret_passage open",
-        "text": "Show the way secret_passage open and passable.",
-        "area": "exit-secret-passage"
-      }
-    ]
-  },
-  {
-    "id": "act2-healers-house",
-    "title": "Healer's House",
-    "width": 1920,
-    "height": 1080,
-    "text": "A small stone house that smells of crushed herbs. A few bundles of dried plants still hang from the rafters, but the shelves below them are nearly bare: rows of empty bottles, rinsed and waiting. A fire burns in the hearth, and a door at the back stands half shut.",
-    "areas": [
-      {
-        "id": "master-healer-lyria",
-        "title": "Master Healer Lyria"
-      },
-      {
-        "id": "exit-south",
-        "title": "Way south"
-      },
-      {
-        "id": "motion-fire",
-        "title": "Fire"
-      }
-    ]
-  },
-  {
-    "id": "act2-hidden-library",
-    "title": "Hidden Library",
-    "width": 1920,
-    "height": 1080,
-    "text": "Discovered beneath Greendale through a secret passage, this ancient library holds countless volumes of magical lore. Glowing crystals provide soft illumination and the air hums with residual energy. Protective enchantments shimmer around the most valuable texts. Somewhere on these shelves may be an answer about the mark you carry.",
-    "areas": [
-      {
-        "id": "ancient-chronicle",
-        "title": "Ancient Chronicle"
-      },
-      {
-        "id": "protective-enchantments",
-        "title": "Protective Enchantments"
-      },
-      {
-        "id": "spectral-librarian",
-        "title": "Spectral Librarian"
-      },
-      {
-        "id": "exit-secret-passage",
-        "title": "Way secret_passage"
-      },
-      {
-        "id": "crystal-focus",
-        "title": "Crystal Focus"
-      }
-    ],
-    "patches": [
-      {
-        "id": "crystal-focus-appears",
-        "title": "Crystal Focus appears",
-        "text": "Add the crystal focus to the picture.",
-        "area": "crystal-focus"
-      }
-    ]
-  },
-  {
-    "id": "act2-forest-transition",
-    "title": "Forest Transition",
-    "width": 1920,
-    "height": 1080,
-    "text": "The mountain path ends at a ring of standing stones, grey and mossed, with runes cut deep in them. Past the stones the trees begin all at once, close and dark.",
-    "areas": [
-      {
-        "id": "standing-stones",
-        "title": "Standing Stones"
-      },
-      {
-        "id": "forest-hermit",
-        "title": "Forest Hermit"
-      },
-      {
-        "id": "exit-west",
-        "title": "Way west"
+        "id": "entry-pass",
+        "title": "Entry Pass"
       },
       {
         "id": "exit-east",
@@ -536,61 +587,16 @@
     ],
     "patches": [
       {
-        "id": "exit-east-open",
-        "title": "Way east open",
-        "text": "Show the way east open and passable.",
-        "area": "exit-east"
-      }
-    ]
-  },
-  {
-    "id": "act2-forest-entrance",
-    "title": "Forest Entrance",
-    "width": 1920,
-    "height": 1080,
-    "text": "Massive trees create a natural cathedral as you enter the Enchanted Forest. Dappled sunlight filters through the dense canopy, and the path ahead disappears into green shadows. The air is alive with birds and rustling leaves, but beneath it lies an expectant silence, as if the forest itself is watching.",
-    "areas": [
-      {
-        "id": "enchanted-acorn",
-        "title": "Enchanted Acorn"
+        "id": "mountain-flower-taken",
+        "title": "Mountain Flower taken",
+        "text": "Remove the mountain flower from the picture.",
+        "area": "mountain-flower"
       },
       {
-        "id": "forest-sprites",
-        "title": "Forest Sprites"
-      },
-      {
-        "id": "exit-west",
-        "title": "Way west"
-      },
-      {
-        "id": "exit-south",
-        "title": "Way south"
-      },
-      {
-        "id": "exit-east",
-        "title": "Way east"
-      },
-      {
-        "id": "ravine",
-        "title": "Ravine"
-      },
-      {
-        "id": "caravan",
-        "title": "Caravan"
-      }
-    ],
-    "patches": [
-      {
-        "id": "enchanted-acorn-taken",
-        "title": "Enchanted Acorn taken",
-        "text": "Remove the enchanted acorn from the picture.",
-        "area": "enchanted-acorn"
-      },
-      {
-        "id": "exit-south-open",
-        "title": "Way south open",
-        "text": "Show the way south open and passable.",
-        "area": "exit-south"
+        "id": "walking-stick-taken",
+        "title": "Walking Stick taken",
+        "text": "Remove the walking stick from the picture.",
+        "area": "walking-stick"
       },
       {
         "id": "exit-east-open",
@@ -599,149 +605,10 @@
         "area": "exit-east"
       },
       {
-        "id": "ravine-appears",
-        "title": "Ravine appears",
-        "text": "Add the ravine to the picture.",
-        "area": "ravine"
-      },
-      {
-        "id": "caravan-appears",
-        "title": "Caravan appears",
-        "text": "Add the caravan to the picture.",
-        "area": "caravan"
-      },
-      {
-        "id": "forest-sprites-aside",
-        "title": "Forest sprites drawn aside",
-        "text": "Move the forest sprites away from the southern path, among the trees.",
-        "area": "forest-sprites"
-      }
-    ]
-  },
-  {
-    "id": "act2-ancient-grove",
-    "title": "Ancient Grove",
-    "width": 1920,
-    "height": 1080,
-    "text": "A ring of trees so old their trunks are wider than a cottage. Signs are carved in their bark, older than any letters you know. In the middle stands one tree taller than the rest, with bark the colour of tarnished silver.",
-    "areas": [
-      {
-        "id": "silver-tree",
-        "title": "Silver-Barked Tree"
-      },
-      {
-        "id": "exit-north",
-        "title": "Way north"
-      },
-      {
-        "id": "ancient-tree-spirit",
-        "title": "Ancient Tree Spirit"
-      },
-      {
-        "id": "silver-leaves",
-        "title": "Silver Leaves"
-      },
-      {
-        "id": "exit-south",
-        "title": "Way south"
-      }
-    ],
-    "patches": [
-      {
-        "id": "exit-south-open",
-        "title": "Way south open",
-        "text": "Show the way south open and passable.",
-        "area": "exit-south"
-      },
-      {
-        "id": "ancient-tree-spirit-appears",
-        "title": "Ancient Tree Spirit appears",
-        "text": "Add Ancient Tree Spirit to the picture.",
-        "area": "ancient-tree-spirit"
-      },
-      {
-        "id": "silver-leaves-appears",
-        "title": "Silver Leaves appears",
-        "text": "Add the silver leaves to the picture.",
-        "area": "silver-leaves"
-      }
-    ]
-  },
-  {
-    "id": "act2-whispering-glade",
-    "title": "Whispering Glade",
-    "width": 1920,
-    "height": 1080,
-    "text": "A meadow opens round a small stream that runs over smooth stones. Wildflowers grow thick to the water's edge. Under the sound of the water there are other sounds, almost voices, and they stop when you listen for them.",
-    "areas": [
-      {
-        "id": "exit-west",
-        "title": "Way west"
-      },
-      {
-        "id": "water-nymphs",
-        "title": "Water Nymphs"
-      },
-      {
-        "id": "crystal-clear-water",
-        "title": "Crystal-Clear Water"
-      },
-      {
-        "id": "moonflowers",
-        "title": "Moonflowers"
-      },
-      {
-        "id": "motion-water",
-        "title": "Running water"
-      }
-    ],
-    "patches": [
-      {
-        "id": "water-nymphs-appears",
-        "title": "Water Nymphs appears",
-        "text": "Add Water Nymphs to the picture.",
-        "area": "water-nymphs"
-      },
-      {
-        "id": "crystal-clear-water-appears",
-        "title": "Crystal-Clear Water appears",
-        "text": "Add the crystal-clear water to the picture.",
-        "area": "crystal-clear-water"
-      },
-      {
-        "id": "moonflowers-appears",
-        "title": "Moonflowers appears",
-        "text": "Add the moonflowers to the picture.",
-        "area": "moonflowers"
-      }
-    ]
-  },
-  {
-    "id": "act2-heart-of-the-forest",
-    "title": "Heart of the Forest",
-    "width": 1920,
-    "height": 1080,
-    "text": "The deepest part of the forest. The light here is green and gold and does not seem to come from the sky. A tree vaster than any other holds up the branches overhead, and before it stands an altar of starstone. The only way out is back north, to the grove.",
-    "areas": [
-      {
-        "id": "offering-altar",
-        "title": "Offering Altar"
-      },
-      {
-        "id": "exit-north",
-        "title": "Way north"
-      },
-      {
-        "id": "nyx",
-        "title": "Nyx"
-      }
-    ],
-    "patches": [
-      {
-        "id": "nyx-appears",
-        "title": "Nyx appears",
-        "text": "Add Nyx to the picture.",
-        "area": "nyx"
+        "id": "entry-pass-appears",
+        "title": "Entry Pass appears",
+        "text": "Add the entry pass to the picture.",
+        "area": "entry-pass"
       }
     ]
   },
@@ -872,20 +739,6 @@
     "text": "A face portrait of a broad old man with a faded royal-blue cloak hood, a scarred weathered face, white beard and a sentry’s watchful eyes."
   },
   {
-    "id": "portrait-nyx",
-    "title": "Nyx",
-    "width": 480,
-    "height": 640,
-    "text": "A face portrait of a young woman with wild hair and green leaves caught in it, a pale, watchful face and bright, curious eyes."
-  },
-  {
-    "id": "portrait-sir-cedric",
-    "title": "Sir Cedric",
-    "width": 480,
-    "height": 640,
-    "text": "A face portrait of a tall knight in his fifties with a weathered, tired face and a steady, watchful stare, a steel mail coif and a dented gorget around his neck."
-  },
-  {
     "id": "act2-portrait-spectral-librarian",
     "title": "Spectral Librarian",
     "width": 480,
@@ -921,10 +774,157 @@
     "text": "A face portrait of a water nymph, her face and hair made of clear flowing stream water, with pale shifting eyes."
   },
   {
+    "id": "act2-residential-quarter",
+    "title": "Residential Quarter",
+    "width": 1920,
+    "height": 1080,
+    "text": "Quiet lanes of two-storey houses, each with a small garden and a workshop. Craftsmen work at benches in the open doorways, and neighbours sit on their steps. Half the garden plots have gone grey.",
+    "areas": [
+      {
+        "id": "local-craftsmen",
+        "title": "Local Craftsmen"
+      },
+      {
+        "id": "families",
+        "title": "Families"
+      },
+      {
+        "id": "exit-south",
+        "title": "Way south"
+      },
+      {
+        "id": "exit-north",
+        "title": "Way north"
+      },
+      {
+        "id": "exit-secret-passage",
+        "title": "Way secret_passage"
+      }
+    ],
+    "patches": [
+      {
+        "id": "exit-secret-passage-open",
+        "title": "Way secret_passage open",
+        "text": "Show the way secret_passage open and passable.",
+        "area": "exit-secret-passage"
+      }
+    ]
+  },
+  {
+    "id": "act2-silver-stag-inn",
+    "title": "The Silver Stag Inn",
+    "width": 1920,
+    "height": 1080,
+    "text": "A three-story inn glows with warm yellow light. Conversations from travelers and locals merge into a comforting din while tales are traded over bread and ale. Stag mounts and adventuring trophies line the walls. The place feels welcoming; information flows here as freely as the drink.",
+    "areas": [
+      {
+        "id": "room-key",
+        "title": "Room Key"
+      },
+      {
+        "id": "door",
+        "title": "Door"
+      },
+      {
+        "id": "innkeeper-marcus",
+        "title": "Innkeeper Marcus"
+      },
+      {
+        "id": "barmaid-elena",
+        "title": "Barmaid Elena"
+      },
+      {
+        "id": "exit-south",
+        "title": "Way south"
+      },
+      {
+        "id": "exit-east",
+        "title": "Way east"
+      }
+    ],
+    "patches": [
+      {
+        "id": "room-key-gone",
+        "title": "Room Key gone",
+        "text": "Remove the room key from the picture.",
+        "area": "room-key"
+      },
+      {
+        "id": "exit-east-open",
+        "title": "Way east open",
+        "text": "Show the way east open and passable.",
+        "area": "exit-east"
+      }
+    ]
+  },
+  {
+    "id": "act2-whispering-glade",
+    "title": "Whispering Glade",
+    "width": 1920,
+    "height": 1080,
+    "text": "A meadow opens round a small stream that runs over smooth stones. Wildflowers grow thick to the water's edge. Under the sound of the water there are other sounds, almost voices, and they stop when you listen for them.",
+    "areas": [
+      {
+        "id": "exit-west",
+        "title": "Way west"
+      },
+      {
+        "id": "water-nymphs",
+        "title": "Water Nymphs"
+      },
+      {
+        "id": "crystal-clear-water",
+        "title": "Crystal-Clear Water"
+      },
+      {
+        "id": "moonflowers",
+        "title": "Moonflowers"
+      },
+      {
+        "id": "motion-water",
+        "title": "Running water"
+      }
+    ],
+    "patches": [
+      {
+        "id": "water-nymphs-appears",
+        "title": "Water Nymphs appears",
+        "text": "Add Water Nymphs to the picture.",
+        "area": "water-nymphs"
+      },
+      {
+        "id": "crystal-clear-water-appears",
+        "title": "Crystal-Clear Water appears",
+        "text": "Add the crystal-clear water to the picture.",
+        "area": "crystal-clear-water"
+      },
+      {
+        "id": "moonflowers-appears",
+        "title": "Moonflowers appears",
+        "text": "Add the moonflowers to the picture.",
+        "area": "moonflowers"
+      }
+    ]
+  },
+  {
     "id": "portrait-elior",
     "title": "Elior",
     "width": 480,
     "height": 640,
     "text": "A face portrait of a farm boy of about nineteen, sun-browned and freckled, with untidy brown hair, an earnest, searching look, and the frayed collar of a homespun shirt."
+  },
+  {
+    "id": "portrait-nyx",
+    "title": "Nyx",
+    "width": 480,
+    "height": 640,
+    "text": "A face portrait of a young woman with wild hair and green leaves caught in it, a pale, watchful face and bright, curious eyes."
+  },
+  {
+    "id": "portrait-sir-cedric",
+    "title": "Sir Cedric",
+    "width": 480,
+    "height": 640,
+    "text": "A face portrait of a tall knight in his fifties with a weathered, tired face and a steady, watchful stare, a steel mail coif and a dented gorget around his neck."
   }
 ]

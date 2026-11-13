@@ -2,95 +2,87 @@
  * What `tts/extract-act.ts` writes, as functions: the per-act source table
  * (`ACT_SOURCES`), the act's narration script (`extractActScript`), its music
  * loops (`extractActMusic`), images (`extractActImages`) and scenes
- * (`extractActScenes`). Nothing here reads `process.argv` or writes a file,
+ * (`extractActScenes`), each in id order (`byId`). Nothing here reads `process.argv` or writes a file,
  * so a vitest test can compare the result with the committed
  * `tts/act<N>/script.json` and `music.json`. Unsigned writing is given to its
  * writer by `act<N>/writers.json`; lines opening as in `act<N>/silent.json` stay
  * silent (instructions, not story); `act<N>/branches.json` lists optional scenes
  * to play on a copy (`ScriptBranch`).
  */
-import { existsSync, readFileSync } from 'node:fs'
-import { Game } from '../web/src/engine'
-import type { Act } from '../web/src/engine'
-import { Act1 } from '../web/src/act1/Act1'
+import { existsSync, readFileSync } from "node:fs";
+import { Game } from "../web/src/engine";
+import type { Act } from "../web/src/engine";
+import { Act1 } from "../web/src/act1/Act1";
+import { ACT1_COMPLETING_COMMANDS, ACT1_GOLDEN_PATH } from "../web/src/act1/Act1GoldenPath";
+import { Act2 } from "../web/src/act2/Act2";
+import { ACT2_COMPLETING_COMMANDS, ACT2_GOLDEN_PATH } from "../web/src/act2/Act2GoldenPath";
+import { Act3 } from "../web/src/act3/Act3";
+import { ACT3_COMPLETING_COMMANDS, ACT3_GOLDEN_PATH } from "../web/src/act3/Act3GoldenPath";
+import { Act4 } from "../web/src/act4/Act4";
+import { ACT4_GOLDEN_PATH } from "../web/src/act4/Act4GoldenPath";
 import {
-  ACT1_COMPLETING_COMMANDS,
-  ACT1_GOLDEN_PATH,
-} from '../web/src/act1/Act1GoldenPath'
-import { Act2 } from '../web/src/act2/Act2'
-import {
-  ACT2_COMPLETING_COMMANDS,
-  ACT2_GOLDEN_PATH,
-} from '../web/src/act2/Act2GoldenPath'
-import { Act3 } from '../web/src/act3/Act3'
-import {
-  ACT3_COMPLETING_COMMANDS,
-  ACT3_GOLDEN_PATH,
-} from '../web/src/act3/Act3GoldenPath'
-import { Act4 } from '../web/src/act4/Act4'
-import { ACT4_GOLDEN_PATH } from '../web/src/act4/Act4GoldenPath'
-import {
-  actScript,
-  type ScriptBranch,
-  type ScriptLine,
-  type WriterRule,
-} from '../web/src/lantern/narrationScript'
-import {
-  actLoops,
-  roomLoops,
-  type MusicTrack,
-} from '../web/src/lantern/musicLists'
-import {
-  allImages,
-  titleImage,
-  type GameImage,
-} from '../web/src/lantern/imageLists'
-import { actScenes, type SceneDeclaration } from '../web/src/lantern/sceneLists'
+    actScript,
+    type ScriptBranch,
+    type ScriptLine,
+    type WriterRule,
+} from "../web/src/lantern/narrationScript";
+import { actLoops, roomLoops, type MusicTrack } from "../web/src/lantern/musicLists";
+import { allImages, titleImage, type GameImage } from "../web/src/lantern/imageLists";
+import { actScenes, type SceneDeclaration } from "../web/src/lantern/sceneLists";
 
 /** What the extractor needs of an act: a fresh act and the commands that play it to its end. */
 export interface ActSource {
-  make: () => Act
-  commands: string[]
+    make: () => Act;
+    commands: string[];
 }
 
 /** The source of each act by number: a fresh act and the commands that play it to its end. */
 export const ACT_SOURCES: Record<string, ActSource> = {
-  '1': {
-    make: () => new Act1(),
-    commands: [...ACT1_GOLDEN_PATH, ...ACT1_COMPLETING_COMMANDS],
-  },
-  '2': {
-    make: () => new Act2(),
-    // The golden path stops with Cedric waiting; the vision and his answer
-    // end the act (branches.json plays the other answer, "say truth").
-    commands: [...ACT2_GOLDEN_PATH, ...ACT2_COMPLETING_COMMANDS],
-  },
-  '3': {
-    make: () => new Act3(),
-    // The completing command plays the closing page into the script.
-    commands: [...ACT3_GOLDEN_PATH, ...ACT3_COMPLETING_COMMANDS],
-  },
-  '4': { make: () => new Act4(), commands: ACT4_GOLDEN_PATH },
-}
+    "1": {
+        make: () => new Act1(),
+        commands: [...ACT1_GOLDEN_PATH, ...ACT1_COMPLETING_COMMANDS],
+    },
+    "2": {
+        make: () => new Act2(),
+        // The golden path stops with Cedric waiting; the vision and his answer
+        // end the act (branches.json plays the other answer, "say truth").
+        commands: [...ACT2_GOLDEN_PATH, ...ACT2_COMPLETING_COMMANDS],
+    },
+    "3": {
+        make: () => new Act3(),
+        // The completing command plays the closing page into the script.
+        commands: [...ACT3_GOLDEN_PATH, ...ACT3_COMPLETING_COMMANDS],
+    },
+    "4": { make: () => new Act4(), commands: ACT4_GOLDEN_PATH },
+};
 
 /** The act numbers the extractor knows, as the strings `extract-act.ts` takes. */
-export const ACT_NUMBERS: string[] = Object.keys(ACT_SOURCES)
+export const ACT_NUMBERS: string[] = Object.keys(ACT_SOURCES);
 
 /** The acts that take seconds to play; their script checks run in a test file of their own. */
-export const LONG_ACT_NUMBERS: string[] = ['2', '3']
+export const LONG_ACT_NUMBERS: string[] = ["2", "3"];
 
 /** Returns the source of act `number`, or throws when there is none. */
 function sourceOf(number: string): ActSource {
-  const source = ACT_SOURCES[number]
-  if (!source) throw new Error(`no such act: "${number}"`)
-  return source
+    const source = ACT_SOURCES[number];
+    if (!source) throw new Error(`no such act: "${number}"`);
+    return source;
+}
+
+/**
+ * Returns `records` in ascending order of their `id` (plain code-unit order, equal ids
+ * keeping their order). The committed lists are written this way so that two branches
+ * changing different records touch different places of the file and git merges them.
+ */
+export function byId<T extends { id: string }>(records: T[]): T[] {
+    return [...records].sort((a, b) => (a.id < b.id ? -1 : a.id > b.id ? 1 : 0));
 }
 
 /** Reads and parses `tts/act<N>/<file>`, or returns `fallback` when it does not exist. */
 function readJson<T>(number: string, file: string, fallback?: T): T {
-  const url = new URL(`./act${number}/${file}`, import.meta.url)
-  if (fallback !== undefined && !existsSync(url)) return fallback
-  return JSON.parse(readFileSync(url, 'utf8')) as T
+    const url = new URL(`./act${number}/${file}`, import.meta.url);
+    if (fallback !== undefined && !existsSync(url)) return fallback;
+    return JSON.parse(readFileSync(url, "utf8")) as T;
 }
 
 /**
@@ -99,59 +91,59 @@ function readJson<T>(number: string, file: string, fallback?: T): T {
  * number is played once for each of these fixed rolls and the lines are merged
  * by id. An act that never draws one is played once.
  */
-const ROLLS = [0, 0.25, 0.5, 0.75]
+const ROLLS = [0, 0.25, 0.5, 0.75];
 
 /** Plays act `number` and returns every line its story reads aloud, as `script.json` holds them. */
 export function extractActScript(number: string): ScriptLine[] {
-  const source = sourceOf(number)
-  const writers = readJson<WriterRule[]>(number, 'writers.json')
-  const silent = readJson<string[]>(number, 'silent.json')
-  const branches = readJson<ScriptBranch[]>(number, 'branches.json', [])
-  const lines = new Map<string, ScriptLine>()
-  const random = Math.random
-  let drawn = false
-  try {
-    for (const roll of ROLLS) {
-      Math.random = (): number => {
-        drawn = true
-        return roll
-      }
-      for (const line of actScript(
-        () => new Game([source.make()]),
-        source.commands,
-        writers,
-        silent,
-        branches,
-      ))
-        if (!lines.has(line.id)) lines.set(line.id, line)
-      // Nothing drew a number, so no other roll can change the script.
-      if (!drawn) break
+    const source = sourceOf(number);
+    const writers = readJson<WriterRule[]>(number, "writers.json");
+    const silent = readJson<string[]>(number, "silent.json");
+    const branches = readJson<ScriptBranch[]>(number, "branches.json", []);
+    const lines = new Map<string, ScriptLine>();
+    const random = Math.random;
+    let drawn = false;
+    try {
+        for (const roll of ROLLS) {
+            Math.random = (): number => {
+                drawn = true;
+                return roll;
+            };
+            for (const line of actScript(
+                () => new Game([source.make()]),
+                source.commands,
+                writers,
+                silent,
+                branches,
+            ))
+                if (!lines.has(line.id)) lines.set(line.id, line);
+            // Nothing drew a number, so no other roll can change the script.
+            if (!drawn) break;
+        }
+    } finally {
+        Math.random = random;
     }
-  } finally {
-    Math.random = random
-  }
-  return [...lines.values()]
+    return byId([...lines.values()]);
 }
 
 /** Returns the act's loop and a loop for each of its rooms, as `music.json` holds them. */
 export function extractActMusic(number: string): MusicTrack[] {
-  const act = sourceOf(number).make()
-  return [...actLoops(act), ...roomLoops(act)]
+    const act = sourceOf(number).make();
+    return byId([...actLoops(act), ...roomLoops(act)]);
 }
 
 /**
  * Returns an image for each room and a portrait for each character of the act,
- * as `images.json` holds them; the first act's list ends with the title screen's picture.
+ * as `images.json` holds them; the first act's list holds the title screen's picture too.
  */
 export function extractActImages(number: string): GameImage[] {
-  const images = allImages(
-    sourceOf(number).make(),
-    ACT_NUMBERS.map((n) => sourceOf(n).make()),
-  )
-  return number === ACT_NUMBERS[0] ? [...images, titleImage()] : images
+    const images = allImages(
+        sourceOf(number).make(),
+        ACT_NUMBERS.map((n) => sourceOf(n).make()),
+    );
+    return byId(number === ACT_NUMBERS[0] ? [...images, titleImage()] : images);
 }
 
 /** Returns a scene for each room of the act, as `scenes.json` holds them. */
 export function extractActScenes(number: string): SceneDeclaration[] {
-  return actScenes(sourceOf(number).make())
+    return byId(actScenes(sourceOf(number).make()));
 }
