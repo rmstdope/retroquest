@@ -757,6 +757,30 @@ describe('useBridge', () => {
     )
   })
 
+  describe('a save with data this engine did not write', () => {
+    const NO_SAVE = '[failure]No save file found.[/failure]'
+
+    it('is no save at all, whichever way it is filed', async () => {
+      const bridge = await runningBridge()
+      const corrupt = 'gASVbQAAAAAAAAB9lC4='
+      localStorageMock._setRaw('retroquest_save', corrupt)
+      localStorageMock._setRaw(
+        'retroquest_save_slots',
+        JSON.stringify([{ slot: 1, data: corrupt }, ...Array(7).fill(null)]),
+      )
+      localStorageMock._setRaw(
+        'retroquest_named_saves',
+        JSON.stringify([{ name: 'old', data: corrupt }]),
+      )
+      expect(bridge.getQuickSave()).toBe(null)
+      expect(bridge.getSaveSlots()[0].act).toBe(null)
+      expect(bridge.getNamedSaves()).toEqual([])
+      expect(bridge.quickLoadGame()).toBe(NO_SAVE)
+      expect(bridge.loadFromSlot(1)).toBe(NO_SAVE)
+      expect(bridge.loadNamedGame('old')).toBe(NO_SAVE)
+    })
+  })
+
   describe('pictureState', () => {
     it('names the room and the patches of its picture that apply', async () => {
       const bridge = await runningBridge()
