@@ -183,11 +183,13 @@ const areaNamesEl = ref<InstanceType<typeof AreaNames> | null>(null)
 const pointingWay = ref<string | null>(null)
 /** The direction of the open way whose mark or name the pointer is over, or null; a new room or the names going clears it. */
 const nameWay = ref<string | null>(null)
+/** A press on an open way goes now: the game takes actions and no scene is changing or waiting. */
+const wayGoes = computed<boolean>(
+  () => game.acceptInput && scene.turn === null && !speech.sceneChange,
+)
 /** The arrow over an open way: only while a press would go (the game takes actions, no scene is changing or waiting). */
 const wayArrow = computed<string | null>(() =>
-  game.acceptInput && scene.turn === null && !speech.sceneChange
-    ? (nameWay.value ?? pointingWay.value)
-    : null,
+  wayGoes.value ? (nameWay.value ?? pointingWay.value) : null,
 )
 /** A laptop screen (≥1024 × 560): the stage with its action row along the bottom. */
 const laptop = useMediaQuery(WIDE_QUERY)
@@ -737,7 +739,7 @@ const wordsCursor = computed<{ cursor?: string }>(() => {
   const dot = wordsDot.value
   if (!dot) return {}
   if (dot.kind !== 'exit') return { cursor: 'pointer' }
-  return dot.direction && wayArrow.value !== null
+  return dot.direction && wayGoes.value
     ? { cursor: wayCursor(dot.direction) }
     : {}
 })
@@ -765,6 +767,9 @@ function onWordsPress(event: MouseEvent): void {
   event.stopPropagation()
   event.preventDefault()
   if (dot.kind === 'exit') {
+    // As a press on the picture: a scene change is skipped or brought up first, and never walked from.
+    if (scene.turn !== null) return scene.skip()
+    if (speech.sceneChange) return speech.changeSceneNow()
     if (dot.direction && game.acceptInput) goWay(dot.direction)
     return
   }

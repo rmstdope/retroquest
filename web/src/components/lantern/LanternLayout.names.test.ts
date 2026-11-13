@@ -274,11 +274,15 @@ describe('LanternLayout: what is here, named on the picture', () => {
     // The bread's dot (0.65, 0.65 of the 960 x 540 picture) lies under the words here.
     await at(wrap.element, 'pointermove', 624, 351)
     expect(wrap.attributes('style')).toContain('cursor: pointer')
-    await at(wrap.element, 'click', 624, 351)
+    // The press lands on the words (inside the story, where a card hurries the narration), at the dot.
+    const story = w.get('.lq-story').element
+    await at(story, 'click', 624, 351)
     expect(w.find('.lq-press-ring').exists()).toBe(true)
     expect(tap).not.toHaveBeenCalled()
     // Away from any dot the press is the cards' and the cursor is theirs.
     await at(wrap.element, 'pointermove', 20, 20)
     expect(wrap.attributes('style') ?? '').not.toContain('cursor')
+    await at(story, 'click', 20, 20)
+    expect(tap).toHaveBeenCalledTimes(1)
   })
 })
