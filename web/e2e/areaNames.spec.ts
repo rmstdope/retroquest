@@ -221,3 +221,127 @@ test('the marks and names come back with the picture after a layout without one 
   await expect(page.locator('[data-area-mark]')).toHaveCount(3)
   await expect(page.locator('[data-area-name]')).toHaveCount(3)
 })
+
+test.describe('a dot under the faded edge of a card (rq-riv9)', () => {
+  /** Where the studio placed the cottage's things when the bug was found. */
+  const PLACED: Record<string, AreaFractions> = {
+    hearth: { x: 0.211458, y: 0.388889, width: 0.145833, height: 0.376852 },
+    lantern: { x: 0.825, y: 0.47037, width: 0.046875, height: 0.107407 },
+    bread: { x: 0.452083, y: 0.585185, width: 0.099479, height: 0.112037 },
+    'scenery-eliors-cottage-table': {
+      x: 0.295833,
+      y: 0.594444,
+      width: 0.38125,
+      height: 0.27963,
+    },
+    'scenery-eliors-cottage-shelves': {
+      x: 0.385417,
+      y: 0.101852,
+      width: 0.140104,
+      height: 0.449074,
+    },
+    'scenery-eliors-cottage-books': {
+      x: 0.414583,
+      y: 0.165741,
+      width: 0.092708,
+      height: 0.115741,
+    },
+    grandmother: {
+      x: 0.623958,
+      y: 0.180556,
+      width: 0.177083,
+      height: 0.698148,
+    },
+    'exit-east': {
+      x: 0.915104,
+      y: 0.184259,
+      width: 0.082292,
+      height: 0.609259,
+    },
+  }
+  /** What each placed thing is called on the picture. */
+  const LABELS: Record<string, string> = {
+    hearth: 'Hearth',
+    lantern: 'Lantern',
+    bread: 'Bread',
+    'scenery-eliors-cottage-table': 'Table',
+    'scenery-eliors-cottage-shelves': 'Shelves',
+    'scenery-eliors-cottage-books': 'Books',
+    grandmother: 'Grandmother',
+  }
+
+  /** Type one command into the action bar. */
+  async function command(page: Page, text: string): Promise<void> {
+    const type = page
+      .getByRole('region', { name: /^Action/ })
+      .getByRole('button', { name: /^(Type|Type a command)$/ })
+    if (await type.isVisible()) await type.click()
+    const input = page.getByLabel('Command', { exact: true })
+    await input.fill(text)
+    await input.press('Enter')
+  }
+
+  test('resting on a dot that a card takes the pointer from names it', async ({
+    page,
+  }): Promise<void> => {
+    await page.setViewportSize({ width: 1000, height: 700 })
+    await toTheCottage(page, PLACED)
+    await command(page, 'talk to grandmother')
+    await command(page, 'talk to grandmother')
+    await page.getByRole('button', { name: /Show what's here/ }).click()
+    await page.getByRole('button', { name: /Show$/ }).click()
+    await expect(page.locator('.lq-story-wrap .lq-cl')).not.toHaveCount(0)
+    // Scroll the words up a few pixels at a time to the first spot where a thing's dot shows with its name left off.
+    const dot = await page
+      .locator('.lq-story-wrap .lq-story')
+      .evaluate(async (story) => {
+        for (
+          let top = story.scrollHeight - story.clientHeight;
+          top >= 0;
+          top -= 3
+        ) {
+          story.scrollTop = top
+          for (let i = 0; i < 3; i++)
+            await new Promise((done) => requestAnimationFrame(done))
+          for (const mark of document.querySelectorAll<HTMLElement>(
+            '[data-area-mark]:not([data-way])',
+          )) {
+            const id = mark.dataset.areaMark!
+            if (document.querySelector(`[data-area-name="${id}"]`)) continue
+            const box = mark.getBoundingClientRect()
+            return {
+              id,
+              x: Math.round(box.x + box.width / 2),
+              y: Math.round(box.y + box.height / 2),
+            }
+          }
+        }
+        return null
+      })
+    expect(dot).not.toBeNull()
+    // Where such a dot lies under a card's faded top edge depends on the story's text, the fonts and the cards'
+    // padding, so the test lays a clear card of its own over the dot in the words, as that edge does: it shows the
+    // dot but takes the pointer.
+    await page.locator('.lq-story-wrap').evaluate((wrap, { x, y }) => {
+      const at = wrap.getBoundingClientRect()
+      const edge = document.createElement('div')
+      edge.dataset.fadedEdge = ''
+      edge.style.cssText =
+        `position: absolute; left: ${x - 40 - at.left}px; top: ${y - 20 - at.top}px; ` +
+        'width: 80px; height: 40px; pointer-events: auto;'
+      wrap.append(edge)
+    }, dot!)
+    await page.mouse.move(5, 300)
+    await page.mouse.move(dot!.x, dot!.y, { steps: 5 })
+    expect(
+      await page.evaluate(
+        ({ x, y }) =>
+          document.elementFromPoint(x, y)?.matches('[data-faded-edge]'),
+        dot!,
+      ),
+    ).toBe(true)
+    await expect(page.locator('[data-area-pointer]')).toHaveText(
+      LABELS[dot!.id],
+    )
+  })
+})
