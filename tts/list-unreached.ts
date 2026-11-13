@@ -7,7 +7,7 @@
  *
  *   (cd web && npx -y tsx@4.23.15 --tsconfig tsconfig.json ../tts/list-unreached.ts 1)
  */
-import { readdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
+import { readFileSync, writeFileSync } from "node:fs";
 import {
     acknowledgedKey,
     authoredLines,

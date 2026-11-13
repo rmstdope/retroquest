@@ -75,7 +75,7 @@ describe.each([1, 2, 3, 4])('the lines of Act %i content', (act) => {
       authoredLines(contentFiles(WEB_ROOT, act)),
       script,
       acknowledged,
-    ).map((line) => `${line.file}: ${line.text}`)
+    ).map((line) => `${line.file.replace(`${WEB_ROOT}/`, '')}: ${line.text}`)
     expect(
       missing,
       'Lines the script lacks: reach them with an entry in tts/act<N>/branches.json (see tts/README.md)',

@@ -119,7 +119,10 @@ export function staleAcknowledgements(
   return acknowledged.filter((key) => !unreached.has(key))
 }
 
-/** Every non-test TypeScript file under `src/act<act>` of the web project at `webRoot`, with its text. */
+/** Files that hold no spoken lines: the golden path's commands and the act's own music credits. */
+const SKIPPED = /^Act\d(GoldenPath)?\.ts$/
+
+/** Every non-test TypeScript file under `src/act<act>` (but not the act class or its golden path) of the web project at `webRoot`, with its text. */
 export function contentFiles(
   webRoot: string,
   act: number | string,
@@ -129,7 +132,11 @@ export function contentFiles(
     for (const name of readdirSync(dir)) {
       const path = `${dir}/${name}`
       if (statSync(path).isDirectory()) walk(path)
-      else if (path.endsWith('.ts') && !path.includes('.test.'))
+      else if (
+        path.endsWith('.ts') &&
+        !path.includes('.test.') &&
+        !SKIPPED.test(name)
+      )
         files.push({ file: path, text: readFileSync(path, 'utf8') })
     }
   }
