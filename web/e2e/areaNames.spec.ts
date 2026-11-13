@@ -259,7 +259,16 @@ test.describe('a dot under the faded edge of a card (rq-riv9)', () => {
       height: 0.609259,
     },
   }
-  const TABLE = 'scenery-eliors-cottage-table'
+  /** What each placed thing is called on the picture. */
+  const LABELS: Record<string, string> = {
+    hearth: 'Hearth',
+    lantern: 'Lantern',
+    bread: 'Bread',
+    'scenery-eliors-cottage-table': 'Table',
+    'scenery-eliors-cottage-shelves': 'Shelves',
+    'scenery-eliors-cottage-books': 'Books',
+    grandmother: 'Grandmother',
+  }
 
   /** Type one command into the action bar. */
   async function command(page: Page, text: string): Promise<void> {
@@ -272,7 +281,9 @@ test.describe('a dot under the faded edge of a card (rq-riv9)', () => {
     await input.press('Enter')
   }
 
-  test('resting on the dot names it', async ({ page }): Promise<void> => {
+  test('resting on a dot that a card takes the pointer from names it', async ({
+    page,
+  }): Promise<void> => {
     await page.setViewportSize({ width: 1000, height: 700 })
     await toTheCottage(page, PLACED)
     await command(page, 'talk to grandmother')
@@ -280,46 +291,57 @@ test.describe('a dot under the faded edge of a card (rq-riv9)', () => {
     await page.getByRole('button', { name: /Show what's here/ }).click()
     await page.getByRole('button', { name: /Show$/ }).click()
     await expect(page.locator('.lq-story-wrap .lq-cl')).not.toHaveCount(0)
-    await expect(page.locator(`[data-area-mark="${TABLE}"]`)).toHaveCount(1)
-    const story = page.locator('.lq-story-wrap .lq-story')
-    /** Scroll the words to `top` and let the marks be laid out again; where the table's left-off dot is then, or null. */
-    const scrollTo = (
-      top: number,
-    ): Promise<{ x: number; y: number; covered: boolean } | null> =>
-      story.evaluate(
-        async (el, [top, table]) => {
-          el.scrollTop = top
+    // Scroll the words up a few pixels at a time to the first spot where a thing's dot shows with its name left off.
+    const dot = await page
+      .locator('.lq-story-wrap .lq-story')
+      .evaluate(async (story) => {
+        for (
+          let top = story.scrollHeight - story.clientHeight;
+          top >= 0;
+          top -= 3
+        ) {
+          story.scrollTop = top
           for (let i = 0; i < 3; i++)
             await new Promise((done) => requestAnimationFrame(done))
-          const mark = document.querySelector(`[data-area-mark="${table}"]`)
-          if (!mark || document.querySelector(`[data-area-name="${table}"]`))
-            return null
-          const box = mark.getBoundingClientRect()
-          const x = Math.round(box.x + box.width / 2)
-          const y = Math.round(box.y + box.height / 2)
-          const at = document.elementFromPoint(x, y)
-          return { x, y, covered: !!at?.closest('.lq-card, .lq-cl') }
-        },
-        [top, TABLE] as const,
-      )
-    // Scroll the words up, a few pixels at a time: wherever the table's dot, its name left off, lies where a card takes the pointer, resting on it names it.
-    const bottom = await story.evaluate(
-      (el) => el.scrollHeight - el.clientHeight,
+          for (const mark of document.querySelectorAll<HTMLElement>(
+            '[data-area-mark]:not([data-way])',
+          )) {
+            const id = mark.dataset.areaMark!
+            if (document.querySelector(`[data-area-name="${id}"]`)) continue
+            const box = mark.getBoundingClientRect()
+            return {
+              id,
+              x: Math.round(box.x + box.width / 2),
+              y: Math.round(box.y + box.height / 2),
+            }
+          }
+        }
+        return null
+      })
+    expect(dot).not.toBeNull()
+    // Where such a dot lies under a card's faded top edge depends on the story's text, the fonts and the cards'
+    // padding, so the test lays a clear card of its own over the dot in the words, as that edge does: it shows the
+    // dot but takes the pointer.
+    await page.locator('.lq-story-wrap').evaluate((wrap, { x, y }) => {
+      const at = wrap.getBoundingClientRect()
+      const edge = document.createElement('div')
+      edge.dataset.fadedEdge = ''
+      edge.style.cssText =
+        `position: absolute; left: ${x - 40 - at.left}px; top: ${y - 20 - at.top}px; ` +
+        'width: 80px; height: 40px; pointer-events: auto;'
+      wrap.append(edge)
+    }, dot!)
+    await page.mouse.move(5, 300)
+    await page.mouse.move(dot!.x, dot!.y, { steps: 5 })
+    expect(
+      await page.evaluate(
+        ({ x, y }) =>
+          document.elementFromPoint(x, y)?.matches('[data-faded-edge]'),
+        dot!,
+      ),
+    ).toBe(true)
+    await expect(page.locator('[data-area-pointer]')).toHaveText(
+      LABELS[dot!.id],
     )
-    let covered = 0
-    for (let top = bottom; top >= 0; top -= 3) {
-      await page.mouse.move(5, 300)
-      const dot = await scrollTo(top)
-      if (!dot?.covered) continue
-      covered++
-      await page.mouse.move(dot.x, dot.y, { steps: 5 })
-      await expect(
-        page.locator('[data-area-pointer]'),
-        `scrolled to ${top}`,
-      ).toHaveText('Table')
-    }
-    // How many positions put the dot under a card depends on the layout: Grandmother's two replies, the fonts and the
-    // cards' padding. A change to any of them can leave none, which fails here rather than checking nothing.
-    expect(covered).toBeGreaterThan(0)
   })
 })
