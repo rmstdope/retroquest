@@ -1211,3 +1211,13 @@ describe('Hemlock answers the healer by name', () => {
     expect(answer).not.toContain('humble store')
   })
 })
+
+describe('Buying a ware picked from the suggestions (rq-wjy0)', () => {
+  it('answers a suggested "buy apple" in the game\'s voice, not with the command format', () => {
+    const game = gameInStore()
+    expect(game.getCommandCompletions().buy).toHaveProperty('apple')
+    const answer = game.commandParser.parse('buy apple')
+    expect(answer).not.toContain('Invalid command format')
+    expect(answer).toBe('[failure]Buy the apple from whom?[/failure]')
+  })
+})
