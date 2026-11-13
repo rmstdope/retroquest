@@ -116,6 +116,12 @@ describe('Act 1 room graph', () => {
     for (const [key, room] of Object.entries(rooms)) {
       for (const [direction, destKey] of Object.entries(room.getExits(state))) {
         if (!(direction in OPPOSITE)) continue
+        if (!(destKey in rooms)) {
+          failures.push(
+            `${key} -> ${direction} -> ${destKey} is not an act 1 room`,
+          )
+          continue
+        }
         const back =
           rooms[destKey as RoomKey].getExits(state)[OPPOSITE[direction]]
         if (back !== key) {

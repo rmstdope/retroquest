@@ -52,7 +52,9 @@ describe('the common-noun characters', () => {
         failures.push(`${name}: at the start reads ${atStart}`)
       }
       if (make().isPlural() !== plural) {
-        failures.push(`${name}: isPlural should be ${plural}`)
+        failures.push(
+          `${name}: isPlural is ${make().isPlural()}, should be ${plural}`,
+        )
       }
     }
     expect(failures).toEqual([])
