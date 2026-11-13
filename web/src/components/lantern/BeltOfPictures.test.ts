@@ -2,7 +2,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { mount, type VueWrapper } from '@vue/test-utils'
 import { nextTick } from 'vue'
-import { readFileSync } from 'node:fs'
 import { createPinia, setActivePinia } from 'pinia'
 import BeltOfPictures from './BeltOfPictures.vue'
 import { useGameStore } from '@/stores/useGameStore'

@@ -384,21 +384,25 @@ describe('StagePicture patches', () => {
     expect(layers(w)).toContain(ROPE)
   })
 
-  it('stacks patches fading in together in their declared order, the later-declared loading first', async () => {
-    const w = await picture([])
-    await w.setProps({ patches: [BUCKET, ROPE] })
-    await patchLoader(w, ROPE).trigger('load')
-    await patchLoader(w, BUCKET).trigger('load')
-    expect(layers(w)).toEqual([BUCKET, ROPE])
-  })
-
-  it('stacks patches fading in together in their declared order, the earlier-declared loading first', async () => {
-    const w = await picture([])
-    await w.setProps({ patches: [BUCKET, ROPE] })
-    await patchLoader(w, BUCKET).trigger('load')
-    await patchLoader(w, ROPE).trigger('load')
-    expect(layers(w)).toEqual([BUCKET, ROPE])
-  })
+  it.each([
+    ['the later-declared loading first', [ROPE, BUCKET], false],
+    ['the earlier-declared loading first', [BUCKET, ROPE], false],
+    [
+      'the later-declared loading first, from a loaded save',
+      [ROPE, BUCKET],
+      true,
+    ],
+  ])(
+    'stacks patches fading in together in their declared order, %s',
+    async (_label, loading, loadedSave) => {
+      const scene = useSceneStore()
+      const w = await picture([])
+      if (loadedSave) scene.reset()
+      await w.setProps({ patches: [BUCKET, ROPE] })
+      for (const patch of loading) await patchLoader(w, patch).trigger('load')
+      expect(layers(w)).toEqual([BUCKET, ROPE])
+    },
+  )
 
   it('lays a patch declared earlier under one already there', async () => {
     const w = await picture([ROPE])
@@ -414,15 +418,5 @@ describe('StagePicture patches', () => {
     await nextTick()
     expect(layers(w)).toEqual([BUCKET])
     expect(w.get('img.lq-patch').classes()).toContain('lq-patch-on')
-  })
-
-  it('lays the patches of a loaded save in their declared order, the later-declared loading first', async () => {
-    const scene = useSceneStore()
-    const w = await picture([])
-    scene.reset()
-    await w.setProps({ patches: [BUCKET, ROPE] })
-    await patchLoader(w, ROPE).trigger('load')
-    await patchLoader(w, BUCKET).trigger('load')
-    expect(layers(w)).toEqual([BUCKET, ROPE])
   })
 })

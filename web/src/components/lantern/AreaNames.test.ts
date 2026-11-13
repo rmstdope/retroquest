@@ -1,7 +1,5 @@
 // @vitest-environment jsdom
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { readFileSync } from 'node:fs'
-import { resolve } from 'node:path'
 import { mount, type VueWrapper } from '@vue/test-utils'
 import { nextTick } from 'vue'
 import { createPinia, setActivePinia } from 'pinia'
@@ -955,27 +953,17 @@ describe('AreaNames', () => {
         /top: ([\d.]+)px/.exec(w.get(selector).attributes('style') ?? '')![1],
       )
 
-    it('steps the mark just below the plate, its name beside it, the line ending at the mark', async () => {
-      const w = mountNames({ showing: true })
-      plateOver('lq-phone-plate')
-      await w.setProps({ relayout: 'plate' })
-      await vi.advanceTimersByTimeAsync(400)
-      await nextTick()
-      expect(top(w, '[data-area-mark="villager"]')).toBeGreaterThanOrEqual(
-        340 + 8,
-      )
-      expect(
-        w.get('[data-area-name="villager"]').attributes('style'),
-      ).toContain('left:')
-    })
-
-    it('draws the line of a moved name to the moved mark, and a press on that mark is a press on its thing', async () => {
+    it('steps the mark just below the plate, its name beside it, the line ending at the mark, and a press on that mark is a press on its thing', async () => {
       const w = mountNames({ showing: true })
       plateOver('lq-phone-plate')
       await w.setProps({ relayout: 'plate' })
       await vi.advanceTimersByTimeAsync(400)
       await nextTick()
       const markY = top(w, '[data-area-mark="villager"]')
+      expect(markY).toBeGreaterThanOrEqual(340 + 8)
+      expect(
+        w.get('[data-area-name="villager"]').attributes('style'),
+      ).toContain('left:')
       const lines = w.findAll('.lq-area-lines line')
       for (const line of lines) {
         const y1 = parseFloat(line.attributes('y1')!)
@@ -1074,12 +1062,16 @@ describe('AreaNames', () => {
       expect(tx).toBeLessThan(bx)
     })
 
-    it.each(['lq-words-hide', 'lq-paper-tab'])(
-      'steps a mark under the story’s Hide/Show tab (%s) clear of it too',
-      async (tab) => {
+    it.each([
+      ['lq-words-hide', 'tab'],
+      ['lq-paper-tab', 'tab'],
+      ['lq-show-names', 'show-names'],
+    ])(
+      'steps a mark under the story’s Hide/Show tab or the Showing button (%s) clear of it too',
+      async (cls, relayout) => {
         const w = mountNames({ showing: true })
-        plateOver(tab)
-        await w.setProps({ relayout: 'tab' })
+        plateOver(cls)
+        await w.setProps({ relayout })
         await vi.advanceTimersByTimeAsync(400)
         await nextTick()
         expect(top(w, '[data-area-mark="villager"]')).toBeGreaterThanOrEqual(
@@ -1087,17 +1079,6 @@ describe('AreaNames', () => {
         )
       },
     )
-
-    it('steps a mark under the Show what’s here / Showing button clear of it too', async () => {
-      const w = mountNames({ showing: true })
-      plateOver('lq-show-names')
-      await w.setProps({ relayout: 'show-names' })
-      await vi.advanceTimersByTimeAsync(400)
-      await nextTick()
-      expect(top(w, '[data-area-mark="villager"]')).toBeGreaterThanOrEqual(
-        340 + 8,
-      )
-    })
 
     it('steps a mark under the Showing button in the picture’s foot corner up or aside, never off the picture', async () => {
       // The button sits at the foot's right (780..950, 506..534); the villager's mark lies under it.
