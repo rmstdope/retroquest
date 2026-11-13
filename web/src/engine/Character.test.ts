@@ -190,3 +190,10 @@ describe('Character names', () => {
     expect(sage.answersTo('mira')).toBe(false)
   })
 })
+
+describe('Character.sells', () => {
+  it('sells nothing by default', () => {
+    const villager = new Character({ name: 'Villager', description: 'Plain.' })
+    expect(villager.sells(gameState())).toEqual([])
+  })
+})

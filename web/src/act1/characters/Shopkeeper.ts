@@ -582,9 +582,21 @@ export class Shopkeeper extends Character {
     )
   }
 
-  /** Lists the wares now on offer; none while the shop refuses every sale. */
+  /**
+   * Lists the wares now on offer; none while the store is shut or a Patches
+   * scene is due. Unlike `whileShut` it only reads the state: the suggestions
+   * are rebuilt after every command, and must not play a scene.
+   */
   override sells(gameState: GameState): string[] {
-    return this.whileShut(gameState) ? [] : Object.keys(this.wares)
+    const stayed = gameState.getStoryFlag(FLAG_PATCHES_STAYED_WITH_GRANDMOTHER)
+    const welcomeDue =
+      gameState.getStoryFlag(FLAG_PATCHES_FOUND) &&
+      !gameState.getStoryFlag(FLAG_PATCHES_RETURNED) &&
+      !stayed
+    const newsDue =
+      stayed && !gameState.getStoryFlag(FLAG_HEMLOCK_HEARD_PATCHES_STAYED)
+    if (welcomeDue || newsDue || !Shopkeeper.isStoreOpen(gameState)) return []
+    return Object.keys(this.wares)
   }
 
   /**

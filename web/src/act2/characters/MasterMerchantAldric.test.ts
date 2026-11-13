@@ -245,3 +245,15 @@ describe('Master Merchant Aldric price sentence', () => {
     }
   })
 })
+
+describe('Master Merchant Aldric buy suggestions', () => {
+  it('offers nothing until the flyer is given, then his wares', () => {
+    const shut = createGameAtMarket()
+    expect(shut.getCommandCompletions().buy).toEqual({})
+
+    const open = createGameWithOpenShop()
+    const buy = open.getCommandCompletions().buy ?? {}
+    expect(Object.keys(buy).length).toBeGreaterThan(0)
+    expect(Object.keys(buy)).not.toContain("merchant's")
+  })
+})

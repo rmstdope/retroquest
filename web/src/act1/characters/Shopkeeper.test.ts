@@ -1254,3 +1254,26 @@ describe('Shopkeeper buy suggestions', () => {
     expect(game.getCommandCompletions().buy).not.toHaveProperty('rope')
   })
 })
+
+describe('Shopkeeper buy suggestions leave the Patches scenes alone', () => {
+  it('builds them without playing the welcome home or its coin', () => {
+    const game = gameInStore({ shopOpen: false })
+    game.state.setStoryFlag(FLAG_PATCHES_FOUND, true)
+    const coins = game.state.getItemCount('coins')
+    expect(game.getCommandCompletions().buy).toEqual({})
+    expect(game.state.getStoryFlag(FLAG_PATCHES_RETURNED)).toBe(false)
+    expect(game.state.getItemCount('coins')).toBe(coins)
+    expect(game.commandParser.parse('talk to hemlock')).toContain('Patches')
+    expect(game.state.getStoryFlag(FLAG_PATCHES_RETURNED)).toBe(true)
+  })
+
+  it('builds them without playing the news that Patches stayed', () => {
+    const game = gameInStore({ shopOpen: false })
+    game.state.setStoryFlag(FLAG_PATCHES_STAYED_WITH_GRANDMOTHER, true)
+    expect(game.getCommandCompletions().buy).toEqual({})
+    expect(game.state.getStoryFlag(FLAG_HEMLOCK_HEARD_PATCHES_STAYED)).toBe(
+      false,
+    )
+    expect(game.state.inventory).toEqual([])
+  })
+})
