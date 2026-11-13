@@ -55,8 +55,8 @@ import type { PictureSize, Rect } from '@/lantern/roomMotionScene'
  * moves (the words coming or going); the story scrolling its words lays the
  * marks out again too, so a dot kept clear of a card stays clear as it scrolls.
  *
- * `markAt` says whether a screen point rests on a showing mark, so a mark
- * under a card's faded edge (which takes the pointer) can still be pointed at.
+ * `spotAt` says which showing mark a screen point rests on, so a mark under a
+ * card's faded edge (which takes the pointer) can still be pointed at and pressed.
  *
  * Ways out can be pressed. `wayAt` says which way a screen point presses (the
  * smallest named thing or open way under it; a closed way, one of
@@ -319,19 +319,22 @@ function wayAt(clientX: number, clientY: number): WayPress | null {
 }
 
 /**
- * Whether the screen point (`clientX`, `clientY`) rests on a mark while every
- * mark is showing. A mark stepped onto the edge of the words can lie under a
+ * The mark the screen point (`clientX`, `clientY`) rests on while every mark is
+ * showing, or null. A mark stepped onto the edge of the words can lie under a
  * card's faded edge, where it shows through but the card takes the pointer:
- * the stage asks this to point at it all the same.
+ * the layout asks this to point at it and to take a press on it as a press on
+ * its thing, the same area as any other mark.
  */
-function markAt(clientX: number, clientY: number): boolean {
-  if (!props.showing) return false
+function spotAt(clientX: number, clientY: number): NamedSpot | null {
+  if (!props.showing) return null
   const frame = frameOf()
   const x = (clientX - frame.left) / frame.ratio
   const y = (clientY - frame.top) / frame.ratio
-  return spots.value.some((s) => Math.hypot(s.x - x, s.y - y) <= DOT_HIT)
+  return (
+    spots.value.find((s) => Math.hypot(s.x - x, s.y - y) <= DOT_HIT) ?? null
+  )
 }
-defineExpose({ wayAt, markAt })
+defineExpose({ wayAt, spotAt })
 
 /** The direction of the open way under the pointer, for its arrow. */
 const pointing = computed<string | null>(() => {
