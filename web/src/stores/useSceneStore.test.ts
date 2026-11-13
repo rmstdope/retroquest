@@ -265,6 +265,20 @@ describe('useSceneStore', () => {
     })
   })
 
+  it('ends an interlude fade when its scope is disposed', () => {
+    const scene = useSceneStore()
+    scene.settled('a.png')
+    const onUp = vi.fn()
+    scene.begin(4, 'b.png', onUp, 3, { unit: 3, markup: 'The dark lets go.' })
+    scene.targetReady(true)
+    vi.advanceTimersByTime(SCENE_HALF_MS)
+    scene.endInterlude()
+    scene.$dispose()
+    vi.advanceTimersByTime(INTERLUDE_FADE_MS + INTERLUDE_RISE_MS)
+    expect(scene.phase).toBe('dark')
+    expect(onUp).not.toHaveBeenCalled()
+  })
+
   it('ends its timers when its scope is disposed', () => {
     const scene = useSceneStore()
     scene.settled('a.png')

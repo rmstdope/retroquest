@@ -105,6 +105,20 @@ describe('useNarrationStore', () => {
     expect(narration.revealed(7, 1)).toBe(false)
   })
 
+  it('ends the hint timer when its scope is disposed', async () => {
+    for (const id of [1, 2, 3]) {
+      narration.begin(id, [voiced()], 'act1')
+      last().onended?.()
+    }
+    narration.begin(4, [voiced()], 'act1')
+    expect(narration.hintVisible).toBe(false)
+    narration.nudgeHint()
+    expect(narration.hintVisible).toBe(true)
+    narration.$dispose()
+    await vi.advanceTimersByTimeAsync(10000)
+    expect(narration.hintVisible).toBe(true)
+  })
+
   it('takes silent units in their place without a pause', async () => {
     narration.begin(1, [voiced(), silent, voiced()], 'act1')
     last().onended?.()
