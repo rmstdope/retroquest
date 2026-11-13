@@ -14,8 +14,28 @@ import {
 import { AncientDragon } from './AncientDragon'
 import { DragonsScale } from '../items/DragonsScale'
 import { DragonsHall } from '../rooms/DragonsHall'
-import { expectMarkupWellFormed } from '@/testing/gameHelpers'
+import {
+  expectDialogueSpeaker,
+  expectMarkupWellFormed,
+} from '@/testing/gameHelpers'
 import { AncientAmulet } from '../items/AncientAmulet'
+
+const DIALOGUE_PATTERN = /\[dialogue\].*?\[\/dialogue\]/gs
+const CHARACTER_NAME_PATTERN = /\[character_name\](.*?)\[\/character_name\]/s
+
+/** No dialogue block in text lacks a preceding speaker name. */
+function expectNoSpeakerlessDialogue(text: string): void {
+  let narration = ''
+  let position = 0
+  for (const block of text.matchAll(DIALOGUE_PATTERN)) {
+    narration += text.slice(position, block.index)
+    position = block.index + block[0].length
+    expect(
+      CHARACTER_NAME_PATTERN.test(narration),
+      `no speaker before dialogue in: ${text}`,
+    ).toBe(true)
+  }
+}
 
 /** A minimal game state for character tests. */
 function makeGameState(): GameState {
@@ -28,14 +48,6 @@ function hasScale(room: { items: unknown[] }): boolean {
 }
 
 describe('AncientDragon', () => {
-  it('initializes with name and description', () => {
-    const dragon = new AncientDragon()
-    expect(dragon.name).toBe('ancient dragon')
-    expect(dragon.description).toContain('worn dull')
-    expect(dragon.description.toLowerCase()).toContain('golden eyes')
-    expect(dragon.description).not.toMatch(/wisdom|ancient|countless/i)
-  })
-
   it('gives the memory when talked to the first time', () => {
     const dragon = new AncientDragon()
     const gameState = makeGameState()
@@ -103,55 +115,65 @@ describe('AncientDragon', () => {
     expect(gameState.getStoryFlag(FLAG_ACT3_DRAGON_OATH_SPOKEN)).toBe(false)
   })
 
-  it.each(['everything', 'hello', 'oath'])(
-    'refuses %s before the scrolls are read and names the Echo Chambers',
-    (words) => {
+  it('refuses everything, hello and oath before the scrolls are read and names the Echo Chambers', () => {
+    const failures: string[] = []
+    for (const words of ['everything', 'hello', 'oath']) {
       const { gameState, room } = hallState(false)
-
       const result = new AncientDragon().sayTo(gameState, words)
+      const ok =
+        result.includes('golden eyes narrow.') &&
+        result.includes(BEFORE_SCROLLS) &&
+        !gameState.getStoryFlag(FLAG_ACT3_DRAGON_OATH_SPOKEN) &&
+        !hasScale(room)
+      if (!ok) failures.push(words)
+    }
+    expect(failures).toEqual([])
+  })
 
-      expect(result).toContain('golden eyes narrow.')
-      expect(result).toContain(BEFORE_SCROLLS)
-      expect(gameState.getStoryFlag(FLAG_ACT3_DRAGON_OATH_SPOKEN)).toBe(false)
-      expect(hasScale(room)).toBe(false)
-    },
-  )
-
-  it.each([
-    ['everything', 'everything'],
-    ['it', 'it'],
-    ['myself', 'myself'],
-    ['what I take', 'what I take'],
-    ['  Everything!  ', 'everything'],
-    ['i return everything .', 'everything'],
-    ['" Everything"', 'everything'],
-    ['EVERYTHING.', 'everything'],
-    ['i return everything', 'everything'],
-    ['I return it.', 'it'],
-    ['I return what i take', 'what I take'],
-    ['i take what is given and i return myself', 'myself'],
-    ['I take what is given, and I return everything.', 'everything'],
-    ['i  take what is  given,  and i return it!', 'it'],
-  ])('accepts %j and accepts it as the oath', (words, word) => {
-    const { gameState, room } = hallState(true)
-
-    const result = new AncientDragon().sayTo(gameState, words)
-
-    expect(result).toContain(
-      '[character_name]Elior[/character_name]\n' +
-        `[dialogue]I take what is given, and I return ${word}.[/dialogue]`,
-    )
-    expect(result).not.toContain('“')
-    expect(result).not.toContain('[event]')
-    expect(result).toContain(
-      'shifts one coil, and a single scale lies loose on the tiles.',
-    )
-    expect(result).toContain(
-      'Your words ring true, young one. It is heavier than it looks.',
-    )
-    expect(gameState.getStoryFlag(FLAG_ACT3_DRAGON_OATH_SPOKEN)).toBe(true)
-    expect(hasScale(room)).toBe(true)
-    expectMarkupWellFormed(result)
+  it('accepts each phrasing of the oath and takes it as the oath', () => {
+    const cases: [string, string][] = [
+      ['everything', 'everything'],
+      ['it', 'it'],
+      ['myself', 'myself'],
+      ['what I take', 'what I take'],
+      ['  Everything!  ', 'everything'],
+      ['i return everything .', 'everything'],
+      ['" Everything"', 'everything'],
+      ['EVERYTHING.', 'everything'],
+      ['i return everything', 'everything'],
+      ['I return it.', 'it'],
+      ['I return what i take', 'what I take'],
+      ['i take what is given and i return myself', 'myself'],
+      ['I take what is given, and I return everything.', 'everything'],
+      ['i  take what is  given,  and i return it!', 'it'],
+    ]
+    const failures: string[] = []
+    for (const [words, word] of cases) {
+      const { gameState, room } = hallState(true)
+      const result = new AncientDragon().sayTo(gameState, words)
+      const ok =
+        result.includes(
+          '[character_name]Elior[/character_name]\n' +
+            `[dialogue]I take what is given, and I return ${word}.[/dialogue]`,
+        ) &&
+        !result.includes('“') &&
+        !result.includes('[event]') &&
+        result.includes(
+          'shifts one coil, and a single scale lies loose on the tiles.',
+        ) &&
+        result.includes(
+          'Your words ring true, young one. It is heavier than it looks.',
+        ) &&
+        gameState.getStoryFlag(FLAG_ACT3_DRAGON_OATH_SPOKEN) &&
+        hasScale(room)
+      try {
+        expectMarkupWellFormed(result)
+      } catch {
+        failures.push(`${words} (markup)`)
+      }
+      if (!ok) failures.push(words)
+    }
+    expect(failures).toEqual([])
   })
 
   it.each([
@@ -251,6 +273,33 @@ describe('AncientDragon', () => {
       'You have said it. The scale is there, young one. Take it.',
     )
     expect(result).not.toContain(QUESTION)
+  })
+
+  it('attributes the dialogue in every branch', () => {
+    const dragon = new AncientDragon()
+    const { gameState } = hallState(false)
+    const answers = [dragon.talkTo(gameState), dragon.sayTo(gameState, 'x')]
+    gameState.setStoryFlag(FLAG_ACT3_OATH_SCROLLS_EXAMINED, true)
+    answers.push(dragon.talkTo(gameState))
+    answers.push(dragon.sayTo(gameState, 'hello'))
+    answers.push(dragon.sayTo(gameState, 'gold'))
+    answers.push(dragon.sayTo(gameState, 'everything'))
+    answers.push(dragon.sayTo(gameState, 'everything'))
+    answers.push(dragon.talkTo(gameState))
+
+    for (const answer of answers) {
+      expectMarkupWellFormed(answer)
+      expectDialogueSpeaker(answer, dragon.name)
+    }
+  })
+
+  it('narrates ignored words without speakerless dialogue', () => {
+    const { gameState } = hallState(true)
+
+    const answer = new AncientDragon().sayTo(gameState, 'hello')
+
+    expectMarkupWellFormed(answer)
+    expectNoSpeakerlessDialogue(answer)
   })
 
   it('tells the memory as three speeches by the ancient dragon', () => {

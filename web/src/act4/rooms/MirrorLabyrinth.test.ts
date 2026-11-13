@@ -4,6 +4,7 @@ import { Act4 } from '../Act4'
 import { MirrorLabyrinth } from './MirrorLabyrinth'
 import { EchoStone } from '../items/EchoStone'
 import { ServantsPendant } from '../items/ServantsPendant'
+import { expectMarkupWellFormed } from '@/testing/gameHelpers'
 import {
   FLAG_ACT4_MAZE_OF_MIRRORS_COMPLETED,
   FLAG_ACT4_MAZE_OF_MIRRORS_STARTED,
@@ -232,6 +233,24 @@ describe('MirrorLabyrinth', () => {
     expect(exitsOf(game, room)).toEqual(['south'])
     expect(room.usePendant(game.state)).toContain('already clear')
     expect(game.move('north')).toContain("can't go that way")
+  })
+
+  it('writes well-formed markup in every state', () => {
+    const { game, room } = inMaze()
+    const answers = [
+      room.useStone(game.state),
+      room.usePendant(game.state),
+      game.move('north'),
+      game.move('west'),
+      game.move('west'),
+      room.usePendant(game.state),
+      room.usePendant(game.state),
+      game.move('east'),
+      room.usePendant(game.state),
+    ]
+    const bare = inMaze({ stone: false })
+    answers.push(bare.game.move('west'))
+    for (const answer of answers) expectMarkupWellFormed(answer)
   })
 
   it('survives a save and load at the fork with the pendant shown', () => {

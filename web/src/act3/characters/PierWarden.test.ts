@@ -99,6 +99,21 @@ describe('PierWarden dialogue branches', () => {
     const early = new Game([new Act3()])
     expect(new PierWarden().talkTo(early.state)).not.toContain(hint)
   })
+
+  it('attributes the dialogue to the warden in every state', () => {
+    const game = new Game([new Act3()])
+    const warden = new PierWarden()
+    const answers = [warden.talkTo(game.state)]
+    game.state.setStoryFlag(FLAG_ACT3_TIDEWARD_SIGILS_COMPLETED, true)
+    answers.push(warden.talkTo(game.state))
+    game.state.setStoryFlag(FLAG_ACT3_LANTERNS_OF_THE_DEEPS_LIT, true)
+    answers.push(warden.talkTo(game.state))
+
+    for (const answer of answers) {
+      expectMarkupWellFormed(answer)
+      expectDialogueSpeaker(answer, warden.name)
+    }
+  })
 })
 
 describe('PierWarden and the weathered coin', () => {
