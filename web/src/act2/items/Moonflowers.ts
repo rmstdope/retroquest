@@ -1,7 +1,7 @@
 import { Item, type GameState, characterName, dialogue } from '@/engine'
 import { WhisperingGlade } from '../rooms/WhisperingGlade'
 
-/** The item's description; `refreshSavedText` restores it in older saves. */
+/** The item's description; `descriptionFor` returns it in older saves. */
 export const MOONFLOWERS_DESCRIPTION =
   'White flowers that open only at night, and these are open still. ' +
   'They smell faintly sweet, and their petals give off a little light of ' +
@@ -17,9 +17,9 @@ export class Moonflowers extends Item {
     })
   }
 
-  /** Give a save made with older wording the current description. */
-  override refreshSavedText(): void {
-    this.description = MOONFLOWERS_DESCRIPTION
+  /** The look: the class's own wording, so an older save reads the current text. */
+  override descriptionFor(): string {
+    return MOONFLOWERS_DESCRIPTION
   }
 
   /** In the Healer's House Lyria waves the blooms away; elsewhere they glow or lie dormant. */

@@ -17,9 +17,9 @@ export class CityNoticeBoard extends Item {
     })
   }
 
-  /** Give a save made with older wording the current description. */
-  override refreshSavedText(): void {
-    this.description = CITY_NOTICE_BOARD_DESCRIPTION
+  /** The look: the class's own wording, so an older save reads the current text. */
+  override descriptionFor(): string {
+    return CITY_NOTICE_BOARD_DESCRIPTION
   }
 
   /** Read the postings on the board. */

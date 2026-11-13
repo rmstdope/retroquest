@@ -98,7 +98,7 @@ describe('before the ruling', () => {
     const game = newGame()
     game.state.inventory.length = 0
     const cedric = find(game, SirCedric)
-    expect(cedric.description).toBe(CEDRIC_BEFORE)
+    expect(cedric.descriptionFor(game.state)).toBe(CEDRIC_BEFORE)
     const text = cedric.talkTo(game.state)
     expect(text).toContain(GREETING)
     expect(text).toContain(
@@ -133,7 +133,7 @@ describe('the ruling', () => {
     expect(text).toContain(
       'Take this to the training yard. A knight should not stand among his squires with an empty scabbard.',
     )
-    expect(find(game, SirCedric).description).toBe(CEDRIC_AFTER)
+    expect(find(game, SirCedric).descriptionFor(game.state)).toBe(CEDRIC_AFTER)
   })
 })
 
@@ -217,7 +217,7 @@ describe('saves', () => {
     const loaded = newGame()
     loaded.loadSaveData(game.toSaveData())
     const cedric = find(loaded, SirCedric)
-    expect(cedric.description).toBe(CEDRIC_AFTER)
+    expect(cedric.descriptionFor(loaded.state)).toBe(CEDRIC_AFTER)
     expect(new TownCrier().talkTo(loaded.state)).toContain('relish')
   })
 
@@ -227,6 +227,8 @@ describe('saves', () => {
     find(game, SirCedric).description = 'A noble knight in gleaming armor.'
     const loaded = newGame()
     loaded.loadSaveData(game.toSaveData())
-    expect(find(loaded, SirCedric).description).toBe(CEDRIC_AFTER)
+    expect(find(loaded, SirCedric).descriptionFor(loaded.state)).toBe(
+      CEDRIC_AFTER,
+    )
   })
 })

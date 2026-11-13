@@ -113,7 +113,9 @@ describe('the arch', () => {
       expect(game.state.currentRoom.describe(game.state)).toContain(
         '[exits]north[/exits] (the way home)',
       )
-      expect(game.state.currentRoom.description).toContain(ARCH_SENTENCE)
+      expect(game.state.currentRoom.descriptionFor(game.state)).toContain(
+        ARCH_SENTENCE,
+      )
     })
   }
 })

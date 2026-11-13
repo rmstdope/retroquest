@@ -17,8 +17,8 @@ describe('Bucket', () => {
       'The [item_name]bucket[/item_name] comes up from the ' +
         '[item_name]well[/item_name] full of murky water.',
     )
-    expect(bucket.description).toContain('sour smell')
-    expect(bucket.description).toContain('murky')
+    expect(bucket.descriptionFor(game.state)).toContain('sour smell')
+    expect(bucket.descriptionFor(game.state)).toContain('murky')
   })
 
   it('draws clear water once the well is purified', () => {
@@ -30,7 +30,7 @@ describe('Bucket', () => {
     const answer = bucket.useWith(game.state, well)
 
     expect(answer).toContain('clear water')
-    expect(bucket.description).toContain('clear water')
+    expect(bucket.descriptionFor(game.state)).toContain('clear water')
   })
 
   it('swaps murky water for clear once the well is purified', () => {
@@ -44,7 +44,7 @@ describe('Bucket', () => {
 
     expect(answer).toContain('clear water')
     expect(answer).not.toContain('[failure]')
-    expect(bucket.description).toContain('clear water')
+    expect(bucket.descriptionFor(game.state)).toContain('clear water')
     expect(bucket.useWith(game.state, well)).toContain('already full')
   })
 })
@@ -235,6 +235,7 @@ describe('A full bucket used with something else', () => {
       const game = new Game([new Act1()])
       const bucket = new Bucket()
       bucket.useWith(game.state, new Well())
+      bucket.description = bucket.descriptionFor(game.state)
       Reflect.deleteProperty(bucket, 'filled')
 
       bucket.migrateLegacyState()

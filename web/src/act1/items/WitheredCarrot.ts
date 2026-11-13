@@ -3,6 +3,9 @@ import { Item, type GameState } from '@/engine'
 const WITHERED_DESCRIPTION =
   'A shriveled, orange carrot barely clinging to life. It looks edible, ' +
   'but only just.'
+const FRESH_DESCRIPTION =
+  'A vibrant, healthy carrot, freshly revived. It looks delicious and ' +
+  'full of nutrients.'
 
 /** A shriveled carrot that can be revived into a fresh carrot. */
 export class WitheredCarrot extends Item {
@@ -26,6 +29,11 @@ export class WitheredCarrot extends Item {
     return this.fresh === true
   }
 
+  /** The carrot's look: withered, or fresh once revived. */
+  override descriptionFor(_gameState: GameState): string {
+    return this.isFresh() ? FRESH_DESCRIPTION : WITHERED_DESCRIPTION
+  }
+
   /**
    * Give a save made before the `fresh` field its value: a revived carrot
    * no longer has the withered description.
@@ -39,9 +47,6 @@ export class WitheredCarrot extends Item {
     this.fresh = true
     this.name = 'fresh carrot'
     this.shortName = 'carrot'
-    this.description =
-      'A vibrant, healthy carrot, freshly revived. It looks delicious and ' +
-      'full of nutrients.'
     return (
       'The [item_name]' +
       this.name.toLowerCase() +

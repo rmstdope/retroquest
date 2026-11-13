@@ -28,11 +28,6 @@ export class SubmergedAntechamber extends Room {
     })
   }
 
-  /** Give a save made with older wording the current description. */
-  override refreshSavedText(): void {
-    this.description = new SubmergedAntechamber().description
-  }
-
   /**
    * The flooded hall; once the Tideward sigils are completed the tide has
    * withdrawn and the room reads as the unmasked hall.
@@ -46,7 +41,7 @@ export class SubmergedAntechamber extends Room {
         'The air is colder, and your steps echo.'
       )
     }
-    return this.description
+    return new SubmergedAntechamber().description
   }
 
   /**

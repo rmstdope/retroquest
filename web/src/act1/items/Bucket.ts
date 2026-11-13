@@ -67,18 +67,27 @@ export class Bucket extends Item {
     )
   }
 
+  /**
+   * The bucket's look: empty, or full of the water it holds. A bucket from a
+   * save made before `holdsPurifiedWater` existed says what its saved text did.
+   */
+  override descriptionFor(_gameState: GameState): string {
+    if (!this.isFilled()) return EMPTY_DESCRIPTION
+    const clear =
+      this.holdsPurifiedWater ?? this.description.includes('clear water')
+    const water = clear ? 'clear water' : 'murky water, with a sour smell'
+    return (
+      `A sturdy wooden bucket with a rope handle. It is full of ${water} ` +
+      'drawn from the well.'
+    )
+  }
+
   /** Fill the bucket with the water in the well. */
   private fill(well: Well): string {
     this.filled = true
     this.name = 'bucket (full)'
     this.holdsPurifiedWater = well.isPurified
-    const water = well.isPurified
-      ? 'clear water'
-      : 'murky water, with a sour smell'
-    this.description =
-      `A sturdy wooden bucket with a rope handle. It is full of ${water} ` +
-      'drawn from the well.'
-    return water
+    return well.isPurified ? 'clear water' : 'murky water, with a sour smell'
   }
 
   /**
@@ -148,7 +157,6 @@ export class Bucket extends Item {
     this.filled = false
     this.name = 'bucket'
     this.holdsPurifiedWater = false
-    this.description = EMPTY_DESCRIPTION
     if (gameState.getStoryFlag(FLAG_VEGETABLE_FIELD_WATERED)) {
       return 'The field drinks the clear water gladly, already green and thriving.'
     }

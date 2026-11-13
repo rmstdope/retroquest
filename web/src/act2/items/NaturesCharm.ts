@@ -1,7 +1,7 @@
 import { Item, type GameState } from '@/engine'
 import { OfferingAltar } from './OfferingAltar'
 
-/** The charm's description; `refreshSavedText` restores it in older saves. */
+/** The charm's description; `descriptionFor` returns it in older saves. */
 export const NATURES_CHARM_DESCRIPTION =
   'A small wooden charm, dark with handling, carved with a sword laid ' +
   "across a branch. Sir Cedric's family has kept it since the knights first " +
@@ -16,9 +16,9 @@ export class NaturesCharm extends Item {
     })
   }
 
-  /** Give a save made with older wording the current description. */
-  override refreshSavedText(): void {
-    this.description = NATURES_CHARM_DESCRIPTION
+  /** The look: the class's own wording, so an older save reads the current text. */
+  override descriptionFor(): string {
+    return NATURES_CHARM_DESCRIPTION
   }
 
   override useWith(gameState: GameState, other: Item): string {

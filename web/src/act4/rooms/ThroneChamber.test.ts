@@ -108,16 +108,20 @@ describe('ThroneChamber', () => {
   it('survives a save at every point, and coming back replays nothing', () => {
     for (const make of [inThrone, refrained, opened, healed, shattered]) {
       const game = make()
-      const description = game.state.currentRoom.description
+      const description = game.state.currentRoom.descriptionFor(game.state)
       const flags = { ...game.state.storyFlags }
       reload(game)
-      expect(game.state.currentRoom.description).toBe(description)
+      expect(game.state.currentRoom.descriptionFor(game.state)).toBe(
+        description,
+      )
       expect(game.state.storyFlags).toEqual(flags)
       expect(Object.keys(game.state.currentRoom.getExits(game.state))).toEqual([
         'south',
       ])
       executeCommands(game, ['s', 'n'])
-      expect(game.state.currentRoom.description).toBe(description)
+      expect(game.state.currentRoom.descriptionFor(game.state)).toBe(
+        description,
+      )
     }
   })
 
@@ -166,7 +170,9 @@ describe('ThroneChamber', () => {
   it('describes the scene and lets the people and things be examined', () => {
     const game = inThrone()
     expect(game.state.currentRoom.name).toBe('Throne Chamber')
-    expect(game.state.currentRoom.description).toBe(FIRST_DESCRIPTION)
+    expect(game.state.currentRoom.descriptionFor(game.state)).toBe(
+      FIRST_DESCRIPTION,
+    )
     expect(executeCommands(game, ['examine malakar'])).toContain(
       "A tall man in a grey robe that was once a Warden's blue. ",
     )
@@ -273,7 +279,9 @@ describe('ThroneChamber', () => {
         'The [item_name]lifelight elixir[/item_name] is warm in your hand. It can be used only once. It could break the crystal and free the king, or it could be offered to Malakar, to heal the wound that is killing him.',
       )
       expectStoryFlag(game.state, FLAG_ACT4_THRONE_AMULET_OPENED, true)
-      expect(game.state.currentRoom.description).toBe(AMULET_DESCRIPTION)
+      expect(game.state.currentRoom.descriptionFor(game.state)).toBe(
+        AMULET_DESCRIPTION,
+      )
       expect(executeCommands(game, ['use ancient amulet'])).toContain(
         'The amulet is already open, its light filling the chamber.',
       )
@@ -316,7 +324,9 @@ describe('ThroneChamber', () => {
       expectItemInInventory(game.state, 'Lifelight Elixir', false)
       expectStoryFlag(game.state, FLAG_ACT4_ELIXIR_ON_MALAKAR, true)
       expectStoryFlag(game.state, FLAG_ACT4_LIFELIGHT_ELIXIR_CONSUMED, true)
-      expect(game.state.currentRoom.description).toBe(HEALED_DESCRIPTION)
+      expect(game.state.currentRoom.descriptionFor(game.state)).toBe(
+        HEALED_DESCRIPTION,
+      )
       expect(executeCommands(game, ['talk to malakar'])).toContain(
         'It does not hurt. For the first time in years, it does not hurt.',
       )
@@ -324,7 +334,9 @@ describe('ThroneChamber', () => {
         'You came for me.',
       )
       reload(game)
-      expect(game.state.currentRoom.description).toBe(HEALED_DESCRIPTION)
+      expect(game.state.currentRoom.descriptionFor(game.state)).toBe(
+        HEALED_DESCRIPTION,
+      )
       expectItemInInventory(game.state, 'Lifelight Elixir', false)
       expect(executeCommands(game, ['talk to malakar'])).toContain(
         'It does not hurt.',
@@ -343,7 +355,9 @@ describe('ThroneChamber', () => {
     expect(text).toContain('The lifelight elixir is gone.')
     expectItemInInventory(game.state, 'Lifelight Elixir', false)
     expectStoryFlag(game.state, FLAG_ACT4_ELIXIR_ON_KING, true)
-    expect(game.state.currentRoom.description).toBe(SHATTERED_DESCRIPTION)
+    expect(game.state.currentRoom.descriptionFor(game.state)).toBe(
+      SHATTERED_DESCRIPTION,
+    )
     const king = executeCommands(game, ['talk to king alden'])
     expectDialogueSpeaker(king, 'King Alden')
     expect(king).toContain('You came for me. Whoever you are, you came.')
@@ -353,7 +367,9 @@ describe('ThroneChamber', () => {
       'You chose the king. Of course you did. So would they.',
     )
     reload(game)
-    expect(game.state.currentRoom.description).toBe(SHATTERED_DESCRIPTION)
+    expect(game.state.currentRoom.descriptionFor(game.state)).toBe(
+      SHATTERED_DESCRIPTION,
+    )
     expect(executeCommands(game, ['talk to king alden'])).toContain(
       'You came for me.',
     )
@@ -366,7 +382,9 @@ describe('ThroneChamber', () => {
     const game = opened()
     executeCommands(game, ['s', 'n'])
     expect(game.state.currentRoom.name).toBe('Throne Chamber')
-    expect(game.state.currentRoom.description).toBe(AMULET_DESCRIPTION)
+    expect(game.state.currentRoom.descriptionFor(game.state)).toBe(
+      AMULET_DESCRIPTION,
+    )
     reload(game)
     expect(executeCommands(game, ['use ancient amulet'])).toContain(
       'already open',

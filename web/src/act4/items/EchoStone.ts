@@ -74,12 +74,13 @@ export class EchoStone extends Item {
   enhance(): void {
     this.enhanced = true
     this.name = ENHANCED_NAME
-    this.description = ENHANCED_DESCRIPTION
   }
 
-  /** The enhanced stone's look. */
-  override examine(_gameState: GameState): string {
-    return this.description
+  /** The stone's look, which changes once the knight's voice has joined it. */
+  override descriptionFor(gameState: GameState): string {
+    return this.enhanced
+      ? ENHANCED_DESCRIPTION
+      : super.descriptionFor(gameState)
   }
 
   /** Use the stone alone: in the maze it repeats the route. */

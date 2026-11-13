@@ -40,12 +40,13 @@ export class MothersLetter extends Item {
     })
   }
 
-  /**
-   * Reading the letter sets FLAG_READ_MOTHERS_LETTER. The text is rebuilt
-   * first, so a letter restored from an older save reads the current wording.
-   */
+  /** The letter as Elior reads it: always the current wording, even for an older save. */
+  override descriptionFor(_gameState: GameState): string {
+    return letterDescription()
+  }
+
+  /** Reading the letter sets FLAG_READ_MOTHERS_LETTER. */
   override examine(gameState: GameState): string {
-    this.description = letterDescription()
     gameState.setStoryFlag(FLAG_READ_MOTHERS_LETTER, true)
     return super.examine(gameState)
   }

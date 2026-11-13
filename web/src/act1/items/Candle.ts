@@ -22,11 +22,9 @@ export class Candle extends Item {
     })
   }
 
-  /** Give a candle from an older save the wording for whether it is lit. */
-  override refreshSavedText(_gameState: GameState): void {
-    this.description = this.isLit
-      ? Candle.LIT_DESCRIPTION
-      : Candle.UNLIT_DESCRIPTION
+  /** The candle's look: cold or lit. */
+  override descriptionFor(_gameState: GameState): string {
+    return this.isLit ? Candle.LIT_DESCRIPTION : Candle.UNLIT_DESCRIPTION
   }
 
   /**
@@ -50,7 +48,6 @@ export class Candle extends Item {
     if (other instanceof Matches) {
       if (!this.isLit) {
         this.isLit = true
-        this.description = Candle.LIT_DESCRIPTION
         gameState.currentRoom.addItem(new Locket())
         return (
           `The [item_name]${this.name}[/item_name] now casts a warm glow. ` +

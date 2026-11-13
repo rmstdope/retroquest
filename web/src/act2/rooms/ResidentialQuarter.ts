@@ -15,7 +15,7 @@ const CELLAR_AFTER =
   'At the end of one lane, where the cellar door was bricked up, the way down ' +
   'to the hidden library stands open.'
 
-/** The Residential Quarter description; `refreshSavedText` restores it on older saves. */
+/** The Residential Quarter description; `descriptionFor` returns it on older saves. */
 export const RESIDENTIAL_QUARTER_DESCRIPTION =
   'Quiet lanes of two-storey houses, each with a small garden and a ' +
   'workshop. Craftsmen work at benches in the open doorways, and neighbours ' +
@@ -33,15 +33,10 @@ export class ResidentialQuarter extends Room {
     })
   }
 
-  /** Give a save made with older wording the current description. */
-  override refreshSavedText(): void {
-    this.description = RESIDENTIAL_QUARTER_DESCRIPTION
-  }
-
   /** The description, ending with the cellar hint or its "after" sentence. */
   override descriptionFor(gameState: GameState): string {
     const found = gameState.getStoryFlag(FLAG_ANCIENT_LIBRARY_ACCEPTED)
-    return `${this.description} ${found ? CELLAR_AFTER : CELLAR_HINT}`
+    return `${RESIDENTIAL_QUARTER_DESCRIPTION} ${found ? CELLAR_AFTER : CELLAR_HINT}`
   }
 
   /** Handle searching for the Hidden Library entrance. */

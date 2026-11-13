@@ -81,11 +81,6 @@ export class FumarolePassages extends Room {
     })
   }
 
-  /** Give a save made with older wording the current description. */
-  override refreshSavedText(): void {
-    this.description = new FumarolePassages().description
-  }
-
   /**
    * Called when a VentStone is used in this room. Tracks calibrations.
    *
@@ -190,7 +185,7 @@ export class FumarolePassages extends Room {
 
   /** The description followed by the current breath on a line of its own. */
   override descriptionFor(gameState: GameState): string {
-    return `${this.description}\n${this.breathLine(gameState)}`
+    return `${new FumarolePassages().description}\n${this.breathLine(gameState)}`
   }
 
   /**

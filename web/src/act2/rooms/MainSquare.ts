@@ -3,7 +3,7 @@ import { CityNoticeBoard } from '../items/CityNoticeBoard'
 import { MerchantsFlyer } from '../items/MerchantsFlyer'
 import { TownCrier } from '../characters/TownCrier'
 
-/** The Main Square's description; `refreshSavedText` restores it on older saves. */
+/** The Main Square's description; `descriptionFor` returns it on older saves. */
 export const MAIN_SQUARE_DESCRIPTION =
   'The heart of Greendale: a great fountain of old heroes fighting beasts, ' +
   'stalls under bright awnings, red roofs all round. The square is crowded, ' +
@@ -29,8 +29,8 @@ export class MainSquare extends Room {
     })
   }
 
-  /** Give a save made with older wording the current description. */
-  override refreshSavedText(): void {
-    this.description = MAIN_SQUARE_DESCRIPTION
+  /** The look: the class's own wording, so an older save reads the current text. */
+  override descriptionFor(): string {
+    return MAIN_SQUARE_DESCRIPTION
   }
 }

@@ -7,10 +7,7 @@ import { FLAG_MAGIC_FULLY_UNLOCKED } from './Act1StoryFlags'
 import { Blacksmith } from './characters/Blacksmith'
 import { Shopkeeper } from './characters/Shopkeeper'
 import { Villager } from './characters/Villager'
-import { Candle } from './items/Candle'
 import { Fish } from './items/Fish'
-import { OldNotice } from './items/OldNotice'
-import { ShinyPebble } from './items/ShinyPebble'
 import { BlessSpell } from './spells/BlessSpell'
 import { GrowSpell } from './spells/GrowSpell'
 import { HealSpell } from './spells/HealSpell'
@@ -47,9 +44,6 @@ describe('Act I loading a save that holds old wording', () => {
       makeGame: () => new Game([new Act1()]),
       prepare,
       cases: [
-        { target: Candle, fields: ['description'] },
-        { target: ShinyPebble, fields: ['description'] },
-        { target: OldNotice, fields: ['description'] },
         { target: Villager, fields: ['name', 'dialogueOptions'] },
         { target: Shopkeeper, fields: ['name'] },
         { target: Blacksmith, fields: ['name'] },

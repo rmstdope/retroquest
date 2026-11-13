@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { Game } from '@/engine'
+import { Game, GameController } from '@/engine'
 import { Act3 } from '../Act3'
 import { FLAG_ACT3_SHELL_HEARD } from '../Act3StoryFlags'
 import { PolishedShell } from './PolishedShell'
@@ -26,6 +26,17 @@ describe('PolishedShell', () => {
       )
       expectMarkupWellFormed(out)
     }
+  })
+
+  it('shows the Bag the same text as examine', () => {
+    const game = new Game([new Act3()])
+    const shell = new PolishedShell()
+    game.state.addItemToInventory(shell)
+    const entry = new GameController(game)
+      .getInventory()
+      .find((e) => e.name.includes('Shell'))
+    expect(entry?.description).toBe(shell.examine(game.state))
+    expect(entry?.description).toContain('it seems to hum.')
   })
 
   it('still shows the hint when the saved description predates it', () => {

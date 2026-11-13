@@ -32,6 +32,17 @@ export class Tobin extends Character {
     })
   }
 
+  /** His look: apart and watching the ceiling, then, once he has the charm, at ease and watching you. */
+  override descriptionFor(gameState: GameState): string {
+    if (!gameState.getStoryFlag(FLAG_ACT3_TOBIN_GIVEN_CHARM))
+      return this.description
+    return (
+      'A boy of perhaps fifteen sits on an upturned bucket, a cracked lamp in ' +
+      'his lap. The pale charm hangs at his throat on a bootlace, over the ' +
+      'strip of torn shirt. He watches you now, not the ceiling.'
+    )
+  }
+
   /** He answers to "tobin", "young miner" and "boy", however cased. */
   override answersTo(name: string): boolean {
     return TOBIN_NAMES.includes(name.trim().toLowerCase())
@@ -47,10 +58,6 @@ export class Tobin extends Character {
     gameState.removeItemFromInventory(item.name)
     gameState.setStoryFlag(FLAG_ACT3_TOBIN_GIVEN_CHARM, true)
     gameState.addVirtue(VIRTUE_SELFLESS)
-    this.description =
-      'A boy of perhaps fifteen sits on an upturned bucket, a cracked lamp in ' +
-      'his lap. The pale charm hangs at his throat on a bootlace, over the ' +
-      'strip of torn shirt. He watches you now, not the ceiling.'
     return (
       `${characterName(this.name)} turns the pale stone over in his ` +
       'fingers. As his hand closes around it, the creak of the new braces ' +

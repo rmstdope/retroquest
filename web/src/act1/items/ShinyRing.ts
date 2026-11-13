@@ -24,13 +24,9 @@ export class ShinyRing extends Item {
     })
   }
 
-  /**
-   * Shows the engraved initials. The text is rebuilt first, so a ring
-   * restored from an older save shows them too.
-   */
-  override examine(gameState: GameState): string {
-    this.description = ringDescription()
-    return super.examine(gameState)
+  /** Shows the engraved initials, even on a ring restored from an older save. */
+  override descriptionFor(_gameState: GameState): string {
+    return ringDescription()
   }
 
   /** The line the story tells when Elior takes it, wherever it is lying. */

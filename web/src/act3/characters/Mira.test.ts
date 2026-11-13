@@ -976,10 +976,10 @@ describe('Mira restored from a save made before the rewrite', () => {
     expect(fresh.loadSaveData(game.toSaveData())).toContain('loaded')
 
     const restored = fresh.state.allRooms.MirasHut.getCharacterByName('mira')
-    expect(restored?.description).toBe(new Mira().description)
+    expect(restored?.descriptionFor(fresh.state)).toBe(new Mira().description)
   })
 
-  it('keeps the description she has after the confession', () => {
+  it('shows the description she has after the confession, whatever the save held', () => {
     const game = new Game([new Act3()])
     game.state.setStoryFlag(FLAG_ACT3_MIRA_CONFESSED, true)
     const mira = game.state.allRooms.MirasHut.getCharacterByName('mira')
@@ -990,8 +990,8 @@ describe('Mira restored from a save made before the rewrite', () => {
     expect(fresh.loadSaveData(game.toSaveData())).toContain('loaded')
 
     const restored = fresh.state.allRooms.MirasHut.getCharacterByName('mira')
-    expect(restored?.description).toBe(
-      "The village healer — and, you know now, the Wardens' pupil.",
+    expect(restored?.descriptionFor(fresh.state)).toBe(
+      Mira.CONFESSED_DESCRIPTION,
     )
   })
 })

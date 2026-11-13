@@ -60,8 +60,18 @@ export class Character {
     return this.isPlural() ? plural : singular
   }
 
-  examine(_gameState: GameState): string {
+  /**
+   * What the character looks like right now, computed from the game's state.
+   * `examine` reads it; override it for a character whose look follows the
+   * story. The saved `description` is never reassigned.
+   */
+  descriptionFor(_gameState: GameState): string {
     return this.description
+  }
+
+  /** The character's look: what `descriptionFor` says. */
+  examine(gameState: GameState): string {
+    return this.descriptionFor(gameState)
   }
 
   /**

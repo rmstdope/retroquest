@@ -22,6 +22,9 @@ describe('Act I loading a save made before the item state fields', () => {
     carrot.revive()
     const lantern = new Lantern()
     lantern.use(game.state)
+    // An old save held the text its game had written into the field.
+    bucket.description = bucket.descriptionFor(game.state)
+    carrot.description = carrot.descriptionFor(game.state)
     for (const [item, field] of [
       [bucket, 'filled'],
       [carrot, 'fresh'],

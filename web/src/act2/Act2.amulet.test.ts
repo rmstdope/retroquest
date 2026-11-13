@@ -1,9 +1,14 @@
 import { describe, it, expect } from 'vitest'
-import { Game } from '@/engine'
+import { Game, GameController } from '@/engine'
 import { executeCommands } from '@/testing/gameHelpers'
 import { Act2 } from './Act2'
+import { FLAG_CEDRIC_RECOGNISED_SIGIL } from './Act2StoryFlags'
 import { AncientAmulet } from './items/AncientAmulet'
 
+const RECOGNISED_LINE =
+  'A mysterious amulet inscribed with runes. At its centre is the sigil of ' +
+  'the Wardens of the Dawn: the sun rising over three linked rings. It is ' +
+  'faintly warm in your hand.'
 const EXAMINE_LINE =
   'A mysterious amulet inscribed with runes. At its centre is a worn sigil ' +
   'you cannot place. It is faintly warm in your hand.'
@@ -32,7 +37,17 @@ describe('Act II ancient amulet', () => {
     expect(carries(game)).toBe(true)
     const amulet = game.state.inventory.find((i) => i instanceof AncientAmulet)
     expect(amulet?.name).toBe('ancient amulet')
-    expect(amulet?.description).toBe(EXAMINE_LINE)
+    expect(amulet?.descriptionFor(game.state)).toBe(EXAMINE_LINE)
+  })
+
+  it('reads the same in the Bag and on examine once Cedric names the sigil', () => {
+    const game = newGame()
+    const bag = (): string =>
+      new GameController(game).getInventory()[0].description
+    expect(bag()).toBe(EXAMINE_LINE)
+    game.state.setStoryFlag(FLAG_CEDRIC_RECOGNISED_SIGIL, true)
+    expect(bag()).toBe(RECOGNISED_LINE)
+    expect(executeCommands(game, ['examine amulet'])).toContain(RECOGNISED_LINE)
   })
 
   it('shows the same examine line in every room', () => {

@@ -5,7 +5,7 @@ import {
 } from '../Act4StoryFlags'
 import { MemoryEchoes } from '../characters/MemoryEchoes'
 import { Memories } from '../items/Memories'
-import { PARENTS_VAULT_BEFORE } from './vaultDescriptions'
+import { PARENTS_VAULT_AFTER, PARENTS_VAULT_BEFORE } from './vaultDescriptions'
 
 /**
  * The quiet room behind the sealed door, where Aren and Lysa's last memories
@@ -28,6 +28,14 @@ export class ParentsVault extends Room {
     if (!this.characters.some((c) => c instanceof MemoryEchoes)) {
       this.addCharacter(new MemoryEchoes())
     }
+  }
+
+  /** Once the memories have been seen, the lanterns are dim. */
+  override descriptionFor(gameState: GameState): string {
+    if (gameState.getStoryFlag(FLAG_ACT4_PARENTS_LEGACY_COMPLETED)) {
+      return PARENTS_VAULT_AFTER
+    }
+    return super.descriptionFor(gameState)
   }
 
   /** Entering the vault starts The Parents' Legacy. */

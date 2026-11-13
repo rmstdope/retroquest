@@ -1,4 +1,4 @@
-import { type NameOptions, Room, characterName } from '@/engine'
+import { type NameOptions, Room, characterName, type GameState } from '@/engine'
 import { Mira } from '../characters/Mira'
 import { SirCedric } from '../characters/SirCedric'
 import { HealingHerbs } from '../items/HealingHerbs'
@@ -21,9 +21,12 @@ export class MirasHut extends Room {
     })
   }
 
-  /** Give a save made with older wording the current description. */
-  override refreshSavedText(): void {
-    this.description = new MirasHut().description
+  /**
+   * The room's look, from the current wording, so a save made before a
+   * wording change shows the current text.
+   */
+  override descriptionFor(_gameState: GameState): string {
+    return new MirasHut().description
   }
 
   /** Named after a person, so it takes no "the" and keeps its capitals. */

@@ -153,13 +153,17 @@ export class Shopkeeper extends Character {
     return price === 1 ? `a ${coin}` : `${numberInWords(price)} ${coin}`
   }
 
+  /** Hemlock's look: always the current wording, even for an older save. */
+  override descriptionFor(_gameState: GameState): string {
+    return Shopkeeper.DESCRIPTION
+  }
+
   /**
    * Bring a shopkeeper from a save made before he was named up to date: he
    * is Hemlock now. Safe to run more than once.
    */
   migrateLegacyName(): void {
     this.name = Shopkeeper.NAME
-    this.description = Shopkeeper.DESCRIPTION
   }
 
   /**

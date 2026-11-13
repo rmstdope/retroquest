@@ -6,7 +6,6 @@ import {
   speech,
   type NameOptions,
 } from '@/engine'
-import { SirCedric } from './SirCedric'
 import { SecretDocuments } from '../items/SecretDocuments'
 import {
   FLAG_CEDRIKS_HONOR_COMPLETED,
@@ -83,7 +82,6 @@ export class LordCommander extends Character {
 
       // The player has examined the papers and understands them
       gameState.getQuest(QUEST_CEDRIKS_LOST_HONOR)?.complete(gameState)
-      SirCedric.refreshAll(gameState)
 
       // Remove the documents from inventory
       const index = gameState.inventory.indexOf(item)

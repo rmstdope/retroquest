@@ -32,11 +32,6 @@ export class SanctumOfTheTide extends Room {
     })
   }
 
-  /** Give a save made with older wording the current description. */
-  override refreshSavedText(): void {
-    this.description = new SanctumOfTheTide().description
-  }
-
   /** The Tide-Born Guardian that keeps the trial, or null if it is gone. */
   private guardian(): TideBornGuardian | null {
     return this.characters.find((c) => c instanceof TideBornGuardian) ?? null
@@ -114,13 +109,14 @@ export class SanctumOfTheTide extends Room {
     const darkness = guardian.enterLine(gameState)
     this.syncCrystal(gameState)
     if (darkness === '' || !first) return darkness
-    return this.description + '\n' + darkness
+    return new SanctumOfTheTide().description + '\n' + darkness
   }
 
   /** In the dark the room is only the line for where Elior stands. */
   override descriptionFor(gameState: GameState): string {
     const guardian = this.guardian()
-    if (!guardian || !this.isDark(gameState)) return this.description
+    if (!guardian || !this.isDark(gameState))
+      return new SanctumOfTheTide().description
     return guardian.lookLine(gameState)
   }
 

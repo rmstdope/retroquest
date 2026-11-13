@@ -2,6 +2,10 @@ import { Item, type GameState, clue } from '@/engine'
 import { AbandonedShed } from '../rooms/AbandonedShed'
 import { Key } from './Key'
 
+const LOCKED_DOOR_DESCRIPTION =
+  "It's a sturdy wooden [item_name]door[/item_name], locked tight. " +
+  "There's a keyhole visible."
+
 /** Locked shed door that can be unlocked with a `Key` item. */
 export class ShedDoor extends Item {
   locked = true
@@ -9,11 +13,16 @@ export class ShedDoor extends Item {
   constructor() {
     super({
       name: 'shed door',
-      description:
-        "It's a sturdy wooden [item_name]door[/item_name], locked tight. " +
-        "There's a keyhole visible.",
+      description: LOCKED_DOOR_DESCRIPTION,
       shortName: 'door',
     })
+  }
+
+  /** The door's look: locked tight, or unlocked and ajar. */
+  override descriptionFor(_gameState: GameState): string {
+    return this.locked
+      ? LOCKED_DOOR_DESCRIPTION
+      : `The [item_name]${this.name}[/item_name] is unlocked and slightly ajar.`
   }
 
   /** Opening by hand: the locked door holds; the unlocked one is already ajar. */
@@ -38,11 +47,6 @@ export class ShedDoor extends Item {
         const doorName = this.name
         gameState.removeItemFromInventory(keyName)
         this.locked = false
-        this.description =
-          'The [item_name]' +
-          doorName +
-          '[/item_name] is unlocked and ' +
-          'slightly ajar.'
         const room = gameState.currentRoom
         if (room instanceof AbandonedShed) room.unlock()
         return (

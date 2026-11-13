@@ -25,36 +25,35 @@ export class Well extends Item {
     })
   }
 
-  /** Examine the well, update flags, and adjust description based on state. */
-  override examine(gameState: GameState): string {
-    gameState.setStoryFlag(FLAG_WELL_EXAMINED, true)
+  /** The well's look: dark and sour, or clear, and whether the ring still lies below. */
+  override descriptionFor(_gameState: GameState): string {
     const baseDesc =
       'An old stone well, its surface worn smooth, its shaft disappearing into ' +
       'the depths.'
     if (this.isPurified) {
-      if (this.containsRing) {
-        this.description =
-          baseDesc +
-          (' The water within is crystal clear. You can see something shiny ' +
-            "at the bottom, but it's still too deep to reach by hand.")
-      } else {
-        this.description =
-          baseDesc +
-          (' The water within is crystal clear. The bottom is visible and ' +
-            'appears empty.')
-      }
-    } else {
-      let desc =
+      return (
         baseDesc +
-        (' The water below is dark and still, and it smells sour, the way ' +
-          'milk does when it has turned.')
-      if (this.containsRing) {
-        desc +=
-          ' Far down, something glints, or you think it does. It is much too ' +
-          'deep to reach.'
-      }
-      this.description = desc
+        (this.containsRing
+          ? ' The water within is crystal clear. You can see something shiny ' +
+            "at the bottom, but it's still too deep to reach by hand."
+          : ' The water within is crystal clear. The bottom is visible and ' +
+            'appears empty.')
+      )
     }
+    return (
+      baseDesc +
+      ' The water below is dark and still, and it smells sour, the way ' +
+      'milk does when it has turned.' +
+      (this.containsRing
+        ? ' Far down, something glints, or you think it does. It is much too ' +
+          'deep to reach.'
+        : '')
+    )
+  }
+
+  /** Examining the well sets FLAG_WELL_EXAMINED. */
+  override examine(gameState: GameState): string {
+    gameState.setStoryFlag(FLAG_WELL_EXAMINED, true)
     return super.examine(gameState)
   }
 

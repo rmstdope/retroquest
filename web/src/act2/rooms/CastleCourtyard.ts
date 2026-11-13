@@ -10,7 +10,7 @@ import {
   FLAG_VISION_SHARED,
 } from '../Act2StoryFlags'
 
-/** The Castle Courtyard description; `refreshSavedText` restores it in older saves. */
+/** The Castle Courtyard description; `descriptionFor` returns it in older saves. */
 export const CASTLE_COURTYARD_DESCRIPTION =
   'An expansive courtyard within the castle walls, featuring training grounds ' +
   'where knights practice their swordwork. Ancient oak trees provide shade for ' +
@@ -43,11 +43,6 @@ export class CastleCourtyard extends Room {
     })
   }
 
-  /** Give a save made with older wording the current description. */
-  override refreshSavedText(): void {
-    this.description = CASTLE_COURTYARD_DESCRIPTION
-  }
-
   /** Leaving the courtyard mid-bout abandons it: Cedric starts the bout over next time. */
   override onEnter(_gameState: GameState): void {
     for (const character of this.characters)
@@ -61,11 +56,11 @@ export class CastleCourtyard extends Room {
       !gameState.getStoryFlag(FLAG_GATHERING_STORM_COMPLETED)
     )
       return (
-        this.description +
+        CASTLE_COURTYARD_DESCRIPTION +
         `\n\n${characterName('Sir Cedric')} is still waiting for you, his ` +
         'hand on his sword.'
       )
-    return this.description
+    return CASTLE_COURTYARD_DESCRIPTION
   }
 
   /** Search for the hidden diary after the prerequisite dialogue. */

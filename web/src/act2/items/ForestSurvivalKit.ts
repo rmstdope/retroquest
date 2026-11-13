@@ -6,7 +6,7 @@ import {
 import { ForestTransition } from '../rooms/ForestTransition'
 import { greendaleWorkDone } from '../greendaleWork'
 
-/** The item's description; `refreshSavedText` restores it in older saves. */
+/** The item's description; `descriptionFor` returns it in older saves. */
 export const FOREST_SURVIVAL_KIT_DESCRIPTION =
   'A canvas roll with everything for a night in the open: dried food, ' +
   'flint and steel, a water skin, a blanket, and a ring of small warding ' +
@@ -23,9 +23,9 @@ export class ForestSurvivalKit extends Item {
     })
   }
 
-  /** Give a save made with older wording the current description. */
-  override refreshSavedText(): void {
-    this.description = FOREST_SURVIVAL_KIT_DESCRIPTION
+  /** The look: the class's own wording, so an older save reads the current text. */
+  override descriptionFor(): string {
+    return FOREST_SURVIVAL_KIT_DESCRIPTION
   }
 
   /** Use the kit; in the Forest Transition it plays the camp scene that completes the hermit's warning. */

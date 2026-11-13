@@ -1,5 +1,8 @@
 import { Room, type Exits, type GameState, clue } from '@/engine'
-import { COURTYARD_AFTER_DESCRIPTION } from './courtyardDescriptions'
+import {
+  COURTYARD_AFTER_DESCRIPTION,
+  COURTYARD_CAPTAIN_GONE_DESCRIPTION,
+} from './courtyardDescriptions'
 import { CaptainOfTheGuard } from '../characters/CaptainOfTheGuard'
 import { TrappedServants } from '../characters/TrappedServants'
 import { ServantsPendant } from '../items/ServantsPendant'
@@ -8,6 +11,7 @@ import {
   FLAG_ACT4_SERVANTS_FREED,
   FLAG_ACT4_TRAPPED_SERVANTS_COMPLETED,
   FLAG_ACT4_TRAPPED_SERVANTS_STARTED,
+  FLAG_ACT4_CHAIN_GIVEN,
 } from '../Act4StoryFlags'
 
 /**
@@ -36,6 +40,17 @@ export class OuterCourtyard extends Room {
   /** Starting to explore the courtyard starts the servants quest. */
   override onEnter(gameState: GameState): void {
     gameState.setStoryFlag(FLAG_ACT4_TRAPPED_SERVANTS_STARTED, true)
+  }
+
+  /** The courtyard once the servants are free, and once the captain has gone home. */
+  override descriptionFor(gameState: GameState): string {
+    if (gameState.getStoryFlag(FLAG_ACT4_CHAIN_GIVEN)) {
+      return COURTYARD_CAPTAIN_GONE_DESCRIPTION
+    }
+    if (gameState.getStoryFlag(FLAG_ACT4_SERVANTS_FREED)) {
+      return COURTYARD_AFTER_DESCRIPTION
+    }
+    return super.descriptionFor(gameState)
   }
 
   /** The way west is always open; north opens once the servants are free. */
@@ -75,7 +90,6 @@ export class OuterCourtyard extends Room {
       // The servants stay, now called the Freed Servants
       const servants = this.getCharacterByName('servants')
       if (servants instanceof TrappedServants) servants.free()
-      this.description = COURTYARD_AFTER_DESCRIPTION
       return (
         'Your blessing settles over the courtyard like warm light through a ' +
         'window. The chains do not break so much as forget to hold, and fall ' +

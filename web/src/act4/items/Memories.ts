@@ -3,7 +3,6 @@ import {
   FLAG_ACT4_PARENTS_LEGACY_COMPLETED,
   FLAG_ACT4_PARENTS_LEGACY_STARTED,
 } from '../Act4StoryFlags'
-import { PARENTS_VAULT_AFTER } from '../rooms/vaultDescriptions'
 
 /** The speaker of the one remembered line inside the ward memory. */
 const LYSA = 'Lysa'
@@ -41,7 +40,6 @@ export class Memories extends Item {
       )
     }
     gameState.setStoryFlag(FLAG_ACT4_PARENTS_LEGACY_COMPLETED, true)
-    gameState.currentRoom.description = PARENTS_VAULT_AFTER
     return [
       'Three young Wardens bent over one workbench: your father, your ' +
         'mother, and a dark-haired man laughing at something Lysa said. ' +

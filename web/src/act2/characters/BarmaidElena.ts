@@ -50,6 +50,37 @@ export class BarmaidElena extends Character {
     })
   }
 
+  /**
+   * Her look follows the cure: grey and slow, then colour back with the mask
+   * on her wrist, then purified, then quick on her feet again.
+   */
+  override descriptionFor(gameState: GameState): string {
+    if (gameState.getStoryFlag(FLAG_INNKEEPERS_DAUGHTER_COMPLETED)) {
+      return (
+        'Elena, quick on her feet again, with a tray on each arm. When she ' +
+        'catches your eye she lifts one to you, like a toast.'
+      )
+    }
+    if (this.elenaPurified) {
+      return (
+        'A young woman, steadier now, with the grey gone from her skin. She ' +
+        'keeps rubbing the inside of her wrist.' +
+        (this.markShown
+          ? ' The silver mask on her wrist is untouched by the water.'
+          : '')
+      )
+    }
+    if (this.elenaInitialHealing) {
+      return (
+        'A young woman with a little colour back in her face. She still ' +
+        'moves carefully, like someone waiting for the cold to come back.' +
+        ' On the inside of her wrist, a small silver mask shows through her ' +
+        'skin.'
+      )
+    }
+    return this.description
+  }
+
   /** She answers to her name, Elena, as well as to barmaid elena. */
   override answersTo(name: string): boolean {
     return super.answersTo(name) || name.toLowerCase() === 'elena'
@@ -195,12 +226,6 @@ export class BarmaidElena extends Character {
     gameState.setStoryFlag(FLAG_ELENA_HEALED, true)
     this.markShown = true
 
-    // Update Elena's description to show improvement
-    this.description =
-      'A young woman with a little colour back in her face. She still moves ' +
-      'carefully, like someone waiting for the cold to come back.' +
-      ' On the inside of her wrist, a small silver mask shows through her skin.'
-
     return (
       '[success]Golden light goes into Elena from your hands. She gasps as ' +
       'colour comes back to her cheeks, and she stands a little straighter.' +
@@ -239,14 +264,6 @@ export class BarmaidElena extends Character {
     // Use the crystal-clear water and set the purification flag
     this.elenaPurified = true
 
-    // Update Elena's description to show purification
-    this.description =
-      'A young woman, steadier now, with the grey gone from her skin. She ' +
-      'keeps rubbing the inside of her wrist.' +
-      (this.markShown
-        ? ' The silver mask on her wrist is untouched by the water.'
-        : '')
-
     return (
       "[success]The water runs over Elena's wrist and down her fingers, and " +
       'where it runs the grey goes out of her skin. She gasps, then breathes ' +
@@ -282,11 +299,6 @@ export class BarmaidElena extends Character {
 
     // Complete the cure and set the quest completion flag
     gameState.getQuest(QUEST_INNKEEPERS_DAUGHTER)?.complete(gameState)
-
-    // Update Elena's description to show complete healing
-    this.description =
-      'Elena, quick on her feet again, with a tray on each arm. When she ' +
-      'catches your eye she lifts one to you, like a toast.'
 
     return (
       '[success]The unbinding takes hold, and Elena cries out, once. Then ' +

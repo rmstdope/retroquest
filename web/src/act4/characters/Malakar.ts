@@ -28,10 +28,6 @@ import { endingPlayed } from '../endings'
 import { AMULET_DARK, AncientAmulet } from '../items/AncientAmulet'
 import { LifelightElixir } from '../items/LifelightElixir'
 import { Forgiveness } from '../spells/Forgiveness'
-import {
-  THRONE_CHAMBER_AMULET,
-  THRONE_CHAMBER_HEALED,
-} from '../rooms/throneDescriptions'
 
 /** The speaker label of the dream voice, as in the Memory Vault. */
 const SHADOW_LABEL = 'Shadow of the Past'
@@ -542,7 +538,6 @@ export class Malakar extends Character {
       return this.burnedByAmulet(gameState)
     }
     gameState.setStoryFlag(FLAG_ACT4_THRONE_AMULET_OPENED, true)
-    gameState.currentRoom.description = THRONE_CHAMBER_AMULET
     return [
       'The amulet opens in your hand like a flower, and ' +
         'the light of the ward pours out over the chamber. Malakar ' +
@@ -611,7 +606,6 @@ export class Malakar extends Character {
     gameState.setStoryFlag(FLAG_ACT4_ELIXIR_ON_MALAKAR, true)
     gameState.setStoryFlag(FLAG_ACT4_LIFELIGHT_ELIXIR_CONSUMED, true)
     gameState.removeItemFromInventoryOrRoom('Lifelight Elixir', 1)
-    gameState.currentRoom.description = THRONE_CHAMBER_HEALED
     return [
       `You kneel and hold the elixir to ${characterName(this.name)}'s lips. ` +
         'He drinks. The grey goes out of his face, and for a moment he is ' +

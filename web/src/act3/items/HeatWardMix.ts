@@ -19,9 +19,12 @@ export class HeatWardMix extends Item {
     })
   }
 
-  /** Give a save made with older wording the current description. */
-  override refreshSavedText(): void {
-    this.description = new HeatWardMix().description
+  /**
+   * The item's look, from the current wording, so a save made before a
+   * wording change shows the current text.
+   */
+  override descriptionFor(_gameState: GameState): string {
+    return new HeatWardMix().description
   }
 
   /**

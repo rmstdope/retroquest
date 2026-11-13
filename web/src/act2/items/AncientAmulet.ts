@@ -1,8 +1,9 @@
-import { Item } from '@/engine'
+import { Item, type GameState } from '@/engine'
+import { FLAG_CEDRIC_RECOGNISED_SIGIL } from '../Act2StoryFlags'
 
 /**
- * The examine line once Sir Cedric has named the sigil; he assigns it to the
- * amulet's description, which the bag panel and the rooms show too.
+ * The look once Sir Cedric has named the sigil (see
+ * `AncientAmulet.descriptionFor`); the Bag and examine both read it.
  */
 export const SIGIL_RECOGNISED_DESCRIPTION =
   'A mysterious amulet inscribed with runes. At its centre is the sigil of ' +
@@ -25,5 +26,12 @@ export class AncientAmulet extends Item {
         'sigil you cannot place. It is faintly warm in your hand.',
       canBeCarried: true,
     })
+  }
+
+  /** The unplaced sigil until Sir Cedric names it, then the Wardens' sigil. */
+  override descriptionFor(gameState: GameState): string {
+    return gameState.getStoryFlag(FLAG_CEDRIC_RECOGNISED_SIGIL)
+      ? SIGIL_RECOGNISED_DESCRIPTION
+      : this.description
   }
 }

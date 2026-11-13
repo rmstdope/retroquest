@@ -82,7 +82,9 @@ describe('wrong casts at Act I puzzles', () => {
     const text = executeCommands(game, ['cast purify on bucket'])
     expect(text).toBe(PURIFY_BUCKET)
     expect(
-      game.state.inventory.find((i) => i instanceof Bucket)?.description,
+      game.state.inventory
+        .find((i) => i instanceof Bucket)
+        ?.descriptionFor(game.state),
     ).toContain('murky')
   })
 

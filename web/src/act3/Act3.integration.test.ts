@@ -1022,7 +1022,9 @@ describe('Act 3 saves from before the stillwater phial stilled the pools', () =>
     new Act3().afterLoad(game.state)
     game.state.refreshSavedText()
 
-    expect(phial.description).toContain('a young woman at a long table')
+    expect(phial.descriptionFor(game.state)).toContain(
+      'a young woman at a long table',
+    )
     expect(vestibule.items.some((i) => i instanceof DarkPool)).toBe(true)
     expect(game.state.getStoryFlag(FLAG_ACT3_POOLS_STILLED)).toBe(true)
     expect(executeCommands(game, ['examine pool'])).toContain(

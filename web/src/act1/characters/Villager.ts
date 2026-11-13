@@ -69,13 +69,17 @@ export class Villager extends Character {
     'elbows. She knows what everyone in Willowbrook had for breakfast, and ' +
     'who they ate it with.'
 
+  /** Tilda's look: always the current wording, even for an older save. */
+  override descriptionFor(_gameState: GameState): string {
+    return Villager.DESCRIPTION
+  }
+
   /**
    * Bring a villager from a save made before she was named up to date: she
    * is Tilda now, with her new description and current rumours (her place in the cycle is kept). Safe to run more than once.
    */
   migrateLegacyName(): void {
     this.name = Villager.NAME
-    this.description = Villager.DESCRIPTION
     this.dialogueOptions = [...Villager.RUMOURS]
   }
 

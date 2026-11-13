@@ -202,7 +202,7 @@ describe('Sir Cedric and the sigil', () => {
     expect(executeCommands(game, ['examine amulet'])).toContain(OLD_EXAMINE)
     executeCommands(game, ['talk to sir cedric'])
     expect(executeCommands(game, ['examine amulet'])).toContain(NEW_EXAMINE)
-    expect(amuletOf(game).description).toBe(NEW_EXAMINE)
+    expect(amuletOf(game).descriptionFor(game.state)).toBe(NEW_EXAMINE)
     dropAmulet(game)
     expect(executeCommands(game, ['examine amulet'])).toContain(NEW_EXAMINE)
   })
@@ -211,13 +211,13 @@ describe('Sir Cedric and the sigil', () => {
     const before = newGame()
     const a = newGame()
     a.loadSaveData(before.toSaveData())
-    expect(amuletOf(a).description).toBe(OLD_EXAMINE)
+    expect(amuletOf(a).descriptionFor(a.state)).toBe(OLD_EXAMINE)
     expect(executeCommands(a, ['talk to sir cedric'])).toContain(
       'Wardens of the Dawn',
     )
     const b = newGame()
     b.loadSaveData(a.toSaveData())
-    expect(amuletOf(b).description).toBe(NEW_EXAMINE)
+    expect(amuletOf(b).descriptionFor(b.state)).toBe(NEW_EXAMINE)
     expect(executeCommands(b, ['talk to sir cedric'])).not.toContain('Wardens')
   })
 

@@ -1,6 +1,6 @@
 import { type NameOptions, Item } from '@/engine'
 
-/** The token's description; `refreshSavedText` restores it in older saves. */
+/** The token's description; `descriptionFor` returns it in older saves. */
 export const NYX_TOKEN_DESCRIPTION =
   'A small crystal on a cord of plaited grass. Turn it in the light and it ' +
   'is green as summer leaves, then brown as autumn, then white as snow.'
@@ -14,9 +14,9 @@ export class NyxToken extends Item {
     })
   }
 
-  /** Give a save made with older wording the current description. */
-  override refreshSavedText(): void {
-    this.description = NYX_TOKEN_DESCRIPTION
+  /** The look: the class's own wording, so an older save reads the current text. */
+  override descriptionFor(): string {
+    return NYX_TOKEN_DESCRIPTION
   }
 
   /** Named after a person, so it takes no "the" and keeps its capitals. */

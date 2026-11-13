@@ -20,7 +20,6 @@ import {
 } from '../Act4StoryFlags'
 import { KnightsRedemption } from '../items/KnightsRedemption'
 import { SorceressTruth } from '../items/SorceressTruth'
-import { CHAMBER_AFTER_REDEMPTION } from '../rooms/chamberDescriptions'
 
 /** What the chamber does the moment she is heard. */
 const CRYSTALS_QUIET =
@@ -230,7 +229,6 @@ export class SorceressOfLies extends Character {
     this.name = UNMASKED_NAME
 
     gameState.addItemToInventory(new SorceressTruth())
-    gameState.currentRoom.description = CHAMBER_AFTER_REDEMPTION
 
     return [
       lead,

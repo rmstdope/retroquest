@@ -55,8 +55,8 @@ export type AmuletStage = 1 | 2 | 3
 /**
  * Elior's heirloom, carried from the first turn of Act III. It glows the
  * first time each Echoes clue is met and shows a little more of his parents'
- * faces; `stage` records how far it has got and `description` (which the
- * bag panel shows) always holds the picture for that stage.
+ * faces; `stage` records how far it has got and `descriptionFor` (which the
+ * bag panel and examine show) gives the picture for that stage.
  */
 export class AncientAmulet extends Item {
   /** How many clues the amulet has glowed at (0 to 3); saved with the game. */
@@ -71,9 +71,9 @@ export class AncientAmulet extends Item {
     })
   }
 
-  /** Put the picture for the current stage back, so an older save shows the current wording. */
-  override refreshSavedText(): void {
-    this.description = PICTURES[this.stage]
+  /** The picture for the current stage, which the Bag and examine both show. */
+  override descriptionFor(_gameState: GameState): string {
+    return PICTURES[this.stage]
   }
 
   /**
@@ -85,7 +85,6 @@ export class AncientAmulet extends Item {
   glow(stage: AmuletStage): string {
     if (this.stage >= stage) return ''
     this.stage = stage
-    this.description = PICTURES[stage]
     return GLOWS[stage] + '\n\n' + CURSES[stage]
   }
 

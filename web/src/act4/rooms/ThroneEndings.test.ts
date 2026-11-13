@@ -178,7 +178,7 @@ describe('Redemption', () => {
     expectStoryFlag(game.state, FLAG_ACT4_REDEMPTION_ENDING, true)
     expectStoryFlag(game.state, FLAG_ACT4_FINAL_STAND_COMPLETED, true)
     expectQuestCompleted(game.state, 'The Final Stand')
-    expect(game.state.currentRoom.description).toBe(
+    expect(game.state.currentRoom.descriptionFor(game.state)).toBe(
       'The dome is quiet. Where the wound was there is only air. King Alden sits among the shards of his prison, alive, and Malakar sits beside him, himself again. Behind the throne an arch stands open on the road home.',
     )
   })
@@ -210,7 +210,9 @@ describe('Redemption', () => {
         'The wound is gone.',
       )
       expect(spellNames(g)).toContain('Forgiveness')
-      expect(g.state.currentRoom.description).toContain('himself again')
+      expect(g.state.currentRoom.descriptionFor(g.state)).toContain(
+        'himself again',
+      )
       expect(executeCommands(g, ['s', 'n'])).not.toContain('Aren')
     }
   })
@@ -296,7 +298,9 @@ describe('Justice', () => {
     expect(text).toContain('You named what he did, and you did not hate him')
     expectStoryFlag(game.state, FLAG_ACT4_JUSTICE_ENDING, true)
     expectQuestCompleted(game.state, 'The Final Stand')
-    expect(game.state.currentRoom.description).toContain('a seal of gold')
+    expect(game.state.currentRoom.descriptionFor(game.state)).toContain(
+      'a seal of gold',
+    )
     expect(game.state.currentRoom.describe(game.state)).not.toContain(
       '[character_name]Malakar[/character_name]',
     )
@@ -312,7 +316,9 @@ describe('Justice', () => {
     expect(spellNames(game)).not.toContain('Forgiveness')
     expect(spellNames(game)).toContain('bless')
     reload(game)
-    expect(game.state.currentRoom.description).toContain('a seal of gold')
+    expect(game.state.currentRoom.descriptionFor(game.state)).toContain(
+      'a seal of gold',
+    )
     expect(game.state.currentRoom.describe(game.state)).not.toContain(
       '[character_name]Malakar[/character_name]',
     )
@@ -369,12 +375,14 @@ describe('Sacrifice', () => {
     expect(executeCommands(game, ['talk to king alden'])).toContain(
       'You have earned your field, farmer. No one will take it from you.',
     )
-    expect(game.state.currentRoom.description).toContain(
+    expect(game.state.currentRoom.descriptionFor(game.state)).toContain(
       'Malakar kneels before him, grey and powerless',
     )
     reload(game)
     expect(spellNames(game)).toEqual(['grow'])
-    expect(game.state.currentRoom.description).toContain('powerless')
+    expect(game.state.currentRoom.descriptionFor(game.state)).toContain(
+      'powerless',
+    )
   })
 })
 

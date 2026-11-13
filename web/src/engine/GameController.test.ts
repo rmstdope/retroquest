@@ -338,6 +338,25 @@ describe('GameController', () => {
   })
 
   describe('journal data', () => {
+    it('shows a carried item the text its examine reads, computed from the state', () => {
+      class Lamp extends Item {
+        lit = false
+
+        /** Reads dark or lit from the lamp's own state. */
+        override descriptionFor(_gameState: GameState): string {
+          return this.lit ? 'A lamp, lit.' : 'A lamp, dark.'
+        }
+      }
+      const ctrl = makeController()
+      const state = ctrl.game.state
+      const lamp = new Lamp({ name: 'lamp', description: 'A lamp.' })
+      state.addItemToInventory(lamp)
+      expect(ctrl.getInventory()[0].description).toBe('A lamp, dark.')
+      lamp.lit = true
+      expect(ctrl.getInventory()[0].description).toBe('A lamp, lit.')
+      expect(lamp.examine(state)).toBe(ctrl.getInventory()[0].description)
+    })
+
     it('lists inventory with counts and spells as markup, and quests as data', () => {
       const ctrl = makeController()
       const state = ctrl.game.state

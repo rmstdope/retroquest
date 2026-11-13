@@ -46,10 +46,16 @@ export class MemoryVault extends Room {
     return super.rest(gameState)
   }
 
-  /** Once the amulet has opened the door, the Shadow watches an open door. */
+  /**
+   * Once the amulet has opened the door, the Shadow watches an open door;
+   * once the orbs are mended, the vault shows them whole.
+   */
   override descriptionFor(gameState: GameState): string {
     if (gameState.getStoryFlag(FLAG_ACT4_VAULT_DOOR_OPENED)) {
       return MEMORY_VAULT_DOOR_OPEN
+    }
+    if (gameState.getStoryFlag(FLAG_ACT4_MEMORY_ORBS_MENDED)) {
+      return MEMORY_VAULT_AFTER
     }
     return super.descriptionFor(gameState)
   }
@@ -86,7 +92,6 @@ export class MemoryVault extends Room {
     }
     gameState.setStoryFlag(FLAG_ACT4_MEMORY_ORBS_MENDED, true)
     gameState.setStoryFlag(FLAG_ACT4_SHADOW_OF_THE_PAST_STARTED, true)
-    this.description = MEMORY_VAULT_AFTER
     for (const character of this.characters) {
       if (character instanceof ShadowOfThePast) character.gainFace()
     }

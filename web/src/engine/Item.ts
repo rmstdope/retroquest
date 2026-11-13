@@ -123,8 +123,20 @@ export class Item {
     )
   }
 
-  examine(_gameState: GameState): string {
+  /**
+   * What the item looks like right now, computed from the game's state. The
+   * Bag, `look` and `examine` all read it, so a change to how the item looks
+   * after a story event is made here once. The saved `description` is only
+   * the text it was built with and is never reassigned; override this for
+   * an item whose look follows the story.
+   */
+  descriptionFor(_gameState: GameState): string {
     return this.description
+  }
+
+  /** The item's look: what `descriptionFor` says. Override only to say more. */
+  examine(gameState: GameState): string {
+    return this.descriptionFor(gameState)
   }
 
   /** Called after the player takes the item; the text is shown after the pickup. */

@@ -14,11 +14,13 @@ export function flagOf(thing: unknown, field: string): boolean {
   )
 }
 
-/** Whether the room `roomKey` now carries one of the `texts` as its description (a text the story sets and a save keeps). */
+/** Whether the room `roomKey` now carries one of the `texts` as its description (the text it computes from the story). */
 export function roomSays(
   c: PatchContext,
   roomKey: string,
   texts: readonly string[],
 ): boolean {
-  return texts.includes(c.state.allRooms[roomKey]?.description ?? '')
+  return texts.includes(
+    c.state.allRooms[roomKey]?.descriptionFor(c.state) ?? '',
+  )
 }

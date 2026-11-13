@@ -60,7 +60,7 @@ function purify(game: Game, elena: BarmaidElena): void {
 describe('Elena and the silver mask', () => {
   it('has no mark before the heal', () => {
     const { game, elena } = setup()
-    expect(elena.description).not.toContain('mask')
+    expect(elena.descriptionFor(game.state)).not.toContain('mask')
     expect(elena.talkTo(game.state)).not.toContain('mask')
   })
 
@@ -68,7 +68,7 @@ describe('Elena and the silver mask', () => {
     const { game, elena } = setup()
     const out = elena.receiveGreaterHeal(game.state)
     expect(out.endsWith('[/success]\n\n' + HEAL_PARAGRAPH)).toBe(true)
-    expect(elena.description.endsWith(HEAL_SENTENCE)).toBe(true)
+    expect(elena.descriptionFor(game.state).endsWith(HEAL_SENTENCE)).toBe(true)
   })
 
   it('heal again: no second mark paragraph', () => {
@@ -83,8 +83,8 @@ describe('Elena and the silver mask', () => {
     const { game, elena } = setup()
     elena.receiveGreaterHeal(game.state)
     purify(game, elena)
-    expect(elena.description.endsWith(WATER_SENTENCE)).toBe(true)
-    expect(elena.description).not.toContain(HEAL_SENTENCE)
+    expect(elena.descriptionFor(game.state).endsWith(WATER_SENTENCE)).toBe(true)
+    expect(elena.descriptionFor(game.state)).not.toContain(HEAL_SENTENCE)
   })
 
   it('first talk after the heal: stage line, speech, then today reply; once', () => {
@@ -130,7 +130,9 @@ describe('Elena and the silver mask', () => {
     const loaded = fresh.state.allRooms.SilverStagInn.characters.find(
       (c): c is BarmaidElena => c instanceof BarmaidElena,
     )!
-    expect(loaded.description.endsWith(HEAL_SENTENCE)).toBe(true)
+    expect(loaded.descriptionFor(fresh.state).endsWith(HEAL_SENTENCE)).toBe(
+      true,
+    )
     expect(loaded.talkTo(fresh.state)).not.toContain(STAGE_LINE)
   })
 
@@ -151,7 +153,7 @@ describe('Elena and the silver mask', () => {
     purify(game, elena)
     const out = elena.receiveDispelFinalCure(game.state)
     expect(out.endsWith('[/success]\n\n' + DISPEL_SENTENCE)).toBe(true)
-    expect(elena.description).not.toContain('mask')
+    expect(elena.descriptionFor(game.state)).not.toContain('mask')
     const talk = elena.talkTo(game.state)
     expect(talk).not.toContain('mask')
     expect(talk).not.toContain(STAGE_LINE)
@@ -173,7 +175,7 @@ describe('Elena and the silver mask', () => {
     Reflect.deleteProperty(loaded, 'markSpoken')
     expect(loaded.talkTo(fresh.state)).not.toContain(STAGE_LINE)
     purify(fresh, loaded)
-    expect(loaded.description).not.toContain('mask')
+    expect(loaded.descriptionFor(fresh.state)).not.toContain('mask')
     expect(loaded.receiveDispelFinalCure(fresh.state)).toContain(
       DISPEL_SENTENCE,
     )
@@ -272,7 +274,9 @@ describe('Elena in her own words', () => {
     )
     expect(out).not.toContain('!')
     expect(out).not.toContain('three-step')
-    expect(elena.description).toContain('with a tray on each arm')
+    expect(elena.descriptionFor(game.state)).toContain(
+      'with a tray on each arm',
+    )
   })
 
   it('after the cure: thanks, and points at the charm over the door', () => {

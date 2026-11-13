@@ -86,7 +86,9 @@ describe('A save made before the rewrite shows the new wording', () => {
     }
     expect(describeIn(loaded, 'VillageSquare')).toContain('keep their voices')
     expect(
-      loaded.state.inventory.find((i) => i instanceof Locket)?.description,
+      loaded.state.inventory
+        .find((i) => i instanceof Locket)
+        ?.descriptionFor(loaded.state),
     ).not.toContain('family')
   })
 })

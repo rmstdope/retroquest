@@ -9,7 +9,6 @@ import {
   speech,
   type NameOptions,
 } from '@/engine'
-import { COURTYARD_CAPTAIN_GONE_DESCRIPTION } from '../rooms/courtyardDescriptions'
 import { GuardiansChain } from '../items/GuardiansChain'
 import {
   FLAG_ACT4_CAPTAIN_APOLOGY_HEARD,
@@ -129,7 +128,6 @@ export class CaptainOfTheGuard extends Character {
     gameState.addVirtue(VIRTUE_SELFLESS)
     const room = gameState.currentRoom
     room.characters = room.characters.filter((c) => c !== this)
-    room.description = COURTYARD_CAPTAIN_GONE_DESCRIPTION
     return [
       "You lift the [item_name]guardian's chain[/item_name] over the " +
         "captain's head. Its crystals flare once and settle against his " +

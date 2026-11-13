@@ -22,11 +22,6 @@ export class CollapsedGalleries extends Room {
     })
   }
 
-  /** Give a save made with older wording the current description. */
-  override refreshSavedText(): void {
-    this.description = new CollapsedGalleries().description
-  }
-
   /**
    * Once the wedge has brought the pile down (or the rescue is done, for a
    * save from before), the gallery reads as cleared.
@@ -37,7 +32,7 @@ export class CollapsedGalleries extends Room {
       pileStands &&
       !gameState.getStoryFlag(FLAG_ACT3_MINERS_RESCUE_COMPLETED)
     ) {
-      return this.description
+      return new CollapsedGalleries().description
     }
     return (
       'The fallen stone is heaped along the walls now, ' +
