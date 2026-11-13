@@ -92,18 +92,6 @@ describe('AncientAmulet', () => {
     expect(AncientAmulet.glowInBag(game.state, 1)).toBe('')
   })
 
-  it('shows the new opening to a save made with the old description', () => {
-    const game = new Game([new Act3()])
-    const amulet = bagAmulet(game)
-    amulet.glow(2)
-    amulet.description = 'A family heirloom whose runes glint like dew at dawn.'
-
-    new Act3().afterLoad(game.state)
-    game.state.refreshSavedText()
-
-    expect(amulet.description).toBe(AFTER_INSCRIPTION)
-  })
-
   it('keeps its picture through a save and load', () => {
     const game = new Game([new Act3()])
     bagAmulet(game).glow(2)

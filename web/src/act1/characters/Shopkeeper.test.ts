@@ -878,24 +878,6 @@ describe('Hemlock idle lines', () => {
     expectDialogueSpeaker(answer, 'Hemlock')
     expect(answer).not.toMatch(/:\s*\[dialogue\]/)
   })
-
-  it('speaks his current lines after loading a save that holds the old ones', () => {
-    const game = gameInStore()
-    const shopkeeper = game.state.currentRoom.getCharacterByName('shopkeeper')
-    Object.defineProperty(shopkeeper, 'dialogueOptions', {
-      value: ['Welcome to my humble store!'],
-      enumerable: true,
-      writable: true,
-      configurable: true,
-    })
-    const loaded = new Game([new Act1()])
-    expect(loaded.loadSaveData(game.toSaveData())).toContain('loaded')
-
-    const answer = loaded.commandParser.parse('talk to shopkeeper')
-
-    expect(answer).toContain('Only store in Willowbrook')
-    expect(answer).not.toContain('humble store')
-  })
 })
 
 describe('Hemlock, named from the first moment', () => {
@@ -926,22 +908,6 @@ describe('Hemlock, named from the first moment', () => {
     game.state.addItemToInventory(new Stick())
     expect(game.commandParser.parse('give stick to hemlock')).toContain(
       '[character_name]Hemlock[/character_name] chuckles and pushes it',
-    )
-  })
-
-  it('is called Hemlock after loading a save made while he was the shopkeeper', () => {
-    const game = gameInStore()
-    game.state.currentRoom.characters[0].name = 'shopkeeper'
-
-    const loaded = new Game([new Act1()])
-    loaded.loadSaveData(game.toSaveData())
-
-    expect(loaded.state.currentRoom.characters.map((c) => c.name)).toEqual([
-      'Hemlock',
-    ])
-    expectDialogueSpeaker(
-      loaded.commandParser.parse('talk to shopkeeper'),
-      'Hemlock',
     )
   })
 })

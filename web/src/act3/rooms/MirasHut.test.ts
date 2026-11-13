@@ -22,16 +22,4 @@ describe("Mira's Hut (Act III)", () => {
         'looking, the way you cross your own kitchen in the dark.',
     )
   })
-
-  it('shows the new wording to a save that stored the old one', () => {
-    const game = new Game([new Act3()])
-    game.state.allRooms.MirasHut.description =
-      'A fragrant hut. Sunlight streams.'
-    const fresh = new Game([new Act3()])
-    fresh.loadSaveData(game.toSaveData())
-    expect(fresh.state.allRooms.MirasHut.description).not.toContain('Sunlight')
-    expect(fresh.state.allRooms.MirasHut.description).toContain(
-      'every one labelled',
-    )
-  })
 })

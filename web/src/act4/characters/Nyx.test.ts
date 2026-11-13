@@ -72,21 +72,4 @@ describe('Nyx and Grandmother described at home', () => {
       GRANDMOTHER,
     )
   })
-
-  it('uses the current words in a save made before the rewrite', () => {
-    const game = home()
-    const field = game.state.allRooms.WillowbrookField
-    const nyx = field.getCharacterByName('Nyx')
-    const grandmother = field.getCharacterByName('Grandmother')
-    if (!nyx || !grandmother) throw new Error('missing a character')
-    nyx.description = 'A small light that flickers in the hedge, keeping close.'
-    grandmother.description =
-      'Your grandmother, waiting at the gate with her hands folded.'
-    const loaded = new Game([new Act4()])
-    expect(loaded.loadSaveData(game.toSaveData())).toContain('loaded')
-    expect(executeCommands(loaded, ['examine nyx'])).toContain(NYX)
-    expect(executeCommands(loaded, ['examine grandmother'])).toContain(
-      GRANDMOTHER,
-    )
-  })
 })

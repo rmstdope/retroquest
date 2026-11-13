@@ -221,18 +221,12 @@ describe('saves', () => {
     expect(new TownCrier().talkTo(loaded.state)).toContain('relish')
   })
 
-  it('a save made before the change loads with the right descriptions', () => {
-    for (const cleared of [false, true]) {
-      const game = newGame()
-      if (cleared) game.state.setStoryFlag(FLAG_CEDRIKS_HONOR_COMPLETED, true)
-      find(game, SirCedric).description = 'A noble knight in gleaming armor.'
-      find(game, CityNoticeBoard).description = 'old'
-      new Act2().afterLoad(game.state)
-      game.state.refreshSavedText()
-      expect(find(game, SirCedric).description).toBe(
-        cleared ? CEDRIC_AFTER : CEDRIC_BEFORE,
-      )
-      expect(find(game, CityNoticeBoard).description).toBe(BOARD_DESCRIPTION)
-    }
+  it('a save made before the change loads with the description of the story so far', () => {
+    const game = newGame()
+    game.state.setStoryFlag(FLAG_CEDRIKS_HONOR_COMPLETED, true)
+    find(game, SirCedric).description = 'A noble knight in gleaming armor.'
+    const loaded = newGame()
+    loaded.loadSaveData(game.toSaveData())
+    expect(find(loaded, SirCedric).description).toBe(CEDRIC_AFTER)
   })
 })

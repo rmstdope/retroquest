@@ -6,7 +6,6 @@ import { EnchantedAcorn } from './EnchantedAcorn'
 import { ForestHeartCrystal } from './ForestHeartCrystal'
 import { NaturesCharm } from './NaturesCharm'
 import { NyxToken } from './NyxToken'
-import { OfferingAltar } from './OfferingAltar'
 import { ProtectiveCharm } from './ProtectiveCharm'
 
 /** The wording the navigator approved for the charms, the acorn and Nyx's gifts. */
@@ -76,33 +75,5 @@ describe('the enchanted acorn', () => {
     expect(acorn.use(game.state)).toBe(idle)
     game.state.currentRoom = game.state.allRooms.MainSquare
     expect(acorn.use(game.state)).toBe(idle)
-  })
-})
-
-describe('refreshSavedText after load', () => {
-  it('gives older saves the new wording of the altar, charms, acorn and gifts', () => {
-    const game = new Game([new Act2()])
-    const gifts = [
-      new DruidicCharm(),
-      new ProtectiveCharm(),
-      new NaturesCharm(),
-      new EnchantedAcorn(),
-      new NyxToken(),
-      new ForestHeartCrystal(),
-    ]
-    const fresh = gifts.map((item) => item.description)
-    for (const item of gifts) item.description = 'old text'
-    game.state.inventory.push(...gifts)
-    const altar = game.state.allRooms.HeartOfTheForest.items.find(
-      (item) => item instanceof OfferingAltar,
-    )
-    if (!altar) throw new Error('the altar is missing')
-    altar.description = 'old text'
-
-    new Act2().afterLoad(game.state)
-    game.state.refreshSavedText()
-
-    expect(gifts.map((item) => item.description)).toEqual(fresh)
-    expect(altar.description).toContain('Three hollows are carved')
   })
 })

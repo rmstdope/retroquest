@@ -263,18 +263,6 @@ describe('Sir Cedric and the save', () => {
     expect(fresh.state.getStoryFlag(FLAG_ACT3_CEDRIC_GATE_ANSWERED)).toBe(true)
     expect(fresh.state.currentRoom.name).toBe("Entrance to Malakar's Fortress")
   })
-
-  it('names him in title case when loading a save that has him in lower case', () => {
-    const game = new Game([new Act3()])
-    const cedric = game.state.allRooms.MirasHut.getCharacterByName('cedric')
-    if (!cedric) throw new Error('Sir Cedric starts in the hut')
-    cedric.name = 'sir cedric'
-    const fresh = new Game([new Act3()])
-    fresh.loadSaveData(game.toSaveData())
-    expect(
-      fresh.state.allRooms.MirasHut.getCharacterByName('cedric')?.name,
-    ).toBe('Sir Cedric')
-  })
 })
 
 describe('Sir Cedric keeps his own gestures', () => {

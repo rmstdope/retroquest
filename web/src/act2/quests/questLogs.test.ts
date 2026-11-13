@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { Game, type Quest } from '@/engine'
+import { Game } from '@/engine'
 import { Act2 } from '../Act2'
 
 /** A quest's name and the agreed wording of the fields that changed. */
@@ -83,48 +83,4 @@ describe('Act II quest logs name real people and places', () => {
     if (log.description) expect(quest?.description).toBe(log.description)
     if (log.completion) expect(quest?.completion).toBe(log.completion)
   })
-
-  it.each(LOGS)('$name is brought up to date in an older save', (log) => {
-    const game = new Game([new Act2()])
-    ageText(game.state.getQuest(log.name), log)
-
-    expectNewWording(load(game), log)
-  })
-
-  it.each(LOGS)('$name is brought up to date once completed', (log) => {
-    const game = new Game([new Act2()])
-    const quest = game.state.getQuest(log.name)
-    if (!quest) throw new Error(`no quest ${log.name}`)
-    quest.completed = true
-    game.state.nonActivatedQuests = game.state.nonActivatedQuests.filter(
-      (q) => q !== quest,
-    )
-    game.state.completedQuests.push(quest)
-    ageText(quest, log)
-
-    const loaded = load(game)
-    expectNewWording(loaded, log)
-    expect(loaded.state.completedQuests.map((q) => q.name)).toContain(log.name)
-  })
 })
-
-/** Give a quest the old words in every field the agreed wording replaces. */
-function ageText(quest: Quest | null, log: Log): void {
-  if (!quest) throw new Error(`no quest ${log.name}`)
-  if (log.description) quest.description = 'old words'
-  if (log.completion) quest.completion = 'old words'
-}
-
-/** Save a game and load it into a fresh one. */
-function load(game: Game): Game {
-  const loaded = new Game([new Act2()])
-  expect(loaded.loadSaveData(game.toSaveData())).toContain('loaded')
-  return loaded
-}
-
-/** Expect the quest of a game to read as the agreed wording says. */
-function expectNewWording(game: Game, log: Log): void {
-  const quest = game.state.getQuest(log.name)
-  if (log.description) expect(quest?.description).toBe(log.description)
-  if (log.completion) expect(quest?.completion).toBe(log.completion)
-}

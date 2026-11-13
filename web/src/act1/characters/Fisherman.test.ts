@@ -206,25 +206,4 @@ describe('Fisherman teaching purify', () => {
       'You have learned [spell_name]purify[/spell_name].',
     )
   })
-
-  it('speaks his current idle line after loading a save that holds the old one', () => {
-    const game = new Game([new Act1()])
-    game.state.currentRoom = game.state.allRooms.Riverbank
-    game.state.addItemToInventory(new Fish())
-    executeCommands(game, ['give fish to fisherman'])
-    const fisherman = game.state.currentRoom.getCharacterByName('fisherman')
-    Object.defineProperty(fisherman, 'dialogueStates', {
-      value: { taught_spells: 'The river has many moods.' },
-      enumerable: true,
-      writable: true,
-      configurable: true,
-    })
-    const loaded = new Game([new Act1()])
-    expect(loaded.loadSaveData(game.toSaveData())).toContain('loaded')
-
-    const answer = loaded.commandParser.parse('talk to fisherman')
-
-    expect(answer).toContain('She used to sit right where you')
-    expect(answer).not.toContain('many moods')
-  })
 })

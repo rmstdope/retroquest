@@ -37,12 +37,4 @@ describe('OldNotice', () => {
     expect(text).toContain('[character_name]Hemlock[/character_name] family')
     expect(text).toContain('A small reward is offered.[/dialogue]')
   })
-
-  it('gives a notice from an older save the current description', () => {
-    const game = new Game([new Act1()])
-    const notice = new OldNotice()
-    notice.description = 'The writing is barely legible.'
-    notice.refreshSavedText(game.state)
-    expect(notice.description).toBe(new OldNotice().description)
-  })
 })

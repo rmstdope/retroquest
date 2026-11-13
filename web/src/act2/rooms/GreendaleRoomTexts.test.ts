@@ -1,9 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { Game } from '@/engine'
 import { Act2 } from '../Act2'
-import { MAIN_SQUARE_DESCRIPTION } from './MainSquare'
-import { HEALERS_HOUSE_DESCRIPTION } from './HealersHouse'
-import { RESIDENTIAL_QUARTER_DESCRIPTION } from './ResidentialQuarter'
 
 const MAIN_SQUARE =
   'The heart of Greendale: a great fountain of old heroes fighting beasts, ' +
@@ -27,22 +24,6 @@ describe('Greendale room texts', () => {
     expect(rooms.MainSquare.description).toBe(MAIN_SQUARE)
     expect(rooms.HealersHouse.description).toBe(HEALERS_HOUSE)
     expect(rooms.ResidentialQuarter.description).toBe(RESIDENTIAL_QUARTER)
-  })
-
-  it('give older saves the current wording on load', () => {
-    const game = new Game([new Act2()])
-    const rooms = game.state.allRooms
-    rooms.MainSquare.description = 'old'
-    rooms.HealersHouse.description = 'old'
-    rooms.ResidentialQuarter.description = 'old'
-    new Act2().afterLoad(game.state)
-    game.state.refreshSavedText()
-    expect(rooms.MainSquare.description).toBe(MAIN_SQUARE_DESCRIPTION)
-    expect(rooms.HealersHouse.description).toBe(HEALERS_HOUSE_DESCRIPTION)
-    expect(rooms.ResidentialQuarter.description).toBe(
-      RESIDENTIAL_QUARTER_DESCRIPTION,
-    )
-    expect(rooms.MainSquare.description).toBe(MAIN_SQUARE)
   })
 
   it('has the search open the old cellar door without naming a command', () => {

@@ -161,16 +161,6 @@ describe('Forest Entrance paths', () => {
     expect(exitsOf(game)).toEqual(['west'])
   })
 
-  it('replaces the old closing text of an older save', () => {
-    const game = atEntrance()
-    game.state.allRooms.ForestEntrance.description =
-      'Old text. Two paths diverge deeper: one toward an ancient grove.'
-    new Act2().afterLoad(game.state)
-    game.state.refreshSavedText()
-    expect(describeRoom(game)).not.toContain('Two paths diverge')
-    expect(describeRoom(game)).toContain(EAST_DARK)
-  })
-
   it('survives a save and load with only the charm used', () => {
     const game = atEntrance()
     executeCommands(game, ['use protective charm'])

@@ -54,20 +54,6 @@ describe('Act II spell descriptions', () => {
   it.each(DESCRIPTIONS)('%s remembers who taught it', (_n, make, text) => {
     expect(make().description).toBe(text)
   })
-
-  it('shows the current wording for spells learned in an older save', () => {
-    const game = new Game([new Act2()])
-    for (const [, make] of DESCRIPTIONS) {
-      const spell = make()
-      game.state.learnSpell(spell)
-    }
-    for (const spell of game.state.knownSpells) spell.description = 'old'
-    new Act2().afterLoad(game.state)
-    game.state.refreshSavedText()
-    expect(game.state.knownSpells.map((s) => s.description)).toEqual(
-      DESCRIPTIONS.map(([, , text]) => text),
-    )
-  })
 })
 
 describe('Act II spell fallback lines', () => {

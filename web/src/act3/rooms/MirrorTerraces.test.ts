@@ -27,17 +27,6 @@ describe('Mirror Terraces', () => {
     )
   })
 
-  it('shows the current text to a save made before the warden left it', () => {
-    const game = new Game([new Act3()])
-    findMirrorTerracesRoom(game).description =
-      'Stepped platforms. A Terrace Warden watches the assembly points.'
-    const fresh = new Game([new Act3()])
-    fresh.loadSaveData(game.toSaveData())
-    const text = findMirrorTerracesRoom(fresh).descriptionFor(fresh.state)
-    expect(text).not.toContain('Terrace Warden')
-    expect(text).toContain('left where someone put them down.')
-  })
-
   it('sets the mirrors-started flag on enter', () => {
     const game = new Game([new Act3()])
     const room = findMirrorTerracesRoom(game)

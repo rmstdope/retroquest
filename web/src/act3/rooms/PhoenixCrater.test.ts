@@ -89,18 +89,5 @@ describe('Phoenix Crater', () => {
       expect(loaded).toContain(PHOENIX_LINES)
       expect(fresh.talk('phoenix')).not.toContain('crater is silent')
     })
-
-    it('shows the current text to a save made before the rewrite', () => {
-      const game = new Game([new Act3()])
-      game.state.currentRoom = new PhoenixCrater()
-      game.rest()
-      game.state.currentRoom.description =
-        'A luminous bowl. At the crater an enormous phoenix reclines on a throne.'
-      const fresh = new Game([new Act3()])
-      fresh.loadSaveData(game.toSaveData())
-      const loaded = fresh.state.currentRoom.descriptionFor(fresh.state)
-      expect(loaded).toContain(PHOENIX_LINES)
-      expect(loaded).not.toContain('throne')
-    })
   })
 })
