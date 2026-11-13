@@ -8,4 +8,4 @@
 
 **Prevent by**: not established; if it recurs, give that spec's wait a reason to be tied to the arrival's own readiness rather than a fixed 15 s.
 
-**Seen before**: nothing like it yet.
+**Seen before**: rq-dn9z, the same spec (rq-fc9f, narrow-window arrival) flaked in CI.
