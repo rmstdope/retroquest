@@ -1210,6 +1210,10 @@ test.describe('Lantern UI (the default)', () => {
     await expect(page.locator('.lq-title-page')).toHaveClass(/is-playing/)
     await expect(page.locator('.lq-title-buttons')).toHaveAttribute('inert')
 
+    await page.evaluate(() => (document.activeElement as HTMLElement).blur())
+    expect(await page.evaluate(() => document.activeElement?.tagName)).toBe(
+      'BODY',
+    )
     await page.keyboard.press('Enter')
     await expect(page.locator('.lq-title-page')).toHaveClass(/is-open/)
     await expect(start).toBeFocused()
@@ -1226,6 +1230,9 @@ test.describe('Lantern UI (the default)', () => {
     await page.mouse.click(box.x + box.width / 2, box.y + 20)
     await expect(page.locator('.lq-title-page')).toHaveClass(/is-open/)
     await expect(page.locator('.lq-title-page')).toBeVisible()
+    await expect(
+      page.getByRole('button', { name: 'Start', exact: true }),
+    ).toBeFocused()
     await page.getByRole('button', { name: 'Start', exact: true }).click()
     await expect(page.locator('.lq-title-page')).toHaveCount(0)
   })

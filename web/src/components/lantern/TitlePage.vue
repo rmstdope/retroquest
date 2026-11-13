@@ -1,5 +1,13 @@
 <script setup lang="ts">
-import { computed, nextTick, onMounted, ref, useId, watch } from 'vue'
+import {
+  computed,
+  nextTick,
+  onBeforeUnmount,
+  onMounted,
+  ref,
+  useId,
+  watch,
+} from 'vue'
 import { continueLine, filled, newestLoadable } from '@/lantern/saveCard'
 import {
   pictureExists,
@@ -17,9 +25,11 @@ import { useReducedMotion } from '@/composables/useReducedMotion'
  * picture, the name, the credit, then the buttons rising one after another,
  * about 5½ seconds in all); until the opening is over the credit and the
  * buttons are inert (neither focusable nor pressable). Any key press or press
- * on the page finishes the opening at once and does nothing else (a key's
- * default action, such as Enter pressing a button, is cancelled); the press
- * still reaches the page's other listeners, so the music starts on it.
+ * anywhere finishes the opening at once and does nothing else (a key's
+ * default action, such as Enter pressing a button, is cancelled, and the
+ * press does not take focus); it is heard on the window, since during the
+ * opening focus is on the body, outside the page. The press still reaches the
+ * other listeners, so the music starts on it.
  * Focus then lands on the main button. Enter on Start or Escape goes on.
  *
  * A returning player has `saves` (the quick save, the slots in use and the saves
@@ -77,12 +87,19 @@ void (async (): Promise<void> => {
 /** The key press that finished the opening, which no other handler of the page answers. */
 let skippedBy: Event | null = null
 
-/** Finish the opening at once; a key press is kept from pressing a button. */
+/** Finish the opening at once; a key press is kept from pressing a button, a pointer press from taking focus. */
 function skip(event: Event): void {
   if (opened.value) return
   opened.value = true
   skippedBy = event
   if (event.type === 'keydown') event.preventDefault()
+  else window.addEventListener('mousedown', keepFocus, true)
+}
+
+/** Once, cancel the mouse press that follows a skipping pointer press, so focus stays for the main button. */
+function keepFocus(event: Event): void {
+  event.preventDefault()
+  window.removeEventListener('mousedown', keepFocus, true)
 }
 
 /** The opening is over once the last button has risen. */
@@ -101,6 +118,13 @@ function onKeydown(event: KeyboardEvent): void {
 
 onMounted(() => {
   if (opened.value) void nextTick(trap.focusFirst)
+  window.addEventListener('keydown', skip, true)
+  window.addEventListener('pointerdown', skip, true)
+})
+onBeforeUnmount(() => {
+  window.removeEventListener('keydown', skip, true)
+  window.removeEventListener('pointerdown', skip, true)
+  window.removeEventListener('mousedown', keepFocus, true)
 })
 </script>
 
@@ -113,8 +137,6 @@ onMounted(() => {
     aria-modal="true"
     :aria-labelledby="titleId"
     tabindex="-1"
-    @keydown.capture="skip"
-    @pointerdown.capture="skip"
     @keydown="onKeydown"
   >
     <div

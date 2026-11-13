@@ -142,6 +142,66 @@ describe('TitlePage', () => {
       expect(document.activeElement?.textContent?.trim()).toBe('Start')
     })
 
+    it('is skipped by a key press while focus is on the body, outside the page', async () => {
+      const w = mountTitle()
+      ;(document.activeElement as HTMLElement | null)?.blur()
+      const event = new KeyboardEvent('keydown', {
+        key: 'Enter',
+        bubbles: true,
+        cancelable: true,
+      })
+      document.body.dispatchEvent(event)
+      await flushPromises()
+
+      expect(event.defaultPrevented).toBe(true)
+      expect(w.emitted('start')).toBeUndefined()
+      expect(w.get('.lq-title-page').classes()).toContain('is-open')
+      expect(document.activeElement?.textContent?.trim()).toBe('Start')
+    })
+
+    it('is skipped by Tab while focus is on the body', async () => {
+      const w = mountTitle()
+      document.body.dispatchEvent(
+        new KeyboardEvent('keydown', { key: 'Tab', bubbles: true }),
+      )
+      await flushPromises()
+      expect(w.get('.lq-title-page').classes()).toContain('is-open')
+    })
+
+    it('keeps the press that skipped it from moving focus off the main button', async () => {
+      const w = mountTitle()
+      document.body.dispatchEvent(
+        new Event('pointerdown', { bubbles: true, cancelable: true }),
+      )
+      await flushPromises()
+      const mousedown = new MouseEvent('mousedown', {
+        bubbles: true,
+        cancelable: true,
+      })
+      w.get('.lq-title-page').element.dispatchEvent(mousedown)
+      expect(mousedown.defaultPrevented).toBe(true)
+      expect(document.activeElement?.textContent?.trim()).toBe('Start')
+      const later = new MouseEvent('mousedown', {
+        bubbles: true,
+        cancelable: true,
+      })
+      w.get('.lq-title-page').element.dispatchEvent(later)
+      expect(later.defaultPrevented).toBe(false)
+    })
+
+    it('stops listening on the window once it is unmounted', async () => {
+      const w = mountTitle()
+      w.unmount()
+      wrapper = undefined
+      const event = new KeyboardEvent('keydown', {
+        key: 'Enter',
+        bubbles: true,
+        cancelable: true,
+      })
+      document.body.dispatchEvent(event)
+      expect(event.defaultPrevented).toBe(false)
+    })
+
     it('is not finished by a button other than the last one rising', async () => {
       const w = mountTitle([save(2)])
       await w.findAll('button')[0].trigger('animationend')
