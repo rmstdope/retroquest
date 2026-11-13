@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lines fade away</title>
+<style>
+:root{--bg:#f4efe4;--fg:#2b2620;--muted:#6d655a;--card:#fffaf0;--line:#d9cfbd;--amber:#f7a823}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#1b1916;--fg:#ece5d8;--muted:#a59c8e;--card:#25221d;--line:#3a352d}}
+body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.5 Georgia,serif;padding:20px 16px}
+h1{font-size:24px;margin:0 0 4px}h2{font-size:19px;margin:28px 0 4px}
+p.lede,ul.lede{color:var(--muted);margin:0 0 14px;max-width:880px}
+table{border-collapse:collapse;font:14px system-ui;max-width:900px}
+td,th{border-bottom:1px solid var(--line);padding:6px 10px;text-align:left;vertical-align:top}th{color:var(--muted);font-weight:600}
+.controls{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0;align-items:center;font:13px system-ui}
+.controls .lbl{color:var(--muted);margin-left:6px}
+.controls button{font:13px system-ui;padding:6px 12px;border-radius:7px;border:1px solid var(--line);background:var(--card);color:var(--fg);cursor:pointer}
+.controls button[aria-pressed=true]{background:var(--amber);border-color:var(--amber);color:#2a1c05}
+
+/* The laptop stage */
+.stage{position:relative;overflow:hidden;border-radius:4px;background:#000;width:960px;height:540px;max-width:100%;user-select:none}
+.pic{position:absolute;inset:0;background:url(../../web/public/images/generated/act1-eliors-cottage.png) center/cover no-repeat}
+.topbar{position:absolute;left:0;right:0;top:0;height:44px;background:linear-gradient(rgba(0,0,0,.55),transparent);z-index:2}
+.room{position:absolute;right:16px;top:10px;font:600 15px Georgia,serif;color:#f6efe0;text-shadow:0 1px 3px #000;z-index:3}
+.dock{position:absolute;left:0;right:0;bottom:0;height:46px;background:rgba(18,20,25,.86);border-top:1px solid #333;z-index:3;font:12px system-ui;color:#9a927f;display:flex;align-items:center;padding:0 14px;gap:14px}
+.dock i{font-style:normal;border:1px solid #444;border-radius:6px;padding:3px 9px;color:#cfc7b8}
+
+/* Narrator's cards, up the left */
+.narr{position:absolute;left:14px;top:60px;bottom:58px;width:36%;display:flex;flex-direction:column;justify-content:flex-end;gap:8px;z-index:3}
+.ncard{background:rgba(22,24,30,.88);color:#ddd5c6;border:1px solid #3a3f4a;border-radius:8px;padding:9px 12px;font-size:14px;line-height:1.45}
+.ncard.reading{border-color:var(--amber);color:#f1ead9}
+
+/* Speech, up the right */
+.talk{position:absolute;right:16px;top:60px;bottom:58px;width:44%;display:flex;flex-direction:column;justify-content:flex-end;gap:8px;z-index:3}
+.ln{display:flex;gap:8px;align-items:flex-start;max-width:100%}
+.ln.right{align-self:flex-end;flex-direction:row-reverse}
+.ln.left{align-self:flex-start}
+.por{flex:none;width:46px;height:46px;border-radius:50%;background:center/cover #333;border:2px solid #c9a96e}
+.col{display:flex;flex-direction:column;min-width:0}
+.ln.right .col{align-items:flex-end}
+.nm{font:12.5px system-ui;color:#c9a96e;background:rgba(30,28,24,.9);border-radius:9px;padding:1px 9px;margin-bottom:3px;width:max-content}
+.ln.left .nm{color:#f2b34a}
+.bub{max-width:380px;padding:9px 14px;border-radius:10px;border:1px solid #c9a96e;background:rgba(36,33,28,.95);color:#ece5d8;font-size:14px;line-height:1.4}
+.ln.left .bub{border-color:var(--amber);background:rgba(60,46,22,.95)}
+.bub.reading{box-shadow:0 0 0 2px var(--amber)}
+
+.w-now{background:rgba(242,158,0,.45);border-radius:3px;box-shadow:0 0 0 2px rgba(242,158,0,.45)}
+/* A line leaving: its room closes once it is gone. */
+.gone{transition:max-height .35s ease,margin .35s ease,padding .35s ease;overflow:hidden}
+.clock{display:block;font:10.5px ui-monospace,Menlo,monospace;color:#9fd1ff;margin-top:3px}
+.hideclocks .clock{display:none}
+
+.log{font:12.5px/1.6 ui-monospace,Menlo,monospace;color:var(--muted);background:var(--card);border:1px solid var(--line);border-radius:8px;padding:8px 10px;width:960px;max-width:100%;box-sizing:border-box;min-height:60px;margin-top:8px}
+
+/* Timeline drawing */
+.tl{font:12px system-ui;width:900px;max-width:100%}
+.tl .row{display:flex;align-items:center;gap:8px;margin:4px 0}
+.tl .who{width:150px;color:var(--muted);flex:none}
+.tl .bar{position:relative;height:16px;flex:1}
+.tl .seg{position:absolute;top:0;bottom:0;border-radius:3px}
+.tl .r{background:var(--amber)}
+.tl .f{background:linear-gradient(90deg,rgba(247,168,35,.75),rgba(247,168,35,0))}
+.tl .f2{background:linear-gradient(90deg,rgba(247,168,35,.8) 0%,rgba(247,168,35,.7) 40%,rgba(247,168,35,0))}
+.tl .axis{display:flex;justify-content:space-between;color:var(--muted);margin-left:158px}
+</style>
+</head>
+<body>
+<h1>The words on the picture fade away by themselves</h1>
+<p class="lede">Every line on the picture, the narrator's on the left and what people say on the right, starts to fade <b>the moment it has been read</b>, and is gone <b>5 seconds</b> later. It fades whether or not more lines come after it, and whether it has been pushed up or not. When it is gone, its room closes. The whole turn can still be read in <b>Story so far</b>. This replaces today's dimming by turn, where older lines are kept at about half and a third of full strength.</p>
+
+<h2>Try it</h2>
+<p class="lede">Press <b>Play the turn</b>. The small blue clocks under each line show how far into its fade it is. They are only here to judge the timing and will not be in the game.</p>
+<div class="controls">
+  <button id="play">▶ Play the turn</button>
+  <span class="lbl">Narration:</span>
+  <button class="narr-t" data-n="on" aria-pressed="true">On</button>
+  <button class="narr-t" data-n="off" aria-pressed="false">Off</button>
+  <button id="clocks" aria-pressed="true">Clocks</button>
+</div>
+<div id="stage" class="stage">
+  <div class="pic"></div><div class="topbar"></div>
+  <div class="room">Elior's Cottage</div>
+  <div class="narr" id="narr"></div>
+  <div class="talk" id="talk"></div>
+  <div class="dock"><i>Look</i><i>Talk</i><i>Use</i><i>Take</i><span style="margin-left:auto">Story so far ▸</span></div>
+</div>
+<div class="log" id="log"></div>
+
+<h2>The fade, drawn over time</h2>
+<p class="lede">Amber is the line being read (narration on). The fade begins when reading ends: clear for 2 s, then eased out, gone at 5 s. Resting the pointer on a line holds its fade. (Agreed: “stays clear, then fades”, rather than an even fade; and the pointer holds it.)</p>
+<div class="tl">
+  <div class="row"><span class="who">Stays, then fades</span><span class="bar"><i class="seg r" style="left:0;width:30%"></i><i class="seg f2" style="left:30%;width:50%"></i></span></div>
+  <div class="axis"><span>line starts</span><span style="margin-left:18%">read to the end</span><span>+2.5 s</span><span>+5 s: gone</span></div>
+</div>
+
+<h2>What decides when the 5 seconds start</h2>
+<table>
+<tr><th>Situation</th><th>Fade starts</th></tr>
+<tr><td>Narration on</td><td>when the narrator has read the line's last word</td></tr>
+<tr><td>Narration on, the player taps to hurry the line</td><td>when the line is cut short, as if it had been read</td></tr>
+<tr><td>Narration off</td><td>when the line has been shown and the time to read it has passed (the same pause the game already waits before the next line)</td></tr>
+<tr><td>Hold to skip, or Esc</td><td>every line shown is counted as read, and all of them fade together</td></tr>
+<tr><td>The player acts during the fade</td><td>the old lines keep fading. The new turn's lines come in at full strength.</td></tr>
+<tr><td>Hide (the ✕)</td><td>as today: everything is hidden at once</td></tr>
+</table>
+
+<script>
+const PORTRAITS = '../../web/public/images/generated/';
+const TURN = [
+  {side:'narr', text:'You sit down at the table. Grandmother pours tea without asking, the way she always has.'},
+  {side:'right', who:'Grandmother', img:'act1-portrait-grandmother.png', text:'You slept through the storm, little one. Or did you?'},
+  {side:'left', who:'Elior', img:'portrait-elior.png', text:'I dreamt of a voice. It knew my name.'},
+  {side:'narr', text:'She sets the pot down slowly, and for a moment she does not look at you.'},
+  {side:'right', who:'Grandmother', img:'act1-portrait-grandmother.png', text:'Then it is time you heard about your grandfather’s lantern.'},
+  {side:'narr', text:'Outside, the wind turns, and a shutter knocks once against the wall.'},
+];
+const FADE_MS = 5000, WORD_MS = 300, GAP_MS = 500, OFF_READ_MS_PER_WORD = 220;
+let curve = 'late', narrated = true, hoverHolds = true, run = 0;
+const narrEl = document.getElementById('narr'), talkEl = document.getElementById('talk'), logEl = document.getElementById('log');
+const say = (m) => { const t = (performance.now()-t0)/1000; const d = document.createElement('div'); d.textContent = `${t.toFixed(1)} s  ${m}`; logEl.prepend(d); while (logEl.children.length > 5) logEl.lastChild.remove(); };
+let t0 = performance.now();
+
+function pick(cls, attr, set) {
+  document.querySelectorAll('.'+cls).forEach((b) => b.addEventListener('click', () => {
+    document.querySelectorAll('.'+cls).forEach((o) => o.setAttribute('aria-pressed', o === b));
+    set(b.dataset[attr]);
+  }));
+}
+pick('curve', 'c', (v) => curve = v);
+pick('narr-t', 'n', (v) => { narrated = v === 'on'; play(); });
+pick('hov', 'h', (v) => hoverHolds = v === 'yes');
+document.getElementById('clocks').addEventListener('click', (e) => {
+  const on = e.target.getAttribute('aria-pressed') !== 'true';
+  e.target.setAttribute('aria-pressed', on);
+  document.getElementById('stage').classList.toggle('hideclocks', !on);
+});
+document.getElementById('play').addEventListener('click', play);
+
+/* Opacity at a point of the fade (0..1 of the 5 s). */
+function strength(p) {
+  if (curve === 'even') return 1 - p;
+  // B: clear for the first 40%, then an easing fade to nothing.
+  if (p < 0.4) return 1;
+  const q = (p - 0.4) / 0.6; return 1 - q * q * (3 - 2 * q);
+}
+
+const fading = [];
+function startFade(el, label) {
+  el._fade = {elapsed: 0, last: performance.now(), label};
+  fading.push(el);
+  say(`“${label}…” read: starts fading`);
+}
+function tick(now) {
+  for (let i = fading.length - 1; i >= 0; i--) {
+    const el = fading[i], f = el._fade;
+    const dt = now - f.last; f.last = now;
+    if (!(hoverHolds && el.matches(':hover'))) f.elapsed += dt;
+    const p = Math.min(1, f.elapsed / FADE_MS);
+    el.style.opacity = strength(p);
+    const clock = el.querySelector('.clock');
+    if (clock) clock.textContent = p < 1 ? `fading ${(f.elapsed/1000).toFixed(1)} / 5.0 s` : 'gone';
+    if (p >= 1) {
+      fading.splice(i, 1);
+      const h = el.offsetHeight; el.classList.add('gone'); el.style.maxHeight = h + 'px';
+      void el.offsetHeight; el.style.maxHeight = '0px'; el.style.marginTop = '-8px';
+      setTimeout(() => el.remove(), 380);
+      say(`“${f.label}…” gone`);
+    }
+  }
+  requestAnimationFrame(tick);
+}
+requestAnimationFrame(tick);
+
+function build(line) {
+  const words = line.text.split(' ').map((w) => `<span>${w}</span>`).join(' ');
+  let el, box;
+  if (line.side === 'narr') {
+    el = document.createElement('div'); el.className = 'ncard'; el.innerHTML = `${words}<span class="clock"></span>`; box = el;
+    narrEl.appendChild(el);
+  } else {
+    el = document.createElement('div'); el.className = `ln ${line.side}`;
+    el.innerHTML = `<span class="por" style="background-image:url(${PORTRAITS}${line.img})"></span><div class="col"><b class="nm">${line.who}</b><div class="bub">${words}<span class="clock"></span></div></div>`;
+    box = el.querySelector('.bub');
+    talkEl.appendChild(el);
+  }
+  return {el, box, spans: box.querySelectorAll('span:not(.clock)')};
+}
+
+const wait = (ms, r) => new Promise((ok) => setTimeout(() => ok(r === run), ms));
+async function play() {
+  const me = ++run; t0 = performance.now();
+  fading.length = 0; narrEl.innerHTML = ''; talkEl.innerHTML = ''; logEl.innerHTML = '';
+  say(narrated ? 'Turn told with narration' : 'Turn told without narration');
+  for (const line of TURN) {
+    const {el, box, spans} = build(line);
+    const label = line.text.split(' ').slice(0, 4).join(' ');
+    if (narrated) {
+      box.classList.add('reading');
+      for (const s of spans) {
+        s.classList.add('w-now');
+        if (!(await wait(WORD_MS, me))) return;
+        s.classList.remove('w-now');
+      }
+      box.classList.remove('reading');
+      startFade(el, label);
+      if (!(await wait(GAP_MS, me))) return;
+    } else {
+      if (!(await wait(spans.length * OFF_READ_MS_PER_WORD, me))) return;
+      startFade(el, label);
+    }
+  }
+  say('Turn told: the player can act');
+}
+</script>
+</body>
+</html>

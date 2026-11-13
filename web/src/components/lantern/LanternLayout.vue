@@ -30,7 +30,7 @@ import { useFocusTrap } from '@/composables/useFocusTrap'
 import { nameActions, type NameAction } from '@/lantern/nameActions'
 import { parseCountedName } from '@/lantern/inventoryChanges'
 import { useStoryFollow } from '@/composables/useStoryFollow'
-import { STAGE_BUBBLES, useBubbleAges } from '@/composables/useBubbleAges'
+import { FADING_LINES, useFadeOnceRead } from '@/composables/useFadeOnceRead'
 import { useNarrationPaper } from '@/composables/useNarrationPaper'
 import {
   SHORT_QUERY,
@@ -107,8 +107,9 @@ import type { SaveSlot } from '@/types/bridge'
  * side and the actions as one row along the bottom.
  * The left side is the narration paper: the turns since the last room change
  * (`useNarrationPaper`), each told as one bubble per paragraph like the speech
- * on the right (`StoryTurn`), the newest bubble lit and older ones dimmed
- * (`useBubbleAges`); the command is not echoed (Story so far keeps it), and
+ * on the right (`StoryTurn`); every bubble and line on the picture fades away
+ * 5 s after it has been read, its room closing (`useFadeOnceRead`), and the
+ * Hide goes once none is left; the command is not echoed (Story so far keeps it), and
  * quest news told in the middle leaves nothing here. The newest turn grows as
  * the narrator reaches each part and, when it is taller than the room under
  * the plate, scrolls with a "More below" pill. One "▾ Hide" on its own line at the bottom centre of the picture (or N,
@@ -500,10 +501,13 @@ const paperAway = computed(
 )
 /**
  * Something is on the picture for the one Hide to clear: the narrator's
- * cards, or on the two-sided laptop stage the speech beside them.
+ * cards, or on the two-sided laptop stage the speech beside them, with a line
+ * of them not yet faded away.
  */
 const wordsVisible = computed(
-  () => paper.visible.value || (twoSides.value && speech.visible.length > 0),
+  () =>
+    (paper.visible.value || (twoSides.value && speech.visible.length > 0)) &&
+    fading.live.value > 0,
 )
 /** The "▾ Hide": the words are showing and no arrival holds them away. */
 const showHide = computed(
@@ -1215,9 +1219,6 @@ onUnmounted(() => {
   cancelAnimationFrame(widePlateFrame)
 })
 
-// The narrator's bubbles and the column's lines dim by how far back they were told, as speech does.
-useBubbleAges(contentEl, STAGE_BUBBLES)
-
 /** The phone's plate height, which the arrival on the picture stays clear of. */
 const plateHeight = ref(108)
 let plateResize: ResizeObserver | undefined
@@ -1339,6 +1340,8 @@ const presentation = useLanternPresentation({
 
 /** The whole game (the hold to skip listens for presses in it). */
 const rootEl = ref<HTMLElement | null>(null)
+/** The lines on the picture (narrator's and speech) fade away once read; `live` counts those left. */
+const fading = useFadeOnceRead(rootEl, FADING_LINES)
 /**
  * Whether the story is being told: a change of scene, a talk still to change
  * it, words still coming, the narrator reading, or a room's words on the

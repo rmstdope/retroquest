@@ -21,7 +21,7 @@ import { useSceneStore } from '@/stores/useSceneStore'
 import { useReadAlong } from '@/composables/useReadAlong'
 import { arrivesOnPicture, recordOnlyFrom } from '@/lantern/stageArrival'
 import type { CardPiece } from '@/lantern/columnPieces'
-import { toldAsSpeech } from '@/lantern/stageSpeech'
+import { readingPauseMs, toldAsSpeech } from '@/lantern/stageSpeech'
 
 /**
  * One turn in the Lantern story: the command echo, the answer's blocks and
@@ -42,7 +42,9 @@ import { toldAsSpeech } from '@/lantern/stageSpeech'
  * the middle of the picture on a first visit (a look, a revisit and a load
  * tell the room here) and quest news, which the stage tells in the middle of
  * the picture (`useArrivalStore`) and Story so far and the journal keep. A
- * card with nothing to tell renders nothing.
+ * card with nothing to tell renders nothing. Each bubble fades away once it
+ * has been read (`useFadeOnceRead`, run by the layout): it says when it is
+ * being read aloud, and in a turn that is not, how long it takes to read.
  *
  * In the single column of a phone or a narrow window (`piece`, see
  * `columnPieces`) the turn is told as several cards with the spoken lines
@@ -202,6 +204,32 @@ const hollow = computed(
     !questCards.value,
 )
 
+/** The words of a block, for the time it takes to read. */
+function wordsOf(block: TurnBlock): string {
+  return 'markup' in block
+    ? block.markup
+    : block.items.map((item) => item.markup).join(' ')
+}
+
+/**
+ * On a card of a turn that is not read aloud, how long bubble `unit` waits
+ * before it fades away (`useFadeOnceRead`): the time to read it and the
+ * card's bubbles before it, as they all show at once. A narrated turn's
+ * bubble fades once it has been read aloud, so waits nothing here; nor does
+ * anything outside a card. The chips come last.
+ */
+function readMs(unit: number): number | undefined {
+  if (!props.card || fade.value) return undefined
+  let ms = 0
+  blocks.value.forEach((block, index) => {
+    if (index <= unit && inPiece(index) && !onSpeech(block))
+      ms += readingPauseMs(wordsOf(block))
+  })
+  if (props.turn.arrival && roomOnCard.value && unit >= arrivalUnit.value)
+    ms += readingPauseMs(props.turn.arrival.description)
+  return ms
+}
+
 function chipLabel(chip: Chip): string {
   const count = chip.count > 1 ? ` ×${chip.count}` : ''
   return `${displayName(chip.name)}${count}`
@@ -236,6 +264,7 @@ function chipLabel(chip: Chip): string {
             'lq-bubble': card,
           }"
           :data-unit="index"
+          :data-read-ms="readMs(index)"
           v-html="html(block.markup, index)"
         ></p>
         <p
@@ -243,6 +272,8 @@ function chipLabel(chip: Chip): string {
           class="lq-block-event"
           :class="{ 'lq-appear': fade, 'lq-bubble lq-bubble-event': card }"
           :data-unit="index"
+          :data-reading="(card && isSpeaking(index)) || undefined"
+          :data-read-ms="readMs(index)"
         >
           <span class="lq-diamond" aria-hidden="true">◆</span>
           <span v-html="renderMarkup(block.markup)"></span>
@@ -255,6 +286,8 @@ function chipLabel(chip: Chip): string {
             'lq-bubble lq-bubble-failure': card,
           }"
           :data-unit="index"
+          :data-reading="(card && isSpeaking(index)) || undefined"
+          :data-read-ms="readMs(index)"
         >
           <span v-if="card" class="lq-failure-mark" aria-hidden="true">⊝</span>
           <svg
@@ -283,6 +316,7 @@ function chipLabel(chip: Chip): string {
             'lq-bubble': card,
           }"
           :data-unit="index"
+          :data-read-ms="readMs(index)"
         >
           <div v-if="speakerLabels[index]" class="lq-speaker">
             {{ displayName(speakerLabels[index] ?? '') }}
@@ -294,6 +328,8 @@ function chipLabel(chip: Chip): string {
           class="lq-block-checklist"
           :class="{ 'lq-appear': fade, 'lq-bubble': card }"
           :data-unit="index"
+          :data-reading="(card && isSpeaking(index)) || undefined"
+          :data-read-ms="readMs(index)"
         >
           <li
             v-for="(item, itemIndex) in block.items"
@@ -330,6 +366,7 @@ function chipLabel(chip: Chip): string {
         'lq-bubble': card,
       }"
       :data-unit="arrivalUnit"
+      :data-read-ms="readMs(arrivalUnit)"
     />
 
     <div
@@ -341,6 +378,7 @@ function chipLabel(chip: Chip): string {
       }"
       role="group"
       aria-label="Changes"
+      :data-read-ms="readMs(Number.POSITIVE_INFINITY)"
     >
       <span
         v-for="({ chip, sign, spoken }, index) in chips"
@@ -436,13 +474,6 @@ function chipLabel(chip: Chip): string {
   box-shadow:
     0 0 0 2px var(--lq-accent),
     0 2px 10px rgba(0, 0, 0, 0.18);
-}
-/* Older bubbles dim as older speech does: one step, then a further one (see `useBubbleAges`). */
-.lq-bubble[data-age='prev'] {
-  opacity: 0.55;
-}
-.lq-bubble[data-age='old'] {
-  opacity: 0.3;
 }
 .lq-failure-mark {
   flex: 0 0 auto;

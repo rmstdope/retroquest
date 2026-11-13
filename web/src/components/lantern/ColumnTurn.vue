@@ -8,7 +8,8 @@ import { FOLLOW_EVENT } from '@/composables/useStoryFollow'
 import { useReadAlong } from '@/composables/useReadAlong'
 import { columnPieces } from '@/lantern/columnPieces'
 import { parseTurn } from '@/lantern/parseTurn'
-import type { SpeechLine } from '@/lantern/stageSpeech'
+import { readingPauseMs, type SpeechLine } from '@/lantern/stageSpeech'
+import { useNarrationStore } from '@/stores/useNarrationStore'
 import { renderMarkup } from '@/utils/theme'
 import SpeechPortrait from './SpeechPortrait.vue'
 import StoryTurn from './StoryTurn.vue'
@@ -20,8 +21,9 @@ import StoryTurn from './StoryTurn.vue'
  * right edge with a small round portrait on the right, Elior at its left with
  * his on the left; the name and portrait show once per run of lines from one
  * speaker, and a narrator card in between ends the run. Each bubble and line
- * is dimmed by how far back it was told (`useBubbleAges`, run by the layout
- * over the whole column). A turn that is still being
+ * fades away once it has been read (`useFadeOnceRead`, run by the layout over
+ * the whole column); a line of a turn that is not read aloud says how long it
+ * takes to read. A turn that is still being
  * told stops at the first line that has not appeared yet, so later cards
  * never come before the line they follow, and a turn whose move is still
  * changing the picture shows no line at all. The lines are the conversation's
@@ -38,6 +40,15 @@ const props = defineProps<{
 const game = useGameStore()
 const speech = useStageSpeechStore()
 const scene = useSceneStore()
+const narration = useNarrationStore()
+/** Whether the turn is read aloud, kept once it has been (its lines then fade once read, not after a time to read). */
+const narrated = ref(narration.narrates(props.turn.id))
+watch(
+  () => narration.narrates(props.turn.id),
+  (now) => {
+    if (now) narrated.value = true
+  },
+)
 
 /**
  * The turn's pieces in the order they happened; of a talk that took Elior to
@@ -134,6 +145,7 @@ function heads(index: number): boolean {
         :class="[`lq-cl-${piece.line.side}`, { 'lq-cl-head': heads(index) }]"
         :data-unit="piece.line.unit >= 0 ? piece.line.unit : undefined"
         :data-piece="index"
+        :data-read-ms="narrated ? undefined : readingPauseMs(piece.line.markup)"
         data-testid="speech-line"
       >
         <SpeechPortrait
@@ -178,13 +190,6 @@ function heads(index: number): boolean {
   display: flex;
   flex-direction: column;
   gap: 8px;
-}
-/* Older lines dim as older bubbles do: one step, then a further one (see `useBubbleAges`). */
-.lq-cl[data-age='prev'] {
-  opacity: 0.55;
-}
-.lq-cl[data-age='old'] {
-  opacity: 0.3;
 }
 /* One row: the portrait (or a gap of its width) at the edge, the words beside it. */
 .lq-cl {

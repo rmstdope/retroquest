@@ -223,7 +223,7 @@ describe('useLanternPresentation', () => {
         }
       }
 
-      it('stays on the picture, dimmed as the turn before, when a command cuts the talk off before it appeared', async () => {
+      it('stays on the picture when a command cuts the talk off before it appeared', async () => {
         await present(false, true)
         const speech = useStageSpeechStore()
         await say(talk(1))
@@ -235,7 +235,6 @@ describe('useLanternPresentation', () => {
           ['Grandmother', 'Some voices are older than memory.'],
           ['Grandmother', 'Sometimes I think it worked.'],
         ])
-        expect(speech.ageOf(1)).toBe('prev')
       })
 
       it('is cleared with the rest when the command leaves the room', async () => {
