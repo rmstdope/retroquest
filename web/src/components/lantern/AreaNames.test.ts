@@ -152,9 +152,9 @@ afterEach(() => {
   for (const wrapper of wrappers) wrapper.unmount()
   wrappers = []
   document.body.innerHTML = ''
-  vi.useRealTimers()
   vi.restoreAllMocks()
   vi.unstubAllGlobals()
+  vi.useRealTimers()
 })
 
 describe('AreaNames', () => {
