@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { describe, it, expect, afterEach, beforeEach } from 'vitest'
+import { describe, it, expect, afterEach, beforeEach, vi } from 'vitest'
 import { mount, flushPromises, type VueWrapper } from '@vue/test-utils'
 import { createPinia, setActivePinia } from 'pinia'
 import TitlePage from './TitlePage.vue'
@@ -204,6 +204,35 @@ describe('TitlePage', () => {
       expect(click.defaultPrevented).toBe(true)
       expect(w.emitted('start')).toBeUndefined()
       await w.get('button').trigger('pointerdown')
+      await w.get('button').trigger('click')
+      expect(w.emitted('start')).toHaveLength(1)
+    })
+
+    it('lets the skipping click reach a bubble-phase window listener, as the music does', async () => {
+      const w = mountTitle()
+      document.body.dispatchEvent(
+        new Event('pointerdown', { bubbles: true, cancelable: true }),
+      )
+      await flushPromises()
+      const heard = vi.fn()
+      window.addEventListener('click', heard)
+      w.get('button').element.dispatchEvent(
+        new MouseEvent('click', { bubbles: true, cancelable: true }),
+      )
+      window.removeEventListener('click', heard)
+      expect(heard).toHaveBeenCalledTimes(1)
+      expect(w.emitted('start')).toBeUndefined()
+    })
+
+    it('ends its guard at a key press when the gesture never clicked', async () => {
+      const w = mountTitle()
+      document.body.dispatchEvent(
+        new Event('pointerdown', { bubbles: true, cancelable: true }),
+      )
+      await flushPromises()
+      document.body.dispatchEvent(
+        new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }),
+      )
       await w.get('button').trigger('click')
       expect(w.emitted('start')).toHaveLength(1)
     })
