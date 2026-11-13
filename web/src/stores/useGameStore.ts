@@ -1410,14 +1410,41 @@ export const useGameStore = defineStore('game', () => {
     return true
   }
 
+  /**
+   * The one save path: `write` files the save (and answers as the bridge
+   * does), the notice or the failure goes in the story, and the answer says
+   * whether the game was saved. Nothing is saved while an act's end is held.
+   */
+  function saveWith(
+    write: (b: GameBridge) => string,
+    notice: string,
+    command: string | null,
+    options?: { chips: false },
+  ): boolean {
+    if (openHeldActEnd()) return false
+    const result = write(requireBridge())
+    if (!showNotice(result, notice)) showOutput(command, result, options)
+    return saved(result)
+  }
+
+  /** The one load path: `read` answers as the bridge does, then `afterLoad`. */
+  function loadWith(
+    read: (b: GameBridge) => string,
+    notice: string,
+    command: string | null,
+  ): void {
+    const b = requireBridge()
+    afterLoad(b, command, read(b), notice)
+  }
+
   /** Quick save; true when the game was saved (a failure goes in the story). */
   function saveGame(command: string | null = null): boolean {
-    if (openHeldActEnd()) return false
-    const b = requireBridge()
-    const result = b.quickSaveGame(turns.value)
-    if (!showNotice(result, 'Game saved'))
-      showOutput(command, result, { chips: false })
-    return saved(result)
+    return saveWith(
+      (b) => b.quickSaveGame(turns.value),
+      'Game saved',
+      command,
+      { chips: false },
+    )
   }
 
   /** A save's answer says it worked (not a failure). */
@@ -1426,22 +1453,20 @@ export const useGameStore = defineStore('game', () => {
   }
 
   function loadGame(command: string | null = null): void {
-    const b = requireBridge()
-    afterLoad(b, command, b.quickLoadGame(), 'Game loaded')
+    loadWith((b) => b.quickLoadGame(), 'Game loaded', command)
   }
 
   function saveNamedGame(name: string, command: string | null = null): boolean {
-    if (openHeldActEnd()) return false
-    const b = requireBridge()
-    const result = b.saveNamedGame(name, turns.value)
-    if (!showNotice(result, `Game saved · ${name}`))
-      showOutput(command, result, { chips: false })
-    return saved(result)
+    return saveWith(
+      (b) => b.saveNamedGame(name, turns.value),
+      `Game saved · ${name}`,
+      command,
+      { chips: false },
+    )
   }
 
   function loadNamedGame(name: string, command: string | null = null): void {
-    const b = requireBridge()
-    afterLoad(b, command, b.loadNamedGame(name), `Game loaded · ${name}`)
+    loadWith((b) => b.loadNamedGame(name), `Game loaded · ${name}`, command)
   }
 
   /**
@@ -1526,17 +1551,15 @@ export const useGameStore = defineStore('game', () => {
   }
 
   function saveToSlot(slot: number): boolean {
-    if (openHeldActEnd()) return false
-    const b = requireBridge()
-    const result = b.saveToSlot(slot, turns.value)
-    if (!showNotice(result, `Game saved · Slot ${slot}`))
-      showOutput(null, result)
-    return saved(result)
+    return saveWith(
+      (b) => b.saveToSlot(slot, turns.value),
+      `Game saved · Slot ${slot}`,
+      null,
+    )
   }
 
   function loadFromSlot(slot: number): void {
-    const b = requireBridge()
-    afterLoad(b, null, b.loadFromSlot(slot), `Game loaded · Slot ${slot}`)
+    loadWith((b) => b.loadFromSlot(slot), `Game loaded · Slot ${slot}`, null)
   }
 
   /**

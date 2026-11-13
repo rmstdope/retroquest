@@ -8,29 +8,30 @@ import { areaThingsOf, type AreaThing } from '@/lantern/areaThings'
 import { appliedPatchIds } from '@/lantern/roomPatchState'
 import { appStorage } from '@/storage/appStorage'
 
-type StoredNamedSave = {
-  name: string
-  timestamp: string
+/**
+ * What every kind of save keeps, whichever way it is filed: the engine's save
+ * data, when it was made, where the player was and the story so far. A new
+ * fact kept with a save is a field here, a line in `buildStoredSave` and a
+ * line in `cardOf`.
+ */
+type StoredSave = {
   data: string
+  /** When it was made; missing in a quick save whose details could not be kept. */
+  timestamp?: string
   /** Where the player was; missing in saves made before the details were kept. */
   act?: string
   room?: string
-  quests?: SaveSlot['quests']
-  /** The story so far as the UI kept it; missing in saves made before it was kept. */
-  story?: unknown
-}
-
-type StoredSaveSlot = {
-  slot: number
-  act: string
-  room: string
-  timestamp: string
-  data: string
   /** Missing in saves made before quest counts were kept. */
   quests?: SaveSlot['quests']
   /** The story so far as the UI kept it; missing in saves made before it was kept. */
   story?: unknown
 }
+
+/** A save made under a name: a stored save and the name it is filed under. */
+type StoredNamedSave = StoredSave & { name: string }
+
+/** A save in a numbered slot: a stored save and the slot it is filed under. */
+type StoredSaveSlot = StoredSave & { slot: number }
 
 /** The quick save's data and its details. */
 const QUICK_KEY = 'retroquest_save'
@@ -49,13 +50,12 @@ const SAVE_FAILED =
 const NO_SAVE = '[failure]No save file found.[/failure]'
 const SAVED = 'Game saved.'
 
-function readQuickMeta(): Partial<Omit<SaveSlot, 'slot'>> {
+/** The details stored beside the quick save's data (all optional). */
+function readQuickMeta(): Partial<StoredSave> {
   try {
     const raw = appStorage.getItem(QUICK_META_KEY)
     const meta: unknown = raw ? JSON.parse(raw) : null
-    return meta && typeof meta === 'object'
-      ? (meta as Partial<Omit<SaveSlot, 'slot'>>)
-      : {}
+    return meta && typeof meta === 'object' ? (meta as Partial<StoredSave>) : {}
   } catch {
     return {}
   }
@@ -66,6 +66,15 @@ function isSaveData(data: unknown): data is string {
   return typeof data === 'string' && data.startsWith('{')
 }
 
+/**
+ * The one reader of a stored save, whichever way it is filed: the entry as
+ * stored when it is an object holding save data this engine wrote, else null.
+ */
+function readStoredSave<T extends StoredSave>(entry: unknown): T | null {
+  if (typeof entry !== 'object' || entry === null) return null
+  return isSaveData((entry as StoredSave).data) ? (entry as T) : null
+}
+
 /** Read and validate persisted named saves from `appStorage`. */
 function readStoredNamedSaves(): StoredNamedSave[] {
   try {
@@ -73,18 +82,19 @@ function readStoredNamedSaves(): StoredNamedSave[] {
     if (!raw) return []
     const parsed: unknown = JSON.parse(raw)
     if (!Array.isArray(parsed)) return []
-    return parsed.filter((entry): entry is StoredNamedSave => {
-      if (typeof entry !== 'object' || entry === null) return false
-      const candidate = entry as Record<string, unknown>
-      return typeof candidate.name === 'string' && isSaveData(candidate.data)
-    })
+    return parsed
+      .map((entry: unknown) => readStoredSave<StoredNamedSave>(entry))
+      .filter(
+        (entry): entry is StoredNamedSave =>
+          entry !== null && typeof entry.name === 'string',
+      )
   } catch {
     return []
   }
 }
 
 /**
- * Read persisted 8-slot save data from `appStorage`.
+ * Read persisted 8-slot save data from appStorage.
  * Always returns an array of exactly 8 entries (null = empty slot).
  */
 function readStoredSaveSlots(): (StoredSaveSlot | null)[] {
@@ -95,15 +105,31 @@ function readStoredSaveSlots(): (StoredSaveSlot | null)[] {
     if (!Array.isArray(parsed) || parsed.length !== SLOT_COUNT) {
       return Array(SLOT_COUNT).fill(null)
     }
-    return parsed.map((entry: unknown) =>
-      entry &&
-      typeof entry === 'object' &&
-      isSaveData((entry as StoredSaveSlot).data)
-        ? (entry as StoredSaveSlot)
-        : null,
-    )
+    return parsed.map((entry: unknown) => readStoredSave<StoredSaveSlot>(entry))
   } catch {
     return Array(SLOT_COUNT).fill(null)
+  }
+}
+
+/** The one writer of a stored save's content: the data, its details and, when there is one, the story. */
+function buildStoredSave(
+  data: string,
+  details: Omit<StoredSave, 'data' | 'story'>,
+  story: unknown,
+): StoredSave {
+  return { data, ...details, ...(story === null ? {} : { story }) }
+}
+
+/** The one card a stored save is shown as, filed under `slot` (and `name` when it has one). */
+function cardOf(stored: StoredSave, slot: number, name?: string): SaveSlot {
+  return {
+    slot,
+    ...(name === undefined ? {} : { name }),
+    act: stored.act ?? null,
+    room: stored.room ?? null,
+    timestamp: stored.timestamp ?? null,
+    quests: stored.quests ?? null,
+    outdated: isOutdatedSave(stored.data),
   }
 }
 
@@ -180,7 +206,7 @@ export function useBridge(loader: () => Promise<ActClass[]> = loadActs) {
   }
 
   /** The details stored next to a save: where the player was and when. */
-  function saveDetails(): Omit<StoredSaveSlot, 'slot' | 'data'> {
+  function saveDetails(): Omit<StoredSave, 'data' | 'story'> {
     const { controller } = requireGame()
     return {
       act: controller.getActName(),
@@ -240,19 +266,20 @@ export function useBridge(loader: () => Promise<ActClass[]> = loadActs) {
   function quickSaveGame(story: unknown = null): string {
     const { game } = requireGame()
     try {
-      const data = game.toSaveData()
-      const meta = JSON.stringify(saveDetails())
-      const told = story === null ? null : JSON.stringify(story)
-      appStorage.setItem(QUICK_KEY, data)
+      const stored = buildStoredSave(game.toSaveData(), saveDetails(), story)
+      appStorage.setItem(QUICK_KEY, stored.data)
       try {
-        appStorage.setItem(QUICK_META_KEY, meta)
+        appStorage.setItem(
+          QUICK_META_KEY,
+          JSON.stringify({ ...stored, data: undefined, story: undefined }),
+        )
       } catch {
         // No details rather than the previous save's.
         appStorage.removeItem(QUICK_META_KEY)
       }
       try {
-        if (told === null) appStorage.removeItem(QUICK_STORY_KEY)
-        else appStorage.setItem(QUICK_STORY_KEY, told)
+        if (stored.story === undefined) appStorage.removeItem(QUICK_STORY_KEY)
+        else appStorage.setItem(QUICK_STORY_KEY, JSON.stringify(stored.story))
       } catch {
         // No story rather than the previous save's.
         appStorage.removeItem(QUICK_STORY_KEY)
@@ -273,10 +300,21 @@ export function useBridge(loader: () => Promise<ActClass[]> = loadActs) {
     }
   }
 
-  function quickLoadGame(): string {
+  /** The quick save as one stored save, from the keys it is kept under; null when there is none this engine can read. */
+  function readQuickSave(): StoredSave | null {
     const data = appStorage.getItem(QUICK_KEY)
-    if (!isSaveData(data)) return NO_SAVE
-    return loadWithStory(data, readQuickStory())
+    if (!isSaveData(data)) return null
+    const meta = readQuickMeta()
+    return {
+      ...meta,
+      data,
+      story: readQuickStory(),
+    }
+  }
+
+  function quickLoadGame(): string {
+    const stored = readQuickSave()
+    return stored ? loadWithStory(stored.data, stored.story) : NO_SAVE
   }
 
   /**
@@ -284,17 +322,8 @@ export function useBridge(loader: () => Promise<ActClass[]> = loadActs) {
    * can read. A save from an older version is a card marked `outdated`.
    */
   function getQuickSave(): SaveSlot | null {
-    const data = appStorage.getItem(QUICK_KEY)
-    if (!isSaveData(data)) return null
-    const meta = readQuickMeta()
-    return {
-      slot: 0,
-      act: meta.act ?? null,
-      room: meta.room ?? null,
-      timestamp: meta.timestamp ?? null,
-      quests: meta.quests ?? null,
-      outdated: isOutdatedSave(data),
-    }
+    const stored = readQuickSave()
+    return stored ? cardOf(stored, 0) : null
   }
 
   /** The 8 slots as cards; a save from an older version is marked `outdated`. */
@@ -302,17 +331,15 @@ export function useBridge(loader: () => Promise<ActClass[]> = loadActs) {
     const stored = readStoredSaveSlots()
     return Array.from({ length: SLOT_COUNT }, (_, i) => {
       const entry = stored[i]
-      const slot = i + 1
-      if (!entry)
-        return { slot, act: null, room: null, timestamp: null, quests: null }
-      return {
-        slot,
-        act: entry.act ?? null,
-        room: entry.room ?? null,
-        timestamp: entry.timestamp ?? null,
-        quests: entry.quests ?? null,
-        outdated: isOutdatedSave(entry.data),
-      }
+      return entry
+        ? cardOf(entry, i + 1)
+        : {
+            slot: i + 1,
+            act: null,
+            room: null,
+            timestamp: null,
+            quests: null,
+          }
     })
   }
 
@@ -326,7 +353,7 @@ export function useBridge(loader: () => Promise<ActClass[]> = loadActs) {
       .map((entry, index) => ({
         entry,
         index,
-        at: Date.parse(entry.timestamp),
+        at: Date.parse(entry.timestamp ?? ''),
       }))
       .sort((a, b) => {
         const byTime =
@@ -334,15 +361,7 @@ export function useBridge(loader: () => Promise<ActClass[]> = loadActs) {
           (Number.isNaN(a.at) ? -Infinity : a.at)
         return byTime === 0 || Number.isNaN(byTime) ? a.index - b.index : byTime
       })
-      .map(({ entry }) => ({
-        slot: NAMED_SLOT,
-        name: entry.name,
-        act: entry.act ?? null,
-        room: entry.room ?? null,
-        timestamp: entry.timestamp ?? null,
-        quests: entry.quests ?? null,
-        outdated: isOutdatedSave(entry.data),
-      }))
+      .map(({ entry }) => cardOf(entry, NAMED_SLOT, entry.name))
   }
 
   /**
@@ -376,9 +395,7 @@ export function useBridge(loader: () => Promise<ActClass[]> = loadActs) {
       const stored = readStoredSaveSlots()
       stored[slot - 1] = {
         slot,
-        data: game.toSaveData(),
-        ...saveDetails(),
-        ...(told === null ? {} : { story: told }),
+        ...buildStoredSave(game.toSaveData(), saveDetails(), told),
       }
       appStorage.setItem(SLOTS_KEY, JSON.stringify(stored))
     })
@@ -398,9 +415,7 @@ export function useBridge(loader: () => Promise<ActClass[]> = loadActs) {
       const saves = readStoredNamedSaves()
       const entry: StoredNamedSave = {
         name,
-        data: game.toSaveData(),
-        ...saveDetails(),
-        ...(told === null ? {} : { story: told }),
+        ...buildStoredSave(game.toSaveData(), saveDetails(), told),
       }
       const existing = saves.findIndex((s) => s.name === name)
       if (existing >= 0) saves[existing] = entry
