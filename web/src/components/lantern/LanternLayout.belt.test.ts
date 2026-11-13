@@ -491,8 +491,7 @@ describe('LanternLayout: the belt of pictures', () => {
     expect(narration.speaking(77)?.unit).toBe(0)
     await click(tile('item:bread').element)
     // The next block is read after the hurried one's short pause.
-    await new Promise((r) => setTimeout(r, 100))
-    expect(narration.speaking(77)?.unit).toBe(1)
+    await vi.waitFor(() => expect(narration.speaking(77)?.unit).toBe(1))
     expect(ring().exists()).toBe(false)
   })
 
