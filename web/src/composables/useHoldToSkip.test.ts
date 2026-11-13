@@ -12,6 +12,7 @@ import {
 
 describe('useHoldToSkip', () => {
   let telling: boolean
+  let thingIdle: boolean
   let skip: ReturnType<typeof vi.fn<() => void>>
   let clicks: number
   let hold: HoldToSkip
@@ -24,6 +25,7 @@ describe('useHoldToSkip', () => {
         hold = useHoldToSkip({
           root: () => document.querySelector('.root'),
           telling: () => telling,
+          thingIdle: () => thingIdle,
           skip: () => skip(),
         })
         return () =>
@@ -69,6 +71,7 @@ describe('useHoldToSkip', () => {
   beforeEach(() => {
     vi.useFakeTimers()
     telling = true
+    thingIdle = true
     skip = vi.fn()
     clicks = 0
     w = host()
@@ -156,14 +159,14 @@ describe('useHoldToSkip', () => {
     expect(clicks).toBe(1)
   })
 
-  it('skips when a thing on the picture is held, since its button does nothing while the story is told (rq-w30z)', async () => {
+  it('skips when a thing on the picture is held while its button does nothing (rq-w30z)', async () => {
     await press(document.querySelector('.thing')!, HOLD_TO_SKIP_MS)
     expect(skip).toHaveBeenCalledTimes(1)
     expect(clicks).toBe(0)
   })
 
-  it('leaves a thing on the picture its own press while nothing is told', async () => {
-    telling = false
+  it('leaves a thing on the picture its own press while its button acts, even as the story is told', async () => {
+    thingIdle = false
     await press(document.querySelector('.thing')!, HOLD_TO_SKIP_MS)
     expect(skip).not.toHaveBeenCalled()
     expect(clicks).toBe(1)

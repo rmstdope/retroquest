@@ -1353,6 +1353,8 @@ function beingTold(): boolean {
 const hold = useHoldToSkip({
   root: () => rootEl.value,
   telling: beingTold,
+  // A thing on the picture opens its ring whenever a press takes a move (an unnarrated arrival, say); otherwise its press is the hold's.
+  thingIdle: () => !pressTakesMove(),
   skip: () => presentation.skipTelling(),
 })
 /** Where a held press shows its ring, while it does. */

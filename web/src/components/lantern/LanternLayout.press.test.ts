@@ -12,6 +12,8 @@ import {
   type StageLine,
 } from '@/stores/useStageSpeechStore'
 import { useNarrationStore } from '@/stores/useNarrationStore'
+import { useArrivalStore } from '@/stores/useArrivalStore'
+import { HOLD_TO_SKIP_MS } from '@/composables/useHoldToSkip'
 import { useSceneStore } from '@/stores/useSceneStore'
 import { useSettingsStore } from '@/stores/useSettingsStore'
 import { setPictureProbe } from '@/lantern/roomPicture'
@@ -222,6 +224,92 @@ describe('LanternLayout: pressing a thing on the picture', () => {
     expect(ring().exists()).toBe(false)
     expect(line.shown).toBe(true)
     await press('bread')
+    expect(ring().exists()).toBe(true)
+  })
+
+  /** Press `id` down for `ms` of real time, then let go: the browser's click follows. */
+  const holdOn = async (id: string, ms: number): Promise<void> => {
+    const pointer = (type: string): void => {
+      hit(id).element.dispatchEvent(
+        new PointerEvent(type, {
+          bubbles: true,
+          cancelable: true,
+          button: 0,
+          isPrimary: true,
+          pointerId: 1,
+          clientX: 400,
+          clientY: 300,
+        }),
+      )
+    }
+    pointer('pointerdown')
+    await new Promise((r) => setTimeout(r, ms))
+    pointer('pointerup')
+    hit(id).element.dispatchEvent(
+      new MouseEvent('click', {
+        bubbles: true,
+        detail: 1,
+        clientX: 400,
+        clientY: 300,
+      }),
+    )
+    await flushPromises()
+  }
+
+  it('skips a narrated examine when a thing is held while it is told, and opens no ring (rq-w30z)', async () => {
+    await cottage()
+    const narration = useNarrationStore()
+    // A voice that plays until it is stopped.
+    narration.setAudioFactory(() => ({
+      volume: 1,
+      currentTime: 0,
+      onended: null,
+      onerror: null,
+      play: () => Promise.resolve(),
+      pause: () => {},
+    }))
+    const voiced = (markup: string) => ({
+      kind: 'block' as const,
+      parts: [
+        {
+          markup,
+          clip: {
+            file: 'x.mp3',
+            speaker: 'narrator',
+            duration: 5,
+            words: [],
+          },
+        },
+      ],
+    })
+    // Two blocks: a click would only hurry to the second; the hold skips both.
+    narration.begin(77, [voiced('A loaf.'), voiced('A crust.')], 'act1')
+    await flushPromises()
+    expect(
+      useStageSpeechStore().conversation?.lines.some((l) => !l.shown),
+    ).not.toBe(true)
+    expect(narration.isNarrating).toBe(true)
+    await holdOn('bread', HOLD_TO_SKIP_MS + 50)
+    expect(narration.isNarrating).toBe(false)
+    expect(ring().exists()).toBe(false)
+  })
+
+  it("still opens a thing's ring from a slow press while an unnarrated arrival is on the picture", async () => {
+    await cottage()
+    useArrivalStore().show(
+      99,
+      [
+        {
+          kind: 'description',
+          lines: [{ unit: 0, markup: 'A room.' }],
+          voiced: false,
+        },
+      ],
+      false,
+    )
+    await flushPromises()
+    expect(useArrivalStore().active).toBe(true)
+    await holdOn('bread', 300)
     expect(ring().exists()).toBe(true)
   })
 
