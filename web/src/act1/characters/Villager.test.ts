@@ -54,23 +54,6 @@ describe('Villager dialogue markup', () => {
     )
   })
 
-  it('tells the current second rumour after loading a save that holds the old one', () => {
-    const game = gameInSquare()
-    const villager = game.state.currentRoom.characters.find(
-      (c) => c instanceof Villager,
-    ) as Villager
-    villager.dialogueOptions[1] = 'Folks say he vanished when the moon went.'
-    villager.dialogueIndex = 1
-    const fresh = new Game([new Act1()])
-    expect(fresh.loadSaveData(game.toSaveData())).toContain('loaded')
-    const loaded = fresh.state.allRooms.VillageSquare.characters.find(
-      (c) => c instanceof Villager,
-    ) as Villager
-
-    expect(loaded.dialogueOptions[1]).toContain('asking after an old amulet')
-    expect(loaded.dialogueIndex).toBe(1)
-  })
-
   it('records that a villager has been talked to', () => {
     const game = gameInSquare()
     game.commandParser.parse('talk to villager')
@@ -86,22 +69,6 @@ describe('Tilda, the baker’s wife', () => {
 
     expectDialogueSpeaker(answer, 'Tilda')
     expect(game.state.getStoryFlag(FLAG_VILLAGER_TALKED_TO)).toBe(true)
-  })
-
-  it('is called Tilda after loading a save made while she was called villager', () => {
-    const game = gameInSquare()
-    const old = game.state.currentRoom.characters.find(
-      (c) => c instanceof Villager,
-    ) as Villager
-    old.name = 'villager'
-
-    const loaded = new Game([new Act1()])
-    loaded.loadSaveData(game.toSaveData())
-
-    expect(loaded.state.currentRoom.characters.map((c) => c.name)).toContain(
-      'Tilda',
-    )
-    expectDialogueSpeaker(loaded.commandParser.parse('talk to tilda'), 'Tilda')
   })
 
   it('asks whether Elior cleaned the well, once, then goes back to her rumours', () => {

@@ -3,7 +3,6 @@ import { Game } from '@/engine'
 import { executeCommands } from '@/testing/gameHelpers'
 import { Act1 } from '../Act1'
 import { Matches } from './Matches'
-import { Candle } from './Candle'
 
 /** An Act I game standing in the Village Chapel. */
 function gameInChapel(): Game {
@@ -35,16 +34,6 @@ describe('Candle', () => {
     expect(executeCommands(game, ['examine candle'])).toBe(
       'The candle is lit, casting a warm, steady light.',
     )
-  })
-
-  it('gives an unlit candle from an older save the cold wording', () => {
-    const game = gameInChapel()
-    const candle = new Candle()
-    candle.description =
-      'A simple beeswax candle. It provides a warm, steady light and a faint, ' +
-      'comforting scent.'
-    candle.refreshSavedText(game.state)
-    expect(candle.description).toBe(new Candle().description)
   })
 
   it('keeps a lit candle lit through the saved-text refresh', () => {

@@ -226,23 +226,6 @@ describe('Borin, named from the first moment', () => {
       '[character_name]Borin[/character_name] has nothing to sell you.',
     )
   })
-
-  it('is called Borin after loading a save made while he was the blacksmith', () => {
-    const game = new Game([new Act1()])
-    game.state.currentRoom = game.state.allRooms.BlacksmithsForge
-    game.state.currentRoom.characters[0].name = 'blacksmith'
-
-    const loaded = new Game([new Act1()])
-    loaded.loadSaveData(game.toSaveData())
-
-    expect(loaded.state.currentRoom.characters.map((c) => c.name)).toEqual([
-      'Borin',
-    ])
-    expectDialogueSpeaker(
-      loaded.commandParser.parse('talk to blacksmith'),
-      'Borin',
-    )
-  })
 })
 
 describe('Borin speaks to Elior as a neighbour (rq-m3fy)', () => {

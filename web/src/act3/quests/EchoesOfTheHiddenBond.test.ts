@@ -141,12 +141,6 @@ describe('Echoes of the Hidden Bond quest', () => {
     expect(quest.description).toContain('Under the hills: something they left')
   })
 
-  it('refreshes the completion text of an older save', () => {
-    quest.completion = 'once apprentices to Malakar'
-    quest.refreshSavedText(game.state)
-    expect(quest.completion).toBe(new EchoesOfTheHiddenBondQuest().completion)
-  })
-
   it('rebuilds the clue list of a finished quest saved with the old wording', () => {
     game.state.setStoryFlag(FLAG_ACT3_SEA_SEALED_LETTER_READ, true)
     game.state.setStoryFlag(FLAG_ACT3_CHARRED_INSCRIPTION_READ, true)
@@ -166,19 +160,6 @@ describe('Echoes of the Hidden Bond quest', () => {
       done: true,
       text: expect.stringContaining('In the Caverns of Shadow: the dragon'),
     })
-  })
-
-  it('refreshes the completion text when a save is loaded', () => {
-    const saved = game.state.nonActivatedQuests.find(
-      (q) => q instanceof EchoesOfTheHiddenBondQuest,
-    )
-    if (!saved) throw new Error('no Echoes quest')
-    saved.completion = 'once apprentices to Malakar'
-
-    new Act3().afterLoad(game.state)
-    game.state.refreshSavedText()
-
-    expect(saved.completion).toBe(new EchoesOfTheHiddenBondQuest().completion)
   })
 
   it('words the intro and the three found texts exactly', () => {

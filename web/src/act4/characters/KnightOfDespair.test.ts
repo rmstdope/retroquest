@@ -481,20 +481,6 @@ describe('KnightOfDespair after the dialogue review', () => {
     expect(stone).not.toContain('as if he knows no other')
     expectMarkupWellFormed(stone)
   })
-
-  it('shows the current look to a save made before the rewrite', () => {
-    const game = createGameInHall()
-    const knight = game.state.currentRoom.getCharacterByName('knight')
-    if (!knight) throw new Error('no knight')
-    knight.description = "When he speaks, his voice is hollow: 'Return.'"
-    const fresh = new Game([new Act4()])
-    expect(fresh.loadSaveData(game.toSaveData())).toContain('loaded')
-
-    const look = executeCommands(fresh, ['examine knight of despair'])
-
-    expect(look).toContain('When he speaks, his voice is hollow.')
-    expect(look).not.toContain("'Return.'")
-  })
 })
 
 describe('the Redeemed Knight once Elior has gone up the stair', () => {

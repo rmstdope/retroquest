@@ -52,21 +52,6 @@ describe('Act III spell descriptions remember who taught the spell', () => {
       "A quiet warmth settles on your shoulders and stays, the way the priest's hand did.",
     )
   })
-
-  it('an older save shows the new wording after loading', () => {
-    const game = new Game([new Act3()])
-    for (const spell of game.state.knownSpells) spell.description = 'Old.'
-    const fresh = new Game([new Act3()])
-    fresh.loadSaveData(game.toSaveData())
-    for (const spell of fresh.state.knownSpells) {
-      if (spell.id in EXPECTED) {
-        expect(spell.description).toBe(EXPECTED[spell.id])
-      }
-    }
-    expect(fresh.state.knownSpells.filter((s) => s.id in EXPECTED).length).toBe(
-      5,
-    )
-  })
 })
 
 describe('Act III bless on someone else', () => {

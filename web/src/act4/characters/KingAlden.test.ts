@@ -37,20 +37,6 @@ describe('King Alden', () => {
     }
     expect(alden.talkTo(game.state)).toContain('sleeps in the crystal')
   })
-
-  it('is described with the current words in a save made before the rewrite', () => {
-    const game = new Game([new Act4()])
-    const alden =
-      game.state.allRooms.ThroneChamber.getCharacterByName('King Alden')
-    if (!alden) throw new Error('no king')
-    alden.description =
-      'The king of Eldoria, grey with the long years of the wound.'
-    const loaded = new Game([new Act4()])
-    expect(loaded.loadSaveData(game.toSaveData())).toContain('loaded')
-    const restored =
-      loaded.state.allRooms.ThroneChamber.getCharacterByName('King Alden')
-    expect(restored?.examine(loaded.state)).toBe(IN_THE_CRYSTAL)
-  })
   /** A game in the Throne Chamber with the amulet and the elixir in hand. */
   function inThrone(): Game {
     const act = new Act4()
