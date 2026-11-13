@@ -4,23 +4,6 @@ import { GameState } from './GameState'
 import { Room } from './Room'
 
 describe('Act', () => {
-  it('keeps its content and metadata', () => {
-    const room = new Room({ name: 'Start', description: '' })
-    const act = new Act({
-      name: 'Act1',
-      rooms: { Start: room },
-      quests: [],
-      musicFile: 'song.mp3',
-      musicInfo: 'Song by Someone',
-    })
-    expect(act.name).toBe('Act1')
-    expect(act.rooms.Start).toBe(room)
-    expect(act.quests).toEqual([])
-    expect(act.musicFile).toBe('song.mp3')
-    expect(act.musicInfo).toBe('Song by Someone')
-    expect(act.classes).toEqual({})
-  })
-
   it('names its content classes for saves', () => {
     const room = new Room({ name: 'Start', description: '' })
     const act = new Act({

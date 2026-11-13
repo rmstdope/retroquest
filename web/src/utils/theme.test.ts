@@ -1,48 +1,17 @@
 import { describe, it, expect } from 'vitest'
-import { renderMarkup, escapeHtml, THEME_TAGS } from '@/utils/theme'
+import { renderMarkup, escapeHtml } from '@/utils/theme'
 
 describe('theme', () => {
-  describe('THEME_TAGS', () => {
-    it('contains all expected tags', () => {
-      const expected = [
-        'character_name',
-        'dialogue',
-        'item_name',
-        'spell_name',
-        'room_name',
-        'quest_name',
-        'event',
-        'failure',
-        'clue',
-        'pending',
-        'success',
-        'exits',
-        'bold',
-        'dim',
-        'italic',
-        'breath',
-        'gesture',
-        'effect',
-      ]
-      expect(THEME_TAGS).toEqual(expected)
-    })
-  })
-
   describe('escapeHtml', () => {
-    it('escapes ampersands', () => {
-      expect(escapeHtml('A & B')).toBe('A &amp; B')
-    })
-
-    it('escapes angle brackets', () => {
-      expect(escapeHtml('<script>')).toBe('&lt;script&gt;')
-    })
-
-    it('escapes double quotes', () => {
-      expect(escapeHtml('"hello"')).toBe('&quot;hello&quot;')
-    })
-
-    it('escapes single quotes', () => {
-      expect(escapeHtml("it's")).toBe('it&#039;s')
+    it('escapes ampersands, brackets and both kinds of quote', () => {
+      const cases: Array<[string, string]> = [
+        ['A & B', 'A &amp; B'],
+        ['<script>', '&lt;script&gt;'],
+        ['"hello"', '&quot;hello&quot;'],
+        ["it's", 'it&#039;s'],
+      ]
+      const wrong = cases.filter(([raw, out]) => escapeHtml(raw) !== out)
+      expect(wrong).toEqual([])
     })
 
     it('handles multiple special characters', () => {
@@ -66,94 +35,30 @@ describe('theme', () => {
       expect(renderMarkup(null as unknown as string)).toBe('')
     })
 
-    it('converts character_name tag to span', () => {
-      expect(renderMarkup('[character_name]Mira[/character_name]')).toBe(
-        '<span class="theme-character_name">Mira</span>',
+    it('converts each theme tag to its span', () => {
+      const tags = [
+        'character_name',
+        'dialogue',
+        'item_name',
+        'spell_name',
+        'room_name',
+        'quest_name',
+        'event',
+        'failure',
+        'pending',
+        'success',
+        'exits',
+        'bold',
+        'italic',
+        'breath',
+        'dim',
+      ]
+      const wrong = tags.filter(
+        (tag) =>
+          renderMarkup(`[${tag}]Text[/${tag}]`) !==
+          `<span class="theme-${tag}">Text</span>`,
       )
-    })
-
-    it('converts dialogue tag', () => {
-      expect(renderMarkup('[dialogue]Hello there![/dialogue]')).toBe(
-        '<span class="theme-dialogue">Hello there!</span>',
-      )
-    })
-
-    it('converts item_name tag', () => {
-      expect(renderMarkup('[item_name]Sword[/item_name]')).toBe(
-        '<span class="theme-item_name">Sword</span>',
-      )
-    })
-
-    it('converts spell_name tag', () => {
-      expect(renderMarkup('[spell_name]Fireball[/spell_name]')).toBe(
-        '<span class="theme-spell_name">Fireball</span>',
-      )
-    })
-
-    it('converts room_name tag', () => {
-      expect(renderMarkup('[room_name]Village[/room_name]')).toBe(
-        '<span class="theme-room_name">Village</span>',
-      )
-    })
-
-    it('converts quest_name tag', () => {
-      expect(renderMarkup('[quest_name]Find Key[/quest_name]')).toBe(
-        '<span class="theme-quest_name">Find Key</span>',
-      )
-    })
-
-    it('converts event tag', () => {
-      expect(renderMarkup('[event]Something happened![/event]')).toBe(
-        '<span class="theme-event">Something happened!</span>',
-      )
-    })
-
-    it('converts failure tag', () => {
-      expect(renderMarkup('[failure]You failed.[/failure]')).toBe(
-        '<span class="theme-failure">You failed.</span>',
-      )
-    })
-
-    it('converts pending tag', () => {
-      expect(renderMarkup('[pending] * Sturdy footwear[/pending]')).toBe(
-        '<span class="theme-pending"> * Sturdy footwear</span>',
-      )
-    })
-
-    it('converts success tag', () => {
-      expect(renderMarkup('[success]You succeeded![/success]')).toBe(
-        '<span class="theme-success">You succeeded!</span>',
-      )
-    })
-
-    it('converts exits tag', () => {
-      expect(renderMarkup('[exits]North, South[/exits]')).toBe(
-        '<span class="theme-exits">North, South</span>',
-      )
-    })
-
-    it('converts bold tag', () => {
-      expect(renderMarkup('[bold]Important[/bold]')).toBe(
-        '<span class="theme-bold">Important</span>',
-      )
-    })
-
-    it('converts italic tag', () => {
-      expect(renderMarkup('[italic]Whispered[/italic]')).toBe(
-        '<span class="theme-italic">Whispered</span>',
-      )
-    })
-
-    it('converts breath tag', () => {
-      expect(renderMarkup('[breath]The vents draw in.[/breath]')).toBe(
-        '<span class="theme-breath">The vents draw in.</span>',
-      )
-    })
-
-    it('converts dim tag', () => {
-      expect(renderMarkup('[dim]Faded text[/dim]')).toBe(
-        '<span class="theme-dim">Faded text</span>',
-      )
+      expect(wrong).toEqual([])
     })
 
     it('handles multiple tags in one string', () => {

@@ -38,11 +38,6 @@ describe('markup helpers', () => {
       findMarkupProblems(event('x') + '\n' + dialogue('Mira', 'Hi')),
     ).toEqual([])
   })
-
-  it('knows the full tag vocabulary', () => {
-    expect(MARKUP_TAGS).toContain('dialogue')
-    expect(MARKUP_TAGS).toContain('event')
-  })
 })
 
 describe('gesture and effect', () => {

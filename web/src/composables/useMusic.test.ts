@@ -72,21 +72,17 @@ describe('useMusic', () => {
   // --- Initial state ---
 
   describe('initial state', () => {
-    it('starts unmuted by default', () => {
-      const { musicMuted } = useMusic(audio)
+    it('starts unmuted with empty track info', () => {
+      const { musicMuted, currentMusicFile, musicInfo } = useMusic(audio)
       expect(musicMuted.value).toBe(false)
+      expect(currentMusicFile.value).toBe('')
+      expect(musicInfo.value).toBe('')
     })
 
     it('restores muted state from localStorage', () => {
       localStorage.setItem('retroquest_music_muted', 'true')
       const { musicMuted } = useMusic(audio)
       expect(musicMuted.value).toBe(true)
-    })
-
-    it('has empty track info', () => {
-      const { currentMusicFile, musicInfo } = useMusic(audio)
-      expect(currentMusicFile.value).toBe('')
-      expect(musicInfo.value).toBe('')
     })
   })
 

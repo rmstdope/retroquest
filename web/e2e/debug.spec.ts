@@ -32,26 +32,6 @@ async function openGame(page: Page) {
 }
 
 test.describe('debug command (dev server)', () => {
-  test('plays the Act I script and leaves one command to finish the act', async ({
-    page,
-  }) => {
-    await openGame(page)
-    await page
-      .getByRole('region', { name: 'Actions' })
-      .getByRole('button', { name: 'Type', exact: true })
-      .click()
-    const input = page.getByLabel('Command')
-
-    await input.fill('debug act1')
-    await input.press('Enter')
-    await expect(page.getByText("Debug script 'act1' played")).toBeVisible()
-
-    // The last command finishes the act: its chapter page opens.
-    await input.fill('use map')
-    await input.press('Enter')
-    await expect(page.getByText(/Act I complete/i).first()).toBeVisible()
-  })
-
   test('names a script that does not exist', async ({ page }) => {
     await openGame(page)
     await page

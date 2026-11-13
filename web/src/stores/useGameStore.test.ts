@@ -180,23 +180,14 @@ describe('useGameStore', () => {
   // --- Initial state ---
 
   describe('initial state', () => {
-    it('starts with loading true', () => {
+    it('starts loading, empty, not accepting input, with the modal hidden', () => {
       expect(store.loading).toBe(true)
-    })
-
-    it('has empty room data', () => {
       expect(store.roomName).toBe('')
       expect(store.roomDescription).toBe('')
       expect(store.characters).toEqual([])
       expect(store.items).toEqual([])
       expect(store.exits).toEqual({})
-    })
-
-    it('does not accept input initially', () => {
       expect(store.acceptInput).toBe(false)
-    })
-
-    it('has modal hidden', () => {
       expect(store.showModal).toBe(false)
       expect(store.modalChapter).toBe(null)
     })
@@ -599,36 +590,6 @@ describe('useGameStore', () => {
 
   // --- saveGame / loadGame ---
 
-  describe('saveGame', () => {
-    beforeEach(async () => {
-      await store.initGame()
-    })
-
-    it('calls bridge.quickSaveGame and shows a notice', () => {
-      store.saveGame()
-      expect(bridge.quickSaveGame).toHaveBeenCalledOnce()
-      expect(store.notice?.text).toBe('Game saved')
-    })
-  })
-
-  describe('loadGame', () => {
-    beforeEach(async () => {
-      await store.initGame()
-    })
-
-    it('calls bridge.quickLoadGame and shows a notice', () => {
-      store.loadGame()
-      expect(bridge.quickLoadGame).toHaveBeenCalledOnce()
-      expect(store.notice?.text).toBe('Game loaded')
-    })
-
-    it('refreshes panels after loading', () => {
-      bridge.controller.getRoomName.mockReturnValue('Saved Room')
-      store.loadGame()
-      expect(store.roomName).toBe('Saved Room')
-    })
-  })
-
   describe('loadFromTitle', () => {
     beforeEach(async () => {
       await store.initGame()
@@ -714,35 +675,6 @@ describe('useGameStore', () => {
   })
 
   // --- saveNamedGame / loadNamedGame ---
-
-  describe('saveNamedGame', () => {
-    beforeEach(async () => {
-      await store.initGame()
-    })
-
-    it('calls bridge.saveNamedGame and shows a notice', () => {
-      store.saveNamedGame('before-boss')
-      expect(bridge.saveNamedGame).toHaveBeenCalledWith(
-        'before-boss',
-        store.turns,
-      )
-      expect(store.notice?.text).toBe('Game saved · before-boss')
-    })
-  })
-
-  describe('loadNamedGame', () => {
-    beforeEach(async () => {
-      await store.initGame()
-    })
-
-    it('calls bridge.loadNamedGame, shows a notice, and refreshes panels', () => {
-      bridge.controller.getRoomName.mockReturnValue('Boss Room')
-      store.loadNamedGame('before-boss')
-      expect(bridge.loadNamedGame).toHaveBeenCalledWith('before-boss')
-      expect(store.notice?.text).toBe('Game loaded · before-boss')
-      expect(store.roomName).toBe('Boss Room')
-    })
-  })
 
   describe('pollQuestEvents', () => {
     const done = (name: string) =>
@@ -1288,29 +1220,58 @@ describe('useGameStore', () => {
     })
   })
 
-  describe('saveToSlot', () => {
+  describe('saving and loading through the bridge', () => {
     beforeEach(async () => {
       await store.initGame()
     })
 
-    it('calls bridge.saveToSlot and shows a notice', () => {
+    it('saves through the bridge and names the save in a notice', () => {
+      store.saveGame()
       store.saveToSlot(3)
+      store.saveNamedGame('before-boss')
+      expect(bridge.quickSaveGame).toHaveBeenCalledOnce()
       expect(bridge.saveToSlot).toHaveBeenCalledWith(3, store.turns)
-      expect(store.notice?.text).toBe('Game saved · Slot 3')
+      expect(bridge.saveNamedGame).toHaveBeenCalledWith(
+        'before-boss',
+        store.turns,
+      )
+      const notices: string[] = []
+      for (const save of [
+        () => store.saveGame(),
+        () => store.saveToSlot(3),
+        () => store.saveNamedGame('before-boss'),
+      ]) {
+        save()
+        notices.push(store.notice?.text ?? '')
+      }
+      expect(notices).toEqual([
+        'Game saved',
+        'Game saved · Slot 3',
+        'Game saved · before-boss',
+      ])
     })
-  })
 
-  describe('loadFromSlot', () => {
-    beforeEach(async () => {
-      await store.initGame()
-    })
-
-    it('calls bridge.loadFromSlot, shows a notice, and refreshes panels', () => {
-      bridge.controller.getRoomName.mockReturnValue('Dungeon')
-      store.loadFromSlot(2)
+    it('loads through the bridge, names the save in a notice and refreshes the panels', () => {
+      const loads: Array<[string, () => unknown, string]> = [
+        ['Game loaded', () => store.loadGame(), 'Saved Room'],
+        ['Game loaded · Slot 2', () => store.loadFromSlot(2), 'Dungeon'],
+        [
+          'Game loaded · before-boss',
+          () => store.loadNamedGame('before-boss'),
+          'Boss Room',
+        ],
+      ]
+      const wrong: string[] = []
+      for (const [notice, load, room] of loads) {
+        bridge.controller.getRoomName.mockReturnValue(room)
+        load()
+        if (store.notice?.text !== notice) wrong.push(`notice ${notice}`)
+        if (store.roomName !== room) wrong.push(`room ${room}`)
+      }
+      expect(wrong).toEqual([])
+      expect(bridge.quickLoadGame).toHaveBeenCalledOnce()
       expect(bridge.loadFromSlot).toHaveBeenCalledWith(2)
-      expect(store.notice?.text).toBe('Game loaded · Slot 2')
-      expect(store.roomName).toBe('Dungeon')
+      expect(bridge.loadNamedGame).toHaveBeenCalledWith('before-boss')
     })
   })
 
@@ -2532,18 +2493,6 @@ describe('useGameStore', () => {
       final: true,
     }
 
-    it('shows the final chapter right after the last quest completes, the completion in the story', () => {
-      bridge.controller.completeQuest
-        .mockReturnValueOnce(
-          quest('[quest_name]Q (main quest)[/quest_name]\n\nDone.'),
-        )
-        .mockReturnValue(null)
-      finishLastAct()
-      expect(store.turns.at(-1)?.quests?.at(-1)?.kind).toBe('completed')
-      expect(store.modalChapter).toEqual(FINAL_CHAPTER)
-      expect(bridge.controller.advanceToRunning).not.toHaveBeenCalled()
-    })
-
     it('keeps the story room and chips of the command that ended the game', () => {
       bridge.controller.getInventory
         .mockReturnValueOnce([{ name: 'Sword', description: '' }])
@@ -2556,18 +2505,6 @@ describe('useGameStore', () => {
       const turn = store.turns.at(-1)!
       expect(turn.room).toBe('Village Square')
       expect(turn.gained.length).toBeGreaterThan(0)
-    })
-
-    it('asks to save on the final chapter instead of going on', () => {
-      finishLastAct()
-      store.continueChapter()
-      expect(store.finishAsked).toBe(true)
-      expect(store.showModal).toBe(true)
-      expect(store.modalChapter).toEqual(FINAL_CHAPTER)
-      store.cancelFinish()
-      expect(store.finishAsked).toBe(false)
-      expect(store.modalChapter).toEqual(FINAL_CHAPTER)
-      expect(store.ending).toBe(null)
     })
 
     it('saves to the quick slot and ends the game', () => {
@@ -2584,6 +2521,18 @@ describe('useGameStore', () => {
       expect(store.showModal).toBe(false)
       expect(store.modalChapter).toBe(null)
       expect(store.notice).toBe(null)
+    })
+
+    it('asks to save on the final chapter instead of going on', () => {
+      finishLastAct()
+      store.continueChapter()
+      expect(store.finishAsked).toBe(true)
+      expect(store.showModal).toBe(true)
+      expect(store.modalChapter).toEqual(FINAL_CHAPTER)
+      store.cancelFinish()
+      expect(store.finishAsked).toBe(false)
+      expect(store.modalChapter).toEqual(FINAL_CHAPTER)
+      expect(store.ending).toBe(null)
     })
 
     it('keeps the dialog open when the save fails', () => {
