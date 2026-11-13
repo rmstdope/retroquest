@@ -401,6 +401,14 @@ describe('HurryKeys, which keeps the pause after a telling', () => {
     expect(keys.decide(aimed(onVerb))?.action).toBe('swallow')
   })
 
+  it('starts the pause after an arrival is cleared with the narration skipped', () => {
+    const keys = new HurryKeys(() => 0)
+    expect(keys.decide(aimed({ arrival: true, key: 'Escape' }))?.action).toBe(
+      'arrival-clear',
+    )
+    expect(keys.decide(aimed(onVerb))?.action).toBe('swallow')
+  })
+
   it('is not settling before any key went on', () => {
     const keys = new HurryKeys(() => 0)
     expect(keys.decide(aimed(onVerb))).toBeNull()

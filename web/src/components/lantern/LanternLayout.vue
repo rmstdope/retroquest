@@ -1044,8 +1044,9 @@ function isEmptyBoxEnter(event: KeyboardEvent): boolean {
 const hurryKeys = new HurryKeys()
 
 /**
- * Keys that steer the narration: describe the press and let `decideHurryKey`
- * say who owns it, then carry out its answer.
+ * Keys that steer the narration: describe the press and let `hurryKeys` say
+ * who owns it (the pause after a telling and the aim at a button are its
+ * own), then carry out its answer.
  */
 function onNarrationKey(event: KeyboardEvent): void {
   // A key held to skip repeats: its repeats are the hold's and take no step.
