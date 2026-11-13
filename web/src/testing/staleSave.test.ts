@@ -47,4 +47,13 @@ describe('staleSaveMismatches', () => {
       }),
     ).toEqual(['Matches.examine()'])
   })
+
+  it('names a field that holds nothing to make stale', () => {
+    expect(
+      staleSaveMismatches({
+        makeGame: () => new Game([new Act1()]),
+        cases: [{ target: Candle, fields: ['noSuchField'] }],
+      }),
+    ).toContain('Candle.noSuchField: nothing to make stale')
+  })
 })

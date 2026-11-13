@@ -108,16 +108,22 @@ function build(options: StaleSaveOptions): Game {
 export function staleSaveMismatches(options: StaleSaveOptions): string[] {
   const source = build(options)
   const expected = build(options)
+  const unstaled: string[] = []
   for (const { target, fields, examine } of options.cases) {
     const object = locate(source.state, target)
     if (!object) continue
     const saved = examine ? [...fields, 'description'] : fields
-    for (const field of saved) object[field] = stale(object[field])
+    for (const field of saved) {
+      const made = stale(object[field])
+      if (JSON.stringify(made) === JSON.stringify(object[field]))
+        unstaled.push(`${target.name}.${field}: nothing to make stale`)
+      object[field] = made
+    }
   }
   const loaded = options.makeGame()
   const answer = loaded.loadSaveData(source.toSaveData())
   if (!answer.includes('loaded')) return [`the save did not load: ${answer}`]
-  const mismatches: string[] = []
+  const mismatches: string[] = [...unstaled]
   for (const staleCase of options.cases) {
     const { target, fields } = staleCase
     const want = locate(expected.state, target)

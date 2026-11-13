@@ -1118,4 +1118,22 @@ describe('Hemlock answers the healer by name', () => {
       'Gone for days now',
     )
   })
+
+  it('speaks his current lines after loading a save that holds the old ones', () => {
+    const game = gameInStore()
+    const shopkeeper = game.state.currentRoom.getCharacterByName('shopkeeper')
+    Object.defineProperty(shopkeeper, 'dialogueOptions', {
+      value: ['Welcome to my humble store!'],
+      enumerable: true,
+      writable: true,
+      configurable: true,
+    })
+    const loaded = new Game([new Act1()])
+    expect(loaded.loadSaveData(game.toSaveData())).toContain('loaded')
+
+    const answer = loaded.commandParser.parse('talk to shopkeeper')
+
+    expect(answer).toContain('Only store in Willowbrook')
+    expect(answer).not.toContain('humble store')
+  })
 })

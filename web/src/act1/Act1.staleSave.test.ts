@@ -5,7 +5,6 @@ import { executeCommands } from '@/testing/gameHelpers'
 import { Act1 } from './Act1'
 import { FLAG_MAGIC_FULLY_UNLOCKED } from './Act1StoryFlags'
 import { Blacksmith } from './characters/Blacksmith'
-import { Fisherman } from './characters/Fisherman'
 import { Shopkeeper } from './characters/Shopkeeper'
 import { Villager } from './characters/Villager'
 import { Candle } from './items/Candle'
@@ -52,9 +51,8 @@ describe('Act I loading a save that holds old wording', () => {
         { target: ShinyPebble, fields: ['description'] },
         { target: OldNotice, fields: ['description'] },
         { target: Villager, fields: ['name', 'dialogueOptions'] },
-        { target: Shopkeeper, fields: ['name', 'dialogueOptions'] },
+        { target: Shopkeeper, fields: ['name'] },
         { target: Blacksmith, fields: ['name'] },
-        { target: Fisherman, fields: ['dialogueStates'] },
         { target: ReviveSpell, fields: ['description'] },
         { target: PurifySpell, fields: ['description'] },
         { target: BlessSpell, fields: ['description'] },
