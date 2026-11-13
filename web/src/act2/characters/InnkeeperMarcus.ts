@@ -243,13 +243,18 @@ export class InnkeeperMarcus extends Character {
    * wares still has it there, and this tidies it on the next talk or buy.
    */
   private forgetSoldKey(gameState: GameState): void {
-    if (!(ROOM_KEY in this.wares)) return
+    if (this.keySold(gameState)) delete this.wares[ROOM_KEY]
+  }
+
+  /** Whether the room key is still among his wares but already sold. */
+  private keySold(gameState: GameState): boolean {
+    if (!(ROOM_KEY in this.wares)) return false
     const held = gameState.inventory.some(
       (item) => item instanceof RoomKey && item.canBeCarried,
     )
     const inn: Room | undefined = gameState.allRooms.SilverStagInn
     const doorOpened = inn !== undefined && 'east' in inn.exits
-    if (held || doorOpened) delete this.wares[ROOM_KEY]
+    return held || doorOpened
   }
 
   /**
@@ -266,6 +271,16 @@ export class InnkeeperMarcus extends Character {
         ? `You've a [item_name]${ROOM_KEY}[/item_name] already. `
         : 'The room upstairs is yours already. ') +
         "One room's plenty for one guest.",
+    )
+  }
+
+  /**
+   * Lists the wares now on offer, leaving out a room key already sold. It
+   * only reads the state; the suggestions are rebuilt after every command.
+   */
+  override sells(gameState: GameState): string[] {
+    return Object.keys(this.wares).filter(
+      (ware) => !(ware === ROOM_KEY && this.keySold(gameState)),
     )
   }
 

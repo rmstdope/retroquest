@@ -173,6 +173,15 @@ export class Character {
   }
 
   /**
+   * The names of the wares this character would sell right now, which the
+   * buy suggestions offer. By default none; a seller lists its wares and
+   * leaves out what `buyItem` would refuse outright.
+   */
+  sells(_gameState: GameState): string[] {
+    return []
+  }
+
+  /**
    * The player asks to buy an item. By default the character sells nothing;
    * the reply names who answered, never the item, so one line serves every
    * item, and opens with the name (see `nameInSentence`), the verb agreeing

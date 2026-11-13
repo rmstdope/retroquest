@@ -129,6 +129,11 @@ export class MasterMerchantAldric extends Character {
     )
   }
 
+  /** Lists the wares now on offer; none until the flyer has been given. */
+  override sells(_gameState: GameState): string[] {
+    return this.gaveFlyer ? Object.keys(this.wares) : []
+  }
+
   /** Handle buying items from Master Merchant Aldric. */
   override buyItem(gameState: GameState, itemName: string): string {
     // Check if shop is accessible

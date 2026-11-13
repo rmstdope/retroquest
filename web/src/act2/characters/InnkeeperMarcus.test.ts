@@ -595,3 +595,27 @@ describe('Innkeeper Marcus restored from a save made before rq-7ci2', () => {
     )
   })
 })
+
+describe('Innkeeper Marcus buy suggestions', () => {
+  it('offers the room key until it is sold, without changing his wares', () => {
+    const game = new Game([new Act2()])
+    game.state.currentRoom = game.state.allRooms.SilverStagInn
+    expect(game.getCommandCompletions().buy).toHaveProperty('room')
+
+    for (let i = 0; i < 20; i++) game.state.addItemToInventory(new Coins())
+    game.commandParser.parse('buy room key from innkeeper marcus')
+    expect(game.getCommandCompletions().buy).not.toHaveProperty('room')
+  })
+
+  it('leaves a sold key out without deleting it from the wares', () => {
+    const game = new Game([new Act2()])
+    game.state.currentRoom = game.state.allRooms.SilverStagInn
+    const marcus = game.state.currentRoom.getCharacterByName('innkeeper marcus')
+    if (!(marcus instanceof InnkeeperMarcus)) throw new Error('no marcus')
+    const key = new RoomKey()
+    key.canBeCarried = true
+    game.state.addItemToInventory(key)
+    expect(marcus.sells(game.state)).not.toContain('room key')
+    expect(marcus.wares).toHaveProperty('room key')
+  })
+})

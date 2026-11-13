@@ -21,6 +21,8 @@ export type ArgumentKind =
   | 'thing'
   /** A character here. */
   | 'character'
+  /** A ware a character here sells. */
+  | 'ware'
   /** A spell the player knows. */
   | 'spell'
   /** The player's own words (not listable), or a save name. */
@@ -113,7 +115,7 @@ export const VERB_FORMS: readonly VerbForm[] = [
   },
   {
     verbs: ['buy'],
-    argument: 'roomItem',
+    argument: 'ware',
     joins: { words: ['from'], argument: 'character', optional: false },
     group: 'Interaction',
     help: ['buy <item> from <character>'],
