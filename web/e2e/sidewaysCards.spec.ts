@@ -38,6 +38,8 @@ async function start(page: Page, width: number, height: number) {
   await page.setViewportSize({ width, height })
   await page.goto('/')
   await page.getByRole('button', { name: 'Start', exact: true }).click()
+  // The title's opening is skipped by the suite's reduced motion; this spec needs the motion back.
+  await page.emulateMedia({ reducedMotion: 'no-preference' })
   await page.locator('.lq-chapter-button').click()
   await page.getByTestId('arrival-on-picture').click()
 }

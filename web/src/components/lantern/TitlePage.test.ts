@@ -77,6 +77,22 @@ describe('TitlePage', () => {
       )
     })
 
+    it('is not in the page until it has loaded, so it fades in when it arrives', async () => {
+      let answer: (loaded: boolean) => void = () => undefined
+      setPictureProbe(
+        () => new Promise<boolean>((resolve) => (answer = resolve)),
+      )
+      const w = mountTitle()
+      await flushPromises()
+      expect(w.find('.lq-title-picture').exists()).toBe(false)
+      expect(w.find('.lq-title-name').exists()).toBe(true)
+      expect(w.find('button').exists()).toBe(true)
+
+      answer(true)
+      await flushPromises()
+      expect(w.find('.lq-title-picture').exists()).toBe(true)
+    })
+
     it('is the opening dream until the title picture is made', async () => {
       setPictureProbe((url) => Promise.resolve(!url.includes('title-screen')))
       const w = mountTitle()
@@ -124,6 +140,24 @@ describe('TitlePage', () => {
       expect(w.emitted('start')).toBeUndefined()
       expect(w.get('.lq-title-page').classes()).toContain('is-open')
       expect(document.activeElement?.textContent?.trim()).toBe('Start')
+    })
+
+    it('is not finished by a button other than the last one rising', async () => {
+      const w = mountTitle([save(2)])
+      await w.findAll('button')[0].trigger('animationend')
+      expect(w.get('.lq-title-page').classes()).toContain('is-playing')
+    })
+
+    it('is skipped by Space, which presses nothing', async () => {
+      const w = mountTitle()
+      const event = new KeyboardEvent('keydown', {
+        key: ' ',
+        bubbles: true,
+        cancelable: true,
+      })
+      w.get('.lq-title-page').element.dispatchEvent(event)
+      expect(event.defaultPrevented).toBe(true)
+      expect(w.emitted('start')).toBeUndefined()
     })
 
     it('is skipped by Escape without starting the game, which works afterwards', async () => {

@@ -1216,6 +1216,40 @@ test.describe('Lantern UI (the default)', () => {
     await expect(page.locator('.lq-title-page')).toBeVisible()
   })
 
+  test('a press where Start will appear only finishes the opening', async ({
+    page,
+  }) => {
+    await page.emulateMedia({ reducedMotion: 'no-preference' })
+    await page.goto('/')
+    await waitForGame(page)
+    const box = (await page.locator('.lq-title-buttons').boundingBox())!
+    await page.mouse.click(box.x + box.width / 2, box.y + 20)
+    await expect(page.locator('.lq-title-page')).toHaveClass(/is-open/)
+    await expect(page.locator('.lq-title-page')).toBeVisible()
+    await page.getByRole('button', { name: 'Start', exact: true }).click()
+    await expect(page.locator('.lq-title-page')).toHaveCount(0)
+  })
+
+  test('keeps the title screen on its dark scheme in the light theme', async ({
+    page,
+  }) => {
+    await page.emulateMedia({ colorScheme: 'light' })
+    await page.goto('/')
+    await waitForGame(page)
+    await page.evaluate(() =>
+      document.documentElement.setAttribute('data-theme', 'light'),
+    )
+    const colour = (selector: string): Promise<string> =>
+      page
+        .locator(selector)
+        .evaluate((el) => getComputedStyle(el).backgroundColor)
+    expect(await colour('.lq-title-page')).toBe('rgb(16, 21, 26)')
+    const text = await page
+      .locator('.lq-wordmark')
+      .evaluate((el) => getComputedStyle(el).color)
+    expect(text).toBe('rgb(255, 184, 54)')
+  })
+
   test('leaves the full-screen button out of the narrowest header', async ({
     page,
   }) => {

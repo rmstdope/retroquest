@@ -63,11 +63,16 @@ watch(opened, (now) => {
   if (now) void nextTick(trap.focusFirst)
 })
 
-/** The picture's URL: the title picture, or the dream's until it is made; '' while unknown. */
+/** The picture's URL: the title picture, or the dream's until it is made; '' until one has loaded. */
 const picture = ref('')
-void pictureExists(titlePictureUrl()).then((made) => {
-  picture.value = made ? titlePictureUrl() : roomPictureUrl('Act1', 'TheDream')
-})
+void (async (): Promise<void> => {
+  for (const url of [titlePictureUrl(), roomPictureUrl('Act1', 'TheDream')]) {
+    if (await pictureExists(url)) {
+      picture.value = url
+      return
+    }
+  }
+})()
 
 /** The key press that finished the opening, which no other handler of the page answers. */
 let skippedBy: Event | null = null
@@ -113,8 +118,9 @@ onMounted(() => {
     @keydown="onKeydown"
   >
     <div
+      v-if="picture"
       class="lq-title-picture"
-      :style="picture ? { backgroundImage: `url('${picture}')` } : undefined"
+      :style="{ backgroundImage: `url('${picture}')` }"
       aria-hidden="true"
     ></div>
     <div class="lq-title-shade" aria-hidden="true"></div>
@@ -169,16 +175,16 @@ onMounted(() => {
           </button>
         </template>
       </div>
+      <p class="lq-credit" :inert="opened ? undefined : true">
+        Original music, images and narration made with
+        <a
+          href="https://github.com/rmstdope/content-studio"
+          target="_blank"
+          rel="noopener"
+          >Content Studio</a
+        >
+      </p>
     </div>
-    <p class="lq-credit" :inert="opened ? undefined : true">
-      Original music, images and narration made with
-      <a
-        href="https://github.com/rmstdope/content-studio"
-        target="_blank"
-        rel="noopener"
-        >Content Studio</a
-      >
-    </p>
   </section>
 </template>
 
@@ -193,6 +199,14 @@ onMounted(() => {
   color: #ece6d6;
   font-family: var(--lq-font-ui);
   container-type: size;
+  /* The title is always drawn on the dark scheme, over its picture, whatever the theme. */
+  --lq-bg: #10151a;
+  --lq-accent: #ffa914;
+  --lq-on-accent: #1a1408;
+  --lq-accent-text: #ffb836;
+  --lq-accent-line: #a8740f;
+  --lq-failure: #e8896b;
+  --lq-failure-soft: #2a1814;
 }
 .lq-title-page:focus {
   outline: none;
@@ -264,7 +278,7 @@ onMounted(() => {
   transform: translateY(6px);
 }
 .lq-credit {
-  position: fixed;
+  position: absolute;
   left: 18px;
   bottom: 14px;
   max-width: calc(100% - 36px);

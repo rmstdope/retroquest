@@ -34,6 +34,8 @@ async function toTheCottage(page: Page, breadY = 0.6): Promise<void> {
   )
   await page.goto('/')
   await page.getByRole('button', { name: 'Start', exact: true }).click()
+  // The title's opening is skipped by the suite's reduced motion; this spec needs the motion back.
+  await page.emulateMedia({ reducedMotion: 'no-preference' })
   await page.locator('.lq-chapter-button').click()
   // The dream is told a few lines at a time on a small screen.
   const arrival = page.getByTestId('arrival-on-picture')
