@@ -106,6 +106,7 @@ function guardGesture(): void {
   window.addEventListener('click', cancelDefault, true)
   window.addEventListener('click', releaseGesture)
   window.addEventListener('pointerdown', releaseGesture, true)
+  window.addEventListener('keydown', releaseGesture, true)
 }
 
 /** Cancel an event's default without stopping it, so the music's listeners still hear the press. */
@@ -113,13 +114,14 @@ function cancelDefault(event: Event): void {
   event.preventDefault()
 }
 
-/** End the guard (after the gesture's click has passed, at the next press, or when the page goes). */
+/** End the guard (after the gesture's click has passed, at the next press or key, or when the page goes). */
 function releaseGesture(): void {
   guarding.value = false
   window.removeEventListener('mousedown', cancelDefault, true)
   window.removeEventListener('click', cancelDefault, true)
   window.removeEventListener('click', releaseGesture)
   window.removeEventListener('pointerdown', releaseGesture, true)
+  window.removeEventListener('keydown', releaseGesture, true)
 }
 
 /** Emit a button's event unless it is the click of the press that skipped the opening. */

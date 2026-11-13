@@ -224,6 +224,19 @@ describe('TitlePage', () => {
       expect(w.emitted('start')).toBeUndefined()
     })
 
+    it('ends its guard at a key press when the gesture never clicked', async () => {
+      const w = mountTitle()
+      document.body.dispatchEvent(
+        new Event('pointerdown', { bubbles: true, cancelable: true }),
+      )
+      await flushPromises()
+      document.body.dispatchEvent(
+        new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }),
+      )
+      await w.get('button').trigger('click')
+      expect(w.emitted('start')).toHaveLength(1)
+    })
+
     it('ends its guard at the next press when the gesture never clicked', async () => {
       const w = mountTitle()
       document.body.dispatchEvent(
