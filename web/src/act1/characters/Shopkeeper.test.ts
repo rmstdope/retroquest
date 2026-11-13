@@ -1213,11 +1213,44 @@ describe('Hemlock answers the healer by name', () => {
 })
 
 describe('Buying a ware picked from the suggestions (rq-wjy0)', () => {
-  it('answers a suggested "buy apple" in the game\'s voice, not with the command format', () => {
+  it('answers a suggested "buy rope" in the game\'s voice, not with the command format', () => {
     const game = gameInStore()
-    expect(game.getCommandCompletions().buy).toHaveProperty('apple')
-    const answer = game.commandParser.parse('buy apple')
+    expect(game.getCommandCompletions().buy).toHaveProperty('rope')
+    const answer = game.commandParser.parse('buy rope')
     expect(answer).not.toContain('Invalid command format')
-    expect(answer).toBe('[failure]Buy the apple from whom?[/failure]')
+    expect(answer).toBe('[failure]Buy the rope from whom?[/failure]')
+  })
+})
+
+describe('Shopkeeper buy suggestions', () => {
+  it('offers only what he sells, and only he as the seller', () => {
+    const game = gameInStore()
+    const tree = game.getCommandCompletions()
+    expect(Object.keys(tree.buy ?? {}).sort()).toEqual([
+      'armor',
+      'rope',
+      'sword',
+    ])
+    expect(tree.buy).not.toHaveProperty('matches')
+    expect(tree.buy).not.toHaveProperty('apple')
+    const sellers = Object.keys(
+      (tree.buy as Record<string, Record<string, object>>).rope.from,
+    )
+    expect(sellers).toContain('hemlock')
+    expect(sellers).not.toContain('patches')
+  })
+
+  it('offers nothing while the store is shut', () => {
+    const tree = gameInStore({ shopOpen: false }).getCommandCompletions()
+    expect(tree.buy).toEqual({})
+  })
+
+  it('drops the rope once it is gone', () => {
+    const game = gameInStore()
+    const keeper = game.state.currentRoom.characters.find(
+      (c): c is Shopkeeper => c instanceof Shopkeeper,
+    )
+    delete keeper?.wares.rope
+    expect(game.getCommandCompletions().buy).not.toHaveProperty('rope')
   })
 })

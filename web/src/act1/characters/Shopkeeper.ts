@@ -582,6 +582,11 @@ export class Shopkeeper extends Character {
     )
   }
 
+  /** Lists the wares now on offer; none while the shop refuses every sale. */
+  override sells(gameState: GameState): string[] {
+    return this.whileShut(gameState) ? [] : Object.keys(this.wares)
+  }
+
   /**
    * Sell a ware for coins, adding the bonus apple to the inventory. Nothing
    * is sold while the store is shut (Patches in Elior's arms is welcomed home

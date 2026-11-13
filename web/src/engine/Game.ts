@@ -394,6 +394,7 @@ Welcome to
       inventoryItem: nameTree('inventoryItem'),
       thing: itemsAndCharacters,
       character: charactersTree,
+      ware: null,
       spell: nested(itemNames.spell ?? []),
     }
 
@@ -408,9 +409,12 @@ Welcome to
     }
     for (const form of VERB_FORMS) {
       for (const verb of form.verbs) {
-        completions[verb] = form.joins
-          ? this.joinedTree(form, itemNames[form.argument] ?? [], trees)
-          : trees[form.argument]
+        completions[verb] =
+          form.argument === 'ware'
+            ? this.waresTree(form)
+            : form.joins
+              ? this.joinedTree(form, itemNames[form.argument] ?? [], trees)
+              : trees[form.argument]
       }
     }
     // `use` offers the names that go on past a joining word, and sends the
@@ -427,6 +431,31 @@ Welcome to
       itemsAndCharacters,
     )
     return split
+  }
+
+  /**
+   * The tree under a verb that buys: each ware a character here sells leads
+   * to the joining word and then to the names of the characters selling that
+   * ware, so nothing else in the room is offered.
+   */
+  private waresTree(form: VerbForm): CompletionTree {
+    const joinWords = form.joins?.words ?? []
+    const sellersOf: Record<string, Character[]> = {}
+    for (const seller of this.state.currentRoom.characters) {
+      for (const ware of seller.sells(this.state)) {
+        ;(sellersOf[ware] ??= []).push(seller)
+      }
+    }
+    // Multi-word wares are split into tokens with the rest of the tree.
+    const tree: CompletionTree = {}
+    for (const [ware, sellers] of Object.entries(sellersOf)) {
+      const target = sendableNames(
+        nested(sellers.flatMap((seller) => seller.allNames())),
+        sellers,
+      )
+      tree[ware] = Object.fromEntries(joinWords.map((word) => [word, target]))
+    }
+    return tree
   }
 
   /**

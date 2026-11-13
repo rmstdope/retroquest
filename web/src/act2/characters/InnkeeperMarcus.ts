@@ -269,6 +269,12 @@ export class InnkeeperMarcus extends Character {
     )
   }
 
+  /** Lists the wares now on offer; none while the shop refuses every sale. */
+  override sells(gameState: GameState): string[] {
+    this.forgetSoldKey(gameState)
+    return Object.keys(this.wares)
+  }
+
   /**
    * Handle buying items from Innkeeper Marcus. A sold room key leaves his
    * wares, so a second one is refused whether or not the first is still held.

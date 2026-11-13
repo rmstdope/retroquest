@@ -1472,6 +1472,17 @@ describe('Game', () => {
   })
 
   describe('completions', () => {
+    it('offers the wares a character here sells, and that character as the seller', () => {
+      const seller = character('Trader')
+      seller.sells = () => ['rope', 'iron key']
+      rooms.EliorsCottage.addCharacter(seller)
+      rooms.EliorsCottage.addCharacter(character('Old Mira'))
+      expect(game.getCommandCompletions().buy).toEqual({
+        rope: { from: { trader: null } },
+        iron: { key: { from: { trader: null } } },
+      })
+    })
+
     it('offers the available directions, items, characters and spells', () => {
       rooms.EliorsCottage.addItem(item("Elior's Journal", 'journal'))
       rooms.EliorsCottage.addCharacter(character('Old Mira'))
@@ -1489,10 +1500,8 @@ describe('Game', () => {
       expect(tree).not.toHaveProperty('drop')
       expect(tree).not.toHaveProperty('discard')
       expect(tree.give).toEqual({ rope: { to: { old: { mira: null } } } })
-      expect(tree.buy).toEqual({
-        "elior's": { journal: { from: { old: { mira: null } } } },
-        journal: { from: { old: { mira: null } } },
-      })
+      // Nobody here sells anything, so there is nothing to buy.
+      expect(tree.buy).toEqual({})
       expect(tree.cast).toEqual({
         light: {
           '@': null,
