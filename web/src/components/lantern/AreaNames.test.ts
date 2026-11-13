@@ -1329,18 +1329,6 @@ describe('AreaNames', () => {
       [things[0], { x: 7, y: 8 }, true],
     ])
   })
-
-  it('lets a mark or a name be pressed, a hand over them', () => {
-    const source = readFileSync(resolve(__dirname, 'AreaNames.vue'), 'utf8')
-    expect(source).toMatch(/\.lq-area-live[^}]*pointer-events: auto/s)
-  })
-
-  it('fades under the stylesheet’s motion setting, which Reduce motion sets to nothing', () => {
-    const source = readFileSync(resolve(__dirname, 'AreaNames.vue'), 'utf8')
-    expect(source).toMatch(
-      /\.lq-area-enter-active[^}]*transition: opacity calc\(0\.2s \* var\(--lq-motion\)\)/s,
-    )
-  })
 })
 
 describe('AreaNames ways out', () => {

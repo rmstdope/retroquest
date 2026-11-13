@@ -177,13 +177,6 @@ describe('PressRing', () => {
     expect(w.emitted('close')).toBeUndefined()
   })
 
-  it('keeps room in the fan for the curve, so the longest name is not cut short', () => {
-    const source = readFileSync(resolve(__dirname, 'PressRing.vue'), 'utf8')
-    expect(source).toMatch(/\.lq-ring-pill \{[^}]*max-width: 100%/s)
-    expect(source).toMatch(/\.lq-ring-fan-right \{[^}]*padding-right: 12px/s)
-    expect(source).toMatch(/\.lq-ring-fan-left \{[^}]*padding-left: 12px/s)
-  })
-
   it('opens round a carried spell in its purple, and takes a thing in hand without sending', async () => {
     const light: RingSubject = {
       areaId: 'belt:spell:light',

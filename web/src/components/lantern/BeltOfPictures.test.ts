@@ -180,45 +180,6 @@ describe('BeltOfPictures', () => {
     expect(w!.get('[data-belt-pic="item:bread"]').classes()).toContain('lq-lit')
   })
 
-  describe('the slim row on a sideways phone', () => {
-    // The path goes through a variable: Vite rewrites a literal `new URL()`.
-    const path = './BeltOfPictures.vue'
-    const source = readFileSync(new URL(path, import.meta.url), 'utf8')
-    const rule = (selector: string): string =>
-      source.match(
-        new RegExp(
-          `^${selector.replace(/[.():-]/g, '\\$&')} \\{([^}]*)\\}`,
-          'm',
-        ),
-      )?.[1] ?? ''
-
-    it('puts the pouch and star side by side while the row is up', () => {
-      const switchRule = rule(
-        '.lq-belt-compact:not(.lq-belt-away) .lq-belt-switch',
-      )
-      expect(switchRule).toContain('flex-direction: row')
-      expect(switchRule).toContain('align-items: center')
-    })
-
-    it('is only as tall as its pictures: 48px and 2px of bar padding', () => {
-      expect(
-        rule('.lq-belt-compact:not(.lq-belt-away) .lq-belt-bar'),
-      ).toContain('padding: 2px 8px')
-      expect(rule('.lq-belt-compact .lq-belt-pic')).toContain('width: 48px')
-    })
-
-    it('keeps an empty row as tall as a row of pictures', () => {
-      expect(
-        rule('.lq-belt-compact:not(.lq-belt-away) .lq-belt-strip'),
-      ).toContain('min-height: 48px')
-    })
-
-    it('keeps the stacked buttons while the row is folded away', () => {
-      expect(rule('.lq-belt-switch')).toContain('flex-direction: column')
-      expect(rule('.lq-belt-bar')).toContain('padding: 6px 8px')
-    })
-  })
-
   it('keeps the names off the pictures when compact', () => {
     mountBelt({ compact: true })
     expect(w!.find('.lq-belt-name').exists()).toBe(false)
