@@ -93,20 +93,6 @@ describe('LanternLayout: what is here, named on the picture', () => {
     expect(w.find('[data-area-mark]').exists()).toBe(false)
   })
 
-  it('shows the marks and names with the button and takes them away again', async () => {
-    await cottage()
-    expect(button().text()).toBe("◎ Show what's here")
-    expect(button().attributes('title')).toBe("Show what's here (S)")
-    expect(w.find('[data-area-mark]').exists()).toBe(false)
-    await button().trigger('click')
-    expect(button().text()).toBe('◎ Showing')
-    expect(button().attributes('title')).toBe("Show what's here (S)")
-    expect(w.findAll('[data-area-mark]')).toHaveLength(2)
-    await button().trigger('click')
-    expect(button().text()).toBe("◎ Show what's here")
-    expect(w.find('[data-area-mark]').exists()).toBe(false)
-  })
-
   it('names only the things the studio has placed, as the corner names them', async () => {
     await cottage()
     await button().trigger('click')

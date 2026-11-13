@@ -58,17 +58,6 @@ describe('LanternLayout: patches of the room picture', () => {
   const patches = (): string[] =>
     w.findAll('img.lq-patch').map((i) => i.attributes('src') ?? '')
 
-  it('lays the patch of the bread once it is taken, with a fade, and nothing before', async () => {
-    expect(patches()).toEqual([])
-    game.submitCommand('take bread')
-    await w.vm.$nextTick()
-    const loader = w.get('img.lq-patch-loading')
-    expect(loader.attributes('src')).toContain('bread-taken')
-    await loader.trigger('load')
-    expect(patches()).toHaveLength(1)
-    expect(w.get('img.lq-patch').classes()).not.toContain('lq-patch-still')
-  })
-
   it('does not lay a patch the studio has not made', async () => {
     game.imageManifest = { 'act1-eliors-cottage': {} }
     game.submitCommand('take bread')

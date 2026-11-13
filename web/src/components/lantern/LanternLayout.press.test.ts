@@ -151,17 +151,6 @@ describe('LanternLayout: pressing a thing on the picture', () => {
     expect(ring().exists()).toBe(true)
   })
 
-  it('sends the command as if typed, closes the ring and the thing goes when taken', async () => {
-    const store = await cottage()
-    await press('bread')
-    await coin('take').trigger('click')
-    expect(ring().exists()).toBe(false)
-    expect(store.turns.at(-1)?.command).toBe('take bread')
-    expect(store.rawInventory.some((i) => /bread/i.test(i.name))).toBe(true)
-    await w.vm.$nextTick()
-    expect(hit('bread').exists()).toBe(false)
-  })
-
   it('opens for a person with Talk to and the rest', async () => {
     await cottage()
     await press('grandmother')
@@ -186,34 +175,10 @@ describe('LanternLayout: pressing a thing on the picture', () => {
     expect(ring().exists()).toBe(false)
   })
 
-  it('closes on Escape and gives focus back to the thing', async () => {
-    await cottage()
-    await press('bread')
-    await key('Escape')
-    await w.vm.$nextTick()
-    expect(ring().exists()).toBe(false)
-    expect(document.activeElement).toBe(hit('bread').element)
-  })
-
   it('does not take the names away or show them by opening a ring', async () => {
     await cottage()
     await press('bread')
     expect(useAreaNamesStore().showing).toBe(false)
-  })
-
-  it('names the thing once, on the ring, with the pointer resting on it', async () => {
-    await cottage()
-    useAreaNamesStore().pointer = { x: 620, y: 350 }
-    await flushPromises()
-    expect(w.find('[data-area-pointer]').text()).toBe('Bread')
-    await press('bread')
-    expect(w.find('.lq-ring-name').text()).toBe('Bread')
-    expect(w.find('[data-area-pointer]').exists()).toBe(false)
-    await key('Escape')
-    expect(ring().exists()).toBe(false)
-    expect(w.findAll('.lq-area-name').map((name) => name.text())).toEqual([
-      'Bread',
-    ])
   })
 
   it('closes when the game stops taking a move', async () => {

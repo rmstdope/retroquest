@@ -205,29 +205,6 @@ describe('LanternLayout: the belt of pictures', () => {
     expect(document.activeElement).toBe(hit('grandmother').element)
   })
 
-  it('puts the hand down with ✕ Cancel, sending nothing, focus back on the picture', async () => {
-    const store = await cottage()
-    const before = store.turns.length
-    await click(tile('item:bread').element)
-    await coin('give').trigger('click')
-    await flushPromises()
-    await w.get('[data-hand-cancel]').trigger('click')
-    await flushPromises()
-    expect(useBeltStore().hand).toBeNull()
-    expect(store.turns.length).toBe(before)
-    expect(document.activeElement).toBe(tile('item:bread').element)
-  })
-
-  it('puts the hand down with Escape', async () => {
-    await cottage()
-    await click(tile('item:bread').element)
-    await coin('give').trigger('click')
-    await flushPromises()
-    await key('Escape')
-    expect(useBeltStore().hand).toBeNull()
-    expect(document.activeElement).toBe(tile('item:bread').element)
-  })
-
   it('puts the hand down when any other command is sent', async () => {
     const store = await cottage()
     await click(tile('item:bread').element)

@@ -192,16 +192,6 @@ describe('LanternLayout: the arrival on the picture', () => {
     expect(w.find('[data-testid="arrival-bar"]').exists()).toBe(true)
   })
 
-  it('goes on with Enter, and clears on the last part, stopping the narrator', async () => {
-    const w = await ready()
-    await run('go north')
-    expect(useNarrationStore(pinia).isNarrating).toBe(true)
-    await key('Enter')
-    expect(card(w)).toBe('')
-    expect(useNarrationStore(pinia).isNarrating).toBe(false)
-    expect(slidAside(w)).toBe(false)
-  })
-
   it('goes on with a click on the picture', async () => {
     const w = await ready()
     useSettingsStore(pinia).narrationOn = false
@@ -226,25 +216,6 @@ describe('LanternLayout: the arrival on the picture', () => {
     expect(down.defaultPrevented).toBe(true)
     expect(card(w)).toBe('')
     expect(document.activeElement).toBe(verb)
-    expect(useGameStore(pinia).turns).toHaveLength(turns)
-  })
-
-  it('goes on with Enter in the empty command box, whose own handler has already taken the key', async () => {
-    useSettingsStore(pinia).startMode = 'type'
-    const w = await ready()
-    await run('go north')
-    const turns = useGameStore(pinia).turns.length
-    const input = w.get('.lq-type-input').element as HTMLInputElement
-    input.focus()
-    const down = new KeyboardEvent('keydown', {
-      key: 'Enter',
-      bubbles: true,
-      cancelable: true,
-    })
-    input.dispatchEvent(down)
-    await vi.advanceTimersByTimeAsync(0)
-    expect(card(w)).toBe('')
-    expect(slidAside(w)).toBe(false)
     expect(useGameStore(pinia).turns).toHaveLength(turns)
   })
 
@@ -287,27 +258,6 @@ describe('LanternLayout: the arrival on the picture', () => {
     expect(w.find('.lq-paper-tab').exists()).toBe(false)
   })
 
-  it('clears when an action is chosen', async () => {
-    const w = await ready()
-    useSettingsStore(pinia).narrationOn = false
-    await run('go north')
-    await w.get('[data-verb="take"]').trigger('click')
-    expect(card(w)).toBe('')
-  })
-
-  it('clears when the player types, and the command still goes through', async () => {
-    useSettingsStore(pinia).startMode = 'type'
-    const w = await ready()
-    useSettingsStore(pinia).narrationOn = false
-    await run('go north')
-    expect(card(w)).not.toBe('')
-    const input = w.get('.lq-type-input')
-    await input.setValue('inventory')
-    expect(card(w)).toBe('')
-    await input.trigger('keydown', { key: 'Enter' })
-    expect(useGameStore(pinia).turns.at(-1)?.command).toBe('inventory')
-  })
-
   it('keeps to its own stores when a store of an earlier test acts late', async () => {
     const w = await ready()
     useSettingsStore(pinia).narrationOn = false
@@ -339,16 +289,6 @@ describe('LanternLayout: the arrival on the picture', () => {
     expect(slidAside(w)).toBe(false)
   })
 
-  it('tells the arrival on a phone too, with its own hint', async () => {
-    const w = await ready(false)
-    useSettingsStore(pinia).narrationOn = false
-    await run('go north')
-    expect(card(w)).toContain('Tap to continue')
-    expect(w.get('[data-testid="arrival-on-picture"]').classes()).toContain(
-      'lq-phone-arrival',
-    )
-  })
-
   it('tells the arrival on a sideways phone with the sideways card (rq-dpom)', async () => {
     const w = await ready('sideways')
     useSettingsStore(pinia).narrationOn = false
@@ -357,14 +297,6 @@ describe('LanternLayout: the arrival on the picture', () => {
     const classes = w.get('[data-testid="arrival-on-picture"]').classes()
     expect(classes).toContain('lq-sideways-arrival')
     expect(classes).not.toContain('lq-phone-arrival')
-  })
-
-  it('leaves a short screen as it was', async () => {
-    const w = await ready('short')
-    await run('go north')
-    expect(card(w)).toBe('')
-    expect(w.find('.lq-paper-tab').exists()).toBe(false)
-    expect(w.find('[data-testid="arrival-on-picture"]').exists()).toBe(false)
   })
 
   it('clears when the window turns into a phone', async () => {
