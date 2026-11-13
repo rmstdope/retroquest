@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>rq-ikao title screen</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600&family=DM+Sans:wght@400;500;600&family=DM+Mono&display=swap">
+<style>
+:root{--bg:#10151a;--fg:#ece6d6;--muted:#a39d8e;--accent:#ffa914;--on-accent:#1a1408;--accent-text:#ffb836;--accent-line:#a8740f;--failure:#e8896b;--failure-soft:#2a1814;--line:#26313b;--surface:#161d24}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#0a0d10;color:var(--fg);font-family:'DM Sans',system-ui,sans-serif;min-height:100vh}
+.bar{display:flex;flex-wrap:wrap;gap:14px 22px;align-items:center;padding:14px 16px;background:var(--surface);border-bottom:1px solid var(--line);font-size:13px}
+.bar h1{font-family:Fraunces,serif;font-size:18px;font-weight:600;color:var(--accent-text);margin-right:8px}
+.bar .grp{display:flex;gap:4px;align-items:center;flex-wrap:wrap}
+.bar .grp>span{color:var(--muted);margin-right:4px}
+.bar button{border:1px solid var(--line);background:#1c242c;color:var(--fg);padding:5px 10px;border-radius:7px;cursor:pointer;font:inherit}
+.bar button.on{background:var(--accent-soft,#36270a);border-color:var(--accent-line);color:var(--accent-text)}
+.bar .replay{background:var(--accent);color:var(--on-accent);border:none;font-weight:600}
+.note{padding:10px 16px;color:var(--muted);font-size:13px;max-width:900px;line-height:1.5}
+.wrap{padding:16px;display:flex;justify-content:center}
+.device{position:relative;overflow:hidden;border:1px solid var(--line);border-radius:14px;background:var(--bg);box-shadow:0 10px 40px #0008}
+.scr{position:absolute;inset:0;container-type:size}
+.pic{position:absolute;inset:0;background:none center/cover no-repeat;opacity:0}
+.shade{position:absolute;inset:0;pointer-events:none}
+.name{opacity:0}
+.word{font-family:Fraunces,serif;font-weight:600;color:var(--accent-text);line-height:1;text-shadow:0 0 22px #000c,0 2px 3px #000}
+.art{font-family:'DM Mono',monospace;color:var(--accent-text);white-space:pre;line-height:1.1;text-shadow:0 0 8px #000,0 1px 2px #000}
+.welcome{display:block;font-size:12px;font-weight:600;letter-spacing:.3em;text-transform:uppercase;color:#ece6d6cc;margin-bottom:8px;text-shadow:0 1px 3px #000}
+.btns{display:flex;flex-direction:column;gap:12px}
+.btns button{opacity:0;transform:translateY(6px);min-width:220px;border-radius:12px;font:inherit;font-weight:600;cursor:pointer}
+.b1{min-height:54px;border:none;background:var(--accent);color:var(--on-accent);font-size:16px!important;padding:6px 28px}
+.b1 small{display:block;font-size:12px;font-weight:400;opacity:.85}
+.b2{height:48px;border:1px solid var(--accent-line);background:#10151acc;color:var(--accent-text);font-size:15px!important;backdrop-filter:blur(4px)}
+.err{opacity:0;padding:8px 12px;border-radius:8px;background:var(--failure-soft);color:var(--failure);font-size:14px;max-width:320px}
+.credit{position:absolute;left:18px;bottom:14px;font-size:12px;color:#ece6d6bb;opacity:0;text-shadow:0 1px 3px #000;max-width:calc(100% - 36px)}
+.credit a{color:var(--accent-text);text-decoration:underline;text-underline-offset:2px}
+.extra{margin-top:10px;font-size:12px;color:#ece6d6aa;text-shadow:0 1px 3px #000;opacity:0}
+.extra b{display:block;font-size:10px;letter-spacing:.12em;text-transform:uppercase;font-weight:600}
+.scr{--k:1}.pace-quick{--k:.55}.pace-slow{--k:1.45}
+.play .pic{animation:fade calc(var(--k)*2.4s) ease forwards}
+.play .name{animation:fade calc(var(--k)*2.4s) ease calc(var(--k)*2s) forwards}
+.play .credit,.play .extra{animation:fade .4s ease calc(var(--k)*4.4s) forwards}
+.play .err{animation:fade .4s ease calc(var(--k)*4.4s + .2s) forwards}
+.play .btns button{animation:rise .35s ease forwards}
+.play .btns button:nth-child(1){animation-delay:calc(var(--k)*4.4s + .4s)}.play .btns button:nth-child(2){animation-delay:calc(var(--k)*4.4s + .58s)}.play .btns button:nth-child(3){animation-delay:calc(var(--k)*4.4s + .76s)}
+.rm-short.play .pic,.rm-short.play .name,.rm-short.play .credit,.rm-short.play .err{animation:fade .3s ease forwards}.rm-short.play .btns button{transform:none;animation:fade .3s ease forwards!important;animation-delay:0s!important}
+.skiphint{position:absolute;right:14px;top:12px;font-size:11px;color:#ece6d699;background:#0008;padding:4px 8px;border-radius:6px}
+.done .pic,.done .name,.done .credit,.done .extra,.done .err{opacity:1;animation:none}.done .btns button{opacity:1;transform:none;animation:none}
+@keyframes fade{to{opacity:1}}@keyframes rise{to{opacity:1;transform:none}}
+.col{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;text-align:center;padding:9cqh 16px 64px}
+.name{margin-bottom:auto}.err{margin-bottom:14px}.btns{align-items:center;margin-bottom:6cqh}.btns button{width:300px}
+.shade{background:linear-gradient(180deg,#10151ad0 0%,#10151a40 38%,#10151a30 55%,#10151ac0 100%)}
+.narrow .btns{width:100%;max-width:320px}.narrow .btns button{width:100%}.narrow .col{padding-top:14cqh}.narrow .credit{bottom:12px}
+.short .col{padding-top:4cqh;padding-bottom:46px}.short .welcome{margin-bottom:4px}.short .btns{margin-bottom:0;flex-direction:row;flex-wrap:wrap;justify-content:center}.short .btns .b1{flex-basis:100%;max-width:420px}.short .btns{max-width:460px}.short .btns .b2{flex:1;height:42px}
+</style></head><body>
+<div class="bar">
+  <h1>Title screen — agreed</h1>
+  <button class="replay" onclick="replay()">▶ Replay opening</button>
+  <div class="grp"><span>Screen</span><button data-k="dev" data-v="desk" class="on">Computer</button><button data-k="dev" data-v="phone">Phone</button><button data-k="dev" data-v="side">Phone sideways</button></div>
+  <div class="grp"><span>Reduce motion</span><button data-k="rm" data-v="off" class="on">Off</button><button data-k="rm" data-v="all">On</button></div>
+  <div class="grp"><span>Player</span><button data-k="who" data-v="new" class="on">First time</button><button data-k="who" data-v="back">Returning</button><button data-k="who" data-v="err">Returning, load failed</button></div>
+</div>
+<p class="note">Agreed: the picture fades in (about 2½ s), then the name (about 2½ s, overlapping), then the credit line, then the buttons one after another, about 5½ s in all. A key press, click or tap during the opening shows everything at once and presses nothing. With less motion on, everything is there from the start. The dream picture stands in until the new title picture is made.</p>
+<div class="wrap"><div class="device" id="dev"><div class="scr" id="scr"></div></div></div>
+<script>
+const S={pace:'mid',rm:'off',dev:'desk',who:'new',nm:'word',cr:'one',pic:'act1-the-dream'};
+const IMG='../../web/public/images/generated/';
+const ART=`########  ######### ######## ########   #######   #######  ##     ## #########  #######  ########
+##     ## ##           ##    ##     ## ##     ## ##     ## ##     ## ##        ##           ##
+##     ## ##           ##    ##     ## ##     ## ##     ## ##     ## ##        ##           ##
+########  #########    ##    ########  ##     ## ##     ## ##     ## #########  #######     ##
+##   ##   ##           ##    ##   ##   ##     ## ##  ## ## ##     ## ##               ##    ##
+##    ##  ##           ##    ##    ##  ##     ## ##   #### ##     ## ##        ##     ##    ##
+##     ## #########    ##    ##     ##  #######   #######   #######  #########  #######     ##`;
+const SIZES={desk:[1024,600],phone:[390,780],side:[780,390]};
+function render(){
+  const [w,h]=SIZES[S.dev];const d=document.getElementById('dev');d.style.width=w+'px';d.style.height=h+'px';
+  const narrow=w<500, short=h<450;
+  const name=S.nm==='art'&&!narrow?`<span class="welcome">Welcome to</span><div class="art" style="font-size:${Math.min(11,(w*0.85)/62)}px">${ART}</div>`
+    :`<span class="welcome">Welcome to</span><div class="word" style="font-size:${narrow?48:short?52:84}px">RetroQuest</div>`;
+  let btns;
+  if(S.who==='new')btns=`<button class="b1">Start</button>`;
+  else btns=`<button class="b1">Continue<small>Act 2 · The Gathering Storm · Quick save · 2 hours ago</small></button><button class="b2">New game</button><button class="b2">Load game</button>`;
+  const err=S.who==='err'?`<div class="err">That save could not be loaded: it was made by an older version of the game.</div>`:'';
+  const extra=S.cr==='two'?`<div class="extra"><b>Music</b>Original music for RetroQuest<br>Images, narration and music made with Content Studio</div>`:'';
+  document.getElementById('scr').className='scr pace-'+S.pace+' rm-'+S.rm+' '+(narrow?'narrow ':'')+(short?'short ':'');
+  document.getElementById('scr').innerHTML=`<div class="pic" style="background-image:url('${IMG}${S.pic}.png')"></div><div class="shade"></div><div class="col"><div class="name">${name}</div>${err}<div class="btns">${btns}</div>${extra}</div><div class="credit">Original music, images and narration made with <a href="https://github.com/rmstdope/content-studio" target="_blank">Content Studio</a></div>`;
+  replay();
+}
+function replay(){const s=document.getElementById('scr');s.classList.remove('play','done');void s.offsetWidth;s.classList.add(S.rm==='all'?'done':'play');}
+function skip(){const s=document.getElementById('scr');if(s.classList.contains('play')){s.classList.remove('play');s.classList.add('done');}}
+document.getElementById('scr').addEventListener('pointerdown',skip);document.addEventListener('keydown',e=>{if(!e.target.closest('.bar'))skip();});
+for(const [k,v] of new URLSearchParams(location.hash.slice(1)))S[k]=v;
+document.querySelectorAll('.bar [data-k]').forEach(b=>b.onclick=()=>{S[b.dataset.k]=b.dataset.v;document.querySelectorAll(`[data-k=${b.dataset.k}]`).forEach(x=>x.classList.toggle('on',x===b));render();});
+render();
+</script></body></html>
