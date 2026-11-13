@@ -80,13 +80,18 @@ const ITEMS: Item[] = [
 ]
 
 describe('Act 1 item descriptions', () => {
-  it.each(ITEMS.map((item) => [item.name, item] as const))(
-    '%s says what it is and promises no use',
-    (_name, item) => {
-      expect(item.description.length).toBeGreaterThan(0)
-      for (const tell of [...PROMISES, ...GENERIC]) {
-        expect(item.description).not.toMatch(tell)
+  it('every item says what it is and promises no use', () => {
+    const failures: string[] = []
+    for (const item of ITEMS) {
+      if (item.description.length === 0) {
+        failures.push(`${item.name}: empty description`)
       }
-    },
-  )
+      for (const tell of [...PROMISES, ...GENERIC]) {
+        if (tell.test(item.description)) {
+          failures.push(`${item.name}: matches ${tell}`)
+        }
+      }
+    }
+    expect(failures).toEqual([])
+  })
 })
