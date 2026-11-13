@@ -9,6 +9,8 @@ describe('useFadeOnceRead', () => {
   let root: HTMLElement
   let live: Readonly<Ref<number>>
   let w: VueWrapper
+  /** Whether the lines are held (the words hidden). */
+  let held: Ref<boolean>
 
   /** A line as the stage draws it; `reading` marks it as being read aloud. */
   function line(
@@ -37,9 +39,10 @@ describe('useFadeOnceRead', () => {
     root = document.createElement('div')
     document.body.appendChild(root)
     const container = ref<HTMLElement | null>(root)
+    held = ref(false)
     const Host = defineComponent({
       setup() {
-        live = useFadeOnceRead(container, '.lq-line').live
+        live = useFadeOnceRead(container, '.lq-line', () => held.value).live
         return () => h('i')
       },
     })
@@ -131,6 +134,37 @@ describe('useFadeOnceRead', () => {
     fadeEnds(a, 'lq-fade-still')
     expect(a.dataset.fade).toBe('gone')
     expect(live.value).toBe(0)
+  })
+
+  it('holds every line while held, and lets go of each to be read anew', async () => {
+    vi.useFakeTimers()
+    const heardOne = line({ reading: true, readMs: 800 })
+    const waitingOne = line({ readMs: 1200 })
+    await vi.advanceTimersByTimeAsync(0)
+    heardOne.classList.remove('lq-speaking')
+    await vi.advanceTimersByTimeAsync(0)
+    expect(heardOne.dataset.fade).toBe('away')
+    held.value = true
+    await vi.advanceTimersByTimeAsync(0)
+    expect([heardOne.dataset.fade, waitingOne.dataset.fade]).toEqual([
+      'live',
+      'live',
+    ])
+    await vi.advanceTimersByTimeAsync(10_000)
+    expect(waitingOne.dataset.fade).toBe('live')
+    fadeEnds(heardOne)
+    expect(live.value).toBe(2)
+
+    held.value = false
+    await vi.advanceTimersByTimeAsync(0)
+    expect(heardOne.dataset.fade).toBe('live')
+    await vi.advanceTimersByTimeAsync(800)
+    expect([heardOne.dataset.fade, waitingOne.dataset.fade]).toEqual([
+      'away',
+      'live',
+    ])
+    await vi.advanceTimersByTimeAsync(400)
+    expect(waitingOne.dataset.fade).toBe('away')
   })
 
   it('forgets a line taken off the stage', async () => {
