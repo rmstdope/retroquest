@@ -263,6 +263,7 @@ export const ACT4_ROOM_PATCHES: Record<string, ImagePatch[]> = {
           THRONE_CHAMBER_JUSTICE,
           THRONE_CHAMBER_SACRIFICE,
         ]),
+      layer: 1,
     },
     {
       id: 'malakar-healed',
@@ -274,6 +275,7 @@ export const ACT4_ROOM_PATCHES: Record<string, ImagePatch[]> = {
           THRONE_CHAMBER_HEALED,
           THRONE_CHAMBER_REDEMPTION,
         ]),
+      layer: 2,
     },
     {
       id: 'wound-sealed',
@@ -281,6 +283,7 @@ export const ACT4_ROOM_PATCHES: Record<string, ImagePatch[]> = {
       text: 'Replace the wound with a seal of gold and pale light hanging in the air, Malakar held inside it.',
       area: 'wound',
       when: (c) => roomSays(c, 'ThroneChamber', [THRONE_CHAMBER_JUSTICE]),
+      layer: 3,
     },
     {
       id: 'malakar-kneeling',
@@ -288,6 +291,7 @@ export const ACT4_ROOM_PATCHES: Record<string, ImagePatch[]> = {
       text: 'Show Malakar kneeling before the king, grey and powerless.',
       area: 'malakar',
       when: (c) => roomSays(c, 'ThroneChamber', [THRONE_CHAMBER_SACRIFICE]),
+      layer: 4,
     },
   ],
 }

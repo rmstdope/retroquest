@@ -52,8 +52,12 @@ export function appliedPatchIds(
   for (const direction of Object.keys(room.getExits(state)))
     present.add(exitAreaId(direction))
   const context: PatchContext = { things, state }
-  return patches
-    .filter((patch) => applies(patch, context, present))
+  return layeredIds(patches.filter((patch) => applies(patch, context, present)))
+}
+
+/** The ids of `patches` lowest layer first and equal layers by id, so the order they were declared in changes nothing. */
+export function layeredIds(patches: readonly ImagePatch[]): string[] {
+  return [...patches]
     .sort(
       (a, b) =>
         (a.layer ?? 0) - (b.layer ?? 0) ||

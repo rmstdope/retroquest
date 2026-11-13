@@ -11,8 +11,8 @@ import { Act3 } from '@/act3/Act3'
 import { Act4 } from '@/act4/Act4'
 import { Game, type Act } from '@/engine'
 import { executeCommands } from '@/testing/gameHelpers'
-import { declaredPatches } from './roomPatches'
-import { appliedPatchIds } from './roomPatchState'
+import { declaredPatches, type ImagePatch } from './roomPatches'
+import { appliedPatchIds, layeredIds } from './roomPatchState'
 
 const ACTS: Array<() => Act> = [
   () => new Act1(),
@@ -126,23 +126,27 @@ describe('appliedPatchIds', () => {
     },
   )
 
-  it('lays a higher layer after a lower one, whatever the order of declaration', () => {
-    const act = new Act1()
-    const game = new Game([act])
-    game.commandParser.parse('go west')
-    const ids = appliedPatchIds(act, 'VillageChapel', game.state)
-    const candle = declaredPatches('Act1', 'VillageChapel').find(
-      (p) => p.id === 'candle-lit',
-    )
-    const locket = declaredPatches('Act1', 'VillageChapel').find(
-      (p) => p.id === 'locket-appears',
-    )
-    expect(candle?.layer ?? 0).toBeLessThan(locket?.layer ?? 0)
-    // Applied patches come out sorted by layer then id, not as declared.
-    const sorted = [...ids].sort()
-    expect(ids.filter((id) => id !== 'locket-appears')).toEqual(
-      sorted.filter((id) => id !== 'locket-appears'),
-    )
+  it('lays patches by layer then id, whatever the order of declaration', () => {
+    const patch = (id: string, layer?: number): ImagePatch => ({
+      id,
+      title: id,
+      text: id,
+      when: 'present',
+      ...(layer !== undefined ? { layer } : {}),
+    })
+    // The id order (a, b) and the layer order (b, a) disagree.
+    const declared = [patch('a', 1), patch('b', 0), patch('c', 0)]
+    expect(layeredIds(declared)).toEqual(['b', 'c', 'a'])
+    expect(layeredIds([...declared].reverse())).toEqual(['b', 'c', 'a'])
+  })
+
+  it('lays the chapel locket over the candle light', () => {
+    const patches = declaredPatches('Act1', 'VillageChapel')
+    expect(layeredIds([...patches].reverse())).toEqual([
+      'candle-lit',
+      'locket-appears',
+    ])
+    expect(patches.find((p) => p.id === 'locket-appears')?.layer).toBe(1)
   })
 
   it.each(ACTS.map((make) => [make().name, make] as const))(

@@ -122,6 +122,7 @@ export const ACT3_ROOM_PATCHES: Record<string, ImagePatch[]> = {
       text: 'Add the lantern bracket to the picture.',
       area: 'lantern-bracket',
       when: 'present',
+      layer: 1,
     },
   ],
   SanctumOfTheTide: [

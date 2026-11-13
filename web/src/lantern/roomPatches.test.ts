@@ -10,9 +10,13 @@ import { Act3 } from '@/act3/Act3'
 import { Act4 } from '@/act4/Act4'
 import { Game, Item, type Act } from '@/engine'
 import { allImages, characterImages } from './imageLists'
-import { declaredAreas, exitAreaId, thingAreaId } from './roomAreas'
+import {
+  declaredAreas,
+  exitAreaId,
+  thingAreaId,
+  unpatchedAreas,
+} from './roomAreas'
 import { declaredPatches, type ImagePatch } from './roomPatches'
-import { unpatchedAreas } from './roomAreas'
 import { ACT1_ROOM_PATCHES } from './roomPatches/act1RoomPatches'
 import { ACT2_ROOM_PATCHES } from './roomPatches/act2RoomPatches'
 import { ACT3_ROOM_PATCHES } from './roomPatches/act3RoomPatches'
