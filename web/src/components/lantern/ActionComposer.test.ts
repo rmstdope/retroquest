@@ -47,6 +47,24 @@ describe('ActionComposer', () => {
     return wrapper
   }
 
+  /** The two places the composer is shown: the side panel and the stage. */
+  const LAYOUTS = ['panel', 'stage'] as const
+  type Layout = (typeof LAYOUTS)[number]
+
+  function mountLayout(layout: Layout) {
+    wrapper = mount(ActionComposer, {
+      attachTo: document.body,
+      ...(layout === 'stage' ? { props: { stage: true } } : {}),
+    })
+    return wrapper
+  }
+
+  /** The Type or Actions half of the mode switch, in either layout. */
+  function modeSwitch(w: VueWrapper, layout: Layout, half: 'Type' | 'Actions') {
+    if (layout === 'panel') return button(w, half)
+    return w.get(half === 'Type' ? '[data-type]' : '[data-actions]')
+  }
+
   function button(w: VueWrapper, name: string) {
     const found = w
       .findAll('button')
@@ -232,17 +250,30 @@ describe('ActionComposer', () => {
       expect(w.find('.lq-builder').exists()).toBe(true)
     })
 
-    it('greys the choices while the game is not taking commands', async () => {
-      const game = useGameStore()
-      const w = mountComposer()
-      await button(w, 'Take').trigger('click')
-      game.acceptInput = false
-      await w.vm.$nextTick()
+    it.each(LAYOUTS)(
+      'greys the choices while the game is not taking commands (%s)',
+      async (layout) => {
+        const game = useGameStore()
+        game.acceptInput = false
+        const closed = mountLayout(layout)
+        expect(button(closed, 'Look').attributes()).toHaveProperty('disabled')
+        closed.unmount()
+        game.acceptInput = true
+        const w = mountLayout(layout)
+        await button(w, 'Take').trigger('click')
+        game.acceptInput = false
+        await w.vm.$nextTick()
 
-      expect(button(w, 'Bucket').attributes()).toHaveProperty('disabled')
-      await button(w, 'Bucket').trigger('click')
-      expect(submit).not.toHaveBeenCalled()
-    })
+        expect(button(w, 'Bucket').attributes()).toHaveProperty('disabled')
+        await button(w, 'Bucket').trigger('click')
+        expect(submit).not.toHaveBeenCalled()
+        if (layout === 'stage') {
+          expect(w.get('.lq-row .lq-close').attributes()).not.toHaveProperty(
+            'disabled',
+          )
+        }
+      },
+    )
   })
 
   it('takes free text for what to say', async () => {
@@ -307,16 +338,6 @@ describe('ActionComposer', () => {
     expect((input.element as HTMLInputElement).value).toBe('')
   })
 
-  it('disables everything while the game is not accepting input', () => {
-    useGameStore().acceptInput = false
-    const w = mountComposer()
-
-    expect(button(w, 'Look').attributes()).toHaveProperty('disabled')
-    expect(button(w, "Go north to Mira's Hut").attributes()).toHaveProperty(
-      'disabled',
-    )
-  })
-
   it('marks the chosen verb as pressed', async () => {
     const w = mountComposer()
 
@@ -351,17 +372,20 @@ describe('ActionComposer', () => {
     expect(w.get('[data-testid="preview"]').text()).toBe('use …')
   })
 
-  it('moves focus to the choices, then back to the verb when performed', async () => {
-    const w = mountComposer()
+  it.each(LAYOUTS)(
+    'moves focus to the choices, then back to the verb when performed (%s)',
+    async (layout) => {
+      const w = mountLayout(layout)
 
-    await button(w, 'Take').trigger('click')
-    await w.vm.$nextTick()
-    expect(document.activeElement).toBe(button(w, 'Bucket').element)
+      await button(w, 'Take').trigger('click')
+      await w.vm.$nextTick()
+      expect(document.activeElement).toBe(button(w, 'Bucket').element)
 
-    await button(w, 'Bucket').trigger('click')
-    await w.vm.$nextTick()
-    expect(document.activeElement).toBe(button(w, 'Take').element)
-  })
+      await button(w, 'Bucket').trigger('click')
+      await w.vm.$nextTick()
+      expect(document.activeElement).toBe(button(w, 'Take').element)
+    },
+  )
 
   it('leaves focus in a pop-up that the command opened', async () => {
     const game = useGameStore()
@@ -750,12 +774,15 @@ describe('ActionComposer', () => {
     const commandBox = (w: VueWrapper): Element =>
       w.get('input[aria-label="Command"]').element
 
-    it('puts the cursor in the command box when Type is chosen', async () => {
-      const w = mountComposer()
-      await button(w, 'Type').trigger('click')
-      await w.vm.$nextTick()
-      expect(document.activeElement).toBe(commandBox(w))
-    })
+    it.each(LAYOUTS)(
+      'puts the cursor in the command box when Type is chosen (%s)',
+      async (layout) => {
+        const w = mountLayout(layout)
+        await modeSwitch(w, layout, 'Type').trigger('click')
+        await w.vm.$nextTick()
+        expect(document.activeElement).toBe(commandBox(w))
+      },
+    )
 
     it('puts the cursor in the box again when Type is already selected, keeping the text', async () => {
       const w = mountComposer()
@@ -768,22 +795,30 @@ describe('ActionComposer', () => {
       expect((commandBox(w) as HTMLInputElement).value).toBe('look')
     })
 
-    it('puts focus on Look when Actions is chosen and no verb was used', async () => {
-      const w = mountComposer()
-      await button(w, 'Type').trigger('click')
-      await button(w, 'Actions').trigger('click')
-      await w.vm.$nextTick()
-      expect(document.activeElement).toBe(w.get('.lq-verbs .lq-verb').element)
-    })
+    it.each(LAYOUTS)(
+      'puts focus on Look when Actions is chosen and no verb was used (%s)',
+      async (layout) => {
+        const w = mountLayout(layout)
+        await modeSwitch(w, layout, 'Type').trigger('click')
+        await modeSwitch(w, layout, 'Actions').trigger('click')
+        await w.vm.$nextTick()
+        expect(document.activeElement).toBe(w.get('.lq-verbs .lq-verb').element)
+      },
+    )
 
-    it('puts focus on the verb used last when Actions is chosen', async () => {
-      const w = mountComposer()
-      await w.get('[data-verb="search"]').trigger('click')
-      await button(w, 'Type').trigger('click')
-      await button(w, 'Actions').trigger('click')
-      await w.vm.$nextTick()
-      expect(document.activeElement).toBe(w.get('[data-verb="search"]').element)
-    })
+    it.each(LAYOUTS)(
+      'puts focus on the verb used last when Actions is chosen (%s)',
+      async (layout) => {
+        const w = mountLayout(layout)
+        await w.get('[data-verb="search"]').trigger('click')
+        await modeSwitch(w, layout, 'Type').trigger('click')
+        await modeSwitch(w, layout, 'Actions').trigger('click')
+        await w.vm.$nextTick()
+        expect(document.activeElement).toBe(
+          w.get('[data-verb="search"]').element,
+        )
+      },
+    )
 
     it('puts focus on the verb used last when Actions is already selected', async () => {
       const w = mountComposer()
@@ -1176,19 +1211,6 @@ describe('ActionComposer on the stage', () => {
     w.unmount()
   })
 
-  it('greys the choices while the game is not taking commands', async () => {
-    const game = useGameStore()
-    const w = stage()
-    await click(w, '[data-verb="talk"]')
-    game.acceptInput = false
-    await w.vm.$nextTick()
-    expect(choice(w, 'Mira').attributes()).toHaveProperty('disabled')
-    expect(w.get('.lq-row .lq-close').attributes()).not.toHaveProperty(
-      'disabled',
-    )
-    w.unmount()
-  })
-
   it('takes Say as words, then the person, with no button', async () => {
     const w = stage()
     await click(w, '[data-verb="say"]')
@@ -1199,17 +1221,6 @@ describe('ActionComposer on the stage', () => {
     await choice(w, 'Mira').trigger('click')
     expect(submit).toHaveBeenCalledWith('say hello to mira')
     expect(w.find('.lq-do').exists()).toBe(false)
-    w.unmount()
-  })
-
-  it('moves focus to the first choice, then back to the verb', async () => {
-    const w = stage()
-    await click(w, '[data-verb="talk"]')
-    await w.vm.$nextTick()
-    expect(document.activeElement?.textContent?.trim()).toBe('Mira')
-    await choice(w, 'Mira').trigger('click')
-    await w.vm.$nextTick()
-    expect(document.activeElement?.getAttribute('data-verb')).toBe('talk')
     w.unmount()
   })
 
@@ -1321,37 +1332,6 @@ describe('ActionComposer on the stage', () => {
     expect(w.get('.lq-type-row .lq-do').text()).toBe('Do it ▸')
     await click(w, '[data-actions]')
     expect(w.find('.lq-verbs').exists()).toBe(true)
-    w.unmount()
-  })
-
-  it('puts the cursor in the command box when ⌨ Type is chosen', async () => {
-    const w = stage()
-    await click(w, '[data-type]')
-    await w.vm.$nextTick()
-    expect(document.activeElement).toBe(
-      w.get('input[aria-label="Command"]').element,
-    )
-    w.unmount()
-  })
-
-  it('puts focus on a verb when Actions is chosen from the command box', async () => {
-    const w = stage()
-    await click(w, '[data-type]')
-    await w.vm.$nextTick()
-    await click(w, '[data-actions]')
-    await w.vm.$nextTick()
-    expect(document.activeElement).toBe(w.get('.lq-verbs .lq-verb').element)
-    w.unmount()
-  })
-
-  it('puts focus back on the verb used last when Actions is chosen', async () => {
-    const w = stage()
-    await click(w, '[data-verb="search"]')
-    await click(w, '[data-type]')
-    await w.vm.$nextTick()
-    await click(w, '[data-actions]')
-    await w.vm.$nextTick()
-    expect(document.activeElement).toBe(w.get('[data-verb="search"]').element)
     w.unmount()
   })
 
