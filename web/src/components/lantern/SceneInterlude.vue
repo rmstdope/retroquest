@@ -38,7 +38,9 @@ const { html } = useReadAlong(() => scene.interlude?.turn ?? 0, root)
         <!-- eslint-enable vue/no-v-html -->
         <p class="lq-interlude-hint">
           {{
-            props.phone ? 'Tap to continue' : 'Click or press Enter to continue'
+            props.phone
+              ? 'Tap to continue · Hold to skip'
+              : 'Click to continue · Hold to skip'
           }}
         </p>
       </div>

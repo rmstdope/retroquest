@@ -76,7 +76,7 @@ describe('ArrivalOnPicture', () => {
     await w.vm.$nextTick()
     expect(w.get('.lq-arrival-line').text()).toBe('Cobbles and a fountain.')
     expect(w.get('.lq-arrival-hint').text()).toBe(
-      'Click or press Enter to continue',
+      'Click to continue · Hold to skip',
     )
     expect(w.find('[data-testid="arrival-bar"]').exists()).toBe(true)
     expect(w.classes()).toContain('lq-on')
@@ -154,7 +154,7 @@ describe('ArrivalOnPicture', () => {
       await w.vm.$nextTick()
       const pill = w.get('.lq-arrival-pill')
       expect(pill.get('.lq-arrival-hint').text()).toBe(
-        'Click or press Enter to continue',
+        'Click to continue · Hold to skip',
       )
       expect(pill.find('[data-testid="arrival-bar"]').exists()).toBe(false)
     })
@@ -420,14 +420,14 @@ describe('ArrivalOnPicture', () => {
       const w = await told(long)
       expect(lines(w)).toEqual(['Aaaaaaaaaa bbbb.', 'Cccccccccc dddd.'])
       expect(w.get('.lq-arrival-hint').text()).toBe(
-        'Click or press Enter to continue',
+        'Click to continue · Hold to skip',
       )
       expect(w.find('.lq-arrival-bar').exists()).toBe(true)
       await w.trigger('click')
       await w.vm.$nextTick()
       expect(lines(w)).toEqual(['Eeee.'])
       expect(w.get('.lq-arrival-hint').text()).toBe(
-        'Click or press Enter to continue',
+        'Click to continue · Hold to skip',
       )
       await w.trigger('click')
       expect(w.find('.lq-arrival-card').exists()).toBe(false)
@@ -558,7 +558,9 @@ describe('ArrivalOnPicture', () => {
     it('pages a phone too, so a tap never moves on past unread lines (rq-fc9f)', async () => {
       const w = await told(long, true)
       expect(lines(w)).toEqual(['Aaaaaaaaaa bbbb.', 'Cccccccccc dddd.'])
-      expect(w.get('.lq-arrival-hint').text()).toBe('Tap to continue')
+      expect(w.get('.lq-arrival-hint').text()).toBe(
+        'Tap to continue · Hold to skip',
+      )
       await w.trigger('click')
       await w.vm.$nextTick()
       expect(lines(w)).toEqual(['Eeee.'])
@@ -636,7 +638,7 @@ describe('ArrivalOnPicture', () => {
       expect(w.get('.lq-news-name').text()).toBe('Hint of magic')
       expect(w.get('.lq-arrival-line').text()).toBe('It stayed.')
       expect(w.get('.lq-arrival-hint').text()).toBe(
-        'Click or press Enter to continue',
+        'Click to continue · Hold to skip',
       )
       expect(w.find('button').exists()).toBe(false)
     })
@@ -704,7 +706,7 @@ describe('ArrivalOnPicture', () => {
         'Your father’s word for calling a thing back.',
       )
       expect(w.get('.lq-arrival-hint').text()).toBe(
-        'Click or press Enter to continue',
+        'Click to continue · Hold to skip',
       )
     })
 
@@ -776,7 +778,7 @@ describe('ArrivalOnPicture', () => {
       voiced: false,
     }
 
-    it('says "Tap to continue" on a room, a quest and a spell, on a phone and on a sideways phone', async () => {
+    it('says "Tap to continue · Hold to skip" on a room, a quest and a spell, on a phone and on a sideways phone', async () => {
       const wrong: string[] = []
       for (const layout of ['phone', 'sideways'] as const) {
         for (const part of [description, newsPart(fresh), spellPart]) {
@@ -786,7 +788,7 @@ describe('ArrivalOnPicture', () => {
           useArrivalStore().show(1, [part], false)
           await w.vm.$nextTick()
           const label = `${layout} ${part.kind}`
-          if (w.get('.lq-arrival-hint').text() !== 'Tap to continue') {
+          if (w.get('.lq-arrival-hint').text() !== 'Tap to continue · Hold to skip') {
             wrong.push(`${label}: hint`)
           }
           if (
@@ -812,7 +814,7 @@ describe('ArrivalOnPicture', () => {
       await w.vm.$nextTick()
       expect(w.classes()).not.toContain('lq-sideways-arrival')
       expect(w.get('.lq-arrival-hint').text()).toBe(
-        'Click or press Enter to continue',
+        'Click to continue · Hold to skip',
       )
     })
 

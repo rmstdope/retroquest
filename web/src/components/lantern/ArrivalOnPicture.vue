@@ -46,7 +46,7 @@ import { useSettingsStore } from '@/stores/useSettingsStore'
  *
  * A phone held sideways (`sideways`) tells the card in the free height between
  * the top buttons and the bottom row, in smaller type on the smallest phones,
- * with the seal small and beside the heading, and says "Tap to continue".
+ * with the seal small and beside the heading, and says "Tap to continue · Hold to skip".
  *
  * News (`news` parts: a learned spell, quest news) is told the same way: a round seal (a violet ✦ for a spell, a tick for a completion),
  * the heading, the quest's or spell's name in large type and then its text, which is the
@@ -438,8 +438,8 @@ onBeforeUnmount(() => {
           <p class="lq-arrival-hint">
             {{
               phone || sideways
-                ? 'Tap to continue'
-                : 'Click or press Enter to continue'
+                ? 'Tap to continue · Hold to skip'
+                : 'Click to continue · Hold to skip'
             }}
           </p>
           <div

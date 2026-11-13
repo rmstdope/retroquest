@@ -89,7 +89,7 @@ test.describe('the arrival told on the picture', () => {
     await expect(line).toBeVisible()
     await expect(line).not.toHaveText('')
     await expect(
-      arrival(page).getByText('Click or press Enter to continue'),
+      arrival(page).getByText('Click to continue · Hold to skip'),
     ).toBeVisible()
     // Narration is off here: the reading-time bar shows.
     await expect(page.getByTestId('arrival-bar')).toBeVisible()
@@ -384,7 +384,7 @@ test.describe('the arrival told on the picture', () => {
     await page.goto('/')
     await page.getByRole('button', { name: 'Start', exact: true }).click()
     await page.locator('.lq-chapter-button').click()
-    await expect(arrival(page)).toContainText('Tap to continue')
+    await expect(arrival(page)).toContainText('Tap to continue · Hold to skip')
   })
 
   test('keeps the continue pill in view under a long arrival on a phone', async ({
@@ -489,7 +489,7 @@ test.describe('the arrival told on the picture', () => {
       await expect(lines.first()).not.toHaveText(first[0])
       await clearOfTheChrome(page)
       await expect(arrival(page).locator('.lq-arrival-hint')).toHaveText(
-        'Click or press Enter to continue',
+        'Click to continue · Hold to skip',
       )
       // Pages and parts go on with Enter until the arrival clears.
       for (let i = 0; i < 12 && (await lines.count()); i++)

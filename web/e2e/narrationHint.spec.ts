@@ -1,6 +1,6 @@
 /**
  * The narration hint ("Space to hurry · Esc to skip", "Tap to hurry ·
- * double-tap to skip") floats over the bottom of the story; on a laptop wide
+ * hold to skip") floats over the bottom of the story; on a laptop wide
  * enough for two sides it sits below the narrator's cards instead, level with
  * the "▾ Hide" (rq-7tei). While a paragraph at the bottom of the story is read
  * aloud, none of its words may sit under it, on desktop or on a phone, and

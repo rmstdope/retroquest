@@ -121,7 +121,7 @@ onBeforeUnmount(() => threadResize?.disconnect())
 
 /**
  * Show the rest of an unnarrated turn's lines at once; a narrated turn is
- * tapped on like the story (one block hurried, a double tap skips the turn).
+ * tapped on like the story (one block hurried; held, it skips the telling).
  */
 function hurry(): void {
   speech.revealAll()

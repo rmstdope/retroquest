@@ -88,7 +88,7 @@ test('the smallest phone: smaller type, whole lines, clear of both rows', async 
   await pushNews(page, [NEW_QUEST])
   await expect(stage(page).locator('.lq-arrival-card')).toHaveCount(1)
   await expect(stage(page).locator('.lq-arrival-hint').last()).toHaveText(
-    'Tap to continue',
+    'Tap to continue · Hold to skip',
   )
   expect(await fontSize(page, '.lq-arrival-line')).toBe('17px')
   // 30 px, scaled by the display scale of a narrow screen.

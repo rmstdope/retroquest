@@ -64,7 +64,7 @@ test.describe('a learned spell told in the middle of the picture', () => {
     )
     await expect(middle(page).getByText('Calls a thing back.')).toBeVisible()
     await expect(
-      middle(page).getByText('Click or press Enter to continue').last(),
+      middle(page).getByText('Click to continue · Hold to skip').last(),
     ).toBeVisible()
 
     await middle(page).click({ position: { x: 600, y: 300 } })
@@ -88,12 +88,16 @@ test.describe('a learned spell told in the middle of the picture', () => {
     ).toContainText('You have learned revive.')
   })
 
-  test('is told on a phone too, with "Tap to continue"', async ({ page }) => {
+  test('is told on a phone too, with "Tap to continue · Hold to skip"', async ({
+    page,
+  }) => {
     await startAct1(page, 390, 844)
     await pushSpell(page)
     await expect(middle(page).locator('.lq-news-name').last()).toHaveText(
       'Revive',
     )
-    await expect(middle(page).getByText('Tap to continue').last()).toBeVisible()
+    await expect(
+      middle(page).getByText('Tap to continue · Hold to skip').last(),
+    ).toBeVisible()
   })
 })

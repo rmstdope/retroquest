@@ -15,6 +15,7 @@ import { useArrivalStore } from '@/stores/useArrivalStore'
 import { startedHoldStore } from '@/testing/holdGame'
 import { useStageSpeechStore } from '@/stores/useStageSpeechStore'
 import { useBridge, type ActClass } from '@/composables/useBridge'
+import { HOLD_RING_MS, HOLD_TO_SKIP_MS } from '@/composables/useHoldToSkip'
 import { readingPauseMs } from '@/lantern/stageSpeech'
 import { readingTimeMs } from '@/lantern/stageArrival'
 import { useSettingsStore } from '@/stores/useSettingsStore'
@@ -34,6 +35,12 @@ function markupOf(block: TurnBlock): string {
  * room with another picture fades through the dark, and the move's words wait
  * until the new picture is fully up.
  */
+/** Press a key and let it go, as a keyboard does. */
+function press(key: string): void {
+  document.dispatchEvent(new KeyboardEvent('keydown', { key }))
+  document.dispatchEvent(new KeyboardEvent('keyup', { key }))
+}
+
 describe('LanternLayout: change of scene', () => {
   let w: VueWrapper
 
@@ -107,7 +114,7 @@ describe('LanternLayout: change of scene', () => {
     await w.vm.$nextTick()
     await w.vm.$nextTick()
     expect(scene.turn).not.toBeNull()
-    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }))
+    press('Enter')
     expect(scene.turn).toBeNull()
     expect(scene.phase).toBe('idle')
   })
@@ -140,7 +147,7 @@ describe('LanternLayout: change of scene', () => {
     await w.vm.$nextTick()
     const input = w.find('input')
     if (input.exists()) await input.trigger('keydown', { key: 'Enter' })
-    else document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }))
+    else press('Enter')
     expect(scene.turn).toBeNull()
   })
 
@@ -417,7 +424,7 @@ describe('LanternLayout: change of scene', () => {
 
   it('on Enter during the waking lets it fade in the dark before the cottage rises', async () => {
     const game = await wakingInTheDark()
-    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }))
+    press('Enter')
     await w.vm.$nextTick()
     await wakingFadesThenCottageRises(game)
   })
@@ -431,13 +438,110 @@ describe('LanternLayout: change of scene', () => {
   it('brings the cottage up at once on a second Enter, once the waking is let go', async () => {
     const game = await wakingInTheDark()
     const scene = useSceneStore()
-    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }))
+    press('Enter')
     await w.vm.$nextTick()
     expect(scene.phase).toBe('dark')
-    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }))
+    press('Enter')
     await w.vm.$nextTick()
     expect(scene.phase).toBe('idle')
     expect(game.roomName).toBe("Elior's Cottage")
+  })
+
+  describe('press and hold to skip', () => {
+    /** Press the stage picture down, as a mouse does. */
+    function pressDown(type = 'pointerdown'): void {
+      w.get('.lq-stage-picture').element.dispatchEvent(
+        new PointerEvent(type, {
+          bubbles: true,
+          cancelable: true,
+          button: 0,
+          isPrimary: true,
+          pointerId: 1,
+          clientX: 300,
+          clientY: 200,
+        }),
+      )
+    }
+
+    /** Hold the stage picture for `ms`, then let go (the browser's click follows). */
+    async function holdPicture(ms: number): Promise<void> {
+      pressDown()
+      await vi.advanceTimersByTimeAsync(ms)
+      await w.vm.$nextTick()
+      pressDown('pointerup')
+      await w.get('.lq-stage-picture').trigger('click')
+      await w.vm.$nextTick()
+    }
+
+    /** The whole telling is over: the cottage is up, nothing is told or held, and the player can act. */
+    async function allTold(
+      game: ReturnType<typeof useGameStore>,
+    ): Promise<void> {
+      await vi.advanceTimersByTimeAsync(0)
+      await w.vm.$nextTick()
+      const scene = useSceneStore()
+      expect(scene.turn).toBeNull()
+      expect(scene.phase).toBe('idle')
+      expect(game.roomName).toBe("Elior's Cottage")
+      expect(useNarrationStore().isNarrating).toBe(false)
+      expect(useArrivalStore().active).toBe(false)
+      expect(
+        useStageSpeechStore().conversation?.lines.every((l) => l.shown) ?? true,
+      ).toBe(true)
+    }
+
+    it('holding the picture while the answer is told skips to the cottage, everything told', async () => {
+      const game = await dream()
+      useSettingsStore().narrationOn = false
+      await answerVoice(game)
+      await holdPicture(HOLD_TO_SKIP_MS)
+      await allTold(game)
+    })
+
+    it('shows the ring at the press while it is held', async () => {
+      const game = await dream()
+      useSettingsStore().narrationOn = false
+      await answerVoice(game)
+      pressDown()
+      await vi.advanceTimersByTimeAsync(HOLD_RING_MS)
+      await w.vm.$nextTick()
+      const ring = w.get('[data-testid="hold-ring"]')
+      expect(ring.attributes('style')).toContain('left: 300px')
+      expect(ring.attributes('style')).toContain('top: 200px')
+      pressDown('pointerup')
+      await w.vm.$nextTick()
+      expect(w.find('[data-testid="hold-ring"]').exists()).toBe(false)
+    })
+
+    it('holding in the dark skips the waking and raises the cottage at once', async () => {
+      const game = await wakingInTheDark()
+      await holdPicture(HOLD_TO_SKIP_MS)
+      await allTold(game)
+    })
+
+    it('narrated, holding skips the narration, the change of scene and the room on the picture', async () => {
+      const game = await dream()
+      recordEverything()
+      const turn = await answerVoice(game)
+      expect(useNarrationStore().narrates(turn.id)).toBe(true)
+      await holdPicture(HOLD_TO_SKIP_MS)
+      await allTold(game)
+    })
+
+    it('holding Enter skips everything; its repeats take no step meanwhile', async () => {
+      const game = await dream()
+      useSettingsStore().narrationOn = false
+      await answerVoice(game)
+      document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }))
+      for (let t = 0; t < HOLD_TO_SKIP_MS; t += 100) {
+        await vi.advanceTimersByTimeAsync(100)
+        document.dispatchEvent(
+          new KeyboardEvent('keydown', { key: 'Enter', repeat: true }),
+        )
+      }
+      document.dispatchEvent(new KeyboardEvent('keyup', { key: 'Enter' }))
+      await allTold(game)
+    })
   })
 
   it('keeps what was told in the dream before the talk until the room changes', async () => {
@@ -639,7 +743,7 @@ describe('LanternLayout: change of scene', () => {
     expect(scene.interlude?.unit).toBe(turn.waking)
     const begin = vi.spyOn(scene, 'begin')
     const spoken = voices.length
-    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }))
+    press('Enter')
     await w.vm.$nextTick()
     // The waking's voice is cut, and nothing after it is read in the dark.
     expect(voices.length).toBe(spoken)
@@ -671,7 +775,7 @@ describe('LanternLayout: change of scene', () => {
     }
     expect(scene.phase).toBe('out')
     expect(game.roomName).toBe('The Dream')
-    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }))
+    press('Enter')
     expect(game.roomName).toBe("Elior's Cottage")
     narration.skipAll()
     await vi.runAllTimersAsync()
@@ -715,7 +819,7 @@ describe('LanternLayout: change of scene', () => {
     }
     expect(scene.phase).toBe('out')
     expect(game.items.join()).toBe('shed door,boards')
-    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }))
+    press('Enter')
     expect(scene.shown).toContain('inside')
     expect(game.items.join()).toContain('mysterious box')
     narration.skipAll()

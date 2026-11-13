@@ -146,7 +146,7 @@ describe('LanternLayout: the arrival on the picture', () => {
     const w = await ready()
     await run('go north')
     expect(card(w)).toContain('A green garden.')
-    expect(card(w)).toContain('Click or press Enter to continue')
+    expect(card(w)).toContain('Click to continue · Hold to skip')
     expect(w.find('[data-testid="arrival-bar"]').exists()).toBe(false)
     expect(storyAside(w)).toBe(true)
     // Both sides are clear, so there is nothing to hide or show.
@@ -298,7 +298,7 @@ describe('LanternLayout: the arrival on the picture', () => {
     const w = await ready('sideways')
     useSettingsStore(pinia).narrationVolume = 0
     await run('go north')
-    expect(card(w)).toContain('Tap to continue')
+    expect(card(w)).toContain('Tap to continue · Hold to skip')
     const classes = w.get('[data-testid="arrival-on-picture"]').classes()
     expect(classes).toContain('lq-sideways-arrival')
     expect(classes).not.toContain('lq-phone-arrival')

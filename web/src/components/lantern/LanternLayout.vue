@@ -23,6 +23,7 @@ import {
   type StoryGeometry,
 } from '@/lantern/ResizeLanding'
 import { useLanternPresentation } from '@/composables/useLanternPresentation'
+import { useHoldToSkip, type HoldRingSpot } from '@/composables/useHoldToSkip'
 import { useAudio } from '@/composables/useAudio'
 import { useActMusic } from '@/composables/useActMusic'
 import { useFocusTrap } from '@/composables/useFocusTrap'
@@ -80,6 +81,7 @@ import LanternHeader from './LanternHeader.vue'
 import RoomPlate from './RoomPlate.vue'
 import RoomTitle from './RoomTitle.vue'
 import SceneInterlude from './SceneInterlude.vue'
+import HoldRing from './HoldRing.vue'
 import SaveToast from './SaveToast.vue'
 import SectionNav, { type Section } from './SectionNav.vue'
 import StageButtons from './StageButtons.vue'
@@ -223,7 +225,7 @@ const keyboardPlayer = useMediaQuery(KEYBOARD_QUERY)
 /** The cursor is in a text field (the command box): only Esc steers the voice there. */
 const fieldFocused = ref(false)
 const hintText = computed(() => {
-  if (!keyboardPlayer.value) return 'Tap to hurry · double-tap to skip'
+  if (!keyboardPlayer.value) return 'Tap to hurry · hold to skip'
   return fieldFocused.value ? 'Esc to skip' : 'Space to hurry · Esc to skip'
 })
 
@@ -392,7 +394,7 @@ function goWay(direction: string): void {
 /**
  * A press on the picture itself shows the rest of an unnarrated turn's speech
  * at once; while there is speech, a narrated turn is tapped on like the story
- * (one block hurried, a double tap skips the turn).
+ * (one block hurried; held, it skips the telling).
  */
 function onPicturePress(event: MouseEvent): void {
   if (!(event.target instanceof Element)) return
@@ -1046,6 +1048,11 @@ let goOnKeyAt = Number.NEGATIVE_INFINITY
  * say who owns it, then carry out its answer.
  */
 function onNarrationKey(event: KeyboardEvent): void {
+  // A key held to skip repeats: its repeats are the hold's and take no step.
+  if (event.repeat && hold.keyHeld(event.key)) {
+    event.preventDefault()
+    return
+  }
   const target = event.target instanceof Element ? event.target : null
   const decision = decideHurryKey({
     key: event.key,
@@ -1069,6 +1076,23 @@ function onNarrationKey(event: KeyboardEvent): void {
     canHide: staged.value && wordsVisible.value && !paper.hidden.value,
     canShow: showTab.value,
   })
+  // Enter or Space that goes on takes its step now; held, it skips the rest.
+  // Aimed at a field or a button it keeps its own press, unless the story took it.
+  if (
+    !event.repeat &&
+    (event.key === 'Enter' || event.key === ' ') &&
+    !event.ctrlKey &&
+    !event.metaKey &&
+    !event.altKey &&
+    beingTold() &&
+    (decision
+      ? ['skip-scene', 'arrival-next', 'hurry'].includes(decision.action)
+      : !event.defaultPrevented &&
+        !target?.closest(
+          'input, textarea, select, [contenteditable], button, a, [role="button"], summary',
+        ))
+  )
+    hold.keyDown(event.key, keyHoldSpot())
   if (!decision) return
   if (decision.consume) {
     event.preventDefault()
@@ -1131,6 +1155,7 @@ onMounted(() => {
   document.addEventListener('focusin', onFocusIn)
   document.addEventListener('keydown', onNamesEscape, true)
   document.addEventListener('keyup', onSpaceUp)
+  document.addEventListener('keyup', onHoldKeyUp)
   document.addEventListener('focusin', onFocusChange)
   document.addEventListener('focusout', onFocusChange)
   // The game opens with its first act intro already showing.
@@ -1272,6 +1297,7 @@ onUnmounted(() => {
   document.removeEventListener('focusin', onFocusIn)
   document.removeEventListener('keydown', onNamesEscape, true)
   document.removeEventListener('keyup', onSpaceUp)
+  document.removeEventListener('keyup', onHoldKeyUp)
   document.removeEventListener('focusin', onFocusChange)
   document.removeEventListener('focusout', onFocusChange)
   storyResize?.disconnect()
@@ -1310,6 +1336,44 @@ const presentation = useLanternPresentation({
   staged: () => staged.value,
   motionReduced,
 })
+
+/** The whole game (the hold to skip listens for presses in it). */
+const rootEl = ref<HTMLElement | null>(null)
+/**
+ * Whether the story is being told: a change of scene, a talk still to change
+ * it, words still coming, the narrator reading, or a room's words on the
+ * picture. Only then does a held press or key skip it all.
+ */
+function beingTold(): boolean {
+  return (
+    !dialogOpen() &&
+    (scene.turn !== null ||
+      speech.sceneChange !== null ||
+      telling.value ||
+      narration.isNarrating ||
+      arrival.active ||
+      arrival.holding)
+  )
+}
+/** Press (or Enter, or Space) and hold to skip the whole telling; a tap is one step. */
+const hold = useHoldToSkip({
+  root: () => rootEl.value,
+  telling: beingTold,
+  skip: () => presentation.skipTelling(),
+})
+/** Where a held press shows its ring, while it does. */
+const holdRing = hold.ring
+/** A held key's ring stands in the middle of the stage (or of the window, with no stage). */
+function keyHoldSpot(): HoldRingSpot {
+  const box = stageEl.value?.getBoundingClientRect()
+  if (box && box.width > 0)
+    return { x: box.left + box.width / 2, y: box.top + box.height * 0.7 }
+  return { x: window.innerWidth / 2, y: window.innerHeight * 0.7 }
+}
+/** A key held down for the hold is let go. */
+function onHoldKeyUp(event: KeyboardEvent): void {
+  hold.keyUp(event.key)
+}
 
 const flights = useFlightStore()
 /** The newest turn whose lost and gained things have flown (or were let be): each turn's fly once. */
@@ -1859,8 +1923,9 @@ const shownQuestView = computed<QuestView | null>(() => {
 /** Help's entry for narration (the engine's help lists commands only). */
 const NARRATION_HELP =
   '\n[bold]Narration:[/bold] tap the story or press Space to hurry the current line; ' +
-  'double-tap or press Esc to show the rest at once. Any action cuts in. ' +
-  'Set its volume, down to silent, in Settings.\n'
+  'hold, or press Esc, to show the rest at once. Any action cuts in. ' +
+  'Set its volume, down to silent, in Settings.
+'
 
 /** Help's line for the key that hides the narration paper (laptop only). */
 const NARRATION_KEY_HELP = '\nN — hide or show the words\n'
@@ -2103,7 +2168,8 @@ watch(
 </script>
 
 <template>
-  <div class="lq-root">
+  <div ref="rootEl" class="lq-root">
+    <HoldRing v-if="holdRing" :spot="holdRing" :still="motionReduced()" />
     <!-- The game, out of reach (and untouched) while a phone is held upright. -->
     <div class="lq-game" :inert="turnPage || undefined">
       <!-- The game has ended: nothing but the end screen. -->

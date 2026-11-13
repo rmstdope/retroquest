@@ -258,19 +258,19 @@ describe('ChapterPage', () => {
     it('hurries on a tap of the title too', async () => {
       const w = start()
       await nextTick()
+      const tap = vi.spyOn(useNarrationStore(), 'tap')
       await w.get('h2').trigger('click')
-      await w.get('h2').trigger('click')
-      expect(useNarrationStore().isNarrating).toBe(false)
+      expect(tap).toHaveBeenCalledTimes(1)
     })
 
-    it('hurries on a tap of the text and skips on a second tap, not on the button', async () => {
+    it('hurries on a tap of the text, and a quick second tap does not skip', async () => {
       const w = start()
       await nextTick()
       await w.get('button').trigger('click')
       expect(useNarrationStore().isNarrating).toBe(true)
       await w.get('.lq-chapter-body').trigger('click')
       await w.get('.lq-chapter-body').trigger('click')
-      expect(useNarrationStore().isNarrating).toBe(false)
+      expect(useNarrationStore().isNarrating).toBe(true)
     })
 
     it("holds the text back while the act's recordings load, then lets it go", async () => {

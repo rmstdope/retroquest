@@ -459,15 +459,15 @@ describe('useNarrationStore', () => {
     expect(FakeAudio.all).toHaveLength(1)
   })
 
-  it('a second tap within 300 ms skips, a lone tap hurries', async () => {
-    narration.begin(1, [voiced(), voiced(), voiced()], 'act1')
+  it('each tap hurries one block, however quick the taps; none skips (a hold does)', async () => {
+    narration.begin(1, [voiced(), voiced(), voiced(), voiced()], 'act1')
     narration.tap()
     await vi.advanceTimersByTimeAsync(400)
     expect(narration.speaking(1)).toMatchObject({ unit: 1 })
     narration.tap()
     await vi.advanceTimersByTimeAsync(100)
     narration.tap()
-    expect(narration.isNarrating).toBe(false)
+    expect(narration.isNarrating).toBe(true)
   })
 
   it('a new turn cuts in on the one being narrated', () => {

@@ -41,6 +41,12 @@ export interface LanternPresentation {
    * picture rises); otherwise the new room comes up at once.
    */
   continueScene(): void
+  /**
+   * Skip the whole telling (a press or Enter held, `useHoldToSkip`): the
+   * change of scene comes up, every word left is shown, the narrator stops
+   * and the room's words leave the picture, so the player can act.
+   */
+  skipTelling(): void
   /** Show the rest of a held turn at once (a press in a held panel); true when something was held. */
   catchUpPanels(): boolean
   /** Leave the chapter page: its voice stops first, then the game goes on (its button, Escape). */
@@ -432,6 +438,14 @@ export function useLanternPresentation(
     scene.skip()
   }
 
+  /** The whole telling is skipped: the scene up, every word shown, the voice and the words on the picture gone. */
+  function skipTelling(): void {
+    bringSceneUp()
+    narration.skipAll()
+    speech.revealAll()
+    arrival.clear()
+  }
+
   /** Leave a chapter page: its voice stops, then the game goes on. */
   function continueChapter(): void {
     narration.skipAll()
@@ -441,6 +455,7 @@ export function useLanternPresentation(
   return {
     bringSceneUp,
     continueScene,
+    skipTelling,
     catchUpPanels: panelHold.catchUp,
     continueChapter,
   }
