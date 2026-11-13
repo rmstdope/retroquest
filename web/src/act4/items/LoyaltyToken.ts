@@ -1,11 +1,10 @@
-import { Item, type Character, type GameState, characterName } from '@/engine'
+import { Item, type GameState, characterName } from '@/engine'
 import {
   FLAG_ACT4_CHAIN_GIVEN,
   FLAG_ACT4_KNIGHT_OF_DESPAIR_COMPLETED,
   FLAG_ACT4_LOYALTY_TOKEN_RAISED_IN_HALL,
   FLAG_ACT4_TOWER_STAIR_OPEN,
 } from '../Act4StoryFlags'
-import { KnightOfDespair } from '../characters/KnightOfDespair'
 import { HallOfEchoes } from '../rooms/HallOfEchoes'
 import { ChamberOfWhispers } from '../rooms/ChamberOfWhispers'
 import { TowerOfShadows } from '../rooms/TowerOfShadows'
@@ -76,11 +75,5 @@ export class LoyaltyToken extends Item {
       'The token is warm in your hand. Someone, somewhere, is glad you ' +
       'came.'
     )
-  }
-
-  /** Raised at the Knight of Despair, the token does what it does in the hall. */
-  override useOnCharacter(gameState: GameState, target: Character): string {
-    if (target instanceof KnightOfDespair) return this.use(gameState)
-    return super.useOnCharacter(gameState, target)
   }
 }
