@@ -3,7 +3,7 @@
  * room, named by the same id as the room's entry in the act's image list.
  */
 import { roomTrackId } from './musicLists'
-import { ELIOR_PORTRAIT_ID, portraitId } from './imageLists'
+import { ELIOR_PORTRAIT_ID, TITLE_IMAGE_ID, portraitId } from './imageLists'
 
 /**
  * The URL of the picture of a room, or '' while no room is known. `variant`
@@ -72,6 +72,14 @@ export function portraitUrl(actName: string, classKey: string): string {
  */
 export function eliorPortraitUrl(): string {
   return `${import.meta.env.BASE_URL}images/generated/${ELIOR_PORTRAIT_ID}.png`
+}
+
+/**
+ * The URL of the title screen's picture. The file may not exist yet; the title
+ * then shows the opening dream's picture.
+ */
+export function titlePictureUrl(): string {
+  return `${import.meta.env.BASE_URL}images/generated/${TITLE_IMAGE_ID}.png`
 }
 
 /**

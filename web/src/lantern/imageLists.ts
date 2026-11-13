@@ -176,6 +176,27 @@ export function characterImages(act: Act, acts: Act[] = [act]): GameImage[] {
   return images
 }
 
+/** The id of the title screen's picture, listed once for the whole game (in the first act's list). */
+export const TITLE_IMAGE_ID = 'title-screen'
+
+/**
+ * The title screen's picture, which the navigator makes in the studio: open
+ * sky at the top for the game's name and a calm middle for the buttons. Until
+ * it is made the title shows the opening dream's picture.
+ */
+export function titleImage(): GameImage {
+  return {
+    id: TITLE_IMAGE_ID,
+    title: 'Title screen',
+    width: IMAGE_WIDTH,
+    height: IMAGE_HEIGHT,
+    text:
+      'The world of RetroQuest at the start of the story: a quiet village ' +
+      'under a lantern-lit dusk, drawn with open sky across the top third ' +
+      "for the game's name and a calm, uncluttered middle for the buttons.",
+  }
+}
+
 /** Everything the act's list holds: its room images, then its portraits (`acts` is the whole game, in order). */
 export function allImages(act: Act, acts: Act[] = [act]): GameImage[] {
   return [...roomImages(act), ...characterImages(act, acts)]

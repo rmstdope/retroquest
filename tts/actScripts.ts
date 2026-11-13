@@ -40,7 +40,11 @@ import {
   roomLoops,
   type MusicTrack,
 } from '../web/src/lantern/musicLists'
-import { allImages, type GameImage } from '../web/src/lantern/imageLists'
+import {
+  allImages,
+  titleImage,
+  type GameImage,
+} from '../web/src/lantern/imageLists'
 import { actScenes, type SceneDeclaration } from '../web/src/lantern/sceneLists'
 
 /** What the extractor needs of an act: a fresh act and the commands that play it to its end. */
@@ -137,13 +141,14 @@ export function extractActMusic(number: string): MusicTrack[] {
 
 /**
  * Returns an image for each room and a portrait for each character of the act,
- * as `images.json` holds them.
+ * as `images.json` holds them; the first act's list ends with the title screen's picture.
  */
 export function extractActImages(number: string): GameImage[] {
-  return allImages(
+  const images = allImages(
     sourceOf(number).make(),
     ACT_NUMBERS.map((n) => sourceOf(n).make()),
   )
+  return number === ACT_NUMBERS[0] ? [...images, titleImage()] : images
 }
 
 /** Returns a scene for each room of the act, as `scenes.json` holds them. */

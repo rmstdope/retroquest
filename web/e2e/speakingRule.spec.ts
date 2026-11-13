@@ -63,6 +63,8 @@ async function expectRuleBesideText(block: Locator): Promise<void> {
 async function openChapter(page: Page): Promise<void> {
   await page.goto('/')
   await page.getByRole('button', { name: 'Start', exact: true }).click()
+  // The title's opening is skipped by the suite's reduced motion; this spec needs the motion back.
+  await page.emulateMedia({ reducedMotion: 'no-preference' })
   await expect(page.locator('.lq-chapter-block').first()).toBeVisible()
   await page.evaluate(() => document.fonts.ready)
 }

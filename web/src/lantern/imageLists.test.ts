@@ -22,10 +22,12 @@ import {
   PORTRAIT_WIDTH,
   ELIOR_PORTRAIT_ID,
   SHARED_PORTRAITS,
+  TITLE_IMAGE_ID,
   allImages,
   characterImages,
   portraitId,
   roomImages,
+  titleImage,
 } from './imageLists'
 
 const SLUG = /^[a-z0-9]+(-[a-z0-9]+)*$/
@@ -235,5 +237,17 @@ describe('the portrait of Elior', () => {
     })
     for (const list of entries) expect(list[0]).toEqual(entries[0]![0])
     expect(ELIOR_PORTRAIT_PROMPT.startsWith(PORTRAIT_PROMPT_START)).toBe(true)
+  })
+})
+
+describe('titleImage', () => {
+  it('lists the title screen picture in the room image size, as a slug', () => {
+    const image = titleImage()
+    expect(image.id).toBe(TITLE_IMAGE_ID)
+    expect(image.id).toMatch(SLUG)
+    expect([image.width, image.height]).toEqual([IMAGE_WIDTH, IMAGE_HEIGHT])
+    expect(image.text).toMatch(/sky/)
+    const rooms = ACTS.flatMap((act) => allImages(act, ACTS).map((i) => i.id))
+    expect(rooms).not.toContain(TITLE_IMAGE_ID)
   })
 })

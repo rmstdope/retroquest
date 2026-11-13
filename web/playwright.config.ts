@@ -79,6 +79,9 @@ export default defineConfig({
   },
   use: {
     trace: 'on-first-retry',
+    // The title screen's opening plays for about 5½ s; the specs that press
+    // Start do not wait it out. Specs that need motion switch it back on.
+    reducedMotion: 'reduce',
   },
   projects: [
     {

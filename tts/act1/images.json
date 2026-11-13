@@ -1065,5 +1065,12 @@
     "width": 480,
     "height": 640,
     "text": "A face portrait of a farm boy of about nineteen, sun-browned and freckled, with untidy brown hair, an earnest, searching look, and the frayed collar of a homespun shirt."
+  },
+  {
+    "id": "title-screen",
+    "title": "Title screen",
+    "width": 1920,
+    "height": 1080,
+    "text": "The world of RetroQuest at the start of the story: a quiet village under a lantern-lit dusk, drawn with open sky across the top third for the game's name and a calm, uncluttered middle for the buttons."
   }
 ]

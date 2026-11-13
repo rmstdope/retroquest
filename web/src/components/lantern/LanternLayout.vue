@@ -2503,8 +2503,6 @@ watch(
         <TitlePage
           v-if="game.showTitle"
           ref="titlePage"
-          :text="game.titleText"
-          :music-info="music.musicInfo.value"
           :saves="titleSaves"
           :error="game.titleLoadError"
           @start="startGame"
