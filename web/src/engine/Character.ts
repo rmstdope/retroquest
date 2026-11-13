@@ -126,7 +126,9 @@ export class Character {
    * `give <item> to <character>` and `use <item> on <character>`. Return the
    * story text when the character takes the offer, or null (the default) to
    * leave it to the verb's own hook (`giveItem`, `Item.useOnCharacter`) and so
-   * to the default refusal.
+   * to the default refusal. A pair moved here must also lose its hand-written
+   * calls to the other verb's hook (`giveItem` or `useOnCharacter`), which
+   * would skip this method.
    */
   acceptOffer(_gameState: GameState, _item: Item): string | null {
     return null

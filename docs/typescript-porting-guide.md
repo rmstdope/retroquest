@@ -47,6 +47,7 @@ parameters is all a content class needs.
 | `is_completed_flag` | `completed` |
 | `use`, `use_with(gs, other)`, `use_on_character(gs, c)` | `use`, `useWith`, `useOnCharacter` |
 | `examine`, `picked_up`, `prevent_pickup`, `open`, `close`, `grow`, `eat`, `drink`, `equip`, `unequip` | same, camelCase (`pickedUp`, `preventPickup`) |
+| *(new in TS)* an item offered to a character | `Character.acceptOffer(gs, item)`: one answer for `give` and `use … on`; null falls through to `giveItem` / `useOnCharacter` |
 | `talk_to(gs)`, `say_to(words, gs)`, `give_item(gs, item)`, `buy_item(name, gs)` | `talkTo(gs)`, `sayTo(gs, words)`, `giveItem(gs, item)`, `buyItem(gs, name)` — **game state first** |
 | `cast_spell`, `cast_on_item`, `cast_on_character` | `castSpell`, `castOnItem`, `castOnCharacter` |
 | `check_trigger`, `check_completion`, `check_update`, `is_main`, `complete` | `checkTrigger`, `checkCompletion`, `checkUpdate`, `isMain`, `complete` |

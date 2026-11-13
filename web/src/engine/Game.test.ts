@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { Act } from './Act'
 import { Character } from './Character'
+import { CommandParser } from './CommandParser'
 import {
   Game,
   GameRunState,
@@ -1039,6 +1040,28 @@ describe('Game', () => {
   })
 
   describe('an item offered to a character', () => {
+    it('answers give, use on and use with alike, as typed', () => {
+      const families = new Talker('Families')
+      families.acceptOffer = (_state, offered) => `Accepted: ${offered.name}`
+      rooms.EliorsCottage.addCharacter(families)
+      game.state.inventory.push(item('apple'))
+      const parser = new CommandParser(game)
+      for (const command of [
+        'give apple to families',
+        'use apple on families',
+        'use apple with families',
+      ]) {
+        expect(parser.parse(command)).toBe('Accepted: apple')
+      }
+    })
+
+    it('refuses by default in both verbs when nothing answers', () => {
+      rooms.EliorsCottage.addCharacter(new Talker('Families'))
+      game.state.inventory.push(item('apple'))
+      expect(game.give('apple to families')).toContain('seem interested')
+      expect(game.use('apple', 'families')).toContain("can't use")
+    })
+
     it('reaches one answer through give and use on', () => {
       const families = new Talker('Families')
       families.acceptOffer = (_state, offered) => `Accepted: ${offered.name}`
