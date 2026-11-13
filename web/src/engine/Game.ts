@@ -766,8 +766,17 @@ Welcome to
     return character.acceptOffer(this.state, item) ?? verbHook()
   }
 
-  /** "buy <item> from <character>"; the seller hears the item without a leading "the". */
+  /**
+   * "buy <item> from <character>"; the seller hears the item without a
+   * leading "the". A ware named with no seller, as the buy suggestions
+   * complete it, is asked about rather than refused as a bad format.
+   */
   buy(args: string): string {
+    const words = args.toLowerCase().split(/\s+/).filter(Boolean)
+    if (words.length > 0 && !words.includes('from')) {
+      const itemName = words.join(' ')
+      return `[failure]Buy the ${withoutArticle(itemName) ?? itemName} from whom?[/failure]`
+    }
     const split = this.splitCommand(args, 'buy', 'from')
     if (typeof split === 'string') return split
     const [itemName, characterName] = split

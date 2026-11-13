@@ -1308,8 +1308,11 @@ describe('Game', () => {
       expect(game.buy('rope from Ghostly Shopkeeper')).toBe(
         "[failure]There is no character named 'Ghostly shopkeeper' here.[/failure]",
       )
-      expect(game.buy('rope shopkeeper')).toBe(
-        "[failure]Invalid command format. Please use 'buy <target1> from <target2>'.[/failure]",
+      expect(game.buy('rope')).toBe(
+        '[failure]Buy the rope from whom?[/failure]',
+      )
+      expect(game.buy('the rope')).toBe(
+        '[failure]Buy the rope from whom?[/failure]',
       )
       expect(game.buy('from shopkeeper')).toBe(
         '[failure]What do you want to buy?[/failure]',
