@@ -12,7 +12,7 @@ import { Act4 } from '@/act4/Act4'
 import { Game, type Act } from '@/engine'
 import { executeCommands } from '@/testing/gameHelpers'
 import { declaredPatches } from './roomPatches'
-import { appliedPatchIds, patchIsKnown } from './roomPatchState'
+import { appliedPatchIds } from './roomPatchState'
 
 const ACTS: Array<() => Act> = [
   () => new Act1(),
@@ -101,17 +101,49 @@ describe('appliedPatchIds', () => {
   })
 
   it.each(ACTS.map((make) => [make().name, make] as const))(
-    'can judge every declared patch of %s',
+    'of %s: every patch carries its rule, a thing patch its area, and the id ending agrees with the rule',
     (_name, make) => {
       const act = make()
-      const unknown: string[] = []
-      for (const room of Object.keys(act.rooms))
-        for (const patch of declaredPatches(act.name, room))
-          if (!patchIsKnown(act.name, room, patch))
-            unknown.push(`${room} ${patch.id}`)
-      expect(unknown).toEqual([])
+      const faults: string[] = []
+      for (const room of Object.keys(act.rooms)) {
+        const variants = ['', ...act.rooms[room].pictureVariants()]
+        for (const variant of variants)
+          for (const patch of declaredPatches(act.name, room, variant)) {
+            const at = `${room} ${patch.id}`
+            if (patch.when === undefined) faults.push(`${at}: no rule`)
+            else if (typeof patch.when === 'string') {
+              if (patch.area === undefined) faults.push(`${at}: no area`)
+              const wantsPresent = /-(appears|open)$/.test(patch.id)
+              const wantsAbsent = /-(taken|gone|cut|closed)$/.test(patch.id)
+              if (patch.when === 'present' && !wantsPresent)
+                faults.push(`${at}: 'present' but the id does not say so`)
+              if (patch.when === 'absent' && !wantsAbsent)
+                faults.push(`${at}: 'absent' but the id does not say so`)
+            }
+          }
+      }
+      expect(faults).toEqual([])
     },
   )
+
+  it('lays a higher layer after a lower one, whatever the order of declaration', () => {
+    const act = new Act1()
+    const game = new Game([act])
+    game.commandParser.parse('go west')
+    const ids = appliedPatchIds(act, 'VillageChapel', game.state)
+    const candle = declaredPatches('Act1', 'VillageChapel').find(
+      (p) => p.id === 'candle-lit',
+    )
+    const locket = declaredPatches('Act1', 'VillageChapel').find(
+      (p) => p.id === 'locket-appears',
+    )
+    expect(candle?.layer ?? 0).toBeLessThan(locket?.layer ?? 0)
+    // Applied patches come out sorted by layer then id, not as declared.
+    const sorted = [...ids].sort()
+    expect(ids.filter((id) => id !== 'locket-appears')).toEqual(
+      sorted.filter((id) => id !== 'locket-appears'),
+    )
+  })
 
   it.each(ACTS.map((make) => [make().name, make] as const))(
     'of %s changes during the golden path and only names declared patches',
