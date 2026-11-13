@@ -774,8 +774,10 @@ Welcome to
   buy(args: string): string {
     const words = args.toLowerCase().split(/\s+/).filter(Boolean)
     if (words.length > 0 && !words.includes('from')) {
-      const itemName = words.join(' ')
-      return `[failure]Buy the ${withoutArticle(itemName) ?? itemName} from whom?[/failure]`
+      const ware = words.slice(['a', 'an', 'the'].includes(words[0]) ? 1 : 0)
+      if (ware.length === 0)
+        return '[failure]What do you want to buy?[/failure]'
+      return `[failure]Buy the ${ware.join(' ')} from whom?[/failure]`
     }
     const split = this.splitCommand(args, 'buy', 'from')
     if (typeof split === 'string') return split

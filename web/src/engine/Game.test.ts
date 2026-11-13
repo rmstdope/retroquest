@@ -1314,6 +1314,15 @@ describe('Game', () => {
       expect(game.buy('the rope')).toBe(
         '[failure]Buy the rope from whom?[/failure]',
       )
+      expect(game.buy('a rope')).toBe(
+        '[failure]Buy the rope from whom?[/failure]',
+      )
+      expect(game.buy('the')).toBe(
+        '[failure]What do you want to buy?[/failure]',
+      )
+      expect(game.buy('rope shopkeeper')).toBe(
+        '[failure]Buy the rope shopkeeper from whom?[/failure]',
+      )
       expect(game.buy('from shopkeeper')).toBe(
         '[failure]What do you want to buy?[/failure]',
       )
