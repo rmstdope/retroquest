@@ -13,7 +13,6 @@ import { Act2 } from '@/act2/Act2'
 import { Act3 } from '@/act3/Act3'
 import { Act4 } from '@/act4/Act4'
 import { Game, type Act } from '@/engine'
-import { declaredPatches } from './roomPatches'
 
 /** The answer to one state change: the ids of patches of the room, or the reason it needs none. */
 type StateChange = { patches: string[] } | { none: string }
@@ -227,7 +226,9 @@ describe.each(ACTS.map((make) => [make().name, make] as const))(
           const room = key.split(' after ')[0]
           for (const patch of entry.patches)
             expect(
-              declaredPatches(name, room).map((p) => p.id),
+              make()
+                .roomPatches(room)
+                .map((p) => p.id),
               key,
             ).toContain(patch)
         } else expect(entry.none.length, key).toBeGreaterThan(0)

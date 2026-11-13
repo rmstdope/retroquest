@@ -1,5 +1,6 @@
 import type { SerializableClass } from './ClassRegistry'
 import type { GameState } from './GameState'
+import type { ImagePatch } from './ImagePatch'
 import type { Quest } from './Quest'
 import type { Room } from './Room'
 
@@ -56,6 +57,15 @@ export class Act {
 
   getActIntro(): string {
     return ''
+  }
+
+  /**
+   * The patches of the picture of room `roomKey` (or of its other picture,
+   * `variant`): the small changes the story makes to it, each with the rule
+   * that says when it applies. None for an act or a room without any.
+   */
+  roomPatches(_roomKey: string, _variant = ''): readonly ImagePatch[] {
+    return []
   }
 
   /**

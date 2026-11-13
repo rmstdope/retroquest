@@ -1,4 +1,11 @@
-import { Act, characterName, type GameState, speech } from '@/engine'
+import { ACT2_ROOM_PATCHES } from './roomPatches'
+import {
+  Act,
+  characterName,
+  type GameState,
+  type ImagePatch,
+  speech,
+} from '@/engine'
 import { Brenn } from './characters/Brenn'
 import { SirCedric } from './characters/SirCedric'
 import { AncientAmulet } from './items/AncientAmulet'
@@ -100,6 +107,11 @@ export class Act2 extends Act {
   }
 
   /** The Act II opening page: arrival at Greendale, quoting only Mira's and Grandmother's Act I words. */
+  /** The act's own room patches: Act 2 declares them in `roomPatches.ts`. */
+  override roomPatches(roomKey: string, variant = ''): readonly ImagePatch[] {
+    return variant ? [] : (ACT2_ROOM_PATCHES[roomKey] ?? [])
+  }
+
   override getActIntro(): string {
     return (
       '[bold]ACT 2: THE GATHERING STORM[/bold]\n\nYou left Willowbrook to ' +

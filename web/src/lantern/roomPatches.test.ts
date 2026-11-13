@@ -16,11 +16,11 @@ import {
   thingAreaId,
   unpatchedAreas,
 } from './roomAreas'
-import { declaredPatches, type ImagePatch } from './roomPatches'
-import { ACT1_ROOM_PATCHES } from './roomPatches/act1RoomPatches'
-import { ACT2_ROOM_PATCHES } from './roomPatches/act2RoomPatches'
-import { ACT3_ROOM_PATCHES } from './roomPatches/act3RoomPatches'
-import { ACT4_ROOM_PATCHES } from './roomPatches/act4RoomPatches'
+import type { ImagePatch } from '@/engine'
+import { ACT1_ROOM_PATCHES } from '@/act1/roomPatches'
+import { ACT2_ROOM_PATCHES } from '@/act2/roomPatches'
+import { ACT3_ROOM_PATCHES } from '@/act3/roomPatches'
+import { ACT4_ROOM_PATCHES } from '@/act4/roomPatches'
 
 const SLUG = /^[a-z0-9]+(-[a-z0-9]+)*$/
 const ACTS: Array<() => Act> = [
@@ -46,10 +46,10 @@ function pictureOf(act: Act, game: Game, key: string): string {
 /** The patches of every picture of room `key`. */
 function patchesOfRoom(act: Act, key: string): readonly ImagePatch[] {
   return [
-    ...declaredPatches(act.name, key),
+    ...act.roomPatches(key),
     ...act.rooms[key]
       .pictureVariants()
-      .flatMap((variant) => declaredPatches(act.name, key, variant)),
+      .flatMap((variant) => act.roomPatches(key, variant)),
   ]
 }
 
@@ -75,7 +75,7 @@ describe('room image patches', () => {
   })
 
   it("leave Elior's cottage unchanged when its ways open, and show the journal with the lantern's light", () => {
-    const ids = declaredPatches('Act1', 'EliorsCottage').map((p) => p.id)
+    const ids = new Act1().roomPatches('EliorsCottage').map((p) => p.id)
     expect(ids).not.toContain('exit-south-open')
     expect(ids).not.toContain('exit-east-open')
     expect(ids).not.toContain('eliors-journal-appears')
@@ -93,7 +93,7 @@ describe('room image patches', () => {
       const act = make()
       for (const room of Object.keys(act.rooms)) {
         const areas = declaredAreas(act.name, room).map((a) => a.id)
-        const patched = declaredPatches(act.name, room).map((p) => p.area)
+        const patched = act.roomPatches(room).map((p) => p.area)
         for (const area of unpatchedAreas(act.name, room)) {
           expect(areas, `${act.name} ${room} ${area}`).toContain(area)
           expect(patched, `${act.name} ${room} ${area}`).not.toContain(area)
@@ -103,7 +103,7 @@ describe('room image patches', () => {
   )
 
   it("lay the chapel's locket over its candle's light, which covers almost the whole picture", () => {
-    const ids = declaredPatches('Act1', 'VillageChapel').map((p) => p.id)
+    const ids = new Act1().roomPatches('VillageChapel').map((p) => p.id)
     expect(ids.indexOf('candle-lit')).toBeLessThan(
       ids.indexOf('locket-appears'),
     )
@@ -121,7 +121,7 @@ describe('room image patches', () => {
       const act = make()
       let total = 0
       for (const room of Object.keys(act.rooms)) {
-        const patches = declaredPatches(act.name, room)
+        const patches = act.roomPatches(room)
         total += patches.length
         const ids = patches.map((p) => p.id)
         expect(new Set(ids).size, `${act.name} ${room} ids`).toBe(ids.length)
@@ -152,7 +152,7 @@ describe('room image patches', () => {
           ),
           ...Object.keys(room.getExits(game.state)).map(exitAreaId),
         ])
-        const patches = declaredPatches(act.name, key)
+        const patches = act.roomPatches(key)
         for (const patch of patches) {
           if (patch.area === undefined) continue
           const adds = /-(appears|open)$/.test(patch.id)
@@ -185,9 +185,7 @@ describe("a room's other pictures", () => {
       if (!(item instanceof Item) || !item.canBeCarried) continue
       const id = thingAreaId(act, item)
       if (
-        !declaredPatches(act.name, 'AbandonedShed', 'inside').some(
-          (p) => p.area === id,
-        )
+        !act.roomPatches('AbandonedShed', 'inside').some((p) => p.area === id)
       )
         missing.push(id)
     }
@@ -266,7 +264,7 @@ describe.each(ACTS.map((make) => [make().name, make] as const))(
         for (const item of room.items) {
           if (!(item instanceof Item) || !item.canBeCarried) continue
           const id = thingAreaId(act, item)
-          if (!declaredPatches(act.name, key).some((p) => p.area === id))
+          if (!act.roomPatches(key).some((p) => p.area === id))
             missing.push(`${act.name} ${key}: ${id}`)
         }
       }

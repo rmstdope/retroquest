@@ -1,4 +1,5 @@
-import { Act, type GameState, type Room } from '@/engine'
+import { ACT3_ROOM_PATCHES } from './roomPatches'
+import { Act, type GameState, type ImagePatch, type Room } from '@/engine'
 import { AncientAmulet } from './items/AncientAmulet'
 import { DarkPool } from './items/DarkPool'
 import { MirasHut } from './rooms/MirasHut'
@@ -111,6 +112,11 @@ export class Act3 extends Act {
   }
 
   /** Return the introductory text for Act III. */
+  /** The act's own room patches: Act 3 declares them in `roomPatches.ts`. */
+  override roomPatches(roomKey: string, variant = ''): readonly ImagePatch[] {
+    return variant ? [] : (ACT3_ROOM_PATCHES[roomKey] ?? [])
+  }
+
   override getActIntro(): string {
     return (
       '[bold]ACT III: TRIALS AND REVELATIONS[/bold]\n\n' +

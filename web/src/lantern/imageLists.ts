@@ -9,19 +9,14 @@
  * named areas (`roomAreas.ts`) and its patches (`roomPatches.ts`). The tts script
  * `extract-act.ts` writes the lists.
  */
-import { Character, type Act } from '@/engine'
+import { Character, type Act, type ImagePatch } from '@/engine'
 import { displayName } from './displayName'
 import { narrationText } from './narrationKey'
 import { ELIOR_PORTRAIT_PROMPT, PORTRAIT_PROMPTS } from './portraitPrompts'
 import { roomTrackId } from './musicLists'
 import { declaredAreas, type ImageArea } from './roomAreas'
 import { spotAreas } from './roomMotion'
-import {
-  declaredPatches,
-  listedPatch,
-  type ImagePatch,
-  type ListedPatch,
-} from './roomPatches'
+import { listedPatch, type ListedPatch } from './roomPatches'
 
 /** Width in pixels of every room image. */
 export const IMAGE_WIDTH = 1920
@@ -108,7 +103,7 @@ export function roomImages(act: Act): GameImage[] {
       room.name,
       narrationText(room.description),
       [...declaredAreas(act.name, key), ...spotAreas(act.name, key)],
-      declaredPatches(act.name, key),
+      act.roomPatches(key),
     ),
   )
   const others = rooms.flatMap(([key, room]) =>
@@ -123,7 +118,7 @@ export function roomImages(act: Act): GameImage[] {
             ...declaredAreas(act.name, key, variant),
             ...spotAreas(act.name, key),
           ],
-          declaredPatches(act.name, key, variant),
+          act.roomPatches(key, variant),
         ),
       ),
   )

@@ -55,6 +55,26 @@ export default tseslint.config(
     },
   },
   {
+    // Only useBridge loads the acts, through dynamic import() calls so each act
+    // is its own chunk; nothing else outside the acts imports one.
+    files: ['src/**/*.{ts,vue}'],
+    ignores: ['src/act*/**', '**/*.test.ts'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              regex: '(^@/act\\d|(^|/)act\\d(/|$))',
+              message:
+                'Only useBridge loads the acts, with a dynamic import(); never import act code statically.',
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
     files: ['**/*.vue'],
     languageOptions: {
       globals: globals.browser,

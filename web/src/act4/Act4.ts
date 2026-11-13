@@ -1,4 +1,5 @@
-import { Act, type GameState, dialogue } from '@/engine'
+import { ACT4_ROOM_PATCHES } from './roomPatches'
+import { Act, type GameState, type ImagePatch, dialogue } from '@/engine'
 import { AncientAmulet } from './items/AncientAmulet'
 import { LifelightElixir } from './items/LifelightElixir'
 import { LoyaltyToken } from './items/LoyaltyToken'
@@ -87,6 +88,11 @@ export class Act4 extends Act {
   }
 
   /** Return the introductory text for Act IV: the companions' goodbye at the gate. */
+  /** The act's own room patches: Act 4 declares them in `roomPatches.ts`. */
+  override roomPatches(roomKey: string, variant = ''): readonly ImagePatch[] {
+    return variant ? [] : (ACT4_ROOM_PATCHES[roomKey] ?? [])
+  }
+
   override getActIntro(): string {
     return (
       '[bold]ACT IV: THE FINAL CONFRONTATION[/bold]\n\n' +

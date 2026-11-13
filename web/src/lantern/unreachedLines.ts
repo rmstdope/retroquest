@@ -119,8 +119,8 @@ export function staleAcknowledgements(
   return acknowledged.filter((key) => !unreached.has(key))
 }
 
-/** Files that hold no spoken lines: the golden path's commands and the act's own music credits. */
-const SKIPPED = /^Act\d(GoldenPath)?\.ts$/
+/** Files that hold no spoken lines: the golden path's commands, the act's own music credits, and the room patches' words for the picture studio. */
+const SKIPPED = /^(Act\d(GoldenPath)?|roomPatches)\.ts$/
 
 /** Every non-test TypeScript file under `src/act<act>` (but not the act class or its golden path) of the web project at `webRoot`, with its text. */
 export function contentFiles(
