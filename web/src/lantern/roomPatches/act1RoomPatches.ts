@@ -68,7 +68,7 @@ export const ACT1_ROOM_PATCHES: Record<string, ImagePatch[]> = {
       title: 'Carrot freshened',
       text: 'Make the carrot in the field green and fresh instead of withered.',
       area: 'withered-carrot',
-      when: (c) => c.things.get('withered-carrot')?.name === 'fresh carrot',
+      when: (c) => flagOf(c.things.get('withered-carrot'), 'fresh'),
     },
   ],
   ChickenCoop: [
