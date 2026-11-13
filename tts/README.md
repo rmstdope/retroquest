@@ -25,9 +25,11 @@ with Whisper. **Refresh dialog** runs the extractor for an act:
 (cd web && npx -y tsx@4.23.15 --tsconfig tsconfig.json ../tts/extract-act.ts 1)  # writes tts/act1/script.json (2, 3, 4 likewise)
 ```
 
-A script.json or music.json that differs from what the extractor writes now fails vitest (`narrationScriptFresh.test.ts`), so rerun it after any change to what the game says. The four lists of each act (`script`, `music`,
-`images`, `scenes`) are written in order of `id`, not in play order, so two branches that change
-different records touch different places of the file and git merges them without a regeneration.
+A script.json or music.json that differs from what the extractor writes now fails vitest (`narrationScriptFresh.test.ts`), so rerun it after any change to what the game says.
+
+The four lists of each act (`script`, `music`, `images`, `scenes`) are written in order of `id`, not
+in play order, so two branches that change different records touch different places of the file
+and git merges them without a regeneration.
 
 - **The script** (`act<N>/script.json`, committed) is gathered by playing the act's golden path
   through the real engine, trying examine/use/talk/look at every step on a copy of the game. Each

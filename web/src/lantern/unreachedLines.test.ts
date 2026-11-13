@@ -83,10 +83,31 @@ describe('unreachedLines with the script in any order', () => {
     ]
     expect(unreachedLines(authored, script, [])).toEqual([])
   })
-  it('does not take sentences from unrelated lines for one literal', () => {
+  it('still names a literal whose last sentence the script lacks', () => {
     const script = [
       line('a', 'The gates loom.'),
       line('b', 'Beyond them lies the dark.'),
+    ]
+    expect(unreachedLines(authored, script, [])).toEqual(authored)
+  })
+})
+
+describe('unreachedLines with sentences only inside other lines', () => {
+  it('does not take sentences from longer, unrelated lines for one literal', () => {
+    const script: ScriptLine[] = [
+      {
+        id: 'a',
+        speaker: 'narrator',
+        text: 'Then the gates loom. Rain falls on the hill.',
+      },
+      {
+        id: 'b',
+        speaker: 'narrator',
+        text: 'Far off, beyond them lies the dark. A bell rings.',
+      },
+    ]
+    const authored = [
+      { file: 'a.ts', text: 'The gates loom. Beyond them lies the dark.' },
     ]
     expect(unreachedLines(authored, script, [])).toEqual(authored)
   })

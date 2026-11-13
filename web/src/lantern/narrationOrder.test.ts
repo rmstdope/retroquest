@@ -52,16 +52,29 @@ describe('byId', () => {
 })
 
 describe('two branches that change different lines of one act', () => {
-  it('merge without a conflict', () => {
-    const { records } = committed('1', 'script.json')
+  it('merge without a conflict, a reworded line being a new id', () => {
+    const base = committed('1', 'script.json').records
     const write = (list: unknown[]): string =>
       JSON.stringify(list, null, 2) + '\n'
-    const base = records
-    const mine = write(base.filter((_, i) => i !== 10))
+    const reworded = (record: { id: string }): { id: string } => ({
+      ...record,
+      id: `${record.id}-reworded`,
+    })
+    const removed = base[10]
+    const replaced = base[base.length - 10]
+    const added = { id: 'zzz-new-line', speaker: 'narrator', text: 'New.' }
+    // One branch drops a line and adds a new one; the other rewords a line.
+    const mine = write(byId([...base.filter((r) => r !== removed), added]))
     const theirs = write(
-      base.map((record, i) =>
-        i === base.length - 10 ? { ...record, text: 'changed' } : record,
-      ),
+      byId(base.map((r) => (r === replaced ? reworded(r) : r))),
+    )
+    const both = write(
+      byId([
+        ...base
+          .filter((r) => r !== removed)
+          .map((r) => (r === replaced ? reworded(r) : r)),
+        added,
+      ]),
     )
     const dir = mkdtempSync(join(tmpdir(), 'merge-'))
     try {
@@ -75,15 +88,6 @@ describe('two branches that change different lines of one act', () => {
         'git',
         ['merge-file', '-p', 'mine', 'base', 'theirs'],
         { cwd: dir, encoding: 'utf8' },
-      )
-      const both = write(
-        base
-          .filter((_, i) => i !== 10)
-          .map((record) =>
-            record === base[base.length - 10]
-              ? { ...record, text: 'changed' }
-              : record,
-          ),
       )
       expect(merged).toEqual(both)
     } finally {
