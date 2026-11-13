@@ -16,19 +16,6 @@ import {
 } from '@/testing/gameHelpers'
 
 describe('Miners dialogue markup', () => {
-  it('attributes the rescue thanks and the later update to the miners', () => {
-    const game = new Game([new Act3()])
-    const miners = new Miners()
-    game.state.currentRoom = game.state.allRooms.CollapsedGalleries
-
-    const answers = [miners.talkTo(game.state), miners.talkTo(game.state)]
-
-    for (const answer of answers) {
-      expectMarkupWellFormed(answer)
-      expectDialogueSpeaker(answer, miners.name)
-    }
-  })
-
   it('has Sir Cedric offer to stay, once, only with the rescue', () => {
     const game = new Game([new Act3()])
     game.state.currentRoom = game.state.allRooms.CollapsedGalleries

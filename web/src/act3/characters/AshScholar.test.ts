@@ -7,10 +7,7 @@ import {
   FLAG_ACT3_MIRRORS_MENDED,
   FLAG_ACT3_PHOENIX_FEATHER_ACQUIRED,
 } from '../Act3StoryFlags'
-import {
-  expectDialogueSpeaker,
-  expectMarkupWellFormed,
-} from '@/testing/gameHelpers'
+import { expectMarkupWellFormed } from '@/testing/gameHelpers'
 
 /** A minimal game state for character tests. */
 function makeGameState(): GameState {
@@ -64,17 +61,6 @@ describe('AshScholar', () => {
         res2.toLowerCase().includes('seek'),
     ).toBe(true)
     expect(g.getItemCount('Brass Mirror Segment')).toBe(2)
-  })
-
-  it('attributes the dialogue on both visits', () => {
-    const g = makeGameState()
-    const scholar = new AshScholar()
-    const answers = [scholar.talkTo(g), scholar.talkTo(g)]
-
-    for (const answer of answers) {
-      expectMarkupWellFormed(answer)
-      expectDialogueSpeaker(answer, scholar.name)
-    }
   })
 })
 

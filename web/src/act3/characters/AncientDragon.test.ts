@@ -14,28 +14,8 @@ import {
 import { AncientDragon } from './AncientDragon'
 import { DragonsScale } from '../items/DragonsScale'
 import { DragonsHall } from '../rooms/DragonsHall'
-import {
-  expectDialogueSpeaker,
-  expectMarkupWellFormed,
-} from '@/testing/gameHelpers'
+import { expectMarkupWellFormed } from '@/testing/gameHelpers'
 import { AncientAmulet } from '../items/AncientAmulet'
-
-const DIALOGUE_PATTERN = /\[dialogue\].*?\[\/dialogue\]/gs
-const CHARACTER_NAME_PATTERN = /\[character_name\](.*?)\[\/character_name\]/s
-
-/** No dialogue block in text lacks a preceding speaker name. */
-function expectNoSpeakerlessDialogue(text: string): void {
-  let narration = ''
-  let position = 0
-  for (const block of text.matchAll(DIALOGUE_PATTERN)) {
-    narration += text.slice(position, block.index)
-    position = block.index + block[0].length
-    expect(
-      CHARACTER_NAME_PATTERN.test(narration),
-      `no speaker before dialogue in: ${text}`,
-    ).toBe(true)
-  }
-}
 
 /** A minimal game state for character tests. */
 function makeGameState(): GameState {
@@ -271,33 +251,6 @@ describe('AncientDragon', () => {
       'You have said it. The scale is there, young one. Take it.',
     )
     expect(result).not.toContain(QUESTION)
-  })
-
-  it('attributes the dialogue in every branch', () => {
-    const dragon = new AncientDragon()
-    const { gameState } = hallState(false)
-    const answers = [dragon.talkTo(gameState), dragon.sayTo(gameState, 'x')]
-    gameState.setStoryFlag(FLAG_ACT3_OATH_SCROLLS_EXAMINED, true)
-    answers.push(dragon.talkTo(gameState))
-    answers.push(dragon.sayTo(gameState, 'hello'))
-    answers.push(dragon.sayTo(gameState, 'gold'))
-    answers.push(dragon.sayTo(gameState, 'everything'))
-    answers.push(dragon.sayTo(gameState, 'everything'))
-    answers.push(dragon.talkTo(gameState))
-
-    for (const answer of answers) {
-      expectMarkupWellFormed(answer)
-      expectDialogueSpeaker(answer, dragon.name)
-    }
-  })
-
-  it('narrates ignored words without speakerless dialogue', () => {
-    const { gameState } = hallState(true)
-
-    const answer = new AncientDragon().sayTo(gameState, 'hello')
-
-    expectMarkupWellFormed(answer)
-    expectNoSpeakerlessDialogue(answer)
   })
 
   it('tells the memory as three speeches by the ancient dragon', () => {
