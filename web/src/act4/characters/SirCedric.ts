@@ -44,8 +44,8 @@ export class SirCedric extends Character {
   }
 
   /** Also answers to "cedric". */
-  override answersTo(name: string): boolean {
-    return super.answersTo(name) || name.toLowerCase() === 'cedric'
+  override otherNames(): string[] {
+    return ['cedric']
   }
 
   /**

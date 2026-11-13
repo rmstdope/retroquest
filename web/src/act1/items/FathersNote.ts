@@ -24,8 +24,8 @@ export class FathersNote extends Item {
   }
 
   /** Answers to every word the box accepts for the note. */
-  override answersTo(name: string): boolean {
-    return NOTE_NAMES.includes(name.toLowerCase())
+  override otherNames(): string[] {
+    return NOTE_NAMES
   }
 
   /** The note is Elior's father's, so it reads "your father's note". */

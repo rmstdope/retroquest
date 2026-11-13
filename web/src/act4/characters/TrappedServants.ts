@@ -45,13 +45,8 @@ export class TrappedServants extends Character {
   }
 
   /** Also answers to "servants", whatever their name is now. */
-  override answersTo(name: string): boolean {
-    return (
-      super.answersTo(name) ||
-      ['servants', 'trapped servants', 'freed servants'].includes(
-        name.toLowerCase(),
-      )
-    )
+  override otherNames(): string[] {
+    return ['servants', 'trapped servants', 'freed servants']
   }
 
   /** The servants are freed: they stay in the courtyard under a new name. */

@@ -170,13 +170,8 @@ export class Shopkeeper extends Character {
    * Answers to his name, Hemlock, and still to shopkeeper, "Old Hemlock" and
    * "Old Man Hemlock": his description and the notice name him so.
    */
-  override answersTo(name: string): boolean {
-    return (
-      super.answersTo(name) ||
-      ['shopkeeper', 'old hemlock', 'old man hemlock'].includes(
-        name.toLowerCase(),
-      )
-    )
+  override otherNames(): string[] {
+    return ['shopkeeper', 'old hemlock', 'old man hemlock']
   }
 
   /**

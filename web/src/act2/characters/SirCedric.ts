@@ -162,8 +162,8 @@ export class SirCedric extends Character {
   }
 
   /** Also answers to his short name, which the `say truth to cedric` command uses. */
-  override answersTo(name: string): boolean {
-    return super.answersTo(name) || name.toLowerCase() === 'cedric'
+  override otherNames(): string[] {
+    return ['cedric']
   }
 
   /** How he looks: the knight he was until his name is cleared, then the one he is. */

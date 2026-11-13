@@ -23,11 +23,8 @@ export class KnightsRedemption extends Item {
   }
 
   /** Also answers to "badge" and "knight's badge", what the story calls it. */
-  override answersTo(name: string): boolean {
-    const wanted = name.toLowerCase()
-    return (
-      super.answersTo(name) || wanted === 'badge' || wanted === "knight's badge"
-    )
+  override otherNames(): string[] {
+    return ['badge', "knight's badge"]
   }
 
   /** The badge's look. */

@@ -79,8 +79,8 @@ export class InnkeeperMarcus extends Character {
   }
 
   /** Also answers to his first name, which the `say truth to marcus` command uses. */
-  override answersTo(name: string): boolean {
-    return super.answersTo(name) || name.toLowerCase() === 'marcus'
+  override otherNames(): string[] {
+    return ['marcus']
   }
 
   /**

@@ -13,8 +13,8 @@ export class Banners extends Item {
   }
 
   /** Also answers to "banner". */
-  override answersTo(name: string): boolean {
-    return super.answersTo(name) || name.toLowerCase() === 'banner'
+  override otherNames(): string[] {
+    return ['banner']
   }
 
   /** Examine the banners. */

@@ -173,3 +173,20 @@ describe('A plural character', () => {
     })
   })
 })
+
+describe('Character names', () => {
+  class Sage extends Character {
+    /** Also called the sage. */
+    override otherNames(): string[] {
+      return ['Sage']
+    }
+  }
+
+  it('answers to its name and listed other names', () => {
+    const sage = new Sage({ name: 'Old Mira', description: 'd' })
+    expect(sage.allNames()).toEqual(['old mira', 'sage'])
+    expect(sage.answersTo('Sage')).toBe(true)
+    expect(sage.answersTo('OLD MIRA')).toBe(true)
+    expect(sage.answersTo('mira')).toBe(false)
+  })
+})

@@ -70,11 +70,8 @@ export class ShadowOfThePast extends Character {
   }
 
   /** Also answers to "shadow" and "shadow of the past", whatever its name is now. */
-  override answersTo(name: string): boolean {
-    return (
-      super.answersTo(name) ||
-      ['shadow', 'shadow of the past'].includes(name.toLowerCase())
-    )
+  override otherNames(): string[] {
+    return ['shadow', 'shadow of the past']
   }
 
   /** The orbs are mended: it gains a face and its full name. */

@@ -35,8 +35,8 @@ export class CaravanMasterThorne extends Character {
   }
 
   /** Also answers to his short name, which the `say forgive to thorne` command uses. */
-  override answersTo(name: string): boolean {
-    return super.answersTo(name) || name.toLowerCase() === 'thorne'
+  override otherNames(): string[] {
+    return ['thorne']
   }
 
   /**

@@ -23,11 +23,8 @@ export class Memories extends Item {
   }
 
   /** Also answers to "memory" and "lanterns". */
-  override answersTo(name: string): boolean {
-    return (
-      super.answersTo(name) ||
-      ['memory', 'lanterns'].includes(name.toLowerCase())
-    )
+  override otherNames(): string[] {
+    return ['memory', 'lanterns']
   }
 
   /** Plays the scene once; afterwards only a dim line. */

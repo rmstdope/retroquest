@@ -18,8 +18,8 @@ export class Caravan extends Item {
   }
 
   /** Also answers to "merchants", the word the greater heal is cast on. */
-  override answersTo(name: string): boolean {
-    return super.answersTo(name) || name.toLowerCase() === 'merchants'
+  override otherNames(): string[] {
+    return ['merchants']
   }
 
   /**

@@ -21,14 +21,8 @@ export class Scenery extends Item {
   }
 
   /** Answers to its chip label and the other typed words of its table entry. */
-  override answersTo(name: string): boolean {
-    const wanted = name.toLowerCase()
-    return (
-      super.answersTo(name) ||
-      SCENERY_BY_KEY[this.key].aliases.some(
-        (alias) => alias.toLowerCase() === wanted,
-      )
-    )
+  override otherNames(): string[] {
+    return SCENERY_BY_KEY[this.key].aliases
   }
 
   /** Give a saved chip the table's current label. */

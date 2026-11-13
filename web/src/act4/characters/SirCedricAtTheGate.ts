@@ -13,8 +13,8 @@ export class SirCedricAtTheGate extends Character {
   }
 
   /** Also answers to "cedric". */
-  override answersTo(name: string): boolean {
-    return super.answersTo(name) || name.toLowerCase() === 'cedric'
+  override otherNames(): string[] {
+    return ['cedric']
   }
 
   /** His one line: he will follow once the wall is down. */

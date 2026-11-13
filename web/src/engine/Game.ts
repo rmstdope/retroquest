@@ -12,6 +12,16 @@ import {
   type CommandTarget,
 } from './CommandParser'
 import { GameState } from './GameState'
+import {
+  DIRECTIONS,
+  EXAMINE_SHORTHAND,
+  SHORT_DIRECTIONS,
+  VERB_FORMS,
+  formOf,
+  helpText,
+  type ArgumentKind,
+  type VerbForm,
+} from './Grammar'
 import { Item } from './Item'
 import { Quest } from './Quest'
 import { Room } from './Room'
@@ -76,8 +86,6 @@ const INVALID_SAVE_NAME =
 
 /** The Roman numerals the act-complete page names acts by, first act first. */
 const ACT_NUMERALS = ['I', 'II', 'III', 'IV', 'V', 'VI']
-
-const CARDINAL_DIRECTIONS = ['north', 'south', 'east', 'west'] as const
 
 /** Words that join a name's parts and so never name a character alone. */
 const NAME_JOINING_WORDS: readonly string[] = ['of', 'the', 'and']
@@ -342,126 +350,107 @@ Welcome to
   }
 
   /**
-   * Completion tokens for the commands possible right now: the open exits by
-   * name, and the four direction letters always. A word that already names
-   * something (the Sorceress of Lies answers to "sorceress") can be sent as it
-   * stands, even where longer names go on from it.
+   * Completion tokens for the commands possible right now, built from the
+   * grammar (`VERB_FORMS`): every verb the parser accepts, the open exits by
+   * name, the direction letters always, and every name a thing here answers
+   * to. A word that already names something (the Sorceress of Lies answers to
+   * "sorceress") can be sent as it stands, even where longer names go on from
+   * it.
    */
   getCommandCompletions(): CompletionTree {
     const room = this.state.currentRoom
-    const names = (items: Item[]): string[] => [
-      ...items.map((item) => item.name.toLowerCase()),
-      ...items
-        .filter((item) => item.shortName)
-        .map((item) => item.shortName.toLowerCase()),
-    ]
-    const allItemNames = names([...room.items, ...this.state.inventory])
-    const inventoryItemNames = names(this.state.inventory)
-    const roomItemNames = names(room.items)
-    const characterNames = room.characters.map((c) => c.name.toLowerCase())
-    const spellNames = this.state.knownSpells.map((s) => s.name.toLowerCase())
+    const namesOf = (things: { allNames(): string[] }[]): string[] =>
+      things.flatMap((thing) => thing.allNames())
     const exits = room.getExits(this.state)
-    const exitNames = leaves(Object.keys(exits))
-
-    // A direction letter can always be sent, so Enter never trades it for a
-    // longer word (`e` for `examine`); a shut or missing way still answers.
-    const directional: CompletionTree = {}
-    for (const direction of CARDINAL_DIRECTIONS) {
-      directional[direction[0]] = null
-    }
-    for (const direction of CARDINAL_DIRECTIONS) {
-      if (direction in exits) directional[direction] = null
-    }
-
     const allItems = [...room.items, ...this.state.inventory]
-    const allItemsTree = sendableNames(nested(allItemNames), allItems)
-    const roomItemsTree = sendableNames(nested(roomItemNames), room.items)
-    const inventoryTree = sendableNames(
-      nested(inventoryItemNames),
-      this.state.inventory,
-    )
+    const itemNames: Partial<Record<ArgumentKind, string[]>> = {
+      item: namesOf(allItems),
+      roomItem: namesOf(room.items),
+      inventoryItem: namesOf(this.state.inventory),
+      spell: this.state.knownSpells.map((s) => s.name.toLowerCase()),
+    }
+    const itemThings: Partial<Record<ArgumentKind, Item[]>> = {
+      item: allItems,
+      roomItem: room.items,
+      inventoryItem: this.state.inventory,
+    }
+    const nameTree = (kind: ArgumentKind): CompletionTree =>
+      sendableNames(nested(itemNames[kind] ?? []), itemThings[kind] ?? [])
     const charactersTree = sendableNames(
-      nested(characterNames),
+      nested(namesOf(room.characters)),
       room.characters,
     )
+    const itemTree = nameTree('item')
     const itemsAndCharacters = sendableNames(
-      { ...allItemsTree, ...charactersTree },
+      mergeTrees(itemTree, charactersTree),
       [...allItems, ...room.characters],
     )
-    const withCharacters = (
-      keys: string[],
-      preposition: string,
-    ): CompletionTree =>
-      Object.fromEntries(
-        keys.map((k) => [k, { [preposition]: charactersTree }]),
-      )
-    const withTarget = (
-      keys: string[],
-      ...prepositions: string[]
-    ): CompletionTree =>
-      Object.fromEntries(
-        keys.map((k) => [
-          k,
-          {
-            '@': null,
-            ...Object.fromEntries(
-              prepositions.map((word) => [word, itemsAndCharacters]),
-            ),
-          },
-        ]),
-      )
-
-    const completions: CompletionTree = {
-      go: exitNames,
-      move: exitNames,
-      ...directional,
-      talk: { to: charactersTree },
-      speak: { to: charactersTree },
-      converse: { with: charactersTree },
-      give: withCharacters(inventoryItemNames, 'to'),
-      hand: inventoryTree,
-      buy: withCharacters(roomItemNames, 'from'),
-      look: { '@': null, at: itemsAndCharacters, ...itemsAndCharacters },
-      l: null,
-      observe: null,
-      survey: null,
-      inspect: itemsAndCharacters,
-      examine: itemsAndCharacters,
-      check: itemsAndCharacters,
-      read: allItemsTree,
-      search: null,
-      investigate: null,
-      take: roomItemsTree,
-      pick: { up: roomItemsTree },
-      grab: roomItemsTree,
-      get: roomItemsTree,
-      use: sendableNames(
-        splitMultiwordKeys(withTarget(allItemNames, 'with', 'on')),
-        allItems,
-        ['with', 'on'],
-      ),
-      inventory: null,
-      i: null,
-      inv: null,
-      open: allItemsTree,
-      close: allItemsTree,
-      cast: withTarget(spellNames, 'on'),
-      // What is said is the player's own words: the tree cannot list them.
-      say: null,
-      spells: null,
-      save: null,
-      load: null,
-      help: null,
-      '?': null,
-      quit: null,
-      exit: null,
-      sleep: null,
-      rest: null,
-      wait: null,
-      map: null,
-      stats: null,
+    const trees: Record<ArgumentKind, CompletionTree | null> = {
+      none: null,
+      text: null,
+      exit: leaves(Object.keys(exits)),
+      item: itemTree,
+      roomItem: nameTree('roomItem'),
+      inventoryItem: nameTree('inventoryItem'),
+      thing: itemsAndCharacters,
+      character: charactersTree,
+      spell: nested(itemNames.spell ?? []),
     }
-    return splitMultiwordKeys(completions)
+
+    const completions: CompletionTree = {}
+    // A direction letter can always be sent, so Enter never trades it for a
+    // longer word (`e` for `examine`); a shut or missing way still answers.
+    for (const letter of Object.keys(SHORT_DIRECTIONS)) {
+      completions[letter] = null
+    }
+    for (const direction of DIRECTIONS) {
+      if (direction in exits) completions[direction] = null
+    }
+    for (const form of VERB_FORMS) {
+      for (const verb of form.verbs) {
+        completions[verb] = form.joins
+          ? this.joinedTree(form, itemNames[form.argument] ?? [], trees)
+          : trees[form.argument]
+      }
+    }
+    // `use` offers the names that go on past a joining word, and sends the
+    // ones that stand as they are.
+    completions.use = sendableNames(
+      splitMultiwordKeys(completions.use ?? {}),
+      allItems,
+      formOf('use').joins?.words ?? [],
+    )
+    const split = splitMultiwordKeys(completions)
+    // "look <thing>" examines it too, and "look" alone is sendable.
+    split[EXAMINE_SHORTHAND] = mergeTrees(
+      split[EXAMINE_SHORTHAND] ?? {},
+      itemsAndCharacters,
+    )
+    return split
+  }
+
+  /**
+   * The tree under a verb that takes one argument and then a joining word and
+   * a second argument ("give X to Y"): each first-argument name leads to the
+   * joining words, and to `@` (sendable as it stands) when the join is optional.
+   */
+  private joinedTree(
+    form: VerbForm,
+    names: string[],
+    trees: Record<ArgumentKind, CompletionTree | null>,
+  ): CompletionTree {
+    const joins = form.joins
+    if (joins === undefined) return {}
+    const target = trees[joins.argument]
+    return Object.fromEntries(
+      names.map((name) => [
+        name,
+        {
+          ...(joins.optional ? { '@': null } : {}),
+          ...Object.fromEntries(joins.words.map((word) => [word, target])),
+        },
+      ]),
+    )
   }
 
   /**
@@ -510,7 +499,7 @@ Welcome to
   /**
    * The full name of the carried or room item the words name, among those
    * whose full name `offered` accepts, or null. Asks each item's `answersTo`,
-   * so it reaches the names no list holds, and drops a leading "the" as
+   * so it reaches whatever the item answers to, and drops a leading "the" as
    * `findAllItems` does.
    */
   itemNamed(
@@ -577,47 +566,7 @@ Welcome to
   }
 
   help(): string {
-    return (
-      '[bold]Available Commands:[/bold]\n' +
-      '\n' +
-      '[bold]Movement:[/bold]\n' +
-      '  go <direction>, move <direction>, <direction>, <short_direction> ' +
-      '(e.g., go north, , move north, north, n)\n' +
-      '\n' +
-      '[bold]Interaction:[/bold]\n' +
-      '  talk to <character>, speak to <character>, converse with <character>\n' +
-      '  say <word(s)> to <character>\n' +
-      '  give <item> to <character>, hand <item> to <character>\n' +
-      '  buy <item> from <character>\n' +
-      '\n' +
-      '[bold]Examination:[/bold]\n' +
-      '  look, observe, survey, l\n' +
-      '  look at <object>, inspect <object>, examine <object>, check <object>\n' +
-      '  search, investigate\n' +
-      '\n' +
-      '[bold]Inventory Management:[/bold]\n' +
-      '  take <item>, pick up <item>, grab <item>, get <item>\n' +
-      '  use <item>, use <item> with <item>\n' +
-      '  inventory, i, inv\n' +
-      '  open <container>\n' +
-      '  close <container>\n' +
-      '\n' +
-      '[bold]Magic:[/bold]\n' +
-      '  cast <spell>\n' +
-      '  cast <spell> on <object/character>\n' +
-      '  spells\n' +
-      '\n' +
-      '[bold]Game Management:[/bold]\n' +
-      '  save [name], load [name]\n' +
-      '  help, ?\n' +
-      '  quit, exit\n' +
-      '\n' +
-      '[bold]Miscellaneous:[/bold]\n' +
-      '  sleep, rest, wait\n' +
-      '  hint\n' +
-      '  map\n' +
-      '  stats\n'
-    )
+    return helpText()
   }
 
   look(): string {
@@ -1138,12 +1087,16 @@ function nested(names: string[]): CompletionTree {
     let node = tree
     parts.forEach((part, i) => {
       if (i === parts.length - 1) {
-        node[part] = null
+        // a name that is also the start of a longer one stays sendable
+        const longer = Object.hasOwn(node, part) ? node[part] : null
+        if (longer === null) node[part] = null
+        else longer['@'] = null
         return
       }
       let next = Object.hasOwn(node, part) ? node[part] : null
       if (!next) {
-        next = {}
+        // a shorter name met first stays sendable
+        next = Object.hasOwn(node, part) ? { '@': null } : {}
         node[part] = next
       }
       node = next
@@ -1165,7 +1118,7 @@ function nested(names: string[]): CompletionTree {
 function sendableNames(
   tree: CompletionTree,
   things: { answersTo(name: string): boolean }[],
-  targetWords: string[] = [],
+  targetWords: readonly string[] = [],
   path: string[] = [],
 ): CompletionTree {
   const named = (words: string[]): boolean =>
@@ -1194,22 +1147,56 @@ function splitMultiwordKeys(tree: CompletionTree): CompletionTree {
     const parts = key.split(/\s+/).filter(Boolean)
     const child = value === null ? null : splitMultiwordKeys(value)
     if (parts.length <= 1) {
-      result[key] = child
+      mergeInto(result, key, child)
       continue
     }
     let node = result
     parts.forEach((part, i) => {
       if (i === parts.length - 1) {
-        node[part] = child
+        mergeInto(node, part, child)
         return
       }
       let next = Object.hasOwn(node, part) ? node[part] : null
       if (!next) {
-        next = {}
+        // a word that was a whole command ("look") stays sendable
+        next = Object.hasOwn(node, part) ? { '@': null } : {}
         node[part] = next
       }
       node = next
     })
+  }
+  return result
+}
+
+/**
+ * Sets `tree[word]` to `child`, keeping what an earlier, longer name already
+ * put under the word: a leaf over a branch makes the branch sendable, and two
+ * branches are merged.
+ */
+function mergeInto(
+  tree: CompletionTree,
+  word: string,
+  child: CompletionTree | null,
+): void {
+  const present = Object.hasOwn(tree, word)
+  const existing = present ? tree[word] : null
+  if (existing === null) {
+    tree[word] = present && child !== null ? { '@': null, ...child } : child
+  } else if (child === null) {
+    existing['@'] = null
+  } else {
+    Object.assign(existing, child)
+  }
+}
+
+/** The two trees as one: a word in both keeps the branches and the `@` of each. */
+function mergeTrees(a: CompletionTree, b: CompletionTree): CompletionTree {
+  const result: CompletionTree = {}
+  for (const [word, child] of Object.entries(a)) {
+    result[word] = child === null ? null : mergeTrees(child, {})
+  }
+  for (const [word, child] of Object.entries(b)) {
+    mergeInto(result, word, child === null ? null : mergeTrees(child, {}))
   }
   return result
 }

@@ -59,8 +59,8 @@ export class Blacksmith extends Character {
   }
 
   /** He answers to his name, Borin, and still to blacksmith. */
-  override answersTo(name: string): boolean {
-    return super.answersTo(name) || name.toLowerCase() === 'blacksmith'
+  override otherNames(): string[] {
+    return ['blacksmith']
   }
 
   /** Dialogue when the player talks to the blacksmith; varies by story flags. */

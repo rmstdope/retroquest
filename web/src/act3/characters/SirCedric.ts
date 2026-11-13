@@ -88,9 +88,8 @@ export class SirCedric extends Character {
    * engine also lets a single word of his name reach him while no one else
    * here shares it (see `Game.findCharacter`).
    */
-  override answersTo(name: string): boolean {
-    const wanted = name.trim().toLowerCase()
-    return wanted === 'sir cedric' || wanted === 'cedric'
+  override otherNames(): string[] {
+    return ['cedric']
   }
 
   /**

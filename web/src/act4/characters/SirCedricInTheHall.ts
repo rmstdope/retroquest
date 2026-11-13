@@ -23,8 +23,8 @@ export class SirCedricInTheHall extends Character {
   }
 
   /** Also answers to "cedric". */
-  override answersTo(name: string): boolean {
-    return super.answersTo(name) || name.toLowerCase() === 'cedric'
+  override otherNames(): string[] {
+    return ['cedric']
   }
 
   /** By the south door, or sitting on the stair once he has forgiven. */

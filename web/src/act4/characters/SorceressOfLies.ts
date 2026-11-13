@@ -83,13 +83,8 @@ export class SorceressOfLies extends Character {
   }
 
   /** Also answers to "sorceress" and "unmasked sorceress", whatever her name is now. */
-  override answersTo(name: string): boolean {
-    return (
-      super.answersTo(name) ||
-      ['sorceress', 'sorceress of lies', 'unmasked sorceress'].includes(
-        name.toLowerCase(),
-      )
-    )
+  override otherNames(): string[] {
+    return ['sorceress', 'sorceress of lies', 'unmasked sorceress']
   }
 
   /** How many of the chamber's three hearts (hers, the staff's, the whispers') Elior has heard. */

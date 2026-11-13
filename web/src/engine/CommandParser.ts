@@ -3,6 +3,13 @@
  * golden path the game gets from act N.
  */
 import type { QuestChanges } from './GameState'
+import {
+  DIRECTIONS,
+  EXAMINE_SHORTHAND,
+  SHORT_DIRECTIONS,
+  formOf,
+  prefixesOf,
+} from './Grammar'
 
 /** The part of the game the parser drives (implemented by Game). */
 export interface CommandTarget {
@@ -37,19 +44,38 @@ export interface CommandTarget {
   goldenPath(actNumber: number): string[]
 }
 
-const DIRECTIONS = ['north', 'south', 'east', 'west', 'up', 'down'] as const
-const SHORT_DIRECTIONS: Record<string, string> = {
-  n: 'north',
-  s: 'south',
-  e: 'east',
-  w: 'west',
-}
-const TALK_PREFIXES = ['talk to ', 'speak to ', 'converse with ']
-const GIVE_PREFIXES = ['give ', 'hand ']
-const EXAMINE_PREFIXES = ['look at ', 'inspect ', 'examine ', 'check ', 'look ']
+const TALK_PREFIXES = prefixesOf('talk to')
+const GIVE_PREFIXES = prefixesOf('give')
+/** `look ` also reads as examine when something follows. */
+const EXAMINE_PREFIXES = [...prefixesOf('inspect'), `${EXAMINE_SHORTHAND} `]
 /** The examine verbs typed with nothing named; `look` alone is `look`. */
-const BARE_EXAMINE_VERBS = ['look at', 'inspect', 'examine', 'check']
-const TAKE_PREFIXES = ['take ', 'pick up ', 'grab ', 'get ']
+const BARE_EXAMINE_VERBS = formOf('inspect').verbs
+const TAKE_PREFIXES = prefixesOf('take')
+const LOOK_VERBS = formOf('look').verbs
+const GO_PREFIXES = prefixesOf('go')
+const SAY_PREFIXES = prefixesOf('say')
+const BUY_PREFIXES = prefixesOf('buy')
+const USE_PREFIXES = prefixesOf('use')
+const OPEN_PREFIXES = prefixesOf('open')
+const CLOSE_PREFIXES = prefixesOf('close')
+const CAST_PREFIXES = prefixesOf('cast')
+const SAVE_PREFIXES = prefixesOf('save')
+const LOAD_PREFIXES = prefixesOf('load')
+const SPELLS_VERBS = formOf('spells').verbs
+const SAVE_VERBS = formOf('save').verbs
+const LOAD_VERBS = formOf('load').verbs
+const HINT_VERBS = formOf('hint').verbs
+const MAP_VERBS = formOf('map').verbs
+const STATS_VERBS = formOf('stats').verbs
+/** The words that join `use`'s two items: "with", and "on" when there is no "with". */
+const USE_JOINS = formOf('use').joins?.words ?? []
+const [USE_WITH, USE_ON] = [` ${USE_JOINS[0]} `, ` ${USE_JOINS[1]} `]
+const GIVE_JOIN = formOf('give').joins?.words[0] ?? 'to'
+const SEARCH_VERBS = formOf('search').verbs
+const INVENTORY_VERBS = formOf('inventory').verbs
+const HELP_VERBS = formOf('help').verbs
+const QUIT_VERBS = formOf('quit').verbs
+const REST_VERBS = formOf('sleep').verbs
 
 const SAY_USAGE = 'Use say <word> to <character>'
 const USE_WITH_USAGE =
@@ -70,8 +96,9 @@ export function addresseeTarget(command: string): string | null {
   const cmd = command.trim().toLowerCase()
   const talk = afterPrefix(cmd, TALK_PREFIXES)
   if (talk !== null) return talk.trim() || null
-  if (cmd.startsWith('say ')) {
-    const args = cmd.slice('say '.length)
+  const sayArgs = afterPrefix(cmd, SAY_PREFIXES)
+  if (sayArgs !== null) {
+    const args = sayArgs
     const separator = args.indexOf(' to ')
     return separator < 0
       ? null
@@ -80,7 +107,7 @@ export function addresseeTarget(command: string): string | null {
   const give = afterPrefix(cmd, GIVE_PREFIXES)
   if (give !== null) {
     const parts = give.split(/\s+/).filter(Boolean)
-    const index = parts.indexOf('to')
+    const index = parts.indexOf(GIVE_JOIN)
     return index > 0 && index < parts.length - 1
       ? parts.slice(index + 1).join(' ')
       : null
@@ -103,46 +130,46 @@ export class CommandParser {
 
     const talkTarget = afterPrefix(cmd, TALK_PREFIXES)
     if (talkTarget !== null) return this.game.talk(talkTarget)
-    if (cmd.startsWith('say ')) return this.say(cmd.slice('say '.length).trim())
+    const sayArgs = afterPrefix(cmd, SAY_PREFIXES)
+    if (sayArgs !== null) return this.say(sayArgs.trim())
     const giveArgs = afterPrefix(cmd, GIVE_PREFIXES)
     if (giveArgs !== null) return this.game.give(giveArgs)
-    if (cmd.startsWith('buy ')) return this.game.buy(cmd.slice('buy '.length))
+    const buyArgs = afterPrefix(cmd, BUY_PREFIXES)
+    if (buyArgs !== null) return this.game.buy(buyArgs)
 
-    if (['look', 'observe', 'survey', 'l'].includes(cmd))
-      return this.game.look()
+    if (LOOK_VERBS.includes(cmd)) return this.game.look()
     if (BARE_EXAMINE_VERBS.includes(cmd)) return this.game.examine('')
     const examineTarget = afterPrefix(cmd, EXAMINE_PREFIXES)
     if (examineTarget !== null) return this.game.examine(examineTarget)
-    if (cmd === 'search' || cmd === 'investigate') return this.game.search()
+    if (SEARCH_VERBS.includes(cmd)) return this.game.search()
 
     const takeTarget = afterPrefix(cmd, TAKE_PREFIXES)
     if (takeTarget !== null) return this.game.take(takeTarget)
     if (cmd === 'use') return 'What do you want to use?'
-    if (cmd.startsWith('use ')) return this.use(command)
-    if (['inventory', 'i', 'inv'].includes(cmd)) return this.game.inventory()
-    if (cmd.startsWith('open '))
-      return this.game.open(cmd.slice('open '.length))
-    if (cmd.startsWith('close '))
-      return this.game.close(cmd.slice('close '.length))
+    if (afterPrefix(cmd, USE_PREFIXES) !== null) return this.use(command)
+    if (INVENTORY_VERBS.includes(cmd)) return this.game.inventory()
+    const openTarget = afterPrefix(cmd, OPEN_PREFIXES)
+    if (openTarget !== null) return this.game.open(openTarget)
+    const closeTarget = afterPrefix(cmd, CLOSE_PREFIXES)
+    if (closeTarget !== null) return this.game.close(closeTarget)
 
-    if (cmd.startsWith('cast '))
-      return this.game.cast(cmd.slice('cast '.length))
-    if (cmd === 'spells') return this.game.spells()
+    const castArgs = afterPrefix(cmd, CAST_PREFIXES)
+    if (castArgs !== null) return this.game.cast(castArgs)
+    if (SPELLS_VERBS.includes(cmd)) return this.game.spells()
 
-    if (cmd === 'save') return this.game.save()
-    if (cmd.startsWith('save '))
-      return this.game.save(cmd.slice('save '.length).trim())
-    if (cmd === 'load') return this.game.load()
-    if (cmd.startsWith('load '))
-      return this.game.load(cmd.slice('load '.length).trim())
-    if (cmd === 'help' || cmd === '?') return this.game.help()
-    if (cmd === 'hint') return this.game.hint()
-    if (cmd === 'quit' || cmd === 'exit') return this.game.quit()
+    if (SAVE_VERBS.includes(cmd)) return this.game.save()
+    const saveName = afterPrefix(cmd, SAVE_PREFIXES)
+    if (saveName !== null) return this.game.save(saveName.trim())
+    if (LOAD_VERBS.includes(cmd)) return this.game.load()
+    const loadName = afterPrefix(cmd, LOAD_PREFIXES)
+    if (loadName !== null) return this.game.load(loadName.trim())
+    if (HELP_VERBS.includes(cmd)) return this.game.help()
+    if (HINT_VERBS.includes(cmd)) return this.game.hint()
+    if (QUIT_VERBS.includes(cmd)) return this.game.quit()
 
-    if (cmd === 'sleep' || cmd === 'rest' || cmd === 'wait')
-      return this.game.rest()
-    if (cmd === 'map') return this.game.map()
-    if (cmd === 'stats') return this.game.stats()
+    if (REST_VERBS.includes(cmd)) return this.game.rest()
+    if (MAP_VERBS.includes(cmd)) return this.game.map()
+    if (STATS_VERBS.includes(cmd)) return this.game.stats()
     if (cmd.startsWith('cheat act ')) {
       const argument = cmd.slice('cheat act '.length).trim()
       const commands = /^[1-9]\d*$/.test(argument)
@@ -155,12 +182,12 @@ export class CommandParser {
 
   /** The direction a movement command names, or null for other commands. */
   private direction(cmd: string): string | null {
-    const word = afterPrefix(cmd, ['go ', 'move ']) ?? cmd
+    const word = afterPrefix(cmd, GO_PREFIXES) ?? cmd
     if (word === cmd) {
       const long = SHORT_DIRECTIONS[word] ?? word
       return (DIRECTIONS as readonly string[]).includes(long) ? long : null
     }
-    if (cmd.startsWith('go ')) return word.trim()
+    if (cmd.startsWith(GO_PREFIXES[0])) return word.trim()
     return (DIRECTIONS as readonly string[]).includes(word) ? word : null
   }
 
@@ -179,13 +206,14 @@ export class CommandParser {
 
   /** `use <item>`, `use <item> with <other>` or `use <item> on <other>`, from the command as typed. */
   private use(command: string): string {
-    const tail = command.trim().slice('use '.length)
+    const tail = command.trim().slice(USE_PREFIXES[0].length)
     const stripped = tail.trim()
     if (!stripped) return 'What do you want to use?'
-    if (tail.toLowerCase().trimEnd().endsWith(' with')) return USE_WITH_USAGE
+    if (tail.toLowerCase().trimEnd().endsWith(USE_WITH.trimEnd()))
+      return USE_WITH_USAGE
     const lower = stripped.toLowerCase()
     // "on" reads the same as "with" when the command has no "with"
-    const joiner = lower.includes(' with ') ? ' with ' : ' on '
+    const joiner = lower.includes(USE_WITH) ? USE_WITH : USE_ON
     const split = lower.indexOf(joiner)
     if (split < 0) return this.game.use(lower)
     const item = lower.slice(0, split).trim()

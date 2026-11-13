@@ -82,8 +82,8 @@ export class BarmaidElena extends Character {
   }
 
   /** She answers to her name, Elena, as well as to barmaid elena. */
-  override answersTo(name: string): boolean {
-    return super.answersTo(name) || name.toLowerCase() === 'elena'
+  override otherNames(): string[] {
+    return ['elena']
   }
 
   /**

@@ -21,11 +21,8 @@ export class SorceressTruth extends Item {
   }
 
   /** Also answers to "mask" and "silver mask", what the story calls it. */
-  override answersTo(name: string): boolean {
-    return (
-      super.answersTo(name) ||
-      ['mask', 'silver mask'].includes(name.toLowerCase())
-    )
+  override otherNames(): string[] {
+    return ['mask', 'silver mask']
   }
 
   /** The mask's look. */

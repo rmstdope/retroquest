@@ -30,11 +30,26 @@ export class Character {
   refreshSavedText(_gameState: GameState): void {}
 
   /**
-   * Whether the player's word for a character names this one; by default
-   * its name, compared case-insensitively. Override to accept other names.
+   * The names besides `name` the player may call this character by, lowercase.
+   * Override to list them; `answersTo` and the suggestion list both read it.
+   */
+  otherNames(): readonly string[] {
+    return []
+  }
+
+  /** Every name the character answers to, lowercase: the name, then `otherNames`. */
+  allNames(): string[] {
+    return [
+      ...new Set([this.name, ...this.otherNames()].map((n) => n.toLowerCase())),
+    ]
+  }
+
+  /**
+   * Whether the player's word for a character names this one: one of
+   * `allNames`, compared case-insensitively.
    */
   answersTo(name: string): boolean {
-    return this.name.toLowerCase() === name.toLowerCase()
+    return this.allNames().includes(name.toLowerCase())
   }
 
   /**

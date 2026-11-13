@@ -40,8 +40,8 @@ export class VaultDoor extends Item {
   }
 
   /** Also answers to "sealed door". */
-  override answersTo(name: string): boolean {
-    return super.answersTo(name) || name.toLowerCase() === 'sealed door'
+  override otherNames(): string[] {
+    return ['sealed door']
   }
 
   /** The door's look, which changes once the Shadow is answered and once it is open. */

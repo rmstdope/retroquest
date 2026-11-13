@@ -176,3 +176,24 @@ describe('Item names in a sentence', () => {
     }
   })
 })
+
+describe('Item names', () => {
+  class Lamp extends Item {
+    /** Also called a lantern. */
+    override otherNames(): string[] {
+      return ['Lantern']
+    }
+  }
+
+  it('answers to its name, short name and listed other names', () => {
+    const lamp = new Lamp({
+      name: 'Brass Lamp',
+      description: 'd',
+      shortName: 'lamp',
+    })
+    expect(lamp.allNames()).toEqual(['brass lamp', 'lamp', 'lantern'])
+    for (const name of lamp.allNames()) expect(lamp.answersTo(name)).toBe(true)
+    expect(lamp.answersTo('LANTERN')).toBe(true)
+    expect(lamp.answersTo('torch')).toBe(false)
+  })
+})

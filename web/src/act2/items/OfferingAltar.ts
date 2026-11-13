@@ -28,8 +28,8 @@ export class OfferingAltar extends Item {
    * Also answers to plain "altar", in code rather than a short name so that
    * saves made before this change reach it too.
    */
-  override answersTo(name: string): boolean {
-    return super.answersTo(name) || name.toLowerCase() === 'altar'
+  override otherNames(): string[] {
+    return ['altar']
   }
 
   /**
