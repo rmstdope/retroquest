@@ -1,6 +1,7 @@
 import { setAppStorage } from '@/storage/appStorage'
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { useBridge } from '@/composables/useBridge'
+import type { SaveSlot } from '@/types/bridge'
 
 /** Minimal localStorage mock shared across all tests in this file. */
 const localStorageMock = (() => {
@@ -704,6 +705,79 @@ describe('useBridge', () => {
       bridge.quickSaveGame()
       expect(bridge.getSaveSlots()[1].outdated).toBe(false)
       expect(bridge.getQuickSave()!.outdated).toBe(false)
+    })
+  })
+
+  describe('what every kind of save remembers', () => {
+    const STORY = [{ text: 'You look around.' }]
+    const kinds: [
+      string,
+      (b: Bridge) => string,
+      (b: Bridge) => SaveSlot | null,
+      (b: Bridge) => string,
+    ][] = [
+      [
+        'quick',
+        (b) => b.quickSaveGame(STORY),
+        (b) => b.getQuickSave(),
+        (b) => b.quickLoadGame(),
+      ],
+      [
+        'slot',
+        (b) => b.saveToSlot(3, STORY),
+        (b) => b.getSaveSlots()[2],
+        (b) => b.loadFromSlot(3),
+      ],
+      [
+        'named',
+        (b) => b.saveNamedGame('fixture', STORY),
+        (b) => b.getNamedSaves()[0],
+        (b) => b.loadNamedGame('fixture'),
+      ],
+    ]
+
+    it.each(kinds)(
+      'a %s save keeps the same details and story from one fixture',
+      async (_kind, save, card, load) => {
+        const bridge = await runningBridge()
+        bridge.controller.takeTurn('take bread')
+        expect(save(bridge)).toBe('Game saved.')
+        expect(card(bridge)).toMatchObject({
+          act: 'Act 1',
+          room: "Elior's Cottage",
+          quests: { completed: 0, total: 11 },
+          outdated: false,
+        })
+        expect(typeof card(bridge)!.timestamp).toBe('string')
+        const reloaded = await runningBridge()
+        expect(load(reloaded)).not.toContain('[failure]')
+        expect(reloaded.takeLoadedStory()).toEqual(STORY)
+        expect(reloaded.controller.getInventory()[0].name).toContain('bread')
+      },
+    )
+  })
+
+  describe('a save with data this engine did not write', () => {
+    const NO_SAVE = '[failure]No save file found.[/failure]'
+
+    it('is no save at all, whichever way it is filed', async () => {
+      const bridge = await runningBridge()
+      const corrupt = 'gASVbQAAAAAAAAB9lC4='
+      localStorageMock._setRaw('retroquest_save', corrupt)
+      localStorageMock._setRaw(
+        'retroquest_save_slots',
+        JSON.stringify([{ slot: 1, data: corrupt }, ...Array(7).fill(null)]),
+      )
+      localStorageMock._setRaw(
+        'retroquest_named_saves',
+        JSON.stringify([{ name: 'old', data: corrupt }]),
+      )
+      expect(bridge.getQuickSave()).toBe(null)
+      expect(bridge.getSaveSlots()[0].act).toBe(null)
+      expect(bridge.getNamedSaves()).toEqual([])
+      expect(bridge.quickLoadGame()).toBe(NO_SAVE)
+      expect(bridge.loadFromSlot(1)).toBe(NO_SAVE)
+      expect(bridge.loadNamedGame('old')).toBe(NO_SAVE)
     })
   })
 
