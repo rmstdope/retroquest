@@ -70,7 +70,9 @@ describe.each([1, 2, 3, 4])('the recordings of Act %i', (act) => {
     if (
       !script.some((line) => line.text === `Act ${numeral} complete. ${title}.`)
     )
-      problems.push('the act-complete heading is missing from the script')
+      problems.push(
+        `the heading "Act ${numeral} complete. ${title}." is missing from the script`,
+      )
     for (const key of Object.keys(cues))
       if (!keys.has(key))
         problems.push(`direction for a line not in script: ${key}`)
@@ -97,7 +99,9 @@ describe.each([1, 2, 3, 4])('the recordings of Act %i', (act) => {
       }
       for (const line of script)
         if (manifest[line.id] && manifest[line.id]?.speaker !== line.speaker)
-          problems.push(`clip in the wrong voice: ${line.id}`)
+          problems.push(
+            `clip in the wrong voice: ${line.id}: clip ${manifest[line.id]?.speaker}, script ${line.speaker}`,
+          )
     }
     expect(problems).toEqual([])
   })

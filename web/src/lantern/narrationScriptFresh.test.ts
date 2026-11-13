@@ -50,12 +50,10 @@ describe('committed narration files are current', () => {
   it(
     'every short act script.json is what extract-act.ts writes',
     () => {
-      const stale = SHORT_ACTS.filter(
-        (number) =>
-          JSON.stringify(extractActScript(number)) !==
-          JSON.stringify(committed(number, 'script.json')),
-      ).map((number) => `tts/act${number}/script.json`)
-      expect(stale).toEqual([])
+      for (const number of SHORT_ACTS)
+        expect
+          .soft(extractActScript(number), `tts/act${number}/script.json`)
+          .toEqual(committed(number, 'script.json'))
     },
     SLOW,
   )
@@ -64,12 +62,10 @@ describe('committed narration files are current', () => {
     ['images.json', extractActImages],
     ['scenes.json', extractActScenes],
   ] as const)('every act %s is what extract-act.ts writes', (file, extract) => {
-    const stale = ACT_NUMBERS.filter(
-      (number) =>
-        JSON.stringify(extract(number)) !==
-        JSON.stringify(committed(number, file)),
-    ).map((number) => `tts/act${number}/${file}`)
-    expect(stale).toEqual([])
+    for (const number of ACT_NUMBERS)
+      expect
+        .soft(extract(number), `tts/act${number}/${file}`)
+        .toEqual(committed(number, file))
   })
 })
 
