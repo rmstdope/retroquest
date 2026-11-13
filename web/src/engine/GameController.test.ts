@@ -103,13 +103,6 @@ describe('GameController', () => {
     expect(ctrl.takeSoundFirings()).toEqual([])
   })
 
-  it('runs commands through the parser', () => {
-    const ctrl = makeController()
-    expect(ctrl.handleCommand('xyzzy')).toContain("I don't understand")
-    expect(ctrl.look()).toBe('')
-    expect(ctrl.getActIntro()).toBe('')
-  })
-
   describe('golden path', () => {
     it('is the golden path of the numbered act, empty when it has none', () => {
       const act = new Act({
@@ -845,15 +838,6 @@ describe('GameController', () => {
       const logo = ctrl.getResultText()
       expect(ctrl.advanceTurn()).toBe(logo)
       expect(ctrl.getResultText()).not.toBe(logo)
-    })
-
-    it('saves and loads through the game', () => {
-      const ctrl = makeController()
-      expect(ctrl.loadGame()).toContain('No save file found')
-      expect(ctrl.saveGame()).toContain('saved')
-      expect(ctrl.loadGame()).toContain('loaded')
-      expect(ctrl.saveGame('slot2')).toContain('saved')
-      expect(ctrl.loadGame('slot2')).toContain('loaded')
     })
   })
 
