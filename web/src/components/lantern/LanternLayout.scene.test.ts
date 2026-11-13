@@ -381,10 +381,10 @@ describe('LanternLayout: change of scene', () => {
     expect(story()).not.toContain('The dark lets go of you')
   })
 
-  it('brings the cottage up at once on Enter during the waking', async () => {
+  /** Answer the voice, unnarrated, and wait until the waking is told in the dark. */
+  async function wakingInTheDark(): Promise<ReturnType<typeof useGameStore>> {
     const game = await dream()
     useSettingsStore().narrationOn = false
-    const scene = useSceneStore()
     await answerVoice(game)
     const voice = useStageSpeechStore().visible.at(-1)!
     vi.advanceTimersByTime(readingPauseMs(voice.markup))
@@ -392,11 +392,51 @@ describe('LanternLayout: change of scene', () => {
     await w.get('img.lq-loading').trigger('load')
     vi.advanceTimersByTime(SCENE_HALF_MS)
     await w.vm.$nextTick()
-    expect(scene.interlude).not.toBeNull()
+    expect(useSceneStore().interlude).not.toBeNull()
+    return game
+  }
+
+  /** The waking is let go: it fades in the dark, and only then does the cottage rise. */
+  async function wakingFadesThenCottageRises(
+    game: ReturnType<typeof useGameStore>,
+  ): Promise<void> {
+    const scene = useSceneStore()
+    expect(scene.interlude).toBeNull()
+    expect(scene.phase).toBe('dark')
+    vi.advanceTimersByTime(INTERLUDE_FADE_MS - 1)
+    await w.vm.$nextTick()
+    expect(scene.phase).toBe('dark')
+    vi.advanceTimersByTime(1)
+    await w.vm.$nextTick()
+    expect(scene.phase).toBe('in')
+    vi.advanceTimersByTime(INTERLUDE_RISE_MS)
+    await w.vm.$nextTick()
+    expect(scene.phase).toBe('idle')
+    expect(game.roomName).toBe("Elior's Cottage")
+  }
+
+  it('on Enter during the waking lets it fade in the dark before the cottage rises', async () => {
+    const game = await wakingInTheDark()
+    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }))
+    await w.vm.$nextTick()
+    await wakingFadesThenCottageRises(game)
+  })
+
+  it('on a click during the waking lets it fade in the dark before the cottage rises', async () => {
+    const game = await wakingInTheDark()
+    await w.get('.lq-stage-picture').trigger('click')
+    await wakingFadesThenCottageRises(game)
+  })
+
+  it('brings the cottage up at once on a second Enter, once the waking is let go', async () => {
+    const game = await wakingInTheDark()
+    const scene = useSceneStore()
+    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }))
+    await w.vm.$nextTick()
+    expect(scene.phase).toBe('dark')
     document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }))
     await w.vm.$nextTick()
     expect(scene.phase).toBe('idle')
-    expect(scene.interlude).toBeNull()
     expect(game.roomName).toBe("Elior's Cottage")
   })
 
@@ -580,6 +620,41 @@ describe('LanternLayout: change of scene', () => {
     expect(game.roomName).toBe("Elior's Cottage")
     expect(voices.length).toBe(spoken + 2)
     // The rest of the turn (its quest news rings) is not left to run after the test.
+    narration.skipAll()
+    await vi.runAllTimersAsync()
+  })
+
+  it('narrated, Enter during the waking stops its voice; it fades in the dark and the cottage rises once', async () => {
+    const game = await dream()
+    const scene = useSceneStore()
+    const narration = useNarrationStore()
+    const voices = recordEverything()
+    const turn = await answerVoice(game)
+    for (let i = 0; i < 10 && !narration.atSceneChange(turn.id); i++) {
+      voices.at(-1)?.onended?.()
+      await vi.advanceTimersByTimeAsync(400)
+    }
+    await vi.advanceTimersByTimeAsync(3 * SCENE_HALF_MS)
+    await w.vm.$nextTick()
+    expect(scene.interlude?.unit).toBe(turn.waking)
+    const begin = vi.spyOn(scene, 'begin')
+    const spoken = voices.length
+    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }))
+    await w.vm.$nextTick()
+    // The waking's voice is cut, and nothing after it is read in the dark.
+    expect(voices.length).toBe(spoken)
+    expect(narration.revealed(turn.id, turn.waking + 1)).toBe(false)
+    expect(scene.interlude).toBeNull()
+    expect(scene.phase).toBe('dark')
+    await vi.advanceTimersByTimeAsync(INTERLUDE_FADE_MS - 1)
+    expect(scene.phase).toBe('dark')
+    await vi.advanceTimersByTimeAsync(1)
+    expect(scene.phase).toBe('in')
+    await vi.advanceTimersByTimeAsync(INTERLUDE_RISE_MS)
+    await w.vm.$nextTick()
+    expect(scene.turn).toBeNull()
+    expect(begin).not.toHaveBeenCalled()
+    expect(game.roomName).toBe("Elior's Cottage")
     narration.skipAll()
     await vi.runAllTimersAsync()
   })

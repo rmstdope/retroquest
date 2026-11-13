@@ -35,6 +35,12 @@ export interface PresentationStage {
 export interface LanternPresentation {
   /** Bring a change of scene (running, or a talk's still to come) up at once: a press in a held panel. */
   bringSceneUp(): void
+  /**
+   * A press on the stage (a click, Enter) during a change of scene: while an
+   * interlude is told in the dark it is let go (its words fade, then the new
+   * picture rises); otherwise the new room comes up at once.
+   */
+  continueScene(): void
   /** Show the rest of a held turn at once (a press in a held panel); true when something was held. */
   catchUpPanels(): boolean
   /** Leave the chapter page: its voice stops first, then the game goes on (its button, Escape). */
@@ -409,6 +415,17 @@ export function useLanternPresentation(
     },
   )
 
+  /** A press during a change of scene: an interlude in the dark is let go, else the new room comes up now. */
+  function continueScene(): void {
+    const told = scene.interlude
+    if (!told) return scene.skip()
+    clearTimeout(interludeTimer)
+    // The narrator's voice on the interlude is cut; what comes after it waits
+    // for the new picture, as it would have.
+    if (interludeNarrated) narration.skipTo(told.unit + 1)
+    scene.endInterlude()
+  }
+
   /** A change of scene running, or a talk's still to come, is brought up now. */
   function bringSceneUp(): void {
     speech.changeSceneNow()
@@ -421,5 +438,10 @@ export function useLanternPresentation(
     game.continueChapter()
   }
 
-  return { bringSceneUp, catchUpPanels: panelHold.catchUp, continueChapter }
+  return {
+    bringSceneUp,
+    continueScene,
+    catchUpPanels: panelHold.catchUp,
+    continueChapter,
+  }
 }

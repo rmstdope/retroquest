@@ -397,8 +397,8 @@ function goWay(direction: string): void {
 function onPicturePress(event: MouseEvent): void {
   if (!(event.target instanceof Element)) return
   if (!event.target.closest('.lq-stage-picture')) return
-  // During a change of scene a click brings the new room up at once.
-  if (scene.turn !== null) return scene.skip()
+  // During a change of scene a click lets the words in the dark go, or brings the new room up at once.
+  if (scene.turn !== null) return presentation.continueScene()
   // A talk that has moved Elior still shows the old room: a press brings the new one up first, and never walks from it.
   if (speech.sceneChange) return speech.changeSceneNow()
   // A way out goes at once, as on the Map; a closed one gets the game's own answer.
@@ -1076,7 +1076,7 @@ function onNarrationKey(event: KeyboardEvent): void {
   }
   switch (decision.action) {
     case 'skip-scene':
-      scene.skip()
+      presentation.continueScene()
       break
     case 'hide-words':
       setWordsHidden(true)
@@ -1635,7 +1635,7 @@ function onAreaPress(
 function onBeltPress(picture: BeltPicture, at: { x: number; y: number }): void {
   const box = stageEl.value?.getBoundingClientRect()
   if (!box || !staged.value) return
-  if (scene.turn !== null) return scene.skip()
+  if (scene.turn !== null) return presentation.continueScene()
   if (speech.sceneChange) return speech.changeSceneNow()
   if (telling.value) {
     speech.revealAll()

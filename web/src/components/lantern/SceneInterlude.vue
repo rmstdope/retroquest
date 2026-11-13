@@ -9,8 +9,9 @@ import { useReadAlong } from '@/composables/useReadAlong'
  * (`useSceneStore`'s interlude): light serif with the soft dark glow of words
  * on the picture, the spoken word lit while the narrator reads it, and the
  * hint under it. It fades in as the dark is reached and slowly out once it
- * is read, still in the dark, before the new picture rises. Presses pass through to the stage, where a click (or Enter)
- * brings the new room up at once. The paragraph is also in the story, which
+ * is read, still in the dark, before the new picture rises. Presses pass
+ * through to the stage, where a click (or Enter) ends it the same way: its
+ * words fade, then the new room rises. The paragraph is also in the story, which
  * keeps it; the layer is a polite live region for screen readers.
  */
 const props = defineProps<{ phone?: boolean }>()
