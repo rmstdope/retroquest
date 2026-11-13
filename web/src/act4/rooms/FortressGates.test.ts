@@ -106,6 +106,12 @@ describe('FortressGates', () => {
         'Your light falls on the guardians and slides off them.',
       )
       expect(game.state.getStoryFlag(FLAG_ACT4_BARRIERS_DISABLED)).toBe(false)
+      expect(
+        game.state.getStoryFlag(FLAG_ACT4_SHATTERED_WARD_GUARDIANS_COMPLETED),
+      ).toBe(false)
+      expect(
+        executeCommands(game, ['cast light on ward stones']),
+      ).not.toContain('You must')
     })
 
     it('answers light on a wrong stone and can be repeated', () => {
@@ -125,12 +131,18 @@ describe('FortressGates', () => {
       ).toBe(false)
     })
 
-    it('throws the player back at the barrier', () => {
+    it('throws the player back at the barrier and starts the guardians quest', () => {
       const game = createGame()
-      expect(executeCommands(game, ['go north'])).toContain(
+      const throwBack =
         'The violet wall throws you back. It swells and fades in time with ' +
-          'the ward stones.',
+        'the ward stones.'
+      expect(executeCommands(game, ['go north'])).toContain(throwBack)
+      expect(game.state.currentRoom.name).toBe('Fortress Gates')
+      expect(game.state.activatedQuests.map((quest) => quest.name)).toContain(
+        'Shattered Ward Guardians',
       )
+      expect(executeCommands(game, ['go east'])).toContain(throwBack)
+      expect(game.state.currentRoom.name).toBe('Fortress Gates')
     })
   })
 

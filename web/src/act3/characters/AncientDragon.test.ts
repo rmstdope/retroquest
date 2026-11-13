@@ -166,8 +166,12 @@ describe('AncientDragon', () => {
         ) &&
         gameState.getStoryFlag(FLAG_ACT3_DRAGON_OATH_SPOKEN) &&
         hasScale(room)
+      try {
+        expectMarkupWellFormed(result)
+      } catch {
+        failures.push(`${words} (markup)`)
+      }
       if (!ok) failures.push(words)
-      expectMarkupWellFormed(result)
     }
     expect(failures).toEqual([])
   })

@@ -10,6 +10,10 @@ function createState(): GameState {
 }
 
 describe('TeleportationFocus', () => {
+  it('cannot be carried', () => {
+    expect(new TeleportationFocus().canBeCarried).toBe(false)
+  })
+
   it('exposes a clear, non-empty name', () => {
     new Game([new Act3()])
 

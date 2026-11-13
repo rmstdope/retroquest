@@ -16,6 +16,10 @@ function setup(): { game: Game; inscription: CharredInscription } {
 }
 
 describe('CharredInscription', () => {
+  it('cannot be carried', () => {
+    expect(setup().inscription.canBeCarried).toBe(false)
+  })
+
   it('sets the story flag when examined', () => {
     const { game, inscription } = setup()
     expect(game.state.getStoryFlag(FLAG_ACT3_CHARRED_INSCRIPTION_READ)).toBe(

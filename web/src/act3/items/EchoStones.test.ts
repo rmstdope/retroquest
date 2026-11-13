@@ -16,6 +16,10 @@ function createState(): GameState {
 }
 
 describe('EchoStones', () => {
+  it('cannot be carried', () => {
+    expect(new EchoStones().canBeCarried).toBe(false)
+  })
+
   it('is blessed by the bless spell', () => {
     const stones = new EchoStones()
     const gs = createState()
