@@ -3,7 +3,7 @@
  * under 600 pixels shows only a turn page while upright and the stage made
  * small on its side; a tablet upright keeps the tall stage.
  */
-import { test, expect, type Page } from '@playwright/test'
+import { test, expect, type Page } from './fixtures'
 
 /** A touch screen, as a phone or a tablet reports itself. */
 test.use({ hasTouch: true, isMobile: true })

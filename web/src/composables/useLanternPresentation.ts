@@ -1,6 +1,5 @@
 import { onUnmounted, watch } from 'vue'
 import { useGameStore, type Turn } from '@/stores/useGameStore'
-import { useSettingsStore } from '@/stores/useSettingsStore'
 import { useNarrationStore } from '@/stores/useNarrationStore'
 import { useArrivalStore } from '@/stores/useArrivalStore'
 import { useSceneStore } from '@/stores/useSceneStore'
@@ -84,7 +83,6 @@ export function useLanternPresentation(
   stage: PresentationStage,
 ): LanternPresentation {
   const game = useGameStore()
-  const settings = useSettingsStore()
   const narration = useNarrationStore()
   const arrival = useArrivalStore()
   const scene = useSceneStore()
@@ -300,14 +298,14 @@ export function useLanternPresentation(
   onUnmounted(() => game.setPanelHold(false))
 
   // The act-complete page waits while the act's last turn is read aloud (a
-  // pop-up would cut the voice off), then opens; with nothing to read, at once.
-  game.setActEndGate(
-    (turn) =>
-      !!turn.narrate &&
-      settings.narrationOn &&
-      !!game.narrationFolder &&
-      !!narration.manifestFor(game.narrationFolder),
-  )
+  // pop-up would cut the voice off), then opens; with nothing to read (no
+  // recordings for the act), at once.
+  game.setActEndGate((turn) => {
+    const manifest = game.narrationFolder
+      ? narration.manifestFor(game.narrationFolder)
+      : null
+    return !!turn.narrate && !!manifest && Object.keys(manifest).length > 0
+  })
   watch(
     () => [game.actEndPending, narration.isNarrating] as const,
     ([pending, narrating]) => {
@@ -329,17 +327,6 @@ export function useLanternPresentation(
   watch(() => game.gameNumber, narration.resetGame)
   // A new game forgets which turns told their news in the middle.
   watch(() => game.gameNumber, arrival.reset)
-
-  // Switching narration off in Settings ends the turn being spoken.
-  watch(
-    () => settings.narrationOn,
-    (on) => {
-      if (!on) {
-        narration.skipAll()
-        arrival.clear()
-      }
-    },
-  )
 
   // A chapter page is read aloud when its act has recordings; one page
   // following another cuts in on it, and closing the last one stops the voice;

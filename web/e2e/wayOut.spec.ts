@@ -3,7 +3,7 @@
  * now is plain painting, but pressing where the studio placed it gets the
  * game's own answer, as the typed direction does, and Elior stays.
  */
-import { test, expect, type Page } from '@playwright/test'
+import { test, expect, type Page } from './fixtures'
 
 /** A one-pixel transparent PNG, standing for a picture the studio made. */
 const PIXEL = Buffer.from(

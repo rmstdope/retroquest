@@ -49,11 +49,8 @@ describe('useSettingsStore', () => {
     expect(DEFAULT_SETTINGS).toEqual({
       theme: 'device',
       textSize: 'medium',
-      musicOn: true,
       musicVolume: 100,
-      effectsOn: true,
       effectsVolume: 100,
-      narrationOn: true,
       narrationVolume: 100,
       startMode: 'actions',
       reduceMotion: 'device',
@@ -61,16 +58,47 @@ describe('useSettingsStore', () => {
     })
   })
 
-  it('keeps an existing mute choice from the old music setting', () => {
+  it('turns the volume to 0 for a mute choice from the old music setting', () => {
     installLocalStorage({ [LEGACY_MUTED_KEY]: 'true' })
 
-    expect(useSettingsStore().musicOn).toBe(false)
+    expect(useSettingsStore().musicVolume).toBe(0)
   })
 
-  it('keeps an existing sound-effects mute choice', () => {
+  it('turns the volume to 0 for an old sound-effects mute choice', () => {
     installLocalStorage({ [LEGACY_SFX_MUTED_KEY]: 'true' })
 
-    expect(useSettingsStore().effectsOn).toBe(false)
+    expect(useSettingsStore().effectsVolume).toBe(0)
+  })
+
+  it('loads a sound saved as switched off at volume 0, and a sound saved as on at its volume', () => {
+    const { store } = installLocalStorage({
+      [SETTINGS_STORAGE_KEY]: JSON.stringify({
+        musicOn: false,
+        musicVolume: 60,
+        effectsOn: true,
+        effectsVolume: 40,
+        narrationOn: false,
+        narrationVolume: 70,
+      }),
+    })
+    const settings = useSettingsStore()
+
+    expect(settings.musicVolume).toBe(0)
+    expect(settings.effectsVolume).toBe(40)
+    expect(settings.narrationVolume).toBe(0)
+    expect(settings.$state).toEqual({
+      ...DEFAULT_SETTINGS,
+      musicVolume: 0,
+      effectsVolume: 40,
+      narrationVolume: 0,
+    })
+    return nextTick().then(() => {
+      settings.theme = 'dark'
+      return nextTick().then(() => {
+        expect(saved(store)).not.toHaveProperty('musicOn')
+        expect(saved(store)).not.toHaveProperty('narrationOn')
+      })
+    })
   })
 
   it('loads valid stored settings', () => {
@@ -78,9 +106,7 @@ describe('useSettingsStore', () => {
       [SETTINGS_STORAGE_KEY]: JSON.stringify({
         theme: 'light',
         textSize: 'large',
-        musicOn: false,
         musicVolume: 25,
-        effectsOn: false,
         effectsVolume: 0,
         startMode: 'type',
         reduceMotion: 'on',
@@ -91,9 +117,7 @@ describe('useSettingsStore', () => {
 
     expect(settings.theme).toBe('light')
     expect(settings.textSize).toBe('large')
-    expect(settings.musicOn).toBe(false)
     expect(settings.musicVolume).toBe(25)
-    expect(settings.effectsOn).toBe(false)
     expect(settings.effectsVolume).toBe(0)
     expect(settings.startMode).toBe('type')
     expect(settings.reduceMotion).toBe('on')
@@ -105,7 +129,6 @@ describe('useSettingsStore', () => {
       [SETTINGS_STORAGE_KEY]: JSON.stringify({
         theme: 'neon',
         textSize: 'huge',
-        musicOn: 'yes',
         musicVolume: 140,
         effectsVolume: -5,
         startMode: 'voice',
@@ -117,7 +140,6 @@ describe('useSettingsStore', () => {
 
     expect(settings.theme).toBe('device')
     expect(settings.textSize).toBe('medium')
-    expect(settings.musicOn).toBe(true)
     expect(settings.musicVolume).toBe(100)
     expect(settings.effectsVolume).toBe(0)
     expect(settings.startMode).toBe('actions')
@@ -187,22 +209,17 @@ describe('useSettingsStore', () => {
     expect(saved(store)).toEqual(DEFAULT_SETTINGS)
   })
 
-  it('stores the narration switch and volume, and falls back on bad values', () => {
+  it('stores the narration volume, and falls back on bad values', () => {
     const { store } = installLocalStorage({
-      [SETTINGS_STORAGE_KEY]: JSON.stringify({
-        narrationOn: false,
-        narrationVolume: 140,
-      }),
+      [SETTINGS_STORAGE_KEY]: JSON.stringify({ narrationVolume: 140 }),
     })
     const settings = useSettingsStore()
-    expect(settings.narrationOn).toBe(false)
     expect(settings.narrationVolume).toBe(100)
 
     settings.narrationVolume = 35
     return nextTick().then(() => {
       expect(saved(store).narrationVolume).toBe(35)
       settings.resetToDefaults()
-      expect(settings.narrationOn).toBe(true)
       expect(settings.narrationVolume).toBe(100)
     })
   })

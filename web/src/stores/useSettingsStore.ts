@@ -17,14 +17,10 @@ export type ReduceMotionSetting = 'device' | 'on' | 'off'
 export interface Settings {
   theme: ThemeSetting
   textSize: LanternTextSize
-  musicOn: boolean
   /** 0–100 */
   musicVolume: number
-  effectsOn: boolean
   /** 0–100 */
   effectsVolume: number
-  /** Whether the story and the characters are read aloud. */
-  narrationOn: boolean
   /** 0–100 */
   narrationVolume: number
   startMode: StartMode
@@ -44,13 +40,10 @@ export const LEGACY_SFX_MUTED_KEY = 'retroquest_sfx_muted'
 export const DEFAULT_SETTINGS: Readonly<Settings> = {
   theme: 'device',
   textSize: 'medium',
-  musicOn: true,
   // Full volume until the Settings dialog (step 22) lets players adjust it,
   // so current players hear no change.
   musicVolume: 100,
-  effectsOn: true,
   effectsVolume: 100,
-  narrationOn: true,
   narrationVolume: 100,
   startMode: 'actions',
   reduceMotion: 'device',
@@ -82,13 +75,17 @@ function volume(value: unknown, fallback: number): number {
   return Math.min(100, Math.max(0, Math.round(value)))
 }
 
+/**
+ * Sound has no on/off switch any more, only a volume. A sound an older
+ * version had switched off comes back at volume 0, so its silence is kept.
+ */
+function silencedIf(wasSwitchedOff: boolean, level: number): number {
+  return wasSwitchedOff ? 0 : level
+}
+
 /** Read saved settings, validating each field against its default. */
 function loadSettings(): Settings {
-  const defaults: Settings = {
-    ...DEFAULT_SETTINGS,
-    musicOn: readStorage(LEGACY_MUTED_KEY) !== 'true',
-    effectsOn: readStorage(LEGACY_SFX_MUTED_KEY) !== 'true',
-  }
+  const defaults: Settings = { ...DEFAULT_SETTINGS }
   let stored: Record<string, unknown> = {}
   try {
     const parsed: unknown = JSON.parse(
@@ -104,12 +101,19 @@ function loadSettings(): Settings {
   return {
     theme: oneOf(stored.theme, THEMES, defaults.theme),
     textSize: oneOf(stored.textSize, sizes, defaults.textSize),
-    musicOn: bool(stored.musicOn, defaults.musicOn),
-    musicVolume: volume(stored.musicVolume, defaults.musicVolume),
-    effectsOn: bool(stored.effectsOn, defaults.effectsOn),
-    effectsVolume: volume(stored.effectsVolume, defaults.effectsVolume),
-    narrationOn: bool(stored.narrationOn, defaults.narrationOn),
-    narrationVolume: volume(stored.narrationVolume, defaults.narrationVolume),
+    musicVolume: silencedIf(
+      readStorage(LEGACY_MUTED_KEY) === 'true' || stored.musicOn === false,
+      volume(stored.musicVolume, defaults.musicVolume),
+    ),
+    effectsVolume: silencedIf(
+      readStorage(LEGACY_SFX_MUTED_KEY) === 'true' ||
+        stored.effectsOn === false,
+      volume(stored.effectsVolume, defaults.effectsVolume),
+    ),
+    narrationVolume: silencedIf(
+      stored.narrationOn === false,
+      volume(stored.narrationVolume, defaults.narrationVolume),
+    ),
     startMode: oneOf(stored.startMode, START_MODES, defaults.startMode),
     reduceMotion: oneOf(
       stored.reduceMotion,
@@ -124,11 +128,8 @@ export const useSettingsStore = defineStore('settings', () => {
   const initial = loadSettings()
   const theme = ref(initial.theme)
   const textSize = ref(initial.textSize)
-  const musicOn = ref(initial.musicOn)
   const musicVolume = ref(initial.musicVolume)
-  const effectsOn = ref(initial.effectsOn)
   const effectsVolume = ref(initial.effectsVolume)
-  const narrationOn = ref(initial.narrationOn)
   const narrationVolume = ref(initial.narrationVolume)
   const startMode = ref(initial.startMode)
   const reduceMotion = ref(initial.reduceMotion)
@@ -138,11 +139,8 @@ export const useSettingsStore = defineStore('settings', () => {
     return {
       theme: theme.value,
       textSize: textSize.value,
-      musicOn: musicOn.value,
       musicVolume: musicVolume.value,
-      effectsOn: effectsOn.value,
       effectsVolume: effectsVolume.value,
-      narrationOn: narrationOn.value,
       narrationVolume: narrationVolume.value,
       startMode: startMode.value,
       reduceMotion: reduceMotion.value,
@@ -161,11 +159,8 @@ export const useSettingsStore = defineStore('settings', () => {
   function resetToDefaults(): void {
     theme.value = DEFAULT_SETTINGS.theme
     textSize.value = DEFAULT_SETTINGS.textSize
-    musicOn.value = DEFAULT_SETTINGS.musicOn
     musicVolume.value = DEFAULT_SETTINGS.musicVolume
-    effectsOn.value = DEFAULT_SETTINGS.effectsOn
     effectsVolume.value = DEFAULT_SETTINGS.effectsVolume
-    narrationOn.value = DEFAULT_SETTINGS.narrationOn
     narrationVolume.value = DEFAULT_SETTINGS.narrationVolume
     startMode.value = DEFAULT_SETTINGS.startMode
     reduceMotion.value = DEFAULT_SETTINGS.reduceMotion
@@ -175,11 +170,8 @@ export const useSettingsStore = defineStore('settings', () => {
   return {
     theme,
     textSize,
-    musicOn,
     musicVolume,
-    effectsOn,
     effectsVolume,
-    narrationOn,
     narrationVolume,
     startMode,
     reduceMotion,

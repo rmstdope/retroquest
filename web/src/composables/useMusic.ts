@@ -91,7 +91,6 @@ export function useMusic(
   ambienceFor: AmbienceSource = NO_AMBIENCE,
 ) {
   const settings = useSettingsStore()
-  const musicMuted = computed(() => !settings.musicOn)
   const currentMusicFile = ref('')
   const musicInfo = ref('')
 
@@ -226,8 +225,7 @@ export function useMusic(
 
   /** An element-based voice for `file`, reusing the spare element if any. */
   function htmlVoiceFor(file: string): MusicVoice {
-    const crossfade =
-      currentMusicFile.value !== '' && !active.paused && !musicMuted.value
+    const crossfade = currentMusicFile.value !== '' && !active.paused
     // With nothing audible to fade out, the element in hand is loaded again.
     const voice =
       !crossfade && active instanceof HtmlMusicVoice ? active : takeSpare()
@@ -245,10 +243,8 @@ export function useMusic(
     fadeInMs: number = 0,
     through: boolean = false,
   ): void {
-    const crossfade =
-      currentMusicFile.value !== '' && !active.paused && !musicMuted.value
-    const fadeIn =
-      fadeInMs > 0 && !crossfade && !comingBack && !musicMuted.value
+    const crossfade = currentMusicFile.value !== '' && !active.paused
+    const fadeIn = fadeInMs > 0 && !crossfade && !comingBack
     if (crossfade) {
       fadeOutActive(through ? MUSIC_THROUGH_MS / 2 : MUSIC_CROSSFADE_MS)
       if (!comingBack) next.volume = 0
@@ -278,9 +274,7 @@ export function useMusic(
         fadeTo(targetVolume.value, MUSIC_THROUGH_MS / 2)
       }, MUSIC_THROUGH_MS / 2)
     } else if (crossfade) fadeTo(targetVolume.value, MUSIC_CROSSFADE_MS)
-    if (!musicMuted.value) {
-      playActive()
-    }
+    playActive()
   }
 
   /** The fade-in still to run, in ms; 0 when none waits for the sound. */
@@ -386,20 +380,6 @@ export function useMusic(
     outgoing.push(entry)
   }
 
-  // Sync flush so muting takes effect immediately, wherever it was changed.
-  watch(
-    () => settings.musicOn,
-    (on) => {
-      if (!on) {
-        stopCrossfade()
-        active.pause()
-      } else if (currentMusicFile.value) {
-        playActive()
-      }
-    },
-    { flush: 'sync' },
-  )
-
   // The volume the music should be at: the setting, dipped under a voice.
   const targetVolume = computed(
     () => (settings.musicVolume / 100) * (narrating.value ? MUSIC_DUCK : 1),
@@ -437,16 +417,12 @@ export function useMusic(
     },
   )
 
-  function toggleMute(): void {
-    settings.musicOn = !settings.musicOn
-  }
-
   function ensureMusicStarted(): void {
     // Also while the first music is still decoding: this input is the
     // gesture that lets the context run.
     const context = sharedAudioContext()
     if (context && context.state !== 'running') void context.resume()
-    if (!currentMusicFile.value || musicMuted.value) return
+    if (!currentMusicFile.value) return
     if (active.paused) playActive()
   }
 
@@ -485,12 +461,10 @@ export function useMusic(
   }
 
   return {
-    musicMuted,
     currentMusicFile,
     musicInfo,
     loadTrack,
     stopCrossfade,
-    toggleMute,
     ensureMusicStarted,
     buildAttributionHtml,
   }

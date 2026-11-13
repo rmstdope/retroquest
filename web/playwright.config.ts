@@ -35,7 +35,7 @@ function parsePort(raw: string | undefined): number {
   return port
 }
 
-/** Browser storage for a project: narration is off unless a spec turns it on. */
+/** Browser storage for a project: narration is at volume 0 unless a spec turns it up. */
 function storageFor(origin: string): {
   cookies: []
   origins: { origin: string; localStorage: { name: string; value: string }[] }[]
@@ -48,7 +48,7 @@ function storageFor(origin: string): {
         localStorage: [
           {
             name: 'retroquest_settings',
-            value: JSON.stringify({ narrationOn: false }),
+            value: JSON.stringify({ narrationVolume: 0 }),
           },
         ],
       },

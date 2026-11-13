@@ -7,7 +7,6 @@ import { actFolder } from '@/lantern/narrationManifest'
 import { POPUP_NARRATION_ID } from '@/lantern/narrationUnits'
 import { useReadAlong } from '@/composables/useReadAlong'
 import { useNarrationStore } from '@/stores/useNarrationStore'
-import { useSettingsStore } from '@/stores/useSettingsStore'
 
 /**
  * A full-screen chapter page between acts: the intro opens an act (title,
@@ -31,7 +30,6 @@ const emit = defineEmits<{ continue: [] }>()
 const button = ref<HTMLButtonElement | null>(null)
 
 const narration = useNarrationStore()
-const settings = useSettingsStore()
 const root = ref<HTMLElement | null>(null)
 const { shown, isSpeaking, html } = useReadAlong(() => POPUP_NARRATION_ID, root)
 const folder = computed(() => actFolder(props.chapter.act))
@@ -66,10 +64,7 @@ function shownMarkup(block: TurnBlock): string {
   return `[${block.kind}]${block.markup}[/${block.kind}]`
 }
 const held = computed(
-  () =>
-    settings.narrationOn &&
-    !!folder.value &&
-    narration.manifestFor(folder.value) === null,
+  () => !!folder.value && narration.manifestFor(folder.value) === null,
 )
 /**
  * Shrink each centred closing block to its widest line of text, so the

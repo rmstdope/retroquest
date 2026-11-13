@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test'
+import { test, expect } from './fixtures'
 
 /** A one-pixel transparent PNG, standing for a picture or a patch the studio made. */
 const PIXEL = Buffer.from(

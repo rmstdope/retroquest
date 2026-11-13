@@ -4,7 +4,7 @@
  * Escape do the same, and on a small sideways phone every name stays inside
  * the picture.
  */
-import { test, expect, type Page } from '@playwright/test'
+import { test, expect, type Page } from './fixtures'
 
 /** A placed area, in fractions of the picture. */
 interface AreaFractions {

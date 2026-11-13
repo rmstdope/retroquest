@@ -1,4 +1,4 @@
-import { test, expect, type Page } from '@playwright/test'
+import { test, expect, type Page } from './fixtures'
 
 /**
  * Answering the voice ends the dream (rq-uqp8): the answer is told the way
@@ -10,10 +10,10 @@ import { test, expect, type Page } from '@playwright/test'
  * far.
  */
 
-/** Open the game on a laptop with narration off, past the dream's own arrival. */
+/** Open the game on a laptop with narration at volume 0, past the dream's own arrival. */
 async function startInDream(page: Page): Promise<void> {
   await page.addInitScript(() =>
-    localStorage.setItem('retroquest_settings', '{"narrationOn":false}'),
+    localStorage.setItem('retroquest_settings', '{"narrationVolume":0}'),
   )
   await page.setViewportSize({ width: 1440, height: 800 })
   await page.goto('/')

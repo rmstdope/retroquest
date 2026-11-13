@@ -3,7 +3,7 @@
  * here is a Tab stop in the newest turn, Enter opens its menu, Escape closes it
  * and focus is back on the same name.
  */
-import { test, expect, type Page } from '@playwright/test'
+import { test, expect, type Page } from './fixtures'
 
 /** Let the browser report the scroll that focusing a name causes. */
 async function settle(page: Page): Promise<void> {
@@ -24,12 +24,12 @@ async function clearArrival(page: Page): Promise<void> {
 }
 
 /**
- * Start a new game (narration off: the voice scrolling the story would close
+ * Start a new game (narration at volume 0: the voice scrolling the story would close
  * an open menu) and close the opening chapter page.
  */
 async function start(page: Page): Promise<void> {
   await page.addInitScript(() =>
-    localStorage.setItem('retroquest_settings', '{"narrationOn":false}'),
+    localStorage.setItem('retroquest_settings', '{"narrationVolume":0}'),
   )
   await page.goto('/')
   await page.getByRole('button', { name: 'Start', exact: true }).click()

@@ -1916,7 +1916,6 @@ describe('LanternLayout', () => {
       setActivePinia(createPinia())
       vi.spyOn(useGameStore(), 'getQuickSave').mockReturnValue(null)
       vi.spyOn(useGameStore(), 'getNamedSaves').mockReturnValue([])
-      useSettingsStore().narrationOn = true
     })
     afterEach(() => {
       vi.useRealTimers()
@@ -2016,18 +2015,27 @@ describe('LanternLayout', () => {
       const held = gate.mock.calls.at(-1)?.[0]
       expect(held?.(narratedTurn(1))).toBe(true)
       expect(held?.(narratedTurn(2, { narrate: undefined }))).toBe(false)
-      useSettingsStore().narrationOn = false
-      expect(held?.(narratedTurn(3))).toBe(false)
+      useSettingsStore().narrationVolume = 0
+      expect(held?.(narratedTurn(3))).toBe(true)
     })
 
-    it('shows a restored or opening turn, or one with narration off, at once', async () => {
+    it('does not hold the act-complete page for an act with no recordings', async () => {
+      const gate = vi.spyOn(useGameStore(), 'setActEndGate')
+      await ready()
+      vi.spyOn(useNarrationStore(), 'manifestFor').mockReturnValue({})
+      const held = gate.mock.calls.at(-1)?.[0]
+      expect(held?.(narratedTurn(1))).toBe(false)
+    })
+
+    it('shows a restored or opening turn at once, and tells a turn at narration volume 0 line by line', async () => {
       const w = await ready()
       await say(narratedTurn(1, { narrate: undefined }))
       expect(texts(w)).toEqual([FIRST, SECOND])
 
-      useSettingsStore().narrationOn = false
+      useSettingsStore().narrationVolume = 0
       await say(narratedTurn(2))
-      expect(w.findAll('.lq-block-text')).toHaveLength(4)
+      expect(useNarrationStore().isNarrating).toBe(true)
+      expect(w.findAll('.lq-block-text')).toHaveLength(3)
     })
 
     it('leaves a turn without recordings, or a turn behind a pop-up, silent', async () => {
@@ -2355,12 +2363,12 @@ describe('LanternLayout', () => {
         expect(useNarrationStore().isNarrating).toBe(false)
       })
 
-      it('shows a chapter page whole when narration is off', async () => {
+      it('tells a chapter page the same way at narration volume 0', async () => {
         const w = await ready()
-        useSettingsStore().narrationOn = false
+        useSettingsStore().narrationVolume = 0
         await openChapter(w)
-        expect(useNarrationStore().isNarrating).toBe(false)
-        expect(w.findAll('.lq-chapter-block')).toHaveLength(1)
+        expect(useNarrationStore().isNarrating).toBe(true)
+        expect(w.get('.lq-chapter-title').classes()).toContain('lq-speaking')
       })
 
       it('does not stall: a voice that never plays still lets the page move on', async () => {
@@ -2564,12 +2572,12 @@ describe('LanternLayout', () => {
         expect(w.find('button.lq-more-below').exists()).toBe(false)
       })
 
-      it('does not hold the story when nothing is narrated', async () => {
+      it('holds the story at narration volume 0 as with a voice', async () => {
         const w = await ready()
-        useSettingsStore().narrationOn = false
+        useSettingsStore().narrationVolume = 0
         await say(narratedTurn(1))
-        expect(wheel(w).defaultPrevented).toBe(false)
-        expect(w.find('.lq-narration-hint').exists()).toBe(false)
+        expect(useNarrationStore().isNarrating).toBe(true)
+        expect(w.find('.lq-narration-hint').exists()).toBe(true)
       })
     })
 
@@ -2639,14 +2647,13 @@ describe('LanternLayout', () => {
         expect(hint(w)).toBe('')
       })
 
-      it('is not shown with narration off, and switching it off ends the turn', async () => {
+      it('stays up when the narration volume is turned to 0 during the turn', async () => {
         const w = await ready()
         await say(narratedTurn(1))
-        useSettingsStore().narrationOn = false
+        useSettingsStore().narrationVolume = 0
         await vi.advanceTimersByTimeAsync(0)
-        expect(hint(w)).toBe('')
-        expect(useNarrationStore().isNarrating).toBe(false)
-        expect(texts(w)).toEqual([FIRST, SECOND])
+        expect(hint(w)).toBe(TOUCH)
+        expect(useNarrationStore().isNarrating).toBe(true)
       })
 
       it('counts again in a new game', async () => {
@@ -2689,7 +2696,7 @@ describe('LanternLayout', () => {
       expect(text).toContain(
         'Narration: tap the story or press Space to hurry the current line; ' +
           'double-tap or press Esc to show the rest at once. Any action cuts in. ' +
-          'Turn narration off in Settings.',
+          'Set its volume, down to silent, in Settings.',
       )
       expect(text.indexOf('Available Commands:')).toBeLessThan(
         text.indexOf('Narration:'),

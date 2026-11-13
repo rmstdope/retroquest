@@ -7,10 +7,13 @@
  * making room for it must not make the story jump when the reading lets it go
  * (rq-7juz).
  */
-import { test, expect, type Page } from '@playwright/test'
+import { test, expect, type Page } from './fixtures'
 
 // Narration on, as for a new player (the config turns it off for the other specs).
-test.use({ storageState: { cookies: [], origins: [] } })
+test.use({
+  storageState: { cookies: [], origins: [] },
+  narrationRecordings: true,
+})
 
 /** Narrated clips end shortly after they start (CI has no audio device). */
 async function quickNarrationClips(page: Page): Promise<void> {

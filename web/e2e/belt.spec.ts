@@ -4,7 +4,7 @@
  * it in hand with a strip saying so, and the next press on a thing sends the
  * command typed. Cancel and Escape put it down; B goes to the belt.
  */
-import { test, expect, type Page } from '@playwright/test'
+import { test, expect, type Page } from './fixtures'
 
 /** A one-pixel transparent PNG, standing for a picture the studio made. */
 const PIXEL = Buffer.from(

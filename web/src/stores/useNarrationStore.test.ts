@@ -104,14 +104,16 @@ describe('useNarrationStore', () => {
     expect(narration.speaking(1)).toMatchObject({ unit: 2 })
   })
 
-  it('does not begin when nothing in the turn is voiced or narration is off', () => {
+  it('does not begin when nothing in the turn is voiced', () => {
     narration.begin(1, [silent, silent], 'act1')
     expect(narration.isNarrating).toBe(false)
+  })
 
-    useSettingsStore().narrationOn = false
-    narration.begin(2, [voiced()], 'act1')
-    expect(narration.isNarrating).toBe(false)
-    expect(FakeAudio.all).toHaveLength(0)
+  it('begins at volume 0 as it does with the voice audible, only silently', () => {
+    useSettingsStore().narrationVolume = 0
+    narration.begin(1, [voiced()], 'act1')
+    expect(narration.isNarrating).toBe(true)
+    expect(last().volume).toBe(0)
   })
 
   it('plays at the narration volume', () => {
@@ -278,12 +280,10 @@ describe('useNarrationStore', () => {
 
     it('does not count a turn that is not narrated', () => {
       narration.begin(1, [silent], 'act1')
-      useSettingsStore().narrationOn = false
       narration.begin(2, [voiced()], 'act1')
-      useSettingsStore().narrationOn = true
       narration.begin(3, [voiced()], 'act1')
       expect(narration.hintVisible).toBe(true)
-      expect(narration.narratedTurns).toBe(1)
+      expect(narration.narratedTurns).toBe(2)
     })
 
     it('starts counting again for a new game', async () => {
@@ -318,10 +318,10 @@ describe('useNarrationStore', () => {
       expect(narration.hintVisible).toBe(false)
     })
 
-    it('is hidden when narration is switched off mid-turn', async () => {
+    it('stays up when the volume is turned to 0 mid-turn', async () => {
       narrateTurn(1)
-      useSettingsStore().narrationOn = false
-      expect(narration.hintVisible).toBe(false)
+      useSettingsStore().narrationVolume = 0
+      expect(narration.hintVisible).toBe(true)
     })
   })
 

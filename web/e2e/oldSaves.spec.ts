@@ -5,7 +5,7 @@
  * game, a dimmed Quick load in the menu, and one plain line when `load` is
  * typed, with the game left where it was.
  */
-import { test, expect, type Page } from '@playwright/test'
+import { test, expect, type Page } from './fixtures'
 
 /** The game menu (☰) is in the phone's header. */
 const PHONE = { width: 360, height: 740 }
@@ -26,7 +26,7 @@ async function seedOldSaves(page: Page): Promise<void> {
       timestamp: '2026-10-20T19:02:00.000Z',
       data: old,
     }
-    localStorage.setItem('retroquest_settings', '{"narrationOn":false}')
+    localStorage.setItem('retroquest_settings', '{"narrationVolume":0}')
     localStorage.setItem('retroquest_save_slots', JSON.stringify(slots))
     localStorage.setItem('retroquest_save', old)
     localStorage.setItem(

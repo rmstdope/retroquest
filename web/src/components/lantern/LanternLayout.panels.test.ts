@@ -91,7 +91,6 @@ describe('LanternLayout: panels wait for the narration', () => {
     } catch {
       // No storage in this environment.
     }
-    useSettingsStore().narrationOn = true
   })
   afterEach(() => {
     wrapper?.unmount()
@@ -137,12 +136,13 @@ describe('LanternLayout: panels wait for the narration', () => {
     expect(w.get('.lq-compass').classes()).toContain('lq-flash')
   })
 
-  it('shows the new room at once when narration is off', async () => {
+  it('holds the old room until the arrival is told, also at narration volume 0', async () => {
     const w = await ready()
-    useSettingsStore().narrationOn = false
+    useSettingsStore().narrationVolume = 0
     await goNorth()
-    expect(cardName(w)).toBe('Garden')
-    expect(useGameStore().panelsHeld).toBe(false)
+    expect(useNarrationStore().isNarrating).toBe(true)
+    expect(cardName(w)).toBe('Hall')
+    expect(useGameStore().panelsHeld).toBe(true)
   })
 
   it('catches up, and does nothing else, when a held map exit is pressed', async () => {

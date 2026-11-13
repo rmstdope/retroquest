@@ -1,4 +1,3 @@
-import { computed } from 'vue'
 import { useSettingsStore } from '@/stores/useSettingsStore'
 import {
   loadChosenManifest,
@@ -38,7 +37,6 @@ export function useAudio(
   loadManifest: () => Promise<ChosenManifest> = loadChosenManifest,
 ) {
   const settings = useSettingsStore()
-  const soundMuted = computed(() => !settings.effectsOn)
 
   let spellTake: ChosenTake | null = null
   void loadManifest()
@@ -50,7 +48,6 @@ export function useAudio(
     .catch(() => {})
 
   function playUrl(url: string): void {
-    if (soundMuted.value) return
     const audio = audioFactory(url)
     audio.volume = settings.effectsVolume / 100
     audio.play().catch(() => {})
@@ -76,16 +73,9 @@ export function useAudio(
       playUrl(GENERATED_MUSIC_PATH + encodeURIComponent(spellTake.file))
   }
 
-  /** Toggle sound effects on or off (saved with the player's settings). */
-  function toggleMute(): void {
-    settings.effectsOn = !settings.effectsOn
-  }
-
   return {
-    soundMuted,
     playNewQuest,
     playQuestComplete,
     playNewSpell,
-    toggleMute,
   }
 }

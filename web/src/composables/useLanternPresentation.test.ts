@@ -156,7 +156,6 @@ describe('useLanternPresentation', () => {
       // No storage in this environment.
     }
     setActivePinia(createPinia())
-    useSettingsStore().narrationOn = true
   })
   afterEach(() => {
     wrapper?.unmount()
@@ -273,13 +272,13 @@ describe('useLanternPresentation', () => {
       expect(played).toEqual(['first.mp3'])
     })
 
-    it('switching narration off ends the turn being told', async () => {
+    it('turning the narration volume to 0 does not end the turn being told', async () => {
       await present()
       await say(narratedTurn(1))
       expect(useNarrationStore().isNarrating).toBe(true)
-      useSettingsStore().narrationOn = false
+      useSettingsStore().narrationVolume = 0
       await vi.advanceTimersByTimeAsync(0)
-      expect(useNarrationStore().isNarrating).toBe(false)
+      expect(useNarrationStore().isNarrating).toBe(true)
     })
 
     it('stops the voice when its component goes', async () => {

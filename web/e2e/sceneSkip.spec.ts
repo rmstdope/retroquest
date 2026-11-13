@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test'
+import { test, expect } from './fixtures'
 
 /**
  * Hurrying past a change of scene on the phone's picture stage (rq-dxpb): a

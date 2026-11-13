@@ -1,4 +1,4 @@
-import { test, expect, type Page } from '@playwright/test'
+import { test, expect, type Page } from './fixtures'
 import { AFTER_TELLING_PAUSE_MS } from '../src/lantern/hurryKeys'
 
 /** Open the game on a laptop and close the opening chapter page: the first room arrives. */
@@ -214,8 +214,11 @@ test.describe('the arrival told on the picture', () => {
   })
 
   test.describe('with the narrator on', () => {
-    // Narration on, as for a new player (the config turns it off elsewhere).
-    test.use({ storageState: { cookies: [], origins: [] } })
+    // Narration on, as for a new player (the config sets it to volume 0 elsewhere).
+    test.use({
+      storageState: { cookies: [], origins: [] },
+      narrationRecordings: true,
+    })
 
     test('tells the arrival of a turn played with the action buttons (rq-mfb1)', async ({
       page,
@@ -250,8 +253,11 @@ test.describe('the arrival told on the picture', () => {
   })
 
   test.describe('with the narrator reading slowly', () => {
-    // Narration on, as for a new player (the config turns it off elsewhere).
-    test.use({ storageState: { cookies: [], origins: [] } })
+    // Narration on, as for a new player (the config sets it to volume 0 elsewhere).
+    test.use({
+      storageState: { cookies: [], origins: [] },
+      narrationRecordings: true,
+    })
 
     // Clips last long enough for the Enters to land while the voice reads.
     test.beforeEach(async ({ page }) => {

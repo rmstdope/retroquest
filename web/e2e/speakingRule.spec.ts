@@ -5,7 +5,7 @@
  * when it appears. Checked on the opening chapter page, on the first room's
  * description and on a plain narrated paragraph, on desktop and on a phone.
  */
-import { test, expect, type Locator, type Page } from '@playwright/test'
+import { test, expect, type Locator, type Page } from './fixtures'
 
 /** Where the rule is, what may clip it, and where the words start. */
 interface RuleGeometry {

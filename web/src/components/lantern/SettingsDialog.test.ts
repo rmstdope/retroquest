@@ -100,50 +100,35 @@ describe('SettingsDialog', () => {
     expect(useSettingsStore().textSize).toBe('extraSmall')
   })
 
-  it('turns music off and on and sets its volume', async () => {
+  it('has no on/off switch for any sound, only a volume slider for each', () => {
     const w = mountSettings()
-    const settings = useSettingsStore()
-    const music = w.get('[role="switch"][aria-label="Music"]')
-    expect(music.attributes('aria-checked')).toBe('true')
 
-    await w.get('input[aria-label="Music volume"]').setValue('40')
-    expect(settings.musicVolume).toBe(40)
-
-    await music.trigger('click')
-    expect(settings.musicOn).toBe(false)
-    expect(w.find('input[aria-label="Music volume"]').exists()).toBe(false)
-  })
-
-  it('turns sound effects off and sets their volume', async () => {
-    const w = mountSettings()
-    const settings = useSettingsStore()
-
-    await w.get('input[aria-label="Sound effects volume"]').setValue('25')
-    await w.get('[role="switch"][aria-label="Sound effects"]').trigger('click')
-
-    expect(settings.effectsVolume).toBe(25)
-    expect(settings.effectsOn).toBe(false)
-  })
-
-  it('has a Narration row, on by default, with its note', () => {
-    const w = mountSettings()
-    const row = w.get('[role="switch"][aria-label="Narration"]')
-
-    expect(row.attributes('aria-checked')).toBe('true')
+    for (const name of ['Music', 'Sound effects', 'Narration']) {
+      expect(w.find(`[role="switch"][aria-label="${name}"]`).exists()).toBe(
+        false,
+      )
+      expect(w.find(`input[aria-label="${name} volume"]`).exists()).toBe(true)
+    }
     expect(w.text()).toContain('The story and every character read aloud')
   })
 
-  it('shows the narration Volume only while narration is on', async () => {
+  it('sets the volume of music, sound effects and narration, down to 0', async () => {
     const w = mountSettings()
     const settings = useSettingsStore()
 
-    await w.get('input[aria-label="Narration volume"]').setValue('55')
-    expect(settings.narrationVolume).toBe(55)
-    expect(w.find('input[aria-label="Narration volume"]').exists()).toBe(true)
+    await w.get('input[aria-label="Music volume"]').setValue('40')
+    await w.get('input[aria-label="Sound effects volume"]').setValue('25')
+    await w.get('input[aria-label="Narration volume"]').setValue('0')
 
-    await w.get('[role="switch"][aria-label="Narration"]').trigger('click')
-    expect(settings.narrationOn).toBe(false)
-    expect(w.find('input[aria-label="Narration volume"]').exists()).toBe(false)
+    expect(settings.musicVolume).toBe(40)
+    expect(settings.effectsVolume).toBe(25)
+    expect(settings.narrationVolume).toBe(0)
+    expect(w.find('input[aria-label="Narration volume"]').exists()).toBe(true)
+    expect(w.findAll('.lq-volume-num').map((n) => n.text())).toEqual([
+      '40',
+      '25',
+      '0',
+    ])
   })
 
   it('names the music that is playing', () => {

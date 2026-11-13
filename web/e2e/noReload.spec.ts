@@ -9,7 +9,7 @@
  * re-optimisation, a restarted server), so a failure here is first read as
  * "did Vite reload?" before "did the game reload itself?".
  */
-import { test, expect, type Page } from '@playwright/test'
+import { test, expect, type Page } from './fixtures'
 import { ACT1_GOLDEN_PATH } from '../src/act1/Act1GoldenPath'
 
 /** The golden path up to and including the walk north out of the Abandoned Shed. */

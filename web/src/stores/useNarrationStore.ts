@@ -181,7 +181,6 @@ export const useNarrationStore = defineStore('narration', () => {
   const hintVisible = computed(
     () =>
       active.value !== null &&
-      settings.narrationOn &&
       (narratedTurns.value <= HINT_TURNS || hintNudged.value),
   )
 
@@ -534,7 +533,7 @@ export const useNarrationStore = defineStore('narration', () => {
     if (active.value) finish(true)
     const voiced =
       !!own || units.some((unit) => unit.parts.some((part) => part.clip))
-    if (!settings.narrationOn || !voiced) return
+    if (!voiced) return
     active.value = {
       turnId,
       units,

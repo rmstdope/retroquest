@@ -1,7 +1,10 @@
-import { test, expect, type Page } from '@playwright/test'
+import { test, expect, type Page } from './fixtures'
 
-// Narration on, as for a new player (the config turns it off for the other specs).
-test.use({ storageState: { cookies: [], origins: [] } })
+// Narration at full volume, as for a new player (the config sets it to 0 for the other specs).
+test.use({
+  storageState: { cookies: [], origins: [] },
+  narrationRecordings: true,
+})
 
 /**
  * Narrated clips end three seconds after they start (the browser has no
@@ -263,27 +266,7 @@ test('holds the story still while it reads, and frees it when the reading ends',
   await expect.poll(top).toBeLessThan(held)
 })
 
-test('shows an answer at once with narration off', async ({
-  page,
-}): Promise<void> => {
-  await page.addInitScript(() =>
-    localStorage.setItem('retroquest_settings', '{"narrationOn":false}'),
-  )
-
-  // The story page of a short window reads the answer as it is told (a laptop
-  // tells the walk into the first room in the middle of the picture).
-  await page.setViewportSize({ width: 1280, height: 500 })
-  await startAct1(page)
-  const input = page.getByLabel('Command', { exact: true })
-  await input.fill('talk to voice')
-  await input.press('Enter')
-
-  await expect(lastTurnBlocks(page).first()).toBeVisible()
-  expect(await lastTurnBlocks(page).count()).toBeGreaterThan(1)
-  await expect(page.locator('.lq-speaking')).toHaveCount(0)
-})
-
-test('hints at hurrying on the first narrated turn, and Settings can switch narration off', async ({
+test('hints at hurrying on the first narrated turn, and Settings has a volume for it but no switch', async ({
   page,
 }): Promise<void> => {
   await slowNarrationClips(page)
@@ -304,11 +287,8 @@ test('hints at hurrying on the first narrated turn, and Settings can switch narr
 
   await page.setViewportSize({ width: 1280, height: 720 })
   await page.getByRole('button', { name: 'Settings', exact: true }).click()
-  const narration = page.getByRole('switch', { name: 'Narration' })
-  await expect(narration).toHaveAttribute('aria-checked', 'true')
+  await expect(page.getByRole('switch', { name: 'Narration' })).toHaveCount(0)
   await expect(page.getByLabel('Narration volume')).toBeVisible()
-  await narration.click()
-  await expect(page.getByLabel('Narration volume')).toHaveCount(0)
 })
 
 test('reads the opening chapter page, and Continue mid-sentence moves on', async ({

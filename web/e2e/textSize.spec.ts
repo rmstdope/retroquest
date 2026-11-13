@@ -4,7 +4,7 @@
  * on their own line under the label without scrolling sideways, and the
  * smallest size survives a reload.
  */
-import { test, expect, type Page } from '@playwright/test'
+import { test, expect, type Page } from './fixtures'
 
 const PHONE = { width: 360, height: 740 }
 
