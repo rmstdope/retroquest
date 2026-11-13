@@ -3,6 +3,7 @@ import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 import { flushPromises, mount, type VueWrapper } from '@vue/test-utils'
 import { createPinia, setActivePinia } from 'pinia'
 import ActionComposer from './ActionComposer.vue'
+import { aimOf } from '@/lantern/hurryKeys'
 import { useGameStore } from '@/stores/useGameStore'
 import { useSettingsStore } from '@/stores/useSettingsStore'
 import { useArrivalStore } from '@/stores/useArrivalStore'
@@ -1711,6 +1712,75 @@ describe('ActionComposer on the stage', () => {
 
       expect(document.activeElement).toBe(hint(w).element)
       w.unmount()
+    })
+  })
+
+  describe('what a press on its buttons is aimed at', () => {
+    it('lets the story tell the verbs, exits, targets and hint (they send a command) from its other buttons', async () => {
+      const w = mount(ActionComposer, {
+        props: { stage: true },
+        attachTo: document.body,
+      })
+      const el = (selector: string): Element => w.get(selector).element
+      expect(aimOf(el('[data-verb="search"]'))).toEqual({
+        onActionButton: true,
+        onCommandButton: true,
+      })
+      expect(aimOf(el('.lq-hint'))).toEqual({
+        onActionButton: true,
+        onCommandButton: true,
+      })
+      expect(aimOf(el('[data-more]'))).toEqual({
+        onActionButton: true,
+        onCommandButton: false,
+      })
+      await w.get('[data-verb="talk"]').trigger('click')
+      expect(w.findAll('.lq-target').length).toBeGreaterThan(0)
+      for (const target of w.findAll('.lq-target'))
+        expect(aimOf(target.element).onCommandButton).toBe(true)
+      expect(aimOf(document.body)).toEqual({
+        onActionButton: false,
+        onCommandButton: false,
+      })
+      w.unmount()
+    })
+
+    it("counts the panel layout's go button, target and hints as commands, and its switches and Cancel as plain actions", async () => {
+      const w = mount(ActionComposer, { attachTo: document.body })
+      const command = { onActionButton: true, onCommandButton: true }
+      const plain = { onActionButton: true, onCommandButton: false }
+      const named = (name: string): Element => {
+        const found = w
+          .findAll('button')
+          .find(
+            (b) =>
+              b.attributes('aria-label') === name ||
+              b.text().trim().replace(/Esc$/, '') === name,
+          )
+        if (!found) throw new Error(`No button "${name}"`)
+        return found.element
+      }
+      expect(aimOf(w.get('[data-exit="north"]').element)).toEqual(command)
+      expect(aimOf(w.get('.lq-composer-top .lq-hint').element)).toEqual(command)
+      expect(aimOf(named('Type'))).toEqual(plain)
+      expect(aimOf(named('Actions'))).toEqual(plain)
+
+      await w.get('[data-verb="talk"]').trigger('click')
+      expect(w.findAll('.lq-target').length).toBeGreaterThan(0)
+      for (const target of w.findAll('.lq-target'))
+        expect(aimOf(target.element)).toEqual(command)
+      expect(aimOf(named('Cancel'))).toEqual(plain)
+      ;(named('Cancel') as HTMLElement).click()
+      await w.vm.$nextTick()
+      w.unmount()
+
+      const stage = mount(ActionComposer, {
+        props: { stage: true },
+        attachTo: document.body,
+      })
+      await stage.get('[data-type]').trigger('click')
+      expect(aimOf(stage.get('.lq-type-row .lq-hint').element)).toEqual(command)
+      stage.unmount()
     })
   })
 })

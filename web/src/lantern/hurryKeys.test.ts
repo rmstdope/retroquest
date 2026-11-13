@@ -1,5 +1,10 @@
 import { describe, it, expect } from 'vitest'
-import { decideHurryKey, type HurryKeyPress } from './hurryKeys'
+import {
+  AFTER_TELLING_PAUSE_MS,
+  HurryKeys,
+  decideHurryKey,
+  type HurryKeyPress,
+} from './hurryKeys'
 
 /** A plain press on nothing in particular, with nothing going on. */
 function press(over: Partial<HurryKeyPress>): HurryKeyPress {
@@ -358,5 +363,54 @@ describe('decideHurryKey while the story is narrated', () => {
     expect(decideHurryKey(press({ ...narrating, dialogOpen: true }))).toBeNull()
     expect(decideHurryKey(press({ ...narrating, modified: true }))).toBeNull()
     expect(decideHurryKey(press({ ...narrating, key: 'a' }))).toBeNull()
+  })
+})
+
+describe('HurryKeys, which keeps the pause after a telling', () => {
+  /** A press without the pause, which `HurryKeys` supplies. */
+  function aimed(
+    over: Partial<HurryKeyPress>,
+  ): Omit<HurryKeyPress, 'settling'> {
+    const { settling: _settling, ...rest } = press(over)
+    return rest
+  }
+  const onVerb = { onControl: true, onActionButton: true }
+
+  it('swallows Enter on an action button for the pause after a hurry, and each key restarts it', () => {
+    let now = 0
+    const keys = new HurryKeys(() => now)
+    const hurrying = aimed({ narrating: true })
+    expect(keys.decide(hurrying)?.action).toBe('hurry')
+
+    const verb = aimed(onVerb)
+    now = AFTER_TELLING_PAUSE_MS - 1
+    expect(keys.decide(verb)?.action).toBe('swallow')
+    now += AFTER_TELLING_PAUSE_MS - 1
+    expect(keys.decide(verb)?.action).toBe('swallow')
+    now += AFTER_TELLING_PAUSE_MS
+    expect(keys.decide(verb)).toBeNull()
+  })
+
+  it('starts the pause after an arrival goes on, but not after a scene skip', () => {
+    let now = 0
+    const keys = new HurryKeys(() => now)
+    expect(keys.decide(aimed({ scene: true }))?.action).toBe('skip-scene')
+    expect(keys.decide(aimed(onVerb))).toBeNull()
+    expect(keys.decide(aimed({ arrival: true }))?.action).toBe('arrival-next')
+    now = 10
+    expect(keys.decide(aimed(onVerb))?.action).toBe('swallow')
+  })
+
+  it('starts the pause after an arrival is cleared with the narration skipped', () => {
+    const keys = new HurryKeys(() => 0)
+    expect(keys.decide(aimed({ arrival: true, key: 'Escape' }))?.action).toBe(
+      'arrival-clear',
+    )
+    expect(keys.decide(aimed(onVerb))?.action).toBe('swallow')
+  })
+
+  it('is not settling before any key went on', () => {
+    const keys = new HurryKeys(() => 0)
+    expect(keys.decide(aimed(onVerb))).toBeNull()
   })
 })

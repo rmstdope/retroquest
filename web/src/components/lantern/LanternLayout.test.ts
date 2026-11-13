@@ -2213,6 +2213,8 @@ describe('LanternLayout', () => {
           button.className = 'lq-verb'
           button.setAttribute(mark, 'x')
         }
+        // A button that sends a command says so, as the composer's own do.
+        if (taken) button.setAttribute('data-hurry', 'command')
         w.get('.lq-composer').element.appendChild(button)
         const enter = new KeyboardEvent('keydown', {
           key: 'Enter',

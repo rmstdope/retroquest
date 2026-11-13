@@ -471,6 +471,7 @@ function onTypedEnter(): void {
   <section
     ref="root"
     class="lq-composer"
+    data-hurry="action"
     :class="{ 'lq-typing': mode === 'type', 'lq-on-stage': stage }"
     aria-label="Actions"
     @keydown.escape="putAway"
@@ -499,6 +500,7 @@ function onTypedEnter(): void {
       </div>
       <button
         type="button"
+        data-hurry="command"
         class="lq-hint"
         aria-label="Hint"
         :aria-disabled="hintBusy"
@@ -532,6 +534,7 @@ function onTypedEnter(): void {
           v-for="[dir, room] in exits"
           :key="dir"
           type="button"
+          data-hurry="command"
           class="lq-exit-btn"
           :aria-label="`Go ${dir} to ${room}`"
           :data-exit="dir"
@@ -581,6 +584,7 @@ function onTypedEnter(): void {
             v-for="target in targets"
             :key="target.value"
             type="button"
+            data-hurry="command"
             class="lq-target"
             :class="`lq-target-${target.kind}`"
             :disabled="!game.acceptInput"
@@ -620,6 +624,7 @@ function onTypedEnter(): void {
               v-for="target in targets"
               :key="target.value"
               type="button"
+              data-hurry="command"
               class="lq-target"
               :class="`lq-target-${target.kind}`"
               :disabled="!game.acceptInput"
@@ -657,6 +662,7 @@ function onTypedEnter(): void {
           v-for="v in mainVerbs"
           :key="v.id"
           type="button"
+          data-hurry="command"
           class="lq-verb"
           :class="{
             'lq-verb-on': verb?.id === v.id,
@@ -684,6 +690,7 @@ function onTypedEnter(): void {
             v-for="v in moreVerbs"
             :key="v.id"
             type="button"
+            data-hurry="command"
             class="lq-verb"
             :class="{ 'lq-verb-on': verb?.id === v.id }"
             :aria-pressed="verb?.id === v.id ? 'true' : 'false'"
@@ -707,6 +714,7 @@ function onTypedEnter(): void {
         <button
           v-if="stage"
           type="button"
+          data-hurry="command"
           class="lq-hint"
           aria-label="Hint"
           :aria-disabled="hintBusy"
@@ -796,6 +804,7 @@ function onTypedEnter(): void {
       <button
         v-if="stage"
         type="button"
+        data-hurry="command"
         class="lq-hint"
         aria-label="Hint"
         :aria-disabled="hintBusy"
