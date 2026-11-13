@@ -14,7 +14,7 @@ import { useBeltStore } from '@/stores/useBeltStore'
 import { firstQuestUnit } from '@/lantern/narrationUnits'
 import { sceneBlock } from '@/lantern/stageArrival'
 import { parseTurn } from '@/lantern/parseTurn'
-import { AFTER_TELLING_PAUSE_MS, decideHurryKey } from '@/lantern/hurryKeys'
+import { HurryKeys, aimOf } from '@/lantern/hurryKeys'
 import { wayCursor } from '@/lantern/wayCursor'
 import type { NamedSpot } from '@/lantern/areaNames'
 import {
@@ -1040,12 +1040,8 @@ function isEmptyBoxEnter(event: KeyboardEvent): boolean {
   return emptyBoxEnters.has(event)
 }
 
-/** The buttons of the actions panel that send a command or build one. */
-const COMMAND_BUTTONS =
-  '.lq-composer :is([data-verb], [data-exit], .lq-target, .lq-hint)'
-
-/** When a key last went on an arrival, hurried the narration, or was swallowed just after (`performance.now()`). */
-let goOnKeyAt = Number.NEGATIVE_INFINITY
+/** Who owns a key that may hurry the story, and the pause after a telling. */
+const hurryKeys = new HurryKeys()
 
 /**
  * Keys that steer the narration: describe the press and let `decideHurryKey`
@@ -1058,7 +1054,7 @@ function onNarrationKey(event: KeyboardEvent): void {
     return
   }
   const target = event.target instanceof Element ? event.target : null
-  const decision = decideHurryKey({
+  const decision = hurryKeys.decide({
     key: event.key,
     repeat: event.repeat,
     modified: event.ctrlKey || event.metaKey || event.altKey,
@@ -1068,11 +1064,9 @@ function onNarrationKey(event: KeyboardEvent): void {
     inField: !!target?.closest('input, textarea, select, [contenteditable]'),
     onControl: !!target?.closest('button, a, [role="button"], summary'),
     onFoldedActions: !!target?.closest('.lq-dock-open'),
-    onActionButton: !!target?.closest('.lq-composer button'),
-    onCommandButton: !!target?.closest(COMMAND_BUTTONS),
+    ...aimOf(target),
     onPaperTab: !!target?.closest('.lq-paper-tab'),
     inOpenList: !!target?.closest('[aria-expanded="true"]'),
-    settling: performance.now() - goOnKeyAt < AFTER_TELLING_PAUSE_MS,
     scene: scene.turn !== null,
     // News held while the lines before it are read takes the keys as if it were up.
     arrival: arrival.active || arrival.holding,
@@ -1113,19 +1107,15 @@ function onNarrationKey(event: KeyboardEvent): void {
       setWordsHidden(false)
       break
     case 'arrival-next':
-      goOnKeyAt = performance.now()
       arrival.next()
       break
     case 'swallow':
-      goOnKeyAt = performance.now()
       break
     case 'arrival-clear':
-      goOnKeyAt = performance.now()
       arrival.clear()
       narration.skipAll()
       break
     case 'hurry':
-      goOnKeyAt = performance.now()
       narration.hurry()
       break
     case 'skip-all':

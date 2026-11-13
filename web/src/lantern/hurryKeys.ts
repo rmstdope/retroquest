@@ -8,7 +8,9 @@
  * what it is aimed at, which of them gets the press, and whether the release
  * of a Space that was taken must be swallowed so it does not press the
  * focused button. The layout only describes the press and carries out the
- * answer.
+ * answer. What a press on a button is aimed at is read here too, from the
+ * `data-hurry` attribute the button (or the actions panel around it) carries,
+ * and the pause after a telling is kept here, by `HurryKeys`.
  *
  * The modes keep deliberately different rules. On a phone the sheet folds as
  * a command is sent and focus lands on the folded bar's Actions: a change of
@@ -24,6 +26,15 @@
  * the narration, Enter and Space on a button in the actions panel do nothing,
  * and each further press starts the pause again.
  */
+
+/** The attribute that says what a press on a button is aimed at: `action` on the actions panel, `command` on a button that sends a command or builds one. */
+export const HURRY_ATTR = 'data-hurry'
+
+/** What `HURRY_ATTR` holds on a button that sends a command or builds one (a verb, an exit, a target, the hint). */
+export const HURRY_COMMAND = 'command'
+
+/** What `HURRY_ATTR` holds on the actions panel, whose buttons give up Enter and Space to the story. */
+export const HURRY_ACTION = 'action'
 
 /** How long after a key went on an arrival or hurried the narration a button in the actions panel ignores Enter and Space. */
 export const AFTER_TELLING_PAUSE_MS = 1000
@@ -238,4 +249,52 @@ export function decideHurryKey(press: HurryKeyPress): HurryKeyDecision | null {
   if (press.dialogOpen) return null
   if (press.arrival && goesOn(press.key)) return arrivalKey(press)
   return narrationKey(press)
+}
+
+/**
+ * What a press on `target` is aimed at, read from the `data-hurry` of the
+ * button it is in (or the panel around that button): whether it is a button
+ * in the actions panel, and whether that button sends a command or builds one.
+ */
+export function aimOf(
+  target: Element | null,
+): Pick<HurryKeyPress, 'onActionButton' | 'onCommandButton'> {
+  const aim = target?.closest('button')?.closest(`[${HURRY_ATTR}]`)
+  const kind = aim?.getAttribute(HURRY_ATTR)
+  return {
+    onActionButton: kind === HURRY_ACTION || kind === HURRY_COMMAND,
+    onCommandButton: kind === HURRY_COMMAND,
+  }
+}
+
+/** The actions of a taken key that go on an arrival or hurry the narration, which start the pause after a telling. */
+const GOES_ON_ACTIONS: readonly HurryKeyAction[] = [
+  'arrival-next',
+  'arrival-clear',
+  'hurry',
+  'swallow',
+]
+
+/**
+ * `decideHurryKey` with the pause after a telling kept inside: it stamps the
+ * clock whenever a key goes on an arrival, hurries the narration or is
+ * swallowed in the pause, and answers `settling` itself.
+ */
+export class HurryKeys {
+  /** When a key last went on (by `now`). */
+  private wentOnAt = Number.NEGATIVE_INFINITY
+
+  /** A decider whose clock is `now`, in milliseconds. */
+  constructor(private readonly now: () => number = () => performance.now()) {}
+
+  /** Decide who owns the key, as `decideHurryKey` does, and keep the pause. */
+  decide(press: Omit<HurryKeyPress, 'settling'>): HurryKeyDecision | null {
+    const decision = decideHurryKey({
+      ...press,
+      settling: this.now() - this.wentOnAt < AFTER_TELLING_PAUSE_MS,
+    })
+    if (decision && GOES_ON_ACTIONS.includes(decision.action))
+      this.wentOnAt = this.now()
+    return decision
+  }
 }

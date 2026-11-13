@@ -3,6 +3,7 @@ import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 import { flushPromises, mount, type VueWrapper } from '@vue/test-utils'
 import { createPinia, setActivePinia } from 'pinia'
 import ActionComposer from './ActionComposer.vue'
+import { aimOf } from '@/lantern/hurryKeys'
 import { useGameStore } from '@/stores/useGameStore'
 import { useSettingsStore } from '@/stores/useSettingsStore'
 import { useArrivalStore } from '@/stores/useArrivalStore'
@@ -1710,6 +1711,37 @@ describe('ActionComposer on the stage', () => {
       await w.vm.$nextTick()
 
       expect(document.activeElement).toBe(hint(w).element)
+      w.unmount()
+    })
+  })
+
+  describe('what a press on its buttons is aimed at', () => {
+    it('lets the story tell the verbs, exits, targets and hint (they send a command) from its other buttons', async () => {
+      const w = mount(ActionComposer, {
+        props: { stage: true },
+        attachTo: document.body,
+      })
+      const el = (selector: string): Element => w.get(selector).element
+      expect(aimOf(el('[data-verb="search"]'))).toEqual({
+        onActionButton: true,
+        onCommandButton: true,
+      })
+      expect(aimOf(el('.lq-hint'))).toEqual({
+        onActionButton: true,
+        onCommandButton: true,
+      })
+      expect(aimOf(el('[data-more]'))).toEqual({
+        onActionButton: true,
+        onCommandButton: false,
+      })
+      await w.get('[data-verb="talk"]').trigger('click')
+      expect(w.findAll('.lq-target').length).toBeGreaterThan(0)
+      for (const target of w.findAll('.lq-target'))
+        expect(aimOf(target.element).onCommandButton).toBe(true)
+      expect(aimOf(document.body)).toEqual({
+        onActionButton: false,
+        onCommandButton: false,
+      })
       w.unmount()
     })
   })
