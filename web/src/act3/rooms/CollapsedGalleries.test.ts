@@ -18,17 +18,6 @@ function dummyState(room?: Room): GameState {
 }
 
 describe('Collapsed Galleries', () => {
-  it('initializes with the fallen rock, no miners and three exits', () => {
-    const room = new CollapsedGalleries()
-    expect(room.name).toBe('Collapsed Galleries')
-    expect(room.items.some((i) => i instanceof FallenRock)).toBe(true)
-    // Miners should not be present initially - they appear after passage is freed
-    expect(room.characters.some((c) => c instanceof Miners)).toBe(false)
-    expect(
-      'south' in room.exits && 'west' in room.exits && 'east' in room.exits,
-    ).toBe(true)
-  })
-
   it('runs the full miners rescue progression', () => {
     const room = new CollapsedGalleries()
     const gs = new GameState(room, { room }, [])

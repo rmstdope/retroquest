@@ -18,16 +18,6 @@ function createFumaroleRoom(): FumarolePassages {
 }
 
 describe('HeatWardMix', () => {
-  it('initializes with name, description and carry flag', () => {
-    const mix = new HeatWardMix()
-
-    expect(mix.name).toBe('heat-ward mix')
-    expect(
-      mix.description.includes('ash-fern') || mix.description.includes('slag'),
-    ).toBe(true)
-    expect(mix.canBeCarried).toBe(true)
-  })
-
   it('fails when used with a non-room item', () => {
     const mix = new HeatWardMix()
     const gs = createState(new Room({ name: 'x', description: '' }))

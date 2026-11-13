@@ -6,11 +6,6 @@ import { ACT4_GOLDEN_PATH } from '../Act4GoldenPath'
 import { executeCommands } from '@/testing/gameHelpers'
 
 describe('MemoryVault', () => {
-  it('has the correct name', () => {
-    const room = new MemoryVault()
-    expect(room.name).toBe('Memory Vault')
-  })
-
   it('lists south and the door east, but offers only south at first', () => {
     const room = new MemoryVault()
     expect(room.exits).toEqual({

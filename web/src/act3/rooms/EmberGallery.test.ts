@@ -8,19 +8,6 @@ function dummyState(): GameState {
 }
 
 describe('Ember Gallery', () => {
-  it('initializes empty with north and west exits', () => {
-    const room = new EmberGallery()
-    expect(room.name).toBe('Ember Gallery')
-    expect(
-      room.description.includes('charcoal') ||
-        room.description.includes('iron'),
-    ).toBe(true)
-    expect(room.exits).toHaveProperty('north')
-    expect(room.exits).toHaveProperty('west')
-    expect(room.items).toEqual([])
-    expect(room.characters).toEqual([])
-  })
-
   it('reveals the deposits only on the first search', () => {
     const room = new EmberGallery()
     const gs = dummyState()

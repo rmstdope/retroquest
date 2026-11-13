@@ -16,20 +16,6 @@ function setup(): { game: Game; inscription: CharredInscription } {
 }
 
 describe('CharredInscription', () => {
-  it('initializes correctly', () => {
-    const { inscription } = setup()
-
-    expect(inscription.name).toBe('Charred Inscription')
-    expect(inscription.shortName).toBe('inscription')
-    expect(inscription.canBeCarried).toBe(false)
-    expect(inscription.description).toContain(
-      'Words burned deep into cooled lava',
-    )
-    expect(inscription.description).toContain(
-      'Three hands wrote here, one after another.',
-    )
-  })
-
   it('sets the story flag when examined', () => {
     const { game, inscription } = setup()
     expect(game.state.getStoryFlag(FLAG_ACT3_CHARRED_INSCRIPTION_READ)).toBe(

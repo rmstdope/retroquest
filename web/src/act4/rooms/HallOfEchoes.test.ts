@@ -9,11 +9,6 @@ import { GhostlyWarriors } from '../characters/GhostlyWarriors'
 import { HallOfEchoes } from './HallOfEchoes'
 
 describe('HallOfEchoes', () => {
-  it('has the correct name', () => {
-    const room = new HallOfEchoes()
-    expect(room.name).toBe('Hall of Echoes')
-  })
-
   it('holds the echoes, the stone, the banners and the knight', () => {
     const room = new HallOfEchoes()
     expect(room.items.map((i) => i.name)).toEqual([

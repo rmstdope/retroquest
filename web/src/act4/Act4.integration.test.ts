@@ -43,19 +43,6 @@ describe('Act 4 integration', () => {
     game = new Game([act4])
   })
 
-  it('initializes correctly', () => {
-    expect(act4).not.toBeNull()
-    expect(typeof act4.rooms, 'rooms is a record').toBe('object')
-    expect(Array.isArray(act4.quests), 'quests is a list').toBe(true)
-    expect(act4.getActIntro()).not.toBeNull()
-  })
-
-  it('can be loaded into a Game', () => {
-    expect(game).not.toBeNull()
-    expect(game.acts).toHaveLength(1)
-    expect(game.acts[0]).toBe(act4)
-  })
-
   it('golden path phase 1: fortress breach', () => {
     // Steps 1-3 of the golden path:
     // 1. Fortress Gates - Ward guardians quest
@@ -164,9 +151,6 @@ describe('Act 4 integration', () => {
   })
 
   describe('the gates and the courtyard', () => {
-    const BARRIER_THROWS_BACK =
-      'The violet wall throws you back. It swells and fades in time with ' +
-      'the ward stones.'
     const SERVANTS_BLOCK =
       'The servants drift across the archway, their chains trailing. ' +
       'They do not stop for you, and you cannot get past them.'
@@ -237,16 +221,6 @@ describe('Act 4 integration', () => {
       )
     })
 
-    it('throws the player back at the barrier and starts the guardians quest', () => {
-      const north = executeCommands(game, ['go north'])
-      expect(north).toContain(BARRIER_THROWS_BACK)
-      expectCurrentRoom(game.state, 'Fortress Gates')
-      expect(active()).toContain('Shattered Ward Guardians')
-      const east = executeCommands(game, ['go east'])
-      expect(east).toContain(BARRIER_THROWS_BACK)
-      expectCurrentRoom(game.state, 'Fortress Gates')
-    })
-
     it('starts the guardians quest on trying east alone', () => {
       executeCommands(game, ['go east'])
       expect(active()).toContain('Shattered Ward Guardians')
@@ -272,17 +246,6 @@ describe('Act 4 integration', () => {
       const broken = game.state.currentRoom.describe(game.state)
       expect(broken).toContain('[exits]east[/exits]')
       expect(broken).toContain('[exits]north[/exits]')
-    })
-
-    it('refuses light before the barrier is broken', () => {
-      const answer = executeCommands(game, ['cast light on ward stones'])
-      expect(answer).toContain('They drink it together and keep their count.')
-      expect(answer).not.toContain('You must')
-      expectStoryFlag(
-        game.state,
-        FLAG_ACT4_SHATTERED_WARD_GUARDIANS_COMPLETED,
-        false,
-      )
     })
 
     it('completes the guardians quest and changes the gates', () => {

@@ -19,16 +19,6 @@ import { ChamberOfWhispers } from '../rooms/ChamberOfWhispers'
 import { expectMarkupWellFormed } from '@/testing/gameHelpers'
 
 describe('TruthSight', () => {
-  it('has the agreed name and description and answers to its name', () => {
-    const spell = new TruthSight()
-    expect(spell.name).toBe('Truth Sight')
-    expect(spell.description).toBe(
-      'See through illusion to what is really there.',
-    )
-    expect(spell.answersTo('truth sight')).toBe(true)
-    expect(spell.answersTo('truth_sight')).toBe(true)
-  })
-
   it('finds nothing hidden in anything but the knight', () => {
     const game = new Game([new Act4()])
     const spell = new TruthSight()

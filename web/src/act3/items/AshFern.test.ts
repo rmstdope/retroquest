@@ -9,14 +9,6 @@ function createState(): GameState {
 }
 
 describe('AshFern', () => {
-  it('initializes with name, description and carry flag', () => {
-    const ash = new AshFern()
-
-    expect(ash.name).toBe('ash-fern')
-    expect(ash.description).toContain('brittle frond')
-    expect(ash.canBeCarried).toBe(true)
-  })
-
   it('fails when used with a non-slag item', () => {
     const ash = new AshFern()
     const gs = createState()

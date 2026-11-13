@@ -21,12 +21,6 @@ function makeDummyItem(): Item {
 }
 
 describe('MendSpell', () => {
-  it('initializes with name and description', () => {
-    const spell = new MendSpell()
-    expect(spell.name).toBe('mend')
-    expect(spell.description).toContain('close what is cracked')
-  })
-
   it('finds nothing to mend without a target', () => {
     const spell = new MendSpell()
     const result = spell.castSpell(makeGameState())

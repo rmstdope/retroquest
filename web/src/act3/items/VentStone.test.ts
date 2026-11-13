@@ -9,17 +9,6 @@ function createState(room: Room): GameState {
 }
 
 describe('VentStone', () => {
-  it('initializes with name, description and carry flag', () => {
-    const stone = new VentStone()
-
-    expect(stone.name).toBe('vent stone')
-    expect(
-      stone.description.toLowerCase().includes('stone') ||
-        stone.description.toLowerCase().includes('vent'),
-    ).toBe(true)
-    expect(stone.canBeCarried).toBe(true)
-  })
-
   it('cannot be used in the wrong room', () => {
     const stone = new VentStone()
     const gs = createState(

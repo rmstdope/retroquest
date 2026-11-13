@@ -94,14 +94,6 @@ describe('Act 3 integration', () => {
     expect(act.isCompleted(game.state)).toBe(true)
   })
 
-  it('initializes correctly', () => {
-    const act3 = new Act3()
-    expect(act3).not.toBeNull()
-    expect(typeof act3.rooms, 'rooms is a record').toBe('object')
-    expect(Array.isArray(act3.quests), 'quests is a list').toBe(true)
-    expect(act3.getActIntro()).not.toBeNull()
-  })
-
   it('opens on the belief Elior voiced in Greendale and on how Mira brought the party home', () => {
     const intro = new Act3().getActIntro()
 
@@ -118,14 +110,6 @@ describe('Act 3 integration', () => {
     )
     expect(intro).not.toContain('THE AWAKENING')
     expect(intro).not.toContain('Obsidian Fortress')
-  })
-
-  it('can be loaded into a Game', () => {
-    const act3 = new Act3()
-    const game = new Game([act3])
-    expect(game).not.toBeNull()
-    expect(game.acts).toHaveLength(1)
-    expect(game.acts[0]).toBe(act3)
   })
 })
 

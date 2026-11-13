@@ -9,17 +9,6 @@ function createState(): GameState {
 }
 
 describe('CooledSlag', () => {
-  it('initializes with name, description and carry flag', () => {
-    const slag = new CooledSlag()
-
-    expect(slag.name).toBe('cooled slag')
-    expect(
-      slag.description.includes('glassy') ||
-        slag.description.toLowerCase().includes('slag'),
-    ).toBe(true)
-    expect(slag.canBeCarried).toBe(true)
-  })
-
   it('fails when used with a non-ash-fern item', () => {
     const slag = new CooledSlag()
     const gs = createState()

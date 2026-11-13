@@ -9,14 +9,6 @@ function createState(): GameState {
 }
 
 describe('BrassMirrorSegment', () => {
-  it('initializes with name, description and carry flag', () => {
-    const seg = new BrassMirrorSegment()
-
-    expect(seg.name.toLowerCase()).toBe('brass mirror segment')
-    expect(seg.description.toLowerCase()).toContain('brass segment')
-    expect(seg.canBeCarried).toBe(true)
-  })
-
   it('fails when used with a non-mount item', () => {
     const seg = new BrassMirrorSegment()
     const gs = createState()

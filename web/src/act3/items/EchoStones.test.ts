@@ -16,16 +16,6 @@ function createState(): GameState {
 }
 
 describe('EchoStones', () => {
-  it('initializes with name, description and carry flag', () => {
-    const stones = new EchoStones()
-
-    expect(stones.name).toBe('echo stones')
-    expect(stones.description).toContain('carved')
-    expect(stones.description).toContain('channels')
-    expect(stones.canBeCarried).toBe(false)
-    expect(stones.areBlessed()).toBe(false)
-  })
-
   it('is blessed by the bless spell', () => {
     const stones = new EchoStones()
     const gs = createState()

@@ -33,10 +33,6 @@ function roomItems(game: Game): string[] {
 }
 
 describe('FortressGates', () => {
-  it('has the correct name', () => {
-    expect(new FortressGates().name).toBe('Fortress Gates')
-  })
-
   it('starts with three stones and no fragment or chain on the ground', () => {
     const game = createGame()
     expect(game.state.currentRoom).toBeInstanceOf(FortressGates)

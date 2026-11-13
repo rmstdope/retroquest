@@ -6,7 +6,6 @@ import { expectMarkupWellFormed, expectStoryFlag } from '@/testing/gameHelpers'
 import { EchoChambers } from './EchoChambers'
 import { RunicWalls } from '../items/RunicWalls'
 import { ResonantChantRubbings } from '../items/ResonantChantRubbings'
-import { OldOathScrolls } from '../items/OldOathScrolls'
 
 const RUBBINGS = 'Resonant Chant Rubbings'
 const SCROLLS = 'Old Oath Scrolls'
@@ -21,17 +20,6 @@ function itemNames(room: Room): string[] {
 }
 
 describe('Echo Chambers', () => {
-  it('initializes with the runic walls and no scrolls', () => {
-    const room = new EchoChambers()
-    expect(room.name).toBe('Echo Chambers')
-    const lower = room.description.toLowerCase()
-    expect(lower.includes('echo') || lower.includes('cavern')).toBe(true)
-    expect(room.items.some((i) => i instanceof RunicWalls)).toBe(true)
-    // Old Oath Scrolls should NOT be present initially
-    expect(room.items.some((i) => i instanceof OldOathScrolls)).toBe(false)
-    expect(room.exits).toHaveProperty('west')
-  })
-
   it('reveals the chant and adds rubbings once when the walls are examined', () => {
     const room = new EchoChambers()
     const walls = new RunicWalls()

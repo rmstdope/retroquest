@@ -20,17 +20,6 @@ describe('TeleportationFocus', () => {
     ).toBe(true)
   })
 
-  it('initializes with name, description and carry flag', () => {
-    const focus = new TeleportationFocus()
-
-    expect(focus.name).toBe('teleportation focus')
-    expect(
-      focus.description.toLowerCase().includes('prism') ||
-        focus.description.toLowerCase().includes('circle'),
-    ).toBe(true)
-    expect(focus.canBeCarried).toBe(false)
-  })
-
   it('examining returns event text', () => {
     const focus = new TeleportationFocus()
     const gs = createState()

@@ -17,16 +17,6 @@ function createState(
 }
 
 describe('ResonantChantRubbings', () => {
-  it('initializes with name, description and carry flag', () => {
-    const rubbings = new ResonantChantRubbings()
-
-    expect(rubbings.name).toBe('Resonant Chant Rubbings')
-    expect(rubbings.canBeCarried).toBe(true)
-    expect(rubbings.description).toContain(
-      'Let stillness echo, let silence bind',
-    )
-  })
-
   it('removes the phantoms when used with blessed stones', () => {
     const rubbings = new ResonantChantRubbings()
     const echoStones = new EchoStones()

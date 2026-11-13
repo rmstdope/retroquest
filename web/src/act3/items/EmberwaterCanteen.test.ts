@@ -8,14 +8,6 @@ function createState(): GameState {
 }
 
 describe('EmberwaterCanteen', () => {
-  it('initializes with name, description and carry flag', () => {
-    const canteen = new EmberwaterCanteen()
-
-    expect(canteen.name).toBe('Emberwater Canteen')
-    expect(canteen.description.toLowerCase()).toContain('canteen')
-    expect(canteen.canBeCarried).toBe(true)
-  })
-
   it('adds a segment on the first examine only and updates the description', () => {
     const canteen = new EmberwaterCanteen()
     const gs = createState()
