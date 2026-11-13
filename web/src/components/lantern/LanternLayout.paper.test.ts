@@ -637,6 +637,44 @@ describe('the narration paper', () => {
     expect(tab()).not.toBeNull()
   })
 
+  it('hurries a narrated look one block with a click on the picture', async () => {
+    await mountWith([turn(1, 'The square is busy.')])
+    game.turns.push(turn(2, 'A fountain.\n\nA bench.', 'look'))
+    await nextTick()
+    await settle()
+    expect(useStageSpeechStore().conversation).toBeNull()
+    const narration = useNarrationStore()
+    // A voice that plays until it is stopped.
+    narration.setAudioFactory(() => ({
+      volume: 1,
+      currentTime: 0,
+      onended: null,
+      onerror: null,
+      play: () => Promise.resolve(),
+      pause: () => {},
+    }))
+    const voiced = (markup: string) => ({
+      kind: 'block' as const,
+      parts: [
+        {
+          markup,
+          clip: {
+            file: 'x.mp3',
+            speaker: 'narrator',
+            duration: 5,
+            words: [],
+          },
+        },
+      ],
+    })
+    narration.begin(2, [voiced('A fountain.'), voiced('A bench.')], 'act1')
+    expect(narration.speaking(2)?.unit).toBe(0)
+    const picture = document.querySelector('.lq-stage-picture') as HTMLElement
+    picture.click()
+    // The next block is read after the hurried one's short pause.
+    await vi.waitFor(() => expect(narration.speaking(2)?.unit).toBe(1))
+  })
+
   it('hides both sides with N too', async () => {
     await mountTalking()
     press('n')

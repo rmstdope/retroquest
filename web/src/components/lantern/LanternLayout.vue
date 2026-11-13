@@ -394,8 +394,8 @@ function goWay(direction: string): void {
 
 /**
  * A press on the picture itself shows the rest of an unnarrated turn's speech
- * at once; while there is speech, a narrated turn is tapped on like the story
- * (one block hurried; held, it skips the telling).
+ * at once, and a narrated turn is tapped on like the story, whether or not
+ * anyone speaks in it (one block hurried; held, it skips the telling).
  */
 function onPicturePress(event: MouseEvent): void {
   if (!(event.target instanceof Element)) return
@@ -408,7 +408,7 @@ function onPicturePress(event: MouseEvent): void {
   const way = wayPressed(event)
   if (way !== null && game.acceptInput) return goWay(way)
   speech.revealAll()
-  if (speech.conversation) narration.tap()
+  narration.tap()
 }
 
 watch(
@@ -1353,6 +1353,8 @@ function beingTold(): boolean {
 const hold = useHoldToSkip({
   root: () => rootEl.value,
   telling: beingTold,
+  // A thing on the picture opens its ring whenever a press takes a move (an unnarrated arrival, say); otherwise its press is the hold's.
+  thingIdle: () => !pressTakesMove(),
   skip: () => presentation.skipTelling(),
 })
 /** Where a held press shows its ring, while it does. */
@@ -1697,7 +1699,7 @@ function onBeltPress(picture: BeltPicture, at: { x: number; y: number }): void {
   if (speech.sceneChange) return speech.changeSceneNow()
   if (telling.value) {
     speech.revealAll()
-    if (speech.conversation) narration.tap()
+    narration.tap()
     return
   }
   if (!pressTakesMove()) return

@@ -23,6 +23,8 @@ export interface HoldToSkipOptions {
   root: () => HTMLElement | null
   /** Whether the story is being told now: only then does a hold skip. */
   telling: () => boolean
+  /** Whether a thing's button on the picture (`AreaPress`) does nothing now, so a press held on it is the hold's; without it, the button keeps its press. */
+  thingIdle?: () => boolean
   /** Skip the whole telling: everything left is shown and the player can act. */
   skip: () => void
 }
@@ -42,6 +44,9 @@ export interface HoldToSkip {
 /** What a press is aimed at that keeps its own presses (and its own long press). */
 const OWN_PRESSES =
   'button, a, input, textarea, select, summary, [contenteditable], [role="button"], [role="dialog"]'
+
+/** A thing's button on the picture (`AreaPress`). */
+const PICTURE_THING = '[data-area-press]'
 
 /**
  * Press and hold to skip: while the story is told, a tap takes one step (the
@@ -99,14 +104,21 @@ export function useHoldToSkip(options: HoldToSkipOptions): HoldToSkip {
     }, HOLD_TO_SKIP_MS)
   }
 
-  /** A press on the story while it is told starts a hold (not on a control, which keeps its own presses). */
+  /** Whether a press on `target` is left to the control it lands on: any control, but a thing on the picture only while its button acts. */
+  function ownPress(target: Element): boolean {
+    const control = target.closest(OWN_PRESSES)
+    if (control === null) return false
+    if (!control.matches(PICTURE_THING)) return true
+    return !(options.thingIdle?.() ?? false)
+  }
+
+  /** A press on the story while it is told starts a hold (not on a control, which keeps its own presses, unless it is a thing on the picture whose button does nothing now). */
   function onPointerDown(event: PointerEvent): void {
     swallowClick = false
     if (event.button !== 0 || !event.isPrimary) return
     const target = event.target instanceof Element ? event.target : null
     const root = options.root()
-    if (!target || !root?.contains(target) || target.closest(OWN_PRESSES))
-      return
+    if (!target || !root?.contains(target) || ownPress(target)) return
     if (!options.telling()) return
     start(event.pointerId, null, { x: event.clientX, y: event.clientY })
   }

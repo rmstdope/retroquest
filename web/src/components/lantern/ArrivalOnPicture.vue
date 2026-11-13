@@ -57,7 +57,7 @@ const props = defineProps<{
   phone?: boolean
   /** A phone held sideways: the card uses the free height between the top and bottom rows, takes smaller type on the smallest phones and keeps the seal beside the heading. */
   sideways?: boolean
-  /** The words are folded away (to show the names on the picture): out of sight and reach, still being read and clicked on in no way, and back when it is false. */
+  /** The words are folded away (to show the names on the picture): out of sight and reach, still being read (a press on the picture or the belt hurries the voice, as for any narrated turn, but nothing pages the words), and back when it is false. */
   away?: boolean
   /** The height the belt of pictures takes at the foot (px): the words end above it (the stage's `--lq-belt-h`). */
   lift?: number

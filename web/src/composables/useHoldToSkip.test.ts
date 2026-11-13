@@ -12,24 +12,31 @@ import {
 
 describe('useHoldToSkip', () => {
   let telling: boolean
+  let thingIdle: boolean
   let skip: ReturnType<typeof vi.fn<() => void>>
   let clicks: number
   let hold: HoldToSkip
   let w: VueWrapper
 
-  /** A host with a stage to press on and a button that keeps its own presses. */
+  /** A host with a stage to press on, a button that keeps its own presses, and a thing's button on the picture. */
   function host(): VueWrapper {
     const Host = defineComponent({
       setup() {
         hold = useHoldToSkip({
           root: () => document.querySelector('.root'),
           telling: () => telling,
+          thingIdle: () => thingIdle,
           skip: () => skip(),
         })
         return () =>
           h('div', { class: 'root' }, [
             h('div', { class: 'stage', onClick: () => clicks++ }),
             h('button', { class: 'verb', onClick: () => clicks++ }),
+            h('button', {
+              class: 'thing',
+              'data-area-press': 'man',
+              onClick: () => clicks++,
+            }),
           ])
       },
     })
@@ -64,6 +71,7 @@ describe('useHoldToSkip', () => {
   beforeEach(() => {
     vi.useFakeTimers()
     telling = true
+    thingIdle = true
     skip = vi.fn()
     clicks = 0
     w = host()
@@ -147,6 +155,19 @@ describe('useHoldToSkip', () => {
 
   it('leaves a button its own press', async () => {
     await press(document.querySelector('.verb')!, HOLD_TO_SKIP_MS)
+    expect(skip).not.toHaveBeenCalled()
+    expect(clicks).toBe(1)
+  })
+
+  it('skips when a thing on the picture is held while its button does nothing (rq-w30z)', async () => {
+    await press(document.querySelector('.thing')!, HOLD_TO_SKIP_MS)
+    expect(skip).toHaveBeenCalledTimes(1)
+    expect(clicks).toBe(0)
+  })
+
+  it('leaves a thing on the picture its own press while its button acts, even as the story is told', async () => {
+    thingIdle = false
+    await press(document.querySelector('.thing')!, HOLD_TO_SKIP_MS)
     expect(skip).not.toHaveBeenCalled()
     expect(clicks).toBe(1)
   })
