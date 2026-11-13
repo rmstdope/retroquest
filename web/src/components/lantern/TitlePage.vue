@@ -96,28 +96,35 @@ function skip(event: Event): void {
   else guardGesture()
 }
 
-/** The events that end a skipping pointer press, which must reach nothing that has appeared under it. */
-const GESTURE_ENDS = ['mousedown', 'click'] as const
+/** True from a skipping pointer press until its click has passed, while the buttons ignore presses. */
+const guarding = ref(false)
 
-/** Swallow the mouse events that follow a skipping pointer press, until its click or the next press. */
+/** Keep the focus where the page put it, and the click from acting on what appeared under the press. */
 function guardGesture(): void {
-  for (const type of GESTURE_ENDS) window.addEventListener(type, swallow, true)
+  guarding.value = true
+  window.addEventListener('mousedown', cancelDefault, true)
+  window.addEventListener('click', cancelDefault, true)
+  window.addEventListener('click', releaseGesture)
   window.addEventListener('pointerdown', releaseGesture, true)
 }
 
-/** Cancel one event of the skipping gesture; its click is the last. */
-function swallow(event: Event): void {
+/** Cancel an event's default without stopping it, so the music's listeners still hear the press. */
+function cancelDefault(event: Event): void {
   event.preventDefault()
-  if (event.type !== 'click') return
-  event.stopPropagation()
-  releaseGesture()
 }
 
-/** End the guard (at the gesture's click, at the next press, or when the page goes). */
+/** End the guard (after the gesture's click has passed, at the next press, or when the page goes). */
 function releaseGesture(): void {
-  for (const type of GESTURE_ENDS)
-    window.removeEventListener(type, swallow, true)
+  guarding.value = false
+  window.removeEventListener('mousedown', cancelDefault, true)
+  window.removeEventListener('click', cancelDefault, true)
+  window.removeEventListener('click', releaseGesture)
   window.removeEventListener('pointerdown', releaseGesture, true)
+}
+
+/** Emit a button's event unless it is the click of the press that skipped the opening. */
+function press(action: () => void): void {
+  if (!guarding.value) action()
 }
 
 /** The opening is over once the last button has risen. */
@@ -181,7 +188,7 @@ onBeforeUnmount(() => {
             type="button"
             class="lq-title-start"
             data-autofocus
-            @click="emit('start')"
+            @click="press(() => emit('start'))"
           >
             Start
           </button>
@@ -192,7 +199,7 @@ onBeforeUnmount(() => {
             type="button"
             class="lq-title-start"
             data-autofocus
-            @click="emit('continue')"
+            @click="press(() => emit('continue'))"
           >
             Continue
             <span class="lq-title-line">{{ continueLine(newest) }}</span>
@@ -201,7 +208,7 @@ onBeforeUnmount(() => {
             type="button"
             :class="newest ? 'lq-title-second' : 'lq-title-start'"
             :data-autofocus="newest ? undefined : ''"
-            @click="emit('start')"
+            @click="press(() => emit('start'))"
           >
             New game
           </button>
@@ -209,7 +216,7 @@ onBeforeUnmount(() => {
             ref="loadButton"
             type="button"
             class="lq-title-second"
-            @click="emit('load')"
+            @click="press(() => emit('load'))"
           >
             Load game
           </button>
