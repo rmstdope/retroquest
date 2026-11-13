@@ -43,6 +43,15 @@ export interface HoldToSkip {
 const OWN_PRESSES =
   'button, a, input, textarea, select, summary, [contenteditable], [role="button"], [role="dialog"]'
 
+/** A thing's button on the picture (`AreaPress`): it does nothing while the story is told, so a press held there is the hold's. */
+const PICTURE_THING = '[data-area-press]'
+
+/** Whether a press on `target` is left to the control it lands on. */
+function ownPress(target: Element): boolean {
+  const control = target.closest(OWN_PRESSES)
+  return control !== null && !control.matches(PICTURE_THING)
+}
+
 /**
  * Press and hold to skip: while the story is told, a tap takes one step (the
  * ordinary click, on its release) and a press held for `HOLD_TO_SKIP_MS`
@@ -99,14 +108,13 @@ export function useHoldToSkip(options: HoldToSkipOptions): HoldToSkip {
     }, HOLD_TO_SKIP_MS)
   }
 
-  /** A press on the story while it is told starts a hold (not on a control, which keeps its own presses). */
+  /** A press on the story while it is told starts a hold (not on a control, which keeps its own presses, unless it is a thing on the picture). */
   function onPointerDown(event: PointerEvent): void {
     swallowClick = false
     if (event.button !== 0 || !event.isPrimary) return
     const target = event.target instanceof Element ? event.target : null
     const root = options.root()
-    if (!target || !root?.contains(target) || target.closest(OWN_PRESSES))
-      return
+    if (!target || !root?.contains(target) || ownPress(target)) return
     if (!options.telling()) return
     start(event.pointerId, null, { x: event.clientX, y: event.clientY })
   }

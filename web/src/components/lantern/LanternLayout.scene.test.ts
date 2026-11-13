@@ -529,6 +529,45 @@ describe('LanternLayout: change of scene', () => {
       await allTold(game)
     })
 
+    /** Send `command` in the dream, narrated: its turn's id. */
+    async function narratedIn(
+      game: ReturnType<typeof useGameStore>,
+      command: string,
+    ): Promise<number> {
+      recordEverything()
+      game.submitCommand(command)
+      const narration = useNarrationStore()
+      // The answer comes through the bridge, and its voice begins once it is up.
+      const narrated = (): boolean =>
+        game.turns.at(-1)?.command === command &&
+        narration.narrates(game.turns.at(-1)!.id)
+      for (let t = 0; t < 2000 && !narrated(); t += 25)
+        await vi.advanceTimersByTimeAsync(25)
+      expect(narrated()).toBe(true)
+      expect(useStageSpeechStore().conversation).toBeNull()
+      const id = game.turns.at(-1)!.id
+      return id
+    }
+
+    it('narrated, a click on the picture hurries an examine, with no one talking (rq-w30z)', async () => {
+      const game = await dream()
+      const id = await narratedIn(game, 'examine man')
+      const narration = useNarrationStore()
+      expect(narration.speaking(id)?.unit).toBe(0)
+      // Its one spoken block is hurried, which ends the turn.
+      await w.get('.lq-stage-picture').trigger('click')
+      await vi.advanceTimersByTimeAsync(200)
+      expect(narration.isNarrating).toBe(false)
+    })
+
+    it('narrated, holding the picture skips an examine, with no one talking (rq-w30z)', async () => {
+      const game = await dream()
+      await narratedIn(game, 'examine child')
+      await holdPicture(HOLD_TO_SKIP_MS)
+      await vi.advanceTimersByTimeAsync(0)
+      expect(useNarrationStore().isNarrating).toBe(false)
+    })
+
     it('holding Enter skips everything; its repeats take no step meanwhile', async () => {
       const game = await dream()
       await answerVoice(game)

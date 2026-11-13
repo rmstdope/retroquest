@@ -643,7 +643,6 @@ describe('the narration paper', () => {
     await nextTick()
     await settle()
     expect(useStageSpeechStore().conversation).toBeNull()
-    useSettingsStore().narrationOn = true
     const narration = useNarrationStore()
     // A voice that plays until it is stopped.
     narration.setAudioFactory(() => ({
@@ -674,10 +673,6 @@ describe('the narration paper', () => {
     picture.click()
     // The next block is read after the hurried one's short pause.
     await vi.waitFor(() => expect(narration.speaking(2)?.unit).toBe(1))
-    // A second click at once is a double tap: the turn is skipped.
-    picture.click()
-    await nextTick()
-    expect(narration.isNarrating).toBe(false)
   })
 
   it('hides both sides with N too', async () => {

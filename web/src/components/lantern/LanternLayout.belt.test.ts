@@ -461,7 +461,6 @@ describe('LanternLayout: the belt of pictures', () => {
   it('hurries a narrated look with no conversation when a picture on the belt is pressed', async () => {
     await cottage()
     expect(useStageSpeechStore().conversation).toBeNull()
-    useSettingsStore().narrationOn = true
     const narration = useNarrationStore()
     // A voice that plays until it is stopped.
     narration.setAudioFactory(() => ({
