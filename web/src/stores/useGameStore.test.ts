@@ -2523,6 +2523,18 @@ describe('useGameStore', () => {
       expect(store.notice).toBe(null)
     })
 
+    it('asks to save on the final chapter instead of going on', () => {
+      finishLastAct()
+      store.continueChapter()
+      expect(store.finishAsked).toBe(true)
+      expect(store.showModal).toBe(true)
+      expect(store.modalChapter).toEqual(FINAL_CHAPTER)
+      store.cancelFinish()
+      expect(store.finishAsked).toBe(false)
+      expect(store.modalChapter).toEqual(FINAL_CHAPTER)
+      expect(store.ending).toBe(null)
+    })
+
     it('keeps the dialog open when the save fails', () => {
       finishLastAct()
       store.continueChapter()
@@ -2533,6 +2545,18 @@ describe('useGameStore', () => {
       expect(store.finishAsked).toBe(true)
       expect(store.modalChapter).toEqual(FINAL_CHAPTER)
       expect(store.turns.length).toBe(turns)
+    })
+
+    it('ends the game without saving', () => {
+      finishLastAct()
+      store.continueChapter()
+      bridge.quickSaveGame.mockClear()
+      expect(store.finishGame(false)).toBe(true)
+      expect(bridge.quickSaveGame).not.toHaveBeenCalled()
+      expect(store.ending).toEqual({
+        text: 'The realm breathes again.',
+        saved: false,
+      })
     })
 
     it('starts afresh after a restart', () => {
