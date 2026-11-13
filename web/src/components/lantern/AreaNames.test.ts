@@ -138,11 +138,12 @@ function onAnEdge(y: number): boolean {
 /** Let the words' measuring and fading settle. */
 async function settle(w: VueWrapper, relayout: string): Promise<void> {
   await w.setProps({ relayout })
-  await new Promise((resolve) => setTimeout(resolve, 400))
+  await vi.advanceTimersByTimeAsync(400)
   await nextTick()
 }
 
 beforeEach(() => {
+  vi.useFakeTimers()
   setActivePinia(createPinia())
   vi.spyOn(HTMLElement.prototype, 'clientWidth', 'get').mockReturnValue(960)
   vi.spyOn(HTMLElement.prototype, 'clientHeight', 'get').mockReturnValue(540)
@@ -151,6 +152,7 @@ afterEach(() => {
   for (const wrapper of wrappers) wrapper.unmount()
   wrappers = []
   document.body.innerHTML = ''
+  vi.useRealTimers()
   vi.restoreAllMocks()
   vi.unstubAllGlobals()
 })
@@ -443,7 +445,7 @@ describe('AreaNames', () => {
       })
       wordsOver('lq-story-wrap')
       await w.setProps({ relayout: 'words' })
-      await new Promise((resolve) => setTimeout(resolve, 400))
+      await vi.advanceTimersByTimeAsync(400)
       await nextTick()
       expect(markAt(w, 'villager')).toEqual({ x: 432, y: 270 })
       // The bucket's point is under the words, which fill the height: its dot stands on their edge at its own x.
@@ -491,7 +493,7 @@ describe('AreaNames', () => {
         const w = mountNames({ showing: true })
         const words = wordsOver(selector)
         await w.setProps({ relayout: 'words' })
-        await new Promise((resolve) => setTimeout(resolve, 400))
+        await vi.advanceTimersByTimeAsync(400)
         await nextTick()
         expect(markAt(w, 'villager')?.x).toBe(144)
         expect(onAnEdge(markAt(w, 'villager')!.y)).toBe(true)
@@ -507,7 +509,7 @@ describe('AreaNames', () => {
       // The wrap runs to 320; the one card ends at 240. The villager's mark (144, 270) is on visible picture.
       cardsOver([0, 320], [0, 320], [20, 240])
       await w.setProps({ relayout: 'words' })
-      await new Promise((resolve) => setTimeout(resolve, 400))
+      await vi.advanceTimersByTimeAsync(400)
       await nextTick()
       expect(w.find('[data-area-mark="villager"]').exists()).toBe(true)
       // The way north's mark (480, 54) is under the card: it steps just above it.
@@ -521,7 +523,7 @@ describe('AreaNames', () => {
       // A spoken line's bubble (20..240) in a column running to 320; the villager's mark (144, 270) is below it.
       cardsOver([0, 320], [0, 320], [20, 240], true)
       await w.setProps({ relayout: 'words' })
-      await new Promise((resolve) => setTimeout(resolve, 400))
+      await vi.advanceTimersByTimeAsync(400)
       await nextTick()
       expect(markAt(w, 'exit-north')?.y).toBeLessThan(20)
       expect(markAt(w, 'villager')).toEqual({ x: 144, y: 270 })
@@ -569,7 +571,7 @@ describe('AreaNames', () => {
       // The story starts at 100; the card above it (20..180) is only seen from 100 down. The way north's mark is at y 54.
       cardsOver([100, 320], [100, 320], [20, 180])
       await w.setProps({ relayout: 'words' })
-      await new Promise((resolve) => setTimeout(resolve, 400))
+      await vi.advanceTimersByTimeAsync(400)
       await nextTick()
       expect(w.find('[data-area-mark="exit-north"]').exists()).toBe(true)
       expect(w.find('[data-area-mark="villager"]').exists()).toBe(true)
@@ -596,7 +598,7 @@ describe('AreaNames', () => {
       expect(onAnEdge(markAt(w, 'villager')!.y)).toBe(true)
       // Faded, with nothing else changing.
       words.style.visibility = 'hidden'
-      await new Promise((resolve) => setTimeout(resolve, 400))
+      await vi.advanceTimersByTimeAsync(400)
       await nextTick()
       expect(markAt(w, 'villager')).toEqual({ x: 144, y: 270 })
     })
@@ -747,7 +749,7 @@ describe('AreaNames', () => {
       })
       cardsOver([285, 540], [285, 540], [285, 540])
       await w.setProps({ relayout: 'words' })
-      await new Promise((resolve) => setTimeout(resolve, 400))
+      await vi.advanceTimersByTimeAsync(400)
       await nextTick()
       return w
     }
@@ -756,7 +758,7 @@ describe('AreaNames', () => {
       const w = mountNames({ showing: true })
       cardsOver([0, 320], [0, 320], [20, 240])
       await w.setProps({ relayout: 'words' })
-      await new Promise((resolve) => setTimeout(resolve, 400))
+      await vi.advanceTimersByTimeAsync(400)
       await nextTick()
       const style = w.get('[data-area-name="villager"]').attributes('style')!
       expect(parseFloat(/top: ([\d.]+)px/.exec(style)![1])).toBeGreaterThan(240)
@@ -787,7 +789,7 @@ describe('AreaNames', () => {
         toJSON: () => ({}),
       })
       await w.setProps({ relayout: 'plate' })
-      await new Promise((resolve) => setTimeout(resolve, 400))
+      await vi.advanceTimersByTimeAsync(400)
       await nextTick()
       const mark = w.get('[data-area-mark="villager"]').attributes('style')!
       const at = (n: string): number =>
@@ -920,7 +922,7 @@ describe('AreaNames', () => {
       const w = await boxedIn()
       document.querySelector('.lq-story-wrap')!.remove()
       await w.setProps({ relayout: 'gone' })
-      await new Promise((resolve) => setTimeout(resolve, 400))
+      await vi.advanceTimersByTimeAsync(400)
       await nextTick()
       expect(w.find('[data-area-name="villager"]').exists()).toBe(true)
     })
@@ -957,7 +959,7 @@ describe('AreaNames', () => {
       const w = mountNames({ showing: true })
       plateOver('lq-phone-plate')
       await w.setProps({ relayout: 'plate' })
-      await new Promise((resolve) => setTimeout(resolve, 400))
+      await vi.advanceTimersByTimeAsync(400)
       await nextTick()
       expect(top(w, '[data-area-mark="villager"]')).toBeGreaterThanOrEqual(
         340 + 8,
@@ -971,7 +973,7 @@ describe('AreaNames', () => {
       const w = mountNames({ showing: true })
       plateOver('lq-phone-plate')
       await w.setProps({ relayout: 'plate' })
-      await new Promise((resolve) => setTimeout(resolve, 400))
+      await vi.advanceTimersByTimeAsync(400)
       await nextTick()
       const markY = top(w, '[data-area-mark="villager"]')
       const lines = w.findAll('.lq-area-lines line')
@@ -995,7 +997,7 @@ describe('AreaNames', () => {
       stage.append(group)
       setRect(button, 200, 140)
       await w.setProps({ relayout: 'button' })
-      await new Promise((resolve) => setTimeout(resolve, 400))
+      await vi.advanceTimersByTimeAsync(400)
       await nextTick()
       expect(top(w, '[data-area-mark="villager"]')).toBeGreaterThanOrEqual(
         340 + 8,
@@ -1028,7 +1030,7 @@ describe('AreaNames', () => {
       // Over the Show tab as well: both step out from under it, still apart.
       plateOver('lq-paper-tab', 240, 80)
       await w.setProps({ relayout: 'tab' })
-      await new Promise((resolve) => setTimeout(resolve, 400))
+      await vi.advanceTimersByTimeAsync(400)
       await nextTick()
       const [tx2, ty2] = at('table')
       const [bx2, by2] = at('bread')
@@ -1061,7 +1063,7 @@ describe('AreaNames', () => {
       const [, byStart] = at('bread')
       const tab = plateOver('lq-paper-tab', y0 - 20, 40)
       await w.setProps({ relayout: 'tab' })
-      await new Promise((resolve) => setTimeout(resolve, 400))
+      await vi.advanceTimersByTimeAsync(400)
       await nextTick()
       expect(tab).toBeTruthy()
       const [tx, ty] = at('table')
@@ -1078,7 +1080,7 @@ describe('AreaNames', () => {
         const w = mountNames({ showing: true })
         plateOver(tab)
         await w.setProps({ relayout: 'tab' })
-        await new Promise((resolve) => setTimeout(resolve, 400))
+        await vi.advanceTimersByTimeAsync(400)
         await nextTick()
         expect(top(w, '[data-area-mark="villager"]')).toBeGreaterThanOrEqual(
           340 + 8,
@@ -1090,7 +1092,7 @@ describe('AreaNames', () => {
       const w = mountNames({ showing: true })
       plateOver('lq-show-names')
       await w.setProps({ relayout: 'show-names' })
-      await new Promise((resolve) => setTimeout(resolve, 400))
+      await vi.advanceTimersByTimeAsync(400)
       await nextTick()
       expect(top(w, '[data-area-mark="villager"]')).toBeGreaterThanOrEqual(
         340 + 8,
@@ -1121,7 +1123,7 @@ describe('AreaNames', () => {
         toJSON: () => ({}),
       })
       await w.setProps({ relayout: 'show-names' })
-      await new Promise((resolve) => setTimeout(resolve, 400))
+      await vi.advanceTimersByTimeAsync(400)
       await nextTick()
       const style = w.get('[data-area-mark="villager"]').attributes('style')
       const x = parseFloat(/left: ([\d.]+)px/.exec(style ?? '')![1])
@@ -1136,7 +1138,7 @@ describe('AreaNames', () => {
       plateOver('lq-words-hide', 250, 40)
       cardsOver([0, 244], [0, 244], [0, 244])
       await w.setProps({ relayout: 'words' })
-      await new Promise((resolve) => setTimeout(resolve, 400))
+      await vi.advanceTimersByTimeAsync(400)
       await nextTick()
       const style = w.get('[data-area-mark="villager"]').attributes('style')
       const left = parseFloat(/left: ([\d.]+)px/.exec(style ?? '')![1])
@@ -1147,14 +1149,14 @@ describe('AreaNames', () => {
       const w = mountNames({ showing: true })
       const plate = plateOver('lq-stage-plate', 200, 40)
       await w.setProps({ relayout: 'a' })
-      await new Promise((resolve) => setTimeout(resolve, 400))
+      await vi.advanceTimersByTimeAsync(400)
       await nextTick()
       expect(top(w, '[data-area-mark="villager"]')).toBeGreaterThanOrEqual(
         240 + 8,
       )
       setRect(plate, 0, 20)
       await w.setProps({ relayout: 'b' })
-      await new Promise((resolve) => setTimeout(resolve, 400))
+      await vi.advanceTimersByTimeAsync(400)
       await nextTick()
       expect(top(w, '[data-area-mark="villager"]')).toBe(270)
     })
@@ -1214,7 +1216,7 @@ describe('AreaNames', () => {
         const w = mountNames({ showing: true, things: pair, boxes: pairBoxes })
         plateOver('lq-phone-plate')
         await w.setProps({ relayout: 'plate' })
-        await new Promise((resolve) => setTimeout(resolve, 400))
+        await vi.advanceTimersByTimeAsync(400)
         await nextTick()
         expect(top(w, '[data-area-mark="books"]')).toBe(
           top(w, '[data-area-mark="shelves"]'),
@@ -1230,7 +1232,7 @@ describe('AreaNames', () => {
         })
         plateOver('lq-phone-plate')
         await all.setProps({ relayout: 'plate' })
-        await new Promise((resolve) => setTimeout(resolve, 400))
+        await vi.advanceTimersByTimeAsync(400)
         await nextTick()
         const spot = left(all, 'books')
         all.unmount()
@@ -1243,7 +1245,7 @@ describe('AreaNames', () => {
         })
         plateOver('lq-phone-plate')
         await one.setProps({ relayout: 'plate' })
-        await new Promise((resolve) => setTimeout(resolve, 400))
+        await vi.advanceTimersByTimeAsync(400)
         await nextTick()
         expect(left(one, 'books')).toBe(spot)
       })
@@ -1253,7 +1255,7 @@ describe('AreaNames', () => {
       const w = mountNames({ showing: false, focused: 'villager' })
       plateOver('lq-phone-plate')
       await w.setProps({ relayout: 'plate' })
-      await new Promise((resolve) => setTimeout(resolve, 400))
+      await vi.advanceTimersByTimeAsync(400)
       await nextTick()
       expect(top(w, '[data-area-mark="villager"]')).toBeGreaterThanOrEqual(
         340 + 8,

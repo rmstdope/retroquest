@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { beforeEach, describe, it, expect, vi } from 'vitest'
+import { afterEach, beforeEach, describe, it, expect, vi } from 'vitest'
 import { SCENE_PAUSE_MS } from '@/lantern/narrationUnits'
 import { flushPromises, mount } from '@vue/test-utils'
 import { nextTick } from 'vue'
@@ -32,8 +32,12 @@ const COMPLETE: Chapter = {
 
 describe('ChapterPage', () => {
   beforeEach(() => {
+    vi.useFakeTimers()
     setActivePinia(createPinia())
     vi.stubGlobal('fetch', () => Promise.reject(new Error('offline')))
+  })
+  afterEach(() => {
+    vi.useRealTimers()
   })
 
   it('opens an act with its title, text and Begin', async () => {
@@ -184,10 +188,10 @@ describe('ChapterPage', () => {
       expect(w.get('h2').classes()).toContain('lq-speaking')
       expect(w.findAll('.lq-chapter-block')).toHaveLength(0)
       audios[0].onended?.()
-      await new Promise((r) => setTimeout(r, 400))
+      await vi.advanceTimersByTimeAsync(400)
       await nextTick()
       expect(w.findAll('.lq-chapter-block')).toHaveLength(0)
-      await new Promise((r) => setTimeout(r, SCENE_PAUSE_MS))
+      await vi.advanceTimersByTimeAsync(SCENE_PAUSE_MS)
       await nextTick()
       expect(w.findAll('.lq-chapter-block').map((b) => b.text())).toEqual([
         'The wind rises.',
@@ -235,7 +239,7 @@ describe('ChapterPage', () => {
       expect(w.get('.lq-chapter-kicker').classes()).not.toContain('lq-speaking')
       expect(w.findAll('.lq-chapter-block')).toHaveLength(0)
       audios[0].onended?.()
-      await new Promise((r) => setTimeout(r, SCENE_PAUSE_MS + 400))
+      await vi.advanceTimersByTimeAsync(SCENE_PAUSE_MS + 400)
       await nextTick()
       expect(w.findAll('.lq-chapter-block').map((b) => b.text())).toEqual([
         'The wind rises.',
