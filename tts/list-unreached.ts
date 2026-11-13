@@ -11,29 +11,10 @@ import { readdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
 import {
     acknowledgedKey,
     authoredLines,
+    contentFiles,
     unreachedLines,
-    type SourceFile,
 } from "../web/src/lantern/unreachedLines";
 import type { ScriptLine } from "../web/src/lantern/narrationScript";
-
-/** The content source files (rooms, items, characters, spells, quests) of act `act`. */
-function contentFiles(act: string): SourceFile[] {
-    const files: SourceFile[] = [];
-    const walk = (dir: string): void => {
-        for (const name of readdirSync(dir)) {
-            const path = `${dir}/${name}`;
-            if (statSync(path).isDirectory()) walk(path);
-            else if (
-                /\/(rooms|items|characters|spells|quests)\//.test(path) &&
-                path.endsWith(".ts") &&
-                !path.includes(".test.")
-            )
-                files.push({ file: path, text: readFileSync(path, "utf8") });
-        }
-    };
-    walk(`src/act${act}`);
-    return files;
-}
 
 for (const act of process.argv.slice(2)) {
     const script = JSON.parse(
@@ -41,7 +22,7 @@ for (const act of process.argv.slice(2)) {
     ) as ScriptLine[];
     const keys = [
         ...new Set(
-            unreachedLines(authoredLines(contentFiles(act)), script, []).map((line) =>
+            unreachedLines(authoredLines(contentFiles(".", act)), script, []).map((line) =>
                 acknowledgedKey(line.text),
             ),
         ),

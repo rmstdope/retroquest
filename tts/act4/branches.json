@@ -109,10 +109,7 @@
     },
     {
         "after": 6,
-        "commands": [
-            "give guardian's chain to captain of the guard",
-            "talk to captain of the guard"
-        ]
+        "commands": ["give guardian's chain to captain of the guard"]
     },
     {
         "after": 29,

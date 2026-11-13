@@ -5,37 +5,23 @@
  * by name, instead of by a reviewer. `tts/act<N>/unreached.json` acknowledges
  * the lines that were already missing when the check began.
  */
-import { readdirSync, readFileSync, statSync } from 'node:fs'
+import { readFileSync } from 'node:fs'
+import { fileURLToPath } from 'node:url'
 import { describe, expect, it } from 'vitest'
 import type { ScriptLine } from './narrationScript'
 import {
   acknowledgedKey,
   authoredLines,
+  contentFiles,
+  staleAcknowledgements,
   unreachedLines,
-  type SourceFile,
 } from './unreachedLines'
 
 /** A source file of the repository relative to `web/`. */
 const here = (path: string): URL => new URL(`../../${path}`, import.meta.url)
 
-/** Every content source file of act `act`: rooms, items, characters, spells and quests. */
-function contentFiles(act: number): SourceFile[] {
-  const files: SourceFile[] = []
-  const walk = (dir: string): void => {
-    for (const name of readdirSync(here(dir))) {
-      const path = `${dir}/${name}`
-      if (statSync(here(path)).isDirectory()) walk(path)
-      else if (
-        /\/(rooms|items|characters|spells|quests)\//.test(path) &&
-        path.endsWith('.ts') &&
-        !path.includes('.test.')
-      )
-        files.push({ file: path, text: readFileSync(here(path), 'utf8') })
-    }
-  }
-  walk(`src/act${act}`)
-  return files
-}
+/** The web project's directory. */
+const WEB_ROOT = fileURLToPath(here('.')).replace(/\/$/, '')
 
 describe('authoredLines', () => {
   it('joins literals concatenated with + and drops markup', () => {
@@ -86,13 +72,32 @@ describe.each([1, 2, 3, 4])('the lines of Act %i content', (act) => {
       readFileSync(here(`../tts/act${act}/unreached.json`), 'utf8'),
     ) as string[]
     const missing = unreachedLines(
-      authoredLines(contentFiles(act)),
+      authoredLines(contentFiles(WEB_ROOT, act)),
       script,
       acknowledged,
     ).map((line) => `${line.file}: ${line.text}`)
     expect(
       missing,
       'Lines the script lacks: reach them with an entry in tts/act<N>/branches.json (see tts/README.md)',
+    ).toEqual([])
+  })
+})
+
+describe.each([1, 2, 3, 4])('unreached.json of Act %i', (act) => {
+  it('holds only lines still missing from the script', () => {
+    const script = JSON.parse(
+      readFileSync(here(`../tts/act${act}/script.json`), 'utf8'),
+    ) as ScriptLine[]
+    const acknowledged = JSON.parse(
+      readFileSync(here(`../tts/act${act}/unreached.json`), 'utf8'),
+    ) as string[]
+    expect(
+      staleAcknowledgements(
+        authoredLines(contentFiles(WEB_ROOT, act)),
+        script,
+        acknowledged,
+      ),
+      'Remove these from unreached.json: the line is now spoken, reworded or gone',
     ).toEqual([])
   })
 })

@@ -259,6 +259,13 @@ export interface ScriptBranch {
   unlearn?: string[]
 }
 
+/** How the engine opens an answer that reaches nobody: no such thing or character here. */
+const NOBODY_HERE = [
+  "[failure]You don't see",
+  '[failure]There is no character named',
+  "[failure]There is no '",
+]
+
 /** How many times in a row each character at hand is talked to, so what they say in turn (rumours, news) is read. */
 const TALKS = 8
 
@@ -363,7 +370,7 @@ export function actScript(
       const addressed = tryOut.lastTurnAddressee() !== null
       add(ownWordsBlocks(command, addressed))
       nobody =
-        text.startsWith("[failure]You don't see") ||
+        NOBODY_HERE.some((refusal) => text.startsWith(refusal)) ||
         (command.startsWith('say ') && !addressed)
       return text
     })

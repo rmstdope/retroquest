@@ -558,6 +558,25 @@ describe('actScript said words', () => {
     ).toThrow(/branch after 0 \(say hello to xyz\).*reaches nobody/)
   })
 
+  it('fails a branch whose talk, give or take reaches nobody, naming the branch', () => {
+    for (const command of [
+      'talk to nobodyhere',
+      'give lantern to nobodyhere',
+      'take nothinghere',
+    ]) {
+      const nobody: ScriptBranch = { after: 0, commands: [command] }
+      expect(() =>
+        actScript(
+          () => new Game([new Act1()]),
+          ACT1_GOLDEN_PATH.slice(0, 1),
+          [],
+          [],
+          [nobody],
+        ),
+      ).toThrow(new RegExp(`branch after 0 \\(${command}\\).*reaches nobody`))
+    }
+  })
+
   it('fails a branch after a step the path does not have, naming the branch', () => {
     const late: ScriptBranch = { after: 5, commands: ['look'] }
     expect(() =>

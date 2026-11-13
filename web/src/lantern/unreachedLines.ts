@@ -6,6 +6,7 @@
  * literals of content files, `unreachedLines` keeps those found in no script
  * line and not acknowledged in `tts/act<N>/unreached.json`.
  */
+import { readdirSync, readFileSync, statSync } from 'node:fs'
 import ts from 'typescript'
 import type { ScriptLine } from './narrationScript'
 
@@ -102,4 +103,36 @@ export function unreachedLines(
       !spoken.includes(line.text) &&
       !acknowledged.includes(acknowledgedKey(line.text)),
   )
+}
+
+/** The acknowledged keys that no unreached authored line has any more: reached, reworded or deleted. */
+export function staleAcknowledgements(
+  authored: AuthoredLine[],
+  script: ScriptLine[],
+  acknowledged: string[],
+): string[] {
+  const unreached = new Set(
+    unreachedLines(authored, script, []).map((line) =>
+      acknowledgedKey(line.text),
+    ),
+  )
+  return acknowledged.filter((key) => !unreached.has(key))
+}
+
+/** Every non-test TypeScript file under `src/act<act>` of the web project at `webRoot`, with its text. */
+export function contentFiles(
+  webRoot: string,
+  act: number | string,
+): SourceFile[] {
+  const files: SourceFile[] = []
+  const walk = (dir: string): void => {
+    for (const name of readdirSync(dir)) {
+      const path = `${dir}/${name}`
+      if (statSync(path).isDirectory()) walk(path)
+      else if (path.endsWith('.ts') && !path.includes('.test.'))
+        files.push({ file: path, text: readFileSync(path, 'utf8') })
+    }
+  }
+  walk(`${webRoot}/src/act${act}`)
+  return files
 }
