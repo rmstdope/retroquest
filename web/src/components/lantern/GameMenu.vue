@@ -97,7 +97,8 @@ const ROWS: Array<{
   <LanternDialog title="Game" eyebrow="RetroQuest" @close="emit('close')">
     <div v-if="sideways" class="lq-side-list">
       <p v-if="act" class="lq-side-act">
-        <span>{{ act.act }}</span><span>{{ act.quests }}</span>
+        <span>{{ act.act }}</span
+        ><span>{{ act.quests }}</span>
       </p>
       <button type="button" class="lq-side-row" @click="quickSave">
         <span class="lq-side-label">Quick save</span>

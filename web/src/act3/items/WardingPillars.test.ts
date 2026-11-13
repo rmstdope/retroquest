@@ -14,7 +14,8 @@ function setup(): { game: Game; room: Room; pillars: WardingPillars } {
   const game = new Game([new Act3()])
   const room = game.state.allRooms.OuterWards
   const pillars = room.items.find((i) => i instanceof WardingPillars) as
-    WardingPillars | undefined
+    | WardingPillars
+    | undefined
   expect(pillars).toBeDefined()
   return { game, room, pillars: pillars as WardingPillars }
 }

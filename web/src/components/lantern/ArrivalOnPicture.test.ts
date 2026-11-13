@@ -788,7 +788,10 @@ describe('ArrivalOnPicture', () => {
           useArrivalStore().show(1, [part], false)
           await w.vm.$nextTick()
           const label = `${layout} ${part.kind}`
-          if (w.get('.lq-arrival-hint').text() !== 'Tap to continue · Hold to skip') {
+          if (
+            w.get('.lq-arrival-hint').text() !==
+            'Tap to continue · Hold to skip'
+          ) {
             wrong.push(`${label}: hint`)
           }
           if (

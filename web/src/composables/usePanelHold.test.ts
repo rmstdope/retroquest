@@ -49,10 +49,9 @@ function voiced(kind: NarrationUnit['kind']): NarrationUnit {
 
 /** One silent unit per block of the turn, then a voiced one per arrival and quest card. */
 function unitsOf(turn: Turn): NarrationUnit[] {
-  const blocks = parseTurn(turn.text).map((): NarrationUnit => ({
-    kind: 'block',
-    parts: [],
-  }))
+  const blocks = parseTurn(turn.text).map(
+    (): NarrationUnit => ({ kind: 'block', parts: [] }),
+  )
   return [
     ...blocks,
     ...(turn.arrival
@@ -182,8 +181,9 @@ describe('usePanelHold: the music of a narrated move', () => {
   /** Every spoken block, the arrival and each quest card voiced. */
   function voicedUnitsOf(turn: Turn): NarrationUnit[] {
     return [
-      ...parseTurn(turn.text).map((block): NarrationUnit =>
-        blockVoice(block) ? voiced('block') : { kind: 'block', parts: [] },
+      ...parseTurn(turn.text).map(
+        (block): NarrationUnit =>
+          blockVoice(block) ? voiced('block') : { kind: 'block', parts: [] },
       ),
       ...(turn.arrival
         ? [{ ...voiced('arrival'), pauseBefore: SCENE_PAUSE_MS }]

@@ -222,7 +222,8 @@ onBeforeUnmount(() =>
       }"
       @click="press(action)"
     >
-      <i aria-hidden="true">{{ action.icon }}</i>{{ action.label }}
+      <i aria-hidden="true">{{ action.icon }}</i
+      >{{ action.label }}
     </button>
     <div
       v-if="fan && opened"
