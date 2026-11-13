@@ -235,6 +235,7 @@ describe('A full bucket used with something else', () => {
       const game = new Game([new Act1()])
       const bucket = new Bucket()
       bucket.useWith(game.state, new Well())
+      bucket.description = bucket.descriptionFor(game.state)
       Reflect.deleteProperty(bucket, 'filled')
 
       bucket.migrateLegacyState()

@@ -24,6 +24,7 @@ describe('WitheredCarrot', () => {
   it('reads a fresh carrot from a save made before the field as fresh', () => {
     const carrot = new WitheredCarrot()
     carrot.revive()
+    carrot.description = carrot.descriptionFor(new Game([new Act1()]).state)
     Reflect.deleteProperty(carrot, 'fresh')
 
     carrot.migrateLegacyState()

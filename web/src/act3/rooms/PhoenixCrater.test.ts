@@ -86,8 +86,7 @@ describe('Phoenix Crater, told by class', () => {
     room.rest(dummyState())
     const phoenix = room.characters[0]
     phoenix.name = 'The Firebird'
-    room.refreshSavedText()
 
-    expect(room.description).toContain(PHOENIX_LINES)
+    expect(room.descriptionFor(dummyState())).toContain(PHOENIX_LINES)
   })
 })

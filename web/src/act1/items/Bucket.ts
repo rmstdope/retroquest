@@ -72,7 +72,7 @@ export class Bucket extends Item {
    * save made before `holdsPurifiedWater` existed says what its saved text did.
    */
   override descriptionFor(_gameState: GameState): string {
-    if (this.name === 'bucket') return EMPTY_DESCRIPTION
+    if (!this.isFilled()) return EMPTY_DESCRIPTION
     const clear =
       this.holdsPurifiedWater ?? this.description.includes('clear water')
     const water = clear ? 'clear water' : 'murky water, with a sour smell'
