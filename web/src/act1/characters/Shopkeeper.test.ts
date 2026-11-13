@@ -602,7 +602,7 @@ describe('Hemlock has only the one rope (rq-28te)', () => {
       }
       const shopkeeper = game.state.currentRoom.getCharacterByName('shopkeeper')
       if (!(shopkeeper instanceof Shopkeeper)) throw new Error('no shopkeeper')
-      Reflect.deleteProperty(shopkeeper, 'ropeSold')
+      shopkeeper.wares.rope = { item: new Rope(), price: 1 }
       const loaded = new Game([new Act1()])
       expect(loaded.loadSaveData(game.toSaveData())).toContain('loaded')
 
@@ -611,6 +611,22 @@ describe('Hemlock has only the one rope (rq-28te)', () => {
       )
     },
   )
+
+  it('takes the rope from the wares of a save that has it sold but still listed (rq-8xc9)', () => {
+    const game = gameInStore()
+    const shopkeeper = game.state.currentRoom.getCharacterByName('shopkeeper')
+    if (!(shopkeeper instanceof Shopkeeper)) throw new Error('no shopkeeper')
+    Reflect.set(shopkeeper, 'ropeSold', true)
+    const loaded = new Game([new Act1()])
+    expect(loaded.loadSaveData(game.toSaveData())).toContain('loaded')
+
+    expect(
+      new GameController(loaded).getRoomWares().map((ware) => ware.name),
+    ).not.toContain('rope')
+    expect(loaded.commandParser.parse('buy rope from shopkeeper')).toContain(
+      LAST_ROPE,
+    )
+  })
 
   /** The store's own rope: the one on the shelf, not one Elior dropped. */
   function shelfRopes(game: Game): Item[] {
@@ -688,13 +704,66 @@ describe('Hemlock has only the one rope (rq-28te)', () => {
     game.state.addItemToInventory(new Coin())
     const shopkeeper = game.state.currentRoom.getCharacterByName('shopkeeper')
     if (!(shopkeeper instanceof Shopkeeper)) throw new Error('no shopkeeper')
-    Reflect.deleteProperty(shopkeeper, 'ropeSold')
+    Reflect.set(shopkeeper, 'ropeSold', undefined)
     const loaded = new Game([new Act1()])
     expect(loaded.loadSaveData(game.toSaveData())).toContain('loaded')
 
     loaded.commandParser.parse('buy rope from shopkeeper')
 
     expect(loaded.state.hasItem('rope')).toBe(true)
+  })
+})
+
+describe('no text offers the rope once it is gone (rq-8xc9)', () => {
+  /** Every text of the store that can mention rope, asked in the store. */
+  function ropeTexts(game: Game): string[] {
+    const talks = [0, 1, 2, 3].map(() =>
+      game.commandParser.parse('talk to shopkeeper'),
+    )
+    return [
+      ...talks,
+      game.commandParser.parse('examine shelves'),
+      new GameController(game).getRoomDescription(),
+    ]
+  }
+
+  function expectNoRopeOffered(game: Game): void {
+    const shopkeeper = game.state.currentRoom.getCharacterByName('shopkeeper')
+    if (!(shopkeeper instanceof Shopkeeper)) throw new Error('no shopkeeper')
+    expect(shopkeeper.ropeGone()).toBe(true)
+    for (const text of ropeTexts(game)) {
+      expect(text).not.toMatch(/\brope\b/i)
+    }
+    expect(game.commandParser.parse('buy rope from shopkeeper')).toContain(
+      'last good rope',
+    )
+  }
+
+  it('is offered while he still has it', () => {
+    const game = gameInStore()
+    const shopkeeper = game.state.currentRoom.getCharacterByName('shopkeeper')
+    if (!(shopkeeper instanceof Shopkeeper)) throw new Error('no shopkeeper')
+    expect(shopkeeper.ropeGone()).toBe(false)
+    expect(ropeTexts(game).join('\n')).toMatch(/rope/i)
+  })
+
+  it('is mentioned by none of them once it is sold, before and after a save', () => {
+    const game = gameInStore()
+    game.state.addItemToInventory(new Coin())
+    game.commandParser.parse('buy rope from shopkeeper')
+    const loaded = new Game([new Act1()])
+    expect(loaded.loadSaveData(game.toSaveData())).toContain('loaded')
+
+    expectNoRopeOffered(loaded)
+  })
+
+  it('is mentioned by none of them once he has given it when Patches stayed', () => {
+    const game = gameInStore({ shopOpen: false })
+    game.state.setStoryFlag(FLAG_PATCHES_FOUND, true)
+    game.state.setStoryFlag(FLAG_PATCHES_STAYED_WITH_GRANDMOTHER, true)
+    game.commandParser.parse('talk to shopkeeper')
+
+    expectNoRopeOffered(game)
   })
 })
 

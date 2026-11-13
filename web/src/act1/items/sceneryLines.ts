@@ -21,7 +21,7 @@ import { Lantern } from './Lantern'
 import { Locket } from './Locket'
 import { Matches } from './Matches'
 import { Mechanism } from './Mechanism'
-import { Rope } from './Rope'
+import { Shopkeeper } from '../characters/Shopkeeper'
 import { RustyHoe } from './RustyHoe'
 import { RustySaw } from './RustySaw'
 import { SharpKnife } from './SharpKnife'
@@ -81,10 +81,15 @@ function shedOpen(gameState: GameState): boolean {
   return shed !== null && 'locked' in shed && shed.locked === false
 }
 
-/** Whether Hemlock's one rope is still on his shelf, read without importing the room. */
+/** Whether Hemlock still has his one rope, read without importing the room. */
 function ropeOnShelf(gameState: GameState): boolean {
   const store: Room | null = gameState.getRoom('General Store')
-  return store !== null && store.items.some((item) => Rope.isOnDisplay(item))
+  return (
+    store !== null &&
+    store.characters.some(
+      (character) => character instanceof Shopkeeper && !character.ropeGone(),
+    )
+  )
 }
 
 /** Whether the key has fallen from the coop's rafter. */

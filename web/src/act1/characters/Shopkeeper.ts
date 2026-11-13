@@ -65,8 +65,9 @@ const MIRA = /\bmira\b/i
  * and are handed over for free once Elior has spoken with the priest.
  *
  * He has only the one good rope: once it is sold, or given when Patches
- * stays, it is off his shelves (the store's rope is taken from the room),
- * so a coin is always left for Borin's whetstone.
+ * stays, it is gone from his wares (and the store's rope is taken from the
+ * room), so a coin is always left for Borin's whetstone. His wares are the one
+ * record of it; `ropeGone` is the one question every text of the store asks.
  */
 export class Shopkeeper extends Character {
   wares: Record<string, { item: Item; price: number }> = {
@@ -75,16 +76,18 @@ export class Shopkeeper extends Character {
     armor: { item: new Armor(), price: 10 },
   }
   priestMatchesGiven = false
-  /** Whether Hemlock has sold his one rope. */
-  ropeSold = false
+  /** The idle line about the rope on his wall, left unsaid once it is gone. */
+  private static readonly ROPE_IDLE_LINE =
+    "That rope's good hemp, from before the caravans stopped. There'll be " +
+    'no more till spring, so mind what you tie with it.'
+
   /**
    * The lines he opens with once the store is open, in turn. Kept out of the
    * saved fields so a save always hears the current wording.
    */
   private static readonly IDLE_LINES: readonly string[] = [
     'Only store in Willowbrook, so I suppose that makes it the finest.',
-    "That rope's good hemp, from before the caravans stopped. There'll be " +
-      'no more till spring, so mind what you tie with it.',
+    Shopkeeper.ROPE_IDLE_LINE,
     "That sword's hung on that wall since my father's day. Nobody in " +
       "Willowbrook has ever needed one. I'd like it to stay that way.",
   ]
@@ -106,12 +109,10 @@ export class Shopkeeper extends Character {
    * His prices as one spoken sentence, in the order of the wares: the first
    * ware names its coin ("[Rope]'s a [coin]"), the rest only their number.
    * When the shelves are bare it is the empty-shelf line instead. The rope
-   * is left out once it is gone.
+   * is left out once it is gone, as it is no longer among the wares.
    */
-  private priceSentence(gameState: GameState): string {
-    const entries = Object.entries(this.wares).filter(
-      ([name]) => name !== 'rope' || !this.ropeGone(gameState),
-    )
+  private priceSentence(): string {
+    const entries = Object.entries(this.wares)
     if (entries.length === 0) return "I've nothing left on the shelves."
     const spoken = entries.map(([name, details], index) => {
       const ware = `[item_name]${index === 0 ? capitalize(name) : name}[/item_name]`
@@ -128,16 +129,22 @@ export class Shopkeeper extends Character {
   }
 
   /**
-   * Whether his one rope is gone: sold, or given to Elior when Patches
-   * stayed with grandmother (read from the story, so a save made after the
-   * gift agrees).
+   * Whether his one rope is gone: sold, or given to Elior when Patches stayed
+   * with grandmother. His wares are the one record, so the rope is gone when
+   * it is no longer among them; the price sentence, his refusal and idle lines,
+   * the store's description and its shelves all ask this.
    */
-  private ropeGone(gameState: GameState): boolean {
-    return (
-      this.ropeSold ||
-      (gameState.getStoryFlag(FLAG_HEMLOCK_HEARD_PATCHES_STAYED) &&
-        !gameState.getStoryFlag(FLAG_RUSTY_HOE_SECOND_COIN_FOUND))
-    )
+  ropeGone(): boolean {
+    return !('rope' in this.wares)
+  }
+
+  /**
+   * Take his one rope out of his wares and off the shelf of `room`, so
+   * nothing offers it any more.
+   */
+  private giveAwayRope(room: Room): void {
+    delete this.wares.rope
+    Shopkeeper.clearShelfRope(room)
   }
 
   /** The first price, with its coin word: "a [coin]" or "five [coins]". */
@@ -335,7 +342,7 @@ export class Shopkeeper extends Character {
     gameState.setStoryFlag(FLAG_MET_HEMLOCK, true)
     const gift = !gameState.getStoryFlag(FLAG_RUSTY_HOE_SECOND_COIN_FOUND)
     if (gift) {
-      Shopkeeper.clearShelfRope(gameState.currentRoom)
+      this.giveAwayRope(gameState.currentRoom)
       const rope = new Rope()
       rope.canBeCarried = true
       gameState.addItemToInventory(rope)
@@ -439,11 +446,13 @@ export class Shopkeeper extends Character {
 
     // Standard dialogue if matches aren't being given for the priest
     const waresInfo =
-      this.priceSentence(gameState) +
+      this.priceSentence() +
       " And there's an [item_name]apple[/item_name] with everything. " +
       "My mother's rule."
 
-    const lines = Shopkeeper.IDLE_LINES
+    const lines = Shopkeeper.IDLE_LINES.filter(
+      (line) => line !== Shopkeeper.ROPE_IDLE_LINE || !this.ropeGone(),
+    )
     const dialogue = lines[this.dialogueIndex % lines.length]
     this.dialogueIndex = (this.dialogueIndex + 1) % lines.length
 
@@ -465,18 +474,31 @@ export class Shopkeeper extends Character {
   }
 
   /**
-   * Bring a shopkeeper from an older save up to date on his one rope. Saves
-   * made before he had only the one have no `ropeSold`, which is read from
-   * the story; saves made before the rope left his shelf with its sale still
-   * show it, and it is taken off. Safe to run more than once.
+   * Bring a shopkeeper from an older save up to date on his one rope, once on
+   * load: a save that still lists the rope among his wares but has it sold
+   * (a saved `ropeSold`, the story's gift, or, in the oldest saves, a rope
+   * Elior holds) gets it taken from the wares and the shelf. Safe to run more
+   * than once.
    */
   migrateLegacyRope(gameState: GameState): void {
-    if (typeof this.ropeSold !== 'boolean')
-      this.ropeSold = this.legacyRopeSold(gameState)
-    if (!this.ropeGone(gameState)) return
+    const saved: unknown = Reflect.get(this, 'ropeSold')
+    Reflect.deleteProperty(this, 'ropeSold')
+    const gone =
+      this.ropeGone() ||
+      this.giftGiven(gameState) ||
+      (typeof saved === 'boolean' ? saved : this.legacyRopeSold(gameState))
+    if (!gone) return
     for (const room of Object.values(gameState.allRooms)) {
-      if (room.characters.includes(this)) Shopkeeper.clearShelfRope(room)
+      if (room.characters.includes(this)) this.giveAwayRope(room)
     }
+  }
+
+  /** Whether the story has him giving the rope when Patches stayed. */
+  private giftGiven(gameState: GameState): boolean {
+    return (
+      gameState.getStoryFlag(FLAG_HEMLOCK_HEARD_PATCHES_STAYED) &&
+      !gameState.getStoryFlag(FLAG_RUSTY_HOE_SECOND_COIN_FOUND)
+    )
   }
 
   /**
@@ -493,15 +515,12 @@ export class Shopkeeper extends Character {
    * mill's mechanism, was sold unless it was his gift when Patches stayed.
    */
   private legacyRopeSold(gameState: GameState): boolean {
-    const giftGiven =
-      gameState.getStoryFlag(FLAG_HEMLOCK_HEARD_PATCHES_STAYED) &&
-      !gameState.getStoryFlag(FLAG_RUSTY_HOE_SECOND_COIN_FOUND)
     const ropeHad =
       gameState.inventory.some((item) => item instanceof Rope) ||
       Object.values(gameState.allRooms).some((room) =>
         room.items.some((item) => item instanceof Mechanism && item.repaired),
       )
-    return ropeHad && !giftGiven
+    return ropeHad && !this.giftGiven(gameState)
   }
 
   /**
@@ -584,7 +603,7 @@ export class Shopkeeper extends Character {
           "He gets them on the house whenever he asks, so they're not for sale.",
       )
     }
-    if (itemNameToBuy === 'rope' && this.ropeGone(gameState)) {
+    if (itemNameToBuy === 'rope' && this.ropeGone()) {
       return speech(
         "That was my last good rope, lad. There'll be no more till spring.",
       )
@@ -634,8 +653,7 @@ export class Shopkeeper extends Character {
     let newItem: Item
     if (itemNameToBuy === 'rope') {
       newItem = new Rope()
-      this.ropeSold = true
-      Shopkeeper.clearShelfRope(gameState.currentRoom)
+      this.giveAwayRope(gameState.currentRoom)
     } else if (itemNameToBuy === 'sword') {
       newItem = new Sword()
     } else if (itemNameToBuy === 'armor') {
