@@ -163,6 +163,7 @@ function heads(index: number): boolean {
       <div
         v-else
         class="lq-cl"
+        data-lq-obstacle="card"
         :class="[`lq-cl-${piece.line.side}`, { 'lq-cl-head': heads(index) }]"
         :data-unit="piece.line.unit >= 0 ? piece.line.unit : undefined"
         :data-piece="index"
@@ -176,9 +177,12 @@ function heads(index: number): boolean {
         />
         <span v-else-if="piece.line.side === 'left'" class="lq-gap"></span>
         <div class="lq-col">
-          <b v-if="heads(index)" class="lq-line-name">{{
-            piece.line.speaker
-          }}</b>
+          <b
+            v-if="heads(index)"
+            class="lq-line-name"
+            data-lq-obstacle="words"
+            >{{ piece.line.speaker }}</b
+          >
           <!-- eslint-disable vue/no-v-html -->
           <div
             class="lq-line"

@@ -158,22 +158,12 @@ export function markInside(
 
 /** Whether (`x`, `y`) lies under `panel`, grown by `REACH` so a mark's glow never touches it. */
 function underPanel(x: number, y: number, panel: Rect): boolean {
-  return (
-    x > panel.x - REACH &&
-    x < panel.x + panel.w + REACH &&
-    y > panel.y - REACH &&
-    y < panel.y + panel.h + REACH
-  )
+  return !isFree(pointBox(x, y), [panel], REACH)
 }
 
 /** Whether (`x`, `y`) lies under the words' rectangle `words`, where a mark would be covered. */
 function inWords(x: number, y: number, words: Rect): boolean {
-  return (
-    x >= words.x &&
-    x <= words.x + words.w &&
-    y >= words.y &&
-    y <= words.y + words.h
-  )
+  return !isFree(pointBox(x, y), [words], ON_EDGE)
 }
 
 /**
@@ -397,13 +387,7 @@ export function keepMarksApart(
     words.some((r) => inWords(x, y, r))
   /** Whether a dot with its middle at (`x`, `y`) would lie even partly under the words. */
   const touchesWords = (x: number, y: number): boolean =>
-    words.some(
-      (r) =>
-        x > r.x - MARK_RADIUS &&
-        x < r.x + r.w + MARK_RADIUS &&
-        y > r.y - MARK_RADIUS &&
-        y < r.y + r.h + MARK_RADIUS,
-    )
+    !isFree(pointBox(x, y), words, MARK_RADIUS)
   // A mark standing on its thing, clear of every other such mark, holds its
   // own spot: no mark that slides lands on it, so it never has to move.
   const holding = marks.filter(
@@ -572,14 +556,39 @@ export function pressAt(
   return shut?.direction ? { direction: shut.direction, open: false } : null
 }
 
+/**
+ * The one answer to "is this spot free": whether `box` (a mark's spot is a
+ * zero-size box) lies clear of every one of the `obstacles` by at least
+ * `margin`. A box that only touches an obstacle is free; one nearer than
+ * `margin` (or overlapping it) is not. Every pass that places a mark or a name
+ * asks this, so what the layer keeps clear of is one set of rectangles tested
+ * one way.
+ */
+export function isFree(
+  box: Rect,
+  obstacles: readonly Rect[],
+  margin = 0,
+): boolean {
+  return !obstacles.some(
+    (o) =>
+      box.x < o.x + o.w + margin &&
+      o.x < box.x + box.w + margin &&
+      box.y < o.y + o.h + margin &&
+      o.y < box.y + box.h + margin,
+  )
+}
+
+/** A margin so small that only a spot on an obstacle's very edge (or inside it) is taken: how a mark is "under" words. */
+export const ON_EDGE = 1e-6
+
+/** The zero-size box of the spot (`x`, `y`). */
+function pointBox(x: number, y: number): Rect {
+  return { x, y, w: 0, h: 0 }
+}
+
 /** Whether two rectangles overlap, with `MARGIN` kept between them. */
 export function overlaps(a: Rect, b: Rect): boolean {
-  return (
-    a.x < b.x + b.w + MARGIN &&
-    b.x < a.x + a.w + MARGIN &&
-    a.y < b.y + b.h + MARGIN &&
-    b.y < a.y + a.h + MARGIN
-  )
+  return !isFree(a, [b], MARGIN)
 }
 
 /** `rect` moved to lie wholly inside the `bounds`. */
@@ -840,7 +849,7 @@ export function hangName(
     }, 0)
   const boxes = [...obstacles, ...names.map((n) => n.rect)]
   const clear = (at: { left: number; top: number }, pad: number): boolean =>
-    lie(at, pad, boxes) === 0
+    isFree({ x: at.left, y: at.top, w, h }, boxes, pad)
   const near =
     tries.find((t) => clear(t, HANG_ROOM)) ?? tries.find((t) => clear(t, 0))
   if (near) return { ...near, leader: null, covers: [] }

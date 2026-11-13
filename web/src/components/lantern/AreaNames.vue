@@ -16,6 +16,7 @@ import {
   type PlacedName,
   type WayPress,
 } from '@/lantern/areaNames'
+import { obstacleElements, readObstacles } from '@/lantern/obstacles'
 import type { AreaThing } from '@/lantern/areaThings'
 import type { AreaBox } from '@/lantern/roomMotion'
 import type { PictureSize, Rect } from '@/lantern/roomMotionScene'
@@ -96,20 +97,6 @@ const NAME_HEIGHT = 25
 const SETTLE_MS = 350
 /** How near a dot the pointer must be to point at it. */
 const DOT_HIT = 14
-/** The things in the stage that a name keeps clear of. */
-const KEEP_CLEAR =
-  '.lq-stage-plate, .lq-phone-plate, .lq-stage-buttons button, .lq-float-menu, .lq-words-hide, ' +
-  '.lq-paper-tab, .lq-show-names, .lq-composer, .lq-arrival-card, .lq-ln'
-/** The panels no mark may lie under: the room plate, the buttons in the picture's top-right corner, the story's Hide/Show tab and the Show what's here button. */
-const PANELS =
-  '.lq-stage-plate, .lq-phone-plate, .lq-stage-buttons button, .lq-words-hide, .lq-paper-tab, ' +
-  '.lq-show-names'
-/** The words over the picture beside the narrator's cards, under which a thing's mark and name wait. */
-const WORDS =
-  '.lq-arrival-card, .lq-ln, .lq-ln .lq-line-name, .lq-more-below, .lq-narration-hint'
-/** The narrator's cards and the one column's spoken lines (the whole `.lq-cl` row: the speaker's portrait, name row and bubble, all of which take a press), each seen only where its scrolling story shows it. */
-const CARDS = '.lq-story-wrap .lq-card, .lq-story-wrap .lq-cl'
-
 const root = ref<HTMLElement | null>(null)
 const view = ref<PictureSize>({ width: 0, height: 0 })
 const obstacles = ref<Rect[]>([])
@@ -143,46 +130,6 @@ function frameOf(): { left: number; top: number; ratio: number } {
   return { left: box.left, top: box.top, ratio }
 }
 
-/**
- * The rectangles of the elements of `scope` matching `selector` that are on
- * show, in the names' pixels; with `clipTo`, each only where its nearest
- * ancestor matching `clipTo` shows it (a card scrolled partly out of its story).
- */
-function rectsOf(
-  scope: HTMLElement,
-  selector: string,
-  clipTo?: string,
-): Rect[] {
-  const frame = frameOf()
-  const rects: Rect[] = []
-  for (const el of scope.querySelectorAll<HTMLElement>(selector)) {
-    let box: { left: number; top: number; right: number; bottom: number } =
-      el.getBoundingClientRect()
-    const clip = clipTo ? el.closest<HTMLElement>(clipTo) : null
-    if (clip) {
-      const by = clip.getBoundingClientRect()
-      box = {
-        left: Math.max(box.left, by.left),
-        top: Math.max(box.top, by.top),
-        right: Math.min(box.right, by.right),
-        bottom: Math.min(box.bottom, by.bottom),
-      }
-    }
-    const width = box.right - box.left
-    const height = box.bottom - box.top
-    if (width < 1 || height < 1) continue
-    // Words folded away fade out first: they no longer cover anything.
-    if (getComputedStyle(el).visibility === 'hidden') continue
-    rects.push({
-      x: (box.left - frame.left) / frame.ratio,
-      y: (box.top - frame.top) / frame.ratio,
-      w: width / frame.ratio,
-      h: height / frame.ratio,
-    })
-  }
-  return rects
-}
-
 /** Measure the layer and what the names keep clear of. */
 function measure(): void {
   const el = stage()
@@ -192,13 +139,11 @@ function measure(): void {
     height: root.value.clientHeight,
   }
   const scope = el.closest<HTMLElement>('.lq-main') ?? el
-  covers.value = [
-    ...rectsOf(scope, CARDS, '.lq-story'),
-    ...rectsOf(scope, WORDS),
-  ]
-  // The cards and spoken lines where they are seen, not the empty rest of their column.
-  obstacles.value = [...rectsOf(scope, KEEP_CLEAR), ...covers.value]
-  panels.value = rectsOf(scope, PANELS)
+  // Whatever lies over the picture says so itself (`data-lq-obstacle`); the cards only where their story shows them.
+  const read = readObstacles(scope, frameOf())
+  covers.value = read.words
+  obstacles.value = read.all
+  panels.value = read.panels
   watchPanels(scope)
 }
 
@@ -215,10 +160,10 @@ function onScroll(): void {
   })
 }
 
-/** Watch the panels' own size, which `ResizeObserver` on the stage does not see. */
+/** Watch the size of every element marked as lying over the picture, which `ResizeObserver` on the stage does not see. */
 function watchPanels(scope: HTMLElement): void {
   if (!observer) return
-  const now = [...scope.querySelectorAll<HTMLElement>(PANELS)]
+  const now = obstacleElements(scope)
   for (const el of watched) if (!now.includes(el)) observer.unobserve(el)
   for (const el of now) if (!watched.includes(el)) observer.observe(el)
   watched = now

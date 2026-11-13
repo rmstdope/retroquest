@@ -323,6 +323,7 @@ onBeforeUnmount(() => {
         v-if="arrival.part"
         :key="`${arrival.part.kind}-${arrival.part.lines[0]?.unit}`"
         class="lq-arrival-card"
+        data-lq-obstacle="words"
         :class="{ 'lq-arrival-rise': arrival.part.kind === 'description' }"
       >
         <div v-if="piece" ref="head" class="lq-news-head">

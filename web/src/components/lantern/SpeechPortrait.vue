@@ -35,6 +35,7 @@ const initial = computed(() => props.name.trim().charAt(0).toUpperCase())
   <div class="lq-portrait" data-testid="portrait">
     <div
       class="lq-card"
+      data-lq-obstacle="card"
       :style="{ background: speakerColor(name) }"
       data-testid="portrait-card"
     >
