@@ -80,7 +80,12 @@ jobs:
               run: npm run test
 
     web-e2e:
+        name: web-e2e (${{ matrix.shard }})
         runs-on: ubuntu-latest
+        strategy:
+            fail-fast: false
+            matrix:
+                shard: ["1/3", "2/3", "3/3"]
         defaults:
             run:
                 working-directory: web
@@ -100,8 +105,8 @@ jobs:
             - name: Install Playwright browsers
               run: npx playwright install --with-deps chromium
 
-            - name: Run E2E tests
-              run: npx playwright test
+            - name: Run E2E tests (shard ${{ matrix.shard }})
+              run: npx playwright test --shard=${{ matrix.shard }}
 
     web-build:
         runs-on: ubuntu-latest
