@@ -8,10 +8,12 @@ import {
   clearOfPanels,
   clearOfWords,
   hangName,
+  isFree,
   keepMarksApart,
   closedWayThings,
   layoutNames,
   NAME_REACH,
+  ON_EDGE,
   markInside,
   nameAt,
   placeNames,
@@ -1404,5 +1406,28 @@ describe('hangName', () => {
     expect(rect.y).toBeGreaterThanOrEqual(phone.y)
     expect(rect.x + rect.w).toBeLessThanOrEqual(phone.x + phone.w)
     expect(rect.y + rect.h).toBeLessThanOrEqual(phone.y + phone.h)
+  })
+})
+
+describe('isFree', () => {
+  const box: Rect = { x: 100, y: 100, w: 50, h: 50 }
+  it('is free of nothing, and of a rectangle far away', () => {
+    expect(isFree({ x: 0, y: 0, w: 0, h: 0 }, [])).toBe(true)
+    expect(isFree({ x: 0, y: 0, w: 0, h: 0 }, [box], 12)).toBe(true)
+  })
+  it('is taken inside a rectangle, and on its very edge when the edge counts', () => {
+    expect(isFree({ x: 120, y: 120, w: 0, h: 0 }, [box], ON_EDGE)).toBe(false)
+    expect(isFree({ x: 100, y: 120, w: 0, h: 0 }, [box], ON_EDGE)).toBe(false)
+    expect(isFree({ x: 150, y: 150, w: 0, h: 0 }, [box], ON_EDGE)).toBe(false)
+    expect(isFree({ x: 150.01, y: 150, w: 0, h: 0 }, [box], ON_EDGE)).toBe(true)
+  })
+  it('is taken within the margin and free exactly one margin away', () => {
+    expect(isFree({ x: 155, y: 120, w: 0, h: 0 }, [box], 12)).toBe(false)
+    expect(isFree({ x: 162, y: 120, w: 0, h: 0 }, [box], 12)).toBe(true)
+    expect(isFree({ x: 88, y: 120, w: 0, h: 0 }, [box], 12)).toBe(true)
+  })
+  it('treats a rectangle as free when it only touches, taken when it overlaps', () => {
+    expect(isFree({ x: 150, y: 100, w: 20, h: 20 }, [box])).toBe(true)
+    expect(isFree({ x: 149, y: 100, w: 20, h: 20 }, [box])).toBe(false)
   })
 })

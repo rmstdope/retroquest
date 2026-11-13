@@ -163,6 +163,7 @@ function heads(index: number): boolean {
       <div
         v-else
         class="lq-cl"
+        data-lq-obstacle="card"
         :class="[`lq-cl-${piece.line.side}`, { 'lq-cl-head': heads(index) }]"
         :data-unit="piece.line.unit >= 0 ? piece.line.unit : undefined"
         :data-piece="index"

@@ -82,6 +82,7 @@ defineExpose({ focusButton })
         :key="button.tab"
         type="button"
         class="lq-stage-btn"
+        data-lq-obstacle="panel"
         :class="{
           'lq-lit': props.drawer === button.tab,
         }"
@@ -96,6 +97,7 @@ defineExpose({ focusButton })
       <button
         type="button"
         class="lq-stage-btn"
+        data-lq-obstacle="panel"
         :class="{ 'lq-lit': props.drawer === 'story' }"
         data-button="story"
         :aria-label="compact ? 'Story so far' : undefined"
@@ -108,6 +110,7 @@ defineExpose({ focusButton })
         <button
           type="button"
           class="lq-stage-btn"
+          data-lq-obstacle="panel"
           :class="{ 'lq-lit': mapOpen }"
           data-button="map"
           :aria-label="compact ? 'Map' : undefined"
@@ -117,7 +120,12 @@ defineExpose({ focusButton })
         >
           🧭<template v-if="!compact"> Map</template>
         </button>
-        <div v-if="mapOpen" class="lq-map-pop" data-panel>
+        <div
+          v-if="mapOpen"
+          class="lq-map-pop"
+          data-lq-obstacle="panel"
+          data-panel
+        >
           <CompassPanel stage />
         </div>
       </div>

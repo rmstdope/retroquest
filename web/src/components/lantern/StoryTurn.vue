@@ -249,6 +249,7 @@ function chipLabel(chip: Chip): string {
     ref="root"
     class="lq-turn"
     :class="{ 'lq-card': card }"
+    :data-lq-obstacle="card ? 'card' : undefined"
     data-testid="turn"
   >
     <div

@@ -157,6 +157,7 @@ function hurry(): void {
           v-for="(line, index) in speech.visible"
           :key="line.key"
           class="lq-ln"
+          data-lq-obstacle="words"
           :class="[
             `lq-line-${line.side}`,
             {
@@ -173,7 +174,12 @@ function hurry(): void {
           />
           <span v-else-if="line.side === 'left'" class="lq-gap"></span>
           <div class="lq-col">
-            <b v-if="heads[index]" class="lq-line-name">{{ line.speaker }}</b>
+            <b
+              v-if="heads[index]"
+              class="lq-line-name"
+              data-lq-obstacle="words"
+              >{{ line.speaker }}</b
+            >
             <div
               class="lq-line"
               :class="{ 'lq-speaking': speech.isSpeaking(line) }"

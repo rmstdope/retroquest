@@ -34,6 +34,11 @@ const boxes = {
 
 let wrappers: VueWrapper[] = []
 
+/** Declare `el` to lie over the picture, as the layout's own elements do. */
+function mark(el: HTMLElement, kind: string): void {
+  el.setAttribute('data-lq-obstacle', kind)
+}
+
 /** Mount over a 960×540 stage (in the `.lq-main` already on the page, if there is one). */
 function mountNames(
   props: Partial<InstanceType<typeof AreaNames>['$props']> = {},
@@ -91,11 +96,14 @@ function cardsOver(
   wrapEl.className = 'lq-story-wrap lq-cards'
   const storyEl = document.createElement('section')
   storyEl.className = 'lq-story'
+  storyEl.setAttribute('data-lq-clip', '')
   const cardEl = document.createElement(line ? 'div' : 'article')
   cardEl.className = line ? 'lq-line' : 'lq-turn lq-card'
+  if (!line) mark(cardEl, 'card')
   if (line) {
     const row = document.createElement('div')
     row.className = 'lq-cl lq-cl-left'
+    mark(row, 'card')
     const col = document.createElement('div')
     col.className = 'lq-col'
     if (head) {
@@ -463,13 +471,16 @@ describe('AreaNames', () => {
     function wordsOver(selector: string): HTMLElement {
       const words = document.createElement('div')
       words.className = selector
+      if (selector !== 'lq-story-wrap') mark(words, 'words')
       document.querySelector('.lq-stage')!.append(words)
       const filled: HTMLElement[] = [words]
       if (selector === 'lq-story-wrap') {
         const story = document.createElement('section')
         story.className = 'lq-story'
+        story.setAttribute('data-lq-clip', '')
         const card = document.createElement('article')
         card.className = 'lq-turn lq-card'
+        mark(card, 'card')
         story.append(card)
         words.append(story)
         filled.push(story, card)
@@ -557,8 +568,10 @@ describe('AreaNames', () => {
         }) as DOMRect
       const line = document.createElement('div')
       line.className = 'lq-ln'
+      mark(line, 'words')
       const name = document.createElement('b')
       name.className = 'lq-line-name'
+      mark(name, 'words')
       line.append(name)
       document.querySelector('.lq-stage')!.append(line)
       vi.spyOn(line, 'getBoundingClientRect').mockReturnValue(rect(70, 240))
@@ -661,6 +674,7 @@ describe('AreaNames', () => {
       const w = mountNames({ showing: true })
       const plate = document.createElement('div')
       plate.className = 'lq-stage-plate'
+      mark(plate, 'panel')
       document.querySelector('.lq-stage')!.append(plate)
       vi.spyOn(plate, 'getBoundingClientRect').mockReturnValue({
         left: 0,
@@ -679,6 +693,31 @@ describe('AreaNames', () => {
       const dot = markAt(w, 'villager')!
       expect(dot.x).toBe(144)
       expect(dot.y).toBeGreaterThan(400)
+    })
+
+    it('steps a dot clear of a panel the layer was never told about by class name (rq-rmg7)', async () => {
+      const w = mountNames({ showing: true })
+      const thing = document.createElement('div')
+      thing.className = 'lq-brand-new-thing'
+      thing.setAttribute('data-lq-obstacle', 'panel')
+      document.querySelector('.lq-stage')!.append(thing)
+      vi.spyOn(thing, 'getBoundingClientRect').mockReturnValue({
+        left: 100,
+        top: 240,
+        width: 100,
+        height: 60,
+        right: 200,
+        bottom: 300,
+        x: 100,
+        y: 240,
+        toJSON: () => ({}),
+      })
+      // The villager's dot (144, 270) lies under it.
+      await w.setProps({ relayout: 'thing' })
+      await vi.advanceTimersByTimeAsync(400)
+      await nextTick()
+      const dot = markAt(w, 'villager')!
+      expect(dot.x === 144 && dot.y === 270).toBe(false)
     })
 
     it('steps a dot clear of the words again when the story scrolls them over it (rq-kgtp)', async () => {
@@ -737,6 +776,7 @@ describe('AreaNames', () => {
       const w = mountNames({ showing: true, ...props })
       const plate = document.createElement('div')
       plate.className = 'lq-stage-plate'
+      mark(plate, 'panel')
       document.querySelector('.lq-stage')!.append(plate)
       vi.spyOn(plate, 'getBoundingClientRect').mockReturnValue({
         left: 0,
@@ -935,6 +975,7 @@ describe('AreaNames', () => {
     function plateOver(selector: string, top = 200, height = 140): HTMLElement {
       const el = document.createElement('div')
       el.className = selector
+      mark(el, 'panel')
       document.querySelector('.lq-stage')!.append(el)
       setRect(el, top, height)
       return el
@@ -985,6 +1026,7 @@ describe('AreaNames', () => {
       const group = document.createElement('div')
       group.className = 'lq-stage-buttons'
       const button = document.createElement('button')
+      mark(button, 'panel')
       group.append(button)
       stage.append(group)
       setRect(button, 200, 140)
@@ -1095,6 +1137,7 @@ describe('AreaNames', () => {
       })
       const button = document.createElement('button')
       button.className = 'lq-show-names'
+      mark(button, 'panel')
       document.querySelector('.lq-stage')!.append(button)
       vi.spyOn(button, 'getBoundingClientRect').mockReturnValue({
         left: 780,

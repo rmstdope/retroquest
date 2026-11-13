@@ -2228,6 +2228,7 @@ watch(
               v-if="sideways"
               type="button"
               class="lq-float-menu"
+              data-lq-obstacle="keep-clear"
               aria-label="Game menu"
               @click="openGameDialog('menu')"
             >
@@ -2237,6 +2238,7 @@ watch(
               v-if="wide"
               ref="widePlate"
               class="lq-stage-plate"
+              data-lq-obstacle="panel"
               :compact="sideways"
               :bare="!pictured"
               :away="plateAway"
@@ -2369,6 +2371,7 @@ watch(
             v-show="section === 'story'"
             ref="plate"
             class="lq-phone-plate"
+            data-lq-obstacle="panel"
             data-panel
             story-button
             :bare="!pictured"
@@ -2416,6 +2419,7 @@ watch(
             <section
               ref="storyEl"
               class="lq-story"
+              data-lq-clip
               tabindex="-1"
               aria-label="Story"
               @click="onStoryClick"
@@ -2441,6 +2445,7 @@ watch(
             <p
               v-if="narration.hintVisible"
               class="lq-narration-hint"
+              data-lq-obstacle="words"
               :class="{ 'lq-hint-raised': moreBelow && !storyHeld }"
             >
               {{ hintText }}
@@ -2450,6 +2455,7 @@ watch(
               ref="moreBelowButton"
               type="button"
               class="lq-more-below"
+              data-lq-obstacle="words"
               @click="readOn"
             >
               More below <span aria-hidden="true">↓</span>
@@ -2466,6 +2472,7 @@ watch(
               ref="hideEl"
               type="button"
               class="lq-words-hide"
+              data-lq-obstacle="panel"
               :title="laptop ? 'Hide the words (N)' : undefined"
               :aria-keyshortcuts="laptop ? 'N' : undefined"
               @click="hidePaper"
@@ -2477,6 +2484,7 @@ watch(
               ref="tabEl"
               type="button"
               class="lq-paper-tab"
+              data-lq-obstacle="panel"
               :title="laptop ? 'Show the words (N)' : undefined"
               :aria-keyshortcuts="laptop ? 'N' : undefined"
               @click="showPaper"
@@ -2487,6 +2495,7 @@ watch(
               v-if="showNamesButton"
               type="button"
               class="lq-show-names"
+              data-lq-obstacle="panel"
               :class="{ 'lq-show-names-on': namesUp }"
               :aria-pressed="namesUp ? 'true' : 'false'"
               :title="laptop ? 'Show what\'s here (S)' : undefined"
@@ -2507,6 +2516,7 @@ watch(
             :key="`composer-${game.gameNumber}`"
             ref="composer"
             class="lq-composer"
+            data-lq-obstacle="keep-clear"
             :class="{ 'lq-sheet': !laptop, 'lq-sheet-over': sheeted }"
             :foldable="!laptop"
             :stage="laptop"
