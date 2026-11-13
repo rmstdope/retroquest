@@ -94,7 +94,7 @@ function readStoredNamedSaves(): StoredNamedSave[] {
 }
 
 /**
- * Read persisted 8-slot save data from appStorage.
+ * Read persisted 8-slot save data from `appStorage`.
  * Always returns an array of exactly 8 entries (null = empty slot).
  */
 function readStoredSaveSlots(): (StoredSaveSlot | null)[] {
