@@ -1,5 +1,9 @@
-import type { ImagePatch } from '../roomPatches'
-import { flagOf } from '../patchRules'
+import type { ImagePatch } from '@/engine'
+import { Candle } from './items/Candle'
+import { Lantern } from './items/Lantern'
+import { Mechanism } from './items/Mechanism'
+import { Well } from './items/Well'
+import { WitheredCarrot } from './items/WitheredCarrot'
 
 /**
  * The declared patches of each room of Act 1, by room key: the small changes
@@ -25,12 +29,7 @@ export const ACT1_ROOM_PATCHES: Record<string, ImagePatch[]> = {
       area: 'lantern',
       when: (c) => {
         const lantern = c.things.get('lantern')
-        return (
-          !!lantern &&
-          'isLit' in lantern &&
-          typeof lantern.isLit === 'function' &&
-          lantern.isLit() === true
-        )
+        return lantern instanceof Lantern && lantern.isLit()
       },
     },
     {
@@ -68,7 +67,10 @@ export const ACT1_ROOM_PATCHES: Record<string, ImagePatch[]> = {
       title: 'Carrot freshened',
       text: 'Make the carrot in the field green and fresh instead of withered.',
       area: 'withered-carrot',
-      when: (c) => flagOf(c.things.get('withered-carrot'), 'fresh'),
+      when: (c) => {
+        const carrot = c.things.get('withered-carrot')
+        return carrot instanceof WitheredCarrot && carrot.isFresh()
+      },
     },
   ],
   ChickenCoop: [
@@ -157,7 +159,10 @@ export const ACT1_ROOM_PATCHES: Record<string, ImagePatch[]> = {
       title: 'Mechanism jammed',
       text: 'Jam a rope through the black-iron mechanism, which hangs still.',
       area: 'mechanism',
-      when: (c) => flagOf(c.things.get('mechanism'), 'repaired'),
+      when: (c) => {
+        const mechanism = c.things.get('mechanism')
+        return mechanism instanceof Mechanism && mechanism.repaired
+      },
     },
   ],
   Riverbank: [
@@ -229,7 +234,10 @@ export const ACT1_ROOM_PATCHES: Record<string, ImagePatch[]> = {
       title: 'Candle lit',
       text: 'Light the candle on the altar: a small steady flame, and the dark corner beside it lit.',
       area: 'candle',
-      when: (c) => flagOf(c.things.get('candle'), 'isLit'),
+      when: (c) => {
+        const candle = c.things.get('candle')
+        return candle instanceof Candle && candle.isLit
+      },
     },
     {
       id: 'locket-appears',
@@ -255,7 +263,10 @@ export const ACT1_ROOM_PATCHES: Record<string, ImagePatch[]> = {
       title: 'Well purified',
       text: 'Make the water in the well clear and bright instead of dark and still.',
       area: 'well',
-      when: (c) => flagOf(c.things.get('well'), 'isPurified'),
+      when: (c) => {
+        const well = c.things.get('well')
+        return well instanceof Well && well.isPurified
+      },
     },
   ],
 }

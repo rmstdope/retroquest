@@ -11,7 +11,7 @@ import { Act3 } from '@/act3/Act3'
 import { Act4 } from '@/act4/Act4'
 import { Game, type Act } from '@/engine'
 import { executeCommands } from '@/testing/gameHelpers'
-import { declaredPatches, type ImagePatch } from './roomPatches'
+import type { ImagePatch } from '@/engine'
 import { appliedPatchIds, layeredIds } from './roomPatchState'
 
 const ACTS: Array<() => Act> = [
@@ -108,7 +108,7 @@ describe('appliedPatchIds', () => {
       for (const room of Object.keys(act.rooms)) {
         const variants = ['', ...act.rooms[room].pictureVariants()]
         for (const variant of variants)
-          for (const patch of declaredPatches(act.name, room, variant)) {
+          for (const patch of act.roomPatches(room, variant)) {
             const at = `${room} ${patch.id}`
             if (patch.when === undefined) faults.push(`${at}: no rule`)
             else if (typeof patch.when === 'string') {
@@ -141,7 +141,7 @@ describe('appliedPatchIds', () => {
   })
 
   it('lays the chapel locket over the candle light', () => {
-    const patches = declaredPatches('Act1', 'VillageChapel')
+    const patches = new Act1().roomPatches('VillageChapel')
     expect(layeredIds([...patches].reverse())).toEqual([
       'candle-lit',
       'locket-appears',
@@ -165,7 +165,7 @@ describe('appliedPatchIds', () => {
         game.commandParser.parse(command)
         game.state.settleQuests()
         for (const room of Object.keys(act.rooms)) {
-          const declared = declaredPatches(act.name, room).map((p) => p.id)
+          const declared = act.roomPatches(room).map((p) => p.id)
           for (const id of appliedPatchIds(act, room, game.state)) {
             expect(declared, `${room} ${id}`).toContain(id)
             seen.add(id)
@@ -179,7 +179,7 @@ describe('appliedPatchIds', () => {
       const otherEndings = new Set(['wound-sealed', 'malakar-kneeling'])
       const never: string[] = []
       for (const room of Object.keys(act.rooms))
-        for (const patch of declaredPatches(act.name, room))
+        for (const patch of act.roomPatches(room))
           if (
             !seen.has(patch.id) &&
             !otherEndings.has(patch.id) &&

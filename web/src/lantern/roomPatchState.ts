@@ -1,20 +1,22 @@
 /**
  * Which of a room picture's patches apply to the story as it stands.
  *
- * Each patch carries its own `when` (see `roomPatches.ts`): `'present'` applies
+ * Each patch carries its own `when` (see `ImagePatch` in the engine): `'present'` applies
  * while the patch's named area (see `roomAreas.ts`) is in the room (a way is
  * "in the room" while the room's exits include it), `'absent'` while it is not,
  * and a rule of its own reads the thing's own state or a story flag. Nothing
  * is saved: the answer is read from the game every time, so a loaded game
  * answers as the played one did.
  */
-import type { Act, Character, GameState, Item } from '@/engine'
+import type {
+  Act,
+  Character,
+  GameState,
+  ImagePatch,
+  Item,
+  PatchContext,
+} from '@/engine'
 import { exitAreaId, thingAreaId } from './roomAreas'
-import {
-  declaredPatches,
-  type ImagePatch,
-  type PatchContext,
-} from './roomPatches'
 
 /** Whether `patch` applies in `context`, given the area ids `present` in the room. */
 function applies(
@@ -43,7 +45,7 @@ export function appliedPatchIds(
 ): string[] {
   // The state's own rooms: after a load they are not the act's first instances.
   const room = state.allRooms[roomKey]
-  const patches = declaredPatches(act.name, roomKey, variant)
+  const patches = act.roomPatches(roomKey, variant)
   if (!room || patches.length === 0) return []
   const things = new Map<string, Item | Character>()
   for (const thing of [...room.items, ...room.characters])

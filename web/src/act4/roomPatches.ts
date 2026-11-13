@@ -1,12 +1,12 @@
-import type { ImagePatch } from '../roomPatches'
+import type { ImagePatch, PatchContext } from '@/engine'
 import {
   THRONE_CHAMBER_HEALED,
   THRONE_CHAMBER_JUSTICE,
   THRONE_CHAMBER_REDEMPTION,
   THRONE_CHAMBER_SACRIFICE,
   THRONE_CHAMBER_SHATTERED,
-} from '@/act4/rooms/throneDescriptions'
-import { PARENTS_VAULT_AFTER } from '@/act4/rooms/vaultDescriptions'
+} from './rooms/throneDescriptions'
+import { PARENTS_VAULT_AFTER } from './rooms/vaultDescriptions'
 import {
   FLAG_ACT4_KNIGHT_OF_DESPAIR_COMPLETED,
   FLAG_ACT4_MEMORY_ORBS_MENDED,
@@ -14,8 +14,18 @@ import {
   FLAG_ACT4_SHADOW_REVEAL_HEARD,
   FLAG_ACT4_SHATTERED_WARD_GUARDIANS_COMPLETED,
   FLAG_ACT4_SORCERESS_OF_LIES_COMPLETED,
-} from '@/act4/Act4StoryFlags'
-import { roomSays } from '../patchRules'
+} from './Act4StoryFlags'
+
+/** Whether the room `roomKey` now carries one of the `texts` as its description (the text it computes from the story). */
+function roomSays(
+  c: PatchContext,
+  roomKey: string,
+  texts: readonly string[],
+): boolean {
+  return texts.includes(
+    c.state.allRooms[roomKey]?.descriptionFor(c.state) ?? '',
+  )
+}
 
 /**
  * The declared patches of each room of Act 4, by room key: the small changes

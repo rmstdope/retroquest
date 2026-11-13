@@ -1,4 +1,5 @@
-import { Act, characterName, type GameState } from '@/engine'
+import { ACT1_ROOM_PATCHES, ACT1_VARIANT_PATCHES } from './roomPatches'
+import { Act, characterName, type GameState, type ImagePatch } from '@/engine'
 import { TheDream } from './rooms/TheDream'
 import { EliorsCottage } from './rooms/EliorsCottage'
 import { VegetableField } from './rooms/VegetableField'
@@ -88,6 +89,12 @@ export class Act1 extends Act {
       classes: ACT1_CLASSES,
       goldenPath: ACT1_GOLDEN_PATH,
     })
+  }
+
+  /** The act's own room patches: Act 1 declares them in `roomPatches.ts`. */
+  override roomPatches(roomKey: string, variant = ''): readonly ImagePatch[] {
+    if (variant) return ACT1_VARIANT_PATCHES[roomKey]?.[variant] ?? []
+    return ACT1_ROOM_PATCHES[roomKey] ?? []
   }
 
   override getActIntro(): string {

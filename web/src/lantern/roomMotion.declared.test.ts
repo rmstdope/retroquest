@@ -5,7 +5,6 @@ import { Act2 } from '@/act2/Act2'
 import type { Act } from '@/engine'
 import { allImages } from './imageLists'
 import { roomTrackId } from './musicLists'
-import { declaredPatches } from './roomPatches'
 import { declaredMotion, isSpotKind, spotAreaId, spotAreas } from './roomMotion'
 
 import { ACT1_ROOM_MOTION } from './roomMotion/act1RoomMotion'
@@ -48,7 +47,7 @@ describe('the declared movement of the rooms', () => {
     for (const make of ACTS) {
       const act = make()
       for (const key of Object.keys(act.rooms)) {
-        const patches = declaredPatches(act.name, key).map((p) => p.id)
+        const patches = act.roomPatches(key).map((p) => p.id)
         for (const e of declaredMotion(act.name, key))
           for (const id of [e.whilePatch, e.unlessPatch])
             if (id) expect(patches, `${act.name} ${key}`).toContain(id)

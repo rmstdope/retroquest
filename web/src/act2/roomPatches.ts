@@ -1,5 +1,5 @@
-import type { ImagePatch } from '../roomPatches'
-import { FLAG_PROTECTIVE_CHARM_USED_FOREST_ENTRANCE } from '@/act2/Act2StoryFlags'
+import type { ImagePatch } from '@/engine'
+import { FLAG_PROTECTIVE_CHARM_USED_FOREST_ENTRANCE } from './Act2StoryFlags'
 
 /**
  * The declared patches of each room of Act 2, by room key: the small changes

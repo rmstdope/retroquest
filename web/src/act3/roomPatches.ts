@@ -1,9 +1,10 @@
-import type { ImagePatch } from '../roomPatches'
+import type { ImagePatch } from '@/engine'
 import {
   FLAG_ACT3_DRAGONS_SCALE_ACQUIRED,
   FLAG_ACT3_MIRRORS_MENDED,
-} from '@/act3/Act3StoryFlags'
-import { flagOf } from '../patchRules'
+} from './Act3StoryFlags'
+import { LanternBracket } from './items/LanternBracket'
+import { WardingPillars } from './items/WardingPillars'
 
 /**
  * The declared patches of each room of Act 3, by room key: the small changes
@@ -82,7 +83,10 @@ export const ACT3_ROOM_PATCHES: Record<string, ImagePatch[]> = {
       title: 'Pillars purified',
       text: 'Show the warding pillars cleansed, their glow clear and steady.',
       area: 'warding-pillars',
-      when: (c) => flagOf(c.things.get('warding-pillars'), 'purified'),
+      when: (c) => {
+        const pillars = c.things.get('warding-pillars')
+        return pillars instanceof WardingPillars && pillars.purified
+      },
     },
   ],
   CollapsedPier: [
@@ -114,7 +118,10 @@ export const ACT3_ROOM_PATCHES: Record<string, ImagePatch[]> = {
       title: 'Lantern mounted',
       text: 'Show a lit lantern mounted in the bracket on the wall.',
       area: 'lantern-bracket',
-      when: (c) => flagOf(c.things.get('lantern-bracket'), 'hasLantern'),
+      when: (c) => {
+        const bracket = c.things.get('lantern-bracket')
+        return bracket instanceof LanternBracket && bracket.hasLantern
+      },
     },
     {
       id: 'lantern-bracket-appears',

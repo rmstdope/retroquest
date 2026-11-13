@@ -1,4 +1,5 @@
 export { Act, type ActOptions } from './Act'
+export type { ImagePatch, PatchContext, PatchWhen } from './ImagePatch'
 export { Character, type CharacterOptions } from './Character'
 export { GameState } from './GameState'
 export type { QuestChanges, SoundFiring } from './GameState'
