@@ -1,4 +1,4 @@
-import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs'
+import { readdirSync, readFileSync, statSync } from 'node:fs'
 import { join } from 'node:path'
 import { describe, expect, it } from 'vitest'
 
@@ -13,17 +13,18 @@ function sourceFiles(dir: string): string[] {
 
 /** Where the text a thing or a room shows is computed, and nowhere else. */
 describe('description writes', () => {
-  it('no item, room or character assigns a description after construction', () => {
+  it('no content file assigns a description after construction, except spells and quests', () => {
     const offenders: string[] = []
     for (const act of ['act1', 'act2', 'act3', 'act4']) {
-      for (const dir of ['items', 'rooms', 'characters']) {
-        const root = join(__dirname, act, dir)
-        if (!existsSync(root)) continue
-        const files = sourceFiles(root)
-        for (const file of files) {
-          const text = readFileSync(file, 'utf8')
-          if (/\.description\s*=[^=]/.test(text)) offenders.push(file)
-        }
+      for (const file of sourceFiles(join(__dirname, act))) {
+        if (/[/\\](spells|quests)[/\\]/.test(file)) continue
+        const text = readFileSync(file, 'utf8')
+        if (
+          /\.description\s*=[^=]/.test(text) ||
+          /\[['"]description['"]\]\s*=[^=]/.test(text) ||
+          /Object\.assign\([^)]*description/.test(text)
+        )
+          offenders.push(file)
       }
     }
     expect(offenders).toEqual([])

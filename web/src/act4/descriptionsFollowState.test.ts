@@ -13,14 +13,16 @@ import {
   FLAG_ACT4_THRONE_AMULET_OPENED,
   FLAG_ACT4_THRONE_REFRAIN_SAID,
 } from './Act4StoryFlags'
-import { THRONE_CHAMBER_AMULET } from './rooms/throneDescriptions'
 import {
+  THRONE_CHAMBER_AMULET,
   THRONE_CHAMBER_HEALED,
   THRONE_CHAMBER_REDEMPTION,
   THRONE_CHAMBER_SHATTERED,
 } from './rooms/throneDescriptions'
-import { COURTYARD_CAPTAIN_GONE_DESCRIPTION } from './rooms/courtyardDescriptions'
-import { COURTYARD_AFTER_DESCRIPTION } from './rooms/courtyardDescriptions'
+import {
+  COURTYARD_AFTER_DESCRIPTION,
+  COURTYARD_CAPTAIN_GONE_DESCRIPTION,
+} from './rooms/courtyardDescriptions'
 import { CHAMBER_AFTER_REDEMPTION } from './rooms/chamberDescriptions'
 import {
   MEMORY_VAULT_AFTER,

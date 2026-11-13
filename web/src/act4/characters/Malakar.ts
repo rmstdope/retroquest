@@ -28,7 +28,6 @@ import { endingPlayed } from '../endings'
 import { AMULET_DARK, AncientAmulet } from '../items/AncientAmulet'
 import { LifelightElixir } from '../items/LifelightElixir'
 import { Forgiveness } from '../spells/Forgiveness'
-import {} from '../rooms/throneDescriptions'
 
 /** The speaker label of the dream voice, as in the Memory Vault. */
 const SHADOW_LABEL = 'Shadow of the Past'

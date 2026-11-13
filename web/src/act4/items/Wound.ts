@@ -26,7 +26,6 @@ import {
   truthLine,
   type Ending,
 } from '../endings'
-import {} from '../rooms/throneDescriptions'
 import { Grow } from '../spells/Grow'
 import { Malakar } from '../characters/Malakar'
 
