@@ -139,7 +139,6 @@
     { "after": 142, "without": ["map"], "commands": ["talk to mira"] },
     { "after": 142, "unlearn": ["grow"], "commands": ["talk to mira"] },
     { "after": 142, "unset": ["journey_bless_completed"], "commands": ["talk to mira"] },
-    {"after": 0, "commands": ["examine dragon"]},
     {"after": 4, "commands": ["give lantern to grandmother", "buy rope from grandmother"]},
     {"after": 22, "commands": ["give lantern to tilda", "buy rope from tilda"]},
     {"after": 36, "commands": ["give lantern to patches"]},

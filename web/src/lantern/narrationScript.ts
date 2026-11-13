@@ -259,6 +259,13 @@ export interface ScriptBranch {
   unlearn?: string[]
 }
 
+/** How the engine opens an answer that reaches nobody: no such thing or character here. */
+const NOBODY_HERE = [
+  "[failure]You don't see",
+  '[failure]There is no character named',
+  "[failure]There is no '",
+]
+
 /** How many times in a row each character at hand is talked to, so what they say in turn (rumours, news) is read. */
 const TALKS = 8
 
@@ -344,6 +351,35 @@ export function actScript(
       add(ownWordsBlocks(command, controller.lastTurnAddressee() !== null))
       return text
     })
+  /** What is wrong with the branches, reported all at once when the act has been played. */
+  const dead: string[] = []
+  /** A branch as its failure names it: where it plays and what it does. */
+  const nameOf = (branch: ScriptBranch): string =>
+    `branch after ${branch.after} (${branch.commands.join(', ')})`
+  for (const branch of branches)
+    if (branch.after < -1 || branch.after >= commands.length)
+      dead.push(
+        `${nameOf(branch)} plays after no such step: the path has ` +
+          `${commands.length} commands, so its lines would reach nobody.`,
+      )
+  /** Play a branch's command and fail when nobody here answers it. */
+  const addBranchTurn = (branch: ScriptBranch, command: string): void => {
+    let nobody = false
+    addAnswer(tryOut, () => {
+      const text = tryOut.takeTurn(command)
+      const addressed = tryOut.lastTurnAddressee() !== null
+      add(ownWordsBlocks(command, addressed))
+      nobody =
+        NOBODY_HERE.some((refusal) => text.startsWith(refusal)) ||
+        (command.startsWith('say ') && !addressed)
+      return text
+    })
+    if (nobody)
+      dead.push(
+        `${nameOf(branch)}: "${command}" reaches nobody here, so the lines ` +
+          'it was written for are not in the script.',
+      )
+  }
   const playBranches = (after: number): void => {
     for (const branch of branches.filter((b) => b.after === after)) {
       probe.loadSaveData(game.toSaveData())
@@ -356,7 +392,7 @@ export function actScript(
         (spell) => !(branch.unlearn ?? []).includes(spell.id.toLowerCase()),
       )
       for (const step of branch.commands) {
-        addTurn(tryOut, step)
+        addBranchTurn(branch, step)
         settle(tryOut)
         // The room as the scene leaves it, which the path may never show.
         if (probe.isActRunning())
@@ -405,5 +441,6 @@ export function actScript(
     arrive()
     tryProbes()
   }
+  if (dead.length) throw new Error(dead.join('\n'))
   return [...script.values()]
 }
