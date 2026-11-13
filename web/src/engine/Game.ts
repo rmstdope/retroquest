@@ -14,6 +14,7 @@ import {
 import { GameState } from './GameState'
 import {
   DIRECTIONS,
+  EXAMINE_SHORTHAND,
   SHORT_DIRECTIONS,
   VERB_FORMS,
   formOf,
@@ -379,15 +380,16 @@ Welcome to
       nested(namesOf(room.characters)),
       room.characters,
     )
+    const itemTree = nameTree('item')
     const itemsAndCharacters = sendableNames(
-      mergeTrees(nameTree('item'), charactersTree),
+      mergeTrees(itemTree, charactersTree),
       [...allItems, ...room.characters],
     )
     const trees: Record<ArgumentKind, CompletionTree | null> = {
       none: null,
       text: null,
       exit: leaves(Object.keys(exits)),
-      item: nameTree('item'),
+      item: itemTree,
       roomItem: nameTree('roomItem'),
       inventoryItem: nameTree('inventoryItem'),
       thing: itemsAndCharacters,
@@ -420,7 +422,10 @@ Welcome to
     )
     const split = splitMultiwordKeys(completions)
     // "look <thing>" examines it too, and "look" alone is sendable.
-    split.look = mergeTrees(split.look ?? {}, itemsAndCharacters)
+    split[EXAMINE_SHORTHAND] = mergeTrees(
+      split[EXAMINE_SHORTHAND] ?? {},
+      itemsAndCharacters,
+    )
     return split
   }
 
@@ -494,7 +499,7 @@ Welcome to
   /**
    * The full name of the carried or room item the words name, among those
    * whose full name `offered` accepts, or null. Asks each item's `answersTo`,
-   * so it reaches the names no list holds, and drops a leading "the" as
+   * so it reaches whatever the item answers to, and drops a leading "the" as
    * `findAllItems` does.
    */
   itemNamed(
@@ -1090,7 +1095,8 @@ function nested(names: string[]): CompletionTree {
       }
       let next = Object.hasOwn(node, part) ? node[part] : null
       if (!next) {
-        next = {}
+        // a shorter name met first stays sendable
+        next = Object.hasOwn(node, part) ? { '@': null } : {}
         node[part] = next
       }
       node = next

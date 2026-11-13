@@ -97,8 +97,8 @@ class OldGardener extends Character {
   }
 
   /** Answers to the trade as well as to the whole name. */
-  override answersTo(name: string): boolean {
-    return super.answersTo(name) || name.toLowerCase() === 'gardener'
+  override otherNames(): string[] {
+    return ['gardener']
   }
 }
 

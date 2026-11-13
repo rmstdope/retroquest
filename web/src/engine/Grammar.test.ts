@@ -39,6 +39,40 @@ describe('Grammar', () => {
     }
   })
 
+  it('the parser understands no verb the grammar lacks', () => {
+    const parser = new CommandParser(recordingTarget())
+    const declared = VERB_FORMS.flatMap((form) => form.verbs)
+    for (const word of [
+      'read',
+      'drop',
+      'listen',
+      'discard',
+      'xyzzy',
+      'dance',
+    ]) {
+      expect(declared).not.toContain(word)
+      expect(parser.parse(`${word} thing`), word).toBe('unknown')
+    }
+  })
+
+  it('the parser takes the joining words the grammar declares', () => {
+    const calls: string[] = []
+    const target = new Proxy(recordingTarget(), {
+      get: (t, name) =>
+        name === 'use'
+          ? (...args: string[]) => (calls.push(args.join('|')), 'use')
+          : Reflect.get(t, name),
+    })
+    const parser = new CommandParser(target)
+    for (const form of VERB_FORMS) {
+      for (const word of form.joins?.words ?? []) {
+        if (form.verbs[0] !== 'use') continue
+        parser.parse(`use rope ${word} chain`)
+      }
+    }
+    expect(calls).toEqual(['rope|chain', 'rope|chain'])
+  })
+
   it('prefixesOf lists every verb of a form with a trailing space', () => {
     expect(prefixesOf('pick up')).toEqual([
       'take ',

@@ -254,3 +254,6 @@ export function helpText(): string {
   })
   return '[bold]Available Commands:[/bold]\n\n' + sections.join('\n')
 }
+
+/** The verb that also examines when a thing follows it: "look rope" reads as "look at rope". */
+export const EXAMINE_SHORTHAND = 'look'

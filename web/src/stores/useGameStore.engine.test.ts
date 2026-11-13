@@ -503,6 +503,11 @@ describe('useGameStore over the real engine: the no-match line and a name that w
     it('still says no match for an extra name with words the command cannot take', async () => {
       const store = await storeHoldingToken()
 
+      // A word after a finished name is the tree's open question (see rq-n1lz):
+      // an extra name reads like the full name.
+      expect(saysNoMatch(store, 'examine pendant bob')).toBe(
+        saysNoMatch(store, "examine nyx's token bob"),
+      )
       expect(saysNoMatch(store, 'use pendant bob')).toBe(true)
       expect(saysNoMatch(store, 'give pendant to bob')).toBe(true)
       expect(saysNoMatch(store, 'go pendant')).toBe(true)
