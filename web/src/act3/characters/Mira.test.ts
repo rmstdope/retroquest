@@ -1037,3 +1037,19 @@ describe('Mira at the Lower Switchbacks, further along', () => {
     )
   })
 })
+
+describe('Mira tells the room by what it is, not by what it is called', () => {
+  it('speaks as at the Lower Switchbacks in a renamed switchbacks', () => {
+    const game = new Game([new Act3()])
+    game.state.setStoryFlag(FLAG_ACT3_MAIN_STARTED, true)
+    game.state.currentRoom = game.state.allRooms.LowerSwitchbacks
+    const mira = new Mira()
+    game.state.currentRoom.characters.push(mira)
+    const named = mira.talkTo(game.state)
+    game.state.currentRoom.name = 'The Black Glass Path'
+    const renamed = mira.talkTo(game.state)
+
+    expect(renamed).toBe(named)
+    expect(renamed).toContain('scholar')
+  })
+})

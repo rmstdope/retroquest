@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest'
+import { Lantern } from '../items/Lantern'
 import { Game, GameController } from '@/engine'
 import { Act1 } from '../Act1'
 import { executeCommands } from '@/testing/gameHelpers'
@@ -98,6 +99,26 @@ describe("Elior's Cottage bread", () => {
     room.items = room.items.filter((item) => item.name !== 'bread')
     new Act1().afterLoad(game.state)
     expect(room.getItemByName('bread')).toBeNull()
+  })
+
+  it('is not brought back for a lit lantern in a save made before the lit field', () => {
+    const game = cottage()
+    executeCommands(game, ['use lantern', 'take bread'])
+    game.state.inventory = game.state.inventory.filter(
+      (item) => item.name !== 'bread',
+    )
+    const room = game.state.allRooms.EliorsCottage
+    room.items = room.items.filter((item) => item.name !== 'bread')
+    const lantern = room.items.find((item) => item instanceof Lantern)
+    if (!lantern) throw new Error('no lantern in the cottage')
+    Reflect.deleteProperty(lantern, 'lit')
+    const loaded = cottage()
+
+    expect(loaded.loadSaveData(game.toSaveData())).toContain('loaded')
+
+    expect(
+      loaded.state.allRooms.EliorsCottage.getItemByName('bread'),
+    ).toBeNull()
   })
 
   it('is not copied when Elior already carries it, through a real save', () => {

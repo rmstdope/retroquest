@@ -121,8 +121,8 @@ export class Act1 extends Act {
     if (!rooms.EliorsCottage.getItemByName('hearth')) {
       rooms.EliorsCottage.addItem(new Hearth())
     }
-    this.restoreCottageLoaf(gameState)
     this.migrateLegacyItemState(gameState)
+    this.restoreCottageLoaf(gameState)
     this.restoreLanternLit(gameState)
     for (const [roomKey, room] of Object.entries(rooms)) {
       Scenery.ensure(room, roomKey)
@@ -150,7 +150,8 @@ export class Act1 extends Act {
 
   /**
    * Give the bucket, the carrot and the lantern of an older save the state
-   * field they now keep, read from how they were then told apart.
+   * field they now keep, read from how they were then told apart. Runs
+   * before anything that asks whether the lantern is lit.
    */
   private migrateLegacyItemState(gameState: GameState): void {
     const items = [

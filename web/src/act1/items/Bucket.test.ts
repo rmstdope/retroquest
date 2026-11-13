@@ -93,7 +93,7 @@ describe('Watering the Vegetable Field', () => {
       'A sturdy wooden bucket with a rope handle. It is full of clear water ' +
       'drawn from the well.'
     delete bucket.holdsPurifiedWater
-    delete bucket.filled
+    Reflect.deleteProperty(bucket, 'filled')
     bucket.migrateLegacyState()
     game.state.addItemToInventory(bucket)
     game.state.currentRoom = game.state.allRooms.VegetableField

@@ -73,3 +73,20 @@ describe('HeatWardMix', () => {
     ).toBe(true)
   })
 })
+
+describe('HeatWardMix room check', () => {
+  it('is told the passages by class, not by name', () => {
+    const room = createFumaroleRoom()
+    room.name = 'The Hissing Vents'
+
+    new HeatWardMix().use(createState(room))
+
+    expect(room.applyHeatWard).toHaveBeenCalled()
+  })
+
+  it('is not fooled by another room that borrows the name', () => {
+    const room = new Room({ name: 'Fumarole Passages', description: '' })
+
+    expect(new HeatWardMix().use(createState(room))).toContain('usefully here')
+  })
+})

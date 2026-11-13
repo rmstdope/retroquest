@@ -386,3 +386,16 @@ describe('GameMap farewell on the Road to Greendale', () => {
     expect(farewell()).not.toContain('Patches')
   })
 })
+
+describe('GameMap road check', () => {
+  it('plays the farewell on the road by what the room is, not by its name', () => {
+    const { game, map } = setupGameAtRoad()
+    completeSideQuestsExcept(game)
+    game.state.addItemToInventory(new AncientAmulet())
+    game.state.currentRoom.name = 'The Long Lane'
+
+    expect(map.use(game.state)).toContain(
+      'the chapel bell rings once, with no hand on the rope.',
+    )
+  })
+})
