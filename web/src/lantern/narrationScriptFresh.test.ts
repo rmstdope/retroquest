@@ -13,6 +13,7 @@ import {
 } from './narrationScript'
 import {
   ACT_NUMBERS,
+  LONG_ACT_NUMBERS,
   extractActImages,
   extractActMusic,
   extractActScenes,
@@ -26,7 +27,9 @@ import {
 const SLOW = 120_000
 
 /** The acts whose script this file checks; the long acts have their own file. */
-const SHORT_ACTS = ACT_NUMBERS.filter((number) => !['2', '3'].includes(number))
+const SHORT_ACTS = ACT_NUMBERS.filter(
+  (number) => !LONG_ACT_NUMBERS.includes(number),
+)
 
 /** Reads a committed JSON file of an act under `tts/act<N>/`. */
 function committed(number: string, file: string): unknown {

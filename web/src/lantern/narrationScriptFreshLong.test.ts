@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs'
 import { describe, expect, it } from 'vitest'
-import { extractActScript } from '../../../tts/actScripts'
+import { extractActScript, LONG_ACT_NUMBERS } from '../../../tts/actScripts'
 
 /** Acts 2 and 3 are slow to play on a loaded machine. */
 const SLOW = 120_000
@@ -12,7 +12,7 @@ const SLOW = 120_000
  * regenerate with `tts/extract-act.ts <N>`.
  */
 describe('committed narration scripts of the long acts are current', () => {
-  for (const number of ['2', '3']) {
+  for (const number of LONG_ACT_NUMBERS) {
     it(
       `tts/act${number}/script.json is what extract-act.ts writes`,
       () => {
