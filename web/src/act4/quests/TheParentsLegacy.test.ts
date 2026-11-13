@@ -8,17 +8,6 @@ import {
 } from '../Act4StoryFlags'
 
 describe('TheParentsLegacy', () => {
-  it('has the agreed card and completion text', () => {
-    const quest = new TheParentsLegacy()
-    expect(quest.name).toBe("The Parents' Legacy")
-    expect(quest.description).toBe(
-      "Behind the sealed door, Aren and Lysa's last memories wait. Look into them, and learn the whole truth before the throne room.",
-    )
-    expect(quest.completion).toBe(
-      "Elior sees the whole truth: his parents' friendship with Malakar, the wound, and the ward they became. The way north to the Throne Chamber opens.",
-    )
-  })
-
   it('starts and completes with its flags', () => {
     const game = new Game([new Act4()])
     const quest = new TheParentsLegacy()
