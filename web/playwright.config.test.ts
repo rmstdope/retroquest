@@ -7,6 +7,7 @@
  * passes only on its retry.
  */
 import { afterEach, describe, expect, it, vi } from 'vitest'
+import { readdirSync, readFileSync } from 'node:fs'
 import type { PlaywrightTestConfig } from '@playwright/test'
 
 /** Loads a fresh copy of the config, so `E2E_PORT` and `CI` are read again. */
@@ -28,7 +29,10 @@ function serversOf(
 }
 
 /** The project called `name`. */
-function projectOf(config: PlaywrightTestConfig, name: string) {
+function projectOf(
+  config: PlaywrightTestConfig,
+  name: string,
+): NonNullable<PlaywrightTestConfig['projects']>[number] {
   const project = config.projects?.find((p) => p.name === name)
   if (project === undefined) {
     throw new Error(`expected a project called ${name}`)
@@ -126,5 +130,19 @@ describe('playwright.config', () => {
     expect(config.workers).toBe(1)
     expect(config.retries).toBe(0)
     expect(config.failOnFlakyTests).toBe(false)
+  })
+
+  it('keeps every spec that types a debug command on the dev server', async () => {
+    const config = await loadConfig()
+    const devSpecs = projectOf(config, 'chromium-dev').testMatch
+    const typesDebug = readdirSync('e2e')
+      .filter((file) => file.endsWith('.spec.ts'))
+      .filter((file) =>
+        /['"`]debug [a-z0-9-]+/.test(readFileSync(`e2e/${file}`, 'utf8')),
+      )
+    expect(typesDebug.length).toBeGreaterThan(0)
+    for (const file of typesDebug) {
+      expect(devSpecs).toContain(file)
+    }
   })
 })
