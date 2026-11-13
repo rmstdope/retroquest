@@ -18,7 +18,6 @@ import { useBridge, type ActClass } from '@/composables/useBridge'
 import { HOLD_RING_MS, HOLD_TO_SKIP_MS } from '@/composables/useHoldToSkip'
 import { readingPauseMs } from '@/lantern/stageSpeech'
 import { readingTimeMs } from '@/lantern/stageArrival'
-import { useSettingsStore } from '@/stores/useSettingsStore'
 import { parseTurn, type TurnBlock } from '@/lantern/parseTurn'
 import { setPictureProbe } from '@/lantern/roomPicture'
 import { narrationKey } from '@/lantern/narrationKey'
@@ -50,8 +49,8 @@ describe('LanternLayout: change of scene', () => {
   async function stage(
     phone = false,
   ): Promise<ReturnType<typeof useGameStore>> {
-    // Settings an earlier test saved (narration off) would carry over where
-    // the test window keeps storage (Node 22, as on CI).
+    // Settings an earlier test saved would carry over where the test window
+    // keeps storage (Node 22, as on CI).
     globalThis.localStorage?.clear?.()
     setActivePinia(createPinia())
     vi.stubGlobal(
@@ -351,7 +350,6 @@ describe('LanternLayout: change of scene', () => {
 
   it('tells the waking in the middle of the dark, then raises the cottage with its name and description', async () => {
     const game = await dream()
-    useSettingsStore().narrationOn = false
     const scene = useSceneStore()
     const turn = await answerVoice(game)
     const waking = markupOf(parseTurn(game.turns.at(-1)!.text)[turn.waking])
@@ -396,7 +394,6 @@ describe('LanternLayout: change of scene', () => {
   /** Answer the voice, unnarrated, and wait until the waking is told in the dark. */
   async function wakingInTheDark(): Promise<ReturnType<typeof useGameStore>> {
     const game = await dream()
-    useSettingsStore().narrationOn = false
     await answerVoice(game)
     const voice = useStageSpeechStore().visible.at(-1)!
     vi.advanceTimersByTime(readingPauseMs(voice.markup))
@@ -497,7 +494,6 @@ describe('LanternLayout: change of scene', () => {
 
     it('holding the picture while the answer is told skips to the cottage, everything told', async () => {
       const game = await dream()
-      useSettingsStore().narrationOn = false
       await answerVoice(game)
       await holdPicture(HOLD_TO_SKIP_MS)
       await allTold(game)
@@ -505,7 +501,6 @@ describe('LanternLayout: change of scene', () => {
 
     it('shows the ring at the press while it is held', async () => {
       const game = await dream()
-      useSettingsStore().narrationOn = false
       await answerVoice(game)
       pressDown()
       await vi.advanceTimersByTimeAsync(HOLD_RING_MS)
@@ -535,7 +530,6 @@ describe('LanternLayout: change of scene', () => {
 
     it('holding Enter skips everything; its repeats take no step meanwhile', async () => {
       const game = await dream()
-      useSettingsStore().narrationOn = false
       await answerVoice(game)
       document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }))
       for (let t = 0; t < HOLD_TO_SKIP_MS; t += 100) {
@@ -654,7 +648,6 @@ describe('LanternLayout: change of scene', () => {
   function recordEverything(
     silent: (key: string) => boolean = () => false,
   ): { onended: (() => void) | null }[] {
-    useSettingsStore().narrationOn = true
     const narration = useNarrationStore()
     const voices: { onended: (() => void) | null }[] = []
     narration.setAudioFactory(() => {
