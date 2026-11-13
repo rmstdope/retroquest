@@ -1,4 +1,5 @@
 import { Item, type GameState } from '@/engine'
+import { FumarolePassages } from '../rooms/FumarolePassages'
 
 /** A carved stone used to tune the timing of the fumarole vents. */
 export class VentStone extends Item {
@@ -15,14 +16,13 @@ export class VentStone extends Item {
 
   /** Use the vent stone to attempt a calibration when in the passages. */
   override use(gameState: GameState): string {
-    // Find current room name and act accordingly
     const room = gameState.currentRoom
     const hook = (
       room as {
         calibrateWithStone?: (gs: GameState, stone: VentStone) => string
       }
     ).calibrateWithStone
-    if (room.name !== 'Fumarole Passages' || typeof hook !== 'function') {
+    if (!(room instanceof FumarolePassages) || typeof hook !== 'function') {
       return (
         `[failure]You can't use ${this.nameInSentence()} ` +
         'usefully here.[/failure]'

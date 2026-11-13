@@ -1,20 +1,42 @@
 import { Item, type GameState } from '@/engine'
 
+const WITHERED_DESCRIPTION =
+  'A shriveled, orange carrot barely clinging to life. It looks edible, ' +
+  'but only just.'
+
 /** A shriveled carrot that can be revived into a fresh carrot. */
 export class WitheredCarrot extends Item {
+  /**
+   * Whether the carrot has been revived. Missing in saves made when the state
+   * lived only in the name; see migrateLegacyState.
+   */
+  fresh?: boolean = false
+
   constructor() {
     super({
       name: 'withered carrot',
-      description:
-        'A shriveled, orange carrot barely clinging to life. It looks edible, ' +
-        'but only just.',
+      description: WITHERED_DESCRIPTION,
       shortName: 'carrot',
       canBeCarried: true,
     })
   }
 
+  /** Whether the carrot has been revived. */
+  isFresh(): boolean {
+    return this.fresh === true
+  }
+
+  /**
+   * Give a save made before the `fresh` field its value: a revived carrot
+   * no longer has the withered description.
+   */
+  migrateLegacyState(): void {
+    this.fresh ??= this.description !== WITHERED_DESCRIPTION
+  }
+
   /** Turn the withered carrot into a fresh carrot and return a message (ReviveSpell). */
   revive(): string {
+    this.fresh = true
     this.name = 'fresh carrot'
     this.shortName = 'carrot'
     this.description =
@@ -29,7 +51,7 @@ export class WitheredCarrot extends Item {
 
   /** The line for the carrot as it is when taken: withered, or fresh once revived. */
   override pickedUp(_gameState: GameState): string {
-    if (this.name === 'fresh carrot') {
+    if (this.isFresh()) {
       return (
         'It is cool and firm, with soil still on it. ' +
         'Not long ago it was barely alive.'

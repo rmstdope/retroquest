@@ -93,6 +93,8 @@ describe('Watering the Vegetable Field', () => {
       'A sturdy wooden bucket with a rope handle. It is full of clear water ' +
       'drawn from the well.'
     delete bucket.holdsPurifiedWater
+    delete bucket.filled
+    bucket.migrateLegacyState()
     game.state.addItemToInventory(bucket)
     game.state.currentRoom = game.state.allRooms.VegetableField
     return bucket
@@ -202,5 +204,51 @@ describe('A full bucket used with something else', () => {
 
     expect(answer).toContain('[failure]')
     expect(answer).not.toContain('water?')
+  })
+
+  describe('its state lives in a field, not in its name', () => {
+    it('knows it is full after drawing water, whatever it is called', () => {
+      const game = new Game([new Act1()])
+      const bucket = new Bucket()
+      bucket.useWith(game.state, new Well())
+      bucket.name = 'pail'
+
+      expect(bucket.isFilled()).toBe(true)
+      expect(bucket.useWith(game.state, new Well())).toContain('already full')
+    })
+
+    it('knows it is empty again after watering the field', () => {
+      const game = new Game([new Act1()])
+      const well = new Well()
+      well.isPurified = true
+      const bucket = new Bucket()
+      bucket.useWith(game.state, well)
+      game.state.currentRoom = game.state.allRooms.VegetableField
+
+      bucket.use(game.state)
+
+      expect(bucket.isFilled()).toBe(false)
+      expect(bucket.name).toBe('bucket')
+    })
+
+    it('reads a save made before the field as full when the water is in it', () => {
+      const game = new Game([new Act1()])
+      const bucket = new Bucket()
+      bucket.useWith(game.state, new Well())
+      Reflect.deleteProperty(bucket, 'filled')
+
+      bucket.migrateLegacyState()
+
+      expect(bucket.isFilled()).toBe(true)
+    })
+
+    it('reads a save made before the field as empty when it is empty', () => {
+      const bucket = new Bucket()
+      Reflect.deleteProperty(bucket, 'filled')
+
+      bucket.migrateLegacyState()
+
+      expect(bucket.isFilled()).toBe(false)
+    })
   })
 })

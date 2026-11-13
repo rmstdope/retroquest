@@ -25,12 +25,31 @@ export class Bucket extends Item {
    */
   holdsPurifiedWater?: boolean = false
 
+  /**
+   * Whether the bucket holds water. Missing in saves made when the state
+   * lived only in the name; see migrateLegacyState.
+   */
+  filled?: boolean = false
+
   constructor() {
     super({
       name: 'bucket',
       description: EMPTY_DESCRIPTION,
       canBeCarried: true,
     })
+  }
+
+  /** Whether the bucket holds water, murky or clear. */
+  isFilled(): boolean {
+    return this.filled === true
+  }
+
+  /**
+   * Give a save made before the `filled` field its value: a bucket with
+   * water in it has a description other than the empty one.
+   */
+  migrateLegacyState(): void {
+    this.filled ??= this.description !== EMPTY_DESCRIPTION
   }
 
   /**
@@ -50,6 +69,7 @@ export class Bucket extends Item {
 
   /** Fill the bucket with the water in the well. */
   private fill(well: Well): string {
+    this.filled = true
     this.name = 'bucket (full)'
     this.holdsPurifiedWater = well.isPurified
     const water = well.isPurified
@@ -68,7 +88,7 @@ export class Bucket extends Item {
    */
   override useWith(gameState: GameState, other: Item): string {
     if (other instanceof Well) {
-      if (this.name === 'bucket') {
+      if (!this.isFilled()) {
         const kind = other.isPurified ? 'clear' : 'murky'
         this.fill(other)
         return (
@@ -91,7 +111,7 @@ export class Bucket extends Item {
     ) {
       return this.use(gameState)
     }
-    if (this.name !== 'bucket') return super.useWith(gameState, other)
+    if (this.isFilled()) return super.useWith(gameState, other)
     return clue(
       'The [item_name]bucket[/item_name] is no use with that. Perhaps near ' +
         'something with water?',
@@ -106,7 +126,7 @@ export class Bucket extends Item {
     if (!(gameState.currentRoom instanceof VegetableField)) {
       return super.use(gameState)
     }
-    if (this.name === 'bucket') {
+    if (!this.isFilled()) {
       if (gameState.getStoryFlag(FLAG_VEGETABLE_FIELD_WATERED)) {
         return clue(
           'The [item_name]bucket[/item_name] is empty, and the rows have ' +
@@ -125,6 +145,7 @@ export class Bucket extends Item {
           'soil further.',
       )
     }
+    this.filled = false
     this.name = 'bucket'
     this.holdsPurifiedWater = false
     this.description = EMPTY_DESCRIPTION
@@ -148,7 +169,7 @@ export class Bucket extends Item {
    * better water now).
    */
   purify(gameState: GameState): string {
-    if (this.name === 'bucket') {
+    if (!this.isFilled()) {
       return (
         '[failure]The [item_name]bucket[/item_name] is empty; there is ' +
         'nothing in it to cleanse.[/failure]'

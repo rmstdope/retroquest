@@ -8,6 +8,11 @@ import {
   speech,
 } from '@/engine'
 import { AshScholar } from './AshScholar'
+import { CavernMouth } from '../rooms/CavernMouth'
+import { FortressEntrance } from '../rooms/FortressEntrance'
+import { LowerSwitchbacks } from '../rooms/LowerSwitchbacks'
+import { MirasHut } from '../rooms/MirasHut'
+import { TidalCauseway } from '../rooms/TidalCauseway'
 import { KeepsakeNote } from '../items/KeepsakeNote'
 import { LifelightElixir } from '../items/LifelightElixir'
 import { SeaSealedLetter } from '../items/SeaSealedLetter'
@@ -183,9 +188,9 @@ export class Mira extends Character {
     // If we're already at Lower Switchbacks, do not teleport; instead
     // provide lore about Wisdom and the phoenix legend.
     // The fortress gate has its own talk (see talkAtGate).
-    if (gameState.currentRoom.name === "Entrance to Malakar's Fortress") {
+    if (gameState.currentRoom instanceof FortressEntrance) {
       return this.talkAtGate(gameState, eventMsg)
-    } else if (gameState.currentRoom.name === 'Cavern Mouth') {
+    } else if (gameState.currentRoom instanceof CavernMouth) {
       // Check if dragon's scale has been acquired
       if (
         !gameState.getStoryFlag(FLAG_ACT3_DRAGONS_SCALE_ACQUIRED) &&
@@ -220,7 +225,7 @@ export class Mira extends Character {
         '\n' +
         speech('The king is fading, Elior. We have less time than I hoped.') +
         cedricAdds(gameState, CEDRIC_KING_WEAKER_3)
-    } else if (gameState.currentRoom.name === 'Lower Switchbacks') {
+    } else if (gameState.currentRoom instanceof LowerSwitchbacks) {
       if (!gameState.getStoryFlag(FLAG_ACT3_PHOENIX_FEATHER_ACQUIRED)) {
         return eventMsg + '\n' + this.onTheMountain(gameState)
       }
@@ -257,7 +262,7 @@ export class Mira extends Character {
             'site we reach.',
         ) +
         cedricAdds(gameState, CEDRIC_KING_WEAKER_2)
-    } else if (gameState.currentRoom.name === 'Tidal Causeway') {
+    } else if (gameState.currentRoom instanceof TidalCauseway) {
       if (!gameState.getStoryFlag(FLAG_ACT3_CRYSTAL_OF_LIGHT_ACQUIRED)) {
         return (
           eventMsg +
@@ -306,7 +311,7 @@ export class Mira extends Character {
             'than when we set out.',
         ) +
         cedricAdds(gameState, CEDRIC_KING_WEAKER_1)
-    } else if (gameState.currentRoom.name === "Mira's Hut") {
+    } else if (gameState.currentRoom instanceof MirasHut) {
       // Check if Elior has read the Keepsake Note first
       if (!gameState.getStoryFlag(FLAG_ACT3_ECHOES_QUEST_STARTED)) {
         return (
