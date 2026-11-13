@@ -79,7 +79,7 @@ test.describe('quest news told in the middle of the picture', () => {
       'Hint of magic',
     )
     await expect(
-      middle(page).getByText('Click or press Enter to continue').last(),
+      middle(page).getByText('Click to continue · Hold to skip').last(),
     ).toBeVisible()
     await expect(middle(page).getByRole('button')).toHaveCount(0)
 
@@ -102,13 +102,17 @@ test.describe('quest news told in the middle of the picture', () => {
     await expect(page.getByTestId('news-line')).toHaveCount(0)
   })
 
-  test('is told on a phone too, with "Tap to continue"', async ({ page }) => {
+  test('is told on a phone too, with "Tap to continue · Hold to skip"', async ({
+    page,
+  }) => {
     await startAct1(page, 390, 844)
     await pushNews(page)
     await expect(middle(page).locator('.lq-news-name').last()).toHaveText(
       'Hint of magic',
     )
-    await expect(middle(page).getByText('Tap to continue').last()).toBeVisible()
+    await expect(
+      middle(page).getByText('Tap to continue · Hold to skip').last(),
+    ).toBeVisible()
   })
 
   for (const [width, height] of [

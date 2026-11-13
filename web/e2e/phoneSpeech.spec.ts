@@ -71,7 +71,7 @@ test('on a phone a long answer opens at its start, with the first line in view',
     page.getByRole('region', { name: 'Current location' }),
   ).toContainText("Elior's Cottage")
   // Her greeting comes a paragraph at a time; the turn opens at its start,
-  // with its first line in view.
+  // with its first line still showing in view (a line read fades away).
   // The Voice's line from the dream left the column with the dream.
   await enter(page, 'talk to grandmother')
   const lines = page.getByTestId('speech-line')
@@ -82,7 +82,7 @@ test('on a phone a long answer opens at its start, with the first line in view',
       () =>
         seenAtTop(
           page,
-          '.lq-one-column [data-testid="speech-line"] .lq-line',
+          '.lq-one-column [data-testid="speech-line"]:not([data-fade="gone"]) .lq-line',
           0,
         ),
       { timeout: 2_000 },

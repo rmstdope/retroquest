@@ -213,6 +213,8 @@ describe('LanternLayout: pressing a thing on the picture', () => {
       narrated: false,
       seen: false,
       carried: false,
+      speaker: 'Grandmother',
+      markup: 'Mind the bread.',
     } as unknown as StageLine
     speech.conversation = { with: 'grandmother', lines: [line] }
     await w.vm.$nextTick()

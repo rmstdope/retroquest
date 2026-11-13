@@ -15,6 +15,7 @@ import {
   type NarrationManifest,
 } from '@/lantern/narrationManifest'
 import { turnUnits } from '@/lantern/narrationUnits'
+import { readingPauseMs } from '@/lantern/stageSpeech'
 import { useArrivalStore } from '@/stores/useArrivalStore'
 import type { ArrivalPart } from '@/lantern/stageArrival'
 import type { QuestNews } from '@/lantern/questNews'
@@ -287,6 +288,21 @@ describe('StoryTurn while it is narrated', () => {
     useNarrationStore().begin(5, turnUnits(t, true, clips), 'act1')
     return mount(StoryTurn, { props: { turn: t } })
   }
+
+  it('on a card, gives each bubble its own time to read, for when a skip shows it unread', async () => {
+    const t = turn({ id: 5, text: TEXT })
+    useNarrationStore().begin(5, turnUnits(t, true, manifest), 'act1')
+    const w = mount(StoryTurn, { props: { turn: t, card: true } })
+    useNarrationStore().skipAll()
+    await w.vm.$nextTick()
+    expect(
+      w.findAll('.lq-bubble').map((b) => b.attributes('data-read-ms')),
+    ).toEqual([
+      String(readingPauseMs('Rain falls on the roof.')),
+      String(readingPauseMs('A door creaks.')),
+      String(readingPauseMs('After that, quiet.')),
+    ])
+  })
 
   it('shows only what has been spoken, marking the block being spoken', () => {
     const w = narrated()

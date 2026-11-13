@@ -128,7 +128,7 @@ describe('useStageSpeechStore', () => {
     },
   )
 
-  it('keeps, dimmed as the turn before, an unread journal a later command cut off', () => {
+  it('keeps an unread journal a later command cut off', () => {
     const speech = useStageSpeechStore()
     const journal = turn(
       `${say('Elior', 'The storm.')}\n${say('Elior', 'The voice.')}`,
@@ -142,7 +142,6 @@ describe('useStageSpeechStore', () => {
       'The storm.',
       'The voice.',
     ])
-    expect(speech.ageOf(journal.id)).toBe('prev')
     // A later turn clears them as usual, once they have been on the picture.
     speech.observe(turn('Nothing happens.', null, 'look'))
     expect(speech.visible).toEqual([])
@@ -618,23 +617,6 @@ describe('useStageSpeechStore: a talk that changes the scene partway', () => {
     scene.skip()
     expect(speech.visible.map((line) => line.markup)).toEqual([words])
   })
-  it('ages a turn by how many turns ago it was told, whether or not anyone spoke in the ones since', () => {
-    const speech = useStageSpeechStore()
-    const talk = turn(say('Borin', 'Well met.'), 'Borin')
-    speech.observe(talk)
-    expect(speech.ageOf(talk.id)).toBe('new')
-    const give = turn('Borin takes the coin.', 'Borin', 'give coin to borin')
-    speech.observe(give)
-    expect(speech.ageOf(talk.id)).toBe('prev')
-    expect(speech.ageOf(give.id)).toBe('new')
-    speech.observe(turn("You don't have that.", 'Borin', 'give gold to borin'))
-    expect(speech.ageOf(talk.id)).toBe('old')
-    const again = turn(say('Borin', 'Again.'), 'Borin')
-    speech.observe(again)
-    expect(speech.ageOf(again.id)).toBe('new')
-    expect(speech.ageOf(talk.id)).toBe('old')
-  })
-
   it("changes a room's own picture after the first paragraph is read, with no one quoted", () => {
     const speech = useStageSpeechStore()
     const scene = useSceneStore()

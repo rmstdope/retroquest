@@ -1,4 +1,4 @@
-import { test, expect, type Page } from './fixtures'
+import { test, expect, type Locator, type Page } from './fixtures'
 
 // Narration at full volume, as for a new player (the config sets it to 0 for the other specs).
 test.use({
@@ -80,7 +80,21 @@ async function turnCount(page: Page): Promise<number> {
 const lastTurnBlocks = (page: Page) =>
   page.getByTestId('turn').last().locator('.lq-block-text')
 
-test('tells an answer block by block, and a double tap shows the rest', async ({
+/** Press and hold the mouse at `position` in `locator` long enough to skip (0.7 s), then let go. */
+async function holdToSkip(
+  page: Page,
+  locator: Locator,
+  position = { x: 5, y: 5 },
+): Promise<void> {
+  const box = await locator.boundingBox()
+  if (!box) throw new Error('nothing to hold')
+  await page.mouse.move(box.x + position.x, box.y + position.y)
+  await page.mouse.down()
+  await page.waitForTimeout(900)
+  await page.mouse.up()
+}
+
+test('tells an answer block by block, a tap hurries and a hold shows the rest', async ({
   page,
 }): Promise<void> => {
   await slowNarrationClips(page)
@@ -98,11 +112,45 @@ test('tells an answer block by block, and a double tap shows the rest', async ({
   expect(early).toBe(1)
   await expect(page.locator('.lq-speaking')).toHaveCount(1)
 
-  // One tap hurries to the next block; two taps in a row show the rest.
+  // A tap hurries to the next block, and a quick second tap only hurries again.
   const story = page.getByRole('region', { name: 'Story' })
   await story.dblclick({ position: { x: 5, y: 5 } })
-  await expect(page.locator('.lq-speaking')).toHaveCount(0)
+  await expect(page.locator('.lq-speaking')).toHaveCount(1)
   expect(await lastTurnBlocks(page).count()).toBeGreaterThan(early)
+
+  // Held, the ring shows; held long enough, the rest is shown at once.
+  const box = (await story.boundingBox())!
+  await page.mouse.move(box.x + 5, box.y + 5)
+  await page.mouse.down()
+  await expect(page.getByTestId('hold-ring')).toBeVisible()
+  await page.waitForTimeout(800)
+  await page.mouse.up()
+  await expect(page.getByTestId('hold-ring')).toHaveCount(0)
+  await expect(page.locator('.lq-speaking')).toHaveCount(0)
+})
+
+test('a hold let go before the ring is full skips nothing', async ({
+  page,
+}): Promise<void> => {
+  await slowNarrationClips(page)
+  await page.setViewportSize({ width: 1280, height: 500 })
+  await startAct1(page)
+  const input = page.getByLabel('Command', { exact: true })
+  await input.fill('talk to voice')
+  await input.press('Enter')
+  await expect(page.locator('.lq-speaking')).toHaveCount(1)
+  const blocks = await lastTurnBlocks(page).count()
+
+  const story = page.getByRole('region', { name: 'Story' })
+  const box = (await story.boundingBox())!
+  await page.mouse.move(box.x + 5, box.y + 5)
+  await page.mouse.down()
+  await expect(page.getByTestId('hold-ring')).toBeVisible()
+  await page.mouse.up()
+  await expect(page.getByTestId('hold-ring')).toHaveCount(0)
+  // Not skipped, and not even a step: the same block is still being read.
+  await expect(page.locator('.lq-speaking')).toHaveCount(1)
+  expect(await lastTurnBlocks(page).count()).toBe(blocks)
 })
 
 for (const { name, width, height } of [
@@ -152,12 +200,16 @@ test('opens a journal drawer at once while the voice reads, and a press inside i
   await page.getByRole('button', { name: /^Quests/ }).click()
   const drawer = page.getByRole('complementary', { name: 'Journal drawer' })
   await expect(drawer).toHaveCount(1)
-  await expect(page.locator('.lq-speaking')).toHaveCount(1)
+  // The voice reads on: on the sides, or the waking in the middle of the dark.
+  const reading = page.locator(
+    '.lq-speaking, [data-testid="scene-interlude"]:not(.lq-interlude-leave-active)',
+  )
+  await expect(reading).toHaveCount(1)
 
   // The drawer is a held panel: a press in it only brings everything up to date.
   // Within one clip, so the voice ending by itself cannot pass it.
   await drawer.getByRole('button', { name: 'Close' }).click()
-  await expect(page.locator('.lq-speaking')).toHaveCount(0, { timeout: 1_000 })
+  await expect(reading).toHaveCount(0, { timeout: 1_000 })
   // That press did nothing but catch up: the drawer is still open.
   await expect(drawer).toHaveCount(1)
   expect(await turnCount(page)).toBe(commands)
@@ -248,7 +300,7 @@ test('holds the story still while it reads, and frees it when the reading ends',
   for (let i = 0; i < 4; i++) {
     await enter(page, i === 0 ? 'talk to voice' : 'look')
     await expect(page.locator('.lq-speaking')).toHaveCount(1)
-    if (i < 3) await story.dblclick({ position: { x: 5, y: 5 } })
+    if (i < 3) await holdToSkip(page, story)
   }
   await expect(page.locator('.lq-narration-hint')).toHaveCount(0)
 
@@ -260,7 +312,7 @@ test('holds the story still while it reads, and frees it when the reading ends',
   expect(await top()).toBe(held)
 
   // Skipped: the story scrolls freely.
-  await story.dblclick({ position: { x: 5, y: 5 } })
+  await holdToSkip(page, story)
   await expect(page.locator('.lq-speaking')).toHaveCount(0)
   await page.mouse.wheel(0, -300)
   await expect.poll(top).toBeLessThan(held)
@@ -280,9 +332,7 @@ test('hints at hurrying on the first narrated turn, and Settings has a volume fo
   await input.press('Enter')
   await expect(page.locator('.lq-narration-hint')).toBeVisible()
 
-  await page.getByRole('region', { name: 'Story' }).dblclick({
-    position: { x: 5, y: 5 },
-  })
+  await holdToSkip(page, page.getByRole('region', { name: 'Story' }))
   await expect(page.locator('.lq-narration-hint')).toHaveCount(0)
 
   await page.setViewportSize({ width: 1280, height: 720 })
@@ -452,7 +502,6 @@ for (const { name, width, height } of [
           await page.keyboard.press(' ')
           return
         }
-        // Never so soon after the last tap that the two make a double tap.
         await page.waitForTimeout(400)
         await page.locator(target).first().dispatchEvent('click')
       }

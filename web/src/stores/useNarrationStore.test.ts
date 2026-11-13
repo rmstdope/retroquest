@@ -459,15 +459,15 @@ describe('useNarrationStore', () => {
     expect(FakeAudio.all).toHaveLength(1)
   })
 
-  it('a second tap within 300 ms skips, a lone tap hurries', async () => {
-    narration.begin(1, [voiced(), voiced(), voiced()], 'act1')
+  it('each tap hurries one block, however quick the taps; none skips (a hold does)', async () => {
+    narration.begin(1, [voiced(), voiced(), voiced(), voiced()], 'act1')
     narration.tap()
     await vi.advanceTimersByTimeAsync(400)
     expect(narration.speaking(1)).toMatchObject({ unit: 1 })
     narration.tap()
     await vi.advanceTimersByTimeAsync(100)
     narration.tap()
-    expect(narration.isNarrating).toBe(false)
+    expect(narration.isNarrating).toBe(true)
   })
 
   it('a new turn cuts in on the one being narrated', () => {
@@ -712,6 +712,26 @@ describe('a narrated move whose picture is still changing', () => {
     expect(narration.atSceneChange(1)).toBe(false)
     expect(narration.revealed(1, 1)).toBe(true)
     expect(FakeAudio.all).toHaveLength(2)
+  })
+
+  it('goes on past where the scene changes to a further stop, and stops there again', async () => {
+    const narration = useNarrationStore()
+    narration.begin(1, [voiced(), voiced(), voiced()], 'act1', false, 1)
+    last().onended?.()
+    await vi.advanceTimersByTimeAsync(400)
+    expect(narration.atSceneChange(1)).toBe(true)
+    // The interlude (unit 1) is told in the dark; the room (unit 2) waits.
+    narration.passSceneChange(1, 2)
+    expect(narration.atSceneChange(1)).toBe(false)
+    expect(narration.revealed(1, 1)).toBe(true)
+    expect(FakeAudio.all).toHaveLength(2)
+    last().onended?.()
+    await vi.advanceTimersByTimeAsync(400)
+    expect(narration.atSceneChange(1)).toBe(true)
+    expect(narration.revealed(1, 2)).toBe(false)
+    narration.passSceneChange(1)
+    expect(narration.revealed(1, 2)).toBe(true)
+    expect(FakeAudio.all).toHaveLength(3)
   })
 
   it('waits for the scene to come up before going on past where it changed', async () => {

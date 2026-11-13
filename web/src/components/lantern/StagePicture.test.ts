@@ -1,7 +1,12 @@
 // @vitest-environment jsdom
 import { describe, it, expect, vi, afterEach, beforeEach } from 'vitest'
 import { createPinia, setActivePinia } from 'pinia'
-import { SCENE_HALF_MS, useSceneStore } from '@/stores/useSceneStore'
+import {
+  INTERLUDE_FADE_MS,
+  INTERLUDE_RISE_MS,
+  SCENE_HALF_MS,
+  useSceneStore,
+} from '@/stores/useSceneStore'
 import { mount } from '@vue/test-utils'
 import { nextTick } from 'vue'
 import StagePicture from './StagePicture.vue'
@@ -81,6 +86,22 @@ describe('StagePicture during a change of scene', () => {
     vi.useFakeTimers()
   })
   afterEach(() => vi.useRealTimers())
+
+  it('lifts the veil at the pace the change of scene rises at', async () => {
+    const scene = useSceneStore()
+    const w = mount(StagePicture, { props: { src: '/a.png' } })
+    await w.get('img.lq-loading').trigger('load')
+    expect(w.attributes('style')).toContain(`--lq-rise: ${SCENE_HALF_MS}ms`)
+    scene.begin(1, '/b.png', () => {}, 0, { unit: 0, markup: 'Awake.' })
+    await w.setProps({ src: '/b.png' })
+    await w.get('img.lq-loading').trigger('load')
+    vi.advanceTimersByTime(SCENE_HALF_MS)
+    scene.endInterlude()
+    vi.advanceTimersByTime(INTERLUDE_FADE_MS)
+    await nextTick()
+    expect(w.classes()).toContain('lq-scene-in')
+    expect(w.attributes('style')).toContain(`--lq-rise: ${INTERLUDE_RISE_MS}ms`)
+  })
 
   it('keeps the old picture under the veil, then puts the new one in place in the dark', async () => {
     const scene = useSceneStore()

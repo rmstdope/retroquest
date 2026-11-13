@@ -22,7 +22,7 @@ import { readingPauseMs } from '@/lantern/stageSpeech'
  *
  * - `hurry` completes the block being spoken and cuts its voice; the next one
  *   plays. `skipTo` does so up to a given unit, `seekToWord` to a word of it. `skipAll` shows the rest of
- *   the turn at once, silently. `tap` is both: a second tap within 300 ms skips. A new turn (`begin`) cuts in on
+ *   the turn at once, silently. `tap` hurries (a held press skips, in the layout). A new turn (`begin`) cuts in on
  *   the one being narrated.
  * - A voice that fails, is blocked, or has not ended `duration + 3 s` after it
  *   started completes its block, so a turn never stalls.
@@ -48,8 +48,6 @@ import { readingPauseMs } from '@/lantern/stageSpeech'
 const GAP_MS = 350
 /** The shorter pause after a hurried block. */
 const HURRIED_GAP_MS = 80
-/** Two taps this close are a double-tap. */
-const DOUBLE_TAP_MS = 300
 /** How long past a clip's length a voice may take before it counts as stuck. */
 const STALL_MARGIN_MS = 3000
 /** Extra time allowed for a clip to start (it is fetched when played) before the guard counts its length. */
@@ -142,7 +140,6 @@ export const useNarrationStore = defineStore('narration', () => {
   let generation = 0
   let timers: ReturnType<typeof setTimeout>[] = []
   let poll: ReturnType<typeof setInterval> | undefined
-  let lastTap = Number.NEGATIVE_INFINITY
   let nudgeTimer: ReturnType<typeof setTimeout> | undefined
 
   /** How the latest narrated turn ended. */
@@ -573,11 +570,15 @@ export const useNarrationStore = defineStore('narration', () => {
     return now?.turnId === turnId && now.atScene
   }
 
-  /** Let the narration of turn `turnId` go on past where its scene changes (the new picture is up). */
-  function passSceneChange(turnId: number): void {
+  /**
+   * Let the narration of turn `turnId` go on past where its scene changes
+   * (the new picture is up), or only as far as unit `until`, where it stops
+   * again (an interlude told in the dark before the new picture rises).
+   */
+  function passSceneChange(turnId: number, until = -1): void {
     const now = active.value
     if (now?.turnId !== turnId || now.sceneAt < 0) return
-    now.sceneAt = -1
+    now.sceneAt = until
     now.atScene = false
     step()
   }
@@ -652,14 +653,10 @@ export const useNarrationStore = defineStore('narration', () => {
     finish(true)
   }
 
-  /** A tap on the story, the picture's speech or a chapter page: hurry, or skip on a second tap within 300 ms. */
+  /** A tap on the story, the picture's speech or a chapter page: hurry one block (a held press skips, `useHoldToSkip`). */
   function tap(): void {
     if (!active.value) return
-    const now = Date.now()
-    const double = now - lastTap < DOUBLE_TAP_MS
-    lastTap = now
-    if (double) skipAll()
-    else hurry()
+    hurry()
   }
 
   return {

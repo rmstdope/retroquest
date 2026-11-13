@@ -3,7 +3,7 @@ import { computed, nextTick, onBeforeUnmount, ref, watch } from 'vue'
 import { useGameStore } from '@/stores/useGameStore'
 import { useStageSpeechStore } from '@/stores/useStageSpeechStore'
 import { useNarrationStore } from '@/stores/useNarrationStore'
-import { continuesRun, runHeads } from '@/lantern/stageSpeech'
+import { continuesRun, readingPauseMs, runHeads } from '@/lantern/stageSpeech'
 import { renderMarkup } from '@/utils/theme'
 import { useReadAlong } from '@/composables/useReadAlong'
 import type { StageLine } from '@/stores/useStageSpeechStore'
@@ -17,12 +17,11 @@ import SpeechPortrait from './SpeechPortrait.vue'
  * run (a new turn starts a new run, also when the same speaker spoke last): the
  * name shows once above its first line still showing, and one portrait
  * beside it (the run's later lines carry only their words, lined up under
- * the first); when the first line leaves at the top, the name and portrait
- * step down to the next line showing. Lines dim by turn, every turn counting
- * (also one where nobody speaks): everything said in the newest turn is full
- * strength, the turn before about 55% and older turns about 30%; a run's name
- * and portrait are as bright as their run (a run never spans two turns).
- * When the room is full the
+ * the first); when the first line leaves at the top, or fades away, the name
+ * and portrait step down to the next line showing. Each line, with its name
+ * and portrait, fades away once it has been read (`useFadeOnceRead`, run by
+ * the layout): it says when it is being read aloud, and how long it takes to
+ * read, which a line never read aloud waits first. When the room is full the
  * oldest leaves at the top, under a soft fade. A line taller than the room
  * never loses its top: the thread scrolls so the newest line shows from its
  * speaker down, its end faded at the bottom (the story band has every word).
@@ -105,6 +104,12 @@ function findFirstShowing(): void {
   firstShowing.value = at === -1 ? Math.max(0, rows.length - 1) : at
 }
 
+/** A line has faded away: the name and portrait of its run step down to the next line showing. */
+function lineGone(): void {
+  // The fade marks the line gone as the event reaches the layout, after this.
+  requestAnimationFrame(findFirstShowing)
+}
+
 // A new line, or a thread made shorter by the paper growing, pins it again.
 watch(
   () => speech.visible.at(-1)?.key,
@@ -121,7 +126,7 @@ onBeforeUnmount(() => threadResize?.disconnect())
 
 /**
  * Show the rest of an unnarrated turn's lines at once; a narrated turn is
- * tapped on like the story (one block hurried, a double tap skips the turn).
+ * tapped on like the story (one block hurried; held, it skips the telling).
  */
 function hurry(): void {
   speech.revealAll()
@@ -145,6 +150,7 @@ function hurry(): void {
         class="lq-thread"
         aria-hidden="true"
         @scroll.passive="findFirstShowing"
+        @animationend="lineGone"
       >
         <!-- eslint-disable vue/no-v-html -->
         <div
@@ -157,35 +163,26 @@ function hurry(): void {
               'lq-run-first': !continuesRun(line, speech.visible[index - 1]),
             },
           ]"
+          :data-read-ms="readingPauseMs(line.markup)"
           data-testid="speech-line"
         >
           <SpeechPortrait
             v-if="heads[index] && line.side === 'left'"
-            :class="`lq-age-${speech.ageOf(line.turnId)}`"
             :name="line.speaker"
             :src="game.portraitFor(line.speaker)"
           />
           <span v-else-if="line.side === 'left'" class="lq-gap"></span>
           <div class="lq-col">
-            <b
-              v-if="heads[index]"
-              class="lq-line-name"
-              :class="`lq-age-${speech.ageOf(line.turnId)}`"
-              >{{ line.speaker }}</b
-            >
+            <b v-if="heads[index]" class="lq-line-name">{{ line.speaker }}</b>
             <div
               class="lq-line"
-              :class="[
-                `lq-age-${speech.ageOf(line.turnId)}`,
-                { 'lq-speaking': speech.isSpeaking(line) },
-              ]"
+              :class="{ 'lq-speaking': speech.isSpeaking(line) }"
             >
               <span v-html="lineHtml(line)"></span>
             </div>
           </div>
           <SpeechPortrait
             v-if="heads[index] && line.side === 'right'"
-            :class="`lq-age-${speech.ageOf(line.turnId)}`"
             :name="line.speaker"
             :src="game.portraitFor(line.speaker)"
           />
@@ -337,12 +334,6 @@ function hurry(): void {
 }
 .lq-line-left .lq-line-name {
   color: var(--lq-accent-text);
-}
-.lq-age-prev {
-  opacity: 0.55;
-}
-.lq-age-old {
-  opacity: 0.3;
 }
 /* The line being read: the read-along ring. */
 .lq-line.lq-speaking {

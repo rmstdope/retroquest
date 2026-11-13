@@ -31,6 +31,8 @@ async function start(page: Page): Promise<void> {
   await page.addInitScript(() =>
     localStorage.setItem('retroquest_settings', '{"narrationVolume":0}'),
   )
+  // The waking is told in the dark of a change of scene, which the suite's reduced motion skips.
+  await page.emulateMedia({ reducedMotion: 'no-preference' })
   await page.goto('/')
   await page.getByRole('button', { name: 'Start', exact: true }).click()
   await page.locator('.lq-chapter-button').click()
@@ -49,6 +51,9 @@ test('a name in the newest turn opens its menu from the keyboard', async ({
   const input = page.getByLabel('Command')
   await input.fill('talk to voice')
   await input.press('Enter')
+  // The waking is told in the middle of the dark first; Enter brings the cottage up.
+  await page.getByTestId('scene-interlude').waitFor()
+  await page.keyboard.press('Enter')
   await clearArrival(page)
   // The quest news is told in the middle and leaves only slim lines: look
   // around for a turn that names who is here.
@@ -82,6 +87,9 @@ test("Tab reaches the newest turn's names between the stage buttons and the acti
   const input = page.getByLabel('Command')
   await input.fill('talk to voice')
   await input.press('Enter')
+  // The waking is told in the middle of the dark first; Enter brings the cottage up.
+  await page.getByTestId('scene-interlude').waitFor()
+  await page.keyboard.press('Enter')
   await clearArrival(page)
   // The quest news is told in the middle and leaves only slim lines: look
   // around for a turn that names who is here.

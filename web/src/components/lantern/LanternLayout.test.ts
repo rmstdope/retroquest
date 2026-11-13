@@ -2039,7 +2039,7 @@ describe('LanternLayout', () => {
       expect(texts(w)).toEqual([FIRST, SECOND, FIRST])
     })
 
-    it('hurries on a tap and skips on a second tap', async () => {
+    it('hurries on a tap, and a quick second tap does not skip', async () => {
       const w = await ready()
       await say(narratedTurn(1))
       await w.get('.lq-story').trigger('click')
@@ -2048,8 +2048,7 @@ describe('LanternLayout', () => {
       await say(narratedTurn(2, { text: `${FIRST}\n${SECOND}\n${FIRST}` }))
       await w.get('.lq-story').trigger('click')
       await w.get('.lq-story').trigger('click')
-      expect(texts(w)).toHaveLength(5)
-      expect(useNarrationStore().isNarrating).toBe(false)
+      expect(useNarrationStore().isNarrating).toBe(true)
     })
 
     it('does not take a click on a name for a tap', async () => {
@@ -2565,7 +2564,7 @@ describe('LanternLayout', () => {
     })
 
     describe('the hint', () => {
-      const TOUCH = 'Tap to hurry · double-tap to skip'
+      const TOUCH = 'Tap to hurry · hold to skip'
       const KEYS = 'Space to hurry · Esc to skip'
       const hint = (w: VueWrapper): string =>
         w.find('.lq-narration-hint').exists()
@@ -2678,7 +2677,7 @@ describe('LanternLayout', () => {
       const text = w.get('[role="dialog"]').text()
       expect(text).toContain(
         'Narration: tap the story or press Space to hurry the current line; ' +
-          'double-tap or press Esc to show the rest at once. Any action cuts in. ' +
+          'hold, or press Esc, to show the rest at once. Any action cuts in. ' +
           'Set its volume, down to silent, in Settings.',
       )
       expect(text.indexOf('Available Commands:')).toBeLessThan(

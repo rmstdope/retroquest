@@ -16,7 +16,8 @@ import { useSceneStore } from '@/stores/useSceneStore'
  * player walks, the next picture is loaded out of sight. If the layout has
  * begun a change of scene (`useSceneStore`), a dark veil comes down over the
  * old picture (about a second), the new picture (or the backdrop) is put in
- * place in the dark and the veil lifts (about a second); the stage reports
+ * place in the dark and the veil lifts (about a second, slower out of a dark
+ * that told an interlude: the store's `riseMs`); the stage reports
  * the picture ready to the store. Otherwise (the first picture, a load, an act
  * starting) the new picture fades in over the old one (about a third of a
  * second, at once under Reduce motion) and the old picture goes once the fade
@@ -457,7 +458,12 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div ref="root" class="lq-stage-picture" :class="`lq-scene-${scene.phase}`">
+  <div
+    ref="root"
+    class="lq-stage-picture"
+    :class="`lq-scene-${scene.phase}`"
+    :style="{ '--lq-rise': `${scene.riseMs}ms` }"
+  >
     <div class="lq-backdrop" aria-hidden="true"></div>
     <img
       v-if="leaving && leaving !== shown"
@@ -603,7 +609,8 @@ onUnmounted(() => {
 }
 .lq-scene-in .lq-veil {
   opacity: 0;
-  transition: opacity calc(1s * var(--lq-motion)) linear;
+  /* As long as the rise takes: slower out of a dark that told an interlude. */
+  transition: opacity calc(var(--lq-rise) * var(--lq-motion)) linear;
 }
 @keyframes lq-drift {
   from {

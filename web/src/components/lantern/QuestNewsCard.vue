@@ -155,7 +155,8 @@ const doneCount = computed(() => {
         ><!-- eslint-disable vue/no-v-html --><span
           v-html="kickerHtml ?? escapeHtml(QUEST_UPDATED_KICKER)"
         ></span>
-        · <strong v-html="nameHtml ?? escapeHtml(news.name)"></strong
+        ·
+        <strong v-html="nameHtml ?? escapeHtml(news.name)"></strong
         ><!-- eslint-enable vue/no-v-html --></span
       >
       <span class="lq-update-toggle" aria-hidden="true">{{

@@ -7,6 +7,7 @@ import type { Turn } from '@/stores/useGameStore'
 import { useStageSpeechStore } from '@/stores/useStageSpeechStore'
 import { useNarrationStore } from '@/stores/useNarrationStore'
 import type { NarrationUnit } from '@/lantern/narrationUnits'
+import { readingPauseMs } from '@/lantern/stageSpeech'
 
 let nextId = 1
 
@@ -125,27 +126,14 @@ describe('StageSpeech', () => {
     expect(w.findAll('[data-testid="portrait"]')).toHaveLength(3)
   })
 
-  it('fades the lines by the turn they were said in, a turn with no speech counting too', async () => {
+  it('says how long a line not read aloud takes to read, so it fades after that', async () => {
     const { speech, w } = mounted()
-    const ages = (selector: string): (string | undefined)[] =>
-      w
-        .findAll(selector)
-        .map((el) => el.classes().find((name) => name.startsWith('lq-age-')))
     speech.observe(turn(say('Mira', 'A.\n\nB.'), 'Mira'))
     speech.revealAll()
     await w.vm.$nextTick()
-    expect(ages('.lq-line')).toEqual(['lq-age-new', 'lq-age-new'])
-    speech.observe(turn('Mira smiles.', 'Mira', 'give coin to mira'))
-    await w.vm.$nextTick()
-    expect(ages('.lq-line')).toEqual(['lq-age-prev', 'lq-age-prev'])
-    speech.observe(turn('Mira shrugs.', 'Mira', 'give pebble to mira'))
-    await w.vm.$nextTick()
-    expect(ages('.lq-line')).toEqual(['lq-age-old', 'lq-age-old'])
-    speech.observe(turn(say('Mira', 'C.'), 'Mira'))
-    speech.revealAll()
-    await w.vm.$nextTick()
-    expect(ages('.lq-line')).toEqual(['lq-age-old', 'lq-age-old', 'lq-age-new'])
-    expect(ages('.lq-line-name')).toEqual(['lq-age-old', 'lq-age-new'])
+    expect(
+      w.findAll('.lq-ln').map((row) => row.attributes('data-read-ms')),
+    ).toEqual(['900', '900'])
   })
 
   it('makes each paragraph of a long speech its own line', async () => {
@@ -280,5 +268,10 @@ describe('StageSpeech', () => {
       'dreamed',
     ])
     expect(lines[0].findAll('.lq-w-now')).toHaveLength(0)
+    // Narrated, each line still says its own time to read, for when a skip shows it unread.
+    expect(lines.map((line) => line.attributes('data-read-ms'))).toEqual([
+      String(readingPauseMs('The storm came.')),
+      String(readingPauseMs('I dreamed of fire.')),
+    ])
   })
 })

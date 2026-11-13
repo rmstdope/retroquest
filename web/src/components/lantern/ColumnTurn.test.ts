@@ -85,6 +85,34 @@ describe('ColumnTurn', () => {
     expect(w.findAll('[data-testid="portrait"]')).toHaveLength(2)
   })
 
+  it('steps the name and portrait down to the next line of the run when its first line fades away', async () => {
+    const t = turn(`${say('Mira', 'One.')}\n${say('Mira', 'Two.')}`)
+    const speech = useStageSpeechStore()
+    speech.observe(t)
+    speech.revealAll()
+    const w = mount(ColumnTurn, { props: { turn: t } })
+    const rows = (): HTMLElement[] =>
+      w
+        .findAll('[data-testid="speech-line"]')
+        .map((r) => r.element as HTMLElement)
+    expect(rows().map((r) => !!r.querySelector('.lq-line-name'))).toEqual([
+      true,
+      false,
+    ])
+    // The fade (run by the layout) has taken the first line away.
+    rows()[0].dataset.fade = 'gone'
+    const end = new Event('animationend', { bubbles: true })
+    Object.defineProperty(end, 'animationName', { value: 'lq-fade-away' })
+    rows()[0].dispatchEvent(end)
+    vi.advanceTimersByTime(20)
+    await w.vm.$nextTick()
+    expect(rows().map((r) => !!r.querySelector('.lq-line-name'))).toEqual([
+      true,
+      true,
+    ])
+    expect(rows()[1].querySelector('[data-testid="portrait"]')).not.toBeNull()
+  })
+
   it('puts Elior at the left and everyone else at the right', () => {
     const t = turn(say('Mira', 'Yes.'), { command: 'say hello to mira' })
     const speech = useStageSpeechStore()

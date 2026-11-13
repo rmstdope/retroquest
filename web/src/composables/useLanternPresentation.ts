@@ -35,6 +35,18 @@ export interface PresentationStage {
 export interface LanternPresentation {
   /** Bring a change of scene (running, or a talk's still to come) up at once: a press in a held panel. */
   bringSceneUp(): void
+  /**
+   * A press on the stage (a click, Enter) during a change of scene: while an
+   * interlude is told in the dark it is let go (its words fade, then the new
+   * picture rises); otherwise the new room comes up at once.
+   */
+  continueScene(): void
+  /**
+   * Skip the whole telling (a press or Enter held, `useHoldToSkip`): the
+   * change of scene comes up, every word left is shown, the narrator stops
+   * and the room's words leave the picture, so the player can act.
+   */
+  skipTelling(): void
   /** Show the rest of a held turn at once (a press in a held panel); true when something was held. */
   catchUpPanels(): boolean
   /** Leave the chapter page: its voice stops first, then the game goes on (its button, Escape). */
@@ -243,16 +255,61 @@ export function useLanternPresentation(
     { flush: 'sync' },
   )
 
-  // A narrated talk that moves Elior changes scene where the narrator stops for it.
+  // A narrated talk that moves Elior changes scene where the narrator stops for
+  // it; stopped again after its interlude, the new picture rises.
   watch(
     () => {
       const turn = game.turns.at(-1)
       return turn && narration.atSceneChange(turn.id) ? turn : null
     },
     (turn) => {
-      if (turn) changeScene(turn, sceneBlock(turn, parseTurn(turn.text)))
+      if (!turn) return
+      if (scene.interlude?.turn === turn.id) scene.endInterlude()
+      else changeScene(turn, sceneBlock(turn, parseTurn(turn.text)))
     },
   )
+
+  /** The interlude's reading time, while nobody narrates it. */
+  let interludeTimer: ReturnType<typeof setTimeout> | undefined
+  /** Whether the narrator is reading the interlude in the dark. */
+  let interludeNarrated = false
+  // The dark tells the interlude: the narrator reads it and stops before what
+  // comes after, or, unnarrated (or not recorded yet, so passed at once), it
+  // stays for its reading time.
+  watch(
+    () => scene.interlude,
+    (told) => {
+      clearTimeout(interludeTimer)
+      interludeNarrated = !!told && narration.narrates(told.turn)
+      if (!told) return
+      if (interludeNarrated) {
+        narration.passSceneChange(told.turn, told.unit + 1)
+        // A voice reads it: the narrator stopping again after it lets the picture rise.
+        if (
+          narration.narrates(told.turn) &&
+          !narration.atSceneChange(told.turn)
+        )
+          return
+        interludeNarrated = false
+      }
+      interludeTimer = setTimeout(
+        () => scene.endInterlude(),
+        readingTimeMs(told.markup),
+      )
+    },
+  )
+  // A narrator that ends inside the interlude (nothing after it), or is
+  // stopped there, lets the picture rise.
+  watch(
+    () => {
+      const told = scene.interlude
+      return !!told && interludeNarrated && !narration.narrates(told.turn)
+    },
+    (ended) => {
+      if (ended) scene.endInterlude()
+    },
+  )
+  onUnmounted(() => clearTimeout(interludeTimer))
 
   /**
    * The scene of talk `turn` changes now, before its block `at`: what it told
@@ -261,10 +318,26 @@ export function useLanternPresentation(
    * picture is up. The room's name changes at the dark, or with the picture
    * when the change is skipped before it. Under Reduce motion, or with the same
    * picture, they (and the room's name) move at once with no fade. Nothing
-   * happens once a newer turn has come.
+   * happens once a newer turn has come. A talk that moved Elior tells its
+   * paragraph `at` (the move) in the middle of the dark, as an interlude
+   * between the pictures; the sides never tell it.
    */
   function changeScene(turn: Turn, at: number): void {
     if (game.turns.at(-1)?.id !== turn.id) return
+    const blocks = parseTurn(turn.text)
+    const fades = !stage.motionReduced()
+    const block = blocks[at]
+    const interlude =
+      fades &&
+      turn.addressed &&
+      turn.description?.moved &&
+      block &&
+      block.kind !== 'checklist'
+        ? { unit: at, markup: block.markup }
+        : null
+    // What the talk told before the move leaves the screen with the old room,
+    // and the interlude with it: it is told in the middle.
+    if (interlude && talkCut?.turn === turn.id) talkCut.at = at + 1
     game.releaseMusic(turn.id)
     game.releasePicture(turn.id)
     const narrated = narration.narrates(turn.id)
@@ -273,11 +346,14 @@ export function useLanternPresentation(
       if (game.turns.at(-1)?.id !== turn.id) return
       // Skipped before the dark, the room's name has not changed yet: it goes with the picture.
       game.releasePanels(turn.id, ['place'], true)
-      if (narrated) narration.passSceneChange(turn.id)
-      else panelHold.settle(turn)
+      if (narrated) {
+        // Brought up while the narrator still reads the interlude: it goes on after it.
+        if (interlude) narration.skipTo(at + 1)
+        narration.passSceneChange(turn.id)
+      } else panelHold.settle(turn)
     }
-    if (game.roomPicture !== scene.shown && !stage.motionReduced())
-      scene.begin(turn.id, game.roomPicture, up, at)
+    if (game.roomPicture !== scene.shown && fades)
+      scene.begin(turn.id, game.roomPicture, up, at, interlude)
     else up()
   }
 
@@ -354,10 +430,29 @@ export function useLanternPresentation(
     },
   )
 
+  /** A press during a change of scene: an interlude in the dark is let go, else the new room comes up now. */
+  function continueScene(): void {
+    const told = scene.interlude
+    if (!told) return scene.skip()
+    clearTimeout(interludeTimer)
+    // The narrator's voice on the interlude is cut; what comes after it waits
+    // for the new picture, as it would have.
+    if (interludeNarrated) narration.skipTo(told.unit + 1)
+    scene.endInterlude()
+  }
+
   /** A change of scene running, or a talk's still to come, is brought up now. */
   function bringSceneUp(): void {
     speech.changeSceneNow()
     scene.skip()
+  }
+
+  /** The whole telling is skipped: the scene up, every word shown, the voice and the words on the picture gone. */
+  function skipTelling(): void {
+    bringSceneUp()
+    narration.skipAll()
+    speech.revealAll()
+    arrival.clear()
   }
 
   /** Leave a chapter page: its voice stops, then the game goes on. */
@@ -366,5 +461,11 @@ export function useLanternPresentation(
     game.continueChapter()
   }
 
-  return { bringSceneUp, catchUpPanels: panelHold.catchUp, continueChapter }
+  return {
+    bringSceneUp,
+    continueScene,
+    skipTelling,
+    catchUpPanels: panelHold.catchUp,
+    continueChapter,
+  }
 }

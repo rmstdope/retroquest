@@ -46,7 +46,7 @@ import { useSettingsStore } from '@/stores/useSettingsStore'
  *
  * A phone held sideways (`sideways`) tells the card in the free height between
  * the top buttons and the bottom row, in smaller type on the smallest phones,
- * with the seal small and beside the heading, and says "Tap to continue".
+ * with the seal small and beside the heading, and says "Tap to continue · Hold to skip".
  *
  * News (`news` parts: a learned spell, quest news) is told the same way: a round seal (a violet ✦ for a spell, a tick for a completion),
  * the heading, the quest's or spell's name in large type and then its text, which is the
@@ -323,6 +323,7 @@ onBeforeUnmount(() => {
         v-if="arrival.part"
         :key="`${arrival.part.kind}-${arrival.part.lines[0]?.unit}`"
         class="lq-arrival-card"
+        :class="{ 'lq-arrival-rise': arrival.part.kind === 'description' }"
       >
         <div v-if="piece" ref="head" class="lq-news-head">
           <div class="lq-news-top">
@@ -437,8 +438,8 @@ onBeforeUnmount(() => {
           <p class="lq-arrival-hint">
             {{
               phone || sideways
-                ? 'Tap to continue'
-                : 'Click or press Enter to continue'
+                ? 'Tap to continue · Hold to skip'
+                : 'Click to continue · Hold to skip'
             }}
           </p>
           <div
@@ -811,6 +812,10 @@ onBeforeUnmount(() => {
 .lq-arrival-fade-enter-active,
 .lq-arrival-fade-leave-active {
   transition: opacity calc(0.15s * var(--lq-motion));
+}
+/* A first visit's description rises slowly over the picture that just came up. */
+.lq-arrival-fade-enter-active.lq-arrival-rise {
+  transition: opacity calc(1.6s * var(--lq-motion)) ease;
 }
 .lq-arrival-fade-enter-from,
 .lq-arrival-fade-leave-to {

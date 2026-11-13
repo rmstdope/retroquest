@@ -28,7 +28,7 @@ import {
  * command that changes the picture of its own room (`Turn.pictureChanged`),
  * with no quoted line, once its first paragraph is read. Lines a new
  * command cut off before they appeared (`noteSeen` remembers the rest) are not
- * cleared by it: they stay, dimmed as the turn before, unless it leaves the room.
+ * cleared by it: they stay unless it leaves the room.
  */
 
 /** Where an unnarrated turn's scene changes: before unit `unit`, by calling `reached` once. */
@@ -60,11 +60,6 @@ export const useStageSpeechStore = defineStore('stageSpeech', () => {
   const narration = useNarrationStore()
   const scene = useSceneStore()
   const conversation = ref<{ with: string; lines: StageLine[] } | null>(null)
-  /**
-   * The newest turns taken in, oldest first (three tell the ages apart),
-   * whether or not anyone spoke in them.
-   */
-  const recentTurns = ref<number[]>([])
   let nextKey = 1
   let timer: ReturnType<typeof setTimeout> | undefined
   /** What to do once the unnarrated turn being read has shown its last line (once), if anything waits for it. */
@@ -284,7 +279,6 @@ export const useStageSpeechStore = defineStore('stageSpeech', () => {
     change: SceneChange | null = null,
     lastLine: (() => void) | null = null,
   ): void {
-    recentTurns.value = [...recentTurns.value, turn.id].slice(-3)
     // An unnarrated line's showing is its own (no skip of the narrator touches
     // it), so it is noted here too; a narrated one only by the earlier `noteSeen`.
     for (const line of conversation.value?.lines ?? [])
@@ -362,21 +356,9 @@ export const useStageSpeechStore = defineStore('stageSpeech', () => {
     )
   }
 
-  /**
-   * How far back turn `turnId` was told, every turn counting: `new` for the
-   * newest, `prev` for the one before it, `old` for any earlier one. The
-   * speech on the picture dims by this, a turn with no speech included.
-   */
-  function ageOf(turnId: number): 'new' | 'prev' | 'old' {
-    const back =
-      recentTurns.value.length - 1 - recentTurns.value.indexOf(turnId)
-    return back === 0 ? 'new' : back === 1 ? 'prev' : 'old'
-  }
-
   return {
     conversation,
     visible,
-    ageOf,
     isSpeaking,
     told,
     lineShown,

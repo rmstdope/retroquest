@@ -80,7 +80,7 @@ describe('the narration paper', () => {
   /** The narrator's bubbles on the paper, in order. */
   const bubbles = (): Element[] => [...paper().querySelectorAll('.lq-bubble')]
 
-  it('holds a bubble for each paragraph since the last room change, the newest lit and older ones dimmed, with no command', async () => {
+  it('holds a bubble for each paragraph since the last room change, each to fade once read, with no command', async () => {
     await mountWith([
       turn(1, 'First.', 'look'),
       turn(2, 'Second.', 'wait'),
@@ -93,13 +93,45 @@ describe('the narration paper', () => {
       'Third.',
       'Fourth.',
     ])
-    expect(bubbles().map((b) => b.getAttribute('data-age'))).toEqual([
-      'old',
-      'old',
-      'prev',
-      'new',
+    // Not read aloud: each waits the time to read it and the card's bubbles before it.
+    expect(bubbles().map((b) => b.getAttribute('data-read-ms'))).toEqual([
+      '900',
+      '900',
+      '900',
+      '1800',
+    ])
+    expect(bubbles().map((b) => b.getAttribute('data-fade'))).toEqual([
+      'live',
+      'live',
+      'live',
+      'live',
     ])
     expect(paper().querySelector('[data-testid="command"]')).toBeNull()
+  })
+
+  it('lets each bubble fade once read, and drops the Hide when every line has gone', async () => {
+    await mountWith([turn(1, 'First.\n\nSecond.', 'look')])
+    await settle()
+    expect(hideButton()).not.toBeNull()
+    // Not read aloud: the first fades after its time to read, the second after both.
+    await new Promise((r) => setTimeout(r, 950))
+    expect(bubbles().map((b) => b.getAttribute('data-fade'))).toEqual([
+      'away',
+      'live',
+    ])
+    const fadeEnds = (el: Element): void => {
+      const event = new Event('animationend', { bubbles: true })
+      Object.defineProperty(event, 'animationName', { value: 'lq-fade-away' })
+      el.dispatchEvent(event)
+    }
+    fadeEnds(bubbles()[0]!)
+    await nextTick()
+    expect(bubbles()[0]?.getAttribute('data-fade')).toBe('gone')
+    expect(hideButton()).not.toBeNull()
+    await new Promise((r) => setTimeout(r, 900))
+    fadeEnds(bubbles()[1]!)
+    await nextTick()
+    expect(hideButton()).toBeNull()
   })
 
   it('clears the cards when the player walks into another room', async () => {
@@ -145,7 +177,6 @@ describe('the narration paper', () => {
     await nextTick()
     expect(bubbles()[1]?.classList.contains('lq-bubble-failure')).toBe(true)
     expect(bubbles()[1]?.textContent).toContain('⊝')
-    expect(bubbles()[0]?.getAttribute('data-age')).toBe('prev')
   })
 
   it('is a column up the left, with no inline band height', async () => {

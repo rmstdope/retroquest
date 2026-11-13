@@ -3,6 +3,7 @@ import { ref, watch } from 'vue'
 import { arrivesOnPicture, newsOnPicture } from '@/lantern/stageArrival'
 import { useGameStore } from './useGameStore'
 import { useSceneStore } from './useSceneStore'
+import { useArrivalStore } from './useArrivalStore'
 
 /** How long the room's title stays over the picture before it settles into the corner (ms): about 0.6 s to fade in, then 3 s. */
 export const ROOM_TITLE_MS = 3600
@@ -24,14 +25,27 @@ export const ROOM_TITLE_MS = 3600
 export const useRoomTitleStore = defineStore('roomTitle', () => {
   const game = useGameStore()
   const scene = useSceneStore()
+  const arrival = useArrivalStore()
 
   /** The name the title shows while it is up; null when settled. */
   const name = ref<string | null>(null)
   /** Whether the room is played on its picture (the layout says): no title on the text page. */
   const staged = ref(false)
   /** The room changed (or a game was started or loaded) and has not been greeted or let pass yet. */
-  let pending = false
+  const waiting = ref(false)
   let timer: ReturnType<typeof setTimeout> | undefined
+  /**
+   * The turn whose arrival has told its room: up now, or already cleared (a
+   * skip shows and clears it in one go, so this is noted as it happens).
+   */
+  const roomTold = ref<number | null>(null)
+  watch(
+    () => arrival.tellsRoom,
+    (up) => {
+      if (up) roomTold.value = arrival.turnId
+    },
+    { flush: 'sync' },
+  )
 
   /** Put the title up for `room`, settling after `ROOM_TITLE_MS`. */
   function greet(room: string): void {
@@ -58,7 +72,7 @@ export const useRoomTitleStore = defineStore('roomTitle', () => {
   /** The stage starts afresh (a new game, a load, a new act): settle, and greet the room once its own picture is up. */
   function reset(): void {
     settle()
-    pending = true
+    waiting.value = true
     // The paper backdrop is never stale: it is what a room without a painted
     // picture settles on again, and it shows no other room.
     stale = scene.shown || null
@@ -82,23 +96,35 @@ export const useRoomTitleStore = defineStore('roomTitle', () => {
   /**
    * Greet the room waiting for it, or let it pass: on the text page, on a
    * first visit, whose arrival is headed by the name, or on a turn that tells
-   * news in the middle (a played turn: a load's turns tell none again).
+   * news in the middle (a played turn: a load's turns tell none again). A
+   * first visit waits until its arrival has come up (when the picture has
+   * risen; a skip shows and clears it at once), so the corner never names the
+   * room before it is told; a newer turn ends that wait.
    */
   function consider(): void {
-    if (!pending || !ready()) return
-    pending = false
+    if (!waiting.value || !ready()) return
     const latest = game.turns.at(-1)
+    const firstVisit = !!latest && arrivesOnPicture(latest)
+    if (staged.value && firstVisit && roomTold.value !== latest?.id) return
+    waiting.value = false
     const middleTaken =
-      !!latest &&
-      (arrivesOnPicture(latest) || (!!latest.narrate && newsOnPicture(latest)))
+      firstVisit || (!!latest && !!latest.narrate && newsOnPicture(latest))
     if (!staged.value || middleTaken) settle()
     else greet(game.roomName)
   }
 
+  // A new game or a load counts its turns afresh: no arrival has told a room of them.
+  watch(
+    () => [game.gameNumber, game.loadNumber] as const,
+    () => {
+      roomTold.value = null
+    },
+    { flush: 'sync' },
+  )
   watch(
     () => [game.gameNumber, game.loadNumber, game.roomName] as const,
     () => {
-      pending = true
+      waiting.value = true
       consider()
     },
     { immediate: true },
@@ -111,9 +137,11 @@ export const useRoomTitleStore = defineStore('roomTitle', () => {
         scene.shown,
         game.roomPicture,
         staged.value,
+        roomTold.value,
+        game.turns.length,
       ] as const,
     consider,
   )
 
-  return { name, staged, greet, settle, reset }
+  return { name, waiting, staged, greet, settle, reset }
 })

@@ -6,9 +6,9 @@ import { useStageSpeechStore } from '@/stores/useStageSpeechStore'
 import { useSceneStore } from '@/stores/useSceneStore'
 import { FOLLOW_EVENT } from '@/composables/useStoryFollow'
 import { useReadAlong } from '@/composables/useReadAlong'
-import { columnPieces } from '@/lantern/columnPieces'
+import { columnPieces, type ColumnPiece } from '@/lantern/columnPieces'
 import { parseTurn } from '@/lantern/parseTurn'
-import type { SpeechLine } from '@/lantern/stageSpeech'
+import { readingPauseMs, type SpeechLine } from '@/lantern/stageSpeech'
 import { renderMarkup } from '@/utils/theme'
 import SpeechPortrait from './SpeechPortrait.vue'
 import StoryTurn from './StoryTurn.vue'
@@ -20,8 +20,9 @@ import StoryTurn from './StoryTurn.vue'
  * right edge with a small round portrait on the right, Elior at its left with
  * his on the left; the name and portrait show once per run of lines from one
  * speaker, and a narrator card in between ends the run. Each bubble and line
- * is dimmed by how far back it was told (`useBubbleAges`, run by the layout
- * over the whole column). A turn that is still being
+ * fades away once it has been read (`useFadeOnceRead`, run by the layout over
+ * the whole column); a line of a turn that is not read aloud says how long it
+ * takes to read. A turn that is still being
  * told stops at the first line that has not appeared yet, so later cards
  * never come before the line they follow, and a turn whose move is still
  * changing the picture shows no line at all. The lines are the conversation's
@@ -103,10 +104,40 @@ watch(
   { flush: 'post' },
 )
 
-/** Whether piece `index` starts a run, so carries the speaker's name and portrait. */
+/** The pieces whose line has faded away (`useFadeOnceRead`), by piece index. */
+const gone = ref<number[]>([])
+
+/** A line has faded away: note which, so the name and portrait step down to the next line of its run. */
+function lineGone(): void {
+  // The fade marks the line gone as the event reaches the layout, after this.
+  requestAnimationFrame(() => {
+    gone.value = Array.from(
+      root.value?.querySelectorAll<HTMLElement>(
+        '.lq-cl[data-fade="gone"][data-piece]',
+      ) ?? [],
+    ).map((row) => Number(row.dataset.piece))
+  })
+}
+
+/** A stable key for a piece, so a row is never reused for another line (its fade marks are its own). */
+function pieceKey(piece: ColumnPiece, index: number): string {
+  return piece.kind === 'line'
+    ? `line-${piece.line.unit}-${piece.line.firstWord}`
+    : piece.blocks.length
+      ? `card-${piece.blocks.join('-')}`
+      : `card-empty-${index}`
+}
+
+/**
+ * Whether piece `index` starts a run, so carries the speaker's name and
+ * portrait: the piece before it still showing (a line faded away is passed
+ * over) is not a line of the same speaker.
+ */
 function heads(index: number): boolean {
   const piece = told.value[index]
-  const before = told.value[index - 1]
+  let at = index - 1
+  while (at >= 0 && gone.value.includes(at)) at--
+  const before = told.value[at]
   return (
     piece?.kind === 'line' &&
     !(before?.kind === 'line' && before.line.speaker === piece.line.speaker)
@@ -120,8 +151,9 @@ function heads(index: number): boolean {
     class="lq-column-turn"
     data-testid="column-turn"
     @click="speech.revealAll()"
+    @animationend="lineGone"
   >
-    <template v-for="(piece, index) in told" :key="index">
+    <template v-for="(piece, index) in told" :key="pieceKey(piece, index)">
       <StoryTurn
         v-if="piece.kind === 'card'"
         :turn="turn"
@@ -134,6 +166,7 @@ function heads(index: number): boolean {
         :class="[`lq-cl-${piece.line.side}`, { 'lq-cl-head': heads(index) }]"
         :data-unit="piece.line.unit >= 0 ? piece.line.unit : undefined"
         :data-piece="index"
+        :data-read-ms="readingPauseMs(piece.line.markup)"
         data-testid="speech-line"
       >
         <SpeechPortrait
@@ -178,13 +211,6 @@ function heads(index: number): boolean {
   display: flex;
   flex-direction: column;
   gap: 8px;
-}
-/* Older lines dim as older bubbles do: one step, then a further one (see `useBubbleAges`). */
-.lq-cl[data-age='prev'] {
-  opacity: 0.55;
-}
-.lq-cl[data-age='old'] {
-  opacity: 0.3;
 }
 /* One row: the portrait (or a gap of its width) at the edge, the words beside it. */
 .lq-cl {

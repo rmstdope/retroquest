@@ -23,13 +23,14 @@ import {
   type StoryGeometry,
 } from '@/lantern/ResizeLanding'
 import { useLanternPresentation } from '@/composables/useLanternPresentation'
+import { useHoldToSkip, type HoldRingSpot } from '@/composables/useHoldToSkip'
 import { useAudio } from '@/composables/useAudio'
 import { useActMusic } from '@/composables/useActMusic'
 import { useFocusTrap } from '@/composables/useFocusTrap'
 import { nameActions, type NameAction } from '@/lantern/nameActions'
 import { parseCountedName } from '@/lantern/inventoryChanges'
 import { useStoryFollow } from '@/composables/useStoryFollow'
-import { STAGE_BUBBLES, useBubbleAges } from '@/composables/useBubbleAges'
+import { FADING_LINES, useFadeOnceRead } from '@/composables/useFadeOnceRead'
 import { useNarrationPaper } from '@/composables/useNarrationPaper'
 import {
   SHORT_QUERY,
@@ -79,6 +80,8 @@ import SettingsDialog from './SettingsDialog.vue'
 import LanternHeader from './LanternHeader.vue'
 import RoomPlate from './RoomPlate.vue'
 import RoomTitle from './RoomTitle.vue'
+import SceneInterlude from './SceneInterlude.vue'
+import HoldRing from './HoldRing.vue'
 import SaveToast from './SaveToast.vue'
 import SectionNav, { type Section } from './SectionNav.vue'
 import StageButtons from './StageButtons.vue'
@@ -104,8 +107,9 @@ import type { SaveSlot } from '@/types/bridge'
  * side and the actions as one row along the bottom.
  * The left side is the narration paper: the turns since the last room change
  * (`useNarrationPaper`), each told as one bubble per paragraph like the speech
- * on the right (`StoryTurn`), the newest bubble lit and older ones dimmed
- * (`useBubbleAges`); the command is not echoed (Story so far keeps it), and
+ * on the right (`StoryTurn`); every bubble and line on the picture fades away
+ * 5 s after it has been read, its room closing (`useFadeOnceRead`), and the
+ * Hide goes once none is left; the command is not echoed (Story so far keeps it), and
  * quest news told in the middle leaves nothing here. The newest turn grows as
  * the narrator reaches each part and, when it is taller than the room under
  * the plate, scrolls with a "More below" pill. One "▾ Hide" on its own line at the bottom centre of the picture (or N,
@@ -222,7 +226,7 @@ const keyboardPlayer = useMediaQuery(KEYBOARD_QUERY)
 /** The cursor is in a text field (the command box): only Esc steers the voice there. */
 const fieldFocused = ref(false)
 const hintText = computed(() => {
-  if (!keyboardPlayer.value) return 'Tap to hurry · double-tap to skip'
+  if (!keyboardPlayer.value) return 'Tap to hurry · hold to skip'
   return fieldFocused.value ? 'Esc to skip' : 'Space to hurry · Esc to skip'
 })
 
@@ -297,8 +301,14 @@ watch(
   },
   { immediate: true },
 )
-/** Whether the room's name in the corner steps away: its title, or a first visit's arrival, is told over the picture (news alone leaves it). */
-const plateAway = computed(() => roomTitle.name !== null || arrival.tellsRoom)
+/**
+ * Whether the room's name in the corner steps away: a room just walked into
+ * waits to be told (its picture still rising), or its title, or a first
+ * visit's arrival, is told over the picture (news alone leaves it).
+ */
+const plateAway = computed(
+  () => roomTitle.waiting || roomTitle.name !== null || arrival.tellsRoom,
+)
 /** Any key or press settles the room's title into the corner at once; the key or press still does what it does. */
 function settleRoomTitle(): void {
   if (roomTitle.name !== null) roomTitle.settle()
@@ -385,13 +395,13 @@ function goWay(direction: string): void {
 /**
  * A press on the picture itself shows the rest of an unnarrated turn's speech
  * at once; while there is speech, a narrated turn is tapped on like the story
- * (one block hurried, a double tap skips the turn).
+ * (one block hurried; held, it skips the telling).
  */
 function onPicturePress(event: MouseEvent): void {
   if (!(event.target instanceof Element)) return
   if (!event.target.closest('.lq-stage-picture')) return
-  // During a change of scene a click brings the new room up at once.
-  if (scene.turn !== null) return scene.skip()
+  // During a change of scene a click lets the words in the dark go, or brings the new room up at once.
+  if (scene.turn !== null) return presentation.continueScene()
   // A talk that has moved Elior still shows the old room: a press brings the new one up first, and never walks from it.
   if (speech.sceneChange) return speech.changeSceneNow()
   // A way out goes at once, as on the Map; a closed one gets the game's own answer.
@@ -491,10 +501,13 @@ const paperAway = computed(
 )
 /**
  * Something is on the picture for the one Hide to clear: the narrator's
- * cards, or on the two-sided laptop stage the speech beside them.
+ * cards, or on the two-sided laptop stage the speech beside them, with a line
+ * of them not yet faded away.
  */
 const wordsVisible = computed(
-  () => paper.visible.value || (twoSides.value && speech.visible.length > 0),
+  () =>
+    (paper.visible.value || (twoSides.value && speech.visible.length > 0)) &&
+    fading.live.value > 0,
 )
 /** The "▾ Hide": the words are showing and no arrival holds them away. */
 const showHide = computed(
@@ -1039,6 +1052,11 @@ let goOnKeyAt = Number.NEGATIVE_INFINITY
  * say who owns it, then carry out its answer.
  */
 function onNarrationKey(event: KeyboardEvent): void {
+  // A key held to skip repeats: its repeats are the hold's and take no step.
+  if (event.repeat && hold.keyHeld(event.key)) {
+    event.preventDefault()
+    return
+  }
   const target = event.target instanceof Element ? event.target : null
   const decision = decideHurryKey({
     key: event.key,
@@ -1062,6 +1080,23 @@ function onNarrationKey(event: KeyboardEvent): void {
     canHide: staged.value && wordsVisible.value && !paper.hidden.value,
     canShow: showTab.value,
   })
+  // Enter or Space that goes on takes its step now; held, it skips the rest.
+  // Aimed at a field or a button it keeps its own press, unless the story took it.
+  if (
+    !event.repeat &&
+    (event.key === 'Enter' || event.key === ' ') &&
+    !event.ctrlKey &&
+    !event.metaKey &&
+    !event.altKey &&
+    beingTold() &&
+    (decision
+      ? ['skip-scene', 'arrival-next', 'hurry'].includes(decision.action)
+      : !event.defaultPrevented &&
+        !target?.closest(
+          'input, textarea, select, [contenteditable], button, a, [role="button"], summary',
+        ))
+  )
+    hold.keyDown(event.key, keyHoldSpot())
   if (!decision) return
   if (decision.consume) {
     event.preventDefault()
@@ -1069,7 +1104,7 @@ function onNarrationKey(event: KeyboardEvent): void {
   }
   switch (decision.action) {
     case 'skip-scene':
-      scene.skip()
+      presentation.continueScene()
       break
     case 'hide-words':
       setWordsHidden(true)
@@ -1124,6 +1159,7 @@ onMounted(() => {
   document.addEventListener('focusin', onFocusIn)
   document.addEventListener('keydown', onNamesEscape, true)
   document.addEventListener('keyup', onSpaceUp)
+  document.addEventListener('keyup', onHoldKeyUp)
   document.addEventListener('focusin', onFocusChange)
   document.addEventListener('focusout', onFocusChange)
   // The game opens with its first act intro already showing.
@@ -1182,9 +1218,6 @@ onUnmounted(() => {
   widePlateResize?.disconnect()
   cancelAnimationFrame(widePlateFrame)
 })
-
-// The narrator's bubbles and the column's lines dim by how far back they were told, as speech does.
-useBubbleAges(contentEl, STAGE_BUBBLES)
 
 /** The phone's plate height, which the arrival on the picture stays clear of. */
 const plateHeight = ref(108)
@@ -1265,6 +1298,7 @@ onUnmounted(() => {
   document.removeEventListener('focusin', onFocusIn)
   document.removeEventListener('keydown', onNamesEscape, true)
   document.removeEventListener('keyup', onSpaceUp)
+  document.removeEventListener('keyup', onHoldKeyUp)
   document.removeEventListener('focusin', onFocusChange)
   document.removeEventListener('focusout', onFocusChange)
   storyResize?.disconnect()
@@ -1303,6 +1337,46 @@ const presentation = useLanternPresentation({
   staged: () => staged.value,
   motionReduced,
 })
+
+/** The whole game (the hold to skip listens for presses in it). */
+const rootEl = ref<HTMLElement | null>(null)
+/** The lines on the picture (narrator's and speech) fade away once read; `live` counts those left. */
+const fading = useFadeOnceRead(rootEl, FADING_LINES)
+/**
+ * Whether the story is being told: a change of scene, a talk still to change
+ * it, words still coming, the narrator reading, or a room's words on the
+ * picture. Only then does a held press or key skip it all.
+ */
+function beingTold(): boolean {
+  return (
+    !dialogOpen() &&
+    (scene.turn !== null ||
+      speech.sceneChange !== null ||
+      telling.value ||
+      narration.isNarrating ||
+      arrival.active ||
+      arrival.holding)
+  )
+}
+/** Press (or Enter, or Space) and hold to skip the whole telling; a tap is one step. */
+const hold = useHoldToSkip({
+  root: () => rootEl.value,
+  telling: beingTold,
+  skip: () => presentation.skipTelling(),
+})
+/** Where a held press shows its ring, while it does. */
+const holdRing = hold.ring
+/** A held key's ring stands in the middle of the stage (or of the window, with no stage). */
+function keyHoldSpot(): HoldRingSpot {
+  const box = stageEl.value?.getBoundingClientRect()
+  if (box && box.width > 0)
+    return { x: box.left + box.width / 2, y: box.top + box.height * 0.7 }
+  return { x: window.innerWidth / 2, y: window.innerHeight * 0.7 }
+}
+/** A key held down for the hold is let go. */
+function onHoldKeyUp(event: KeyboardEvent): void {
+  hold.keyUp(event.key)
+}
 
 const flights = useFlightStore()
 /** The newest turn whose lost and gained things have flown (or were let be): each turn's fly once. */
@@ -1628,7 +1702,7 @@ function onAreaPress(
 function onBeltPress(picture: BeltPicture, at: { x: number; y: number }): void {
   const box = stageEl.value?.getBoundingClientRect()
   if (!box || !staged.value) return
-  if (scene.turn !== null) return scene.skip()
+  if (scene.turn !== null) return presentation.continueScene()
   if (speech.sceneChange) return speech.changeSceneNow()
   if (telling.value) {
     speech.revealAll()
@@ -1852,7 +1926,7 @@ const shownQuestView = computed<QuestView | null>(() => {
 /** Help's entry for narration (the engine's help lists commands only). */
 const NARRATION_HELP =
   '\n[bold]Narration:[/bold] tap the story or press Space to hurry the current line; ' +
-  'double-tap or press Esc to show the rest at once. Any action cuts in. ' +
+  'hold, or press Esc, to show the rest at once. Any action cuts in. ' +
   'Set its volume, down to silent, in Settings.\n'
 
 /** Help's line for the key that hides the narration paper (laptop only). */
@@ -2096,7 +2170,8 @@ watch(
 </script>
 
 <template>
-  <div class="lq-root">
+  <div ref="rootEl" class="lq-root">
+    <HoldRing v-if="holdRing" :spot="holdRing" :still="motionReduced()" />
     <!-- The game, out of reach (and untouched) while a phone is held upright. -->
     <div class="lq-game" :inert="turnPage || undefined">
       <!-- The game has ended: nothing but the end screen. -->
@@ -2287,6 +2362,11 @@ watch(
             />
           </div>
           <!-- Over the picture, and over the words beside it (the stage isolates its own layers). -->
+          <SceneInterlude
+            v-if="staged"
+            v-show="section === 'story'"
+            :phone="phoneStage"
+          />
           <RoomTitle
             v-if="staged"
             v-show="section === 'story'"

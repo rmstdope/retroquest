@@ -118,3 +118,79 @@ test('any key settles the title at once', async ({ page }): Promise<void> => {
   await page.keyboard.press('Shift')
   await expect(title).toHaveCount(0, { timeout: 2500 })
 })
+
+/**
+ * Note every name the corner shows (not faded out), from now until `told`
+ * is on the page (the arrival or the title telling the room).
+ */
+async function watchCorner(page: Page, told: string): Promise<void> {
+  await page.evaluate((doneSelector) => {
+    const seen: string[] = []
+    ;(window as unknown as { cornerSeen: string[] }).cornerSeen = seen
+    const look = (): void => {
+      const name = document.querySelector('.lq-stage-plate .lq-room-name')
+      if (name && name.textContent && getComputedStyle(name).opacity !== '0')
+        seen.push(name.textContent)
+      if (!document.querySelector(doneSelector)) requestAnimationFrame(look)
+    }
+    requestAnimationFrame(look)
+  }, told)
+}
+
+/** The names the corner showed since `watchCorner`. */
+async function cornerSeen(page: Page): Promise<string[]> {
+  return page.evaluate(
+    () => (window as unknown as { cornerSeen: string[] }).cornerSeen,
+  )
+}
+
+const ARRIVAL_UP = '[data-testid="arrival-on-picture"].lq-on'
+const TITLE_UP = '[data-testid="room-title"]'
+
+test('starting the game names no room in the corner before the first room is told', async ({
+  page,
+}): Promise<void> => {
+  await page.setViewportSize({ width: 1280, height: 800 })
+  await page.goto('/')
+  await page.getByRole('button', { name: 'Start', exact: true }).click()
+  await watchCorner(page, ARRIVAL_UP)
+  await page.locator('.lq-chapter-button').click()
+  await expect(page.locator(ARRIVAL_UP)).toBeVisible()
+  expect(await cornerSeen(page)).toEqual([])
+})
+
+test('waking into a new room does not name it in the corner before its arrival tells it', async ({
+  page,
+}): Promise<void> => {
+  test.setTimeout(60_000)
+  await page.setViewportSize({ width: 1280, height: 800 })
+  await page.goto('/')
+  await page.getByRole('button', { name: 'Start', exact: true }).click()
+  await page.locator('.lq-chapter-button').click()
+  const arrival = page.locator(ARRIVAL_UP)
+  await expect(arrival).toBeVisible()
+  for (let turn = 0; turn < 8 && (await arrival.isVisible()); turn++)
+    await page.keyboard.press('Enter')
+  await page
+    .getByRole('region', { name: /^Action/ })
+    .getByRole('button', { name: /^(Type|Type a command)$/ })
+    .click()
+  await watchCorner(page, ARRIVAL_UP)
+  await command(page, 'say hello to voice')
+  // The waking is read in the dark first (about fifteen seconds unnarrated).
+  await expect(arrival).toContainText("Elior's Cottage", { timeout: 40_000 })
+  expect(await cornerSeen(page)).not.toContain("Elior's Cottage")
+})
+
+test('walking back into a room does not name it in the corner before its title tells it', async ({
+  page,
+}): Promise<void> => {
+  await playedAct(page)
+  await watchCorner(page, TITLE_UP)
+  await command(page, 'go west')
+  const title = page.getByTestId('room-title')
+  await expect(title).toBeVisible()
+  const name = (await title.locator('.lq-room-title-name').textContent()) ?? ''
+  expect(name.length).toBeGreaterThan(0)
+  expect(await cornerSeen(page)).not.toContain(name)
+})
