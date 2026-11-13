@@ -542,19 +542,33 @@ describe('actScript said words', () => {
     })
   })
 
-  it('reads no words of a say command that reaches nobody', () => {
+  it('fails a branch whose say command reaches nobody, naming the branch', () => {
     const nobody: ScriptBranch = {
       after: 0,
       commands: ['say hello to xyz'],
     }
-    const lines = actScript(
-      () => new Game([new Act1()]),
-      ACT1_GOLDEN_PATH.slice(0, 1),
-      [],
-      [],
-      [nobody],
-    )
-    expect(lines.some((line) => line.speaker === 'elior')).toBe(false)
+    expect(() =>
+      actScript(
+        () => new Game([new Act1()]),
+        ACT1_GOLDEN_PATH.slice(0, 1),
+        [],
+        [],
+        [nobody],
+      ),
+    ).toThrow(/branch after 0 \(say hello to xyz\).*reaches nobody/)
+  })
+
+  it('fails a branch after a step the path does not have, naming the branch', () => {
+    const late: ScriptBranch = { after: 5, commands: ['look'] }
+    expect(() =>
+      actScript(
+        () => new Game([new Act1()]),
+        ACT1_GOLDEN_PATH.slice(0, 1),
+        [],
+        [],
+        [late],
+      ),
+    ).toThrow(/branch after 5 \(look\).*no such step/)
   })
 })
 

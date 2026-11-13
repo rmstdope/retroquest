@@ -41,9 +41,16 @@ A script.json or music.json that differs from what the extractor writes now fail
   (`content-studio/narration/act<N>.lock.json`) and deletes their mp3s. Never edit those generated
   files by hand. The act's key-scene directions (`content-studio/narration/act<N>.edits.json`) are
   the studio's: move or drop one whose line changed there.
-- **`act<N>/branches.json`** (Acts II to IV) lists optional scenes the golden path skips, each
+- **`act<N>/branches.json`** (all four acts, Act I included) lists optional scenes the golden path skips, each
   `{ after: <index of a path command>, commands: [...] }`, played on a copy so their lines are
   recorded too (Marcus told the truth, Brenn forgiven, Tobin and the Quiet Charm).
+  Extraction fails, naming the branch, when `after` is not a step of the path or a command reaches
+  nobody here (a "You don't see" answer, a say command with no one to hear it).
+- **`act<N>/unreached.json`** acknowledges the lines the act's content can speak that the script
+  lacks (`web/src/lantern/unreachedLines.test.ts` finds them by their string literals). A line you
+  add that no path, probe or branch reaches fails that test, naming it and its file: reach it with a
+  `branches.json` entry. Never add to `unreached.json` to get past the test unless the line is
+  meant to stay unspoken; it is written by `(cd web && npx -y tsx@4.23.15 --tsconfig tsconfig.json ../tts/list-unreached.ts 1)`.
 - **`act<N>/writers.json`** gives unsigned writing, and narrated notes, to the writer by their
   opening words (the mother's letter, the father's note, Elior's journal); other writing is the
   narrator's. **`act<N>/silent.json`** lists openings that stay silent (the chapter page's help
