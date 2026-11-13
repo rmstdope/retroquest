@@ -89,12 +89,16 @@ function newGame(): Game {
 describe('Act I pickup lines (rq-3uug)', () => {
   it('gives every carried item a line of its own, never the shared one', () => {
     const wrong: string[] = []
+    const owner: Record<string, string> = {}
     for (const make of ITEMS) {
       const game = newGame()
       const item = new make()
       item.canBeCarried = true
       game.state.currentRoom.items.push(item)
       const line = game.take(item.name)
+      if (line in owner)
+        wrong.push(`${item.name} repeats the line of ${owner[line]}`)
+      owner[line] = item.name
       if (line === '' || line === SHARED_LINE)
         wrong.push(`${item.name}: ${line}`)
     }
@@ -134,6 +138,7 @@ describe('Act I pickup lines (rq-3uug)', () => {
     const again = game.take('locket')
     expect(again).not.toContain('You have learned')
     expect(again).not.toBe(SHARED_LINE)
+    expect(again).not.toBe('')
   })
 
   it('says the line once when different items share a name', () => {

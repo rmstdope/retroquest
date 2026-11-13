@@ -956,6 +956,8 @@ describe('Shopkeeper price sentence', () => {
         answer = game.commandParser.parse('talk to shopkeeper')
 
       expect(answer).toContain("[item_name]sword[/item_name]'s five")
+      expect(answer).toContain("[item_name]armor[/item_name]'s ten")
+      expect(answer).toContain("[item_name]Rope[/item_name]'s a")
       expect(answer).toContain('[item_name]apple[/item_name]')
       expect(answer.match(/\[dialogue\]/g)).toHaveLength(1)
       expect(answer).not.toContain('- ')
