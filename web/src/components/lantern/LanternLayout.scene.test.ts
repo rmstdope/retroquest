@@ -1,5 +1,5 @@
-import { createMemoryStorage, setAppStorage } from '@/storage/appStorage'
 // @vitest-environment jsdom
+import { createMemoryStorage, setAppStorage } from '@/storage/appStorage'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { mount, type VueWrapper } from '@vue/test-utils'
 import { createPinia, setActivePinia } from 'pinia'

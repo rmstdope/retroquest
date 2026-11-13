@@ -6,7 +6,7 @@ import { appStorage } from '@/storage/appStorage'
 /**
  * The belt of pictures's own state: which list it shows (Bag or Spells),
  * whether it is put away, and the thing or spell taken in hand. The first two
- * are remembered on this device in localStorage like the theme and the text
+ * are remembered on this device in the browser's storage (`appStorage`) like the theme and the text
  * size, each validated on load, and are not part of a save; unavailable or
  * corrupt storage just means the defaults for this visit. The hand is never
  * stored: the layout empties it whenever the game moves on.

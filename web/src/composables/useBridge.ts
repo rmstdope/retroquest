@@ -66,7 +66,7 @@ function isSaveData(data: unknown): data is string {
   return typeof data === 'string' && data.startsWith('{')
 }
 
-/** Read and validate persisted named saves from local storage. */
+/** Read and validate persisted named saves from `appStorage`. */
 function readStoredNamedSaves(): StoredNamedSave[] {
   try {
     const raw = appStorage.getItem(NAMED_KEY)
@@ -84,7 +84,7 @@ function readStoredNamedSaves(): StoredNamedSave[] {
 }
 
 /**
- * Read persisted 8-slot save data from localStorage.
+ * Read persisted 8-slot save data from `appStorage`.
  * Always returns an array of exactly 8 entries (null = empty slot).
  */
 function readStoredSaveSlots(): (StoredSaveSlot | null)[] {
