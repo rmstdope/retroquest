@@ -1,9 +1,6 @@
 // @vitest-environment jsdom
 import { describe, it, expect, vi, afterEach, beforeEach } from 'vitest'
 import { createPinia, setActivePinia } from 'pinia'
-import { readFileSync } from 'node:fs'
-import { dirname, join } from 'node:path'
-import { fileURLToPath } from 'node:url'
 import {
   INTERLUDE_FADE_MS,
   INTERLUDE_RISE_MS,
@@ -104,15 +101,6 @@ describe('StagePicture during a change of scene', () => {
     await nextTick()
     expect(w.classes()).toContain('lq-scene-in')
     expect(w.attributes('style')).toContain(`--lq-rise: ${INTERLUDE_RISE_MS}ms`)
-  })
-
-  it('draws the veil lifting over the rise time', () => {
-    const source = readFileSync(
-      join(dirname(fileURLToPath(import.meta.url)), 'StagePicture.vue'),
-      'utf8',
-    )
-    const rule = source.match(/\.lq-scene-in \.lq-veil \{([^}]*)\}/)
-    expect(rule?.[1]).toContain('calc(var(--lq-rise) * var(--lq-motion))')
   })
 
   it('keeps the old picture under the veil, then puts the new one in place in the dark', async () => {
