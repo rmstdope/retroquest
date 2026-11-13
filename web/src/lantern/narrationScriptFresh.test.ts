@@ -19,8 +19,14 @@ import {
   extractActScript,
 } from '../../../tts/actScripts'
 
-/** Each act is played four times by the extractor, which is slow on a loaded machine. */
+/**
+ * Acts 2 and 3 play for seconds each; `narrationScriptFreshLong.test.ts`
+ * checks their scripts so that the two files run side by side.
+ */
 const SLOW = 120_000
+
+/** The acts whose script this file checks; the long acts have their own file. */
+const SHORT_ACTS = ACT_NUMBERS.filter((number) => !['2', '3'].includes(number))
 
 /** Reads a committed JSON file of an act under `tts/act<N>/`. */
 function committed(number: string, file: string): unknown {
@@ -38,7 +44,7 @@ function committed(number: string, file: string): unknown {
  * behind fails here; regenerate with `tts/extract-act.ts <N>`.
  */
 describe('committed narration files are current', () => {
-  for (const number of ACT_NUMBERS) {
+  for (const number of SHORT_ACTS) {
     it(
       `tts/act${number}/script.json is what extract-act.ts writes`,
       () => {
@@ -48,6 +54,8 @@ describe('committed narration files are current', () => {
       },
       SLOW,
     )
+  }
+  for (const number of ACT_NUMBERS) {
     it(`tts/act${number}/music.json is what extract-act.ts writes`, () => {
       expect(extractActMusic(number)).toEqual(committed(number, 'music.json'))
     })
