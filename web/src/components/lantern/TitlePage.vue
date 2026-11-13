@@ -27,7 +27,7 @@ import { useReducedMotion } from '@/composables/useReducedMotion'
  * buttons are inert (neither focusable nor pressable). Any key press or press
  * anywhere finishes the opening at once and does nothing else (a key's
  * default action, such as Enter pressing a button, is cancelled, and the
- * press does not take focus); it is heard on the window, since during the
+ * press neither takes focus nor presses what has appeared under it); it is heard on the window, since during the
  * opening focus is on the body, outside the page. The press still reaches the
  * other listeners, so the music starts on it.
  * Focus then lands on the main button. Enter on Start or Escape goes on.
@@ -87,19 +87,37 @@ void (async (): Promise<void> => {
 /** The key press that finished the opening, which no other handler of the page answers. */
 let skippedBy: Event | null = null
 
-/** Finish the opening at once; a key press is kept from pressing a button, a pointer press from taking focus. */
+/** Finish the opening at once; a key press is kept from pressing a button, a pointer press from pressing or focusing one. */
 function skip(event: Event): void {
   if (opened.value) return
   opened.value = true
   skippedBy = event
   if (event.type === 'keydown') event.preventDefault()
-  else window.addEventListener('mousedown', keepFocus, true)
+  else guardGesture()
 }
 
-/** Once, cancel the mouse press that follows a skipping pointer press, so focus stays for the main button. */
-function keepFocus(event: Event): void {
+/** The events that end a skipping pointer press, which must reach nothing that has appeared under it. */
+const GESTURE_ENDS = ['mousedown', 'click'] as const
+
+/** Swallow the mouse events that follow a skipping pointer press, until its click or the next press. */
+function guardGesture(): void {
+  for (const type of GESTURE_ENDS) window.addEventListener(type, swallow, true)
+  window.addEventListener('pointerdown', releaseGesture, true)
+}
+
+/** Cancel one event of the skipping gesture; its click is the last. */
+function swallow(event: Event): void {
   event.preventDefault()
-  window.removeEventListener('mousedown', keepFocus, true)
+  if (event.type !== 'click') return
+  event.stopPropagation()
+  releaseGesture()
+}
+
+/** End the guard (at the gesture's click, at the next press, or when the page goes). */
+function releaseGesture(): void {
+  for (const type of GESTURE_ENDS)
+    window.removeEventListener(type, swallow, true)
+  window.removeEventListener('pointerdown', releaseGesture, true)
 }
 
 /** The opening is over once the last button has risen. */
@@ -124,7 +142,7 @@ onMounted(() => {
 onBeforeUnmount(() => {
   window.removeEventListener('keydown', skip, true)
   window.removeEventListener('pointerdown', skip, true)
-  window.removeEventListener('mousedown', keepFocus, true)
+  releaseGesture()
 })
 </script>
 

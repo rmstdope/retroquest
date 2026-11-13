@@ -690,6 +690,7 @@ describe('LanternLayout', () => {
     await flushPromises()
     expect(document.activeElement?.textContent?.trim()).toBe('Start')
 
+    await wrapper.get('.lq-title-start').trigger('pointerdown')
     await wrapper.get('.lq-title-start').trigger('click')
     await flushPromises()
 

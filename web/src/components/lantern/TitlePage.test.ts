@@ -181,12 +181,50 @@ describe('TitlePage', () => {
       w.get('.lq-title-page').element.dispatchEvent(mousedown)
       expect(mousedown.defaultPrevented).toBe(true)
       expect(document.activeElement?.textContent?.trim()).toBe('Start')
+      w.get('.lq-title-page').element.dispatchEvent(
+        new MouseEvent('click', { bubbles: true, cancelable: true }),
+      )
       const later = new MouseEvent('mousedown', {
         bubbles: true,
         cancelable: true,
       })
       w.get('.lq-title-page').element.dispatchEvent(later)
       expect(later.defaultPrevented).toBe(false)
+    })
+
+    it('swallows the click that ends the skipping press, once', async () => {
+      const w = mountTitle()
+      document.body.dispatchEvent(
+        new Event('pointerdown', { bubbles: true, cancelable: true }),
+      )
+      await flushPromises()
+      const start = w.get('button').element
+      const click = new MouseEvent('click', { bubbles: true, cancelable: true })
+      start.dispatchEvent(click)
+      expect(click.defaultPrevented).toBe(true)
+      expect(w.emitted('start')).toBeUndefined()
+      await w.get('button').trigger('pointerdown')
+      await w.get('button').trigger('click')
+      expect(w.emitted('start')).toHaveLength(1)
+    })
+
+    it('ends its guard at the next press when the gesture never clicked', async () => {
+      const w = mountTitle()
+      document.body.dispatchEvent(
+        new Event('pointerdown', { bubbles: true, cancelable: true }),
+      )
+      await flushPromises()
+      document.body.dispatchEvent(
+        new Event('pointerdown', { bubbles: true, cancelable: true }),
+      )
+      const mousedown = new MouseEvent('mousedown', {
+        bubbles: true,
+        cancelable: true,
+      })
+      document.body.dispatchEvent(mousedown)
+      expect(mousedown.defaultPrevented).toBe(false)
+      await w.get('button').trigger('click')
+      expect(w.emitted('start')).toHaveLength(1)
     })
 
     it('stops listening on the window once it is unmounted', async () => {
@@ -232,6 +270,7 @@ describe('TitlePage', () => {
       const w = mountTitle()
       await w.get('.lq-title-page').trigger('pointerdown')
       expect(w.get('.lq-title-page').classes()).toContain('is-open')
+      await w.get('button').trigger('pointerdown')
       await w.get('button').trigger('click')
       expect(w.emitted('start')).toHaveLength(1)
     })
