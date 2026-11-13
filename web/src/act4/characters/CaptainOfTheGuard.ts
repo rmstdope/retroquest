@@ -43,8 +43,8 @@ export class CaptainOfTheGuard extends Character {
   }
 
   /** Also answers to "captain". */
-  override answersTo(name: string): boolean {
-    return super.answersTo(name) || name.toLowerCase() === 'captain'
+  override otherNames(): string[] {
+    return ['captain']
   }
 
   /** Blind while enthralled; once freed, awake and restless among the servants. */

@@ -13,8 +13,8 @@ export class Apple extends Item {
   }
 
   /** Answers to "apples" too, the word the store's shelves and Hemlock use. */
-  override answersTo(name: string): boolean {
-    return super.answersTo(name) || name.toLowerCase() === 'apples'
+  override otherNames(): string[] {
+    return ['apples']
   }
 
   /**

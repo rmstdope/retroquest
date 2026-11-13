@@ -130,8 +130,8 @@ export class Villager extends Character {
   }
 
   /** She answers to her name, Tilda, and still to villager. */
-  override answersTo(name: string): boolean {
-    return super.answersTo(name) || name.toLowerCase() === 'villager'
+  override otherNames(): string[] {
+    return ['villager']
   }
 
   /**

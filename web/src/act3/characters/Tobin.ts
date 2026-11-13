@@ -44,8 +44,8 @@ export class Tobin extends Character {
   }
 
   /** He answers to "tobin", "young miner" and "boy", however cased. */
-  override answersTo(name: string): boolean {
-    return TOBIN_NAMES.includes(name.trim().toLowerCase())
+  override otherNames(): readonly string[] {
+    return TOBIN_NAMES
   }
 
   /**

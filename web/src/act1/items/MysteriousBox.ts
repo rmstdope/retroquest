@@ -27,9 +27,8 @@ export class MysteriousBox extends Item {
   }
 
   /** Once opened, the box also answers to the note left inside it. */
-  override answersTo(name: string): boolean {
-    if (super.answersTo(name)) return true
-    return !this.containsMap && NOTE_NAMES.includes(name.toLowerCase())
+  override otherNames(): string[] {
+    return this.containsMap ? [] : NOTE_NAMES
   }
 
   /**
@@ -37,7 +36,11 @@ export class MysteriousBox extends Item {
    * verb tried on the note is answered by the note and never by the box.
    */
   override partNamed(name: string): Item {
-    return super.answersTo(name) ? this : new FathersNote()
+    return [this.name, this.shortName].some(
+      (own) => own.toLowerCase() === name.toLowerCase(),
+    )
+      ? this
+      : new FathersNote()
   }
 
   /**

@@ -19,11 +19,8 @@ export class CrystalWhispers extends Item {
   }
 
   /** Also answers to "whisper" and "crystals". */
-  override answersTo(name: string): boolean {
-    return (
-      super.answersTo(name) ||
-      ['whisper', 'crystals'].includes(name.toLowerCase())
-    )
+  override otherNames(): string[] {
+    return ['whisper', 'crystals']
   }
 
   /** The crystals fall silent once the Sorceress is redeemed. */

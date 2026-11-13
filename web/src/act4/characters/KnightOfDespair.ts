@@ -102,13 +102,8 @@ export class KnightOfDespair extends Character {
   }
 
   /** Also answers to "knight" and "redeemed knight", whatever his name is now. */
-  override answersTo(name: string): boolean {
-    return (
-      super.answersTo(name) ||
-      ['knight', 'knight of despair', 'redeemed knight'].includes(
-        name.toLowerCase(),
-      )
-    )
+  override otherNames(): string[] {
+    return ['knight', 'knight of despair', 'redeemed knight']
   }
 
   /** How many of the hall's three sights (the knight, the banners, the Echo Stone) Elior has seen through. */

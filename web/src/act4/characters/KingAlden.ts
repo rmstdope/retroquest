@@ -38,10 +38,8 @@ export class KingAlden extends Character {
   }
 
   /** Also answers to "alden" and "king". */
-  override answersTo(name: string): boolean {
-    return (
-      super.answersTo(name) || ['alden', 'king'].includes(name.toLowerCase())
-    )
+  override otherNames(): string[] {
+    return ['alden', 'king']
   }
 
   /** His look, which changes once the prison is broken. */

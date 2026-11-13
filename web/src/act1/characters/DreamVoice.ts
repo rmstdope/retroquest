@@ -28,9 +28,8 @@ export class DreamVoice extends Character {
    * The figure, the shadow and the voice are one. The man who lifts the
    * child is not it: he is the dream's own scenery.
    */
-  override answersTo(name: string): boolean {
-    const wanted = name.toLowerCase().replace(/^the /, '')
-    return ['voice', 'figure', 'shadow', 'stranger'].includes(wanted)
+  override otherNames(): string[] {
+    return ['voice', 'figure', 'shadow', 'stranger']
   }
 
   /** Answering the voice ends the dream (see `wake`). */

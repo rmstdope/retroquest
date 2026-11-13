@@ -17,7 +17,7 @@ export class Field extends Item {
   }
 
   /** The player may also say "crops". */
-  override answersTo(name: string): boolean {
-    return super.answersTo(name) || name.toLowerCase() === 'crops'
+  override otherNames(): string[] {
+    return ['crops']
   }
 }

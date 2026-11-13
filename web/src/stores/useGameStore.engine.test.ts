@@ -503,17 +503,18 @@ describe('useGameStore over the real engine: the no-match line and a name that w
     it('still says no match for an extra name with words the command cannot take', async () => {
       const store = await storeHoldingToken()
 
-      expect(saysNoMatch(store, 'examine pendant bob')).toBe(true)
       expect(saysNoMatch(store, 'use pendant bob')).toBe(true)
       expect(saysNoMatch(store, 'give pendant to bob')).toBe(true)
       expect(saysNoMatch(store, 'go pendant')).toBe(true)
     })
   })
 
-  it('says no match for a name still being typed', async () => {
+  it('offers a character’s other name while it is being typed', async () => {
     const store = await storeIn(Act2, 'CastleCourtyard')
 
-    expect(saysNoMatch(store, 'talk to ced')).toBe(true)
+    expect(store.completionState('talk to ced').candidates).toContain('cedric')
+    expect(saysNoMatch(store, 'talk to ced')).toBe(false)
+    expect(saysNoMatch(store, 'talk to xyz')).toBe(true)
   })
 })
 

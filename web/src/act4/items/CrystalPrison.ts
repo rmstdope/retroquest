@@ -25,11 +25,8 @@ export class CrystalPrison extends Item {
   }
 
   /** Also answers to "crystal" and "crystal prison". */
-  override answersTo(name: string): boolean {
-    return (
-      super.answersTo(name) ||
-      ['crystal', 'crystal prison'].includes(name.toLowerCase())
-    )
+  override otherNames(): string[] {
+    return ['crystal', 'crystal prison']
   }
 
   /** The prison's look, which changes once it is broken. */

@@ -37,8 +37,8 @@ export class GhostlyWarriors extends Character {
   }
 
   /** Also answers to "warriors". */
-  override answersTo(name: string): boolean {
-    return super.answersTo(name) || name.toLowerCase() === 'warriors'
+  override otherNames(): string[] {
+    return ['warriors']
   }
 
   /** The warriors' look. */

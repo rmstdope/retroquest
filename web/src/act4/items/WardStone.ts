@@ -30,13 +30,8 @@ export class WardStone extends Item {
   }
 
   /** The player may say "left stone" or "left ward stone". */
-  override answersTo(name: string): boolean {
-    const wanted = name.toLowerCase()
-    return (
-      super.answersTo(name) ||
-      wanted === `${this.side} ward stone` ||
-      wanted === `${this.side} stone`
-    )
+  override otherNames(): string[] {
+    return [`${this.side} ward stone`, `${this.side} stone`]
   }
 
   /** Whether the guardians' hold on the gates is already broken. */

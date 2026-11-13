@@ -28,13 +28,8 @@ export class Guardians extends Item {
   }
 
   /** The player may also say "guardian" or "shadow guardian". */
-  override answersTo(name: string): boolean {
-    const wanted = name.toLowerCase()
-    return (
-      super.answersTo(name) ||
-      wanted === 'guardian' ||
-      wanted === 'shadow guardian'
-    )
+  override otherNames(): string[] {
+    return ['guardian', 'shadow guardian']
   }
 
   /** The guardians' look: in time with the stones, then gone. */

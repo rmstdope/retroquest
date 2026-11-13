@@ -41,8 +41,8 @@ export class TrueSelf extends Character {
   }
 
   /** Also answers to "reflection". */
-  override answersTo(name: string): boolean {
-    return super.answersTo(name) || name.toLowerCase() === 'reflection'
+  override otherNames(): string[] {
+    return ['reflection']
   }
 
   /** The reflection's look. */

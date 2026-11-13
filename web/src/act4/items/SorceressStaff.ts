@@ -20,8 +20,8 @@ export class SorceressStaff extends Item {
   }
 
   /** Also answers to "sorceress's staff". */
-  override answersTo(name: string): boolean {
-    return super.answersTo(name) || name.toLowerCase() === "sorceress's staff"
+  override otherNames(): string[] {
+    return ["sorceress's staff"]
   }
 
   /** Looking at the staff starts the quest; it is bare once she is redeemed. */

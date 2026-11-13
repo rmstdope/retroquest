@@ -36,15 +36,31 @@ export class Item {
   refreshSavedText(_gameState: GameState): void {}
 
   /**
-   * Whether the player's word for an item names this one: its full name or
-   * short name, compared case-insensitively. Override to accept more names.
+   * The names besides `name` and `shortName` the player may call this item by,
+   * lowercase. Override to list them; `answersTo` and the suggestion list both
+   * read it, so a name listed here is accepted and offered.
+   */
+  otherNames(): readonly string[] {
+    return []
+  }
+
+  /** Every name the item answers to, lowercase: full name, short name, then `otherNames`. */
+  allNames(): string[] {
+    return [
+      ...new Set(
+        [this.name, this.shortName, ...this.otherNames()].map((name) =>
+          name.toLowerCase(),
+        ),
+      ),
+    ]
+  }
+
+  /**
+   * Whether the player's word for an item names this one: one of `allNames`,
+   * compared case-insensitively.
    */
   answersTo(name: string): boolean {
-    const wanted = name.toLowerCase()
-    return (
-      this.name.toLowerCase() === wanted ||
-      this.shortName.toLowerCase() === wanted
-    )
+    return this.allNames().includes(name.toLowerCase())
   }
 
   /**

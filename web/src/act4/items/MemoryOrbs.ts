@@ -30,8 +30,8 @@ export class MemoryOrbs extends Item {
   }
 
   /** Also answers to "orbs" and "memory orbs". */
-  override answersTo(name: string): boolean {
-    return super.answersTo(name) || name.toLowerCase() === 'orbs'
+  override otherNames(): string[] {
+    return ['orbs']
   }
 
   /** Looking at the orbs starts the Shadow's quest; the look changes once they are mended. */

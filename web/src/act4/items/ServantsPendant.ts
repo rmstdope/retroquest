@@ -16,8 +16,8 @@ export class ServantsPendant extends Item {
   }
 
   /** Also answers to "pendant", what the story calls it. */
-  override answersTo(name: string): boolean {
-    return super.answersTo(name) || name.toLowerCase() === 'pendant'
+  override otherNames(): string[] {
+    return ['pendant']
   }
 
   /** Use the pendant with the Echo Stone: the same as using the stone. */

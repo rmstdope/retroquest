@@ -3,6 +3,7 @@
  * golden path the game gets from act N.
  */
 import type { QuestChanges } from './GameState'
+import { DIRECTIONS, SHORT_DIRECTIONS, formOf, prefixesOf } from './Grammar'
 
 /** The part of the game the parser drives (implemented by Game). */
 export interface CommandTarget {
@@ -37,19 +38,19 @@ export interface CommandTarget {
   goldenPath(actNumber: number): string[]
 }
 
-const DIRECTIONS = ['north', 'south', 'east', 'west', 'up', 'down'] as const
-const SHORT_DIRECTIONS: Record<string, string> = {
-  n: 'north',
-  s: 'south',
-  e: 'east',
-  w: 'west',
-}
-const TALK_PREFIXES = ['talk to ', 'speak to ', 'converse with ']
-const GIVE_PREFIXES = ['give ', 'hand ']
-const EXAMINE_PREFIXES = ['look at ', 'inspect ', 'examine ', 'check ', 'look ']
+const TALK_PREFIXES = prefixesOf('talk to')
+const GIVE_PREFIXES = prefixesOf('give')
+/** `look ` also reads as examine when something follows. */
+const EXAMINE_PREFIXES = [...prefixesOf('inspect'), 'look ']
 /** The examine verbs typed with nothing named; `look` alone is `look`. */
-const BARE_EXAMINE_VERBS = ['look at', 'inspect', 'examine', 'check']
-const TAKE_PREFIXES = ['take ', 'pick up ', 'grab ', 'get ']
+const BARE_EXAMINE_VERBS = formOf('inspect').verbs
+const TAKE_PREFIXES = prefixesOf('take')
+const LOOK_VERBS = formOf('look').verbs
+const SEARCH_VERBS = formOf('search').verbs
+const INVENTORY_VERBS = formOf('inventory').verbs
+const HELP_VERBS = formOf('help').verbs
+const QUIT_VERBS = formOf('quit').verbs
+const REST_VERBS = formOf('sleep').verbs
 
 const SAY_USAGE = 'Use say <word> to <character>'
 const USE_WITH_USAGE =
@@ -108,18 +109,17 @@ export class CommandParser {
     if (giveArgs !== null) return this.game.give(giveArgs)
     if (cmd.startsWith('buy ')) return this.game.buy(cmd.slice('buy '.length))
 
-    if (['look', 'observe', 'survey', 'l'].includes(cmd))
-      return this.game.look()
+    if (LOOK_VERBS.includes(cmd)) return this.game.look()
     if (BARE_EXAMINE_VERBS.includes(cmd)) return this.game.examine('')
     const examineTarget = afterPrefix(cmd, EXAMINE_PREFIXES)
     if (examineTarget !== null) return this.game.examine(examineTarget)
-    if (cmd === 'search' || cmd === 'investigate') return this.game.search()
+    if (SEARCH_VERBS.includes(cmd)) return this.game.search()
 
     const takeTarget = afterPrefix(cmd, TAKE_PREFIXES)
     if (takeTarget !== null) return this.game.take(takeTarget)
     if (cmd === 'use') return 'What do you want to use?'
     if (cmd.startsWith('use ')) return this.use(command)
-    if (['inventory', 'i', 'inv'].includes(cmd)) return this.game.inventory()
+    if (INVENTORY_VERBS.includes(cmd)) return this.game.inventory()
     if (cmd.startsWith('open '))
       return this.game.open(cmd.slice('open '.length))
     if (cmd.startsWith('close '))
@@ -135,12 +135,11 @@ export class CommandParser {
     if (cmd === 'load') return this.game.load()
     if (cmd.startsWith('load '))
       return this.game.load(cmd.slice('load '.length).trim())
-    if (cmd === 'help' || cmd === '?') return this.game.help()
+    if (HELP_VERBS.includes(cmd)) return this.game.help()
     if (cmd === 'hint') return this.game.hint()
-    if (cmd === 'quit' || cmd === 'exit') return this.game.quit()
+    if (QUIT_VERBS.includes(cmd)) return this.game.quit()
 
-    if (cmd === 'sleep' || cmd === 'rest' || cmd === 'wait')
-      return this.game.rest()
+    if (REST_VERBS.includes(cmd)) return this.game.rest()
     if (cmd === 'map') return this.game.map()
     if (cmd === 'stats') return this.game.stats()
     if (cmd.startsWith('cheat act ')) {

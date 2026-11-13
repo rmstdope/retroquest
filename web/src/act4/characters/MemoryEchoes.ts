@@ -44,8 +44,8 @@ export class MemoryEchoes extends Character {
   }
 
   /** Also answers to what Elior calls them. */
-  override answersTo(name: string): boolean {
-    return super.answersTo(name) || OTHER_NAMES.includes(name.toLowerCase())
+  override otherNames(): string[] {
+    return OTHER_NAMES
   }
 
   /** Reads "the memory echoes of Aren and Lysa", the two names kept capitalised. */

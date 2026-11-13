@@ -91,11 +91,8 @@ export class Wound extends Item {
   }
 
   /** Also answers to "wound in time" and "rift", as the chamber calls it. */
-  override answersTo(name: string): boolean {
-    return (
-      super.answersTo(name) ||
-      ['wound in time', 'rift'].includes(name.toLowerCase())
-    )
+  override otherNames(): string[] {
+    return ['wound in time', 'rift']
   }
 
   /** The wound's look: gone, or drinking from whoever the elixir did not reach. */

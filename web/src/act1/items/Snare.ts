@@ -36,8 +36,8 @@ export class Snare extends Item {
   }
 
   /** The snare answers to its name and to `fox`, `kit` and `fox kit`. */
-  override answersTo(name: string): boolean {
-    return super.answersTo(name) || KIT_WORDS.includes(name.toLowerCase())
+  override otherNames(): readonly string[] {
+    return KIT_WORDS
   }
 
   /** The kit while it is caught; the cut, empty snare afterwards. */

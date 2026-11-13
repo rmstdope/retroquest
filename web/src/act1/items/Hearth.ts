@@ -13,7 +13,7 @@ export class Hearth extends Item {
   }
 
   /** The hearth also answers to "fire", as the room's description says. */
-  override answersTo(name: string): boolean {
-    return super.answersTo(name) || name.toLowerCase() === 'fire'
+  override otherNames(): string[] {
+    return ['fire']
   }
 }
