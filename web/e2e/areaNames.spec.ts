@@ -318,6 +318,8 @@ test.describe('a dot under the faded edge of a card (rq-riv9)', () => {
         `scrolled to ${top}`,
       ).toHaveText('Table')
     }
+    // How many positions put the dot under a card depends on the layout: Grandmother's two replies, the fonts and the
+    // cards' padding. A change to any of them can leave none, which fails here rather than checking nothing.
     expect(covered).toBeGreaterThan(0)
   })
 })
