@@ -50,6 +50,9 @@ describe('LanternLayout: change of scene', () => {
   async function stage(
     phone = false,
   ): Promise<ReturnType<typeof useGameStore>> {
+    // Settings an earlier test saved (narration off) would carry over where
+    // the test window keeps storage (Node 22, as on CI).
+    globalThis.localStorage?.clear?.()
     setActivePinia(createPinia())
     vi.stubGlobal(
       'matchMedia',
@@ -651,6 +654,7 @@ describe('LanternLayout: change of scene', () => {
   function recordEverything(
     silent: (key: string) => boolean = () => false,
   ): { onended: (() => void) | null }[] {
+    useSettingsStore().narrationOn = true
     const narration = useNarrationStore()
     const voices: { onended: (() => void) | null }[] = []
     narration.setAudioFactory(() => {
