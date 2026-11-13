@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { ref, watch } from 'vue'
+import { onScopeDispose, ref, watch } from 'vue'
 import { arrivesOnPicture, newsOnPicture } from '@/lantern/stageArrival'
 import { useGameStore } from './useGameStore'
 import { useSceneStore } from './useSceneStore'
@@ -53,6 +53,9 @@ export const useRoomTitleStore = defineStore('roomTitle', () => {
     name.value = room
     timer = setTimeout(settle, ROOM_TITLE_MS)
   }
+
+  // The store's own timer ends with its scope; no caller has to clear it.
+  onScopeDispose(() => clearTimeout(timer))
 
   /** Settle the title into the corner now. */
   function settle(): void {

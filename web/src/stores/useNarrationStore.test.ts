@@ -97,6 +97,14 @@ describe('useNarrationStore', () => {
     expect(narration.revealed(7, 1)).toBe(true)
   })
 
+  it('ends its timers when its scope is disposed', async () => {
+    narration.begin(7, [voiced(), voiced()], 'act1')
+    last().onended?.()
+    narration.$dispose()
+    await vi.advanceTimersByTimeAsync(10000)
+    expect(narration.revealed(7, 1)).toBe(false)
+  })
+
   it('takes silent units in their place without a pause', async () => {
     narration.begin(1, [voiced(), silent, voiced()], 'act1')
     last().onended?.()

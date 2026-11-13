@@ -264,4 +264,16 @@ describe('useSceneStore', () => {
       expect(scene.ready).toBe(false)
     })
   })
+
+  it('ends its timers when its scope is disposed', () => {
+    const scene = useSceneStore()
+    scene.settled('a.png')
+    const onUp = vi.fn()
+    scene.begin(4, 'b.png', onUp)
+    scene.targetReady(true)
+    scene.$dispose()
+    vi.advanceTimersByTime(SCENE_HALF_MS * 3)
+    expect(scene.phase).toBe('out')
+    expect(onUp).not.toHaveBeenCalled()
+  })
 })

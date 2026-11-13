@@ -323,6 +323,14 @@ describe('useStageSpeechStore', () => {
     expect(speech.lineSpeaking(first.id, 1, 0)).toBe(false)
   })
 
+  it('ends its timer when its scope is disposed', () => {
+    const speech = useStageSpeechStore()
+    speech.observe(turn(say('Mira', 'A.\n\nB.'), 'Mira'))
+    speech.$dispose()
+    vi.runAllTimers()
+    expect(speech.visible.map((l) => l.markup)).toEqual(['A.'])
+  })
+
   it('stops releasing lines once cleared', () => {
     const speech = useStageSpeechStore()
     speech.observe(turn(say('Mira', 'A.\n\nB.'), 'Mira'))

@@ -160,4 +160,13 @@ describe('useFlightStore', () => {
     vi.advanceTimersByTime(FLIGHT_LAND_MS - 1)
     expect(flights.landedName).toBe('rope')
   })
+
+  it('ends its timers when its scope is disposed', () => {
+    const flights = useFlightStore()
+    flights.launch([lantern])
+    flights.$dispose()
+    vi.advanceTimersByTime(FLIGHT_SHOW_MS + FLIGHT_HOLD_MS + FLIGHT_FLY_MS)
+    expect(flights.phase).toBe('show')
+    expect(flights.landed).toBeNull()
+  })
 })

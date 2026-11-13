@@ -288,4 +288,11 @@ describe('useRoomTitleStore', () => {
     await nextTick()
     expect(title.name).toBeNull()
   })
+
+  it('ends its timer when its scope is disposed', async () => {
+    await enter('Village Square', moveTurn(2, false))
+    title.$dispose()
+    vi.advanceTimersByTime(ROOM_TITLE_MS * 2)
+    expect(title.name).toBe('Village Square')
+  })
 })

@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { computed, ref, shallowRef } from 'vue'
+import { computed, onScopeDispose, ref, shallowRef } from 'vue'
 import type { Turn } from './useGameStore'
 import { useNarrationStore } from './useNarrationStore'
 import { useSceneStore } from './useSceneStore'
@@ -242,6 +242,9 @@ export const useStageSpeechStore = defineStore('stageSpeech', () => {
         lines: lines.map((line) => Object.assign(line, { carried: true })),
       }
   }
+
+  // The store's own timer ends with its scope; no caller has to clear it.
+  onScopeDispose(() => clearTimeout(timer))
 
   /** Show the rest of the turn's lines at once. */
   function revealAll(): void {

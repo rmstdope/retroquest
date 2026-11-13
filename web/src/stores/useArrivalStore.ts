@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { computed, ref, watch } from 'vue'
+import { computed, onScopeDispose, ref, watch } from 'vue'
 import { useNarrationStore } from './useNarrationStore'
 import { useStageSpeechStore } from './useStageSpeechStore'
 import { useSceneStore } from './useSceneStore'
@@ -50,6 +50,9 @@ export interface PageStart {
  */
 export const useArrivalStore = defineStore('arrival', () => {
   const narration = useNarrationStore()
+  // Taken once, from this store's own pinia: its timer must not look them up through the active one.
+  const stageSpeech = useStageSpeechStore()
+  const scene = useSceneStore()
   /** The arrival being told: its turn, parts and the part up. */
   const current = ref<{
     turnId: number
@@ -147,6 +150,9 @@ export const useArrivalStore = defineStore('arrival', () => {
     clearTimeout(timer)
     timer = undefined
   }
+
+  // The store's own timer ends with its scope; no caller has to clear it.
+  onScopeDispose(stopTimer)
 
   /** Move on after `ms`. */
   function later(ms: number, then: () => void): void {
@@ -267,8 +273,7 @@ export const useArrivalStore = defineStore('arrival', () => {
     const unit = now.parts[0].lines[0].unit
     return now.narrated
       ? narration.revealed(now.turnId, unit)
-      : useStageSpeechStore().told(now.turnId) &&
-          !useSceneStore().holds(now.turnId, unit)
+      : stageSpeech.told(now.turnId) && !scene.holds(now.turnId, unit)
   }
 
   /** Go on to the next page, or part (the narrator jumps with it); on the last one, clear. */

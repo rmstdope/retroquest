@@ -100,6 +100,13 @@ describe('useArrivalStore', () => {
     expect(arrival.tellsRoom).toBe(false)
   })
 
+  it('ends its timer when its scope is disposed', () => {
+    arrival.show(1, parts(true, false), false)
+    arrival.$dispose()
+    vi.advanceTimersByTime(30000)
+    expect(arrival.part?.kind).toBe('events')
+  })
+
   it('tells no room for what happens alone', () => {
     arrival.show(1, parts(true, false).slice(0, 1), false)
     expect(arrival.active).toBe(true)
