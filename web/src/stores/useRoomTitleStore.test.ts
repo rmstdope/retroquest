@@ -109,6 +109,27 @@ describe('useRoomTitleStore', () => {
     expect(title.name).toBeNull()
   })
 
+  it('stops waiting once a skip shows the arrival and clears it at once, leaving the corner named', async () => {
+    await enter('Village Square', moveTurn(2, true))
+    expect(title.waiting).toBe(true)
+    const arrival = useArrivalStore()
+    arrival.show(
+      2,
+      [
+        {
+          kind: 'description',
+          lines: [{ unit: 0, markup: 'Cobbles.' }],
+          voiced: false,
+        },
+      ],
+      false,
+    )
+    arrival.clear()
+    await nextTick()
+    expect(title.waiting).toBe(false)
+    expect(title.name).toBeNull()
+  })
+
   it('stops waiting for an arrival a newer turn has replaced, and greets the room', async () => {
     await enter('Village Square', moveTurn(2, true))
     expect(title.waiting).toBe(true)

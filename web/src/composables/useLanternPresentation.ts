@@ -274,19 +274,24 @@ export function useLanternPresentation(
   /** Whether the narrator is reading the interlude in the dark. */
   let interludeNarrated = false
   // The dark tells the interlude: the narrator reads it and stops before what
-  // comes after, or, unnarrated, it stays for its reading time.
+  // comes after, or, unnarrated (or not recorded yet, so passed at once), it
+  // stays for its reading time.
   watch(
     () => scene.interlude,
     (told) => {
       clearTimeout(interludeTimer)
       interludeNarrated = !!told && narration.narrates(told.turn)
       if (!told) return
-      if (interludeNarrated) narration.passSceneChange(told.turn, told.unit + 1)
-      else
-        interludeTimer = setTimeout(
-          () => scene.endInterlude(),
-          readingTimeMs(told.markup),
-        )
+      if (interludeNarrated) {
+        narration.passSceneChange(told.turn, told.unit + 1)
+        // A voice reads it: the narrator stopping again after it lets the picture rise.
+        if (!narration.atSceneChange(told.turn)) return
+        interludeNarrated = false
+      }
+      interludeTimer = setTimeout(
+        () => scene.endInterlude(),
+        readingTimeMs(told.markup),
+      )
     },
   )
   // A narrator that ends inside the interlude (nothing after it), or is

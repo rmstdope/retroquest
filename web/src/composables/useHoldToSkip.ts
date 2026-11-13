@@ -94,10 +94,12 @@ export function useHoldToSkip(options: HoldToSkipOptions): HoldToSkip {
       spentKey = keyDown
       // The release that follows a pointer hold clicks: it is the hold's.
       swallowClick = keyDown === null
-      options.skip()
+      // The telling may have ended while the hold ran: nothing is left to skip.
+      if (options.telling()) options.skip()
     }, HOLD_TO_SKIP_MS)
   }
 
+  /** A press on the story while it is told starts a hold (not on a control, which keeps its own presses). */
   function onPointerDown(event: PointerEvent): void {
     swallowClick = false
     if (event.button !== 0 || !event.isPrimary) return
@@ -109,6 +111,7 @@ export function useHoldToSkip(options: HoldToSkipOptions): HoldToSkip {
     start(event.pointerId, null, { x: event.clientX, y: event.clientY })
   }
 
+  /** A held press that moves away is a scroll or a drag: given up. */
   function onPointerMove(event: PointerEvent): void {
     if (!held || held.pointer !== event.pointerId || !held.at) return
     const moved = Math.hypot(
@@ -121,17 +124,27 @@ export function useHoldToSkip(options: HoldToSkipOptions): HoldToSkip {
     drop()
   }
 
+  /** The held press is let go: given up, and no step if its ring showed. */
   function onPointerUp(event: PointerEvent): void {
-    if (!held || held.pointer !== event.pointerId) return
-    // Let go after the ring showed and before it was full: given up, no step.
-    swallowClick = ring.value !== null
-    drop()
+    if (held && held.pointer === event.pointerId) {
+      // Let go after the ring showed and before it was full: given up, no step.
+      swallowClick = ring.value !== null
+      drop()
+    }
+    // The click a release makes follows it at once; a release that makes none
+    // (a long touch) leaves no swallowing for a later click.
+    if (swallowClick)
+      setTimeout(() => {
+        swallowClick = false
+      }, 0)
   }
 
+  /** The browser took the press (a scroll, a gesture): the hold is given up. */
   function onPointerCancel(event: PointerEvent): void {
     if (held && held.pointer === event.pointerId) drop()
   }
 
+  /** The click that ends a hold is the hold's: it is kept from the picture. */
   function onClick(event: MouseEvent): void {
     if (!swallowClick) return
     swallowClick = false
@@ -139,19 +152,23 @@ export function useHoldToSkip(options: HoldToSkipOptions): HoldToSkip {
     event.stopPropagation()
   }
 
+  /** A long press held for the skip opens no menu of the phone's own. */
   function onContextMenu(event: MouseEvent): void {
     if (held && held.pointer !== null) event.preventDefault()
   }
 
+  /** Enter or Space went down on the story: hold it to skip. */
   function keyDown(key: string, at: HoldRingSpot | null): void {
     spentKey = null
     start(null, key, at)
   }
 
+  /** Whether `key` is down for a hold, so its repeats take no step. */
   function keyHeld(key: string): boolean {
     return held?.key === key || spentKey === key
   }
 
+  /** `key` is let go: a hold not yet full is given up. */
   function keyUp(key: string): void {
     if (spentKey === key) spentKey = null
     if (held?.key === key) drop()

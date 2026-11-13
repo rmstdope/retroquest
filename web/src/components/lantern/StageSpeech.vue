@@ -20,8 +20,8 @@ import SpeechPortrait from './SpeechPortrait.vue'
  * the first); when the first line leaves at the top, or fades away, the name
  * and portrait step down to the next line showing. Each line, with its name
  * and portrait, fades away once it has been read (`useFadeOnceRead`, run by
- * the layout): it says when it is being read aloud, and in a turn that is
- * not, how long it takes to read. When the room is full the
+ * the layout): it says when it is being read aloud, and how long it takes to
+ * read, which a line never read aloud waits first. When the room is full the
  * oldest leaves at the top, under a soft fade. A line taller than the room
  * never loses its top: the thread scrolls so the newest line shows from its
  * speaker down, its end faded at the bottom (the story band has every word).
@@ -163,9 +163,7 @@ function hurry(): void {
               'lq-run-first': !continuesRun(line, speech.visible[index - 1]),
             },
           ]"
-          :data-read-ms="
-            line.narrated ? undefined : readingPauseMs(line.markup)
-          "
+          :data-read-ms="readingPauseMs(line.markup)"
           data-testid="speech-line"
         >
           <SpeechPortrait

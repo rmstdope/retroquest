@@ -6,10 +6,9 @@ import { useStageSpeechStore } from '@/stores/useStageSpeechStore'
 import { useSceneStore } from '@/stores/useSceneStore'
 import { FOLLOW_EVENT } from '@/composables/useStoryFollow'
 import { useReadAlong } from '@/composables/useReadAlong'
-import { columnPieces } from '@/lantern/columnPieces'
+import { columnPieces, type ColumnPiece } from '@/lantern/columnPieces'
 import { parseTurn } from '@/lantern/parseTurn'
 import { readingPauseMs, type SpeechLine } from '@/lantern/stageSpeech'
-import { useNarrationStore } from '@/stores/useNarrationStore'
 import { renderMarkup } from '@/utils/theme'
 import SpeechPortrait from './SpeechPortrait.vue'
 import StoryTurn from './StoryTurn.vue'
@@ -40,15 +39,6 @@ const props = defineProps<{
 const game = useGameStore()
 const speech = useStageSpeechStore()
 const scene = useSceneStore()
-const narration = useNarrationStore()
-/** Whether the turn is read aloud, kept once it has been (its lines then fade once read, not after a time to read). */
-const narrated = ref(narration.narrates(props.turn.id))
-watch(
-  () => narration.narrates(props.turn.id),
-  (now) => {
-    if (now) narrated.value = true
-  },
-)
 
 /**
  * The turn's pieces in the order they happened; of a talk that took Elior to
@@ -114,10 +104,38 @@ watch(
   { flush: 'post' },
 )
 
-/** Whether piece `index` starts a run, so carries the speaker's name and portrait. */
+/** The pieces whose line has faded away (`useFadeOnceRead`), by piece index. */
+const gone = ref<number[]>([])
+
+/** A line has faded away: note which, so the name and portrait step down to the next line of its run. */
+function lineGone(): void {
+  // The fade marks the line gone as the event reaches the layout, after this.
+  requestAnimationFrame(() => {
+    gone.value = Array.from(
+      root.value?.querySelectorAll<HTMLElement>(
+        '.lq-cl[data-fade="gone"][data-piece]',
+      ) ?? [],
+    ).map((row) => Number(row.dataset.piece))
+  })
+}
+
+/** A stable key for a piece, so a row is never reused for another line (its fade marks are its own). */
+function pieceKey(piece: ColumnPiece, index: number): string {
+  return piece.kind === 'line'
+    ? `line-${piece.line.unit}-${piece.line.firstWord}`
+    : `card-${piece.blocks.join(',') || index}`
+}
+
+/**
+ * Whether piece `index` starts a run, so carries the speaker's name and
+ * portrait: the piece before it still showing (a line faded away is passed
+ * over) is not a line of the same speaker.
+ */
 function heads(index: number): boolean {
   const piece = told.value[index]
-  const before = told.value[index - 1]
+  let at = index - 1
+  while (at >= 0 && gone.value.includes(at)) at--
+  const before = told.value[at]
   return (
     piece?.kind === 'line' &&
     !(before?.kind === 'line' && before.line.speaker === piece.line.speaker)
@@ -131,8 +149,9 @@ function heads(index: number): boolean {
     class="lq-column-turn"
     data-testid="column-turn"
     @click="speech.revealAll()"
+    @animationend="lineGone"
   >
-    <template v-for="(piece, index) in told" :key="index">
+    <template v-for="(piece, index) in told" :key="pieceKey(piece, index)">
       <StoryTurn
         v-if="piece.kind === 'card'"
         :turn="turn"
@@ -145,7 +164,7 @@ function heads(index: number): boolean {
         :class="[`lq-cl-${piece.line.side}`, { 'lq-cl-head': heads(index) }]"
         :data-unit="piece.line.unit >= 0 ? piece.line.unit : undefined"
         :data-piece="index"
-        :data-read-ms="narrated ? undefined : readingPauseMs(piece.line.markup)"
+        :data-read-ms="readingPauseMs(piece.line.markup)"
         data-testid="speech-line"
       >
         <SpeechPortrait

@@ -81,6 +81,23 @@ describe('useFadeOnceRead', () => {
     expect(el.dataset.fade).toBe('away')
   })
 
+  it('starts a line read aloud fading at once, however long its time to read', async () => {
+    const el = line({ reading: true, readMs: 4000 })
+    await settle()
+    el.classList.remove('lq-speaking')
+    await settle()
+    expect(el.dataset.fade).toBe('away')
+  })
+
+  it('gives a line never read aloud its time to read first, as after a skip', async () => {
+    vi.useFakeTimers()
+    const el = line({ readMs: 3000 })
+    await vi.advanceTimersByTimeAsync(2999)
+    expect(el.dataset.fade).toBe('live')
+    await vi.advanceTimersByTimeAsync(1)
+    expect(el.dataset.fade).toBe('away')
+  })
+
   it('is gone once its fade has run, and the lines left are counted', async () => {
     const a = line()
     const b = line({ reading: true })

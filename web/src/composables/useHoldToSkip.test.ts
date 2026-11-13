@@ -118,6 +118,26 @@ describe('useHoldToSkip', () => {
     expect(hold.ring.value).toBeNull()
   })
 
+  it('skips nothing when the telling ended while the press was held', async () => {
+    pointer('pointerdown', stage())
+    telling = false
+    vi.advanceTimersByTime(HOLD_TO_SKIP_MS)
+    await nextTick()
+    expect(skip).not.toHaveBeenCalled()
+    expect(hold.ring.value).toBeNull()
+  })
+
+  it('swallows no later click when the release of a hold makes none (a long touch)', async () => {
+    pointer('pointerdown', stage())
+    vi.advanceTimersByTime(HOLD_TO_SKIP_MS)
+    pointer('pointerup', stage())
+    vi.advanceTimersByTime(10)
+    // A click made later, by the keyboard on a button, is its own.
+    ;(document.querySelector('.verb') as HTMLButtonElement).click()
+    expect(skip).toHaveBeenCalledTimes(1)
+    expect(clicks).toBe(1)
+  })
+
   it('does not hold while nothing is being told', async () => {
     telling = false
     await press(stage(), HOLD_TO_SKIP_MS)

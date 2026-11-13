@@ -212,21 +212,28 @@ function wordsOf(block: TurnBlock): string {
 }
 
 /**
- * On a card of a turn that is not read aloud, how long bubble `unit` waits
- * before it fades away (`useFadeOnceRead`): the time to read it and the
- * card's bubbles before it, as they all show at once. A narrated turn's
- * bubble fades once it has been read aloud, so waits nothing here; nor does
- * anything outside a card. The chips come last.
+ * On a card, how long bubble `unit` waits before it fades away if it is never
+ * read aloud (`useFadeOnceRead`; a bubble read aloud fades once read). In a
+ * turn that is not narrated the bubbles all show at once, so it is the time
+ * to read it and the card's bubbles before it; in a narrated one (a skip
+ * showed it, or it has no recording yet) the time to read it alone. The
+ * chips (`unit` past the last) come last. Nothing outside a card.
  */
 function readMs(unit: number): number | undefined {
-  if (!props.card || fade.value) return undefined
+  if (!props.card) return undefined
   let ms = 0
   blocks.value.forEach((block, index) => {
-    if (index <= unit && inPiece(index) && !onSpeech(block))
+    const counts = fade.value ? index === unit : index <= unit
+    if (counts && inPiece(index) && !onSpeech(block))
       ms += readingPauseMs(wordsOf(block))
   })
-  if (props.turn.arrival && roomOnCard.value && unit >= arrivalUnit.value)
+  const room = fade.value
+    ? unit === arrivalUnit.value
+    : unit >= arrivalUnit.value
+  if (props.turn.arrival && roomOnCard.value && room)
     ms += readingPauseMs(props.turn.arrival.description)
+  if (unit === Number.POSITIVE_INFINITY && fade.value)
+    ms += readingPauseMs(chips.value.map(({ chip }) => chip.name).join(' '))
   return ms
 }
 

@@ -21,6 +21,8 @@ import { readingTimeMs } from '@/lantern/stageArrival'
 import { useSettingsStore } from '@/stores/useSettingsStore'
 import { parseTurn, type TurnBlock } from '@/lantern/parseTurn'
 import { setPictureProbe } from '@/lantern/roomPicture'
+import { narrationKey } from '@/lantern/narrationKey'
+import { UNSIGNED } from '@/lantern/narrationScript'
 import { Act1 } from '@/act1/Act1'
 import { Key } from '@/act1/items/Key'
 import { Game } from '@/engine'
@@ -642,8 +644,13 @@ describe('LanternLayout: change of scene', () => {
       expect(useStageSpeechStore().visible).toEqual([])
     })
 
-  /** Give every line a recording whose voice ends when the test says; the voices made so far. */
-  function recordEverything(): { onended: (() => void) | null }[] {
+  /**
+   * Give every line a recording whose voice ends when the test says (but those
+   * `silent` names, as if not recorded yet); the voices made so far.
+   */
+  function recordEverything(
+    silent: (key: string) => boolean = () => false,
+  ): { onended: (() => void) | null }[] {
     const narration = useNarrationStore()
     const voices: { onended: (() => void) | null }[] = []
     narration.setAudioFactory(() => {
@@ -660,7 +667,10 @@ describe('LanternLayout: change of scene', () => {
     })
     const clip = { file: 'x.mp3', speaker: 'narrator', duration: 1, words: [] }
     vi.spyOn(narration, 'manifestFor').mockReturnValue(
-      new Proxy({}, { get: () => clip }),
+      new Proxy(
+        {},
+        { get: (_, key) => (silent(String(key)) ? undefined : clip) },
+      ),
     )
     return voices
   }
@@ -724,6 +734,49 @@ describe('LanternLayout: change of scene', () => {
     expect(game.roomName).toBe("Elior's Cottage")
     expect(voices.length).toBe(spoken + 2)
     // The rest of the turn (its quest news rings) is not left to run after the test.
+    narration.skipAll()
+    await vi.runAllTimersAsync()
+  })
+
+  it('narrated, a waking not recorded yet stays its time to read in the dark, then the cottage rises', async () => {
+    const game = await dream()
+    const scene = useSceneStore()
+    const narration = useNarrationStore()
+    /** The keys a recording of the waking would have, as the narrator or as writing. */
+    const wakingKeys = (): string[] => {
+      const latest = game.turns.at(-1)
+      const block = latest
+        ? parseTurn(latest.text).find(
+            (b) => b.kind === 'text' && b.markup.startsWith('The dark lets go'),
+          )
+        : undefined
+      return block && 'markup' in block
+        ? ['narrator', UNSIGNED].map((who) => narrationKey(who, block.markup))
+        : []
+    }
+    const voices = recordEverything((key) => wakingKeys().includes(key))
+    const turn = await answerVoice(game)
+    expect(narration.narrates(turn.id)).toBe(true)
+    for (let i = 0; i < 10 && !narration.atSceneChange(turn.id); i++) {
+      voices.at(-1)?.onended?.()
+      await vi.advanceTimersByTimeAsync(400)
+    }
+    // Find the moment the dark tells the waking (to within 50 ms).
+    for (let i = 0; i < 200 && !scene.interlude; i++)
+      await vi.advanceTimersByTimeAsync(50)
+    // The waking is told in the dark with no voice, and stays its time to read.
+    expect(scene.interlude?.unit).toBe(turn.waking)
+    const spoken = voices.length
+    const markup = scene.interlude!.markup
+    await vi.advanceTimersByTimeAsync(readingTimeMs(markup) - 100)
+    expect(scene.interlude).not.toBeNull()
+    expect(voices.length).toBe(spoken)
+    await vi.advanceTimersByTimeAsync(100)
+    expect(scene.interlude).toBeNull()
+    await vi.advanceTimersByTimeAsync(INTERLUDE_FADE_MS + INTERLUDE_RISE_MS)
+    await w.vm.$nextTick()
+    expect(scene.turn).toBeNull()
+    expect(game.roomName).toBe("Elior's Cottage")
     narration.skipAll()
     await vi.runAllTimersAsync()
   })

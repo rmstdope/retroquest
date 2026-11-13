@@ -34,6 +34,18 @@ export const useRoomTitleStore = defineStore('roomTitle', () => {
   /** The room changed (or a game was started or loaded) and has not been greeted or let pass yet. */
   const waiting = ref(false)
   let timer: ReturnType<typeof setTimeout> | undefined
+  /**
+   * The turn whose arrival has told its room: up now, or already cleared (a
+   * skip shows and clears it in one go, so this is noted as it happens).
+   */
+  const roomTold = ref<number | null>(null)
+  watch(
+    () => arrival.tellsRoom,
+    (up) => {
+      if (up) roomTold.value = arrival.turnId
+    },
+    { flush: 'sync' },
+  )
 
   /** Put the title up for `room`, settling after `ROOM_TITLE_MS`. */
   function greet(room: string): void {
@@ -85,15 +97,15 @@ export const useRoomTitleStore = defineStore('roomTitle', () => {
    * Greet the room waiting for it, or let it pass: on the text page, on a
    * first visit, whose arrival is headed by the name, or on a turn that tells
    * news in the middle (a played turn: a load's turns tell none again). A
-   * first visit waits until its arrival is up (when the picture has risen),
-   * so the corner never names the room before it is told; a newer turn ends
-   * that wait.
+   * first visit waits until its arrival has come up (when the picture has
+   * risen; a skip shows and clears it at once), so the corner never names the
+   * room before it is told; a newer turn ends that wait.
    */
   function consider(): void {
     if (!waiting.value || !ready()) return
     const latest = game.turns.at(-1)
     const firstVisit = !!latest && arrivesOnPicture(latest)
-    if (staged.value && firstVisit && !arrival.tellsRoom) return
+    if (staged.value && firstVisit && roomTold.value !== latest?.id) return
     waiting.value = false
     const middleTaken =
       firstVisit || (!!latest && !!latest.narrate && newsOnPicture(latest))
@@ -105,6 +117,8 @@ export const useRoomTitleStore = defineStore('roomTitle', () => {
     () => [game.gameNumber, game.loadNumber, game.roomName] as const,
     () => {
       waiting.value = true
+      // A new game or a load counts its turns afresh.
+      if (!arrival.tellsRoom) roomTold.value = null
       consider()
     },
     { immediate: true },
@@ -117,7 +131,7 @@ export const useRoomTitleStore = defineStore('roomTitle', () => {
         scene.shown,
         game.roomPicture,
         staged.value,
-        arrival.tellsRoom,
+        roomTold.value,
         game.turns.length,
       ] as const,
     consider,

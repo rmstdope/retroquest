@@ -436,7 +436,7 @@ body {
 /*
  * A line on the picture fades away once it has been read (`useFadeOnceRead`):
  * clear for its first 2 s, then eased out, gone at 5 s; resting the pointer on
- * it holds the fade. Gone, it takes its room with it, and so does a narrator's
+ * it holds the fade (not on a touch screen). Gone, it takes its room with it, and so does a narrator's
  * card (or a turn of the one column) whose lines have all gone. Under Reduce
  * motion it stays clear for the 5 s, then goes at once. The selectors repeat
  * `[data-fade]` to outweigh a line's own coming-in animation.
@@ -444,8 +444,11 @@ body {
 .lq-root [data-fade='away'][data-fade] {
   animation: lq-fade-away 5s linear forwards;
 }
-.lq-root [data-fade='away'][data-fade]:hover {
-  animation-play-state: paused;
+/* Only a pointer that can rest (not a finger, whose last tap would stick). */
+@media (hover: hover) {
+  .lq-root [data-fade='away'][data-fade]:hover {
+    animation-play-state: paused;
+  }
 }
 @media (prefers-reduced-motion: reduce) {
   :root:not([data-reduce-motion='off']) .lq-root [data-fade='away'][data-fade] {
