@@ -683,8 +683,10 @@ describe('LanternLayout', () => {
       body: 'You are Elior.',
     }
     game.showModal = true
-    game.titleText = 'Welcome\n[bold yellow]\n###\n[/bold yellow]'
     game.showTitle = true
+    await flushPromises()
+    // The opening is still playing: a press finishes it, then focus is on Start.
+    await wrapper.get('.lq-title-page').trigger('pointerdown')
     await flushPromises()
     expect(document.activeElement?.textContent?.trim()).toBe('Start')
 
@@ -1743,38 +1745,18 @@ describe('LanternLayout', () => {
         expect(text).toContain('Market by Conquest')
       })
 
-      /** Serves `takes`, plays Market across Act I and shows the title page. */
-      async function titleCreditsWith(takes: unknown): Promise<string> {
-        stubMusic(takes)
+      it('shows the one Content Studio credit on the title page, whatever music plays', async () => {
+        stubMusic({ market: { file: 'market.mp3', duration: 60 } })
         const w = mountLayout()
         const game = useGameStore()
         game.musicFile = MARKET
         game.musicInfo = 'Market by Conquest\nSource: https://freetouse.com'
-        game.musicActName = 'Act1'
-        game.musicRoomKey = 'VillageSquare'
-        game.titleText =
-          'Welcome\n[bold yellow]\n###\n[/bold yellow]\n' +
-          '[bold]Music track:[/bold] Market by Conquest\n' +
-          'Source: https://freetouse.com'
         game.showTitle = true
         await flushPromises()
-        return w.get('.lq-credits').text()
-      }
-
-      it('credits a take chosen for the act loop on the title page', async () => {
-        const text = await titleCreditsWith({
-          market: { file: 'market.mp3', duration: 60 },
-        })
-        expect(text).toContain('Original music for RetroQuest')
-        expect(text).toContain(
-          'Images, narration and music made with Content Studio',
+        expect(w.get('.lq-credit').text()).toBe(
+          'Original music, images and narration made with Content Studio',
         )
-        expect(text).not.toContain('Conquest')
-      })
-
-      it("names the act's file on the title page when no take is chosen", async () => {
-        const text = await titleCreditsWith({})
-        expect(text).toContain('Market by Conquest')
+        expect(w.find('.lq-credits').exists()).toBe(false)
       })
     })
 

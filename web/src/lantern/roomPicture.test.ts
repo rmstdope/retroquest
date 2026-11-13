@@ -7,6 +7,7 @@ import {
   roomPatchUrl,
   roomPictureUrl,
   setPictureProbe,
+  titlePictureUrl,
 } from './roomPicture'
 import { roomTrackId } from './musicLists'
 import { ELIOR_PORTRAIT_ID, characterImages, portraitId } from './imageLists'
@@ -136,4 +137,12 @@ describe('room picture patches', () => {
       expect(madePatches(junk, 'act1-village-square')).toEqual([])
     },
   )
+})
+
+describe('titlePictureUrl', () => {
+  it('is the generated picture named by the title image id', () => {
+    expect(titlePictureUrl()).toBe(
+      `${import.meta.env.BASE_URL}images/generated/title-screen.png`,
+    )
+  })
 })

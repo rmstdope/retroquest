@@ -1180,57 +1180,40 @@ test.describe('Lantern UI (the default)', () => {
     expect(width).toBe(568)
   })
 
-  test('lines the title art up at its left edge', async ({ page }) => {
-    await page.goto('/')
-    await injectMockState(page)
-    await page.evaluate(() => {
-      /* eslint-disable @typescript-eslint/no-explicit-any */
-      const app = (document.querySelector('#app') as any).__vue_app__
-      const store = app.config.globalProperties.$pinia.state.value.game
-      store.titleText = '[bold yellow]\n########\n##   ##.\n##\n[/bold yellow]'
-      store.showTitle = true
-      /* eslint-enable @typescript-eslint/no-explicit-any */
-    })
-
-    const art = page.locator('.lq-art')
-    await expect(art).toBeVisible()
-    const lineStarts = await art.evaluate((pre) => {
-      const text = pre.firstChild as Text
-      const range = document.createRange()
-      const starts: number[] = []
-      let offset = 0
-      for (const line of text.data.split('\n')) {
-        range.setStart(text, offset)
-        range.setEnd(text, offset + 1)
-        starts.push(Math.round(range.getBoundingClientRect().left))
-        offset += line.length + 1
-      }
-      return starts
-    })
-    expect(new Set(lineStarts).size).toBe(1)
-  })
-
-  test('shows a wordmark instead of the tiny title art on narrow phones', async ({
+  test('names the game in type, in place of the old block-letter art', async ({
     page,
   }) => {
     await page.goto('/')
-    await injectMockState(page)
-    await page.evaluate(() => {
-      /* eslint-disable @typescript-eslint/no-explicit-any */
-      const app = (document.querySelector('#app') as any).__vue_app__
-      const store = app.config.globalProperties.$pinia.state.value.game
-      store.titleText = '[bold yellow]\n########\n##   ##\n[/bold yellow]'
-      store.showTitle = true
-      /* eslint-enable @typescript-eslint/no-explicit-any */
-    })
+    await waitForGame(page)
+    await expect(page.locator('.lq-title-page')).toBeVisible()
+    await expect(page.locator('.lq-art')).toHaveCount(0)
+    await expect(page.getByText('Welcome to')).toBeVisible()
 
-    await page.setViewportSize({ width: 320, height: 568 })
-    await expect(page.locator('.lq-wordmark')).toBeVisible()
-    await expect(page.locator('.lq-art')).toBeHidden()
+    for (const size of [
+      { width: 390, height: 780 },
+      { width: 780, height: 390 },
+      { width: 1280, height: 800 },
+    ]) {
+      await page.setViewportSize(size)
+      await expect(page.locator('.lq-wordmark')).toBeVisible()
+      await expect(page.locator('.lq-credit')).toBeVisible()
+    }
+  })
 
-    await page.setViewportSize({ width: 1280, height: 800 })
-    await expect(page.locator('.lq-art')).toBeVisible()
-    await expect(page.locator('.lq-wordmark')).toBeHidden()
+  test('opens the title screen in steps, and a key press finishes it without pressing Start', async ({
+    page,
+  }) => {
+    await page.emulateMedia({ reducedMotion: 'no-preference' })
+    await page.goto('/')
+    await waitForGame(page)
+    const start = page.getByRole('button', { name: 'Start', exact: true })
+    await expect(page.locator('.lq-title-page')).toHaveClass(/is-playing/)
+    await expect(page.locator('.lq-title-buttons')).toHaveAttribute('inert')
+
+    await page.keyboard.press('Enter')
+    await expect(page.locator('.lq-title-page')).toHaveClass(/is-open/)
+    await expect(start).toBeFocused()
+    await expect(page.locator('.lq-title-page')).toBeVisible()
   })
 
   test('leaves the full-screen button out of the narrowest header', async ({
