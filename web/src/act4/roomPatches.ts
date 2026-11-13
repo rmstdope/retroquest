@@ -1,4 +1,4 @@
-import type { ImagePatch } from '@/engine'
+import type { ImagePatch, PatchContext } from '@/engine'
 import {
   THRONE_CHAMBER_HEALED,
   THRONE_CHAMBER_JUSTICE,
@@ -15,7 +15,6 @@ import {
   FLAG_ACT4_SHATTERED_WARD_GUARDIANS_COMPLETED,
   FLAG_ACT4_SORCERESS_OF_LIES_COMPLETED,
 } from './Act4StoryFlags'
-import type { PatchContext } from '@/engine'
 
 /** Whether the room `roomKey` now carries one of the `texts` as its description (the text it computes from the story). */
 function roomSays(
