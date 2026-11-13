@@ -35,7 +35,11 @@ import {
   type ScriptLine,
   type WriterRule,
 } from '../web/src/lantern/narrationScript'
-import { actLoops, roomLoops, type MusicTrack } from '../web/src/lantern/musicLists'
+import {
+  actLoops,
+  roomLoops,
+  type MusicTrack,
+} from '../web/src/lantern/musicLists'
 import { allImages, type GameImage } from '../web/src/lantern/imageLists'
 import { actScenes, type SceneDeclaration } from '../web/src/lantern/sceneLists'
 
@@ -68,6 +72,9 @@ export const ACT_SOURCES: Record<string, ActSource> = {
 /** The act numbers the extractor knows, as the strings `extract-act.ts` takes. */
 export const ACT_NUMBERS: string[] = Object.keys(ACT_SOURCES)
 
+/** The acts that take seconds to play; their script checks run in a test file of their own. */
+export const LONG_ACT_NUMBERS: string[] = ['2', '3']
+
 /** Returns the source of act `number`, or throws when there is none. */
 function sourceOf(number: string): ActSource {
   const source = ACT_SOURCES[number]
@@ -84,8 +91,9 @@ function readJson<T>(number: string, file: string, fallback?: T): T {
 
 /**
  * Lines the engine picks at random (the phantoms' whispers) must all be in the
- * script, and the script must not depend on a roll: the act is played once for
- * each of these fixed rolls and the lines are merged by id.
+ * script, and the script must not depend on a roll: an act that draws a random
+ * number is played once for each of these fixed rolls and the lines are merged
+ * by id. An act that never draws one is played once.
  */
 const ROLLS = [0, 0.25, 0.5, 0.75]
 
@@ -97,9 +105,13 @@ export function extractActScript(number: string): ScriptLine[] {
   const branches = readJson<ScriptBranch[]>(number, 'branches.json', [])
   const lines = new Map<string, ScriptLine>()
   const random = Math.random
+  let drawn = false
   try {
     for (const roll of ROLLS) {
-      Math.random = (): number => roll
+      Math.random = (): number => {
+        drawn = true
+        return roll
+      }
       for (const line of actScript(
         () => new Game([source.make()]),
         source.commands,
@@ -108,6 +120,8 @@ export function extractActScript(number: string): ScriptLine[] {
         branches,
       ))
         if (!lines.has(line.id)) lines.set(line.id, line)
+      // Nothing drew a number, so no other roll can change the script.
+      if (!drawn) break
     }
   } finally {
     Math.random = random
