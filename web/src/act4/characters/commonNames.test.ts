@@ -27,7 +27,7 @@ import { Whispers } from './Whispers'
  * of one, never "Herald" as if it were a proper name, and a group of them
  * takes plural verbs.
  */
-describe.each([
+const COMMON_NOUNS = [
   ['Captain of the Guard', false, (): Character => new CaptainOfTheGuard()],
   ['ghostly warriors', true, (): Character => new GhostlyWarriors()],
   ['Knight of Despair', false, (): Character => new KnightOfDespair()],
@@ -37,21 +37,32 @@ describe.each([
   ['trapped servants', true, (): Character => new TrappedServants()],
   ['True Self', false, (): Character => new TrueSelf()],
   ['whispers', true, (): Character => new Whispers()],
-] as const)('the %s, a common-noun character', (name, plural, make) => {
-  const marked = `[character_name]${name}[/character_name]`
+] as const
 
-  it('reads "the" mid-sentence and "The" at the start', () => {
-    expect(make().nameInSentence()).toBe(`the ${marked}`)
-    expect(make().nameInSentence({ atStart: true })).toBe(`The ${marked}`)
-  })
-
-  it(plural ? 'takes plural verbs' : 'takes singular verbs', () => {
-    expect(make().isPlural()).toBe(plural)
+describe('the common-noun characters', () => {
+  it('read "the" mid-sentence, "The" at the start, with the right verbs', () => {
+    const failures: string[] = []
+    for (const [name, plural, make] of COMMON_NOUNS) {
+      const marked = `[character_name]${name}[/character_name]`
+      if (make().nameInSentence() !== `the ${marked}`) {
+        failures.push(`${name}: mid-sentence reads ${make().nameInSentence()}`)
+      }
+      const atStart = make().nameInSentence({ atStart: true })
+      if (atStart !== `The ${marked}`) {
+        failures.push(`${name}: at the start reads ${atStart}`)
+      }
+      if (make().isPlural() !== plural) {
+        failures.push(
+          `${name}: isPlural is ${make().isPlural()}, should be ${plural}`,
+        )
+      }
+    }
+    expect(failures).toEqual([])
   })
 })
 
 /** The characters with a name of their own keep it capitalised, alone. */
-describe.each([
+const PROPER_NAMES = [
   ['Grandmother', (): Character => new Grandmother()],
   ['King Alden', (): Character => new KingAlden()],
   ['Malakar', (): Character => new Malakar()],
@@ -61,11 +72,18 @@ describe.each([
   ['Sir Cedric', (): Character => new SirCedricInTheHall()],
   ['Mira', (): Character => new MiraAtTheGate()],
   ['Sir Cedric', (): Character => new SirCedricAtTheGate()],
-] as const)('%s, a proper name', (name, make) => {
-  it('reads without an article', () => {
-    expect(make().nameInSentence()).toBe(
-      `[character_name]${name}[/character_name]`,
-    )
+] as const
+
+describe('the characters with a name of their own', () => {
+  it('read without an article', () => {
+    const failures: string[] = []
+    for (const [name, make] of PROPER_NAMES) {
+      const expected = `[character_name]${name}[/character_name]`
+      if (make().nameInSentence() !== expected) {
+        failures.push(`${name}: reads ${make().nameInSentence()}`)
+      }
+    }
+    expect(failures).toEqual([])
   })
 })
 

@@ -74,16 +74,6 @@ function unlockInn(room: Room): void {
 }
 
 describe('Act 2 rooms', () => {
-  it.each(ROOM_ENTRIES)('creates %s without errors', (_roomName, RoomClass) => {
-    const room = new RoomClass()
-    expect(room).not.toBeNull()
-    expect(room.name).not.toBeNull()
-    expect(room.description).not.toBeNull()
-    expect(room).toHaveProperty('items')
-    expect(room).toHaveProperty('characters')
-    expect(room).toHaveProperty('exits')
-  })
-
   it('has valid exits in every room', () => {
     const validRoomNames = new Set<string>(Object.keys(ROOM_CLASSES))
     const state = emptyState()

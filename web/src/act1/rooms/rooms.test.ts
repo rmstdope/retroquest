@@ -85,11 +85,12 @@ describe("Elior's Cottage exits", () => {
 })
 
 describe('Act 1 room graph', () => {
-  it.each(Object.keys(ROOM_CLASSES) as RoomKey[])(
-    'reaches every room from %s',
-    (start) => {
-      const state = stateWithSpells(['revive'])
-      const rooms = allRooms()
+  it('reaches every room from every room', () => {
+    const state = stateWithSpells(['revive'])
+    const rooms = allRooms()
+    const keys = Object.keys(rooms)
+    const failures: string[] = []
+    for (const start of keys) {
       const visited = new Set<string>()
       const queue: string[] = [start]
       while (queue.length > 0) {
@@ -100,27 +101,38 @@ describe('Act 1 room graph', () => {
           if (!visited.has(dest) && dest in rooms) queue.push(dest)
         }
       }
-      expect([...visited].sort()).toEqual(Object.keys(rooms).sort())
-    },
-  )
+      const missing = keys.filter((key) => !visited.has(key))
+      if (missing.length > 0) {
+        failures.push(`${start} cannot reach ${missing.join(', ')}`)
+      }
+    }
+    expect(failures).toEqual([])
+  })
 
-  it.each(Object.keys(ROOM_CLASSES) as RoomKey[])(
-    '%s exits lead back',
-    (key) => {
-      const state = stateWithSpells(['revive'])
-      const rooms = allRooms()
-      for (const [direction, destKey] of Object.entries(
-        rooms[key].getExits(state),
-      )) {
+  it('has every exit lead back', () => {
+    const state = stateWithSpells(['revive'])
+    const rooms = allRooms()
+    const failures: string[] = []
+    for (const [key, room] of Object.entries(rooms)) {
+      for (const [direction, destKey] of Object.entries(room.getExits(state))) {
         if (!(direction in OPPOSITE)) continue
+        if (!(destKey in rooms)) {
+          failures.push(
+            `${key} -> ${direction} -> ${destKey} is not an act 1 room`,
+          )
+          continue
+        }
         const back =
           rooms[destKey as RoomKey].getExits(state)[OPPOSITE[direction]]
-        expect(back, `${key} -> ${direction} -> ${destKey} leads back`).toBe(
-          key,
-        )
+        if (back !== key) {
+          failures.push(
+            `${key} -> ${direction} -> ${destKey} does not lead back`,
+          )
+        }
       }
-    },
-  )
+    }
+    expect(failures).toEqual([])
+  })
 })
 
 describe('Grandmother and the photograph', () => {

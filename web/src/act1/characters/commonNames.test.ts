@@ -22,41 +22,48 @@ function gameWith(character: Character): Game {
  * replies call them "the merchant" mid-sentence and "The merchant" at the
  * start of one, never "Merchant" as if it were a proper name.
  */
-describe.each([
+const COMMON_NOUNS = [
   ['merchant', (): Character => new Merchant()],
   ['deer', (): Character => new Deer()],
   ['fisherman', (): Character => new Fisherman()],
   ['priest', (): Character => new Priest()],
-])('the %s, a common-noun character', (name, make) => {
-  const marked = `[character_name]${name}[/character_name]`
+] as const
 
-  it('is "The" one at the start of its answer to an unknown word', () => {
-    const game = gameWith(make())
-
-    expect(game.commandParser.parse(`say hello to ${name}`)).toContain(
-      `The ${marked} `,
-    )
-  })
-
-  it('is "The" one at the start of a sentence when it sells nothing', () => {
-    const game = gameWith(make())
-
-    expect(game.commandParser.parse(`buy rope from ${name}`)).toBe(
-      `The ${marked} has nothing to sell you.`,
-    )
+describe('the common-noun characters', () => {
+  it('are "The" one at the start of a sentence', () => {
+    const failures: string[] = []
+    for (const [name, make] of COMMON_NOUNS) {
+      const marked = `[character_name]${name}[/character_name]`
+      const unknown = gameWith(make()).commandParser.parse(
+        `say hello to ${name}`,
+      )
+      if (!unknown.includes(`The ${marked} `)) {
+        failures.push(`${name}: answer to an unknown word reads ${unknown}`)
+      }
+      const sells = gameWith(make()).commandParser.parse(
+        `buy rope from ${name}`,
+      )
+      if (sells !== `The ${marked} has nothing to sell you.`) {
+        failures.push(`${name}: selling nothing reads ${sells}`)
+      }
+    }
+    expect(failures).toEqual([])
   })
 })
 
 describe('Borin and Hemlock, named from the start', () => {
-  it.each([
-    ['borin', 'Borin', (): Character => new Blacksmith()],
-    ['hemlock', 'Hemlock', (): Character => new Shopkeeper()],
-  ])('%s is a proper name, with no article', (word, name, make) => {
-    const game = gameWith(make())
-
-    expect(game.commandParser.parse(`say hello to ${word}`)).toContain(
-      `[character_name]${name}[/character_name] `,
-    )
+  it('are proper names, with no article', () => {
+    const failures: string[] = []
+    for (const [word, name, make] of [
+      ['borin', 'Borin', (): Character => new Blacksmith()],
+      ['hemlock', 'Hemlock', (): Character => new Shopkeeper()],
+    ] as const) {
+      const reply = gameWith(make()).commandParser.parse(`say hello to ${word}`)
+      if (!reply.includes(`[character_name]${name}[/character_name] `)) {
+        failures.push(`${name}: reply reads ${reply}`)
+      }
+    }
+    expect(failures).toEqual([])
   })
 
   it('Borin sells nothing, and says so by name', () => {
