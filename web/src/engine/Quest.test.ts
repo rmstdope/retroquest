@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { Quest } from './Quest'
+import { Quest, type QuestStage } from './Quest'
 import { GameState } from './GameState'
 import { Room } from './Room'
 
@@ -163,5 +163,94 @@ describe('Quest', () => {
       })
       expect(q.description).toContain('[pending]Map[/pending]')
     })
+  })
+})
+
+/** A quest with three stages, the first two in one chapter and one later. */
+class StagedQuest extends Quest {
+  constructor() {
+    super({ name: 'Staged', description: 'Open.' })
+  }
+
+  protected override opening(): string {
+    return 'Open.'
+  }
+
+  protected override stages(): QuestStage[] {
+    const flag = (key: string) => (gs: GameState) => gs.getStoryFlag(key)
+    return [
+      { key: 'a', reached: flag('a'), log: 'A.', hint: 'Do A.' },
+      { key: 'b', reached: flag('b'), log: 'B.', hint: 'Do B.' },
+      { key: 'c', reached: flag('c'), log: 'C.', chapter: 1 },
+    ]
+  }
+
+  slot(gs: GameState): void {
+    this.slotUnnotedStages(gs)
+  }
+}
+
+describe('Quest stages', () => {
+  it('logs the opening, then each stage in the order it was reached', () => {
+    const gs = gameState()
+    const q = new StagedQuest()
+    expect(q.checkUpdate(gs)).toBe(false)
+    expect(q.details()).toEqual({
+      kind: 'journal',
+      latest: 'Open.',
+      earlier: [],
+    })
+    gs.setStoryFlag('b', true)
+    expect(q.checkUpdate(gs)).toBe(true)
+    gs.setStoryFlag('a', true)
+    expect(q.checkUpdate(gs)).toBe(true)
+    expect(q.details()).toEqual({
+      kind: 'journal',
+      latest: 'A.',
+      earlier: ['Open.', 'B.'],
+    })
+  })
+
+  it('reports a stage once and keeps a later chapter after an earlier one', () => {
+    const gs = gameState()
+    const q = new StagedQuest()
+    gs.setStoryFlag('c', true)
+    expect(q.checkUpdate(gs)).toBe(true)
+    expect(q.checkUpdate(gs)).toBe(false)
+    gs.setStoryFlag('a', true)
+    expect(q.checkUpdate(gs)).toBe(false)
+    const details = q.details()
+    expect(details.kind === 'journal' && details.latest).toBe('C.')
+  })
+
+  it('hints at the first stage not yet reached that has a hint', () => {
+    const gs = gameState()
+    const q = new StagedQuest()
+    expect(q.hint(gs)).toBe('Do A.')
+    gs.setStoryFlag('a', true)
+    expect(q.hint(gs)).toBe('Do B.')
+    gs.setStoryFlag('b', true)
+    q.checkUpdate(gs)
+    expect(q.hint(gs)).toBe('B.')
+  })
+
+  it('slots a flag raised before it was noted in ahead of later noted stages', () => {
+    const gs = gameState()
+    const q = new StagedQuest()
+    gs.setStoryFlag('b', true)
+    q.checkUpdate(gs)
+    gs.setStoryFlag('a', true)
+    q.slot(gs)
+    q.checkUpdate(gs)
+    expect(Object.keys(q.flagState)).toEqual(['a', 'b'])
+  })
+
+  it('copes with a save made before the quest had stages', () => {
+    const gs = gameState()
+    const q = Object.create(StagedQuest.prototype) as StagedQuest
+    Object.assign(q, { name: 'Staged', description: 'Open.' })
+    expect(q.hint(gs)).toBe('Do A.')
+    gs.setStoryFlag('a', true)
+    expect(q.checkUpdate(gs)).toBe(true)
   })
 })

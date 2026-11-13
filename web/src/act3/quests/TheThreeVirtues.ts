@@ -1,4 +1,4 @@
-import { Quest, type GameState } from '@/engine'
+import { Quest, flagStage, type GameState, type QuestStage } from '@/engine'
 import {
   FLAG_ACT3_CRYSTAL_OF_LIGHT_ACQUIRED,
   FLAG_ACT3_MAIN_COMPLETED,
@@ -33,8 +33,6 @@ const SCROLLS_UNREAD =
 
 /** Quest to prove Courage, Wisdom, and Selflessness to unlock the final ritual. */
 export class TheThreeVirtuesQuest extends Quest {
-  private flagState: Record<string, boolean> = {}
-
   constructor() {
     super({
       name: 'The Three Virtues',
@@ -69,49 +67,36 @@ export class TheThreeVirtuesQuest extends Quest {
     return gameState.getStoryFlag(FLAG_ACT3_MAIN_STARTED)
   }
 
-  /** Update quest description based on acquired relics. */
-  override checkUpdate(gameState: GameState): boolean {
-    let updated = false
-    const earlier: string[] = []
-    let newDesc = OPENING_ENTRY
-    if (gameState.getStoryFlag(FLAG_ACT3_CRYSTAL_OF_LIGHT_ACQUIRED)) {
-      if (!this.flagState[FLAG_ACT3_CRYSTAL_OF_LIGHT_ACQUIRED]) {
-        this.flagState[FLAG_ACT3_CRYSTAL_OF_LIGHT_ACQUIRED] = true
-        updated = true
-      }
-      earlier.push(newDesc)
-      newDesc =
-        '\n\nYou walked into the black water and named what you did not ' +
-        'abandon: yourself. The guardian gave you the crystal of light. ' +
-        'Sir Cedric has said little since it asked him the same question. '
-    }
+  /** The opening entry, before any relic is acquired. */
+  protected override opening(): string {
+    return OPENING_ENTRY
+  }
 
-    // Add block for Phoenix Feather acquisition
-    if (gameState.getStoryFlag(FLAG_ACT3_PHOENIX_FEATHER_ACQUIRED)) {
-      if (!this.flagState[FLAG_ACT3_PHOENIX_FEATHER_ACQUIRED]) {
-        this.flagState[FLAG_ACT3_PHOENIX_FEATHER_ACQUIRED] = true
-        updated = true
-      }
-      earlier.push(newDesc)
-      newDesc =
-        '\n\nYou answered the phoenix: wisdom is patience, even when the ' +
-        'world burns. It gave you a feather, and told you of a Warden who ' +
-        'had none. '
-    }
-
-    // Add block for Dragon's Scale acquisition
-    if (gameState.getStoryFlag(FLAG_ACT3_DRAGONS_SCALE_ACQUIRED)) {
-      if (!this.flagState[FLAG_ACT3_DRAGONS_SCALE_ACQUIRED]) {
-        this.flagState[FLAG_ACT3_DRAGONS_SCALE_ACQUIRED] = true
-        updated = true
-      }
-      earlier.push(newDesc)
-      newDesc =
-        "\n\nYou have the dragon's scale, heavy in your pack. With all three " +
-        "relics in hand, Mira's Warding Rite is all that is left. "
-    }
-    this.setJournal(earlier, newDesc)
-    return updated
+  /** One entry for each relic, always in the order crystal, feather, scale. */
+  protected override stages(): QuestStage[] {
+    const lead = '\n\n'
+    return [
+      flagStage(
+        FLAG_ACT3_CRYSTAL_OF_LIGHT_ACQUIRED,
+        'You walked into the black water and named what you did not ' +
+          'abandon: yourself. The guardian gave you the crystal of light. ' +
+          'Sir Cedric has said little since it asked him the same question. ',
+        { lead, chapter: 0 },
+      ),
+      flagStage(
+        FLAG_ACT3_PHOENIX_FEATHER_ACQUIRED,
+        'You answered the phoenix: wisdom is patience, even when the ' +
+          'world burns. It gave you a feather, and told you of a Warden who ' +
+          'had none. ',
+        { lead, chapter: 1 },
+      ),
+      flagStage(
+        FLAG_ACT3_DRAGONS_SCALE_ACQUIRED,
+        "You have the dragon's scale, heavy in your pack. With all three " +
+          "relics in hand, Mira's Warding Rite is all that is left. ",
+        { lead, chapter: 2 },
+      ),
+    ]
   }
 
   /** Check if quest is completed when Act 3 main completion flag is set. */

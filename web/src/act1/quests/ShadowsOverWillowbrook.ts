@@ -1,4 +1,10 @@
-import { characterName, Quest, type GameState } from '@/engine'
+import {
+  characterName,
+  flagStage,
+  Quest,
+  type GameState,
+  type QuestStage,
+} from '@/engine'
 import {
   FLAG_CONNECT_WITH_NATURE,
   FLAG_DEER_CAN_BE_OBSERVED,
@@ -20,16 +26,33 @@ import { RareFlower } from '../items/RareFlower'
 import { OldMill } from '../rooms/OldMill'
 import { RoadToGreendale } from '../rooms/RoadToGreendale'
 
+/** The dream that opens the journal. */
+const DREAM =
+  'You dreamed of a storm, a tune, and a figure in the dark that ' +
+  'whispered your name. You woke with three words written down: ' +
+  '…let them rest…'
+
+/** Mira's request for the flower, which her words carry while she lacks it. */
+const FLOWER_REQUEST =
+  ' She wants a rare flower from the Hidden Glade, one that opens only ' +
+  'for someone the land trusts.'
+
+/** True when the flower opened before Mira spoke of the sickness. */
+function flowerFirst(reached: readonly string[]): boolean {
+  return (
+    reached.includes(FLAG_MAGIC_FULLY_UNLOCKED) &&
+    reached.indexOf(FLAG_MAGIC_FULLY_UNLOCKED) <
+      reached.indexOf(FLAG_CONNECT_WITH_NATURE)
+  )
+}
+
 /**
  * Main Act I quest tracking the unfolding village corruption mystery.
  *
- * Rebuilds `description` on update, dimming prior segments and highlighting
- * the newest narrative beat. Uses an internal `flagState` record to avoid
- * repeating the same revelation more than once.
+ * Declares its beats as stages; the engine rebuilds `description` on update,
+ * dimming prior segments and highlighting the newest narrative beat.
  */
 export class ShadowsOverWillowbrookQuest extends Quest {
-  private flagState: Record<string, boolean> = {}
-
   constructor() {
     super({
       name: 'Shadows over Willowbrook',
@@ -55,125 +78,97 @@ export class ShadowsOverWillowbrookQuest extends Quest {
     return gameState.getStoryFlag(FLAG_WOKE_FROM_DREAM)
   }
 
-  /** Record a flag the first time it is seen; true when it was new. */
-  private noteFlag(flag: string): boolean {
-    if (this.flagState[flag]) return false
-    this.flagState[flag] = true
-    return true
+  /** The dream that opens the journal. */
+  protected override opening(): string {
+    return DREAM
   }
 
   /**
-   * Rebuild the journal: the dream first, then every beat whose flag is
-   * set, in the order the flags were first noticed (`flagState` keeps its
-   * insertion order, in saves too), so the newest beat is usually the latest.
-   * The village's signs and Mira's words on them always come before the
-   * flower, even when noticed after it, so the log never steps backwards;
-   * her words carry her request for the flower only when she did not have
-   * it yet.
-   * True only when the newest entry changed: a beat folded in among the
-   * earlier ones is not news, or the story would repeat the newest entry.
+   * The journal's beats, in story order. The dream comes first, then every
+   * beat whose flag is set, in the order the flags were first noticed, so the
+   * newest beat is usually the latest. The village's signs and Mira's words
+   * on them always come before the flower (chapter 0), even when noticed
+   * after it, so the log never steps backwards; her words carry her request
+   * for the flower only when she did not have it yet.
    */
-  override checkUpdate(gameState: GameState): boolean {
-    const dream =
-      'You dreamed of a storm, a tune, and a figure in the dark that ' +
-      'whispered your name. You woke with three words written down: ' +
-      '…let them rest…'
-    const beats: [string, string][] = [
-      [
+  protected override stages(): QuestStage[] {
+    const lead = '\n'
+    return [
+      flagStage(
         FLAG_INVESTIGATED_WITHERED_CROPS,
         'The [room_name]Vegetable Field[/room_name] has withered under a grey ' +
           'sky: brittle leaves, cracked earth, and only a few stubborn carrots ' +
           'left.',
-      ],
-      [
+        { lead, chapter: 0 },
+      ),
+      flagStage(
         FLAG_VILLAGER_TALKED_TO,
         `In the square, ${characterName('Tilda')} has more rumours than bread, ` +
           'and the people around her keep their voices down.',
-      ],
-      [
+        { lead, chapter: 0 },
+      ),
+      flagStage(
         FLAG_WELL_EXAMINED,
         'The village well smells sour, and far down in the dark water ' +
           'something glints.',
-      ],
-      [
+        { lead, chapter: 0 },
+      ),
+      flagStage(
         FLAG_CONNECT_WITH_NATURE,
-        `${characterName('Mira')} says the sickness in the fields and the ` +
-          'sickness of the king feel like one wound.',
-      ],
-      [
+        (reached) =>
+          `${characterName('Mira')} says the sickness in the fields and the ` +
+          'sickness of the king feel like one wound.' +
+          (flowerFirst(reached) ? '' : FLOWER_REQUEST),
+        { lead, chapter: 0 },
+      ),
+      flagStage(
         FLAG_MAGIC_FULLY_UNLOCKED,
         'The flower opened for you. ' +
           `${characterName('Mira')} showed you how to mend, how to open and ` +
           'how to make a light, and promised you the ' +
           '[item_name]ancient amulet[/item_name] once you are ready for the road.',
-      ],
-      [
+        { lead, chapter: 1 },
+      ),
+      flagStage(
         FLAG_FOUND_RUNE_TOKEN,
         'Fishing the ring from the purified well, you ' +
           'drew up something else: a [item_name]rune token[/item_name] of black ' +
           'iron, scored with a twisted rune and colder than the water. ' +
           'The well did not sour by itself.',
-      ],
-      [
+        { lead, chapter: 1 },
+      ),
+      flagStage(
         FLAG_STRANGER_SEEN_AT_MILL,
         'At the [room_name]Old Mill[/room_name] a man in a grey cloak stood at ' +
           'the far door with his back to you. He left ' +
           'toward the river without turning.',
-      ],
-      [
+        { lead, chapter: 1 },
+      ),
+      flagStage(
         FLAG_VEGETABLE_FIELD_WATERED,
         'With clean water from the well, you brought ' +
           'the [room_name]Vegetable Field[/room_name] back to life. ' +
           'Where the blight is lifted, the land remembers how to grow.',
-      ],
-      [
+        { lead, chapter: 1 },
+      ),
+      flagStage(
         FLAG_MIRA_NAMED_FOULING_SIGIL,
         `${characterName('Mira')} named the token a fouling sigil: someone ` +
           'poisoned the well on purpose. Whoever carried it, perhaps the cloaked ' +
           'stranger the villagers whisper about, was searching Willowbrook for ' +
           'something, or for someone.',
-      ],
-      [
+        { lead, chapter: 1 },
+      ),
+      flagStage(
         FLAG_MERCHANT_NEWS_HEARD,
         `On the road to Greendale, the ${characterName('merchant')} brought ` +
           'grim news from the capital: King Alden lies ill, and no physician ' +
           'can name his sickness. The roads have turned dangerous, and crops ' +
           'are failing in every valley between. Whatever troubles Willowbrook ' +
           'may be part of something larger.',
-      ],
-    ]
-    let updated = false
-    const shown = beats.filter(([flag]) => gameState.getStoryFlag(flag))
-    for (const [flag] of shown) if (this.noteFlag(flag)) updated = true
-    const noticed = Object.keys(this.flagState)
-    const flowerAt = beats.findIndex(
-      ([flag]) => flag === FLAG_MAGIC_FULLY_UNLOCKED,
-    )
-    const chapter = (flag: string): number =>
-      beats.findIndex(([beat]) => beat === flag) < flowerAt ? 0 : 1
-    shown.sort(
-      ([a], [b]) =>
-        chapter(a) - chapter(b) || noticed.indexOf(a) - noticed.indexOf(b),
-    )
-    // Her request for the flower is news only while she does not have it.
-    const flowerFirst =
-      noticed.includes(FLAG_MAGIC_FULLY_UNLOCKED) &&
-      noticed.indexOf(FLAG_MAGIC_FULLY_UNLOCKED) <
-        noticed.indexOf(FLAG_CONNECT_WITH_NATURE)
-    const request =
-      ' She wants a rare flower from the Hidden Glade, one that opens only ' +
-      'for someone the land trusts.'
-    const stages = [
-      dream,
-      ...shown.map(
-        ([flag, text]) =>
-          `\n${text}` +
-          (flag === FLAG_CONNECT_WITH_NATURE && !flowerFirst ? request : ''),
+        { lead, chapter: 1 },
       ),
     ]
-    const latestBefore = this.latestStage
-    this.setJournal(stages.slice(0, -1), stages[stages.length - 1])
-    return updated && this.latestStage !== latestBefore
   }
 
   /**

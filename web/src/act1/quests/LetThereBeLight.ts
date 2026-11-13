@@ -1,4 +1,4 @@
-import { characterName, Quest, type GameState } from '@/engine'
+import { characterName, Quest, type GameState, type QuestStage } from '@/engine'
 import { Candle } from '../items/Candle'
 import { Matches } from '../items/Matches'
 import { Shopkeeper } from '../characters/Shopkeeper'
@@ -38,27 +38,27 @@ export class LetThereBeLightQuest extends Quest {
     return gameState.getStoryFlag(FLAG_PRIEST_TALKED_TO)
   }
 
-  /** Once Elior holds the matches, the log moves on to the cold candle, once. */
-  override checkUpdate(gameState: GameState): boolean {
-    if (
-      this.latestStage ||
-      !gameState.inventory.some((item) => item instanceof Matches)
-    ) {
-      return false
-    }
-    this.setJournal([OUT_OF_MATCHES], MATCHES_IN_HAND)
-    return true
+  /** The opening, while the priest's matches are still at the store. */
+  protected override opening(): string {
+    return OUT_OF_MATCHES
   }
 
   /**
-   * While the General Store is shut and the matches are still there, says
-   * that Hemlock sees to them only once Patches is home; otherwise the
-   * newest log entry, as every quest does.
+   * Once Elior holds the matches the log moves on to the cold candle, for
+   * good. While the General Store is shut and the matches are still there,
+   * the hint says Hemlock sees to them only once Patches is home.
    */
-  override hint(gameState: GameState): string | null {
-    if (!Shopkeeper.isStoreOpen(gameState) && !this.latestStage)
-      return MATCHES_WAIT_ON_PATCHES
-    return super.hint(gameState)
+  protected override stages(): QuestStage[] {
+    return [
+      {
+        key: 'matches',
+        reached: (gameState) =>
+          gameState.inventory.some((item) => item instanceof Matches),
+        log: MATCHES_IN_HAND,
+        hint: (gameState) =>
+          Shopkeeper.isStoreOpen(gameState) ? null : MATCHES_WAIT_ON_PATCHES,
+      },
+    ]
   }
 
   override checkCompletion(gameState: GameState): boolean {

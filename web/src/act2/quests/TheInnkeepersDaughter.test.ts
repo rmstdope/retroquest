@@ -93,3 +93,21 @@ describe("The Innkeeper's Daughter log", () => {
     expect(hint(game)).toContain('untouched water')
   })
 })
+
+describe('an older save of the Innkeeper’s Daughter', () => {
+  it('keeps the order its log was reached in', () => {
+    const game = playedTo('talk to master healer lyria')
+    const quest = game.state.getQuest(QUEST_INNKEEPERS_DAUGHTER)
+    if (!quest) throw new Error('quest missing')
+    // An older save kept the order as a list, and no record at all.
+    Object.assign(quest, { noted: ['healed', 'diagnosed'] })
+    Reflect.deleteProperty(quest, 'flagState')
+    game.state.setStoryFlag(FLAG_ELENA_HEALED, true)
+    game.state.setStoryFlag(FLAG_LYRIA_DIAGNOSED, true)
+    quest.refreshSavedText(game.state)
+    quest.checkUpdate(game.state)
+    expect(quest.details()).toMatchObject({
+      latest: expect.stringContaining('how a curse like Elena'),
+    })
+  })
+})
