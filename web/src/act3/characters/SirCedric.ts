@@ -1,4 +1,10 @@
-import { Character, type GameState, characterName, dialogue } from '@/engine'
+import {
+  Character,
+  type GameState,
+  characterName,
+  dialogue,
+  heardAs,
+} from '@/engine'
 import {
   CEDRIC_DESCRIPTION,
   CEDRIC_GATE_TALK,
@@ -24,23 +30,10 @@ import {
 const REFRAIN = 'Power follows purpose; purpose follows truth.'
 
 /** The words of the carved refrain, as Elior may answer him. */
-const REFRAIN_WORDS = wordsOf(REFRAIN)
+const REFRAIN_WORDS = heardAs(REFRAIN)
 
 /** The words of its first half, which he waits to hear the rest of. */
-const FIRST_HALF_WORDS = wordsOf(REFRAIN.split(';')[0])
-
-/**
- * The lower-case words of an utterance, one space apart, with every mark of
- * punctuation and run of spaces between them dropped: a phone keyboard
- * rarely offers a semicolon, so the refrain counts however it is punctuated.
- */
-function wordsOf(text: string): string {
-  return text
-    .toLowerCase()
-    .split(/[^a-z]+/)
-    .filter((word) => word !== '')
-    .join(' ')
-}
+const FIRST_HALF_WORDS = heardAs(REFRAIN.split(';')[0])
 
 /** Rooms of the Sunken Ruins other than the Sanctum, by room key. */
 const RUINS_ROOMS = [
@@ -234,7 +227,7 @@ export class SirCedric extends Character {
    * he is ready.
    */
   override sayTo(gameState: GameState, words: string): string {
-    const said = wordsOf(words)
+    const said = heardAs(words)
     const isRefrain = said === 'refrain' || said === REFRAIN_WORDS
     const atGate = this.roomKey(gameState) === 'FortressEntrance'
     if (atGate && gameState.getStoryFlag(FLAG_ACT3_CEDRIC_GATE_ANSWERED)) {

@@ -1,9 +1,10 @@
 /**
  * How the game hears what Elior says to a character: one normaliser for
- * answers that must be the whole utterance, and one whole-word matcher for
- * answers that may sit inside a sentence. The `sayTo` of Act III and Act IV go through these, so
- * a new riddle cannot reintroduce a substring match ("impatience" is not
- * "patience").
+ * answers that must be the whole utterance, one comparison that hears an
+ * answer as its words whatever the punctuation between them, and one
+ * whole-word matcher for answers that may sit inside a sentence. The `sayTo`
+ * of Act III and Act IV go through these, so a new riddle cannot reintroduce
+ * a substring match ("impatience" is not "patience").
  */
 
 /**
@@ -36,6 +37,16 @@ function wordsOf(text: string): string[] {
 export function saysAnyOf(words: string, answers: readonly string[]): boolean {
   const spoken = wordsOf(words)
   return answers.some((answer) => startsOf(spoken, answer).length > 0)
+}
+
+/**
+ * The utterance heard as its words alone: lower case, one space apart, every
+ * mark of punctuation and run of spaces between them dropped. Compare it with
+ * an answer heard the same way where the whole utterance must be the answer
+ * however it is punctuated (a phone keyboard rarely offers a semicolon).
+ */
+export function heardAs(words: string): string {
+  return wordsOf(words).join(' ')
 }
 
 /** Where the answer's words appear in a row among the spoken words. */

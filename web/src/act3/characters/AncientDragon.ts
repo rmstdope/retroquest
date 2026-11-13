@@ -4,7 +4,7 @@ import {
   characterName,
   dialogue,
   speech,
-  normaliseSpokenWord,
+  heardAs,
   type NameOptions,
 } from '@/engine'
 import { AncientAmulet } from '../items/AncientAmulet'
@@ -218,7 +218,7 @@ export class AncientDragon extends Character {
     if (gameState.getStoryFlag(FLAG_ACT3_DRAGON_OATH_SPOKEN)) {
       return `The ${name} rumbles: ` + speech(OATH_ACCEPTED_LINE)
     }
-    const answer = normaliseAnswer(words)
+    const answer = heardAs(words)
     const word = GIVING_WORDS.get(oathBlank(answer))
     if (word !== undefined) {
       gameState.setStoryFlag(FLAG_ACT3_DRAGON_OATH_SPOKEN, true)
@@ -248,7 +248,7 @@ const OATH_QUESTION = 'what will you give back, for what you take?'
 const OATH_ACCEPTED_LINE =
   'You have said it. The scale is there, young one. Take it.'
 
-/** The words that fill the blank, normalised, with how the echo spells them. */
+/** The words that fill the blank, heard as words, with how the echo spells them. */
 const GIVING_WORDS: ReadonlyMap<string, string> = new Map([
   ['everything', 'everything'],
   ['it', 'it'],
@@ -269,14 +269,7 @@ const TAKING_ANSWERS: readonly string[] = [
 ]
 
 /**
- * Hear an answer as the engine does, after dropping its commas.
- */
-function normaliseAnswer(words: string): string {
-  return normaliseSpokenWord(words.replace(/,/g, ''))
-}
-
-/**
- * The part of a normalised answer that fills the blank: the whole answer, or
+ * The part of an answer heard as its words that fills the blank: the whole answer, or
  * what follows "i return" or "i take what is given and i return".
  */
 function oathBlank(answer: string): string {
