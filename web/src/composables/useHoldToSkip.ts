@@ -110,7 +110,7 @@ export function useHoldToSkip(options: HoldToSkipOptions): HoldToSkip {
   }
 
   function onPointerMove(event: PointerEvent): void {
-    if (held?.pointer !== event.pointerId || !held.at) return
+    if (!held || held.pointer !== event.pointerId || !held.at) return
     const moved = Math.hypot(
       event.clientX - held.at.x,
       event.clientY - held.at.y,
@@ -122,14 +122,14 @@ export function useHoldToSkip(options: HoldToSkipOptions): HoldToSkip {
   }
 
   function onPointerUp(event: PointerEvent): void {
-    if (held?.pointer !== event.pointerId) return
+    if (!held || held.pointer !== event.pointerId) return
     // Let go after the ring showed and before it was full: given up, no step.
     swallowClick = ring.value !== null
     drop()
   }
 
   function onPointerCancel(event: PointerEvent): void {
-    if (held?.pointer === event.pointerId) drop()
+    if (held && held.pointer === event.pointerId) drop()
   }
 
   function onClick(event: MouseEvent): void {

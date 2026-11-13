@@ -131,6 +131,18 @@ describe('useHoldToSkip', () => {
     expect(clicks).toBe(1)
   })
 
+  it('ignores a move or a release with no press held, whatever its pointer', () => {
+    const bare = (type: string): void => {
+      stage().dispatchEvent(new MouseEvent(type, { bubbles: true }))
+    }
+    expect(() => {
+      bare('pointermove')
+      bare('pointerup')
+      bare('pointercancel')
+    }).not.toThrow()
+    expect(skip).not.toHaveBeenCalled()
+  })
+
   it('keeps the phone from opening its own menu on a long press', () => {
     pointer('pointerdown', stage())
     const menu = new MouseEvent('contextmenu', {
