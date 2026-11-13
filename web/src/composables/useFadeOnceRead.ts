@@ -35,17 +35,23 @@ export interface FadeOnceRead {
  * showed it, or it has no recording yet) waits its `data-read-ms` first, the
  * time to read it. It fades whether or not more lines come after it. The marks follow the DOM as lines come and go
  * and as their reading starts and stops; Story so far keeps every line.
+ *
+ * While `held` says so (the words are hidden), no line fades: a fading one is
+ * live again and nothing waits its time to read. Let go, every line still on
+ * the picture waits its time to read once more, as if never read aloud, then
+ * fades, so words brought back are there to be read.
  */
 export function useFadeOnceRead(
   container: Ref<HTMLElement | null>,
   selector: string,
+  held: () => boolean = () => false,
 ): FadeOnceRead {
   const live = ref(0)
   let observer: MutationObserver | null = null
   /** The lines waiting their time to read before they fade. */
   const waiting = new Map<Element, ReturnType<typeof setTimeout>>()
   /** The lines seen being read aloud: they fade at once when it ends. */
-  const heard = new WeakSet<Element>()
+  let heard = new WeakSet<Element>()
 
   /** Whether `el`, or a part of it, is being read aloud. */
   function reading(el: Element): boolean {
@@ -60,6 +66,14 @@ export function useFadeOnceRead(
         clearTimeout(timer)
         waiting.delete(el)
       }
+    if (held()) {
+      for (const timer of waiting.values()) clearTimeout(timer)
+      waiting.clear()
+      for (const el of lines)
+        if (el.dataset.fade !== 'gone') el.dataset.fade = 'live'
+      live.value = lines.filter((el) => el.dataset.fade !== 'gone').length
+      return
+    }
     for (const el of lines) {
       if (reading(el)) {
         heard.add(el)
@@ -124,6 +138,11 @@ export function useFadeOnceRead(
     },
     { immediate: true, flush: 'post' },
   )
+  // Let go, the lines brought back are read anew.
+  watch(held, (now) => {
+    if (!now) heard = new WeakSet<Element>()
+    if (container.value) mark(container.value)
+  })
   onScopeDispose(() => stop(container.value))
 
   return { live: readonly(live) }

@@ -220,6 +220,31 @@ describe('the narration paper', () => {
     expect(document.activeElement).toBe(hideButton())
   })
 
+  it('holds the words while they are hidden, so Show brings them back to fade anew', async () => {
+    await mountWith([turn(1, 'First.')])
+    await settle()
+    hideButton()?.click()
+    await nextTick()
+    // Longer than the time to read it: shown, it would have started to fade.
+    await new Promise((r) => setTimeout(r, 950))
+    expect(bubbles()[0]?.getAttribute('data-fade')).toBe('live')
+    // No fade runs out while they are hidden.
+    const event = new Event('animationend', { bubbles: true })
+    Object.defineProperty(event, 'animationName', { value: 'lq-fade-away' })
+    bubbles()[0]!.dispatchEvent(event)
+    await nextTick()
+    expect(tab()?.textContent?.trim()).toBe('▴ Show')
+
+    tab()?.click()
+    await nextTick()
+    await nextTick()
+    expect(bubbles()[0]?.getAttribute('data-fade')).toBe('live')
+    expect(hideButton()).not.toBeNull()
+    // Shown again, it waits its time to read once more, then fades.
+    await new Promise((r) => setTimeout(r, 950))
+    expect(bubbles()[0]?.getAttribute('data-fade')).toBe('away')
+  })
+
   it('toggles with N, but not in the command box, and moves no focus', async () => {
     await mountWith([turn(1, 'First.')])
     press('n')
