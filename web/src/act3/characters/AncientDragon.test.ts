@@ -352,7 +352,9 @@ describe('AncientDragon', () => {
     expect(again).not.toContain('blazes')
     expectMarkupWellFormed(first)
     expect(
-      gameState.inventory.find((i) => i instanceof AncientAmulet)?.description,
+      gameState.inventory
+        .find((i) => i instanceof AncientAmulet)
+        ?.examine(gameState),
     ).toContain('hand in hand')
   })
 

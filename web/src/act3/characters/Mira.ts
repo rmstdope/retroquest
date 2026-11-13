@@ -73,14 +73,24 @@ export class Mira extends Character {
     'The village healer, with chalk dust still on her sleeves from the ' +
     'circle in the castle yard. She watches you the way she watches a fever.'
 
+  /** What she looks like once she has confessed. */
+  static readonly CONFESSED_DESCRIPTION =
+    "The village healer — and, you know now, the Wardens' pupil, who " +
+    'stayed in Willowbrook for your sake. She meets your eyes more easily ' +
+    'than before.'
+
   constructor() {
     super({ name: 'Mira', description: Mira.DESCRIPTION })
   }
 
-  /** Give an older save her current description, unless she has confessed (her description then follows the story). */
-  override refreshSavedText(gameState: GameState): void {
-    if (!gameState.getStoryFlag(FLAG_ACT3_MIRA_CONFESSED))
-      this.description = Mira.DESCRIPTION
+  /**
+   * Her look follows the story: the healer before her confession, and the
+   * Wardens' pupil after it.
+   */
+  override descriptionFor(gameState: GameState): string {
+    return gameState.getStoryFlag(FLAG_ACT3_MIRA_CONFESSED)
+      ? Mira.CONFESSED_DESCRIPTION
+      : Mira.DESCRIPTION
   }
 
   /**
@@ -616,15 +626,11 @@ export class Mira extends Character {
   }
 
   /**
-   * Plays Mira's confession (a fixed conversation), records it and gives her
-   * the description she has from now on.
+   * Plays Mira's confession (a fixed conversation) and records it; her
+   * description follows the flag from then on.
    */
   private confess(gameState: GameState, eventMsg: string): string {
     gameState.setStoryFlag(FLAG_ACT3_MIRA_CONFESSED, true)
-    this.description =
-      "The village healer — and, you know now, the Wardens' pupil, who " +
-      'stayed in Willowbrook for your sake. She meets your eyes more easily ' +
-      'than before.'
     return [
       eventMsg,
       `${characterName(this.name)}'s hands stop above the three relics. ` +

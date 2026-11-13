@@ -1,7 +1,7 @@
 import { type NameOptions, Item, type GameState, writing } from '@/engine'
 import { FLAG_READ_SQUIRES_DIARY } from '../Act2StoryFlags'
 
-/** The diary's description; `refreshSavedText` restores it in older saves. */
+/** The diary's description; `descriptionFor` returns it in older saves. */
 export const SQUIRES_DIARY_DESCRIPTION =
   'A worn leather-bound diary belonging to a former squire. The pages are ' +
   'filled with observations about castle life and training exercises. There are ' +
@@ -19,9 +19,9 @@ export class SquiresDiary extends Item {
     })
   }
 
-  /** Give a save made with older wording the current description. */
-  override refreshSavedText(): void {
-    this.description = SQUIRES_DIARY_DESCRIPTION
+  /** The look: the class's own wording, so an older save reads the current text. */
+  override descriptionFor(): string {
+    return SQUIRES_DIARY_DESCRIPTION
   }
 
   /** Use the diary: set story flag, remove the item, and return narrative text. */

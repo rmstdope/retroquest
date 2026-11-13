@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { Game } from '@/engine'
+import { Game, type Character, type Item, type Room } from '@/engine'
 import { staleSaveMismatches, type StaleTextCase } from '@/testing/staleSave'
 import { Act2 } from './Act2'
 import { MountainHermit } from './characters/MountainHermit'
@@ -56,39 +56,43 @@ const QUEST_CASES: StaleTextCase[] = [
   { target: TheInnkeepersDaughterQuest, fields: ['description', 'completion'] },
 ]
 
-/** The rooms, characters, items and spells whose wording an older save holds in the old form. */
+/** The spells whose wording an older save holds in the old form. */
 const OBJECT_CASES: StaleTextCase[] = [
-  { target: WhisperingGlade, fields: ['description'] },
-  { target: HeartOfTheForest, fields: ['description'] },
-  { target: AncientGrove, fields: ['description'] },
-  { target: MountainPath, fields: ['description'] },
-  { target: MainSquare, fields: ['description'] },
-  { target: HealersHouse, fields: ['description'] },
-  { target: ResidentialQuarter, fields: ['description'] },
-  { target: ForestEntrance, fields: ['description'] },
-  { target: MountainHermit, fields: ['description'] },
-  { target: SirCedric, fields: ['description'] },
-  { target: CityNoticeBoard, fields: ['description'] },
-  { target: OfferingAltar, fields: ['description'] },
-  { target: Coins, fields: ['description'] },
-  { target: MerchantsFlyer, fields: ['description'] },
-  { target: CrystalClearWater, fields: ['description'] },
-  { target: Moonflowers, fields: ['description'] },
-  { target: SilverLeaves, fields: ['description'] },
-  { target: CrystalFocus, fields: ['description'] },
-  { target: ForestSurvivalKit, fields: ['description'] },
-  { target: DruidicCharm, fields: ['description'] },
-  { target: ProtectiveCharm, fields: ['description'] },
-  { target: NaturesCharm, fields: ['description'] },
-  { target: EnchantedAcorn, fields: ['description'] },
-  { target: NyxToken, fields: ['description'] },
-  { target: ForestHeartCrystal, fields: ['description'] },
   { target: MendSpell, fields: ['description'] },
   { target: GreaterHealSpell, fields: ['description'] },
   { target: DispelSpell, fields: ['description'] },
   { target: NatureSenseSpell, fields: ['description'] },
   { target: ForestSpeechSpell, fields: ['description'] },
   { target: PropheticVision, fields: ['description'] },
+]
+
+/** The rooms, characters and items whose look is computed, so a saved old wording never shows. */
+const COMPUTED_LOOKS: (new () => Room | Character | Item)[] = [
+  WhisperingGlade,
+  HeartOfTheForest,
+  AncientGrove,
+  MountainPath,
+  MainSquare,
+  HealersHouse,
+  ResidentialQuarter,
+  ForestEntrance,
+  MountainHermit,
+  SirCedric,
+  CityNoticeBoard,
+  OfferingAltar,
+  Coins,
+  MerchantsFlyer,
+  CrystalClearWater,
+  Moonflowers,
+  SilverLeaves,
+  CrystalFocus,
+  ForestSurvivalKit,
+  DruidicCharm,
+  ProtectiveCharm,
+  NaturesCharm,
+  EnchantedAcorn,
+  NyxToken,
+  ForestHeartCrystal,
 ]
 
 /** An Act II game carrying every item and knowing every spell the cases check. */
@@ -147,5 +151,15 @@ describe('Act II loading a save that holds old wording', () => {
     ]
 
     expect(mismatches).toEqual([])
+  })
+
+  it('reads a room, character or item from its computed look, whatever an old save holds', () => {
+    const { state } = new Game([new Act2()])
+    for (const Target of COMPUTED_LOOKS) {
+      const thing = new Target()
+      const current = thing.descriptionFor(state)
+      thing.description = 'old Thornfield wording'
+      expect(thing.descriptionFor(state), Target.name).toBe(current)
+    }
   })
 })

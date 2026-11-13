@@ -4,7 +4,7 @@ import { DruidicCharm } from './DruidicCharm'
 import { NaturesCharm } from './NaturesCharm'
 import { ProtectiveCharm } from './ProtectiveCharm'
 
-/** The altar's description; `refreshSavedText` restores it in older saves. */
+/** The altar's description; `descriptionFor` returns it in older saves. */
 export const OFFERING_ALTAR_DESCRIPTION =
   'An altar cut from one block of starstone, pale and speckled. Three ' +
   'hollows are carved in its top, and beside each a sign is cut: an oak ' +
@@ -19,9 +19,9 @@ export class OfferingAltar extends Item {
     })
   }
 
-  /** Give a save made with older wording the current description. */
-  override refreshSavedText(): void {
-    this.description = OFFERING_ALTAR_DESCRIPTION
+  /** The look: the class's own wording, so an older save reads the current text. */
+  override descriptionFor(): string {
+    return OFFERING_ALTAR_DESCRIPTION
   }
 
   /**

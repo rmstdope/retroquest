@@ -41,9 +41,8 @@ export class Mechanism extends Item {
   }
 
   /** Describe the device as working or jammed. */
-  override examine(gameState: GameState): string {
-    this.description = this.repaired ? JAMMED_DESCRIPTION : WORKING_DESCRIPTION
-    return super.examine(gameState)
+  override descriptionFor(_gameState: GameState): string {
+    return this.repaired ? JAMMED_DESCRIPTION : WORKING_DESCRIPTION
   }
 
   /** Point at the gears while it runs; once jammed, there is nothing to do. */
@@ -72,7 +71,6 @@ export class Mechanism extends Item {
       if (otherIndex >= 0) gameState.inventory.splice(otherIndex, 1)
       const millstoneFragment = new MillstoneFragment()
       gameState.currentRoom.addItem(millstoneFragment)
-      this.description = JAMMED_DESCRIPTION
       const nameHtml = `[item_name]${this.name}[/item_name]`
       return (
         'You thread the [item_name]rope[/item_name] through the gears of the ' +

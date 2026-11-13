@@ -26,14 +26,9 @@ import {
   truthLine,
   type Ending,
 } from '../endings'
-import {
-  THRONE_CHAMBER_JUSTICE,
-  THRONE_CHAMBER_REDEMPTION,
-  THRONE_CHAMBER_SACRIFICE,
-} from '../rooms/throneDescriptions'
+import {} from '../rooms/throneDescriptions'
 import { Grow } from '../spells/Grow'
 import { Malakar } from '../characters/Malakar'
-import { AncientAmulet } from './AncientAmulet'
 
 /** What the amulet says before the elixir has been used. */
 const NOT_YET = clue(
@@ -237,18 +232,10 @@ export class Wound extends Item {
     gameState.setStoryFlag(flag, true)
     gameState.setStoryFlag(FLAG_ACT4_FINAL_STAND_COMPLETED, true)
     const room = gameState.currentRoom
-    for (const item of gameState.inventory) {
-      if (item instanceof AncientAmulet) item.settleAfterEnding(gameState)
-    }
     if (ending === 'justice') {
       room.characters = room.characters.filter(
         (character) => !(character instanceof Malakar),
       )
     }
-    room.description = {
-      redemption: THRONE_CHAMBER_REDEMPTION,
-      justice: THRONE_CHAMBER_JUSTICE,
-      sacrifice: THRONE_CHAMBER_SACRIFICE,
-    }[ending]
   }
 }

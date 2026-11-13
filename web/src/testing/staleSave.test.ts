@@ -11,7 +11,7 @@ describe('staleSaveMismatches', () => {
     expect(
       staleSaveMismatches({
         makeGame: () => new Game([new Act1()]),
-        cases: [{ target: Candle, fields: ['description'] }],
+        cases: [{ target: Candle, fields: [], examine: true }],
       }),
     ).toEqual([])
   })

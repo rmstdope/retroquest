@@ -1,6 +1,11 @@
 import { Item, type GameState, characterName, speech, writing } from '@/engine'
 import { BlessSpell } from '../spells/BlessSpell'
 
+const LOCKET_DESCRIPTION =
+  'A small, intricately carved silver locket, clearly very old. ' +
+  'A tiny crest, a tree under two moons, is worked into its lid. ' +
+  'It feels cool to the touch.'
+
 /**
  * The founders' heirloom of Elior's mother's line: a small silver locket
  * bearing the founders' crest, hidden in the chapel the night she left.
@@ -9,18 +14,15 @@ export class Locket extends Item {
   constructor() {
     super({
       name: 'locket',
-      description:
-        'A small, intricately carved silver locket, clearly very old. ' +
-        'A tiny crest, a tree under two moons, is worked into its lid. ' +
-        'It feels cool to the touch.',
+      description: LOCKET_DESCRIPTION,
       shortName: 'locket',
       canBeCarried: true,
     })
   }
 
-  /** Give a save made before the rewrite the current description. */
-  override refreshSavedText(): void {
-    this.description = new Locket().description
+  /** The locket's look: always the current wording, even for an older save. */
+  override descriptionFor(_gameState: GameState): string {
+    return LOCKET_DESCRIPTION
   }
 
   /**

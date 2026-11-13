@@ -297,6 +297,8 @@ describe('Sir Cedric restored from a save made before the rewrite', () => {
     expect(fresh.loadSaveData(game.toSaveData())).toContain('loaded')
 
     const restored = fresh.state.currentRoom.getCharacterByName('cedric')
-    expect(restored?.description).toBe(new SirCedric().description)
+    expect(restored?.descriptionFor(fresh.state)).toBe(
+      new SirCedric().description,
+    )
   })
 })

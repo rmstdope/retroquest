@@ -33,17 +33,11 @@ export class AncientAmulet extends Item {
     })
   }
 
-  /** Describe the amulet as the place and the keepsakes Elior carries colour it. */
-  override examine(gameState: GameState): string {
-    this.description = this.reaction(gameState)
-    const text = super.examine(gameState)
-    // The bag panel shows `description`, so it rests on the in-hand line.
-    this.description = IN_HAND
-    return text
-  }
-
-  /** The examine line for the current state. */
-  private reaction(gameState: GameState): string {
+  /**
+   * The amulet as the place and the keepsakes Elior carries colour it: the
+   * Bag, look and examine all read this.
+   */
+  override descriptionFor(gameState: GameState): string {
     if (!gameState.hasItem(this.name)) {
       return gameState.hasItem('locket') || gameState.hasItem("mother's letter")
         ? KEEPSAKE

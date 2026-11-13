@@ -4,6 +4,11 @@ import { FATHERS_NOTE, FathersNote, NOTE_NAMES } from './FathersNote'
 import { GameMap } from './GameMap'
 import { SharpKnife } from './SharpKnife'
 
+const LOCKED_BOX_DESCRIPTION =
+  'A small, ornate wooden box covered in strange runes. The lid is ' +
+  'tightly shut, and it feels oddly heavy for its size. You sense ' +
+  'something important is hidden inside.'
+
 /**
  * Small locked container introducing multi-step acquisition and object state
  * transitions. Elior's father sealed it in his workshop so that only Elior's
@@ -16,10 +21,7 @@ export class MysteriousBox extends Item {
   constructor() {
     super({
       name: 'mysterious box',
-      description:
-        'A small, ornate wooden box covered in strange runes. The lid is ' +
-        'tightly shut, and it feels oddly heavy for its size. You sense ' +
-        'something important is hidden inside.',
+      description: LOCKED_BOX_DESCRIPTION,
       shortName: 'box',
     })
   }
@@ -57,14 +59,28 @@ export class MysteriousBox extends Item {
     )
   }
 
+  /** The box's look: shut, unlocked, or open with only the father's note left. */
+  override descriptionFor(_gameState: GameState): string {
+    if (!this.containsMap) {
+      return (
+        'An open, ornate wooden box. Only a folded note remains inside, in ' +
+        `your father's careful, slanting hand:\n${writing(FATHERS_NOTE)}`
+      )
+    }
+    if (!this.locked) {
+      return (
+        `A small, ornate wooden [item_name]${this.name}[/item_name] covered ` +
+        'in strange runes. The lock has clicked open.'
+      )
+    }
+    return LOCKED_BOX_DESCRIPTION
+  }
+
   /** Unlock the box if locked, otherwise report already unlocked (called by UnlockSpell). */
   unlock(_gameState: GameState): string {
     const nameHtml = `[item_name]${this.name}[/item_name]`
     if (this.locked) {
       this.locked = false
-      this.description =
-        `A small, ornate wooden ${nameHtml} covered in ` +
-        'strange runes. The lock has clicked open.'
       return `A soft click is heard from the ${nameHtml} as the lock springs open!`
     }
     return `[failure]The ${nameHtml} is already unlocked.[/failure]`
@@ -88,9 +104,6 @@ export class MysteriousBox extends Item {
       gameState.addItemToInventory(new GameMap())
       this.containsMap = false
       const note = writing(FATHERS_NOTE)
-      this.description =
-        'An open, ornate wooden box. Only a folded note remains inside, in ' +
-        `your father's careful, slanting hand:\n${note}`
       return (
         'Inside, you find a [item_name]map[/item_name]! You take the ' +
         '[item_name]map[/item_name] and place it in your inventory.\n' +

@@ -5,7 +5,27 @@ import { CrystalPrison } from '../items/CrystalPrison'
 import { Wound } from '../items/Wound'
 import { Throne } from '../items/Throne'
 import { endingPlayed } from '../endings'
-import { THRONE_CHAMBER_FIRST } from './throneDescriptions'
+import {
+  FLAG_ACT4_ELIXIR_ON_KING,
+  FLAG_ACT4_ELIXIR_ON_MALAKAR,
+  FLAG_ACT4_THRONE_AMULET_OPENED,
+} from '../Act4StoryFlags'
+import {
+  THRONE_CHAMBER_AMULET,
+  THRONE_CHAMBER_FIRST,
+  THRONE_CHAMBER_HEALED,
+  THRONE_CHAMBER_JUSTICE,
+  THRONE_CHAMBER_REDEMPTION,
+  THRONE_CHAMBER_SACRIFICE,
+  THRONE_CHAMBER_SHATTERED,
+} from './throneDescriptions'
+
+/** The chamber's look once each ending has played. */
+const AFTER_ENDING = {
+  redemption: THRONE_CHAMBER_REDEMPTION,
+  justice: THRONE_CHAMBER_JUSTICE,
+  sacrifice: THRONE_CHAMBER_SACRIFICE,
+}
 
 /**
  * The seat of Malakar's power and the climax of Act IV: King Alden hangs in
@@ -32,6 +52,25 @@ export class ThroneChamber extends Room {
     if (!this.items.some((item) => item instanceof Throne)) {
       this.addItem(new Throne())
     }
+  }
+
+  /**
+   * The chamber's look follows the scene: the ending that has played, else
+   * the elixir given to the king or to Malakar, else the opened amulet.
+   */
+  override descriptionFor(gameState: GameState): string {
+    const ending = endingPlayed(gameState)
+    if (ending) return AFTER_ENDING[ending]
+    if (gameState.getStoryFlag(FLAG_ACT4_ELIXIR_ON_KING)) {
+      return THRONE_CHAMBER_SHATTERED
+    }
+    if (gameState.getStoryFlag(FLAG_ACT4_ELIXIR_ON_MALAKAR)) {
+      return THRONE_CHAMBER_HEALED
+    }
+    if (gameState.getStoryFlag(FLAG_ACT4_THRONE_AMULET_OPENED)) {
+      return THRONE_CHAMBER_AMULET
+    }
+    return super.descriptionFor(gameState)
   }
 
   /** South always; north, the way home, once an ending has been played. */

@@ -437,11 +437,11 @@ describe('older saves', () => {
     if (!quest) throw new Error('no quest')
     const d = quest.details()
     return JSON.stringify([
-      state.allRooms.CastleApproach.description,
-      state.allRooms.CastleCourtyard.description,
-      state.allRooms.GreatHall.description,
-      state.inventory.map((i) => i.description),
-      state.allRooms.CastleCourtyard.items.map((i) => i.description),
+      state.allRooms.CastleApproach.descriptionFor(state),
+      state.allRooms.CastleCourtyard.descriptionFor(state),
+      state.allRooms.GreatHall.descriptionFor(state),
+      state.inventory.map((i) => i.descriptionFor(state)),
+      state.allRooms.CastleCourtyard.items.map((i) => i.descriptionFor(state)),
       quest.description,
       quest.completion,
       d,

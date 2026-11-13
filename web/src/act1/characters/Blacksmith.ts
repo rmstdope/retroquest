@@ -45,13 +45,17 @@ export class Blacksmith extends Character {
     'posts and an old burn on every knuckle. He talks while he works, ' +
     "and he doesn't stop working."
 
+  /** Borin's look: always the current wording, even for an older save. */
+  override descriptionFor(_gameState: GameState): string {
+    return Blacksmith.DESCRIPTION
+  }
+
   /**
    * Bring a smith from a save made before he was named up to date: he is
    * Borin now. Safe to run more than once.
    */
   migrateLegacyName(): void {
     this.name = Blacksmith.NAME
-    this.description = Blacksmith.DESCRIPTION
   }
 
   /** He answers to his name, Borin, and still to blacksmith. */

@@ -52,11 +52,6 @@ export class MirrorTerraces extends Room {
     })
   }
 
-  /** Give a save made with older wording the current description. */
-  override refreshSavedText(): void {
-    this.description = DESCRIPTION
-  }
-
   /** Room hook called when the player arrives; mark mirrors quest started. */
   override onEnter(gameState: GameState): void {
     gameState.setStoryFlag(FLAG_ACT3_MIRRORS_OF_EMBER_LIGHT_STARTED, true)

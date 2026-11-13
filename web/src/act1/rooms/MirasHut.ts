@@ -9,6 +9,12 @@ const GLOW =
   'step in, as if something you carry has woken it.'
 const EMPTY_STAND = ' The stand where the amulet rested stands empty.'
 
+const HUT_DESCRIPTION =
+  'A small hut hung with drying herbs: lavender, sage, and roots in ' +
+  'bundles from the rafters. Shelves of bottles line the walls, every ' +
+  `one labelled. ${characterName('Mira')} moves among them without looking, ` +
+  'the way you move through your own kitchen.'
+
 /**
  * Mira's Hut room: early healing and mystical mentor resource node. The
  * amulet on its stand glows brighter while Elior carries the locket or his
@@ -18,11 +24,7 @@ export class MirasHut extends Room {
   constructor() {
     super({
       name: "Mira's Hut",
-      description:
-        'A small hut hung with drying herbs: lavender, sage, and roots in ' +
-        'bundles from the rafters. Shelves of bottles line the walls, every ' +
-        `one labelled. ${characterName('Mira')} moves among them without looking, ` +
-        'the way you move through your own kitchen.',
+      description: HUT_DESCRIPTION,
       items: [
         new HealingHerb(),
         new AncientAmulet(),
@@ -33,18 +35,9 @@ export class MirasHut extends Room {
     })
   }
 
-  /** Give a save made before the rewrite the current description. */
-  override refreshSavedText(): void {
-    this.description = new MirasHut().description
-  }
-
-  /**
-   * The hut's text with the amulet's glow or the empty stand added. Saves
-   * made before this was computed may carry either sentence in the stored
-   * description, so both are stripped first.
-   */
+  /** The hut's text with the amulet's glow or the empty stand added. */
   override descriptionFor(gameState: GameState): string {
-    const base = this.description.replace(GLOW, '').replace(EMPTY_STAND, '')
+    const base = HUT_DESCRIPTION
     const onStand = this.items.some((item) => item instanceof AncientAmulet)
     const keepsake =
       gameState.hasItem('locket') || gameState.hasItem("mother's letter")

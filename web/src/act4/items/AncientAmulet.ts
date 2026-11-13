@@ -64,23 +64,12 @@ export class AncientAmulet extends Item {
     })
   }
 
-  /** Give a save the current description, which an ending leaves dark. */
-  override refreshSavedText(gameState: GameState): void {
-    this.description = new AncientAmulet().description
-    this.settleAfterEnding(gameState)
-  }
-
-  /** Make the description (the note in the Bag) match the ending played. */
-  settleAfterEnding(gameState: GameState): void {
-    this.description = lookAfterEnding(gameState) ?? this.description
-  }
-
   /**
    * The amulet's look: the picture of the third figure follows the story
    * (orbs mended, refrain said), and every ending leaves the amulet dark,
-   * with the parents gone.
+   * with the parents gone. The Bag, look and examine all read it.
    */
-  override examine(gameState: GameState): string {
+  override descriptionFor(gameState: GameState): string {
     const afterEnding = lookAfterEnding(gameState)
     if (afterEnding) return afterEnding
     let stage = 0

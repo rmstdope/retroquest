@@ -26,11 +26,6 @@ export class TidalCauseway extends Room {
     })
   }
 
-  /** Give a save made with older wording the current description. */
-  override refreshSavedText(): void {
-    this.description = new TidalCauseway().description
-  }
-
   /**
    * Cast light in the causeway to reveal things hidden in mural-shadow.
    *
@@ -56,7 +51,7 @@ export class TidalCauseway extends Room {
   /** The description, ending with the curse's mark once the clue is found. */
   override descriptionFor(gameState: GameState): string {
     return gameState.getStoryFlag(FLAG_ACT3_SEA_SEALED_LETTER_READ)
-      ? `${this.description} ${CURSE_LINE}`
-      : this.description
+      ? `${new TidalCauseway().description} ${CURSE_LINE}`
+      : new TidalCauseway().description
   }
 }

@@ -3,7 +3,7 @@ import type { Exits, GameState } from '@/engine'
 import { SilverTree } from '../items/SilverTree'
 import { FLAG_WHISPERS_IN_WIND_COMPLETED } from '../Act2StoryFlags'
 
-/** The room's description; `refreshSavedText` restores it in older saves. */
+/** The room's description; `descriptionFor` returns it in older saves. */
 export const ANCIENT_GROVE_DESCRIPTION =
   'A ring of trees so old their trunks are wider than a cottage. Signs ' +
   'are carved in their bark, older than any letters you know. In the ' +
@@ -26,9 +26,9 @@ export class AncientGrove extends Room {
     })
   }
 
-  /** Give a save made with older wording the current description. */
-  override refreshSavedText(): void {
-    this.description = ANCIENT_GROVE_DESCRIPTION
+  /** The look: the class's own wording, so an older save reads the current text. */
+  override descriptionFor(): string {
+    return ANCIENT_GROVE_DESCRIPTION
   }
 
   /** Return exits, revealing south only after the whispers quest is completed. */

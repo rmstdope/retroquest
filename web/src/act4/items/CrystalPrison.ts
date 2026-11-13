@@ -4,7 +4,6 @@ import {
   FLAG_ACT4_LIFELIGHT_ELIXIR_CONSUMED,
 } from '../Act4StoryFlags'
 import { endingPlayed } from '../endings'
-import { THRONE_CHAMBER_SHATTERED } from '../rooms/throneDescriptions'
 
 /** The prison's look once it is broken. */
 const PRISON_SHATTERED = 'The crystal lies in shards around the ritual circle.'
@@ -34,7 +33,7 @@ export class CrystalPrison extends Item {
   }
 
   /** The prison's look, which changes once it is broken. */
-  override examine(gameState: GameState): string {
+  override descriptionFor(gameState: GameState): string {
     if (
       endingPlayed(gameState) ||
       gameState.getStoryFlag(FLAG_ACT4_ELIXIR_ON_KING)
@@ -49,7 +48,6 @@ export class CrystalPrison extends Item {
     gameState.setStoryFlag(FLAG_ACT4_ELIXIR_ON_KING, true)
     gameState.setStoryFlag(FLAG_ACT4_LIFELIGHT_ELIXIR_CONSUMED, true)
     gameState.removeItemFromInventoryOrRoom('Lifelight Elixir', 1)
-    gameState.currentRoom.description = THRONE_CHAMBER_SHATTERED
     return [
       'You pour the elixir over the crystal. It cracks like ice in ' +
         'spring, and King Alden falls free, gasping, alive. But the wound ' +

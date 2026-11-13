@@ -7,10 +7,7 @@ import {
   dialogue,
   speech,
 } from '@/engine'
-import {
-  AncientAmulet,
-  SIGIL_RECOGNISED_DESCRIPTION,
-} from '../items/AncientAmulet'
+import { AncientAmulet } from '../items/AncientAmulet'
 import { Coins } from '../items/Coins'
 import { NaturesCharm } from '../items/NaturesCharm'
 import { TrainingSword } from '../items/TrainingSword'
@@ -154,11 +151,6 @@ export class SirCedric extends Character {
     })
   }
 
-  /** Give an older save the description that matches whether his name has been cleared. */
-  override refreshSavedText(gameState: GameState): void {
-    this.refreshDescription(gameState)
-  }
-
   /**
    * Handing him the training sword is answered as using it before him is:
    * he knows the blade, and the bout begins (see `TrainingSword.use`);
@@ -174,17 +166,9 @@ export class SirCedric extends Character {
     return super.answersTo(name) || name.toLowerCase() === 'cedric'
   }
 
-  /** Give every Sir Cedric in the game the description that matches the state of his name. */
-  static refreshAll(gameState: GameState): void {
-    for (const room of Object.values(gameState.allRooms))
-      for (const character of room.characters)
-        if (character instanceof SirCedric)
-          character.refreshDescription(gameState)
-  }
-
-  /** Set the description that matches whether his name has been cleared; safe to repeat. */
-  refreshDescription(gameState: GameState): void {
-    this.description = gameState.getStoryFlag(FLAG_CEDRIKS_HONOR_COMPLETED)
+  /** How he looks: the knight he was until his name is cleared, then the one he is. */
+  override descriptionFor(gameState: GameState): string {
+    return gameState.getStoryFlag(FLAG_CEDRIKS_HONOR_COMPLETED)
       ? CEDRIC_DESCRIPTION_AFTER
       : CEDRIC_DESCRIPTION_BEFORE
   }
@@ -502,7 +486,6 @@ export class SirCedric extends Character {
     const amulet = gameState.inventory.find((i) => i instanceof AncientAmulet)
     if (amulet && !gameState.getStoryFlag(FLAG_CEDRIC_RECOGNISED_SIGIL)) {
       gameState.setStoryFlag(FLAG_CEDRIC_RECOGNISED_SIGIL, true)
-      amulet.description = SIGIL_RECOGNISED_DESCRIPTION
       if (!gameState.getStoryFlag(FLAG_SPOKEN_TO_SIR_CEDRIC)) {
         gameState.setStoryFlag(FLAG_SPOKEN_TO_SIR_CEDRIC, true)
         return this.interruptedGreeting()

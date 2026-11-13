@@ -80,10 +80,14 @@ export class SirCedric extends Character {
     })
   }
 
-  /** Give an older save his name in title case and his current description. */
+  /** Give an older save his name in title case. */
   override refreshSavedText(): void {
     this.name = CEDRIC_NAME
-    this.description = CEDRIC_DESCRIPTION
+  }
+
+  /** His current description, so an older save shows the current wording. */
+  override descriptionFor(_gameState: GameState): string {
+    return CEDRIC_DESCRIPTION
   }
 
   /**

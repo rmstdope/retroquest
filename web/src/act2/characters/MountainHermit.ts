@@ -39,9 +39,9 @@ export class MountainHermit extends Character {
     })
   }
 
-  /** Give a save made with older wording the current description. */
-  override refreshSavedText(): void {
-    this.description = MOUNTAIN_HERMIT_DESCRIPTION
+  /** The look: the class's own wording, so an older save reads the current text. */
+  override descriptionFor(): string {
+    return MOUNTAIN_HERMIT_DESCRIPTION
   }
 
   /** Greet the player, hand over Cedric's sword, or point them onward. */

@@ -3,7 +3,7 @@ import { FLAG_PROTECTIVE_CHARM_USED_FOREST_ENTRANCE } from '../Act2StoryFlags'
 import { ForestEntrance } from '../rooms/ForestEntrance'
 import { OfferingAltar } from './OfferingAltar'
 
-/** The charm's description; `refreshSavedText` restores it in older saves. */
+/** The charm's description; `descriptionFor` returns it in older saves. */
 export const PROTECTIVE_CHARM_DESCRIPTION =
   "A twist of braided grass, bark and a bird's bone: the hermit's mark. It " +
   "tells the forest you are under the hermit's protection."
@@ -19,9 +19,9 @@ export class ProtectiveCharm extends Item {
     })
   }
 
-  /** Give a save made with older wording the current description. */
-  override refreshSavedText(): void {
-    this.description = PROTECTIVE_CHARM_DESCRIPTION
+  /** The look: the class's own wording, so an older save reads the current text. */
+  override descriptionFor(): string {
+    return PROTECTIVE_CHARM_DESCRIPTION
   }
 
   /** Opens the sprites' path at the forest entrance; elsewhere it is only braided grass. */

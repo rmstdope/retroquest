@@ -31,12 +31,6 @@ export class PhoenixCrater extends Room {
     })
   }
 
-  /** Give a save made with older wording the current description. */
-  override refreshSavedText(): void {
-    this.description =
-      BASE_DESCRIPTION + (this.phoenixPresent() ? PHOENIX_DESCRIPTION : '')
-  }
-
   /** Whether the Phoenix has appeared. */
   private phoenixPresent(): boolean {
     return this.characters.some((c) => c instanceof Phoenix)
@@ -63,7 +57,6 @@ export class PhoenixCrater extends Room {
   override rest(_gameState: GameState): string {
     if (!this.phoenixPresent()) {
       this.addCharacter(new Phoenix())
-      this.description = BASE_DESCRIPTION + PHOENIX_DESCRIPTION
       return (
         'As your eyes close, the air grows warmer. When you open them, a ' +
         'phoenix is lying in the crater with you, watching you as if it has ' +

@@ -1,14 +1,16 @@
 import { Item, type GameState, characterName, writing } from '@/engine'
 import { FLAG_READ_HEMLOCK_NOTICE } from '../Act1StoryFlags'
 
+const NOTICE_DESCRIPTION =
+  'A faded piece of parchment pinned to the notice board. ' +
+  'The ink has run, but you can make out the words:'
+
 /** Faded missing-cat poster pinned to the notice board: Hemlock's plea for Patches. */
 export class OldNotice extends Item {
   constructor() {
     super({
       name: 'old notice',
-      description:
-        'A faded piece of parchment pinned to the notice board. ' +
-        'The ink has run, but you can make out the words:',
+      description: NOTICE_DESCRIPTION,
       shortName: 'notice',
     })
   }
@@ -20,7 +22,7 @@ export class OldNotice extends Item {
   override examine(gameState: GameState): string {
     gameState.setStoryFlag(FLAG_READ_HEMLOCK_NOTICE, true)
     return (
-      `${this.description}\n` +
+      `${this.descriptionFor(gameState)}\n` +
       writing(
         `[bold]MISSING[/bold] - Our dear cat, ${characterName('Patches')}, has vanished. ` +
           'Last seen near the old well. ' +
@@ -32,8 +34,8 @@ export class OldNotice extends Item {
     )
   }
 
-  /** Give a save made before the poster could be read the current description. */
-  override refreshSavedText(_gameState: GameState): void {
-    this.description = new OldNotice().description
+  /** The notice's look: always the current wording, even for an older save. */
+  override descriptionFor(_gameState: GameState): string {
+    return NOTICE_DESCRIPTION
   }
 }

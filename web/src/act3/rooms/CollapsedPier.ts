@@ -1,4 +1,4 @@
-import { Room } from '@/engine'
+import { Room, type GameState } from '@/engine'
 import { Locker } from '../items/Locker'
 import { WeatheredCoin } from '../items/WeatheredCoin'
 import { PierWarden } from '../characters/PierWarden'
@@ -19,8 +19,11 @@ export class CollapsedPier extends Room {
     })
   }
 
-  /** Give a save made with older wording the current description. */
-  override refreshSavedText(): void {
-    this.description = new CollapsedPier().description
+  /**
+   * The room's look, from the current wording, so a save made before a
+   * wording change shows the current text.
+   */
+  override descriptionFor(_gameState: GameState): string {
+    return new CollapsedPier().description
   }
 }

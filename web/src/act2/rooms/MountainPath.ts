@@ -6,7 +6,7 @@ import { CampSite } from '../items/CampSite'
 import { MountainHermit } from '../characters/MountainHermit'
 import { FLAG_SUPPLIES_QUEST_COMPLETED } from '../Act2StoryFlags'
 
-/** The room's description; `refreshSavedText` restores it in older saves. */
+/** The room's description; `descriptionFor` returns it in older saves. */
 export const MOUNTAIN_PATH_DESCRIPTION =
   'A trail climbs through rock and pine between Willowbrook and ' +
   'Greendale. From the overlooks you can see both: Greendale ahead, and ' +
@@ -30,9 +30,9 @@ export class MountainPath extends Room {
     })
   }
 
-  /** Give a save made with older wording the current description. */
-  override refreshSavedText(): void {
-    this.description = MOUNTAIN_PATH_DESCRIPTION
+  /** The look: the class's own wording, so an older save reads the current text. */
+  override descriptionFor(): string {
+    return MOUNTAIN_PATH_DESCRIPTION
   }
 
   /** Return exits, hiding the forest route until the supplies quest is completed. */

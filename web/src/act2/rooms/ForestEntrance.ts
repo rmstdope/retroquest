@@ -7,7 +7,7 @@ import {
 import { EnchantedAcorn } from '../items/EnchantedAcorn'
 import { ForestSprites } from '../characters/ForestSprites'
 
-/** The Forest Entrance base text; `refreshSavedText` restores it in older saves. */
+/** The Forest Entrance base text; `descriptionFor` returns it in older saves. */
 export const FOREST_ENTRANCE_DESCRIPTION =
   'Massive trees create a natural cathedral as you enter the Enchanted Forest. ' +
   'Dappled sunlight filters through the dense canopy, and the path ahead ' +
@@ -37,11 +37,6 @@ export class ForestEntrance extends Room {
     })
   }
 
-  /** Give a save made with older wording the current description. */
-  override refreshSavedText(): void {
-    this.description = FOREST_ENTRANCE_DESCRIPTION
-  }
-
   /** Whether the protective charm has been used here. */
   private charmUsed(gameState: GameState): boolean {
     return gameState.getStoryFlag(FLAG_PROTECTIVE_CHARM_USED_FOREST_ENTRANCE)
@@ -65,7 +60,7 @@ export class ForestEntrance extends Room {
       ? "To the east, your lantern's blue light picks out a narrow path " +
         'through the undergrowth, toward a tranquil glade.'
       : 'To the east the undergrowth grows thick and dark.'
-    return `${this.description} ${south} ${east}`
+    return `${FOREST_ENTRANCE_DESCRIPTION} ${south} ${east}`
   }
 
   /** Return exits: west always, south after the charm, east after the lantern. */

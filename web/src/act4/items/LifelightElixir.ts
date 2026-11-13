@@ -5,6 +5,12 @@ import { Malakar } from '../characters/Malakar'
 import { CrystalPrison } from './CrystalPrison'
 import { Wound } from './Wound'
 
+/** The elixir's look. */
+const ELIXIR_DESCRIPTION =
+  'A small glass vial the colour of first light. Something moves in ' +
+  'it: a white glint, a thread of flame, a dark shimmer like a scale ' +
+  'turning. Mira made it from the three relics.'
+
 /** What the elixir says when it is aimed at anything but the two targets. */
 const WRONG_TARGET = clue(
   "The elixir is for the king's prison, or for Malakar's wound.",
@@ -28,23 +34,15 @@ export class LifelightElixir extends Item {
   constructor() {
     super({
       name: 'Lifelight Elixir',
-      description:
-        'A small glass vial the colour of first light. Something moves in ' +
-        'it: a white glint, a thread of flame, a dark shimmer like a scale ' +
-        'turning. Mira made it from the three relics.',
+      description: ELIXIR_DESCRIPTION,
       canBeCarried: true,
       shortName: 'elixir',
     })
   }
 
-  /** Give a save made before the Act IV wording review the current description. */
-  override refreshSavedText(): void {
-    this.description = new LifelightElixir().description
-  }
-
-  /** The elixir's look. */
-  override examine(_gameState: GameState): string {
-    return this.description
+  /** The elixir's look: always the current wording, even in an older save. */
+  override descriptionFor(_gameState: GameState): string {
+    return ELIXIR_DESCRIPTION
   }
 
   /** The Malakar of the current room, if the player stands in his chamber. */

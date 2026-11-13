@@ -20,9 +20,12 @@ export class CrystalOfLight extends Item {
     })
   }
 
-  /** Give a save made with older wording the current description. */
-  override refreshSavedText(): void {
-    this.description = new CrystalOfLight().description
+  /**
+   * The item's look, from the current wording, so a save made before a
+   * wording change shows the current text.
+   */
+  override descriptionFor(_gameState: GameState): string {
+    return new CrystalOfLight().description
   }
 
   /** No direct blocking; gating enforced during `pickedUp()`. */

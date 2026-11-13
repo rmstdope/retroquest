@@ -31,18 +31,12 @@ export class PolishedShell extends Item {
   }
 
   /**
-   * Examine the shell: the description plus the hint that it hums. The hint
+   * The shell's look: the description plus the hint that it hums. The hint
    * is added here, not in the description, so a save made before it existed
-   * (which restores the old description) still shows it.
+   * (which restores the old description) still shows it, in the Bag too.
    */
-  override examine(gameState: GameState): string {
-    const saved = this.description
-    this.description = `${saved} ${HUM_HINT}`
-    try {
-      return super.examine(gameState)
-    } finally {
-      this.description = saved
-    }
+  override descriptionFor(_gameState: GameState): string {
+    return `${this.description} ${HUM_HINT}`
   }
 
   /** Play the tune: the full passage once, then one short line. */

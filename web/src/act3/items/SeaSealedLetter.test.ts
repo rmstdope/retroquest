@@ -103,7 +103,9 @@ describe('SeaSealedLetter', () => {
     expect(again).not.toContain('grows warm')
     expectMarkupWellFormed(first)
     expect(
-      game.state.inventory.find((i) => i instanceof AncientAmulet)?.description,
+      game.state.inventory
+        .find((i) => i instanceof AncientAmulet)
+        ?.examine(game.state),
     ).toContain('two faces linger')
   })
 })

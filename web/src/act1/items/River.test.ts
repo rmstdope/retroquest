@@ -27,8 +27,8 @@ describe('River', () => {
 
     expect(result).not.toMatch(/right now/)
     expect(result).toContain('will not give another')
-    expect(river.description).not.toMatch(/recently/)
-    expect(river.description).toContain('will not give another')
+    expect(river.descriptionFor(game.state)).not.toMatch(/recently/)
+    expect(river.descriptionFor(game.state)).toContain('will not give another')
     expect(game.state.inventory.some((item) => item instanceof Fish)).toBe(
       false,
     )

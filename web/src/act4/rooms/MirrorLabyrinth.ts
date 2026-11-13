@@ -118,7 +118,7 @@ export class MirrorLabyrinth extends Room {
 
   /** The look of the stretch Elior stands in; the solved room has its own. */
   override descriptionFor(gameState: GameState): string {
-    if (this.isSolved(gameState)) return this.description
+    if (this.isSolved(gameState)) return MAZE_AFTER_DESCRIPTION
     return STRETCH_DESCRIPTIONS[this.stretch]
   }
 
@@ -164,7 +164,6 @@ export class MirrorLabyrinth extends Room {
   private solve(gameState: GameState): string {
     gameState.setStoryFlag(FLAG_ACT4_MAZE_OF_MIRRORS_COMPLETED, true)
     gameState.learnSpell(new TruthSight())
-    this.description = MAZE_AFTER_DESCRIPTION
     this.addCharacter(new TrueSelf())
     return (
       'You step into the empty corridor. Behind you the false mirrors go ' +

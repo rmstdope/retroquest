@@ -17,6 +17,14 @@ const LOCKED_DESCRIPTION =
   'locked, and no light gets past the grimy boards, but the air smells of ' +
   'old earth and lamp oil.'
 
+/** The shed once its door is open, seen from inside. */
+const INSIDE_DESCRIPTION =
+  'A rickety shed leans precariously at the edge of Willowbrook, its weathered ' +
+  'boards creaking in the wind. Rusty tools and broken crates are scattered ' +
+  'about a long workbench, and a thick layer of dust covers everything. ' +
+  'Little light gets past the grimy boards, and the air smells of old ' +
+  'earth and lamp oil.'
+
 /**
  * Abandoned Shed room: staged unlock and layered search progression.
  *
@@ -39,21 +47,11 @@ export class AbandonedShed extends Room {
   constructor() {
     super({
       name: 'Abandoned Shed',
-      description:
-        'A rickety shed leans precariously at the edge of Willowbrook, its weathered ' +
-        'boards creaking in the wind. Rusty tools and broken crates are scattered ' +
-        'about a long workbench, and a thick layer of dust covers everything. ' +
-        'Little light gets past the grimy boards, and the air smells of old ' +
-        'earth and lamp oil.',
+      description: INSIDE_DESCRIPTION,
       items: [new ShedDoor(), ...Scenery.forRoom('AbandonedShed')],
       characters: [],
       exits: { north: 'VillageWell', south: 'OldMill' },
     })
-  }
-
-  /** Give a save made before the rewrite the current description. */
-  override refreshSavedText(): void {
-    this.description = new AbandonedShed().description
   }
 
   /**
@@ -61,7 +59,7 @@ export class AbandonedShed extends Room {
    * see in; the inside once it is open.
    */
   override descriptionFor(_gameState: GameState): string {
-    return this.locked ? LOCKED_DESCRIPTION : this.description
+    return this.locked ? LOCKED_DESCRIPTION : INSIDE_DESCRIPTION
   }
 
   /** The outside while the door is locked, the inside once it is open. */

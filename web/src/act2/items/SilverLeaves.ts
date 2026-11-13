@@ -1,6 +1,6 @@
 import { Item } from '@/engine'
 
-/** The item's description; `refreshSavedText` restores it in older saves. */
+/** The item's description; `descriptionFor` returns it in older saves. */
 export const SILVER_LEAVES_DESCRIPTION =
   'Leaves from the silver-barked tree, cool and stiff, with a silver ' +
   'sheen even in shadow. A healer would know what to do with these.'
@@ -18,8 +18,8 @@ export class SilverLeaves extends Item {
     })
   }
 
-  /** Give a save made with older wording the current description. */
-  override refreshSavedText(): void {
-    this.description = SILVER_LEAVES_DESCRIPTION
+  /** The look: the class's own wording, so an older save reads the current text. */
+  override descriptionFor(): string {
+    return SILVER_LEAVES_DESCRIPTION
   }
 }

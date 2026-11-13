@@ -1,4 +1,4 @@
-import { Item } from '@/engine'
+import { Item, type GameState } from '@/engine'
 
 /** The elixir Mira made from the three relics, to stop what Malakar is doing to the king. */
 export class LifelightElixir extends Item {
@@ -15,8 +15,11 @@ export class LifelightElixir extends Item {
     })
   }
 
-  /** Give a save made with older wording the current description. */
-  override refreshSavedText(): void {
-    this.description = new LifelightElixir().description
+  /**
+   * The item's look, from the current wording, so a save made before a
+   * wording change shows the current text.
+   */
+  override descriptionFor(_gameState: GameState): string {
+    return new LifelightElixir().description
   }
 }

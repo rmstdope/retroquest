@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { Game } from '@/engine'
+import { Game, GameController } from '@/engine'
 import { Act3 } from '../Act3'
 import { AncientAmulet } from './AncientAmulet'
 import { executeCommands, expectMarkupWellFormed } from '@/testing/gameHelpers'
@@ -32,7 +32,7 @@ describe('AncientAmulet', () => {
   it('starts in the bag, not in Mira’s Hut', () => {
     const game = new Game([new Act3()])
 
-    expect(bagAmulet(game).description).toBe(BEFORE)
+    expect(bagAmulet(game).examine(game.state)).toBe(BEFORE)
     expect(
       game.state.currentRoom.items.some((i) => i instanceof AncientAmulet),
     ).toBe(false)
@@ -55,13 +55,18 @@ describe('AncientAmulet', () => {
   it('shows the same line in the inventory panel', () => {
     const game = new Game([new Act3()])
     const amulet = bagAmulet(game)
+    const bag = (): string =>
+      new GameController(game).getInventory()[0].description
 
-    amulet.glow(1)
-    expect(amulet.description).toBe(AFTER_LETTER)
-    amulet.glow(2)
-    expect(amulet.description).toBe(AFTER_INSCRIPTION)
-    amulet.glow(3)
-    expect(amulet.description).toBe(AFTER_DRAGON)
+    for (const [stage, line] of [
+      [1, AFTER_LETTER],
+      [2, AFTER_INSCRIPTION],
+      [3, AFTER_DRAGON],
+    ] as const) {
+      amulet.glow(stage)
+      expect(bag()).toBe(line)
+      expect(amulet.examine(game.state)).toBe(line)
+    }
   })
 
   it('glows with the agreed words, once per stage', () => {
@@ -77,12 +82,13 @@ describe('AncientAmulet', () => {
   })
 
   it('never glows for an earlier stage than the one reached', () => {
-    const amulet = new AncientAmulet()
+    const game = new Game([new Act3()])
+    const amulet = bagAmulet(game)
 
     amulet.glow(2)
 
     expect(amulet.glow(1)).toBe('')
-    expect(amulet.description).toBe(AFTER_INSCRIPTION)
+    expect(amulet.examine(game.state)).toBe(AFTER_INSCRIPTION)
   })
 
   it('glowInBag is silent when the bag holds no amulet', () => {
@@ -99,7 +105,7 @@ describe('AncientAmulet', () => {
 
     fresh.loadSaveData(game.toSaveData())
 
-    expect(bagAmulet(fresh).description).toBe(AFTER_INSCRIPTION)
+    expect(bagAmulet(fresh).examine(fresh.state)).toBe(AFTER_INSCRIPTION)
     expect(bagAmulet(fresh).glow(2)).toBe('')
   })
 

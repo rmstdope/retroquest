@@ -20,9 +20,12 @@ export class ToolCache extends Room {
     })
   }
 
-  /** Give a save made with older wording the current description. */
-  override refreshSavedText(): void {
-    this.description = new ToolCache().description
+  /**
+   * The room's look, from the current wording, so a save made before a
+   * wording change shows the current text.
+   */
+  override descriptionFor(_gameState: GameState): string {
+    return new ToolCache().description
   }
 
   /** Describe the supply crate and hint at its importance. */

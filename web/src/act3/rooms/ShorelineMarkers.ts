@@ -25,9 +25,12 @@ export class ShorelineMarkers extends Room {
     })
   }
 
-  /** Give a save made with older wording the current description. */
-  override refreshSavedText(): void {
-    this.description = new ShorelineMarkers().description
+  /**
+   * The room's look, from the current wording, so a save made before a
+   * wording change shows the current text.
+   */
+  override descriptionFor(_gameState: GameState): string {
+    return new ShorelineMarkers().description
   }
 
   /** Search the steles to find Moon Rune shards for ward construction. */

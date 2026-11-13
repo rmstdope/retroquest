@@ -1,11 +1,10 @@
 import { describe, it, expect } from 'vitest'
-import { Game } from '@/engine'
+import { Game, type Character, type Item, type Room } from '@/engine'
 import { staleSaveMismatches } from '@/testing/staleSave'
 import { Act3 } from './Act3'
 import { SirCedric } from './characters/SirCedric'
 import { AncientAmulet } from './items/AncientAmulet'
 import { CrystalOfLight } from './items/CrystalOfLight'
-import { FortressGates } from './items/FortressGates'
 import { HeatWardMix } from './items/HeatWardMix'
 import { LifelightElixir } from './items/LifelightElixir'
 import { StillwaterPhial } from './items/StillwaterPhial'
@@ -57,31 +56,7 @@ describe('Act III loading a save that holds old wording', () => {
       makeGame: () => new Game([new Act3()]),
       prepare,
       cases: [
-        { target: MirasHut, fields: ['description'] },
-        { target: CavernMouth, fields: ['description'] },
-        { target: CollapsedGalleries, fields: ['description'] },
-        { target: ToolCache, fields: ['description'] },
-        { target: EchoChambers, fields: ['description'] },
-        { target: OuterWards, fields: ['description'] },
-        { target: SubmergedAntechamber, fields: ['description'] },
-        { target: TidalCauseway, fields: ['description'] },
-        { target: ShorelineMarkers, fields: ['description'] },
-        { target: CollapsedPier, fields: ['description'] },
-        { target: SanctumOfTheTide, fields: ['description'] },
-        { target: LowerSwitchbacks, fields: ['description'] },
-        { target: ObsidianOutcrops, fields: ['description'] },
-        { target: MirrorTerraces, fields: ['description'] },
-        { target: FumarolePassages, fields: ['description'] },
-        { target: EmberGallery, fields: ['description'] },
-        { target: PhoenixCrater, fields: ['description'] },
-        { target: FortressEntrance, fields: ['description'] },
         { target: SirCedric, fields: ['name'] },
-        { target: AncientAmulet, fields: ['description'] },
-        { target: CrystalOfLight, fields: ['description'] },
-        { target: HeatWardMix, fields: ['description'] },
-        { target: StillwaterPhial, fields: ['description'] },
-        { target: FortressGates, fields: ['description'] },
-        { target: LifelightElixir, fields: ['description'] },
         { target: PurifySpell, fields: ['description'] },
         { target: UnlockSpell, fields: ['description'] },
         { target: LightSpell, fields: ['description'] },
@@ -101,6 +76,69 @@ describe('Act III loading a save that holds old wording', () => {
       ],
     })
 
+    expect(mismatches).toEqual([])
+  })
+})
+
+/** Something the game describes from the state: `descriptionFor` is the one method that does. */
+type Described = Room | Item | Character
+
+describe('Act III loading a save that holds an old saved description', () => {
+  it('describes every object with the current wording', () => {
+    const targets: (abstract new (...args: never[]) => Described)[] = [
+      MirasHut,
+      CavernMouth,
+      CollapsedGalleries,
+      ToolCache,
+      EchoChambers,
+      OuterWards,
+      SubmergedAntechamber,
+      TidalCauseway,
+      ShorelineMarkers,
+      CollapsedPier,
+      SanctumOfTheTide,
+      LowerSwitchbacks,
+      ObsidianOutcrops,
+      MirrorTerraces,
+      FumarolePassages,
+      EmberGallery,
+      PhoenixCrater,
+      FortressEntrance,
+      AncientAmulet,
+      CrystalOfLight,
+      HeatWardMix,
+      StillwaterPhial,
+      LifelightElixir,
+      SirCedric,
+    ]
+    const find = (game: Game, target: (typeof targets)[number]): Described => {
+      const state = game.state
+      const rooms = Object.values(state.allRooms)
+      const all: Described[] = [
+        ...rooms,
+        ...rooms.flatMap((room) => room.items),
+        ...rooms.flatMap((room) => room.characters),
+        ...state.inventory,
+      ]
+      const found = all.find((object) => object instanceof target)
+      if (!found) throw new Error(`${target.name} is not in the game`)
+      return found
+    }
+    const fresh = new Game([new Act3()])
+    prepare(fresh)
+    const source = new Game([new Act3()])
+    prepare(source)
+    for (const target of targets) find(source, target).description = 'STALE'
+    const loaded = new Game([new Act3()])
+    loaded.loadSaveData(source.toSaveData())
+
+    const mismatches = targets
+      .filter(
+        (target) =>
+          find(loaded, target).descriptionFor(loaded.state) !==
+          find(fresh, target).descriptionFor(fresh.state),
+      )
+      .map((target) => target.name)
     expect(mismatches).toEqual([])
   })
 })

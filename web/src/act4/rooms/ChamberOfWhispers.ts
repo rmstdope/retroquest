@@ -6,7 +6,10 @@ import {
 import { SorceressOfLies } from '../characters/SorceressOfLies'
 import { CrystalWhispers } from '../items/CrystalWhispers'
 import { SorceressStaff } from '../items/SorceressStaff'
-import { CHAMBER_FIRST_LOOK_SENTENCE } from './chamberDescriptions'
+import {
+  CHAMBER_AFTER_REDEMPTION,
+  CHAMBER_FIRST_LOOK_SENTENCE,
+} from './chamberDescriptions'
 
 /**
  * The sorceress's domain where truth becomes malleable and lies feel real.
@@ -28,6 +31,14 @@ export class ChamberOfWhispers extends Room {
       characters: [new SorceressOfLies()],
       exits: { down: 'TowerOfShadows', north: 'MemoryVault' },
     })
+  }
+
+  /** Once the Sorceress is redeemed, the crystals have gone quiet. */
+  override descriptionFor(gameState: GameState): string {
+    if (gameState.getStoryFlag(FLAG_ACT4_SORCERESS_OF_LIES_COMPLETED)) {
+      return CHAMBER_AFTER_REDEMPTION
+    }
+    return super.descriptionFor(gameState)
   }
 
   /** Entering the chamber starts the Sorceress's side quest. */

@@ -17,9 +17,9 @@ export class MerchantsFlyer extends Item {
     })
   }
 
-  /** Give a save made with older wording the current description. */
-  override refreshSavedText(): void {
-    this.description = FLYER_DESCRIPTION
+  /** The look: the class's own wording, so an older save reads the current text. */
+  override descriptionFor(): string {
+    return FLYER_DESCRIPTION
   }
 
   override use(_gameState: GameState): string {

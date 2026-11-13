@@ -100,7 +100,7 @@ describe('The Shadow of the Past', () => {
     expect(game.state.activatedQuests.map((q) => q.name)).toContain(
       'The Shadow of the Past',
     )
-    expect(game.state.currentRoom.description).toContain(
+    expect(game.state.currentRoom.descriptionFor(game.state)).toContain(
       'Among them stands a shadow in the shape of a man.',
     )
     expect(executeCommands(game, ['talk to shadow'])).toContain(MUTE)
@@ -142,10 +142,12 @@ describe('The Shadow of the Past', () => {
     )
     expect(text).toContain('It is the voice from your dream')
     expectStoryFlag(game.state, FLAG_ACT4_MEMORY_ORBS_MENDED, true)
-    expect(game.state.currentRoom.description).toContain(
+    expect(game.state.currentRoom.descriptionFor(game.state)).toContain(
       'The orbs hang whole and still now, each holding its scene like a held breath. The Shadow of the Past stands among them, almost solid, its eyes on the sealed door to the east.',
     )
-    expect(game.state.currentRoom.description).not.toContain('wavers')
+    expect(game.state.currentRoom.descriptionFor(game.state)).not.toContain(
+      'wavers',
+    )
     expect(game.state.currentRoom.describe(game.state)).toContain(
       '[character_name]Shadow of the Past[/character_name]',
     )
@@ -271,12 +273,14 @@ describe('The Shadow of the Past', () => {
       const game = make()
       const before = {
         flags: { ...game.state.storyFlags },
-        description: game.state.currentRoom.description,
+        description: game.state.currentRoom.descriptionFor(game.state),
         shadow: game.state.currentRoom.characters[0].name,
       }
       reload(game)
       expect(game.state.storyFlags).toEqual(before.flags)
-      expect(game.state.currentRoom.description).toBe(before.description)
+      expect(game.state.currentRoom.descriptionFor(game.state)).toBe(
+        before.description,
+      )
       expect(game.state.currentRoom.characters[0].name).toBe(before.shadow)
     }
     const game = answered()
@@ -310,7 +314,7 @@ describe("The Parents' Legacy", () => {
     expect(game.state.activatedQuests.map((q) => q.name)).toContain(
       "The Parents' Legacy",
     )
-    expect(game.state.currentRoom.description).toContain(
+    expect(game.state.currentRoom.descriptionFor(game.state)).toContain(
       'the saddest and warmest room in the fortress.',
     )
     expect(executeCommands(game, ['go north'])).toContain(NORTH_SHUT)
@@ -333,7 +337,7 @@ describe("The Parents' Legacy", () => {
     }
     expectQuestCompleted(game.state, "The Parents' Legacy")
     expectStoryFlag(game.state, FLAG_ACT4_PARENTS_LEGACY_COMPLETED, true)
-    expect(game.state.currentRoom.description).toContain(
+    expect(game.state.currentRoom.descriptionFor(game.state)).toContain(
       'The lanterns hang dim and still now',
     )
     expect(text).toContain(
@@ -343,7 +347,9 @@ describe("The Parents' Legacy", () => {
     expect(again).toContain('The lanterns are dim now.')
     expect(again).not.toContain('It was the opposite.')
     reload(game)
-    expect(game.state.currentRoom.description).toContain('hang dim and still')
+    expect(game.state.currentRoom.descriptionFor(game.state)).toContain(
+      'hang dim and still',
+    )
     executeCommands(game, ['go north'])
     expect(game.state.currentRoom.name).toBe('Throne Chamber')
   })
