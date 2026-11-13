@@ -281,9 +281,13 @@ test.describe('a dot under the faded edge of a card (rq-riv9)', () => {
     await input.press('Enter')
   }
 
-  test('resting on a dot that a card takes the pointer from names it', async ({
-    page,
-  }): Promise<void> => {
+  /**
+   * Talk to Grandmother twice with the dots showing, and lay a clear card edge of the test's own over a dot whose
+   * name is left off: it shows the dot but takes the pointer. Returns that dot.
+   */
+  async function dotUnderCardEdge(
+    page: Page,
+  ): Promise<{ id: string; x: number; y: number }> {
     await page.setViewportSize({ width: 1000, height: 700 })
     await toTheCottage(page, PLACED)
     await command(page, 'talk to grandmother')
@@ -331,17 +335,37 @@ test.describe('a dot under the faded edge of a card (rq-riv9)', () => {
         'width: 80px; height: 40px; pointer-events: auto;'
       wrap.append(edge)
     }, dot!)
+    return dot as { id: string; x: number; y: number }
+  }
+
+  test('resting on a dot that a card takes the pointer from names it', async ({
+    page,
+  }): Promise<void> => {
+    const dot = await dotUnderCardEdge(page)
     await page.mouse.move(5, 300)
-    await page.mouse.move(dot!.x, dot!.y, { steps: 5 })
+    await page.mouse.move(dot.x, dot.y, { steps: 5 })
     expect(
       await page.evaluate(
         ({ x, y }) =>
           document.elementFromPoint(x, y)?.matches('[data-faded-edge]'),
-        dot!,
+        dot,
       ),
     ).toBe(true)
-    await expect(page.locator('[data-area-pointer]')).toHaveText(
-      LABELS[dot!.id],
-    )
+    await expect(page.locator('[data-area-pointer]')).toHaveText(LABELS[dot.id])
+  })
+
+  test('pressing a dot that shows through a card’s edge presses its thing, not the card (rq-njoa)', async ({
+    page,
+  }): Promise<void> => {
+    const dot = await dotUnderCardEdge(page)
+    await page.mouse.move(5, 300)
+    await page.mouse.move(dot.x, dot.y, { steps: 5 })
+    expect(
+      await page
+        .locator('.lq-story-wrap')
+        .evaluate((wrap) => getComputedStyle(wrap).cursor),
+    ).toBe('pointer')
+    await page.mouse.click(dot.x, dot.y)
+    await expect(page.locator('.lq-press-ring')).toBeVisible()
   })
 })

@@ -7,6 +7,7 @@ import { useBridge, type ActClass } from '@/composables/useBridge'
 import { Act1 } from '@/act1/Act1'
 import { PANEL_GROUPS, useGameStore } from '@/stores/useGameStore'
 import { useAreaNamesStore } from '@/stores/useAreaNamesStore'
+import { useNarrationStore } from '@/stores/useNarrationStore'
 import { useArrivalStore } from '@/stores/useArrivalStore'
 import { useSceneStore } from '@/stores/useSceneStore'
 import { useSettingsStore } from '@/stores/useSettingsStore'
@@ -246,5 +247,38 @@ describe('LanternLayout: what is here, named on the picture', () => {
       }),
     )
     expect(useAreaNamesStore().showing).toBe(false)
+  })
+
+  it('takes a press on a dot that shows through the words as a press on its thing, and never hurries the narration (rq-njoa)', async () => {
+    await cottage()
+    await key('s')
+    const narration = useNarrationStore()
+    const tap = vi.spyOn(narration, 'tap')
+    const wrap = w.get('.lq-story-wrap')
+    const at = async (
+      el: Element,
+      type: string,
+      clientX: number,
+      clientY: number,
+    ): Promise<void> => {
+      el.dispatchEvent(
+        new MouseEvent(type, {
+          clientX,
+          clientY,
+          bubbles: true,
+          cancelable: true,
+        }),
+      )
+      await w.vm.$nextTick()
+    }
+    // The bread's dot (0.65, 0.65 of the 960 x 540 picture) lies under the words here.
+    await at(wrap.element, 'pointermove', 624, 351)
+    expect(wrap.attributes('style')).toContain('cursor: pointer')
+    await at(wrap.element, 'click', 624, 351)
+    expect(w.find('.lq-press-ring').exists()).toBe(true)
+    expect(tap).not.toHaveBeenCalled()
+    // Away from any dot the press is the cards' and the cursor is theirs.
+    await at(wrap.element, 'pointermove', 20, 20)
+    expect(wrap.attributes('style') ?? '').not.toContain('cursor')
   })
 })

@@ -16,6 +16,7 @@ import { sceneBlock } from '@/lantern/stageArrival'
 import { parseTurn } from '@/lantern/parseTurn'
 import { AFTER_TELLING_PAUSE_MS, decideHurryKey } from '@/lantern/hurryKeys'
 import { wayCursor } from '@/lantern/wayCursor'
+import type { NamedSpot } from '@/lantern/areaNames'
 import {
   END_SLACK,
   ResizeLanding,
@@ -372,6 +373,13 @@ function wayPressed(event: MouseEvent): string | null {
   )
 }
 
+/** Go the way out in `direction` at once, as a press on its dot or its painted place does. */
+function goWay(direction: string): void {
+  narration.skipAll()
+  belt.emptyHand()
+  game.submitCommand(`go ${direction}`)
+}
+
 /**
  * A press on the picture itself shows the rest of an unnarrated turn's speech
  * at once; while there is speech, a narrated turn is tapped on like the story
@@ -386,12 +394,7 @@ function onPicturePress(event: MouseEvent): void {
   if (speech.sceneChange) return speech.changeSceneNow()
   // A way out goes at once, as on the Map; a closed one gets the game's own answer.
   const way = wayPressed(event)
-  if (way !== null && game.acceptInput) {
-    narration.skipAll()
-    belt.emptyHand()
-    game.submitCommand(`go ${way}`)
-    return
-  }
+  if (way !== null && game.acceptInput) return goWay(way)
   speech.revealAll()
   if (speech.conversation) narration.tap()
 }
@@ -705,6 +708,7 @@ function onNamesEscape(event: KeyboardEvent): void {
 /** The pointer leaves the stage: no name follows it, no way's arrow shows. */
 function onStageLeave(): void {
   names.pointer = null
+  wordsDot.value = null
   nameWay.value = null
 }
 
@@ -725,17 +729,50 @@ function onStagePointer(event: PointerEvent): void {
   names.pointer = { x: event.clientX, y: event.clientY }
 }
 
+/** The dot showing through the words' faded edge that the pointer rests on, or null: the words then have the pressable cursor. */
+const wordsDot = ref<NamedSpot | null>(null)
+
+/** The cursor over the words: the hand, or an open way's arrow, while a dot shows through them under the pointer. */
+const wordsCursor = computed<{ cursor?: string }>(() => {
+  const dot = wordsDot.value
+  if (!dot) return {}
+  if (dot.kind !== 'exit') return { cursor: 'pointer' }
+  return dot.direction && wayArrow.value !== null
+    ? { cursor: wayCursor(dot.direction) }
+    : {}
+})
+
 /**
  * The pointer moves over the words, which lie outside the stage: resting on a
  * mark that shows through a card's faded edge points at it as over the
- * picture (rq-riv9); anywhere else on the words nothing is pointed at.
+ * picture (rq-riv9) and gives the words its pressable cursor (rq-njoa);
+ * anywhere else on the words nothing is pointed at.
  */
 function onWordsPointer(event: PointerEvent): void {
-  names.pointer =
-    event.pointerType !== 'touch' &&
-    areaNamesEl.value?.markAt(event.clientX, event.clientY)
-      ? { x: event.clientX, y: event.clientY }
-      : null
+  const dot = areaNamesEl.value?.spotAt(event.clientX, event.clientY) ?? null
+  wordsDot.value = event.pointerType !== 'touch' ? dot : null
+  names.pointer = wordsDot.value ? { x: event.clientX, y: event.clientY } : null
+}
+
+/**
+ * A press or tap on a dot that shows through the words' faded edge is a press
+ * on its thing, as on the picture, and never hurries the narration (rq-njoa);
+ * a press anywhere else on the words goes on to the cards as before.
+ */
+function onWordsPress(event: MouseEvent): void {
+  const dot = areaNamesEl.value?.spotAt(event.clientX, event.clientY)
+  if (!dot) return
+  event.stopPropagation()
+  event.preventDefault()
+  if (dot.kind === 'exit') {
+    if (dot.direction && game.acceptInput) goWay(dot.direction)
+    return
+  }
+  onAreaPress(
+    { areaId: dot.areaId, name: dot.name, label: dot.label, kind: dot.kind },
+    { x: event.clientX, y: event.clientY },
+    true,
+  )
 }
 
 /** The story is held still and follows the word while an answer is read. */
@@ -2284,17 +2321,19 @@ watch(
               'lq-paper-away': paperAway,
               'lq-covered': sheetOpen,
             }"
-            :style="
-              wide
+            :style="{
+              ...(wide
                 ? {
                     top: `${cardsTop}px`,
                     bottom: sideways
                       ? 'calc(var(--lq-hide-line) + 60px + var(--lq-belt-h))'
                       : `calc(${actionsHeight}px + var(--lq-belt-h) + var(--lq-hide-line) + 12px)`,
                   }
-                : {}
-            "
+                : {}),
+              ...wordsCursor,
+            }"
             :inert="paperAway || undefined"
+            @click.capture="onWordsPress"
             @pointermove="onWordsPointer"
             @pointerleave="onStageLeave"
           >
