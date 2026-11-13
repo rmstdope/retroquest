@@ -257,6 +257,11 @@ describe('ActionComposer', () => {
         game.acceptInput = false
         const closed = mountLayout(layout)
         expect(button(closed, 'Look').attributes()).toHaveProperty('disabled')
+        if (layout === 'panel') {
+          expect(
+            button(closed, "Go north to Mira's Hut").attributes(),
+          ).toHaveProperty('disabled')
+        }
         closed.unmount()
         game.acceptInput = true
         const w = mountLayout(layout)
