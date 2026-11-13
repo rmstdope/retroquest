@@ -142,9 +142,14 @@ export class Quest {
     return this.completion
   }
 
+  /** `flagState`, made when a save from before the quest had stages lacks it. */
+  protected reachedKeys(): Record<string, boolean> {
+    return (this.flagState ??= {})
+  }
+
   /** True when the stage's test holds now or the log has already noted it. */
   private isReached(stage: QuestStage, gameState: GameState): boolean {
-    return this.flagState[stage.key] === true || stage.reached(gameState)
+    return this.reachedKeys()[stage.key] === true || stage.reached(gameState)
   }
 
   /**
@@ -186,11 +191,11 @@ export class Quest {
     const shown = stages.filter((stage) => this.isReached(stage, gameState))
     let fresh = false
     for (const { key } of shown) {
-      if (this.flagState[key]) continue
-      this.flagState[key] = true
+      if (this.reachedKeys()[key]) continue
+      this.reachedKeys()[key] = true
       fresh = true
     }
-    const noticed = Object.keys(this.flagState)
+    const noticed = Object.keys(this.reachedKeys())
     shown.sort(
       (a, b) =>
         (a.chapter ?? 0) - (b.chapter ?? 0) ||
@@ -212,7 +217,7 @@ export class Quest {
    */
   protected slotUnnotedStages(gameState: GameState): void {
     const order = this.stages().map(({ key }) => key)
-    const noted = Object.keys(this.flagState)
+    const noted = Object.keys(this.reachedKeys())
     for (const stage of this.stages()) {
       if (noted.includes(stage.key) || !stage.reached(gameState)) continue
       const later = order.slice(order.indexOf(stage.key) + 1)

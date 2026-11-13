@@ -66,6 +66,9 @@ export const INNKEEPERS_DAUGHTER_COMPLETION =
  * step of that order, or Lyria while she has not explained it.
  */
 export class TheInnkeepersDaughterQuest extends Quest {
+  /** Saves made before the engine kept the order: the keys, as first noted. */
+  private noted?: string[]
+
   constructor() {
     super({
       name: QUEST_INNKEEPERS_DAUGHTER,
@@ -77,6 +80,11 @@ export class TheInnkeepersDaughterQuest extends Quest {
   /** Bring the log up to date in a save made with the older wording. */
   override refreshSavedText(gameState: GameState): void {
     this.completion = INNKEEPERS_DAUGHTER_COMPLETION
+    // An older save kept the reached order as a list; the engine keeps a record.
+    if (this.noted) {
+      for (const key of this.noted) this.reachedKeys()[key] = true
+      this.noted = undefined
+    }
     // Started quests are rebuilt on load; settle the rest without reporting news.
     if (this.completed) this.checkUpdate(gameState)
     else if (!gameState.activatedQuests.includes(this))

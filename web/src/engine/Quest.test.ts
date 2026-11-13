@@ -244,4 +244,13 @@ describe('Quest stages', () => {
     q.checkUpdate(gs)
     expect(Object.keys(q.flagState)).toEqual(['a', 'b'])
   })
+
+  it('copes with a save made before the quest had stages', () => {
+    const gs = gameState()
+    const q = Object.create(StagedQuest.prototype) as StagedQuest
+    Object.assign(q, { name: 'Staged', description: 'Open.' })
+    expect(q.hint(gs)).toBe('Do A.')
+    gs.setStoryFlag('a', true)
+    expect(q.checkUpdate(gs)).toBe(true)
+  })
 })

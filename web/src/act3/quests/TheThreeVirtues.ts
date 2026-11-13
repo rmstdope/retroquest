@@ -72,7 +72,7 @@ export class TheThreeVirtuesQuest extends Quest {
     return OPENING_ENTRY
   }
 
-  /** One entry for each relic, added in the order the relics are acquired. */
+  /** One entry for each relic, always in the order crystal, feather, scale. */
   protected override stages(): QuestStage[] {
     const lead = '\n\n'
     return [
@@ -81,20 +81,20 @@ export class TheThreeVirtuesQuest extends Quest {
         'You walked into the black water and named what you did not ' +
           'abandon: yourself. The guardian gave you the crystal of light. ' +
           'Sir Cedric has said little since it asked him the same question. ',
-        { lead },
+        { lead, chapter: 0 },
       ),
       flagStage(
         FLAG_ACT3_PHOENIX_FEATHER_ACQUIRED,
         'You answered the phoenix: wisdom is patience, even when the ' +
           'world burns. It gave you a feather, and told you of a Warden who ' +
           'had none. ',
-        { lead },
+        { lead, chapter: 1 },
       ),
       flagStage(
         FLAG_ACT3_DRAGONS_SCALE_ACQUIRED,
         "You have the dragon's scale, heavy in your pack. With all three " +
           "relics in hand, Mira's Warding Rite is all that is left. ",
-        { lead },
+        { lead, chapter: 2 },
       ),
     ]
   }
