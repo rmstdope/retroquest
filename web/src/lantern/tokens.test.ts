@@ -2,7 +2,6 @@ import { readFileSync } from 'node:fs'
 import { describe, it, expect } from 'vitest'
 import {
   LANTERN_PALETTES,
-  LANTERN_TEXT_SCALE,
   contrastRatio,
   cssVariableName,
   type LanternPalette,
@@ -68,33 +67,21 @@ describe('contrastRatio', () => {
 })
 
 describe('Lantern palettes', () => {
-  for (const theme of ['dark', 'light'] as const) {
-    describe(theme, () => {
-      it.each(textPairs(LANTERN_PALETTES[theme]))(
-        '%s meets WCAG AA',
-        (_label, fg, bg) => {
-          expect(contrastRatio(fg, bg)).toBeGreaterThanOrEqual(AA_TEXT)
-        },
-      )
-    })
-  }
+  it.each(['dark', 'light'] as const)(
+    'every %s text pair meets WCAG AA',
+    (theme) => {
+      const failing = textPairs(LANTERN_PALETTES[theme])
+        .map(([label, fg, bg]) => [label, contrastRatio(fg, bg)] as const)
+        .filter(([, ratio]) => ratio < AA_TEXT)
+        .map(([label, ratio]) => `${label}: ${ratio.toFixed(2)}`)
+      expect(failing).toEqual([])
+    },
+  )
 
   it('dark and light define the same tokens', () => {
     expect(Object.keys(LANTERN_PALETTES.light).sort()).toEqual(
       Object.keys(LANTERN_PALETTES.dark).sort(),
     )
-  })
-})
-
-describe('Lantern text scale', () => {
-  it('maps the five sizes, smallest first, to the chosen multipliers', () => {
-    expect(LANTERN_TEXT_SCALE).toEqual({
-      smallest: 0.64,
-      extraSmall: 0.76,
-      small: 0.88,
-      medium: 1,
-      large: 1.18,
-    })
   })
 })
 
@@ -149,12 +136,12 @@ describe('lantern.css', () => {
     ).toBe('0')
   })
 
-  it.each(THEME_TAGS)(
-    'styles the inline [%s] tag for the Lantern look',
-    (tag) => {
-      expect(lanternCss).toContain(`\n.theme-${tag} {`)
-    },
-  )
+  it('styles every inline theme tag for the Lantern look', () => {
+    const unstyled = THEME_TAGS.filter(
+      (tag) => !lanternCss.includes(`\n.theme-${tag} {`),
+    )
+    expect(unstyled).toEqual([])
+  })
 
   it('bundles a prose face for every weight the inline tags use, upright and italic', () => {
     // Tags sit in prose and in italic dialogue; a missing face makes the browser

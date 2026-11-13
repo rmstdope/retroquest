@@ -53,14 +53,10 @@ describe.each([1, 2, 3, 4])('the recordings of Act %i', (act) => {
   const script = read<Line[]>(act, 'script.json')
   const cues = cuesOf(act)
 
-  it('casts every speaker of its script', () => {
-    const uncast = [...new Set(script.map((line) => line.speaker))].filter(
-      (speaker) => !CAST.speakers[speaker],
-    )
-    expect(uncast).toEqual([])
-  })
-
-  it('carries the act-complete heading in its script', () => {
+  it('has a cast, heading, directions, pronunciations and clips that all fit its script', () => {
+    const problems: string[] = []
+    const keys = new Set(script.map((line) => line.id))
+    const numeral = ['', 'I', 'II', 'III', 'IV'][act]
     const title = [
       '',
       'The Call to Adventure',
@@ -68,44 +64,46 @@ describe.each([1, 2, 3, 4])('the recordings of Act %i', (act) => {
       'Trials and Revelations',
       'The Final Confrontation',
     ][act]
-    const numeral = ['', 'I', 'II', 'III', 'IV'][act]
-    expect(script.map((line) => line.text)).toContain(
-      `Act ${numeral} complete. ${title}.`,
+
+    for (const speaker of new Set(script.map((line) => line.speaker)))
+      if (!CAST.speakers[speaker]) problems.push(`speaker not cast: ${speaker}`)
+    if (
+      !script.some((line) => line.text === `Act ${numeral} complete. ${title}.`)
     )
-  })
-
-  it('gives every key-scene direction to a line of the script', () => {
-    const keys = new Set(script.map((line) => line.id))
-    expect(Object.keys(cues).filter((key) => !keys.has(key))).toEqual([])
-  })
-
-  it('says the act’s title in words', () => {
-    const numeral = ['', 'I', 'II', 'III', 'IV'][act]
-    expect(PRONOUNCE[`Act ${numeral}:`]).toMatch(/^Act \w+:$/)
-    expect(PRONOUNCE[`Act ${numeral} complete.`]).toMatch(
-      /^Act \w+ complete\.$/,
+      problems.push(
+        `the heading "Act ${numeral} complete. ${title}." is missing from the script`,
+      )
+    for (const key of Object.keys(cues))
+      if (!keys.has(key))
+        problems.push(`direction for a line not in script: ${key}`)
+    if (!/^Act \w+:$/.test(PRONOUNCE[`Act ${numeral}:`] ?? ''))
+      problems.push(`no pronunciation of "Act ${numeral}:" in words`)
+    if (
+      !/^Act \w+ complete\.$/.test(PRONOUNCE[`Act ${numeral} complete.`] ?? '')
     )
-  })
+      problems.push(`no pronunciation of "Act ${numeral} complete." in words`)
 
-  it('has no clip for a line that left the script, and every clip on disk', () => {
     const manifestFile = new URL(`act${act}/manifest.json`, AUDIO)
-    expect(existsSync(manifestFile)).toBe(true)
-    const manifest = JSON.parse(
-      readFileSync(manifestFile, 'utf8'),
-    ) as NarrationManifest
-    // A line with no recording yet is not a defect; a clip with no line is.
-    const keys = new Set(script.map((line) => line.id))
-    expect(Object.keys(manifest).filter((key) => !keys.has(key))).toEqual([])
-    for (const clip of Object.values(manifest))
-      expect(existsSync(new URL(`act${act}/${clip.file}`, AUDIO))).toBe(true)
-  })
-
-  it('records each recorded line in its speaker’s voice', () => {
-    const manifest = JSON.parse(
-      readFileSync(new URL(`act${act}/manifest.json`, AUDIO), 'utf8'),
-    ) as NarrationManifest
-    for (const line of script.filter((entry) => manifest[entry.id]))
-      expect(manifest[line.id]?.speaker).toBe(line.speaker)
+    if (!existsSync(manifestFile)) {
+      problems.push('manifest.json is missing')
+    } else {
+      const manifest = JSON.parse(
+        readFileSync(manifestFile, 'utf8'),
+      ) as NarrationManifest
+      // A line with no recording yet is not a defect; a clip with no line is.
+      for (const [key, clip] of Object.entries(manifest)) {
+        if (!keys.has(key))
+          problems.push(`clip for a line not in script: ${key}`)
+        if (!existsSync(new URL(`act${act}/${clip.file}`, AUDIO)))
+          problems.push(`clip file missing on disk: ${clip.file}`)
+      }
+      for (const line of script)
+        if (manifest[line.id] && manifest[line.id]?.speaker !== line.speaker)
+          problems.push(
+            `clip in the wrong voice: ${line.id}: clip ${manifest[line.id]?.speaker}, script ${line.speaker}`,
+          )
+    }
+    expect(problems).toEqual([])
   })
 })
 

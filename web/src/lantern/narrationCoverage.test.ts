@@ -202,18 +202,22 @@ describe.each([1, 2, 3, 4])('narration coverage of Act %i', (act) => {
     `web/public/audio/narration/act${act}/manifest.json`,
   )
 
-  it.each(OPTIONAL_LINES[act].map((line) => [line.opening, line] as const))(
-    'voices the optional line "%s" in its speaker\'s voice',
-    (_opening, expected) => {
+  it("voices every optional line in its speaker's voice", () => {
+    const wrong = OPTIONAL_LINES[act].flatMap((expected) => {
       const line = script.find((entry) =>
         entry.text.startsWith(expected.opening),
       )
-      expect(line?.speaker).toBe(expected.speaker)
       const clip = manifest[line?.id ?? '']
+      const problems: string[] = []
+      if (line?.speaker !== expected.speaker)
+        problems.push(`"${expected.opening}": script speaker ${line?.speaker}`)
       // A line with no recording yet is not a defect; a recorded one has its speaker's voice.
-      if (clip) expect(clip.speaker).toBe(expected.speaker)
-    },
-  )
+      if (clip && clip.speaker !== expected.speaker)
+        problems.push(`"${expected.opening}": clip speaker ${clip.speaker}`)
+      return problems
+    })
+    expect(wrong).toEqual([])
+  })
 })
 
 describe('Act I stock replies in the script (rq-bio)', () => {
@@ -274,24 +278,26 @@ const REST_LINES: Record<number, string[]> = {
 describe.each([1, 2, 3, 4])('narration of resting in Act %i', (act) => {
   const script = readJson<ScriptLine[]>(`tts/act${act}/script.json`)
 
-  it.each(REST_LINES[act])('has the narrator read "%s"', (words) => {
-    expect(script.find((entry) => entry.text === words)?.speaker).toBe(
-      'narrator',
+  it('has the narrator read every resting line', () => {
+    const wrong = REST_LINES[act].filter(
+      (words) =>
+        script.find((entry) => entry.text === words)?.speaker !== 'narrator',
     )
+    expect(wrong).toEqual([])
   })
 })
 
-describe.each([2, 3, 4])(
-  'the pickup sentence in the script of Act %i (rq-do7s)',
-  (act) => {
-    it('is voiced by the narrator', () => {
+describe('the pickup sentence in the scripts of Acts 2 to 4 (rq-do7s)', () => {
+  it('is voiced by the narrator', () => {
+    const wrong = [2, 3, 4].filter((act) => {
       const script = readJson<ScriptLine[]>(`tts/act${act}/script.json`)
       const line = script.find(
         (entry) =>
           entry.text ===
           'This might come in handy, so you decide to pick it up.',
       )
-      expect(line?.speaker).toBe('narrator')
+      return line?.speaker !== 'narrator'
     })
-  },
-)
+    expect(wrong).toEqual([])
+  })
+})
