@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import { onScopeDispose, ref } from 'vue'
 import type { Chip, ChipKind } from '@/lantern/inventoryChanges'
 import { displayName } from '@/lantern/displayName'
 
@@ -137,6 +137,9 @@ export const useFlightStore = defineStore('flight', () => {
     )
     if (!current.value) next()
   }
+
+  // The store's own timers end with its scope; no caller has to clear them.
+  onScopeDispose(() => timers.forEach(clearTimeout))
 
   /** Stop at once: nothing more flies, no button stays bumped, nothing is left to tell. */
   function clear(): void {

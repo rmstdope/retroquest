@@ -1,4 +1,5 @@
 import { afterEach, beforeEach } from 'vitest'
+import { disposePinia, getActivePinia } from 'pinia'
 import { createMemoryStorage, setAppStorage } from '@/storage/appStorage'
 
 /**
@@ -18,3 +19,13 @@ if (typeof Range !== 'undefined' && !Range.prototype.getClientRects) {
  */
 beforeEach(() => setAppStorage(createMemoryStorage()))
 afterEach(() => setAppStorage(null))
+
+/**
+ * Every test ends with the active pinia disposed, which stops every store's
+ * scope and so every timer a store armed: a store callback never fires into a
+ * later test.
+ */
+afterEach(() => {
+  const pinia = getActivePinia()
+  if (pinia) disposePinia(pinia)
+})

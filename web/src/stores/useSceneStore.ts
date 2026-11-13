@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { computed, ref } from 'vue'
+import { computed, onScopeDispose, ref } from 'vue'
 
 /** One half of a change of scene (the old picture out, or the new one in), in ms. */
 export const SCENE_HALF_MS = 1000
@@ -229,6 +229,12 @@ export const useSceneStore = defineStore('scene', () => {
     if (ready.value === false) target.value = ''
     finish()
   }
+
+  // The store's own timers end with its scope; no caller has to clear them.
+  onScopeDispose(() => {
+    stopTimer()
+    stopFading()
+  })
 
   /** Forget the picture and any change (a new game, a load, a new act); the words are not run. */
   function reset(): void {

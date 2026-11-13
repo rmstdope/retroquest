@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { computed, ref, watch } from 'vue'
+import { computed, onScopeDispose, ref, watch } from 'vue'
 import { useSettingsStore } from './useSettingsStore'
 import { useSceneStore } from './useSceneStore'
 import {
@@ -194,6 +194,12 @@ export const useNarrationStore = defineStore('narration', () => {
       hintNudged.value = false
     }, NUDGE_MS)
   }
+
+  // The store's own timers end with its scope; no caller has to clear them.
+  onScopeDispose(() => {
+    stopVoice()
+    clearTimeout(nudgeTimer)
+  })
 
   /** A new game starts counting narrated turns again. */
   function resetGame(): void {
