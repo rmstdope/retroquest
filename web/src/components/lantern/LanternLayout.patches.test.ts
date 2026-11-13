@@ -83,6 +83,9 @@ describe('LanternLayout: patches of the room picture', () => {
     expect(w.get('img.lq-patch-loading').attributes('src')).toContain(
       'bread-taken',
     )
+    // A patch laid during play fades in; only a loaded save lays it still.
+    await w.get('img.lq-patch-loading').trigger('load')
+    expect(w.get('img.lq-patch').classes()).not.toContain('lq-patch-still')
   })
 
   it('lays the changes of a loaded save in the same room without a fade, and takes away those it no longer has', async () => {

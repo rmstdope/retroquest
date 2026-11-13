@@ -245,6 +245,22 @@ describe('LanternLayout: the belt of pictures', () => {
     expect(ring().exists()).toBe(false)
   })
 
+  it('puts the hand down with ✕ Cancel or Escape, focus back on the picture', async () => {
+    await cottage()
+    for (const putDown of [
+      () => w.get('[data-hand-cancel]').trigger('click'),
+      () => key('Escape'),
+    ]) {
+      await click(tile('item:bread').element)
+      await coin('give').trigger('click')
+      await flushPromises()
+      await putDown()
+      await flushPromises()
+      expect(useBeltStore().hand).toBeNull()
+      expect(document.activeElement).toBe(tile('item:bread').element)
+    }
+  })
+
   it('goes to the belt with B, switches lists with B again, and Escape goes back', async () => {
     await cottage()
     const before = hit('grandmother').element as HTMLElement

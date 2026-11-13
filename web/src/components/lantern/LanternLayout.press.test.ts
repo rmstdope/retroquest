@@ -113,9 +113,14 @@ describe('LanternLayout: pressing a thing on the picture', () => {
 
   it('opens a ring for a thing, with its name, as the Actions row would offer it', async () => {
     await cottage()
+    useAreaNamesStore().pointer = { x: 620, y: 350 }
+    await flushPromises()
+    expect(w.find('[data-area-pointer]').text()).toBe('Bread')
     await press('bread')
     expect(ring().exists()).toBe(true)
     expect(w.get('.lq-ring-name').text()).toBe('Bread')
+    // The thing is named once, on the ring, not under the pointer as well.
+    expect(w.find('[data-area-pointer]').exists()).toBe(false)
     expect(
       w
         .findAll('.lq-press-ring .lq-ring-coin')

@@ -258,6 +258,19 @@ describe('LanternLayout: the arrival on the picture', () => {
     expect(w.find('.lq-paper-tab').exists()).toBe(false)
   })
 
+  it('clears when the player types, and the command still goes through', async () => {
+    useSettingsStore(pinia).startMode = 'type'
+    const w = await ready()
+    useSettingsStore(pinia).narrationOn = false
+    await run('go north')
+    expect(card(w)).not.toBe('')
+    const input = w.get('.lq-type-input')
+    await input.setValue('inventory')
+    expect(card(w)).toBe('')
+    await input.trigger('keydown', { key: 'Enter' })
+    expect(useGameStore(pinia).turns.at(-1)?.command).toBe('inventory')
+  })
+
   it('keeps to its own stores when a store of an earlier test acts late', async () => {
     const w = await ready()
     useSettingsStore(pinia).narrationOn = false

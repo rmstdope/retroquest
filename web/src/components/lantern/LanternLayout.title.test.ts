@@ -81,6 +81,11 @@ describe('LanternLayout: the room title', () => {
     await w.vm.$nextTick()
     expect(useRoomTitleStore().name).toBe('Hall')
     expect(title().text()).toContain('Hall')
+    expect(title().attributes('aria-hidden')).toBe('true')
+    expect(w.get('.lq-main').classes()).toContain('lq-titled')
+    useRoomTitleStore().settle()
+    await w.vm.$nextTick()
+    expect(w.get('.lq-main').classes()).not.toContain('lq-titled')
   })
 
   it('greets a room loaded from another only once its own picture is up, never over the old one', async () => {
