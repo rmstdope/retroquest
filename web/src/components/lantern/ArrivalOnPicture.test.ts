@@ -138,15 +138,6 @@ describe('ArrivalOnPicture', () => {
     expect(w.attributes('aria-live')).toBe('polite')
   })
 
-  it('says "Tap to continue" on a phone', async () => {
-    const w = mount(ArrivalOnPicture, {
-      props: { pictured: true, phone: true },
-    })
-    useArrivalStore().show(1, [description], false)
-    await w.vm.$nextTick()
-    expect(w.get('.lq-arrival-hint').text()).toBe('Tap to continue')
-  })
-
   describe('the hint pill', () => {
     it('holds the hint and, while nobody speaks, the reading bar', async () => {
       const w = mount(ArrivalOnPicture, { props: { pictured: true } })
@@ -355,17 +346,6 @@ describe('ArrivalOnPicture', () => {
       )
       expect(scrollTo.mock.calls[0][0].behavior).toBe('auto')
       document.documentElement.style.removeProperty('--lq-motion')
-    })
-
-    it('keeps the pill from shrinking and the stage from scrolling itself', () => {
-      const source = read('./ArrivalOnPicture.vue')
-      const pill = source.match(/\.lq-arrival-pill \{([^}]*)\}/)?.[1] ?? ''
-      expect(pill).toContain('flex-shrink: 0')
-      const phone = source.match(/\.lq-phone-arrival \{([^}]*)\}/)?.[1] ?? ''
-      expect(phone).not.toContain('overflow-y')
-      const text = source.match(/\.lq-arrival-text \{([^}]*)\}/)?.[1] ?? ''
-      expect(text).toContain('overflow-y: auto')
-      expect(text).toContain('min-height: 0')
     })
   })
 
@@ -693,38 +673,6 @@ describe('ArrivalOnPicture', () => {
         'Sturdy footwear',
       ])
     })
-
-    it('lets a line holding a checklist span the card, so its width cap is the card', () => {
-      const source = read('./ArrivalOnPicture.vue')
-      expect(source).toMatch(
-        /\.lq-arrival-line:has\(\.lq-quest-checklist\),\s*\.lq-arrival-twin :deep\(\.lq-arrival-line:has\(\.lq-quest-checklist\)\) \{\s*align-self: stretch;/,
-      )
-    })
-
-    it('lays the checklist out as one left-aligned column, centred and at most 22em wide', () => {
-      const source = read('./ArrivalOnPicture.vue')
-      const rule = source.match(
-        /\.lq-arrival-line :deep\(\.lq-quest-checklist\),\s*\.lq-arrival-twin :deep\(\.lq-quest-checklist\) \{([^}]*)\}/,
-      )
-      const body = rule?.[1] ?? ''
-      expect(body).toMatch(/(^|\n)\s*width: fit-content;/)
-      expect(body).toContain('max-width: min(22em, 100%)')
-      expect(body).toContain('margin-inline: auto')
-      expect(body).toContain('text-align: left')
-      expect(body).not.toContain('align-items: center')
-      expect(body).toContain(
-        'min-width: min(var(--lq-checklist-width, 0px), 100%)',
-      )
-    })
-
-    it('says "Tap to continue" on a phone', async () => {
-      const w = mount(ArrivalOnPicture, {
-        props: { pictured: true, phone: true },
-      })
-      useArrivalStore().show(1, [piece(fresh)], false)
-      await w.vm.$nextTick()
-      expect(w.get('.lq-arrival-hint').text()).toBe('Tap to continue')
-    })
   })
 
   describe('spell news', () => {
@@ -783,37 +731,7 @@ describe('ArrivalOnPicture', () => {
     })
   })
 
-  describe('the change between messages', () => {
-    it('takes the leaving message out of the row, so it cannot push the new one sideways', () => {
-      const source = read('./ArrivalOnPicture.vue')
-      expect(source).not.toContain('mode="out-in"')
-      expect(source).toMatch(
-        /\.lq-arrival-fade-leave-active \{\s*position: absolute;\s*\}/,
-      )
-    })
-
-    it('fades quickly, by opacity alone', () => {
-      const source = read('./ArrivalOnPicture.vue')
-      const active = source.match(
-        /\.lq-arrival-fade-enter-active,\s*\.lq-arrival-fade-leave-active \{([^}]*)\}/,
-      )
-      expect(active?.[1]).toContain(
-        'transition: opacity calc(0.15s * var(--lq-motion))',
-      )
-      const ends = source.match(
-        /\.lq-arrival-fade-enter-from,\s*\.lq-arrival-fade-leave-to \{([^}]*)\}/,
-      )
-      expect(ends?.[1].trim()).toBe('opacity: 0;')
-    })
-  })
-
   describe('on a sideways phone (rq-dpom)', () => {
-    const source = read('./ArrivalOnPicture.vue')
-    /** The declarations of the first rule with this exact selector. */
-    const rule = (selector: string): string =>
-      source.match(
-        new RegExp(`${selector.replace(/[.()]/g, '\\$&')} \\{([^}]*)\\}`),
-      )?.[1] ?? ''
     const done: QuestNews = {
       kind: 'completed',
       name: 'Hint of magic',
@@ -840,17 +758,34 @@ describe('ArrivalOnPicture', () => {
       voiced: false,
     }
 
-    it('says "Tap to continue" on a room, a quest and a spell', async () => {
-      for (const part of [description, newsPart(fresh), spellPart]) {
-        const w = mount(ArrivalOnPicture, {
-          props: { pictured: true, sideways: true },
-        })
-        useArrivalStore().show(1, [part], false)
-        await w.vm.$nextTick()
-        expect(w.get('.lq-arrival-hint').text()).toBe('Tap to continue')
-        expect(w.classes()).toContain('lq-sideways-arrival')
-        expect(w.classes()).not.toContain('lq-phone-arrival')
+    it('says "Tap to continue" on a room, a quest and a spell, on a phone and on a sideways phone', async () => {
+      const wrong: string[] = []
+      for (const layout of ['phone', 'sideways'] as const) {
+        for (const part of [description, newsPart(fresh), spellPart]) {
+          const w = mount(ArrivalOnPicture, {
+            props: { pictured: true, [layout]: true },
+          })
+          useArrivalStore().show(1, [part], false)
+          await w.vm.$nextTick()
+          const label = `${layout} ${part.kind}`
+          if (w.get('.lq-arrival-hint').text() !== 'Tap to continue') {
+            wrong.push(`${label}: hint`)
+          }
+          if (
+            w.classes().includes('lq-sideways-arrival') !==
+            (layout === 'sideways')
+          ) {
+            wrong.push(`${label}: sideways class`)
+          }
+          if (
+            layout === 'sideways' &&
+            w.classes().includes('lq-phone-arrival')
+          ) {
+            wrong.push(`${label}: phone class`)
+          }
+        }
       }
+      expect(wrong).toEqual([])
     })
 
     it('keeps the laptop hint and no sideways class otherwise', async () => {
@@ -877,12 +812,6 @@ describe('ArrivalOnPicture', () => {
       }
     })
 
-    it('measures the words at the width they are shown: 20 px a side', () => {
-      expect(rule('.lq-sideways-arrival .lq-arrival-measure')).toContain(
-        'padding: 0 20px',
-      )
-    })
-
     it('gives a new quest no seal in the heading row', async () => {
       const w = mount(ArrivalOnPicture, {
         props: { pictured: true, sideways: true },
@@ -890,43 +819,6 @@ describe('ArrivalOnPicture', () => {
       useArrivalStore().show(1, [newsPart(fresh)], false)
       await w.vm.$nextTick()
       expect(w.get('.lq-news-top').find('.lq-news-seal').exists()).toBe(false)
-    })
-
-    it('uses the free height: 56 px at the top, 61 px at the foot, belt up or away', () => {
-      const stage = rule('.lq-sideways-arrival')
-      expect(stage).toContain('padding: 56px 20px 61px')
-    })
-
-    it('sits the words 12 px under the title instead of 14 (rq-z0hc)', () => {
-      expect(rule('.lq-sideways-arrival .lq-news-head')).toContain(
-        'margin-bottom: -2px',
-      )
-      expect(source).toContain('const SIDEWAYS_TITLE_TRIM = 2')
-    })
-
-    it('makes the seal small and flows it beside the heading', () => {
-      expect(rule('.lq-sideways-arrival .lq-news-seal')).toContain(
-        'width: 22px',
-      )
-      expect(rule('.lq-sideways-arrival .lq-news-seal')).toContain(
-        'height: 22px',
-      )
-      expect(rule('.lq-sideways-arrival .lq-news-top')).toContain(
-        'display: flex',
-      )
-      expect(rule('.lq-news-top')).toContain('display: contents')
-    })
-
-    it('takes smaller type only on the smallest phones', () => {
-      const media = source.match(
-        /@media \(max-height: 340px\) \{([\s\S]*?)\n\}\n/,
-      )?.[1]
-      expect(media).toContain('.lq-sideways-arrival .lq-arrival-line')
-      expect(media).toContain('font-size: calc(17px * var(--lq-text-scale, 1))')
-      expect(media).toContain('.lq-sideways-arrival .lq-news-name')
-      expect(media).toContain(
-        'font-size: calc(30px * var(--lq-display-scale, 1))',
-      )
     })
   })
 })

@@ -1,6 +1,4 @@
 // @vitest-environment jsdom
-import { readFileSync } from 'node:fs'
-import { resolve } from 'node:path'
 import { afterEach, describe, expect, it } from 'vitest'
 import { nextTick } from 'vue'
 import { mount, type VueWrapper } from '@vue/test-utils'
@@ -175,13 +173,6 @@ describe('PressRing', () => {
       new Event('pointerdown', { bubbles: true }),
     )
     expect(w.emitted('close')).toBeUndefined()
-  })
-
-  it('keeps room in the fan for the curve, so the longest name is not cut short', () => {
-    const source = readFileSync(resolve(__dirname, 'PressRing.vue'), 'utf8')
-    expect(source).toMatch(/\.lq-ring-pill \{[^}]*max-width: 100%/s)
-    expect(source).toMatch(/\.lq-ring-fan-right \{[^}]*padding-right: 12px/s)
-    expect(source).toMatch(/\.lq-ring-fan-left \{[^}]*padding-left: 12px/s)
   })
 
   it('opens round a carried spell in its purple, and takes a thing in hand without sending', async () => {

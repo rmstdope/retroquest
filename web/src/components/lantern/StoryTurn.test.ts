@@ -170,27 +170,23 @@ describe('StoryTurn', () => {
     )
   })
 
-  it('labels only the first of several quotes by the same speaker', () => {
-    const w = mountTurn({
+  it('labels only the first of several quotes by the same speaker, and again when the speaker changes', () => {
+    const same = mountTurn({
       text:
         "[character_name]Mira[/character_name] smiles. [dialogue]'Welcome.'[/dialogue] " +
         "She pauses. [dialogue]'Sit down.'[/dialogue]",
     })
-
-    const quotes = w.findAll('.lq-block-dialogue')
+    const quotes = same.findAll('.lq-block-dialogue')
     expect(quotes).toHaveLength(2)
     expect(quotes[0].find('.lq-speaker').text()).toBe('Mira')
     expect(quotes[1].find('.lq-speaker').exists()).toBe(false)
-  })
 
-  it('labels a quote again when the speaker changes', () => {
-    const w = mountTurn({
+    const changed = mountTurn({
       text:
         "[character_name]Mira[/character_name] says [dialogue]'Hello.'[/dialogue] " +
         "[character_name]Borin[/character_name] grunts. [dialogue]'Aye.'[/dialogue]",
     })
-
-    const labels = w.findAll('.lq-speaker').map((l) => l.text())
+    const labels = changed.findAll('.lq-speaker').map((l) => l.text())
     expect(labels).toEqual(['Mira', 'Borin'])
   })
 
@@ -1045,17 +1041,6 @@ describe('StoryTurn quest news told in the middle', () => {
       expect(visibleText(w)).toBe('First.')
     })
 
-    it('renders nothing when the piece holds only the command', () => {
-      const w = mount(StoryTurn, {
-        props: {
-          turn: turn({ command: 'talk to mira', text }),
-          card: true,
-          piece: piece({ command: true }),
-        },
-      })
-      expect(w.find('article').exists()).toBe(false)
-    })
-
     it('puts no gained chip on any piece (the gained thing flies to its button instead)', () => {
       const t = turn({
         text,
@@ -1071,15 +1056,25 @@ describe('StoryTurn quest news told in the middle', () => {
       expect(withChips.findAll('[data-testid="chip"]')).toHaveLength(0)
     })
 
-    it('renders nothing for a piece with nothing to show', () => {
-      const w = mount(StoryTurn, {
-        props: {
-          turn: turn({ text }),
-          card: true,
-          piece: piece({ news: true }),
-        },
-      })
-      expect(w.find('article').exists()).toBe(false)
+    it('renders nothing for a piece with only the command, or with nothing to show', () => {
+      const wrong: string[] = []
+      for (const [label, props] of [
+        [
+          'only the command',
+          {
+            turn: turn({ command: 'talk to mira', text }),
+            piece: piece({ command: true }),
+          },
+        ],
+        [
+          'nothing to show',
+          { turn: turn({ text }), piece: piece({ news: true }) },
+        ],
+      ] as const) {
+        const w = mount(StoryTurn, { props: { ...props, card: true } })
+        if (w.find('article').exists()) wrong.push(label)
+      }
+      expect(wrong).toEqual([])
     })
   })
 })
