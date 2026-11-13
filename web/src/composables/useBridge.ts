@@ -6,6 +6,7 @@ import { Game, GameController, isOutdatedSave, type Act } from '@/engine'
 import type { SaveSlot } from '@/types/bridge'
 import { areaThingsOf, type AreaThing } from '@/lantern/areaThings'
 import { appliedPatchIds } from '@/lantern/roomPatchState'
+import { appStorage } from '@/storage/appStorage'
 
 type StoredNamedSave = {
   name: string
@@ -50,7 +51,7 @@ const SAVED = 'Game saved.'
 
 function readQuickMeta(): Partial<Omit<SaveSlot, 'slot'>> {
   try {
-    const raw = localStorage.getItem(QUICK_META_KEY)
+    const raw = appStorage.getItem(QUICK_META_KEY)
     const meta: unknown = raw ? JSON.parse(raw) : null
     return meta && typeof meta === 'object'
       ? (meta as Partial<Omit<SaveSlot, 'slot'>>)
@@ -68,7 +69,7 @@ function isSaveData(data: unknown): data is string {
 /** Read and validate persisted named saves from local storage. */
 function readStoredNamedSaves(): StoredNamedSave[] {
   try {
-    const raw = localStorage.getItem(NAMED_KEY)
+    const raw = appStorage.getItem(NAMED_KEY)
     if (!raw) return []
     const parsed: unknown = JSON.parse(raw)
     if (!Array.isArray(parsed)) return []
@@ -88,7 +89,7 @@ function readStoredNamedSaves(): StoredNamedSave[] {
  */
 function readStoredSaveSlots(): (StoredSaveSlot | null)[] {
   try {
-    const raw = localStorage.getItem(SLOTS_KEY)
+    const raw = appStorage.getItem(SLOTS_KEY)
     if (!raw) return Array(SLOT_COUNT).fill(null)
     const parsed: unknown = JSON.parse(raw)
     if (!Array.isArray(parsed) || parsed.length !== SLOT_COUNT) {
@@ -242,19 +243,19 @@ export function useBridge(loader: () => Promise<ActClass[]> = loadActs) {
       const data = game.toSaveData()
       const meta = JSON.stringify(saveDetails())
       const told = story === null ? null : JSON.stringify(story)
-      localStorage.setItem(QUICK_KEY, data)
+      appStorage.setItem(QUICK_KEY, data)
       try {
-        localStorage.setItem(QUICK_META_KEY, meta)
+        appStorage.setItem(QUICK_META_KEY, meta)
       } catch {
         // No details rather than the previous save's.
-        localStorage.removeItem(QUICK_META_KEY)
+        appStorage.removeItem(QUICK_META_KEY)
       }
       try {
-        if (told === null) localStorage.removeItem(QUICK_STORY_KEY)
-        else localStorage.setItem(QUICK_STORY_KEY, told)
+        if (told === null) appStorage.removeItem(QUICK_STORY_KEY)
+        else appStorage.setItem(QUICK_STORY_KEY, told)
       } catch {
         // No story rather than the previous save's.
-        localStorage.removeItem(QUICK_STORY_KEY)
+        appStorage.removeItem(QUICK_STORY_KEY)
       }
     } catch {
       return SAVE_FAILED
@@ -265,7 +266,7 @@ export function useBridge(loader: () => Promise<ActClass[]> = loadActs) {
   /** The quick save's story, or null when it has none that can be read. */
   function readQuickStory(): unknown {
     try {
-      const raw = localStorage.getItem(QUICK_STORY_KEY)
+      const raw = appStorage.getItem(QUICK_STORY_KEY)
       return raw ? (JSON.parse(raw) as unknown) : null
     } catch {
       return null
@@ -273,7 +274,7 @@ export function useBridge(loader: () => Promise<ActClass[]> = loadActs) {
   }
 
   function quickLoadGame(): string {
-    const data = localStorage.getItem(QUICK_KEY)
+    const data = appStorage.getItem(QUICK_KEY)
     if (!isSaveData(data)) return NO_SAVE
     return loadWithStory(data, readQuickStory())
   }
@@ -283,7 +284,7 @@ export function useBridge(loader: () => Promise<ActClass[]> = loadActs) {
    * can read. A save from an older version is a card marked `outdated`.
    */
   function getQuickSave(): SaveSlot | null {
-    const data = localStorage.getItem(QUICK_KEY)
+    const data = appStorage.getItem(QUICK_KEY)
     if (!isSaveData(data)) return null
     const meta = readQuickMeta()
     return {
@@ -379,7 +380,7 @@ export function useBridge(loader: () => Promise<ActClass[]> = loadActs) {
         ...saveDetails(),
         ...(told === null ? {} : { story: told }),
       }
-      localStorage.setItem(SLOTS_KEY, JSON.stringify(stored))
+      appStorage.setItem(SLOTS_KEY, JSON.stringify(stored))
     })
   }
 
@@ -404,7 +405,7 @@ export function useBridge(loader: () => Promise<ActClass[]> = loadActs) {
       const existing = saves.findIndex((s) => s.name === name)
       if (existing >= 0) saves[existing] = entry
       else saves.push(entry)
-      localStorage.setItem(NAMED_KEY, JSON.stringify(saves))
+      appStorage.setItem(NAMED_KEY, JSON.stringify(saves))
     })
   }
 

@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref, watch } from 'vue'
 import type { BeltList, Hand } from '@/lantern/belt'
+import { appStorage } from '@/storage/appStorage'
 
 /**
  * The belt of pictures's own state: which list it shows (Bag or Spells),
@@ -17,7 +18,7 @@ function load(): { away: boolean; list: BeltList } {
   const fallback = { away: false, list: 'bag' as BeltList }
   try {
     const parsed: unknown = JSON.parse(
-      localStorage.getItem(BELT_STORAGE_KEY) ?? '{}',
+      appStorage.getItem(BELT_STORAGE_KEY) ?? '{}',
     )
     if (!parsed || typeof parsed !== 'object') return fallback
     const stored = parsed as Record<string, unknown>
@@ -42,7 +43,7 @@ export const useBeltStore = defineStore('belt', () => {
 
   watch([away, list], () => {
     try {
-      localStorage.setItem(
+      appStorage.setItem(
         BELT_STORAGE_KEY,
         JSON.stringify({ away: away.value, list: list.value }),
       )

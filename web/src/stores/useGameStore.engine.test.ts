@@ -1,3 +1,4 @@
+import { setAppStorage } from '@/storage/appStorage'
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 import { ref } from 'vue'
 import { setActivePinia, createPinia } from 'pinia'
@@ -122,7 +123,7 @@ describe('useGameStore over the real engine: game over', () => {
     setActivePinia(createPinia())
     // Saves need the browser's storage: an empty one in memory.
     const stored: Record<string, string> = {}
-    vi.stubGlobal('localStorage', {
+    setAppStorage({
       getItem: (key: string): string | null => stored[key] ?? null,
       setItem: (key: string, value: string): void => {
         stored[key] = value
@@ -618,7 +619,7 @@ describe('useGameStore over the real engine: the story so far in a save', () => 
   beforeEach(() => {
     setActivePinia(createPinia())
     stored = {}
-    vi.stubGlobal('localStorage', {
+    setAppStorage({
       getItem: (key: string): string | null => stored[key] ?? null,
       setItem: (key: string, value: string): void => {
         stored[key] = value

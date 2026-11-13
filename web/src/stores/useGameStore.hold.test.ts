@@ -1,3 +1,4 @@
+import { appStorage, setAppStorage } from '@/storage/appStorage'
 import { roomTrackId } from '@/lantern/musicLists'
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 import { setActivePinia, createPinia } from 'pinia'
@@ -19,7 +20,7 @@ describe('useGameStore: panels held while a turn is narrated', () => {
   beforeEach(() => {
     setActivePinia(createPinia())
     const stored: Record<string, string> = {}
-    vi.stubGlobal('localStorage', {
+    setAppStorage({
       getItem: (key: string): string | null => stored[key] ?? null,
       setItem: (key: string, value: string): void => {
         stored[key] = value
@@ -508,7 +509,7 @@ describe('useGameStore: panels held while a turn is narrated', () => {
       game.state.addItemToInventory(new Key())
       game.commandParser.parse('use key with door')
       game.commandParser.parse('take broken shovel')
-      localStorage.setItem('retroquest_save', game.toSaveData())
+      appStorage.setItem('retroquest_save', game.toSaveData())
       const store = useGameStore()
       store.setBridge(useBridge(async (): Promise<ActClass[]> => [Act1]))
       await store.initGame()

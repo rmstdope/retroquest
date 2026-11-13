@@ -1,3 +1,4 @@
+import { setAppStorage } from '@/storage/appStorage'
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { useBridge } from '@/composables/useBridge'
 
@@ -21,11 +22,6 @@ const localStorageMock = (() => {
   }
 })()
 
-Object.defineProperty(globalThis, 'localStorage', {
-  value: localStorageMock,
-  writable: true,
-})
-
 function storageFull() {
   localStorageMock.setItem.mockImplementationOnce(() => {
     throw new Error('QuotaExceededError')
@@ -47,6 +43,7 @@ async function runningBridge() {
 describe('useBridge', () => {
   beforeEach(() => {
     localStorageMock.clear()
+    setAppStorage(localStorageMock)
     vi.clearAllMocks()
   })
 

@@ -1,3 +1,4 @@
+import { appStorage, setAppStorage } from '@/storage/appStorage'
 import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest'
 import { setActivePinia, createPinia } from 'pinia'
 import { useAudio } from './useAudio'
@@ -25,11 +26,6 @@ const localStorageMock = (() => {
   }
 })()
 
-Object.defineProperty(globalThis, 'localStorage', {
-  value: localStorageMock,
-  writable: true,
-})
-
 function createMockFactory() {
   const playFn = vi.fn(() => Promise.resolve())
   const created: Array<{
@@ -48,6 +44,7 @@ function createMockFactory() {
 describe('useAudio', () => {
   beforeEach(() => {
     localStorageMock.clear()
+    setAppStorage(localStorageMock)
     vi.clearAllMocks()
     setActivePinia(createPinia())
   })
@@ -66,7 +63,7 @@ describe('useAudio', () => {
     })
 
     it('plays at volume 0 for a mute choice from the old setting', () => {
-      localStorage.setItem('retroquest_sfx_muted', 'true')
+      appStorage.setItem('retroquest_sfx_muted', 'true')
       const { factory, created } = createMockFactory()
       useAudio(factory).playNewQuest()
       expect(created[0].volume).toBe(0)
