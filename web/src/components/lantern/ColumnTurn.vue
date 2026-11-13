@@ -123,7 +123,9 @@ function lineGone(): void {
 function pieceKey(piece: ColumnPiece, index: number): string {
   return piece.kind === 'line'
     ? `line-${piece.line.unit}-${piece.line.firstWord}`
-    : `card-${piece.blocks.join(',') || index}`
+    : piece.blocks.length
+      ? `card-${piece.blocks.join('-')}`
+      : `card-empty-${index}`
 }
 
 /**

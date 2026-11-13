@@ -285,7 +285,11 @@ export function useLanternPresentation(
       if (interludeNarrated) {
         narration.passSceneChange(told.turn, told.unit + 1)
         // A voice reads it: the narrator stopping again after it lets the picture rise.
-        if (!narration.atSceneChange(told.turn)) return
+        if (
+          narration.narrates(told.turn) &&
+          !narration.atSceneChange(told.turn)
+        )
+          return
         interludeNarrated = false
       }
       interludeTimer = setTimeout(

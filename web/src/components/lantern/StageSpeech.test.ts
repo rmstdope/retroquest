@@ -7,6 +7,7 @@ import type { Turn } from '@/stores/useGameStore'
 import { useStageSpeechStore } from '@/stores/useStageSpeechStore'
 import { useNarrationStore } from '@/stores/useNarrationStore'
 import type { NarrationUnit } from '@/lantern/narrationUnits'
+import { readingPauseMs } from '@/lantern/stageSpeech'
 
 let nextId = 1
 
@@ -267,5 +268,10 @@ describe('StageSpeech', () => {
       'dreamed',
     ])
     expect(lines[0].findAll('.lq-w-now')).toHaveLength(0)
+    // Narrated, each line still says its own time to read, for when a skip shows it unread.
+    expect(lines.map((line) => line.attributes('data-read-ms'))).toEqual([
+      String(readingPauseMs('The storm came.')),
+      String(readingPauseMs('I dreamed of fire.')),
+    ])
   })
 })

@@ -130,6 +130,29 @@ describe('useRoomTitleStore', () => {
     expect(title.name).toBeNull()
   })
 
+  it('leaves the corner named when the move, its arrival and a skip all come in one moment', async () => {
+    title.settle()
+    // A skip during the old picture's fade: the room changes, its arrival is shown and cleared.
+    game.turns = [...game.turns, moveTurn(2, true)]
+    game.roomName = 'Village Square'
+    const arrival = useArrivalStore()
+    arrival.show(
+      2,
+      [
+        {
+          kind: 'description',
+          lines: [{ unit: 0, markup: 'Cobbles.' }],
+          voiced: false,
+        },
+      ],
+      false,
+    )
+    arrival.clear()
+    await nextTick()
+    expect(title.waiting).toBe(false)
+    expect(title.name).toBeNull()
+  })
+
   it('stops waiting for an arrival a newer turn has replaced, and greets the room', async () => {
     await enter('Village Square', moveTurn(2, true))
     expect(title.waiting).toBe(true)

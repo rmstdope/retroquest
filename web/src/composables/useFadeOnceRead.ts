@@ -63,6 +63,9 @@ export function useFadeOnceRead(
     for (const el of lines) {
       if (reading(el)) {
         heard.add(el)
+        // Read aloud now: its time to read (if it was waiting) is the voice's.
+        clearTimeout(waiting.get(el))
+        waiting.delete(el)
         // A row Vue reused for a line being read starts over.
         el.dataset.fade = 'live'
         continue

@@ -113,12 +113,18 @@ export const useRoomTitleStore = defineStore('roomTitle', () => {
     else greet(game.roomName)
   }
 
+  // A new game or a load counts its turns afresh: no arrival has told a room of them.
+  watch(
+    () => [game.gameNumber, game.loadNumber] as const,
+    () => {
+      roomTold.value = null
+    },
+    { flush: 'sync' },
+  )
   watch(
     () => [game.gameNumber, game.loadNumber, game.roomName] as const,
     () => {
       waiting.value = true
-      // A new game or a load counts its turns afresh.
-      if (!arrival.tellsRoom) roomTold.value = null
       consider()
     },
     { immediate: true },
