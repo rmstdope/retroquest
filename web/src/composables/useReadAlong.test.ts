@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { beforeEach, describe, expect, it } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { SCENE_PAUSE_MS } from '@/lantern/narrationUnits'
 import { defineComponent, h, nextTick, ref, type VNode } from 'vue'
 import { mount } from '@vue/test-utils'
@@ -19,6 +19,7 @@ describe('useReadAlong', () => {
   let audio: NarrationAudio
 
   beforeEach(() => {
+    vi.useFakeTimers()
     setActivePinia(createPinia())
     useNarrationStore().setAudioFactory(() => {
       audio = {
@@ -31,6 +32,9 @@ describe('useReadAlong', () => {
       }
       return audio
     })
+  })
+  afterEach(() => {
+    vi.useRealTimers()
   })
 
   /** A surface narrated under `id`, drawing `content` with the read-along. */
@@ -81,7 +85,7 @@ describe('useReadAlong', () => {
     expect(w.find('p.lq-speaking').exists()).toBe(true)
     expect(w.findAll('.lq-w')).toHaveLength(3)
     audio.currentTime = 1.2
-    await new Promise((r) => setTimeout(r, 120))
+    await vi.advanceTimersByTimeAsync(120)
     await nextTick()
     expect(w.find('.lq-w-now').text()).toBe('two')
     narration.skipAll()
@@ -120,7 +124,7 @@ describe('useReadAlong', () => {
       'act1',
     )
     // A room is read after a pause.
-    await new Promise((r) => setTimeout(r, SCENE_PAUSE_MS + 50))
+    await vi.advanceTimersByTimeAsync(SCENE_PAUSE_MS + 50)
     await nextTick()
     expect(w.find('h3 .lq-w').attributes('data-w')).toBe('0')
     expect(w.findAll('p .lq-w').map((s) => s.attributes('data-w'))).toEqual([
@@ -129,9 +133,9 @@ describe('useReadAlong', () => {
       '3',
     ])
     audio.onended?.()
-    await new Promise((r) => setTimeout(r, 1200))
+    await vi.advanceTimersByTimeAsync(1200)
     audio.currentTime = 1.2
-    await new Promise((r) => setTimeout(r, 120))
+    await vi.advanceTimersByTimeAsync(120)
     await nextTick()
     expect(w.find('.lq-w-now').text()).toBe('two')
   })
@@ -173,7 +177,7 @@ describe('useReadAlong', () => {
       await nextTick()
       await nextTick()
       audio.currentTime = 1.2
-      await new Promise((r) => setTimeout(r, 120))
+      await vi.advanceTimersByTimeAsync(120)
       await nextTick()
       expect(followed).toContain('two')
       expect(scrolled.every((el) => el.tagName === 'P')).toBe(true)
@@ -237,7 +241,7 @@ describe('useReadAlong', () => {
       await nextTick()
       await nextTick()
       expect(ends).toEqual([])
-      await new Promise((r) => setTimeout(r, 150))
+      await vi.advanceTimersByTimeAsync(150)
       await nextTick()
       await nextTick()
       expect(ends).toEqual([w.find('p').element])
@@ -278,7 +282,7 @@ describe('useReadAlong', () => {
       ),
       'act1',
     )
-    await new Promise((r) => setTimeout(r, SCENE_PAUSE_MS + 50))
+    await vi.advanceTimersByTimeAsync(SCENE_PAUSE_MS + 50)
     await nextTick()
     // The room's name is read; its description is still to come.
     audio.onended?.()
