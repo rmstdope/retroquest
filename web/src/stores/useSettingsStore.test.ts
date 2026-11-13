@@ -1,3 +1,4 @@
+import { setAppStorage } from '@/storage/appStorage'
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 import { setActivePinia, createPinia } from 'pinia'
 import { nextTick } from 'vue'
@@ -24,7 +25,7 @@ function installLocalStorage(initial: Record<string, string> = {}) {
       for (const key of Object.keys(store)) delete store[key]
     }),
   }
-  vi.stubGlobal('localStorage', mock)
+  setAppStorage(mock)
   return { store, mock }
 }
 
@@ -181,11 +182,14 @@ describe('useSettingsStore', () => {
   })
 
   it('works with defaults when storage is unavailable', async () => {
-    vi.stubGlobal('localStorage', {
+    setAppStorage({
       getItem: () => {
         throw new Error('blocked')
       },
       setItem: () => {
+        throw new Error('blocked')
+      },
+      removeItem: () => {
         throw new Error('blocked')
       },
     })

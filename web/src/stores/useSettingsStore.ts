@@ -1,9 +1,10 @@
 import { defineStore } from 'pinia'
 import { ref, watch } from 'vue'
 import { LANTERN_TEXT_SCALE, type LanternTextSize } from '@/lantern/tokens'
+import { appStorage } from '@/storage/appStorage'
 
 /**
- * Player settings for the Lantern UI, saved in localStorage.
+ * Player settings for the Lantern UI, saved in the browser's storage (`appStorage`).
  *
  * Every field is validated on load; an invalid or missing value falls back to
  * its default, and unavailable storage (e.g. private mode) just means the
@@ -56,7 +57,7 @@ const REDUCE_MOTION: readonly ReduceMotionSetting[] = ['device', 'on', 'off']
 
 function readStorage(key: string): string | null {
   try {
-    return localStorage.getItem(key)
+    return appStorage.getItem(key)
   } catch {
     return null
   }
@@ -163,7 +164,7 @@ export const useSettingsStore = defineStore('settings', () => {
 
   watch(snapshot, (value) => {
     try {
-      localStorage.setItem(SETTINGS_STORAGE_KEY, JSON.stringify(value))
+      appStorage.setItem(SETTINGS_STORAGE_KEY, JSON.stringify(value))
     } catch {
       // Storage unavailable: settings still apply for this visit.
     }

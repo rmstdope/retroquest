@@ -1,3 +1,4 @@
+import { appStorage } from '@/storage/appStorage'
 import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest'
 import { setActivePinia, createPinia } from 'pinia'
 import { nextTick, ref } from 'vue'
@@ -224,7 +225,7 @@ describe('useMusic', () => {
     })
 
     it('does nothing when muted', () => {
-      localStorage.setItem('retroquest_music_muted', 'true')
+      appStorage.setItem('retroquest_music_muted', 'true')
       const { loadTrack, ensureMusicStarted } = useMusic(audio)
       loadTrack('tavern.mp3', 'Theme')
       ;(audio.play as ReturnType<typeof vi.fn>).mockClear()

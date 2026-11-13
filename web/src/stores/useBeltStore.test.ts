@@ -1,3 +1,4 @@
+import { setAppStorage } from '@/storage/appStorage'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { createPinia, setActivePinia } from 'pinia'
 import { BELT_STORAGE_KEY, useBeltStore } from './useBeltStore'
@@ -15,10 +16,13 @@ function installStorage(initial: Record<string, string> = {}): {
   store: Record<string, string>
 } {
   const store = { ...initial }
-  vi.stubGlobal('localStorage', {
+  setAppStorage({
     getItem: (key: string) => store[key] ?? null,
     setItem: (key: string, value: string) => {
       store[key] = value
+    },
+    removeItem: (key: string) => {
+      delete store[key]
     },
   })
   return { store }
@@ -72,11 +76,14 @@ describe('useBeltStore', () => {
   it('survives corrupt or unavailable storage', () => {
     installStorage({ [BELT_STORAGE_KEY]: '{nope' })
     expect(useBeltStore().list).toBe('bag')
-    vi.stubGlobal('localStorage', {
+    setAppStorage({
       getItem: () => {
         throw new Error('blocked')
       },
       setItem: () => {
+        throw new Error('blocked')
+      },
+      removeItem: () => {
         throw new Error('blocked')
       },
     })

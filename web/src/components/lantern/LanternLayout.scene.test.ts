@@ -1,4 +1,5 @@
 // @vitest-environment jsdom
+import { createMemoryStorage, setAppStorage } from '@/storage/appStorage'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { mount, type VueWrapper } from '@vue/test-utils'
 import { createPinia, setActivePinia } from 'pinia'
@@ -51,7 +52,7 @@ describe('LanternLayout: change of scene', () => {
   ): Promise<ReturnType<typeof useGameStore>> {
     // Settings an earlier test saved would carry over where the test window
     // keeps storage (Node 22, as on CI).
-    globalThis.localStorage?.clear?.()
+    setAppStorage(createMemoryStorage())
     setActivePinia(createPinia())
     vi.stubGlobal(
       'matchMedia',
@@ -837,7 +838,7 @@ describe('LanternLayout: change of scene', () => {
     saved.state.currentRoom = saved.state.allRooms.AbandonedShed
     saved.state.addItemToInventory(new Key())
     const save = saved.toSaveData()
-    vi.stubGlobal('localStorage', {
+    setAppStorage({
       getItem: (key: string): string | null =>
         key === 'retroquest_save' ? save : null,
       setItem: (): void => {},
