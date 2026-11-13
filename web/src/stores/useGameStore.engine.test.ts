@@ -432,6 +432,77 @@ describe('useGameStore over the real engine: the no-match line and a name that w
     expect(saysNoMatch(store, 'say truth to bob')).toBe(false)
   })
 
+  describe('a word after a finished name', () => {
+    /** The real store, holding Nyx's Token. */
+    function storeHoldingToken(): Promise<Store> {
+      return storeIn(Act4, 'ChamberOfWhispers', (state) => {
+        state.inventory.push(new NyxToken())
+      })
+    }
+
+    /** What the list says about the typed text. */
+    function listFor(
+      store: Store,
+      typed: string,
+    ): { noMatch: boolean; open: boolean; word: string } {
+      const { noMatch, open, word } = useCommandCompletion(
+        ref(typed),
+        (input) => store.completionState(input),
+        (input) => store.tabComplete(input).newInput,
+        () => true,
+      )
+      return { noMatch: noMatch.value, open: open.value, word: word.value }
+    }
+
+    it.each([
+      ['examine pendant bob', 'bob'],
+      ["examine nyx's token bob", 'bob'],
+      ['examine crystalline pendant bob', 'bob'],
+      ['examine pendant b', 'b'],
+      ['examine pendant bob ', 'bob'],
+      ['examine pendant bob smith', 'smith'],
+      ['examine pendant bob smith ', 'smith'],
+    ])('says no match for “%s”, quoting the last word', async (typed, word) => {
+      const store = await storeHoldingToken()
+
+      expect(listFor(store, typed)).toEqual({ noMatch: true, open: true, word })
+    })
+
+    it.each([
+      ['go north bob', 'bob'],
+      ['examine sorceress bob', 'bob'],
+      ['talk to sorceress bob', 'bob'],
+    ])(
+      'says no match for “%s” too: words after any finished name',
+      async (typed, word) => {
+        const store = await storeHoldingToken()
+
+        expect(listFor(store, typed)).toMatchObject({ noMatch: true, word })
+      },
+    )
+
+    it.each(['inventory foo', 'inventory foo bar', 'spells foo bar'])(
+      'keeps the list closed for “%s”: a verb that takes nothing',
+      async (typed) => {
+        const store = await storeHoldingToken()
+
+        expect(listFor(store, typed).open).toBe(false)
+      },
+    )
+
+    it.each([
+      'examine pendant',
+      'examine pendant ',
+      'examine crystalline pendant ',
+      'say hello there to mira',
+      'save before the bridge',
+    ])('keeps the list closed for “%s”', async (typed) => {
+      const store = await storeHoldingToken()
+
+      expect(listFor(store, typed).open).toBe(false)
+    })
+  })
+
   describe("an item's extra names", () => {
     /** The real store, holding Nyx's Token, in the room of the Sorceress. */
     function storeHoldingToken(): Promise<Store> {
@@ -503,11 +574,8 @@ describe('useGameStore over the real engine: the no-match line and a name that w
     it('still says no match for an extra name with words the command cannot take', async () => {
       const store = await storeHoldingToken()
 
-      // A word after a finished name is the tree's open question (see rq-n1lz):
-      // an extra name reads like the full name.
-      expect(saysNoMatch(store, 'examine pendant bob')).toBe(
-        saysNoMatch(store, "examine nyx's token bob"),
-      )
+      expect(saysNoMatch(store, 'examine pendant bob')).toBe(true)
+      expect(saysNoMatch(store, "examine nyx's token bob")).toBe(true)
       expect(saysNoMatch(store, 'use pendant bob')).toBe(true)
       expect(saysNoMatch(store, 'give pendant to bob')).toBe(true)
       expect(saysNoMatch(store, 'go pendant')).toBe(true)

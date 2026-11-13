@@ -1719,7 +1719,9 @@ export const useGameStore = defineStore('game', () => {
    * come next for the word being typed, whether the text can already be sent
    * as a command, and which of three states the list is in — `matches` (some
    * words to offer), `none` (an earlier word is unknown, or the last word
-   * matches nothing) or `complete` (the command needs no more words). Text
+   * matches nothing) or `complete` (the command needs no more words: a name
+   * typed in full, or any words after a verb that takes free text or nothing,
+   * which are the player's own; a word after a finished name is `none`). Text
    * the tree cannot follow is `complete` when, from where the tree offers a
    * character, it names one here: the tree holds only full names and a
    * character answers to more. An item answers to more as well: its other
@@ -1750,8 +1752,12 @@ export const useGameStore = defineStore('game', () => {
     let node: CompletionTree | null = commandPlace.value.completions
     for (const [index, token] of tokens.slice(0, -1).entries()) {
       if (node === null) {
-        // Words after a finished command: nothing to offer.
-        return { ...none, kind: 'complete', sendable: true }
+        // Same rule as after the loop: a dead end right after the verb (index
+        // 1) is free text or no argument; deeper it is a finished name, and a
+        // word after it matches nothing.
+        return index === 1
+          ? { ...none, kind: 'complete', sendable: true }
+          : none
       }
       walked.push({ start: index, node })
       if (offersCharacter(node)) nameStart = index
@@ -1759,7 +1765,13 @@ export const useGameStore = defineStore('game', () => {
         return unmatched(false)
       node = node[token]
     }
-    if (node === null) return { ...none, kind: 'complete', sendable: true }
+    if (node === null) {
+      // A finished command, or a name typed in full (with or without the
+      // space after it); a word begun after the name matches nothing.
+      return last === '' || tokens.length === 2
+        ? { ...none, kind: 'complete', sendable: true }
+        : none
+    }
     walked.push({ start: tokens.length - 1, node })
     if (offersCharacter(node)) nameStart = tokens.length - 1
 
