@@ -11,7 +11,8 @@ import { beltPictures, type BeltList, type BeltPicture } from '@/lantern/belt'
  * carried (the Bag) or the spells known, each a square with its name beneath
  * (none on a sideways phone, where the name is in the ring) in its usual
  * colour, ×2 on a counted thing, and the first letter of the name until the
- * picture is made (then the picture, `BeltFace`). Two tiny buttons with pictures only, a pouch and a star,
+ * picture is made (then the picture, `BeltFace`). Two tiny buttons with
+ * pictures only, a pouch and a star,
  * sit at its left end: the lit one is the list showing, pressing the other
  * switches, and pressing either while the belt is away brings it back on that
  * list. ▾ puts it away. ‹ and › show when more pictures are carried than fit;

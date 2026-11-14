@@ -200,11 +200,13 @@ export function beltImageId(kind: 'item' | 'spell', name: string): string {
 /**
  * The classes (by class key) of things that are not carriable when built but are
  * handed over or picked up in play, so they reach the belt; a test plays each
- * act's golden path to keep this and the lists complete.
+ * act's golden path to check it, but only what the path carries; a new
+ * handed-over thing (the shop's wares are bought by Elior) is added here by hand.
  */
 const CARRIED_LATER: readonly string[] = [
   'AncientAmulet',
   'Apple',
+  'Armor',
   'ExtendedMagneticFishingRod',
   'ForestHeartCrystal',
   'MagneticFishingRod',
@@ -215,6 +217,7 @@ const CARRIED_LATER: readonly string[] = [
   'RoomKey',
   'Rope',
   'SecretDocuments',
+  'Sword',
 ]
 
 /** The other names a thing takes in play that show with a picture of their own, by class key (a revived carrot, a strengthened stone). */

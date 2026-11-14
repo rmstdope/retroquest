@@ -23,6 +23,9 @@ export const THING_PROMPTS: Readonly<Record<string, string>> = {
     'A single grey-green fern frond, its tips scorched black as if from a fire.',
   'item-binding-resin':
     'A lump of amber resin, sticky and glossy, with a thread of it hanging down.',
+  'item-armor': 'A plain leather jerkin studded with small iron rivets.',
+  'item-sword':
+    'A plain steel sword with a leather-wrapped grip and a short crosspiece.',
   'item-bread':
     'A round, crusty loaf of brown bread with a split across its top.',
   'item-brass-mirror-segment':

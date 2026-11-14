@@ -1060,6 +1060,13 @@
     "text": "A round red apple with a short stalk and a single green leaf. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
   },
   {
+    "id": "item-armor",
+    "title": "Armor",
+    "width": 256,
+    "height": 256,
+    "text": "A plain leather jerkin studded with small iron rivets. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+  },
+  {
     "id": "item-bread",
     "title": "Bread",
     "width": 256,
@@ -1282,6 +1289,13 @@
     "width": 256,
     "height": 256,
     "text": "A straight, knobbly wooden stick, bare of its bark at one end. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+  },
+  {
+    "id": "item-sword",
+    "title": "Sword",
+    "width": 256,
+    "height": 256,
+    "text": "A plain steel sword with a leather-wrapped grip and a short crosspiece. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
   },
   {
     "id": "item-travel-cloak",

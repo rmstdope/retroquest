@@ -5,6 +5,8 @@ import { setPictureProbe } from '@/lantern/roomPicture'
 import { useBeltPicture } from './useBeltPicture'
 
 /** Runs the composable inside a component and returns what it yields. */
+const mounted: { unmount: () => void }[] = []
+
 function run(name: string): { url: () => string | null } {
   let url = (): string | null => null
   const Probe = defineComponent({
@@ -17,12 +19,17 @@ function run(name: string): { url: () => string | null } {
       return () => h('div')
     },
   })
-  createApp(Probe).mount(document.createElement('div'))
+  const app = createApp(Probe)
+  app.mount(document.createElement('div'))
+  mounted.push(app)
   return { url: () => url() }
 }
 
 describe('useBeltPicture', () => {
-  afterEach(() => setPictureProbe(null))
+  afterEach(() => {
+    setPictureProbe(null)
+    for (const app of mounted.splice(0)) app.unmount()
+  })
 
   it('is null while the picture loads, then its URL', async () => {
     const release = ref<(found: boolean) => void>(() => undefined)

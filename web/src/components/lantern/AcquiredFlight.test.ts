@@ -276,6 +276,28 @@ describe('AcquiredFlight', () => {
       expect(flight.find('svg').exists()).toBe(true)
     })
 
+    it('shows the picture in place of the sign under Reduce motion too', async () => {
+      setPictureProbe(() => Promise.resolve(true))
+      w = mount(AcquiredFlight)
+      useFlightStore().launch(
+        [{ kind: 'item', name: 'bread', count: 1 }],
+        [],
+        true,
+      )
+      await flushPromises()
+      const flight = w.get('[data-testid="flight"]')
+      expect(flight.find('img').exists()).toBe(true)
+      expect(flight.find('svg').exists()).toBe(false)
+    })
+
+    it('gives the picture the thin edge of its kind, on the grey loss card too', async () => {
+      setPictureProbe(() => Promise.resolve(true))
+      w = mount(AcquiredFlight)
+      useFlightStore().launch([], [{ kind: 'item', name: 'bread', count: 1 }])
+      await flushPromises()
+      expect(w.get('img').classes()).toContain('lq-flight-face-item')
+    })
+
     it('shows the picture of a lost thing after the minus sign', async () => {
       setPictureProbe(() => Promise.resolve(true))
       w = mount(AcquiredFlight)

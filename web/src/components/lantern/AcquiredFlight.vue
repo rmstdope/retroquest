@@ -203,7 +203,7 @@ const style = computed(() => {
     <BeltFace
       :kind="flights.current.kind"
       :name="flights.current.name"
-      picture-class="lq-flight-face"
+      :picture-class="`lq-flight-face lq-flight-face-${flights.current.kind}`"
     >
       <svg
         v-if="flights.current.kind === 'item'"
@@ -275,14 +275,20 @@ const style = computed(() => {
   color: var(--lq-spell);
 }
 .lq-flight-face {
-  /* A small square of the picture, in the coloured edge of the card's kind (grey for a loss). */
+  /* A small square of the picture, in the thin coloured edge of its kind (amber thing, blue spell), also on the grey card of a loss. */
   width: calc(44px * var(--lq-text-scale, 1));
   height: calc(44px * var(--lq-text-scale, 1));
   flex: none;
   box-sizing: border-box;
-  border: 2px solid currentColor;
-  border-radius: 10px;
+  border: 1px solid;
+  border-radius: 8px;
   object-fit: cover;
+}
+.lq-flight-face-item {
+  border-color: var(--lq-item-line);
+}
+.lq-flight-face-spell {
+  border-color: var(--lq-spell-line);
 }
 .lq-flight-icon {
   width: calc(28px * var(--lq-text-scale, 1));

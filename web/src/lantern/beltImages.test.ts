@@ -35,11 +35,20 @@ describe('beltImageId', () => {
     expect(beltImageId('item', 'Crystal-clear Water')).toBe(
       'item-crystal-clear-water',
     )
+    // A state in brackets is the same thing.
+    expect(beltImageId('item', 'lantern (lit)')).toBe('item-lantern')
+    expect(beltImageId('item', 'bucket (full)')).toBe('item-bucket')
     expect(beltImageId('spell', 'greater heal')).toBe('spell-greater-heal')
   })
 })
 
 describe('beltImages', () => {
+  it("lists what the shop's wares sell, carriable only once bought", () => {
+    const ids = beltImages(new Act1()).map((i) => i.id)
+    expect(ids).toContain('item-sword')
+    expect(ids).toContain('item-armor')
+  })
+
   it.each(ACTS.map((act) => [act.name, act] as const))(
     'lists %s once each, square, with the shared style after a prompt',
     (_name, act) => {
