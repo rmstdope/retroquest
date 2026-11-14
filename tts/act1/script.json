@@ -320,11 +320,6 @@
     "text": "You know a spell now, but when you reach for it the warmth comes and nothing answers. Grandmother says Mira has a way with herbs, and with other things."
   },
   {
-    "id": "0200b035e089fb",
-    "speaker": "merchant",
-    "text": "Boots, friend? I've one good pair of wandering boots left, walked in and soft, and the soles will outlast you. I'll not take coin for them; coin I can earn anywhere. Something small and fine would buy them. A ring, say. Failing that, my old mare threw a shoe on the hill road; a good iron horseshoe would do me nearly as well. Forgive me if I'm short, friend. I've not eaten since the hill road, and there's no inn this side of Greendale."
-  },
-  {
     "id": "0201b4ec21d3af",
     "speaker": "narrator",
     "text": "The deer came to you in the glade, and where it stood a rare flower opened."
@@ -400,11 +395,6 @@
     "text": "A handful of small, juicy berries. They look edible, but you can't be sure they're safe."
   },
   {
-    "id": "026d47b0d5035d",
-    "speaker": "mother",
-    "text": "My dearest Elior, if you are reading this, you found the bend, as I knew you would. The river remembers what the village forgets. If Malakar comes asking about our line, do not answer him. He is not the friend we knew. Mira keeps the amulet for you. When you are ready, it will know you. Your father and I"
-  },
-  {
     "id": "02777008ee8a7f",
     "speaker": "narrator",
     "text": "Every bottle is labelled in Mira's small, upright hand. Some of the labels are older than you are."
@@ -438,11 +428,6 @@
     "id": "02d25d2e523f27",
     "speaker": "tilda",
     "text": "Magic? In Willowbrook? ... Well. I'll not tell a soul if you'd rather I didn't. But I'll know, and I'll be saving you the first loaf every morning."
-  },
-  {
-    "id": "02d5b07d379eab",
-    "speaker": "merchant",
-    "text": "How are the boots? Give them a week and they'll know your feet better than you do. Forgive me if I'm short, friend. I've not eaten since the hill road, and there's no inn this side of Greendale."
   },
   {
     "id": "02dc158d29c293",
@@ -530,11 +515,6 @@
     "text": "Patches flicks an ear at you, but the words mean nothing to her."
   },
   {
-    "id": "0365b2c22b2690",
-    "speaker": "merchant",
-    "text": "You'll want news, if you're bound for Greendale. It's a sombre city this season: they say King Alden has fallen ill, and no physician can name the sickness. And the roads have gone bad besides. I passed a cart on its side by the hill road, and nobody with it. And it's not only your fields that are failing. I've seen crops gone grey in every valley from here to the capital, ever since the king took to his bed. Keep to the daylight, friend. How are the boots? Give them a week and they'll know your feet better than you do. Forgive me if I'm short, friend. I've not eaten since the hill road, and there's no inn this side of Greendale."
-  },
-  {
     "id": "03668510b9789c",
     "speaker": "fisherman",
     "text": "River's off this season. Fish are sulking, and this arm's gone stiff on me, so I couldn't land one if they weren't."
@@ -568,6 +548,11 @@
     "id": "039b782d29ebe8",
     "speaker": "narrator",
     "text": "They drift past like smoke, and your hand goes through them. The tall figure does not drift with them."
+  },
+  {
+    "id": "039dd366843493",
+    "speaker": "grandmother",
+    "text": "If you're going out, look in on Mira at her hut; she was asking after you. You know she has a way with herbs, and with... other things. Hemlock will have heard whatever there is to hear at the General Store; he always does. And show your face at the forge, or Borin will think you've forgotten him."
   },
   {
     "id": "03b2a91ae4d914",
@@ -1580,6 +1565,11 @@
     "text": "The bucket is empty. The parched rows will need water from somewhere."
   },
   {
+    "id": "098c354de3deb9",
+    "speaker": "mother",
+    "text": "Your father and I"
+  },
+  {
     "id": "099ef7427214cf",
     "speaker": "narrator",
     "text": "It snaps to the nearest bit of iron and has to be pulled free. Small as it is, it does not let go easily."
@@ -1628,6 +1618,11 @@
     "id": "09dbad01a111e2",
     "speaker": "narrator",
     "text": "A heavy iron horseshoe, bent a little at one heel."
+  },
+  {
+    "id": "09eb960acf99a4",
+    "speaker": "grandmother",
+    "text": "Your father wrote in one like that every night, at this table. Half of it I never understood."
   },
   {
     "id": "09f4ddd73f46c9",
@@ -2680,6 +2675,11 @@
     "text": "A hushed clearing hidden deep within the forest, dim and overgrown. Brambles crowd its edges, and the tall grass stands grey and still beneath branches that shut out the sun. In the center, a mossy stone bears a faint inscription, too deep in shadow to read. An unnatural darkness lingers here, though the sky above the branches is clear."
   },
   {
+    "id": "108bf4b1ec09e6",
+    "speaker": "merchant",
+    "text": "Boots, friend? I've one good pair of wandering boots left, walked in and soft, and the soles will outlast you. I'll not take coin for them; coin I can earn anywhere. Something small and fine would buy them. A ring, say."
+  },
+  {
     "id": "109af3cf46b360",
     "speaker": "elior",
     "text": "revive"
@@ -2810,6 +2810,11 @@
     "text": "It bends more than a rod should. It will have to do."
   },
   {
+    "id": "116a45326f37a2",
+    "speaker": "mother",
+    "text": "My dearest Elior, if you are reading this, you found the bend, as I knew you would. The river remembers what the village forgets."
+  },
+  {
     "id": "116aac75767bd3",
     "speaker": "narrator",
     "text": "A small hut hung with drying herbs: lavender, sage, and roots in bundles from the rafters. Shelves of bottles line the walls, every one labelled. Mira moves among them without looking, the way you move through your own kitchen. The stand where the amulet rested stands empty."
@@ -2913,6 +2918,11 @@
     "id": "11dd4f19fe2e0e",
     "speaker": "grandmother",
     "text": "I kept that in paper all these years so you could hand it back to me? She left it for you. Wear it."
+  },
+  {
+    "id": "11f1ae6497a795",
+    "speaker": "merchant",
+    "text": "How are the boots? Give them a week and they'll know your feet better than you do."
   },
   {
     "id": "11f4b58f1fb91f",
@@ -3055,6 +3065,11 @@
     "text": "Tilda keeps her floury hands behind her back."
   },
   {
+    "id": "133042235f493c",
+    "speaker": "grandmother",
+    "text": "You've a good heart, Elior. Don't let anyone talk you out of it."
+  },
+  {
     "id": "13327ebef4da3d",
     "speaker": "narrator",
     "text": "A warm light settles over Hemlock and finds nothing that needs mending."
@@ -3168,11 +3183,6 @@
     "id": "13d48619d5c015",
     "speaker": "narrator",
     "text": "Shadows over Willowbrook: Something is wrong in Willowbrook. The fields, the square and the well each hold a part of it."
-  },
-  {
-    "id": "13d8c3545b7f3a",
-    "speaker": "grandmother",
-    "text": "So the chickens gave up my little secret. I tucked that key up in the coop rafters years ago. It opens the old shed by the mill. It was a workshop once... your father's. I never could bring myself to go in. It's dark as a cellar in there, dear; take the lantern with you."
   },
   {
     "id": "13e55a61b29678",
@@ -3495,6 +3505,11 @@
     "text": "You'd fetch a poor price for that word on any road I know, friend."
   },
   {
+    "id": "15ba2e42eb660c",
+    "speaker": "merchant",
+    "text": "You'll want news, if you're bound for Greendale. It's a sombre city this season: they say King Alden has fallen ill, and no physician can name the sickness. And the roads have gone bad besides. I passed a cart on its side by the hill road, and nobody with it. And it's not only your fields that are failing. I've seen crops gone grey in every valley from here to the capital, ever since the king took to his bed. Keep to the daylight, friend."
+  },
+  {
     "id": "15be0c5891cd29",
     "speaker": "elior",
     "text": "hello"
@@ -3675,6 +3690,11 @@
     "text": "A small hut hung with drying herbs: lavender, sage, and roots in bundles from the rafters. Shelves of bottles line the walls, every one labelled. Mira moves among them without looking, the way you move through your own kitchen."
   },
   {
+    "id": "16e754dcb3d08f",
+    "speaker": "grandmother",
+    "text": "It was a workshop once... your father's. I never could bring myself to go in. It's dark as a cellar in there, dear; take the lantern with you."
+  },
+  {
     "id": "16edfcea3ba8e5",
     "speaker": "narrator",
     "text": "Borin eyes the coin."
@@ -3693,6 +3713,11 @@
     "id": "170dffc3a2d0ec",
     "speaker": "mira",
     "text": "And look at that well again on your way. Water doesn't sour without a reason."
+  },
+  {
+    "id": "17140de494a0fe",
+    "speaker": "merchant",
+    "text": "Failing that, my old mare threw a shoe on the hill road; a good iron horseshoe would do me nearly as well."
   },
   {
     "id": "171506b6cf1ced",
@@ -3820,11 +3845,6 @@
     "text": "It's a sturdy wooden door, locked tight. There's a keyhole visible."
   },
   {
-    "id": "17d4ca14565432",
-    "speaker": "grandmother",
-    "text": "The village is on edge, you'll have noticed. Folk keep their voices down in the square these days, and nobody will say why. If you're going out, look in on Mira at her hut; she was asking after you. You know she has a way with herbs, and with... other things. Hemlock will have heard whatever there is to hear at the General Store; he always does. And show your face at the forge, or Borin will think you've forgotten him. You've a good heart, Elior. Don't let anyone talk you out of it."
-  },
-  {
     "id": "17e1cb133266c5",
     "speaker": "hemlock",
     "text": "Keep it for later, lad. I've a shop to mind."
@@ -3868,6 +3888,11 @@
     "id": "183f821d2aac3b",
     "speaker": "narrator",
     "text": "The coin lands heads up. Seems like a regular coin, perhaps for trading."
+  },
+  {
+    "id": "18501e0018f749",
+    "speaker": "merchant",
+    "text": "Forgive me if I'm short, friend. I've not eaten since the hill road, and there's no inn this side of Greendale."
   },
   {
     "id": "18521d8843e1ac",
@@ -4015,6 +4040,11 @@
     "text": "The key turns in the lock! The shed door creaks open."
   },
   {
+    "id": "191498f4de6fab",
+    "speaker": "grandmother",
+    "text": "He thought the land was getting sick long before anyone else did. And there was one thing he kept coming back to: a way to call a thing back when it's nearly gone. Revive, he called it. He'd try it on my herbs when they wilted."
+  },
+  {
     "id": "191afc75332e35",
     "speaker": "grandmother",
     "text": "Out already? You were scribbling in that journal before your eyes were open. Read it while it's fresh."
@@ -4028,6 +4058,11 @@
     "id": "19244f5c6fea49",
     "speaker": "narrator",
     "text": "Tilda, the baker's wife, flour to the elbows. She knows what everyone in Willowbrook had for breakfast, and who they ate it with."
+  },
+  {
+    "id": "1926412d76768d",
+    "speaker": "grandmother",
+    "text": "So the chickens gave up my little secret. I tucked that key up in the coop rafters years ago. It opens the old shed by the mill."
   },
   {
     "id": "192b401a127985",
@@ -4165,11 +4200,6 @@
     "text": "I'll make a pie. You'll be here to eat it, I hope."
   },
   {
-    "id": "19f9bc427a7b3c",
-    "speaker": "merchant",
-    "text": "You'll want news, if you're bound for Greendale. It's a sombre city this season: they say King Alden has fallen ill, and no physician can name the sickness. And the roads have gone bad besides. I passed a cart on its side by the hill road, and nobody with it. And it's not only your fields that are failing. I've seen crops gone grey in every valley from here to the capital, ever since the king took to his bed. Keep to the daylight, friend. Boots, friend? I've one good pair of wandering boots left, walked in and soft, and the soles will outlast you. I'll not take coin for them; coin I can earn anywhere. Something small and fine would buy them. A ring, say. Failing that, my old mare threw a shoe on the hill road; a good iron horseshoe would do me nearly as well. Forgive me if I'm short, friend. I've not eaten since the hill road, and there's no inn this side of Greendale."
-  },
-  {
     "id": "1a0584f15d4544",
     "speaker": "narrator",
     "text": "The runes on the lid fade as you read, their work done. The box was sealed so that only your magic could ever open it."
@@ -4193,11 +4223,6 @@
     "id": "1a21472deec87b",
     "speaker": "narrator",
     "text": "You can't unlock a person!"
-  },
-  {
-    "id": "1a35a4f872fc47",
-    "speaker": "grandmother",
-    "text": "Your father wrote in one like that every night, at this table. Half of it I never understood. He thought the land was getting sick long before anyone else did. And there was one thing he kept coming back to: a way to call a thing back when it's nearly gone. Revive, he called it. He'd try it on my herbs when they wilted."
   },
   {
     "id": "1a417e323b4711",
@@ -4523,6 +4548,16 @@
     "id": "1c6132c7c2896c",
     "speaker": "elior",
     "text": "I knew that voice. Not the way you know a neighbour's, but the way you know a song someone sang to you before you had words for it. It made my chest ache. I can't think from where."
+  },
+  {
+    "id": "1c613417f5382b",
+    "speaker": "grandmother",
+    "text": "The village is on edge, you'll have noticed. Folk keep their voices down in the square these days, and nobody will say why."
+  },
+  {
+    "id": "1c647c64bc920f",
+    "speaker": "mother",
+    "text": "If Malakar comes asking about our line, do not answer him. He is not the friend we knew. Mira keeps the amulet for you. When you are ready, it will know you."
   },
   {
     "id": "1c6599d8336db4",

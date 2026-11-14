@@ -37,7 +37,7 @@ const KING_NEWS =
   "And it's not only your fields that are failing. " +
   "I've seen crops gone grey in every valley from here to the capital, " +
   'ever since the king took to his bed. ' +
-  'Keep to the daylight, friend.\n'
+  'Keep to the daylight, friend.'
 
 /** Whether the item is food the merchant won't take from a traveller (not the fresh bread). */
 function isRoadFood(item: Item): boolean {
@@ -53,8 +53,16 @@ function isRoadFood(item: Item): boolean {
 
 /** What he adds to every talk until he has been given the fresh bread. */
 const HUNGER_LINE =
-  "\nForgive me if I'm short, friend. I've not eaten since the hill road, " +
+  "Forgive me if I'm short, friend. I've not eaten since the hill road, " +
   "and there's no inn this side of Greendale."
+
+/** Each non-empty line as a quote of its own, one per line, so a hurry passes one at a time. */
+function quotes(...lines: string[]): string {
+  return lines
+    .filter((line) => line)
+    .map((line) => speech(line))
+    .join('\n')
+}
 
 /**
  * Traveling merchant NPC who trades one pair of wandering boots: for the
@@ -84,7 +92,8 @@ export class Merchant extends Character {
 
   /**
    * Dialogue when the player speaks to the merchant. The first talk puts the
-   * news of the ill king ahead of his usual line, in the same speech.
+   * news of the ill king ahead of his usual line; each line is a quote of its
+   * own (`quotes`).
    */
   override talkTo(gameState: GameState): string {
     let news = ''
@@ -96,31 +105,31 @@ export class Merchant extends Character {
     if (!this.bootsGiven) {
       return (
         `The ${characterName(this.name)} offers a friendly nod. ` +
-        speech(
-          news +
-            "Boots, friend? I've one good pair of " +
+        quotes(
+          news,
+          "Boots, friend? I've one good pair of " +
             '[item_name]wandering boots[/item_name] left, walked in and ' +
             "soft, and the soles will outlast you. I'll not take coin for " +
             'them; coin I can earn anywhere. Something small and fine ' +
-            'would buy them. A ring, say.\n' +
-            'Failing that, my old mare threw a shoe on the hill road; ' +
-            'a good iron [item_name]horseshoe[/item_name] would do me nearly as well.' +
-            this.hunger(),
+            'would buy them. A ring, say.',
+          'Failing that, my old mare threw a shoe on the hill road; ' +
+            'a good iron [item_name]horseshoe[/item_name] would do me nearly as well.',
+          this.hunger(),
         )
       )
     }
     return (
       `The ${characterName(this.name)} grins. ` +
-      speech(
-        news +
-          'How are the [item_name]boots[/item_name]? Give them a week and ' +
-          "they'll know your feet better than you do." +
-          this.hunger(),
+      quotes(
+        news,
+        'How are the [item_name]boots[/item_name]? Give them a week and ' +
+          "they'll know your feet better than you do.",
+        this.hunger(),
       )
     )
   }
 
-  /** The hunger line that ends his speech until he has been fed. */
+  /** What he adds while still hungry: the hunger line until he has been fed, else nothing. */
   private hunger(): string {
     return this.fed ? '' : HUNGER_LINE
   }

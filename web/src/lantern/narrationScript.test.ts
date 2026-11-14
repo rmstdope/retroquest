@@ -94,6 +94,29 @@ describe('linesOfTurn', () => {
     expect(lines.map((l) => l.speaker)).toEqual(['mother', 'narrator'])
   })
 
+  it('refuses a quote that spans several lines, since a hurry passes one recording and the player sees lines', () => {
+    expect(() =>
+      linesOfTurn(
+        '[character_name]Grandmother[/character_name]\n' +
+          '[dialogue]The village is on edge.\nLook in on Mira.[/dialogue]',
+        WRITERS,
+      ),
+    ).toThrow(/The village is on edge\./)
+  })
+
+  it('reads a quote split into one per line as one line each', () => {
+    const lines = linesOfTurn(
+      '[character_name]Grandmother[/character_name]\n' +
+        '[dialogue]The village is on edge.[/dialogue]\n' +
+        '[dialogue]Look in on Mira.[/dialogue]',
+      WRITERS,
+    )
+    expect(lines.map((l) => [l.speaker, l.text])).toEqual([
+      ['grandmother', 'The village is on edge.'],
+      ['grandmother', 'Look in on Mira.'],
+    ])
+  })
+
   it('also gives narrated writing (a dim note on the page) to its writer, under the narrator’s key', () => {
     const [line] = linesOfTurn(
       'What a night, it was. A note in dim ink.',

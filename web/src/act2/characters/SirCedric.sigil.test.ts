@@ -1,7 +1,7 @@
 /** Sir Cedric recognises the Wardens' sigil on Elior's amulet (rq-roe.2). */
 import { describe, it, expect } from 'vitest'
 import { Game, Quest } from '@/engine'
-import { executeCommands } from '@/testing/gameHelpers'
+import { executeCommands, quotesOf } from '@/testing/gameHelpers'
 import { parseTurn } from '@/lantern/parseTurn'
 import { Act2 } from '../Act2'
 import {
@@ -97,15 +97,15 @@ describe('Sir Cedric and the sigil', () => {
     ].map((piece) => text.indexOf(piece))
     expect(order).toEqual([...order].sort((a, b) => a - b))
     expect(order.every((i) => i >= 0)).toBe(true)
+    // The sigil, the Wardens and the storm: a quote each, one per paragraph.
     expect(parseTurn(out).map((b) => b.kind)).toEqual([
       'dialogue',
       'text',
       'dialogue',
+      'dialogue',
+      'dialogue',
     ])
-    const last = parseTurn(out)[2]
-    expect('markup' in last && last.markup).toContain(
-      SIGIL_WORDS + '\n\n' + BOUND_WORDS,
-    )
+    expect(quotesOf(out)).toHaveLength(4)
     expect(out).toContain('[item_name]ancient amulet[/item_name]')
     expect(game.state.getStoryFlag(FLAG_SPOKEN_TO_SIR_CEDRIC)).toBe(true)
     expect(game.state.getStoryFlag(FLAG_CEDRIC_RECOGNISED_SIGIL)).toBe(true)
@@ -161,7 +161,9 @@ describe('Sir Cedric and the sigil', () => {
       'text',
       'dialogue',
       'dialogue',
+      'dialogue',
     ])
+    quotesOf(out)
     const again = executeCommands(game, ['talk to sir cedric'])
     expect(again).not.toContain('Wardens')
     expect(again).not.toContain('goes very still')

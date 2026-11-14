@@ -91,15 +91,21 @@ export class Grandmother extends Character {
         '\nShe does not sit down herself.\n' +
         speech(
           "The village is on edge, you'll have noticed. Folk keep their " +
-            'voices down in the square these days, and nobody will say why.\n' +
-            `If you're going out, look in on ${characterName('Mira')} at her ` +
+            'voices down in the square these days, and nobody will say why.',
+        ) +
+        '\n' +
+        speech(
+          `If you're going out, look in on ${characterName('Mira')} at her ` +
             'hut; she was asking after you. You know she has a way with ' +
             'herbs, and with... other things. ' +
             `${characterName('Hemlock')} will have heard whatever there is ` +
             'to hear at the [room_name]General Store[/room_name]; he always ' +
             'does. And show your face at the forge, or ' +
-            `${characterName('Borin')} will think you've forgotten him.\n` +
-            `You've a good heart, ${characterName('Elior')}. ` +
+            `${characterName('Borin')} will think you've forgotten him.`,
+        ) +
+        '\n' +
+        speech(
+          `You've a good heart, ${characterName('Elior')}. ` +
             "Don't let anyone talk you out of it.",
         )
       this.dialogueState.initial_talk = false // Change state after initial talk
@@ -244,8 +250,11 @@ export class Grandmother extends Character {
       'lying open where you left it. ' +
       speech(
         'Your father wrote in one like that every night, at this table. ' +
-          'Half of it I never understood.\n' +
-          'He thought the land was getting sick long before anyone else did. ' +
+          'Half of it I never understood.',
+      ) +
+      '\n' +
+      speech(
+        'He thought the land was getting sick long before anyone else did. ' +
           'And there was one thing he kept coming back to: a way to call a ' +
           "thing back when it's nearly gone. [spell_name]Revive[/spell_name], " +
           "he called it. He'd try it on my herbs when they wilted.",
@@ -417,12 +426,17 @@ export class Grandmother extends Character {
 
   /** What she says on seeing the shed key she once hid in the chicken coop. */
   private shedKeyHint(): string {
-    return speech(
-      'So the chickens gave up my little secret. I tucked that key up in the ' +
-        'coop rafters years ago. It opens the old shed by the mill.\n' +
+    return (
+      speech(
+        'So the chickens gave up my little secret. I tucked that key up in the ' +
+          'coop rafters years ago. It opens the old shed by the mill.',
+      ) +
+      '\n' +
+      speech(
         "It was a workshop once... your father's. I never could bring myself " +
-        "to go in. It's dark as a cellar in there, dear; take the " +
-        '[item_name]lantern[/item_name] with you.',
+          "to go in. It's dark as a cellar in there, dear; take the " +
+          '[item_name]lantern[/item_name] with you.',
+      )
     )
   }
 

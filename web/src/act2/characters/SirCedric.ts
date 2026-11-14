@@ -496,7 +496,7 @@ export class SirCedric extends Character {
         characterName('Sir Cedric') +
         "'s eyes fall on it, and he goes very still." +
         '\n\n' +
-        dialogue('Sir Cedric', this.recognitionWords()) +
+        this.recognitionWords() +
         '\n\n' +
         this.normalReply(gameState)
       )
@@ -504,19 +504,24 @@ export class SirCedric extends Character {
     return this.normalReply(gameState)
   }
 
-  /** The words in which Cedric names the sigil and Elior's family bound to the Wardens. */
+  /** The words in which Cedric names the sigil and Elior's family bound to the Wardens: two quotes, one per paragraph. */
   private recognitionWords(): string {
     return (
-      'That sigil. The sun rising over three linked rings. I have seen it ' +
-      'only in the old histories in the castle archive: it is the mark of ' +
-      'the Wardens of the Dawn. They guarded this kingdom long ago, and ' +
-      'most have forgotten them. The oldest histories draw the mark another ' +
-      'way: a tree under two moons, from before there were three things to ' +
-      'guard.' +
+      dialogue(
+        'Sir Cedric',
+        'That sigil. The sun rising over three linked rings. I have seen it ' +
+          'only in the old histories in the castle archive: it is the mark of ' +
+          'the Wardens of the Dawn. They guarded this kingdom long ago, and ' +
+          'most have forgotten them. The oldest histories draw the mark another ' +
+          'way: a tree under two moons, from before there were three things to ' +
+          'guard.',
+      ) +
       '\n\n' +
-      'Whoever wore that amulet before you was a Warden, and your family is ' +
-      'bound to them. I know no more than that. But I know enough to listen ' +
-      'to you.'
+      speech(
+        'Whoever wore that amulet before you was a Warden, and your family is ' +
+          'bound to them. I know no more than that. But I know enough to listen ' +
+          'to you.',
+      )
     )
   }
 
@@ -533,11 +538,10 @@ export class SirCedric extends Character {
       AMULET_GLOW +
       ' His eyes have fallen on it.' +
       '\n\n' +
-      dialogue(
-        'Sir Cedric',
-        this.recognitionWords() +
-          '\n\n' +
-          'There is a storm gathering over this kingdom, and I do not yet ' +
+      this.recognitionWords() +
+      '\n\n' +
+      speech(
+        'There is a storm gathering over this kingdom, and I do not yet ' +
           'know its name. The sigil tells me where you come from; it does ' +
           'not tell me what you can do. Show me, with a blade, here in the ' +
           'yard.',

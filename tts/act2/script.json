@@ -905,6 +905,11 @@
     "text": "You found an entry pass!"
   },
   {
+    "id": "088040a5f804cf",
+    "speaker": "sir cedric",
+    "text": "That sigil. The sun rising over three linked rings. I have seen it only in the old histories in the castle archive: it is the mark of the Wardens of the Dawn. They guarded this kingdom long ago, and most have forgotten them. The oldest histories draw the mark another way: a tree under two moons, from before there were three things to guard."
+  },
+  {
     "id": "08b359213adf11",
     "speaker": "forest sprites",
     "text": "—wanting the deep paths."
@@ -2890,6 +2895,11 @@
     "text": "Sir Cedric lowers his blade and nods."
   },
   {
+    "id": "1d012b6b84b254",
+    "speaker": "sir cedric",
+    "text": "There is a storm gathering over this kingdom, and I do not yet know its name. The sigil tells me where you come from; it does not tell me what you can do. Show me, with a blade, here in the yard."
+  },
+  {
     "id": "1d0ab320bc37ea",
     "speaker": "narrator",
     "text": "The Gathering Storm: The survival kit, the lantern and the rope are packed. The merchants of Greendale have done what they can for you. The rest of the road leads to the edge of the Enchanted Forest."
@@ -2913,11 +2923,6 @@
     "id": "1d4a09f002189e",
     "speaker": "narrator",
     "text": "He pauses, and his voice drops."
-  },
-  {
-    "id": "1d69cb002c235a",
-    "speaker": "sir cedric",
-    "text": "That sigil. The sun rising over three linked rings. I have seen it only in the old histories in the castle archive: it is the mark of the Wardens of the Dawn. They guarded this kingdom long ago, and most have forgotten them. The oldest histories draw the mark another way: a tree under two moons, from before there were three things to guard. Whoever wore that amulet before you was a Warden, and your family is bound to them. I know no more than that. But I know enough to listen to you. There is a storm gathering over this kingdom, and I do not yet know its name. The sigil tells me where you come from; it does not tell me what you can do. Show me, with a blade, here in the yard."
   },
   {
     "id": "1d7be17fbf8d29",
@@ -3283,6 +3288,11 @@
     "id": "1fdb21dd205fa5",
     "speaker": "narrator",
     "text": "He takes a practice blade from the rack and squares off against you."
+  },
+  {
+    "id": "1fdc7264e3bc5f",
+    "speaker": "sir cedric",
+    "text": "Whoever wore that amulet before you was a Warden, and your family is bound to them. I know no more than that. But I know enough to listen to you."
   },
   {
     "id": "1fe084f76b5a38",
