@@ -556,25 +556,36 @@ test.describe('the arrival told on the picture', () => {
 })
 
 test.describe('a long arrival on a narrow window (rq-fc9f)', () => {
-  /** The text of each line whose end shows inside its text box (not cut off or faded below it). */
-  async function endsShown(page: Page): Promise<string[]> {
+  /** The page up on the card that is not fading out: all its lines, and those whose end shows. */
+  interface ShownPage {
+    lines: string[]
+    ends: string[]
+  }
+
+  /**
+   * The page up, read in one go from the card that is not fading out, or null
+   * once no such card is left. The card goes on its own when the last page is
+   * read, so a count of cards and a later look at its lines can see two
+   * different moments (rq-z206).
+   */
+  async function pageUp(page: Page): Promise<ShownPage | null> {
     return arrival(page)
-      .locator('.lq-arrival-line')
-      .evaluateAll((lines) =>
-        lines
-          .filter((line) => {
-            const box = line
-              .closest('.lq-arrival-text')!
-              .getBoundingClientRect()
-            // The bottom 44 px of a box with more below are faded out.
-            const faded = line
-              .closest('.lq-arrival-text')!
-              .classList.contains('lq-fade-b')
-            const floor = box.bottom - (faded ? 44 : 0)
-            return line.getBoundingClientRect().bottom <= floor + 1
-          })
-          .map((line) => line.textContent ?? ''),
-      )
+      .locator('.lq-arrival-card:not(.lq-arrival-fade-leave-active)')
+      .evaluateAll((cards) => {
+        const card = cards[0]
+        if (!card) return null
+        const lines = [...card.querySelectorAll('.lq-arrival-line')]
+        const ends = lines.filter((line) => {
+          const text = line.closest('.lq-arrival-text')!
+          const box = text.getBoundingClientRect()
+          // The bottom 44 px of a box with more below are faded out.
+          const floor =
+            box.bottom - (text.classList.contains('lq-fade-b') ? 44 : 0)
+          return line.getBoundingClientRect().bottom <= floor + 1
+        })
+        const text = (line: Element): string => line.textContent ?? ''
+        return { lines: lines.map(text), ends: ends.map(text) }
+      })
   }
 
   /** Every sentence of the Dream's description, each of which must be shown. */
@@ -602,27 +613,29 @@ test.describe('a long arrival on a narrow window (rq-fc9f)', () => {
     const card = arrival(page).locator('.lq-arrival-card')
     await expect(card).toHaveCount(1)
     const seen: string[] = []
-    for (let i = 0; i < 12 && (await card.count()); i++) {
-      await expect(
-        arrival(page).locator('.lq-arrival-line').first(),
-      ).toBeVisible()
-      const shown = await endsShown(page)
-      seen.push(...shown)
-      const before = await arrival(page)
-        .locator('.lq-arrival-line')
-        .allTextContents()
+    for (let i = 0; i < 12; i++) {
+      // Wait for the page to show the end of every line on it (as it does
+      // once it is cut and laid out), or for the card to have gone.
+      let up = null as ShownPage | null
+      await expect
+        .poll(
+          async () => {
+            up = await pageUp(page)
+            return (
+              up === null ||
+              (up.lines.length > 0 && up.ends.length === up.lines.length)
+            )
+          },
+          { message: 'the page up shows the end of every line on it' },
+        )
+        .toBe(true)
+      if (!up) break
+      seen.push(...up.ends)
+      const before = up.lines
       await page.keyboard.press('Enter')
       // The page up gives way to the next page, the next part, or nothing.
       await expect
-        .poll(async () =>
-          (await card.count()) === 0
-            ? null
-            : await arrival(page)
-                .locator(
-                  '.lq-arrival-card:not(.lq-arrival-fade-leave-active) .lq-arrival-line',
-                )
-                .allTextContents(),
-        )
+        .poll(async () => (await pageUp(page))?.lines ?? null)
         .not.toEqual(before)
     }
     const told = seen.join(' ')

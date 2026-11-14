@@ -188,13 +188,31 @@ test.describe('quest news told in the middle of the picture', () => {
       // Each page's list by its text, so a page seen twice counts once.
       let alone = ''
       const lefts: Record<string, number> = {}
+      const list = box.locator('.lq-quest-checklist')
+      // The page's list in one read: the card can go between two reads (the
+      // last page ends the news), and a read of a list that is gone waits on
+      // it until the test times out (rq-z206).
+      const read = (): Promise<{
+        text: string
+        items: number
+        left: number
+      } | null> =>
+        list.evaluateAll((lists) => {
+          const first = lists[0] as HTMLElement | undefined
+          return first
+            ? {
+                text: first.innerText,
+                items: first.querySelectorAll('li').length,
+                left: first.getBoundingClientRect().x,
+              }
+            : null
+        })
       for (let turn = 0; turn < 14; turn++) {
-        const list = box.locator('.lq-quest-checklist')
-        if ((await list.count()) === 0) break
-        const first = await list.first().innerText({ timeout: 1500 })
-        if ((await list.first().locator('li').count()) === 1) alone = first
-        const bounds = await list.first().boundingBox({ timeout: 1500 })
-        lefts[first] = Math.round(bounds?.x ?? -1)
+        const shown = await read()
+        if (!shown) break
+        const first = shown.text
+        if (shown.items === 1) alone = first
+        lefts[first] = Math.round(shown.left)
         // Enter, with no control focused, goes on a page; the last ends the
         // news and takes the card away.
         await page.evaluate(() =>
@@ -202,9 +220,7 @@ test.describe('quest news told in the middle of the picture', () => {
         )
         await page.keyboard.press('Enter')
         await expect
-          .poll(async () =>
-            (await list.count()) === 0 ? '' : list.first().innerText(),
-          )
+          .poll(async () => (await read())?.text ?? '')
           .not.toBe(first)
       }
       expect(Object.keys(lefts).length).toBeGreaterThan(1)
