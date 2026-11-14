@@ -265,6 +265,45 @@ describe('LanternLayout: leaving by pressing a way out in the picture', () => {
     expect(submit).not.toHaveBeenCalled()
   })
 
+  it("takes a press on a way's dot through the words as a press on the way: it goes, and a change of scene is brought up first", async () => {
+    const store = await cottage()
+    await openTheWays(store)
+    const submit = vi.spyOn(store, 'submitCommand')
+    document.dispatchEvent(
+      new KeyboardEvent('keydown', { key: 's', bubbles: true }),
+    )
+    await w.vm.$nextTick()
+    const story = w.get('.lq-story').element
+    const dot = async (): Promise<void> => {
+      const wrap = w.get('.lq-story-wrap').element
+      wrap.dispatchEvent(
+        new MouseEvent('pointermove', {
+          clientX: 576,
+          clientY: 108,
+          bubbles: true,
+        }),
+      )
+      await w.vm.$nextTick()
+      story.dispatchEvent(
+        new MouseEvent('click', {
+          clientX: 576,
+          clientY: 108,
+          bubbles: true,
+          cancelable: true,
+        }),
+      )
+      await w.vm.$nextTick()
+    }
+    const reached = vi.fn()
+    useStageSpeechStore().sceneChange = { turnId: 1, unit: 1, reached }
+    await dot()
+    expect(reached).toHaveBeenCalled()
+    expect(submit).not.toHaveBeenCalled()
+    useStageSpeechStore().sceneChange = null
+    await dot()
+    expect(submit).toHaveBeenCalledWith('go east')
+  })
+
   it('closes an open panel and goes on the same press', async () => {
     const store = await cottage()
     await openTheWays(store)

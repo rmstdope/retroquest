@@ -42,17 +42,18 @@ describe('decidePointerPress', () => {
       )
     })
 
-    it('leaves a thing and a way dot to do nothing', () => {
+    it('leaves a thing to do nothing, and a way dot still goes', () => {
       expect(decidePointerPress(press('thing', { telling: true })).action).toBe(
         'none',
       )
       expect(
-        decidePointerPress(press('exit-dot', { telling: true })).action,
-      ).toBe('none')
+        decidePointerPress(press('exit-dot', { telling: true, way: true }))
+          .action,
+      ).toBe('go-way')
     })
   })
 
-  describe('a narrated turn without speech', () => {
+  describe('a narrated turn without speech (the module tells it from one with speech by nothing: both are `telling`)', () => {
     it('a press on the picture still hurries the narrator', () => {
       expect(
         decidePointerPress(press('picture', { telling: true })).action,

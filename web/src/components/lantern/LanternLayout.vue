@@ -779,7 +779,7 @@ function onWordsPress(event: MouseEvent): void {
   event.stopPropagation()
   event.preventDefault()
   if (dot.kind === 'exit') {
-    const way = dot.direction ?? null
+    const way = dot.direction || null
     pressOn('exit-dot', { way: way !== null }, way)
     return
   }
