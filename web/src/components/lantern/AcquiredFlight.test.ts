@@ -2,6 +2,8 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { mount, type VueWrapper } from '@vue/test-utils'
 import { createPinia, setActivePinia } from 'pinia'
+import { flushPromises } from '@vue/test-utils'
+import { setPictureProbe } from '@/lantern/roomPicture'
 import AcquiredFlight from './AcquiredFlight.vue'
 import {
   FLIGHT_HOLD_MS,
@@ -29,6 +31,7 @@ describe('AcquiredFlight', () => {
     vi.useFakeTimers()
   })
   afterEach(() => {
+    setPictureProbe(null)
     w?.unmount()
     document.body.innerHTML = ''
     vi.useRealTimers()
@@ -237,6 +240,52 @@ describe('AcquiredFlight', () => {
       expect(w.get('[aria-live="polite"]').text()).toBe(
         'Lost Bread. Gained Hook',
       )
+    })
+  })
+
+  describe('with pictures made', () => {
+    it('shows a gained painted thing as its picture in place of the bag sign', async () => {
+      setPictureProbe(() => Promise.resolve(true))
+      w = mount(AcquiredFlight)
+      useFlightStore().launch([{ kind: 'item', name: 'bread', count: 2 }])
+      await flushPromises()
+      const flight = w.get('[data-testid="flight"]')
+      expect(flight.find('img').attributes('src')).toMatch(/item-bread\.png$/)
+      expect(flight.find('svg').exists()).toBe(false)
+      expect(flight.text()).toBe('Bread ×2')
+    })
+
+    it('shows a learnt painted spell in place of the sparkle', async () => {
+      setPictureProbe(() => Promise.resolve(true))
+      w = mount(AcquiredFlight)
+      useFlightStore().launch([{ kind: 'spell', name: 'light', count: 1 }])
+      await flushPromises()
+      const flight = w.get('[data-testid="flight"]')
+      expect(flight.classes()).toContain('lq-flight-spell')
+      expect(flight.find('img').attributes('src')).toMatch(/spell-light\.png$/)
+      expect(flight.find('svg').exists()).toBe(false)
+    })
+
+    it('keeps the bag sign and the sparkle for a thing not painted yet', async () => {
+      setPictureProbe(() => Promise.resolve(false))
+      w = mount(AcquiredFlight)
+      useFlightStore().launch([{ kind: 'item', name: 'bread', count: 1 }])
+      await flushPromises()
+      const flight = w.get('[data-testid="flight"]')
+      expect(flight.find('img').exists()).toBe(false)
+      expect(flight.find('svg').exists()).toBe(true)
+    })
+
+    it('shows the picture of a lost thing after the minus sign', async () => {
+      setPictureProbe(() => Promise.resolve(true))
+      w = mount(AcquiredFlight)
+      useFlightStore().launch([], [{ kind: 'item', name: 'bread', count: 1 }])
+      await flushPromises()
+      const flight = w.get('[data-testid="flight"]')
+      expect(flight.classes()).toContain('lq-flight-lost')
+      expect(flight.find('.lq-flight-minus').exists()).toBe(true)
+      expect(flight.find('img').exists()).toBe(true)
+      expect(flight.find('svg').exists()).toBe(false)
     })
   })
 })

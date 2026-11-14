@@ -24,6 +24,7 @@ import {
   SHARED_PORTRAITS,
   TITLE_IMAGE_ID,
   allImages,
+  beltImages,
   characterImages,
   portraitId,
   roomImages,
@@ -177,11 +178,15 @@ describe('characterImages', () => {
     expect(portraitId('Act4', 'Mira')).toBe('portrait-mira')
   })
 
-  it('lists the rooms first and the portraits after them', () => {
+  it('lists the rooms first, the portraits after them, then the belt pictures', () => {
     const act = new Act1()
     const rooms = roomImages(act).length
+    const portraits = characterImages(act).length
     expect(allImages(act).slice(0, rooms)).toEqual(roomImages(act))
-    expect(allImages(act).slice(rooms)).toEqual(characterImages(act))
+    expect(allImages(act).slice(rooms, rooms + portraits)).toEqual(
+      characterImages(act),
+    )
+    expect(allImages(act).slice(rooms + portraits)).toEqual(beltImages(act))
   })
 
   it('starts every portrait prompt with a face portrait, in every act', () => {
