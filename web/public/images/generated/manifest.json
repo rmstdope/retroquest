@@ -30,6 +30,11 @@
       }
     }
   },
+  "act1-abandoned-shed-inside": {
+    "file": "act1-abandoned-shed-inside.png",
+    "width": 1920,
+    "height": 1080
+  },
   "act1-blacksmiths-forge": {
     "file": "act1-blacksmiths-forge.png",
     "width": 1920,
