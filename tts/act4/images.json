@@ -631,6 +631,90 @@
     ]
   },
   {
+    "id": "item-ancient-amulet",
+    "title": "Ancient Amulet",
+    "width": 256,
+    "height": 256,
+    "text": "A worn bronze amulet on a thin chain, a spiral cut into its green-tinged face. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+  },
+  {
+    "id": "item-echo-stone",
+    "title": "Echo Stone",
+    "width": 256,
+    "height": 256,
+    "text": "A smooth grey stone with a ring of thin rings carved around it like ripples. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+  },
+  {
+    "id": "item-enhanced-echo-stone",
+    "title": "Enhanced Echo Stone",
+    "width": 256,
+    "height": 256,
+    "text": "A smooth grey stone with bright rings carved around it, glowing a pale blue. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+  },
+  {
+    "id": "item-forest-heart-crystal",
+    "title": "Forest Heart Crystal",
+    "width": 256,
+    "height": 256,
+    "text": "A green crystal shaped like a heart, with a pale light in its middle. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+  },
+  {
+    "id": "item-guardians-chain",
+    "title": "Guardian's Chain",
+    "width": 256,
+    "height": 256,
+    "text": "A heavy iron chain with thick links and a broken clasp at one end. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+  },
+  {
+    "id": "item-guardians-essence",
+    "title": "Guardian's Essence",
+    "width": 256,
+    "height": 256,
+    "text": "A small bottle of swirling silver mist, sealed with a wax stopper. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+  },
+  {
+    "id": "item-knights-redemption",
+    "title": "Knight's Redemption",
+    "width": 256,
+    "height": 256,
+    "text": "A plain steel sword with a worn leather grip, laid blade down. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+  },
+  {
+    "id": "item-lifelight-elixir",
+    "title": "Lifelight Elixir",
+    "width": 256,
+    "height": 256,
+    "text": "A slender glass vial of glowing golden liquid with a cork stopper. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+  },
+  {
+    "id": "item-loyalty-token",
+    "title": "Loyalty Token",
+    "width": 256,
+    "height": 256,
+    "text": "A round bronze token with a stamped shield, worn smooth at its edge. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+  },
+  {
+    "id": "item-nyxs-token",
+    "title": "Nyx's Token",
+    "width": 256,
+    "height": 256,
+    "text": "A small, dark green leaf-shaped token on a loop of cord. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+  },
+  {
+    "id": "item-servants-pendant",
+    "title": "Servant's Pendant",
+    "width": 256,
+    "height": 256,
+    "text": "A small brass pendant in the shape of a key, hung on a plain cord. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+  },
+  {
+    "id": "item-sorceresss-truth",
+    "title": "Sorceress's Truth",
+    "width": 256,
+    "height": 256,
+    "text": "A small mirror in a black frame, its glass showing a pale violet glow. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+  },
+  {
     "id": "portrait-elior",
     "title": "Elior",
     "width": 480,
@@ -664,5 +748,54 @@
     "width": 480,
     "height": 640,
     "text": "A face portrait of a tall knight in his fifties with a weathered, tired face and a steady, watchful stare, a steel mail coif and a dented gorget around his neck."
+  },
+  {
+    "id": "spell-bless",
+    "title": "Bless",
+    "width": 256,
+    "height": 256,
+    "text": "A raised open hand with a ring of soft gold light around the palm. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+  },
+  {
+    "id": "spell-forgiveness",
+    "title": "Forgiveness",
+    "width": 256,
+    "height": 256,
+    "text": "Two open hands held out together, with a warm white light between them. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+  },
+  {
+    "id": "spell-grow",
+    "title": "Grow",
+    "width": 256,
+    "height": 256,
+    "text": "A small green seedling in a palm of soil, with a bright new shoot unfurling. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+  },
+  {
+    "id": "spell-hearts-truth",
+    "title": "Heart's Truth",
+    "width": 256,
+    "height": 256,
+    "text": "A red heart cupped in two hands, with a clear white light in its middle. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+  },
+  {
+    "id": "spell-light",
+    "title": "Light",
+    "width": 256,
+    "height": 256,
+    "text": "A small, warm ball of light hovering just above a pair of cupped hands. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+  },
+  {
+    "id": "spell-redemptions-light",
+    "title": "Redemption's Light",
+    "width": 256,
+    "height": 256,
+    "text": "A steady golden flame held above a cupped hand. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+  },
+  {
+    "id": "spell-truth-sight",
+    "title": "Truth Sight",
+    "width": 256,
+    "height": 256,
+    "text": "A hand held up to an eye of pale violet light, with a thin beam through its fingers. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
   }
 ]

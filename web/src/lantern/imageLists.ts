@@ -9,9 +9,10 @@
  * named areas (`roomAreas.ts`) and its patches (`roomPatches.ts`). The tts script
  * `extract-act.ts` writes the lists.
  */
-import { Character, type Act, type ImagePatch } from '@/engine'
+import { Character, Item, Spell, type Act, type ImagePatch } from '@/engine'
 import { displayName } from './displayName'
 import { narrationText } from './narrationKey'
+import { BELT_STYLE, SPELL_PROMPTS, THING_PROMPTS } from './beltPrompts'
 import { ELIOR_PORTRAIT_PROMPT, PORTRAIT_PROMPTS } from './portraitPrompts'
 import { roomTrackId } from './musicLists'
 import { declaredAreas, type ImageArea } from './roomAreas'
@@ -27,6 +28,9 @@ export const IMAGE_HEIGHT = 1080
 export const PORTRAIT_WIDTH = 480
 /** Height in pixels of every portrait (upright, 3:4). */
 export const PORTRAIT_HEIGHT = 640
+
+/** Width and height in pixels of every thing's and spell's picture (square). */
+export const BELT_SIZE = 256
 
 /**
  * The class keys of the characters who appear in more than one act. Each has a
@@ -176,6 +180,99 @@ export function characterImages(act: Act, acts: Act[] = [act]): GameImage[] {
   return images
 }
 
+/**
+ * The id of the picture of a thing (`item`) or a spell (`spell`) on the belt:
+ * `<kind>-<name>`, the name lower case, a state in brackets at its end ("lantern
+ * (lit)", "bucket (full)") left off, apostrophes dropped and every other run of
+ * non-alphanumerics a hyphen. It has no act: a name has one picture wherever it
+ * appears.
+ */
+export function beltImageId(kind: 'item' | 'spell', name: string): string {
+  const slug = name
+    .toLowerCase()
+    .replace(/\s*\([^)]*\)\s*$/, '')
+    .replace(/['’]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+  return `${kind}-${slug}`
+}
+
+/**
+ * The classes (by class key) of things that are not carriable when built but are
+ * handed over or picked up in play, so they reach the belt; a test plays each
+ * act's golden path to keep this and the lists complete.
+ */
+const CARRIED_LATER: readonly string[] = [
+  'AncientAmulet',
+  'Apple',
+  'ExtendedMagneticFishingRod',
+  'ForestHeartCrystal',
+  'MagneticFishingRod',
+  'Matches',
+  'NaturesCharm',
+  'NyxToken',
+  'PhoenixFeather',
+  'RoomKey',
+  'Rope',
+  'SecretDocuments',
+]
+
+/** The other names a thing takes in play that show with a picture of their own, by class key (a revived carrot, a strengthened stone). */
+const RENAMED: Readonly<Record<string, readonly string[]>> = {
+  EchoStone: ['enhanced echo stone'],
+  WitheredCarrot: ['fresh carrot'],
+}
+
+/** A fresh instance of a content class that builds without arguments, else null (scenery that needs its room). */
+function bareInstance(C: unknown): unknown {
+  try {
+    return new (C as new () => unknown)()
+  } catch {
+    return null
+  }
+}
+
+/**
+ * One picture for every thing that can be carried and every spell the act
+ * registers (`act.classes`), named by the name the belt shows (`beltImageId`),
+ * so a name that returns in a later act is the same entry there. The words are
+ * the hand-written line of `beltPrompts.ts` followed by `BELT_STYLE`; the
+ * picture is square. A carriable thing or a spell without a line is a mistake.
+ */
+export function beltImages(act: Act): GameImage[] {
+  const images = new Map<string, GameImage>()
+  /** Lists one thing or spell by the name the belt shows it under. */
+  const list = (kind: 'item' | 'spell', name: string): void => {
+    const id = beltImageId(kind, name)
+    if (images.has(id)) return
+    const prompt = (kind === 'item' ? THING_PROMPTS : SPELL_PROMPTS)[id]
+    if (prompt === undefined) {
+      throw new Error(`No picture line for ${kind} ${name} (${id})`)
+    }
+    images.set(id, {
+      id,
+      title: displayName(name),
+      width: BELT_SIZE,
+      height: BELT_SIZE,
+      text: `${prompt} ${BELT_STYLE}`,
+    })
+  }
+  for (const [key, C] of Object.entries(act.classes)) {
+    const prototype = (C as { prototype: unknown }).prototype
+    if (!(prototype instanceof Item || prototype instanceof Spell)) continue
+    const thing = bareInstance(C)
+    if (thing instanceof Spell) list('spell', thing.name)
+    else if (
+      thing instanceof Item &&
+      (thing.canBeCarried || CARRIED_LATER.includes(key))
+    ) {
+      list('item', thing.name)
+      for (const name of RENAMED[key] ?? []) list('item', name)
+    }
+  }
+  return [...images.values()]
+}
+
 /** The id of the title screen's picture, listed once for the whole game (in the first act's list). */
 export const TITLE_IMAGE_ID = 'title-screen'
 
@@ -197,7 +294,7 @@ export function titleImage(): GameImage {
   }
 }
 
-/** Everything the act's list holds: its room images, then its portraits (`acts` is the whole game, in order). */
+/** Everything the act's list holds: its room images, its portraits, then its belt pictures (`acts` is the whole game, in order). */
 export function allImages(act: Act, acts: Act[] = [act]): GameImage[] {
-  return [...roomImages(act), ...characterImages(act, acts)]
+  return [...roomImages(act), ...characterImages(act, acts), ...beltImages(act)]
 }
