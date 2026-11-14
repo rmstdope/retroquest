@@ -379,25 +379,46 @@ for (const viewport of [
     await page.getByRole('button', { name: 'Start', exact: true }).click()
 
     // While the title is read no paragraph is shown yet.
-    const button = page.locator('.lq-chapter-button')
     await expect(page.locator('.lq-chapter-title.lq-speaking')).toHaveCount(1)
     await expect(page.locator('.lq-chapter-block')).toHaveCount(0)
-    const before = await button.boundingBox()
+    /** The shown and unshown paragraphs, and where Begin is, read in one go. */
+    const opening = (): Promise<{
+      count: number
+      unshown: number
+      begin: { x: number; y: number; width: number; height: number }
+    }> =>
+      page.evaluate(() => {
+        const begin = document
+          .querySelector('.lq-chapter-button')!
+          .getBoundingClientRect()
+        return {
+          count: document.querySelectorAll('.lq-chapter-block').length,
+          unshown: document.querySelectorAll('.lq-chapter-unshown').length,
+          begin: {
+            x: begin.x,
+            y: begin.y,
+            width: begin.width,
+            height: begin.height,
+          },
+        }
+      })
+    const before = (await opening()).begin
 
     // Each paragraph appears as its voice starts; Begin does not move.
-    const blocks = page.locator('.lq-chapter-block')
-    // Every paragraph's room is there from the start; the reading is over once all are shown.
-    const unshown = page.locator('.lq-chapter-unshown')
+    // Every paragraph's room is there from the start; the reading is over once
+    // all are shown. Both counts and Begin's place are read in one go: a
+    // paragraph that appears between two reads would end the wait with only
+    // the first one seen (rq-z206).
     let seen = 0
     await expect
       .poll(
         async () => {
-          const count = await blocks.count()
-          if (count > seen) {
-            seen = count
-            expect(await button.boundingBox()).toEqual(before)
+          const now = await opening()
+          if (now.count > seen) {
+            seen = now.count
+            expect(now.begin).toEqual(before)
           }
-          return count > 0 && (await unshown.count()) === 0
+          return now.count > 0 && now.unshown === 0
         },
         { intervals: [100], timeout: 25_000 },
       )

@@ -6,6 +6,10 @@
  * empty one (the game then tells its lines as it does for a line with no
  * recording yet), unless the spec sets the `narrationRecordings` option with
  * `test.use({ narrationRecordings: true })` to get the real recordings.
+ *
+ * `E2E_CPU_THROTTLE=<rate>` slows the page's CPU by that factor (Chromium's
+ * own throttling), to bring out on a laptop the races a busy CI runner shows:
+ * `E2E_CPU_THROTTLE=10 npx playwright test <spec> --repeat-each 10`.
  */
 import { test as base } from '@playwright/test'
 
@@ -19,6 +23,11 @@ export const test = base.extend<{ narrationRecordings: boolean }>({
       await page.route('**/audio/narration/*/manifest.json', (route) =>
         route.fulfill({ json: {} }),
       )
+    const throttle = Number(process.env.E2E_CPU_THROTTLE)
+    if (throttle > 1) {
+      const cdp = await page.context().newCDPSession(page)
+      await cdp.send('Emulation.setCPUThrottlingRate', { rate: throttle })
+    }
     await use(page)
   },
 })
