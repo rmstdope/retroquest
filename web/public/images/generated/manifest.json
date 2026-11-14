@@ -496,7 +496,68 @@
   "act1-hidden-glade": {
     "file": "act1-hidden-glade.png",
     "width": 1920,
-    "height": 1080
+    "height": 1080,
+    "patches": {
+      "deer-appears": {
+        "file": "act1-hidden-glade.deer-appears.png",
+        "width": 1920,
+        "height": 1080
+      },
+      "rare-flower-appears": {
+        "file": "act1-hidden-glade.rare-flower-appears.png",
+        "width": 1920,
+        "height": 1080
+      },
+      "shiny-pebble-taken": {
+        "file": "act1-hidden-glade.shiny-pebble-taken.png",
+        "width": 1920,
+        "height": 1080
+      }
+    },
+    "areas": {
+      "shiny-pebble": {
+        "x": 0.478646,
+        "y": 0.803704,
+        "width": 0.054688,
+        "height": 0.069444
+      },
+      "scenery-hidden-glade-mossy-stone": {
+        "x": 0.394271,
+        "y": 0.530556,
+        "width": 0.236979,
+        "height": 0.244444
+      },
+      "scenery-hidden-glade-brambles": {
+        "x": 0,
+        "y": 0.439815,
+        "width": 0.226042,
+        "height": 0.560185
+      },
+      "scenery-hidden-glade-grass": {
+        "x": 0.227083,
+        "y": 0.787963,
+        "width": 0.597917,
+        "height": 0.212037
+      },
+      "exit-north": {
+        "x": 0.404167,
+        "y": 0.37963,
+        "width": 0.225521,
+        "height": 0.162963
+      },
+      "rare-flower": {
+        "x": 0.278646,
+        "y": 0.626852,
+        "width": 0.098438,
+        "height": 0.190741
+      },
+      "deer": {
+        "x": 0.646875,
+        "y": 0.288889,
+        "width": 0.232813,
+        "height": 0.54537
+      }
+    }
   },
   "act1-miras-hut": {
     "file": "act1-miras-hut.png",
@@ -748,7 +809,52 @@
   "act1-road-to-greendale": {
     "file": "act1-road-to-greendale.png",
     "width": 1920,
-    "height": 1080
+    "height": 1080,
+    "patches": {
+      "rusty-saw-taken": {
+        "file": "act1-road-to-greendale.rusty-saw-taken.png",
+        "width": 1920,
+        "height": 1080
+      }
+    },
+    "areas": {
+      "rusty-saw": {
+        "x": 0.252604,
+        "y": 0.874074,
+        "width": 0.184375,
+        "height": 0.089815
+      },
+      "scenery-road-to-greendale-oaks": {
+        "x": 0,
+        "y": 0,
+        "width": 0.544271,
+        "height": 0.649074
+      },
+      "scenery-road-to-greendale-cart": {
+        "x": 0.581771,
+        "y": 0.526852,
+        "width": 0.146354,
+        "height": 0.180556
+      },
+      "scenery-road-to-greendale-mare": {
+        "x": 0.577604,
+        "y": 0.548148,
+        "width": 0.058854,
+        "height": 0.241667
+      },
+      "merchant": {
+        "x": 0.675,
+        "y": 0.513889,
+        "width": 0.058333,
+        "height": 0.265741
+      },
+      "exit-west": {
+        "x": 0,
+        "y": 0.250926,
+        "width": 0.065104,
+        "height": 0.538889
+      }
+    }
   },
   "act1-the-dream": {
     "file": "act1-the-dream.png",
@@ -868,7 +974,93 @@
   "act1-village-chapel": {
     "file": "act1-village-chapel.png",
     "width": 1920,
-    "height": 1080
+    "height": 1080,
+    "patches": {
+      "candle-lit": {
+        "file": "act1-village-chapel.candle-lit.png",
+        "width": 1920,
+        "height": 1080
+      },
+      "locket-appears": {
+        "file": "act1-village-chapel.locket-appears.png",
+        "width": 1920,
+        "height": 1080
+      }
+    },
+    "areas": {
+      "candle": {
+        "x": 0.383333,
+        "y": 0.839815,
+        "width": 0.091667,
+        "height": 0.072222
+      },
+      "prayer-book": {
+        "x": 0.3625,
+        "y": 0.519444,
+        "width": 0.047396,
+        "height": 0.034259
+      },
+      "scenery-village-chapel-altar": {
+        "x": 0.35625,
+        "y": 0.548148,
+        "width": 0.285938,
+        "height": 0.233333
+      },
+      "scenery-village-chapel-bell-rope": {
+        "x": 0.581771,
+        "y": 0.036111,
+        "width": 0.053646,
+        "height": 0.478704
+      },
+      "scenery-village-chapel-mark": {
+        "x": 0.865104,
+        "y": 0.176852,
+        "width": 0.080729,
+        "height": 0.175926
+      },
+      "scenery-village-chapel-pews": {
+        "x": 0.676042,
+        "y": 0.613889,
+        "width": 0.323958,
+        "height": 0.386111
+      },
+      "scenery-village-chapel-dark-corner": {
+        "x": 0.322917,
+        "y": 0.650926,
+        "width": 0.052083,
+        "height": 0.083333
+      },
+      "priest": {
+        "x": 0.204167,
+        "y": 0.277778,
+        "width": 0.099479,
+        "height": 0.371296
+      },
+      "exit-west": {
+        "x": 0,
+        "y": 0.215741,
+        "width": 0.078125,
+        "height": 0.622222
+      },
+      "exit-east": {
+        "x": 0.934375,
+        "y": 0.116667,
+        "width": 0.065625,
+        "height": 0.664815
+      },
+      "locket": {
+        "x": 0.332813,
+        "y": 0.683333,
+        "width": 0.043229,
+        "height": 0.072222
+      },
+      "motion-fire": {
+        "x": 0.476563,
+        "y": 0.438889,
+        "width": 0.046875,
+        "height": 0.071296
+      }
+    }
   },
   "act1-village-square": {
     "file": "act1-village-square.png",
