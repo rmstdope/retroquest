@@ -4,6 +4,7 @@ import { useGameStore } from '@/stores/useGameStore'
 import { useStageSpeechStore } from '@/stores/useStageSpeechStore'
 import { useNarrationStore } from '@/stores/useNarrationStore'
 import { continuesRun, readingPauseMs, runHeads } from '@/lantern/stageSpeech'
+import { decidePointerPress, quietPress } from '@/lantern/pointerPress'
 import { renderMarkup } from '@/utils/theme'
 import { useReadAlong } from '@/composables/useReadAlong'
 import type { StageLine } from '@/stores/useStageSpeechStore'
@@ -129,6 +130,7 @@ onBeforeUnmount(() => threadResize?.disconnect())
  * tapped on like the story (one block hurried; held, it skips the telling).
  */
 function hurry(): void {
+  if (decidePointerPress(quietPress('speech')).action !== 'hurry') return
   speech.revealAll()
   narration.tap()
 }

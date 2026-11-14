@@ -15,6 +15,12 @@ import { firstQuestUnit } from '@/lantern/narrationUnits'
 import { sceneBlock } from '@/lantern/stageArrival'
 import { parseTurn } from '@/lantern/parseTurn'
 import { HurryKeys, aimOf } from '@/lantern/hurryKeys'
+import {
+  decidePointerPress,
+  type PointerPress,
+  type PointerPressAction,
+  type PressKind,
+} from '@/lantern/pointerPress'
 import { wayCursor } from '@/lantern/wayCursor'
 import type { NamedSpot } from '@/lantern/areaNames'
 import {
@@ -400,15 +406,8 @@ function goWay(direction: string): void {
 function onPicturePress(event: MouseEvent): void {
   if (!(event.target instanceof Element)) return
   if (!event.target.closest('.lq-stage-picture')) return
-  // During a change of scene a click lets the words in the dark go, or brings the new room up at once.
-  if (scene.turn !== null) return presentation.continueScene()
-  // A talk that has moved Elior still shows the old room: a press brings the new one up first, and never walks from it.
-  if (speech.sceneChange) return speech.changeSceneNow()
-  // A way out goes at once, as on the Map; a closed one gets the game's own answer.
   const way = wayPressed(event)
-  if (way !== null && game.acceptInput) return goWay(way)
-  speech.revealAll()
-  narration.tap()
+  pressOn('picture', { way: way !== null }, way)
 }
 
 watch(
@@ -780,10 +779,8 @@ function onWordsPress(event: MouseEvent): void {
   event.stopPropagation()
   event.preventDefault()
   if (dot.kind === 'exit') {
-    // As a press on the picture: a scene change is skipped or brought up first, and never walked from.
-    if (scene.turn !== null) return scene.skip()
-    if (speech.sceneChange) return speech.changeSceneNow()
-    if (dot.direction && game.acceptInput) goWay(dot.direction)
+    const way = dot.direction ?? null
+    pressOn('exit-dot', { way: way !== null }, way)
     return
   }
   onAreaPress(
@@ -1354,7 +1351,7 @@ const hold = useHoldToSkip({
   root: () => rootEl.value,
   telling: beingTold,
   // A thing on the picture opens its ring whenever a press takes a move (an unnarrated arrival, say); otherwise its press is the hold's.
-  thingIdle: () => !pressTakesMove(),
+  thingIdle: () => decidePointerPress(pressOf('thing')).action === 'none',
   skip: () => presentation.skipTelling(),
 })
 /** Where a held press shows its ring, while it does. */
@@ -1609,17 +1606,57 @@ const telling = computed(
     narration.isNarrating ||
     (speech.conversation?.lines.some((line) => !line.shown) ?? false),
 )
-/** The game takes a move from a press on the picture or the belt now (no scene change, words, dialog, drawer or sheet in the way). */
-function pressTakesMove(): boolean {
-  return (
-    game.acceptInput &&
-    scene.phase === 'idle' &&
-    scene.turn === null &&
-    !telling.value &&
-    !dialogOpen() &&
-    drawerTab.value === null &&
-    !sheetOpen.value
-  )
+/** A press of `kind` as `decidePointerPress` hears it: the story's state now, with the details of this press in `over`. */
+function pressOf(
+  kind: PressKind,
+  over: Partial<PointerPress> = {},
+): PointerPress {
+  return {
+    kind,
+    scene: scene.turn !== null,
+    sceneChange: speech.sceneChange !== null,
+    telling: telling.value,
+    acceptInput: game.acceptInput,
+    sceneBusy: scene.phase !== 'idle',
+    blocked: dialogOpen() || drawerTab.value !== null || sheetOpen.value,
+    way: false,
+    hand: belt.hand !== null,
+    onControl: false,
+    ...over,
+  }
+}
+
+/**
+ * Decide a press of `kind` and carry out the answers that need nothing of the
+ * press itself (a scene brought up, a way gone, the words hurried or the
+ * narrator tapped on). `way` is the direction pressed, for `go-way`. The
+ * answer comes back so a thing or a belt picture can take its ring or hand.
+ */
+function pressOn(
+  kind: PressKind,
+  over: Partial<PointerPress> = {},
+  way: string | null = null,
+): PointerPressAction {
+  const { action } = decidePointerPress(pressOf(kind, over))
+  switch (action) {
+    case 'continue-scene':
+      presentation.continueScene()
+      break
+    case 'scene-now':
+      speech.changeSceneNow()
+      break
+    case 'go-way':
+      if (way !== null) goWay(way)
+      break
+    case 'hurry':
+      speech.revealAll()
+      narration.tap()
+      break
+    case 'tap':
+      narration.tap()
+      break
+  }
+  return action
 }
 
 /** Where a ring pressed at `at` (in the window) is drawn: in the part of the picture the command bar, dock and phone panel leave, so no button or name hides under them. */
@@ -1678,16 +1715,16 @@ function onAreaPress(
   if (!box || !staged.value) return
   // A way out smaller than the thing it lies on is the press's: the stage takes it (`onPicturePress`).
   // A press on a thing's own mark or name is its thing's, wherever the mark stands.
-  if (!onMark && areaNamesEl.value?.wayAt(at.x, at.y)) return
-  if (!pressTakesMove()) return
-  if (belt.hand) {
+  const wayUnder = !onMark && !!areaNamesEl.value?.wayAt(at.x, at.y)
+  const answer = pressOn('thing', { way: wayUnder })
+  if (answer === 'send-hand' && belt.hand) {
     sendHand(handCommand(belt.hand, thing))
-    return
-  }
-  ring.value = {
-    thing,
-    from: 'room',
-    ...ringPlacement(box, at),
+  } else if (answer === 'open-ring') {
+    ring.value = {
+      thing,
+      from: 'room',
+      ...ringPlacement(box, at),
+    }
   }
 }
 
@@ -1695,23 +1732,16 @@ function onAreaPress(
 function onBeltPress(picture: BeltPicture, at: { x: number; y: number }): void {
   const box = stageEl.value?.getBoundingClientRect()
   if (!box || !staged.value) return
-  if (scene.turn !== null) return presentation.continueScene()
-  if (speech.sceneChange) return speech.changeSceneNow()
-  if (telling.value) {
-    speech.revealAll()
-    narration.tap()
-    return
-  }
-  if (!pressTakesMove()) return
-  if (belt.hand) {
+  const answer = pressOn('belt')
+  if (answer === 'send-hand' && belt.hand) {
     const command = pressedOnBelt(belt.hand, picture)
     if (command) sendHand(command)
-    return
-  }
-  ring.value = {
-    thing: subjectOf(picture),
-    from: 'belt',
-    ...ringPlacement(box, at),
+  } else if (answer === 'open-ring') {
+    ring.value = {
+      thing: subjectOf(picture),
+      from: 'belt',
+      ...ringPlacement(box, at),
+    }
   }
 }
 
@@ -2061,12 +2091,11 @@ function runNameAction(command: string): void {
 /** A click on the story: a tap for the narration (names keep their menu), then the name menu. */
 function onStoryClick(event: MouseEvent): void {
   const target = event.target instanceof Element ? event.target : null
-  if (
-    !target?.closest(
+  pressOn('story', {
+    onControl: !!target?.closest(
       'button, a, [data-name-kind], .theme-item_name, .theme-character_name',
-    )
-  )
-    narration.tap()
+    ),
+  })
   onNameClick(event)
 }
 
