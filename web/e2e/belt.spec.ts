@@ -285,3 +285,17 @@ test.describe('on a phone held sideways', () => {
     expect(box.y + box.height).toBeLessThanOrEqual(stage.y + stage.height + 1)
   })
 })
+
+test('a thing whose picture has been made shows it in place of its letter', async ({
+  page,
+}): Promise<void> => {
+  await page.setViewportSize({ width: 1280, height: 800 })
+  await toTheCottage(page)
+  const bread = page.locator('[data-belt-pic="item:bread"]')
+  // The suite answers every picture file with a picture, as if the studio had made them all.
+  await expect(bread.locator('img')).toHaveAttribute(
+    'src',
+    /images\/generated\/item-bread\.png$/,
+  )
+  await expect(bread.locator('.lq-belt-letter')).toHaveCount(0)
+})

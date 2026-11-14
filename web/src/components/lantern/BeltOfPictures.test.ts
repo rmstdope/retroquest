@@ -7,6 +7,8 @@ import BeltOfPictures from './BeltOfPictures.vue'
 import { useGameStore } from '@/stores/useGameStore'
 import { useBeltStore } from '@/stores/useBeltStore'
 import { useFlightStore } from '@/stores/useFlightStore'
+import { setPictureProbe } from '@/lantern/roomPicture'
+import { flushPromises } from '@vue/test-utils'
 
 describe('BeltOfPictures', () => {
   let w: VueWrapper | undefined
@@ -38,6 +40,7 @@ describe('BeltOfPictures', () => {
     ]
   })
   afterEach(() => {
+    setPictureProbe(null)
     w?.unmount()
     vi.unstubAllGlobals()
   })
@@ -236,5 +239,47 @@ describe('BeltOfPictures', () => {
     await nextTick()
     expect(scrolled).toHaveBeenCalled()
     useFlightStore().clear()
+  })
+
+  describe('with pictures made', () => {
+    it('shows the picture of a painted thing in place of its letter, keeping the rest', async () => {
+      setPictureProbe((url) => Promise.resolve(url.endsWith('item-bread.png')))
+      mountBelt()
+      await flushPromises()
+      const bread = w!.get('[data-belt-pic="item:bread"]')
+      expect(bread.find('img').attributes('src')).toMatch(/item-bread\.png$/)
+      expect(bread.find('img').attributes('alt')).toBe('')
+      expect(bread.find('.lq-belt-letter').exists()).toBe(false)
+      expect(bread.text()).toContain('×2')
+      expect(bread.text()).toContain('Bread')
+      expect(bread.attributes('aria-label')).toBe('Bread, 2')
+      const journal = w!.get('[data-belt-pic="item:Elior\'s Journal"]')
+      expect(journal.find('img').exists()).toBe(false)
+      expect(journal.find('.lq-belt-letter').text()).toBe('E')
+    })
+
+    it('shows a painted spell, on the small row of a sideways phone too', async () => {
+      setPictureProbe(() => Promise.resolve(true))
+      mountBelt({ compact: true })
+      await w!.get('[data-belt-switch="spells"]').trigger('click')
+      await flushPromises()
+      const light = w!.get('[data-belt-pic="spell:light"]')
+      expect(light.find('img').attributes('src')).toMatch(/spell-light\.png$/)
+    })
+
+    it('keeps the letter while the picture loads and when it fails to load', async () => {
+      setPictureProbe(() => new Promise<boolean>(() => undefined))
+      mountBelt()
+      await flushPromises()
+      expect(w!.find('[data-belt-pic="item:bread"] img').exists()).toBe(false)
+      expect(
+        w!.get('[data-belt-pic="item:bread"] .lq-belt-letter').text(),
+      ).toBe('B')
+      setPictureProbe(() => Promise.resolve(false))
+      w!.unmount()
+      mountBelt()
+      await flushPromises()
+      expect(w!.find('[data-belt-pic="item:bread"] img').exists()).toBe(false)
+    })
   })
 })

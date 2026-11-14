@@ -1046,6 +1046,286 @@
     ]
   },
   {
+    "id": "item-ancient-amulet",
+    "title": "Ancient Amulet",
+    "width": 256,
+    "height": 256,
+    "text": "A worn bronze amulet on a thin chain, a spiral cut into its green-tinged face. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+  },
+  {
+    "id": "item-apple",
+    "title": "Apple",
+    "width": 256,
+    "height": 256,
+    "text": "A round red apple with a short stalk and a single green leaf. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+  },
+  {
+    "id": "item-armor",
+    "title": "Armor",
+    "width": 256,
+    "height": 256,
+    "text": "A plain leather jerkin studded with small iron rivets. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+  },
+  {
+    "id": "item-bread",
+    "title": "Bread",
+    "width": 256,
+    "height": 256,
+    "text": "A round, crusty loaf of brown bread with a split across its top. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+  },
+  {
+    "id": "item-broken-shovel",
+    "title": "Broken Shovel",
+    "width": 256,
+    "height": 256,
+    "text": "A rusty shovel with a snapped wooden handle and a dented blade. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+  },
+  {
+    "id": "item-bucket",
+    "title": "Bucket",
+    "width": 256,
+    "height": 256,
+    "text": "A wooden bucket bound with iron hoops and a rope handle. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+  },
+  {
+    "id": "item-coin",
+    "title": "Coin",
+    "width": 256,
+    "height": 256,
+    "text": "A single round copper coin with a worn, stamped face. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+  },
+  {
+    "id": "item-dull-knife",
+    "title": "Dull Knife",
+    "width": 256,
+    "height": 256,
+    "text": "A short kitchen knife with a chipped, dull blade and a worn wooden handle. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+  },
+  {
+    "id": "item-egg",
+    "title": "Egg",
+    "width": 256,
+    "height": 256,
+    "text": "A single speckled brown hen’s egg. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+  },
+  {
+    "id": "item-extended-magnetic-fishing-rod",
+    "title": "Extended Magnetic Fishing Rod",
+    "width": 256,
+    "height": 256,
+    "text": "A long fishing rod with a red and silver magnet tied on its line and a wooden pole slid out to a greater length. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+  },
+  {
+    "id": "item-faded-photograph",
+    "title": "Faded Photograph",
+    "width": 256,
+    "height": 256,
+    "text": "A small, creased photograph gone pale and brown, showing two blurred figures. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+  },
+  {
+    "id": "item-feather",
+    "title": "Feather",
+    "width": 256,
+    "height": 256,
+    "text": "A long white feather with a grey tip. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+  },
+  {
+    "id": "item-fish",
+    "title": "Fish",
+    "width": 256,
+    "height": 256,
+    "text": "A silvery fish with a round belly, glistening wet. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+  },
+  {
+    "id": "item-fishing-rod",
+    "title": "Fishing Rod",
+    "width": 256,
+    "height": 256,
+    "text": "A long, bending wooden fishing rod with a reel of line and a small hook. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+  },
+  {
+    "id": "item-fresh-bread",
+    "title": "Fresh Bread",
+    "width": 256,
+    "height": 256,
+    "text": "A golden loaf of bread, still steaming, with a dusting of flour on its crust. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+  },
+  {
+    "id": "item-fresh-carrot",
+    "title": "Fresh Carrot",
+    "width": 256,
+    "height": 256,
+    "text": "A plump orange carrot with a bushy tuft of bright green leaves. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+  },
+  {
+    "id": "item-horseshoe",
+    "title": "Horseshoe",
+    "width": 256,
+    "height": 256,
+    "text": "A heavy iron horseshoe, bent a little at one heel. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+  },
+  {
+    "id": "item-key",
+    "title": "Key",
+    "width": 256,
+    "height": 256,
+    "text": "A small brass key with a round bow and two teeth. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+  },
+  {
+    "id": "item-lantern",
+    "title": "Lantern",
+    "width": 256,
+    "height": 256,
+    "text": "A tin lantern with a small door and a ring on top, its candle burnt low. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+  },
+  {
+    "id": "item-locket",
+    "title": "Locket",
+    "width": 256,
+    "height": 256,
+    "text": "A small silver locket on a fine chain, shut tight. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+  },
+  {
+    "id": "item-magnet",
+    "title": "Magnet",
+    "width": 256,
+    "height": 256,
+    "text": "A red and silver horseshoe-shaped magnet. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+  },
+  {
+    "id": "item-magnetic-fishing-rod",
+    "title": "Magnetic Fishing Rod",
+    "width": 256,
+    "height": 256,
+    "text": "A short fishing rod with a red and silver magnet tied on the end of its line. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+  },
+  {
+    "id": "item-map",
+    "title": "Map",
+    "width": 256,
+    "height": 256,
+    "text": "A rolled and creased map of a countryside, inked in brown with a few green washes. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+  },
+  {
+    "id": "item-matches",
+    "title": "Matches",
+    "width": 256,
+    "height": 256,
+    "text": "A small wooden box of matches, a few spilled beside it. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+  },
+  {
+    "id": "item-millstone-fragment",
+    "title": "Millstone Fragment",
+    "width": 256,
+    "height": 256,
+    "text": "A rough grey wedge of millstone, grooved on one flat side. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+  },
+  {
+    "id": "item-mothers-letter",
+    "title": "Mother's Letter",
+    "width": 256,
+    "height": 256,
+    "text": "A folded letter of cream paper sealed with a blob of red wax. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+  },
+  {
+    "id": "item-rare-flower",
+    "title": "Rare Flower",
+    "width": 256,
+    "height": 256,
+    "text": "A single flower with deep purple petals and gold at its centre. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+  },
+  {
+    "id": "item-rope",
+    "title": "Rope",
+    "width": 256,
+    "height": 256,
+    "text": "A coil of thick hemp rope, loosely knotted. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+  },
+  {
+    "id": "item-rune-token",
+    "title": "Rune Token",
+    "width": 256,
+    "height": 256,
+    "text": "A flat grey stone token with a single glowing rune cut into it. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+  },
+  {
+    "id": "item-rusty-hoe",
+    "title": "Rusty Hoe",
+    "width": 256,
+    "height": 256,
+    "text": "A farm hoe with a rusty blade and a splintered wooden handle. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+  },
+  {
+    "id": "item-rusty-saw",
+    "title": "Rusty Saw",
+    "width": 256,
+    "height": 256,
+    "text": "A hand saw with a rusty, toothed blade and a wooden grip. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+  },
+  {
+    "id": "item-sharp-knife",
+    "title": "Sharp Knife",
+    "width": 256,
+    "height": 256,
+    "text": "A short knife with a bright, sharp blade and a wooden handle. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+  },
+  {
+    "id": "item-shiny-pebble",
+    "title": "Shiny Pebble",
+    "width": 256,
+    "height": 256,
+    "text": "A small, smooth, shining pebble, grey with a white stripe. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+  },
+  {
+    "id": "item-shiny-ring",
+    "title": "Shiny Ring",
+    "width": 256,
+    "height": 256,
+    "text": "A thin gold ring with a tiny green stone. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+  },
+  {
+    "id": "item-stick",
+    "title": "Stick",
+    "width": 256,
+    "height": 256,
+    "text": "A straight, knobbly wooden stick, bare of its bark at one end. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+  },
+  {
+    "id": "item-sword",
+    "title": "Sword",
+    "width": 256,
+    "height": 256,
+    "text": "A plain steel sword with a leather-wrapped grip and a short crosspiece. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+  },
+  {
+    "id": "item-travel-cloak",
+    "title": "Travel Cloak",
+    "width": 256,
+    "height": 256,
+    "text": "A heavy, dark green travelling cloak with a brass clasp at the neck, folded over. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+  },
+  {
+    "id": "item-wandering-boots",
+    "title": "Wandering Boots",
+    "width": 256,
+    "height": 256,
+    "text": "A pair of worn brown leather boots with muddy soles and loose laces. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+  },
+  {
+    "id": "item-wild-berries",
+    "title": "Wild Berries",
+    "width": 256,
+    "height": 256,
+    "text": "A small handful of dark red berries with a few green leaves. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+  },
+  {
+    "id": "item-withered-carrot",
+    "title": "Withered Carrot",
+    "width": 256,
+    "height": 256,
+    "text": "A shrunken, wrinkled carrot with a few dry green stalks. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+  },
+  {
     "id": "portrait-elior",
     "title": "Elior",
     "width": 480,
@@ -1065,6 +1345,55 @@
     "width": 480,
     "height": 640,
     "text": "A face portrait of a village healer in middle age, with a calm, steady gaze that rests on you a moment longer than is comfortable, and a sprig of dried sage tucked behind one ear."
+  },
+  {
+    "id": "spell-bless",
+    "title": "Bless",
+    "width": 256,
+    "height": 256,
+    "text": "A raised open hand with a ring of soft gold light around the palm. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+  },
+  {
+    "id": "spell-grow",
+    "title": "Grow",
+    "width": 256,
+    "height": 256,
+    "text": "A small green seedling in a palm of soil, with a bright new shoot unfurling. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+  },
+  {
+    "id": "spell-heal",
+    "title": "Heal",
+    "width": 256,
+    "height": 256,
+    "text": "A single glowing green leaf held in a soft light. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+  },
+  {
+    "id": "spell-light",
+    "title": "Light",
+    "width": 256,
+    "height": 256,
+    "text": "A small, warm ball of light hovering just above a pair of cupped hands. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+  },
+  {
+    "id": "spell-purify",
+    "title": "Purify",
+    "width": 256,
+    "height": 256,
+    "text": "A cup of clear water with a ring of white light spreading over it. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+  },
+  {
+    "id": "spell-revive",
+    "title": "Revive",
+    "width": 256,
+    "height": 256,
+    "text": "A drooping flower lifting its head, with a warm glow around its petals. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+  },
+  {
+    "id": "spell-unlock",
+    "title": "Unlock",
+    "width": 256,
+    "height": 256,
+    "text": "A brass key surrounded by a bright ring of light, with an open padlock beside it. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
   },
   {
     "id": "title-screen",

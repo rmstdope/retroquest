@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, onUnmounted, ref, watch } from 'vue'
+import BeltFace from './BeltFace.vue'
 import {
   FLIGHT_FLY_MS,
   LEAVE_RISE_MS,
@@ -199,34 +200,40 @@ const style = computed(() => {
     data-testid="flight"
   >
     <span v-if="flights.current.leaving" class="lq-flight-minus">−</span>
-    <svg
-      v-if="flights.current.kind === 'item'"
-      class="lq-flight-icon"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      stroke-width="1.8"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      aria-hidden="true"
+    <BeltFace
+      :kind="flights.current.kind"
+      :name="flights.current.name"
+      :picture-class="`lq-flight-face lq-flight-face-${flights.current.kind}`"
     >
-      <path d="M8 7V6a4 4 0 0 1 8 0v1" />
-      <path d="M5 7h14l-1.2 12.2A2 2 0 0 1 15.8 21H8.2a2 2 0 0 1-2-1.8z" />
-    </svg>
-    <svg
-      v-else
-      class="lq-flight-icon"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      stroke-width="1.8"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      aria-hidden="true"
-    >
-      <path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z" />
-      <path d="M19 17l.7 2 2 .7-2 .7-.7 2-.7-2-2-.7 2-.7z" />
-    </svg>
+      <svg
+        v-if="flights.current.kind === 'item'"
+        class="lq-flight-icon"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.8"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <path d="M8 7V6a4 4 0 0 1 8 0v1" />
+        <path d="M5 7h14l-1.2 12.2A2 2 0 0 1 15.8 21H8.2a2 2 0 0 1-2-1.8z" />
+      </svg>
+      <svg
+        v-else
+        class="lq-flight-icon"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.8"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z" />
+        <path d="M19 17l.7 2 2 .7-2 .7-.7 2-.7-2-2-.7 2-.7z" />
+      </svg>
+    </BeltFace>
     <span class="lq-flight-name">{{ label }}</span>
   </div>
   <p class="lq-sr-only" aria-live="polite">{{ announcement }}</p>
@@ -266,6 +273,22 @@ const style = computed(() => {
   border: 1px solid var(--lq-spell-line);
   background: var(--lq-spell-soft);
   color: var(--lq-spell);
+}
+.lq-flight-face {
+  /* A small square of the picture, in the thin coloured edge of its kind (amber thing, blue spell), also on the grey card of a loss. */
+  width: calc(44px * var(--lq-text-scale, 1));
+  height: calc(44px * var(--lq-text-scale, 1));
+  flex: none;
+  box-sizing: border-box;
+  border: 1px solid;
+  border-radius: 8px;
+  object-fit: cover;
+}
+.lq-flight-face-item {
+  border-color: var(--lq-item-line);
+}
+.lq-flight-face-spell {
+  border-color: var(--lq-spell-line);
 }
 .lq-flight-icon {
   width: calc(28px * var(--lq-text-scale, 1));

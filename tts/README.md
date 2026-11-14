@@ -205,3 +205,5 @@ take to size. The `images` section of `content-studio.json` points at the lists
 (`from.part`). Prompt overrides are the studio's, in the same edits file (`images`), never in the
 game's code, and the chosen take of each image is in `content-studio/images/lock.json`; the lists
 come from `web/src/lantern/imageLists.ts` and a vitest test fails when a committed list is stale.
+
+After the rooms and portraits each act's list also holds the belt pictures: one 256x256 square entry for every thing that can be carried and every spell the act registers, `item-<name>` or `spell-<name>` (`beltImageId`), the same entry in every act where the name appears. The words are the hand-written line of `web/src/lantern/beltPrompts.ts`, what is seen and never what it means, followed by the things-and-spells style (`BELT_STYLE`) that the studio's look cannot hold. The belt shows a picture once its file exists and keeps the first letter until then.

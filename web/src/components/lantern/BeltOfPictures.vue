@@ -3,6 +3,7 @@ import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useGameStore } from '@/stores/useGameStore'
 import { useBeltStore } from '@/stores/useBeltStore'
 import { useFlightStore } from '@/stores/useFlightStore'
+import BeltFace from './BeltFace.vue'
 import { beltPictures, type BeltList, type BeltPicture } from '@/lantern/belt'
 
 /**
@@ -10,7 +11,8 @@ import { beltPictures, type BeltList, type BeltPicture } from '@/lantern/belt'
  * carried (the Bag) or the spells known, each a square with its name beneath
  * (none on a sideways phone, where the name is in the ring) in its usual
  * colour, ×2 on a counted thing, and the first letter of the name until the
- * picture is made. Two tiny buttons with pictures only, a pouch and a star,
+ * picture is made (then the picture, `BeltFace`). Two tiny buttons with
+ * pictures only, a pouch and a star,
  * sit at its left end: the lit one is the list showing, pressing the other
  * switches, and pressing either while the belt is away brings it back on that
  * list. ▾ puts it away. ‹ and › show when more pictures are carried than fit;
@@ -368,7 +370,13 @@ defineExpose({ focusBelt, focusPicture, has, root })
             @pointerleave="pointed = null"
           >
             <span class="lq-belt-square" aria-hidden="true">
-              <span class="lq-belt-letter">{{ picture.letter }}</span>
+              <BeltFace
+                :kind="picture.kind"
+                :name="picture.name"
+                picture-class="lq-belt-face"
+              >
+                <span class="lq-belt-letter">{{ picture.letter }}</span>
+              </BeltFace>
               <span v-if="picture.count > 1" class="lq-belt-count"
                 >×{{ picture.count }}</span
               >
@@ -550,6 +558,14 @@ defineExpose({ focusBelt, focusPicture, has, root })
   border-radius: 10px;
   border: 1px solid;
   font: 600 26px var(--lq-font-display);
+}
+.lq-belt-face {
+  /* The painted picture fills the square, inside its coloured edge; the same even light in every act. */
+  width: 100%;
+  height: 100%;
+  border-radius: 9px;
+  object-fit: cover;
+  filter: none;
 }
 .lq-belt-item .lq-belt-square {
   background: var(--lq-item-soft);

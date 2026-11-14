@@ -1059,6 +1059,202 @@
     ]
   },
   {
+    "id": "item-ancient-amulet",
+    "title": "Ancient Amulet",
+    "width": 256,
+    "height": 256,
+    "text": "A worn bronze amulet on a thin chain, a spiral cut into its green-tinged face. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+  },
+  {
+    "id": "item-ash-fern",
+    "title": "Ash-Fern",
+    "width": 256,
+    "height": 256,
+    "text": "A single grey-green fern frond, its tips scorched black as if from a fire. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+  },
+  {
+    "id": "item-binding-resin",
+    "title": "Binding Resin",
+    "width": 256,
+    "height": 256,
+    "text": "A lump of amber resin, sticky and glossy, with a thread of it hanging down. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+  },
+  {
+    "id": "item-brass-mirror-segment",
+    "title": "Brass Mirror Segment",
+    "width": 256,
+    "height": 256,
+    "text": "A curved shard of brass-framed mirror, its edge jagged and its glass clouded. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+  },
+  {
+    "id": "item-charred-notebook",
+    "title": "Charred Notebook",
+    "width": 256,
+    "height": 256,
+    "text": "A small leather notebook, blackened at its edges, its cover curling from fire. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+  },
+  {
+    "id": "item-cooled-slag",
+    "title": "Cooled Slag",
+    "width": 256,
+    "height": 256,
+    "text": "A dull, glassy lump of black slag with a rusty-orange vein through it. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+  },
+  {
+    "id": "item-crystal-of-light",
+    "title": "Crystal of Light",
+    "width": 256,
+    "height": 256,
+    "text": "A pale crystal the size of a fist, its inside glowing a soft white. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+  },
+  {
+    "id": "item-dragons-scale",
+    "title": "Dragon's Scale",
+    "width": 256,
+    "height": 256,
+    "text": "A single large scale, red at its centre and fading to black at its rim. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+  },
+  {
+    "id": "item-emberwater-canteen",
+    "title": "Emberwater Canteen",
+    "width": 256,
+    "height": 256,
+    "text": "A battered metal canteen with a leather strap, a faint red glow at its mouth. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+  },
+  {
+    "id": "item-heat-ward-mix",
+    "title": "Heat-Ward Mix",
+    "width": 256,
+    "height": 256,
+    "text": "A small clay jar of reddish paste with a wooden spoon standing in it. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+  },
+  {
+    "id": "item-keepsake-note",
+    "title": "Keepsake Note",
+    "width": 256,
+    "height": 256,
+    "text": "A small folded note of cream paper, tied with a thin blue thread. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+  },
+  {
+    "id": "item-lifelight-elixir",
+    "title": "Lifelight Elixir",
+    "width": 256,
+    "height": 256,
+    "text": "A slender glass vial of glowing golden liquid with a cork stopper. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+  },
+  {
+    "id": "item-miners-key",
+    "title": "Miner's Key",
+    "width": 256,
+    "height": 256,
+    "text": "A long, dark iron key with a square bow and a tag of tin tied to it. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+  },
+  {
+    "id": "item-moon-rune-shards",
+    "title": "Moon Rune Shards",
+    "width": 256,
+    "height": 256,
+    "text": "Three flat pale stone shards laid together, each carved with a half-moon. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+  },
+  {
+    "id": "item-old-oath-scrolls",
+    "title": "Old Oath Scrolls",
+    "width": 256,
+    "height": 256,
+    "text": "Two rolled parchment scrolls tied with a faded red ribbon. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+  },
+  {
+    "id": "item-phoenix-feather",
+    "title": "Phoenix Feather",
+    "width": 256,
+    "height": 256,
+    "text": "A long feather shading from deep red to gold, glowing faintly at its tip. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+  },
+  {
+    "id": "item-polished-shell",
+    "title": "Polished Shell",
+    "width": 256,
+    "height": 256,
+    "text": "A smooth, pearly spiral shell with pink inside its opening. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+  },
+  {
+    "id": "item-prism-lantern",
+    "title": "Prism Lantern",
+    "width": 256,
+    "height": 256,
+    "text": "A lantern with a glass prism for its chimney, throwing small bands of coloured light. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+  },
+  {
+    "id": "item-quiet-charm",
+    "title": "Quiet Charm",
+    "width": 256,
+    "height": 256,
+    "text": "A small wooden bell with a plug of wool stuffed in its mouth. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+  },
+  {
+    "id": "item-reinforced-braces",
+    "title": "Reinforced Braces",
+    "width": 256,
+    "height": 256,
+    "text": "A pair of timber braces bound with iron straps at their ends. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+  },
+  {
+    "id": "item-resonant-chant-rubbings",
+    "title": "Resonant Chant Rubbings",
+    "width": 256,
+    "height": 256,
+    "text": "A sheet of thin paper rubbed black with graphite, showing rows of carved marks. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+  },
+  {
+    "id": "item-rusted-locker-key",
+    "title": "Rusted Locker Key",
+    "width": 256,
+    "height": 256,
+    "text": "A small flat key, thick with orange rust, with a number stamped on its bow. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+  },
+  {
+    "id": "item-sea-sealed-letter",
+    "title": "Sea-Sealed Letter",
+    "width": 256,
+    "height": 256,
+    "text": "A letter folded small and sealed with a blue-green wax, a salt stain across it. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+  },
+  {
+    "id": "item-stillwater-phial",
+    "title": "Stillwater Phial",
+    "width": 256,
+    "height": 256,
+    "text": "A small glass phial of still, dark blue water, with a silver cap. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+  },
+  {
+    "id": "item-support-straps",
+    "title": "Support Straps",
+    "width": 256,
+    "height": 256,
+    "text": "Two stout leather straps with iron buckles, coiled together. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+  },
+  {
+    "id": "item-vent-stone",
+    "title": "Vent Stone",
+    "width": 256,
+    "height": 256,
+    "text": "A dark red stone, pitted like pumice, with a thin curl of smoke rising from it. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+  },
+  {
+    "id": "item-weathered-coin",
+    "title": "Weathered Coin",
+    "width": 256,
+    "height": 256,
+    "text": "A thick old coin, green with age, its stamped face almost worn away. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+  },
+  {
+    "id": "item-wedge-blocks",
+    "title": "Wedge Blocks",
+    "width": 256,
+    "height": 256,
+    "text": "Three chunky wooden wedges, stacked in a small heap. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+  },
+  {
     "id": "portrait-elior",
     "title": "Elior",
     "width": 480,
@@ -1078,5 +1274,40 @@
     "width": 480,
     "height": 640,
     "text": "A face portrait of a tall knight in his fifties with a weathered, tired face and a steady, watchful stare, a steel mail coif and a dented gorget around his neck."
+  },
+  {
+    "id": "spell-bless",
+    "title": "Bless",
+    "width": 256,
+    "height": 256,
+    "text": "A raised open hand with a ring of soft gold light around the palm. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+  },
+  {
+    "id": "spell-light",
+    "title": "Light",
+    "width": 256,
+    "height": 256,
+    "text": "A small, warm ball of light hovering just above a pair of cupped hands. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+  },
+  {
+    "id": "spell-mend",
+    "title": "Mend",
+    "width": 256,
+    "height": 256,
+    "text": "A cracked clay cup with a gold seam of light closing across the crack. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+  },
+  {
+    "id": "spell-purify",
+    "title": "Purify",
+    "width": 256,
+    "height": 256,
+    "text": "A cup of clear water with a ring of white light spreading over it. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+  },
+  {
+    "id": "spell-unlock",
+    "title": "Unlock",
+    "width": 256,
+    "height": 256,
+    "text": "A brass key surrounded by a bright ring of light, with an open padlock beside it. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
   }
 ]
