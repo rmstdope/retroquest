@@ -618,13 +618,16 @@ test.describe('a long arrival on a narrow window (rq-fc9f)', () => {
       // once it is cut and laid out), or for the card to have gone.
       let up = null as ShownPage | null
       await expect
-        .poll(async () => {
-          up = await pageUp(page)
-          return (
-            up === null ||
-            (up.lines.length > 0 && up.ends.length === up.lines.length)
-          )
-        })
+        .poll(
+          async () => {
+            up = await pageUp(page)
+            return (
+              up === null ||
+              (up.lines.length > 0 && up.ends.length === up.lines.length)
+            )
+          },
+          { message: 'the page up shows the end of every line on it' },
+        )
         .toBe(true)
       if (!up) break
       seen.push(...up.ends)
