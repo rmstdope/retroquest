@@ -11179,6 +11179,303 @@
    }
   ]
  },
+ "039dd366843493": {
+  "file": "039dd366843493.mp3",
+  "speaker": "grandmother",
+  "duration": 19.365,
+  "words": [
+   {
+    "word": "If",
+    "start": 0.0,
+    "end": 0.16
+   },
+   {
+    "word": "you're",
+    "start": 0.16,
+    "end": 0.28
+   },
+   {
+    "word": "going",
+    "start": 0.28,
+    "end": 0.54
+   },
+   {
+    "word": "out,",
+    "start": 0.54,
+    "end": 0.9
+   },
+   {
+    "word": "look",
+    "start": 1.1,
+    "end": 1.54
+   },
+   {
+    "word": "in",
+    "start": 1.54,
+    "end": 1.74
+   },
+   {
+    "word": "on",
+    "start": 1.74,
+    "end": 1.98
+   },
+   {
+    "word": "Mira",
+    "start": 1.98,
+    "end": 2.26
+   },
+   {
+    "word": "at",
+    "start": 2.26,
+    "end": 2.58
+   },
+   {
+    "word": "her",
+    "start": 2.58,
+    "end": 2.78
+   },
+   {
+    "word": "hut;",
+    "start": 2.78,
+    "end": 3.12
+   },
+   {
+    "word": "she",
+    "start": 3.34,
+    "end": 3.7
+   },
+   {
+    "word": "was",
+    "start": 3.7,
+    "end": 3.88
+   },
+   {
+    "word": "asking",
+    "start": 3.88,
+    "end": 4.34
+   },
+   {
+    "word": "after",
+    "start": 4.34,
+    "end": 4.68
+   },
+   {
+    "word": "you.",
+    "start": 4.68,
+    "end": 4.96
+   },
+   {
+    "word": "You",
+    "start": 5.36,
+    "end": 5.86
+   },
+   {
+    "word": "know",
+    "start": 5.86,
+    "end": 6.04
+   },
+   {
+    "word": "she",
+    "start": 6.04,
+    "end": 6.26
+   },
+   {
+    "word": "has",
+    "start": 6.26,
+    "end": 6.46
+   },
+   {
+    "word": "a",
+    "start": 6.46,
+    "end": 6.62
+   },
+   {
+    "word": "way",
+    "start": 6.62,
+    "end": 6.76
+   },
+   {
+    "word": "with",
+    "start": 6.76,
+    "end": 6.98
+   },
+   {
+    "word": "herbs,",
+    "start": 6.98,
+    "end": 7.4
+   },
+   {
+    "word": "and",
+    "start": 7.6,
+    "end": 7.94
+   },
+   {
+    "word": "with...",
+    "start": 7.94,
+    "end": 8.22
+   },
+   {
+    "word": "other",
+    "start": 8.22,
+    "end": 8.64
+   },
+   {
+    "word": "things.",
+    "start": 8.64,
+    "end": 9.08
+   },
+   {
+    "word": "Hemlock",
+    "start": 10.0,
+    "end": 10.52
+   },
+   {
+    "word": "will",
+    "start": 10.52,
+    "end": 10.68
+   },
+   {
+    "word": "have",
+    "start": 10.68,
+    "end": 10.82
+   },
+   {
+    "word": "heard",
+    "start": 10.82,
+    "end": 11.08
+   },
+   {
+    "word": "whatever",
+    "start": 11.08,
+    "end": 11.36
+   },
+   {
+    "word": "there",
+    "start": 11.36,
+    "end": 11.62
+   },
+   {
+    "word": "is",
+    "start": 11.62,
+    "end": 11.84
+   },
+   {
+    "word": "to",
+    "start": 11.84,
+    "end": 12.0
+   },
+   {
+    "word": "hear",
+    "start": 12.0,
+    "end": 12.26
+   },
+   {
+    "word": "at",
+    "start": 12.26,
+    "end": 12.42
+   },
+   {
+    "word": "the",
+    "start": 12.42,
+    "end": 12.54
+   },
+   {
+    "word": "General",
+    "start": 12.54,
+    "end": 12.84
+   },
+   {
+    "word": "Store;",
+    "start": 12.84,
+    "end": 13.32
+   },
+   {
+    "word": "he",
+    "start": 13.48,
+    "end": 13.8
+   },
+   {
+    "word": "always",
+    "start": 13.8,
+    "end": 14.22
+   },
+   {
+    "word": "does.",
+    "start": 14.22,
+    "end": 14.58
+   },
+   {
+    "word": "And",
+    "start": 15.08,
+    "end": 15.5
+   },
+   {
+    "word": "show",
+    "start": 15.5,
+    "end": 15.74
+   },
+   {
+    "word": "your",
+    "start": 15.74,
+    "end": 15.94
+   },
+   {
+    "word": "face",
+    "start": 15.94,
+    "end": 16.24
+   },
+   {
+    "word": "at",
+    "start": 16.24,
+    "end": 16.38
+   },
+   {
+    "word": "the",
+    "start": 16.38,
+    "end": 16.5
+   },
+   {
+    "word": "forge,",
+    "start": 16.5,
+    "end": 16.94
+   },
+   {
+    "word": "or",
+    "start": 17.1,
+    "end": 17.4
+   },
+   {
+    "word": "Borin",
+    "start": 17.4,
+    "end": 17.76
+   },
+   {
+    "word": "will",
+    "start": 17.76,
+    "end": 17.98
+   },
+   {
+    "word": "think",
+    "start": 17.98,
+    "end": 18.2
+   },
+   {
+    "word": "you've",
+    "start": 18.2,
+    "end": 18.46
+   },
+   {
+    "word": "forgotten",
+    "start": 18.46,
+    "end": 18.8
+   },
+   {
+    "word": "him.",
+    "start": 18.8,
+    "end": 19.1
+   }
+  ]
+ },
  "03b2a91ae4d914": {
   "file": "03b2a91ae4d914.mp3",
   "speaker": "narrator",
@@ -31133,6 +31430,33 @@
    }
   ]
  },
+ "098c354de3deb9": {
+  "file": "098c354de3deb9.mp3",
+  "speaker": "mother",
+  "duration": 1.347,
+  "words": [
+   {
+    "word": "Your",
+    "start": 0.0,
+    "end": 0.46
+   },
+   {
+    "word": "father",
+    "start": 0.46,
+    "end": 0.8
+   },
+   {
+    "word": "and",
+    "start": 0.8,
+    "end": 1.04
+   },
+   {
+    "word": "I",
+    "start": 1.04,
+    "end": 1.2
+   }
+  ]
+ },
  "099ef7427214cf": {
   "file": "099ef7427214cf.mp3",
   "speaker": "narrator",
@@ -32140,6 +32464,103 @@
     "word": "heel.",
     "start": 3.18,
     "end": 3.46
+   }
+  ]
+ },
+ "09eb960acf99a4": {
+  "file": "09eb960acf99a4.mp3",
+  "speaker": "grandmother",
+  "duration": 6.594,
+  "words": [
+   {
+    "word": "Your",
+    "start": 0.0,
+    "end": 0.2
+   },
+   {
+    "word": "father",
+    "start": 0.2,
+    "end": 0.6
+   },
+   {
+    "word": "wrote",
+    "start": 0.6,
+    "end": 0.9
+   },
+   {
+    "word": "in",
+    "start": 0.9,
+    "end": 1.06
+   },
+   {
+    "word": "one",
+    "start": 1.06,
+    "end": 1.26
+   },
+   {
+    "word": "like",
+    "start": 1.26,
+    "end": 1.5
+   },
+   {
+    "word": "that",
+    "start": 1.5,
+    "end": 1.82
+   },
+   {
+    "word": "every",
+    "start": 1.82,
+    "end": 2.32
+   },
+   {
+    "word": "night,",
+    "start": 2.32,
+    "end": 2.7
+   },
+   {
+    "word": "at",
+    "start": 2.7,
+    "end": 3.16
+   },
+   {
+    "word": "this",
+    "start": 3.16,
+    "end": 3.42
+   },
+   {
+    "word": "table.",
+    "start": 3.42,
+    "end": 3.82
+   },
+   {
+    "word": "Half",
+    "start": 4.48,
+    "end": 5.0
+   },
+   {
+    "word": "of",
+    "start": 5.0,
+    "end": 5.14
+   },
+   {
+    "word": "it",
+    "start": 5.14,
+    "end": 5.26
+   },
+   {
+    "word": "I",
+    "start": 5.26,
+    "end": 5.38
+   },
+   {
+    "word": "never",
+    "start": 5.38,
+    "end": 5.62
+   },
+   {
+    "word": "understood.",
+    "start": 5.62,
+    "end": 6.14
    }
   ]
  },
@@ -51613,6 +52034,218 @@
    }
   ]
  },
+ "108bf4b1ec09e6": {
+  "file": "108bf4b1ec09e6.mp3",
+  "speaker": "merchant",
+  "duration": 15.697,
+  "words": [
+   {
+    "word": "Boots,",
+    "start": 0.0,
+    "end": 0.54
+   },
+   {
+    "word": "friend?",
+    "start": 0.72,
+    "end": 0.98
+   },
+   {
+    "word": "I've",
+    "start": 1.42,
+    "end": 1.98
+   },
+   {
+    "word": "one",
+    "start": 1.98,
+    "end": 2.26
+   },
+   {
+    "word": "good",
+    "start": 2.26,
+    "end": 2.52
+   },
+   {
+    "word": "pair",
+    "start": 2.52,
+    "end": 2.9
+   },
+   {
+    "word": "of",
+    "start": 2.9,
+    "end": 3.12
+   },
+   {
+    "word": "wandering",
+    "start": 3.12,
+    "end": 3.56
+   },
+   {
+    "word": "boots",
+    "start": 3.56,
+    "end": 4.08
+   },
+   {
+    "word": "left,",
+    "start": 4.08,
+    "end": 4.56
+   },
+   {
+    "word": "walked",
+    "start": 4.8,
+    "end": 5.3
+   },
+   {
+    "word": "in",
+    "start": 5.3,
+    "end": 5.44
+   },
+   {
+    "word": "and",
+    "start": 5.44,
+    "end": 5.62
+   },
+   {
+    "word": "soft,",
+    "start": 5.62,
+    "end": 6.1
+   },
+   {
+    "word": "and",
+    "start": 6.22,
+    "end": 6.3
+   },
+   {
+    "word": "the",
+    "start": 6.3,
+    "end": 6.44
+   },
+   {
+    "word": "soles",
+    "start": 6.44,
+    "end": 6.88
+   },
+   {
+    "word": "will",
+    "start": 6.88,
+    "end": 7.06
+   },
+   {
+    "word": "outlast",
+    "start": 7.06,
+    "end": 7.6
+   },
+   {
+    "word": "you.",
+    "start": 7.6,
+    "end": 7.96
+   },
+   {
+    "word": "I'll",
+    "start": 8.22,
+    "end": 8.6
+   },
+   {
+    "word": "not",
+    "start": 8.6,
+    "end": 8.82
+   },
+   {
+    "word": "take",
+    "start": 8.82,
+    "end": 9.08
+   },
+   {
+    "word": "coin",
+    "start": 9.08,
+    "end": 9.44
+   },
+   {
+    "word": "for",
+    "start": 9.44,
+    "end": 9.64
+   },
+   {
+    "word": "them;",
+    "start": 9.64,
+    "end": 9.92
+   },
+   {
+    "word": "coin",
+    "start": 10.14,
+    "end": 10.54
+   },
+   {
+    "word": "I",
+    "start": 10.54,
+    "end": 10.7
+   },
+   {
+    "word": "can",
+    "start": 10.7,
+    "end": 10.86
+   },
+   {
+    "word": "earn",
+    "start": 10.86,
+    "end": 11.08
+   },
+   {
+    "word": "anywhere.",
+    "start": 11.08,
+    "end": 11.58
+   },
+   {
+    "word": "Something",
+    "start": 11.9,
+    "end": 12.42
+   },
+   {
+    "word": "small",
+    "start": 12.42,
+    "end": 12.84
+   },
+   {
+    "word": "and",
+    "start": 12.84,
+    "end": 13.08
+   },
+   {
+    "word": "fine",
+    "start": 13.08,
+    "end": 13.46
+   },
+   {
+    "word": "would",
+    "start": 13.46,
+    "end": 13.66
+   },
+   {
+    "word": "buy",
+    "start": 13.66,
+    "end": 13.92
+   },
+   {
+    "word": "them.",
+    "start": 13.92,
+    "end": 14.22
+   },
+   {
+    "word": "A",
+    "start": 14.38,
+    "end": 14.66
+   },
+   {
+    "word": "ring,",
+    "start": 14.66,
+    "end": 15.0
+   },
+   {
+    "word": "say.",
+    "start": 15.18,
+    "end": 15.38
+   }
+  ]
+ },
  "109af3cf46b360": {
   "file": "109af3cf46b360.mp3",
   "speaker": "elior",
@@ -53905,6 +54538,133 @@
    }
   ]
  },
+ "116a45326f37a2": {
+  "file": "116a45326f37a2.mp3",
+  "speaker": "mother",
+  "duration": 10.913,
+  "words": [
+   {
+    "word": "My",
+    "start": 0.0,
+    "end": 0.28
+   },
+   {
+    "word": "dearest",
+    "start": 0.28,
+    "end": 0.7
+   },
+   {
+    "word": "Elior,",
+    "start": 0.7,
+    "end": 1.24
+   },
+   {
+    "word": "if",
+    "start": 1.7,
+    "end": 2.36
+   },
+   {
+    "word": "you",
+    "start": 2.36,
+    "end": 2.5
+   },
+   {
+    "word": "are",
+    "start": 2.5,
+    "end": 2.64
+   },
+   {
+    "word": "reading",
+    "start": 2.64,
+    "end": 2.9
+   },
+   {
+    "word": "this,",
+    "start": 2.9,
+    "end": 3.4
+   },
+   {
+    "word": "you",
+    "start": 3.4,
+    "end": 4.34
+   },
+   {
+    "word": "found",
+    "start": 4.34,
+    "end": 4.52
+   },
+   {
+    "word": "the",
+    "start": 4.52,
+    "end": 4.64
+   },
+   {
+    "word": "bend,",
+    "start": 4.64,
+    "end": 4.98
+   },
+   {
+    "word": "as",
+    "start": 5.36,
+    "end": 6.02
+   },
+   {
+    "word": "I",
+    "start": 6.02,
+    "end": 6.14
+   },
+   {
+    "word": "knew",
+    "start": 6.14,
+    "end": 6.28
+   },
+   {
+    "word": "you",
+    "start": 6.28,
+    "end": 6.44
+   },
+   {
+    "word": "would.",
+    "start": 6.44,
+    "end": 6.82
+   },
+   {
+    "word": "The",
+    "start": 7.78,
+    "end": 8.46
+   },
+   {
+    "word": "river",
+    "start": 8.46,
+    "end": 8.74
+   },
+   {
+    "word": "remembers",
+    "start": 8.74,
+    "end": 9.32
+   },
+   {
+    "word": "what",
+    "start": 9.32,
+    "end": 9.54
+   },
+   {
+    "word": "the",
+    "start": 9.54,
+    "end": 9.66
+   },
+   {
+    "word": "village",
+    "start": 9.66,
+    "end": 9.98
+   },
+   {
+    "word": "forgets.",
+    "start": 9.98,
+    "end": 10.68
+   }
+  ]
+ },
  "116aac75767bd3": {
   "file": "116aac75767bd3.mp3",
   "speaker": "narrator",
@@ -55744,6 +56504,98 @@
     "word": "it.",
     "start": 6.62,
     "end": 6.88
+   }
+  ]
+ },
+ "11f1ae6497a795": {
+  "file": "11f1ae6497a795.mp3",
+  "speaker": "merchant",
+  "duration": 5.433,
+  "words": [
+   {
+    "word": "How",
+    "start": 0.0,
+    "end": 0.28
+   },
+   {
+    "word": "are",
+    "start": 0.28,
+    "end": 0.44
+   },
+   {
+    "word": "the",
+    "start": 0.44,
+    "end": 0.62
+   },
+   {
+    "word": "boots?",
+    "start": 0.62,
+    "end": 1.14
+   },
+   {
+    "word": "Give",
+    "start": 1.4,
+    "end": 1.9
+   },
+   {
+    "word": "them",
+    "start": 1.9,
+    "end": 2.08
+   },
+   {
+    "word": "a",
+    "start": 2.08,
+    "end": 2.3
+   },
+   {
+    "word": "week",
+    "start": 2.3,
+    "end": 2.62
+   },
+   {
+    "word": "and",
+    "start": 2.62,
+    "end": 2.8
+   },
+   {
+    "word": "they'll",
+    "start": 2.8,
+    "end": 3.06
+   },
+   {
+    "word": "know",
+    "start": 3.06,
+    "end": 3.28
+   },
+   {
+    "word": "your",
+    "start": 3.28,
+    "end": 3.52
+   },
+   {
+    "word": "feet",
+    "start": 3.52,
+    "end": 3.88
+   },
+   {
+    "word": "better",
+    "start": 3.88,
+    "end": 4.24
+   },
+   {
+    "word": "than",
+    "start": 4.24,
+    "end": 4.48
+   },
+   {
+    "word": "you",
+    "start": 4.48,
+    "end": 4.78
+   },
+   {
+    "word": "do.",
+    "start": 4.78,
+    "end": 5.06
    }
   ]
  },
@@ -58600,6 +59452,78 @@
     "word": "back.",
     "start": 2.42,
     "end": 2.66
+   }
+  ]
+ },
+ "133042235f493c": {
+  "file": "133042235f493c.mp3",
+  "speaker": "grandmother",
+  "duration": 4.365,
+  "words": [
+   {
+    "word": "You've",
+    "start": 0.0,
+    "end": 0.4
+   },
+   {
+    "word": "a",
+    "start": 0.4,
+    "end": 0.5
+   },
+   {
+    "word": "good",
+    "start": 0.5,
+    "end": 0.76
+   },
+   {
+    "word": "heart,",
+    "start": 0.76,
+    "end": 1.12
+   },
+   {
+    "word": "Elior.",
+    "start": 1.32,
+    "end": 1.7
+   },
+   {
+    "word": "Don't",
+    "start": 2.12,
+    "end": 2.64
+   },
+   {
+    "word": "let",
+    "start": 2.64,
+    "end": 2.78
+   },
+   {
+    "word": "anyone",
+    "start": 2.78,
+    "end": 3.2
+   },
+   {
+    "word": "talk",
+    "start": 3.2,
+    "end": 3.52
+   },
+   {
+    "word": "you",
+    "start": 3.52,
+    "end": 3.74
+   },
+   {
+    "word": "out",
+    "start": 3.74,
+    "end": 3.94
+   },
+   {
+    "word": "of",
+    "start": 3.94,
+    "end": 4.08
+   },
+   {
+    "word": "it.",
+    "start": 4.08,
+    "end": 4.2
    }
   ]
  },
@@ -65827,6 +66751,438 @@
    }
   ]
  },
+ "15ba2e42eb660c": {
+  "file": "15ba2e42eb660c.mp3",
+  "speaker": "merchant",
+  "duration": 31.746,
+  "words": [
+   {
+    "word": "You'll",
+    "start": 0.0,
+    "end": 0.4
+   },
+   {
+    "word": "want",
+    "start": 0.4,
+    "end": 0.7
+   },
+   {
+    "word": "news,",
+    "start": 0.7,
+    "end": 1.24
+   },
+   {
+    "word": "if",
+    "start": 1.24,
+    "end": 1.76
+   },
+   {
+    "word": "you're",
+    "start": 1.76,
+    "end": 1.98
+   },
+   {
+    "word": "bound",
+    "start": 1.98,
+    "end": 2.36
+   },
+   {
+    "word": "for",
+    "start": 2.36,
+    "end": 2.68
+   },
+   {
+    "word": "Greendale.",
+    "start": 2.68,
+    "end": 3.52
+   },
+   {
+    "word": "It's",
+    "start": 3.74,
+    "end": 4.16
+   },
+   {
+    "word": "a",
+    "start": 4.16,
+    "end": 4.32
+   },
+   {
+    "word": "sombre",
+    "start": 4.32,
+    "end": 4.82
+   },
+   {
+    "word": "city",
+    "start": 4.82,
+    "end": 5.18
+   },
+   {
+    "word": "this",
+    "start": 5.18,
+    "end": 5.48
+   },
+   {
+    "word": "season:",
+    "start": 5.48,
+    "end": 5.98
+   },
+   {
+    "word": "they",
+    "start": 6.2,
+    "end": 6.44
+   },
+   {
+    "word": "say",
+    "start": 6.44,
+    "end": 6.74
+   },
+   {
+    "word": "King",
+    "start": 6.74,
+    "end": 7.02
+   },
+   {
+    "word": "Alden",
+    "start": 7.02,
+    "end": 7.46
+   },
+   {
+    "word": "has",
+    "start": 7.46,
+    "end": 7.7
+   },
+   {
+    "word": "fallen",
+    "start": 7.7,
+    "end": 8.06
+   },
+   {
+    "word": "ill,",
+    "start": 8.06,
+    "end": 8.44
+   },
+   {
+    "word": "and",
+    "start": 8.62,
+    "end": 8.88
+   },
+   {
+    "word": "no",
+    "start": 8.88,
+    "end": 9.14
+   },
+   {
+    "word": "physician",
+    "start": 9.14,
+    "end": 9.66
+   },
+   {
+    "word": "can",
+    "start": 9.66,
+    "end": 9.96
+   },
+   {
+    "word": "name",
+    "start": 9.96,
+    "end": 10.28
+   },
+   {
+    "word": "the",
+    "start": 10.28,
+    "end": 10.5
+   },
+   {
+    "word": "sickness.",
+    "start": 10.5,
+    "end": 10.94
+   },
+   {
+    "word": "And",
+    "start": 11.22,
+    "end": 11.46
+   },
+   {
+    "word": "the",
+    "start": 11.46,
+    "end": 11.6
+   },
+   {
+    "word": "roads",
+    "start": 11.6,
+    "end": 11.98
+   },
+   {
+    "word": "have",
+    "start": 11.98,
+    "end": 12.14
+   },
+   {
+    "word": "gone",
+    "start": 12.14,
+    "end": 12.36
+   },
+   {
+    "word": "bad",
+    "start": 12.36,
+    "end": 12.76
+   },
+   {
+    "word": "besides.",
+    "start": 12.76,
+    "end": 13.1
+   },
+   {
+    "word": "I",
+    "start": 13.36,
+    "end": 13.96
+   },
+   {
+    "word": "passed",
+    "start": 13.96,
+    "end": 14.36
+   },
+   {
+    "word": "a",
+    "start": 14.36,
+    "end": 14.54
+   },
+   {
+    "word": "cart",
+    "start": 14.54,
+    "end": 14.8
+   },
+   {
+    "word": "on",
+    "start": 14.8,
+    "end": 15.02
+   },
+   {
+    "word": "its",
+    "start": 15.02,
+    "end": 15.18
+   },
+   {
+    "word": "side",
+    "start": 15.18,
+    "end": 15.48
+   },
+   {
+    "word": "by",
+    "start": 15.48,
+    "end": 15.66
+   },
+   {
+    "word": "the",
+    "start": 15.66,
+    "end": 15.82
+   },
+   {
+    "word": "hill",
+    "start": 15.82,
+    "end": 16.08
+   },
+   {
+    "word": "road,",
+    "start": 16.08,
+    "end": 16.48
+   },
+   {
+    "word": "and",
+    "start": 16.6,
+    "end": 16.86
+   },
+   {
+    "word": "nobody",
+    "start": 16.86,
+    "end": 17.28
+   },
+   {
+    "word": "with",
+    "start": 17.28,
+    "end": 17.62
+   },
+   {
+    "word": "it.",
+    "start": 17.62,
+    "end": 17.82
+   },
+   {
+    "word": "And",
+    "start": 18.1,
+    "end": 18.68
+   },
+   {
+    "word": "it's",
+    "start": 18.68,
+    "end": 18.9
+   },
+   {
+    "word": "not",
+    "start": 18.9,
+    "end": 19.08
+   },
+   {
+    "word": "only",
+    "start": 19.08,
+    "end": 19.4
+   },
+   {
+    "word": "your",
+    "start": 19.4,
+    "end": 19.64
+   },
+   {
+    "word": "fields",
+    "start": 19.64,
+    "end": 20.12
+   },
+   {
+    "word": "that",
+    "start": 20.12,
+    "end": 20.34
+   },
+   {
+    "word": "are",
+    "start": 20.34,
+    "end": 20.48
+   },
+   {
+    "word": "failing.",
+    "start": 20.48,
+    "end": 20.88
+   },
+   {
+    "word": "I've",
+    "start": 21.18,
+    "end": 21.78
+   },
+   {
+    "word": "seen",
+    "start": 21.78,
+    "end": 22.1
+   },
+   {
+    "word": "crops",
+    "start": 22.1,
+    "end": 22.64
+   },
+   {
+    "word": "gone",
+    "start": 22.64,
+    "end": 23.0
+   },
+   {
+    "word": "grey",
+    "start": 23.0,
+    "end": 23.44
+   },
+   {
+    "word": "in",
+    "start": 23.44,
+    "end": 23.9
+   },
+   {
+    "word": "every",
+    "start": 23.9,
+    "end": 24.2
+   },
+   {
+    "word": "valley",
+    "start": 24.2,
+    "end": 24.66
+   },
+   {
+    "word": "from",
+    "start": 24.66,
+    "end": 24.94
+   },
+   {
+    "word": "here",
+    "start": 24.94,
+    "end": 25.3
+   },
+   {
+    "word": "to",
+    "start": 25.3,
+    "end": 25.48
+   },
+   {
+    "word": "the",
+    "start": 25.48,
+    "end": 25.68
+   },
+   {
+    "word": "capital,",
+    "start": 25.68,
+    "end": 26.14
+   },
+   {
+    "word": "ever",
+    "start": 26.14,
+    "end": 26.92
+   },
+   {
+    "word": "since",
+    "start": 26.92,
+    "end": 27.24
+   },
+   {
+    "word": "the",
+    "start": 27.24,
+    "end": 27.52
+   },
+   {
+    "word": "king",
+    "start": 27.52,
+    "end": 27.8
+   },
+   {
+    "word": "took",
+    "start": 27.8,
+    "end": 28.16
+   },
+   {
+    "word": "to",
+    "start": 28.16,
+    "end": 28.36
+   },
+   {
+    "word": "his",
+    "start": 28.36,
+    "end": 28.58
+   },
+   {
+    "word": "bed.",
+    "start": 28.58,
+    "end": 29.02
+   },
+   {
+    "word": "Keep",
+    "start": 29.02,
+    "end": 30.0
+   },
+   {
+    "word": "to",
+    "start": 30.0,
+    "end": 30.2
+   },
+   {
+    "word": "the",
+    "start": 30.2,
+    "end": 30.34
+   },
+   {
+    "word": "daylight,",
+    "start": 30.34,
+    "end": 30.74
+   },
+   {
+    "word": "friend.",
+    "start": 31.08,
+    "end": 31.28
+   }
+  ]
+ },
  "15be0c5891cd29": {
   "file": "15be0c5891cd29.mp3",
   "speaker": "elior",
@@ -68949,6 +70305,153 @@
    }
   ]
  },
+ "16e754dcb3d08f": {
+  "file": "16e754dcb3d08f.mp3",
+  "speaker": "grandmother",
+  "duration": 10.635,
+  "words": [
+   {
+    "word": "It",
+    "start": 0.0,
+    "end": 0.22
+   },
+   {
+    "word": "was",
+    "start": 0.22,
+    "end": 0.4
+   },
+   {
+    "word": "a",
+    "start": 0.4,
+    "end": 0.54
+   },
+   {
+    "word": "workshop",
+    "start": 0.54,
+    "end": 0.96
+   },
+   {
+    "word": "once...",
+    "start": 0.96,
+    "end": 1.52
+   },
+   {
+    "word": "your",
+    "start": 2.14,
+    "end": 2.58
+   },
+   {
+    "word": "father's.",
+    "start": 2.58,
+    "end": 3.26
+   },
+   {
+    "word": "I",
+    "start": 3.72,
+    "end": 4.16
+   },
+   {
+    "word": "never",
+    "start": 4.16,
+    "end": 4.42
+   },
+   {
+    "word": "could",
+    "start": 4.42,
+    "end": 4.64
+   },
+   {
+    "word": "bring",
+    "start": 4.64,
+    "end": 4.86
+   },
+   {
+    "word": "myself",
+    "start": 4.86,
+    "end": 5.3
+   },
+   {
+    "word": "to",
+    "start": 5.3,
+    "end": 5.52
+   },
+   {
+    "word": "go",
+    "start": 5.52,
+    "end": 5.7
+   },
+   {
+    "word": "in.",
+    "start": 5.7,
+    "end": 5.98
+   },
+   {
+    "word": "It's",
+    "start": 6.56,
+    "end": 7.0
+   },
+   {
+    "word": "dark",
+    "start": 7.0,
+    "end": 7.18
+   },
+   {
+    "word": "as",
+    "start": 7.18,
+    "end": 7.38
+   },
+   {
+    "word": "a",
+    "start": 7.38,
+    "end": 7.52
+   },
+   {
+    "word": "cellar",
+    "start": 7.52,
+    "end": 7.94
+   },
+   {
+    "word": "in",
+    "start": 7.94,
+    "end": 8.08
+   },
+   {
+    "word": "there,",
+    "start": 8.08,
+    "end": 8.26
+   },
+   {
+    "word": "dear;",
+    "start": 8.36,
+    "end": 8.56
+   },
+   {
+    "word": "take",
+    "start": 8.88,
+    "end": 9.28
+   },
+   {
+    "word": "the",
+    "start": 9.28,
+    "end": 9.44
+   },
+   {
+    "word": "lantern",
+    "start": 9.44,
+    "end": 9.8
+   },
+   {
+    "word": "with",
+    "start": 9.8,
+    "end": 10.12
+   },
+   {
+    "word": "you.",
+    "start": 10.12,
+    "end": 10.32
+   }
+  ]
+ },
  "16edfcea3ba8e5": {
   "file": "16edfcea3ba8e5.mp3",
   "speaker": "narrator",
@@ -69314,6 +70817,123 @@
     "word": "reason.",
     "start": 4.4,
     "end": 4.72
+   }
+  ]
+ },
+ "17140de494a0fe": {
+  "file": "17140de494a0fe.mp3",
+  "speaker": "merchant",
+  "duration": 8.545,
+  "words": [
+   {
+    "word": "Failing",
+    "start": 0.0,
+    "end": 0.62
+   },
+   {
+    "word": "that,",
+    "start": 0.62,
+    "end": 1.1
+   },
+   {
+    "word": "my",
+    "start": 1.48,
+    "end": 2.08
+   },
+   {
+    "word": "old",
+    "start": 2.08,
+    "end": 2.4
+   },
+   {
+    "word": "mare",
+    "start": 2.4,
+    "end": 2.74
+   },
+   {
+    "word": "threw",
+    "start": 2.74,
+    "end": 3.08
+   },
+   {
+    "word": "a",
+    "start": 3.08,
+    "end": 3.32
+   },
+   {
+    "word": "shoe",
+    "start": 3.32,
+    "end": 3.56
+   },
+   {
+    "word": "on",
+    "start": 3.56,
+    "end": 3.84
+   },
+   {
+    "word": "the",
+    "start": 3.84,
+    "end": 3.98
+   },
+   {
+    "word": "hill",
+    "start": 3.98,
+    "end": 4.2
+   },
+   {
+    "word": "road;",
+    "start": 4.2,
+    "end": 4.58
+   },
+   {
+    "word": "a",
+    "start": 4.92,
+    "end": 5.56
+   },
+   {
+    "word": "good",
+    "start": 5.56,
+    "end": 5.84
+   },
+   {
+    "word": "iron",
+    "start": 5.84,
+    "end": 6.2
+   },
+   {
+    "word": "horseshoe",
+    "start": 6.2,
+    "end": 6.74
+   },
+   {
+    "word": "would",
+    "start": 6.74,
+    "end": 6.96
+   },
+   {
+    "word": "do",
+    "start": 6.96,
+    "end": 7.14
+   },
+   {
+    "word": "me",
+    "start": 7.14,
+    "end": 7.34
+   },
+   {
+    "word": "nearly",
+    "start": 7.34,
+    "end": 7.66
+   },
+   {
+    "word": "as",
+    "start": 7.66,
+    "end": 7.92
+   },
+   {
+    "word": "well.",
+    "start": 7.92,
+    "end": 8.16
    }
   ]
  },
@@ -72840,6 +74460,118 @@
    }
   ]
  },
+ "18501e0018f749": {
+  "file": "18501e0018f749.mp3",
+  "speaker": "merchant",
+  "duration": 7.477,
+  "words": [
+   {
+    "word": "Forgive",
+    "start": 0.0,
+    "end": 0.32
+   },
+   {
+    "word": "me",
+    "start": 0.32,
+    "end": 0.64
+   },
+   {
+    "word": "if",
+    "start": 0.64,
+    "end": 0.84
+   },
+   {
+    "word": "I'm",
+    "start": 0.84,
+    "end": 1.08
+   },
+   {
+    "word": "short,",
+    "start": 1.08,
+    "end": 1.48
+   },
+   {
+    "word": "friend.",
+    "start": 1.66,
+    "end": 1.9
+   },
+   {
+    "word": "I've",
+    "start": 2.3,
+    "end": 2.72
+   },
+   {
+    "word": "not",
+    "start": 2.72,
+    "end": 2.94
+   },
+   {
+    "word": "eaten",
+    "start": 2.94,
+    "end": 3.22
+   },
+   {
+    "word": "since",
+    "start": 3.22,
+    "end": 3.56
+   },
+   {
+    "word": "the",
+    "start": 3.56,
+    "end": 3.78
+   },
+   {
+    "word": "hill",
+    "start": 3.78,
+    "end": 4.02
+   },
+   {
+    "word": "road,",
+    "start": 4.02,
+    "end": 4.46
+   },
+   {
+    "word": "and",
+    "start": 4.62,
+    "end": 4.96
+   },
+   {
+    "word": "there's",
+    "start": 4.96,
+    "end": 5.26
+   },
+   {
+    "word": "no",
+    "start": 5.26,
+    "end": 5.48
+   },
+   {
+    "word": "inn",
+    "start": 5.48,
+    "end": 5.74
+   },
+   {
+    "word": "this",
+    "start": 5.74,
+    "end": 6.0
+   },
+   {
+    "word": "side",
+    "start": 6.0,
+    "end": 6.32
+   },
+   {
+    "word": "of",
+    "start": 6.32,
+    "end": 6.5
+   },
+   {
+    "word": "Greendale.",
+    "start": 6.5,
+    "end": 7.22
+   }
+  ]
+ },
  "18521d8843e1ac": {
   "file": "18521d8843e1ac.mp3",
   "speaker": "narrator",
@@ -75258,6 +76990,243 @@
    }
   ]
  },
+ "191498f4de6fab": {
+  "file": "191498f4de6fab.mp3",
+  "speaker": "grandmother",
+  "duration": 14.257,
+  "words": [
+   {
+    "word": "He",
+    "start": 0.0,
+    "end": 0.14
+   },
+   {
+    "word": "thought",
+    "start": 0.14,
+    "end": 0.36
+   },
+   {
+    "word": "the",
+    "start": 0.36,
+    "end": 0.54
+   },
+   {
+    "word": "land",
+    "start": 0.54,
+    "end": 0.82
+   },
+   {
+    "word": "was",
+    "start": 0.82,
+    "end": 1.02
+   },
+   {
+    "word": "getting",
+    "start": 1.02,
+    "end": 1.26
+   },
+   {
+    "word": "sick",
+    "start": 1.26,
+    "end": 1.64
+   },
+   {
+    "word": "long",
+    "start": 1.64,
+    "end": 1.96
+   },
+   {
+    "word": "before",
+    "start": 1.96,
+    "end": 2.28
+   },
+   {
+    "word": "anyone",
+    "start": 2.28,
+    "end": 2.6
+   },
+   {
+    "word": "else",
+    "start": 2.6,
+    "end": 2.92
+   },
+   {
+    "word": "did.",
+    "start": 2.92,
+    "end": 3.24
+   },
+   {
+    "word": "And",
+    "start": 3.46,
+    "end": 3.94
+   },
+   {
+    "word": "there",
+    "start": 3.94,
+    "end": 4.08
+   },
+   {
+    "word": "was",
+    "start": 4.08,
+    "end": 4.24
+   },
+   {
+    "word": "one",
+    "start": 4.24,
+    "end": 4.48
+   },
+   {
+    "word": "thing",
+    "start": 4.48,
+    "end": 4.7
+   },
+   {
+    "word": "he",
+    "start": 4.7,
+    "end": 4.9
+   },
+   {
+    "word": "kept",
+    "start": 4.9,
+    "end": 5.14
+   },
+   {
+    "word": "coming",
+    "start": 5.14,
+    "end": 5.42
+   },
+   {
+    "word": "back",
+    "start": 5.42,
+    "end": 5.74
+   },
+   {
+    "word": "to:",
+    "start": 5.74,
+    "end": 6.0
+   },
+   {
+    "word": "a",
+    "start": 6.28,
+    "end": 6.74
+   },
+   {
+    "word": "way",
+    "start": 6.74,
+    "end": 6.9
+   },
+   {
+    "word": "to",
+    "start": 6.9,
+    "end": 7.06
+   },
+   {
+    "word": "call",
+    "start": 7.06,
+    "end": 7.32
+   },
+   {
+    "word": "a",
+    "start": 7.32,
+    "end": 7.5
+   },
+   {
+    "word": "thing",
+    "start": 7.5,
+    "end": 7.72
+   },
+   {
+    "word": "back",
+    "start": 7.72,
+    "end": 8.06
+   },
+   {
+    "word": "when",
+    "start": 8.06,
+    "end": 8.36
+   },
+   {
+    "word": "it's",
+    "start": 8.36,
+    "end": 8.58
+   },
+   {
+    "word": "nearly",
+    "start": 8.58,
+    "end": 8.9
+   },
+   {
+    "word": "gone.",
+    "start": 8.9,
+    "end": 9.38
+   },
+   {
+    "word": "Revive,",
+    "start": 10.26,
+    "end": 10.74
+   },
+   {
+    "word": "he",
+    "start": 10.82,
+    "end": 10.96
+   },
+   {
+    "word": "called",
+    "start": 10.96,
+    "end": 11.28
+   },
+   {
+    "word": "it.",
+    "start": 11.28,
+    "end": 11.46
+   },
+   {
+    "word": "He'd",
+    "start": 11.74,
+    "end": 12.18
+   },
+   {
+    "word": "try",
+    "start": 12.18,
+    "end": 12.4
+   },
+   {
+    "word": "it",
+    "start": 12.4,
+    "end": 12.54
+   },
+   {
+    "word": "on",
+    "start": 12.54,
+    "end": 12.68
+   },
+   {
+    "word": "my",
+    "start": 12.68,
+    "end": 12.86
+   },
+   {
+    "word": "herbs",
+    "start": 12.86,
+    "end": 13.24
+   },
+   {
+    "word": "when",
+    "start": 13.24,
+    "end": 13.46
+   },
+   {
+    "word": "they",
+    "start": 13.46,
+    "end": 13.6
+   },
+   {
+    "word": "wilted.",
+    "start": 13.6,
+    "end": 14.08
+   }
+  ]
+ },
  "191afc75332e35": {
   "file": "191afc75332e35.mp3",
   "speaker": "grandmother",
@@ -75576,6 +77545,148 @@
     "word": "with.",
     "start": 8.12,
     "end": 8.34
+   }
+  ]
+ },
+ "1926412d76768d": {
+  "file": "1926412d76768d.mp3",
+  "speaker": "grandmother",
+  "duration": 8.777,
+  "words": [
+   {
+    "word": "So",
+    "start": 0.0,
+    "end": 0.24
+   },
+   {
+    "word": "the",
+    "start": 0.24,
+    "end": 0.44
+   },
+   {
+    "word": "chickens",
+    "start": 0.44,
+    "end": 0.8
+   },
+   {
+    "word": "gave",
+    "start": 0.8,
+    "end": 1.18
+   },
+   {
+    "word": "up",
+    "start": 1.18,
+    "end": 1.38
+   },
+   {
+    "word": "my",
+    "start": 1.38,
+    "end": 1.56
+   },
+   {
+    "word": "little",
+    "start": 1.56,
+    "end": 1.8
+   },
+   {
+    "word": "secret.",
+    "start": 1.8,
+    "end": 2.3
+   },
+   {
+    "word": "I",
+    "start": 2.62,
+    "end": 3.06
+   },
+   {
+    "word": "tucked",
+    "start": 3.06,
+    "end": 3.34
+   },
+   {
+    "word": "that",
+    "start": 3.34,
+    "end": 3.62
+   },
+   {
+    "word": "key",
+    "start": 3.62,
+    "end": 3.88
+   },
+   {
+    "word": "up",
+    "start": 3.88,
+    "end": 4.1
+   },
+   {
+    "word": "in",
+    "start": 4.1,
+    "end": 4.24
+   },
+   {
+    "word": "the",
+    "start": 4.24,
+    "end": 4.34
+   },
+   {
+    "word": "coop",
+    "start": 4.34,
+    "end": 4.6
+   },
+   {
+    "word": "rafters",
+    "start": 4.6,
+    "end": 5.18
+   },
+   {
+    "word": "years",
+    "start": 5.18,
+    "end": 5.44
+   },
+   {
+    "word": "ago.",
+    "start": 5.44,
+    "end": 5.86
+   },
+   {
+    "word": "It",
+    "start": 6.1,
+    "end": 6.52
+   },
+   {
+    "word": "opens",
+    "start": 6.52,
+    "end": 6.92
+   },
+   {
+    "word": "the",
+    "start": 6.92,
+    "end": 7.14
+   },
+   {
+    "word": "old",
+    "start": 7.14,
+    "end": 7.44
+   },
+   {
+    "word": "shed",
+    "start": 7.44,
+    "end": 7.84
+   },
+   {
+    "word": "by",
+    "start": 7.84,
+    "end": 8.08
+   },
+   {
+    "word": "the",
+    "start": 8.08,
+    "end": 8.22
+   },
+   {
+    "word": "mill.",
+    "start": 8.22,
+    "end": 8.5
    }
   ]
  },
@@ -85745,6 +87856,295 @@
     "word": "where.",
     "start": 11.2,
     "end": 11.48
+   }
+  ]
+ },
+ "1c613417f5382b": {
+  "file": "1c613417f5382b.mp3",
+  "speaker": "grandmother",
+  "duration": 8.081,
+  "words": [
+   {
+    "word": "The",
+    "start": 0.0,
+    "end": 0.16
+   },
+   {
+    "word": "village",
+    "start": 0.16,
+    "end": 0.52
+   },
+   {
+    "word": "is",
+    "start": 0.52,
+    "end": 0.74
+   },
+   {
+    "word": "on",
+    "start": 0.74,
+    "end": 0.92
+   },
+   {
+    "word": "edge,",
+    "start": 0.92,
+    "end": 1.32
+   },
+   {
+    "word": "you'll",
+    "start": 1.78,
+    "end": 2.02
+   },
+   {
+    "word": "have",
+    "start": 2.02,
+    "end": 2.12
+   },
+   {
+    "word": "noticed.",
+    "start": 2.12,
+    "end": 2.5
+   },
+   {
+    "word": "Folk",
+    "start": 3.0,
+    "end": 3.56
+   },
+   {
+    "word": "keep",
+    "start": 3.56,
+    "end": 3.76
+   },
+   {
+    "word": "their",
+    "start": 3.76,
+    "end": 3.94
+   },
+   {
+    "word": "voices",
+    "start": 3.94,
+    "end": 4.36
+   },
+   {
+    "word": "down",
+    "start": 4.36,
+    "end": 4.68
+   },
+   {
+    "word": "in",
+    "start": 4.68,
+    "end": 4.9
+   },
+   {
+    "word": "the",
+    "start": 4.9,
+    "end": 5.02
+   },
+   {
+    "word": "square",
+    "start": 5.02,
+    "end": 5.32
+   },
+   {
+    "word": "these",
+    "start": 5.32,
+    "end": 5.6
+   },
+   {
+    "word": "days,",
+    "start": 5.6,
+    "end": 6.0
+   },
+   {
+    "word": "and",
+    "start": 6.28,
+    "end": 6.62
+   },
+   {
+    "word": "nobody",
+    "start": 6.62,
+    "end": 6.94
+   },
+   {
+    "word": "will",
+    "start": 6.94,
+    "end": 7.18
+   },
+   {
+    "word": "say",
+    "start": 7.18,
+    "end": 7.42
+   },
+   {
+    "word": "why.",
+    "start": 7.42,
+    "end": 7.68
+   }
+  ]
+ },
+ "1c647c64bc920f": {
+  "file": "1c647c64bc920f.mp3",
+  "speaker": "mother",
+  "duration": 12.632,
+  "words": [
+   {
+    "word": "If",
+    "start": 0.0,
+    "end": 0.42
+   },
+   {
+    "word": "Malakar",
+    "start": 0.42,
+    "end": 0.9
+   },
+   {
+    "word": "comes",
+    "start": 0.9,
+    "end": 1.16
+   },
+   {
+    "word": "asking",
+    "start": 1.16,
+    "end": 1.5
+   },
+   {
+    "word": "about",
+    "start": 1.5,
+    "end": 1.76
+   },
+   {
+    "word": "our",
+    "start": 1.76,
+    "end": 1.94
+   },
+   {
+    "word": "line,",
+    "start": 1.94,
+    "end": 2.32
+   },
+   {
+    "word": "do",
+    "start": 2.66,
+    "end": 3.38
+   },
+   {
+    "word": "not",
+    "start": 3.38,
+    "end": 3.6
+   },
+   {
+    "word": "answer",
+    "start": 3.6,
+    "end": 3.96
+   },
+   {
+    "word": "him.",
+    "start": 3.96,
+    "end": 4.28
+   },
+   {
+    "word": "He",
+    "start": 5.0,
+    "end": 5.56
+   },
+   {
+    "word": "is",
+    "start": 5.56,
+    "end": 5.72
+   },
+   {
+    "word": "not",
+    "start": 5.72,
+    "end": 5.9
+   },
+   {
+    "word": "the",
+    "start": 5.9,
+    "end": 6.04
+   },
+   {
+    "word": "friend",
+    "start": 6.04,
+    "end": 6.26
+   },
+   {
+    "word": "we",
+    "start": 6.26,
+    "end": 6.46
+   },
+   {
+    "word": "knew.",
+    "start": 6.46,
+    "end": 6.74
+   },
+   {
+    "word": "Mira",
+    "start": 7.94,
+    "end": 8.1
+   },
+   {
+    "word": "keeps",
+    "start": 8.1,
+    "end": 8.38
+   },
+   {
+    "word": "the",
+    "start": 8.38,
+    "end": 8.56
+   },
+   {
+    "word": "amulet",
+    "start": 8.56,
+    "end": 8.98
+   },
+   {
+    "word": "for",
+    "start": 8.98,
+    "end": 9.18
+   },
+   {
+    "word": "you.",
+    "start": 9.18,
+    "end": 9.4
+   },
+   {
+    "word": "When",
+    "start": 9.96,
+    "end": 10.52
+   },
+   {
+    "word": "you",
+    "start": 10.52,
+    "end": 10.64
+   },
+   {
+    "word": "are",
+    "start": 10.64,
+    "end": 10.78
+   },
+   {
+    "word": "ready,",
+    "start": 10.78,
+    "end": 11.1
+   },
+   {
+    "word": "it",
+    "start": 11.46,
+    "end": 11.82
+   },
+   {
+    "word": "will",
+    "start": 11.82,
+    "end": 11.96
+   },
+   {
+    "word": "know",
+    "start": 11.96,
+    "end": 12.16
+   },
+   {
+    "word": "you.",
+    "start": 12.16,
+    "end": 12.4
    }
   ]
  },
