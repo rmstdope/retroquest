@@ -102,14 +102,22 @@ test('a press on someone in the picture goes through the title, opens their ring
   // goes there rather than waiting for the button to stand still. Where he is
   // is read in one go (rq-n0mb): the picture's buttons are made afresh when
   // its image arrives, which can be just after the title, so a button found
-  // in one step may be gone when its box is asked for in the next.
-  const priest = await page.waitForFunction(() => {
-    const button = document.querySelector('[data-area-press="priest"]')
-    const box = button?.getBoundingClientRect()
-    return box && box.width > 0 && box.height > 0
-      ? { x: box.x + box.width / 2, y: box.y + box.height / 2 }
-      : null
-  })
+  // in one step may be gone when its box is asked for in the next. A layer
+  // remade after the read puts the button in the same place, so the click
+  // lands either way. The wait is short, so the press comes while the title
+  // is still up.
+  const priest = await page.waitForFunction(
+    () => {
+      const button = document.querySelector('[data-area-press="priest"]')
+      const box = button?.getBoundingClientRect()
+      return box && box.width > 0 && box.height > 0
+        ? { x: box.x + box.width / 2, y: box.y + box.height / 2 }
+        : null
+    },
+    undefined,
+    { timeout: 3000 },
+  )
+  // Never null once the wait has resolved; the check narrows the type.
   const at = await priest.jsonValue()
   if (!at) throw new Error('the priest is not placed')
   await page.mouse.click(at.x, at.y)
