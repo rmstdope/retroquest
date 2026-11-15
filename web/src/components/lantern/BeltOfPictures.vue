@@ -526,7 +526,11 @@ defineExpose({ focusBelt, focusPicture, has, root })
 .lq-belt-empty {
   margin: 0;
   align-self: center;
-  color: var(--lq-muted);
+  /* Lies on the picture: on paper, as the names under the pictures do, so a dark room cannot swallow it. */
+  padding: 2px 8px;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--lq-surface) 88%, transparent);
+  color: var(--lq-fg);
   font-size: 14px;
 }
 .lq-belt-pic {
