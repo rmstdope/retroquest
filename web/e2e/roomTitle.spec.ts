@@ -99,13 +99,20 @@ test('a press on someone in the picture goes through the title, opens their ring
   const title = page.getByTestId('room-title')
   await expect(title).toHaveText(/Village Chapel/)
   // The press lands where the priest is; the picture drifts, so the mouse
-  // goes there rather than waiting for the button to stand still.
-  const priest = await page.locator('[data-area-press="priest"]').boundingBox()
-  if (!priest) throw new Error('the priest is not placed')
-  await page.mouse.click(
-    priest.x + priest.width / 2,
-    priest.y + priest.height / 2,
-  )
+  // goes there rather than waiting for the button to stand still. Where he is
+  // is read in one go (rq-n0mb): the picture's buttons are made afresh when
+  // its image arrives, which can be just after the title, so a button found
+  // in one step may be gone when its box is asked for in the next.
+  const priest = await page.waitForFunction(() => {
+    const button = document.querySelector('[data-area-press="priest"]')
+    const box = button?.getBoundingClientRect()
+    return box && box.width > 0 && box.height > 0
+      ? { x: box.x + box.width / 2, y: box.y + box.height / 2 }
+      : null
+  })
+  const at = await priest.jsonValue()
+  if (!at) throw new Error('the priest is not placed')
+  await page.mouse.click(at.x, at.y)
   await expect(page.getByRole('menu')).toBeVisible()
   await expect(title).toHaveCount(0, { timeout: 2500 })
 })
