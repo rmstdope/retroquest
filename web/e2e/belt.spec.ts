@@ -299,3 +299,31 @@ test('a thing whose picture has been made shows it in place of its letter', asyn
   )
   await expect(bread.locator('.lq-belt-letter')).toHaveCount(0)
 })
+
+for (const colorScheme of ['light', 'dark'] as const) {
+  test(`an empty list says so on the names' paper, readable over the picture (${colorScheme})`, async ({
+    page,
+  }): Promise<void> => {
+    await page.emulateMedia({ colorScheme })
+    await page.setViewportSize({ width: 1280, height: 800 })
+    await toTheCottage(page)
+    // The paper the names under the pictures lie on, as the bread shows it.
+    const paper = await page
+      .locator('[data-belt-pic="item:bread"] .lq-belt-name')
+      .evaluate((el) => getComputedStyle(el).backgroundColor)
+    await page.getByRole('button', { name: 'Spells' }).click()
+    const empty = page.locator('.lq-belt-empty')
+    await expect(empty).toHaveText('You know no spells yet.')
+    // The words lie on that same paper, not straight on a dark picture, in
+    // the page's own text colour rather than the muted one.
+    const style = await empty.evaluate((el) => {
+      const computed = getComputedStyle(el)
+      return { background: computed.backgroundColor, colour: computed.color }
+    })
+    expect(style.background).toBe(paper)
+    const pageText = await page
+      .locator('.lq-root')
+      .evaluate((el) => getComputedStyle(el).color)
+    expect(style.colour).toBe(pageText)
+  })
+}
