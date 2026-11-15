@@ -1,6 +1,10 @@
 import { describe, it, expect } from 'vitest'
 import { Game, findMarkupProblems } from '@/engine'
-import { executeCommands, expectDialogueSpeaker } from '@/testing/gameHelpers'
+import {
+  executeCommands,
+  expectDialogueSpeaker,
+  quotesOf,
+} from '@/testing/gameHelpers'
 import {
   FLAG_MAGIC_FULLY_UNLOCKED,
   FLAG_PATCHES_FOUND,
@@ -27,6 +31,19 @@ function cottageGame(): Game {
   game.state.currentRoom = game.state.allRooms.EliorsCottage
   return game
 }
+
+describe('Grandmother, a line at a time', () => {
+  it('says each line of her first talk as a quote of its own, so a hurry passes one', () => {
+    const answer = executeCommands(cottageGame(), ['talk to grandmother'])
+    const quotes = quotesOf(answer)
+    expect(quotes[1]).toBe(
+      "The village is on edge, you'll have noticed. Folk keep their voices " +
+        'down in the square these days, and nobody will say why.',
+    )
+    expect(quotes).toHaveLength(4)
+    expectDialogueSpeaker(answer, 'grandmother')
+  })
+})
 
 describe('Grandmother and the locket', () => {
   it('recognises the locket as her daughter’s founders’ heirloom', () => {

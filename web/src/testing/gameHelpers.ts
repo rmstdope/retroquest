@@ -205,6 +205,20 @@ export function expectDialogueSpeaker(text: string, speaker: string): void {
   expect(spoken, `${speaker} never speaks in: ${text}`).toBeGreaterThan(0)
 }
 
+/**
+ * The words of each dialogue block of `text`, in order, after checking that
+ * none spans several lines: a quote is one recording, and a hurry passes one
+ * recording, so each line on screen is a quote of its own.
+ */
+export function quotesOf(text: string): string[] {
+  const quotes = [...text.matchAll(DIALOGUE_PATTERN)].map((m) =>
+    m[0].replace(/^\[dialogue\]|\[\/dialogue\]$/g, ''),
+  )
+  for (const quote of quotes)
+    expect(quote, 'a quote spans several lines').not.toContain('\n')
+  return quotes
+}
+
 /** No dialogue block contains a 'Name:' speaker label. */
 export function expectNoSpeakerLabelInDialogue(text: string): void {
   for (const [block] of text.matchAll(DIALOGUE_PATTERN)) {

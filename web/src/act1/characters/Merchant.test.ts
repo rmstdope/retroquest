@@ -1,7 +1,11 @@
 import { describe, it, expect } from 'vitest'
 import { Game } from '@/engine'
 import { Act1 } from '../Act1'
-import { executeCommands, expectDialogueSpeaker } from '@/testing/gameHelpers'
+import {
+  executeCommands,
+  expectDialogueSpeaker,
+  quotesOf,
+} from '@/testing/gameHelpers'
 import {
   FLAG_KEPT_MOTHERS_RING,
   FLAG_MERCHANT_NEWS_HEARD,
@@ -108,7 +112,8 @@ describe('Merchant', () => {
       first.indexOf('A ring, say.'),
     )
     expectDialogueSpeaker(first, 'merchant')
-    expect(first.match(/\[dialogue\]/g)).toHaveLength(1)
+    // News, offer, horseshoe and hunger: a quote each, one per line.
+    expect(quotesOf(first)).toHaveLength(4)
     expect(game.state.getStoryFlag(FLAG_MERCHANT_NEWS_HEARD)).toBe(true)
     expect(second).not.toContain('King Alden')
     expect(second).toContain('A ring, say.')
@@ -125,7 +130,7 @@ describe('Merchant', () => {
       first.indexOf('know your feet'),
     )
     expectDialogueSpeaker(first, 'merchant')
-    expect(first.match(/\[dialogue\]/g)).toHaveLength(1)
+    expect(quotesOf(first)).toHaveLength(3)
     expect(executeCommands(game, ['talk to merchant'])).not.toContain('Alden')
   })
 
@@ -170,7 +175,7 @@ const REMEMBERED_SELFLESS =
   '[event]✦ Selflessness — this will be remembered[/event]'
 
 describe('Merchant and the fresh bread', () => {
-  it('ends every talk with his hunger line, in the same speech, until he is fed', () => {
+  it('ends every talk with his hunger line, a quote of its own, until he is fed', () => {
     const game = gameAtMerchant()
 
     const first = executeCommands(game, ['talk to merchant'])
@@ -178,7 +183,7 @@ describe('Merchant and the fresh bread', () => {
 
     for (const answer of [first, second]) {
       expect(answer).toContain(HUNGER)
-      expect(answer.match(/\[dialogue\]/g)).toHaveLength(1)
+      expect(quotesOf(answer).at(-1)).toBe(HUNGER)
       expect(answer.indexOf(HUNGER)).toBeGreaterThan(
         answer.indexOf('[item_name]horseshoe[/item_name]'),
       )
