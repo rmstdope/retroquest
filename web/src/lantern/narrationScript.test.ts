@@ -101,7 +101,7 @@ describe('linesOfTurn', () => {
           '[dialogue]The village is on edge.\nLook in on Mira.[/dialogue]',
         WRITERS,
       ),
-    ).toThrow(/The village is on edge\./)
+    ).toThrow(/spans several lines.*The village is on edge\./)
   })
 
   it('reads a quote split into one per line as one line each', () => {

@@ -163,7 +163,7 @@ describe('Sir Cedric and the sigil', () => {
       'dialogue',
       'dialogue',
     ])
-    quotesOf(out)
+    expect(quotesOf(out)).toHaveLength(3)
     const again = executeCommands(game, ['talk to sir cedric'])
     expect(again).not.toContain('Wardens')
     expect(again).not.toContain('goes very still')

@@ -4,6 +4,7 @@ import {
   executeCommands,
   expectItemInInventory,
   expectItemInRoom,
+  quotesOf,
 } from '@/testing/gameHelpers'
 import { Act1 } from '../Act1'
 import { FadedPhotograph } from './FadedPhotograph'
@@ -59,6 +60,14 @@ describe("The mother's letter at the river bend", () => {
 
     expect(response).toContain('[failure]')
     expectItemInRoom(game.state.currentRoom, 'smooth stone')
+  })
+
+  it('is written a line at a time, so a hurry passes one line, all unsigned', () => {
+    const description = new MothersLetter().description
+    expect(quotesOf(description)).toHaveLength(3)
+    expect(description).not.toMatch(
+      /\[character_name\][^[]+\[\/character_name\]\n\[dialogue\]/,
+    )
   })
 
   it('names Malakar and the amulet in written words', () => {

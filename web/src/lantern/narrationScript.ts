@@ -218,9 +218,11 @@ function voiceOf(block: VoicedBlock, writers: WriterRule[]): string {
 
 /**
  * Script lines for voiced blocks: keyed by the block as shown, voiced by
- * `voiceOf`; blocks without words are dropped. Throws on a quote that spans
+ * `voiceOf`; blocks without words are dropped. Throws on a block that spans
  * several lines: a hurry passes one recording, so a quote of three lines would
- * hurry all three. Such a quote is written as one `speech()` per line.
+ * hurry all three. Such a quote is written as one `speech()` per line. Only the
+ * script extractor and its freshness tests call this, never play, so the throw
+ * is a check on the act's own text.
  */
 function scriptLines(
   blocks: VoicedBlock[],
@@ -229,7 +231,7 @@ function scriptLines(
   const long = blocks.find((block) => block.markup.includes('\n'))
   if (long)
     throw new Error(
-      `a quote read aloud spans several lines; write one quote per line: ${narrationText(long.markup.split('\n')[0])}`,
+      `a line read aloud spans several lines; write one quote (or block) per line: ${narrationText(long.markup.split('\n')[0])}`,
     )
   return blocks
     .map((block) => ({

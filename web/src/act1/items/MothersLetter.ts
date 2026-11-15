@@ -3,7 +3,6 @@ import {
   Item,
   type GameState,
   characterName,
-  speech,
   writing,
 } from '@/engine'
 import { FLAG_READ_MOTHERS_LETTER } from '../Act1StoryFlags'
@@ -18,14 +17,14 @@ function letterDescription(): string {
         'The river remembers what the village forgets.',
     ) +
     '\n' +
-    speech(
+    writing(
       `If ${characterName('Malakar')} comes asking about our line, ` +
         'do not answer him. He is not the friend we knew. ' +
         `${characterName('Mira')} keeps the amulet for you. ` +
         'When you are ready, it will know you.',
     ) +
     '\n' +
-    speech('Your father and I') +
+    writing('Your father and I') +
     '\nThe rest has blurred away in the water stains.'
   )
 }
