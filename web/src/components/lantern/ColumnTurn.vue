@@ -104,19 +104,16 @@ watch(
   { flush: 'post' },
 )
 
-/** The pieces whose line has faded away (`useFadeOnceRead`), by piece index. */
-const gone = ref<number[]>([])
+/** The pieces whose line has faded out of sight, spent or gone (`useFadeOnceRead`), by piece key. */
+const outOfSight = ref<string[]>([])
 
-/** A line has faded away: note which, so the name and portrait step down to the next line of its run. */
-function lineGone(): void {
-  // The fade marks the line gone as the event reaches the layout, after this.
-  requestAnimationFrame(() => {
-    gone.value = Array.from(
-      root.value?.querySelectorAll<HTMLElement>(
-        '.lq-cl[data-fade="gone"][data-piece]',
-      ) ?? [],
-    ).map((row) => Number(row.dataset.piece))
-  })
+/** A line has left sight, or come back: note which, so the name and portrait go to the first line of its run in sight. */
+function sightChanged(): void {
+  outOfSight.value = Array.from(
+    root.value?.querySelectorAll<HTMLElement>(
+      '.lq-cl:is([data-fade="gone"], [data-fade="spent"])[data-key]',
+    ) ?? [],
+  ).map((row) => row.dataset.key ?? '')
 }
 
 /** A stable key for a piece, so a row is never reused for another line (its fade marks are its own). */
@@ -130,13 +127,14 @@ function pieceKey(piece: ColumnPiece, index: number): string {
 
 /**
  * Whether piece `index` starts a run, so carries the speaker's name and
- * portrait: the piece before it still showing (a line faded away is passed
- * over) is not a line of the same speaker.
+ * portrait: the piece before it still showing (a line faded out of sight is
+ * passed over) is not a line of the same speaker.
  */
 function heads(index: number): boolean {
   const piece = told.value[index]
   let at = index - 1
-  while (at >= 0 && gone.value.includes(at)) at--
+  while (at >= 0 && outOfSight.value.includes(pieceKey(told.value[at], at)))
+    at--
   const before = told.value[at]
   return (
     piece?.kind === 'line' &&
@@ -151,7 +149,7 @@ function heads(index: number): boolean {
     class="lq-column-turn"
     data-testid="column-turn"
     @click="speech.revealAll()"
-    @animationend="lineGone"
+    @lq-line-sight="sightChanged"
   >
     <template v-for="(piece, index) in told" :key="pieceKey(piece, index)">
       <StoryTurn
@@ -167,6 +165,7 @@ function heads(index: number): boolean {
         :class="[`lq-cl-${piece.line.side}`, { 'lq-cl-head': heads(index) }]"
         :data-unit="piece.line.unit >= 0 ? piece.line.unit : undefined"
         :data-piece="index"
+        :data-key="pieceKey(piece, index)"
         :data-read-ms="readingPauseMs(piece.line.markup)"
         data-testid="speech-line"
       >

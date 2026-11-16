@@ -3,7 +3,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { ref } from 'vue'
 import { mount, type VueWrapper } from '@vue/test-utils'
 import { defineComponent, h, type Ref } from 'vue'
-import { useFadeOnceRead } from './useFadeOnceRead'
+import { LINE_SIGHT_EVENT, useFadeOnceRead } from './useFadeOnceRead'
 
 describe('useFadeOnceRead', () => {
   let root: HTMLElement
@@ -14,12 +14,20 @@ describe('useFadeOnceRead', () => {
 
   /** A line as the stage draws it; `reading` marks it as being read aloud. */
   function line(
-    opts: { reading?: boolean; readMs?: number } = {},
+    opts: { reading?: boolean; readMs?: number; column?: HTMLElement } = {},
   ): HTMLElement {
     const el = document.createElement('p')
     el.className = 'lq-line'
     if (opts.reading) el.classList.add('lq-speaking')
     if (opts.readMs !== undefined) el.dataset.readMs = String(opts.readMs)
+    ;(opts.column ?? root).appendChild(el)
+    return el
+  }
+
+  /** A column of its own on the stage, whose lines fade in their own order. */
+  function column(): HTMLElement {
+    const el = document.createElement('div')
+    el.className = 'lq-column'
     root.appendChild(el)
     return el
   }
@@ -42,7 +50,12 @@ describe('useFadeOnceRead', () => {
     held = ref(false)
     const Host = defineComponent({
       setup() {
-        live = useFadeOnceRead(container, '.lq-line', () => held.value).live
+        live = useFadeOnceRead(
+          container,
+          '.lq-line',
+          () => held.value,
+          '.lq-column',
+        ).live
         return () => h('i')
       },
     })
@@ -174,5 +187,104 @@ describe('useFadeOnceRead', () => {
     a.remove()
     await settle()
     expect(live.value).toBe(0)
+  })
+
+  it('never starts fading a line before the lines above it', async () => {
+    vi.useFakeTimers()
+    const older = line({ readMs: 3000 })
+    const newer = line({ readMs: 500 })
+    await vi.advanceTimersByTimeAsync(500)
+    expect(newer.dataset.fade).toBe('live')
+    await vi.advanceTimersByTimeAsync(2500)
+    expect([older.dataset.fade, newer.dataset.fade]).toEqual(['away', 'away'])
+  })
+
+  it('starts a line heard while the line above still shows fading after it', async () => {
+    vi.useFakeTimers()
+    const older = line({ readMs: 3000 })
+    const newer = line({ reading: true })
+    await vi.advanceTimersByTimeAsync(0)
+    newer.classList.remove('lq-speaking')
+    await vi.advanceTimersByTimeAsync(0)
+    expect(newer.dataset.fade).toBe('live')
+    await vi.advanceTimersByTimeAsync(3000)
+    expect([older.dataset.fade, newer.dataset.fade]).toEqual(['away', 'away'])
+  })
+
+  it('keeps a faded line in its place until every line above it is gone', async () => {
+    const older = line()
+    const newer = line()
+    await settle()
+    expect([older.dataset.fade, newer.dataset.fade]).toEqual(['away', 'away'])
+    // The older one's fade was held (a pointer resting on it), so the newer ends first.
+    fadeEnds(newer)
+    expect(newer.dataset.fade).toBe('spent')
+    expect(live.value).toBe(2)
+    fadeEnds(older)
+    expect([older.dataset.fade, newer.dataset.fade]).toEqual(['gone', 'gone'])
+    expect(live.value).toBe(0)
+  })
+
+  it('orders the lines of each column on their own', async () => {
+    vi.useFakeTimers()
+    const narrator = column()
+    const speech = column()
+    const told = line({ readMs: 3000, column: narrator })
+    const said = line({ readMs: 500, column: speech })
+    await vi.advanceTimersByTimeAsync(500)
+    expect([told.dataset.fade, said.dataset.fade]).toEqual(['live', 'away'])
+    fadeEnds(said)
+    expect(said.dataset.fade).toBe('gone')
+  })
+
+  it('keeps a line already faded away out of sight while the words are hidden', async () => {
+    const older = line()
+    const newer = line()
+    await settle()
+    fadeEnds(newer)
+    held.value = true
+    await settle()
+    expect([older.dataset.fade, newer.dataset.fade]).toEqual(['live', 'spent'])
+    held.value = false
+    await settle()
+    fadeEnds(older)
+    expect([older.dataset.fade, newer.dataset.fade]).toEqual(['gone', 'gone'])
+  })
+
+  it('says when each line leaves sight, also one held back by the line above it', async () => {
+    const older = line()
+    const newer = line()
+    await settle()
+    const said: string[] = []
+    root.addEventListener(LINE_SIGHT_EVENT, (event) => {
+      if (event.target instanceof HTMLElement)
+        said.push(
+          `${event.target === older ? 'older' : 'newer'} ${event.target.dataset.fade}`,
+        )
+    })
+    fadeEnds(newer)
+    expect(said).toEqual(['newer spent'])
+    // The top line's fade has run with nothing above it: spent, then gone at once.
+    fadeEnds(older)
+    expect(said).toEqual([
+      'newer spent',
+      'older spent',
+      'older gone',
+      'newer gone',
+    ])
+  })
+
+  it('says when a line out of sight comes back, read aloud again', async () => {
+    const older = line()
+    const newer = line()
+    await settle()
+    fadeEnds(newer)
+    let said = 0
+    root.addEventListener(LINE_SIGHT_EVENT, () => said++)
+    newer.classList.add('lq-speaking')
+    await settle()
+    expect(newer.dataset.fade).toBe('live')
+    expect(said).toBe(1)
+    expect(older.dataset.fade).toBe('away')
   })
 })

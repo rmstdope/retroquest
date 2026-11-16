@@ -8,6 +8,7 @@ import { useStageSpeechStore } from '@/stores/useStageSpeechStore'
 import { useNarrationStore } from '@/stores/useNarrationStore'
 import type { NarrationUnit } from '@/lantern/narrationUnits'
 import { readingPauseMs } from '@/lantern/stageSpeech'
+import { LINE_SIGHT_EVENT } from '@/composables/useFadeOnceRead'
 
 let nextId = 1
 
@@ -89,6 +90,26 @@ describe('StageSpeech', () => {
     const rows = w.findAll('[data-testid="speech-line"]')
     expect(rows[0].find('[data-testid="portrait"]').exists()).toBe(true)
     expect(rows[1].find('[data-testid="portrait"]').exists()).toBe(false)
+  })
+
+  it("heads a new conversation's first line, though the lines before it faded out of sight", async () => {
+    const { speech, w } = mounted()
+    speech.observe(
+      turn(`${say('Mira', 'One.')}\n${say('Mira', 'Two.')}`, 'Mira'),
+    )
+    speech.revealAll()
+    await w.vm.$nextTick()
+    for (const row of w.findAll('[data-testid="speech-line"]')) {
+      const el = row.element as HTMLElement
+      el.dataset.fade = 'gone'
+      el.dispatchEvent(new Event(LINE_SIGHT_EVENT, { bubbles: true }))
+    }
+    speech.observe(turn(say('Grandmother', 'There you are.'), 'Grandmother'))
+    speech.revealAll()
+    await w.vm.$nextTick()
+    const rows = w.findAll('[data-testid="speech-line"]')
+    const first = rows.find((row) => row.text().includes('There you are'))!
+    expect(first.find('.lq-line-name').exists()).toBe(true)
   })
 
   it("heads a new turn's first line with its speaker, though they also spoke last (rq-h7xh)", async () => {

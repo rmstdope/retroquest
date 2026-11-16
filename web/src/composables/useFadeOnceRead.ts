@@ -12,6 +12,21 @@ export const FADE_AWAY_MS = 5000
 export const FADING_LINES =
   '.lq-paper-content :is(.lq-bubble:not(.lq-pending), .lq-cl), .lq-speech .lq-ln'
 
+/**
+ * The columns the fading lines stand in: the speech at the right of the
+ * laptop stage, and the narrator's cards (or a phone's one column). Each
+ * column's lines fade in their own order, top first.
+ */
+export const FADING_COLUMNS = '.lq-thread, .lq-paper-content'
+
+/**
+ * Event fired (bubbling) on a line the moment it leaves sight (its fade has
+ * run, `spent`, or it has gone and taken its room away, `gone`) or comes back
+ * into sight (read aloud again). A column moves a run's name and portrait to
+ * the first of its lines in sight.
+ */
+export const LINE_SIGHT_EVENT = 'lq-line-sight'
+
 /** What marks a line (or a part of it) as being read aloud now. */
 const READING = '.lq-speaking, [data-reading]'
 
@@ -28,16 +43,25 @@ export interface FadeOnceRead {
  * Fade every line on the picture away once it has been read: each element in
  * `container` matching `selector` is marked `data-fade="live"` when it shows,
  * `"away"` once it has been read, which runs its fade (`lantern.css`: clear
- * for 2 s, gone by `FADE_AWAY_MS`, held while the pointer rests on it), and
- * `"gone"` when the fade has run, which takes it and its room away. A line is
+ * for 2 s, gone by `FADE_AWAY_MS`, held while the pointer rests on it),
+ * `"spent"` when the fade has run (unseen, keeping its room), and `"gone"`
+ * once every line above it in its column is gone too, which takes it and its
+ * room away (each change of sight fires `LINE_SIGHT_EVENT`). A line is
  * read once neither it nor a part of it is being read aloud (`.lq-speaking`,
  * `[data-reading]`); a line never read aloud (its turn not narrated, a skip
  * showed it, or it has no recording yet) waits its `data-read-ms` first, the
- * time to read it. It fades whether or not more lines come after it. The marks follow the DOM as lines come and go
- * and as their reading starts and stops; Story so far keeps every line.
+ * time to read it. It fades whether or not more lines come after it, but
+ * never ahead of the lines above it in its column (the nearest ancestor
+ * matching `columns`, else `container`): a line read while one above it still
+ * shows starts fading once that one has, and a spent line keeps its room
+ * until the lines above it are gone.
+ * So a line going never moves the lines still showing in a column resting at
+ * its foot. The marks follow the DOM as lines come and go and as their reading
+ * starts and stops; Story so far keeps every line.
  *
  * While `held` says so (the words are hidden), no line fades: a fading one is
- * live again and nothing waits its time to read. Let go, every line still on
+ * live again (a spent one stays out of sight) and nothing waits its time to
+ * read. Let go, every line still on
  * the picture waits its time to read once more, as if never read aloud, then
  * fades, so words brought back are there to be read.
  */
@@ -45,6 +69,7 @@ export function useFadeOnceRead(
   container: Ref<HTMLElement | null>,
   selector: string,
   held: () => boolean = () => false,
+  columns: string = '',
 ): FadeOnceRead {
   const live = ref(0)
   let observer: MutationObserver | null = null
@@ -52,6 +77,13 @@ export function useFadeOnceRead(
   const waiting = new Map<Element, ReturnType<typeof setTimeout>>()
   /** The lines seen being read aloud: they fade at once when it ends. */
   let heard = new WeakSet<Element>()
+  /** The lines read, waiting only for a line above them to start fading. */
+  let ready = new WeakSet<Element>()
+
+  /** The column `el` stands in, whose lines fade top first. */
+  function columnOf(el: Element, root: HTMLElement): Element {
+    return (columns && el.closest(columns)) || root
+  }
 
   /** Whether `el`, or a part of it, is being read aloud. */
   function reading(el: Element): boolean {
@@ -69,45 +101,89 @@ export function useFadeOnceRead(
     if (held()) {
       for (const timer of waiting.values()) clearTimeout(timer)
       waiting.clear()
+      ready = new WeakSet<Element>()
+      // A spent line was seen to fade away already, so it stays out of sight.
       for (const el of lines)
-        if (el.dataset.fade !== 'gone') el.dataset.fade = 'live'
+        if (el.dataset.fade !== 'gone' && el.dataset.fade !== 'spent')
+          el.dataset.fade = 'live'
       live.value = lines.filter((el) => el.dataset.fade !== 'gone').length
       return
     }
+    /** Per column: whether every line so far has started fading, and whether every one is gone. */
+    const above = new Map<Element, { fading: boolean; gone: boolean }>()
     for (const el of lines) {
-      if (reading(el)) {
-        heard.add(el)
-        // Read aloud now: its time to read (if it was waiting) is the voice's.
-        clearTimeout(waiting.get(el))
-        waiting.delete(el)
-        // A row Vue reused for a line being read starts over.
-        el.dataset.fade = 'live'
-        continue
-      }
-      if (!el.dataset.fade) el.dataset.fade = 'live'
-      if (el.dataset.fade !== 'live' || waiting.has(el)) continue
-      const ms = heard.has(el) ? 0 : Number(el.dataset.readMs) || 0
-      if (ms <= 0) {
-        el.dataset.fade = 'away'
-        continue
-      }
-      waiting.set(
-        el,
-        setTimeout(() => {
-          waiting.delete(el)
-          if (el.dataset.fade === 'live') el.dataset.fade = 'away'
-        }, ms),
-      )
+      const col = columnOf(el, root)
+      const before = above.get(col) ?? { fading: true, gone: true }
+      step(el, root, before.fading, before.gone)
+      above.set(col, {
+        fading: before.fading && el.dataset.fade !== 'live',
+        gone: before.gone && el.dataset.fade === 'gone',
+      })
     }
     live.value = lines.filter((el) => el.dataset.fade !== 'gone').length
   }
 
-  /** A line's fade has run: it is gone. */
+  /**
+   * Move one line on: `fadingAbove` says every line above it in its column
+   * has started fading, `goneAbove` that every one is gone.
+   */
+  function step(
+    el: HTMLElement,
+    root: HTMLElement,
+    fadingAbove: boolean,
+    goneAbove: boolean,
+  ): void {
+    if (reading(el)) {
+      heard.add(el)
+      ready.delete(el)
+      // Read aloud now: its time to read (if it was waiting) is the voice's.
+      clearTimeout(waiting.get(el))
+      waiting.delete(el)
+      // A row Vue reused for a line being read starts over.
+      const outOfSight =
+        el.dataset.fade === 'spent' || el.dataset.fade === 'gone'
+      el.dataset.fade = 'live'
+      if (outOfSight)
+        el.dispatchEvent(new Event(LINE_SIGHT_EVENT, { bubbles: true }))
+      return
+    }
+    if (!el.dataset.fade) el.dataset.fade = 'live'
+    if (el.dataset.fade === 'spent' && goneAbove) {
+      leave(el, 'gone')
+      return
+    }
+    if (el.dataset.fade !== 'live' || waiting.has(el)) return
+    const ms = heard.has(el) ? 0 : Number(el.dataset.readMs) || 0
+    if (ready.has(el) || ms <= 0) {
+      if (fadingAbove) {
+        ready.delete(el)
+        el.dataset.fade = 'away'
+      } else ready.add(el)
+      return
+    }
+    waiting.set(
+      el,
+      setTimeout(() => {
+        waiting.delete(el)
+        if (el.dataset.fade !== 'live') return
+        ready.add(el)
+        mark(root)
+      }, ms),
+    )
+  }
+
+  /** Mark `el` spent or gone, and say it has left sight. */
+  function leave(el: HTMLElement, how: 'spent' | 'gone'): void {
+    el.dataset.fade = how
+    el.dispatchEvent(new Event(LINE_SIGHT_EVENT, { bubbles: true }))
+  }
+
+  /** A line's fade has run: it is spent, and gone once every line above it in its column is. */
   function onAnimationEnd(event: Event): void {
     const el = event.target
     if (!(el instanceof HTMLElement) || el.dataset.fade !== 'away') return
     if (!FADES.includes((event as AnimationEvent).animationName)) return
-    el.dataset.fade = 'gone'
+    leave(el, 'spent')
     if (container.value) mark(container.value)
   }
 

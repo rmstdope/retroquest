@@ -41,6 +41,24 @@ for (const width of [1440]) {
     await expect(page.locator('.lq-line-left .lq-line-name')).toHaveText(
       'Elior',
     )
+    // Elior's line is drawn as his: at the left, in the accent's border.
+    const look = await page.evaluate(() => {
+      const style = (sel: string): CSSStyleDeclaration =>
+        getComputedStyle(document.querySelector(sel)!)
+      const thread = document
+        .querySelector('.lq-thread')!
+        .getBoundingClientRect()
+      const left = document
+        .querySelector('.lq-line-left')!
+        .getBoundingClientRect()
+      return {
+        atLeft: Math.round(left.left - thread.left),
+        ownBorder:
+          style('.lq-line-left .lq-line').borderTopColor !==
+          style('.lq-line-right .lq-line').borderTopColor,
+      }
+    })
+    expect(look).toEqual({ atLeft: 0, ownBorder: true })
     const edges = await page.evaluate(() => {
       const right = (sel: string): number | undefined =>
         document.querySelector(sel)?.getBoundingClientRect().right

@@ -458,6 +458,12 @@ body {
 :root[data-reduce-motion='on'] .lq-root [data-fade='away'][data-fade] {
   animation-name: lq-fade-still;
 }
+/* A line whose fade has run while one above it still shows keeps its room,
+   unseen and out of reach (nothing presses it, and area names pass it by). */
+.lq-root [data-fade='spent'] {
+  opacity: 0;
+  visibility: hidden;
+}
 .lq-root [data-fade='gone'],
 .lq-root
   :is(.lq-card, .lq-column-turn):has([data-fade]):not(
