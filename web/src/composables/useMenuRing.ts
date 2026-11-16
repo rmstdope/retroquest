@@ -5,7 +5,9 @@ const HUSH_MS = 250
 
 /**
  * The ring of a keyboard-driven screen (Save, Load, Settings, Quit): the
- * cream outline is focus on a "stop", an element that matches `stopSelector`.
+ * ring is focus on a "stop", an element that matches `stopSelector`. How it
+ * looks is the `[data-ring]` rule in `lantern.css`: mark the ringed element
+ * with it.
  * Bind `onFocusIn` to the dialog (focus events bubble): the ring arriving on a
  * different stop from somewhere else in the dialog sounds the soft ting (the
  * dialog opening, or focus coming back from outside it, is silent). `ringTo`

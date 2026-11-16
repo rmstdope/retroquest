@@ -101,6 +101,15 @@ describe('useMenuRing', () => {
     expect(document.activeElement?.id).not.toBe('b')
   })
 
+  it('canHover is asked about the stop, not the element under the pointer', () => {
+    const ring = useMenuRing('.stop', (stop) => stop.id !== 'a')
+    const root = dialog()
+    pointer(ring, root.querySelector('#b'), 10, 10)
+    pointer(ring, root.querySelector('#b'), 11, 10)
+    pointer(ring, root.querySelector('#a1'), 13, 10)
+    expect(document.activeElement?.id).toBe('b')
+  })
+
   it('a pointer that only rests while the list scrolls does not take the ring', () => {
     const ring = useMenuRing('.stop')
     const root = dialog()

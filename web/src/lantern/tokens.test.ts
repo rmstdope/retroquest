@@ -194,7 +194,7 @@ describe('the menu screens', () => {
         new URL(`../components/lantern/${name}.vue`, import.meta.url),
         'utf8',
       )
-      expect(source).toContain('data-ring')
+      expect(source).toMatch(/<[^>]*\sdata-ring(=|\s|>)/)
       expect(source).not.toContain('outline: 3px')
       expect(source.toLowerCase()).not.toContain('#f4ecd2')
     },
