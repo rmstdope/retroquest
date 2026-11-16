@@ -135,4 +135,19 @@ describe('useMenuRing', () => {
     useMenuRing('.stop').choose()
     expect(choose).toHaveBeenCalledOnce()
   })
+
+  it('brings a stop reached by keyboard whole into view, a pointer one not', () => {
+    const ring = useMenuRing('.stop')
+    const root = dialog()
+    const stop = root.querySelector<HTMLElement>('#b')!
+    const scroll = vi.fn()
+    stop.scrollIntoView = scroll
+    const matches = vi.spyOn(stop, 'matches')
+    matches.mockReturnValue(false)
+    focusIn(root, '#b', root.querySelector('#a'), ring)
+    expect(scroll).not.toHaveBeenCalled()
+    matches.mockReturnValue(true)
+    focusIn(root, '#b', root.querySelector('#a'), ring)
+    expect(scroll).toHaveBeenCalledWith({ block: 'nearest' })
+  })
 })

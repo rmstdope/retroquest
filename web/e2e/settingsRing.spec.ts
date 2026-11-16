@@ -38,9 +38,9 @@ test('Settings: the ring is whole on the last row and on the first', async ({
 }): Promise<void> => {
   await openSettings(page)
   await page.keyboard.press('ArrowUp')
-  expect(await clipped(page)).toBe(0)
+  await expect.poll(() => clipped(page)).toBe(0)
   await page.keyboard.press('ArrowDown')
-  expect(await clipped(page)).toBe(0)
+  await expect.poll(() => clipped(page)).toBe(0)
 })
 
 test('Settings: the ring is whole on every row walked down with the arrow keys', async ({
@@ -49,7 +49,7 @@ test('Settings: the ring is whole on every row walked down with the arrow keys',
   await openSettings(page)
   for (let i = 0; i < 40; i++) {
     await page.keyboard.press('ArrowDown')
-    expect(await clipped(page)).toBe(0)
+    await expect.poll(() => clipped(page)).toBe(0)
   }
 })
 
@@ -59,6 +59,6 @@ test('Settings: the ring is whole on every stop Tab reaches, on a phone too', as
   await openSettings(page, 390)
   for (let i = 0; i < 25; i++) {
     await page.keyboard.press('Tab')
-    expect(await clipped(page)).toBe(0)
+    await expect.poll(() => clipped(page)).toBe(0)
   }
 })

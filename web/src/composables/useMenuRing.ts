@@ -3,6 +3,11 @@ import { useUiSounds } from './useUiSounds'
 /** How long (in milliseconds) a choice keeps the ting quiet. */
 const HUSH_MS = 250
 
+/** Whether keyboard focus (not a pointer) put the ring on this element. */
+function isKeyboardFocus(element: Element): boolean {
+  return element.matches(':focus-visible')
+}
+
 /**
  * The ring of a keyboard-driven screen (Save, Load, Settings, Quit): the
  * cream outline is focus on a "stop", an element that matches `stopSelector`.
@@ -48,6 +53,14 @@ export function useMenuRing(stopSelector: string): {
       const root = event.currentTarget
       const from = event.relatedTarget
       const to = stopOf(event.target)
+      // A stop reached by keyboard (Tab) comes whole into view, ring and all:
+      // the browser only scrolls the focused control, not the row around it.
+      if (
+        to &&
+        event.target instanceof Element &&
+        isKeyboardFocus(event.target)
+      )
+        to.scrollIntoView?.({ block: 'nearest' })
       if (!to || !(root instanceof Node) || !(from instanceof Node)) return
       if (Date.now() < hushedUntil) return
       if (root.contains(from) && stopOf(from) !== to) sounds.playMove()
