@@ -15,6 +15,7 @@ const { busy, send } = useSendCommand()
   <button
     type="button"
     class="lq-hint-btn"
+    data-hurry="command"
     aria-label="Hint"
     :aria-disabled="busy"
     :class="{ 'lq-busy': busy }"
@@ -23,3 +24,10 @@ const { busy, send } = useSendCommand()
     💡<template v-if="!compact"> Hint</template>
   </button>
 </template>
+
+<style scoped>
+.lq-hint-btn.lq-busy {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+</style>

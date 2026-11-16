@@ -185,6 +185,34 @@ describe('RoomPlate', () => {
       w.unmount()
     })
 
+    it('folds when a save is loaded into the same room, and when focus leaves the plate', async () => {
+      const game = useGameStore()
+      const w = await open()
+      game.loadNumber++
+      await w.vm.$nextTick()
+      expect(w.findAll('.lq-pill')).toHaveLength(0)
+      await w.get('.lq-name-btn').trigger('click')
+      const outside = document.createElement('button')
+      document.body.appendChild(outside)
+      w.get('.lq-pill').element.dispatchEvent(
+        new FocusEvent('focusout', { bubbles: true, relatedTarget: outside }),
+      )
+      await w.vm.$nextTick()
+      expect(w.findAll('.lq-pill')).toHaveLength(0)
+      outside.remove()
+      w.unmount()
+    })
+
+    it('is out of reach while the name is away, and its pills are hurry-able commands', async () => {
+      const w = mount(RoomPlate, { props: { away: true } })
+      expect(w.get('.lq-name-wrap').attributes('inert')).toBeDefined()
+      await w.setProps({ away: false })
+      expect(w.get('.lq-name-wrap').attributes('inert')).toBeUndefined()
+      await w.get('.lq-name-btn').trigger('click')
+      expect(w.get('.lq-pill').attributes('data-hurry')).toBe('command')
+      w.unmount()
+    })
+
     it('opens for a room with no picture the same way', async () => {
       const w = await open({ bare: true })
       expect(pills(w)).toHaveLength(3)

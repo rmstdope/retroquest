@@ -93,4 +93,40 @@ describe('LanternLayout: F1 and the typing box', () => {
     await flushPromises()
     expect(w.find('.lq-type-input').exists()).toBe(false)
   })
+
+  it('leaves F1 alone on the title page, so the game does not begin with the box up', async () => {
+    stubScreen(false)
+    const game = useGameStore()
+    game.showTitle = true
+    w = mount(LanternLayout, { attachTo: document.body })
+    await flushPromises()
+    const event = new KeyboardEvent('keydown', {
+      key: 'F1',
+      bubbles: true,
+      cancelable: true,
+    })
+    window.dispatchEvent(event)
+    await flushPromises()
+    expect(w.find('.lq-type-input').exists()).toBe(false)
+    expect(event.defaultPrevented).toBe(false)
+  })
+
+  it('gives a narrow desktop window the box too: only a phone has none', async () => {
+    vi.stubGlobal(
+      'matchMedia',
+      vi.fn((query: string) => ({
+        // A 900 x 800 mouse window: not wide, not short, not a phone.
+        matches:
+          query.includes('hover: hover') || query.includes('orientation'),
+        addEventListener: vi.fn(),
+        removeEventListener: vi.fn(),
+      })),
+    )
+    useGameStore().showTitle = false
+    w = mount(LanternLayout, { attachTo: document.body })
+    await flushPromises()
+    window.dispatchEvent(new KeyboardEvent('keydown', { key: 'F1' }))
+    await flushPromises()
+    expect(w.find('.lq-type-input').exists()).toBe(true)
+  })
 })

@@ -695,7 +695,15 @@ describe('the narration paper', () => {
     )
     w?.unmount()
     document.body.innerHTML = ''
-    stubScreen(false)
+    // A phone: touch, no hover, small.
+    vi.stubGlobal(
+      'matchMedia',
+      vi.fn((query: string) => ({
+        matches: !query.includes('hover: hover'),
+        addEventListener: vi.fn(),
+        removeEventListener: vi.fn(),
+      })),
+    )
     const phoneHelp = await helpText()
     expect(phoneHelp).toContain(
       "Press the room's name for Look, Search and Rest.",

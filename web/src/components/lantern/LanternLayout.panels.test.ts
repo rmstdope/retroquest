@@ -257,6 +257,8 @@ describe('LanternLayout: panels wait for the narration', () => {
   it('keeps the voice reading while typing, and the word list follows the place', async () => {
     const w = await ready()
     const game = useGameStore()
+    useGameStore().showModal = false
+    useGameStore().showTitle = false
     window.dispatchEvent(new KeyboardEvent('keydown', { key: 'F1' }))
     await goNorth()
     expect(cardName(w)).toBe('Hall')

@@ -25,7 +25,8 @@ describe('useCommandBox', () => {
     scope = effectScope()
   })
   afterEach(() => scope.stop())
-  const make = () => scope.run(() => useCommandBox(canType))!
+  const make = (blocked: () => boolean = () => false) =>
+    scope.run(() => useCommandBox(canType, blocked))!
 
   it('starts hidden', () => {
     expect(make().open.value).toBe(false)
@@ -56,7 +57,7 @@ describe('useCommandBox', () => {
     expect(box.open.value).toBe(false)
   })
 
-  it('is hidden again whenever a game begins, but a load during play leaves it as it was', async () => {
+  it('is hidden again whenever a game begins, but hidden again at a restart; the box is not tied to loads, so a load leaves it as it was', async () => {
     const game = useGameStore()
     const box = make()
     f1()
@@ -65,6 +66,17 @@ describe('useCommandBox', () => {
     expect(box.open.value).toBe(false)
     f1()
     await nextTick()
+    expect(box.open.value).toBe(true)
+  })
+
+  it('leaves F1 alone while the title page, a pop-up or a dialog is up', () => {
+    let blocked = true
+    const box = make(() => blocked)
+    const event = f1()
+    expect(box.open.value).toBe(false)
+    expect(event.defaultPrevented).toBe(false)
+    blocked = false
+    f1()
     expect(box.open.value).toBe(true)
   })
 

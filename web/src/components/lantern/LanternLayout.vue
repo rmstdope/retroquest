@@ -236,8 +236,6 @@ const wide = computed(() => laptop.value || sideways.value)
 const textPage = computed(() => short.value && !phone.value)
 /** Any other screen (a tablet, a narrow window) that is not short: the picture stage, arranged for a tall screen. */
 const phoneStage = computed(() => !wide.value && !textPage.value)
-/** The actions are a sheet over the picture, opened from a folded bar. */
-const sheeted = computed(() => phoneStage.value || sideways.value)
 /** The room is played on its picture: the laptop stage or the phone's. */
 const staged = computed(() => wide.value || phoneStage.value)
 /** The laptop window is wide enough for the narrator on one side and speech on the other. */
@@ -273,10 +271,10 @@ const stageButtons = ref<InstanceType<typeof StageButtons> | null>(null)
 const plate = ref<InstanceType<typeof RoomPlate> | null>(null)
 /** Whether the room's picture is up (otherwise the paper backdrop), for the arrival's ink. */
 const pictured = ref(false)
-/** A keyboard can type here: every screen but a phone, which plays by pointing only. */
-const canType = computed(() => !sheeted.value)
+/** A keyboard can type here: every screen but a phone (touch, small), which plays by pointing only. */
+const canType = computed(() => !phone.value)
 /** The typing box (F1 brings it up and hides it): hidden whenever a game begins. */
-const commandBox = useCommandBox(canType)
+const commandBox = useCommandBox(canType, () => dialogOpen())
 const typingOpen = commandBox.open
 /** Whether the start-of-game note about F1 is up. */
 const f1NoteShown = ref(false)
@@ -451,10 +449,11 @@ onUnmounted(() => document.removeEventListener('pointerdown', onOutsidePress))
 
 /** The height the belt of pictures takes at the foot of the picture (0 while it is put away). */
 const beltHeight = ref(0)
+/** The room the typing box takes at the foot of the picture, with its gap. */
 const BOX_ROOM = 64
 /** How far above the foot of the picture the belt stands: above the typing box while it is up, else at the foot (a sideways phone keeps 8px). */
 const beltBottom = computed(() =>
-  laptop.value ? boxRoom.value : sideways.value ? 8 : 16,
+  laptop.value ? boxRoom.value : sideways.value ? 8 : 16 + boxRoom.value,
 )
 /** The belt starts at the picture's left edge. */
 const beltLeft = computed(() => 0)
@@ -467,9 +466,9 @@ const footCover = computed(() =>
       : 0,
 )
 
-/** The room the typing box takes at the foot of the laptop's picture while it is up, which the story drawer and the words stop above. */
+/** The room the typing box takes at the foot of the picture while it is up, which the story drawer and the words stop above. */
 const boxRoom = computed(() =>
-  laptop.value && typingOpen.value ? BOX_ROOM : 0,
+  staged.value && typingOpen.value ? BOX_ROOM : 0,
 )
 
 // The laptop shows everything at once; coming back from it starts on the story.
@@ -1055,7 +1054,6 @@ function onNarrationKey(event: KeyboardEvent): void {
     dialogOpen: dialogOpen(),
     inField: !!target?.closest('input, textarea, select, [contenteditable]'),
     onControl: !!target?.closest('button, a, [role="button"], summary'),
-    onFoldedActions: false,
     ...aimOf(target),
     onPaperTab: !!target?.closest('.lq-paper-tab'),
     inOpenList: !!target?.closest('[aria-expanded="true"]'),
@@ -1357,8 +1355,7 @@ function onPanelPress(event: MouseEvent): void {
   if (!target?.closest('[data-panel] :is(button, a, [role="button"])')) return
   // A press during a change of scene (or before a talk's) brings the new room up first.
   presentation.bringSceneUp()
-  // Opening the sheet, or the bigger map, changes nothing the voice holds: it
-  // never waits for it.
+  // Opening the bigger map changes nothing the voice holds: it never waits for it.
   // The room name's pills and Hint act on the first press, wherever they stand: a pill or Hint cuts an arrival short and sends its command.
   if (target.closest('.lq-name-btn, .lq-pill, .lq-hint-btn, [data-bigger-map]'))
     return
@@ -2195,7 +2192,7 @@ watch(
 /**
  * Focus goes back without scrolling (a scroll away also closes the menu).
  * When nothing had it (a mouse click on text) and a key closed the menu,
- * it goes to the actions; a click or scroll leaves it be (on a phone,
+ * it goes to the typing box (when it is up); a click or scroll leaves it be (on a phone,
  * focusing the typing box could open the keyboard).
  */
 function closeNameMenu(byKey: boolean): void {
@@ -2407,7 +2404,7 @@ watch(
             />
             <!-- The typing box (F1) and the note about F1 stand at the foot of the picture, where the action bar used to be. -->
             <CommandBox
-              v-if="typingOpen && wide"
+              v-if="typingOpen && staged"
               :key="`box-${game.gameNumber}`"
               ref="commandBoxEl"
               class="lq-stage-box"
@@ -2416,7 +2413,7 @@ watch(
               @hide="hideBox"
             />
             <F1Note
-              v-else-if="f1NoteShown && wide"
+              v-else-if="f1NoteShown && staged"
               class="lq-stage-note"
               @done="f1NoteShown = false"
             />
@@ -2685,6 +2682,11 @@ watch(
             class="lq-text-box"
             @input="clearShownArrival"
             @hide="hideBox"
+          />
+          <F1Note
+            v-else-if="f1NoteShown && !staged"
+            class="lq-text-note"
+            @done="f1NoteShown = false"
           />
 
           <template v-if="!wide">
@@ -3052,7 +3054,9 @@ watch(
   );
 }
 .lq-phone .lq-story-wrap.lq-cards.lq-one-column {
-  margin-bottom: calc(var(--lq-hide-line) + var(--lq-belt-h, 0px));
+  margin-bottom: calc(
+    var(--lq-hide-line) + var(--lq-belt-h, 0px) + var(--lq-actions-h, 0px)
+  );
 }
 /* The strip saying what the next press does: under the top row, in the middle of the picture. */
 .lq-stage .lq-hand-strip {
@@ -3206,6 +3210,10 @@ watch(
 }
 .lq-stage-box {
   width: 60%;
+}
+.lq-text-note {
+  align-self: center;
+  margin: 8px;
 }
 .lq-text-box {
   flex: 0 0 auto;

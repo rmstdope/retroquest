@@ -59,6 +59,13 @@ for (const size of [
       path: `test-results/sideways-${size.width}x${size.height}.png`,
     })
     // The room name fans out Look, Search and Rest in a row, over the words.
+    // The name can be pressed once the arrival has left it visible.
+    await expect(async () => {
+      await page.keyboard.press('Enter')
+      await expect(page.locator('.lq-plate-away')).toHaveCount(0, {
+        timeout: 500,
+      })
+    }).toPass()
     await page.locator('.lq-name-btn').click()
     await expect(page.locator('.lq-pill')).toHaveCount(3)
     await page.locator('.lq-pill', { hasText: 'Look' }).click()

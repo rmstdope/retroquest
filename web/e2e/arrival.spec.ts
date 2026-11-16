@@ -146,11 +146,16 @@ test.describe('the arrival told on the picture', () => {
     expect(await turnCount(page)).toBe(before)
   })
 
-  test('clears when Search is chosen from the room name', async ({ page }) => {
+  test('clears when Hint is pressed, and the room name is out of reach while it is told', async ({
+    page,
+  }) => {
     await startAct1(page)
     await expect(arrival(page).locator('.lq-arrival-line')).toBeVisible()
-    await page.locator('.lq-name-btn').click()
-    await page.locator('.lq-pill', { hasText: 'Search' }).click()
+    await expect(page.locator('.lq-name-wrap').first()).toHaveAttribute(
+      'inert',
+      '',
+    )
+    await page.getByRole('button', { name: 'Hint' }).first().click()
     await expect(arrival(page).locator('.lq-arrival-line')).toHaveCount(0)
     await expect(story(page)).toBeVisible()
   })

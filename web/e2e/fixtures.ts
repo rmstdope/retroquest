@@ -74,7 +74,11 @@ export async function enterCommand(page: Page, command: string): Promise<void> {
   const input = page.getByLabel('Command', { exact: true })
   if (!(await input.isVisible())) {
     await page.keyboard.press('F1')
-    await input.waitFor({ state: 'visible', timeout: 600 }).catch(() => {})
+    // A phone has no box; anywhere else a missing box is a failure.
+    const phone = await page.evaluate(
+      () => matchMedia('(hover: none) and (pointer: coarse)').matches,
+    )
+    if (!phone) await input.waitFor({ state: 'visible', timeout: 2000 })
   }
   if (await input.isVisible()) {
     await input.fill(command)

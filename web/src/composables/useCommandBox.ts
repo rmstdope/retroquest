@@ -1,4 +1,4 @@
-import { onUnmounted, ref, watch, type Ref } from 'vue'
+import { onScopeDispose, ref, watch, type Ref } from 'vue'
 import { useGameStore } from '@/stores/useGameStore'
 
 /**
@@ -6,10 +6,13 @@ import { useGameStore } from '@/stores/useGameStore'
  * again hides it; the key is taken, so the browser's own help never opens.
  * Where there is no box (`canType` false: a phone plays by pointing only) F1
  * is left alone and the box is put away if the screen becomes a phone. The
- * box starts hidden whenever a game begins (a restart); loading a save during
+ * box starts hidden whenever a game begins (and F1 is left alone while `blocked` says the title page, a pop-up or a dialog is up) (a restart); loading a save during
  * play leaves it as it was.
  */
-export function useCommandBox(canType: Ref<boolean>): {
+export function useCommandBox(
+  canType: Ref<boolean>,
+  blocked: () => boolean = () => false,
+): {
   open: Ref<boolean>
   hide: () => void
 } {
@@ -18,12 +21,14 @@ export function useCommandBox(canType: Ref<boolean>): {
 
   function onKey(event: KeyboardEvent): void {
     if (event.key !== 'F1' || !canType.value) return
+    // Over the title page, a pop-up or a dialog F1 is the browser's own help key: the game leaves it be.
+    if (blocked()) return
     event.preventDefault()
     event.stopPropagation()
     if (!event.repeat) open.value = !open.value
   }
   window.addEventListener('keydown', onKey, true)
-  onUnmounted(() => window.removeEventListener('keydown', onKey, true))
+  onScopeDispose(() => window.removeEventListener('keydown', onKey, true))
 
   watch(canType, (can) => {
     if (!can) open.value = false

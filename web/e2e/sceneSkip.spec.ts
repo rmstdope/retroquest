@@ -1,4 +1,4 @@
-import { test, expect, enterCommand } from './fixtures'
+import { test, expect, enterCommand, closeTypingBox } from './fixtures'
 
 /**
  * Hurrying past a change of scene on the phone's picture stage (rq-dxpb): a
@@ -25,6 +25,8 @@ for (const key of ['Enter', 'Space']) {
     await expect(page.locator('.lq-stage-picture.lq-scene-idle')).toHaveCount(0)
     await expect(page.locator('.lq-scrim')).toHaveCount(0)
 
+    // The box takes Space and Enter as letters: put it away so the key reaches the scene.
+    await closeTypingBox(page)
     await page.keyboard.press(key)
 
     await expect(page.locator('.lq-stage-picture.lq-scene-idle')).toHaveCount(1)

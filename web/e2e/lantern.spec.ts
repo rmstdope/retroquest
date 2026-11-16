@@ -119,13 +119,26 @@ test.describe('Lantern UI (the default)', () => {
     await expect(input).toHaveCount(0)
   })
 
-  test('a phone has no typing box: F1 does nothing', async ({ page }) => {
-    await page.setViewportSize({ width: 390, height: 844 })
+  test.describe('on a phone (touch)', () => {
+    test.use({ hasTouch: true, isMobile: true })
+    test('a phone has no typing box: F1 does nothing', async ({ page }) => {
+      await page.setViewportSize({ width: 390, height: 844 })
+      await page.goto('/')
+      await injectMockState(page)
+      await page.keyboard.press('F1')
+      await expect(page.getByLabel('Command')).toHaveCount(0)
+      await expect(page.locator('.lq-composer, .lq-dock')).toHaveCount(0)
+    })
+  })
+
+  test('a narrow mouse window gets the box too: only a phone has none', async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 900, height: 800 })
     await page.goto('/')
     await injectMockState(page)
     await page.keyboard.press('F1')
-    await expect(page.getByLabel('Command')).toHaveCount(0)
-    await expect(page.locator('.lq-composer, .lq-dock')).toHaveCount(0)
+    await expect(page.getByLabel('Command')).toBeVisible()
   })
 
   test('uses the Lantern colours', async ({ page }) => {

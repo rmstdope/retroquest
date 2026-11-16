@@ -9,16 +9,13 @@
  * of a Space that was taken must be swallowed so it does not press the
  * focused button. The layout only describes the press and carries out the
  * answer. What a press on a button is aimed at is read here too, from the
- * `data-hurry` attribute the button (or the actions panel around it) carries,
+ * `data-hurry` attribute the button (or the panel around it) carries,
  * and the pause after a telling is kept here, by `HurryKeys`.
  *
- * The modes keep deliberately different rules. On a phone the sheet folds as
- * a command is sent and focus lands on the folded bar's Actions: a change of
- * scene takes both Enter and Space from that button, but ordinary narration
- * takes only Space (the hurry the hint invites) and leaves Enter as the
- * button's own press. A button in the actions panel, where focus stays after
- * a verb is sent on a laptop, gives up Space, and one that sends a command
- * gives up Enter too, so a player hurrying the answer does not send it again.
+ * The modes keep deliberately different rules. A command button (Hint, a
+ * pill of the room name: `data-hurry="command"`) gives up Space during
+ * narration, and Enter too, so a player hurrying the answer does not send the
+ * command again; any other button keeps its own Enter.
  *
  * Focus stays on a verb through an arrival too, and when the last line has
  * been hurried, so a player still going on when either ends would press that
@@ -57,8 +54,6 @@ export interface HurryKeyPress {
   inField: boolean
   /** The target is in a button, link, `[role="button"]` or summary. */
   onControl: boolean
-  /** The target is in the folded bar's Actions button. */
-  onFoldedActions: boolean
   /** The target is a button in the actions panel. */
   onActionButton: boolean
   /** The target is a button in the actions panel that sends a command or builds one (a verb, an exit, a target, the hint). */
@@ -110,8 +105,7 @@ function take(
 /**
  * During a change of scene, Enter or Space brings the new room up at
  * once. Fields and controls keep their own Enter and Space, except an empty
- * command box, the folded bar's Actions (which stays folded) and a button in
- * the actions panel, where focus sits on its own (after Begin, it is on Look).
+ * command box and a command button, where focus may sit on its own.
  */
 function sceneKey(press: HurryKeyPress): HurryKeyDecision | null {
   if (
@@ -124,7 +118,6 @@ function sceneKey(press: HurryKeyPress): HurryKeyDecision | null {
     return null
   if (
     press.emptyBoxEnter ||
-    press.onFoldedActions ||
     press.onActionButton ||
     !(press.inField || press.onControl)
   )
@@ -149,19 +142,16 @@ function arrivalKey(press: HurryKeyPress): HurryKeyDecision | null {
 
 /**
  * While the narrator reads: a field keeps Space and Enter. A button, link or
- * summary presses on Space or Enter, except Space on the folded bar's Actions
- * or a button in the actions panel, and Enter on a button there that sends a
- * command: that is the hurry the hint invites, so the sheet stays folded, the
- * verb is not sent again and a Space's release is swallowed. Enter on any
+ * summary presses on Space or Enter, except Space on a command button, and
+ * Enter on it: that is the hurry the hint invites, so the command is not sent
+ * again and a Space's release is swallowed. Enter on any
  * other button stays its own press. (Holding the key skips the telling; that
  * is the hold's.)
  */
 function narrationKey(press: HurryKeyPress): HurryKeyDecision | null {
   if (press.inField) return null
   const takenFromButton =
-    press.key === ' '
-      ? press.onActionButton || press.onFoldedActions
-      : press.onCommandButton
+    press.key === ' ' ? press.onActionButton : press.onCommandButton
   if (!takenFromButton && press.onControl) return null
   return take('hurry', press.key === ' ' && takenFromButton)
 }

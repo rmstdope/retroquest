@@ -27,7 +27,7 @@ import HintButton from './HintButton.vue'
  * right of the name, and stays while the name is away; with `hintButton` a
  * round 💡 Hint stands beside it (that stage has no top-right row of buttons).
  * The plate lets presses through to the picture beneath; only its buttons take
- * them. Compact (a phone on its side) is smaller.
+ * them (the name is not inert text: it is a button). Compact (a phone on its side) is smaller.
  */
 const props = defineProps<{
   storyButton?: boolean
@@ -75,7 +75,6 @@ function press(command: string): void {
   if (busy.value) return
   open.value = false
   send(command)
-  void nextTick(focusName)
 }
 
 /** ↑ ← and ↓ → move focus between the pills, round the ends. */
@@ -120,9 +119,15 @@ onUnmounted(() => {
   document.removeEventListener('pointerdown', onOutsidePress, true)
 })
 
-// A new room, a new game and a pop-up all put the pills away.
+/** Focus leaving the name and its pills (the menu, the typing box) puts the pills away. */
+function onFocusOut(event: FocusEvent): void {
+  const next = event.relatedTarget
+  if (next instanceof Node && !root.value?.contains(next)) open.value = false
+}
+
+// A new room, a new game, a load and a pop-up all put the pills away.
 watch(
-  () => [game.roomName, game.gameNumber, game.showModal],
+  () => [game.roomName, game.gameNumber, game.loadNumber, game.showModal],
   () => (open.value = false),
 )
 
@@ -143,7 +148,11 @@ defineExpose({ focusStoryButton, focusName })
     aria-label="Current location"
     @animationend.self="endFlash"
   >
-    <div class="lq-name-wrap">
+    <div
+      class="lq-name-wrap"
+      :inert="props.away || undefined"
+      @focusout="onFocusOut"
+    >
       <h2 class="lq-room-name">
         <button
           ref="nameEl"
@@ -165,6 +174,7 @@ defineExpose({ focusStoryButton, focusName })
           :key="pill.command"
           type="button"
           class="lq-pill"
+          data-hurry="command"
           :aria-disabled="busy"
           :class="{ 'lq-busy': busy }"
           @click="press(pill.command)"
@@ -201,7 +211,7 @@ defineExpose({ focusStoryButton, focusName })
   align-items: center;
   gap: 10px;
   min-width: 0;
-  /* The name is not a button: a press goes through it to the picture or the words beneath. */
+  /* The plate itself lets a press go through to the picture or the words beneath; only its buttons take one. */
   pointer-events: none;
 }
 .lq-name-wrap {
@@ -274,13 +284,15 @@ defineExpose({ focusStoryButton, focusName })
 .lq-plate-hint {
   margin-left: 0;
 }
+.lq-name-btn:focus-visible {
+  outline: 2px solid var(--lq-accent);
+  outline-offset: 0;
+}
 .lq-room-name {
   flex: 0 1 auto;
   min-width: 0;
   margin: 0;
-  overflow: hidden;
   white-space: nowrap;
-  text-overflow: ellipsis;
   font-family: var(--lq-font-display);
   font-size: calc(20px * var(--lq-display-scale));
   font-weight: 500;
