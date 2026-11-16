@@ -158,7 +158,8 @@ import type { SaveSlot } from '@/types/bridge'
  * page, with the tabs on top (and ☰ in the corner) and the same sheet folded into the bar,
  * which also folds when an answer does not fit beside it.
  * A new turn opens at its start, with a "More below" pill while the story
- * goes on below the visible part.
+ * goes on below the visible part; in the one column each line said after
+ * comes whole into view, pushing the older lines up (rq-r7ct).
  * After the last act, Finish the game asks to save (FinishDialog), then
  * only the end screen shows; the act's music keeps playing under it.
  * A player's command, and the arrival that opens an act, is narrated when the
@@ -1152,7 +1153,10 @@ onMounted(() => {
     storyResize.observe(storyEl.value)
     // The turns also settle after a crossing; a reading's new paragraphs must not jump the follow.
     if (contentEl.value) {
-      contentResize = new ResizeObserver(() => resizeLanding.reland())
+      contentResize = new ResizeObserver(() => {
+        resizeLanding.reland()
+        keepAtFoot()
+      })
       contentResize.observe(contentEl.value)
     }
   }
@@ -1296,6 +1300,8 @@ watch(() => settings.textSize, updateMoreBelow, { flush: 'post' })
 // On the laptop's cards a reading cut short leaves the newest card at its
 // start in view: the turn grew after the pane was last moved, and the older
 // cards must not keep the column.
+// (In the one column the lines it shows then push on to its last line, as
+// every line said does: `showNewestLine`.)
 watch(storyHeld, async (held) => {
   if (held) return
   await nextTick()
@@ -1534,6 +1540,8 @@ watch(
         false,
       )
     else latest?.scrollIntoView?.({ block: 'start' })
+    // Opened at its start, the story no longer rests at its foot.
+    noteFoot()
     // Every answer is read on the picture: the phone's sheet folds after each turn.
     const folds =
       !laptop.value &&
@@ -1552,6 +1560,108 @@ watch(
   },
   { flush: 'post' },
 )
+
+/**
+ * Bring the newest line said in the one column whole into view, pushing the
+ * older lines up to the foot of the story (rq-r7ct): never so far that its
+ * own top leaves, and never back (`footTop`). So the lines fading away
+ * above it never move what still shows. A story being read is moved by its
+ * follow instead, and nothing moves while the story is out of sight (another
+ * section is open) or no line is said.
+ */
+async function showNewestLine(): Promise<void> {
+  await nextTick()
+  const story = storyEl.value
+  const said = speech.visible.at(-1)
+  if (
+    !column.value ||
+    storyHeld.value ||
+    section.value !== 'story' ||
+    !story ||
+    !said
+  )
+    return
+  lineShown = said.key
+  const top = footTop(story)
+  if (top === null) return
+  if (top > story.scrollTop) moveStory(top, false)
+  noteFoot()
+  updateMoreBelow()
+}
+
+/**
+ * Where the story rests at its foot, the room kept below the newest line too
+ * (a pane short of its foot would close that gap as the rows above it go,
+ * moving what still shows), but never past that line's top. Null while no
+ * line said is drawn in the story.
+ */
+function footTop(story: HTMLElement): number | null {
+  const said = speech.visible.at(-1)
+  const newest =
+    said &&
+    story.querySelector<HTMLElement>(
+      `[data-turn="${said.turnId}"] [data-key="line-${said.unit}-${said.firstWord}"]`,
+    )
+  if (!newest) return null
+  const pane = story.getBoundingClientRect()
+  const line = newest.getBoundingClientRect()
+  const paddingTop = parseFloat(getComputedStyle(story).paddingTop) || 0
+  return Math.min(
+    story.scrollHeight - story.clientHeight,
+    story.scrollTop + line.top - (pane.top + paddingTop),
+  )
+}
+
+/** Whether the story rests at its foot, so stays there as its content changes size (`keepAtFoot`). */
+let atFoot = false
+
+/** Note whether the story is at its foot: the player scrolling back leaves it. */
+function noteFoot(): void {
+  const story = storyEl.value
+  atFoot =
+    !!story && story.scrollTop >= story.scrollHeight - story.clientHeight - 1
+}
+
+/**
+ * Keep the one column at its foot (never past the newest line's top) while
+ * its content changes size (a run's name stepping down to its next line takes
+ * room), so the lines still showing stay where they are.
+ */
+function keepAtFoot(): void {
+  const story = storyEl.value
+  if (!atFoot || !column.value || !story || section.value !== 'story') return
+  // A window crossing lands the story where the player was reading instead.
+  if (resizeLanding.landing) return
+  const top = footTop(story)
+  // Also while a turn is read: `moveStory` tells the follow where it belongs.
+  if (top !== null && Math.abs(top - story.scrollTop) > 1) moveStory(top, false)
+}
+
+/**
+ * A line has left sight (or come back): once the column has drawn the change
+ * (a run's name stepping down), keep the story at its foot before the next
+ * frame, so what still shows never moves, not even for a frame.
+ */
+function lineSightChanged(): void {
+  void nextTick(keepAtFoot)
+}
+
+/** The story scrolled: what is below, and whether it is still at its foot. */
+function onStoryScroll(): void {
+  updateMoreBelow()
+  noteFoot()
+}
+/** The key of the newest line last brought into view (`showNewestLine`). */
+let lineShown: number | undefined
+// Each new line (also the rest of a talk shown at once by a press or a skip,
+// which so ends at its last line) brings the newest line into view, and so
+// does the story shown again after another section, if a line was said
+// meanwhile: a player who scrolled back to read keeps their place otherwise.
+watch(() => speech.visible.at(-1)?.key, showNewestLine, { flush: 'post' })
+watch(section, (now) => {
+  if (now === 'story' && speech.visible.at(-1)?.key !== lineShown)
+    void showNewestLine()
+})
 
 // The quest chime and fanfare (sound settings apply).
 game.setAudioPlayer(useAudio())
@@ -2538,13 +2648,17 @@ watch(
               aria-label="Story"
               @click="onStoryClick"
               @keydown="onStoryKeydown"
-              @scroll.passive="updateMoreBelow"
+              @scroll.passive="onStoryScroll"
               @wheel.passive="endLanding"
               @touchstart.passive="endLanding"
               @pointerdown.passive="endLanding"
             >
               <h2 class="lq-sr-only">Story</h2>
-              <div ref="contentEl" class="lq-paper-content">
+              <div
+                ref="contentEl"
+                class="lq-paper-content"
+                @lq-line-sight="lineSightChanged"
+              >
                 <template v-for="turn in storyTurns" :key="turn.id">
                   <ColumnTurn v-if="column" :turn="turn" :data-turn="turn.id" />
                   <StoryTurn

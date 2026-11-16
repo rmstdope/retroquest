@@ -2,9 +2,13 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { flushPromises, mount, type VueWrapper } from '@vue/test-utils'
 import { createPinia, setActivePinia } from 'pinia'
+import { ref } from 'vue'
 import LanternLayout from './LanternLayout.vue'
 import { startedHoldStore } from '@/testing/holdGame'
-import { useGameStore } from '@/stores/useGameStore'
+import { useGameStore, type Turn } from '@/stores/useGameStore'
+import { useStageSpeechStore } from '@/stores/useStageSpeechStore'
+import { LINE_SIGHT_EVENT } from '@/composables/useFadeOnceRead'
+import { useNarrationStore } from '@/stores/useNarrationStore'
 
 /**
  * Which screen the test pretends to be: `upright` is a tablet (or a narrow mouse
@@ -241,5 +245,218 @@ describe('LanternLayout: the stage on a phone', () => {
     expect(w.find('.lq-story-drawer').exists()).toBe(true)
     expect(w.find('.lq-header').exists()).toBe(false)
     expect(w.find('.lq-stage-picture').exists()).toBe(true)
+  })
+})
+
+/** The one column on a narrow stage, laid out by hand (jsdom has no layout). */
+describe('LanternLayout: a new line said in the one column', () => {
+  let w: VueWrapper
+  /** The story pane's height, and where the newest line starts in its content. */
+  const PANE = 300
+  const LINE_TOP = 250
+  /** Room the content gains after the line is shown (a name stepping down above it). */
+  let grown = 0
+  /** The layout's resize observers, called by hand. */
+  let resized: (() => void)[] = []
+  /** Whether a story turn is being read aloud. */
+  const reading = ref(false)
+
+  beforeEach(async () => {
+    setActivePinia(createPinia())
+    screen('upright')
+    grown = 0
+    resized = []
+    reading.value = false
+    Object.defineProperty(useNarrationStore(), 'storyReading', {
+      configurable: true,
+      get: () => reading.value,
+    })
+    vi.stubGlobal(
+      'ResizeObserver',
+      class {
+        constructor(callback: () => void) {
+          resized.push(callback)
+        }
+        observe(): void {}
+        disconnect(): void {}
+      },
+    )
+    await startedHoldStore()
+    w = mount(LanternLayout, { attachTo: document.body })
+    await w.vm.$nextTick()
+  })
+  afterEach(() => {
+    w.unmount()
+    vi.unstubAllGlobals()
+    vi.restoreAllMocks()
+  })
+
+  const pane = (): HTMLElement =>
+    document.querySelector('section[aria-label="Story"]') as HTMLElement
+
+  /** Lay the pane out, `PANE` tall, with the newest spoken line at `LINE_TOP` in its content, `height` tall. */
+  function layOut(height: number, below = 0): void {
+    const el = pane()
+    let top = 0
+    Object.defineProperty(el, 'clientHeight', {
+      configurable: true,
+      value: PANE,
+    })
+    Object.defineProperty(el, 'scrollHeight', {
+      configurable: true,
+      get: () => LINE_TOP + height + below + grown,
+    })
+    Object.defineProperty(el, 'scrollTop', {
+      configurable: true,
+      get: () => top,
+      set: (value: number) => {
+        top = value
+      },
+    })
+    vi.spyOn(Element.prototype, 'getBoundingClientRect').mockImplementation(
+      function (this: Element): DOMRect {
+        if (this === el) return { top: 0, bottom: PANE } as DOMRect
+        // Only the newest line is laid out: the one to bring into view.
+        const said = useStageSpeechStore().visible.at(-1)
+        if (
+          said &&
+          this.matches(`[data-key="line-${said.unit}-${said.firstWord}"]`)
+        )
+          return {
+            top: LINE_TOP - top,
+            bottom: LINE_TOP + height - top,
+          } as DOMRect
+        return { top: 0, bottom: 0, height: 0 } as DOMRect
+      },
+    )
+  }
+
+  /** Grandmother says a line `height` tall in a new turn, shown at once unless `reveal` is false. */
+  async function sayLine(
+    height: number,
+    reveal = true,
+    below = 0,
+  ): Promise<void> {
+    const game = useGameStore()
+    const said: Turn = {
+      id: 9_999,
+      command: 'talk to grandmother',
+      text: '[character_name]Grandmother[/character_name]\n[dialogue]There you are.\n\nSit down.[/dialogue]',
+      room: game.roomName,
+      description: null,
+      gained: [],
+      lost: [],
+      arrival: null,
+      addressed: 'Grandmother',
+    }
+    layOut(height, below)
+    game.turns = [...game.turns, said]
+    await flushPromises()
+    if (reveal) useStageSpeechStore().revealAll()
+    await flushPromises()
+  }
+
+  it('pushes the story up so the whole line shows', async () => {
+    expect(w.find('.lq-one-column').exists()).toBe(true)
+    await sayLine(200)
+    expect(w.findAll('[data-testid="speech-line"]').length).toBeGreaterThan(0)
+    expect(pane().scrollTop).toBe(LINE_TOP + 200 - PANE)
+  })
+
+  it('shows the room kept below the newest line too, so the column rests at its foot', async () => {
+    await sayLine(200, true, 20)
+    expect(pane().scrollTop).toBe(LINE_TOP + 200 + 20 - PANE)
+  })
+
+  it('keeps the column at its foot when the content above the newest line grows', async () => {
+    await sayLine(200)
+    grown = 20
+    for (const callback of resized) callback()
+    await flushPromises()
+    expect(pane().scrollTop).toBe(LINE_TOP + 200 + 20 - PANE)
+  })
+
+  it('keeps the column at its foot as soon as a line leaves sight, before the next frame', async () => {
+    await sayLine(200)
+    grown = 20
+    document
+      .querySelector('[data-testid="speech-line"]')!
+      .dispatchEvent(new Event(LINE_SIGHT_EVENT, { bubbles: true }))
+    await flushPromises()
+    expect(pane().scrollTop).toBe(LINE_TOP + 200 + 20 - PANE)
+  })
+
+  it('keeps the column at its foot while a turn is read aloud too', async () => {
+    await sayLine(200)
+    reading.value = true
+    await flushPromises()
+    grown = 20
+    for (const callback of resized) callback()
+    await flushPromises()
+    expect(pane().scrollTop).toBe(LINE_TOP + 200 + 20 - PANE)
+  })
+
+  it("keeps the newest line's top in view when the column grows past it", async () => {
+    await sayLine(250)
+    // The newest line, 250 tall, ends at the foot; 100 more below it would push its top out.
+    grown = 100
+    for (const callback of resized) callback()
+    await flushPromises()
+    expect(pane().scrollTop).toBe(LINE_TOP)
+  })
+
+  it('leaves the column alone while another section is open', async () => {
+    await sayLine(200)
+    await w.findAll('.lq-nav-bottom .lq-nav-btn')[1]!.trigger('click')
+    await flushPromises()
+    grown = 20
+    for (const callback of resized) callback()
+    await flushPromises()
+    expect(pane().scrollTop).toBe(LINE_TOP + 200 - PANE)
+  })
+
+  it('leaves a player who scrolled back where they are when the content grows', async () => {
+    await sayLine(200)
+    pane().scrollTop = 0
+    pane().dispatchEvent(new Event('scroll'))
+    grown = 20
+    for (const callback of resized) callback()
+    await flushPromises()
+    expect(pane().scrollTop).toBe(0)
+  })
+
+  it('stops a line taller than the pane at its top, so it is read from its start', async () => {
+    await sayLine(500)
+    expect(pane().scrollTop).toBe(LINE_TOP)
+  })
+
+  it('brings a line said while another section was open into view when the story is shown again', async () => {
+    await sayLine(200, false)
+    pane().scrollTop = 0
+    await w.findAll('.lq-nav-bottom .lq-nav-btn')[1]!.trigger('click')
+    useStageSpeechStore().revealAll()
+    await flushPromises()
+    expect(pane().scrollTop).toBe(0)
+    await w.findAll('.lq-nav-bottom .lq-nav-btn')[0]!.trigger('click')
+    await flushPromises()
+    expect(pane().scrollTop).toBe(LINE_TOP + 200 - PANE)
+  })
+
+  it('keeps the place of a player who scrolled back to read, when the story is shown again', async () => {
+    await sayLine(200)
+    pane().scrollTop = 0
+    await w.findAll('.lq-nav-bottom .lq-nav-btn')[1]!.trigger('click')
+    await flushPromises()
+    await w.findAll('.lq-nav-bottom .lq-nav-btn')[0]!.trigger('click')
+    await flushPromises()
+    expect(pane().scrollTop).toBe(0)
+  })
+
+  it('leaves the story where it is when the conversation is cleared', async () => {
+    await sayLine(200)
+    pane().scrollTop = 0
+    useStageSpeechStore().clear()
+    await flushPromises()
+    expect(pane().scrollTop).toBe(0)
   })
 })

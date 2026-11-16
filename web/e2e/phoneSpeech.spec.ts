@@ -5,7 +5,7 @@ import { test, expect, type Page } from './fixtures'
  * plate and the Hide is never cut through its top on a phone, so
  * its speaker and first words can be read, and when more lines are said than
  * fit, the newest stays at the foot while the oldest leave at the top
- * (rq-gw9m).
+ * (rq-gw9m); on a phone each new line comes whole into view (rq-r7ct).
  */
 
 /**
@@ -38,27 +38,7 @@ async function seenAtCentre(page: Page, selector: string): Promise<boolean> {
   }, selector)
 }
 
-/** Whether the top-left corner of the element (its first words) is what the player sees there. */
-async function seenAtTop(
-  page: Page,
-  selector: string,
-  index = -1,
-): Promise<boolean> {
-  return page.evaluate(
-    ([sel, at]) => {
-      const element = Array.from(document.querySelectorAll(sel as string)).at(
-        at as number,
-      )
-      if (!element) return false
-      const box = element.getBoundingClientRect()
-      const hit = document.elementFromPoint(box.left + 12, box.top + 12)
-      return hit !== null && element.contains(hit)
-    },
-    [selector, index],
-  )
-}
-
-test('on a phone a long answer opens at its start, with the first line in view', async ({
+test('on a phone each new line comes whole into view, pushing the older ones up (rq-r7ct)', async ({
   page,
 }): Promise<void> => {
   await page.setViewportSize({ width: 390, height: 844 })
@@ -70,21 +50,27 @@ test('on a phone a long answer opens at its start, with the first line in view',
   await expect(
     page.getByRole('region', { name: 'Current location' }),
   ).toContainText("Elior's Cottage")
-  // Her greeting comes a paragraph at a time; the turn opens at its start,
-  // with its first line still showing in view (a line read fades away).
-  // The Voice's line from the dream left the column with the dream.
+  // Her greeting comes a paragraph at a time, more than the column holds.
   await enter(page, 'talk to grandmother')
   const lines = page.getByTestId('speech-line')
   await expect(lines).toHaveCount(3)
   await expect(lines.nth(2)).toContainText("If you're going out")
+  // The newest is whole inside the story pane, from its top to its foot.
   await expect
     .poll(
       () =>
-        seenAtTop(
-          page,
-          '.lq-one-column [data-testid="speech-line"]:not([data-fade="gone"]) .lq-line',
-          0,
-        ),
+        page.evaluate(() => {
+          const story = document.querySelector('.lq-one-column .lq-story')!
+          const pane = story.getBoundingClientRect()
+          const rows = document.querySelectorAll('[data-testid="speech-line"]')
+          const at = rows[rows.length - 1].getBoundingClientRect()
+          // The column is full: the story has been pushed up to show it.
+          return (
+            story.scrollTop > 0 &&
+            at.top >= pane.top - 1 &&
+            at.bottom <= pane.bottom + 1
+          )
+        }),
       { timeout: 2_000 },
     )
     .toBe(true)
