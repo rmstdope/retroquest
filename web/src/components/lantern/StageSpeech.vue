@@ -21,8 +21,9 @@ import SpeechPortrait from './SpeechPortrait.vue'
  * and portrait step down to the next line showing. Each line, with its name
  * and portrait, fades away once it has been read (`useFadeOnceRead`, run by
  * the layout): it says when it is being read aloud, and how long it takes to
- * read, which a line never read aloud waits first. When the room is full the
- * oldest leaves at the top, under a soft fade. A line taller than the room
+ * read, which a line never read aloud waits first; the lines still showing
+ * stay where they are. When the room is full the oldest leaves at the top,
+ * under a soft fade. A line taller than the room
  * never loses its top: the thread scrolls so the newest line shows from its
  * speaker down, its end faded at the bottom (the story band has every word).
  * The conversation is kept by `useStageSpeechStore`. This is the laptop
@@ -281,9 +282,16 @@ function hurry(): void {
 .lq-run-first {
   margin-top: 16px;
 }
-/* The rows rest at the foot of the thread while they fit. */
-.lq-ln:first-child {
+/* The rows rest at the foot of the thread while they fit. A spacer, not the
+   first row, takes the room above them: a line that has faded away takes no
+   room (`display: none`), so the rows still showing stay where they are and
+   rise only when a new line comes in below. Its negative margin cancels the
+   thread's gap after it. */
+.lq-thread::before {
+  content: '';
+  flex: none;
   margin-top: auto;
+  margin-bottom: -8px;
 }
 .lq-col {
   position: relative;

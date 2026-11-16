@@ -216,3 +216,35 @@ test('on a phone the lines rest at the foot of the column and a two-line name cl
   expect(clear.belowRowBefore).toBe(true)
   expect(clear.inside).toBe(true)
 })
+
+test('a line fading away leaves the lines still showing where they are', async ({
+  page,
+}): Promise<void> => {
+  await page.setViewportSize({ width: 1440, height: 900 })
+  await page.goto('/')
+  await page.getByRole('button', { name: 'Start', exact: true }).click()
+  await page.locator('.lq-chapter-button').click()
+  await enter(page, 'talk to voice')
+  await enter(page, 'talk to grandmother')
+  const lines = page.getByTestId('speech-line')
+  await expect(lines).toHaveCount(4, { timeout: 30_000 })
+
+  /** How far the newest line's foot is above the foot of the thread's room. */
+  const lift = (): Promise<number> =>
+    page.evaluate(() => {
+      const thread = document.querySelector<HTMLElement>('.lq-thread')!
+      const newest = thread.lastElementChild!
+      const foot =
+        thread.getBoundingClientRect().bottom -
+        parseFloat(getComputedStyle(thread).paddingBottom)
+      return Math.round(foot - newest.getBoundingClientRect().bottom)
+    })
+  expect(await lift()).toBe(0)
+
+  // Once the oldest line has faded away, the newest still rests at the foot.
+  await expect(lines.first()).toHaveAttribute('data-fade', 'gone', {
+    timeout: 30_000,
+  })
+  await expect(lines.last()).not.toHaveAttribute('data-fade', 'gone')
+  expect(await lift()).toBe(0)
+})
