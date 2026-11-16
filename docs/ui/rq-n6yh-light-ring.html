@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Light ring b</title>
+<style>
+:root{--bg:#f5f0e6;--surface:#fffcf5;--raised:#efe8da;--line:#e2d9c6;--line2:#cfc4ad;--fg:#22201b;--muted:#6b6455;--accent:#f29e00;--accent-soft:#ffe0a0;--accent-text:#7a4300;--on-accent:#1a1408;--failure-soft:#fbe9e2;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.45 'DM Sans',system-ui,sans-serif;padding:24px 16px}
+h1{font:600 22px Georgia,serif;margin:0 0 4px}
+.lede{color:var(--muted);margin:0 0 20px;max-width:760px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:22px;max-width:1180px}
+.cap{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:0 0 8px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px 18px;box-shadow:0 8px 30px rgb(60 40 10/.12)}
+.ph{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.ph b{font:600 18px Georgia,serif}.x{color:var(--muted)}
+.row{min-height:52px;display:flex;align-items:center;gap:12px;padding:4px 6px;border-radius:8px}
+.row+.row{border-top:1px solid var(--line)}
+.row .lbl{flex:1}
+.seg{display:flex;gap:6px}.seg span{padding:6px 12px;border:1px solid var(--line2);border-radius:999px;font-size:13px}
+.seg .on{background:var(--accent);border-color:var(--accent);color:var(--on-accent);font-weight:600}
+.slider{width:120px;height:6px;border-radius:3px;background:linear-gradient(90deg,var(--accent) 60%,var(--line2) 60%)}
+.sw{width:40px;height:22px;border-radius:11px;background:var(--line2);position:relative}.sw::after{content:"";position:absolute;left:3px;top:3px;width:16px;height:16px;border-radius:50%;background:#fff}
+.sw.on{background:var(--accent)}.sw.on::after{left:21px}
+.slots{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.slot{border:1px dashed var(--line2);border-radius:12px;padding:12px;min-height:74px;display:flex;gap:10px;align-items:center}
+.slot.f{border-style:solid;background:var(--raised)}
+.badge{width:34px;height:34px;border-radius:8px;background:var(--line);display:grid;place-items:center;font-weight:600;flex:none}
+.slot small{display:block;color:var(--muted)}
+.slot.dis{opacity:.55}
+.btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+.btn{padding:10px 16px;border-radius:10px;border:1px solid var(--line2);background:transparent}
+.btn.p{background:var(--accent);border-color:var(--accent);font-weight:600}
+.ask{background:var(--raised);border-radius:12px;padding:12px;margin-top:12px}
+.keys{display:flex;justify-content:flex-end;gap:12px;color:var(--muted);font-size:12px;margin-top:12px}
+kbd{border:1px solid var(--line2);border-bottom-width:2px;border-radius:4px;padding:0 5px;font:11px ui-monospace,monospace}
+.phone{max-width:360px}
+.phone .slots{grid-template-columns:1fr}
+.dark{--bg:#10151a;--surface:#161d24;--raised:#1c242c;--line:#26313b;--line2:#34404b;--fg:#ece6d6;--muted:#a39d8e;--accent:#ffa914}
+.dark.panel{background:var(--surface);color:var(--fg)}
+.note{font-size:13px;color:var(--muted);margin-top:8px}
+/* THE RING */
+.ring{outline:3px solid #7a4300;outline-offset:3px}
+.ring.row{border-radius:8px}
+.dark .ring{outline:3px solid #f4ecd2;outline-offset:3px;box-shadow:none}
+</style></head><body>
+<h1>Option B — a deep brown ring</h1>
+<p class="lede">In the light theme the ring is drawn in the dark amber-brown the light theme uses for highlighted words: same thickness, same gap. Warmer, but nearer the amber of a switched-on choice.</p>
+<div class="grid">
+
+<div><p class="cap">Settings — ring on Theme (Light is switched on, amber)</p>
+<div class="panel"><div class="ph"><b>Settings</b><span class="x">✕</span></div>
+<div class="row ring"><span class="lbl">Theme</span><span class="seg"><span>Follow device</span><span class="on">Light</span><span>Dark</span></span></div>
+<div class="row"><span class="lbl">Text size</span><span class="seg"><span>Small</span><span class="on">Medium</span><span>Large</span></span></div>
+<div class="row"><span class="lbl">Full screen</span><span class="sw"></span></div>
+<div class="row"><span class="lbl">Music volume</span><span class="slider"></span></div>
+<div class="keys"><span><kbd>↑</kbd><kbd>↓</kbd> move</span><span><kbd>←</kbd><kbd>→</kbd> change</span><span><kbd>Esc</kbd> back</span></div>
+</div></div>
+
+<div><p class="cap">Settings — ring on a switch row that is on</p>
+<div class="panel"><div class="ph"><b>Settings</b><span class="x">✕</span></div>
+<div class="row"><span class="lbl">Start with</span><span class="seg"><span class="on">The picture</span><span>The story</span></span></div>
+<div class="row ring"><span class="lbl">Reduce motion</span><span class="sw on"></span></div>
+<div class="row"><span class="lbl">Always show what's here</span><span class="sw"></span></div>
+</div></div>
+
+<div><p class="cap">Save game — ring on an empty slot (dashed edge)</p>
+<div class="panel"><div class="ph"><b>Save game</b><span class="x">✕</span></div>
+<div class="slots">
+<div class="slot f"><span class="badge">1</span><span>Willowbrook<small>Act 1 · yesterday</small></span></div>
+<div class="slot ring"><span class="badge">2</span><span>Empty<small>Save here</small></span></div>
+<div class="slot f"><span class="badge">3</span><span>Ancient Ruins<small>Act 2 · 3 days ago</small></span></div>
+<div class="slot"><span class="badge">4</span><span>Empty<small>Save here</small></span></div>
+</div></div></div>
+
+<div><p class="cap">Load game — ring on a filled slot, next to an old save it skips</p>
+<div class="panel"><div class="ph"><b>Load game</b><span class="x">✕</span></div>
+<div class="slots">
+<div class="slot f ring"><span class="badge">1</span><span>Willowbrook<small>Act 1 · yesterday</small></span></div>
+<div class="slot f dis"><span class="badge">2</span><span>Old save<small>From an older version</small></span></div>
+<div class="slot f"><span class="badge">3</span><span>Ancient Ruins<small>Act 2 · 3 days ago</small></span></div>
+<div class="slot"><span class="badge">4</span><span>Empty</span></div>
+</div></div></div>
+
+<div><p class="cap">The question in the card — ring on Cancel</p>
+<div class="panel"><div class="ph"><b>Save game</b><span class="x">✕</span></div>
+<div class="slot f"><span class="badge">1</span><span>Willowbrook<small>Act 1 · yesterday</small></span></div>
+<div class="ask">Replace this save?<div class="btns"><span class="btn ring">Cancel</span><span class="btn p">Replace</span></div></div>
+</div></div>
+
+<div><p class="cap">Quit question — ring on Cancel</p>
+<div class="panel"><div class="ph"><b>Quit?</b></div>
+<p style="margin:0">Your progress since the last save will be lost.</p>
+<div class="btns"><span class="btn p">Save and quit</span><span class="btn">Quit without saving</span><span class="btn ring">Cancel</span></div>
+</div></div>
+
+<div class="phone"><p class="cap">Phone width — Save game, one column</p>
+<div class="panel"><div class="ph"><b>Save game</b><span class="x">✕</span></div>
+<div class="slots">
+<div class="slot f ring"><span class="badge">1</span><span>Willowbrook<small>Act 1 · yesterday</small></span></div>
+<div class="slot"><span class="badge">2</span><span>Empty<small>Save here</small></span></div>
+</div></div></div>
+
+<div class="phone"><p class="cap">For comparison — the dark theme, unchanged</p>
+<div class="panel dark"><div class="ph"><b>Settings</b><span class="x">✕</span></div>
+<div class="row ring"><span class="lbl">Theme</span><span class="seg"><span>Follow device</span><span>Light</span><span class="on" style="background:#ffa914;border-color:#ffa914;color:#1a1408">Dark</span></span></div>
+<div class="row" style="border-color:#26313b"><span class="lbl">Text size</span><span class="seg"><span>Small</span><span class="on" style="background:#ffa914;border-color:#ffa914;color:#1a1408">Medium</span><span>Large</span></span></div>
+</div><p class="note">The dark theme keeps today's cream ring.</p></div>
+
+</div></body></html>
