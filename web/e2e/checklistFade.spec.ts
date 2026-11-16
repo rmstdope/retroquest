@@ -1,4 +1,4 @@
-import { test, expect, type Locator, type Page } from './fixtures'
+import { test, expect, type Locator, type Page, skipTelling } from './fixtures'
 
 /**
  * In a checklist quest's log, what is still to do stands out and what is done
@@ -154,7 +154,7 @@ test.describe('a checklist fades what is done (rq-3t6a)', () => {
       news.locator('.lq-check-done'),
       news.locator('.lq-check-pending'),
     )
-    await page.keyboard.press('Escape')
+    await skipTelling(page)
     const turn = page.locator('.lq-block-checklist').last()
     await expectDoneFaded(
       turn.locator('.lq-check-done'),

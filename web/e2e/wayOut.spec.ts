@@ -3,7 +3,7 @@
  * now is plain painting, but pressing where the studio placed it gets the
  * game's own answer, as the typed direction does, and Elior stays.
  */
-import { test, expect, type Page } from './fixtures'
+import { test, expect, type Page, skipTelling } from './fixtures'
 
 /** A one-pixel transparent PNG, standing for a picture the studio made. */
 const PIXEL = Buffer.from(
@@ -45,7 +45,7 @@ async function toTheCottage(page: Page): Promise<void> {
   const input = page.getByLabel('Command', { exact: true })
   await input.fill('say hello to voice')
   await input.press('Enter')
-  await page.keyboard.press('Escape')
+  await skipTelling(page)
   await expect(page.locator('.lq-stage-picture.lq-scene-idle')).toHaveCount(1)
   await expect(page.locator('.lq-room-name')).toHaveText("Elior's Cottage")
 }

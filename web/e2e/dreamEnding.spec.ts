@@ -1,4 +1,4 @@
-import { test, expect, type Page } from './fixtures'
+import { test, expect, type Page, skipTelling } from './fixtures'
 
 /**
  * Answering the voice ends the dream (rq-uqp8): the answer is told the way
@@ -23,7 +23,7 @@ async function startInDream(page: Page): Promise<void> {
   await page.getByRole('button', { name: 'Start', exact: true }).click()
   await page.locator('.lq-chapter-button').click()
   // The dream's own arrival is told in the middle first.
-  await page.keyboard.press('Escape')
+  await skipTelling(page)
   await page
     .getByRole('region', { name: 'Actions' })
     .getByRole('button', { name: 'Type', exact: true })
@@ -72,7 +72,7 @@ for (const command of ['talk to voice', 'say who are you to voice']) {
     await expect(middle).not.toContainText('let them rest')
 
     // In the cottage nothing of the dream, nor the waking, is left on the cards.
-    await page.keyboard.press('Escape')
+    await skipTelling(page)
     await expect(card).not.toContainText('The dark lets go of you')
     await expect(card).not.toContainText('The whisper comes once more')
     await expect(card).not.toContainText('let them rest')

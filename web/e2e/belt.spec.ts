@@ -4,7 +4,7 @@
  * it in hand with a strip saying so, and the next press on a thing sends the
  * command typed. Cancel and Escape put it down; B goes to the belt.
  */
-import { test, expect, type Page } from './fixtures'
+import { test, expect, type Page, skipTelling } from './fixtures'
 
 /** A one-pixel transparent PNG, standing for a picture the studio made. */
 const PIXEL = Buffer.from(
@@ -48,7 +48,7 @@ async function toTheCottage(page: Page): Promise<void> {
   const input = page.getByLabel('Command', { exact: true })
   await input.fill('say hello to voice')
   await input.press('Enter')
-  await page.keyboard.press('Escape')
+  await skipTelling(page)
   // The waking is told in the middle of the dark first; Enter brings the cottage up.
   await page.getByTestId('scene-interlude').waitFor()
   await page.keyboard.press('Enter')

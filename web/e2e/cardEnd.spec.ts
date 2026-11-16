@@ -1,4 +1,4 @@
-import { test, expect, type Page } from './fixtures'
+import { test, expect, type Page, skipTelling } from './fixtures'
 
 /**
  * A narrator's card on the laptop stays whole in the left column once the
@@ -60,7 +60,7 @@ test('the dream card is whole while Grandmother answers, and nothing loops', asy
     .getByRole('button', { name: 'Type', exact: true })
     .click()
   await enter(page, 'talk to voice')
-  await page.keyboard.press('Escape')
+  await skipTelling(page)
   for (const command of [
     'use lantern',
     'take bread',
@@ -69,7 +69,7 @@ test('the dream card is whole while Grandmother answers, and nothing loops', asy
     'use journal',
   ]) {
     await enter(page, command)
-    await page.keyboard.press('Escape')
+    await skipTelling(page)
   }
 
   await enter(page, 'talk to grandmother')

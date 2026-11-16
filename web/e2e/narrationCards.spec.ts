@@ -3,7 +3,7 @@
  * laptop (rq-c15r.1): the story pane is gone, the cards stop under the room
  * plate and never overlap the speech, also in a window about 1060 px wide.
  */
-import { test, expect, type Page } from './fixtures'
+import { test, expect, type Page, skipTelling } from './fixtures'
 
 /** Open the game, close the opening chapter page and switch the actions to typing. */
 async function start(page: Page): Promise<void> {
@@ -31,7 +31,7 @@ for (const width of [1440]) {
     await start(page)
     await enter(page, 'talk to voice')
     // The walk into the first room is told in the middle first.
-    await page.keyboard.press('Escape')
+    await skipTelling(page)
     await enter(page, 'look')
     await enter(page, 'talk to grandmother')
 
@@ -63,7 +63,7 @@ test('at 1060px the cards and the lines share one column in the middle, under th
   await page.setViewportSize({ width: 1060, height: 800 })
   await start(page)
   await enter(page, 'talk to voice')
-  await page.keyboard.press('Escape')
+  await skipTelling(page)
   await enter(page, 'look')
   await enter(page, 'talk to grandmother')
 
@@ -108,14 +108,14 @@ test.describe('with the narrator reading', () => {
     await page.setViewportSize({ width: 1440, height: 800 })
     await start(page)
     await enter(page, 'talk to voice')
-    await page.keyboard.press('Escape')
+    await skipTelling(page)
     await enter(page, 'look')
-    await page.keyboard.press('Escape')
+    await skipTelling(page)
     await enter(page, 'talk to grandmother')
-    await page.keyboard.press('Escape')
+    await skipTelling(page)
     await enter(page, 'xyzzy')
     await enter(page, 'look')
-    await page.keyboard.press('Escape')
+    await skipTelling(page)
 
     const wrap = page.locator('.lq-story-wrap.lq-cards')
     // The look's first bubble (the room) is the newest turn's start.

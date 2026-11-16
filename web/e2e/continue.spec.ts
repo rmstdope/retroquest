@@ -46,7 +46,7 @@ test('Continue opens the newest save with no chapter page', async ({
 
   await expect(page.locator('.lq-title-page')).toHaveCount(0)
   await expect(page.locator('.lq-chapter-button')).toHaveCount(0)
-  await expect(page.getByTestId('act')).toBeVisible()
+  await expect(page.locator('.lq-room-name')).toBeVisible()
 })
 
 test('Load game from the title page loads a card with no question', async ({
@@ -96,5 +96,5 @@ test('a save made under a name is listed on the title page after a reload and lo
   await expect(dialog.getByText('Saves you named')).toBeVisible()
   await dialog.getByRole('button', { name: /^Load mysave:/ }).click()
   await expect(page.locator('.lq-title-page')).toHaveCount(0)
-  await expect(page.getByTestId('act')).toBeVisible()
+  await expect(page.locator('.lq-room-name')).toBeVisible()
 })

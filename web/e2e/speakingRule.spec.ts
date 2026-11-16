@@ -5,7 +5,7 @@
  * when it appears. Checked on the opening chapter page, on the first room's
  * description and on a plain narrated paragraph, on desktop and on a phone.
  */
-import { test, expect, type Locator, type Page } from './fixtures'
+import { test, expect, type Locator, type Page, skipTelling } from './fixtures'
 
 /** Where the rule is, what may clip it, and where the words start. */
 interface RuleGeometry {
@@ -102,7 +102,7 @@ for (const width of [1280, 360]) {
       // sends it away.
       const told = page.locator('.lq-arrival-card')
       await expect(told.last()).toBeVisible()
-      await page.keyboard.press('Escape')
+      await skipTelling(page)
       await expect(told).toHaveCount(0)
       // A first visit is told in the middle, not on the card: look tells it there.
       const input = page.getByLabel('Command', { exact: true })
@@ -122,7 +122,7 @@ for (const width of [1280, 360]) {
       await openChapter(page)
       await type(page, 'talk to voice')
       // The walk into the first room is told in the middle first; Escape sends it away.
-      await page.keyboard.press('Escape')
+      await skipTelling(page)
       const paragraph = page
         .getByTestId('turn')
         .last()
