@@ -2,11 +2,13 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { flushPromises, mount, type VueWrapper } from '@vue/test-utils'
 import { createPinia, setActivePinia } from 'pinia'
+import { ref } from 'vue'
 import LanternLayout from './LanternLayout.vue'
 import { startedHoldStore } from '@/testing/holdGame'
 import { useGameStore, type Turn } from '@/stores/useGameStore'
 import { useStageSpeechStore } from '@/stores/useStageSpeechStore'
 import { LINE_SIGHT_EVENT } from '@/composables/useFadeOnceRead'
+import { useNarrationStore } from '@/stores/useNarrationStore'
 
 /**
  * Which screen the test pretends to be: `upright` is a tablet (or a narrow mouse
@@ -256,12 +258,19 @@ describe('LanternLayout: a new line said in the one column', () => {
   let grown = 0
   /** The layout's resize observers, called by hand. */
   let resized: (() => void)[] = []
+  /** Whether a story turn is being read aloud. */
+  const reading = ref(false)
 
   beforeEach(async () => {
     setActivePinia(createPinia())
     screen('upright')
     grown = 0
     resized = []
+    reading.value = false
+    Object.defineProperty(useNarrationStore(), 'storyReading', {
+      configurable: true,
+      get: () => reading.value,
+    })
     vi.stubGlobal(
       'ResizeObserver',
       class {
@@ -375,6 +384,35 @@ describe('LanternLayout: a new line said in the one column', () => {
       .dispatchEvent(new Event(LINE_SIGHT_EVENT, { bubbles: true }))
     await flushPromises()
     expect(pane().scrollTop).toBe(LINE_TOP + 200 + 20 - PANE)
+  })
+
+  it('keeps the column at its foot while a turn is read aloud too', async () => {
+    await sayLine(200)
+    reading.value = true
+    await flushPromises()
+    grown = 20
+    for (const callback of resized) callback()
+    await flushPromises()
+    expect(pane().scrollTop).toBe(LINE_TOP + 200 + 20 - PANE)
+  })
+
+  it("keeps the newest line's top in view when the column grows past it", async () => {
+    await sayLine(250)
+    // The newest line, 250 tall, ends at the foot; 100 more below it would push its top out.
+    grown = 100
+    for (const callback of resized) callback()
+    await flushPromises()
+    expect(pane().scrollTop).toBe(LINE_TOP)
+  })
+
+  it('leaves the column alone while another section is open', async () => {
+    await sayLine(200)
+    await w.findAll('.lq-nav-bottom .lq-nav-btn')[1]!.trigger('click')
+    await flushPromises()
+    grown = 20
+    for (const callback of resized) callback()
+    await flushPromises()
+    expect(pane().scrollTop).toBe(LINE_TOP + 200 - PANE)
   })
 
   it('leaves a player who scrolled back where they are when the content grows', async () => {

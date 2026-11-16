@@ -1564,9 +1564,10 @@ watch(
 /**
  * Bring the newest line said in the one column whole into view, pushing the
  * older lines up to the foot of the story (rq-r7ct): never so far that its
- * own top leaves, and never back. So the lines fading away above it never move what still shows. A
- * story being read is moved by its follow instead, and nothing moves while
- * the story is out of sight (another section is open) or no line is said.
+ * own top leaves, and never back (`footTop`). So the lines fading away
+ * above it never move what still shows. A story being read is moved by its
+ * follow instead, and nothing moves while the story is out of sight (another
+ * section is open) or no line is said.
  */
 async function showNewestLine(): Promise<void> {
   await nextTick()
@@ -1581,22 +1582,34 @@ async function showNewestLine(): Promise<void> {
   )
     return
   lineShown = said.key
-  const newest = story.querySelector<HTMLElement>(
-    `[data-turn="${said.turnId}"] [data-key="line-${said.unit}-${said.firstWord}"]`,
-  )
-  if (!newest) return
-  // To the foot, the room kept below the line too: a pane short of its foot
-  // would close that gap as the rows above it go, moving what still shows.
-  const pane = story.getBoundingClientRect()
-  const line = newest.getBoundingClientRect()
-  const paddingTop = parseFloat(getComputedStyle(story).paddingTop) || 0
-  const top = Math.min(
-    story.scrollHeight - story.clientHeight,
-    story.scrollTop + line.top - (pane.top + paddingTop),
-  )
+  const top = footTop(story)
+  if (top === null) return
   if (top > story.scrollTop) moveStory(top, false)
   noteFoot()
   updateMoreBelow()
+}
+
+/**
+ * Where the story rests at its foot, the room kept below the newest line too
+ * (a pane short of its foot would close that gap as the rows above it go,
+ * moving what still shows), but never past that line's top. Null while no
+ * line said is drawn in the story.
+ */
+function footTop(story: HTMLElement): number | null {
+  const said = speech.visible.at(-1)
+  const newest =
+    said &&
+    story.querySelector<HTMLElement>(
+      `[data-turn="${said.turnId}"] [data-key="line-${said.unit}-${said.firstWord}"]`,
+    )
+  if (!newest) return null
+  const pane = story.getBoundingClientRect()
+  const line = newest.getBoundingClientRect()
+  const paddingTop = parseFloat(getComputedStyle(story).paddingTop) || 0
+  return Math.min(
+    story.scrollHeight - story.clientHeight,
+    story.scrollTop + line.top - (pane.top + paddingTop),
+  )
 }
 
 /** Whether the story rests at its foot, so stays there as its content changes size (`keepAtFoot`). */
@@ -1610,16 +1623,18 @@ function noteFoot(): void {
 }
 
 /**
- * Keep the one column at its foot while its content changes size above the
- * newest line (a run's name stepping down to its next line takes room), so
- * the lines still showing stay where they are.
+ * Keep the one column at its foot (never past the newest line's top) while
+ * its content changes size (a run's name stepping down to its next line takes
+ * room), so the lines still showing stay where they are.
  */
 function keepAtFoot(): void {
   const story = storyEl.value
-  if (!atFoot || !column.value || storyHeld.value || !story) return
-  if (section.value !== 'story') return
-  const foot = story.scrollHeight - story.clientHeight
-  if (story.scrollTop < foot - 1) moveStory(foot, false)
+  if (!atFoot || !column.value || !story || section.value !== 'story') return
+  // A window crossing lands the story where the player was reading instead.
+  if (resizeLanding.landing) return
+  const top = footTop(story)
+  // Also while a turn is read: `moveStory` tells the follow where it belongs.
+  if (top !== null && Math.abs(top - story.scrollTop) > 1) moveStory(top, false)
 }
 
 /**
