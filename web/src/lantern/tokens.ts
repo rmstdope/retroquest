@@ -35,6 +35,8 @@ export interface LanternPalette {
   accentSoft: string
   /** Amber border. */
   accentLine: string
+  /** The selection ring of the menu screens (Settings, Save and Load, Quit). */
+  ring: string
   /** Failed actions ("not like that"): soft rust. */
   failure: string
   failureSoft: string
@@ -69,6 +71,7 @@ export const LANTERN_PALETTES: Readonly<Record<LanternTheme, LanternPalette>> =
       accentText: '#ffb836',
       accentSoft: '#36270a',
       accentLine: '#a8740f',
+      ring: '#f4ecd2',
       failure: '#e8896b',
       failureSoft: '#2a1814',
       success: '#8fcf7a',
@@ -96,6 +99,7 @@ export const LANTERN_PALETTES: Readonly<Record<LanternTheme, LanternPalette>> =
       accentText: '#7a4300',
       accentSoft: '#ffe0a0',
       accentLine: '#eba526',
+      ring: '#7a4300',
       failure: '#a63d1f',
       failureSoft: '#fbe9e2',
       success: '#2e6e27',
