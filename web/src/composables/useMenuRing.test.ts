@@ -169,4 +169,44 @@ describe('useMenuRing', () => {
     vi.useRealTimers()
     expect(scroll).toHaveBeenCalledWith({ block: 'nearest' })
   })
+
+  it('with wholeOnPoint, a real move onto a stop brings it whole into view, a re-sent one does not', () => {
+    const ring = useMenuRing('.stop', undefined, true)
+    const root = dialog()
+    const a = root.querySelector<HTMLElement>('#a')!
+    const b = root.querySelector<HTMLElement>('#b')!
+    a.scrollIntoView = vi.fn()
+    b.scrollIntoView = vi.fn()
+    pointer(ring, a, 1, 1)
+    expect(a.scrollIntoView).not.toHaveBeenCalled()
+    pointer(ring, a, 4, 1)
+    expect(a.scrollIntoView).toHaveBeenCalledWith({ block: 'nearest' })
+    pointer(ring, b, 4, 1)
+    expect(b.scrollIntoView).not.toHaveBeenCalled()
+  })
+
+  it('with wholeOnPoint, a click on a stop brings it whole into view; without, it does not', () => {
+    const root = dialog()
+    const a = root.querySelector<HTMLElement>('#a')!
+    a.scrollIntoView = vi.fn()
+    const click = { target: root.querySelector('#a1') } as unknown as MouseEvent
+    useMenuRing('.stop').onPress(click)
+    expect(a.scrollIntoView).not.toHaveBeenCalled()
+    useMenuRing('.stop', undefined, true).onPress(click)
+    expect(a.scrollIntoView).toHaveBeenCalledWith({ block: 'nearest' })
+  })
+
+  it('with wholeOnPoint, moving about inside a stop does not bring it into view again, leaving and returning does', () => {
+    const ring = useMenuRing('.stop', undefined, true)
+    const root = dialog()
+    const a = root.querySelector<HTMLElement>('#a')!
+    a.scrollIntoView = vi.fn()
+    pointer(ring, a, 1, 1)
+    pointer(ring, a, 4, 1)
+    pointer(ring, a, 6, 1)
+    expect(a.scrollIntoView).toHaveBeenCalledTimes(1)
+    pointer(ring, root.querySelector('#b'), 9, 1)
+    pointer(ring, a, 12, 1)
+    expect(a.scrollIntoView).toHaveBeenCalledTimes(2)
+  })
 })
