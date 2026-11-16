@@ -73,7 +73,7 @@ function watchFades(
 
 for (const [name, width, height] of [
   ['the laptop stage', 1440, 900],
-  ['a phone (rq-r7ct)', 390, 844],
+  ...[1, 2, 3, 4, 5].map((n) => [`a phone (rq-r7ct) #${n}`, 390, 844] as const),
 ] as const)
   test(`on ${name} a line fading away never moves the lines still showing`, async ({
     page,
