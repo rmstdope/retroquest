@@ -142,3 +142,36 @@ test('on an upright phone the plate does not fold (rq-7cv0)', async ({
     /lq-plate-folded/,
   )
 })
+
+test('on a phone the lines arrive without a ResizeObserver loop error (rq-zaqg)', async ({
+  page,
+}): Promise<void> => {
+  // The browser reports the loop as an error event on the window, not as a thrown error.
+  await page.addInitScript(() => {
+    const seen: string[] = []
+    ;(window as unknown as { loopErrors: string[] }).loopErrors = seen
+    window.addEventListener('error', (event) => {
+      if (/ResizeObserver loop/.test(event.message)) seen.push(event.message)
+    })
+  })
+  await page.setViewportSize({ width: 390, height: 844 })
+  await page.goto('/')
+  await page.getByRole('button', { name: 'Start', exact: true }).click()
+  await page.locator('.lq-chapter-button').click()
+
+  await enter(page, 'talk to voice')
+  await enter(page, 'use lantern')
+  await enter(page, 'use journal')
+  await enter(page, 'talk to grandmother')
+  // Her greeting arrives a line at a time, the last one ending it.
+  await expect(page.getByTestId('speech-line').last()).toContainText(
+    'a good heart',
+    { timeout: 30_000 },
+  )
+
+  expect(
+    await page.evaluate(
+      () => (window as unknown as { loopErrors: string[] }).loopErrors,
+    ),
+  ).toEqual([])
+})
