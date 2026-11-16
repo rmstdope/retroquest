@@ -174,6 +174,17 @@ describe('GameMenu', () => {
     expect(w.emitted('open')).toEqual([['save']])
   })
 
+  it('puts the ring on an entry a moving pointer is over, and leaves it for a resting one', async () => {
+    const w = mountMenu()
+    await w.vm.$nextTick()
+    const quit = item(w, 'Quit')
+
+    await quit.trigger('mousemove', { screenX: 1 })
+    expect(document.activeElement).toBe(item(w, 'Save').element)
+    await quit.trigger('mousemove', { screenX: 9 })
+    expect(document.activeElement).toBe(quit.element)
+  })
+
   it('closes with its close button', async () => {
     const w = mountMenu()
 

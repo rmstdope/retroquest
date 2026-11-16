@@ -130,3 +130,24 @@ test('Save: a moving pointer takes the ring and the ring follows it', async ({
   })
   await expect(slot).toBeFocused()
 })
+
+test('The menu: only the ringed entry looks picked when the pointer rests on another', async ({
+  page,
+}): Promise<void> => {
+  await openMenu(page)
+  const save = page.getByRole('button', { name: 'Save', exact: true })
+  const quit = page.getByRole('button', { name: 'Quit', exact: true })
+  const help = page.getByRole('button', { name: 'Help', exact: true })
+  const fill = (entry: typeof quit): Promise<string> =>
+    entry.evaluate((el) => getComputedStyle(el).backgroundColor)
+  const plain = await fill(help)
+  const box = await quit.boundingBox()
+  if (!box) throw new Error('Quit has no box')
+  await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2)
+  // The keyboard moves the ring off Save and back while the pointer rests on Quit.
+  await page.keyboard.press('ArrowDown')
+  await page.keyboard.press('ArrowUp')
+  await expect(save).toBeFocused()
+  expect(await fill(quit)).toBe(plain)
+  expect(await fill(save)).not.toBe(plain)
+})
