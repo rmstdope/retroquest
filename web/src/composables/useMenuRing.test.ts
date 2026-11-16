@@ -169,4 +169,30 @@ describe('useMenuRing', () => {
     vi.useRealTimers()
     expect(scroll).toHaveBeenCalledWith({ block: 'nearest' })
   })
+
+  it('with wholeOnPoint, a real move onto a stop brings it whole into view, a re-sent one does not', () => {
+    const ring = useMenuRing('.stop', undefined, true)
+    const root = dialog()
+    const a = root.querySelector<HTMLElement>('#a')!
+    const b = root.querySelector<HTMLElement>('#b')!
+    a.scrollIntoView = vi.fn()
+    b.scrollIntoView = vi.fn()
+    pointer(ring, a, 1, 1)
+    expect(a.scrollIntoView).not.toHaveBeenCalled()
+    pointer(ring, a, 4, 1)
+    expect(a.scrollIntoView).toHaveBeenCalledWith({ block: 'nearest' })
+    pointer(ring, b, 4, 1)
+    expect(b.scrollIntoView).not.toHaveBeenCalled()
+  })
+
+  it('with wholeOnPoint, a click on a stop brings it whole into view; without, it does not', () => {
+    const root = dialog()
+    const a = root.querySelector<HTMLElement>('#a')!
+    a.scrollIntoView = vi.fn()
+    const click = { target: root.querySelector('#a1') } as unknown as MouseEvent
+    useMenuRing('.stop').onPress(click)
+    expect(a.scrollIntoView).not.toHaveBeenCalled()
+    useMenuRing('.stop', undefined, true).onPress(click)
+    expect(a.scrollIntoView).toHaveBeenCalledWith({ block: 'nearest' })
+  })
 })

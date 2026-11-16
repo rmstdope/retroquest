@@ -50,7 +50,7 @@ const STARTS: Array<{ value: StartMode; label: string }> = [
   { value: 'type', label: 'Type' },
 ]
 
-const ring = useMenuRing('[data-stop]')
+const ring = useMenuRing('[data-stop]', undefined, true)
 const root = ref<HTMLElement | null>(null)
 const KEYS: KeyHint[] = [
   { keys: ['↑', '↓'], word: 'move' },
@@ -178,6 +178,7 @@ function volume(event: Event): number {
     @close="emit('close')"
     @focusin="ring.onFocusIn"
     @mousemove="ring.onMove"
+    @click="ring.onPress"
     @keydown.tab="ring.afterTab"
   >
     <div ref="root" @keydown="onKeydown">

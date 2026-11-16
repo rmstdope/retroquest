@@ -18,6 +18,10 @@ const HUSH_MS = 250
  * now. A move event at the same screen position as the last one is the
  * browser re-sending the pointer after a scroll, not the player moving it, so
  * it never takes the ring.
+ * With `wholeOnPoint` (Settings, whose list scrolls) a pointer that moves onto
+ * a stop, or a click on one (`onPress`, for a tap on a touch screen), also
+ * brings the whole stop into view, as the arrow keys do. Hand scrolling never
+ * does, since a re-sent move is not a move.
  * `choose` is the latch of a choice made.
  * `afterTab` (bound to a Tab key press) brings the whole stop the ring has
  * reached into view, since the browser scrolls only the focused control, not
@@ -26,10 +30,12 @@ const HUSH_MS = 250
 export function useMenuRing(
   stopSelector: string,
   canHover?: (stop: Element) => boolean,
+  wholeOnPoint = false,
 ): {
   onFocusIn(event: FocusEvent): void
   ringTo(element: HTMLElement | null | undefined): void
   onMove(event: MouseEvent): void
+  onPress(event: MouseEvent): void
   choose(): void
   afterTab(): void
   moved(): void
@@ -71,6 +77,12 @@ export function useMenuRing(
       if (canHover && !canHover(stop)) return
       if (!stop.contains(document.activeElement))
         stop.focus({ preventScroll: true })
+      if (wholeOnPoint) stop.scrollIntoView?.({ block: 'nearest' })
+    },
+    onPress(event: MouseEvent): void {
+      const stop = stopOf(event.target)
+      if (wholeOnPoint && stop instanceof HTMLElement)
+        stop.scrollIntoView?.({ block: 'nearest' })
     },
     choose: (): void => {
       hushedUntil = Date.now() + HUSH_MS
