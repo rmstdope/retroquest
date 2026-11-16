@@ -30,11 +30,20 @@ describe('StageButtons', () => {
     w?.unmount()
   })
 
-  it('has the three buttons in order, the Bag and Spells being the belt of pictures', () => {
+  it('has the three buttons in order, then the round ☰, the Bag and Spells being the belt of pictures', () => {
     const labels = mountButtons()
       .findAll('button.lq-stage-btn')
       .map((b) => b.text())
-    expect(labels).toEqual(['Quests · 0', '⟲ Story so far', '🧭 Map'])
+    expect(labels).toEqual(['Quests · 0', '⟲ Story so far', '🧭 Map', '☰'])
+  })
+
+  it('asks for the menu from ☰, which is named Menu', async () => {
+    const w = mountButtons()
+    const menu = w.get('[data-button="menu"]')
+    expect(menu.attributes('aria-label')).toBe('Menu')
+    expect(menu.attributes('title')).toBe('Menu')
+    await menu.trigger('click')
+    expect(w.emitted('menu')).toHaveLength(1)
   })
 
   it('has no Bag or Spells button, and nothing to fly to', () => {

@@ -638,14 +638,14 @@ describe('the narration paper', () => {
     vi.spyOn(game, 'readInfo').mockReturnValue('[bold]Commands[/bold]')
     await mountWith([turn(1, 'First.')])
     await settle()
-    // The laptop header has Help in its row; the phone's is behind the menu.
+    // Help is behind the menu.
     const menu = document.querySelector<HTMLElement>(
-      'button[aria-label="Game menu"]',
+      'button[aria-label="Menu"]',
     )
     menu?.click()
     await nextTick()
     const help = [...document.querySelectorAll<HTMLElement>('button')].find(
-      (b) => b.textContent?.trim().startsWith('Help'),
+      (b) => b.textContent?.trim() === 'Help',
     )
     help?.click()
     await nextTick()
@@ -657,6 +657,7 @@ describe('the narration paper', () => {
 
   it('has the Help line for N on a laptop, and not on a phone', async () => {
     const laptopHelp = await helpText()
+    expect(laptopHelp).toContain("Esc — close what's open, or open the menu")
     expect(laptopHelp).toContain('N — hide or show the words')
     expect(laptopHelp).toContain("S — show or hide what's here")
     expect(laptopHelp.indexOf('S — show')).toBeGreaterThan(

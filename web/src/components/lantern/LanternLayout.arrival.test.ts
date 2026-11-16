@@ -246,10 +246,9 @@ describe('LanternLayout: the arrival on the picture', () => {
     expect(up.defaultPrevented).toBe(true)
   })
 
-  it('clears with a held Space, and Escape does nothing to it', async () => {
+  it('clears with a held Space', async () => {
     const w = await ready()
     await run('go north')
-    await key('Escape')
     expect(card(w)).not.toBe('')
     await hold()
     expect(card(w)).toBe('')
@@ -495,10 +494,6 @@ describe('LanternLayout: the arrival on the picture', () => {
       })
       pushTurn({ ...news(), text: 'A green garden.', narrate: true })
       await vi.advanceTimersByTimeAsync(0)
-      await key('Escape')
-      await vi.advanceTimersByTimeAsync(0)
-      // Escape no longer skips.
-      expect(useNarrationStore(pinia).isNarrating).toBe(true)
       await hold()
       await vi.advanceTimersByTimeAsync(0)
       expect(card(w)).toBe('')

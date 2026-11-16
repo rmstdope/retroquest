@@ -108,7 +108,7 @@ describe('SaveLoadDialog', () => {
 
     expect(game.saveToSlot).toHaveBeenCalledWith(1)
     expect(w.find('[role="alert"]').exists()).toBe(false)
-    expect(w.emitted('close')).toHaveLength(1)
+    expect(w.emitted('done')).toHaveLength(1)
   })
 
   it('asks in the card before replacing a save', async () => {
@@ -205,7 +205,7 @@ describe('SaveLoadDialog', () => {
       .trigger('click')
 
     expect(useGameStore().loadGame).toHaveBeenCalledOnce()
-    expect(w.emitted('close')).toHaveLength(1)
+    expect(w.emitted('done')).toHaveLength(1)
   })
 
   it('loads a slot', async () => {
@@ -475,7 +475,7 @@ describe('SaveLoadDialog', () => {
       expect(useGameStore().loadNamedGame).toHaveBeenCalledWith(
         'before-the-mirrors',
       )
-      expect(w.emitted('close')).toHaveLength(1)
+      expect(w.emitted('done')).toHaveLength(1)
     })
 
     it('cancels the question with Escape before closing', async () => {

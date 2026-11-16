@@ -456,8 +456,7 @@ describe('LanternLayout', () => {
       const w = await storyWith(
         '[character_name]Grandmother[/character_name] smiles.',
       )
-      const before = w.get('button[aria-label="Text size"]')
-        .element as HTMLElement
+      const before = w.get('button[aria-label="Menu"]').element as HTMLElement
       before.focus()
       await w.get('.lq-story .theme-character_name').trigger('click')
       await flushPromises()
@@ -704,11 +703,13 @@ describe('LanternLayout', () => {
     useGameStore().quitAsked = true
     await w.vm.$nextTick()
 
-    expect(w.get('[role="dialog"] h2').text()).toBe('Quit game?')
+    expect(w.get('[role="dialog"] h2').text()).toBe('Quit to the main menu?')
   })
 
-  it('shows the header', () => {
-    expect(mountLayout().text()).toContain('RetroQuest')
+  it('has no top bar: no title, no bar of buttons', () => {
+    const w = mountLayout()
+    expect(w.find('header').exists()).toBe(false)
+    expect(w.text()).not.toContain('RetroQuest')
   })
 
   it('lists the turns with their command and rendered answer', async () => {
@@ -840,6 +841,7 @@ describe('LanternLayout', () => {
         'Quests · 0',
         '⟲ Story so far',
         '🧭 Map',
+        '☰',
       ])
       expect(w.find('section[aria-label="Story"]').exists()).toBe(true)
       expect(w.find('section[aria-label="Actions"]').exists()).toBe(true)
@@ -1265,14 +1267,13 @@ describe('LanternLayout', () => {
       expect(sections(w).get('[aria-current="page"]').text()).toMatch(/^Quests/)
     })
 
-    it('moves the section tabs into the header on a short screen', () => {
+    it('puts the section tabs on top of the page on a short screen, under the menu button', () => {
       stubScreen(true)
       const w = mountLayout()
 
-      expect(w.get('header').find('nav[aria-label="Sections"]').exists()).toBe(
-        true,
-      )
+      expect(w.find('header').exists()).toBe(false)
       expect(sections(w).classes()).toContain('lq-nav-top')
+      expect(w.get('.lq-float-menu').attributes('aria-label')).toBe('Menu')
     })
   })
 
@@ -1612,39 +1613,45 @@ describe('LanternLayout', () => {
 
     afterEach(() => vi.unstubAllGlobals())
 
-    it('opens the game menu from the header on a phone', async () => {
+    it('opens the menu from ☰ on a tall stage', async () => {
       phone()
       const w = mountLayout()
 
-      await w.get('button[aria-label="Game menu"]').trigger('click')
+      await w.get('button[aria-label="Menu"]').trigger('click')
 
-      expect(w.get('[role="dialog"] h2').text()).toBe('Game')
+      expect(w.get('[role="dialog"] h2').text()).toBe('Menu')
     })
 
-    it('shows Stats from the menu and gives focus back to the menu button', async () => {
+    it('opens Help from the menu, comes back to the menu on ✕, and gives focus back to ☰ when the menu closes', async () => {
       phone()
       const game = useGameStore()
       vi.spyOn(game, 'readInfo').mockReturnValue(
-        '[bold]Current Room:[/bold] Square',
+        '[bold]Available Commands:[/bold]',
       )
       wrapper = mount(LanternLayout, { attachTo: document.body })
-      const menuButton = wrapper.get('button[aria-label="Game menu"]')
+      const menuButton = wrapper.get('button[aria-label="Menu"]')
       ;(menuButton.element as HTMLElement).focus()
       await menuButton.trigger('click')
       await flushPromises()
 
-      const stats = wrapper
+      const help = wrapper
         .findAll('[role="dialog"] button')
-        .find((b) => b.text().startsWith('Stats'))!
-      await stats.trigger('click')
+        .find((b) => b.text() === 'Help')!
+      await help.trigger('click')
       await flushPromises()
 
       const dialog = wrapper.get('[role="dialog"]')
-      expect(dialog.get('h2').text()).toBe('Stats')
-      expect(dialog.text()).toContain('Current Room: Square')
-      expect(game.readInfo).toHaveBeenCalledWith('stats')
+      expect(dialog.get('h2').text()).toBe('Help')
+      expect(dialog.text()).toContain('Available Commands:')
+      expect(game.readInfo).toHaveBeenCalledWith('help')
 
+      // ✕ returns to the menu, focus on the entry it came from.
       await dialog.get('button[aria-label="Close"]').trigger('click')
+      await flushPromises()
+      expect(wrapper.get('[role="dialog"] h2').text()).toBe('Menu')
+      expect(document.activeElement?.textContent?.trim()).toBe('Help')
+
+      await wrapper.get('[role="dialog"]').trigger('keydown', { key: 'Escape' })
       await flushPromises()
       expect(wrapper.find('[role="dialog"]').exists()).toBe(false)
       expect(document.activeElement).toBe(menuButton.element)
@@ -1658,10 +1665,10 @@ describe('LanternLayout', () => {
       vi.spyOn(game, 'getNamedSaves').mockReturnValue([])
       const w = mountLayout()
 
-      await w.get('button[aria-label="Game menu"]').trigger('click')
+      await w.get('button[aria-label="Menu"]').trigger('click')
       await w
         .findAll('[role="dialog"] button')
-        .find((b) => b.text().startsWith('Load game'))!
+        .find((b) => b.text() === 'Load')!
         .trigger('click')
 
       expect(w.get('[role="dialog"] h2').text()).toBe('Load game')
@@ -1671,10 +1678,10 @@ describe('LanternLayout', () => {
       phone()
       const w = mountLayout()
 
-      await w.get('button[aria-label="Game menu"]').trigger('click')
+      await w.get('button[aria-label="Menu"]').trigger('click')
       await w
         .findAll('[role="dialog"] button')
-        .find((b) => b.text().startsWith('Settings'))!
+        .find((b) => b.text() === 'Settings')!
         .trigger('click')
 
       expect(w.get('[role="dialog"] h2').text()).toBe('Settings')
@@ -1714,10 +1721,10 @@ describe('LanternLayout', () => {
         game.musicActName = 'Act1'
         game.musicRoomKey = 'VillageSquare'
         await flushPromises()
-        await w.get('button[aria-label="Game menu"]').trigger('click')
+        await w.get('button[aria-label="Menu"]').trigger('click')
         await w
           .findAll('[role="dialog"] button')
-          .find((b) => b.text().startsWith('Settings'))!
+          .find((b) => b.text() === 'Settings')!
           .trigger('click')
         return w.get('.lq-now-playing').text()
       }
@@ -1764,7 +1771,7 @@ describe('LanternLayout', () => {
     it('closes the menu when a game pop-up opens', async () => {
       phone()
       const w = mountLayout()
-      await w.get('button[aria-label="Game menu"]').trigger('click')
+      await w.get('button[aria-label="Menu"]').trigger('click')
       const game = useGameStore()
 
       game.modalChapter = {
@@ -1781,7 +1788,7 @@ describe('LanternLayout', () => {
       expect(w.find('[role="dialog"]').exists()).toBe(false)
     })
 
-    it('shows Help from the laptop header', async () => {
+    it('shows Help from the menu on a laptop', async () => {
       vi.stubGlobal(
         'matchMedia',
         vi.fn((query: string) => ({
@@ -1796,8 +1803,11 @@ describe('LanternLayout', () => {
       )
       const w = mountLayout()
 
-      const help = w.findAll('header button').find((b) => b.text() === 'Help')!
-      await help.trigger('click')
+      await w.get('button[aria-label="Menu"]').trigger('click')
+      await w
+        .findAll('[role="dialog"] button')
+        .find((b) => b.text() === 'Help')!
+        .trigger('click')
 
       expect(w.get('[role="dialog"] h2').text()).toBe('Help')
       expect(w.get('[role="dialog"]').text()).toContain('Available Commands:')
@@ -2268,10 +2278,9 @@ describe('LanternLayout', () => {
       expect(useNarrationStore().isNarrating).toBe(false)
     })
 
-    it('leaves Escape to the text-size popover and to a half-built command', async () => {
-      const w = await ready()
+    it('leaves Escape to a half-built command', async () => {
+      await ready()
       await say(narratedTurn(1))
-      await w.get('button[aria-label="Text size"]').trigger('click')
       document.body.dispatchEvent(
         new KeyboardEvent('keydown', {
           key: 'Escape',
@@ -2546,7 +2555,7 @@ describe('LanternLayout', () => {
 
     describe('the hint', () => {
       const TOUCH = 'Tap to hurry · hold to skip'
-      const KEYS = 'Space to hurry · Esc to skip'
+      const KEYS = 'Space to hurry · hold to skip'
       const hint = (w: VueWrapper): string =>
         w.find('.lq-narration-hint').exists()
           ? w.get('.lq-narration-hint').text()
@@ -2573,7 +2582,7 @@ describe('LanternLayout', () => {
         expect(hint(w)).toBe(KEYS)
       })
 
-      it('says only Esc to skip while the cursor is in the command box', async () => {
+      it('shows no hint while the cursor is in the command box', async () => {
         vi.stubGlobal(
           'matchMedia',
           vi.fn((query: string) => ({
@@ -2589,7 +2598,7 @@ describe('LanternLayout', () => {
         field.className = 'lq-type-input'
         field.focus()
         await vi.advanceTimersByTimeAsync(0)
-        expect(hint(w)).toBe('Esc to skip')
+        expect(w.find('.lq-narration-hint').exists()).toBe(false)
         field.blur()
         await vi.advanceTimersByTimeAsync(0)
         expect(hint(w)).toBe(KEYS)
@@ -2649,7 +2658,7 @@ describe('LanternLayout', () => {
       const w = await ready()
       game.musicFile = 'market.mp3'
       game.musicInfo = 'Market by Conquest\nSource: https://freetouse.com/music'
-      await w.get('button[aria-label="Game menu"]').trigger('click')
+      await w.get('button[aria-label="Menu"]').trigger('click')
       const help = w
         .findAll('[role="dialog"] button')
         .find((b) => b.text().startsWith('Help'))!
@@ -2657,8 +2666,8 @@ describe('LanternLayout', () => {
 
       const text = w.get('[role="dialog"]').text()
       expect(text).toContain(
-        'Narration: tap the story or press Space to hurry the current line; ' +
-          'hold, or press Esc, to show the rest at once. Any action cuts in. ' +
+        'Narration: Tap the story or press Space to hurry the current line; ' +
+          'hold to show the rest at once. Any action cuts in. ' +
           'Set its volume, down to silent, in Settings.',
       )
       expect(text.indexOf('Available Commands:')).toBeLessThan(
