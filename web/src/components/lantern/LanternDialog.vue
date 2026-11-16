@@ -16,7 +16,9 @@ import { useFocusTrap } from '@/composables/useFocusTrap'
  * unless `restoreFocus` is off (the game's own pop-ups send it to the
  * actions instead). `wide` gives a body that needs room, like the map, a
  * panel at least 680px wide that grows to fit its body, up to the window
- * (on a phone it is the full-width sheet like any other).
+ * (on a phone it is the full-width sheet like any other). `centered` keeps
+ * the panel in the middle of the screen on a phone too, as the pause menu
+ * and the quit question are.
  */
 const props = withDefaults(
   defineProps<{
@@ -25,8 +27,15 @@ const props = withDefaults(
     closable?: boolean
     restoreFocus?: boolean
     wide?: boolean
+    centered?: boolean
   }>(),
-  { eyebrow: '', closable: true, restoreFocus: true, wide: false },
+  {
+    eyebrow: '',
+    closable: true,
+    restoreFocus: true,
+    wide: false,
+    centered: false,
+  },
 )
 const emit = defineEmits<{ close: [] }>()
 const titleId = useId()
@@ -60,7 +69,7 @@ defineExpose({ focusFirst: trap.focusFirst })
 </script>
 
 <template>
-  <div class="lq-dialog-layer">
+  <div class="lq-dialog-layer" :class="{ 'lq-dialog-centered': centered }">
     <div class="lq-dialog-scrim" aria-hidden="true" @click="onBackdrop"></div>
     <section
       ref="panel"
@@ -248,6 +257,34 @@ defineExpose({ focusFirst: trap.focusFirst })
   }
   .lq-dialog-foot {
     padding: 10px 16px calc(14px + env(safe-area-inset-bottom));
+  }
+}
+/* The pause menu and the quit question stay in the middle on a phone, too. */
+@media (max-width: 639px) {
+  .lq-dialog-layer.lq-dialog-centered {
+    align-items: center;
+    padding: 16px;
+  }
+  .lq-dialog-centered .lq-dialog-panel {
+    max-height: 84dvh;
+    border: 1px solid var(--lq-accent-line);
+    border-radius: 18px;
+    box-shadow: 0 30px 60px rgb(0 0 0 / 0.45);
+  }
+  .lq-dialog-centered .lq-dialog-grabber {
+    display: none;
+  }
+  .lq-dialog-centered .lq-dialog-head {
+    padding: 18px 16px 14px 22px;
+  }
+  .lq-dialog-centered .lq-dialog-title {
+    font-size: calc(24px * var(--lq-display-scale));
+  }
+  .lq-dialog-centered .lq-dialog-content {
+    padding: 18px 22px 22px;
+  }
+  .lq-dialog-centered .lq-dialog-foot {
+    padding: 10px 22px 14px;
   }
 }
 </style>
