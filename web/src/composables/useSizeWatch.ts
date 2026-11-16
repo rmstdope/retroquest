@@ -11,12 +11,14 @@ import { getCurrentScope, onScopeDispose } from 'vue'
  * rq-zaqg); here the rule is held once. By default the work runs on the next
  * animation frame, once a frame however many reports arrive. An observer that
  * must act inside the report says so with `inReport`, and even then a target
- * added while the report is delivered is only watched from the next frame.
+ * added by that watch's own work while the report is delivered is only
+ * watched from the next frame. (Another watch's work, or a Vue watcher, that
+ * adds a target is not held: nothing does that today.)
  */
 
 /** What a component does with a size watch. */
 export interface SizeWatch {
-  /** Watch `el`; from the next frame when a report is being delivered. */
+  /** Watch `el`; from the next frame when called from this watch's own `inReport` work. */
   observe(el: Element): void
   /** Stop watching `el`. */
   unobserve(el: Element): void

@@ -104,7 +104,7 @@ const obstacles = ref<Rect[]>([])
 const covers = ref<Rect[]>([])
 /** The panels (plate, corner buttons, the story's Hide/Show tab and the Show what's here button) the marks keep clear of. */
 const panels = ref<Rect[]>([])
-/** The panel elements the observer is watching, so a plate that grows or folds moves the marks at once. */
+/** The panel elements the size watch has been given (it watches a new one from the next frame), so a plate that grows or folds moves the marks at once. */
 let watched: HTMLElement[] = []
 /**
  * Sizes are measured inside the report, but a panel found now is only watched
