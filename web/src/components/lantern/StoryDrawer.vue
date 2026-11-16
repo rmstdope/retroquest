@@ -133,7 +133,9 @@ function onKeydown(event: KeyboardEvent): void {
 .lq-story-drawer {
   position: absolute;
   /* Under the buttons, so the lit one stays in sight and can be pressed again;
-     above the action row, so every action stays in reach. */
+     above the action row, so every action stays in reach. It lies beside the
+     stage, over everything drawn on the picture (the belt, the words, Hide
+     and Show, the bar, the room's title): nothing is drawn over its lines. */
   top: 76px;
   right: 0;
   bottom: var(--lq-actions-h, 0px);
@@ -208,7 +210,7 @@ function onKeydown(event: KeyboardEvent): void {
   position: absolute;
   inset: -4px 0;
 }
-/* On a phone it covers the whole stage, edge to edge, bar included. */
+/* On a phone it covers the whole stage, edge to edge, plate, menu button and bar included. */
 .lq-phone-drawer {
   top: 0;
   bottom: 0;

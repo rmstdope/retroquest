@@ -2394,6 +2394,7 @@ watch(
           :style="{
             ...(phoneStage ? { '--lq-plate-h': `${plateHeight}px` } : {}),
             '--lq-belt-h': `${beltHeight}px`,
+            '--lq-actions-h': `${actionsHeight}px`,
           }"
           @click.capture="onPanelPress"
         >
@@ -2403,7 +2404,6 @@ watch(
             ref="stageEl"
             class="lq-stage"
             :style="{
-              '--lq-actions-h': `${actionsHeight}px`,
               '--lq-stage-buttons-w': `${stageButtonsWidth}px`,
               '--lq-belt-bottom': `${beltBottom}px`,
               '--lq-belt-left': `${beltLeft}px`,
@@ -2493,20 +2493,21 @@ watch(
               class="lq-hand-strip"
               @cancel="cancelHand"
             />
-            <JournalDrawer
-              v-if="drawerTab === 'quests'"
-              :key="`drawer-${stageKey}`"
-              @close="closeDrawer"
-            />
-            <StoryDrawer
-              v-else-if="drawerTab === 'story'"
-              :key="`story-${stageKey}`"
-              :phone="phoneStage"
-              @click="onNameClick"
-              @keydown="onNameKeydown"
-              @close="closeDrawer"
-            />
           </div>
+          <!-- The drawers lie beside the stage, not in it: the stage keeps its layers to itself, so a drawer inside it lay under the belt and under everything drawn over the stage (the words, Hide and Show, the bar, the room's title). -->
+          <JournalDrawer
+            v-if="staged && drawerTab === 'quests'"
+            :key="`drawer-${stageKey}`"
+            @close="closeDrawer"
+          />
+          <StoryDrawer
+            v-else-if="staged && drawerTab === 'story'"
+            :key="`story-${stageKey}`"
+            :phone="phoneStage"
+            @click="onNameClick"
+            @keydown="onNameKeydown"
+            @close="closeDrawer"
+          />
           <!-- The caption of the picture pointed at: over the words, above the belt and the Hide or Show button. -->
           <div
             v-if="beltCaption"
@@ -2884,8 +2885,9 @@ watch(
   padding: 16px;
 }
 /* The stage: the room's picture fills the play area, the story band and the
-   actions sit along its bottom. The stage itself is behind them (it makes no
-   stacking context of its own, so the drawer in it rises above them). */
+   actions sit along its bottom. The stage keeps its layers to itself (its own
+   stacking context, below), so it lies behind them all; the drawers lie
+   beside it, over them. */
 .lq-staged {
   position: relative;
   max-width: none;
