@@ -9,8 +9,8 @@ import { test, expect, type Page } from './fixtures'
 const RING_REACH = 6
 
 /** Open Settings on a short window, so the list has to scroll. */
-async function openSettings(page: Page): Promise<void> {
-  await page.setViewportSize({ width: 900, height: 480 })
+async function openSettings(page: Page, width = 900): Promise<void> {
+  await page.setViewportSize({ width, height: 480 })
   await page.goto('/')
   await page.getByRole('button', { name: 'Start', exact: true }).click()
   await page.locator('.lq-chapter-button').click()
@@ -21,9 +21,12 @@ async function openSettings(page: Page): Promise<void> {
 /** How far (px) the focused row's ring sticks out past the list's edges. */
 async function clipped(page: Page): Promise<number> {
   return page.evaluate((reach: number) => {
-    const row = document.activeElement?.closest('.lq-stop') ?? null
     const list = document.querySelector('.lq-dialog-content')
-    if (!row || !list) return Number.POSITIVE_INFINITY
+    const active = document.activeElement
+    if (!list || !active) return Number.POSITIVE_INFINITY
+    // Focus outside the scrolling list (the close button) has nothing to clip.
+    if (!list.contains(active)) return 0
+    const row = active.closest('.lq-stop') ?? active
     const r = row.getBoundingClientRect()
     const l = list.getBoundingClientRect()
     return Math.max(l.top - (r.top - reach), r.bottom + reach - l.bottom, 0)
@@ -46,6 +49,16 @@ test('Settings: the ring is whole on every row walked down with the arrow keys',
   await openSettings(page)
   for (let i = 0; i < 40; i++) {
     await page.keyboard.press('ArrowDown')
+    expect(await clipped(page)).toBe(0)
+  }
+})
+
+test('Settings: the ring is whole on every stop Tab reaches, on a phone too', async ({
+  page,
+}): Promise<void> => {
+  await openSettings(page, 390)
+  for (let i = 0; i < 25; i++) {
+    await page.keyboard.press('Tab')
     expect(await clipped(page)).toBe(0)
   }
 })
