@@ -1558,8 +1558,8 @@ watch(
 
 /**
  * Bring the newest line said in the one column whole into view, pushing the
- * older lines up (rq-r7ct): never so far that its own top leaves, and never
- * back. So the lines fading away above it never move what still shows. A
+ * older lines up to the foot of the story (rq-r7ct): never so far that its
+ * own top leaves, and never back. So the lines fading away above it never move what still shows. A
  * story being read is moved by its follow instead, and nothing moves while
  * the story is out of sight (another section is open) or no line is said.
  */
@@ -1580,14 +1580,16 @@ async function showNewestLine(): Promise<void> {
     `[data-turn="${said.turnId}"] [data-key="line-${said.unit}-${said.firstWord}"]`,
   )
   if (!newest) return
-  const style = getComputedStyle(story)
+  // To the foot, the room kept below the line too: a pane short of its foot
+  // would close that gap as the rows above it go, moving what still shows.
   const pane = story.getBoundingClientRect()
   const line = newest.getBoundingClientRect()
-  const below =
-    line.bottom - (pane.bottom - (parseFloat(style.paddingBottom) || 0))
-  const room = line.top - (pane.top + (parseFloat(style.paddingTop) || 0))
-  const by = Math.min(below, room)
-  if (by > 0) moveStory(story.scrollTop + by, false)
+  const paddingTop = parseFloat(getComputedStyle(story).paddingTop) || 0
+  const top = Math.min(
+    story.scrollHeight - story.clientHeight,
+    story.scrollTop + line.top - (pane.top + paddingTop),
+  )
+  if (top > story.scrollTop) moveStory(top, false)
   updateMoreBelow()
 }
 /** The key of the newest line last brought into view (`showNewestLine`). */

@@ -269,7 +269,7 @@ describe('LanternLayout: a new line said in the one column', () => {
     document.querySelector('section[aria-label="Story"]') as HTMLElement
 
   /** Lay the pane out, `PANE` tall, with the newest spoken line at `LINE_TOP` in its content, `height` tall. */
-  function layOut(height: number): void {
+  function layOut(height: number, below = 0): void {
     const el = pane()
     let top = 0
     Object.defineProperty(el, 'clientHeight', {
@@ -278,7 +278,7 @@ describe('LanternLayout: a new line said in the one column', () => {
     })
     Object.defineProperty(el, 'scrollHeight', {
       configurable: true,
-      value: LINE_TOP + height,
+      value: LINE_TOP + height + below,
     })
     Object.defineProperty(el, 'scrollTop', {
       configurable: true,
@@ -306,7 +306,11 @@ describe('LanternLayout: a new line said in the one column', () => {
   }
 
   /** Grandmother says a line `height` tall in a new turn, shown at once unless `reveal` is false. */
-  async function sayLine(height: number, reveal = true): Promise<void> {
+  async function sayLine(
+    height: number,
+    reveal = true,
+    below = 0,
+  ): Promise<void> {
     const game = useGameStore()
     const said: Turn = {
       id: 9_999,
@@ -319,7 +323,7 @@ describe('LanternLayout: a new line said in the one column', () => {
       arrival: null,
       addressed: 'Grandmother',
     }
-    layOut(height)
+    layOut(height, below)
     game.turns = [...game.turns, said]
     await flushPromises()
     if (reveal) useStageSpeechStore().revealAll()
@@ -331,6 +335,11 @@ describe('LanternLayout: a new line said in the one column', () => {
     await sayLine(200)
     expect(w.findAll('[data-testid="speech-line"]').length).toBeGreaterThan(0)
     expect(pane().scrollTop).toBe(LINE_TOP + 200 - PANE)
+  })
+
+  it('shows the room kept below the newest line too, so the column rests at its foot', async () => {
+    await sayLine(200, true, 20)
+    expect(pane().scrollTop).toBe(LINE_TOP + 200 + 20 - PANE)
   })
 
   it('stops a line taller than the pane at its top, so it is read from its start', async () => {
