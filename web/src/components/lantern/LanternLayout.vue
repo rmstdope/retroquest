@@ -1561,13 +1561,21 @@ watch(
  * older lines up (rq-r7ct): never so far that its own top leaves, and never
  * back. So the lines fading away above it never move what still shows. A
  * story being read is moved by its follow instead, and nothing moves while
- * the story is out of sight or no line is said.
+ * the story is out of sight (another section is open) or no line is said.
  */
 async function showNewestLine(): Promise<void> {
   await nextTick()
   const story = storyEl.value
   const said = speech.visible.at(-1)
-  if (!column.value || storyHeld.value || !story || !said) return
+  if (
+    !column.value ||
+    storyHeld.value ||
+    section.value !== 'story' ||
+    !story ||
+    !said
+  )
+    return
+  lineShown = said.key
   const newest = story.querySelector<HTMLElement>(
     `[data-turn="${said.turnId}"] [data-key="line-${said.unit}-${said.firstWord}"]`,
   )
@@ -1582,12 +1590,16 @@ async function showNewestLine(): Promise<void> {
   if (by > 0) moveStory(story.scrollTop + by, false)
   updateMoreBelow()
 }
+/** The key of the newest line last brought into view (`showNewestLine`). */
+let lineShown: number | undefined
 // Each new line (also the rest of a talk shown at once by a press or a skip,
-// which so ends at its last line), and the story shown again after another
-// section, brings the newest line into view.
+// which so ends at its last line) brings the newest line into view, and so
+// does the story shown again after another section, if a line was said
+// meanwhile: a player who scrolled back to read keeps their place otherwise.
 watch(() => speech.visible.at(-1)?.key, showNewestLine, { flush: 'post' })
 watch(section, (now) => {
-  if (now === 'story') void showNewestLine()
+  if (now === 'story' && speech.visible.at(-1)?.key !== lineShown)
+    void showNewestLine()
 })
 
 // The quest chime and fanfare (sound settings apply).

@@ -305,13 +305,13 @@ describe('LanternLayout: a new line said in the one column', () => {
     )
   }
 
-  /** Grandmother says a line `height` tall in a new turn, shown at once. */
-  async function sayLine(height: number): Promise<void> {
+  /** Grandmother says a line `height` tall in a new turn, shown at once unless `reveal` is false. */
+  async function sayLine(height: number, reveal = true): Promise<void> {
     const game = useGameStore()
     const said: Turn = {
       id: 9_999,
       command: 'talk to grandmother',
-      text: '[character_name]Grandmother[/character_name]\n[dialogue]There you are.[/dialogue]',
+      text: '[character_name]Grandmother[/character_name]\n[dialogue]There you are.\n\nSit down.[/dialogue]',
       room: game.roomName,
       description: null,
       gained: [],
@@ -322,7 +322,7 @@ describe('LanternLayout: a new line said in the one column', () => {
     layOut(height)
     game.turns = [...game.turns, said]
     await flushPromises()
-    useStageSpeechStore().revealAll()
+    if (reveal) useStageSpeechStore().revealAll()
     await flushPromises()
   }
 
@@ -338,15 +338,26 @@ describe('LanternLayout: a new line said in the one column', () => {
     expect(pane().scrollTop).toBe(LINE_TOP)
   })
 
-  it('brings the newest line into view when the story is shown again after another section', async () => {
-    await sayLine(200)
+  it('brings a line said while another section was open into view when the story is shown again', async () => {
+    await sayLine(200, false)
     pane().scrollTop = 0
     await w.findAll('.lq-nav-bottom .lq-nav-btn')[1]!.trigger('click')
+    useStageSpeechStore().revealAll()
     await flushPromises()
     expect(pane().scrollTop).toBe(0)
     await w.findAll('.lq-nav-bottom .lq-nav-btn')[0]!.trigger('click')
     await flushPromises()
     expect(pane().scrollTop).toBe(LINE_TOP + 200 - PANE)
+  })
+
+  it('keeps the place of a player who scrolled back to read, when the story is shown again', async () => {
+    await sayLine(200)
+    pane().scrollTop = 0
+    await w.findAll('.lq-nav-bottom .lq-nav-btn')[1]!.trigger('click')
+    await flushPromises()
+    await w.findAll('.lq-nav-bottom .lq-nav-btn')[0]!.trigger('click')
+    await flushPromises()
+    expect(pane().scrollTop).toBe(0)
   })
 
   it('leaves the story where it is when the conversation is cleared', async () => {
