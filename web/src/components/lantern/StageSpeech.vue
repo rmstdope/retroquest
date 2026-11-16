@@ -292,7 +292,7 @@ function hurry(): void {
   align-self: flex-end;
   justify-content: flex-end;
 }
-.lq-line-sight {
+.lq-line-left {
   align-self: flex-start;
 }
 .lq-gap {
@@ -326,7 +326,7 @@ function hurry(): void {
 .lq-line-right .lq-line-name {
   right: 0;
 }
-.lq-line-sight .lq-line-name {
+.lq-line-left .lq-line-name {
   left: 0;
 }
 .lq-line {
@@ -344,7 +344,7 @@ function hurry(): void {
   overflow-wrap: anywhere;
   animation: lq-line-in calc(0.25s * var(--lq-motion)) ease-out both;
 }
-.lq-line-sight .lq-line {
+.lq-line-left .lq-line {
   border-color: var(--lq-accent);
   background: color-mix(in srgb, var(--lq-accent) 10%, var(--lq-surface));
 }
@@ -368,7 +368,7 @@ function hurry(): void {
   font-size: calc(12.5px * var(--lq-text-scale));
   color: var(--lq-character);
 }
-.lq-line-sight .lq-line-name {
+.lq-line-left .lq-line-name {
   color: var(--lq-accent-text);
 }
 /* The line being read: the read-along ring. */
