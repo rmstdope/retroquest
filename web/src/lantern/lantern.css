@@ -113,6 +113,7 @@
   --lq-accent-text: #ffb836;
   --lq-accent-soft: #36270a;
   --lq-accent-line: #a8740f;
+  --lq-ring: #f4ecd2;
   --lq-failure: #e8896b;
   --lq-failure-soft: #2a1814;
   --lq-success: #8fcf7a;
@@ -174,6 +175,7 @@
     --lq-accent-text: #7a4300;
     --lq-accent-soft: #ffe0a0;
     --lq-accent-line: #eba526;
+    --lq-ring: #7a4300;
     --lq-failure: #a63d1f;
     --lq-failure-soft: #fbe9e2;
     --lq-success: #2e6e27;
@@ -211,6 +213,7 @@
   --lq-accent-text: #7a4300;
   --lq-accent-soft: #ffe0a0;
   --lq-accent-line: #eba526;
+  --lq-ring: #7a4300;
   --lq-failure: #a63d1f;
   --lq-failure-soft: #fbe9e2;
   --lq-success: #2e6e27;

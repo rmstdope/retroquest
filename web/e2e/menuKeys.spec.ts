@@ -80,6 +80,20 @@ test('Help scrolls with the keys; Quit moves between its buttons', async ({
   await page.getByRole('button', { name: 'Help', exact: true }).click()
   const body = page.locator('.lq-dialog-content')
   await page.setViewportSize({ width: 1280, height: 300 })
+  // The dialog takes focus a tick after it opens; keys pressed before that
+  // reach the page behind it and scroll nothing.
+  await expect
+    .poll(() =>
+      page.evaluate(
+        () => !!document.activeElement?.closest('.lq-dialog-panel'),
+      ),
+    )
+    .toBe(true)
+  // End scrolls to the height the body has when it is pressed, so wait for the
+  // short window to lay the text out as taller than its box first.
+  await expect
+    .poll(() => body.evaluate((el) => el.scrollHeight > el.clientHeight))
+    .toBe(true)
   await page.keyboard.press('End')
   await expect
     .poll(() =>

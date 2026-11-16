@@ -137,7 +137,7 @@ function saveAndQuit(): void {
   cursor: pointer;
 }
 .lq-quit-buttons > button:focus {
-  outline: 3px solid #f4ecd2;
+  outline: 3px solid var(--lq-ring);
   outline-offset: 3px;
 }
 .lq-quit-primary {

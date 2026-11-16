@@ -469,11 +469,11 @@ function cardLabel(card: SaveSlot): string {
 .lq-slot-btn:focus {
   outline: none;
 }
-/* The ring: the same cream outline as the title page, round the whole slot. */
+/* The ring: the theme's ring colour (cream on dark, deep brown on light), round the whole slot. */
 .lq-slot:has(.lq-slot-btn:focus),
 .lq-ask-cancel:focus,
 .lq-ask-ok:focus {
-  outline: 3px solid #f4ecd2;
+  outline: 3px solid var(--lq-ring);
   outline-offset: 3px;
 }
 .lq-slot-btn:disabled {

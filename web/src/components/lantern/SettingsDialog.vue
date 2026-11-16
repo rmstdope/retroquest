@@ -23,7 +23,7 @@ import type { KeyHint } from './KeyLine.vue'
  * `musicInfo` is the credit of the music actually playing (a take chosen in
  * Content Studio has its own), as the layout's music player holds it.
  *
- * It works from the keyboard. Each row is a stop and the cream ring goes round
+ * It works from the keyboard. Each row is a stop and the selection ring goes round
  * the whole row, starting on Theme: ↑ ↓ move between the rows (round the
  * ends, scrolling to keep the row in view; the Music, Sound effects and
  * Narration headings are not stops, their Volume rows are); ← → change the
@@ -423,14 +423,14 @@ function volume(event: Event): number {
 .lq-stop:focus {
   outline: none;
 }
-/* The ring: the same cream outline as the title page, round the whole row. */
+/* The ring: the theme's ring colour (cream on dark, deep brown on light), round the whole row. */
 .lq-stop:focus-within {
-  outline: 3px solid #f4ecd2;
+  outline: 3px solid var(--lq-ring);
   outline-offset: 3px;
   border-radius: 8px;
 }
 .lq-stop :focus-visible {
-  outline: 2px solid #f4ecd2;
+  outline: 2px solid var(--lq-ring);
   outline-offset: 2px;
 }
 .lq-group + .lq-group {

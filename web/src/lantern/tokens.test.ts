@@ -78,6 +78,23 @@ describe('Lantern palettes', () => {
     },
   )
 
+  it('the selection ring stands out from every panel it sits on (3:1)', () => {
+    for (const theme of ['dark', 'light'] as const) {
+      const p = LANTERN_PALETTES[theme]
+      for (const bg of ['bg', 'surface', 'raised'] as const) {
+        expect(
+          contrastRatio(p.ring, p[bg]),
+          `${theme} ring on ${bg}`,
+        ).toBeGreaterThanOrEqual(3)
+      }
+    }
+  })
+
+  it('the ring is cream on dark and deep brown on light', () => {
+    expect(LANTERN_PALETTES.dark.ring).toBe('#f4ecd2')
+    expect(LANTERN_PALETTES.light.ring).toBe('#7a4300')
+  })
+
   it('dark and light define the same tokens', () => {
     expect(Object.keys(LANTERN_PALETTES.light).sort()).toEqual(
       Object.keys(LANTERN_PALETTES.dark).sort(),
@@ -159,5 +176,27 @@ describe('lantern.css', () => {
         )
       }
     }
+  })
+})
+
+describe('the menu screens', () => {
+  it.each(['SettingsDialog', 'SaveLoadDialog', 'QuitDialog'])(
+    '%s draws its selection ring with the theme token, never a fixed cream',
+    (name) => {
+      const source = readFileSync(
+        new URL(`../components/lantern/${name}.vue`, import.meta.url),
+        'utf8',
+      )
+      expect(source).toContain('var(--lq-ring)')
+      expect(source.toLowerCase()).not.toContain('#f4ecd2')
+    },
+  )
+
+  it('the title page keeps its cream ring in both themes', () => {
+    const source = readFileSync(
+      new URL('../components/lantern/TitlePage.vue', import.meta.url),
+      'utf8',
+    )
+    expect(source).toContain('#f4ecd2')
   })
 })
