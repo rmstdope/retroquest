@@ -281,9 +281,15 @@ function hurry(): void {
 .lq-run-first {
   margin-top: 16px;
 }
-/* The rows rest at the foot of the thread while they fit. */
-.lq-ln:first-child {
+/* The rows rest at the foot of the thread while they fit. The auto margin is
+   on a spacer that is always there, not on the first row: a row that has faded
+   away is display: none and its margin would stop counting, so the rows left
+   would jump up. The negative margin takes back the gap the spacer adds. */
+.lq-thread::before {
+  content: '';
+  flex: none;
   margin-top: auto;
+  margin-bottom: -8px;
 }
 .lq-col {
   position: relative;

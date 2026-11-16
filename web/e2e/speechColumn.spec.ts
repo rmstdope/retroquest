@@ -216,3 +216,33 @@ test('on a phone the lines rest at the foot of the column and a two-line name cl
   expect(clear.belowRowBefore).toBe(true)
   expect(clear.inside).toBe(true)
 })
+
+test('fading the oldest line leaves the lines still showing where they are', async ({
+  page,
+}): Promise<void> => {
+  await page.setViewportSize({ width: 1280, height: 1400 })
+  await page.goto('/')
+  await page.getByRole('button', { name: 'Start', exact: true }).click()
+  await page.locator('.lq-chapter-button').click()
+  await enter(page, 'talk to voice')
+  await enter(page, 'talk to grandmother')
+  await expect(page.getByTestId('speech-line')).toHaveCount(4, {
+    timeout: 30_000,
+  })
+
+  // One synchronous step, so no real fade can land in between: the oldest
+  // row is marked gone as `useFadeOnceRead` does, and the rest are measured.
+  const moved = await page.evaluate(() => {
+    const rows = Array.from(
+      document.querySelectorAll<HTMLElement>('.lq-thread .lq-ln'),
+    ).filter((row) => row.offsetParent !== null)
+    const tops = (): number[] =>
+      rows.slice(1).map((row) => row.getBoundingClientRect().top)
+    const before = tops()
+    rows[0]!.dataset.fade = 'gone'
+    const after = tops()
+    return after.map((top, i) => Math.abs(top - before[i]!))
+  })
+  expect(moved.length).toBeGreaterThan(0)
+  for (const distance of moved) expect(distance).toBeLessThan(0.5)
+})
