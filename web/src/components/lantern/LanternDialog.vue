@@ -152,9 +152,7 @@ defineExpose({ focusFirst: trap.focusFirst })
       <footer v-if="$slots.footer" class="lq-dialog-foot">
         <slot name="footer" />
       </footer>
-      <div v-if="keyLine.length" class="lq-dialog-keys">
-        <KeyLine :hints="keyLine" />
-      </div>
+      <KeyLine v-if="keyLine.length" class="lq-dialog-keys" :hints="keyLine" />
     </section>
   </div>
 </template>

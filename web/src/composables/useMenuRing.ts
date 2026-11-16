@@ -1,5 +1,8 @@
 import { useUiSounds } from './useUiSounds'
 
+/** How long (in milliseconds) a choice keeps the ting quiet. */
+const HUSH_MS = 250
+
 /**
  * The ring of a keyboard-driven screen (Save, Load, Settings, Quit): the
  * cream outline is focus on a "stop", an element that matches `stopSelector`.
@@ -18,6 +21,8 @@ export function useMenuRing(stopSelector: string): {
   moved(): void
 } {
   const sounds = useUiSounds()
+  /** Until when (a time) the ting stays quiet, after a choice. */
+  let hushedUntil = 0
 
   /** The stop an element is, or is inside. */
   function stopOf(node: EventTarget | null): Element | null {
@@ -36,15 +41,21 @@ export function useMenuRing(stopSelector: string): {
       const from = event.relatedTarget
       const to = stopOf(event.target)
       if (!to || !(root instanceof Node) || !(from instanceof Node)) return
+      if (Date.now() < hushedUntil) return
       if (root.contains(from) && stopOf(from) !== to) sounds.playMove()
     },
     ringTo,
     onHover(event: MouseEvent): void {
       const stop = event.currentTarget
       if (!(stop instanceof HTMLElement)) return
-      if (!stop.contains(document.activeElement)) ringTo(stop)
+      if (event.movementX === 0 && event.movementY === 0) return
+      if (!stop.contains(document.activeElement))
+        stop.focus({ preventScroll: true })
     },
-    choose: (): void => sounds.playChoose(),
+    choose: (): void => {
+      hushedUntil = Date.now() + HUSH_MS
+      sounds.playChoose()
+    },
     moved: (): void => sounds.playMove(),
   }
 }

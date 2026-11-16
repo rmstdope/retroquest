@@ -221,7 +221,11 @@ describe('LanternDialog', () => {
     press('Home')
     expect(to).toHaveBeenLastCalledWith({ top: 0 })
     press('End')
-    expect(to).toHaveBeenCalledTimes(2)
+    expect(to).toHaveBeenLastCalledWith({ top: body.scrollHeight })
+    press('PageDown')
+    expect(by).toHaveBeenLastCalledWith({ top: body.clientHeight * 0.9 })
+    press('PageUp')
+    expect(by).toHaveBeenLastCalledWith({ top: -body.clientHeight * 0.9 })
     expect(press('a').defaultPrevented).toBe(false)
   })
 

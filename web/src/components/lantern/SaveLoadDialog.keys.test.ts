@@ -188,7 +188,7 @@ describe('SaveLoadDialog from the keyboard', () => {
 
   it('a pointer entering a slot takes the ring', async () => {
     const w = await open('save')
-    await w.findAll('.lq-slot-btn')[3].trigger('mouseenter')
+    await w.findAll('.lq-slot-btn')[3].trigger('mouseenter', { movementX: 4 })
     expect(ringed()).toBe('4')
   })
 
@@ -219,6 +219,26 @@ describe('SaveLoadDialog from the keyboard', () => {
     await flushPromises()
     expect(ringed()).toBe('3')
     expect(w.find('.lq-ask').exists()).toBe(false)
+  })
+
+  it("pointing at the question's other button moves the ring onto it", async () => {
+    slots = slots.map((_, i) => made(i + 1, 10 + i))
+    const w = await open('save')
+    await w.findAll('.lq-slot-btn')[2].trigger('click')
+    await flushPromises()
+    await w.get('.lq-ask-ok').trigger('mouseenter', { movementX: 4 })
+    expect(document.activeElement?.textContent?.trim()).toBe('Replace')
+    await w.findAll('.lq-slot-btn')[0].trigger('mouseenter', { movementX: 4 })
+    expect(document.activeElement?.textContent?.trim()).toBe('Replace')
+  })
+
+  it('a choice that moves the ring on makes one sound, the latch', async () => {
+    slots = slots.map((_, i) => made(i + 1, 10 + i))
+    const w = await open('save')
+    sounds.move.mockClear()
+    await w.findAll('.lq-slot-btn')[2].trigger('click')
+    await flushPromises()
+    expect(sounds.move).not.toHaveBeenCalled()
   })
 
   it('with nothing loadable there is no ring, no sound, and the key line says only Esc back', async () => {

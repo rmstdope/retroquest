@@ -138,7 +138,7 @@ function onKeydown(event: KeyboardEvent): void {
   if (to !== at) ring.ringTo(buttons[to])
 }
 
-/** A pointer entering a slot takes the ring (not while a question is open). */
+/** A pointer entering a slot takes the ring (not while a question is open: only its two buttons take it then). */
 function onHover(event: MouseEvent): void {
   if (asking.value === null) ring.onHover(event)
 }
@@ -382,7 +382,7 @@ function cardLabel(card: SaveSlot): string {
                 <button
                   type="button"
                   class="lq-ask-cancel"
-                  @mouseenter="onHover"
+                  @mouseenter="ring.onHover"
                   @click="(ring.choose(), cancel(card))"
                 >
                   Cancel
@@ -390,7 +390,7 @@ function cardLabel(card: SaveSlot): string {
                 <button
                   type="button"
                   class="lq-ask-ok"
-                  @mouseenter="onHover"
+                  @mouseenter="ring.onHover"
                   @click="(ring.choose(), confirm(card))"
                 >
                   {{ saving ? 'Replace' : 'Load' }}

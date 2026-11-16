@@ -55,6 +55,8 @@ test('Settings: ↑ ↓ move between rows and ← → change them', async ({
       () => (document.activeElement as HTMLElement | null)?.dataset.stop,
     )
   expect(await row()).toBe('theme')
+  // A pointer resting over the list never takes the ring when it scrolls.
+  await page.mouse.move(640, 400)
   await page.keyboard.press('ArrowRight')
   await expect(
     page.getByRole('button', { name: 'Light', exact: true }),
@@ -77,9 +79,17 @@ test('Help scrolls with the keys; Quit moves between its buttons', async ({
   await openMenu(page)
   await page.getByRole('button', { name: 'Help', exact: true }).click()
   const body = page.locator('.lq-dialog-content')
+  await page.setViewportSize({ width: 1280, height: 300 })
   await page.keyboard.press('End')
+  await expect
+    .poll(() =>
+      body.evaluate(
+        (el) => el.scrollTop + el.clientHeight >= el.scrollHeight - 1,
+      ),
+    )
+    .toBe(true)
   await page.keyboard.press('Home')
-  expect(await body.evaluate((el) => el.scrollTop)).toBe(0)
+  await expect.poll(() => body.evaluate((el) => el.scrollTop)).toBe(0)
   await page.keyboard.press('Escape')
   await page.getByRole('button', { name: 'Quit', exact: true }).click()
   await expect(page.getByRole('button', { name: 'Cancel' })).toBeFocused()

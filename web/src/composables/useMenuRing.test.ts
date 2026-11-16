@@ -63,11 +63,56 @@ describe('useMenuRing', () => {
     const root = dialog()
     const a = root.querySelector<HTMLElement>('#a')!
     const b = root.querySelector<HTMLElement>('#b')!
-    ring.onHover({ currentTarget: b } as unknown as MouseEvent)
+    ring.onHover({
+      currentTarget: b,
+      movementX: 3,
+      movementY: 0,
+    } as unknown as MouseEvent)
     expect(document.activeElement).toBe(b)
     root.querySelector<HTMLElement>('#a1')!.focus()
-    ring.onHover({ currentTarget: a } as unknown as MouseEvent)
+    ring.onHover({
+      currentTarget: a,
+      movementX: 3,
+      movementY: 0,
+    } as unknown as MouseEvent)
     expect(document.activeElement?.id).toBe('a1')
+  })
+
+  it('a pointer that only rests while the list scrolls does not take the ring', () => {
+    const ring = useMenuRing('.stop')
+    const root = dialog()
+    ring.onHover({
+      currentTarget: root.querySelector('#b'),
+      movementX: 0,
+      movementY: 0,
+    } as unknown as MouseEvent)
+    expect(document.activeElement?.id).not.toBe('b')
+  })
+
+  it('hovering does not scroll the list', () => {
+    const ring = useMenuRing('.stop')
+    const root = dialog()
+    const b = root.querySelector<HTMLElement>('#b')!
+    b.scrollIntoView = vi.fn()
+    ring.onHover({
+      currentTarget: b,
+      movementX: 2,
+      movementY: 2,
+    } as unknown as MouseEvent)
+    expect(b.scrollIntoView).not.toHaveBeenCalled()
+  })
+
+  it('a choice hushes the ting that its own focus move would make', () => {
+    const ring = useMenuRing('.stop')
+    const root = dialog()
+    ring.choose()
+    focusIn(root, '#b', root.querySelector('#a'), ring)
+    expect(move).not.toHaveBeenCalled()
+    vi.useFakeTimers()
+    vi.setSystemTime(Date.now() + 1000)
+    focusIn(root, '#a', root.querySelector('#b'), ring)
+    vi.useRealTimers()
+    expect(move).toHaveBeenCalledTimes(1)
   })
 
   it('plays the latch for a choice', () => {
