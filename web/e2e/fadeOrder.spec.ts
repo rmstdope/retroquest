@@ -43,6 +43,29 @@ function watchFades(
           const first = new Map<HTMLElement, number>()
           let furthest = 0
           const started = performance.now()
+          let previous = ''
+          const snap = (): string => {
+            const st = document.querySelector<HTMLElement>(
+              '.lq-cards .lq-story',
+            )
+            const r = (e: Element | null | undefined): string => {
+              const b = e?.getBoundingClientRect()
+              return b ? `${Math.round(b.top)}-${Math.round(b.bottom)}` : '?'
+            }
+            return (
+              `story=${r(st)} st=${st?.scrollTop} sh=${st?.scrollHeight} wrap=${r(st?.parentElement)} pb=${st ? getComputedStyle(st).paddingBottom : ''} | ` +
+              Array.from(
+                st?.querySelectorAll<HTMLElement>(
+                  '.lq-column-turn, .lq-column-turn > *',
+                ) ?? [],
+              )
+                .map(
+                  (e) =>
+                    `${e.className.split(' ').slice(0, 3).join('.')}:${e.dataset.fade ?? ''}:${r(e)}:${r(e.querySelector('.lq-line'))}`,
+                )
+                .join(' ')
+            )
+          }
           const look = (): void => {
             const showing = lines().filter(
               (el) => el.dataset.fade && el.dataset.fade !== 'gone',
@@ -55,21 +78,14 @@ function watchFades(
               const was = first.get(el)
               if (was === undefined) first.set(el, top)
               else {
-                if (Math.abs(top - was) > Math.max(1, furthest)) {
-                  const st = document.querySelector('.lq-cards .lq-story')
+                if (Math.abs(top - was) > Math.max(1, furthest))
                   console.log(
-                    `MOVE ${Math.round(performance.now() - started)} ${el.className} ${el.dataset.fade} ${Math.round(was)}->${Math.round(top)} st=${st?.scrollTop} sh=${st?.scrollHeight} ch=${st?.clientHeight} | ` +
-                      lines()
-                        .map(
-                          (l) =>
-                            `${l.className.split(' ')[0]}:${l.dataset.fade}:${Math.round(l.getBoundingClientRect().top)}-${Math.round(l.getBoundingClientRect().bottom)}`,
-                        )
-                        .join(' '),
+                    `MOVE ${Math.round(performance.now() - started)} ${el.className} ${Math.round(was)}->${Math.round(top)}\nBEFORE ${previous}\nAFTER  ${snap()}`,
                   )
-                }
                 furthest = Math.max(furthest, Math.abs(top - was))
               }
             }
+            previous = snap()
             if (showing.length === 0 || performance.now() - started > limit)
               resolve({
                 watched: first.size,
