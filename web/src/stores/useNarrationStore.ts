@@ -478,9 +478,15 @@ export const useNarrationStore = defineStore('narration', () => {
     // start, with a longer allowance for a play that never settles.
     guard(LOAD_MARGIN_MS)
     watchWord()
-    element.play().then(() => {
-      if (mine === generation && !resumeFrom) guard(0)
-    }, end)
+    element.play().then(
+      () => {
+        if (mine === generation && !resumeFrom) guard(0)
+      },
+      // A pause while the clip still loads rejects this play: not a failure.
+      () => {
+        if (!resumeFrom) end()
+      },
+    )
     // On hold the voice is paused where it is and plays on from there.
     holdVoice = () => {
       timers.forEach(clearTimeout)
@@ -507,7 +513,7 @@ export const useNarrationStore = defineStore('narration', () => {
     if (resumeFrom || !active.value) return
     if (holdVoice) holdVoice()
     else {
-      // Between parts: the pending step waits until `resume`.
+      // Between parts: the pending step waits until `resume` (the rest of a unit's own breath is not kept).
       timers.forEach(clearTimeout)
       timers = []
       resumeFrom = () => step()

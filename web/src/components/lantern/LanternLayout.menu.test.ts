@@ -101,6 +101,35 @@ describe('LanternLayout: the Escape menu', () => {
     expect(heading()).toBe('Menu')
   })
 
+  it('first clears what is typed in the command box: the menu needs another press', async () => {
+    useGameStore().acceptInput = true
+    await flushPromises()
+    w.get('[data-type]').element.dispatchEvent(
+      new MouseEvent('click', { bubbles: true }),
+    )
+    await flushPromises()
+    const box = document.querySelector<HTMLInputElement>(
+      'input[aria-label="Command"]',
+    )!
+    box.focus()
+    box.value = 'xyz'
+    box.dispatchEvent(new Event('input', { bubbles: true }))
+    await flushPromises()
+    await press('Escape', box)
+    await press('Escape', box)
+    expect(box.value).toBe('')
+    expect(heading()).toBeUndefined()
+  })
+
+  it('first closes the small map: the menu needs another press', async () => {
+    await w.get('[data-button="map"]').trigger('click')
+    await flushPromises()
+    expect(w.find('.lq-map-pop').exists()).toBe(true)
+    await press('Escape')
+    expect(w.find('.lq-map-pop').exists()).toBe(false)
+    expect(heading()).toBeUndefined()
+  })
+
   it('does not open on the title page, a chapter page, a game pop-up or the end screen', async () => {
     const game = useGameStore()
     game.showTitle = true

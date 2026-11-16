@@ -365,8 +365,8 @@ function putAway(event: KeyboardEvent): void {
 /**
  * Escape in the command box takes one step back per press: close the word list
  * (the text stays), then clear the text, then leave the box for the verbs. A
- * box that takes no input is left alone. Every step but the list's own is
- * consumed here so the layout does not also open the menu.
+ * box that takes no input is left alone. Every step is consumed here so the
+ * layout does not also open the menu.
  */
 function onTypedEscape(event: KeyboardEvent): void {
   if (completion.open.value) {

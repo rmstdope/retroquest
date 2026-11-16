@@ -429,6 +429,30 @@ describe('useNarrationStore', () => {
       expect(narration.revealed(1, 1)).toBe(true)
     })
 
+    it('keeps the line when the pause comes before the clip has loaded (the browser rejects its play)', async () => {
+      class LoadingAudio extends FakeAudio {
+        override play(): Promise<void> {
+          return new Promise((_resolve, reject) => {
+            this.reject = () => reject(new Error('AbortError'))
+          })
+        }
+        override pause(): void {
+          super.pause()
+          this.reject?.()
+        }
+        reject: (() => void) | null = null
+      }
+      narration.setAudioFactory((src) => new LoadingAudio(src))
+      narration.begin(1, [voiced(3), voiced(2)], 'act1')
+      narration.pause()
+      await vi.advanceTimersByTimeAsync(60_000)
+      expect(narration.revealed(1, 1)).toBe(false)
+      narration.resume()
+      last().onended?.()
+      await vi.advanceTimersByTimeAsync(5_000)
+      expect(narration.revealed(1, 1)).toBe(true)
+    })
+
     it('does nothing when nothing is narrated', () => {
       expect(() => {
         narration.pause()

@@ -10,8 +10,8 @@ import CompassPanel from './CompassPanel.vue'
  * ways out beneath it. (The Bag and Spells are the belt of pictures at the
  * picture's foot.) They are controlled by the layout, which lets only one of
  * the three be open (`drawer`), and press-only: nothing opens on
- * hover. The round ☰ at the end of the row opens the menu. The button of the open one stays lit. Walking from the map keeps it
- * open. Escape closes the map (asking the layout to, which returns focus to
+ * hover. The round ☰ at the end of the row opens the menu. The button of
+ * the open one stays lit. Walking from the map keeps it open. Escape closes the map (asking the layout to, which returns focus to
  * the button) and nothing else hears it. The buttons open their drawers at
  * once, even while a turn is read aloud; only the map's ways out are a held
  * panel (`data-panel`), where a first press catches up.
