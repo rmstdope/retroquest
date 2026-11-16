@@ -151,14 +151,22 @@ export function continuesRun(
 
 /**
  * Which lines head a run of one speaker in one turn (the ones that carry the
- * name and the portrait), given each line and the index of the first line
- * still showing at the top of the picture. Lines before it have left; a run
- * whose first line has left is headed by its first line still showing.
+ * name and the portrait), given each line, the index of the first line still
+ * showing at the top of the picture, and the indexes of the lines below it
+ * that have faded out of sight. Lines before it have left; a run whose first
+ * line has left is headed by its first line still showing, and a line out of
+ * sight is passed over, as if it were not there.
  */
-export function runHeads(lines: RunLine[], firstShowing: number): boolean[] {
-  return lines.map(
-    (line, index) =>
-      index >= firstShowing &&
-      (index === firstShowing || !continuesRun(line, lines[index - 1])),
-  )
+export function runHeads(
+  lines: RunLine[],
+  firstShowing: number,
+  outOfSight: number[] = [],
+): boolean[] {
+  let before: RunLine | undefined
+  return lines.map((line, index) => {
+    if (index < firstShowing || outOfSight.includes(index)) return false
+    const head = index === firstShowing || !continuesRun(line, before)
+    before = line
+    return head
+  })
 }

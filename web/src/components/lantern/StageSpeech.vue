@@ -62,8 +62,13 @@ function lineHtml(line: StageLine): string {
 /** Index of the first line still showing at the top of the thread (0 when nothing is laid out). */
 const firstShowing = ref(0)
 
+/** The lines whose fade has run (spent or gone), by index: out of sight, so never a head. */
+const outOfSight = ref<number[]>([])
+
 /** Which lines head a run, so carry its name and portrait. */
-const heads = computed(() => runHeads(speech.visible, firstShowing.value))
+const heads = computed(() =>
+  runHeads(speech.visible, firstShowing.value, outOfSight.value),
+)
 
 /** The thread of lines, while there is one. */
 const thread = ref<HTMLElement | null>(null)
@@ -85,7 +90,8 @@ function pinNewest(): void {
 
 /**
  * Find the first line whose top is below the thread's top padding, so the
- * name drawn above it is inside the thread. A head's name and portrait take
+ * name drawn above it is inside the thread (a line faded out of sight that
+ * keeps its room is passed over). A head's name and portrait take
  * no room of their own (rows keep a steady height), so moving the head
  * never moves anything else.
  */
@@ -98,10 +104,25 @@ function findFirstShowing(): void {
   const pad = parseFloat(getComputedStyle(el).paddingTop) || 0
   const rows = Array.from(el.children)
   const at = rows.findIndex(
-    (row) => row instanceof HTMLElement && row.offsetTop >= el.scrollTop + pad,
+    (row) =>
+      row instanceof HTMLElement &&
+      row.dataset.fade !== 'spent' &&
+      row.offsetTop >= el.scrollTop + pad,
   )
   // A thread cut through every row (one very tall line) heads its newest.
   firstShowing.value = at === -1 ? Math.max(0, rows.length - 1) : at
+}
+
+/** A line has left sight: its run's name and portrait step down to the next line in sight. */
+function lineLeft(): void {
+  const rows = Array.from(thread.value?.children ?? [])
+  outOfSight.value = rows.flatMap((row, index) =>
+    row instanceof HTMLElement &&
+    (row.dataset.fade === 'spent' || row.dataset.fade === 'gone')
+      ? [index]
+      : [],
+  )
+  findFirstShowing()
 }
 
 // A new line, or a thread made shorter by the paper growing, pins it again.
@@ -145,7 +166,7 @@ function hurry(): void {
         class="lq-thread"
         aria-hidden="true"
         @scroll.passive="findFirstShowing"
-        @lq-line-gone="findFirstShowing"
+        @lq-line-left="lineLeft"
       >
         <!-- eslint-disable vue/no-v-html -->
         <div

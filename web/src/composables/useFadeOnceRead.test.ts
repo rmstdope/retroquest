@@ -3,7 +3,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { ref } from 'vue'
 import { mount, type VueWrapper } from '@vue/test-utils'
 import { defineComponent, h, type Ref } from 'vue'
-import { LINE_GONE_EVENT, useFadeOnceRead } from './useFadeOnceRead'
+import { LINE_LEFT_EVENT, useFadeOnceRead } from './useFadeOnceRead'
 
 describe('useFadeOnceRead', () => {
   let root: HTMLElement
@@ -218,7 +218,7 @@ describe('useFadeOnceRead', () => {
     expect([older.dataset.fade, newer.dataset.fade]).toEqual(['away', 'away'])
     // The older one's fade was held (a pointer resting on it), so the newer ends first.
     fadeEnds(newer)
-    expect(newer.dataset.fade).toBe('away')
+    expect(newer.dataset.fade).toBe('spent')
     expect(live.value).toBe(2)
     fadeEnds(older)
     expect([older.dataset.fade, newer.dataset.fade]).toEqual(['gone', 'gone'])
@@ -237,28 +237,40 @@ describe('useFadeOnceRead', () => {
     expect(said.dataset.fade).toBe('gone')
   })
 
-  it('lets a line already faded away go when the words are hidden, not come back', async () => {
+  it('keeps a line already faded away out of sight while the words are hidden', async () => {
     const older = line()
     const newer = line()
     await settle()
     fadeEnds(newer)
-    expect(newer.dataset.fade).toBe('away')
     held.value = true
     await settle()
-    expect([older.dataset.fade, newer.dataset.fade]).toEqual(['live', 'gone'])
+    expect([older.dataset.fade, newer.dataset.fade]).toEqual(['live', 'spent'])
+    held.value = false
+    await settle()
+    fadeEnds(older)
+    expect([older.dataset.fade, newer.dataset.fade]).toEqual(['gone', 'gone'])
   })
 
-  it('says when each line is gone, also one held back by the line above it', async () => {
+  it('says when each line leaves sight, also one held back by the line above it', async () => {
     const older = line()
     const newer = line()
     await settle()
-    const said: HTMLElement[] = []
-    root.addEventListener(LINE_GONE_EVENT, (event) => {
-      if (event.target instanceof HTMLElement) said.push(event.target)
+    const said: string[] = []
+    root.addEventListener(LINE_LEFT_EVENT, (event) => {
+      if (event.target instanceof HTMLElement)
+        said.push(
+          `${event.target === older ? 'older' : 'newer'} ${event.target.dataset.fade}`,
+        )
     })
     fadeEnds(newer)
-    expect(said).toEqual([])
+    expect(said).toEqual(['newer spent'])
+    // The top line's fade has run with nothing above it: spent, then gone at once.
     fadeEnds(older)
-    expect(said).toEqual([older, newer])
+    expect(said).toEqual([
+      'newer spent',
+      'older spent',
+      'older gone',
+      'newer gone',
+    ])
   })
 })

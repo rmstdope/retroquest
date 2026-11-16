@@ -104,14 +104,14 @@ watch(
   { flush: 'post' },
 )
 
-/** The pieces whose line has faded away (`useFadeOnceRead`), by piece index. */
-const gone = ref<number[]>([])
+/** The pieces whose line has faded out of sight, spent or gone (`useFadeOnceRead`), by piece index. */
+const outOfSight = ref<number[]>([])
 
-/** A line has faded away: note which, so the name and portrait step down to the next line of its run. */
-function lineGone(): void {
-  gone.value = Array.from(
+/** A line has left sight: note which, so the name and portrait step down to the next line of its run. */
+function lineLeft(): void {
+  outOfSight.value = Array.from(
     root.value?.querySelectorAll<HTMLElement>(
-      '.lq-cl[data-fade="gone"][data-piece]',
+      '.lq-cl:is([data-fade="gone"], [data-fade="spent"])[data-piece]',
     ) ?? [],
   ).map((row) => Number(row.dataset.piece))
 }
@@ -127,13 +127,13 @@ function pieceKey(piece: ColumnPiece, index: number): string {
 
 /**
  * Whether piece `index` starts a run, so carries the speaker's name and
- * portrait: the piece before it still showing (a line faded away is passed
- * over) is not a line of the same speaker.
+ * portrait: the piece before it still showing (a line faded out of sight is
+ * passed over) is not a line of the same speaker.
  */
 function heads(index: number): boolean {
   const piece = told.value[index]
   let at = index - 1
-  while (at >= 0 && gone.value.includes(at)) at--
+  while (at >= 0 && outOfSight.value.includes(at)) at--
   const before = told.value[at]
   return (
     piece?.kind === 'line' &&
@@ -148,7 +148,7 @@ function heads(index: number): boolean {
     class="lq-column-turn"
     data-testid="column-turn"
     @click="speech.revealAll()"
-    @lq-line-gone="lineGone"
+    @lq-line-left="lineLeft"
   >
     <template v-for="(piece, index) in told" :key="pieceKey(piece, index)">
       <StoryTurn

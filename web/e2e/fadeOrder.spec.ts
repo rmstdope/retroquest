@@ -22,41 +22,47 @@ async function enter(page: Page, command: string): Promise<void> {
 
 /**
  * Watch every fading line on the picture until all are gone (or `ms` has
- * passed): the furthest any moved while it still showed, in px, and how many
- * are left.
+ * passed): how many it watched, the furthest any moved while it still
+ * showed, in px, and how many are left.
  */
 function watchFades(
   page: Page,
   ms: number,
-): Promise<{ moved: number; left: number }> {
+): Promise<{ watched: number; moved: number; left: number }> {
   return page.evaluate(
     (limit) =>
-      new Promise<{ moved: number; left: number }>((resolve) => {
-        const lines = (): HTMLElement[] =>
-          Array.from(
-            document.querySelectorAll<HTMLElement>(
-              '.lq-paper-content :is(.lq-bubble, .lq-cl), .lq-thread .lq-ln',
-            ),
-          )
-        const first = new Map<HTMLElement, number>()
-        let furthest = 0
-        const started = performance.now()
-        const look = (): void => {
-          const showing = lines().filter(
-            (el) => el.dataset.fade && el.dataset.fade !== 'gone',
-          )
-          for (const el of showing) {
-            const top = el.getBoundingClientRect().top
-            const was = first.get(el)
-            if (was === undefined) first.set(el, top)
-            else furthest = Math.max(furthest, Math.abs(top - was))
+      new Promise<{ watched: number; moved: number; left: number }>(
+        (resolve) => {
+          const lines = (): HTMLElement[] =>
+            Array.from(
+              document.querySelectorAll<HTMLElement>(
+                '.lq-paper-content :is(.lq-bubble, .lq-cl), .lq-thread .lq-ln',
+              ),
+            )
+          const first = new Map<HTMLElement, number>()
+          let furthest = 0
+          const started = performance.now()
+          const look = (): void => {
+            const showing = lines().filter(
+              (el) => el.dataset.fade && el.dataset.fade !== 'gone',
+            )
+            for (const el of showing) {
+              const top = el.getBoundingClientRect().top
+              const was = first.get(el)
+              if (was === undefined) first.set(el, top)
+              else furthest = Math.max(furthest, Math.abs(top - was))
+            }
+            if (showing.length === 0 || performance.now() - started > limit)
+              resolve({
+                watched: first.size,
+                moved: Math.round(furthest),
+                left: showing.length,
+              })
+            else requestAnimationFrame(look)
           }
-          if (showing.length === 0 || performance.now() - started > limit)
-            resolve({ moved: Math.round(furthest), left: showing.length })
-          else requestAnimationFrame(look)
-        }
-        look()
-      }),
+          look()
+        },
+      ),
     ms,
   )
 }
@@ -77,7 +83,8 @@ test('a line fading away never moves the lines still showing', async ({
   await said.first().locator('.lq-line').click()
   // A pointer resting on a line holds its fade.
   await page.mouse.move(1, 1)
-  const { moved, left } = await watchFades(page, 60_000)
+  const { watched, moved, left } = await watchFades(page, 60_000)
+  expect(watched).toBeGreaterThan(1)
   expect(left).toBe(0)
   // Within a pixel: a line's top may round differently as the page settles.
   expect(moved).toBeLessThanOrEqual(1)

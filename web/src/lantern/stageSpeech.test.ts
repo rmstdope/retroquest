@@ -197,4 +197,20 @@ describe('runHeads', () => {
   it('has nothing to mark without lines', () => {
     expect(runHeads([], 0)).toEqual([])
   })
+
+  it('steps a run down past a line out of sight, which is never a head', () => {
+    expect(runHeads(oneTurn('Mira', 'Elior', 'Elior'), 0, [1])).toEqual([
+      true,
+      false,
+      true,
+    ])
+  })
+
+  it('lets a run go on past a line out of sight between its lines', () => {
+    expect(runHeads(oneTurn('Mira', 'Elior', 'Mira'), 0, [1])).toEqual([
+      true,
+      false,
+      false,
+    ])
+  })
 })
