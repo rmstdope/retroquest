@@ -141,6 +141,10 @@ export const useNarrationStore = defineStore('narration', () => {
   let timers: ReturnType<typeof setTimeout>[] = []
   let poll: ReturnType<typeof setInterval> | undefined
   let nudgeTimer: ReturnType<typeof setTimeout> | undefined
+  /** Takes the narration up again after `pause`; null when it is not paused. */
+  let resumeFrom: (() => void) | null = null
+  /** Puts the voice in hand on hold; set while a clip plays. */
+  let holdVoice: (() => void) | null = null
 
   /** How the latest narrated turn ended. */
   const lastEnd = ref<{
@@ -297,6 +301,8 @@ export const useNarrationStore = defineStore('narration', () => {
   /** Forget the pending pause, stall guard and word lookup, and stop the voice. */
   function stopVoice(): void {
     generation++
+    resumeFrom = null
+    holdVoice = null
     timers.forEach(clearTimeout)
     timers = []
     clearInterval(poll)
@@ -462,15 +468,57 @@ export const useNarrationStore = defineStore('narration', () => {
       timers.forEach(clearTimeout)
       timers = [setTimeout(end, clip.duration * 1000 + STALL_MARGIN_MS + extra)]
     }
+    const watchWord = (): void => {
+      clearInterval(poll)
+      poll = setInterval(() => {
+        if (mine === generation) now.word = wordAt(clip, element.currentTime)
+      }, WORD_POLL_MS)
+    }
     // The clip is fetched when played: count its length from when sound can
     // start, with a longer allowance for a play that never settles.
     guard(LOAD_MARGIN_MS)
-    poll = setInterval(() => {
-      if (mine === generation) now.word = wordAt(clip, element.currentTime)
-    }, WORD_POLL_MS)
+    watchWord()
     element.play().then(() => {
-      if (mine === generation) guard(0)
+      if (mine === generation && !resumeFrom) guard(0)
     }, end)
+    // On hold the voice is paused where it is and plays on from there.
+    holdVoice = () => {
+      timers.forEach(clearTimeout)
+      timers = []
+      clearInterval(poll)
+      poll = undefined
+      element.pause()
+      resumeFrom = () => {
+        const left = Math.max(0, clip.duration - element.currentTime)
+        timers = [
+          setTimeout(end, left * 1000 + STALL_MARGIN_MS + LOAD_MARGIN_MS),
+        ]
+        watchWord()
+        element.play().then(undefined, end)
+      }
+    }
+  }
+
+  /**
+   * Hold the narration where it is (a menu is open): a voice pauses mid-line
+   * and the wait before the next part stops. `resume` takes it up again.
+   */
+  function pause(): void {
+    if (resumeFrom || !active.value) return
+    if (holdVoice) holdVoice()
+    else {
+      // Between parts: the pending step waits until `resume`.
+      timers.forEach(clearTimeout)
+      timers = []
+      resumeFrom = () => step()
+    }
+  }
+
+  /** Take the narration up where `pause` left it. */
+  function resume(): void {
+    const again = resumeFrom
+    resumeFrom = null
+    again?.()
   }
 
   /**
@@ -686,6 +734,8 @@ export const useNarrationStore = defineStore('narration', () => {
     atSceneChange,
     passSceneChange,
     hurry,
+    pause,
+    resume,
     skipTo,
     seekToWord,
     skipAll,
