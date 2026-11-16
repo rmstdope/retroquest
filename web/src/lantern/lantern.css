@@ -495,7 +495,7 @@ body {
 }
 
 /*
- * The selection ring of the menu screens (Settings, Save and Load, Quit): the
+ * The selection ring of the menu screens (Escape menu, Settings, Save and Load, Quit): the
  * one place its outline is drawn, in the theme's ring colour. An element marked
  * `data-ring` is ringed while it has focus; `data-ring="within"` while focus is
  * on anything inside it (a Settings row), `data-ring="slot"` while its slot

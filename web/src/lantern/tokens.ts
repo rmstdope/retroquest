@@ -35,7 +35,7 @@ export interface LanternPalette {
   accentSoft: string
   /** Amber border. */
   accentLine: string
-  /** The selection ring of the menu screens (Settings, Save and Load, Quit). */
+  /** The selection ring of the menu screens (Escape menu, Settings, Save and Load, Quit). */
   ring: string
   /** Failed actions ("not like that"): soft rust. */
   failure: string
