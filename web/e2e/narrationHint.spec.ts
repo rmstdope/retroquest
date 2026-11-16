@@ -1,5 +1,5 @@
 /**
- * The narration hint ("Space to hurry · Esc to skip", "Tap to hurry ·
+ * The narration hint ("Space to hurry · hold to skip", "Tap to hurry ·
  * hold to skip") floats over the bottom of the story; on a laptop wide
  * enough for two sides it sits below the narrator's cards instead, level with
  * the "▾ Hide" (rq-7tei). While a paragraph at the bottom of the story is read
@@ -172,6 +172,8 @@ for (const { name, width, height } of [
         await page.getByRole('button', { name: 'Type a command' }).click()
       await input.fill(command)
       await input.press('Enter')
+      // Space is a letter in the command box, where no hint shows: leave it.
+      await input.blur()
       await expect(page.locator('.lq-narration-hint')).toBeVisible()
       expectClear(await watchReading(page), command)
     }
@@ -201,6 +203,8 @@ test('on a wide desktop the hint sits at the height of the Hide button and cover
     if (await type.isVisible()) await type.click()
     await input.fill(command)
     await input.press('Enter')
+    // Space is a letter in the command box, where no hint shows: leave it.
+    await input.blur()
   }
   // The voice wakes the hero, whose arrival in the cottage is told on the
   // picture; the next command clears it and is read on the cards.
@@ -245,6 +249,8 @@ for (const { name, width, height } of [
           .click()
       await input.fill(command)
       await input.press('Enter')
+      // Space is a letter in the command box, where no hint shows: leave it.
+      await input.blur()
     }
     await enter('talk to voice')
     await expect(page.getByTestId('arrival-on-picture')).toBeVisible()

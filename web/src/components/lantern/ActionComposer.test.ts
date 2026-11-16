@@ -1406,7 +1406,7 @@ describe('ActionComposer on the stage', () => {
       w.unmount()
     })
 
-    it('leaves the Escape to an arrival on the picture', async () => {
+    it('closes the word list first on Escape during an arrival on the picture', async () => {
       const { w, input } = await typing('abc')
       useArrivalStore().show(
         1,
@@ -1424,7 +1424,7 @@ describe('ActionComposer on the stage', () => {
       w.unmount()
     })
 
-    it('leaves the Escape to the narrator while it reads', async () => {
+    it('steps back on Escape while the narrator reads', async () => {
       const narration = useNarrationStore()
       narration.setAudioFactory(() => ({
         volume: 1,
@@ -1457,11 +1457,12 @@ describe('ActionComposer on the stage', () => {
       )
       expect(narration.isNarrating).toBe(true)
       await esc(input)
-      expect(w.find('input[aria-label="Command"]').exists()).toBe(true)
+      expect(narration.isNarrating).toBe(true)
+      expect(w.find('input[aria-label="Command"]').exists()).toBe(false)
       w.unmount()
     })
 
-    it('leaves the Escape to a speech on a phone (no stage)', async () => {
+    it('takes the Escape even with a speech on a phone (no stage)', async () => {
       const w = mount(ActionComposer, { attachTo: document.body })
       await w
         .findAll('button')
@@ -1487,24 +1488,7 @@ describe('ActionComposer on the stage', () => {
         cancelable: true,
       })
       input.element.dispatchEvent(event)
-      expect(event.defaultPrevented).toBe(false)
-      w.unmount()
-    })
-
-    it('leaves the Escape to the layout while words are showing on the stage', async () => {
-      const w = mount(ActionComposer, {
-        props: { stage: true, wordsShowing: true },
-        attachTo: document.body,
-      })
-      await click(w, '[data-type]')
-      const input = w.get('input[aria-label="Command"]')
-      const event = new KeyboardEvent('keydown', {
-        key: 'Escape',
-        cancelable: true,
-      })
-      input.element.dispatchEvent(event)
-      expect(event.defaultPrevented).toBe(false)
-      expect(w.find('input[aria-label="Command"]').exists()).toBe(true)
+      expect(event.defaultPrevented).toBe(true)
       w.unmount()
     })
 

@@ -4,7 +4,7 @@
  * Escape do the same, and on a small sideways phone every name stays inside
  * the picture.
  */
-import { test, expect, type Page } from './fixtures'
+import { test, expect, type Page, skipTelling } from './fixtures'
 
 /** A placed area, in fractions of the picture. */
 interface AreaFractions {
@@ -64,7 +64,6 @@ async function toTheCottage(
   const input = page.getByLabel('Command', { exact: true })
   await input.fill('say hello to voice')
   await input.press('Enter')
-  await page.keyboard.press('Escape')
   // The waking is told in the middle of the dark first; Enter brings the cottage up.
   await page.getByTestId('scene-interlude').waitFor()
   await page.keyboard.press('Enter')
@@ -72,12 +71,12 @@ async function toTheCottage(
   // Then the cottage's name and description are told in the middle; Escape sends them away.
   const told = page.locator('[data-testid="arrival-on-picture"].lq-on')
   await told.waitFor()
-  await page.keyboard.press('Escape')
+  await skipTelling(page)
   await expect(told).toHaveCount(0)
   await expect(page.locator('.lq-room-name')).toHaveText("Elior's Cottage")
 }
 
-test('the button, S and Escape show and take away the marks and names on a laptop', async ({
+test('the button and S show and take away the marks and names on a laptop', async ({
   page,
 }): Promise<void> => {
   await page.setViewportSize({ width: 1280, height: 800 })
@@ -89,7 +88,8 @@ test('the button, S and Escape show and take away the marks and names on a lapto
   await expect(page.getByRole('button', { name: '◎ Showing' })).toBeFocused()
   await expect(page.locator('[data-area-mark]')).toHaveCount(3)
   await expect(page.locator('[data-area-name="bread"]')).toHaveText('Bread')
-  await page.keyboard.press('Escape')
+  // Escape leaves them be (it opens the menu); S takes them away.
+  await page.keyboard.press('s')
   await expect(page.locator('[data-area-mark]')).toHaveCount(0)
   await page.keyboard.press('s')
   await expect(page.locator('[data-area-mark]')).toHaveCount(3)

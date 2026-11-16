@@ -52,9 +52,10 @@ describe('LanternLayout: the stage on a phone', () => {
       expect(w.get('.lq-sheet').isVisible()).toBe(false)
     })
 
-    it('keeps the five section tabs and no buttons on the picture', () => {
+    it('keeps the five section tabs and no buttons on the picture, but the round ☰ in the corner', () => {
       expect(w.findAll('.lq-nav-bottom .lq-nav-btn')).toHaveLength(5)
       expect(w.find('.lq-buttons').exists()).toBe(false)
+      expect(w.get('.lq-float-menu').attributes('aria-label')).toBe('Menu')
     })
 
     it('leaves the room name to the plate', () => {
@@ -156,8 +157,8 @@ describe('LanternLayout: the stage on a phone', () => {
       expect(w.find('.lq-phone-plate').exists()).toBe(false)
     })
 
-    it('floats ☰ and one plate top left, the three buttons top right', () => {
-      expect(w.get('.lq-float-menu').attributes('aria-label')).toBe('Game menu')
+    it('has one plate top left, and the three buttons and ☰ top right', () => {
+      expect(w.find('.lq-float-menu').exists()).toBe(false)
       expect(w.get('.lq-stage-plate').classes()).toContain('lq-plate-compact')
       const labels = w
         .findAll('.lq-stage-buttons .lq-stage-btn')
@@ -166,6 +167,7 @@ describe('LanternLayout: the stage on a phone', () => {
         expect.stringMatching(/^Quests · \d+$/),
         '⟲',
         '🧭',
+        '☰',
       ])
     })
 
@@ -180,11 +182,12 @@ describe('LanternLayout: the stage on a phone', () => {
       expect(dock.get('.lq-dock-hint').text()).toBe('💡 Hint')
     })
 
-    it('opens the menu from ☰ as the sideways list', async () => {
+    it('opens the same centred menu from ☰', async () => {
       vi.spyOn(useGameStore(), 'getQuickSave').mockReturnValue(null)
-      await w.get('.lq-float-menu').trigger('click')
+      await w.get('.lq-stage-buttons [data-button="menu"]').trigger('click')
       await flushPromises()
-      expect(document.body.querySelector('.lq-side-list')).not.toBeNull()
+      expect(document.body.querySelector('.lq-dialog-centered')).not.toBeNull()
+      expect(document.body.querySelector('.lq-side-list')).toBeNull()
     })
 
     it('opens the sheet over the picture and folds it after a turn', async () => {

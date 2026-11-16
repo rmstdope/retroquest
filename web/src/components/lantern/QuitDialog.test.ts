@@ -40,12 +40,16 @@ describe('QuitDialog', () => {
   it('asks whether to save before quitting', () => {
     const w = mountQuit()
 
-    expect(w.get('[role="dialog"] h2').text()).toBe('Quit game?')
-    // "Act I" is kept on one line (no-break space).
-    expect(w.text()).toContain('game then starts from Act\u00a0I.')
+    expect(w.get('[role="dialog"] h2').text()).toBe('Quit to the main menu?')
+    expect(w.get('.lq-dialog-eyebrow').text()).toBe('Menu')
+    expect(w.text()).toContain(
+      'Save before you go? Anything since your last save is lost otherwise.',
+    )
+    expect(w.text()).not.toContain('Act')
+    expect(w.get('.lq-dialog-layer').classes()).toContain('lq-dialog-centered')
   })
 
-  it('saves, then starts again', async () => {
+  it('saves, then quits to the main menu', async () => {
     const w = mountQuit()
 
     await button(w, 'Save and quit').trigger('click')
@@ -70,7 +74,7 @@ describe('QuitDialog', () => {
     )
   })
 
-  it('starts again without saving', async () => {
+  it('quits to the main menu without saving', async () => {
     const w = mountQuit()
 
     await button(w, 'Quit without saving').trigger('click')

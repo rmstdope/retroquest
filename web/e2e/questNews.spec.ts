@@ -1,4 +1,4 @@
-import { test, expect, type Page } from './fixtures'
+import { test, expect, type Page, skipTelling } from './fixtures'
 
 /** Open the game and close the opening chapter page and the first arrival. */
 async function startAct1(
@@ -97,7 +97,7 @@ test.describe('quest news told in the middle of the picture', () => {
     await startAct1(page)
     await pushNews(page)
     await expect(middle(page).locator('.lq-news-kicker').last()).toBeVisible()
-    await page.keyboard.press('Escape')
+    await skipTelling(page)
     await expect(middle(page).locator('.lq-news-kicker')).toHaveCount(0)
     await expect(page.getByTestId('news-line')).toHaveCount(0)
   })
@@ -157,10 +157,11 @@ test.describe('quest news told in the middle of the picture', () => {
   }
 
   // Heights at which a page holds the short need alone, under the one-row
-  // room plate (about 94 px lower than under the old room card).
+  // room plate (about 94 px lower than under the old room card), and with no
+  // top bar (about 70 px lower again).
   for (const [width, height] of [
-    [850, 740],
-    [390, 620],
+    [850, 670],
+    [390, 570],
   ]) {
     test(`keeps one left edge for a checklist split over pages at ${width} wide`, async ({
       page,

@@ -3,7 +3,7 @@
  * of the picture, on its own line, with the narrator's cards and the speech
  * ending above it at every width; it clears both sides and leaves "▴ Show".
  */
-import { test, expect, type Page } from './fixtures'
+import { test, expect, type Page, skipTelling } from './fixtures'
 
 /** Open the game and close the opening chapter page. */
 async function start(page: Page): Promise<void> {
@@ -32,7 +32,7 @@ for (const width of [1440]) {
     await page.setViewportSize({ width, height: 800 })
     await start(page)
     await enter(page, 'talk to voice')
-    await page.keyboard.press('Escape')
+    await skipTelling(page)
     await enter(page, 'look')
     await enter(page, 'talk to grandmother')
 
@@ -83,7 +83,7 @@ for (const size of [
     await page.setViewportSize(size)
     await start(page)
     await enter(page, 'talk to voice')
-    await page.keyboard.press('Escape')
+    await skipTelling(page)
     await enter(page, 'look')
     await enter(page, 'talk to grandmother')
 

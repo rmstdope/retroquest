@@ -11,7 +11,7 @@
  * own throttling), to bring out on a laptop the races a busy CI runner shows:
  * `E2E_CPU_THROTTLE=10 npx playwright test <spec> --repeat-each 10`.
  */
-import { test as base } from '@playwright/test'
+import { test as base, type Page } from '@playwright/test'
 
 export * from '@playwright/test'
 
@@ -31,3 +31,18 @@ export const test = base.extend<{ narrationRecordings: boolean }>({
     await use(page)
   },
 })
+
+/**
+ * Show the rest of what is being told at once, as a player does: let go of the
+ * command box (a space typed there is a letter), then hold Space until the
+ * hold to skip is full. Escape no longer skips: it opens the menu.
+ */
+export async function skipTelling(page: Page): Promise<void> {
+  await page.evaluate(() => (document.activeElement as HTMLElement)?.blur())
+  await page.keyboard.down(' ')
+  await page.waitForTimeout(HOLD_TO_SKIP_MS + 150)
+  await page.keyboard.up(' ')
+}
+
+/** How long Space is held to skip a telling (the app's `HOLD_TO_SKIP_MS`, with a margin kept by the helper). */
+const HOLD_TO_SKIP_MS = 700

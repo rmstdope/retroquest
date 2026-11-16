@@ -48,7 +48,6 @@ async function toTheCottage(page: Page): Promise<void> {
   const input = page.getByLabel('Command', { exact: true })
   await input.fill('say hello to voice')
   await input.press('Enter')
-  await page.keyboard.press('Escape')
   // The waking is told in the middle of the dark first; Enter brings the cottage up.
   await page.getByTestId('scene-interlude').waitFor()
   await page.keyboard.press('Enter')

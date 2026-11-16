@@ -33,6 +33,7 @@ import { useHoldToSkip, type HoldRingSpot } from '@/composables/useHoldToSkip'
 import { useAudio } from '@/composables/useAudio'
 import { useActMusic } from '@/composables/useActMusic'
 import { useFocusTrap } from '@/composables/useFocusTrap'
+import { useFullscreen } from '@/composables/useFullscreen'
 import { nameActions, type NameAction } from '@/lantern/nameActions'
 import { parseCountedName } from '@/lantern/inventoryChanges'
 import { useStoryFollow } from '@/composables/useStoryFollow'
@@ -78,12 +79,15 @@ import FinishDialog from './FinishDialog.vue'
 import JournalDrawer from './JournalDrawer.vue'
 import JournalPanel from './JournalPanel.vue'
 import LanternDialog from './LanternDialog.vue'
-import GameMenu, { type InfoKind, type MenuKind } from './GameMenu.vue'
+import GameMenu, {
+  type InfoKind,
+  type MenuEntry,
+  type MenuKind,
+} from './GameMenu.vue'
 import QuestDialog, { type QuestView } from './QuestDialog.vue'
 import QuitDialog from './QuitDialog.vue'
 import SaveLoadDialog from './SaveLoadDialog.vue'
 import SettingsDialog from './SettingsDialog.vue'
-import LanternHeader from './LanternHeader.vue'
 import RoomPlate from './RoomPlate.vue'
 import RoomTitle from './RoomTitle.vue'
 import SceneInterlude from './SceneInterlude.vue'
@@ -104,11 +108,11 @@ import { newestLoadable } from '@/lantern/saveCard'
 import type { SaveSlot } from '@/types/bridge'
 
 /**
- * Shell of the Lantern UI (the only UI; old `?ui=` links open it too): header, story (one
+ * Shell of the Lantern UI (the only UI; old `?ui=` links open it too): no top bar, story (one
  * StoryTurn per turn) and the action composer. On laptops (≥1024 × 560) the
  * room is played on its picture, which fills the play area: the room's name
- * top-left (`RoomPlate`; who and what is here are marked on the picture), the buttons Bag, Spells, Quests, Story
- * so far and Map top-right (the journal and the story open as a drawer from
+ * top-left (`RoomPlate`; who and what is here are marked on the picture), the buttons Quests, Story
+ * so far and Map and the round ☰ (the menu) top-right (the journal and the story open as a drawer from
  * the right, the map beneath its button), the narrator's words up the left
  * side and the actions as one row along the bottom.
  * The left side is the narration paper: the turns since the last room change
@@ -118,10 +122,9 @@ import type { SaveSlot } from '@/types/bridge'
  * Hide goes once none is left; the command is not echoed (Story so far keeps it), and
  * quest news told in the middle leaves nothing here. The newest turn grows as
  * the narrator reaches each part and, when it is taller than the room under
- * the plate, scrolls with a "More below" pill. One "▾ Hide" on its own line at the bottom centre of the picture (or N,
- * or Escape when nothing is narrated) clears both the narrator's bubbles and
- * the speech, leaving a "▴ Show" tab in its place; the tab, N, Escape again
- * (unless typed in a field, where the command box takes its own steps back)
+ * the plate, scrolls with a "More below" pill. One "▾ Hide" on its own line at the bottom centre of the picture (or N)
+ * clears both the narrator's bubbles and
+ * the speech, leaving a "▴ Show" tab in its place; the tab, N
  * or the next turn that tells something
  * brings both back as they were, and every turn is read in the story drawer.
  * Under about 1100 px wide (a laptop window too narrow for two sides, and
@@ -133,12 +136,12 @@ import type { SaveSlot } from '@/types/bridge'
  * middle of the picture instead (`ArrivalOnPicture`, `useArrivalStore`): the
  * words are clear (no Hide or Show) and the bubbles come back when the
  * arrival clears (the room itself having been told in the middle). Enter or Space goes on, a click on the
- * picture too; Escape, the tab, an action or typing clear it at once.
+ * picture too; the tab, an action or typing clear it at once.
  * A phone (a touch screen whose shorter side is under 600 px) is played
  * sideways: held upright it shows only the turn page (`TurnPage`) over the
  * game, which waits behind it, inert and unchanged (the layout does not
  * depend on how the phone is held); on its side it is the laptop stage made
- * small: no header, ☰ and the plate top left, the buttons top right, the folded
+ * small: the plate top left, the buttons and ☰ top right, the folded
  * bar (Actions, keyboard, Hint) at the foot left, the words up the left side,
  * and the actions a sheet over the picture that folds after every turn.
  * Other smaller screens that are not short (a tablet upright, a narrow window)
@@ -147,7 +150,7 @@ import type { SaveSlot } from '@/types/bridge'
  * the picture and the folded bar above the section tabs (Story, Bag, Spells,
  * Quests, Map); the actions are a sheet (at most 62% of the height) over the
  * picture that folds after every turn. A short mouse window keeps the text
- * page, with the tabs in the header and the same sheet folded into the bar,
+ * page, with the tabs on top (and ☰ in the corner) and the same sheet folded into the bar,
  * which also folds when an answer does not fit beside it.
  * A new turn opens at its start, with a "More below" pill while the story
  * goes on below the visible part.
@@ -157,12 +160,13 @@ import type { SaveSlot } from '@/types/bridge'
  * act has recordings and narration is on (`useNarrationStore`):
  * `useLanternPresentation` starts it with the new turn (and reads a chapter
  * page, and decides what stops either), a click on
- * the story hurries it (two skip), Space/Enter hurry while focus is not on a
- * field or a control (Space also on the folded bar's Actions and the actions panel's buttons; an arrival on the picture goes on a part instead), Escape skips (also in the command box, unless its word
- * list is open), and a pop-up stops it. Building a command (typing, verbs,
+ * the story hurries it (two skip, and a press held skips the whole telling),
+ * Space/Enter hurry while focus is not on a
+ * field or a control (Space also on the folded bar's Actions and the actions panel's buttons; an arrival on the picture goes on a part instead; held, they skip the whole telling), Escape does not skip,
+ * and a pop-up stops it. The menu (☰, or Escape when nothing else takes it) and anything opened from it pause the
+ * narration where it is until it closes (`useNarrationStore.pause`), and F switches full screen. Building a command (typing, verbs,
  * targets) never stops it: only the complete command cuts in.
- * While a command is narrated the panels (plate, buttons, map, drawer, the
- * header's room and counts) keep the state from before it and switch as the
+ * While a command is narrated the panels (plate, buttons, map, drawer) keep the state from before it and switch as the
  * voice reaches them (`usePanelHold`), and so do the command box's word list
  * and the target chips, unless the command moved the player: nothing in the
  * room just left can be addressed, so those offer the room the player is in
@@ -229,14 +233,15 @@ const twoSides = computed(() => wide.value && sides.value)
 const column = computed(() => staged.value && !twoSides.value)
 /** A mouse and keyboard: the narration hint names keys instead of taps. */
 const keyboardPlayer = useMediaQuery(KEYBOARD_QUERY)
-/** The cursor is in a text field (the command box): only Esc steers the voice there. */
+/** The cursor is in a text field (the command box): no key steers the voice there. */
 const fieldFocused = ref(false)
+/** The hint under the story: none in the command box, where Space is a letter. */
 const hintText = computed(() => {
   if (!keyboardPlayer.value) return 'Tap to hurry · hold to skip'
-  return fieldFocused.value ? 'Esc to skip' : 'Space to hurry · Esc to skip'
+  return fieldFocused.value ? '' : 'Space to hurry · hold to skip'
 })
 
-/** The Type-mode command box: the one field where Esc skips the voice. */
+/** The Type-mode command box: where Space is a letter, so no hint names a key. */
 const COMMAND_BOX = '.lq-type-input'
 
 /** Follows where the cursor is, for the hint. */
@@ -532,7 +537,7 @@ async function hidePaper(): Promise<void> {
 }
 
 /**
- * Hide or show the words from a key (N, Escape). Focus on the Hide or inside
+ * Hide or show the words from a key (N). Focus on the Hide or inside
  * the cards follows to the tab when they go, and focus on the tab follows to
  * Hide when they come back; focus anywhere else (the command box) stays.
  */
@@ -562,7 +567,7 @@ function onPaperKey(event: KeyboardEvent): void {
   if (event.defaultPrevented || event.repeat) return
   if (event.ctrlKey || event.metaKey || event.altKey) return
   if (!staged.value || !wordsVisible.value || dialogOpen()) return
-  // An arrival on the picture holds the paper away; Escape, Enter or the tab end it.
+  // An arrival on the picture holds the paper away; Enter, Space or the tab end it.
   if (arrival.active) return
   const target = event.target instanceof Element ? event.target : null
   if (target?.closest('input, textarea, select, [contenteditable]')) return
@@ -688,7 +693,7 @@ function onNamesKey(event: KeyboardEvent): void {
   toggleNames()
 }
 
-/** Escape takes the names away before it does anything else, but for a dialog that is up, which shuts first. */
+/** Escape steps back from what is in hand and from the belt (S, not Escape, takes the names away); a dialog that is up shuts first. */
 function onNamesEscape(event: KeyboardEvent): void {
   if (event.key !== 'Escape') return
   if (dialogOpen() || ring.value) return
@@ -713,10 +718,6 @@ function onNamesEscape(event: KeyboardEvent): void {
     back?.focus({ preventScroll: true })
     return
   }
-  if (!names.showing || !showNamesButton.value) return
-  event.preventDefault()
-  event.stopImmediatePropagation()
-  names.turnOff()
 }
 
 /** The pointer leaves the stage: no name follows it, no way's arrow shows. */
@@ -1069,8 +1070,6 @@ function onNarrationKey(event: KeyboardEvent): void {
     // News held while the lines before it are read takes the keys as if it were up.
     arrival: arrival.active || arrival.holding,
     narrating: narration.isNarrating,
-    canHide: staged.value && wordsVisible.value && !paper.hidden.value,
-    canShow: showTab.value,
   })
   // Enter or Space that goes on takes its step now; held, it skips the rest.
   // Aimed at a field or a button it keeps its own press, unless the story took it.
@@ -1098,26 +1097,13 @@ function onNarrationKey(event: KeyboardEvent): void {
     case 'skip-scene':
       presentation.continueScene()
       break
-    case 'hide-words':
-      setWordsHidden(true)
-      break
-    case 'show-words':
-      setWordsHidden(false)
-      break
     case 'arrival-next':
       arrival.next()
       break
     case 'swallow':
       break
-    case 'arrival-clear':
-      arrival.clear()
-      narration.skipAll()
-      break
     case 'hurry':
       narration.hurry()
-      break
-    case 'skip-all':
-      narration.skipAll()
       break
   }
 }
@@ -1497,7 +1483,7 @@ watch(
   },
 )
 
-// News cut short before its spell came up (a second Escape on the held news,
+// News cut short before its spell came up (a hold on the held news,
 // a new command) still rings the spell's sound as it goes, as the quest cards
 // still ring theirs. A turn no longer in the story (a new game, or a load,
 // which brings back the save's story in its place) rings nothing.
@@ -1908,14 +1894,34 @@ watch(
   },
 )
 
-const INFO_TITLES: Record<InfoKind, string> = { stats: 'Stats', help: 'Help' }
+const INFO_TITLES: Record<InfoKind, string> = { help: 'Help' }
 let dialogOpener: HTMLElement | null = null
+/** The menu entry a window or the quit question was opened from, which gets focus when it closes and the menu comes back. */
+const menuEntry = ref<MenuEntry | null>(null)
 
+/** Open the menu (a button, Escape), or a window from it (then its entry is remembered). */
 function openGameDialog(kind: 'menu' | MenuKind): void {
   if (!gameDialog.value)
     dialogOpener = document.activeElement as HTMLElement | null
+  menuEntry.value = kind === 'menu' ? null : kind
+  if (kind === 'menu') focusMenuEntry.value = null
   gameDialog.value = kind
 }
+
+/** Quit asked from the menu: the question takes its place, and Cancel brings it back. */
+function askQuitFromMenu(): void {
+  menuEntry.value = 'quit'
+  game.quitAsked = true
+}
+
+/** The quit question was cancelled: back to the menu it came from, or to the game. */
+function cancelQuit(): void {
+  game.quitAsked = false
+  if (gameDialog.value === 'menu') focusMenuEntry.value = 'quit'
+}
+
+/** The entry of the menu that takes focus when it comes back (null: Save). */
+const focusMenuEntry = ref<MenuEntry | null>(null)
 
 // A game pop-up closes the player's dialogs (they do not come back after).
 watch(
@@ -1927,13 +1933,77 @@ watch(
   },
 )
 
-/** Closing the last one gives focus back to what opened the first one. */
+/** Closing the menu gives focus back to what opened it. */
 async function closeGameDialog(): Promise<void> {
+  // A window opened from the menu goes back to the menu, focus on its entry.
+  if (gameDialog.value !== 'menu' && menuEntry.value) {
+    focusMenuEntry.value = menuEntry.value
+    gameDialog.value = 'menu'
+    return
+  }
+  await closeAllGameDialogs()
+}
+
+/** Everything the menu opened is closed and the game goes on (a slot saved or loaded, the menu closed). */
+async function closeAllGameDialogs(): Promise<void> {
   gameDialog.value = null
+  menuEntry.value = null
+  focusMenuEntry.value = null
   await nextTick()
   if (document.activeElement === document.body && dialogOpener?.isConnected)
     dialogOpener.focus()
 }
+
+// A new game (quitting to the main menu) leaves nothing of the menu behind.
+watch(
+  () => game.gameNumber,
+  () => {
+    gameDialog.value = null
+    menuEntry.value = null
+    focusMenuEntry.value = null
+  },
+)
+
+// The narration waits, mid-line, while the menu or anything from it is open;
+// the music and the room's sounds play on.
+watch(
+  () => gameDialog.value !== null || game.quitAsked,
+  (open) => (open ? narration.pause() : narration.resume()),
+)
+
+const fullscreen = useFullscreen()
+
+/**
+ * Keys that belong to no one thing: Escape opens the menu when nothing else
+ * took it (what is open closes first, and the command box and the belt step
+ * back first: they consume their Escape), but not on the title page, a
+ * chapter page, a game pop-up, the end screen or the turn page; F switches
+ * full screen on and off, except in a text field. A held key acts once.
+ */
+function onMenuKey(event: KeyboardEvent): void {
+  if (event.defaultPrevented || event.repeat) return
+  if (event.ctrlKey || event.metaKey || event.altKey) return
+  if (event.key === 'Escape') {
+    if (
+      game.ending ||
+      turnPage.value ||
+      dialogOpen() ||
+      ring.value ||
+      document.querySelector('.lq-dialog-layer')
+    )
+      return
+    event.preventDefault()
+    openGameDialog('menu')
+    return
+  }
+  if (event.key !== 'f' && event.key !== 'F') return
+  const target = event.target instanceof Element ? event.target : null
+  if (target?.closest('input, textarea, select, [contenteditable]')) return
+  if (!fullscreen.supported) return
+  fullscreen.toggle()
+}
+onMounted(() => document.addEventListener('keydown', onMenuKey))
+onUnmounted(() => document.removeEventListener('keydown', onMenuKey))
 
 /** The quest whose details are open, from the active or completed list. */
 const shownQuestView = computed<QuestView | null>(() => {
@@ -1948,9 +2018,15 @@ const shownQuestView = computed<QuestView | null>(() => {
 
 /** Help's entry for narration (the engine's help lists commands only). */
 const NARRATION_HELP =
-  '\n[bold]Narration:[/bold] tap the story or press Space to hurry the current line; ' +
-  'hold, or press Esc, to show the rest at once. Any action cuts in. ' +
+  '\n[bold]Narration:[/bold] Tap the story or press Space to hurry the current line; ' +
+  'hold to show the rest at once. Any action cuts in. ' +
   'Set its volume, down to silent, in Settings.\n'
+
+/** Help's line for the key that closes what is open, or opens the menu (laptop only). */
+const ESCAPE_KEY_HELP = "\nEsc — close what's open, or open the menu\n"
+
+/** Help's line for the full-screen key (laptop only, where full screen works). */
+const FULLSCREEN_KEY_HELP = '\nF — full screen on or off\n'
 
 /** Help's line for the key that hides the narration paper (laptop only). */
 const NARRATION_KEY_HELP = '\nN — hide or show the words\n'
@@ -1960,17 +2036,18 @@ const NAMES_KEY_HELP = "\nS — show or hide what's here\n"
 
 /** Stats or Help as HTML (Help ends with the music credits). */
 const infoHtml = computed(() => {
-  const kind = gameDialog.value
-  if (kind !== 'stats' && kind !== 'help') return ''
-  const html = renderMarkup(game.readInfo(kind))
-  return kind === 'help'
-    ? html +
-        renderMarkup(NARRATION_HELP) +
-        (laptop.value
-          ? renderMarkup(NARRATION_KEY_HELP) + renderMarkup(NAMES_KEY_HELP)
-          : '') +
-        music.buildAttributionHtml()
-    : html
+  if (gameDialog.value !== 'help') return ''
+  return (
+    renderMarkup(game.readInfo('help')) +
+    renderMarkup(NARRATION_HELP) +
+    (laptop.value
+      ? renderMarkup(ESCAPE_KEY_HELP) +
+        (fullscreen.supported ? renderMarkup(FULLSCREEN_KEY_HELP) : '') +
+        renderMarkup(NARRATION_KEY_HELP) +
+        renderMarkup(NAMES_KEY_HELP)
+      : '') +
+    music.buildAttributionHtml()
+  )
 })
 
 // --- Names in the story: click one for a small menu of what fits ---
@@ -2152,14 +2229,12 @@ const chapterDialog = ref<HTMLElement | null>(null)
 const chapterTrap = useFocusTrap(chapterDialog)
 
 /**
- * A chapter page keeps Tab inside, and Escape goes on like its button (also
- * after a click on its text, which focuses the page itself).
+ * A chapter page keeps Tab inside (also after a click on its text, which
+ * focuses the page itself). Escape does nothing here: only its button goes on.
  */
 function onChapterKeydown(event: KeyboardEvent): void {
-  if (event.key === 'Escape') {
-    event.stopPropagation()
-    presentation.continueChapter()
-  } else chapterTrap.onKeydown(event)
+  if (event.key === 'Escape') event.stopPropagation()
+  else chapterTrap.onKeydown(event)
 }
 
 // Closing the save dialog puts focus back on the last chapter's button.
@@ -2203,17 +2278,19 @@ watch(
         :saved="game.ending.saved"
       />
       <template v-else>
-        <LanternHeader
-          v-if="!sideways"
-          :compact="!wide"
-          :hide-room="phoneStage"
-          @menu="openGameDialog('menu')"
-          @open="openGameDialog"
+        <!-- A short window with no picture: the section tabs on top, under the menu button. -->
+        <SectionNav v-if="textPage" v-model="section" class="lq-nav-top" />
+        <button
+          v-if="!wide"
+          type="button"
+          class="lq-float-menu"
+          data-lq-obstacle="keep-clear"
+          title="Menu"
+          aria-label="Menu"
+          @click="openGameDialog('menu')"
         >
-          <template v-if="!wide && textPage" #nav>
-            <SectionNav v-model="section" class="lq-nav-top" />
-          </template>
-        </LanternHeader>
+          ☰
+        </button>
 
         <main
           ref="mainEl"
@@ -2255,16 +2332,6 @@ watch(
               :away="arrivalFolded"
               :lift="beltHeight"
             />
-            <button
-              v-if="sideways"
-              type="button"
-              class="lq-float-menu"
-              data-lq-obstacle="keep-clear"
-              aria-label="Game menu"
-              @click="openGameDialog('menu')"
-            >
-              ☰
-            </button>
             <RoomPlate
               v-if="wide"
               ref="widePlate"
@@ -2285,6 +2352,7 @@ watch(
               @journal="toggleDrawer"
               @story="toggleDrawer('story')"
               @map="toggleDrawer('map')"
+              @menu="openGameDialog('menu')"
               @close="closeDrawer"
             />
             <!-- After the plate and the buttons, so the things on the picture are Tab stops right after them; the picture itself lies beneath everything (z-index). -->
@@ -2474,7 +2542,7 @@ watch(
               </div>
             </section>
             <p
-              v-if="narration.hintVisible"
+              v-if="narration.hintVisible && hintText"
               class="lq-narration-hint"
               data-lq-obstacle="words"
               :class="{ 'lq-hint-raised': moreBelow && !storyHeld }"
@@ -2551,7 +2619,6 @@ watch(
             :class="{ 'lq-sheet': !laptop, 'lq-sheet-over': sheeted }"
             :foldable="!laptop"
             :stage="laptop"
-            :words-showing="showHide"
             @click.capture="clearShownArrival"
             @input="clearShownArrival"
             @fold="fold"
@@ -2628,7 +2695,7 @@ watch(
 
         <!-- Dialogs the player opens (a game pop-up takes precedence). -->
         <template v-if="!game.showModal">
-          <QuitDialog v-if="game.quitAsked" />
+          <QuitDialog v-if="game.quitAsked" @cancel="cancelQuit" />
           <QuestDialog
             v-else-if="shownQuestView"
             :key="shownQuestView.name"
@@ -2637,9 +2704,10 @@ watch(
           />
           <GameMenu
             v-else-if="gameDialog === 'menu'"
-            :sideways="sideways"
-            @close="closeGameDialog"
+            :focus="focusMenuEntry"
+            @close="closeAllGameDialogs"
             @open="openGameDialog"
+            @quit="askQuitFromMenu"
           />
           <SettingsDialog
             v-else-if="gameDialog === 'settings'"
@@ -2650,6 +2718,7 @@ watch(
             v-else-if="gameDialog === 'save' || gameDialog === 'load'"
             :mode="gameDialog"
             @close="closeGameDialog"
+            @done="closeAllGameDialogs"
           />
           <LanternDialog
             v-else-if="gameDialog"
@@ -2995,15 +3064,14 @@ watch(
 .lq-sideways .lq-sheet {
   max-height: 85dvh;
 }
-/* A sideways phone: the menu button floats beside the plate, which moves over; the words
-   come up over the left side, the Hide sits at the foot in the middle. */
+/* The menu button where the stage has no row of buttons (a tall stage, the text page): in the corner, over the page. */
 .lq-float-menu {
-  position: absolute;
+  position: fixed;
   top: 8px;
-  left: 8px;
-  z-index: 2;
-  width: 40px;
-  height: 40px;
+  right: 8px;
+  z-index: 6;
+  width: 44px;
+  height: 44px;
   border-radius: 999px;
   border: 1px solid var(--lq-line2);
   background: color-mix(in srgb, var(--lq-surface) 93%, transparent);
@@ -3013,14 +3081,18 @@ watch(
   cursor: pointer;
   box-shadow: 0 4px 16px rgb(0 0 0 / 0.2);
 }
+/* The tabs of the text page leave the corner to the menu button. */
+.lq-nav-top {
+  padding-right: 60px;
+}
 .lq-sideways .lq-stage-plate {
   top: 8px;
-  left: 56px;
+  left: 8px;
   /* Ends 8px before the buttons, however wide their counts and dots make them. */
   max-width: min(
     360px,
     38%,
-    calc(100% - 56px - var(--lq-stage-buttons-w) - 16px)
+    calc(100% - 8px - var(--lq-stage-buttons-w) - 16px)
   );
 }
 .lq-sideways .lq-stage-buttons {

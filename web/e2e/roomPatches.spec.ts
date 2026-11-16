@@ -1,4 +1,4 @@
-import { test, expect } from './fixtures'
+import { test, expect, skipTelling } from './fixtures'
 
 /** A one-pixel transparent PNG, standing for a picture or a patch the studio made. */
 const PIXEL = Buffer.from(
@@ -51,7 +51,7 @@ test('the bread taken in the cottage is laid over its picture as a patch', async
   const input = page.getByLabel('Command', { exact: true })
   await input.fill('say hello to voice')
   await input.press('Enter')
-  await page.keyboard.press('Escape')
+  await skipTelling(page)
   await expect(page.locator('.lq-stage-picture.lq-scene-idle')).toHaveCount(1)
   await expect(page.locator('img.lq-patch')).toHaveCount(0)
 

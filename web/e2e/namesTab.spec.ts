@@ -3,7 +3,7 @@
  * here is a Tab stop in the newest turn, Enter opens its menu, Escape closes it
  * and focus is back on the same name.
  */
-import { test, expect, type Page } from './fixtures'
+import { test, expect, type Page, skipTelling } from './fixtures'
 
 /** Let the browser report the scroll that focusing a name causes. */
 async function settle(page: Page): Promise<void> {
@@ -19,7 +19,7 @@ async function settle(page: Page): Promise<void> {
 async function clearArrival(page: Page): Promise<void> {
   const told = page.locator('.lq-arrival-card')
   await expect(told.last()).toBeVisible()
-  await page.keyboard.press('Escape')
+  await skipTelling(page)
   await expect(told).toHaveCount(0)
 }
 

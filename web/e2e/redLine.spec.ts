@@ -135,6 +135,32 @@ async function startGame(page: Page): Promise<void> {
   await page.getByRole('button', { name: 'Start', exact: true }).click()
 }
 
+/** The act the game is in ("Act I"), from the game's own progress record. */
+async function currentAct(page: Page): Promise<string | null> {
+  return page.evaluate(() => {
+    interface Root extends Element {
+      __vue_app__?: {
+        config: {
+          globalProperties: {
+            $pinia: {
+              state: {
+                value: {
+                  game: { questProgress: { actNumber: number } | null }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    const root: Root | null = document.querySelector('#app')
+    const n =
+      root?.__vue_app__?.config.globalProperties.$pinia.state.value.game
+        .questProgress?.actNumber
+    return n ? `Act ${['I', 'II', 'III', 'IV', 'V'][n - 1]}` : null
+  })
+}
+
 /**
  * Close every chapter page until the act `header` is on screen,
  * collecting the text of the chapter pages on the way. Waits for the next page
@@ -143,12 +169,11 @@ async function startGame(page: Page): Promise<void> {
 async function readPages(page: Page, header: string): Promise<string[]> {
   const pages: string[] = []
   const chapterButton = page.locator('.lq-chapter-button')
-  const actHeader = page.getByTestId('act')
   for (;;) {
     if (await chapterButton.isVisible()) {
       pages.push(await page.locator('.lq-chapter').innerText())
       await chapterButton.click()
-    } else if ((await actHeader.textContent()) === header) {
+    } else if ((await currentAct(page)) === header) {
       return pages
     } else {
       await expect(chapterButton).toBeVisible()

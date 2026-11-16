@@ -1,4 +1,4 @@
-import { test, expect, type Locator, type Page } from './fixtures'
+import { test, expect, type Locator, type Page, skipTelling } from './fixtures'
 
 // Narration at full volume, as for a new player (the config sets it to 0 for the other specs).
 test.use({
@@ -259,7 +259,7 @@ test('Enter and Space on a focused verb hurry as the voice reads, without pressi
   expect(await turnCount(page)).toBe(commands)
 })
 
-test('typing keeps the voice reading, and Esc in the command box skips it', async ({
+test('typing keeps the voice reading, and Esc in the command box steps back without skipping it', async ({
   page,
 }): Promise<void> => {
   // A short screen: the text page, where the sheet is the composer (a taller
@@ -276,12 +276,12 @@ test('typing keeps the voice reading, and Esc in the command box skips it', asyn
   await input.pressSequentially('look')
   expect(await lastTurnBlocks(page).count()).toBeLessThanOrEqual(shown + 1)
   await expect(page.locator('.lq-speaking')).not.toHaveCount(0)
-  await expect(page.locator('.lq-narration-hint')).toHaveText('Esc to skip')
+  // No key skips from the command box: no hint there.
+  await expect(page.locator('.lq-narration-hint')).toHaveCount(0)
 
-  // The word list is open for "look"; the first Esc closes it, the next skips.
+  // The word list is open for "look"; Esc closes it, and the voice reads on.
   await input.press('Escape')
-  await input.press('Escape')
-  await expect(page.locator('.lq-speaking')).toHaveCount(0)
+  await expect(page.locator('.lq-speaking')).not.toHaveCount(0)
   await expect(input).toHaveValue('look')
   await expect(input).toBeFocused()
 })
@@ -336,6 +336,7 @@ test('hints at hurrying on the first narrated turn, and Settings has a volume fo
   await expect(page.locator('.lq-narration-hint')).toHaveCount(0)
 
   await page.setViewportSize({ width: 1280, height: 720 })
+  await page.getByRole('button', { name: 'Menu', exact: true }).click()
   await page.getByRole('button', { name: 'Settings', exact: true }).click()
   await expect(page.getByRole('switch', { name: 'Narration' })).toHaveCount(0)
   await expect(page.getByLabel('Narration volume')).toBeVisible()
@@ -444,7 +445,7 @@ test('in the one column the held story follows Elior’s journal lines as they a
     }
     await expect
       .poll(async () => {
-        await page.keyboard.press('Escape')
+        await skipTelling(page)
         return page.locator('.lq-speaking').count()
       })
       .toBe(0)
@@ -506,7 +507,7 @@ for (const { name, width, height } of [
         }
         await expect
           .poll(async () => {
-            await page.keyboard.press('Escape')
+            await skipTelling(page)
             return page.locator('.lq-speaking').count()
           })
           .toBe(0)
@@ -571,7 +572,7 @@ for (const { name, width, height } of [
       }
       await expect
         .poll(async () => {
-          await page.keyboard.press('Escape')
+          await skipTelling(page)
           return page.locator('.lq-speaking').count()
         })
         .toBe(0)

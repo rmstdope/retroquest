@@ -400,6 +400,67 @@ describe('useNarrationStore', () => {
     expect(last()).not.toBe(first)
   })
 
+  describe('pause and resume (a menu is open)', () => {
+    it('pauses the voice mid-line and plays on from there without ending the part', async () => {
+      narration.begin(1, [voiced(3), voiced(2)], 'act1')
+      const first = last()
+      first.currentTime = 1
+      narration.pause()
+      expect(first.paused).toBe(true)
+      // Far longer than the clip: a paused voice does not run out its timers.
+      await vi.advanceTimersByTimeAsync(60_000)
+      expect(narration.revealed(1, 1)).toBe(false)
+      first.paused = false
+      narration.resume()
+      expect(first.paused).toBe(false)
+      first.onended?.()
+      await vi.advanceTimersByTimeAsync(5_000)
+      expect(narration.revealed(1, 1)).toBe(true)
+    })
+
+    it('holds the wait between parts and goes on after resume', async () => {
+      narration.begin(1, [voiced(1), voiced(1)], 'act1')
+      last().onended?.()
+      narration.pause()
+      await vi.advanceTimersByTimeAsync(60_000)
+      expect(narration.revealed(1, 1)).toBe(false)
+      narration.resume()
+      await vi.advanceTimersByTimeAsync(5_000)
+      expect(narration.revealed(1, 1)).toBe(true)
+    })
+
+    it('keeps the line when the pause comes before the clip has loaded (the browser rejects its play)', async () => {
+      class LoadingAudio extends FakeAudio {
+        override play(): Promise<void> {
+          return new Promise((_resolve, reject) => {
+            this.reject = () => reject(new Error('AbortError'))
+          })
+        }
+        override pause(): void {
+          super.pause()
+          this.reject?.()
+        }
+        reject: (() => void) | null = null
+      }
+      narration.setAudioFactory((src) => new LoadingAudio(src))
+      narration.begin(1, [voiced(3), voiced(2)], 'act1')
+      narration.pause()
+      await vi.advanceTimersByTimeAsync(60_000)
+      expect(narration.revealed(1, 1)).toBe(false)
+      narration.resume()
+      last().onended?.()
+      await vi.advanceTimersByTimeAsync(5_000)
+      expect(narration.revealed(1, 1)).toBe(true)
+    })
+
+    it('does nothing when nothing is narrated', () => {
+      expect(() => {
+        narration.pause()
+        narration.resume()
+      }).not.toThrow()
+    })
+  })
+
   it('skipTo cuts the voice and plays from the given unit, skipping the ones between', () => {
     narration.begin(7, [voiced(), voiced(), voiced()], 'act1')
     const first = last()

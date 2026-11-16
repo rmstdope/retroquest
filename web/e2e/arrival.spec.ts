@@ -1,4 +1,4 @@
-import { test, expect, type Page } from './fixtures'
+import { test, expect, type Page, skipTelling } from './fixtures'
 import { AFTER_TELLING_PAUSE_MS } from '../src/lantern/hurryKeys'
 
 /** Open the game on a laptop and close the opening chapter page: the first room arrives. */
@@ -167,7 +167,7 @@ test.describe('the arrival told on the picture', () => {
     const card = arrival(page).locator('.lq-arrival-card')
     await page.keyboard.press('Enter')
     await expect(card).toHaveCount(1)
-    await page.keyboard.press('Escape')
+    await skipTelling(page)
     await page.keyboard.press('Enter')
     await page.waitForTimeout(PRESS_SETTLES_MS)
     expect(await turnCount(page)).toBe(1)
@@ -375,7 +375,7 @@ test.describe('the arrival told on the picture', () => {
     await startAct1(page)
     await expect(arrival(page).locator('.lq-arrival-line')).toBeVisible()
     await expect(page.getByTestId('arrival-bar').locator('i')).toBeVisible()
-    await page.keyboard.press('Escape')
+    await skipTelling(page)
     await expect(arrival(page).locator('.lq-arrival-line')).toHaveCount(0)
   })
 
@@ -528,7 +528,7 @@ test.describe('the arrival told on the picture', () => {
         if (text.includes('Elior')) break
       }
       expect(seen.some((text) => text.includes('let them rest'))).toBe(true)
-      await page.keyboard.press('Escape')
+      await skipTelling(page)
       await expect(lines).toHaveCount(0)
     })
 
@@ -602,14 +602,13 @@ test.describe('a long arrival on a narrow window (rq-fc9f)', () => {
     'It is whispering, at the very edge of hearing, and what it whispers is your name.',
   ]
 
-  test('shows every line of the Dream before Enter moves on, after Escape', async ({
+  test('shows every line of the Dream before Enter moves on', async ({
     page,
   }) => {
     await page.setViewportSize({ width: 564, height: 717 })
     await page.goto('/')
     await page.getByRole('button', { name: 'Start', exact: true }).click()
-    await expect(page.locator('.lq-chapter-button')).toBeVisible()
-    await page.keyboard.press('Escape')
+    await page.locator('.lq-chapter-button').click()
     const card = arrival(page).locator('.lq-arrival-card')
     await expect(card).toHaveCount(1)
     const seen: string[] = []

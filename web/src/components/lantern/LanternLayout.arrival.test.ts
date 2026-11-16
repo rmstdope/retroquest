@@ -1,4 +1,5 @@
 // @vitest-environment jsdom
+import { HOLD_TO_SKIP_MS } from '@/composables/useHoldToSkip'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { nextTick } from 'vue'
 import { mount, type VueWrapper } from '@vue/test-utils'
@@ -125,6 +126,18 @@ describe('LanternLayout: the arrival on the picture', () => {
     await vi.advanceTimersByTimeAsync(0)
   }
 
+  /** Hold Space for the whole hold-to-skip, then let go. */
+  const hold = async (): Promise<void> => {
+    document.dispatchEvent(
+      new KeyboardEvent('keydown', { key: ' ', bubbles: true }),
+    )
+    await vi.advanceTimersByTimeAsync(HOLD_TO_SKIP_MS + 50)
+    document.dispatchEvent(
+      new KeyboardEvent('keyup', { key: ' ', bubbles: true }),
+    )
+    await vi.advanceTimersByTimeAsync(0)
+  }
+
   beforeEach(() => {
     audios.length = 0
     pinia = createPinia()
@@ -233,10 +246,11 @@ describe('LanternLayout: the arrival on the picture', () => {
     expect(up.defaultPrevented).toBe(true)
   })
 
-  it('clears with Escape', async () => {
+  it('clears with a held Space', async () => {
     const w = await ready()
     await run('go north')
-    await key('Escape')
+    expect(card(w)).not.toBe('')
+    await hold()
     expect(card(w)).toBe('')
     expect(useNarrationStore(pinia).isNarrating).toBe(false)
     expect(slidAside(w)).toBe(false)
@@ -288,7 +302,7 @@ describe('LanternLayout: the arrival on the picture', () => {
     expect(card(w)).toBe('')
     expect(slidAside(w)).toBe(false)
     await run('go north')
-    await key('Escape')
+    await hold()
     await run('go south')
     expect(card(w)).toBe('')
     expect(slidAside(w)).toBe(false)
@@ -471,7 +485,7 @@ describe('LanternLayout: the arrival on the picture', () => {
       expect(card(w)).toBe('')
     })
 
-    it('after Escape, shows the skipped lines first and holds the card; Space brings it up, a second Escape ends it', async () => {
+    it('after a held Space, shows the skipped lines and the news at once, holding no card', async () => {
       const w = await ready(true, true)
       useGameStore(pinia).setAudioPlayer({
         playNewQuest: vi.fn(),
@@ -480,27 +494,15 @@ describe('LanternLayout: the arrival on the picture', () => {
       })
       pushTurn({ ...news(), text: 'A green garden.', narrate: true })
       await vi.advanceTimersByTimeAsync(0)
-      await key('Escape')
+      await hold()
       await vi.advanceTimersByTimeAsync(0)
-      // The skipped line is on the story, not pushed aside by the card.
       expect(card(w)).toBe('')
       expect(storyAside(w)).toBe(false)
-      expect(w.get('.lq-story').text()).toContain('A green garden.')
-      await key(' ')
-      expect(card(w)).toContain('Hint of magic')
-
-      pushTurn({ ...news(91), text: 'A green garden.', narrate: true })
-      await vi.advanceTimersByTimeAsync(0)
-      await key('Escape')
-      await vi.advanceTimersByTimeAsync(0)
-      expect(useArrivalStore(pinia).holding).toBe(true)
-      await key('Escape')
       expect(useArrivalStore(pinia).holding).toBe(false)
-      await vi.advanceTimersByTimeAsync(10000)
-      expect(card(w)).toBe('')
+      expect(w.get('.lq-story').text()).toContain('A green garden.')
     })
 
-    it('ends all the news of the turn with Escape', async () => {
+    it('ends all the news of the turn with a held Space', async () => {
       const w = await ready(true, false)
       useSettingsStore(pinia).narrationVolume = 0
       useGameStore(pinia).setAudioPlayer({
@@ -510,7 +512,7 @@ describe('LanternLayout: the arrival on the picture', () => {
       })
       pushTurn(news())
       await vi.advanceTimersByTimeAsync(0)
-      await key('Escape')
+      await hold()
       expect(card(w)).toBe('')
       expect(w.findAll('[data-testid="news-line"]')).toHaveLength(0)
     })
@@ -536,7 +538,7 @@ describe('LanternLayout: the arrival on the picture', () => {
     useSettingsStore(pinia).narrationVolume = 0
     await run('go north')
     expect(storyAside(w)).toBe(true)
-    await key('Escape')
+    await hold()
     await run('look')
     expect(slidAside(w)).toBe(false)
     expect(w.get('.lq-story-wrap').attributes('inert')).toBeUndefined()
@@ -723,20 +725,20 @@ describe('LanternLayout: the arrival on the picture', () => {
       return audio
     }
 
-    it('rings the spell sound once when the talk is skipped with Escape', async () => {
+    it('rings the spell sound once when the talk is skipped with a held Space', async () => {
       await ready(true, true)
       const audio = await narratedSpellTurn()
-      await key('Escape')
+      await hold()
       await vi.advanceTimersByTimeAsync(20000)
       expect(audio.playNewSpell).toHaveBeenCalledOnce()
       expect(audio.playQuestComplete).toHaveBeenCalledOnce()
     })
 
-    it('rings the spell sound once when a second Escape ends the held news', async () => {
+    it('rings the spell sound once when a second hold ends the held news', async () => {
       await ready(true, true)
       const audio = await narratedSpellTurn()
-      await key('Escape')
-      await key('Escape')
+      await hold()
+      await hold()
       await vi.advanceTimersByTimeAsync(20000)
       expect(audio.playNewSpell).toHaveBeenCalledOnce()
       expect(audio.playQuestComplete).toHaveBeenCalledOnce()

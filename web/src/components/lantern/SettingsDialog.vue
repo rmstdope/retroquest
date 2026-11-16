@@ -6,13 +6,17 @@ import {
   type ThemeSetting,
 } from '@/stores/useSettingsStore'
 import { useReducedMotion } from '@/composables/useReducedMotion'
+import { useFullscreen } from '@/composables/useFullscreen'
+import { useMediaQuery, KEYBOARD_QUERY } from '@/composables/useMediaQuery'
 import { LANTERN_TEXT_SIZES } from '@/lantern/tokens'
 import LanternDialog from './LanternDialog.vue'
 
 /**
  * The player's settings, saved in this browser: theme and text size, music,
  * sound effects and narration (on/off and volume), how the actions start, and reduce
- * motion (which follows the device until it is changed here).
+ * motion (which follows the device until it is changed here). Full screen is a
+ * switch at the end of Appearance (left out where the browser cannot do it,
+ * with a line about the F key for a keyboard only).
  *
  * `musicInfo` is the credit of the music actually playing (a take chosen in
  * Content Studio has its own), as the layout's music player holds it.
@@ -33,6 +37,8 @@ const STARTS: Array<{ value: StartMode; label: string }> = [
   { value: 'type', label: 'Type' },
 ]
 
+const fullscreen = useFullscreen()
+const keyboardPlayer = useMediaQuery(KEYBOARD_QUERY)
 const motionReduced = useReducedMotion()
 function toggleMotion(): void {
   settings.reduceMotion = motionReduced.value ? 'off' : 'on'
@@ -91,6 +97,24 @@ function volume(event: Event): number {
       <p class="lq-sample">
         The great boughs creak overhead as silver leaves drift down around you.
       </p>
+      <div v-if="fullscreen.supported" class="lq-row">
+        <span class="lq-row-text"
+          ><span class="lq-row-label">Full screen</span
+          ><span v-if="keyboardPlayer" class="lq-note"
+            >Press F to switch it on or off</span
+          ></span
+        >
+        <button
+          type="button"
+          role="switch"
+          class="lq-switch"
+          aria-label="Full screen"
+          :aria-checked="fullscreen.active.value ? 'true' : 'false'"
+          @click="fullscreen.toggle"
+        >
+          <span class="lq-knob"></span>
+        </button>
+      </div>
     </section>
 
     <section class="lq-group" aria-labelledby="lq-set-sound">

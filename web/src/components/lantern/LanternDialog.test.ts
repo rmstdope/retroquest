@@ -30,6 +30,16 @@ describe('LanternDialog', () => {
     )
   }
 
+  it('can stay centred on a phone (centered)', () => {
+    expect(mountDialog().get('.lq-dialog-layer').classes()).not.toContain(
+      'lq-dialog-centered',
+    )
+    wrapper?.unmount()
+    expect(
+      mountDialog({ centered: true }).get('.lq-dialog-layer').classes(),
+    ).toContain('lq-dialog-centered')
+  })
+
   it('is a modal dialog named by its title', () => {
     const w = mountDialog()
     const dialog = w.get('[role="dialog"]')

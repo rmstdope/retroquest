@@ -1,4 +1,4 @@
-import { test, expect, type Page } from './fixtures'
+import { test, expect, type Page, skipTelling } from './fixtures'
 
 /** Wait for the game to start (the act chunks load after the page's load event). */
 async function waitForGame(page: Page) {
@@ -47,15 +47,14 @@ async function injectMockState(page: Page) {
 }
 
 test.describe('Lantern UI (the default)', () => {
-  test('shows the Lantern shell with header, story and command box', async ({
+  test('shows the Lantern shell with story and command box, and no top bar', async ({
     page,
   }) => {
     await page.goto('/')
     await injectMockState(page)
 
-    await expect(page.getByText('RetroQuest', { exact: true })).toBeVisible()
-    await expect(page.getByTestId('act')).toHaveText('Act I')
-    await expect(page.getByTestId('quest-progress')).toContainText('4/11')
+    await expect(page.getByRole('banner')).toHaveCount(0)
+    await expect(page.getByText('RetroQuest', { exact: true })).toHaveCount(0)
     await expect(page.getByText('bustles with life')).toBeVisible()
     await expect(
       page.getByRole('button', { name: 'Look', exact: true }),
@@ -72,19 +71,6 @@ test.describe('Lantern UI (the default)', () => {
         .trim(),
     )
     expect(['#ffa914', '#f29e00']).toContain(accent)
-  })
-
-  test('on a phone the text size popover stays on screen', async ({ page }) => {
-    await page.setViewportSize({ width: 390, height: 844 })
-    await page.goto('/')
-    await injectMockState(page)
-
-    await page.getByRole('button', { name: 'Text size' }).click()
-    const box = await page
-      .getByRole('group', { name: 'Text size' })
-      .boundingBox()
-    expect(box!.x).toBeGreaterThanOrEqual(0)
-    expect(box!.x + box!.width).toBeLessThanOrEqual(390)
   })
 
   test('the command box stays on screen with a long story', async ({
@@ -672,7 +658,7 @@ test.describe('Lantern UI (the default)', () => {
     await expect(drawer).toHaveCount(0)
   })
 
-  test('puts speech on the picture on a laptop: the grandmother on the right, Elior on the left, cleared by ✕, Escape and walking', async ({
+  test('puts speech on the picture on a laptop: the grandmother on the right, Elior on the left, cleared by ✕ and walking', async ({
     page,
   }) => {
     await page.setViewportSize({ width: 1280, height: 800 })
@@ -731,12 +717,10 @@ test.describe('Lantern UI (the default)', () => {
     await expect(lines.first()).toBeVisible()
     await expect(page.getByRole('button', { name: '▾ Hide' })).toBeFocused()
 
-    // Escape hides too (focus stays in the command box), and so does N.
-    await input.focus()
-    await page.keyboard.press('Escape')
-    await expect(lines.first()).toBeHidden()
-    await expect(input).toBeFocused()
+    // N hides too (not in the command box, where it is a letter).
     await input.blur()
+    await page.keyboard.press('n')
+    await expect(lines.first()).toBeHidden()
     await page.keyboard.press('n')
     await expect(lines.first()).toBeVisible()
 
@@ -903,15 +887,19 @@ test.describe('Lantern UI (the default)', () => {
     await expect(page.getByRole('region', { name: 'Action bar' })).toBeVisible()
   })
 
-  test('puts the section tabs in the header in phone landscape', async ({
+  test('puts the section tabs on top of the page in phone landscape, under the menu button', async ({
     page,
   }) => {
     await page.setViewportSize({ width: 844, height: 390 })
     await page.goto('/')
     await injectMockState(page)
 
+    await expect(page.getByRole('banner')).toHaveCount(0)
     await expect(
-      page.getByRole('banner').getByRole('navigation', { name: 'Sections' }),
+      page.getByRole('navigation', { name: 'Sections' }),
+    ).toBeVisible()
+    await expect(
+      page.getByRole('button', { name: 'Menu', exact: true }),
     ).toBeVisible()
     const overflow = await page.evaluate(
       () => document.documentElement.scrollHeight - window.innerHeight,
@@ -1083,31 +1071,6 @@ test.describe('Lantern UI (the default)', () => {
     })
   }
 
-  test('uses a one-row header with the room name on a phone', async ({
-    page,
-  }) => {
-    await page.setViewportSize({ width: 320, height: 568 })
-    await page.goto('/')
-    await injectMockState(page)
-    await page.evaluate(() => {
-      /* eslint-disable @typescript-eslint/no-explicit-any */
-      const app = (document.querySelector('#app') as any).__vue_app__
-      const store = app.config.globalProperties.$pinia.state.value.game
-      store.roomName = "Entrance to Malakar's Fortress"
-      /* eslint-enable @typescript-eslint/no-explicit-any */
-    })
-
-    const header = page.getByRole('banner')
-    await expect(header).toContainText('Act I · Quests 4/11')
-    await expect(
-      header.getByRole('heading', { name: 'RetroQuest' }),
-    ).toBeAttached()
-    const height = await header.evaluate(
-      (e) => e.getBoundingClientRect().height,
-    )
-    expect(height).toBeLessThan(72)
-  })
-
   test('shows a completed quest in the story, not as a pop-up, on a small phone', async ({
     page,
   }) => {
@@ -1145,7 +1108,7 @@ test.describe('Lantern UI (the default)', () => {
     await expect(middle.getByText('Oath of Stillness')).toBeVisible()
     await expect(middle.getByText('Side quest complete · 5 of 8')).toBeVisible()
     await expect(page.getByRole('dialog')).toHaveCount(0)
-    await page.keyboard.press('Escape')
+    await skipTelling(page)
     await expect(middle.getByText('Oath of Stillness')).toHaveCount(0)
     const story = page.getByRole('region', { name: 'Story' })
     await expect(story).not.toContainText('Oath of Stillness')
@@ -1255,19 +1218,6 @@ test.describe('Lantern UI (the default)', () => {
       .locator('.lq-wordmark')
       .evaluate((el) => getComputedStyle(el).color)
     expect(text).toBe('rgb(255, 184, 54)')
-  })
-
-  test('leaves the full-screen button out of the narrowest header', async ({
-    page,
-  }) => {
-    await page.setViewportSize({ width: 390, height: 844 })
-    await page.goto('/')
-    await injectMockState(page)
-    const button = page.getByRole('button', { name: 'Full screen' })
-    await expect(button).toBeVisible()
-
-    await page.setViewportSize({ width: 320, height: 568 })
-    await expect(button).toBeHidden()
   })
 
   test('asks to save before finishing in a bottom sheet on a small phone', async ({

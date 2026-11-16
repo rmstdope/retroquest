@@ -70,9 +70,9 @@ for (const size of [
     } else {
       await expect(page.locator('.lq-hint-word')).toBeVisible()
     }
-    await page.locator('.lq-float-menu').click()
+    await page.getByRole('button', { name: 'Menu', exact: true }).click()
     await expect(page.getByText('Quick save')).toBeVisible()
-    await expect(page.getByText('Text size')).toBeVisible()
+    await expect(page.getByRole('button', { name: 'Quit' })).toBeVisible()
   })
 }
 

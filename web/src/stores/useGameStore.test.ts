@@ -248,6 +248,8 @@ describe('useGameStore', () => {
       bridge.controller.isAcceptingInput.mockReturnValue(true)
       await store.initGame()
       expect(store.acceptInput).toBe(false)
+      // Quitting lands on the main menu: the title page is up again.
+      expect(store.showTitle).toBe(true)
     })
 
     it('restores acceptInput after intro modal is dismissed', async () => {

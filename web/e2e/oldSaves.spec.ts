@@ -7,7 +7,7 @@
  */
 import { test, expect, type Page } from './fixtures'
 
-/** The game menu (☰) is in the phone's header. */
+/** The menu (☰) is among the buttons on the picture. */
 const PHONE = { width: 360, height: 740 }
 const REASON = "Made by an older version · can't be loaded"
 const OLD_LINE =
@@ -50,22 +50,24 @@ test('old saves are dimmed with their reason and cannot be loaded', async ({
   await seedOldSaves(page)
   await start(page)
 
-  await page.getByRole('button', { name: 'Game menu' }).click()
+  await page.getByRole('button', { name: 'Menu', exact: true }).click()
   const quickLoad = page.getByRole('button', { name: /^Quick load/ })
   await expect(quickLoad).toBeDisabled()
-  await expect(quickLoad).toContainText(
-    'The quick save is from an older version',
-  )
+  await expect(
+    page.getByText('The quick save is from an older version'),
+  ).toBeVisible()
 
-  await page.getByRole('button', { name: /^Save game/ }).click()
+  await page.getByRole('button', { name: 'Save', exact: true }).click()
   const saving = page.getByRole('dialog', { name: 'Save game' })
   await saving.locator('[data-slot="1"] .lq-slot-btn').click()
   await expect(saving.locator('[data-slot="1"]')).toContainText('Just saved')
   await page.keyboard.press('Escape')
   await expect(saving).toHaveCount(0)
+  // Back in the menu: another Escape closes it.
+  await page.keyboard.press('Escape')
 
-  await page.getByRole('button', { name: 'Game menu' }).click()
-  await page.getByRole('button', { name: /^Load game/ }).click()
+  await page.getByRole('button', { name: 'Menu', exact: true }).click()
+  await page.getByRole('button', { name: 'Load', exact: true }).click()
   const dialog = page.getByRole('dialog', { name: 'Load game' })
   await expect(dialog.getByText('Pick a save to go back to.')).toBeVisible()
   for (const slot of ['0', '2']) {
@@ -88,8 +90,8 @@ test('an old slot can be saved over after asking', async ({ page }) => {
   await seedOldSaves(page)
   await start(page)
 
-  await page.getByRole('button', { name: 'Game menu' }).click()
-  await page.getByRole('button', { name: /^Save game/ }).click()
+  await page.getByRole('button', { name: 'Menu', exact: true }).click()
+  await page.getByRole('button', { name: 'Save', exact: true }).click()
   const card = page
     .getByRole('dialog', { name: 'Save game' })
     .locator('[data-slot="2"]')
@@ -114,7 +116,7 @@ test('typing load for an old save says so and leaves the game as it was', async 
     .first()
     .click()
   const turns = page.locator('.lq-story .lq-turn')
-  const act = page.getByTestId('act')
+  const act = page.locator('.lq-room-name')
   const actBefore = await act.textContent()
   const turnsBefore = await turns.count()
   const input = page.getByLabel('Command')
@@ -148,6 +150,7 @@ test('settings saved with a sound switched off load it at volume 0', async ({
   await page.goto('/')
   await page.getByRole('button', { name: 'Start', exact: true }).click()
   await page.locator('.lq-chapter-button').click()
+  await page.getByRole('button', { name: 'Menu', exact: true }).click()
   await page.getByRole('button', { name: 'Settings', exact: true }).click()
 
   await expect(page.getByLabel('Music volume')).toHaveValue('0')
