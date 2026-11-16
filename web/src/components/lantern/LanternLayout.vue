@@ -2973,6 +2973,10 @@ watch(
   /* The right margin leaves the corner to the menu button, so "Story so far" sits beside it. */
   margin: 8px 60px 0 8px;
 }
+/* What is left beside "Story so far" is narrow, so a long room name wraps rather than being cut off. */
+.lq-phone-plate :deep(.lq-room-name) {
+  white-space: normal;
+}
 /* The stage: one Hide on its own slim line at the foot of the picture, just
    above the actions (the laptop's row, the phone's folded bar), the words
    ending above it; hidden, the "▴ Show" tab rests in its place. Both sit at

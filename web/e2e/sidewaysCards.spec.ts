@@ -110,7 +110,11 @@ test('a larger phone keeps today’s type', async ({ page }) => {
   await start(page, 844, 390)
   await pushNews(page, [NEW_QUEST])
   await expect(stage(page).locator('.lq-news-name').first()).toBeVisible()
-  expect(await fontSize(page, '.lq-arrival-line')).toBe('24px')
+  // Retried: the first arrival's line can still be leaving as the news comes in.
+  await expect(stage(page).locator('.lq-arrival-line').first()).toHaveCSS(
+    'font-size',
+    '24px',
+  )
   // 44 px, scaled by the display scale of a narrow screen.
   expect(parseFloat(await fontSize(page, '.lq-news-name'))).toBeGreaterThan(36)
 })
