@@ -4,7 +4,7 @@ import { useUiSounds } from './useUiSounds'
 const HUSH_MS = 250
 
 /**
- * The ring of a keyboard-driven screen (Save, Load, Settings, Quit): the
+ * The ring of a keyboard-driven screen (Escape menu, Save, Load, Settings, Quit): the
  * ring is focus on a "stop", an element that matches `stopSelector`. How it
  * looks is the `[data-ring]` rule in `lantern.css`: mark the ringed element
  * with it.

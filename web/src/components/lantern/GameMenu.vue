@@ -79,12 +79,18 @@ function onKeydown(event: KeyboardEvent): void {
   >
     <div ref="list" class="lq-menu" @keydown="onKeydown">
       <div class="lq-quick">
-        <button type="button" class="lq-menu-entry" @click="quickSave">
+        <button
+          type="button"
+          class="lq-menu-entry"
+          data-ring
+          @click="quickSave"
+        >
           Quick save
         </button>
         <button
           type="button"
           class="lq-menu-entry"
+          data-ring
           :disabled="quickSaveOld"
           @click="quickLoad"
         >
@@ -100,6 +106,7 @@ function onKeydown(event: KeyboardEvent): void {
         :key="row.kind"
         type="button"
         class="lq-menu-entry lq-menu-row"
+        data-ring
         :data-autofocus="starts(row.kind) || undefined"
         @click="emit('open', row.kind)"
       >
@@ -109,6 +116,7 @@ function onKeydown(event: KeyboardEvent): void {
       <button
         type="button"
         class="lq-menu-entry lq-menu-row lq-menu-quit"
+        data-ring
         :data-autofocus="starts('quit') || undefined"
         @click="emit('quit')"
       >

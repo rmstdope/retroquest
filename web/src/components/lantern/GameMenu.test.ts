@@ -185,6 +185,16 @@ describe('GameMenu', () => {
     expect(document.activeElement).toBe(quit.element)
   })
 
+  it("marks every entry as a ring stop, for the menus' one ring", () => {
+    const w = mountMenu()
+    const entries = w.findAll('.lq-menu-entry')
+
+    expect(entries).toHaveLength(7)
+    for (const entry of entries) {
+      expect(entry.attributes('data-ring')).toBeDefined()
+    }
+  })
+
   it('closes with its close button', async () => {
     const w = mountMenu()
 
