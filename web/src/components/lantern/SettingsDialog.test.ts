@@ -47,6 +47,97 @@ describe('SettingsDialog', () => {
       .find((b) => (b.attributes('aria-label') ?? b.text()) === label)!
   }
 
+  describe('Full screen', () => {
+    let request: ReturnType<typeof vi.fn>
+    let exit: ReturnType<typeof vi.fn>
+
+    beforeEach(() => {
+      request = vi.fn(() => Promise.resolve())
+      exit = vi.fn(() => Promise.resolve())
+      document.documentElement.requestFullscreen =
+        request as unknown as typeof document.documentElement.requestFullscreen
+      document.exitFullscreen =
+        exit as unknown as typeof document.exitFullscreen
+    })
+    afterEach(() => {
+      Reflect.deleteProperty(document, 'fullscreenEnabled')
+      Reflect.deleteProperty(document, 'fullscreenElement')
+    })
+
+    function supported(yes: boolean, keyboard = true): void {
+      Object.defineProperty(document, 'fullscreenEnabled', {
+        value: yes,
+        configurable: true,
+      })
+      vi.stubGlobal(
+        'matchMedia',
+        vi.fn((query: string) => ({
+          matches: query.includes('hover: hover') ? keyboard : false,
+          addEventListener: vi.fn(),
+          removeEventListener: vi.fn(),
+        })),
+      )
+    }
+    const row = (w: VueWrapper) =>
+      w.find('button[role="switch"][aria-label="Full screen"]')
+
+    it('is a switch at the end of Appearance, off while the page is not full screen', () => {
+      supported(true)
+      const w = mountSettings()
+      const appearance = w.get('section[aria-labelledby="lq-set-look"]')
+      const labels = appearance
+        .findAll('.lq-row-label')
+        .map((label) => label.text())
+      expect(labels).toEqual(['Theme', 'Text size', 'Full screen'])
+      expect(row(w).attributes('aria-checked')).toBe('false')
+    })
+
+    it('says which key switches it, with a keyboard only', () => {
+      supported(true, true)
+      expect(mountSettings().text()).toContain('Press F to switch it on or off')
+      wrapper?.unmount()
+      supported(true, false)
+      expect(mountSettings().text()).not.toContain('Press F')
+    })
+
+    it('switches full screen on, and off when it is on', async () => {
+      supported(true)
+      const w = mountSettings()
+      await row(w).trigger('click')
+      expect(request).toHaveBeenCalledOnce()
+      Object.defineProperty(document, 'fullscreenElement', {
+        value: document.documentElement,
+        configurable: true,
+      })
+      document.dispatchEvent(new Event('fullscreenchange'))
+      await w.vm.$nextTick()
+      expect(row(w).attributes('aria-checked')).toBe('true')
+      await row(w).trigger('click')
+      expect(exit).toHaveBeenCalledOnce()
+    })
+
+    it('turns off when the browser leaves full screen by its own means', async () => {
+      supported(true)
+      Object.defineProperty(document, 'fullscreenElement', {
+        value: document.documentElement,
+        configurable: true,
+      })
+      const w = mountSettings()
+      expect(row(w).attributes('aria-checked')).toBe('true')
+      Reflect.deleteProperty(document, 'fullscreenElement')
+      document.dispatchEvent(new Event('fullscreenchange'))
+      await w.vm.$nextTick()
+      expect(row(w).attributes('aria-checked')).toBe('false')
+    })
+
+    it('is not shown at all where full screen cannot work', () => {
+      supported(false)
+      const w = mountSettings()
+      expect(row(w).exists()).toBe(false)
+      expect(w.text()).not.toContain('Full screen')
+    })
+  })
+
   it('is the settings dialog with its groups', () => {
     const w = mountSettings()
 
