@@ -18,18 +18,25 @@ async function openSettings(page: Page, width = 900): Promise<void> {
   await page.getByRole('button', { name: 'Settings', exact: true }).click()
 }
 
-/** How far (px) the focused row's ring sticks out past the list's edges. */
-async function clipped(page: Page): Promise<number> {
+/** '0' when the focused row's ring is whole, else how far it sticks out. */
+async function clipped(page: Page): Promise<string> {
   return page.evaluate((reach: number) => {
     const list = document.querySelector('.lq-dialog-content')
     const active = document.activeElement
-    if (!list || !active) return Number.POSITIVE_INFINITY
+    if (!list || !active) return 'no list or focus'
     // Focus outside the scrolling list (the close button) has nothing to clip.
-    if (!list.contains(active)) return 0
+    if (!list.contains(active)) return '0'
     const row = active.closest('.lq-stop') ?? active
     const r = row.getBoundingClientRect()
     const l = list.getBoundingClientRect()
-    return Math.max(l.top - (r.top - reach), r.bottom + reach - l.bottom, 0)
+    const out = Math.max(
+      l.top - (r.top - reach),
+      r.bottom + reach - l.bottom,
+      0,
+    )
+    return out === 0
+      ? '0'
+      : `${out}px: ${active.tagName} row ${r.top}-${r.bottom} list ${l.top}-${l.bottom}`
   }, RING_REACH)
 }
 
@@ -38,9 +45,9 @@ test('Settings: the ring is whole on the last row and on the first', async ({
 }): Promise<void> => {
   await openSettings(page)
   await page.keyboard.press('ArrowUp')
-  await expect.poll(() => clipped(page)).toBe(0)
+  await expect.poll(() => clipped(page)).toBe('0')
   await page.keyboard.press('ArrowDown')
-  await expect.poll(() => clipped(page)).toBe(0)
+  await expect.poll(() => clipped(page)).toBe('0')
 })
 
 test('Settings: the ring is whole on every row walked down with the arrow keys', async ({
@@ -49,7 +56,7 @@ test('Settings: the ring is whole on every row walked down with the arrow keys',
   await openSettings(page)
   for (let i = 0; i < 40; i++) {
     await page.keyboard.press('ArrowDown')
-    await expect.poll(() => clipped(page)).toBe(0)
+    await expect.poll(() => clipped(page)).toBe('0')
   }
 })
 
@@ -59,6 +66,6 @@ test('Settings: the ring is whole on every stop Tab reaches, on a phone too', as
   await openSettings(page, 390)
   for (let i = 0; i < 25; i++) {
     await page.keyboard.press('Tab')
-    await expect.poll(() => clipped(page)).toBe(0)
+    await expect.poll(() => clipped(page)).toBe('0')
   }
 })
