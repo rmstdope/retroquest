@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { computed, inject, nextTick, onBeforeUnmount, ref, watch } from 'vue'
+import { computed, inject, nextTick, ref, watch } from 'vue'
+import { useSizeWatch } from '@/composables/useSizeWatch'
 import { useGameStore } from '@/stores/useGameStore'
 import { useStageSpeechStore } from '@/stores/useStageSpeechStore'
 import { useNarrationStore } from '@/stores/useNarrationStore'
@@ -130,14 +131,8 @@ watch(
   () => speech.visible.at(-1)?.key,
   () => void nextTick(pinNewest),
 )
-let threadResize: ResizeObserver | undefined
-watch(thread, (el) => {
-  threadResize?.disconnect()
-  if (!el || typeof ResizeObserver === 'undefined') return
-  threadResize = new ResizeObserver(pinNewest)
-  threadResize.observe(el)
-})
-onBeforeUnmount(() => threadResize?.disconnect())
+const threadResize = useSizeWatch(pinNewest, { inReport: true })
+watch(thread, (el) => threadResize.retarget(...(el ? [el] : [])))
 
 /**
  * Show the rest of an unnarrated turn's lines at once; a narrated turn is

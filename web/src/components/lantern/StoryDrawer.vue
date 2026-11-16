@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { nextTick, onMounted, onUnmounted, ref } from 'vue'
+import { nextTick, onMounted, ref } from 'vue'
+import { useSizeWatch } from '@/composables/useSizeWatch'
 import { useGameStore } from '@/stores/useGameStore'
 import StoryTurn from './StoryTurn.vue'
 
@@ -22,7 +23,8 @@ const emit = defineEmits<{ close: [] }>()
 const game = useGameStore()
 const body = ref<HTMLElement | null>(null)
 const pill = ref(false)
-let resize: ResizeObserver | undefined
+/** Update the pill when the body's size is reported. */
+const resize = useSizeWatch(updatePill, { inReport: true })
 
 /** Slack so rounding never leaves the pill up at the very end. */
 const END_SLACK = 8
@@ -54,14 +56,10 @@ function toNewest(smooth: boolean): void {
 onMounted(async () => {
   toNewest(false)
   body.value?.focus({ preventScroll: true })
-  if (typeof ResizeObserver !== 'undefined' && body.value) {
-    resize = new ResizeObserver(updatePill)
-    resize.observe(body.value)
-  }
+  if (body.value) resize.observe(body.value)
   await nextTick()
   updatePill()
 })
-onUnmounted(() => resize?.disconnect())
 
 /**
  * Tab from the drawer's own body (where it opens) lands on the first name of

@@ -3,6 +3,7 @@ import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useGameStore } from '@/stores/useGameStore'
 import { useBeltStore } from '@/stores/useBeltStore'
 import { useFlightStore } from '@/stores/useFlightStore'
+import { useSizeWatch } from '@/composables/useSizeWatch'
 import BeltFace from './BeltFace.vue'
 import { beltPictures, type BeltList, type BeltPicture } from '@/lantern/belt'
 
@@ -195,27 +196,18 @@ watch(
 
 watch(pictures, () => void nextTick(measureScroll))
 
-let observer: ResizeObserver | undefined
-/** The frame that applies a new size: on the next frame, so the layout it moves is not measured in the same one (no observer loop). */
-let frame = 0
+/** A new size is applied on the next frame, so the layout it moves is not measured in the same one. */
+const sizeWatch = useSizeWatch(() => {
+  measureScroll()
+  emit('measure', belt.away ? 0 : (root.value?.offsetHeight ?? 0))
+})
 onMounted(() => {
   measureScroll()
-  if (root.value && typeof ResizeObserver === 'function') {
-    observer = new ResizeObserver(() => {
-      cancelAnimationFrame(frame)
-      frame = requestAnimationFrame(() => {
-        measureScroll()
-        emit('measure', belt.away ? 0 : (root.value?.offsetHeight ?? 0))
-      })
-    })
-    observer.observe(root.value)
-  }
+  if (root.value) sizeWatch.observe(root.value)
   emit('measure', belt.away ? 0 : (root.value?.offsetHeight ?? 0))
 })
 onUnmounted(() => {
   emit('caption', null)
-  observer?.disconnect()
-  cancelAnimationFrame(frame)
   emit('measure', 0)
 })
 watch(
