@@ -159,7 +159,11 @@
         "x": 0.531771,
         "y": 0.869444,
         "width": 0.088021,
-        "height": 0.087037
+        "height": 0.087037,
+        "mark": {
+          "x": 0.595833,
+          "y": 0.907407
+        }
       },
       "scenery-chicken-coop-coop": {
         "x": 0.23125,
@@ -224,13 +228,21 @@
         "x": 0.211458,
         "y": 0.388889,
         "width": 0.145833,
-        "height": 0.376852
+        "height": 0.376852,
+        "mark": {
+          "x": 0.259375,
+          "y": 0.473148
+        }
       },
       "lantern": {
         "x": 0.825,
         "y": 0.47037,
         "width": 0.046875,
-        "height": 0.107407
+        "height": 0.107407,
+        "mark": {
+          "x": 0.844792,
+          "y": 0.503704
+        }
       },
       "bread": {
         "x": 0.452083,
@@ -248,7 +260,11 @@
         "x": 0.385417,
         "y": 0.101852,
         "width": 0.140104,
-        "height": 0.449074
+        "height": 0.449074,
+        "mark": {
+          "x": 0.455208,
+          "y": 0.406481
+        }
       },
       "scenery-eliors-cottage-books": {
         "x": 0.414583,
@@ -260,7 +276,11 @@
         "x": 0.623958,
         "y": 0.180556,
         "width": 0.177083,
-        "height": 0.698148
+        "height": 0.698148,
+        "mark": {
+          "x": 0.677083,
+          "y": 0.291667
+        }
       },
       "patches": {
         "x": 0.167708,
@@ -1107,19 +1127,31 @@
         "x": 0.638542,
         "y": 0.491667,
         "width": 0.095313,
-        "height": 0.142593
+        "height": 0.142593,
+        "mark": {
+          "x": 0.708333,
+          "y": 0.594444
+        }
       },
       "scenery-village-square-market-stalls": {
         "x": 0.809375,
         "y": 0.348148,
         "width": 0.154688,
-        "height": 0.562037
+        "height": 0.562037,
+        "mark": {
+          "x": 0.859375,
+          "y": 0.473148
+        }
       },
       "villager": {
         "x": 0.124479,
         "y": 0.497222,
         "width": 0.076042,
-        "height": 0.338889
+        "height": 0.338889,
+        "mark": {
+          "x": 0.158333,
+          "y": 0.582407
+        }
       },
       "exit-west": {
         "x": 0,
@@ -1465,6 +1497,11 @@
     "width": 256,
     "height": 256
   },
+  "item-fishing-rod": {
+    "file": "item-fishing-rod.png",
+    "width": 256,
+    "height": 256
+  },
   "item-fresh-bread": {
     "file": "item-fresh-bread.png",
     "width": 256,
@@ -1477,6 +1514,111 @@
   },
   "item-horseshoe": {
     "file": "item-horseshoe.png",
+    "width": 256,
+    "height": 256
+  },
+  "item-key": {
+    "file": "item-key.png",
+    "width": 256,
+    "height": 256
+  },
+  "item-lantern": {
+    "file": "item-lantern.png",
+    "width": 256,
+    "height": 256
+  },
+  "item-locket": {
+    "file": "item-locket.png",
+    "width": 256,
+    "height": 256
+  },
+  "item-magnet": {
+    "file": "item-magnet.png",
+    "width": 256,
+    "height": 256
+  },
+  "item-map": {
+    "file": "item-map.png",
+    "width": 256,
+    "height": 256
+  },
+  "item-matches": {
+    "file": "item-matches.png",
+    "width": 256,
+    "height": 256
+  },
+  "item-millstone-fragment": {
+    "file": "item-millstone-fragment.png",
+    "width": 256,
+    "height": 256
+  },
+  "item-mothers-letter": {
+    "file": "item-mothers-letter.png",
+    "width": 256,
+    "height": 256
+  },
+  "item-rare-flower": {
+    "file": "item-rare-flower.png",
+    "width": 256,
+    "height": 256
+  },
+  "item-rope": {
+    "file": "item-rope.png",
+    "width": 256,
+    "height": 256
+  },
+  "item-rune-token": {
+    "file": "item-rune-token.png",
+    "width": 256,
+    "height": 256
+  },
+  "item-rusty-saw": {
+    "file": "item-rusty-saw.png",
+    "width": 256,
+    "height": 256
+  },
+  "item-sharp-knife": {
+    "file": "item-sharp-knife.png",
+    "width": 256,
+    "height": 256
+  },
+  "item-shiny-pebble": {
+    "file": "item-shiny-pebble.png",
+    "width": 256,
+    "height": 256
+  },
+  "item-shiny-ring": {
+    "file": "item-shiny-ring.png",
+    "width": 256,
+    "height": 256
+  },
+  "item-stick": {
+    "file": "item-stick.png",
+    "width": 256,
+    "height": 256
+  },
+  "item-sword": {
+    "file": "item-sword.png",
+    "width": 256,
+    "height": 256
+  },
+  "item-travel-cloak": {
+    "file": "item-travel-cloak.png",
+    "width": 256,
+    "height": 256
+  },
+  "item-wandering-boots": {
+    "file": "item-wandering-boots.png",
+    "width": 256,
+    "height": 256
+  },
+  "item-wild-berries": {
+    "file": "item-wild-berries.png",
+    "width": 256,
+    "height": 256
+  },
+  "item-withered-carrot": {
+    "file": "item-withered-carrot.png",
     "width": 256,
     "height": 256
   },
@@ -1504,5 +1646,45 @@
     "file": "portrait-sir-cedric.png",
     "width": 480,
     "height": 640
+  },
+  "spell-bless": {
+    "file": "spell-bless.png",
+    "width": 256,
+    "height": 256
+  },
+  "spell-grow": {
+    "file": "spell-grow.png",
+    "width": 256,
+    "height": 256
+  },
+  "spell-heal": {
+    "file": "spell-heal.png",
+    "width": 256,
+    "height": 256
+  },
+  "spell-light": {
+    "file": "spell-light.png",
+    "width": 256,
+    "height": 256
+  },
+  "spell-purify": {
+    "file": "spell-purify.png",
+    "width": 256,
+    "height": 256
+  },
+  "spell-revive": {
+    "file": "spell-revive.png",
+    "width": 256,
+    "height": 256
+  },
+  "spell-unlock": {
+    "file": "spell-unlock.png",
+    "width": 256,
+    "height": 256
+  },
+  "title-screen": {
+    "file": "title-screen.png",
+    "width": 1920,
+    "height": 1080
   }
 }
