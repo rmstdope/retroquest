@@ -1,0 +1,28 @@
+<!doctype html><html><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1">
+<title>Option A — series name large, subtitle beneath</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;600&family=DM+Sans:wght@400;600&display=swap" rel=stylesheet>
+<style>
+body{margin:0;background:#0b0e12;color:#ece6d6;font-family:'DM Sans',sans-serif;padding:24px 16px}
+h1.cap{font-size:18px;font-weight:600;margin:0 0 4px} p.cap{margin:0 0 20px;color:#b9b2a2;max-width:760px;font-size:14px}
+.row{display:flex;gap:24px;flex-wrap:wrap;align-items:flex-start}
+.lab{font-size:12px;letter-spacing:.15em;text-transform:uppercase;color:#8d8778;margin:0 0 6px}
+.screen{position:relative;overflow:hidden;border:1px solid #333;border-radius:8px;background:#10151a url(../../web/public/images/generated/title-screen.png) center/cover;display:flex;flex-direction:column;align-items:center;text-align:center}
+.screen:before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgb(16 21 26/.82),rgb(16 21 26/.25) 38%,rgb(16 21 26/.19) 55%,rgb(16 21 26/.75))}
+.screen>*{position:relative}
+.desk{width:760px;max-width:100%;height:475px;padding-top:42px}
+.phone{width:400px;max-width:100%;height:185px;padding-top:12px}
+.welcome{font-size:12px;font-weight:600;letter-spacing:.3em;text-transform:uppercase;color:rgb(236 230 214/.8);text-shadow:0 1px 3px #000;margin-bottom:8px}
+.phone .welcome{font-size:9px;margin-bottom:4px}
+.wm{font-family:Fraunces,serif;font-weight:600;line-height:1;color:#ffb836;text-shadow:0 0 22px rgb(0 0 0/.8),0 2px 3px #000}
+.sub{font-family:Fraunces,serif;font-style:italic;color:#ece6d6;text-shadow:0 1px 3px #000}
+.btns{margin-top:auto;margin-bottom:56px;display:flex;flex-direction:column;gap:10px;width:240px}
+.phone .btns{flex-direction:row;width:340px;margin-bottom:22px;gap:6px}
+.btns b{display:block;padding:12px;border-radius:6px;background:#ffa914;color:#1a1408;font-weight:600;font-size:15px}
+.btns i{display:block;padding:11px;border-radius:6px;border:1px solid #a8740f;color:#ffb836;font-style:normal;font-size:15px;background:rgb(16 21 26/.6)}
+.phone .btns b,.phone .btns i{flex:1;padding:6px;font-size:11px}
+.orn{display:flex;align-items:center;gap:8px;color:#a8740f;margin:10px auto;width:220px}.orn span{flex:1;height:1px;background:#a8740f}
+.phone .orn{margin:4px auto;width:120px;font-size:8px}
+</style></head><body>
+<h1 class=cap>Option A — series name large, subtitle beneath</h1><p class=cap>The series name is the big gold title; "Wardens of the Dawn" sits under it in smaller white italics, between two thin rules. "Welcome to" stays above.</p>
+<div class=row><div><p class=lab>Computer</p><div class="screen desk"><div class=welcome>Welcome to</div><div class=wm style="font-size:76px">Tales of Twinmoor</div><div class=orn><span></span>◆<span></span></div><div class=sub style="font-size:28px">Wardens of the Dawn</div><div class=btns><b>Continue</b><i>New game</i><i>Load game</i></div></div></div>
+<div><p class=lab>Phone, held sideways</p><div class="screen phone"><div class=welcome>Welcome to</div><div class=wm style="font-size:36px">Tales of Twinmoor</div><div class=sub style="font-size:14px;margin-top:4px">Wardens of the Dawn</div><div class=btns><b>Continue</b><i>New game</i><i>Load game</i></div></div></div></div></body></html>
