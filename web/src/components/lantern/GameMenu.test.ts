@@ -2,7 +2,7 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 import { mount, type VueWrapper } from '@vue/test-utils'
 import { createPinia, setActivePinia } from 'pinia'
-import GameMenu from './GameMenu.vue'
+import GameMenu, { type MenuEntry } from './GameMenu.vue'
 import { useGameStore } from '@/stores/useGameStore'
 
 describe('GameMenu', () => {
@@ -17,7 +17,7 @@ describe('GameMenu', () => {
     wrapper = undefined
   })
 
-  function mountMenu(props: { focus?: string } = {}) {
+  function mountMenu(props: { focus?: MenuEntry } = {}) {
     wrapper = mount(GameMenu, { attachTo: document.body, props })
     return wrapper
   }
@@ -49,9 +49,7 @@ describe('GameMenu', () => {
   it('lists plain one-word entries in the agreed order', () => {
     const w = mountMenu()
 
-    const labels = w
-      .findAll('.lq-menu-entry')
-      .map((entry) => entry.text())
+    const labels = w.findAll('.lq-menu-entry').map((entry) => entry.text())
     expect(labels).toEqual([
       'Quick save',
       'Quick load',

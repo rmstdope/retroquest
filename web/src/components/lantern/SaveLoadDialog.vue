@@ -21,7 +21,7 @@ import LanternDialog from './LanternDialog.vue'
  * the engine's line.
  */
 const props = defineProps<{ mode: 'save' | 'load'; fromTitle?: boolean }>()
-const emit = defineEmits<{ close: [] }>()
+const emit = defineEmits<{ close: []; done: [] }>()
 const game = useGameStore()
 
 const QUICK = 0
@@ -84,7 +84,7 @@ async function save(slot: number): Promise<void> {
   const held = game.actEndPending
   const ok = game.saveToSlot(slot)
   if (held) {
-    emit('close')
+    emit('done')
     return
   }
   asking.value = null
@@ -103,7 +103,7 @@ function load(card: SaveSlot): void {
   if (card.name !== undefined) game.loadNamedGame(card.name)
   else if (card.slot === QUICK) game.loadGame()
   else game.loadFromSlot(card.slot)
-  emit('close')
+  emit('done')
 }
 
 /** Ask in the card, with focus on Cancel (the safe answer). */

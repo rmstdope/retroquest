@@ -4,16 +4,21 @@ import { useGameStore } from '@/stores/useGameStore'
 import LanternDialog from './LanternDialog.vue'
 
 /**
- * Asked when the player types `quit` or `exit`: save first (quick save),
- * quit without saving, or go back to the game. Quitting starts a new game
- * from Act I (a browser tab cannot close itself). If the save fails, the
- * game is not quit and the dialog says so.
+ * Asked when the player picks Quit in the menu or types `quit` or `exit`:
+ * save first (quick save), quit without saving, or cancel. Quitting goes back
+ * to the main menu (the title page; a browser tab cannot close itself). If
+ * the save fails, the game is not quit and the dialog says so. Cancel, ✕,
+ * Escape and a click outside end the question; the layout then shows the
+ * menu again when the question came from it.
  */
+const emit = defineEmits<{ cancel: [] }>()
 const game = useGameStore()
 const saveFailed = ref(false)
 
+/** Cancel, ✕, Escape or a click outside: the question ends (the layout brings the menu back). */
 function cancel(): void {
   game.quitAsked = false
+  emit('cancel')
 }
 
 function saveAndQuit(): void {
@@ -23,10 +28,14 @@ function saveAndQuit(): void {
 </script>
 
 <template>
-  <LanternDialog title="Quit game?" eyebrow="Game" @close="cancel">
+  <LanternDialog
+    title="Quit to the main menu?"
+    eyebrow="Menu"
+    centered
+    @close="cancel"
+  >
     <p class="lq-quit-text">
-      Save before you go? Anything since your last save is lost otherwise. A new
-      game then starts from Act&nbsp;I.
+      Save before you go? Anything since your last save is lost otherwise.
     </p>
     <p v-if="saveFailed" class="lq-quit-error" role="alert">
       Your game could not be saved, so it was not quit. You can quit without

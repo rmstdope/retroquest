@@ -33,6 +33,7 @@ import { useHoldToSkip, type HoldRingSpot } from '@/composables/useHoldToSkip'
 import { useAudio } from '@/composables/useAudio'
 import { useActMusic } from '@/composables/useActMusic'
 import { useFocusTrap } from '@/composables/useFocusTrap'
+import { useFullscreen } from '@/composables/useFullscreen'
 import { nameActions, type NameAction } from '@/lantern/nameActions'
 import { parseCountedName } from '@/lantern/inventoryChanges'
 import { useStoryFollow } from '@/composables/useStoryFollow'
@@ -78,12 +79,15 @@ import FinishDialog from './FinishDialog.vue'
 import JournalDrawer from './JournalDrawer.vue'
 import JournalPanel from './JournalPanel.vue'
 import LanternDialog from './LanternDialog.vue'
-import GameMenu, { type InfoKind, type MenuKind } from './GameMenu.vue'
+import GameMenu, {
+  type InfoKind,
+  type MenuEntry,
+  type MenuKind,
+} from './GameMenu.vue'
 import QuestDialog, { type QuestView } from './QuestDialog.vue'
 import QuitDialog from './QuitDialog.vue'
 import SaveLoadDialog from './SaveLoadDialog.vue'
 import SettingsDialog from './SettingsDialog.vue'
-import LanternHeader from './LanternHeader.vue'
 import RoomPlate from './RoomPlate.vue'
 import RoomTitle from './RoomTitle.vue'
 import SceneInterlude from './SceneInterlude.vue'
@@ -229,11 +233,12 @@ const twoSides = computed(() => wide.value && sides.value)
 const column = computed(() => staged.value && !twoSides.value)
 /** A mouse and keyboard: the narration hint names keys instead of taps. */
 const keyboardPlayer = useMediaQuery(KEYBOARD_QUERY)
-/** The cursor is in a text field (the command box): only Esc steers the voice there. */
+/** The cursor is in a text field (the command box): no key steers the voice there. */
 const fieldFocused = ref(false)
+/** The hint under the story: none in the command box, where Space is a letter. */
 const hintText = computed(() => {
   if (!keyboardPlayer.value) return 'Tap to hurry · hold to skip'
-  return fieldFocused.value ? 'Esc to skip' : 'Space to hurry · Esc to skip'
+  return fieldFocused.value ? '' : 'Space to hurry · hold to skip'
 })
 
 /** The Type-mode command box: the one field where Esc skips the voice. */
@@ -1889,14 +1894,34 @@ watch(
   },
 )
 
-const INFO_TITLES: Record<InfoKind, string> = { stats: 'Stats', help: 'Help' }
+const INFO_TITLES: Record<InfoKind, string> = { help: 'Help' }
 let dialogOpener: HTMLElement | null = null
+/** The menu entry a window or the quit question was opened from, which gets focus when it closes and the menu comes back. */
+const menuEntry = ref<MenuEntry | null>(null)
 
+/** Open the menu (a button, Escape), or a window from it (then its entry is remembered). */
 function openGameDialog(kind: 'menu' | MenuKind): void {
   if (!gameDialog.value)
     dialogOpener = document.activeElement as HTMLElement | null
+  menuEntry.value = kind === 'menu' ? null : kind
+  if (kind === 'menu') focusMenuEntry.value = null
   gameDialog.value = kind
 }
+
+/** Quit asked from the menu: the question takes its place, and Cancel brings it back. */
+function askQuitFromMenu(): void {
+  menuEntry.value = 'quit'
+  game.quitAsked = true
+}
+
+/** The quit question was cancelled: back to the menu it came from, or to the game. */
+function cancelQuit(): void {
+  game.quitAsked = false
+  if (gameDialog.value === 'menu') focusMenuEntry.value = 'quit'
+}
+
+/** The entry of the menu that takes focus when it comes back (null: Save). */
+const focusMenuEntry = ref<MenuEntry | null>(null)
 
 // A game pop-up closes the player's dialogs (they do not come back after).
 watch(
@@ -1908,13 +1933,77 @@ watch(
   },
 )
 
-/** Closing the last one gives focus back to what opened the first one. */
+/** Closing the menu gives focus back to what opened it. */
 async function closeGameDialog(): Promise<void> {
+  // A window opened from the menu goes back to the menu, focus on its entry.
+  if (gameDialog.value !== 'menu' && menuEntry.value) {
+    focusMenuEntry.value = menuEntry.value
+    gameDialog.value = 'menu'
+    return
+  }
+  await closeAllGameDialogs()
+}
+
+/** Everything the menu opened is closed and the game goes on (a slot saved or loaded, the menu closed). */
+async function closeAllGameDialogs(): Promise<void> {
   gameDialog.value = null
+  menuEntry.value = null
+  focusMenuEntry.value = null
   await nextTick()
   if (document.activeElement === document.body && dialogOpener?.isConnected)
     dialogOpener.focus()
 }
+
+// A new game (quitting to the main menu) leaves nothing of the menu behind.
+watch(
+  () => game.gameNumber,
+  () => {
+    gameDialog.value = null
+    menuEntry.value = null
+    focusMenuEntry.value = null
+  },
+)
+
+// The narration waits, mid-line, while the menu or anything from it is open;
+// the music and the room's sounds play on.
+watch(
+  () => gameDialog.value !== null || game.quitAsked,
+  (open) => (open ? narration.pause() : narration.resume()),
+)
+
+const fullscreen = useFullscreen()
+
+/**
+ * Keys that belong to no one thing: Escape opens the menu when nothing else
+ * took it (what is open closes first, and the command box and the belt step
+ * back first: they consume their Escape), but not on the title page, a
+ * chapter page, a game pop-up, the end screen or the turn page; F switches
+ * full screen on and off, except in a text field. A held key acts once.
+ */
+function onMenuKey(event: KeyboardEvent): void {
+  if (event.defaultPrevented || event.repeat) return
+  if (event.ctrlKey || event.metaKey || event.altKey) return
+  if (event.key === 'Escape') {
+    if (
+      game.ending ||
+      turnPage.value ||
+      dialogOpen() ||
+      ring.value ||
+      document.querySelector('.lq-dialog-layer')
+    )
+      return
+    event.preventDefault()
+    openGameDialog('menu')
+    return
+  }
+  if (event.key !== 'f' && event.key !== 'F') return
+  const target = event.target instanceof Element ? event.target : null
+  if (target?.closest('input, textarea, select, [contenteditable]')) return
+  if (!fullscreen.supported) return
+  fullscreen.toggle()
+}
+onMounted(() => document.addEventListener('keydown', onMenuKey))
+onUnmounted(() => document.removeEventListener('keydown', onMenuKey))
 
 /** The quest whose details are open, from the active or completed list. */
 const shownQuestView = computed<QuestView | null>(() => {
@@ -1929,9 +2018,15 @@ const shownQuestView = computed<QuestView | null>(() => {
 
 /** Help's entry for narration (the engine's help lists commands only). */
 const NARRATION_HELP =
-  '\n[bold]Narration:[/bold] tap the story or press Space to hurry the current line; ' +
-  'hold, or press Esc, to show the rest at once. Any action cuts in. ' +
+  '\n[bold]Narration:[/bold] Tap the story or press Space to hurry the current line; ' +
+  'hold to show the rest at once. Any action cuts in. ' +
   'Set its volume, down to silent, in Settings.\n'
+
+/** Help's line for the key that closes what is open, or opens the menu (laptop only). */
+const ESCAPE_KEY_HELP = "\nEsc — close what's open, or open the menu\n"
+
+/** Help's line for the full-screen key (laptop only, where full screen works). */
+const FULLSCREEN_KEY_HELP = '\nF — full screen on or off\n'
 
 /** Help's line for the key that hides the narration paper (laptop only). */
 const NARRATION_KEY_HELP = '\nN — hide or show the words\n'
@@ -1941,17 +2036,18 @@ const NAMES_KEY_HELP = "\nS — show or hide what's here\n"
 
 /** Stats or Help as HTML (Help ends with the music credits). */
 const infoHtml = computed(() => {
-  const kind = gameDialog.value
-  if (kind !== 'stats' && kind !== 'help') return ''
-  const html = renderMarkup(game.readInfo(kind))
-  return kind === 'help'
-    ? html +
-        renderMarkup(NARRATION_HELP) +
-        (laptop.value
-          ? renderMarkup(NARRATION_KEY_HELP) + renderMarkup(NAMES_KEY_HELP)
-          : '') +
-        music.buildAttributionHtml()
-    : html
+  if (gameDialog.value !== 'help') return ''
+  return (
+    renderMarkup(game.readInfo('help')) +
+    renderMarkup(NARRATION_HELP) +
+    (laptop.value
+      ? renderMarkup(ESCAPE_KEY_HELP) +
+        (fullscreen.supported ? renderMarkup(FULLSCREEN_KEY_HELP) : '') +
+        renderMarkup(NARRATION_KEY_HELP) +
+        renderMarkup(NAMES_KEY_HELP)
+      : '') +
+    music.buildAttributionHtml()
+  )
 })
 
 // --- Names in the story: click one for a small menu of what fits ---
@@ -2182,17 +2278,19 @@ watch(
         :saved="game.ending.saved"
       />
       <template v-else>
-        <LanternHeader
-          v-if="!sideways"
-          :compact="!wide"
-          :hide-room="phoneStage"
-          @menu="openGameDialog('menu')"
-          @open="openGameDialog"
+        <!-- A short window with no picture: the section tabs on top, under the menu button. -->
+        <SectionNav v-if="textPage" v-model="section" class="lq-nav-top" />
+        <button
+          v-if="!wide"
+          type="button"
+          class="lq-float-menu"
+          data-lq-obstacle="keep-clear"
+          title="Menu"
+          aria-label="Menu"
+          @click="openGameDialog('menu')"
         >
-          <template v-if="!wide && textPage" #nav>
-            <SectionNav v-model="section" class="lq-nav-top" />
-          </template>
-        </LanternHeader>
+          ☰
+        </button>
 
         <main
           ref="mainEl"
@@ -2234,16 +2332,6 @@ watch(
               :away="arrivalFolded"
               :lift="beltHeight"
             />
-            <button
-              v-if="sideways"
-              type="button"
-              class="lq-float-menu"
-              data-lq-obstacle="keep-clear"
-              aria-label="Game menu"
-              @click="openGameDialog('menu')"
-            >
-              ☰
-            </button>
             <RoomPlate
               v-if="wide"
               ref="widePlate"
@@ -2264,6 +2352,7 @@ watch(
               @journal="toggleDrawer"
               @story="toggleDrawer('story')"
               @map="toggleDrawer('map')"
+              @menu="openGameDialog('menu')"
               @close="closeDrawer"
             />
             <!-- After the plate and the buttons, so the things on the picture are Tab stops right after them; the picture itself lies beneath everything (z-index). -->
@@ -2453,7 +2542,7 @@ watch(
               </div>
             </section>
             <p
-              v-if="narration.hintVisible"
+              v-if="narration.hintVisible && hintText"
               class="lq-narration-hint"
               data-lq-obstacle="words"
               :class="{ 'lq-hint-raised': moreBelow && !storyHeld }"
@@ -2606,7 +2695,7 @@ watch(
 
         <!-- Dialogs the player opens (a game pop-up takes precedence). -->
         <template v-if="!game.showModal">
-          <QuitDialog v-if="game.quitAsked" />
+          <QuitDialog v-if="game.quitAsked" @cancel="cancelQuit" />
           <QuestDialog
             v-else-if="shownQuestView"
             :key="shownQuestView.name"
@@ -2615,9 +2704,10 @@ watch(
           />
           <GameMenu
             v-else-if="gameDialog === 'menu'"
-            :sideways="sideways"
-            @close="closeGameDialog"
+            :focus="focusMenuEntry"
+            @close="closeAllGameDialogs"
             @open="openGameDialog"
+            @quit="askQuitFromMenu"
           />
           <SettingsDialog
             v-else-if="gameDialog === 'settings'"
@@ -2628,6 +2718,7 @@ watch(
             v-else-if="gameDialog === 'save' || gameDialog === 'load'"
             :mode="gameDialog"
             @close="closeGameDialog"
+            @done="closeAllGameDialogs"
           />
           <LanternDialog
             v-else-if="gameDialog"
@@ -2973,15 +3064,14 @@ watch(
 .lq-sideways .lq-sheet {
   max-height: 85dvh;
 }
-/* A sideways phone: the menu button floats beside the plate, which moves over; the words
-   come up over the left side, the Hide sits at the foot in the middle. */
+/* The menu button where the stage has no row of buttons (a tall stage, the text page): in the corner, over the page. */
 .lq-float-menu {
-  position: absolute;
+  position: fixed;
   top: 8px;
-  left: 8px;
-  z-index: 2;
-  width: 40px;
-  height: 40px;
+  right: 8px;
+  z-index: 6;
+  width: 44px;
+  height: 44px;
   border-radius: 999px;
   border: 1px solid var(--lq-line2);
   background: color-mix(in srgb, var(--lq-surface) 93%, transparent);
@@ -2991,14 +3081,18 @@ watch(
   cursor: pointer;
   box-shadow: 0 4px 16px rgb(0 0 0 / 0.2);
 }
+/* The tabs of the text page leave the corner to the menu button. */
+.lq-nav-top {
+  padding-right: 60px;
+}
 .lq-sideways .lq-stage-plate {
   top: 8px;
-  left: 56px;
+  left: 8px;
   /* Ends 8px before the buttons, however wide their counts and dots make them. */
   max-width: min(
     360px,
     38%,
-    calc(100% - 56px - var(--lq-stage-buttons-w) - 16px)
+    calc(100% - 8px - var(--lq-stage-buttons-w) - 16px)
   );
 }
 .lq-sideways .lq-stage-buttons {

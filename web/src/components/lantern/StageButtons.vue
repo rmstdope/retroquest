@@ -10,7 +10,7 @@ import CompassPanel from './CompassPanel.vue'
  * ways out beneath it. (The Bag and Spells are the belt of pictures at the
  * picture's foot.) They are controlled by the layout, which lets only one of
  * the three be open (`drawer`), and press-only: nothing opens on
- * hover. The button of the open one stays lit. Walking from the map keeps it
+ * hover. The round ☰ at the end of the row opens the menu. The button of the open one stays lit. Walking from the map keeps it
  * open. Escape closes the map (asking the layout to, which returns focus to
  * the button) and nothing else hears it. The buttons open their drawers at
  * once, even while a turn is read aloud; only the map's ways out are a held
@@ -27,6 +27,7 @@ const emit = defineEmits<{
   journal: [tab: Tab]
   story: []
   map: []
+  menu: []
   close: []
 }>()
 const game = useGameStore()
@@ -129,6 +130,17 @@ defineExpose({ focusButton })
           <CompassPanel stage />
         </div>
       </div>
+      <button
+        type="button"
+        class="lq-stage-btn lq-menu-btn"
+        data-lq-obstacle="panel"
+        data-button="menu"
+        title="Menu"
+        aria-label="Menu"
+        @click="emit('menu')"
+      >
+        ☰
+      </button>
     </div>
   </div>
 </template>
@@ -158,6 +170,11 @@ defineExpose({ focusButton })
   cursor: pointer;
   box-shadow: 0 4px 16px rgb(0 0 0 / 0.2);
 }
+.lq-menu-btn {
+  width: 44px;
+  padding: 0;
+  font-size: 18px;
+}
 .lq-stage-btn.lq-lit {
   border-color: var(--lq-accent);
   background: var(--lq-accent-soft);
@@ -171,6 +188,11 @@ defineExpose({ focusButton })
   min-height: 40px;
   padding: 0 10px;
   font-size: 12px;
+}
+.lq-compact .lq-menu-btn {
+  width: 40px;
+  padding: 0;
+  font-size: 16px;
 }
 @media (max-height: 340px) {
   .lq-compact .lq-count-sep {
