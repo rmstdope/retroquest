@@ -77,7 +77,7 @@ function saveAndQuit(): void {
         <button
           type="button"
           class="lq-quit-primary"
-          @mouseenter="ring.onHover"
+          @mousemove="ring.onHover"
           @click="choose(saveAndQuit)"
         >
           Save and quit
@@ -85,7 +85,7 @@ function saveAndQuit(): void {
         <button
           type="button"
           class="lq-quit-plain"
-          @mouseenter="ring.onHover"
+          @mousemove="ring.onHover"
           @click="choose(() => game.restartGame())"
         >
           Quit without saving
@@ -94,7 +94,7 @@ function saveAndQuit(): void {
           type="button"
           class="lq-quit-plain"
           data-autofocus
-          @mouseenter="ring.onHover"
+          @mousemove="ring.onHover"
           @click="choose(cancel)"
         >
           Cancel

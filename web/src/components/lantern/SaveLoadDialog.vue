@@ -295,7 +295,7 @@ function cardLabel(card: SaveSlot): string {
               :disabled="!saving && (!filled(card) || card.outdated)"
               :aria-label="cardLabel(card)"
               :data-autofocus="startKey === cardKey(card) ? '' : undefined"
-              @mouseenter="onHover"
+              @mousemove="onHover"
               @click="pick(card)"
             >
               <span
@@ -382,7 +382,7 @@ function cardLabel(card: SaveSlot): string {
                 <button
                   type="button"
                   class="lq-ask-cancel"
-                  @mouseenter="ring.onHover"
+                  @mousemove="ring.onHover"
                   @click="(ring.choose(), cancel(card))"
                 >
                   Cancel
@@ -390,7 +390,7 @@ function cardLabel(card: SaveSlot): string {
                 <button
                   type="button"
                   class="lq-ask-ok"
-                  @mouseenter="ring.onHover"
+                  @mousemove="ring.onHover"
                   @click="(ring.choose(), confirm(card))"
                 >
                   {{ saving ? 'Replace' : 'Load' }}

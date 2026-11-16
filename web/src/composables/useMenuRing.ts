@@ -10,7 +10,10 @@ const HUSH_MS = 250
  * different stop from somewhere else in the dialog sounds the soft ting (the
  * dialog opening, or focus coming back from outside it, is silent). `ringTo`
  * puts the ring on an element and keeps it in view; `onHover` is a pointer
- * entering a stop, which takes the ring unless it is already inside it.
+ * moving over a stop (bind it to `mousemove`), which takes the ring unless it
+ * is already inside it. A move event at the same screen position as the last
+ * one is the browser re-sending the pointer after a scroll, not the player
+ * moving it, so it never takes the ring.
  * `choose` is the latch of a choice made.
  */
 export function useMenuRing(stopSelector: string): {
@@ -23,6 +26,8 @@ export function useMenuRing(stopSelector: string): {
   const sounds = useUiSounds()
   /** Until when (a time) the ting stays quiet, after a choice. */
   let hushedUntil = 0
+  /** Where the pointer was at its last move over a stop, if it has moved. */
+  let lastPointer: { x: number; y: number } | null = null
 
   /** The stop an element is, or is inside. */
   function stopOf(node: EventTarget | null): Element | null {
@@ -48,7 +53,11 @@ export function useMenuRing(stopSelector: string): {
     onHover(event: MouseEvent): void {
       const stop = event.currentTarget
       if (!(stop instanceof HTMLElement)) return
-      if (event.movementX === 0 && event.movementY === 0) return
+      const moved =
+        lastPointer !== null &&
+        (lastPointer.x !== event.screenX || lastPointer.y !== event.screenY)
+      lastPointer = { x: event.screenX, y: event.screenY }
+      if (!moved) return
       if (!stop.contains(document.activeElement))
         stop.focus({ preventScroll: true })
     },

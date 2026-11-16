@@ -188,7 +188,11 @@ describe('SaveLoadDialog from the keyboard', () => {
 
   it('a pointer entering a slot takes the ring', async () => {
     const w = await open('save')
-    await w.findAll('.lq-slot-btn')[3].trigger('mouseenter', { movementX: 4 })
+    {
+      const stop = w.findAll('.lq-slot-btn')[3]
+      await stop.trigger('mousemove', { screenX: 1 })
+      await stop.trigger('mousemove', { screenX: 9 })
+    }
     expect(ringed()).toBe('4')
   })
 
@@ -226,9 +230,17 @@ describe('SaveLoadDialog from the keyboard', () => {
     const w = await open('save')
     await w.findAll('.lq-slot-btn')[2].trigger('click')
     await flushPromises()
-    await w.get('.lq-ask-ok').trigger('mouseenter', { movementX: 4 })
+    {
+      const stop = w.get('.lq-ask-ok')
+      await stop.trigger('mousemove', { screenX: 1 })
+      await stop.trigger('mousemove', { screenX: 9 })
+    }
     expect(document.activeElement?.textContent?.trim()).toBe('Replace')
-    await w.findAll('.lq-slot-btn')[0].trigger('mouseenter', { movementX: 4 })
+    {
+      const stop = w.findAll('.lq-slot-btn')[0]
+      await stop.trigger('mousemove', { screenX: 1 })
+      await stop.trigger('mousemove', { screenX: 9 })
+    }
     expect(document.activeElement?.textContent?.trim()).toBe('Replace')
   })
 
