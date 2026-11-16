@@ -13,4 +13,4 @@ One re-run of the e2e shards (about 6 minutes) and a local reproduction.
 Not established; a fix is the navigator's to choose (quarantine or fix the two specs).
 
 ## Seen before
-Nothing like it yet in `docs/retrospectives/`.
+rq-gw9m (CI red on flaky suites the change does not touch) and rq-n0mb (a test reported "1 flaky").
