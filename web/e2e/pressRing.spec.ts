@@ -3,7 +3,7 @@
  * round it, an action sends the command it would have typed, Escape steps back,
  * and on the smallest sideways phone the ring stays inside the picture.
  */
-import { test, expect, type Page, skipTelling } from './fixtures'
+import { test, expect, type Page } from './fixtures'
 
 /** A one-pixel transparent PNG, standing for a picture the studio made. */
 const PIXEL = Buffer.from(
@@ -49,7 +49,6 @@ async function toTheCottage(page: Page, breadY = 0.6): Promise<void> {
   const input = page.getByLabel('Command', { exact: true })
   await input.fill('say hello to voice')
   await input.press('Enter')
-  await skipTelling(page)
   // The waking is told in the middle of the dark first; Enter brings the cottage up.
   await page.getByTestId('scene-interlude').waitFor()
   await page.keyboard.press('Enter')

@@ -602,14 +602,13 @@ test.describe('a long arrival on a narrow window (rq-fc9f)', () => {
     'It is whispering, at the very edge of hearing, and what it whispers is your name.',
   ]
 
-  test('shows every line of the Dream before Enter moves on, after Escape', async ({
+  test('shows every line of the Dream before Enter moves on', async ({
     page,
   }) => {
     await page.setViewportSize({ width: 564, height: 717 })
     await page.goto('/')
     await page.getByRole('button', { name: 'Start', exact: true }).click()
-    await expect(page.locator('.lq-chapter-button')).toBeVisible()
-    await skipTelling(page)
+    await page.locator('.lq-chapter-button').click()
     const card = arrival(page).locator('.lq-arrival-card')
     await expect(card).toHaveCount(1)
     const seen: string[] = []

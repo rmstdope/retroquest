@@ -1,4 +1,4 @@
-import { test, expect, type Locator, type Page } from './fixtures'
+import { test, expect, type Locator, type Page, skipTelling } from './fixtures'
 
 // Narration at full volume, as for a new player (the config sets it to 0 for the other specs).
 test.use({
@@ -445,7 +445,7 @@ test('in the one column the held story follows Elior’s journal lines as they a
     }
     await expect
       .poll(async () => {
-        await page.keyboard.press('Escape')
+        await skipTelling(page)
         return page.locator('.lq-speaking').count()
       })
       .toBe(0)
@@ -507,7 +507,7 @@ for (const { name, width, height } of [
         }
         await expect
           .poll(async () => {
-            await page.keyboard.press('Escape')
+            await skipTelling(page)
             return page.locator('.lq-speaking').count()
           })
           .toBe(0)
@@ -572,7 +572,7 @@ for (const { name, width, height } of [
       }
       await expect
         .poll(async () => {
-          await page.keyboard.press('Escape')
+          await skipTelling(page)
           return page.locator('.lq-speaking').count()
         })
         .toBe(0)

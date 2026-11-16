@@ -108,11 +108,11 @@ import { newestLoadable } from '@/lantern/saveCard'
 import type { SaveSlot } from '@/types/bridge'
 
 /**
- * Shell of the Lantern UI (the only UI; old `?ui=` links open it too): header, story (one
+ * Shell of the Lantern UI (the only UI; old `?ui=` links open it too): no top bar, story (one
  * StoryTurn per turn) and the action composer. On laptops (≥1024 × 560) the
  * room is played on its picture, which fills the play area: the room's name
- * top-left (`RoomPlate`; who and what is here are marked on the picture), the buttons Bag, Spells, Quests, Story
- * so far and Map top-right (the journal and the story open as a drawer from
+ * top-left (`RoomPlate`; who and what is here are marked on the picture), the buttons Quests, Story
+ * so far and Map and the round ☰ (the menu) top-right (the journal and the story open as a drawer from
  * the right, the map beneath its button), the narrator's words up the left
  * side and the actions as one row along the bottom.
  * The left side is the narration paper: the turns since the last room change
@@ -122,10 +122,9 @@ import type { SaveSlot } from '@/types/bridge'
  * Hide goes once none is left; the command is not echoed (Story so far keeps it), and
  * quest news told in the middle leaves nothing here. The newest turn grows as
  * the narrator reaches each part and, when it is taller than the room under
- * the plate, scrolls with a "More below" pill. One "▾ Hide" on its own line at the bottom centre of the picture (or N,
- * or Escape when nothing is narrated) clears both the narrator's bubbles and
- * the speech, leaving a "▴ Show" tab in its place; the tab, N, Escape again
- * (unless typed in a field, where the command box takes its own steps back)
+ * the plate, scrolls with a "More below" pill. One "▾ Hide" on its own line at the bottom centre of the picture (or N)
+ * clears both the narrator's bubbles and
+ * the speech, leaving a "▴ Show" tab in its place; the tab, N
  * or the next turn that tells something
  * brings both back as they were, and every turn is read in the story drawer.
  * Under about 1100 px wide (a laptop window too narrow for two sides, and
@@ -137,12 +136,12 @@ import type { SaveSlot } from '@/types/bridge'
  * middle of the picture instead (`ArrivalOnPicture`, `useArrivalStore`): the
  * words are clear (no Hide or Show) and the bubbles come back when the
  * arrival clears (the room itself having been told in the middle). Enter or Space goes on, a click on the
- * picture too; Escape, the tab, an action or typing clear it at once.
+ * picture too; the tab, an action or typing clear it at once.
  * A phone (a touch screen whose shorter side is under 600 px) is played
  * sideways: held upright it shows only the turn page (`TurnPage`) over the
  * game, which waits behind it, inert and unchanged (the layout does not
  * depend on how the phone is held); on its side it is the laptop stage made
- * small: no header, ☰ and the plate top left, the buttons top right, the folded
+ * small: the plate top left, the buttons and ☰ top right, the folded
  * bar (Actions, keyboard, Hint) at the foot left, the words up the left side,
  * and the actions a sheet over the picture that folds after every turn.
  * Other smaller screens that are not short (a tablet upright, a narrow window)
@@ -151,7 +150,7 @@ import type { SaveSlot } from '@/types/bridge'
  * the picture and the folded bar above the section tabs (Story, Bag, Spells,
  * Quests, Map); the actions are a sheet (at most 62% of the height) over the
  * picture that folds after every turn. A short mouse window keeps the text
- * page, with the tabs in the header and the same sheet folded into the bar,
+ * page, with the tabs on top (and ☰ in the corner) and the same sheet folded into the bar,
  * which also folds when an answer does not fit beside it.
  * A new turn opens at its start, with a "More below" pill while the story
  * goes on below the visible part.
@@ -161,12 +160,13 @@ import type { SaveSlot } from '@/types/bridge'
  * act has recordings and narration is on (`useNarrationStore`):
  * `useLanternPresentation` starts it with the new turn (and reads a chapter
  * page, and decides what stops either), a click on
- * the story hurries it (two skip), Space/Enter hurry while focus is not on a
- * field or a control (Space also on the folded bar's Actions and the actions panel's buttons; an arrival on the picture goes on a part instead), Escape skips (also in the command box, unless its word
- * list is open), and a pop-up stops it. Building a command (typing, verbs,
+ * the story hurries it (two skip, and a press held skips the whole telling),
+ * Space/Enter hurry while focus is not on a
+ * field or a control (Space also on the folded bar's Actions and the actions panel's buttons; an arrival on the picture goes on a part instead; held, they skip the whole telling), Escape does not skip,
+ * and a pop-up stops it. The menu (☰, or Escape when nothing else takes it) and anything opened from it pause the
+ * narration where it is until it closes (`useNarrationStore.pause`), and F switches full screen. Building a command (typing, verbs,
  * targets) never stops it: only the complete command cuts in.
- * While a command is narrated the panels (plate, buttons, map, drawer, the
- * header's room and counts) keep the state from before it and switch as the
+ * While a command is narrated the panels (plate, buttons, map, drawer) keep the state from before it and switch as the
  * voice reaches them (`usePanelHold`), and so do the command box's word list
  * and the target chips, unless the command moved the player: nothing in the
  * room just left can be addressed, so those offer the room the player is in
@@ -241,7 +241,7 @@ const hintText = computed(() => {
   return fieldFocused.value ? '' : 'Space to hurry · hold to skip'
 })
 
-/** The Type-mode command box: the one field where Esc skips the voice. */
+/** The Type-mode command box: where Space is a letter, so no hint names a key. */
 const COMMAND_BOX = '.lq-type-input'
 
 /** Follows where the cursor is, for the hint. */
@@ -537,7 +537,7 @@ async function hidePaper(): Promise<void> {
 }
 
 /**
- * Hide or show the words from a key (N, Escape). Focus on the Hide or inside
+ * Hide or show the words from a key (N). Focus on the Hide or inside
  * the cards follows to the tab when they go, and focus on the tab follows to
  * Hide when they come back; focus anywhere else (the command box) stays.
  */
@@ -567,7 +567,7 @@ function onPaperKey(event: KeyboardEvent): void {
   if (event.defaultPrevented || event.repeat) return
   if (event.ctrlKey || event.metaKey || event.altKey) return
   if (!staged.value || !wordsVisible.value || dialogOpen()) return
-  // An arrival on the picture holds the paper away; Escape, Enter or the tab end it.
+  // An arrival on the picture holds the paper away; Enter, Space or the tab end it.
   if (arrival.active) return
   const target = event.target instanceof Element ? event.target : null
   if (target?.closest('input, textarea, select, [contenteditable]')) return
@@ -1483,7 +1483,7 @@ watch(
   },
 )
 
-// News cut short before its spell came up (a second Escape on the held news,
+// News cut short before its spell came up (a hold on the held news,
 // a new command) still rings the spell's sound as it goes, as the quest cards
 // still ring theirs. A turn no longer in the story (a new game, or a load,
 // which brings back the save's story in its place) rings nothing.
