@@ -214,7 +214,6 @@ defineExpose({ focusStoryButton, focusName })
   display: flex;
   max-width: 100%;
   padding: 2px 6px;
-  margin: -2px -6px;
   border: 1px solid transparent;
   border-radius: 8px;
   background: transparent;

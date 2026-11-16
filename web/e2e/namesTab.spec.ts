@@ -3,7 +3,14 @@
  * here is a Tab stop in the newest turn, Enter opens its menu, Escape closes it
  * and focus is back on the same name.
  */
-import { test, expect, type Page, skipTelling } from './fixtures'
+import {
+  test,
+  expect,
+  type Page,
+  skipTelling,
+  enterCommand,
+  closeTypingBox,
+} from './fixtures'
 
 /** Let the browser report the scroll that focusing a name causes. */
 async function settle(page: Page): Promise<void> {
@@ -44,21 +51,14 @@ test('a name in the newest turn opens its menu from the keyboard', async ({
   await page.setViewportSize({ width: 1280, height: 800 })
   await start(page)
   // The voice's answer wakes the player in Elior's Cottage, where Grandmother is.
-  await page
-    .getByRole('button', { name: /^Type( a command)?$/ })
-    .first()
-    .click()
-  const input = page.getByLabel('Command')
-  await input.fill('talk to voice')
-  await input.press('Enter')
+  await enterCommand(page, 'talk to voice')
   // The waking is told in the middle of the dark first; Enter brings the cottage up.
   await page.getByTestId('scene-interlude').waitFor()
   await page.keyboard.press('Enter')
   await clearArrival(page)
   // The quest news is told in the middle and leaves only slim lines: look
   // around for a turn that names who is here.
-  await input.fill('look')
-  await input.press('Enter')
+  await enterCommand(page, 'look')
   const stop = page
     .locator('.lq-story .lq-turn')
     .last()
@@ -80,21 +80,15 @@ test("Tab reaches the newest turn's names between the stage buttons and the acti
 }) => {
   await page.setViewportSize({ width: 1280, height: 800 })
   await start(page)
-  await page
-    .getByRole('button', { name: /^Type( a command)?$/ })
-    .first()
-    .click()
-  const input = page.getByLabel('Command')
-  await input.fill('talk to voice')
-  await input.press('Enter')
+  await enterCommand(page, 'talk to voice')
   // The waking is told in the middle of the dark first; Enter brings the cottage up.
   await page.getByTestId('scene-interlude').waitFor()
   await page.keyboard.press('Enter')
   await clearArrival(page)
   // The quest news is told in the middle and leaves only slim lines: look
   // around for a turn that names who is here.
-  await input.fill('look')
-  await input.press('Enter')
+  await enterCommand(page, 'look')
+  await closeTypingBox(page)
   const stop = page
     .locator('.lq-story .lq-turn')
     .last()
@@ -123,16 +117,10 @@ test('in the Story so far drawer, Enter at once on a name just scrolled into vie
 }) => {
   await page.setViewportSize({ width: 1280, height: 800 })
   await start(page)
-  await page
-    .getByRole('button', { name: /^Type( a command)?$/ })
-    .first()
-    .click()
-  const input = page.getByLabel('Command')
   // Wake in Elior's Cottage, then look about until the story is long enough
   // that its first names are out of the drawer's sight.
   for (const command of ['talk to voice', 'look', 'look', 'look', 'look']) {
-    await input.fill(command)
-    await input.press('Enter')
+    await enterCommand(page, command)
   }
   await page.getByRole('button', { name: /Story so far/ }).click()
   const drawer = page.locator('.lq-story-drawer')

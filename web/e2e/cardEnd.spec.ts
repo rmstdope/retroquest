@@ -1,4 +1,10 @@
-import { test, expect, type Page, skipTelling } from './fixtures'
+import {
+  test,
+  expect,
+  type Page,
+  skipTelling,
+  enterCommand as enter,
+} from './fixtures'
 
 /**
  * A narrator's card on the laptop stays whole in the left column once the
@@ -31,14 +37,6 @@ async function prepare(page: Page): Promise<void> {
   })
 }
 
-/** Type a command. */
-async function enter(page: Page, command: string): Promise<void> {
-  const input = page.getByLabel('Command', { exact: true })
-  await input.click()
-  await input.fill(command)
-  await input.press('Enter')
-}
-
 /** The error messages the window has seen. */
 async function errors(page: Page): Promise<string[]> {
   return page.evaluate(
@@ -55,10 +53,6 @@ test('the dream card is whole while Grandmother answers, and nothing loops', asy
   await page.goto('/')
   await page.getByRole('button', { name: 'Start', exact: true }).click()
   await page.locator('.lq-chapter-button').click()
-  await page
-    .getByRole('region', { name: 'Actions' })
-    .getByRole('button', { name: 'Type', exact: true })
-    .click()
   await enter(page, 'talk to voice')
   await skipTelling(page)
   for (const command of [

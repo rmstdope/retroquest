@@ -6,7 +6,7 @@
  * under it; on a laptop neither it nor the Quests drawer has the belt or
  * Hide / Show what's here over its foot.
  */
-import { test, expect, type Page } from './fixtures'
+import { test, expect, type Page, enterCommand } from './fixtures'
 
 interface VueHost {
   __vue_app__: {
@@ -41,14 +41,7 @@ async function openGame(page: Page): Promise<void> {
 
 /** Type `text` in the command box (opening the folded actions first when they are folded) and send it. */
 async function command(page: Page, text: string): Promise<void> {
-  const input = page.getByLabel('Command', { exact: true })
-  if (!(await input.isVisible()))
-    await page
-      .getByRole('button', { name: /^(Type|Type a command)$/ })
-      .first()
-      .click()
-  await input.fill(text)
-  await input.press('Enter')
+  await enterCommand(page, text)
 }
 
 /**

@@ -46,3 +46,56 @@ export async function skipTelling(page: Page): Promise<void> {
 
 /** How long Space is held to skip a telling (the app's `HOLD_TO_SKIP_MS`, with a margin kept by the helper). */
 const HOLD_TO_SKIP_MS = 700
+
+/** The part of the game store the helpers below drive. */
+interface GameStoreHandle {
+  acceptInput: boolean
+  submitCommand(command: string): void
+}
+
+/** The app's Vue root, as far as the helpers reach into it. */
+interface AppRootElement extends Element {
+  __vue_app__?: {
+    config: {
+      globalProperties: {
+        $pinia: { _s: Map<string, GameStoreHandle> }
+      }
+    }
+  }
+}
+
+/**
+ * Send a command the way a player does: F1 brings up the typing box and the
+ * command is typed and sent with Enter (the box stays up for the next one).
+ * A phone has no box (it plays by pointing only), so there the command goes
+ * straight to the game, once it takes commands.
+ */
+export async function enterCommand(page: Page, command: string): Promise<void> {
+  const input = page.getByLabel('Command', { exact: true })
+  if (!(await input.isVisible())) {
+    await page.keyboard.press('F1')
+    await input.waitFor({ state: 'visible', timeout: 600 }).catch(() => {})
+  }
+  if (await input.isVisible()) {
+    await input.fill(command)
+    await input.press('Enter')
+    return
+  }
+  await page.waitForFunction(() => {
+    const root = document.querySelector('#app') as AppRootElement | null
+    return root?.__vue_app__?.config.globalProperties.$pinia._s.get('game')
+      ?.acceptInput
+  })
+  await page.evaluate((text) => {
+    const root = document.querySelector('#app') as AppRootElement | null
+    root?.__vue_app__?.config.globalProperties.$pinia._s
+      .get('game')
+      ?.submitCommand(text)
+  }, command)
+}
+
+/** Put the typing box away (F1) if it is up, so keys such as B and S reach the page again. */
+export async function closeTypingBox(page: Page): Promise<void> {
+  if (await page.getByLabel('Command', { exact: true }).isVisible())
+    await page.keyboard.press('F1')
+}

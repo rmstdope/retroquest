@@ -1,23 +1,9 @@
-import { test, expect, type Page } from './fixtures'
-
+import { test, expect, enterCommand as enter } from './fixtures'
 /**
  * Speech is a chat-style column at the right of the picture (rq-c15r.2):
  * small round portraits of a fixed size, Elior at the left of the column,
  * and, on a narrow laptop window, no overlap with the narrator's cards.
  */
-
-/** Type a command into the actions bar. */
-async function enter(page: Page, command: string): Promise<void> {
-  const input = page.getByLabel('Command', { exact: true })
-  const type = page
-    .getByRole('region', { name: 'Actions' })
-    .getByRole('button', { name: 'Type', exact: true })
-  if (await type.isVisible()) await type.click()
-  else if (!(await input.isVisible()))
-    await page.getByRole('button', { name: 'Type a command' }).click()
-  await input.fill(command)
-  await input.press('Enter')
-}
 
 for (const width of [1440]) {
   test(`at ${width}px the speech column holds 46px portraits and clears the cards`, async ({

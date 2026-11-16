@@ -3041,11 +3041,15 @@ watch(
   transform: translateX(-50%);
 }
 .lq-above-hide {
-  margin-bottom: calc(var(--lq-hide-line) + var(--lq-belt-h, 0px));
+  margin-bottom: calc(
+    var(--lq-hide-line) + var(--lq-belt-h, 0px) + var(--lq-actions-h, 0px)
+  );
 }
 /* The belt stands at the foot of the picture, and the words and the buttons over them rise above it (nothing rises while it is put away). */
 .lq-staged .lq-paper-tabrow {
-  transform: translateY(calc(-1 * var(--lq-belt-h, 0px)));
+  transform: translateY(
+    calc(-1 * (var(--lq-belt-h, 0px) + var(--lq-actions-h, 0px)))
+  );
 }
 .lq-phone .lq-story-wrap.lq-cards.lq-one-column {
   margin-bottom: calc(var(--lq-hide-line) + var(--lq-belt-h, 0px));
@@ -3197,7 +3201,7 @@ watch(
   position: absolute;
   left: 50%;
   bottom: 12px;
-  z-index: 5;
+  z-index: 7;
   transform: translateX(-50%);
 }
 .lq-stage-box {

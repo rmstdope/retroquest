@@ -4,7 +4,13 @@
  * it in hand with a strip saying so, and the next press on a thing sends the
  * command typed. Cancel and Escape put it down; B goes to the belt.
  */
-import { test, expect, type Page } from './fixtures'
+import {
+  test,
+  expect,
+  enterCommand,
+  type Page,
+  closeTypingBox,
+} from './fixtures'
 
 /** A one-pixel transparent PNG, standing for a picture the studio made. */
 const PIXEL = Buffer.from(
@@ -41,17 +47,12 @@ async function toTheCottage(page: Page): Promise<void> {
   const arrival = page.getByTestId('arrival-on-picture')
   for (let turn = 0; turn < 8 && (await arrival.isVisible()); turn++)
     await page.keyboard.press('Enter')
-  await page
-    .getByRole('region', { name: /^Action/ })
-    .getByRole('button', { name: /^(Type|Type a command)$/ })
-    .click()
-  const input = page.getByLabel('Command', { exact: true })
-  await input.fill('say hello to voice')
-  await input.press('Enter')
+  await enterCommand(page, 'say hello to voice')
+  await closeTypingBox(page)
   // The waking is told in the middle of the dark first; Enter brings the cottage up.
   await page.getByTestId('scene-interlude').waitFor()
   await page.keyboard.press('Enter')
-  await expect(page.locator('.lq-room-name')).toHaveText("Elior's Cottage")
+  await expect(page.locator('.lq-name-text')).toHaveText("Elior's Cottage")
   await expect(page.locator('.lq-stage-picture.lq-scene-idle')).toHaveCount(1)
   // Only while a card is really up: one fading out takes no key, and a press
   // too many would open the folded actions.
@@ -268,7 +269,7 @@ for (const name of ['Wandering Boots', 'Faded Photograph']) {
 
 test.describe('on a phone held sideways', () => {
   test.use({ hasTouch: true, isMobile: true })
-  test('the belt shares the foot row with the actions, with no names beneath', async ({
+  test('the belt stands at the picture foot from its left edge, with no names beneath', async ({
     page,
   }): Promise<void> => {
     await page.setViewportSize({ width: 568, height: 320 })
@@ -277,10 +278,10 @@ test.describe('on a phone held sideways', () => {
     await expect(pic).toBeVisible()
     await expect(page.locator('.lq-belt-name')).toHaveCount(0)
     await page.screenshot({ path: 'test-results/belt-sideways.png' })
-    const dock = (await page.locator('.lq-dock').boundingBox())!
     const box = (await pic.boundingBox())!
-    expect(box.x).toBeGreaterThanOrEqual(dock.x + dock.width)
     const stage = (await page.locator('.lq-stage').boundingBox())!
+    expect(await page.locator('.lq-dock').count()).toBe(0)
+    expect(box.x).toBeGreaterThanOrEqual(stage.x)
     expect(box.y + box.height).toBeLessThanOrEqual(stage.y + stage.height + 1)
   })
 })

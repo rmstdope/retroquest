@@ -3,24 +3,19 @@
  * laptop (rq-c15r.1): the story pane is gone, the cards stop under the room
  * plate and never overlap the speech, also in a window about 1060 px wide.
  */
-import { test, expect, type Page, skipTelling } from './fixtures'
+import {
+  test,
+  expect,
+  type Page,
+  skipTelling,
+  enterCommand as enter,
+} from './fixtures'
 
 /** Open the game, close the opening chapter page and switch the actions to typing. */
 async function start(page: Page): Promise<void> {
   await page.goto('/')
   await page.getByRole('button', { name: 'Start', exact: true }).click()
   await page.locator('.lq-chapter-button').click()
-  await page
-    .getByRole('region', { name: 'Actions' })
-    .getByRole('button', { name: 'Type', exact: true })
-    .click()
-}
-
-/** Type a command. */
-async function enter(page: Page, command: string): Promise<void> {
-  const input = page.getByLabel('Command', { exact: true })
-  await input.fill(command)
-  await input.press('Enter')
 }
 
 for (const width of [1440]) {

@@ -38,8 +38,9 @@ for (const size of [
     await expect(page.locator('.lq-stage-picture')).toBeVisible()
     await expect(page.locator('.lq-header')).toHaveCount(0)
     await expect(page.locator('.lq-nav-bottom')).toHaveCount(0)
-    await expect(page.getByRole('button', { name: 'Actions ▴' })).toBeVisible()
-    await expect(page.getByRole('button', { name: 'Hint' })).toBeVisible()
+    await expect(page.locator('.lq-dock, .lq-composer')).toHaveCount(0)
+    // Hint is the round 💡 first on the top row.
+    await expect(page.getByRole('button', { name: 'Hint' })).toHaveText('💡')
     // One compact row: it never covers the words.
     const plate = await page.locator('.lq-stage-plate').boundingBox()
     expect(plate?.height ?? 999).toBeLessThan(60)
@@ -57,19 +58,13 @@ for (const size of [
     await page.screenshot({
       path: `test-results/sideways-${size.width}x${size.height}.png`,
     })
-    // The sheet is above the scrim: a press on its first verb lands.
-    await page.getByRole('button', { name: 'Actions ▴' }).click()
-    await page
-      .getByRole('button', { name: 'Look', exact: true })
-      .first()
-      .click()
-    await page.getByRole('button', { name: 'Actions ▴' }).waitFor()
-    if (size.height <= 340) {
+    // The room name fans out Look, Search and Rest in a row, over the words.
+    await page.locator('.lq-name-btn').click()
+    await expect(page.locator('.lq-pill')).toHaveCount(3)
+    await page.locator('.lq-pill', { hasText: 'Look' }).click()
+    await expect(page.locator('.lq-pill')).toHaveCount(0)
+    if (size.height <= 340)
       await expect(page.getByRole('button', { name: 'Bag' })).toBeVisible()
-      await expect(page.locator('.lq-hint-word')).toBeHidden()
-    } else {
-      await expect(page.locator('.lq-hint-word')).toBeVisible()
-    }
     await page.getByRole('button', { name: 'Menu', exact: true }).click()
     await expect(page.getByText('Quick save')).toBeVisible()
     await expect(page.getByRole('button', { name: 'Quit' })).toBeVisible()
@@ -118,7 +113,7 @@ for (const size of [
         return (quests?.x ?? 0) - ((plate?.x ?? 0) + (plate?.width ?? 999))
       })
       .toBeGreaterThanOrEqual(0)
-    const name = page.locator('.lq-stage-plate .lq-room-name')
+    const name = page.locator('.lq-stage-plate .lq-name-text')
     await expect(name).toHaveText('Abandoned Shed')
     await expect
       .poll(() => name.evaluate((el) => el.scrollWidth - el.clientWidth))
@@ -132,7 +127,7 @@ test('a name too long for the corner stays one row and ends before the buttons',
   await page.setViewportSize({ width: 568, height: 320 })
   await start(page)
   await lightDots(page, 'Submerged Antechamber')
-  const name = page.locator('.lq-stage-plate .lq-room-name')
+  const name = page.locator('.lq-stage-plate .lq-name-text')
   await expect(name).toHaveText('Submerged Antechamber')
   await expect
     .poll(async (): Promise<number> => {

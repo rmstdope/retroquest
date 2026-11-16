@@ -98,7 +98,7 @@ test('on a tall screen the menu button does not cover Story so far', async ({
   expect(story!.x + story!.width).toBeLessThanOrEqual(menu!.x)
 })
 
-test('on a tall screen the longest room name shows in full beside Story so far and the menu button', async ({
+test('on a tall screen the longest room name keeps its ▾ beside Story so far, Hint and the menu button', async ({
   page,
 }): Promise<void> => {
   await page.setViewportSize({ width: 390, height: 844 })
@@ -119,13 +119,12 @@ test('on a tall screen the longest room name shows in full beside Story so far a
     host.__vue_app__.config.globalProperties.$pinia.state.value.game.roomName =
       'Submerged Antechamber'
   })
-  const name = page.locator('.lq-phone-plate .lq-room-name')
+  const name = page.locator('.lq-phone-plate .lq-name-text')
   await expect(name).toHaveText('Submerged Antechamber')
-  const fits = await name.evaluate(
-    (el: HTMLElement) => el.scrollWidth <= el.clientWidth,
-  )
-  expect(fits).toBe(true)
-  const nameBox = await name.boundingBox()
+  // A name too long for the row ends in an ellipsis, with the ▾ always kept.
+  const caret = page.locator('.lq-phone-plate .lq-name-caret')
+  await expect(caret).toBeVisible()
+  const nameBox = await caret.boundingBox()
   const story = await page
     .getByRole('button', { name: /Story so far/ })
     .boundingBox()
