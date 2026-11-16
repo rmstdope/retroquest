@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { describe, it, expect, afterEach } from 'vitest'
+import { describe, it, expect, afterEach, vi } from 'vitest'
 import { mount, type VueWrapper } from '@vue/test-utils'
 import LanternDialog from './LanternDialog.vue'
 
@@ -187,5 +187,61 @@ describe('LanternDialog', () => {
 
     expect(document.activeElement).not.toBe(opener)
     opener.remove()
+  })
+
+  it('starts on the panel itself, with no ring, when asked (startOnPanel)', async () => {
+    mountDialog({ startOnPanel: true })
+    await Promise.resolve()
+    await Promise.resolve()
+    expect(document.activeElement).toBe(
+      wrapper?.get('.lq-dialog-panel').element,
+    )
+  })
+
+  it('scrolls the body with the scroll keys when asked (scrollKeys)', () => {
+    mountDialog({ scrollKeys: true })
+    const body = wrapper?.get('.lq-dialog-content').element as HTMLElement
+    const by = vi.fn()
+    const to = vi.fn()
+    body.scrollBy = by
+    body.scrollTo = to
+    const press = (key: string): KeyboardEvent => {
+      const event = new KeyboardEvent('keydown', {
+        key,
+        bubbles: true,
+        cancelable: true,
+      })
+      wrapper?.get('.first').element.dispatchEvent(event)
+      return event
+    }
+    expect(press('ArrowDown').defaultPrevented).toBe(true)
+    expect(by).toHaveBeenLastCalledWith({ top: 40 })
+    press('ArrowUp')
+    expect(by).toHaveBeenLastCalledWith({ top: -40 })
+    press('Home')
+    expect(to).toHaveBeenLastCalledWith({ top: 0 })
+    press('End')
+    expect(to).toHaveBeenLastCalledWith({ top: body.scrollHeight })
+    press('PageDown')
+    expect(by).toHaveBeenLastCalledWith({ top: body.clientHeight * 0.9 })
+    press('PageUp')
+    expect(by).toHaveBeenLastCalledWith({ top: -body.clientHeight * 0.9 })
+    expect(press('a').defaultPrevented).toBe(false)
+  })
+
+  it('leaves the arrows alone without scrollKeys', () => {
+    mountDialog()
+    const event = new KeyboardEvent('keydown', {
+      key: 'ArrowDown',
+      bubbles: true,
+      cancelable: true,
+    })
+    wrapper?.get('.first').element.dispatchEvent(event)
+    expect(event.defaultPrevented).toBe(false)
+  })
+
+  it('shows its key line below the footer', () => {
+    mountDialog({ keyLine: [{ keys: ['Esc'], word: 'back' }] })
+    expect(wrapper?.findComponent({ name: 'KeyLine' }).exists()).toBe(true)
   })
 })

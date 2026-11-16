@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useGameStore } from '@/stores/useGameStore'
+import { useMenuRing } from '@/composables/useMenuRing'
 import LanternDialog from './LanternDialog.vue'
+import type { KeyHint } from './KeyLine.vue'
 
 /**
  * Asked when the player picks Quit in the menu or types `quit` or `exit`:
@@ -9,11 +11,38 @@ import LanternDialog from './LanternDialog.vue'
  * to the main menu (the title page; a browser tab cannot close itself). If
  * the save fails, the game is not quit and the dialog says so. Cancel, ✕,
  * Escape and a click outside end the question; the layout then shows the
- * menu again when the question came from it.
+ * menu again when the question came from it. It works from the keyboard: the
+ * ring starts on Cancel, the arrows move it between the buttons (round the
+ * ends), a pointer entering a button takes it, and Enter chooses.
  */
 const emit = defineEmits<{ cancel: [] }>()
 const game = useGameStore()
 const saveFailed = ref(false)
+const buttons = ref<HTMLElement | null>(null)
+const ring = useMenuRing('.lq-quit-buttons > button')
+const KEYS: KeyHint[] = [
+  { keys: ['←', '→'], word: 'move' },
+  { keys: ['Enter'], word: 'choose' },
+  { keys: ['Esc'], word: 'back' },
+]
+
+/** The arrows move the ring between the buttons, round the ends. */
+function onKeydown(event: KeyboardEvent): void {
+  const step = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 }[
+    event.key
+  ]
+  if (!step) return
+  event.preventDefault()
+  const all = [...(buttons.value?.querySelectorAll('button') ?? [])]
+  const at = all.indexOf(document.activeElement as HTMLButtonElement)
+  ring.ringTo(all[(at + step + all.length) % all.length])
+}
+
+/** A button chosen, with the latch. */
+function choose(action: () => void): void {
+  ring.choose()
+  action()
+}
 
 /** Cancel, ✕, Escape or a click outside: the question ends (the layout brings the menu back). */
 function cancel(): void {
@@ -32,7 +61,9 @@ function saveAndQuit(): void {
     title="Quit to the main menu?"
     eyebrow="Menu"
     centered
+    :key-line="KEYS"
     @close="cancel"
+    @focusin="ring.onFocusIn"
   >
     <p class="lq-quit-text">
       Save before you go? Anything since your last save is lost otherwise.
@@ -42,18 +73,29 @@ function saveAndQuit(): void {
       saving, or go back to the game.
     </p>
     <template #footer>
-      <div class="lq-quit-buttons">
-        <button type="button" class="lq-quit-primary" @click="saveAndQuit">
+      <div ref="buttons" class="lq-quit-buttons" @keydown="onKeydown">
+        <button
+          type="button"
+          class="lq-quit-primary"
+          @mouseenter="ring.onHover"
+          @click="choose(saveAndQuit)"
+        >
           Save and quit
         </button>
-        <button type="button" class="lq-quit-plain" @click="game.restartGame()">
+        <button
+          type="button"
+          class="lq-quit-plain"
+          @mouseenter="ring.onHover"
+          @click="choose(() => game.restartGame())"
+        >
           Quit without saving
         </button>
         <button
           type="button"
           class="lq-quit-plain"
           data-autofocus
-          @click="cancel"
+          @mouseenter="ring.onHover"
+          @click="choose(cancel)"
         >
           Cancel
         </button>
@@ -92,6 +134,10 @@ function saveAndQuit(): void {
   font: inherit;
   font-size: 15px;
   cursor: pointer;
+}
+.lq-quit-buttons > button:focus {
+  outline: 3px solid #f4ecd2;
+  outline-offset: 3px;
 }
 .lq-quit-primary {
   border: none;

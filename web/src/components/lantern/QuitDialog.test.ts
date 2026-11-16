@@ -5,6 +5,11 @@ import { createPinia, setActivePinia } from 'pinia'
 import QuitDialog from './QuitDialog.vue'
 import { useGameStore } from '@/stores/useGameStore'
 
+const sounds = vi.hoisted(() => ({ move: vi.fn(), choose: vi.fn() }))
+vi.mock('@/composables/useUiSounds', () => ({
+  useUiSounds: () => ({ playMove: sounds.move, playChoose: sounds.choose }),
+}))
+
 describe('QuitDialog', () => {
   let wrapper: VueWrapper | undefined
   let order: string[]
@@ -100,5 +105,68 @@ describe('QuitDialog', () => {
     await w.vm.$nextTick()
 
     expect(document.activeElement).toBe(button(w, 'Cancel').element)
+  })
+
+  describe('from the keyboard', () => {
+    function press(key: string): void {
+      document.activeElement?.dispatchEvent(
+        new KeyboardEvent('keydown', { key, bubbles: true, cancelable: true }),
+      )
+    }
+
+    beforeEach(() => {
+      sounds.move.mockClear()
+      sounds.choose.mockClear()
+    })
+
+    it('opens with the ring on Cancel', async () => {
+      const w = mountQuit()
+      await w.vm.$nextTick()
+      await w.vm.$nextTick()
+      expect(document.activeElement).toBe(button(w, 'Cancel').element)
+    })
+
+    it('moves between the buttons with the arrows, wrapping round', async () => {
+      const w = mountQuit()
+      await w.vm.$nextTick()
+      await w.vm.$nextTick()
+      press('ArrowRight')
+      expect(document.activeElement).toBe(button(w, 'Save and quit').element)
+      press('ArrowLeft')
+      expect(document.activeElement).toBe(button(w, 'Cancel').element)
+      press('ArrowLeft')
+      expect(document.activeElement).toBe(
+        button(w, 'Quit without saving').element,
+      )
+      press('ArrowDown')
+      expect(document.activeElement).toBe(button(w, 'Cancel').element)
+      press('ArrowUp')
+      expect(document.activeElement).toBe(
+        button(w, 'Quit without saving').element,
+      )
+    })
+
+    it('a pointer entering a button puts the ring on it', async () => {
+      const w = mountQuit()
+      await w.vm.$nextTick()
+      await button(w, 'Save and quit').trigger('mouseenter', { movementX: 4 })
+      expect(document.activeElement).toBe(button(w, 'Save and quit').element)
+    })
+
+    it('latches when a button is chosen', async () => {
+      const w = mountQuit()
+      await button(w, 'Quit without saving').trigger('click')
+      expect(sounds.choose).toHaveBeenCalledOnce()
+    })
+
+    it('carries the key line for the question', () => {
+      const w = mountQuit()
+      const hints = w.getComponent({ name: 'KeyLine' }).props('hints')
+      expect(hints).toEqual([
+        { keys: ['←', '→'], word: 'move' },
+        { keys: ['Enter'], word: 'choose' },
+        { keys: ['Esc'], word: 'back' },
+      ])
+    })
   })
 })

@@ -1,9 +1,19 @@
 <script setup lang="ts">
 import { computed, nextTick, ref } from 'vue'
 import { useGameStore } from '@/stores/useGameStore'
-import { actLabel, cardKey, filled, savedWhen } from '@/lantern/saveCard'
+import {
+  actLabel,
+  cardKey,
+  filled,
+  newestLoadable,
+  oldestFilled,
+  savedWhen,
+} from '@/lantern/saveCard'
+import { gridTarget, type GridKey } from '@/lantern/ringGrid'
+import { useMenuRing } from '@/composables/useMenuRing'
 import type { SaveSlot } from '@/types/bridge'
 import LanternDialog from './LanternDialog.vue'
+import type { KeyHint } from './KeyLine.vue'
 
 /**
  * Save or load a game: the 8 slots (and, when loading, the quick save
@@ -19,6 +29,15 @@ import LanternDialog from './LanternDialog.vue'
  * Opened from the title page (`fromTitle`) no game is in play, so a picked
  * save loads at once, with no question, and a failed load stays here with
  * the engine's line.
+ *
+ * It works from the keyboard. The cream ring starts on the first empty slot
+ * when saving (the oldest save when every slot is full) and on the newest
+ * save when loading (with nothing loadable there is no ring, and the dialog
+ * itself holds focus). The arrows walk the slots as the grid is drawn, round
+ * the ends, passing over the ones that cannot be used; Enter or Space picks
+ * the ringed slot as a click does; a pointer entering a slot takes the ring.
+ * While a question is open the arrows move only between Cancel and its
+ * answer, and Escape answers Cancel and puts the ring back on the slot.
  */
 const props = defineProps<{ mode: 'save' | 'load'; fromTitle?: boolean }>()
 const emit = defineEmits<{ close: []; done: [] }>()
@@ -34,6 +53,8 @@ const asking = ref<string | number | null>(null)
 const justSaved = ref<string | number | null>(null)
 const saveFailed = ref(false)
 const list = ref<HTMLElement | null>(null)
+const ring = useMenuRing('.lq-slot-btn, .lq-ask-cancel, .lq-ask-ok')
+const ARROWS = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight']
 
 const cards = computed<SaveSlot[]>(() => {
   void version.value
@@ -54,6 +75,73 @@ const groups = computed(() => [
     ? [{ id: 'named', heading: NAMED_HEADING, cards: namedCards.value }]
     : []),
 ])
+
+/** The slot the ring starts on, or null when there is none to ring. */
+const startKey = computed<string | number | null>(() => {
+  if (saving.value) {
+    const empty = cards.value.find((card) => !filled(card))
+    const start = empty ?? oldestFilled(cards.value)
+    return start ? cardKey(start) : null
+  }
+  const start = newestLoadable([...cards.value, ...namedCards.value])
+  return start ? cardKey(start) : null
+})
+
+/** The key line: the arrows walk the slots, unless there is nothing to pick. */
+const keyLine = computed<KeyHint[]>(() =>
+  startKey.value === null && !saving.value
+    ? [{ keys: ['Esc'], word: 'back' }]
+    : [
+        { keys: ['↑', '↓', '←', '→'], word: 'move' },
+        { keys: ['Enter'], word: 'choose' },
+        { keys: ['Esc'], word: 'back' },
+      ],
+)
+
+/** The slot buttons that can take the ring, in reading order. */
+function slotButtons(): HTMLButtonElement[] {
+  return [
+    ...(list.value?.querySelectorAll<HTMLButtonElement>(
+      '.lq-slot-btn:not(:disabled)',
+    ) ?? []),
+  ]
+}
+
+/** The arrows: between the question's two buttons, or across the slot grid. */
+function onKeydown(event: KeyboardEvent): void {
+  if (!ARROWS.includes(event.key)) return
+  const active = document.activeElement
+  if (asking.value !== null) {
+    const both = [
+      ...(list.value?.querySelectorAll<HTMLElement>(
+        '.lq-ask-cancel, .lq-ask-ok',
+      ) ?? []),
+    ]
+    const step = event.key === 'ArrowLeft' || event.key === 'ArrowUp' ? -1 : 1
+    event.preventDefault()
+    ring.ringTo(
+      both[
+        (both.indexOf(active as HTMLElement) + step + both.length) % both.length
+      ],
+    )
+    return
+  }
+  const buttons = slotButtons()
+  const at = buttons.findIndex((button) => button === active)
+  if (at < 0) return
+  event.preventDefault()
+  const rects = buttons.map((button) => {
+    const box = (button.closest('li') ?? button).getBoundingClientRect()
+    return { left: box.left, top: box.top, width: box.width }
+  })
+  const to = gridTarget(rects, at, event.key as GridKey)
+  if (to !== at) ring.ringTo(buttons[to])
+}
+
+/** A pointer entering a slot takes the ring (not while a question is open: only its two buttons take it then). */
+function onHover(event: MouseEvent): void {
+  if (asking.value === null) ring.onHover(event)
+}
 
 function badge(card: SaveSlot): string {
   if (card.name !== undefined) return '✎'
@@ -114,6 +202,7 @@ async function ask(card: SaveSlot): Promise<void> {
 }
 
 function pick(card: SaveSlot): void {
+  ring.choose()
   justSaved.value = null
   if (props.fromTitle) {
     const loaded =
@@ -160,7 +249,10 @@ function cardLabel(card: SaveSlot): string {
   <LanternDialog
     :title="saving ? 'Save game' : 'Load game'"
     eyebrow="Game"
+    :key-line="keyLine"
+    :start-on-panel="startKey === null && !saving"
     @close="emit('close')"
+    @focusin="ring.onFocusIn"
   >
     <p class="lq-intro">
       {{
@@ -179,7 +271,7 @@ function cardLabel(card: SaveSlot): string {
     >
       {{ game.titleLoadError }}
     </p>
-    <div ref="list">
+    <div ref="list" @keydown="onKeydown">
       <template v-for="group in groups" :key="group.id">
         <h3 v-if="group.heading" class="lq-named-heading">
           {{ group.heading }}
@@ -202,6 +294,8 @@ function cardLabel(card: SaveSlot): string {
               class="lq-slot-btn"
               :disabled="!saving && (!filled(card) || card.outdated)"
               :aria-label="cardLabel(card)"
+              :data-autofocus="startKey === cardKey(card) ? '' : undefined"
+              @mouseenter="onHover"
               @click="pick(card)"
             >
               <span
@@ -288,11 +382,17 @@ function cardLabel(card: SaveSlot): string {
                 <button
                   type="button"
                   class="lq-ask-cancel"
-                  @click="cancel(card)"
+                  @mouseenter="ring.onHover"
+                  @click="(ring.choose(), cancel(card))"
                 >
                   Cancel
                 </button>
-                <button type="button" class="lq-ask-ok" @click="confirm(card)">
+                <button
+                  type="button"
+                  class="lq-ask-ok"
+                  @mouseenter="ring.onHover"
+                  @click="(ring.choose(), confirm(card))"
+                >
                   {{ saving ? 'Replace' : 'Load' }}
                 </button>
               </span>
@@ -364,6 +464,16 @@ function cardLabel(card: SaveSlot): string {
   font: inherit;
   text-align: left;
   cursor: pointer;
+}
+.lq-slot-btn:focus {
+  outline: none;
+}
+/* The ring: the same cream outline as the title page, round the whole slot. */
+.lq-slot:has(.lq-slot-btn:focus),
+.lq-ask-cancel:focus,
+.lq-ask-ok:focus {
+  outline: 3px solid #f4ecd2;
+  outline-offset: 3px;
 }
 .lq-slot-btn:disabled {
   opacity: 0.55;
