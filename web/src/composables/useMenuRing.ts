@@ -9,11 +9,11 @@ const HUSH_MS = 250
  * Bind `onFocusIn` to the dialog (focus events bubble): the ring arriving on a
  * different stop from somewhere else in the dialog sounds the soft ting (the
  * dialog opening, or focus coming back from outside it, is silent). `ringTo`
- * puts the ring on an element and keeps it in view; `onHover` is a pointer
- * moving over a stop (bind it to `mousemove` on each stop), which takes the
- * ring unless it is already inside it. `track` records every pointer move in
- * the dialog (bind it to `mousemove` on the dialog, so it runs after the stop's
- * `onHover`). A move event at the same screen position as the last one is the
+ * puts the ring on an element and keeps it in view; `onMove` is the pointer
+ * moving anywhere in the dialog (bind it once, to `mousemove` on the dialog):
+ * over a stop it takes the ring, unless the ring is already inside that stop
+ * or `canHover` (optional, given the stop) says the stop takes no pointer
+ * now. A move event at the same screen position as the last one is the
  * browser re-sending the pointer after a scroll, not the player moving it, so
  * it never takes the ring.
  * `choose` is the latch of a choice made.
@@ -21,11 +21,13 @@ const HUSH_MS = 250
  * reached into view, since the browser scrolls only the focused control, not
  * the row around it.
  */
-export function useMenuRing(stopSelector: string): {
+export function useMenuRing(
+  stopSelector: string,
+  canHover?: (stop: Element) => boolean,
+): {
   onFocusIn(event: FocusEvent): void
   ringTo(element: HTMLElement | null | undefined): void
-  onHover(event: MouseEvent): void
-  track(event: MouseEvent): void
+  onMove(event: MouseEvent): void
   choose(): void
   afterTab(): void
   moved(): void
@@ -57,18 +59,16 @@ export function useMenuRing(stopSelector: string): {
       if (root.contains(from) && stopOf(from) !== to) sounds.playMove()
     },
     ringTo,
-    onHover(event: MouseEvent): void {
-      const stop = event.currentTarget
-      if (!(stop instanceof HTMLElement)) return
+    onMove(event: MouseEvent): void {
+      const stop = stopOf(event.target)
       const moved =
         lastPointer !== null &&
         (lastPointer.x !== event.screenX || lastPointer.y !== event.screenY)
-      if (!moved) return
+      lastPointer = { x: event.screenX, y: event.screenY }
+      if (!moved || !(stop instanceof HTMLElement)) return
+      if (canHover && !canHover(stop)) return
       if (!stop.contains(document.activeElement))
         stop.focus({ preventScroll: true })
-    },
-    track(event: MouseEvent): void {
-      lastPointer = { x: event.screenX, y: event.screenY }
     },
     choose: (): void => {
       hushedUntil = Date.now() + HUSH_MS

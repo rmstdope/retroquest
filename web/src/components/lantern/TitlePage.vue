@@ -37,7 +37,11 @@ import { useUiSounds } from '@/composables/useUiSounds'
  * the choices in the order on screen, wrapping round (from the credit link they
  * put it on the last or the first); a pointer entering a choice moves it there.
  * A ring that moves to another choice sounds a soft ting, a choice made a
- * latch; arriving on the main choice is silent.
+ * latch; arriving on the main choice is silent. This ring is deliberately not
+ * the menus' shared one (`useMenuRing` and the `data-ring` rule in
+ * `lantern.css`): it lies over the full-bleed picture, so it stays cream in both
+ * themes (the menus' follows the theme token), it is taken on `mouseenter` and
+ * it walks the page's own choices rather than a dialog's stops.
  *
  * A returning player has `saves` (the quick save, the slots in use and the saves
  * made under a name): the page then offers Continue (the newest save that can be loaded, named under

@@ -64,7 +64,7 @@ function saveAndQuit(): void {
     :key-line="KEYS"
     @close="cancel"
     @focusin="ring.onFocusIn"
-    @mousemove="ring.track"
+    @mousemove="ring.onMove"
   >
     <p class="lq-quit-text">
       Save before you go? Anything since your last save is lost otherwise.
@@ -76,26 +76,26 @@ function saveAndQuit(): void {
     <template #footer>
       <div ref="buttons" class="lq-quit-buttons" @keydown="onKeydown">
         <button
+          data-ring
           type="button"
           class="lq-quit-primary"
-          @mousemove="ring.onHover"
           @click="choose(saveAndQuit)"
         >
           Save and quit
         </button>
         <button
+          data-ring
           type="button"
           class="lq-quit-plain"
-          @mousemove="ring.onHover"
           @click="choose(() => game.restartGame())"
         >
           Quit without saving
         </button>
         <button
+          data-ring
           type="button"
           class="lq-quit-plain"
           data-autofocus
-          @mousemove="ring.onHover"
           @click="choose(cancel)"
         >
           Cancel
@@ -135,10 +135,6 @@ function saveAndQuit(): void {
   font: inherit;
   font-size: 15px;
   cursor: pointer;
-}
-.lq-quit-buttons > button:focus {
-  outline: 3px solid var(--lq-ring);
-  outline-offset: 3px;
 }
 .lq-quit-primary {
   border: none;

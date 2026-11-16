@@ -53,7 +53,11 @@ const asking = ref<string | number | null>(null)
 const justSaved = ref<string | number | null>(null)
 const saveFailed = ref(false)
 const list = ref<HTMLElement | null>(null)
-const ring = useMenuRing('.lq-slot-btn, .lq-ask-cancel, .lq-ask-ok')
+/** While a question is open only its two buttons take the pointer's ring, not the slots. */
+const ring = useMenuRing(
+  '.lq-slot-btn, .lq-ask-cancel, .lq-ask-ok',
+  (stop) => asking.value === null || !stop.classList.contains('lq-slot-btn'),
+)
 const ARROWS = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight']
 
 const cards = computed<SaveSlot[]>(() => {
@@ -136,11 +140,6 @@ function onKeydown(event: KeyboardEvent): void {
   })
   const to = gridTarget(rects, at, event.key as GridKey)
   if (to !== at) ring.ringTo(buttons[to])
-}
-
-/** A pointer entering a slot takes the ring (not while a question is open: only its two buttons take it then). */
-function onHover(event: MouseEvent): void {
-  if (asking.value === null) ring.onHover(event)
 }
 
 function badge(card: SaveSlot): string {
@@ -253,7 +252,7 @@ function cardLabel(card: SaveSlot): string {
     :start-on-panel="startKey === null && !saving"
     @close="emit('close')"
     @focusin="ring.onFocusIn"
-    @mousemove="ring.track"
+    @mousemove="ring.onMove"
   >
     <p class="lq-intro">
       {{
@@ -283,6 +282,7 @@ function cardLabel(card: SaveSlot): string {
             :key="cardKey(card)"
             :data-slot="cardKey(card)"
             class="lq-slot"
+            data-ring="slot"
             :class="{
               'lq-slot-filled': filled(card),
               'lq-slot-old': card.outdated,
@@ -296,7 +296,6 @@ function cardLabel(card: SaveSlot): string {
               :disabled="!saving && (!filled(card) || card.outdated)"
               :aria-label="cardLabel(card)"
               :data-autofocus="startKey === cardKey(card) ? '' : undefined"
-              @mousemove="onHover"
               @click="pick(card)"
             >
               <span
@@ -383,7 +382,7 @@ function cardLabel(card: SaveSlot): string {
                 <button
                   type="button"
                   class="lq-ask-cancel"
-                  @mousemove="ring.onHover"
+                  data-ring
                   @click="(ring.choose(), cancel(card))"
                 >
                   Cancel
@@ -391,7 +390,7 @@ function cardLabel(card: SaveSlot): string {
                 <button
                   type="button"
                   class="lq-ask-ok"
-                  @mousemove="ring.onHover"
+                  data-ring
                   @click="(ring.choose(), confirm(card))"
                 >
                   {{ saving ? 'Replace' : 'Load' }}
@@ -468,13 +467,6 @@ function cardLabel(card: SaveSlot): string {
 }
 .lq-slot-btn:focus {
   outline: none;
-}
-/* The ring: the theme's ring colour (cream on dark, deep brown on light), round the whole slot. */
-.lq-slot:has(.lq-slot-btn:focus),
-.lq-ask-cancel:focus,
-.lq-ask-ok:focus {
-  outline: 3px solid var(--lq-ring);
-  outline-offset: 3px;
 }
 .lq-slot-btn:disabled {
   opacity: 0.55;
