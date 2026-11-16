@@ -1219,6 +1219,38 @@ describe('AreaNames', () => {
       )
     })
 
+    it('watches a plate it finds while sizes are reported only after that report, so the browser has no loop to report (rq-zaqg)', async () => {
+      const observed: Element[] = []
+      let reporting = false
+      const observedWhileReporting: Element[] = []
+      let notify: () => void = () => {}
+      vi.stubGlobal(
+        'ResizeObserver',
+        class {
+          constructor(callback: () => void) {
+            notify = (): void => {
+              reporting = true
+              callback()
+              reporting = false
+            }
+          }
+          observe(el: Element): void {
+            if (reporting) observedWhileReporting.push(el)
+            observed.push(el)
+          }
+          unobserve(): void {}
+          disconnect(): void {}
+        },
+      )
+      mountNames({ showing: true })
+      // The plate comes on the page after the names, and a size report finds it.
+      const plate = plateOver('lq-phone-plate', 0, 20)
+      notify()
+      await vi.advanceTimersByTimeAsync(50)
+      expect(observedWhileReporting).toEqual([])
+      expect(observed).toContain(plate)
+    })
+
     describe('two things under the plate', () => {
       const pair: AreaThing[] = [
         {

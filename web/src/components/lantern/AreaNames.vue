@@ -110,6 +110,8 @@ let observer: ResizeObserver | undefined
 let scrolled: HTMLElement | null = null
 /** The frame a scroll's measure waits for, so a scroll measures once a frame. */
 let scrollFrame: number | undefined
+/** The frame the panels found in a size report wait for before they are watched (`onResize`). */
+let watchFrame: number | undefined
 
 /** The stage this is laid over, or null before it is on the page. */
 function stage(): HTMLElement | null {
@@ -130,10 +132,33 @@ function frameOf(): { left: number; top: number; ratio: number } {
   return { left: box.left, top: box.top, ratio }
 }
 
-/** Measure the layer and what the names keep clear of. */
+/** Measure the layer and what the names keep clear of, and watch the panels found. */
 function measure(): void {
+  const scope = measureLayer()
+  if (scope) watchPanels(scope)
+}
+
+/**
+ * Sizes were reported: measure, but watch a panel found now only from the
+ * next frame. A panel watched while sizes are reported is reported within
+ * the same frame unless it lies deeper in the page than everything just
+ * reported, and the phone's plate does not, so the browser would report a
+ * loop (rq-zaqg). Its first report then comes a frame later and measures
+ * again.
+ */
+function onResize(): void {
+  const scope = measureLayer()
+  if (!scope || watchFrame !== undefined) return
+  watchFrame = requestAnimationFrame(() => {
+    watchFrame = undefined
+    watchPanels(scope)
+  })
+}
+
+/** Measure the layer and what the names keep clear of; the scope read, or null before it is on the page. */
+function measureLayer(): HTMLElement | null {
   const el = stage()
-  if (!el || !root.value) return
+  if (!el || !root.value) return null
   view.value = {
     width: root.value.clientWidth,
     height: root.value.clientHeight,
@@ -144,7 +169,7 @@ function measure(): void {
   covers.value = read.words
   obstacles.value = read.all
   panels.value = read.panels
-  watchPanels(scope)
+  return scope
 }
 
 /**
@@ -183,7 +208,7 @@ onMounted(() => {
     passive: true,
   })
   if (el && typeof ResizeObserver === 'function') {
-    observer = new ResizeObserver(measure)
+    observer = new ResizeObserver(onResize)
     observer.observe(el)
     // The layer itself: it may have no size yet when it is put on the page.
     if (root.value) observer.observe(root.value)
@@ -194,6 +219,7 @@ onUnmounted(() => {
   clearTimeout(settleTimer)
   scrolled?.removeEventListener('scroll', onScroll, { capture: true })
   if (scrollFrame !== undefined) cancelAnimationFrame(scrollFrame)
+  if (watchFrame !== undefined) cancelAnimationFrame(watchFrame)
 })
 let settleTimer: ReturnType<typeof setTimeout> | undefined
 // What the names keep clear of moved: measure again, and once more when what fades has faded.
