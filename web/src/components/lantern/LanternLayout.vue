@@ -2961,7 +2961,8 @@ watch(
   position: relative;
   z-index: 1;
   flex: 0 0 auto;
-  margin: 8px 8px 0;
+  /* The right margin leaves the corner to the menu button, so "Story so far" sits beside it. */
+  margin: 8px 60px 0 8px;
 }
 /* The stage: one Hide on its own slim line at the foot of the picture, just
    above the actions (the laptop's row, the phone's folded bar), the words
