@@ -3,11 +3,6 @@ import { useUiSounds } from './useUiSounds'
 /** How long (in milliseconds) a choice keeps the ting quiet. */
 const HUSH_MS = 250
 
-/** Whether keyboard focus (not a pointer) put the ring on this element. */
-function isKeyboardFocus(element: Element): boolean {
-  return element.matches(':focus-visible')
-}
-
 /**
  * The ring of a keyboard-driven screen (Save, Load, Settings, Quit): the
  * cream outline is focus on a "stop", an element that matches `stopSelector`.
@@ -22,6 +17,9 @@ function isKeyboardFocus(element: Element): boolean {
  * browser re-sending the pointer after a scroll, not the player moving it, so
  * it never takes the ring.
  * `choose` is the latch of a choice made.
+ * `afterTab` (bound to a Tab key press) brings the whole stop the ring has
+ * reached into view, since the browser scrolls only the focused control, not
+ * the row around it.
  */
 export function useMenuRing(stopSelector: string): {
   onFocusIn(event: FocusEvent): void
@@ -29,6 +27,7 @@ export function useMenuRing(stopSelector: string): {
   onHover(event: MouseEvent): void
   track(event: MouseEvent): void
   choose(): void
+  afterTab(): void
   moved(): void
 } {
   const sounds = useUiSounds()
@@ -53,14 +52,6 @@ export function useMenuRing(stopSelector: string): {
       const root = event.currentTarget
       const from = event.relatedTarget
       const to = stopOf(event.target)
-      // A stop reached by keyboard (Tab) comes whole into view, ring and all:
-      // the browser only scrolls the focused control, not the row around it.
-      if (
-        to &&
-        event.target instanceof Element &&
-        isKeyboardFocus(event.target)
-      )
-        to.scrollIntoView?.({ block: 'nearest' })
       if (!to || !(root instanceof Node) || !(from instanceof Node)) return
       if (Date.now() < hushedUntil) return
       if (root.contains(from) && stopOf(from) !== to) sounds.playMove()
@@ -82,6 +73,11 @@ export function useMenuRing(stopSelector: string): {
     choose: (): void => {
       hushedUntil = Date.now() + HUSH_MS
       sounds.playChoose()
+    },
+    afterTab: (): void => {
+      setTimeout(() => {
+        stopOf(document.activeElement)?.scrollIntoView?.({ block: 'nearest' })
+      }, 0)
     },
     moved: (): void => sounds.playMove(),
   }

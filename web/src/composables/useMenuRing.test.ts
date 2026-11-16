@@ -136,18 +136,18 @@ describe('useMenuRing', () => {
     expect(choose).toHaveBeenCalledOnce()
   })
 
-  it('brings a stop reached by keyboard whole into view, a pointer one not', () => {
+  it('after a Tab, brings the stop holding focus whole into view', () => {
+    vi.useFakeTimers()
     const ring = useMenuRing('.stop')
     const root = dialog()
-    const stop = root.querySelector<HTMLElement>('#b')!
+    const stop = root.querySelector<HTMLElement>('#a')
     const scroll = vi.fn()
-    stop.scrollIntoView = scroll
-    const matches = vi.spyOn(stop, 'matches')
-    matches.mockReturnValue(false)
-    focusIn(root, '#b', root.querySelector('#a'), ring)
+    if (stop) stop.scrollIntoView = scroll
+    root.querySelector<HTMLElement>('#a1')?.focus()
+    ring.afterTab()
     expect(scroll).not.toHaveBeenCalled()
-    matches.mockReturnValue(true)
-    focusIn(root, '#b', root.querySelector('#a'), ring)
+    vi.runAllTimers()
+    vi.useRealTimers()
     expect(scroll).toHaveBeenCalledWith({ block: 'nearest' })
   })
 })
