@@ -187,7 +187,7 @@ describe('the menu screens', () => {
     expect(lanternCss.match(/outline: 3px solid/g)).toHaveLength(1)
   })
 
-  it.each(['SettingsDialog', 'SaveLoadDialog', 'QuitDialog'])(
+  it.each(['SettingsDialog', 'SaveLoadDialog', 'QuitDialog', 'GameMenu'])(
     '%s marks its ring and draws no outline of its own',
     (name) => {
       const source = readFileSync(
