@@ -67,24 +67,44 @@ describe('useMenuRing', () => {
     } as unknown as MouseEvent
   }
 
+  /** A pointer move as the browser delivers it: the stop first, then the dialog. */
+  function pointer(
+    ring: ReturnType<typeof useMenuRing>,
+    stop: Element | null,
+    x: number,
+    y: number,
+  ): void {
+    if (stop) ring.onHover(over(stop, x, y))
+    ring.track(over(null, x, y))
+  }
+
   it('a pointer that moves over a stop rings it, unless focus is already inside', () => {
     const ring = useMenuRing('.stop')
     const root = dialog()
     const a = root.querySelector<HTMLElement>('#a')!
     const b = root.querySelector<HTMLElement>('#b')!
-    ring.onHover(over(b, 10, 10))
-    ring.onHover(over(b, 13, 10))
+    pointer(ring, b, 10, 10)
+    pointer(ring, b, 13, 10)
     expect(document.activeElement).toBe(b)
     root.querySelector<HTMLElement>('#a1')!.focus()
-    ring.onHover(over(a, 20, 10))
+    pointer(ring, a, 20, 10)
     expect(document.activeElement?.id).toBe('a1')
   })
 
   it('a pointer that only rests while the list scrolls does not take the ring', () => {
     const ring = useMenuRing('.stop')
     const root = dialog()
-    ring.onHover(over(root.querySelector('#a'), 10, 10))
-    ring.onHover(over(root.querySelector('#b'), 10, 10))
+    pointer(ring, root.querySelector('#a'), 10, 10)
+    pointer(ring, root.querySelector('#b'), 10, 10)
+    expect(document.activeElement?.id).not.toBe('b')
+  })
+
+  it('a pointer resting on something that is not a stop does not take the ring when a stop scrolls under it', () => {
+    const ring = useMenuRing('.stop')
+    const root = dialog()
+    pointer(ring, root.querySelector('#a'), 10, 10)
+    pointer(ring, null, 40, 40)
+    pointer(ring, root.querySelector('#b'), 40, 40)
     expect(document.activeElement?.id).not.toBe('b')
   })
 
@@ -93,8 +113,8 @@ describe('useMenuRing', () => {
     const root = dialog()
     const b = root.querySelector<HTMLElement>('#b')!
     b.scrollIntoView = vi.fn()
-    ring.onHover(over(b, 1, 1))
-    ring.onHover(over(b, 3, 3))
+    pointer(ring, b, 1, 1)
+    pointer(ring, b, 3, 3)
     expect(b.scrollIntoView).not.toHaveBeenCalled()
   })
 

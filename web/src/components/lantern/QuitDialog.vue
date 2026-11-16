@@ -64,6 +64,7 @@ function saveAndQuit(): void {
     :key-line="KEYS"
     @close="cancel"
     @focusin="ring.onFocusIn"
+    @mousemove="ring.track"
   >
     <p class="lq-quit-text">
       Save before you go? Anything since your last save is lost otherwise.

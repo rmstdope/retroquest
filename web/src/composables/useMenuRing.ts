@@ -10,23 +10,26 @@ const HUSH_MS = 250
  * different stop from somewhere else in the dialog sounds the soft ting (the
  * dialog opening, or focus coming back from outside it, is silent). `ringTo`
  * puts the ring on an element and keeps it in view; `onHover` is a pointer
- * moving over a stop (bind it to `mousemove`), which takes the ring unless it
- * is already inside it. A move event at the same screen position as the last
- * one is the browser re-sending the pointer after a scroll, not the player
- * moving it, so it never takes the ring.
+ * moving over a stop (bind it to `mousemove` on each stop), which takes the
+ * ring unless it is already inside it. `track` records every pointer move in
+ * the dialog (bind it to `mousemove` on the dialog, so it runs after the stop's
+ * `onHover`). A move event at the same screen position as the last one is the
+ * browser re-sending the pointer after a scroll, not the player moving it, so
+ * it never takes the ring.
  * `choose` is the latch of a choice made.
  */
 export function useMenuRing(stopSelector: string): {
   onFocusIn(event: FocusEvent): void
   ringTo(element: HTMLElement | null | undefined): void
   onHover(event: MouseEvent): void
+  track(event: MouseEvent): void
   choose(): void
   moved(): void
 } {
   const sounds = useUiSounds()
   /** Until when (a time) the ting stays quiet, after a choice. */
   let hushedUntil = 0
-  /** Where the pointer was at its last move over a stop, if it has moved. */
+  /** Where the pointer was at its last move anywhere in the dialog, if it has moved. */
   let lastPointer: { x: number; y: number } | null = null
 
   /** The stop an element is, or is inside. */
@@ -56,10 +59,12 @@ export function useMenuRing(stopSelector: string): {
       const moved =
         lastPointer !== null &&
         (lastPointer.x !== event.screenX || lastPointer.y !== event.screenY)
-      lastPointer = { x: event.screenX, y: event.screenY }
       if (!moved) return
       if (!stop.contains(document.activeElement))
         stop.focus({ preventScroll: true })
+    },
+    track(event: MouseEvent): void {
+      lastPointer = { x: event.screenX, y: event.screenY }
     },
     choose: (): void => {
       hushedUntil = Date.now() + HUSH_MS

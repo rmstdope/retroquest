@@ -177,6 +177,7 @@ function volume(event: Event): number {
     :key-line="KEYS"
     @close="emit('close')"
     @focusin="ring.onFocusIn"
+    @mousemove="ring.track"
   >
     <div ref="root" @keydown="onKeydown">
       <section class="lq-group" aria-labelledby="lq-set-look">

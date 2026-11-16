@@ -253,6 +253,7 @@ function cardLabel(card: SaveSlot): string {
     :start-on-panel="startKey === null && !saving"
     @close="emit('close')"
     @focusin="ring.onFocusIn"
+    @mousemove="ring.track"
   >
     <p class="lq-intro">
       {{
