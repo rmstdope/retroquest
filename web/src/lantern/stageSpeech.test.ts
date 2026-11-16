@@ -194,6 +194,28 @@ describe('runHeads', () => {
     ).toEqual([true, true, false])
   })
 
+  it('ends a run at a narrator card, which heads nothing itself', () => {
+    expect(
+      runHeads(
+        [
+          { speaker: 'Mira', turnId: 1 },
+          null,
+          { speaker: 'Mira', turnId: 1 },
+          { speaker: 'Mira', turnId: 1 },
+        ],
+        0,
+      ),
+    ).toEqual([true, false, true, false])
+  })
+
+  it('passes over a line out of sight, as if it were not there', () => {
+    expect(runHeads(oneTurn('G', 'G', 'G'), 0, [0])).toEqual([
+      false,
+      true,
+      false,
+    ])
+  })
+
   it('has nothing to mark without lines', () => {
     expect(runHeads([], 0)).toEqual([])
   })

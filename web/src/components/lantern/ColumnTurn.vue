@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, nextTick, ref, watch } from 'vue'
+import { computed, inject, nextTick, ref, watch } from 'vue'
 import type { Turn } from '@/stores/useGameStore'
 import { useGameStore } from '@/stores/useGameStore'
 import { useStageSpeechStore } from '@/stores/useStageSpeechStore'
@@ -8,7 +8,12 @@ import { FOLLOW_EVENT } from '@/composables/useStoryFollow'
 import { useReadAlong } from '@/composables/useReadAlong'
 import { columnPieces, type ColumnPiece } from '@/lantern/columnPieces'
 import { parseTurn } from '@/lantern/parseTurn'
-import { readingPauseMs, type SpeechLine } from '@/lantern/stageSpeech'
+import { columnLineId, createFadeLedger, FADE_LEDGER } from '@/lantern/lineFade'
+import {
+  readingPauseMs,
+  runHeads,
+  type SpeechLine,
+} from '@/lantern/stageSpeech'
 import { renderMarkup } from '@/utils/theme'
 import SpeechPortrait from './SpeechPortrait.vue'
 import StoryTurn from './StoryTurn.vue'
@@ -39,6 +44,8 @@ const props = defineProps<{
 const game = useGameStore()
 const speech = useStageSpeechStore()
 const scene = useSceneStore()
+/** Which lines have faded out of sight, kept by `useFadeOnceRead` in the layout. */
+const fade = inject(FADE_LEDGER, createFadeLedger, true)
 
 /**
  * The turn's pieces in the order they happened; of a talk that took Elior to
@@ -104,18 +111,6 @@ watch(
   { flush: 'post' },
 )
 
-/** The pieces whose line has faded out of sight, spent or gone (`useFadeOnceRead`), by piece key. */
-const outOfSight = ref<string[]>([])
-
-/** A line has left sight, or come back: note which, so the name and portrait go to the first line of its run in sight. */
-function sightChanged(): void {
-  outOfSight.value = Array.from(
-    root.value?.querySelectorAll<HTMLElement>(
-      '.lq-cl:is([data-fade="gone"], [data-fade="spent"])[data-key]',
-    ) ?? [],
-  ).map((row) => row.dataset.key ?? '')
-}
-
 /** A stable key for a piece, so a row is never reused for another line (its fade marks are its own). */
 function pieceKey(piece: ColumnPiece, index: number): string {
   return piece.kind === 'line'
@@ -125,22 +120,41 @@ function pieceKey(piece: ColumnPiece, index: number): string {
       : `card-empty-${index}`
 }
 
-/**
- * Whether piece `index` starts a run, so carries the speaker's name and
- * portrait: the piece before it still showing (a line faded out of sight is
- * passed over) is not a line of the same speaker.
- */
-function heads(index: number): boolean {
-  const piece = told.value[index]
-  let at = index - 1
-  while (at >= 0 && outOfSight.value.includes(pieceKey(told.value[at], at)))
-    at--
-  const before = told.value[at]
-  return (
-    piece?.kind === 'line' &&
-    !(before?.kind === 'line' && before.line.speaker === piece.line.speaker)
-  )
+/** The id of a told piece's line in the fade ledger. */
+function lineId(piece: ColumnPiece, index: number): string {
+  return columnLineId(props.turn.id, pieceKey(piece, index))
 }
+
+/**
+ * Which pieces start a run, so carry the speaker's name and portrait (the
+ * shared `runHeads`): the piece before it still showing (a line faded out of
+ * sight is passed over) is not a line of the same speaker; a card ends a run.
+ * A line out of sight keeps the name it had (its name takes room in this
+ * column, which it keeps while a line above still shows), judged as if it
+ * were showing.
+ */
+const heads = computed(() => {
+  const lines = told.value.map((piece) =>
+    piece.kind === 'line'
+      ? { speaker: piece.line.speaker, turnId: props.turn.id }
+      : null,
+  )
+  const out = told.value.flatMap((piece, index) =>
+    piece.kind === 'line' && fade.outOfSight(lineId(piece, index))
+      ? [index]
+      : [],
+  )
+  const showing = runHeads(lines, 0, out)
+  return showing.map((head, index) =>
+    out.includes(index)
+      ? runHeads(
+          lines.slice(0, index + 1),
+          0,
+          out.filter((other) => other < index),
+        )[index]
+      : head,
+  )
+})
 </script>
 
 <template>
@@ -149,7 +163,6 @@ function heads(index: number): boolean {
     class="lq-column-turn"
     data-testid="column-turn"
     @click="speech.revealAll()"
-    @lq-line-sight="sightChanged"
   >
     <template v-for="(piece, index) in told" :key="pieceKey(piece, index)">
       <StoryTurn
@@ -162,21 +175,22 @@ function heads(index: number): boolean {
         v-else
         class="lq-cl"
         data-lq-obstacle="card"
-        :class="[`lq-cl-${piece.line.side}`, { 'lq-cl-head': heads(index) }]"
+        :class="[`lq-cl-${piece.line.side}`, { 'lq-cl-head': heads[index] }]"
         :data-unit="piece.line.unit >= 0 ? piece.line.unit : undefined"
         :data-piece="index"
         :data-key="pieceKey(piece, index)"
+        :data-line-id="lineId(piece, index)"
         :data-read-ms="readingPauseMs(piece.line.markup)"
         data-testid="speech-line"
       >
         <SpeechPortrait
-          v-if="heads(index) && piece.line.side === 'left'"
+          v-if="heads[index] && piece.line.side === 'left'"
           :name="piece.line.speaker"
           :src="game.portraitFor(piece.line.speaker)"
         />
         <span v-else-if="piece.line.side === 'left'" class="lq-gap"></span>
         <div class="lq-col">
-          <b v-if="heads(index)" class="lq-line-name">{{
+          <b v-if="heads[index]" class="lq-line-name">{{
             piece.line.speaker
           }}</b>
           <!-- eslint-disable vue/no-v-html -->
@@ -195,7 +209,7 @@ function heads(index: number): boolean {
           <!-- eslint-enable vue/no-v-html -->
         </div>
         <SpeechPortrait
-          v-if="heads(index) && piece.line.side === 'right'"
+          v-if="heads[index] && piece.line.side === 'right'"
           :name="piece.line.speaker"
           :src="game.portraitFor(piece.line.speaker)"
         />

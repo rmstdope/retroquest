@@ -8,7 +8,11 @@ import { useStageSpeechStore } from '@/stores/useStageSpeechStore'
 import { useNarrationStore } from '@/stores/useNarrationStore'
 import type { NarrationUnit } from '@/lantern/narrationUnits'
 import { readingPauseMs } from '@/lantern/stageSpeech'
-import { LINE_SIGHT_EVENT } from '@/composables/useFadeOnceRead'
+import {
+  createFadeLedger,
+  FADE_LEDGER,
+  type FadeLedger,
+} from '@/lantern/lineFade'
 
 let nextId = 1
 
@@ -35,8 +39,12 @@ const say = (name: string, words: string): string =>
 
 function mounted() {
   const speech = useStageSpeechStore()
-  const w = mount(StageSpeech, { attachTo: document.body })
-  return { speech, w }
+  const ledger: FadeLedger = createFadeLedger()
+  const w = mount(StageSpeech, {
+    attachTo: document.body,
+    global: { provide: { [FADE_LEDGER as symbol]: ledger } },
+  })
+  return { speech, w, ledger }
 }
 
 describe('StageSpeech', () => {
@@ -93,16 +101,14 @@ describe('StageSpeech', () => {
   })
 
   it("heads a new conversation's first line, though the lines before it faded out of sight", async () => {
-    const { speech, w } = mounted()
+    const { speech, w, ledger } = mounted()
     speech.observe(
       turn(`${say('Mira', 'One.')}\n${say('Mira', 'Two.')}`, 'Mira'),
     )
     speech.revealAll()
     await w.vm.$nextTick()
     for (const row of w.findAll('[data-testid="speech-line"]')) {
-      const el = row.element as HTMLElement
-      el.dataset.fade = 'gone'
-      el.dispatchEvent(new Event(LINE_SIGHT_EVENT, { bubbles: true }))
+      ledger.set((row.element as HTMLElement).dataset.lineId ?? '', 'gone')
     }
     speech.observe(turn(say('Grandmother', 'There you are.'), 'Grandmother'))
     speech.revealAll()

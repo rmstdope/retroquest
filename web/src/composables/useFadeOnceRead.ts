@@ -1,4 +1,12 @@
 import { onScopeDispose, readonly, ref, watch, type Ref } from 'vue'
+import {
+  advanceColumn,
+  createFadeLedger,
+  finishFade,
+  type ColumnLineInput,
+  type FadeLedger,
+  type FadeState,
+} from '@/lantern/lineFade'
 
 /** How long a line on the picture takes to fade away once it has been read, in ms (`lantern.css`). */
 export const FADE_AWAY_MS = 5000
@@ -19,14 +27,6 @@ export const FADING_LINES =
  */
 export const FADING_COLUMNS = '.lq-thread, .lq-paper-content'
 
-/**
- * Event fired (bubbling) on a line the moment it leaves sight (its fade has
- * run, `spent`, or it has gone and taken its room away, `gone`) or comes back
- * into sight (read aloud again). A column moves a run's name and portrait to
- * the first of its lines in sight.
- */
-export const LINE_SIGHT_EVENT = 'lq-line-sight'
-
 /** What marks a line (or a part of it) as being read aloud now. */
 const READING = '.lq-speaking, [data-reading]'
 
@@ -37,6 +37,8 @@ const FADES = ['lq-fade-away', 'lq-fade-still']
 export interface FadeOnceRead {
   /** How many lines are on the picture and not yet gone. */
   live: Readonly<Ref<number>>
+  /** Every line's fade state by its `data-line-id`, for the columns to read (`lineFade.ts`). */
+  ledger: FadeLedger
 }
 
 /**
@@ -46,7 +48,8 @@ export interface FadeOnceRead {
  * for 2 s, gone by `FADE_AWAY_MS`, held while the pointer rests on it),
  * `"spent"` when the fade has run (unseen, keeping its room), and `"gone"`
  * once every line above it in its column is gone too, which takes it and its
- * room away (each change of sight fires `LINE_SIGHT_EVENT`). A line is
+ * room away (the rules are `advanceColumn`'s; each line's state is also kept
+ * in the returned `ledger` by its `data-line-id`). A line is
  * read once neither it nor a part of it is being read aloud (`.lq-speaking`,
  * `[data-reading]`); a line never read aloud (its turn not narrated, a skip
  * showed it, or it has no recording yet) waits its `data-read-ms` first, the
@@ -77,8 +80,10 @@ export function useFadeOnceRead(
   const waiting = new Map<Element, ReturnType<typeof setTimeout>>()
   /** The lines seen being read aloud: they fade at once when it ends. */
   let heard = new WeakSet<Element>()
-  /** The lines read, waiting only for a line above them to start fading. */
+  /** The lines whose time to read has run, waiting only for a line above them to start fading. */
   let ready = new WeakSet<Element>()
+  /** What every line's fade state is, for the columns. */
+  const ledger = createFadeLedger()
 
   /** The column `el` stands in, whose lines fade top first. */
   function columnOf(el: Element, root: HTMLElement): Element {
@@ -88,6 +93,19 @@ export function useFadeOnceRead(
   /** Whether `el`, or a part of it, is being read aloud. */
   function reading(el: Element): boolean {
     return el.matches(READING) || el.querySelector(READING) !== null
+  }
+
+  /** Tell the ledger every line's state, and drop the lines that have left the page. */
+  function publish(lines: HTMLElement[]): void {
+    const present = new Set<string>()
+    for (const el of lines) {
+      const id = el.dataset.lineId
+      if (!id) continue
+      present.add(id)
+      ledger.set(id, (el.dataset.fade as FadeState | undefined) ?? 'live')
+    }
+    for (const id of Object.keys(ledger.states))
+      if (!present.has(id)) ledger.forget(id)
   }
 
   /** Mark every line, start the fade of those read, and count the rest. */
@@ -107,75 +125,63 @@ export function useFadeOnceRead(
         if (el.dataset.fade !== 'gone' && el.dataset.fade !== 'spent')
           el.dataset.fade = 'live'
       live.value = lines.filter((el) => el.dataset.fade !== 'gone').length
+      publish(lines)
       return
     }
-    /** Per column: whether every line so far has started fading, and whether every one is gone. */
-    const above = new Map<Element, { fading: boolean; gone: boolean }>()
+    const byColumn = new Map<Element, HTMLElement[]>()
     for (const el of lines) {
       const col = columnOf(el, root)
-      const before = above.get(col) ?? { fading: true, gone: true }
-      step(el, root, before.fading, before.gone)
-      above.set(col, {
-        fading: before.fading && el.dataset.fade !== 'live',
-        gone: before.gone && el.dataset.fade === 'gone',
-      })
+      byColumn.set(col, [...(byColumn.get(col) ?? []), el])
     }
+    for (const column of byColumn.values()) advance(column, root)
     live.value = lines.filter((el) => el.dataset.fade !== 'gone').length
+    publish(lines)
   }
 
-  /**
-   * Move one line on: `fadingAbove` says every line above it in its column
-   * has started fading, `goneAbove` that every one is gone.
-   */
-  function step(
-    el: HTMLElement,
-    root: HTMLElement,
-    fadingAbove: boolean,
-    goneAbove: boolean,
-  ): void {
-    if (reading(el)) {
+  /** What `advanceColumn` needs to know of a line. */
+  function inputOf(el: HTMLElement): ColumnLineInput {
+    const isReading = reading(el)
+    if (isReading) {
       heard.add(el)
       ready.delete(el)
       // Read aloud now: its time to read (if it was waiting) is the voice's.
       clearTimeout(waiting.get(el))
       waiting.delete(el)
-      // A row Vue reused for a line being read starts over.
-      const outOfSight =
-        el.dataset.fade === 'spent' || el.dataset.fade === 'gone'
-      el.dataset.fade = 'live'
-      if (outOfSight)
-        el.dispatchEvent(new Event(LINE_SIGHT_EVENT, { bubbles: true }))
-      return
     }
-    if (!el.dataset.fade) el.dataset.fade = 'live'
-    if (el.dataset.fade === 'spent' && goneAbove) {
-      leave(el, 'gone')
-      return
-    }
-    if (el.dataset.fade !== 'live' || waiting.has(el)) return
     const ms = heard.has(el) ? 0 : Number(el.dataset.readMs) || 0
-    if (ready.has(el) || ms <= 0) {
-      if (fadingAbove) {
-        ready.delete(el)
-        el.dataset.fade = 'away'
-      } else ready.add(el)
-      return
+    return {
+      state: el.dataset.fade as FadeState | undefined,
+      reading: isReading,
+      eligible: ready.has(el) || ms <= 0,
+      waiting: waiting.has(el),
     }
-    waiting.set(
-      el,
-      setTimeout(() => {
-        waiting.delete(el)
-        if (el.dataset.fade !== 'live') return
-        ready.add(el)
-        mark(root)
-      }, ms),
-    )
   }
 
-  /** Mark `el` spent or gone, and say it has left sight. */
-  function leave(el: HTMLElement, how: 'spent' | 'gone'): void {
-    el.dataset.fade = how
-    el.dispatchEvent(new Event(LINE_SIGHT_EVENT, { bubbles: true }))
+  /** Advance one column's lines by the rules of `advanceColumn` and carry out what it decided. */
+  function advance(column: HTMLElement[], root: HTMLElement): void {
+    const outputs = advanceColumn(column.map(inputOf))
+    column.forEach((el, index) => {
+      const out = outputs[index]
+      if (out.state === 'away') ready.delete(el)
+      el.dataset.fade = out.state
+      if (out.wait) waitToRead(el, root)
+    })
+  }
+
+  /** Give `el` the time to read it takes (`data-read-ms`), then let it fade. */
+  function waitToRead(el: HTMLElement, root: HTMLElement): void {
+    waiting.set(
+      el,
+      setTimeout(
+        () => {
+          waiting.delete(el)
+          if (el.dataset.fade !== 'live') return
+          ready.add(el)
+          mark(root)
+        },
+        Number(el.dataset.readMs) || 0,
+      ),
+    )
   }
 
   /** A line's fade has run: it is spent, and gone once every line above it in its column is. */
@@ -183,7 +189,7 @@ export function useFadeOnceRead(
     const el = event.target
     if (!(el instanceof HTMLElement) || el.dataset.fade !== 'away') return
     if (!FADES.includes((event as AnimationEvent).animationName)) return
-    leave(el, 'spent')
+    el.dataset.fade = finishFade('away')
     if (container.value) mark(container.value)
   }
 
@@ -221,5 +227,5 @@ export function useFadeOnceRead(
   })
   onScopeDispose(() => stop(container.value))
 
-  return { live: readonly(live) }
+  return { live: readonly(live), ledger }
 }

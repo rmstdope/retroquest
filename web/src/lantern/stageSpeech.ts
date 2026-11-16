@@ -151,19 +151,25 @@ export function continuesRun(
 
 /**
  * Which lines head a run of one speaker in one turn (the ones that carry the
- * name and the portrait), given each line, the index of the first line still
- * showing at the top of the picture, and the indexes of the lines below it
- * that have faded out of sight. Lines before it have left; a run whose first
- * line has left is headed by its first line still showing, and a line out of
- * sight is passed over, as if it were not there.
+ * name and the portrait), for both columns that draw runs: the laptop's speech
+ * thread and the phone's one column. Given each line (`null` for a narrator
+ * card between them, which ends a run and heads nothing), the index of the
+ * first line still showing at the top of the picture, and the indexes of the
+ * lines that have faded out of sight. Lines before the first showing have
+ * left; a run whose first line has left is headed by its first line still
+ * showing, and a line out of sight is passed over, as if it were not there.
  */
 export function runHeads(
-  lines: RunLine[],
+  lines: (RunLine | null)[],
   firstShowing: number,
   outOfSight: number[] = [],
 ): boolean[] {
   let before: RunLine | undefined
   return lines.map((line, index) => {
+    if (!line) {
+      before = undefined
+      return false
+    }
     if (index < firstShowing || outOfSight.includes(index)) return false
     const head = index === firstShowing || !continuesRun(line, before)
     before = line
