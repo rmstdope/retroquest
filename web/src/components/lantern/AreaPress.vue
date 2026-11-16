@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
+import { useSizeWatch } from '@/composables/useSizeWatch'
 import { placeNames, type PlacedName } from '@/lantern/areaNames'
 import type { AreaThing } from '@/lantern/areaThings'
 import type { AreaBox } from '@/lantern/roomMotion'
@@ -28,8 +29,6 @@ const emit = defineEmits<{
 
 const root = ref<HTMLElement | null>(null)
 const view = ref<PictureSize>({ width: 0, height: 0 })
-let observer: ResizeObserver | undefined
-
 function measure(): void {
   if (!root.value) return
   view.value = {
@@ -37,14 +36,12 @@ function measure(): void {
     height: root.value.clientHeight,
   }
 }
+/** Measure when the layer's size is reported (inside the report: it writes only its own state). */
+const sizeWatch = useSizeWatch(measure, { inReport: true })
 onMounted(() => {
   measure()
-  if (root.value && typeof ResizeObserver === 'function') {
-    observer = new ResizeObserver(measure)
-    observer.observe(root.value)
-  }
+  if (root.value) sizeWatch.observe(root.value)
 })
-onUnmounted(() => observer?.disconnect())
 
 /** The things that can be pressed and are in view, left to right, each with its stacking: smaller over larger. */
 const stops = computed(() => {

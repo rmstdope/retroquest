@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, onUnmounted, ref, watch } from 'vue'
+import { useSizeWatch } from '@/composables/useSizeWatch'
 import { useReducedMotion } from '@/composables/useReducedMotion'
 import type { MotionSpec } from '@/lantern/roomMotion'
 import {
@@ -354,7 +355,8 @@ const canvasUp = ref(false)
 let motionScene: MotionScene = createMotionScene()
 let frame = 0
 let lastFrame = 0
-let observer: ResizeObserver | undefined
+/** Size the canvas when the picture's size is reported (it writes only the canvas and the scene). */
+const sizeWatch = useSizeWatch(sizeCanvas, { inReport: true })
 
 /** Tell the scene how big the canvas is, and the canvas how many pixels to have. */
 function sizeCanvas(): void {
@@ -434,13 +436,9 @@ watch(reduced, (now) => (now ? stopMotion() : syncMotion(true)), {
 watch(
   canvasEl,
   (el) => {
-    observer?.disconnect()
+    sizeWatch.retarget(...(el && root.value ? [root.value] : []))
     if (!el) return
     sizeCanvas()
-    if (typeof ResizeObserver === 'function' && root.value) {
-      observer = new ResizeObserver(sizeCanvas)
-      observer.observe(root.value)
-    }
     startFrames()
   },
   { flush: 'post' },
@@ -449,7 +447,6 @@ watch(() => props.pictureSize, sizeCanvas, { flush: 'post' })
 
 onUnmounted(() => {
   cancelAnimationFrame(frame)
-  observer?.disconnect()
   clearTimeout(leaveTimer)
   clearTimeout(patchTimer)
   clearTimeout(restoreTimer)

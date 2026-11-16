@@ -5,6 +5,7 @@ import { parseTurn, type TurnBlock } from '@/lantern/parseTurn'
 import { displayName } from '@/lantern/displayName'
 import { actFolder } from '@/lantern/narrationManifest'
 import { POPUP_NARRATION_ID } from '@/lantern/narrationUnits'
+import { useSizeWatch } from '@/composables/useSizeWatch'
 import { useReadAlong } from '@/composables/useReadAlong'
 import { useNarrationStore } from '@/stores/useNarrationStore'
 
@@ -99,21 +100,18 @@ function hugText(): void {
     }
   }
 }
-let resizeObserver: ResizeObserver | null = null
+/** Hug the text again when the page's size is reported. */
+const sizeWatch = useSizeWatch(hugText, { inReport: true })
 onMounted(() => {
   if (folder.value) void narration.preload(folder.value)
   hugText()
   // Web fonts change line widths when they arrive.
   void document.fonts?.ready.then(hugText)
   document.fonts?.addEventListener?.('loadingdone', hugText)
-  if (typeof ResizeObserver !== 'undefined' && root.value) {
-    resizeObserver = new ResizeObserver(hugText)
-    resizeObserver.observe(root.value)
-  }
+  if (root.value) sizeWatch.observe(root.value)
 })
 onUpdated(hugText)
 onBeforeUnmount(() => {
-  resizeObserver?.disconnect()
   document.fonts?.removeEventListener?.('loadingdone', hugText)
 })
 

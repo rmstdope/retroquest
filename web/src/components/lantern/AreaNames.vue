@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
+import { useSizeWatch } from '@/composables/useSizeWatch'
 import {
   clearOfPanels,
   clearOfWords,
@@ -105,13 +106,17 @@ const covers = ref<Rect[]>([])
 const panels = ref<Rect[]>([])
 /** The panel elements the observer is watching, so a plate that grows or folds moves the marks at once. */
 let watched: HTMLElement[] = []
-let observer: ResizeObserver | undefined
+/**
+ * Sizes are measured inside the report, but a panel found now is only watched
+ * from the next frame (the watch holds it): the phone's plate lies no deeper
+ * in the page than what was just reported, so watching it at once is a
+ * loop (rq-zaqg).
+ */
+const sizeWatch = useSizeWatch(measure, { inReport: true })
 /** Where scrolling is listened for (the scope `measure` reads), once on the page. */
 let scrolled: HTMLElement | null = null
 /** The frame a scroll's measure waits for, so a scroll measures once a frame. */
 let scrollFrame: number | undefined
-/** The frame the panels found in a size report wait for before they are watched (`onResize`). */
-let watchFrame: number | undefined
 
 /** The stage this is laid over, or null before it is on the page. */
 function stage(): HTMLElement | null {
@@ -136,23 +141,6 @@ function frameOf(): { left: number; top: number; ratio: number } {
 function measure(): void {
   const scope = measureLayer()
   if (scope) watchPanels(scope)
-}
-
-/**
- * Sizes were reported: measure, but watch a panel found now only from the
- * next frame. A panel watched while sizes are reported is reported within
- * the same frame unless it lies deeper in the page than everything just
- * reported, and the phone's plate does not, so the browser would report a
- * loop (rq-zaqg). Its first report then comes a frame later and measures
- * again.
- */
-function onResize(): void {
-  const scope = measureLayer()
-  if (!scope || watchFrame !== undefined) return
-  watchFrame = requestAnimationFrame(() => {
-    watchFrame = undefined
-    watchPanels(scope)
-  })
 }
 
 /** Measure the layer and what the names keep clear of; the scope read, or null before it is on the page. */
@@ -187,11 +175,10 @@ function onScroll(): void {
 
 /** Watch the size of the marked panels, which `ResizeObserver` on the stage does not see. */
 function watchPanels(scope: HTMLElement): void {
-  if (!observer) return
   // Only the panels, as before: cards and words come and go with the story (a scroll or relayout measures for them), and the composer's size follows the layout, so watching it would loop.
   const now = obstacleElements(scope, ['panel'])
-  for (const el of watched) if (!now.includes(el)) observer.unobserve(el)
-  for (const el of now) if (!watched.includes(el)) observer.observe(el)
+  for (const el of watched) if (!now.includes(el)) sizeWatch.unobserve(el)
+  for (const el of now) if (!watched.includes(el)) sizeWatch.observe(el)
   watched = now
 }
 
@@ -207,19 +194,16 @@ onMounted(() => {
     capture: true,
     passive: true,
   })
-  if (el && typeof ResizeObserver === 'function') {
-    observer = new ResizeObserver(onResize)
-    observer.observe(el)
+  if (el) {
+    sizeWatch.observe(el)
     // The layer itself: it may have no size yet when it is put on the page.
-    if (root.value) observer.observe(root.value)
+    if (root.value) sizeWatch.observe(root.value)
   }
 })
 onUnmounted(() => {
-  observer?.disconnect()
   clearTimeout(settleTimer)
   scrolled?.removeEventListener('scroll', onScroll, { capture: true })
   if (scrollFrame !== undefined) cancelAnimationFrame(scrollFrame)
-  if (watchFrame !== undefined) cancelAnimationFrame(watchFrame)
 })
 let settleTimer: ReturnType<typeof setTimeout> | undefined
 // What the names keep clear of moved: measure again, and once more when what fades has faded.

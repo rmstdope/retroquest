@@ -39,6 +39,7 @@ import {
 import { useLanternPresentation } from '@/composables/useLanternPresentation'
 import { useHoldToSkip, type HoldRingSpot } from '@/composables/useHoldToSkip'
 import { useAudio } from '@/composables/useAudio'
+import { useSizeWatch } from '@/composables/useSizeWatch'
 import { useActMusic } from '@/composables/useActMusic'
 import { useFocusTrap } from '@/composables/useFocusTrap'
 import { useFullscreen } from '@/composables/useFullscreen'
@@ -464,9 +465,11 @@ const footCover = computed(() =>
 
 /** The height of the action row, which the story drawer stops above. */
 const actionsHeight = ref(0)
-let actionsResize: ResizeObserver | undefined
-/** The frame that applies the action row's new height, while one is waiting. */
-let actionsFrame = 0
+/** Follows the action row's height, on the next frame: the cards' column ends above the row. */
+const actionsResize = useSizeWatch(() => {
+  const actions = composer.value?.$el
+  if (actions instanceof HTMLElement) actionsHeight.value = actions.offsetHeight
+})
 
 // The laptop shows everything at once; coming back from it starts on the story.
 // Turning the phone, or changing the stage, starts the stage afresh.
@@ -852,31 +855,22 @@ function readOn(): void {
 }
 const composer = ref<InstanceType<typeof ActionComposer> | null>(null)
 const dock = ref<InstanceType<typeof DockBar> | null>(null)
-let dockResize: ResizeObserver | undefined
-let dockFrame = 0
+/** Follows the dock's size, on the next frame: what moves with it is not measured in the same one. */
+const dockResize = useSizeWatch(() => {
+  const el = dock.value?.$el
+  if (el instanceof HTMLElement)
+    dockSize.value = { w: el.offsetWidth, h: el.offsetHeight }
+})
 watch(
   dock,
   (current) => {
-    dockResize?.disconnect()
     const el = current?.$el
-    if (typeof ResizeObserver === 'undefined' || !(el instanceof HTMLElement))
-      return
-    // On the next frame, as the action row's: what moves with it is not measured in the same one.
-    dockResize = new ResizeObserver(() => {
-      cancelAnimationFrame(dockFrame)
-      dockFrame = requestAnimationFrame(() => {
-        dockSize.value = { w: el.offsetWidth, h: el.offsetHeight }
-      })
-    })
-    dockResize.observe(el)
-    dockSize.value = { w: el.offsetWidth, h: el.offsetHeight }
+    dockResize.retarget(...(el instanceof HTMLElement ? [el] : []))
+    if (el instanceof HTMLElement)
+      dockSize.value = { w: el.offsetWidth, h: el.offsetHeight }
   },
   { flush: 'post' },
 )
-onUnmounted(() => {
-  dockResize?.disconnect()
-  cancelAnimationFrame(dockFrame)
-})
 
 /** Focus the actions: the open composer, or the folded bar's Actions button. */
 function focusActions(): void {
@@ -1015,8 +1009,21 @@ watch(
 
 // The story also changes size without scrolling: the sheet opens or folds,
 // the window turns, a section is shown again, the room card grows.
-let storyResize: ResizeObserver | undefined
-let contentResize: ResizeObserver | undefined
+const storyResize = useSizeWatch(
+  () => {
+    resizeLanding.reland()
+    updateMoreBelow()
+    refollow()
+  },
+  { inReport: true },
+)
+const contentResize = useSizeWatch(
+  () => {
+    resizeLanding.reland()
+    keepAtFoot()
+  },
+  { inReport: true },
+)
 
 /** Whether a pop-up, menu or dialog is open (it has its own keys). */
 function dialogOpen(): boolean {
@@ -1153,21 +1160,10 @@ onMounted(() => {
   document.addEventListener('focusout', onFocusChange)
   // The game opens with its first act intro already showing.
   if (game.showModal) void nextTick(focusPopUp)
-  if (typeof ResizeObserver !== 'undefined' && storyEl.value) {
-    storyResize = new ResizeObserver(() => {
-      resizeLanding.reland()
-      updateMoreBelow()
-      refollow()
-    })
+  if (storyEl.value) {
     storyResize.observe(storyEl.value)
     // The turns also settle after a crossing; a reading's new paragraphs must not jump the follow.
-    if (contentEl.value) {
-      contentResize = new ResizeObserver(() => {
-        resizeLanding.reland()
-        keepAtFoot()
-      })
-      contentResize.observe(contentEl.value)
-    }
+    if (contentEl.value) contentResize.observe(contentEl.value)
   }
 })
 
@@ -1180,104 +1176,68 @@ const PLATE_TOP = 16
 /** A sideways phone's plate stands closer to the edge. */
 const PLATE_TOP_SIDEWAYS = 8
 const PLATE_GAP = 12
-let widePlateResize: ResizeObserver | undefined
-/** The frame that applies the plate's new height, while one is waiting. */
-let widePlateFrame = 0
+/**
+ * Follows the plate's height, on the next frame: the cards' column is resized
+ * and observed too, and resizing it while the plate's change is delivered
+ * loops the observers.
+ */
+const widePlateResize = useSizeWatch(() => {
+  const el = widePlate.value?.$el
+  if (el instanceof HTMLElement)
+    cardsTop.value =
+      (sideways.value ? PLATE_TOP_SIDEWAYS : PLATE_TOP) +
+      el.offsetHeight +
+      PLATE_GAP
+})
 watch(
   widePlate,
   (current) => {
-    widePlateResize?.disconnect()
-    cancelAnimationFrame(widePlateFrame)
     const el = current?.$el
-    if (typeof ResizeObserver === 'undefined' || !(el instanceof HTMLElement))
-      return
-    // On the next frame: the cards' column is resized and observed too, and
-    // resizing it while the plate's change is delivered loops the observers.
-    widePlateResize = new ResizeObserver(() => {
-      cancelAnimationFrame(widePlateFrame)
-      widePlateFrame = requestAnimationFrame(() => {
-        cardsTop.value =
-          (sideways.value ? PLATE_TOP_SIDEWAYS : PLATE_TOP) +
-          el.offsetHeight +
-          PLATE_GAP
-      })
-    })
-    widePlateResize.observe(el)
+    widePlateResize.retarget(...(el instanceof HTMLElement ? [el] : []))
   },
   { flush: 'post' },
 )
-onUnmounted(() => {
-  widePlateResize?.disconnect()
-  cancelAnimationFrame(widePlateFrame)
-})
 
 /** The phone's plate height, which the arrival on the picture stays clear of. */
 const plateHeight = ref(108)
-let plateResize: ResizeObserver | undefined
+const plateResize = useSizeWatch(
+  () => {
+    const el = plate.value?.$el
+    if (el instanceof HTMLElement) plateHeight.value = el.offsetHeight
+  },
+  { inReport: true },
+)
 watch(
   plate,
   (current) => {
-    plateResize?.disconnect()
     const el = current?.$el
-    if (typeof ResizeObserver === 'undefined' || !(el instanceof HTMLElement))
-      return
-    plateResize = new ResizeObserver(() => {
-      plateHeight.value = el.offsetHeight
-    })
-    plateResize.observe(el)
+    plateResize.retarget(...(el instanceof HTMLElement ? [el] : []))
   },
   { flush: 'post' },
 )
-onUnmounted(() => plateResize?.disconnect())
 
 /** How wide the stage's top-right buttons stand: a sideways phone's plate ends before them. */
 const stageButtonsWidth = ref(0)
-let stageButtonsResize: ResizeObserver | undefined
-let stageButtonsFrame = 0
+/** Follows the buttons' width, on the next frame, as the plate's: the plate is observed too. */
+const stageButtonsResize = useSizeWatch(() => {
+  const el = stageButtons.value?.$el
+  if (el instanceof HTMLElement) stageButtonsWidth.value = el.offsetWidth
+})
 watch(
   stageButtons,
   (current) => {
-    stageButtonsResize?.disconnect()
-    cancelAnimationFrame(stageButtonsFrame)
     const el = current?.$el
-    if (typeof ResizeObserver === 'undefined' || !(el instanceof HTMLElement))
-      return
-    // On the next frame, as the plate's: the plate is observed too.
-    stageButtonsResize = new ResizeObserver(() => {
-      cancelAnimationFrame(stageButtonsFrame)
-      stageButtonsFrame = requestAnimationFrame(() => {
-        stageButtonsWidth.value = el.offsetWidth
-      })
-    })
-    stageButtonsResize.observe(el)
+    stageButtonsResize.retarget(...(el instanceof HTMLElement ? [el] : []))
   },
   { flush: 'post' },
 )
-onUnmounted(() => {
-  stageButtonsResize?.disconnect()
-  cancelAnimationFrame(stageButtonsFrame)
-})
 
 // The action row is a new element after a new game: follow the current one.
 watch(
   composer,
   (current) => {
-    actionsResize?.disconnect()
-    cancelAnimationFrame(actionsFrame)
     const actions = current?.$el
-    if (
-      typeof ResizeObserver === 'undefined' ||
-      !(actions instanceof HTMLElement)
-    )
-      return
-    // On the next frame, as the plate's: the cards' column ends above the row.
-    actionsResize = new ResizeObserver(() => {
-      cancelAnimationFrame(actionsFrame)
-      actionsFrame = requestAnimationFrame(() => {
-        actionsHeight.value = actions.offsetHeight
-      })
-    })
-    actionsResize.observe(actions)
+    actionsResize.retarget(...(actions instanceof HTMLElement ? [actions] : []))
   },
   { flush: 'post' },
 )
@@ -1293,11 +1253,7 @@ onUnmounted(() => {
   document.removeEventListener('keyup', onHoldKeyUp)
   document.removeEventListener('focusin', onFocusChange)
   document.removeEventListener('focusout', onFocusChange)
-  storyResize?.disconnect()
-  contentResize?.disconnect()
   resizeLanding.dispose()
-  actionsResize?.disconnect()
-  cancelAnimationFrame(actionsFrame)
 })
 
 // Larger or smaller text changes how much of the turn is still below.

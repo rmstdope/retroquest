@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { computed, nextTick, onMounted, ref, watch } from 'vue'
+import { useSizeWatch } from '@/composables/useSizeWatch'
 import { useArrivalStore } from '@/stores/useArrivalStore'
 import { useReadAlong } from '@/composables/useReadAlong'
 import { questTextHtml } from '@/lantern/questTextHtml'
@@ -205,11 +206,9 @@ watch(
     recut()
   },
 )
-let stageObserver: ResizeObserver | undefined
+const stageWatch = useSizeWatch(recut)
 onMounted(() => {
-  if (typeof ResizeObserver === 'undefined' || !root.value) return
-  stageObserver = new ResizeObserver(() => requestAnimationFrame(recut))
-  stageObserver.observe(root.value)
+  if (root.value) stageWatch.observe(root.value)
 })
 // Cut each part afresh, once its card is drawn.
 watch(
@@ -234,7 +233,7 @@ const fadeBottom = ref(false)
 /** The lit word is kept in the top two thirds of the box, and put a third down when it leaves. */
 const BAND_END = 2 / 3
 const PLACE_AT = 1 / 3
-let observer: ResizeObserver | undefined
+const boxWatch = useSizeWatch(measure)
 
 /** Whether the text continues above and below what shows. */
 function measure(): void {
@@ -271,16 +270,10 @@ function follow(event: Event): void {
 
 /** Measure the box afresh, and watch it and its lines for a change of size. */
 async function watchBox(el: HTMLElement | null): Promise<void> {
-  observer?.disconnect()
+  boxWatch.retarget()
   await nextTick()
   measure()
-  if (el && typeof ResizeObserver !== 'undefined') {
-    observer ??= new ResizeObserver(() => requestAnimationFrame(measure))
-    observer.observe(el)
-    el.querySelectorAll('.lq-arrival-line').forEach((line) =>
-      observer?.observe(line),
-    )
-  }
+  if (el) boxWatch.retarget(el, ...el.querySelectorAll('.lq-arrival-line'))
 }
 
 watch(text, watchBox)
@@ -293,10 +286,6 @@ watch(
     void watchBox(text.value)
   },
 )
-onBeforeUnmount(() => {
-  observer?.disconnect()
-  stageObserver?.disconnect()
-})
 </script>
 
 <template>
