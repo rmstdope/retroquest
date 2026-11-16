@@ -33,7 +33,115 @@
   "act1-abandoned-shed-inside": {
     "file": "act1-abandoned-shed-inside.png",
     "width": 1920,
-    "height": 1080
+    "height": 1080,
+    "patches": {
+      "broken-shovel-taken": {
+        "file": "act1-abandoned-shed-inside.broken-shovel-taken.png",
+        "width": 1920,
+        "height": 1080
+      },
+      "fishing-rod-appears": {
+        "file": "act1-abandoned-shed-inside.fishing-rod-appears.png",
+        "width": 1920,
+        "height": 1080
+      },
+      "magnet-appears": {
+        "file": "act1-abandoned-shed-inside.magnet-appears.png",
+        "width": 1920,
+        "height": 1080
+      },
+      "patches-gone": {
+        "file": "act1-abandoned-shed-inside.patches-gone.png",
+        "width": 1920,
+        "height": 1080
+      }
+    },
+    "areas": {
+      "shed-door": {
+        "x": 0.103646,
+        "y": 0.055556,
+        "width": 0.156771,
+        "height": 0.812037
+      },
+      "scenery-abandoned-shed-boards": {
+        "x": 0.46875,
+        "y": 0.175926,
+        "width": 0.459375,
+        "height": 0.282407
+      },
+      "exit-north": {
+        "x": 0.272917,
+        "y": 0.384259,
+        "width": 0.192708,
+        "height": 0.182407
+      },
+      "exit-south": {
+        "x": 0.284375,
+        "y": 0.903704,
+        "width": 0.381771,
+        "height": 0.096296
+      },
+      "mysterious-box": {
+        "x": 0.571354,
+        "y": 0.437963,
+        "width": 0.06875,
+        "height": 0.126852
+      },
+      "broken-shovel": {
+        "x": 0.242708,
+        "y": 0.649074,
+        "width": 0.160417,
+        "height": 0.296296
+      },
+      "scenery-abandoned-shed-workbench": {
+        "x": 0.376042,
+        "y": 0.526852,
+        "width": 0.367708,
+        "height": 0.366667,
+        "mark": {
+          "x": 0.532813,
+          "y": 0.60463
+        }
+      },
+      "scenery-abandoned-shed-crates": {
+        "x": 0.686458,
+        "y": 0.625926,
+        "width": 0.278125,
+        "height": 0.374074,
+        "mark": {
+          "x": 0.824479,
+          "y": 0.864815
+        }
+      },
+      "scenery-abandoned-shed-tools": {
+        "x": 0.445833,
+        "y": 0.515741,
+        "width": 0.09375,
+        "height": 0.061111
+      },
+      "scenery-abandoned-shed-shelves": {
+        "x": 0.294271,
+        "y": 0.244444,
+        "width": 0.194271,
+        "height": 0.169444
+      },
+      "patches": {
+        "x": 0.829167,
+        "y": 0.674074,
+        "width": 0.127083,
+        "height": 0.181481,
+        "mark": {
+          "x": 0.871875,
+          "y": 0.72963
+        }
+      },
+      "fishing-rod": {
+        "x": 0.758854,
+        "y": 0.331481,
+        "width": 0.050521,
+        "height": 0.051852
+      }
+    }
   },
   "act1-blacksmiths-forge": {
     "file": "act1-blacksmiths-forge.png",
@@ -1432,6 +1540,50 @@
     "width": 1920,
     "height": 1080
   },
+  "act3-cavern-mouth": {
+    "file": "act3-cavern-mouth.png",
+    "width": 1920,
+    "height": 1080,
+    "patches": {
+      "mira-appears": {
+        "file": "act3-cavern-mouth.mira-appears.png",
+        "width": 1920,
+        "height": 1080
+      }
+    },
+    "areas": {
+      "mine-overseer": {
+        "x": 0.322396,
+        "y": 0.577778,
+        "width": 0.091146,
+        "height": 0.332407
+      },
+      "exit-north": {
+        "x": 0.413542,
+        "y": 0.52037,
+        "width": 0.151563,
+        "height": 0.387037
+      },
+      "exit-east": {
+        "x": 0.864583,
+        "y": 0.331481,
+        "width": 0.135417,
+        "height": 0.557407
+      },
+      "mira": {
+        "x": 0.564583,
+        "y": 0.511111,
+        "width": 0.080208,
+        "height": 0.391667
+      },
+      "sir-cedric": {
+        "x": 0.709896,
+        "y": 0.372222,
+        "width": 0.148958,
+        "height": 0.565741
+      }
+    }
+  },
   "item-ancient-amulet": {
     "file": "item-ancient-amulet.png",
     "width": 256,
@@ -1537,6 +1689,11 @@
     "width": 256,
     "height": 256
   },
+  "item-magnetic-fishing-rod": {
+    "file": "item-magnetic-fishing-rod.png",
+    "width": 256,
+    "height": 256
+  },
   "item-map": {
     "file": "item-map.png",
     "width": 256,
@@ -1569,6 +1726,11 @@
   },
   "item-rune-token": {
     "file": "item-rune-token.png",
+    "width": 256,
+    "height": 256
+  },
+  "item-rusty-hoe": {
+    "file": "item-rusty-hoe.png",
     "width": 256,
     "height": 256
   },

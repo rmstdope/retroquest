@@ -43,8 +43,106 @@
       }
     },
     "act1-abandoned-shed-inside": {
-      "text": "The inside of a small tool shed. In the room there is a broken shovel, a workbench, a number of crates. On top of the workbench stands a small mysterious box.",
-      "gameWas": "A rickety shed leans precariously at the edge of Willowbrook, its weathered boards creaking in the wind. Rusty tools and broken crates are scattered about a long workbench, and a thick layer of dust covers everything. Little light gets past the grimy boards, and the air smells of old earth and lamp oil."
+      "text": "The inside of a small tool shed with wooden plan walls. In the room there is a broken shovel, a workbench, a number of crates. On top of the workbench stands a very small mysterious box. The shed door is ajar. There are shelves on one of the walls.",
+      "gameWas": "A rickety shed leans precariously at the edge of Willowbrook, its weathered boards creaking in the wind. Rusty tools and broken crates are scattered about a long workbench, and a thick layer of dust covers everything. Little light gets past the grimy boards, and the air smells of old earth and lamp oil.",
+      "patches": {
+        "fishing-rod-appears": {
+          "text": "Add a simple wooden fishing rod on top of the shelf",
+          "gameWas": "Add the fishing rod to the picture."
+        },
+        "magnet-appears": {
+          "text": "Add a small horseshoe shaped red and white magnet on the shelf",
+          "gameWas": "Add the magnet to the picture."
+        }
+      },
+      "takeAreas": {
+        "17": {
+          "broken-shovel": {
+            "x": 466,
+            "y": 701,
+            "width": 308,
+            "height": 320
+          },
+          "exit-north": {
+            "x": 524,
+            "y": 415,
+            "width": 370,
+            "height": 197
+          },
+          "exit-south": {
+            "x": 546,
+            "y": 976,
+            "width": 733,
+            "height": 104
+          },
+          "fishing-rod": {
+            "x": 1457,
+            "y": 358,
+            "width": 97,
+            "height": 56
+          },
+          "mysterious-box": {
+            "x": 1097,
+            "y": 473,
+            "width": 132,
+            "height": 137
+          },
+          "patches": {
+            "x": 1592,
+            "y": 728,
+            "width": 244,
+            "height": 196,
+            "point": {
+              "x": 1674,
+              "y": 788
+            }
+          },
+          "scenery-abandoned-shed-boards": {
+            "x": 900,
+            "y": 190,
+            "width": 882,
+            "height": 305
+          },
+          "scenery-abandoned-shed-crates": {
+            "x": 1318,
+            "y": 676,
+            "width": 534,
+            "height": 404,
+            "point": {
+              "x": 1583,
+              "y": 934
+            }
+          },
+          "scenery-abandoned-shed-shelves": {
+            "x": 565,
+            "y": 264,
+            "width": 373,
+            "height": 183
+          },
+          "scenery-abandoned-shed-tools": {
+            "x": 856,
+            "y": 557,
+            "width": 180,
+            "height": 66
+          },
+          "scenery-abandoned-shed-workbench": {
+            "x": 722,
+            "y": 569,
+            "width": 706,
+            "height": 396,
+            "point": {
+              "x": 1023,
+              "y": 653
+            }
+          },
+          "shed-door": {
+            "x": 199,
+            "y": 60,
+            "width": 301,
+            "height": 877
+          }
+        }
+      }
     },
     "act1-blacksmiths-forge": {
       "text": "A smoky forge. Coals glow in the hearth. The blacksmith stands next to an anvil with a hammer in his hand. There is a small horseshoe on the wall.",
@@ -1172,9 +1270,81 @@
       "text": "In the midst of the forest, a meadow opens round a small stream that runs over smooth stones and ends up in a small pond. Wildflowers grow thick to the water's edge. Under the sound of the water there are other sounds, almost voices, and they stop when you listen for them.",
       "gameWas": "A meadow opens round a small stream that runs over smooth stones. Wildflowers grow thick to the water's edge. Under the sound of the water there are other sounds, almost voices, and they stop when you listen for them."
     },
+    "act3-cavern-mouth": {
+      "patches": {
+        "mira-appears": {
+          "text": "Add a cloaked woman to the picture.",
+          "gameWas": "Add Mira to the picture."
+        }
+      },
+      "takeAreas": {
+        "5": {
+          "exit-east": {
+            "x": 1660,
+            "y": 358,
+            "width": 260,
+            "height": 602
+          },
+          "exit-north": {
+            "x": 794,
+            "y": 562,
+            "width": 291,
+            "height": 418
+          },
+          "mine-overseer": {
+            "x": 619,
+            "y": 624,
+            "width": 175,
+            "height": 359
+          },
+          "mira": {
+            "x": 1084,
+            "y": 552,
+            "width": 154,
+            "height": 423
+          }
+        },
+        "6": {
+          "exit-east": {
+            "x": 1660,
+            "y": 358,
+            "width": 260,
+            "height": 602
+          },
+          "exit-north": {
+            "x": 794,
+            "y": 562,
+            "width": 291,
+            "height": 418
+          },
+          "mine-overseer": {
+            "x": 619,
+            "y": 624,
+            "width": 175,
+            "height": 359
+          },
+          "mira": {
+            "x": 1084,
+            "y": 552,
+            "width": 154,
+            "height": 423
+          },
+          "sir-cedric": {
+            "x": 1363,
+            "y": 402,
+            "width": 286,
+            "height": 611
+          }
+        }
+      }
+    },
     "item-broken-shovel": {
       "text": "A rusty spade with the wooden handle broken in half and a completely broken blade. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border.",
       "gameWas": "A rusty shovel with a snapped wooden handle and a dented blade. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
+    },
+    "item-extended-magnetic-fishing-rod": {
+      "text": "A very very long fishing rod with a red and silver magnet tied on its line and a wooden pole slid out to a greater length. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border.",
+      "gameWas": "A long fishing rod with a red and silver magnet tied on its line and a wooden pole slid out to a greater length. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
     },
     "item-fishing-rod": {
       "text": "A short, bending wooden fishing rod with a line and a small hook. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border.",
@@ -1189,7 +1359,7 @@
       "gameWas": "A short fishing rod with a red and silver magnet tied on the end of its line. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
     },
     "item-rusty-hoe": {
-      "text": "A farming hoe with a rusty blade and a splintered wooden handle. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border.",
+      "text": "A farm hoe with a rusty blade and a long wooden handle. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border.",
       "gameWas": "A farm hoe with a rusty blade and a splintered wooden handle. Painted storybook illustration of a single object from a small medieval fantasy world, soft gouache with visible brush texture, muted natural colours, soft even light, the object alone and centred on a plain warm parchment wash, square composition, no text, lettering or border."
     },
     "item-sword": {
@@ -1211,6 +1381,10 @@
     "portrait-sir-cedric": {
       "text": "A face portrait of a tall knight in his fifties with a weathered, tired face and a steady, watchful stare, a steel chainmail on his upper body.",
       "gameWas": "A face portrait of a tall knight in his fifties with a weathered, tired face and a steady, watchful stare, a steel mail coif and a dented gorget around his neck."
+    },
+    "title-screen": {
+      "text": "A quiet village under a lantern-lit dusk, drawn with open sky across the top third and a calm, uncluttered middle for the buttons. In the clouds, you can see the outlines of a cloaked man.",
+      "gameWas": "The world of RetroQuest at the start of the story: a quiet village under a lantern-lit dusk, drawn with open sky across the top third for the game's name and a calm, uncluttered middle for the buttons."
     }
   }
 }
