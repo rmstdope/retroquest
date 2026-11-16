@@ -110,9 +110,9 @@ function findFirstShowing(): void {
   const pad = parseFloat(getComputedStyle(el).paddingTop) || 0
   const rows = Array.from(el.children)
   const at = rows.findIndex(
-    (row, index) =>
+    (row) =>
       row instanceof HTMLElement &&
-      !fade.outOfSight(speechLineId(speech.visible[index]?.key ?? -1)) &&
+      !fade.outOfSight(row.dataset.lineId ?? '') &&
       row.offsetTop >= el.scrollTop + pad,
   )
   // A thread cut through every row (one very tall line) heads its newest.

@@ -44,10 +44,6 @@ export interface ColumnLineOutput {
   state: FadeState
   /** Whether the line should start its time to read. */
   wait: boolean
-  /** Whether a line out of sight came back (it is being read aloud again). */
-  back: boolean
-  /** Whether the line has just taken its room away. */
-  left: boolean
 }
 
 /**
@@ -64,15 +60,11 @@ export function advanceColumn(lines: ColumnLineInput[]): ColumnLineOutput[] {
     const out: ColumnLineOutput = {
       state: line.state ?? 'live',
       wait: false,
-      back: false,
-      left: false,
     }
     if (line.reading) {
-      out.back = out.state === 'spent' || out.state === 'gone'
       out.state = 'live'
     } else if (out.state === 'spent' && goneAbove) {
       out.state = 'gone'
-      out.left = true
     } else if (out.state === 'live' && !line.waiting) {
       if (line.eligible) {
         if (fadingAbove) out.state = 'away'

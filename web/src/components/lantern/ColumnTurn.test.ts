@@ -113,7 +113,7 @@ describe('ColumnTurn', () => {
       ledger.set(rows()[0].dataset.lineId ?? '', mark)
       await w.vm.$nextTick()
       expect(rows().map((r) => !!r.querySelector('.lq-line-name'))).toEqual([
-        false,
+        true,
         true,
       ])
       expect(rows()[1].querySelector('[data-testid="portrait"]')).not.toBeNull()

@@ -14,9 +14,7 @@ function fresh(over: Partial<ColumnLineInput> = {}): ColumnLineInput {
 
 describe('advanceColumn', () => {
   it('shows a new line live and asks for its time to read when it has none', () => {
-    expect(advanceColumn([fresh()])).toEqual([
-      { state: 'live', wait: true, back: false, left: false },
-    ])
+    expect(advanceColumn([fresh()])).toEqual([{ state: 'live', wait: true }])
   })
 
   it('starts a read line fading only when every line above it has started', () => {
@@ -32,9 +30,9 @@ describe('advanceColumn', () => {
     expect(open.map((line) => line.state)).toEqual(['away', 'away'])
   })
 
-  it('keeps a line being read live, and says one out of sight came back', () => {
+  it('keeps a line being read live, and brings one out of sight back', () => {
     const out = advanceColumn([fresh({ state: 'spent', reading: true })])
-    expect(out[0]).toMatchObject({ state: 'live', back: true })
+    expect(out[0]).toMatchObject({ state: 'live' })
   })
 
   it('takes a spent line away only once every line above it is gone', () => {
@@ -47,7 +45,7 @@ describe('advanceColumn', () => {
       fresh({ state: 'gone' }),
       fresh({ state: 'spent' }),
     ])
-    expect(out[1]).toMatchObject({ state: 'gone', left: true })
+    expect(out[1]).toMatchObject({ state: 'gone' })
   })
 
   it('finishes a fade into spent, and leaves other states alone', () => {

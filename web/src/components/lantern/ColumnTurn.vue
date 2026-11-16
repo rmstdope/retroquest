@@ -129,22 +129,32 @@ function lineId(piece: ColumnPiece, index: number): string {
  * Which pieces start a run, so carry the speaker's name and portrait (the
  * shared `runHeads`): the piece before it still showing (a line faded out of
  * sight is passed over) is not a line of the same speaker; a card ends a run.
+ * A line out of sight keeps the name it had (its name takes room in this
+ * column, which it keeps while a line above still shows), judged as if it
+ * were showing.
  */
-const heads = computed(() =>
-  runHeads(
-    told.value.map((piece) =>
-      piece.kind === 'line'
-        ? { speaker: piece.line.speaker, turnId: props.turn.id }
-        : null,
-    ),
-    0,
-    told.value.flatMap((piece, index) =>
-      piece.kind === 'line' && fade.outOfSight(lineId(piece, index))
-        ? [index]
-        : [],
-    ),
-  ),
-)
+const heads = computed(() => {
+  const lines = told.value.map((piece) =>
+    piece.kind === 'line'
+      ? { speaker: piece.line.speaker, turnId: props.turn.id }
+      : null,
+  )
+  const out = told.value.flatMap((piece, index) =>
+    piece.kind === 'line' && fade.outOfSight(lineId(piece, index))
+      ? [index]
+      : [],
+  )
+  const showing = runHeads(lines, 0, out)
+  return showing.map((head, index) =>
+    out.includes(index)
+      ? runHeads(
+          lines.slice(0, index + 1),
+          0,
+          out.filter((other) => other < index),
+        )[index]
+      : head,
+  )
+})
 </script>
 
 <template>
