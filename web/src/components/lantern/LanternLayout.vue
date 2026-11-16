@@ -37,7 +37,11 @@ import { useFullscreen } from '@/composables/useFullscreen'
 import { nameActions, type NameAction } from '@/lantern/nameActions'
 import { parseCountedName } from '@/lantern/inventoryChanges'
 import { useStoryFollow } from '@/composables/useStoryFollow'
-import { FADING_LINES, useFadeOnceRead } from '@/composables/useFadeOnceRead'
+import {
+  FADING_COLUMNS,
+  FADING_LINES,
+  useFadeOnceRead,
+} from '@/composables/useFadeOnceRead'
 import { useNarrationPaper } from '@/composables/useNarrationPaper'
 import {
   SHORT_QUERY,
@@ -1316,7 +1320,12 @@ const presentation = useLanternPresentation({
 /** The whole game (the hold to skip listens for presses in it). */
 const rootEl = ref<HTMLElement | null>(null)
 /** The lines on the picture (narrator's and speech) fade away once read, held while the words are hidden; `live` counts those left. */
-const fading = useFadeOnceRead(rootEl, FADING_LINES, () => paper.hidden.value)
+const fading = useFadeOnceRead(
+  rootEl,
+  FADING_LINES,
+  () => paper.hidden.value,
+  FADING_COLUMNS,
+)
 /**
  * Whether the story is being told: a change of scene, a talk still to change
  * it, words still coming, the narrator reading, or a room's words on the
