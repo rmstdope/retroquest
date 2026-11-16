@@ -95,6 +95,14 @@
   "file": "shop-bell.mp3",
   "duration": 1.989
  },
+ "title-choose": {
+  "file": "title-choose.mp3",
+  "duration": 0.298
+ },
+ "title-move": {
+  "file": "title-move.mp3",
+  "duration": 0.15
+ },
  "twig-snap": {
   "file": "twig-snap.mp3",
   "duration": 1.227
