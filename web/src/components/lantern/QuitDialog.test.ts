@@ -149,7 +149,11 @@ describe('QuitDialog', () => {
     it('a pointer entering a button puts the ring on it', async () => {
       const w = mountQuit()
       await w.vm.$nextTick()
-      await button(w, 'Save and quit').trigger('mouseenter', { movementX: 4 })
+      {
+        const stop = button(w, 'Save and quit')
+        await stop.trigger('mousemove', { screenX: 1 })
+        await stop.trigger('mousemove', { screenX: 9 })
+      }
       expect(document.activeElement).toBe(button(w, 'Save and quit').element)
     })
 

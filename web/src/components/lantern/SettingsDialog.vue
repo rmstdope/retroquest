@@ -177,6 +177,7 @@ function volume(event: Event): number {
     :key-line="KEYS"
     @close="emit('close')"
     @focusin="ring.onFocusIn"
+    @mousemove="ring.track"
   >
     <div ref="root" @keydown="onKeydown">
       <section class="lq-group" aria-labelledby="lq-set-look">
@@ -186,7 +187,7 @@ function volume(event: Event): number {
           data-stop="theme"
           data-autofocus
           tabindex="-1"
-          @mouseenter="ring.onHover"
+          @mousemove="ring.onHover"
         >
           <span class="lq-row-text"
             ><span class="lq-row-label">Theme</span
@@ -209,7 +210,7 @@ function volume(event: Event): number {
           class="lq-row lq-row-wrap lq-stop"
           data-stop="textSize"
           tabindex="-1"
-          @mouseenter="ring.onHover"
+          @mousemove="ring.onHover"
         >
           <span class="lq-row-text"
             ><span class="lq-row-label">Text size</span
@@ -239,7 +240,7 @@ function volume(event: Event): number {
           class="lq-row lq-stop"
           data-stop="fullscreen"
           tabindex="-1"
-          @mouseenter="ring.onHover"
+          @mousemove="ring.onHover"
         >
           <span class="lq-row-text"
             ><span class="lq-row-label">Full screen</span
@@ -272,7 +273,7 @@ function volume(event: Event): number {
           class="lq-volume lq-stop"
           data-stop="musicVolume"
           tabindex="-1"
-          @mouseenter="ring.onHover"
+          @mousemove="ring.onHover"
         >
           <span class="lq-note">Volume</span>
           <input
@@ -295,7 +296,7 @@ function volume(event: Event): number {
           class="lq-volume lq-stop"
           data-stop="effectsVolume"
           tabindex="-1"
-          @mouseenter="ring.onHover"
+          @mousemove="ring.onHover"
         >
           <span class="lq-note">Volume</span>
           <input
@@ -320,7 +321,7 @@ function volume(event: Event): number {
           class="lq-volume lq-stop"
           data-stop="narrationVolume"
           tabindex="-1"
-          @mouseenter="ring.onHover"
+          @mousemove="ring.onHover"
         >
           <span class="lq-note">Volume</span>
           <input
@@ -345,7 +346,7 @@ function volume(event: Event): number {
           class="lq-row lq-stop"
           data-stop="startMode"
           tabindex="-1"
-          @mouseenter="ring.onHover"
+          @mousemove="ring.onHover"
         >
           <span class="lq-row-text"
             ><span class="lq-row-label">Start with</span
@@ -368,7 +369,7 @@ function volume(event: Event): number {
           class="lq-row lq-stop"
           data-stop="reduceMotion"
           tabindex="-1"
-          @mouseenter="ring.onHover"
+          @mousemove="ring.onHover"
         >
           <span class="lq-row-text"
             ><span class="lq-row-label">Reduce motion</span
@@ -394,7 +395,7 @@ function volume(event: Event): number {
           class="lq-row lq-stop"
           data-stop="alwaysShowNames"
           tabindex="-1"
-          @mouseenter="ring.onHover"
+          @mousemove="ring.onHover"
         >
           <span class="lq-row-text"
             ><span class="lq-row-label">Always show what's here</span

@@ -101,3 +101,18 @@ test('Help scrolls with the keys; Quit moves between its buttons', async ({
   await page.keyboard.press('Enter')
   await expect(page.getByRole('dialog', { name: 'Menu' })).toBeVisible()
 })
+
+test('Save: a moving pointer takes the ring and the ring follows it', async ({
+  page,
+}): Promise<void> => {
+  await openMenu(page)
+  await page.getByRole('button', { name: 'Save', exact: true }).click()
+  const slot = page.locator('.lq-slot-btn').nth(3)
+  const box = await slot.boundingBox()
+  if (!box) throw new Error('slot 4 has no box')
+  await page.mouse.move(box.x + 4, box.y + 4)
+  await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2, {
+    steps: 5,
+  })
+  await expect(slot).toBeFocused()
+})

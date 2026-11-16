@@ -187,9 +187,9 @@ describe('SettingsDialog from the keyboard', () => {
 
   it('a pointer entering a row takes the ring', async () => {
     const w = await open()
-    await w
-      .get('[data-stop="reduceMotion"]')
-      .trigger('mouseenter', { movementX: 4 })
+    const stop = w.get('[data-stop="reduceMotion"]')
+    await stop.trigger('mousemove', { screenX: 1 })
+    await stop.trigger('mousemove', { screenX: 9 })
     expect(ringed()).toBe('reduceMotion')
   })
 
