@@ -177,7 +177,7 @@ function volume(event: Event): number {
     :key-line="KEYS"
     @close="emit('close')"
     @focusin="ring.onFocusIn"
-    @mousemove="ring.track"
+    @mousemove="ring.onMove"
     @keydown.tab="ring.afterTab"
   >
     <div ref="root" @keydown="onKeydown">
@@ -185,10 +185,10 @@ function volume(event: Event): number {
         <h3 id="lq-set-look" class="lq-group-title">Appearance</h3>
         <div
           class="lq-row lq-stop"
+          data-ring="within"
           data-stop="theme"
           data-autofocus
           tabindex="-1"
-          @mousemove="ring.onHover"
         >
           <span class="lq-row-text"
             ><span class="lq-row-label">Theme</span
@@ -209,9 +209,9 @@ function volume(event: Event): number {
         </div>
         <div
           class="lq-row lq-row-wrap lq-stop"
+          data-ring="within"
           data-stop="textSize"
           tabindex="-1"
-          @mousemove="ring.onHover"
         >
           <span class="lq-row-text"
             ><span class="lq-row-label">Text size</span
@@ -239,9 +239,9 @@ function volume(event: Event): number {
         <div
           v-if="fullscreen.supported"
           class="lq-row lq-stop"
+          data-ring="within"
           data-stop="fullscreen"
           tabindex="-1"
-          @mousemove="ring.onHover"
         >
           <span class="lq-row-text"
             ><span class="lq-row-label">Full screen</span
@@ -272,9 +272,9 @@ function volume(event: Event): number {
         </div>
         <label
           class="lq-volume lq-stop"
+          data-ring="within"
           data-stop="musicVolume"
           tabindex="-1"
-          @mousemove="ring.onHover"
         >
           <span class="lq-note">Volume</span>
           <input
@@ -295,9 +295,9 @@ function volume(event: Event): number {
         </div>
         <label
           class="lq-volume lq-stop"
+          data-ring="within"
           data-stop="effectsVolume"
           tabindex="-1"
-          @mousemove="ring.onHover"
         >
           <span class="lq-note">Volume</span>
           <input
@@ -320,9 +320,9 @@ function volume(event: Event): number {
         </div>
         <label
           class="lq-volume lq-stop"
+          data-ring="within"
           data-stop="narrationVolume"
           tabindex="-1"
-          @mousemove="ring.onHover"
         >
           <span class="lq-note">Volume</span>
           <input
@@ -345,9 +345,9 @@ function volume(event: Event): number {
         <h3 id="lq-set-play" class="lq-group-title">Playing</h3>
         <div
           class="lq-row lq-stop"
+          data-ring="within"
           data-stop="startMode"
           tabindex="-1"
-          @mousemove="ring.onHover"
         >
           <span class="lq-row-text"
             ><span class="lq-row-label">Start with</span
@@ -368,9 +368,9 @@ function volume(event: Event): number {
         </div>
         <div
           class="lq-row lq-stop"
+          data-ring="within"
           data-stop="reduceMotion"
           tabindex="-1"
-          @mousemove="ring.onHover"
         >
           <span class="lq-row-text"
             ><span class="lq-row-label">Reduce motion</span
@@ -394,9 +394,9 @@ function volume(event: Event): number {
         </div>
         <div
           class="lq-row lq-stop"
+          data-ring="within"
           data-stop="alwaysShowNames"
           tabindex="-1"
-          @mousemove="ring.onHover"
         >
           <span class="lq-row-text"
             ><span class="lq-row-label">Always show what's here</span
@@ -421,13 +421,8 @@ function volume(event: Event): number {
 </template>
 
 <style scoped>
-.lq-stop:focus {
-  outline: none;
-}
-/* The ring: the theme's ring colour (cream on dark, deep brown on light), round the whole row. */
+/* The ring itself is drawn by `[data-ring]` in lantern.css; here only the row's corners. */
 .lq-stop:focus-within {
-  outline: 3px solid var(--lq-ring);
-  outline-offset: 3px;
   border-radius: 8px;
 }
 .lq-stop :focus-visible {

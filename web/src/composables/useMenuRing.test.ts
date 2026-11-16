@@ -58,24 +58,18 @@ describe('useMenuRing', () => {
     expect(move).not.toHaveBeenCalled()
   })
 
-  /** A pointer event over a stop, at a screen position. */
-  function over(stop: Element | null, x: number, y: number): MouseEvent {
-    return {
-      currentTarget: stop,
-      screenX: x,
-      screenY: y,
-    } as unknown as MouseEvent
-  }
-
-  /** A pointer move as the browser delivers it: the stop first, then the dialog. */
+  /** A pointer move as the browser delivers it to the dialog: the target is the element under the pointer. */
   function pointer(
     ring: ReturnType<typeof useMenuRing>,
-    stop: Element | null,
+    target: Element | null,
     x: number,
     y: number,
   ): void {
-    if (stop) ring.onHover(over(stop, x, y))
-    ring.track(over(null, x, y))
+    ring.onMove({
+      target,
+      screenX: x,
+      screenY: y,
+    } as unknown as MouseEvent)
   }
 
   it('a pointer that moves over a stop rings it, unless focus is already inside', () => {
@@ -89,6 +83,31 @@ describe('useMenuRing', () => {
     root.querySelector<HTMLElement>('#a1')!.focus()
     pointer(ring, a, 20, 10)
     expect(document.activeElement?.id).toBe('a1')
+  })
+
+  it('a pointer over something inside a stop rings the stop', () => {
+    const ring = useMenuRing('.stop')
+    const root = dialog()
+    pointer(ring, root.querySelector('#b'), 10, 10)
+    pointer(ring, root.querySelector('#a1'), 13, 10)
+    expect(document.activeElement?.id).toBe('a')
+  })
+
+  it('a stop that canHover refuses does not take the ring', () => {
+    const ring = useMenuRing('.stop', (stop) => stop.id !== 'b')
+    const root = dialog()
+    pointer(ring, root.querySelector('#a'), 10, 10)
+    pointer(ring, root.querySelector('#b'), 13, 10)
+    expect(document.activeElement?.id).not.toBe('b')
+  })
+
+  it('canHover is asked about the stop, not the element under the pointer', () => {
+    const ring = useMenuRing('.stop', (stop) => stop.id !== 'a')
+    const root = dialog()
+    pointer(ring, root.querySelector('#b'), 10, 10)
+    pointer(ring, root.querySelector('#b'), 11, 10)
+    pointer(ring, root.querySelector('#a1'), 13, 10)
+    expect(document.activeElement?.id).toBe('b')
   })
 
   it('a pointer that only rests while the list scrolls does not take the ring', () => {

@@ -180,14 +180,22 @@ describe('lantern.css', () => {
 })
 
 describe('the menu screens', () => {
+  it('the ring outline is declared once, in lantern.css, from the theme token', () => {
+    expect(lanternCss).toMatch(
+      /\[data-ring\][^{]*\{[^}]*outline: 3px solid var\(--lq-ring\)/,
+    )
+    expect(lanternCss.match(/outline: 3px solid/g)).toHaveLength(1)
+  })
+
   it.each(['SettingsDialog', 'SaveLoadDialog', 'QuitDialog'])(
-    '%s draws its selection ring with the theme token, never a fixed cream',
+    '%s marks its ring and draws no outline of its own',
     (name) => {
       const source = readFileSync(
         new URL(`../components/lantern/${name}.vue`, import.meta.url),
         'utf8',
       )
-      expect(source).toContain('var(--lq-ring)')
+      expect(source).toMatch(/<[^>]*\sdata-ring(=|\s|>)/)
+      expect(source).not.toContain('outline: 3px')
       expect(source.toLowerCase()).not.toContain('#f4ecd2')
     },
   )

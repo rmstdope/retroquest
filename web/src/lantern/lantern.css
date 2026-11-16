@@ -493,3 +493,17 @@ body {
     opacity: 0;
   }
 }
+
+/*
+ * The selection ring of the menu screens (Settings, Save and Load, Quit): the
+ * one place its outline is drawn, in the theme's ring colour. An element marked
+ * `data-ring` is ringed while it has focus; `data-ring="within"` while focus is
+ * on anything inside it (a Settings row), `data-ring="slot"` while its slot
+ * button has focus (a save slot, which holds other buttons too).
+ */
+[data-ring]:focus,
+[data-ring='within']:focus-within,
+[data-ring='slot']:has(.lq-slot-btn:focus) {
+  outline: 3px solid var(--lq-ring);
+  outline-offset: 3px;
+}
