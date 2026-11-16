@@ -64,7 +64,12 @@ test('on a phone each new line comes whole into view, pushing the older ones up 
           const pane = story.getBoundingClientRect()
           const rows = document.querySelectorAll('[data-testid="speech-line"]')
           const at = rows[rows.length - 1].getBoundingClientRect()
-          return at.top >= pane.top - 1 && at.bottom <= pane.bottom + 1
+          // The column is full: the story has been pushed up to show it.
+          return (
+            story.scrollTop > 0 &&
+            at.top >= pane.top - 1 &&
+            at.bottom <= pane.bottom + 1
+          )
         }),
       { timeout: 2_000 },
     )

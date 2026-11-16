@@ -290,7 +290,12 @@ describe('LanternLayout: a new line said in the one column', () => {
     vi.spyOn(Element.prototype, 'getBoundingClientRect').mockImplementation(
       function (this: Element): DOMRect {
         if (this === el) return { top: 0, bottom: PANE } as DOMRect
-        if (this.matches('[data-testid="speech-line"]'))
+        // Only the newest line is laid out: the one to bring into view.
+        const said = useStageSpeechStore().visible.at(-1)
+        if (
+          said &&
+          this.matches(`[data-key="line-${said.unit}-${said.firstWord}"]`)
+        )
           return {
             top: LINE_TOP - top,
             bottom: LINE_TOP + height - top,
@@ -316,9 +321,8 @@ describe('LanternLayout: a new line said in the one column', () => {
     }
     layOut(height)
     game.turns = [...game.turns, said]
-    const speech = useStageSpeechStore()
-    speech.observe(said)
-    speech.revealAll()
+    await flushPromises()
+    useStageSpeechStore().revealAll()
     await flushPromises()
   }
 
@@ -332,5 +336,24 @@ describe('LanternLayout: a new line said in the one column', () => {
   it('stops a line taller than the pane at its top, so it is read from its start', async () => {
     await sayLine(500)
     expect(pane().scrollTop).toBe(LINE_TOP)
+  })
+
+  it('brings the newest line into view when the story is shown again after another section', async () => {
+    await sayLine(200)
+    pane().scrollTop = 0
+    await w.findAll('.lq-nav-bottom .lq-nav-btn')[1]!.trigger('click')
+    await flushPromises()
+    expect(pane().scrollTop).toBe(0)
+    await w.findAll('.lq-nav-bottom .lq-nav-btn')[0]!.trigger('click')
+    await flushPromises()
+    expect(pane().scrollTop).toBe(LINE_TOP + 200 - PANE)
+  })
+
+  it('leaves the story where it is when the conversation is cleared', async () => {
+    await sayLine(200)
+    pane().scrollTop = 0
+    useStageSpeechStore().clear()
+    await flushPromises()
+    expect(pane().scrollTop).toBe(0)
   })
 })

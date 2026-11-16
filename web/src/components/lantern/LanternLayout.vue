@@ -1297,6 +1297,8 @@ watch(() => settings.textSize, updateMoreBelow, { flush: 'post' })
 // On the laptop's cards a reading cut short leaves the newest card at its
 // start in view: the turn grew after the pane was last moved, and the older
 // cards must not keep the column.
+// (In the one column the lines it shows then push on to its last line, as
+// every line said does: `showNewestLine`.)
 watch(storyHeld, async (held) => {
   if (held) return
   await nextTick()
@@ -1554,33 +1556,39 @@ watch(
   { flush: 'post' },
 )
 
-// A new line said in the one column comes whole into view, pushing the older
-// lines up (rq-r7ct): never so far that its own top leaves, and never back.
-// So the lines fading away above it never move what still shows. A story
-// being read is moved by its follow instead.
-watch(
-  () => speech.visible.at(-1)?.key,
-  async () => {
-    await nextTick()
-    const story = storyEl.value
-    if (!column.value || storyHeld.value || !story) return
-    const rows = story.querySelectorAll<HTMLElement>(
-      '[data-testid="speech-line"]',
-    )
-    const newest = rows[rows.length - 1]
-    if (!newest) return
-    const style = getComputedStyle(story)
-    const pane = story.getBoundingClientRect()
-    const line = newest.getBoundingClientRect()
-    const below =
-      line.bottom - (pane.bottom - (parseFloat(style.paddingBottom) || 0))
-    const room = line.top - (pane.top + (parseFloat(style.paddingTop) || 0))
-    const by = Math.min(below, room)
-    if (by > 0) moveStory(story.scrollTop + by, false)
-    updateMoreBelow()
-  },
-  { flush: 'post' },
-)
+/**
+ * Bring the newest line said in the one column whole into view, pushing the
+ * older lines up (rq-r7ct): never so far that its own top leaves, and never
+ * back. So the lines fading away above it never move what still shows. A
+ * story being read is moved by its follow instead, and nothing moves while
+ * the story is out of sight or no line is said.
+ */
+async function showNewestLine(): Promise<void> {
+  await nextTick()
+  const story = storyEl.value
+  const said = speech.visible.at(-1)
+  if (!column.value || storyHeld.value || !story || !said) return
+  const newest = story.querySelector<HTMLElement>(
+    `[data-turn="${said.turnId}"] [data-key="line-${said.unit}-${said.firstWord}"]`,
+  )
+  if (!newest) return
+  const style = getComputedStyle(story)
+  const pane = story.getBoundingClientRect()
+  const line = newest.getBoundingClientRect()
+  const below =
+    line.bottom - (pane.bottom - (parseFloat(style.paddingBottom) || 0))
+  const room = line.top - (pane.top + (parseFloat(style.paddingTop) || 0))
+  const by = Math.min(below, room)
+  if (by > 0) moveStory(story.scrollTop + by, false)
+  updateMoreBelow()
+}
+// Each new line (also the rest of a talk shown at once by a press or a skip,
+// which so ends at its last line), and the story shown again after another
+// section, brings the newest line into view.
+watch(() => speech.visible.at(-1)?.key, showNewestLine, { flush: 'post' })
+watch(section, (now) => {
+  if (now === 'story') void showNewestLine()
+})
 
 // The quest chime and fanfare (sound settings apply).
 game.setAudioPlayer(useAudio())

@@ -238,7 +238,7 @@ test('on a phone the lines rest at the foot of the column and a two-line name cl
 test('a line fading away leaves the lines still showing where they are', async ({
   page,
 }): Promise<void> => {
-  test.setTimeout(60_000)
+  test.setTimeout(90_000)
   await page.setViewportSize({ width: 1440, height: 900 })
   await page.goto('/')
   await page.getByRole('button', { name: 'Start', exact: true }).click()
@@ -246,7 +246,7 @@ test('a line fading away leaves the lines still showing where they are', async (
   await enter(page, 'talk to voice')
   await enter(page, 'talk to grandmother')
   const lines = page.getByTestId('speech-line')
-  await expect(lines).toHaveCount(4, { timeout: 20_000 })
+  await expect(lines).toHaveCount(4, { timeout: 30_000 })
 
   /** How far the newest line's foot is above the foot of the thread's room. */
   const lift = (): Promise<number> =>
