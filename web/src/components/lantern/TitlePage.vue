@@ -17,6 +17,7 @@ import {
 import type { SaveSlot } from '@/types/bridge'
 import { useFocusTrap } from '@/composables/useFocusTrap'
 import { useReducedMotion } from '@/composables/useReducedMotion'
+import { useUiSounds } from '@/composables/useUiSounds'
 
 /**
  * The game's title page, before the first act: a full-screen picture, the
@@ -31,6 +32,12 @@ import { useReducedMotion } from '@/composables/useReducedMotion'
  * opening focus is on the body, outside the page. The press still reaches the
  * other listeners, so the music starts on it.
  * Focus then lands on the main button. Enter on Start or Escape goes on.
+ *
+ * The ring (a cream outline) is the focus on a choice. ↑ and ↓ move it between
+ * the choices in the order on screen, wrapping round (from the credit link they
+ * put it on the last or the first); a pointer entering a choice moves it there.
+ * A ring that moves to another choice sounds a soft ting, a choice made a
+ * latch; arriving on the main choice is silent.
  *
  * A returning player has `saves` (the quick save, the slots in use and the saves
  * made under a name): the page then offers Continue (the newest save that can be loaded, named under
@@ -53,10 +60,16 @@ const emit = defineEmits<{ start: []; continue: []; load: [] }>()
 const hasSaves = computed(() => props.saves.some(filled))
 const newest = computed(() => newestLoadable(props.saves))
 const loadButton = ref<HTMLButtonElement | null>(null)
+const sounds = useUiSounds()
+
+/** True while focus is put back on Load game, which is no move of the ring. */
+let returning = false
 
 /** Put focus on Load game (after its window closed). */
 function focusLoad(): void {
+  returning = true
   loadButton.value?.focus()
+  returning = false
 }
 defineExpose({ focusLoad })
 const titleId = useId()
@@ -124,9 +137,47 @@ function releaseGesture(): void {
   window.removeEventListener('keydown', releaseGesture, true)
 }
 
-/** Emit a button's event unless it is the click of the press that skipped the opening. */
+/** Emit a button's event, with the latch sound, unless it is the click of the press that skipped the opening. */
 function press(action: () => void): void {
-  if (!guarding.value) action()
+  if (guarding.value) return
+  sounds.playChoose()
+  action()
+}
+
+/** The choices, in the order on screen. */
+function choices(): HTMLElement[] {
+  return [
+    ...(page.value?.querySelectorAll<HTMLElement>(
+      '.lq-title-buttons > button',
+    ) ?? []),
+  ]
+}
+
+/** Move the ring one choice down (`step` 1) or up (-1), wrapping round; from outside the choices ↓ takes the first and ↑ the last. */
+function moveRing(step: 1 | -1): void {
+  const all = choices()
+  if (all.length < 2 && all[0] === document.activeElement) return
+  const at = all.findIndex((button) => button === document.activeElement)
+  const to =
+    at < 0
+      ? step === 1
+        ? 0
+        : all.length - 1
+      : (at + step + all.length) % all.length
+  all[to]?.focus({ preventScroll: true })
+}
+
+/** Ting when the ring arrives from another element of the page (not on arrival, nor when focus returns to the page). */
+function onChoiceFocus(event: FocusEvent): void {
+  const from = event.relatedTarget
+  if (returning) return
+  if (from instanceof Node && page.value?.contains(from)) sounds.playMove()
+}
+
+/** The pointer entering a choice puts the ring on it. */
+function onChoiceHover(event: MouseEvent): void {
+  if (event.currentTarget instanceof HTMLElement)
+    event.currentTarget.focus({ preventScroll: true })
 }
 
 /** The opening is over once the last button has risen. */
@@ -139,7 +190,13 @@ function onKeydown(event: KeyboardEvent): void {
   if (event === skippedBy) return
   if (event.key === 'Escape') {
     event.stopPropagation()
-    if (!hasSaves.value) emit('start')
+    if (!hasSaves.value) {
+      sounds.playChoose()
+      emit('start')
+    }
+  } else if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+    event.preventDefault()
+    moveRing(event.key === 'ArrowDown' ? 1 : -1)
   } else trap.onKeydown(event)
 }
 
@@ -184,12 +241,14 @@ onBeforeUnmount(() => {
         class="lq-title-buttons"
         :inert="opened ? undefined : true"
         @animationend="onRisen"
+        @focusin="onChoiceFocus"
       >
         <template v-if="!hasSaves">
           <button
             type="button"
             class="lq-title-start"
             data-autofocus
+            @mouseenter="onChoiceHover"
             @click="press(() => emit('start'))"
           >
             Start
@@ -201,6 +260,7 @@ onBeforeUnmount(() => {
             type="button"
             class="lq-title-start"
             data-autofocus
+            @mouseenter="onChoiceHover"
             @click="press(() => emit('continue'))"
           >
             Continue
@@ -210,6 +270,7 @@ onBeforeUnmount(() => {
             type="button"
             :class="newest ? 'lq-title-second' : 'lq-title-start'"
             :data-autofocus="newest ? undefined : ''"
+            @mouseenter="onChoiceHover"
             @click="press(() => emit('start'))"
           >
             New game
@@ -218,6 +279,7 @@ onBeforeUnmount(() => {
             ref="loadButton"
             type="button"
             class="lq-title-second"
+            @mouseenter="onChoiceHover"
             @click="press(() => emit('load'))"
           >
             Load game
@@ -341,6 +403,10 @@ onBeforeUnmount(() => {
   color: var(--lq-accent-text);
   text-decoration: underline;
   text-underline-offset: 2px;
+}
+.lq-title-buttons > button:focus {
+  outline: 3px solid #f4ecd2;
+  outline-offset: 3px;
 }
 .lq-title-start {
   min-height: 54px;

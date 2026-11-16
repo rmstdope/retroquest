@@ -4,7 +4,13 @@
  */
 import { readFileSync } from 'node:fs'
 import { describe, expect, it } from 'vitest'
-import { effectsList, type EffectEntry } from './effectLists'
+import {
+  effectsList,
+  TITLE_CHOOSE_EFFECT,
+  TITLE_MOVE_EFFECT,
+  UI_EFFECT_IDS,
+  type EffectEntry,
+} from './effectLists'
 
 const SLUG = /^[a-z0-9]+(-[a-z0-9]+)*$/
 
@@ -38,6 +44,13 @@ describe('effectsList', () => {
     const byId = new Map(effectsList().map((entry) => [entry.id, entry]))
     expect(byId.get('rain')?.loops).toBe(true)
     expect(byId.get('lightning')?.loops).toBeUndefined()
+  })
+
+  it('lists the two title page sounds, which the interface plays', () => {
+    const ids = effectsList().map((effect) => effect.id)
+    expect(ids).toContain(TITLE_MOVE_EFFECT)
+    expect(ids).toContain(TITLE_CHOOSE_EFFECT)
+    expect(UI_EFFECT_IDS).toEqual([TITLE_MOVE_EFFECT, TITLE_CHOOSE_EFFECT])
   })
 
   it('tts/effects.json is what the game lists', () => {

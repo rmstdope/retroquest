@@ -251,5 +251,15 @@
     "text": "a deep, warm, resonant hum of ancient living magic beneath a vast tree, slow and peaceful, faint golden shimmer",
     "seconds": 20,
     "loops": true
+  },
+  {
+    "id": "title-move",
+    "text": "a tiny soft glass ting, like a fingernail on a lantern pane, very short",
+    "seconds": 1
+  },
+  {
+    "id": "title-choose",
+    "text": "a warm brass lantern latch clicking shut, short",
+    "seconds": 1
   }
 ]

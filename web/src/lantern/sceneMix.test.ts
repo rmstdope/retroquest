@@ -6,7 +6,7 @@
 import { readdirSync, readFileSync } from 'node:fs'
 import { describe, expect, it } from 'vitest'
 import { roomTrackId } from './musicLists'
-import { GAME_EFFECTS } from './effectLists'
+import { GAME_EFFECTS, UI_EFFECT_IDS } from './effectLists'
 import {
   MAX_SCENE_LEVEL,
   readSceneMix,
@@ -255,13 +255,14 @@ describe('the committed mixes', () => {
           )
   })
 
-  it('play every listed clip somewhere', () => {
+  it('play every listed clip somewhere, but those the interface plays', () => {
     const played = new Set(
       Object.values(SCENE_MIX).flatMap((entry) =>
         entry.effects.map((effect) => effect.id),
       ),
     )
-    for (const clip of GAME_EFFECTS) expect(played).toContain(clip.id)
+    for (const clip of GAME_EFFECTS)
+      if (!UI_EFFECT_IDS.includes(clip.id)) expect(played).toContain(clip.id)
   })
 
   it('give every scene of Act II between one and five effects', () => {
